@@ -2,26 +2,29 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
-  SDL,
+  SDL_compat,
   autoreconfHook,
   autoconf-archive,
   glib,
-  pkg-config,
+  pkgconf,
+  validatePkgConfig,
+  testers,
+  fullVariant ? false,
+  withLvTool ? fullVariant,
+  withExamples ? fullVariant,
 }:
-
-stdenv.mkDerivation rec {
-  pname = "libvisual";
+stdenv.mkDerivation (finalAttrs: {
+  pname = "libvisual" + lib.optionalString fullVariant "-full";
   version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "Libvisual";
     repo = "libvisual";
-    rev = "libvisual-${version}";
+    rev = "libvisual-${finalAttrs.version}";
     hash = "sha256-bDnpQODXB2Z6hezVoh7c6cklp6qpyDzVBAnwZD8Gros=";
   };
 
-  sourceRoot = "${src.name}/libvisual";
+  sourceRoot = "${finalAttrs.src.name}/libvisual";
 
   outputs = [
     "out"
@@ -32,27 +35,32 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook
     autoconf-archive
-    pkg-config
+    pkgconf
+    validatePkgConfig
   ];
-  buildInputs = [
-    SDL
-    glib
-  ];
+  buildInputs = [ glib ] ++ lib.optional (withLvTool || withExamples) SDL_compat;
+
+  preConfigure = ''
+    PKG_CONFIG=pkgconf
+  '';
 
   configureFlags =
-    lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-      # Remove when 0.5.x is published.
-      "--disable-lv-tool"
+    [
+      (lib.enableFeature withLvTool "lv-tool")
+      (lib.enableFeature withExamples "examples")
     ]
     ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
       "ac_cv_func_malloc_0_nonnull=yes"
       "ac_cv_func_realloc_0_nonnull=yes"
     ];
 
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
   meta = {
     description = "Abstraction library for audio visualisations";
-    homepage = "https://sourceforge.net/projects/libvisual/";
+    homepage = "http://libvisual.org/";
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.linux;
-  };
-}
+    pkgConfigModules = [ "libvisual-0.4" ];
+  } // lib.attrsets.optionalAttrs withLvTool { mainProgram = "lv-tool-0.4"; };
+})
