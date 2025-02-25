@@ -1261,7 +1261,14 @@ in {
   zenohd = handleTest ./zenohd.nix {};
   zeronet-conservancy = handleTest ./zeronet-conservancy.nix {};
   zfs = handleTest ./zfs.nix {};
-  zigbee2mqtt = handleTest ./zigbee2mqtt.nix {};
+  zigbee2mqtt_1 = runTest {
+    imports = [ ./zigbee2mqtt.nix ];
+    _module.args.package = pkgs.zigbee2mqtt_1;
+  };
+  zigbee2mqtt_2 = runTest {
+    imports = [ ./zigbee2mqtt.nix ];
+    _module.args.package = pkgs.zigbee2mqtt_2;
+  };
   zipline = handleTest ./zipline.nix {};
   zoneminder = handleTest ./zoneminder.nix {};
   zookeeper = handleTest ./zookeeper.nix {};
