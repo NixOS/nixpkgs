@@ -54,6 +54,22 @@ in
       example = "bfq";
     };
 
+    defaultSchedulerExclude = mkOption {
+      type = types.nullOr udevValue;
+      default = "loop[0-9]*";
+      description = ''
+        Device name pattern to exclude from default scheduler assignment
+        through {option}`config.hardware.block.defaultScheduler` and
+        {option}`config.hardware.block.defaultSchedulerRotational`.
+
+        By default this excludes loop devices which generally do not benefit
+        from extra I/O scheduling in addition to the scheduling already
+        performed for their backing devices.
+
+        This setting does not affect {option}`config.hardware.block.scheduler`.
+      '';
+    };
+
     scheduler = mkOption {
       type = types.attrsOf udevValue;
       default = { };
@@ -121,7 +137,11 @@ in
           (pkgs.writeTextDir "etc/udev/rules.d/98-block-io-scheduler.rules" (
             concatLines (
               map (concatStringsSep ", ") (
-                optional (cfg.defaultScheduler != null) [
+                optional (cfg.defaultSchedulerExclude != null) [
+                  ''KERNEL=="${escape cfg.defaultSchedulerExclude}"''
+                  ''GOTO="defaults_end"''
+                ]
+                ++ optional (cfg.defaultScheduler != null) [
                   ''SUBSYSTEM=="block"''
                   ''ACTION=="add|change"''
                   ''TEST=="queue/scheduler"''
@@ -134,6 +154,7 @@ in
                   ''TEST=="queue/scheduler"''
                   ''ATTR{queue/scheduler}="${escape cfg.defaultSchedulerRotational}"''
                 ]
+                ++ optional (cfg.defaultSchedulerExclude != null) [ ''LABEL="defaults_end"'' ]
                 ++ mapAttrsToList (name: sched: [
                   ''SUBSYSTEM=="block"''
                   ''ACTION=="add|change"''
