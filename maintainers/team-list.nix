@@ -515,7 +515,6 @@ with lib.maintainers;
     members = [
       fab
       hexa
-      mic92
     ];
     scope = "Maintain the Home Assistant ecosystem";
     shortName = "Home Assistant";
