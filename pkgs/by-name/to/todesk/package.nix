@@ -108,6 +108,7 @@ buildFHSEnv {
     libva
   ];
   extraBwrapArgs = [
+    "--tmpfs /opt/todesk"
     "--bind /var/lib/todesk /opt/todesk/config" # create the folder before bind to avoid permission denided.
     "--bind ${todesk-unwrapped}/bin /opt/todesk/bin"
     "--bind /var/lib/todesk /etc/todesk" # service write uuid here. Such a pain!
