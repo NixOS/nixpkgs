@@ -31,9 +31,7 @@ let
 
   phases = lib.composeManyExtensions (
     [
-      (callPackage ./common/add-core-symbolication.nix { })
       (callPackage ./common/derivation-options.nix { })
-      (callPackage ./common/passthru-private-frameworks.nix { inherit sdkVersion; })
       (callPackage ./common/passthru-source-release-files.nix { inherit sdkVersion; })
       (callPackage ./common/remove-disallowed-packages.nix { })
       (callPackage ./common/process-stubs.nix { })
@@ -57,12 +55,6 @@ stdenvNoCC.mkDerivation (
     src = fetchSDK sdkInfo;
 
     dontConfigure = true;
-
-    # TODO(@connorbaker):
-    # This is a quick fix unblock builds broken by https://github.com/NixOS/nixpkgs/pull/370750.
-    # Fails due to a reflexive symlink:
-    # $out/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.3.sdk/System/Library/PrivateFrameworks/CoreSymbolication.framework/Versions/A/A
-    dontCheckForBrokenSymlinks = true;
 
     strictDeps = true;
 

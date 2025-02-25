@@ -2,7 +2,18 @@
 # See: https://github.com/apple-oss-distributions/IOKitTools/blob/main/IOKitTools.xcodeproj/project.pbxproj
 
 # Project settings
-project('IOKitTools', 'c', version : '@version@')
+project(
+    'IOKitTools',
+    'c',
+    'meson_version' : '>=1.2',
+    version : '@version@',
+    default_options : {
+        # TODO: Figure out why we can’t pass `paths` to `dependency()`,
+        # which would be preferable.
+        'c_args': [ '-iframeworkwithsysroot', '/System/Library/PrivateFrameworks' ],
+        'objc_args': [ '-iframeworkwithsysroot', '/System/Library/PrivateFrameworks' ],
+    },
+)
 
 
 # Dependencies
@@ -12,7 +23,7 @@ ncurses = dependency('ncurses')
 
 core_foundation = dependency('appleframeworks', modules : 'CoreFoundation')
 iokit = dependency('appleframeworks', modules : 'IOKit')
-core_symbolication = dependency('appleframeworks', modules : 'CoreSymbolication')
+core_symbolication = dependency('CoreSymbolication', method : 'extraframework')
 perfdata = dependency('appleframeworks', modules : 'perfdata')
 
 

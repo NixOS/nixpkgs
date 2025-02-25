@@ -8,7 +8,6 @@ project('diskdev_cmds', 'c', 'objc', version : '@version@')
 # Dependencies
 cc = meson.get_compiler('c')
 
-apfs = dependency('appleframeworks', modules : 'APFS')
 removefile = cc.find_library('removefile')
 
 
@@ -111,7 +110,7 @@ executable(
         # https://github.com/apple-oss-distributions/xnu/blob/94d3b452840153a99b38a3a9659680b2a006908e/bsd/sys/attr.h#L300
         '-DVOL_CAP_FMT_SEALED=0x02000000',
     ],
-    dependencies : [ apfs, libdisk ],
+    dependencies : [ libdisk ],
     include_directories : [ 'edt_fstab', 'fsck.tproj', 'mount_flags_dir' ],
     install : true,
     link_args : host_machine.cpu_family() == 'x86_64' ? [ '-Wl,-undefined,dynamic_lookup' ] : [ ],
@@ -213,7 +212,6 @@ executable(
         # https://github.com/apple-oss-distributions/xnu/blob/94d3b452840153a99b38a3a9659680b2a006908e/bsd/sys/attr.h#L300
         '-DVOL_CAP_FMT_SEALED=0x02000000',
     ],
-    dependencies : [ apfs ],
     install : true,
     sources : [
         'mount_flags_dir/mount_flags.c',
