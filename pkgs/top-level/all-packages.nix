@@ -15882,10 +15882,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreData IOKit;
   };
 
-  haven-cli = callPackage ../applications/blockchains/haven-cli {
-    inherit (darwin.apple_sdk.frameworks) CoreData IOKit PCSC;
-  };
-
   monero-gui = libsForQt5.callPackage ../applications/blockchains/monero-gui { };
 
   napari = with python3Packages; toPythonApplication napari;
