@@ -4162,8 +4162,6 @@ with pkgs;
 
   matrix-sdk-crypto-nodejs = callPackage ../development/libraries/matrix-sdk-crypto-nodejs { };
 
-  makemkv = libsForQt5.callPackage ../applications/video/makemkv { };
-
   man = man-db;
 
   mangohud = callPackage ../tools/graphics/mangohud {
