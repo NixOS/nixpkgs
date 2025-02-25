@@ -134,6 +134,8 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     ++ optionals vulkanSupport vulkanBuildInputs
     ++ [ curl ];
 
+  hardeningDisable = optionals rocmSupport [ "zerocallusedregs" "stackprotector" ];
+
   cmakeFlags =
     [
       # -march=native is non-deterministic; override with platform-specific flags if needed
