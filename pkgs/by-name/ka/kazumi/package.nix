@@ -103,6 +103,7 @@ flutter327.buildFlutterApplication rec {
   };
 
   postInstall = ''
+    ln -snf ${mpv}/lib/libmpv.so.2 $out/app/kazumi/lib/libmpv.so.2
     install -Dm0644 ./assets/linux/io.github.Predidit.Kazumi.desktop $out/share/applications/io.github.Predidit.Kazumi.desktop
     install -Dm0644 ./assets/images/logo/logo_linux.png $out/share/icons/hicolor/512x512/apps/io.github.Predidit.Kazumi.png
   '';
