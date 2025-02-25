@@ -67,17 +67,29 @@ stdenv.mkDerivation {
   version = "${versionNum}-${release}";
   inherit src;
 
+  patches = lib.optionals (versionNum == "1.0.0") [
+    # a static field was declared as protected but was accessed
+    # from a place where it would have had to be public
+    # this is only an error when using clang, gcc is more lenient
+    ./clang-fix-protected-field.patch
+  ];
+
   postPatch = ''
     sed -i resources/simulide.desktop \
       -e "s|^Exec=.*$|Exec=simulide|" \
       -e "s|^Icon=.*$|Icon=simulide|"
 
     # Note: older versions don't have REV_NO
+    # Note: the project file hardcodes a homebrew gcc compiler when using darwin
+    #       which we don't want, so we just delete the relevant lines
     sed -i SimulIDE.pr* \
       -e "s|^VERSION = .*$|VERSION = ${versionNum}|" \
       -e "s|^RELEASE = .*$|RELEASE = ${release'}|" \
       -e "s|^REV_NO = .*$|REV_NO = ${rev}|" \
-      -e "s|^BUILD_DATE = .*$|BUILD_DATE = ??-??-??|"
+      -e "s|^BUILD_DATE = .*$|BUILD_DATE = ??????|" \
+      -e "/QMAKE_CC/d" \
+      -e "/QMAKE_CXX/d" \
+      -e "/QMAKE_LINK/d"
 
     ${lib.optionalString (lib.versionOlder versionNum "1.0.0") ''
       # GCC 13 needs the <cstdint> header explicitly included
@@ -108,19 +120,27 @@ stdenv.mkDerivation {
   installPhase = ''
     runHook preInstall
 
-    install -Dm644 ../resources/simulide.desktop $out/share/applications/simulide.desktop
-    install -Dm644 ../${iconPath} $out/share/icons/hicolor/256x256/apps/simulide.png
+    ${lib.optionalString stdenv.hostPlatform.isLinux ''
+      install -Dm644 ../resources/simulide.desktop $out/share/applications/simulide.desktop
+      install -Dm644 ../${iconPath} $out/share/icons/hicolor/256x256/apps/simulide.png
+    ''}
 
-    mkdir -p $out/share/simulide $out/bin
     pushd executables/SimulIDE_*
     ${
-      if lib.versionOlder versionNum "1.0.0" then
+      if stdenv.hostPlatform.isDarwin then
         ''
+          mkdir -p $out/Applications
+          cp -r simulide.app $out/Applications
+        ''
+      else if lib.versionOlder versionNum "1.0.0" then
+        ''
+          mkdir -p $out/share/simulide $out/bin
           cp -r share/simulide/* $out/share/simulide
           cp bin/simulide $out/bin/simulide
         ''
       else
         ''
+          mkdir -p $out/share/simulide $out/bin
           cp -r data examples $out/share/simulide
           cp simulide $out/bin/simulide
         ''
@@ -128,6 +148,16 @@ stdenv.mkDerivation {
     popd
 
     runHook postInstall
+  '';
+
+  # on darwin there are some binaries in the examples directory which
+  # accidentally get wrapped by wrapQtAppsHook so we do the wrapping manually instead
+  dontWrapQtApps = stdenv.hostPlatform.isDarwin;
+
+  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p $out/bin
+    wrapQtApp $out/Applications/simulide.app/Contents/MacOs/simulide
+    ln -s $out/Applications/simulide.app/Contents/MacOs/simulide $out/bin/simulide
   '';
 
   meta = {
@@ -144,6 +174,9 @@ stdenv.mkDerivation {
       carloscraveiro
       tomasajt
     ];
-    platforms = [ "x86_64-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "x86_64-darwin"
+    ];
   };
 }
