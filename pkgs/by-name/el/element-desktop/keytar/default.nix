@@ -10,10 +10,26 @@
   xcbuild,
   fetchNpmDeps,
   npmHooks,
+  electron,
+  buildPackages,
+  runCommand,
 }:
 
 let
   pinData = lib.importJSON ./pin.json;
+
+  # Make sure the native modules are built against electron's nodejs version
+  npmHooks = buildPackages.npmHooks.override {
+    nodejs =
+      runCommand "electron-headers"
+        {
+          passthru.version = electron.version;
+        }
+        ''
+          mkdir -p $out
+          tar -C $out --strip-components=1 -xvf ${electron.headers}
+        '';
+  };
 
 in
 stdenv.mkDerivation rec {
