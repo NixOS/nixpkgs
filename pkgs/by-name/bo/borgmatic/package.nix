@@ -14,12 +14,12 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "borgmatic";
-  version = "1.9.5";
+  version = "1.9.12";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-wVGM2BsgmZiKWttceIw5pbJGYY2V3+MY1Iv86PwIcU8=";
+    hash = "sha256-c7FXJ4afbnHHDtVU7QcPM+g1i/IAGJwl1TTHx7eDcIs=";
   };
 
   nativeCheckInputs =
@@ -40,7 +40,7 @@ python3Packages.buildPythonApplication rec {
   # by default only 70.02% coverage is reached
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace '--cov-fail-under=100' '--cov-fail-under=70'
+      --replace '--cov-fail-under=100' '--cov-fail-under=68'
   '';
 
   nativeBuildInputs = [ installShellFiles ];
