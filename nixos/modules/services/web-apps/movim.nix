@@ -703,8 +703,12 @@ in
       services.movim-data-setup = {
         description = "Movim setup: .env file, databases init, cache reload";
         wantedBy = [ "multi-user.target" ];
-        requiredBy = [ "${phpExecutionUnit}.service" ];
         before = [ "${phpExecutionUnit}.service" ];
+        requiredBy = [ "${phpExecutionUnit}.service" ];
+        wants = [
+          "network.target"
+          "local-fs.target"
+        ];
         after = lib.optional cfg.database.createLocally dbService;
         requires = lib.optional cfg.database.createLocally dbService;
 
@@ -759,8 +763,18 @@ in
       services.movim = {
         description = "Movim daemon";
         wantedBy = [ "multi-user.target" ];
-        after = [ "movim-data-setup.service" ];
-        requires = [ "movim-data-setup.service" ] ++ lib.optional cfg.database.createLocally dbService;
+        wants = [
+          "network.target"
+          "local-fs.target"
+        ];
+        after =
+          [ "movim-data-setup.service" ]
+          ++ lib.optional cfg.database.createLocally dbService
+          ++ lib.optional (cfg.nginx != null) "nginx.service";
+        requires =
+          [ "movim-data-setup.service" ]
+          ++ lib.optional cfg.database.createLocally dbService
+          ++ lib.optional (cfg.nginx != null) "nginx.service";
         environment = {
           PUBLIC_URL = "//${cfg.domain}";
           WS_PORT = builtins.toString cfg.port;
@@ -775,6 +789,10 @@ in
       };
 
       services.${phpExecutionUnit} = {
+        wantedBy = lib.optional (cfg.nginx != null) "nginx.service";
+        before = [ "movim.service" ] ++ lib.optional (cfg.nginx != null) "nginx.service";
+        requiredBy = [ "movim.service" ];
+        wants = [ "network.target" ];
         after = [ "movim-data-setup.service" ];
         requires = [ "movim-data-setup.service" ] ++ lib.optional cfg.database.createLocally dbService;
       };
