@@ -187,12 +187,12 @@ final: prev:
 
   LazyVim = buildVimPlugin {
     pname = "LazyVim";
-    version = "2025-02-15";
+    version = "2025-02-22";
     src = fetchFromGitHub {
       owner = "LazyVim";
       repo = "LazyVim";
-      rev = "401ef48fcd617534b017ef471309bb1bd6465131";
-      sha256 = "1056af0psn9pxm1q9fcfh8rnv66fapq6fbv7h88ppz8c88d5lr0d";
+      rev = "cb223553ff73eb2f37ffb5dc0bb75b76a4677faf";
+      sha256 = "0yc8xcgfjfg0j4jm0rkfpd9d0bg6n29vsm2g9fdmacbmhx79261l";
     };
     meta.homepage = "https://github.com/LazyVim/LazyVim/";
     meta.hydraPlatforms = [ ];

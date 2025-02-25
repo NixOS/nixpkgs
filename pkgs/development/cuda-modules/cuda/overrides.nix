@@ -171,9 +171,9 @@ filterAndCreateOverrides {
         prevAttrs.buildInputs
         # x86_64 only needs gmp from 12.0 and on
         ++ lib.lists.optionals (cudaAtLeast "12.0") [ gmp ]
-        # Additional dependencies for CUDA 12.6 and later, which
+        # Additional dependencies for CUDA 12.5 and later, which
         # support multiple Python versions.
-        ++ lib.lists.optionals (cudaAtLeast "12.6") [
+        ++ lib.lists.optionals (cudaAtLeast "12.5") [
           libxcrypt-legacy
           ncurses6
           python39
@@ -188,7 +188,7 @@ filterAndCreateOverrides {
         prevAttrs.installPhase
         # Python 3.8 is not in nixpkgs anymore, delete Python 3.8 cuda-gdb support
         # to avoid autopatchelf failing to find libpython3.8.so.
-        + lib.optionalString (cudaAtLeast "12.6") ''
+        + lib.optionalString (cudaAtLeast "12.5") ''
           find $bin -name '*python3.8*' -delete
         '';
     };
@@ -225,7 +225,7 @@ filterAndCreateOverrides {
 
       postPatch =
         let
-          nvvmReplace = lib.optionalString (cudaOlder "12.6") ''
+          nvvmReplace = lib.optionalString (cudaOlder "12.5") ''
             --replace-fail \
               '$(TOP)/$(_NVVM_BRANCH_)' \
               "''${!outputBin}/nvvm" \
