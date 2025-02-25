@@ -986,7 +986,6 @@ let
     # Impure network access during build
     "waddR"
     "tiledb"
-    "x13binary"
     "switchr"
 
     # ExperimentHub dependents, require net access during build
