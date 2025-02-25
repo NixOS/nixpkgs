@@ -90,7 +90,7 @@ let
         timeoutStyle
       ;
       path = with pkgs; makeBinPath (
-        [ coreutils gnused gnugrep findutils diffutils btrfs-progs util-linux mdadm ]
+        [ coreutils gnused gnugrep findutils diffutils util-linux mdadm ]
         ++ optional cfg.efiSupport efibootmgr
         ++ optionals cfg.useOSProber [ busybox os-prober ]);
       font = lib.optionalString (cfg.font != null) (
@@ -729,7 +729,6 @@ in
         let
           install-grub-pl = pkgs.replaceVars ./install-grub.pl {
             utillinux = pkgs.util-linux;
-            btrfsprogs = pkgs.btrfs-progs;
             inherit (config.system.nixos) distroName;
             # targets of a replacement in code
             bootPath = null;
