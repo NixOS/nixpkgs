@@ -28,6 +28,9 @@ lib.makeOverridable ({ # The kernel source tarball.
 , # Allows overriding the default defconfig
   defconfig ? null
 
+, # Allows overriding the default defconfig file
+  defconfigFile ? null
+
 , # Legacy overrides to the intermediate kernel config, as string
   extraConfig ? ""
 
@@ -164,6 +167,9 @@ let
       # Patch kconfig to print "###" after every question so that
       # generate-config.pl from the generic builder can answer them.
       sed -e '/fflush(stdout);/i\printf("###");' -i scripts/kconfig/conf.c
+    '' + lib.optionalString (defconfigFile != null) ''
+      # replace the default defconfig file
+      cp ${defconfigFile} arch/$kernelArch/configs/$kernelBaseConfig
     '';
 
     preUnpack = kernel.preUnpack or "";
