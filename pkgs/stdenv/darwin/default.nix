@@ -126,17 +126,6 @@ let
                 ln -s "${compiler-rt.out}/lib"   "$rsrc/lib"
                 ln -s "${compiler-rt.out}/share" "$rsrc/share"
                 echo "-resource-dir=$rsrc" >> $out/nix-support/cc-cflags
-              ''
-              + lib.optionalString (isFromBootstrapFiles prevStage.llvmPackages.clang-unwrapped) ''
-                # Work around the `-nostdlibinc` patch in the bootstrap tools.
-                # TODO: Remove after the bootstrap tools have been updated.
-                substituteAll ${builtins.toFile "add-flags-extra.sh" ''
-                  if [ "@darwinMinVersion@" ]; then
-                    NIX_CFLAGS_COMPILE_@suffixSalt@+=" -idirafter $SDKROOT/usr/include"
-                    NIX_CFLAGS_COMPILE_@suffixSalt@+=" -iframework $SDKROOT/System/Library/Frameworks"
-                  fi
-                ''} add-flags-extra.sh
-                cat add-flags-extra.sh >> $out/nix-support/add-flags.sh
               '';
 
             cc = prevStage.llvmPackages.clang-unwrapped;
@@ -332,7 +321,6 @@ let
       libxml2
       libxo
       ncurses
-      openbsm
       openpam
       xcbuild
       zlib
@@ -417,7 +405,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
         gnugrep = bootstrapTools;
         pbzx = bootstrapTools;
 
-        jq = null;
+        jq = bootstrapTools;
 
         cctools = bootstrapTools // {
           libtool = bootstrapTools;
@@ -446,28 +434,6 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
               runtimeShell = self.stdenvNoCC.shell;
 
               bintools = selfDarwin.binutils-unwrapped;
-
-              # Bootstrap tools cctools needs the hook and wrappers to make sure things are signed properly,
-              # and additional linker flags to work around a since‐removed patch.
-              # This can be dropped once the bootstrap tools cctools has been updated to 1010.6.
-              extraBuildCommands = ''
-                printf %s ${lib.escapeShellArg ''
-                  extraBefore+=("-F$DEVELOPER_DIR/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks")
-                  extraBefore+=("-L$DEVELOPER_DIR/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/lib")
-                ''} >> $out/nix-support/add-local-ldflags-before.sh
-
-                echo 'source ${selfDarwin.postLinkSignHook}' >> $out/nix-support/post-link-hook
-
-                export signingUtils=${selfDarwin.signingUtils}
-
-                wrap \
-                  install_name_tool ${../../build-support/bintools-wrapper/darwin-install_name_tool-wrapper.sh} \
-                  "${selfDarwin.binutils-unwrapped}/bin/install_name_tool"
-
-                wrap \
-                  strip ${../../build-support/bintools-wrapper/darwin-strip-wrapper.sh} \
-                  "${selfDarwin.binutils-unwrapped}/bin/strip"
-              '';
             };
 
             binutils-unwrapped =
@@ -537,6 +503,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
                         fi
                       done
                       ln -s ${bootstrapTools}/bin/dsymutil $out/bin/dsymutil
+                      ln -s ${bootstrapTools}/bin/llvm-readtapi $out/bin/llvm-readtapi
                       ln -s ${bootstrapTools}/lib/libLLVM* $out/lib
                     '';
                     passthru.isFromBootstrapFiles = true;
@@ -680,34 +647,11 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
           selfDarwin: superDarwin: {
             signingUtils = prevStage.darwin.signingUtils.override { inherit (selfDarwin) sigtool; };
 
-            postLinkSignHook = prevStage.darwin.postLinkSignHook.override { inherit (selfDarwin) sigtool; };
-
             # Rewrap binutils with the real libSystem
             binutils = superDarwin.binutils.override {
               inherit (self) coreutils;
               bintools = selfDarwin.binutils-unwrapped;
               libc = selfDarwin.libSystem;
-
-              # Bootstrap tools cctools needs the hook and wrappers to make sure things are signed properly.
-              # This can be dropped once the bootstrap tools cctools has been updated to 1010.6.
-              extraBuildCommands = ''
-                printf %s ${lib.escapeShellArg ''
-                  extraBefore+=("-F$DEVELOPER_DIR/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks")
-                  extraBefore+=("-L$DEVELOPER_DIR/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/lib")
-                ''} >> $out/nix-support/add-local-ldflags-before.sh
-
-                echo 'source ${selfDarwin.postLinkSignHook}' >> $out/nix-support/post-link-hook
-
-                export signingUtils=${selfDarwin.signingUtils}
-
-                wrap \
-                  install_name_tool ${../../build-support/bintools-wrapper/darwin-install_name_tool-wrapper.sh} \
-                  "${selfDarwin.binutils-unwrapped}/bin/install_name_tool"
-
-                wrap \
-                  strip ${../../build-support/bintools-wrapper/darwin-strip-wrapper.sh} \
-                  "${selfDarwin.binutils-unwrapped}/bin/strip"
-              '';
             };
 
             # Avoid building unnecessary Python dependencies due to building LLVM manpages.
@@ -941,35 +885,21 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
               # Rebuild darwin.binutils with the new LLVM, so only inherit libSystem from the previous stage.
               // {
                 inherit (prevStage.darwin) libSystem;
+
+                # Disable building the documentation due to the dependency on llvm-manpages,
+                # which brings in a bunch of Python dependencies.
+                binutils-unwrapped = superDarwin.binutils-unwrapped.override {
+                  inherit (self) cctools ld64;
+                  enableManpages = false;
+                };
               }
             );
 
             llvmPackages =
               let
-                tools = super.llvmPackages.tools.extend (
-                  _: superTools: {
-                    # darwin.binutils-unwrapped needs to build the LLVM man pages, which requires a lot of Python stuff
-                    # that ultimately ends up depending on git. Fortunately, the git dependency is only for check
-                    # inputs. The following set of overrides allow the LLVM documentation to be built without
-                    # pulling curl (and other packages like ffmpeg) into the stdenv bootstrap.
-                    #
-                    # However, even without darwin.binutils-unwrapped, this has to be overridden in the LLVM package set
-                    # because otherwise llvmPackages.llvm-manpages on its own is broken.
-                    llvm-manpages = superTools.llvm-manpages.override {
-                      python3Packages = self.python3.pkgs.overrideScope (
-                        _: superPython: {
-                          hatch-vcs = superPython.hatch-vcs.overrideAttrs { doInstallCheck = false; };
-                          markdown-it-py = superPython.markdown-it-py.overrideAttrs { doInstallCheck = false; };
-                          mdit-py-plugins = superPython.mdit-py-plugins.overrideAttrs { doInstallCheck = false; };
-                          myst-parser = superPython.myst-parser.overrideAttrs { doInstallCheck = false; };
-                        }
-                      );
-                    };
-                  }
-                );
                 libraries = super.llvmPackages.libraries.extend (_: _: llvmLibrariesPackages prevStage);
               in
-              super.llvmPackages // { inherit tools libraries; } // tools // libraries;
+              super.llvmPackages // { inherit libraries; } // libraries;
           }
         ];
 
@@ -1200,7 +1130,6 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
               ncurses.dev
               ncurses.man
               ncurses.out
-              openbsm
               openpam
               openssl.out
               patch
@@ -1264,8 +1193,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
                 patch
                 ;
 
-              # TODO: Simplify when dropping support for macOS < 11.
-              "apple-sdk_${builtins.replaceStrings [ "." ] [ "_" ] sdkMajorVersion}" = self.apple-sdk;
+              "apple-sdk_${sdkMajorVersion}" = self.apple-sdk;
 
               darwin = super.darwin.overrideScope (
                 _: _:
@@ -1297,6 +1225,12 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
                   libraries = super."llvmPackages_${llvmVersion}".libraries.extend (
                     _: _:
                     llvmLibrariesPackages prevStage
+                    # Avoid depending on llvm-manpages from the bootstrap, which brings a bunch of Python dependencies
+                    # into the bootstrap. This means that there are no man pages in darwin.binutils, but they are still
+                    # available from llvm-manpages, ld64, and cctools.
+                    // {
+                      inherit (super."llvmPackages_${llvmVersion}") llvm-manpages;
+                    }
                     // lib.optionalAttrs (super.stdenv.targetPlatform == localSystem) {
                       inherit (prevStage.llvmPackages) clang;
                     }
