@@ -35,6 +35,10 @@ import ../../make-test-python.nix (
               inherit (movim) description info;
               xmppdomain = prosody.domain;
             };
+            database = {
+              type = "postgresql";
+              createLocally = true;
+            };
             nginx = { };
           };
 
