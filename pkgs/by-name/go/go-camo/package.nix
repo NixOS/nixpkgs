@@ -1,27 +1,42 @@
 {
   lib,
-  buildGoModule,
+  buildGo124Module,
   fetchFromGitHub,
+  installShellFiles,
+  scdoc,
 }:
 
-buildGoModule rec {
+buildGo124Module rec {
   pname = "go-camo";
-  version = "2.6.1";
+  version = "2.6.2";
 
   src = fetchFromGitHub {
     owner = "cactus";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-916XMmSRopudpLVKSBVp415nGkRCGkkunvQZiR46aSU=";
+    hash = "sha256-f4XviRqu4muc2owwV3p7y5Rehl1jrf0jDhQQvGxnw7M=";
   };
 
-  vendorHash = "sha256-IYXVc6SkhayYtHKbojHrQSaCQlt3E+nwrZ4sR/fuV0Y=";
+  vendorHash = "sha256-s6OPmtTx2/AxSm6Y0UjYORSuozPUemGyfdtv1NNlZHc=";
+
+  nativeBuildInputs = [
+    installShellFiles
+    scdoc
+  ];
 
   ldflags = [
     "-s"
     "-w"
     "-X=main.ServerVersion=${version}"
   ];
+
+  postBuild = ''
+    make man
+  '';
+
+  postInstall = ''
+    installManPage build/man/*
+  '';
 
   preCheck = ''
     # requires network access
