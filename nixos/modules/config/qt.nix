@@ -22,6 +22,11 @@ let
       libsForQt5.plasma-integration
       libsForQt5.systemsettings
     ];
+    kde6 = [
+      kdePackages.kio
+      kdePackages.plasma-integration
+      kdePackages.systemsettings
+    ];
     lxqt = [
       lxqt.lxqt-qtplugin
       lxqt.lxqt-config
@@ -116,6 +121,14 @@ in
             "systemsettings"
           ]
           [
+            "kdePackages"
+            "plasma-integration"
+          ]
+          [
+            "kdePackages"
+            "systemsettings"
+          ]
+          [
             "lxqt"
             "lxqt-config"
           ]
@@ -138,7 +151,8 @@ in
           The options are
           - `gnome`: Use GNOME theme with [qgnomeplatform](https://github.com/FedoraQt/QGnomePlatform)
           - `gtk2`: Use GTK theme with [qtstyleplugins](https://github.com/qt/qtstyleplugins)
-          - `kde`: Use Qt settings from Plasma.
+          - `kde`: Use Qt settings from Plasma 5.
+          - `kde6`: Use Qt settings from Plasma 6.
           - `lxqt`: Use LXQt style set using the [lxqt-config-appearance](https://github.com/lxqt/lxqt-config)
              application.
           - `qt5ct`: Use Qt style set using the [qt5ct](https://sourceforge.net/projects/qt5ct/)
