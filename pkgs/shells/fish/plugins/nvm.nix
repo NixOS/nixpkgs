@@ -5,12 +5,12 @@
 }:
 buildFishPlugin rec {
   pname = "nvm";
-  version = "2.2.16";
+  version = "2.2.17";
   src = fetchFromGitHub {
     owner = "jorgebucaran";
     repo = "nvm.fish";
     tag = version;
-    hash = "sha256-GTEkCm+OtxMS3zJI5gnFvvObkrpepq1349/LcEPQRDo=";
+    hash = "sha256-BNnoP9gLQuZQt/0SOOsZaYOexNN2K7PKWT/paS0BJJY=";
   };
 
   meta = {
