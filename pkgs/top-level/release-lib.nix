@@ -1,6 +1,6 @@
 { supportedSystems
 , system ? builtins.currentSystem
-, packageSet ? (import ../..)
+, packageSet ? (import ./default.nix)
 , scrubJobs ? true
 , # Attributes passed to nixpkgs. Don't build packages marked as unfree.
   nixpkgsArgs ? {
@@ -37,7 +37,15 @@ let
     systems
     ;
 
-  pkgs = packageSet (recursiveUpdate { inherit system; config.allowUnsupportedSystem = true; } nixpkgsArgs);
+  pkgs = packageSet (recursiveUpdate {
+    localSystem = {
+      inherit system;
+    };
+    crossSystem = {
+      inherit system;
+    };
+    config.allowUnsupportedSystem = true;
+  } nixpkgsArgs);
 
   hydraJob' = if scrubJobs then hydraJob else id;
 
@@ -46,7 +54,16 @@ let
      Nixpkgs from being evaluated again and again for every
      job/platform pair. */
   mkPkgsFor = crossSystem: let
-    packageSet' = args: packageSet (args // { inherit crossSystem; } // nixpkgsArgs);
+    packageSet' = args:
+      let
+        args' = args // nixpkgsArgs // {
+          localSystem = (nixpkgsArgs.localSystem or {}) // {
+            inherit system;
+          };
+        };
+      in packageSet (args' // lib.optionalAttrs (args' ? crossSystem || crossSystem != null) {
+        crossSystem = (args'.crossSystem or {}) // crossSystem;
+      });
 
     pkgs_x86_64_linux = packageSet' { system = "x86_64-linux"; };
     pkgs_i686_linux = packageSet' { system = "i686-linux"; };
@@ -84,7 +101,7 @@ let
     examplesByConfig = flip mapAttrs'
       systems.examples
       (_: crossSystem: nameValuePair crossSystem.config {
-        inherit crossSystem;
+        crossSystem = lib.optionalAttrs (crossSystem != null) crossSystem // (nixpkgsArgs.crossSystem or {});
         pkgsFor = mkPkgsFor crossSystem;
       });
     native = mkPkgsFor null;
