@@ -2,6 +2,7 @@
 , fetchFromGitHub
 , lib
 , stdenv
+, llvmPackages
 }:
 
 # This was originally called mkl-dnn, then it was renamed to dnnl, and it has
@@ -21,6 +22,8 @@ stdenv.mkDerivation (finalAttrs: {
   outputs = [ "out" "dev" "doc" ];
 
   nativeBuildInputs = [ cmake ];
+
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ llvmPackages.openmp ];
 
   # Tests fail on some Hydra builders, because they do not support SSE4.2.
   doCheck = false;
