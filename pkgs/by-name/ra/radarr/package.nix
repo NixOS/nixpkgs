@@ -36,11 +36,10 @@ let
         ./nuget-config.patch
       ]
       ++ lib.optionals (lib.versionOlder version "6.0") [
-        # See https://github.com/Sonarr/Sonarr/issues/7442 and
-        # https://github.com/Sonarr/Sonarr/pull/7443.
-        # Unfortunately, the .NET 8 upgrade was only merged into the v5 branch,
+        # See https://github.com/Radarr/Radarr/pull/10258
+        # Unfortunately, the .NET 8 upgrade will be merged into the v6 branch,
         # and it may take some time for that to become stable.
-        # However, the patches cleanly apply to v4 as well.
+        # However, the patches cleanly apply to v5 as well.
         (fetchpatch {
           name = "dotnet8-compatibility";
           url = "https://github.com/Radarr/Radarr/commit/1414883d6c3e21eaabab11394450e14f3d5e2eda.patch";
@@ -126,7 +125,7 @@ buildDotnetModule {
     "--property:TargetFramework=net8.0"
     "--property:EnableAnalyzers=false"
     # Override defaults in src/Directory.Build.props that use current time.
-    "--property:Copyright=Copyright 2014-2025 radarr.tv (GNU General Public v3)"
+    "--property:Copyright=Copyright 2014-2025 radarr.video (GNU General Public v3)"
     "--property:AssemblyVersion=${version}"
     "--property:AssemblyConfiguration=main"
     "--property:RuntimeIdentifier=${rid}"
@@ -190,15 +189,11 @@ buildDotnetModule {
   };
 
   meta = {
-    description = "Smart PVR for newsgroup and bittorrent users";
-    homepage = "https://radarr.tv";
+    description = "Usenet/BitTorrent movie downloader";
+    homepage = "https://radarr.video";
+    changelog = "https://github.com/Radarr/Radarr/releases/tag/v${version}";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [
-      fadenb
-      purcell
-      tie
-      niklaskorz
-    ];
+    maintainers = with lib.maintainers; [ edwtjo purcell ];
     mainProgram = "Radarr";
     # platforms inherited from dotnet-sdk.
   };
