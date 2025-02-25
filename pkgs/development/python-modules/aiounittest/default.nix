@@ -14,20 +14,21 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "kwarunek";
-    repo = pname;
+    repo = "aiounittest";
     tag = version;
     hash = "sha256-hcfcB2SMduTopqdRdMi63UTTD7BWc5g2opAfahWXjlw=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ wrapt ];
+  dependencies = [ wrapt ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "aiounittest" ];
 
   meta = with lib; {
+    changelog = "https://github.com/kwarunek/aiounittest/releases/tag/${src.tag}";
     description = "Test asyncio code more easily";
     homepage = "https://github.com/kwarunek/aiounittest";
     license = licenses.mit;
