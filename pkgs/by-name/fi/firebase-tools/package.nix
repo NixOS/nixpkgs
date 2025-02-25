@@ -8,20 +8,27 @@
 }:
 buildNpmPackage rec {
   pname = "firebase-tools";
-  version = "13.30.0";
+  version = "13.31.2";
 
   src = fetchFromGitHub {
     owner = "firebase";
     repo = "firebase-tools";
     tag = "v${version}";
-    hash = "sha256-QeFkZJAdXs9+buE1qQqKZkEh9LYTlR1IQiueLx3rUbs=";
+    hash = "sha256-Oyg559MT5+F8QKfPqNgKq8fXtn4hnZeO1ipgkYuMgNE=";
   };
 
-  npmDepsHash = "sha256-IIYHtePMsgh3WfuspYaQEGMYnn9KrAg0pE39mlhldO8=";
+  npmDepsHash = "sha256-mJ+H7rG9quBZWklb2dYlJ3uBa2SmDME517TbcJ/Gnvc=";
+
+  patches = [
+    ./override-ajv.patch
+    ./override-whatwg-url.patch
+  ];
 
   postPatch = ''
     ln -s npm-shrinkwrap.json package-lock.json
   '';
+
+  makeCacheWritable = true;
 
   nativeBuildInputs =
     [
