@@ -213,19 +213,19 @@ in
       };
 
       dataDir = mkOption {
-        type = types.nonEmptyStr;
+        type = types.path;
         default = "/var/lib/movim";
         description = "State directory of the `movim` user which holds the application’s state & data.";
       };
 
       logDir = mkOption {
-        type = types.nonEmptyStr;
+        type = types.path;
         default = "/var/log/movim";
         description = "Log directory of the `movim` user which holds the application’s logs.";
       };
 
       runtimeDir = mkOption {
-        type = types.nonEmptyStr;
+        type = types.path;
         default = "/run/movim";
         description = "Runtime directory of the `movim` user which holds the application’s caches & temporary files.";
       };
@@ -254,9 +254,8 @@ in
       };
 
       minifyStaticFiles = mkOption {
-        type =
-          with types;
-          either bool (submodule {
+        type = types.either types.bool (
+          types.submodule {
             options = {
               script = mkOption {
                 type = types.submodule {
@@ -264,7 +263,7 @@ in
                     enable = mkEnableOption "Script minification";
                     package = mkPackageOption pkgs "esbuild" { };
                     target = mkOption {
-                      type = with types; nullOr nonEmptyStr;
+                      type = types.nullOr types.nonEmptyStr;
                       default = null;
                     };
                   };
@@ -276,7 +275,7 @@ in
                     enable = mkEnableOption "Script minification";
                     package = mkPackageOption pkgs "lightningcss" { };
                     target = mkOption {
-                      type = with types; nullOr nonEmptyStr;
+                      type = types.nullOr types.nonEmptyStr;
                       default = null;
                     };
                   };
@@ -291,36 +290,35 @@ in
                 };
               };
             };
-          });
+          }
+        );
         default = true;
         description = "Do minification on public static files";
       };
 
       precompressStaticFiles = mkOption {
-        type =
-          with types;
-          submodule {
-            options = {
-              brotli = {
-                enable = mkEnableOption "Brotli precompression";
-                package = mkPackageOption pkgs "brotli" { };
-                compressionLevel = mkOption {
-                  type = types.ints.between 0 11;
-                  default = 11;
-                  description = "Brotli compression level";
-                };
+        type = types.submodule {
+          options = {
+            brotli = {
+              enable = mkEnableOption "Brotli precompression";
+              package = mkPackageOption pkgs "brotli" { };
+              compressionLevel = mkOption {
+                type = types.ints.between 0 11;
+                default = 11;
+                description = "Brotli compression level";
               };
-              gzip = {
-                enable = mkEnableOption "Gzip precompression";
-                package = mkPackageOption pkgs "gzip" { };
-                compressionLevel = mkOption {
-                  type = types.ints.between 1 9;
-                  default = 9;
-                  description = "Gzip compression level";
-                };
+            };
+            gzip = {
+              enable = mkEnableOption "Gzip precompression";
+              package = mkPackageOption pkgs "gzip" { };
+              compressionLevel = mkOption {
+                type = types.ints.between 1 9;
+                default = 9;
+                description = "Gzip compression level";
               };
             };
           };
+        };
         default = {
           brotli.enable = true;
           gzip.enable = false;
@@ -332,67 +330,67 @@ in
         type = types.submodule {
           options = {
             info = mkOption {
-              type = with types; nullOr str;
+              type = types.nullOr types.nonEmptyStr;
               default = null;
               description = "Content of the info box on the login page";
             };
 
             description = mkOption {
-              type = with types; nullOr str;
+              type = types.nullOr types.nonEmptyStr;
               default = null;
               description = "General description of the instance";
             };
 
             timezone = mkOption {
-              type = with types; nullOr str;
+              type = types.nullOr types.nonEmptyStr;
               default = null;
               description = "The server timezone";
             };
 
             restrictsuggestions = mkOption {
-              type = with types; nullOr bool;
+              type = types.nullOr types.bool;
               default = null;
               description = "Only suggest chatrooms, Communities and other contents that are available on the user XMPP server and related services";
             };
 
             chatonly = mkOption {
-              type = with types; nullOr bool;
+              type = types.nullOr types.bool;
               default = null;
               description = "Disable all the social feature (Communities, Blog…) and keep only the chat ones";
             };
 
             disableregistration = mkOption {
-              type = with types; nullOr bool;
+              type = types.nullOr types.bool;
               default = null;
               description = "Remove the XMPP registration flow and buttons from the interface";
             };
 
             loglevel = mkOption {
-              type = with types; nullOr (ints.between 0 3);
+              type = types.nullOr (types.ints.between 0 3);
               default = null;
               description = "The server loglevel";
             };
 
             locale = mkOption {
-              type = with types; nullOr str;
+              type = types.nullOr types.nonEmptyStr;
               default = null;
               description = "The server main locale";
             };
 
             xmppdomain = mkOption {
-              type = with types; nullOr str;
+              type = types.nullOr types.nonEmptyStr;
               default = null;
               description = "The default XMPP server domain";
             };
 
             xmppdescription = mkOption {
-              type = with types; nullOr str;
+              type = types.nullOr types.nonEmptyStr;
               default = null;
               description = "The default XMPP server description";
             };
 
             xmppwhitelist = mkOption {
-              type = with types; nullOr str;
+              type = types.nullOr types.nonEmptyStr;
               default = null;
               description = "The allowlisted XMPP servers";
             };
@@ -420,7 +418,7 @@ in
       };
 
       secretFile = mkOption {
-        type = with types; nullOr path;
+        type = types.nullOr types.path;
         default = null;
         description = "The secret file to be sourced for the .env settings.";
       };
@@ -437,13 +435,13 @@ in
         };
 
         name = mkOption {
-          type = types.str;
+          type = types.nonEmptyStr;
           default = "movim";
           description = "Database name.";
         };
 
         user = mkOption {
-          type = types.str;
+          type = types.nonEmptyStr;
           default = "movim";
           description = "Database username.";
         };
@@ -456,15 +454,9 @@ in
       };
 
       nginx = mkOption {
-        type =
-          with types;
-          nullOr (
-            submodule (
-              import ../web-servers/nginx/vhost-options.nix {
-                inherit config lib;
-              }
-            )
-          );
+        type = types.nullOr (
+          types.submodule (import ../web-servers/nginx/vhost-options.nix { inherit config lib; })
+        );
         default = null;
         example =
           lib.literalExpression # nginx
