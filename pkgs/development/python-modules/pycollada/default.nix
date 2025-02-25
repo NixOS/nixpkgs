@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "pycollada";
-  version = "0.8";
+  version = "0.9";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-86N1nMTOwdWekyqtdDmdvPVB0YhiqtkDx3AEDaQq8g4=";
+    hash = "sha256-gk9ugJ5RDWSbWYSm6o5hTOXPJwyB6rb76q8K5x3mpq8=";
   };
 
   propagatedBuildInputs = [
