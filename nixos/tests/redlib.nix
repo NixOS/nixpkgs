@@ -3,7 +3,7 @@ import ./make-test-python.nix (
   {
     name = "redlib";
     meta.maintainers = with lib.maintainers; [
-      soispha
+      bpeetz
       Guanran928
     ];
 

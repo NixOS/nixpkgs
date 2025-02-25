@@ -269,7 +269,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   # Add a ‘qemu-kvm’ wrapper for compatibility/convenience.
-  postInstall = lib.optionalString (!minimal) ''
+  postInstall = lib.optionalString (!minimal && !xenSupport) ''
     ln -s $out/bin/qemu-system-${stdenv.hostPlatform.qemuArch} $out/bin/qemu-kvm
   '';
 
