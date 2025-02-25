@@ -17,7 +17,6 @@
   ipv6 ? true,
   nixosTests,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "squid";
   version = "7.0.1";
@@ -82,9 +81,12 @@ stdenv.mkDerivation (finalAttrs: {
 
     cd test-suite/
   '';
+
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin
-    cp src/squid $out/bin
+    cp ../src/squid $out/bin
+    runHook postInstall
   '';
 
   passthru.tests.squid = nixosTests.squid;

@@ -56,6 +56,21 @@ import ./make-test-python.nix (
           {
             virtualisation.vlans = [ 1 ];
             networking.firewall.enable = true;
+
+            services.nginx = {
+              enable = true;
+
+              virtualHosts."server" = {
+                root = "/etc";
+                locations."/".index = "hostname";
+                listen = [
+                  {
+                    addr = "0.0.0.0";
+                    port = 80;
+                  }
+                ];
+              };
+            };
           }
         ];
 
@@ -74,10 +89,6 @@ import ./make-test-python.nix (
             ];
             networking.firewall.enable = true;
             networking.firewall.allowedTCPPorts = [ config.services.squid.proxyPort ];
-
-            nixpkgs.config.permittedInsecurePackages = [
-              "squid-6.12"
-            ];
 
             services.squid = {
               enable = true;
@@ -160,6 +171,8 @@ import ./make-test-python.nix (
             client.fail('[[ `timeout 3 curl http://${serverIp}` ]]')
             # ... but can with the proxy
             client.succeed('[[ `timeout 3 curl --proxy http://${proxyInternalIp}:3128 http://${serverIp}` == "server" ]]')
+            # and cannot from the server
+            server.fail('[[ `timeout 3 curl http://${clientIp}` ]]')
       '';
   }
 )
