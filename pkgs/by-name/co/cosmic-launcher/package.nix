@@ -59,7 +59,10 @@ rustPlatform.buildRustPackage rec {
     description = "Launcher for the COSMIC Desktop Environment";
     mainProgram = "cosmic-launcher";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ nyabinary ];
+    maintainers = with lib.maintainers; [
+      nyabinary
+      HeitorAugustoLN
+    ];
     platforms = lib.platforms.linux;
   };
 }
