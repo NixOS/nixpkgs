@@ -239,7 +239,7 @@ in
     services.qemuGuest.package = pkgs.qemu_test.ga;
 
     # Squelch warning about unset system.stateVersion
-    system.stateVersion = lib.mkDefault lib.trivial.release;
+    system.stateVersion = (lib.mkOverride 1200) lib.trivial.release;
   };
 
 }
