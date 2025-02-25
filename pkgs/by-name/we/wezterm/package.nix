@@ -42,9 +42,6 @@ rustPlatform.buildRustPackage rec {
   postPatch = ''
     echo ${version} > .tag
 
-    # tests are failing with: Unable to exchange encryption keys
-    rm -r wezterm-ssh/tests
-
     # hash does not work well with NixOS
     substituteInPlace assets/shell-integration/wezterm.sh \
       --replace-fail 'hash wezterm 2>/dev/null' 'command type -P wezterm &>/dev/null' \
