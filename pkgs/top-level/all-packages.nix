@@ -13391,24 +13391,20 @@ with pkgs;
   firefox-esr-unwrapped = firefox-esr-128-unwrapped;
 
   firefox = wrapFirefox firefox-unwrapped { };
-  firefox-beta = wrapFirefox firefox-beta-unwrapped {
-    desktopName = "Firefox Beta";
-  };
-  firefox-devedition = wrapFirefox firefox-devedition-unwrapped {
-    desktopName = "Firefox Developer Edition";
-  };
+  firefox-beta = wrapFirefox firefox-beta-unwrapped { };
+  firefox-devedition = wrapFirefox firefox-devedition-unwrapped { };
 
   firefox-mobile = callPackage ../applications/networking/browsers/firefox/mobile-config.nix { };
 
   firefox-esr-128 = wrapFirefox firefox-esr-128-unwrapped {
     nameSuffix = "-esr";
-    desktopName = "Firefox ESR";
     wmClass = "firefox-esr";
     icon = "firefox-esr";
   };
   firefox-esr = firefox-esr-128;
 
   firefox-bin-unwrapped = callPackage ../applications/networking/browsers/firefox-bin {
+    inherit (firefox-unwrapped.passthru) applicationName;
     channel = "release";
     generated = import ../applications/networking/browsers/firefox-bin/release_sources.nix;
   };
@@ -13418,23 +13414,23 @@ with pkgs;
   };
 
   firefox-beta-bin-unwrapped = firefox-bin-unwrapped.override {
+    inherit (firefox-beta-unwrapped.passthru) applicationName;
     channel = "beta";
     generated = import ../applications/networking/browsers/firefox-bin/beta_sources.nix;
   };
 
   firefox-beta-bin = res.wrapFirefox firefox-beta-bin-unwrapped {
     pname = "firefox-beta-bin";
-    desktopName = "Firefox Beta";
   };
 
   firefox-devedition-bin-unwrapped = callPackage ../applications/networking/browsers/firefox-bin {
+    inherit (firefox-devedition-unwrapped.passthru) applicationName;
     channel = "developer-edition";
     generated = import ../applications/networking/browsers/firefox-bin/developer-edition_sources.nix;
   };
 
   firefox-devedition-bin = res.wrapFirefox firefox-devedition-bin-unwrapped {
     pname = "firefox-devedition-bin";
-    desktopName = "Firefox DevEdition";
     wmClass = "firefox-aurora";
   };
 
@@ -15233,9 +15229,7 @@ with pkgs;
   thunderbird-128 = wrapThunderbird thunderbirdPackages.thunderbird-128 { };
 
   thunderbird-bin = wrapThunderbird thunderbird-bin-unwrapped {
-    applicationName = "thunderbird";
     pname = "thunderbird-bin";
-    desktopName = "Thunderbird";
   };
   thunderbird-bin-unwrapped = callPackage ../applications/networking/mailreaders/thunderbird-bin {
     generated = import ../applications/networking/mailreaders/thunderbird-bin/release_sources.nix;
