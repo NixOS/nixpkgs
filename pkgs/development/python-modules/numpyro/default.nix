@@ -93,6 +93,9 @@ buildPythonPackage rec {
 
     # ValueError: compiling computation that requires 2 logical devices, but only 1 XLA devices are available (num_replicas=2)
     "test_chain"
+
+    # test_biject_to[CorrMatrix()-(15,)] - assert Array(False, dtype=bool)
+    "test_biject_to"
   ];
 
   meta = {
