@@ -84,6 +84,12 @@ buildPythonPackage rec {
     tensorflow
   ];
 
+  pytestFlagsArray = [
+    # DeprecationWarning: linear_util.wrap_init is missing a DebugInfo object.
+    "-W"
+    "ignore::DeprecationWarning"
+  ];
+
   disabledTestPaths = [
     # Docs test, needs extra deps + we're not interested in it.
     "docs/_ext/codediff_test.py"
