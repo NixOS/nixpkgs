@@ -50,35 +50,24 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "surrealist";
-  version = "3.1.9";
+  version = "3.2.4";
 
   src = fetchFromGitHub {
     owner = "surrealdb";
     repo = "surrealist";
     rev = "surrealist-v${finalAttrs.version}";
-    hash = "sha256-p+Tyu65A+vykqafu1RCRKYFXb435Uyu9WxUoEqjI8d8=";
+    hash = "sha256-FWNGC0QoEUu1h3e3sfgWmbvqcNNvfWXU7PEjTXxu9Qo=";
   };
 
-  # HACK: A dependency (surrealist -> tauri -> **reqwest**) contains hyper-tls
-  # as an actually optional dependency. It ends up in the `Cargo.lock` file of
-  # tauri, but not in the one of surrealist. We apply a patch to `Cargo.toml`
-  # and `Cargo.lock` to ensure that we have it in our vendor archive. This may
-  # be a result of the following bug:
-  # https://github.com/rust-lang/cargo/issues/10801
-  patches = [
-    ./0001-Cargo.patch
-  ];
-
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit (finalAttrs) patches src;
+    inherit (finalAttrs) src;
     sourceRoot = "${finalAttrs.src.name}/${finalAttrs.cargoRoot}";
-    hash = "sha256-qrPIcWpdrvTmaFcfKAfz+n8a6lp6IcIMq9ZCHaa7AHQ=";
-    patchFlags = [ "-p2" ];
+    hash = "sha256-Su9ZOPIskV5poeS8pgtri+sZANBpdgnuCsQqE4WKFdA=";
   };
 
   pnpmDeps = pnpm_9.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-JwOY6Z8UjbrodSQ3csnT+puftbQUDF3NIK7o6rSpl2o=";
+    hash = "sha256-oreeV9g16/F7JGLApi0Uq+vTqNhIg7Lg1Z4k00RUOYI=";
   };
 
   nativeBuildInputs = [
