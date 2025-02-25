@@ -9135,6 +9135,19 @@ final: prev:
     meta.hydraPlatforms = [ ];
   };
 
+  nerdy-nvim = buildVimPlugin {
+    pname = "nerdy.nvim";
+    version = "2025-02-23";
+    src = fetchFromGitHub {
+      owner = "2KAbhishek";
+      repo = "nerdy.nvim";
+      rev = "319cc93d4038b24497eb34c344b20fb462be6c9a";
+      sha256 = "05dnqydmflymc2svijndsrnjv02waliy7si2md35ji9bzpw4cg6k";
+    };
+    meta.homepage = "https://github.com/2KAbhishek/nerdy.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   netman-nvim = buildVimPlugin {
     pname = "netman.nvim";
     version = "2025-01-11";
