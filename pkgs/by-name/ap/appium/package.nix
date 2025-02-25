@@ -3,10 +3,9 @@
 , stdenvNoCC
 , nodejs
 , makeWrapper
-, yq-go
 , lib
   # default to the 2 most used drivers
-, drivers ? with nodePackages; [ appium-uiautomator2-driver appium-xcuitest-driver ]
+, drivers ? with nodePackages; [ (callPackage ./extensions/appium-uiautomator2-driver {}) (callPackage ./extensions/appium-xcuitest-driver {}) ]
 , plugins ? []
 , callPackage
 }:
