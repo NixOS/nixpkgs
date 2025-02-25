@@ -29,5 +29,8 @@ buildGoModule rec {
     mainProgram = "lego";
   };
 
-  passthru.tests.lego = nixosTests.acme;
+  passthru.tests = {
+    lego-http = nixosTests.acme.http01-builtin;
+    lego-dns = nixosTests.acme.dns01-builtin;
+  };
 }
