@@ -26,7 +26,7 @@
 , ifcSupport ? false
 , stdenv
 , swig
-, vtk
+, vtk_9_2
 , wrapGAppsHook3
 , xercesc
 , yaml-cpp
@@ -120,7 +120,7 @@ freecad-utils.makeCustomizable (stdenv.mkDerivation (finalAttrs: {
       shiboken2
       soqt
       swig
-      vtk
+      vtk_9_2
       xercesc
       yaml-cpp
       zlib
