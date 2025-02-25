@@ -20,6 +20,7 @@
   dbus,
   gmobile,
   umockdev,
+  nix-update-script,
 }:
 
 let
@@ -105,6 +106,10 @@ stdenv.mkDerivation (finalAttrs: {
         done
     fi
   '';
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "Daemon to provide haptic (and later more) feedback on events";
