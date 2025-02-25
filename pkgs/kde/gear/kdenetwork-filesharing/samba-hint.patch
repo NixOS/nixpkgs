@@ -1,0 +1,12 @@
+--- a/samba/filepropertiesplugin/qml/MissingSambaPage.qml
++++ b/samba/filepropertiesplugin/qml/MissingSambaPage.qml
+@@ -16,7 +16,7 @@ Item {
+ 
+         icon.name: "dialog-error"
+ 
+-        text: xi18nc("@info", "The <application>Samba</application> file sharing service must be installed before folders can be shared.")
+-        explanation: i18n("Because this distro does not include PackageKit, we cannot show you a nice \"Install it\" button, and you will have to use your package manager to install the <command>samba</command> server package manually.")
++        text: xi18nc("@info", "File sharing service unavailable")
++        explanation: i18n("Please enable the `services.samba.enable` and `services.samba.usershares.enable` options in your NixOS configuration.")
+     }
+ }

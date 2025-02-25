@@ -1,0 +1,25 @@
+diff --git a/lib/Archive/Libarchive/Lib.pm b/lib/Archive/Libarchive/Lib.pm
+index 3fcbcf4..214df7a 100644
+--- a/lib/Archive/Libarchive/Lib.pm
++++ b/lib/Archive/Libarchive/Lib.pm
+@@ -3,7 +3,7 @@ package Archive::Libarchive::Lib;
+ use strict;
+ use warnings;
+ use 5.020;
+-use FFI::CheckLib 0.30 qw( find_lib_or_die );
++use FFI::CheckLib qw( find_lib_or_die );
+ use Encode qw( decode );
+ use experimental qw( signatures );
+ 
+index 3fcbcf4..718caed 100644
+--- a/lib/Archive/Libarchive/Lib.pm
++++ b/lib/Archive/Libarchive/Lib.pm
+@@ -23,7 +23,7 @@ L<Archive::Libarchive>.
+ 
+ sub lib
+ {
+-  $ENV{ARCHIVE_LIBARCHIVE_LIB_DLL} // find_lib_or_die( lib => 'archive', symbol => ['archive_read_free','archive_write_free','archive_free'], alien => ['Alien::Libarchive3'] );
++  $ENV{ARCHIVE_LIBARCHIVE_LIB_DLL} // find_lib_or_die( lib => 'archive', symbol => ['archive_read_free','archive_write_free','archive_free'], libpath => '@@libarchive@@' );
+ }
+ 
+ sub ffi

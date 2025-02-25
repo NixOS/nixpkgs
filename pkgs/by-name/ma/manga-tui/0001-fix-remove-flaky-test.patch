@@ -1,0 +1,42 @@
+From e84ddb20ca6b99ec2bf84bb3c3cfc3cdbbfd5ff2 Mon Sep 17 00:00:00 2001
+From: Youwen Wu <youwenw@gmail.com>
+Date: Wed, 6 Nov 2024 02:11:30 -0800
+Subject: [PATCH] fix: remove flaky test
+
+---
+ src/view/pages/manga.rs | 21 ---------------------
+ 1 file changed, 21 deletions(-)
+
+diff --git a/src/view/pages/manga.rs b/src/view/pages/manga.rs
+index 119d9ea..7179a22 100644
+--- a/src/view/pages/manga.rs
++++ b/src/view/pages/manga.rs
+@@ -1853,25 +1853,4 @@ mod test {
+         assert_eq!(manga_page.bookmark_state.phase, BookmarkPhase::SearchingFromApi);
+         assert_eq!(expected, result)
+     }
+-
+-    #[tokio::test]
+-    async fn it_sends_event_chapter_bookmarked_failed_to_fetch() {
+-        let (tx, _) = unbounded_channel();
+-        let mut manga_page = MangaPage::new(Manga::default(), None).with_global_sender(tx);
+-
+-        flush_events(&mut manga_page);
+-
+-        let api_client = TestApiClient::with_failing_response();
+-
+-        manga_page.fetch_chapter_bookmarked(ChapterBookmarked::default(), api_client);
+-
+-        let expected = MangaPageEvents::FetchBookmarkFailed;
+-
+-        let result = timeout(Duration::from_millis(250), manga_page.local_event_rx.recv())
+-            .await
+-            .unwrap()
+-            .unwrap();
+-
+-        assert_eq!(expected, result);
+-    }
+ }
+-- 
+2.46.1
+

@@ -1,0 +1,27 @@
+From 0b1d9759c43629dcd3d3a6216ea47b09516a5d84 Mon Sep 17 00:00:00 2001
+From: seth <getchoo@tuta.io>
+Date: Sat, 6 Jul 2024 18:59:50 -0400
+Subject: [PATCH] fix E0716
+
+doesn't seem to have popped up in upstream's CI. maybe this is only an
+issue in rust versions < 1.79?
+---
+ src/data/item.rs | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/data/item.rs b/src/data/item.rs
+index 43dcf6f..985be74 100644
+--- a/src/data/item.rs
++++ b/src/data/item.rs
+@@ -327,7 +327,7 @@ impl ItemSchema {
+             Self::Unknown(schema) => {
+                 let info = crate::utils::AppInfo::new(schema);
+                 if info.is_installed() {
+-                    &format!("{schema}-symbolic")
++                    return format!("{schema}-symbolic");
+                 } else {
+                     "dialog-password-symbolic"
+                 }
+-- 
+2.45.1
+

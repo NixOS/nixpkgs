@@ -1,0 +1,20 @@
+diff --git a/eden/common/os/test/CMakeLists.txt b/eden/common/os/test/CMakeLists.txt
+index a9f71443f8..be1423c455 100644
+--- a/eden/common/os/test/CMakeLists.txt
++++ b/eden/common/os/test/CMakeLists.txt
+@@ -18,4 +18,4 @@
+     ${LIBGMOCK_LIBRARIES}
+ )
+ 
+-gtest_discover_tests(os_test)
++gtest_discover_tests(os_test DISCOVERY_TIMEOUT 25)
+diff --git a/eden/common/utils/test/CMakeLists.txt b/eden/common/utils/test/CMakeLists.txt
+index 0cac73e569..ff08ecccb8 100644
+--- a/eden/common/utils/test/CMakeLists.txt
++++ b/eden/common/utils/test/CMakeLists.txt
+@@ -34,4 +34,4 @@
+     ${LIBGMOCK_LIBRARIES}
+ )
+ 
+-gtest_discover_tests(utils_test)
++gtest_discover_tests(utils_test DISCOVERY_TIMEOUT 25)

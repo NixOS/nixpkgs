@@ -1,0 +1,25 @@
+diff -u a/CoreFoundation/URL.subproj/CFURLComponents.c b/CoreFoundation/URL.subproj/CFURLComponents.c
+--- a/CoreFoundation/URL.subproj/CFURLComponents.c	1969-12-31 19:00:01.000000000 -0500
++++ b/CoreFoundation/URL.subproj/CFURLComponents.c	2023-06-09 20:36:52.995514573 -0400
+@@ -66,7 +66,8 @@
+     return CFRetain(CFSTR("A really nice CFURLComponents object"));
+ }
+ 
+-CF_CROSS_PLATFORM_EXPORT void __CFURLComponentsDeallocate(CFURLComponentsRef instance) {
++CF_CROSS_PLATFORM_EXPORT void __CFURLComponentsDeallocate(CFTypeRef cf) {
++    CFURLComponentsRef instance = (CFURLComponentsRef)cf;
+     __CFGenericValidateType(instance, _CFURLComponentsGetTypeID());
+     
+     if (instance->_urlString) CFRelease(instance->_urlString);
+diff -u a/CoreFoundation/URL.subproj/CFURLComponents.h b/CoreFoundation/URL.subproj/CFURLComponents.h
+--- a/CoreFoundation/URL.subproj/CFURLComponents.h	1969-12-31 19:00:01.000000000 -0500
++++ b/CoreFoundation/URL.subproj/CFURLComponents.h	2023-06-09 20:39:36.967857713 -0400
+@@ -38,7 +38,7 @@
+ 
+ CF_EXPORT CFTypeID _CFURLComponentsGetTypeID(void);
+ 
+-CF_CROSS_PLATFORM_EXPORT void __CFURLComponentsDeallocate(CFURLComponentsRef);
++CF_CROSS_PLATFORM_EXPORT void __CFURLComponentsDeallocate(CFTypeRef);
+ 
+ // URLComponents are always mutable.
+ CF_EXPORT _Nullable CFURLComponentsRef _CFURLComponentsCreate(CFAllocatorRef alloc);

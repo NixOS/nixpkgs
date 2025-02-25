@@ -1,0 +1,36 @@
+From 99852365513266afdd793289813e8e565186c9e6 Mon Sep 17 00:00:00 2001
+From: Nick Clifton <nickc@redhat.com>
+Date: Wed, 23 Mar 2022 11:39:49 +0000
+Subject: [PATCH] dlltool: Use the output name as basis for deterministic temp
+ prefixes
+
+        PR 28885
+        * dlltool.c (main): use imp_name rather than dll_name when
+        generating a temporary file name.
+---
+ binutils/ChangeLog | 9 +++++++++
+ binutils/dlltool.c | 7 ++++---
+ 2 files changed, 13 insertions(+), 3 deletions(-)
+
+diff --git a/binutils/dlltool.c b/binutils/dlltool.c
+index d95bf3f5470..89871510b45 100644
+--- a/binutils/dlltool.c
++++ b/binutils/dlltool.c
+@@ -3992,10 +3992,11 @@ main (int ac, char **av)
+   if (tmp_prefix == NULL)
+     {
+       /* If possible use a deterministic prefix.  */
+-      if (dll_name)
++      if (imp_name || delayimp_name)
+         {
+-          tmp_prefix = xmalloc (strlen (dll_name) + 2);
+-          sprintf (tmp_prefix, "%s_", dll_name);
++          const char *input = imp_name ? imp_name : delayimp_name;
++          tmp_prefix = xmalloc (strlen (input) + 2);
++          sprintf (tmp_prefix, "%s_", input);
+           for (i = 0; tmp_prefix[i]; i++)
+             if (!ISALNUM (tmp_prefix[i]))
+               tmp_prefix[i] = '_';
+-- 
+2.31.1
+

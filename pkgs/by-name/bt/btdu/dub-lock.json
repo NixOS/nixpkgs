@@ -1,0 +1,20 @@
+{
+  "dependencies": {
+    "ae": {
+      "version": "0.0.3461",
+      "sha256": "1mk075r3bas8s699y6sc4fxbdyjhc9cm6qxcqqaj0di9ijb71fq1"
+    },
+    "btrfs": {
+      "version": "0.0.21",
+      "sha256": "0j7ksngwn8kilbql6p7hh5jvmrxqsr7pniw2n1qlrwdsms6qv72m"
+    },
+    "ncurses": {
+      "version": "1.0.0",
+      "sha256": "0ivl88vp2dy9rpv6x3f9jlyqa7aps2x1kkyx80w2d4vcs31pzmb2"
+    },
+    "emsi_containers": {
+      "version": "0.9.0",
+      "sha256": "1viz1fjh6jhfvl0d25bb1q7aclm1hrs0d7hhcx1d9c0gg5k6lcpm"
+    }
+  }
+}

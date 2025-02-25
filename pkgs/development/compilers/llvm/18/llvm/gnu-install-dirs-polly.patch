@@ -1,0 +1,13 @@
+--- a/tools/polly/cmake/polly_macros.cmake	2024-03-15 17:36:20.550893344 -0700
++++ b/tools/polly/cmake/polly_macros.cmake	2024-03-15 17:37:06.277332960 -0700
+@@ -45,8 +45,8 @@
+     install(TARGETS ${name}
+       COMPONENT ${name}
+       EXPORT LLVMExports
+-      LIBRARY DESTINATION lib${LLVM_LIBDIR_SUFFIX}
+-      ARCHIVE DESTINATION lib${LLVM_LIBDIR_SUFFIX})
++      LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}${LLVM_LIBDIR_SUFFIX}
++      ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}${LLVM_LIBDIR_SUFFIX})
+     add_llvm_install_targets(install-${name}
+       COMPONENT ${name})
+   endif()

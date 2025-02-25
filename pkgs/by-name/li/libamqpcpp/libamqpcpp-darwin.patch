@@ -1,0 +1,13 @@
+--- a/src/Makefile
++++ b/src/Makefile
+@@ -0,0 +1 @@
++CXX ?= g++
+@@ -43 +44 @@ ${SHARED_LIB}: ${SHARED_OBJECTS}
+-	${LD} ${LD_FLAGS} -Wl,${SONAMEPARAMETER},lib$(LIBRARY_NAME).so.$(SONAME) -o $@ ${SHARED_OBJECTS}
++	${CXX} ${LD_FLAGS} -Wl,${SONAMEPARAMETER},lib$(LIBRARY_NAME).so.$(SONAME) -o $@ ${SHARED_OBJECTS}
+@@ -52 +53 @@ ${SHARED_OBJECTS}:
+-	${CPP} ${CPPFLAGS} -fpic -o $@ ${@:%.o=%.cpp}
++	${CXX} ${CPPFLAGS} -fpic -o $@ ${@:%.o=%.cpp}
+@@ -55 +56 @@ ${STATIC_OBJECTS}:
+-	${CPP} ${CPPFLAGS} -o $@ ${@:%.s.o=%.cpp}
++	${CXX} ${CPPFLAGS} -o $@ ${@:%.s.o=%.cpp}

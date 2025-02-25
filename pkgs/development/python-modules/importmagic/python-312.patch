@@ -1,0 +1,24 @@
+--- a/importmagic/index.py
++++ b/importmagic/index.py
+@@ -8,18 +8,14 @@
+ import logging
+ import re
+ from contextlib import contextmanager
+-from distutils import sysconfig
++import sysconfig
+ 
+ from importmagic.util import parse_ast
+ 
+ 
+ LIB_LOCATIONS = sorted(set((
+-    (sysconfig.get_python_lib(standard_lib=True), 'S'),
+-    (sysconfig.get_python_lib(plat_specific=True), '3'),
+-    (sysconfig.get_python_lib(standard_lib=True, prefix=sys.prefix), 'S'),
+-    (sysconfig.get_python_lib(plat_specific=True, prefix=sys.prefix), '3'),
+-    (sysconfig.get_python_lib(standard_lib=True, prefix='/usr/local'), 'S'),
+-    (sysconfig.get_python_lib(plat_specific=True, prefix='/usr/local'), '3'),
++    (sysconfig.get_path('stdlib'), 'S'),
++    (sysconfig.get_path('platlib'), '3'),
+ )), key=lambda l: -len(l[0]))
+ 
+ # Regex matching modules that we never attempt to index.
