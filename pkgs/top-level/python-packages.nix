@@ -1693,6 +1693,8 @@ self: super: with self; {
 
   binho-host-adapter = callPackage ../development/python-modules/binho-host-adapter { };
 
+  binsync = callPackage ../development/python-modules/binsync { };
+
   biom-format = callPackage ../development/python-modules/biom-format { };
 
   biopandas = callPackage ../development/python-modules/biopandas { };
@@ -12616,6 +12618,8 @@ self: super: with self; {
   pypytools = callPackage ../development/python-modules/pypytools { };
 
   pyqldb = callPackage ../development/python-modules/pyqldb { };
+
+  pyqodeng = callPackage ../development/python-modules/pyqodeng { };
 
   pyqrcode = callPackage ../development/python-modules/pyqrcode { };
 
