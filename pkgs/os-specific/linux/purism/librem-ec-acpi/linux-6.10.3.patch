@@ -1,0 +1,26 @@
+From 13fc2a3949c30cfd8624acdbc97c7942aee588f8 Mon Sep 17 00:00:00 2001
+From: primalmotion <primalmotion@pm.me>
+Date: Tue, 6 Aug 2024 18:14:10 +0200
+Subject: [PATCH] fixed: build on linux 6.10.3
+
+---
+ librem_ec_acpi.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/librem_ec_acpi.c b/librem_ec_acpi.c
+index 4e8ebf3..d53f580 100644
+--- a/librem_ec_acpi.c
++++ b/librem_ec_acpi.c
+@@ -779,7 +779,9 @@ static SIMPLE_DEV_PM_OPS(librem_ec_pm, librem_ec_suspend, librem_ec_resume);
+ 
+ static struct acpi_driver librem_ec_driver = {
+ 	.name = "Librem EC ACPI Driver",
++#if LINUX_VERSION_CODE < KERNEL_VERSION(6, 10, 3)
+ 	.owner = THIS_MODULE,
++#endif
+ 	.class = "hotkey",
+ 	.ids = device_ids,
+ 	// .flags = ACPI_DRIVER_ALL_NOTIFY_EVENTS,
+-- 
+GitLab
+
