@@ -27,14 +27,6 @@
 
 # Copy this file to your Android project.
 let
-  # Declaration of versions for everything. This is useful since these
-  # versions may be used in multiple places in this Nix expression.
-  android = {
-    platforms = [ "35" ];
-    systemImageTypes = [ "google_apis" ];
-    abis = [ "x86_64" ];
-  };
-
   # If you copy this example out of nixpkgs, something like this will work:
   /*
     androidEnvNixpkgs = fetchTarball {
@@ -54,13 +46,11 @@ let
     inherit config pkgs licenseAccepted;
   };
 
-  sdkArgs = {
-    platformVersions = android.platforms;
-    abiVersions = android.abis;
-    systemImageTypes = android.systemImageTypes;
+  emulatorSupported = pkgs.stdenv.hostPlatform.isx86_64 || pkgs.stdenv.hostPlatform.isDarwin;
 
+  sdkArgs = {
     includeSystemImages = true;
-    includeEmulator = true;
+    includeEmulator = "if-supported";
 
     # Accepting more licenses declaratively:
     extraLicenses = [
@@ -133,10 +123,11 @@ pkgs.mkShell rec {
           echo "installed_packages_section: ''${installed_packages_section}"
 
           packages=(
-            "build-tools;35.0.0" "cmdline-tools;13.0" \
-            "emulator" "platform-tools" "platforms;android-35" \
+            "build-tools" "cmdline-tools" \
+            "platform-tools" "platforms;android-35" \
             "system-images;android-35;google_apis;x86_64"
           )
+          ${pkgs.lib.optionalString emulatorSupported ''packages+=("emulator")''}
 
           for package in "''${packages[@]}"; do
             if [[ ! $installed_packages_section =~ "$package" ]]; then
@@ -195,21 +186,25 @@ pkgs.mkShell rec {
             jdk
           ];
         }
-        ''
-          export ANDROID_USER_HOME=$PWD/.android
-          mkdir -p $ANDROID_USER_HOME
+        (
+          pkgs.lib.optionalString emulatorSupported ''
+            export ANDROID_USER_HOME=$PWD/.android
+            mkdir -p $ANDROID_USER_HOME
 
-          avdmanager delete avd -n testAVD || true
-          echo "" | avdmanager create avd --force --name testAVD --package 'system-images;android-35;google_apis;x86_64'
-          result=$(avdmanager list avd)
+            avdmanager delete avd -n testAVD || true
+            echo "" | avdmanager create avd --force --name testAVD --package 'system-images;android-35;google_apis;x86_64'
+            result=$(avdmanager list avd)
 
-          if [[ ! $result =~ "Name: testAVD" ]]; then
-            echo "avdmanager couldn't create the avd! The output is :''${result}"
-            exit 1
-          fi
+            if [[ ! $result =~ "Name: testAVD" ]]; then
+              echo "avdmanager couldn't create the avd! The output is :''${result}"
+              exit 1
+            fi
 
-          avdmanager delete avd -n testAVD || true
-          touch "$out"
-        '';
+            avdmanager delete avd -n testAVD || true
+          ''
+          + ''
+            touch $out
+          ''
+        );
   };
 }

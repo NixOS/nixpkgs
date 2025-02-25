@@ -6,7 +6,8 @@ set -e
 pushd "$(dirname "$0")" &>/dev/null || exit 1
 
 echo "Writing repo.json" >&2
-cat ./repo.json | ruby mkrepo.rb \
+pid=$BASHPID
+ruby mkrepo.rb \
     --packages ./xml/repository2-3.xml \
     --images ./xml/android-sys-img2-3.xml \
     --images ./xml/android-tv-sys-img2-3.xml \
@@ -15,7 +16,7 @@ cat ./repo.json | ruby mkrepo.rb \
     --images ./xml/android-automotive-sys-img2-3.xml \
     --images ./xml/google_apis-sys-img2-3.xml \
     --images ./xml/google_apis_playstore-sys-img2-3.xml \
-    --addons ./xml/addon2-3.xml \
+    --addons ./xml/addon2-3.xml <./repo.json 2>/proc/$pid/fd/1 \
          | sponge repo.json
 
 popd &>/dev/null
