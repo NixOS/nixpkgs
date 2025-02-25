@@ -84,20 +84,21 @@ let
     '';
   };
 
-  genTests = version:
+  genTests = version: webserver:
     let
       testBase.imports = [
         baseModule
         {
           nodes.nextcloud = { pkgs, ... }: {
             services.nextcloud.package = pkgs.${"nextcloud${toString version}"};
+            services.nextcloud.webserver = webserver;
           };
         }
       ];
 
       callNextcloudTest = path:
         let
-          name = "${removeSuffix ".nix" (baseNameOf path)}${toString version}";
+          name = "${removeSuffix ".nix" (baseNameOf path)}-${webserver}-${toString version}";
         in nameValuePair name (import path {
           inherit system pkgs testBase;
           name = "nextcloud-${name}";
@@ -110,4 +111,10 @@ let
       ./with-objectstore.nix
     ];
 in
-listToAttrs (concatMap genTests [ 29 30 ])
+listToAttrs (concatMap
+  (version: concatMap
+    (webserver: genTests version webserver)
+    [ "nginx" "caddy" ]
+  )
+  [ 29 30 ]
+)
