@@ -16,13 +16,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "smartgithg";
-  version = "24.1.1";
+  version = "24.1.2";
 
   src = fetchurl {
     url = "https://www.syntevo.com/downloads/smartgit/smartgit-linux-${
       builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version
     }.tar.gz";
-    hash = "sha256-Lv5U/D1p5+Xiq/IeQJGDu3t6j6sP0r0vMYpfAEeExfI=";
+    hash = "sha256-bPiPb/k5f9dRpwm4Wj+c2mhFhH9WOz2hzKeDfQLRLHQ=";
   };
 
   nativeBuildInputs = [ wrapGAppsHook3 ];
