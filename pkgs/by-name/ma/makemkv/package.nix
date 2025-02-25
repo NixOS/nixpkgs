@@ -5,10 +5,9 @@
   fetchurl,
   ffmpeg,
   lib,
-  mkDerivation,
+  libsForQt5,
   openssl,
   pkg-config,
-  qtbase,
   rubyPackages,
   writeShellApplication,
   zlib,
@@ -35,7 +34,7 @@ let
     hash = "sha256-JrEV5rpJNRgbXqiKLNUZZtWbZyR44EMTd1kSKVGLZ6o=";
   };
 in
-mkDerivation {
+libsForQt5.mkDerivation {
   pname = "makemkv";
   inherit version;
 
@@ -58,7 +57,7 @@ mkDerivation {
   buildInputs = [
     ffmpeg
     openssl
-    qtbase
+    libsForQt5.qtbase
     zlib
   ];
 
