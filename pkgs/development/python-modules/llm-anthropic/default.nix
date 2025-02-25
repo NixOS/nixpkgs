@@ -1,5 +1,6 @@
 {
   lib,
+  callPackage,
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
@@ -44,6 +45,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "llm_anthropic" ];
 
   passthru.updateScript = nix-update-script { };
+
+  passthru.tests = {
+    llm-plugin = callPackage ./tests/llm-plugin.nix { };
+  };
 
   meta = {
     description = "LLM access to models by Anthropic, including the Claude series";
