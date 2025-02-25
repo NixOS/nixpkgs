@@ -1,8 +1,8 @@
 diff --git a/common/flatpak-run.c b/common/flatpak-run.c
-index 94ad013..5c9f55e 100644
+index 6df992d7..d6018e8f 100644
 --- a/common/flatpak-run.c
 +++ b/common/flatpak-run.c
-@@ -871,6 +871,49 @@ out:
+@@ -2256,11 +2256,55 @@ out:
    return res;
  }
  
@@ -52,7 +52,13 @@ index 94ad013..5c9f55e 100644
  static void
  add_font_path_args (FlatpakBwrap *bwrap)
  {
-@@ -898,6 +946,18 @@ add_font_path_args (FlatpakBwrap *bwrap)
+   g_autoptr(GString) xml_snippet = g_string_new ("");
+   gchar *path_build_tmp = NULL;
++  g_autoptr(GFile) user_font_nix = NULL;
+   g_autoptr(GFile) user_font1 = NULL;
+   g_autoptr(GFile) user_font2 = NULL;
+   g_autoptr(GFile) user_font_cache = NULL;
+@@ -2283,6 +2327,18 @@ add_font_path_args (FlatpakBwrap *bwrap)
                                "\t<remap-dir as-path=\"%s\">/run/host/fonts</remap-dir>\n",
                                SYSTEM_FONTS_DIR);
      }
@@ -71,7 +77,49 @@ index 94ad013..5c9f55e 100644
  
    if (g_file_test ("/usr/local/share/fonts", G_FILE_TEST_EXISTS))
      {
-@@ -998,6 +1058,13 @@ add_icon_path_args (FlatpakBwrap *bwrap)
+@@ -2317,6 +2373,10 @@ add_font_path_args (FlatpakBwrap *bwrap)
+                               NULL);
+     }
+ 
++  path_build_tmp = g_build_filename (g_get_home_dir (), ".nix-profile/share/fonts", NULL);
++  user_font_nix = g_file_new_for_path (path_build_tmp);
++  g_clear_pointer (&path_build_tmp, g_free);
++
+   path_build_tmp = g_build_filename (g_get_user_data_dir (), "fonts", NULL);
+   user_font1 = g_file_new_for_path (path_build_tmp);
+   g_clear_pointer (&path_build_tmp, g_free);
+@@ -2325,7 +2385,19 @@ add_font_path_args (FlatpakBwrap *bwrap)
+   user_font2 = g_file_new_for_path (path_build_tmp);
+   g_clear_pointer (&path_build_tmp, g_free);
+ 
+-  if (g_file_query_exists (user_font1, NULL))
++  if (g_file_query_exists (user_font_nix, NULL))
++    {
++      add_nix_store_symlink_targets (bwrap, g_file_get_path (user_font_nix));
++      flatpak_bwrap_add_args (bwrap,
++                              "--ro-bind",
++                              flatpak_file_get_path_cached (user_font_nix),
++                              "/run/host/user-fonts",
++                              NULL);
++      g_string_append_printf (xml_snippet,
++                              "\t<remap-dir as-path=\"%s\">/run/host/user-fonts</remap-dir>\n",
++                              flatpak_file_get_path_cached (user_font_nix));
++    }
++  else if (g_file_query_exists (user_font1, NULL))
+     {
+       flatpak_bwrap_add_args (bwrap,
+                               "--ro-bind", flatpak_file_get_path_cached (user_font1), "/run/host/user-fonts",
+@@ -2374,7 +2446,8 @@ add_font_path_args (FlatpakBwrap *bwrap)
+ static void
+ add_icon_path_args (FlatpakBwrap *bwrap)
+ {
+-  g_autofree gchar *user_icons_path = NULL;
++  gchar *path_build_tmp = NULL;
++  g_autoptr(GFile) user_icons_nix = NULL;
+   g_autoptr(GFile) user_icons = NULL;
+ 
+   if (g_file_test ("/usr/share/icons", G_FILE_TEST_IS_DIR))
+@@ -2383,10 +2456,30 @@ add_icon_path_args (FlatpakBwrap *bwrap)
                                "--ro-bind", "/usr/share/icons", "/run/host/share/icons",
                                NULL);
      }
@@ -83,5 +131,25 @@ index 94ad013..5c9f55e 100644
 +                              NULL);
 +    }
  
-   user_icons_path = g_build_filename (g_get_user_data_dir (), "icons", NULL);
-   user_icons = g_file_new_for_path (user_icons_path);
+-  user_icons_path = g_build_filename (g_get_user_data_dir (), "icons", NULL);
+-  user_icons = g_file_new_for_path (user_icons_path);
+-  if (g_file_query_exists (user_icons, NULL))
++  path_build_tmp = g_build_filename (g_get_home_dir (), ".nix-profile/share/icons", NULL);
++  user_icons_nix = g_file_new_for_path (path_build_tmp);
++  g_clear_pointer (&path_build_tmp, g_free);
++
++  path_build_tmp = g_build_filename (g_get_user_data_dir (), "icons", NULL);
++  user_icons = g_file_new_for_path (path_build_tmp);
++  g_clear_pointer (&path_build_tmp, g_free);
++
++  if (g_file_query_exists (user_icons_nix, NULL))
++    {
++      add_nix_store_symlink_targets(bwrap, flatpak_file_get_path_cached (user_icons_nix));
++      flatpak_bwrap_add_args(bwrap,
++                             "--ro-bind", flatpak_file_get_path_cached (user_icons_nix), "/run/host/user-share/icons",
++                             NULL);
++    }
++  else if (g_file_query_exists (user_icons, NULL))
+     {
+       flatpak_bwrap_add_args (bwrap,
+                               "--ro-bind", flatpak_file_get_path_cached (user_icons), "/run/host/user-share/icons",
