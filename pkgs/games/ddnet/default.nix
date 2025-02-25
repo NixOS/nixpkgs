@@ -128,9 +128,10 @@ stdenv.mkDerivation rec {
     homepage = "https://ddnet.org";
     license = licenses.asl20;
     maintainers = with maintainers; [
-      sirseruju
       lom
       ncfavier
+      Scrumplex
+      sirseruju
     ];
     mainProgram = "DDNet";
   };
