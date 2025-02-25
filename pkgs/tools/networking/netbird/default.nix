@@ -18,20 +18,39 @@
   UserNotifications,
   WebKit,
   ui ? false,
+  client ? true,
+  server ? false,
   netbird-ui,
 }:
 let
   modules =
-    if ui then
-      {
-        "client/ui" = "netbird-ui";
-      }
-    else
-      {
-        client = "netbird";
-        management = "netbird-mgmt";
-        signal = "netbird-signal";
-      };
+    { }
+    // (
+      if ui then
+        {
+          "client/ui" = "netbird-ui";
+        }
+      else
+        { }
+    )
+    // (
+      if client then
+        {
+          client = "netbird";
+        }
+      else
+        { }
+    )
+    // (
+      if server then
+        {
+          management = "netbird-mgmt";
+          signal = "netbird-signal";
+          relay = "netbird-relay";
+        }
+      else
+        { }
+    );
 in
 buildGoModule rec {
   pname = "netbird";
@@ -91,7 +110,8 @@ buildGoModule rec {
         ''
           mv $out/bin/${lib.last (lib.splitString "/" module)} $out/bin/${binary}
         ''
-        + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform && !ui) ''
+        # relay has no completions, in which case the completion subcommand will error
+        + lib.optionalString (module != "relay" && module != "client/ui") ''
           installShellCompletion --cmd ${binary} \
             --bash <($out/bin/${binary} completion bash) \
             --fish <($out/bin/${binary} completion fish) \
@@ -121,10 +141,7 @@ buildGoModule rec {
     changelog = "https://github.com/netbirdio/netbird/releases/tag/v${version}";
     description = "Connect your devices into a single secure private WireGuard®-based mesh network with SSO/MFA and simple access controls";
     license = licenses.bsd3;
-    maintainers = with maintainers; [
-      vrifox
-      saturn745
-    ];
     mainProgram = if ui then "netbird-ui" else "netbird";
+    maintainers = with maintainers; [ vrifox saturn745 patrickdag ];
   };
 }
