@@ -21,7 +21,7 @@
   applyPatches,
 }:
 let
-  version = "5.18.4.9674";
+  version = "5.19.2.9720";
   # The dotnet8 compatibility patches also change `yarn.lock`, so we must pass
   # the already patched lockfile to `fetchYarnDeps`.
   src = applyPatches {
@@ -29,7 +29,7 @@ let
       owner = "Radarr";
       repo = "Radarr";
       tag = "v${version}";
-      hash = "sha256-62hFukUJYXRvtrH/zeUTxvx1pw1IMEDDs2RtJ4fxyHU=";
+      hash = "sha256-9uOh31ezK6+jumGZDco4OzyNvGRP4shlI7KcvoqXizQ=";
     };
     patches =
       [
@@ -69,7 +69,7 @@ buildDotnetModule {
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
-    hash = "sha256-YkBFvv+g4p22HdM/GQAHVGGW1yLYGWpNtRq7+QJiLIw=";
+    hash = "sha256-Cm4N2fIDABMowY5N0rt6qwVu/k22f5gO1+4itloxC+o=";
   };
 
   ffprobe = lib.optionalDrvAttr withFFmpeg (lib.getExe' ffmpeg "ffprobe");
@@ -85,7 +85,7 @@ buildDotnetModule {
   '';
   postInstall =
     lib.optionalString withFFmpeg ''
-      rm -- "$out/lib/sonarr/ffprobe"
+      rm -- "$out/lib/radarr/ffprobe"
       ln -s -- "$ffprobe" "$out/lib/radarr/ffprobe"
     ''
     + ''
@@ -113,13 +113,13 @@ buildDotnetModule {
   ];
 
   testProjectFile = [
-    "src/NzbDrone.Api.Test/Sonarr.Api.Test.csproj"
-    "src/NzbDrone.Common.Test/Sonarr.Common.Test.csproj"
-    "src/NzbDrone.Core.Test/Sonarr.Core.Test.csproj"
-    "src/NzbDrone.Host.Test/Sonarr.Host.Test.csproj"
-    "src/NzbDrone.Libraries.Test/Sonarr.Libraries.Test.csproj"
-    "src/NzbDrone.Mono.Test/Sonarr.Mono.Test.csproj"
-    "src/NzbDrone.Test.Common/Sonarr.Test.Common.csproj"
+    "src/NzbDrone.Api.Test/Radarr.Api.Test.csproj"
+    "src/NzbDrone.Common.Test/Radarr.Common.Test.csproj"
+    "src/NzbDrone.Core.Test/Radarr.Core.Test.csproj"
+    "src/NzbDrone.Host.Test/Radarr.Host.Test.csproj"
+    "src/NzbDrone.Libraries.Test/Radarr.Libraries.Test.csproj"
+    "src/NzbDrone.Mono.Test/Radarr.Mono.Test.csproj"
+    "src/NzbDrone.Test.Common/Radarr.Test.Common.csproj"
   ];
 
   dotnetFlags = [
@@ -152,17 +152,19 @@ buildDotnetModule {
           "FullyQualifiedName!=NzbDrone.Mono.Test.EnvironmentInfo.ReleaseFileVersionAdapterFixture.should_get_version_info"
 
           # fails to start test dummy because it cannot locate .NET runtime for some reason
-          "FullyQualifiedName!=NzbDrone.Common.Test.ProcessProviderFixture.Should_be_able_to_start_process"
+          "FullyQualifiedName!=NzbDrone.Common.Test.ProcessProviderFixture.should_be_able_to_start_process"
+          "FullyQualifiedName!=NzbDrone.Common.Test.ProcessProviderFixture.exists_should_find_running_process"
           "FullyQualifiedName!=NzbDrone.Common.Test.ProcessProviderFixture.kill_all_should_kill_all_process_with_name"
 
           # makes real HTTP requests
           "FullyQualifiedName!~NzbDrone.Core.Test.TvTests.RefreshEpisodeServiceFixture"
           "FullyQualifiedName!~NzbDrone.Core.Test.UpdateTests.UpdatePackageProviderFixture"
+
+          "FullyQualifiedName!=NzbDrone.Common.Test.ServiceFactoryFixture.event_handlers_should_be_unique"
         ]
         ++ lib.optionals stdenvNoCC.buildPlatform.isDarwin [
           # fails on macOS
           "FullyQualifiedName!~NzbDrone.Core.Test.Http.HttpProxySettingsProviderFixture"
-          "FullyQualifiedName!=NzbDrone.Common.Test.ServiceFactoryFixture.event_handlers_should_be_unique"
         ]
       )
     }"
