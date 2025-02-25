@@ -77,7 +77,7 @@ let
     disableBootstrap = atLeast11 && !stdenv.hostPlatform.isDarwin && (atLeast12 -> !profiledCompiler);
 
     inherit (stdenv) buildPlatform hostPlatform targetPlatform;
-    targetConfig = if targetPlatform != hostPlatform then targetPlatform.config else null;
+    targetConfig = if targetPlatform.config != hostPlatform.config then targetPlatform.config else null;
 
     patches = callFile ./patches {};
 
@@ -328,11 +328,11 @@ pipe ((callFile ./common/builder.nix {}) ({
     # compiler (after the specs for the cross-gcc are created). Having
     # LIBRARY_PATH= makes gcc read the specs from ., and the build breaks.
 
-    CPATH = optionals (targetPlatform == hostPlatform) (makeSearchPathOutput "dev" "include" ([]
+    CPATH = optionals (targetPlatform.config == hostPlatform.config) (makeSearchPathOutput "dev" "include" ([]
       ++ optional (zlib != null) zlib
     ));
 
-    LIBRARY_PATH = optionals (targetPlatform == hostPlatform) (makeLibraryPath (
+    LIBRARY_PATH = optionals (targetPlatform.config == hostPlatform.config) (makeLibraryPath (
       optional (zlib != null) zlib
     ));
 
