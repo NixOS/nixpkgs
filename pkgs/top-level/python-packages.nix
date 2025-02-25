@@ -5167,6 +5167,8 @@ self: super: with self; {
 
   gdown = callPackage ../development/python-modules/gdown { };
 
+  gdsfactory = callPackage ../development/python-modules/gdsfactory { };
+
   ge25519 = callPackage ../development/python-modules/ge25519 { };
 
   geant4 = toPythonModule (pkgs.geant4.override {
@@ -7080,6 +7082,8 @@ self: super: with self; {
     inherit (pkgs) keyutils;
   };
 
+  kfactory = callPackage ../development/python-modules/kfactory { };
+
   khanaa = callPackage ../development/python-modules/khanaa {};
 
   kicad = toPythonModule (pkgs.kicad.override {
@@ -7103,6 +7107,8 @@ self: super: with self; {
   kiwisolver = callPackage ../development/python-modules/kiwisolver { };
 
   klaus = callPackage ../development/python-modules/klaus { };
+
+  klayout = callPackage ../development/python-modules/klayout { };
 
   klein = callPackage ../development/python-modules/klein { };
 
@@ -14156,6 +14162,10 @@ self: super: with self; {
 
   recordlinkage = callPackage ../development/python-modules/recordlinkage { };
 
+  rectpack = callPackage ../development/python-modules/rectpack { };
+
+  rectangle-packer = callPackage ../development/python-modules/rectangle-packer { };
+
   recurring-ical-events = callPackage ../development/python-modules/recurring-ical-events { };
 
   recursive-pth-loader = toPythonModule (callPackage ../development/python-modules/recursive-pth-loader { });
@@ -14581,6 +14591,8 @@ self: super: with self; {
   ruamel-yaml = callPackage ../development/python-modules/ruamel-yaml { };
 
   ruamel-yaml-clib = callPackage ../development/python-modules/ruamel-yaml-clib { };
+
+  ruamel-yaml-string = callPackage ../development/python-modules/ruamel-yaml-string { };
 
   rubicon-objc = callPackage ../development/python-modules/rubicon-objc { };
 
