@@ -5,6 +5,7 @@
   mathcomp-finmap,
   mathcomp-bigenough,
   hierarchy-builder,
+  stdlib,
   single ? false,
   coqPackages,
   coq,
@@ -176,26 +177,11 @@ let
       ];
       intra-deps = lib.optionals (package != "single") (map mathcomp_ packages.${package});
       pkgpath = lib.switch package [
-        {
-          case = "single";
-          out = ".";
-        }
-        {
-          case = "analysis";
-          out = "theories";
-        }
-        {
-          case = "experimental-reals";
-          out = "experimental_reals";
-        }
-        {
-          case = "reals-stdlib";
-          out = "reals_stdlib";
-        }
-        {
-          case = "analysis-stdlib";
-          out = "analysis_stdlib";
-        }
+        { case = "single"; out = "."; }
+        { case = "analysis"; out = "theories"; }
+        { case = "experimental-reals"; out = "experimental_reals"; }
+        { case = "reals-stdlib"; out = "reals_stdlib"; }
+        { case = "analysis-stdlib"; out = "analysis_stdlib"; }
       ] package;
       pname = if package == "single" then "mathcomp-analysis-single" else "mathcomp-${package}";
       derivation = mkCoqDerivation ({
@@ -226,7 +212,12 @@ let
           ++ lib.optionals (lib.elem package [
             "analysis"
             "single"
-          ]) analysis-deps;
+          ]) analysis-deps
+          ++ lib.optional (lib.elem package [
+            "reals-stdlib"
+            "analysis-stdlib"
+            "single"
+          ]) stdlib;
 
         preBuild = ''
           cd ${pkgpath}
