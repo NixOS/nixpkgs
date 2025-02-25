@@ -7484,7 +7484,6 @@ with pkgs;
     ;
 
   inherit (callPackages ../development/tools/electron/chromedriver { })
-    electron-chromedriver_29
     electron-chromedriver_30
     electron-chromedriver_31
     electron-chromedriver_32
