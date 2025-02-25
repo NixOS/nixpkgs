@@ -7773,6 +7773,12 @@
     github = "fkautz";
     githubId = 135706;
   };
+  FKouhai = {
+    name = "Fran Cirka";
+    email = "frandres00@gmail.com";
+    github = "FKouhai";
+    githubId = 24593008;
+  };
   flacks = {
     name = "Jean Lucas";
     email = "jean@4ray.co";
