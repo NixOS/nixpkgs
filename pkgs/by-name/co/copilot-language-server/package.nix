@@ -6,14 +6,14 @@
 
 buildNpmPackage rec {
   pname = "copilot-language-server";
-  version = "1.273.0";
+  version = "1.275.0";
 
   src = fetchurl {
     url = "https://registry.npmjs.org/@github/copilot-language-server/-/copilot-language-server-${version}.tgz";
-    hash = "sha256-S3LhyNg8sSJPl+vnMir4AbyerORz0b1S7JyjCeoXW2E=";
+    hash = "sha256-OVqtwz9T5vSYAZc8nof0jXn7H40i1r7SAS6jK4xeSlo=";
   };
 
-  npmDepsHash = "sha256-ikITGNY6a6SKOSTBU9q4sQMX51mOxMix+a1Bt+h9wGw=";
+  npmDepsHash = "sha256-PLX/mN7xu8gMh2BkkyTncP3+rJ3nBmX+pHxl0ONXbe4=";
 
   postPatch = ''
     ln -s ${./package-lock.json} package-lock.json
