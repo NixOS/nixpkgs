@@ -8,9 +8,6 @@
   makeBinaryWrapper,
   libxkbcommon,
   wayland,
-  appstream-glib,
-  desktop-file-utils,
-  intltool,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -20,7 +17,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-launcher";
-    rev = "epoch-${version}";
+    tag = "epoch-${version}";
     hash = "sha256-0htDjdS8431orzNnetK0ubNvjO/5748YYqeESJKTUUs=";
   };
 
@@ -32,15 +29,14 @@ rustPlatform.buildRustPackage rec {
     pkg-config
     makeBinaryWrapper
   ];
+
   buildInputs = [
     libxkbcommon
     wayland
-    appstream-glib
-    desktop-file-utils
-    intltool
   ];
 
   dontUseJustBuild = true;
+  dontUseJustCheck = true;
 
   justFlags = [
     "--set"
@@ -60,14 +56,14 @@ rustPlatform.buildRustPackage rec {
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ wayland ]}"
   '';
 
-  RUSTFLAGS = "--cfg tokio_unstable";
+  env."CARGO_TARGET_${stdenv.hostPlatform.rust.cargoEnvVarTarget}_RUSTFLAGS" = "--cfg tokio_unstable";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/pop-os/cosmic-launcher";
     description = "Launcher for the COSMIC Desktop Environment";
     mainProgram = "cosmic-launcher";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ nyabinary ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ nyabinary ];
+    platforms = lib.platforms.linux;
   };
 }
