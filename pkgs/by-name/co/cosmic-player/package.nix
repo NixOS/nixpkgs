@@ -21,20 +21,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cosmic-player";
-  version = "1.0.0-alpha.5.1";
+  version = "1.0.0-alpha.6";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = pname;
     rev = "epoch-${version}";
-    hash = "sha256-IgMFKtuMAfRtbxunwrwRzFi/0PcSMWhx33uJcxiAHhI=";
+    hash = "sha256-Ebjj+C+yLCRomZy2W8mYDig1pv7aQcD3A9V2M53RM5U=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-VSUv4yV54fzWPhxZV/EjBrkx7tTLo6vfSHNiluWnn9A=";
+  cargoHash = "sha256-p1ylYB6xuF0UrhUO+QbGIgxqvZeQ6+GIbSNijTDXyRE=";
 
   postPatch = ''
-    substituteInPlace justfile --replace '#!/usr/bin/env' "#!$(command -v env)"
+    substituteInPlace justfile --replace-fail '#!/usr/bin/env' "#!$(command -v env)"
   '';
 
   nativeBuildInputs = [
