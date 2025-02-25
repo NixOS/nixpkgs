@@ -15,17 +15,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "sequoia-sq";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchFromGitLab {
     owner = "sequoia-pgp";
     repo = "sequoia-sq";
     rev = "v${version}";
-    hash = "sha256-m6uUqTXswzdtIabNgijdU54VGQSk0SkSqdh+7m1Q7RU=";
+    hash = "sha256-8vOlgqFt9kMTG8ENW9I24YNsrKdhwFnhvF3srdpm/zY=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-a+3oKORX88SfMw4/QA6+Ls12koZIw0iadTulCzGlr6U=";
+  cargoHash = "sha256-kTeDRZdwi7hSJbqhv6UJNdbmbDchzsogKn06iyswkHc=";
 
   nativeBuildInputs = [
     pkg-config
@@ -48,17 +48,13 @@ rustPlatform.buildRustPackage rec {
       ]
     );
 
-  checkFlags = [
-    # https://gitlab.com/sequoia-pgp/sequoia-sq/-/issues/297
-    "--skip=sq_autocrypt_import"
-  ];
-
   # Needed for tests to be able to create a ~/.local/share/sequoia directory
   preCheck = ''
     export HOME=$(mktemp -d)
   '';
 
   env.ASSET_OUT_DIR = "/tmp/";
+  env.RUST_BACKTRACE = "full";
 
   doCheck = true;
 
