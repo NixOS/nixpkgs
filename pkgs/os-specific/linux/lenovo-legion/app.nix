@@ -8,7 +8,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "lenovo-legion-app";
-  version = "0.0.18";
+  version = "0.0.18-unstable-2024-09-22";
 
   src = fetchFromGitHub {
     owner = "johnfanv2";
@@ -30,15 +30,15 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   postPatch = ''
-    # only fixup application (legion-linux-gui), service (legiond) currently not installed so do not fixup
+    # fixup some hardcoded strings (version, FHS paths)
+    # only application (legion-linux-gui) was installed, service (legiond) not installed,
+    # so we only need to fixup files related to the application
     # version
     substituteInPlace ./setup.cfg \
-      --replace-fail "_VERSION" "${version}"
-
+      --replace-fail "_VERSION" "${builtins.head (lib.splitString "-" version)}"
     # /etc
     substituteInPlace ./legion_linux/legion.py \
       --replace-fail "/etc/legion_linux" "$out/share/legion_linux"
-
     # /usr
     substituteInPlace ./legion_linux/legion_gui.desktop \
       --replace-fail "Icon=/usr/share/pixmaps/legion_logo.png" "Icon=legion_logo"
