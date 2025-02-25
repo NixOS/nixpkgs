@@ -158,7 +158,7 @@ buildDotnetModule {
           # makes real HTTP requests
           "FullyQualifiedName!~NzbDrone.Core.Test.TvTests.RefreshEpisodeServiceFixture"
           "FullyQualifiedName!~NzbDrone.Core.Test.UpdateTests.UpdatePackageProviderFixture"
-          
+
           "FullyQualifiedName!=NzbDrone.Common.Test.ServiceFactoryFixture.event_handlers_should_be_unique"
         ]
         ++ lib.optionals stdenvNoCC.buildPlatform.isDarwin [
