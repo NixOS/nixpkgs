@@ -1,0 +1,101 @@
+From 17e7b7c2ef6023be77b22ae83162e78de0a5a936 Mon Sep 17 00:00:00 2001
+From: Anusha GodavarthySurya <anusha.godavarthysurya@amd.com>
+Date: Fri, 11 Oct 2024 17:10:12 +0000
+Subject: [PATCH] SWDEV-472840 SWDEV-461980 - Fix null stream sync performance
+
+=> If null stream is not created during sync skip nullstrm creation
+=> Do cpu wait on blocking & null stream if it exists
+
+Change-Id: I90d6ced6a2dd1782ba58f3fed4e3608fc0efa55a
+---
+ hipamd/src/hip_device.cpp   | 23 +++++++++++++++++++----
+ hipamd/src/hip_internal.hpp |  2 +-
+ hipamd/src/hip_stream.cpp   | 22 ++++++++++++++++------
+ 3 files changed, 36 insertions(+), 11 deletions(-)
+
+diff --git a/hipamd/src/hip_device.cpp b/hipamd/src/hip_device.cpp
+index 9f6a8e3d0..20889b0fe 100644
+--- a/hipamd/src/hip_device.cpp
++++ b/hipamd/src/hip_device.cpp
+@@ -257,15 +257,30 @@ void Device::destroyAllStreams() {
+ }
+ 
+ // ================================================================================================
+-void Device::SyncAllStreams( bool cpu_wait) {
++void Device::SyncAllStreams(bool cpu_wait, bool wait_blocking_streams_only) {
+   // Make a local copy to avoid stalls for GPU finish with multiple threads
+   std::vector<hip::Stream*> streams;
+   streams.reserve(streamSet.size());
+   {
+     amd::ScopedLock lock(streamSetLock);
+-    for (auto it : streamSet) {
+-      streams.push_back(it);
+-      it->retain();
++    if (wait_blocking_streams_only) {
++      auto null_stream = GetNullStream();
++      for (auto it : streamSet) {
++        if (it != null_stream && (it->Flags() & hipStreamNonBlocking) == 0) {
++          streams.push_back(it);
++          it->retain();
++        }
++      }
++      // Add null stream to the end of the list so that wait happens after all blocking streams.
++      if (null_stream != nullptr) {
++        streams.push_back(null_stream);
++        null_stream->retain();
++      }
++    } else {
++      for (auto it : streamSet) {
++        streams.push_back(it);
++        it->retain();
++      }
+     }
+   }
+   for (auto it : streams) {
+diff --git a/hipamd/src/hip_internal.hpp b/hipamd/src/hip_internal.hpp
+index d0a6dca57..47749c012 100644
+--- a/hipamd/src/hip_internal.hpp
++++ b/hipamd/src/hip_internal.hpp
+@@ -595,7 +595,7 @@ class stream_per_thread {
+ 
+     void destroyAllStreams();
+ 
+-    void SyncAllStreams( bool cpu_wait = true);
++    void SyncAllStreams( bool cpu_wait = true, bool wait_blocking_streams_only = false);
+ 
+     bool StreamCaptureBlocking();
+ 
+diff --git a/hipamd/src/hip_stream.cpp b/hipamd/src/hip_stream.cpp
+index 937374977..76a732acd 100644
+--- a/hipamd/src/hip_stream.cpp
++++ b/hipamd/src/hip_stream.cpp
+@@ -357,13 +357,23 @@ hipError_t hipStreamSynchronize_common(hipStream_t stream) {
+       HIP_RETURN(hipErrorStreamCaptureUnsupported);
+     }
+   }
+-  bool wait = (stream == nullptr || stream == hipStreamLegacy) ? true : false;
+-  auto hip_stream = hip::getStream(stream, wait);
+ 
+-  // Wait for the current host queue
+-  hip_stream->finish();
+-  // Release freed memory for all memory pools on the device
+-  hip_stream->GetDevice()->ReleaseFreedMemory();
++  if (stream == nullptr) {
++    // Do cpu wait on null stream and only on blocking streams
++    constexpr bool WaitblockingStreamOnly = true;
++    getCurrentDevice()->SyncAllStreams(true, WaitblockingStreamOnly);
++
++    // Release freed memory for all memory pools on the device
++    getCurrentDevice()->ReleaseFreedMemory();
++  } else {
++    constexpr bool wait = false;
++    auto hip_stream = hip::getStream(stream, wait);
++
++    // Wait for the current host queue
++    hip_stream->finish();
++    // Release freed memory for all memory pools on the device
++    hip_stream->GetDevice()->ReleaseFreedMemory();
++  }
+   return hipSuccess;
+ }
+ 

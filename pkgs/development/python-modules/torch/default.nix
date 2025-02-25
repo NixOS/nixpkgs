@@ -16,11 +16,10 @@
     if cudaSupport then
       magma-cuda-static
     else if rocmSupport then
-      magma-hip
+      null
     else
       magma,
   magma,
-  magma-hip,
   magma-cuda-static,
   # Use the system NCCL as long as we're targeting CUDA on a supported platform.
   useSystemNccl ? (cudaSupport && !cudaPackages.nccl.meta.unsupported || rocmSupport),
@@ -36,6 +35,7 @@
   symlinkJoin,
   which,
   pybind11,
+  pkg-config,
   removeReferencesTo,
 
   # Build inputs
@@ -54,6 +54,7 @@
   cffi,
   click,
   typing-extensions,
+  six,
   # ROCm build and `torch.compile` requires `triton`
   tritonSupport ? (!stdenv.hostPlatform.isDarwin),
   triton,
@@ -66,7 +67,13 @@
   #          (dependencies without cuda support).
   #          Instead we should rely on overlays and nixpkgsFun.
   # (@SomeoneSerge)
-  _tritonEffective ? if cudaSupport then triton-cuda else triton,
+  _tritonEffective ?
+    if cudaSupport then
+      triton-cuda
+    else if rocmSupport then
+      rocmPackages.triton
+    else
+      triton,
   triton-cuda,
 
   # Unit tests
@@ -86,13 +93,13 @@
 
   # dependencies for torch.utils.tensorboard
   pillow,
-  six,
+  future,
   tensorboard,
   protobuf,
 
   # ROCm dependencies
   rocmSupport ? config.rocmSupport,
-  rocmPackages_5,
+  rocmPackages,
   gpuTargets ? [ ],
 
   vulkanSupport ? false,
@@ -111,8 +118,6 @@ let
   inherit (cudaPackages) cudaFlags cudnn nccl;
 
   triton = throw "python3Packages.torch: use _tritonEffective instead of triton to avoid divergence";
-
-  rocmPackages = rocmPackages_5;
 
   setBool = v: if v then "1" else "0";
 
@@ -181,7 +186,7 @@ let
       clr
       rccl
       miopen
-      miopengemm
+      aotriton
       rocrand
       rocblas
       rocsparse
@@ -193,10 +198,12 @@ let
       rocfft
       rocsolver
       hipfft
+      hiprand
       hipsolver
+      hipblas-common
       hipblas
+      hipblaslt
       rocminfo
-      rocm-thunk
       rocm-comgr
       rocm-device-libs
       rocm-runtime
@@ -213,6 +220,7 @@ let
   brokenConditions = attrsets.filterAttrs (_: cond: cond) {
     "CUDA and ROCm are mutually exclusive" = cudaSupport && rocmSupport;
     "CUDA is not targeting Linux" = cudaSupport && !stdenv.hostPlatform.isLinux;
+    "ROCm 6 is currently not compatible with magma" = rocmSupport && effectiveMagma != null;
     "Unsupported CUDA version" =
       cudaSupport
       && !(builtins.elem cudaPackages.cudaMajorVersion [
@@ -226,8 +234,6 @@ let
     # In particular, this triggered warnings from cuda's `aliases.nix`
     "Magma cudaPackages does not match cudaPackages" =
       cudaSupport && (effectiveMagma.cudaPackages.cudaVersion != cudaPackages.cudaVersion);
-    "Rocm support is currently broken because `rocmPackages.hipblaslt` is unpackaged. (2024-06-09)" =
-      rocmSupport;
   };
 
   unroll-src = writeShellScript "unroll-src" ''
@@ -294,6 +300,10 @@ buildPythonPackage rec {
 
       # annotations (3.7), print_function (3.0), with_statement (2.6) are all supported
       sed -i -e "/from __future__ import/d" **.py
+      substituteInPlace third_party/NNPACK/CMakeLists.txt --replace "PYTHONPATH=" 'PYTHONPATH=$ENV{PYTHONPATH}:'
+      # flag from cmakeFlags doesn't work, not clear why
+      # setting it at the top of NNPACK's own CMakeLists does
+      sed -i '2s;^;set(PYTHON_SIX_SOURCE_DIR ${six.src})\n;' third_party/NNPACK/CMakeLists.txt
     ''
     + lib.optionalString rocmSupport ''
       # https://github.com/facebookincubator/gloo/pull/297
@@ -366,6 +376,10 @@ buildPythonPackage rec {
   # We only do an imports check, so do not build tests either.
   BUILD_TEST = setBool false;
 
+  # ninja hook doesn't automatically turn on ninja
+  # because pytorch setup.py is responsible for this
+  CMAKE_GENERATOR = "Ninja";
+
   # Unlike MKL, oneDNN (née MKLDNN) is FOSS, so we enable support for
   # it by default. PyTorch currently uses its own vendored version
   # of oneDNN through Intel iDeep.
@@ -376,14 +390,15 @@ buildPythonPackage rec {
   # Also avoids pytorch exporting the headers of pybind11
   USE_SYSTEM_PYBIND11 = true;
 
-  # NB technical debt: building without NNPACK as workaround for missing `six`
-  USE_NNPACK = 0;
+  # Multicore CPU convnet support
+  USE_NNPACK = 1;
 
   # Explicitly enable MPS for Darwin
   USE_MPS = setBool stdenv.hostPlatform.isDarwin;
 
   cmakeFlags =
     [
+      (lib.cmakeFeature "PYTHON_SIX_SOURCE_DIR" "${six.src}")
       # (lib.cmakeBool "CMAKE_FIND_DEBUG_MODE" true)
       (lib.cmakeFeature "CUDAToolkit_VERSION" cudaPackages.cudaVersion)
     ]
@@ -432,6 +447,8 @@ buildPythonPackage rec {
 
   env =
     {
+      # Builds faster without this and we don't have enough inputs that cmd length is an issue
+      NIX_CC_USE_RESPONSE_FILE = 0;
       # disable warnings as errors as they break the build on every compiler
       # bump, among other things.
       # Also of interest: pytorch ignores CXXFLAGS uses CFLAGS for both C and C++:
@@ -441,6 +458,9 @@ buildPythonPackage rec {
     }
     // lib.optionalAttrs vulkanSupport {
       VULKAN_SDK = shaderc.bin;
+    }
+    // lib.optionalAttrs rocmSupport {
+      AOTRITON_INSTALLED_PREFIX = "${rocmPackages.aotriton}";
     };
 
   nativeBuildInputs =
@@ -449,6 +469,7 @@ buildPythonPackage rec {
       which
       ninja
       pybind11
+      pkg-config
       removeReferencesTo
     ]
     ++ lib.optionals cudaSupport (
@@ -495,7 +516,7 @@ buildPythonPackage rec {
       ]
     )
     ++ lib.optionals rocmSupport [ rocmPackages.llvm.openmp ]
-    ++ lib.optionals (cudaSupport || rocmSupport) [ effectiveMagma ]
+    ++ lib.optionals (effectiveMagma != null && (cudaSupport || rocmSupport)) [ effectiveMagma ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [ numactl ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       apple-sdk_13

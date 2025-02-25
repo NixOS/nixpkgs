@@ -2,24 +2,31 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   rocmUpdateScript,
   cmake,
+  ninja,
   rocm-cmake,
   clr,
   gfortran,
+  hipblas-common,
   rocblas,
   rocsolver,
+  rocsparse,
+  rocprim,
   gtest,
   lapack-reference,
+  writeShellScriptBin,
   buildTests ? false,
   buildBenchmarks ? false,
   buildSamples ? false,
+  gpuTargets ? clr.localGpuTargets or clr.gpuTargets,
 }:
 
 # Can also use cuBLAS
 stdenv.mkDerivation (finalAttrs: {
   pname = "hipblas";
-  version = "6.0.2";
+  version = "6.3.1";
 
   outputs =
     [
@@ -39,20 +46,46 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ROCm";
     repo = "hipBLAS";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-Fq7o2sMmHlHIv9UKJw+u/h9K/ZhKVJWwosYTdYIsscA=";
+    #rev = "a4b23dec749d9d623f0e7699045f381ec3eddfab";
+    hash = "sha256-Rz1KAhBUbvErHTF2PM1AkVhqo4OHldfSNMSpp5Tx9yk=";
   };
+
+  patches = [
+    # https://github.com/ROCm/hipBLAS/pull/952
+    (fetchpatch {
+      name = "transitively-depend-hipblas-common.patch";
+      url = "https://github.com/ROCm/hipBLAS/commit/54220fdaebf0fb4fd0921ee9e418ace5b143ec8f.patch";
+      hash = "sha256-MFEhv8Bkrd2zD0FFIDg9oJzO7ztdyMAF+R9oYA0rmwQ=";
+    })
+    (fetchpatch {
+      name = "correct-hipblas-common-library-type.patch";
+      url = "https://github.com/ROCm/hipBLAS/commit/de9dcda7391766761f50258da5e7bfe9bc5caec8.patch";
+      hash = "sha256-5OSa2fkvOole0LAq+vT8KpT8433m4judsfr9Yeyvn4Q=";
+    })
+  ];
+
+  postPatch = ''
+    substituteInPlace library/CMakeLists.txt \
+      --replace-fail "find_package(Git REQUIRED)" ""
+  '';
 
   nativeBuildInputs = [
     cmake
+    ninja
     rocm-cmake
     clr
     gfortran
   ];
 
+  propagatedBuildInputs = [ hipblas-common ];
+
   buildInputs =
     [
       rocblas
+      rocprim
+      rocsparse
       rocsolver
+      # hipblaslt
     ]
     ++ lib.optionals buildTests [
       gtest
@@ -61,15 +94,21 @@ stdenv.mkDerivation (finalAttrs: {
       lapack-reference
     ];
 
+  hardeningDisable = [ "zerocallusedregs" "stackprotector" ];
+
   cmakeFlags =
     [
-      "-DCMAKE_C_COMPILER=hipcc"
-      "-DCMAKE_CXX_COMPILER=hipcc"
+      "-DCMAKE_CXX_COMPILER=${clr.hipClangPath}/clang++"
+      # Upstream is migrating to amdclang++, it is likely this will be correct in next version bump
+      #"-DCMAKE_CXX_COMPILER=${lib.getBin clr}/bin/amdclang++"
       # Manually define CMAKE_INSTALL_<DIR>
       # See: https://github.com/NixOS/nixpkgs/pull/197838
       "-DCMAKE_INSTALL_BINDIR=bin"
       "-DCMAKE_INSTALL_LIBDIR=lib"
       "-DCMAKE_INSTALL_INCLUDEDIR=include"
+    ]
+    ++ lib.optionals (gpuTargets != [ ]) [
+      "-DAMDGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
     ]
     ++ lib.optionals buildTests [
       "-DBUILD_CLIENTS_TESTS=ON"
@@ -100,8 +139,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = rocmUpdateScript {
     name = finalAttrs.pname;
-    owner = finalAttrs.src.owner;
-    repo = finalAttrs.src.repo;
+    inherit (finalAttrs.src) owner;
+    inherit (finalAttrs.src) repo;
   };
 
   meta = with lib; {
@@ -110,8 +149,5 @@ stdenv.mkDerivation (finalAttrs: {
     license = with licenses; [ mit ];
     maintainers = teams.rocm.members;
     platforms = platforms.linux;
-    broken =
-      versions.minor finalAttrs.version != versions.minor stdenv.cc.version
-      || versionAtLeast finalAttrs.version "7.0.0";
   };
 })

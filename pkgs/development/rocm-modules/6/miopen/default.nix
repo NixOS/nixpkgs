@@ -10,9 +10,13 @@
   rocm-cmake,
   rocblas,
   rocmlir,
+  rocrand,
+  rocm-runtime,
+  rocm-merged-llvm,
+  hipblas-common,
+  hipblas,
+  hipblaslt,
   clr,
-  clang-tools-extra,
-  clang-ocl,
   composable_kernel,
   frugally-deep,
   rocm-docs-core,
@@ -30,43 +34,48 @@
   rocm-comgr,
   roctracer,
   python3Packages,
+  # FIXME: should be able to use all clr targets
+  gpuTargets ? [
+    "gfx908"
+    "gfx90a"
+    "gfx942"
+    "gfx1030"
+    "gfx1100"
+  ], # clr.gpuTargets
   buildDocs ? false, # Needs internet because of rocm-docs-core
   buildTests ? false,
 }:
 
 let
-  version = "6.0.2";
+  # FIXME: cmake files need patched to include this properly
+  cFlags = "-O3 -DNDEBUG -Wno-documentation-pedantic --offload-compress -I${hipblas-common}/include  -I${hipblas}/include -I${roctracer}/include -I${nlohmann_json}/include -I${sqlite.dev}/include -I${rocrand}/include";
+  version = "6.3.1";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "MIOpen";
     rev = "rocm-${version}";
-    hash = "sha256-mbOdlSb0ESKi9hMkq3amv70Xkp/YKnZYre24d/y5TD0=";
+    hash = "sha256-KV+tJPD4HQayY8zD4AdOFxxYRnyI47suxX5OgZ7mpdU=";
     fetchLFS = true;
+    fetchSubmodules = true;
+    # WORKAROUND: .lfsconfig is incorrectly set to exclude everything upstream
     leaveDotGit = true;
-
-    # If you're reading this, it's gonna take a bit of time.
-    # fetchSubModules doesn't work with postFetch???
-    # fetchLFS isn't actually fetching the LFS files...
     postFetch = ''
       export HOME=$(mktemp -d)
       cd $out
-
-      # We need more history to fetch LFS files
+      set -x
       git remote add origin $url
-      git fetch origin
+      git fetch origin +refs/tags/rocm-${version}:refs/tags/rocm-${version}
       git clean -fdx
-      git checkout rocm-${version}
-
-      # We need to do this manually since using leaveDotGit and fetchSubmodules errors
-      git submodule update --init
-
-      # Fetch the LFS files
+      git switch -c rocm-${version} refs/tags/rocm-${version}
+      git config lfs.fetchexclude "none"
+      rm .lfsconfig
       git lfs install
-      git lfs fetch --all
+      git lfs track "*.kdb.bz2"
+      GIT_TRACE=1 git lfs fetch --include="src/kernels/**"
+      GIT_TRACE=1 git lfs pull --include="src/kernels/**"
       git lfs checkout
 
-      # Remove the defunct .git folder
       rm -rf .git
     '';
   };
@@ -112,8 +121,16 @@ stdenv.mkDerivation (finalAttrs: {
   inherit version src;
   pname = "miopen";
 
+  env.CFLAGS = cFlags;
+  env.CXXFLAGS = cFlags;
+
+  preConfigure = ''
+    makeFlagsArray+=("-l$(nproc)")
+  '';
   # Find zstd and add to target. Mainly for torch.
   patches = [
+    ./skip-preexisting-dbs.patch
+    ./fix-isnan.patch # https://github.com/ROCm/MIOpen/pull/3448
     (fetchpatch {
       url = "https://github.com/ROCm/MIOpen/commit/e608b4325646afeabb5e52846997b926d2019d19.patch";
       hash = "sha256-oxa3qlIC2bzbwGxrQOZXoY/S7CpLsMrnWRB7Og0tk0M=";
@@ -122,11 +139,11 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/ROCm/MIOpen/commit/3413d2daaeb44b7d6eadcc03033a5954a118491e.patch";
       hash = "sha256-ST4snUcTmmSI1Ogx815KEX9GdMnmubsavDzXCGJkiKs=";
     })
-    (fetchpatch {
-      name = "Extend-MIOpen-ISA-compatibility.patch";
-      url = "https://github.com/GZGavinZhao/MIOpen/commit/416088b534618bd669a765afce59cfc7197064c1.patch";
-      hash = "sha256-OwONCA68y8s2GqtQj+OtotXwUXQ5jM8tpeM92iaD4MU=";
-    })
+    # (fetchpatch {
+    #   name = "Extend-MIOpen-ISA-compatibility.patch";
+    #   url = "https://github.com/GZGavinZhao/MIOpen/commit/416088b534618bd669a765afce59cfc7197064c1.patch";
+    #   hash = "sha256-OwONCA68y8s2GqtQj+OtotXwUXQ5jM8tpeM92iaD4MU=";
+    # })
   ];
 
   outputs =
@@ -139,20 +156,24 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals buildTests [
       "test"
     ];
+  enableParallelBuilding = true;
+  env.ROCM_PATH = clr;
+  env.LD_LIBRARY_PATH = lib.makeLibraryPath [ rocm-runtime ];
+  env.HIP_CLANG_PATH = "${rocm-merged-llvm}/bin";
 
   nativeBuildInputs = [
     pkg-config
     cmake
     rocm-cmake
     clr
-    clang-tools-extra
   ];
 
   buildInputs =
     [
+      hipblas
+      hipblas-common
       rocblas
       rocmlir
-      clang-ocl
       composable_kernel
       half
       boost
@@ -161,6 +182,8 @@ stdenv.mkDerivation (finalAttrs: {
       nlohmann_json
       frugally-deep
       roctracer
+      rocrand
+      hipblaslt
     ]
     ++ lib.optionals buildDocs [
       latex
@@ -178,15 +201,33 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags =
     [
-      "-DCMAKE_CXX_FLAGS=-Wno-#warnings" # <half> -> <half/half.hpp>
-      "-DUNZIPPER=${bzip2}/bin/bunzip2"
+      "-DAMDGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
+      "-DGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
+      "-DGPU_ARCHS=${lib.concatStringsSep ";" gpuTargets}"
+      "-DMIOPEN_USE_SQLITE_PERFDB=ON"
+      "-DCMAKE_VERBOSE_MAKEFILE=ON"
+      "-DCMAKE_MODULE_PATH=${clr}/hip/cmake"
+      "-DCMAKE_BUILD_TYPE=Release"
+
+      # needs to stream to stdout so bzcat rather than bunzip2
+      "-DUNZIPPER=${bzip2}/bin/bzcat"
+
+      # isnan not defined for float error, probably still needs hipcc? should try without hipcc again next bump
+      "-DCMAKE_C_COMPILER=amdclang"
+      "-DCMAKE_CXX_COMPILER=amdclang++"
+      "-DROCM_PATH=${clr}"
+      "-DHIP_ROOT_DIR=${clr}"
+      (lib.cmakeBool "MIOPEN_USE_ROCBLAS" true)
+      (lib.cmakeBool "MIOPEN_USE_HIPBLASLT" true)
+      (lib.cmakeBool "MIOPEN_USE_COMPOSABLEKERNEL" true)
+      (lib.cmakeBool "MIOPEN_USE_HIPRTC" true)
+      (lib.cmakeBool "MIOPEN_USE_COMGR" true)
+      "-DCMAKE_HIP_COMPILER_ROCM_ROOT=${clr}"
       # Manually define CMAKE_INSTALL_<DIR>
       # See: https://github.com/NixOS/nixpkgs/pull/197838
       "-DCMAKE_INSTALL_BINDIR=bin"
       "-DCMAKE_INSTALL_LIBDIR=lib"
       "-DCMAKE_INSTALL_INCLUDEDIR=include"
-      "-DCMAKE_C_COMPILER=hipcc"
-      "-DCMAKE_CXX_COMPILER=hipcc"
       "-DMIOPEN_BACKEND=HIP"
     ]
     ++ lib.optionals buildTests [
@@ -195,24 +236,38 @@ stdenv.mkDerivation (finalAttrs: {
     ];
 
   postPatch = ''
+    echo "HACK: disabling clang-tidy"
+    substituteInPlace cmake/ClangTidy.cmake \
+      --replace-fail 'macro(enable_clang_tidy)' 'macro(enable_clang_tidy)
+      endmacro()
+      macro(enable_clang_tidy_unused)' \
+      --replace-fail 'function(clang_tidy_check TARGET)' 'function(clang_tidy_check TARGET)
+      return()'
+
     patchShebangs test src/composable_kernel fin utils install_deps.cmake
 
-    substituteInPlace CMakeLists.txt \
-      --replace "unpack_db(\"\''${CMAKE_SOURCE_DIR}/src/kernels/\''${FILE_NAME}.kdb.bz2\")" "" \
-      --replace "MIOPEN_HIP_COMPILER MATCHES \".*clang\\\\+\\\\+$\"" "true" \
-      --replace "set(MIOPEN_TIDY_ERRORS ALL)" "" # error: missing required key 'key'
+      #--replace "unpack_db(\"\''${CMAKE_SOURCE_DIR}/src/kernels/\''${FILE_NAME}.kdb.bz2\")" "" \
+    # substituteInPlace CMakeLists.txt \
+    #   --replace "MIOPEN_HIP_COMPILER MATCHES \".*clang\\\\+\\\\+$\"" "true" \
+    #   --replace "set(MIOPEN_TIDY_ERRORS ALL)" "" # error: missing required key 'key'
 
     substituteInPlace test/gtest/CMakeLists.txt \
       --replace "include(googletest)" ""
 
-    substituteInPlace test/gtest/CMakeLists.txt \
-      --replace-fail " gtest_main " " ${gtest}/lib/libgtest.so ${gtest}/lib/libgtest_main.so "
+    # substituteInPlace test/gtest/CMakeLists.txt \
+    #   --replace-fail " gtest_main " " ${gtest}/lib/libgtest.so ${gtest}/lib/libgtest_main.so "
 
     ln -sf ${gfx900} src/kernels/gfx900.kdb
     ln -sf ${gfx906} src/kernels/gfx906.kdb
     ln -sf ${gfx908} src/kernels/gfx908.kdb
     ln -sf ${gfx90a} src/kernels/gfx90a.kdb
     ln -sf ${gfx1030} src/kernels/gfx1030.kdb
+    mkdir -p build/share/miopen/db/
+    ln -sf ${gfx900} build/share/miopen/db/gfx900.kdb
+    ln -sf ${gfx906} build/share/miopen/db/gfx906.kdb
+    ln -sf ${gfx908} build/share/miopen/db/gfx908.kdb
+    ln -sf ${gfx90a} build/share/miopen/db/gfx90a.kdb
+    ln -sf ${gfx1030} build/share/miopen/db/gfx1030.kdb
   '';
 
   # Unfortunately, it seems like we have to call make on these manually
@@ -249,13 +304,14 @@ stdenv.mkDerivation (finalAttrs: {
         )
       } $test/bin/*
     '';
+  # doCheck = false; # FIXME: clang-tidy really slow :(
 
   requiredSystemFeatures = [ "big-parallel" ];
 
   passthru.updateScript = rocmUpdateScript {
     name = finalAttrs.pname;
-    owner = finalAttrs.src.owner;
-    repo = finalAttrs.src.repo;
+    inherit (finalAttrs.src) owner;
+    inherit (finalAttrs.src) repo;
   };
 
   meta = with lib; {
@@ -264,8 +320,5 @@ stdenv.mkDerivation (finalAttrs: {
     license = with licenses; [ mit ];
     maintainers = teams.rocm.members;
     platforms = platforms.linux;
-    broken =
-      versions.minor finalAttrs.version != versions.minor stdenv.cc.version
-      || versionAtLeast finalAttrs.version "7.0.0";
   };
 })

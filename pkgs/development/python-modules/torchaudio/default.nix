@@ -50,7 +50,6 @@ let
       hipsolver
       hipblas
       rocminfo
-      rocm-thunk
       rocm-comgr
       rocm-device-libs
       rocm-runtime
