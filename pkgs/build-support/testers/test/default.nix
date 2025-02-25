@@ -356,4 +356,6 @@ lib.recurseIntoAttrs {
         touch -- "$out"
       '';
   };
+
+  testEqualArrayOrMap = pkgs.callPackages ../testEqualArrayOrMap/tests.nix { };
 }

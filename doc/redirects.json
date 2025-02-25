@@ -11,6 +11,9 @@
   "ex-testBuildFailurePrime-doc-example": [
     "index.html#ex-testBuildFailurePrime-doc-example"
   ],
+  "ex-testEqualArrayOrMap-test-function-add-cowbell": [
+    "index.html#ex-testEqualArrayOrMap-test-function-add-cowbell"
+  ],
   "neovim": [
     "index.html#neovim"
   ],
@@ -343,6 +346,15 @@
   ],
   "tester-testBuildFailurePrime-return": [
     "index.html#tester-testBuildFailurePrime-return"
+  ],
+  "tester-testEqualArrayOrMap": [
+    "index.html#tester-testEqualArrayOrMap"
+  ],
+  "tester-testEqualArrayOrMap-inputs": [
+    "index.html#tester-testEqualArrayOrMap-inputs"
+  ],
+  "tester-testEqualArrayOrMap-return": [
+    "index.html#tester-testEqualArrayOrMap-return"
   ],
   "variables-specifying-dependencies": [
     "index.html#variables-specifying-dependencies"
