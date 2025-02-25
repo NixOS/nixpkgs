@@ -44,7 +44,7 @@ let
             rocmUpdateScript;
         }
       );
-      inherit (self.llvm) rocm-llvm rocm-merged-llvm clang openmp;
+      inherit (self.llvm) rocm-llvm rocm-clang openmp;
 
       rocm-core = self.callPackage ./rocm-core { };
       amdsmi = pyPackages.callPackage ./amdsmi {
@@ -58,15 +58,15 @@ let
       };
 
       rocm-device-libs = self.callPackage ./rocm-device-libs {
-        inherit (llvm) rocm-llvm;
+        inherit (self) rocm-llvm;
       };
 
       rocm-runtime = self.callPackage ./rocm-runtime {
-        inherit (llvm) rocm-llvm;
+        inherit (self) rocm-llvm;
       };
 
       rocm-comgr = self.callPackage ./rocm-comgr {
-        inherit (llvm) rocm-llvm;
+        inherit (self) rocm-llvm;
       };
 
       rocminfo = self.callPackage ./rocminfo { };
@@ -82,32 +82,28 @@ let
 
       # Eventually will be in the LLVM repo
       hipcc = self.callPackage ./hipcc {
-        inherit (llvm) rocm-llvm;
+        inherit (self) rocm-llvm;
       };
 
       # Replaces hip, opencl-runtime, and rocclr
       clr = self.callPackage ./clr {
-        # stdenv = gcc13Stdenv;
-        inherit (llvm) rocm-llvm rocm-clang;
+        inherit (self) rocm-llvm rocm-clang;
       };
 
       aotriton = self.callPackage ./aotriton { };
 
       hipify = self.callPackage ./hipify {
-        inherit (llvm)
-          clang
-          rocm-merged-llvm
-          ;
+        inherit (self) rocm-llvm rocm-clang;
       };
 
       # hsakmt was merged into rocm-runtime
       hsakmt = self.rocm-runtime;
 
       rocprofiler = self.callPackage ./rocprofiler {
-        inherit (llvm) clang;
+        inherit (self) rocm-clang;
       };
       rocprofiler-register = self.callPackage ./rocprofiler-register {
-        inherit (llvm) clang;
+        inherit (self) rocm-clang;
       };
 
       # Needs GCC
@@ -158,7 +154,7 @@ let
       };
 
       rocblas = self.callPackage ./rocblas {
-        inherit (llvm) rocm-llvm;
+        inherit (self) rocm-llvm;
         buildTests = true;
         buildBenchmarks = true;
       };
@@ -185,8 +181,7 @@ let
 
       composable_kernel = self.callPackage ./composable_kernel { };
       ck4inductor = pyPackages.callPackage ./composable_kernel/ck4inductor.nix {
-        inherit (self) composable_kernel;
-        inherit (llvm) rocm-merged-llvm;
+        inherit (self) composable_kernel rocm-llvm;
       };
 
       half = self.callPackage ./half { };
@@ -369,9 +364,9 @@ let
         rocm-ml-libraries = symlinkJoin {
           name = "rocm-ml-libraries-meta";
           paths = [
-            llvm.clang
-            llvm.mlir
-            llvm.openmp
+            rocm-clang
+            rocm-llvm
+            openmp
             rocm-core
             miopen-hip
             rocm-hip-libraries
@@ -426,9 +421,9 @@ let
           name = "rocm-openmp-sdk-meta";
           paths = [
             rocm-core
-            llvm.clang
-            llvm.mlir
-            llvm.openmp # openmp-extras-devel (https://github.com/ROCm/aomp)
+            rocm-clang
+            rocm-llvm
+            openmp # openmp-extras-devel (https://github.com/ROCm/aomp)
             rocm-language-runtime
           ];
         };
@@ -458,9 +453,9 @@ let
             rocm-core
             hipify
             rocm-cmake
-            llvm.clang
-            llvm.mlir
-            llvm.openmp
+            rocm-clang
+            rocm-llvm
+            openmp
             rocm-runtime
             rocm-hip-runtime
           ];

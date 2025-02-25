@@ -696,6 +696,7 @@ rec {
           isLLVM = true;
           isROCm = true;
           llvm-src = llvmSrc;
+          inherit mkHipClang;
         };
 
         meta = with lib; {
@@ -716,43 +717,20 @@ rec {
         };
       });
 
-  clang = wrapCCWith ({
+  mkHipClang = thisStdenv : (wrapCCWith ({
     name = "rocm-clang";
     cc = llvm;
-    # gccForLibs = gcc13.cc;
-    # libcxx = llvmPackages_18.libcxx;
-    # Note to future maintainers and bug chasers:
-    # If C compilation breaks, check if cc-wrapper is adding some flags to
-    # `libcxx-cxxflags` that would cause problems for the C compiler.
-    #
-    # The ideal way to do this is to modify `cc-wrapper.sh` to treat `-x hip`
-    # compilations as C++ compilations. However, this is not done for the
-    # following reasons:
-    # - Modifying `cc-wrapper.sh` cause a world rebuild.
-    # - We should probably use the common LLVM infrastructure once they figure
-    #   out how to properly override packages.
-    extraBuildCommands = ''
-      # # HIP will be invoked through C compiler (`clang`) even though it needs C++ headers
-      # cat $out/nix-support/libcxx-cxxflags | tee -a $out/nix-support/cc-cflags
-      # substituteInPlace $out/nix-support/libcxx-cxxflags \
-      #   --replace-fail "isystem" "idirafter"
+    gccForLibs = if thisStdenv.cc.isClang then null else thisStdenv.cc.cc;
+    # We can detect libstdc++ properly (after patching), at least if it's GCC
+    extraBuildCommands = lib.optionalString (!thisStdenv.cc.isClang) ''
       echo "" > $out/nix-support/libcxx-cxxflags
-
-      # echo "-resource-dir=${llvm}/lib/clang/18" | tee -a $out/nix-support/cc-cflags
-      # echo "-isystem ${llvm}/lib/clang/18/include/cuda_wrappers" | tee -a $out/nix-support/cc-cflags
     '';
-  });
+  }));
 
+  clang = mkHipClang stdenv;
   rocm-clang = clang;
 
   rocm-llvm = llvm;
-  rocm-merged-llvm = llvm;
-  # rocm-merged-llvm = symlinkJoin {
-  #   name = "rocm-merged-llvm";
-  #   paths = [
-  #     ()
-  #   ];
-  # };
 
   rocmClangStdenv = overrideCC stdenv clang;
 

@@ -266,6 +266,7 @@ stdenv.mkDerivation (finalAttrs: {
       ] (target: "gfx${target}");
 
       inherit hipClangPath;
+      mkHipClang = rocm-llvm.mkHipClang;
 
       updateScript = rocmUpdateScript {
         name = finalAttrs.pname;

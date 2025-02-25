@@ -4,9 +4,9 @@
   fetchFromGitHub,
   rocmUpdateScript,
   cmake,
-  clang,
+  rocm-clang,
   libxml2,
-  rocm-merged-llvm,
+  rocm-llvm,
   zlib,
   zstd,
   perl,
@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libxml2
-    rocm-merged-llvm
+    rocm-llvm
     zlib
     zstd
     perl
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
-      --replace "\''${LLVM_TOOLS_BINARY_DIR}/clang" "${clang}/bin/clang"
+      --replace "\''${LLVM_TOOLS_BINARY_DIR}/clang" "${rocm-clang}/bin/clang"
     chmod +x bin/*
   '';
 
