@@ -14,7 +14,7 @@ buildPythonPackage rec {
   version = "0.3.4";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "firefly-cpp";
