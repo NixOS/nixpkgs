@@ -1,32 +1,38 @@
 {
-  stdenv,
-  lib,
-  fetchurl,
-  cairo,
-  meson,
-  ninja,
-  pkg-config,
-  python3,
   asciidoc,
-  wrapGAppsHook3,
+  cairo,
+  dbus,
+  fdk_aac,
+  fetchurl,
+  freerdp3,
+  fuse3,
+  gdk-pixbuf,
   glib,
+  gnome,
+  lib,
+  libdrm,
   libei,
   libepoxy,
-  libdrm,
-  nv-codec-headers-11,
-  pipewire,
-  systemd,
-  libsecret,
+  libgudev,
   libnotify,
   libopus,
+  libsecret,
   libxkbcommon,
-  gdk-pixbuf,
-  freerdp3,
-  fdk_aac,
-  tpm2-tss,
-  fuse3,
-  gnome,
+  mesa,
+  meson,
+  mutter,
+  ninja,
+  nv-codec-headers-11,
+  openssl,
+  pipewire,
+  pkg-config,
   polkit,
+  python3,
+  stdenv,
+  systemd,
+  tpm2-tss,
+  wireplumber,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation rec {
@@ -38,35 +44,46 @@ stdenv.mkDerivation rec {
     hash = "sha256-QE2wiHLmkDlD4nUam2Myf2NZcKnKodL2dTCcpEV8+cI=";
   };
 
+  postPatch = ''
+    patchShebangs \
+      tests/prepare-test-environment.sh \
+      tests/run-vnc-tests.py
+
+    substituteInPlace tests/prepare-test-environment.sh \
+      --replace-fail \
+        dbus_run_session=\$\{DBUS_RUN_SESSION_BIN:-dbus-run-session\} \
+        'dbus_run_session="dbus-run-session --config-file=${dbus}/share/dbus-1/session.conf"'
+  '';
+
   nativeBuildInputs = [
+    asciidoc
     meson
     ninja
     pkg-config
     python3
-    asciidoc
     wrapGAppsHook3
   ];
 
   buildInputs = [
     cairo
-    freerdp3
     fdk_aac
-    tpm2-tss
+    freerdp3
     fuse3
     gdk-pixbuf # For libnotify
     glib
+    libdrm
     libei
     libepoxy
-    libdrm
-    nv-codec-headers-11
     libnotify
     libopus
     libsecret
     libxkbcommon
+    nv-codec-headers-11
     pipewire
-    systemd
     polkit # For polkit-gobject
-  ];
+    systemd
+    tpm2-tss
+  ] ++ lib.optional doCheck checkInputs;
 
   mesonFlags = [
     "-Dconf_dir=/etc/gnome-remote-desktop"
@@ -74,9 +91,19 @@ stdenv.mkDerivation rec {
     "-Dsystemd_system_unit_dir=${placeholder "out"}/lib/systemd/system"
     "-Dsystemd_sysusers_dir=${placeholder "out"}/lib/sysusers.d"
     "-Dsystemd_tmpfiles_dir=${placeholder "out"}/lib/tmpfiles.d"
-    "-Dtests=false" # Too deep of a rabbit hole.
     # TODO: investigate who should be fixed here.
     "-Dc_args=-I${freerdp3}/include/winpr3"
+  ];
+
+  doCheck = true;
+
+  checkInputs = [
+    dbus # for dbus-run-session
+    libgudev
+    mesa # for gbm
+    mutter
+    openssl
+    wireplumber
   ];
 
   passthru = {
