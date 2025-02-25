@@ -1,0 +1,13 @@
+diff --git a/howdy/src/pam/main.cc b/howdy/src/pam/main.cc
+index d1b8e34..8498655 100644
+--- a/howdy/src/pam/main.cc
++++ b/howdy/src/pam/main.cc
+@@ -290,7 +290,7 @@ auto identify(pam_handle_t *pamh, int flags, int argc, const char **argv,
+   // zombie process)
+   optional_task<int> child_task([&] {
+     int status;
+-    wait(&status);
++    waitpid(child_pid, &status, 0);
+     {
+       std::unique_lock<std::mutex> lock(mutx);
+       if (confirmation_type == ConfirmationType::Unset) {
