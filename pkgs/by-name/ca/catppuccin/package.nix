@@ -269,7 +269,7 @@ lib.checkListOfEnum "${pname}: variant" validVariants [ variant ] lib.checkListO
       ''
       + lib.optionalString (lib.elem "qt5ct" themeList) ''
         mkdir -p "$out/qt5ct"
-        cp "${sources.qt5ct}/themes/Catppuccin-${variant}-${accent}.conf" "$out/qt5ct"
+        cp "${sources.qt5ct}/themes/catppuccin-${variant}-${accent}.conf" "$out/qt5ct"
 
       ''
       + lib.optionalString (lib.elem "rofi" themeList) ''

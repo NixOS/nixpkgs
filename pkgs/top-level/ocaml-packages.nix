@@ -2012,6 +2012,8 @@ let
 
     wasm = callPackage ../development/ocaml-modules/wasm { };
 
+    wasm_of_ocaml-compiler = callPackage ../development/tools/ocaml/js_of_ocaml/compiler-wasm.nix { };
+
     wayland = callPackage ../development/ocaml-modules/wayland { };
 
     webbrowser = callPackage ../development/ocaml-modules/webbrowser { };
