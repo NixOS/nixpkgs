@@ -2,16 +2,21 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   SDL,
   autoreconfHook,
   autoconf-archive,
   glib,
   pkg-config,
+  fullVariant ? false,
+  withLvTool ? fullVariant,
+  withExamples ? fullVariant,
 }:
 
+# Remove when 0.5.x is published.
+assert stdenv.hostPlatform != stdenv.buildPlatform -> !withLvTool;
+
 stdenv.mkDerivation rec {
-  pname = "libvisual";
+  pname = "libvisual" + lib.optionalString fullVariant "-full";
   version = "0.4.2";
 
   src = fetchFromGitHub {
@@ -34,15 +39,12 @@ stdenv.mkDerivation rec {
     autoconf-archive
     pkg-config
   ];
-  buildInputs = [
-    SDL
-    glib
-  ];
+  buildInputs = [ glib ] ++ lib.optional (withLvTool || withExamples) SDL;
 
   configureFlags =
-    lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-      # Remove when 0.5.x is published.
-      "--disable-lv-tool"
+    [
+      (lib.enableFeature withLvTool "lv-tool")
+      (lib.enableFeature withExamples "examples")
     ]
     ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
       "ac_cv_func_malloc_0_nonnull=yes"
@@ -54,5 +56,5 @@ stdenv.mkDerivation rec {
     homepage = "https://sourceforge.net/projects/libvisual/";
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.linux;
-  };
+  } // lib.attrsets.optionalAttrs withLvTool { mainProgram = "lv-tool-0.4"; };
 }
