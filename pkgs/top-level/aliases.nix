@@ -403,6 +403,7 @@ mapAliases {
   edUnstable = throw "edUnstable was removed; use ed instead"; # Added 2024-07-01
   elasticsearch7Plugins = elasticsearchPlugins;
   electronplayer = throw "'electronplayer' has been removed as it had been discontinued upstream since October 2024"; # Added 2024-12-17
+  electron-fiddle = throw "electron-fiddle has been removed, as it was not maintained and it blocked the Electron 24 removal"; # Added 2025-02-24
 
   element-desktop-wayland = throw "element-desktop-wayland has been removed. Consider setting NIXOS_OZONE_WL=1 via 'environment.sessionVariables' instead"; # Added 2024-12-17
 
@@ -895,6 +896,7 @@ mapAliases {
 
   lobster-two = throw "'lobster-two' has been renamed to/replaced by 'google-fonts'"; # Converted to throw 2024-10-17
   loc = throw "'loc' has been removed due to lack of upstream maintenance. Consider 'tokei' as an alternative."; # Added 2025-01-25
+  logseq = throw "logseq has been removed, due to lack of maintenance and blocking the Electron 27 removal."; # Added 2025-02-24
   loop = throw "'loop' has been removed due to lack of upstream maintenance"; # Added 2025-01-25
   luna-icons = throw "luna-icons has been removed as it was removed upstream"; # Added 2024-10-29
   lv_img_conv = throw "'lv_img_conv' has been removed from nixpkgs as it is broken"; # Added 2024-06-18
@@ -941,6 +943,7 @@ mapAliases {
   mhwaveedit = throw "'mkwaveedit' has been removed due to lack of maintenance upstream. Consider using 'audacity' or 'tenacity' instead";
   microcodeAmd = microcode-amd; # Added 2024-09-08
   microcodeIntel = microcode-intel; # Added 2024-09-08
+  micropad = throw "micropad has been removed, since it was unmaintained and blocked the Electron 27 removal."; # Added 2025-02-24
   microsoft_gsl = microsoft-gsl; # Added 2023-05-26
   MIDIVisualizer = midivisualizer; # Added 2024-06-12
   mikutter = throw "'mikutter' has been removed because the package was broken and had no maintainers"; # Added 2024-10-01
@@ -1137,6 +1140,7 @@ mapAliases {
 
   pax-rs = throw "'pax-rs' has been removed because upstream has disappeared"; # Added 2025-01-25
   PageEdit = pageedit; # Added 2024-01-21
+  passky-desktop = throw "passky-desktop has been removed, as it was unmaintained and blocking the Electron 29 removal."; # Added 2025-02-24
   p2pvc = throw "p2pvc has been removed as it is unmaintained upstream and depends on OpenCV 2"; # Added 2024-08-20
   packet-cli = throw "'packet-cli' has been renamed to/replaced by 'metal-cli'"; # Converted to throw 2024-10-17
   panopticon = throw "'panopticon' has been removed because it is unmaintained upstream"; # Added 2025-01-25
@@ -1584,6 +1588,7 @@ mapAliases {
   webkitgtk = lib.warnOnInstantiate "Explicitly set the ABI version of 'webkitgtk'" webkitgtk_4_0;
   webmetro = throw "'webmetro' has been removed due to lack of upstream maintenance"; # Added 2025-01-25
   wg-bond = throw "'wg-bond' has been removed due to lack of upstream maintenance"; # Added 2025-01-25
+  whalebird = throw "whalebird has been removed, since it was unmaintained and blocked the Electron 27 removal."; # Added 2025-02-24
   whatsapp-for-linux = wasistlos; # Added 2025-01-30
   wineWayland = wine-wayland;
   win-virtio = virtio-win; # Added 2023-10-17
