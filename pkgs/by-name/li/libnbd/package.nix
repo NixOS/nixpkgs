@@ -22,11 +22,11 @@ lib.throwIf (buildOcamlBindings && !lib.versionAtLeast ocamlPackages.ocaml.versi
   stdenv.mkDerivation
   rec {
     pname = "libnbd";
-    version = "1.20.2";
+    version = "1.22.0";
 
     src = fetchurl {
       url = "https://download.libguestfs.org/libnbd/${lib.versions.majorMinor version}-stable/${pname}-${version}.tar.gz";
-      hash = "sha256-7DgviwGPPLccTPvomyH+0CMknXmR2wENsxpXD97OP84=";
+      hash = "sha256-mh607p3W+ZMqEnzN3L7/zXoB6TVH2mKY75nrNrzpxjg=";
     };
 
     nativeBuildInputs =
