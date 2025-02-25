@@ -18,12 +18,12 @@ assertEqualArray() {
   local -nr expectedArrayRef="$1"
   local -nr actualArrayRef="$2"
 
-  if ! isDeclaredArray expectedArrayRef; then
+  if ! isDeclaredArray "${!expectedArrayRef}"; then
     nixErrorLog "first arugment expectedArrayRef must be an array reference to a declared array"
     exit 1
   fi
 
-  if ! isDeclaredArray actualArrayRef; then
+  if ! isDeclaredArray "${!actualArrayRef}"; then
     nixErrorLog "second arugment actualArrayRef must be an array reference to a declared array"
     exit 1
   fi
