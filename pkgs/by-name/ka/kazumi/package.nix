@@ -11,7 +11,13 @@
   mimalloc,
   mpv,
   mpv-unwrapped,
+  runCommand,
+  yq,
+  kazumi,
+  _experimental-update-script-combinators,
+  gitUpdater,
 }:
+
 flutter327.buildFlutterApplication rec {
   pname = "kazumi";
   version = "1.5.4";
@@ -25,9 +31,7 @@ flutter327.buildFlutterApplication rec {
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
-  nativeBuildInputs = [
-    autoPatchelfHook
-  ];
+  nativeBuildInputs = [ autoPatchelfHook ];
 
   buildInputs = [
     webkitgtk_4_1
@@ -104,11 +108,25 @@ flutter327.buildFlutterApplication rec {
 
   postInstall = ''
     ln -snf ${mpv}/lib/libmpv.so.2 $out/app/kazumi/lib/libmpv.so.2
-    install -Dm0644 ./assets/linux/io.github.Predidit.Kazumi.desktop $out/share/applications/io.github.Predidit.Kazumi.desktop
-    install -Dm0644 ./assets/images/logo/logo_linux.png $out/share/icons/hicolor/512x512/apps/io.github.Predidit.Kazumi.png
+    install -Dm0644 assets/linux/io.github.Predidit.Kazumi.desktop $out/share/applications/io.github.Predidit.Kazumi.desktop
+    install -Dm0644 assets/images/logo/logo_linux.png $out/share/icons/hicolor/512x512/apps/io.github.Predidit.Kazumi.png
   '';
 
-  passthru.updateScript = ./update.sh;
+  passthru = {
+    pubspecSource =
+      runCommand "pubspec.lock.json"
+        {
+          nativeBuildInputs = [ yq ];
+          inherit (kazumi) src;
+        }
+        ''
+          cat $src/pubspec.lock | yq > $out
+        '';
+    updateScript = _experimental-update-script-combinators.sequence [
+      (gitUpdater { })
+      (_experimental-update-script-combinators.copyAttrOutputToFile "kazumi.pubspecSource" ./pubspec.lock.json)
+    ];
+  };
 
   meta = {
     description = "Watch Animes online with danmaku support";
