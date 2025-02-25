@@ -70,13 +70,21 @@ let
       "resources/icons/simulide.png";
 
   installFiles =
-    if lib.versionOlder versionNum "1.0.0" then
+    if stdenv.hostPlatform.isDarwin then
       ''
+        mkdir -p $out/Applications $out/bin
+        cp -r simulide.app $out/Applications
+        ln -s $out/Applications/simulide.app/Contents/MacOs/simulide $out/bin/simulide
+      ''
+    else if lib.versionOlder versionNum "1.0.0" then
+      ''
+        mkdir -p $out/share/simulide $out/bin
         cp -r share/simulide/* $out/share/simulide
         cp bin/simulide $out/bin/simulide
       ''
     else
       ''
+        mkdir -p $out/share/simulide $out/bin
         cp -r data examples $out/share/simulide
         cp simulide $out/bin/simulide
       '';
@@ -89,6 +97,8 @@ stdenv.mkDerivation {
   version = "${versionNum}-${release}";
   inherit src;
 
+  patches = lib.optionals (versionNum == "1.0.0") [ ./clang.patch ];
+
   postPatch = ''
     sed -i resources/simulide.desktop \
       -e "s|^Exec=.*$|Exec=simulide|" \
@@ -99,7 +109,10 @@ stdenv.mkDerivation {
       -e "s|^VERSION = .*$|VERSION = ${versionNum}|" \
       -e "s|^RELEASE = .*$|RELEASE = ${release'}|" \
       -e "s|^REV_NO = .*$|REV_NO = ${rev}|" \
-      -e "s|^BUILD_DATE = .*$|BUILD_DATE = ??-??-??|"
+      -e "s|^BUILD_DATE = .*$|BUILD_DATE = ??????|" \
+      -e "/QMAKE_CC/d" \
+      -e "/QMAKE_CXX/d" \
+      -e "/QMAKE_LINK/d"
 
     ${extraPostPatch}
   '';
@@ -124,10 +137,11 @@ stdenv.mkDerivation {
   installPhase = ''
     runHook preInstall
 
-    install -Dm644 ../resources/simulide.desktop $out/share/applications/simulide.desktop
-    install -Dm644 ../${iconPath} $out/share/icons/hicolor/256x256/apps/simulide.png
+    ${lib.optionalString stdenv.hostPlatform.isLinux ''
+      install -Dm644 ../resources/simulide.desktop $out/share/applications/simulide.desktop
+      install -Dm644 ../${iconPath} $out/share/icons/hicolor/256x256/apps/simulide.png
+    ''}
 
-    mkdir -p $out/share/simulide $out/bin
     pushd executables/SimulIDE_*
     ${installFiles}
     popd
@@ -149,6 +163,10 @@ stdenv.mkDerivation {
       carloscraveiro
       tomasajt
     ];
-    platforms = [ "x86_64-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
   };
 }
