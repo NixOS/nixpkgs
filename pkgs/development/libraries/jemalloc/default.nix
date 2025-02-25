@@ -58,7 +58,8 @@ stdenv.mkDerivation rec {
   # Tries to link test binaries binaries dynamically and fails
   doCheck = !stdenv.hostPlatform.isStatic;
 
-  enableParallelBuilding = true;
+  # Parallel builds break reproducibility.
+  enableParallelBuilding = false;
 
   meta = with lib; {
     homepage = "https://jemalloc.net/";
