@@ -3,10 +3,8 @@
   stdenv,
   fetchFromGitHub,
   pkg-config,
-  qtbase,
-  qtsvg,
-  qtcharts,
-  wrapQtAppsHook,
+  qt6,
+  cereal,
   cmake,
   python3,
   unstableGitUpdater,
@@ -25,17 +23,24 @@ stdenv.mkDerivation rec {
     hash = "sha256-aNJTM/s4GNhWVXQxK1R/rIN/NmeKglibQZMh8ENjIzo=";
   };
 
+  postPatch = ''
+    rm -r external/VSRTL/external/cereal
+    substituteInPlace {src/serializers.h,src/io/iobase.h} \
+      --replace-fail "VSRTL/external/cereal/include/cereal/cereal.hpp" "cereal/cereal.hpp"
+  '';
+
   nativeBuildInputs = [
     cmake
     pkg-config
     python3
-    wrapQtAppsHook
+    qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
-    qtbase
-    qtsvg
-    qtcharts
+    cereal
+    qt6.qtbase
+    qt6.qtsvg
+    qt6.qtcharts
   ];
 
   installPhase =

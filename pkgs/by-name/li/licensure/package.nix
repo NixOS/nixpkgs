@@ -44,7 +44,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/chasinglogic/licensure";
     license = licenses.gpl3Plus;
     mainProgram = "licensure";
-    maintainers = [ maintainers.soispha ];
+    maintainers = [ maintainers.bpeetz ];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

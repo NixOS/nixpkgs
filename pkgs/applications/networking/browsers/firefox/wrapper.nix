@@ -1,4 +1,4 @@
-{ stdenv, lib, makeDesktopItem, makeWrapper, lndir, config
+{ stdenv, lib, makeDesktopItem, makeBinaryWrapper, lndir, config
 , buildPackages
 , jq, xdg-utils, writeText
 
@@ -23,12 +23,11 @@
 browser:
 
 let
+  isDarwin = stdenv.hostPlatform.isDarwin;
   wrapper =
-    { applicationName ? browser.binaryName or (lib.getName browser)
+    { applicationName ? browser.binaryName or (lib.getName browser) # Note: this is actually *binary* name and is different from browser.applicationName, which is *app* name!
     , pname ? applicationName
     , version ? lib.getVersion browser
-    , desktopName ? # applicationName with first letter capitalized
-      (lib.toUpper (lib.substring 0 1 applicationName) + lib.substring 1 (-1) applicationName)
     , nameSuffix ? ""
     , icon ? applicationName
     , wmClass ? applicationName
@@ -82,7 +81,8 @@ let
             ++ gtk_modules;
       gtk_modules = [ libcanberra-gtk3 ];
 
-      launcherName = "${applicationName}${nameSuffix}";
+      # Darwin does not rename bundled binaries
+      launcherName = "${applicationName}${lib.optionalString (!isDarwin) nameSuffix}";
 
       #########################
       #                       #
@@ -164,7 +164,7 @@ let
         name = launcherName;
         exec = "${launcherName} --name ${wmClass} %U";
         inherit icon;
-        inherit desktopName;
+        desktopName = browser.applicationName;
         startupNotify = true;
         startupWMClass = wmClass;
         terminal = false;
@@ -219,7 +219,7 @@ let
               };
             }));
 
-      nativeBuildInputs = [ makeWrapper lndir jq ];
+      nativeBuildInputs = [ makeBinaryWrapper lndir jq ];
       buildInputs = [ browser.gtk3 ];
 
       makeWrapperArgs = [
@@ -279,10 +279,18 @@ let
         ''ln -sfLt ''${MOZ_HOME:-~/.mozilla}/native-messaging-hosts ${ext}/lib/mozilla/native-messaging-hosts/*''
       ]) allNativeMessagingHosts);
 
-      buildCommand = ''
-        if [ ! -x "${browser}/bin/${applicationName}" ]
+      buildCommand = let
+        appPath = "Applications/${browser.applicationName}.app";
+        executablePrefix = if isDarwin then "${appPath}/Contents/MacOS" else "bin";
+        executablePath="${executablePrefix}/${applicationName}";
+        finalBinaryPath = "${executablePath}" + lib.optionalString (!isDarwin) "${nameSuffix}";
+        sourceBinary="${browser}/${executablePath}";
+        libDir = if isDarwin then "${appPath}/Contents/Resources" else "lib/${libName}";
+        prefsDir = if isDarwin then "${libDir}/browser/defaults/preferences" else "${libDir}/defaults/pref";
+      in ''
+        if [ ! -x "${sourceBinary}" ]
         then
-            echo "cannot find executable file \`${browser}/bin/${applicationName}'"
+            echo "cannot find executable file \`${sourceBinary}'"
             exit 1
         fi
 
@@ -314,10 +322,31 @@ let
 
         cd "$out"
 
+      '' + lib.optionalString isDarwin ''
+        cd "${appPath}"
+
+        # These files have to be copied and not symlinked, otherwise tabs crash.
+        # Maybe related to how omni.ja file is mmapped into memory. See:
+        # https://github.com/mozilla/gecko-dev/blob/b1662b447f306e6554647914090d4b73ac8e1664/modules/libjar/nsZipArchive.cpp#L204
+        for file in $(find . -type l -name "omni.ja"); do
+          rm "$file"
+          cp "${browser}/${appPath}/$file" "$file"
+        done
+
+        # Copy any embedded .app directories; plugin-container fails to start otherwise.
+        for dir in $(find . -type d -name '*.app'); do
+          rm -r "$dir"
+          cp -r "${browser}/${appPath}/$dir" "$dir"
+        done
+
+        cd ..
+
+      '' + ''
+
         # create the wrapper
 
-        executablePrefix="$out/bin"
-        executablePath="$executablePrefix/${applicationName}"
+        executablePrefix="$out/${executablePrefix}"
+        executablePath="$out/${executablePath}"
         oldWrapperArgs=()
 
         if [[ -L $executablePath ]]; then
@@ -348,13 +377,15 @@ let
 
         appendToVar makeWrapperArgs --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
         concatTo makeWrapperArgs oldWrapperArgs
-        makeWrapper "$oldExe" "''${executablePath}${nameSuffix}" "''${makeWrapperArgs[@]}"
+
+        makeWrapper "$oldExe" "$out/${finalBinaryPath}" "''${makeWrapperArgs[@]}"
+
         #############################
         #                           #
         #   END EXTRA PREF CHANGES  #
         #                           #
         #############################
-
+      '' + lib.optionalString (!isDarwin) ''
         if [ -e "${browser}/share/icons" ]; then
             mkdir -p "$out/share"
             ln -s "${browser}/share/icons" "$out/share/icons"
@@ -389,12 +420,12 @@ let
         #                       #
         #########################
         # user customization
-        mkdir -p $out/lib/${libName}
+        libDir="$out/${libDir}"
 
         # creating policies.json
-        mkdir -p "$out/lib/${libName}/distribution"
+        mkdir -p "$libDir/distribution"
 
-        POL_PATH="$out/lib/${libName}/distribution/policies.json"
+        POL_PATH="$libDir/distribution/policies.json"
         rm -f "$POL_PATH"
         cat ${policiesJson} >> "$POL_PATH"
 
@@ -405,25 +436,26 @@ let
         done
 
         # preparing for autoconfig
-        mkdir -p "$out/lib/${libName}/defaults/pref"
+        prefsDir="$out/${prefsDir}"
+        mkdir -p "$prefsDir"
 
-        echo 'pref("general.config.filename", "mozilla.cfg");' > "$out/lib/${libName}/defaults/pref/autoconfig.js"
-        echo 'pref("general.config.obscure_value", 0);' >> "$out/lib/${libName}/defaults/pref/autoconfig.js"
+        echo 'pref("general.config.filename", "mozilla.cfg");' > "$prefsDir/autoconfig.js"
+        echo 'pref("general.config.obscure_value", 0);' >> "$prefsDir/autoconfig.js"
 
-        cat > "$out/lib/${libName}/mozilla.cfg" << EOF
+        cat > "$libDir/mozilla.cfg" << EOF
         ${mozillaCfg}
         EOF
 
         extraPrefsFiles=(${builtins.toString extraPrefsFiles})
         for extraPrefsFile in "''${extraPrefsFiles[@]}"; do
-          cat "$extraPrefsFile" >> "$out/lib/${libName}/mozilla.cfg"
+          cat "$extraPrefsFile" >> "$libDir/mozilla.cfg"
         done
 
-        cat >> "$out/lib/${libName}/mozilla.cfg" << EOF
+        cat >> "$libDir/mozilla.cfg" << EOF
         ${extraPrefs}
         EOF
 
-        mkdir -p $out/lib/${libName}/distribution/extensions
+        mkdir -p "$libDir/distribution/extensions"
 
         #############################
         #                           #
