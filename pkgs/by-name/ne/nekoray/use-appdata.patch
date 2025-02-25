@@ -1,0 +1,27 @@
+From 4982b3ffa18ef7bfa5ef14f7bfa67b0c4bfe56f7 Mon Sep 17 00:00:00 2001
+From: Pavel Sobolev <contact@paveloom.dev>
+Date: Thu, 26 Dec 2024 19:47:37 +0300
+Subject: [PATCH] Use AppData.
+
+See https://github.com/MatsuriDayo/nekoray/issues/1416.
+---
+ main/main.cpp | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/main/main.cpp b/main/main.cpp
+index b14f04f..30ba0a7 100644
+--- a/main/main.cpp
++++ b/main/main.cpp
+@@ -91,9 +91,7 @@ int main(int argc, char* argv[]) {
+     if (NekoGui::dataStore->argv.contains("-debug")) NekoGui::dataStore->flag_debug = true;
+     if (NekoGui::dataStore->argv.contains("-flag_restart_tun_on")) NekoGui::dataStore->flag_restart_tun_on = true;
+     if (NekoGui::dataStore->argv.contains("-flag_reorder")) NekoGui::dataStore->flag_reorder = true;
+-#ifdef NKR_CPP_USE_APPDATA
+     NekoGui::dataStore->flag_use_appdata = true; // Example: Package & MacOS
+-#endif
+ #ifdef NKR_CPP_DEBUG
+     NekoGui::dataStore->flag_debug = true;
+ #endif
+-- 
+2.47.0
+
