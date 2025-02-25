@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "jianpu-ly";
-  version = "1.832";
+  version = "1.839";
   pyproject = true;
 
   src = fetchPypi {
     inherit version;
     pname = "jianpu_ly";
-    hash = "sha256-7+PM8wHzC5O8o12VjA1aeYIAdv/17TM7RymHyxkq5vs=";
+    hash = "sha256-KFBG/iJeFt2dHHNvhPZlvWxAEO4kLPpNW4R1HRWuUUg=";
   };
 
   dependencies = [ lilypond ];
