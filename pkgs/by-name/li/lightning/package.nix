@@ -1,10 +1,11 @@
 {
-  lib,
   fetchurl,
-  libopcodes,
-  libiberty,
-  stdenv,
+  lib,
   libbfd,
+  libiberty,
+  libopcodes,
+  nix-update-script,
+  stdenv,
   zlib,
 }:
 
