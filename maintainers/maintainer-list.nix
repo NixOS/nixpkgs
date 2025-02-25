@@ -25011,6 +25011,12 @@
     github = "wegank";
     githubId = 9713184;
   };
+  weirdrock = {
+    name = "weirdrock";
+    email = "weirdrock@riseup.net";
+    github = "weirdrock";
+    githubId = 142561048;
+  };
   weitzj = {
     name = "Jan Weitz";
     email = "nixpkgs@janweitz.de";
