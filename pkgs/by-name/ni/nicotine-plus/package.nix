@@ -10,9 +10,13 @@
   python3Packages,
   libadwaita,
 }:
-python3Packages.buildPythonApplication rec {
+let
+
   pname = "nicotine-plus";
   version = "3.3.8";
+in
+python3Packages.buildPythonApplication {
+  inherit pname version;
   pyproject = true;
   src = fetchFromGitHub {
     owner = "nicotine-plus";
