@@ -18,12 +18,12 @@ assertEqualMap() {
   local -nr expectedMapRef="$1"
   local -nr actualMapRef="$2"
 
-  if ! isDeclaredMap expectedMapRef; then
+  if ! isDeclaredMap "${!expectedMapRef}"; then
     nixErrorLog "first arugment expectedMapRef must be an associative array reference to a declared associative array"
     exit 1
   fi
 
-  if ! isDeclaredMap actualMapRef; then
+  if ! isDeclaredMap "${!actualMapRef}"; then
     nixErrorLog "second arugment actualMapRef must be an associative array reference to a declared associative array"
     exit 1
   fi
