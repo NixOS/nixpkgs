@@ -48,10 +48,20 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
-    # SystemError: nanobind::detail::nb_func_error_except(): exception could not be translated!
-    "test_filter"
-  ];
+  disabledTests =
+    [
+      # TypeError: no unmapping handler for 0 of type <class 'int'>
+      # https://github.com/patrick-kidger/equinox/issues/959
+      "test_nested_loops"
+      "test_speed_buffer_while"
+      "test_vmap_primal_batched_cond"
+      "test_vmap_primal_unbatched_cond"
+      "test_vprim"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # SystemError: nanobind::detail::nb_func_error_except(): exception could not be translated!
+      "test_filter"
+    ];
 
   pythonImportsCheck = [ "equinox" ];
 
