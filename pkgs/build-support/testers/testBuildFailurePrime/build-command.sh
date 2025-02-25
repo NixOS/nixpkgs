@@ -23,6 +23,7 @@ testBuilderLogEntries() {
   nixLog "checking original builder log"
   local -r builderLogEntries="$(<"${failed:?}/testBuildFailure.log")"
   local -i shouldExit=0
+  local expectedBuilderLogEntry
   for expectedBuilderLogEntry in "${expectedBuilderLogEntries[@]}"; do
     if [[ ${builderLogEntries} == *"$expectedBuilderLogEntry"* ]]; then
       nixLog "original builder log contains ${expectedBuilderLogEntry@Q}"
