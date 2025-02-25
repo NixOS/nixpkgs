@@ -1,25 +1,18 @@
-diff --git a/src/arma3-unix-launcher/mainwindow.cpp b/src/arma3-unix-launcher/mainwindow.cpp
-index 66b73cc..f89f66b 100644
---- a/src/arma3-unix-launcher/mainwindow.cpp
-+++ b/src/arma3-unix-launcher/mainwindow.cpp
-@@ -56,6 +56,3 @@ MainWindow::MainWindow(std::unique_ptr<ARMA3::Client> arma3_client, std::filesys
- {
--    if (use_steam_integration)
--        steam_integration = std::make_unique<Steam::SteamIntegration>(ARMA3::Definitions::app_id);
--    else
--        steam_integration = std::make_unique<Steam::IntegrationStub>(ARMA3::Definitions::app_id);
-+    steam_integration = std::make_unique<Steam::IntegrationStub>(ARMA3::Definitions::app_id);
- 
-diff --git a/src/dayz-linux-launcher/mainwindow.cpp b/src/dayz-linux-launcher/mainwindow.cpp
-index d9223db..5773593 100644
---- a/src/dayz-linux-launcher/mainwindow.cpp
-+++ b/src/dayz-linux-launcher/mainwindow.cpp
-@@ -56,6 +56,3 @@ MainWindow::MainWindow(std::unique_ptr<DayZ::Client> arma3_client, std::filesyst
- {
--    if (use_steam_integration)
--        steam_integration = std::make_unique<Steam::SteamIntegration>(DayZ::Definitions::app_id);
--    else
--        steam_integration = std::make_unique<Steam::IntegrationStub>(DayZ::Definitions::app_id);
-+    steam_integration = std::make_unique<Steam::IntegrationStub>(DayZ::Definitions::app_id);
- 
+diff --git a/src/arma3-unix-launcher/main.cpp b/src/arma3-unix-launcher/main.cpp
+index 10f6ed9..c706734 100644
+--- a/src/arma3-unix-launcher/main.cpp
++++ b/src/arma3-unix-launcher/main.cpp
+@@ -216,3 +216,3 @@ int main(int argc, char *argv[])
 
+-        MainWindow w(std::move(client), config_file, parser.get<bool>("--disable-steam-integration"));
++        MainWindow w(std::move(client), config_file, !parser.get<bool>("--disable-steam-integration"));
+         w.show();
+diff --git a/src/dayz-linux-launcher/main.cpp b/src/dayz-linux-launcher/main.cpp
+index f30bf8a..e0cef66 100644
+--- a/src/dayz-linux-launcher/main.cpp
++++ b/src/dayz-linux-launcher/main.cpp
+@@ -216,3 +216,3 @@ int main(int argc, char *argv[])
+
+-        MainWindow w(std::move(client), config_file, parser.get<bool>("--disable-steam-integration"));
++        MainWindow w(std::move(client), config_file, !parser.get<bool>("--disable-steam-integration"));
+         w.show();
