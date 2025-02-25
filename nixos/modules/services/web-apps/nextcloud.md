@@ -16,7 +16,7 @@ and optionally supports
 [`services.nginx`](#opt-services.nginx.enable)).
 
 For the database, you can set
-[`services.nextcloud.config.dbtype`](#opt-services.nextcloud.config.dbtype) to
+[`services.nextcloud.settings.dbtype`](#opt-services.nextcloud.settings.dbtype) to
 either `sqlite` (the default), `mysql`, or `pgsql`. The simplest is `sqlite`,
 which will be automatically created and managed by the application. For the
 last two, you can easily create a local database by setting
@@ -32,10 +32,8 @@ A very basic configuration may look like this:
     enable = true;
     hostName = "nextcloud.tld";
     database.createLocally = true;
-    config = {
-      dbtype = "pgsql";
-      adminpassFile = "/path/to/admin-pass-file";
-    };
+    config.adminpassFile = "/path/to/admin-pass-file";
+    settings.dbtype = "pgsql";
   };
 
   networking.firewall.allowedTCPPorts = [ 80 443 ];
@@ -55,6 +53,25 @@ it's needed to add them to
 
 Auto updates for Nextcloud apps can be enabled using
 [`services.nextcloud.autoUpdateApps`](#opt-services.nextcloud.autoUpdateApps.enable).
+
+## Configure external database {#module-services-nextcloud-external-database}
+
+External databases can be configured through `dbtype`, `dbhost`, `dbuser`,
+`dbname`, `dbtableprefix` inside the
+[`services.nextcloud.settings`](#opt-services.nextcloud.settings) scope.
+Specifying `dbpass` is done via [`services.nextcloud.secretFile`](#opt-services.nextcloud.secretFile),
+for example:
+```nix
+{ pkgs, ... }:
+{
+  services.nextcloud.secretFile = "/etc/nextcloud-secret-file";
+}
+environment.etc."nextcloud-secret-file".text = ''
+  {
+    "dbpass": "secret"
+  }
+'';
+```
 
 ## Common problems {#module-services-nextcloud-pitfalls-during-upgrade}
 
@@ -156,8 +173,7 @@ Auto updates for Nextcloud apps can be enabled using
     Cannot decode /run/secrets/nextcloud_secrets, because: Syntax error
     ```
 
-    This can happen if [](#opt-services.nextcloud.secretFile) or
-    [](#opt-services.nextcloud.config.dbpassFile) are managed by
+    This can happen if [](#opt-services.nextcloud.secretFile) is managed by
     [sops-nix](https://github.com/Mic92/sops-nix/).
 
     Here, `/run/secrets/nextcloud_secrets` is a symlink to
