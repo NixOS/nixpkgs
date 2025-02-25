@@ -1,0 +1,20 @@
+/bin/bash not available in Nix, so I totally removed the shebang. Replacing it by `/usr/bin/env bash` doesn't seem to work
+
+diff --git a/doc/extractHeadline.sh b/doc/extractHeadline.sh
+index dce77e71ac..dc9cee0096 100755
+--- a/doc/extractHeadline.sh
++++ b/doc/extractHeadline.sh
+@@ -1,4 +1,3 @@
+-#!/bin/bash
+ # StarPU --- Runtime system for heterogeneous multicore architectures.
+ #
+ # Copyright (C) 2022-2025   University of Bordeaux, CNRS (LaBRI UMR 5800), Inria
+diff --git a/doc/fixLinks.sh b/doc/fixLinks.sh
+index ee61fc715e..8504d88b40 100755
+--- a/doc/fixLinks.sh
++++ b/doc/fixLinks.sh
+@@ -1,4 +1,3 @@
+-#!/bin/bash
+ # StarPU --- Runtime system for heterogeneous multicore architectures.
+ #
+ # Copyright (C) 2023-2025   University of Bordeaux, CNRS (LaBRI UMR 5800), Inria
