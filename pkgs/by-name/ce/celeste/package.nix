@@ -34,7 +34,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-OBGDnhpVLOPdYhofWfeaueklt7KBkLhM02JNvuvUQ2Q=";
 
   postPatch = ''
-    pushd $cargoDepsCopy/librclone-sys
+    pushd $cargoDepsCopy/librclone-sys-*
     oldHash=$(sha256sum build.rs | cut -d " " -f 1)
     patch -p2 < ${./librclone-path.patch}
     substituteInPlace build.rs \
