@@ -3,6 +3,7 @@
   cffi,
   fetchFromGitHub,
   lib,
+  libpq,
   postgresql,
   postgresqlTestHook,
   pytestCheckHook,
@@ -30,11 +31,11 @@ buildPythonPackage rec {
   '';
 
   build-system = [
-    postgresql
     setuptools
   ];
 
   dependencies = [
+    libpq
     cffi
     six
   ];
@@ -43,6 +44,7 @@ buildPythonPackage rec {
   doCheck = !stdenv.hostPlatform.isDarwin;
 
   nativeCheckInputs = [
+    postgresql
     postgresqlTestHook
     pytestCheckHook
   ];
