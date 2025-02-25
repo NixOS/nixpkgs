@@ -481,21 +481,22 @@ in
         );
         default = null;
         example =
-          lib.literalExpression # nginx
+          lib.literalExpression # nix
             ''
               {
                 serverAliases = [
-                  "pics.''${config.networking.domain}"
+                  "pics.''${config.movim.domain}"
                 ];
                 enableACME = true;
                 forceHttps = true;
               }
             '';
         description = ''
-          With this option, you can customize an nginx virtual host which already has sensible defaults for Movim.
-          Set to `{ }` if you do not need any customization to the virtual host.
-          If enabled, then by default, the {option}`serverName` is `''${domain}`,
-          If this is set to null (the default), no nginx virtualHost will be configured.
+          With this option, you can customize an Nginx virtual host which
+          already has sensible defaults for Movim. Set to `{ }` if you do not
+          need any customization to the virtual host. If enabled, then by
+          default, the {option}`serverName` is `''${domain}`, If this is set to
+          `null` (the default), no Nginx `virtualHost` will be configured.
         '';
       };
 
@@ -657,7 +658,7 @@ in
                     '';
                 };
               };
-              extraConfig = # ngnix
+              extraConfig = # nginx
                 ''
                   index index.php;
                 '';
