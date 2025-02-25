@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [ kdePackages.plasma-desktop ];
-
+  propagatedUserEnvPkgs = [ glib ];
   dontWrapQtApps = true;
   strictDeps = true;
 
