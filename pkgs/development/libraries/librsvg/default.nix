@@ -11,7 +11,6 @@
   installShellFiles,
   pango,
   freetype,
-  harfbuzz,
   cairo,
   libxml2,
   bzip2,
@@ -25,7 +24,6 @@
   python3Packages,
   gnome,
   vala,
-  writeShellScript,
   shared-mime-info,
   # Requires building a cdylib.
   withPixbufLoader ? !stdenv.hostPlatform.isStatic,
@@ -92,7 +90,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs =
     [
-      gdk-pixbuf
       installShellFiles
       pkg-config
       meson
@@ -146,7 +143,7 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = !stdenv.isDarwin && !stdenv.hostPlatform.isi686;
 
   env = {
-    PKG_CONFIG_GDK_PIXBUF_2_0_GDK_PIXBUF_QUERY_LOADERS = writeShellScript "gdk-pixbuf-loader-loaders-wrapped" ''
+    PKG_CONFIG_GDK_PIXBUF_2_0_GDK_PIXBUF_QUERY_LOADERS = buildPackages.writeShellScript "gdk-pixbuf-loader-loaders-wrapped" ''
       ${lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (stdenv.hostPlatform.emulator buildPackages)} ${lib.getDev gdk-pixbuf}/bin/gdk-pixbuf-query-loaders
     '';
   };
@@ -164,6 +161,10 @@ stdenv.mkDerivation (finalAttrs: {
     # https://gitlab.gnome.org/GNOME/librsvg/-/issues/1150
     substituteInPlace rsvg/meson.build \
       --replace-fail 'requires: library_dependencies_sole,' 'requires: [cairo_dep, gio_dep, glib_dep, pixbuf_dep],'
+
+    # Upstream disables loaders.cache generation when cross-compiling, but unnecessarily so.
+    substituteInPlace gdk-pixbuf-loader/meson.build \
+      --replace-fail 'meson.is_cross_build()' 'false'
   '';
 
   preCheck = ''
@@ -178,8 +179,7 @@ stdenv.mkDerivation (finalAttrs: {
     let
       emulator = stdenv.hostPlatform.emulator buildPackages;
     in
-    # Not generated when cross compiling.
-    lib.optionalString (lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) ''
+    lib.optionalString withPixbufLoader ''
       # Merge gdkpixbuf and librsvg loaders
       GDK_PIXBUF=$out/${gdk-pixbuf.binaryDir}
       cat ${lib.getLib gdk-pixbuf}/${gdk-pixbuf.binaryDir}/loaders.cache $GDK_PIXBUF/loaders.cache > $GDK_PIXBUF/loaders.cache.tmp
