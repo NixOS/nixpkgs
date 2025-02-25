@@ -21,18 +21,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchgit {
     url = "https://review.sourcearcade.org/flashprog";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-S+UKDtpKYenwm+zR+Bg8HHxb2Jr7mFHAVCZdZTqCyRQ=";
+    rev = "648dfdc9272f02aaca0217fcdab542a10f45476e";
+    hash = "sha256-ORbi5AapwY7Jf9gnHZe/6EWt+nzgBX5ejLRUmbPV3ME=";
   };
-
-  patches = [
-    # fixes compiler warnings on Darwin
-    (fetchpatch {
-      url = "https://review.sourcearcade.org/changes/flashprog~309/revisions/2/patch?download";
-      hash = "sha256-eiEenR8+CHCJcNx9YY09I7gxRGUQWmaQlmXtykvXyMU=";
-      decode = "base64 -d";
-    })
-  ];
 
   nativeBuildInputs = [
     meson
