@@ -308,6 +308,7 @@ in stdenv.mkDerivation {
 
   postInstall = ''
     # Move driver-related bits to $drivers
+    moveToOutput "lib/gallium-pipe" $drivers
     moveToOutput "lib/gbm" $drivers
     moveToOutput "lib/lib*_mesa*" $drivers
     moveToOutput "lib/libgallium*" $drivers
@@ -339,7 +340,6 @@ in stdenv.mkDerivation {
 
     moveToOutput bin/intel_clc $driversdev
     moveToOutput bin/mesa_clc $driversdev
-    moveToOutput lib/gallium-pipe $opencl
     moveToOutput "lib/lib*OpenCL*" $opencl
     moveToOutput "lib/libOSMesa*" $osmesa
     moveToOutput bin/spirv2dxil $spirv2dxil
@@ -392,7 +392,7 @@ in stdenv.mkDerivation {
 
   env.NIX_CFLAGS_COMPILE = toString ([
     "-UPIPE_SEARCH_DIR"
-    "-DPIPE_SEARCH_DIR=\"${placeholder "opencl"}/lib/gallium-pipe\""
+    "-DPIPE_SEARCH_DIR=\"${placeholder "drivers"}/lib/gallium-pipe\""
   ]);
 
   passthru = {
