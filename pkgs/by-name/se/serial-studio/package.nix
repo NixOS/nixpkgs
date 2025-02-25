@@ -2,34 +2,44 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  qmake,
-  qtquickcontrols2,
-  qtserialport,
-  qtsvg,
-  wrapQtAppsHook,
+  cmake,
+  qt6,
+  pkg-config,
 }:
 
 stdenv.mkDerivation rec {
   pname = "serial-studio";
-  version = "1.1.7";
+  version = "3.0.6";
 
   src = fetchFromGitHub {
     owner = "Serial-Studio";
     repo = "Serial-Studio";
     rev = "v${version}";
-    hash = "sha256-Tsd1PGB7cO8h3HDifOtB8jsnj+fS4a/o5nfLoohVLM4=";
+    hash = "sha256-q3RWy3HRs5NG0skFb7PSv8jK5pI5rtbccP8j38l8kjM=";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
-    qmake
-    wrapQtAppsHook
+    cmake
+    qt6.wrapQtAppsHook
+    pkg-config
   ];
 
   buildInputs = [
-    qtquickcontrols2
-    qtserialport
-    qtsvg
+    qt6.qtbase
+    qt6.qtdeclarative
+    qt6.qtsvg
+    qt6.qtgraphs
+    qt6.qtlocation
+    qt6.qtconnectivity
+    qt6.qttools
+    qt6.qtserialport
+    qt6.qtpositioning
+  ];
+
+  patches = [
+    ./0001-CMake-Deploy-Fix.patch
+    ./0002-Connect-Button-Fix.patch
   ];
 
   meta = with lib; {
