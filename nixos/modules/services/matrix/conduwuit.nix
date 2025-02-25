@@ -6,8 +6,6 @@
 }:
 let
   cfg = config.services.conduwuit;
-  defaultUser = "conduwuit";
-  defaultGroup = "conduwuit";
 
   format = pkgs.formats.toml { };
   configFile = format.generate "conduwuit.toml" cfg.settings;
@@ -16,22 +14,6 @@ in
   meta.maintainers = with lib.maintainers; [ niklaskorz ];
   options.services.conduwuit = {
     enable = lib.mkEnableOption "conduwuit";
-
-    user = lib.mkOption {
-      type = lib.types.nonEmptyStr;
-      description = ''
-        The user {command}`conduwuit` is run as.
-      '';
-      default = defaultUser;
-    };
-
-    group = lib.mkOption {
-      type = lib.types.nonEmptyStr;
-      description = ''
-        The group {command}`conduwuit` is run as.
-      '';
-      default = defaultGroup;
-    };
 
     extraEnvironment = lib.mkOption {
       type = lib.types.attrsOf lib.types.str;
@@ -171,6 +153,19 @@ in
     };
   };
 
+  imports = [
+    (lib.mkRemovedOptionModule [
+      "services"
+      "conduwuit"
+      "user"
+    ] "Removed without replacement, as the option did not have any effect.")
+    (lib.mkRemovedOptionModule [
+      "services"
+      "conduwuit"
+      "group"
+    ] "Removed without replacement, as the option did not have any effect.")
+  ];
+
   config = lib.mkIf cfg.enable {
     assertions = [
       {
@@ -181,27 +176,7 @@ in
           Leave one of the two options unset or explicitly set them to `null`.
         '';
       }
-      {
-        assertion = cfg.user != defaultUser -> config ? users.users.${cfg.user};
-        message = "If `services.conduwuit.user` is changed, the configured user must already exist.";
-      }
-      {
-        assertion = cfg.group != defaultGroup -> config ? users.groups.${cfg.group};
-        message = "If `services.conduwuit.group` is changed, the configured group must already exist.";
-      }
     ];
-
-    users.users = lib.mkIf (cfg.user == defaultUser) {
-      ${defaultUser} = {
-        group = cfg.group;
-        home = cfg.settings.global.database_path;
-        isSystemUser = true;
-      };
-    };
-
-    users.groups = lib.mkIf (cfg.group == defaultGroup) {
-      ${defaultGroup} = { };
-    };
 
     systemd.services.conduwuit = {
       description = "Conduwuit Matrix Server";
@@ -209,16 +184,14 @@ in
       wantedBy = [ "multi-user.target" ];
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
-      environment = lib.mkMerge ([
+      environment = lib.mkMerge [
         { CONDUWUIT_CONFIG = configFile; }
         cfg.extraEnvironment
-      ]);
+      ];
       startLimitBurst = 5;
       startLimitIntervalSec = 60;
       serviceConfig = {
         DynamicUser = true;
-        User = cfg.user;
-        Group = cfg.group;
 
         DevicePolicy = "closed";
         LockPersonality = true;
