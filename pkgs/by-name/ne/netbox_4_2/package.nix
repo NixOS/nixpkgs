@@ -14,7 +14,7 @@ let
 in
 py.pkgs.buildPythonApplication rec {
   pname = "netbox";
-  version = "4.0.11";
+  version = "4.2.3";
 
   format = "other";
 
@@ -22,13 +22,11 @@ py.pkgs.buildPythonApplication rec {
     owner = "netbox-community";
     repo = "netbox";
     tag = "v${version}";
-    hash = "sha256-0yEz7v5RL1+cqbGDyuyEsywFonJQfPdVIQdL0qLyc04=";
+    hash = "sha256-vdH/R88Vtu+xRLjETK0h+E4WoYRoseP0r+wROi8nMcM=";
   };
 
   patches = [
     ./custom-static-root.patch
-    # From https://github.com/netbox-community/netbox/pull/17620
-    ./django-5.1.patch
   ];
 
   propagatedBuildInputs =
@@ -111,7 +109,8 @@ py.pkgs.buildPythonApplication rec {
     pythonPath = py.pkgs.makePythonPath propagatedBuildInputs;
     inherit (py.pkgs) gunicorn;
     tests = {
-      netbox = nixosTests.netbox_4_0;
+      netbox = nixosTests.netbox_4_2;
+      inherit (nixosTests) netbox-upgrade;
     };
   };
 
@@ -123,9 +122,6 @@ py.pkgs.buildPythonApplication rec {
     maintainers = with lib.maintainers; [
       minijackson
       raitobezarius
-    ];
-    knownVulnerabilities = [
-      "Netbox version ${version} is EOL; please upgrade by following the current release notes instructions."
     ];
   };
 }
