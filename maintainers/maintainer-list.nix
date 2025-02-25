@@ -25061,6 +25061,12 @@
     githubId = 24979302;
     name = "Vladimír Zahradník";
   };
+  wgrav = {
+    name = "wgrav";
+    github = "wgrav01";
+    githubId = 63617338;
+    email = "wgrav01@protonmail.com";
+  };
   wfdewith = {
     name = "Wim de With";
     email = "wf@dewith.io";
