@@ -17,6 +17,9 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  # MLKit intentionally has some of these in its test suite.
+  dontCheckForBrokenSymlinks = true;
+
   checkPhase = ''
     runHook preCheck
     echo ==== Running MLKit test suite: test ====
