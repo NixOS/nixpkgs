@@ -1,0 +1,13 @@
+diff --git a/veridian-slang/slang_wrapper/CMakeLists.txt b/veridian-slang/slang_wrapper/CMakeLists.txt
+index a3cf824..9941e92 100644
+--- a/veridian-slang/slang_wrapper/CMakeLists.txt
++++ b/veridian-slang/slang_wrapper/CMakeLists.txt
+@@ -6,7 +6,7 @@ project(
+ )
+ 
+ # Keep the version the same as the one in `build.rs`
+-find_package(slang 7.0 REQUIRED)
++find_package(slang 8.0 REQUIRED)
+ 
+ set(CMAKE_CXX_STANDARD 20)
+ set(CMAKE_CXX_STANDARD_REQUIRED ON)

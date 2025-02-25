@@ -1,0 +1,13 @@
+diff --git a/veridian-slang/build.rs b/veridian-slang/build.rs
+index d42c02d..e59e951 100644
+--- a/veridian-slang/build.rs
++++ b/veridian-slang/build.rs
+@@ -43,7 +43,7 @@ fn build_slang(slang_src: &Path, slang_install: &Path) {
+ fn build_slang_wrapper(slang: &Path, wrapper_install: &Path) {
+     cmake::Config::new("slang_wrapper")
+         .profile("Release")
+-        .define("CMAKE_PREFIX_PATH", slang)
++        .define("CMAKE_PREFIX_PATH", slang.join(";@fmtlib@;@boostlib@"))
+         .out_dir(wrapper_install)
+         .build();
+ }
