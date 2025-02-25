@@ -18,14 +18,14 @@ in
 
 buildGoModule rec {
   pname = "regclient";
-  version = "0.8.1";
+  version = "0.8.2";
   tag = "v${version}";
 
   src = fetchFromGitHub {
     owner = "regclient";
     repo = "regclient";
     rev = tag;
-    sha256 = "sha256-a0UF0CRGxXRce9e/tJBEL3oC/ZrRxyzEBCaCx8u615c=";
+    sha256 = "sha256-Y+mO/DgJ7CqzDFTNyOMUEOZTnZmOjPu8O4xRO/qGVYY=";
   };
   vendorHash = "sha256-SWkrPpjAA32XkToh7ujSPaRNvHtf2ymvx5E7iGD5B8k=";
 
