@@ -47,6 +47,7 @@ for (const extension of extensions) {
             installSpec: pluginName,
             installPath: extension.path,
             appiumVersion: `^${extension.manifest.peerDependencies.appium}`,
+            ...extension.manifest.appium,
         }
     }
 }
