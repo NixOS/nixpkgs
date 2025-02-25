@@ -5,15 +5,9 @@
   lib,
   fetchFromGitHub,
   pkg-config,
-  libX11,
-  libXrandr,
-  libXinerama,
-  libXcursor,
-  libXi,
-  libXext,
-  libGLU,
   ffmpeg,
   ncurses,
+  glfw,
   Cocoa,
 }:
 stdenv.mkDerivation rec {
@@ -31,17 +25,18 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
   ];
-  buildInputs = [
-    libX11
-    libXrandr
-    libXinerama
-    libXcursor
-    libXi
-    libXext
-    libGLU
-    ncurses
-    ffmpeg
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin Cocoa;
+  buildInputs =
+    [
+      ncurses
+      ffmpeg
+      glfw
+    ]
+    ++ lib.optional stdenv.hostPlatform.isDarwin Cocoa;
+
+  # This CMakeLists builds a version of glfw that does not work in wayland
+  patchPhase = ''
+    echo "" > ./deps/vera/deps/CMakeLists.txt
+  '';
 
   meta = with lib; {
     description = "Live GLSL coding renderer";
