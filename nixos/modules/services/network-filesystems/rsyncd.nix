@@ -22,10 +22,7 @@ in
       };
 
       settings = lib.mkOption {
-        type = lib.types.oneOf [
-          settingsFormat.type
-          (pkgs.formats.ini { }).type # Retrocompatibility
-        ];
+        inherit (settingsFormat) type;
         default = { };
         example = {
           globalSection = {
@@ -55,15 +52,6 @@ in
           Configuration for rsyncd. See
           {manpage}`rsyncd.conf(5)`.
         '';
-        apply =
-          val:
-          if (lib.typeOf val == "ini") then
-            {
-              sections = lib.removeAttrs val [ "global" ];
-              globalSection = val.global;
-            }
-          else
-            val;
       };
 
       socketActivated = lib.mkOption {
