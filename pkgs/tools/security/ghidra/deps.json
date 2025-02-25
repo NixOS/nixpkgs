@@ -103,7 +103,7 @@
    "tar.gz": "sha256-FzNmYFJZqD3BicQyf/TDclSv7WW0+GbL2KXvLqRJ6PM="
   }
  },
- "https://github.com/NationalSecurityAgency/ghidra-data/raw/Ghidra_11.3": {
+ "https://github.com/NationalSecurityAgency/ghidra-data/raw/Ghidra_11.3.1": {
   "FunctionID/vs2012_x64": {
    "fidb": "sha256-1OmKs/eQuDF5MhhDC7oNiySl+/TaZbDB/6jLDPvrDNw="
   },
