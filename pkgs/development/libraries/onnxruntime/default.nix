@@ -30,13 +30,13 @@
 
 
 let
-  version = "1.20.1";
+  version = "1.20.2";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "onnxruntime";
     tag = "v${version}";
-    hash = "sha256-xIjR2HsVIqc78ojSXzoTGIxk7VndGYa8o4pVB8U8oXI=";
+    hash = "sha256-GTrRRNdqLUKCcWC9VdV/Oslszykn73dMXf66FLcHRVc=";
     fetchSubmodules = true;
   };
 
