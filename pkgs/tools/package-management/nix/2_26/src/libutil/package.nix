@@ -52,17 +52,6 @@ mkMesonLibrary (finalAttrs: {
     nlohmann_json
   ];
 
-  preConfigure =
-    # "Inline" .version so it's not a symlink, and includes the suffix.
-    # Do the meson utils, without modification.
-    #
-    # TODO: change release process to add `pre` in `.version`, remove it
-    # before tagging, and restore after.
-    ''
-      chmod u+w ./.version
-      echo ${version} > ../../.version
-    '';
-
   mesonFlags = [
     (lib.mesonEnable "cpuid" stdenv.hostPlatform.isx86_64)
   ];
