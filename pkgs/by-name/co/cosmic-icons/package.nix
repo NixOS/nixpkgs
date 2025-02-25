@@ -46,6 +46,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     license = with lib.licenses; [
       cc-by-sa-40
     ];
-    maintainers = with lib.maintainers; [ a-kenji ];
+    maintainers = with lib.maintainers; [
+      a-kenji
+      HeitorAugustoLN
+    ];
   };
 })
