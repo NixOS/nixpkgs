@@ -158,7 +158,7 @@ buildDotnetModule {
           # makes real HTTP requests
           "FullyQualifiedName!~NzbDrone.Core.Test.TvTests.RefreshEpisodeServiceFixture"
           "FullyQualifiedName!~NzbDrone.Core.Test.UpdateTests.UpdatePackageProviderFixture"
-
+          
           "FullyQualifiedName!=NzbDrone.Common.Test.ServiceFactoryFixture.event_handlers_should_be_unique"
         ]
         ++ lib.optionals stdenvNoCC.buildPlatform.isDarwin [
@@ -193,7 +193,10 @@ buildDotnetModule {
     homepage = "https://radarr.video";
     changelog = "https://github.com/Radarr/Radarr/releases/tag/v${version}";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ edwtjo purcell ];
+    maintainers = with lib.maintainers; [
+      edwtjo
+      purcell
+    ];
     mainProgram = "Radarr";
     # platforms inherited from dotnet-sdk.
   };
