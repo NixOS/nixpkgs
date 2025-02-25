@@ -9,6 +9,7 @@
   lz4,
   xz,
   zlib,
+  zstd,
   libselinux,
   fuseSupport ? stdenv.hostPlatform.isLinux,
   selinuxSupport ? false,
@@ -37,6 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
       lz4
       zlib
       xz
+      zstd
     ]
     ++ lib.optionals fuseSupport [ fuse ]
     ++ lib.optionals selinuxSupport [ libselinux ];
