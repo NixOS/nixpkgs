@@ -5,6 +5,7 @@
   rustPlatform,
   just,
   libcosmicAppHook,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -43,6 +44,15 @@ rustPlatform.buildRustPackage rec {
   '';
 
   env."CARGO_TARGET_${stdenv.hostPlatform.rust.cargoEnvVarTarget}_RUSTFLAGS" = "--cfg tokio_unstable";
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version"
+      "unstable"
+      "--version-regex"
+      "epoch-(.*)"
+    ];
+  };
 
   meta = {
     homepage = "https://github.com/pop-os/cosmic-launcher";
