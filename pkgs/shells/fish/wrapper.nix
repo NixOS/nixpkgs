@@ -1,4 +1,6 @@
-{ lib, writeShellApplication, fish, writeTextFile }:
+{ lib, symlinkJoin, makeWrapper, writeTextFile }:
+
+fish:
 
 lib.makeOverridable ({
   completionDirs ? [],
@@ -38,15 +40,21 @@ let
     ++ (map (vendorDir "conf") pluginPkgs)
     ++ (map (vendorDir "conf") [ localFishConfig shellAliasesFishConfig ]);
 
-in writeShellApplication {
-  inherit runtimeInputs;
+in symlinkJoin {
   name = "fish";
-  text = ''
-    ${fish}/bin/fish --init-command "
-      set --prepend fish_complete_path ${lib.escapeShellArgs complPath}
-      set --prepend fish_function_path ${lib.escapeShellArgs funcPath}
-      set --local fish_conf_source_path ${lib.escapeShellArgs confPath}
-      for c in \$fish_conf_source_path/*; source \$c; end
-    " "$@"
+  paths = [ fish ];
+  nativeBuildInputs = [ makeWrapper ];
+  postBuild = ''
+    wrapProgram $out/bin/fish \
+      --prefix PATH : ${lib.makeBinPath runtimeInputs} \
+      --add-flags ${lib.escapeShellArg ''
+        --init-command ${lib.escapeShellArg ''
+          set --prepend fish_complete_path ${lib.escapeShellArgs complPath}
+          set --prepend fish_function_path ${lib.escapeShellArgs funcPath}
+          set --local fish_conf_source_path ${lib.escapeShellArgs confPath}
+          for c in $fish_conf_source_path/*; source $c; end
+        ''}
+      ''}
   '';
+  inherit (fish) meta shellPath;
 })
