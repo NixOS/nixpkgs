@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "coqpit-config";
   version = "0.2.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "idiap";
@@ -22,11 +22,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  nativeBuildInputs = [
+  build-system = [
     hatchling
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     typing-extensions
   ];
 
