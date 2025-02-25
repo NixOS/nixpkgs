@@ -6,20 +6,21 @@
   autoconf-archive,
   glib,
   pkg-config,
+  validatePkgConfig,
+  testers,
 }:
-
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libvisual";
   version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "Libvisual";
     repo = "libvisual";
-    rev = "libvisual-${version}";
+    rev = "libvisual-${finalAttrs.version}";
     hash = "sha256-bDnpQODXB2Z6hezVoh7c6cklp6qpyDzVBAnwZD8Gros=";
   };
 
-  sourceRoot = "${src.name}/libvisual";
+  sourceRoot = "${finalAttrs.src.name}/libvisual";
 
   outputs = [
     "out"
@@ -31,6 +32,7 @@ stdenv.mkDerivation rec {
     autoreconfHook
     autoconf-archive
     pkg-config
+    validatePkgConfig
   ];
   buildInputs = [ glib ];
 
@@ -44,10 +46,13 @@ stdenv.mkDerivation rec {
       "ac_cv_func_realloc_0_nonnull=yes"
     ];
 
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
   meta = {
     description = "Abstraction library for audio visualisations";
     homepage = "http://libvisual.org/";
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.linux ++ lib.platforms.freebsd;
+    pkgConfigModules = [ "libvisual-0.4" ];
   };
-}
+})
