@@ -11,5 +11,5 @@ let
   ];
 in
 {
-  standard = handleTestOn supportedSystems ./standard.nix { inherit system; };
+  prosody-nginx = handleTestOn supportedSystems ./prosody-nginx.nix { inherit system; };
 }
