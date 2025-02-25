@@ -21,16 +21,16 @@ in
 
 buildGoModule rec {
   pname = "albyhub";
-  version = "1.12.0";
+  version = "1.14.3";
 
   src = fetchFromGitHub {
     owner = "getAlby";
     repo = "hub";
     rev = "v${version}";
-    hash = "sha256-m3ImIz9qQVFZAjZPuVFkGANhWFIJp0uGDknfhouHHBo=";
+    hash = "sha256-fvmN2moxXIcd1meQq/zSGKOVEV07arM0Ct8hjOa1mD4=";
   };
 
-  vendorHash = "sha256-N6HmwmalHLhuO918i1L7GeoEme1/VNDzVtOKo2t6K98=";
+  vendorHash = "sha256-Kc8R4SIb+XiWS01sHvISzL0b5tM2t0cJgae1ZnoNsIo=";
 
   nativeBuildInputs = [
     fixup-yarn-lock
