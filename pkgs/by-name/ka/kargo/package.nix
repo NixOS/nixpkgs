@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "akuity";
     repo = "kargo";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-GC3u4v8qrVi8+Ne08f074DvPh0RFmpmCOdJ5XD3kk+o=";
   };
 
@@ -59,13 +59,13 @@ buildGoModule rec {
       --zsh <($out/bin/kargo completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Application lifecycle orchestration";
     mainProgram = "kargo";
     downloadPage = "https://github.com/akuity/kargo";
     homepage = "https://kargo.akuity.io";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       bbigras
     ];
   };
