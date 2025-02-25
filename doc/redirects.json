@@ -3085,6 +3085,18 @@
   "javascript-pnpm-extraCommands": [
     "index.html#javascript-pnpm-extraCommands"
   ],
+  "javascript-bun": [
+    "index.html#javascript-bun"
+  ],
+  "javascript-bun-sourceRoot": [
+    "index.html#javascript-bun-sourceRoot"
+  ],
+  "javascript-bun-workspaces": [
+    "index.html#javascript-bun-workspaces"
+  ],
+  "javascript-bun-extraCommands": [
+    "index.html#javascript-bun-extraCommands"
+  ],
   "javascript-yarn": [
     "index.html#javascript-yarn"
   ],

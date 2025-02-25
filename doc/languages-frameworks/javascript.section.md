@@ -525,6 +525,132 @@ pnpmDeps = pnpm.fetchDeps {
 In this example, `prePnpmInstall` will be run by both `pnpm.configHook` and by the `pnpm.fetchDeps` builder.
 
 
+### Bun {#javascript-bun}
+
+Bun based projects use a `bun.lock` file instead of a `package-lock.json` to pin dependencies. Nixpkgs provides a hooks below to for install dependacies via `bun.configHook` which configures the project to install via the use of `bunDeps` before building the project.
+
+```nix
+{
+  stdenv,
+  bun
+}:
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "foo";
+  version = "0-unstable-1980-01-01";
+
+  src = ...;
+
+  nativeBuildInputs = [
+    bun.configHook
+  ];
+
+  bunDeps = bun.fetchDeps {
+    inherit (finalAttrs) pname version src;
+    hash = "...";
+  };
+})
+
+```
+
+`bun.configHook` supports additional flags to `bun install` via `bunInstallFlags`
+
+```nix
+{
+  stdenv,
+  bun,
+}:
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "foo";
+  version = "0-unstable-1980-01-01";
+
+  src = ...;
+
+  bunInstallFlags = [ "--shamefully-hoist" ];
+
+  bunDeps = bun.fetchDeps {
+    inherit (finalAttrs) bunInstallFlags;
+  };
+})
+```
+
+
+#### Dealing with `sourceRoot` {#javascript-bun-sourceRoot}
+
+If the bun project is in a subdirectory, you can just define `sourceRoot` or `setSourceRoot` for `fetchDeps`.
+If `sourceRoot` is different between the parent derivation and `fetchDeps`, you will have to set `bunRoot` to effectively be the same location as it is in `fetchDeps`.
+
+Assuming the following directory structure, we can define `sourceRoot` and `bunRoot` as follows:
+
+```
+.
+├── frontend
+│   ├── ...
+│   ├── package.json
+│   └── bun.lock
+└── ...
+```
+
+```nix
+  ...
+  bunDeps = bun.fetchDeps {
+    ...
+    sourceRoot = "${finalAttrs.src.name}/frontend";
+  };
+
+  # by default the working directory is the extracted source
+  bunRoot = "frontend";
+```
+
+#### Bun workspaces {#javascript-bun-workspaces}
+
+If you need to use a Bun workspace for your project, then set `bunWorkspaces = [ "<workspace project name 1>" "<workspace project name 2>" ]`, etc, in your `bun.fetchDeps` call,
+which will make Bun only install dependencies for those workspace packages.
+
+For example:
+
+```nix
+...
+bunWorkspaces = [ "@astrojs/language-server" ];
+bunDeps = bun.fetchDeps {
+  inherit (finalAttrs) bunWorkspaces;
+  ...
+}
+```
+
+The above would make `bun.fetchDeps` call only install dependencies for the `@astrojs/language-server` workspace package.
+Note that you do not need to set `sourceRoot` to make this work.
+
+Usually in such cases, you'd want to use `bun --filter=<bun workspace name> build` to build your project, as `npmHooks.npmBuildHook` probably won't work. A `buildPhase` based on the following example will probably fit most workspace projects:
+
+```nix
+buildPhase = ''
+  runHook preBuild
+
+  bun --filter=@astrojs/language-server build
+
+  runHook postBuild
+'';
+```
+
+#### Additional Bun Commands and settings {#javascript-bun-extraCommands}
+
+If you require setting an additional Bun configuration setting (such as `--dry-run` or similar),
+set `preBunInstall` to the right commands to run. For example:
+
+```nix
+preBunInstall = ''
+  --dry-run
+'';
+bunDeps = bun.fetchDeps {
+  inherit (finalAttrs) preBunInstall;
+  ...
+};
+```
+
+In this example, `preBunInstall` will be run by both `bun.configHook` and by the `bun.fetchDeps` builder.
+
 ### Yarn {#javascript-yarn}
 
 Yarn based projects use a `yarn.lock` file instead of a `package-lock.json` to pin dependencies. Nixpkgs provides the Nix function `fetchYarnDeps` which fetches an offline cache suitable for running `yarn install` before building the project. In addition, Nixpkgs provides the hooks:
