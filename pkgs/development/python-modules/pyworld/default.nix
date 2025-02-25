@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "pyworld";
-  version = "0.3.4";
+  version = "0.3.5";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-EGxw7np9jJukiNgCLyAzcGkppA8CZCVrjofaWquYMDo=";
+    hash = "sha256-G5PlPN22eg5PqjTWz5GaxsZi/rHIwO2QHXG1las5aqM=";
   };
 
   nativeBuildInputs = [ cython ];
