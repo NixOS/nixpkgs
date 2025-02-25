@@ -179,6 +179,17 @@ let
       "mysql" = "mysql.service";
     }
     .${cfg.database.type};
+
+  # https://github.com/movim/movim/issues/314
+  movimCSP = ''"${
+    lib.concatStringsSep ";" [
+      "default-src 'self'"
+      "img-src 'self' aesgcm: https:"
+      "media-src 'self' aesgcm: https:"
+      "script-src 'self' 'unsafe-eval' 'unsafe-inline'"
+      "style-src 'self' 'unsafe-inline'"
+    ]
+  }"'';
 in
 {
   options.services = {
@@ -453,6 +464,31 @@ in
         };
       };
 
+      h2o = mkOption {
+        type = types.nullOr (
+          types.submodule (import ../web-servers/h2o/vhost-options.nix { inherit config lib; })
+        );
+        default = null;
+        example =
+          lib.literalExpression # nix
+            ''
+              {
+                serverAliases = [
+                  "pics.''${config.movim.domain}"
+                ];
+                acme.enable = true;
+                tls.policy = "force";
+              }
+            '';
+        description = ''
+          With this option, you can customize an H2O virtual host which already
+          has sensible defaults for Movim. Set to `{ }` if you do not need any
+          customization to the virtual host. If enabled, then by default, the
+          {option}`serverName` is `''${domain}`, If this is set to `null` (the
+          default), no H2O `hosts` will be configured.
+        '';
+      };
+
       nginx = mkOption {
         type = types.nullOr (
           types.submodule (import ../web-servers/nginx/vhost-options.nix { inherit config lib; })
@@ -503,6 +539,9 @@ in
             group = cfg.group;
           };
         }
+        // lib.optionalAttrs (cfg.h2o != null) {
+          "${config.services.h2o.user}".extraGroups = [ cfg.group ];
+        }
         // lib.optionalAttrs (cfg.nginx != null) {
           "${config.services.nginx.user}".extraGroups = [ cfg.group ];
         };
@@ -547,6 +586,52 @@ in
           "pm.max_spare_servers" = 8;
           "pm.max_requests" = 500;
         };
+      };
+
+      h2o = mkIf (cfg.h2o != null) {
+        enable = true;
+        hosts."${cfg.domain}" = mkMerge [
+          {
+            settings = {
+              paths = {
+                "/ws/" = {
+                  "proxy.preserve-host" = "ON";
+                  "proxy.tunnel" = "ON";
+                  "proxy.reverse.url" = "http://${cfg.settings.DAEMON_INTERFACE}:${builtins.toString cfg.port}/";
+                };
+                "/" =
+                  {
+                    "file.dir" = "${package}/share/php/movim/public";
+                    "file.index" = [
+                      "index.php"
+                      "index.html"
+                    ];
+                    redirect = {
+                      url = "/index.php/";
+                      internal = "YES";
+                      status = 307;
+                    };
+                    # https://github.com/movim/movim/issues/314
+                    "header.set" = [
+                      "Content-Security-Policy ${movimCSP}"
+                    ];
+                  }
+                  // lib.optionalAttrs (with cfg.precompressStaticFiles; brotli.enable || gzip.enable) {
+                    "file.send-compressed" = "ON";
+                  };
+              };
+              "file.custom-handler" = {
+                extension = [ ".php" ];
+                "fastcgi.document_root" = "${package}";
+                "fastcgi.connect" = {
+                  port = "${fpm.socket}";
+                  type = "unix";
+                };
+              };
+            };
+          }
+          cfg.h2o
+        ];
       };
 
       nginx =
@@ -603,7 +688,7 @@ in
                   extraConfig = # nginx
                     ''
                       # https://github.com/movim/movim/issues/314
-                      add_header Content-Security-Policy "default-src 'self'; img-src 'self' aesgcm: https:; media-src 'self' aesgcm: https:; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline';";
+                      add_header Content-Security-Policy ${movimCSP};
                       set $no_cache 1;
                     '';
                 };
@@ -678,7 +763,13 @@ in
 
       phpfpm.pools.${pool} =
         let
-          socketOwner = if (cfg.nginx != null) then config.services.nginx.user else cfg.user;
+          socketOwner =
+            if (cfg.h2o != null) then
+              config.services.h2o.user
+            else if (cfg.nginx != null) then
+              config.services.nginx.user
+            else
+              cfg.user;
         in
         {
           phpPackage = package.php;
@@ -769,10 +860,12 @@ in
             "movim-data-setup.service"
           ]
           ++ lib.optional cfg.database.createLocally dbService
+          ++ lib.optional (cfg.h2o != null) "h2o.service"
           ++ lib.optional (cfg.nginx != null) "nginx.service";
         requires =
           [ "movim-data-setup.service" ]
           ++ lib.optional cfg.database.createLocally dbService
+          ++ lib.optional (cfg.h2o != null) "h2o.service"
           ++ lib.optional (cfg.nginx != null) "nginx.service";
         environment = {
           PUBLIC_URL = "//${cfg.domain}";
@@ -788,13 +881,19 @@ in
       };
 
       services.${phpExecutionUnit} = {
-        before = [ "movim.service" ] ++ lib.optional (cfg.nginx != null) "nginx.service";
+        before =
+          [ "movim.service" ]
+          ++ lib.optional (cfg.h2o != null) "h2o.service"
+          ++ lib.optional (cfg.nginx != null) "nginx.service";
         after = [
           "network.target"
           "local-fs.target"
           "movim-data-setup.service"
         ];
-        requiredBy = [ "movim.service" ] ++ lib.optional (cfg.nginx != null) "nginx.service";
+        requiredBy =
+          [ "movim.service" ]
+          ++ lib.optional (cfg.h2o != null) "h2o.service"
+          ++ lib.optional (cfg.nginx != null) "nginx.service";
         requires = [ "movim-data-setup.service" ] ++ lib.optional cfg.database.createLocally dbService;
       };
 
