@@ -10408,8 +10408,8 @@
   };
   jacekpoz = {
     name = "Jacek Poziemski";
-    email = "jacekpoz@proton.me";
-    matrix = "@jacekpoz:jacekpoz.pl";
+    email = "jacek@poz.pet";
+    matrix = "@jacek:poz.pet";
     github = "jacekpoz";
     githubId = 64381190;
   };
