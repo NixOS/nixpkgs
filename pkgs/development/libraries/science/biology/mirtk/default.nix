@@ -9,7 +9,7 @@
   libGLU,
   fltk,
   itk,
-  vtk,
+  vtk_9_2,
   zlib,
   tbb,
 }:
@@ -59,7 +59,7 @@ stdenv.mkDerivation {
     libGLU
     python3
     tbb
-    vtk
+    vtk_9_2
     zlib
   ];
 
