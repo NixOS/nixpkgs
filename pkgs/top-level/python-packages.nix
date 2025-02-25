@@ -6602,6 +6602,7 @@ self: super: with self; {
     inherit python numpy;
     enablePython = true;
     enableRtk = false;
+    stdenv = if stdenv.cc.isGNU then pkgs.stdenvAdapters.useLibsFrom stdenv pkgs.gcc12Stdenv else stdenv;
   });
 
 
