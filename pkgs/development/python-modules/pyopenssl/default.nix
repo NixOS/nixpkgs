@@ -11,18 +11,20 @@
   sphinxHook,
   sphinx-rtd-theme,
   pytest-rerunfailures,
+  typing-extensions,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pyopenssl";
-  version = "24.3.0";
+  version = "25.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyca";
     repo = "pyopenssl";
     tag = version;
-    hash = "sha256-otK7Y7Kb/l3QOErhAcuDHB/CKG9l1vH2BTnOieAWNc0=";
+    hash = "sha256-CQHLEtNb2jX7WNAYlmv5EIgepetMl81Xl3AJuRqOHow=";
   };
 
   outputs = [
@@ -41,7 +43,9 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [ "cryptography" ];
 
-  dependencies = [ cryptography ];
+  dependencies = [
+    cryptography
+  ] ++ lib.optionals (pythonOlder "3.13") [ typing-extensions ];
 
   nativeCheckInputs = [
     pretend
