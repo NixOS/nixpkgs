@@ -127,11 +127,15 @@ rec {
   riscv64-embedded = {
     config = "riscv64-none-elf";
     libc = "newlib";
+    # embedded riscv has various architectural extensions in common use
+    gcc.enableMultilib = true;
   };
 
   riscv32-embedded = {
     config = "riscv32-none-elf";
     libc = "newlib";
+    # embedded riscv has various architectural extensions in common use
+    gcc.enableMultilib = true;
   };
 
   mips64-embedded = {
