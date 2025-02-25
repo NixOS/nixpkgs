@@ -271,7 +271,7 @@ in
         DBName = cfg.database.name;
         DBUser = cfg.database.user;
         SocketDir = runtimeDir;
-        FpingLocation = "/run/wrappers/bin/fping";
+        FpingLocation = "${config.security.wrapperDir}/fping";
         LoadModule = builtins.attrNames cfg.modules;
       }
       (mkIf (cfg.database.createLocally != true) { DBPort = cfg.database.port; })

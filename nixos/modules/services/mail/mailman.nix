@@ -471,7 +471,7 @@ in {
         echo '#!${pkgs.runtimeShell}
         sudo=exec
         if [[ "$USER" != mailman ]]; then
-          sudo="exec /run/wrappers/bin/sudo -u mailman"
+          sudo="exec ${config.security.wrapperDir}/sudo -u mailman"
         fi
         $sudo ${placeholder "out"}/bin/.mailman-wrapped "$@"
         ' > $out/bin/mailman

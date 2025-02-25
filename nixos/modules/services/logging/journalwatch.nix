@@ -105,7 +105,8 @@ in
 
       mailBinary = lib.mkOption {
         type = lib.types.path;
-        default = "/run/wrappers/bin/sendmail";
+        default = "${config.security.wrapperDir}/sendmail";
+        defaultText = lib.literalExpression ''"''${config.security.wrapperDir}/sendmail"'';
         description = ''
           Sendmail-compatible binary to be used to send the messages.
         '';

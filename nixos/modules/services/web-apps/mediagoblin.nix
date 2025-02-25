@@ -187,7 +187,7 @@ in
       (pkgs.writeShellScriptBin "mediagoblin-gmg" ''
         sudo=exec
         if [[ "$USER" != mediagoblin ]]; then
-         sudo='exec /run/wrappers/bin/sudo -u mediagoblin'
+         sudo='exec ${config.security.wrapperDir}/sudo -u mediagoblin'
         fi
         $sudo sh -c "cd /var/lib/mediagoblin; env GI_TYPELIB_PATH=${GI_TYPELIB_PATH} ${lib.getExe' finalPackage "gmg"} $@"
       '')

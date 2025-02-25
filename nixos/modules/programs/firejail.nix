@@ -41,7 +41,7 @@ let
             ''
               cat <<_EOF >$out/bin/${command}
               #! ${pkgs.runtimeShell} -e
-              exec /run/wrappers/bin/firejail ${args} -- ${builtins.toString opts.executable} "\$@"
+              exec ${config.security.wrapperDir}/firejail ${args} -- ${builtins.toString opts.executable} "\$@"
               _EOF
               chmod 0755 $out/bin/${command}
 

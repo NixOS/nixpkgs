@@ -20,7 +20,7 @@ let
     cd ${agorakit}
     sudo() {
       if [[ "$USER" != ${user} ]]; then
-        exec /run/wrappers/bin/sudo -u ${user} "$@"
+        exec ${config.security.wrapperDir}/sudo -u ${user} "$@"
       else
         exec "$@"
       fi

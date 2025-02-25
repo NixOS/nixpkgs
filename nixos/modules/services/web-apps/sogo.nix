@@ -90,7 +90,7 @@ in
         SOGoTimeZone = "${cfg.timezone}";
         SOGoLanguage = "${cfg.language}";
         // Paths
-        WOSendMail = "/run/wrappers/bin/sendmail";
+        WOSendMail = "${config.security.wrapperDir}/sendmail";
         SOGoMailSpoolPath = "/var/lib/sogo/spool";
         // Enable CSRF protection
         SOGoXSRFValidationEnabled = YES;

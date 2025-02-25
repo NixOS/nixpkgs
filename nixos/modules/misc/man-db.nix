@@ -82,7 +82,7 @@ in
       ''
         # Manual pages paths for NixOS
         MANPATH_MAP /run/current-system/sw/bin /run/current-system/sw/share/man
-        MANPATH_MAP /run/wrappers/bin          /run/current-system/sw/share/man
+        MANPATH_MAP ${config.security.wrapperDir} /run/current-system/sw/share/man
 
         ${lib.optionalString config.documentation.man.generateCaches ''
           # Generated manual pages cache for NixOS (immutable)

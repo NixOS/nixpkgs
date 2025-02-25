@@ -91,7 +91,7 @@ in
 
         systemd = lib.mkIf cfg.systemd.setPath.enable {
           user.extraConfig = ''
-            DefaultEnvironment="PATH=/run/wrappers/bin:/etc/profiles/per-user/%u/bin:/nix/var/nix/profiles/default/bin:/run/current-system/sw/bin:$PATH"
+            DefaultEnvironment="PATH=${config.security.wrapperDir}:/etc/profiles/per-user/%u/bin:/nix/var/nix/profiles/default/bin:/run/current-system/sw/bin:$PATH"
           '';
         };
       }

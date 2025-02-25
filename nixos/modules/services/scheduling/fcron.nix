@@ -104,7 +104,10 @@ in
               let
                 isSendmailWrapped = lib.hasAttr "sendmail" config.security.wrappers;
                 sendmailPath =
-                  if isSendmailWrapped then "/run/wrappers/bin/sendmail" else "${config.system.path}/bin/sendmail";
+                  if isSendmailWrapped then
+                    "${config.security.wrapperDir}/sendmail"
+                  else
+                    "${config.system.path}/bin/sendmail";
               in
               pkgs.writeText "fcron.conf" ''
                 fcrontabs   =       /var/spool/fcron
@@ -166,7 +169,7 @@ in
           --group fcron \
           --directory /var/spool/fcron
         # load system crontab file
-        /run/wrappers/bin/fcrontab -u systab - < ${pkgs.writeText "systab" cfg.systab}
+        ${config.security.wrapperDir}/fcrontab -u systab - < ${pkgs.writeText "systab" cfg.systab}
       '';
 
       serviceConfig = {
