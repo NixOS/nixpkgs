@@ -4,6 +4,7 @@
   stdenv,
   rustPlatform,
   pkg-config,
+  geoclue2-with-demo-agent,
   libinput,
   udev,
 }:
@@ -27,6 +28,8 @@ rustPlatform.buildRustPackage rec {
     libinput
     udev
   ];
+
+  env.GEOCLUE_AGENT = "${lib.getLib geoclue2-with-demo-agent}/libexec/geoclue-2.0/demos/agent";
 
   makeFlags = [
     "prefix=$(out)"
