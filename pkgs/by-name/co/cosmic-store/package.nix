@@ -73,6 +73,7 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [
       ahoneybun
       nyabinary
+      HeitorAugustoLN
     ];
     platforms = lib.platforms.linux;
   };
