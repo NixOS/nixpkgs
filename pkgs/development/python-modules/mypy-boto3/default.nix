@@ -1170,8 +1170,8 @@ rec {
       "sha256-HlCKfH/+QklUjmfzX0OuqKYNJC6wQc7fNXSMca5cIAI=";
 
   mypy-boto3-s3outposts =
-    buildMypyBoto3Package "s3outposts" "1.36.0"
-      "sha256-oLFs4pHfXJbG5cenQi83ur7ZaMfPLYzqp4AvvAadg+k=";
+    buildMypyBoto3Package "s3outposts" "1.37.0"
+      "sha256-c0vXkW5sR7JkdzvsS/rMFme9EwY1x5eZAbRWYKew0v4=";
 
   mypy-boto3-sagemaker =
     buildMypyBoto3Package "sagemaker" "1.36.25"
