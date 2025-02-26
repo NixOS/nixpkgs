@@ -26,15 +26,19 @@
   withSharedLLVM ? withLLVM,
 }:
 
+let
+  minVersionSpirvHeaders = "1.4.305";
+  devendorSpirvHeaders = lib.versionAtLeast spirv-headers.version minVersionSpirvHeaders;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "shader-slang";
-  version = "2025.4";
+  version = "2025.5.1";
 
   src = fetchFromGitHub {
     owner = "shader-slang";
     repo = "slang";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-odZEWiE8SQrfPlRjkI6HkB+sHUhj5ySyBQCKQua7CKA=";
+    hash = "sha256-OaFO/P4lrxw+0AeX/hEuSBYdxbvMqb0TbCCQs4LKYa0=";
     fetchSubmodules = true;
   };
 
@@ -76,21 +80,23 @@ stdenv.mkDerivation (finalAttrs: {
       miniz
       lz4
       libxml2
+    ]
+    ++ lib.optionals devendorSpirvHeaders [
       spirv-headers
     ]
-    ++ (lib.optionals stdenv.hostPlatform.isLinux [
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
       libX11
-    ])
-    ++ (lib.optionals withLLVM [
+    ]
+    ++ lib.optionals withLLVM [
       # Slang only supports LLVM 13:
       # https://github.com/shader-slang/slang/blob/master/docs/building.md#llvm-support
       llvmPackages_13.llvm
       llvmPackages_13.libclang
-    ])
-    ++ (lib.optionals withGlslang [
+    ]
+    ++ lib.optionals withGlslang [
       # SPIRV-tools is included in glslang.
       glslang
-    ]);
+    ];
 
   separateDebugInfo = true;
 
@@ -125,16 +131,16 @@ stdenv.mkDerivation (finalAttrs: {
       "-DSLANG_ENABLE_SLANG_RHI=OFF"
       "-DSLANG_USE_SYSTEM_MINIZ=ON"
       "-DSLANG_USE_SYSTEM_LZ4=ON"
-      "-DSLANG_SPIRV_HEADERS_INCLUDE_DIR=${spirv-headers}/include"
       "-DSLANG_SLANG_LLVM_FLAVOR=${if withLLVM then "USE_SYSTEM_LLVM" else "DISABLE"}"
     ]
-    # Currently depends on unreleased op type `SpvOpTypeNodePayloadArrayAMDX`,
-    # which will be included in next release >1.3.296
-    ++ lib.optional (lib.versionAtLeast spirv-headers.version "1.3.297.0") "-DSLANG_USE_SYSTEM_SPIRV_HEADERS=ON"
-    ++ (lib.optionals withGlslang [
+    ++ lib.optionals devendorSpirvHeaders [
+      "-DSLANG_SPIRV_HEADERS_INCLUDE_DIR=${spirv-headers}/include"
+      "-DSLANG_USE_SYSTEM_SPIRV_HEADERS=ON"
+    ]
+    ++ lib.optionals withGlslang [
       "-DSLANG_USE_SYSTEM_SPIRV_TOOLS=ON"
       "-DSLANG_USE_SYSTEM_GLSLANG=ON"
-    ])
+    ]
     ++ lib.optional (!withGlslang) "-DSLANG_ENABLE_SLANG_GLSLANG=OFF";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
