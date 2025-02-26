@@ -798,8 +798,8 @@ rec {
       "sha256-KolHBiYkyFntiOh7fbFytnhfKhnz+/jkXI1PpD9lIzo=";
 
   mypy-boto3-license-manager-user-subscriptions =
-    buildMypyBoto3Package "license-manager-user-subscriptions" "1.36.25"
-      "sha256-NMUlRMm5RBYhp6pGaXeJyMRj0jf0klIF1SUiA+6jK+8=";
+    buildMypyBoto3Package "license-manager-user-subscriptions" "1.37.0"
+      "sha256-Q3LbIvZgdUj+M4miKLCmvJ/8xwKniGDzslapBVKrmR0=";
 
   mypy-boto3-lightsail =
     buildMypyBoto3Package "lightsail" "1.36.24"
