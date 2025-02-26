@@ -173,7 +173,7 @@ buildPythonPackage rec {
       pytestCheckHook
       postgresql
     ]
-    ++ lib.optional (stdenv.hostPlatform.isLinux) postgresqlTestHook
+    ++ lib.optional stdenv.hostPlatform.isLinux postgresqlTestHook
     ++ optional-dependencies.c
     ++ optional-dependencies.pool;
 
@@ -187,7 +187,7 @@ buildPythonPackage rec {
     ''
       cd ..
     ''
-    + lib.optionalString (stdenv.hostPlatform.isLinux) ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
       export PSYCOPG_TEST_DSN="host=/build/run/postgresql user=$PGUSER"
     '';
 
@@ -219,7 +219,7 @@ buildPythonPackage rec {
   ];
 
   postCheck = ''
-    cd ${pname}
+    cd psycopg
   '';
 
   passthru = {
