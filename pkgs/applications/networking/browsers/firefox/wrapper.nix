@@ -147,7 +147,7 @@ let
         // to be able to install addons that do not have an extid
         // Security is maintained because only user whitelisted addons
         // with a checksum can be installed
-        ${ lib.optionalString usesNixExtensions ''lockPref("xpinstall.signatures.required", false)'' };
+        ${ lib.optionalString usesNixExtensions ''lockPref("xpinstall.signatures.required", false);'' }
       '';
 
       #############################
