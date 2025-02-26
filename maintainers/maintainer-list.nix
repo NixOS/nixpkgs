@@ -6912,6 +6912,11 @@
     githubId = 934284;
     name = "Rouven Czerwinski";
   };
+  EmanuelM153 = {
+    name = "Emanuel";
+    github = "EmanuelM153";
+    githubId = 134736553;
+  };
   emattiza = {
     email = "nix@mattiza.dev";
     github = "emattiza";

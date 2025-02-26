@@ -6,7 +6,6 @@
 }:
 
 # TODO: Gems includes for Mruby
-# TODO: Recommended options
 let
   cfg = config.services.h2o;
   inherit (config.security.acme) certs;
@@ -21,6 +20,8 @@ let
     ;
 
   mkCertOwnershipAssertion = import ../../../security/acme/mk-cert-ownership-assertion.nix lib;
+
+  inherit (import ./common.nix { inherit lib; }) tlsRecommendationsOption;
 
   settingsFormat = pkgs.formats.yaml { };
 
@@ -76,6 +77,34 @@ let
       all = certNames'.dependent ++ certNames'.independent;
     };
 
+  mozTLSRecs =
+    if cfg.defaultTLSRecommendations != null then
+      let
+        # NOTE: if updating, *do* verify the changes then adjust ciphers &
+        # other settings with the tests @
+        # `nixos/tests/web-servers/h2o/tls-recommendations.nix`
+        # & run with `nix-build -A nixosTests.h2o.tls-recommendations`
+        version = "5.7";
+        git_tag = "v5.7.1";
+        guidelinesJSON =
+          lib.pipe
+            {
+              urls = [
+                "https://ssl-config.mozilla.org/guidelines/${version}.json"
+                "https://raw.githubusercontent.com/mozilla/ssl-config-generator/refs/tags/${git_tag}/src/static/guidelines/${version}.json"
+              ];
+              sha256 = "sha256:1mj2pcb1hg7q2wpgdq3ac8pc2q64wvwvwlkb9xjmdd9jm4hiyny7";
+            }
+            [
+              pkgs.fetchurl
+              builtins.readFile
+              builtins.fromJSON
+            ];
+      in
+      guidelinesJSON.configurations
+    else
+      null;
+
   hostsConfig = lib.concatMapAttrs (
     name: value:
     let
@@ -130,23 +159,79 @@ let
             ]
           )
           {
-            "${names.server}:${builtins.toString port.TLS}" = value.settings // {
-              listen =
-                let
-                  identity =
-                    value.tls.identity
-                    ++ lib.optional (builtins.elem names.cert certNames.all) {
-                      key-file = "${certs.${names.cert}.directory}/key.pem";
-                      certificate-file = "${certs.${names.cert}.directory}/fullchain.pem";
+            "${names.server}:${builtins.toString port.TLS}" =
+              let
+                tlsRecommendations = lib.attrByPath [ "tls" "recommendations" ] cfg.defaultTLSRecommendations value;
+
+                hasTLSRecommendations = tlsRecommendations != null && mozTLSRecs != null;
+
+                # NOTE: Let’s Encrypt has sunset OCSP stapling. Mozilla’s
+                # ssl-config-generator is at present still recommending this setting, but
+                # this module will skip setting a stapling value as Let’s Encrypt +
+                # ACME is the most likely use case.
+                #
+                # See: https://github.com/mozilla/ssl-config-generator/issues/323
+                tlsRecAttrs = lib.optionalAttrs hasTLSRecommendations (
+                  let
+                    recs = mozTLSRecs.${tlsRecommendations};
+                  in
+                  {
+                    min-version = builtins.head recs.tls_versions;
+                    cipher-preference = "server";
+                    "cipher-suite-tls1.3" = recs.ciphersuites;
+                  }
+                  // lib.optionalAttrs (recs.ciphers.openssl != [ ]) {
+                    cipher-suite = lib.concatStringsSep ":" recs.ciphers.openssl;
+                  }
+                );
+
+                headerRecAttrs =
+                  lib.optionalAttrs
+                    (
+                      hasTLSRecommendations
+                      && value.tls != null
+                      && builtins.elem value.tls.policy [
+                        "force"
+                        "only"
+                      ]
+                    )
+                    (
+                      let
+                        headerSet = value.settings."header.set" or [ ];
+                        recs = mozTLSRecs.${tlsRecommendations};
+                        hsts = "Strict-Transport-Security: max-age=${builtins.toString recs.hsts_min_age}; includeSubDomains; preload";
+                      in
+                      {
+                        "header.set" =
+                          if builtins.isString headerSet then
+                            [
+                              headerSet
+                              hsts
+                            ]
+                          else
+                            headerSet ++ [ hsts ];
+                      }
+                    );
+              in
+              value.settings
+              // headerRecAttrs
+              // {
+                listen =
+                  let
+                    identity =
+                      value.tls.identity
+                      ++ lib.optional (builtins.elem names.cert certNames.all) {
+                        key-file = "${certs.${names.cert}.directory}/key.pem";
+                        certificate-file = "${certs.${names.cert}.directory}/fullchain.pem";
+                      };
+                  in
+                  {
+                    port = port.TLS;
+                    ssl = (lib.recursiveUpdate tlsRecAttrs value.tls.extraSettings) // {
+                      inherit identity;
                     };
-                in
-                {
-                  port = port.TLS;
-                  ssl = value.tls.extraSettings // {
-                    inherit identity;
                   };
-                };
-            };
+              };
           };
     in
     # With a high likelihood of HTTP & ACME challenges being on the same port,
@@ -184,11 +269,13 @@ in
       };
 
       package = lib.mkPackageOption pkgs "h2o" {
-        example = ''
-          pkgs.h2o.override {
-            withMruby = false;
-          };
-        '';
+        example = # nix
+          ''
+            pkgs.h2o.override {
+              withMruby = false;
+              openssl = pkgs.openssl_legacy;
+            }
+          '';
       };
 
       defaultHTTPListenPort = mkOption {
@@ -209,6 +296,8 @@ in
         example = 8443;
       };
 
+      defaultTLSRecommendations = tlsRecommendationsOption;
+
       settings = mkOption {
         type = settingsFormat.type;
         default = { };
@@ -216,13 +305,7 @@ in
       };
 
       hosts = mkOption {
-        type = types.attrsOf (
-          types.submodule (
-            import ./vhost-options.nix {
-              inherit config lib;
-            }
-          )
-        );
+        type = types.attrsOf (types.submodule (import ./vhost-options.nix { inherit config lib; }));
         default = { };
         description = ''
           The `hosts` config to be merged with the settings.
