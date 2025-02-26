@@ -36,8 +36,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "ddnet";
-    repo = pname;
-    rev = version;
+    repo = "ddnet";
+    tag = version;
     hash = "sha256-R9LXcYM96fibHzpXDWIOSASKIbh+GeiGyz7xVvV2v1Q=";
   };
 
