@@ -522,8 +522,8 @@ rec {
       "sha256-4ncbasnlALjaFg4lDKHwtXGg88Z2+DTVv/cPXlfLlBg=";
 
   mypy-boto3-evidently =
-    buildMypyBoto3Package "evidently" "1.36.0"
-      "sha256-ZL6PFxN2uN8qehPqNE+SRVxi5qiPlSph4bJC5pvU5O8=";
+    buildMypyBoto3Package "evidently" "1.37.0"
+      "sha256-MQJMX5Zv1/Cdd70NJZCXsMe3y9YLWvELE/u+gDfgLfc=";
 
   mypy-boto3-finspace =
     buildMypyBoto3Package "finspace" "1.36.0"
