@@ -50,11 +50,6 @@ rustPlatform.buildRustPackage rec {
     "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-store"
   ];
 
-  env = {
-    VERGEN_GIT_COMMIT_DATE = "2025-02-21";
-    VERGEN_GIT_SHA = src.rev;
-  };
-
   passthru = {
     updateScript = nix-update-script {
       extraArgs = [
