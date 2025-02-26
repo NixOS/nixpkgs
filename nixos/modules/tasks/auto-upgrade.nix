@@ -77,9 +77,7 @@ let
       }
     fi
 
-    ${lib.concatMapStringsSep "\n"
-      (file: "cleanup ${desyncFile file}")
-      (lib.attrNames cfg.desync)}
+    ${lib.concatMapStringsSep "\n" (file: "cleanup ${desyncFile file}") (lib.attrNames cfg.desync)}
   '';
 in
 {
