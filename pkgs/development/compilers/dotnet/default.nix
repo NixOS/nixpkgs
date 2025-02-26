@@ -70,6 +70,7 @@ makeScopeWithSplicing' {
 
       dotnet_8 = recurseIntoAttrs (callPackage ./8 { });
       dotnet_9 = recurseIntoAttrs (callPackage ./9 { });
+      dotnet_10 = recurseIntoAttrs (callPackage ./10 { });
     }
     // lib.optionalAttrs config.allowAliases {
       # EOL
