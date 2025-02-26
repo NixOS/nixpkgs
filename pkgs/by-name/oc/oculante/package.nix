@@ -62,6 +62,10 @@ rustPlatform.buildRustPackage rec {
       darwin.libobjc
     ];
 
+  preBuild = ''
+    export HOME="$(mktemp -d)"
+  '';
+
   checkFlags = [
     "--skip=bench"
     "--skip=tests::net" # requires network access
