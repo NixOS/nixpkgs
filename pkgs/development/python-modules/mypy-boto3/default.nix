@@ -186,8 +186,8 @@ rec {
       "sha256-nlk8Jb31LevHaTX8DwCv6H3h6CSQKzoBwXWDqgfqZa0=";
 
   mypy-boto3-chime =
-    buildMypyBoto3Package "chime" "1.36.0"
-      "sha256-OpXjgK7npAG40XSjiViO5jhyaopLL/0XGLk8nBas4ss=";
+    buildMypyBoto3Package "chime" "1.37.0"
+      "sha256-SzXIm9zxflVGjvmCa/15Dg3lG782PIuHozbVtEpFDnI=";
 
   mypy-boto3-chime-sdk-identity =
     buildMypyBoto3Package "chime-sdk-identity" "1.36.0"
