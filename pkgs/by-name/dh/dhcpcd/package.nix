@@ -44,6 +44,7 @@ stdenv.mkDerivation rec {
     "--localstatedir=/var"
     "--disable-privsep"
     "--dbdir=/var/lib/dhcpcd"
+    "--with-default-hostname=nixos"
     (lib.enableFeature enablePrivSep "privsep")
   ] ++ lib.optional enablePrivSep "--privsepuser=dhcpcd";
 
