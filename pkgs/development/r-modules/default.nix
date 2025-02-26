@@ -372,7 +372,7 @@ let
     EMCluster = [ pkgs.lapack ];
     fangs = [ pkgs.cargo ];
     fastpng = [ pkgs.zlib.dev ];
-    fcl = [ pkgs.cargo ];
+    fcl = with pkgs; [ cargo rustc ];
     fftw = [ pkgs.fftw.dev ];
     fftwtools = with pkgs; [ fftw.dev pkg-config ];
     fingerPro = [ pkgs.gsl ];
