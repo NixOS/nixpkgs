@@ -154,8 +154,8 @@ rec {
       "sha256-C28bRk0IhJreEN0Zs/SfyBrhnvV12+Lbojp2oGJenfc=";
 
   mypy-boto3-autoscaling-plans =
-    buildMypyBoto3Package "autoscaling-plans" "1.36.0"
-      "sha256-DKQN+a0VCBBJWxSFq+3GwlSMIxmBfT6U71TCQdnItSs=";
+    buildMypyBoto3Package "autoscaling-plans" "1.37.0"
+      "sha256-cHLVZqOWxEFgselqi+XBqItepzP8hND1Ef7jHDOLdNU=";
 
   mypy-boto3-backup =
     buildMypyBoto3Package "backup" "1.36.0"
