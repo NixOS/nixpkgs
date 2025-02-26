@@ -243,6 +243,7 @@ jobs:
       # Can't use the token received from permissions above, because it can't get enough permissions
       - uses: actions/create-github-app-token@0d564482f06ca65fa9e77e2510873638c82206f2 # v1.11.5
         id: app-token
+        if: github.repository_owner == 'NixOS'
         with:
           app-id: ${{ vars.OWNER_APP_ID }}
           private-key: ${{ secrets.OWNER_APP_PRIVATE_KEY }}
@@ -323,6 +324,7 @@ jobs:
           NUMBER: ${{ github.event.number }}
 
       - name: Requesting maintainer reviews
+        if: github.repository_owner == 'NixOS'
         run: |
           # maintainers.json contains GitHub IDs. Look up handles to request reviews from.
           # There appears to be no API to request reviews based on GitHub IDs
