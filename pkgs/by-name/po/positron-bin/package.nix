@@ -22,7 +22,7 @@
 }:
 let
   pname = "positron-bin";
-  version = "2025.02.0-171";
+  version = "2025.04.0-64";
 in
 stdenv.mkDerivation {
   inherit version pname;
@@ -30,13 +30,13 @@ stdenv.mkDerivation {
   src =
     if stdenv.hostPlatform.isDarwin then
       fetchurl {
-        url = "https://github.com/posit-dev/positron/releases/download/${version}/Positron-${version}.dmg";
-        hash = "sha256-b5o1+UXt5JAuHkm1K1jrMLV+7PHfKJTOff4aTk8xm2I=";
+        url = "https://cdn.posit.co/positron/dailies/mac/universal/Positron-${version}.dmg";
+        hash = "sha256-MmLc2YFmWIcmsRp4swKYJdQHAWfSIsW23D5ZLfyb4b4=";
       }
     else
       fetchurl {
-        url = "https://github.com/posit-dev/positron/releases/download/${version}/Positron-${version}-x64.deb";
-        hash = "sha256-TjQc/Y4Sa2MlLslbygYVFbIk3raArMvYstSiSEYzfo0=";
+        url = "https://cdn.posit.co/positron/dailies/deb/x86_64/Positron-${version}-x64.deb";
+        hash = "sha256-d1HjnMGpKg68EW0wXWvgXL0VEepn1vFJWuAN0HD2IPs=";
       };
 
   buildInputs =
