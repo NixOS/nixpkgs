@@ -134,7 +134,7 @@ let
           };
         };
     in
-    lib.mapAttrs build (grammars);
+    lib.mapAttrs build grammars;
 
   # Usage:
   # pkgs.tree-sitter.withPlugins (p: [ p.tree-sitter-c p.tree-sitter-java ... ])
