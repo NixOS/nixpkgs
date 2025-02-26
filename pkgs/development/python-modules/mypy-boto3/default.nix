@@ -550,8 +550,8 @@ rec {
       "sha256-6sweonHO2L2Ff98CGtuFdD2q3RGWy9rlk0NV8l0hvcg=";
 
   mypy-boto3-forecastquery =
-    buildMypyBoto3Package "forecastquery" "1.36.0"
-      "sha256-TWypDz0ZRrNI4D6VV6lDHrlfWCeTOETspmEx1Pj1wCk=";
+    buildMypyBoto3Package "forecastquery" "1.37.0"
+      "sha256-fBOuX8kCfMYEiATBBuMBdkT8YdvmDB6JshkvO06j4Hw=";
 
   mypy-boto3-frauddetector =
     buildMypyBoto3Package "frauddetector" "1.36.0"
