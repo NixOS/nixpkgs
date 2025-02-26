@@ -75,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   # this excludes you, pkgsStatic (cmake wants to run built binaries
   # in the buildPhase)
-  doInstallCheck = stdenv.buildPlatform == stdenv.hostPlatform;
+  doInstallCheck = stdenv.buildPlatform.equals stdenv.hostPlatform;
 
   meta = with lib; {
     homepage = "https://github.com/drogonframework/drogon";

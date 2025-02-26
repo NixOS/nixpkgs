@@ -29,7 +29,8 @@ stdenv.mkDerivation rec {
 
   # Case-insensitivity workaround for https://github.com/linux-pam/linux-pam/issues/569
   postPatch =
-    lib.optionalString (stdenv.buildPlatform.isDarwin && stdenv.buildPlatform != stdenv.hostPlatform)
+    lib.optionalString
+      (stdenv.buildPlatform.isDarwin && stdenv.buildPlatform.notEquals stdenv.hostPlatform)
       ''
         rm CHANGELOG
         touch ChangeLog

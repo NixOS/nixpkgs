@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   ];
 
   configureFlags =
-    lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    lib.optionals (stdenv.hostPlatform.notEquals stdenv.buildPlatform) [
       # Remove when 0.5.x is published.
       "--disable-lv-tool"
     ]

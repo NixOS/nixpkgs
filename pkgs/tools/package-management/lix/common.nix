@@ -55,7 +55,7 @@
     cargoDeps = docCargoDeps;
   },
 
-  enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform,
+  enableDocumentation ? stdenv.hostPlatform.equals stdenv.buildPlatform,
   enableStatic ? stdenv.hostPlatform.isStatic,
   withAWS ? !enableStatic && (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin),
   aws-sdk-cpp,

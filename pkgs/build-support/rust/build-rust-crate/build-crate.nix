@@ -35,7 +35,7 @@ let
       (mkRustcDepArgs dependencies crateRenames)
       (mkRustcFeatureArgs crateFeatures)
     ]
-    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    ++ lib.optionals (stdenv.hostPlatform.notEquals stdenv.buildPlatform) [
       "--target"
       stdenv.hostPlatform.rust.rustcTargetSpec
     ]

@@ -217,7 +217,7 @@ stdenv.mkDerivation rec {
   ];
 
   makeFlags =
-    lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    lib.optionals (stdenv.buildPlatform.notEquals stdenv.hostPlatform) [
       "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
     ]
     ++ [

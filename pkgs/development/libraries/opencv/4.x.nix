@@ -312,7 +312,7 @@ effectiveStdenv.mkDerivation {
     zlib
   ] ++ optionals enablePython [
     pythonPackages.python
-  ] ++ optionals (effectiveStdenv.buildPlatform == effectiveStdenv.hostPlatform) [
+  ] ++ optionals (effectiveStdenv.buildPlatform.equals effectiveStdenv.hostPlatform) [
     hdf5
   ] ++ optionals enableGtk2 [
     gtk2
@@ -403,7 +403,7 @@ effectiveStdenv.mkDerivation {
     pythonPackages.pip
     pythonPackages.wheel
     pythonPackages.setuptools
-  ] ++ optionals (effectiveStdenv.hostPlatform == effectiveStdenv.buildPlatform) [
+  ] ++ optionals (effectiveStdenv.hostPlatform.equals effectiveStdenv.buildPlatform) [
     pythonPackages.pythonImportsCheckHook
   ]) ++ optionals enableCuda [
     cudaPackages.cuda_nvcc
@@ -561,7 +561,7 @@ effectiveStdenv.mkDerivation {
       withIpp = opencv4.override { enableIpp = true; };
     }
     // optionalAttrs (!enablePython) { pythonEnabled = pythonPackages.opencv4; }
-    // optionalAttrs (effectiveStdenv.buildPlatform != "x86_64-darwin") {
+    // optionalAttrs (effectiveStdenv.buildPlatform.notEquals "x86_64-darwin") {
       opencv4-tests = callPackage ./tests.nix {
         inherit enableGStreamer enableGtk2 enableGtk3 runAccuracyTests runPerformanceTests testDataSrc;
         inherit opencv4;

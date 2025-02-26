@@ -66,7 +66,7 @@ let
 
     strictDeps = true;
 
-    doCheck = stdenv.hostPlatform.isLinux && (stdenv.hostPlatform == stdenv.buildPlatform);
+    doCheck = stdenv.hostPlatform.isLinux && (stdenv.hostPlatform.equals stdenv.buildPlatform);
 
     checkPhase = ''
       runHook preCheck

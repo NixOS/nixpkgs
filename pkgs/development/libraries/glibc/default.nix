@@ -75,12 +75,14 @@ in
             # Fix -Werror build failure when building glibc with musl with GCC >= 8, see:
             # https://github.com/NixOS/nixpkgs/pull/68244#issuecomment-544307798
             (lib.optional stdenv.hostPlatform.isMusl "-Wno-error=attribute-alias")
-            (lib.optionals ((stdenv.hostPlatform != stdenv.buildPlatform) || stdenv.hostPlatform.isMusl) [
-              # Ignore "error: '__EI___errno_location' specifies less restrictive attributes than its target '__errno_location'"
-              # New warning as of GCC 9
-              # Same for musl: https://github.com/NixOS/nixpkgs/issues/78805
-              "-Wno-error=missing-attributes"
-            ])
+            (lib.optionals ((stdenv.hostPlatform.notEquals stdenv.buildPlatform) || stdenv.hostPlatform.isMusl)
+              [
+                # Ignore "error: '__EI___errno_location' specifies less restrictive attributes than its target '__errno_location'"
+                # New warning as of GCC 9
+                # Same for musl: https://github.com/NixOS/nixpkgs/issues/78805
+                "-Wno-error=missing-attributes"
+              ]
+            )
             (lib.optionals (stdenv.hostPlatform.isPower64) [
               # Do not complain about the Processor Specific ABI (i.e. the
               # choice to use IEEE-standard `long double`).  We pass this

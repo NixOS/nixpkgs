@@ -59,7 +59,7 @@ stdenv.mkDerivation (rec {
   ];
 
   buildInputs = [
-    (if stdenv.buildPlatform == stdenv.hostPlatform then llvm else targetLlvm)
+    (if stdenv.buildPlatform.equals stdenv.hostPlatform then llvm else targetLlvm)
   ] ++ lib.optionals (ompdSupport && ompdGdbSupport) [
     python3
   ];

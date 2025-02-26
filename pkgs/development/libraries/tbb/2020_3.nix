@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     lib.optionals stdenv.cc.isClang [
       "compiler=clang"
     ]
-    ++ (lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) (
+    ++ (lib.optional (stdenv.buildPlatform.notEquals stdenv.hostPlatform) (
       if stdenv.hostPlatform.isAarch64 then
         "arch=arm64"
       else if stdenv.hostPlatform.isx86_64 then

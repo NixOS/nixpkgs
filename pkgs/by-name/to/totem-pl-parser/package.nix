@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     glib
   ];
 
-  mesonFlags = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+  mesonFlags = lib.optionals (stdenv.buildPlatform.notEquals stdenv.hostPlatform) [
     "-Dintrospection=false"
   ];
 

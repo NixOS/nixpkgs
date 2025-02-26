@@ -28,7 +28,7 @@ let
     inherit lib stdenv pkgsBuildHost pkgsBuildTarget pkgsTargetTarget;
   };
   # Allow faster cross compiler generation by reusing Build artifacts
-  fastCross = (stdenv.buildPlatform == stdenv.hostPlatform) && (stdenv.hostPlatform != stdenv.targetPlatform);
+  fastCross = (stdenv.buildPlatform.equals stdenv.hostPlatform) && (stdenv.hostPlatform.notEquals stdenv.targetPlatform);
 in
 {
   lib = lib';
@@ -60,7 +60,7 @@ in
       then pkgsBuildBuild.rustPackages
       else
         self.buildRustPackages.overrideScope (_: _:
-        lib.optionalAttrs (stdenv.buildPlatform == stdenv.hostPlatform)
+        lib.optionalAttrs (stdenv.buildPlatform.equals stdenv.hostPlatform)
           (selectRustPackage pkgsBuildHost).packages.prebuilt);
       bootRustPlatform = makeRustPlatform bootstrapRustPackages;
     in {

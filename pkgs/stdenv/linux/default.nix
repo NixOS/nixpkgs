@@ -115,7 +115,7 @@
     (config.replaceBootstrapFiles or lib.id) files,
 }:
 
-assert crossSystem == localSystem;
+assert crossSystem.equals localSystem;
 
 let
   inherit (localSystem) system;
@@ -898,7 +898,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
 
             gnumake = super.gnumake.override { inBootstrap = false; };
           }
-          // lib.optionalAttrs (super.stdenv.targetPlatform == localSystem) {
+          // lib.optionalAttrs (super.stdenv.targetPlatform.equals localSystem) {
             # Need to get rid of these when cross-compiling.
             inherit (prevStage) binutils binutils-unwrapped;
             gcc = cc;

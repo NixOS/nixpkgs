@@ -20,6 +20,15 @@ let
 
   inherit (lib.strings) toJSON;
 
+  # define this binding in the top-level let-block so that it only prints once
+  warnAboutPlatformEquals = lib.warn (lib.concatStringsSep " " [
+    "It seems that you're comparing platform attrsets using plain == equality,"
+    "which is not supported, and will result in an error soon."
+    "Use `--abort-on-warn --show-trace` to find the location of this warning."
+    "If equality (e.g. host == build) was used, try (build.canExecute host) or (build.equals host) instead."
+    "If equality was not used, you may avoid this warning by filtering out the `warnAboutPlatformEquals` attribute."
+  ]) null;
+
   doubles = import ./doubles.nix { inherit lib; };
   parse = import ./parse.nix { inherit lib; };
   inspect = import ./inspect.nix { inherit lib; };
@@ -42,8 +51,10 @@ let
     both arguments have been `elaborate`-d.
   */
   equals =
-    let removeFunctions = a: filterAttrs (_: v: !isFunction v) a;
-    in a: b: removeFunctions a == removeFunctions b;
+    let
+      removeUnwanted = filterAttrs (name: v: !(name == "warnAboutPlatformEquals" || isFunction v));
+    in
+    a: b: removeUnwanted a == removeUnwanted b;
 
   /**
     List of all Nix system doubles the nixpkgs flake will expose the package set
@@ -421,6 +432,10 @@ let
           isNoStdTarget =
             any (t: hasInfix t final.rust.rustcTarget) ["-none" "nvptx" "switch" "-uefi"];
         };
+      } // {
+        inherit warnAboutPlatformEquals;
+        equals = equals final;
+        notEquals = platform: !final.equals platform;
       };
   in assert final.useAndroidPrebuilt -> final.isAndroid;
      assert foldl

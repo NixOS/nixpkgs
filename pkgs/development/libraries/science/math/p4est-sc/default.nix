@@ -60,7 +60,7 @@ stdenv.mkDerivation {
 
   # disallow Darwin checks due to prototype incompatibility of qsort_r
   # to be fixed in a future version of the source code
-  doCheck = !stdenv.hostPlatform.isDarwin && stdenv.hostPlatform == stdenv.buildPlatform;
+  doCheck = !stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.equals stdenv.buildPlatform;
 
   meta = {
     branch = "prev3-develop";

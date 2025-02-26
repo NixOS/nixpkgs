@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   DIFF = "${diffutils}/bin/diff";
   DIFF3 = "${diffutils}/bin/diff3";
 
-  disallowedReferences = lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+  disallowedReferences = lib.optionals (stdenv.hostPlatform.notEquals stdenv.buildPlatform) [
     buildPackages.diffutils
     buildPackages.ed
   ];

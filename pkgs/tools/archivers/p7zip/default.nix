@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
       # I think this is a typo and should be CXX? Either way let's kill it
       sed -i '/XX=\/usr/d' makefile.macosx_llvm_64bits
     ''
-    + lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
+    + lib.optionalString (stdenv.buildPlatform.notEquals stdenv.hostPlatform) ''
       substituteInPlace makefile.machine \
         --replace 'CC=gcc'  'CC=${stdenv.cc.targetPrefix}gcc' \
         --replace 'CXX=g++' 'CXX=${stdenv.cc.targetPrefix}g++'

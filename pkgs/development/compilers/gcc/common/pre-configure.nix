@@ -35,7 +35,10 @@ lib.optionalString (hostPlatform.isSunOS && hostPlatform.is64bit) ''
 # meet that need: it runs on the hostPlatform.
 +
   lib.optionalString
-    (langFortran && (with stdenv; buildPlatform != hostPlatform && hostPlatform == targetPlatform))
+    (
+      langFortran
+      && (with stdenv; buildPlatform.notEquals hostPlatform && hostPlatform.equals targetPlatform)
+    )
     ''
       export GFORTRAN_FOR_TARGET=${pkgsBuildTarget.gfortran}/bin/${stdenv.targetPlatform.config}-gfortran
     ''
@@ -52,7 +55,8 @@ lib.optionalString (hostPlatform.isSunOS && hostPlatform.is64bit) ''
 # actually different we need to convince the configure script that it
 # is in fact building a cross compiler although it doesn't believe it.
 +
-  lib.optionalString (targetPlatform.config == hostPlatform.config && targetPlatform != hostPlatform)
+  lib.optionalString
+    (targetPlatform.config == hostPlatform.config && targetPlatform.notEquals hostPlatform)
     ''
       substituteInPlace configure --replace is_cross_compiler=no is_cross_compiler=yes
     ''
@@ -65,12 +69,14 @@ lib.optionalString (hostPlatform.isSunOS && hostPlatform.is64bit) ''
 +
   lib.optionalString
     (
-      targetPlatform != hostPlatform && withoutTargetLibc && targetPlatform.config == hostPlatform.config
+      targetPlatform.notEquals hostPlatform
+      && withoutTargetLibc
+      && targetPlatform.config == hostPlatform.config
     )
     ''
       export inhibit_libc=true
     ''
 
-+ lib.optionalString (targetPlatform != hostPlatform && withoutTargetLibc && enableShared) (
++ lib.optionalString (targetPlatform.notEquals hostPlatform && withoutTargetLibc && enableShared) (
   import ./libgcc-buildstuff.nix { inherit lib stdenv; }
 )

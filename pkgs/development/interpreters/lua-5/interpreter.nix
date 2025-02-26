@@ -121,11 +121,7 @@ stdenv.mkDerivation (
       makeFlagsArray+=(CFLAGS='-O2 -fPIC${lib.optionalString compat compatFlags} $(${
         if lib.versionAtLeast luaversion "5.2" then "SYSCFLAGS" else "MYCFLAGS"
       })' )
-      makeFlagsArray+=(${lib.optionalString stdenv.hostPlatform.isDarwin "CC=\"$CC\""}${
-        lib.optionalString (
-          stdenv.buildPlatform != stdenv.hostPlatform
-        ) " 'AR=${stdenv.cc.targetPrefix}ar rcu'"
-      })
+      makeFlagsArray+=(${lib.optionalString stdenv.hostPlatform.isDarwin "CC=\"$CC\""}${lib.optionalString (stdenv.buildPlatform.notEquals stdenv.hostPlatform) " 'AR=${stdenv.cc.targetPrefix}ar rcu'"})
 
       installFlagsArray=( TO_BIN="lua luac" INSTALL_DATA='cp -d' \
         TO_LIB="${
