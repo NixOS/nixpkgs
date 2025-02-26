@@ -12,6 +12,7 @@
   gst_all_1,
   libglvnd,
   libgbm,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -69,6 +70,15 @@ rustPlatform.buildRustPackage rec {
   postInstall = ''
     libcosmicAppWrapperArgs+=(--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0")
   '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version"
+      "unstable"
+      "--version-regex"
+      "epoch-(.*)"
+    ];
+  };
 
   meta = {
     homepage = "https://github.com/pop-os/cosmic-player";
