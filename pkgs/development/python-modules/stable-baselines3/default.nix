@@ -34,6 +34,10 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
+  pythonRelaxDeps = [
+    "gymnasium"
+  ];
+
   dependencies = [
     cloudpickle
     gymnasium
