@@ -1142,8 +1142,8 @@ rec {
       "sha256-0hUuTUVv6+WqpPn+TJVgsl5bIuw0WejLarVu/hv1trk=";
 
   mypy-boto3-route53-recovery-control-config =
-    buildMypyBoto3Package "route53-recovery-control-config" "1.36.0"
-      "sha256-aJYGZRenjJ5HTpblArMAhIXcmPKuFnCatq+oxf+wpV4=";
+    buildMypyBoto3Package "route53-recovery-control-config" "1.37.0"
+      "sha256-VW984jFkCzfG2w2XP5fa5eiUjs31yTQbX5jyKuFIS20=";
 
   mypy-boto3-route53-recovery-readiness =
     buildMypyBoto3Package "route53-recovery-readiness" "1.36.0"
