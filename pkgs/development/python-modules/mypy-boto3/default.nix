@@ -630,8 +630,8 @@ rec {
       "sha256-iFTzEIhVgRojrEBJSsl5kRS1diHZr3pfuSgqj5La0Hw=";
 
   mypy-boto3-internetmonitor =
-    buildMypyBoto3Package "internetmonitor" "1.36.0"
-      "sha256-YBNZe+PnJgXQ2On2x1ppx/a2ua/HMS9XQjg6nYlsLj4=";
+    buildMypyBoto3Package "internetmonitor" "1.37.0"
+      "sha256-VoOeyU+V9ciGtDBFwJeagMuPCXDjoSf8kUneJzhDarE=";
 
   mypy-boto3-iot =
     buildMypyBoto3Package "iot" "1.36.7"
