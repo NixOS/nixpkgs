@@ -33,6 +33,7 @@
   ungoogled ? false, # Whether to build chromium or ungoogled-chromium
   cupsSupport ? true,
   pulseSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux,
+  useSystemLibffi ? true,
   commandLineArgs ? "",
   pkgsBuildBuild,
   pkgs,
@@ -76,6 +77,7 @@ let
         cupsSupport
         pulseSupport
         ungoogled
+        useSystemLibffi
         ;
       gnChromium = buildPackages.gn.overrideAttrs (
         oldAttrs:
