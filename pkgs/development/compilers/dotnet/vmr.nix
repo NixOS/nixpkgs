@@ -24,6 +24,7 @@
   python3,
   xmlstarlet,
   nodejs,
+  cpio,
   callPackage,
   unzip,
   yq,
@@ -90,6 +91,9 @@ stdenv.mkDerivation rec {
     ++ lib.optionals (lib.versionAtLeast version "9") [
       nodejs
     ]
+    ++ lib.optionals (lib.versionAtLeast version "10") [
+      cpio
+    ]
     ++ lib.optionals isDarwin [
       getconf
     ];
@@ -143,7 +147,7 @@ stdenv.mkDerivation rec {
   '';
 
   patches =
-    lib.optionals (lib.versionAtLeast version "9") [
+    lib.optionals (lib.versionAtLeast version "9" && lib.versionOlder version "10") [
       ./UpdateNuGetConfigPackageSourcesMappings-don-t-add-em.patch
     ]
     ++ lib.optionals (lib.versionOlder version "9") [
