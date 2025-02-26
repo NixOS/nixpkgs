@@ -1358,8 +1358,8 @@ rec {
       "sha256-aQHdWjauDHjUI37N8Nif29qWZzRhbSonUYL9ZxKTiVI=";
 
   mypy-boto3-timestream-write =
-    buildMypyBoto3Package "timestream-write" "1.36.0"
-      "sha256-e9OUxHV8zKmsvT7uBTcrkvSF1EKi34PCAnMZGEDwMwk=";
+    buildMypyBoto3Package "timestream-write" "1.37.0"
+      "sha256-XKJCht/z7eHSjhbPLXPbB5DnGmCdMfuDjEhZTIzE6gg=";
 
   mypy-boto3-tnb =
     buildMypyBoto3Package "tnb" "1.36.0"
