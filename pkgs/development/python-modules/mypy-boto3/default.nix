@@ -542,8 +542,8 @@ rec {
       "sha256-fe2N065m93H+/0dUe2Q5yFjGVFDG/Gxq1jU1mYKtcOU=";
 
   mypy-boto3-fms =
-    buildMypyBoto3Package "fms" "1.36.0"
-      "sha256-18L9i0t/98USqXxSujbvE6hkxA6FHELJemiTdqLfxLM=";
+    buildMypyBoto3Package "fms" "1.37.0"
+      "sha256-0Z6WKKbucAFPy5MQkxblr4TUC7lLAp+0yJc4t4gE2X0=";
 
   mypy-boto3-forecast =
     buildMypyBoto3Package "forecast" "1.36.0"
