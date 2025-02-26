@@ -63,7 +63,12 @@ stdenv.mkDerivation rec {
   ) "[ -e ${placeholder "out"}/lib/dhcpcd/dev/udev.so ]";
 
   passthru.tests = {
-    inherit (nixosTests.networking.scripted) macvlan dhcpSimple dhcpOneIf;
+    inherit (nixosTests.networking.scripted)
+      macvlan
+      dhcpSimple
+      dhcpHostname
+      dhcpOneIf
+      ;
   };
 
   meta = with lib; {

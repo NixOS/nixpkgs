@@ -284,7 +284,8 @@ in
           [
             dhcpcd
             config.networking.resolvconf.package
-          ] ++ lib.optional cfg.setHostname (
+          ]
+          ++ lib.optional cfg.setHostname (
             pkgs.writeShellScriptBin "hostname" ''
               ${lib.getExe' pkgs.systemd "hostnamectl"} set-hostname --transient $1
             ''
