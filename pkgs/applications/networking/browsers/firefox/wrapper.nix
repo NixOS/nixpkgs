@@ -1,4 +1,4 @@
-{ stdenv, lib, makeDesktopItem, makeBinaryWrapper, lndir, config
+{ stdenv, lib, makeDesktopItem, makeWrapper, lndir, config
 , buildPackages
 , jq, xdg-utils, writeText
 
@@ -219,7 +219,7 @@ let
               };
             }));
 
-      nativeBuildInputs = [ makeBinaryWrapper lndir jq ];
+      nativeBuildInputs = [ makeWrapper lndir jq ];
       buildInputs = [ browser.gtk3 ];
 
       makeWrapperArgs = [
