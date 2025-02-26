@@ -222,8 +222,8 @@ rec {
       "sha256-BmOYLQsJB84gWmOepiX/8D+E6iE9BXKSYJnvdrUOb7M=";
 
   mypy-boto3-clouddirectory =
-    buildMypyBoto3Package "clouddirectory" "1.36.0"
-      "sha256-NQnrx4nzScaOBOYsiN8UjOT3LXYrgC/MW4AIPBr1l0I=";
+    buildMypyBoto3Package "clouddirectory" "1.37.0"
+      "sha256-lIkRuhQHTqlXRkyf9hIIZ0oh3vgdr5GzLApLt9lXvaw=";
 
   mypy-boto3-cloudformation =
     buildMypyBoto3Package "cloudformation" "1.36.15"
