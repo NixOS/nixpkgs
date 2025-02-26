@@ -37,12 +37,12 @@
 
 buildPythonApplication rec {
   pname = "bikeshed";
-  version = "4.2.7";
+  version = "5.1.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-vtZ97brCk+fd/HsA2UHdS17o8rJ/VvSOdhg0MHzlCs8=";
+    hash = "sha256-Oba7Ba61uwQQByLKIy6oRywNP5jGkbYwuBMwln+dcaw=";
   };
 
   build-system = [ setuptools ];

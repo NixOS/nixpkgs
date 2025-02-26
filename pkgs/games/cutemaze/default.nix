@@ -12,11 +12,11 @@
 
 stdenv.mkDerivation rec {
   pname = "cutemaze";
-  version = "1.3.4";
+  version = "1.3.5";
 
   src = fetchurl {
     url = "https://gottcode.org/cutemaze/cutemaze-${version}.tar.bz2";
-    hash = "sha256-DKWg/wuWSsjs9dkJlanIxQhVWpebWRx5h6SRi5yFm84=";
+    hash = "sha256-a+QIOD0TB0AGnqIUgtkMBZuPUCQbXp4NtZ6b0vk/J0c=";
   };
 
   nativeBuildInputs = [

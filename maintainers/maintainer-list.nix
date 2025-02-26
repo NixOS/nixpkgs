@@ -21993,6 +21993,12 @@
     github = "snpschaaf";
     githubId = 105843013;
   };
+  snu = {
+    email = "kabelfrickler@gmail.com";
+    github = "snue";
+    githubId = 6476416;
+    name = "Stefan Nuernberger";
+  };
   snyh = {
     email = "snyh@snyh.org";
     github = "snyh";
