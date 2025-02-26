@@ -242,12 +242,6 @@
     name = "Kenzie";
     keys = [ { fingerprint = "D292 365E 3C46 A5AA 75EE  B30B 78DB 7EDE 3540 794B"; } ];
   };
-  _48cf = {
-    name = "czapek";
-    email = "czapek1337@gmail.com";
-    github = "48cf";
-    githubId = 32851089;
-  };
   _4ever2 = {
     email = "eske@cs.au.dk";
     github = "4ever2";
