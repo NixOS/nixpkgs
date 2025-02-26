@@ -1,5 +1,6 @@
 {
   lib,
+  callPackage,
   buildGoModule,
   fetchFromGitHub,
   ncurses,
@@ -25,7 +26,9 @@ let
     }
   );
 
-  version = "1.1.0";
+  web = callPackage ./web.nix { };
+
+  version = "2.2.0";
 in
 buildGoModule {
   pname = "opencloud";
@@ -96,6 +99,7 @@ buildGoModule {
   excludedPackages = [ "tests/*" ];
 
   passthru = {
+    inherit web;
     tests = { inherit (nixosTests) opencloud; };
     updateScript = nix-update-script { };
   };
