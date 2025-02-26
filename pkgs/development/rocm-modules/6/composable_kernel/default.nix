@@ -33,7 +33,8 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "composable_kernel${clr.gpuArchSuffix}";
-  # This version must be PEP 440 compatible because it's the version of the ck4inductor python package too
+  # Picked this version over 6.3 because much easier to get to build
+  # and it matches the version torch 2.6 wants
   version = "6.4.0-unstable-20241220";
 
   outputs =
@@ -46,12 +47,6 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals buildExamples [
       "example"
     ];
-
-  patches = [
-    # for Gentoo this gives a significant speedup in build times
-    # not observing speedup. possibly because our LLVM has been patched to fix amdgpu-early-inline-all issues?
-    # ./disable-amdgpu-inline.patch
-  ];
 
   src = fetchFromGitHub {
     owner = "ROCm";
@@ -87,11 +82,14 @@ stdenv.mkDerivation (finalAttrs: {
       "-DCMAKE_MODULE_PATH=${clr}/hip/cmake"
       "-DCMAKE_BUILD_TYPE=Release"
       "-DCMAKE_POLICY_DEFAULT_CMP0069=NEW"
+      # "-DDL_KERNELS=ON" # Not needed, slow to build
+      # CK_USE_CODEGEN Required for migraphx which uses device_gemm_multiple_d.hpp
+      # but migraphx requires an incompatible fork of CK and fails anyway
+      # "-DCK_USE_CODEGEN=ON"
+      # It might be worth skipping fp64 in future with this:
+      # "-DDTYPES=fp32;fp16;fp8;bf16;int8"
       # Manually define CMAKE_INSTALL_<DIR>
       # See: https://github.com/NixOS/nixpkgs/pull/197838
-      # "-DDL_KERNELS=ON"
-      # Not turned on because don't think deps require it, slightly speeds up build
-      # "-DCK_USE_CODEGEN=ON"
       "-DCMAKE_INSTALL_BINDIR=bin"
       "-DCMAKE_INSTALL_LIBDIR=lib"
       "-DCMAKE_INSTALL_INCLUDEDIR=include"
@@ -134,16 +132,20 @@ stdenv.mkDerivation (finalAttrs: {
         --replace-fail "add_subdirectory(profiler)" ""
     '';
 
-  # Clamp parallelism based on free memory at build start to avoid OOM
+  # Compile parallelism adjusted based on available RAM
+  # Never uses less than cores/4, never uses more than cores
+  # Link parallelism capped at 2
+  # Set up fancier ninja status line with ETA because this build takes forever
+  # and it's convenient to know around when it'll be done
   preConfigure = ''
     export NINJA_SUMMARIZE_BUILD=1
     export NINJA_STATUS="[%r jobs | %P %f/%t @ %o/s | %w | ETA %W ] "
     MEM_GB_TOTAL=$(awk '/MemTotal/ { printf "%d \n", $2/1024/1024 }' /proc/meminfo)
     MEM_GB_AVAILABLE=$(awk '/MemAvailable/ { printf "%d \n", $2/1024/1024 }' /proc/meminfo)
     APPX_GB=$((MEM_GB_AVAILABLE > MEM_GB_TOTAL ? MEM_GB_TOTAL : MEM_GB_AVAILABLE))
-    MAX_CORES=$((1 + APPX_GB / 2))
-    MAX_CORES_LINK=$((1 + APPX_GB / 8))
-    MAX_CORES_LINK=$((MAX_CORES_LINK > NIX_BUILD_CORES ? NIX_BUILD_CORES : MAX_CORES_LINK))
+    MAX_CORES=$((1 + APPX_GB/2))
+    MAX_CORES=$((MAX_CORES < NIX_BUILD_CORES/4 ? NIX_BUILD_CORES/4 : MAX_CORES))
+    LINK_CORES=$((2 > NIX_BUILD_CORES ? NIX_BUILD_CORES : 2))
     export NIX_BUILD_CORES="$((NIX_BUILD_CORES > MAX_CORES ? MAX_CORES : NIX_BUILD_CORES))"
     echo "Picked new core limits NIX_BUILD_CORES=$NIX_BUILD_CORES LINK_CORES=$LINK_CORES based on available mem: $APPX_GB GB"
     cmakeFlagsArray+=(
@@ -153,10 +155,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postInstall =
-    ''
-      zstd --rm $out/lib/libdevice_*_operations.a
-    ''
-    + lib.optionalString buildTests ''
+    lib.optionalString buildTests ''
       mkdir -p $test/bin
       mv $out/bin/test_* $test/bin
     ''
@@ -170,6 +169,8 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs.src) owner;
     inherit (finalAttrs.src) repo;
   };
+
+  passthru.anyGfx9Target = lib.lists.any (lib.strings.hasPrefix "gfx9") gpuTargets;
 
   meta = with lib; {
     description = "Performance portable programming model for machine learning tensor operators";

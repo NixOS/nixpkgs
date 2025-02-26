@@ -94,7 +94,7 @@ buildPythonPackage rec {
     clr
   ];
 
-  env.ROCM_PATH = rocminfo;
+  env.ROCM_PATH = "${clr}";
 
   pythonImportsCheck = [ "Tensile" ];
 

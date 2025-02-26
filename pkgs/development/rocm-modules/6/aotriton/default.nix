@@ -67,7 +67,7 @@ stdenv.mkDerivation (
       owner = "ROCm";
       repo = "aotriton";
       rev = "${finalAttrs.version}";
-      hash = "sha256-15Qr0EgV+pU6Hnmxqy76Nmryqr7qNkoE6iDcg9z35Hk=";
+      hash = "sha256-gSzGYWfyUNLyzqpu3BM8rjFFL7cRVZ+w9L5pnh9QGz4=";
       fetchSubmodules = true;
     };
     env.CXX = compiler;

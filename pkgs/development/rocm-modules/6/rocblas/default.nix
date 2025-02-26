@@ -61,7 +61,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocblas${clr.gpuArchSuffix}";
-  version = "6.3.1";
+  version = "6.3.3";
 
   outputs = [
     "out"

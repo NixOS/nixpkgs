@@ -33,7 +33,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocsolver${clr.gpuArchSuffix}";
-  version = "6.3.1";
+  version = "6.3.3";
 
   outputs =
     [
@@ -120,7 +120,6 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs.src) owner repo;
   };
 
-  enableParallelBuilding = true;
   requiredSystemFeatures = [ "big-parallel" ];
 
   meta = with lib; {

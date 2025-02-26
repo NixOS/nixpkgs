@@ -34,7 +34,7 @@ in
 # infiniband ib_peer_mem support isn't in the mainline kernel but is carried by some distros
 stdenv.mkDerivation (finalAttrs: {
   pname = "rccl${clr.gpuArchSuffix}";
-  version = "6.3.1";
+  version = "6.3.3";
 
   outputs =
     [
@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ROCm";
     repo = "rccl";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-61yvFqloOO6qtn0H6XsAPvJ6LKlOeXgTD/xbjCuB3zQ=";
+    hash = "sha256-998tDiC0Qp9hhcXtFpiCWqwdKPVT2vNp0GU/rng03Bw=";
   };
 
   nativeBuildInputs = [

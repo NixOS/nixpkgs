@@ -160,9 +160,10 @@ let
 
       rocalution = self.callPackage ./rocalution { };
 
-      rocmlir = self.callPackage ./rocmlir {
+      rocmlir-rock = self.callPackage ./rocmlir {
         buildRockCompiler = true;
       };
+      rocmlir = self.rocmlir-rock;
 
       hipsolver = self.callPackage ./hipsolver { };
 
@@ -174,12 +175,10 @@ let
 
       # hipTensor - Only supports GFX9
 
-      composable_kernel_build = self.callPackage ./composable_kernel { };
+      composable_kernel = self.callPackage ./composable_kernel { };
 
-      # FIXME: we have compressed code objects now, may be able to skip two stages?
-      composable_kernel = self.callPackage ./composable_kernel/unpack.nix { };
       ck4inductor = pyPackages.callPackage ./composable_kernel/ck4inductor.nix {
-        inherit (self) composable_kernel_build;
+        inherit (self) composable_kernel;
         inherit (llvm) rocm-merged-llvm;
       };
 
