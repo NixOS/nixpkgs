@@ -9017,7 +9017,7 @@ with pkgs;
     inherit (darwin.apple_sdk_12_3.libs) xpc;
   });
 
-  qxmpp = libsForQt5.callPackage ../development/libraries/qxmpp { };
+  qxmpp = qt6Packages.callPackage ../development/libraries/qxmpp { };
 
   gnu-efi = if stdenv.hostPlatform.isEfi
               then callPackage ../development/libraries/gnu-efi { }
