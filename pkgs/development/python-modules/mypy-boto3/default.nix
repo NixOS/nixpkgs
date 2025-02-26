@@ -214,8 +214,8 @@ rec {
       "sha256-ovn/hkWHBBTUsDkQppzTApcVRYZXwxTOugZHIPnbCQk=";
 
   mypy-boto3-cloud9 =
-    buildMypyBoto3Package "cloud9" "1.36.0"
-      "sha256-yI4hvfNnHy8L/RVWKDzEQXAhZMjN2i5mN49AMk1NEFc=";
+    buildMypyBoto3Package "cloud9" "1.37.0"
+      "sha256-ihfdqDnLejO7jEpXp1UPzeOWZTk2RgCBDbSIYJsy0oU=";
 
   mypy-boto3-cloudcontrol =
     buildMypyBoto3Package "cloudcontrol" "1.36.0"
