@@ -202,6 +202,15 @@ in
       '';
     };
 
+    networking.dhcpcd.allowSetuid = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = ''
+        Whether to relax the security sandbox to allow running setuid
+        binaries (e.g. `sudo`) in the dhcpcd hooks.
+      '';
+    };
+
     networking.dhcpcd.runHook = lib.mkOption {
       type = lib.types.lines;
       default = "";
@@ -213,7 +222,7 @@ in
         ::: {.note}
         To use sudo or similar tools in your script you may have to set:
 
-            systemd.services.dhcpcd.serviceConfig.NoNewPrivileges = false;
+            networking.dhcpcd.allowSetuid = true;
 
         In addition, as most of the filesystem is inaccessible to dhcpcd
         by default, you may want to define some exceptions, e.g.
@@ -321,7 +330,7 @@ in
             "CAP_NET_RAW"
             "CAP_NET_BIND_SERVICE"
           ];
-          CapabilityBoundingSet = [
+          CapabilityBoundingSet = lib.optionals (!cfg.allowSetuid) [
             "CAP_NET_ADMIN"
             "CAP_NET_RAW"
             "CAP_NET_BIND_SERVICE"
@@ -335,7 +344,7 @@ in
           DeviceAllow = "";
           LockPersonality = true;
           MemoryDenyWriteExecute = true;
-          NoNewPrivileges = lib.mkDefault true; # may be disabled for sudo in runHook
+          NoNewPrivileges = lib.mkDefault (!cfg.allowSetuid); # may be disabled for sudo in runHook
           PrivateDevices = true;
           PrivateMounts = true;
           PrivateTmp = true;
@@ -360,15 +369,18 @@ in
           RestrictNamespaces = true;
           RestrictRealtime = true;
           RestrictSUIDSGID = true;
-          SystemCallFilter = [
-            "@system-service"
-            "~@aio"
-            "~@keyring"
-            "~@memlock"
-            "~@mount"
-            "~@privileged"
-            "~@resources"
-          ];
+          SystemCallFilter =
+            [
+              "@system-service"
+              "~@aio"
+              "~@keyring"
+              "~@memlock"
+              "~@mount"
+            ]
+            ++ lib.optionals (!cfg.allowSetuid) [
+              "~@privileged"
+              "~@resources"
+            ];
           SystemCallArchitectures = "native";
           UMask = "0027";
         };
