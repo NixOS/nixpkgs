@@ -5573,6 +5573,8 @@ self: super: with self; {
 
   gotenberg-client = callPackage ../development/python-modules/gotenberg-client { };
 
+  gotify = callPackage ../development/python-modules/gotify { };
+
   gorilla = callPackage ../development/python-modules/gorilla { };
 
   goslide-api = callPackage ../development/python-modules/goslide-api { };
