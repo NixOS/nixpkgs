@@ -1,5 +1,6 @@
 {
   lib,
+  callPackage,
   buildGoModule,
   fetchFromGitHub,
   ncurses,
@@ -24,6 +25,8 @@ let
       PROTOC_GO_INJECT_TAG = "protoc-go-inject-tag";
     }
   );
+
+  web = callPackage ./web.nix { };
 
   version = "1.1.0";
 in
@@ -96,6 +99,7 @@ buildGoModule {
   excludedPackages = [ "tests/*" ];
 
   passthru = {
+    inherit web;
     tests = { inherit (nixosTests) opencloud; };
     updateScript = nix-update-script { };
   };
