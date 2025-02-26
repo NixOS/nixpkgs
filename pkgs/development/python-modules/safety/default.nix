@@ -11,8 +11,8 @@
   dparse,
   ruamel-yaml,
   jinja2,
-  levenshtein,
   marshmallow,
+  nltk,
   authlib,
   typer,
   pydantic,
@@ -27,23 +27,17 @@
 
 buildPythonPackage rec {
   pname = "safety";
-  version = "3.3.0";
-
-  disabled = pythonOlder "3.8";
-
+  version = "3.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyupio";
     repo = "safety";
     tag = version;
-    hash = "sha256-K41ytQhOP3RJ83fbd15cRJD9bAQs+wRnDIBC6XR1bOE=";
+    hash = "sha256-u+ysRpWLHDQdNRBSlYXz80e/MCT4smmv/YX8sfIrn24=";
   };
 
   postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail python-levenshtein levenshtein
-
     substituteInPlace safety/safety.py \
       --replace-fail "telemetry: bool = True" "telemetry: bool = False"
     substituteInPlace safety/util.py \
@@ -59,7 +53,6 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [
     "pydantic"
-    "safety-schemas"
   ];
 
   dependencies = [
@@ -70,8 +63,8 @@ buildPythonPackage rec {
     dparse
     ruamel-yaml
     jinja2
-    levenshtein
     marshmallow
+    nltk
     authlib
     typer
     pydantic

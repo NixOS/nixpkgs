@@ -3,48 +3,42 @@
   lib,
   fetchFromGitHub,
   cmake,
-  qtbase,
-  qttools,
-  qtsvg,
-  qt5compat,
-  quazip,
-  qtwayland,
+  qt6,
+  qt6Packages,
   hunspell,
-  wrapQtAppsHook,
-  poppler,
   zlib,
   pkg-config,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "texstudio";
-  version = "4.8.5";
+  version = "4.8.6";
 
   src = fetchFromGitHub {
     owner = "texstudio-org";
     repo = "texstudio";
     rev = finalAttrs.version;
-    hash = "sha256-/sxXtapR55+/pTljFl03DYlJa7dMZVNlPji4/a06yZI=";
+    hash = "sha256-PvxzG4VPhCmwc/Kh5g85fV/Mc7ih08pt/zUNBgldZiI=";
   };
 
   nativeBuildInputs = [
     cmake
-    wrapQtAppsHook
+    qt6.wrapQtAppsHook
     pkg-config
   ];
   buildInputs =
     [
       hunspell
-      poppler
-      qt5compat
-      qtbase
-      qtsvg
-      qttools
-      quazip
+      qt6.qt5compat
+      qt6.qtbase
+      qt6.qtsvg
+      qt6.qttools
+      qt6Packages.poppler
+      qt6Packages.quazip
       zlib
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
-      qtwayland
+      qt6.qtwayland
     ];
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
