@@ -85,7 +85,8 @@ stdenv.mkDerivation {
 
         # Positron will use the system version of BLAS if we don't provide the nix version.
         wrapProgram "$out/Applications/Positron.app/Contents/Resources/app/bin/code" \
-          --prefix DYLD_INSERT_LIBRARIES : "${lib.makeLibraryPath [ blas ]}/libblas.dylib"
+          --prefix DYLD_INSERT_LIBRARIES : "${lib.makeLibraryPath [ blas ]}/libblas.dylib" \
+          --add-flags "--disable-updates"
 
         ln -s "$out/Applications/Positron.app/Contents/Resources/app/bin/code" "$out/bin/positron"
         runHook postInstall
@@ -112,7 +113,9 @@ stdenv.mkDerivation {
 
         # Fix libGL.so not found errors.
         wrapProgram "$out/share/positron/positron" \
-          --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libglvnd ]}"
+          --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libglvnd ]}" \
+          --add-flags "--disable-updates"
+
 
         mkdir -p "$out/bin"
         ln -s "$out/share/positron/positron" "$out/bin/positron"
