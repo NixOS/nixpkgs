@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "stclib";
     repo = "STC";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-vbFv1jPVeMQC58fVjoNlbB5w3EM/v4NGKqx0XvaJuns=";
   };
 
@@ -27,12 +27,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   installPhase =
     let
-      pc = rec {
-        name = "${finalAttrs.pname}.pc";
+      pc = {
+        name = "stc.pc";
         file = writeText name ''
           includedir=@PREFIX@/include
 
-          Name: ${finalAttrs.pname}
+          Name: stc
           Description: Smart Template Containers
           URL: https://github.com/stclib/STC
           Version: ${finalAttrs.version}
