@@ -24,7 +24,7 @@ let
         exec ${upgradeDesyncsPkg}/bin/nixos-upgrade-desyncs
       ''}
     '';
-  desyncFile = c: "/var/lib/nixos/desyncs/${lib.strings.escapeShellArg c}.nix";
+  desyncFile = desyncId: "/var/lib/nixos/desyncs/${lib.strings.escapeShellArg desyncId}.nix";
   upgradeDesyncsPkg = pkgs.writeScriptBin "nixos-upgrade-desyncs" ''
     #!/bin/sh
     set -euo pipefail
@@ -34,9 +34,9 @@ let
     # Generate the new files
 
     ${lib.concatMapStrings (
-      c:
+      desyncId:
       let
-        file = desyncFile c;
+        file = desyncFile desyncId;
       in
       ''
 
@@ -48,13 +48,13 @@ let
         ${pkgs.nix}/bin/nix-build \
           -E '(import <nixpkgs/nixos> {})
           .config.system.autoUpgrade.desync
-          .'${lib.strings.escapeShellArg (lib.strings.escapeNixString c)}'.desyncUpgradeScript' \
+          .'${lib.strings.escapeShellArg (lib.strings.escapeNixString desyncId)}'.desyncUpgradeScript' \
           --out-link ${file} \
           || \
         ${pkgs.nix}/bin/nix-build \
           -E '(import <nixpkgs/nixos> {})
           .config.system.autoUpgrade.desync
-          .'${lib.strings.escapeShellArg (lib.strings.escapeNixString c)}'.upgradeFailedScript' \
+          .'${lib.strings.escapeShellArg (lib.strings.escapeNixString desyncId)}'.upgradeFailedScript' \
           --out-link ${file}
       ''
     ) (lib.attrNames cfg.desync)}
@@ -67,14 +67,19 @@ let
     fi
 
     # Either clean up the .old files, or recover from them
+    if [ "$build_succeeded" != "true" ]; then
+      cleanup() {
+        mv "$1.old" "$1"
+      }
+    else
+      cleanup() {
+        rm -f "$1.old"
+      }
+    fi
 
-    ${lib.concatMapStrings (file: ''
-      if [ "$build_succeeded" != "true" ]; then
-        mv ${file}.old ${file}
-      else
-        rm -f ${file}.old
-      fi
-    '') (map desyncFile (lib.attrNames cfg.desync))}
+    ${lib.concatMapStringsSep "\n"
+      (file: "cleanup ${desyncFile file}")
+      (lib.attrNames cfg.desync)}
   '';
 in
 {
@@ -300,7 +305,7 @@ in
               # Options for the end-user for configuring
               options.defaultPath = lib.mkOption {
                 default = modulesPath + "/../..";
-                defaultText = "<Path of the nixpkgs evaluation the auto-upgrade module is part of>";
+                defaultText = lib.literalMD "Path of the nixpkgs evaluation the auto-upgrade module is part of";
                 description = "Default path to use for the nixpkgs";
                 type = lib.types.path;
               };
@@ -308,15 +313,7 @@ in
               options.overlays = lib.mkOption {
                 default = [ ];
                 description = "Overlays to add to the nixpkgs evaluation for this desync";
-                # TODO: when upstreaming, factor out with the `overlayType` in nixos/modules/misc/nixpkgs.nix by putting it in lib/types.nix
-                type = lib.types.listOf (
-                  lib.mkOptionType {
-                    name = "nixpkgs-overlay";
-                    description = "nixpkgs overlay";
-                    check = lib.isFunction;
-                    merge = lib.mergeOneOption;
-                  }
-                );
+                type = lib.types.listOf lib.types.overlayType;
               };
 
               options.pkgsFor = lib.mkOption {
@@ -326,7 +323,7 @@ in
                     inherit (nixpkgs-cfg) config localSystem crossSystem;
                     overlays = config.overlays;
                   };
-                defaultText = ''
+                defaultText = lib.literalExpression ''
                   # Reuse the top-level nixpkgs configuration, except for overlays that would cause
                   # an infinite loop if a package from a desync were to be used in an overlay.
                   path: import path {
@@ -347,7 +344,7 @@ in
               };
 
               options.requireBuilds = lib.mkOption {
-                example = "pkgs: with pkgs; [ home-assistant matrix-synapse ]";
+                example = lib.literalExpression "pkgs: with pkgs; [ home-assistant matrix-synapse ]";
                 description = ''
                   The builds that must pass to consider this version of nixpkgs a working version.
 
@@ -367,7 +364,7 @@ in
                   This defaults to `14` in order to avoid packages silently becoming infinitely old with
                   this module simply enabled.
                 '';
-                type = lib.types.nullOr lib.types.int;
+                type = lib.types.nullOr lib.types.ints.positive;
               };
 
               # Read-only options, defined here and for consumption by the end-user
@@ -376,7 +373,7 @@ in
                 description = ''
                   The age (in number of rebuilds) of this nixpkgs version.
                 '';
-                type = lib.types.int;
+                type = lib.types.ints.unsigned;
               };
 
               options.path = lib.mkOption {
@@ -402,18 +399,24 @@ in
 
               # Internal options and configuration, to make this work
               options.desyncUpgradeScript = lib.mkOption {
-                # Derivation called to upgrade the desync files.
-                # `$out` will be symlinked from `/var/lib/nixos/desyncs/${name}.nix by the `upgradeScript`
                 readOnly = true;
+                internal = true;
                 visible = false;
+                description = ''
+                  Derivation called to upgrade the desync files.
+                  `$out` will be symlinked from `/var/lib/nixos/desyncs/${name}.nix by the `upgradeScript`
+                '';
                 type = lib.types.package;
               };
 
               options.upgradeFailedScript = lib.mkOption {
-                # Derivation called when the latest upgrade failed.
-                # `$out` will be symlinked from `/var/lib/nixos/desyncs/${name}.nix by the `upgradeScript`
                 readOnly = true;
+                internal = true;
                 visible = false;
+                description = ''
+                  Derivation called when the latest upgrade failed.
+                  `$out` will be symlinked from `/var/lib/nixos/desyncs/${name}.nix by the `upgradeScript`
+                '';
                 type = lib.types.package;
               };
 
@@ -433,8 +436,7 @@ in
                       };
                 in
                 {
-                  desyncAge = desync.desyncAge;
-                  path = desync.path;
+                  inherit (desync) desyncAge path;
                   pkgs = config.pkgsFor desync.path;
 
                   desyncUpgradeScript = pkgs.runCommand "nixos-desync-${name}" { } ''
@@ -461,7 +463,7 @@ in
                     set -euo pipefail
 
                     ${lib.optionalString (config.desyncAge >= config.maxDesyncAge) ''
-                      echo "Did not get any successful build for ${name} in the past ${config.desyncAge} rebuilds!" >&2
+                      echo "Did not get any successful build for ${name} in the past ${toString config.desyncAge} rebuilds!" >&2
                       exit 1
                     ''}
 

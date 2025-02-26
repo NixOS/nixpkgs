@@ -882,6 +882,13 @@ rec {
       nestedTypes.elemType = elemType;
     };
 
+    overlayType = lib.mkOptionType {
+      name = "nixpkgs-overlay";
+      description = "nixpkgs overlay";
+      check = lib.isFunction;
+      merge = lib.mergeOneOption;
+    };
+
     # A submodule (like typed attribute set). See NixOS manual.
     submodule = modules: submoduleWith {
       shorthandOnlyDefinesConfig = true;
