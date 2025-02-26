@@ -121,10 +121,13 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.7";
 
-  outputs = [
-    "out"
-    "doc"
-  ];
+  outputs =
+    [
+      "out"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform) [
+      "doc"
+    ];
 
   sphinxRoot = "../docs";
 
@@ -141,13 +144,18 @@ buildPythonPackage rec {
     cd psycopg
   '';
 
-  nativeBuildInputs = [
-    furo
-    setuptools
-    shapely
-    sphinx-autodoc-typehints
-    sphinxHook
-  ];
+  nativeBuildInputs =
+    [
+      furo
+      setuptools
+      shapely
+    ]
+    # building the docs fails with the following error when cross compiling
+    #  AttributeError: module 'psycopg_c.pq' has no attribute '__impl__'
+    ++ lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform) [
+      sphinx-autodoc-typehints
+      sphinxHook
+    ];
 
   propagatedBuildInputs = [
     psycopg-c
