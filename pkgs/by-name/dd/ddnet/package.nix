@@ -116,7 +116,7 @@ stdenv.mkDerivation rec {
     install_name_tool -change "$out/lib/libsteam_api.dylib" "$out/lib/ddnet/libsteam_api.dylib" "$out/bin/DDNet"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Teeworlds modification with a unique cooperative gameplay";
     longDescription = ''
       DDraceNetwork (DDNet) is an actively maintained version of DDRace,
@@ -126,8 +126,12 @@ stdenv.mkDerivation rec {
       design your own maps, or run your own server.
     '';
     homepage = "https://ddnet.org";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = with lib.licenses; [
+      zlib
+      ofl
+      cc-by-sa-30
+    ];
+    maintainers = with lib.maintainers; [
       lom
       ncfavier
       Scrumplex
