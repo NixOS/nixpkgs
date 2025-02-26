@@ -97,6 +97,9 @@ let
   };
 
   recommendedProxyConfig = pkgs.writeText "nginx-recommended-proxy-headers.conf" ''
+    # don't let clients close the keep-alive connection to upstream. See the nginx blog for details:
+    # https://www.nginx.com/blog/avoiding-top-10-nginx-configuration-mistakes/#no-keepalives
+    proxy_set_header        Connection "";
     proxy_set_header        Host $host;
     proxy_set_header        X-Real-IP $remote_addr;
     proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -234,9 +237,6 @@ let
         proxy_send_timeout      ${cfg.proxyTimeout};
         proxy_read_timeout      ${cfg.proxyTimeout};
         proxy_http_version      1.1;
-        # don't let clients close the keep-alive connection to upstream. See the nginx blog for details:
-        # https://www.nginx.com/blog/avoiding-top-10-nginx-configuration-mistakes/#no-keepalives
-        proxy_set_header        "Connection" "";
         include ${recommendedProxyConfig};
       ''}
 
