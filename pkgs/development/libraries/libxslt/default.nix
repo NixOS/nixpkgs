@@ -32,6 +32,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     pkg-config
     autoreconfHook
+  ] ++ lib.optionals cryptoSupport [
+    libgcrypt
   ];
 
   buildInputs = [
@@ -42,8 +44,6 @@ stdenv.mkDerivation (finalAttrs: {
     libxml2.py
     python
     ncurses
-  ] ++ lib.optionals cryptoSupport [
-    libgcrypt
   ];
 
   propagatedBuildInputs = [
@@ -58,6 +58,10 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.optionalString pythonSupport "PYTHON=${python.pythonOnBuildForHost.interpreter}")
   ] ++ lib.optionals (!cryptoSupport) [
     "--without-crypto"
+  ] ++ lib.optionals cryptoSupport [
+    # not ideal to use -config scripts but it's not possible switch it to pkg-config
+    # binaries in dev have a for build shebang
+    "LIBGCRYPT_CONFIG=${lib.getExe' (lib.getDev libgcrypt) "libgcrypt-config"}"
   ];
 
   enableParallelBuilding = true;
