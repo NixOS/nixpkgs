@@ -30,7 +30,7 @@
 }:
 
 let
-  openrct2-version = "0.4.19.1";
+  openrct2-version = "0.4.20";
 
   # Those versions MUST match the pinned versions within the CMakeLists.txt
   # file. The REPLAYS repository from the CMakeLists.txt is not necessary.
@@ -43,7 +43,7 @@ let
     owner = "OpenRCT2";
     repo = "OpenRCT2";
     rev = "v${openrct2-version}";
-    hash = "sha256-sg09JmoWF9utPG7PakKpgLgX64FAc2x8ILX3lVHkRi0=";
+    hash = "sha256-G/uD3t8m7C74pjSA6dbz4gzu9CwEpmyFwtYpoFIiRjM=";
   };
 
   objects-src = fetchFromGitHub {
