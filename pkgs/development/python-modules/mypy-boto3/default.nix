@@ -622,8 +622,8 @@ rec {
       "sha256-CzJQ+aqu8YRRuywzXXkf9yUuqbfvabjbV76vmBwvndc=";
 
   mypy-boto3-inspector =
-    buildMypyBoto3Package "inspector" "1.36.0"
-      "sha256-FH0ZCCvDp2nb0HQ+2JiiurdsHR5Xc2sY9q+w8/U+kDc=";
+    buildMypyBoto3Package "inspector" "1.37.0"
+      "sha256-RgmXpEJXEw/FOdxuiSs09BAhsgb4WBJj6/icuM7uCrI=";
 
   mypy-boto3-inspector2 =
     buildMypyBoto3Package "inspector2" "1.36.0"
