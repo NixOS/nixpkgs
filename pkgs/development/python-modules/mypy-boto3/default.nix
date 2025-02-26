@@ -874,8 +874,8 @@ rec {
       "sha256-tT+F001HVeqcZFaj7BEZw+NIZwekMRrNPo5oNR2OUhI=";
 
   mypy-boto3-mediapackage-vod =
-    buildMypyBoto3Package "mediapackage-vod" "1.36.0"
-      "sha256-2s23evnXhLsv5FxFAD/4tdZeQCaWIYBX9Dr8Dq7k2tY=";
+    buildMypyBoto3Package "mediapackage-vod" "1.37.0"
+      "sha256-c5KHSqJapAh71+VG8ZVltRXozAF4muW/p6d0g5EH7IQ=";
 
   mypy-boto3-mediapackagev2 =
     buildMypyBoto3Package "mediapackagev2" "1.36.0"
