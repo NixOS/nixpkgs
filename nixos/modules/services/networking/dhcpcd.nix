@@ -69,7 +69,7 @@ let
     hostname
 
     # A list of options to request from the DHCP server.
-    option domain_name_servers, domain_name, domain_search, host_name
+    option domain_name_servers, domain_name, domain_search
     option classless_static_routes, ntp_servers, interface_mtu
 
     # A ServerID is required by RFC2131.
@@ -112,6 +112,7 @@ let
     ${lib.optionalString (config.networking.enableIPv6 && cfg.IPv6rs == false) ''
       noipv6rs
     ''}
+    ${lib.optionalString cfg.setHostname "option host_name"}
 
     ${cfg.extraConfig}
   '';
@@ -137,11 +138,27 @@ in
       type = lib.types.bool;
       default = false;
       description = ''
-        Whenever to leave interfaces configured on dhcpcd daemon
+        Whether to leave interfaces configured on dhcpcd daemon
         shutdown. Set to true if you have your root or store mounted
         over the network or this machine accepts SSH connections
         through DHCP interfaces and clients should be notified when
         it shuts down.
+      '';
+    };
+
+    networking.dhcpcd.setHostname = lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+      description = ''
+        Whether to set the machine hostname based on the information
+        received from the DHCP server.
+
+        ::: {.note}
+        The hostname will be changed only if the current one is
+        the empty string, `localhost` or `nixos`.
+
+        Polkit ([](#opt-security.polkit.enable)) is also required.
+        :::
       '';
     };
 
@@ -263,11 +280,15 @@ in
         # dhcpcd.  So do a "systemctl restart" instead.
         stopIfChanged = false;
 
-        path = [
-          dhcpcd
-          pkgs.nettools
-          config.networking.resolvconf.package
-        ];
+        path =
+          [
+            dhcpcd
+            config.networking.resolvconf.package
+          ] ++ lib.optional cfg.setHostname (
+            pkgs.writeShellScriptBin "hostname" ''
+              ${lib.getExe' pkgs.systemd "hostnamectl"} set-hostname --transient $1
+            ''
+          );
 
         unitConfig.ConditionCapability = "CAP_NET_ADMIN";
 
@@ -371,17 +392,27 @@ in
       /run/current-system/systemd/bin/systemctl reload dhcpcd.service
     '';
 
-    security.polkit.extraConfig = lib.mkIf config.services.resolved.enable ''
-      polkit.addRule(function(action, subject) {
-          if (action.id == 'org.freedesktop.resolve1.revert' ||
-              action.id == 'org.freedesktop.resolve1.set-dns-servers' ||
-              action.id == 'org.freedesktop.resolve1.set-domains') {
-              if (subject.user == '${config.systemd.services.dhcpcd.serviceConfig.User}') {
-                  return polkit.Result.YES;
-              }
-          }
-      });
-    '';
+    security.polkit.extraConfig = lib.mkMerge [
+      (lib.mkIf config.services.resolved.enable ''
+        polkit.addRule(function(action, subject) {
+            if (action.id == 'org.freedesktop.resolve1.revert' ||
+                action.id == 'org.freedesktop.resolve1.set-dns-servers' ||
+                action.id == 'org.freedesktop.resolve1.set-domains') {
+                if (subject.user == 'dhcpcd') {
+                    return polkit.Result.YES;
+                }
+            }
+        });
+      '')
+      (lib.mkIf cfg.setHostname ''
+        polkit.addRule(function(action, subject) {
+            if (action.id == 'org.freedesktop.hostname1.set-hostname' &&
+                subject.user == 'dhcpcd') {
+                return polkit.Result.YES;
+            }
+        });
+      '')
+    ];
 
   };
 
