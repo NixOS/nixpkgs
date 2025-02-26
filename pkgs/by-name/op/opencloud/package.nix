@@ -27,6 +27,7 @@ let
   );
 
   web = callPackage ./web.nix { };
+  idp-web = callPackage ./idp-web.nix { };
 
   version = "1.1.0";
 in
@@ -99,7 +100,7 @@ buildGoModule {
   excludedPackages = [ "tests/*" ];
 
   passthru = {
-    inherit web;
+    inherit web idp-web;
     tests = { inherit (nixosTests) opencloud; };
     updateScript = nix-update-script { };
   };
