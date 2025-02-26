@@ -112,7 +112,7 @@ buildPythonPackage rec {
 
   disabledTestPaths =
     [
-      # Varius integration tests fail every once in a while when we
+      # Various integration tests fail every once in a while when we
       # upgrade dependencies, so don't bother testing them.
       "tests/integrations/"
     ]

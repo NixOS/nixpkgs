@@ -8,17 +8,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rippkgs";
-  version = "1.1.2";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "replit";
     repo = "rippkgs";
     tag = "v${version}";
-    hash = "sha256-CQGmTXzAj3wA7UTwdeL7gujbT4duS8QE5yZzGKwvzog=";
+    hash = "sha256-nRaGbJg1zCHTL8y/Tk5dM1dSu2v06ECsZYyMPIQTlvg=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-RW7FBg5aLaNVFDEM4IvpS5gnb2luqWH2ya/7gKKOp4A=";
+  cargoHash = "sha256-bSgQ/dmOffWOYpgeNn0vTdzrM/aFkD3znN9c1u/sjQ0=";
 
   nativeBuildInputs = [
     pkg-config

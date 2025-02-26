@@ -65,7 +65,7 @@
   libbacktrace,
   systemd,
   xdg-dbus-proxy,
-  substituteAll,
+  replaceVars,
   glib,
   unifdef,
   addDriverRunpath,
@@ -103,8 +103,7 @@ clangStdenv.mkDerivation (finalAttrs: {
   };
 
   patches = lib.optionals clangStdenv.hostPlatform.isLinux [
-    (substituteAll {
-      src = ./fix-bubblewrap-paths.patch;
+    (replaceVars ./fix-bubblewrap-paths.patch {
       inherit (builtins) storeDir;
       inherit (addDriverRunpath) driverLink;
     })

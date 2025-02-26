@@ -166,6 +166,7 @@ let
         alderlake      = versionAtLeast ccVersion "12.0";
         sapphirerapids = versionAtLeast ccVersion "11.0";
         emeraldrapids  = versionAtLeast ccVersion "13.0";
+        sierraforest   = versionAtLeast ccVersion "13.0";
 
         # AMD
         znver1         = true;
@@ -257,7 +258,7 @@ let
 
   machineFlags =
     # Always add -march based on cpu in triple. Sometimes there is a
-    # discrepency (x86_64 vs. x86-64), so we provide an "arch" arg in
+    # discrepancy (x86_64 vs. x86-64), so we provide an "arch" arg in
     # that case.
     optional (targetPlatform ? gcc.arch && !(targetPlatform.isDarwin && targetPlatform.isAarch64) && isGccArchSupported targetPlatform.gcc.arch) "-march=${targetPlatform.gcc.arch}" ++
     # TODO: aarch64-darwin has mcpu incompatible with gcc

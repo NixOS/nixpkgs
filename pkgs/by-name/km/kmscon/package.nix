@@ -5,7 +5,7 @@
   fetchpatch,
   meson,
   libtsm,
-  systemd,
+  systemdLibs,
   libxkbcommon,
   libdrm,
   libGLU,
@@ -17,18 +17,18 @@
   libxslt,
   libgbm,
   ninja,
+  check,
   buildPackages,
 }:
-
 stdenv.mkDerivation rec {
   pname = "kmscon";
-  version = "9.0.0";
+  version = "9.0.0-unstable-2025-01-09";
 
   src = fetchFromGitHub {
     owner = "Aetf";
     repo = "kmscon";
-    rev = "v${version}";
-    sha256 = "sha256-8owyyzCrZVbWXcCR+RA+m0MOrdzW+efI+rIMWEVEZ1o=";
+    rev = "a81941f4464e6f9cee75bfb8a1db88c253ede33d";
+    sha256 = "sha256-l7Prt7CsYi4VCnp9xktvqqNT+4djSdO2GvP1JdxhNSI=";
   };
 
   strictDeps = true;
@@ -45,8 +45,9 @@ stdenv.mkDerivation rec {
     libxkbcommon
     pango
     pixman
-    systemd
+    systemdLibs
     libgbm
+    check
   ];
 
   nativeBuildInputs = [
@@ -57,33 +58,15 @@ stdenv.mkDerivation rec {
     libxslt # xsltproc
   ];
 
-  # Remove the patches attrlist once the package is bumped to something newer than both of these patches
-  patches = [
-    (fetchpatch {
-      name = "0001-tests-fix-warnings.patch";
-      url = "https://github.com/Aetf/kmscon/commit/b65f4269b03de580923ab390bde795e7956b633f.patch";
-      sha256 = "sha256-ngflPwmNMM/2JzhV+hHiH3efQyoSULfqEywzWox9iAQ=";
-    })
-    (fetchpatch {
-      # https://github.com/Aetf/kmscon/pull/96
-      name = "0002-runtime-fix-logout.patch";
-      url = "https://github.com/Aetf/kmscon/commit/a81941f4464e6f9cee75bfb8a1db88c253ede33d.patch";
-      sha256 = "sha256-geWu8MVsHKs8VHauh5Tf9eWJrdA5+0bPFAQ32T6Xsqg=";
-    })
-  ];
-
-  # _FORTIFY_SOURCE requires compiling with optimization (-O)
   env.NIX_CFLAGS_COMPILE =
-    lib.optionalString stdenv.cc.isGNU "-O" + " -Wno-error=maybe-uninitialized"; # https://github.com/Aetf/kmscon/issues/49
-
-  configureFlags = [
-    "--enable-multi-seat"
-    "--disable-debug"
-    "--enable-optimizations"
-    "--with-renderers=bbulk,gltex,pixman"
-  ];
+    lib.optionalString stdenv.cc.isGNU "-O "
+    + "-Wno-error=maybe-uninitialized -Wno-error=unused-result -Wno-error=implicit-function-declaration";
 
   enableParallelBuilding = true;
+
+  patches = [
+    ./sandbox.patch # Generate system units where they should be (nix store) instead of /etc/systemd/system
+  ];
 
   meta = with lib; {
     description = "KMS/DRM based System Console";

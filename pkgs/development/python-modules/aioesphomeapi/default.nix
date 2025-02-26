@@ -26,7 +26,7 @@
 
 buildPythonPackage rec {
   pname = "aioesphomeapi";
-  version = "29.1.0";
+  version = "29.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -35,7 +35,7 @@ buildPythonPackage rec {
     owner = "esphome";
     repo = "aioesphomeapi";
     tag = "v${version}";
-    hash = "sha256-/4/FNb6lGlitsAzO0OadWqP02Wx+mnlrA6yzXFm72sg=";
+    hash = "sha256-NK83VZBBMLBkQOb7Z4yVL6GImdNspgF9YIAy8HlktrA=";
   };
 
   build-system = [
@@ -61,15 +61,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTests = [
-    # https://github.com/esphome/aioesphomeapi/pull/1081
-    "test_request_while_handshaking"
-  ];
-
   disabledTestPaths = [
     # benchmarking requires pytest-codespeed
     "tests/benchmarks"
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [ "aioesphomeapi" ];
 

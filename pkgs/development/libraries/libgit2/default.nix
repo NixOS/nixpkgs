@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-DBUILD_SHARED_LIBS=${if staticBuild then "OFF" else "ON"}"
   ] ++ lib.optionals stdenv.hostPlatform.isWindows [
     "-DDLLTOOL=${stdenv.cc.bintools.targetPrefix}dlltool"
-    # For ws2_32, refered to by a `*.pc` file
+    # For ws2_32, referred to by a `*.pc` file
     "-DCMAKE_LIBRARY_PATH=${stdenv.cc.libc}/lib"
   ] ++ lib.optionals stdenv.hostPlatform.isOpenBSD [
     # openbsd headers fail with default c90

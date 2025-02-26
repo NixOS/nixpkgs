@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
 
   # Wrap with RASPA_DIR
   # so that users can run $out/bin/simulate directly
-  # without the need of a `run` srcipt.
+  # without the need of a `run` script.
   postInstall = ''
     wrapProgram "$out/bin/simulate" \
       --set RASPA_DIR "$out"

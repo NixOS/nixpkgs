@@ -59,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # Don't use native macOS frameworks
       # Caution: do not set this as (!stdenv.hostPlatform.isDarwin) since it would be true
-      # outside Darwin - and ImageIO does not exist outisde Darwin
+      # outside Darwin - and ImageIO does not exist outside Darwin
       (lib.enableFeature false "imageio")
     ];
 

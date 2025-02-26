@@ -1253,8 +1253,8 @@ let
         mktplcRef = {
           name = "databricks";
           publisher = "databricks";
-          version = "2.3.1";
-          hash = "sha256-Qa839ygG8Z3aD/ZSshe2hg0ee3ZFU8xRrJ5E0cUjfCU=";
+          version = "2.6.0";
+          hash = "sha256-nPDElLHZUeGNqE3QcO5GIj6AN1rNPk3RYQjFCUSuCdM=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/databricks.databricks/changelog";
@@ -2101,8 +2101,8 @@ let
         mktplcRef = {
           publisher = "github";
           name = "codespaces";
-          version = "1.16.9";
-          hash = "sha256-Zj1dHz8uBHnRpjnD9tUr8OJILRq9Ty91ePiNq6/Vi7c=";
+          version = "1.17.3";
+          hash = "sha256-idJFYHJ4yeqpFZBX55Y0v1yfzgqyhS0MrC4yIto7i7w=";
         };
 
         meta = {
@@ -2110,6 +2110,7 @@ let
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=GitHub.codespaces";
           homepage = "https://github.com/features/codespaces";
           license = lib.licenses.unfree;
+          maintainers = [ lib.maintainers.therobot2105 ];
         };
       };
 
@@ -2118,8 +2119,8 @@ let
           publisher = "github";
           name = "copilot";
           # Verify which version is available with nix run nixpkgs#vsce -- show github.copilot --json
-          version = "1.266.1363"; # compatible with vscode ^1.96
-          hash = "sha256-paT/fZMIjSh7Bp4bBg4ZT/c1wVc0ecQLJxulSQZjRdg=";
+          version = "1.275.0"; # compatible with vscode ^1.97
+          hash = "sha256-pxH8hHRN36/ggqfMWOUYxANrblJ6S5GfslN15ZttumQ=";
         };
 
         meta = {
@@ -2136,8 +2137,8 @@ let
           publisher = "github";
           name = "copilot-chat";
           # Verify which version is available with nix run nixpkgs#vsce -- show github.copilot-chat --json
-          version = "0.24.2025020602"; # latest compatible with vscode ^1.97
-          hash = "sha256-smeBJ+yEIdbBs1eiKlPFCpYrb/nAkpnGlT9pTNnCnBI=";
+          version = "0.24.2025021302"; # latest compatible with vscode ^1.97
+          hash = "sha256-+lb+fo5PvEvWrQlyMi72SJ8bVwd8zTU2tDK+jJJSkPA=";
         };
         meta = {
           description = "GitHub Copilot Chat is a companion extension to GitHub Copilot that houses experimental chat features";

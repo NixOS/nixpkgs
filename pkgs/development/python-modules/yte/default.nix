@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "yte";
-  version = "1.5.7";
+  version = "1.7.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "koesterlab";
     repo = "yte";
     tag = "v${version}";
-    hash = "sha256-mcg002lMUjrU/AAhioSBiB+vBIU9fAUBIKLoLS/9OVI=";
+    hash = "sha256-W9t2BlBp947Rwnq+IKbL5aJqauZmYQOzuBIstw6hHQY=";
   };
 
   build-system = [ poetry-core ];
@@ -50,7 +50,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "YAML template engine with Python expressions";
     homepage = "https://github.com/koesterlab/yte";
-    changelog = "https://github.com/yte-template-engine/yte/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/yte-template-engine/yte/blob/${src.tag}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
     mainProgram = "yte";

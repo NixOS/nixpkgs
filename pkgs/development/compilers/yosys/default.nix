@@ -41,7 +41,7 @@
 
 let
 
-  # Provides a wrapper for creating a yosys with the specifed plugins preloaded
+  # Provides a wrapper for creating a yosys with the specified plugins preloaded
   #
   # Example:
   #

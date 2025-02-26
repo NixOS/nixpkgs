@@ -20,7 +20,6 @@
   makeWrapper,
   pango,
   pipewire,
-  pulseaudio,
   vulkan-loader,
   wrapGAppsHook3,
   xcb-imdkit,
@@ -31,12 +30,12 @@
 
 stdenv.mkDerivation rec {
   pname = "bitwig-studio-unwrapped";
-  version = "5.2.7";
+  version = "5.3.1";
 
   src = fetchurl {
     name = "bitwig-studio-${version}.deb";
     url = "https://www.bitwig.com/dl/Bitwig%20Studio/${version}/installer_linux/";
-    hash = "sha256-Tyi7qYhTQ5i6fRHhrmz4yHXSdicd4P4iuF9FRKRhkMI=";
+    hash = "sha256-mxodFCu4SDzofnoZZZ7TPDUIrRc3UJt8TuEBwDOo2wQ=";
   };
 
   nativeBuildInputs = [
@@ -48,7 +47,7 @@ stdenv.mkDerivation rec {
   dontBuild = true;
   dontWrapGApps = true; # we only want $gappsWrapperArgs here
 
-  buildInputs = with xorg; [
+  buildInputs = [
     alsa-lib
     atk
     cairo
@@ -62,19 +61,18 @@ stdenv.mkDerivation rec {
     # libjpeg8 is required for converting jpeg's to colour palettes
     libjpeg
     libnghttp2
-    libxcb
-    libXcursor
-    libX11
-    libXtst
+    xorg.libxcb
+    xorg.libXcursor
+    xorg.libX11
+    xorg.libXtst
     libxkbcommon
     pango
     pipewire
-    pulseaudio
     (lib.getLib stdenv.cc.cc)
     vulkan-loader
     xcb-imdkit
-    xcbutil
-    xcbutilwm
+    xorg.xcbutil
+    xorg.xcbutilwm
     zlib
   ];
 
@@ -123,7 +121,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Digital audio workstation";
     longDescription = ''
       Bitwig Studio is a multi-platform music-creation system for
@@ -131,9 +129,9 @@ stdenv.mkDerivation rec {
       editing tools and a super-fast workflow.
     '';
     homepage = "https://www.bitwig.com/";
-    license = licenses.unfree;
+    license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       bfortz
       michalrus
       mrVanDalo

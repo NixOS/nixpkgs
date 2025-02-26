@@ -1,6 +1,6 @@
 {
   lib,
-  substituteAll,
+  replaceVars,
   mkDerivation,
   fetchFromGitHub,
   gitUpdater,
@@ -22,8 +22,7 @@ mkDerivation rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./0001-NixOS-provide-mobile-broadband-provider-info-path.patch;
+    (replaceVars ./0001-NixOS-provide-mobile-broadband-provider-info-path.patch {
       mobileBroadbandProviderInfo = mobile-broadband-provider-info;
     })
     ./0001-NixOS-Skip-tests-they-re-shock-full-of-hardcoded-FHS.patch

@@ -113,7 +113,7 @@ buildPythonPackage rec {
     # playwright._impl._errors.TimeoutError: Locator.click: Timeout 30000ms exceeded
     "test_sidebar_hide"
     "test_show_search_bar"
-    # Unable to lauch browser
+    # Unable to launch browser
     "test_document_viewer"
   ];
 

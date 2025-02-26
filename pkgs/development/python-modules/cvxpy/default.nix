@@ -25,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "cvxpy";
-  version = "1.6.0";
+  version = "1.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cvxpy";
     repo = "cvxpy";
     tag = "v${version}";
-    hash = "sha256-t2+j0ZrvGvTv6FoNVpD2MVFZKfGgqTaN32OKwBXM3Zw=";
+    hash = "sha256-r354ShPTMsnCCCTKYH+IbDWIlbPAhg1PqQTWG/sEzWE=";
   };
 
   # we need to patch out numpy version caps from upstream
@@ -88,7 +88,7 @@ buildPythonPackage rec {
     description = "Domain-specific language for modeling convex optimization problems in Python";
     homepage = "https://www.cvxpy.org/";
     downloadPage = "https://github.com/cvxpy/cvxpy//releases";
-    changelog = "https://github.com/cvxpy/cvxpy/releases/tag/${src.tag}";
+    changelog = "https://github.com/cvxpy/cvxpy/releases/tag/v${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ drewrisinger ];
   };

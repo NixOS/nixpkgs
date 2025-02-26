@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   setuptools,
   setuptools-scm,
 
@@ -52,6 +53,14 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-8bo2RHuIP7X7EaOlHd+2m4XU287owchAwiqPnpjKFjI=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "fix-narwhals-test.patch";
+      url = "https://github.com/posit-dev/py-shiny/commit/184a9ebd81ff730439513f343576a68f8c1f6eb9.patch";
+      hash = "sha256-DsGnuHQXODzGwpe8ZUHeXGzRFxxduwxCRk82RJaYZg0=";
+    })
+  ];
 
   build-system = [
     setuptools

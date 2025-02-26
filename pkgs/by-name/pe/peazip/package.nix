@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "peazip";
-  version = "10.2.0";
+  version = "10.3.0";
 
   src = fetchFromGitHub {
     owner = "peazip";
     repo = pname;
     rev = version;
-    hash = "sha256-TyfLqT9VNSViJOWwM3KgL2tvCZE14bLlT/6DgF9IAOE=";
+    hash = "sha256-rEddDg2sS/4+HK3UqPEWudWnwjMPNjA2+v4CKtFtZYM=";
   };
   sourceRoot = "${src.name}/peazip-sources";
 
@@ -84,7 +84,13 @@ stdenv.mkDerivation rec {
     ln -s $out/share/peazip $out/lib/peazip/res/share
     cp -r res/share/{icons,lang,themes,presets} $out/share/peazip/
     # Install desktop entries
+    # We don't copy res/share/batch/freedesktop_integration/additional-desktop-files/*.desktop because they are just duplicates of res/share/batch/freedesktop_integration/*.desktop
     install -D res/share/batch/freedesktop_integration/*.desktop -t $out/share/applications
+    install -D res/share/batch/freedesktop_integration/KDE-servicemenus/KDE6-dolphin/*.desktop -t $out/share/kio/servicemenus
+    install -D res/share/batch/freedesktop_integration/KDE-servicemenus/KDE5-dolphin/*.desktop -t $out/share/kservices5/ServiceMenus
+    install -D res/share/batch/freedesktop_integration/KDE-servicemenus/KDE4-dolphin/*.desktop -t $out/share/kde4/services/ServiceMenus
+    install -D res/share/batch/freedesktop_integration/KDE-servicemenus/KDE3-konqueror/*.desktop -t $out/share/apps/konqueror/servicemenus
+
     # Install desktop entries's icons
     mkdir -p $out/share/icons/hicolor/256x256/apps
     ln -s $out/share/peazip/icons/peazip.png -t $out/share/icons/hicolor/256x256/apps/

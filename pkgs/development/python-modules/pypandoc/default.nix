@@ -6,7 +6,7 @@
   pandocfilters,
   poetry-core,
   pythonOlder,
-  substituteAll,
+  replaceVars,
   texliveSmall,
 }:
 
@@ -25,8 +25,7 @@ buildPythonPackage rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./static-pandoc-path.patch;
+    (replaceVars ./static-pandoc-path.patch {
       pandoc = "${lib.getBin pandoc}/bin/pandoc";
       pandocVersion = pandoc.version;
     })

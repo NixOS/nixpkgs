@@ -18,7 +18,7 @@ To test the build process of every IDE (as well as the process for adding plugin
  - Run ./bin/update_bin.py, this will update binary IDEs and plugins, and automatically commit them
  - Source builds need a bit more effort, as they **aren't automated at the moment**:
    - Find the build of the stable release you want to target (usually different for pycharm and idea, should have three components)
-   - Build number is avaliable on JetBrains website:
+   - Build number is available on JetBrains website:
      - IDEA: https://www.jetbrains.com/idea/download/other.html
      - PyCharm: https://www.jetbrains.com/pycharm/download/other.html
    - Update the `version` & `buildNumber` fields in source/ides.json

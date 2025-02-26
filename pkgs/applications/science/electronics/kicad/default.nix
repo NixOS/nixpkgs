@@ -90,7 +90,7 @@ let
   versionsImport = import ./versions.nix;
 
   # versions.nix does not provide us with version, src and rev. We
-  # need to turn this into approprate fetcher calls.
+  # need to turn this into appropriate fetcher calls.
   kicadSrcFetch = fetchFromGitLab {
     group = "kicad";
     owner = "code";

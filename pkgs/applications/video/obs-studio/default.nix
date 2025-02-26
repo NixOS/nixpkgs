@@ -7,6 +7,8 @@
   nv-codec-headers-12,
   fetchFromGitHub,
   addDriverRunpath,
+  autoAddDriverRunpath,
+  cudaSupport ? config.cudaSupport,
   cmake,
   fdk_aac,
   ffmpeg,
@@ -62,8 +64,8 @@
 
 let
   inherit (lib) optional optionals;
-in
 
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "obs-studio";
   version = "31.0.1";
@@ -84,14 +86,17 @@ stdenv.mkDerivation (finalAttrs: {
     ./fix-nix-plugin-path.patch
   ];
 
-  nativeBuildInputs = [
-    addDriverRunpath
-    cmake
-    ninja
-    pkg-config
-    wrapGAppsHook3
-    wrapQtAppsHook
-  ] ++ optional scriptingSupport swig;
+  nativeBuildInputs =
+    [
+      addDriverRunpath
+      cmake
+      ninja
+      pkg-config
+      wrapGAppsHook3
+      wrapQtAppsHook
+    ]
+    ++ optional scriptingSupport swig
+    ++ optional cudaSupport autoAddDriverRunpath;
 
   buildInputs =
     [
@@ -180,15 +185,11 @@ stdenv.mkDerivation (finalAttrs: {
   dontWrapGApps = true;
   preFixup =
     let
-      wrapperLibraries =
-        [
-          xorg.libX11
-          libvlc
-          libGL
-        ]
-        ++ optionals decklinkSupport [
-          blackmagic-desktop-video
-        ];
+      wrapperLibraries = [
+        xorg.libX11
+        libvlc
+        libGL
+      ] ++ optionals decklinkSupport [ blackmagic-desktop-video ];
     in
     ''
       qtWrapperArgs+=(

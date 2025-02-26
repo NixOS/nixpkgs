@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "tensordict";
-  version = "0.7.0";
+  version = "0.7.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "tensordict";
     tag = "v${version}";
-    hash = "sha256-KbCNBFewMx4kaWMoV+zREj6XTZiwmR4/I3zpf55wuOQ=";
+    hash = "sha256-tUm1uV9k/IDlR3y/e1aIlU1bjDeh2+zdJdxu8Z9x3es=";
   };
 
   build-system = [

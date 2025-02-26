@@ -3,7 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
   fontconfig,
   python,
 
@@ -44,8 +44,7 @@ buildPythonPackage rec {
 
   patches = [
     # Patch pygame's dependency resolution to let it find build inputs
-    (substituteAll {
-      src = ./fix-dependency-finding.patch;
+    (replaceVars ./fix-dependency-finding.patch {
       buildinputs_include = builtins.toJSON (
         builtins.concatMap (dep: [
           "${lib.getDev dep}/"

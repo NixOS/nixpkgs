@@ -383,6 +383,12 @@ let
 
     dot-merlin-reader = callPackage ../development/tools/ocaml/merlin/dot-merlin-reader.nix { };
 
+    dream = callPackage ../development/ocaml-modules/dream { };
+
+    dream-httpaf = callPackage ../development/ocaml-modules/dream/httpaf.nix { };
+
+    dream-pure = callPackage ../development/ocaml-modules/dream/pure.nix { };
+
     dscheck = callPackage ../development/ocaml-modules/dscheck { };
 
     dssi = callPackage ../development/ocaml-modules/dssi { };
@@ -978,9 +984,7 @@ let
     lambda-term = callPackage ../development/ocaml-modules/lambda-term { };
 
     lambdapi = callPackage ../development/ocaml-modules/lambdapi {
-      why3 = pkgs.why3.override { ocamlPackages = self;
-        version = "1.7.2"; coqPackages = pkgs.coqPackages_8_18;
-      };
+      why3 = pkgs.why3.override { ocamlPackages = self; };
     };
 
     lambdasoup = callPackage ../development/ocaml-modules/lambdasoup { };
@@ -1211,6 +1215,8 @@ let
     mirage-profile = callPackage ../development/ocaml-modules/mirage-profile { };
 
     mirage-protocols = callPackage ../development/ocaml-modules/mirage-protocols { };
+
+    mirage-ptime = callPackage ../development/ocaml-modules/mirage-ptime { };
 
     mirage-random = callPackage ../development/ocaml-modules/mirage-random { };
 
@@ -2007,6 +2013,8 @@ let
     ### W ###
 
     wasm = callPackage ../development/ocaml-modules/wasm { };
+
+    wasm_of_ocaml-compiler = callPackage ../development/tools/ocaml/js_of_ocaml/compiler-wasm.nix { };
 
     wayland = callPackage ../development/ocaml-modules/wayland { };
 

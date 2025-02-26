@@ -29,6 +29,7 @@
   transformers,
   xformers,
   xgrammar,
+  numba,
   fastapi,
   uvicorn,
   pydantic,
@@ -89,15 +90,16 @@ let
 
   vllm-flash-attn = stdenv.mkDerivation rec {
     pname = "vllm-flash-attn";
-    version = "2.6.2";
+    # https://github.com/vllm-project/flash-attention/blob/${src.rev}/vllm_flash_attn/__init__.py
+    version = "2.7.2.post1";
 
     # see CMakeLists.txt, grepping for GIT_TAG near vllm-flash-attn
     # https://github.com/vllm-project/vllm/blob/${version}/CMakeLists.txt
     src = fetchFromGitHub {
       owner = "vllm-project";
       repo = "flash-attention";
-      rev = "d4e09037abf588af1ec47d0e966b237ee376876c";
-      hash = "sha256-KFEsZlrwvCgvPzQ/pCLWcnbGq89mWE3yTDdtJSV9MII=";
+      rev = "720c94869cf2e0ff5a706e9c7f1dce0939686ade";
+      hash = "sha256-UXbBfzBCOBjRRAAOhIzt0E27VjC6xu4G1CkZfu9LKRs=";
     };
 
     dontConfigure = true;
@@ -195,7 +197,7 @@ in
 
 buildPythonPackage rec {
   pname = "vllm";
-  version = "0.7.2";
+  version = "0.7.3";
   pyproject = true;
 
   stdenv = if cudaSupport then cudaPackages.backendStdenv else args.stdenv;
@@ -204,7 +206,7 @@ buildPythonPackage rec {
     owner = "vllm-project";
     repo = pname;
     tag = "v${version}";
-    hash = "sha256-j59DpNuO5TgGD6UVGzueSTumd7mDMB4l1QytV3rFIJE=";
+    hash = "sha256-gudlikAjwZNkniKRPJYm7beoti8eHp5LaRV2/UNEibo=";
   };
 
   patches = [
@@ -322,6 +324,7 @@ buildPythonPackage rec {
       uvicorn
       xformers
       xgrammar
+      numba
     ]
     ++ uvicorn.optional-dependencies.standard
     ++ aioprometheus.optional-dependencies.starlette

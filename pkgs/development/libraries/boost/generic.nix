@@ -94,7 +94,7 @@ let
       (
         # The stacktrace from exception feature causes memory leaks when built
         # with libc++. For all other standard library implementations, i.e.
-        # libstdc++, we must aknowledge this or stacktrace refuses to compile.
+        # libstdc++, we must acknowledge this or stacktrace refuses to compile.
         # Issue upstream: https://github.com/boostorg/stacktrace/issues/163
         if (stdenv.cc.libcxx != null) then
           "boost.stacktrace.from_exception=off"
@@ -221,6 +221,15 @@ stdenv.mkDerivation {
         stripLen = 1;
         extraPrefix = "libs/python/";
         hash = "sha256-0IHK55JSujYcwEVOuLkwOa/iPEkdAKQlwVWR42p/X2U=";
+      })
+    ]
+    ++ lib.optional (lib.versionAtLeast version "1.87") [
+      # Fix operator<< for shared_ptr and intrusive_ptr
+      # https://github.com/boostorg/smart_ptr/issues/115
+      (fetchpatch {
+        url = "https://github.com/boostorg/smart_ptr/commit/e7433ba54596da97cb7859455cd37ca140305a9c.patch";
+        relative = "include";
+        hash = "sha256-9JvKQOAB19wQpWLNAhuB9eL8qKqXWTQHAJIXdLYMNG8=";
       })
     ];
 

@@ -33,7 +33,7 @@ buildPythonPackage rec {
   ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   disabledTests = [
-    # tests pip install, which unsuprisingly fails
+    # tests pip install, which unsurprisingly fails
     "test_hatch_build"
   ];
 

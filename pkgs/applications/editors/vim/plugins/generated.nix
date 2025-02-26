@@ -187,12 +187,12 @@ final: prev:
 
   LazyVim = buildVimPlugin {
     pname = "LazyVim";
-    version = "2025-02-15";
+    version = "2025-02-22";
     src = fetchFromGitHub {
       owner = "LazyVim";
       repo = "LazyVim";
-      rev = "401ef48fcd617534b017ef471309bb1bd6465131";
-      sha256 = "1056af0psn9pxm1q9fcfh8rnv66fapq6fbv7h88ppz8c88d5lr0d";
+      rev = "cb223553ff73eb2f37ffb5dc0bb75b76a4677faf";
+      sha256 = "0yc8xcgfjfg0j4jm0rkfpd9d0bg6n29vsm2g9fdmacbmhx79261l";
     };
     meta.homepage = "https://github.com/LazyVim/LazyVim/";
     meta.hydraPlatforms = [ ];
@@ -2827,6 +2827,19 @@ final: prev:
     meta.hydraPlatforms = [ ];
   };
 
+  colorful-menu-nvim = buildVimPlugin {
+    pname = "colorful-menu.nvim";
+    version = "2025-02-17";
+    src = fetchFromGitHub {
+      owner = "xzbdmw";
+      repo = "colorful-menu.nvim";
+      rev = "e1b4095e3726156e65d009f06ad1076b0d75dd3e";
+      sha256 = "0d23l2l92n7wp0am0raap7vsjxqzgv3dc60rcwpbix138fxxas96";
+    };
+    meta.homepage = "https://github.com/xzbdmw/colorful-menu.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   colorizer = buildVimPlugin {
     pname = "colorizer";
     version = "2022-01-03";
@@ -3233,12 +3246,12 @@ final: prev:
 
   crates-nvim = buildVimPlugin {
     pname = "crates.nvim";
-    version = "2025-02-07";
+    version = "2025-02-20";
     src = fetchFromGitHub {
       owner = "saecki";
       repo = "crates.nvim";
-      rev = "1d92a7f449a2a76d8f4c3459bd98f450e76d2ea3";
-      sha256 = "1y2d100zrihznhiw5chqj11nfrjkd9rax6aqjdgfb4cd0fa2jgms";
+      rev = "1803c8b5516610ba7cdb759a4472a78414ee6cd4";
+      sha256 = "0bqcdsbhs1ab51nmqd3cx7p6nlpmrjj0a53hax9scpqzr23nvr66";
     };
     meta.homepage = "https://github.com/saecki/crates.nvim/";
     meta.hydraPlatforms = [ ];
@@ -4483,6 +4496,19 @@ final: prev:
     meta.hydraPlatforms = [ ];
   };
 
+  faust-nvim = buildVimPlugin {
+    pname = "faust-nvim";
+    version = "2022-06-01";
+    src = fetchFromGitHub {
+      owner = "madskjeldgaard";
+      repo = "faust-nvim";
+      rev = "d6e8b1658233df74ac8dc1dc84a3f7568dc00586";
+      sha256 = "0zf8zfc6baxd93w5iyhldcda5izb5ldrxb0wkcxqkp95azsc871w";
+    };
+    meta.homepage = "https://github.com/madskjeldgaard/faust-nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   fcitx-vim = buildVimPlugin {
     pname = "fcitx.vim";
     version = "2024-04-21";
@@ -5041,6 +5067,19 @@ final: prev:
       sha256 = "0mspffvg2z5lx4ck96d2pnf1azy3s1zq720n6abnxzajadmnh47r";
     };
     meta.homepage = "https://github.com/ThePrimeagen/git-worktree.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
+  github-nvim-theme = buildVimPlugin {
+    pname = "github-nvim-theme";
+    version = "2024-12-31";
+    src = fetchFromGitHub {
+      owner = "projekt0n";
+      repo = "github-nvim-theme";
+      rev = "c106c9472154d6b2c74b74565616b877ae8ed31d";
+      sha256 = "1w7lz4bgfm8hq1mir4hcr8ik585d4l4w7bjl8yl3g3zklj8223pw";
+    };
+    meta.homepage = "https://github.com/projekt0n/github-nvim-theme/";
     meta.hydraPlatforms = [ ];
   };
 
@@ -9093,6 +9132,19 @@ final: prev:
       sha256 = "0d7xm5rafw5biv8phfyny2haqq50mnh0q4ms7dkhvp9k1k2k2whz";
     };
     meta.homepage = "https://github.com/Xuyuanp/nerdtree-git-plugin/";
+    meta.hydraPlatforms = [ ];
+  };
+
+  nerdy-nvim = buildVimPlugin {
+    pname = "nerdy.nvim";
+    version = "2025-02-23";
+    src = fetchFromGitHub {
+      owner = "2KAbhishek";
+      repo = "nerdy.nvim";
+      rev = "319cc93d4038b24497eb34c344b20fb462be6c9a";
+      sha256 = "05dnqydmflymc2svijndsrnjv02waliy7si2md35ji9bzpw4cg6k";
+    };
+    meta.homepage = "https://github.com/2KAbhishek/nerdy.nvim/";
     meta.hydraPlatforms = [ ];
   };
 

@@ -407,7 +407,7 @@ else let
       # Derivations set it to choose what sort of machine could be used to
       # execute the build, The build platform entirely determines this,
       # indeed more finely than Nix knows or cares about. The `system`
-      # attribute of `buildPlatfom` matches Nix's degree of specificity.
+      # attribute of `buildPlatform` matches Nix's degree of specificity.
       # exactly.
       inherit (stdenv.buildPlatform) system;
 

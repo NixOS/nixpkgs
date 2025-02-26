@@ -23,28 +23,30 @@ in
       };
 
       package = lib.mkPackageOption pkgs "xonsh" {
-        example = "pkgs.xonsh.override { extraPackages = ps: [ ps.requests ]; }";
+        extraDescription = ''
+          The argument `extraPackages` of this package will be overridden by
+          the option `programs.xonsh.extraPackages`.
+        '';
       };
 
       config = lib.mkOption {
         default = "";
-        description = "Control file to customize your shell behavior.";
+        description = ''
+          Extra text added to the end of `/etc/xonsh/xonshrc`,
+          the system-wide control file for xonsh.
+        '';
         type = lib.types.lines;
       };
 
       extraPackages = lib.mkOption {
         default = (ps: [ ]);
+        defaultText = lib.literalExpression "ps: [ ]";
+        example = lib.literalExpression ''
+          ps: with ps; [ numpy xonsh.xontribs.xontrib-vox ]
+        '';
         type = with lib.types; coercedTo (listOf lib.types.package) (v: (_: v)) (functionTo (listOf lib.types.package));
         description = ''
-          Add the specified extra packages to the xonsh package.
-          Preferred over using `programs.xonsh.package` as it composes with `programs.xonsh.xontribs`.
-
-          Take care in using this option along with manually defining the package
-          option above, as the two can result in conflicting sets of build dependencies.
-          This option assumes that the package option has an overridable argument
-          called `extraPackages`, so if you override the package option but also
-          intend to use this option, be sure that your resulting package still honors
-          the necessary option.
+          Xontribs and extra Python packages to be available in xonsh.
         '';
       };
     };

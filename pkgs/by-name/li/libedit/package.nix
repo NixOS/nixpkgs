@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   ncurses,
+  autoreconfHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -22,6 +23,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./01-cygwin.patch
+  ];
+
+  nativeBuildInputs = [
+    autoreconfHook
   ];
 
   propagatedBuildInputs = [

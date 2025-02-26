@@ -60,7 +60,7 @@ buildPythonPackage rec {
 
   disabledTests = [
     # The following tests are from 'tests/test_dask_image/test_ndmeasure/test_find_objects.py' and
-    # fail because of errrors on numpy slices
+    # fail because of errors on numpy slices
     # AttributeError: 'str' object has no attribute 'start'
     "test_find_objects"
     "test_3d_find_objects"

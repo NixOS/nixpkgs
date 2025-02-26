@@ -44,6 +44,12 @@ stdenv.mkDerivation rec {
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [
+    # XXX: do not add autoreconfHook without very careful testing!
+    # Problems that were identified during the last attempt:
+    #  • Prints a warning about being a development version not
+    #    suitable for production use.
+    #  • Smartcards do not work, at least without pcscd.
+
     pkg-config
     texinfo
     libgpg-error
@@ -82,6 +88,7 @@ stdenv.mkDerivation rec {
     [
       ./fix-libusb-include-path.patch
       ./CVE-2022-3219.patch
+      ./static.patch
     ]
     ++ lib.map (v: "${freepgPatches}/STABLE-BRANCH-2-4-freepg/" + v) [
       "0002-gpg-accept-subkeys-with-a-good-revocation-but-no-sel.patch"

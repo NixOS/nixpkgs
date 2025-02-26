@@ -13,14 +13,14 @@
 
 stdenv.mkDerivation rec {
   pname = "minicom";
-  version = "2.9";
+  version = "2.10";
 
   src = fetchFromGitLab {
     domain = "salsa.debian.org";
     owner = "minicom-team";
     repo = pname;
     rev = version;
-    sha256 = "sha256-+fKvHrApDXm94LItXv+xSDIE5zD7rTY5IeNSuzQglpg=";
+    sha256 = "sha256-wC6VlMRwuhV1zQ26wNx7gijuze8E2CvnzpqOSIPzq2s=";
   };
 
   buildInputs =

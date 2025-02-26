@@ -85,7 +85,7 @@ _multioutConfig() {
 
     prependToVar configureFlags \
         --bindir="${!outputBin}"/bin --sbindir="${!outputBin}"/sbin \
-        --includedir="${!outputInclude}"/include --oldincludedir="${!outputInclude}"/include \
+        --includedir="${!outputInclude}"/include \
         --mandir="${!outputMan}"/share/man --infodir="${!outputInfo}"/share/info \
         --docdir="${!outputDoc}"/share/doc/"${shareDocName}" \
         --libdir="${!outputLib}"/lib --libexecdir="${!outputLib}"/libexec \

@@ -201,15 +201,17 @@ in rec {
     src = fetchFromGitHub {
       owner = "dracula";
       repo = "tmux";
-      rev = "v${version}";
+      tag = "v${version}";
       hash = "sha256-WNgCa8F618JQiHDM1YxHj7oR7w+7U6SU89K90RYIUh8=";
     };
-    meta = with lib; {
+    meta = {
       homepage = "https://draculatheme.com/tmux";
+      downloadPage = "https://github.com/dracula/tmux";
       description = "Feature packed Dracula theme for tmux!";
-      license = licenses.mit;
-      platforms = platforms.unix;
-      maintainers = with maintainers; [ ethancedwards8 ];
+      changelog = "https://github.com/dracula/tmux/releases/tag/v${version}/CHANGELOG.md";
+      license = lib.licenses.mit;
+      platforms = lib.platforms.unix;
+      maintainers = with lib.maintainers; [ ethancedwards8 ];
     };
   };
 
@@ -460,13 +462,13 @@ in rec {
 
   pass = mkTmuxPlugin {
     pluginName = "pass";
-    version = "0-unstable-2020-02-28";
+    version = "0-unstable-2025-02-20";
     rtpFilePath = "plugin.tmux";
-    src = pkgs.fetchFromGitHub {
+    src = fetchFromGitHub {
       owner = "rafi";
       repo = "tmux-pass";
-      rev = "76b1c98911d56928063a41bc93a2d9e81818ef4c";
-      hash = "sha256-bamz4IZrozo5R7jt+z7YKyrogawPqsZ9cTJi9osjVoA=";
+      rev = "c853c8b5e31dea93d17551ef3e18be16c063e28e";
+      hash = "sha256-fDAqQcr0SC9WrKbGgt7z03ex2ORZ7ChOzDGl6HFXMaA";
     };
 
     nativeBuildInputs = [ pkgs.makeWrapper ];
@@ -480,10 +482,11 @@ in rec {
         ] )}
     '';
 
-    meta = with lib; {
+    meta = {
       description = "Password-store browser using fzf in tmux";
       homepage = "https://github.com/rafi/tmux-pass";
-      license = licenses.unlicense;
+      license = lib.licenses.gpl3Only;
+      maintainers = [ lib.maintainers.ethancedwards8 ];
     };
   };
 

@@ -23,7 +23,7 @@ let
     lib.concatStringsSep "\n\n" extraCertificateStrings
   );
 
-  srcVersion = "3.107";
+  srcVersion = "3.108";
   version = if nssOverride != null then nssOverride.version else srcVersion;
   meta = with lib; {
     homepage = "https://curl.haxx.se/docs/caextract.html";
@@ -47,7 +47,7 @@ let
           owner = "nss-dev";
           repo = "nss";
           rev = "NSS_${lib.replaceStrings [ "." ] [ "_" ] version}_RTM";
-          hash = "sha256-c6ks/pBvZHipNkmBy784s96zMYP+D9q3VlVrPVSohLw=";
+          hash = "sha256-L2XRj3D8SsS2QYQFDLwGtaPoZ7tN4kz8hGdVKefFSu8=";
         };
 
     dontBuild = true;

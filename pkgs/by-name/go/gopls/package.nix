@@ -6,17 +6,17 @@
 
 buildGoModule rec {
   pname = "gopls";
-  version = "0.17.1";
+  version = "0.18.0";
 
   src = fetchFromGitHub {
     owner = "golang";
     repo = "tools";
     rev = "gopls/v${version}";
-    hash = "sha256-NLUIFNooOOA4LEL5nZNdP9TvDkQUqLjKi44kZtOxeuI=";
+    hash = "sha256-YFAJH3jepOcgAdnSBP0G0e/GoNx9crLuQxgUFDBecwY=";
   };
 
   modRoot = "gopls";
-  vendorHash = "sha256-wH3YRiok3YWNzw9ejXMMitq58SxrNWXiKYKz2Hf0ZlM=";
+  vendorHash = "sha256-gz46W1uvA4LBe8UaKH9arAKJt1QtbbGLrF4LSwI6M4o=";
 
   # https://github.com/golang/tools/blob/9ed98faa/gopls/main.go#L27-L30
   ldflags = [ "-X main.version=v${version}" ];

@@ -56,7 +56,7 @@ let
   #
   #   https://community.chocolatey.org/packages/manim-latex#files
   #
-  # which includes another cutom distribution called tinytex, for which the
+  # which includes another custom distribution called tinytex, for which the
   # package list can be found at
   #
   #   https://github.com/yihui/tinytex/blob/master/tools/pkgs-custom.txt

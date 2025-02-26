@@ -10,6 +10,8 @@
   # dependencies
   babel,
   commonmark,
+  css-inline,
+  faicons,
   htmltools,
   importlib-metadata,
   importlib-resources,
@@ -25,6 +27,7 @@
   pytestCheckHook,
   pytest-cov-stub,
   requests,
+  selenium,
   shiny,
   syrupy,
 }:
@@ -49,6 +52,8 @@ buildPythonPackage rec {
   dependencies = [
     babel
     commonmark
+    css-inline
+    faicons
     htmltools
     importlib-metadata
     importlib-resources
@@ -67,12 +72,14 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-cov-stub
     requests
+    selenium
     shiny
     syrupy
   ];
 
   disabledTests = [
     # require selenium with chrome driver:
+    "test_save_custom_webdriver"
     "test_save_image_file"
     "test_save_non_png"
   ];

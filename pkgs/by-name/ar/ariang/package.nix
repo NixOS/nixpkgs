@@ -7,16 +7,16 @@
 
 buildNpmPackage rec {
   pname = "ariang";
-  version = "1.3.9";
+  version = "1.3.10";
 
   src = fetchFromGitHub {
     owner = "mayswind";
     repo = "AriaNg";
     rev = version;
-    hash = "sha256-c3+iyw8LgdB29552jJQr4q5P2ZW80jC0aN+eaenEYFo=";
+    hash = "sha256-YABoDBPrxII0uw4Cyy1A4AcLQ3Uo28dJa/F4LTI7f5Y=";
   };
 
-  npmDepsHash = "sha256-N7ZK6wthBYAt8tU8sJE0QChAYxWfJ1HG5P+AjXZfIiw=";
+  npmDepsHash = "sha256-cNTkdrJuXMhcBbbCYJ9Xs639T0QWUbhRABD2gQ2cfjM=";
 
   makeCacheWritable = true;
 

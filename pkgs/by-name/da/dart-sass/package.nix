@@ -46,6 +46,11 @@ buildDartApplication rec {
 
   dartCompileFlags = [ "--define=version=${version}" ];
 
+  postInstall = ''
+    # dedupe identiall binaries
+    ln -rsf $out/bin/{,dart-}sass
+  '';
+
   passthru = {
     inherit embedded-protocol-version embedded-protocol;
     updateScript = ./update.sh;

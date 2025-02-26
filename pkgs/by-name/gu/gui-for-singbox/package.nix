@@ -12,17 +12,26 @@
   autoPatchelfHook,
   makeDesktopItem,
   copyDesktopItems,
-  replaceVars,
+  nix-update-script,
 }:
+
 let
   pname = "gui-for-singbox";
-  version = "1.9.0";
+  version = "1.9.3";
 
   src = fetchFromGitHub {
     owner = "GUI-for-Cores";
     repo = "GUI.for.SingBox";
     tag = "v${version}";
-    hash = "sha256-5zd4CVWVR+E3E097Xjd/V6QFRV9Ye2UQvBalAQ9zqXc=";
+    hash = "sha256-3ZSQoSXa9ma+r6y/xQGPjDw3BryH/s3TEEN2KptN+f8=";
+  };
+
+  metaCommon = {
+    description = "SingBox GUI program developed by vue3 + wails";
+    homepage = "https://github.com/GUI-for-Cores/GUI.for.SingBox";
+    license = with lib.licenses; [ gpl3Plus ];
+    maintainers = with lib.maintainers; [ ];
+    platforms = lib.platforms.linux;
   };
 
   frontend = stdenv.mkDerivation (finalAttrs: {
@@ -36,7 +45,7 @@ let
     pnpmDeps = pnpm_9.fetchDeps {
       inherit (finalAttrs) pname version src;
       sourceRoot = "${finalAttrs.src.name}/frontend";
-      hash = "sha256-dLI1YMzs9lLk9lJBkBgc6cpirM79khy0g5VaOVEzUAc=";
+      hash = "sha256-IljvA3vVD7RXULPWvKJPp4fi094SDDPs/AlxJKOk6OY=";
     };
 
     sourceRoot = "${finalAttrs.src.name}/frontend";
@@ -52,19 +61,15 @@ let
     installPhase = ''
       runHook preInstall
 
-      cp -r ./dist $out
+      cp -r dist $out
 
       runHook postInstall
     '';
 
-    meta = {
-      description = "GUI program developed by vue3";
-      license = with lib.licenses; [ gpl3Plus ];
-      maintainers = with lib.maintainers; [ ];
-      platforms = lib.platforms.linux;
-    };
+    meta = metaCommon;
   });
 in
+
 buildGoModule {
   inherit pname version src;
 
@@ -76,7 +81,7 @@ buildGoModule {
       --replace-fail '@basepath@' "$out"
   '';
 
-  vendorHash = "sha256-OrysyJF+lUMf+0vWmOZHjxUdE6fQCKArmpV4alXxtYs=";
+  vendorHash = "sha256-Ft3qkxCAkNIqTapqT4g8w0L8VV3z30GwWb17kGr03jw=";
 
   nativeBuildInputs = [
     wails
@@ -89,6 +94,18 @@ buildGoModule {
     webkitgtk_4_0
     libsoup_3
   ];
+
+  preBuild = ''
+    cp -r ${frontend} frontend/dist
+  '';
+
+  buildPhase = ''
+    runHook preBuild
+
+    wails build -m -s -trimpath -skipbindings -devtools -tags webkit2_40 -o GUI.for.SingBox
+
+    runHook postBuild
+  '';
 
   desktopItems = [
     (makeDesktopItem {
@@ -106,33 +123,26 @@ buildGoModule {
     })
   ];
 
-  preBuild = ''
-    cp -r ${frontend} ./frontend/dist
-  '';
-
-  buildPhase = ''
-    runHook preBuild
-
-    wails build -m -s -trimpath -skipbindings -devtools -tags webkit2_40 -o GUI.for.SingBox
-
-    runHook postBuild
-  '';
-
   installPhase = ''
     runHook preInstall
 
-    install -Dm 0755 ./build/bin/GUI.for.SingBox $out/bin/GUI.for.SingBox
+    install -Dm 0755 build/bin/GUI.for.SingBox $out/bin/GUI.for.SingBox
     install -Dm 0644 build/appicon.png $out/share/pixmaps/gui-for-singbox.png
 
     runHook postInstall
   '';
 
-  meta = {
-    description = "SingBox GUI program developed by vue3 + wails";
-    homepage = "https://github.com/GUI-for-Cores/GUI.for.SingBox";
+  passthru = {
+    inherit frontend;
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--subpackage"
+        "frontend"
+      ];
+    };
+  };
+
+  meta = metaCommon // {
     mainProgram = "GUI.for.SingBox";
-    license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ ];
-    platforms = lib.platforms.linux;
   };
 }
