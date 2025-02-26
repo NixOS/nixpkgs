@@ -6,6 +6,7 @@
   pytest-repeat,
   pytestCheckHook,
   setuptools,
+  stdenv,
 }:
 
 buildPythonPackage rec {
@@ -19,6 +20,12 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-8RM850pd8gEgmbYg+jczAxkivumAV5PeCcruya+4sCs=";
   };
+
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # error: unsupported option '-mfloat-abi=' for target 'aarch64-apple-darwin'
+    substituteInPlace setup.py \
+      --replace-fail '"-mfloat-abi=hard",' ""
+  '';
 
   build-system = [
     setuptools
