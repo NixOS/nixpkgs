@@ -48,10 +48,12 @@ rec {
       dummy
       ;
     tests = {
-      inherit (nixos'.tests.acme)
-        http01-builtin
-        dns01
-        ;
+      acme = {
+        inherit (nixos'.tests.acme)
+          http01-builtin
+          dns01
+          ;
+      };
       inherit (nixos'.tests)
         containers-imperative
         containers-ip
