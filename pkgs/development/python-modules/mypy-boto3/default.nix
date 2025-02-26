@@ -806,8 +806,8 @@ rec {
       "sha256-h2JU5d5xFlRFmubn04Fj1IpmChHuopFM9m5NOGjB7xE=";
 
   mypy-boto3-location =
-    buildMypyBoto3Package "location" "1.36.24"
-      "sha256-T50aDATanZgUeBh98Kg2q5/oijnNr3JwEBN3GLPzmfw=";
+    buildMypyBoto3Package "location" "1.37.0"
+      "sha256-PcBNOGGOtp+7V8UTqWIICoT0GjzYIx+XXx65neIfP9Q=";
 
   mypy-boto3-logs =
     buildMypyBoto3Package "logs" "1.36.3"
