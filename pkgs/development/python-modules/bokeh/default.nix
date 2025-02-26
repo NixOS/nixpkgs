@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  fetchFromGitHub,
   pythonOlder,
   replaceVars,
   colorama,
@@ -54,13 +53,6 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-m4HWqepi51oEoanZ+TGUIBaJC+7Jq10SmipEMs9ZXAo=";
-  };
-
-  src_test = fetchFromGitHub {
-    owner = "bokeh";
-    repo = "bokeh";
-    rev = "refs/tags/${version}";
-    hash = "sha256-MAv+6bwc5f+jZasRDsYTJ/ir0i1pYCuwqPMumsYWvws=";
   };
 
   patches = [
@@ -122,11 +114,8 @@ buildPythonPackage rec {
   ];
 
   doCheck = false; # need more work
-  pytestFlagsArray = "tests/test_defaults.py";
+
   pythonImportsCheck = [ "bokeh" ];
-  preCheck = ''
-    cp -rv ''${src_test}/tests/* ./tests/
-  '';
 
   meta = {
     description = "Statistical and novel interactive HTML plots for Python";
