@@ -117,6 +117,7 @@ let
       ${lib.optionalString cfg.defaults.enableDebugLogs "set -x"}
       set -euo pipefail
       cd /var/lib/acme
+      chmod -R u=rwX,g=,o= .lego/accounts
       chown -R ${user} .lego/accounts
     '' + (lib.concatStringsSep "\n" (lib.mapAttrsToList (cert: data: ''
       for fixpath in ${lib.escapeShellArg cert} .lego/${lib.escapeShellArg cert}; do
@@ -161,8 +162,7 @@ let
       };
     }
 
-    # In order to avoid race conditions creating the CA for selfsigned certs,
-    # we have a separate service which will create the necessary files.
+    # Avoid race conditions creating the CA for selfsigned certs
     (lib.mkIf cfg.preliminarySelfsigned {
       path = [ pkgs.minica ];
       # Working directory will be /tmp
@@ -482,6 +482,9 @@ let
         # By default group will have no access to the cert files.
         # This chmod will fix that.
         chmod 640 out/*
+
+        # Also ensure safer permissions on the account directory.
+        chmod -R u=rwX,g=,o= accounts/.
       '';
     };
   };
@@ -596,6 +599,17 @@ let
           Key type to use for private keys.
           For an up to date list of supported values check the --key-type option
           at <https://go-acme.github.io/lego/usage/cli/options/>.
+        '';
+      };
+
+      listenHTTP = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
+        inherit (defaultAndText "listenHTTP" null) default defaultText;
+        example = ":1360";
+        description = ''
+          Interface and port to listen on to solve HTTP challenges
+          in the form `[INTERFACE]:PORT`.
+          If you use a port other than 80, you must proxy port 80 to this port.
         '';
       };
 
@@ -741,20 +755,6 @@ let
         '';
         description = ''
           A list of extra domain names, which are included in the one certificate to be issued.
-        '';
-      };
-
-      # This setting must be different for each configured certificate, otherwise
-      # two or more renewals may fail to bind to the address. Hence, it is not in
-      # the inheritableOpts.
-      listenHTTP = lib.mkOption {
-        type = lib.types.nullOr lib.types.str;
-        default = null;
-        example = ":1360";
-        description = ''
-          Interface and port to listen on to solve HTTP challenges
-          in the form [INTERFACE]:PORT.
-          If you use a port other than 80, you must proxy port 80 to this port.
         '';
       };
 
