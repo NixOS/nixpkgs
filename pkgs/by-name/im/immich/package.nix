@@ -17,12 +17,19 @@
   cacert,
   unzip,
   # runtime deps
+  cairo,
   exiftool,
+  giflib,
   jellyfin-ffmpeg, # Immich depends on the jellyfin customizations, see https://github.com/NixOS/nixpkgs/issues/351943
   imagemagick,
+  libjpeg,
+  libpng,
   libraw,
   libheif,
+  librsvg,
+  pango,
   perl,
+  pixman,
   vips,
 }:
 let
@@ -118,6 +125,23 @@ let
       # Rollup does not find the dependency otherwise
       ln -s node_modules/@immich/sdk/node_modules/@oazapfts node_modules/
     '';
+
+    env.npm_config_build_from_source = "true";
+
+    nativeBuildInputs = [
+      pkg-config
+    ];
+
+    buildInputs = [
+      # https://github.com/Automattic/node-canvas/blob/master/Readme.md#compiling
+      cairo
+      giflib
+      libjpeg
+      libpng
+      librsvg
+      pango
+      pixman
+    ];
 
     installPhase = ''
       runHook preInstall
