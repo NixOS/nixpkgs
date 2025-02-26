@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  stdenv,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -20,7 +21,7 @@ rustPlatform.buildRustPackage rec {
 
   postPatch = ''
     substituteInPlace tests/utils.rs --replace-fail \
-      'target/debug' "target/$(rustc -vV | sed -n 's|host: ||p')/debug"
+      'target/debug' "target/${stdenv.hostPlatform.rust.rustcTargetSpec}/$cargoCheckType"
   '';
 
   meta = with lib; {
