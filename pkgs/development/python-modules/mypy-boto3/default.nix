@@ -114,8 +114,8 @@ rec {
       "sha256-lcpglldLcTNS22dpGNB/NnDt1CPOUAzwVdcWoRMzHyE=";
 
   mypy-boto3-application-insights =
-    buildMypyBoto3Package "application-insights" "1.36.0"
-      "sha256-VrkJZgxPjzKyTMCrinaDXTyJ5QH+80u28dThroi9lO0=";
+    buildMypyBoto3Package "application-insights" "1.37.0"
+      "sha256-2NYYxdpcfu21ZhCAuoTR1d0QihRCHM49Sb1nqfOHLgk=";
 
   mypy-boto3-applicationcostprofiler =
     buildMypyBoto3Package "applicationcostprofiler" "1.36.0"
