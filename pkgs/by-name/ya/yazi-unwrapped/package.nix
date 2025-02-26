@@ -26,7 +26,7 @@ let
     hash = "sha256-kEVXejDg4ChFoMNBvKlwdFEyUuTcY2VuK9j0PdafKus=";
   };
 in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "yazi";
   inherit version;
 
@@ -34,6 +34,7 @@ rustPlatform.buildRustPackage rec {
     code_src
     man_src
   ];
+
   sourceRoot = code_src.name;
 
   useFetchCargoVendor = true;
@@ -59,6 +60,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   passthru.updateScript.command = [ ./update.sh ];
+  passthru.srcs = { inherit code_src man_src; }; # for updating sources
 
   meta = {
     description = "Blazing fast terminal file manager written in Rust, based on async I/O";
