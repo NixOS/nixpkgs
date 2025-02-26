@@ -1402,8 +1402,8 @@ rec {
       "sha256-yonNSXiST3CS+I4xh1RpSAc7iqWYbpFluL5JzyrG+nQ=";
 
   mypy-boto3-wellarchitected =
-    buildMypyBoto3Package "wellarchitected" "1.36.0"
-      "sha256-ntUry6ANYTFhl2MBw6JbQLCmq45rXkILYfhTxBTZxvU=";
+    buildMypyBoto3Package "wellarchitected" "1.37.0"
+      "sha256-eO6jC+Ypn01Im6GXo7KufnzDe1ZzASdU5fE1dPJ9KjQ=";
 
   mypy-boto3-wisdom =
     buildMypyBoto3Package "wisdom" "1.36.0"
