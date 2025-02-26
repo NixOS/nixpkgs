@@ -24,6 +24,7 @@
   python3,
   xmlstarlet,
   nodejs,
+  cpio,
   callPackage,
   unzip,
   yq,
@@ -90,6 +91,9 @@ stdenv.mkDerivation rec {
     ++ lib.optionals (lib.versionAtLeast version "9") [
       nodejs
     ]
+    ++ lib.optionals (lib.versionAtLeast version "10") [
+      cpio
+    ]
     ++ lib.optionals isDarwin [
       getconf
     ];
@@ -143,7 +147,7 @@ stdenv.mkDerivation rec {
   '';
 
   patches =
-    lib.optionals (lib.versionAtLeast version "9") [
+    lib.optionals (lib.versionAtLeast version "9" && lib.versionOlder version "10") [
       ./UpdateNuGetConfigPackageSourcesMappings-don-t-add-em.patch
     ]
     ++ lib.optionals (lib.versionOlder version "9") [
@@ -283,7 +287,9 @@ stdenv.mkDerivation rec {
 
         substituteInPlace \
           src/runtime/src/installer/managed/Microsoft.NET.HostModel/HostModelUtils.cs \
-          src/sdk/src/Tasks/Microsoft.NET.Build.Tasks/targets/Microsoft.NET.Sdk.targets \
+      ''
+      + lib.optionalString (lib.versionOlder version "10") "  src/sdk/src/Tasks/Microsoft.NET.Build.Tasks/targets/Microsoft.NET.Sdk.targets \\\n"
+      + ''
           --replace-fail '/usr/bin/codesign' '${sigtool}/bin/codesign'
 
         # fix: strip: error: unknown argument '-n'
@@ -318,9 +324,9 @@ stdenv.mkDerivation rec {
         # ld: library not found for -ld_classic
         substituteInPlace \
           src/runtime/src/coreclr/nativeaot/BuildIntegration/Microsoft.NETCore.Native.Unix.targets \
-          src/runtime/src/coreclr/tools/aot/ILCompiler/ILCompiler.csproj \
-          --replace-fail 'Include="-ld_classic"' ""
       ''
+      + lib.optionalString (lib.versionOlder version "10") "  src/runtime/src/coreclr/tools/aot/ILCompiler/ILCompiler.csproj \\\n"
+      + "  --replace-fail 'Include=\"-ld_classic\"' \"\"\n"
       + lib.optionalString (lib.versionOlder version "9") ''
         # [...]/build.proj(123,5): error : Did not find PDBs for the following SDK files:
         # [...]/build.proj(123,5): error : sdk/8.0.102/System.Resources.Extensions.dll

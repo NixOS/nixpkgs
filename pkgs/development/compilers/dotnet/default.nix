@@ -88,6 +88,7 @@ let
 
         dotnet_8 = recurseIntoAttrs (callPackage ./8 { });
         dotnet_9 = recurseIntoAttrs (callPackage ./9 { });
+        dotnet_10 = recurseIntoAttrs (callPackage ./10 { });
       }
     );
   };
@@ -158,7 +159,8 @@ pkgs
   # use binary SDK here to avoid downgrading feature band
   sdk_8_0_1xx = if !pkgs.dotnet_8.vmr.meta.broken then pkgs.dotnet_8.sdk else pkgs.sdk_8_0_1xx-bin;
   sdk_9_0_1xx = if !pkgs.dotnet_9.vmr.meta.broken then pkgs.dotnet_9.sdk else pkgs.sdk_9_0_1xx-bin;
-  sdk_10_0_1xx = pkgs.sdk_10_0_1xx-bin;
+  sdk_10_0_1xx =
+    if !pkgs.dotnet_10.vmr.meta.broken then pkgs.dotnet_10.sdk else pkgs.sdk_10_0_1xx-bin;
   # source-built SDK only exists for _1xx feature band
   # https://github.com/dotnet/source-build/issues/3667
   sdk_8_0_3xx = combineSdk sdk_8_0_1xx pkgs.sdk_8_0_3xx-bin;
