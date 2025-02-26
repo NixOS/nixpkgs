@@ -394,8 +394,8 @@ rec {
       "sha256-qTRgz+uAHDYJWtjED5bAVURgXCYk0ZAnto97WKBGorQ=";
 
   mypy-boto3-devicefarm =
-    buildMypyBoto3Package "devicefarm" "1.36.0"
-      "sha256-IipLmvFCzQ9GA8BcOtRwORY+RORxS2UArh+qmcY/sKM=";
+    buildMypyBoto3Package "devicefarm" "1.37.1"
+      "sha256-YtWLY5SEB0t/gk1qDf+UPjmB58CZdOs9GZ6JLkqRJE8=";
 
   mypy-boto3-devops-guru =
     buildMypyBoto3Package "devops-guru" "1.36.0"
