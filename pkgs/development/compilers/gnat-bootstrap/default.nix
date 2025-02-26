@@ -85,6 +85,11 @@ stdenv.mkDerivation (
               hash = "sha256-DC95udGSzRDE22ON4UpekxTYWOSBeUdJvILbSFj6MFQ=";
               upstreamTriplet = "x86_64-pc-linux-gnu";
             };
+            aarch64-darwin = {
+              inherit url;
+              hash = "sha256-Bjl6iuM2xLknezR92j/kpDYpxqTcxK1v8rffmivOAVw=";
+              upstreamTriplet = "aarch64-apple-darwin23.2.0";
+            };
           }
           .${stdenv.hostPlatform.system} or throwUnsupportedSystem;
         "14" =
@@ -107,6 +112,11 @@ stdenv.mkDerivation (
               inherit url;
               hash = "sha256-SVW/0yyj6ZH1GAjvD+unII+zSLGd3KGFt1bjjQ3SEFU=";
               upstreamTriplet = "aarch64-linux-gnu";
+            };
+            aarch64-darwin = {
+              inherit url;
+              hash = "sha256-/nARwdQzAMd41fslUbrgloxn0hVZp9PokfQ9yPmL1g8=";
+              upstreamTriplet = "aarch64-apple-darwin23.6.0";
             };
           }
           .${stdenv.hostPlatform.system} or throwUnsupportedSystem;
@@ -214,7 +224,7 @@ stdenv.mkDerivation (
       # [2]: https://gcc.gnu.org/onlinedocs/gcc-12.2.0/gcc/Fixed-Headers.html
 
       + lib.optionalString (stdenv.hostPlatform.isDarwin) ''
-        upstreamBuildPrefix="/Users/runner/work/GNAT-FSF-builds/GNAT-FSF-builds/sbx/x86_64-darwin/gcc/install"
+        upstreamBuildPrefix="/Users/runner/work/GNAT-FSF-builds/GNAT-FSF-builds/sbx/${stdenv.hostPlatform.system}/gcc/install"
         for i in "$out"/lib/*.dylib "$out"/lib/gcc/*/*/adalib/*.dylib; do
           if [[ -f "$i" && ! -h "$i" ]]; then
             install_name_tool -id "$i" "$i" || true
@@ -246,10 +256,13 @@ stdenv.mkDerivation (
       homepage = "https://www.gnu.org/software/gnat";
       license = licenses.gpl3;
       maintainers = with maintainers; [ ethindp ];
-      platforms = [
-        "x86_64-linux"
-        "x86_64-darwin"
-      ] ++ lib.optionals (lib.versionAtLeast majorVersion "14") [ "aarch64-linux" ];
+      platforms =
+        [
+          "x86_64-linux"
+          "x86_64-darwin"
+        ]
+        ++ lib.optionals (lib.versionAtLeast majorVersion "14") [ "aarch64-linux" ]
+        ++ lib.optionals (lib.versionAtLeast majorVersion "13") [ "aarch64-darwin" ];
       sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     };
   }
