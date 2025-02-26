@@ -950,8 +950,8 @@ rec {
       "sha256-gA8+WKvFzCegzUUWvsTbEmHkYPLIomBrqaIRJHkJqhE=";
 
   mypy-boto3-network-firewall =
-    buildMypyBoto3Package "network-firewall" "1.36.24"
-      "sha256-P8/aw3Dm47Z/NL5Q7HDTzB++R46puU4kB/DTWmvdtuY=";
+    buildMypyBoto3Package "network-firewall" "1.37.0"
+      "sha256-O9iEc3Yla0/bmvhouX1PLQQET79uJlbQtuz7aKrOekY=";
 
   mypy-boto3-networkmanager =
     buildMypyBoto3Package "networkmanager" "1.36.0"
