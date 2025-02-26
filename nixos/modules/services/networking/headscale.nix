@@ -369,7 +369,7 @@ in
                   default = [ ];
                   description = ''
                     Extra DNS records
-                    so far only A and AAAA records are supported (on the tailscale side)
+                    So far only A and AAAA records are supported (on the tailscale side).
                   '';
                   example = [
                     {
