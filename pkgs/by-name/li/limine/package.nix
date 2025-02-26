@@ -109,8 +109,8 @@ stdenv.mkDerivation {
       licenses.zlib # tinf
     ];
     maintainers = [
+      maintainers.lzcunt
       maintainers.phip1611
-      maintainers.sanana
       maintainers.surfaceflinger
     ];
   };
