@@ -822,8 +822,8 @@ rec {
       "sha256-DKOnbmgF1khWJ2IJBB/B8Y+3aleNAJqiKdd0H+3thf4=";
 
   mypy-boto3-lookoutvision =
-    buildMypyBoto3Package "lookoutvision" "1.36.0"
-      "sha256-io3qKqROXYFpOFmwjppVJTIRHFFO6IgUiow1izALKTE=";
+    buildMypyBoto3Package "lookoutvision" "1.37.0"
+      "sha256-9lGnqh0rDZ7/rwRXCjsbuukQPQmXjAVWo3JLx54S+j0=";
 
   mypy-boto3-m2 =
     buildMypyBoto3Package "m2" "1.36.0"
