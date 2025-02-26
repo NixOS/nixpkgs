@@ -9,11 +9,11 @@
 
   # dependencies
   jax,
-  jaxlib,
   jaxtyping,
   typing-extensions,
+  wadler-lindig,
 
-  # checks
+  # tests
   beartype,
   optax,
   pytest-xdist,
@@ -22,23 +22,23 @@
 
 buildPythonPackage rec {
   pname = "equinox";
-  version = "0.11.11";
+  version = "0.11.12";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "patrick-kidger";
     repo = "equinox";
     tag = "v${version}";
-    hash = "sha256-xCAk9qac2ZmevUMMRgBokLKuGWyrF4fGpN03li49cR8=";
+    hash = "sha256-hor2qw+aTL7yhV53E/y5DUwyDEYJA8RPRS39xxa8xcw=";
   };
 
   build-system = [ hatchling ];
 
   dependencies = [
     jax
-    jaxlib
     jaxtyping
     typing-extensions
+    wadler-lindig
   ];
 
   nativeCheckInputs = [
