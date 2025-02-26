@@ -1106,8 +1106,8 @@ rec {
       "sha256-hsf4jHttzq/Mlxix77YwoLz3hPBqyCvnU/i696puZJw=";
 
   mypy-boto3-rekognition =
-    buildMypyBoto3Package "rekognition" "1.36.0"
-      "sha256-Z9C9MFtokgiaYd9GvtT2mkdkVCEoL37bclPNNZ/jtRo=";
+    buildMypyBoto3Package "rekognition" "1.37.0"
+      "sha256-ozwlq5US07sA2HMoOvtyo1/d1O8ixsMFqthTwo3BWjw=";
 
   mypy-boto3-resiliencehub =
     buildMypyBoto3Package "resiliencehub" "1.36.0"
