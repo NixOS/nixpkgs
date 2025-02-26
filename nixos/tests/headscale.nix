@@ -97,7 +97,7 @@ import ./make-test-python.nix (
       # Check that they are reachable from the tailnet
       peer1.wait_until_succeeds("tailscale ping peer2")
       peer2.wait_until_succeeds("tailscale ping peer1.tailnet")
-      peer1.wait_until_succeeds("tailscale ping foo.bar")
+      assert "100.64.0.2" in peer1.wait_until_succeeds("${lib.getExe pkgs.dig} +short foo.bar")
     '';
   }
 )
