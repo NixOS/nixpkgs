@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "python-technove";
-  version = "1.3.1";
+  version = "1.3.2";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "Moustachauve";
     repo = "pytechnove";
     tag = "v${version}";
-    hash = "sha256-umtM2fIyEiimt/X2SvgqjaTYGutvJHkSJ3pRfwSbOfQ=";
+    hash = "sha256-LgrydBgx68HP8yaywkMMeS71VqhilYGODppBZbdkssQ=";
   };
 
   postPatch = ''
