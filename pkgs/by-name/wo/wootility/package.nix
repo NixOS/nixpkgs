@@ -7,10 +7,10 @@
 
 let
   pname = "wootility";
-  version = "4.7.3";
+  version = "4.7.4";
   src = fetchurl {
     url = "https://s3.eu-west-2.amazonaws.com/wooting-update/wootility-lekker-linux-latest/wootility-lekker-${version}.AppImage";
-    sha256 = "sha256-5S4Yz2VymKfT1uBXYufb6MWx1aMbGn4ufT8RITJtuPc=";
+    sha256 = "sha256-NiQgYuhd1ULWU/mAMJkaQNU/zwOZV1uPS5LHOAV64Yg=";
   };
 in
 
