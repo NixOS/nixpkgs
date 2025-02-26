@@ -14,20 +14,18 @@
   pkg-config,
   systemd,
   cppunit,
-  esi ? false,
   ipv6 ? true,
   nixosTests,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "squid";
-  version = "6.13";
+  version = "7.0.1";
 
   src = fetchurl {
     url = "https://github.com/squid-cache/squid/releases/download/SQUID_${
       builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version
     }/squid-${finalAttrs.version}.tar.xz";
-    hash = "sha256-Iy4FZ5RszAEVZTw8GPAeg/LZzEnEPZ3q2LMZrws1rVI=";
+    hash = "sha256-Bw3Y5iGtItRdcAYF6xnSysG2zae3PwTzRXjTw/2N35s=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -62,7 +60,6 @@ stdenv.mkDerivation (finalAttrs: {
       "--enable-htcp"
     ]
     ++ (if ipv6 then [ "--enable-ipv6" ] else [ "--disable-ipv6" ])
-    ++ lib.optional (!esi) "--disable-esi"
     ++ lib.optional (
       stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isMusl
     ) "--enable-linux-netfilter";
@@ -81,6 +78,15 @@ stdenv.mkDerivation (finalAttrs: {
         --replace "$(type -P true)" "$(realpath fake-true)" \
         --replace "/bin/true" "$(realpath fake-true)"
     done
+
+    cd test-suite/
+  '';
+
+  installPhase = ''
+    runHook preInstall
+    mkdir -p $out/bin
+    cp ../src/squid $out/bin
+    runHook postInstall
   '';
 
   passthru.tests.squid = nixosTests.squid;
@@ -91,8 +97,5 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ raskin ];
-    knownVulnerabilities = [
-      "Squid has multiple unresolved security vulnerabilities, for more information see https://megamansec.github.io/Squid-Security-Audit/"
-    ];
   };
 })
