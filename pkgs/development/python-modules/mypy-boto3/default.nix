@@ -1146,8 +1146,8 @@ rec {
       "sha256-VW984jFkCzfG2w2XP5fa5eiUjs31yTQbX5jyKuFIS20=";
 
   mypy-boto3-route53-recovery-readiness =
-    buildMypyBoto3Package "route53-recovery-readiness" "1.36.0"
-      "sha256-gz1f418XrU5TDLV1CgRdVSnNNJqi85KXOtywZT51PBs=";
+    buildMypyBoto3Package "route53-recovery-readiness" "1.37.0"
+      "sha256-BLrTyePwfPIYM3eRRBncGPGWOjnIRw9TpvYXwAD42Vk=";
 
   mypy-boto3-route53domains =
     buildMypyBoto3Package "route53domains" "1.36.0"
