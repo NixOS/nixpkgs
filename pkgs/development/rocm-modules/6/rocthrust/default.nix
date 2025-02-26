@@ -15,7 +15,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocthrust";
-  version = "6.3.1";
+  version = "6.3.3";
 
   outputs =
     [

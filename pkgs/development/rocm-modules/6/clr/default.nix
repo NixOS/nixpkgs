@@ -55,7 +55,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "clr";
-  version = "6.3.1";
+  version = "6.3.3";
 
   outputs = [
     "out"
@@ -66,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ROCm";
     repo = "clr";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-wo3kwk6HQJsP+ycaVh2mmMjEgGlj/Z6KXNXOXbJ1KLs=";
+    hash = "sha256-4qjfnn0kto2sNaSumXxHRHFrf3a3RZILOdhVSxkEs1I=";
   };
 
   nativeBuildInputs = [
@@ -159,8 +159,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     # We're not on Windows so these are never installed to hipcc...
     substituteInPlace hipamd/CMakeLists.txt \
-      --replace "install(PROGRAMS \''${HIPCC_BIN_DIR}/hipcc.bat DESTINATION bin)" "" \
-      --replace "install(PROGRAMS \''${HIPCC_BIN_DIR}/hipconfig.bat DESTINATION bin)" ""
+      --replace-fail "install(PROGRAMS \''${HIPCC_BIN_DIR}/hipcc.bat DESTINATION bin)" "" \
+      --replace-fail "install(PROGRAMS \''${HIPCC_BIN_DIR}/hipconfig.bat DESTINATION bin)" ""
 
     substituteInPlace hipamd/src/hip_embed_pch.sh \
       --replace-fail "\''$LLVM_DIR/bin/clang" "${hipClangPath}/clang"

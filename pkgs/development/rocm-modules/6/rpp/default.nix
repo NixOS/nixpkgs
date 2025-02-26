@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
         "cpu"
     );
 
-  version = "6.3.1";
+  version = "6.3.3";
 
   src = fetchFromGitHub {
     owner = "ROCm";
@@ -99,5 +99,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = with licenses; [ mit ];
     maintainers = teams.rocm.members;
     platforms = platforms.linux;
+    broken = useOpenCL;
   };
 })

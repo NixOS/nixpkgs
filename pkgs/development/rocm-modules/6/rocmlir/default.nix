@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   rocmUpdateScript,
   cmake,
   rocm-cmake,
@@ -42,7 +41,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocmlir${suffix}";
-  version = "6.3.1";
+  version = "6.3.3";
 
   outputs =
     [

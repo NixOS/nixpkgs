@@ -20,7 +20,7 @@ let
     else
       throw "Unsupported ROCm LLVM platform";
 in
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation {
   pname = "rocm-device-libs";
   # In-tree with ROCm LLVM
   inherit (rocm-merged-llvm) version;
@@ -58,4 +58,4 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ lovesegfault ] ++ teams.rocm.members;
     platforms = platforms.linux;
   };
-})
+}

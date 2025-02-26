@@ -177,8 +177,9 @@ in
 rec {
   inherit (llvmPackagesRocm) libunwind;
   inherit (llvmPackagesRocm) libcxx;
-  llvm-orig = llvmPackagesRocm.llvm; # nix why-depends --derivation .#rocmPackages.clr .#rocmPackages.llvm.llvm-orig
-  clang-orig = llvmPackagesRocm.clang; # nix why-depends --derivation .#rocmPackages.clr .#rocmPackages.llvm.llvm-orig
+  # Pass through original attrs for debugging where non-overridden llvm/clang is getting used
+  # llvm-orig = llvmPackagesRocm.llvm; # nix why-depends --derivation .#rocmPackages.clr .#rocmPackages.llvm.llvm-orig
+  # clang-orig = llvmPackagesRocm.clang; # nix why-depends --derivation .#rocmPackages.clr .#rocmPackages.llvm.clang-orig
   llvm = (llvmPackagesRocm.llvm.override { ninja = emptyDirectory; }).overrideAttrs (old: {
     dontStrip = profilableStdenv;
     nativeBuildInputs = old.nativeBuildInputs ++ [ removeReferencesTo ];
@@ -305,7 +306,10 @@ rec {
           ];
           pname = "${old.pname}-rocm";
           patches = filteredPatches ++ [
+            # Never add FHS include paths
             ./clang-bodge-ignore-systemwide-incls.diff
+            # Prevents builds timing out if a single compiler invocation is very slow but
+            # per-arch jobs are completing by ensuring there's terminal output
             ./clang-log-jobs.diff
             (fetchpatch {
               # [ClangOffloadBundler]: Add GetBundleIDsInFile to OffloadBundler
@@ -313,9 +317,10 @@ rec {
               url = "https://github.com/GZGavinZhao/rocm-llvm-project/commit/6d296f879b0fed830c54b2a9d26240da86c8bb3a.patch";
               relative = "clang";
             })
-            # FIXME: if llvm was overrideable properly this wouldn't be needed
+            # FIXME: Needed due to https://github.com/NixOS/nixpkgs/issues/375431
+            # Once we can switch to overrideScope this can be removed
             (substituteAll {
-              src = ./clang-at-least-16-LLVMgold-path.patch;
+              src = ./../../../compilers/llvm/common/clang/clang-at-least-16-LLVMgold-path.patch;
               libllvmLibdir = "${llvm.lib}/lib";
             })
           ];

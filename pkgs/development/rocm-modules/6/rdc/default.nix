@@ -8,6 +8,7 @@
   rocm-smi,
   rocm-runtime,
   libcap,
+  libdrm,
   grpc,
   protobuf,
   openssl,
@@ -47,7 +48,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rdc";
-  version = "6.3.1";
+  version = "6.3.3";
 
   outputs =
     [
@@ -64,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ROCm";
     repo = "rdc";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-sKsti7LeWsxvOmc9h/srsl0OmHkJIRNRiV+8mFVG3/M=";
+    hash = "sha256-s/31b8/Kn5l1QJ941UMSB8SCzpvODsPfOLMmEBUYYmY=";
   };
 
   nativeBuildInputs =
@@ -84,12 +85,15 @@ stdenv.mkDerivation (finalAttrs: {
       rocm-smi
       rocm-runtime
       libcap
+      libdrm
       grpc
       openssl
     ]
     ++ lib.optionals buildTests [
       gtest
     ];
+
+  CXXFLAGS = "-I${libcap.dev}/include";
 
   cmakeFlags =
     [

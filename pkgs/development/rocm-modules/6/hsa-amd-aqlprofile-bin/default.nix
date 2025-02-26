@@ -9,19 +9,20 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hsa-amd-aqlprofile-bin";
-  version = "6.3.0";
+  version = "6.3.3";
 
   src =
     let
       inherit (finalAttrs) version;
       patch = rocm-core.ROCM_LIBPATCH_VERSION;
-      majorMinor = lib.versions.major version + "." + lib.versions.minor version;
-      incremental = "39";
+      majorMinor = lib.versions.majorMinor version;
+      poolVersion = if majorMinor + ".0" == version then majorMinor else version;
+      incremental = "74";
       osRelease = "22.04";
     in
     fetchurl {
-      url = "https://repo.radeon.com/rocm/apt/${majorMinor}/pool/main/h/hsa-amd-aqlprofile/hsa-amd-aqlprofile_1.0.0.${patch}-${incremental}~${osRelease}_amd64.deb";
-      hash = "sha256-ghgz5ZgWopgLJcK4Vbwm6zlny3IwxzWz9V0Fuwu35R0=";
+      url = "https://repo.radeon.com/rocm/apt/${poolVersion}/pool/main/h/hsa-amd-aqlprofile/hsa-amd-aqlprofile_1.0.0.${patch}-${incremental}~${osRelease}_amd64.deb";
+      hash = "sha256-Lo6gU9ywkujtsKvnOAwL3L8qQNPwjjm0Pm4OyzoUYao=";
     };
 
   nativeBuildInputs = [ dpkg ];

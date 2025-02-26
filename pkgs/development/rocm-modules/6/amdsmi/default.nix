@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   rocmUpdateScript,
   cmake,
   pkg-config,
@@ -20,12 +21,12 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "amdsmi";
-  version = "6.3.1";
+  version = "6.3.3";
   src = fetchFromGitHub {
     owner = "rocm";
     repo = "amdsmi";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-ZHr7G2/A4t3yH4S5urt1u8DZqGRcXpZUC/eavhkgPMY=";
+    hash = "sha256-hrPqd4ZWqzTG7JRfVwc1SZx6TNS0Q/LFg8yDxrM3mPo=";
   };
 
   postPatch = ''
@@ -33,12 +34,19 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "amd_smi)" ${"'"}''${AMD_SMI_TARGET})' \
       --replace-fail 'target_link_libraries(''${GOAMDSMI_SHIM_TARGET} -L' '#'
 
+    # Manually unpack esmi_ib_src and add amd_hsmp.h so execute-process git clone doesn't run
     cp -rf --no-preserve=mode ${esmi_ib_src} ./esmi_ib_library
     mkdir -p ./esmi_ib_library/include/asm
-    cp ${./amd_hsmp.h} ./esmi_ib_library/include/asm/amd_hsmp.h
+    cp ./include/amd_smi/impl/amd_hsmp.h ./esmi_ib_library/include/asm/amd_hsmp.h
   '';
 
-  patches = [ ];
+  patches = [
+    # Fix ld.lld undefined reference: drmGetVersion
+    (fetchpatch {
+      url = "https://github.com/ROCm/amdsmi/commit/c3864bf6171970d86dc50fd23f06377736823997.patch";
+      hash = "sha256-zRG1tBD8sIQCWdKfCbXC/Z/6d6NTrRYvRpddPWdM4j8=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -61,6 +69,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall = ''
     wrapPythonProgramsIn $out
+    rm $out/bin/amd-smi
+    ln -sf $out/libexec/amdsmi_cli/amdsmi_cli.py $out/bin/amd-smi
   '';
 
   passthru.updateScript = rocmUpdateScript {

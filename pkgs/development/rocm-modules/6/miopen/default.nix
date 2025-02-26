@@ -54,13 +54,13 @@
 let
   # FIXME: cmake files need patched to include this properly
   cFlags = "-O3 -DNDEBUG -Wno-documentation-pedantic --offload-compress -I${hipblas-common}/include  -I${hipblas}/include -I${roctracer}/include -I${nlohmann_json}/include -I${sqlite.dev}/include -I${rocrand}/include";
-  version = "6.3.1";
+  version = "6.3.3";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "MIOpen";
     rev = "rocm-${version}";
-    hash = "sha256-KV+tJPD4HQayY8zD4AdOFxxYRnyI47suxX5OgZ7mpdU=";
+    hash = "sha256-rX+BE6wBDMnLyc6eai3bDVvmfahomDO0s10n6HhWu7c=";
     fetchLFS = true;
     fetchSubmodules = true;
     # WORKAROUND: .lfsconfig is incorrectly set to exclude everything upstream
@@ -251,9 +251,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     patchShebangs test src/composable_kernel fin utils install_deps.cmake
 
-    substituteInPlace test/gtest/CMakeLists.txt \
-      --replace "include(googletest)" ""
-
     ln -sf ${gfx900} src/kernels/gfx900.kdb
     ln -sf ${gfx906} src/kernels/gfx906.kdb
     ln -sf ${gfx908} src/kernels/gfx908.kdb
@@ -301,7 +298,6 @@ stdenv.mkDerivation (finalAttrs: {
         )
       } $test/bin/*
     '';
-  # doCheck = false; # FIXME: clang-tidy really slow :(
 
   requiredSystemFeatures = [ "big-parallel" ];
 

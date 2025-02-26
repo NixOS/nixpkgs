@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
         "cpu"
     );
 
-  version = "6.3.1";
+  version = "6.3.3";
 
   src = fetchFromGitHub {
     owner = "ROCm";
@@ -120,8 +120,8 @@ stdenv.mkDerivation (finalAttrs: {
     export CXXFLAGS+=" --rocm-path=${clr} --rocm-device-lib-path=${rocm-device-libs}/amdgcn/bitcode"
     # Properly find miopen, fix ffmpeg version detection
     substituteInPlace amd_openvx_extensions/CMakeLists.txt \
-      --replace "miopen     PATHS \''${ROCM_PATH} QUIET" "miopen PATHS ${miopen} QUIET" \
-      --replace "\''${ROCM_PATH}/include/miopen/config.h" "${miopen}/include/miopen/config.h"
+      --replace-fail "miopen     PATHS \''${ROCM_PATH} QUIET" "miopen PATHS ${miopen} QUIET" \
+      --replace-fail "\''${ROCM_PATH}/include/miopen/config.h" "${miopen}/include/miopen/config.h"
 
     # Properly find turbojpeg
     substituteInPlace cmake/FindTurboJpeg.cmake \
