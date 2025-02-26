@@ -85,7 +85,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   version = "4731";
 
   src = fetchFromGitHub {
-    owner = "ggerganov";
+    owner = "ggml-org";
     repo = "llama.cpp";
     tag = "b${finalAttrs.version}";
     hash = "sha256-XB7TI1/Ui9BGdsD5TVH5MMZalgEGquW9wYcAhxgAcP0=";
@@ -194,7 +194,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Inference of Meta's LLaMA model (and others) in pure C/C++";
-    homepage = "https://github.com/ggerganov/llama.cpp/";
+    homepage = "https://github.com/ggml-org/llama.cpp";
     license = licenses.mit;
     mainProgram = "llama";
     maintainers = with maintainers; [
