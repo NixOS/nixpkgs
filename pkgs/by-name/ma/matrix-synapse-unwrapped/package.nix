@@ -9,7 +9,7 @@
   rustPlatform,
   rustc,
   nixosTests,
-  callPackage,
+  nix-update-script,
 }:
 
 let
@@ -174,6 +174,7 @@ python3.pkgs.buildPythonApplication rec {
     tests = { inherit (nixosTests) matrix-synapse matrix-synapse-workers; };
     inherit plugins;
     python = python3;
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {
