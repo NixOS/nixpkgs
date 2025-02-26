@@ -146,8 +146,8 @@ rec {
       "sha256-qBzg02M7akfgvbBeeg2T++ahv9cr712G+/3oyhU37Q8=";
 
   mypy-boto3-auditmanager =
-    buildMypyBoto3Package "auditmanager" "1.36.0"
-      "sha256-14tXgIYjMC62ZDPhdU5FeaIYDRlIGkVtek33a8+JW8c=";
+    buildMypyBoto3Package "auditmanager" "1.37.0"
+      "sha256-wH8zPvix4Yd0uBbz71EJmk6YWe/bBZz4v+QHjl2yud0=";
 
   mypy-boto3-autoscaling =
     buildMypyBoto3Package "autoscaling" "1.36.0"
