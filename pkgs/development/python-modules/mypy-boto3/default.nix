@@ -490,8 +490,8 @@ rec {
       "sha256-h1hUoDGwVC3shOU236Z7GvphwsFnm+6lVMVYz7hjadM=";
 
   mypy-boto3-elb =
-    buildMypyBoto3Package "elb" "1.36.0"
-      "sha256-jfF0FDyLYqOObAjD5NOzDeyVIx0yQ9PpWmGXPR6S8i0=";
+    buildMypyBoto3Package "elb" "1.37.0"
+      "sha256-2loxTqxOQxGiJkuLh7qgIaGSuML0/xN3f3AKHQoMT+Q=";
 
   mypy-boto3-elbv2 =
     buildMypyBoto3Package "elbv2" "1.36.0"
