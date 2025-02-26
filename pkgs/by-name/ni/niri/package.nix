@@ -8,6 +8,7 @@
   libinput,
   libxkbcommon,
   mesa,
+  versionCheckHook,
   nix-update-script,
   pango,
   pipewire,
@@ -24,13 +25,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "niri";
-  version = "25.01";
+  version = "25.02";
 
   src = fetchFromGitHub {
     owner = "YaLTeR";
     repo = "niri";
     tag = "v${version}";
-    hash = "sha256-AJ1rlgNOPb3/+DbS5hkhm21t6Oz8IgqLllwmZt0lyzk=";
+    hash = "sha256-mTTHA0RAaQcdYe+9A3Jx77cmmyLFHmRoZdd8RpWa+m8=";
   };
 
   postPatch = ''
@@ -40,7 +41,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-eGI3i7FnjZGEfcGvEpNLOog8cgExBJuGoXM/oHsui0M=";
+  cargoHash = "sha256-xUjBQ65INi5qD7s5SpPw9TISgY6I3bjjUBmpubvM43I=";
 
   strictDeps = true;
 
@@ -102,11 +103,9 @@ rustPlatform.buildRustPackage rec {
     );
   };
 
-  preCheck = ''
-    export XDG_RUNTIME_DIR=$(mktemp -d)
-    # See https://github.com/YaLTeR/niri/issues/953
-    export RAYON_NUM_THREADS=1
-  '';
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
 
   passthru = {
     providedSessions = [ "niri" ];
