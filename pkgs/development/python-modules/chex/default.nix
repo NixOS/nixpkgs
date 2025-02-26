@@ -23,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "chex";
-  version = "0.1.88";
+  version = "0.1.89";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "deepmind";
     repo = "chex";
     tag = "v${version}";
-    hash = "sha256-umRq+FZwyx1hz839ZibRTEFKjbBugrfUJuE8PagjqI4=";
+    hash = "sha256-eTEfmbpmwtCuphtOq0iHUT8zGfyQ4/aUorL4FQwcKBw=";
   };
 
   build-system = [ setuptools ];
@@ -60,7 +60,7 @@ buildPythonPackage rec {
   meta = {
     description = "Library of utilities for helping to write reliable JAX code";
     homepage = "https://github.com/deepmind/chex";
-    changelog = "https://github.com/google-deepmind/chex/releases/tag/v${version}";
+    changelog = "https://github.com/google-deepmind/chex/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ ndl ];
   };
