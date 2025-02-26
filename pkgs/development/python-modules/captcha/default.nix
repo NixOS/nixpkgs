@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "captcha";
-  version = "0.6.0";
+  version = "0.7.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "lepture";
     repo = "captcha";
     tag = "v${version}";
-    hash = "sha256-5d5gts+BXS5OKVziR9cLczsD2QMXZ/n31sPEq+gPlxk=";
+    hash = "sha256-cZI9LSX/FH3bKL3DKDObNZP0D0n5hSD/lhV19ageMXY=";
   };
 
   dependencies = [ pillow ];
