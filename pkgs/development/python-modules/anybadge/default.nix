@@ -6,6 +6,7 @@
   pytestCheckHook,
   pythonOlder,
   requests,
+  sh,
 }:
 
 buildPythonPackage rec {
@@ -22,14 +23,21 @@ buildPythonPackage rec {
     hash = "sha256-9qGmiIGzVdWHMyurMqTqEz+NKYlc/5zt6HPsssCH4Pk=";
   };
 
-  # setup.py reads its version from the TRAVIS_TAG environment variable
-  TRAVIS_TAG = "v${version}";
+  # replace version info, also remove the need for git to check the tag for build
+  postPatch = ''
+    substituteInPlace ./setup.py \
+      --replace 'version=get_version()' 'version="${version}"'
 
-  propagatedBuildInputs = [ packaging ];
+    substituteInPlace ./anybadge/__init__.py \
+      --replace '"0.0.0"' '"${version}"'
+  '';
+
+  dependencies = [ packaging ];
 
   nativeCheckInputs = [
     pytestCheckHook
     requests
+    sh
   ];
 
   disabledTests = [
