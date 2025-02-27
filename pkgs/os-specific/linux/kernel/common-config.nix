@@ -43,17 +43,24 @@ let
   );
 
   forceRust = features.rust or false;
-  kernelSupportsRust = lib.versionAtLeast version "6.7"
-    # Known to be broken: https://lore.kernel.org/lkml/31885EDD-EF6D-4EF1-94CA-276BA7A340B7@kernel.org/T/
-    && !(stdenv.hostPlatform.isRiscV && stdenv.cc.isGNU);
-
+  # Architecture support collected from HAVE_RUST Kconfig definitions and the following table:
+  # https://web.git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/rust/arch-support.rst
+  kernelSupportsRust = (
+    lib.versionAtLeast version "6.12"
+    && (
+      stdenv.hostPlatform.isx86_64
+      || stdenv.hostPlatform.isLoongArch64
+      || stdenv.hostPlatform.isAarch64
+      || (stdenv.hostPlatform.isRiscV64 && !stdenv.cc.isGNU)
+    )
+  );
 
   # Currently only enabling Rust by default on kernel 6.12+,
   # which actually has features that use Rust that we want.
   defaultRust = lib.versionAtLeast version "6.12" && rustAvailable;
   withRust =
     assert lib.assertMsg (!(forceRust && !kernelSupportsRust)) ''
-      Kernels below 6.7 (the kernel being built is ${version}) don't support Rust.
+      Kernel ${version} is not declared as supporting Rust on this host platform and compiler.
     '';
     (forceRust || defaultRust) && kernelSupportsRust;
 
