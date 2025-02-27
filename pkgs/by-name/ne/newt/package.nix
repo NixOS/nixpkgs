@@ -4,11 +4,11 @@
   stdenv,
   slang,
   popt,
-  python,
+  python3,
 }:
 
 let
-  pythonIncludePath = "${lib.getDev python}/include/python";
+  pythonIncludePath = "${lib.getDev python3}/include/python";
 in
 stdenv.mkDerivation rec {
   pname = "newt";
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   '';
 
   strictDeps = true;
-  nativeBuildInputs = [ python ];
+  nativeBuildInputs = [ python3 ];
   buildInputs = [
     slang
     popt
