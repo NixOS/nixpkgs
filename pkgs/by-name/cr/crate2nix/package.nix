@@ -34,7 +34,7 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     wrapProgram $out/bin/crate2nix \
-      --prefix PATH ":" ${
+      --suffix PATH ":" ${
         lib.makeBinPath [
           cargo
           nix
