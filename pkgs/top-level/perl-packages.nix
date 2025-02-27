@@ -19310,10 +19310,10 @@ with self; {
       ../development/perl-modules/net-snmp-add-sha-algorithms.patch
     ];
     preCheck =
-      (lib.optionalString stdenv.hostPlatform.isLinux ''
+      lib.optionalString stdenv.hostPlatform.isLinux ''
         export NIX_REDIRECTS=/etc/protocols=${pkgs.iana-etc}/etc/protocols
-        export LD_PRELOAD=${pkgs.libredirect}/lib/libredirect.so
-      '');
+      '';
+    nativeCheckInputs = lib.optionals stdenv.hostPlatform.isLinux [ pkgs.libredirect.hook ];
     propagatedBuildInputs = [
       CryptDES
       CryptRijndael
