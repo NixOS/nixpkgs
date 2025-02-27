@@ -7,22 +7,15 @@
 
 stdenv.mkDerivation rec {
   pname = "r8125";
-  # On update please verify (using `diff -r`) that the source matches the
-  # realtek version.
-  version = "9.014.01";
-
-  # This is a mirror. The original website[1] doesn't allow non-interactive
-  # downloads, instead emailing you a download link.
-  # [1] https://www.realtek.com/en/component/zoo/category/network-interface-controllers-10-100-1000m-gigabit-ethernet-pci-express-software
+  version = "9.015.00";
   src = fetchFromGitHub {
-    owner = "louistakepillz";
+    owner = "alper-han";
     repo = "r8125";
     rev = version;
-    sha256 = "sha256-vYgAOmKFQZDKrZsS3ynXB0DrT3wU0JWzNTYO6FyMG9M=";
+    sha256 = "sha256-ceJXSOyAFis2RVhjVhtoGai4/22Si4j1OG083A2jlt0=";
   };
 
   hardeningDisable = [ "pic" ];
-
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
   preBuild = ''
@@ -37,14 +30,9 @@ stdenv.mkDerivation rec {
   buildFlags = [ "modules" ];
 
   meta = with lib; {
-    homepage = "https://github.com/louistakepillz/r8125";
-    downloadPage = "https://www.realtek.com/en/component/zoo/category/network-interface-controllers-10-100-1000m-gigabit-ethernet-pci-express-software";
-    description = "Realtek r8125 driver";
-    longDescription = ''
-      A kernel module for Realtek 8125 2.5G network cards.
-    '';
-    # r8125 has been integrated into the kernel as of v5.9.1
-    broken = lib.versionAtLeast kernel.version "5.9.1";
+    homepage = "https://github.com/alper-han/r8125";
+    downloadPage = "https://www.realtek.com/Download/List?cate_id=584";
+    description = "Realtek r8125 2.5G Ethernet driver";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ peelz ];
