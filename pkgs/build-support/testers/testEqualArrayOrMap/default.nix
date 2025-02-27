@@ -2,39 +2,34 @@
   lib,
   stdenvNoCC,
 }:
-let
-  inherit (lib.asserts) assertMsg;
-  inherit (lib.customisation) makeOverridable;
+lib.makeOverridable (
+  {
+    name,
+    valuesArray ? null,
+    valuesMap ? null,
+    expectedArray ? null,
+    expectedMap ? null,
+    script,
+  }:
+  assert lib.assertMsg (
+    expectedArray != null || expectedMap != null
+  ) "testEqualArrayOrMap: at least one of 'expectedArray' or 'expectedMap' must be provided";
+  stdenvNoCC.mkDerivation {
+    __structuredAttrs = true;
+    strictDeps = true;
 
-  testEqualArrayOrMap =
-    {
-      name,
-      valuesArray ? null,
-      valuesMap ? null,
-      expectedArray ? null,
-      expectedMap ? null,
-      script,
-    }:
-    assert assertMsg (
-      expectedArray != null || expectedMap != null
-    ) "testEqualArrayOrMap: at least one of 'expectedArray' or 'expectedMap' must be provided";
-    stdenvNoCC.mkDerivation {
-      __structuredAttrs = true;
-      strictDeps = true;
+    inherit name;
 
-      inherit name;
+    nativeBuildInputs = [
+      ./assert-equal-array.sh
+      ./assert-equal-map.sh
+    ];
 
-      nativeBuildInputs = [
-        ./assert-equal-array.sh
-        ./assert-equal-map.sh
-      ];
+    inherit valuesArray valuesMap;
+    inherit expectedArray expectedMap;
 
-      inherit valuesArray valuesMap;
-      inherit expectedArray expectedMap;
+    inherit script;
 
-      inherit script;
-
-      buildCommandPath = ./build-command.sh;
-    };
-in
-makeOverridable testEqualArrayOrMap
+    buildCommandPath = ./build-command.sh;
+  }
+)
