@@ -1,4 +1,5 @@
 {
+  lib,
   stdenv,
   callPackage,
   cmake,
@@ -15,6 +16,8 @@
   util-linux,
   libselinux,
   libsepol,
+  withVala ? false,
+  vala,
 }:
 
 let
@@ -48,7 +51,7 @@ stdenv.mkDerivation {
     pkg-config
     intltool
     gobject-introspection
-  ];
+  ] ++ lib.optional withVala vala;
   propagatedBuildInputs = [
     pcre
     util-linux

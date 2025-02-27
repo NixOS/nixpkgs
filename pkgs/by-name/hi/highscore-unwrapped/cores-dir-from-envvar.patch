@@ -1,0 +1,43 @@
+diff --git a/runner/core-module.vala b/runner/core-module.vala
+index 0bf3446..638396e 100644
+--- a/runner/core-module.vala
++++ b/runner/core-module.vala
+@@ -18,14 +18,14 @@ private class Highscore.CoreModule : TypeModule {
+ 
+         try {
+             var keyfile_path = Path.build_filename (
+-                Config.CORES_DIR,
++                Environment.get_variable ("HIGHSCORE_CORES_DIR") ?? Config.CORES_DIR,
+                 @"$core_filename.highscore"
+             );
+ 
+             var keyfile = new KeyFile ();
+             keyfile.load_from_file (keyfile_path, KeyFileFlags.NONE);
+             var module_name = keyfile.get_string ("Highscore", "Module");
+-            module_path = Path.build_filename (Config.CORES_DIR, module_name);
++            module_path = Path.build_filename (Environment.get_variable ("HIGHSCORE_CORES_DIR") ?? Config.CORES_DIR, module_name);
+             name = keyfile.get_string ("Highscore", "Name");
+ 
+             if (keyfile.has_group ("Hacks")) {
+diff --git a/src/core-register.vala b/src/core-register.vala
+index bc6da61..261fb88 100644
+--- a/src/core-register.vala
++++ b/src/core-register.vala
+@@ -21,7 +21,7 @@ public class Highscore.Core : Object {
+ 
+         try {
+             var keyfile_path = Path.build_filename (
+-                Config.CORES_DIR,
++                Environment.get_variable ("HIGHSCORE_CORES_DIR") ?? Config.CORES_DIR,
+                 @"$core_filename.highscore"
+             );
+ 
+@@ -60,7 +60,7 @@ public class Highscore.CoreRegister : Object {
+         cores = new HashTable<string, Core> (str_hash, str_equal);
+ 
+         try {
+-            var directory = File.new_for_path (Config.CORES_DIR);
++            var directory = File.new_for_path (Environment.get_variable ("HIGHSCORE_CORES_DIR") ?? Config.CORES_DIR);
+             var enumerator = directory.enumerate_children (FileAttribute.STANDARD_NAME, 0);
+ 
+             FileInfo info;
