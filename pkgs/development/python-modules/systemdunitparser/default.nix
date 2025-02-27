@@ -4,6 +4,7 @@
   fetchFromGitHub,
   setuptools,
   wheel,
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
@@ -26,6 +27,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "SystemdUnitParser"
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "SystemdUnitParser is an extension to Python's configparser.RawConfigParser to properly parse systemd unit files";
