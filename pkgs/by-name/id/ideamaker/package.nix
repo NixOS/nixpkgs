@@ -13,12 +13,16 @@
   libGLU,
   libpsl,
   libsForQt5,
+  libredirect,
+  libX11,
   lz4,
   makeDesktopItem,
+  makeWrapper,
   nghttp2,
   shared-mime-info,
   stdenv,
   writeShellApplication,
+  xkeyboardconfig,
 }:
 let
   pname = "ideamaker";
@@ -37,9 +41,11 @@ stdenv.mkDerivation {
     autoPatchelfHook
     copyDesktopItems
     dpkg
+    makeWrapper
     shared-mime-info
-    libsForQt5.wrapQtAppsHook
   ];
+
+  dontWrapQtApps = true;
 
   buildInputs = [
     libGLU
@@ -49,20 +55,17 @@ stdenv.mkDerivation {
     gtk3
     nghttp2
     libpsl
-    # libsForQt5.qtbase
-    # libsForQt5.qt5.qtwayland
+    libsForQt5.qtbase
+    libsForQt5.qt5.qtwayland
   ];
 
   installPhase = ''
     runHook preInstall
 
-    install -D usr/lib/x86_64-linux-gnu/ideamaker/ideamaker \
-      $out/bin/ideamaker
+    mkdir -p $out/bin
 
-    mkdir $out/lib
-    # shopt -s extglob
-    # cp -a usr/lib/x86_64-linux-gnu/ideamaker/!(libQt5*) $out/lib
-    cp -a usr/lib/x86_64-linux-gnu/ideamaker/* $out/lib
+    cp -r usr $out
+    cp -r usr/share $out/share
 
     mimetypeDir=$out/share/icons/hicolor/128x128/mimetypes
     mkdir -p ''$mimetypeDir
@@ -75,7 +78,24 @@ stdenv.mkDerivation {
     install -D usr/share/ideamaker/icons/ideamaker-icon.png \
       $out/share/pixmaps/ideamaker.png
 
+    ln -sf $out/usr/lib/x86_64-linux-gnu/ideamaker/ideamaker $out/bin/ideamaker
+
     runHook postInstall
+  '';
+
+  preFixup = ''
+    wrapProgram $out/bin/ideamaker \
+      --set LD_PRELOAD "${libredirect}/lib/libredirect.so" \
+      --set QT_XKB_CONFIG_ROOT "${xkeyboardconfig}/share/X11/xkb" \
+      --set QTCOMPOSE "${libX11.out}/share/X11/locale" \
+      --set KDEDIRS "$HOME/.nix-profile:/nix/var/nix/profiles/default" \
+      --set NIX_REDIRECTS /usr/share=$out/share/
+  '';
+
+  postFixup = ''
+    patchelf \
+      --add-needed libdbus-1.so.3 \
+      "$out/usr/lib/x86_64-linux-gnu/ideamaker/libQt5DBus.so.5.15.2"
   '';
 
   desktopItems = [
@@ -125,11 +145,12 @@ stdenv.mkDerivation {
 
   meta = {
     inherit description;
-    homepage = "https://www.raise3d.com/ideamaker/";
     changelog = "https://www.raise3d.com/download/ideamaker-release-notes/";
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    homepage = "https://www.raise3d.com/ideamaker/";
     license = lib.licenses.unfree;
-    platforms = [ "x86_64-linux" ];
+    mainProgram = "ideamaker";
     maintainers = with lib.maintainers; [ cjshearer ];
+    platforms = [ "x86_64-linux" ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 }
