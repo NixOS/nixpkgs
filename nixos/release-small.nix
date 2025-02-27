@@ -48,8 +48,13 @@ rec {
       dummy
       ;
     tests = {
+      acme = {
+        inherit (nixos'.tests.acme)
+          http01-builtin
+          dns01
+          ;
+      };
       inherit (nixos'.tests)
-        acme
         containers-imperative
         containers-ip
         firewall
@@ -135,7 +140,8 @@ rec {
         (map onSupported [
           "nixos.dummy"
           "nixos.manual"
-          "nixos.tests.acme"
+          "nixos.tests.acme.http01-builtin"
+          "nixos.tests.acme.dns01"
           "nixos.tests.containers-imperative"
           "nixos.tests.containers-ip"
           "nixos.tests.firewall"

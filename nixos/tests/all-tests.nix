@@ -146,7 +146,7 @@ in {
 
   _3proxy = runTest ./3proxy.nix;
   aaaaxy = runTest ./aaaaxy.nix;
-  acme = runTest ./acme.nix;
+  acme = import ./acme/default.nix { inherit runTest; };
   acme-dns = handleTest ./acme-dns.nix {};
   actual = handleTest ./actual.nix {};
   adguardhome = runTest ./adguardhome.nix;
@@ -196,7 +196,9 @@ in {
   beanstalkd = handleTest ./beanstalkd.nix {};
   bees = handleTest ./bees.nix {};
   benchexec = handleTest ./benchexec.nix {};
-  binary-cache = handleTest ./binary-cache.nix {};
+  binary-cache = handleTest ./binary-cache.nix { compression = "zstd"; };
+  binary-cache-no-compression = handleTest ./binary-cache.nix { compression = "none"; };
+  binary-cache-xz = handleTest ./binary-cache.nix { compression = "xz"; };
   bind = handleTest ./bind.nix {};
   bird = handleTest ./bird.nix {};
   birdwatcher = handleTest ./birdwatcher.nix {};
@@ -440,6 +442,7 @@ in {
   gns3-server = handleTest ./gns3-server.nix {};
   gnupg = handleTest ./gnupg.nix {};
   goatcounter = handleTest ./goatcounter.nix {};
+  go-camo = handleTest ./go-camo.nix { };
   go-neb = handleTest ./go-neb.nix {};
   gobgpd = handleTest ./gobgpd.nix {};
   gocd-agent = handleTest ./gocd-agent.nix {};
@@ -488,6 +491,7 @@ in {
   honk = runTest ./honk.nix;
   installed-tests = pkgs.recurseIntoAttrs (handleTest ./installed-tests {});
   invidious = handleTest ./invidious.nix {};
+  iosched = handleTest ./iosched.nix {};
   isolate = handleTest ./isolate.nix {};
   livebook-service = handleTest ./livebook-service.nix {};
   pyload = handleTest ./pyload.nix {};
@@ -1261,7 +1265,14 @@ in {
   zenohd = handleTest ./zenohd.nix {};
   zeronet-conservancy = handleTest ./zeronet-conservancy.nix {};
   zfs = handleTest ./zfs.nix {};
-  zigbee2mqtt = handleTest ./zigbee2mqtt.nix {};
+  zigbee2mqtt_1 = runTest {
+    imports = [ ./zigbee2mqtt.nix ];
+    _module.args.package = pkgs.zigbee2mqtt_1;
+  };
+  zigbee2mqtt_2 = runTest {
+    imports = [ ./zigbee2mqtt.nix ];
+    _module.args.package = pkgs.zigbee2mqtt_2;
+  };
   zipline = handleTest ./zipline.nix {};
   zoneminder = handleTest ./zoneminder.nix {};
   zookeeper = handleTest ./zookeeper.nix {};

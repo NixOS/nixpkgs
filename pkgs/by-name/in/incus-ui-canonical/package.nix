@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  fetchurl,
   fetchFromGitHub,
   fetchYarnDeps,
   nodejs,
@@ -9,16 +10,22 @@
   nixosTests,
   git,
 }:
-
+let
+  # this rarely changes https://github.com/zabbly/incus/blob/daily/patches/ui-canonical-renames.sed
+  renamesSed = fetchurl {
+    url = "https://raw.githubusercontent.com/zabbly/incus/0fa53811ff1043fd9f28c8b78851b60ca58e1b10/patches/ui-canonical-renames.sed";
+    hash = "sha256-f0vd/Xp/kBbZkg6CBM4cZPlwg5WUL/zv3mCAEmugzCE=";
+  };
+in
 stdenv.mkDerivation rec {
   pname = "incus-ui-canonical";
-  version = "0.14.6";
+  version = "0.14.7";
 
   src = fetchFromGitHub {
     owner = "zabbly";
     repo = "incus-ui-canonical";
     tag = "incus-${version}";
-    hash = "sha256-An2mhIj3D2EdB1Bgnry1l2m6r/GIKTee4anSYNTq8B8=";
+    hash = "sha256-O8dXTtpeFs2muwXHuNZsXjr15gWYlPmdjW4aQHwDBpY=";
   };
 
   offlineCache = fetchYarnDeps {
@@ -26,15 +33,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-dkATFNjAPhrPbXhcJ/R4eIpcagKEwBSnRfLwqTPIe6c=";
   };
 
-  zabbly = fetchFromGitHub {
-    owner = "zabbly";
-    repo = "incus";
-    rev = "36714d7c38eb3cc3e4e821c7aed44e066e1e84ca";
-    hash = "sha256-H6gjXmwCv3oGXrzn1NENfgO3CWXMnmp94GdJv2Q8n0w=";
-  };
-
   patchPhase = ''
-    sed -i -f "$zabbly/patches/ui-canonical-renames.sed" src/*/*.ts* src/*/*/*.ts* src/*/*/*/*.ts*
+    find -type f -name "*.ts" -o -name "*.tsx" -o -name "*.scss" | xargs sed -i -f ${renamesSed}
   '';
 
   nativeBuildInputs = [

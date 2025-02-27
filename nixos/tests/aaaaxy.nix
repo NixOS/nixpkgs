@@ -22,7 +22,7 @@
       "ln -s '${pkgs.aaaaxy.testing_infra}/assets/demos/benchmark.dem' '/tmp/aaaaxy/assets/demos/'",
       """
         '${pkgs.aaaaxy.testing_infra}/scripts/regression-test-demo.sh' \
-        'aaaaxy' 'on track for Any%, All Paths, No Teleports and No Coil' \
+        'aaaaxy' 'on track for Any%, All Paths, All Flipped, No Teleports and No Coil' \
         '${pkgs.aaaaxy}/bin/aaaaxy' '/tmp/aaaaxy/assets/demos/benchmark.dem'
       """,
     )

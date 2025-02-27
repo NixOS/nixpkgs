@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  fetchpatch,
   installShellFiles,
   pkg-config,
   openssl,
@@ -23,6 +24,16 @@ rustPlatform.buildRustPackage rec {
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-ey5pFGLgj17+RZGjpLOeN7Weh29jJyvuRrJ8wsIlC58=";
+
+  patches = [
+    (fetchpatch {
+      # typst 0.13.0 has a regression regarding usage of inotify when running `typst watch`
+      # also affects NixOS: https://github.com/typst/typst/issues/5903#issuecomment-2680985045
+      name = "fix-high-cpu-in-watch-mode.patch";
+      url = "https://patch-diff.githubusercontent.com/raw/typst/typst/pull/5905.patch";
+      hash = "sha256-qq5Dj5kKSjdlHp8FOH+gQtzZGqzBscvG8ufSrL94tsY=";
+    })
+  ];
 
   nativeBuildInputs = [
     installShellFiles
