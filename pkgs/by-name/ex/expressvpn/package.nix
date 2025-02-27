@@ -49,12 +49,21 @@ let
   };
 
   expressvpndFHS = buildFHSEnv {
-    inherit pname version;
+    # Setting the name makes the wrapper executable available as $out/bin/expressvpnd
+    name = "expressvpnd";
 
     # When connected, it directly creates/deletes resolv.conf to change the DNS entries.
     # Since it's running in an FHS environment, it has no effect on actual resolv.conf.
     # Hence, place a watcher that updates host resolv.conf when FHS resolv.conf changes.
+
+    # Mount the host's resolv.conf to the container's /etc/resolv.conf
     runScript = writeScript "${pname}-wrapper" ''
+      mkdir -p /host/etc
+      [ -e /host/etc/resolv.conf ] || touch /host/etc/resolv.conf
+      mount --bind /etc/resolv.conf /host/etc/resolv.conf
+      mount -o remount,rw /host/etc/resolv.conf
+      trap "umount /host/etc/resolv.conf" EXIT
+
       cp /host/etc/resolv.conf /etc/resolv.conf;
       while inotifywait /etc 2>/dev/null;
       do
