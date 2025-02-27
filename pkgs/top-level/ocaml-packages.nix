@@ -1224,6 +1224,8 @@ let
 
     mirage-runtime = callPackage ../development/ocaml-modules/mirage/runtime.nix { };
 
+    mirage-sleep = callPackage ../development/ocaml-modules/mirage-sleep { };
+
     mirage-time = callPackage ../development/ocaml-modules/mirage-time { };
 
     mirage-time-unix = callPackage ../development/ocaml-modules/mirage-time/unix.nix { };
