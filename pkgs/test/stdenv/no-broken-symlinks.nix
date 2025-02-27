@@ -17,23 +17,17 @@ let
     ln -s${optionalString (!absolute) "r"} "$out/reflexive-symlink" "$out/reflexive-symlink"
   '';
 
-  # Some platforms implement permissions for symlinks, while others - including
-  # Linux - ignore them. This function takes an extra argument specifying
-  # whether a failure to make the symlink unreadable should count as a 'fail' or
-  # 'pass', to make sure the tests work properly for both kinds of platform.
-  mkUnreadableSymlink = absolute: failIfUnsupported: ''
+  # Some platforms implement permissions for symlinks, while others - including Linux - ignore them.
+  # As a result, testing this hook's handling of unreadable symlinks requires careful attention to
+  # which kind of platform we're on. See the comments by `meta.badPlatforms` below for details.
+  platformsWithSymlinkPermissions = with lib.platforms; darwin ++ freebsd ++ netbsd ++ openbsd;
+  platformsWithoutSymlinkPermissions = lib.subtractLists platformsWithSymlinkPermissions lib.platforms.all;
+  mkUnreadableSymlink = absolute: ''
     touch "$out/unreadable-symlink-target"
     (
       umask 777
       ln -s${optionalString (!absolute) "r"} "$out/unreadable-symlink-target" "$out/unreadable-symlink"
     )
-    if readlink "$out/unreadable-symlink" >/dev/null 2>&1; then
-      nixErrorLog "symlink permissions not supported"
-      ${optionalString failIfUnsupported
-        # Postpone the failure until after no-broken-symlinks.sh has a chance to print its messages
-        "postFixupHooks+=('exit 1')"
-      }
-    fi
   '';
 
   mkValidSymlink = absolute: ''
@@ -50,10 +44,11 @@ let
       name,
       commands ? [ ],
       derivationArgs ? { },
+      meta ? { },
     }:
     stdenv.mkDerivation (
       {
-        inherit name;
+        inherit name meta;
         strictDeps = true;
         dontUnpack = true;
         dontPatch = true;
@@ -155,19 +150,26 @@ in
       {
         failed = testBuildFailure (testBuilder {
           name = "fail-unreadable-symlink-relative-inner";
-          commands = [ (mkUnreadableSymlink false true) ];
+          commands = [ (mkUnreadableSymlink false) ];
         });
+
+        # Skip test if symlink permissions are not supported, since the hook won't have anything to report.
+        meta.badPlatforms = platformsWithoutSymlinkPermissions;
       }
       ''
         (( 1 == "$(cat "$failed/testBuildFailure.exit")" ))
-        grep -E 'found 0 dangling symlinks, 0 reflexive symlinks and 1 unreadable symlinks|symlink permissions not supported' "$failed/testBuildFailure.log"
+        grep -F 'found 0 dangling symlinks, 0 reflexive symlinks and 1 unreadable symlinks' "$failed/testBuildFailure.log"
         touch $out
       '';
 
   pass-unreadable-symlink-relative-allowed = testBuilder {
     name = "pass-unreadable-symlink-relative-allowed";
-    commands = [ (mkUnreadableSymlink false false) ];
+    commands = [ (mkUnreadableSymlink false) ];
     derivationArgs.dontCheckForBrokenSymlinks = true;
+
+    # This test will break on platforms that use symlink permissions, because even though this hook will be okay, later ones will error out.
+    # It should be safe to run on other platforms, just to make sure the hook isn't completely broken. It won't have anything to report, though.
+    meta.badPlatforms = platformsWithSymlinkPermissions;
   };
 
   fail-unreadable-symlink-absolute =
@@ -175,21 +177,29 @@ in
       {
         failed = testBuildFailure (testBuilder {
           name = "fail-unreadable-symlink-absolute-inner";
-          commands = [ (mkUnreadableSymlink true true) ];
+          commands = [ (mkUnreadableSymlink true) ];
         });
+
+        # Skip test if symlink permissions are not supported, since the hook won't have anything to report.
+        meta.badPlatforms = platformsWithoutSymlinkPermissions;
       }
       ''
         (( 1 == "$(cat "$failed/testBuildFailure.exit")" ))
-        grep -E 'found 0 dangling symlinks, 0 reflexive symlinks and 1 unreadable symlinks|symlink permissions not supported' "$failed/testBuildFailure.log"
+        grep -F 'found 0 dangling symlinks, 0 reflexive symlinks and 1 unreadable symlinks' "$failed/testBuildFailure.log"
         touch $out
       '';
 
   pass-unreadable-symlink-absolute-allowed = testBuilder {
     name = "pass-unreadable-symlink-absolute-allowed";
-    commands = [ (mkUnreadableSymlink true false) ];
+    commands = [ (mkUnreadableSymlink true) ];
     derivationArgs.dontCheckForBrokenSymlinks = true;
+
+    # This test will break on platforms that use symlink permissions, because even though this hook will be okay, later ones will error out.
+    # It should be safe to run on other platforms, just to make sure the hook isn't completely broken. It won't have anything to report, though.
+    meta.badPlatforms = platformsWithSymlinkPermissions;
   };
 
+  # Leave the unreadable symlink out of the combined 'broken' test since it doesn't work on all platforms.
   fail-broken-symlinks-relative =
     runCommand "fail-broken-symlinks-relative"
       {
@@ -198,16 +208,12 @@ in
           commands = [
             (mkDanglingSymlink false)
             (mkReflexiveSymlink false)
-            (mkUnreadableSymlink false true)
           ];
         });
       }
       ''
         (( 1 == "$(cat "$failed/testBuildFailure.exit")" ))
-        if ! grep -F 'found 1 dangling symlinks, 1 reflexive symlinks and 1 unreadable symlinks' "$failed/testBuildFailure.log"; then
-          grep -F 'symlink permissions not supported' "$failed/testBuildFailure.log"
-          grep -F 'found 1 dangling symlinks, 1 reflexive symlinks and 0 unreadable symlinks' "$failed/testBuildFailure.log"
-        fi
+        grep -F 'found 1 dangling symlinks, 1 reflexive symlinks and 0 unreadable symlinks' "$failed/testBuildFailure.log"
         touch $out
       '';
 
@@ -216,7 +222,6 @@ in
     commands = [
       (mkDanglingSymlink false)
       (mkReflexiveSymlink false)
-      (mkUnreadableSymlink false false)
     ];
     derivationArgs.dontCheckForBrokenSymlinks = true;
   };
@@ -229,9 +234,40 @@ in
           commands = [
             (mkDanglingSymlink true)
             (mkReflexiveSymlink true)
-            (mkUnreadableSymlink true true)
           ];
         });
+      }
+      ''
+        (( 1 == "$(cat "$failed/testBuildFailure.exit")" ))
+        grep -F 'found 1 dangling symlinks, 1 reflexive symlinks and 0 unreadable symlinks' "$failed/testBuildFailure.log"
+        touch $out
+      '';
+
+  pass-broken-symlinks-absolute-allowed = testBuilder {
+    name = "pass-broken-symlinks-absolute-allowed";
+    commands = [
+      (mkDanglingSymlink true)
+      (mkReflexiveSymlink true)
+    ];
+    derivationArgs.dontCheckForBrokenSymlinks = true;
+  };
+
+  # The `all-broken` tests include unreadable symlinks along with the other kinds of broken links.
+  # They should be run/skipped on the same sets platforms as the corresponding `unreadable` tests.
+  fail-all-broken-symlinks-relative =
+    runCommand "fail-all-broken-symlinks-relative"
+      {
+        failed = testBuildFailure (testBuilder {
+          name = "fail-all-broken-symlinks-relative-inner";
+          commands = [
+            (mkDanglingSymlink false)
+            (mkReflexiveSymlink false)
+            (mkUnreadableSymlink false)
+          ];
+        });
+
+        # Skip test if symlink permissions are not supported, since the hook won't have anything to report.
+        meta.badPlatforms = platformsWithoutSymlinkPermissions;
       }
       ''
         (( 1 == "$(cat "$failed/testBuildFailure.exit")" ))
@@ -242,14 +278,56 @@ in
         touch $out
       '';
 
-  pass-broken-symlinks-absolute-allowed = testBuilder {
-    name = "pass-broken-symlinks-absolute-allowed";
+  pass-all-broken-symlinks-relative-allowed = testBuilder {
+    name = "pass-all-broken-symlinks-relative-allowed";
+    commands = [
+      (mkDanglingSymlink false)
+      (mkReflexiveSymlink false)
+      (mkUnreadableSymlink false)
+    ];
+    derivationArgs.dontCheckForBrokenSymlinks = true;
+
+    # This test will break on platforms that use symlink permissions, because even though this hook will be okay, later ones will error out.
+    # It should be safe to run on other platforms, just to make sure the hook isn't completely broken. It won't have anything to report, though.
+    meta.badPlatforms = platformsWithSymlinkPermissions;
+  };
+
+  fail-all-broken-symlinks-absolute =
+    runCommand "fail-all-broken-symlinks-absolute"
+      {
+        failed = testBuildFailure (testBuilder {
+          name = "fail-all-broken-symlinks-absolute-inner";
+          commands = [
+            (mkDanglingSymlink true)
+            (mkReflexiveSymlink true)
+            (mkUnreadableSymlink true)
+          ];
+        });
+
+        # Skip test if symlink permissions are not supported, since the hook won't have anything to report.
+        meta.badPlatforms = platformsWithoutSymlinkPermissions;
+      }
+      ''
+        (( 1 == "$(cat "$failed/testBuildFailure.exit")" ))
+        if ! grep -F 'found 1 dangling symlinks, 1 reflexive symlinks and 1 unreadable symlinks' "$failed/testBuildFailure.log"; then
+          grep -F 'symlink permissions not supported' "$failed/testBuildFailure.log"
+          grep -F 'found 1 dangling symlinks, 1 reflexive symlinks and 0 unreadable symlinks' "$failed/testBuildFailure.log"
+        fi
+        touch $out
+      '';
+
+  pass-all-broken-symlinks-absolute-allowed = testBuilder {
+    name = "pass-all-broken-symlinks-absolute-allowed";
     commands = [
       (mkDanglingSymlink true)
       (mkReflexiveSymlink true)
-      (mkUnreadableSymlink true false)
+      (mkUnreadableSymlink true)
     ];
     derivationArgs.dontCheckForBrokenSymlinks = true;
+
+    # This test will break on platforms that use symlink permissions, because even though this hook will be okay, later ones will error out.
+    # It should be safe to run on other platforms, just to make sure the hook isn't completely broken. It won't have anything to report, though.
+    meta.badPlatforms = platformsWithSymlinkPermissions;
   };
 
   pass-valid-symlink-relative = testBuilder {
