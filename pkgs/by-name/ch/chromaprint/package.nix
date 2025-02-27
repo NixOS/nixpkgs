@@ -11,6 +11,7 @@
   zlib,
   testers,
   validatePkgConfig,
+  nix-update-script,
   withExamples ? true,
   withTools ? true,
 }:
@@ -70,7 +71,10 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "BUILD_TOOLS" withTools)
   ];
 
-  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+  };
 
   meta =
     {
