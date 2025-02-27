@@ -372,7 +372,7 @@ let
     EMCluster = [ pkgs.lapack ];
     fangs = [ pkgs.cargo ];
     fastpng = [ pkgs.zlib.dev ];
-    fcl = [ pkgs.cargo ];
+    fcl = with pkgs; [ cargo rustc ];
     fftw = [ pkgs.fftw.dev ];
     fftwtools = with pkgs; [ fftw.dev pkg-config ];
     fingerPro = [ pkgs.gsl ];
@@ -700,7 +700,7 @@ let
     bbl = with pkgs; [ gsl ];
     diffHic = with pkgs; [ xz.dev bzip2.dev ];
     writexl = with pkgs; [ zlib.dev ];
-    xslt = with pkgs; [ libxslt libxml2 ];
+    xslt = with pkgs; [ libxslt libxml2 ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ xz ];
     qpdf = with pkgs; [ libjpeg.dev zlib.dev ];
     vcfR = with pkgs; [ zlib.dev ];
     bio3d = with pkgs; [ zlib.dev ];

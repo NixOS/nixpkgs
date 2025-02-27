@@ -19,22 +19,22 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "incus-ui-canonical";
-  version = "0.15";
+  version = "0.14.7";
 
   src = fetchFromGitHub {
     owner = "zabbly";
     repo = "incus-ui-canonical";
-    tag = version;
-    hash = "sha256-HqdaG51W7eUCGUhA+9pYrAWaA6qyK7Fc95CKJvk9GaA=";
+    tag = "incus-${version}";
+    hash = "sha256-O8dXTtpeFs2muwXHuNZsXjr15gWYlPmdjW4aQHwDBpY=";
   };
 
   offlineCache = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
-    hash = "sha256-O7oEAjmCEmPpsO/rdkZVhUkxhFzhHpPRbmci3yRBA7g=";
+    hash = "sha256-dkATFNjAPhrPbXhcJ/R4eIpcagKEwBSnRfLwqTPIe6c=";
   };
 
   patchPhase = ''
-    find -type f -name "*.ts" -o -name "*.tsx" -o -name "*.scss" -o -name "*.html" | xargs sed -i -f ${renamesSed}
+    find -type f -name "*.ts" -o -name "*.tsx" -o -name "*.scss" | xargs sed -i -f ${renamesSed}
   '';
 
   nativeBuildInputs = [
