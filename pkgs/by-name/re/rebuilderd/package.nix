@@ -15,6 +15,7 @@
   darwin,
   buildPackages,
   versionCheckHook,
+  nixosTests,
   nix-update-script,
 }:
 
@@ -108,6 +109,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
   versionCheckProgramArg = [ "--version" ];
   doInstallCheck = true;
+
+  passthru.tests = {
+    rebuilderd = nixosTests.rebuilderd;
+  };
 
   passthru.updateScript = nix-update-script { };
 
