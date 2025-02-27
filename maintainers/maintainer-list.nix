@@ -10430,6 +10430,12 @@
     github = "jacg";
     githubId = 2570854;
   };
+  jackcres = {
+    email = "crespomerchano@gmail.com";
+    github = "omarcresp";
+    githubId = 27465620;
+    name = "JackCres";
+  };
   jackgerrits = {
     email = "jack@jackgerrits.com";
     github = "jackgerrits";
