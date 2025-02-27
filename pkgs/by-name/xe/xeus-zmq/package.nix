@@ -12,6 +12,21 @@
   zeromq,
 }:
 
+let
+  # Nixpkgs moved to xeus 5.2.0, but we need 3.2.0
+  xeus_3_2_0 = xeus.overrideAttrs (oldAttrs: {
+    version = "3.2.0";
+
+    src = fetchFromGitHub {
+      owner = "jupyter-xeus";
+      repo = "xeus";
+      version = "3.2.0";
+      sha256 = "sha256-D/dJ0SHxTHJw63gHD6FRZS7O2TVZ0voIv2mQASEjLA8=";
+    };
+  });
+
+in
+
 clangStdenv.mkDerivation rec {
   pname = "xeus-zmq";
   version = "1.3.0";
