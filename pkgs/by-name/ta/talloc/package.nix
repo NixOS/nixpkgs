@@ -67,6 +67,11 @@ stdenv.mkDerivation rec {
   # module, which works correctly in all cases.
   PYTHON_CONFIG = "/invalid";
 
+  # https://reviews.llvm.org/D135402
+  NIX_LDFLAGS = lib.optional (
+    stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17"
+  ) "--undefined-version";
+
   # this must not be exported before the ConfigurePhase otherwise waf whines
   preBuild = lib.optionalString stdenv.hostPlatform.isMusl ''
     export NIX_CFLAGS_LINK="-no-pie -shared";
