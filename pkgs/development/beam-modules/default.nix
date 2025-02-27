@@ -93,6 +93,7 @@ let
       # without helper functions buildRebar3 and buildMix.
       hex = callPackage ./hex { };
       webdriver = callPackage ./webdriver { };
+      refactorex = callPackage ./refactorex { };
     };
 in
 makeExtensible packages
