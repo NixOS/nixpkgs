@@ -14,7 +14,6 @@
 
 let
   plugins = python3.pkgs.callPackage ./plugins { };
-  tools = callPackage ./tools { };
 in
 python3.pkgs.buildPythonApplication rec {
   pname = "matrix-synapse";
@@ -173,7 +172,7 @@ python3.pkgs.buildPythonApplication rec {
 
   passthru = {
     tests = { inherit (nixosTests) matrix-synapse matrix-synapse-workers; };
-    inherit plugins tools;
+    inherit plugins;
     python = python3;
   };
 
