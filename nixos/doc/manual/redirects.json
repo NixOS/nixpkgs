@@ -41,6 +41,15 @@
   "module-services-crab-hole-upstream-options": [
     "index.html#module-services-crab-hole-upstream-options"
   ],
+  "module-services-strfry": [
+    "index.html#module-services-strfry"
+  ],
+  "module-services-strfry-basic-usage": [
+    "index.html#module-services-strfry-basic-usage"
+  ],
+  "module-services-strfry-reverse-proxy": [
+    "index.html#module-services-strfry-reverse-proxy"
+  ],
   "preface": [
     "index.html#preface"
   ],
