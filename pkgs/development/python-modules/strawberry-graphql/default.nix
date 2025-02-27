@@ -44,7 +44,7 @@
 
 buildPythonPackage rec {
   pname = "strawberry-graphql";
-  version = "0.258.0";
+  version = "0.260.2";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -53,7 +53,7 @@ buildPythonPackage rec {
     owner = "strawberry-graphql";
     repo = "strawberry";
     tag = version;
-    hash = "sha256-gv/P7pz2wcIKXP5SChTlsM2j2GPuRK+iuLZil8/VvJk=";
+    hash = "sha256-VEydj+o9V9wZrNW8zwo59Amj08bSN6X9/8tIDP+q1uQ=";
   };
 
   postPatch = ''
