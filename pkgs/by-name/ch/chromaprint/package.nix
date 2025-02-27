@@ -9,6 +9,8 @@
   ffmpeg-headless,
   darwin,
   zlib,
+  testers,
+  validatePkgConfig,
   withExamples ? true,
   withTools ? true,
 }:
@@ -48,6 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     ninja
+    validatePkgConfig
   ];
 
   buildInputs =
@@ -67,12 +70,15 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "BUILD_TOOLS" withTools)
   ];
 
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
   meta =
     {
       homepage = "https://acoustid.org/chromaprint";
       description = "AcoustID audio fingerprinting library";
       license = lib.licenses.lgpl21Plus;
       platforms = lib.platforms.unix;
+      pkgConfigModules = [ "libchromaprint" ];
     }
     // lib.attrsets.optionalAttrs withTools {
       mainProgram = "fpcalc";
