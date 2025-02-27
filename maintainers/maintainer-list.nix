@@ -12524,6 +12524,12 @@
     githubId = 361496;
     name = "Nikola Knežević";
   };
+  knvpk = {
+    email = "katakampavan.btech@gmail.com";
+    github = "knvpk";
+    githubId = 6078669;
+    name = "Pavan Katakam";
+  };
   kolaente = {
     email = "k@knt.li";
     github = "kolaente";
