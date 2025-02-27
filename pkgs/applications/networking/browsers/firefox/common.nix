@@ -116,23 +116,22 @@ in
 , ltoSupport ? (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.is64bit && !stdenv.hostPlatform.isRiscV), overrideCC, buildPackages
 , pgoSupport ? (stdenv.hostPlatform.isLinux && stdenv.hostPlatform == stdenv.buildPlatform), xvfb-run
 , elfhackSupport ? isElfhackPlatform stdenv && !(stdenv.hostPlatform.isMusl && stdenv.hostPlatform.isAarch64)
-, pipewireSupport ? waylandSupport && webrtcSupport
+, pipewireSupport ? waylandSupport && enableWebRTC
 , pulseaudioSupport ? stdenv.hostPlatform.isLinux, libpulseaudio
 , sndioSupport ? stdenv.hostPlatform.isLinux, sndio
 , waylandSupport ? !stdenv.hostPlatform.isDarwin, libxkbcommon, libdrm
 
-## privacy-related options
+## privacy
 
-, privacySupport ? false
+, enableDataReporting ? true
+, enableLocation ? true
+, enableWebRTC ? true
 
-# WARNING: NEVER set any of the options below to `true` by default.
-# Set to `!privacySupport` or `false`.
+, enableCrashReporter ? enableDataReporting && !stdenv.hostPlatform.isRiscV && !stdenv.hostPlatform.isMusl, curl
 
-, crashreporterSupport ? !privacySupport && !stdenv.hostPlatform.isRiscV && !stdenv.hostPlatform.isMusl, curl
-, geolocationSupport ? !privacySupport
-, googleAPISupport ? geolocationSupport
-, mlsAPISupport ? geolocationSupport
-, webrtcSupport ? !privacySupport
+, enableNeckoWiFi ? enableLocation
+, enableGoogleAPI ? enableLocation
+, enableMLSAPI ? enableLocation
 
 # digital rights managemewnt
 
@@ -162,13 +161,27 @@ in
 # > the experience of Firefox users, you won't have any issues using the
 # > official branding.
 , enableOfficialBranding ? true
-}:
+, ...
+}@attrs:
 
 assert stdenv.cc.libc or null != null;
-assert pipewireSupport -> !waylandSupport || !webrtcSupport -> throw "${pname}: pipewireSupport requires both wayland and webrtc support.";
+assert pipewireSupport -> !waylandSupport || !enableWebRTC -> throw "${pname}: pipewireSupport requires both wayland and webrtc support.";
 assert elfhackSupport -> isElfhackPlatform stdenv;
 
+# removed in 25.05
+assert attrs ? privacySupport -> throw "${pname}: The privacySupport option has been replaced and split into `enableDataReporting`, `enableLocation` and `enableWebRTC`.";
+
 let
+  # Don't use official branding with these features disabled
+  useOfficialBranding =
+    enableOfficialBranding &&
+    enableCrashReporter &&
+    enableDataReporting &&
+    enableGoogleAPI &&
+    enableMLSAPI &&
+    enableWebRTC
+  ;
+
   inherit (lib) enableFeature;
 
   # Target the LLVM version that rustc is built with for LTO.
@@ -242,7 +255,7 @@ buildStdenv.mkDerivation {
   outputs = [
     "out"
   ]
-  ++ lib.optionals crashreporterSupport [ "symbols" ];
+  ++ lib.optionals enableCrashReporter [ "symbols" ];
 
   # Add another configure-build-profiling run before the final configure phase if we build with pgo
   preConfigurePhases = lib.optionals pgoSupport [
@@ -311,7 +324,7 @@ buildStdenv.mkDerivation {
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ pkg-config ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ rsync ]
-  ++ lib.optionals crashreporterSupport [ dump_syms patchelf ]
+  ++ lib.optionals enableCrashReporter [ dump_syms patchelf ]
   ++ lib.optionals pgoSupport [ xvfb-run ]
   ++ extraNativeBuildInputs;
 
@@ -327,6 +340,10 @@ buildStdenv.mkDerivation {
     # Set predictable directories for build and state
     export MOZ_OBJDIR=$(pwd)/objdir
     export MOZBUILD_STATE_PATH=$TMPDIR/mozbuild
+
+    # Optionally deconfigure features that submit data
+    ${lib.optionalString (!enableDataReporting)
+      "export MOZ_DATA_REPORTING=0"}
 
     # Don't try to send libnotify notifications during build
     export MOZ_NOSPAM=1
@@ -373,7 +390,7 @@ buildStdenv.mkDerivation {
         LDFLAGS="-Wl,-rpath,$(pwd)/objdir/dist/${binaryName}"
       ''}
     fi
-  '' + lib.optionalString googleAPISupport ''
+  '' + lib.optionalString enableGoogleAPI ''
     # Google API key used by Chromium and Firefox.
     # Note: These are for NixOS/nixpkgs use ONLY. For your own distribution,
     # please get your own set of keys at https://www.chromium.org/developers/how-tos/api-keys/.
@@ -381,13 +398,13 @@ buildStdenv.mkDerivation {
     # 60.5+ & 66+ did split the google API key arguments: https://bugzilla.mozilla.org/show_bug.cgi?id=1531176
     configureFlagsArray+=("--with-google-location-service-api-keyfile=$TMPDIR/google-api-key")
     configureFlagsArray+=("--with-google-safebrowsing-api-keyfile=$TMPDIR/google-api-key")
-  '' + lib.optionalString mlsAPISupport ''
+  '' + lib.optionalString enableMLSAPI ''
     # Mozilla Location services API key
     # Note: These are for NixOS/nixpkgs use ONLY. For your own distribution,
     # please get your own set of keys at https://location.services.mozilla.com/api.
     echo "dfd7836c-d458-4917-98bb-421c82d3c8a0" > $TMPDIR/mls-api-key
     configureFlagsArray+=("--with-mozilla-api-keyfile=$TMPDIR/mls-api-key")
-  '' + lib.optionalString (enableOfficialBranding && !stdenv.hostPlatform.is32bit) ''
+  '' + lib.optionalString (useOfficialBranding && !stdenv.hostPlatform.is32bit) ''
     export MOZILLA_OFFICIAL=1
   '' + lib.optionalString (!requireSigning) ''
     export MOZ_REQUIRE_SIGNING=
@@ -442,12 +459,12 @@ buildStdenv.mkDerivation {
     (enableFeature sndioSupport "sndio")
   ]
   ++ [
-    (enableFeature crashreporterSupport "crashreporter")
+    (enableFeature enableCrashReporter "crashreporter")
     (enableFeature ffmpegSupport "ffmpeg")
-    (enableFeature geolocationSupport "necko-wifi")
+    (enableFeature enableNeckoWiFi "necko-wifi")
     (enableFeature gssSupport "negotiateauth")
     (enableFeature jemallocSupport "jemalloc")
-    (enableFeature webrtcSupport "webrtc")
+    (enableFeature enableWebRTC "webrtc")
 
     (enableFeature debugBuild "debug")
     (if debugBuild then "--enable-profiling" else "--enable-optimize")
@@ -457,7 +474,7 @@ buildStdenv.mkDerivation {
     (enableFeature enableDebugSymbols "debug-symbols")
   ]
   ++ lib.optionals enableDebugSymbols [ "--disable-strip" "--disable-install-strip" ]
-  ++ lib.optional enableOfficialBranding "--enable-official-branding"
+  ++ lib.optionals useOfficialBranding [ "--enable-official-branding" ]
   ++ lib.optional (branding != null) "--with-branding=${branding}"
   ++ extraConfigureFlags;
 
@@ -560,7 +577,7 @@ buildStdenv.mkDerivation {
 
   # Generate build symbols once after the final build
   # https://firefox-source-docs.mozilla.org/crash-reporting/uploading_symbol.html
-  preInstall = lib.optionalString crashreporterSupport ''
+  preInstall = lib.optionalString enableCrashReporter ''
     ./mach buildsymbols
     mkdir -p $symbols/
     cp objdir/dist/*.crashreporter-symbols.zip $symbols/
@@ -593,7 +610,7 @@ buildStdenv.mkDerivation {
     cd ..
   '';
 
-  postFixup = lib.optionalString (crashreporterSupport && buildStdenv.hostPlatform.isLinux) ''
+  postFixup = lib.optionalString (enableCrashReporter && buildStdenv.hostPlatform.isLinux) ''
     patchelf --add-rpath "${lib.makeLibraryPath [ curl ]}" $out/lib/${binaryName}/crashreporter
   '';
 
@@ -623,6 +640,7 @@ buildStdenv.mkDerivation {
     inherit tests;
     inherit gtk3;
     inherit wasiSysRoot;
+    inherit useOfficialBranding;
     version = packageVersion;
   } // extraPassthru;
 
