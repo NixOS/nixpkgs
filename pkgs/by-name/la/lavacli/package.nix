@@ -38,7 +38,7 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://lava.gitlab.io/lavacli/";
     changelog = "https://gitlab.com/lava/lavacli/-/commits/v${version}?ref_type=tags";
     license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ snu ];
+    maintainers = lib.teams.cyberus.members;
     mainProgram = "lavacli";
   };
 }
