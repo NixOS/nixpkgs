@@ -253,30 +253,7 @@ buildStdenv.mkDerivation {
 
   patches = lib.optionals (lib.versionAtLeast version "111" && lib.versionOlder version "133") [ ./env_var_for_system_dir-ff111.patch ]
   ++ lib.optionals (lib.versionAtLeast version "133") [ ./env_var_for_system_dir-ff133.patch ]
-  ++ lib.optionals (lib.versionAtLeast version "96" && lib.versionOlder version "121") [ ./no-buildconfig-ffx96.patch ]
   ++ lib.optionals (lib.versionAtLeast version "121") [ ./no-buildconfig-ffx121.patch ]
-  ++ lib.optionals (lib.versionOlder version "128.2" || (lib.versionAtLeast version "129" && lib.versionOlder version "130")) [
-    (fetchpatch {
-      # https://bugzilla.mozilla.org/show_bug.cgi?id=1912663
-      name = "cbindgen-0.27.0-compat.patch";
-      url = "https://hg.mozilla.org/integration/autoland/raw-rev/98cd34c7ff57";
-      hash = "sha256-MqgWHgbDedVzDOqY2/fvCCp+bGwFBHqmaJLi/mllZug=";
-    })
-  ]
-  ++ lib.optionals (lib.versionOlder version "122") [ ./bindgen-0.64-clang-18.patch  ]
-  ++ lib.optionals (lib.versionOlder version "123") [
-    (fetchpatch {
-      name = "clang-18.patch";
-      url = "https://hg.mozilla.org/mozilla-central/raw-rev/ba6abbd36b496501cea141e17b61af674a18e279";
-      hash = "sha256-2IpdSyye3VT4VB95WurnyRFtdN1lfVtYpgEiUVhfNjw=";
-    })
-  ]
-  ++ lib.optionals ((lib.versionAtLeast version "129" && lib.versionOlder version "134") || lib.versionOlder version "128.6.0") [
-    # Python 3.12.8 compat
-    # https://bugzilla.mozilla.org/show_bug.cgi?id=1935621
-    # https://phabricator.services.mozilla.com/D231480
-    ./mozbz-1935621-attachment-9442305.patch
-  ]
   ++ [
     # LLVM 19 turned on WASM reference types by default, exposing a bug
     # that broke the Mozilla WASI build. Supposedly, it has been fixed
