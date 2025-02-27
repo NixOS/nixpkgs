@@ -17823,8 +17823,6 @@ with pkgs;
 
   sane-frontends = callPackage ../applications/graphics/sane/frontends.nix { };
 
-  sc-controller = callPackage ../misc/drivers/sc-controller {};
-
   slock = callPackage ../misc/screensavers/slock {
     conf = config.slock.conf or null;
   };
