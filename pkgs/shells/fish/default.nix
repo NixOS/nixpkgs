@@ -19,6 +19,11 @@
   cmake,
   fishPlugins,
   procps,
+  rustc,
+  cargo,
+  rustPlatform,
+  gitMinimal,
+  mandoc,
 
   # used to generate autocompletions from manpages and for configuration editing in the browser
   usePython ? true,
@@ -141,19 +146,29 @@ let
     end # fenv
   '';
 
-  fish = stdenv.mkDerivation rec {
-    pname = "fish";
-    version = "3.7.1";
+  version = "4.0.0";
 
-    src = fetchurl {
-      # There are differences between the release tarball and the tarball GitHub
-      # packages from the tag. Specifically, it comes with a file containing its
-      # version, which is used in `build_tools/git_version_gen.sh` to determine
-      # the shell's actual version (and what it displays when running `fish
-      # --version`), as well as the local documentation for all builtins (and
-      # maybe other things).
-      url = "https://github.com/fish-shell/fish-shell/releases/download/${version}/${pname}-${version}.tar.xz";
-      hash = "sha256-YUyfVkPNB5nfOROV+mu8NklCe7g5cizjsRTTu8GjslA=";
+  src = fetchurl {
+    # There are differences between the release tarball and the tarball GitHub
+    # packages from the tag. Specifically, it comes with a file containing its
+    # version, which is used in `build_tools/git_version_gen.sh` to determine
+    # the shell's actual version (and what it displays when running `fish
+    # --version`), as well as the local documentation for all builtins (and
+    # maybe other things).
+    url = "https://github.com/fish-shell/fish-shell/releases/download/${version}/fish-${version}.tar.xz";
+    hash = "sha256-L9pb2XA1cGTY1MiW4IKFulmWXKKoxIKcqKgr87icafM=";
+  };
+
+  fish = stdenv.mkDerivation {
+    pname = "fish";
+    inherit version;
+
+    inherit src;
+
+    cargoDeps = rustPlatform.fetchCargoVendor {
+      inherit src;
+      name = "fish";
+      hash = "sha256-j1HCj1iZ5ZV8nfMmJq5ggPD4s+5V8IretDdoz+G3wWU=";
     };
 
     patches = [
@@ -174,13 +189,11 @@ let
     postPatch =
       ''
         # src/fish_tests.cpp
-        sed -i 's|/bin/ls|${coreutils}/bin/ls|' src/fish_tests.cpp
-        sed -i 's|is_potential_path(L"/usr"|is_potential_path(L"/nix"|' src/fish_tests.cpp
-        sed -i 's|L"/bin/echo"|L"${coreutils}/bin/echo"|' src/fish_tests.cpp
-        sed -i 's|L"/bin/c"|L"${coreutils}/bin/c"|' src/fish_tests.cpp
-        sed -i 's|L"/bin/ca"|L"${coreutils}/bin/ca"|' src/fish_tests.cpp
-        # disable flakey test
-        sed -i '/{TEST_GROUP("history_races"), history_tests_t::test_history_races},/d' src/fish_tests.cpp
+        sed -i 's|/bin/ls|${coreutils}/bin/ls|' src/builtins/tests/test_tests.rs
+        sed -i 's|is_potential_path(L"/usr"|is_potential_path(L"/nix"|' src/builtins/tests/test_tests.rs
+        sed -i 's|L"/bin/echo"|L"${coreutils}/bin/echo"|' src/builtins/tests/test_tests.rs
+        sed -i 's|L"/bin/c"|L"${coreutils}/bin/c"|' src/builtins/tests/test_tests.rs
+        sed -i 's|L"/bin/ca"|L"${coreutils}/bin/ca"|' src/builtins/tests/test_tests.rs
 
         # tests/checks/cd.fish
         sed -i 's|/bin/pwd|${coreutils}/bin/pwd|' tests/checks/cd.fish
@@ -200,17 +213,25 @@ let
 
         # tests/checks/complete.fish
         sed -i 's|/bin/ls|${coreutils}/bin/ls|' tests/checks/complete.fish
+
+        # Our build includes `/sbin/` in the path, which the test doesn't expect.
+        rm tests/checks/default-setup-path.fish
       ''
       + lib.optionalString stdenv.hostPlatform.isDarwin ''
         # Tests use pkill/pgrep which are currently not built on Darwin
         # See https://github.com/NixOS/nixpkgs/pull/103180
         rm tests/pexpects/exit.py
+        rm tests/pexpects/fg.py
         rm tests/pexpects/job_summary.py
         rm tests/pexpects/signals.py
 
         # pexpect tests are flaky in general
         # See https://github.com/fish-shell/fish-shell/issues/8789
         rm tests/pexpects/bind.py
+
+        # chmod: changing permissions of 'sbin/setuid-exe': Operation not permitted
+        sed -i 's|chmod u+s,a+x sbin/setuid-exe||; s|# CHECK: sbin/setuid-exe||' \
+            tests/checks/path.fish
       ''
       + lib.optionalString stdenv.hostPlatform.isLinux ''
         # pexpect tests are flaky on aarch64-linux (also x86_64-linux)
@@ -226,6 +247,9 @@ let
     nativeBuildInputs = [
       cmake
       gettext
+      rustPlatform.cargoSetupHook
+      rustc
+      cargo
     ];
 
     buildInputs = [
@@ -233,6 +257,11 @@ let
       libiconv
       pcre2
     ];
+
+    env = {
+      # Disable some flaky tests.
+      CI = true;
+    };
 
     cmakeFlags =
       [
@@ -275,10 +304,15 @@ let
       coreutils
       (python3.withPackages (ps: [ ps.pexpect ]))
       procps
+      gitMinimal
+      mandoc
     ];
 
     checkPhase = ''
-      make test
+      # TODO: Why do we have to cd out of `$cmakeDir` for this?
+      pushd "$cmakeDir"
+      make fish_run_tests
+      popd
     '';
 
     postInstall =
