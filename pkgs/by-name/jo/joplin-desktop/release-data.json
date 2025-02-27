@@ -1,15 +1,15 @@
 {
-  "version": "3.1.24",
+  "version": "3.2.13",
   "x86_64-linux": {
-    "url": "https://github.com/laurent22/joplin/releases/download/v3.1.24/Joplin-3.1.24.AppImage",
-    "sha256": "089drwwzxc2vysr74scripx5s6i1cw3jq6wmnl3z1zh9mkh42q92"
+    "url": "https://github.com/laurent22/joplin/releases/download/v3.2.13/Joplin-3.2.13.AppImage",
+    "sha256": "06xmm2annf3i8qfi8hclac3lgfssb2f3sx06vgabgsn67i8gid20"
   },
   "x86_64-darwin": {
-    "url": "https://github.com/laurent22/joplin/releases/download/v3.1.24/Joplin-3.1.24.dmg",
-    "sha256": "0mpi0ly4ivyr3q9vppngrvzndri896xyidlbzan2id1lgrfrbzir"
+    "url": "https://github.com/laurent22/joplin/releases/download/v3.2.13/Joplin-3.2.13.dmg",
+    "sha256": "1z9lp07z85jf1g2rwzn4q5kssfqqb921lfqgkjkjnz12padf3kpf"
   },
   "aarch64-darwin": {
-    "url": "https://github.com/laurent22/joplin/releases/download/v3.1.24/Joplin-3.1.24-arm64.dmg",
-    "sha256": "12wic91lab0j2n4z7x1yxf27a0scirqgchdq38y254j811jyxl8y"
+    "url": "https://github.com/laurent22/joplin/releases/download/v3.2.13/Joplin-3.2.13-arm64.dmg",
+    "sha256": "0r7rfka60vrynwxdfk71mbhdwxv2rivxqc2qpzrhmz26h8vksm3h"
   }
 }
