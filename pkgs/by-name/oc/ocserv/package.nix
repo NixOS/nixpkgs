@@ -4,6 +4,7 @@
   fetchFromGitLab,
   autoreconfHook,
   pkg-config,
+  ipcalc,
   nettle,
   gnutls,
   libev,
@@ -14,7 +15,6 @@
   gperf,
   readline,
   lz4,
-  libgssglue,
   ronn,
   pam,
   libxcrypt,
@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ocserv";
-  version = "1.2.4";
+  version = "1.3.0";
 
   src = fetchFromGitLab {
     owner = "openconnect";
     repo = "ocserv";
     rev = version;
-    hash = "sha256-IYiYC9oAw35YjpptUEnhuZQqoDevku25r7qi6SG8xtk=";
+    hash = "sha256-oZ1t1BTCdsq1jpa7LfzRGwQNTROHH9/lLBT2WAvj5h4=";
   };
 
   nativeBuildInputs = [
@@ -38,6 +38,7 @@ stdenv.mkDerivation rec {
     ronn
   ];
   buildInputs = [
+    ipcalc
     nettle
     gnutls
     libev
@@ -47,7 +48,6 @@ stdenv.mkDerivation rec {
     libseccomp
     readline
     lz4
-    libgssglue
     pam
     libxcrypt
   ];
