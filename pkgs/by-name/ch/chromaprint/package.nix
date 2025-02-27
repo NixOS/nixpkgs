@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   fetchpatch,
   fetchpatch2,
   cmake,
@@ -15,9 +15,11 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "chromaprint";
   version = "1.5.1";
 
-  src = fetchurl {
-    url = "https://github.com/acoustid/chromaprint/releases/download/v${finalAttrs.version}/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-oarY+juLGLeNN1Wzdn+v+au2ckLgG0eOyaZOGQ8zXhw=";
+  src = fetchFromGitHub {
+    owner = "acoustid";
+    repo = "chromaprint";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-bFplHaqXYvGbl8E8b/HUNFO4X+B/HPZjGTmuVFPjS3g=";
   };
 
   patches = [
