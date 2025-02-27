@@ -93,7 +93,7 @@ buildPythonPackage rec {
   doCheck = !stdenv.hostPlatform.isDarwin;
   # ignore tests which incorrect fail to detect xvfb
   checkPhase = ''
-    LC_ALL="en_US.UTF-8" pytest nipype/tests -k 'not display and not test_no_et_multiproc'
+    pytest nipype/tests -k 'not display and not test_no_et_multiproc'
   '';
   pythonImportsCheck = [ "nipype" ];
 
