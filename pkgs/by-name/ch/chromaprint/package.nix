@@ -9,6 +9,8 @@
   ffmpeg-headless,
   darwin,
   zlib,
+  withExamples ? true,
+  withTools ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -61,15 +63,18 @@ stdenv.mkDerivation (finalAttrs: {
     );
 
   cmakeFlags = [
-    "-DBUILD_EXAMPLES=ON"
-    "-DBUILD_TOOLS=ON"
+    (lib.cmakeBool "BUILD_EXAMPLES" withExamples)
+    (lib.cmakeBool "BUILD_TOOLS" withTools)
   ];
 
-  meta = {
-    homepage = "https://acoustid.org/chromaprint";
-    description = "AcoustID audio fingerprinting library";
-    mainProgram = "fpcalc";
-    license = lib.licenses.lgpl21Plus;
-    platforms = lib.platforms.unix;
-  };
+  meta =
+    {
+      homepage = "https://acoustid.org/chromaprint";
+      description = "AcoustID audio fingerprinting library";
+      license = lib.licenses.lgpl21Plus;
+      platforms = lib.platforms.unix;
+    }
+    // lib.attrsets.optionalAttrs withTools {
+      mainProgram = "fpcalc";
+    };
 })
