@@ -1,4 +1,3 @@
-# NOTE: Must be `import`-ed rather than `callPackage`-d to preserve the `override` attribute.
 {
   lib,
   stdenvNoCC,
