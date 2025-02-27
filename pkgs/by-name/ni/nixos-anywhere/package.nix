@@ -59,6 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
       maintainers.mic92
       maintainers.lassulus
       maintainers.phaer
+      maintainers.Enzime
     ];
   };
 })
