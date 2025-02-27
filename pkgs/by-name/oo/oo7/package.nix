@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  nix-update-script,
   oo7,
   openssl,
   pkg-config,
@@ -41,8 +42,7 @@ rustPlatform.buildRustPackage rec {
   passthru = {
     tests.testVersion = testers.testVersion { package = oo7; };
 
-    # TODO: re-enable this when upstream adds a Cargo.lock
-    # updateScript = nix-update-script { };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {
