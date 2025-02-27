@@ -78,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/k4yt3x/video2x/releases/tag/${finalAttrs.version}/CHANGELOG.md";
     homepage = "https://github.com/k4yt3x/video2x";
     license = lib.licenses.agpl3Plus;
-    platforms = lib.platforms.unix;
+    platforms = lib.platforms.linux;
     mainProgram = "video2x";
   };
 })
