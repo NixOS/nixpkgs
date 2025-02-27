@@ -9,14 +9,14 @@
   plugins ? [ ],
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
-  pname = "adminerneo";
-  version = "4.14";
+  pname = "adminneo";
+  version = "4.15";
 
   src = fetchFromGitHub {
-    owner = "adminerneo";
-    repo = "adminerneo";
+    owner = "adminneo-org";
+    repo = "adminneo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-GxkITh6Hh7E6qKEsCYs8M1xLeCbdI1WQqM1Zjdb6BVE=";
+    hash = "sha256-QqASJat7wHSqisBn1O5JNDVUmnZ8mxdRe8pePkIpWJI=";
   };
 
   nativeBuildInputs = [
@@ -63,7 +63,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Database management in a single PHP file (fork of Adminer)";
-    homepage = "https://github.com/adminerneo/adminerneo";
+    homepage = "https://github.com/adminneo-org/adminneo";
     license = with lib.licenses; [
       asl20
       gpl2Only
