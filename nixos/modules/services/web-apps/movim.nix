@@ -504,7 +504,7 @@ in
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [ cfg.package ];
+    environment.systemPackages = [ package ];
 
     users = {
       users =
