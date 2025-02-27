@@ -302,6 +302,22 @@ in
         type = settingsFormat.type;
         default = { };
         description = "Configuration for H2O (see <https://h2o.examp1e.net/configure.html>)";
+        example =
+          literalExpression
+            # nix
+            ''
+              {
+                compress = "ON";
+                ssl-offload = "kernel";
+                http2-reprioritize-blocking-assets = "ON";
+                "file.mime.addtypes" = {
+                  "text/x-rst" = {
+                    extensions = [ ".rst" ];
+                    is_compressible = "YES";
+                  };
+                };
+              }
+            '';
       };
 
       hosts = mkOption {
