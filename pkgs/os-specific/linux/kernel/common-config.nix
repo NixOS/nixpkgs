@@ -43,7 +43,10 @@ let
   );
 
   forceRust = features.rust or false;
-  kernelSupportsRust = lib.versionAtLeast version "6.7";
+  kernelSupportsRust = lib.versionAtLeast version "6.7"
+    # Known to be broken: https://lore.kernel.org/lkml/31885EDD-EF6D-4EF1-94CA-276BA7A340B7@kernel.org/T/
+    && !(stdenv.hostPlatform.isRiscV && stdenv.cc.isGNU);
+
 
   # Currently only enabling Rust by default on kernel 6.12+,
   # which actually has features that use Rust that we want.
