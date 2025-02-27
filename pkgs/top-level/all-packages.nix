@@ -17823,9 +17823,7 @@ with pkgs;
 
   sane-frontends = callPackage ../applications/graphics/sane/frontends.nix { };
 
-  sc-controller = python3Packages.callPackage ../misc/drivers/sc-controller {
-    inherit libusb1; # Shadow python.pkgs.libusb1.
-  };
+  sc-controller = callPackage ../misc/drivers/sc-controller {};
 
   slock = callPackage ../misc/screensavers/slock {
     conf = config.slock.conf or null;
