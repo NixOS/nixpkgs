@@ -6,7 +6,7 @@
   fetchpatch2,
   cmake,
   ninja,
-  ffmpeg,
+  ffmpeg-headless,
   darwin,
   zlib,
 }:
@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs =
-    [ ffmpeg ]
+    [ ffmpeg-headless ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin (
       with darwin.apple_sdk.frameworks;
       [
