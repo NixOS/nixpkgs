@@ -9740,8 +9740,6 @@ with pkgs;
 
   nettle = import ../development/libraries/nettle { inherit callPackage fetchurl; };
 
-  newt = callPackage ../development/libraries/newt { python = python3; };
-
   libnghttp2 = nghttp2.lib;
 
   nghttp3 = callPackage ../development/libraries/nghttp3 { inherit (darwin.apple_sdk.frameworks) CoreServices; };
