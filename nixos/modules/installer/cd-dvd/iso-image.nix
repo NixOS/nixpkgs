@@ -57,18 +57,6 @@ let
     in
     menuBuilderGrub2 finalCfg [
       { class = "installer"; }
-      {
-        class = "nomodeset";
-        params = "nomodeset";
-      }
-      {
-        class = "copytoram";
-        params = "copytoram";
-      }
-      {
-        class = "debug";
-        params = "debug";
-      }
     ];
 
   # Timeout in syslinux is in units of 1/10 of a second.
@@ -81,6 +69,59 @@ let
   # null means max timeout (infinity)
   # 0 means disable timeout
   grubEfiTimeout = if config.boot.loader.timeout == null then -1 else config.boot.loader.timeout;
+
+  optionsSubMenus = [
+    {
+      title = "Copy ISO Files to RAM";
+      class = "copytoram";
+      params = [ "copytoram" ];
+    }
+    {
+      title = "No modesetting";
+      class = "nomodeset";
+      params = [ "nomodeset" ];
+    }
+    {
+      title = "Debug Console Output";
+      class = "debug";
+      params = [ "debug" ];
+    }
+    # If we boot into a graphical environment where X is autoran
+    # and always crashes, it makes the media unusable. Allow the user
+    # to disable this.
+    {
+      title = "Disable display-manager";
+      class = "quirk-disable-displaymanager";
+      params = [
+        "systemd.mask=display-manager.service"
+        "plymouth.enable=0"
+      ];
+    }
+    # Some laptop and convertibles have the panel installed in an
+    # inconvenient way, rotated away from the keyboard.
+    # Those entries makes it easier to use the installer.
+    {
+      title = "Rotate framebuffer Clockwise";
+      class = "rotate-90cw";
+      params = [ "fbcon=rotate:1" ];
+    }
+    {
+      title = "Rotate framebuffer Upside-Down";
+      class = "rotate-180";
+      params = [ "fbcon=rotate:2" ];
+    }
+    {
+      title = "Rotate framebuffer Counter-Clockwise";
+      class = "rotate-90ccw";
+      params = [ "fbcon=rotate:3" ];
+    }
+    # Serial access is a must!
+    {
+      title = "Serial console=ttyS0,115200n8";
+      class = "serial";
+      params = [ "console=ttyS0,115200n8" ];
+    }
+  ];
 
   # The configuration file for syslinux.
 
@@ -95,6 +136,16 @@ let
   #   * COM32 entries (chainload, reboot, poweroff) are not recognized. They
   #     result in incorrect boot entries.
 
+  menuBuilderIsolinux =
+    { label, params }:
+    ''
+      LABEL ${label}
+      MENU LABEL ${config.isoImage.prependToMenuLabel}${config.system.nixos.distroName} ${config.system.nixos.label}${config.isoImage.appendToMenuLabel}
+      LINUX /boot/${config.system.boot.loader.kernelFile}
+      APPEND init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams} ${toString params}
+      INITRD /boot/${config.system.boot.loader.initrdFile}
+    '';
+
   baseIsolinuxCfg = ''
     SERIAL 0 115200
     TIMEOUT ${builtins.toString syslinuxTimeout}
@@ -105,39 +156,30 @@ let
 
     DEFAULT boot
 
-    LABEL boot
-    MENU LABEL ${config.isoImage.prependToMenuLabel}${config.system.nixos.distroName} ${config.system.nixos.label}${config.isoImage.appendToMenuLabel}
-    LINUX /boot/${config.system.boot.loader.kernelFile}
-    APPEND init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams}
-    INITRD /boot/${config.system.boot.loader.initrdFile}
+    ${menuBuilderIsolinux {
+      label = "boot";
+      params = [ ];
+    }}
 
-    # A variant to boot with 'nomodeset'
-    LABEL boot-nomodeset
-    MENU LABEL ${config.isoImage.prependToMenuLabel}${config.system.nixos.distroName} ${config.system.nixos.label}${config.isoImage.appendToMenuLabel} (nomodeset)
-    LINUX /boot/${config.system.boot.loader.kernelFile}
-    APPEND init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams} nomodeset
-    INITRD /boot/${config.system.boot.loader.initrdFile}
+    MENU BEGIN Options
 
-    # A variant to boot with 'copytoram'
-    LABEL boot-copytoram
-    MENU LABEL ${config.isoImage.prependToMenuLabel}${config.system.nixos.distroName} ${config.system.nixos.label}${config.isoImage.appendToMenuLabel} (copytoram)
-    LINUX /boot/${config.system.boot.loader.kernelFile}
-    APPEND init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams} copytoram
-    INITRD /boot/${config.system.boot.loader.initrdFile}
+    ${lib.concatMapStringsSep "\n" (
+      {
+        title,
+        class,
+        params,
+      }:
+      ''
+        MENU BEGIN ${title}
+        ${menuBuilderIsolinux {
+          label = "boot-${class}";
+          inherit params;
+        }}
+        MENU END
+      ''
+    ) optionsSubMenus}
 
-    # A variant to boot with verbose logging to the console
-    LABEL boot-debug
-    MENU LABEL ${config.isoImage.prependToMenuLabel}${config.system.nixos.distroName} ${config.system.nixos.label}${config.isoImage.appendToMenuLabel} (debug)
-    LINUX /boot/${config.system.boot.loader.kernelFile}
-    APPEND init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams} loglevel=7
-    INITRD /boot/${config.system.boot.loader.initrdFile}
-
-    # A variant to boot with a serial console enabled
-    LABEL boot-serial
-    MENU LABEL ${config.isoImage.prependToMenuLabel}${config.system.nixos.distroName} ${config.system.nixos.label}${config.isoImage.appendToMenuLabel} (serial console=ttyS0,115200n8)
-    LINUX /boot/${config.system.boot.loader.kernelFile}
-    APPEND init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams} console=ttyS0,115200n8
-    INITRD /boot/${config.system.boot.loader.initrdFile}
+    MENU END
   '';
 
   isolinuxMemtest86Entry = ''
@@ -364,40 +406,22 @@ let
         #
 
         ${buildMenuGrub2}
-        submenu "HiDPI, Quirks and Accessibility" --class hidpi --class submenu {
+        submenu "Options" --class submenu --class hidpi {
           ${grubMenuCfg}
 
-          # If we boot into a graphical environment where X is autoran
-          # and always crashes, it makes the media unusable. Allow the user
-          # to disable this.
-          submenu "Disable display-manager" --class quirk-disable-displaymanager {
-            ${grubMenuCfg}
-            ${buildMenuAdditionalParamsGrub2 "systemd.mask=display-manager.service plymouth.enable=0"}
-          }
-
-          # Some laptop and convertibles have the panel installed in an
-          # inconvenient way, rotated away from the keyboard.
-          # Those entries makes it easier to use the installer.
-          submenu "" {return}
-          submenu "Rotate framebuffer Clockwise" --class rotate-90cw {
-            ${grubMenuCfg}
-            ${buildMenuAdditionalParamsGrub2 "fbcon=rotate:1"}
-          }
-          submenu "Rotate framebuffer Upside-Down" --class rotate-180 {
-            ${grubMenuCfg}
-            ${buildMenuAdditionalParamsGrub2 "fbcon=rotate:2"}
-          }
-          submenu "Rotate framebuffer Counter-Clockwise" --class rotate-90ccw {
-            ${grubMenuCfg}
-            ${buildMenuAdditionalParamsGrub2 "fbcon=rotate:3"}
-          }
-
-          # Serial access is a must!
-          submenu "" {return}
-          submenu "Serial console=ttyS0,115200n8" --class serial {
-            ${grubMenuCfg}
-            ${buildMenuAdditionalParamsGrub2 "console=ttyS0,115200n8"}
-          }
+          ${lib.concatMapStringsSep "\n" (
+            {
+              title,
+              class,
+              params,
+            }:
+            ''
+              submenu "${title}" --class ${class} {
+                ${grubMenuCfg}
+                ${buildMenuAdditionalParamsGrub2 (toString params)}
+              }
+            ''
+          ) optionsSubMenus}
         }
 
         ${lib.optionalString (refindBinary != null) ''
