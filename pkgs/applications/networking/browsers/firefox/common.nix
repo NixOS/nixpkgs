@@ -22,10 +22,6 @@
 }:
 
 let
-  # Rename the variables to prevent infinite recursion
-  requireSigningDefault = requireSigning;
-  allowAddonSideloadDefault = allowAddonSideload;
-
   # Specifying --(dis|en)able-elf-hack on a platform for which it's not implemented will give `--disable-elf-hack is not available in this configuration`
   # This is declared here because it's used in the default value of elfhackSupport
   isElfhackPlatform = stdenv: stdenv.hostPlatform.isElf &&
@@ -95,9 +91,10 @@ in
 
 # optionals
 
-## addon signing/sideloading
-, requireSigning ? requireSigningDefault
-, allowAddonSideload ? allowAddonSideloadDefault
+## build
+, enableLTO ? (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.is64bit && !stdenv.hostPlatform.isRiscV), overrideCC, buildPackages
+, enablePGO ? (stdenv.hostPlatform.isLinux && stdenv.hostPlatform == stdenv.buildPlatform), xvfb-run
+, enableElfhack ? isElfhackPlatform stdenv && !(stdenv.hostPlatform.isMusl && stdenv.hostPlatform.isAarch64)
 
 ## debugging
 
@@ -106,20 +103,21 @@ in
 # On 32bit platforms, we disable adding "-g" for easier linking.
 , enableDebugSymbols ? !stdenv.hostPlatform.is32bit
 
+## addon signing/sideloading
+, enableAddonSideload ? allowAddonSideload
+, enableSigningRequirement ? requireSigning
+
 ## optional libraries
 
-, alsaSupport ? stdenv.hostPlatform.isLinux, alsa-lib
-, ffmpegSupport ? true
-, gssSupport ? true, libkrb5
-, jackSupport ? stdenv.hostPlatform.isLinux, libjack2
-, jemallocSupport ? !stdenv.hostPlatform.isMusl, jemalloc
-, ltoSupport ? (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.is64bit && !stdenv.hostPlatform.isRiscV), overrideCC, buildPackages
-, pgoSupport ? (stdenv.hostPlatform.isLinux && stdenv.hostPlatform == stdenv.buildPlatform), xvfb-run
-, elfhackSupport ? isElfhackPlatform stdenv && !(stdenv.hostPlatform.isMusl && stdenv.hostPlatform.isAarch64)
-, pipewireSupport ? waylandSupport && enableWebRTC
-, pulseaudioSupport ? stdenv.hostPlatform.isLinux, libpulseaudio
-, sndioSupport ? stdenv.hostPlatform.isLinux, sndio
-, waylandSupport ? !stdenv.hostPlatform.isDarwin, libxkbcommon, libdrm
+, withALSA ? stdenv.hostPlatform.isLinux, alsa-lib
+, withFFMPEG ? true
+, withGSS ? true, libkrb5
+, withJACK ? stdenv.hostPlatform.isLinux, libjack2
+, withJemalloc ? !stdenv.hostPlatform.isMusl, jemalloc
+, withPipewire ? withWayland && enableWebRTC
+, withPulseaudio ? stdenv.hostPlatform.isLinux, libpulseaudio
+, withSndio ? stdenv.hostPlatform.isLinux, sndio
+, withWayland ? !stdenv.hostPlatform.isDarwin, libxkbcommon, libdrm
 
 ## privacy
 
@@ -165,8 +163,8 @@ in
 }@attrs:
 
 assert stdenv.cc.libc or null != null;
-assert pipewireSupport -> !waylandSupport || !enableWebRTC -> throw "${pname}: pipewireSupport requires both wayland and webrtc support.";
-assert elfhackSupport -> isElfhackPlatform stdenv;
+assert withPipewire -> !withWayland || !enableWebRTC -> throw "${pname}: pipewireSupport requires both wayland and webrtc support.";
+assert enableElfhack -> isElfhackPlatform stdenv;
 
 # removed in 25.05
 assert attrs ? privacySupport -> throw "${pname}: The privacySupport option has been replaced and split into `enableDataReporting`, `enableLocation` and `enableWebRTC`.";
@@ -200,7 +198,7 @@ let
 
   # LTO requires LLVM bintools including ld.lld and llvm-ar.
   buildStdenv = overrideCC llvmPackages.stdenv (llvmPackages.stdenv.cc.override {
-    bintools = if ltoSupport then buildPackages.rustc.llvmPackages.bintools else stdenv.cc.bintools;
+    bintools = if enableLTO then buildPackages.rustc.llvmPackages.bintools else stdenv.cc.bintools;
   });
 
   # Compile the wasm32 sysroot to build the RLBox Sandbox
@@ -242,7 +240,7 @@ let
     pref("${key}", ${builtins.toJSON value.value});
   '') defaultPrefs));
 
-  toolkit = if stdenv.hostPlatform.isDarwin then "cairo-cocoa" else "cairo-gtk3${lib.optionalString waylandSupport "-wayland"}";
+  toolkit = if stdenv.hostPlatform.isDarwin then "cairo-cocoa" else "cairo-gtk3${lib.optionalString withWayland "-wayland"}";
 
 in
 
@@ -258,7 +256,7 @@ buildStdenv.mkDerivation {
   ++ lib.optionals enableCrashReporter [ "symbols" ];
 
   # Add another configure-build-profiling run before the final configure phase if we build with pgo
-  preConfigurePhases = lib.optionals pgoSupport [
+  preConfigurePhases = lib.optionals enablePGO [
     "configurePhase"
     "buildPhase"
     "profilingPhase"
@@ -325,7 +323,7 @@ buildStdenv.mkDerivation {
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ pkg-config ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ rsync ]
   ++ lib.optionals enableCrashReporter [ dump_syms patchelf ]
-  ++ lib.optionals pgoSupport [ xvfb-run ]
+  ++ lib.optionals enablePGO [ xvfb-run ]
   ++ extraNativeBuildInputs;
 
   setOutputFlags = false; # `./mach configure` doesn't understand `--*dir=` flags.
@@ -361,7 +359,7 @@ buildStdenv.mkDerivation {
     # RBox WASM Sandboxing
     export WASM_CC=${pkgsCross.wasi32.stdenv.cc}/bin/${pkgsCross.wasi32.stdenv.cc.targetPrefix}cc
     export WASM_CXX=${pkgsCross.wasi32.stdenv.cc}/bin/${pkgsCross.wasi32.stdenv.cc.targetPrefix}c++
-  '' + lib.optionalString pgoSupport ''
+  '' + lib.optionalString enablePGO ''
     if [ -e "$TMPDIR/merged.profdata" ]; then
       echo "Configuring with profiling data"
       for i in "''${!configureFlagsArray[@]}"; do
@@ -406,7 +404,7 @@ buildStdenv.mkDerivation {
     configureFlagsArray+=("--with-mozilla-api-keyfile=$TMPDIR/mls-api-key")
   '' + lib.optionalString (useOfficialBranding && !stdenv.hostPlatform.is32bit) ''
     export MOZILLA_OFFICIAL=1
-  '' + lib.optionalString (!requireSigning) ''
+  '' + lib.optionalString (!enableSigningRequirement) ''
     export MOZ_REQUIRE_SIGNING=
   '' + lib.optionalString stdenv.hostPlatform.isMusl ''
     # linking firefox hits the vm.max_map_count kernel limit with the default musl allocator
@@ -431,13 +429,13 @@ buildStdenv.mkDerivation {
     "--target=${buildStdenv.hostPlatform.config}"
   ]
   # LTO is done using clang and lld on Linux.
-  ++ lib.optionals ltoSupport [
+  ++ lib.optionals enableLTO [
      "--enable-lto=cross,full" # Cross-Language LTO
      "--enable-linker=lld"
   ]
-  ++ lib.optional (isElfhackPlatform stdenv) (enableFeature elfhackSupport "elf-hack")
+  ++ lib.optional (isElfhackPlatform stdenv) (enableFeature enableElfhack "elf-hack")
   ++ lib.optional (!drmSupport) "--disable-eme"
-  ++ lib.optional (allowAddonSideload) "--allow-addon-sideload"
+  ++ lib.optional enableAddonSideload "--allow-addon-sideload"
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     # MacOS builds use bundled versions of libraries: https://bugzilla.mozilla.org/show_bug.cgi?id=1776255
     "--enable-system-pixman"
@@ -453,17 +451,17 @@ buildStdenv.mkDerivation {
     "--with-system-zlib"
 
     # These options are not available on MacOS, even --disable-*
-    (enableFeature alsaSupport "alsa")
-    (enableFeature jackSupport "jack")
-    (enableFeature pulseaudioSupport "pulseaudio")
-    (enableFeature sndioSupport "sndio")
+    (enableFeature withALSA "alsa")
+    (enableFeature withJACK "jack")
+    (enableFeature withPulseaudio "pulseaudio")
+    (enableFeature withSndio "sndio")
   ]
   ++ [
     (enableFeature enableCrashReporter "crashreporter")
-    (enableFeature ffmpegSupport "ffmpeg")
+    (enableFeature withFFMPEG "ffmpeg")
     (enableFeature enableNeckoWiFi "necko-wifi")
-    (enableFeature gssSupport "negotiateauth")
-    (enableFeature jemallocSupport "jemalloc")
+    (enableFeature withGSS "negotiateauth")
+    (enableFeature withJemalloc "jemalloc")
     (enableFeature enableWebRTC "webrtc")
 
     (enableFeature debugBuild "debug")
@@ -520,20 +518,20 @@ buildStdenv.mkDerivation {
     xorg.xorgproto
     zlib
     (if (lib.versionAtLeast version "116") then nss_latest else nss_esr/*3.90*/)
-  ] ++ lib.optional  alsaSupport alsa-lib
-    ++ lib.optional  jackSupport libjack2
-    ++ lib.optional  pulseaudioSupport libpulseaudio # only headers are needed
-    ++ lib.optional  sndioSupport sndio
-    ++ lib.optionals waylandSupport [ libxkbcommon libdrm ]
+  ] ++ lib.optional  withALSA alsa-lib
+    ++ lib.optional  withJACK libjack2
+    ++ lib.optional  withPulseaudio libpulseaudio # only headers are needed
+    ++ lib.optional  withSndio sndio
+    ++ lib.optionals withWayland [ libxkbcommon libdrm ]
   ))
   # icu74 fails to build on 127 and older
   # https://bugzilla.mozilla.org/show_bug.cgi?id=1862601
   ++ [ (if (lib.versionAtLeast version "134") then icu74 else icu73) ]
-  ++ lib.optional  gssSupport libkrb5
-  ++ lib.optional  jemallocSupport jemalloc
+  ++ lib.optional  withGSS libkrb5
+  ++ lib.optional  withJemalloc jemalloc
   ++ extraBuildInputs;
 
-  profilingPhase = lib.optionalString pgoSupport ''
+  profilingPhase = lib.optionalString enablePGO ''
     # Package up Firefox for profiling
     ./mach package
 
@@ -628,15 +626,15 @@ buildStdenv.mkDerivation {
     inherit applicationName;
     inherit application extraPatches;
     inherit updateScript;
-    inherit alsaSupport;
+    inherit withALSA;
     inherit binaryName;
-    inherit requireSigning allowAddonSideload;
-    inherit jackSupport;
-    inherit pipewireSupport;
-    inherit sndioSupport;
+    inherit enableSigningRequirement enableAddonSideload;
+    inherit withJACK;
+    inherit withPipewire;
+    inherit withSndio;
     inherit nspr;
-    inherit ffmpegSupport;
-    inherit gssSupport;
+    inherit withFFMPEG;
+    inherit withGSS;
     inherit tests;
     inherit gtk3;
     inherit wasiSysRoot;

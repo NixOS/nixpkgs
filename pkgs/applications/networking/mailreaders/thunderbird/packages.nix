@@ -75,7 +75,7 @@ let
         withLocation = false;
         withWebRTC = false;
 
-        pgoSupport = false; # console.warn: feeds: "downloadFeed: network connection unavailable"
+        enablePGO = false; # console.warn: feeds: "downloadFeed: network connection unavailable"
 
         icu73 = icu73';
       };

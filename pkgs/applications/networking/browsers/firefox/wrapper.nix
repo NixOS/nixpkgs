@@ -51,12 +51,12 @@ let
     }:
 
     let
-      ffmpegSupport = browser.ffmpegSupport or false;
-      gssSupport = browser.gssSupport or false;
-      alsaSupport = browser.alsaSupport or false;
-      pipewireSupport = browser.pipewireSupport or false;
-      sndioSupport = browser.sndioSupport or false;
-      jackSupport = browser.jackSupport or false;
+      ffmpegSupport = browser.withFFMPEG or false;
+      gssSupport = browser.withGSS or false;
+      alsaSupport = browser.withALSA or false;
+      pipewireSupport = browser.withPipewire or false;
+      sndioSupport = browser.withSndio or false;
+      jackSupport = browser.withJACK or false;
       # PCSC-Lite daemon (services.pcscd) also must be enabled for firefox to access smartcards
       smartcardSupport = cfg.smartcardSupport or false;
 
@@ -99,7 +99,7 @@ let
       # and an extid attribute
       extensions = if nameArray != (lib.unique nameArray) then
         throw "Firefox addon name needs to be unique"
-      else if browser.requireSigning || !browser.allowAddonSideload then
+      else if browser.enableSigningRequirement || !browser.enableAddonSideload then
         throw "Nix addons are only supported with signature enforcement disabled and addon sideloading enabled (eg. LibreWolf)"
       else builtins.map (a:
         if ! (builtins.hasAttr "extid" a) then
