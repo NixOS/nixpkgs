@@ -1,14 +1,9 @@
-# NOTE: Must be `import`-ed rather than `callPackage`-d to preserve the `override` attribute.
 {
   lib,
   stdenvNoCC,
   testers,
 }:
 let
-  inherit (lib) maintainers;
-  inherit (lib.customisation) makeOverridable;
-  inherit (testers) testBuildFailure;
-
   # See https://nixos.org/manual/nixpkgs/unstable/#tester-testBuildFailurePrime
   # or doc/build-helpers/testers.chapter.md
   testBuildFailure' =
@@ -19,18 +14,15 @@ let
       expectedBuilderLogEntries ? [ ],
       script ? "",
     }:
-    let
-      failed = testBuildFailure drv;
-    in
-    stdenvNoCC.mkDerivation {
+    stdenvNoCC.mkDerivation (finalAttrs: {
       __structuredAttrs = true;
       strictDeps = true;
 
       inherit name;
 
-      nativeBuildInputs = [ failed ];
+      nativeBuildInputs = [ finalAttrs.failed ];
 
-      inherit failed;
+      failed = testers.testBuildFailure drv;
 
       inherit expectedBuilderExitCode expectedBuilderLogEntries;
 
@@ -40,8 +32,8 @@ let
 
       meta = {
         description = "A wrapper around testers.testBuildFailure to simplify common use cases";
-        maintainers = [ maintainers.connorbaker ];
+        maintainers = [ lib.maintainers.connorbaker ];
       };
-    };
+    });
 in
-makeOverridable testBuildFailure'
+lib.makeOverridable testBuildFailure'
