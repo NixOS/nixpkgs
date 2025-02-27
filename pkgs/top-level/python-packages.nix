@@ -5774,9 +5774,7 @@ self: super: with self; {
 
   guessit = callPackage ../development/python-modules/guessit { };
 
-  guestfs = callPackage ../development/python-modules/guestfs {
-    qemu = pkgs.qemu;
-  };
+  guestfs = toPythonModule pkgs.libguestfs;
 
   gudhi = callPackage ../development/python-modules/gudhi {
     inherit (pkgs) cgal;
