@@ -16057,6 +16057,8 @@ self: super: with self; {
     inherit (pkgs) systemd;
   };
 
+  systemdunitparser = callPackage ../development/python-modules/systemdunitparser { };
+
   sysv-ipc = callPackage ../development/python-modules/sysv-ipc { };
 
   syrupy = callPackage ../development/python-modules/syrupy { };
