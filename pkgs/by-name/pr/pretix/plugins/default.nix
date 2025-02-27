@@ -4,6 +4,8 @@
 }:
 
 {
+  dbvat = callPackage ./dbvat.nix { };
+
   pages = callPackage ./pages.nix { };
 
   passbook = callPackage ./passbook.nix { };
