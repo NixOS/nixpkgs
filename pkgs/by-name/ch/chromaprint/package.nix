@@ -1,21 +1,22 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchpatch
-, fetchpatch2
-, cmake
-, ninja
-, ffmpeg
-, darwin
-, zlib
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  fetchpatch2,
+  cmake,
+  ninja,
+  ffmpeg,
+  darwin,
+  zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "chromaprint";
   version = "1.5.1";
 
   src = fetchurl {
-    url = "https://github.com/acoustid/chromaprint/releases/download/v${version}/${pname}-${version}.tar.gz";
+    url = "https://github.com/acoustid/chromaprint/releases/download/v${finalAttrs.version}/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-oarY+juLGLeNN1Wzdn+v+au2ckLgG0eOyaZOGQ8zXhw=";
   };
 
@@ -40,18 +41,33 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ cmake ninja ];
+  nativeBuildInputs = [
+    cmake
+    ninja
+  ];
 
-  buildInputs = [ ffmpeg ] ++ lib.optionals stdenv.hostPlatform.isDarwin
-    (with darwin.apple_sdk.frameworks; [ Accelerate CoreGraphics CoreVideo zlib ]);
+  buildInputs =
+    [ ffmpeg ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (
+      with darwin.apple_sdk.frameworks;
+      [
+        Accelerate
+        CoreGraphics
+        CoreVideo
+        zlib
+      ]
+    );
 
-  cmakeFlags = [ "-DBUILD_EXAMPLES=ON" "-DBUILD_TOOLS=ON" ];
+  cmakeFlags = [
+    "-DBUILD_EXAMPLES=ON"
+    "-DBUILD_TOOLS=ON"
+  ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://acoustid.org/chromaprint";
     description = "AcoustID audio fingerprinting library";
     mainProgram = "fpcalc";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.unix;
   };
-}
+})
