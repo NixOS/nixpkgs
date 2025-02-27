@@ -9,13 +9,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "system76-power";
-  version = "1.2.2";
+  version = "1.2.3";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "system76-power";
     rev = version;
-    hash = "sha256-Ju4xIWOf6m8z1fUSbzafKkyt9XXT8q1/8RukrhtswsE=";
+    hash = "sha256-fyatAoWw/4ORojayA90er+H5weRykg+2ZzTsGThpW5g=";
   };
 
   nativeBuildInputs = [ pkg-config ];
