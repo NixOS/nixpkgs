@@ -87,6 +87,7 @@ vimUtils.buildVimPlugin {
     maintainers = with lib.maintainers; [
       ttrei
       aarnphm
+      jackcres
     ];
   };
 }
