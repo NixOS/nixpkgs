@@ -4239,8 +4239,6 @@ self: super: with self; {
 
   enum34 = callPackage ../development/python-modules/enum34 { };
 
-  enum-compat = callPackage ../development/python-modules/enum-compat { };
-
   env-canada = callPackage ../development/python-modules/env-canada { };
 
   environmental-override = callPackage ../development/python-modules/environmental-override { };
@@ -16058,6 +16056,8 @@ self: super: with self; {
   systemd = callPackage ../development/python-modules/systemd {
     inherit (pkgs) systemd;
   };
+
+  systemdunitparser = callPackage ../development/python-modules/systemdunitparser { };
 
   sysv-ipc = callPackage ../development/python-modules/sysv-ipc { };
 

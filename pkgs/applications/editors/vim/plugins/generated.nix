@@ -1032,6 +1032,19 @@ final: prev:
     meta.hydraPlatforms = [ ];
   };
 
+  augment-vim = buildVimPlugin {
+    pname = "augment.vim";
+    version = "2025-02-12";
+    src = fetchFromGitHub {
+      owner = "augmentcode";
+      repo = "augment.vim";
+      rev = "a50e362f6c16a0c43da20f613e337a6dfd3fb94a";
+      sha256 = "1m1nfiij7wxw63zjh09hc14dxd45rwb6pf48ls101fh461gffdpr";
+    };
+    meta.homepage = "https://github.com/augmentcode/augment.vim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   aurora = buildVimPlugin {
     pname = "aurora";
     version = "2024-07-21";
@@ -9132,6 +9145,19 @@ final: prev:
       sha256 = "0d7xm5rafw5biv8phfyny2haqq50mnh0q4ms7dkhvp9k1k2k2whz";
     };
     meta.homepage = "https://github.com/Xuyuanp/nerdtree-git-plugin/";
+    meta.hydraPlatforms = [ ];
+  };
+
+  nerdy-nvim = buildVimPlugin {
+    pname = "nerdy.nvim";
+    version = "2025-02-23";
+    src = fetchFromGitHub {
+      owner = "2KAbhishek";
+      repo = "nerdy.nvim";
+      rev = "319cc93d4038b24497eb34c344b20fb462be6c9a";
+      sha256 = "05dnqydmflymc2svijndsrnjv02waliy7si2md35ji9bzpw4cg6k";
+    };
+    meta.homepage = "https://github.com/2KAbhishek/nerdy.nvim/";
     meta.hydraPlatforms = [ ];
   };
 

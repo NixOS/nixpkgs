@@ -2,7 +2,7 @@
 {
   fetchurl,
   lib,
-  llvmPackages_18,
+  llvmPackages,
   mtools,
   nasm,
   # The following options map to configure flags.
@@ -15,10 +15,9 @@
 }:
 
 let
-  llvmPackages = llvmPackages_18;
   stdenv = llvmPackages.stdenv;
 
-  version = "8.7.0";
+  version = "9.0.0";
 
   hasI686 =
     (if targets == [ ] then stdenv.hostPlatform.isx86_32 else (builtins.elem "i686" targets))
@@ -56,9 +55,9 @@ let
     ];
 in
 
-assert lib.assertMsg (!(biosSupport && !hasI686)) "BIOS builds are possible only for x86";
+assert lib.assertMsg (!biosSupport || hasI686) "BIOS builds are possible only for x86";
 
-assert lib.assertMsg (!(pxeSupport && !hasI686)) "PXE builds are possible only for x86";
+assert lib.assertMsg (!pxeSupport || hasI686) "PXE builds are possible only for x86";
 
 # The output of the derivation is a tool to create bootable images using Limine
 # as bootloader for various platforms and corresponding binary and helper files.
@@ -70,13 +69,8 @@ stdenv.mkDerivation {
   # Packaging that in Nix is very cumbersome.
   src = fetchurl {
     url = "https://github.com/limine-bootloader/limine/releases/download/v${version}/limine-${version}.tar.gz";
-    hash = "sha256-pwoR9ptMpdhdEe/Kbyc+smv9oNIqtJ9L0KFdf6/g0Ec=";
+    hash = "sha256-jTApAnysHola1RX7zk2CLoEbNpS8r+O9qP1zJjxZ7Ho=";
   };
-
-  hardeningDisable = [
-    # clang doesn't support this for RISC-V target
-    "zerocallusedregs"
-  ];
 
   enableParallelBuilding = true;
 
@@ -115,9 +109,8 @@ stdenv.mkDerivation {
       licenses.zlib # tinf
     ];
     maintainers = [
-      maintainers._48cf
+      maintainers.lzcunt
       maintainers.phip1611
-      maintainers.sanana
       maintainers.surfaceflinger
     ];
   };

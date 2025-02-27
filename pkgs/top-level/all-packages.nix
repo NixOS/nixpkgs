@@ -1404,8 +1404,6 @@ with pkgs;
 
   py65 = with python3.pkgs; toPythonApplication py65;
 
-  ripes = qt6Packages.callPackage ../applications/emulators/ripes { };
-
   rmg-wayland = callPackage ../by-name/rm/rmg/package.nix {
     withWayland = true;
   };
@@ -2209,7 +2207,6 @@ with pkgs;
   easycrypt = callPackage ../applications/science/logic/easycrypt {
     why3 = pkgs.why3.override {
       ideSupport = false;
-      version = "1.7.2";
       coqPackages = { coq = null; flocq = null; };
     };
   };
@@ -4162,8 +4159,6 @@ with pkgs;
 
   matrix-sdk-crypto-nodejs = callPackage ../development/libraries/matrix-sdk-crypto-nodejs { };
 
-  makemkv = libsForQt5.callPackage ../applications/video/makemkv { };
-
   man = man-db;
 
   mangohud = callPackage ../tools/graphics/mangohud {
@@ -5095,8 +5090,6 @@ with pkgs;
 
   texmaker = qt6Packages.callPackage ../applications/editors/texmaker { };
 
-  texstudio = qt6Packages.callPackage ../applications/editors/texstudio { };
-
   textadept = libsForQt5.callPackage ../applications/editors/textadept { };
 
   texworks = qt6Packages.callPackage ../applications/editors/texworks { };
@@ -5943,14 +5936,14 @@ with pkgs;
     gnat-bootstrap =
       if stdenv.hostPlatform == stdenv.targetPlatform
          && stdenv.buildPlatform == stdenv.hostPlatform
-      then buildPackages.gnat-bootstrap12
+      then buildPackages.gnat-bootstrap13
       else buildPackages.gnat13;
     stdenv =
       if stdenv.hostPlatform == stdenv.targetPlatform
          && stdenv.buildPlatform == stdenv.hostPlatform
          && stdenv.buildPlatform.isDarwin
          && stdenv.buildPlatform.isx86_64
-      then overrideCC stdenv gnat-bootstrap12
+      then overrideCC stdenv gnat-bootstrap13
       else stdenv;
   });
 
@@ -5966,14 +5959,14 @@ with pkgs;
     gnat-bootstrap =
       if stdenv.hostPlatform == stdenv.targetPlatform
          && stdenv.buildPlatform == stdenv.hostPlatform
-      then buildPackages.gnat-bootstrap12
+      then buildPackages.gnat-bootstrap14
       else buildPackages.gnat13;
     stdenv =
       if stdenv.hostPlatform == stdenv.targetPlatform
          && stdenv.buildPlatform == stdenv.hostPlatform
          && stdenv.buildPlatform.isDarwin
          && stdenv.buildPlatform.isx86_64
-      then overrideCC stdenv gnat-bootstrap12
+      then overrideCC stdenv gnat-bootstrap14
       else stdenv;
   });
 
@@ -5981,6 +5974,16 @@ with pkgs;
   gnat-bootstrap11 = wrapCC (callPackage ../development/compilers/gnat-bootstrap { majorVersion = "11"; });
   gnat-bootstrap12 = wrapCCWith ({
     cc = callPackage ../development/compilers/gnat-bootstrap { majorVersion = "12"; };
+  } // lib.optionalAttrs (stdenv.hostPlatform.isDarwin) {
+    bintools = bintoolsDualAs;
+  });
+  gnat-bootstrap13 = wrapCCWith ({
+    cc = callPackage ../development/compilers/gnat-bootstrap { majorVersion = "13"; };
+  } // lib.optionalAttrs (stdenv.hostPlatform.isDarwin) {
+    bintools = bintoolsDualAs;
+  });
+  gnat-bootstrap14 = wrapCCWith ({
+    cc = callPackage ../development/compilers/gnat-bootstrap { majorVersion = "14"; };
   } // lib.optionalAttrs (stdenv.hostPlatform.isDarwin) {
     bintools = bintoolsDualAs;
   });
@@ -10621,10 +10624,6 @@ with pkgs;
     fmt = fmt_11;
   };
 
-  texpresso = callPackage ../tools/typesetting/tex/texpresso {
-    texpresso-tectonic = callPackage ../tools/typesetting/tex/texpresso/tectonic.nix { };
-  };
-
   tinyxml = tinyxml2;
 
   tinyxml2 = callPackage ../development/libraries/tinyxml/2.6.2.nix { };
@@ -13385,24 +13384,20 @@ with pkgs;
   firefox-esr-unwrapped = firefox-esr-128-unwrapped;
 
   firefox = wrapFirefox firefox-unwrapped { };
-  firefox-beta = wrapFirefox firefox-beta-unwrapped {
-    desktopName = "Firefox Beta";
-  };
-  firefox-devedition = wrapFirefox firefox-devedition-unwrapped {
-    desktopName = "Firefox Developer Edition";
-  };
+  firefox-beta = wrapFirefox firefox-beta-unwrapped { };
+  firefox-devedition = wrapFirefox firefox-devedition-unwrapped { };
 
   firefox-mobile = callPackage ../applications/networking/browsers/firefox/mobile-config.nix { };
 
   firefox-esr-128 = wrapFirefox firefox-esr-128-unwrapped {
     nameSuffix = "-esr";
-    desktopName = "Firefox ESR";
     wmClass = "firefox-esr";
     icon = "firefox-esr";
   };
   firefox-esr = firefox-esr-128;
 
   firefox-bin-unwrapped = callPackage ../applications/networking/browsers/firefox-bin {
+    inherit (firefox-unwrapped.passthru) applicationName;
     channel = "release";
     generated = import ../applications/networking/browsers/firefox-bin/release_sources.nix;
   };
@@ -13412,23 +13407,23 @@ with pkgs;
   };
 
   firefox-beta-bin-unwrapped = firefox-bin-unwrapped.override {
+    inherit (firefox-beta-unwrapped.passthru) applicationName;
     channel = "beta";
     generated = import ../applications/networking/browsers/firefox-bin/beta_sources.nix;
   };
 
   firefox-beta-bin = res.wrapFirefox firefox-beta-bin-unwrapped {
     pname = "firefox-beta-bin";
-    desktopName = "Firefox Beta";
   };
 
   firefox-devedition-bin-unwrapped = callPackage ../applications/networking/browsers/firefox-bin {
+    inherit (firefox-devedition-unwrapped.passthru) applicationName;
     channel = "developer-edition";
     generated = import ../applications/networking/browsers/firefox-bin/developer-edition_sources.nix;
   };
 
   firefox-devedition-bin = res.wrapFirefox firefox-devedition-bin-unwrapped {
     pname = "firefox-devedition-bin";
-    desktopName = "Firefox DevEdition";
     wmClass = "firefox-aurora";
   };
 
@@ -15227,9 +15222,7 @@ with pkgs;
   thunderbird-128 = wrapThunderbird thunderbirdPackages.thunderbird-128 { };
 
   thunderbird-bin = wrapThunderbird thunderbird-bin-unwrapped {
-    applicationName = "thunderbird";
     pname = "thunderbird-bin";
-    desktopName = "Thunderbird";
   };
   thunderbird-bin-unwrapped = callPackage ../applications/networking/mailreaders/thunderbird-bin {
     generated = import ../applications/networking/mailreaders/thunderbird-bin/release_sources.nix;
@@ -15884,10 +15877,6 @@ with pkgs;
 
   monero-cli = callPackage ../applications/blockchains/monero-cli {
     inherit (darwin.apple_sdk.frameworks) CoreData IOKit;
-  };
-
-  haven-cli = callPackage ../applications/blockchains/haven-cli {
-    inherit (darwin.apple_sdk.frameworks) CoreData IOKit PCSC;
   };
 
   monero-gui = libsForQt5.callPackage ../applications/blockchains/monero-gui { };
@@ -17154,7 +17143,7 @@ with pkgs;
   simulide_0_4_15 = callPackage ../by-name/si/simulide/package.nix { versionNum = "0.4.15"; };
   simulide_1_0_0 = callPackage ../by-name/si/simulide/package.nix { versionNum = "1.0.0"; };
   simulide_1_1_0 = callPackage ../by-name/si/simulide/package.nix { versionNum = "1.1.0"; };
-  simulide = callPackage ../by-name/si/simulide/package.nix { versionNum = "1.0.0"; };
+  simulide_1_2_0 = callPackage ../by-name/si/simulide/package.nix { versionNum = "1.2.0"; };
 
   eagle = libsForQt5.callPackage ../applications/science/electronics/eagle/eagle.nix { };
 

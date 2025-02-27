@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "cwcwidth";
-  version = "0.1.9";
+  version = "0.1.10";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-8Z0RoBSNSoys0GTJbpO8qM40FaGGroIEA49F4Qjbdrg=";
+    hash = "sha256-dGh2D3LB9BB74bKyhUvAAEAeo2pp2u02+5ZqHhmnoSQ=";
   };
 
   nativeBuildInputs = [

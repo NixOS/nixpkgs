@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "deepin-editor";
-  version = "6.5.8";
+  version = "6.5.15";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-QMq7DIggMhY4EseIa7/tvgxGwZn07OitOm1YjrzMFHg=";
+    hash = "sha256-aMxEESZ/noGtEDpQZz1asR0M+wnAfQT1FXLaQB6B0Zs=";
   };
 
   nativeBuildInputs = [
@@ -49,6 +49,9 @@ stdenv.mkDerivation rec {
   strictDeps = true;
 
   cmakeFlags = [ "-DVERSION=${version}" ];
+
+  # Fix build with icu4c: "error: parameter declared 'auto'"
+  env.NIX_CFLAGS_COMPILE = toString [ "--std=c++17" ];
 
   meta = {
     description = "Desktop text editor that supports common text editing features";

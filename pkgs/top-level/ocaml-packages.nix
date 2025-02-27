@@ -1216,6 +1216,8 @@ let
 
     mirage-protocols = callPackage ../development/ocaml-modules/mirage-protocols { };
 
+    mirage-ptime = callPackage ../development/ocaml-modules/mirage-ptime { };
+
     mirage-random = callPackage ../development/ocaml-modules/mirage-random { };
 
     mirage-random-test = callPackage ../development/ocaml-modules/mirage-random-test { };

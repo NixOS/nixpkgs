@@ -2,6 +2,7 @@
   stdenvNoCC,
   lib,
   vscode-utils,
+  ruff,
 }:
 
 vscode-utils.buildVscodeMarketplaceExtension {
@@ -32,6 +33,15 @@ vscode-utils.buildVscodeMarketplaceExtension {
       version = "2024.34.0";
     }
     // sources.${stdenvNoCC.system} or (throw "Unsupported system ${stdenvNoCC.system}");
+
+  postInstall = ''
+    test -x "$out/$installPrefix/bundled/libs/bin/ruff" || {
+      echo "Replacing the bundled ruff binary failed, because 'bundled/libs/bin/ruff' is missing."
+      echo "Update the package to the match the new path/behavior."
+      exit 1
+    }
+    ln -sf ${lib.getExe ruff} "$out/$installPrefix/bundled/libs/bin/ruff"
+  '';
 
   meta = {
     license = lib.licenses.mit;
