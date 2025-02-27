@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "elfio";
-  version = "3.10";
+  version = "3.12";
 
   src = fetchFromGitHub {
     owner = "serge1";
     repo = "elfio";
     rev = "Release_${version}";
-    sha256 = "sha256-DuZhkiHXdCplRiOy1Gsu7voVPdCbFt+4qFqlOeOeWQw=";
+    sha256 = "sha256-tDRBscs2L/3gYgLQvb1+8nNxqkr8v1xBkeDXuOqShX4=";
   };
 
   nativeBuildInputs = [ cmake ];
