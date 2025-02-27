@@ -9,15 +9,15 @@
   xtl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xeus";
-  version = "3.2.0";
+  version = "5.1.1";
 
   src = fetchFromGitHub {
     owner = "jupyter-xeus";
-    repo = "xeus";
-    rev = version;
-    sha256 = "sha256-D/dJ0SHxTHJw63gHD6FRZS7O2TVZ0voIv2mQASEjLA8=";
+    repo = pname;
+    tag = version;
+    hash = "sha256-YtAkegwHo9XXIz0l5qXqnKn6kP1MWETXbVommX+Pws8=";
   };
 
   nativeBuildInputs = [
@@ -28,7 +28,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     nlohmann_json
     libuuid
-    xtl
   ];
 
   cmakeFlags = [
@@ -45,4 +44,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ serge_sans_paille ];
     platforms = platforms.all;
   };
-}
+})
