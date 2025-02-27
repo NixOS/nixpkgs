@@ -8,7 +8,7 @@
 }:
 
 let
-  version = "1.1295.3";
+  version = "1.1295.4";
 in
 buildNpmPackage {
   pname = "snyk";
@@ -18,7 +18,7 @@ buildNpmPackage {
     owner = "snyk";
     repo = "cli";
     tag = "v${version}";
-    hash = "sha256-I7x+HjucTEhiAC6bocMeQO/eAWHYcqwA9FXYvcef3Og=";
+    hash = "sha256-71wyFHiRRWPE3C+6o742rggb44EwXF0k+SmuS1NWuIE=";
   };
 
   npmDepsHash = "sha256-RuIavwtTbgo5Ni7oGH2i5VAcVxfS4wKKSX6qHD8CHIw=";
