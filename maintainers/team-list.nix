@@ -221,6 +221,7 @@ with lib.maintainers;
     members = [
       xanderio
       blitz
+      snu
     ];
     scope = "Team for Cyberus Technology employees who collectively maintain packages.";
     shortName = "Cyberus Technology employees";
