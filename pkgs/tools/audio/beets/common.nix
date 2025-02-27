@@ -2,6 +2,7 @@
   lib,
   src,
   version,
+  fetchpatch,
   bashInteractive,
   diffPlugins,
   gobject-introspection,
@@ -79,7 +80,19 @@ python3Packages.buildPythonApplication {
   inherit src version;
   pyproject = true;
 
-  patches = extraPatches;
+  patches = [
+    (fetchpatch {
+      # Already on master. TODO: remove when updating to the next release
+      # Issue: https://github.com/beetbox/beets/issues/5527
+      # PR: https://github.com/beetbox/beets/pull/5650
+      name = "fix-im-backend";
+      url = "https://github.com/beetbox/beets/commit/1f938674015ee71431fe9bd97c2214f58473efd2.patch";
+      hash = "sha256-koCYeiUhk1ifo6CptOSu3p7Nz0FFUeiuArTknM/tpVQ=";
+      excludes = [
+        "docs/changelog.rst"
+      ];
+    })
+  ] ++ extraPatches;
 
   build-system = [
     python3Packages.poetry-core
