@@ -8,6 +8,7 @@
   gst_all_1,
   python3Packages,
   sphinxHook,
+  writableTmpDirAsHomeHook,
   runtimeShell,
   writeScript,
 
@@ -145,6 +146,9 @@ python3Packages.buildPythonApplication {
       rarfile
       responses
     ]
+    ++ [
+      writableTmpDirAsHomeHook
+    ]
     ++ pluginWrapperBins;
 
   __darwinAllowLocalNetworking = true;
@@ -170,8 +174,7 @@ python3Packages.buildPythonApplication {
       | sort -u > plugins_available
     ${diffPlugins (attrNames builtinPlugins) "plugins_available"}
 
-    export BEETS_TEST_SHELL="${bashInteractive}/bin/bash --norc"
-    export HOME="$(mktemp -d)"
+    export BEETS_TEST_SHELL="${lib.getExe bashInteractive} --norc"
 
     env EDITOR="${writeScript "beetconfig.sh" ''
       #!${runtimeShell}
