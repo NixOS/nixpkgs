@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   pname = "r8125";
   version = "9.015.00";
   src = fetchFromGitHub {
-    owner = "alper-han";
+    owner = "louistakepillz";
     repo = "r8125";
     rev = version;
     sha256 = "sha256-ceJXSOyAFis2RVhjVhtoGai4/22Si4j1OG083A2jlt0=";
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   buildFlags = [ "modules" ];
 
   meta = with lib; {
-    homepage = "https://github.com/alper-han/r8125";
+    homepage = "https://github.com/louistakepillz/r8125";
     downloadPage = "https://www.realtek.com/Download/List?cate_id=584";
     description = "Realtek r8125 2.5G Ethernet driver";
     license = licenses.gpl2Plus;
