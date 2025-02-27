@@ -14045,8 +14045,6 @@ with pkgs;
 
   ladspa-sdk = callPackage ../applications/audio/ladspa-sdk { };
 
-  ladybird = callPackage ../applications/networking/browsers/ladybird { };
-
   lemonbar = callPackage ../applications/window-managers/lemonbar { };
 
   lemonbar-xft = callPackage ../applications/window-managers/lemonbar/xft.nix { };
