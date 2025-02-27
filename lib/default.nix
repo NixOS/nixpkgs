@@ -142,7 +142,7 @@ let
       isValidPosixName toShellVar toShellVars trim trimWith
       escapeRegex escapeURL escapeXML replaceChars lowerChars
       upperChars toLower toUpper toSentenceCase addContextFrom splitString
-      removePrefix removeSuffix versionOlder versionAtLeast
+      splitStringBy removePrefix removeSuffix versionOlder versionAtLeast
       getName getVersion match split
       cmakeOptionType cmakeBool cmakeFeature
       mesonOption mesonBool mesonEnable
