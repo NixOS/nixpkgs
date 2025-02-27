@@ -131,14 +131,13 @@ in
 , enableGoogleAPI ? enableLocation
 , enableMLSAPI ? enableLocation
 
-# digital rights managemewnt
+# DRM / Encrypted Media Extensions
 
-# This flag controls whether Firefox will show the nagbar, that allows
-# users at runtime the choice to enable Widevine CDM support when a site
-# requests it.
+# Build time toggle to control whether the DRM nagbar will appear
+# (browser.eme.ui.enabled), when sites require it to playback media.
 # Controlling the nagbar and widevine CDM at runtime is possible by setting
 # `browser.eme.ui.enabled` and `media.gmp-widevinecdm.enabled` accordingly
-, drmSupport ? true
+, enableEMENagbar ? true
 
 # As stated by Sylvestre Ledru (@sylvestre) on Nov 22, 2017 at
 # https://github.com/NixOS/nixpkgs/issues/31843#issuecomment-346372756 we
@@ -168,6 +167,7 @@ assert enableElfhack -> isElfhackPlatform stdenv;
 
 # removed in 25.05
 assert attrs ? privacySupport -> throw "${pname}: The privacySupport option has been replaced and split into `enableDataReporting`, `enableLocation` and `enableWebRTC`.";
+assert attrs ? drmSupport -> throw "${pname}: The `drmSupport` attribute has been renamed to `enableEMENagbar` to better reflect its purpose.";
 
 let
   # Don't use official branding with these features disabled
@@ -434,7 +434,7 @@ buildStdenv.mkDerivation {
      "--enable-linker=lld"
   ]
   ++ lib.optional (isElfhackPlatform stdenv) (enableFeature enableElfhack "elf-hack")
-  ++ lib.optional (!drmSupport) "--disable-eme"
+  ++ lib.optional (!enableEMENagbar) "--disable-eme"
   ++ lib.optional enableAddonSideload "--allow-addon-sideload"
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     # MacOS builds use bundled versions of libraries: https://bugzilla.mozilla.org/show_bug.cgi?id=1776255
