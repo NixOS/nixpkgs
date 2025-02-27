@@ -474,6 +474,71 @@ runTests {
     expected = [ "A" "B" ];
   };
 
+  testSplitStringAtSimple = {
+    expr = strings.splitStringAt { separators = [ "." ]; } "a.b.c.d";
+    expected = [ "a" "b" "c" "d" ];
+  };
+
+  testSplitStringAtEmpty = {
+    expr = strings.splitStringAt { separators = [ "." ]; } "a..b";
+    expected = [ "a" "" "b" ];
+  };
+
+  testSplitStringAtOne = {
+    expr = strings.splitStringAt { separators = [ ":" ]; } "a.b";
+    expected = [ "a.b" ];
+  };
+
+  testSplitStringAtNone = {
+    expr = strings.splitStringAt { separators = [ "." ]; } "";
+    expected = [ "" ];
+  };
+
+  testSplitStringAtFirstEmpty = {
+    expr = strings.splitStringAt { separators = [ "/" ]; } "/a/b/c";
+    expected = [ "" "a" "b" "c" ];
+  };
+
+  testSplitStringAtLastEmpty = {
+    expr = strings.splitStringAt { separators = [ ":" ]; } "2001:db8:0:0042::8a2e:370:";
+    expected = [ "2001" "db8" "0" "0042" "" "8a2e" "370" "" ];
+  };
+
+  testSplitStringAtUppercase = {
+    expr = strings.splitStringAt { uppercase = true; } "aBcD";
+    expected = [ "a" "Bc" "D" ];
+  };
+
+  testSplitStringAtLowercase = {
+    expr = strings.splitStringAt { lowercase = true; } "aBcD";
+    expected = [ "aB" "cD" ];
+  };
+
+  testSplitStringAtDigit = {
+    expr = strings.splitStringAt { digit = true; } "a1b2c3d";
+    expected = [ "a" "1" "b" "2" "c" "3" "d" ];
+  };
+
+  testSplitStringAtUpperLower = {
+    expr = strings.splitStringAt { uppercase = true; lowercase = true; } "aBcD";
+    expected = [ "a" "B" "c" "D" ];
+  };
+
+  testSplitStringAtUpperDigit = {
+    expr = strings.splitStringAt { uppercase = true; digit = true; } "a1B2c3D";
+    expected = [ "a" "1" "B" "2" "c" "3" "D" ];
+  };
+
+  testSplitStringAtLowerDigit = {
+    expr = strings.splitStringAt { lowercase = true; digit = true; } "3aab2caDcb1d";
+    expected = [ "3" "aab" "2" "caD" "cb" "1" "d" ];
+  };
+
+  testSplitStringAtUpperLowerDigit = {
+    expr = strings.splitStringAt { uppercase = true; lowercase = true; digit = true; } "3aab2caDcb1d";
+    expected = [ "3" "aab" "2" "ca" "D" "cb" "1" "d" ];
+  };
+
   testEscapeShellArg = {
     expr = strings.escapeShellArg "esc'ape\nme";
     expected = "'esc'\\''ape\nme'";
