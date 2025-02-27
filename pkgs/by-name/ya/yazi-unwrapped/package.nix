@@ -9,13 +9,13 @@
   rust-jemalloc-sys,
 }:
 let
-  version = "25.2.11";
+  version = "25.2.26";
 
   code_src = fetchFromGitHub {
     owner = "sxyazi";
     repo = "yazi";
     tag = "v${version}";
-    hash = "sha256-yVpSoEmEA+/XF/jlJqKdkj86m8IZLAbrxDxz5ZnmP78=";
+    hash = "sha256-DqhqpQRCSBTGonL9+bP7pA3mO2CemlbhwzShVdrL1/0=";
   };
 
   man_src = fetchFromGitHub {
@@ -37,11 +37,11 @@ rustPlatform.buildRustPackage rec {
   sourceRoot = code_src.name;
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-AfXi68PNrYj6V6CYIPZT0t2l5KYTYrIzJgrcEPLW8FM=";
+  cargoHash = "sha256-xg37aypFKY0ZG9GOkygTHlOAjqkTuhLNKo8Fz6MF2ZY=";
 
   env.YAZI_GEN_COMPLETIONS = true;
   env.VERGEN_GIT_SHA = "Nixpkgs";
-  env.VERGEN_BUILD_DATE = "2025-02-11";
+  env.VERGEN_BUILD_DATE = "2025-02-26";
 
   nativeBuildInputs = [ installShellFiles ];
   buildInputs = [ rust-jemalloc-sys ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Foundation ];
