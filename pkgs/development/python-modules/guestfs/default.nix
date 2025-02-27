@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchurl,
   libguestfs,
+  pythonAtLeast,
   qemu,
 }:
 
@@ -10,6 +11,9 @@ buildPythonPackage rec {
   pname = "guestfs";
   version = "1.40.1";
   format = "setuptools";
+
+  # undefined symbol: PyEval_CallObject
+  disabled = pythonAtLeast "3.13";
 
   src = fetchurl {
     url = "http://download.libguestfs.org/python/guestfs-${version}.tar.gz";
