@@ -2,6 +2,7 @@
   lib,
   appimageTools,
   fetchurl,
+  nix-update-script,
 }:
 
 let
@@ -28,7 +29,7 @@ appimageTools.wrapType2 {
       --replace-fail 'Exec=AppRun' 'Exec=lunatask'
   '';
 
-  passthru.updateScript = ./update.py;
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "All-in-one encrypted todo list, notebook, habit and mood tracker, pomodoro timer, and journaling app";
