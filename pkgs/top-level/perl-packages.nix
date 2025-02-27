@@ -13139,6 +13139,19 @@ with self; {
     };
   };
 
+  IPCCmd = buildPerlPackage {
+    pname = "IPC-Cmd";
+    version = "1.04";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/B/BI/BINGOS/IPC-Cmd-1.04.tar.gz";
+      hash = "sha256-0RCg9g41xlchRUIA8NLw+JZVKaKt2WSdH6b0+ezLZDA=";
+    };
+    meta = {
+      description = "A cross platform way of running (interactive) commandline programs";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   IPCConcurrencyLimit = buildPerlPackage {
     pname = "IPC-ConcurrencyLimit";
     version = "0.17";
