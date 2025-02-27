@@ -14,7 +14,7 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "cosmic-idle";
-  version = "1.0.0-alpha.5.1";
+  version = "1.0.0-alpha.6";
 
   src = fetchFromGitHub {
     owner = "pop-os";

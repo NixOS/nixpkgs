@@ -8,12 +8,12 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "cosmic-wallpapers";
-  version = "1.0.0-alpha.5.1";
+  version = "1.0.0-alpha.6";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-wallpapers";
-    rev = "epoch-${finalAttrs.version}";
+    tag = "epoch-${finalAttrs.version}";
     forceFetchGit = true;
     fetchLFS = true;
     hash = "sha256-Exrps3DicL/G/g0kbSsCvoFhiJn1k3v8I09GhW7EwNM=";
@@ -26,10 +26,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     })
   ];
 
-  makeFlags = [ "prefix=$(out)" ];
+  makeFlags = [ "prefix=${placeholder "out"}" ];
 
   passthru.updateScript = nix-update-script {
     extraArgs = [
+      "--version"
+      "unstable"
       "--version-regex"
       "epoch-(.*)"
     ];
