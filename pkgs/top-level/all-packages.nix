@@ -10198,7 +10198,7 @@ with pkgs;
     suffix = "min";
   };
 
-  poppler_utils = poppler.override {
+  poppler-utils = poppler.override {
     suffix = "utils";
     utils = true;
   };
