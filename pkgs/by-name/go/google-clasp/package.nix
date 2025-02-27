@@ -19,6 +19,10 @@ buildNpmPackage rec {
 
   # `npm run build` tries installing clasp globally
   npmBuildScript = [ "compile" ];
+  # Remove dangling symlink of a dependency
+  postInstall = ''
+    rm $out/lib/node_modules/@google/clasp/node_modules/.bin/sshpk-{verify,sign,conv}
+  '';
 
   meta = {
     description = "Develop Apps Script Projects locally";
