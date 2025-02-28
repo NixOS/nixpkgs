@@ -718,7 +718,7 @@ in
 
       boot.loader.grub.devices = mkIf (cfg.device != "") [ cfg.device ];
 
-      boot.loader.grub.mirroredBoots = mkIf (cfg.devices != [ ]) [
+      boot.loader.grub.mirroredBoots = mkIf (cfg.devices == [ ]) [
         { path = "/boot"; inherit (cfg) devices; inherit (efi) efiSysMountPoint; }
       ];
 
