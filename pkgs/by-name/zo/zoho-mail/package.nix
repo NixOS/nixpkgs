@@ -1,20 +1,21 @@
-{ lib
-, stdenv
-, fetchurl
-, autoPatchelfHook
-, dpkg
-, ffmpeg-full
-, glib
-, gtk3
-, wrapGAppsHook
-, nss
-, xdg-utils
-, nspr
-, mesa
-, systemd
-, libglvnd
-, libGL
-, libGLU
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoPatchelfHook,
+  dpkg,
+  ffmpeg-full,
+  glib,
+  gtk3,
+  wrapGAppsHook3,
+  nss,
+  xdg-utils,
+  nspr,
+  mesa,
+  systemd,
+  libglvnd,
+  libGL,
+  libGLU,
 }:
 
 stdenv.mkDerivation rec {
@@ -26,7 +27,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-03jahxpn4lf7i8923v2wr3zahp7cw1s0l9ikivxbfxgighyabpa6";
   };
 
-  nativeBuildInputs = [ autoPatchelfHook wrapGAppsHook ];
+  nativeBuildInputs = [
+    autoPatchelfHook
+    wrapGAppsHook
+  ];
 
   dontWrapGApps = true;
 
