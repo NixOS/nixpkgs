@@ -28,7 +28,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "firefoxpwa";
-  version = "2.13.3";
+  version = "2.14.1";
 
   src = fetchFromGitHub {
     owner = "filips123";
