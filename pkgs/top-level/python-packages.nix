@@ -6306,6 +6306,8 @@ self: super: with self; {
 
   icalendar = callPackage ../development/python-modules/icalendar { };
 
+  icalendar-compatibility = callPackage ../development/python-modules/icalendar-compatibility { };
+
   icalevents = callPackage ../development/python-modules/icalevents { };
 
   icecream = callPackage ../development/python-modules/icecream { };
