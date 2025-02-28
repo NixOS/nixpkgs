@@ -176,6 +176,8 @@ rustPlatform.buildRustPackage rec {
   passthru.updateScript = ./update/update.ts;
   passthru.tests = callPackage ./tests { };
 
+  requiredSystemFeatures = [ "big-parallel" ];
+
   meta = with lib; {
     homepage = "https://deno.land/";
     changelog = "https://github.com/denoland/deno/releases/tag/v${version}";
