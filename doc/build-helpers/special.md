@@ -6,6 +6,7 @@ This chapter describes several special build helpers.
 special/fakenss.section.md
 special/fhs-environments.section.md
 special/makesetuphook.section.md
+special/makeSetupHookPrime.section.md
 special/mkshell.section.md
 special/vm-tools.section.md
 special/checkpoint-build.section.md

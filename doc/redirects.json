@@ -1,4 +1,10 @@
 {
+  "build-helpers-special-makeSetupHookPrime": [
+    "index.html#build-helpers-special-makeSetupHookPrime"
+  ],
+  "build-helpers-special-makeSetupHookPrime-inputs": [
+    "index.html#build-helpers-special-makeSetupHookPrime-inputs"
+  ],
   "chap-build-helpers-finalAttrs": [
     "index.html#chap-build-helpers-finalAttrs"
   ],
@@ -10,6 +16,9 @@
   ],
   "ex-shfmt": [
     "index.html#ex-shfmt"
+  ],
+  "ex-makeSetupHookPrime-doc-example": [
+    "index.html#ex-makeSetupHookPrime-doc-example"
   ],
   "ex-testBuildFailurePrime-doc-example": [
     "index.html#ex-testBuildFailurePrime-doc-example"
@@ -349,6 +358,9 @@
   ],
   "ssec-cosmic-settings-fallback": [
     "index.html#ssec-cosmic-settings-fallback"
+  ],
+  "setup-hook-sourceGuard": [
+    "index.html#setup-hook-sourceGuard"
   ],
   "ssec-stdenv-dependencies": [
     "index.html#ssec-stdenv-dependencies"
