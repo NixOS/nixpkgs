@@ -956,6 +956,7 @@ in {
   readarr = handleTest ./readarr.nix {};
   realm = handleTest ./realm.nix {};
   readeck = runTest ./readeck.nix;
+  rebuilderd = runTest ./rebuilderd.nix;
   redis = handleTest ./redis.nix {};
   redlib = handleTest ./redlib.nix {};
   redmine = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./redmine.nix {};
