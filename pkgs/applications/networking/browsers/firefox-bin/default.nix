@@ -119,7 +119,17 @@ stdenv.mkDerivation {
     changelog = "https://www.mozilla.org/en-US/firefox/${version}/releasenotes/";
     description = "Mozilla Firefox, free web browser (binary package)";
     homepage = "https://www.mozilla.org/firefox/";
-    license = licenses.mpl20;
+    license = {
+      shortName = "firefox";
+      fullName = "Firefox Terms of Use";
+      url = "https://www.mozilla.org/about/legal/terms/firefox/";
+      # "You Are Responsible for the Consequences of Your Use of Firefox"
+      # (despite the heading, not an indemnity clause) conflicts with FSF
+      # freedom 0: "The freedom to run the program as you wish, for any
+      # purpose".
+      free = false;
+      redistributable = true; # since MPL-2.0 still applies
+    };
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     platforms = builtins.attrNames mozillaPlatforms;
     hydraPlatforms = [];
