@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     scdoc
   ];
 
-  propagatedBuildInputs = [
+  buildInputs = [
     util-linux # waitpid
     newt # whiptail
     libnotify # notify
@@ -67,9 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall =
     let
-      wrapperArgs = ''
-        --suffix PATH : "${lib.makeBinPath finalAttrs.propagatedBuildInputs}"
-      '';
+      wrapperArgs = "--suffix PATH : ${lib.makeBinPath finalAttrs.buildInputs}";
     in
     ''
       wrapProgram $out/bin/uwsm ${wrapperArgs}
