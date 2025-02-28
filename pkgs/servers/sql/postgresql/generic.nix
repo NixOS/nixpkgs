@@ -244,16 +244,19 @@ let
 
       buildFlags = [ "world" ];
 
-      env = {
-        # libpgcommon.a and libpgport.a contain all paths returned by pg_config and are linked
-        # into all binaries. However, almost no binaries actually use those paths. The following
-        # flags will remove unused sections from all shared libraries and binaries - including
-        # those paths. This avoids a lot of circular dependency problems with different outputs,
-        # and allows splitting them cleanly.
-        CFLAGS =
-          "-fdata-sections -ffunction-sections"
-          + (if stdenv'.cc.isClang then " -flto" else " -fmerge-constants -Wl,--gc-sections");
-      } // lib.optionalAttrs pythonSupport { PYTHON = lib.getExe python3; };
+      env =
+        {
+          # libpgcommon.a and libpgport.a contain all paths returned by pg_config and are linked
+          # into all binaries. However, almost no binaries actually use those paths. The following
+          # flags will remove unused sections from all shared libraries and binaries - including
+          # those paths. This avoids a lot of circular dependency problems with different outputs,
+          # and allows splitting them cleanly.
+          CFLAGS =
+            "-fdata-sections -ffunction-sections"
+            + (if stdenv'.cc.isClang then " -flto" else " -fmerge-constants -Wl,--gc-sections");
+        }
+        // lib.optionalAttrs perlSupport { PERL = lib.getExe perl; }
+        // lib.optionalAttrs pythonSupport { PYTHON = lib.getExe python3; };
 
       configureFlags =
         let
