@@ -94,7 +94,13 @@ let
       perl,
 
       # PL/Python
-      pythonSupport ? false,
+      pythonSupport ?
+        lib.meta.availableOn stdenv.hostPlatform python3
+        # Building with python in pkgsStatic gives this error:
+        #  checking how to link an embedded Python application... configure: error: could not find shared library for Python
+        && !stdenv.hostPlatform.isStatic
+        # configure tries to call the python executable
+        && stdenv.buildPlatform.canExecute stdenv.hostPlatform,
       python3,
 
       # PL/Tcl
@@ -154,7 +160,7 @@ let
         "doc"
         "lib"
         "man"
-      ];
+      ] ++ lib.optionals pythonSupport [ "plpython3" ];
       outputChecks = {
         out = {
           disallowedReferences = [
@@ -400,16 +406,16 @@ let
           # to their own output for installation, will then fail to find "postgres" during linking.
           substituteInPlace "$dev/lib/pgxs/src/Makefile.port" \
             --replace-fail '-bundle_loader $(bindir)/postgres' "-bundle_loader $out/bin/postgres"
-        '';
-
-      postFixup =
-        lib.optionalString stdenv'.hostPlatform.isGnu ''
-          # initdb needs access to "locale" command from glibc.
-          wrapProgram $out/bin/initdb --prefix PATH ":" ${glibc.bin}/bin
         ''
         + lib.optionalString pythonSupport ''
-          wrapProgram "$out/bin/postgres" --set PYTHONPATH "${python3}/${python3.sitePackages}"
+          moveToOutput "lib/*plpython3*" "$plpython3"
+          moveToOutput "share/postgresql/extension/*plpython3*" "$plpython3"
         '';
+
+      postFixup = lib.optionalString stdenv'.hostPlatform.isGnu ''
+        # initdb needs access to "locale" command from glibc.
+        wrapProgram $out/bin/initdb --prefix PATH ":" ${glibc.bin}/bin
+      '';
 
       # Running tests as "install check" to work around SIP issue on macOS:
       # https://www.postgresql.org/message-id/flat/4D8E1BC5-BBCF-4B19-8226-359201EA8305%40gmail.com
@@ -444,7 +450,7 @@ let
           pkgs =
             let
               scope = {
-                inherit jitSupport;
+                inherit jitSupport pythonSupport;
                 inherit (llvmPackages) llvm;
                 postgresql = this;
                 stdenv = stdenv';
@@ -485,7 +491,7 @@ let
             import ./ext newSelf newSuper;
 
           withPackages = postgresqlWithPackages {
-            inherit buildEnv;
+            inherit buildEnv lib makeBinaryWrapper;
             postgresql = this;
           };
 
@@ -533,7 +539,12 @@ let
     });
 
   postgresqlWithPackages =
-    { postgresql, buildEnv }:
+    {
+      postgresql,
+      buildEnv,
+      lib,
+      makeBinaryWrapper,
+    }:
     f:
     let
       installedExtensions = f postgresql.pkgs;
@@ -545,7 +556,19 @@ let
         postgresql.man # in case user installs this into environment
       ];
 
-      pathsToLink = [ "/" ];
+      pathsToLink = [
+        "/"
+        "/bin"
+      ];
+
+      nativeBuildInputs = [ makeBinaryWrapper ];
+      postBuild =
+        let
+          args = lib.concatMap (ext: ext.wrapperArgs or [ ]) installedExtensions;
+        in
+        ''
+          wrapProgram "$out/bin/postgres" ${lib.concatStringsSep " " args}
+        '';
 
       passthru = {
         inherit installedExtensions;
@@ -555,11 +578,11 @@ let
           ;
 
         withJIT = postgresqlWithPackages {
-          inherit buildEnv;
+          inherit buildEnv lib makeBinaryWrapper;
           postgresql = postgresql.withJIT;
         } f;
         withoutJIT = postgresqlWithPackages {
-          inherit buildEnv;
+          inherit buildEnv lib makeBinaryWrapper;
           postgresql = postgresql.withoutJIT;
         } f;
       };
