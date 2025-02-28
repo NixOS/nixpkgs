@@ -33,7 +33,7 @@
 }:
 
 let
-  openrct2-version = "0.4.19.1";
+  openrct2-version = "0.4.20";
 
   # Those versions MUST match the pinned versions within the CMakeLists.txt
   # file. The REPLAYS repository from the CMakeLists.txt is not necessary.
@@ -41,13 +41,6 @@ let
   openmsx-version = "1.6";
   opensfx-version = "1.0.5";
   title-sequences-version = "0.4.14";
-
-  openrct2-src = fetchFromGitHub {
-    owner = "OpenRCT2";
-    repo = "OpenRCT2";
-    rev = "v${openrct2-version}";
-    hash = "sha256-sg09JmoWF9utPG7PakKpgLgX64FAc2x8ILX3lVHkRi0=";
-  };
 
   objects = fetchurl {
     url = "https://github.com/OpenRCT2/objects/releases/download/v${objects-version}/objects.zip";
@@ -66,11 +59,16 @@ let
     hash = "sha256-FA33FOgG/tQRzEl2Pn8WsPzypIelcAHR5Q/Oj5FIqfM=";
   };
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "openrct2";
   version = openrct2-version;
 
-  src = openrct2-src;
+  src = fetchFromGitHub {
+    owner = "OpenRCT2";
+    repo = "OpenRCT2";
+    rev = "v${openrct2-version}";
+    hash = "sha256-G/uD3t8m7C74pjSA6dbz4gzu9CwEpmyFwtYpoFIiRjM=";
+  };
 
   nativeBuildInputs = [
     cmake
@@ -140,15 +138,15 @@ stdenv.mkDerivation {
       + (versionCheck "TITLE_SEQUENCE" title-sequences-version)
     );
 
-  meta = with lib; {
+  meta = {
     description = "Open source re-implementation of RollerCoaster Tycoon 2 (original game required)";
     homepage = "https://openrct2.io/";
     downloadPage = "https://github.com/OpenRCT2/OpenRCT2/releases";
-    license = licenses.gpl3Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       oxzi
       keenanweaver
     ];
   };
-}
+})
