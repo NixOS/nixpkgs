@@ -1095,6 +1095,44 @@ rec {
     map (name: f name attrs.${name}) (attrNames attrs);
 
   /**
+    Call a function for each attribute in the given set and return
+    the concatenated results.
+
+    # Inputs
+
+    `f`
+
+    : A function, given an attribute's name and value, returns a list of new values.
+
+    `attrs`
+
+    : Attribute set to map over.
+
+    # Type
+
+    ```
+    # FIXME
+    concatMapAttrsToList :: (String -> a -> b) -> AttrSet -> [b]
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.attrsets.concatMapAttrsToList` usage example
+
+    ```nix
+    concatMapAttrsToList (name: value: [ name (name + value) ])
+       { x = "a"; y = "b"; }
+    => [ "x" "xa" "y" "yb" ]
+    ```
+
+    :::
+  */
+  concatMapAttrsToList =
+    f:
+    attrs:
+    concatMap (name: f name attrs.${name}) (attrNames attrs);
+
+  /**
     Deconstruct an attrset to a list of name-value pairs as expected by [`builtins.listToAttrs`](https://nixos.org/manual/nix/stable/language/builtins.html#builtins-listToAttrs).
     Each element of the resulting list is an attribute set with these attributes:
     - `name` (string): The name of the attribute
