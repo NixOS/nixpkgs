@@ -30,12 +30,12 @@
 
 buildPythonApplication rec {
   pname = "gaphor";
-  version = "2.27.0";
+  version = "3.0.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-MsbEeOop6Osq2Hn6CkorsXt8/bTY//QHW/uCl0FEUN4=";
+    hash = "sha256-I5n0XeZLQw4qje6gwh2aMu5Zo5tuXgESHhkR0xegaYM=";
   };
 
   pythonRelaxDeps = [ "defusedxml" ];
