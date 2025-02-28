@@ -32,6 +32,7 @@ postgresql-test-hook.section.md
 premake.section.md
 python.section.md
 scons.section.md
+sourceGuard.section.md
 tauri.section.md
 tetex-tex-live.section.md
 unzip.section.md

@@ -163,6 +163,10 @@ with pkgs;
 
   __flattenIncludeHackHook = callPackage ../build-support/setup-hooks/flatten-include-hack { };
 
+  makeSetupHook' = callPackage ../build-support/setup-hooks/makeSetupHookPrime { };
+
+  sourceGuard = callPackage ../build-support/setup-hooks/sourceGuard { };
+
   addBinToPathHook = callPackage (
     { makeSetupHook }:
     makeSetupHook {
