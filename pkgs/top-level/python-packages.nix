@@ -8288,6 +8288,8 @@ self: super: with self; {
 
   merge3 = callPackage ../development/python-modules/merge3 { };
 
+  mergecal = callPackage ../development/python-modules/mergecal { };
+
   mergedb = callPackage ../development/python-modules/mergedb { };
 
   mergedeep = callPackage ../development/python-modules/mergedeep { };
