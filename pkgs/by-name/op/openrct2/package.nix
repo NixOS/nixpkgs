@@ -147,6 +147,9 @@ stdenv.mkDerivation {
     downloadPage = "https://github.com/OpenRCT2/OpenRCT2/releases";
     license = licenses.gpl3Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ oxzi ];
+    maintainers = with maintainers; [
+      oxzi
+      keenanweaver
+    ];
   };
 }
