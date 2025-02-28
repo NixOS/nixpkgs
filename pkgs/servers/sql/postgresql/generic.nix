@@ -254,7 +254,7 @@ let
         CFLAGS =
           "-fdata-sections -ffunction-sections"
           + (if stdenv'.cc.isClang then " -flto" else " -fmerge-constants -Wl,--gc-sections");
-      } // lib.optionalAttrs pythonSupport { PYTHON = "${python3}/bin/python"; };
+      } // lib.optionalAttrs pythonSupport { PYTHON = lib.getExe python3; };
 
       configureFlags =
         let
