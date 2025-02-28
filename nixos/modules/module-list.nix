@@ -1216,6 +1216,7 @@
   ./services/networking/ofono.nix
   ./services/networking/oidentd.nix
   ./services/networking/oink.nix
+  ./services/networking/omada.nix
   ./services/networking/onedrive.nix
   ./services/networking/openconnect.nix
   ./services/networking/opengfw.nix

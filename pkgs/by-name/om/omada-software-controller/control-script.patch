@@ -1,0 +1,27 @@
+diff -uNr Omada_SDN_Controller_v5.15.8.2_linux_x64/Omada_SDN_Controller_v5.15.8.2_linux_x64/bin/control.sh Omada_SDN_Controller_v5.15.8.2_linux_x64/Omada_SDN_Controller_v5.15.8.2_linux_x64/bin/control.sh
+--- Omada_SDN_Controller_v5.15.8.2_linux_x64/Omada_SDN_Controller_v5.15.8.2_linux_x64/bin/control.sh
++++ Omada_SDN_Controller_v5.15.8.2_linux_x64/Omada_SDN_Controller_v5.15.8.2_linux_x64/bin/control.sh
+@@ -31,7 +31,7 @@ MAIN_CLASS="com.tplink.smb.omada.starter.OmadaLinuxMain"
+ OMADA_USER=${OMADA_USER:-root}
+ OMADA_GROUP=$(id -gn ${OMADA_USER})
+
+-PID_FILE="/var/run/${NAME}.pid"
++PID_FILE="/run/omada/omada.pid"
+
+ help() {
+     echo "usage: $0 help"
+@@ -81,8 +81,12 @@ check_version() {
+     echo "Omada Controller v5.15.8.2 for Linux (X64)"
+ }
+
+-# root permission check
+-check_root_perms
++# copy default config files if they don't exist yet
++cp -rn ${OMADA_HOME}/defaults/data/* ${OMADA_HOME}/data
++cp -rn ${OMADA_HOME}/defaults/properties/* ${OMADA_HOME}/properties
++
++# don't check root permission, but make copied directories user-writable
++chmod -R +w ${OMADA_HOME}/{data,properties}
+
+ # JSVC - for running java apps as services
+ JSVC=$(command -v jsvc)
