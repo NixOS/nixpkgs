@@ -2,6 +2,8 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchurl,
+  unzip,
 
   SDL2,
   cmake,
@@ -14,6 +16,7 @@
   freetype,
   gbenchmark,
   icu,
+  innoextract,
   jansson,
   libGLU,
   libiconv,
@@ -46,32 +49,21 @@ let
     hash = "sha256-sg09JmoWF9utPG7PakKpgLgX64FAc2x8ILX3lVHkRi0=";
   };
 
-  objects-src = fetchFromGitHub {
-    owner = "OpenRCT2";
-    repo = "objects";
-    rev = "v${objects-version}";
-    hash = "sha256-mxlabWuh8TTJs74yXdiv7XtdeGmCWQ5N1JoY7Xo0itQ=";
+  objects = fetchurl {
+    url = "https://github.com/OpenRCT2/objects/releases/download/v${objects-version}/objects.zip";
+    hash = "sha256-xrgAy817G5xwfzZX+8Xy2508/Zwq32aKzMndus14Qd8=";
   };
-
-  openmsx-src = fetchFromGitHub {
-    owner = "OpenRCT2";
-    repo = "OpenMusic";
-    rev = "v${openmsx-version}";
-    hash = "sha256-KjWJSB2tdE0ExswVlz0dLXNPhLJ1kI6VZb3vqXQfx8w=";
+  openmsx = fetchurl {
+    url = "https://github.com/OpenRCT2/OpenMusic/releases/download/v${openmsx-version}/openmusic.zip";
+    hash = "sha256-8JfTpMzTn3VG+X2z7LG4vnNkj1O3p1lbhszL3Bp1V+Q=";
   };
-
-  opensfx-src = fetchFromGitHub {
-    owner = "OpenRCT2";
-    repo = "OpenSoundEffects";
-    rev = "v${opensfx-version}";
-    hash = "sha256-ucADnMLGm36eAo+NiioxEzeMqtu7YbGF9wsydK1mmoE=";
+  opensfx = fetchurl {
+    url = "https://github.com/OpenRCT2/OpenSoundEffects/releases/download/v${opensfx-version}/opensound.zip";
+    hash = "sha256-qVIUi+FkwSjk/TrqloIuXwUe3ZoLHyyE3n92KM47Lhg=";
   };
-
-  title-sequences-src = fetchFromGitHub {
-    owner = "OpenRCT2";
-    repo = "title-sequences";
-    rev = "v${title-sequences-version}";
-    hash = "sha256-ier7sBYJjBIvKVxfaCelJPZ+oF9NEshvR2k/X9JpP+0=";
+  title-sequences = fetchurl {
+    url = "https://github.com/OpenRCT2/title-sequences/releases/download/v${title-sequences-version}/title-sequences.zip";
+    hash = "sha256-FA33FOgG/tQRzEl2Pn8WsPzypIelcAHR5Q/Oj5FIqfM=";
   };
 in
 stdenv.mkDerivation {
@@ -83,6 +75,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     cmake
     pkg-config
+    unzip
   ];
 
   buildInputs = [
@@ -96,6 +89,7 @@ stdenv.mkDerivation {
     freetype
     gbenchmark
     icu
+    innoextract
     jansson
     libGLU
     libiconv
@@ -118,12 +112,11 @@ stdenv.mkDerivation {
   ];
 
   postUnpack = ''
-    mkdir -p $sourceRoot/data/assetpack
-
-    cp -r ${objects-src}         $sourceRoot/data/object
-    cp -r ${openmsx-src}         $sourceRoot/data/assetpack/openrct2.music.alternative.parkap
-    cp -r ${opensfx-src}         $sourceRoot/data/assetpack/openrct2.sound.parkap
-    cp -r ${title-sequences-src} $sourceRoot/data/sequence
+    mkdir -p $sourceRoot/data/{object,sequence}
+    unzip -o ${objects} -d $sourceRoot/data/object
+    unzip -o ${openmsx} -d $sourceRoot/data
+    unzip -o ${opensfx} -d $sourceRoot/data
+    unzip -o ${title-sequences} -d $sourceRoot/data/sequence
   '';
 
   # Fix blank changelog & contributors screen. See https://github.com/OpenRCT2/OpenRCT2/issues/16988
