@@ -6,13 +6,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "gersemi";
-  version = "0.18.2";
+  version = "0.19.1";
 
   src = fetchFromGitHub {
     owner = "BlankSpruce";
     repo = "gersemi";
     tag = version;
-    hash = "sha256-yd6KbMmk/zVYcaJkZqS+XatJoTX9UzAlMt2jljF91/4=";
+    hash = "sha256-W69K2PT02cAQ3NFlUfBzWkfRT4Bg5KKKsZq35ksuIhg=";
   };
 
   propagatedBuildInputs = with python3Packages; [

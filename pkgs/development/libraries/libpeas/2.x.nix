@@ -3,7 +3,7 @@
 , buildPackages
 , fetchurl
 , pkgsCross
-, substituteAll
+, replaceVars
 , pkg-config
 , gi-docgen
 , gobject-introspection
@@ -34,8 +34,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     # Make PyGObject’s gi library available.
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       pythonPaths = lib.concatMapStringsSep ", " (pkg: "'${pkg}/${python3.sitePackages}'") [
         python3.pkgs.pygobject3
       ];

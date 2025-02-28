@@ -46,7 +46,7 @@ let
       --retry 3
       --disable-epsv
       --cookie-jar cookies
-      --user-agent "curl "
+      --user-agent "nixpkgs stack version test/1.0"
       --insecure
     )
 

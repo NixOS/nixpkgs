@@ -13,7 +13,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "snapcraft";
-  version = "8.6.1";
+  version = "8.7.1";
 
   pyproject = true;
 
@@ -21,7 +21,7 @@ python3Packages.buildPythonApplication rec {
     owner = "canonical";
     repo = "snapcraft";
     tag = version;
-    hash = "sha256-SbxsgvDptkUl8gHAIrJvnzIPOh0/R81n8cgJWBH7BXQ=";
+    hash = "sha256-QKnlnFvQjpNYaZ42vcSNGS5HRSz+hHDzxBpE5lRYfWw=";
   };
 
   patches = [
@@ -43,15 +43,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   postPatch = ''
-    substituteInPlace setup.py \
-      --replace-fail 'version=determine_version()' 'version="${version}"' \
-      --replace-fail 'gnupg' 'python-gnupg'
-
-    substituteInPlace requirements.txt \
-      --replace-fail 'gnupg==2.3.1' 'python-gnupg'
-
-    substituteInPlace snapcraft/__init__.py \
-      --replace-fail '__version__ = _get_version()' '__version__ = "${version}"'
+    substituteInPlace snapcraft/__init__.py --replace-fail "dev" "${version}"
 
     substituteInPlace snapcraft_legacy/__init__.py \
       --replace-fail '__version__ = _get_version()' '__version__ = "${version}"'
@@ -60,8 +52,7 @@ python3Packages.buildPythonApplication rec {
       --replace-fail 'arch_linker_path = Path(arch_config.dynamic_linker)' \
       'return str(Path("${glibc}/lib/ld-linux-x86-64.so.2"))'
 
-    substituteInPlace pyproject.toml \
-      --replace-fail '"pytest-cov>=4.0",' ""
+    substituteInPlace pyproject.toml --replace-fail 'gnupg' 'python-gnupg'
   '';
 
   nativeBuildInputs = [ makeWrapper ];
@@ -110,10 +101,11 @@ python3Packages.buildPythonApplication rec {
     validators
   ];
 
-  build-system = with python3Packages; [ setuptools ];
+  build-system = with python3Packages; [ setuptools-scm ];
 
   pythonRelaxDeps = [
     "craft-parts"
+    "cryptography"
     "docutils"
     "jsonschema"
     "pygit2"

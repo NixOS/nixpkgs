@@ -3,7 +3,7 @@
   lib,
   fetchzip,
   makeWrapper,
-  jre,
+  jre_headless,
   nixosTests,
   callPackage,
   confFile ? null,
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     makeWrapper
-    jre
+    jre_headless
   ];
 
   patches = [
@@ -81,7 +81,7 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     for script in $(find $out/bin -type f -executable); do
-      wrapProgram "$script" --set JAVA_HOME ${jre} --prefix PATH : ${jre}/bin
+      wrapProgram "$script" --set JAVA_HOME ${jre_headless} --prefix PATH : ${jre_headless}/bin
     done
   '';
 
@@ -91,13 +91,13 @@ stdenv.mkDerivation rec {
     enabledPlugins = plugins;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.keycloak.org/";
     description = "Identity and access management for modern applications and services";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.asl20;
-    platforms = jre.meta.platforms;
-    maintainers = with maintainers; [
+    sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
+    license = lib.licenses.asl20;
+    platforms = jre_headless.meta.platforms;
+    maintainers = with lib.maintainers; [
       ngerstle
       talyz
       nickcao

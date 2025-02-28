@@ -56,6 +56,8 @@ let
     {
       name = "${name}-vendor-staging";
 
+      impureEnvVars = lib.fetchers.proxyImpureEnvVars;
+
       nativeBuildInputs =
         [
           fetchCargoVendorUtil
@@ -78,6 +80,9 @@ let
         runHook postBuild
       '';
 
+      strictDeps = true;
+
+      dontConfigure = true;
       dontInstall = true;
       dontFixup = true;
 

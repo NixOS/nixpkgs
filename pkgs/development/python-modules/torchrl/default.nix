@@ -48,14 +48,14 @@
 
 buildPythonPackage rec {
   pname = "torchrl";
-  version = "0.6.0";
+  version = "0.7.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "rl";
     tag = "v${version}";
-    hash = "sha256-2jxvxhhKZQVy1aU0G9PE8nPlg8yp+/+EUACkLNLRpMQ=";
+    hash = "sha256-+GE84GusipNZ18euV8ag0AbOtUrYfOxUAeXeCgF2OiI=";
   };
 
   build-system = [
@@ -186,5 +186,8 @@ buildPythonPackage rec {
     changelog = "https://github.com/pytorch/rl/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
+    # torhcrl is not compatible with our current version of gymnasium (>=1.0)
+    # https://github.com/pytorch/rl/pull/2473
+    broken = true;
   };
 }

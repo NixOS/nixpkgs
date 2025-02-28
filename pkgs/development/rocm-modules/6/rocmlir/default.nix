@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   rocmUpdateScript,
   cmake,
   rocm-cmake,
@@ -71,6 +72,19 @@ stdenv.mkDerivation (finalAttrs: {
     zstd
     zlib
     ncurses
+  ];
+
+  patches = [
+    (fetchpatch {
+      name = "fix-TosaToRock-missing-includes.patch";
+      url = "https://github.com/ROCm/rocMLIR/commit/80b8c94a5dd6ab832733116fe0339c1d6011ab57.patch";
+      hash = "sha256-przg1AQZTiVbVd/4wA+KlGXu/RISO5n11FBkmUFKRSA=";
+    })
+    (fetchpatch {
+      name = "fix-cmake-depedency-on-transforms.patch";
+      url = "https://github.com/ROCm/rocMLIR/commit/b85ca4855e0f0214c2fd695e493c884cf08a3472.patch";
+      hash = "sha256-m108PnwvDAN3xWko+gZMgvCNFl4LXTvC67JHXhFHeBc=";
+    })
   ];
 
   cmakeFlags =

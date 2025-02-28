@@ -1,9 +1,9 @@
 {
   "chromium": {
-    "version": "133.0.6943.53",
+    "version": "133.0.6943.141",
     "chromedriver": {
-      "hash_darwin": "sha256-aMpn8kj3Guj8HxNMEwujZbE2R4jNTRDVO+cg8JgOvkA=",
-      "hash_darwin_aarch64": "sha256-SWLTeD4aJVHKl2BXGUJRNL0eslMNhm+9zWrWh5EMQiY="
+      "hash_darwin": "sha256-ko7IT0yCfrz1Mdaen8FYsNBWMM6s7bzjZey4cG+QIIs=",
+      "hash_darwin_aarch64": "sha256-4wiQUAesLgPJLWKFl8pAiB6QsReB3RAiPR5yw0F4/Vs="
     },
     "deps": {
       "depot_tools": {
@@ -19,8 +19,8 @@
     "DEPS": {
       "src": {
         "url": "https://chromium.googlesource.com/chromium/src.git",
-        "rev": "9a80935019b0925b01cc21d254da203bc3986f04",
-        "hash": "sha256-doJ/HygMtLxr04S73lhs5kTt8qC7SHrCxHbjAoFPv2M=",
+        "rev": "2a5d6da0d6165d7b107502095a937fe7704fcef6",
+        "hash": "sha256-MJlCEe1WBh+7Pl3H4jnkMuSykTBSgh5x/ZPnNwYM4DE=",
         "recompress": true
       },
       "src/third_party/clang-format/script": {
@@ -575,8 +575,8 @@
       },
       "src/third_party/pdfium": {
         "url": "https://pdfium.googlesource.com/pdfium.git",
-        "rev": "c674dba647e81805158339785c0c7e3b57643f8c",
-        "hash": "sha256-2Z7Dg3IuxMB+xKFURo0Z7NztPQht7Fd+A1dX99gQ+A4="
+        "rev": "a6637ded97c46aa4879769b1a6b0f2128e6ea257",
+        "hash": "sha256-Y2quVCJS62YFwxBSB42Wg03QQ10M8C1GTrRvhr73IN8="
       },
       "src/third_party/perfetto": {
         "url": "https://android.googlesource.com/platform/external/perfetto.git",
@@ -755,8 +755,8 @@
       },
       "src/third_party/webrtc": {
         "url": "https://webrtc.googlesource.com/src.git",
-        "rev": "283b6ef9d3eabe5bb3ed7c9d6b6d211a92f9b6d0",
-        "hash": "sha256-KMyO88KoYiTHq+stdbc8vRYqeQbrqexDIiOeWbqytrU="
+        "rev": "cd3e2951ff0f36fa12bea747862c52533a2b39f3",
+        "hash": "sha256-5tdES3wILTC25Lvos5mWYlfT4ZnM2pBFy5LVACVMXEY="
       },
       "src/third_party/wuffs/src": {
         "url": "https://skia.googlesource.com/external/github.com/google/wuffs-mirror-release-c.git",
@@ -785,13 +785,13 @@
       },
       "src/v8": {
         "url": "https://chromium.googlesource.com/v8/v8.git",
-        "rev": "fe051262efbbd92479a08436f733eba9f756e008",
-        "hash": "sha256-l3hMgnhy2Ml6kExwGFWi+M6Oq4YFsOSIkRDCmji+syY="
+        "rev": "93c6f1082c25ef7fdf60ee2e4a029d65808d9343",
+        "hash": "sha256-OV1WncJaYvx1bB5najkKDNC2iMTU+m2vDAi9S/AjCyw="
       }
     }
   },
   "ungoogled-chromium": {
-    "version": "133.0.6943.53",
+    "version": "133.0.6943.141",
     "deps": {
       "depot_tools": {
         "rev": "423f1e1914ab4aa7b2bdf804e216d4c097853ba2",
@@ -802,16 +802,16 @@
         "hash": "sha256-T2dcISln9WCODoI/LsE2ldkRfFdMwVOmqqjQinAmZss="
       },
       "ungoogled-patches": {
-        "rev": "133.0.6943.53-1",
-        "hash": "sha256-8n0BST0sqQRcfv0lCiEflrvyxt8Agj/kK0O2fVzWqCY="
+        "rev": "133.0.6943.141-1",
+        "hash": "sha256-FqpRx73axclW8bXmsRO845c3NB3ZBxE4fL4n7gU1P5A="
       },
       "npmHash": "sha256-oVoTruhxTymYiGkELd2Oa1wOfjGLtChQZozP4GzOO1A="
     },
     "DEPS": {
       "src": {
         "url": "https://chromium.googlesource.com/chromium/src.git",
-        "rev": "9a80935019b0925b01cc21d254da203bc3986f04",
-        "hash": "sha256-doJ/HygMtLxr04S73lhs5kTt8qC7SHrCxHbjAoFPv2M=",
+        "rev": "2a5d6da0d6165d7b107502095a937fe7704fcef6",
+        "hash": "sha256-MJlCEe1WBh+7Pl3H4jnkMuSykTBSgh5x/ZPnNwYM4DE=",
         "recompress": true
       },
       "src/third_party/clang-format/script": {
@@ -1366,8 +1366,8 @@
       },
       "src/third_party/pdfium": {
         "url": "https://pdfium.googlesource.com/pdfium.git",
-        "rev": "c674dba647e81805158339785c0c7e3b57643f8c",
-        "hash": "sha256-2Z7Dg3IuxMB+xKFURo0Z7NztPQht7Fd+A1dX99gQ+A4="
+        "rev": "a6637ded97c46aa4879769b1a6b0f2128e6ea257",
+        "hash": "sha256-Y2quVCJS62YFwxBSB42Wg03QQ10M8C1GTrRvhr73IN8="
       },
       "src/third_party/perfetto": {
         "url": "https://android.googlesource.com/platform/external/perfetto.git",
@@ -1546,8 +1546,8 @@
       },
       "src/third_party/webrtc": {
         "url": "https://webrtc.googlesource.com/src.git",
-        "rev": "283b6ef9d3eabe5bb3ed7c9d6b6d211a92f9b6d0",
-        "hash": "sha256-KMyO88KoYiTHq+stdbc8vRYqeQbrqexDIiOeWbqytrU="
+        "rev": "cd3e2951ff0f36fa12bea747862c52533a2b39f3",
+        "hash": "sha256-5tdES3wILTC25Lvos5mWYlfT4ZnM2pBFy5LVACVMXEY="
       },
       "src/third_party/wuffs/src": {
         "url": "https://skia.googlesource.com/external/github.com/google/wuffs-mirror-release-c.git",
@@ -1576,8 +1576,8 @@
       },
       "src/v8": {
         "url": "https://chromium.googlesource.com/v8/v8.git",
-        "rev": "fe051262efbbd92479a08436f733eba9f756e008",
-        "hash": "sha256-l3hMgnhy2Ml6kExwGFWi+M6Oq4YFsOSIkRDCmji+syY="
+        "rev": "93c6f1082c25ef7fdf60ee2e4a029d65808d9343",
+        "hash": "sha256-OV1WncJaYvx1bB5najkKDNC2iMTU+m2vDAi9S/AjCyw="
       }
     }
   }

@@ -12,6 +12,10 @@
   systemdMinimal,
   libxcrypt,
 
+  # options
+  withModules ? !stdenv.hostPlatform.isStatic,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdMinimal,
+
   # passthru
   nixosTests,
 }:
@@ -24,6 +28,14 @@ stdenv.mkDerivation rec {
     url = "https://www.openldap.org/software/download/OpenLDAP/openldap-release/${pname}-${version}.tgz";
     hash = "sha256-LLfcc+nINA3/DZk1f7qleKvzDMZhnwUhlyxVVoHmsv8=";
   };
+
+  patches = [
+    (fetchurl {
+      name = "test069-sleep.patch";
+      url = "https://bugs.openldap.org/attachment.cgi?id=1051";
+      hash = "sha256-9LcFTswMQojrwHD+PRvlnSrwrISCFcboHypBwoDIZc0=";
+    })
+  ];
 
   # TODO: separate "out" and "bin"
   outputs = [
@@ -46,12 +58,16 @@ stdenv.mkDerivation rec {
       (cyrus_sasl.override {
         inherit openssl;
       })
-      libsodium
       libtool
       openssl
     ]
     ++ lib.optionals (stdenv.hostPlatform.isLinux) [
       libxcrypt # causes linking issues on *-darwin
+    ]
+    ++ lib.optionals withModules [
+      libsodium
+    ]
+    ++ lib.optionals withSystemd [
       systemdMinimal
     ];
 
@@ -61,10 +77,10 @@ stdenv.mkDerivation rec {
 
   configureFlags =
     [
-      "--enable-argon2"
       "--enable-crypt"
-      "--enable-modules"
       "--enable-overlays"
+      (lib.enableFeature withModules "argon2")
+      (lib.enableFeature withModules "modules")
     ]
     ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
       "--with-yielding_select=yes"
@@ -126,7 +142,7 @@ stdenv.mkDerivation rec {
     "INSTALL=install"
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString withModules ''
     for module in $extraContribModules; do
       make $installFlags install -C contrib/slapd-modules/$module
     done

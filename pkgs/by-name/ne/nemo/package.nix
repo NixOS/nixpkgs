@@ -35,13 +35,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "nemo";
-  version = "6.4.4";
+  version = "6.4.5";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    hash = "sha256-6U7SeqgWKFb6l5u/fHqv+gzIh+MsJurKuWpHDNGRTsg=";
+    hash = "sha256-9JfCBC5YjfQadF7KzPgZ1yPkiSjmuEO1tfMU2BmJES8=";
   };
 
   patches = [

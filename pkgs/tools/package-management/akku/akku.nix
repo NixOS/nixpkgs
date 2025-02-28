@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     git
   ];
 
-  # Use a dummy package index to boostrap Akku
+  # Use a dummy package index to bootstrap Akku
   preBuild = ''
     touch bootstrap.db
   '';

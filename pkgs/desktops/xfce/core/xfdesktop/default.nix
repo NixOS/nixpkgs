@@ -1,7 +1,6 @@
 {
   lib,
   mkXfceDerivation,
-  fetchpatch,
   exo,
   gtk3,
   libxfce4ui,
@@ -18,18 +17,9 @@
 mkXfceDerivation {
   category = "xfce";
   pname = "xfdesktop";
-  version = "4.20.0";
+  version = "4.20.1";
 
-  sha256 = "sha256-80g3lk1TkQI0fbYf2nXs36TrPlaGTHgH6k/TGOzRd3w=";
-
-  patches = [
-    # Fix monitor chooser UI resource path
-    # https://gitlab.xfce.org/xfce/xfdesktop/-/merge_requests/181
-    (fetchpatch {
-      url = "https://gitlab.xfce.org/xfce/xfdesktop/-/commit/699e21b062f56bdc0db192bfe036420b2618612e.patch";
-      hash = "sha256-YTtXF+OJMHn6KY2xui1qGZ04np9a60asne+8ZS/dujs=";
-    })
-  ];
+  sha256 = "sha256-QBzsHXEdTGj8PlgB+L/TJjxAVksKqf+9KrRN3YaBf44=";
 
   buildInputs = [
     exo

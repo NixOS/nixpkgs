@@ -306,7 +306,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     mainProgram = "mpv";
     maintainers = with lib.maintainers; [
-      AndersonTorres
       fpletz
       globin
       ma27

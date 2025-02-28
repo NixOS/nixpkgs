@@ -10,18 +10,18 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "equicord";
-  version = "1.10.8";
+  version = "1.11.4";
 
   src = fetchFromGitHub {
     owner = "Equicord";
     repo = "Equicord";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-kbK9tnu0G/nLy4A06xvd2yvlc6UhQfKiC6I9qmJeIwc=";
+    hash = "sha256-BjAp+bubpG9tTo8y5LWcTCnpLbiyuY1Q6ZnprgeKoZg=";
   };
 
   pnpmDeps = pnpm_9.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-HAKNc8ZyIGEkrNbqQSycR1wePPOisF8nc4/E+KmKyYU=";
+    hash = "sha256-4uCo/pQ4f8k/7DNpCPDAeqfroZ9icFiTwapwS10uWkE=";
   };
 
   nativeBuildInputs = [

@@ -4,7 +4,7 @@
   fetchFromGitHub,
   libusb-compat-0_1,
   readline,
-  cmake,
+  autoreconfHook,
   pkg-config,
 }:
 
@@ -20,22 +20,29 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    cmake
+    # Note: Use autotools instead of cmake to build for darwin.
+    # When built with cmake, the following error occurs on real device like PN532:
+    # ```
+    # $ LIBNFC_DEVICE=pn532_uart:/dev/tty.usbserial-110 nfc-list
+    # nfc-list uses libnfc 1.8.0
+    # error       libnfc.bus.uart Unable to set serial port speed to 115200 baud. Speed value must be one of those defined in termios(3).
+    # error       libnfc.driver.pn532_uart        pn53x_check_communication error
+    # nfc-list: ERROR: Unable to open NFC device: pn532_uart:/dev/tty.usbserial-110
+    # ```
+    autoreconfHook
     pkg-config
   ];
 
   buildInputs = [
-    libusb-compat-0_1
     readline
+  ];
+
+  propagatedBuildInputs = [
+    libusb-compat-0_1
   ];
 
   configureFlags = [
     "sysconfdir=/etc"
-  ];
-
-  cmakeFlags = lib.optionals stdenv.hostPlatform.isDarwin [
-    "-DLIBNFC_DRIVER_PN532_I2C=OFF"
-    "-DLIBNFC_DRIVER_PN532_SPI=OFF"
   ];
 
   meta = with lib; {

@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , buildPackages
-, substituteAll
+, replaceVars
 , fetchurl
 , pkg-config
 , docutils
@@ -58,8 +58,7 @@
 
 let
 
-  gtkCleanImmodulesCache = substituteAll {
-    src = ./hooks/clean-immodules-cache.sh;
+  gtkCleanImmodulesCache = replaceVars ./hooks/clean-immodules-cache.sh {
     gtk_module_path = "gtk-4.0";
     gtk_binary_version = "4.0.0";
   };

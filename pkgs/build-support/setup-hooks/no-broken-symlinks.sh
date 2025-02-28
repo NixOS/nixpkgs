@@ -51,10 +51,10 @@ noBrokenSymlinks() {
     fi
 
     if [[ $path == "$symlinkTarget" ]]; then
-      nixErrorLog "the symlink $path is reflexive $symlinkTarget"
+      nixErrorLog "the symlink $path is reflexive"
       numReflexiveSymlinks+=1
     elif [[ ! -e $symlinkTarget ]]; then
-      nixErrorLog "the symlink $path points to a missing target $symlinkTarget"
+      nixErrorLog "the symlink $path points to a missing target: $symlinkTarget"
       numDanglingSymlinks+=1
     else
       nixDebugLog "the symlink $path is irreflexive and points to a target which exists"

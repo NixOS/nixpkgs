@@ -10,7 +10,9 @@
   pydicom,
   pylibjpeg,
   pylibjpeg-libjpeg,
+  pylibjpeg-openjpeg,
   setuptools,
+  typing-extensions,
 }:
 
 let
@@ -23,7 +25,7 @@ let
 in
 buildPythonPackage rec {
   pname = "highdicom";
-  version = "0.23.1";
+  version = "0.24.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -32,7 +34,7 @@ buildPythonPackage rec {
     owner = "MGHComputationalPathology";
     repo = "highdicom";
     tag = "v${version}";
-    hash = "sha256-LrsG85/bpqIEP++LgvyaVyw4tMsuUTtHNwWl7apuToM=";
+    hash = "sha256-1LRXJkltRLtPJ/NrFZVyjTusXfmcEVOTFEuq0gOI+yQ=";
   };
 
   build-system = [
@@ -44,13 +46,14 @@ buildPythonPackage rec {
     pillow
     pillow-jpls
     pydicom
+    typing-extensions
   ];
 
   optional-dependencies = {
     libjpeg = [
       pylibjpeg
       pylibjpeg-libjpeg
-      #pylibjpeg-openjpeg  # broken on aarch64-linux
+      pylibjpeg-openjpeg
     ];
   };
 
@@ -77,6 +80,7 @@ buildPythonPackage rec {
     "test_rgb_jpegls"
     "test_construction_autotile"
     "test_pixel_types_fractional"
+    "test_pixel_types_labelmap"
   ];
 
   pythonImportsCheck = [

@@ -18,6 +18,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-OJizLQeWE2D28s822zYDa3GaIw5HZGklioDzIkPoRfo=";
   };
 
+  configureFlags = [
+    "--disable-libodbc"
+  ];
+
   nativeBuildInputs = [ pkg-config ];
   buildInputs = lib.optionals useGTK [ gtk2 ] ++ lib.optional stdenv.hostPlatform.isDarwin Carbon;
 

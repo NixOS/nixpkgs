@@ -6,28 +6,28 @@
   langchain-core,
   langchain-tests,
   numpy,
-  poetry-core,
+  pdm-backend,
   pytestCheckHook,
   pytest-asyncio,
 }:
 
 buildPythonPackage rec {
   pname = "langchain-chroma";
-  version = "0.2.0";
+  version = "0.2.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-chroma==${version}";
-    hash = "sha256-9YxWLc8SaxTl7LwbK0FGzl2WtkWJzTHxm3VRYFGB5To=";
+    hash = "sha256-GFDaUA0E25YDHYLwrpsAuOiBWFvHByl61XhwK5NmJbg=";
   };
 
   sourceRoot = "${src.name}/libs/partners/chroma";
 
   patches = [ ./001-async-test.patch ];
 
-  build-system = [ poetry-core ];
+  build-system = [ pdm-backend ];
 
   pythonRelaxDeps = [ "numpy" ];
 

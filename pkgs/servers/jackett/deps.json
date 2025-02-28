@@ -56,18 +56,8 @@
   },
   {
     "pname": "Microsoft.AspNetCore.DataProtection",
-    "version": "2.2.0",
-    "hash": "sha256-/aEB1KEQDlBdB2MXG9q/YsOLnGv49uV6D753gsBdnyY="
-  },
-  {
-    "pname": "Microsoft.AspNetCore.DataProtection",
     "version": "8.0.11",
     "hash": "sha256-hetvscFzzsXkbUfUTXdwoOQFMp5lU4P3klOiOqjWtGc="
-  },
-  {
-    "pname": "Microsoft.AspNetCore.DataProtection.Abstractions",
-    "version": "2.2.0",
-    "hash": "sha256-3zGsOkU/9QrXI96cREJfIni38IazRVNpcS3nqvWFJL4="
   },
   {
     "pname": "Microsoft.AspNetCore.DataProtection.Abstractions",

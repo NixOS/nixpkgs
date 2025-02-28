@@ -65,7 +65,7 @@ python3Packages.buildPythonApplication rec {
       "test_godot_plugin"
     ]
     ++
-    # There are no docker images available for the aarch64 architecutre
+    # There are no docker images available for the aarch64 architecture
     # which are required for tests.
     lib.optionals stdenv.hostPlatform.isAarch64 [
       "test_arch"

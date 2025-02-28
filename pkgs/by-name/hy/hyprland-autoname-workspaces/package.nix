@@ -6,17 +6,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "hyprland-autoname-workspaces";
-  version = "1.1.15";
+  version = "1.1.16";
 
   src = fetchFromGitHub {
     owner = "hyprland-community";
     repo = "hyprland-autoname-workspaces";
     rev = version;
-    hash = "sha256-oXVKee3YAMXtVJBqJGt1SpH0KFzvIB278EN69A2OeXY=";
+    hash = "sha256-M/3mqO7G2E5NW2uE+X8P4UhEl0r1fPXuxyb1NowJQnY=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-zkv8Eb4k3Hu4PSQKOZTEu0dNFLeoKq03uY5S7G8fo4U=";
+  cargoHash = "sha256-GwLyC1G2RAIvb7c8vFRAUErp1ychY9mSAWhBNzX4Kvk=";
 
   doCheck = false;
 

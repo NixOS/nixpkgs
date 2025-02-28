@@ -1,19 +1,21 @@
 {
   lib,
   fetchFromGitHub,
+  gitUpdater,
   python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "jefferson";
-  version = "0.4.5";
+  version = "0.4.6";
   format = "pyproject";
+  disabled = python3.pkgs.pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "onekey-sec";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-PGtrvZ0cQvdiswn2Bk43c3LbIZqJyvNe5rnTPw/ipUM=";
+    hash = "sha256-6eh4i9N3aArU8+W8K341pp9J0QYEojDiMrEc8yax4SY=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
@@ -26,14 +28,16 @@ python3.pkgs.buildPythonApplication rec {
     lzallright
   ];
 
-  pythonRelaxDeps = [ "cstruct" ];
-
   pythonImportsCheck = [
     "jefferson"
   ];
 
   # upstream has no tests
   doCheck = false;
+
+  passthru = {
+    updateScript = gitUpdater { rev-prefix = "v"; };
+  };
 
   meta = with lib; {
     description = "JFFS2 filesystem extraction tool";

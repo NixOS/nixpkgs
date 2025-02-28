@@ -1,19 +1,24 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-  pytestCheckHook,
+  fetchFromGitHub,
+
+  # build-system
   hatch-vcs,
+  hatchling,
+
+  # dependencies
+  joblib,
   lxml,
-  matplotlib,
   nibabel,
   numpy,
   pandas,
+  requests,
   scikit-learn,
   scipy,
-  joblib,
-  requests,
+  packaging,
+
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -21,36 +26,53 @@ buildPythonPackage rec {
   version = "0.11.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-oB3wj8bI3tPNb7eiEWNGA61Gpt94BQS20FIiwuepcv4=";
+  src = fetchFromGitHub {
+    owner = "nilearn";
+    repo = "nilearn";
+    tag = version;
+    hash = "sha256-ZvodSRJkKwPwpYHOLmxAYIIv7f9AlrjmZS9KLPjz5rM=";
   };
 
-  nativeBuildInputs = [ hatch-vcs ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail " --template=maint_tools/templates/index.html" ""
+  '';
 
-  nativeCheckInputs = [ pytestCheckHook ];
-  disabledTests = [ "test_clean_confounds" ]; # https://github.com/nilearn/nilearn/issues/2608
-  # do subset of tests which don't fetch resources
-  pytestFlagsArray = [ "nilearn/connectome/tests" ];
+  build-system = [
+    hatch-vcs
+    hatchling
+  ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     joblib
     lxml
-    matplotlib
     nibabel
     numpy
     pandas
     requests
     scikit-learn
     scipy
+    packaging
   ];
 
-  meta = with lib; {
-    homepage = "https://nilearn.github.io";
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  disabledTests = [
+    # https://github.com/nilearn/nilearn/issues/2608
+    "test_clean_confounds"
+
+    # [XPASS(strict)] invalid checks should fail
+    "test_check_estimator_invalid_group_sparse_covariance"
+  ];
+
+  # do subset of tests which don't fetch resources
+  pytestFlagsArray = [ "nilearn/connectome/tests" ];
+
+  meta = {
     description = "Module for statistical learning on neuroimaging data";
+    homepage = "https://nilearn.github.io";
     changelog = "https://github.com/nilearn/nilearn/releases/tag/${version}";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 }

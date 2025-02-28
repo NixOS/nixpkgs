@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchzip,
+  fetchpatch,
   cmake,
   pkg-config,
   SDL2,
@@ -70,6 +71,16 @@ stdenv.mkDerivation rec {
     url = "https://cdn.openttd.org/openttd-releases/${version}/${pname}-${version}-source.tar.xz";
     hash = "sha256-YT4IE/rJ9pnpeMWKbOra6AbSUwW19RwOKlXkxwoMeKY=";
   };
+
+  patches = [
+    # Fix build against icu-76:
+    #   https://github.com/OpenTTD/OpenTTD/pull/13048
+    (fetchpatch {
+      name = "icu-75.patch";
+      url = "https://github.com/OpenTTD/OpenTTD/commit/14fac2ad37bfb9cec56b4f9169d864f6f1c7b96e.patch";
+      hash = "sha256-L35ybnTKPO+HVP/7ZYzWM2mA+s1RAywhofSuzpy/6sc=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake

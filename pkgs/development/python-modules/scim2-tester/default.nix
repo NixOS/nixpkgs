@@ -9,6 +9,7 @@
   werkzeug,
   scim2-server,
   pytest-httpserver,
+  cacert,
 }:
 
 buildPythonPackage rec {
@@ -34,6 +35,7 @@ buildPythonPackage rec {
     werkzeug
     scim2-server
     pytest-httpserver
+    cacert
   ] ++ optional-dependencies.httpx;
 
   pythonImportsCheck = [ "scim2_tester" ];

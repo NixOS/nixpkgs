@@ -103,7 +103,7 @@ buildPythonPackage rec {
     "tests/test_stat_summary.py"
     "tests/test_theme.py"
 
-    # Linting / formatting: useless as it has nothing to do with the package functionning
+    # Linting / formatting: useless as it has nothing to do with the package functioning
     # Disabling this prevents adding a dependency on 'ruff' and 'black'.
     "tests/test_lint_and_format.py"
   ];

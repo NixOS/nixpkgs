@@ -7,13 +7,13 @@
 
 buildLua {
   pname = "autosubsync-mpv";
-  version = "0-unstable-2022-12-26";
+  version = "0-unstable-2024-10-29";
 
   src = fetchFromGitHub {
     owner = "joaquintorres";
     repo = "autosubsync-mpv";
-    rev = "22cb928ecd94cc8cadaf8c354438123c43e0c70d";
-    sha256 = "sha256-XQPFC7l9MTZAW5FfULRQJfu/7FuGj9bbjQUZhNv0rlc=";
+    rev = "125ac13d1b84b3a64bb2e912225a8356c1c01364";
+    sha256 = "sha256-Xwu8WTB3p3YDTydfyidF/zpN6CyTQyZgQvGX/HAa9hw=";
   };
 
   # While nixpkgs only packages alass, we might as well make that the default

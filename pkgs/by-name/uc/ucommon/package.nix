@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
       --replace 'ifndef UCOMMON_SYSRUNTIME' 'if 0'
   '';
 
-  # ucommon.pc has link time depdendencies on -lusecure -lucommon -lgnutls
+  # ucommon.pc has link time dependencies on -lusecure -lucommon -lgnutls
   propagatedBuildInputs = [ gnutls ];
 
   doCheck = true;

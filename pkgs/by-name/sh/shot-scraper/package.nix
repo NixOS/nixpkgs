@@ -1,19 +1,21 @@
 {
   lib,
   python3,
-  fetchPypi,
+  fetchFromGitHub,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "shot-scraper";
-  version = "1.4";
+  version = "1.6";
   format = "setuptools";
 
   disabled = python3.pkgs.pythonOlder "3.6";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-hPzOwvTQAFs9IQRkq/uw+pHv5ZP5XU3Zn605SL8udPA=";
+  src = fetchFromGitHub {
+    owner = "simonw";
+    repo = "shot-scraper";
+    tag = version;
+    hash = "sha256-3FU9UH0dQcRgYydtyo+p0fPBPtW47YFIKh13dJiQwfA=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [

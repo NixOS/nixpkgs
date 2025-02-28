@@ -9,7 +9,7 @@
   installShellFiles,
 }:
 let
-  version = "0.4.43";
+  version = "0.4.45";
 in
 rustPlatform.buildRustPackage rec {
   inherit version;
@@ -19,13 +19,13 @@ rustPlatform.buildRustPackage rec {
     owner = "rust-lang";
     repo = "mdBook";
     tag = "v${version}";
-    hash = "sha256-aADNcuIeDef9+a3NOWQxo6IRnKJ6AbkvE4GqvFbubyI=";
+    hash = "sha256-LgjJUz1apE1MejVjl4/5O6ISpnGkBXY33g6xfoukZxA=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
     allowGitDependencies = false;
-    hash = "sha256-W5hg6ECNQRIh07ogZkXTn51el2YltutY86aJBYFDTP4=";
+    hash = "sha256-+7fC6cq6NQIUPtmNc5S5y4lRIS47v0tg1ru/AAYA6TM=";
   };
 
   nativeBuildInputs = [ installShellFiles ];

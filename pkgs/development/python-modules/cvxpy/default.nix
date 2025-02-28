@@ -16,7 +16,7 @@
   scipy,
   scs,
 
-  # checks
+  # tests
   hypothesis,
   pytestCheckHook,
 
@@ -25,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "cvxpy";
-  version = "1.6.0";
+  version = "1.6.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cvxpy";
     repo = "cvxpy";
     tag = "v${version}";
-    hash = "sha256-t2+j0ZrvGvTv6FoNVpD2MVFZKfGgqTaN32OKwBXM3Zw=";
+    hash = "sha256-8O6Cw0PkIyCtEIZjutZAUpKpiQnhUWSone27PNKSVlU=";
   };
 
   # we need to patch out numpy version caps from upstream
@@ -77,6 +77,7 @@ buildPythonPackage rec {
     "test_partial_problem"
 
     # cvxpy.error.SolverError: Solver 'CVXOPT' failed. Try another solver, or solve with verbose=True for more information.
+    # https://github.com/cvxpy/cvxpy/issues/1588
     "test_oprelcone_1_m1_k3_complex"
     "test_oprelcone_1_m3_k1_complex"
     "test_oprelcone_2"
@@ -88,7 +89,7 @@ buildPythonPackage rec {
     description = "Domain-specific language for modeling convex optimization problems in Python";
     homepage = "https://www.cvxpy.org/";
     downloadPage = "https://github.com/cvxpy/cvxpy//releases";
-    changelog = "https://github.com/cvxpy/cvxpy/releases/tag/${src.tag}";
+    changelog = "https://github.com/cvxpy/cvxpy/releases/tag/v${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ drewrisinger ];
   };

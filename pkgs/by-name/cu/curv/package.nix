@@ -58,16 +58,21 @@ stdenv.mkDerivation rec {
       llvmPackages.openmp
     ];
 
+  # force char to be unsigned on aarch64
+  # https://codeberg.org/doug-moen/curv/issues/227
+  NIX_CFLAGS_COMPILE = [ "-fsigned-char" ];
+
   # GPU tests do not work in sandbox, instead we do this for sanity
-  checkPhase = ''
-    runHook preCheck
-    test "$($out/bin/curv -x 2 + 2)" -eq "4"
-    runHook postCheck
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+    test "$(set -x; $out/bin/curv -x "2 + 2")" -eq "4"
+    runHook postInstallCheck
   '';
 
   meta = with lib; {
     description = "2D and 3D geometric modelling programming language for creating art with maths";
-    homepage = "https://github.com/curv3d/curv";
+    homepage = "https://codeberg.org/doug-moen/curv";
     license = licenses.asl20;
     platforms = platforms.all;
     broken = stdenv.hostPlatform.isDarwin;

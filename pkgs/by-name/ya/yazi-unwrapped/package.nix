@@ -8,24 +8,40 @@
   Foundation,
   rust-jemalloc-sys,
 }:
+let
+  version = "25.2.26";
 
-rustPlatform.buildRustPackage rec {
-  pname = "yazi";
-  version = "25.2.11";
-
-  src = fetchFromGitHub {
+  code_src = fetchFromGitHub {
     owner = "sxyazi";
     repo = "yazi";
-    rev = "v${version}";
-    hash = "sha256-yVpSoEmEA+/XF/jlJqKdkj86m8IZLAbrxDxz5ZnmP78=";
+    tag = "v${version}";
+    hash = "sha256-DqhqpQRCSBTGonL9+bP7pA3mO2CemlbhwzShVdrL1/0=";
   };
 
+  man_src = fetchFromGitHub {
+    name = "manpages"; # needed to ensure name is unique
+    owner = "yazi-rs";
+    repo = "manpages";
+    rev = "8950e968f4a1ad0b83d5836ec54a070855068dbf";
+    hash = "sha256-kEVXejDg4ChFoMNBvKlwdFEyUuTcY2VuK9j0PdafKus=";
+  };
+in
+rustPlatform.buildRustPackage rec {
+  pname = "yazi";
+  inherit version;
+
+  srcs = [
+    code_src
+    man_src
+  ];
+  sourceRoot = code_src.name;
+
   useFetchCargoVendor = true;
-  cargoHash = "sha256-AfXi68PNrYj6V6CYIPZT0t2l5KYTYrIzJgrcEPLW8FM=";
+  cargoHash = "sha256-xg37aypFKY0ZG9GOkygTHlOAjqkTuhLNKo8Fz6MF2ZY=";
 
   env.YAZI_GEN_COMPLETIONS = true;
   env.VERGEN_GIT_SHA = "Nixpkgs";
-  env.VERGEN_BUILD_DATE = "2025-02-11";
+  env.VERGEN_BUILD_DATE = "2025-02-26";
 
   nativeBuildInputs = [ installShellFiles ];
   buildInputs = [ rust-jemalloc-sys ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Foundation ];
@@ -35,6 +51,8 @@ rustPlatform.buildRustPackage rec {
       --bash ./yazi-boot/completions/yazi.bash \
       --fish ./yazi-boot/completions/yazi.fish \
       --zsh  ./yazi-boot/completions/_yazi
+
+    installManPage ../${man_src.name}/yazi{.1,-config.5}
 
     install -Dm444 assets/yazi.desktop -t $out/share/applications
     install -Dm444 assets/logo.png $out/share/pixmaps/yazi.png

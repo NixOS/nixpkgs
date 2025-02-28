@@ -56,7 +56,7 @@ let
   #
   #   https://community.chocolatey.org/packages/manim-latex#files
   #
-  # which includes another cutom distribution called tinytex, for which the
+  # which includes another custom distribution called tinytex, for which the
   # package list can be found at
   #
   #   https://github.com/yihui/tinytex/blob/master/tools/pkgs-custom.txt
@@ -268,6 +268,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "manim" ];
 
   meta = {
+    # https://github.com/ManimCommunity/manim/pull/4037
+    broken = lib.versionAtLeast av.version "14";
     description = "Animation engine for explanatory math videos - Community version";
     longDescription = ''
       Manim is an animation engine for explanatory math videos. It's used to

@@ -71,7 +71,8 @@ buildPythonPackage rec {
     pytestCheckHook
   ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
-  pytestFlagsArray = [ "--timeout=30" ];
+  # See https://github.com/NixOS/nixpkgs/issues/381908 and https://github.com/NixOS/nixpkgs/issues/385450.
+  pytestFlagsArray = [ "--timeout=600" ];
 
   pythonImportsCheck = [ "moviepy" ];
 

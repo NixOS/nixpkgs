@@ -36,6 +36,9 @@
   vulkan-loader,
   wayland,
   xorg,
+
+  # tests
+  nixosTests,
 }:
 
 let
@@ -59,17 +62,17 @@ in
 
 rustPlatform.buildRustPackage {
   pname = "servo";
-  version = "0-unstable-2025-01-14";
+  version = "0-unstable-2025-02-27";
 
   src = fetchFromGitHub {
     owner = "servo";
     repo = "servo";
-    rev = "f5ef8aaed32e6a6da3faca3a710e73cd35c31059";
-    hash = "sha256-LaAg07Lp/oWNsrtqM6UrqmPAm/ajmPJPZb5O7q9eLO8=";
+    rev = "0065e63190dba501d23c16759a2a1ea1e8f15cd8";
+    hash = "sha256-5VvKGNBJ+1bWW9XcXk0DU0owBmdkTpX8voAVO4QMdrQ=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-a5Dv/AiPs/fnKcboBej9H7BiRKCIjm0GaQ2ICiH9SpQ=";
+  cargoHash = "sha256-mfOzlqRAVR7O7uWn27pwccXp+WRl5BEO3l0KEyzjmUc=";
 
   postPatch = ''
     # Remap absolute path between modules to include SEMVER
@@ -143,11 +146,19 @@ rustPlatform.buildRustPackage {
       --prefix LD_LIBRARY_PATH : ${runtimePaths}
   '';
 
+  passthru = {
+    updateScript = ./update.sh;
+    tests = { inherit (nixosTests) servo; };
+  };
+
   meta = {
     description = "The embeddable, independent, memory-safe, modular, parallel web rendering engine";
     homepage = "https://servo.org";
     license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [ supinie ];
+    maintainers = with lib.maintainers; [
+      hexa
+      supinie
+    ];
     mainProgram = "servo";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };

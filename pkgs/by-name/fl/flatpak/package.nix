@@ -1,9 +1,11 @@
 {
   lib,
   stdenv,
+  pkgsCross,
   appstream,
   bison,
   bubblewrap,
+  buildPackages,
   bzip2,
   coreutils,
   curl,
@@ -12,6 +14,7 @@
   docbook-xsl-nons,
   docbook_xml_dtd_45,
   fetchurl,
+  fetchpatch,
   fuse3,
   gdk-pixbuf,
   gettext,
@@ -57,11 +60,23 @@
   xorg,
   zstd,
   withAutoSideloading ? false,
+  withDconf ? lib.meta.availableOn stdenv.hostPlatform dconf,
   withDocbookDocs ? true,
-  withGtkDoc ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
-  withMan ? true,
+  withGlibNetworking ? lib.meta.availableOn stdenv.hostPlatform glib-networking,
+  withGtkDoc ?
+    withDocbookDocs
+    && stdenv.buildPlatform.canExecute stdenv.hostPlatform
+    # https://github.com/mesonbuild/meson/pull/14257
+    && !stdenv.hostPlatform.isStatic,
+  withIntrospection ?
+    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
+    && stdenv.hostPlatform.emulatorAvailable buildPackages,
+  withMalcontent ? lib.meta.availableOn stdenv.hostPlatform malcontent,
+  withMan ? withDocbookDocs,
+  withP11Kit ? lib.meta.availableOn stdenv.hostPlatform p11-kit,
+  withPolkit ? lib.meta.availableOn stdenv.hostPlatform polkit,
   withSELinuxModule ? false,
-  withSystemd ? true,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -74,9 +89,11 @@ stdenv.mkDerivation (finalAttrs: {
       "out"
       "dev"
     ]
-    ++ lib.optionals (withDocbookDocs || withGtkDoc) [
-      "devdoc"
+    ++ lib.optionals withDocbookDocs [
       "doc"
+    ]
+    ++ lib.optionals withGtkDoc [
+      "devdoc"
     ]
     ++ lib.optional finalAttrs.doCheck "installedTests"
     ++ lib.optional withMan "man";
@@ -86,43 +103,53 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-ywrFZa3LYhJ8bRHtUO5wRNaoNvppw1Sy9LZAoiv6Syo=";
   };
 
-  patches = [
-    # Hardcode paths used by tests and change test runtime generation to use files from Nix store.
-    # https://github.com/flatpak/flatpak/issues/1460
-    (replaceVars ./fix-test-paths.patch {
-      inherit
-        coreutils
-        gettext
-        gtk3
-        socat
-        ;
-      dfu = desktop-file-utils;
-      hicolorIconTheme = hicolor-icon-theme;
-      smi = shared-mime-info;
-    })
+  patches =
+    [
+      # Use flatpak from PATH to avoid references to `/nix/store` in `/desktop` files.
+      # Applications containing `DBusActivatable` entries should be able to find the flatpak binary.
+      # https://github.com/NixOS/nixpkgs/issues/138956
+      ./binary-path.patch
 
-    # Hardcode paths used by Flatpak itself.
-    (replaceVars ./fix-paths.patch {
-      p11kit = lib.getExe p11-kit;
-    })
+      # Try mounting fonts and icons from NixOS locations if FHS locations don't exist.
+      # https://github.com/NixOS/nixpkgs/issues/119433
+      ./fix-fonts-icons.patch
 
-    # Use flatpak from PATH to avoid references to `/nix/store` in `/desktop` files.
-    # Applications containing `DBusActivatable` entries should be able to find the flatpak binary.
-    # https://github.com/NixOS/nixpkgs/issues/138956
-    ./binary-path.patch
+      # Nix environment hacks should not leak into the apps.
+      # https://github.com/NixOS/nixpkgs/issues/53441
+      ./unset-env-vars.patch
 
-    # Try mounting fonts and icons from NixOS locations if FHS locations don't exist.
-    # https://github.com/NixOS/nixpkgs/issues/119433
-    ./fix-fonts-icons.patch
+      # The icon validator needs to access the gdk-pixbuf loaders in the Nix store
+      # and cannot bind FHS paths since those are not available on NixOS.
+      finalAttrs.passthru.icon-validator-patch
 
-    # Nix environment hacks should not leak into the apps.
-    # https://github.com/NixOS/nixpkgs/issues/53441
-    ./unset-env-vars.patch
-
-    # The icon validator needs to access the gdk-pixbuf loaders in the Nix store
-    # and cannot bind FHS paths since those are not available on NixOS.
-    finalAttrs.passthru.icon-validator-patch
-  ];
+      (fetchpatch {
+        name = "static.patch";
+        url = "https://github.com/flatpak/flatpak/commit/114c22e814fc28243585915321b8e943471c377f.patch";
+        hash = "sha256-3JLzG74myBTssXQau0Ei5rpthy93Va7xb2MHRnJ3kaI=";
+      })
+    ]
+    ++ lib.optionals finalAttrs.doCheck [
+      # Hardcode paths used by tests and change test runtime generation to use files from Nix store.
+      # https://github.com/flatpak/flatpak/issues/1460
+      (replaceVars ./fix-test-paths.patch {
+        inherit
+          coreutils
+          gettext
+          gtk3
+          socat
+          ;
+        dfu = desktop-file-utils;
+        hicolorIconTheme = hicolor-icon-theme;
+        smi = shared-mime-info;
+      })
+    ]
+    ++ lib.optionals withP11Kit [
+      # Hardcode p11-kit path used by Flatpak itself.
+      # If disabled, will have to be on PATH.
+      (replaceVars ./fix-paths.patch {
+        p11kit = lib.getExe p11-kit;
+      })
+    ];
 
   # Fixup shebangs in some scripts
   #
@@ -137,18 +164,22 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
+  depsBuildBuild = [ pkg-config ];
+
   nativeBuildInputs =
     [
       (python3.pythonOnBuildForHost.withPackages (p: [ p.pyparsing ]))
       bison
-      gobject-introspection
+      glib
       meson
       ninja
       pkg-config
       validatePkgConfig
+      wayland-scanner
       wrapGAppsNoGuiHook
     ]
     ++ lib.optional withGtkDoc gtk-doc
+    ++ lib.optional withIntrospection gobject-introspection
     ++ lib.optional withMan libxslt
     ++ lib.optional withSELinuxModule bzip2
     ++ lib.optionals withDocbookDocs [
@@ -161,10 +192,8 @@ stdenv.mkDerivation (finalAttrs: {
     [
       appstream
       curl
-      dconf
       fuse3
       gdk-pixbuf
-      glib-networking
       gpgme
       gsettings-desktop-schemas
       json-glib
@@ -173,16 +202,16 @@ stdenv.mkDerivation (finalAttrs: {
       librsvg # for flatpak-validate-icon
       libseccomp
       libxml2
-      malcontent
-      polkit
       python3
       wayland
       wayland-protocols
-      wayland-scanner
       xorg.libXau
       zstd
     ]
-    ++ lib.optional withGtkDoc gtk-doc
+    ++ lib.optional withDconf dconf
+    ++ lib.optional withGlibNetworking glib-networking
+    ++ lib.optional withMalcontent malcontent
+    ++ lib.optional withPolkit polkit
     ++ lib.optional withSystemd systemd;
 
   # Required by flatpak.pc
@@ -195,7 +224,15 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonBool "auto_sideloading" withAutoSideloading)
     (lib.mesonBool "installed_tests" finalAttrs.finalPackage.doCheck)
     (lib.mesonBool "tests" finalAttrs.finalPackage.doCheck)
+    (lib.mesonEnable "dconf" withDconf)
+    (lib.mesonEnable "docbook_docs" withDocbookDocs)
+    (lib.mesonEnable "gir" withIntrospection)
+    (lib.mesonEnable "gtkdoc" withGtkDoc)
+    (lib.mesonEnable "malcontent" withMalcontent)
+    (lib.mesonEnable "man" withMan)
     (lib.mesonEnable "selinux_module" withSELinuxModule)
+    (lib.mesonEnable "system_helper" withPolkit)
+    (lib.mesonEnable "systemd" withSystemd)
     (lib.mesonOption "dbus_config_dir" (placeholder "out" + "/share/dbus-1/system.d"))
     (lib.mesonOption "profile_dir" (placeholder "out" + "/etc/profile.d"))
     (lib.mesonOption "system_bubblewrap" (lib.getExe bubblewrap))
@@ -221,6 +258,8 @@ stdenv.mkDerivation (finalAttrs: {
     };
 
     tests = {
+      cross-aarch64 = pkgsCross.aarch64-multiplatform.flatpak;
+
       pkg-config = testers.hasPkgConfigModules { package = finalAttrs.finalPackage; };
 
       validate-icon = runCommand "test-icon-validation" { } ''

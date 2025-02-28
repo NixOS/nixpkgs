@@ -253,6 +253,7 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /nixos/tests/postgresql @NixOS/postgres
 
 # MySQL/MariaDB and related stuff
+/nixos/modules/services/databases/mysql.nix     @6543
 /nixos/modules/services/backup/mysql-backup.nix @6543
 
 # Hardened profile & related modules
@@ -442,3 +443,9 @@ pkgs/by-name/lx/lxc*                    @adamcstephens
 /pkgs/by-name/ap/apple-sdk                     @NixOS/darwin-core
 /pkgs/os-specific/darwin/apple-source-releases @NixOS/darwin-core
 /pkgs/stdenv/darwin                            @NixOS/darwin-core
+
+# BEAM
+pkgs/development/beam-modules/          @NixOS/beam
+pkgs/development/interpreters/erlang/   @NixOS/beam
+pkgs/development/interpreters/elixir/   @NixOS/beam
+pkgs/development/interpreters/lfe/      @NixOS/beam

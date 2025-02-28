@@ -517,7 +517,7 @@ in {
             description = ''
               List of ${domain}
               [blueprints](https://www.home-assistant.io/docs/blueprint/) to
-              install into {file}`''${configDir}/blueprints/${domain}`.
+              install into {file}`''${config.services.home-assistant.configDir}/blueprints/${domain}`.
             '';
             example =
               if domain == "automation" then

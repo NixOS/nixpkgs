@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
       the rows and columns.
     '';
     license = licenses.bsd3;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
   };
 }

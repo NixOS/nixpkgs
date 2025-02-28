@@ -389,8 +389,6 @@ def execute(argv: list[str]) -> None:
 
             dry_run = action == Action.DRY_BUILD
             no_link = action in (Action.SWITCH, Action.BOOT)
-            build_flags |= {"no_out_link": no_link, "dry_run": dry_run}
-            flake_build_flags |= {"no_link": no_link, "dry_run": dry_run}
             rollback = bool(args.rollback)
 
             def validate_image_variant(variants: ImageVariants) -> None:
@@ -444,29 +442,32 @@ def execute(argv: list[str]) -> None:
                         flake,
                         build_host,
                         eval_flags=flake_common_flags,
-                        flake_build_flags=flake_build_flags,
+                        flake_build_flags=flake_build_flags
+                        | {"no_link": no_link, "dry_run": dry_run},
                         copy_flags=copy_flags,
                     )
                 case (_, False, None, Flake(_)):
                     path_to_config = nix.build_flake(
                         attr,
                         flake,
-                        flake_build_flags=flake_build_flags,
+                        flake_build_flags=flake_build_flags
+                        | {"no_link": no_link, "dry_run": dry_run},
                     )
                 case (_, False, Remote(_), None):
                     path_to_config = nix.build_remote(
                         attr,
                         build_attr,
                         build_host,
-                        instantiate_flags=common_flags,
+                        realise_flags=common_flags,
+                        instantiate_flags=build_flags,
                         copy_flags=copy_flags,
-                        build_flags=build_flags,
                     )
                 case (_, False, None, None):
                     path_to_config = nix.build(
                         attr,
                         build_attr,
-                        build_flags=build_flags,
+                        build_flags=build_flags
+                        | {"no_out_link": no_link, "dry_run": dry_run},
                     )
                 case never:
                     # should never happen, but mypy is not smart enough to

@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "filebeat";
-  version = "8.17.1";
+  version = "8.17.2";
 
   src = fetchFromGitHub {
     owner = "elastic";
     repo = "beats";
     tag = "v${version}";
-    hash = "sha256-I245j8Atnp7r0ZL6Lfew0I4uluSodeNnYWFs3x/JYUc=";
+    hash = "sha256-Gk+F4OOe/n3SdiycKwJe4nPwfEKAVesKj5Fmvbe9Q5U=";
   };
 
-  vendorHash = "sha256-eGvpeik7kU/OC1bI4hjavEyF7GvQWXHsNlF+1Smn22c=";
+  vendorHash = "sha256-p2Bm2MM85BFI/ePw+ZY90UgqeFKbozGvFvsjY6M82ts=";
 
   subPackages = [ "filebeat" ];
 

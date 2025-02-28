@@ -191,8 +191,8 @@ have a predefined type and string generator already declared under
           in {
             a = 1;
             b = format.lib.mkSubstitution "a";
-            c = format.lib.mkSubstition "SOME_ENVVAR";
-            d = format.lib.mkSubstition {
+            c = format.lib.mkSubstitution "SOME_ENVVAR";
+            d = format.lib.mkSubstitution {
               value = "SOME_OPTIONAL_ENVVAR";
               optional = true;
             };
@@ -333,7 +333,7 @@ have a predefined type and string generator already declared under
     `{ sections = {}; globalSection = {}; }` where *sections* are several
     sections as with *pkgs.formats.ini* and *globalSection* being just a single
     attrset of key-value pairs for a single section, the global section which
-    preceedes the section definitions.
+    precedes the section definitions.
 
     The attribute `lib.type.atom` contains the used INI atom.
 

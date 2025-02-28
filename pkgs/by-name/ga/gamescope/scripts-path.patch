@@ -1,0 +1,13 @@
+diff --git a/src/Script/Script.cpp b/src/Script/Script.cpp
+index a104ee9..f7cfc8b 100644
+--- a/src/Script/Script.cpp
++++ b/src/Script/Script.cpp
+@@ -130,7 +130,7 @@ namespace gamescope
+         }
+         else
+         {
+-            RunFolder( "/usr/share/gamescope/scripts", true );
++            RunFolder( "@out@/share/gamescope/scripts", true );
+             RunFolder( "/etc/gamescope/scripts", true );
+         }
+ 

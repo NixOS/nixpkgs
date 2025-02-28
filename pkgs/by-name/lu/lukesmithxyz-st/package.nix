@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/LukeSmithxyz/st";
     description = "Luke Smith's fork of st";
     license = licenses.mit;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 }

@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     description = "8031/8051 assembler";
     mainProgram = "as31";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
   };
 }

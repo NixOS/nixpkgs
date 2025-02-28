@@ -5,6 +5,7 @@
   ocaml,
   findlib,
   camlp4,
+  cstruct,
   ocamlbuild,
   erm_xml,
   mirage-crypto,
@@ -32,6 +33,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [ camlp4 ];
   propagatedBuildInputs = [
+    cstruct
     erm_xml
     mirage-crypto
     mirage-crypto-rng

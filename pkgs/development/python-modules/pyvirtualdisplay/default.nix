@@ -3,7 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchPypi,
-  substituteAll,
+  replaceVars,
   xorg,
 
   # build-system
@@ -32,8 +32,7 @@ buildPythonPackage rec {
   };
 
   patches = lib.optionals stdenv.hostPlatform.isLinux [
-    (substituteAll {
-      src = ./paths.patch;
+    (replaceVars ./paths.patch {
       xauth = lib.getExe xorg.xauth;
       xdpyinfo = lib.getExe xorg.xdpyinfo;
     })

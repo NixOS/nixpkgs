@@ -8,7 +8,7 @@ let
   version = "0.6.42";
 
   src = fetchurl {
-    # Nuclear currenntly only publishes AppImage releases for x86_64, which is hardcoded in
+    # Nuclear currently only publishes AppImage releases for x86_64, which is hardcoded in
     # the package name. We also hardcode the host arch in the release name, but should upstream
     # provide more arches, we should use stdenv.hostPlatform to determine the arch and choose
     # source URL accordingly.

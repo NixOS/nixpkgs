@@ -171,8 +171,8 @@
   },
   {
     "pname": "NLog",
-    "version": "5.3.3",
-    "hash": "sha256-M6IbNKj4cUplxS7vi54m2SZe4bQdmMusDTMmsjqmZKg="
+    "version": "5.3.4",
+    "hash": "sha256-Cwr1Wu9VbOcRz3GdVKkt7lIpNwC1E4Hdb0g+qEkEr3k="
   },
   {
     "pname": "QRCoder",
@@ -246,13 +246,13 @@
   },
   {
     "pname": "Splat",
-    "version": "15.2.22",
-    "hash": "sha256-GSD6XrFYlYj6jkmI7Z4bYCcRIQCRAyzcuVWHmAll5K4="
+    "version": "15.3.1",
+    "hash": "sha256-1MlkqywOtLr5TbQ+zAqzw0l92LK9+9h2+sJgmfV32RU="
   },
   {
     "pname": "Splat.NLog",
-    "version": "15.2.22",
-    "hash": "sha256-oro9JqLAicoqdNA6wLWqTjcqOpHbsDDOPX82TnZoNIU="
+    "version": "15.3.1",
+    "hash": "sha256-u/8nSYE618HHNfJjyiQfuluWx83FDYW2RlorPjxRuxs="
   },
   {
     "pname": "sqlite-net-pcl",
@@ -278,11 +278,6 @@
     "pname": "SQLitePCLRaw.provider.e_sqlite3",
     "version": "2.1.2",
     "hash": "sha256-e56+FgxEHqV3SGQx0ZAqzlscPxNUPXJ8Ls9rtqET1S4="
-  },
-  {
-    "pname": "System.Collections.Immutable",
-    "version": "8.0.0",
-    "hash": "sha256-F7OVjKNwpqbUh8lTidbqJWYi476nsq9n+6k0+QVRo3w="
   },
   {
     "pname": "System.ComponentModel.Annotations",

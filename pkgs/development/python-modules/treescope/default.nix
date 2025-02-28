@@ -17,20 +17,22 @@
   # tests
   absl-py,
   jaxlib,
+  omegaconf,
+  pydantic,
   pytestCheckHook,
   torch,
 }:
 
 buildPythonPackage rec {
   pname = "treescope";
-  version = "0.1.8";
+  version = "0.1.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "google-deepmind";
     repo = "treescope";
     tag = "v${version}";
-    hash = "sha256-/rSQUmmfMPP7sZ6avd9bc4lSW/sHLXLEKKCJdXjBTB4=";
+    hash = "sha256-rLrsG7psY3xkuvNtdRULiMWKzIiWZpJ7TVJhwTNGXRQ=";
   };
 
   build-system = [ flit-core ];
@@ -51,6 +53,8 @@ buildPythonPackage rec {
     absl-py
     jax
     jaxlib
+    omegaconf
+    pydantic
     pytestCheckHook
     torch
   ];

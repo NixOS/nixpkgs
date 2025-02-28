@@ -91,7 +91,7 @@ rustPlatform.buildRustPackage rec {
     ''
     + lib.optionalString stdenv.hostPlatform.isLinux ''
       # Both libappindicator-rs and SlimeVR need to know where Nix's appindicator lib is.
-      pushd $cargoDepsCopy/libappindicator-sys
+      pushd $cargoDepsCopy/libappindicator-sys-*
       oldHash=$(sha256sum src/lib.rs | cut -d " " -f 1)
       substituteInPlace src/lib.rs \
         --replace-fail "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"

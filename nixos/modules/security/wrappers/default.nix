@@ -1,7 +1,9 @@
 { config, lib, pkgs, ... }:
 let
 
-  inherit (config.security) wrapperDir wrappers;
+  inherit (config.security) wrapperDir;
+
+  wrappers = lib.filterAttrs (name: value: value.enable) config.security.wrappers;
 
   parentWrapperDir = dirOf wrapperDir;
 
@@ -41,6 +43,11 @@ let
      // { description = "file mode string"; };
 
   wrapperType = lib.types.submodule ({ name, config, ... }: {
+    options.enable = lib.mkOption
+      { type = lib.types.bool;
+        default = true;
+        description = "Whether to enable the wrapper.";
+      };
     options.source = lib.mkOption
       { type = lib.types.path;
         description = "The absolute path to the program to be wrapped.";

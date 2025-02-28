@@ -14,7 +14,6 @@
   ninja,
   isFullBuild ? true,
   linuxHeaders,
-  fetchpatch,
 }:
 let
   pname = "libc";
@@ -28,25 +27,11 @@ let
   '');
 in
 stdenv.mkDerivation (finalAttrs: {
-  inherit pname version;
+  inherit pname version patches;
 
   src = src';
 
   sourceRoot = "${finalAttrs.src.name}/runtimes";
-
-  patches =
-    lib.optional (lib.versions.major version == "20")
-      # Removes invalid token from the LLVM version being placed in the namespace.
-      # Can be removed when LLVM 20 bumps to rc2.
-      # PR: https://github.com/llvm/llvm-project/pull/126284
-      (
-        fetchpatch {
-          url = "https://github.com/llvm/llvm-project/commit/3a3a3230d171e11842a9940b6da0f72022b1c5b3.patch";
-          stripLen = 1;
-          hash = "sha256-QiU1cWp+027ZZNVdvfGVwbIoRd9jqtSbftGsmaW1gig=";
-        }
-      )
-    ++ patches;
 
   nativeBuildInputs =
     [
@@ -75,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postInstall = lib.optionalString (!isFullBuild) ''
-    substituteAll ${./libc-shim.so} $out/lib/libc.so
+    substituteAll ${./libc-shim.tpl} $out/lib/libc.so
   '';
 
   libc = if (!isFullBuild) then stdenv.cc.libc else null;

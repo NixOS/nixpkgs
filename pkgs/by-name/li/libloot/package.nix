@@ -98,7 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
   env.GTEST_FILTER =
     let
       disabledTests = [
-        # Some locale releated tests fail because they need the LOCALE_ARCHIVE env var to be set to "${glibcLocales}/lib/locale/locale-archive"
+        # Some locale related tests fail because they need the LOCALE_ARCHIVE env var to be set to "${glibcLocales}/lib/locale/locale-archive"
         # Due to storage size concerns of `glibcLocales`, we skip this
         "CompareFilenames.shouldBeCaseInsensitiveAndLocaleInvariant"
         "NormalizeFilename.shouldCaseFoldStringsAndBeLocaleInvariant"

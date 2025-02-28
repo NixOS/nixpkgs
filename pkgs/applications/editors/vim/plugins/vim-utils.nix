@@ -67,7 +67,7 @@
   ============================
   The example file pkgs/applications/editors/vim/plugins/default.nix provides
   both:
-  * manually mantained plugins
+  * manually maintained plugins
   * plugins created by VAM's nix#ExportPluginsForNix implementation
 
   I highly recommend to lookup vim plugin attribute names at the [vim-pi] project

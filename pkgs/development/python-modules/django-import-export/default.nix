@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "django-import-export";
-  version = "4.3.4";
+  version = "4.3.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "django-import-export";
     repo = "django-import-export";
     tag = version;
-    hash = "sha256-o21xT+gu1vuar/QJbXhg2hpHkrBCVOMhGAFngi32d10=";
+    hash = "sha256-jHF1En3lmNhHAiN/3o6eRUub8RhD8+mTXwbDqDP4Zlw=";
   };
 
   pythonRelaxDeps = [ "tablib" ];
@@ -61,7 +61,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Django application and library for importing and exporting data with admin integration";
     homepage = "https://github.com/django-import-export/django-import-export";
-    changelog = "https://github.com/django-import-export/django-import-export/blob/${version}/docs/changelog.rst";
+    changelog = "https://github.com/django-import-export/django-import-export/blob/${src.tag}/docs/changelog.rst";
     license = licenses.bsd2;
     maintainers = with maintainers; [ sephi ];
   };

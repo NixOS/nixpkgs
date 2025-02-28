@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   buildPythonPackage,
-  substituteAll,
+  replaceVars,
 
   # build-system
   setuptools,
@@ -38,8 +38,7 @@ buildPythonPackage rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./ffmpeg-path.patch;
+    (replaceVars ./ffmpeg-path.patch {
       ffmpeg = ffmpeg-headless;
     })
   ];

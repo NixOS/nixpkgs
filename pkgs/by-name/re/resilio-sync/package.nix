@@ -8,23 +8,18 @@
 
 stdenv.mkDerivation rec {
   pname = "resilio-sync";
-  version = "2.8.1.1390";
+  version = "3.0.2.1058";
 
   src =
     {
       x86_64-linux = fetchurl {
         url = "https://download-cdn.resilio.com/${version}/linux/x64/0/resilio-sync_x64.tar.gz";
-        sha256 = "sha256-XrfE2frDxOS32MzO7gpJEsMd0WY+b7TS0h/H94M7Py4=";
-      };
-
-      i686-linux = fetchurl {
-        url = "https://download-cdn.resilio.com/${version}/linux/i386/0/resilio-sync_i386.tar.gz";
-        sha256 = "sha256-tWwb9DHLlXeyimzyo/yxVKqlkP3jlAxT2Yzs6h2bIgs=";
+        hash = "sha256-jdkxSN/JscL2hxIWuShNKyUk28d453LPDM/+FtzquGQ=";
       };
 
       aarch64-linux = fetchurl {
         url = "https://download-cdn.resilio.com/${version}/linux/arm64/0/resilio-sync_arm64.tar.gz";
-        sha256 = "sha256-b859DqxTfnBMMeiwXlGKTQ+Mpmr2Rpg24l/GNkxSWbA=";
+        hash = "sha256-iczg1jEy+49QczKxc0/UZJ8LPaCHsXKmSrudVb3RWZ8=";
       };
     }
     .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");

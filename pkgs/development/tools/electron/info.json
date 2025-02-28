@@ -47,10 +47,10 @@
             },
             "src/electron": {
                 "fetcher": "fetchFromGitHub",
-                "hash": "sha256-pOWNw6MLjy7ucMGtF/sVPNmlmje0ozqRhEwOPkfW1oM=",
+                "hash": "sha256-3W6F30x90mLX1BdL9zY/YLShFRUGirokadzEg5QX6TU=",
                 "owner": "electron",
                 "repo": "electron",
-                "rev": "v32.3.0"
+                "rev": "v32.3.1"
             },
             "src/media/cdm/api": {
                 "fetcher": "fetchFromGitiles",
@@ -938,7 +938,7 @@
         "electron_yarn_hash": "122y1vnizwg0rwz8qf37mvpa0i78141y98wn4h11l6b9gyshrs65",
         "modules": "128",
         "node": "20.18.1",
-        "version": "32.3.0"
+        "version": "32.3.1"
     },
     "33": {
         "chrome": "130.0.6723.191",
@@ -988,10 +988,10 @@
             },
             "src/electron": {
                 "fetcher": "fetchFromGitHub",
-                "hash": "sha256-1Sl36LYp/tePk5ChWKv9ZCVcoEZECMEDKKiKvpO8ea8=",
+                "hash": "sha256-cOiflmkAzX0U7wFoGwxYDKMMrmSdjn18oXvguS6RSeY=",
                 "owner": "electron",
                 "repo": "electron",
-                "rev": "v33.4.0"
+                "rev": "v33.4.1"
             },
             "src/media/cdm/api": {
                 "fetcher": "fetchFromGitiles",
@@ -1891,6 +1891,6 @@
         "electron_yarn_hash": "0bzsswcg62b39xinq5vikk7qz7d15276s2vc15v1gcb5wvh05ff8",
         "modules": "130",
         "node": "20.18.1",
-        "version": "33.4.0"
+        "version": "33.4.1"
     }
 }

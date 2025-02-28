@@ -6,18 +6,18 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "spl";
-  version = "0.4.2";
+  version = "0.4.3";
 
   passthru.updateScript = nix-update-script { };
 
   src = fetchgit {
     url = "https://git.tudbut.de/tudbut/spl";
     rev = "v${version}";
-    hash = "sha256-cU6qSh4HM3os/A1w0+5TSZLkS2Y/C864qvmixkxPAh8=";
+    hash = "sha256-ckj50psQ2/r7Bw03J2VjHx0R1zY5xivJfvB9HNxnJLw=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-Ra3pNw3NJ9hSSxb1O7piMD+1cPeofTAYbdM9WRlwYKo=";
+  cargoHash = "sha256-rq6GO+5qXM22JoAGdAM3Bb6/U0+x5sRYUjnZQUpzcGA=";
 
   meta = {
     description = "Simple, concise, concatenative scripting language";

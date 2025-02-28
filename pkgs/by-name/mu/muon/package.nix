@@ -133,7 +133,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://muon.build/";
     description = "Implementation of Meson build system in C99";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
     broken = stdenv.hostPlatform.isDarwin; # typical `ar failure`
     mainProgram = "muon";

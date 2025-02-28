@@ -42,21 +42,24 @@ stdenv.mkDerivation rec {
     jq
   ];
 
-  buildInputs = [
-    glslang
-    libX11
-    libXau
-    libXdmcp
-    libXrandr
-    libffi
-    libxcb
-    robin-hood-hashing
-    spirv-headers
-    spirv-tools
-    vulkan-headers
-    vulkan-utility-libraries
-    wayland
-  ];
+  buildInputs =
+    [
+      glslang
+      robin-hood-hashing
+      spirv-headers
+      spirv-tools
+      vulkan-headers
+      vulkan-utility-libraries
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      libX11
+      libXau
+      libXdmcp
+      libXrandr
+      libffi
+      libxcb
+      wayland
+    ];
 
   cmakeFlags = [
     "-DBUILD_LAYER_SUPPORT_FILES=ON"
@@ -82,7 +85,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Official Khronos Vulkan validation layers";
     homepage = "https://github.com/KhronosGroup/Vulkan-ValidationLayers";
-    platforms = platforms.linux;
+    platforms = platforms.all;
     license = licenses.asl20;
     maintainers = [ maintainers.ralith ];
   };

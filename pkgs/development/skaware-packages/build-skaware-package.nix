@@ -85,7 +85,7 @@ stdenv.mkDerivation {
         lib.assertMsg (!lib.elem "man" outputs)
           "If you pass `manpages` to `skawarePackages.buildPackage`, you cannot have a `man` output already!"
       );
-      # insert as early as posible, but keep the first element
+      # insert as early as possible, but keep the first element
       if lib.length outputs > 0 then
         [
           (lib.head outputs)

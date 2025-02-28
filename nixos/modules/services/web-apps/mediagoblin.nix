@@ -220,7 +220,8 @@ in
             '';
             locations = {
               "/".proxyPass = "http://127.0.0.1:${toString cfg.paste.port}";
-              "/mgoblin_static/".alias = "${finalPackage}/${finalPackage.python.sitePackages}/mediagoblin/static/";
+              "/mgoblin_static/".alias =
+                "${finalPackage}/${finalPackage.python.sitePackages}/mediagoblin/static/";
               "/mgoblin_media/".alias = "/var/lib/mediagoblin/user_dev/media/public/";
               "/theme_static/".alias = "/var/lib/mediagoblin/user_dev/theme_static/";
               "/plugin_static/".alias = "/var/lib/mediagoblin/user_dev/plugin_static/";
@@ -252,7 +253,7 @@ in
             ++ lib.optionals (cfg.settings.mediagoblin.plugins ? "mediagoblin.media_types.pdf") (
               with pkgs;
               [
-                poppler_utils
+                poppler-utils
                 unoconv
               ]
             );

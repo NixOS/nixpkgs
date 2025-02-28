@@ -5,7 +5,7 @@
   fetchFromGitHub,
   fetchPypi,
   python313,
-  substituteAll,
+  replaceVars,
   ffmpeg-headless,
   inetutils,
   nixosTests,
@@ -108,6 +108,16 @@ let
         };
       });
 
+      av = super.av.overridePythonAttrs (rec {
+        version = "13.1.0";
+        src = fetchFromGitHub {
+          owner = "PyAV-Org";
+          repo = "PyAV";
+          tag = "v${version}";
+          hash = "sha256-x2a9SC4uRplC6p0cD7fZcepFpRidbr6JJEEOaGSWl60=";
+        };
+      });
+
       eq3btsmart = super.eq3btsmart.overridePythonAttrs (oldAttrs: rec {
         version = "1.4.1";
         src = fetchFromGitHub {
@@ -139,6 +149,22 @@ let
         };
         dependencies = with self; [
           requests
+        ];
+      });
+
+      # acme and thus hass-nabucasa doesn't support josepy v2
+      # https://github.com/certbot/certbot/issues/10185
+      josepy = super.josepy.overridePythonAttrs (old: rec {
+        version = "1.15.0";
+        src = fetchFromGitHub {
+          owner = "certbot";
+          repo = "josepy";
+          tag = "v${version}";
+          hash = "sha256-fK4JHDP9eKZf2WO+CqRdEjGwJg/WNLvoxiVrb5xQxRc=";
+        };
+        dependencies = with self; [
+          pyopenssl
+          cryptography
         ];
       });
 
@@ -369,7 +395,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run update-component-packages.py after updating
-  hassVersion = "2025.2.2";
+  hassVersion = "2025.2.5";
 
 in
 python.pkgs.buildPythonApplication rec {
@@ -390,13 +416,13 @@ python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = "refs/tags/${version}";
-    hash = "sha256-aCGfxWJnDJ4V5FjrFV3TLHBtPQDyNh1qjDKFL/bHBz0=";
+    hash = "sha256-8adHpOiuWddgqQjInc92FjEwVyg2Rvgx7wNOj3+Kxsk=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-9bdkcDMTQtaRlyLK65fwVDlV4s1GpxqbTYDNxstST4w=";
+    hash = "sha256-JD2xus356qNzT5jqZOHr5gn4WGeC189rM83D81xVtWo=";
   };
 
   build-system = with python.pkgs; [
@@ -405,6 +431,7 @@ python.pkgs.buildPythonApplication rec {
 
   pythonRelaxDeps = [
     "aiohttp"
+    "aiozoneinfo"
     "attrs"
     "bcrypt"
     "ciso8601"
@@ -440,8 +467,7 @@ python.pkgs.buildPythonApplication rec {
     ./patches/static-follow-symlinks.patch
 
     # Patch path to ffmpeg binary
-    (substituteAll {
-      src = ./patches/ffmpeg-path.patch;
+    (replaceVars ./patches/ffmpeg-path.patch {
       ffmpeg = "${lib.getExe ffmpeg-headless}";
     })
   ];
