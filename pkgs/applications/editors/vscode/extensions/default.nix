@@ -1780,8 +1780,7 @@ let
         };
       };
 
-      equinusocio.vsc-material-theme = callPackage ./equinusocio.vsc-material-theme { };
-
+      equinusocio.vsc-material-theme = throw "'equinusocio.vsc-material-theme' has been removed due to security concerns. The extension contained potentially malicious code and was taken down."; # Added 2025-02-28
       equinusocio.vsc-material-theme-icons = throw "'equinusocio.vsc-material-theme-icons' has been removed due to security concerns. The extension contained potentially malicious code and was taken down."; # Added 2025-02-28
 
       esbenp.prettier-vscode = buildVscodeMarketplaceExtension {
