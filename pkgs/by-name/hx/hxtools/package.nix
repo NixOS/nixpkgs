@@ -5,6 +5,8 @@
   pkg-config,
   zstd,
   libHX,
+  perl,
+  bash,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -22,6 +24,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    # Perl and Bash are pulled to make patchShebangs work.
+    perl
+    bash
     libHX
   ];
 
