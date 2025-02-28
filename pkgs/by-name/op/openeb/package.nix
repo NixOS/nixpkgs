@@ -7,7 +7,7 @@
   protobuf,
   makeWrapper,
   opencv,
-  libusb,
+  libusb1,
   boost,
   libGL,
   glew,
@@ -33,7 +33,7 @@ stdenv.mkDerivation {
 
   buildInputs = [
     opencv
-    libusb
+    libusb1
     boost
     libGL
     glew
