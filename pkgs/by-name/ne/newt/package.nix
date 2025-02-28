@@ -58,8 +58,12 @@ stdenv.mkDerivation rec {
   ];
 
   postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    set -xe
     install_name_tool -id $out/lib/libnewt.so.${version} $out/lib/libnewt.so.${version}
     install_name_tool -change libnewt.so.${version} $out/lib/libnewt.so.${version} $out/bin/whiptail
+    install_name_tool -change libnewt.so.${version} $out/lib/libnewt.so.${version} \
+      $out/lib/python*/site-packages/_snack* # glob for version & suffix
+    set +x
   '';
 
   passthru.tests.pythonModule = (python3.withPackages (ps: [ ps.snack ])).overrideAttrs (
