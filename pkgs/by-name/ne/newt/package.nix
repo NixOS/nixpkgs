@@ -62,6 +62,26 @@ stdenv.mkDerivation rec {
     install_name_tool -change libnewt.so.${version} $out/lib/libnewt.so.${version} $out/bin/whiptail
   '';
 
+  passthru.tests.pythonModule = (python3.withPackages (ps: [ ps.snack ])).overrideAttrs (
+    { nativeBuildInputs, postBuild, ... }@_prevAttrs:
+    {
+      nativeBuildInputs = nativeBuildInputs ++ [ python3.pkgs.pythonImportsCheckHook ];
+      pythonImportsCheck = [ "snack" ];
+      /**
+        Call pythonImportsCheckPhase manually. This is necessary because:
+        - pythonImportsCheckHook adds the check to $preDistPhases
+        - python3.withPackages is built with a version of `buildEnv`,
+          ... which is implemented by `runCommand`,
+          ... which has a custom builder and does not run $preDistPhases
+      */
+      postBuild =
+        postBuild
+        + ''
+          runPhase pythonImportsCheckPhase
+        '';
+    }
+  );
+
   meta = {
     description = "Library for color text mode, widget based user interfaces";
     mainProgram = "whiptail";
