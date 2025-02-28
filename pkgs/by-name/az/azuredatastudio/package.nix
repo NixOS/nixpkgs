@@ -19,6 +19,7 @@
   gtk3,
   icu,
   libdrm,
+  libsecret,
   libunwind,
   libuuid,
   libxkbcommon,
@@ -88,7 +89,7 @@ in
 stdenv.mkDerivation rec {
 
   pname = "azuredatastudio";
-  version = "1.49.1";
+  version = "1.51.1";
 
   desktopItems = [
     desktopItem
@@ -102,8 +103,8 @@ stdenv.mkDerivation rec {
     # In the downloads table for Linux .tar.gz
     # This will give a go.microsoft redirect link, I think it's better to use the direct link to which the redirect points.
     # You can do so by using curl: curl -I <go.microsoft link>
-    url = "https://download.microsoft.com/download/7/8/3/783c2037-8607-43c4-a593-0936e965d38b/azuredatastudio-linux-1.49.1.tar.gz";
-    sha256 = "sha256-0LCrRUTTe8UEDgtGLvxVQL8pA5dwA6SvZEZSDILr7jo=";
+    url = "https://download.microsoft.com/download/380cb128-f316-418f-b60a-963454e34173/azuredatastudio-linux-1.51.1.tar.gz";
+    sha256 = "sha256-JAKGGyktNw4sZtCiuZWhrKA6xpEeJoNj94OrJUE0unw=";
   };
 
   nativeBuildInputs = [
@@ -147,7 +148,7 @@ stdenv.mkDerivation rec {
   ];
 
   # this will most likely need to be updated when azuredatastudio's version changes
-  sqltoolsservicePath = "${targetPath}/resources/app/extensions/mssql/sqltoolsservice/Linux/5.0.20240724.1";
+  sqltoolsservicePath = "${targetPath}/resources/app/extensions/mssql/sqltoolsservice/Linux/5.0.20250115.1";
 
   rpath = lib.concatStringsSep ":" [
     (lib.makeLibraryPath [
@@ -164,6 +165,7 @@ stdenv.mkDerivation rec {
       nss
       nspr
       libdrm
+      libsecret
       xorg.libX11
       xorg.libxcb
       xorg.libXcomposite
