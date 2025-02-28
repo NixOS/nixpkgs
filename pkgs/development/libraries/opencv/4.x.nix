@@ -43,7 +43,7 @@
 , enableCublas ? enableCuda
 , enableCudnn ? false # NOTE: CUDNN has a large impact on closure size so we disable it by default
 , enableCufft ? enableCuda
-, cudaPackages ? cudaPackages
+, cudaPackages
 , nvidia-optical-flow-sdk
 
 , enableLto ? true
