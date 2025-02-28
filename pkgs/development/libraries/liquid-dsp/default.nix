@@ -19,7 +19,16 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-3UKAwhYaYZ42+d+wiW/AB6x5TSOel8d++d3HeZqAg/8=";
   };
 
-  configureFlags = lib.optionals stdenv.hostPlatform.isDarwin [ "LIBTOOL=${cctools}/bin/libtool" ];
+  configureFlags =
+    lib.optionals stdenv.hostPlatform.isDarwin [
+      "LIBTOOL=${cctools}/bin/libtool"
+    ]
+    ++ [
+      # Prevent native cpu arch from leaking into binaries. This might lead to
+      # poor performance, but having portable and working executables is more
+      # important.
+      (lib.enableFeature true "simdoverride")
+    ];
 
   nativeBuildInputs =
     [ autoreconfHook ]
