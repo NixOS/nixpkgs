@@ -67,11 +67,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "postfix";
-  version = "3.9.2";
+  version = "3.9.3";
 
   src = fetchurl {
     url = "https://de.postfix.org/ftpmirror/official/postfix-${version}.tar.gz";
-    hash = "sha256-ApB+N9OpZz81eaMmMaimkCWCfqQnnm7gIk2E0fRNhl4=";
+    hash = "sha256-Psn6zZPBi1azAY9sIUicRIdRDZiw1m/vJovaSsevPwg=";
   };
 
   nativeBuildInputs = [
