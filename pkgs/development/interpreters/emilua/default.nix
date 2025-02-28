@@ -51,13 +51,13 @@ in
 
 stdenv.mkDerivation (self: {
   pname = "emilua";
-  version = "0.10.1";
+  version = "0.11.0";
 
   src = fetchFromGitLab {
     owner = "emilua";
     repo = "emilua";
     rev = "v${self.version}";
-    hash = "sha256-D6XKXik9nWQ6t6EF6dLbRGB60iFbPUM8/H8iFAz1QlE=";
+    hash = "sha256-u4AvbMXmaZVuMfnNCP8rLbfSlHQhDg4/zw4EdeOZ2ZI=";
   };
 
   propagatedBuildInputs = [
