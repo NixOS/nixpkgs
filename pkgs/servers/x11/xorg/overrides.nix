@@ -1020,8 +1020,8 @@ self: super:
       rev = "ce811e78882d9f31636351dfe65351f4ded52c74";
       sha256 = "sha256-PKCxFHMwxgbew0gkxNBKiezWuqlFG6bWLkmtUNyoF8Q=";
     };
-    buildInputs = attrs.buildInputs ++ [ xorg.libXScrnSaver xorg.libXv xorg.pixman xorg.utilmacros ];
-    nativeBuildInputs = attrs.nativeBuildInputs ++ [autoreconfHook ];
+    buildInputs = attrs.buildInputs ++ [ xorg.libXScrnSaver xorg.libXv xorg.pixman ];
+    nativeBuildInputs = attrs.nativeBuildInputs ++ [ autoreconfHook xorg.utilmacros xorg.xorgserver ];
     configureFlags = [ "--with-default-dri=3" "--enable-tools" ];
     patches = [ ./use_crocus_and_iris.patch ];
 
