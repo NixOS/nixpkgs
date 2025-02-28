@@ -7,6 +7,15 @@
 let
   tests = tests-stdenv // test-extendMkDerivation // tests-go // tests-python;
 
+  # We are testing the overriding result of these packages without building them.
+  pkgsAllowingBroken = pkgs.extend (
+    finalAttrs: previousAttrs: {
+      config = previousAttrs.config // {
+        allowBroken = true;
+      };
+    }
+  );
+
   tests-stdenv =
     let
       addEntangled =
@@ -251,13 +260,49 @@ let
 
   tests-python =
     let
-      p = pkgs.python3Packages.xpybutil.overridePythonAttrs (_: {
-        dontWrapPythonPrograms = true;
-      });
+      inherit (pkgsAllowingBroken.python3Packages) pip;
+      applyOverridePythonAttrs =
+        p:
+        p.overridePythonAttrs (_: {
+          dontWrapPythonPrograms = true;
+        });
+      revertOverridePythonAttrs =
+        p:
+        p.overridePythonAttrs (_: {
+          dontWrapPythonPrograms = false;
+        });
+      checkOverridePythonAttrs = p: !lib.hasInfix "wrapPythonPrograms" p.postFixup;
+      overrideAttrsFooBar =
+        drv:
+        drv.overrideAttrs (
+          finalAttrs: previousAttrs: {
+            FOO = "a";
+            BAR = finalAttrs.FOO;
+          }
+        );
+      checkAttrsFooBar = drv: drv.FOO == "a" && drv.BAR == "a";
     in
     {
       overridePythonAttrs = {
-        expr = !lib.hasInfix "wrapPythonPrograms" p.postFixup;
+        expr = checkOverridePythonAttrs (applyOverridePythonAttrs pip);
+        expected = true;
+      };
+      overridePythonAttrs-nested = {
+        expr = revertOverridePythonAttrs (applyOverridePythonAttrs pip) == pip;
+        expected = true;
+      };
+      overrideAttrs-overridePythonAttrs-test-overrideAttrs = {
+        expr = checkAttrsFooBar (applyOverridePythonAttrs (overrideAttrsFooBar pip));
+        expected = true;
+      };
+      overrideAttrs-overridePythonAttrs-test-overridePythonAttrs = {
+        expr = checkOverridePythonAttrs (applyOverridePythonAttrs (overrideAttrsFooBar pip));
+        expected = true;
+      };
+      overrideAttrs-overridePythonAttrs-test-commutation = {
+        expr =
+          (applyOverridePythonAttrs (overrideAttrsFooBar pip))
+          == (overrideAttrsFooBar (applyOverridePythonAttrs pip));
         expected = true;
       };
     };
