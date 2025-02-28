@@ -110,7 +110,13 @@ let
       python3,
 
       # PL/Tcl
-      tclSupport ? false,
+      tclSupport ?
+        lib.meta.availableOn stdenv.hostPlatform tcl
+        # tcl is broken in pkgsStatic
+        && !stdenv.hostPlatform.isStatic
+        # configure fails with:
+        #   configure: error: file 'tclConfig.sh' is required for Tcl
+        && stdenv.buildPlatform.canExecute stdenv.hostPlatform,
       tcl,
 
       # SELinux
@@ -169,7 +175,8 @@ let
           "man"
         ]
         ++ lib.optionals perlSupport [ "plperl" ]
-        ++ lib.optionals pythonSupport [ "plpython3" ];
+        ++ lib.optionals pythonSupport [ "plpython3" ]
+        ++ lib.optionals tclSupport [ "pltcl" ];
       outputChecks = {
         out = {
           disallowedReferences = [
@@ -423,6 +430,10 @@ let
         + lib.optionalString pythonSupport ''
           moveToOutput "lib/*plpython3*" "$plpython3"
           moveToOutput "share/postgresql/extension/*plpython3*" "$plpython3"
+        ''
+        + lib.optionalString tclSupport ''
+          moveToOutput "lib/*pltcl*" "$pltcl"
+          moveToOutput "share/postgresql/extension/*pltcl*" "$pltcl"
         '';
 
       postFixup = lib.optionalString stdenv'.hostPlatform.isGnu ''
@@ -463,7 +474,12 @@ let
           pkgs =
             let
               scope = {
-                inherit jitSupport pythonSupport perlSupport;
+                inherit
+                  jitSupport
+                  pythonSupport
+                  perlSupport
+                  tclSupport
+                  ;
                 inherit (llvmPackages) llvm;
                 postgresql = this;
                 stdenv = stdenv';
