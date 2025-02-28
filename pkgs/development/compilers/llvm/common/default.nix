@@ -1224,7 +1224,13 @@ let
           isFullBuild = true;
           # Use clang due to "gnu::naked" not working on aarch64.
           # Issue: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=77882
-          stdenv = overrideCC stdenv buildLlvmTools.clangNoLibcNoRt;
+          stdenv = overrideCC stdenv (
+            buildLlvmTools.clangNoLibcNoRt.override {
+              nixSupport.cc-cflags = lib.optional (
+                lib.versionAtLeast metadata.release_version "15" && stdenv.targetPlatform.isWasm
+              ) "-fno-exceptions";
+            }
+          );
         };
 
         libc = if stdenv.targetPlatform.libc == "llvm" then libraries.libc-full else libraries.libc-overlay;
