@@ -15,7 +15,6 @@
 , protobuf_29
 , config
 , ocl-icd
-, buildPackages
 , qimgv
 , opencv4
 
@@ -100,7 +99,6 @@
 let
   inherit (lib.attrsets) mapAttrsToList optionalAttrs;
   inherit (lib.lists) last optionals;
-  inherit (lib.meta) getExe;
   inherit (lib.strings) cmakeBool cmakeFeature cmakeOptionType concatStrings concatStringsSep optionalString;
   inherit (lib.trivial) flip;
 
