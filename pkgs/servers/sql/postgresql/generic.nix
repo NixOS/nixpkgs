@@ -216,7 +216,6 @@ let
         ++ lib.optionals pamSupport [ linux-pam ]
         ++ lib.optionals perlSupport [ perl ]
         ++ lib.optionals ldapSupport [ openldap ]
-        ++ lib.optionals tclSupport [ tcl ]
         ++ lib.optionals selinuxSupport [ libselinux ]
         ++ lib.optionals nlsSupport [ gettext ];
 
@@ -256,7 +255,8 @@ let
             + (if stdenv'.cc.isClang then " -flto" else " -fmerge-constants -Wl,--gc-sections");
         }
         // lib.optionalAttrs perlSupport { PERL = lib.getExe perl; }
-        // lib.optionalAttrs pythonSupport { PYTHON = lib.getExe python3; };
+        // lib.optionalAttrs pythonSupport { PYTHON = lib.getExe python3; }
+        // lib.optionalAttrs tclSupport { TCLSH = "${lib.getBin tcl}/bin/tclsh"; };
 
       configureFlags =
         let
