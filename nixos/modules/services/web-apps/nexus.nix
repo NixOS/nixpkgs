@@ -19,7 +19,7 @@ in
 
       package = lib.mkPackageOption pkgs "nexus" { };
 
-      jdkPackage = lib.mkPackageOption pkgs "openjdk8" { };
+      jdkPackage = lib.mkPackageOption pkgs "openjdk17" { };
 
       user = mkOption {
         type = types.str;
@@ -58,7 +58,6 @@ in
           -Xmx1200M
           -XX:MaxDirectMemorySize=2G
           -XX:+UnlockDiagnosticVMOptions
-          -XX:+UnsyncloadClass
           -XX:+LogVMOutput
           -XX:LogFile=${cfg.home}/nexus3/log/jvm.log
           -XX:-OmitStackTraceInFastThrow
@@ -78,7 +77,6 @@ in
             -Xmx1200M
             -XX:MaxDirectMemorySize=2G
             -XX:+UnlockDiagnosticVMOptions
-            -XX:+UnsyncloadClass
             -XX:+LogVMOutput
             -XX:LogFile=''${home}/nexus3/log/jvm.log
             -XX:-OmitStackTraceInFastThrow
@@ -99,6 +97,22 @@ in
           Please refer to the docs (https://help.sonatype.com/repomanager3/installation/configuring-the-runtime-environment)
           for further information.
         '';
+      };
+
+      jdkOpts = mkOption {
+        type = types.lines;
+        default = ''
+            --add-opens=java.base/java.util=ALL-UNNAMED
+            --add-opens=java.base/java.net=ALL-UNNAMED
+        '';
+        defaultText = literalExpression ''
+          '''
+            --add-opens=java.base/java.util=ALL-UNNAMED
+            --add-opens=java.base/java.net=ALL-UNNAMED
+          '''
+        '';
+
+        description = '' Options passed to JDK_JAVA_OPTIONS'';
       };
     };
   };
@@ -125,6 +139,7 @@ in
 
         INSTALL4J_JAVA_HOME = cfg.jdkPackage;
         VM_OPTS_FILE = pkgs.writeText "nexus.vmoptions" cfg.jvmOpts;
+        JDK_JAVA_OPTIONS = cfg.jdkOpts;
       };
 
       preStart = ''
