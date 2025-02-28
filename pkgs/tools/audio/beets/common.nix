@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   src,
   version,
   fetchpatch,
@@ -166,10 +167,19 @@ python3Packages.buildPythonApplication {
 
   __darwinAllowLocalNetworking = true;
 
-  disabledTestPaths = disabledTestPaths ++ [
-    # touches network
-    "test/plugins/test_aura.py"
-  ];
+  disabledTestPaths =
+    disabledTestPaths
+    ++ [
+      # touches network
+      "test/plugins/test_aura.py"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # Flaky: several tests fail randomly with:
+      # if not self._poll(timeout):
+      #   raise Empty
+      #   _queue.Empty
+      "test/plugins/test_player.py"
+    ];
   disabledTests = disabledTests ++ [
     # beets.ui.UserError: unknown command 'autobpm'
     "test/plugins/test_autobpm.py::TestAutoBPMPlugin::test_import"
