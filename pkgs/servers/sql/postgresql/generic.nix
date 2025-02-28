@@ -212,7 +212,6 @@ let
         ++ lib.optionals lz4Enabled [ lz4 ]
         ++ lib.optionals zstdEnabled [ zstd ]
         ++ lib.optionals systemdSupport [ systemdLibs ]
-        ++ lib.optionals pythonSupport [ python3 ]
         ++ lib.optionals gssSupport [ libkrb5 ]
         ++ lib.optionals pamSupport [ linux-pam ]
         ++ lib.optionals perlSupport [ perl ]
