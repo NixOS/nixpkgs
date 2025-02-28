@@ -2,7 +2,7 @@
   flutter,
   fetchFromGitHub,
   util-linux,
-  wrapGAppsHook,
+  wrapGAppsHook3,
   makeDesktopItem,
   lib,
 }:
@@ -23,7 +23,7 @@ flutter.buildFlutterApplication rec {
   ];
 
   propagatedBuildInputs = [
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   pubspecLock = lib.importJSON ./pubspec.lock;
