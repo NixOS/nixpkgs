@@ -362,6 +362,7 @@ mapAliases {
   deadpixi-sam = deadpixi-sam-unstable;
 
   debugedit-unstable = throw "'debugedit-unstable' has been renamed to/replaced by 'debugedit'"; # Converted to throw 2024-10-17
+  deltachat-cursed = arcanechat-tui; # added 2025-02-25
   deltachat-electron = throw "'deltachat-electron' has been renamed to/replaced by 'deltachat-desktop'"; # Converted to throw 2024-10-17
 
   demjson = with python3Packages; toPythonApplication demjson; # Added 2022-01-18
@@ -704,7 +705,6 @@ mapAliases {
   kube3d = k3d; # Added 2022-0705
   kafkacat = throw "'kafkacat' has been renamed to/replaced by 'kcat'"; # Converted to throw 2024-10-17
   kak-lsp = kakoune-lsp; # Added 2024-04-01
-  kargo = throw "kargo was removed as it is deprecated upstream and depends on the removed boto package"; # Added 2024-09-22
   kdbplus = throw "'kdbplus' has been removed from nixpkgs"; # Added 2024-05-06
   kdeconnect = throw "'kdeconnect' has been renamed to/replaced by 'plasma5Packages.kdeconnect-kde'"; # Converted to throw 2024-10-17
   keepkey_agent = keepkey-agent; # added 2024-01-06
@@ -1215,6 +1215,7 @@ mapAliases {
 
   PlistCpp = plistcpp; # Added 2024-01-05
   pocket-updater-utility = pupdate; # Added 2024-01-25
+  poppler_utils = poppler-utils; # Added 2025-02-27
   powerline-rs = throw "'powerline-rs' has been removed due to lack of upstream maintenance"; # Added 2025-01-26
   prismlauncher-qt5 = throw "'prismlauncher-qt5' has been removed from nixpkgs. Please use 'prismlauncher'"; # Added 2024-04-20
   prismlauncher-qt5-unwrapped = throw "'prismlauncher-qt5-unwrapped' has been removed from nixpkgs. Please use 'prismlauncher-unwrapped'"; # Added 2024-04-20

@@ -868,6 +868,7 @@
   ./services/misc/radicle.nix
   ./services/misc/readarr.nix
   ./services/misc/realmd.nix
+  ./services/misc/rebuilderd.nix
   ./services/misc/recyclarr.nix
   ./services/misc/redlib.nix
   ./services/misc/redmine.nix
@@ -1459,6 +1460,7 @@
   ./services/web-apps/agorakit.nix
   ./services/web-apps/alps.nix
   ./services/web-apps/anuko-time-tracker.nix
+  ./services/web-apps/archtika.nix
   ./services/web-apps/artalk.nix
   ./services/web-apps/audiobookshelf.nix
   ./services/web-apps/bluemap.nix

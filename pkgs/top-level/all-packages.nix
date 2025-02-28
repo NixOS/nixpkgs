@@ -9024,7 +9024,7 @@ with pkgs;
     inherit (darwin.apple_sdk_12_3.libs) xpc;
   });
 
-  qxmpp = libsForQt5.callPackage ../development/libraries/qxmpp { };
+  qxmpp = qt6Packages.callPackage ../development/libraries/qxmpp { };
 
   gnu-efi = if stdenv.hostPlatform.isEfi
               then callPackage ../development/libraries/gnu-efi { }
@@ -10207,7 +10207,7 @@ with pkgs;
     suffix = "min";
   };
 
-  poppler_utils = poppler.override {
+  poppler-utils = poppler.override {
     suffix = "utils";
     utils = true;
   };
@@ -11063,7 +11063,7 @@ with pkgs;
     wrapR = false;
   };
 
-  rstudioWrapper = libsForQt5.callPackage ../development/r-modules/wrapper-rstudio.nix {
+  rstudioWrapper = callPackage ../development/r-modules/wrapper-rstudio.nix {
     recommendedPackages = with rPackages; [
       boot class cluster codetools foreign KernSmooth lattice MASS
       Matrix mgcv nlme nnet rpart spatial survival
@@ -13945,7 +13945,7 @@ with pkgs;
 
   kbibtex = libsForQt5.callPackage ../applications/office/kbibtex { };
 
-  kaidan = libsForQt5.callPackage ../applications/networking/instant-messengers/kaidan { };
+  kaidan = kdePackages.callPackage ../applications/networking/instant-messengers/kaidan { };
 
   kdeltachat = libsForQt5.callPackage ../applications/networking/instant-messengers/kdeltachat { };
 
@@ -14044,8 +14044,6 @@ with pkgs;
   };
 
   ladspa-sdk = callPackage ../applications/audio/ladspa-sdk { };
-
-  ladybird = callPackage ../applications/networking/browsers/ladybird { };
 
   lemonbar = callPackage ../applications/window-managers/lemonbar { };
 
@@ -16107,7 +16105,6 @@ with pkgs;
   deliantra-maps = callPackage ../games/deliantra/maps.nix { };
   deliantra-data = callPackage ../games/deliantra/data.nix { };
 
-  ddnet = callPackage ../games/ddnet {};
   ddnet-server = ddnet.override { buildClient = false; };
 
   devilutionx = callPackage ../games/devilutionx {
@@ -17832,10 +17829,6 @@ with pkgs;
 
   sane-frontends = callPackage ../applications/graphics/sane/frontends.nix { };
 
-  sc-controller = python3Packages.callPackage ../misc/drivers/sc-controller {
-    inherit libusb1; # Shadow python.pkgs.libusb1.
-  };
-
   slock = callPackage ../misc/screensavers/slock {
     conf = config.slock.conf or null;
   };
@@ -18062,8 +18055,6 @@ with pkgs;
   tomb = callPackage ../by-name/to/tomb/package.nix {
     pinentry = pinentry-curses;
   };
-
-  serial-studio = libsForQt5.callPackage ../applications/misc/serial-studio { };
 
   maphosts = callPackage ../tools/networking/maphosts { };
 

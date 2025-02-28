@@ -1165,6 +1165,8 @@ self: super: with self; {
 
   ayla-iot-unofficial = callPackage ../development/python-modules/ayla-iot-unofficial { };
 
+  azure-ai-documentintelligence = callPackage ../development/python-modules/azure-ai-documentintelligence { };
+
   azure-appconfiguration = callPackage ../development/python-modules/azure-appconfiguration { };
 
   azure-applicationinsights = callPackage ../development/python-modules/azure-applicationinsights { };
@@ -2099,6 +2101,8 @@ self: super: with self; {
   capturer = callPackage ../development/python-modules/capturer { };
 
   carbon = callPackage ../development/python-modules/carbon { };
+
+  cardano-tools = callPackage ../development/python-modules/cardano-tools { };
 
   cardimpose = callPackage ../development/python-modules/cardimpose { };
 
@@ -6488,6 +6492,8 @@ self: super: with self; {
 
   iocextract = callPackage ../development/python-modules/iocextract { };
 
+  ioctl-opt = callPackage ../development/python-modules/ioctl-opt { };
+
   ionhash = callPackage ../development/python-modules/ionhash { };
 
   ionoscloud = callPackage ../development/python-modules/ionoscloud { };
@@ -9728,6 +9734,8 @@ self: super: with self; {
 
   oemthermostat = callPackage ../development/python-modules/oemthermostat { };
 
+  ogmios = callPackage ../development/python-modules/ogmios { };
+
   okonomiyaki = callPackage ../development/python-modules/okonomiyaki { };
 
   okta = callPackage ../development/python-modules/okta { };
@@ -11066,6 +11074,8 @@ self: super: with self; {
   plac = callPackage ../development/python-modules/plac { };
 
   plaid-python = callPackage ../development/python-modules/plaid-python { };
+
+  planetary-computer = callPackage ../development/python-modules/planetary-computer { };
 
   plantuml = callPackage ../development/python-modules/plantuml { };
 
