@@ -57,7 +57,7 @@
   pdftk,
   perl,
   pgpdump,
-  poppler_utils,
+  poppler-utils,
   procyon,
   python3,
   qemu,
@@ -232,7 +232,7 @@ python.pkgs.buildPythonApplication rec {
         openssh
         pdftk
         perl
-        poppler_utils
+        poppler-utils
         procyon
         qemu
         R
