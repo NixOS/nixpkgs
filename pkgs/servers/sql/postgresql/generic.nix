@@ -89,7 +89,13 @@ let
       linux-pam,
 
       # PL/Perl
-      perlSupport ? false,
+      perlSupport ?
+        lib.meta.availableOn stdenv.hostPlatform perl
+        # Building with perl in pkgsStatic gives this error:
+        #   configure: error: cannot build PL/Perl because libperl is not a shared library
+        && !stdenv.hostPlatform.isStatic
+        # configure tries to call the perl executable for the version
+        && stdenv.buildPlatform.canExecute stdenv.hostPlatform,
       perl,
 
       # PL/Python
@@ -153,13 +159,16 @@ let
 
       hardeningEnable = lib.optionals (!stdenv'.cc.isClang) [ "pie" ];
 
-      outputs = [
-        "out"
-        "dev"
-        "doc"
-        "lib"
-        "man"
-      ] ++ lib.optionals pythonSupport [ "plpython3" ];
+      outputs =
+        [
+          "out"
+          "dev"
+          "doc"
+          "lib"
+          "man"
+        ]
+        ++ lib.optionals perlSupport [ "plperl" ]
+        ++ lib.optionals pythonSupport [ "plpython3" ];
       outputChecks = {
         out = {
           disallowedReferences = [
@@ -406,6 +415,10 @@ let
           substituteInPlace "$dev/lib/pgxs/src/Makefile.port" \
             --replace-fail '-bundle_loader $(bindir)/postgres' "-bundle_loader $out/bin/postgres"
         ''
+        + lib.optionalString perlSupport ''
+          moveToOutput "lib/*plperl*" "$plperl"
+          moveToOutput "share/postgresql/extension/*plperl*" "$plperl"
+        ''
         + lib.optionalString pythonSupport ''
           moveToOutput "lib/*plpython3*" "$plpython3"
           moveToOutput "share/postgresql/extension/*plpython3*" "$plpython3"
@@ -449,7 +462,7 @@ let
           pkgs =
             let
               scope = {
-                inherit jitSupport pythonSupport;
+                inherit jitSupport pythonSupport perlSupport;
                 inherit (llvmPackages) llvm;
                 postgresql = this;
                 stdenv = stdenv';
