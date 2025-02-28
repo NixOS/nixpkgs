@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (self: {
   pname = "emilua_beast";
-  version = "1.1.1";
+  version = "1.1.2";
 
   src = fetchFromGitLab {
     owner = "emilua";
     repo = "beast";
     rev = "v${self.version}";
-    hash = "sha256-8pHL0ut221LvFwb/o1GuLV3gIDw5LSeqxqIa9eaQjXY=";
+    hash = "sha256-MASaZvhIVKmeBUcn/NjlBZ+xh+2RgwHBH2o08lklGa0=";
   };
 
   buildInputs = [
