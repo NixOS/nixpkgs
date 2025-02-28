@@ -1206,6 +1206,8 @@ let
 
     mirage-logs = callPackage ../development/ocaml-modules/mirage-logs { };
 
+    mirage-mtime = callPackage ../development/ocaml-modules/mirage-mtime { };
+
     mirage-nat = callPackage ../development/ocaml-modules/mirage-nat { };
 
     mirage-net = callPackage ../development/ocaml-modules/mirage-net { };
@@ -1223,6 +1225,8 @@ let
     mirage-random-test = callPackage ../development/ocaml-modules/mirage-random-test { };
 
     mirage-runtime = callPackage ../development/ocaml-modules/mirage/runtime.nix { };
+
+    mirage-sleep = callPackage ../development/ocaml-modules/mirage-sleep { };
 
     mirage-time = callPackage ../development/ocaml-modules/mirage-time { };
 
