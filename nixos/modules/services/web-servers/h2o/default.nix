@@ -230,6 +230,9 @@ let
                     ssl = (lib.recursiveUpdate tlsRecAttrs value.tls.extraSettings) // {
                       inherit identity;
                     };
+                  }
+                  // lib.optionalAttrs (value.host != null) {
+                    host = value.host;
                   };
               };
           };
