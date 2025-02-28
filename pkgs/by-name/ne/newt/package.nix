@@ -5,6 +5,7 @@
   slang,
   popt,
   python3,
+  gettext,
 }:
 
 let
@@ -33,10 +34,14 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
   nativeBuildInputs = [ python3 ];
-  buildInputs = [
-    slang
-    popt
-  ];
+  buildInputs =
+    [
+      slang
+      popt
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      gettext # for darwin with clang
+    ];
 
   NIX_LDFLAGS = "-lncurses";
 
@@ -45,10 +50,6 @@ stdenv.mkDerivation rec {
     # programs to use at different stages.
     unset CPP
   '';
-
-  configureFlags = lib.optionals stdenv.hostPlatform.isDarwin [
-    "--disable-nls"
-  ];
 
   makeFlags = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
@@ -59,13 +60,13 @@ stdenv.mkDerivation rec {
     install_name_tool -change libnewt.so.${version} $out/lib/libnewt.so.${version} $out/bin/whiptail
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Library for color text mode, widget based user interfaces";
     mainProgram = "whiptail";
     homepage = "https://pagure.io/newt";
     changelog = "https://pagure.io/newt/blob/master/f/CHANGES";
-    license = licenses.lgpl2;
-    platforms = platforms.unix;
-    maintainers = [ ];
+    license = lib.licenses.lgpl2;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ bryango ];
   };
 }
