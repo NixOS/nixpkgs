@@ -9,6 +9,9 @@ in
 // {
   timescaledb-apache = super.callPackage ./ext/timescaledb.nix { enableUnfree = false; };
 }
+// lib.optionalAttrs (!self.perlSupport) {
+  plperl = throw "PostgreSQL extension `plperl` is not available, because `postgresql` was built without Perl support. Override with `perlSupport = true` to enable the extension.";
+}
 // lib.optionalAttrs (!self.pythonSupport) {
   plpython3 = throw "PostgreSQL extension `plpython3` is not available, because `postgresql` was built without Python support. Override with `pythonSupport = true` to enable the extension.";
 }
