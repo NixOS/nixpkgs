@@ -84,7 +84,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Open project for 2D/3D image and point cloud processing";
     changelog = "https://github.com/PointCloudLibrary/pcl/blob/pcl-${finalAttrs.version}/CHANGES.md";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ GaetanLepage ];
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+      usertam
+    ];
     platforms = with lib.platforms; linux ++ darwin;
   };
 })
