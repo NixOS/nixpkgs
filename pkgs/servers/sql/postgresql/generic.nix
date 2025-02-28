@@ -79,11 +79,13 @@ let
       gettext,
 
       # PAM
-      # Building with linux-pam in pkgsStatic gives a few "undefined reference" errors like this:
-      #   /nix/store/3s55icpsbc36sgn7sa8q3qq4z6al6rlr-linux-pam-static-x86_64-unknown-linux-musl-1.6.1/lib/libpam.a(pam_audit.o):
-      #     in function `pam_modutil_audit_write':(.text+0x571):
-      #     undefined reference to `audit_close'
-      pamSupport ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isStatic,
+      pamSupport ?
+        lib.meta.availableOn stdenv.hostPlatform linux-pam
+        # Building with linux-pam in pkgsStatic gives a few "undefined reference" errors like this:
+        #   /nix/store/3s55icpsbc36sgn7sa8q3qq4z6al6rlr-linux-pam-static-x86_64-unknown-linux-musl-1.6.1/lib/libpam.a(pam_audit.o):
+        #     in function `pam_modutil_audit_write':(.text+0x571):
+        #     undefined reference to `audit_close'
+        && !stdenv.hostPlatform.isStatic,
       linux-pam,
 
       # PL/Perl
