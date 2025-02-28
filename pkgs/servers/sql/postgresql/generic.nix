@@ -269,6 +269,7 @@ let
           "--enable-debug"
           (lib.optionalString systemdSupport "--with-systemd")
           (if stdenv.hostPlatform.isFreeBSD then "--with-uuid=bsd" else "--with-uuid=e2fs")
+          (withFeature perlSupport "perl")
         ]
         ++ lib.optionals lz4Enabled [ "--with-lz4" ]
         ++ lib.optionals zstdEnabled [ "--with-zstd" ]
@@ -292,7 +293,6 @@ let
             [
               "LDFLAGS_EX_BE=-Wl,--export-dynamic"
             ]
-        ++ lib.optionals (atLeast "17" && !perlSupport) [ "--without-perl" ]
         ++ lib.optionals ldapSupport [ "--with-ldap" ]
         ++ lib.optionals tclSupport [ "--with-tcl" ]
         ++ lib.optionals selinuxSupport [ "--with-selinux" ]
