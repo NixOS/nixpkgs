@@ -13,6 +13,7 @@
   stdenv,
   swig,
   systemd,
+  nix-update-script,
   # ImportError: cannot import name 'mlog' from 'mesonbuild'
   withDocs ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
 }:
@@ -65,6 +66,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   # mocked ioctl conflicts with the musl one: https://github.com/NixOS/nixpkgs/pull/263768#issuecomment-1782877974
   doCheck = !stdenv.hostPlatform.isMusl;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "C Library for NVM Express on Linux";
