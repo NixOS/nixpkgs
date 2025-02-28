@@ -43,7 +43,9 @@ stdenv.mkDerivation rec {
       gettext # for darwin with clang
     ];
 
-  NIX_LDFLAGS = "-lncurses";
+  NIX_LDFLAGS =
+    "-lncurses"
+    + lib.optionalString stdenv.hostPlatform.isDarwin " -L${python3}/lib -lpython${python3.pythonVersion}";
 
   preConfigure = ''
     # If CPP is set explicitly, configure and make will not agree about which
