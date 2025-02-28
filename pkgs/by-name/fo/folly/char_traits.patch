@@ -1,0 +1,29 @@
+diff --git a/folly/memory/test/UninitializedMemoryHacksTest.cpp b/folly/memory/test/UninitializedMemoryHacksTest.cpp
+index 38e27c3..17424af 100644
+--- a/folly/memory/test/UninitializedMemoryHacksTest.cpp
++++ b/folly/memory/test/UninitializedMemoryHacksTest.cpp
+@@ -283,7 +283,7 @@ TEST(UninitializedMemoryHacks, simpleStringWChar) {
+ }
+ 
+ TEST(UninitializedMemoryHacks, simpleStringSChar) {
+-  testSimple<std::basic_string<signed char>>();
++  testSimple<std::basic_string<char>>();
+ }
+ 
+ TEST(UninitializedMemoryHacks, simpleVectorChar) {
+@@ -307,7 +307,7 @@ TEST(UninitializedMemoryHacks, randomStringWChar) {
+ }
+ 
+ TEST(UninitializedMemoryHacks, randomStringSChar) {
+-  testRandom<std::basic_string<signed char>>();
++  testRandom<std::basic_string<char>>();
+ }
+ 
+ TEST(UninitializedMemoryHacks, randomVectorChar) {
+@@ -323,5 +323,5 @@ TEST(UninitializedMemoryHacks, randomVectorInt) {
+ }
+ 
+ // We are deliberately putting this at the bottom to make sure it can follow use
+-FOLLY_DECLARE_STRING_RESIZE_WITHOUT_INIT(signed char)
++//FOLLY_DECLARE_STRING_RESIZE_WITHOUT_INIT(char)
+ FOLLY_DECLARE_VECTOR_RESIZE_WITHOUT_INIT(int)

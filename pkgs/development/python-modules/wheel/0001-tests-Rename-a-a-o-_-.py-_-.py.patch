@@ -1,0 +1,34 @@
+From 5879a4bbc34d1eb25e160b15b2f5a4f10eac6bd2 Mon Sep 17 00:00:00 2001
+From: toonn <toonn@toonn.io>
+Date: Mon, 13 Sep 2021 18:07:26 +0200
+Subject: [PATCH] =?UTF-8?q?tests:=20Rename=20a=CC=8Aa=CC=88o=CC=88=5F?=
+ =?UTF-8?q?=E6=97=A5=E6=9C=AC=E8=AA=9E.py=20=3D>=20=C3=A6=C9=90=C3=B8=5F?=
+ =?UTF-8?q?=E6=97=A5=E6=9C=AC=E5=83=B9.py?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+`åäö_日本語.py` normalizes differently in NFC and NFD normal forms. This
+means a hash generated for the source directory can differ depending on
+whether or not the filesystem is normalizing and which normal form it
+uses.
+
+By renaming the file to `æɐø_日本價.py` we avoid this issue by using a
+name that has the same encoding in each normal form.
+---
+ tests/test_bdist_wheel.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tests/test_bdist_wheel.py b/tests/test_bdist_wheel.py
+index 5a6db16..42cf121 100644
+--- a/tests/test_bdist_wheel.py
++++ b/tests/test_bdist_wheel.py
+@@ -69,7 +69,7 @@ def test_unicode_record(wheel_paths):
+     with ZipFile(path) as zf:
+         record = zf.read("unicode.dist-0.1.dist-info/RECORD")
+ 
+-    assert "åäö_日本語.py".encode() in record
++    assert "æɐø_日本價.py".encode() in record
+ 
+ 
+ UTF8_PKG_INFO = """\

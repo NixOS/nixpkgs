@@ -1,0 +1,13 @@
+diff --git a/mealie/services/openai/openai.py b/mealie/services/openai/openai.py
+index 09c391d5..5d74d930 100644
+--- a/mealie/services/openai/openai.py
++++ b/mealie/services/openai/openai.py
+@@ -7,7 +7,7 @@ from pathlib import Path
+ from textwrap import dedent
+ 
+ from openai import NOT_GIVEN, AsyncOpenAI
+-from openai.resources.chat.completions import ChatCompletion
++from openai.types.chat import ChatCompletion
+ from pydantic import BaseModel, field_validator
+ 
+ from mealie.core.config import get_app_settings

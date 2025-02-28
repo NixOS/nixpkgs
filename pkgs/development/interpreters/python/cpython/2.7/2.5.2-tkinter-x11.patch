@@ -1,0 +1,27 @@
+--- origsrc/setup.py	2008-02-04 17:41:02.000000000 -0600
++++ src/setup.py	2008-07-02 02:11:28.671875000 -0500
+@@ -1277,12 +1279,6 @@
+             include_dirs.append('/usr/X11/include')
+             added_lib_dirs.append('/usr/X11/lib')
+ 
+-        # If Cygwin, then verify that X is installed before proceeding
+-        if host_platform == 'cygwin':
+-            x11_inc = find_file('X11/Xlib.h', [], include_dirs)
+-            if x11_inc is None:
+-                return
+-
+         # Check for BLT extension
+         if self.compiler.find_library_file(lib_dirs + added_lib_dirs,
+                                            'BLT8.0'):
+@@ -1300,9 +1296,8 @@
+         if host_platform in ['aix3', 'aix4']:
+             libs.append('ld')
+ 
+-        # Finally, link with the X11 libraries (not appropriate on cygwin)
+-        if host_platform != "cygwin":
+-            libs.append('X11')
++        # Finally, link with the X11 libraries
++        libs.append('X11')
+ 
+         ext = Extension('_tkinter', ['_tkinter.c', 'tkappinit.c'],
+                         define_macros=[('WITH_APPINIT', 1)] + defs,

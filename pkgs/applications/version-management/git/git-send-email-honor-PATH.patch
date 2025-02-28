@@ -1,0 +1,31 @@
+diff --git a/Documentation/git-send-email.txt b/Documentation/git-send-email.txt
+index 3db4eab4ba..39bc0e77c9 100644
+--- a/Documentation/git-send-email.txt
++++ b/Documentation/git-send-email.txt
+@@ -220,9 +220,9 @@ a password is obtained using 'git-credential'.
+ --smtp-server=<host>::
+ 	If set, specifies the outgoing SMTP server to use (e.g.
+ 	`smtp.example.com` or a raw IP address).  If unspecified, and if
+-	`--sendmail-cmd` is also unspecified, the default is to search
+-	for `sendmail` in `/usr/sbin`, `/usr/lib` and $PATH if such a
+-	program is available, falling back to `localhost` otherwise.
++	`--sendmail-cmd` is also unspecified, the default is to search for
++	`sendmail` in $PATH if such a program is available, falling back to
++	`localhost` otherwise.
+ +
+ For backward compatibility, this option can also specify a full pathname
+ of a sendmail-like program instead; the program must support the `-i`
+diff --git a/git-send-email.perl b/git-send-email.perl
+index e65d969d0b..508d49483d 100755
+--- a/git-send-email.perl
++++ b/git-send-email.perl
+@@ -1066,8 +1066,7 @@ sub expand_one_alias {
+ }
+ 
+ if (!defined $sendmail_cmd && !defined $smtp_server) {
+-	my @sendmail_paths = qw( /usr/sbin/sendmail /usr/lib/sendmail );
+-	push @sendmail_paths, map {"$_/sendmail"} split /:/, $ENV{PATH};
++	my @sendmail_paths = map {"$_/sendmail"} split /:/, $ENV{PATH};
+ 	foreach (@sendmail_paths) {
+ 		if (-x $_) {
+ 			$sendmail_cmd = $_;

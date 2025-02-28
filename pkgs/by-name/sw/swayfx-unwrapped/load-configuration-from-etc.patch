@@ -1,0 +1,48 @@
+From 92283df3acbffa5c1bb21f23cdd686113d905114 Mon Sep 17 00:00:00 2001
+From: Patrick Hilhorst <git@hilhorst.be>
+Date: Wed, 31 Mar 2021 21:14:13 +0200
+Subject: [PATCH] Load configs from /etc but fallback to /nix/store
+
+This change will load all configuration files from /etc, to make it easy
+to override them, but fallback to /nix/store/.../etc/sway/config to make
+Sway work out-of-the-box with the default configuration on non NixOS
+systems.
+
+Original patch by Michael Weiss, updated for Sway 1.6 by Patrick Hilhorst
+
+Co-authored-by: Michael Weiss <dev.primeos@gmail.com>
+---
+ meson.build   | 3 ++-
+ sway/config.c | 3 ++-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/meson.build b/meson.build
+index b7a29660..8ae8ceb3 100644
+--- a/meson.build
++++ b/meson.build
+@@ -164,7 +164,8 @@ if scdoc.found()
+ 	endforeach
+ endif
+ 
+-add_project_arguments('-DSYSCONFDIR="/@0@"'.format(join_paths(prefix, sysconfdir)), language : 'c')
++add_project_arguments('-DSYSCONFDIR="/@0@"'.format(sysconfdir), language : 'c')
++add_project_arguments('-DNIX_SYSCONFDIR="/@0@"'.format(join_paths(prefix, sysconfdir)), language : 'c')
+ 
+ version = '"@0@"'.format(meson.project_version())
+ git = find_program('git', native: true, required: false)
+diff --git a/sway/config.c b/sway/config.c
+index 76b9ec08..fb5b51aa 100644
+--- a/sway/config.c
++++ b/sway/config.c
+@@ -374,7 +374,8 @@ static char *get_config_path(void) {
+ 		{ .prefix = home, .config_folder = ".i3"},
+ 		{ .prefix = config_home, .config_folder = "i3"},
+ 		{ .prefix = SYSCONFDIR, .config_folder = "sway"},
+-		{ .prefix = SYSCONFDIR, .config_folder = "i3"}
++		{ .prefix = SYSCONFDIR, .config_folder = "i3"},
++		{ .prefix = NIX_SYSCONFDIR, .config_folder = "sway"},
+ 	};
+ 
+ 	size_t num_config_paths = sizeof(config_paths)/sizeof(config_paths[0]);
+-- 
+2.30.1

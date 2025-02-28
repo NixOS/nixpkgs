@@ -1,0 +1,32 @@
+diff --git a/vrc-get-gui/app/fonts.ts b/vrc-get-gui/app/fonts.ts
+index 855de943..3fd6a0b6 100644
+--- a/vrc-get-gui/app/fonts.ts
++++ b/vrc-get-gui/app/fonts.ts
+@@ -1,5 +1,3 @@
+-import {Noto_Sans_Mono} from "next/font/google";
++import localFont from "next/font/local";
+ 
+-export const notoSansMono = Noto_Sans_Mono({
+-	subsets: ["latin"]
+-});
++export const notoSansMono = localFont({ src: './fonts/noto-sans.ttf' })
+diff --git a/vrc-get-gui/app/layout.tsx b/vrc-get-gui/app/layout.tsx
+index f38ab32d..723101b7 100644
+--- a/vrc-get-gui/app/layout.tsx
++++ b/vrc-get-gui/app/layout.tsx
+@@ -1,13 +1,11 @@
+ import type {Metadata} from "next";
+-import {Noto_Sans_JP} from "next/font/google";
++import localFont from "next/font/local";
+ import "./globals.css";
+ import 'react-toastify/dist/ReactToastify.css';
+ import {SideBar} from "@/components/SideBar";
+ import {Providers} from "@/components/providers";
+ 
+-const notoSansJP = Noto_Sans_JP({
+-	subsets: ["latin"],
+-});
++const notoSansJP = localFont({ src: "./fonts/noto-sans-jp.ttf", });
+ 
+ export const metadata: Metadata = {
+ 	title: "Create Next App",

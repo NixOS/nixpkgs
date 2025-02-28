@@ -1,0 +1,19 @@
+diff --git a/src/installation.ml b/src/installation.ml
+index 3c64e395..be7d6e7b 100644
+--- a/src/installation.ml
++++ b/src/installation.ml
+@@ -39,13 +39,4 @@ let rec normalize fn =
+    and hope that it is of the form [.../bin/menhir]. We change this to
+    [.../lib/menhirLib], and hope that this is where MenhirLib is installed. *)
+ 
+-let libdir () =
+-  let root =
+-    Sys.executable_name
+-    |> normalize
+-    |> Filename.dirname (* remove [menhir] *)
+-    |> Filename.dirname (* remove [bin] *)
+-  in
+-  Filename.concat
+-    root
+-    (Filename.concat "lib" "menhirLib")
++let libdir () = ignore normalize; "@libdir@"

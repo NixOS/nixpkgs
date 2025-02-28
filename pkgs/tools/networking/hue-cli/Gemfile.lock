@@ -1,0 +1,18 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    hue-cli (0.1.4)
+      hue-lib (>= 0.7.4)
+      json
+    hue-lib (0.7.4)
+      json
+    json (2.2.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  hue-cli
+
+BUNDLED WITH
+   2.1.4

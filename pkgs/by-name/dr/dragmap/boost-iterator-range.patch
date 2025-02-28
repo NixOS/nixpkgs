@@ -1,0 +1,12 @@
+diff --git a/src/lib/map/Mapper.cpp b/src/lib/map/Mapper.cpp
+index 6eaa2c5..781988c 100644
+--- a/src/lib/map/Mapper.cpp
++++ b/src/lib/map/Mapper.cpp
+@@ -22,6 +22,7 @@
+ //#include "common/Crc32Hw.hpp"
+ #include "common/DragenLogger.hpp"
+ #include "map/Mapper.hpp"
++#include <boost/range/iterator_range.hpp>
+ 
+ namespace dragenos {
+ namespace map {

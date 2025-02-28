@@ -1,0 +1,14 @@
+diff --git a/build.xml b/build.xml
+index fcc4931..2afeb6c 100644
+--- a/build.xml
++++ b/build.xml
+@@ -345,6 +345,9 @@
+             <entry key="HDF5_VERSION" value="${hdf5.version}"/>
+             <entry key="HDFVIEW_VERSION" value="${app.version}"/>
+         </propertyfile>
++        <exec executable="sed" failonerror="true">
++            <arg line="-i /#/d ${classes.dir}/hdf/versions.properties" />
++        </exec>
+     </target>
+ 
+     <target name="compile" depends="clean, create-property-file, compileobj, compilehdf4, compilefits, compilenc2, compilehdf5">

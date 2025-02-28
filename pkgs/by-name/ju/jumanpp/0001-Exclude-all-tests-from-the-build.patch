@@ -1,0 +1,177 @@
+From c52a5046e19718a43d48c9b3cfdc121d964e8c3b Mon Sep 17 00:00:00 2001
+From: Maximilian Bosch <maximilian@mbosch.me>
+Date: Fri, 28 Jan 2022 17:43:35 +0100
+Subject: [PATCH] Exclude all tests from the build
+
+For some reason it isn't sufficient to set `-DJPP_ENABLE_TESTS=OFF`.
+Doing that because the tests on 2.0.0-rc3 don't seem to be working and
+the vendored catch2 doesn't build with glibc 2.34.
+---
+ src/CMakeLists.txt               |  3 +--
+ src/core/CMakeLists.txt          | 11 +----------
+ src/core/analysis/CMakeLists.txt |  2 --
+ src/core/codegen/CMakeLists.txt  |  3 ---
+ src/core/spec/CMakeLists.txt     |  2 --
+ src/core/training/CMakeLists.txt |  2 --
+ src/jumandic/CMakeLists.txt      |  8 +-------
+ src/rnn/CMakeLists.txt           |  5 +----
+ src/util/CMakeLists.txt          |  2 --
+ 9 files changed, 4 insertions(+), 34 deletions(-)
+
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index 169dff5..64b6a07 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -67,7 +67,6 @@ function(jpp_feature_codegen)
+ endfunction(jpp_feature_codegen)
+ 
+ add_subdirectory(util)
+-add_subdirectory(testing)
+ add_subdirectory(core)
+ add_subdirectory(jumandic)
+-add_subdirectory(rnn)
+\ No newline at end of file
++add_subdirectory(rnn)
+diff --git a/src/core/CMakeLists.txt b/src/core/CMakeLists.txt
+index c63d134..01c825e 100644
+--- a/src/core/CMakeLists.txt
++++ b/src/core/CMakeLists.txt
+@@ -55,20 +55,11 @@ set(core_hdrs
+   ${core_hdrs}
+   )
+ 
+-set(core_test_srcs
+-  ${core_test_srcs}
+-  ${core_tsrcs}
+-  test/test_analyzer_env.h
+-  ../testing/test_analyzer.h
+-  )
+-
+ add_library(jpp_core ${core_srcs} ${core_hdrs} ${libs3p_pegtl_headers})
+-jpp_test_executable(jpp_core_tests ${core_test_srcs})
+ 
+ target_include_directories(jpp_core PUBLIC ${jpp_core_cfg_dir})
+ 
+ target_link_libraries(jpp_core PUBLIC jpp_util jpp_rnn PRIVATE pathie)
+-target_link_libraries(jpp_core_tests jpp_core jpp_core_train)
+ 
+ if (${JPP_USE_PROTOBUF})
+   target_include_directories(jpp_core PUBLIC ${Protobuf_INCLUDE_DIR} ${CMAKE_CURRENT_BINARY_DIR})
+@@ -78,4 +69,4 @@ endif()
+ add_subdirectory(benchmarks)
+ if (${JPP_ENABLE_DEV_TOOLS})
+   add_subdirectory(devtools)
+-endif ()
+\ No newline at end of file
++endif ()
+diff --git a/src/core/analysis/CMakeLists.txt b/src/core/analysis/CMakeLists.txt
+index 526263e..1b32f8d 100644
+--- a/src/core/analysis/CMakeLists.txt
++++ b/src/core/analysis/CMakeLists.txt
+@@ -79,5 +79,3 @@ jpp_core_files(core_hdrs
+   )
+ 
+ 
+-jpp_test_executable(jpp_core_analysis_tests ${core_analysis_tsrc})
+-target_link_libraries(jpp_core_analysis_tests jpp_core)
+diff --git a/src/core/codegen/CMakeLists.txt b/src/core/codegen/CMakeLists.txt
+index a905cee..fa759c7 100644
+--- a/src/core/codegen/CMakeLists.txt
++++ b/src/core/codegen/CMakeLists.txt
+@@ -30,7 +30,4 @@ set(jpp_codegen_tsrcs
+ 
+ add_library(jpp_core_codegen ${jpp_codegen_srcs} ${jpp_codegen_hdrs})
+ 
+-jpp_test_executable(jpp_codegen_tests ${jpp_codegen_tsrcs})
+-target_include_directories(jpp_codegen_tests PRIVATE ${cgtest02_INCLUDE})
+ target_link_libraries(jpp_core_codegen jpp_core)
+-target_link_libraries(jpp_codegen_tests jpp_core_codegen)
+\ No newline at end of file
+diff --git a/src/core/spec/CMakeLists.txt b/src/core/spec/CMakeLists.txt
+index f495d67..da827b9 100644
+--- a/src/core/spec/CMakeLists.txt
++++ b/src/core/spec/CMakeLists.txt
+@@ -33,5 +33,3 @@ jpp_core_files(core_hdrs
+ 
+   )
+ 
+-jpp_test_executable(jpp_core_spec_tests ${core_spec_tsrc} ${libs3p_pegtl_headers})
+-target_link_libraries(jpp_core_spec_tests jpp_core)
+\ No newline at end of file
+diff --git a/src/core/training/CMakeLists.txt b/src/core/training/CMakeLists.txt
+index 960437e..4ede9e1 100644
+--- a/src/core/training/CMakeLists.txt
++++ b/src/core/training/CMakeLists.txt
+@@ -39,7 +39,5 @@ set(core_train_hdrs
+ 
+ 
+ add_library(jpp_core_train ${core_train_src} ${core_train_hdrs})
+-jpp_test_executable(jpp_core_train_tests ${core_train_tsrc})
+ 
+ target_link_libraries(jpp_core_train jpp_core)
+-target_link_libraries(jpp_core_train_tests jpp_core_train)
+\ No newline at end of file
+diff --git a/src/jumandic/CMakeLists.txt b/src/jumandic/CMakeLists.txt
+index bef3149..85a8b5d 100644
+--- a/src/jumandic/CMakeLists.txt
++++ b/src/jumandic/CMakeLists.txt
+@@ -53,10 +53,6 @@ if (${JPP_USE_PROTOBUF})
+ endif ()
+ 
+ 
+-jpp_test_executable(jpp_jumandic_tests ${jumandic_tests})
+-jpp_test_executable(jpp_bug_tests ${bug_test_sources})
+-target_include_directories(jpp_jumandic_tests PRIVATE ${jpp_jumandic_cg_INCLUDE})
+-
+ add_executable(jpp_jumandic_bootstrap main/bootstrap.cc)
+ add_executable(jumanpp_v2 main/jumanpp.cc)
+ add_executable(jumanpp_v2_train main/jumanpp_train.cc main/jumanpp_train.h)
+@@ -64,11 +60,9 @@ add_executable(jpp_jumandic_pathdiff main/path_diff.cc)
+ target_include_directories(jpp_jumandic_pathdiff PRIVATE ${jpp_jumandic_cg_INCLUDE})
+ 
+ target_link_libraries(jpp_jumandic jpp_jumandic_spec)
+-target_link_libraries(jpp_jumandic_tests jpp_jumandic jpp_core_train)
+-target_link_libraries(jpp_bug_tests jpp_jumandic jpp_core_train)
+ target_link_libraries(jpp_jumandic_bootstrap jpp_jumandic)
+ target_link_libraries(jumanpp_v2 jpp_jumandic)
+ target_link_libraries(jumanpp_v2_train jpp_jumandic jpp_core_train)
+ target_link_libraries(jpp_jumandic_pathdiff jpp_jumandic)
+ 
+-install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/jumanpp_v2 RENAME jumanpp DESTINATION bin)
+\ No newline at end of file
++install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/jumanpp_v2 RENAME jumanpp DESTINATION bin)
+diff --git a/src/rnn/CMakeLists.txt b/src/rnn/CMakeLists.txt
+index 448ba51..ca09a00 100644
+--- a/src/rnn/CMakeLists.txt
++++ b/src/rnn/CMakeLists.txt
+@@ -1,12 +1,9 @@
+ set(jpp_rnn_sources mikolov_rnn.cc)
+ set(jpp_rnn_includes mikolov_rnn.h simple_rnn_impl.h mikolov_rnn_impl.h rnn_arg_parse.h)
+-set(jpp_rnn_tests mikolov_rnn_test.cc)
+ 
+ add_library(jpp_rnn ${jpp_rnn_sources} ${jpp_rnn_includes} )
+ add_library(jumanpp_rnn_legacy legacy/rnnlmlib.h legacy/rnnlmlib_static.h legacy/rnnlmlib_static.cpp)
+ 
+-jpp_test_executable(jpp_rnn_tests ${jpp_rnn_tests})
+ target_link_libraries(jpp_rnn jpp_util)
+-target_link_libraries(jpp_rnn_tests jpp_rnn jumanpp_rnn_legacy)
+ 
+-target_link_libraries(jumanpp_rnn_legacy jpp_util)
+\ No newline at end of file
++target_link_libraries(jumanpp_rnn_legacy jpp_util)
+diff --git a/src/util/CMakeLists.txt b/src/util/CMakeLists.txt
+index 53b6c57..c4599d5 100644
+--- a/src/util/CMakeLists.txt
++++ b/src/util/CMakeLists.txt
+@@ -25,8 +25,6 @@ endif()
+ 
+ 
+ add_library(jpp_util ${jpp_util_sources} ${jpp_util_headers} ${BACKWARD_headers})
+-jpp_test_executable(jpp_util_test ${jpp_util_test_srcs} ${jpp_util_headers})
+-target_link_libraries(jpp_util_test jpp_util)
+ target_link_libraries(jpp_util ${CMAKE_THREAD_LIBS_INIT})
+ target_include_directories(jpp_util PUBLIC ${JPP_LIBS_DIR} ${JPP_SRC_DIR})
+ target_compile_features(jpp_util PUBLIC
+-- 
+2.33.1
+

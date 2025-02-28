@@ -1,0 +1,69 @@
+diff --git a/CMake/Modules/Findhamlib.cmake b/CMake/Modules/Findhamlib.cmake
+index 1590f05..e797851 100644
+--- a/CMake/Modules/Findhamlib.cmake
++++ b/CMake/Modules/Findhamlib.cmake
+@@ -47,7 +47,7 @@ if (NOT PC_HAMLIB_FOUND)
+ 
+   # libusb-1.0 has no pkg-config file on Windows so we have to find it
+   # ourselves
+-  find_library (LIBUSB NAMES usb-1.0 PATH_SUFFIXES MinGW32/dll)
++  find_library (LIBUSB NAMES libusb-1.0 usb-1.0 PATH_SUFFIXES MinGW32/dll)
+   if (LIBUSB)
+     set (hamlib_EXTRA_LIBRARIES ${LIBUSB} ${hamlib_EXTRA_LIBRARIES})
+     get_filename_component (hamlib_libusb_path ${LIBUSB} PATH)
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 75b80b3..7c04265 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -558,7 +558,6 @@ find_package (FFTW3 COMPONENTS double single threads REQUIRED)
+ #
+ # libhamlib setup
+ #
+-set (hamlib_STATIC 1)
+ find_package (hamlib 3 REQUIRED)
+ find_program (RIGCTL_EXE rigctl)
+ find_program (RIGCTLD_EXE rigctld)
+@@ -576,6 +576,7 @@ message (STATUS "hamlib_LIBRARY_DIRS: ${hamlib_LIBRARY_DIRS}")
+ find_package (Qt5Widgets 5 REQUIRED)
+ find_package (Qt5Multimedia 5 REQUIRED)
+ find_package (Qt5PrintSupport 5 REQUIRED)
++find_package (Qt5SerialPort 5 REQUIRED)
+ 
+ if (WIN32)
+   add_definitions (-DQT_NEEDS_QTMAIN)
+@@ -849,7 +850,7 @@ target_link_libraries (qcp Qt5::Widgets Qt5::PrintSupport)
+ add_library (wsjt_qt STATIC ${wsjt_qt_CXXSRCS} ${wsjt_qt_GENUISRCS} ${GENAXSRCS})
+ # set wsjtx_udp exports to static variants
+ target_compile_definitions (wsjt_qt PUBLIC UDP_STATIC_DEFINE)
+-target_link_libraries (wsjt_qt qcp Qt5::Widgets Qt5::Network)
++target_link_libraries (wsjt_qt qcp Qt5::Widgets Qt5::Network Qt5::SerialPort)
+ target_include_directories (wsjt_qt BEFORE PRIVATE ${hamlib_INCLUDE_DIRS})
+ if (WIN32)
+   target_link_libraries (wsjt_qt Qt5::AxContainer Qt5::AxBase)
+@@ -959,7 +960,6 @@ else ()
+       )
+   endif ()
+ endif ()
+-qt5_use_modules (js8call SerialPort) # not sure why the interface link library syntax above doesn't work
+ 
+ # if (UNIX)
+ #   if (NOT WSJT_SKIP_MANPAGES)
+@@ -1292,3 +1292,5 @@ configure_file ("${PROJECT_SOURCE_DIR}/CMakeCPackOptions.cmake.in"
+ set (CPACK_PROJECT_CONFIG_FILE "${PROJECT_BINARY_DIR}/CMakeCPackOptions.cmake")
+ 
+ include (CPack)
++
++add_definitions (-DJS8_USE_HAMLIB_THREE)
+diff --git a/Configuration.cpp b/Configuration.cpp
+index 8258f97..63a29bb 100644
+--- a/Configuration.cpp
++++ b/Configuration.cpp
+@@ -160,7 +160,7 @@
+ #include <QFont>
+ #include <QFontDialog>
+ #include <QColorDialog>
+-#include <QSerialPortInfo>
++#include <QtSerialPort/QSerialPortInfo>
+ #include <QScopedPointer>
+ #include <QDateTimeEdit>
+ #include <QProcess>

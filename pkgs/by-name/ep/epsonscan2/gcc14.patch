@@ -1,0 +1,37 @@
+diff --git a/thirdparty/zlib/gzlib.c b/thirdparty/zlib/gzlib.c
+index 4105e6a..eae3a38 100644
+--- a/thirdparty/zlib/gzlib.c
++++ b/thirdparty/zlib/gzlib.c
+@@ -3,6 +3,7 @@
+  * For conditions of distribution and use, see copyright notice in zlib.h
+  */
+ 
++#include <unistd.h>
+ #include "gzguts.h"
+ 
+ #if defined(_WIN32) && !defined(__BORLANDC__) && !defined(__MINGW32__)
+diff --git a/thirdparty/zlib/gzread.c b/thirdparty/zlib/gzread.c
+index 956b91e..66089b6 100644
+--- a/thirdparty/zlib/gzread.c
++++ b/thirdparty/zlib/gzread.c
+@@ -3,6 +3,7 @@
+  * For conditions of distribution and use, see copyright notice in zlib.h
+  */
+ 
++#include <unistd.h>
+ #include "gzguts.h"
+ 
+ /* Local functions */
+diff --git a/thirdparty/zlib/gzwrite.c b/thirdparty/zlib/gzwrite.c
+index c7b5651..e685f3e 100644
+--- a/thirdparty/zlib/gzwrite.c
++++ b/thirdparty/zlib/gzwrite.c
+@@ -3,6 +3,7 @@
+  * For conditions of distribution and use, see copyright notice in zlib.h
+  */
+ 
++#include <unistd.h>
+ #include "gzguts.h"
+ 
+ /* Local functions */
+ 

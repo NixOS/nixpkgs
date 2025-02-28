@@ -1,0 +1,12 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 276ae4e2..db13e6e3 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1507,7 +1507,6 @@ if (LINALG STREQUAL "OpenBLAS")
+     NAMES openblas
+     PATHS ${OPENBLASROOT}
+     PATH_SUFFIXES lib
+-    NO_DEFAULT_PATH
+   )
+ 
+   if (NOT LIBOPENBLAS)

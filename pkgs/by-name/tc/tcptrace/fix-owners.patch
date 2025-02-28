@@ -1,0 +1,16 @@
+Index: tcptrace-6.6.1/Makefile.in
+===================================================================
+--- tcptrace-6.6.1.orig/Makefile.in
+--- tcptrace-6.6.1/Makefile.in
+@@ -286,9 +286,9 @@
+ # just a quick installation rule
+ INSTALL = ./install-sh -c
+ install: tcptrace install-man
+-	$(INSTALL) -m 755 -o bin -g bin tcptrace ${BINDIR}/tcptrace
++	$(INSTALL) -m 755 tcptrace ${BINDIR}/tcptrace
+ install-man: 
+-	$(INSTALL) -m 444 -o bin -g bin tcptrace.man $(MANDIR)/man1/tcptrace.1
++	$(INSTALL) -m 444 tcptrace.man $(MANDIR)/man1/tcptrace.1
+ 
+ 
+ 

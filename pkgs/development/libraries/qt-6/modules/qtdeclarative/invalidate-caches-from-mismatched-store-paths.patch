@@ -1,0 +1,112 @@
+diff --git a/src/qml/common/qv4compileddata.cpp b/src/qml/common/qv4compileddata.cpp
+index 9dee91f713..9dec5cae67 100644
+--- a/src/qml/common/qv4compileddata.cpp
++++ b/src/qml/common/qv4compileddata.cpp
+@@ -15,6 +15,8 @@
+ #include <QtCore/qscopeguard.h>
+ #include <QtCore/qstandardpaths.h>
+ 
++#include <QtCore/qcoreapplication.h>
++
+ static_assert(QV4::CompiledData::QmlCompileHashSpace > QML_COMPILE_HASH_LENGTH);
+ 
+ #if defined(QML_COMPILE_HASH) && defined(QML_COMPILE_HASH_LENGTH) && QML_COMPILE_HASH_LENGTH > 0
+@@ -26,6 +28,35 @@ __attribute__((section(".qml_compile_hash")))
+ const char qml_compile_hash[QV4::CompiledData::QmlCompileHashSpace] = QML_COMPILE_HASH;
+ static_assert(sizeof(QV4::CompiledData::Unit::libraryVersionHash) > QML_COMPILE_HASH_LENGTH,
+               "Compile hash length exceeds reserved size in data structure. Please adjust and bump the format version");
++
++bool nix__isNixApplication() {
++    static const bool value = QCoreApplication::applicationFilePath().startsWith(QStringLiteral("@nixStore@"));
++    return value;
++}
++
++static_assert(sizeof(QV4::CompiledData::Unit::libraryVersionHash) >
++                  /*sha1*/ 20 + /*NIX:*/ 4,
++              "Nix compile hash length exceeds the reserved space in data "
++              "structure. Please review the patch.");
++
++const QByteArray &nix__applicationHash() {
++    static const QByteArray value = [](){
++        QCryptographicHash applicationHash(QCryptographicHash::Sha1);
++        applicationHash.addData(QByteArrayView(qml_compile_hash, QML_COMPILE_HASH_LENGTH));
++
++        // We only care about the package, not the specific file path.
++        auto view = QCoreApplication::applicationFilePath().sliced(@nixStoreLength@);
++        auto pkgEndIdx = view.indexOf(QStringLiteral("/"));
++        if (pkgEndIdx != -1) view = view.sliced(0, pkgEndIdx);
++
++        applicationHash.addData(view.toUtf8());
++
++        return QByteArray("NIX:") + applicationHash.result();
++    }();
++
++    return value;
++}
++
+ #else
+ #  error "QML_COMPILE_HASH must be defined for the build of QtDeclarative to ensure version checking for cache files"
+ #endif
+@@ -69,13 +100,29 @@ bool Unit::verifyHeader(QDateTime expectedSourceTimeStamp, QString *errorString)
+     }
+ 
+ #if defined(QML_COMPILE_HASH) && defined(QML_COMPILE_HASH_LENGTH) && QML_COMPILE_HASH_LENGTH > 0
+-    if (qstrncmp(qml_compile_hash, libraryVersionHash, QML_COMPILE_HASH_LENGTH) != 0) {
++    const bool nixUnit = qstrncmp("NIX:", this->libraryVersionHash, 4) == 0;
++
++    if (nixUnit && !nix__isNixApplication()) {
++        *errorString = QStringLiteral("QML compile hash is for a nix store application.");
++        return false;
++    }
++
++    const char *targetHash = qml_compile_hash;
++    size_t targetHashLength = QML_COMPILE_HASH_LENGTH;
++
++    if (nixUnit) {
++        const auto &applicationHash = nix__applicationHash();
++        targetHash = applicationHash.constData();
++        targetHashLength = applicationHash.length();
++    }
++
++    if (qstrncmp(targetHash, this->libraryVersionHash, targetHashLength) != 0) {
+         *errorString = QStringLiteral("QML compile hashes don't match. Found %1 expected %2")
+                                .arg(QString::fromLatin1(
+-                                            QByteArray(libraryVersionHash, QML_COMPILE_HASH_LENGTH)
++                                            QByteArray(this->libraryVersionHash, targetHashLength)
+                                                     .toPercentEncoding()),
+                                     QString::fromLatin1(
+-                                            QByteArray(qml_compile_hash, QML_COMPILE_HASH_LENGTH)
++                                            QByteArray(targetHash, targetHashLength)
+                                                     .toPercentEncoding()));
+         return false;
+     }
+@@ -213,6 +260,29 @@ bool CompilationUnit::saveToDisk(const QUrl &unitUrl, QString *errorString)
+         return false;
+     }
+ 
++#if defined(QML_COMPILE_HASH) && defined(QML_COMPILE_HASH_LENGTH) && QML_COMPILE_HASH_LENGTH > 0
++    if (nix__isNixApplication() && unitUrl.scheme() == QStringLiteral("qrc")) {
++        // If the application is running from the nix store, we can safely save
++        // bytecode for its embedded QML files as long as we hash the
++        // application path into the version. This will invalidate the caches
++        // when the store path changes.
++        const auto &applicationHash = nix__applicationHash();
++
++        memcpy(const_cast<char *>(unitData()->libraryVersionHash),
++               applicationHash.constData(), applicationHash.length());
++    } else if (unitUrl.path().startsWith(QStringLiteral("@nixStore@"))) {
++        // We don't store bytecode for bare QML files in the nix store as the
++        // paths will change every time the application updates, filling caches
++        // endlessly with junk.
++        *errorString = QStringLiteral("Refusing to save bytecode for bare @nixStore@ path.");
++        return false;
++    } else {
++        // If the QML file is loaded from a normal file path it doesn't matter
++        // if the application itself is running from a nix path, so we fall back
++        // to the default Qt behavior.
++    }
++#endif
++
+     return SaveableUnitPointer(unitData()).saveToDisk<char>(
+             [&unitUrl, errorString](const char *data, quint32 size) {
+                 const QString cachePath = localCacheFilePath(unitUrl);
