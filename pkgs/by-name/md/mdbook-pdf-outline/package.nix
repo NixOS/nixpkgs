@@ -5,13 +5,13 @@
 }:
 
 python3Packages.buildPythonApplication rec {
-  pname = "mdbook-pdf-outline";
-  version = "0.1.4";
+  pname = "mdbook_pdf_outline";
+  version = "0.1.5";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-STi+54iT+5+Xi0IzGXv2dxVS91+T6fjg3xmbJjekpPE=";
+    hash = "sha256-/Vdcr3jafUccqqLy1UX1GJXu/YELVDBSSXBxoEwYf7w=";
   };
 
   nativeBuildInputs = [
