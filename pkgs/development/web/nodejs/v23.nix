@@ -14,8 +14,8 @@ let
 in
 buildNodejs {
   inherit enableNpm;
-  version = "23.8.0";
-  sha256 = "6ec5d54d0e8423fc5986f6efa4f661e8370659818b14f458cdc9d1b9f75d3b88";
+  version = "23.9.0";
+  sha256 = "c6b420bedbb049a6538c33af28abaf89011ccc879f0f0f81791675263c238f97";
   patches = [
     ./configure-emulator.patch
     ./configure-armv6-vfpv2.patch
@@ -77,6 +77,12 @@ buildNodejs {
       url = "https://github.com/nodejs/node/commit/7ba05b8065d38ab7d16f217045e0557661e00d4a.patch?full_index=1";
       hash = "sha256-BaEwd1WHHNZXn6GK/UlyVMn1CnTyjYD8OYzldwrakSk=";
       revert = true;
+    })
+    (fetchpatch2 {
+      url = "https://github.com/nodejs/node/commit/e027791c6d09c1c5e6640d2944ee3a9ac3fe246c.patch?full_index=1";
+      hash = "sha256-sqvIa1rTfpIKD9kattiyGts83qB+L6Bx1Wt4wbPmb7o=";
+      revert = true;
+      excludes = [ "doc/*" ];
     })
     # test-icu-env is failing without the reverts
     (fetchpatch2 {
