@@ -31,6 +31,6 @@ buildGoModule rec {
 
   passthru.tests = {
     lego-http = nixosTests.acme.http01-builtin;
-    lego-dns = nixosTests.acme.dns01-builtin;
+    lego-dns = nixosTests.acme.dns01;
   };
 }
