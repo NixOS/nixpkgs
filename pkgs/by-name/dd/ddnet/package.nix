@@ -32,13 +32,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ddnet";
-  version = "18.9";
+  version = "19.0";
 
   src = fetchFromGitHub {
     owner = "ddnet";
-    repo = pname;
-    rev = version;
-    hash = "sha256-aJzNfo7K5OOo14XJRmDOYzXFF5fZK0aXgIfVvjvzjrU=";
+    repo = "ddnet";
+    tag = version;
+    hash = "sha256-R9LXcYM96fibHzpXDWIOSASKIbh+GeiGyz7xVvV2v1Q=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
@@ -116,7 +116,7 @@ stdenv.mkDerivation rec {
     install_name_tool -change "$out/lib/libsteam_api.dylib" "$out/lib/ddnet/libsteam_api.dylib" "$out/bin/DDNet"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Teeworlds modification with a unique cooperative gameplay";
     longDescription = ''
       DDraceNetwork (DDNet) is an actively maintained version of DDRace,
@@ -126,11 +126,16 @@ stdenv.mkDerivation rec {
       design your own maps, or run your own server.
     '';
     homepage = "https://ddnet.org";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
-      sirseruju
+    license = with lib.licenses; [
+      zlib
+      ofl
+      cc-by-sa-30
+    ];
+    maintainers = with lib.maintainers; [
       lom
       ncfavier
+      Scrumplex
+      sirseruju
     ];
     mainProgram = "DDNet";
   };
