@@ -268,6 +268,7 @@ let
           "--enable-debug"
           (lib.optionalString systemdSupport "--with-systemd")
           "--with-uuid=e2fs"
+          (withFeature perlSupport "perl")
         ]
         ++ lib.optionals lz4Enabled [ "--with-lz4" ]
         ++ lib.optionals zstdEnabled [ "--with-zstd" ]
@@ -279,7 +280,6 @@ let
         ++ lib.optionals (stdenv'.hostPlatform.isDarwin && atLeast "16" && olderThan "18") [
           "LDFLAGS_EX_BE=-Wl,-export_dynamic"
         ]
-        ++ lib.optionals (atLeast "17" && !perlSupport) [ "--without-perl" ]
         ++ lib.optionals ldapSupport [ "--with-ldap" ]
         ++ lib.optionals tclSupport [ "--with-tcl" ]
         ++ lib.optionals selinuxSupport [ "--with-selinux" ]
