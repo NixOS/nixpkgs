@@ -122,6 +122,8 @@ in {
     wal2json = super.callPackage ./wal2json.nix { };
 
     pgddl = super.callPackage ./pgddl.nix {};
+} // lib.optionalAttrs self.perlSupport {
+  plperl = super.callPackage ./plperl.nix { };
 } // lib.optionalAttrs self.pythonSupport {
   plpython3 = super.callPackage ./plpython3.nix { };
 } // lib.optionalAttrs config.allowAliases {
