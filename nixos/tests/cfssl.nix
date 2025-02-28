@@ -22,7 +22,7 @@ import ./make-test-python.nix (
           serviceConfig = {
             User = "cfssl";
             Type = "oneshot";
-            WorkingDirectory = config.services.cfssl.dataDir;
+            inherit (config.systemd.services.cfssl.serviceConfig) WorkingDirectory StateDirectory StateDirectoryMode;
           };
           script = with pkgs; ''
             ${cfssl}/bin/cfssl genkey -initca ${
