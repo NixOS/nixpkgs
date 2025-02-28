@@ -749,9 +749,9 @@
     },
     "MetaScope": {
       "name": "MetaScope",
-      "version": "1.5.4",
-      "sha256": "1f69bkm7qb027pl1c1w9vlvbcw0sxi0da5az21a8i8xrz42aab57",
-      "depends": ["BiocFileCache", "Biostrings", "Matrix", "MultiAssayExperiment", "Rbowtie2", "Rsamtools", "S4Vectors", "SummarizedExperiment", "data_table", "dplyr", "ggplot2", "magrittr", "readr", "rlang", "stringr", "tibble", "tidyr"]
+      "version": "1.6.0",
+      "sha256": "1f7w4dfv6sizpp97vjwm034ha4pcq93b3j0gg1l75s6ans8s89aw",
+      "depends": ["BiocFileCache", "Biostrings", "Matrix", "MultiAssayExperiment", "Rbowtie2", "Rsamtools", "S4Vectors", "SummarizedExperiment", "data_table", "dplyr", "ggplot2", "magrittr", "readr", "rlang", "stringr", "taxize", "tibble", "tidyr"]
     },
     "MethylAidData": {
       "name": "MethylAidData",
@@ -1139,8 +1139,8 @@
     },
     "STexampleData": {
       "name": "STexampleData",
-      "version": "1.14.0",
-      "sha256": "1n2cq1ia7vi7a2gma9mhwv34dwy0fyxmap5fycy3f8f2bnm373kw",
+      "version": "1.14.1",
+      "sha256": "14xdinp0ix55lgs0adcxwnjascrpx4s39kghrhbcpjl0ainrdhk3",
       "depends": ["ExperimentHub", "SingleCellExperiment", "SpatialExperiment"]
     },
     "SVM2CRMdata": {
@@ -1319,9 +1319,9 @@
     },
     "TumourMethData": {
       "name": "TumourMethData",
-      "version": "1.3.0",
-      "sha256": "01xbsi6x4bafkp0m5xi4l2w62067xnfqnlkaz59ng1hf2ld2p690",
-      "depends": ["ExperimentHub", "GenomicRanges", "HDF5Array", "R_utils", "SummarizedExperiment", "rhdf5"]
+      "version": "1.4.0",
+      "sha256": "14y58qa4khi4jdymilxrb6x57br1gjclw2q3n9mivjrj6z3r3nmw",
+      "depends": ["BSgenome_Hsapiens_UCSC_hg19", "ExperimentHub", "ExperimentHubData", "GenomicRanges", "HDF5Array", "R_utils", "SummarizedExperiment", "TCGAutils", "dplyr", "knitr", "methrix", "openxlsx", "readr", "rhdf5", "rmarkdown", "stringr", "tibble", "usethis", "xlsx"]
     },
     "VariantToolsData": {
       "name": "VariantToolsData",
@@ -1739,9 +1739,9 @@
     },
     "etec16s": {
       "name": "etec16s",
-      "version": "1.33.0",
-      "sha256": "1xbj8z68006riah51lpk0bh8hq240wl9n1inlss84yj6kn4y5m0w",
-      "depends": ["Biobase"]
+      "version": "1.34.0",
+      "sha256": "114jmrnjm2xpfzx1m10bn73fy1am209c70ws4jwfggrbavg6xp8j",
+      "depends": ["Biobase", "metagenomeSeq"]
     },
     "ewceData": {
       "name": "ewceData",
@@ -1817,8 +1817,8 @@
     },
     "gDRtestData": {
       "name": "gDRtestData",
-      "version": "1.4.0",
-      "sha256": "1qqk9x8i2g5284p60hxznl95b6sp80qksx4qq724ycmknayg3kxb",
+      "version": "1.4.1",
+      "sha256": "0ybp2zrkjivrfl62zz7jljs1inlnx3iybwazyh0rxb255r9cg9ns",
       "depends": ["checkmate", "data_table"]
     },
     "gageData": {
@@ -2117,9 +2117,9 @@
     },
     "msd16s": {
       "name": "msd16s",
-      "version": "1.25.0",
-      "sha256": "0lzcpwf9rhr8i80hn3dab0fpgx7qmy0q9l8j7fkrazq2paiiikj7",
-      "depends": ["Biobase"]
+      "version": "1.26.0",
+      "sha256": "0wg705d0232d4916d3b84q62pdrzmf8v3k9apyh4fsmg4pk2xw6p",
+      "depends": ["Biobase", "metagenomeSeq"]
     },
     "msdata": {
       "name": "msdata",
@@ -2207,8 +2207,8 @@
     },
     "pRolocdata": {
       "name": "pRolocdata",
-      "version": "1.44.0",
-      "sha256": "0dh5zgwr248gnlygja7ly66dyhh4b4xf72n9ycp0xa02xdl0mwi3",
+      "version": "1.44.1",
+      "sha256": "01n9p4a02lq96rhz97skzs79mvnki3vqyn3b4b89vhrp8idgmli0",
       "depends": ["Biobase", "MSnbase"]
     },
     "parathyroidSE": {
