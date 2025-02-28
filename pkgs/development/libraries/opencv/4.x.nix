@@ -211,7 +211,7 @@ let
       hash = "sha256-O+Yshk3N2Lkl6S9qWxWnoDmBngSms88IiCfwjPLMB78=";
     };
     name = "v0.1.2e.zip";
-    md5 = "";
+    md5 = "962ce79e0b95591f226431f7b5f152cd";
     dst = ".cache/ade";
   };
 
