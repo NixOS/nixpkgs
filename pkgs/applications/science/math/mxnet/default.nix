@@ -94,6 +94,6 @@ stdenv.mkDerivation rec {
     homepage = "https://mxnet.incubator.apache.org/";
     maintainers = with maintainers; [ abbradar ];
     license = licenses.asl20;
-    platforms = platforms.unix;
+    platforms = platforms.linux;
   };
 }
