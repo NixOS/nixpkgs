@@ -28,14 +28,14 @@
 
 stdenv.mkDerivation (self: {
   pname = "godot3";
-  version = "3.5.2";
+  version = "3.6";
   godotBuildDescription = "X11 tools";
 
   src = fetchFromGitHub {
     owner = "godotengine";
     repo = "godot";
     rev = "${self.version}-stable";
-    sha256 = "sha256-C+1J5N0ETL1qKust+2xP9uB4x9NwrMqIm8aFAivVYQw=";
+    sha256 = "sha256-4WQYO1BBDK9+eyblpI8qRgbBG4+qPRVZMjeAFAtot+0=";
   };
 
   nativeBuildInputs = [
@@ -84,7 +84,7 @@ stdenv.mkDerivation (self: {
   shouldBuildTools = true;
   godotBuildTarget = "release_debug";
 
-  shouldUseLinkTimeOptimization = self.godotBuildTarget == "release";
+  lto = if self.godotBuildTarget == "release" then "full" else "none";
 
   sconsFlags = [
     "arch=${stdenv.hostPlatform.linuxArch}"
@@ -92,7 +92,7 @@ stdenv.mkDerivation (self: {
     "tools=${lib.boolToString self.shouldBuildTools}"
     "target=${self.godotBuildTarget}"
     "bits=${toString stdenv.hostPlatform.parsed.cpu.bits}"
-    "use_lto=${lib.boolToString self.shouldUseLinkTimeOptimization}"
+    "lto=${self.lto}"
   ];
 
   shouldWrapBinary = self.shouldBuildTools;
