@@ -1,4 +1,4 @@
-{ lib, config, stdenv, stdenvNoCC, jq, lndir, runtimeShell, shellcheck-minimal }:
+{ lib, config, stdenv, stdenvNoCC, jq, lndir, unixtools, tmate, runtimeShell, shellcheck-minimal }:
 
 let
   inherit (lib)
@@ -649,6 +649,46 @@ rec {
     ln -s ${lib.getBin drv}/bin $out/bin
   '';
 
+  /*
+    Adds a hook to the nativeBuildInputs of a derivation which will provide an
+    SSH session via tmate to the build environment, for interactive
+    debugging
+
+    Example:
+
+    # Spawn a tmate session after the `buildPhase` of the `hello` derivation
+    addTmateBreakpoint (pkgs.hello.overrideAttrs { buildPhase = "exit 1;"; })
+  */
+  addTmateBreakpoint = let
+    tmateWrapper = writeShellScript "tmate" "${tmate}/bin/tmate -F";
+    flags = if stdenv.hostPlatform.isDarwin then "-qeF ./tmpfile" else "-qefc";
+    warningMessage = "addTmateBreakpoint in use, ignore the sha256 warning and do not leak these build logs, otherwise unauthorized ssh access to the build sandbox may occur";
+    hook = lib.warn warningMessage (makeSetupHook {} (writeTextFile {
+      name = "hook.sh";
+      text = ''
+        breakpointHookTmate() {
+          local red='\033[0;31m'
+          local no_color='\033[0m'
+
+          echo -e "''${red}build failed in ''${curPhase} with exit code ''${exitCode}''${no_color}"
+          echo -e "''${red}### WARNING ###''${no_color}"
+          echo -e "''${red}${warningMessage}''${no_color}"
+
+          printf "To attach using tmate:\n\n"
+          ${unixtools.script}/bin/script ${flags} "${tmateWrapper}"
+        }
+        failureHooks+=(breakpointHookTmate)
+      '';
+    }));
+  in drv: drv.overrideAttrs (old: {
+    name = "${drv.name}-addTmateBreakpoint-${builtins.unsafeDiscardStringContext (lib.substring 0 12 (baseNameOf drv.drvPath))}";
+    nativeBuildInputs = (old.nativeBuildInputs or []) ++ [
+      hook
+    ];
+    outputHash = "";
+    outputHashAlgo = "sha256";
+    outputHashMode = "recursive";
+  });
 
   # Docs in doc/build-helpers/special/makesetuphook.section.md
   # See https://nixos.org/manual/nixpkgs/unstable/#sec-pkgs.makeSetupHook
