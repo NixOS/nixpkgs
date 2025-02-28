@@ -46,7 +46,6 @@ let
 
   defaultPackageNames = [
     "perl"
-    "rsync"
     "strace"
   ];
   defaultPackages = map (
