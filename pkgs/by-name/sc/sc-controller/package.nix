@@ -1,35 +1,31 @@
 {
   lib,
-  buildPythonApplication,
+  python3Packages,
   fetchFromGitHub,
   wrapGAppsHook3,
-  pytestCheckHook,
   gtk3,
   gobject-introspection,
   libappindicator-gtk3,
   librsvg,
-  evdev,
-  pygobject3,
-  pylibacl,
   bluez,
-  vdf,
   linuxHeaders,
   libX11,
   libXext,
   libXfixes,
   libusb1,
   udev,
+  gtk-layer-shell,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "sc-controller";
-  version = "0.4.8.21";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "C0rn3j";
-    repo = pname;
+    repo = "sc-controller";
     tag = "v${version}";
-    hash = "sha256-XakbCuwjIAXYFZxvJsAlDIJEl09pwFPT12h04onXd34=";
+    hash = "sha256-Zxzka9zM9u7AJxrqh8011plP/HgQK61e6ejKksYfPz0=";
   };
 
   nativeBuildInputs = [
@@ -43,14 +39,27 @@ buildPythonApplication rec {
     librsvg
   ];
 
-  propagatedBuildInputs = [
-    evdev
-    pygobject3
-    pylibacl
-    vdf
+  dependencies =
+    with python3Packages;
+    [
+      evdev
+      pygobject3
+      pylibacl
+      vdf
+      ioctl-opt
+    ]
+    ++ [
+      gtk-layer-shell
+      python3Packages.libusb1
+    ];
+
+  nativeCheckInputs = [
+    python3Packages.pytestCheckHook
+    python3Packages.libusb1
+    python3Packages.toml
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  patches = [ ./scc_osd_keyboard.patch ];
 
   postPatch = ''
     substituteInPlace scc/paths.py --replace sys.prefix "'$out'"
@@ -80,13 +89,13 @@ buildPythonApplication rec {
     )
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/C0rn3j/sc-controller";
     # donations: https://www.patreon.com/kozec
     description = "User-mode driver and GUI for Steam Controller and other controllers";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       orivej
       rnhmjoj
     ];
