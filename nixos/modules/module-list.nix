@@ -274,6 +274,7 @@
   ./programs/oddjobd.nix
   ./programs/opengamepadui.nix
   ./programs/openvpn3.nix
+  ./programs/orca-slicer.nix
   ./programs/obs-studio.nix
   ./programs/partition-manager.nix
   ./programs/pay-respects.nix
