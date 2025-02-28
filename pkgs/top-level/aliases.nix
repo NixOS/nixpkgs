@@ -1666,6 +1666,7 @@ mapAliases {
   strelka = throw "strelka depends on Python 2.6+, and does not support Python 3."; # Added 2025-03-17
   sumneko-lua-language-server = lua-language-server; # Added 2023-02-07
   sumokoin = throw "sumokoin has been removed as it was abandoned upstream"; # Added 2024-11-23
+  supertag = throw "supertag has been removed as it was abandoned upstream and fails to build"; # Added 2025-04-20
   swiProlog = lib.warnOnInstantiate "swiProlog has been renamed to swi-prolog" swi-prolog; # Added 2024-09-07
   swiPrologWithGui = lib.warnOnInstantiate "swiPrologWithGui has been renamed to swi-prolog-gui" swi-prolog-gui; # Added 2024-09-07
   swig1 = throw "swig1 has been removed as it is obsolete"; # Added 2024-08-23
