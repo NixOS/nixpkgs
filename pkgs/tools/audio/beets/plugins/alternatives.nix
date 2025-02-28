@@ -8,14 +8,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "beets-alternatives";
-  version = "0.13.1";
+  version = "0.13.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     repo = "beets-alternatives";
     owner = "geigerzaehler";
     tag = "v${version}";
-    hash = "sha256-+LvQC7hYtbJeWJiDEKtSFZaEtnuXZ+4mI75rrX9Sd64=";
+    hash = "sha256-OoQsP+QVIOnSA4oy1a8JJ3VeCUS+GR8sPPOysvmRMqI=";
   };
 
   nativeBuildInputs = [
@@ -32,17 +32,12 @@ python3Packages.buildPythonApplication rec {
       pytestCheckHook
       pytest-cov-stub
       mock
+      pillow
       typeguard
     ]
     ++ [
       writableTmpDirAsHomeHook
     ];
-
-  disabledTests = [
-    # ValueError: too many values to unpack (expected 2)
-    # https://github.com/geigerzaehler/beets-alternatives/issues/122
-    "test_embed_art"
-  ];
 
   meta = {
     description = "Beets plugin to manage external files";
