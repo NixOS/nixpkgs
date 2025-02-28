@@ -35,7 +35,7 @@ let
       docbook_xml_dtd_45,
       flex,
       libxslt,
-      makeWrapper,
+      makeBinaryWrapper,
       pkg-config,
       removeReferencesTo,
 
@@ -228,7 +228,7 @@ let
           flex
           libxml2
           libxslt
-          makeWrapper
+          makeBinaryWrapper
           perl
           pkg-config
           removeReferencesTo
