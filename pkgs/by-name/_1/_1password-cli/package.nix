@@ -45,15 +45,16 @@ stdenv.mkDerivation {
     else
       throw "Source for ${pname} is not available for ${system}";
 
-  nativeBuildInputs = [
-    installShellFiles
-    versionCheckHook
-  ] ++ lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook;
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    xar
-    cpio
-  ];
+  nativeBuildInputs =
+    [
+      installShellFiles
+      versionCheckHook
+    ]
+    ++ lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook
+    ++ lib.optional stdenv.hostPlatform.isDarwin [
+      xar
+      cpio
+    ];
 
   unpackPhase = lib.optionalString stdenv.hostPlatform.isDarwin ''
     xar -xf $src
