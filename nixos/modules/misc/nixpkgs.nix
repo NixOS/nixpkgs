@@ -176,7 +176,7 @@ in
           })
         ]
       '';
-      type = lib.types.listOf lib.types.overlayType;
+      type = lib.types.listOf lib.types.extensionFunction;
       description = ''
         List of overlays to apply to Nixpkgs.
         This option allows modifying the Nixpkgs package set accessed through the `pkgs` module argument.

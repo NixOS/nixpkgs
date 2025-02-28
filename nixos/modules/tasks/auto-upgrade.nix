@@ -8,12 +8,11 @@
 let
   cfg = config.system.autoUpgrade;
   nixpkgs-cfg = config.nixpkgs;
-  nixos-rebuild = "${config.system.build.nixos-rebuild}/bin/nixos-rebuild";
+  nixos-rebuild = lib.getExe config.system.build.nixos-rebuild;
   upgradeFlag = if cfg.upgradeAll then "--upgrade-all" else "--upgrade";
   upgradeScript =
     flags:
-    pkgs.writeScript "upgrade-channels" ''
-      #!/bin/sh
+    pkgs.writeShellScript "upgrade-channels" ''
       set -euo pipefail
 
       # Upgrade the channels if required, without spending any time building
@@ -25,8 +24,7 @@ let
       ''}
     '';
   desyncFile = desyncId: "/var/lib/nixos/desyncs/${lib.strings.escapeShellArg desyncId}.nix";
-  upgradeDesyncsPkg = pkgs.writeScriptBin "nixos-upgrade-desyncs" ''
-    #!/bin/sh
+  upgradeDesyncsPkg = pkgs.writeShellScriptBin "nixos-upgrade-desyncs" ''
     set -euo pipefail
 
     mkdir -p /var/lib/nixos/desyncs
@@ -45,13 +43,13 @@ let
         # This is expected, as it evaluates the nixos configuration in exactly
         # the same way as `nixos-rebuild` would have.
         cp -f ${file} ${file}.old || true
-        ${pkgs.nix}/bin/nix-build \
+        ${lib.getExe' config.nix.package "nix-build"} \
           -E '(import <nixpkgs/nixos> {})
           .config.system.autoUpgrade.desync
           .'${lib.strings.escapeShellArg (lib.strings.escapeNixString desyncId)}'.desyncUpgradeScript' \
           --out-link ${file} \
           || \
-        ${pkgs.nix}/bin/nix-build \
+        ${lib.getExe' config.nix.package "nix-build"} \
           -E '(import <nixpkgs/nixos> {})
           .config.system.autoUpgrade.desync
           .'${lib.strings.escapeShellArg (lib.strings.escapeNixString desyncId)}'.upgradeFailedScript' \
@@ -311,7 +309,7 @@ in
               options.overlays = lib.mkOption {
                 default = [ ];
                 description = "Overlays to add to the nixpkgs evaluation for this desync";
-                type = lib.types.listOf lib.types.overlayType;
+                type = lib.types.listOf lib.types.extensionFunction;
               };
 
               options.pkgsFor = lib.mkOption {

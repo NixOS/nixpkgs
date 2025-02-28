@@ -139,6 +139,10 @@ merging is handled.
 
 :   A type for the top level Nixpkgs package set.
 
+`types.extensionFunction`
+
+:   A type for an extension function (ie. overlay) to the Nixpkgs package set.
+
 ### Numeric types {#sec-option-types-numeric}
 
 `types.int`
