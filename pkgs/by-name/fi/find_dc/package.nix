@@ -7,7 +7,7 @@ pkgs.buildGoModule rec {
   src = pkgs.fetchFromGitHub {
     owner = "0xthefr34k";
     repo = "find_dc";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-rPw0H2jlCyeAKGLCR1Gvisv+hHCCmyRWi1k+i5zzxTg=";
   };
 
