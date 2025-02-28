@@ -9,26 +9,26 @@
 }:
 let
   pname = "cursor";
-  version = "0.45.11";
+  version = "0.45.14";
 
   inherit (stdenvNoCC) hostPlatform;
 
   sources = {
     x86_64-linux = fetchurl {
-      url = "https://download.todesktop.com/230313mzl4w4u92/cursor-0.45.11-build-250207y6nbaw5qc-x86_64.AppImage";
-      hash = "sha256-kpS4YHlv9C3e7Em4yCl4YS9nNgNNpMsSyXmMlT29hCI=";
+      url = "https://download.todesktop.com/230313mzl4w4u92/cursor-0.45.14-build-250219jnihavxsz-x86_64.AppImage";
+      hash = "sha256-5MGWJi8TP+13jZf6YMMUU5uYY/3OBTFxtGpirvgj8ZI=";
     };
     aarch64-linux = fetchurl {
-      url = "https://download.todesktop.com/230313mzl4w4u92/cursor-0.45.11-build-250207y6nbaw5qc-arm64.AppImage";
-      hash = "sha256-XyxyXRzqZnb3XQ07XP+U3hVGm2Rq+kjcPMaeoqyqwys=";
+      url = "https://download.todesktop.com/230313mzl4w4u92/cursor-0.45.14-build-250219jnihavxsz-arm64.AppImage";
+      hash = "sha256-8OUlPuPNgqbGe2x7gG+m3n3u6UDvgnVekkjJ08pVORs=";
     };
     x86_64-darwin = fetchurl {
-      url = "https://download.todesktop.com/230313mzl4w4u92/Cursor%200.45.11%20-%20Build%20250207y6nbaw5qc-x64.dmg";
-      hash = "sha256-VehjX0mcngBeUdEbkB6Vpu+mcTXy9YAh7BLAM1K9K+Y=";
+      url = "https://download.todesktop.com/230313mzl4w4u92/Cursor%200.45.14%20-%20Build%20250219jnihavxsz-x64.dmg";
+      hash = "sha256-NyDY74PZjSjpuTSVaO/l9adPcLX1kytyrFGQjJ/8WcQ=";
     };
     aarch64-darwin = fetchurl {
-      url = "https://download.todesktop.com/230313mzl4w4u92/Cursor%200.45.11%20-%20Build%20250207y6nbaw5qc-arm64.dmg";
-      hash = "sha256-VeRroXuhJsSnlF8Ys8CjsNRE0LAUgOHPMddVFn8cItI=";
+      url = "https://download.todesktop.com/230313mzl4w4u92/Cursor%200.45.14%20-%20Build%20250219jnihavxsz-arm64.dmg";
+      hash = "sha256-A503TxDDFENqMnc1hy/lMMyIgC7YwwRYPJy+tp649Eg=";
     };
   };
 
