@@ -11774,6 +11774,8 @@ self: super: with self; {
 
   pydantic_1 = callPackage ../development/python-modules/pydantic/1.nix { };
 
+  pydantic-ai = callPackage ../development/python-modules/pydantic-ai { };
+
   pydantic-ai-slim = callPackage ../development/python-modules/pydantic-ai-slim { };
 
   pydantic-compat = callPackage ../development/python-modules/pydantic-compat { };
