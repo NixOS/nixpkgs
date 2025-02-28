@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "x-wr-timezone";
-  version = "2.0.0";
+  version = "2.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "niccokunzmann";
     repo = "x-wr-timezone";
     tag = "v${version}";
-    hash = "sha256-F/bNETgscbhEkpG/D1eSJaBNdpi0+xEYuNL4RURGST0=";
+    hash = "sha256-Llpe3Z0Yfd0vRgx95D4YVrnNJk0g/VqPuNvtUrUpFk0=";
   };
 
   build-system = [ setuptools ];
