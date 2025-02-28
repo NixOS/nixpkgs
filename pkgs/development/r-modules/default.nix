@@ -450,6 +450,7 @@ let
     PKI = [ pkgs.openssl.dev ];
     png = [ pkgs.libpng.dev ];
     protolite = [ pkgs.protobuf ];
+    prqlr = with pkgs; [ cargo rustc ];
     R2SWF = with pkgs; [ zlib libpng freetype.dev ];
     RAppArmor = [ pkgs.libapparmor ];
     rapportools = [ pkgs.which ];
@@ -1203,6 +1204,10 @@ let
     });
 
     SpliceWiz = old.SpliceWiz.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
+    });
+
+    prqlr = old.prqlr.overrideAttrs (attrs: {
       postPatch = "patchShebangs configure";
     });
 
