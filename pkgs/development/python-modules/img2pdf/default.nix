@@ -16,7 +16,7 @@
   mupdf-headless,
   netpbm,
   numpy,
-  poppler_utils,
+  poppler-utils,
   pytestCheckHook,
   runCommand,
   scipy,
@@ -75,7 +75,7 @@ buildPythonPackage rec {
     mupdf-headless
     netpbm
     numpy
-    poppler_utils
+    poppler-utils
     pytestCheckHook
     scipy
   ];

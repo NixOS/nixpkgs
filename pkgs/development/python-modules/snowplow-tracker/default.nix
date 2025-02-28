@@ -7,27 +7,25 @@
   pytestCheckHook,
   requests,
   setuptools,
-  types-requests,
   typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "snowplow-tracker";
-  version = "1.0.4";
+  version = "1.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "snowplow";
     repo = "snowplow-python-tracker";
     tag = version;
-    hash = "sha256-JYAmVW/+MK0XadF/Mjm3YX+ruSF/SBg0B7IMFz/G+X0=";
+    hash = "sha256-GfKMoMUUOxiUcUVdDc6YGgO+CVRvFjDtqQU/FrTO41U=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
     requests
-    types-requests
     typing-extensions
   ];
 
@@ -40,7 +38,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/snowplow/snowplow-python-tracker/releases/tag/${src.tag}";
+    changelog = "https://github.com/snowplow/snowplow-python-tracker/blob/${src.tag}/CHANGES.txt";
     description = "Add analytics to your Python and Django apps, webapps and games";
     homepage = "https://github.com/snowplow/snowplow-python-tracker";
     license = lib.licenses.asl20;

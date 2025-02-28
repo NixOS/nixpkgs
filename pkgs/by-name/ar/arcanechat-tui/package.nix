@@ -3,20 +3,19 @@
   python3,
   fetchFromGitHub,
   testers,
-  deltachat-cursed,
+  arcanechat-tui,
 }:
 
 python3.pkgs.buildPythonApplication rec {
-  pname = "deltachat-cursed";
-  version = "0.10.0";
-
+  pname = "arcanechat-tui";
+  version = "0.11.1";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "adbenitez";
-    repo = "deltachat-cursed";
-    rev = "v${version}";
-    hash = "sha256-KCPIZf/8Acp9syFN1IHbf8hQrjk0yzniff+dVSSM/Ro=";
+    owner = "ArcaneChat";
+    repo = "arcanechat-tui";
+    tag = "v${version}";
+    hash = "sha256-ARk0WkpJ2VhIdOHQzYmmsuherABNgqwjwnPWk92y9yA=";
   };
 
   build-system = with python3.pythonOnBuildForHost.pkgs; [
@@ -35,18 +34,18 @@ python3.pkgs.buildPythonApplication rec {
 
   passthru.tests = {
     version = testers.testVersion rec {
-      package = deltachat-cursed;
+      package = arcanechat-tui;
       command = ''
         HOME="$TEMP" ${lib.getExe package} --version
       '';
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight Delta Chat client";
-    homepage = "https://github.com/adbenitez/deltachat-cursed";
-    license = licenses.gpl3Plus;
-    mainProgram = "curseddelta";
-    maintainers = with maintainers; [ dotlambda ];
+    homepage = "https://github.com/ArcaneChat/arcanechat-tui";
+    license = lib.licenses.gpl3Plus;
+    mainProgram = "arcanechat-tui";
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }
