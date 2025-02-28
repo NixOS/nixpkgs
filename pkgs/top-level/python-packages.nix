@@ -10435,6 +10435,8 @@ self: super: with self; {
 
   pglast = callPackage ../development/python-modules/pglast { };
 
+  pglive = callPackage ../development/python-modules/pglive { };
+
   pgpdump = callPackage ../development/python-modules/pgpdump { };
 
   pgpy = callPackage ../development/python-modules/pgpy { };
