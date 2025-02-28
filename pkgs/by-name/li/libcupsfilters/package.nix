@@ -15,7 +15,7 @@
   mupdf,
   pkg-config,
   poppler,
-  poppler_utils,
+  poppler-utils,
   qpdf,
   stdenv,
 }:
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     libtiff
     mupdf
     poppler
-    poppler_utils
+    poppler-utils
     qpdf
   ];
   configureFlags = [
