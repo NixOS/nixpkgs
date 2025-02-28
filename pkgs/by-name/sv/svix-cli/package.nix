@@ -1,47 +1,59 @@
 {
   lib,
+  rustPlatform,
   fetchFromGitHub,
-  fetchpatch,
-  buildGoModule,
+  pkg-config,
+  openssl,
+  protobuf,
+  stdenv,
+  darwin,
 }:
 
-buildGoModule rec {
-  version = "0.21.1";
+rustPlatform.buildRustPackage rec {
   pname = "svix-cli";
-  revision = "v${version}";
+  version = "1.58.1";
 
   src = fetchFromGitHub {
     owner = "svix";
-    repo = pname;
-    rev = revision;
-    hash = "sha256-bHcxhJs4Nu/hdiftQFZMx4M5iqFtpOzrsvXOgo9NlDc=";
+    repo = "svix-webhooks";
+    rev = "v${version}";
+    hash = "sha256-XDatrXFaDav0ucW19A7ALCRRCERCSey1wVXeVHGUV3M=";
   };
 
-  vendorHash = "sha256-qSzEpxktdAV+mHa+586mKvpclCpXR6sE7HNcPZywd4s=";
+  sourceRoot = "${src.name}/svix-cli";
 
-  # Increase minimum go version to 1.17 as the build fails with 1.16
-  # due to modules requiring code that was introduced in 1.17
-  # PR submitted upstream: https://github.com/svix/svix-cli/pull/103
-  patches = [
-    (fetchpatch {
-      name = "increase-minimum-go.patch";
-      url = "https://github.com/svix/svix-cli/commit/3c6fc06f72bd7e43165c31019b206ebad175d758.patch";
-      hash = "sha256-OwiyBZ3IZGkvo6zEZY1+XYFrqT+RseqTJ5xwCl3LtVg=";
-    })
-  ];
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit src sourceRoot;
+    name = "svix-cli-${version}";
+    hash = "sha256-AuIjP+UdmE26qJqGE/kVx5okM4j9dXw6k85PQx2RObU=";
+  };
 
-  subPackages = [ "." ];
+  nativeBuildInputs = [ pkg-config ];
 
-  ldflags = [
-    "-s"
-    "-w"
-    "-X github.com/svix/svix-cli/version.Version=v${version}"
-  ];
+  buildInputs =
+    [
+      openssl
+      protobuf
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.CoreServices
+      darwin.apple_sdk.frameworks.Security
+      darwin.apple_sdk.frameworks.SystemConfiguration
+    ];
+
+  # needed for internal protobuf c wrapper library
+  PROTOC = "${protobuf}/bin/protoc";
+  PROTOC_INCLUDE = "${protobuf}/include";
+
+  OPENSSL_NO_VENDOR = 1;
 
   meta = with lib; {
+    mainProgram = "svix";
     description = "A CLI for interacting with the Svix API";
-    homepage = "https://github.com/svix/svix-cli/";
-    license = licenses.gpl3;
+    homepage = "https://github.com/svix/svix-webhooks";
+    changelog = "https://github.com/svix/svix-webhooks/releases/tag/v${version}";
+    license = licenses.mit;
     maintainers = with maintainers; [ techknowlogick ];
+    broken = stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.isDarwin; # aws-lc-sys currently broken on darwin x86_64
   };
 }
