@@ -8,6 +8,9 @@
   "ex-build-helpers-extendMkDerivation": [
     "index.html#ex-build-helpers-extendMkDerivation"
   ],
+  "ex-shfmt": [
+    "index.html#ex-shfmt"
+  ],
   "ex-testBuildFailurePrime-doc-example": [
     "index.html#ex-testBuildFailurePrime-doc-example"
   ],
@@ -334,6 +337,15 @@
   ],
   "footnote-stdenv-find-inputs-location.__back.0": [
     "index.html#footnote-stdenv-find-inputs-location.__back.0"
+  ],
+  "tester-shfmt": [
+    "index.html#tester-shfmt"
+  ],
+  "tester-shfmt-inputs": [
+    "index.html#tester-shfmt-inputs"
+  ],
+  "tester-shfmt-return": [
+    "index.html#tester-shfmt-return"
   ],
   "tester-testBuildFailurePrime": [
     "index.html#tester-testBuildFailurePrime"
