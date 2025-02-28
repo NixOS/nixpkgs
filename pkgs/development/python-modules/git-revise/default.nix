@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   pythonOlder,
   git,
@@ -29,12 +30,17 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    # `gpg: agent_genkey failed: No agent running`
+    "test_gpgsign"
+  ];
+
   meta = with lib; {
     description = "Efficiently update, split, and rearrange git commits";
     homepage = "https://github.com/mystor/git-revise";
     changelog = "https://github.com/mystor/git-revise/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
     mainProgram = "git-revise";
-    maintainers = with maintainers; [ emily ];
+    maintainers = with maintainers; [ _9999years ];
   };
 }
