@@ -9,12 +9,12 @@
   replaceVars,
 }:
 let
-  version = "0.13.0";
+  version = "0.13.1";
   src = fetchFromGitHub {
     owner = "Saghen";
     repo = "blink.cmp";
     tag = "v${version}";
-    hash = "sha256-sZmWEJwphmuBt43kuFM84CV+muSour1/R9lF4S5lbvs=";
+    hash = "sha256-eOlTkWMzQTZPPKPKUxg8Q2PwkOhfaQdrMZkg9Ew8t/g=";
   };
   blink-fuzzy-lib = rustPlatform.buildRustPackage {
     inherit version src;
