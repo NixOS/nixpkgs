@@ -6492,6 +6492,8 @@ self: super: with self; {
 
   iocextract = callPackage ../development/python-modules/iocextract { };
 
+  ioctl-opt = callPackage ../development/python-modules/ioctl-opt { };
+
   ionhash = callPackage ../development/python-modules/ionhash { };
 
   ionoscloud = callPackage ../development/python-modules/ionoscloud { };
