@@ -50,6 +50,10 @@ let
     then realGrub.override { efiSupport = cfg.efiSupport; }
     else null;
 
+  bootPath = if cfg.mirroredBoots != [ ]
+    then (builtins.head cfg.mirroredBoots).path
+    else "/boot";
+
   f = x: optionalString (x != null) ("" + x);
 
   grubConfig = args:
@@ -755,6 +759,16 @@ in
       system.boot.loader.id = "grub";
 
       environment.systemPackages = mkIf (grub != null) [ grub ];
+
+      # Link /boot under /run/boot-loder-entries to make
+      # systemd happy even on non-EFI system
+      systemd.mounts = lib.optional (!cfg.efiSupport) {
+        what  = bootPath;
+        where = "/run/boot-loader-entries";
+        type  = "none";
+        options = "bind";
+        requiredBy = [ "local-fs.target" ];
+      };
 
       boot.loader.grub.extraPrepareConfig =
         concatStrings (mapAttrsToList (n: v: ''

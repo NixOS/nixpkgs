@@ -15,7 +15,6 @@
 , protobuf_29
 , config
 , ocl-icd
-, buildPackages
 , qimgv
 , opencv4
 
@@ -44,7 +43,7 @@
 , enableCublas ? enableCuda
 , enableCudnn ? false # NOTE: CUDNN has a large impact on closure size so we disable it by default
 , enableCufft ? enableCuda
-, cudaPackages ? cudaPackages
+, cudaPackages
 , nvidia-optical-flow-sdk
 
 , enableLto ? true
@@ -100,7 +99,6 @@
 let
   inherit (lib.attrsets) mapAttrsToList optionalAttrs;
   inherit (lib.lists) last optionals;
-  inherit (lib.meta) getExe;
   inherit (lib.strings) cmakeBool cmakeFeature cmakeOptionType concatStrings concatStringsSep optionalString;
   inherit (lib.trivial) flip;
 
@@ -213,7 +211,7 @@ let
       hash = "sha256-O+Yshk3N2Lkl6S9qWxWnoDmBngSms88IiCfwjPLMB78=";
     };
     name = "v0.1.2e.zip";
-    md5 = "";
+    md5 = "962ce79e0b95591f226431f7b5f152cd";
     dst = ".cache/ade";
   };
 

@@ -71,5 +71,8 @@ import ./make-test-python.nix ({ pkgs, lib, withNg ? false, ... }: {
           # at this point we've tested regression #262724, but haven't tested the bootloader itself
           # TODO: figure out how to how to tell the test driver to start the bootloader instead of
           # booting into the kernel directly.
+
+      with subtest("New boot entry has been added"):
+          machine.succeed("test -f /boot/loader/entries/nixos-generation-2.conf")
     '';
 })
