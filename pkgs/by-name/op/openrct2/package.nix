@@ -126,6 +126,12 @@ stdenv.mkDerivation {
     cp -r ${title-sequences-src} $sourceRoot/data/sequence
   '';
 
+  # Fix blank changelog & contributors screen. See https://github.com/OpenRCT2/OpenRCT2/issues/16988
+  postPatch = ''
+    substituteInPlace src/openrct2/platform/Platform.Linux.cpp \
+      --replace-fail "/usr/share/doc/openrct2" "$out/share/doc/openrct2"
+  '';
+
   preConfigure =
     # Verify that the correct version of each third party repository is used.
     (
