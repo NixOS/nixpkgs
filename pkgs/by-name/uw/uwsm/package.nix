@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     bash # sh
     systemd
     python
-  ] ++ (lib.optionals uuctlSupport [ dmenu ]);
+  ] ++ lib.optionals uuctlSupport [ dmenu ];
 
   mesonFlags = [
     "--prefix=${placeholder "out"}"
@@ -73,15 +73,15 @@ stdenv.mkDerivation (finalAttrs: {
     in
     ''
       wrapProgram $out/bin/uwsm ${wrapperArgs}
-      ${lib.optionalString uuctlSupport ''
-        wrapProgram $out/bin/uuctl ${wrapperArgs}
-      ''}
-      ${lib.optionalString uwsmAppSupport ''
-        wrapProgram $out/bin/uwsm-app ${wrapperArgs}
-      ''}
-      ${lib.optionalString fumonSupport ''
-        wrapProgram $out/bin/fumon ${wrapperArgs}
-      ''}
+    ''
+    + lib.optionalString uuctlSupport ''
+      wrapProgram $out/bin/uuctl ${wrapperArgs}
+    ''
+    + lib.optionalString uwsmAppSupport ''
+      wrapProgram $out/bin/uwsm-app ${wrapperArgs}
+    ''
+    + lib.optionalString fumonSupport ''
+      wrapProgram $out/bin/fumon ${wrapperArgs}
     '';
 
   outputs = [
