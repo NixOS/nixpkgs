@@ -69,7 +69,7 @@ let
         buildFlags = [ "--enable-system-libraries" ];
       };
       gitlab-glfm-markdown = attrs: {
-        cargoDeps = rustPlatform.fetchCargoTarball {
+        cargoDeps = rustPlatform.fetchCargoVendor {
           src = stdenv.mkDerivation {
             inherit (buildRubyGem { inherit (attrs) gemName version source; })
               name
@@ -83,7 +83,7 @@ let
               cp Cargo.lock $out
             '';
           };
-          hash = "sha256-vFApyObuqsMBXhT2yyMpH7rzW0GaPgJUn9/hE/GpS9I=";
+          hash = "sha256-LpuQMV112Z5lspSK4M0IYdkxO8oVmucnJtqF2Y3+aNU=";
         };
 
         dontBuild = false;

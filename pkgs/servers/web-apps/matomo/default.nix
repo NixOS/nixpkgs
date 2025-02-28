@@ -105,19 +105,23 @@ let
       #
       # The filesToFix list may contain files that are exclusive to only one of the versions we build
       # make sure to test for existence to avoid erroring on an incompatible version and failing
-      postFixup = ''
-        pushd $out/share > /dev/null
-        for f in $filesToFix; do
-          if [ -f "$f" ]; then
-            length="$(wc -c "$f" | cut -d' ' -f1)"
-            hash="$(md5sum "$f" | cut -d' ' -f1)"
-            sed -i "s:\\(\"$f\"[^(]*(\\).*:\\1\"$length\", \"$hash\"),:g" config/manifest.inc.php
-          else
-            echo "INFO(files-to-fix): $f does not exist in this version"
-          fi
-        done
-        popd > /dev/null
-      '';
+      postFixup =
+        let
+          hashCmd = if lib.versions.major version == "4" then "md5sum" else "sha256sum";
+        in
+        ''
+          pushd $out/share > /dev/null
+          for f in $filesToFix; do
+            if [ -f "$f" ]; then
+              length="$(wc -c "$f" | cut -d' ' -f1)"
+              hash="$(${hashCmd} "$f" | cut -d' ' -f1)"
+              sed -i "s:\\(\"$f\"[^(]*(\\).*:\\1\"$length\", \"$hash\"),:g" config/manifest.inc.php
+            else
+              echo "INFO(files-to-fix): $f does not exist in this version"
+            fi
+          done
+          popd > /dev/null
+        '';
 
       passthru = {
         tests = nixosTests.matomo."${pname}";
