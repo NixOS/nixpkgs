@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "aiosqlite";
-  version = "0.20.0";
+  version = "0.21.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "omnilib";
     repo = pname;
     tag = "v${version}";
-    hash = "sha256-JQ9iNxK7FvBhPyr825d+8P5ZYFztDIX3gOwp4FPfyU4=";
+    hash = "sha256-3l/uR97WuLlkAEdogL9iYoXp89bsAcpH6XEtMELsX9o=";
   };
 
   nativeBuildInputs = [ flit-core ];
