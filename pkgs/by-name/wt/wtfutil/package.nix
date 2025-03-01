@@ -1,9 +1,12 @@
 {
+  lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
-  lib,
   makeWrapper,
   ncurses,
+  versionCheckHook,
+  nix-update-script,
 }:
 
 buildGoModule rec {
@@ -25,17 +28,27 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
   ];
 
   subPackages = [ "." ];
 
   nativeBuildInputs = [ makeWrapper ];
 
+  postPatch = ''
+    substituteInPlace flags/flags.go --replace-fail 'version := "dev"' 'version := "v${version}"'
+  '';
+
   postInstall = ''
     mv "$out/bin/wtf" "$out/bin/wtfutil"
     wrapProgram "$out/bin/wtfutil" --prefix PATH : "${ncurses.dev}/bin"
   '';
+
+  doInstallCheck = true;
+  # Darwin Error: mkdir /var/empty: file exists
+  nativeInstallCheckInputs = lib.optional (!stdenv.hostPlatform.isDarwin) [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Personal information dashboard for your terminal";
