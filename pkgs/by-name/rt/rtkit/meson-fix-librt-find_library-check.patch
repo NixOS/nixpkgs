@@ -1,0 +1,22 @@
+From 98f70edd8f534c371cb4308b9720739c5178918d Mon Sep 17 00:00:00 2001
+From: Felipe Sateler <fsateler@users.noreply.github.com>
+Date: Sat, 11 Apr 2020 10:59:21 -0400
+Subject: [PATCH] meson: fix librt find_library check
+
+---
+ meson.build | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/meson.build b/meson.build
+index 02e6c73..49da472 100644
+--- a/meson.build
++++ b/meson.build
+@@ -22,7 +22,7 @@ polkit_dep = dependency('polkit-gobject-1', required: false)
+ systemd_dep = dependency('systemd', required: false)
+ thread_dep = dependency('threads')
+ 
+-librt_dep = cc.find_library('z')
++librt_dep = cc.find_library('rt')
+ cc.check_header('sched.h', dependencies: librt_dep)
+ cc.has_function('sched_setscheduler', dependencies: librt_dep)
+ 

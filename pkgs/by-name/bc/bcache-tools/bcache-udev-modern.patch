@@ -1,0 +1,42 @@
+This patch does two things:
+1) Drops probe-bcache, so now util-linux detecting functionality is used.
+2) Drops bcache-register, moving registering device functionality into rule
+   using 'sh'.
+This reduces things that need to be present in initrd, replacing them with
+already existing functionality and reducing overall initrd size.
+
+diff --git a/69-bcache.rules b/69-bcache.rules
+index 9cc7f0d..6a52893 100644
+--- a/69-bcache.rules
++++ b/69-bcache.rules
+@@ -10,16 +10,11 @@ KERNEL=="fd*|sr*", GOTO="bcache_end"
+ # It recognised bcache (util-linux 2.24+)
+ ENV{ID_FS_TYPE}=="bcache", GOTO="bcache_backing_found"
+ # It recognised something else; bail
+-ENV{ID_FS_TYPE}=="?*", GOTO="bcache_backing_end"
+-
+-# Backing devices: scan, symlink, register
+-IMPORT{program}="probe-bcache -o udev $tempnode"
+-ENV{ID_FS_TYPE}!="bcache", GOTO="bcache_backing_end"
+-ENV{ID_FS_UUID_ENC}=="?*", SYMLINK+="disk/by-uuid/$env{ID_FS_UUID_ENC}"
++GOTO="bcache_backing_end"
+ 
+ LABEL="bcache_backing_found"
+ RUN{builtin}+="kmod load bcache"
+-RUN+="bcache-register $tempnode"
++RUN+="@shell@ -c 'echo $tempnode > /sys/fs/bcache/register_quiet'"
+ LABEL="bcache_backing_end"
+ 
+ # Cached devices: symlink
+diff --git a/Makefile b/Makefile
+index c824ae3..c5f7309 100644
+--- a/Makefile
++++ b/Makefile
+@@ -9,7 +9,6 @@ all: make-bcache probe-bcache bcache-super-show bcache-register
+ 
+ install: make-bcache probe-bcache bcache-super-show
+ 	$(INSTALL) -m0755 make-bcache bcache-super-show	$(DESTDIR)${PREFIX}/sbin/
+-	$(INSTALL) -m0755 probe-bcache bcache-register		$(DESTDIR)$(UDEVLIBDIR)/
+ 	$(INSTALL) -m0644 69-bcache.rules	$(DESTDIR)$(UDEVLIBDIR)/rules.d/
+ 	$(INSTALL) -m0644 -- *.8 $(DESTDIR)${PREFIX}/share/man/man8/
+ 	$(INSTALL) -D -m0755 initramfs/hook	$(DESTDIR)/usr/share/initramfs-tools/hooks/bcache

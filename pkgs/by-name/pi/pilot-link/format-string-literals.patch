@@ -1,0 +1,53 @@
+--- pilot-link/src/pilot-dlpsh.c
++++ pilot-link/src/pilot-dlpsh.c
+@@ -389,7 +389,7 @@
+ 
+ 	strftime(timebuf, 80, "Now setting Palm time from desktop to: "
+ 			      "%a %b %d %H:%M:%S %Z %Y\n", tm_ptr);
+-	printf(timebuf);
++	printf("%s", timebuf);
+ 	gettimeofday(&tv, 0);
+ 	ltime = tv.tv_sec + 1;
+ 	usleep(1000000 - tv.tv_usec);
+--- pilot-link/src/pilot-hinotes.c
++++ pilot-link/src/pilot-hinotes.c
+@@ -79,9 +79,7 @@
+ 		printf("...\n");
+ 	else
+ 		printf("\n");
+-	printf("\n");
+-	printf(m.text);
+-	printf("\n");
++	printf("\n%s\n", m.text);
+ }
+ 
+ void write_memo_in_directory(char *dirname, struct HiNoteNote m,
+--- pilot-link/src/pilot-xfer.c
++++ pilot-link/src/pilot-xfer.c
+@@ -2477,8 +2477,7 @@
+ 				{
+ 					fprintf(stderr, "   ERROR: '%s' is not a directory or does not exist.\n"
+ 							"   Please supply a directory name when performing a "
+-							"backup or restore and try again.\n\n", dirname);
+-					fprintf(stderr,gracias);
++							"backup or restore and try again.\n\n%s", dirname, gracias);
+ 					return 1;
+ 				}
+ 			}
+@@ -2487,14 +2486,12 @@
+ 		case palm_op_list:
+ 			if (rargc > 0)
+ 			{
+-				fprintf(stderr,"   ERROR: Do not pass additional arguments to -busrlLC.\n");
+-				fprintf(stderr,gracias);
++				fprintf(stderr,"   ERROR: Do not pass additional arguments to -busrlLC.\n%s", gracias);
+ 				return 1;
+ 			}
+ 			break;
+ 		case palm_op_noop:
+-			fprintf(stderr,"   ERROR: Must specify one of -bursimfdlC.\n");
+-			fprintf(stderr,gracias);
++			fprintf(stderr,"   ERROR: Must specify one of -bursimfdlC.\n%s", gracias);
+ 			return 1;
+ 			break;
+ 		case palm_op_merge:

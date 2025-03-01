@@ -1,0 +1,11 @@
+--- a/configure
++++ b/configure
+@@ -904,7 +904,7 @@
+ #line 905 "configure"
+ #include "confdefs.h"
+
+-main(){return(0);}
++int main(){return(0);}
+ EOF
+ if { (eval echo configure:910: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+   ac_cv_prog_cc_works=yes

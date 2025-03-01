@@ -1,0 +1,149 @@
+diff --git a/bin/quarto.js b/bin/quarto.js
+index f854281..0b78f6e 100644
+--- a/bin/quarto.js
++++ b/bin/quarto.js
+@@ -28511,7 +28511,7 @@ function jupyterHubServicePrefix() {
+     return Deno.env.get("JUPYTERHUB_SERVICE_PREFIX");
+ }
+ function isInteractiveTerminal() {
+-    return Deno.isatty(Deno.stderr.rid);
++    return Deno.stderr.isTerminal();
+ }
+ function isInteractiveSession() {
+     return isRStudio() || isInteractiveTerminal() || isVSCodeOutputChannel();
+@@ -83562,7 +83562,7 @@ function writeFileToStdout(file) {
+     });
+     const contents = readAllSync(df);
+     writeAllSync1(Deno.stdout, contents);
+-    Deno.close(df.rid);
++    df.close();
+ }
+ function clearLine() {
+     info(ansi.eraseLine.cursorLeft(), {
+@@ -96154,6 +96154,7 @@ class ParserBase {
+ class SAXParser extends ParserBase {
+     _listeners = {};
+     _controller;
++    _encoding;
+     fireListeners(event) {
+         const [name, ...args] = event;
+         const list = this._listeners[name] || [];
+@@ -96189,33 +96190,23 @@ class SAXParser extends ParserBase {
+     write(chunk, controller) {
+         try {
+             this._controller = controller;
+-            this.chunk = new TextDecoder().decode(chunk);
++            this.chunk = new TextDecoder(this._encoding).decode(chunk);
+             this.run();
+         } finally{
+             this._controller = undefined;
+         }
+     }
+-    getStream() {
+-        return new WritableStream(this);
+-    }
+-    getWriter() {
+-        const streamWriter = this.getStream().getWriter();
+-        return {
+-            async write (p) {
+-                await streamWriter.ready;
+-                await streamWriter.write(p);
+-                return p.length;
+-            }
+-        };
+-    }
+-    async parse(source) {
++    async parse(source, encoding) {
++        this._encoding = encoding;
+         if (typeof source === 'string') {
+             this.chunk = source;
+             this.run();
+         } else if (source instanceof Uint8Array) {
+             this.write(source);
+         } else {
+-            await Deno.copy(source, this.getWriter());
++            await source.pipeThrough(new TextDecoderStream(this._encoding)).pipeTo(new WritableStream({
++                write: (str)=>this.parse(str, encoding)
++            }));
+         }
+     }
+     on(event, listener) {
+@@ -96326,8 +96317,7 @@ async function readSitemap(sitemapPath) {
+         }
+     });
+     const reader = await Deno.open(sitemapPath);
+-    await parser.parse(reader);
+-    reader.close();
++    await parser.parse(reader.readable);
+     return urlset;
+ }
+ function writeSitemap(sitemapPath, urlset, draftMode) {
+@@ -98407,21 +98397,21 @@ async function generateFeed(feed, feedItems, path) {
+             feed,
+             escape: __VIRTUAL_FILE172
+         });
+-        await Deno.write(feedFile.rid, textEncoder.encode(preamble));
++        await feedFile.write(textEncoder.encode(preamble));
+         for (const feedItem of feedItems){
+             const item = renderEjs(resourcePath("projects/website/listing/feed/item.ejs.md"), {
+                 item: feedItem,
+                 escape: __VIRTUAL_FILE172
+             });
+-            await Deno.write(feedFile.rid, textEncoder.encode(item));
++            await feedFile.write(textEncoder.encode(item));
+         }
+         const postamble = renderEjs(resourcePath("projects/website/listing/feed/postamble.ejs.md"), {
+             feed,
+             escape: __VIRTUAL_FILE172
+         });
+-        await Deno.write(feedFile.rid, textEncoder.encode(postamble));
++        await feedFile.write(textEncoder.encode(postamble));
+     } finally{
+-        Deno.close(feedFile.rid);
++        feedFile.close();
+     }
+ }
+ function prepareItems(items, options) {
+@@ -112277,7 +112267,7 @@ async function renderForPublish(render, providerName, type, title, siteUrl) {
+ }
+ function stageDocumentPublish(title, publishFiles) {
+     const publishDir = globalTempContext().createDir();
+-    const stagedFiles = window.structuredClone(publishFiles);
++    const stagedFiles = globalThis.structuredClone(publishFiles);
+     stagedFiles.baseDir = publishDir;
+     for (const file of publishFiles.files){
+         const src = join2(publishFiles.baseDir, file);
+@@ -126377,33 +126367,6 @@ function reportPeformanceMetrics() {
+     console.log("Performance metrics");
+     console.log("Quarto:");
+     console.log(JSON.stringify(quartoPerformanceMetrics(), null, 2));
+-    console.log();
+-    console.log("Deno:");
+-    const denoMetrics = JSON.parse(JSON.stringify(Deno.metrics()));
+-    denoMetrics.ops = Object.fromEntries(Object.entries(denoMetrics.ops).map(([key, opMetrics])=>{
+-        for (const key of Object.keys(opMetrics)){
+-            if (opMetrics[key] === 0) {
+-                delete opMetrics[key];
+-            }
+-        }
+-        return [
+-            key,
+-            opMetrics
+-        ];
+-    }).filter(([_key, opMetrics])=>Object.keys(opMetrics).length > 0).map(([key, opMetrics])=>{
+-        if (opMetrics.opsDispatched === opMetrics.opsDispatchedSync && opMetrics.opsDispatched === opMetrics.opsCompleted && opMetrics.opsDispatched === opMetrics.opsCompletedSync || opMetrics.opsDispatched === opMetrics.opsDispatchedAsync && opMetrics.opsDispatched === opMetrics.opsCompleted && opMetrics.opsDispatched === opMetrics.opsCompletedAsync) {
+-            return [
+-                key,
+-                opMetrics.opsDispatched
+-            ];
+-        } else {
+-            return [
+-                key,
+-                opMetrics
+-            ];
+-        }
+-    }));
+-    console.log(JSON.stringify(denoMetrics, null, 2));
+ }
+ async function mainRunner(runner) {
+     try {

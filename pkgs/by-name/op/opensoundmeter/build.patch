@@ -1,0 +1,13 @@
+--- a/OpenSoundMeter.desktop
++++ b/OpenSoundMeter.desktop
+@@ -6 +6 @@
+-Icon=white
++Icon=OpenSoundMeter
+--- a/OpenSoundMeter.pro
++++ b/OpenSoundMeter.pro
+@@ -261 +261 @@
+-APP_GIT_VERSION = $$system(git --git-dir $$_PRO_FILE_PWD_/.git --work-tree $$_PRO_FILE_PWD_ describe --tags $$system(git --git-dir $$_PRO_FILE_PWD_/.git --work-tree $$_PRO_FILE_PWD_ rev-list --tags --max-count=1))
++APP_GIT_VERSION = ?
+@@ -486 +486 @@
+-unix:!macx:!ios:CONFIG(release, debug|release) {
++unix:!linux:!macx:!ios:CONFIG(release, debug|release) {

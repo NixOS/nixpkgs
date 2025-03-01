@@ -1,0 +1,92 @@
+diff '--color=auto' -ruN a/src/cdb.c b/src/cdb.c
+--- a/src/cdb.c	1970-01-01 01:00:01.000000000 +0100
++++ b/src/cdb.c	2024-10-08 11:28:57.892951658 +0200
+@@ -1564,7 +1564,7 @@
+             (warriorsLeft ? warriorsLeft : 1));
+     substitute(buf[bi1], "CYCLE", outs, buf[bi2]);
+     SWITCHBI;
+-    sprintf(outs, "%d", round);
++    sprintf(outs, "%d", roundCounter);
+     substitute(buf[bi1], "ROUND", outs, buf[bi2]);
+ 
+     SWITCHBI;
+@@ -1875,7 +1875,7 @@
+ #endif
+   int     nFuture, nPast, count, taskHalf = (coreSize <= 10000 ? 7 : 5);
+ 
+-  sprintf(outs, roundOfCycle, round, rounds,
++  sprintf(outs, roundOfCycle, roundCounter, rounds,
+           (cycle + (warriorsLeft ? warriorsLeft : 1) - 1) /
+           (warriorsLeft ? warriorsLeft : 1));
+   cdb_fputs(outs, COND);
+diff '--color=auto' -ruN a/src/curdisp.c b/src/curdisp.c
+--- a/src/curdisp.c	1970-01-01 01:00:01.000000000 +0100
++++ b/src/curdisp.c	2024-10-08 11:29:52.129955266 +0200
+@@ -156,7 +156,7 @@
+       wstandend(corewin);
+       if (!--refreshCounter) {
+         refreshCounter = refreshInterval;
+-        update_statusline(round);
++        update_statusline(roundCounter);
+         wrefresh(corewin);
+       }
+     }
+@@ -542,7 +542,7 @@
+ text_display_close()
+ {
+   if (displayLevel) {
+-    update_statusline(round - 1);
++    update_statusline(roundCounter - 1);
+     wstandout(corewin);
+     mvwaddstr(corewin, 0, 0, pressAnyKey);
+     wrefresh(corewin);
+diff '--color=auto' -ruN a/src/sim.c b/src/sim.c
+--- a/src/sim.c	1970-01-01 01:00:01.000000000 +0100
++++ b/src/sim.c	2024-10-08 11:28:21.848284678 +0200
+@@ -173,7 +173,7 @@
+ mem_struct FAR *memory;
+ 
+ long    cycle;
+-int     round;
++int     roundCounter;
+ 
+ char    alloc_p = 0;                /* indicate whether memory has been allocated */
+ int     warriorsLeft;                /* number of warriors still left in core */
+@@ -328,7 +328,7 @@
+ #endif
+ 
+   display_init();
+-  round = 1;
++  roundCounter = 1;
+   do {                                /* each round */
+ #if defined(DOS16) && !defined(SERVER) && !defined(DOSTXTGRAPHX) && !defined(DOSGRXGRAPHX) && !defined(DJGPP)
+     fputc('\r', stdout);        /* enable interruption by Ctrl-C */
+@@ -1421,13 +1421,13 @@
+ #ifndef SERVER
+     if (debugState == BREAK) {
+       if (warriorsLeft == 1 && warriors != 1)
+-	sprintf(outs, warriorTerminatedEndOfRound, W - warrior, W->name, round);
++	sprintf(outs, warriorTerminatedEndOfRound, W - warrior, W->name, roundCounter);
+       else
+-	sprintf(outs, endOfRound, round);
++	sprintf(outs, endOfRound, roundCounter);
+       debugState = cdb(outs);
+     }
+ #endif
+-  } while (++round <= rounds);
++  } while (++roundCounter <= rounds);
+ 
+   display_close();
+ #ifdef PERMUTATE
+diff '--color=auto' -ruN a/src/sim.h b/src/sim.h
+--- a/src/sim.h	1970-01-01 01:00:01.000000000 +0100
++++ b/src/sim.h	2024-10-08 11:27:46.730634854 +0200
+@@ -89,7 +89,7 @@
+ #define FAR
+ #endif
+ 
+-extern int round;
++extern int roundCounter;
+ extern long cycle;
+ extern ADDR_T progCnt;                /* program counter */
+ extern warrior_struct *W;        /* indicate which warrior is running */

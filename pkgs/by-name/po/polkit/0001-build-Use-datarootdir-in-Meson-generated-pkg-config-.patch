@@ -1,0 +1,53 @@
+From 7ba07551dfcd4ef9a87b8f0d9eb8b91fabcb41b3 Mon Sep 17 00:00:00 2001
+From: Jan Tojnar <jtojnar@gmail.com>
+Date: Mon, 1 Nov 2021 14:17:17 +0100
+Subject: [PATCH] build: Use datarootdir in Meson-generated pkg-config files
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+With datadir outside of prefix (currently unsupported by Meson[1]
+but a frequent occurrence in Nixpkgs), the `datadir` entry,
+in the `polkit-gobject-1` pkg-config file will be an absolute path.
+This will prevent changing the base directory of `policydir`
+with `--define-variable=prefix=…`, which many projects use
+to install policy files to their own prefix.
+
+Previously, this worked without changes on Nixpkgs’s part because
+the pkg-config template used by Autotools contained `@datarootdir@`,
+which resolves to `$(prefix)/share`[2], taking no heed of the changed datadir.
+
+Similar issue can happen when a distribution package redefines datadir
+like Debian does/did.[3]
+
+This patch changes Meson-based build system to use `$(prefix)/share`
+in the generated pkg-config files, mirroring Autotools.
+
+---
+
+1. Likely to change in the future: https://github.com/mesonbuild/meson/issues/2561#issuecomment-939253717
+2. https://www.gnu.org/prep/standards/html_node/Directory-Variables.html
+3. https://blogs.gnome.org/hughsie/2014/06/16/datarootdir-v-s-datadir/
+---
+ src/polkit/meson.build | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/src/polkit/meson.build b/src/polkit/meson.build
+index 63dc1e85..c92cb70f 100644
+--- a/src/polkit/meson.build
++++ b/src/polkit/meson.build
+@@ -113,9 +113,8 @@ pkg.generate(
+   requires: common_deps,
+   variables: [
+     'exec_prefix=${prefix}',
+-    'datadir=' + ('${prefix}' / pk_datadir),
+-    'policydir=' + ('${datadir}' / pk_actiondir),
+-    'actiondir=' + ('${datadir}' / pk_actiondir),
++    'policydir=' + ('${prefix}' / 'share' / pk_actiondir),
++    'actiondir=' + ('${prefix}' / 'share' / pk_actiondir),
+     'pkcheck_supports_uid=true',
+   ],
+ )
+-- 
+GitLab
+

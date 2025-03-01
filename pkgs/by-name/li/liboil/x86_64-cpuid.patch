@@ -1,0 +1,38 @@
+From 705916007fba0a845229a02dc6474cb523eff150 Mon Sep 17 00:00:00 2001
+From: David Schleef <ds@schleef.org>
+Date: Tue, 20 Jul 2010 21:05:26 +0000
+Subject: x86: Fix cpuid function on x86-64
+
+Fixes: #28956.
+---
+diff --git a/liboil/liboilcpu-x86.c b/liboil/liboilcpu-x86.c
+index e7a1978..ef4d3f2 100644
+--- a/liboil/liboilcpu-x86.c
++++ b/liboil/liboilcpu-x86.c
+@@ -162,13 +162,10 @@ get_cpuid (uint32_t op, uint32_t *a, uint32_t *b, uint32_t *c, uint32_t *d)
+ static void
+ get_cpuid (uint32_t op, uint32_t *a, uint32_t *b, uint32_t *c, uint32_t *d)
+ {
++  *a = op;
+   __asm__ (
+-      "  pushq %%rbx\n"
+       "  cpuid\n"
+-      "  mov %%ebx, %%esi\n"
+-      "  popq %%rbx\n"
+-      : "=a" (*a), "=S" (*b), "=c" (*c), "=d" (*d)
+-      : "0" (op));
++      : "+a" (*a), "=b" (*b), "=c" (*c), "=d" (*d));
+ }
+ #endif
+ 
+@@ -185,7 +182,7 @@ oil_cpu_detect_cpuid (void)
+ {
+   uint32_t eax, ebx, ecx, edx;
+   uint32_t level;
+-  char vendor[13] = { 0 };
++  char vendor[13+4] = { 0 };
+   int ret;
+ 
+   oil_fault_check_enable ();
+--
+cgit v0.9.0.2-2-gbebe

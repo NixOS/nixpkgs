@@ -1,0 +1,8 @@
+  vers_1 5.0, "SMC", "SMC2632W", "Version 01.02", ""
+  manfid 0x0156, 0x0002
+  funcid network_adapter
+  cftable_entry 0x01 [default]
+    Vcc Vmin 3000mV Vmax 3300mV Iavg 300mA Ipeak 300mA
+    Idown 10mA
+    io 0x0000-0x003f [lines=6] [16bit]
+    irq mask 0xffff [level] [pulse]
