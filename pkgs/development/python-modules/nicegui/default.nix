@@ -65,8 +65,8 @@ buildPythonPackage rec {
   # this is also fixed in the github publish workflow in the project itself
   postPatch = ''
     sed --in-place \
-    's#^version = "[0-9]*\.[0-9]*\.[0-9]*-dev"$#version = "${version}"#' \
-    pyproject.toml
+      's#^version = "[0-9]*\.[0-9]*\.[0-9]*-dev"$#version = "${version}"#' \
+      pyproject.toml
   '';
 
   build-system = [
