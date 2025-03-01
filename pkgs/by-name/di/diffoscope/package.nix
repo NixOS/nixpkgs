@@ -41,7 +41,7 @@
   html2text,
   imagemagick,
   installShellFiles,
-  jdk,
+  jdk8,
   libarchive,
   libcaca,
   libxmlb,
@@ -223,7 +223,7 @@ python.pkgs.buildPythonApplication rec {
         gnupg
         hdf5
         imagemagick
-        jdk
+        jdk8
         libcaca
         llvm
         mono
