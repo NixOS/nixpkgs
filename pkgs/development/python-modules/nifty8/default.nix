@@ -38,6 +38,15 @@ buildPythonPackage rec {
     hash = "sha256-Q42ZhQ/T8JmkG75BexevbvVKQqfDmMG6+oTYR0Ze718=";
   };
 
+  # nifty8.re is the jax-backed version of nifty8 (the regular one uses numpy).
+  # It is not compatible with the latest jax update:
+  # https://gitlab.mpcdf.mpg.de/ift/nifty/-/issues/414
+  # While the issue is being fixed by upstream, we completely remove this package from the source and the tests.
+  postPatch = ''
+    rm -r src/re
+    rm -r test/test_re
+  '';
+
   build-system = [ setuptools ];
 
   dependencies = [
