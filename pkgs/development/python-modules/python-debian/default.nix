@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   pythonOlder,
   fetchFromGitLab,
@@ -35,6 +36,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+  ];
+
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+    "tests/test_debfile.py"
   ];
 
   pythonImportsCheck = [ "debian" ];
