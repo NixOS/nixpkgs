@@ -32,5 +32,10 @@ let
 in
 lib.pipe raw-pkg [
   (overrideCabal overrides)
+  (x: x.overrideAttrs (old: {
+    meta = old.meta // {
+      relatedPackages = [ "nixfmt-tree" ];
+    };
+  }))
   justStaticExecutables
 ]
