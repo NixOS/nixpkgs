@@ -9,6 +9,7 @@
   libgbm,
   pipewire,
   gst_all_1,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -52,6 +53,15 @@ rustPlatform.buildRustPackage rec {
     "prefix=${placeholder "out"}"
     "CARGO_TARGET_DIR=target/${stdenv.hostPlatform.rust.cargoShortTarget}"
   ];
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version"
+      "unstable"
+      "--version-regex"
+      "epoch-(.*)"
+    ];
+  };
 
   meta = {
     homepage = "https://github.com/pop-os/xdg-desktop-portal-cosmic";
