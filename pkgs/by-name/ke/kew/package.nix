@@ -1,21 +1,22 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fftwFloat
-, chafa
-, glib
-, libopus
-, opusfile
-, libvorbis
-, taglib
-, faad2
-, libogg
-, pkg-config
-, versionCheckHook
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fftwFloat,
+  chafa,
+  glib,
+  libopus,
+  opusfile,
+  libvorbis,
+  taglib,
+  faad2,
+  libogg,
+  pkg-config,
+  versionCheckHook,
+  gitUpdater,
 }:
 
-stdenv.mkDerivation(finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "kew";
   version = "3.0.3";
 
@@ -27,7 +28,17 @@ stdenv.mkDerivation(finalAttrs: {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ fftwFloat.dev chafa glib.dev libopus opusfile libvorbis taglib faad2 libogg ];
+  buildInputs = [
+    fftwFloat.dev
+    chafa
+    glib.dev
+    libopus
+    opusfile
+    libvorbis
+    taglib
+    faad2
+    libogg
+  ];
 
   installFlags = [
     "MAN_DIR=${placeholder "out"}/share/man"
@@ -48,7 +59,10 @@ stdenv.mkDerivation(finalAttrs: {
     homepage = "https://github.com/ravachol/kew";
     platforms = lib.platforms.unix;
     license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ demine matteopacini ];
+    maintainers = with lib.maintainers; [
+      demine
+      matteopacini
+    ];
     mainProgram = "kew";
   };
 })
