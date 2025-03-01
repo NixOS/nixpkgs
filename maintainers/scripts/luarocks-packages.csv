@@ -127,7 +127,7 @@ nvim-nio,,,,,,mrcjkb
 nvim-web-devicons,,,,,,
 oil.nvim,,,,,,
 orgmode,,,,,,
-papis-nvim,,,,,,GaetanLepage
+papis.nvim,,,,,,GaetanLepage
 pathlib.nvim,,,,,,
 penlight,,,,,,alerque
 plenary.nvim,https://raw.githubusercontent.com/nvim-lua/plenary.nvim/master/plenary.nvim-scm-1.rockspec,,,,5.1,
