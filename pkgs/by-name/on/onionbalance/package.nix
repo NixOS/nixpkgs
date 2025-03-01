@@ -74,7 +74,7 @@ let
       homepage = "https://gitlab.torproject.org/tpo/onion-services/onionbalance";
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [ MulliganSecurity ];
-      platforms = platforms.linux;
+      platforms = lib.platforms.linux;
       mainProgram = "onionbalance-config";
     };
 
