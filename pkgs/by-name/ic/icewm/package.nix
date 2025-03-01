@@ -37,6 +37,7 @@
   pcre2,
   perl,
   pkg-config,
+  fetchpatch,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -92,6 +93,17 @@ stdenv.mkDerivation (finalAttrs: {
     libxcb
     mkfontdir
     pcre2
+  ];
+
+  patches = [
+    # https://github.com/NixOS/nixpkgs/issues/385959
+    # https://github.com/bbidulock/icewm/issues/794
+    # TODO: remove this patch when it is included in a release
+    (fetchpatch {
+      name = "fdomenu-icons-quoted";
+      url = "https://github.com/bbidulock/icewm/commit/74bb0a2989127a3ff87d2932ff547713bc710cfe.patch";
+      hash = "sha256-/rMSJYGAJs9cgNu5j4Mov/PfO7ocXQeNRq0vasfRcKA=";
+    })
   ];
 
   cmakeFlags = [
