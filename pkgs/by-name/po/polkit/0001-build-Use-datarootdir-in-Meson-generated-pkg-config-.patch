@@ -1,4 +1,4 @@
-From 7ba07551dfcd4ef9a87b8f0d9eb8b91fabcb41b3 Mon Sep 17 00:00:00 2001
+From 5db2dee82bf652cca5fd782c19c8cc8e7ad5ed3e Mon Sep 17 00:00:00 2001
 From: Jan Tojnar <jtojnar@gmail.com>
 Date: Mon, 1 Nov 2021 14:17:17 +0100
 Subject: [PATCH] build: Use datarootdir in Meson-generated pkg-config files
@@ -29,18 +29,17 @@ in the generated pkg-config files, mirroring Autotools.
 2. https://www.gnu.org/prep/standards/html_node/Directory-Variables.html
 3. https://blogs.gnome.org/hughsie/2014/06/16/datarootdir-v-s-datadir/
 ---
- src/polkit/meson.build | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ src/polkit/meson.build | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/src/polkit/meson.build b/src/polkit/meson.build
-index 63dc1e85..c92cb70f 100644
+index a7ce02b..9192a36 100644
 --- a/src/polkit/meson.build
 +++ b/src/polkit/meson.build
-@@ -113,9 +113,8 @@ pkg.generate(
+@@ -114,8 +114,8 @@ pkg.generate(
    requires: common_deps,
    variables: [
      'exec_prefix=${prefix}',
--    'datadir=' + ('${prefix}' / pk_datadir),
 -    'policydir=' + ('${datadir}' / pk_actiondir),
 -    'actiondir=' + ('${datadir}' / pk_actiondir),
 +    'policydir=' + ('${prefix}' / 'share' / pk_actiondir),
@@ -49,5 +48,5 @@ index 63dc1e85..c92cb70f 100644
    ],
  )
 -- 
-GitLab
+2.48.1
 
