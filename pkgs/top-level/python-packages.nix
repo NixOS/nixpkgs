@@ -11127,6 +11127,8 @@ self: super: with self; {
 
   plotnine = callPackage ../development/python-modules/plotnine { };
 
+  plover-stroke = callPackage ../development/python-modules/plover-stroke { };
+
   pluggy = callPackage ../development/python-modules/pluggy { };
 
   plugincode = callPackage ../development/python-modules/plugincode { };
