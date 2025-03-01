@@ -36,6 +36,6 @@ stdenv.mkDerivation rec {
     homepage = "https://supercollider.github.io/sc3-plugins/";
     maintainers = [ ];
     license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    platforms = with platforms; darwin ++ linux;
   };
 }
