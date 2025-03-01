@@ -12349,6 +12349,7 @@ with pkgs;
   usbrelayd = callPackage ../os-specific/linux/usbrelay/daemon.nix { };
 
   util-linuxMinimal = util-linux.override {
+    cryptsetupSupport = false;
     nlsSupport = false;
     ncursesSupport = false;
     pamSupport = false;

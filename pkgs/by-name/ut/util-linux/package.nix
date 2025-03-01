@@ -8,6 +8,11 @@
   capabilitiesSupport ? stdenv.hostPlatform.isLinux,
   libcap_ng,
   libxcrypt,
+  # Disable this by default because `mount` is setuid. However, we also support
+  # "dlopen" as a value here. Note that the nixpkgs setuid wrapper and ld-linux.so will filter out LD_LIBRARY_PATH
+  # if you set this to dlopen, so ensure you're accessing it without the wrapper if you depend on that.
+  cryptsetupSupport ? false,
+  cryptsetup,
   ncursesSupport ? true,
   ncurses,
   pamSupport ? true,
@@ -24,9 +29,11 @@
   gitUpdater,
 }:
 
+let
+  isMinimal = cryptsetupSupport == false && !nlsSupport && !ncursesSupport && !systemdSupport;
+in
 stdenv.mkDerivation rec {
-  pname =
-    "util-linux" + lib.optionalString (!nlsSupport && !ncursesSupport && !systemdSupport) "-minimal";
+  pname = "util-linux" + lib.optionalString isMinimal "-minimal";
   version = "2.40.4";
 
   src = fetchurl {
@@ -88,6 +95,14 @@ stdenv.mkDerivation rec {
       "--disable-su" # provided by shadow
       (lib.enableFeature writeSupport "write")
       (lib.enableFeature nlsSupport "nls")
+      (lib.withFeatureAs (cryptsetupSupport != false) "cryptsetup" (
+        if cryptsetupSupport == true then
+          "yes"
+        else if cryptsetupSupport == "dlopen" then
+          "dlopen"
+        else
+          throw "invalid cryptsetupSupport value: ${toString cryptsetupSupport}"
+      ))
       (lib.withFeature ncursesSupport "ncursesw")
       (lib.withFeature systemdSupport "systemd")
       (lib.withFeatureAs systemdSupport "systemdsystemunitdir" "${placeholder "bin"}/lib/systemd/system/")
@@ -117,10 +132,13 @@ stdenv.mkDerivation rec {
     "usrsbin_execdir=${placeholder "bin"}/sbin"
   ];
 
-  nativeBuildInputs = [
-    pkg-config
-    installShellFiles
-  ] ++ lib.optionals translateManpages [ po4a ];
+  nativeBuildInputs =
+    [
+      pkg-config
+      installShellFiles
+    ]
+    ++ lib.optionals translateManpages [ po4a ]
+    ++ lib.optionals (cryptsetupSupport == "dlopen") [ cryptsetup ];
 
   buildInputs =
     [
@@ -128,6 +146,7 @@ stdenv.mkDerivation rec {
       libxcrypt
       sqlite
     ]
+    ++ lib.optionals (cryptsetupSupport == true) [ cryptsetup ]
     ++ lib.optionals pamSupport [ pam ]
     ++ lib.optionals capabilitiesSupport [ libcap_ng ]
     ++ lib.optionals ncursesSupport [ ncurses ]
