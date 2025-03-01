@@ -9,6 +9,7 @@
   libgbm,
   pipewire,
   gst_all_1,
+  coreutils,
   nix-update-script,
 }:
 
@@ -46,6 +47,12 @@ rustPlatform.buildRustPackage rec {
   ];
 
   checkInputs = [ gst_all_1.gstreamer ];
+
+  # Also modifies the functionality by replacing 'false' with 'true' to enable the portal to start properly.
+  postPatch = ''
+    substituteInPlace data/org.freedesktop.impl.portal.desktop.cosmic.service \
+      --replace-fail 'Exec=/bin/false' 'Exec=${lib.getExe' coreutils "true"}'
+  '';
 
   dontCargoInstall = true;
 
