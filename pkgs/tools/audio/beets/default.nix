@@ -38,7 +38,7 @@ lib.makeExtensible (self: {
     src = fetchFromGitHub {
       owner = "beetbox";
       repo = "beets";
-      rev = "v${version}";
+      tag = "v${version}";
       hash = "sha256-jhwXRgUUQJgQ/PLwvY1UfHCJ9UC8DcdBpE/janao0RM=";
     };
   };
