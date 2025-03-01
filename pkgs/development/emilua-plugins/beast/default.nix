@@ -1,4 +1,5 @@
 {
+  lib,
   stdenv,
   emilua,
   meson,
@@ -34,4 +35,15 @@ stdenv.mkDerivation (self: {
   ];
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
+
+  meta = {
+    description = "Emilua bindings to Boost.Beast (a WebSocket library)";
+    homepage = "https://gitlab.com/emilua/beast";
+    license = lib.licenses.boost;
+    maintainers = with lib.maintainers; [
+      manipuladordedados
+      lucasew
+    ];
+    platforms = lib.platforms.linux;
+  };
 })
