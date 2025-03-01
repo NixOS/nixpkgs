@@ -1501,6 +1501,7 @@
   ./services/web-apps/gancio.nix
   ./services/web-apps/gerrit.nix
   ./services/web-apps/glance.nix
+  ./services/web-apps/glitchtip.nix
   ./services/web-apps/gotify-server.nix
   ./services/web-apps/gotosocial.nix
   ./services/web-apps/grav.nix
