@@ -7,12 +7,12 @@
 }:
 
 buildGoModule rec {
-  pname = "wtf";
+  pname = "wtfutil";
   version = "0.43.0";
 
   src = fetchFromGitHub {
     owner = "wtfutil";
-    repo = pname;
+    repo = "wtf";
     rev = "v${version}";
     sha256 = "sha256-DFrA4bx+wSOxmt1CVA1oNiYVmcWeW6wpfR5F1tnhyDY=";
   };
