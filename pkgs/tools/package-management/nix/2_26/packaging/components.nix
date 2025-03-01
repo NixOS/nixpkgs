@@ -172,7 +172,7 @@ let
       mesonFlags = [ (lib.mesonBool "b_asneeded" false) ] ++ prevAttrs.mesonFlags or [ ];
     };
 
-  miscGoodPractice = finalAttrs: prevAttrs: {
+  nixDefaultsLayer = finalAttrs: prevAttrs: {
     strictDeps = prevAttrs.strictDeps or true;
     enableParallelBuilding = true;
   };
@@ -276,14 +276,14 @@ in
     (scope.overrideSource "${./..}").appendPatches patches;
 
   mkMesonDerivation = mkPackageBuilder [
-    miscGoodPractice
+    nixDefaultsLayer
     scope.sourceLayer
     setVersionLayer
     mesonLayer
     scope.mesonComponentOverrides
   ];
   mkMesonExecutable = mkPackageBuilder [
-    miscGoodPractice
+    nixDefaultsLayer
     bsdNoLinkAsNeeded
     scope.sourceLayer
     setVersionLayer
@@ -292,7 +292,7 @@ in
     scope.mesonComponentOverrides
   ];
   mkMesonLibrary = mkPackageBuilder [
-    miscGoodPractice
+    nixDefaultsLayer
     bsdNoLinkAsNeeded
     scope.sourceLayer
     mesonLayer
