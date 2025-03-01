@@ -2,7 +2,7 @@
 
 buildDunePackage rec {
   pname = "pcre";
-  version = "7.5.0";
+  version = "8.0.3";
 
   useDune2 = true;
 
@@ -10,7 +10,7 @@ buildDunePackage rec {
 
   src = fetchurl {
     url = "https://github.com/mmottl/pcre-ocaml/releases/download/${version}/pcre-${version}.tbz";
-    sha256 = "sha256-ZxFC9AtthhccvAZyU/qt+QMBkWHVdIi9D7bFRWwsvRo=";
+    sha256 = "sha256-FIgCeBEAHKz7/6bNsUoqbH2c3eMq62gphVdEa+kNf3k=";
   };
 
   buildInputs = [ dune-configurator ];
