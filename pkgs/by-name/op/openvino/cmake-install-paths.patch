@@ -1,0 +1,145 @@
+--- a/cmake/developer_package/packaging/archive.cmake
++++ b/cmake/developer_package/packaging/archive.cmake
+@@ -25,14 +25,15 @@ endif()
+ macro(ov_archive_cpack_set_dirs)
+     # common "archive" package locations
+     # TODO: move current variables to OpenVINO specific locations
+-    set(OV_CPACK_INCLUDEDIR runtime/include)
+-    set(OV_CPACK_OPENVINO_CMAKEDIR runtime/cmake)
+-    set(OV_CPACK_DOCDIR docs)
+-    set(OV_CPACK_LICENSESDIR licenses)
+-    set(OV_CPACK_SAMPLESDIR samples)
++    set(OV_CPACK_INCLUDEDIR "${CMAKE_INSTALL_INCLUDEDIR}")
++    set(OV_CPACK_OPENVINO_CMAKEDIR "${CMAKE_INSTALL_FULL_LIBDIR}/cmake/openvino")
++    set(OV_CPACK_DOCDIR "${CMAKE_INSTALL_DATAROOTDIR}/doc/openvino")
++    set(OV_CPACK_LICENSESDIR "${CMAKE_INSTALL_DATAROOTDIR}/licenses/openvino")
++    set(OV_CPACK_SAMPLESDIR "${CMAKE_INSTALL_DATAROOTDIR}/openvino/samples")
+     set(OV_CPACK_WHEELSDIR wheels)
+     set(OV_CPACK_DEVREQDIR tools)
+-    set(OV_CPACK_PYTHONDIR python)
++    find_package(Python QUIET REQUIRED COMPONENTS Interpreter Development)
++    set(OV_CPACK_PYTHONDIR "${CMAKE_INSTALL_LIBDIR}/python${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}/site-packages")
+ 
+     if(USE_BUILD_TYPE_SUBFOLDER)
+         set(build_type ${CMAKE_BUILD_TYPE})
+@@ -49,11 +50,11 @@ macro(ov_archive_cpack_set_dirs)
+         set(OV_CPACK_RUNTIMEDIR runtime/lib/${ARCH_FOLDER}/${build_type})
+         set(OV_CPACK_ARCHIVEDIR runtime/lib/${ARCH_FOLDER}/${build_type})
+     else()
+-        set(OV_CPACK_LIBRARYDIR runtime/lib/${ARCH_FOLDER})
+-        set(OV_CPACK_RUNTIMEDIR runtime/lib/${ARCH_FOLDER})
+-        set(OV_CPACK_ARCHIVEDIR runtime/lib/${ARCH_FOLDER})
++        set(OV_CPACK_LIBRARYDIR "${CMAKE_INSTALL_LIBDIR}")
++        set(OV_CPACK_RUNTIMEDIR "${CMAKE_INSTALL_LIBDIR}")
++        set(OV_CPACK_ARCHIVEDIR "${CMAKE_INSTALL_LIBDIR}")
+     endif()
+-    set(OV_CPACK_PLUGINSDIR ${OV_CPACK_RUNTIMEDIR})
++    set(OV_CPACK_PLUGINSDIR "${OV_CPACK_RUNTIMEDIR}/openvino")
+ endmacro()
+ 
+ ov_archive_cpack_set_dirs()
+@@ -78,9 +79,9 @@ macro(ov_define_component_include_rules)
+     # licensing
+     unset(OV_CPACK_COMP_LICENSING_EXCLUDE_ALL)
+     # samples
+-    unset(OV_CPACK_COMP_CPP_SAMPLES_EXCLUDE_ALL)
+-    unset(OV_CPACK_COMP_C_SAMPLES_EXCLUDE_ALL)
+-    unset(OV_CPACK_COMP_PYTHON_SAMPLES_EXCLUDE_ALL)
++    set(OV_CPACK_COMP_CPP_SAMPLES_EXCLUDE_ALL EXCLUDE_FROM_ALL)
++    set(OV_CPACK_COMP_C_SAMPLES_EXCLUDE_ALL EXCLUDE_FROM_ALL)
++    set(OV_CPACK_COMP_PYTHON_SAMPLES_EXCLUDE_ALL EXCLUDE_FROM_ALL)
+     # python
+     unset(OV_CPACK_COMP_PYTHON_OPENVINO_EXCLUDE_ALL)
+     unset(OV_CPACK_COMP_BENCHMARK_APP_EXCLUDE_ALL)
+@@ -92,8 +93,8 @@ macro(ov_define_component_include_rules)
+     # nodejs
+     set(OV_CPACK_COMP_NPM_EXCLUDE_ALL EXCLUDE_FROM_ALL)
+     # scripts
+-    unset(OV_CPACK_COMP_INSTALL_DEPENDENCIES_EXCLUDE_ALL)
+-    unset(OV_CPACK_COMP_SETUPVARS_EXCLUDE_ALL)
++    set(OV_CPACK_COMP_INSTALL_DEPENDENCIES_EXCLUDE_ALL EXCLUDE_FROM_ALL)
++    set(OV_CPACK_COMP_SETUPVARS_EXCLUDE_ALL EXCLUDE_FROM_ALL)
+     # pkgconfig
+     set(OV_CPACK_COMP_PKG_CONFIG_EXCLUDE_ALL ${OV_CPACK_COMP_CORE_DEV_EXCLUDE_ALL})
+     # symbolic links
+--- a/src/plugins/intel_npu/tools/compile_tool/CMakeLists.txt
++++ b/src/plugins/intel_npu/tools/compile_tool/CMakeLists.txt
+@@ -28,7 +28,7 @@ ov_add_target(ADD_CPPLINT
+                       npu_tools_utils)
+ 
+ set_target_properties(${TARGET_NAME} PROPERTIES
+-                          FOLDER ${CMAKE_CURRENT_SOURCE_DIR}
++                          FOLDER ${CMAKE_CURRENT_SOURCE_DIR} OUTPUT_NAME ov-${TARGET_NAME}
+                           CXX_STANDARD 17)
+ 
+ # TODO: fix warnings and remove this exception
+@@ -41,13 +41,13 @@ endif()
+ #
+ 
+ install(TARGETS ${TARGET_NAME}
+-        RUNTIME DESTINATION "tools/${TARGET_NAME}"
++        RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
+         COMPONENT ${NPU_INTERNAL_COMPONENT}
+         ${OV_CPACK_COMP_NPU_INTERNAL_EXCLUDE_ALL})
+ 
+ if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/README.md")
+     install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/README.md"
+-            DESTINATION "tools/${TARGET_NAME}"
++            DESTINATION "${OV_CPACK_DOCDIR}" RENAME README-${TARGET_NAME}.md
+             COMPONENT ${NPU_INTERNAL_COMPONENT}
+             ${OV_CPACK_COMP_NPU_INTERNAL_EXCLUDE_ALL})
+ endif()
+--- a/src/plugins/intel_npu/tools/protopipe/CMakeLists.txt
++++ b/src/plugins/intel_npu/tools/protopipe/CMakeLists.txt
+@@ -52,7 +52,7 @@ ov_add_target(ADD_CPPLINT
+               LINK_LIBRARIES PRIVATE ${DEPENDENCIES})
+ 
+ set_target_properties(${TARGET_NAME} PROPERTIES
+-                          FOLDER ${CMAKE_CURRENT_SOURCE_DIR}
++                          FOLDER ${CMAKE_CURRENT_SOURCE_DIR} OUTPUT_NAME ov-${TARGET_NAME}
+                           CXX_STANDARD 17)
+ 
+ #
+@@ -60,13 +60,13 @@ set_target_properties(${TARGET_NAME} PROPERTIES
+ #
+ 
+ install(TARGETS ${TARGET_NAME}
+-        RUNTIME DESTINATION "tools/${TARGET_NAME}"
++        RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
+         COMPONENT ${NPU_INTERNAL_COMPONENT}
+         ${OV_CPACK_COMP_NPU_INTERNAL_EXCLUDE_ALL})
+ 
+ if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/README.md")
+     install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/README.md"
+-            DESTINATION "tools/${TARGET_NAME}"
++            DESTINATION "${OV_CPACK_DOCDIR}" RENAME README-${TARGET_NAME}.md
+             COMPONENT ${NPU_INTERNAL_COMPONENT}
+             ${OV_CPACK_COMP_NPU_INTERNAL_EXCLUDE_ALL})
+ endif()
+--- a/src/plugins/intel_npu/tools/single-image-test/CMakeLists.txt
++++ b/src/plugins/intel_npu/tools/single-image-test/CMakeLists.txt
+@@ -50,7 +50,7 @@ ov_add_target(ADD_CPPLINT
+ ov_set_threading_interface_for(${TARGET_NAME})
+ 
+ set_target_properties(${TARGET_NAME} PROPERTIES
+-                          FOLDER ${CMAKE_CURRENT_SOURCE_DIR}
++                          FOLDER ${CMAKE_CURRENT_SOURCE_DIR} OUTPUT_NAME ov-${TARGET_NAME}
+                           CXX_STANDARD 17)
+ 
+ # TODO: fix warnings and remove this exception
+@@ -63,13 +63,13 @@ endif()
+ #
+ 
+ install(TARGETS ${TARGET_NAME}
+-        RUNTIME DESTINATION "tools/${TARGET_NAME}"
++        RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
+         COMPONENT ${NPU_INTERNAL_COMPONENT}
+         ${OV_CPACK_COMP_NPU_INTERNAL_EXCLUDE_ALL})
+ 
+ if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/README.md")
+     install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/README.md"
+-            DESTINATION "tools/${TARGET_NAME}"
++            DESTINATION "${OV_CPACK_DOCDIR}" RENAME README-${TARGET_NAME}.md
+             COMPONENT ${NPU_INTERNAL_COMPONENT}
+             ${OV_CPACK_COMP_NPU_INTERNAL_EXCLUDE_ALL})
+ endif()
