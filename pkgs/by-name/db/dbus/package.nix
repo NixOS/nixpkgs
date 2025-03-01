@@ -22,29 +22,6 @@ stdenv.mkDerivation rec {
   pname = "dbus";
   version = "1.14.10";
 
-  src = fetchurl {
-    url = "https://dbus.freedesktop.org/releases/dbus/dbus-${version}.tar.xz";
-    sha256 = "sha256-uh8h0r2dM52i1KqHgMCd8y/qh5mLc9ok9Jq53x42pQ8=";
-  };
-
-  patches = lib.optional stdenv.hostPlatform.isSunOS ./implement-getgrouplist.patch;
-
-  postPatch = ''
-    substituteInPlace bus/Makefile.am \
-      --replace 'install-data-hook:' 'disabled:' \
-      --replace '$(mkinstalldirs) $(DESTDIR)$(localstatedir)/run/dbus' ':'
-    substituteInPlace tools/Makefile.am \
-      --replace 'install-data-local:' 'disabled:' \
-      --replace 'installcheck-local:' 'disabled:'
-  ''
-  # cleanup of runtime references
-  + ''
-    substituteInPlace ./dbus/dbus-sysdeps-unix.c \
-      --replace 'DBUS_BINDIR "/dbus-launch"' "\"$lib/bin/dbus-launch\""
-    substituteInPlace ./tools/dbus-launch.c \
-      --replace 'DBUS_DAEMONDIR"/dbus-daemon"' '"/run/current-system/sw/bin/dbus-daemon"'
-  '';
-
   outputs = [
     "out"
     "dev"
@@ -52,9 +29,18 @@ stdenv.mkDerivation rec {
     "doc"
     "man"
   ];
+
   separateDebugInfo = true;
 
+  src = fetchurl {
+    url = "https://dbus.freedesktop.org/releases/dbus/dbus-${version}.tar.xz";
+    sha256 = "sha256-uh8h0r2dM52i1KqHgMCd8y/qh5mLc9ok9Jq53x42pQ8=";
+  };
+
+  patches = lib.optional stdenv.hostPlatform.isSunOS ./implement-getgrouplist.patch;
+
   strictDeps = true;
+
   nativeBuildInputs = [
     autoreconfHook
     autoconf-archive
@@ -120,6 +106,22 @@ stdenv.mkDerivation rec {
     "sysconfdir=${placeholder "out"}/etc"
     "datadir=${placeholder "out"}/share"
   ];
+
+  postPatch = ''
+    substituteInPlace bus/Makefile.am \
+      --replace 'install-data-hook:' 'disabled:' \
+      --replace '$(mkinstalldirs) $(DESTDIR)$(localstatedir)/run/dbus' ':'
+    substituteInPlace tools/Makefile.am \
+      --replace 'install-data-local:' 'disabled:' \
+      --replace 'installcheck-local:' 'disabled:'
+  ''
+  # cleanup of runtime references
+  + ''
+    substituteInPlace ./dbus/dbus-sysdeps-unix.c \
+      --replace 'DBUS_BINDIR "/dbus-launch"' "\"$lib/bin/dbus-launch\""
+    substituteInPlace ./tools/dbus-launch.c \
+      --replace 'DBUS_DAEMONDIR"/dbus-daemon"' '"/run/current-system/sw/bin/dbus-daemon"'
+  '';
 
   # it's executed from $lib by absolute path
   postFixup = ''
