@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
     ++ (lib.mapAttrsToList (lib.flip lib.enableFeature)) programs;
 
   nativeBuildInputs = [ pkg-config ] ++ lib.optionals rebuildMan [ asciidoctor ];
-  buildInputs = [
+  propagatedBuildInputs = [
     lvm2
     json_c
     openssl
