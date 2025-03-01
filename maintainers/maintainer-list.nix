@@ -2547,6 +2547,12 @@
     github = "Baitinq";
     githubId = 30861839;
   };
+  bakito = {
+    email = "github@bakito.ch";
+    name = "Marc Brugger";
+    github = "bakito";
+    githubId = 2733215;
+  };
   baksa = {
     email = "baksa@pm.me";
     name = "Kryštof Baksa";
