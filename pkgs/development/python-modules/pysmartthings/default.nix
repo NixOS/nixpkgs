@@ -1,40 +1,51 @@
 {
   lib,
   aiohttp,
+  aiosseclient,
+  aioresponses,
   buildPythonPackage,
   fetchFromGitHub,
+  mashumaro,
+  orjson,
+  poetry-core,
   pytest-asyncio,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
+  syrupy,
+  yarl,
 }:
 
 buildPythonPackage rec {
   pname = "pysmartthings";
-  version = "0.7.8";
-  format = "setuptools";
+  version = "2.4.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
-    owner = "andrewsayre";
-    repo = pname;
-    rev = version;
-    hash = "sha256-r+f2+vEXJdQGDlbs/MhraFgEmsAf32PU282blLRLjzc=";
+    owner = "pySmartThings";
+    repo = "pysmartthings";
+    rev = "v${version}";
+    hash = "sha256-t52XRDHirM0e+MUvG8/54LQVZcXe7Nsl++2kSNbIfg8=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "aiohttp>=3.8.0,<4.0.0" "aiohttp<=4.0.0"
-  '';
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [ aiohttp ];
-
-  # https://github.com/andrewsayre/pysmartthings/issues/80
-  doCheck = lib.versionOlder aiohttp.version "3.9.0";
+  dependencies = [
+    aiohttp
+    aiosseclient
+    mashumaro
+    orjson
+    yarl
+  ];
 
   nativeCheckInputs = [
+    aioresponses
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
+    syrupy
   ];
 
   pythonImportsCheck = [ "pysmartthings" ];
