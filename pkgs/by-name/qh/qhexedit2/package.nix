@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qhexedit2";
-  version = "0.8.9";
+  version = "0.8.11";
 
   src = fetchFromGitHub {
     owner = "Simsys";
     repo = "qhexedit2";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qg8dyXwAsTVSx85Ad7UYhr4d1aTRG9QbvC0uyOMcY8g=";
+    hash = "sha256-W1KjcKj49sHf1vxWvgmOlla0HTGsc4zMSuHtsptgMtQ=";
   };
 
   postPatch = ''
