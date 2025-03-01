@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sticky-notes";
-  version = "0.2.5";
+  version = "0.2.6";
 
   src = fetchFromGitHub {
     owner = "vixalien";
     repo = "sticky";
     rev = "v${version}";
-    hash = "sha256-+++xUiMjO+19hmLLBamOL6tMUqB0a8ixTXca/6A8ZK8=";
+    hash = "sha256-keSxUTil4/QO8Wn4p6LB7oERxXHKD83qIRPZ93ZygWE=";
     fetchSubmodules = true;
   };
 
