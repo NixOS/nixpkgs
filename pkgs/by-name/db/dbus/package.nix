@@ -64,24 +64,22 @@ stdenv.mkDerivation rec {
     xmlto
   ];
 
-  propagatedBuildInputs = [
+  buildInputs = [
     expat
+  ]
+  ++ lib.optionals x11Support (
+    with xorg;
+    [
+      libX11
+      libICE
+      libSM
+    ]
+  )
+  ++ lib.optional enableSystemd systemdMinimal
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    audit
+    libapparmor
   ];
-
-  buildInputs =
-    lib.optionals x11Support (
-      with xorg;
-      [
-        libX11
-        libICE
-        libSM
-      ]
-    )
-    ++ lib.optional enableSystemd systemdMinimal
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      audit
-      libapparmor
-    ];
   # ToDo: optional selinux?
 
   __darwinAllowLocalNetworking = true;
