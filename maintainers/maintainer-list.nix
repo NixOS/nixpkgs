@@ -21751,6 +21751,12 @@
     githubId = 8219659;
     name = "Siraphob Phipathananunth";
   };
+  SirBerg = {
+    email = "benno@boerg.co";
+    github = "SirBerg";
+    githubId = 87900036;
+    name = "Benno Rodehack";
+  };
   siriobalmelli = {
     email = "sirio@b-ad.ch";
     github = "siriobalmelli";
