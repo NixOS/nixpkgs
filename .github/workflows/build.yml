@@ -11,6 +11,10 @@ on:
     # Every week
     - cron: "0 0 * * 0"
 
+env:
+  LLVM_VERSION: 19
+  GCC_VERSION: 14
+
 jobs:
   build:
     strategy:
@@ -21,8 +25,8 @@ jobs:
             configure_preset: "static"
             build_preset: "static-release"
             release_name: "linux-x86-64"
-            cc: "gcc-14"
-            cxx: "g++-14"
+            cc: "gcc-$GCC_VERSION"
+            cxx: "g++-$GCC_VERSION"
 
           - platform: windows-latest
             configure_preset: "windows-static"
@@ -59,28 +63,24 @@ jobs:
 
       - name: Install requirements
         run: |
-          # Temporary until gcc-14 is officialy released and available on the runner
           sudo add-apt-repository "deb http://archive.ubuntu.com/ubuntu/ noble main universe"
           sudo apt update
-          sudo apt install gcc-14 g++-14
+          sudo apt install gcc-$GCC_VERSION g++-$GCC_VERSION
           sudo apt install libfuse-dev
         if: matrix.platform == 'ubuntu-latest'
     
       - name: Brew python fix
         run: |
-          # Temporary fix, see https://github.com/actions/setup-python/issues/577
-          rm /usr/local/bin/2to3 || true
-          rm /usr/local/bin/idle3 || true
-          rm /usr/local/bin/pydoc3 || true
-          rm /usr/local/bin/python3 || true
-          rm /usr/local/bin/python3-config || true
+          # Temporary fix, see https://github.com/actions/runner-images/issues/9966
+          brew install --overwrite python@3.12
+          brew install --overwrite python@3.13
         shell: bash
         if: matrix.platform == 'macos-13'
 
       - name: Install requirements (MacOS)
         run: |
           brew update
-          brew install llvm
+          brew install llvm@$LLVM_VERSION
           brew install macfuse
           # Hack to properly target the os libcxx dynlib
           sed -i '' '/^#define _LIBCPP_HAS_NO_VENDOR_AVAILABILITY_ANNOTATIONS/d' "$(brew --prefix llvm)"/include/c++/v1/__config_site

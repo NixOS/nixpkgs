@@ -34,16 +34,16 @@ void dumpdir(const std::filesystem::path& target,
       return;
     }
   }
-  for (auto [name, item_or_error] : *dir) {
+  for (auto [name, entry_or_error] : *dir) {
     auto const npath = path / name;
     try {
-      auto item = throw_if_error(item_or_error);
+      auto entry = throw_if_error(entry_or_error);
       if (verbose)
         std::println("Dumping /{}", npath.generic_string());
-      if (item->is_directory()) {
-        dumpdir(target, std::dynamic_pointer_cast<Directory>(item), npath, verbose);
-      } else if (item->is_file()) {
-        auto file = std::dynamic_pointer_cast<File>(item);
+      if (entry->is_directory()) {
+        dumpdir(target, std::dynamic_pointer_cast<Directory>(entry), npath, verbose);
+      } else if (entry->is_file()) {
+        auto file = std::dynamic_pointer_cast<File>(entry);
         std::ofstream output_file((target / npath).string(), std::ios::binary | std::ios::out);
         size_t to_read = file->Size();
         File::stream stream(file);

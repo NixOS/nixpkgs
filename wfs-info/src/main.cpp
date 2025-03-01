@@ -7,7 +7,6 @@
 
 #include <boost/program_options.hpp>
 #include <filesystem>
-#include <fstream>
 #include <iostream>
 #include <memory>
 #include <print>
@@ -24,8 +23,8 @@ std::string inline prettify_path(const std::filesystem::path& path) {
 
 void quotaInfo(int depth, const std::filesystem::path& path, const std::shared_ptr<QuotaArea>& quota) {
   std::string padding(depth, '\t');
-  std::println("{}Quota {} [0x{:08x}-0x{:08x}]:", padding, prettify_path(path), quota->device_block_number(),
-               quota->to_device_block_number(quota->blocks_count()));
+  std::println("{}Quota {} [0x{:08x}-0x{:08x}]:", padding, prettify_path(path), quota->physical_block_number(),
+               quota->to_physical_block_number(quota->blocks_count()));
 
   padding += '\t';
   std::shared_ptr<FreeBlocksAllocator> allocator = throw_if_error(quota->GetFreeBlocksAllocator());
@@ -34,9 +33,9 @@ void quotaInfo(int depth, const std::filesystem::path& path, const std::shared_p
 
   std::println("{}Free blocks: 0x{:08x}", padding, allocator_header->free_blocks_count.value());
   std::println("{}Free metadata blocks: 0x{:08x}", padding,
-               quota->to_device_block_number(allocator_header->free_blocks_cache_count.value()));
+               quota->to_physical_blocks_count(allocator_header->free_blocks_cache_count.value()));
   std::println("{}Free metadata block: 0x{:08x}", padding,
-               quota->to_device_block_number(allocator_header->free_blocks_cache_count.value()));
+               quota->to_physical_block_number(allocator_header->free_blocks_cache.value()));
 
   std::vector<FreeBlocksRangeInfo> ranges;
   for (const auto& extent : tree) {
@@ -49,8 +48,8 @@ void quotaInfo(int depth, const std::filesystem::path& path, const std::shared_p
   std::println("{}Free ranges:", padding);
   padding += '\t';
   for (const auto& range : ranges) {
-    std::println("{}[0x{:08x}-0x{:08x}]", padding, quota->to_device_block_number(range.block_number),
-                 quota->to_device_block_number(range.block_number + range.blocks_count));
+    std::println("{}[0x{:08x}-0x{:08x}]", padding, quota->to_physical_block_number(range.block_number),
+                 quota->to_physical_block_number(range.block_number + range.blocks_count));
   }
 }
 
@@ -59,12 +58,12 @@ void dirInfo(int depth, const std::shared_ptr<Directory>& dir, const std::filesy
     quotaInfo(depth, path, dir->quota());
     depth += 1;
   }
-  for (auto [name, item_or_error] : *dir) {
+  for (auto [name, entry_or_error] : *dir) {
     auto const npath = path / name;
     try {
-      auto item = throw_if_error(item_or_error);
-      if (item->is_directory())
-        dirInfo(depth, std::dynamic_pointer_cast<Directory>(item), npath);
+      auto entry = throw_if_error(entry_or_error);
+      if (entry->is_directory())
+        dirInfo(depth, std::dynamic_pointer_cast<Directory>(entry), npath);
     } catch (const WfsException& e) {
       std::println(std::cerr, "Error: Failed to dump {} ({})", prettify_path(npath), e.what());
     }
@@ -152,8 +151,8 @@ int main(int argc, char* argv[]) {
     auto wfs_device = throw_if_error(WfsDevice::Open(device, key));
     std::println("Allocator state:");
     auto transactions_area = throw_if_error(wfs_device->GetTransactionsArea());
-    std::println("Transactions [0x{:08x}-0x{:08x}]", transactions_area->device_block_number(),
-                 transactions_area->to_device_blocks_count(transactions_area->blocks_count()));
+    std::println("Transactions [0x{:08x}-0x{:08x}]", transactions_area->physical_block_number(),
+                 transactions_area->to_physical_blocks_count(transactions_area->blocks_count()));
     dirInfo(0, throw_if_error(wfs_device->GetRootDirectory()), {});
     std::println("Done!");
   } catch (std::exception& e) {

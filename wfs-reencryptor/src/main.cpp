@@ -122,15 +122,15 @@ void exploreDir(const ReencryptorBlocksDevice* reencryptor,
     }
   }
   updateExploreStatus(reencryptor, prettify_path(path));
-  for (auto [name, item_or_error] : *dir) {
+  for (auto [name, entry_or_error] : *dir) {
     auto const npath = path / name;
     try {
-      auto item = throw_if_error(item_or_error);
-      if (item->is_directory())
-        exploreDir(reencryptor, std::dynamic_pointer_cast<Directory>(item), npath);
-      else if (item->is_file()) {
+      auto entry = throw_if_error(entry_or_error);
+      if (entry->is_directory())
+        exploreDir(reencryptor, std::dynamic_pointer_cast<Directory>(entry), npath);
+      else if (entry->is_file()) {
         updateExploreStatus(reencryptor, prettify_path(npath));
-        auto file = std::dynamic_pointer_cast<File>(item);
+        auto file = std::dynamic_pointer_cast<File>(entry);
         size_t to_read = file->Size();
         File::stream stream(file);
         std::array<char, 0x2000> data;
