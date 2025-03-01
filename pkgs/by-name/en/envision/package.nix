@@ -187,5 +187,6 @@ buildFHSEnv {
 
   meta = envision-unwrapped.meta // {
     description = "${envision-unwrapped.meta.description} (with build environment)";
+    broken = true;
   };
 }
