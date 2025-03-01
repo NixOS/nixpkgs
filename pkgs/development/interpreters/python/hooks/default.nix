@@ -184,6 +184,12 @@ in
               ] ++ previousPythonAttrs.disabledTestPaths or [ ];
             })
           );
+          disabledTestPaths-item = objprint.overridePythonAttrs (previousPythonAttrs: {
+            pname = "test-pytestCheckHook-disabledTestPaths-item-${previousPythonAttrs.pname}";
+            disabledTestPaths = [
+              "tests/test_basic.py::TestBasic"
+            ] ++ previousPythonAttrs.disabledTestPaths or [ ];
+          });
           disabledTestPaths-glob = objprint.overridePythonAttrs (previousPythonAttrs: {
             pname = "test-pytestCheckHook-disabledTestPaths-glob-${previousPythonAttrs.pname}";
             disabledTestPaths = [
