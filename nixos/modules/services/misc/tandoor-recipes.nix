@@ -7,6 +7,18 @@
 let
   cfg = config.services.tandoor-recipes;
   pkg = cfg.package;
+  stateDir = "/var/lib/tandoor-recipes";
+  mediaRoot =
+    if lib.versionAtLeast config.system.stateVersion "25.05" then
+      "${stateDir}/media"
+    else if cfg.extraConfig ? MEDIA_ROOT then
+      cfg.extraConfig.MEDIA_ROOT
+    else
+      lib.warn ''
+        Starting at NixOS 25.05 the default MEDIA_ROOT will be set to
+        /var/lib/tandoor-recipes/media instead of /var/lib/tandoor-recipes. For
+        more info see https://github.com/NixOS/nixpkgs/pull/386167.
+      '' stateDir;
 
   # SECRET_KEY through an env file
   env =
@@ -14,7 +26,7 @@ let
       GUNICORN_CMD_ARGS = "--bind=${cfg.address}:${toString cfg.port}";
       DEBUG = "0";
       DEBUG_TOOLBAR = "0";
-      MEDIA_ROOT = "/var/lib/tandoor-recipes";
+      MEDIA_ROOT = mediaRoot;
     }
     // lib.optionalAttrs (config.time.timeZone != null) {
       TZ = config.time.timeZone;
@@ -26,7 +38,7 @@ let
     ${lib.toShellVars env}
     eval "$(${config.systemd.package}/bin/systemctl show -pUID,GID,MainPID tandoor-recipes.service)"
     exec ${pkgs.util-linux}/bin/nsenter \
-      -t $MainPID -m -S $UID -G $GID --wdns=${env.MEDIA_ROOT} \
+      -t $MainPID -m -S $UID -G $GID --wdns=${stateDir} \
       ${pkg}/bin/tandoor-recipes "$@"
   '';
 in
@@ -67,8 +79,27 @@ in
       description = ''
         Extra tandoor recipes config options.
 
-        See [the example dot-env file](https://raw.githubusercontent.com/vabene1111/recipes/master/.env.template)
-        for available options.
+        See [the tandoor documentation](https://docs.tandoor.dev/system/configuration)
+        for all available options. And the [environment template](https://raw.githubusercontent.com/vabene1111/recipes/master/.env.template)
+        for a commonly used subset.
+
+        By default the following environment will be used:
+
+        ```nix
+        {
+          GUNICORN_CMD_ARGS = "--bind=''${cfg.address}:''${toString cfg.port}";
+          DEBUG = "0";
+          DEBUG_TOOLBAR = "0";
+          MEDIA_ROOT = /var/lib/tandoor-recipes/media;
+        }
+        // lib.optionalAttrs (config.time.timeZone != null) {
+          TZ = config.time.timeZone;
+        }
+        ```
+
+        Any environment variables set through this option are combined with the
+        default environment. If the variable is already part of the default
+        environment it will override the default.
       '';
       example = {
         ENABLE_SIGNUP = "1";
@@ -113,8 +144,10 @@ in
 
         User = cfg.user;
         Group = cfg.group;
-        StateDirectory = "tandoor-recipes";
-        WorkingDirectory = env.MEDIA_ROOT;
+        StateDirectory = [
+          "tandoor-recipes"
+        ] ++ lib.optional (env.MEDIA_ROOT == "/var/lib/tandoor-recipes/media") "tandoor-recipes/media";
+        WorkingDirectory = stateDir;
         RuntimeDirectory = "tandoor-recipes";
 
         BindReadOnlyPaths = [
