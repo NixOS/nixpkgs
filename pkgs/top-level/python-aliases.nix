@@ -435,6 +435,7 @@ mapAliases ({
   ordereddict = throw "ordereddict has been removed because it is only useful on unsupported python versions."; # added 2022-05-28
   pafy = throw "pafy has been removed because it is unmaintained and only a dependency of mps-youtube, itself superseded by yewtube"; # Added 2023-01-19
   pam = python-pam; # added 2020-09-07.
+  para = throw "para has been removed because it is unmaintained"; # added 2025-03-01
   PasteDeploy = pastedeploy; # added 2021-10-07
   pathlib = throw "pathlib was removed as it has been integrated in python standard library in version 3.4"; # added 2024-05-13
   pathpy = path; # added 2022-04-12
