@@ -419,15 +419,15 @@
   "org/springdoc/openapi-gradle-plugin#org.springdoc.openapi-gradle-plugin.gradle.plugin/1.8.0": {
    "pom": "sha256-LRFzQyMeKb4i5Im8H0gl4dS771RZBeeTJE6VIhlXFU8="
   },
-  "org/springframework#spring-core/6.0.23": {
-   "jar": "sha256-TOmcA/2FlH1DV/xCrN5OCAs2TVOjrLHPq52jmCQMQpE=",
-   "module": "sha256-eCrk9Me63PoSiLZ+lzw96kPqoMD4am2RCEIAn2i+l9w=",
-   "pom": "sha256-FU3YnVr9T1idQA4GJkk87ONTsYc2e/ODPvVx97KQ5kE="
+  "org/springframework#spring-core/6.1.14": {
+   "jar": "sha256-4VoRefyWQv/tE8pV4oY+LaUkzNEIO3xvG1z9VzPzssU=",
+   "module": "sha256-c5SoxHoyHbg43H3wtb7F9prMPMu7D4jn57eCdEpaahE=",
+   "pom": "sha256-7YrAnxeoq79chQmBgDdU1CSx2jYytN37Kl7K5Com1pE="
   },
-  "org/springframework#spring-jcl/6.0.23": {
-   "jar": "sha256-zCnuRaX/A2qZwLue0aCEBls2HvWiSeD0XxZYzMP0dQQ=",
-   "module": "sha256-4F58rXbbpxI0nJWB/wt3dyzJ9jiRsOtI9Feyq36ObtQ=",
-   "pom": "sha256-JAilcZX6oBf25+ye+N2K7InB3Qa5ZyBopMpWiALKl7I="
+  "org/springframework#spring-jcl/6.1.14": {
+   "jar": "sha256-mXXEYrrO56DBqnnlWqT67QK9KNx40SUkBNqH9ff7TLE=",
+   "module": "sha256-eVuSx7ppHm1vSPMy/IoKELVkJx1A/luRYEsT89XeBFo=",
+   "pom": "sha256-XS7hByyO0HjD5QkJVXnPKujOMBMFhthMz2q2LACN9WM="
   },
   "org/springframework/boot#org.springframework.boot.gradle.plugin/3.3.5": {
    "pom": "sha256-yGsKKmHOFuW2MK0UYJ3nS9dOFAX23odkPptBsbEojnc="
@@ -1076,8 +1076,8 @@
   "net/sf/launch4j#launch4j/3.50": {
    "pom": "sha256-1716EuPm1bR/Ou0p/4g89cTKnie3GWkQZnkzH6N+xy0="
   },
-  "net/sf/launch4j#launch4j/3.50/workdir-linux64": {
-   "jar": "sha256-/uvoOrT+Q5F+qn3/Jy3uDvP6hUvWgzRDRDDgjjoS8zA="
+  "net/sf/launch4j#launch4j/3.50/workdir-linux": {
+   "jar": "sha256-lIYQ+neeFs1zX+wI+d+NfIZmWsbND1Kobh1QYW/msdo="
   },
   "org/antlr#antlr4-master/4.13.0": {
    "pom": "sha256-IiBv17pJUVLlJvUO/sn8j03QX8tD38+PJk6Dffa2Qk8="
