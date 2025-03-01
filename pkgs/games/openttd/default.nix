@@ -118,21 +118,17 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace src/music/fluidsynth.cpp \
-      --replace "/usr/share/soundfonts/default.sf2" "${soundfont-fluid}/share/soundfonts/FluidR3_GM2-2.sf2"
+      --replace-fail "/usr/share/soundfonts/default.sf2" "${soundfont-fluid}/share/soundfonts/FluidR3_GM2-2.sf2"
   '';
 
-  postInstall = ''
-    ${lib.optionalString withOpenGFX ''
-      cp ${opengfx}/*.tar $out/share/games/openttd/baseset
-    ''}
-
-    ${lib.optionalString withOpenSFX ''
-      cp ${opensfx}/*.tar $out/share/games/openttd/baseset
-    ''}
-
-    ${lib.optionalString withOpenMSX ''
-      tar -xf ${openmsx}/*.tar -C $out/share/games/openttd/baseset
-    ''}
+  postInstall = lib.optionalString withOpenGFX ''
+    cp ${opengfx}/*.tar $out/share/games/openttd/baseset
+  ''
+  + lib.optionalString withOpenSFX ''
+    cp ${opensfx}/*.tar $out/share/games/openttd/baseset
+  ''
+  + lib.optionalString withOpenMSX ''
+    tar -xf ${openmsx}/*.tar -C $out/share/games/openttd/baseset
   '';
 
   meta = with lib; {
