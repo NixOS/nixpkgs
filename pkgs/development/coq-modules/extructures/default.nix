@@ -19,7 +19,7 @@
       [
         {
           cases = [
-            (range "8.17" "8.20")
+            (range "8.17" "9.0")
             (isGe "2.0.0")
           ];
           out = "0.5.0";
@@ -75,5 +75,6 @@
   (o: {
     propagatedBuildInputs =
       o.propagatedBuildInputs
-      ++ lib.optional (lib.versionAtLeast o.version "0.3.0") deriving;
+      ++ lib.optional (lib.versionAtLeast o.version "0.3.0"
+                       || o.version == "dev") deriving;
   })

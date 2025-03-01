@@ -53,7 +53,7 @@ in {
         description = ''
           Address to listen on. Must be in the
           `ListenStream=` syntax of
-          [systemd.socket(5)](https://www.freedesktop.org/software/systemd/man/systemd.socket.html).
+          {manpage}`systemd.socket(5)`.
         '';
       };
 

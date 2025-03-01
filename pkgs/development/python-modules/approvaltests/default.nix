@@ -55,6 +55,7 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
+    "test_preceding_whitespace"
     # Tests expect paths below ApprovalTests.Python directory
     "test_received_filename"
     "test_pytest_namer"

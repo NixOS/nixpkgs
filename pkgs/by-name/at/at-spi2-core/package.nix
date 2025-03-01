@@ -27,7 +27,7 @@
 
 stdenv.mkDerivation rec {
   pname = "at-spi2-core";
-  version = "2.54.0";
+  version = "2.54.1";
 
   outputs = [
     "out"
@@ -36,8 +36,8 @@ stdenv.mkDerivation rec {
   separateDebugInfo = true;
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    hash = "sha256-1+7n51vt3MJyztwrYFNWAPOq5uSBWJ68Znr8Q3wKYHk=";
+    url = "mirror://gnome/sources/at-spi2-core/${lib.versions.majorMinor version}/at-spi2-core-${version}.tar.xz";
+    hash = "sha256-8HKeXIdl/rGWm7bB+6GK+iWCEmsDWap1oXP9oaz5PEw=";
   };
 
   nativeBuildInputs =
@@ -95,7 +95,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "at-spi2-core";
       versionPolicy = "odd-unstable";
     };
   };

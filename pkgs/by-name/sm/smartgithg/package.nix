@@ -14,15 +14,15 @@
 let
   jre = openjdk21;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "smartgithg";
-  version = "23.1.3";
+  version = "24.1.1";
 
   src = fetchurl {
     url = "https://www.syntevo.com/downloads/smartgit/smartgit-linux-${
-      builtins.replaceStrings [ "." ] [ "_" ] version
+      builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version
     }.tar.gz";
-    hash = "sha256-UvdHr1L5MYwl7eT1BVS/M8Ydtw8VjDG+QuqMW0Q5La4=";
+    hash = "sha256-Lv5U/D1p5+Xiq/IeQJGDu3t6j6sP0r0vMYpfAEeExfI=";
   };
 
   nativeBuildInputs = [ wrapGAppsHook3 ];
@@ -79,10 +79,10 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  desktopItem = makeDesktopItem rec {
+  desktopItem = makeDesktopItem {
     name = "smartgit";
     exec = "smartgit";
-    comment = meta.description;
+    comment = finalAttrs.meta.description;
     icon = "smartgit";
     desktopName = "SmartGit";
     categories = [
@@ -96,16 +96,16 @@ stdenv.mkDerivation rec {
       "x-scheme-handler/sourcetree"
     ];
     startupNotify = true;
-    startupWMClass = name;
+    startupWMClass = "smartgit";
     keywords = [ "git" ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "GUI for Git, Mercurial, Subversion";
     homepage = "https://www.syntevo.com/smartgit/";
     changelog = "https://www.syntevo.com/smartgit/changelog.txt";
-    license = licenses.unfree;
-    platforms = platforms.linux;
+    license = lib.licenses.unfree;
+    platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ jraygauthier ];
   };
-}
+})

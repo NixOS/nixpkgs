@@ -7,21 +7,22 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "flexget";
-  version = "3.13.6";
+  version = "3.15.7";
   pyproject = true;
 
-  # Fetch from GitHub in order to use `requirements.in`
   src = fetchFromGitHub {
     owner = "Flexget";
     repo = "Flexget";
     tag = "v${version}";
-    hash = "sha256-I6AQtoGk/YUDM5DzegvLi8QmVvoma16zJGZ8BMUUN3c=";
+    hash = "sha256-vMg4HimS+/QSbuwwVfKAroux8VHrKsm1wPGZDWN33g8=";
   };
 
-  # relax dep constrains, keep environment constraints
   pythonRelaxDeps = true;
 
-  build-system = with python3Packages; [ setuptools ];
+  build-system = with python3Packages; [
+    hatchling
+    hatch-requirements-txt
+  ];
 
   dependencies = with python3Packages; [
     # See https://github.com/Flexget/Flexget/blob/master/pyproject.toml
@@ -156,7 +157,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = {
     homepage = "https://flexget.com/";
-    changelog = "https://github.com/Flexget/Flexget/releases/tag/v${version}";
+    changelog = "https://github.com/Flexget/Flexget/releases/tag/${src.tag}";
     description = "Multipurpose automation tool for all of your media";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pbsds ];

@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "sqlfmt";
-  version = "0.24.0";
+  version = "0.26.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "tconbeer";
     repo = "sqlfmt";
     tag = "v${version}";
-    hash = "sha256-8TPuFxcZ6ENiPyzSDJPneqvOkPkuFlTYHvbuM842j30=";
+    hash = "sha256-q0pkwuQY0iLzK+Lef6k62UxMKJy592RsJnSZnVYdMa8=";
   };
 
   pythonRelaxDeps = [ "platformdirs" ];

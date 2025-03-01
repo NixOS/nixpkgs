@@ -3,34 +3,58 @@
   stdenvNoCC,
   fetchurl,
   unzip,
+  makeBinaryWrapper,
+  versionCheckHook,
+  writeShellScript,
+  coreutils,
+  xcbuild,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "cyberduck";
-  version = "9.0.0.41777";
+  version = "9.1.2.42722";
 
   src = fetchurl {
     url = "https://update.cyberduck.io/Cyberduck-${finalAttrs.version}.zip";
-    hash = "sha256-oDTFkoX4uu+X5vLDHn+tGoNB/Pd9ncdFE8dGS6PT5wg=";
+    hash = "sha256-oGerVv6CteMl+MJ9AfGYmo6Iv6i7BFUCF+E3My6UH6I=";
   };
   sourceRoot = ".";
 
-  nativeBuildInputs = [ unzip ];
+  nativeBuildInputs = [
+    unzip
+    makeBinaryWrapper
+  ];
 
   installPhase = ''
     runHook preInstall
 
     mkdir -p $out/Applications
     cp -r Cyberduck.app $out/Applications
+    makeWrapper $out/Applications/Cyberduck.app/Contents/MacOS/Cyberduck $out/bin/cyberduck
 
     runHook postInstall
   '';
 
-  meta = with lib; {
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgram = writeShellScript "version-check" ''
+    marketing_version=$(${xcbuild}/bin/PlistBuddy -c "Print :CFBundleShortVersionString" "$1" | ${coreutils}/bin/tr -d '"')
+    build_version=$(${xcbuild}/bin/PlistBuddy -c "Print :CFBundleVersion" "$1")
+
+    echo $marketing_version.$build_version
+  '';
+  versionCheckProgramArg = [ "${placeholder "out"}/Applications/Cyberduck.app/Contents/Info.plist" ];
+  doInstallCheck = true;
+
+  meta = {
     description = "Libre file transfer client for Mac and Windows";
     homepage = "https://cyberduck.io";
-    license = licenses.gpl3Plus;
+    changelog = "https://cyberduck.io/changelog/";
+    license = lib.licenses.gpl3Plus;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [ emilytrau ];
-    platforms = platforms.darwin;
+    maintainers = with lib.maintainers; [
+      emilytrau
+      DimitarNestorov
+    ];
+    platforms = lib.platforms.darwin;
+    mainProgram = "cyberduck";
   };
 })

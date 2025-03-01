@@ -7,6 +7,7 @@
   installShellFiles,
   callPackage,
   nixosTests,
+  authelia-web ? callPackage ./web.nix { inherit nodejs pnpm fetchFromGitHub; },
 }:
 
 let
@@ -16,7 +17,8 @@ let
     src
     vendorHash
     ;
-  web = callPackage ./web.nix { inherit nodejs pnpm fetchFromGitHub; };
+
+  web = authelia-web;
 in
 buildGoModule rec {
   inherit

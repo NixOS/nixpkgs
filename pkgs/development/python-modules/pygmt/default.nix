@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "pygmt";
-  version = "0.14.0";
+  version = "0.14.2";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "GenericMappingTools";
     repo = "pygmt";
     tag = "v${version}";
-    hash = "sha256-8dzZuv9feiRyh3l8wV6+gYvc6N+yQnabgSbvw4ig+GY=";
+    hash = "sha256-UwqkJxO+LbJz7BVbQnulxm4sMrKHoY3ayqLHfZy7Ji4=";
   };
 
   postPatch = ''
@@ -65,7 +65,7 @@ buildPythonPackage rec {
     description = "Python interface for the Generic Mapping Tools";
     homepage = "https://github.com/GenericMappingTools/pygmt";
     license = lib.licenses.bsd3;
-    changelog = "https://github.com/GenericMappingTools/pygmt/releases/tag/v${version}";
+    changelog = "https://github.com/GenericMappingTools/pygmt/releases/tag/${src.tag}";
     maintainers = lib.teams.geospatial.members;
   };
 }

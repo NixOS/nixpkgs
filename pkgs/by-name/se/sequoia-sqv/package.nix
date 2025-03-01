@@ -19,7 +19,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-frGukJDsxq+BWLPC/4imfc42lDKVF8BPIQQDazaLaQ0=";
   };
 
-  cargoHash = "sha256-1h1nXtXMTwL8ICxWTV8My0IdE+6w0L7xXZD012Cv5U8=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-WaLRBf+Umaa8LTQ97TsJJ7pUlmficIwuFV6d5QDT6SA=";
 
   nativeBuildInputs = [
     pkg-config
@@ -30,7 +31,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     nettle
   ];
-  # Install shell completion files and manual pages. Unfortunatly it is hard to
+  # Install shell completion files and manual pages. Unfortunately it is hard to
   # predict the paths to all of these files generated during the build, and it
   # is impossible to control these using `$OUT_DIR` or alike, as implied by
   # upstream's `build.rs`. This is a general Rust issue also discussed in

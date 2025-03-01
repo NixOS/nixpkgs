@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Codec library which supports H.264 encoding and decoding";
     changelog = "https://github.com/cisco/openh264/releases/tag/${finalAttrs.src.rev}";
     license = with lib.licenses; [ bsd2 ];
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     # See meson.build
     platforms =
       lib.platforms.windows

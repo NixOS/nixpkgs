@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
       - Easy customized color scheme definition.
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
   };
 }

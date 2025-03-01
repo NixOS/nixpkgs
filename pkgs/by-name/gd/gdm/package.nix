@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   fetchpatch,
-  substituteAll,
+  replaceVars,
   meson,
   ninja,
   pkg-config,
@@ -35,8 +35,7 @@
 
 let
 
-  override = substituteAll {
-    src = ./org.gnome.login-screen.gschema.override;
+  override = replaceVars ./org.gnome.login-screen.gschema.override {
     icon = "${nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake-white.svg";
   };
 
@@ -105,8 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
     })
 
     # Change hardcoded paths to nix store paths.
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       inherit
         coreutils
         plymouth

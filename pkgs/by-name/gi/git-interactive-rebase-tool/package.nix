@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-NlnESZua4OP7rhMoER/VgBST9THqISQ0LCG1ZakNTqs=";
   };
 
-  cargoHash = "sha256-9pUUKxPpyoX9f10ZiLWsol2rv66WzQqwa6VubRTrT9Y=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-WTg1o2iF5/UOVIqKFqGbC28B4HrKJWM0+XCHgaA1lc4=";
 
   # Compilation during tests fails if this env var is not set.
   preCheck = "export GIRT_BUILD_GIT_HASH=${version}";

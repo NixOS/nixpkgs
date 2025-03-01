@@ -8,11 +8,11 @@
 buildKodiAddon rec {
   pname = "idna";
   namespace = "script.module.idna";
-  version = "3.4.0";
+  version = "3.10.0";
 
   src = fetchzip {
     url = "https://mirrors.kodi.tv/addons/${lib.toLower rel}/${namespace}/${namespace}-${version}.zip";
-    sha256 = "sha256-wS1d1L18v4+RGwxDh7OpKRHB2A4qYwiq6b5mAz7l8Pk=";
+    sha256 = "sha256-wFS7rETO+VGeg1MxMEdb/cwVw5/TEoZF2CS3BjkxDlk=";
   };
 
   passthru = {

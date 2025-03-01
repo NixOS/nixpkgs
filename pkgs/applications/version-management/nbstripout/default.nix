@@ -3,7 +3,7 @@
   python3,
   fetchPypi,
   coreutils,
-  git,
+  gitMinimal,
   mercurial,
 }:
 
@@ -29,7 +29,7 @@ python3.pkgs.buildPythonApplication rec {
   nativeCheckInputs =
     [
       coreutils
-      git
+      gitMinimal
       mercurial
     ]
     ++ (with python3.pkgs; [

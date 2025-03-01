@@ -190,7 +190,7 @@ let
     lispLibs = super.mathkit.lispLibs ++ [ super.sb-cga ];
   };
 
-  stumpwm = super.stumpwm.overrideAttrs {
+  stumpwm = super.stumpwm.overrideLispAttrs {
     inherit (pkgs.stumpwm) src version;
     meta = {
       inherit (pkgs.stumpwm.meta) description license homepage;

@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "goxel";
-  version = "0.15.1";
+  version = "0.15.1-unstable-2024-12-27";
 
   src = fetchFromGitHub {
     owner = "guillaumechereau";
     repo = "goxel";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-mNSkQisWL3wXb+IsClWFTMbpeiRC4xteePXNP+GkUnU=";
+    rev = "60ec064a144295b17dfece85bb778dad19eaa8dc";
+    hash = "sha256-H5ErFfYsGmU2KsWJyUoozlrpf/JhgFimMxyFHt+czdg=";
   };
 
   nativeBuildInputs = [

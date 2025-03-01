@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-HJQpzUdvjGhZnH5+qlgaekDpqSUmOhR30VPzg1lZIl0=";
   };
 
-  cargoHash = "sha256-6g5l4sQv8OsOLJZ/Vl3RLU8k/zx3Bj13STonsY2+lf0=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-eAVsursZ19H9xyuiClQmGcqh343JP5eKfBkxXrXlM3I=";
 
   meta = {
     description = "Pi-Hole clone written in Rust using Hickory DNS";

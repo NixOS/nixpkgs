@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , buildPackages
-, substituteAll
+, replaceVars
 , fetchurl
 , pkg-config
 , docutils
@@ -58,8 +58,7 @@
 
 let
 
-  gtkCleanImmodulesCache = substituteAll {
-    src = ./hooks/clean-immodules-cache.sh;
+  gtkCleanImmodulesCache = replaceVars ./hooks/clean-immodules-cache.sh {
     gtk_module_path = "gtk-4.0";
     gtk_binary_version = "4.0.0";
   };
@@ -68,7 +67,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gtk4";
-  version = "4.16.7";
+  version = "4.16.12";
 
   outputs = [ "out" "dev" ] ++ lib.optionals x11Support [ "devdoc" ];
   outputBin = "dev";
@@ -80,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = with finalAttrs; "mirror://gnome/sources/gtk/${lib.versions.majorMinor version}/gtk-${version}.tar.xz";
-    hash = "sha256-UwPHYk4VpIiAWRud3UM4mvuj3k+5KiGXGVGbsWQs49w=";
+    hash = "sha256-7zG9vW8ILEQBY0ogyFCwBQyb8lLvHgeXZO6VoqDEyVo=";
   };
 
   depsBuildBuild = [

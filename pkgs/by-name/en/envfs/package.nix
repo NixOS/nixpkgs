@@ -13,7 +13,8 @@ rustPlatform.buildRustPackage rec {
     rev = version;
     hash = "sha256-kOfnKguvJQHW/AfQOetxVefjoEj7ec5ew6fumhOwP08=";
   };
-  cargoHash = "sha256-isx4jBsA3HX6124R3qtwTqH5fLTAP7xdQD5bTzCAybo=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-VvdvYxNBzwJJy09npC30VaOzOU9Fwi++qon9Od4juHE=";
 
   passthru.tests = {
     envfs = nixosTests.envfs;

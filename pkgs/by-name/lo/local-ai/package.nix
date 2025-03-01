@@ -149,7 +149,7 @@ let
       final: prev: {
         name = "llama-cpp-grpc";
         src = fetchFromGitHub {
-          owner = "ggerganov";
+          owner = "ggml-org";
           repo = "llama.cpp";
           rev = "ba8a1f9c5b675459c55a83e3f97f10df3a66c788";
           hash = "sha256-YunQh1760AcknBFwHc6uMZJ7V4OzEAKiwB9HBH1n4bc=";
@@ -579,7 +579,7 @@ let
       runHook postInstall
     '';
 
-    # patching rpath with patchelf doens't work. The execuable
+    # patching rpath with patchelf doens't work. The executable
     # raises an segmentation fault
     postFixup =
       let

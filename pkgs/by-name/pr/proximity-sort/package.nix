@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-MRLQvspv6kjirljhAkk1KT+hPA4hdjA1b7RL9eEyglQ=";
   };
 
-  cargoHash = "sha256-0hP6qa8d5CaqtBHCWBJ8UjtVJc6Z0GmL8DvdTWDMM8g=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-rlxNvIYtVdWth5ZEdbmxOf3GKXIBpHnGDcSO883Ldjg=";
 
   meta = with lib; {
     description = "Simple command-line utility for sorting inputs by proximity to a path argument";

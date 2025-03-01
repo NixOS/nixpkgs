@@ -100,6 +100,7 @@
   tree-sitter-svelte = lib.importJSON ./tree-sitter-svelte.json;
   tree-sitter-talon = lib.importJSON ./tree-sitter-talon.json;
   tree-sitter-templ = lib.importJSON ./tree-sitter-templ.json;
+  tree-sitter-tera = lib.importJSON ./tree-sitter-tera.json;
   tree-sitter-tiger = lib.importJSON ./tree-sitter-tiger.json;
   tree-sitter-tlaplus = lib.importJSON ./tree-sitter-tlaplus.json;
   tree-sitter-toml = lib.importJSON ./tree-sitter-toml.json;

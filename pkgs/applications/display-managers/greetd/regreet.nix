@@ -12,16 +12,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "regreet";
-  version = "0.1.3";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "rharish101";
     repo = "ReGreet";
     rev = version;
-    hash = "sha256-PYBRfBdy6+cv3VKBFu5RUec/yfuKrAEkRxpanihIt1E=";
+    hash = "sha256-f8Xvno5QqmWz4SUiFYDvs8lFU1ZaqQ8gpTaVzWxW4T8=";
   };
 
-  cargoHash = "sha256-SUIyekcuDbPIh/9+EKaAoep9hZDJv8BW+ovtWyDqiCI=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-abCQ3RsnZ/a1DbjQFOiA7Xs7bbqSJxwNps8yV6Q4FIw=";
 
   buildFeatures = [ "gtk4_8" ];
 

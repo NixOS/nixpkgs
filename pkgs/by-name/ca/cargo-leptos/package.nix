@@ -16,16 +16,17 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "cargo-leptos";
-  version = "0.2.25";
+  version = "0.2.28";
 
   src = fetchFromGitHub {
     owner = "leptos-rs";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-vgYr6mMS2O4/102R+6iCW9IBziM1tIav569d36iIbl8=";
+    hash = "sha256-SjpfM963Zux+H5QhK8prvDLuI56fP5PqX5gcVbthRx4=";
   };
 
-  cargoHash = "sha256-Q3+tOpvzDqIn2M6Zrm1xK6TeTV4zrxK0PYgcIsEBIhE=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-Da9ei4yAOfhSQmQgrUDZCmMeJXTfGnYhI1+L0JT/ECs=";
 
   buildInputs = optionals isDarwin [
     SystemConfiguration

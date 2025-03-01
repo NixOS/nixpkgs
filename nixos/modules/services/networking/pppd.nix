@@ -53,7 +53,7 @@ in
                 config = mkOption {
                   type = types.lines;
                   default = "";
-                  description = "pppd configuration for this peer, see the pppd(8) man page.";
+                  description = "pppd configuration for this peer, see the {manpage}`pppd(8)` man page.";
                 };
               };
             }

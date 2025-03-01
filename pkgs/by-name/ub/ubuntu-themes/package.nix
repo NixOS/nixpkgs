@@ -68,6 +68,8 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+  dontCheckForBrokenSymlinks = true;
+
   meta = with lib; {
     description = "Ubuntu monochrome and Suru icon themes, Ambiance and Radiance themes, and Ubuntu artwork";
     homepage = "https://launchpad.net/ubuntu-themes";

@@ -19,7 +19,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   sourceRoot = "${src.name}/cli";
-  cargoHash = "sha256-nZktEEp0BYusNJL7w9WhX6JK1LCmyi7dI659I9IR+Wo=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-ZhrjxHqwWwcVkCVkJJnVm2CZLfRlrI2383ejgI+B2KQ=";
   cargoPatches = [ ./cargo_lock.patch ];
 
   buildInputs =

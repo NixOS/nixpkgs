@@ -30,7 +30,6 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.mit;
     maintainers = with maintainers; [
       colemickens
-      nrdxp
     ];
     platforms = with platforms; linux;
   };

@@ -6,14 +6,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mandown";
-  version = "0.1.5";
+  version = "1.0.0";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-TgOxRd8s2Vb4pNVPmFt2E5VnRHIEt6YlnTNyr91l6P8=";
+    hash = "sha256-30AM/t1Qq4xydG12Nh+J1MBKNvxxD/LVTkmTchsZHLw=";
   };
 
-  cargoHash = "sha256-eHKivxnbOk3K2JEVIVHhaEds6Gr2TcYUnFuallHRV/0=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-T3cUHyKQIYTL9jMoLsq6jEiIeFZcSZuyCna7TNEjGyU=";
 
   meta = with lib; {
     description = "Markdown to groff (man page) converter";

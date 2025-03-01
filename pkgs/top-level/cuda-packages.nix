@@ -11,7 +11,7 @@
 #
 # To summarize:
 #
-# - `prev` should only be used to access attributes which are going to be overriden.
+# - `prev` should only be used to access attributes which are going to be overridden.
 # - `final` should only be used to access `callPackage` to build new packages.
 # - Attribute names should be computable without relying on `final`.
 #   - Extensions should take arguments to build attribute names before relying on `final`.
@@ -79,6 +79,7 @@ let
     cudatoolkit = final.callPackage ../development/cuda-modules/cudatoolkit/redist-wrapper.nix { };
     cudatoolkit-legacy-runfile = final.callPackage ../development/cuda-modules/cudatoolkit { };
 
+    cudnn-frontend = final.callPackage ../development/cuda-modules/cudnn-frontend/default.nix { };
     saxpy = final.callPackage ../development/cuda-modules/saxpy { };
     nccl = final.callPackage ../development/cuda-modules/nccl { };
     nccl-tests = final.callPackage ../development/cuda-modules/nccl-tests { };

@@ -37,7 +37,7 @@
 
 buildPythonPackage rec {
   pname = "pelican";
-  version = "4.10.1";
+  version = "4.11.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -46,7 +46,7 @@ buildPythonPackage rec {
     owner = "getpelican";
     repo = "pelican";
     tag = version;
-    hash = "sha256-RWzOMp3H0QbZyGsXd8cakeRqZhVH7d6ftxZHBA4cPSA=";
+    hash = "sha256-SrzHAqDX+DCeaWMmlG8tgA1RKLDnICkvDIE/kUQZN+s=";
     # Remove unicode file names which leads to different checksums on HFS+
     # vs. other filesystems because of unicode normalisation.
     postFetch = ''
@@ -61,7 +61,7 @@ buildPythonPackage rec {
 
   build-system = [ pdm-backend ];
 
-  pythonRelaxDeps = [ "unidecode" ];
+  pythonRelaxDeps = [ "pygments" ];
 
   buildInputs = [
     glibcLocales
@@ -131,7 +131,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Static site generator that requires no database or server-side logic";
     homepage = "https://getpelican.com/";
-    changelog = "https://github.com/getpelican/pelican/blob/${version}/docs/changelog.rst";
+    changelog = "https://github.com/getpelican/pelican/blob/${src.tag}/docs/changelog.rst";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [
       offline

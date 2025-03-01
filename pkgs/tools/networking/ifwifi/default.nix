@@ -20,7 +20,8 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-DPMCwyKqGJrav0wASBky9bS1bvJ3xaGsDzsk1bKaH1U=";
   };
 
-  cargoHash = "sha256-TL7ZsRbpRdYymJHuoCUCqe/U3Vacb9mtKFh85IOl+PA=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-oxuOc9FSKYq6UjimZPLayJ+5xsWzh3gZV/mVpPbPWHk=";
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin Security;
@@ -53,7 +54,7 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://github.com/araujobsd/ifwifi";
     license = with licenses; [ bsd2 ];
-    maintainers = with maintainers; [ blaggacao ];
+    maintainers = with maintainers; [ ];
     # networkmanager doesn't work on darwin
     # even though the `wifiscanner` crate would work
     platforms = with platforms; linux; # ++ darwin;

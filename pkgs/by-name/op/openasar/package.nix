@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "openasar";
-  version = "0-unstable-2025-01-10";
+  version = "0-unstable-2025-01-20";
 
   src = fetchFromGitHub {
     owner = "GooseMod";
     repo = "OpenAsar";
-    rev = "4ed9e52d42501927b60354fcc456da50ed41cde2";
-    hash = "sha256-3b31iEmNUlBLc47Cw7EtMMgc+oPr1V6oqNTKRemXJfA=";
+    rev = "e88eebf440866a06f3eca3b4fe2a8cc07818ee61";
+    hash = "sha256-SejlIm9AIK09grP8j5h0O8DxIv85zGssr170xskGx2I=";
   };
 
   postPatch = ''

@@ -28,12 +28,12 @@ let
       version,
       sha512,
       updateScript,
+      applicationName ? "Thunderbird",
     }:
     (buildMozillaMach rec {
       pname = "thunderbird";
-      inherit version updateScript;
+      inherit version updateScript applicationName;
       application = "comm/mail";
-      applicationName = "Mozilla Thunderbird";
       binaryName = pname;
       src = fetchurl {
         url = "mirror://mozilla/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.xz";
@@ -98,8 +98,10 @@ rec {
   thunderbird-esr = thunderbird-128;
 
   thunderbird-128 = common {
-    version = "128.6.0esr";
-    sha512 = "a561eac0bf0b8c72f3337ccebcde9099c342d1b31ce2b1f31096f1f805a195c49d627cf726cd56d41b21ec292d96fd577e8f226fcb24d8b13e0d773fc334b073";
+    applicationName = "Thunderbird ESR";
+
+    version = "128.7.1esr";
+    sha512 = "3f84e1f1a83379da1f154b66dbb5f941d04548ad017aab32aa9520f4315edb524e3754ac1fe9a7ae27f7aa33e2881c6783f11ccc53cda713f107760b7d880667";
 
     updateScript = callPackage ./update.nix {
       attrPath = "thunderbirdPackages.thunderbird-128";

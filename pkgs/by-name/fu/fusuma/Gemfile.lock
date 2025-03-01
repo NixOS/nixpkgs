@@ -1,7 +1,7 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    fusuma (3.5.0)
+    fusuma (3.7.0)
     fusuma-plugin-appmatcher (0.7.1)
       fusuma (>= 3.0)
       rexml

@@ -40,9 +40,9 @@ stdenv.mkDerivation (finalAttrs: {
         '/share/gsettings-schemas/${finalAttrs.finalPackage.name}/glib-2.0/schemas'
   '';
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-Nx/e2H9NxCTj62xVDlKTpPdjlxAx2YAcQJh1kHByrd4=";
+    hash = "sha256-dOd/4n8G/zEsF0ClqhI2QBLosEz3uyzC9q5sHDVWAx4=";
   };
 
   nativeBuildInputs = [

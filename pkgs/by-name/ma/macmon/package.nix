@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-Uc+UjlCeG7W++l7d/3tSkIVbUi8IbNn3A5fqyshG+xE=";
   };
 
-  cargoHash = "sha256-mE6PGWjaCFpqVoE1zISOqwt6o5SakjJM4sPRtU90lPA=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-erKN6wR/W48QF1FbUkzjo6xaN1GVbAelruzxf4NS07o=";
 
   meta = {
     homepage = "https://github.com/vladkens/macmon";

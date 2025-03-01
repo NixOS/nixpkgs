@@ -42,12 +42,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "phosh";
-  version = "0.44.0";
+  version = "0.44.1";
 
   src = fetchurl {
     # Release tarball which includes subprojects gvc and libcall-ui
     url = with finalAttrs; "https://sources.phosh.mobi/releases/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-b4yrSC0TzTuh5kl93DeJNh06ZKjvNhTSjhDzmsEuK2g=";
+    hash = "sha256-rczGr7YSmVFu13oa3iSTmSQ4jsjl7lv38zQtD7WmDis=";
   };
 
   nativeBuildInputs = [

@@ -16,7 +16,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-KPnLVKz10SuVcG0CCFWxWnjhf9gHHPCRZw6AW9/gAmk=";
   };
 
-  cargoHash = "sha256-YwlI+Z3Zry3i3amz3DufvKzSS1Hrp2kPG76aH5tMJ2g=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-g+n0C8tkEuixbRo48cMOYPXcYt+Ur1TP6fFTYlI4fVg=";
 
   meta = {
     description = "Job control from anywhere";

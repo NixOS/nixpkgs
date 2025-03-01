@@ -6,11 +6,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "plemoljp";
-  version = "2.0.2";
+  version = "2.0.3";
 
   src = fetchzip {
     url = "https://github.com/yuru7/PlemolJP/releases/download/v${version}/PlemolJP_v${version}.zip";
-    hash = "sha256-e2uhDJfw3/Aisjo0ezVyxfvhBVagggTC87DSxIzbLoI=";
+    hash = "sha256-cT2BpD2PoAd38uYCQlq5fv9NYgwInblrYdK/XDEmOWI=";
   };
 
   installPhase = ''

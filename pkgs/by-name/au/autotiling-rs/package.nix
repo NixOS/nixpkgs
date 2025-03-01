@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-LQbmF2M6pWa0QEbKF770x8TFLMGrJeq5HnXHvLrDDPA=";
   };
 
-  cargoHash = "sha256-wot5GKBA2TBrA/jnWD0eypPRqUodmk/TJlYJMl3/gm4=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-s2r8517RgcMq+6S2M+gTI7a+C4AhxIkDOHG0XjRI4rI=";
 
   meta = with lib; {
     description = "Autotiling for sway (and possibly i3)";

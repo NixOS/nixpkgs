@@ -1,5 +1,6 @@
 {
   lib,
+  callPackage,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -18,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "llm-ollama";
-  version = "0.8.1";
+  version = "0.8.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "taketwo";
     repo = "llm-ollama";
     tag = version;
-    hash = "sha256-9AgHX2FJRXSKZOLt7JR/9Fg4i2HGNQY2vSsJa4+2BGQ=";
+    hash = "sha256-/WAugfkI4izIQ7PoKM9epd/4vFxYPvsiwDbEqqTdMq4=";
   };
 
   build-system = [
@@ -55,6 +56,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "llm_ollama"
   ];
+
+  passthru.tests = {
+    llm-plugin = callPackage ./tests/llm-plugin.nix { };
+  };
 
   meta = {
     description = "LLM plugin providing access to Ollama models using HTTP API";

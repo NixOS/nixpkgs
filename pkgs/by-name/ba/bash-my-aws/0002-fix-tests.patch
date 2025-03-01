@@ -1,0 +1,52 @@
+diff --git a/test/stack-spec.sh b/test/stack-spec.sh
+index f04a10c..1165953 100755
+--- a/test/stack-spec.sh
++++ b/test/stack-spec.sh
+@@ -72,28 +72,30 @@ describe "_bma_stack_template_arg:" "$(
+ 
+ )"
+ 
+-[[ -d cloudformation/params ]] || mkdir -p cloudformation/params
++TEST_DIR=$(mktemp -d)
++
++[[ -d "$TEST_DIR"/cloudformation/params ]] || mkdir -p "$TEST_DIR"/cloudformation/params
+ 
+ 
+ # templates
+ touch            \
+-  $(dirname $0)/cloudformation/great-app.json \
+-  $(dirname $0)/cloudformation/great-app.yml  \
+-  $(dirname $0)/cloudformation/great-app.yaml \
++  "$TEST_DIR"/cloudformation/great-app.json \
++  "$TEST_DIR"/cloudformation/great-app.yml  \
++  "$TEST_DIR"/cloudformation/great-app.yaml \
+ 
+ # params
+ 
+ [[ -d params ]] || mkdir params
+ 
+ touch                                      \
+-  $(dirname $0)/cloudformation/great-app-params.json                    \
+-  $(dirname $0)/cloudformation/great-app-params-staging.json            \
+-  $(dirname $0)/cloudformation/great-app-params-another-env.json        \
+-  $(dirname $0)/cloudformation/params/great-app-params.json             \
+-  $(dirname $0)/cloudformation/params/great-app-params-staging.json     \
+-  $(dirname $0)/cloudformation/params/great-app-params-another-env.json
++  "$TEST_DIR"/cloudformation/great-app-params.json                    \
++  "$TEST_DIR"/cloudformation/great-app-params-staging.json            \
++  "$TEST_DIR"/cloudformation/great-app-params-another-env.json        \
++  "$TEST_DIR"/cloudformation/params/great-app-params.json             \
++  "$TEST_DIR"/cloudformation/params/great-app-params-staging.json     \
++  "$TEST_DIR"/cloudformation/params/great-app-params-another-env.json
+ 
+-cd $(dirname $0)/cloudformation
++cd "$TEST_DIR"/cloudformation
+ 
+ describe "_bma_stack_args:" "$(
+   context "without an argument" "$(
+@@ -115,3 +117,5 @@ describe "_bma_stack_args:" "$(
+ )"
+ 
+ cd -
++
++rm -rf "$TEST_DIR"

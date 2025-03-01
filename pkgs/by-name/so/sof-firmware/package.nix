@@ -6,11 +6,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "sof-firmware";
-  version = "2024.09.2";
+  version = "2025.01";
 
   src = fetchurl {
     url = "https://github.com/thesofproject/sof-bin/releases/download/v${version}/sof-bin-${version}.tar.gz";
-    sha256 = "sha256-huaEGlXx1tHJFQOoSCwbR128rezbYVG/oKwAldHYpSo=";
+    sha256 = "sha256-NNVl23V6MkUBBjF8xR84v2eWLg/It/fHLm45/YnpkmM=";
   };
 
   dontFixup = true; # binaries must not be stripped or patchelfed

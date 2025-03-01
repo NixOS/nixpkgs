@@ -13,7 +13,7 @@
   pandoc,
   nlohmann_json,
   # Nominatim needs to be built with the same postgres version it will target
-  postgresql,
+  libpq,
   python3,
   php,
   lua,
@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
     # python3Packages.pylint  # We don't want to run pylint because the package could break on pylint bumps which is really annoying.
     # python3Packages.pytest  # disabled since I can't get it to run tests anyway
     # python3Packages.behave  # disabled since I can't get it to run tests anyway
-    postgresql
+    libpq
   ];
 
   postPatch = ''

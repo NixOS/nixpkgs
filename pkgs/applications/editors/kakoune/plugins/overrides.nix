@@ -172,7 +172,8 @@ self: super: {
       git
     ];
 
-    cargoHash = "sha256-EjSj/+BysGwJBxK6Ccg2+pXHdB2Lg3dxIURRsSVTHVY=";
+    useFetchCargoVendor = true;
+    cargoHash = "sha256-cgUBa0rgfJFnosCgD20G1rlOl/nyXJ9bA9SSf4BuqAs=";
 
     postInstall = ''
       mkdir -p $out/share/kak/bin

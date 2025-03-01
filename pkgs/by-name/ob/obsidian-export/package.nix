@@ -14,7 +14,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-r5G2XVV2F/Bt29gxuTZKX+KxH6RFa1hJNH3gSTi7yCU=";
   };
 
-  cargoHash = "sha256-lkqoMFasHpfhmVd3dlYd/TKIBIDzqMbsxfigpeJq0w8=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-d9CL29lc3IMpXZa7hGC17UhEJnZPZuRiy0DqWtgyjV8=";
 
   meta = {
     changelog = "https://github.com/zoni/obsidian-export/blob/${src.rev}/CHANGELOG.md";

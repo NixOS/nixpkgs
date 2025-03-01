@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-pT+hiREKdzw9MKv28QpLK6LmHvnRci26f0DlcXns2rA=";
   };
 
-  cargoHash = "sha256-sUSXcVv93Sn6qNPNsbPvKXSZYkTdrOQifpSPBWjfqy8=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-A5fUATbOuwSt0n1KV/+bbd65mDwWhllGraf2RrBTK6s=";
 
   meta = {
     description = "Rust server to retrieve and relay a playlist for Twitch livestreams/VODs";

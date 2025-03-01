@@ -69,10 +69,10 @@ stdenv.mkDerivation (finalAttrs: {
     ./0001-Cargo.patch
   ];
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) patches src;
     sourceRoot = "${finalAttrs.src.name}/${finalAttrs.cargoRoot}";
-    hash = "sha256-8rw3x17f5pLLyvxozFPWq9pJNHy4wXwV9CcaUGAbdd0=";
+    hash = "sha256-qrPIcWpdrvTmaFcfKAfz+n8a6lp6IcIMq9ZCHaa7AHQ=";
     patchFlags = [ "-p2" ];
   };
 

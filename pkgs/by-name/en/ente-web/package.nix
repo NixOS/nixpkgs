@@ -6,12 +6,13 @@
   nodejs,
   yarnConfigHook,
   yarnBuildHook,
+  nix-update-script,
   extraBuildEnv ? { },
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ente-web";
-  version = "0.9.16";
+  version = "0.9.97";
 
   src = fetchFromGitHub {
     owner = "ente-io";
@@ -19,13 +20,13 @@ stdenv.mkDerivation (finalAttrs: {
     sparseCheckout = [ "web" ];
     tag = "photos-v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-DqfUUXY79CndEqPT8TR4PasLtaSCtqZaV2kp10Vu4PQ=";
+    hash = "sha256-JEVz02FfPRhTolZMXOSmYzvLJTm0ImCuf912MAk2EmM=";
   };
   sourceRoot = "${finalAttrs.src.name}/web";
 
   offlineCache = fetchYarnDeps {
     yarnLock = "${finalAttrs.src}/web/yarn.lock";
-    hash = "sha256-tgFh8Av1Wl77N4hR2Y5TQp9lEH4ZCQnCIWMPmlZBlV4=";
+    hash = "sha256-GIgvHfQc9qz06267lfiDo/WQhxBgS7vMCocMf6PWCHc=";
   };
 
   nativeBuildInputs = [
@@ -44,6 +45,13 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "photos-v(.*)"
+    ];
+  };
 
   meta = {
     description = "Web client for Ente Photos";

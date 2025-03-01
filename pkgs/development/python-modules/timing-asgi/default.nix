@@ -18,10 +18,15 @@ buildPythonPackage rec {
     hash = "sha256-oEDesmy9t2m51Zd6Zg87qoYbfbDnejfrbjyBkZ3hF58=";
   };
 
+  # The current pyproject.toml content is not compatible with poetry-core==2.0
   postPatch = ''
     substituteInPlace pyproject.toml \
-    --replace-fail poetry.masonry.api poetry.core.masonry.api \
-    --replace-fail "poetry>=" "poetry-core>="
+      --replace-fail "[tool.poetry]" "[project]" \
+      --replace-fail \
+        '"Steinn Eldjárn Sigurðarson <steinnes@gmail.com>"' \
+        '{ name = "Steinn Eldjárn Sigurðarson", email = "steinnes@gmail.com" },' \
+      --replace-fail poetry.masonry.api poetry.core.masonry.api \
+      --replace-fail "poetry>=" "poetry-core>="
   '';
 
   build-system = [ poetry-core ];
@@ -37,10 +42,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  meta = with lib; {
+  meta = {
     description = "ASGI middleware to emit timing metrics with something like statsd";
     homepage = "https://pypi.org/project/timing-asgi";
-    license = licenses.mit;
-    maintainers = with maintainers; [ GaetanLepage ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 }

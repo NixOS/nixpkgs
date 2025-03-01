@@ -10,16 +10,16 @@
 
 buildGoModule rec {
   pname = "ejson2env";
-  version = "2.0.6";
+  version = "2.0.7";
 
   src = fetchFromGitHub {
     owner = "Shopify";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-VXkWmmX+4D+j9ODSEeJJbIx+Bfni9d2X22BFQIe4kwk=";
+    sha256 = "sha256-9i84nHIuAR7PG6/v8O5GEi6xToJk0c+knpVPOPx+1b8=";
   };
 
-  vendorHash = "sha256-7oy8bCegsvv35zyo2aTFMSGZMFkArmxy0rOpK6WlubI=";
+  vendorHash = "sha256-NirIAwmrUH7ny1H7d63bIrFQ8EWuxjh6Qp66Sw8eMO8=";
 
   ldflags = [
     "-s"

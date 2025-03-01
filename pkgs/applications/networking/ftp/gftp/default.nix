@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/masneyb/gftp";
     description = "GTK-based multithreaded FTP client for *nix-based machines";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
   };
 }

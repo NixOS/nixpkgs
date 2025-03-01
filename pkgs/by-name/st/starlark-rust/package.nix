@@ -14,7 +14,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-1M3p5QHMOBgmdEyr31Bhv7X8UdUmoeL0o1hWaw2tahQ=";
   };
 
-  cargoHash = "sha256-zcU0xdVDFNfUZR+t/HdwRXEw4/5hmKgUX20gFm7lVhk=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-BSXbFKR4AOKhssj+m5PIfgaoeRVDK+KRkApi8FUa8jg=";
 
   meta = with lib; {
     description = "Rust implementation of the Starlark language";

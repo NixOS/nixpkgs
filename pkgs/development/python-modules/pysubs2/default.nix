@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "pysubs2";
-  version = "1.7.3";
+  version = "1.8.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "tkarabela";
     repo = pname;
     rev = version;
-    hash = "sha256-PrpN+w/gCi7S9OmD6kbbvL9VlZEfy1DbehFTwjxsibA=";
+    hash = "sha256-fKSb7MfBHGft8Tp6excjfkVXKnHRER11X0QxbR1zD4I=";
   };
 
   nativeBuildInputs = [ setuptools ];

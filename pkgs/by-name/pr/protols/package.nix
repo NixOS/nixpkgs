@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-MsQFGbUWymGYXLABWsDlSXAWBwxw0P9de/txrxdf/Lw=";
   };
 
-  cargoHash = "sha256-BTCcAv7JlyDDG90rKwr2lmEHyxxLFEvZzUGS2DVxqmc=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-eO35LukqPFooGFCluLhQacvqlVtreJH/XdnlBYwImbw=";
 
   meta = {
     description = "Protocol Buffers language server written in Rust";

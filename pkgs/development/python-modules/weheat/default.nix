@@ -1,6 +1,8 @@
 {
   lib,
   aenum,
+  aiohttp-retry,
+  aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
   pydantic,
@@ -12,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "weheat";
-  version = "2024.12.22";
+  version = "2025.2.13";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -21,7 +23,7 @@ buildPythonPackage rec {
     owner = "wefabricate";
     repo = "wh-python";
     tag = version;
-    hash = "sha256-hd0mqdcj+rvrYCvxhK3ewuiDekWUgTD7JypjL/EMqv8=";
+    hash = "sha256-YXo+pwgCjw2CWUCS9DY9jaLjhj+q+ZqfW3uh1aSXnM0=";
   };
 
   pythonRelaxDeps = [
@@ -33,6 +35,8 @@ buildPythonPackage rec {
 
   dependencies = [
     aenum
+    aiohttp
+    aiohttp-retry
     pydantic
     python-dateutil
     urllib3

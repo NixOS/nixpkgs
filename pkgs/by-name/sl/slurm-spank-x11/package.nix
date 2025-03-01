@@ -17,6 +17,9 @@ stdenv.mkDerivation rec {
 
   patches = [ ./hostlist.patch ];
 
+  # Required for build with gcc-14
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
+
   buildPhase = ''
     gcc -DX11_LIBEXEC_PROG="\"$out/bin/slurm-spank-x11\"" \
         -g -o slurm-spank-x11 slurm-spank-x11.c

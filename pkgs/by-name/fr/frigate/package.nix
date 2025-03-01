@@ -26,7 +26,6 @@ let
   python = python312.override {
     self = python;
     packageOverrides = self: super: {
-      paho-mqtt = super.paho-mqtt_2;
     };
   };
 
@@ -79,7 +78,7 @@ python.pkgs.buildPythonApplication rec {
     substituteInPlace frigate/detectors/detector_config.py \
       --replace-fail "/labelmap.txt" "${placeholder "out"}/share/frigate/labelmap.txt"
 
-    substituteInPlace frigate/output/birdseye.py \
+    substituteInPlace frigate/output/birdseye.py frigate/api/media.py \
       --replace-fail "/opt/frigate/" "${placeholder "out"}/${python.sitePackages}/"
 
     # work around onvif-zeep idiosyncrasy

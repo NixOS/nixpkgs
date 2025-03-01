@@ -372,7 +372,7 @@ let
     EMCluster = [ pkgs.lapack ];
     fangs = [ pkgs.cargo ];
     fastpng = [ pkgs.zlib.dev ];
-    fcl = [ pkgs.cargo ];
+    fcl = with pkgs; [ cargo rustc ];
     fftw = [ pkgs.fftw.dev ];
     fftwtools = with pkgs; [ fftw.dev pkg-config ];
     fingerPro = [ pkgs.gsl ];
@@ -700,7 +700,7 @@ let
     bbl = with pkgs; [ gsl ];
     diffHic = with pkgs; [ xz.dev bzip2.dev ];
     writexl = with pkgs; [ zlib.dev ];
-    xslt = with pkgs; [ libxslt libxml2 ];
+    xslt = with pkgs; [ libxslt libxml2 ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ xz ];
     qpdf = with pkgs; [ libjpeg.dev zlib.dev ];
     vcfR = with pkgs; [ zlib.dev ];
     bio3d = with pkgs; [ zlib.dev ];
@@ -796,7 +796,7 @@ let
     shrinkTVP = [ pkgs.gsl ];
     sbrl = with pkgs; [ gsl gmp.dev ];
     surveyvoi = with pkgs; [ gmp.dev mpfr.dev ];
-    unigd = with pkgs; [ cairo.dev libpng.dev ];
+    unigd = with pkgs; [ cairo.dev libpng.dev ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ expat xorg.libXdmcp ];
     HilbertVisGUI = [ pkgs.gtkmm2.dev ];
     textshaping = with pkgs; [ harfbuzz.dev freetype.dev fribidi libpng ];
     DropletUtils = [ pkgs.zlib.dev ];
@@ -986,7 +986,6 @@ let
     # Impure network access during build
     "waddR"
     "tiledb"
-    "x13binary"
     "switchr"
 
     # ExperimentHub dependents, require net access during build
@@ -1044,10 +1043,10 @@ let
     });
 
     gifski = old.gifski.overrideAttrs (attrs: {
-      cargoDeps = pkgs.rustPlatform.fetchCargoTarball {
+      cargoDeps = pkgs.rustPlatform.fetchCargoVendor {
         src = attrs.src;
         sourceRoot = "gifski/src/myrustlib";
-        hash = "sha256-tVbuYzGdBzWVeQ26Imq6y5gA0R/CjuNCZtQgfd3/qwA=";
+        hash = "sha256-yz6M3qDQPfT0HJHyK2wgzgl5sBh7EmdJ5zW8SJkk+wY=";
       };
 
       cargoRoot = "src/myrustlib";
@@ -1061,10 +1060,10 @@ let
 
     timeless = old.timeless.overrideAttrs (attrs: {
       preConfigure = "patchShebangs configure";
-      cargoDeps = pkgs.rustPlatform.fetchCargoTarball {
+      cargoDeps = pkgs.rustPlatform.fetchCargoVendor {
         src = attrs.src;
         sourceRoot = "timeless/src/rust";
-        hash = "sha256-AccuRY3lfTXzaMnaYieKCEJErKo5132oSXgILbFhePI=";
+        hash = "sha256-5TV7iCzaaFwROfJNO6pvSUbJBzV+wZlU5+ZK4AMT6X0=";
       };
 
       cargoRoot = "src/rust";

@@ -6,6 +6,7 @@
   gnome,
   adwaita-icon-theme,
   meson,
+  mesonEmulatorHook,
   ninja,
   pkg-config,
   gtk3,
@@ -51,20 +52,24 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    gettext
-    itstool
-    pkg-config
-    libxml2
-    wrapGAppsHook3
-    gobject-introspection
-    gtk-doc
-    docbook-xsl-nons
-    docbook_xml_dtd_43
-    python3
-  ];
+  nativeBuildInputs =
+    [
+      meson
+      ninja
+      gettext
+      itstool
+      pkg-config
+      libxml2
+      wrapGAppsHook3
+      gobject-introspection
+      gtk-doc
+      docbook-xsl-nons
+      docbook_xml_dtd_43
+      python3
+    ]
+    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+      mesonEmulatorHook
+    ];
 
   buildInputs = [
     glib
@@ -85,6 +90,8 @@ stdenv.mkDerivation (finalAttrs: {
     chmod +x meson_post_install.py # patchShebangs requires executable file
     patchShebangs meson_post_install.py
   '';
+
+  strictDeps = true;
 
   passthru = {
     updateScript = gnome.updateScript {

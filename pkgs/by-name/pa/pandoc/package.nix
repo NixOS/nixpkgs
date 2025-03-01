@@ -39,6 +39,12 @@ in
       remove-references-to \
         -t ${pandoc-cli.scope.pandoc} \
         $out/bin/pandoc
+    ''
+    # https://github.com/jgm/typst-hs/commit/9707b74ce60d71c2ba0f35249ffbd01dea197a6e
+    + lib.optionalString (lib.versionAtLeast pandoc-cli.scope.typst.version "0.6.1") ''
+      remove-references-to \
+        -t ${pandoc-cli.scope.typst} \
+        $out/bin/pandoc
     '' + lib.optionalString (stdenv.buildPlatform == stdenv.hostPlatform) ''
       mkdir -p $out/share/bash-completion/completions
       $out/bin/pandoc --bash-completion > $out/share/bash-completion/completions/pandoc

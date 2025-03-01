@@ -1,6 +1,6 @@
-{ lib
+{ stdenv
+, lib
 , mkXfceDerivation
-, gobject-introspection
 , wayland-scanner
 , glib
 , gtk3
@@ -11,18 +11,24 @@
 , wayland
 , wayland-protocols
 , wlr-protocols
+, withIntrospection ?
+    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
+    && stdenv.hostPlatform.emulatorAvailable buildPackages
+, buildPackages
+, gobject-introspection
 }:
 
 mkXfceDerivation {
   category = "xfce";
   pname = "libxfce4windowing";
-  version = "4.20.0";
+  version = "4.20.2";
 
-  sha256 = "sha256-t/GbsGipc0Ts2tZJaDJBuDF+9XMp8+Trq78NPAuHEpU=";
+  sha256 = "sha256-Xw1hs854K5dZCAYoBMoqJzdSxPRFUYqEpWxg4DLSK5Q=";
 
   nativeBuildInputs = [
-    gobject-introspection
     wayland-scanner
+  ] ++ lib.optionals withIntrospection [
+    gobject-introspection
   ];
 
   buildInputs = [

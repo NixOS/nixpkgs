@@ -18,16 +18,16 @@
 
 buildPythonPackage rec {
   pname = "llvmlite";
-  version = "0.43.0";
+  version = "0.44.0";
   pyproject = true;
 
-  disabled = isPyPy || pythonAtLeast "3.13";
+  disabled = isPyPy || pythonAtLeast "3.14";
 
   src = fetchFromGitHub {
     owner = "numba";
     repo = "llvmlite";
     tag = "v${version}";
-    hash = "sha256-5QBSRDb28Bui9IOhGofj+c7Rk7J5fNv5nPksEPY/O5o=";
+    hash = "sha256-ZIA/JfK9ZP00Zn6SZuPus30Xw10hn3DArHCkzBZAUV0=";
   };
 
   build-system = [ setuptools ];

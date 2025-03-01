@@ -40,6 +40,7 @@
   libXext,
   livekit-libwebrtc,
   testers,
+  writableTmpDirAsHomeHook,
 
   withGLES ? false,
   buildRemoteServer ? true,
@@ -95,7 +96,7 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "zed-editor";
-  version = "0.169.2";
+  version = "0.175.5";
 
   outputs = [ "out" ] ++ lib.optional buildRemoteServer "remote_server";
 
@@ -103,7 +104,7 @@ rustPlatform.buildRustPackage rec {
     owner = "zed-industries";
     repo = "zed";
     tag = "v${version}";
-    hash = "sha256-IdJVWsHWMzE0AZxFy6jOmquc2jFeozNDdAhbB3fFMwk=";
+    hash = "sha256-CeuZv5GFZ9tttpj+4JAgQZcKtPpbE+NxawcW5W0CFws=";
   };
 
   patches = [
@@ -112,6 +113,12 @@ rustPlatform.buildRustPackage rec {
     # Until https://github.com/zed-industries/zed/issues/19971 is fixed,
     # we also skip any crate for which the license cannot be determined.
     ./0001-generate-licenses.patch
+
+    # Upstream delegates linking on Linux to clang to make use of mold,
+    # but builds fine with our standard linker.
+    # This patch removes their linker override from the cargo config.
+    ./0002-linux-linker.patch
+
     # See https://github.com/zed-industries/zed/pull/21661#issuecomment-2524161840
     "script/patches/use-cross-platform-livekit.patch"
   ];
@@ -123,7 +130,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-0zH5J3nvBpqD22nFzX98MBoTtNDpWS4NSSMcT1DB2SM=";
+  cargoHash = "sha256-UJAH1hCf/p974GNJtvNMzZs8RkxtJQeLhUBCJjLsapU=";
 
   nativeBuildInputs =
     [
@@ -207,9 +214,9 @@ rustPlatform.buildRustPackage rec {
     wrapProgram $out/libexec/zed-editor --suffix PATH : ${lib.makeBinPath [ nodejs ]}
   '';
 
-  preCheck = ''
-    export HOME=$(mktemp -d);
-  '';
+  nativeCheckInputs = [
+    writableTmpDirAsHomeHook
+  ];
 
   checkFlags =
     [
@@ -291,16 +298,6 @@ rustPlatform.buildRustPackage rec {
   versionCheckProgram = "${placeholder "out"}/bin/zeditor";
   versionCheckProgramArg = [ "--version" ];
   doInstallCheck = true;
-
-  # The darwin Applications directory is not stripped by default, see
-  # https://github.com/NixOS/nixpkgs/issues/367169
-  # This setting is not platform-guarded as it doesn't do any harm on Linux,
-  # where this directory simply does not exist.
-  stripDebugList = [
-    "bin"
-    "libexec"
-    "Applications"
-  ];
 
   passthru = {
     updateScript = gitUpdater {

@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "mihomo";
-  version = "1.19.1";
+  version = "1.19.2";
 
   src = fetchFromGitHub {
     owner = "MetaCubeX";
     repo = "mihomo";
     rev = "v${version}";
-    hash = "sha256-leeD/lra0ZA7in5ZX+uZwWRyHEaE9WzC8UEigI+Z+aA=";
+    hash = "sha256-lTrUM4/t7GP8IhuyMqit7Iv4AX2I8tlMJWvgx2tDbgE=";
   };
 
-  vendorHash = "sha256-0CStTmN2+bXJuoolVM8Spfj2HKYK7a8krxlA0uwHOOw=";
+  vendorHash = "sha256-/YW3IRdDHcOrwUkXt/ORhN3OrwwV5H63WP6ioTFDR+c=";
 
   excludedPackages = [ "./test" ];
 

@@ -48,6 +48,6 @@ buildPythonPackage rec {
     description = "Creates C++ bindings for Python modules";
     homepage = "https://riverbankcomputing.com/";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ nrdxp ];
+    maintainers = with maintainers; [ ];
   };
 }

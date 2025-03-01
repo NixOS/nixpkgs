@@ -13,7 +13,7 @@ let
     # This is more complicated than apparent at first sight
     # because:
     #   * The color markers and the text must be print
-    #     in the same echo statement. Otherise, other
+    #     in the same echo statement. Otherwise, other
     #     intermingled text from concurrent builds will
     #     be colored as well.
     #   * We need to preserve the trailing newline of the

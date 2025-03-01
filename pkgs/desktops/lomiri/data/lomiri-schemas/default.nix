@@ -2,7 +2,6 @@
   stdenvNoCC,
   lib,
   fetchFromGitLab,
-  fetchpatch,
   gitUpdater,
   testers,
   cmake,
@@ -15,23 +14,14 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "lomiri-schemas";
-  version = "0.1.6";
+  version = "0.1.7";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-schemas";
-    rev = finalAttrs.version;
-    hash = "sha256-hCKsjZ2xW+Jimm8IT6E6ZaPGwXydiNTxyaHxY0gOEpg=";
+    tag = finalAttrs.version;
+    hash = "sha256-AI/tpTzhnzKygG/zgszQAmvbaM8VdU+Chs9bjd9Jx9A=";
   };
-
-  patches = [
-    # Remove when version > 0.1.6
-    (fetchpatch {
-      name = "0001-lomiri-schemas-Declare-no-compilers-needed.patch";
-      url = "https://gitlab.com/ubports/development/core/lomiri-schemas/-/commit/6eec0513d2348dcfe49ce5969a091584888a79e5.patch";
-      hash = "sha256-pbHNeP28WQ9wDdRkgsS8WY24ZKLS3G3h4gEd22DPuH8=";
-    })
-  ];
 
   strictDeps = true;
 

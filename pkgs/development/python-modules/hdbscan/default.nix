@@ -13,12 +13,12 @@
 
 buildPythonPackage rec {
   pname = "hdbscan";
-  version = "0.8.38.post1";
+  version = "0.8.40";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-X726L/tamai1L6KRVljO1r7Vn00NX0CxxnNkbJKKrAs=";
+    hash = "sha256-yeOD/xe+7gWRB1/2XVJL2ltaNd+wHSGCRae6MMjUihc=";
   };
 
   pythonRemoveDeps = [ "cython" ];

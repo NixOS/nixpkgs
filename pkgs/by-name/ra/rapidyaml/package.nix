@@ -8,14 +8,14 @@
 
 stdenv.mkDerivation rec {
   pname = "rapidyaml";
-  version = "0.7.2";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "biojppm";
     repo = pname;
     fetchSubmodules = true;
     rev = "v${version}";
-    hash = "sha256-vAYafhWo9xavM2j+mT3OGcX7ZSS25mieR/3b79BO+jA=";
+    hash = "sha256-5Z1UV8JSgaO4X8+fTEgxD7bzD1igOgiLQMn10c3rCLs=";
   };
 
   nativeBuildInputs = [

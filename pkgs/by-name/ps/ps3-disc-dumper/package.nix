@@ -9,13 +9,13 @@
 
 buildDotnetModule rec {
   pname = "ps3-disc-dumper";
-  version = "4.2.5";
+  version = "4.3.0";
 
   src = fetchFromGitHub {
     owner = "13xforever";
     repo = "ps3-disc-dumper";
     tag = "v${version}";
-    hash = "sha256-ax2Q1VodzktXSdZBvO1fys+xigk/jzbMWHxqoLIKE7w=";
+    hash = "sha256-FtKFX7w60lAt7aMg/KNumFGESluYZf1/vzjdkLctkqs=";
   };
 
   dotnet-sdk = dotnetCorePackages.sdk_9_0;

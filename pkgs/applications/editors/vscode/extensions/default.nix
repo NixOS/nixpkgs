@@ -309,6 +309,8 @@ let
         };
       };
 
+      anweber.vscode-httpyac = callPackage ./anweber.vscode-httpyac { };
+
       apollographql.vscode-apollo = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "vscode-apollo";
@@ -735,8 +737,8 @@ let
         mktplcRef = {
           name = "vscode-intelephense-client";
           publisher = "bmewburn";
-          version = "1.12.5";
-          hash = "sha256-2Tamwag4KovIOKTe/g4qePVDFxm0mgsLtPNdWcKzigI=";
+          version = "1.14.1";
+          hash = "sha256-h9ROZtTLY7/QbM6ftiZJCtHkEYSVkrMU9pgv4QyTrzg=";
         };
         meta = {
           description = "PHP code intelligence for Visual Studio Code";
@@ -1251,8 +1253,8 @@ let
         mktplcRef = {
           name = "databricks";
           publisher = "databricks";
-          version = "2.3.1";
-          hash = "sha256-Qa839ygG8Z3aD/ZSshe2hg0ee3ZFU8xRrJ5E0cUjfCU=";
+          version = "2.6.0";
+          hash = "sha256-nPDElLHZUeGNqE3QcO5GIj6AN1rNPk3RYQjFCUSuCdM=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/databricks.databricks/changelog";
@@ -1313,6 +1315,18 @@ let
           maintainers = [ lib.maintainers.datafoo ];
         };
       };
+
+      dendron.adjust-heading-level = callPackage ./dendron.adjust-heading-level { };
+
+      dendron.dendron = callPackage ./dendron.dendron { };
+
+      dendron.dendron-markdown-preview-enhanced =
+        callPackage ./dendron.dendron-markdown-preview-enhanced
+          { };
+
+      dendron.dendron-paste-image = callPackage ./dendron.dendron-paste-image { };
+
+      dendron.dendron-snippet-maker = callPackage ./dendron.dendron-snippet-maker { };
 
       denoland.vscode-deno = buildVscodeMarketplaceExtension {
         mktplcRef = {
@@ -1766,23 +1780,8 @@ let
         };
       };
 
-      equinusocio.vsc-material-theme = callPackage ./equinusocio.vsc-material-theme { };
-
-      equinusocio.vsc-material-theme-icons = buildVscodeMarketplaceExtension {
-        mktplcRef = {
-          name = "vsc-material-theme-icons";
-          publisher = "Equinusocio";
-          version = "3.8.8";
-          hash = "sha256-el2hQaq1gZBn2PZ+f+S1fHM/g3V0sX7Chyre04sds8k=";
-        };
-        meta = {
-          description = "Material Theme Icons, the most epic icons theme for Visual Studio Code and Material Theme";
-          downloadPage = "https://marketplace.visualstudio.com/items?itemName=Equinusocio.vsc-material-theme-icons";
-          homepage = "https://github.com/material-theme/vsc-material-theme-icons";
-          license = lib.licenses.asl20;
-          maintainers = [ lib.maintainers.themaxmur ];
-        };
-      };
+      equinusocio.vsc-material-theme = throw "'equinusocio.vsc-material-theme' has been removed due to security concerns. The extension contained potentially malicious code and was taken down."; # Added 2025-02-28
+      equinusocio.vsc-material-theme-icons = throw "'equinusocio.vsc-material-theme-icons' has been removed due to security concerns. The extension contained potentially malicious code and was taken down."; # Added 2025-02-28
 
       esbenp.prettier-vscode = buildVscodeMarketplaceExtension {
         mktplcRef = {
@@ -2087,8 +2086,8 @@ let
         mktplcRef = {
           publisher = "github";
           name = "codespaces";
-          version = "1.16.9";
-          hash = "sha256-Zj1dHz8uBHnRpjnD9tUr8OJILRq9Ty91ePiNq6/Vi7c=";
+          version = "1.17.3";
+          hash = "sha256-idJFYHJ4yeqpFZBX55Y0v1yfzgqyhS0MrC4yIto7i7w=";
         };
 
         meta = {
@@ -2096,6 +2095,7 @@ let
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=GitHub.codespaces";
           homepage = "https://github.com/features/codespaces";
           license = lib.licenses.unfree;
+          maintainers = [ lib.maintainers.therobot2105 ];
         };
       };
 
@@ -2103,8 +2103,9 @@ let
         mktplcRef = {
           publisher = "github";
           name = "copilot";
-          version = "1.251.0"; # compatible with vscode ^1.96
-          hash = "sha256-nv6lTPTPcggwMgO8a4KAF0W7gpou1399f/axnH0sS4s=";
+          # Verify which version is available with nix run nixpkgs#vsce -- show github.copilot --json
+          version = "1.275.0"; # compatible with vscode ^1.97
+          hash = "sha256-pxH8hHRN36/ggqfMWOUYxANrblJ6S5GfslN15ZttumQ=";
         };
 
         meta = {
@@ -2121,8 +2122,8 @@ let
           publisher = "github";
           name = "copilot-chat";
           # Verify which version is available with nix run nixpkgs#vsce -- show github.copilot-chat --json
-          version = "0.24.2024121201"; # compatible with vscode ^1.96
-          hash = "sha256-v3wdodDzYalz927KqqpL4IqEqLRmx1CLWdGBvZgNmpE=";
+          version = "0.24.2025021302"; # latest compatible with vscode ^1.97
+          hash = "sha256-+lb+fo5PvEvWrQlyMi72SJ8bVwd8zTU2tDK+jJJSkPA=";
         };
         meta = {
           description = "GitHub Copilot Chat is a companion extension to GitHub Copilot that houses experimental chat features";
@@ -2381,6 +2382,22 @@ let
           homepage = "https://github.com/hediet/vscode-drawio";
           license = lib.licenses.gpl3Only;
           maintainers = [ lib.maintainers.themaxmur ];
+        };
+      };
+
+      hirse.vscode-ungit = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-ungit";
+          publisher = "hirse";
+          version = "2.5.2";
+          hash = "sha256-0CFYL6rBecB8rNnk4IAtg03ZPdSJ9qxwnVdhdQedxsQ=";
+        };
+        meta = {
+          description = "Ungit in Visual Studio Code.";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=Hirse.vscode-ungit";
+          homepage = "https://github.com/hirse/vscode-ungit";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.therobot2105 ];
         };
       };
 
@@ -3095,6 +3112,8 @@ let
         };
       };
 
+      marus25.cortex-debug = callPackage ./marus25.cortex-debug { };
+
       matangover.mypy = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "mypy";
@@ -3389,110 +3408,21 @@ let
         };
       };
 
-      ms-pyright.pyright = buildVscodeMarketplaceExtension {
-        mktplcRef = {
-          name = "pyright";
-          publisher = "ms-pyright";
-          version = "1.1.300";
-          hash = "sha256-GzRJeV4qfgM2kBv6U3MH7lMWl3CL6LWPI/9GaVWZL+o=";
-        };
-        meta = {
-          description = "VS Code static type checking for Python";
-          downloadPage = "https://marketplace.visualstudio.com/items?itemName=ms-pyright.pyright";
-          homepage = "https://github.com/Microsoft/pyright#readme";
-          changelog = "https://marketplace.visualstudio.com/items/ms-pyright.pyright/changelog";
-          license = lib.licenses.mit;
-          maintainers = [ lib.maintainers.ratsclub ];
-        };
-      };
+      ms-pyright.pyright = callPackage ./ms-pyright.pyright { };
 
-      ms-python.black-formatter = buildVscodeMarketplaceExtension {
-        mktplcRef = {
-          name = "black-formatter";
-          publisher = "ms-python";
-          version = "2024.2.0";
-          hash = "sha256-qIO+YqTXjwgznzUlnPSts1R2BM6iN8B9vESkelGPgZM=";
-        };
-        meta = {
-          changelog = "https://marketplace.visualstudio.com/items/ms-python.black-formatter/changelog";
-          description = "Formatter extension for Visual Studio Code using black";
-          downloadPage = "https://marketplace.visualstudio.com/items?itemName=ms-python.black-formatter";
-          homepage = "https://github.com/microsoft/vscode-black-formatter";
-          license = lib.licenses.mit;
-          maintainers = with lib.maintainers; [
-            amadejkastelic
-            sikmir
-          ];
-        };
-      };
+      ms-python.black-formatter = callPackage ./ms-python.black-formatter { };
 
-      ms-python.flake8 = buildVscodeMarketplaceExtension {
-        mktplcRef = {
-          name = "flake8";
-          publisher = "ms-python";
-          version = "2023.10.0";
-          hash = "sha256-4Vjw8yJPrxLg0hcoTw8AEBEcmQ9sEUNqFaHLxICks0E=";
-        };
-        meta = {
-          changelog = "https://marketplace.visualstudio.com/items/ms-python.flake8/changelog";
-          description = "Python linting support for VS Code using Flake8";
-          downloadPage = "https://marketplace.visualstudio.com/items?itemName=ms-python.flake8";
-          homepage = "https://github.com/microsoft/vscode-flake8";
-          license = lib.licenses.mit;
-          maintainers = [ lib.maintainers.amadejkastelic ];
-        };
-      };
+      ms-python.flake8 = callPackage ./ms-python.flake8 { };
 
-      ms-python.isort = buildVscodeMarketplaceExtension {
-        mktplcRef = {
-          name = "isort";
-          publisher = "ms-python";
-          version = "2023.10.1";
-          hash = "sha256-NRsS+mp0pIhGZiqxAMXNZ7SwLno9Q8pj+RS1WB92HzU=";
-        };
-        meta = with lib; {
-          description = "Import sorting extension for Visual Studio Code using isort";
-          downloadPage = "https://marketplace.visualstudio.com/items?itemName=ms-python.isort";
-          homepage = "https://github.com/microsoft/vscode-isort";
-          license = licenses.mit;
-          maintainers = with maintainers; [ sikmir ];
-        };
-      };
+      ms-python.isort = callPackage ./ms-python.isort { };
 
-      ms-python.pylint = buildVscodeMarketplaceExtension {
-        mktplcRef = {
-          name = "pylint";
-          publisher = "ms-python";
-          version = "2023.10.1";
-          hash = "sha256-1tI5u33c5CHFQxkJZ/OxW3ZA5qPr4RoCIf6dqIMPykQ=";
-        };
-        meta = {
-          changelog = "https://marketplace.visualstudio.com/items/ms-python.pylint/changelog";
-          description = "Python linting support for VS Code using Pylint";
-          downloadPage = "https://marketplace.visualstudio.com/items?itemName=ms-python.pylint";
-          homepage = "https://github.com/microsoft/vscode-pylint";
-          license = lib.licenses.mit;
-          maintainers = [ lib.maintainers.amadejkastelic ];
-        };
-      };
+      ms-python.pylint = callPackage ./ms-python.pylint { };
+
+      ms-python.mypy-type-checker = callPackage ./ms-python.mypy-type-checker { };
 
       ms-python.python = callPackage ./ms-python.python { };
 
-      ms-python.debugpy = buildVscodeMarketplaceExtension {
-        mktplcRef = {
-          name = "debugpy";
-          publisher = "ms-python";
-          version = "2024.6.0";
-          hash = "sha256-VlPe65ViBur5P6L7iRKdGnmbNlSCwYrdZAezStx8Bz8=";
-        };
-        meta = {
-          description = "Python debugger (debugpy) extension for VS Code";
-          downloadPage = "https://marketplace.visualstudio.com/items?itemName=ms-python.debugpy";
-          homepage = "https://github.com/Microsoft/vscode-python-debugger";
-          license = lib.licenses.mit;
-          maintainers = [ lib.maintainers.carlthome ];
-        };
-      };
+      ms-python.debugpy = callPackage ./ms-python.debugpy { };
 
       ms-python.vscode-pylance = callPackage ./ms-python.vscode-pylance { };
 
@@ -3907,8 +3837,6 @@ let
         };
       };
 
-      nvarner.typst-lsp = callPackage ./nvarner.typst-lsp { };
-
       ocamllabs.ocaml-platform = buildVscodeMarketplaceExtension {
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/ocamllabs.ocaml-platform/changelog";
@@ -4024,6 +3952,8 @@ let
           license = lib.licenses.mit;
         };
       };
+
+      platformio.platformio-vscode-ide = callPackage ./platformio.platformio-vscode-ide { };
 
       pollywoggames.pico8-ls = buildVscodeMarketplaceExtension {
         mktplcRef = {
@@ -4153,8 +4083,8 @@ let
         mktplcRef = {
           name = "vscode-yaml";
           publisher = "redhat";
-          version = "1.14.0";
-          sha256 = "0pww9qndd2vsizsibjsvscz9fbfx8srrj67x4vhmwr581q674944";
+          version = "1.16.0";
+          hash = "sha256-3cuonI98gVFE/GwPA7QCA1LfSC8oXqgtV4i6iOngwhk=";
         };
         meta = {
           license = lib.licenses.mit;
@@ -5383,8 +5313,8 @@ let
         mktplcRef = {
           name = "vscode-icons";
           publisher = "vscode-icons-team";
-          version = "12.10.0";
-          hash = "sha256-GNDLuszuJN3P0V25F4gm7yUJsFEQgFMMPMTFLWLIvSo=";
+          version = "12.11.0";
+          hash = "sha256-RpuCHJBLqhAXAdvC0qGDUJIy5ww1yqlSb7hKwCALidM=";
         };
         meta = {
           description = "Bring real icons to your Visual Studio Code";

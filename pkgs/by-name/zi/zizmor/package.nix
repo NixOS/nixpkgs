@@ -8,16 +8,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "zizmor";
-  version = "1.0.1";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "woodruffw";
     repo = "zizmor";
     tag = "v${version}";
-    hash = "sha256-1NpwBjJlpaP3iyTfrgMwO/1qR74/MNBYjtf4+wCe4m8=";
+    hash = "sha256-LJ/yg5Xm5TIf7fQf84iHJpQ/Zsu0hz5YRPZEZO/eAS4=";
   };
 
-  cargoHash = "sha256-feAfHkcLvEdFblehPGtLO01Vl9QpOueuJrpEujlv4qY=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-AKc4RPdtxr2zcsfUJ/MVF9EId4394SZrP8vx8O35lho=";
 
   passthru.tests.version = testers.testVersion {
     package = zizmor;

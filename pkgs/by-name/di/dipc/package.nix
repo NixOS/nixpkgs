@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-RXEC8bwdnUOaDmYIb7ci/JD+vi16tBn55FRsUmwaRzk=";
   };
 
-  cargoHash = "sha256-XQ85T64K1NLdSOtAFr0XluvFNTaHzoWKxoQtBQ+uSKQ=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-1vjVuAawuquPqem1as6xIv/ZJCzjgC4k0uyPSlrvpeg=";
 
   meta = with lib; {
     description = "Convert your favorite images and wallpapers with your favorite color palettes/themes";

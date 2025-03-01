@@ -10,29 +10,32 @@
   boto3,
   langchain-core,
   numpy,
+  pydantic,
 
   # tests
-  langchain-standard-tests,
+  langchain-tests,
   pytest-asyncio,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "langchain-aws";
-  version = "0.2.1";
+  version = "0.2.11";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain-aws";
     tag = "v${version}";
-    hash = "sha256-LHhyEkgu1sjOk4E4WMy4vYGyikqdVD3WvRPjoAP1CfA=";
+    hash = "sha256-tEkwa+rpitGxstci754JH5HCqD7+WX0No6ielJJnbxk=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail "--snapshot-warn-unused" "" \
       --replace-fail "--cov=langchain_aws" ""
+    substituteInPlace tests/unit_tests/{test_standard.py,chat_models/test_bedrock_converse.py} \
+      --replace-fail "langchain_standard_tests" "langchain_tests"
   '';
 
   sourceRoot = "${src.name}/libs/aws";
@@ -43,6 +46,7 @@ buildPythonPackage rec {
     boto3
     langchain-core
     numpy
+    pydantic
   ];
 
   pythonRelaxDeps = [
@@ -51,7 +55,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    langchain-standard-tests
+    langchain-tests
     pytest-asyncio
     pytestCheckHook
   ];
@@ -62,6 +66,8 @@ buildPythonPackage rec {
 
   passthru = {
     inherit (langchain-core) updateScript;
+    # updates the wrong fetcher rev attribute
+    skipBulkUpdate = true;
   };
 
   meta = {
@@ -72,6 +78,7 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [
       drupol
       natsukium
+      sarahec
     ];
   };
 }

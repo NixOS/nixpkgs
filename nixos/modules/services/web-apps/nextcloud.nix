@@ -294,7 +294,11 @@ in {
     https = mkOption {
       type = types.bool;
       default = false;
-      description = "Use HTTPS for generated links.";
+      description = ''
+        Use HTTPS for generated links.
+
+        Be aware that this also enables HTTP Strict Transport Security (HSTS) headers.
+      '';
     };
     package = mkOption {
       type = types.package;
@@ -303,6 +307,15 @@ in {
     };
     phpPackage = mkPackageOption pkgs "php" {
       example = "php82";
+    };
+
+    finalPackage = mkOption {
+      type = types.package;
+      readOnly = true;
+      description = ''
+        Package to the finalized Nextcloud package, including all installed apps.
+        This is automatically set by the module.
+      '';
     };
 
     maxUploadSize = mkOption {
@@ -625,7 +638,7 @@ in {
         description = ''
           Whether to load the Redis module into PHP.
           You still need to enable Redis in your config.php.
-          See https://docs.nextcloud.com/server/14/admin_manual/configuration_server/caching_configuration.html
+          See <https://docs.nextcloud.com/server/latest/admin_manual/configuration_server/caching_configuration.html>
         '';
       };
       memcached = mkOption {
@@ -634,7 +647,7 @@ in {
         description = ''
           Whether to load the Memcached module into PHP.
           You still need to enable Memcached in your config.php.
-          See https://docs.nextcloud.com/server/14/admin_manual/configuration_server/caching_configuration.html
+          See <https://docs.nextcloud.com/server/latest/admin_manual/configuration_server/caching_configuration.html>
         '';
       };
     };
@@ -924,6 +937,8 @@ in {
       ] ++ [
         "L+ ${datadir}/config/override.config.php - - - - ${overrideConfig}"
       ];
+
+      services.nextcloud.finalPackage = webroot;
 
       systemd.services = {
         # When upgrading the Nextcloud package, Nextcloud can report errors such as

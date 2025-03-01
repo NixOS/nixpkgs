@@ -623,7 +623,7 @@ in
           tr -dc A-Za-z0-9 </dev/urandom 2>/dev/null | head -c 64 > ${stateDir}/secret.key
         fi
 
-        echo "exit( wfGetDB( DB_MASTER )->tableExists( 'user' ) ? 1 : 0 );" | \
+        echo "exit( wfGetDB( DB_PRIMARY )->tableExists( 'user' ) ? 1 : 0 );" | \
         ${php}/bin/php ${pkg}/share/mediawiki/maintenance/eval.php --conf ${mediawikiConfig} && \
         ${php}/bin/php ${pkg}/share/mediawiki/maintenance/install.php \
           --confpath /tmp \
@@ -639,7 +639,7 @@ in
           ${lib.escapeShellArg cfg.name} \
           admin
 
-        ${php}/bin/php ${pkg}/share/mediawiki/maintenance/update.php --conf ${mediawikiConfig} --quick
+        ${php}/bin/php ${pkg}/share/mediawiki/maintenance/update.php --conf ${mediawikiConfig} --quick --skip-external-dependencies
       '';
 
       serviceConfig = {

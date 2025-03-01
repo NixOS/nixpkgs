@@ -5,7 +5,7 @@
   meson,
   ninja,
   pkg-config,
-  substituteAll,
+  replaceVars,
   gettext,
   dbus,
   glib,
@@ -55,8 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
-    (substituteAll {
-      src = ./hardcode-ssh-path.patch;
+    (replaceVars ./hardcode-ssh-path.patch {
       ssh_program = "${lib.getBin openssh}/bin/ssh";
     })
   ];

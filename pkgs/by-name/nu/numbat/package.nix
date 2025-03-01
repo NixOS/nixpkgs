@@ -18,7 +18,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-5XsrOAvBrmCG6k7YRwGZZtBP/o1jVVtBBTrwIT5CDX8=";
   };
 
-  cargoHash = "sha256-RMON7JThY6Ad1QHQFiNbTb2PUsfviR2t+55k1ZtlOd8=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-GYdg4LkGyKfu22C++ZkwkTGR11++hrX2Wnvb7Skn8NY=";
 
   env.NUMBAT_SYSTEM_MODULE_PATH = "${placeholder "out"}/share/numbat/modules";
 

@@ -11,7 +11,7 @@
   gtk3,
   qtbase,
   qtwayland,
-  substituteAll,
+  replaceVars,
   gsettings-desktop-schemas,
   useQt6 ? false,
 }:
@@ -29,13 +29,12 @@ stdenv.mkDerivation rec {
 
   patches = [
     # Hardcode GSettings schema path to avoid crashes from missing schemas
-    (substituteAll {
-      src = ./hardcode-gsettings.patch;
+    (replaceVars ./hardcode-gsettings.patch {
       gds_gsettings_path = glib.getSchemaPath gsettings-desktop-schemas;
     })
 
     # Backport cursor fix for Qt6 apps
-    # Ajusted from https://github.com/FedoraQt/QGnomePlatform/pull/138
+    # Adjusted from https://github.com/FedoraQt/QGnomePlatform/pull/138
     ./qt6-cursor-fix.patch
   ];
 

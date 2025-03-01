@@ -8,11 +8,11 @@ let
   inherit (lib)
     getExe
     isBool
+    listToAttrs
     literalExpression
     maintainers
     mkEnableOption
     mkIf
-    mkMerge
     mkOption
     mkPackageOption
     optionalString
@@ -169,16 +169,19 @@ in
           "url"
           "model"
         ];
-    environment = mkMerge (
-      [
-        {
-          systemPackages = [ finalPackage ];
-        }
-      ]
-      ++ map (rule: {
-        etc."xdg/pay-respects/rules/${rule.command}.toml".source = generate "${rule.command}.toml" rule;
-      }) cfg.runtimeRules
-    );
+
+    environment = {
+      etc = listToAttrs (
+        map (rule: {
+          name = "xdg/pay-respects/rules/${rule.command}.toml";
+          value = {
+            source = generate "${rule.command}.toml" rule;
+          };
+        }) cfg.runtimeRules
+      );
+
+      systemPackages = [ finalPackage ];
+    };
 
     programs = {
       bash.interactiveShellInit = initScript "bash";

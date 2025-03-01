@@ -18,8 +18,8 @@ let
 in
 buildNodejs {
   inherit enableNpm;
-  version = "20.18.1";
-  sha256 = "91df43f8ab6c3f7be81522d73313dbdd5634bbca228ef0e6d9369fe0ab8cccd0";
+  version = "20.18.3";
+  sha256 = "0674f16f3bc284c11724cd3f7c2a43f7c2c13d2eb7a872dd0db198f3d588c5f2";
   patches = [
     ./configure-emulator.patch
     ./configure-armv6-vfpv2.patch
@@ -34,16 +34,6 @@ buildNodejs {
       extraPrefix = "deps/v8/third_party/zlib/";
       stripLen = 1;
       hash = "sha256-WVxsoEcJu0WBTyelNrVQFTZxJhnekQb1GrueeRBRdnY=";
-    })
-    # Fix for https://github.com/NixOS/nixpkgs/issues/355919
-    # FIXME: remove after a minor point release
-    (fetchpatch2 {
-      url = "https://github.com/nodejs/node/commit/a094a8166cd772f89e92b5deef168e5e599fa815.patch?full_index=1";
-      hash = "sha256-5FZfozYWRa1ZI/f+e+xpdn974Jg2DbiHbua13XUQP5E=";
-    })
-    (fetchpatch2 {
-      url = "https://github.com/nodejs/node/commit/f270462c09ddfd770291a7c8a2cd204b2c63d730.patch?full_index=1";
-      hash = "sha256-Err0i5g7WtXcnhykKgrS3ocX7/3oV9UrT0SNeRtMZNU=";
     })
     # Backport V8 fixes for LLVM 19.
     (fetchpatch2 {
@@ -60,10 +50,20 @@ buildNodejs {
       stripLen = 1;
       hash = "sha256-6y3aEqxNC4iTQEv1oewodJrhOHxjp5xZMq1P1QL94Rg=";
     })
-    # fixes test failure, remove when included in release
+
+    # Backport fixes for OpenSSL 3.4
+    # FIXME: remove when merged upstream
     (fetchpatch2 {
-      url = "https://github.com/nodejs/node/commit/b6fe731c55eb4cb9d14042a23e5002ed39b7c8b7.patch?full_index=1";
-      hash = "sha256-KoKsQBFKUji0GeEPTR8ixBflCiHBhPqd2cPVPuKyua8=";
+      url = "https://github.com/nodejs/node/commit/e799722f1a0bf43fe4d47e4824b9524363fe0d62.patch";
+      hash = "sha256-nz95vmBx+zFPdOR9kg0HdgiAlqgTeXistOP/NLF3qW0=";
+    })
+    (fetchpatch2 {
+      url = "https://github.com/nodejs/node/commit/e6a988dbdee47b3412094a90d35d6bd8207c750d.patch";
+      hash = "sha256-UJ8alA54PrhHXK9u120HvBgm0scuEDBwCRuuVYVa/Ng=";
+    })
+    (fetchpatch2 {
+      url = "https://github.com/nodejs/node/commit/7895b8eae9e4f2919028fe81e38790af07b4cc92.patch";
+      hash = "sha256-S2PmFw/e0/DY71UJb2RYXu9Qft/rBFC50K0Ex7v/9QE=";
     })
   ] ++ gypPatches;
 }

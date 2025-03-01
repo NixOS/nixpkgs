@@ -14,7 +14,7 @@
     = FilePath
     // Path to execute plus arguments to pass it
     | [ (FilePath | String) ]
-    // Advanced attribue set (experimental)
+    // Advanced attribute set (experimental)
     | {
       // Script to execute (same as basic update script above)
       command : (FilePath | [ (FilePath | String) ])

@@ -59,7 +59,7 @@ python3.pkgs.buildPythonApplication rec {
     export HOME=$(mktemp -d)
   '';
 
-  # Satisfy the python-mpv depedency, which is mpv within NixOS
+  # Satisfy the python-mpv dependency, which is mpv within NixOS
   postPatch = ''
     substituteInPlace setup.py --replace-fail "python-mpv" "mpv"
   '';

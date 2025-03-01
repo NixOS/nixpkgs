@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "yamlfmt";
-  version = "0.15.0";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "yamlfmt";
     tag = "v${version}";
-    hash = "sha256-eAcHl4h7c3HU901cuqzAPs49qRldxKQDxrWBmccmwos=";
+    hash = "sha256-4PCwMLwFtCK55k7b6CgpPOKsxLdeU55DxYEDbYDWVYg=";
   };
 
-  vendorHash = "sha256-za95/Zj8MXJqt9tW6csaRlXFs+5ET/D4CUsCnGqcLQQ=";
+  vendorHash = "sha256-eOuLgNCxrI2HIFBwLAYRl6PwW/1hihQ0QsTtG1sxCL8=";
 
   ldflags = [
     "-s"

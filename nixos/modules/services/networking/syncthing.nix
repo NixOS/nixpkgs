@@ -21,7 +21,7 @@ let
     # note that the dot in front of `${path}` is the hostname, which is
     # required.
     then "--unix-socket ${cfg.guiAddress} http://.${path}"
-    # no adjustements are needed if cfg.guiAddress is a network address
+    # no adjustments are needed if cfg.guiAddress is a network address
     else "${cfg.guiAddress}${path}"
     ;
 
@@ -68,7 +68,7 @@ let
 
   /* Syncthing's rest API for the folders and devices is almost identical.
   Hence we iterate them using lib.pipe and generate shell commands for both at
-  the sime time. */
+  the same time. */
   (lib.pipe {
     # The attributes below are the only ones that are different for devices /
     # folders.

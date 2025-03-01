@@ -18,7 +18,7 @@ in
           to start manually via the "sx" command from a vt shell. The X server
           runs under the user's id, not as root. The user must provide a
           ~/.config/sx/sxrc file containing session startup commands, see
-          sx(1). This is not automatically generated from the desktopManager
+          {manpage}`sx(1)`. This is not automatically generated from the desktopManager
           and windowManager settings. sx doesn't have a way to directly set
           X server flags, but it can be done by overriding its xorgserver
           dependency.

@@ -10,11 +10,12 @@
 
 stdenv.mkDerivation rec {
   pname = "yEd";
-  version = "3.24";
+  version = "3.25";
 
   src = fetchzip {
-    url = "https://www.yworks.com/resources/yed/demo/${pname}-${version}.zip";
-    sha256 = "sha256-4aotsOippuKUucweWERtqm/5pz2gwW1Sue48KPisQ0I=";
+    # to update: archive https://www.yworks.com/resources/yed/demo/yEd-${version}.zip
+    url = "https://web.archive.org/web/20250212125159/https://www.yworks.com/resources/yed/demo/yEd-${version}.zip";
+    sha256 = "sha256-6Z24XmFPK+aomO7hImN4AdN08kjOsyn9PvHToyQj8sk=";
   };
 
   nativeBuildInputs = [

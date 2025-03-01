@@ -770,7 +770,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
               bzip2
               xz
               zlib
-              bash
+              bashNonInteractive
               binutils
               coreutils
               diffutils
@@ -806,7 +806,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
               gzip
               bzip2
               xz
-              bash
+              bashNonInteractive
               binutils.bintools
               coreutils
               diffutils
@@ -866,7 +866,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
               gzip
               bzip2
               xz
-              bash
+              bashNonInteractive
               coreutils
               diffutils
               findutils

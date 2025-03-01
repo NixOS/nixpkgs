@@ -26,16 +26,17 @@ Rust applications are packaged by using the `buildRustPackage` helper from `rust
 
 rustPlatform.buildRustPackage rec {
   pname = "ripgrep";
-  version = "12.1.1";
+  version = "14.1.1";
 
   src = fetchFromGitHub {
     owner = "BurntSushi";
     repo = pname;
     rev = version;
-    hash = "sha256-+s5RBC3XSgb8omTbUNLywZnP6jSxZBKSS1BmXOjRF8M=";
+    hash = "sha256-gyWnahj1A+iXUQlQ1O1H1u7K5euYQOld9qWm99Vjaeg=";
   };
 
-  cargoHash = "sha256-jtBw4ahSl88L0iuCXxQgZVm1EcboWRJMNtjxLVTtzts=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-9atn5qyBDy4P6iUoHFhg+TV6Ur71fiah4oTJbBMeEy4=";
 
   meta = {
     description = "Fast line-oriented regex search tool, similar to ag and ack";
@@ -63,18 +64,7 @@ hash using `nix-hash --to-sri --type sha256 "<original sha256>"`.
 }
 ```
 
-Exception: If the application has cargo `git` dependencies, the `cargoHash`
-approach will not work by default. In this case, you can set `useFetchCargoVendor = true`
-to use an improved fetcher that supports handling `git` dependencies.
-
-```nix
-{
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-RqPVFovDaD2rW31HyETJfQ0qVwFxoGEvqkIgag3H6KU=";
-}
-```
-
-If this method still does not work, you can resort to copying the `Cargo.lock` file into nixpkgs
+If this method does not work, you can resort to copying the `Cargo.lock` file into nixpkgs
 and importing it as described in the [next section](#importing-a-cargo.lock-file).
 
 Both types of hashes are permitted when contributing to nixpkgs. The
@@ -119,7 +109,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-aDQA4A5mScX9or3Lyiv/5GyAehidnpKKE0grhbP1Ctc=";
   };
 
-  cargoHash = "sha256-tbrTbutUs5aPSV+yE0IBUZAAytgmZV7Eqxia7g+9zRs=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-iDYh52rj1M5Uupvbx2WeDd/jvQZ+2A50V5rp5e2t7q4=";
   cargoDepsName = pname;
 
   # ...
@@ -443,14 +434,14 @@ hooks that can be used to integrate Cargo in non-Rust packages.
 
 Since network access is not allowed in sandboxed builds, Rust crate
 dependencies need to be retrieved using a fetcher. `rustPlatform`
-provides the `fetchCargoTarball` fetcher, which vendors all
+provides the `fetchCargoVendor` fetcher, which vendors all
 dependencies of a crate. For example, given a source path `src`
-containing `Cargo.toml` and `Cargo.lock`, `fetchCargoTarball`
+containing `Cargo.toml` and `Cargo.lock`, `fetchCargoVendor`
 can be used as follows:
 
 ```nix
 {
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
     hash = "sha256-BoHIN/519Top1NUBjpB/oEMqi86Omt3zTQcXFWqrek0=";
   };
@@ -470,19 +461,8 @@ also be used:
   the `Cargo.lock`/`Cargo.toml` files need to be patched before
   vendoring.
 
-In case the lockfile contains cargo `git` dependencies, you can use
-`fetchCargoVendor` instead.
-```nix
-{
-  cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    hash = "sha256-RqPVFovDaD2rW31HyETJfQ0qVwFxoGEvqkIgag3H6KU=";
-  };
-}
-```
-
 If a `Cargo.lock` file is available, you can alternatively use the
-`importCargoLock` function. In contrast to `fetchCargoTarball`, this
+`importCargoLock` function. In contrast to `fetchCargoVendor`, this
 function does not require a hash (unless git dependencies are used)
 and fetches every dependency as a separate fixed-output derivation.
 `importCargoLock` can be used as follows:
@@ -521,12 +501,13 @@ you of the correct hash.
 `rustPlatform` provides the following hooks to automate Cargo builds:
 
 * `cargoSetupHook`: configure Cargo to use dependencies vendored
-  through `fetchCargoTarball`. This hook uses the `cargoDeps`
-  environment variable to find the vendored dependencies. If a project
-  already vendors its dependencies, the variable `cargoVendorDir` can
-  be used instead. When the `Cargo.toml`/`Cargo.lock` files are not in
-  `sourceRoot`, then the optional `cargoRoot` is used to specify the
-  Cargo root directory relative to `sourceRoot`.
+  through `fetchCargoVendor` or `importCargoLock`. This hook uses the
+  `cargoDeps` environment variable to find the vendored
+  dependencies. If a project already vendors its dependencies, the
+  variable `cargoVendorDir` can be used instead. When the
+  `Cargo.toml`/`Cargo.lock` files are not in `sourceRoot`, then the
+  optional `cargoRoot` is used to specify the Cargo root directory
+  relative to `sourceRoot`.
 * `cargoBuildHook`: use Cargo to build a crate. If the crate to be
   built is a crate in e.g. a Cargo workspace, the relative path to the
   crate to build can be set through the optional `buildAndTestSubdir`
@@ -557,7 +538,7 @@ you of the correct hash.
 #### Python package using `setuptools-rust` {#python-package-using-setuptools-rust}
 
 For Python packages using `setuptools-rust`, you can use
-`fetchCargoTarball` and `cargoSetupHook` to retrieve and set up Cargo
+`fetchCargoVendor` and `cargoSetupHook` to retrieve and set up Cargo
 dependencies. The build itself is then performed by
 `buildPythonPackage`.
 
@@ -586,9 +567,9 @@ buildPythonPackage rec {
     hash = "sha256-rQ2hRV52naEf6PvRsWVCTN7B1oXAQGmnpJw4iIdhamw=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src sourceRoot;
-    hash = "sha256-miW//pnOmww2i6SOGbkrAIdc/JMDT4FJLqdMFojZeoY=";
+    hash = "sha256-RO1m8wEd5Ic2M9q+zFHeCJWhCr4Sv3CEWd08mkxsBec=";
   };
 
   sourceRoot = "${src.name}/bindings/python";
@@ -609,7 +590,7 @@ directory.  In such cases, the `cargoRoot` attribute can be used to
 specify the crate's directory relative to `sourceRoot`. In the
 following example, the crate is in `src/rust`, as specified in the
 `cargoRoot` attribute. Note that we also need to specify the correct
-path for `fetchCargoTarball`.
+path for `fetchCargoVendor`.
 
 ```nix
 
@@ -629,10 +610,10 @@ buildPythonPackage rec {
     hash = "sha256-xGDilsjLOnls3MfVbGKnj80KCUCczZxlis5PmHzpNcQ=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
     sourceRoot = "${pname}-${version}/${cargoRoot}";
-    hash = "sha256-PS562W4L1NimqDV2H0jl5vYhL08H9est/pbIxSdYVfo=";
+    hash = "sha256-ctUt8maCjnGddKPf+Ii++wKsAXA1h+JM6zKQNXXwJqQ=";
   };
 
   cargoRoot = "src/rust";
@@ -644,9 +625,9 @@ buildPythonPackage rec {
 #### Python package using `maturin` {#python-package-using-maturin}
 
 Python packages that use [Maturin](https://github.com/PyO3/maturin)
-can be built with `fetchCargoTarball`, `cargoSetupHook`, and
+can be built with `fetchCargoVendor`, `cargoSetupHook`, and
 `maturinBuildHook`. For example, the following (partial) derivation
-builds the `retworkx` Python package. `fetchCargoTarball` and
+builds the `retworkx` Python package. `fetchCargoVendor` and
 `cargoSetupHook` are used to fetch and set up the crate dependencies.
 `maturinBuildHook` is used to perform the build.
 
@@ -669,9 +650,9 @@ buildPythonPackage rec {
     hash = "sha256-11n30ldg3y3y6qxg3hbj837pnbwjkqw3nxq6frds647mmmprrd20=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-heOBK8qi2nuc/Ib+I/vLzZ1fUUD/G/KTw9d7M4Hz5O0=";
+    hash = "sha256-QsPCQhNZKYCAogQriQX6pBYQUDAIUsEdRX/63dAqTzg=";
   };
 
   nativeBuildInputs = with rustPlatform; [ cargoSetupHook maturinBuildHook ];
@@ -682,7 +663,7 @@ buildPythonPackage rec {
 
 #### Rust package built with `meson` {#rust-package-built-with-meson}
 
-Some projects, especially GNOME applications, are built with the Meson Build System instead of calling Cargo directly. Using `rustPlatform.buildRustPackage` may successfully build the main program, but related files will be missing. Instead, you need to set up Cargo dependencies with `fetchCargoTarball` and `cargoSetupHook` and leave the rest to Meson. `rust` and `cargo` are still needed in `nativeBuildInputs` for Meson to use.
+Some projects, especially GNOME applications, are built with the Meson Build System instead of calling Cargo directly. Using `rustPlatform.buildRustPackage` may successfully build the main program, but related files will be missing. Instead, you need to set up Cargo dependencies with `fetchCargoVendor` and `cargoSetupHook` and leave the rest to Meson. `rust` and `cargo` are still needed in `nativeBuildInputs` for Meson to use.
 
 ```nix
 { lib
@@ -713,9 +694,9 @@ stdenv.mkDerivation rec {
     hash = "sha256-PrNPprSS98yN8b8yw2G6hzTSaoE65VbsM3q7FVB4mds=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-8fa3fa+sFi5H+49B5sr2vYPkp9C9s6CcE0zv4xB8gww=";
+    hash = "sha256-eR1ZGtTZQNhofFUEjI7IX16sMKPJmAl7aIFfPJukecg=";
   };
 
   nativeBuildInputs = [
@@ -998,16 +979,17 @@ in
 
 rustPlatform.buildRustPackage rec {
   pname = "ripgrep";
-  version = "12.1.1";
+  version = "14.1.1";
 
   src = fetchFromGitHub {
     owner = "BurntSushi";
     repo = "ripgrep";
     rev = version;
-    hash = "sha256-+s5RBC3XSgb8omTbUNLywZnP6jSxZBKSS1BmXOjRF8M=";
+    hash = "sha256-gyWnahj1A+iXUQlQ1O1H1u7K5euYQOld9qWm99Vjaeg=";
   };
 
-  cargoHash = "sha256-l1vL2ZdtDRxSGvP0X/l3nMw8+6WF67KPutJEzUROjg8=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-9atn5qyBDy4P6iUoHFhg+TV6Ur71fiah4oTJbBMeEy4=";
 
   doCheck = false;
 

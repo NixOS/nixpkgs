@@ -21,7 +21,7 @@
   withLDAP ? true,
   openldap,
   withPgSQL ? false,
-  postgresql,
+  libpq,
   withMySQL ? false,
   libmysqlclient,
   withSQLite ? false,
@@ -67,11 +67,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "postfix";
-  version = "3.9.1";
+  version = "3.9.3";
 
   src = fetchurl {
     url = "https://de.postfix.org/ftpmirror/official/postfix-${version}.tar.gz";
-    hash = "sha256-xIiUTrA2JXbRj1+MxLmzKjW8s11xuUfarJdkr0dw9kM=";
+    hash = "sha256-Psn6zZPBi1azAY9sIUicRIdRDZiw1m/vJovaSsevPwg=";
   };
 
   nativeBuildInputs = [
@@ -87,7 +87,7 @@ stdenv.mkDerivation rec {
       libnsl
       pcre2
     ]
-    ++ lib.optional withPgSQL postgresql
+    ++ lib.optional withPgSQL libpq
     ++ lib.optional withMySQL libmysqlclient
     ++ lib.optional withSQLite sqlite
     ++ lib.optional withLDAP openldap;

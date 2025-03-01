@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pyfibaro";
-  version = "0.8.0";
+  version = "0.8.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "rappenze";
     repo = "pyfibaro";
     tag = version;
-    hash = "sha256-7hn5iFuN86sdqLi5MIEwBYLYbPg7J1BbADHYdjYBCNA=";
+    hash = "sha256-M7ntlPK88er9Se3pPZEHjCDw3TIYtiruHdaCLB0ee8A=";
   };
 
   build-system = [ setuptools ];

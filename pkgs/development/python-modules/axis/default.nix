@@ -9,6 +9,7 @@
   packaging,
   pythonOlder,
   setuptools,
+  typing-extensions,
   xmltodict,
 }:
 
@@ -40,6 +41,7 @@ buildPythonPackage rec {
     httpx
     orjson
     packaging
+    typing-extensions
     xmltodict
   ];
 

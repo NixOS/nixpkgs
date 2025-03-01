@@ -126,7 +126,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   buildInputs = [ libuuid ];
   propagatedBuildInputs = [
-    # similar to 5.2.x, we progagate these inputs for OTB
+    # similar to 5.2.x, we propagate these inputs for OTB
     expat
     fftw
     fftwFloat

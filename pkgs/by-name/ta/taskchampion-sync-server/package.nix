@@ -13,7 +13,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-uOlubcQ5LAECvQEqgUR/5aLuDGQrdHy+K6vSapACmoo=";
   };
 
-  cargoHash = "sha256-Erhr5NduvQyUJSSurKqcZXJe4ExP68t8ysn7hZLAgP4=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-BOXg6Pjy4lhzdaqJkOLJNGAtX9cWmbN6QEmP0g7D6Qw=";
 
   meta = {
     description = "Sync server for Taskwarrior 3";

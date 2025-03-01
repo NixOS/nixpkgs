@@ -3,41 +3,39 @@
   stdenv,
   rustPlatform,
   fetchFromGitHub,
-  git,
+  gitMinimal,
   python3,
   makeWrapper,
   writeScriptBin,
   versionCheckHook,
   nix-update-script,
+  writableTmpDirAsHomeHook,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "pylyzer";
-  version = "0.0.77";
+  version = "0.0.82";
 
   src = fetchFromGitHub {
     owner = "mtshiba";
     repo = "pylyzer";
     tag = "v${version}";
-    hash = "sha256-MlDW3dNe9fdOzWp38VkjgoiqOYgBF+ezwTQE0+6SXCc=";
+    hash = "sha256-cSMHd3j3xslSR/v4KZ5LUwxPPR/b+okwrT54gUyLXXw=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-bkYRPwiB2BN4WNZ0HcOBiDbFyidftbHWyIDvJasnePc=";
+  cargoHash = "sha256-JrDj88JjQon2rtywa/PqnS1pTxTLigPHNnqQS/tO9RA=";
 
   nativeBuildInputs = [
-    git
+    gitMinimal
     python3
     makeWrapper
+    writableTmpDirAsHomeHook
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ (writeScriptBin "diskutil" "") ];
 
   buildInputs = [
     python3
   ];
-
-  preBuild = ''
-    export HOME=$(mktemp -d)
-  '';
 
   postInstall = ''
     mkdir -p $out/lib

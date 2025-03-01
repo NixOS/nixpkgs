@@ -12,18 +12,18 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "nezha-theme-nazhua";
-  version = "0.5.1";
+  version = "0.5.8";
 
   src = fetchFromGitHub {
     owner = "hi2shark";
     repo = "nazhua";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5XEdfUCwQSa+PWu4SHJCg3rCtblyD5x41lKe0SvFrU8=";
+    hash = "sha256-aRHMOyTWBYXgVBAXshQNHds+KZn4F8Gz9mzazIwT5TQ=";
   };
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = finalAttrs.src + "/yarn.lock";
-    hash = "sha256-Wy4xtLjDNkBLeESJCbfq9GhT0mSTAfGBN0A3oHX5BuE=";
+    hash = "sha256-/CQsG3iQdPyKHdApeMzq4w90NsMBdLXUP2lya8vtK5Q=";
   };
 
   nativeBuildInputs = [

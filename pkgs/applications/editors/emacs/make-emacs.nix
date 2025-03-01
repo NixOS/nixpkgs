@@ -32,6 +32,7 @@
   jansson,
   libXaw,
   libXcursor,
+  libXft,
   libXi,
   libXpm,
   libgccjit,
@@ -60,6 +61,7 @@
   texinfo,
   webkitgtk_4_0,
   wrapGAppsHook3,
+  writeText,
   zlib,
 
   # Boolean flags
@@ -69,6 +71,7 @@
   withAcl ? false,
   withAlsaLib ? false,
   withAthena ? false,
+  withCairo ? withX,
   withCsrc ? true,
   withDbus ? stdenv.hostPlatform.isLinux,
   withGTK3 ? withPgtk && !noGui,
@@ -182,7 +185,6 @@ mkDerivation (finalAttrs: {
             ./native-comp-driver-options-30.patch
         )
         {
-
           backendPath = (
             lib.concatStringsSep " " (
               builtins.map (x: ''"-B${x}"'') (
@@ -333,7 +335,6 @@ mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals withX [
       Xaw3d
-      cairo
       giflib
       libXaw
       libXpm
@@ -341,6 +342,12 @@ mkDerivation (finalAttrs: {
       libpng
       librsvg
       libtiff
+    ]
+    ++ lib.optionals withCairo [
+      cairo
+    ]
+    ++ lib.optionals (withX && !withCairo) [
+      libXft
     ]
     ++ lib.optionals withXinput2 [
       libXi
@@ -396,8 +403,8 @@ mkDerivation (finalAttrs: {
       else if withX then
         [
           (lib.withFeatureAs true "x-toolkit" toolkit)
-          (lib.withFeature true "cairo")
-          (lib.withFeature true "xft")
+          (lib.withFeature withCairo "cairo")
+          (lib.withFeature (!withCairo) "xft")
         ]
       else if withPgtk then
         [
@@ -500,6 +507,8 @@ mkDerivation (finalAttrs: {
     patchelf --add-rpath ${lib.makeLibraryPath [ libXcursor ]} $out/bin/emacs
     patchelf --add-needed "libXcursor.so.1" "$out/bin/emacs"
   '';
+
+  setupHook = ./setup-hook.sh;
 
   passthru = {
     inherit withNativeCompilation;

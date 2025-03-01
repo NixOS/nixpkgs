@@ -23,6 +23,12 @@ stdenv.mkDerivation rec {
         -i src/GsWidget.cxx
   '';
 
+  configureFlags = [
+    "ac_cv_func_malloc_0_nonnull=yes"
+    "ac_cv_func_realloc_0_nonnull=yes"
+    "FLTKCONFIG=${lib.getExe' (lib.getDev fltk13) "fltk-config"}"
+  ];
+
   meta = with lib; {
     description = "WYSIWYG PostScript annotator";
     homepage = "https://flpsed.org/flpsed.html";

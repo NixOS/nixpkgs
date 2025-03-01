@@ -5,25 +5,27 @@
   fetchFromGitHub,
   nix-update-script,
   glibcLocales,
+  versionCheckHook,
   withPostgresAdapter ? true,
   withBigQueryAdapter ? true,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "harlequin";
-  version = "1.25.2-unstable-2024-12-30";
+  version = "2.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tconbeer";
     repo = "harlequin";
-    rev = "7ef5327157c7617c1032c9128b487b32d1c91fea";
-    hash = "sha256-QoIjEfQgN6YWDDor4PxfeFkkFGAidUC0ZvHy+PqgnWs=";
+    tag = "v${version}";
+    hash = "sha256-IUzN+rWL69TUUS9npcmfSAPqy/8SYNusNAN/muCMqNI=";
   };
 
   pythonRelaxDeps = [
     "numpy"
     "pyarrow"
     "textual"
+    "syrupy"
   ];
 
   build-system = with python3Packages; [ poetry-core ];
@@ -65,15 +67,11 @@ python3Packages.buildPythonApplication rec {
     export HOME=$(mktemp -d)
   '';
 
-  nativeCheckInputs =
-    [
-      # FIX: restore on next release
-      # versionCheckHook
-    ]
-    ++ (with python3Packages; [
-      pytest-asyncio
-      pytestCheckHook
-    ]);
+  nativeCheckInputs = with python3Packages; [
+    pytest-asyncio
+    pytestCheckHook
+    versionCheckHook
+  ];
 
   disabledTests =
     [
@@ -81,8 +79,8 @@ python3Packages.buildPythonApplication rec {
       "test_connect_extensions"
       "test_connect_prql"
     ]
-    ++ lib.optionals (stdenv.hostPlatform.system == "aarch64-darwin") [
-      # Test incorrectly tries to load a dylib compiled for x86_64
+    ++ lib.optionals (!stdenv.hostPlatform.isx86_64) [
+      # Test incorrectly tries to load a dylib/so compiled for x86_64
       "test_load_extension"
     ];
 

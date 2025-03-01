@@ -19,13 +19,13 @@ let
 in
 buildDotnetModule rec {
   pname = "slskd";
-  version = "0.22.1";
+  version = "0.22.2";
 
   src = fetchFromGitHub {
     owner = "slskd";
     repo = "slskd";
     tag = version;
-    hash = "sha256-2IMEkNc7LqevTwsW6r6WR+2xH760wFYT5/S8dvjOz4o=";
+    hash = "sha256-Arf/QOq0wYely+CYwb4sJXsxB2BbEHZ2bUNyqeGbFdg=";
   };
 
   nativeBuildInputs = [

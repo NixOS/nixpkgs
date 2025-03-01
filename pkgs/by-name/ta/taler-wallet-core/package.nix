@@ -7,15 +7,15 @@
   fetchgit,
   srcOnly,
   removeReferencesTo,
-  nodejs,
+  nodejs_20,
   pnpm_9,
   python3,
-  git,
+  gitMinimal,
   jq,
   zip,
 }:
 let
-  nodeSources = srcOnly nodejs;
+  nodeSources = srcOnly nodejs_20;
   esbuild' = esbuild.override {
     buildGoModule =
       args:
@@ -47,9 +47,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     customPython
-    nodejs
+    nodejs_20
     pnpm_9.configHook
-    git
+    gitMinimal
     jq
     zip
   ];
@@ -59,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-BVVmv0VVvQ2YhL0zOKiM1oVKJKvqwMGNR47DkcCj874=";
   };
 
-  buildInputs = [ nodejs ];
+  buildInputs = [ nodejs_20 ];
 
   # Make a fake git repo with a commit.
   # Without this, the package does not build.

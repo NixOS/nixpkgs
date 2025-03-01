@@ -41,6 +41,9 @@ buildPythonPackage rec {
   # require devtools_testutils which is a internal package for azure-sdk
   doCheck = false;
 
+  # multiple packages in a singel repo, and the updater picks the wrong tag
+  passthru.skipBulkUpdate = true;
+
   meta = {
     description = "Microsoft Azure File DataLake Storage Client Library for Python";
     homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/storage/azure-storage-file-datalake";

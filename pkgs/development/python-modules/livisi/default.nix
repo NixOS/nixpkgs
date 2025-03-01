@@ -20,6 +20,8 @@ buildPythonPackage rec {
     hash = "sha256-ggEbzN9FfqT968hgOblIh5dfVibzgUEc4SoZfBGOCwo=";
   };
 
+  pythonRelaxDeps = [ "colorlog" ];
+
   build-system = [ setuptools ];
 
   dependencies = [

@@ -33,7 +33,8 @@ rustPlatform.buildRustPackage rec {
     xorg.xcbutil
   ] ++ lib.optional stdenv.hostPlatform.isDarwin AppKit;
 
-  cargoHash = "sha256-jm0UCKDy6TrogMPavB86lvk8yKZXubTGGbApk+oP2RQ=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-NRFTrSH2aorBqsvBOTqfKmer5tXEEF1ZMUtlMfZ6vD8=";
 
   meta = with lib; {
     description = "Simple and fast dashboard for Kubernetes";

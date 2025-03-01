@@ -37,6 +37,13 @@ stdenv.mkDerivation rec {
     SDL_ttf
   ];
 
+  # pass in correct sdl-config for cross builds
+  env.SDL_CONFIG = lib.getExe' SDL.dev "sdl-config";
+
+  makeFlags = [
+    "AR=${stdenv.cc.targetPrefix}ar"
+  ];
+
   desktopItems = [
     (makeDesktopItem {
       name = "fish-fillets-ng";

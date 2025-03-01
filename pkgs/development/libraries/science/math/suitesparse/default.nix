@@ -13,9 +13,13 @@
   enableCuda ? config.cudaSupport,
   cudaPackages,
   openmp ? null,
-}:
+}@inputs:
 
-stdenv.mkDerivation rec {
+let
+  stdenv = throw "Use effectiveStdenv instead";
+  effectiveStdenv = if enableCuda then cudaPackages.backendStdenv else inputs.stdenv;
+in
+effectiveStdenv.mkDerivation rec {
   pname = "suitesparse";
   version = "5.13.0";
 
@@ -35,7 +39,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs =
     [
     ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    ++ lib.optionals effectiveStdenv.hostPlatform.isDarwin [
       fixDarwinDylibNames
     ]
     ++ lib.optionals enableCuda [
@@ -53,7 +57,7 @@ stdenv.mkDerivation rec {
       gmp
       mpfr
     ]
-    ++ lib.optionals stdenv.cc.isClang [
+    ++ lib.optionals effectiveStdenv.cc.isClang [
       openmp
     ]
     ++ lib.optionals enableCuda [
@@ -82,14 +86,14 @@ stdenv.mkDerivation rec {
       "CUDART_LIB=${lib.getLib cudaPackages.cuda_cudart}/lib/libcudart.so"
       "CUBLAS_LIB=${lib.getLib cudaPackages.libcublas}/lib/libcublas.so"
     ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    ++ lib.optionals effectiveStdenv.hostPlatform.isDarwin [
       # Unless these are set, the build will attempt to use `Accelerate` on darwin, see:
       # https://github.com/DrTimothyAldenDavis/SuiteSparse/blob/v5.13.0/SuiteSparse_config/SuiteSparse_config.mk#L368
       "BLAS=-lblas"
       "LAPACK=-llapack"
     ];
 
-  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+  env = lib.optionalAttrs effectiveStdenv.hostPlatform.isDarwin {
     # Ensure that there is enough space for the `fixDarwinDylibNames` hook to
     # update the install names of the output dylibs.
     NIX_LDFLAGS = "-headerpad_max_install_names";

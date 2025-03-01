@@ -19,6 +19,7 @@
   nasm,
   pkg-config,
   which,
+  openssl,
 
   # Tests
   nixosTests,
@@ -26,7 +27,7 @@
   # Runtime dependencies
   arrow-cpp,
   babeltrace,
-  boost,
+  boost186,
   bzip2,
   cryptsetup,
   cunit,
@@ -173,6 +174,7 @@ let
       johanot
       krav
       nh2
+      benaryorg
     ];
     platforms = [
       "x86_64-linux"
@@ -231,11 +233,11 @@ let
             hash = "sha256-J9N1kDrIJhz+QEf2cJ0W99GNObHskqr3KvmJVSplDr0=";
           };
           cargoRoot = "src/_bcrypt";
-          cargoDeps = rustPlatform.fetchCargoTarball {
+          cargoDeps = rustPlatform.fetchCargoVendor {
             inherit src;
             sourceRoot = "${pname}-${version}/${cargoRoot}";
             name = "${pname}-${version}";
-            hash = "sha256-lDWX69YENZFMu7pyBmavUZaalGvFqbHSHfkwkzmDQaY=";
+            hash = "sha256-8PyCgh/rUO8uynzGdgylAsb5k55dP9fCnf40UOTCR/M=";
           };
         });
 
@@ -256,9 +258,15 @@ let
           disabledTests = old.disabledTests or [ ] ++ [
             "test_export_md5_digest"
           ];
+          disabledTestPaths = old.disabledTestPaths or [ ] ++ [
+            "tests/test_ssl.py"
+          ];
           propagatedBuildInputs = old.propagatedBuildInputs or [ ] ++ [
             self.flaky
           ];
+          # hack: avoid building docs due to incompatibility with current sphinx
+          nativeBuildInputs = [ openssl ]; # old.nativeBuildInputs but without sphinx*
+          outputs = lib.filter (o: o != "doc") old.outputs;
         });
 
         # This is the most recent version of `trustme` that's still compatible with `cryptography` 40.
@@ -289,7 +297,7 @@ let
       };
   };
 
-  boost' = boost.override {
+  boost' = boost186.override {
     enablePython = true;
     inherit python;
   };
@@ -504,7 +512,7 @@ rec {
       #          |       ^~~~~~~~~~~~~~~~~~
       # Looks like `close()` is somehow not included.
       # But the relevant code is already removed in `open-telemetry` 1.10: https://github.com/open-telemetry/opentelemetry-cpp/pull/2031
-      # So it's proably not worth trying to fix that for this Ceph version,
+      # So it's probably not worth trying to fix that for this Ceph version,
       # and instead just disable Ceph's Jaeger support.
       "-DWITH_JAEGER:BOOL=OFF"
       "-DWITH_TESTS:BOOL=OFF"

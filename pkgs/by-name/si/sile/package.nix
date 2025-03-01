@@ -24,7 +24,7 @@
 
   # passthru.tests
   runCommand,
-  poppler_utils,
+  poppler-utils,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -36,10 +36,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-+9pZUDszPYJmFgHbZH0aKtZ6qLcJjh73jG2CFoRKxWc=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
+    dontConfigure = true;
     nativeBuildInputs = [ zstd ];
-    hash = "sha256-qw5XvXFhYLQJalk3fQwKakgBwfWMjhJzHKbqjchE2V0=";
+    hash = "sha256-FdUrivumG5R69CwZedpkBzds5PcZr4zSsA6QW/+rDBM=";
   };
 
   nativeBuildInputs = [
@@ -156,7 +157,7 @@ stdenv.mkDerivation (finalAttrs: {
       runCommand "${finalAttrs.pname}-test"
         {
           nativeBuildInputs = [
-            poppler_utils
+            poppler-utils
             finalAttrs.finalPackage
           ];
           inherit (finalAttrs) FONTCONFIG_FILE;

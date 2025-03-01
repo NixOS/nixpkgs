@@ -45,7 +45,7 @@ in
         type = types.str;
         description = ''
           File containing the AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY
-          in the format of an EnvironmentFile as described by systemd.exec(5)
+          in the format of an EnvironmentFile as described by {manpage}`systemd.exec(5)`
         '';
       };
 

@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromGitHub,
+  backports-shutil-which,
   bech32,
   buildPythonPackage,
   setuptools,
@@ -46,6 +47,7 @@ buildPythonPackage rec {
   pythonRemoveDeps = [ "backports.shutil-which" ];
 
   dependencies = [
+    backports-shutil-which
     unidecode
     configargparse
     python-daemon

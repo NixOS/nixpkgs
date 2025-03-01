@@ -26,7 +26,7 @@ mkCoqDerivation {
         {
           cases = [
             (range "8.17" "8.19")
-            (range "1.3.1" "1.3.2")
+            (range "1.3.1" "1.3.3")
           ];
           out = "0.1.0";
         }

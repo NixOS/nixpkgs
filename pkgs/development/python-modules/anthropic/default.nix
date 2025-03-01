@@ -24,7 +24,7 @@
 
 buildPythonPackage rec {
   pname = "anthropic";
-  version = "0.42.0";
+  version = "0.47.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     owner = "anthropics";
     repo = "anthropic-sdk-python";
     tag = "v${version}";
-    hash = "sha256-7cRXKXiyq3ty21klkitjjnm9rzBRmAXGYvvVxTNWeZ4=";
+    hash = "sha256-W7ByBoPTpSOww+hf/uOQdpRm0NxX7vA9QbSLd9mVQdE=";
   };
 
   build-system = [
@@ -90,7 +90,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Anthropic's safety-first language model APIs";
     homepage = "https://github.com/anthropics/anthropic-sdk-python";
-    changelog = "https://github.com/anthropics/anthropic-sdk-python/releases/tag/v${version}";
+    changelog = "https://github.com/anthropics/anthropic-sdk-python/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ natsukium ];
   };

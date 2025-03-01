@@ -16,7 +16,7 @@
   freetype-py,
   gflanguages,
   gfsubsets,
-  git,
+  gitMinimal,
   glyphsets,
   installShellFiles,
   jinja2,
@@ -41,20 +41,21 @@
   toml,
   ufo2ft,
   ufolint,
+  ufomerge,
   unicodedata2,
   vharfbuzz,
 }:
 
 buildPythonPackage rec {
   pname = "fontbakery";
-  version = "0.12.10";
+  version = "0.13.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-+9O7cAE6CUATvybG22qULNNHi94zSGqU9UjhvrF9R8k=";
+    hash = "sha256-NoUqR+u2GgjE+nj05AXvtprdWieT6XbGGcmOnEMolC4=";
   };
 
   env.PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION = "python";
@@ -105,12 +106,13 @@ buildPythonPackage rec {
     toml
     ufo2ft
     ufolint
+    ufomerge
     unicodedata2
     vharfbuzz
   ];
 
   nativeCheckInputs = [
-    git
+    gitMinimal
     pytestCheckHook
     pytest-xdist
     requests-mock

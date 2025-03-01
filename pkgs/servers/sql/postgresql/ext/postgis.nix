@@ -35,7 +35,7 @@ let
 in
 buildPostgresqlExtension (finalAttrs: {
   pname = "postgis";
-  version = "3.5.0";
+  version = "3.5.2";
 
   outputs = [
     "out"
@@ -46,12 +46,11 @@ buildPostgresqlExtension (finalAttrs: {
     owner = "postgis";
     repo = "postgis";
     rev = "${finalAttrs.version}";
-    hash = "sha256-wh7Lav2vnKzGWuSvvMFvAaGV7ynD+KgPsFUgujdtzlA=";
+    hash = "sha256-1kOLtG6AMavbWQ1lHG2ABuvIcyTYhgcbjuVmqMR4X+g=";
   };
 
   buildInputs =
     [
-      libxml2
       geos
       proj
       gdal
@@ -65,8 +64,10 @@ buildPostgresqlExtension (finalAttrs: {
     autoconf
     automake
     libtool
+    libxml2
     perl
     pkg-config
+    protobufc
     which
   ] ++ lib.optional jitSupport llvm;
   dontDisableStatic = true;

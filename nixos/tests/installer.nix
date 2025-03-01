@@ -734,6 +734,7 @@ let
                 texinfo
                 unionfs-fuse
                 xorg.lndir
+                shellcheck-minimal
 
                 # add curl so that rather than seeing the test attempt to download
                 # curl's tarball, we see what it's trying to download

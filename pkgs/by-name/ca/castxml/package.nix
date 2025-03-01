@@ -5,7 +5,7 @@
   libffi,
   libxml2,
   llvmPackages,
-  python3,
+  sphinx,
   stdenv,
   testers,
   zlib,
@@ -16,7 +16,6 @@
 
 let
   inherit (llvmPackages) libclang llvm;
-  inherit (python3.pkgs) sphinx;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "castxml";

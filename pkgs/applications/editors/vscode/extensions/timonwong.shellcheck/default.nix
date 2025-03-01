@@ -10,8 +10,8 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "shellcheck";
     publisher = "timonwong";
-    version = "0.37.4";
-    sha256 = "sha256-+DFoHjb5sl9s5Vqw7onsv+MKjS4+loGVnZsF9/e+7dQ=";
+    version = "0.37.7";
+    sha256 = "sha256-i8cVY8EcKSxnmWmRWDiARF79pOEcYMc+y+7i4d8EDTo=";
   };
   nativeBuildInputs = [
     jq

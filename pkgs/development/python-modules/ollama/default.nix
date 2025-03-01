@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "ollama";
-  version = "0.4.5";
+  version = "0.4.7";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "ollama";
     repo = "ollama-python";
     tag = "v${version}";
-    hash = "sha256-8Y3CRd+VXABuMpaqfJ5mYQhQ+U4Qk7EcjSnPd/hsebY=";
+    hash = "sha256-+iinQIVbL0f4kNc9aaS0H4Ua2K5w5uapFAIkpyoMj+E=";
   };
 
   postPatch = ''
@@ -52,7 +52,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Ollama Python library";
     homepage = "https://github.com/ollama/ollama-python";
-    changelog = "https://github.com/ollama/ollama-python/releases/tag/v${version}";
+    changelog = "https://github.com/ollama/ollama-python/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

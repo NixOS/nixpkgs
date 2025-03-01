@@ -15,6 +15,7 @@
 
   # Native build inputs:
   ninja,
+  bashInteractive,
   pkg-config,
   python3,
   perl,
@@ -214,6 +215,7 @@ let
   };
 
   isElectron = packageName == "electron";
+  needsCompgen = chromiumVersionAtLeast "133";
 
   chromiumDeps = lib.mapAttrs (
     path: args:
@@ -291,6 +293,11 @@ let
     nativeBuildInputs =
       [
         ninja
+      ]
+      ++ lib.optionals needsCompgen [
+        bashInteractive # needed for compgen in buildPhase -> process_template
+      ]
+      ++ [
         pkg-config
         python3WithPackages
         perl
@@ -666,14 +673,14 @@ let
 
         # Build Chromium using the system toolchain (for Linux distributions):
         #
-        # What you would expect to be caled "target_toolchain" is
+        # What you would expect to be called "target_toolchain" is
         # actually called either "default_toolchain" or "custom_toolchain",
         # depending on which part of the codebase you are in; see:
         # https://github.com/chromium/chromium/blob/d36462cc9279464395aea5e65d0893d76444a296/build/config/BUILDCONFIG.gn#L17-L44
         custom_toolchain = "//build/toolchain/linux/unbundle:default";
         host_toolchain = "//build/toolchain/linux/unbundle:default";
         # We only build those specific toolchains when we cross-compile, as native non-cross-compilations would otherwise
-        # end up building much more things than they need to (roughtly double the build steps and time/compute):
+        # end up building much more things than they need to (roughly double the build steps and time/compute):
       }
       // lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) {
         host_toolchain = "//build/toolchain/linux/unbundle:host";
@@ -795,12 +802,12 @@ let
       let
         buildCommand = target: ''
           TERM=dumb ninja -C "${buildPath}" -j$NIX_BUILD_CORES "${target}"
-          (
+          ${lib.optionalString needsCompgen "bash -s << EOL\n"}(
             source chrome/installer/linux/common/installer.include
             PACKAGE=$packageName
             MENUNAME="Chromium"
             process_template chrome/app/resources/manpage.1.in "${buildPath}/chrome.1"
-          )
+          )${lib.optionalString needsCompgen "\nEOL"}
         '';
         targets = extraAttrs.buildTargets or [ ];
         commands = map buildCommand targets;

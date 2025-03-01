@@ -19,25 +19,25 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cosmic-term";
-  version = "1.0.0-alpha.3";
+  version = "1.0.0-alpha.6";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-term";
     rev = "epoch-${version}";
-    hash = "sha256-4++wCyRVIodWdlrvK2vMcHGoY4BctnrkopWC6dZvhMk=";
+    hash = "sha256-sdeRkT6UcyBKIFnJZn3aGf8LZQimqVPqtXo7RtwUs5M=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-0KXo1wtbbnK3Kk+EGZo7eEecM4PChLpwawWWI0Bp/Yw=";
+  cargoHash = "sha256-Qznkqp+zWpP/ok2xG7U5lYBW0qo4+ARnm8hgxU20ha0=";
 
   # COSMIC applications now uses vergen for the About page
   # Update the COMMIT_DATE to match when the commit was made
-  env.VERGEN_GIT_COMMIT_DATE = "2024-09-24";
+  env.VERGEN_GIT_COMMIT_DATE = "2025-02-21";
   env.VERGEN_GIT_SHA = src.rev;
 
   postPatch = ''
-    substituteInPlace justfile --replace '#!/usr/bin/env' "#!$(command -v env)"
+    substituteInPlace justfile --replace-fail '#!/usr/bin/env' "#!$(command -v env)"
   '';
 
   nativeBuildInputs = [
@@ -78,19 +78,9 @@ rustPlatform.buildRustPackage rec {
     "-Wl,--pop-state"
   ];
 
-  # LD_LIBRARY_PATH can be removed once tiny-xlib is bumped above 0.2.2
   postInstall = ''
     wrapProgram "$out/bin/cosmic-term" \
-      --suffix XDG_DATA_DIRS : "${cosmic-icons}/share" \
-      --prefix LD_LIBRARY_PATH : ${
-        lib.makeLibraryPath [
-          libxkbcommon
-          vulkan-loader
-          xorg.libX11
-          xorg.libXcursor
-          xorg.libXi
-        ]
-      }
+      --suffix XDG_DATA_DIRS : "${cosmic-icons}/share"
   '';
 
   meta = with lib; {

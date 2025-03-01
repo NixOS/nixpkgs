@@ -93,6 +93,9 @@
   # For Vulkan support (--enable-features=Vulkan)
   addDriverRunpath,
   undmg,
+
+  # For QT support
+  qt6,
 }:
 
 let
@@ -162,15 +165,17 @@ let
     ++ [
       gtk3
       gtk4
+      qt6.qtbase
+      qt6.qtwayland
     ];
 
   linux = stdenv.mkDerivation (finalAttrs: {
     inherit pname meta passthru;
-    version = "132.0.6834.83";
+    version = "133.0.6943.141";
 
     src = fetchurl {
       url = "https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_${finalAttrs.version}-1_amd64.deb";
-      hash = "sha256-qufv7m7iQ8yX6WeNajTbPELCmRhr4GGBa8Wzy+iMFhg=";
+      hash = "sha256-iMW9V3dARAG7kJgCCWIT0OBDsxYqDnp+CpwgcjAT8zI=";
     };
 
     # With strictDeps on, some shebangs were not being patched correctly
@@ -243,6 +248,9 @@ let
 
       # "--simulate-outdated-no-au" disables auto updates and browser outdated popup
       makeWrapper "$out/share/google/$appname/google-$appname" "$exe" \
+        --prefix QT_PLUGIN_PATH  : "${qt6.qtbase}/lib/qt-6/plugins" \
+        --prefix QT_PLUGIN_PATH  : "${qt6.qtwayland}/lib/qt-6/plugins" \
+        --prefix NIXPKGS_QT6_QML_IMPORT_PATH : "${qt6.qtwayland}/lib/qt-6/qml" \
         --prefix LD_LIBRARY_PATH : "$rpath" \
         --prefix PATH            : "$binpath" \
         --suffix PATH            : "${lib.makeBinPath [ xdg-utils ]}" \
@@ -266,11 +274,11 @@ let
 
   darwin = stdenvNoCC.mkDerivation (finalAttrs: {
     inherit pname meta passthru;
-    version = "132.0.6834.84";
+    version = "133.0.6943.142";
 
     src = fetchurl {
-      url = "http://dl.google.com/release2/chrome/acpvuq6jnnfhesngduj6lnfmy3zq_132.0.6834.84/GoogleChrome-132.0.6834.84.dmg";
-      hash = "sha256-SX8IUdTnIJHwfF9ZwIHZwGZUncJ/NLQpuEL/X8p1KJo=";
+      url = "http://dl.google.com/release2/chrome/ejubi5y7bpapjhrevtxffszuji_133.0.6943.142/GoogleChrome-133.0.6943.142.dmg";
+      hash = "sha256-cDnCnswvtRkyrwv52/GFHPTsmRZItN3rgqqc62mS7Ao=";
     };
 
     dontPatch = true;

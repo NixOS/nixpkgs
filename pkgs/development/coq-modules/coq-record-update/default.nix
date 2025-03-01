@@ -13,7 +13,7 @@ mkCoqDerivation rec {
     with lib.versions;
     lib.switch coq.coq-version [
       {
-        case = range "8.10" "8.20";
+        case = range "8.10" "9.0";
         out = "0.3.4";
       }
     ] null;

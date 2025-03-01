@@ -64,7 +64,9 @@
   at-spi2-core,
   unixODBC,
   unixODBCDrivers,
+  libGL,
   # darwin
+  moltenvk,
   moveBuildTree,
   darwinVersionInputs,
   xcbuild,
@@ -73,15 +75,14 @@
   # optional dependencies
   cups,
   libmysqlclient,
-  postgresql,
+  libpq,
   withGtk3 ? false,
   gtk3,
   withLibinput ? false,
   libinput,
   # options
-  libGLSupported ? stdenv.hostPlatform.isLinux,
-  libGL,
   qttranslations ? null,
+  fetchpatch,
 }:
 
 let
@@ -99,6 +100,9 @@ stdenv.mkDerivation rec {
       openssl
       sqlite
       zlib
+      libGL
+      vulkan-headers
+      vulkan-loader
       # Text rendering
       harfbuzz
       icu
@@ -132,8 +136,6 @@ stdenv.mkDerivation rec {
       libselinux
       libsepol
       lttng-ust
-      vulkan-headers
-      vulkan-loader
       libthai
       libdrm
       libdatrie
@@ -159,26 +161,17 @@ stdenv.mkDerivation rec {
       xorg.xcbutilcursor
       libepoxy
     ]
-    ++ lib.optionals libGLSupported [
-      libGL
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isMinGW [
-      vulkan-headers
-      vulkan-loader
-    ]
     ++ lib.optional (cups != null && lib.meta.availableOn stdenv.hostPlatform cups) cups;
 
   buildInputs =
     lib.optionals (lib.meta.availableOn stdenv.hostPlatform at-spi2-core) [
       at-spi2-core
     ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin darwinVersionInputs
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (darwinVersionInputs ++ [ moltenvk ])
     ++ lib.optional withGtk3 gtk3
     ++ lib.optional withLibinput libinput
     ++ lib.optional (libmysqlclient != null && !stdenv.hostPlatform.isMinGW) libmysqlclient
-    ++ lib.optional (
-      postgresql != null && lib.meta.availableOn stdenv.hostPlatform postgresql
-    ) postgresql;
+    ++ lib.optional (libpq != null && lib.meta.availableOn stdenv.hostPlatform libpq) libpq;
 
   nativeBuildInputs = [
     bison
@@ -229,10 +222,19 @@ stdenv.mkDerivation rec {
     # don't pass qtbase's QML directory to qmlimportscanner if it's empty
     ./skip-missing-qml-directory.patch
 
-    # Qt treats linker flags without known suffix as libraries since 6.7.2 (see qt/qtbase commit ea0f00d).
-    # Don't do this for absolute paths (like `/nix/store/…/QtMultimedia.framework/Versions/A/QtMultimedia`).
-    # Upcoming upstream fix: https://codereview.qt-project.org/c/qt/qtbase/+/613683.
-    ./dont-treat-abspaths-without-suffix-as-libraries.patch
+    # FIXME: 6.8.3 backports recommended by KDE
+    (fetchpatch {
+      url = "https://invent.kde.org/qt/qt/qtbase/-/commit/12d4bf1ab52748cb84894f50d437064b439e0b7d.patch";
+      hash = "sha256-HBwmQyAyaJh+in50Kd+mMa/6t+GZC3UmQWSe7Ugvn2Y=";
+    })
+    (fetchpatch {
+      url = "https://invent.kde.org/qt/qt/qtbase/-/commit/2ef615228bba9a8eb282437bfb7472f925610e89.patch";
+      hash = "sha256-pkKA7o7er9n5mu8EfJsjs8NeEq/SlKpEoRZwsDor1+c=";
+    })
+    (fetchpatch {
+      url = "https://invent.kde.org/qt/qt/qtbase/-/commit/a43c7e58046604796aa69974ea1c5d3e2648c755.patch";
+      hash = "sha256-4KJn7RTpSi8IFUElt3LEoMsuJmkYSf+bp2/Jmf42Ygs=";
+    })
   ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -274,14 +276,15 @@ stdenv.mkDerivation rec {
       "-DQT_FEATURE_libproxy=ON"
       "-DQT_FEATURE_system_sqlite=ON"
       "-DQT_FEATURE_openssl_linked=ON"
+      "-DQT_FEATURE_vulkan=ON"
     ]
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
       "-DQT_FEATURE_sctp=ON"
       "-DQT_FEATURE_journald=${if systemdSupport then "ON" else "OFF"}"
-      "-DQT_FEATURE_vulkan=ON"
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       "-DQT_FEATURE_rpath=OFF"
+      "-DQT_NO_XCODE_MIN_VERSION_CHECK=ON"
     ]
     ++ lib.optionals isCrossBuild [
       "-DQT_HOST_PATH=${pkgsBuildBuild.qt6.qtbase}"

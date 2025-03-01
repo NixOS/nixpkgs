@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-whvRCV1g2avKegfQpMgYi+E6ETxT2tQqVS2SWRpAqF8=";
   };
 
-  cargoHash = "sha256-uw1oWIoKi6qsObI4SkEiHwEj9QoxE9jufu9O+ZKM8DI=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-WLHXeYNfALa7GfFAHEO9PAlFKB2lbDefgAYCn6G0U6Y=";
 
   nativeInstallCheckInputs = [
     versionCheckHook

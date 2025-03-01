@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  utils,
   ...
 }:
 let
@@ -78,6 +79,23 @@ in
       '';
     };
 
+    services.journald.audit = lib.mkOption {
+      default = null;
+      type = lib.types.nullOr lib.types.bool;
+      description = ''
+        If enabled systemd-journald will turn on auditing on start-up.
+        If disabled it will turn it off. If unset it will neither enable nor disable it, leaving the previous state unchanged.
+
+        NixOS defaults to leaving this unset as enabling audit without auditd running leads to spamming /dev/kmesg with random messages
+        and if you enable auditd then auditd is responsible for turning auditing on.
+
+        If you want to have audit logs in journald and do not mind audit logs also ending up in /dev/kmesg you can set this option to true.
+
+        If you want to for some ununderstandable reason disable auditing if auditd enabled it then you can set this option to false.
+        It is of NixOS' opinion that setting this to false is definitely the wrong thing to do - but it's an option.
+      '';
+    };
+
     services.journald.extraConfig = lib.mkOption {
       default = "";
       type = lib.types.lines;
@@ -116,6 +134,11 @@ in
         "syslog.socket"
       ];
 
+    systemd.sockets.systemd-journald-audit.wantedBy = [
+      "systemd-journald.service"
+      "sockets.target"
+    ];
+
     environment.etc = {
       "systemd/journald.conf".text = ''
         [Journal]
@@ -129,6 +152,7 @@ in
         ${lib.optionalString (cfg.forwardToSyslog) ''
           ForwardToSyslog=yes
         ''}
+        Audit=${utils.systemdUtils.lib.toOption cfg.audit}
         ${cfg.extraConfig}
       '';
     };

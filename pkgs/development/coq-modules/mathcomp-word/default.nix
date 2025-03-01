@@ -3,6 +3,7 @@
   coq,
   mkCoqDerivation,
   mathcomp,
+  stdlib,
   lib,
   version ? null,
 }:
@@ -61,7 +62,7 @@ mkCoqDerivation {
       [
         {
           cases = [
-            (range "8.16" "8.20")
+            (range "8.16" "9.0")
             (isGe "2.0")
           ];
           out = "3.2";
@@ -80,6 +81,7 @@ mkCoqDerivation {
     mathcomp.algebra
     mathcomp.ssreflect
     mathcomp.fingroup
+    stdlib
   ];
 
   meta = with lib; {

@@ -12,18 +12,18 @@
 
 buildPythonPackage rec {
   pname = "clarabel";
-  version = "0.9.0";
+  version = "0.10.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-DW0/6IAL5bS11AqOFL1JJmez5GzF2+N2d85e0l8HGdQ=";
+    hash = "sha256-qKIQUFj9fbVHGL5TxIcVpQkQUAsQ/wuPU4BDTmnBChA=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-NNvrDXBodrO3bxr4X1HEn5uHmHDJ1s9C70lPv7OkSCo=";
+    hash = "sha256-Ohbeavkayl6vMyYX9kVVLRddvVB9gWOxfzdWAOg+gac=";
   };
 
   nativeBuildInputs = with rustPlatform; [

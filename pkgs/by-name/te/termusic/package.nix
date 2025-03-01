@@ -41,16 +41,17 @@ rustPlatform.buildRustPackage rec {
   ];
 
   postPatch = ''
-    pushd $cargoDepsCopy/stream-download
+    pushd $cargoDepsCopy/stream-download-0.6.0
     oldHash=$(sha256sum src/lib.rs | cut -d " " -f 1)
-    substituteInPlace $cargoDepsCopy/stream-download/src/lib.rs \
+    substituteInPlace $cargoDepsCopy/stream-download-0.6.0/src/lib.rs \
       --replace-warn '#![doc = include_str!("../README.md")]' ""
     substituteInPlace .cargo-checksum.json \
       --replace-warn $oldHash $(sha256sum src/lib.rs | cut -d " " -f 1)
     popd
   '';
 
-  cargoHash = "sha256-4PprZdTIcYa8y7FwQVrG0ZBg7N/Xe6HDt/z6ZmaHd5Y=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-LWatmnmLBDf4BFq5RMQBbN4wmptYuz3xqyzz6gJGzX8=";
 
   useNextest = true;
 

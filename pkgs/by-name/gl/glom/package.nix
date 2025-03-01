@@ -155,11 +155,9 @@ stdenv.mkDerivation (finalAttrs: {
       gpl2
     ];
     homepage = "https://gitlab.gnome.org/Archive/glom";
-    maintainers =
-      lib.teams.gnome.members
-      ++ (with lib.maintainers; [
-        bot-wxt1221
-      ]);
+    maintainers = with lib.maintainers; [
+      bot-wxt1221
+    ];
     platforms = lib.platforms.linux;
   };
 })

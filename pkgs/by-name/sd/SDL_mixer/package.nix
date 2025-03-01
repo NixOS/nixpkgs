@@ -70,9 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   nativeBuildInputs = [
-    SDL
     pkg-config
-    smpeg
   ];
 
   buildInputs = [
@@ -83,6 +81,10 @@ stdenv.mkDerivation (finalAttrs: {
     libvorbis
     smpeg
   ];
+
+  # pass in correct *-config for cross builds
+  env.SDL_CONFIG = lib.getExe' SDL.dev "sdl-config";
+  env.SMPEG_CONFIG = lib.getExe' smpeg.dev "smpeg-config";
 
   configureFlags = [
     (lib.enableFeature false "music-ogg-shared")

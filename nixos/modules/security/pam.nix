@@ -1483,7 +1483,7 @@ in
           the YubiCloud.
 
           Use "challenge-response" for offline validation using YubiKeys with HMAC-SHA-1
-          Challenge-Response configurations. See the man-page ykpamcfg(1) for further
+          Challenge-Response configurations. See the man-page {manpage}`ykpamcfg(1)` for further
           details on how to configure offline Challenge-Response validation.
 
           More information can be found [here](https://developers.yubico.com/yubico-pam/Authentication_Using_Challenge-Response.html).

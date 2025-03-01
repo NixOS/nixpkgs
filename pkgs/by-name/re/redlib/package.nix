@@ -18,7 +18,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-lFvlrVFzMk6igH/h/3TZnkl8SooanVyIRYbSyleb2OU=";
   };
 
-  cargoHash = "sha256-BorE3wcT8eCgIatHyNr3p9ewj7cX8yYer0vPEuBYPj4=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-cqYPxDhIPA45A29Kl3XlF1gd9/EzlyqyFHH69lAju2A=";
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Security
@@ -77,7 +78,7 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.agpl3Only;
     mainProgram = "redlib";
     maintainers = with lib.maintainers; [
-      soispha
+      bpeetz
       Guanran928
     ];
   };

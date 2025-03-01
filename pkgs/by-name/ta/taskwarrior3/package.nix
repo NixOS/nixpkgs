@@ -33,10 +33,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-aKDwRCJ1yopRdsPxnHhgOpSho1i8/dcAurI+XhpSbn4=";
     fetchSubmodules = true;
   };
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     name = "${finalAttrs.pname}-${finalAttrs.version}-cargo-deps";
     inherit (finalAttrs) src;
-    hash = "sha256-mzmrbsUuIjUVuNEa33EgtOTl9r+0xYj2WkKqFjxX1oU=";
+    hash = "sha256-UbJodQBCrmXbw5+ahusBnEcoCYGFHRA6bg5hf9/prmA=";
   };
 
   postPatch = ''

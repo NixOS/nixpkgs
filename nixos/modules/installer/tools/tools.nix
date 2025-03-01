@@ -1,10 +1,10 @@
 # This module generates nixos-install, nixos-rebuild,
 # nixos-generate-config, etc.
 
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, options, ... }:
 
 let
-  makeProg = args: pkgs.substituteAll (args // {
+  makeProg = args: pkgs.replaceVarsWith (args // {
     dir = "bin";
     isExecutable = true;
     nativeBuildInputs = [
@@ -18,28 +18,32 @@ let
   nixos-generate-config = makeProg {
     name = "nixos-generate-config";
     src = ./nixos-generate-config.pl;
-    perl = "${pkgs.perl.withPackages (p: [ p.FileSlurp ])}/bin/perl";
-    hostPlatformSystem = pkgs.stdenv.hostPlatform.system;
-    detectvirt = "${config.systemd.package}/bin/systemd-detect-virt";
-    btrfs = "${pkgs.btrfs-progs}/bin/btrfs";
-    inherit (config.system.nixos-generate-config) configuration desktopConfiguration;
-    xserverEnabled = config.services.xserver.enable;
+    replacements = {
+      perl = "${pkgs.perl.withPackages (p: [ p.FileSlurp ])}/bin/perl";
+      hostPlatformSystem = pkgs.stdenv.hostPlatform.system;
+      detectvirt = "${config.systemd.package}/bin/systemd-detect-virt";
+      btrfs = "${pkgs.btrfs-progs}/bin/btrfs";
+      inherit (config.system.nixos-generate-config) configuration desktopConfiguration flake;
+      xserverEnabled = config.services.xserver.enable;
+    };
     manPage = ./manpages/nixos-generate-config.8;
   };
 
   nixos-version = makeProg {
     name = "nixos-version";
     src = ./nixos-version.sh;
-    inherit (pkgs) runtimeShell;
-    inherit (config.system.nixos) version codeName revision;
-    inherit (config.system) configurationRevision;
-    json = builtins.toJSON ({
-      nixosVersion = config.system.nixos.version;
-    } // lib.optionalAttrs (config.system.nixos.revision != null) {
-      nixpkgsRevision = config.system.nixos.revision;
-    } // lib.optionalAttrs (config.system.configurationRevision != null) {
-      configurationRevision = config.system.configurationRevision;
-    });
+    replacements = {
+      inherit (pkgs) runtimeShell;
+      inherit (config.system.nixos) version codeName revision;
+      inherit (config.system) configurationRevision;
+      json = builtins.toJSON ({
+        nixosVersion = config.system.nixos.version;
+      } // lib.optionalAttrs (config.system.nixos.revision != null) {
+        nixpkgsRevision = config.system.nixos.revision;
+      } // lib.optionalAttrs (config.system.configurationRevision != null) {
+        configurationRevision = config.system.configurationRevision;
+      });
+    };
     manPage = ./manpages/nixos-version.8;
   };
 
@@ -50,6 +54,24 @@ let
     withNgSuffix = false;
     withReexec = true;
   };
+
+  defaultFlakeTemplate = ''
+    {
+      inputs = {
+        # This is pointing to an unstable release.
+        # If you prefer a stable release instead, you can this to the latest number shown here: https://nixos.org/download
+        # i.e. nixos-24.11
+        # Use `nix flake update` to update the flake to the latest revision of the chosen release channel.
+        nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+      };
+      outputs = inputs\@{ self, nixpkgs, ... }: {
+        # NOTE: '${options.networking.hostName.default}' is the default hostname
+        nixosConfigurations.${options.networking.hostName.default} = nixpkgs.lib.nixosSystem {
+          modules = [ ./configuration.nix ];
+        };
+      };
+    }
+  '';
 
   defaultConfigTemplate = ''
     # Edit this configuration file to define what should be installed on
@@ -172,6 +194,24 @@ let
 in
 {
   options.system.nixos-generate-config = {
+
+    flake = lib.mkOption {
+      internal = true;
+      type = lib.types.str;
+      default = defaultFlakeTemplate;
+      description = ''
+        The NixOS module that `nixos-generate-config`
+        saves to `/etc/nixos/flake.nix` if --flake is set.
+
+        This is an internal option. No backward compatibility is guaranteed.
+        Use at your own risk!
+
+        Note that this string gets spliced into a Perl script. The perl
+        variable `$bootLoaderConfig` can be used to
+        splice in the boot loader configuration.
+      '';
+    };
+
     configuration = lib.mkOption {
       internal = true;
       type = lib.types.str;
@@ -192,7 +232,7 @@ in
     desktopConfiguration = lib.mkOption {
       internal = true;
       type = lib.types.listOf lib.types.lines;
-      default = [];
+      default = [ ];
       description = ''
         Text to preseed the desktop configuration that `nixos-generate-config`
         saves to `/etc/nixos/configuration.nix`.

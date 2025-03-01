@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   sqlite,
-  postgresql,
+  libpq,
   zlib,
   acl,
   ncurses,
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [
-      postgresql
+      libpq
       sqlite
       zlib
       ncurses
@@ -51,12 +51,14 @@ stdenv.mkDerivation rec {
   configureFlags =
     [
       "--with-sqlite3=${sqlite.dev}"
-      "--with-postgresql=${lib.getDev postgresql}"
+      "--with-postgresql=${lib.getDev libpq}"
       "--with-logdir=/var/log/bacula"
       "--with-working-dir=/var/lib/bacula"
       "--mandir=\${out}/share/man"
     ]
-    ++ lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) "ac_cv_func_setpgrp_void=yes"
+    ++
+      lib.optional (stdenv.buildPlatform != stdenv.hostPlatform)
+        "ac_cv_func_setpgrp_void=${if stdenv.hostPlatform.isBSD then "no" else "yes"}"
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # bacula’s `configure` script fails to detect CoreFoundation correctly,
       # but these symbols are available in the nixpkgs CoreFoundation framework.

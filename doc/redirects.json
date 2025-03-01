@@ -1,6 +1,15 @@
 {
+  "chap-build-helpers-finalAttrs": [
+    "index.html#chap-build-helpers-finalAttrs"
+  ],
   "chap-release-notes": [
     "release-notes.html#chap-release-notes"
+  ],
+  "ex-build-helpers-extendMkDerivation": [
+    "index.html#ex-build-helpers-extendMkDerivation"
+  ],
+  "ex-testBuildFailurePrime-doc-example": [
+    "index.html#ex-testBuildFailurePrime-doc-example"
   ],
   "neovim": [
     "index.html#neovim"
@@ -13,6 +22,9 @@
   ],
   "nixpkgs-manual": [
     "index.html#nixpkgs-manual"
+  ],
+  "no-broken-symlinks.sh": [
+    "index.html#no-broken-symlinks.sh"
   ],
   "preface": [
     "index.html#preface"
@@ -40,6 +52,9 @@
   ],
   "sec-allow-insecure": [
     "index.html#sec-allow-insecure"
+  ],
+  "sec-build-helper-extendMkDerivation": [
+    "index.html#sec-build-helper-extendMkDerivation"
   ],
   "sec-modify-via-packageOverrides": [
     "index.html#sec-modify-via-packageOverrides"
@@ -73,6 +88,9 @@
     "index.html#titanium",
     "index.html#building-a-titanium-app",
     "index.html#emulating-or-simulating-the-app"
+  ],
+  "sec-nixpkgs-release-25.05-incompatibilities-nexusmods-app-upgraded": [
+    "release-notes.html#sec-nixpkgs-release-25.05-incompatibilities-nexusmods-app-upgraded"
   ],
   "sec-nixpkgs-release-25.05-lib": [
     "release-notes.html#sec-nixpkgs-release-25.05-lib"
@@ -316,6 +334,15 @@
   ],
   "footnote-stdenv-find-inputs-location.__back.0": [
     "index.html#footnote-stdenv-find-inputs-location.__back.0"
+  ],
+  "tester-testBuildFailurePrime": [
+    "index.html#tester-testBuildFailurePrime"
+  ],
+  "tester-testBuildFailurePrime-inputs": [
+    "index.html#tester-testBuildFailurePrime-inputs"
+  ],
+  "tester-testBuildFailurePrime-return": [
+    "index.html#tester-testBuildFailurePrime-return"
   ],
   "variables-specifying-dependencies": [
     "index.html#variables-specifying-dependencies"
@@ -817,6 +844,12 @@
   ],
   "set-source-date-epoch-to-latest.sh": [
     "index.html#set-source-date-epoch-to-latest.sh"
+  ],
+  "add-bin-to-path.sh": [
+    "index.html#add-bin-to-path.sh"
+  ],
+  "writable-tmpdir-as-home.sh": [
+    "index.html#writable-tmpdir-as-home.sh"
   ],
   "bintools-wrapper": [
     "index.html#bintools-wrapper"
@@ -1950,6 +1983,9 @@
   "sec-pkgs-binary-cache": [
     "index.html#sec-pkgs-binary-cache"
   ],
+  "sec-pkgs-binary-cache-arguments": [
+    "index.html#sec-pkgs-binary-cache-arguments"
+  ],
   "sec-pkgs-binary-cache-example": [
     "index.html#sec-pkgs-binary-cache-example"
   ],
@@ -2333,6 +2369,12 @@
   ],
   "using-predefined-android-package-compositions": [
     "index.html#using-predefined-android-package-compositions"
+  ],
+  "astal": [
+    "index.html#astal"
+  ],
+  "astal-bundling": [
+    "index.html#astal-bundling"
   ],
   "spawning-emulator-instances": [
     "index.html#spawning-emulator-instances"

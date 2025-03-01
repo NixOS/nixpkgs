@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   };
 
   installPhase = ''
-    install -m644 --target $out/share/fonts/truetype/inconsolata -D $src/ofl/inconsolata/static/*.ttf
+    install -m644 --target $out/share/fonts/truetype/inconsolata -D $src/ofl/inconsolata/static/*.ttf $src/ofl/inconsolata/*.ttf
   '';
 
   meta = with lib; {

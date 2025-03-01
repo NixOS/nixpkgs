@@ -12,16 +12,16 @@ let
   variants = {
     # ./update-zen.py zen
     zen = {
-      version = "6.12.2"; # zen
+      version = "6.13.4"; # zen
       suffix = "zen1"; # zen
-      sha256 = "0a6anmfm6495j6lwlywr62ghpwdvbdn54bl5baya5jz7vfqc1ghj"; # zen
+      sha256 = "04dnc6k15jslwbpk1fiayh730nd9rbz9sdwj1qabihc5lqz735f5"; # zen
       isLqx = false;
     };
     # ./update-zen.py lqx
     lqx = {
-      version = "6.12.2"; # lqx
-      suffix = "lqx3"; # lqx
-      sha256 = "18ibc0dz70vxb61mzdhbhbjg0kfxgcsrl3zdki0cqlhcvfxwk19h"; # lqx
+      version = "6.12.16"; # lqx
+      suffix = "lqx1"; # lqx
+      sha256 = "0b4dwfdn65g8w39ihcg5q1nxj3mfplf5rhc3cmks5wzscg8l766h"; # lqx
       isLqx = true;
     };
   };
@@ -140,6 +140,7 @@ let
           maintainers = with lib.maintainers; [
             thiagokokada
             jerrysm64
+            axertheaxe
           ];
           description =
             "Built using the best configuration and kernel sources for desktop, multimedia, and gaming workloads."

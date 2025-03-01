@@ -3,7 +3,7 @@
   fetchFromGitHub,
   fetchpatch,
   sqlite,
-  postgresql,
+  libpq,
   boost,
   darwin,
   lib,
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   buildInputs =
     [
       sqlite
-      postgresql
+      libpq
       boost
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [

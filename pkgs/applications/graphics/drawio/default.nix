@@ -130,7 +130,13 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Desktop application for creating diagrams";
     homepage = "https://about.draw.io/";
-    license = licenses.unfree;
+    license = with lib.licenses; [
+      # The LICENSE file of https://github.com/jgraph/drawio claims Apache License Version 2.0 again since https://github.com/jgraph/drawio/commit/5b2e73471e4fea83d681f0cec5d1aaf7c3884996
+      asl20
+      # But the README says:
+      # The minified code authored by us in this repo is licensed under an Apache v2 license, but the sources to build those files are not in this repo. This is not an open source project.
+      unfreeRedistributable
+    ];
     changelog = "https://github.com/jgraph/drawio-desktop/releases/tag/v${version}";
     maintainers = with maintainers; [ darkonion0 ];
     platforms = platforms.darwin ++ platforms.linux;

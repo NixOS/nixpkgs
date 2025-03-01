@@ -85,7 +85,7 @@ though it is expected to still take some time to get done.
 If you're interested in helping out with this effort,
 please see [this ticket](https://github.com/NixOS/nixpkgs-vet/issues/56).
 
-Since [only PRs to packages in `pkgs/by-name` can be automatically merged](../../CONTRIBUTING.md#how-to-merge-pull-requests),
+Since [only PRs to packages in `pkgs/by-name` can be automatically merged](../../CONTRIBUTING.md#how-to-merge-pull-requests-yourself),
 if package maintainers would like to use this feature, they are welcome to migrate their packages to `pkgs/by-name`.
 To lessen PR traffic, they're encouraged to also perform some more general maintenance on the package in the same PR,
 though this is not required and must not be expected.

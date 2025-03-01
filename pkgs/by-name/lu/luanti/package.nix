@@ -26,7 +26,7 @@
   gmp,
   libspatialindex,
   leveldb,
-  postgresql,
+  libpq,
   hiredis,
   libiconv,
   ninja,
@@ -40,13 +40,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "luanti";
-  version = "5.10.0";
+  version = "5.11.0";
 
   src = fetchFromGitHub {
     owner = "minetest";
     repo = "minetest";
-    rev = finalAttrs.version;
-    hash = "sha256-sumwm8mJghpSriVflMQSHQM4BTmAhfI/Wl/FroLTVts=";
+    tag = finalAttrs.version;
+    hash = "sha256-0PJK7sS2oFTNWex9rLTgVIqaRhwuUb6H5HIlVOGA08k=";
   };
 
   patches = [
@@ -132,7 +132,7 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals buildServer [
       leveldb
-      postgresql
+      libpq
       hiredis
       prometheus-cpp
     ];

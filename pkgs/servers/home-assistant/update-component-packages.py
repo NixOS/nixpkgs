@@ -44,7 +44,7 @@ PKG_PREFERENCES = {
     "ha-av": "av",
     "numpy": "numpy",
     "ollama-hass": "ollama",
-    "paho-mqtt": "paho-mqtt_1",
+    "paho-mqtt": "paho-mqtt",
     "pysuezV2": "pysuez",
     "sentry-sdk": "sentry-sdk",
     "slackclient": "slack-sdk",

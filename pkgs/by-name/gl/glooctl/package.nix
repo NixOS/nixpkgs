@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "glooctl";
-  version = "1.18.5";
+  version = "1.18.10";
 
   src = fetchFromGitHub {
     owner = "solo-io";
     repo = "gloo";
     rev = "v${version}";
-    hash = "sha256-0ITszVZnxbXSCie9lFotMwZYSVTAhqDgKiz19apPkog=";
+    hash = "sha256-q3/BU5KyC8V4osTsL6S9KRGXl4Sf41TuzyNdhxmsESE=";
   };
 
-  vendorHash = "sha256-AEfDeUD7A4ZFgctNa8b1XeJMFnmcQCLvlQqNFM/gSCc=";
+  vendorHash = "sha256-lcnsmeZ2XobBE95KqIhUZCKmevg2WEGuZC4qUVkdafM=";
 
   subPackages = [ "projects/gloo/cli/cmd" ];
 

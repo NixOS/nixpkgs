@@ -7,16 +7,17 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "obs-do";
-  version = "0.1.6";
+  version = "0.1.7";
 
   src = fetchFromGitHub {
     owner = "jonhoo";
     repo = "obs-do";
     tag = "v${version}";
-    hash = "sha256-t6m/PX4GMCFH9wFrOaU/dcrbKitUXQlOcU7aUyJPpxA=";
+    hash = "sha256-aeFUgwbB1sGD6n+WT4GJpQURk/xKvL0w+6DtF1VQsCM=";
   };
 
-  cargoHash = "sha256-GZsTDG5lS6XpVT6mobMOCKsJ4iXAVW2NIsm4s+v52SU=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-uiQnWe/yni++czOwHXbXjQTdg2nOdI3FxUag+aKP69c=";
 
   nativeInstallCheckInputs = [
     versionCheckHook

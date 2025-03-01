@@ -1,7 +1,7 @@
 {
   fetchurl,
   fetchpatch,
-  substituteAll,
+  replaceVars,
   lib,
   stdenv,
   docutils,
@@ -24,7 +24,6 @@
   librsvg,
   webp-pixbuf-loader,
   geoclue2,
-  perl,
   desktop-file-utils,
   libpulseaudio,
   libical,
@@ -70,7 +69,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-shell";
-  version = "47.2";
+  version = "47.4";
 
   outputs = [
     "out"
@@ -79,13 +78,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-shell/${lib.versions.major finalAttrs.version}/gnome-shell-${finalAttrs.version}.tar.xz";
-    hash = "sha256-QYTQGhq4LLQh0couK8zgKSzrRsTHSeYbC95LdQBNLgA=";
+    hash = "sha256-aAuvaU9F+PyDLSRa2mxjtfxLAwzPvrv8Dg47wo2i5G0=";
   };
 
   patches = [
     # Hardcode paths to various dependencies so that they can be found at runtime.
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       glib_compile_schemas = "${glib.dev}/bin/glib-compile-schemas";
       gsettings = "${glib.bin}/bin/gsettings";
       tecla = "${lib.getBin gnome-tecla}/bin/tecla";
@@ -118,7 +116,6 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     gettext
     gi-docgen
-    perl
     wrapGAppsHook4
     sassc
     desktop-file-utils
@@ -186,7 +183,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
-    patchShebangs src/data-to-c.pl
+    patchShebangs src/data-to-c.py
 
     # We can generate it ourselves.
     rm -f man/gnome-shell.1

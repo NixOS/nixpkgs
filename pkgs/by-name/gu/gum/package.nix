@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "gum";
-  version = "0.14.5";
+  version = "0.15.2";
 
   src = fetchFromGitHub {
     owner = "charmbracelet";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-moKirTXziVo6ESOsnTUmPkcdBYL/VHaG226+UfM0xAk=";
+    hash = "sha256-kQDCgQXI9jTUHM8UEfDSLXMoUUMOt0Iccv3P3RtPOIg=";
   };
 
-  vendorHash = "sha256-wjM2ld4go7OQu6XqsSGurjN09Fd5t9FNLvIzgrZEZ1k=";
+  vendorHash = "sha256-WxM1gCIsxRWNq9IdBux4BJi6r87wY2/6vtMjEDSQnv0=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -29,17 +29,14 @@ buildGoModule rec {
     "-X=main.Version=${version}"
   ];
 
-  postInstall =
-    ''
-      $out/bin/gum man > gum.1
-      installManPage gum.1
-    ''
-    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      installShellCompletion --cmd gum \
-        --bash <($out/bin/gum completion bash) \
-        --fish <($out/bin/gum completion fish) \
-        --zsh <($out/bin/gum completion zsh)
-    '';
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    $out/bin/gum man > gum.1
+    installManPage gum.1
+    installShellCompletion --cmd gum \
+      --bash <($out/bin/gum completion bash) \
+      --fish <($out/bin/gum completion fish) \
+      --zsh <($out/bin/gum completion zsh)
+  '';
 
   meta = with lib; {
     description = "Tasty Bubble Gum for your shell";

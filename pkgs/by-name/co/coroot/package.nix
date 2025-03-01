@@ -11,13 +11,13 @@
 
 buildGoModule rec {
   pname = "coroot";
-  version = "1.6.8";
+  version = "1.8.6";
 
   src = fetchFromGitHub {
     owner = "coroot";
     repo = "coroot";
     rev = "v${version}";
-    hash = "sha256-ndzn0ZcuzdmCXnijUr6jq3KSFqSdF2FYd/2qi5Huk5Y=";
+    hash = "sha256-0jBlpeG5JMM2iPc4G9lo/fqcCupA/gay3BguilQr0e0=";
   };
 
   vendorHash = "sha256-wyxNT8g5TUCjlxauL7NmCf4HZ91V2nD64L1L/rYH864=";

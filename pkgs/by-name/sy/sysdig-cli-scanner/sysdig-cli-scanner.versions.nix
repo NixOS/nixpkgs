@@ -1,23 +1,23 @@
 {
-  version = "v1.19.0";
+  version = "1.20.0";
 
   x86_64-linux = {
-    url = "https://download.sysdig.com/scanning/bin/sysdig-cli-scanner/v1.19.0/linux/amd64/sysdig-cli-scanner";
-    hash = "sha256-TYjf9Axt8IRaTCQ4oA8jdKGLotRPZPJfSDsTXB0nyuU=";
+    url = "https://download.sysdig.com/scanning/bin/sysdig-cli-scanner/1.20.0/linux/amd64/sysdig-cli-scanner";
+    hash = "sha256-zN8s7Ztc1yz6bbLlbIesnbv6CfrsB8VFaXyixPVR40E=";
   };
 
   aarch64-linux = {
-    url = "https://download.sysdig.com/scanning/bin/sysdig-cli-scanner/v1.19.0/linux/arm64/sysdig-cli-scanner";
-    hash = "sha256-dSGHZxERmjk1bOXtvLPyJ3KQYhC8XtfSpDqmESv1Cj0=";
+    url = "https://download.sysdig.com/scanning/bin/sysdig-cli-scanner/1.20.0/linux/arm64/sysdig-cli-scanner";
+    hash = "sha256-b1SE9q1NZQeHjjX3dyXzCc5/ZuiOWKON623eu8TlzhI=";
   };
 
   x86_64-darwin = {
-    url = "https://download.sysdig.com/scanning/bin/sysdig-cli-scanner/v1.19.0/darwin/amd64/sysdig-cli-scanner";
-    hash = "sha256-rJcudXL2BY/r4W0QdZAjl/1c8NPz08qB7kEvbsq5nog=";
+    url = "https://download.sysdig.com/scanning/bin/sysdig-cli-scanner/1.20.0/darwin/amd64/sysdig-cli-scanner";
+    hash = "sha256-Rwq8en8dt1VKoPdHWTIYr67ppBlFI+br/H8jKepfqKQ=";
   };
 
   aarch64-darwin = {
-    url = "https://download.sysdig.com/scanning/bin/sysdig-cli-scanner/v1.19.0/darwin/arm64/sysdig-cli-scanner";
-    hash = "sha256-1NLzebkzfP/KakW9p2466BVkSee4x6tZRP2d0eTALIo=";
+    url = "https://download.sysdig.com/scanning/bin/sysdig-cli-scanner/1.20.0/darwin/arm64/sysdig-cli-scanner";
+    hash = "sha256-LWlCemjODa29NA+/Skzw8hWtbOmtMWYSI3G3e1PvUDo=";
   };
 }

@@ -7,7 +7,7 @@
   tesseract,
   cuneiform,
   isPy3k,
-  substituteAll,
+  replaceVars,
   pytestCheckHook,
   setuptools,
   setuptools-scm,
@@ -33,15 +33,17 @@ buildPythonPackage rec {
 
   patches =
     [ ]
-    ++ (lib.optional withTesseractSupport (substituteAll {
-      src = ./paths-tesseract.patch;
-      inherit tesseract;
-      tesseractLibraryLocation = "${tesseract}/lib/libtesseract${stdenv.hostPlatform.extensions.sharedLibrary}";
-    }))
-    ++ (lib.optional stdenv.hostPlatform.isLinux (substituteAll {
-      src = ./paths-cuneiform.patch;
-      inherit cuneiform;
-    }));
+    ++ (lib.optional withTesseractSupport (
+      replaceVars ./paths-tesseract.patch {
+        inherit tesseract;
+        tesseractLibraryLocation = "${tesseract}/lib/libtesseract${stdenv.hostPlatform.extensions.sharedLibrary}";
+      }
+    ))
+    ++ (lib.optional stdenv.hostPlatform.isLinux (
+      replaceVars ./paths-cuneiform.patch {
+        inherit cuneiform;
+      }
+    ));
 
   propagatedBuildInputs = [ pillow ];
 

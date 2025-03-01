@@ -20,7 +20,8 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-87Fdx3Jqi3dNWM5DZl+UYs031qn2DoiiWd3IysT/glQ=";
   };
 
-  cargoHash = "sha256-y2fNypA0MrCdUI/K6QrZWw/5mkYafj2s6jrGHU2zGXw=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-iRDe3zg7tfEYGLCRY6bJ6OdoT8ej0MB/vteCIf5xqNA=";
 
   prePatch = ''sed -i "s,ExecStart=.*/bin,ExecStart=$out/bin," etc/below.service'';
   postInstall = ''

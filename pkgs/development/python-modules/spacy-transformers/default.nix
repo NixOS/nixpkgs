@@ -17,16 +17,16 @@
 
 buildPythonPackage rec {
   pname = "spacy-transformers";
-  version = "1.3.6";
+  version = "1.3.8";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "explosion";
     repo = "spacy-transformers";
     tag = "release-v${version}";
-    hash = "sha256-VZEx7mDTqcJ7c0qqDYc3GZzesqi/MwJawAZDUGdXMB0=";
+    hash = "sha256-VhFF+cbZL+sod1t4fqyVDEDdGHXqVJsOGUj81EErdMA=";
   };
 
   build-system = [
@@ -54,11 +54,11 @@ buildPythonPackage rec {
 
   passthru.tests.annotation = callPackage ./annotation-test { };
 
-  meta = with lib; {
+  meta = {
     description = "spaCy pipelines for pretrained BERT, XLNet and GPT-2";
     homepage = "https://github.com/explosion/spacy-transformers";
-    changelog = "https://github.com/explosion/spacy-transformers/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ nickcao ];
+    changelog = "https://github.com/explosion/spacy-transformers/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ nickcao ];
   };
 }

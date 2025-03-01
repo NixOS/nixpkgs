@@ -5,16 +5,16 @@
 }:
 buildGoModule rec {
   pname = "testkube";
-  version = "2.1.84";
+  version = "2.1.90";
 
   src = fetchFromGitHub {
     owner = "kubeshop";
     repo = "testkube";
     rev = "v${version}";
-    hash = "sha256-1w+n/CXFWVLROSlI/bo5g9MMb1UNsqFDz8mL+5Xxg/s=";
+    hash = "sha256-aFe+AcW8mRcPDcT4jTpDrRn/8ROT6WSu3DO0penba6c=";
   };
 
-  vendorHash = "sha256-GCXbp8cJUji7vAEVpTP9T/mRIwfu5+TqEKtoOQWlxrY=";
+  vendorHash = "sha256-XkjZIHUH5VtYxdvHSVlulX+pFxcAaKX/wTK4g233mq4=";
 
   ldflags = [
     "-X main.version=${version}"

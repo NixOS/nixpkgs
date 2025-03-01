@@ -22,12 +22,12 @@
 
 buildPythonPackage rec {
   pname = "astroquery";
-  version = "0.4.7";
+  version = "0.4.8";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-BH+6ywpPrsTNtiZ16RnCRMHDXmYQRPy7bJqTMzF0fsk=";
+    hash = "sha256-XBEIiJfZ1ZAAfRgzyk12MU12WL2YQzyHWXeZ20U67LU=";
   };
 
   disabled = !isPy3k;

@@ -73,8 +73,10 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    mkdir --parents "$out/share/doc/"
+    mkdir --parents "$out/bin" "$out/share/doc" "$out/share/pixmaps/"
     cp --recursive * "$out"
+    ln --symbolic "../${finalAttrs.meta.mainProgram}" "$out/bin/"
+    ln --symbolic ../../DaggerfallUnity_Data/Resources/UnityPlayer.png "$out/share/pixmaps/"
 
     ${lib.strings.concatMapStringsSep "\n" (file: ''
       cp "${file}" "$out/share/doc/${file.name}"
@@ -91,7 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
       desktopName = "Daggerfall Unity";
       comment = finalAttrs.meta.description;
       icon = "UnityPlayer";
-      exec = "DaggerfallUnity.x86_64";
+      exec = finalAttrs.meta.mainProgram;
       categories = [ "Game" ];
     })
   ];

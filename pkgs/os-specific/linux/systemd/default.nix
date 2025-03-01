@@ -17,6 +17,7 @@
   getent,
   glibcLocales,
   autoPatchelfHook,
+  fetchpatch,
 
   # glib is only used during tests (test-bus-gvariant, test-bus-marshal)
   glib,
@@ -119,7 +120,12 @@
   withLibBPF ?
     lib.versionAtLeast buildPackages.llvmPackages.clang.version "10.0"
     # assumes hard floats
-    && (stdenv.hostPlatform.isAarch -> lib.versionAtLeast stdenv.hostPlatform.parsed.cpu.version "6")
+    && (
+      stdenv.hostPlatform.isAarch
+      ->
+        stdenv.hostPlatform.parsed.cpu ? version
+        && lib.versionAtLeast stdenv.hostPlatform.parsed.cpu.version "6"
+    )
     # see https://github.com/NixOS/nixpkgs/pull/194149#issuecomment-1266642211
     && !stdenv.hostPlatform.isMips64
     # can't find gnu/stubs-32.h
@@ -280,6 +286,14 @@ stdenv.mkDerivation (finalAttrs: {
         "0024-undef-stdin-for-references-using-stdin-as-a-struct-m.patch"
         "0025-adjust-header-inclusion-order-to-avoid-redeclaration.patch"
         "0026-build-path.c-avoid-boot-time-segfault-for-musl.patch"
+      ]
+      ++ [
+        # add a missing include
+        (fetchpatch {
+          url = "https://github.com/systemd/systemd/commit/34fcd3638817060c79e1186b370e46d9b3a7409f.patch";
+          hash = "sha256-Uaewo3jPrZGJttlLcqO6cCj1w3IGZmvbur4+TBdIPxc=";
+          excludes = [ "src/udev/udevd.c" ];
+        })
       ]
     );
 

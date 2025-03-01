@@ -38,7 +38,7 @@
   ninja,
   python312,
   python39,
-  git,
+  gitMinimal,
   version,
   flutterVersion,
   dartSdkVersion,
@@ -176,7 +176,7 @@ stdenv.mkDerivation (finalAttrs: {
     [
       python3
       (tools.vpython python3)
-      git
+      gitMinimal
       pkg-config
       ninja
       dart

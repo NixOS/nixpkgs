@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "dateparser";
-  version = "1.2.0";
+  version = "1.2.1";
 
   disabled = pythonOlder "3.7";
 
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     owner = "scrapinghub";
     repo = "dateparser";
     tag = "v${version}";
-    hash = "sha256-mnL44hojebOwP6qtEBHs5QM4uRmLuGlVNr+sM3jZEKE=";
+    hash = "sha256-O0FsLWbH0kGjwGCTklBMVVqosxXlXRyS9aAcggtBLsA=";
   };
 
   nativeBuildInputs = [ setuptools ];

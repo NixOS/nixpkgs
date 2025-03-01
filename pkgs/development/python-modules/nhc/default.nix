@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "nhc";
-  version = "0.3.3";
+  version = "0.3.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "vandeurenglenn";
     repo = "nhc";
     tag = "v${version}";
-    hash = "sha256-s3DVdnjhRUZRG/LwKwOuZSiNtzpccBtHl/PNvux/NwQ=";
+    hash = "sha256-OoWRAELy6w+LVfhBJyKReQUYD/yr4POFH+ScOgp3xyU=";
   };
 
   build-system = [ setuptools ];

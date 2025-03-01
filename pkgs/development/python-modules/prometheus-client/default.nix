@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "prometheus-client";
-  version = "0.21.0";
+  version = "0.21.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "prometheus";
     repo = "client_python";
     tag = "v${version}";
-    hash = "sha256-LrCBCfIcpxNjy/yjwCG4J34eJO4AdUr21kp9FBwSeAY=";
+    hash = "sha256-mlgaSVJ4UHM8xw0QPnHSYiTH2v3V6BWi5Abz9aKt2qU=";
   };
 
   build-system = [ setuptools ];
@@ -41,7 +41,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Prometheus instrumentation library for Python applications";
     homepage = "https://github.com/prometheus/client_python";
-    changelog = "https://github.com/prometheus/client_python/releases/tag/v${version}";
+    changelog = "https://github.com/prometheus/client_python/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = [ ];
   };

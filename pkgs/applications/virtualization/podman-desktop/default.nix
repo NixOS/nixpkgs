@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , makeWrapper
 , copyDesktopItems
-, electron
+, electron_33
 , nodejs
 , pnpm_9
 , makeDesktopItem
@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildPhase = ''
     runHook preBuild
 
-    cp -r ${electron.dist} electron-dist
+    cp -r ${electron_33.dist} electron-dist
     chmod -R u+w electron-dist
 
     pnpm build
@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
       --dir \
       --config .electron-builder.config.cjs \
       -c.electronDist=electron-dist \
-      -c.electronVersion=${electron.version}
+      -c.electronVersion=${electron_33.version}
 
     runHook postBuild
   '';
@@ -84,7 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     install -Dm644 buildResources/icon.svg "$out/share/icons/hicolor/scalable/apps/podman-desktop.svg"
 
-    makeWrapper '${electron}/bin/electron' "$out/bin/podman-desktop" \
+    makeWrapper '${electron_33}/bin/electron' "$out/bin/podman-desktop" \
       --add-flags "$out/share/lib/podman-desktop/resources/app.asar" \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       --inherit-argv0
@@ -113,7 +113,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/containers/podman-desktop/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ booxter panda2134 ];
-    inherit (electron.meta) platforms;
+    inherit (electron_33.meta) platforms;
     mainProgram = "podman-desktop";
   };
 })

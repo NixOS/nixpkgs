@@ -54,7 +54,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     '';
     homepage = "https://monaspace.githubnext.com/";
     license = lib.licenses.ofl;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.all;
   };
 })

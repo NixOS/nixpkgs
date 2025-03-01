@@ -35,7 +35,7 @@ echo "testBuildFailure: Original builder produced exit code: $r"
 # -----------------------------------------
 # Write the build log to the default output
 
-# Source structured attrs as per nixpkgs/pkgs/stdenv/generic/default-builder.sh
+# Source structured attrs as per nixpkgs/pkgs/stdenv/generic/source-stdenv.sh
 #
 # We need this so that we can read $outputs when `__structuredAttrs` is enabled
 #

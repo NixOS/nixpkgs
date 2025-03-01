@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "rq";
-  version = "1.16.2";
+  version = "2.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "rq";
     repo = "rq";
     tag = "v${version}";
-    hash = "sha256-8uhCV4aJNbY273jOa9D5OlgEG1w3hXVncClKQTO9Pyk=";
+    hash = "sha256-J3ftABqm+5lH37LiBskEXOb6MszvDKO2271s+CEk0ls=";
   };
 
   build-system = [ hatchling ];
@@ -66,7 +66,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library for creating background jobs and processing them";
     homepage = "https://github.com/nvie/rq/";
-    changelog = "https://github.com/rq/rq/releases/tag/v${version}";
+    changelog = "https://github.com/rq/rq/releases/tag/${src.tag}";
     license = licenses.bsd2;
     maintainers = with maintainers; [ mrmebelman ];
   };

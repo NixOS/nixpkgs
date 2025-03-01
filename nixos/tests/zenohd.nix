@@ -82,7 +82,6 @@ import ./make-test-python.nix (
     };
 
     testScript = ''
-      start_all()
       router.wait_for_unit("zenohd.service")
       client.wait_for_unit("multi-user.target")
 

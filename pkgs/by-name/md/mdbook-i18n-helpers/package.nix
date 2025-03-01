@@ -16,7 +16,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-FdguzuYpMl6i1dvoPNE1Bk+GTmeTrqLUY/sVRsbETtU=";
   };
 
-  cargoHash = "sha256-sPRylKXTSkVkhDvpAvHuYIr9TSi1ustIs1HTwEIbk/w=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-ZBGMfJA2diPvvoIXPosUs4ngXU9/GMGa4GAlKIjwm8s=";
 
   meta = with lib; {
     description = "Helpers for a mdbook i18n workflow based on Gettext";

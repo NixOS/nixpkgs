@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   capnproto,
-  cython,
+  cython_0,
   fetchFromGitHub,
   isPy27,
   isPyPy,
@@ -11,19 +11,19 @@
 
 buildPythonPackage rec {
   pname = "pycapnp";
-  version = "1.1.0";
+  version = "2.0.0";
   format = "setuptools";
   disabled = isPyPy || isPy27;
 
   src = fetchFromGitHub {
     owner = "capnproto";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "1xi6df93ggkpmwckwbi356v7m32zv5qry8s45hvsps66dz438kmi";
+    tag = "v${version}";
+    sha256 = "sha256-SVeBRJMMR1Z8+S+QoiUKGRFGUPS/MlmWLi1qRcGcPoE=";
   };
 
   nativeBuildInputs = [
-    cython
+    cython_0
     pkgconfig
   ];
 
@@ -38,8 +38,5 @@ buildPythonPackage rec {
     homepage = "https://capnproto.github.io/pycapnp/";
     maintainers = [ ];
     license = licenses.bsd2;
-    # No support for capnproto 1.0 yet
-    # https://github.com/capnproto/pycapnp/issues/323
-    broken = lib.versionAtLeast capnproto.version "1.0";
   };
 }

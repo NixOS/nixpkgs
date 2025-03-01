@@ -32,27 +32,32 @@ in
 buildDotnetModule rec {
   inherit pname dotnet-sdk dotnet-runtime;
 
-  vsVersion = "2.61.27";
+  vsVersion = "2.64.7";
   src = fetchFromGitHub {
     owner = "dotnet";
     repo = "roslyn";
     rev = "VSCode-CSharp-${vsVersion}";
-    hash = "sha256-mqlCfgymhH/pR/GW3qZd0rmLdNezgVGZS6Q6zaNor8E=";
+    hash = "sha256-HWcVb2vpZxZWSxvWYRc91iUNaNGYDGEgKzHtD3yoyXs=";
   };
 
   # versioned independently from vscode-csharp
   # "roslyn" in here:
   # https://github.com/dotnet/vscode-csharp/blob/main/package.json
-  version = "4.13.0-3.25051.1";
+  version = "4.14.0-1.25074.7";
   projectFile = "src/LanguageServer/${project}/${project}.csproj";
   useDotnetFromEnv = true;
   nugetDeps = ./deps.json;
 
   nativeBuildInputs = [ jq ];
 
-  # until upstream updates net6.0 here:
-  # https://github.com/dotnet/roslyn/blob/6cc106c0eaa9b0ae070dba3138a23aeab9b50c13/eng/targets/TargetFrameworks.props#L20
-  patches = [ ./force-sdk_8_0.patch ];
+  patches = [
+    # until upstream updates net6.0 here:
+    # https://github.com/dotnet/roslyn/blob/6cc106c0eaa9b0ae070dba3138a23aeab9b50c13/eng/targets/TargetFrameworks.props#L20
+    ./force-sdk_8_0.patch
+    # until made configurable/and or different location
+    # https://github.com/dotnet/roslyn/issues/76892
+    ./cachedirectory.patch
+  ];
 
   postPatch = ''
     # Upstream uses rollForward = latestPatch, which pins to an *exact* .NET SDK version.

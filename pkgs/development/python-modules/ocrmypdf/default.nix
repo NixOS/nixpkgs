@@ -3,7 +3,7 @@
   buildPythonPackage,
   deprecation,
   fetchFromGitHub,
-  ghostscript,
+  ghostscript_headless,
   hatch-vcs,
   hatchling,
   hypothesis,
@@ -21,7 +21,7 @@
   pythonOlder,
   rich,
   reportlab,
-  substituteAll,
+  replaceVars,
   tesseract,
   unpaper,
   installShellFiles,
@@ -50,9 +50,8 @@ buildPythonPackage rec {
 
   patches = [
     ./use-pillow-heif.patch
-    (substituteAll {
-      src = ./paths.patch;
-      gs = lib.getExe ghostscript;
+    (replaceVars ./paths.patch {
+      gs = lib.getExe ghostscript_headless;
       jbig2 = lib.getExe jbig2enc;
       pngquant = lib.getExe pngquant;
       tesseract = lib.getExe tesseract;

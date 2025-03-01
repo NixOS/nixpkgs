@@ -28,14 +28,14 @@
 
 buildPythonPackage rec {
   pname = "distributed";
-  version = "2024.12.1";
+  version = "2025.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dask";
     repo = "distributed";
     tag = version;
-    hash = "sha256-R8DTiatme99afA6enTpC3AFN0KRmDbd+VGpXRNqvE8w=";
+    hash = "sha256-7ak0979nyapd5BSJnGgV5881Rc5AfhgG67PT2KC1NzQ=";
   };
 
   postPatch = ''
@@ -78,7 +78,7 @@ buildPythonPackage rec {
   meta = {
     description = "Distributed computation in Python";
     homepage = "https://distributed.readthedocs.io/";
-    changelog = "https://github.com/dask/distributed/releases/tag/${version}";
+    changelog = "https://github.com/dask/distributed/releases/tag/${src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ teh ];
   };

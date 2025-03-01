@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-QNJlxZ9uNwNgFWm9qRJdPfusx7dXHZajjFH7wDhpgcs=";
   };
 
-  preConfigure = "./autogen.sh";
+  configureScript = "./autogen.sh";
 
   nativeBuildInputs = [
     automake

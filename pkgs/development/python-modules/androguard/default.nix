@@ -2,19 +2,25 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
-  future,
+  poetry-core,
+  apkinspector,
   networkx,
   pygments,
   lxml,
   colorama,
+  cryptography,
+  dataset,
+  frida-python,
+  loguru,
   matplotlib,
   asn1crypto,
   click,
+  mutf8,
+  pyyaml,
   pydot,
   ipython,
+  oscrypto,
   pyqt5,
-  pyperclip,
   pytestCheckHook,
   python-magic,
   qt5,
@@ -29,48 +35,50 @@ assert lib.warnIf (!doCheck) "python3Packages.androguard: doCheck is deprecated"
 
 buildPythonPackage rec {
   pname = "androguard";
-  version = "3.4.0a1";
+  version = "4.1.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     repo = pname;
     owner = pname;
-    rev = "v${version}";
-    sha256 = "1aparxiq11y0hbvkayp92w684nyxyyx7mi0n1x6x51g5z6c58vmy";
+    tag = "v${version}";
+    sha256 = "sha256-qz6x7UgYXal1DbQGzi4iKnSGEn873rKibKme/pF7tLk=";
   };
 
-  patches = [
-    ./drop-removed-networkx-formats.patch
-    ./fix-tests.patch
+  build-system = [
+    poetry-core
   ];
-
-  build-system = [ setuptools ];
 
   nativeBuildInputs = lib.optionals withGui [ qt5.wrapQtAppsHook ];
 
   dependencies =
     [
+      apkinspector
       asn1crypto
       click
       colorama
-      future
+      cryptography
+      dataset
+      frida-python
       ipython
+      loguru
       lxml
       matplotlib
+      mutf8
       networkx
+      oscrypto
       pydot
       pygments
+      pyyaml
     ]
     ++ networkx.optional-dependencies.default
     ++ networkx.optional-dependencies.extra
     ++ lib.optionals withGui [
       pyqt5
-      pyperclip
     ];
 
   nativeCheckInputs = [
     pytestCheckHook
-    pyperclip
     pyqt5
     python-magic
   ];

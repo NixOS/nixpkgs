@@ -58,14 +58,14 @@ in
 
 stdenv.mkDerivation rec {
   pname = "openvino";
-  version = "2024.6.0";
+  version = "2025.0.0";
 
   src = fetchFromGitHub {
     owner = "openvinotoolkit";
     repo = "openvino";
     tag = version;
     fetchSubmodules = true;
-    hash = "sha256-GmbRuFM5L60vQNJLCkva1NzBWWKXK674xjMUpME4o4c=";
+    hash = "sha256-+LXOX5ChfVbD2dbQYuIp9unz6v3OIpH5YUpdhn2okbM=";
   };
 
   outputs = [
@@ -104,7 +104,7 @@ stdenv.mkDerivation rec {
     "-Wno-dev"
     "-DCMAKE_MODULE_PATH:PATH=${placeholder "out"}/lib/cmake"
     "-DCMAKE_PREFIX_PATH:PATH=${placeholder "out"}"
-    "-DOpenCV_DIR=${opencv}/lib/cmake/opencv4/"
+    "-DOpenCV_DIR=${lib.getLib opencv}/lib/cmake/opencv4/"
     "-DProtobuf_LIBRARIES=${protobuf}/lib/libprotobuf${stdenv.hostPlatform.extensions.sharedLibrary}"
     "-DPython_EXECUTABLE=${python.interpreter}"
 
@@ -117,7 +117,8 @@ stdenv.mkDerivation rec {
 
     # features
     (cmakeBool "ENABLE_INTEL_CPU" stdenv.hostPlatform.isx86_64)
-    (cmakeBool "ENABLE_INTEL_NPU" false) # undefined reference to `std::ios_base_library_init()@GLIBCXX_3.4.32'
+    (cmakeBool "ENABLE_INTEL_GPU" true)
+    (cmakeBool "ENABLE_INTEL_NPU" stdenv.hostPlatform.isx86_64)
     (cmakeBool "ENABLE_JS" false)
     (cmakeBool "ENABLE_LTO" true)
     (cmakeBool "ENABLE_ONEDNN_FOR_GPU" false)
@@ -148,7 +149,7 @@ stdenv.mkDerivation rec {
     libusb1
     libxml2
     ocl-icd
-    opencv.cxxdev
+    opencv
     pugixml
     snappy
     tbb_2022_0
@@ -172,6 +173,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    changelog = "https://github.com/openvinotoolkit/openvino/releases/tag/${src.tag}";
     description = "OpenVINO™ Toolkit repository";
     longDescription = ''
       This toolkit allows developers to deploy pre-trained deep learning models through a high-level C++ Inference Engine API integrated with application logic.

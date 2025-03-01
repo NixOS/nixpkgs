@@ -2,7 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  git,
+  gitMinimal,
   python3,
 }:
 
@@ -37,7 +37,7 @@ buildGoModule rec {
     ]);
 
   nativeCheckInputs = [
-    git
+    gitMinimal
     (python3.withPackages (
       ps: with ps; [
         setuptools

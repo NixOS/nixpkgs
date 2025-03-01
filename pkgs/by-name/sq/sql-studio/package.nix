@@ -29,7 +29,8 @@ in
 rustPlatform.buildRustPackage {
   inherit pname version src;
 
-  cargoHash = "sha256-Hw7VbcU/Y8wl4KObHvQfUXRORlbsuLHTQDMzk3Qel20=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-pvoQ73aW5XbnQJVCuV7lyrN3mg85Ye4913RzrA3S8J4=";
 
   preBuild = ''
     cp -pr --reflink=auto -- ${ui} ui/dist

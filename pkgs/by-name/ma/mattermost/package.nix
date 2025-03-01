@@ -19,10 +19,10 @@
     #
     # Ensure you also check ../mattermostLatest/package.nix.
     regex = "^v(9\\.11\\.[0-9]+)$";
-    version = "9.11.7";
-    srcHash = "sha256-KeGpYy3jr7/B2mtBk9em2MXJBJR2+Wajmvtz/yT4SG8=";
-    vendorHash = "sha256-alLPBfnA1o6bUUgPRqvYW/98UKR9wltmFTzKIGtVEm4=";
-    npmDepsHash = "sha256-ysz38ywGxJ5DXrrcDmcmezKbc5Y7aug9jOWUzHRAs/0=";
+    version = "9.11.9";
+    srcHash = "sha256-sEu5s+yMCPYxvyc7kuiA9AE/qBi08iTqhYxwO7J9xiE=";
+    vendorHash = "sha256-h/hcdVImU3wFp7BGHS/TxYBEWGv9v06y8etaz9OrHTA=";
+    npmDepsHash = "sha256-B7pXMHwyf7dQ2x2VJu+mdZz03/9FyyYvFYOw8XguTH8=";
   },
 }:
 
@@ -42,10 +42,18 @@ let
       wrapMattermost =
         server:
         stdenvNoCC.mkDerivation {
-          pname = "${server.pname}-wrapped";
-          inherit (server) version;
           inherit server;
-          inherit (server) webapp;
+
+          # src and npmDeps must be provided for the update script!
+          inherit (server)
+            pname
+            version
+            src
+            goModules
+            npmDeps
+            webapp
+            meta
+            ;
 
           dontUnpack = true;
 
@@ -59,12 +67,7 @@ let
             done
           '';
 
-          passthru = finalPassthru // {
-            inherit server;
-            inherit (server) webapp;
-          };
-
-          inherit (server) meta;
+          passthru = finalPassthru;
         };
       finalPassthru =
         let
@@ -243,20 +246,21 @@ buildMattermost rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Mattermost is an open source platform for secure collaboration across the entire software development lifecycle";
     homepage = "https://www.mattermost.org";
-    license = with licenses; [
+    license = with lib.licenses; [
       agpl3Only
       asl20
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       ryantm
       numinit
       kranzes
       mgdelacroix
       fsagbuya
     ];
+    platforms = lib.platforms.linux;
     mainProgram = "mattermost";
   };
 }

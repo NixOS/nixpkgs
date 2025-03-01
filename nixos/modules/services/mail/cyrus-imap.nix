@@ -80,7 +80,7 @@ in
       type = int;
       default = 32;
       description = ''
-        Socket listen queue backlog size. See listen(2) for more information about a backlog.
+        Socket listen queue backlog size. See {manpage}`listen(2)` for more information about a backlog.
         Default is 32, which may be increased if you have a very high connection rate.
       '';
     };
@@ -194,7 +194,7 @@ in
           DAEMON = mkOption {
             default = { };
             description = ''
-              This section lists long running daemons to start before any SERVICES are spawned. master(8) will ensure that these processes are running, restarting any process which dies or forks. All listed processes will be shutdown when master(8) is exiting.
+              This section lists long running daemons to start before any SERVICES are spawned. {manpage}`master(8)` will ensure that these processes are running, restarting any process which dies or forks. All listed processes will be shutdown when {manpage}`master(8)` is exiting.
             '';
           };
         };
@@ -221,7 +221,7 @@ in
             type = path;
             default = "/run/cyrus/lmtp";
             description = ''
-              Unix socket that lmtpd listens on, used by deliver(8). This should match the path specified in cyrus.conf(5).
+              Unix socket that lmtpd listens on, used by {manpage}`deliver(8)`. This should match the path specified in {manpage}`cyrus.conf(5)`.
             '';
           };
           idlesocket = mkOption {

@@ -4,7 +4,7 @@
   fetchFromGitHub,
   autoreconfHook,
   cxxtools,
-  postgresql,
+  libpq,
   libmysqlclient,
   sqlite,
   zlib,
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     cxxtools
-    postgresql
+    libpq
     libmysqlclient
     sqlite
     zlib

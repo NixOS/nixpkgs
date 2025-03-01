@@ -37,20 +37,21 @@ let
     gnutar
     gzip
     perl
+    util-linux
     wget
     xz
   ];
 in
 stdenv.mkDerivation rec {
   pname = "debootstrap";
-  version = "1.0.140";
+  version = "1.0.140_bpo12+1";
 
   src = fetchFromGitLab {
     domain = "salsa.debian.org";
     owner = "installer-team";
     repo = "debootstrap";
     rev = "refs/tags/${version}";
-    hash = "sha256-kusY42HwyMFuzwJimdVzuwx9XGjKssGAR7guB4E0TbQ=";
+    hash = "sha256-4vINaMRo6IrZ6e2/DAJ06ODy2BWm4COR1JDSY52upUc=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

@@ -1,7 +1,7 @@
 {
-  "version": "2.55.29",
+  "version": "2.63.32",
   "linux-x64": {
-    "hash": "sha256-3RQk5VNrI2sSUBCBfRTEsxjLqZkpoTELt/v+CIp94QU=",
+    "hash": "sha256-laI6zoydOKAkRHZvHXQ6eFEJoFrb2I2Fe6gvti3eoJg=",
     "binaries": [
       ".debugger/createdump",
       ".debugger/vsdbg",
@@ -11,7 +11,7 @@
     ]
   },
   "linux-arm64": {
-    "hash": "sha256-p8VbpeLtGDO3TKpjY9EuqDVyCDvZaQe9+KeAMTMulDc=",
+    "hash": "sha256-3XWSzNhPSoAUlVVe3RNQ/Ttxm4WIuWahH0hGd4FXFhw=",
     "binaries": [
       ".debugger/createdump",
       ".debugger/vsdbg",
@@ -21,7 +21,7 @@
     ]
   },
   "darwin-x64": {
-    "hash": "sha256-r85BNsxIXuQD20kjgqBvCLzTof4ExYDfbKG0zHaR86o=",
+    "hash": "sha256-TfI6XR2jCxKCNt3mNu+ndH3KqHctWK+JF52eNd+QaLQ=",
     "binaries": [
       ".debugger/x86_64/createdump",
       ".debugger/x86_64/vsdbg",
@@ -31,7 +31,7 @@
     ]
   },
   "darwin-arm64": {
-    "hash": "sha256-p56EkUDxsukTx0FCCE2OrUBk3t2zj/kU6cdUVqdpfb8=",
+    "hash": "sha256-SoTaPgFYuxilmXZ/QXrc8xrMa58u6HnmuhiNK9knfME=",
     "binaries": [
       ".debugger/arm64/createdump",
       ".debugger/arm64/vsdbg",

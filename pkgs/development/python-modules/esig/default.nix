@@ -14,12 +14,12 @@
 
 buildPythonPackage rec {
   pname = "esig";
-  version = "0.9.8.3";
+  version = "1.0.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-BGZaJSrpNSwZMHBYFDmDVPZOtgam/EVyh5Y5FAB8e1o=";
+    hash = "sha256-s0500Kc3i+sd9hZIBXMFfu9KtM0iexqJpEZVmrw0Obw=";
   };
 
   buildInputs = [ boost ];

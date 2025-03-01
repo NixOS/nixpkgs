@@ -34,18 +34,18 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "taterclient-ddnet";
-  version = "10.0.3";
+  version = "10.1.1";
 
   src = fetchFromGitHub {
     owner = "sjrc6";
     repo = "taterclient-ddnet";
     tag = "V${finalAttrs.version}";
-    hash = "sha256-RhOZuPsjyXq5UcM+5dawDi1BfjMMQ3K9O3PHkCg5sDI=";
+    hash = "sha256-B5J8LctMYkb6X1tEI5H4oMEDDWLLpLW5v4NRWplhncY=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname src version;
-    hash = "sha256-NDeHpf1iYApP/Y/DE7FGBu67ld6A0+8227oTVlOMe1M=";
+    hash = "sha256-VKGc4LQjt2FHbELLBKtV8rKpxjGBrzlA3m9BSdZ/6Z0=";
   };
 
   nativeBuildInputs = [

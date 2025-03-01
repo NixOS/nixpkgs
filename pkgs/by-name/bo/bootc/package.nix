@@ -14,7 +14,8 @@
 rustPlatform.buildRustPackage rec {
   pname = "bootc";
   version = "1.1.2";
-  cargoHash = "sha256-i8eYypTgm43Ib1HZ2e9WBLUyDAGCZPpvpzmjTS8d9e0=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-/Sb2XtVguj5zpj/OTl90xFHFSaBeLgb8xIlNm4UrnRI=";
   doInstallCheck = true;
 
   src = fetchFromGitHub {

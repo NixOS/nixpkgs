@@ -38,6 +38,8 @@ let
 
     apron = callPackage ../development/ocaml-modules/apron { };
 
+    arg-complete = callPackage ../development/ocaml-modules/arg-complete { };
+
     arp = callPackage ../development/ocaml-modules/arp { };
 
     asai = callPackage ../development/ocaml-modules/asai { };
@@ -361,6 +363,8 @@ let
 
     dolmen_loop =  callPackage ../development/ocaml-modules/dolmen/loop.nix { };
 
+    dolmen_lsp =  callPackage ../development/ocaml-modules/dolmen/lsp.nix { };
+
     dolmen_type =  callPackage ../development/ocaml-modules/dolmen/type.nix { };
 
     dolog = callPackage ../development/ocaml-modules/dolog { };
@@ -378,6 +382,12 @@ let
     dose3 = callPackage ../development/ocaml-modules/dose3 { };
 
     dot-merlin-reader = callPackage ../development/tools/ocaml/merlin/dot-merlin-reader.nix { };
+
+    dream = callPackage ../development/ocaml-modules/dream { };
+
+    dream-httpaf = callPackage ../development/ocaml-modules/dream/httpaf.nix { };
+
+    dream-pure = callPackage ../development/ocaml-modules/dream/pure.nix { };
 
     dscheck = callPackage ../development/ocaml-modules/dscheck { };
 
@@ -418,7 +428,7 @@ let
     dune-private-libs = callPackage ../development/ocaml-modules/dune-private-libs { };
 
     dune-release = callPackage ../development/tools/ocaml/dune-release {
-      inherit (pkgs) opam git mercurial coreutils gnutar bzip2;
+      inherit (pkgs) opam gitMinimal mercurial coreutils gnutar bzip2;
     };
 
     dune-rpc = callPackage ../development/ocaml-modules/dune-rpc { };
@@ -456,7 +466,15 @@ let
       stdenv = pkgs.gcc13Stdenv;
     };
 
-    eliom = callPackage ../development/ocaml-modules/eliom { };
+    eliom = let
+      js_of_ocaml-compiler = self.js_of_ocaml-compiler.override { version = "5.9.1"; };
+      js_of_ocaml = self.js_of_ocaml.override { inherit js_of_ocaml-compiler; };
+    in callPackage ../development/ocaml-modules/eliom rec {
+      js_of_ocaml-ppx = self.js_of_ocaml-ppx.override { inherit js_of_ocaml; };
+      js_of_ocaml-ppx_deriving_json = self.js_of_ocaml-ppx_deriving_json.override { inherit js_of_ocaml; };
+      js_of_ocaml-lwt = self.js_of_ocaml-lwt.override { inherit js_of_ocaml js_of_ocaml-ppx; };
+      js_of_ocaml-tyxml = self.js_of_ocaml-tyxml.override { inherit js_of_ocaml js_of_ocaml-ppx; };
+    };
 
     elpi = callPackage ../development/ocaml-modules/elpi (
       let ppxlib_0_15 = if lib.versionAtLeast ppxlib.version "0.15"
@@ -709,6 +727,10 @@ let
 
     httpun-eio = callPackage ../development/ocaml-modules/httpun/eio.nix { };
 
+    httpun-lwt = callPackage ../development/ocaml-modules/httpun/lwt.nix { };
+
+    httpun-lwt-unix = callPackage ../development/ocaml-modules/httpun/lwt-unix.nix { };
+
     httpun-types = callPackage ../development/ocaml-modules/httpun/types.nix { };
 
     httpun-ws = callPackage ../development/ocaml-modules/httpun-ws { };
@@ -793,7 +815,7 @@ let
       then import ../development/ocaml-modules/janestreet/0.17.nix
          {
            inherit self;
-           inherit (pkgs) bash fzf lib openssl zstd;
+           inherit (pkgs) bash fetchpatch fzf lib openssl zstd;
          }
       else if lib.versionOlder "4.13.1" ocaml.version
       then import ../development/ocaml-modules/janestreet/0.16.nix {
@@ -1085,6 +1107,8 @@ let
 
     memtrace = callPackage ../development/ocaml-modules/memtrace { };
 
+    mem_usage = callPackage ../development/ocaml-modules/mem_usage { };
+
     menhir = callPackage ../development/ocaml-modules/menhir { };
 
     menhirLib = callPackage ../development/ocaml-modules/menhir/lib.nix { };
@@ -1192,6 +1216,8 @@ let
 
     mirage-protocols = callPackage ../development/ocaml-modules/mirage-protocols { };
 
+    mirage-ptime = callPackage ../development/ocaml-modules/mirage-ptime { };
+
     mirage-random = callPackage ../development/ocaml-modules/mirage-random { };
 
     mirage-random-test = callPackage ../development/ocaml-modules/mirage-random-test { };
@@ -1240,6 +1266,10 @@ let
 
     multicore-magic =  callPackage ../development/ocaml-modules/multicore-magic { };
 
+    multipart_form =  callPackage ../development/ocaml-modules/multipart_form { };
+
+    multipart_form-lwt =  callPackage ../development/ocaml-modules/multipart_form/lwt.nix { };
+
     multipart-form-data =  callPackage ../development/ocaml-modules/multipart-form-data { };
 
     mustache =  callPackage ../development/ocaml-modules/mustache { };
@@ -1252,6 +1282,8 @@ let
     };
 
     netchannel = callPackage ../development/ocaml-modules/netchannel { };
+
+    nice_parser = callPackage ../development/ocaml-modules/nice_parser { };
 
     ninja_utils = callPackage ../development/ocaml-modules/ninja_utils { };
 
@@ -1407,7 +1439,12 @@ let
 
     ocsigen-start = callPackage ../development/ocaml-modules/ocsigen-start { };
 
-    ocsigen-toolkit = callPackage ../development/ocaml-modules/ocsigen-toolkit { };
+    ocsigen-toolkit = let
+      js_of_ocaml-compiler = self.js_of_ocaml-compiler.override { version = "5.9.1"; };
+      js_of_ocaml = self.js_of_ocaml.override { inherit js_of_ocaml-compiler; };
+    in callPackage ../development/ocaml-modules/ocsigen-toolkit {
+      js_of_ocaml-ppx_deriving_json = self.js_of_ocaml-ppx_deriving_json.override { inherit js_of_ocaml; };
+    };
 
     ocsipersist = callPackage ../development/ocaml-modules/ocsipersist {};
 
@@ -1540,7 +1577,7 @@ let
     posix-types = callPackage ../development/ocaml-modules/posix/types.nix { };
 
     postgresql = callPackage ../development/ocaml-modules/postgresql {
-      inherit (pkgs) postgresql;
+      inherit (pkgs) libpq;
     };
 
     pp = callPackage ../development/ocaml-modules/pp { };
@@ -1673,6 +1710,8 @@ let
     readline = callPackage ../development/ocaml-modules/readline {
       readline = pkgs.readline;
     };
+
+    reanalyze = callPackage ../development/tools/ocaml/reanalyze { };
 
     reason = callPackage ../development/compilers/reason { };
 
@@ -1974,6 +2013,8 @@ let
     ### W ###
 
     wasm = callPackage ../development/ocaml-modules/wasm { };
+
+    wasm_of_ocaml-compiler = callPackage ../development/tools/ocaml/js_of_ocaml/compiler-wasm.nix { };
 
     wayland = callPackage ../development/ocaml-modules/wayland { };
 

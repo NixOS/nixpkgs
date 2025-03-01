@@ -14,18 +14,20 @@
   xdg-utils,
   ollama,
   vte-gtk4,
+  libspelling,
+  nix-update-script,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "alpaca";
-  version = "3.2.0";
+  version = "5.0.5";
   pyproject = false; # Built with meson
 
   src = fetchFromGitHub {
     owner = "Jeffser";
     repo = "Alpaca";
     tag = version;
-    hash = "sha256-Mh+LYslVmb4l+ZCB1Si7hxugzHPz/mULUMBNeJI12r0=";
+    hash = "sha256-VfD10mMlRNi6Ye3IXy60ygx9DGTpzG06T6zQLm+8dFo=";
   };
 
   nativeBuildInputs = [
@@ -42,6 +44,7 @@ python3Packages.buildPythonApplication rec {
     libadwaita
     gtksourceview5
     vte-gtk4
+    libspelling
   ];
 
   dependencies = with python3Packages; [
@@ -54,6 +57,8 @@ python3Packages.buildPythonApplication rec {
     pydbus
     odfpy
     pyicu
+    matplotlib
+    openai
   ];
 
   dontWrapGApps = true;
@@ -70,6 +75,8 @@ python3Packages.buildPythonApplication rec {
     # https://github.com/flatpak/flatpak/issues/3229
     "--set FLATPAK_DEST ${placeholder "out"}"
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Ollama client made with GTK4 and Adwaita";
@@ -89,6 +96,6 @@ python3Packages.buildPythonApplication rec {
       aleksana
       Gliczy
     ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
   };
 }

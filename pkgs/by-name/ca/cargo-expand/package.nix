@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-nbzQmZ8hAiU8K+/VHwbEniTsioCgQhbADIxV9tL3M1k=";
   };
 
-  cargoHash = "sha256-sOxLRNGIHsUBNWWRUo2qyeewL06rU5paq4LbXpksMzg=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-aLHeGAIVm6hY+sRymQjQf2WwiwkIDKl+GSvI/D6JOCo=";
 
   meta = with lib; {
     description = "Cargo subcommand to show result of macro expansion";

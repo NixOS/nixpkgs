@@ -1,6 +1,5 @@
 {
   lib,
-  stdenvNoCC,
   buildNpmPackage,
   fetchFromGitHub,
   fetchpatch2,
@@ -18,12 +17,19 @@
   cacert,
   unzip,
   # runtime deps
+  cairo,
   exiftool,
+  giflib,
   jellyfin-ffmpeg, # Immich depends on the jellyfin customizations, see https://github.com/NixOS/nixpkgs/issues/351943
   imagemagick,
+  libjpeg,
+  libpng,
   libraw,
   libheif,
+  librsvg,
+  pango,
   perl,
+  pixman,
   vips,
 }:
 let
@@ -116,9 +122,24 @@ let
     preBuild = ''
       rm node_modules/@immich/sdk
       ln -s ${openapi} node_modules/@immich/sdk
-      # Rollup does not find the dependency otherwise
-      ln -s node_modules/@immich/sdk/node_modules/@oazapfts node_modules/
     '';
+
+    env.npm_config_build_from_source = "true";
+
+    nativeBuildInputs = [
+      pkg-config
+    ];
+
+    buildInputs = [
+      # https://github.com/Automattic/node-canvas/blob/master/Readme.md#compiling
+      cairo
+      giflib
+      libjpeg
+      libpng
+      librsvg
+      pango
+      pixman
+    ];
 
     installPhase = ''
       runHook preInstall
@@ -126,21 +147,6 @@ let
       cp -r build $out
 
       runHook postInstall
-    '';
-  };
-
-  node-addon-api = stdenvNoCC.mkDerivation rec {
-    pname = "node-addon-api";
-    version = "8.3.0";
-    src = fetchFromGitHub {
-      owner = "nodejs";
-      repo = "node-addon-api";
-      tag = "v${version}";
-      hash = "sha256-7KkJkMNX352XnWTOC6mJB+IcFrda20UENcNwoXWDm+s=";
-    };
-    installPhase = ''
-      mkdir $out
-      cp -r *.c *.h *.gyp *.gypi index.js package-support.json package.json tools $out/
     '';
   };
 
@@ -180,27 +186,9 @@ buildNpmPackage' {
   # Required because vips tries to write to the cache dir
   makeCacheWritable = true;
 
-  # we manually build sharp from source later on
-  # FIXME figure out why otherwise it fails with
-  #     error: 'NewOrCopy' is not a member of 'Napi::Buffer<char>'
-  env.SHARP_IGNORE_GLOBAL_LIBVIPS = 1;
+  env.SHARP_FORCE_GLOBAL_LIBVIPS = 1;
 
   preBuild = ''
-    unset SHARP_IGNORE_GLOBAL_LIBVIPS
-    export SHARP_FORCE_GLOBAL_LIBVIPS=1
-
-    pushd node_modules/sharp
-
-    mkdir node_modules
-    ln -s ${node-addon-api} node_modules/node-addon-api
-
-    node install/check
-
-    rm -r node_modules
-
-    popd
-    rm -r node_modules/@img/sharp*
-
     # If exiftool-vendored.pl isn't found, exiftool is searched for on the PATH
     rm -r node_modules/exiftool-vendored.*
   '';

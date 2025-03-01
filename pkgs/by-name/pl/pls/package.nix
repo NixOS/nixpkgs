@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-gJufm2krZSTdBbbfZ+355M9e3MJQbDEpSPf0EbZEayQ=";
   };
 
-  cargoHash = "sha256-cDAHzK3pgpn5zEFdLBltf1e28yFFkXOzcF+nvDb8aWI=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-q6tLSq9MkWOT+XUmtv123C9VwncJ7ljTnaGEZOZqLjk=";
 
   meta = {
     changelog = "https://github.com/pls-rs/pls/releases/tag/${src.rev}";

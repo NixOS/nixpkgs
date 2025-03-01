@@ -3,7 +3,7 @@
   fetchpatch,
   stdenv,
   lib,
-  substituteAll,
+  replaceVars,
   aspellWithDicts,
   at-spi2-core ? null,
   atspiSupport ? true,
@@ -51,8 +51,7 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       inherit mousetweaks;
     })
     # Allow loading hunspell dictionaries installed in NixOS system path

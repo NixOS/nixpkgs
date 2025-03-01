@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  gitUpdater,
+  nix-update-script,
   autoreconfHook,
   pkg-config,
   pandoc,
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     installShellCompletion --bash bash-completion/stenc
   '';
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "SCSI Tape Encryption Manager";

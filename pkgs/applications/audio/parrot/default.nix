@@ -15,16 +15,17 @@
 }:
 rustPlatform.buildRustPackage {
   pname = "parrot";
-  version = "1.6.0-unstable-2024-02-28";
+  version = "1.6.0-unstable-2024-07-12";
 
   src = fetchFromGitHub {
     owner = "aquelemiguel";
     repo = "parrot";
-    rev = "fcf933818a5e754f5ad4217aec8bfb16935d7442";
-    hash = "sha256-3YTXIKj1iqCB+tN7/0v1DAaMM6aJiSxBYHO98uK8KFo=";
+    rev = "a6c1e88a1e360d46a91bc536985db87af72245b3";
+    hash = "sha256-to1SVLzw2l06cqsVOopk9KH2UyGgJ4CwWagHxaDrf4Y=";
   };
 
-  cargoHash = "sha256-3G7NwSZaiocjgfdtmJVWfMZOHCNhC08NgolPa9AvPfE=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-be/gGKCd8/VgcjzhyMKDl5TzAuavm1rPNYBm8RLTP90=";
 
   nativeBuildInputs = [
     cmake

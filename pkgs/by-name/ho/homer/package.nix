@@ -6,15 +6,16 @@
   nodejs,
   dart-sass,
   nix-update-script,
+  nixosTests,
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "homer";
-  version = "24.12.1";
+  version = "25.02.1";
   src = fetchFromGitHub {
     owner = "bastienwirtz";
     repo = "homer";
     rev = "v${version}";
-    hash = "sha256-nOhovVqWlHPunwruJrgqFhhDxccKBp/iEyB3Y3C5Cz8=";
+    hash = "sha256-Fh6qV2eU7VRskbPun7OcJmqgjILVE8w5lV70xH6znmc=";
   };
 
   pnpmDeps = pnpm_9.fetchDeps {
@@ -24,7 +25,7 @@ stdenvNoCC.mkDerivation rec {
       src
       patches
       ;
-    hash = "sha256-+FijxCiI5pr6kp+/99DJJOJSI9w6pbtfW25SUyEcWio=";
+    hash = "sha256-qeMmPI2B5FW82qLVtbREDjQh76THMCOZRQCM0DgvCqI=";
   };
 
   # Enables specifying a custom Sass compiler binary path via `SASS_EMBEDDED_BIN_PATH` environment variable.
@@ -54,7 +55,12 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = {
+      inherit (nixosTests.homer) caddy nginx;
+    };
+  };
 
   meta = with lib; {
     description = "A very simple static homepage for your server.";

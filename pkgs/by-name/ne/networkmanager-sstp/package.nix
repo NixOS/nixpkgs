@@ -29,18 +29,22 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-zd+g86cZLyibLhYLal6XzUb9wFu7kHROp0KzRM95Qng=";
   };
 
-  nativeBuildInputs = [
-    autoreconfHook
-    file
-    gettext
-    pkg-config
-  ];
+  nativeBuildInputs =
+    [
+      autoreconfHook
+      file
+      gettext
+      glib # for gdbus-codegen
+      pkg-config
+    ]
+    ++ lib.optionals withGnome [
+      gtk4 # for gtk4-builder-tool
+    ];
 
   buildInputs =
     [
       sstp
       networkmanager
-      glib
       ppp
     ]
     ++ lib.optionals withGnome [
@@ -62,6 +66,8 @@ stdenv.mkDerivation rec {
     "--with-pppd-plugin-dir=$(out)/lib/pppd/2.5.0"
     "--enable-absolute-paths"
   ];
+
+  strictDeps = true;
 
   passthru = {
     updateScript = gnome.updateScript {

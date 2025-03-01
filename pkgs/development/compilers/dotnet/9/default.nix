@@ -6,5 +6,5 @@
   bootstrapSdkFile = ./bootstrap-sdk.nix;
   allowPrerelease = true;
   depsFile = ./deps.json;
-  fallbackTargetPackages = dotnetCorePackages.sdk_9_0.targetPackages;
+  fallbackTargetPackages = dotnetCorePackages.sdk_9_0-bin.targetPackages;
 }

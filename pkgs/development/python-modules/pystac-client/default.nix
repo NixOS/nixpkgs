@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "pystac-client";
-  version = "0.8.5";
+  version = "0.8.6";
   pyproject = true;
   disabled = pythonOlder "3.9";
 
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "stac-utils";
     repo = "pystac-client";
     tag = "v${version}";
-    hash = "sha256-bryJCg0JqjxQi5tAvd5Y2f/hXmHoIGEFiHuSPCjqfYk=";
+    hash = "sha256-rbRxqR6hZy284JfQu5+dukFTBHllqzjo0k9aWhrkRAU=";
   };
 
   build-system = [ setuptools ];

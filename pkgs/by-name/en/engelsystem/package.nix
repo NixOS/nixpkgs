@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation rec {
   pname = "engelsystem";
-  version = "3.5.0";
+  version = "3.6.0";
 
   src = fetchzip {
     url = "https://github.com/engelsystem/engelsystem/releases/download/v${version}/engelsystem-v${version}.zip";
-    hash = "sha256-RbzAHBZN02u14WaLtq5EOh4XwIdHKvzX7NhDBhn/CaU=";
+    hash = "sha256-AZVW04bcSlESSRmtfvP2oz15xvZLlGEz/X9rX7PuRGg=";
   };
 
   buildInputs = [ php ];

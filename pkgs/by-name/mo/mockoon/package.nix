@@ -6,11 +6,11 @@
 
 let
   pname = "mockoon";
-  version = "6.1.0";
+  version = "9.1.0";
 
   src = fetchurl {
-    url = "https://github.com/mockoon/mockoon/releases/download/v${version}/mockoon-${version}.AppImage";
-    hash = "sha256-harZU3TTIzfJoY/jAQI0dm7YSOr24Y9xk9L5ZaBLdD8=";
+    url = "https://github.com/mockoon/mockoon/releases/download/v${version}/mockoon-${version}.x86_64.AppImage";
+    hash = "sha256-54E8o8m192yVuuLu3n4I9KRsC5h1UYBZ/1m0n5vGSdY=";
   };
 
   appimageContents = appimageTools.extractType2 {
@@ -31,10 +31,16 @@ appimageTools.wrapType2 {
 
   meta = with lib; {
     description = "Easiest and quickest way to run mock APIs locally";
+    longDescription = ''
+      Mockoon is the easiest and quickest way to run mock APIs locally.
+      No remote deployment, no account required, free and open-source.
+    '';
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     homepage = "https://mockoon.com";
+    changelog = "https://github.com/mockoon/mockoon/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ dit7ya ];
     mainProgram = "mockoon";
+    platforms = [ "x86_64-linux" ];
   };
 }

@@ -30,7 +30,7 @@ appimageTools.wrapType2 rec {
     mkdir -p $out/share/pixmaps
     cp ${appimageContents}/GoldenCheetah.desktop $out/share/applications/
     substituteInPlace $out/share/applications/GoldenCheetah.desktop --replace-fail \
-      "Exec=GoldenCheetah" "Exec=QT_PLUGIN_PATH= GoldenCheetah"
+      "Exec=GoldenCheetah" "Exec=env QT_PLUGIN_PATH= GoldenCheetah"
     cp ${appimageContents}/gc.png $out/share/pixmaps/
   '';
   meta = {

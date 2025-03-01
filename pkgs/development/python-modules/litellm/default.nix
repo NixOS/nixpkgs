@@ -37,7 +37,7 @@
 
 buildPythonPackage rec {
   pname = "litellm";
-  version = "1.53.9";
+  version = "1.59.8";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -46,10 +46,12 @@ buildPythonPackage rec {
     owner = "BerriAI";
     repo = "litellm";
     tag = "v${version}";
-    hash = "sha256-xSILlbZhu6GgFFg5+f20x2Hxy4KnHMbSV18VFnjUrMQ=";
+    hash = "sha256-2OkREmgs+r+vco1oEVgp5nq7cfwIAlMAh0FL2ceO88Y=";
   };
 
   build-system = [ poetry-core ];
+
+  pythonRelaxDeps = [ "httpx" ];
 
   dependencies = [
     aiohttp
@@ -99,7 +101,7 @@ buildPythonPackage rec {
     description = "Use any LLM as a drop in replacement for gpt-3.5-turbo. Use Azure, OpenAI, Cohere, Anthropic, Ollama, VLLM, Sagemaker, HuggingFace, Replicate (100+ LLMs)";
     mainProgram = "litellm";
     homepage = "https://github.com/BerriAI/litellm";
-    changelog = "https://github.com/BerriAI/litellm/releases/tag/v${version}";
+    changelog = "https://github.com/BerriAI/litellm/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ happysalada ];
   };

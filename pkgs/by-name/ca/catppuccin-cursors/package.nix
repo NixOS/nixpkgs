@@ -39,7 +39,7 @@ let
   };
   variantName = { palette, color }: palette + color;
   variants = lib.mapCartesianProduct variantName dimensions;
-  version = "1.0.2";
+  version = "2.0.0";
 in
 stdenvNoCC.mkDerivation {
   pname = "catppuccin-cursors";
@@ -49,7 +49,7 @@ stdenvNoCC.mkDerivation {
     owner = "catppuccin";
     repo = "cursors";
     rev = "v${version}";
-    hash = "sha256-Mm0fRh/Shem65E/Cl0yyw+efEHOEt/OJ+MzL+3Mcbwc=";
+    hash = "sha256-qis6p+/m7+DdRDYzLq9yB2eZGpfZe5z5xRsa/1HoIG4=";
   };
 
   nativeBuildInputs = [

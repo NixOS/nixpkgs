@@ -21,13 +21,13 @@
 
 buildGoModule rec {
   pname = "kubernetes";
-  version = "1.32.0";
+  version = "1.32.2";
 
   src = fetchFromGitHub {
     owner = "kubernetes";
     repo = "kubernetes";
     rev = "v${version}";
-    hash = "sha256-VpinMMWvFYpcqDC9f3q/oEqUHRz7thHMs0bKt6AaNms=";
+    hash = "sha256-pie36Y3zKGKvnCDHtjNHYox1b2xhy6w7MShkAfkDVrs=";
   };
 
   vendorHash = null;

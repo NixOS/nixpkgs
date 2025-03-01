@@ -4,6 +4,8 @@
   fetchFromGitHub,
   espeak-ng,
   tts,
+  addBinToPathHook,
+  writableTmpDirAsHomeHook,
 }:
 
 let
@@ -111,18 +113,20 @@ python.pkgs.buildPythonApplication rec {
     doCheck = true;
   });
 
-  nativeCheckInputs = with python.pkgs; [
-    espeak-ng
-    pytestCheckHook
-  ];
+  nativeCheckInputs =
+    with python.pkgs;
+    [
+      espeak-ng
+      pytestCheckHook
+    ]
+    ++ [
+      addBinToPathHook
+      writableTmpDirAsHomeHook
+    ];
 
   preCheck = ''
     # use the installed TTS in $PYTHONPATH instead of the one from source to also have cython modules.
     mv TTS{,.old}
-    export PATH=$out/bin:$PATH
-
-    # numba tries to write to HOME directory
-    export HOME=$TMPDIR
 
     for file in $(grep -rl 'python TTS/bin' tests); do
       substituteInPlace "$file" \
@@ -131,7 +135,7 @@ python.pkgs.buildPythonApplication rec {
   '';
 
   disabledTests = [
-    # Requires network acccess to download models
+    # Requires network access to download models
     "test_korean_text_to_phonemes"
     "test_models_offset_0_step_3"
     "test_models_offset_1_step_3"

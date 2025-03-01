@@ -1,16 +1,13 @@
 {
   lib,
   buildNpmPackage,
-  electron_31,
+  electron,
   fetchFromGitHub,
   writers,
   makeWrapper,
   withGui ? false,
 }:
 
-let
-  electron = electron_31;
-in
 buildNpmPackage rec {
   pname = "zap-chip";
   version = "2024.09.27";

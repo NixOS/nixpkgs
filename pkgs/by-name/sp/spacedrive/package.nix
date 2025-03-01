@@ -79,7 +79,7 @@ if stdenv.hostPlatform.isDarwin then
       mkdir -p "$out/Applications/Spacedrive.app"
       cp -r . "$out/Applications/Spacedrive.app"
       mkdir -p "$out/bin"
-      ln -s "$out/Applications/Spacedrive.app/Contents/MacOS/Spacedrive" "$out/bin/spacedrive"
+      ln -s "$out/Applications/Spacedrive.app/Contents/MacOS/sd-desktop" "$out/bin/spacedrive"
 
       runHook postInstall
     '';

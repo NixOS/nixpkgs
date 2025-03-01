@@ -11,7 +11,7 @@
   openssl,
   patchelf,
   mariadb-connector-c,
-  postgresql,
+  libpq,
   zlib,
   tzdata,
   # Databases
@@ -83,7 +83,7 @@ stdenv.mkDerivation rec {
     boost186
     openssl
     systemd
-  ] ++ lib.optional withPostgresql postgresql;
+  ] ++ lib.optional withPostgresql libpq;
 
   nativeBuildInputs = [
     cmake

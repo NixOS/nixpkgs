@@ -16,7 +16,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-7MnYTY/7PWu+VvxABtSLUnJ4FPzd9QCfrUBcSxcXUso=";
   };
 
-  cargoHash = "sha256-D+9269WRCvpohyhrl6wkzalV7wPsJE38hSviTU2CNyg=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-2tpaTVCJJ0c4SyBQU2FjGvCYbdNLXxwIXv8O0+Uibrs=";
 
   meta = {
     description = "Reverse proxy to bypass the need for port forwarding";

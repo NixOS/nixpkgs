@@ -3,7 +3,7 @@
   buildPythonPackage,
   isPy27,
   fetchFromGitea,
-  substituteAll,
+  replaceVars,
   fetchpatch,
   colord,
   setuptools,
@@ -16,7 +16,7 @@
   mupdf-headless,
   netpbm,
   numpy,
-  poppler_utils,
+  poppler-utils,
   pytestCheckHook,
   runCommand,
   scipy,
@@ -38,8 +38,7 @@ buildPythonPackage rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./default-icc-profile.patch;
+    (replaceVars ./default-icc-profile.patch {
       srgbProfile =
         if stdenv.hostPlatform.isDarwin then
           "/System/Library/ColorSync/Profiles/sRGB Profile.icc"
@@ -76,7 +75,7 @@ buildPythonPackage rec {
     mupdf-headless
     netpbm
     numpy
-    poppler_utils
+    poppler-utils
     pytestCheckHook
     scipy
   ];

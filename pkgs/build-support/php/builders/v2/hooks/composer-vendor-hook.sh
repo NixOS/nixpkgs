@@ -96,9 +96,23 @@ composerVendorInstallHook() {
     mkdir -p $out
 
     cp -ar composer.json $(composer config vendor-dir) $out/
+    mapfile -t installer_paths < <(jq -r 'try((.extra."installer-paths") | keys[])' composer.json)
+
+    for installer_path in "${installer_paths[@]}"; do
+        # Remove everything after {$name} placeholder
+        installer_path="${installer_path/\{\$name\}*/}";
+        out_installer_path="$out/${installer_path/\{\$name\}*/}";
+        # Copy the installer path if it exists
+        if [[ -d "$installer_path" ]]; then
+            mkdir -p $(dirname "$out_installer_path")
+            cp -ar "$installer_path" "$out_installer_path"
+            # Strip out the git repositories
+            find $out_installer_path -name .git -type d -prune -print -exec rm -rf {} ";"
+        fi
+    done
 
     if [[ -f "composer.lock" ]]; then
-        cp -ar composer.lock $(composer config vendor-dir) $out/
+        cp -ar composer.lock $out/
     fi
 
     echo "Finished composerVendorInstallHook"

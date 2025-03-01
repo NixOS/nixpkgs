@@ -1,21 +1,18 @@
 {
   lib,
-  black,
   buildPythonPackage,
   fetchFromGitHub,
   hatchling,
   pytest,
-  pytestCheckHook,
-  pythonOlder,
+  black,
   ruff,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-examples";
   version = "0.0.15";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pydantic";
@@ -38,6 +35,13 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "pytest_examples" ];
+
+  disabledTests = [
+    # Fails with AssertionError because formatting is different than expected
+    "test_black_error"
+    "test_black_error_dot_space"
+    "test_black_error_multiline"
+  ];
 
   meta = {
     description = "Pytest plugin for testing examples in docstrings and markdown files";

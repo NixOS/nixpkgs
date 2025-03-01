@@ -10,6 +10,7 @@
   libarchive,
   libcpr,
   libloot,
+  lz4,
   pugixml,
 
   libsForQt5,
@@ -20,13 +21,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "limo";
-  version = "1.0.11";
+  version = "1.1";
 
   src = fetchFromGitHub {
     owner = "limo-app";
     repo = "limo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-KQD7U9sHHsxKIzMbrYqhTBUfFZpsoqiSxz5zMNIxU4o=";
+    hash = "sha256-fzqIZ/BqOpPjo18qi4VidGg1ruhQLqfwoA/hidGPEao=";
   };
 
   patches = lib.optionals (!withUnrar) [
@@ -48,6 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
       libarchive
       libcpr
       libloot
+      lz4
       pugixml
 
       libsForQt5.qtbase
@@ -61,6 +63,8 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags =
     [
       (lib.cmakeFeature "LIMO_INSTALL_PREFIX" (placeholder "out"))
+    ]
+    ++ lib.optionals (withUnrar) [
       (lib.cmakeBool "USE_SYSTEM_LIBUNRAR" true)
     ]
     ++ lib.optionals (!withUnrar) [

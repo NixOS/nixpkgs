@@ -25,7 +25,7 @@
 
 let
   # TODO: Reuse one defined in torch?
-  # Some of those dependencies are probbly not required,
+  # Some of those dependencies are probably not required,
   # but it breaks when the store path is different between torch and torchaudio
   rocmtoolkit_joined = symlinkJoin {
     name = "rocm-merged";

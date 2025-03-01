@@ -9,13 +9,14 @@
 
 buildMozillaMach rec {
   pname = "firefox-devedition";
-  version = "135.0b4";
-  applicationName = "Mozilla Firefox Developer Edition";
+  binaryName = pname;
+  version = "135.0b9";
+  applicationName = "Firefox Developer Edition";
   requireSigning = false;
   branding = "browser/branding/aurora";
   src = fetchurl {
     url = "mirror://mozilla/devedition/releases/${version}/source/firefox-${version}.source.tar.xz";
-    sha512 = "d3ee20d264c4c26308b814f4cc997349a6df32da17b9a29514b0504f7548606f4b6793ccd2e7464babf6588f13bfcc0e0641f9ac8d620f7da7d7e45684fdf775";
+    sha512 = "bf09f999b347492b841a26fcbcfb4d37e5f74528a05ffab47572dcaae01cb43e70baf58e83cc5153498a6a6ad2cb69507b628fba840090c91f4dbca62717a435";
   };
 
   meta = {
@@ -29,7 +30,7 @@ buildMozillaMach rec {
     # not in `badPlatforms` because cross-compilation on 64-bit machine might work.
     maxSilent = 14400; # 4h, double the default of 7200s (c.f. #129212, #129115)
     license = lib.licenses.mpl20;
-    mainProgram = "firefox";
+    mainProgram = binaryName;
   };
   tests = {
     inherit (nixosTests) firefox-devedition;
