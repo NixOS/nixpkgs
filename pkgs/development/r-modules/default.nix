@@ -1026,6 +1026,13 @@ let
     # -> arrow 14.0.0.2 on CRAN; was lagging behind libarrow release:
     #   https://github.com/apache/arrow/issues/39698 )
 
+    ACME = old.ACME.overrideAttrs (attrs: {
+      env = (attrs.env or { }) // {
+        # Avoid incompatible pointer type error
+        NIX_CFLAGS_COMPILE = attrs.env.NIX_CFLAGS_COMPILE + " -Wno-incompatible-pointer-types";
+      };
+    });
+
     vegan3d = old.vegan3d.overrideAttrs (attrs: {
       RGL_USE_NULL = "true";
     });
