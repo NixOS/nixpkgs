@@ -53,9 +53,13 @@ let
       p = cfg.package.override (
         {
           inherit phpCfg;
-          withPgsql = cfg.database.type == "pgsql";
-          withMysql = cfg.database.type == "mysql";
           inherit (cfg) minifyStaticFiles;
+        }
+        // lib.optionalAttrs (cfg.database.type == "postgresql") {
+          withPostgreSQL = true;
+        }
+        // lib.optionalAttrs (cfg.database.type == "mysql") {
+          withMySQL = true;
         }
         // lib.optionalAttrs (lib.isAttrs cfg.minifyStaticFiles) (
           with cfg.minifyStaticFiles;
