@@ -1,11 +1,9 @@
 {
   lib,
   SDL2,
-  SDL2_image,
   SDL2_net,
   alsa-lib,
   fetchFromGitHub,
-  fetchpatch,
   fluidsynth,
   gitUpdater,
   glib,
@@ -33,21 +31,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dosbox-staging";
-  version = "0.81.1";
+  version = "0.82.0";
 
   src = fetchFromGitHub {
     owner = "dosbox-staging";
     repo = "dosbox-staging";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-XGssEyX+AVv7/ixgGTRtPFjsUSX0FT0fhP+TXsFl2fY=";
+    hash = "sha256-raCVhG0GmNhLQviaVbD0hn2N9XaJqj2rbSFV6aMzjOg=";
   };
 
   patches = [
-    (fetchpatch {
-      name = "darwin-allow-bypass-wraps.patch";
-      url = "https://github.com/dosbox-staging/dosbox-staging/commit/9f0fc1dc762010e5f7471d01c504d817a066cae3.patch";
-      hash = "sha256-IzxRE1Vr+M8I5hdy80UwebjJ5R1IlH9ymaYgs6VwAO4=";
-    })
+    # get-version fails during the build, I don't know why but this works
+    ./0001-remove-get-version.patch
   ];
 
   nativeBuildInputs = [
@@ -61,7 +56,6 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs =
     [
       SDL2
-      SDL2_image
       SDL2_net
       fluidsynth
       glib
@@ -81,10 +75,13 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib ];
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   postInstall = ''
-    install -Dm644 $src/contrib/linux/dosbox-staging.desktop $out/share/applications/
+    install -Dm644 $src/contrib/linux/org.dosbox-staging.dosbox-staging.desktop $out/share/applications/
   '';
 
   # Rename binary, add a wrapper, and copy manual to avoid conflict with
