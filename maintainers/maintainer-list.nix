@@ -1008,6 +1008,12 @@
     githubId = 217050;
     name = "Albert Chae";
   };
+  albertilagan = {
+    email = "me@albertilagan.dev";
+    github = "albertilagan";
+    githubId = 22500561;
+    name = "Albert Ilagan";
+  };
   albertodvp = {
     email = "alberto.fanton@protonmail.com";
     github = "albertodvp";
