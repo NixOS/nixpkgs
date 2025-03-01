@@ -7014,6 +7014,8 @@ self: super: with self; {
 
   kaptan = callPackage ../development/python-modules/kaptan { };
 
+  karney = callPackage ../development/python-modules/karney { };
+
   karton-asciimagic = callPackage ../development/python-modules/karton-asciimagic { };
 
   karton-autoit-ripper = callPackage ../development/python-modules/karton-autoit-ripper { };
