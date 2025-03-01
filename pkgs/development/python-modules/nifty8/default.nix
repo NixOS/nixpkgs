@@ -28,7 +28,7 @@
 
 buildPythonPackage rec {
   pname = "nifty8";
-  version = "8.5.4";
+  version = "8.5.6";
   pyproject = true;
 
   src = fetchFromGitLab {
@@ -36,7 +36,7 @@ buildPythonPackage rec {
     owner = "ift";
     repo = "nifty";
     tag = "v${version}";
-    hash = "sha256-Q42ZhQ/T8JmkG75BexevbvVKQqfDmMG6+oTYR0Ze718=";
+    hash = "sha256-DQPCLRVl/UE1zv7nUZtPJa/sRwmAkHgrcDsxRa/ndX4=";
   };
 
   # nifty8.re is the jax-backed version of nifty8 (the regular one uses numpy).
@@ -87,7 +87,7 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://gitlab.mpcdf.mpg.de/ift/nifty";
-    changelog = "https://gitlab.mpcdf.mpg.de/ift/nifty/-/blob/${src.tag}/ChangeLog.md";
+    changelog = "https://gitlab.mpcdf.mpg.de/ift/nifty/-/blob/v${version}/ChangeLog.md";
     description = "Bayesian Imaging library for high-dimensional posteriors";
     longDescription = ''
       NIFTy, "Numerical Information Field Theory", is a Bayesian imaging library.
