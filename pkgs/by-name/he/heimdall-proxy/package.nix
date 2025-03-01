@@ -7,9 +7,10 @@ let
   version = "0.15.5";
 in
 buildGoModule {
+  pname = "heimdall-proxy";
+
   inherit version;
 
-  pname = "heimdall-proxy";
   src = fetchFromGitHub {
     owner = "dadrus";
     repo = "heimdall";
