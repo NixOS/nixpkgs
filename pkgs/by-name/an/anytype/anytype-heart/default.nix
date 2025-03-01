@@ -12,12 +12,12 @@
 let
   tantivy-go = callPackage ../tantivy-go { };
   pname = "anytype-heart";
-  version = "0.39.10";
+  version = "0.39.11";
   src = fetchFromGitHub {
     owner = "anyproto";
     repo = "anytype-heart";
     tag = "v${version}";
-    hash = "sha256-w7l/J3UwLiyM1vFhIW2WEdCxxXER+x9xMPH+LfyCQWM=";
+    hash = "sha256-+H63bc4aJPERfclzKh4E3uYEEwNycLfe0BCPSlilqCc=";
   };
 
   arch =
