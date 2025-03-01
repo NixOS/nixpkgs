@@ -7080,6 +7080,8 @@ self: super: with self; {
 
   keystoneauth1 = callPackage ../development/python-modules/keystoneauth1 { };
 
+  keystoneauth-websso = callPackage ../development/python-modules/keystoneauth-websso { };
+
   keyutils = callPackage ../development/python-modules/keyutils {
     inherit (pkgs) keyutils;
   };
