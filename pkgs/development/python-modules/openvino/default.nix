@@ -3,6 +3,7 @@
   buildPythonPackage,
   openvino-native,
   numpy,
+  packaging,
 }:
 
 buildPythonPackage {
@@ -12,7 +13,10 @@ buildPythonPackage {
 
   src = openvino-native.python;
 
-  propagatedBuildInputs = [ numpy ];
+  dependencies = [
+    numpy
+    packaging
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -23,10 +27,7 @@ buildPythonPackage {
     runHook postInstall
   '';
 
-  pythonImportsCheck = [
-    "openvino"
-    "openvino.runtime"
-  ];
+  pythonImportsCheck = [ "openvino" ];
 
   meta = with lib; {
     description = "OpenVINO(TM) Runtime";
