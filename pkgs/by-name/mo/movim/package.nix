@@ -41,19 +41,8 @@ let
     else
       { }
   );
-in
-php.buildComposerProject2 (finalAttrs: {
-  pname = "movim";
-  version = "0.29.2";
 
-  src = fetchFromGitHub {
-    owner = "movim";
-    repo = "movim";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-/u8/9tn0X+IwXKyK3S5uA9X8IRsg5xDdUPpnvxOIaYc=";
-  };
-
-  php = php.buildEnv (
+  phpPackage = php.buildEnv (
     {
       extensions = (
         { all, enabled }:
@@ -82,6 +71,19 @@ php.buildComposerProject2 (finalAttrs: {
       extraConfig = phpCfg;
     }
   );
+in
+phpPackage.buildComposerProject2 (finalAttrs: {
+  pname = "movim";
+  version = "0.29.2";
+
+  src = fetchFromGitHub {
+    owner = "movim";
+    repo = "movim";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-/u8/9tn0X+IwXKyK3S5uA9X8IRsg5xDdUPpnvxOIaYc=";
+  };
+
+  php = phpPackage;
 
   nativeBuildInputs =
     lib.optional minify.script.enable esbuild
@@ -105,7 +107,7 @@ php.buildComposerProject2 (finalAttrs: {
     # Point to PHP + PHP INI in the Nix store
     substituteInPlace src/Movim/Console/DaemonCommand.php \
       --replace-fail "<info>php vendor/bin/phinx migrate</info>" \
-        "<info>${lib.getBin finalAttrs.php} vendor/bin/phinx migrate</info>" \
+        "<info>${lib.getBin phpPackage} vendor/bin/phinx migrate</info>" \
       --replace-fail "<info>php daemon.php setAdmin {jid}</info>" \
         "<info>${finalAttrs.meta.mainProgram} setAdmin {jid}</info>"
 
