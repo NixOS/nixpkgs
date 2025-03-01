@@ -728,17 +728,22 @@ in
 
     systemd.services.discourse = {
       wantedBy = [ "multi-user.target" ];
-      after = [
-        "redis-discourse.service"
-        "postgresql.service"
-        "discourse-postgresql.service"
-      ];
+      after =
+        [
+          "redis-discourse.service"
+          "postgresql.service"
+        ]
+        ++ lib.optionals databaseActuallyCreateLocally [
+          "discourse-postgresql.service"
+        ];
       bindsTo =
         [
           "redis-discourse.service"
         ]
-        ++ lib.optionals (cfg.database.host == null) [
+        ++ lib.optionals (config.services.postgresql.enable) [
           "postgresql.service"
+        ]
+        ++ lib.optionals databaseActuallyCreateLocally [
           "discourse-postgresql.service"
         ];
       path = cfg.package.runtimeDeps ++ [
