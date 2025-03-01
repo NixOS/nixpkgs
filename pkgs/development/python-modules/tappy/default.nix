@@ -2,8 +2,8 @@
   lib,
   buildPythonPackage,
   pythonOlder,
-  fetchPypi,
-  setuptools,
+  fetchurl,
+  hatchling,
   pyyaml,
   more-itertools,
   pytestCheckHook,
@@ -11,18 +11,19 @@
 
 buildPythonPackage rec {
   pname = "tap.py";
-  version = "3.1";
+  version = "3.2.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.9";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-PAzUUhKtWiWzVEWWTiUX76AAoRihv8NDfa6CiJLq8eE=";
+  # fetchPypi doesn't work, cf. https://github.com/NixOS/nixpkgs/issues/369009
+  src = fetchurl {
+    url = "https://files.pythonhosted.org/packages/37/d0/28b0c6c7fe464f70664f123e9f64f36acaf92767af98c1a82df6e2b49f41/tap_py-3.2.1.tar.gz";
+    hash = "sha256-0DyeavClb62ZTxxp8UBB5naBHXPu7vIL9Ad8Q9Yh1gg=";
   };
 
   build-system = [
-    setuptools
+    hatchling
   ];
 
   optional-dependencies = {
