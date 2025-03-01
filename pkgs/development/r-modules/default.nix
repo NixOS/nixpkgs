@@ -1101,6 +1101,12 @@ let
       ];
     });
 
+    clarabel = old.clarabel.overrideAttrs (attrs: {
+      postPatch = ''
+        patchShebangs configure
+      '';
+    });
+
     lwgeom = old.lwgeom.overrideAttrs (attrs: {
       configureFlags = [
         "--with-proj-lib=${pkgs.lib.getLib pkgs.proj}/lib"
