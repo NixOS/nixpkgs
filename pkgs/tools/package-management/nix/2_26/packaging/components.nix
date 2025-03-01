@@ -175,6 +175,21 @@ let
   nixDefaultsLayer = finalAttrs: prevAttrs: {
     strictDeps = prevAttrs.strictDeps or true;
     enableParallelBuilding = true;
+    pos = builtins.unsafeGetAttrPos "pname" prevAttrs;
+    meta = prevAttrs.meta or { } // {
+      homepage = prevAttrs.meta.homepage or "https://nixos.org/nix";
+      longDescription =
+        prevAttrs.longDescription or ''
+          Nix is a powerful package manager for mainly Linux and other Unix systems that
+          makes package management reliable and reproducible. It provides atomic
+          upgrades and rollbacks, side-by-side installation of multiple versions of
+          a package, multi-user package management and easy setup of build
+          environments.
+        '';
+      license = prevAttrs.meta.license or lib.licenses.lgpl21Plus;
+      maintainers = prevAttrs.meta.maintainers or [ ] ++ lib.teams.nix.members;
+      platforms = prevAttrs.meta.platforms or (lib.platforms.unix ++ lib.platforms.windows);
+    };
   };
 
   /**
@@ -194,6 +209,7 @@ in
 {
   version = baseVersion + versionSuffix;
   inherit versionSuffix;
+  maintainers = lib.teams.nix.members;
 
   inherit filesetToSource;
 
