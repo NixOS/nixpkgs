@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "pymodbus";
-  version = "3.8.3";
+  version = "3.8.6";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = "pymodbus-dev";
     repo = "pymodbus";
     tag = "v${version}";
-    hash = "sha256-0jS18oCVX+WvGvaIlug3Wbf4oJUmspGYlcmJQR0MXhI=";
+    hash = "sha256-AnFPrjY6ukONAeCyHIzhtULm0vNjJugIxtuwACClzOo=";
   };
 
   build-system = [ setuptools ];
