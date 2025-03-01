@@ -7954,6 +7954,8 @@ self: super: with self; {
 
   rtfunicode = callPackage ../development/python-modules/rtfunicode { };
 
+  rtf_tokenize = callPackage ../development/python-modules/rtf_tokenize { };
+
   rtmixer = callPackage ../development/python-modules/rtmixer { };
 
   regress = callPackage ../development/python-modules/regress { };
