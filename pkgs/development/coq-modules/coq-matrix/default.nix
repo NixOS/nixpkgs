@@ -5,9 +5,8 @@
   version ? null,
 }:
 mkCoqDerivation {
-  pname = "matrix";
   owner = "zhengpushi";
-  repo = "CoqMatrix";
+  pname = "CoqMatrix";
   inherit version;
   defaultVersion =
     with lib.versions;
