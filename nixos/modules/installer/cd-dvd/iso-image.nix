@@ -175,7 +175,6 @@ let
     # Search using a "marker file"
     search --set=root --file /EFI/nixos-installer-image
 
-    insmod gfxterm
     insmod png
     set gfxpayload=keep
     set gfxmode=${lib.concatStringsSep "," [
@@ -196,23 +195,17 @@ let
       "auto"
     ]}
 
-    if [ "\$textmode" == "false" ]; then
-      terminal_output gfxterm
-      terminal_input  console
-    else
-      terminal_output console
-      terminal_input  console
-      # Sets colors for console term.
-      set menu_color_normal=cyan/blue
-      set menu_color_highlight=white/blue
-    fi
 
     ${ # When there is a theme configured, use it, otherwise use the background image.
     if config.isoImage.grubTheme != null then ''
       # Sets theme.
       set theme=(\$root)/EFI/BOOT/grub-theme/theme.txt
       # Load theme fonts
-      $(find ${config.isoImage.grubTheme} -iname '*.pf2' -printf "loadfont (\$root)/EFI/BOOT/grub-theme/%P\n")
+      set loadfontdone=false
+      $(find ${config.isoImage.grubTheme} -iname '*.pf2' -printf "if loadfont (\$root)/EFI/BOOT/grub-theme/%P; then set loadfontdone=true; fi\n")
+      if [ "\$loadfontdone" == "false" ]; then
+        loadfont (\$root)/EFI/BOOT/unicode.pf2
+      fi
     '' else ''
       if background_image (\$root)/EFI/BOOT/efi-background.png; then
         # Black background means transparent background when there
@@ -225,6 +218,19 @@ let
         set menu_color_highlight=white/blue
       fi
     ''}
+
+    if [ "\$textmode" == "false" ]; then
+      insmod gfxterm
+      terminal_output gfxterm
+      terminal_input  console
+    else
+      terminal_output console
+      terminal_input  console
+      # Sets colors for console term.
+      set menu_color_normal=cyan/blue
+      set menu_color_highlight=white/blue
+    fi
+
   '';
 
   # The EFI boot image.
