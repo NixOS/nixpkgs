@@ -6,18 +6,19 @@
   pkg-config,
   openssl,
   zlib,
+  writableTmpDirAsHomeHook,
   versionCheckHook,
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "distant";
   version = "0.20.0";
 
   src = fetchFromGitHub {
     owner = "chipsenkbeil";
     repo = "distant";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-DcnleJUAeYg3GSLZljC3gO9ihiFz04dzT/ddMnypr48=";
   };
 
@@ -42,9 +43,9 @@ rustPlatform.buildRustPackage rec {
     OPENSSL_NO_VENDOR = true;
   };
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
+  nativeCheckInputs = [
+    writableTmpDirAsHomeHook
+  ];
 
   checkFlags =
     [
@@ -77,11 +78,11 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Library and tooling that supports remote filesystem and process operations";
     homepage = "https://github.com/chipsenkbeil/distant";
-    changelog = "https://github.com/chipsenkbeil/distant/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/chipsenkbeil/distant/blob/${finalAttrs.version}/CHANGELOG.md";
     # From the README:
     # "This project is licensed under either of Apache License, Version 2.0, MIT license at your option."
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
     mainProgram = "distant";
   };
-}
+})
