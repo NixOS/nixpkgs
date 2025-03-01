@@ -13184,9 +13184,9 @@ with pkgs;
   ;
 
   emacs-macport = emacs29-macport;
-  emacs = emacs29;
-  emacs-gtk = emacs29-gtk3;
-  emacs-nox = emacs29-nox;
+  emacs = emacs30;
+  emacs-gtk = emacs30-gtk3;
+  emacs-nox = emacs30-nox;
 
   emacsPackagesFor = emacs: import ./emacs-packages.nix {
     inherit (lib) makeScope makeOverridable dontRecurseIntoAttrs;
