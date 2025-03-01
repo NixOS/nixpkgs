@@ -39,6 +39,17 @@ mkDerivation {
   postPatch = lib.optionalString (userSettings != null) ''
     install -m644 "${writeText "UserSettings.hs" userSettings}" src/UserSettings.hs
   '';
+  # Force the build system to always prefix executables with the target platform.
+  # Depends on changes to `configure` in common-hadrian.nix for pre 9.12.
+  preConfigure = ''
+    substituteInPlace src/Packages.hs \
+      --replace-fail 'targetPlatform ++ "-" else ""' \
+                     'targetPlatform ++ "-" else targetPlatform ++ "-"'
+  '' + lib.optionalString (lib.versionAtLeast ghcVersion "9.12") ''
+    substituteInPlace src/Rules/Generate.hs \
+      --replace-fail 'tpf <> "-" else ""' \
+                     'tpf <> "-" else tpf <> "-"'
+  '';
   configureFlags = [
     # avoid QuickCheck dep which needs shared libs / TH
     "-f-selftest"
