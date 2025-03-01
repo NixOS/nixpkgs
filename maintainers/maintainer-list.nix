@@ -7772,6 +7772,12 @@
     github = "fkautz";
     githubId = 135706;
   };
+  FKouhai = {
+    name = "Fran Cirka";
+    email = "frandres00@gmail.com";
+    github = "FKouhai";
+    githubId = 24593008;
+  };
   flacks = {
     name = "Jean Lucas";
     email = "jean@4ray.co";
@@ -8013,8 +8019,8 @@
     githubId = 53809656;
   };
   fredeb = {
-    email = "im@fredeb.dev";
-    github = "FredeEB";
+    email = "frederikbraendstrup@gmail.com";
+    github = "FredeHoey";
     githubId = 7551358;
     name = "Frede Emil";
   };
@@ -12614,6 +12620,12 @@
     github = "KoviRobi";
     githubId = 1903418;
     name = "Kovacsics Robert";
+  };
+  kpbaks = {
+    email = "kristoffer.pbs@gmail.com";
+    github = "kpbaks";
+    githubId = 57013304;
+    name = "Kristoffer Plagborg Bak Sørensen";
   };
   kpcyrd = {
     email = "git@rxv.cc";

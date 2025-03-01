@@ -2102,6 +2102,8 @@ self: super: with self; {
 
   carbon = callPackage ../development/python-modules/carbon { };
 
+  cardano-tools = callPackage ../development/python-modules/cardano-tools { };
+
   cardimpose = callPackage ../development/python-modules/cardimpose { };
 
   cart = callPackage ../development/python-modules/cart { };
@@ -6490,6 +6492,8 @@ self: super: with self; {
 
   iocextract = callPackage ../development/python-modules/iocextract { };
 
+  ioctl-opt = callPackage ../development/python-modules/ioctl-opt { };
+
   ionhash = callPackage ../development/python-modules/ionhash { };
 
   ionoscloud = callPackage ../development/python-modules/ionoscloud { };
@@ -9729,6 +9733,8 @@ self: super: with self; {
   ofxtools = callPackage ../development/python-modules/ofxtools { };
 
   oemthermostat = callPackage ../development/python-modules/oemthermostat { };
+
+  ogmios = callPackage ../development/python-modules/ogmios { };
 
   okonomiyaki = callPackage ../development/python-modules/okonomiyaki { };
 
