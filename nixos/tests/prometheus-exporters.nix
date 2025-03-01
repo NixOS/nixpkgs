@@ -364,28 +364,10 @@ let
         apiKeyFile = pkgs.writeText "dummy-api-key" apikey;
       };
       metricProvider = {
-        services.sonarr.enable = true;
-        systemd.services.sonarr.serviceConfig.ExecStartPre =
-          let
-            sonarr_config = pkgs.writeText "config.xml" ''
-              <Config>
-                <LogLevel>info</LogLevel>
-                <EnableSsl>False</EnableSsl>
-                <Port>8989</Port>
-                <SslPort>9898</SslPort>
-                <UrlBase></UrlBase>
-                <BindAddress>*</BindAddress>
-                <ApiKey>${apikey}</ApiKey>
-                <AuthenticationMethod>None</AuthenticationMethod>
-                <UpdateMechanism>BuiltIn</UpdateMechanism>
-                <Branch>main</Branch>
-                <InstanceName>Sonarr</InstanceName>
-              </Config>
-            '';
-          in
-          [
-            ''${pkgs.coreutils}/bin/install -D -m 777 ${sonarr_config} -T /var/lib/sonarr/.config/NzbDrone/config.xml''
-          ];
+        services.sonarr = {
+          enable = true;
+          environmentFiles = [(pkgs.writeText "sonarr-env" "SONARR__AUTH__APIKEY=${apikey}")];
+        };
       };
       exporterTest = ''
         wait_for_unit("sonarr.service")

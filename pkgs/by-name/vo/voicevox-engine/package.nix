@@ -8,14 +8,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "voicevox-engine";
-  version = "0.22.2";
+  version = "0.23.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "VOICEVOX";
     repo = "voicevox_engine";
     tag = version;
-    hash = "sha256-TZycd3xX5d4dNk4ze2JozyO7zDpGAuO+O7xHAx7QXUI=";
+    hash = "sha256-kuWpLnDKRYcfV9FxYLeR6FmQFO2K12KxJx/Y/4MwhbM=";
   };
 
   patches = [
@@ -113,7 +113,7 @@ python3Packages.buildPythonApplication rec {
       owner = "VOICEVOX";
       repo = "voicevox_resource";
       tag = version;
-      hash = "sha256-oeWJESm1v0wicAXXFAyZT8z4QRVv9c+3vsWksmuY5wY=";
+      hash = "sha256-6pxx+ebNzXd3qbrFa4gfMDM2e5XANo3ZPzSAegKoJBE=";
     };
 
     pyopenjtalk = python3Packages.callPackage ./pyopenjtalk.nix { };
