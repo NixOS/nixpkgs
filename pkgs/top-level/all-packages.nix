@@ -163,6 +163,21 @@ with pkgs;
 
   __flattenIncludeHackHook = callPackage ../build-support/setup-hooks/flatten-include-hack { };
 
+  makeSetupHook' = callPackage ../build-support/setup-hooks/makeSetupHookPrime { };
+
+  sourceGuard = callPackage ../build-support/setup-hooks/sourceGuard { };
+
+  arrayUtilities = lib.makeScope newScope (
+    finalArrayUtilities:
+    recurseIntoAttrs {
+      callPackages = lib.callPackagesWith (pkgs // finalArrayUtilities);
+    }
+    // lib.packagesFromDirectoryRecursive {
+      inherit (finalArrayUtilities) callPackage;
+      directory = ../build-support/setup-hooks/arrayUtilities;
+    }
+  );
+
   addBinToPathHook = callPackage (
     { makeSetupHook }:
     makeSetupHook {
