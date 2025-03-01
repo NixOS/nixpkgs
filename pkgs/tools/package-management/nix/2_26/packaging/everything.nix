@@ -216,6 +216,15 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     mainProgram = "nix";
     description = "The Nix package manager";
+    longDescription = nix-cli.meta.longDescription;
+    homepage = nix-cli.meta.homepage;
+    license = nix-cli.meta.license;
+    maintainers = lib.teams.nix.members;
+    platforms = nix-cli.meta.platforms;
+    outputsToInstall = [
+      "out"
+      "man"
+    ];
     pkgConfigModules = [
       "nix-cmd"
       "nix-expr"
