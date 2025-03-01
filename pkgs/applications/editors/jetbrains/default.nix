@@ -403,8 +403,6 @@ rec {
               xargs patchelf \
                 --replace-needed libssl.so.10 libssl.so \
                 --replace-needed libcrypto.so.10 libcrypto.so
-
-              chmod +x $PWD/plugins/intellij-rust/bin/linux/*/intellij-rust-native-helper
             )
           '';
       });
