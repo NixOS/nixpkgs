@@ -12,17 +12,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "amber-lang";
-  version = "0.3.5-alpha";
+  version = "0.4.0-alpha";
 
   src = fetchFromGitHub {
     owner = "amber-lang";
     repo = "amber";
     rev = version;
-    hash = "sha256-wf0JNWNliDGNvlbWoatPqDKmVaBzHeCKOvJWuE9PnpQ=";
+    hash = "sha256-N9G/2G8+vrpr1/K7XLwgW+X2oAyAaz4qvN+EbLOCU1Q=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-OhrSK+bvdQP1bAcEbS2foHxY4BEYoJ9SQaE7Rj9od0Y=";
+  cargoHash = "sha256-e5+L7Qgd6hyqT1Pb9X7bVtRr+xm428Z5J4hhsYNnGtU=";
 
   preConfigure = ''
     substituteInPlace src/compiler.rs \
@@ -50,7 +50,7 @@ rustPlatform.buildRustPackage rec {
   passthru = {
     updateScript = nix-update-script { };
     tests.run = runCommand "amber-lang-eval-test" { nativeBuildInputs = [ amber-lang ]; } ''
-      diff -U3 --color=auto <(amber -e 'echo "Hello, World"') <(echo 'Hello, World')
+      diff -U3 --color=auto <(amber eval 'echo "Hello, World"') <(echo 'Hello, World')
       touch $out
     '';
   };
