@@ -3,7 +3,7 @@
   buildPythonPackage,
   pythonOlder,
   fetchPypi,
-  setuptools,
+  hatchling,
   pyyaml,
   more-itertools,
   pytestCheckHook,
@@ -11,18 +11,19 @@
 
 buildPythonPackage rec {
   pname = "tap.py";
-  version = "3.1";
+  version = "3.2.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-PAzUUhKtWiWzVEWWTiUX76AAoRihv8NDfa6CiJLq8eE=";
+    pname = "tap_py";
+    inherit version;
+    hash = "sha256-0DyeavClb62ZTxxp8UBB5naBHXPu7vIL9Ad8Q9Yh1gg=";
   };
 
   build-system = [
-    setuptools
+    hatchling
   ];
 
   optional-dependencies = {
