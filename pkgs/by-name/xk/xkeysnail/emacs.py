@@ -3,22 +3,21 @@ import re
 from xkeysnail.transform import *
 
 aa = False
-def aa_setvar(v):
-    def _aa_setvar():
+def aaset(v):
+    def _aaset():
         transform._mark_set = False
         global aa; aa = v
-    return _aa_setvar
-def aa_ifvar():
-    def _aa_ifvar():
-        transform._mark_set = False
-        global aa
+    return _aaset
+def aaif():
+    def _aaif():
+        global aa; transform._mark_set = False
         if aa: aa = False; return K("esc")
         return K("enter")
-    return _aa_ifvar
-def aa_flipmark():
-    def _aa_flipmark():
+    return _aaif
+def aaflip():
+    def _aaflip():
         transform._mark_set = not transform._mark_set;
-    return _aa_flipmark
+    return _aaflip
 
 define_keymap(re.compile("Google-chrome|Chromium-browser|firefox"), {
     K("C-b"): with_mark(K("left")),
@@ -37,17 +36,17 @@ define_keymap(re.compile("Google-chrome|Chromium-browser|firefox"), {
     K("C-d"): [K("delete"), set_mark(False)],
     K("M-d"): [K("C-delete"), set_mark(False)],
     K("M-backspace"): [K("C-backspace"), set_mark(False)],
-
     K("C-slash"): [K("C-z"), set_mark(False)],
-    K("C-space"): aa_flipmark(),
+
+    K("C-space"): aaflip(),
+    # K("C-space"): set_mark(True),
     K("C-M-space"): with_or_set_mark(K("C-right")),
 
+    K("enter"): aaif(),
+    K("C-s"): [K("F3"), aaset(True)],
+    K("C-r"): [K("Shift-F3"), aaset(True)],
+    K("C-g"): [K("esc"), aaset(False)]
     # K("C-s"): K("F3"),
     # K("C-r"): K("Shift-F3"),
     # K("C-g"): [K("esc"), set_mark(False)]
-
-    K("C-s"): [K("F3"), aa_setvar(True)],
-    K("C-r"): [K("Shift-F3"), aa_setvar(True)],
-    K("C-g"): [K("esc"), aa_setvar(False)],
-    K("enter"): aa_ifvar()
 })
