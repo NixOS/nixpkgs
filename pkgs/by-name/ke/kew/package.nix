@@ -11,6 +11,8 @@
 , faad2
 , libogg
 , pkg-config
+, versionCheckHook
+, gitUpdater
 }:
 
 stdenv.mkDerivation(finalAttrs: {
@@ -31,6 +33,15 @@ stdenv.mkDerivation(finalAttrs: {
     "MAN_DIR=${placeholder "out"}/share/man"
     "PREFIX=${placeholder "out"}"
   ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  versionCheckProgramArg = [ "--version" ];
+  doInstallCheck = true;
+
+  passthru = {
+    updateScript = gitUpdater { };
+  };
 
   meta = {
     description = "Command-line music player for Linux";
