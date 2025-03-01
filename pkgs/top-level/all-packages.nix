@@ -13164,10 +13164,6 @@ with pkgs;
   };
 
   inherit (recurseIntoAttrs (callPackage ../applications/editors/emacs { }))
-    emacs28
-    emacs28-gtk3
-    emacs28-nox
-
     emacs29
     emacs29-gtk3
     emacs29-nox
@@ -13178,7 +13174,6 @@ with pkgs;
     emacs30-nox
     emacs30-pgtk
 
-    emacs28-macport
     emacs29-macport
   ;
 
