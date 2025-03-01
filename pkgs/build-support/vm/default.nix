@@ -247,11 +247,17 @@ rec {
     eval "$preVM"
 
     if [ "$enableParallelBuilding" = 1 ]; then
+      QEMU_NR_VCPUS=0
       if [ ''${NIX_BUILD_CORES:-0} = 0 ]; then
-        QEMU_OPTS+=" -smp cpus=$(nproc)"
+        QEMU_NR_VCPUS="$(nproc)"
       else
-        QEMU_OPTS+=" -smp cpus=$NIX_BUILD_CORES"
+        QEMU_NR_VCPUS="$NIX_BUILD_CORES"
       fi
+      # qemu only supports 255 vCPUs (see error from `qemu-system-x86_64 -smp 256`)
+      if [ "$QEMU_NR_VCPUS" -gt 255 ]; then
+        QEMU_NR_VCPUS=255
+      fi
+      QEMU_OPTS+=" -smp cpus=$QEMU_NR_VCPUS"
     fi
 
     # Write the command to start the VM to a file so that the user can
