@@ -205,6 +205,16 @@ with pkgs;
 
   sourceGuard = pkgs.sourceGuard.passthru.tests;
 
+  # Accumulate all passthru.tests from arrayUtilities into a single attribute set.
+  arrayUtilities = recurseIntoAttrs (
+    lib.concatMapAttrs (
+      name: value:
+      lib.optionalAttrs (value ? passthru.tests) {
+        ${name} = value.passthru.tests;
+      }
+    ) arrayUtilities
+  );
+
   srcOnly = callPackage ../build-support/src-only/tests.nix { };
 
   systemd = callPackage ./systemd { };
