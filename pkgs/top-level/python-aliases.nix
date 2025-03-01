@@ -389,6 +389,7 @@ mapAliases ({
   mrkd = throw "mrkd has been promoted to a top-level attribute name: `pkgs.mrkd`"; # added 2023-08-01
   multi_key_dict = multi-key-dict; # added 2023-11-05
   mutmut = throw "mutmut has been promoted to a top-level attribute name: `pkgs.mutmut`"; # added 2022-10-02
+  mwcli = throw "mwcli has been removed because it is unmaintained"; # added 2025-03-01
   n3fit = throw "n3fit has been removed since it relies on a dependency that was removed"; # added 2024-08-24
   nbmerge = throw "nbmerge has moved to pkgs.nbmerge"; # added 2024-07-05
   mypy-boto3-alexaforbusiness = throw "mypy-boto3-alexaforbusiness was removed because it is unmaintained"; # added 2024-09-04
