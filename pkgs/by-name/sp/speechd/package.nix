@@ -38,11 +38,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "speech-dispatcher";
-  version = "0.11.5";
+  version = "0.12.0";
 
   src = fetchurl {
-    url = "https://github.com/brailcom/speechd/releases/download/${version}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-HOR1n/q7rxrrQzpewHOb4Gdum9+66URKezvhsq8+wSs=";
+    url = "https://github.com/brailcom/speechd/releases/download/${version}/speech-dispatcher-${version}.tar.gz";
+    hash = "sha256-4d0L+iS4M4VF4WVFEzCt9RxMDcqGKxtn52+6UULbu3Q=";
   };
 
   patches =
@@ -122,7 +122,7 @@ stdenv.mkDerivation rec {
     ];
 
   postPatch = ''
-    substituteInPlace src/modules/pico.c --replace "/usr/share/pico/lang" "${svox}/share/pico/lang"
+    substituteInPlace src/modules/pico.c --replace-fail "/usr/share/pico/lang" "${svox}/share/pico/lang"
   '';
 
   postInstall =
@@ -137,16 +137,16 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description =
       "Common interface to speech synthesis" + lib.optionalString libsOnly " - client libraries only";
     homepage = "https://devel.freebsoft.org/speechd";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
       berce
       jtojnar
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "speech-dispatcher";
   };
 }
