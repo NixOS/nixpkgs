@@ -3,7 +3,6 @@
   buildPythonPackage,
   openvino-native,
   numpy,
-  python,
 }:
 
 buildPythonPackage {
@@ -18,8 +17,8 @@ buildPythonPackage {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/${python.sitePackages}
-    cp -Rv * $out/${python.sitePackages}/
+    mkdir -p $out
+    cp -Rv * $out/
 
     runHook postInstall
   '';
