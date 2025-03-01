@@ -13,12 +13,12 @@
 
 stdenv.mkDerivation rec {
   pname = "dcmtk";
-  version = "3.6.8";
+  version = "3.6.9";
   src = fetchFromGitHub {
     owner = "DCMTK";
     repo = pname;
     rev = "DCMTK-${version}";
-    hash = "sha256-PQR9+xSlfBvogv0p6AL/yapelJpsYteA4T4lPkOIfLc=";
+    hash = "sha256-mdI/YqM38WhnCbsylIlmqLLWC5/QR+a8Wn9CNcN7KXU=";
   };
 
   nativeBuildInputs = [ cmake ];
