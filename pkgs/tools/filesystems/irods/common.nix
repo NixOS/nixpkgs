@@ -26,7 +26,7 @@
   fmt,
   nlohmann_json,
   curl,
-  spdlog_rods,
+  spdlog,
   bison,
   flex,
 }:
@@ -63,7 +63,7 @@
     nanodbc
     fmt
     nlohmann_json
-    spdlog_rods
+    spdlog
     curl
   ];
 
@@ -79,7 +79,7 @@
     "-DIRODS_EXTERNALS_FULLPATH_NANODBC=${nanodbc}"
     "-DIRODS_EXTERNALS_FULLPATH_FMT=${fmt}"
     "-DIRODS_EXTERNALS_FULLPATH_JSON=${nlohmann_json}"
-    "-DIRODS_EXTERNALS_FULLPATH_SPDLOG=${spdlog_rods}"
+    "-DIRODS_EXTERNALS_FULLPATH_SPDLOG=${spdlog}"
     "-DIRODS_LINUX_DISTRIBUTION_NAME=nix"
     "-DIRODS_LINUX_DISTRIBUTION_VERSION_MAJOR=1.0"
     "-DCPACK_GENERATOR=TGZ"
