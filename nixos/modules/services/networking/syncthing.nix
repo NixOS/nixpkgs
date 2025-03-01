@@ -29,6 +29,8 @@ let
     deviceID = device.id;
   }) cfg.settings.devices;
 
+  anyAutoAccept = builtins.any (dev: dev.autoAcceptFolders) devices;
+
   folders = mapAttrsToList (_: folder: folder //
     throwIf (folder?rescanInterval || folder?watch || folder?watchDelay) ''
       The options services.syncthing.settings.folders.<name>.{rescanInterval,watch,watchDelay}
@@ -180,7 +182,12 @@ in {
 
       overrideFolders = mkOption {
         type = types.bool;
-        default = true;
+        default = !anyAutoAccept;
+        defaultText = literalMD ''
+          `true` unless any device has the
+          [autoAcceptFolders](#opt-services.syncthing.settings.devices._name_.autoAcceptFolders)
+          option set to `true`.
+        '';
         description = ''
           Whether to delete the folders which are not configured via the
           [folders](#opt-services.syncthing.settings.folders) option.
@@ -620,6 +627,15 @@ in {
   ###### implementation
 
   config = mkIf cfg.enable {
+    assertions = [
+      {
+        assertion = !(cfg.overrideFolders && anyAutoAccept);
+        message = ''
+          services.syncthing.overrideFolders will delete auto-accepted folders
+          from the configuration, creating path conflicts.
+        '';
+      }
+    ];
 
     networking.firewall = mkIf cfg.openDefaultPorts {
       allowedTCPPorts = [ 22000 ];

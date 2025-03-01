@@ -414,8 +414,8 @@ rec {
       "sha256-XUl7lWJvL6safxXCh1bLWz6SJbSqoY0gzLkrhm2rgJc=";
 
   mypy-boto3-dms =
-    buildMypyBoto3Package "dms" "1.37.0"
-      "sha256-h+Hh/vPvbS8L4dGnUvH0THMY3mWTd419jXrOclSF4/Y=";
+    buildMypyBoto3Package "dms" "1.37.4"
+      "sha256-GQxq0/FfkLrojbsPpkrmgHmg0B4v0Jj5sluZoeyQqGg=";
 
   mypy-boto3-docdb =
     buildMypyBoto3Package "docdb" "1.37.0"
@@ -470,8 +470,8 @@ rec {
       "sha256-uKccWDS0zhFrs6CQ9ve6by4rYL43T6iFZ3rjNy7SiyI=";
 
   mypy-boto3-eks =
-    buildMypyBoto3Package "eks" "1.37.0"
-      "sha256-hIHtzejTrusWfkNbR7Jyrrcpc5n/TpVwEu98zIgWitM=";
+    buildMypyBoto3Package "eks" "1.37.4"
+      "sha256-KuV/D7dQ87HL+smlqSrpGgi3/uw0zbP/SZ2PHgH1h/s=";
 
   mypy-boto3-elastic-inference =
     buildMypyBoto3Package "elastic-inference" "1.36.0"
@@ -862,8 +862,8 @@ rec {
       "sha256-KFa0yNwhYlFGz4ADpsxt3OCZfYDBv6Hfw9Ti09f7fIc=";
 
   mypy-boto3-mediaconvert =
-    buildMypyBoto3Package "mediaconvert" "1.37.0"
-      "sha256-oWRcta8DyDqOIRuHbmkerZ4ux0j8P6SsoiA/KOfsU0o=";
+    buildMypyBoto3Package "mediaconvert" "1.37.4"
+      "sha256-xBMBhCrnTV7sILg2/dXUy2PeNeCuNHkb7plAumD5Pq8=";
 
   mypy-boto3-medialive =
     buildMypyBoto3Package "medialive" "1.37.0"
@@ -1054,8 +1054,8 @@ rec {
       "sha256-xPW1Ogeucuynd6rOGji/ihdWWrEzTXQdqcjiJeFX2bs=";
 
   mypy-boto3-pricing =
-    buildMypyBoto3Package "pricing" "1.37.0"
-      "sha256-Hg/vHZN0t8YZvoQqaQeFXBhWgQ1ynwUmjzgrFJdOwIU=";
+    buildMypyBoto3Package "pricing" "1.37.4"
+      "sha256-LGVcSjeM8AS69PVrUAqh+KaB94Fi1/KGbf2+kBPUu2s=";
 
   mypy-boto3-privatenetworks =
     buildMypyBoto3Package "privatenetworks" "1.37.0"
@@ -1294,8 +1294,8 @@ rec {
       "sha256-7VbfcklEJdTn0OBI8jIcwXUU+ju+38QQu7i3CcS/9WQ=";
 
   mypy-boto3-ssm =
-    buildMypyBoto3Package "ssm" "1.37.0"
-      "sha256-0lDEHof5mDuIXwsQVEmlS3TeGXZK77FuYGbI4GxbV64=";
+    buildMypyBoto3Package "ssm" "1.37.4"
+      "sha256-fnhpeIqk24UXEniZChFadkJbLebbKAdKHxZrlG7MpSI=";
 
   mypy-boto3-ssm-contacts =
     buildMypyBoto3Package "ssm-contacts" "1.37.0"
