@@ -335,6 +335,24 @@ in
           include ${cfg.lxcPackage}/etc/apparmor.d/lxc-containers
         '';
       };
+      includes."abstractions/base" = ''
+        # Allow incusd to launch tar to extract image template
+        # These are dependencies for tar, xz, and unsquashfs commands
+        # https://discuss.linuxcontainers.org/t/creating-new-containers-vms-blocked-by-apparmor-on-nixos/21908/6
+        mr ${lib.getLib pkgs.acl}/lib/libacl.so*,
+        mr ${lib.getLib pkgs.attr}/lib/libattr.so*,
+        mr ${lib.getLib pkgs.lz4}/lib/liblz4.so*,
+        mr ${lib.getLib pkgs.lzo}/lib/liblzo2.so*,
+        mr ${lib.getLib pkgs.xz}/lib/liblzma.so*,
+        mr ${lib.getLib pkgs.zlib}/lib/libz.so*,
+        mr ${lib.getLib pkgs.zstd}/lib/libzstd.so*,
+        mr ${pkgs.stdenv.cc.libc}/lib/libc.so*,
+        mr ${pkgs.stdenv.cc.libc}/lib/libm.so*,
+        mr ${pkgs.stdenv.cc.libc}/lib/libpthread.so*,
+        r ${pkgs.stdenv.cc.libc}/lib/gconv/gconv-modules,
+        r ${pkgs.stdenv.cc.libc}/lib/gconv/gconv-modules.d/,
+        r ${pkgs.stdenv.cc.libc}/lib/gconv/gconv-modules.d/gconv-modules-extra.conf,
+      '';
     };
 
     systemd.services.incus = {
