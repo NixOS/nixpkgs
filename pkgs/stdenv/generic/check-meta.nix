@@ -96,8 +96,7 @@ let
 
   hasUnfreeLicense = attrs: hasLicense attrs && isUnfree attrs.meta.license;
 
-  hasNoMaintainers = attrs:
-    attrs ? meta.maintainers && (length attrs.meta.maintainers) == 0;
+  hasNoMaintainers = attrs: (attrs.meta.maintainers or [ ]) == [ ];
 
   isMarkedBroken = attrs: attrs.meta.broken or false;
 
