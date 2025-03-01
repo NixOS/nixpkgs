@@ -1,27 +1,31 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, ffmpeg
 , fftwFloat
 , chafa
-, freeimage
 , glib
+, libopus
+, opusfile
+, libvorbis
+, taglib
+, faad2
+, libogg
 , pkg-config
 }:
 
 stdenv.mkDerivation rec {
   pname = "kew";
-  version = "1.5.2";
+  version = "3.0.3";
 
   src = fetchFromGitHub {
     owner = "ravachol";
     repo = "kew";
-    rev = "v${version}";
-    hash = "sha256-Om7v8eTlYxXQYf1MG+L0I5ICQ2LS7onouhPGosuK8NM=";
+    tag = "v${version}";
+    hash = "sha256-DzJ+7PanA15A9nIbFPWZ/tdxq4aDyParJORcuqHV7jc=";
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ ffmpeg freeimage fftwFloat chafa glib ];
+  buildInputs = [ fftwFloat.dev chafa glib.dev libopus opusfile libvorbis taglib faad2 libogg ];
 
   installFlags = [
     "MAN_DIR=${placeholder "out"}/share/man"
@@ -31,7 +35,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Command-line music player for Linux";
     homepage = "https://github.com/ravachol/kew";
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ demine ];
     mainProgram = "kew";
