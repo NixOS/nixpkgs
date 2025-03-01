@@ -873,8 +873,13 @@ rec {
       description = "function that evaluates to a(n) ${optionDescriptionPhrase (class: class == "noun" || class == "composite") elemType}";
       descriptionClass = "composite";
       check = isFunction;
-      merge = loc: defs:
-        fnArgs: (mergeDefinitions (loc ++ [ "<function body>" ]) elemType (map (fn: { inherit (fn) file; value = fn.value fnArgs; }) defs)).mergedValue;
+      merge = loc: defs: {
+        # An argument attribute has a default when it has a default in all definitions
+        __functionArgs = lib.zipAttrsWith (_: lib.all (x: x)) (
+          lib.map (fn: lib.functionArgs fn.value) defs
+        );
+        __functor = _: callerArgs: (mergeDefinitions (loc ++ [ "<function body>" ]) elemType (map (fn: { inherit (fn) file; value = fn.value callerArgs; }) defs)).mergedValue;
+      };
       getSubOptions = prefix: elemType.getSubOptions (prefix ++ [ "<function body>" ]);
       getSubModules = elemType.getSubModules;
       substSubModules = m: functionTo (elemType.substSubModules m);
