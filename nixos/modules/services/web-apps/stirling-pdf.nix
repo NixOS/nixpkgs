@@ -14,6 +14,18 @@ in
 
     package = lib.mkPackageOption pkgs "stirling-pdf" { };
 
+    user = lib.mkOption {
+      default = "stirling-pdf";
+      description = "User stirling-pdf runs as.";
+      type = lib.types.str;
+    };
+
+    group = lib.mkOption {
+      default = "stirling-pdf";
+      description = "Group stirling-pdf runs as.";
+      type = lib.types.str;
+    };
+
     environment = lib.mkOption {
       type = lib.types.attrsOf (
         lib.types.oneOf [
@@ -49,19 +61,22 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-
     users = {
-      users.stirling-pdf = {
-        isSystemUser = true;
-        home = cfg.dataDir;
-        description = "User for running the stirling-pdf service";
-        group = "stirling-pdf";
+      users = lib.mkIf (cfg.user == "stirling-pdf") {
+        stirling-pdf = {
+          isSystemUser = true;
+          home = cfg.dataDir;
+          description = "User for running the stirling-pdf service";
+          group = cfg.group;
+        };
       };
-      groups.stirling-pdf = { };
+      groups = lib.mkIf (cfg.group == "stirling-pdf") {
+        stirling-pdf = { };
+      };
     };
 
     systemd.tmpfiles.rules = [
-      "d '${cfg.dataDir}' - stirling-pdf stirling-pdf - -"
+      "d '${cfg.dataDir}' - ${cfg.user} ${cfg.group} - -"
     ];
 
     systemd.services.stirling-pdf = {
@@ -108,7 +123,7 @@ in
         RuntimeDirectory = "stirling-pdf";
         StateDirectory = "stirling-pdf";
         SuccessExitStatus = 143;
-        User = "stirling-pdf";
+        User = cfg.user;
         WorkingDirectory = cfg.dataDir;
 
         # Hardening
