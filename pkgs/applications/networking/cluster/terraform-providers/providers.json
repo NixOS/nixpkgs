@@ -831,13 +831,13 @@
     "vendorHash": "sha256-1nm2Y4T9/mCWMXMjXEzBz3w08AYHjQJeb9mYPQeWPs0="
   },
   "mongodbatlas": {
-    "hash": "sha256-UO+4o6uJMkK2QptCbDD5U2ncVm0/B46q4gh4+TrsFU8=",
+    "hash": "sha256-v3WzVKqph1VoXfJPGo8jVgRrP1qD2+M5PsZPBdAdHgA=",
     "homepage": "https://registry.terraform.io/providers/mongodb/mongodbatlas",
     "owner": "mongodb",
     "repo": "terraform-provider-mongodbatlas",
-    "rev": "v1.26.1",
+    "rev": "v1.28.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-pe4Bki7jFbs+Bg4xIpQemousjm4bH7kcItv1lAJ8m74="
+    "vendorHash": "sha256-8odneg1s1HW42leGRTRpkiFDBhwINkh/t0+TWz5CZmI="
   },
   "namecheap": {
     "hash": "sha256-fHH9sHI1mqQ9q9nX9DHJ0qfEfmDB4/2uzyVvUuIAF18=",
@@ -876,11 +876,11 @@
     "vendorHash": "sha256-YmZvHzrEZVvXI8CIcjX40s+MHTThPeXNQ05cnqkNbbE="
   },
   "ns1": {
-    "hash": "sha256-YlaLuSFzymTdtmHg6UNfPgt1+mz8G+P2rqvCcv38uqY=",
+    "hash": "sha256-AtBMsFlqWaAAMb/3z0uXTsOn5lbiB9pOzi8ulKJpntw=",
     "homepage": "https://registry.terraform.io/providers/ns1-terraform/ns1",
     "owner": "ns1-terraform",
     "repo": "terraform-provider-ns1",
-    "rev": "v2.5.1",
+    "rev": "v2.5.2",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-jZAwCXozHYReks6ZGjqkvIitWeg19AVGm3R9r20XsMM="
   },
