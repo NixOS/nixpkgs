@@ -23,6 +23,8 @@
   asciidoctor,
   makeWrapper,
   gitUpdater,
+  enableIoUring ? false,
+  emilua, # this package
 }:
 
 let
@@ -89,7 +91,8 @@ stdenv.mkDerivation (self: {
   dontUseCmakeConfigure = true;
 
   mesonFlags = [
-    (lib.mesonBool "enable_io_uring" false)
+    (lib.mesonBool "enable_io_uring" enableIoUring)
+    (lib.mesonBool "enable_file_io" enableIoUring)
     (lib.mesonBool "enable_tests" true)
     (lib.mesonBool "enable_manpages" true)
     (lib.mesonOption "version_suffix" "-nixpkgs1")
@@ -99,7 +102,8 @@ stdenv.mkDerivation (self: {
     patchShebangs src/emilua_gperf.awk --interpreter '${lib.getExe gawk} -f'
   '';
 
-  doCheck = true;
+  # io_uring is not allowed in Nix sandbox, that breaks the tests
+  doCheck = !enableIoUring;
 
   mesonCheckFlags = [
     # Skipped test: libpsx
@@ -119,6 +123,7 @@ stdenv.mkDerivation (self: {
     updateScript = gitUpdater { rev-prefix = "v"; };
     inherit boost;
     sitePackages = "lib/emilua-${(lib.concatStringsSep "." (lib.take 2 (lib.splitVersion self.version)))}";
+    tests.with-io-uring = emilua.override { enableIoUring = true; };
   };
 
   meta = {
