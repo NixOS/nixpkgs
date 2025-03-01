@@ -1,5 +1,12 @@
-{ lib, stdenv, python312, fetchFromGitHub, gitMinimal, portaudio
-, playwright-driver, }:
+{
+  lib,
+  stdenv,
+  python312,
+  fetchFromGitHub,
+  gitMinimal,
+  portaudio,
+  playwright-driver,
+}:
 
 let
   python3 = python312.override {
@@ -119,8 +126,7 @@ let
 
     buildInputs = [ portaudio ];
 
-    nativeCheckInputs = (with python3.pkgs; [ pytestCheckHook ])
-      ++ [ gitMinimal ];
+    nativeCheckInputs = (with python3.pkgs; [ pytestCheckHook ]) ++ [ gitMinimal ];
 
     disabledTestPaths = [
       # Tests require network access
@@ -129,30 +135,34 @@ let
       "tests/help/test_help.py"
     ];
 
-    disabledTests = [
-      # Tests require network
-      "test_urls"
-      "test_get_commit_message_with_custom_prompt"
-      # FileNotFoundError
-      "test_get_commit_message"
-      # Expected 'launch_gui' to have been called once
-      "test_browser_flag_imports_streamlit"
-      # AttributeError
-      "test_simple_send_with_retries"
-      # Expected 'check_version' to have been called once
-      "test_main_exit_calls_version_check"
-      # AssertionError: assert 2 == 1
-      "test_simple_send_non_retryable_error"
-    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # Tests fails on darwin
-      "test_dark_mode_sets_code_theme"
-      "test_default_env_file_sets_automatic_variable"
-      # FileNotFoundError: [Errno 2] No such file or directory: 'vim'
-      "test_pipe_editor"
-    ];
+    disabledTests =
+      [
+        # Tests require network
+        "test_urls"
+        "test_get_commit_message_with_custom_prompt"
+        # FileNotFoundError
+        "test_get_commit_message"
+        # Expected 'launch_gui' to have been called once
+        "test_browser_flag_imports_streamlit"
+        # AttributeError
+        "test_simple_send_with_retries"
+        # Expected 'check_version' to have been called once
+        "test_main_exit_calls_version_check"
+        # AssertionError: assert 2 == 1
+        "test_simple_send_non_retryable_error"
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        # Tests fails on darwin
+        "test_dark_mode_sets_code_theme"
+        "test_default_env_file_sets_automatic_variable"
+        # FileNotFoundError: [Errno 2] No such file or directory: 'vim'
+        "test_pipe_editor"
+      ];
 
-    makeWrapperArgs =
-      [ "--set AIDER_CHECK_UPDATE false" "--set AIDER_ANALYTICS false" ];
+    makeWrapperArgs = [
+      "--set AIDER_CHECK_UPDATE false"
+      "--set AIDER_ANALYTICS false"
+    ];
 
     preCheck = ''
       export HOME=$(mktemp -d)
@@ -160,31 +170,41 @@ let
     '';
 
     optional-dependencies = with python3.pkgs; {
-      playwright = [ greenlet playwright pyee typing-extensions ];
+      playwright = [
+        greenlet
+        playwright
+        pyee
+        typing-extensions
+      ];
     };
 
     passthru = {
-      withPlaywright = aider-chat.overridePythonAttrs
-        ({ dependencies, makeWrapperArgs, propagatedBuildInputs ? [ ], ... }: {
-          dependencies = dependencies
-            ++ aider-chat.optional-dependencies.playwright;
-          propagatedBuildInputs = propagatedBuildInputs
-            ++ [ playwright-driver.browsers ];
+      withPlaywright = aider-chat.overridePythonAttrs (
+        {
+          dependencies,
+          makeWrapperArgs,
+          propagatedBuildInputs ? [ ],
+          ...
+        }:
+        {
+          dependencies = dependencies ++ aider-chat.optional-dependencies.playwright;
+          propagatedBuildInputs = propagatedBuildInputs ++ [ playwright-driver.browsers ];
           makeWrapperArgs = makeWrapperArgs ++ [
             "--set PLAYWRIGHT_BROWSERS_PATH ${playwright-driver.browsers}"
             "--set PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS=true"
           ];
-        });
+        }
+      );
     };
 
     meta = {
       description = "AI pair programming in your terminal";
       homepage = "https://github.com/paul-gauthier/aider";
-      changelog =
-        "https://github.com/paul-gauthier/aider/blob/v${version}/HISTORY.md";
+      changelog = "https://github.com/paul-gauthier/aider/blob/v${version}/HISTORY.md";
       license = lib.licenses.asl20;
       maintainers = with lib.maintainers; [ happysalada ];
       mainProgram = "aider";
     };
   };
-in aider-chat
+in
+aider-chat
