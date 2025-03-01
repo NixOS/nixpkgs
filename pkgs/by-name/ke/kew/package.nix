@@ -13,14 +13,14 @@
 , pkg-config
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation(finalAttrs: {
   pname = "kew";
   version = "3.0.3";
 
   src = fetchFromGitHub {
     owner = "ravachol";
     repo = "kew";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-DzJ+7PanA15A9nIbFPWZ/tdxq4aDyParJORcuqHV7jc=";
   };
 
@@ -32,12 +32,12 @@ stdenv.mkDerivation rec {
     "PREFIX=${placeholder "out"}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Command-line music player for Linux";
     homepage = "https://github.com/ravachol/kew";
-    platforms = platforms.unix;
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ demine matteopacini ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ demine matteopacini ];
     mainProgram = "kew";
   };
-}
+})
