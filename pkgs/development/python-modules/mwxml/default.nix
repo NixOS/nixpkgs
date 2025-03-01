@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchPypi,
   jsonschema,
@@ -30,6 +31,11 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "mwxml" ];
+
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    # AttributeError: Can't get local object 'map.<locals>.process_path'
+    "test_complex_error_handler"
+  ];
 
   meta = {
     description = "Set of utilities for processing MediaWiki XML dump data";
