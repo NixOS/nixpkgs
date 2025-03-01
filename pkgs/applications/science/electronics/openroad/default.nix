@@ -9,7 +9,7 @@
   git,
   python3,
   swig,
-  boost,
+  boost186, # 1.87.0 broken https://github.com/boostorg/asio/issues/442
   cbc, # for clp
   cimg,
   clp, # for or-tools
@@ -44,19 +44,15 @@ let
 in
 mkDerivation rec {
   pname = "openroad";
-  version = "2.0-unstable-2024-12-31";
+  version = "2.0-unstable-2025-03-01";
 
   src = fetchFromGitHub {
     owner = "The-OpenROAD-Project";
     repo = "OpenROAD";
-    rev = "21cf29eda317e0c7777fbfaa3f384ec9fab1a0f9";
+    rev = "e794373d44ac5421f0633d8dda7e5c59e8fe79bf";
     fetchSubmodules = true;
-    hash = "sha256-cRETSW8cG/Q0hgxaFJjtnBqsIU0r6/kCRy1+5gJfC9o=";
+    hash = "sha256-a/X4FHkbiqHeblse2ZkLT56gYP+LCrAIZVCdsWF59jM=";
   };
-
-  patches = [
-    ./swig43-compat.patch # https://github.com/The-OpenROAD-Project/OpenROAD/issues/6451
-  ];
 
   nativeBuildInputs = [
     bison
@@ -70,7 +66,7 @@ mkDerivation rec {
   ];
 
   buildInputs = [
-    boost
+    boost186
     cbc
     cimg
     clp
@@ -99,12 +95,15 @@ mkDerivation rec {
 
   postPatch = ''
     patchShebangs --build etc/find_messages.py
+    # Disable two tests that are failing curently.
+    sed 's/^.*partition_gcd/# \0/g' -i src/par/test/CMakeLists.txt
   '';
 
   cmakeFlags = [
     "-DENABLE_TESTS=ON"
     "-DUSE_SYSTEM_BOOST=ON"
     "-DUSE_SYSTEM_ABC=OFF"
+    "-DABC_SKIP_TESTS=ON" # it attempts to download gtest
     "-DUSE_SYSTEM_OPENSTA=OFF"
     "-DOPENROAD_VERSION=${version}_${src.rev}"
     "-DCMAKE_RULE_MESSAGES=OFF"
@@ -119,8 +118,6 @@ mkDerivation rec {
   # to see if there are any breaking changes in unstable that should be vendored as well.
   doCheck = true;
   checkPhase = ''
-    # Disable two tests that are failing curently.
-    sed 's/^.*partition_gcd/# \0/g' -i src/par/test/CTestTestfile.cmake
     make test
     ../test/regression
   '';
