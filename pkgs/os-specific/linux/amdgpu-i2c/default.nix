@@ -5,22 +5,23 @@
   kernel,
 }:
 
-stdenv.mkDerivation rec {
+let
+  KDIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
+in
+stdenv.mkDerivation {
   pname = "amdgpu-i2c";
-  version = "0.0.1";
+  version = "0-unstable-2024-12-16";
 
   src = fetchFromGitHub {
     owner = "twifty";
-    repo = pname;
-    rev = "master";
+    repo = "amd-gpu-i2c";
+    rev = "06ca41fd12fb90f970d3ebd4785cc26cc0a3f3b0";
     sha256 = "sha256-GVyrwnwNSBW4OCNDqQMU6e31C4bG14arC0MPkRWfiJQ=";
   };
 
   hardeningDisable = [ "pic" ];
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
-
-  KDIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
 
   buildPhase = "make -C ${KDIR} M=/build/source modules";
   installPhase = ''
