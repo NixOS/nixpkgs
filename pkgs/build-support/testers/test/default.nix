@@ -39,6 +39,8 @@ lib.recurseIntoAttrs {
 
   shellcheck = pkgs.callPackage ../shellcheck/tests.nix { };
 
+  shfmt = pkgs.callPackages ../shfmt/tests.nix { };
+
   runCommand = lib.recurseIntoAttrs {
     bork = pkgs.python3Packages.bork.tests.pytest-network;
 
