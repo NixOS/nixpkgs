@@ -34,8 +34,18 @@ assert lib.assertOneOf "backend" backend [
 let
   githash = "cd0ed6c0712088ddb901be68189ba7fa1439a9e7";
   fakegit = writeShellScriptBin "git" "echo ${githash}";
+  stdenv' =
+    if
+      builtins.elem backend [
+        "cuda"
+        "tensorrt"
+      ]
+    then
+      cudaPackages.backendStdenv
+    else
+      stdenv;
 in
-stdenv.mkDerivation rec {
+stdenv'.mkDerivation rec {
   pname = "katago";
   version = "1.15.3";
 
@@ -58,10 +68,12 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optionals (backend == "eigen") [ eigen ]
     ++ lib.optionals (backend == "cuda") [
+      cudaPackages.cuda_cudart
       cudaPackages.cudnn
       cudaPackages.cudatoolkit
     ]
     ++ lib.optionals (backend == "tensorrt") [
+      cudaPackages.cuda_cudart
       cudaPackages.cudatoolkit
       cudaPackages.tensorrt
     ]
