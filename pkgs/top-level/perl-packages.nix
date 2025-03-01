@@ -19310,10 +19310,10 @@ with self; {
       ../development/perl-modules/net-snmp-add-sha-algorithms.patch
     ];
     preCheck =
-      (lib.optionalString stdenv.hostPlatform.isLinux ''
+      lib.optionalString stdenv.hostPlatform.isLinux ''
         export NIX_REDIRECTS=/etc/protocols=${pkgs.iana-etc}/etc/protocols
-        export LD_PRELOAD=${pkgs.libredirect}/lib/libredirect.so
-      '');
+      '';
+    nativeCheckInputs = lib.optionals stdenv.hostPlatform.isLinux [ pkgs.libredirect.hook ];
     propagatedBuildInputs = [
       CryptDES
       CryptRijndael
@@ -22473,6 +22473,10 @@ with self; {
     patches = [
       # https://github.com/PerlGameDev/SDL/pull/304
       ../development/perl-modules/sdl-modern-perl.patch
+      (fetchpatch {
+        url = "https://aur.archlinux.org/cgit/aur.git/plain/surface-xs-declare-calc-offset-earlier.diff?h=perl-sdl&id=d4b6da86d33046cde0e84fa2cd6eaccff1667cab";
+        hash = "sha256-dQ2O4dO18diSAilSZrZj6II+mBuKKI3cx9fR1SJqUvo=";
+      })
     ];
     preCheck = "rm t/core_audiospec.t";
     buildInputs = [ pkgs.SDL pkgs.SDL_gfx pkgs.SDL_mixer pkgs.SDL_image pkgs.SDL_ttf pkgs.SDL_Pango pkgs.SDL_net AlienSDL CaptureTiny TestDeep TestDifferences TestException TestMost TestWarn ];
