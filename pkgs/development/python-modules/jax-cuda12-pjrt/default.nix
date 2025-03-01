@@ -18,10 +18,16 @@ let
   cudaLibPath = lib.makeLibraryPath (
     with cudaPackages;
     [
+      (lib.getLib libcublas) # libcublas.so
+      (lib.getLib cuda_cupti) # libcupti.so
       (lib.getLib cuda_cudart) # libcudart.so
       (lib.getLib cudnn) # libcudnn.so
-      (lib.getLib libcublas) # libcublas.so
-      addDriverRunpath.driverLink # libcuda.so
+      (lib.getLib libcufft) # libcufft.so
+      (lib.getLib libcusolver) # libcusolver.so
+      (lib.getLib libcusparse) # libcusparse.so
+      (lib.getLib nccl) # libnccl.so
+      (lib.getLib libnvjitlink) # libnvJitLink.so
+      (lib.getLib addDriverRunpath.driverLink) # libcuda.so
     ]
   );
 
@@ -82,6 +88,8 @@ buildPythonPackage {
   doCheck = true;
 
   pythonImportsCheck = [ "jax_plugins" ];
+
+  inherit cudaLibPath;
 
   meta = {
     description = "JAX XLA PJRT Plugin for NVIDIA GPUs";
