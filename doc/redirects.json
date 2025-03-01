@@ -1,4 +1,10 @@
 {
+  "build-helpers-special-makeSetupHookPrime": [
+    "index.html#build-helpers-special-makeSetupHookPrime"
+  ],
+  "build-helpers-special-makeSetupHookPrime-inputs": [
+    "index.html#build-helpers-special-makeSetupHookPrime-inputs"
+  ],
   "chap-build-helpers-finalAttrs": [
     "index.html#chap-build-helpers-finalAttrs"
   ],
@@ -8,8 +14,17 @@
   "ex-build-helpers-extendMkDerivation": [
     "index.html#ex-build-helpers-extendMkDerivation"
   ],
+  "ex-shfmt": [
+    "index.html#ex-shfmt"
+  ],
+  "ex-makeSetupHookPrime-doc-example": [
+    "index.html#ex-makeSetupHookPrime-doc-example"
+  ],
   "ex-testBuildFailurePrime-doc-example": [
     "index.html#ex-testBuildFailurePrime-doc-example"
+  ],
+  "ex-testEqualArrayOrMap-test-function-add-cowbell": [
+    "index.html#ex-testEqualArrayOrMap-test-function-add-cowbell"
   ],
   "neovim": [
     "index.html#neovim"
@@ -311,6 +326,9 @@
   "sec-tools-of-stdenv": [
     "index.html#sec-tools-of-stdenv"
   ],
+  "setup-hook-sourceGuard": [
+    "index.html#setup-hook-sourceGuard"
+  ],
   "ssec-stdenv-dependencies": [
     "index.html#ssec-stdenv-dependencies"
   ],
@@ -335,6 +353,15 @@
   "footnote-stdenv-find-inputs-location.__back.0": [
     "index.html#footnote-stdenv-find-inputs-location.__back.0"
   ],
+  "tester-shfmt": [
+    "index.html#tester-shfmt"
+  ],
+  "tester-shfmt-inputs": [
+    "index.html#tester-shfmt-inputs"
+  ],
+  "tester-shfmt-return": [
+    "index.html#tester-shfmt-return"
+  ],
   "tester-testBuildFailurePrime": [
     "index.html#tester-testBuildFailurePrime"
   ],
@@ -343,6 +370,15 @@
   ],
   "tester-testBuildFailurePrime-return": [
     "index.html#tester-testBuildFailurePrime-return"
+  ],
+  "tester-testEqualArrayOrMap": [
+    "index.html#tester-testEqualArrayOrMap"
+  ],
+  "tester-testEqualArrayOrMap-inputs": [
+    "index.html#tester-testEqualArrayOrMap-inputs"
+  ],
+  "tester-testEqualArrayOrMap-return": [
+    "index.html#tester-testEqualArrayOrMap-return"
   ],
   "variables-specifying-dependencies": [
     "index.html#variables-specifying-dependencies"
@@ -1532,9 +1568,6 @@
   ],
   "tester-shellcheck-inputs": [
     "index.html#tester-shellcheck-inputs"
-  ],
-  "tester-shellcheck-param-src": [
-    "index.html#tester-shellcheck-param-src"
   ],
   "tester-shellcheck-return": [
     "index.html#tester-shellcheck-return"
