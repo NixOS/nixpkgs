@@ -13187,6 +13187,7 @@ with pkgs;
   emacs = emacs30;
   emacs-gtk = emacs30-gtk3;
   emacs-nox = emacs30-nox;
+  emacs-pgtk = emacs30-pgtk;
 
   emacsPackagesFor = emacs: import ./emacs-packages.nix {
     inherit (lib) makeScope makeOverridable dontRecurseIntoAttrs;
