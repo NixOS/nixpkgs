@@ -70,6 +70,19 @@ buildPythonPackage rec {
     openssh
   ];
 
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    # Fatal Python error: Aborted
+    # matplotlib/backend_bases.py", line 2654 in create_with_canvas
+    "test_optimize_kl_domain_expansion"
+    "test_plot_priorsamples"
+  ];
+
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+    # Fatal Python error: Aborted
+    # matplotlib/backend_bases.py", line 2654 in create_with_canvas
+    "test/test_plot.py"
+  ];
+
   __darwinAllowLocalNetworking = true;
   postCheck =
     lib.optionalString
