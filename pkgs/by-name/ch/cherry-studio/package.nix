@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cherry-studio";
-  version = "1.0.1";
+  version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "CherryHQ";
     repo = "cherry-studio";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-C8D0XCwIFWG+5WakAK+TmI4VVuIYJBSgkv5ynM2Ewkc=";
+    hash = "sha256-Y03ORv37ZROzdGc1L5bqrMIjikNaB6cpr+5eZ0k7Qq4=";
   };
 
   yarnOfflineCache = stdenvNoCC.mkDerivation {
@@ -70,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
     outputHashMode = "recursive";
-    outputHash = "sha256-DrEkaXkbaY40uYH7niT10OFJH+PD7ip3A4OCwbKmtz8=";
+    outputHash = "sha256-STpo83lfrOwWBtzDVL3Cy9sqz/B9K5s2GTHIly7g/b0=";
   };
 
   nativeBuildInputs = [
