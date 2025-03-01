@@ -70,18 +70,18 @@ buildPythonPackage rec {
     openssh
   ];
 
-  checkPhase = ''
-    runHook preCheck
-
-    python3 -m pytest test
-
-    if [ "${stdenv.buildPlatform.system}" != "aarch64-linux" ] && \
-       [ "${stdenv.buildPlatform.system}" != "x86_64-darwin" ]; then
-    ${mpi}/bin/mpiexec -n 2 --bind-to none python3 -m pytest test/test_mpi
-    fi
-
-    runHook postCheck
-  '';
+  __darwinAllowLocalNetworking = true;
+  postCheck =
+    lib.optionalString
+      (
+        # Fails on aarch64-linux with:
+        # hwloc/linux: failed to find sysfs cpu topology directory, aborting linux discovery.
+        # All nodes which are allocated for this job are already filled.
+        !(stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64)
+      )
+      ''
+        ${lib.getExe' mpi "mpirun"} -n 2 --bind-to none python3 -m pytest test/test_mpi
+      '';
 
   pythonImportsCheck = [ "nifty8" ];
 
