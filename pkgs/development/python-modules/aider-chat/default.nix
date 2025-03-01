@@ -5,6 +5,7 @@
   fetchFromGitHub,
   gitMinimal,
   portaudio,
+  playwright-driver,
 }:
 
 let
@@ -179,9 +180,19 @@ let
 
     passthru = {
       withPlaywright = aider-chat.overridePythonAttrs (
-        { dependencies, ... }:
+        {
+          dependencies,
+          makeWrapperArgs,
+          propagatedBuildInputs ? [ ],
+          ...
+        }:
         {
           dependencies = dependencies ++ aider-chat.optional-dependencies.playwright;
+          propagatedBuildInputs = propagatedBuildInputs ++ [ playwright-driver.browsers ];
+          makeWrapperArgs = makeWrapperArgs ++ [
+            "--set PLAYWRIGHT_BROWSERS_PATH ${playwright-driver.browsers}"
+            "--set PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS=true"
+          ];
         }
       );
     };
