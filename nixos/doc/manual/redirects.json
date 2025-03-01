@@ -1029,6 +1029,12 @@
   "module-services-samba-configuring-file-share": [
     "index.html#module-services-samba-configuring-file-share"
   ],
+  "module-services-tandoor-recipes": [
+    "index.html#module-services-tandoor-recipes"
+  ],
+  "module-services-tandoor-recipes-migrating-media": [
+    "index.html#module-services-tandoor-recipes-migrating-media"
+  ],
   "module-services-litestream": [
     "index.html#module-services-litestream"
   ],

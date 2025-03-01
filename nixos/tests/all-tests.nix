@@ -1447,6 +1447,7 @@ in
   tayga = runTest ./tayga.nix;
   technitium-dns-server = runTest ./technitium-dns-server.nix;
   teeworlds = runTest ./teeworlds.nix;
+  tandoor-recipes-media = handleTest ./tandoor-recipes-media.nix { };
   telegraf = runTest ./telegraf.nix;
   teleport = handleTest ./teleport.nix { };
   teleports = runTest ./teleports.nix;
