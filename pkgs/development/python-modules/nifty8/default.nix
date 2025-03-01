@@ -21,6 +21,7 @@
 
   # test
   pytestCheckHook,
+  pytest-xdist,
   mpiCheckPhaseHook,
   openssh,
 }:
@@ -64,6 +65,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    pytest-xdist
     mpiCheckPhaseHook
     openssh
   ];
