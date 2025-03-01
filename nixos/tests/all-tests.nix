@@ -463,7 +463,7 @@ in {
   greetd-no-shadow = handleTest ./greetd-no-shadow.nix {};
   grocy = handleTest ./grocy.nix {};
   grow-partition = runTest ./grow-partition.nix;
-  grub = import ./grub.nix { inherit pkgs runTest; };
+  grub = handleTest ./grub.nix {};
   guacamole-server = handleTest ./guacamole-server.nix {};
   guix = handleTest ./guix {};
   gvisor = handleTest ./gvisor.nix {};
@@ -1217,6 +1217,7 @@ in {
   vault-postgresql = handleTest ./vault-postgresql.nix {};
   vaultwarden = discoverTests (import ./vaultwarden.nix);
   vector = handleTest ./vector {};
+  velocity = runTest ./velocity.nix;
   vengi-tools = handleTest ./vengi-tools.nix {};
   victoriametrics = handleTest ./victoriametrics {};
   vikunja = handleTest ./vikunja.nix {};
