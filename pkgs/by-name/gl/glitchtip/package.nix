@@ -5,6 +5,7 @@
   callPackage,
   stdenv,
   makeWrapper,
+  nixosTests,
 }:
 
 let
@@ -111,6 +112,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     inherit frontend python;
+    tests = { inherit (nixosTests) glitchtip; };
     updateScript = ./update.sh;
   };
 

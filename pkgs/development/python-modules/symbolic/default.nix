@@ -9,6 +9,7 @@
   milksnake,
   cffi,
   pytestCheckHook,
+  nixosTests,
 }:
 
 buildPythonPackage rec {
@@ -62,6 +63,8 @@ buildPythonPackage rec {
   pytestFlagsArray = [ "py" ];
 
   pythonImportsCheck = [ "symbolic" ];
+
+  passthru.tests = { inherit (nixosTests) glitchtip; };
 
   meta = {
     description = "Python library for dealing with symbol files and more";
