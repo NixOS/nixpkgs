@@ -8,6 +8,7 @@
   cargo,
   milksnake,
   cffi,
+  nixosTests,
 }:
 
 buildPythonPackage rec {
@@ -49,6 +50,8 @@ buildPythonPackage rec {
   '';
 
   pythonImportsCheck = [ "symbolic" ];
+
+  passthru.tests = { inherit (nixosTests) glitchtip; };
 
   meta = {
     description = "Python library for dealing with symbol files and more";
