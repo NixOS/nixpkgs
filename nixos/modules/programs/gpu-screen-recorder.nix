@@ -34,6 +34,9 @@ in
       capabilities = "cap_sys_admin+ep";
       source = "${package}/bin/gsr-kms-server";
     };
+    environment.systemPackages = [
+        cfg.package
+    ];
   };
 
   meta.maintainers = with lib.maintainers; [ timschumi ];
