@@ -64,6 +64,7 @@ class ReencryptorBlocksDevice final : public BlocksDevice {
   void Reencrypt(std::shared_ptr<BlocksDevice> output_device) {
     auto total_bytes = bytes_count();
     size_t bytes_so_far = 0;
+    size_t blocks_so_far = 0;
     for (const auto& [block_number, info] : blocks_) {
       std::vector<std::byte> data(info.data_size, std::byte{0});
       BlocksDevice::ReadBlock(block_number, info.size_in_blocks, data, {}, info.iv, info.encrypted,
@@ -71,8 +72,10 @@ class ReencryptorBlocksDevice final : public BlocksDevice {
       output_device->WriteBlock(block_number, info.size_in_blocks, data, {}, info.iv, info.encrypted,
                                 /*recalculate_hash=*/false);
       bytes_so_far += info.data_size;
-      std::print("Reencrypting: {: 6.2f}/{:.2f} GB [{:.2f}%]\r", static_cast<double>(bytes_so_far) / kBytesPerGB,
-                 static_cast<double>(total_bytes) / kBytesPerGB, static_cast<double>(bytes_so_far) / total_bytes * 100);
+      blocks_so_far++;
+      std::print("Reencrypting: {: 8}/{} blocks | {: 6.2f}/{:.2f} GB [{:.2f}%]\r", blocks_so_far, blocks_.size(),
+                 static_cast<double>(bytes_so_far) / kBytesPerGB, static_cast<double>(total_bytes) / kBytesPerGB,
+                 static_cast<double>(bytes_so_far) / total_bytes * 100);
     }
   }
 
@@ -284,6 +287,7 @@ int main(int argc, char* argv[]) {
     std::println("");
     std::println("Done!");
   } catch (std::exception& e) {
+    std::println("");
     std::println(std::cerr, "Error: {}", e.what());
     return 1;
   }
