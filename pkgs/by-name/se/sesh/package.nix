@@ -5,13 +5,13 @@
 }:
 buildGoModule rec {
   pname = "sesh";
-  version = "2.10.0";
+  version = "2.13.0";
 
   src = fetchFromGitHub {
     owner = "joshmedeski";
     repo = "sesh";
     rev = "v${version}";
-    hash = "sha256-IM6wE/DMplG8jk4BXYprwIztPbgAHubr/YFavvPkBU8=";
+    hash = "sha256-YFvUYacuvyzNXwY+y9kI4tPlrlojDuZpR7VaTGdVqb8=";
   };
 
   vendorHash = "sha256-3wNp1meUoUFPa2CEgKjuWcu4I6sxta3FPFvCb9QMQhQ=";
