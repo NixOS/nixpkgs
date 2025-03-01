@@ -10,14 +10,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "snagboot";
-  version = "2.1";
+  version = "2.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bootlin";
     repo = "snagboot";
     tag = "v${version}";
-    hash = "sha256-1WyCzfvcvDpYybxV2Jt/Ty4i2ywapJmEAZtlvxe3dpQ=";
+    hash = "sha256-JXhh+Ed/ZwytNrMwvGw7jaDBvwDQiUKe+gBDezOCHO4=";
   };
 
   build-system = with python3Packages; [
