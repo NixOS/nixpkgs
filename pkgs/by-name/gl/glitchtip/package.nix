@@ -111,7 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    inherit frontend;
+    inherit frontend python;
     updateScript = ./update.sh;
   };
 
