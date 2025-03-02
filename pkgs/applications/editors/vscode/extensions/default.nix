@@ -811,7 +811,7 @@ let
 
       illixion.vscode-vibrancy-continued = buildVscodeMarketplaceExtension {
         mktplcRef = {
-          name "vscode-vibrancy-continued";
+          name = "vscode-vibrancy-continued";
           publisher = "illixion";
           version = "1.1.44";
           sha256 = "sha256-6YMr64MTtJrmMMMPW/s6hMh/IilDqLMrspKRPT4uSpM=";
@@ -821,7 +821,7 @@ let
           changelog = "https://marketplace.visualstudio.com/items/illixion.vscode-vibrancy-continued/changelog";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=illixion.vscode-vibrancy-continued";
           homepage = "https://github.com/illixion/vscode-vibrancy-continued#readme";
-          maintainers = with maintainers; [ _2hexed ];
+          maintainers = with lib.maintainers; [ _2hexed ];
           license = lib.licenses.mit;
         };
       };
