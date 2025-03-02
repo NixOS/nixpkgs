@@ -34,6 +34,11 @@ buildPythonPackage rec {
   pytestFlagsArray = [ "python/test" ];
   pythonImportsCheck = [ "ducc0" ];
 
+  postInstall = ''
+    mkdir -p $out/include
+    cp -r ${src}/src/ducc0 $out/include
+  '';
+
   DUCC0_OPTIMIZATION = "portable-strip";
 
   meta = with lib; {
