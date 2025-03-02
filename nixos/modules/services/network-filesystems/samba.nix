@@ -170,7 +170,8 @@ in
             };
             global."passwd program" = lib.mkOption {
               type = lib.types.str;
-              default = "/run/wrappers/bin/passwd %u";
+              default = "${config.security.wrapperDir}/passwd %u";
+              defaultText = lib.literalExpression ''"''${config.security.wrapperDir}/passwd %u"'';
               description = "Path to a program that can be used to set UNIX user passwords.";
             };
           };
@@ -178,24 +179,35 @@ in
         default = {
           "global" = {
             "security" = "user";
-            "passwd program" = "/run/wrappers/bin/passwd %u";
+            "passwd program" = "${config.security.wrapperDir}/passwd %u";
             "invalid users" = [ "root" ];
           };
         };
-        example = {
-          "global" = {
-            "security" = "user";
-            "passwd program" = "/run/wrappers/bin/passwd %u";
-            "invalid users" = [ "root" ];
-          };
-          "public" = {
-            "path" = "/srv/public";
-            "read only" = "yes";
-            "browseable" = "yes";
-            "guest ok" = "yes";
-            "comment" = "Public samba share.";
-          };
-        };
+        defaultText = lib.literalExpression ''
+          {
+            "global" = {
+              "security" = "user";
+              "passwd program" = "''${config.security.wrapperDir}/passwd %u";
+              "invalid users" = [ "root" ];
+            };
+          }
+        '';
+        example = lib.literalExpression ''
+          {
+            "global" = {
+              "security" = "user";
+              "passwd program" = "''${config.security.wrapperDir}/passwd %u";
+              "invalid users" = [ "root" ];
+            };
+            "public" = {
+              "path" = "/srv/public";
+              "read only" = "yes";
+              "browseable" = "yes";
+              "guest ok" = "yes";
+              "comment" = "Public samba share.";
+            };
+          }
+        '';
         description = ''
           Configuration file for the Samba suite in ini format.
           This file is located in /etc/samba/smb.conf
