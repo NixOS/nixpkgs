@@ -1,4 +1,4 @@
-from typing import Generator
+from typing import Any, Generator
 import argparse
 import asyncio
 import contextlib
@@ -19,11 +19,11 @@ class UpdateFailedException(Exception):
     pass
 
 
-def eprint(*args, **kwargs):
+def eprint(*args: Any, **kwargs: Any) -> None:
     print(*args, file=sys.stderr, **kwargs)
 
 
-async def check_subprocess_output(*args, **kwargs):
+async def check_subprocess_output(*args: str, **kwargs: Any) -> bytes:
     """
     Emulate check and capture_output arguments of subprocess.run function.
     """
@@ -48,7 +48,7 @@ async def run_update_script(
     temp_dir: tuple[str, str] | None,
     package: dict,
     keep_going: bool,
-):
+) -> None:
     worktree: str | None = None
 
     update_script_command = package["updateScript"]
@@ -153,7 +153,7 @@ async def check_changes(
     package: dict,
     worktree: str,
     update_info: str,
-):
+) -> list[dict]:
     if "commit" in package["supportedFeatures"]:
         changes = json.loads(update_info)
     else:
@@ -230,7 +230,7 @@ async def updater(
     packages_to_update: asyncio.Queue[dict | None],
     keep_going: bool,
     commit: bool,
-):
+) -> None:
     while True:
         package = await packages_to_update.get()
         if package is None:
@@ -248,7 +248,7 @@ async def start_updates(
     keep_going: bool,
     commit: bool,
     packages: list[dict],
-):
+) -> None:
     merge_lock = asyncio.Lock()
     packages_to_update: asyncio.Queue[dict | None] = asyncio.Queue()
 
