@@ -4,43 +4,28 @@
   fetchFromGitHub,
   pkg-config,
   openssl,
-  stdenv,
-  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "tarmac";
-  version = "0.7.0";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "Roblox";
     repo = "tarmac";
-    rev = "v${version}";
-    sha256 = "sha256-O6qrAzGiAxiE56kpuvH/jDKHRXxHZ2SlDL5nwOOd4EU=";
+    tag = "v${version}";
+    hash = "sha256-WBkdC5YzZPtqQ9khxmvSFBHhZzfjICWkFcdi1PNsj5g=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-  };
+  useFetchCargoVendor = true;
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  cargoHash = "sha256-u6EQLCdANSi1TBy2O1P5Ro5gJlfBjh/Xm7/uzCHtRu0=";
 
-  buildInputs =
-    [
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Security
-    ];
+  nativeBuildInputs = [ pkg-config ];
 
-  # update Cargo.lock to work with openssl 3
-  postPatch = ''
-    ln -sf ${./Cargo.lock} Cargo.lock
-  '';
+  buildInputs = [ openssl ];
 
-  meta = with lib; {
+  meta = {
     description = "Resource compiler and asset manager for Roblox";
     mainProgram = "tarmac";
     longDescription = ''
@@ -50,7 +35,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/Roblox/tarmac";
     downloadPage = "https://github.com/Roblox/tarmac/releases/tag/v${version}";
     changelog = "https://github.com/Roblox/tarmac/raw/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ wackbyte ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ wackbyte ];
   };
 }
