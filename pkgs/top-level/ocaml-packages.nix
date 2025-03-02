@@ -1570,6 +1570,8 @@ let
 
     posix-base = callPackage ../development/ocaml-modules/posix/base.nix { };
 
+    posix-math2 = callPackage ../development/ocaml-modules/posix/math2.nix { };
+
     posix-socket = callPackage ../development/ocaml-modules/posix/socket.nix { };
 
     posix-time2 = callPackage ../development/ocaml-modules/posix/time2.nix { };
