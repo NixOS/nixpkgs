@@ -40,6 +40,9 @@ buildPythonPackage rec {
     rm -rf asyncpg/
   '';
 
+  # https://github.com/MagicStack/asyncpg/issues/1236
+  disabledTests = [ "test_connect_params" ];
+
   pythonImportsCheck = [ "asyncpg" ];
 
   meta = with lib; {

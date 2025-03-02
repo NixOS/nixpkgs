@@ -256,6 +256,8 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
     # (since it will do a futile invocation of gcc (!) to find
     # libuuid, slowing down program startup a lot).
     noldconfigPatch
+    # https://www.cve.org/CVERecord?id=CVE-2025-0938
+    ./CVE-2025-0938.patch
   ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform && stdenv.hostPlatform.isFreeBSD) [
     # Cross compilation only supports a limited number of "known good"
     # configurations. If you're reading this and it's been a long time
