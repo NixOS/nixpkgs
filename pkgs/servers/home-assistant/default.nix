@@ -440,6 +440,7 @@ python.pkgs.buildPythonApplication rec {
     "jinja2"
     "orjson"
     "pillow"
+    "propcache"
     "pyjwt"
     "pyopenssl"
     "pyyaml"
