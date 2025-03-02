@@ -250,6 +250,16 @@ buildPythonPackage rec {
       "test_get_executable_path"
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # TypeError: argument should be a str or an os.PathLike object where __fspath__ returns a str, not 'NoneType'
+      "test_component_example_values"
+      "test_component_functions"
+      "test_public_request_pass"
+
+      # Failed: DID NOT RAISE <class 'ValueError'>
+      # test.conftest.NixNetworkAccessDeniedError
+      "test_private_request_fail"
+      "test_theme_builder_launches"
+
       # flaky on darwin (depend on port availability)
       "test_all_status_messages"
       "test_async_generators"
