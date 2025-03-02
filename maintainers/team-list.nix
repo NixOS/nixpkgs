@@ -801,9 +801,11 @@ with lib.maintainers;
 
   nix = {
     members = [
-      eelco
-      grahamc
-      pierron
+      roberth
+      ericson2314
+      mic92
+      lovesegfault
+      artturin
     ];
     scope = "Maintain the Nix package manager.";
     shortName = "Nix/nix-cli ecosystem";

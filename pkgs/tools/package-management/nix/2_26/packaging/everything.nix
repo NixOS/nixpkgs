@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  lndir,
   buildEnv,
 
   nix-util,
@@ -38,7 +39,8 @@
   nix-perl-bindings,
 
   testers,
-  runCommand,
+
+  patchedSrc ? null,
 }:
 
 let
@@ -68,52 +70,6 @@ let
           ;
       };
 
-  dev =
-    nixAttrs:
-    stdenv.mkDerivation (finalAttrs: {
-      name = "nix-${nix-cli.version}-dev";
-      pname = "nix";
-      version = nix-cli.version;
-      dontUnpack = true;
-      dontBuild = true;
-      libs = map lib.getDev (lib.attrValues libs);
-      installPhase = ''
-        mkdir -p $out/nix-support
-        echo $libs >> $out/nix-support/propagated-build-inputs
-        echo ${nixAttrs.finalPackage} >> $out/nix-support/propagated-build-inputs
-      '';
-      passthru = {
-        tests = {
-          # TODO: is this supposed to work for a dev output?
-          # pkg-config = testers.hasPkgConfigModules {
-          #   package = finalAttrs.finalPackage;
-          # };
-        };
-
-        # If we were to fully emulate output selection here, we'd confuse the Nix CLIs,
-        # because they rely on `drvPath`.
-        dev = finalAttrs.finalPackage.out;
-        out = nixAttrs.finalPackage.out;
-
-        libs = throw "`nix.dev.libs` is not meant to be used; use `nix.libs` instead.";
-      };
-      meta = {
-        pkgConfigModules = [
-          "nix-cmd"
-          "nix-expr"
-          "nix-expr-c"
-          "nix-fetchers"
-          "nix-flake"
-          "nix-flake-c"
-          "nix-main"
-          "nix-main-c"
-          "nix-store"
-          "nix-store-c"
-          "nix-util"
-          "nix-util-c"
-        ];
-      };
-    });
   devdoc = buildEnv {
     name = "nix-${nix-cli.version}-devdoc";
     paths = [
@@ -123,86 +79,166 @@ let
   };
 
 in
-(buildEnv {
-  name = "nix-${nix-cli.version}";
-  paths = [
-    nix-cli
-    nix-manual.man
+stdenv.mkDerivation (finalAttrs: {
+  pname = "nix";
+  version = nix-cli.version;
+
+  /**
+    This package uses a multi-output derivation, even though some outputs could
+    have been provided directly by the constituent component that provides it.
+
+    This is because not all tooling handles packages composed of arbitrary
+    outputs yet. This includes nix itself, https://github.com/NixOS/nix/issues/6507.
+
+    `devdoc` is also available, but not listed here, because this attribute is
+    not an output of the same derivation that provides `out`, `dev`, etc.
+  */
+  outputs = [
+    "out"
+    "dev"
+    "doc"
+    "man"
   ];
 
-  meta.mainProgram = "nix";
-}).overrideAttrs
-  (
-    finalAttrs: prevAttrs: {
-      doCheck = true;
-      doInstallCheck = true;
+  /**
+    Unpacking is handled in this package's constituent components
+  */
+  dontUnpack = true;
+  /**
+    Building is handled in this package's constituent components
+  */
+  dontBuild = true;
 
-      checkInputs =
-        [
-          # Make sure the unit tests have passed
-          nix-util-tests.tests.run
-          nix-store-tests.tests.run
-          nix-expr-tests.tests.run
-          nix-fetchers-tests.tests.run
-          nix-flake-tests.tests.run
+  /**
+    `doCheck` controles whether tests are added as build gate for the combined package.
+    This includes both the unit tests and the functional tests, but not the
+    integration tests that run in CI (the flake's `hydraJobs` and some of the `checks`).
+  */
+  doCheck = true;
 
-          # Make sure the functional tests have passed
-          nix-functional-tests
-        ]
-        ++ lib.optionals
-          (!stdenv.hostPlatform.isStatic && stdenv.buildPlatform.canExecute stdenv.hostPlatform)
-          [
-            # Perl currently fails in static build
-            # TODO: Split out tests into a separate derivation?
-            nix-perl-bindings
-          ];
-      passthru = prevAttrs.passthru // {
-        inherit (nix-cli) version;
+  /**
+    `fixupPhase` currently doesn't understand that a symlink output isn't writable.
 
-        /**
-          These are the libraries that are part of the Nix project. They are used
-          by the Nix CLI and other tools.
+    We don't compile or link anything in this derivation, so fixups aren't needed.
+  */
+  dontFixup = true;
 
-          If you need to use these libraries in your project, we recommend to use
-          the `-c` C API libraries exclusively, if possible.
+  checkInputs =
+    [
+      # Make sure the unit tests have passed
+      nix-util-tests.tests.run
+      nix-store-tests.tests.run
+      nix-expr-tests.tests.run
+      nix-fetchers-tests.tests.run
+      nix-flake-tests.tests.run
 
-          We also recommend that you build the complete package to ensure that the unit tests pass.
-          You could do this in CI, or by passing it in an unused environment variable. e.g in a `mkDerivation` call:
+      # Make sure the functional tests have passed
+      nix-functional-tests
+    ]
+    ++ lib.optionals
+      (!stdenv.hostPlatform.isStatic && stdenv.buildPlatform.canExecute stdenv.hostPlatform)
+      [
+        # Perl currently fails in static build
+        # TODO: Split out tests into a separate derivation?
+        nix-perl-bindings
+      ];
 
-          ```nix
-            buildInputs = [ nix.libs.nix-util-c nix.libs.nix-store-c ];
-            # Make sure the nix libs we use are ok
-            unusedInputsForTests = [ nix ];
-            disallowedReferences = nix.all;
-          ```
-        */
-        inherit libs;
+  nativeBuildInputs = [
+    lndir
+  ];
 
-        tests = prevAttrs.passthru.tests or { } // {
-          pkg-config = testers.hasPkgConfigModules {
-            package = finalAttrs.finalPackage;
-          };
-        };
+  installPhase =
+    let
+      devPaths = lib.mapAttrsToList (_k: lib.getDev) finalAttrs.finalPackage.libs;
+    in
+    ''
+      mkdir -p $out $dev/nix-support $doc $man
 
-        /**
-          A derivation referencing the `dev` outputs of the Nix libraries.
-        */
-        dev = dev finalAttrs;
-        inherit devdoc;
-        doc = nix-manual;
-        outputs = [
-          "out"
-          "dev"
-          "devdoc"
-          "doc"
-        ];
-        all = lib.attrValues (
-          lib.genAttrs finalAttrs.passthru.outputs (outName: finalAttrs.finalPackage.${outName})
-        );
+      # Custom files
+      echo $libs >> $dev/nix-support/propagated-build-inputs
+      echo ${nix-cli} >> $dev/nix-support/propagated-build-inputs
+
+      # Merged outputs
+      lndir ${nix-cli} $out
+      (
+        libs=( ${lib.escapeShellArgs devPaths} )
+        for lib in $libs; do
+          lndir $lib $dev
+        done
+      )
+
+      # Forwarded outputs
+      ln -s ${nix-manual} $doc
+      ln -s ${nix-manual.man} $man
+    '';
+
+  passthru = {
+    inherit (nix-cli) version;
+    src = patchedSrc;
+
+    /**
+      These are the libraries that are part of the Nix project. They are used
+      by the Nix CLI and other tools.
+
+      If you need to use these libraries in your project, we recommend to use
+      the `-c` C API libraries exclusively, if possible.
+
+      We also recommend that you build the complete package to ensure that the unit tests pass.
+      You could do this in CI, or by passing it in an unused environment variable. e.g in a `mkDerivation` call:
+
+      ```nix
+        buildInputs = [ nix.libs.nix-util-c nix.libs.nix-store-c ];
+        # Make sure the nix libs we use are ok
+        unusedInputsForTests = [ nix ];
+        disallowedReferences = nix.all;
+      ```
+    */
+    inherit libs;
+
+    /**
+      Developer documentation for `nix`, in `share/doc/nix/{internal,external}-api/`.
+
+      This is not a proper output; see `outputs` for context.
+    */
+    inherit devdoc;
+
+    /**
+      Extra tests that test this package, but do not run as part of the build.
+      See <https://nixos.org/manual/nixpkgs/stable/index.html#var-passthru-tests>
+    */
+    tests = {
+      pkg-config = testers.hasPkgConfigModules {
+        package = finalAttrs.finalPackage;
       };
-      meta = prevAttrs.meta // {
-        description = "The Nix package manager";
-        pkgConfigModules = (dev finalAttrs).meta.pkgConfigModules;
-      };
-    }
-  )
+    };
+  };
+
+  meta = {
+    mainProgram = "nix";
+    description = "The Nix package manager";
+    longDescription = nix-cli.meta.longDescription;
+    homepage = nix-cli.meta.homepage;
+    license = nix-cli.meta.license;
+    maintainers = lib.teams.nix.members;
+    platforms = nix-cli.meta.platforms;
+    outputsToInstall = [
+      "out"
+      "man"
+    ];
+    pkgConfigModules = [
+      "nix-cmd"
+      "nix-expr"
+      "nix-expr-c"
+      "nix-fetchers"
+      "nix-flake"
+      "nix-flake-c"
+      "nix-main"
+      "nix-main-c"
+      "nix-store"
+      "nix-store-c"
+      "nix-util"
+      "nix-util-c"
+    ];
+  };
+
+})
