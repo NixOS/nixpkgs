@@ -36,7 +36,7 @@ in
 
     defaultOptions = lib.mkOption {
       type = with lib.types; listOf str;
-      default = [ ];
+      default = [ "SETENV" ];
       description = ''
         Options used for the default rules, granting `root` and the
         `wheel` group permission to run any command as any user.
