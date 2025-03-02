@@ -12,7 +12,7 @@
 , glib
 , glog
 , gflags
-, protobuf_29
+, protobuf_21
 , config
 , ocl-icd
 , buildPackages
@@ -307,7 +307,7 @@ effectiveStdenv.mkDerivation {
     glib
     glog
     pcre2
-    protobuf_29
+    protobuf_21
     zlib
   ] ++ optionals enablePython [
     pythonPackages.python
@@ -415,6 +415,7 @@ effectiveStdenv.mkDerivation {
     (cmakeBool "OPENCV_GENERATE_PKGCONFIG" true)
     (cmakeBool "WITH_OPENMP" true)
     (cmakeBool "BUILD_PROTOBUF" false)
+    (cmakeBool "WITH_PROTOBUF" true)
     (cmakeBool "PROTOBUF_UPDATE_FILES" true)
     (cmakeBool "OPENCV_ENABLE_NONFREE" enableUnfree)
     (cmakeBool "BUILD_TESTS" runAccuracyTests)
