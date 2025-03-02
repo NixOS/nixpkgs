@@ -1,0 +1,71 @@
+From f3b1238483cc9bc3869c40e63a4cebf32052c624 Mon Sep 17 00:00:00 2001
+From: Samuel Tam <main@usertam.dev>
+Date: Sun, 2 Mar 2025 16:35:03 +0000
+Subject: [PATCH] lib/PoissonRecon: fix build with clang 19
+
+https://bugs.freebsd.org/bugzilla/show_bug.cgi?id=281867
+---
+ src/thirdparty/PoissonRecon/Ply.h            | 8 ++++----
+ src/thirdparty/PoissonRecon/SparseMatrix.inl | 6 ------
+ 2 files changed, 4 insertions(+), 10 deletions(-)
+
+diff --git a/src/thirdparty/PoissonRecon/Ply.h b/src/thirdparty/PoissonRecon/Ply.h
+index 699381ff..e5831263 100644
+--- a/src/thirdparty/PoissonRecon/Ply.h
++++ b/src/thirdparty/PoissonRecon/Ply.h
+@@ -301,7 +301,7 @@ public:
+ 	PlyValueVertex( void ) : value( Real(0) ) { ; }
+ 	PlyValueVertex( Point3D< Real > p , Real v ) : point(p) , value(v) { ; }
+ 	PlyValueVertex operator + ( PlyValueVertex p ) const { return PlyValueVertex( point+p.point , value+p.value ); }
+-	PlyValueVertex operator - ( PlyValueVertex p ) const { return PlyValueVertex( point-p.value , value-p.value ); }
++	PlyValueVertex operator - ( PlyValueVertex p ) const { return PlyValueVertex( point-p.point , value-p.value ); }
+ 	template< class _Real > PlyValueVertex operator * ( _Real s ) const { return PlyValueVertex( point*s , Real(value*s) ); }
+ 	template< class _Real > PlyValueVertex operator / ( _Real s ) const { return PlyValueVertex( point/s , Real(value/s) ); }
+ 	PlyValueVertex& operator += ( PlyValueVertex p ) { point += p.point , value += p.value ; return *this; }
+@@ -340,7 +340,7 @@ public:
+ 	PlyOrientedVertex( void ) { ; }
+ 	PlyOrientedVertex( Point3D< Real > p , Point3D< Real > n ) : point(p) , normal(n) { ; }
+   	PlyOrientedVertex operator + ( PlyOrientedVertex p ) const { return PlyOrientedVertex( point+p.point , normal+p.normal ); }
+-	PlyOrientedVertex operator - ( PlyOrientedVertex p ) const { return PlyOrientedVertex( point-p.value , normal-p.normal ); }
++	PlyOrientedVertex operator - ( PlyOrientedVertex p ) const { return PlyOrientedVertex( point-p.point , normal-p.normal ); }
+ 	template< class _Real > PlyOrientedVertex operator * ( _Real s ) const { return PlyOrientedVertex( point*s , normal*s ); }
+ 	template< class _Real > PlyOrientedVertex operator / ( _Real s ) const { return PlyOrientedVertex( point/s , normal/s ); }
+ 	PlyOrientedVertex& operator += ( PlyOrientedVertex p ) { point += p.point , normal += p.normal ; return *this; }
+@@ -386,7 +386,7 @@ public:
+ 		}
+ 
+ 	  	_PlyColorVertex operator + ( _PlyColorVertex p ) const { return _PlyColorVertex( point+p.point , color+p.color ); }
+-		_PlyColorVertex operator - ( _PlyColorVertex p ) const { return _PlyColorVertex( point-p.value , color-p.color ); }
++		_PlyColorVertex operator - ( _PlyColorVertex p ) const { return _PlyColorVertex( point-p.point , color-p.color ); }
+ 		template< class _Real > _PlyColorVertex operator * ( _Real s ) const { return _PlyColorVertex( point*s , color*s ); }
+ 		template< class _Real > _PlyColorVertex operator / ( _Real s ) const { return _PlyColorVertex( point/s , color/s ); }
+ 		_PlyColorVertex& operator += ( _PlyColorVertex p ) { point += p.point , color += p.color ; return *this; }
+@@ -455,7 +455,7 @@ public:
+ 		}
+ 
+ 	  	_PlyColorAndValueVertex operator + ( _PlyColorAndValueVertex p ) const { return _PlyColorAndValueVertex( point+p.point , color+p.color , value+p.value ); }
+-		_PlyColorAndValueVertex operator - ( _PlyColorAndValueVertex p ) const { return _PlyColorAndValueVertex( point-p.value , color-p.color , value+p.value ); }
++		_PlyColorAndValueVertex operator - ( _PlyColorAndValueVertex p ) const { return _PlyColorAndValueVertex( point-p.point , color-p.color , value+p.value ); }
+ 		template< class _Real > _PlyColorAndValueVertex operator * ( _Real s ) const { return _PlyColorAndValueVertex( point*s , color*s , value*s ); }
+ 		template< class _Real > _PlyColorAndValueVertex operator / ( _Real s ) const { return _PlyColorAndValueVertex( point/s , color/s , value/s ); }
+ 		_PlyColorAndValueVertex& operator += ( _PlyColorAndValueVertex p ) { point += p.point , color += p.color , value += p.value ; return *this; }
+diff --git a/src/thirdparty/PoissonRecon/SparseMatrix.inl b/src/thirdparty/PoissonRecon/SparseMatrix.inl
+index c181d827..de310538 100755
+--- a/src/thirdparty/PoissonRecon/SparseMatrix.inl
++++ b/src/thirdparty/PoissonRecon/SparseMatrix.inl
+@@ -192,12 +192,6 @@ void SparseMatrix< T >::SetRowSize( int row , int count )
+ }
+ 
+ 
+-template<class T>
+-void SparseMatrix<T>::SetZero()
+-{
+-	Resize(this->m_N, this->m_M);
+-}
+-
+ template<class T>
+ SparseMatrix<T> SparseMatrix<T>::operator * (const T& V) const
+ {
+-- 
+2.47.1
+
