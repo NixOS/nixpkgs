@@ -37,6 +37,10 @@ buildPythonPackage rec {
       --replace-fail "setuptools==67.7.2" "setuptools"
   '';
 
+  pythonRelaxDeps = [
+    "python-debian"
+  ];
+
   build-system = [ setuptools-scm ];
 
   dependencies = [
