@@ -187,8 +187,6 @@ let
         };
       });
 
-      paho-mqtt = super.paho-mqtt_1;
-
       pymelcloud = super.pymelcloud.overridePythonAttrs (oldAttrs: {
         version = "2.5.9";
         src = fetchFromGitHub {
@@ -395,7 +393,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run update-component-packages.py after updating
-  hassVersion = "2025.2.5";
+  hassVersion = "2025.3.0b3";
 
 in
 python.pkgs.buildPythonApplication rec {
@@ -416,13 +414,13 @@ python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = "refs/tags/${version}";
-    hash = "sha256-8adHpOiuWddgqQjInc92FjEwVyg2Rvgx7wNOj3+Kxsk=";
+    hash = "sha256-RO/PW4WH1gMf/VL7RJqXMASO2QCKz5l7oud70gSX7TU=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-JD2xus356qNzT5jqZOHr5gn4WGeC189rM83D81xVtWo=";
+    hash = "sha256-tpm9uW1/EpvLL/XpCe0g2PFbvSZLJPjVDHiX9Vqi99I=";
   };
 
   build-system = with python.pkgs; [
@@ -442,6 +440,7 @@ python.pkgs.buildPythonApplication rec {
     "jinja2"
     "orjson"
     "pillow"
+    "propcache"
     "pyjwt"
     "pyopenssl"
     "pyyaml"
