@@ -443,13 +443,13 @@ let
         disabledTests = attrs.disabledTests;
       }
       // optionalAttrs (attrs ? pytestFlags) {
-          pytestFlags = attrs.pytestFlags;
+        pytestFlags = attrs.pytestFlags;
       }
       // optionalAttrs (attrs ? pytestFlagsArray) {
         pytestFlagsArray = attrs.pytestFlagsArray;
       }
       // optionalAttrs (attrs ? unittestFlags) {
-          unittestFlags = attrs.unittestFlags;
+        unittestFlags = attrs.unittestFlags;
       }
       // optionalAttrs (attrs ? unittestFlagsArray) {
         unittestFlagsArray = attrs.unittestFlagsArray;
