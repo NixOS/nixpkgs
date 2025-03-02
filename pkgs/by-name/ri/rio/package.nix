@@ -53,17 +53,17 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "rio";
-  version = "0.2.7";
+  version = "0.2.8";
 
   src = fetchFromGitHub {
     owner = "raphamorim";
     repo = "rio";
     rev = "v${version}";
-    hash = "sha256-OUiEqfh08q/VnX08w7uRDsKMPq5ZBxcZ8jIz/eYVf8k=";
+    hash = "sha256-1sX2V00irRhxiBoAu/Xx98YWDwkqMxXyEAFLboDxUo8=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-OQ+nDdq4H291jLgWLLov2XVwOOErpiJPuDBUKR67blw=";
+  cargoHash = "sha256-HDG3JokPcOds2wGjTelhUSE33dpcp4k5yZyRMZZQJEc=";
 
   nativeBuildInputs =
     [
