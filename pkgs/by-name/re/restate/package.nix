@@ -17,23 +17,23 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "restate";
-  version = "1.2.0";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "restatedev";
     repo = "restate";
     tag = "v${version}";
-    hash = "sha256-omkugB/8V97QoUYBgag5LdqkqfNsM6P4Az9yWJjoRxw=";
+    hash = "sha256-MrWhG4J4UBTfDrrkOIotfVhBawtkQ5tfIiaHJYKY3Og=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-zAN/8a+UTPxUpzSTgqK5WVgYjen5yn0/XSTiJtBZPj0=";
+  cargoHash = "sha256-smNiHs230Pth0iS5mlQ0XBgu4oHE+Gvqh5Uozuc1hwM=";
 
   env = {
     PROTOC = lib.getExe protobuf;
     PROTOC_INCLUDE = "${protobuf}/include";
 
-    VERGEN_GIT_COMMIT_DATE = "2025-02-15";
+    VERGEN_GIT_COMMIT_DATE = "2025-02-27";
     VERGEN_GIT_SHA = "v${version}";
 
     # rustflags as defined in the upstream's .cargo/config.toml
