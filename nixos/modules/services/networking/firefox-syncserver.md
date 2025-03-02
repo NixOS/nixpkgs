@@ -8,7 +8,18 @@ The absolute minimal configuration for the sync server looks like this:
 
 ```nix
 {
-  services.mysql.package = pkgs.mariadb;
+  services.mysql = {
+    ensureDatabases = [ "firefox_syncserver" ];
+    ensureUsers = [
+      {
+        name = "firefox-syncserver";
+        ensurePermissions = {
+          "firefox_syncserver.*" = "ALL PRIVILEGES";
+        };
+      }
+    ];
+    package = pkgs.mariadb;
+  };
 
   services.firefox-syncserver = {
     enable = true;
