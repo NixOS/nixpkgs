@@ -18,6 +18,10 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-4kwGrKvDihBi6Gcvcf6ophNI6GGd+M4qR0nnu/AUK1Q=";
   };
 
+  patches = [
+    ./make_ui_files_writeable_on_startup.patch
+  ];
+
   pythonRelaxDeps = [
     "websockets"
   ];
