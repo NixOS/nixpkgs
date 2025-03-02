@@ -16,6 +16,11 @@
 }:
 let
   latestVersionForNc = {
+    "31" = {
+      version = "9.0.0";
+      appHash = "sha256-hhHWCzaSfV41Ysuq4WXjy63mflgEsb2qdGapHE8fuA8=";
+      modelHash = "sha256-WzK9StICup/YuRcuM575DiPYHsvXGt9CRrAoBVGbXHI=";
+    };
     "30" = {
       version = "8.2.0";
       appHash = "sha256-CAORqBdxNQ0x+xIVY2zI07jvsKHaa7eH0jpVuP0eSW4=";
@@ -25,13 +30,6 @@ let
       version = "7.1.0";
       appHash = "sha256-qR4SrTHFAc4YWiZAsL94XcH4VZqYtkRLa0y+NdiFZus=";
       modelHash = "sha256-M/j5wVOBLR7xMVJQWDUWAzLajRUBYEzHSNBsRSBUgfM=";
-    };
-    "28" = {
-      # Once this version is no longer supported, we can remove the getAppValue replacements below
-      # The getAppValueString stuff will need to remain
-      version = "6.1.0";
-      appHash = "sha256-225r2JnDOoURvLmzpmHp/QL6GDx9124/YTywbxH3/rk=";
-      modelHash = "sha256-4mhQM/ajpwjqTb8jSbEIdtSRrWZEOaMZQXAwcfSRQ/M=";
     };
   };
   currentVersionInfo = latestVersionForNc.${ncVersion};
@@ -85,8 +83,6 @@ stdenv.mkDerivation rec {
       --replace-quiet "\$this->settingsService->getSetting('node_binary')" "'${lib.getExe nodejs}'" \
       --replace-quiet "\$this->config->getAppValueString('node_binary', '""')" "'${lib.getExe nodejs}'" \
       --replace-quiet "\$this->config->getAppValueString('node_binary')" "'${lib.getExe nodejs}'" \
-      --replace-quiet "\$this->config->getAppValue('node_binary', '""')" "'${lib.getExe nodejs}'" \
-      --replace-quiet "\$this->config->getAppValue('node_binary')" "'${lib.getExe nodejs}'"
     test "$(grep "get[a-zA-Z]*('node_binary'" recognize/lib/**/*.php | wc -l)" -eq 0
 
 
