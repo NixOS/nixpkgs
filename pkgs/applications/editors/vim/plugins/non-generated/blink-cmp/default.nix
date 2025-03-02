@@ -41,6 +41,9 @@ vimUtils.buildVimPlugin {
     ''
       mkdir -p target/release
       ln -s ${blink-fuzzy-lib}/lib/libblink_cmp_fuzzy${ext} target/release/libblink_cmp_fuzzy${ext}
+
+      # Avoid warning about read-only filesystem
+      echo -n "nix" > target/release/version
     '';
 
   patches = [
