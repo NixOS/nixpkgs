@@ -1,5 +1,4 @@
-from __future__ import annotations
-from typing import Dict, Generator, List, Optional, Tuple
+from typing import Generator
 import argparse
 import asyncio
 import contextlib
@@ -13,7 +12,7 @@ import tempfile
 
 class CalledProcessError(Exception):
     process: asyncio.subprocess.Process
-    stderr: Optional[bytes]
+    stderr: bytes | None
 
 
 class UpdateFailedException(Exception):
@@ -46,11 +45,11 @@ async def check_subprocess_output(*args, **kwargs):
 async def run_update_script(
     nixpkgs_root: str,
     merge_lock: asyncio.Lock,
-    temp_dir: Optional[Tuple[str, str]],
-    package: Dict,
+    temp_dir: tuple[str, str] | None,
+    package: dict,
     keep_going: bool,
 ):
-    worktree: Optional[str] = None
+    worktree: str | None = None
 
     update_script_command = package["updateScript"]
 
@@ -110,7 +109,7 @@ async def run_update_script(
 
 
 @contextlib.contextmanager
-def make_worktree() -> Generator[Tuple[str, str], None, None]:
+def make_worktree() -> Generator[tuple[str, str], None, None]:
     with tempfile.TemporaryDirectory() as wt:
         branch_name = f"update-{os.path.basename(wt)}"
         target_directory = f"{wt}/nixpkgs"
@@ -128,7 +127,7 @@ async def commit_changes(
     merge_lock: asyncio.Lock,
     worktree: str,
     branch: str,
-    changes: List[Dict],
+    changes: list[dict],
 ) -> None:
     for change in changes:
         # Git can only handle a single index operation at a time
@@ -151,7 +150,7 @@ async def commit_changes(
 
 
 async def check_changes(
-    package: Dict,
+    package: dict,
     worktree: str,
     update_info: str,
 ):
@@ -208,9 +207,9 @@ async def check_changes(
 
 async def merge_changes(
     merge_lock: asyncio.Lock,
-    package: Dict,
+    package: dict,
     update_info: str,
-    temp_dir: Optional[Tuple[str, str]],
+    temp_dir: tuple[str, str] | None,
 ) -> None:
     if temp_dir is not None:
         worktree, branch = temp_dir
@@ -226,9 +225,9 @@ async def merge_changes(
 
 async def updater(
     nixpkgs_root: str,
-    temp_dir: Optional[Tuple[str, str]],
+    temp_dir: tuple[str, str] | None,
     merge_lock: asyncio.Lock,
-    packages_to_update: asyncio.Queue[Optional[Dict]],
+    packages_to_update: asyncio.Queue[dict | None],
     keep_going: bool,
     commit: bool,
 ):
@@ -248,13 +247,13 @@ async def start_updates(
     max_workers: int,
     keep_going: bool,
     commit: bool,
-    packages: List[Dict],
+    packages: list[dict],
 ):
     merge_lock = asyncio.Lock()
-    packages_to_update: asyncio.Queue[Optional[Dict]] = asyncio.Queue()
+    packages_to_update: asyncio.Queue[dict | None] = asyncio.Queue()
 
     with contextlib.ExitStack() as stack:
-        temp_dirs: List[Optional[Tuple[str, str]]] = []
+        temp_dirs: list[tuple[str, str] | None] = []
 
         # Do not create more workers than there are packages.
         num_workers = min(max_workers, len(packages))
