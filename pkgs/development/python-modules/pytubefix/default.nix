@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "pytubefix";
-  version = "8.12.1";
+  version = "8.12.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "JuanBindez";
     repo = "pytubefix";
     tag = "v${version}";
-    hash = "sha256-PZxwF8rAPHmPpw6MKI8OVrl7CRNn9ldPnsPmHlAYahM=";
+    hash = "sha256-1m7d1eLnoIDrja83sGKBh/u8ryZuw6lb1FEO+XNc03M=";
   };
 
   build-system = [ setuptools ];
@@ -44,7 +44,7 @@ buildPythonPackage rec {
   meta = {
     description = "Pytube fork with additional features and fixes";
     homepage = "https://github.com/JuanBindez/pytubefix";
-    changelog = "https://github.com/JuanBindez/pytubefix/releases/tag/v${version}";
+    changelog = "https://github.com/JuanBindez/pytubefix/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ youhaveme9 ];
   };
