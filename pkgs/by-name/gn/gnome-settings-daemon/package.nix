@@ -43,11 +43,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-settings-daemon";
-  version = "47.2";
+  version = "48.rc";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-settings-daemon/${lib.versions.major finalAttrs.version}/gnome-settings-daemon-${finalAttrs.version}.tar.xz";
-    hash = "sha256-HrdYhi6Ij1WghpGTCH8c+8x6EWNlTmMAmf9DQt0/alo=";
+    hash = "sha256-2n8M42iKyfG4k+OboKQ6IkjnCO4hD4Q+ML8KnYQ5pd0=";
   };
 
   patches = [
