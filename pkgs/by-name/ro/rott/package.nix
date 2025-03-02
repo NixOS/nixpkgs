@@ -3,7 +3,7 @@
   lib,
   fetchurl,
   writeShellScript,
-  SDL,
+  SDL_compat,
   SDL_mixer,
   makeDesktopItem,
   copyDesktopItems,
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ copyDesktopItems ];
 
   buildInputs = [
-    SDL
+    SDL_compat
     SDL_mixer
   ];
 
