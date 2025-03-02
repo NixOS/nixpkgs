@@ -60,6 +60,9 @@ stdenv.mkDerivation (finalAttrs: {
         patchelf --add-rpath ${lib.makeLibraryPath [ sdl3 ]} $out/lib/libSDL2.so
       '';
 
+  patches = [ ./find-headers.patch ];
+  setupHook = ./setup-hook.sh;
+
   passthru = {
     tests =
       let
