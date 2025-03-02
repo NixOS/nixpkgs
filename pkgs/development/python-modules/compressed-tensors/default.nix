@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "compressed-tensors";
-  version = "0.9.1";
+  version = "0.9.2";
   pyproject = true;
 
   # Release on PyPI is missing the `utils` directory, which `setup.py` wants to import
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "neuralmagic";
     repo = pname;
     tag = version;
-    hash = "sha256-AsbNFBvHxjiLl0T4JnQ5QrZdERUUYgS4iJvMRQytzN4=";
+    hash = "sha256-PxW8zseDUF0EOh7E/N8swwgFTfvkoTpp+d3ngAUpFNU=";
   };
 
   build-system = [ setuptools ];
