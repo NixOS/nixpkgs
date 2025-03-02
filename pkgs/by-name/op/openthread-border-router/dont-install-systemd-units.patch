@@ -1,0 +1,14 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index d31b2096b1..5d2dec8049 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -104,9 +104,6 @@ include(GNUInstallDirs)
+ 
+ pkg_check_modules(SYSTEMD systemd)
+ 
+-if(SYSTEMD_FOUND)
+-    pkg_get_variable(OTBR_SYSTEMD_UNIT_DIR systemd systemdsystemunitdir)
+-endif()
+ 
+ 
+ add_subdirectory(third_party EXCLUDE_FROM_ALL)
