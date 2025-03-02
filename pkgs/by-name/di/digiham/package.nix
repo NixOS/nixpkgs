@@ -16,8 +16,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "jketterl";
-    repo = finalAttrs.pname;
-    rev = finalAttrs.version;
+    repo = "digiham";
+    tag = finalAttrs.version;
     hash = "sha256-v7qp6Lv94Ec0yzHsc08YDfE5OU54nglosRLWb98yDiQ=";
   };
 
@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/jketterl/digiham";
-    description = "tools for decoding digital ham communication";
+    description = "Tools for decoding digital ham communication";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.unix;
     maintainers = lib.teams.c3d2.members;
