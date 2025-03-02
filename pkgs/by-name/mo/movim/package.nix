@@ -5,8 +5,8 @@
   dash,
   php,
   phpCfg ? null,
-  withPgsql ? true, # “strongly recommended” according to docs
-  withMysql ? false,
+  withPostgreSQL ? true, # “strongly recommended” according to docs
+  withMySQL ? false,
   minifyStaticFiles ? false, # default files are often not minified
   esbuild,
   lightningcss,
@@ -41,8 +41,38 @@ let
     else
       { }
   );
+
+  phpPackage = php.buildEnv (
+    {
+      extensions = (
+        { all, enabled }:
+        enabled
+        ++ [
+          all.curl
+          all.dom
+          all.gd
+          all.imagick
+          all.mbstring
+          all.pdo
+          all.simplexml
+        ]
+        ++ lib.optionals withPostgreSQL [
+          all.pdo_pgsql
+          all.pgsql
+        ]
+        ++ lib.optionals withMySQL [
+          all.mysqli
+          all.mysqlnd
+          all.pdo_mysql
+        ]
+      );
+    }
+    // lib.optionalAttrs (phpCfg != null) {
+      extraConfig = phpCfg;
+    }
+  );
 in
-php.buildComposerProject2 (finalAttrs: {
+phpPackage.buildComposerProject2 (finalAttrs: {
   pname = "movim";
   version = "0.29.2";
 
@@ -53,41 +83,7 @@ php.buildComposerProject2 (finalAttrs: {
     hash = "sha256-/u8/9tn0X+IwXKyK3S5uA9X8IRsg5xDdUPpnvxOIaYc=";
   };
 
-  php = php.buildEnv (
-    {
-      extensions = (
-        { all, enabled }:
-        enabled
-        ++ (with all; [
-          curl
-          dom
-          gd
-          imagick
-          mbstring
-          pdo
-          simplexml
-        ])
-        ++ lib.optionals withPgsql (
-          with all;
-          [
-            pdo_pgsql
-            pgsql
-          ]
-        )
-        ++ lib.optionals withMysql (
-          with all;
-          [
-            mysqli
-            mysqlnd
-            pdo_mysql
-          ]
-        )
-      );
-    }
-    // lib.optionalAttrs (phpCfg != null) {
-      extraConfig = phpCfg;
-    }
-  );
+  php = phpPackage;
 
   nativeBuildInputs =
     lib.optional minify.script.enable esbuild
@@ -111,7 +107,7 @@ php.buildComposerProject2 (finalAttrs: {
     # Point to PHP + PHP INI in the Nix store
     substituteInPlace src/Movim/Console/DaemonCommand.php \
       --replace-fail "<info>php vendor/bin/phinx migrate</info>" \
-        "<info>${lib.getBin finalAttrs.php} vendor/bin/phinx migrate</info>" \
+        "<info>${lib.getBin phpPackage} vendor/bin/phinx migrate</info>" \
       --replace-fail "<info>php daemon.php setAdmin {jid}</info>" \
         "<info>${finalAttrs.meta.mainProgram} setAdmin {jid}</info>"
 
