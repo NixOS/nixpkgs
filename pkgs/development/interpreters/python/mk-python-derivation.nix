@@ -42,7 +42,6 @@ let
     optionals
     optionalAttrs
     hasSuffix
-    escapeShellArgs
     extendDerivation
     head
     splitString
