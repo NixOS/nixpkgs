@@ -6,8 +6,9 @@
   makeWrapper,
   lib,
   stdenv,
-  swig,
   which,
+
+  # build dependencies
   boost,
   curl,
   eigen,
@@ -22,18 +23,23 @@
   perl,
   python3,
   shark,
+  swig,
   tinyxml,
+
+  # otb modules
   enableFeatureExtraction ? true,
   enableHyperspectral ? true,
   enableLearning ? true,
   enableMiscellaneous ? true,
   enableOpenMP ? false,
-  enablePython ? true,
+  enablePython ? false,
   extraPythonPackages ? ps: with ps; [ ],
   enableRemote ? true,
+  enableShark ? true,
   enableSAR ? true,
   enableSegmentation ? true,
   enableStereoProcessing ? true,
+  enableThirdParty ? true,
 }:
 let
   inherit (lib) optionalString optionals optional;
@@ -183,14 +189,23 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "otb";
-  version = "9.1.0";
+  version = "10.0-unstable-2025-02-13";
 
   src = fetchFromGitHub {
     owner = "orfeotoolbox";
     repo = "otb";
-    rev = finalAttrs.version;
-    hash = "sha256-NRyq6WTGxtPpBHXBXLCQyq60n0cJ/575xPs7QYSziYo=";
+    rev = "34c96ef53bb94985a1358d5c3de1a5ac6dfecf18";
+    hash = "sha256-QCLuUryVi+r8sQGxvrh9G91uLxuRju6l3LxVJO3VzXM=";
   };
+
+  patches = [
+    # fixes for gdal 10
+    # https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/-/merge_requests/1056
+    (fetchpatch {
+      url = "https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/-/merge_requests/1056/diffs.patch";
+      hash = "sha256-Zj/wkx0vxn5vqj0hszn7NxoYW1yf63G3HPVKbSdZIOY=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -201,18 +216,22 @@ stdenv.mkDerivation (finalAttrs: {
 
   # https://www.orfeo-toolbox.org/CookBook/CompilingOTBFromSource.html#native-build-with-system-dependencies
   # activates all modules and python by default
-  cmakeFlags =
-    optional enableFeatureExtraction "-DOTB_BUILD_FeaturesExtraction=ON"
-    ++ optional enableHyperspectral "-DOTB_BUILD_Hyperspectral=ON"
-    ++ optional enableLearning "-DOTB_BUILD_Learning=ON"
-    ++ optional enableMiscellaneous "-DOTB_BUILD_Miscellaneous=ON"
-    ++ optional enableOpenMP "-DOTB_USE_OPENMP=ON"
-    ++ optional enableRemote "-DOTB_BUILD_RemoteModules=ON"
-    ++ optional enableSAR "-DOTB_BUILD_SAR=ON"
-    ++ optional enableSegmentation "-DOTB_BUILD_Segmentation=ON"
-    ++ optional enableStereoProcessing "-DOTB_BUILD_StereoProcessing=ON"
-    ++ optional enablePython "-DOTB_WRAP_PYTHON=ON"
-    ++ optional finalAttrs.doInstallCheck "-DBUILD_TESTING=ON";
+  cmakeFlags = [
+    (lib.cmakeBool "OTBGroup_Core" true)
+    (lib.cmakeBool "OTB_BUILD_FeaturesExtraction" enableFeatureExtraction)
+    (lib.cmakeBool "OTB_BUILD_Hyperspectral" enableHyperspectral)
+    (lib.cmakeBool "OTB_BUILD_Learning" enableLearning)
+    (lib.cmakeBool "OTB_BUILD_Miscellaneous" enableMiscellaneous)
+    (lib.cmakeBool "OTB_USE_OPENMP" enableOpenMP)
+    (lib.cmakeBool "OTB_BUILD_RemoteModules" enableRemote)
+    (lib.cmakeBool "OTB_BUILD_SAR" enableSAR)
+    (lib.cmakeBool "OTB_USE_SHARK" enableShark)
+    (lib.cmakeBool "OTB_BUILD_Segmentation" enableSegmentation)
+    (lib.cmakeBool "OTB_BUILD_StereoProcessing" enableStereoProcessing)
+    (lib.cmakeBool "OTBGroup_ThirdParty" enableThirdParty)
+    (lib.cmakeBool "OTB_WRAP_PYTHON" enablePython)
+    (lib.cmakeBool "BUILD_TESTING" finalAttrs.doInstallCheck)
+  ];
 
   propagatedBuildInputs =
     [
@@ -231,11 +250,10 @@ stdenv.mkDerivation (finalAttrs: {
       tinyxml
     ]
     ++ otb-itk.propagatedBuildInputs
-    ++ optionals enablePython ([ python3 ] ++ pythonInputs);
+    ++ optionals enablePython ([ python3 ] ++ pythonInputs)
+    ++ optionals enableShark [ otb-shark ];
 
-  doInstallCheck = false;
-
-  pythonPath = optionals enablePython pythonInputs;
+  doInstallCheck = true;
 
   postInstall = ''
     wrapProgram $out/bin/otbcli \
@@ -248,5 +266,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.orfeo-toolbox.org/";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ daspk04 ];
+    platforms = lib.platforms.linux;
   };
 })
