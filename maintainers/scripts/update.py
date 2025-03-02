@@ -1,4 +1,6 @@
-from typing import Any, Generator
+from graphlib import TopologicalSorter
+from pathlib import Path
+from typing import Any, Generator, Literal
 import argparse
 import asyncio
 import contextlib
@@ -8,6 +10,9 @@ import re
 import subprocess
 import sys
 import tempfile
+
+
+Order = Literal["arbitrary", "reverse-topological", "topological"]
 
 
 class CalledProcessError(Exception):
@@ -40,6 +45,145 @@ async def check_subprocess_output(*args: str, **kwargs: Any) -> bytes:
         raise error
 
     return stdout
+
+
+async def nix_instantiate(attr_path: str) -> Path:
+    out = await check_subprocess_output(
+        "nix-instantiate",
+        "-A",
+        attr_path,
+        stdout=asyncio.subprocess.PIPE,
+        stderr=asyncio.subprocess.PIPE,
+    )
+    drv = out.decode("utf-8").strip().split("!", 1)[0]
+
+    return Path(drv)
+
+
+async def nix_query_requisites(drv: Path) -> list[Path]:
+    requisites = await check_subprocess_output(
+        "nix-store",
+        "--query",
+        "--requisites",
+        str(drv),
+        stdout=asyncio.subprocess.PIPE,
+        stderr=asyncio.subprocess.PIPE,
+    )
+
+    drv_str = str(drv)
+
+    return [
+        Path(requisite)
+        for requisite in requisites.decode("utf-8").splitlines()
+        # Avoid self-loops.
+        if requisite != drv_str
+    ]
+
+
+async def attr_instantiation_worker(
+    semaphore: asyncio.Semaphore,
+    attr_path: str,
+) -> tuple[Path, str]:
+    async with semaphore:
+        eprint(f"Instantiating {attr_path}…")
+        return (await nix_instantiate(attr_path), attr_path)
+
+
+async def requisites_worker(
+    semaphore: asyncio.Semaphore,
+    drv: Path,
+) -> tuple[Path, list[Path]]:
+    async with semaphore:
+        eprint(f"Obtaining requisites for {drv}…")
+        return (drv, await nix_query_requisites(drv))
+
+
+def requisites_to_attrs(
+    drv_attr_paths: dict[Path, str],
+    requisites: list[Path],
+) -> set[str]:
+    """
+    Converts a set of requisite `.drv`s to a set of attribute paths.
+    Derivations that do not correspond to any of the packages we want to update will be discarded.
+    """
+    return {
+        drv_attr_paths[requisite]
+        for requisite in requisites
+        if requisite in drv_attr_paths
+    }
+
+
+def reverse_edges(graph: dict[str, set[str]]) -> dict[str, set[str]]:
+    """
+    Flips the edges of a directed graph.
+    """
+
+    reversed_graph: dict[str, set[str]] = {}
+    for dependent, dependencies in graph.items():
+        for dependency in dependencies:
+            reversed_graph.setdefault(dependency, set()).add(dependent)
+
+    return reversed_graph
+
+
+def get_independent_sorter(
+    packages: list[dict],
+) -> TopologicalSorter[str]:
+    """
+    Returns a sorter which treats all packages as independent,
+    which will allow them to be updated in parallel.
+    """
+
+    attr_deps: dict[str, set[str]] = {
+        package["attrPath"]: set() for package in packages
+    }
+    sorter = TopologicalSorter(attr_deps)
+    sorter.prepare()
+
+    return sorter
+
+
+async def get_topological_sorter(
+    max_workers: int,
+    packages: list[dict],
+    reverse_order: bool,
+) -> tuple[TopologicalSorter[str], list[dict]]:
+    """
+    Returns a sorter which returns packages in topological or reverse topological order,
+    which will ensure a package is updated before or after its dependencies, respectively.
+    """
+
+    semaphore = asyncio.Semaphore(max_workers)
+
+    drv_attr_paths = dict(
+        await asyncio.gather(
+            *(
+                attr_instantiation_worker(semaphore, package["attrPath"])
+                for package in packages
+            )
+        )
+    )
+
+    drv_requisites = await asyncio.gather(
+        *(requisites_worker(semaphore, drv) for drv in drv_attr_paths.keys())
+    )
+
+    attr_deps = {
+        drv_attr_paths[drv]: requisites_to_attrs(drv_attr_paths, requisites)
+        for drv, requisites in drv_requisites
+    }
+
+    if reverse_order:
+        attr_deps = reverse_edges(attr_deps)
+
+    # Adjust packages order based on the topological one
+    ordered = list(TopologicalSorter(attr_deps).static_order())
+    packages = sorted(packages, key=lambda package: ordered.index(package["attrPath"]))
+
+    sorter = TopologicalSorter(attr_deps)
+    sorter.prepare()
+
+    return sorter, packages
 
 
 async def run_update_script(
@@ -250,11 +394,41 @@ async def updater(
         packages_to_update.task_done()
 
 
+async def populate_queue(
+    attr_packages: dict[str, dict],
+    sorter: TopologicalSorter[str],
+    packages_to_update: asyncio.Queue[dict | None],
+    num_workers: int,
+) -> None:
+    """
+    Keeps populating the queue with packages that can be updated
+    according to ordering requirements. If topological order
+    is used, the packages will appear in waves, as packages with
+    no dependencies are processed and removed from the sorter.
+    With `order="none"`, all packages will be enqueued simultaneously.
+    """
+
+    # Fill up an update queue,
+    while sorter.is_active():
+        ready_packages = list(sorter.get_ready())
+        eprint(f"Enqueuing group of {len(ready_packages)} packages")
+        for package in ready_packages:
+            await packages_to_update.put(attr_packages[package])
+        await packages_to_update.join()
+        sorter.done(*ready_packages)
+
+    # Add sentinels, one for each worker.
+    # A worker will terminate when it gets a sentinel from the queue.
+    for i in range(num_workers):
+        await packages_to_update.put(None)
+
+
 async def start_updates(
     max_workers: int,
     keep_going: bool,
     commit: bool,
-    packages: list[dict],
+    attr_packages: dict[str, dict],
+    sorter: TopologicalSorter[str],
 ) -> None:
     merge_lock = asyncio.Lock()
     packages_to_update: asyncio.Queue[dict | None] = asyncio.Queue()
@@ -263,7 +437,7 @@ async def start_updates(
         temp_dirs: list[tuple[str, str] | None] = []
 
         # Do not create more workers than there are packages.
-        num_workers = min(max_workers, len(packages))
+        num_workers = min(max_workers, len(attr_packages))
 
         nixpkgs_root_output = await check_subprocess_output(
             "git",
@@ -278,14 +452,12 @@ async def start_updates(
             temp_dir = stack.enter_context(make_worktree()) if commit else None
             temp_dirs.append(temp_dir)
 
-        # Fill up an update queue,
-        for package in packages:
-            await packages_to_update.put(package)
-
-        # Add sentinels, one for each worker.
-        # A workers will terminate when it gets sentinel from the queue.
-        for i in range(num_workers):
-            await packages_to_update.put(None)
+        queue_task = populate_queue(
+            attr_packages,
+            sorter,
+            packages_to_update,
+            num_workers,
+        )
 
         # Prepare updater workers for each temp_dir directory.
         # At most `num_workers` instances of `run_update_script` will be running at one time.
@@ -303,6 +475,7 @@ async def start_updates(
 
         tasks = asyncio.gather(
             *updater_tasks,
+            queue_task,
         )
 
         try:
@@ -324,9 +497,23 @@ async def main(
     commit: bool,
     packages_path: str,
     skip_prompt: bool,
+    order: Order,
 ) -> None:
     with open(packages_path) as f:
         packages = json.load(f)
+
+    if order != "arbitrary":
+        eprint("Sorting packages…")
+        reverse_order = order == "reverse-topological"
+        sorter, packages = await get_topological_sorter(
+            max_workers,
+            packages,
+            reverse_order,
+        )
+    else:
+        sorter = get_independent_sorter(packages)
+
+    attr_packages = {package["attrPath"]: package for package in packages}
 
     eprint()
     eprint("Going to be running update for following packages:")
@@ -340,7 +527,7 @@ async def main(
         eprint()
         eprint("Running update for:")
 
-        await start_updates(max_workers, keep_going, commit, packages)
+        await start_updates(max_workers, keep_going, commit, attr_packages, sorter)
 
         eprint()
         eprint("Packages updated!")
@@ -375,6 +562,13 @@ parser.add_argument(
     help="Commit the changes",
 )
 parser.add_argument(
+    "--order",
+    dest="order",
+    default="arbitrary",
+    choices=["arbitrary", "reverse-topological", "topological"],
+    help="Sort the packages based on dependency relation",
+)
+parser.add_argument(
     "packages",
     help="JSON file containing the list of package names and their update scripts",
 )
@@ -397,6 +591,7 @@ if __name__ == "__main__":
                 args.commit,
                 args.packages,
                 args.skip_prompt,
+                args.order,
             )
         )
     except KeyboardInterrupt as e:
