@@ -152,7 +152,7 @@ async def commit_changes(
 async def check_changes(
     package: dict,
     worktree: str,
-    update_info: str,
+    update_info: bytes,
 ) -> list[dict]:
     if "commit" in package["supportedFeatures"]:
         changes = json.loads(update_info)
@@ -208,7 +208,7 @@ async def check_changes(
 async def merge_changes(
     merge_lock: asyncio.Lock,
     package: dict,
-    update_info: str,
+    update_info: bytes,
     temp_dir: tuple[str, str] | None,
 ) -> None:
     if temp_dir is not None:
