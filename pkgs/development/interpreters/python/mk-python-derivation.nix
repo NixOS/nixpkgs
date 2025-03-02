@@ -110,6 +110,7 @@ let
     "disabledTestPaths"
     "disabledTests"
     "enabledTestPaths"
+    "enabledTests"
     "pytestFlags"
     "pytestFlagsArray"
     "unittestFlags"
@@ -458,6 +459,7 @@ let
         )
         (getExistingAttrs [
           "enabledTestPaths"
+          "enabledTests"
         ] attrs)
     )
   );
