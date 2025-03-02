@@ -3,6 +3,7 @@
   apple-sdk,
   apple-sdk_12,
   mkAppleDerivation,
+  darwin,
   ncurses,
   openpam,
   pkg-config,
@@ -96,14 +97,10 @@ mkAppleDerivation {
     sed -e '/    if (os_feature_enabled(cronBTMToggle, cronBTMCheck))/,/    }/d' -i atrun/atrun.c
   '';
 
-  preConfigure = ''
-    export NIX_CFLAGS_COMPILE+=" -iframework $SDKROOT/System/Library/Frameworks/OpenDirectory.framework/Frameworks"
-  '';
-
   env.NIX_CFLAGS_COMPILE = "-I${privateHeaders}/include";
 
   buildInputs = [
-    apple-sdk.privateFrameworksHook
+    darwin.CoreSymbolication-headers
     ncurses
     openpam
   ];

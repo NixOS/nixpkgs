@@ -112,6 +112,9 @@ qtModule {
     # Override locales install path so they go to QtWebEngine's $out
     ./locales-path.patch
 
+    # Don’t look for binaries in the Darwin developer directory.
+    ./darwin-use-unprefixed-toolchain-binaries.patch
+
     # Fix build of vendored xnnpack on aarch64/gcc14
     # FIXME: remove when upstream updates
     (fetchpatch {

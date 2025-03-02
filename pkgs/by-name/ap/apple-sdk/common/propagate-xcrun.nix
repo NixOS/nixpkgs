@@ -36,15 +36,5 @@ self: super: {
 
       mkdir -p "$out/usr/bin"
       ln -s '${xcbuild.xcrun}/bin/xcrun' "$out/usr/bin/xcrun"
-
-      # Include `libtool` in the toolchain, so `xcrun -find libtool` can find it without requiring `cctools.libtool`
-      # as a `nativeBuildInput`.
-      mkdir -p "$toolchainsPath/usr/bin"
-      ln -s '${cctools.libtool}/bin/${stdenv.cc.targetPrefix}libtool' "$toolchainsPath/usr/bin/libtool"
-
-      # Include additional binutils required by some packages (such as Chromium).
-      for tool in lipo nm otool size strip; do
-        ln -s '${darwin.binutils-unwrapped}/bin/${stdenv.cc.targetPrefix}'$tool "$toolchainsPath/usr/bin/$tool"
-      done
     '';
 }
