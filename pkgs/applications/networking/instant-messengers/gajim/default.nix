@@ -6,10 +6,10 @@
 
   # Native dependencies
   python3,
-  gtk3,
+  gtk4,
   gobject-introspection,
   adwaita-icon-theme,
-  gtksourceview4,
+  gtksourceview5,
   glib-networking,
 
   # Test dependencies
@@ -51,9 +51,9 @@ python3.pkgs.buildPythonApplication rec {
 
   buildInputs =
     [
-      gtk3
+      gtk4
       adwaita-icon-theme
-      gtksourceview4
+      gtksourceview5
       glib-networking
     ]
     ++ lib.optionals enableJingle [
