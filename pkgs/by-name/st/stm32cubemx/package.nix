@@ -71,6 +71,13 @@ let
       done;
 
       cp ${desktopItem}/share/applications/*.desktop $out/share/applications
+      if ! grep -q StartupWMClass= "$out"/share/applications/*.desktop; then
+          chmod +w "$out"/share/applications/*.desktop
+          echo "StartupWMClass=com-st-microxplorer-maingui-STM32CubeMX" >> "$out"/share/applications/*.desktop
+      else
+          echo "error: upstream already provides StartupWMClass= in desktop file -- please update package expr" >&2
+          exit 1
+      fi
     '';
 
     meta = with lib; {
