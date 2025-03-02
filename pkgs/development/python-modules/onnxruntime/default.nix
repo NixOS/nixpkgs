@@ -4,6 +4,7 @@
   buildPythonPackage,
   autoPatchelfHook,
   onnxruntime,
+  openvino,
   coloredlogs,
   numpy,
   packaging,
@@ -58,6 +59,7 @@ buildPythonPackage {
       # dependency between the two. Option 2, because onnxruntime takes forever to build with cuda support.
       onnxruntime
     ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ openvino ]
     ++ lib.optionals onnxruntime.passthru.cudaSupport (
       with onnxruntime.passthru.cudaPackages;
       [
