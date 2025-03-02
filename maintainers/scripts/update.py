@@ -93,14 +93,19 @@ async def run_update_script(
         raise asyncio.exceptions.CancelledError()
     except CalledProcessError as e:
         eprint(f" - {package['name']}: ERROR")
-        eprint()
-        eprint(f"--- SHOWING ERROR LOG FOR {package['name']} ----------------------")
-        eprint()
-        eprint(e.stderr.decode("utf-8"))
-        with open(f"{package['pname']}.log", "wb") as logfile:
-            logfile.write(e.stderr)
-        eprint()
-        eprint(f"--- SHOWING ERROR LOG FOR {package['name']} ----------------------")
+        if e.stderr is not None:
+            eprint()
+            eprint(
+                f"--- SHOWING ERROR LOG FOR {package['name']} ----------------------"
+            )
+            eprint()
+            eprint(e.stderr.decode("utf-8"))
+            with open(f"{package['pname']}.log", "wb") as logfile:
+                logfile.write(e.stderr)
+            eprint()
+            eprint(
+                f"--- SHOWING ERROR LOG FOR {package['name']} ----------------------"
+            )
 
         if not keep_going:
             raise UpdateFailedException(
