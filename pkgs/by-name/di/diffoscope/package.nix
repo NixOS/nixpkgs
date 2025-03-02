@@ -278,6 +278,11 @@ python.pkgs.buildPythonApplication rec {
       # Fails because it fails to determine llvm version
       "test_item3_deflate_llvm_bitcode"
     ]
+    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+      # OSError: [Errno 8] Exec format error: 'aapt2'
+      "test_compare_non_existing"
+      "test_no_differences"
+    ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # Disable flaky tests on Darwin
       "test_non_unicode_filename"
