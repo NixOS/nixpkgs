@@ -30,16 +30,12 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-settings";
-    rev = "epoch-${version}";
+    tag = "epoch-${version}";
     hash = "sha256-gTzZvhj7oBuL23dtedqfxUCT413eMoDc0rlNeqCeZ6E=";
   };
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-zMHJc6ytbOoi9E47Zsg6zhbQKObsaOtVHuPnLAu36I4=";
-
-  postPatch = ''
-    substituteInPlace justfile --replace '#!/usr/bin/env' "#!$(command -v env)"
-  '';
 
   nativeBuildInputs = [
     cmake
@@ -61,6 +57,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   dontUseJustBuild = true;
+  dontUseJustCheck = true;
 
   justFlags = [
     "--set"
@@ -84,12 +81,12 @@ rustPlatform.buildRustPackage rec {
     ];
   };
 
-  meta = with lib; {
-    homepage = "https://github.com/pop-os/cosmic-settings";
+  meta = {
     description = "Settings for the COSMIC Desktop Environment";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ nyabinary ];
-    platforms = platforms.linux;
+    homepage = "https://github.com/pop-os/cosmic-settings";
+    license = lib.licenses.gpl3Only;
     mainProgram = "cosmic-settings";
+    maintainers = with lib.maintainers; [ nyabinary ];
+    platforms = lib.platforms.linux;
   };
 }
