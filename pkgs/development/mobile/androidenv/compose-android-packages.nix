@@ -244,14 +244,14 @@ let
       true
     else if check == false then
       false
-    else if check == null || check == "if-supported" then
+    else if check == "if-supported" then
       let
         hasSrc =
           package: package.src != null && (builtins.isList package.src -> builtins.length package.src > 0);
       in
       packages != [ ] && lib.all hasSrc packages
     else
-      throw "Invalid argument ${toString check}; use true, false, or null/if-supported";
+      throw "Invalid argument ${toString check}; use true, false, or if-supported";
 
   # Function that automatically links all plugins for which multiple versions can coexist
   linkPlugins =
