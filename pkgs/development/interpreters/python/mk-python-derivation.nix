@@ -108,6 +108,7 @@ let
     "format"
     "disabledTestPaths"
     "disabledTests"
+    "enabledTestPaths"
     "pytestFlags"
     "pytestFlagsArray"
     "unittestFlags"
@@ -446,6 +447,19 @@ let
         "unittestFlags"
         "unittestFlagsArray"
       ] attrs
+      //
+        lib.mapAttrs
+          (
+            name: value:
+            lib.throwIf (attrs.${name} == [ ])
+              "${lib.getName finalAttrs}: ${name} must be unspecified, null or a non-empty list."
+              attrs.${name}
+          )
+          (
+            getOptionalAttrs [
+              "enabledTestPaths"
+            ] attrs
+          )
     )
   );
 
