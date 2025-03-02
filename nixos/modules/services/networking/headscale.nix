@@ -337,6 +337,62 @@ in
                 '';
                 example = [ "mydomain.internal" ];
               };
+
+              extra_records =
+                let
+                  record = with lib; {
+                    options = {
+                      name = mkOption {
+                        type = types.str;
+                        description = "DNS record name";
+                        example = "prometheus.myvpn.example.com";
+                      };
+                      type = mkOption {
+                        type = types.enum [
+                          "A"
+                          "AAAA"
+                        ];
+                        description = "DNS record type";
+                        default = "A";
+                        example = "AAAA";
+                      };
+                      value = mkOption {
+                        type = types.str;
+                        description = "DNS record mapping";
+                        example = "100.64.0.3";
+                      };
+                    };
+                  };
+                in
+                lib.mkOption {
+                  type = lib.types.listOf (lib.types.submodule record);
+                  default = [ ];
+                  description = ''
+                    Extra DNS records
+                    So far only A and AAAA records are supported (on the tailscale side).
+                  '';
+                  example = [
+                    {
+                      name = "prometheus.myvpn.example.com";
+                      type = "A";
+                      value = "100.64.0.3";
+                    }
+                  ];
+                };
+
+              extra_records_path = lib.mkOption {
+                type = lib.types.nullOr (
+                  lib.types.oneOf [
+                    lib.types.str
+                    lib.types.path
+                  ]
+                );
+                default = null;
+                description = ''
+                  Extra dynamic DNS records specified as a JSON file
+                '';
+                example = "/var/lib/headscale/extra-records.json";
+              };
             };
 
             oidc = {
