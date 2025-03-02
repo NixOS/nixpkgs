@@ -4281,10 +4281,11 @@ with pkgs;
   nm-tray = libsForQt5.callPackage ../tools/networking/networkmanager/tray.nix { };
 
   inherit (callPackages ../servers/nextcloud {})
-    nextcloud29 nextcloud30;
+    nextcloud29 nextcloud30 nextcloud31;
 
   nextcloud29Packages = callPackage ../servers/nextcloud/packages { ncVersion = "29"; };
   nextcloud30Packages = callPackage ../servers/nextcloud/packages { ncVersion = "30"; };
+  nextcloud31Packages = callPackage ../servers/nextcloud/packages { ncVersion = "31"; };
 
   nextcloud-news-updater = callPackage ../servers/nextcloud/news-updater.nix { };
 
@@ -14390,8 +14391,6 @@ with pkgs;
   mwic = callPackage ../applications/misc/mwic {
     pythonPackages = python3Packages;
   };
-
-  neomutt = darwin.apple_sdk_11_0.callPackage ../applications/networking/mailreaders/neomutt { };
 
   natron = libsForQt5.callPackage ../applications/video/natron { };
 
