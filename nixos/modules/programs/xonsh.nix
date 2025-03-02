@@ -6,6 +6,7 @@ let
 
   cfg = config.programs.xonsh;
   package = cfg.package.override { inherit (cfg) extraPackages; };
+  bashCompletionPath = "${cfg.bashCompletion.package}/share/bash-completion/bash_completion";
 in
 
 {
@@ -49,6 +50,13 @@ in
           Xontribs and extra Python packages to be available in xonsh.
         '';
       };
+
+      bashCompletion = {
+        enable = lib.mkEnableOption "bash completions for xonsh" // {
+          default = true;
+        };
+        package = lib.mkPackageOption pkgs "bash-completion" { };
+      };
     };
 
   };
@@ -77,6 +85,8 @@ in
           if _ls_alias is not None:
               aliases['ls'] = _ls_alias
           del _ls_alias
+
+      ${lib.optionalString cfg.bashCompletion.enable "$BASH_COMPLETIONS = '${bashCompletionPath}'"}
 
       ${cfg.config}
     '';
