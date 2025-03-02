@@ -17,22 +17,24 @@
   python3,
   qttools,
   git,
+  qtmultimedia,
 }:
 let
   qtPython = python3.withPackages (pkgs: with pkgs; [ pyqt5 ]);
 in
 stdenv.mkDerivation rec {
   pname = "seamly2d";
-  version = "2022-08-15.0339";
+  version = "2025.2.24.204";
 
   src = fetchFromGitHub {
     owner = "FashionFreedom";
     repo = "Seamly2D";
-    rev = "v${version}";
-    sha256 = "13jxkg84jfz8g52zwhh5jvi23wryzkavwbsfalzr9m04blj5xnik";
+    tag = "v${version}";
+    hash = "sha256-Mz4uXYohMf5SE/NWbFtw3hXEIXBWr3A0zuWGeD+zkQE=";
   };
 
   buildInputs = [
+    qtmultimedia
     git
     qtPython
     qtbase
@@ -56,19 +58,10 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    substituteInPlace common.pri \
-      --replace '$$[QT_INSTALL_HEADERS]/QtXmlPatterns' '${lib.getDev qtxmlpatterns}/include/QtXmlPatterns' \
-      --replace '$$[QT_INSTALL_HEADERS]/QtSvg' '${lib.getDev qtsvg}/include/QtSvg' \
-      --replace '$$[QT_INSTALL_HEADERS]/' '${lib.getDev qtbase}/include/' \
-      --replace '$$[QT_INSTALL_HEADERS]' '${lib.getDev qtbase}'
-    substituteInPlace src/app/translations.pri \
-      --replace '$$[QT_INSTALL_BINS]/$$LRELEASE' '${lib.getDev qttools}/bin/lrelease'
     substituteInPlace src/app/seamly2d/mainwindowsnogui.cpp \
-      --replace 'define PDFTOPS "pdftops"' 'define PDFTOPS "${lib.getBin poppler-utils}/bin/pdftops"'
+      --replace-fail 'define PDFTOPS "pdftops"' 'define PDFTOPS "${lib.getBin poppler-utils}/bin/pdftops"'
     substituteInPlace src/libs/vwidgets/export_format_combobox.cpp \
-      --replace 'define PDFTOPS "pdftops"' 'define PDFTOPS "${lib.getBin poppler-utils}/bin/pdftops"'
-    substituteInPlace src/app/seamlyme/mapplication.cpp \
-      --replace 'diagrams.rcc' '../share/diagrams.rcc'
+      --replace-fail 'define PDFTOPS "pdftops"' 'define PDFTOPS "${lib.getBin poppler-utils}/bin/pdftops"'
   '';
 
   qmakeFlags = [
@@ -83,9 +76,6 @@ stdenv.mkDerivation rec {
   installFlags = [ "INSTALL_ROOT=$(out)" ];
 
   postInstall = ''
-    mv $out/usr/share $out/
-    rmdir $out/usr
-
     mv $out/share/seamly2d/* $out/share/.
     rmdir $out/share/seamly2d
 
