@@ -7,6 +7,7 @@
 let
   cfg = config.services.tandoor-recipes;
   pkg = cfg.package;
+  stateDir = "/var/lib/tandoor-recipes";
 
   # SECRET_KEY through an env file
   env =
@@ -14,7 +15,7 @@ let
       GUNICORN_CMD_ARGS = "--bind=${cfg.address}:${toString cfg.port}";
       DEBUG = "0";
       DEBUG_TOOLBAR = "0";
-      MEDIA_ROOT = "/var/lib/tandoor-recipes";
+      MEDIA_ROOT = "${stateDir}/media";
     }
     // lib.optionalAttrs (config.time.timeZone != null) {
       TZ = config.time.timeZone;
@@ -26,7 +27,7 @@ let
     ${lib.toShellVars env}
     eval "$(${config.systemd.package}/bin/systemctl show -pUID,GID,MainPID tandoor-recipes.service)"
     exec ${pkgs.util-linux}/bin/nsenter \
-      -t $MainPID -m -S $UID -G $GID --wdns=${env.MEDIA_ROOT} \
+      -t $MainPID -m -S $UID -G $GID --wdns=${stateDir} \
       ${pkg}/bin/tandoor-recipes "$@"
   '';
 in
@@ -98,9 +99,7 @@ in
       };
     };
 
-    users.groups = lib.mkIf (cfg.group == "tandoor_recipes") {
-      tandoor-recipes = { };
-    };
+    users.groups = lib.mkIf (cfg.group == "tandoor_recipes") { tandoor-recipes = { }; };
 
     systemd.services.tandoor-recipes = {
       description = "Tandoor Recipes server";
@@ -113,8 +112,11 @@ in
 
         User = cfg.user;
         Group = cfg.group;
-        StateDirectory = "tandoor-recipes";
-        WorkingDirectory = env.MEDIA_ROOT;
+        StateDirectory = [
+          "tandoor-recipes"
+          "tandoor-recipes/media"
+        ];
+        WorkingDirectory = stateDir;
         RuntimeDirectory = "tandoor-recipes";
 
         BindReadOnlyPaths = [
