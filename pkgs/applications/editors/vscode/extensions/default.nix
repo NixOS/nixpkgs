@@ -814,13 +814,13 @@ let
           name = "vscode-vibrancy-continued";
           publisher = "illixion";
           version = "1.1.44";
-          sha256 = "sha256-6YMr64MTtJrmMMMPW/s6hMh/IilDqLMrspKRPT4uSpM=";
+          sha256 = "sha256-1oEfnS7BBKPJ9cSu05S6GQsN76nk5JW7aBq/2O8raSY=";
         };
         meta = {
-          description = "Vibrancy Effect for Visual Studio Code";
-          changelog = "https://marketplace.visualstudio.com/items/illixion.vscode-vibrancy-continued/changelog";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=illixion.vscode-vibrancy-continued";
+          changelog = "https://marketplace.visualstudio.com/items/illixion.vscode-vibrancy-continued/changelog";
           homepage = "https://github.com/illixion/vscode-vibrancy-continued#readme";
+          description = "Vibrancy Effect for Visual Studio Code";
           maintainers = with lib.maintainers; [ _2hexed ];
           license = lib.licenses.mit;
         };
