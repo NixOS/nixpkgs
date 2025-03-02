@@ -1588,6 +1588,9 @@ let
       buildInputs = [ cacert ] ++ attrs.buildInputs;
     });
 
+    float = old.float.overrideAttrs (attrs: {
+      enableParallelBuilding = false;
+    });
 
     immunotation = let
       MHC41alleleList = fetchurl {
