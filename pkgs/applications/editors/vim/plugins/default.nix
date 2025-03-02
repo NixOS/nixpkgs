@@ -17,11 +17,8 @@ let
 
   inherit (lib) extends;
 
-  initialPackages = self: { };
-
-  plugins = callPackage ./generated.nix {
+  plugins = callPackage ./parse-generated.nix {
     inherit buildVimPlugin;
-    inherit (neovimUtils) buildNeovimPlugin;
   };
 
   # TL;DR
@@ -37,8 +34,6 @@ let
 
   aliases = if config.allowAliases then (import ./aliases.nix lib) else final: prev: { };
 
-  extensible-self = lib.makeExtensible (
-    extends aliases (extends overrides (extends plugins initialPackages))
-  );
+  extensible-self = lib.makeExtensible (extends aliases (extends overrides (lib.toFunction plugins)));
 in
 extensible-self
