@@ -106,6 +106,13 @@ let
                   path = ../12;
                 }
               ];
+              "clang/aarch64-tblgen.patch" = [
+                {
+                  after = "17";
+                  before = "18";
+                  path = ../17;
+                }
+              ];
               "lld/add-table-base.patch" = [
                 {
                   after = "16";
@@ -516,12 +523,17 @@ let
             # Crude method to drop polly patches if present, they're not needed for tblgen.
             (p: (!lib.hasInfix "-polly" p))
             tools.libllvm.patches;
-        clangPatches = [
-          # Would take tools.libclang.patches, but this introduces a cycle due
-          # to replacements depending on the llvm outpath (e.g. the LLVMgold patch).
-          # So take the only patch known to be necessary.
-          (metadata.getVersionFile "clang/gnu-install-dirs.patch")
-        ];
+        clangPatches =
+          [
+            # Would take tools.libclang.patches, but this introduces a cycle due
+            # to replacements depending on the llvm outpath (e.g. the LLVMgold patch).
+            # So take the only patch known to be necessary.
+            (metadata.getVersionFile "clang/gnu-install-dirs.patch")
+          ]
+          ++ lib.optional (stdenv.isAarch64 && lib.versions.major metadata.release_version == "17")
+            # Fixes llvm17 tblgen builds on aarch64.
+            # https://github.com/llvm/llvm-project/issues/106521#issuecomment-2337175680
+            (metadata.getVersionFile "clang/aarch64-tblgen.patch");
       };
 
       libclang = callPackage ./clang {
@@ -602,7 +614,12 @@ let
             ];
             stripLen = 1;
             hash = "sha256-1NKej08R9SPlbDY/5b0OKUsHjX07i9brR84yXiPwi7E=";
-          });
+          })
+          ++
+            lib.optional (stdenv.isAarch64 && lib.versions.major metadata.release_version == "17")
+              # Fixes llvm17 tblgen builds on aarch64.
+              # https://github.com/llvm/llvm-project/issues/106521#issuecomment-2337175680
+              (metadata.getVersionFile "clang/aarch64-tblgen.patch");
       };
 
       clang-unwrapped = tools.libclang;
