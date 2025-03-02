@@ -2,13 +2,21 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  fetchurl,
   pkg-config,
   makeWrapper,
   openssl,
   mpv,
-  ffmpeg,
+  ffmpeg_6,
   nodejs,
 }:
+
+let
+  desktop = fetchurl {
+    url = "https://github.com/THMonster/Revda/raw/e1c236f6f940443419b6202735b6f8a0c9cdbe8b/misc/dmlive-mime.desktop";
+    hash = "sha256-k4h0cSfjuTZAYLjbaTfcye1aC5obd6D3tAZjgBV8xCI=";
+  };
+in
 
 rustPlatform.buildRustPackage {
   pname = "dmlive";
@@ -37,10 +45,11 @@ rustPlatform.buildRustPackage {
     wrapProgram "$out/bin/dmlive" --suffix PATH : "${
       lib.makeBinPath [
         mpv
-        ffmpeg
+        ffmpeg_6
         nodejs
       ]
     }"
+    install -Dm644 ${desktop} $out/share/applications/dmlive-mime.desktop
   '';
 
   env.OPENSSL_NO_VENDOR = true;

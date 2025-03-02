@@ -7,14 +7,14 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "exo";
-  version = "0.0.10-alpha";
+  version = "0.0.14-alpha";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "exo-explore";
     repo = "exo";
     tag = "v${version}";
-    hash = "sha256-JJGjr9RLiJ23mPpSsx6exs8hXx/ZkL5rl8i6Xg1vFhY=";
+    hash = "sha256-GoYfpr6oFpreWQtSomOwgfzSoBAbjqGZ1mcc0u9TBl4=";
   };
 
   build-system = with python3Packages; [ setuptools ];
@@ -42,10 +42,10 @@ python3Packages.buildPythonApplication rec {
     requests
     rich
     scapy
-    tenacity
     tqdm
     transformers
     tinygrad
+    uvloop
   ];
 
   pythonImportsCheck = [

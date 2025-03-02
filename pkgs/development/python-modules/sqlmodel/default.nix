@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "sqlmodel";
-  version = "0.0.22";
+  version = "0.0.23";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "tiangolo";
     repo = "sqlmodel";
     tag = version;
-    hash = "sha256-y6lY6DlfdCF5dliRkiU6r+ny/a9ssDtqRmF+/rcKFkg=";
+    hash = "sha256-G4L+02ey+FYPe9Yhd4VMl39LR4NT+m+GRVxV4w/Ifo0=";
   };
 
   patches = [

@@ -30,7 +30,7 @@ stdenvNoCC.mkDerivation rec {
       ttx -v -o $fontname.xml $file
       substituteInPlace $fontname.xml \
         --replace-fail "<usWidthClass value=\"5\"/>" "<usWidthClass value=\"3\"/>"
-      ttx $fontname.xml -o $fontname.ttf
+      ttx --no-recalc-timestamp $fontname.xml -o $fontname.ttf
     done
 
     install -Dm644 *.ttf -t $out/share/fonts/truetype

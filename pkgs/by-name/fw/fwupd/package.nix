@@ -317,6 +317,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeCheckInputs = [
     polkit
+    libredirect.hook
   ];
 
   preCheck = ''
@@ -324,7 +325,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     echo "12345678901234567890123456789012" > machine-id
     export NIX_REDIRECTS=/etc/machine-id=$(realpath machine-id) \
-    LD_PRELOAD=${libredirect}/lib/libredirect.so
   '';
 
   postInstall = ''

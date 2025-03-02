@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pugixml";
-  version = "1.14";
+  version = "1.15";
 
   src = fetchFromGitHub {
     owner = "zeux";
     repo = "pugixml";
-    rev = "v${version}";
-    sha256 = "sha256-xxtJr9VeBPxpxWJaDGO635+Ch7ZS6t6VyuXEio+ogZ8=";
+    tag = "v${version}";
+    hash = "sha256-t/57lg32KgKPc7qRGQtO/GOwHRqoj78lllSaE/A8Z9Q=";
   };
 
   outputs = [ "out" ] ++ lib.optionals shared [ "dev" ];
@@ -27,8 +27,8 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DBUILD_TESTS=ON"
-    "-DBUILD_SHARED_LIBS=${if shared then "ON" else "OFF"}"
+    (lib.cmakeBool "BUILD_TESTS" true)
+    (lib.cmakeBool "BUILD_SHARED_LIBS" shared)
   ];
 
   nativeCheckInputs = [ check ];
@@ -38,11 +38,11 @@ stdenv.mkDerivation rec {
     sed -i -e '/PUGIXML_HAS_LONG_LONG/ s/^\/\///' src/pugiconfig.hpp
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Light-weight, simple and fast XML parser for C++ with XPath support";
     homepage = "https://pugixml.org";
-    license = licenses.mit;
-    maintainers = with maintainers; [ pSub ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ pSub ];
+    platforms = lib.platforms.unix;
   };
 }

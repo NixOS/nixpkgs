@@ -5,7 +5,7 @@
   wrapQtAppsHook,
   fetchFromGitHub,
   addDriverRunpath,
-  poppler_utils,
+  poppler-utils,
   qtxmlpatterns,
   qtsvg,
   libgbm,
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     git
     qtPython
     qtbase
-    poppler_utils
+    poppler-utils
     qtxmlpatterns
     qtsvg
     libgbm
@@ -64,9 +64,9 @@ stdenv.mkDerivation rec {
     substituteInPlace src/app/translations.pri \
       --replace '$$[QT_INSTALL_BINS]/$$LRELEASE' '${lib.getDev qttools}/bin/lrelease'
     substituteInPlace src/app/seamly2d/mainwindowsnogui.cpp \
-      --replace 'define PDFTOPS "pdftops"' 'define PDFTOPS "${lib.getBin poppler_utils}/bin/pdftops"'
+      --replace 'define PDFTOPS "pdftops"' 'define PDFTOPS "${lib.getBin poppler-utils}/bin/pdftops"'
     substituteInPlace src/libs/vwidgets/export_format_combobox.cpp \
-      --replace 'define PDFTOPS "pdftops"' 'define PDFTOPS "${lib.getBin poppler_utils}/bin/pdftops"'
+      --replace 'define PDFTOPS "pdftops"' 'define PDFTOPS "${lib.getBin poppler-utils}/bin/pdftops"'
     substituteInPlace src/app/seamlyme/mapplication.cpp \
       --replace 'diagrams.rcc' '../share/diagrams.rcc'
   '';

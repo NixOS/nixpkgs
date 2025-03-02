@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "websockify";
-  version = "0.12.0";
+  version = "0.13.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "novnc";
     repo = pname;
     tag = "v${version}";
-    hash = "sha256-+qjWmCkXJj8J5OImMSjTwXWyApmJ883NMr0157iqPS4=";
+    hash = "sha256-b57L4o071zEt/gX9ZVzEpcnp0RCeo3peZrby2mccJgQ=";
   };
 
   propagatedBuildInputs = [
@@ -48,7 +48,7 @@ buildPythonPackage rec {
     description = "WebSockets support for any application/server";
     mainProgram = "websockify";
     homepage = "https://github.com/kanaka/websockify";
-    changelog = "https://github.com/novnc/websockify/releases/tag/v${version}";
+    changelog = "https://github.com/novnc/websockify/releases/tag/${src.tag}";
     license = licenses.lgpl3Only;
     maintainers = [ ];
   };

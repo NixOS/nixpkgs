@@ -221,6 +221,7 @@ with lib.maintainers;
     members = [
       xanderio
       blitz
+      snu
     ];
     scope = "Team for Cyberus Technology employees who collectively maintain packages.";
     shortName = "Cyberus Technology employees";
@@ -568,6 +569,7 @@ with lib.maintainers;
       edwtjo
       leona
       theCapypara
+      thiagokokada
     ];
     shortName = "Jetbrains";
     scope = "Maintainers of the Jetbrains IDEs in nixpkgs";
@@ -829,7 +831,12 @@ with lib.maintainers;
   };
 
   neovim = {
-    members = [ ];
+    members = [
+      GaetanLepage
+      khaneliman
+      mrcjkb
+      perchun
+    ];
     githubTeams = [ "neovim" ];
     scope = "Maintain the vim and neovim text editors and related packages.";
     shortName = "Vim/Neovim";

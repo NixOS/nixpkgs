@@ -220,6 +220,10 @@ lib.recurseIntoAttrs {
     sideEffectStructuredAttrs = overrideStructuredAttrs true sideEffects;
   };
 
+  testBuildFailure' = lib.recurseIntoAttrs (
+    pkgs.callPackages ../testBuildFailurePrime/tests.nix { inherit overrideStructuredAttrs; }
+  );
+
   testEqualContents = lib.recurseIntoAttrs {
     equalDir = testers.testEqualContents {
       assertion = "The same directory contents at different paths are recognized as equal";

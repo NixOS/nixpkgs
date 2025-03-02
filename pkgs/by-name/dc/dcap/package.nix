@@ -30,14 +30,16 @@ stdenv.mkDerivation rec {
     libxcrypt
   ];
 
+  strictDeps = true;
+
   preConfigure = ''
-    patchShebangs bootstrap.sh
+    patchShebangs --build bootstrap.sh
     ./bootstrap.sh
   '';
 
   doCheck = true;
 
-  nativeCheckInputs = [ cunit ];
+  checkInputs = [ cunit ];
 
   outputs = [
     "bin"

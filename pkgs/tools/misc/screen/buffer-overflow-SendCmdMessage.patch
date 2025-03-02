@@ -1,0 +1,13 @@
+--- a/attacher.c	2025-02-24 20:15:31.701820351 +0100
++++ b/attacher.c	2025-02-24 20:17:05.893826559 +0100
+@@ -461,8 +461,8 @@
+ 		size_t len;
+ 		len = strlen(*av) + 1;
+ 		if (p + len >= m.m.command.cmd + ARRAY_SIZE(m.m.command.cmd) - 1)
+-			break;
++			Panic(0, "Total length of the command to send too large.\n");
+-		strncpy(p, *av, MAXPATHLEN);
++		memcpy(p, *av, len);
+ 		p += len;
+ 	}
+ 	*p = 0;

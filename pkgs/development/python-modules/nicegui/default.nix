@@ -1,61 +1,64 @@
 {
   lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  poetry-core,
+  setuptools,
+
+  # dependencies
   aiofiles,
   aiohttp,
-  buildPythonPackage,
   certifi,
-  pkgs,
   docutils,
   fastapi,
-  fetchFromGitHub,
   httpx,
   ifaddr,
   itsdangerous,
   jinja2,
-  libsass,
   markdown2,
-  matplotlib,
   orjson,
-  pandas,
-  plotly,
-  poetry-core,
-  pyecharts,
   pygments,
-  pytest-asyncio,
-  pytest-selenium,
-  pytestCheckHook,
   python-multipart,
   python-socketio,
-  pythonOlder,
-  pywebview,
   requests,
-  setuptools,
   typing-extensions,
   urllib3,
   uvicorn,
   vbuild,
   watchfiles,
+
+  # optional-dependencies
+  matplotlib,
+  pywebview,
+  plotly,
+  libsass,
+  redis,
+
+  # tests
+  pandas,
+  pkgs,
+  polars,
+  pyecharts,
+  pytest-asyncio,
+  pytest-selenium,
+  pytestCheckHook,
   webdriver-manager,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "nicegui";
-  version = "2.9.1";
+  version = "2.11.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "zauberzeug";
     repo = "nicegui";
     tag = "v${version}";
-    hash = "sha256-PrY+jNA+OYtFzyuRzUckZZntsQg/eovkEfPPO1PX/18=";
+    hash = "sha256-U7S4JQ92H0SYEpMsMw5inioO6ayQ1/NDA7vnvR4i7Mk=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail '"setuptools>=30.3.0,<50",' ""
-  '';
 
   build-system = [
     poetry-core
@@ -92,21 +95,20 @@ buildPythonPackage rec {
     native = [ pywebview ];
     plotly = [ plotly ];
     sass = [ libsass ];
+    redis = [ redis ];
   };
 
   nativeCheckInputs = [
     pandas
     pkgs.chromedriver
+    polars
     pyecharts
     pytest-asyncio
     pytest-selenium
     pytestCheckHook
     webdriver-manager
+    writableTmpDirAsHomeHook
   ] ++ lib.flatten (builtins.attrValues optional-dependencies);
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   pythonImportsCheck = [ "nicegui" ];
 
@@ -116,7 +118,7 @@ buildPythonPackage rec {
   meta = {
     description = "Module to create web-based user interfaces";
     homepage = "https://github.com/zauberzeug/nicegui/";
-    changelog = "https://github.com/zauberzeug/nicegui/releases/tag/${src.tag}";
+    changelog = "https://github.com/zauberzeug/nicegui/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };

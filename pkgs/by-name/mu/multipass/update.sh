@@ -68,7 +68,6 @@ update_pubspec_json "$LATEST_VERSION"
 
 update_dart_pkg_hash dartssh2 andrei-toterman dartssh2
 update_dart_pkg_hash hotkey_manager_linux andrei-toterman hotkey_manager
-update_dart_pkg_hash system_info2 andrei-toterman system_info
 update_dart_pkg_hash tray_menu andrei-toterman tray_menu
 update_dart_pkg_hash window_size google flutter-desktop-embedding
 update_dart_pkg_hash xterm levkropp xterm.dart

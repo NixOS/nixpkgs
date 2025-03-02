@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   fetchurl,
-  fetchpatch2,
+  fetchpatch,
   aqbanking,
   boost,
   cmake,
@@ -80,6 +80,12 @@ stdenv.mkDerivation rec {
     ./0003-remove-valgrind.patch
     # this patch makes gnucash exec the Finance::Quote wrapper directly
     ./0004-exec-fq-wrapper.patch
+    # this patch fixes the build against icu 76
+    (fetchpatch {
+      name = "icu-76.patch";
+      url = "https://github.com/Gnucash/gnucash/commit/579eed1facc0f7834ea70b1a342ebca0f125d788.patch";
+      hash = "sha256-XzRPHDPxt2TfeqO48vaNEcfF58neVDMxVqkPKrG5xoM=";
+    })
   ];
 
   # this needs to be an environment variable and not a cmake flag to suppress

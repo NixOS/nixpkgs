@@ -7,7 +7,7 @@
   libz,
   mupdf,
   pkg-config,
-  poppler_utils,
+  poppler-utils,
   stdenv,
 }:
 
@@ -37,9 +37,9 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--with-mutool-path=${mupdf}/bin/mutool"
     "--with-pdftops=pdftops"
-    "--with-pdftops-path=${poppler_utils}/bin/pdftops"
+    "--with-pdftops-path=${poppler-utils}/bin/pdftops"
     "--with-gs-path=${ghostscript}/bin/gs"
-    "--with-pdftocairo-path=${poppler_utils}/bin/pdftocairo"
+    "--with-pdftocairo-path=${poppler-utils}/bin/pdftocairo"
   ];
   makeFlags = [
     "CUPS_SERVERBIN=$(out)/lib/cups"

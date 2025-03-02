@@ -15,19 +15,19 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ruff";
-  version = "0.9.7";
+  version = "0.9.9";
 
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "ruff";
-    tag = version;
-    hash = "sha256-eUQ4YBaQvSHbPjETC1rdpCm8WzJYkJXLnaPThrBvgj0=";
+    tag = finalAttrs.version;
+    hash = "sha256-SPthKFnUdBZwcLZm5EWmjskgdpO1+Llr6QEi8+a1cY0=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-yEgKSz1iLVONFi/elZHesqLmYrgL3mAXCUccVxX9oRs=";
+  cargoHash = "sha256-DNHl04LLKh4hUU4ZmI3UKSrMO7vHL6GjpbxKLYgBQ/A=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -82,7 +82,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Extremely fast Python linter and code formatter";
     homepage = "https://github.com/astral-sh/ruff";
-    changelog = "https://github.com/astral-sh/ruff/releases/tag/${version}";
+    changelog = "https://github.com/astral-sh/ruff/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     mainProgram = "ruff";
     maintainers = with lib.maintainers; [
@@ -90,4 +90,4 @@ rustPlatform.buildRustPackage rec {
       GaetanLepage
     ];
   };
-}
+})

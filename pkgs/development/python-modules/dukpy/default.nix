@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   buildPythonPackage,
   setuptools,
@@ -55,5 +56,8 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ruby0b ];
     mainProgram = "dukpy";
+    # error: 'TARGET_OS_BRIDGE' is not defined, evaluates to 0 [-Werror,-Wundef-prefix=TARGET_OS_]
+    # https://github.com/amol-/dukpy/issues/82
+    broken = stdenv.cc.isClang;
   };
 }

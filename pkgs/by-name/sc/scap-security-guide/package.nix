@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "scap-security-guide";
-  version = "0.1.75";
+  version = "0.1.76";
 
   src = fetchFromGitHub {
     owner = "ComplianceAsCode";
     repo = "content";
     tag = "v${version}";
-    hash = "sha256-fS0zvWIKyGAhqgBzFuELA/1iJa4N0whsnc9h/uwA3Ao=";
+    hash = "sha256-M1o9UG2pKtkFByp37UP++am8lJFfnoDBkRh1fos+ED0=";
   };
 
   postPatch = ''

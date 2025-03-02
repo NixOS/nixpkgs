@@ -1165,6 +1165,8 @@ self: super: with self; {
 
   ayla-iot-unofficial = callPackage ../development/python-modules/ayla-iot-unofficial { };
 
+  azure-ai-documentintelligence = callPackage ../development/python-modules/azure-ai-documentintelligence { };
+
   azure-appconfiguration = callPackage ../development/python-modules/azure-appconfiguration { };
 
   azure-applicationinsights = callPackage ../development/python-modules/azure-applicationinsights { };
@@ -1466,7 +1468,7 @@ self: super: with self; {
 
   pueblo = callPackage ../development/python-modules/pueblo { };
 
-  pulumi = callPackage ../development/python-modules/pulumi { inherit (pkgs) pulumi; };
+  pulumi = callPackage ../development/python-modules/pulumi { };
 
   pulumi-aws = callPackage ../development/python-modules/pulumi-aws { };
 
@@ -2100,6 +2102,8 @@ self: super: with self; {
 
   carbon = callPackage ../development/python-modules/carbon { };
 
+  cardano-tools = callPackage ../development/python-modules/cardano-tools { };
+
   cardimpose = callPackage ../development/python-modules/cardimpose { };
 
   cart = callPackage ../development/python-modules/cart { };
@@ -2681,6 +2685,8 @@ self: super: with self; {
   cookiecutter = callPackage ../development/python-modules/cookiecutter { };
 
   cookies = callPackage ../development/python-modules/cookies { };
+
+  coolname = callPackage ../development/python-modules/coolname { };
 
   coordinates = callPackage ../development/python-modules/coordinates { };
 
@@ -4238,8 +4244,6 @@ self: super: with self; {
   enturclient = callPackage ../development/python-modules/enturclient { };
 
   enum34 = callPackage ../development/python-modules/enum34 { };
-
-  enum-compat = callPackage ../development/python-modules/enum-compat { };
 
   env-canada = callPackage ../development/python-modules/env-canada { };
 
@@ -6490,6 +6494,8 @@ self: super: with self; {
 
   iocextract = callPackage ../development/python-modules/iocextract { };
 
+  ioctl-opt = callPackage ../development/python-modules/ioctl-opt { };
+
   ionhash = callPackage ../development/python-modules/ionhash { };
 
   ionoscloud = callPackage ../development/python-modules/ionoscloud { };
@@ -6730,6 +6736,8 @@ self: super: with self; {
   jinja2-ansible-filters = callPackage ../development/python-modules/jinja2-ansible-filters { };
 
   jinja2-git = callPackage ../development/python-modules/jinja2-git { };
+
+  jinja2-humanize-extension = callPackage ../development/python-modules/jinja2-humanize-extension { };
 
   jinja2-pluralize = callPackage ../development/python-modules/jinja2-pluralize { };
 
@@ -9730,6 +9738,8 @@ self: super: with self; {
 
   oemthermostat = callPackage ../development/python-modules/oemthermostat { };
 
+  ogmios = callPackage ../development/python-modules/ogmios { };
+
   okonomiyaki = callPackage ../development/python-modules/okonomiyaki { };
 
   okta = callPackage ../development/python-modules/okta { };
@@ -11068,6 +11078,8 @@ self: super: with self; {
   plac = callPackage ../development/python-modules/plac { };
 
   plaid-python = callPackage ../development/python-modules/plaid-python { };
+
+  planetary-computer = callPackage ../development/python-modules/planetary-computer { };
 
   plantuml = callPackage ../development/python-modules/plantuml { };
 
@@ -16059,6 +16071,8 @@ self: super: with self; {
     inherit (pkgs) systemd;
   };
 
+  systemdunitparser = callPackage ../development/python-modules/systemdunitparser { };
+
   sysv-ipc = callPackage ../development/python-modules/sysv-ipc { };
 
   syrupy = callPackage ../development/python-modules/syrupy { };
@@ -17959,6 +17973,8 @@ self: super: with self; {
   urllib3 = callPackage ../development/python-modules/urllib3 { };
 
   urlman = callPackage ../development/python-modules/urlman { };
+
+  urlmatch = callPackage ../development/python-modules/urlmatch { };
 
   urlpy = callPackage ../development/python-modules/urlpy { };
 

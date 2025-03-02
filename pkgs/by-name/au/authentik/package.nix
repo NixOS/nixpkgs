@@ -275,7 +275,7 @@ let
             pyyaml
             requests-oauthlib
             scim2-filter-parser
-            sentry-sdk
+            sentry-sdk_2
             service-identity
             setproctitle
             structlog

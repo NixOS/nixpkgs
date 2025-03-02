@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "flyway";
-  version = "11.0.1";
+  version = "11.3.2";
   src = fetchurl {
     url =
       "mirror://maven/org/flywaydb/flyway-commandline/${finalAttrs.version}/flyway-commandline-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-7dyoDUx2iJWEiPNDUQiXtvmHOD3UollvELD23J5Sjt4=";
+    sha256 = "sha256-n3TjM/z9kkMMqFboWT6ISBtYN3cFyhmFRgyUSfWolZs=";
   };
   nativeBuildInputs = [ makeWrapper ];
   dontBuild = true;

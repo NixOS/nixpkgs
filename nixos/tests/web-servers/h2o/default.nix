@@ -13,4 +13,5 @@ in
 {
   basic = handleTestOn supportedSystems ./basic.nix { inherit system; };
   mruby = handleTestOn supportedSystems ./mruby.nix { inherit system; };
+  tls-recommendations = handleTestOn supportedSystems ./tls-recommendations.nix { inherit system; };
 }

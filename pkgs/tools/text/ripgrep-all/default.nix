@@ -6,7 +6,7 @@
   makeWrapper,
   ffmpeg,
   pandoc,
-  poppler_utils,
+  poppler-utils,
   ripgrep,
   Security,
   zip,
@@ -17,7 +17,7 @@ let
   path = [
     ffmpeg
     pandoc
-    poppler_utils
+    poppler-utils
     ripgrep
     zip
     fzf
@@ -46,7 +46,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [
     makeWrapper
-    poppler_utils
+    poppler-utils
   ];
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin Security;
 

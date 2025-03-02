@@ -96,6 +96,11 @@ in
 buildFHSEnv {
   inherit (package) pname version meta;
   runScript = "${package.outPath}/bin/stm32cubemx";
+  extraInstallCommands = ''
+    mkdir -p $out/share/{applications,icons}
+    ln -sf ${package.outPath}/share/applications/* $out/share/applications/
+    ln -sf ${package.outPath}/share/icons/* $out/share/icons/
+  '';
   targetPkgs =
     pkgs: with pkgs; [
       alsa-lib

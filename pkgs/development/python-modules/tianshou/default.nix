@@ -1,39 +1,48 @@
 {
   lib,
-  ale-py,
+  stdenv,
   buildPythonPackage,
-  cython,
-  deepdiff,
-  docstring-parser,
+  pythonOlder,
   fetchFromGitHub,
+
+  # build-system
+  poetry-core,
+
+  # dependencies
+  deepdiff,
   gymnasium,
   h5py,
-  imageio,
-  joblib,
-  jsonargparse,
   matplotlib,
-  mujoco,
   numba,
   numpy,
-  opencv,
   overrides,
   packaging,
   pandas,
   pettingzoo,
-  poetry-core,
-  pybox2d,
-  pybullet,
-  pygame,
-  pymunk,
-  pytestCheckHook,
-  pythonOlder,
-  scipy,
   sensai-utils,
-  shimmy,
-  swig,
   tensorboard,
   torch,
   tqdm,
+
+  # optional-dependencies
+  docstring-parser,
+  jsonargparse,
+  ale-py,
+  opencv,
+  shimmy,
+  pybox2d,
+  pygame,
+  swig,
+  mujoco,
+  imageio,
+  cython,
+  pybullet,
+  joblib,
+  scipy,
+
+  # tests
+  pymunk,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -156,20 +165,26 @@ buildPythonPackage rec {
     "test/offline"
   ];
 
-  disabledTests = [
-    # AttributeError: 'TimeLimit' object has no attribute 'test_attribute'
-    "test_attr_unwrapped"
-    # Failed: DID NOT RAISE <class 'TypeError'>
-    "test_batch"
-    # Failed: Raised AssertionError
-    "test_vecenv"
-  ];
+  disabledTests =
+    [
+      # AttributeError: 'TimeLimit' object has no attribute 'test_attribute'
+      "test_attr_unwrapped"
+      # Failed: DID NOT RAISE <class 'TypeError'>
+      "test_batch"
+      # Failed: Raised AssertionError
+      "test_vecenv"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # Fatal Python error: Aborted
+      # pettingzoo/classic/tictactoe/tictactoe.py", line 254 in reset
+      "test_tic_tac_toe"
+    ];
 
-  meta = with lib; {
+  meta = {
     description = "Elegant PyTorch deep reinforcement learning library";
     homepage = "https://github.com/thu-ml/tianshou";
     changelog = "https://github.com/thu-ml/tianshou/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ derdennisop ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ derdennisop ];
   };
 }

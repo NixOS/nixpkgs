@@ -1,4 +1,4 @@
-{ stdenv, lib, makeDesktopItem, makeBinaryWrapper, lndir, config
+{ stdenv, lib, makeDesktopItem, makeWrapper, lndir, config
 , buildPackages
 , jq, xdg-utils, writeText
 
@@ -147,7 +147,7 @@ let
         // to be able to install addons that do not have an extid
         // Security is maintained because only user whitelisted addons
         // with a checksum can be installed
-        ${ lib.optionalString usesNixExtensions ''lockPref("xpinstall.signatures.required", false)'' };
+        ${ lib.optionalString usesNixExtensions ''lockPref("xpinstall.signatures.required", false);'' }
       '';
 
       #############################
@@ -219,7 +219,7 @@ let
               };
             }));
 
-      nativeBuildInputs = [ makeBinaryWrapper lndir jq ];
+      nativeBuildInputs = [ makeWrapper lndir jq ];
       buildInputs = [ browser.gtk3 ];
 
       makeWrapperArgs = [

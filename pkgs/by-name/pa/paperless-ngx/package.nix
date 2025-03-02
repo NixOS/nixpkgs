@@ -17,7 +17,7 @@
   qpdf,
   tesseract5,
   unpaper,
-  poppler_utils,
+  poppler-utils,
   liberation_ttf,
   xcbuild,
   pango,
@@ -73,14 +73,14 @@ let
     qpdf
     tesseract5
     unpaper
-    poppler_utils
+    poppler-utils
   ];
 
   frontend = buildNpmPackage {
     pname = "paperless-ngx-frontend";
     inherit version src;
 
-    nodejs = nodejs_20;  # does not build with 22
+    nodejs = nodejs_20; # does not build with 22
 
     postPatch = ''
       cd src-ui
@@ -316,6 +316,7 @@ python.pkgs.buildPythonApplication rec {
     changelog = "https://github.com/paperless-ngx/paperless-ngx/releases/tag/v${version}";
     license = licenses.gpl3Only;
     platforms = platforms.unix;
+    mainProgram = "paperless-ngx";
     maintainers = with maintainers; [
       leona
       SuperSandro2000

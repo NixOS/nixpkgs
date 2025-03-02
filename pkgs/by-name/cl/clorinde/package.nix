@@ -8,17 +8,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "clorinde";
-  version = "0.12.0";
+  version = "0.13.1";
 
   src = fetchFromGitHub {
     owner = "halcyonnouveau";
     repo = "clorinde";
     tag = "clorinde-v${finalAttrs.version}";
-    hash = "sha256-F6RGDhx5+efOKHB35obx6GTncVb0ZloSfLbRbFfunVY=";
+    hash = "sha256-P8Reoz7OAqKyz0pDIJWRWnEtQutSPE5w+gHUuCxN9QI=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-xC/g0J3647QI6tZOozxfDVxe5S4OCJ3DIYEq1U8wpck=";
+  cargoHash = "sha256-BIAQ6xwvC1X0k+HZqrGxOfv9+b26jVGjMOtbSdqn0hs=";
 
   cargoBuildFlags = [ "--package=clorinde" ];
 
@@ -38,7 +38,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Generate type-checked Rust from your PostgreSQL";
     homepage = "https://github.com/halcyonnouveau/clorinde";
-    changelog = "https://github.com/halcyonnouveau/clorinde/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/halcyonnouveau/clorinde/blob/clorinde-v${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [
       mit
       asl20

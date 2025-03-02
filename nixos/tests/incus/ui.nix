@@ -15,13 +15,15 @@ import ../make-test-python.nix (
     nodes.machine =
       { lib, ... }:
       {
-        virtualisation = {
-          incus = {
-            enable = true;
-            package = if lts then pkgs.incus-lts else pkgs.incus;
-          };
-          incus.ui.enable = true;
+
+        virtualisation.incus = {
+          enable = true;
+          package = if lts then pkgs.incus-lts else pkgs.incus;
+
+          preseed.config."core.https_address" = ":8443";
+          ui.enable = true;
         };
+
         networking.nftables.enable = true;
 
         environment.systemPackages =
@@ -63,16 +65,10 @@ import ../make-test-python.nix (
       };
 
     testScript = ''
-      machine.wait_for_unit("sockets.target")
       machine.wait_for_unit("incus.service")
-      machine.wait_for_file("/var/lib/incus/unix.socket")
-
-      # Configure incus listen address
-      machine.succeed("incus config set core.https_address :8443")
-      machine.succeed("systemctl restart incus")
 
       # Check that the INCUS_UI environment variable is populated in the systemd unit
-      machine.succeed("cat /etc/systemd/system/incus.service | grep 'INCUS_UI'")
+      machine.succeed("systemctl cat incus.service | grep 'INCUS_UI'")
 
       # Ensure the endpoint returns an HTML page with 'Incus UI' in the title
       machine.succeed("curl -kLs https://localhost:8443/ui | grep '<title>Incus UI</title>'")
