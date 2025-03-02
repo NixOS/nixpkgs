@@ -7,34 +7,45 @@
   lxml,
   pygments,
   pythonOlder,
-  setuptools,
+  hatchling,
+  hatch-fancy-pypi-readme,
+  hatch-vcs,
   tomli,
 }:
 
 buildPythonPackage rec {
   pname = "gcovr";
-  version = "8.2";
+  version = "8.3";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-mh3d1FhdE+x3VV211rajHugVh+pvxgT/n80jLLB4LfU=";
+    hash = "sha256-+qNx+cSn94yYANplUQfU+Z8EtxjRwNn0jK/cvvAEkHk=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ hatchling ];
+
+  # pythonRelaxDeps do not work on pyproject.toml
+  preBuild = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "hatchling==1.26.1" "hatchling"
+  '';
 
   dependencies = [
     colorlog
     jinja2
     lxml
     pygments
+    hatch-fancy-pypi-readme
+    hatch-vcs
   ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   # There are no unit tests in the pypi tarball. Most of the unit tests on the
   # github repository currently only work with gcc5, so we just disable them.
   # See also: https://github.com/gcovr/gcovr/issues/206
+  # Despite the CI passing many GCC version, ~300 tests are failing on nixos
   doCheck = false;
 
   pythonImportsCheck = [
