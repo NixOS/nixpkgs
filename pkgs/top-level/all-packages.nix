@@ -2027,10 +2027,7 @@ with pkgs;
     '';
   });
 
-  calamares = libsForQt5.callPackage ../tools/misc/calamares {
-    python = python3;
-    boost = boost.override { enablePython = true; python = python3; };
-  };
+  calamares = libsForQt5.callPackage ../tools/misc/calamares { };
   calamares-nixos = lowPrio (calamares.override { nixos-extensions = true; });
   candle = libsForQt5.callPackage ../applications/misc/candle { };
 
@@ -10642,7 +10639,6 @@ with pkgs;
   valeStyles = recurseIntoAttrs (callPackages ../by-name/va/vale/styles.nix { });
 
   valhalla = callPackage ../development/libraries/valhalla {
-    boost = boost.override { enablePython = true; python = python3; };
     protobuf = protobuf_21.override {
       abseil-cpp = abseil-cpp_202103.override {
         cxxStandard = "17";
