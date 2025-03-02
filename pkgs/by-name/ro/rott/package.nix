@@ -2,34 +2,22 @@
   stdenv,
   lib,
   fetchurl,
-  writeShellScript,
   SDL_compat,
   SDL_mixer,
   makeDesktopItem,
   copyDesktopItems,
-  runtimeShell,
   buildShareware ? false,
 }:
-
-let
-  # Allow the game to be launched from a user's PATH and load the game data from the user's home directory.
-  launcher = writeShellScript "rott" ''
-    set -eEuo pipefail
-    dir=$HOME/.rott/data
-    test -e $dir || mkdir -p $dir
-    cd $dir
-    exec @out@/libexec/rott "$@"
-  '';
-
-in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rott";
   version = "1.1.2";
 
   src = fetchurl {
-    url = "https://icculus.org/rott/releases/${pname}-${version}.tar.gz";
-    sha256 = "1zr7v5dv2iqx40gzxbg8mhac7fxz3kqf28y6ysxv1xhjqgl1c98h";
+    url = "https://icculus.org/rott/releases/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
+    hash = "sha256-ECUW6MMS9rC79sYj4fAcv7vDFKzorf4fIB1HsVvZJ/8=";
   };
+
+  patches = [ ./cflags.patch ];
 
   nativeBuildInputs = [ copyDesktopItems ];
 
@@ -38,24 +26,21 @@ stdenv.mkDerivation rec {
     SDL_mixer
   ];
 
-  sourceRoot = "rott-${version}/rott";
+  enableParallelBuilding = true;
+
+  sourceRoot = "rott-${finalAttrs.version}/rott";
 
   makeFlags = [
     "SHAREWARE=${if buildShareware then "1" else "0"}"
-  ];
-
-  # when using SDL_compat instead of SDL1, SDL_mixer isn't correctly detected,
-  # but there is no harm just specifying it
-  env.NIX_CFLAGS_COMPILE = toString [
-    "-I${lib.getDev SDL_mixer}/include/SDL"
+    # when using SDL_compat instead of SDL1, SDL_mixer isn't correctly detected,
+    # but there is no harm just specifying it
+    "EXTRACFLAGS=-I${lib.getDev SDL_mixer}/include/SDL"
   ];
 
   installPhase = ''
     runHook preInstall
 
-    install -Dm555 -t $out/libexec rott
-    install -Dm555 ${launcher} $out/bin/${launcher.name}
-    substituteInPlace $out/bin/rott --subst-var out
+    install -Dm755 -t $out/bin rott
 
     runHook postInstall
   '';
@@ -69,12 +54,12 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "SDL port of Rise of the Triad";
     mainProgram = "rott";
     homepage = "https://icculus.org/rott/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ sander ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ sander ];
+    platforms = lib.platforms.all;
   };
-}
+})
