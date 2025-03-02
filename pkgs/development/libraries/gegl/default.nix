@@ -129,7 +129,9 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = !stdenv.hostPlatform.isDarwin;
 
   passthru = {
-    inherit gimp;
+    tests = {
+      inherit gimp;
+    };
   };
 
   meta = with lib; {
