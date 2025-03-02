@@ -77,6 +77,10 @@ EOF
         flagsArray+=(-k "$(_pytestIncludeExcludeExpr enabledTests disabledTests)")
     fi
 
+    if [[ -n "${enabledTestMarks[*]-}" ]] || [[ -n "${disabledTestMarks[*]-}" ]]; then
+        flagsArray+=(-m "$(_pytestIncludeExcludeExpr enabledTestMarks disabledTestMarks)")
+    fi
+
     # Compatibility layer to the obsolete pytestFlagsArray
     eval "flagsArray+=(${pytestFlagsArray[*]-})"
 

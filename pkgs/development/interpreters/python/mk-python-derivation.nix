@@ -106,8 +106,10 @@ let
     "doInstallCheck"
     "pyproject"
     "format"
+    "disabledTestMarks"
     "disabledTestPaths"
     "disabledTests"
+    "enabledTestMarks"
     "enabledTestPaths"
     "enabledTests"
     "pytestFlags"
@@ -441,6 +443,7 @@ let
     }
     // optionalAttrs (attrs.doCheck or true) (
       getOptionalAttrs [
+        "disabledTestMarks"
         "disabledTestPaths"
         "disabledTests"
         "pytestFlags"
@@ -458,6 +461,7 @@ let
           )
           (
             getOptionalAttrs [
+              "enabledTestMarks"
               "enabledTestPaths"
               "enabledTests"
             ] attrs
