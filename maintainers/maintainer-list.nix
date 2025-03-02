@@ -19797,6 +19797,12 @@
     github = "Reputable2772";
     githubId = 153411261;
   };
+  ret2pop = {
+    email = "ret2pop@gmail.com";
+    github = "ret2pop";
+    githubId = 135050157;
+    name = "Preston Pan";
+  };
   rettetdemdativ = {
     email = "michael@koeppl.dev";
     github = "rettetdemdativ";
