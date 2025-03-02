@@ -1,0 +1,13 @@
+diff --git a/src/lib/WPXTable.h b/src/lib/WPXTable.h
+index 6d1e921..0234ad7 100644
+--- a/src/lib/WPXTable.h
++++ b/src/lib/WPXTable.h
+@@ -76,7 +76,7 @@ public:
+ 	WPXTableList & operator=(const WPXTableList & tableList);
+ 	virtual ~WPXTableList();
+ 
+-	WPXTable * operator[](size_t i) { return (*m_tableList)[i]; }
++	WPXTable * operator[](std::size_t i) { return (*m_tableList)[i]; }
+ 	void add(WPXTable *table) { m_tableList->push_back(table); }
+ 
+ private:

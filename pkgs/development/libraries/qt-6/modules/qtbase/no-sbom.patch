@@ -1,0 +1,11 @@
+--- a/cmake/QtBuildOptionsHelpers.cmake
++++ b/cmake/QtBuildOptionsHelpers.cmake
+@@ -345,7 +345,7 @@ macro(qt_internal_setup_sbom)
+     qt_internal_compute_sbom_default(_qt_generate_sbom_default)
+ 
+     option(QT_GENERATE_SBOM "Generate SBOM documents in SPDX v2.3 tag:value format."
+-        "${_qt_generate_sbom_default}")
++        OFF)
+ 
+     option(QT_SBOM_GENERATE_JSON
+         "Generate SBOM documents in SPDX v2.3 JSON format if dependencies are available" ON)

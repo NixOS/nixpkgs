@@ -1,0 +1,83 @@
+From 3317b3a78666e6073c63f62a322176e3dc680461 Mon Sep 17 00:00:00 2001
+From: Ivan Trubach <mr.trubach@icloud.com>
+Date: Sat, 17 Aug 2024 22:35:03 +0300
+Subject: [PATCH 3/3] Do not search for a C++ compiler and set MAKE_CXX
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Removes unnecessary reference to C++ compiler if CXX is set to an
+absolute path. If CXX is not an absolute path, we avoid defaulting CXX
+to a compiler name that was used to build the package.
+
+Context: GNU Make defines default values for CC, CXX and other
+environment variables. For CXX, it usually defaults to g++, however,
+FreeBSD and OpenBSD no longer ship GCC as a system compiler (and use
+Clang instead). For C compiler, POSIX standardizes the name to be "cc",
+but there is no such standard for C++ compiler name. As a fix, GNU Make
+uses CXX set for build as a default (via MAKE_CXX preprocessor macro in
+the source code).
+
+We revert the change that added this behavior and set the default to c++
+or g++ that does not depend on the build platform.
+
+In stdenv, CXX environment variable is always defined and overrides the
+default value.
+
+References:
+ • https://savannah.gnu.org/bugs/?63668
+ • https://git.savannah.gnu.org/cgit/make.git/commit/?id=ffa28f3914ff402b3915f75e4fed86ac6fb1449d
+---
+ configure.ac  |  2 --
+ src/default.c | 19 ++++++-------------
+ 2 files changed, 6 insertions(+), 15 deletions(-)
+
+diff --git a/configure.ac b/configure.ac
+index cd785754..41a65307 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -37,8 +37,6 @@ AM_INIT_AUTOMAKE([1.16.1 foreign -Werror -Wall])
+ # Checks for programs.
+ AC_USE_SYSTEM_EXTENSIONS
+ AC_PROG_CC
+-AC_PROG_CXX
+-AC_DEFINE_UNQUOTED(MAKE_CXX, ["$CXX"], [Default C++ compiler.])
+ 
+ # Configure gnulib
+ gl_EARLY
+diff --git a/src/default.c b/src/default.c
+index e396269b..78ba402f 100644
+--- a/src/default.c
++++ b/src/default.c
+@@ -528,22 +528,15 @@ static const char *default_variables[] =
+ #ifdef GCC_IS_NATIVE
+     "CC", "gcc",
+     "OBJC", "gcc",
++# ifdef __MSDOS__
++    "CXX", "gpp",       /* g++ is an invalid name on MSDOS */
++# else
++    "CXX", "g++",
++# endif /* __MSDOS__ */
+ #else
+     "CC", "cc",
+     "OBJC", "cc",
+-#endif
+-#ifdef MAKE_CXX
+-    "CXX", MAKE_CXX,
+-#else
+-# ifdef GCC_IS_NATIVE
+-#  ifdef __MSDOS__
+-    "CXX", "gpp",       /* g++ is an invalid name on MSDOS */
+-#  else
+-    "CXX", "gcc",
+-#  endif /* __MSDOS__ */
+-# else
+-    "CXX", "g++",
+-# endif
++    "CXX", "c++",
+ #endif
+     /* This expands to $(CO) $(COFLAGS) $< $@ if $@ does not exist,
+        and to the empty string if $@ does exist.  */
+-- 
+2.44.1
+

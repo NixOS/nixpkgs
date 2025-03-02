@@ -1,0 +1,34 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+Date: Sat, 5 Jun 2021 14:50:26 +0200
+Subject: [PATCH] Do not require wget and unzip
+
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 2261fe7..ce8edad 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -243,21 +243,6 @@ if(BUILD_DOCUMENTATION)
+         set(DOXYFILE_MAKE make.bat)
+     endif()
+ 
+-    if(NOT CHECK_DOCUMENTATION)
+-        find_program(WGET_EXE wget)
+-        if(WGET_EXE)
+-            message(STATUS "Found WGet: ${WGET_EXE}")
+-        else()
+-            message(FATAL_ERROR "wget is needed to build the documentation. Please install it correctly")
+-        endif()
+-        find_program(UNZIP_EXE unzip)
+-        if(UNZIP_EXE)
+-            message(STATUS "Found Unzip: ${UNZIP_EXE}")
+-        else()
+-            message(FATAL_ERROR "unzip is needed to build the documentation. Please install it correctly")
+-        endif()
+-    endif()
+-
+     # Target to create documentation directories
+     add_custom_target(docdirs
+         COMMAND ${CMAKE_COMMAND} -E make_directory ${PROJECT_BINARY_DIR}/doc
+-- 
+2.40.1
+

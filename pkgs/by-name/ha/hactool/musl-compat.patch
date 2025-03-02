@@ -1,0 +1,13 @@
+diff --git a/main.c b/main.c
+index 07f53cb..f2265df 100644
+--- a/main.c
++++ b/main.c
+@@ -369,7 +369,7 @@ int main(int argc, char **argv) {
+                     return EXIT_FAILURE;
+                 }
+                 nca_ctx.tool_ctx->base_file_type = BASEFILE_FAKE;
+-                nca_ctx.tool_ctx->base_file++; /* Guarantees base_file != NULL. I'm so sorry. */
++                if (!nca_ctx.tool_ctx->base_file) nca_ctx.tool_ctx->base_file = (FILE*) 1;
+                 break;
+             case 32:
+                 tool_ctx.action |= ACTION_ONLYUPDATEDROMFS;

@@ -1,0 +1,37 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 365b835..4341de9 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -57,6 +57,7 @@ endif(JPEG_FOUND)
+ include(FindJasper)
+ if(JASPER_FOUND)
+   set(HAVE_JASPER_LIB 1)
++  set(K2PDFOPT_LIB ${K2PDFOPT_LIB} ${JASPER_LIBRARY})
+ endif(JASPER_FOUND)
+ 
+ # paths from willuslib/wgs.c
+@@ -71,9 +72,12 @@ else()
+   message(STATUS "Could NOT find ghostscript executable")
+ endif(GHOSTSCRIPT_EXECUTABLE)
+ 
+-# willus.h
+-# HAVE_GSL_LIB
+-
++pkg_check_modules(GSL gsl)
++if(GSL_FOUND)
++  set(HAVE_GSL_LIB 1)
++  include_directories(SYSTEM ${GSL_INCLUDEDIR})
++  set(K2PDFOPT_LIB ${K2PDFOPT_LIB} ${GSL_LDFLAGS})
++endif(GSL_FOUND)
+ 
+ # libfreetype6 (>= 2.3.9), libjbig2dec0, libjpeg8 (>= 8c), libx11-6, libxext6, zlib1g (>= 1:1.2.0)
+ # MUPDF_STATIC_LDFLAGS misses mupdf-js-none, and doubles libs ...
+@@ -85,7 +89,7 @@ if(MUPDF_FOUND)
+   include_directories(SYSTEM ${MUPDF_INCLUDEDIR})
+   message(STATUS "mupdf libraries: ${MUPDF_LDFLAGS}")
+   set(K2PDFOPT_LIB ${K2PDFOPT_LIB} ${MUPDF_LDFLAGS} 
+-    -lmupdf-js-none -lopenjpeg -ljbig2dec -ljpeg -lfreetype -llcms -lgumbo
++
+   )
+ endif(MUPDF_FOUND)
+ 
