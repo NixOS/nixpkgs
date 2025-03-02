@@ -4,22 +4,23 @@
   fetchFromGitHub,
   rustPlatform,
   cmake,
-  makeBinaryWrapper,
-  cosmic-icons,
-  cosmic-randr,
   just,
+  libcosmicAppHook,
   pkg-config,
-  libxkbcommon,
+  expat,
   libinput,
   fontconfig,
   freetype,
-  wayland,
-  expat,
   udev,
   util-linux,
+  cosmic-randr,
   nix-update-script,
 }:
-
+let
+  libcosmicAppHook' = (libcosmicAppHook.__spliced.buildHost or libcosmicAppHook).override {
+    includeSettings = false;
+  };
+in
 rustPlatform.buildRustPackage rec {
   pname = "cosmic-settings";
   version = "1.0.0-alpha.1";
@@ -41,16 +42,15 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [
     cmake
     just
+    libcosmicAppHook'
     pkg-config
-    makeBinaryWrapper
   ];
+
   buildInputs = [
-    libxkbcommon
-    libinput
+    expat
     fontconfig
     freetype
-    wayland
-    expat
+    libinput
     udev
     util-linux
   ];
@@ -66,10 +66,8 @@ rustPlatform.buildRustPackage rec {
     "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-settings"
   ];
 
-  postInstall = ''
-    wrapProgram "$out/bin/cosmic-settings" \
-      --prefix PATH : ${lib.makeBinPath [ cosmic-randr ]} \
-      --suffix XDG_DATA_DIRS : "$out/share:${cosmic-icons}/share"
+  preFixup = ''
+    libcosmicAppWrapperArgs+=(--prefix PATH : ${lib.makeBinPath [ cosmic-randr ]})
   '';
 
   passthru.updateScript = nix-update-script {
