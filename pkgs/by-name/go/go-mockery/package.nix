@@ -1,14 +1,14 @@
-{ lib, buildGoModule, fetchFromGitHub, go-mockery, runCommand, go }:
+{ lib, buildGo124Module, fetchFromGitHub, go-mockery, runCommand, go }:
 
-buildGoModule rec {
+buildGo124Module rec {
   pname = "go-mockery";
-  version = "2.52.1";
+  version = "2.52.4";
 
   src = fetchFromGitHub {
     owner = "vektra";
     repo = "mockery";
     rev = "v${version}";
-    sha256 = "sha256-algCErKmB43r/t7wo8BJSM0MHRxvxVWZ2u0n1xuLLdw=";
+    sha256 = "sha256-5LGwBnUWO9iB8NVm0qxOChLri7lIQM9TYhIUTZeA1UI=";
   };
 
   preCheck = ''
@@ -24,7 +24,7 @@ buildGoModule rec {
   env.CGO_ENABLED = false;
 
   proxyVendor = true;
-  vendorHash = "sha256-nL6dDGifhtmDHfz1ae+wnmVPPQDLrRgI7v8c5cQzo8Q=";
+  vendorHash = "sha256-oNecP9ruwv/tD5Xf9zOhK6x8O2U4zHrgQJk29Ro1QGU=";
 
   subPackages = [ "." ];
 
