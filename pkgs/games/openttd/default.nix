@@ -55,13 +55,6 @@ let
     url = "https://cdn.openttd.org/openmsx-releases/0.4.2/openmsx-0.4.2-all.zip";
     sha256 = "sha256-Cgrg2m+uTODFg39mKgX+hE8atV7v5bVyZd716vSZB8M=";
   };
-
-  playmidi = writeScriptBin "playmidi" ''
-    #!${runtimeShell}
-    trap "${procps}/bin/pkill fluidsynth" EXIT
-    ${fluidsynth}/bin/fluidsynth -a ${audioDriver} -i ${soundfont-fluid}/share/soundfonts/FluidR3_GM2-2.sf2 $*
-  '';
-
 in
 stdenv.mkDerivation rec {
   pname = "openttd";
@@ -123,28 +116,19 @@ stdenv.mkDerivation rec {
     "--without-liblzo2"
   ];
 
-  postInstall = ''
-    ${lib.optionalString withOpenGFX ''
-      cp ${opengfx}/*.tar $out/share/games/openttd/baseset
-    ''}
+  postPatch = ''
+    substituteInPlace src/music/fluidsynth.cpp \
+      --replace-fail "/usr/share/soundfonts/default.sf2" "${soundfont-fluid}/share/soundfonts/FluidR3_GM2-2.sf2"
+  '';
 
-    mkdir -p $out/share/games/openttd/data
-
-    ${lib.optionalString withOpenSFX ''
-      cp ${opensfx}/*.tar $out/share/games/openttd/data
-    ''}
-
-    mkdir $out/share/games/openttd/baseset/openmsx
-
-    ${lib.optionalString withOpenMSX ''
-      cp ${openmsx}/*.tar $out/share/games/openttd/baseset/openmsx
-    ''}
-
-    ${lib.optionalString withFluidSynth ''
-      wrapProgram $out/bin/openttd \
-        --add-flags -m \
-        --add-flags extmidi:cmd=${playmidi}/bin/playmidi
-    ''}
+  postInstall = lib.optionalString withOpenGFX ''
+    cp ${opengfx}/*.tar $out/share/games/openttd/baseset
+  ''
+  + lib.optionalString withOpenSFX ''
+    cp ${opensfx}/*.tar $out/share/games/openttd/baseset
+  ''
+  + lib.optionalString withOpenMSX ''
+    tar -xf ${openmsx}/*.tar -C $out/share/games/openttd/baseset
   '';
 
   meta = with lib; {
