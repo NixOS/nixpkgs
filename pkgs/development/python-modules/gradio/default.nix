@@ -2,14 +2,11 @@
   lib,
   stdenv,
   buildPythonPackage,
-  fetchPypi,
   fetchFromGitHub,
-  fetchpatch,
-  pythonOlder,
   writeShellScriptBin,
   gradio,
 
-  # pyproject
+  # build-system
   hatchling,
   hatch-requirements-txt,
   hatch-fancy-pypi-readme,
@@ -19,7 +16,7 @@
   nodejs,
   pnpm_9,
 
-  # runtime
+  # dependencies
   setuptools,
   aiofiles,
   anyio,
@@ -27,6 +24,7 @@
   fastapi,
   ffmpy,
   gradio-client,
+  groovy,
   httpx,
   huggingface-hub,
   importlib-resources,
@@ -53,7 +51,7 @@
   authlib,
   itsdangerous,
 
-  # check
+  # tests
   pytestCheckHook,
   hypothesis,
   altair,
@@ -68,42 +66,32 @@
   tqdm,
   transformers,
   vega-datasets,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "gradio";
-  version = "5.11.0";
+  version = "5.20.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  # unfortunately no fetchPypi due to https://github.com/gradio-app/gradio/pull/9778
   src = fetchFromGitHub {
     owner = "gradio-app";
     repo = "gradio";
     tag = "gradio@${version}";
-    hash = "sha256-HW0J7oSkCo4DIHpU4LUoBZ2jmmrv5Xd64floA4uyo5A=";
+    hash = "sha256-gAAyhsnc1LUcAvlUC5hftsWN1kSiRWqcQ4iKGpSIL+U=";
   };
 
   pnpmDeps = pnpm_9.fetchDeps {
     inherit pname version src;
-    hash = "sha256-9fAkP2zV3OfyROdtvmS94ujpkGmlB0wGOaWS13LgJTM=";
-   };
-
-  # fix packaging.ParserSyntaxError, which can't handle comments
-  postPatch = ''
-    sed -i -e "s/ #.*$//g" requirements*.txt
-  '';
+    hash = "sha256-y0Bdupn19gEtwatc6Q3KD7aekXDk0xrq04LaG7gxMFI=";
+  };
 
   pythonRelaxDeps = [
-    "tomlkit"
     "aiofiles"
     "markupsafe"
-    "pillow"
   ];
 
   pythonRemoveDeps = [
-    # our package is presented as a binary, not a python lib - and
     # this isn't a real runtime dependency
     "ruff"
   ];
@@ -128,6 +116,7 @@ buildPythonPackage rec {
     fastapi
     ffmpy
     gradio-client
+    groovy
     httpx
     huggingface-hub
     importlib-resources
@@ -156,26 +145,30 @@ buildPythonPackage rec {
     itsdangerous
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-    hypothesis
-    altair
-    boto3
-    gradio-pdf
-    ffmpeg
-    ipython
-    pytest-asyncio
-    respx
-    scikit-image
-    # shap is needed as well, but breaks too often
-    torch
-    tqdm
-    transformers
-    vega-datasets
+  nativeCheckInputs =
+    [
+      pytestCheckHook
+      hypothesis
+      altair
+      boto3
+      gradio-pdf
+      ffmpeg
+      ipython
+      pytest-asyncio
+      respx
+      scikit-image
+      # shap is needed as well, but breaks too often
+      torch
+      tqdm
+      transformers
+      vega-datasets
 
-    # mock calls to `shutil.which(...)`
-    (writeShellScriptBin "npm" "false")
-  ] ++ optional-dependencies.oauth ++ pydantic.optional-dependencies.email;
+      # mock calls to `shutil.which(...)`
+      (writeShellScriptBin "npm" "false")
+      writableTmpDirAsHomeHook
+    ]
+    ++ optional-dependencies.oauth
+    ++ pydantic.optional-dependencies.email;
 
   preBuild = ''
     pnpm build
@@ -191,11 +184,10 @@ buildPythonPackage rec {
   # We additionally xfail FileNotFoundError, since the gradio devs often fail to upload test assets to pypi.
   preCheck =
     ''
-      export HOME=$TMPDIR
       cat ${./conftest-skip-network-errors.py} >> test/conftest.py
     ''
+    # OSError: [Errno 24] Too many open files
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      # OSError: [Errno 24] Too many open files
       ulimit -n 4096
     '';
 
@@ -250,6 +242,16 @@ buildPythonPackage rec {
       "test_get_executable_path"
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # TypeError: argument should be a str or an os.PathLike object where __fspath__ returns a str, not 'NoneType'
+      "test_component_example_values"
+      "test_component_functions"
+      "test_public_request_pass"
+
+      # Failed: DID NOT RAISE <class 'ValueError'>
+      # test.conftest.NixNetworkAccessDeniedError
+      "test_private_request_fail"
+      "test_theme_builder_launches"
+
       # flaky on darwin (depend on port availability)
       "test_all_status_messages"
       "test_async_generators"
@@ -316,8 +318,7 @@ buildPythonPackage rec {
   ];
 
   # check the binary works outside the build env
-  doInstallCheck = true;
-  postInstallCheck = ''
+  postCheck = ''
     env --ignore-environment $out/bin/gradio environment >/dev/null
   '';
 

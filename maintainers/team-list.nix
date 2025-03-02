@@ -831,7 +831,12 @@ with lib.maintainers;
   };
 
   neovim = {
-    members = [ ];
+    members = [
+      GaetanLepage
+      khaneliman
+      mrcjkb
+      perchun
+    ];
     githubTeams = [ "neovim" ];
     scope = "Maintain the vim and neovim text editors and related packages.";
     shortName = "Vim/Neovim";
