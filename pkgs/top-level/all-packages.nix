@@ -1753,8 +1753,6 @@ with pkgs;
 
   dkimpy = with python3Packages; toPythonApplication dkimpy;
 
-  echidna = haskell.lib.compose.justStaticExecutables (haskellPackages.callPackage ../tools/security/echidna { });
-
   esbuild = callPackage ../development/tools/esbuild { };
 
   esbuild_netlify = callPackage ../development/tools/esbuild/netlify.nix { };
@@ -4535,8 +4533,6 @@ with pkgs;
 
   pakcs = callPackage ../development/compilers/pakcs { };
 
-  pandoc_3_6 = callPackage ../by-name/pa/pandoc/package.nix { selectPandocCLI = (p: p.pandoc-cli_3_6); };
-
   paperwork = callPackage ../applications/office/paperwork/paperwork-gtk.nix { };
 
   parallel = callPackage ../tools/misc/parallel { };
@@ -6088,8 +6084,8 @@ with pkgs;
     # until 9.8 is ready
     (if stdenv.hostPlatform.isStatic then haskell.packages.native-bignum.ghc94
     # JS backend can't use gmp
-    else if stdenv.hostPlatform.isGhcjs then haskell.packages.native-bignum.ghc96
-    else haskell.packages.ghc96)
+    else if stdenv.hostPlatform.isGhcjs then haskell.packages.native-bignum.ghc98
+    else haskell.packages.ghc98)
   // { __recurseIntoDerivationForReleaseJobs = true; };
 
   # haskellPackages.ghc is build->host (it exposes the compiler used to build the
@@ -11234,8 +11230,6 @@ with pkgs;
 
   grafana = callPackage ../servers/monitoring/grafana { };
   grafanaPlugins = callPackages ../servers/monitoring/grafana/plugins { };
-
-  hasura-graphql-engine = haskell.lib.compose.justStaticExecutables haskell.packages.ghc810.graphql-engine;
 
   hasura-cli = callPackage ../servers/hasura/cli.nix { };
 
