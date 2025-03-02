@@ -2,6 +2,7 @@
   cmake,
   callPackage,
   fetchFromGitHub,
+  fetchpatch,
   makeWrapper,
   lib,
   stdenv,
@@ -9,7 +10,10 @@
   which,
   boost,
   curl,
+  eigen,
+  fftwFloat,
   gdal,
+  itk,
   libsvm,
   libgeotiff,
   muparser,
@@ -36,7 +40,144 @@ let
   pythonInputs =
     optionals enablePython (with python3.pkgs; [ numpy ]) ++ (extraPythonPackages python3.pkgs);
 
-  otb-itk = callPackage ./itk_4_13/package.nix { };
+  # ITK configs for OTB requires 5.3.0 and
+  # filter out gdcm, libminc from list of ITK deps as it's not needed for OTB
+  itkVersion = "5.3.0";
+  itkDepsToRemove = [
+    "gdcm"
+    "libminc"
+  ];
+  itkIsInDepsToRemove = dep: builtins.any (d: d == dep.name) itkDepsToRemove;
+
+  # override the ITK version with OTB version
+  # https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/-/blob/develop/SuperBuild/CMake/External_itk.cmake?ref_type=heads#L145
+  otb-itk = (itk.override { enableRtk = false; }).overrideAttrs (oldArgs: {
+    version = itkVersion;
+    src = fetchFromGitHub {
+      owner = "InsightSoftwareConsortium";
+      repo = "ITK";
+      tag = "v${itkVersion}";
+      hash = "sha256-+qCd8Jzpl5fEPTUpLyjjFBkfgCn3+Lf4pi8QnjCwofs=";
+    };
+
+    # https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/-/tree/develop/SuperBuild/patches/ITK?ref_type=heads
+    patches = oldArgs.patches or [ ] ++ [
+      ./itk-1-fftw-all.diff
+      ./itk-2-totalprogress-all.diff
+      # add gcc13 patch for itk 5.3.0 as well
+      (fetchpatch {
+        name = "fix-gcc13-build";
+        url = "https://github.com/InsightSoftwareConsortium/ITK/commit/9a719a0d2f5f489eeb9351b0ef913c3693147a4f.patch";
+        hash = "sha256-dDyqYOzo91afR8W7k2N64X6l7t6Ws1C9iuRkWHUe0fg=";
+      })
+    ];
+
+    cmakeFlags = oldArgs.cmakeFlags or [ ] ++ [
+      (lib.cmakeBool "ITK_USE_SYSTEM_EIGEN" true)
+
+      # turn off all the itk modules from nixpkgs
+      (lib.cmakeBool "ITK_USE_SYSTEM_GDCM" false)
+      (lib.cmakeBool "ITK_USE_SYSTEM_MINC" false)
+      (lib.cmakeBool "Module_ITKMINC" false)
+      (lib.cmakeBool "Module_ITKIOMINC" false)
+      (lib.cmakeBool "Module_ITKIOTransformMINC" false)
+      (lib.cmakeBool "Module_SimpleITKFilters" false)
+      (lib.cmakeBool "Module_ITKReview" false)
+      (lib.cmakeBool "Module_MGHIO" false)
+      (lib.cmakeBool "Module_AdaptiveDenoising" false)
+      (lib.cmakeBool "Module_GenericLabelInterpolator" false)
+
+      # enable itk modules for otb
+      # https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/-/blob/develop/SuperBuild/CMake/External_itk.cmake?ref_type=heads
+      # https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/-/blob/develop/SuperBuild/CMake/External_itk.cmake?ref_type=heads#L143
+      (lib.cmakeBool "BUILD_TESTING" false)
+      (lib.cmakeBool "ITK_BUILD_DEFAULT_MODULES" false)
+      (lib.cmakeBool "ITKGroup_Core" false)
+      (lib.cmakeBool "Module_ITKCommon" true)
+      (lib.cmakeBool "Module_ITKFiniteDifference" true)
+      (lib.cmakeBool "Module_ITKGPUCommon" true)
+      (lib.cmakeBool "Module_ITKGPUFiniteDifference" true)
+      (lib.cmakeBool "Module_ITKImageAdaptors" true)
+      (lib.cmakeBool "Module_ITKImageFunction" true)
+      (lib.cmakeBool "Module_ITKMesh" true)
+      (lib.cmakeBool "Module_ITKQuadEdgeMesh" true)
+      (lib.cmakeBool "Module_ITKSpatialObjects" true)
+      (lib.cmakeBool "Module_ITKTransform" true)
+      (lib.cmakeBool "Module_ITKAnisotropicSmoothing" true)
+      (lib.cmakeBool "Module_ITKAntiAlias" true)
+      (lib.cmakeBool "Module_ITKBiasCorrection" true)
+      (lib.cmakeBool "Module_ITKBinaryMathematicalMorphology" true)
+      (lib.cmakeBool "Module_ITKColormap" true)
+      (lib.cmakeBool "Module_ITKConvolution" true)
+      (lib.cmakeBool "Module_ITKCurvatureFlow" true)
+      (lib.cmakeBool "Module_ITKDeconvolution" true)
+      (lib.cmakeBool "Module_ITKDenoising" true)
+      (lib.cmakeBool "Module_ITKDisplacementField" true)
+      (lib.cmakeBool "Module_ITKDistanceMap" true)
+      (lib.cmakeBool "Module_ITKFastMarching" true)
+      (lib.cmakeBool "Module_ITKFFT" true)
+      (lib.cmakeBool "Module_ITKGPUAnisotropicSmoothing" true)
+      (lib.cmakeBool "Module_ITKGPUImageFilterBase" true)
+      (lib.cmakeBool "Module_ITKGPUSmoothing" true)
+      (lib.cmakeBool "Module_ITKGPUThresholding" true)
+      (lib.cmakeBool "Module_ITKImageCompare" true)
+      (lib.cmakeBool "Module_ITKImageCompose" true)
+      (lib.cmakeBool "Module_ITKImageFeature" true)
+      (lib.cmakeBool "Module_ITKImageFilterBase" true)
+      (lib.cmakeBool "Module_ITKImageFusion" true)
+      (lib.cmakeBool "Module_ITKImageGradient" true)
+      (lib.cmakeBool "Module_ITKImageGrid" true)
+      (lib.cmakeBool "Module_ITKImageIntensity" true)
+      (lib.cmakeBool "Module_ITKImageLabel" true)
+      (lib.cmakeBool "Module_ITKImageSources" true)
+      (lib.cmakeBool "Module_ITKImageStatistics" true)
+      (lib.cmakeBool "Module_ITKLabelMap" true)
+      (lib.cmakeBool "Module_ITKMathematicalMorphology" true)
+      (lib.cmakeBool "Module_ITKPath" true)
+      (lib.cmakeBool "Module_ITKQuadEdgeMeshFiltering" true)
+      (lib.cmakeBool "Module_ITKSmoothing" true)
+      (lib.cmakeBool "Module_ITKSpatialFunction" true)
+      (lib.cmakeBool "Module_ITKThresholding" true)
+      (lib.cmakeBool "Module_ITKEigen" true)
+      (lib.cmakeBool "Module_ITKNarrowBand" true)
+      (lib.cmakeBool "Module_ITKOptimizers" true)
+      (lib.cmakeBool "Module_ITKOptimizersv4" true)
+      (lib.cmakeBool "Module_ITKPolynomials" true)
+      (lib.cmakeBool "Module_ITKStatistics" true)
+      (lib.cmakeBool "Module_ITKRegistrationCommon" true)
+      (lib.cmakeBool "Module_ITKGPURegistrationCommon" true)
+      (lib.cmakeBool "Module_ITKGPUPDEDeformableRegistration" true)
+      (lib.cmakeBool "Module_ITKMetricsv4" true)
+      (lib.cmakeBool "Module_ITKPDEDeformableRegistration" true)
+      (lib.cmakeBool "Module_ITKRegistrationMethodsv4" true)
+      (lib.cmakeBool "Module_ITKClassifiers" true)
+      (lib.cmakeBool "Module_ITKConnectedComponents" true)
+      (lib.cmakeBool "Module_ITKDeformableMesh" true)
+      (lib.cmakeBool "Module_ITKKLMRegionGrowing" true)
+      (lib.cmakeBool "Module_ITKLabelVoting" true)
+      (lib.cmakeBool "Module_ITKLevelSets" true)
+      (lib.cmakeBool "Module_ITKLevelSetsv4" true)
+      (lib.cmakeBool "Module_ITKMarkovRandomFieldsClassifiers" true)
+      (lib.cmakeBool "Module_ITKRegionGrowing" true)
+      (lib.cmakeBool "Module_ITKSignedDistanceFunction" true)
+      (lib.cmakeBool "Module_ITKVoronoi" true)
+      (lib.cmakeBool "Module_ITKWatersheds" true)
+    ];
+
+    buildInputs = oldArgs.buildInputs or [ ] ++ [
+      # add eigen as well as itk nixpkgs doesn't add it for version lower than 5.4.0
+      eigen
+    ];
+
+    propagatedBuildInputs =
+      lib.lists.filter (pkg: !(itkIsInDepsToRemove pkg)) oldArgs.propagatedBuildInputs or [ ]
+      ++ [
+        # the only missing dependency for OTB from itk propagated list
+        fftwFloat
+      ];
+
+  });
+
   otb-shark = shark.override { enableOpenMP = enableOpenMP; };
 
 in
@@ -73,21 +214,24 @@ stdenv.mkDerivation (finalAttrs: {
     ++ optional enablePython "-DOTB_WRAP_PYTHON=ON"
     ++ optional finalAttrs.doInstallCheck "-DBUILD_TESTING=ON";
 
-  propagatedBuildInputs = [
-    boost
-    curl
-    gdal
-    libgeotiff
-    libsvm
-    muparser
-    muparserx
-    opencv
-    otb-itk
-    otb-shark
-    perl
-    swig
-    tinyxml
-  ] ++ optionals enablePython ([ python3 ] ++ pythonInputs);
+  propagatedBuildInputs =
+    [
+      boost
+      curl
+      gdal
+      libgeotiff
+      libsvm
+      muparser
+      muparserx
+      opencv
+      otb-itk
+      otb-shark
+      perl
+      swig
+      tinyxml
+    ]
+    ++ otb-itk.propagatedBuildInputs
+    ++ optionals enablePython ([ python3 ] ++ pythonInputs);
 
   doInstallCheck = false;
 
