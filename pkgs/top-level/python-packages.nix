@@ -14886,6 +14886,8 @@ self: super: with self; {
     semgrep-core = callPackage ../development/python-modules/semgrep/semgrep-core.nix { };
   };
 
+  semgrep-search = callPackage ../development/python-modules/semgrep-search { };
+
   semaphore-bot = callPackage ../development/python-modules/semaphore-bot { };
 
   semver = callPackage ../development/python-modules/semver { };
