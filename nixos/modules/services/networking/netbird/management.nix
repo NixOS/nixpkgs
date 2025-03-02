@@ -38,7 +38,7 @@ let
     Stuns = [
       {
         Proto = "udp";
-        URI = "stun:${cfg.turnDomain}:3478";
+        URI = "stun:${cfg.management.turnDomain}:3478";
         Username = "";
         Password = null;
       }
@@ -48,7 +48,7 @@ let
       Turns = [
         {
           Proto = "udp";
-          URI = "turn:${cfg.turnDomain}:${builtins.toString cfg.turnPort}";
+          URI = "turn:${cfg.management.turnDomain}:${builtins.toString cfg.management.turnPort}";
           Username = "netbird";
           Password = "netbird";
         }
@@ -58,10 +58,14 @@ let
       Secret = "not-secure-secret";
       TimeBasedCredentials = false;
     };
+    Relay = {
+      Addresses = [ cfg.relay.settings.NB_EXPOSED_ADDRESS ];
+      CredentialsTTL = "24h";
+      Secret._secret = cfg.relay.authSecretFile;
+    };
 
     Signal = {
       Proto = "https";
-      URI = "${cfg.domain}:443";
       Username = "";
       Password = null;
     };
@@ -79,9 +83,9 @@ let
     };
 
     HttpConfig = {
-      Address = "127.0.0.1:${builtins.toString cfg.port}";
+      Address = "127.0.0.1:${builtins.toString cfg.management.port}";
       IdpSignKeyRefreshEnabled = true;
-      OIDCConfigEndpoint = cfg.oidcConfigEndpoint;
+      OIDCConfigEndpoint = cfg.management.oidcConfigEndpoint;
     };
 
     IdpManagerConfig = {
@@ -128,18 +132,18 @@ let
     };
   };
 
-  managementConfig = recursiveUpdate defaultSettings cfg.settings;
+  managementConfig = recursiveUpdate defaultSettings cfg.management.settings;
 
   managementFile = settingsFormat.generate "config.json" managementConfig;
 
-  cfg = config.services.netbird.server.management;
+  cfg = config.services.netbird.server;
 in
 
 {
   options.services.netbird.server.management = {
     enable = mkEnableOption "Netbird Management Service";
 
-    package = mkPackageOption pkgs "netbird" { };
+    package = mkPackageOption pkgs "netbird-server" { };
 
     domain = mkOption {
       type = str;
@@ -224,7 +228,7 @@ in
           Stuns = [
             {
               Proto = "udp";
-              URI = "stun:''${cfg.turnDomain}:3478";
+              URI = "stun:''${cfg.management.turnDomain}:3478";
               Username = "";
               Password = null;
             }
@@ -234,7 +238,7 @@ in
             Turns = [
               {
                 Proto = "udp";
-                URI = "turn:''${cfg.turnDomain}:3478";
+                URI = "turn:''${cfg.management.turnDomain}:3478";
                 Username = "netbird";
                 Password = "netbird";
               }
@@ -247,7 +251,7 @@ in
 
           Signal = {
             Proto = "https";
-            URI = "''${cfg.domain}:443";
+            URI = "localhost:''${cfg.signal.port}";
             Username = "";
             Password = null;
           };
@@ -263,9 +267,9 @@ in
           StoreConfig = { Engine = "sqlite"; };
 
           HttpConfig = {
-            Address = "127.0.0.1:''${builtins.toString cfg.port}";
+            Address = "127.0.0.1:''${builtins.toString cfg.management.port}";
             IdpSignKeyRefreshEnabled = true;
-            OIDCConfigEndpoint = cfg.oidcConfigEndpoint;
+            OIDCConfigEndpoint = cfg.management.oidcConfigEndpoint;
           };
 
           IdpManagerConfig = {
@@ -340,11 +344,9 @@ in
       default = "INFO";
       description = "Log level of the netbird services.";
     };
-
-    enableNginx = mkEnableOption "Nginx reverse-proxy for the netbird management service";
   };
 
-  config = mkIf cfg.enable {
+  config = mkIf cfg.management.enable {
     warnings =
       concatMap
         (
@@ -368,7 +370,7 @@ in
 
     assertions = [
       {
-        assertion = cfg.port != cfg.metricsPort;
+        assertion = cfg.management.port != cfg.management.metricsPort;
         message = "The primary listen port cannot be the same as the listen port for the metrics endpoint";
       }
     ];
@@ -386,7 +388,7 @@ in
       serviceConfig = {
         ExecStart = escapeSystemdExecArgs (
           [
-            (getExe' cfg.package "netbird-mgmt")
+            (getExe' cfg.management.package "netbird-mgmt")
             "management"
             # Config file
             "--config"
@@ -396,28 +398,28 @@ in
             "${stateDir}/data"
             # DNS domain
             "--dns-domain"
-            cfg.dnsDomain
+            cfg.management.dnsDomain
             # Port to listen on
             "--port"
-            cfg.port
+            cfg.management.port
             # Port the internal prometheus server listens on
             "--metrics-port"
-            cfg.metricsPort
+            cfg.management.metricsPort
             # Log to stdout
             "--log-file"
             "console"
             # Log level
             "--log-level"
-            cfg.logLevel
+            cfg.management.logLevel
             #
             "--idp-sign-key-refresh-enabled"
             # Domain for internal resolution
             "--single-account-mode-domain"
-            cfg.singleAccountModeDomain
+            cfg.management.singleAccountModeDomain
           ]
-          ++ (optional cfg.disableAnonymousMetrics "--disable-anonymous-metrics")
-          ++ (optional cfg.disableSingleAccountMode "--disable-single-account-mode")
-          ++ cfg.extraOptions
+          ++ (optional cfg.management.disableAnonymousMetrics "--disable-anonymous-metrics")
+          ++ (optional cfg.management.disableSingleAccountMode "--disable-single-account-mode")
+          ++ cfg.management.extraOptions
         );
         Restart = "always";
         RuntimeDirectory = "netbird-mgmt";
@@ -452,27 +454,5 @@ in
       stopIfChanged = false;
     };
 
-    services.nginx = mkIf cfg.enableNginx {
-      enable = true;
-
-      virtualHosts.${cfg.domain} = {
-        locations = {
-          "/api".proxyPass = "http://localhost:${builtins.toString cfg.port}";
-
-          "/management.ManagementService/".extraConfig = ''
-            # This is necessary so that grpc connections do not get closed early
-            # see https://stackoverflow.com/a/67805465
-            client_body_timeout 1d;
-
-            grpc_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-
-            grpc_pass grpc://localhost:${builtins.toString cfg.port};
-            grpc_read_timeout 1d;
-            grpc_send_timeout 1d;
-            grpc_socket_keepalive on;
-          '';
-        };
-      };
-    };
   };
 }
