@@ -7,44 +7,23 @@
   enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdMinimal,
   systemdMinimal,
   audit,
+  libcap_ng,
   libapparmor,
   dbus,
   docbook_xml_dtd_44,
   docbook-xsl-nons,
-  xmlto,
-  autoreconfHook,
-  autoconf-archive,
+  libxslt,
+  meson,
+  ninja,
+  python3,
   x11Support ? (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin),
   xorg,
+  writeText,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dbus";
-  version = "1.14.10";
-
-  src = fetchurl {
-    url = "https://dbus.freedesktop.org/releases/dbus/dbus-${version}.tar.xz";
-    sha256 = "sha256-uh8h0r2dM52i1KqHgMCd8y/qh5mLc9ok9Jq53x42pQ8=";
-  };
-
-  patches = lib.optional stdenv.hostPlatform.isSunOS ./implement-getgrouplist.patch;
-
-  postPatch =
-    ''
-      substituteInPlace bus/Makefile.am \
-        --replace 'install-data-hook:' 'disabled:' \
-        --replace '$(mkinstalldirs) $(DESTDIR)$(localstatedir)/run/dbus' ':'
-      substituteInPlace tools/Makefile.am \
-        --replace 'install-data-local:' 'disabled:' \
-        --replace 'installcheck-local:' 'disabled:'
-    ''
-    # cleanup of runtime references
-    + ''
-      substituteInPlace ./dbus/dbus-sysdeps-unix.c \
-        --replace 'DBUS_BINDIR "/dbus-launch"' "\"$lib/bin/dbus-launch\""
-      substituteInPlace ./tools/dbus-launch.c \
-        --replace 'DBUS_DAEMONDIR"/dbus-daemon"' '"/run/current-system/sw/bin/dbus-daemon"'
-    '';
+  version = "1.16.2";
 
   outputs = [
     "out"
@@ -53,24 +32,47 @@ stdenv.mkDerivation rec {
     "doc"
     "man"
   ];
+
+  src = fetchurl {
+    url = "https://dbus.freedesktop.org/releases/dbus/dbus-${finalAttrs.version}.tar.xz";
+    sha256 = "sha256-C6KhpLFq/nvOssB+nOmajCw1COXewpDbtkM4S9a+t+I=";
+  };
+
+  patches = [
+    # Implement getgrouplist for platforms where it is not available (e.g. Illumos/Solaris)
+    ./implement-getgrouplist.patch
+
+    # Add a Meson configuration option that will allow us to use a different
+    # `datadir` for installation from the one that will be compiled into dbus.
+    # This is necessary to allow NixOS to manage dbus service definitions,
+    # since the `datadir` in the package will be immutable. But we still want
+    # to install the files to the latter, since there is no other suitable
+    # place for the project to install them.
+    #
+    # We will also just remove installation of empty `${runstatedir}/dbus`
+    # and `${localstatedir}/lib/dbus` since these are useless in the package.
+    ./meson-install-dirs.patch
+  ];
+
   separateDebugInfo = true;
 
   strictDeps = true;
+
   nativeBuildInputs = [
-    autoreconfHook
-    autoconf-archive
+    meson
+    ninja
     pkg-config
     docbook_xml_dtd_44
     docbook-xsl-nons
-    xmlto
-  ];
-
-  propagatedBuildInputs = [
-    expat
+    libxslt # for xsltproc
+    python3
   ];
 
   buildInputs =
-    lib.optionals x11Support (
+    [
+      expat
+    ]
+    ++ lib.optionals x11Support (
       with xorg;
       [
         libX11
@@ -81,52 +83,58 @@ stdenv.mkDerivation rec {
     ++ lib.optional enableSystemd systemdMinimal
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       audit
+      libcap_ng
       libapparmor
     ];
-  # ToDo: optional selinux?
 
   __darwinAllowLocalNetworking = true;
 
-  configureFlags =
-    [
-      "--enable-user-session"
-      "--enable-xml-docs"
-      "--libexecdir=${placeholder "out"}/libexec"
-      "--datadir=/etc"
-      "--localstatedir=/var"
-      "--runstatedir=/run"
-      "--sysconfdir=/etc"
-      "--with-session-socket-dir=/tmp"
-      "--with-system-pid-file=/run/dbus/pid"
-      "--with-system-socket=/run/dbus/system_bus_socket"
-      "--with-systemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
-      "--with-systemduserunitdir=${placeholder "out"}/etc/systemd/user"
-    ]
-    ++ lib.optional (!x11Support) "--without-x"
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      "--enable-apparmor"
-      "--enable-libaudit"
-    ]
-    ++ lib.optionals enableSystemd [ "SYSTEMCTL=${systemdMinimal}/bin/systemctl" ];
-
-  NIX_CFLAGS_LINK = lib.optionalString (!stdenv.hostPlatform.isDarwin) "-Wl,--as-needed";
-
-  enableParallelBuilding = true;
+  mesonFlags = [
+    "--libexecdir=${placeholder "out"}/libexec"
+    # datadir from which dbus will load files will be managed by the NixOS module:
+    "--datadir=/etc"
+    # But we still want to install stuff to the package:
+    "-Dinstall_datadir=${placeholder "out"}/share"
+    "--localstatedir=/var"
+    "-Druntime_dir=/run"
+    "--sysconfdir=/etc"
+    "-Dinstall_sysconfdir=${placeholder "out"}/etc"
+    "-Ddoxygen_docs=disabled"
+    "-Dducktype_docs=disabled"
+    "-Dqt_help=disabled"
+    "-Drelocation=disabled" # Conflicts with multiple outputs
+    "-Dmodular_tests=disabled" # Requires glib
+    "-Dsession_socket_dir=/tmp"
+    "-Dsystemd_system_unitdir=${placeholder "out"}/etc/systemd/system"
+    "-Dsystemd_user_unitdir=${placeholder "out"}/etc/systemd/user"
+    (lib.mesonEnable "x11_autolaunch" x11Support)
+    (lib.mesonEnable "apparmor" stdenv.hostPlatform.isLinux)
+    (lib.mesonEnable "libaudit" stdenv.hostPlatform.isLinux)
+    (lib.mesonEnable "kqueue" (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isBSD))
+    (lib.mesonEnable "launchd" stdenv.hostPlatform.isDarwin)
+    "-Dselinux=disabled"
+    "--cross-file=${writeText "crossfile.ini" ''
+      [binaries]
+      systemctl = '${systemdMinimal}/bin/systemctl'
+    ''}"
+  ];
 
   doCheck = true;
 
-  makeFlags = [
-    # Fix paths in XML catalog broken by mismatching build/install datadir.
-    "dtddir=${placeholder "out"}/share/xml/dbus-1"
-  ];
+  postPatch = ''
+    patchShebangs \
+      test/data/copy_data_for_tests.py \
+      meson_post_install.py
 
-  installFlags = [
-    "sysconfdir=${placeholder "out"}/etc"
-    "datadir=${placeholder "out"}/share"
-  ];
+    # Cleanup of runtime references
+    substituteInPlace ./dbus/dbus-sysdeps-unix.c \
+      --replace-fail 'DBUS_BINDIR "/dbus-launch"' "\"$lib/bin/dbus-launch\""
+    substituteInPlace ./tools/dbus-launch.c \
+      --replace-fail 'DBUS_DAEMONDIR"/dbus-daemon"' '"/run/current-system/sw/bin/dbus-daemon"'
+  '';
 
-  # it's executed from $lib by absolute path
   postFixup = ''
+    # It's executed from $lib by absolute path
     moveToOutput bin/dbus-launch "$lib"
     ln -s "$lib/bin/dbus-launch" "$out/bin/"
   '';
@@ -138,9 +146,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Simple interprocess messaging system";
     homepage = "https://www.freedesktop.org/wiki/Software/dbus/";
-    changelog = "https://gitlab.freedesktop.org/dbus/dbus/-/blob/dbus-${version}/NEWS";
+    changelog = "https://gitlab.freedesktop.org/dbus/dbus/-/blob/dbus-${finalAttrs.version}/NEWS";
     license = licenses.gpl2Plus; # most is also under AFL-2.1
-    maintainers = teams.freedesktop.members ++ (with maintainers; [ ]);
+    maintainers = teams.freedesktop.members;
     platforms = platforms.unix;
   };
-}
+})
