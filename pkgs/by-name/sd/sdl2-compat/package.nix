@@ -93,7 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/libsdl-org/sdl2-compat/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.zlib;
     maintainers = with lib.maintainers; [ nadiaholmquist ];
-    platforms = lib.platforms.unix;
+    platforms = lib.platforms.all;
     pkgConfigModules = [ "sdl2_compat" ];
   };
 })
