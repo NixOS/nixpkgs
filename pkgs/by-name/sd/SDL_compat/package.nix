@@ -1,11 +1,12 @@
 {
   lib,
-  SDL2,
+  sdl2-compat,
   cmake,
   darwin,
   fetchFromGitHub,
   libGLU,
   libiconv,
+  libX11,
   mesa,
   pkg-config,
   stdenv,
@@ -39,7 +40,10 @@ stdenv.mkDerivation (finalAttrs: {
     ];
 
   propagatedBuildInputs =
-    [ SDL2 ]
+    [
+      libX11
+      sdl2-compat
+    ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       libiconv
       Cocoa
