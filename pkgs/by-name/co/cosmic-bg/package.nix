@@ -7,6 +7,7 @@
   libcosmicAppHook,
   just,
   nasm,
+  nix-update-script,
 
   withMoldLinker ? stdenv.targetPlatform.isLinux,
 }:
@@ -47,6 +48,15 @@ rustPlatform.buildRustPackage.override
 
     env."CARGO_TARGET_${stdenv.hostPlatform.rust.cargoEnvVarTarget}_RUSTFLAGS" =
       lib.optionalString withMoldLinker "-C link-arg=-fuse-ld=mold";
+
+    passthru.updateScript = nix-update-script {
+      extraArgs = [
+        "--version"
+        "unstable"
+        "--version-regex"
+        "epoch-(.*)"
+      ];
+    };
 
     meta = {
       homepage = "https://github.com/pop-os/cosmic-bg";
