@@ -175,6 +175,7 @@ let
 
       # hipTensor - Only supports GFX9
 
+      composable_kernel_base = self.callPackage ./composable_kernel/base.nix { };
       composable_kernel = self.callPackage ./composable_kernel { };
 
       ck4inductor = pyPackages.callPackage ./composable_kernel/ck4inductor.nix {

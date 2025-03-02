@@ -1,184 +1,241 @@
 {
   lib,
-  stdenv,
-  fetchFromGitHub,
-  rocmUpdateScript,
-  cmake,
-  rocm-cmake,
-  rocm-merged-llvm,
   clr,
-  rocm-device-libs,
-  rocminfo,
-  hipify,
-  git,
-  gtest,
-  zstd,
-  ninja,
-  buildTests ? false,
-  buildExamples ? false,
-  gpuTargets ? (
-    clr.localGpuTargets or [
-      "gfx900"
-      "gfx906"
-      "gfx908"
-      "gfx90a"
-      "gfx942"
-      "gfx1030"
-      "gfx1100"
-      "gfx1101"
-      "gfx1102"
-    ]
-  ),
+  composable_kernel_base,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
-  pname = "composable_kernel${clr.gpuArchSuffix}";
-  # Picked this version over 6.3 because much easier to get to build
-  # and it matches the version torch 2.6 wants
-  version = "6.4.0-unstable-20241220";
-
-  outputs =
-    [
-      "out"
-    ]
-    ++ lib.optionals buildTests [
-      "test"
-    ]
-    ++ lib.optionals buildExamples [
-      "example"
-    ];
-
-  src = fetchFromGitHub {
-    owner = "ROCm";
-    repo = "composable_kernel";
-    rev = "07339c738396ebeae57374771ded4dcf11bddf1e";
-    hash = "sha256-EvEBxlOpQ71BF57VW79WBo/cdxAwTKFXFMiYKyGyyEs=";
+let
+  parts = {
+    _mha = {
+      # mha takes ~3hrs on 64 cores on an EPYC milan system at ~2.5GHz
+      # big-parallel builders are one gen newer and clocked ~30% higher but only 24 cores
+      # Should be <10h timeout but might be cutting it close
+      # TODO: work out how to split this into smaller chunks instead of all 3k mha instances together
+      # mha_0,1,2, search ninja target file for the individual instances, split by the index?
+      # TODO: can we prune the generated instances down to only what in practice are used with popular models
+      # when using flash-attention + MHA kernels?
+      targets = [
+        "device_mha_instance"
+      ];
+      requiredSystemFeatures = [ "big-parallel" ];
+      extraCmakeFlags = [ "-DHIP_CLANG_NUM_PARALLEL_JOBS=2" ];
+    };
+    gemm_multiply_multiply = {
+      targets = [
+        "device_gemm_multiply_multiply_instance"
+      ];
+      requiredSystemFeatures = [ "big-parallel" ];
+      extraCmakeFlags = [ "-DHIP_CLANG_NUM_PARALLEL_JOBS=2" ];
+    };
+    grouped_conv = {
+      targets = [
+        "device_grouped_conv1d_bwd_weight_instance"
+        "device_grouped_conv2d_bwd_data_instance"
+        "device_grouped_conv2d_bwd_weight_instance"
+        "device_grouped_conv1d_fwd_instance"
+        "device_grouped_conv2d_fwd_instance"
+        "device_grouped_conv2d_fwd_dynamic_op_instance"
+      ];
+    };
+    grouped_conv_bwd_3d = {
+      targets = [
+        "device_grouped_conv3d_bwd_data_instance"
+        "device_grouped_conv3d_bwd_data_bilinear_instance"
+        "device_grouped_conv3d_bwd_data_scale_instance"
+        "device_grouped_conv3d_bwd_weight_instance"
+        "device_grouped_conv3d_bwd_weight_bilinear_instance"
+        "device_grouped_conv3d_bwd_weight_scale_instance"
+      ];
+    };
+    grouped_conv_fwd_3d = {
+      targets = [
+        "device_grouped_conv3d_fwd_instance"
+        "device_grouped_conv3d_fwd_bilinear_instance"
+        "device_grouped_conv3d_fwd_convinvscale_instance"
+        "device_grouped_conv3d_fwd_convscale_instance"
+        "device_grouped_conv3d_fwd_convscale_add_instance"
+        "device_grouped_conv3d_fwd_convscale_relu_instance"
+        "device_grouped_conv3d_fwd_dynamic_op_instance"
+        "device_grouped_conv3d_fwd_scale_instance"
+        "device_grouped_conv3d_fwd_scaleadd_ab_instance"
+        "device_grouped_conv3d_fwd_scaleadd_scaleadd_relu_instance"
+      ];
+    };
+    batched_gemm = {
+      targets = [
+        "device_batched_gemm_instance"
+        "device_batched_gemm_add_relu_gemm_add_instance"
+        "device_batched_gemm_bias_permute_instance"
+        "device_batched_gemm_gemm_instance"
+        "device_batched_gemm_reduce_instance"
+        "device_batched_gemm_softmax_gemm_instance"
+        "device_batched_gemm_softmax_gemm_permute_instance"
+        "device_grouped_gemm_instance"
+        "device_grouped_gemm_bias_instance"
+        "device_grouped_gemm_fastgelu_instance"
+        "device_grouped_gemm_fixed_nk_instance"
+        "device_grouped_gemm_fixed_nk_multi_abd_instance"
+        "device_grouped_gemm_tile_loop_instance"
+      ];
+    };
+    gemm_universal = {
+      targets = [
+        "device_gemm_universal_instance"
+        "device_gemm_universal_batched_instance"
+        "device_gemm_universal_reduce_instance"
+        "device_gemm_universal_streamk_instance"
+      ];
+      requiredSystemFeatures = [ "big-parallel" ];
+      extraCmakeFlags = [ "-DHIP_CLANG_NUM_PARALLEL_JOBS=2" ];
+    };
+    gemm_other = {
+      targets = [
+        "device_gemm_instance"
+        "device_gemm_ab_scale_instance"
+        "device_gemm_add_instance"
+        "device_gemm_add_add_fastgelu_instance"
+        "device_gemm_add_fastgelu_instance"
+        "device_gemm_add_multiply_instance"
+        "device_gemm_add_relu_instance"
+        "device_gemm_add_relu_add_layernorm_instance"
+        "device_gemm_add_silu_instance"
+        "device_gemm_bias_add_reduce_instance"
+        "device_gemm_bilinear_instance"
+        "device_gemm_fastgelu_instance"
+        "device_gemm_multi_abd_instance"
+        "device_gemm_multiply_add_instance"
+        "device_gemm_reduce_instance"
+        "device_gemm_splitk_instance"
+        "device_gemm_streamk_instance"
+      ];
+    };
+    conv = {
+      targets = [
+        "device_conv1d_bwd_data_instance"
+        "device_conv2d_bwd_data_instance"
+        "device_conv2d_fwd_instance"
+        "device_conv2d_fwd_bias_relu_instance"
+        "device_conv2d_fwd_bias_relu_add_instance"
+        "device_conv3d_bwd_data_instance"
+      ];
+    };
+    pool = {
+      targets = [
+        "device_avg_pool2d_bwd_instance"
+        "device_avg_pool3d_bwd_instance"
+        "device_pool2d_fwd_instance"
+        "device_pool3d_fwd_instance"
+        "device_max_pool_bwd_instance"
+      ];
+    };
+    other1 = {
+      targets = [
+        "device_batchnorm_instance"
+        "device_contraction_bilinear_instance"
+        "device_contraction_scale_instance"
+        "device_elementwise_instance"
+        "device_elementwise_normalization_instance"
+        "device_normalization_bwd_data_instance"
+        "device_normalization_bwd_gamma_beta_instance"
+        "device_normalization_fwd_instance"
+      ];
+    };
+    other2 = {
+      targets = [
+        "device_column_to_image_instance"
+        "device_image_to_column_instance"
+        "device_permute_scale_instance"
+        "device_quantization_instance"
+        "device_reduce_instance"
+        "device_softmax_instance"
+        "device_transpose_instance"
+      ];
+    };
   };
+  tensorOpBuilder =
+    {
+      part,
+      targets,
+      extraCmakeFlags ? [ ],
+      requiredSystemFeatures ? [ ],
+    }:
+    composable_kernel_base.overrideAttrs (old: {
+      inherit requiredSystemFeatures;
+      pname = "composable_kernel${clr.gpuArchSuffix}-${part}";
+      makeTargets = targets;
+      preBuild = ''
+        echo "Building ${part}"
+        makeFlagsArray+=($makeTargets)
+        substituteInPlace Makefile \
+          --replace-fail '.NOTPARALLEL:' ""
+      '';
 
-  nativeBuildInputs = [
-    git
-    cmake
-    rocminfo
-    clr
-    hipify
-    ninja
-    zstd
-  ];
+      # Compile parallelism adjusted based on available RAM
+      # Never uses less than NIX_BUILD_CORES/4, never uses more than NIX_BUILD_CORES
+      # CK uses an unusually high amount of memory per core in the build step
+      # Nix/nixpkgs doesn't really have any infra to tell it that this build is unusually memory hungry
+      # So, bodge. Otherwise you end up having to build all of ROCm with a low core limit when
+      # it's only this package that has trouble.
+      preConfigure =
+        old.preConfigure or ""
+        + ''
+          MEM_GB_TOTAL=$(awk '/MemTotal/ { printf "%d \n", $2/1024/1024 }' /proc/meminfo)
+          MEM_GB_AVAILABLE=$(awk '/MemAvailable/ { printf "%d \n", $2/1024/1024 }' /proc/meminfo)
+          APPX_GB=$((MEM_GB_AVAILABLE > MEM_GB_TOTAL ? MEM_GB_TOTAL : MEM_GB_AVAILABLE))
+          MAX_CORES=$((1 + APPX_GB/3))
+          MAX_CORES=$((MAX_CORES < NIX_BUILD_CORES/3 ? NIX_BUILD_CORES/3 : MAX_CORES))
+          export NIX_BUILD_CORES="$((NIX_BUILD_CORES > MAX_CORES ? MAX_CORES : NIX_BUILD_CORES))"
+          echo "Picked new core limit NIX_BUILD_CORES=$NIX_BUILD_CORES based on available mem: $APPX_GB GB"
+          cmakeFlagsArray+=(
+            "-DCK_PARALLEL_COMPILE_JOBS=$NIX_BUILD_CORES"
+          )
+        '';
+      cmakeFlags = old.cmakeFlags ++ extraCmakeFlags;
+      # Early exit after build phase with success, skips fixups etc
+      # Will get copied back into /build of the final CK
+      postBuild = ''
+        find . -name "*.o" -type f | while read -r file; do
+          mkdir -p "$out/$(dirname "$file")"
+          cp --reflink=auto "$file" "$out/$file"
+        done
+        exit 0
+      '';
+      meta = old.meta // {
+        broken = false;
+      };
+    });
+  composable_kernel_parts = builtins.mapAttrs (
+    part: targets: tensorOpBuilder (targets // { inherit part; })
+  ) parts;
+in
 
-  buildInputs = [
-    rocm-cmake
-    clr
-    zstd
-  ];
+composable_kernel_base.overrideAttrs (
+  finalAttrs: old: {
+    pname = "composable_kernel${clr.gpuArchSuffix}";
+    parts_dirs = builtins.attrValues composable_kernel_parts;
+    disallowedReferences = builtins.attrValues composable_kernel_parts;
+    preBuild = ''
+      for dir in $parts_dirs; do
+        find "$dir" -type f -name "*.o" | while read -r file; do
+          # Extract the relative path by removing the output directory prefix
+          rel_path="''${file#"$dir/"}"
 
-  strictDeps = true;
-  enableParallelBuilding = true;
-  requiredSystemFeatures = [ "big-parallel" ];
-  env.ROCM_PATH = clr;
-  env.HIP_CLANG_PATH = "${rocm-merged-llvm}/bin";
+          # Create parent directory if it doesn't exist
+          mkdir -p "$(dirname "$rel_path")"
 
-  cmakeFlags =
-    [
-      "-DCMAKE_MODULE_PATH=${clr}/hip/cmake"
-      "-DCMAKE_BUILD_TYPE=Release"
-      "-DCMAKE_POLICY_DEFAULT_CMP0069=NEW"
-      # "-DDL_KERNELS=ON" # Not needed, slow to build
-      # CK_USE_CODEGEN Required for migraphx which uses device_gemm_multiple_d.hpp
-      # but migraphx requires an incompatible fork of CK and fails anyway
-      # "-DCK_USE_CODEGEN=ON"
-      # It might be worth skipping fp64 in future with this:
-      # "-DDTYPES=fp32;fp16;fp8;bf16;int8"
-      # Manually define CMAKE_INSTALL_<DIR>
-      # See: https://github.com/NixOS/nixpkgs/pull/197838
-      "-DCMAKE_INSTALL_BINDIR=bin"
-      "-DCMAKE_INSTALL_LIBDIR=lib"
-      "-DCMAKE_INSTALL_INCLUDEDIR=include"
-      "-DBUILD_DEV=OFF"
-      "-DROCM_PATH=${clr}"
-      "-DCMAKE_HIP_COMPILER_ROCM_ROOT=${clr}"
-
-      # FP8 can build for 908/90a but very slow build
-      # and produces unusably slow kernels that are huge
-      "-DCK_USE_FP8_ON_UNSUPPORTED_ARCH=OFF"
-    ]
-    ++ lib.optionals (gpuTargets != [ ]) [
-      # We intentionally set GPU_ARCHS and not AMD/GPU_TARGETS
-      # per readme this is required if archs are dissimilar
-      # In rocm-6.3.x not setting any arch flag worked
-      # but setting dissimilar arches always failed
-      "-DGPU_ARCHS=${lib.concatStringsSep ";" gpuTargets}"
-    ]
-    ++ lib.optionals buildTests [
-      "-DGOOGLETEST_DIR=${gtest.src}" # Custom linker names
-    ];
-
-  # No flags to build selectively it seems...
-  postPatch =
-    ''
-      export HIP_DEVICE_LIB_PATH=${rocm-device-libs}/amdgcn/bitcode
-    ''
-    + lib.optionalString (!buildTests) ''
-      substituteInPlace CMakeLists.txt \
-        --replace-fail "add_subdirectory(test)" ""
-      substituteInPlace codegen/CMakeLists.txt \
-        --replace-fail "include(ROCMTest)" ""
-    ''
-    + lib.optionalString (!buildExamples) ''
-      substituteInPlace CMakeLists.txt \
-        --replace-fail "add_subdirectory(example)" ""
-    ''
-    + ''
-      substituteInPlace CMakeLists.txt \
-        --replace-fail "add_subdirectory(profiler)" ""
+          # Copy the file back to its original location, give it a future timestamp
+          # so make treats it as up to date
+          cp --reflink=auto --no-preserve=all "$file" "$rel_path"
+          touch -d "now +10 hours" "$rel_path"
+        done
+      done
     '';
-
-  # Compile parallelism adjusted based on available RAM
-  # Never uses less than cores/4, never uses more than cores
-  # Link parallelism capped at 2
-  # Set up fancier ninja status line with ETA because this build takes forever
-  # and it's convenient to know around when it'll be done
-  preConfigure = ''
-    export NINJA_SUMMARIZE_BUILD=1
-    export NINJA_STATUS="[%r jobs | %P %f/%t @ %o/s | %w | ETA %W ] "
-    MEM_GB_TOTAL=$(awk '/MemTotal/ { printf "%d \n", $2/1024/1024 }' /proc/meminfo)
-    MEM_GB_AVAILABLE=$(awk '/MemAvailable/ { printf "%d \n", $2/1024/1024 }' /proc/meminfo)
-    APPX_GB=$((MEM_GB_AVAILABLE > MEM_GB_TOTAL ? MEM_GB_TOTAL : MEM_GB_AVAILABLE))
-    MAX_CORES=$((1 + APPX_GB/2))
-    MAX_CORES=$((MAX_CORES < NIX_BUILD_CORES/4 ? NIX_BUILD_CORES/4 : MAX_CORES))
-    LINK_CORES=$((2 > NIX_BUILD_CORES ? NIX_BUILD_CORES : 2))
-    export NIX_BUILD_CORES="$((NIX_BUILD_CORES > MAX_CORES ? MAX_CORES : NIX_BUILD_CORES))"
-    echo "Picked new core limits NIX_BUILD_CORES=$NIX_BUILD_CORES LINK_CORES=$LINK_CORES based on available mem: $APPX_GB GB"
-    cmakeFlagsArray+=(
-      "-DCK_PARALLEL_LINK_JOBS=$LINK_CORES"
-      "-DCK_PARALLEL_COMPILE_JOBS=$NIX_BUILD_CORES"
-    )
-  '';
-
-  postInstall =
-    lib.optionalString buildTests ''
-      mkdir -p $test/bin
-      mv $out/bin/test_* $test/bin
-    ''
-    + lib.optionalString buildExamples ''
-      mkdir -p $example/bin
-      mv $out/bin/example_* $example/bin
-    '';
-
-  passthru.updateScript = rocmUpdateScript {
-    name = finalAttrs.pname;
-    inherit (finalAttrs.src) owner;
-    inherit (finalAttrs.src) repo;
-  };
-
-  passthru.anyGfx9Target = lib.lists.any (lib.strings.hasPrefix "gfx9") gpuTargets;
-
-  meta = with lib; {
-    description = "Performance portable programming model for machine learning tensor operators";
-    homepage = "https://github.com/ROCm/composable_kernel";
-    license = with licenses; [ mit ];
-    maintainers = teams.rocm.members;
-    platforms = platforms.linux;
-    # Builds which don't don't target any gfx9 cause cmake errors in dependent projects
-    broken = !finalAttrs.passthru.anyGfx9Target;
-  };
-})
+    passthru = old.passthru // {
+      parts = composable_kernel_parts;
+    };
+    meta = old.meta // {
+      # Builds which don't don't target any gfx9 cause cmake errors in dependent projects
+      broken = !finalAttrs.passthru.anyGfx9Target;
+    };
+  }
+)
