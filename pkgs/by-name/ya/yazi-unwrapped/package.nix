@@ -8,33 +8,13 @@
   Foundation,
   rust-jemalloc-sys,
 }:
-let
+rustPlatform.buildRustPackage (finalAttrs: {
+  pname = "yazi";
   version = "25.2.26";
 
-  code_src = fetchFromGitHub {
-    owner = "sxyazi";
-    repo = "yazi";
-    tag = "v${version}";
-    hash = "sha256-DqhqpQRCSBTGonL9+bP7pA3mO2CemlbhwzShVdrL1/0=";
-  };
+  srcs = builtins.attrValues finalAttrs.passthru.srcs;
 
-  man_src = fetchFromGitHub {
-    name = "manpages"; # needed to ensure name is unique
-    owner = "yazi-rs";
-    repo = "manpages";
-    rev = "8950e968f4a1ad0b83d5836ec54a070855068dbf";
-    hash = "sha256-kEVXejDg4ChFoMNBvKlwdFEyUuTcY2VuK9j0PdafKus=";
-  };
-in
-rustPlatform.buildRustPackage rec {
-  pname = "yazi";
-  inherit version;
-
-  srcs = [
-    code_src
-    man_src
-  ];
-  sourceRoot = code_src.name;
+  sourceRoot = finalAttrs.passthru.srcs.code_src.name;
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-xg37aypFKY0ZG9GOkygTHlOAjqkTuhLNKo8Fz6MF2ZY=";
@@ -52,13 +32,29 @@ rustPlatform.buildRustPackage rec {
       --fish ./yazi-boot/completions/yazi.fish \
       --zsh  ./yazi-boot/completions/_yazi
 
-    installManPage ../${man_src.name}/yazi{.1,-config.5}
+    installManPage ../${finalAttrs.passthru.srcs.man_src.name}/yazi{.1,-config.5}
 
     install -Dm444 assets/yazi.desktop -t $out/share/applications
     install -Dm444 assets/logo.png $out/share/pixmaps/yazi.png
   '';
 
   passthru.updateScript.command = [ ./update.sh ];
+  passthru.srcs = {
+    code_src = fetchFromGitHub {
+      owner = "sxyazi";
+      repo = "yazi";
+      tag = "v${finalAttrs.version}";
+      hash = "sha256-DqhqpQRCSBTGonL9+bP7pA3mO2CemlbhwzShVdrL1/0=";
+    };
+
+    man_src = fetchFromGitHub {
+      name = "manpages"; # needed to ensure name is unique
+      owner = "yazi-rs";
+      repo = "manpages";
+      rev = "8950e968f4a1ad0b83d5836ec54a070855068dbf";
+      hash = "sha256-kEVXejDg4ChFoMNBvKlwdFEyUuTcY2VuK9j0PdafKus=";
+    };
+  };
 
   meta = {
     description = "Blazing fast terminal file manager written in Rust, based on async I/O";
@@ -74,4 +70,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "yazi";
   };
-}
+})
