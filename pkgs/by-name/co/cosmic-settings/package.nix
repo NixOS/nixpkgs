@@ -91,7 +91,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/pop-os/cosmic-settings";
     license = lib.licenses.gpl3Only;
     mainProgram = "cosmic-settings";
-    maintainers = with lib.maintainers; [ nyabinary ];
+    maintainers = with lib.maintainers; [
+      nyabinary
+      HeitorAugustoLN
+    ];
     platforms = lib.platforms.linux;
   };
 }
