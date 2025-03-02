@@ -4111,6 +4111,10 @@ with self; {
     };
     nativeBuildInputs = [ pkgs.ld-is-cc-hook ];
     buildInputs = [ ModuleBuildXSUtil ];
+    #  src/compiler/util/Compiler_double_charactor_operator.cpp:9:54: error: ISO C++17 does not allow 'register' storage class specifier [-Wregister]
+    env = lib.optionalAttrs stdenv.cc.isClang {
+      NIX_CFLAGS_COMPILE = "-Wno-error=register";
+    };
     meta = {
       homepage = "https://github.com/goccy/p5-Compiler-Lexer";
       description = "Lexical Analyzer for Perl5";
@@ -22487,21 +22491,6 @@ with self; {
     };
   };
 
-  SearchXapian = buildPerlPackage {
-    pname = "Search-Xapian";
-    version = "1.2.25.5";
-    src = fetchurl {
-      url = "mirror://cpan/authors/id/O/OL/OLLY/Search-Xapian-1.2.25.5.tar.gz";
-      hash = "sha256-IE+9xxLWcR/6tmjB9M/AB7Y5qftkrX4ZyyD8EKkQuos=";
-    };
-    buildInputs = [ pkgs.xapian DevelLeak ];
-    meta = {
-      description = "Perl XS frontend to the Xapian C++ search library";
-      homepage = "https://xapian.org";
-      license = with lib.licenses; [ artistic1 gpl1Plus ];
-    };
-  };
-
   SeleniumRemoteDriver = buildPerlPackage {
     pname = "Selenium-Remote-Driver";
     version = "1.49";
@@ -24094,12 +24083,12 @@ with self; {
 
   SysVirt = buildPerlModule rec {
     pname = "Sys-Virt";
-    version = "10.9.0";
+    version = "11.0.0";
     src = fetchFromGitLab {
       owner = "libvirt";
       repo = "libvirt-perl";
-      rev = "v${version}";
-      hash = "sha256-g2HH9Ep5cAa4qXo9/MKJmxeive6oqHQEX9C8qY+u2g4=";
+      tag = "v${version}";
+      hash = "sha256-k1fpVLWbFgZOUvCPLN6EpYgSfpwig5mHiWMRo8iRvZc=";
     };
     nativeBuildInputs = [ pkgs.pkg-config ];
     buildInputs = [ pkgs.libvirt CPANChanges TestPod TestPodCoverage XMLXPath ];
@@ -28610,6 +28599,35 @@ with self; {
       description = "Perl extension for inclusive (1.0 and 1.1) and exclusive canonicalization of XML using libxml2";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = [ maintainers.sgo ];
+    };
+  };
+
+  Xapian = buildPerlModule rec {
+    pname = "Xapian";
+    version = "1.4.27";
+    src = fetchurl {
+      url = "https://oligarchy.co.uk/xapian/${version}/xapian-bindings-${version}.tar.xz";
+      sha256 = "1fhq6rydjymmyn79cdza0j4rmlizrrwmf5mx276rlmwyh085wfxs";
+    };
+    buildInputs = [ pkgs.xapian ];
+    preConfigure = ''
+      # FIXME: doesn't work for cross
+      export PERL_LIB="$out/lib/perl5/site_perl/${perl.version}"
+      export PERL_ARCH="$PERL_LIB/$(perl -MConfig -e 'print $Config{archname}')"
+    '';
+    configureFlags = [
+      "--with-perl"
+    ];
+    outputs = [ "out" ]; # no "devdoc"
+    # Use default phases
+    buildPhase = null;
+    checkPhase = null;
+    checkTarget = "check";
+    installPhase = null;
+    meta = {
+      description = "Bindings allowing Xapian to be used from Perl";
+      homepage = "https://xapian.org";
+      license = [ lib.licenses.gpl2Plus ];
     };
   };
 

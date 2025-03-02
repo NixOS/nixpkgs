@@ -1468,7 +1468,7 @@ self: super: with self; {
 
   pueblo = callPackage ../development/python-modules/pueblo { };
 
-  pulumi = callPackage ../development/python-modules/pulumi { inherit (pkgs) pulumi; };
+  pulumi = callPackage ../development/python-modules/pulumi { };
 
   pulumi-aws = callPackage ../development/python-modules/pulumi-aws { };
 
@@ -2685,6 +2685,8 @@ self: super: with self; {
   cookiecutter = callPackage ../development/python-modules/cookiecutter { };
 
   cookies = callPackage ../development/python-modules/cookies { };
+
+  coolname = callPackage ../development/python-modules/coolname { };
 
   coordinates = callPackage ../development/python-modules/coordinates { };
 
@@ -6734,6 +6736,8 @@ self: super: with self; {
   jinja2-ansible-filters = callPackage ../development/python-modules/jinja2-ansible-filters { };
 
   jinja2-git = callPackage ../development/python-modules/jinja2-git { };
+
+  jinja2-humanize-extension = callPackage ../development/python-modules/jinja2-humanize-extension { };
 
   jinja2-pluralize = callPackage ../development/python-modules/jinja2-pluralize { };
 
