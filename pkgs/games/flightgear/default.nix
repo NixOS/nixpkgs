@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitLab,
   wrapQtAppsHook,
   libglut,
   freealut,
@@ -28,41 +28,42 @@
   udev,
   fltk13,
   apr,
-  makeDesktopItem,
-  qtbase,
+  qt5,
   qtdeclarative,
   glew,
   curl,
 }:
 
 let
-  version = "2020.3.19";
-  shortVersion = builtins.substring 0 6 version;
+  version = "2024.1.1";
   data = stdenv.mkDerivation rec {
     pname = "flightgear-data";
     inherit version;
 
-    src = fetchurl {
-      url = "mirror://sourceforge/flightgear/release-${shortVersion}/FlightGear-${version}-data.txz";
-      sha256 = "sha256-863EnNBU+rYTdxHwMV6HbBu99lO6H3mKGuyumm6YR5U=";
+    src = fetchFromGitLab {
+      owner = "flightgear";
+      repo = "fgdata";
+      tag = "v${version}";
+      hash = "sha256-PdqsIZw9mSrvnqqB/fVFjWPW9njhXLWR/2LQCMoBLQI=";
     };
 
     dontUnpack = true;
 
     installPhase = ''
       mkdir -p "$out/share/FlightGear"
-      tar xf "${src}" -C "$out/share/FlightGear/" --strip-components=1
+      cp ${src}/* -a "$out/share/FlightGear/"
     '';
   };
 in
 stdenv.mkDerivation rec {
   pname = "flightgear";
-  # inheriting data for `nix-prefetch-url -A pkgs.flightgear.data.src`
-  inherit version data;
+  inherit version;
 
-  src = fetchurl {
-    url = "mirror://sourceforge/flightgear/release-${shortVersion}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-Fn0I3pzA9yIYs3myPNflbH9u4Y19VZUS2lGjvWfzjm4=";
+  src = fetchFromGitLab {
+    owner = "flightgear";
+    repo = "flightgear";
+    tag = "v${version}";
+    hash = "sha256-h4N18VAbJGQSBKA+eEQxej5e5MEwAcZpvH+dpTypM+k=";
   };
 
   nativeBuildInputs = [
@@ -94,7 +95,7 @@ stdenv.mkDerivation rec {
     udev
     fltk13
     apr
-    qtbase
+    qt5.full
     glew
     qtdeclarative
     curl
