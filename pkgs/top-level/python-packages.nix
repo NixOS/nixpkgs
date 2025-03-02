@@ -487,6 +487,8 @@ self: super: with self; {
 
   aioweenect = callPackage ../development/python-modules/aioweenect { };
 
+  aiowebdav2 = callPackage ../development/python-modules/aiowebdav2 { };
+
   aiowebostv = callPackage ../development/python-modules/aiowebostv { };
 
   aiowmi = callPackage ../development/python-modules/aiowmi { };
