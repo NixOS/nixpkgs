@@ -15,8 +15,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "frankmorgner";
     repo = "openpace";
-    rev = version;
-    sha256 = "sha256-KsgCTHvbqxNOcf9HWgXGxagpIjHEcQ5Kryjq71F8XRk=";
+    tag = version;
+    hash = "sha256-KsgCTHvbqxNOcf9HWgXGxagpIjHEcQ5Kryjq71F8XRk=";
   };
 
   nativeBuildInputs = [
@@ -32,11 +32,11 @@ stdenv.mkDerivation rec {
     autoreconf --verbose --install
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Cryptographic library for EAC version 2";
     homepage = "https://github.com/frankmorgner/openpace";
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ vaavaav ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ vaavaav ];
   };
 }
