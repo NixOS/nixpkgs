@@ -134,7 +134,8 @@ stdenv.mkDerivation (
       in
       "[${lib.concatStringsSep "," options}]";
 
-    LC_ALL = "C.UTF-8";
+    LANG = if stdenv.isLinux then "C.UTF-8" else "C";
+    LC_CTYPE = if stdenv.isLinux then "C.UTF-8" else "UTF-8";
 
     postUnpack =
       ''

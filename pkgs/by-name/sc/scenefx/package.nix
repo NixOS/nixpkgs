@@ -4,7 +4,7 @@
   fetchFromGitHub,
   meson,
   ninja,
-  wlroots_0_17,
+  wlroots_0_18,
   scdoc,
   pkg-config,
   wayland,
@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "scenefx";
-  version = "0.1";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "wlrfx";
     repo = "scenefx";
     tag = finalAttrs.version;
-    hash = "sha256-vBmunqXwGbMNiGRd372TdMU4siWhIVYn5RVYne9C7uQ=";
+    hash = "sha256-BLIADMQwPJUtl6hFBhh5/xyYwLFDnNQz0RtgWO/Ua8s=";
   };
 
   strictDeps = true;
@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     pixman
     wayland
     wayland-protocols
-    wlroots_0_17
+    wlroots_0_18
   ];
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;

@@ -10171,6 +10171,11 @@
     githubId = 88038050;
     name = "Souvik Sen";
   };
+  io12 = {
+    github = "io12";
+    githubId = 7348004;
+    name = "Benjamin Levy";
+  };
   iogamaster = {
     email = "iogamastercode+nixpkgs@gmail.com";
     name = "IogaMaster";
