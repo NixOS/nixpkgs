@@ -14,7 +14,7 @@
 
 stdenv.mkDerivation rec {
   pname = "glibmm";
-  version = "2.82.0";
+  version = "2.83.1";
 
   outputs = [
     "out"
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    hash = "sha256-OGhM/zFyc2FcZ7j6mAbxYpnVHlUG2bkJuuFbWJ+pnLY=";
+    hash = "sha256-aDUKgjwz2orPsSY3FbsAKjbGg0a9RMGaxMPwvRkP0rE=";
   };
 
   nativeBuildInputs = [
