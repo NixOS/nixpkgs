@@ -57,4 +57,4 @@ let
     if tryOnce.success then tryOnce.value else "";
 
 in
-lib.genAttrs strings normaliseAndCheck
+lib.genAttrs normaliseAndCheck strings
