@@ -1997,6 +1997,8 @@ let
         };
       };
 
+      fstarlang.fstar-vscode-assistant = callPackage ./fstarlang.fstar-vscode-assistant { };
+
       funkyremi.vscode-google-translate = buildVscodeMarketplaceExtension {
         mktplcRef = {
           publisher = "funkyremi";
