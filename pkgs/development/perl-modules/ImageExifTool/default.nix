@@ -1,28 +1,41 @@
 {
+  lib,
+  stdenv,
   buildPerlPackage,
   exiftool,
   fetchurl,
   gitUpdater,
-  lib,
   shortenPerlShebang,
-  stdenv,
   testers,
+  ArchiveZip,
+  CompressRawLzma,
+  IOCompress,
+  IOCompressBrotli,
+  UnicodeLineBreak,
 }:
 
 buildPerlPackage rec {
   pname = "Image-ExifTool";
-  version = "13.00";
+  version = "13.10";
 
   src = fetchurl {
     url = "https://exiftool.org/Image-ExifTool-${version}.tar.gz";
-    hash = "sha256-SJV4jzT4NHZfhr5KWtWjJDP1ctdXFg7Ne2Eur17TfoQ=";
+    hash = "sha256-0VuuGLbqIFhp8/yBXLw1r5AiokUGu1QNjLLoW3eVtgA=";
   };
-
-  nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
 
   postPatch = ''
     patchShebangs exiftool
   '';
+
+  nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
+
+  buildInputs = [
+    ArchiveZip
+    CompressRawLzma
+    IOCompress
+    IOCompressBrotli
+    UnicodeLineBreak
+  ];
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     shortenPerlShebang $out/bin/exiftool
