@@ -62,6 +62,5 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.agpl3Plus;
     mainProgram = "offpunk";
     maintainers = with lib.maintainers; [ DamienCassou ];
-    platforms = lib.platforms.linux;
   };
 }
