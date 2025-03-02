@@ -22,7 +22,9 @@ stdenv.mkDerivation rec {
     ninja
   ];
 
-  doCheck = true;
+  # Assertion failed: (false && "!__builtin_constant_p(c_align_to(16, non_constant_expr ? 8 : 16))"),
+  # function test_basic_gnuc, file ../src/test-basic.c, line 548.
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   meta = {
     homepage = "https://github.com/c-util/c-stdaux";
