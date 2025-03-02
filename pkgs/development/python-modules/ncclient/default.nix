@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "ncclient";
-  version = "0.6.16";
+  version = "0.6.17";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = pname;
     repo = pname;
     tag = "v${version}";
-    hash = "sha256-IMCMlGt5/G4PRz525ZomsovU55vBnGhHndBtC7ym6lc=";
+    hash = "sha256-XWTd71p74j7EgPPVbdlH3a7zyEXKir1UpK1eGaNOEw4=";
   };
 
   propagatedBuildInputs = [
@@ -36,7 +36,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library for NETCONF clients";
     homepage = "https://github.com/ncclient/ncclient";
-    changelog = "https://github.com/ncclient/ncclient/releases/tag/v${version}";
+    changelog = "https://github.com/ncclient/ncclient/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [ xnaveira ];
   };
