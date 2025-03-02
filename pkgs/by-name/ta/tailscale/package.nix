@@ -62,6 +62,12 @@ buildGoModule {
     "cmd/tailscaled"
   ];
 
+  excludedPackages = [
+    # exlude integration tests which fail to work
+    # and require additional tooling
+    "tstest/integration"
+  ];
+
   ldflags = [
     "-w"
     "-s"
@@ -73,7 +79,59 @@ buildGoModule {
     "ts_include_cli"
   ];
 
-  doCheck = false;
+  # remove vendored tooling to ensure it's not used
+  # also avoids some unnecessary tests
+  preBuild = ''
+    rm -rf ./tool
+  '';
+
+  preCheck = ''
+    # feed in all tests for testing
+    # subPackages above limits what is built to just what we
+    # want but also limits the tests
+    unset subPackages
+
+    # several tests hang
+    rm tsnet/tsnet_test.go
+  '';
+
+  checkFlags =
+    let
+      skippedTests = [
+        # dislikes vendoring
+        "TestPackageDocs" # .
+        # tries to start tailscaled
+        "TestContainerBoot" # cmd/containerboot
+
+        # just part of a tool which generates yaml for k8s CRDs
+        # requires helm
+        "Test_generate" # cmd/k8s-operator/generate
+        # self reported potentially flakey test
+        "TestConnMemoryOverhead" # control/controlbase
+
+        # interacts with `/proc/net/route` and need a default route
+        "TestDefaultRouteInterface" # net/netmon
+        "TestRouteLinuxNetlink" # net/netmon
+        "TestGetRouteTable" # net/routetable
+
+        # remote udp call to 8.8.8.8
+        "TestDefaultInterfacePortable" # net/netutil
+
+        # launches an ssh server which works when provided openssh
+        # also requires executing commands but nixbld user has /noshell
+        "TestSSH" # ssh/tailssh
+        # wants users alice & ubuntu
+        "TestMultipleRecorders" # ssh/tailssh
+        "TestSSHAuthFlow" # ssh/tailssh
+        "TestSSHRecordingCancelsSessionsOnUploadFailure" # ssh/tailssh
+        "TestSSHRecordingNonInteractive" # ssh/tailssh
+
+        # test for a dev util which helps to fork golang.org/x/crypto/acme
+        # not necessary and fails to match
+        "TestSyncedToUpstream" # tempfork/acme
+      ];
+    in
+    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
   postInstall =
     ''
