@@ -28,6 +28,11 @@ let
       hash = "sha256-IcahhuWX1Ba7kmyJaNJlY1gcVHOR6uynyr7w5MMwRgo=";
     };
 
+    installPhase = ''
+      mkdir $out
+      cp -R ./dist $out/
+    '';
+
     npmDepsHash = "sha256-LeSKSZYtjrZ84RkhGbLEMHVi1fw7FK/137F0V4hjSCE=";
     forceGitDeps = true;
     makeCacheWritable = true;
@@ -74,16 +79,10 @@ maven.buildMavenPackage rec {
     "-Dmaven.test.skip=true"
     "-P enhance"
     "-P embedded-jetty"
-    "-P bundle-ui"
     "-Dservices.bom.merge.skip=false"
     "-Dlogback.configuration.file=${src}/src/main/docker/logback.xml"
     "-Dcyclonedx-cli.path=${lib.getExe cyclonedx-cli}"
   ];
-
-  preBuild = ''
-    mkdir -p frontend
-    cp -r ${frontend}/lib/node_modules/@dependencytrack/frontend/dist frontend/
-  '';
 
   afterDepsSetup = ''
     mvn cyclonedx:makeBom -Dmaven.repo.local=$mvnDeps/.m2 \
@@ -105,7 +104,6 @@ maven.buildMavenPackage rec {
   '';
 
   passthru = {
-    # passthru for nix-update
     inherit frontend;
     tests = {
       inherit (nixosTests) dependency-track;
