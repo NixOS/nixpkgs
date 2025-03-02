@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  utils,
   ...
 }:
 let
@@ -269,6 +270,30 @@ in
           default = "http_status:404";
         };
       };
+
+    };
+
+    extraGlobalArgs = lib.mkOption {
+      type = with lib.types; listOf str;
+      default = [ ];
+      example = [
+        "--loglevel"
+        "debug"
+      ];
+      description = ''
+        Extra arguments to pass to cloudflared
+        that are common to all tunnel subcommands.
+      '';
+    };
+
+    extraRunArgs = lib.mkOption {
+      type = with lib.types; listOf str;
+      default = [ ];
+      example = [ "--post-quantum" ];
+      description = ''
+        Extra arguments to pass to cloudflared
+        that are specific to the run subcommand.
+      '';
     };
   };
 
@@ -336,7 +361,17 @@ in
         serviceConfig = {
           User = cfg.user;
           Group = cfg.group;
-          ExecStart = "${cfg.package}/bin/cloudflared tunnel --config=${mkConfigFile} --no-autoupdate run";
+          ExecStart = utils.escapeSystemdExecArgs (
+            [
+              "${cfg.package}/bin/cloudflared"
+              "tunnel"
+              "--config=${mkConfigFile}"
+              "--no-autoupdate"
+            ]
+            ++ cfg.extraGlobalArgs
+            ++ [ "run" ]
+            ++ cfg.extraRunArgs
+          );
           Restart = "on-failure";
         };
       })
