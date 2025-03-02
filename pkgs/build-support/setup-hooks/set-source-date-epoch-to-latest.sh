@@ -4,6 +4,16 @@ updateSourceDateEpoch() {
     #   https://salsa.debian.org/reproducible-builds/diffoscope/-/issues/378
     [[ $path == -* ]] && path="./$path"
 
+    # If a derivation can reliably determine the source date,
+    # it can pass along this information in /nix-support/SOURCE_DATE_EPOCH
+    # (as any file timestamps are cleared from the NAR format)
+    if [ -f "$1/nix-support/SOURCE_DATE_EPOCH" ]; then
+        local time=$(cat "$1/nix-support/SOURCE_DATE_EPOCH")
+        echo "setting SOURCE_DATE_EPOCH to timestamp $time from $1/nix-support/SOURCE_DATE_EPOCH"
+        export SOURCE_DATE_EPOCH="$time"
+        return
+    fi
+
     # Get the last modification time of all regular files, sort them,
     # and get the most recent. Maybe we should use
     # https://github.com/0-wiz-0/findnewest here.

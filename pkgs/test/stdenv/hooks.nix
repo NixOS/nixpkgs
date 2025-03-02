@@ -140,5 +140,22 @@
       touch $out
     '';
   };
+  set-source-date-epoch-to-recorded = stdenv.mkDerivation {
+    name = "test-set-source-date-epoch-to-recorded";
+    buildCommand = ''
+      sourceRoot=$NIX_BUILD_TOP/source
+      mkdir -p $sourceRoot/nix-support
+      # Even when an older (unchanged) or newer (generated?) date
+      # is found in the repo timestamps:
+      touch --date=1/1/2014 $sourceRoot/foo
+      touch --date=1/1/2016 $sourceRoot/foo
+      echo 1420070400 > $sourceRoot/nix-support/SOURCE_DATE_EPOCH
+
+      _updateSourceDateEpochFromSourceRoot
+
+      [[ $SOURCE_DATE_EPOCH == "1420070400" ]]
+      touch $out
+    '';
+  };
   # TODO: add strip
 }
