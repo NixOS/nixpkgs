@@ -35,6 +35,7 @@ let
     elem
     extendDerivation
     fixedWidthString
+    flip
     getName
     hasSuffix
     head
@@ -44,6 +45,7 @@ let
     optionalAttrs
     optionals
     optionalString
+    removePrefix
     splitString
     stringLength
     ;
@@ -64,18 +66,18 @@ let
 
   isMismatchedPython = drv: drv.pythonModule != python;
 
-  withDistOutput' = lib.flip elem [
+  withDistOutput' = flip elem [
     "pyproject"
     "setuptools"
     "wheel"
   ];
 
-  isBootstrapInstallPackage' = lib.flip elem [
+  isBootstrapInstallPackage' = flip elem [
     "flit-core"
     "installer"
   ];
 
-  isBootstrapPackage' = lib.flip elem (
+  isBootstrapPackage' = flip elem (
     [
       "build"
       "packaging"
@@ -87,12 +89,12 @@ let
     ]
   );
 
-  isSetuptoolsDependency' = lib.flip elem [
+  isSetuptoolsDependency' = flip elem [
     "setuptools"
     "wheel"
   ];
 
-  cleanAttrs = lib.flip removeAttrs [
+  cleanAttrs = flip removeAttrs [
     "disabled"
     "checkPhase"
     "checkInputs"
@@ -462,7 +464,7 @@ let
     drv:
     extendDerivation (
       drv.disabled
-      -> throw "${lib.removePrefix namePrefix drv.name} not supported for interpreter ${python.executable}"
+      -> throw "${removePrefix namePrefix drv.name} not supported for interpreter ${python.executable}"
     ) { } (toPythonModule drv);
 
 in
