@@ -9,6 +9,7 @@
   yarn,
   nixosTests,
   git,
+  nix-update-script,
 }:
 let
   # this rarely changes https://github.com/zabbly/incus/blob/daily/patches/ui-canonical-renames.sed
@@ -72,7 +73,16 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  passthru.tests.default = nixosTests.incus.ui;
+  passthru = {
+    tests.default = nixosTests.incus.ui;
+
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "incus-([0-9\\.]+)"
+      ];
+    };
+  };
 
   meta = {
     description = "Web user interface for Incus";
