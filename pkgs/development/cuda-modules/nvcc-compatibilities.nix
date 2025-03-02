@@ -118,7 +118,8 @@ let
     # https://docs.nvidia.com/cuda/archive/12.8.0/cuda-installation-guide-linux/index.html#host-compiler-support-policy
     "12.8" = attrs."12.6" // {
       clangMaxMajorVersion = "19";
-      gccMaxMajorVersion = "14";
+      # should be 14 but some projects such as cupy do not compile with gcc14 yet
+      gccMaxMajorVersion = "13";
     };
   };
 in
