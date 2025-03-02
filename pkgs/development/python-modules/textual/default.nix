@@ -28,14 +28,14 @@
 
 buildPythonPackage rec {
   pname = "textual";
-  version = "1.0.0";
+  version = "2.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Textualize";
     repo = "textual";
     tag = "v${version}";
-    hash = "sha256-3pNUDkkq9X3W9DdWp4M4h4ddHN+GzUxLCFNJJdAtRJM=";
+    hash = "sha256-VKo1idLu5sYGtuK8yZzVE6QrrMOciYIesbGVlqzNjfk=";
   };
 
   build-system = [ poetry-core ];
@@ -105,7 +105,7 @@ buildPythonPackage rec {
   meta = {
     description = "TUI framework for Python inspired by modern web development";
     homepage = "https://github.com/Textualize/textual";
-    changelog = "https://github.com/Textualize/textual/releases/tag/v${version}";
+    changelog = "https://github.com/Textualize/textual/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ gepbird ];
   };
