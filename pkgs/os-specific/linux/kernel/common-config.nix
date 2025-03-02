@@ -43,7 +43,7 @@ let
   );
 
   forceRust = features.rust or false;
-  kernelSupportsRust = lib.versionAtLeast version "6.7";
+  kernelSupportsRust = lib.versionAtLeast version "6.7" && !stdenv.hostPlatform.isi686;
 
   # Currently only enabling Rust by default on kernel 6.12+,
   # which actually has features that use Rust that we want.
@@ -1054,7 +1054,7 @@ let
         HIDRAW = yes;
 
         # Enable loading HID fixups as eBPF from userspace
-        HID_BPF = whenAtLeast "6.3" yes;
+        HID_BPF = whenAtLeast "6.3" (whenPlatformHasEBPFJit yes);
 
         HID_ACRUX_FF = yes;
         DRAGONRISE_FF = yes;
@@ -1281,7 +1281,7 @@ let
         LIRC = yes;
 
         SCHED_CORE = whenAtLeast "5.14" yes;
-        SCHED_CLASS_EXT = whenAtLeast "6.12" yes;
+        SCHED_CLASS_EXT = whenAtLeast "6.12" (whenPlatformHasEBPFJit yes);
 
         LRU_GEN = whenAtLeast "6.1" yes;
         LRU_GEN_ENABLED = whenAtLeast "6.1" yes;
