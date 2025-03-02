@@ -8901,6 +8901,10 @@ with pkgs;
     stdenv = stdenvNoLibc;
   };
 
+  panda3ds-qt = panda3ds.override {
+    withQt = true;
+  };
+
   # These are used when buiding compiler-rt / libgcc, prior to building libc.
   preLibcCrossHeaders = let
     inherit (stdenv.targetPlatform) libc;
