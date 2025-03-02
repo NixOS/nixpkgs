@@ -598,6 +598,7 @@ in {
   lightdm = handleTest ./lightdm.nix {};
   lighttpd = handleTest ./lighttpd.nix {};
   limesurvey = handleTest ./limesurvey.nix {};
+  limine = recurseIntoAttrs (handleTest ./limine {});
   listmonk = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./listmonk.nix {};
   litestream = handleTest ./litestream.nix {};
   lldap = handleTest ./lldap.nix {};
