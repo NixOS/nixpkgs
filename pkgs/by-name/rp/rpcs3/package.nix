@@ -21,8 +21,9 @@
   python3,
   pugixml,
   flatbuffers,
-  llvm_16,
+  llvm_18,
   cubeb,
+  opencv,
   enableDiscordRpc ? false,
   faudioSupport ? true,
   faudio,
@@ -34,10 +35,10 @@
 
 let
   # Keep these separate so the update script can regex them
-  rpcs3GitVersion = "17265-418a99a62";
-  rpcs3Version = "0.0.34-17265-418a99a62";
-  rpcs3Revision = "418a99a62b814b7f831072610c9e7d7b5e90610c";
-  rpcs3Hash = "sha256-NN7gEtt/18JCAHFZNQ8OqpATWx50qXda2Kk7NVq5T9Y=";
+  rpcs3GitVersion = "17543-1dc3ebf89";
+  rpcs3Version = "0.0.35-17543-1dc3ebf89";
+  rpcs3Revision = "1dc3ebf891d29a7cd31c940e4ba8aaf987421bce";
+  rpcs3Hash = "sha256-2pMR1q0QkEG+fxsE7+CST5IBJEDZDR+FoQ8RZUsvcco=";
 
   inherit (qt6Packages)
     qtbase
@@ -80,6 +81,7 @@ stdenv.mkDerivation {
     (lib.cmakeBool "USE_SYSTEM_PUGIXML" true)
     (lib.cmakeBool "USE_SYSTEM_FLATBUFFERS" true)
     (lib.cmakeBool "USE_SYSTEM_SDL" true)
+    (lib.cmakeBool "USE_SYSTEM_OPENCV" true)
     (lib.cmakeBool "USE_SDL" true)
     (lib.cmakeBool "WITH_LLVM" true)
     (lib.cmakeBool "BUILD_LLVM" false)
@@ -117,8 +119,9 @@ stdenv.mkDerivation {
       pugixml
       SDL2
       flatbuffers
-      llvm_16
+      llvm_18
       libSM
+      opencv
     ]
     ++ cubeb.passthru.backendLibs
     ++ lib.optional faudioSupport faudio
