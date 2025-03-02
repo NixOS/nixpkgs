@@ -109,6 +109,7 @@ let
     "format"
     "disabledTestPaths"
     "disabledTests"
+    "enabledTestPaths"
     "pytestFlags"
     "pytestFlagsArray"
     "unittestFlags"
@@ -447,6 +448,17 @@ let
         "unittestFlags"
         "unittestFlagsArray"
       ] attrs
+      // lib.mapAttrs
+        (
+          name: value:
+          lib.throwIf
+            (finalAttrs.doInstallCheck && attrs.${name} == [ ])
+            "${lib.getName finalAttrs}: ${name} must be unspecified, null or a non-empty list when doInstallCheck is true."
+            attrs.${name}
+        )
+        (getExistingAttrs [
+          "enabledTestPaths"
+        ] attrs)
     )
   );
 
