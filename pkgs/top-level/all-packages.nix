@@ -2028,7 +2028,7 @@ with pkgs;
     '';
   });
 
-  calamares = libsForQt5.callPackage ../tools/misc/calamares {
+  calamares = qt6.callPackage ../tools/misc/calamares {
     python = python3;
     boost = boost.override { enablePython = true; python = python3; };
   };
