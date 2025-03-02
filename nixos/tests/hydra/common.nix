@@ -1,4 +1,3 @@
-{ system, ... }:
 {
   baseConfig =
     { pkgs, ... }:
@@ -6,7 +5,7 @@
       trivialJob = pkgs.writeTextDir "trivial.nix" ''
         { trivial = builtins.derivation {
             name = "trivial";
-            system = "${system}";
+            system = "${pkgs.stdenv.hostPlatform.system}";
             builder = "/bin/sh";
             allowSubstitutes = false;
             preferLocalBuild = true;
