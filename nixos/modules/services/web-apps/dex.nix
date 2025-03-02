@@ -117,7 +117,7 @@ in
             "-/etc/localtime"
             "-/etc/nsswitch.conf"
             "-/etc/resolv.conf"
-            "-/etc/ssl/certs/ca-certificates.crt"
+            "${config.security.pki.caBundle}:/etc/ssl/certs/ca-certificates.crt"
           ];
           BindPaths = optional (cfg.settings.storage.type == "postgres") "/var/run/postgresql";
           # ProtectClock= adds DeviceAllow=char-rtc r
