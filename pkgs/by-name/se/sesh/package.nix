@@ -16,14 +16,18 @@ buildGoModule rec {
 
   vendorHash = "sha256-3wNp1meUoUFPa2CEgKjuWcu4I6sxta3FPFvCb9QMQhQ=";
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.version=v${version}"
+  ];
 
   meta = {
+    changelog = "https://github.com/joshmedeski/sesh/releases/tag/${src.rev}";
     description = "Smart session manager for the terminal";
     homepage = "https://github.com/joshmedeski/sesh";
-    changelog = "https://github.com/joshmedeski/sesh/releases/tag/${src.rev}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ gwg313 ];
     mainProgram = "sesh";
+    maintainers = with lib.maintainers; [ gwg313 ];
   };
 }
