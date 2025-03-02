@@ -1,0 +1,3 @@
+{ callPackage }:
+
+callPackage ./thorium.nix { }
