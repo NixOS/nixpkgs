@@ -11445,6 +11445,8 @@ with pkgs;
     xonotic
     ;
 
+  xash-dedicated = callPackage ../by-name/xa/xash3d-fwgs/package.nix { buildServer = true; };
+
   xonotic-glx =
     (callPackage ../games/xonotic {
       withSDL = false;
