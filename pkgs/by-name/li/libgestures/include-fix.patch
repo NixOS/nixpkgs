@@ -1,0 +1,12 @@
+diff -ur a/include/gestures/include/finger_metrics.h b/include/gestures/include/finger_metrics.h
+--- a/include/gestures/include/finger_metrics.h    1970-01-01 09:00:01.000000000 +0900
++++ b/include/gestures/include/finger_metrics.h    2018-12-01 16:58:51.590718511 +0900
+@@ -5,6 +5,8 @@
+ #ifndef GESTURES_FINGER_METRICS_H_
+ #define GESTURES_FINGER_METRICS_H_
+ 
++#include <math.h>
++
+ #include "gestures/include/gestures.h"
+ #include "gestures/include/prop_registry.h"
+#include "gestures/include/vector.h"

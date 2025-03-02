@@ -1,0 +1,27 @@
+From d1a480867c0778ee46ff0213e2b1e494afcb67fc Mon Sep 17 00:00:00 2001
+From: toonn <toonn@toonn.io>
+Date: Mon, 1 Jul 2024 15:19:37 +0200
+Subject: [PATCH 2/2] sse2neon: Cast to variable type
+
+The `__m128d` type corresponds to `float32x4_t` or `float64x2_t`
+depending on the platform. The cast cannot explicitly use either type.
+---
+ src_base/neon/sse2neon.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src_base/neon/sse2neon.h b/src_base/neon/sse2neon.h
+index 490c0a4..3290fa3 100644
+--- a/src_base/neon/sse2neon.h
++++ b/src_base/neon/sse2neon.h
+@@ -6003,7 +6003,7 @@ FORCE_INLINE void _mm_storeu_si32(void *p, __m128i a)
+ FORCE_INLINE void _mm_stream_pd(double *p, __m128d a)
+ {
+ #if __has_builtin(__builtin_nontemporal_store)
+-    __builtin_nontemporal_store(a, (float32x4_t *) p);
++    __builtin_nontemporal_store(a, (__m128d *) p);
+ #elif defined(__aarch64__)
+     vst1q_f64(p, vreinterpretq_f64_m128d(a));
+ #else
+-- 
+2.44.1
+

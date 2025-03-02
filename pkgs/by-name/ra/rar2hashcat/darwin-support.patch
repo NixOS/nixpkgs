@@ -1,0 +1,24 @@
+diff --git a/Makefile b/Makefile
+index eca86a9..f11931b 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1,5 +1,5 @@
+ # Common variables
+-CFLAGS = -g -static -O2 -D_GNU_SOURCE -DARCH_LITTLE_ENDIAN=1
++CFLAGS = -g -O2 -D_GNU_SOURCE -DARCH_LITTLE_ENDIAN=1
+ TARGET = rar2hashcat
+ 
+ # Variables for Linux target
+diff --git a/base64_convert.c b/base64_convert.c
+index 0d2635d..b101e3c 100644
+--- a/base64_convert.c
++++ b/base64_convert.c
+@@ -163,7 +163,7 @@ static char *strnzcpy(char *dst, const char *src, int size)
+ 	return dst;
+ }
+ 
+-#ifdef __linux__
++#if defined(__linux__) || defined(__APPLE__)
+ static char *strupr(char *s)
+ {
+ 	unsigned char *ptr = (unsigned char *)s;

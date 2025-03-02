@@ -1,0 +1,13 @@
+diff --git a/lib/dune b/lib/dune
+index 2266b87..344c704 100644
+--- a/lib/dune
++++ b/lib/dune
+@@ -8,7 +8,7 @@
+ (rule
+  (targets GIT_COMMIT)
+  (deps (:x ../bin/git_commit.sh))
+- (action (with-stdout-to %{targets} (run %{x})))
++ (action (with-stdout-to %{targets} (run echo None)))
+ )
+ 
+ (rule
