@@ -1779,6 +1779,16 @@ let
       RGL_USE_NULL = "true";
     });
 
+    methylKit = old.methylKit.overrideAttrs (attrs: {
+      # resolve missing function from data.table
+      patches = [
+        (pkgs.fetchpatch {
+          url = "https://github.com/al2na/methylKit/commit/5c30347630bc064d7aefc918923f723671f35253.patch";
+          sha256 = "sha256-hwtybBmSYwVInMIEZ7i7zudJWjiRJmrD0/tU7v78pPc=";
+        })
+      ];
+    });
+
     Rrdrand = old.Rrdrand.override { platforms = lib.platforms.x86_64 ++ lib.platforms.x86; };
 
     symengine = old.symengine.overrideAttrs (_: {
