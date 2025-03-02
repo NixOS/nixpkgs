@@ -7,6 +7,8 @@
   fetchFromGitHub,
   poetry-core,
   pyric,
+  pytest-asyncio,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
   usb-devices,
@@ -26,11 +28,6 @@ buildPythonPackage rec {
     hash = "sha256-JaFazXjbHohj4+rPkQA/SaBP0irHrre3vaCqz7T2bwE=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail " --cov=bluetooth_auto_recovery --cov-report=term-missing:skip-covered" ""
-  '';
-
   build-system = [ poetry-core ];
 
   dependencies = [
@@ -41,7 +38,11 @@ buildPythonPackage rec {
     usb-devices
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytest-asyncio
+    pytest-cov-stub
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "bluetooth_auto_recovery" ];
 
