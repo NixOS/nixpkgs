@@ -109,6 +109,7 @@ let
     "disabledTestPaths"
     "disabledTests"
     "enabledTestPaths"
+    "enabledTests"
     "pytestFlags"
     "pytestFlagsArray"
     "unittestFlags"
@@ -458,6 +459,7 @@ let
           (
             getOptionalAttrs [
               "enabledTestPaths"
+              "enabledTests"
             ] attrs
           )
     )
