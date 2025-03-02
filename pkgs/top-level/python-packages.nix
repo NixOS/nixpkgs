@@ -5724,6 +5724,8 @@ self: super: with self; {
 
   groestlcoin-hash = callPackage ../development/python-modules/groestlcoin-hash { };
 
+  groovy = callPackage ../development/python-modules/groovy { };
+
   grpc-google-iam-v1 = callPackage ../development/python-modules/grpc-google-iam-v1 { };
 
   grpc-interceptor = callPackage ../development/python-modules/grpc-interceptor { };

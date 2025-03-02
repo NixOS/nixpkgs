@@ -2,14 +2,14 @@
   lib,
   fetchurl,
   appimageTools,
-  dotnet-runtime,
+  dotnet-runtime_9,
 }:
 let
   pname = "vrcx";
-  version = "2025.01.31";
+  version = "2025.03.01";
   filename = builtins.replaceStrings [ "." ] [ "" ] version;
   src = fetchurl {
-    hash = "sha256-hrAsy/yv8GW0mIDA5PJLUs4EYNufPiOplLlmb9pFwX4=";
+    hash = "sha256-d+sqebPDZC0GWtd+5/R1KXIKUbpZ0k9YFupsf29IHCs=";
     url = "https://github.com/vrcx-team/VRCX/releases/download/v${version}/VRCX_${filename}.AppImage";
   };
   appimageContents = appimageTools.extract {
@@ -18,17 +18,17 @@ let
 in
 appimageTools.wrapType2 rec {
   inherit pname version src;
-  extraPkgs = pkgs: [ dotnet-runtime ];
+  extraPkgs = pkgs: [ dotnet-runtime_9 ];
   extraInstallCommands = ''
     install -m 444 -D ${appimageContents}/vrcx.desktop \
-      $out/share/applications/vrcx.desktop
+      $out/share/applications/VRCX.desktop
     install -m 444 -D ${appimageContents}/usr/share/icons/hicolor/256x256/apps/vrcx.png \
-      $out/share/icons/hicolor/256x256/apps/vrcx.png
+      $out/share/icons/hicolor/256x256/apps/VRCX.png
 
-    substituteInPlace $out/share/applications/vrcx.desktop \
-      --replace-fail 'Exec=AppRun' 'Exec=${pname}'
-    substituteInPlace $out/share/applications/vrcx.desktop \
-      --replace-fail 'Icon=VRCX' "Icon=$out/share/icons/hicolor/256x256/apps/vrcx.png"
+    substituteInPlace $out/share/applications/VRCX.desktop \
+      --replace-fail 'Exec=AppRun' 'Exec=${pname} --no-install --ozone-platform-hint=auto'
+    substituteInPlace $out/share/applications/VRCX.desktop \
+      --replace-fail 'Icon=VRCX' "Icon=$out/share/icons/hicolor/256x256/apps/VRCX.png"
   '';
 
   meta = {
@@ -42,6 +42,6 @@ appimageTools.wrapType2 rec {
     downloadPage = "https://github.com/vrcx-team/VRCX/releases";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     maintainers = with lib.maintainers; [ ShyAssassin ];
-    platforms = [ "x86_64-linux" ];
+    platforms = lib.platforms.linux;
   };
 }
