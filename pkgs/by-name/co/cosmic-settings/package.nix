@@ -11,6 +11,8 @@
   libinput,
   fontconfig,
   freetype,
+  pipewire,
+  pulseaudio,
   udev,
   util-linux,
   cosmic-randr,
@@ -44,6 +46,8 @@ rustPlatform.buildRustPackage rec {
     just
     libcosmicAppHook'
     pkg-config
+    rustPlatform.bindgenHook
+    util-linux
   ];
 
   buildInputs = [
@@ -51,8 +55,9 @@ rustPlatform.buildRustPackage rec {
     fontconfig
     freetype
     libinput
+    pipewire
+    pulseaudio
     udev
-    util-linux
   ];
 
   dontUseJustBuild = true;
