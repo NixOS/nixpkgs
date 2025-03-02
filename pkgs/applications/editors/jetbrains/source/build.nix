@@ -221,7 +221,7 @@ let
 
   brokenPlugins = fetchurl {
     url = "https://web.archive.org/web/20250224030717if_/https://downloads.marketplace.jetbrains.com/files/brokenPlugins.json";
-    hash = "sha256-l3qy9ixYsHqZZ9kk1r2fA4GomaJsLaM/T48VaL5ZJr8=";
+    hash = "sha256-wQO+qmFfBn32F//bs/a5Q/H4Kpc171jKA9EMmeatc6w=";
   };
 
 in
