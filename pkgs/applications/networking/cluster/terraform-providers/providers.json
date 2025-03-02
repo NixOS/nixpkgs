@@ -90,13 +90,13 @@
     "vendorHash": "sha256-YIn8akPW+DCVF0eYZxsmJxmrJuYhK4QLG/uhmmrXd4c="
   },
   "auth0": {
-    "hash": "sha256-mlGMYuQCiQhQH5gCLLG8YrEQ40E4WuvPW6xFYAOZbwQ=",
+    "hash": "sha256-s+Aa4XWY0fubJy5iPgCs8bZX0UZbyOUEus0HRz2j4do=",
     "homepage": "https://registry.terraform.io/providers/auth0/auth0",
     "owner": "auth0",
     "repo": "terraform-provider-auth0",
-    "rev": "v1.12.0",
+    "rev": "v1.13.1",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-NynPovzkVRNU0EGxbIcvO4AOxnmG10mWfk8520arU5c="
+    "vendorHash": "sha256-KfoyGSA9viZRxOG9KVd+U0up66u6ivdG/iVIWh1RCLk="
   },
   "avi": {
     "hash": "sha256-e8yzc3nRP0ktcuuKyBXydS9NhoceYZKzJcqCWOfaPL0=",
@@ -516,13 +516,13 @@
     "vendorHash": "sha256-c4xM36A4wuYyy08+KSPYG4bKikSfAP0QSQ3ni1IszAI="
   },
   "google-beta": {
-    "hash": "sha256-fxmkUL+cHWbSiabSUDUKm5hwqzFKW7i9btlhKzDsEuI=",
+    "hash": "sha256-bxL3ufwXuioA73my5G89YSbvhHSz/DjzNbN3CfxarF8=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/google-beta",
     "owner": "hashicorp",
     "repo": "terraform-provider-google-beta",
-    "rev": "v6.20.0",
+    "rev": "v6.23.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-LsSPovaLIkW/+0XLB40jZyZx8/WiZIpTW1WYEKglDks="
+    "vendorHash": "sha256-lPjjaFKYLI4JoYGzhw9GcXl0z/zb22nzqIP+tMeAGOc="
   },
   "googleworkspace": {
     "hash": "sha256-dedYnsKHizxJZibuvJOMbJoux0W6zgKaK5fxIofKqCY=",
@@ -1282,13 +1282,13 @@
     "vendorHash": "sha256-iEi3zkr4kIZ1FTAft/Fy//v7xtlX/8uSrnbuxgFTDyA="
   },
   "temporalcloud": {
-    "hash": "sha256-cHhrNEHzOWp1wrbWZkoAjFyyhmHfvFZtM8g/u9RI+F0=",
+    "hash": "sha256-qzBgk6FOKiaKXwpUEj61pYW/72a0EpR3GTces5IbjJw=",
     "homepage": "https://registry.terraform.io/providers/temporalio/temporalcloud",
     "owner": "temporalio",
     "repo": "terraform-provider-temporalcloud",
-    "rev": "v0.6.0",
+    "rev": "v0.6.1",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-Cqo7aq0uBISrnpQPrmJBNACSt2mAt12I4xpf8yDd0AU="
+    "vendorHash": "sha256-0B2XRpvUk0mgDu3inz37LLJijwH3aQyoSb8IaHr6was="
   },
   "tencentcloud": {
     "hash": "sha256-zTH4s6PuYarQHvtFHB0yrFmsFLuoY0PmMjVD/FKnCkM=",
