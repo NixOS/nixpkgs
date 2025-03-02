@@ -212,6 +212,29 @@ in
               ] ++ previousPythonAttrs.disabledTestPaths or [ ];
             })
           );
+          enabledTests = objprint.overridePythonAttrs (previousPythonAttrs: {
+            pname = "test-pytestCheckHook-enabledTests-${previousPythonAttrs.pname}";
+            enabledTests = [
+              "TestBasic"
+            ] ++ previousPythonAttrs.disabledTests or [ ];
+          });
+          enabledTests-expression = objprint.overridePythonAttrs (previousPythonAttrs: {
+            __structuredAttrs = true;
+            pname = "test-pytestCheckHook-enabledTests-expression-${previousPythonAttrs.pname}";
+            enabledTests = [
+              "TestBasic and test_print"
+              "test_str"
+            ] ++ previousPythonAttrs.disabledTests or [ ];
+          });
+          enabledTests-disabledTests = objprint.overridePythonAttrs (previousPythonAttrs: {
+            pname = "test-pytestCheckHook-enabledTests-disabledTests-${previousPythonAttrs.pname}";
+            enabledTests = [
+              "TestBasic"
+            ] ++ previousPythonAttrs.disabledTests or [ ];
+            disabledTests = [
+              "test_print"
+            ] ++ previousPythonAttrs.disabledTests or [ ];
+          });
           enabledTestPaths = objprint.overridePythonAttrs (previousPythonAttrs: {
             pname = "test-pytestCheckHook-enabledTestPaths-${previousPythonAttrs.pname}";
             enabledTestPaths = [

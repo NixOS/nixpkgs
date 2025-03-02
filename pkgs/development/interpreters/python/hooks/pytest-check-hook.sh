@@ -3,6 +3,23 @@
 
 echo "Sourcing pytest-check-hook"
 
+function _pytestIncludeExcludeExpr() {
+    local includeListName="$1"
+    local -n includeListRef="$includeListName"
+    local excludeListName="$2"
+    local -n excludeListRef="$excludeListName"
+    local includeString excludeString
+    if [[ -n "${includeListRef[*]-}" ]]; then
+        # ((element1) or (element2))
+        includeString="(($(concatStringsSep ") or (" "$includeListName")))"
+    fi
+    if [[ -n "${excludeListRef[*]-}" ]]; then
+        # and not (element1) and not (element2)
+        excludeString="${includeString:+ and }not ($(concatStringsSep ") and not (" "$excludeListName"))"
+    fi
+    echo "$includeString$excludeString"
+}
+
 function pytestCheckPhase() {
     echo "Executing pytestCheckPhase"
     runHook preCheck
@@ -56,10 +73,8 @@ EOF
         fi
     done
 
-    if [ -n "${disabledTests[*]-}" ]; then
-        # not (keyword1) and not (keyword2)
-        disabledTestsString="not ($(concatStringsSep ") and not (" disabledTests))"
-        flagsArray+=(-k "$disabledTestsString")
+    if [[ -n "${enabledTests[*]-}" ]] || [[ -n "${disabledTests[*]-}" ]]; then
+        flagsArray+=(-k "$(_pytestIncludeExcludeExpr enabledTests disabledTests)")
     fi
 
     # Compatibility layer to the obsolete pytestFlagsArray
