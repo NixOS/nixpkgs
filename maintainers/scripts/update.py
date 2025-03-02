@@ -242,6 +242,8 @@ async def updater(
 
         await run_update_script(nixpkgs_root, merge_lock, temp_dir, package, keep_going)
 
+        packages_to_update.task_done()
+
 
 async def start_updates(
     max_workers: int,
