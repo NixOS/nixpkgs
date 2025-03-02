@@ -18231,4 +18231,8 @@ with pkgs;
   rustdesk-flutter = callPackage ../by-name/ru/rustdesk-flutter/package.nix {
     flutter = flutter324;
   };
+
+  libvisual-full = callPackage ../by-name/li/libvisual/package.nix {
+    fullVariant = true;
+  };
 }
