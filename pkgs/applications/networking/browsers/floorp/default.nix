@@ -63,14 +63,9 @@
   {
     # Upstream build configuration can be found at
     # .github/workflows/src/linux/shared/mozconfig_linux_base
-    privacySupport = true;
-    webrtcSupport = true;
     enableOfficialBranding = false;
-    googleAPISupport = true;
-    mlsAPISupport = true;
+    enableDataReporting = false;
+    enableLocation = true;
+    enableWebRTC = true;
   }
-).overrideAttrs
-  (prev: {
-    MOZ_DATA_REPORTING = "";
-    MOZ_TELEMETRY_REPORTING = "";
-  })
+)
