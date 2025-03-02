@@ -289,34 +289,36 @@ async def start_updates(
 
         # Prepare updater workers for each temp_dir directory.
         # At most `num_workers` instances of `run_update_script` will be running at one time.
-        updaters = asyncio.gather(
-            *[
-                updater(
-                    nixpkgs_root,
-                    temp_dir,
-                    merge_lock,
-                    packages_to_update,
-                    keep_going,
-                    commit,
-                )
-                for temp_dir in temp_dirs
-            ]
+        updater_tasks = [
+            updater(
+                nixpkgs_root,
+                temp_dir,
+                merge_lock,
+                packages_to_update,
+                keep_going,
+                commit,
+            )
+            for temp_dir in temp_dirs
+        ]
+
+        tasks = asyncio.gather(
+            *updater_tasks,
         )
 
         try:
             # Start updater workers.
-            await updaters
+            await tasks
         except asyncio.exceptions.CancelledError:
             # When one worker is cancelled, cancel the others too.
-            updaters.cancel()
+            tasks.cancel()
         except UpdateFailedException as e:
             # When one worker fails, cancel the others, as this exception is only thrown when keep_going is false.
-            updaters.cancel()
+            tasks.cancel()
             eprint(e)
             sys.exit(1)
 
 
-def main(
+async def main(
     max_workers: int,
     keep_going: bool,
     commit: bool,
@@ -338,7 +340,7 @@ def main(
         eprint()
         eprint("Running update for:")
 
-        asyncio.run(start_updates(max_workers, keep_going, commit, packages))
+        await start_updates(max_workers, keep_going, commit, packages)
 
         eprint()
         eprint("Packages updated!")
@@ -388,12 +390,14 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     try:
-        main(
-            args.max_workers,
-            args.keep_going,
-            args.commit,
-            args.packages,
-            args.skip_prompt,
+        asyncio.run(
+            main(
+                args.max_workers,
+                args.keep_going,
+                args.commit,
+                args.packages,
+                args.skip_prompt,
+            )
         )
     except KeyboardInterrupt as e:
         # Let’s cancel outside of the main loop too.
