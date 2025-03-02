@@ -1,0 +1,12 @@
+diff --git a/src/util.js b/src/util.js
+index d37e42f..9e57ad5 100644
+--- a/src/util.js
++++ b/src/util.js
+@@ -4,7 +4,6 @@ import Gio from 'gi://Gio';
+ import GLib from 'gi://GLib';
+ import Soup from 'gi://Soup';
+ import Xdp from 'gi://Xdp';
+-import XdpGtk4 from 'gi://XdpGtk4';
+ import { gettext as _, ngettext } from 'gettext';
+ 
+ const Format = imports.format;

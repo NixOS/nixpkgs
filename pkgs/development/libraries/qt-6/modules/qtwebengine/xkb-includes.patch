@@ -1,0 +1,12 @@
+--- a/src/3rdparty/chromium/ui/events/ozone/layout/xkb/xkb_keyboard_layout_engine.cc	2023-04-19 21:58:29.127258300 +0900
++++ b/src/3rdparty/chromium/ui/events/ozone/layout/xkb/xkb_keyboard_layout_engine.cc	2023-04-19 22:01:35.860196284 +0900
+@@ -637,8 +637,7 @@
+                           .variant = layout_variant.c_str(),
+                           .options = ""};
+   std::unique_ptr<xkb_context, XkbContextDeleter> context;
+-  context.reset(xkb_context_new(XKB_CONTEXT_NO_DEFAULT_INCLUDES));
+-  xkb_context_include_path_append(context.get(), "/usr/share/X11/xkb");
++  context.reset(xkb_context_new(XKB_CONTEXT_NO_FLAGS));
+   std::unique_ptr<xkb_keymap, XkbKeymapDeleter> keymap;
+   keymap.reset(xkb_keymap_new_from_names(context.get(), &names,
+                                          XKB_KEYMAP_COMPILE_NO_FLAGS));

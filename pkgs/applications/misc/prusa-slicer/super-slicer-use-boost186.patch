@@ -1,0 +1,60 @@
+diff --git a/src/hints/HintsToPot.cpp b/src/hints/HintsToPot.cpp
+index 7c8029cdeb..4791f0612f 100644
+--- a/src/hints/HintsToPot.cpp
++++ b/src/hints/HintsToPot.cpp
+@@ -9,7 +9,7 @@
+ 
+ bool write_to_pot(boost::filesystem::path path, const std::vector<std::pair<std::string, std::string>>& data)
+ {
+-	boost::filesystem::ofstream file(std::move(path), std::ios_base::app);
++	boost::nowide::ofstream file(path.string(), std::ios_base::app);
+ 	for (const auto& element : data)
+ 	{
+ 		//Example of .pot element 
+diff --git a/src/slic3r/GUI/RemovableDriveManager.cpp b/src/slic3r/GUI/RemovableDriveManager.cpp
+index 2f8ac96a1a..f0f95c9459 100644
+--- a/src/slic3r/GUI/RemovableDriveManager.cpp
++++ b/src/slic3r/GUI/RemovableDriveManager.cpp
+@@ -22,7 +22,8 @@
+ #include <pwd.h>
+ #include <boost/filesystem.hpp>
+ #include <boost/system/error_code.hpp>
+-#include <boost/filesystem/convenience.hpp>
++#include <boost/filesystem/path.hpp>
++#include <boost/filesystem/operations.hpp>
+ #include <boost/process.hpp>
+ #endif
+ 
+diff --git a/src/slic3r/GUI/ScriptExecutor.cpp b/src/slic3r/GUI/ScriptExecutor.cpp
+index 3e10680e46..374915ee34 100644
+--- a/src/slic3r/GUI/ScriptExecutor.cpp
++++ b/src/slic3r/GUI/ScriptExecutor.cpp
+@@ -825,6 +825,19 @@ void as_back_custom_initial_value(int preset_type, std::string& key) {
+     set_custom_option(preset_type, serialized_vars);
+ }
+ 
++inline void load_string_file(boost::filesystem::path const& p, std::string& str)
++{
++    boost::filesystem::ifstream file;
++    file.exceptions(std::ios_base::failbit | std::ios_base::badbit);
++    file.open(p, std::ios_base::binary);
++    const boost::uintmax_t sz = boost::filesystem::file_size(p);
++    if (BOOST_UNLIKELY(sz > static_cast< boost::uintmax_t >((std::numeric_limits< std::streamsize >::max)())))
++        BOOST_FILESYSTEM_THROW(std::length_error("File size exceeds max read size"));
++    str.resize(static_cast< std::size_t >(sz), '\0');
++    if (sz > 0u)
++        file.read(&str[0], static_cast< std::streamsize >(sz));
++}
++
+ /////// main script fucntions //////
+ 
+ //TODO: add "unset" function, that revert to last value (befoer a scripted set) if a set has been made since last not-scripted change.
+@@ -960,7 +973,7 @@ void ScriptContainer::init(const std::string& tab_key, Tab* tab)
+         //res = builder.AddSectionFromFile(ui_script_file.string().c_str()); //seems to be problematic on cyrillic locale
+         {
+             std::string all_file;
+-            boost::filesystem::load_string_file(ui_script_file, all_file);
++            load_string_file(ui_script_file, all_file);
+             res = builder.AddSectionFromMemory(ui_script_file.string().c_str(), all_file.c_str(), (unsigned int)(all_file.length()), 0);
+         }
+         if (res < 0) throw CompileErrorException("Error, can't build the script for tab " + tab_key);

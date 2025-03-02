@@ -1,0 +1,181 @@
+This patch was produced by manually merging:
+
+* <https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=74bfca7360910ae640c2c9c362fe9a4c0ebcc3ba>
+* <https://github.com/iains/gcc-14-branch/tree/gcc-14.2-darwin-r2>
+
+and then taking the diff between the result and the upstream GCC
+commit, and excerpting only the files that have conflicts when
+naively applying the branch’s diff to the snapshot. (This is
+more files than the two that actually needed manual merge work –
+`gcc/config/aarch64/aarch64-tune.md` and `libgcc/config.host` –
+because `patch(1)` can’t do a three‐way merge using ancestor
+information.)
+
+diff --git a/gcc/config/aarch64/aarch64-tune.md b/gcc/config/aarch64/aarch64-tune.md
+index 35b27ddb88..8ce2a93168 100644
+--- a/gcc/config/aarch64/aarch64-tune.md
++++ b/gcc/config/aarch64/aarch64-tune.md
+@@ -1,5 +1,5 @@
+ ;; -*- buffer-read-only: t -*-
+ ;; Generated automatically by gentune.sh from aarch64-cores.def
+ (define_attr "tune"
+-	"cortexa34,cortexa35,cortexa53,cortexa57,cortexa72,cortexa73,thunderx,thunderxt88p1,thunderxt88,octeontx,octeontxt81,octeontxt83,thunderxt81,thunderxt83,ampere1,ampere1a,ampere1b,emag,xgene1,falkor,qdf24xx,exynosm1,phecda,thunderx2t99p1,vulcan,thunderx2t99,cortexa55,cortexa75,cortexa76,cortexa76ae,cortexa77,cortexa78,cortexa78ae,cortexa78c,cortexa65,cortexa65ae,cortexx1,cortexx1c,neoversen1,ares,neoversee1,octeontx2,octeontx2t98,octeontx2t96,octeontx2t93,octeontx2f95,octeontx2f95n,octeontx2f95mm,a64fx,fujitsu_monaka,tsv110,thunderx3t110,neoversev1,zeus,neoverse512tvb,saphira,cortexa57cortexa53,cortexa72cortexa53,cortexa73cortexa35,cortexa73cortexa53,cortexa75cortexa55,cortexa76cortexa55,cortexr82,cortexa510,cortexa520,cortexa710,cortexa715,cortexa720,cortexa725,cortexx2,cortexx3,cortexx4,cortexx925,neoversen2,cobalt100,neoversen3,neoversev2,grace,neoversev3,neoversev3ae,demeter,generic,generic_armv8_a,generic_armv9_a"
++	"cortexa34,cortexa35,cortexa53,cortexa57,cortexa72,cortexa73,thunderx,thunderxt88p1,thunderxt88,octeontx,octeontxt81,octeontxt83,thunderxt81,thunderxt83,ampere1,ampere1a,ampere1b,emag,xgene1,falkor,qdf24xx,exynosm1,phecda,thunderx2t99p1,vulcan,thunderx2t99,cortexa55,cortexa75,cortexa76,cortexa76ae,cortexa77,cortexa78,cortexa78ae,cortexa78c,cortexa65,cortexa65ae,cortexx1,cortexx1c,neoversen1,ares,neoversee1,octeontx2,octeontx2t98,octeontx2t96,octeontx2t93,octeontx2f95,octeontx2f95n,octeontx2f95mm,a64fx,fujitsu_monaka,tsv110,thunderx3t110,neoversev1,zeus,neoverse512tvb,saphira,cortexa57cortexa53,cortexa72cortexa53,cortexa73cortexa35,cortexa73cortexa53,cortexa75cortexa55,cortexa76cortexa55,cortexr82,applea12,applem1,applem2,applem3,cortexa510,cortexa520,cortexa710,cortexa715,cortexa720,cortexa725,cortexx2,cortexx3,cortexx4,cortexx925,neoversen2,cobalt100,neoversen3,neoversev2,grace,neoversev3,neoversev3ae,demeter,generic,generic_armv8_a,generic_armv9_a"
+ 	(const (symbol_ref "((enum attr_tune) aarch64_tune)")))
+diff --git a/gcc/config/darwin.h b/gcc/config/darwin.h
+index 0d8886c026..5370511bec 100644
+--- a/gcc/config/darwin.h
++++ b/gcc/config/darwin.h
+@@ -42,6 +42,7 @@
+ 
+ #define DARWIN_X86 0
+ #define DARWIN_PPC 0
++#define DARWIN_ARM64 0
+ 
+ #define OBJECT_FORMAT_MACHO 1
+ 
+@@ -373,7 +374,8 @@
+ */
+ 
+ #define DARWIN_NOCOMPACT_UNWIND \
+-" %:version-compare(>= 10.6 mmacosx-version-min= -no_compact_unwind) "
++"%{!fuse-ld=lld: \
++    %:version-compare(>= 10.6 mmacosx-version-min= -no_compact_unwind)}"
+ 
+ /* In Darwin linker specs we can put -lcrt0.o and ld will search the library
+    path for crt0.o or -lcrtx.a and it will search for libcrtx.a.  As for
+@@ -397,7 +399,8 @@
+     LINK_PLUGIN_SPEC \
+     "%{flto*:%<fcompare-debug*} \
+      %{flto} %{fno-lto} %{flto=*} \
+-    %l " \
++     %l \
++     %{fuse-ld=*:-fuse-ld=%*} " \
+     DARWIN_PLATFORM_ID \
+     LINK_COMPRESS_DEBUG_SPEC \
+    "%X %{s} %{t} %{Z} %{u*} \
+@@ -979,7 +982,12 @@
+   { "apple_kext_compatibility", 0, 0, false, true, false, false,	     \
+     darwin_handle_kext_attribute, NULL },				     \
+   { "weak_import", 0, 0, true, false, false, false,			     \
+-    darwin_handle_weak_import_attribute, NULL }
++    darwin_handle_weak_import_attribute, NULL },			     \
++  { "availability", 0, -1, true, false, false, false,			     \
++    darwin_handle_availability_attribute, NULL }
++
++#undef TARGET_ATTRIBUTE_TAKES_IDENTIFIER_P
++#define TARGET_ATTRIBUTE_TAKES_IDENTIFIER_P darwin_attribute_takes_identifier_p
+ 
+ /* Make local constant labels linker-visible, so that if one follows a
+    weak_global constant, ld64 will be able to separate the atoms.  */
+@@ -1227,6 +1235,10 @@
+ #define TARGET_N_FORMAT_TYPES 1
+ #define TARGET_FORMAT_TYPES darwin_additional_format_types
+ 
++/* We want __builtin_unreachable to be expanded as a trap instruction.  */
++#undef TARGET_UNREACHABLE_SHOULD_TRAP
++#define TARGET_UNREACHABLE_SHOULD_TRAP darwin_unreachable_traps_p
++
+ #ifndef USED_FOR_TARGET
+ extern void darwin_driver_init (unsigned int *,struct cl_decoded_option **);
+ #define GCC_DRIVER_HOST_INITIALIZATION \
+diff --git a/libgcc/config.host b/libgcc/config.host
+index 7332903704..ae4c91dee3 100644
+--- a/libgcc/config.host
++++ b/libgcc/config.host
+@@ -82,7 +82,7 @@
+         cpu_type=m32c
+ 	tmake_file=t-fdpbit
+         ;;
+-aarch64*-*-*)
++aarch64*-*-* | arm64*-*-*)
+ 	cpu_type=aarch64
+ 	;;
+ alpha*-*-*)
+@@ -236,22 +236,25 @@
+   esac
+   tmake_file="$tmake_file t-slibgcc-darwin"
+   case ${host} in
++    x86_64-*-darwin2[0-2]*)
++      tmake_file="t-darwin-min-11 t-darwin-libgccs1 $tmake_file"
++      ;;
+     *-*-darwin2*)
+       tmake_file="t-darwin-min-11 $tmake_file"
+       ;;
+     *-*-darwin1[89]*)
+-      tmake_file="t-darwin-min-8 $tmake_file"
++      tmake_file="t-darwin-min-8 t-darwin-libgccs1 $tmake_file"
+       ;;
+     *-*-darwin9* | *-*-darwin1[0-7]*)
+-      tmake_file="t-darwin-min-5 $tmake_file"
++      tmake_file="t-darwin-min-5 t-darwin-libgccs1 $tmake_file"
+       ;;
+     *-*-darwin[4-8]*)
+-      tmake_file="t-darwin-min-1 $tmake_file"
++      tmake_file="t-darwin-min-1 t-darwin-libgccs1 $tmake_file"
+       ;;
+     *)
+       # Fall back to configuring for the oldest system known to work with
+       # all archs and the current sources.
+-      tmake_file="t-darwin-min-5 $tmake_file"
++      tmake_file="t-darwin-min-5 t-darwin-libgccs1 $tmake_file"
+       echo "Warning: libgcc configured to support macOS 10.5" 1>&2
+       ;;
+   esac
+@@ -277,7 +280,7 @@
+   if test "x$enable_darwin_at_rpath" = "xyes"; then
+     tmake_file="$tmake_file t-darwin-rpath "
+   fi
+-  extra_parts="crt3.o libd10-uwfef.a crttms.o crttme.o libemutls_w.a"
++  extra_parts="crt3.o crttms.o crttme.o libemutls_w.a "
+   ;;
+ *-*-dragonfly*)
+   tmake_file="$tmake_file t-crtstuff-pic t-libgcc-pic t-eh-dw2-dip"
+@@ -421,6 +424,15 @@
+ 	tmake_file="${tmake_file} t-dfprules"
+ 	md_unwind_header=aarch64/aarch64-unwind.h
+ 	;;
++aarch64*-*-darwin*)
++	extra_parts="$extra_parts crtfastmath.o libheapt_w.a"
++	tmake_file="${tmake_file} ${cpu_type}/t-aarch64"
++	tmake_file="${tmake_file} ${cpu_type}/t-lse"
++	tmake_file="${tmake_file} t-crtfm t-dfprules"
++	tmake_file="${tmake_file} ${cpu_type}/t-softfp t-softfp"
++	tmake_file="${tmake_file} ${cpu_type}/t-heap-trampoline"
++	md_unwind_header=aarch64/aarch64-unwind.h
++	;;
+ aarch64*-*-freebsd*)
+ 	extra_parts="$extra_parts crtfastmath.o"
+ 	tmake_file="${tmake_file} ${cpu_type}/t-aarch64"
+@@ -728,14 +740,14 @@
+ 	tmake_file="$tmake_file i386/t-crtpc t-crtfm i386/t-msabi"
+ 	tm_file="$tm_file i386/darwin-lib.h"
+ 	extra_parts="$extra_parts crtprec32.o crtprec64.o crtprec80.o"
+-	extra_parts="$extra_parts crtfastmath.o libheapt_w.a"
++	extra_parts="$extra_parts crtfastmath.o libd10-uwfef.a libheapt_w.a"
+ 	tmake_file="${tmake_file} i386/t-heap-trampoline"
+ 	;;
+ x86_64-*-darwin*)
+ 	tmake_file="$tmake_file i386/t-crtpc t-crtfm i386/t-msabi"
+ 	tm_file="$tm_file i386/darwin-lib.h"
+ 	extra_parts="$extra_parts crtprec32.o crtprec64.o crtprec80.o"
+-	extra_parts="$extra_parts crtfastmath.o libheapt_w.a"
++	extra_parts="$extra_parts crtfastmath.o libd10-uwfef.a libheapt_w.a"
+ 	tmake_file="${tmake_file} i386/t-heap-trampoline"
+ 	;;
+ i[34567]86-*-elfiamcu)
+@@ -1218,12 +1230,14 @@
+ 	# We build the darwin10 EH shim for Rosetta (running on x86 machines).
+ 	tm_file="$tm_file i386/darwin-lib.h"
+ 	tmake_file="$tmake_file rs6000/t-ppc64-fp rs6000/t-ibm-ldouble"
++	extra_parts="$extra_parts libd10-uwfef.a "
+ 	extra_parts="$extra_parts crt2.o crt3_2.o libef_ppc.a dw_ppc.o"
+ 	;;
+ powerpc64-*-darwin*)
+ 	# We build the darwin10 EH shim for Rosetta (running on x86 machines).
+ 	tm_file="$tm_file i386/darwin-lib.h"
+ 	tmake_file="$tmake_file rs6000/t-darwin64 rs6000/t-ibm-ldouble"
++	extra_parts="$extra_parts libd10-uwfef.a "
+ 	extra_parts="$extra_parts crt2.o crt3_2.o libef_ppc.a dw_ppc.o"
+ 	;;
+ powerpc*-*-freebsd*)

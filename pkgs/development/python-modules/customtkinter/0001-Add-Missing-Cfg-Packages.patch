@@ -1,0 +1,15 @@
+diff --git a/setup.cfg b/setup.cfg
+index 5f95b7f..9250e4f 100644
+--- a/setup.cfg
++++ b/setup.cfg
+@@ -22,6 +22,10 @@ repository = https://github.com/tomschimansky/customtkinter
+ python_requires = >=3.7
+ packages =
+     customtkinter
++    customtkinter.assets.fonts
++    customtkinter.assets.fonts.Roboto
++    customtkinter.assets.icons
++    customtkinter.assets.themes
+     customtkinter.windows
+     customtkinter.windows.widgets
+     customtkinter.windows.widgets.appearance_mode
