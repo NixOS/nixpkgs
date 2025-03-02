@@ -671,8 +671,14 @@ extendDerivation
    # Pass through extra attributes that are not inputs, but
    # should be made available to Nix expressions using the
    # derivation (e.g., in assertions).
+   #
+   # For structured attributes, we do not want checkedEnv to end up in
+   # derivation arguments (i.e. drvAttrs) to allow reusing them as mkDerivation
+   # argument again (checkedEnv does not allow collisions between derivation
+   # arguments and `env` contents).
+   optionalAttrs (envIsExportable && __structuredAttrs) checkedEnv //
    passthru)
-  (derivation (derivationArg // optionalAttrs envIsExportable checkedEnv));
+  (derivation (derivationArg // optionalAttrs (envIsExportable && !__structuredAttrs) checkedEnv));
 
 in
 {
