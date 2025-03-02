@@ -17,6 +17,7 @@
   expat,
   udev,
   util-linux,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -70,6 +71,15 @@ rustPlatform.buildRustPackage rec {
       --prefix PATH : ${lib.makeBinPath [ cosmic-randr ]} \
       --suffix XDG_DATA_DIRS : "$out/share:${cosmic-icons}/share"
   '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version"
+      "unstable"
+      "--version-regex"
+      "epoch-(.*)"
+    ];
+  };
 
   meta = with lib; {
     homepage = "https://github.com/pop-os/cosmic-settings";
