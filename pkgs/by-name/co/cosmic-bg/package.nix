@@ -52,7 +52,10 @@ rustPlatform.buildRustPackage.override
       homepage = "https://github.com/pop-os/cosmic-bg";
       description = "Applies Background for the COSMIC Desktop Environment";
       license = lib.licenses.mpl20;
-      maintainers = with lib.maintainers; [ nyabinary ];
+      maintainers = with lib.maintainers; [
+        nyabinary
+        HeitorAugustoLN
+      ];
       platforms = lib.platforms.linux;
       mainProgram = "cosmic-bg";
     };
