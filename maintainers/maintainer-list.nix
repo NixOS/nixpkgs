@@ -175,6 +175,12 @@
     github = "1nv0k32";
     githubId = 30079271;
   };
+  _2hexed = {
+    name = "n";
+    email = "2hexed@protonmail.com";
+    github = "2hexed";
+    githubId = 54501296;
+  };
   _21CSM = {
     name = "21CSM";
     email = "21CSM@tutanota.com";
