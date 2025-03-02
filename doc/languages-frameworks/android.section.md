@@ -27,7 +27,7 @@ buildInputs = [
 ];
 ```
 
-These will export ANDROID_SDK_ROOT and ANDROID_NDK_ROOT to the SDK and NDK directories
+These will export `ANDROID_SDK_ROOT` and `ANDROID_NDK_ROOT` to the SDK and NDK directories
 in the specified Android build environment.
 
 ## Deploying an Android SDK installation with plugins {#deploying-an-android-sdk-installation-with-plugins}
@@ -57,7 +57,7 @@ exceptions are the tools, platform-tools and build-tools sub packages.
 
 The following parameters are supported:
 
-* `cmdLineToolsVersion `, specifies the version of the `cmdline-tools` package to use.
+* `cmdLineToolsVersion` specifies the version of the `cmdline-tools` package to use.
   It defaults to the latest.
 * `toolsVersion`, specifies the version of the `tools` package. Notice `tools` is
   obsolete, and currently only `26.1.1` is available, so there's not a lot of
@@ -69,14 +69,14 @@ The following parameters are supported:
   use. It defaults to the latest.
 * `includeEmulator` specifies whether to deploy the emulator package (`false`
   by default). When enabled, the version of the emulator to deploy can be
-  specified by setting the `emulatorVersion` parameter. If set to `null` or
+  specified by setting the `emulatorVersion` parameter. If set to
   `"if-supported"`, it will deploy the emulator if it's supported by the system.
 * `includeCmake` specifies whether CMake should be included. It defaults to true
-  on x86-64 and Darwin platforms, and also supports `null` and `"if-supported"`.
+  on x86-64 and Darwin platforms, and also supports `"if-supported"`.
 * `cmakeVersions` specifies which CMake versions should be deployed.
   It defaults to the latest.
 * `includeNDK` specifies that the Android NDK bundle should be included.
-  Defaults to: `false` though can be set to `true`, `null`, or `"if-supported"`.
+  Defaults to `false` though can be set to `true` or `"if-supported"`.
 * `ndkVersions` specifies the NDK versions that we want to use. These are linked
   under the `ndk` directory of the SDK root, and the first is linked under the
   `ndk-bundle` directory. It defaults to the latest.
@@ -84,8 +84,8 @@ The following parameters are supported:
   `ndkVersions` overrides this parameter if provided.
 * `includeExtras` is an array of identifier strings referring to arbitrary
   add-on packages that should be installed. Note that extras may not be compatible
-  with all platforms (for example, the Google TV head unit does not have an aarch64-linux
-  compile).
+  with all platforms (for example, the Google TV head unit, which does not
+  have an aarch64-linux compile).
 * `platformVersions` specifies which platform SDK versions should be included.
   It defaults to including only the latest API level, though you can add more.
 
@@ -313,17 +313,9 @@ android {
 ## Querying the available versions of each plugin {#querying-the-available-versions-of-each-plugin}
 
 All androidenv packages are available on [search.nixos.org](https://search.nixos.org).
-
-Additionally, repo.json provides all the options in one file now.
-
-A shell script in the `pkgs/development/mobile/androidenv/` subdirectory can be used to retrieve all
-possible options:
-
-```bash
-./querypackages.sh packages
-```
-
-The above command-line instruction queries all package versions in repo.json.
+Note that `aarch64-linux` compatibility is currently spotty, though `x86_64-linux` and `aarch64-darwin`
+are well supported. This is because Google's repository definitions mark some packages for "all" architectures
+that are really only for `x86_64` or `aarch64`.
 
 ## Updating the generated expressions {#updating-the-generated-expressions}
 
