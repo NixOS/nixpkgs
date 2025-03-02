@@ -1,24 +1,30 @@
 {
   lib,
   stdenv,
-  buildGo123Module,
+
+  buildGoModule,
   fetchFromGitHub,
   fetchpatch,
+
   makeWrapper,
+  installShellFiles,
+  # runtime tooling - linux
   getent,
   iproute2,
   iptables,
   shadow,
   procps,
+  # runtime tooling - darwin
+  lsof,
+
   nixosTests,
-  installShellFiles,
   tailscale-nginx-auth,
 }:
 
 let
   version = "1.80.2";
 in
-buildGo123Module {
+buildGoModule {
   pname = "tailscale";
   inherit version;
 
@@ -78,9 +84,9 @@ buildGo123Module {
       wrapProgram $out/bin/tailscaled \
         --prefix PATH : ${
           lib.makeBinPath [
+            getent
             iproute2
             iptables
-            getent
             shadow
           ]
         } \
@@ -101,13 +107,13 @@ buildGo123Module {
     inherit tailscale-nginx-auth;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://tailscale.com";
     description = "Node agent for Tailscale, a mesh VPN built on WireGuard";
     changelog = "https://github.com/tailscale/tailscale/releases/tag/v${version}";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     mainProgram = "tailscale";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       mbaillie
       jk
       mfrw
