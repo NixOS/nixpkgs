@@ -177,6 +177,12 @@ let
                   path = ../15;
                 }
               ];
+              "llvm/clear-GOTOffsetMap-when-resetting-GOT-section.patch" = [
+                {
+                  after = "15";
+                  path = ../15;
+                }
+              ];
               "libunwind/gnu-install-dirs.patch" = [
                 {
                   before = "17";
