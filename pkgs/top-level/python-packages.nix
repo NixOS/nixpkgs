@@ -453,6 +453,8 @@ self: super: with self; {
 
   aiosqlite = callPackage ../development/python-modules/aiosqlite { };
 
+  aiosseclient = callPackage ../development/python-modules/aiosseclient { };
+
   aiosteamist = callPackage ../development/python-modules/aiosteamist { };
 
   aiostream = callPackage ../development/python-modules/aiostream { };
