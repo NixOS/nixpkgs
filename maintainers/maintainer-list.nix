@@ -7600,6 +7600,13 @@
     github = "feathecutie";
     githubId = 53912746;
   };
+  federicoschonborn = {
+    name = "Federico Damián Schonborn";
+    email = "federicoschonborn@disroot.org";
+    github = "FedericoSchonborn";
+    githubId = 62166915;
+    matrix = "@FedericoDSchonborn:matrix.org";
+  };
   fedx-sudo = {
     email = "fedx-sudo@pm.me";
     github = "FedX-sudo";
@@ -10170,6 +10177,11 @@
     github = "invokes-su";
     githubId = 88038050;
     name = "Souvik Sen";
+  };
+  io12 = {
+    github = "io12";
+    githubId = 7348004;
+    name = "Benjamin Levy";
   };
   iogamaster = {
     email = "iogamastercode+nixpkgs@gmail.com";
