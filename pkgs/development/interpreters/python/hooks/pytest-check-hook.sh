@@ -9,10 +9,6 @@ function pytestCheckPhase() {
 
     # Compose arguments
     local -a flagsArray=(-m pytest)
-    if [ -n "${disabledTests[*]-}" ]; then
-        disabledTestsString="not $(concatStringsSep " and not " disabledTests)"
-        flagsArray+=(-k "$disabledTestsString")
-    fi
 
     local -a _pathsArray=()
     concatTo _pathsArray disabledTestPaths
@@ -29,6 +25,11 @@ if next(glob.iglob(path_glob), None) is None:
 EOF
         flagsArray+=("--ignore-glob=$path")
     done
+
+    if [ -n "${disabledTests[*]-}" ]; then
+        disabledTestsString="not $(concatStringsSep " and not " disabledTests)"
+        flagsArray+=(-k "$disabledTestsString")
+    fi
 
     # Compatibility layer to the obsolete pytestFlagsArray
     eval "flagsArray+=(${pytestFlagsArray[*]-})"
