@@ -71,6 +71,7 @@ let
 
   rocmLibs = [
     rocmPackages.clr
+    rocmPackages.hipblas-common
     rocmPackages.hipblas
     rocmPackages.rocblas
     rocmPackages.rocsolver
@@ -78,10 +79,9 @@ let
     rocmPackages.rocm-device-libs
     rocmPackages.rocm-smi
   ];
-  rocmClang = linkFarm "rocm-clang" { llvm = rocmPackages.llvm.clang; };
   rocmPath = buildEnv {
     name = "rocm-path";
-    paths = rocmLibs ++ [ rocmClang ];
+    paths = rocmLibs;
   };
 
   cudaLibs = [
@@ -132,6 +132,8 @@ let
   goBuild =
     if enableCuda then
       buildGoModule.override { stdenv = cudaPackages.backendStdenv; }
+    else if enableRocm then
+      buildGoModule.override { stdenv = rocmPackages.stdenv; }
     else
       buildGoModule;
   inherit (lib) licenses platforms maintainers;
@@ -149,6 +151,13 @@ goBuild {
       ROCM_PATH = rocmPath;
       CLBlast_DIR = "${clblast}/lib/cmake/CLBlast";
       HIP_PATH = rocmPath;
+      CFLAGS = "-Wno-c++17-extensions -I${rocmPath}/include";
+      CXXFLAGS = "-Wno-c++17-extensions -I${rocmPath}/include";
+    }
+    // lib.optionalAttrs (enableRocm && (rocmPackages.clr.localGpuTargets or false) != false) {
+      # If rocm CLR is set to build for an exact set of targets reuse that target list,
+      # otherwise let ollama use its builtin defaults
+      HIP_ARCHS = lib.concatStringsSep ";" rocmPackages.clr.localGpuTargets;
     }
     // lib.optionalAttrs enableCuda { CUDA_PATH = cudaPath; };
 
