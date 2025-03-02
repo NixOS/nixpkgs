@@ -33,19 +33,19 @@ let
   inherit (builtins) unsafeGetAttrPos;
   inherit (lib)
     elem
-    optionalString
-    max
-    stringLength
+    extendDerivation
     fixedWidthString
     getName
-    optional
-    optionals
-    optionalAttrs
     hasSuffix
-    extendDerivation
     head
-    splitString
     isBool
+    max
+    optional
+    optionalAttrs
+    optionals
+    optionalString
+    splitString
+    stringLength
     ;
 
   leftPadName =
