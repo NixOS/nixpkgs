@@ -1456,14 +1456,18 @@ self: super: {
     lsp-types = self.lsp-types_2_1_1_0;
   };
 
-  # 2024-02-28: The Hackage version dhall-lsp-server-1.1.3 requires
-  # lsp-1.4.0.0 which is hard to build with this LTS. However, the latest
-  # git version of dhall-lsp-server works with lsp-2.1.0.0, and only
-  # needs jailbreaking to build successfully.
-  dhall-lsp-server = super.dhall-lsp-server.overrideScope (lself: lsuper: {
-    lsp = doJailbreak lself.lsp_2_1_0_0;  # sorted-list <0.2.2
-    lsp-types = doJailbreak lself.lsp-types_2_1_1_0;  # lens <5.3
-  });
+  # Needs matching lsp-types;
+  # Lift bound on sorted-list <0.2.2
+  lsp_2_1_0_0 = doDistribute (doJailbreak (super.lsp_2_1_0_0.override {
+    lsp-types = self.lsp-types_2_1_1_0;
+  }));
+  # Lift bound on lens <5.3
+  lsp-types_2_1_1_0 = doDistribute (doJailbreak super.lsp-types_2_1_1_0);
+
+  # 2025-03-03: dhall-lsp-server-1.1.4 requires lsp-2.1.0.0
+  dhall-lsp-server = super.dhall-lsp-server.override {
+    lsp = self.lsp_2_1_0_0;
+  };
 
   ghcjs-dom-hello = appendPatches [
     (fetchpatch {
