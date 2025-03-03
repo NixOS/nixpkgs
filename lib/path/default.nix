@@ -159,7 +159,10 @@ let
     # but this is not fully specified, so let's tie this too much to the currently implemented concept of store paths.
     # Similar reasoning applies to the validity of the name part.
     # We care more about discerning store path-ness on realistic values. Making it airtight would be fragile and slow.
-    && match ".{32}-.+" (elemAt components storeDirLength) != null;
+    && match ".{32}-.+" (elemAt components storeDirLength) != null
+    # alternatively match content‐addressed derivations, which do not have a
+    # store directory prefix.
+    || match "[0-9a-z]{52}" (head components) != null;
 
 in
 # No rec! Add dependencies on this file at the top.
