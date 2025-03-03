@@ -71,6 +71,28 @@ let
     pkgs
     ;
 
+  # Packages that match the following predicates won't be evaluated on any platforms
+  # Each predicate takes a human-readable, dot-delimited attribute path and the derivation itself
+  filterPackagePredicates =
+    let
+      matchCudaPackageByName = name: path: null != builtins.match "cudaPackages[^\.]*\.${name}" path;
+      knownBrokenConditions =
+        conds: drv: builtins.any (cond: drv.brokenConditions.${cond} or false) conds;
+    in
+    [
+    ];
+  filterPackageFn =
+    path: platforms:
+    if
+      builtins.any (
+        pred: pred (lib.getAttrFromPath path pkgs) (lib.showAttrPath path)
+      ) filterPackagePredicates
+    then
+      [ ]
+    else
+      platforms;
+  mapTestOnFiltered = platforms: mapTestOn (lib.mapAttrsRecursive filterPackageFn platforms);
+
   # Package sets to evaluate whole
   # Derivations from these package sets are selected based on the value
   # of their meta.{hydraPlatforms,platforms,badPlatforms} attributes
@@ -80,7 +102,7 @@ let
   # Explicitly select additional packages to also evaluate
   # The desired platforms must be set explicitly here
   jobs =
-    mapTestOn {
+    mapTestOnFiltered {
       blas = linux;
       blender = linux;
       faiss = linux;
@@ -164,6 +186,6 @@ let
         vllm = linux;
       };
     }
-    // mapTestOn evalPackageSetPlatforms;
+    // mapTestOnFiltered evalPackageSetPlatforms;
 in
 jobs
