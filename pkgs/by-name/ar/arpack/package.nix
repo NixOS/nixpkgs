@@ -53,11 +53,11 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeBool "BUILD_SHARED_LIBS" stdenv.hostPlatform.hasSharedLibraries)
     (lib.cmakeBool "EIGEN" true)
-    (lib.cmakeBool "EXAMPLES" finalAttrs.doCheck)
+    (lib.cmakeBool "EXAMPLES" finalAttrs.finalPackage.doCheck)
     (lib.cmakeBool "ICB" true)
     (lib.cmakeBool "INTERFACE64" (!useAccel && blas.isILP64))
     (lib.cmakeBool "MPI" useMpi)
-    (lib.cmakeBool "TESTS" finalAttrs.doCheck)
+    (lib.cmakeBool "TESTS" finalAttrs.finalPackage.doCheck)
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "-DBLA_VENDOR=${if useAccel then "Apple" else "Generic"}"
   ];

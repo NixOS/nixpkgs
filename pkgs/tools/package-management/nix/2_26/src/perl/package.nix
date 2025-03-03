@@ -31,7 +31,7 @@ perl.pkgs.toPerlModule (
         ./meson.build
         ./meson.options
       ]
-      ++ lib.optionals finalAttrs.doCheck [
+      ++ lib.optionals finalAttrs.finalPackage.doCheck [
         ./.yath.rc.in
         ./t
       ]
@@ -70,7 +70,7 @@ perl.pkgs.toPerlModule (
     mesonFlags = [
       (lib.mesonOption "dbi_path" "${perlPackages.DBI}/${perl.libPrefix}")
       (lib.mesonOption "dbd_sqlite_path" "${perlPackages.DBDSQLite}/${perl.libPrefix}")
-      (lib.mesonEnable "tests" finalAttrs.doCheck)
+      (lib.mesonEnable "tests" finalAttrs.finalPackage.doCheck)
     ];
 
     mesonCheckFlags = [
