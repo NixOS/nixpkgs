@@ -367,7 +367,7 @@ filterAndCreateOverrides {
   nvidia_driver =
     { }:
     prevAttrs: {
-      brokenConditions = prevAttrs.brokenConditions // {
+      badPlatformsConditions = prevAttrs.badPlatformsConditions // {
         "Package is not supported; use drivers from linuxPackages" = true;
       };
     };
