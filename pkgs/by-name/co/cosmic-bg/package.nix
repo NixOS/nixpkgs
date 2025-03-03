@@ -14,14 +14,14 @@
 
 rustPlatform.buildRustPackage.override
   { stdenv = if withMoldLinker then stdenvAdapters.useMoldLinker stdenv else stdenv; }
-  rec {
+  (finalAttrs: {
     pname = "cosmic-bg";
     version = "1.0.0-alpha.6";
 
     src = fetchFromGitHub {
       owner = "pop-os";
       repo = "cosmic-bg";
-      tag = "epoch-${version}";
+      tag = "epoch-${finalAttrs.version}";
       hash = "sha256-4b4laUXTnAbdngLVh8/dD144m9QrGReSEjRZoNR6Iks=";
     };
 
@@ -69,4 +69,4 @@ rustPlatform.buildRustPackage.override
       platforms = lib.platforms.linux;
       mainProgram = "cosmic-bg";
     };
-  }
+  })
