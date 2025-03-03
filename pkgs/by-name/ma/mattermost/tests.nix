@@ -143,7 +143,7 @@ mattermost.overrideAttrs (
         "TestSessionStore/MySQL/SessionGetWithDeviceId"
         "TestSessionStore/MySQL/GetMobileSessionMetadata"
       ]
-      ++ optionals (!stdenv.isx86_64) [
+      ++ optionals (!stdenv.hostPlatform.isx86_64) [
         # aarch64: invalid operating system or processor architecture
         "TestCanIUpgradeToE0"
       ];
