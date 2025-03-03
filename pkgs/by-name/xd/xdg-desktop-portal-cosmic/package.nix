@@ -13,20 +13,20 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "xdg-desktop-portal-cosmic";
   version = "1.0.0-alpha.6";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "xdg-desktop-portal-cosmic";
-    tag = "epoch-${version}";
+    tag = "epoch-${finalAttrs.version}";
     hash = "sha256-ymBmnSEXGCNbLTIVzHP3tjKAG0bgvEFU1C8gnxiow98=";
   };
 
   env = {
     VERGEN_GIT_COMMIT_DATE = "2025-02-20";
-    VERGEN_GIT_SHA = src.rev;
+    VERGEN_GIT_SHA = finalAttrs.src.rev;
   };
 
   useFetchCargoVendor = true;
@@ -81,4 +81,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "xdg-desktop-portal-cosmic";
     platforms = lib.platforms.linux;
   };
-}
+})
