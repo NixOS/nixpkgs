@@ -7,6 +7,7 @@
   kcoreaddons,
   kwidgetsaddons,
   wrapQtAppsHook,
+  plasma-workspace,
 }:
 stdenv.mkDerivation rec {
   pname = "koi";
@@ -19,8 +20,18 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-ip7e/Sz/l5UiTFUTLJPorPO7NltE2Isij2MCmvHZV40=";
   };
 
+  patches = [
+    ./patches/0001-plasmastyle.cpp-Use-relative-path.patch
+    ./patches/0002-icons.cpp-Use-configurable-libexec-path.patch
+  ];
+  postPatch = ''
+    sed -i "s|@plasma-changeicons@|${plasma-workspace}/libexec/plasma-changeicons|g" src/icons.cpp
+  '';
   # See https://github.com/baduhai/Koi/blob/master/development/Nix%20OS/dev.nix
-  sourceRoot = "source/src";
+  sourceRoot = "source";
+  preConfigure = ''
+    cd src
+  '';
   nativeBuildInputs = [
     cmake
     wrapQtAppsHook
