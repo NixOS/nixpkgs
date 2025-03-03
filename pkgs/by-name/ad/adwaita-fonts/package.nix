@@ -1,27 +1,31 @@
 {
   lib,
   stdenvNoCC,
-  fetchFromGitLab,
+  fetchurl,
   meson,
   ninja,
+  gnome,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "adwaita-fonts";
   version = "48.2";
 
-  src = fetchFromGitLab {
-    domain = "gitlab.gnome.org";
-    owner = "GNOME";
-    repo = "adwaita-fonts";
-    tag = "${finalAttrs.version}";
-    hash = "sha256-rXr4U5k0MUz766F5kVssZfM6Ra/hQOe/HLpGss2aZuo=";
+  src = fetchurl {
+    url = "mirror://gnome/sources/adwaita-fonts/${lib.versions.major finalAttrs.version}/adwaita-fonts-${finalAttrs.version}.tar.xz";
+    hash = "sha256-FW9+kvL4LlJ/xzwwnbsjfApKXDqVvF7pSl77aUfFU+A=";
   };
 
   nativeBuildInputs = [
     meson
     ninja
   ];
+
+  passthru = {
+    updateScript = gnome.updateScript {
+      packageName = "adwaita-fonts";
+    };
+  };
 
   meta = {
     description = "Adwaita Sans, a variation of Inter, and Adwaita Mono, Iosevka customized to match Inter";
