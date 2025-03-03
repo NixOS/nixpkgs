@@ -29,20 +29,18 @@
 buildPythonPackage rec {
   pname = "bytewax";
   version = "0.17.2";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "bytewax";
-    repo = pname;
+    repo = "bytewax";
     tag = "v${version}";
     hash = "sha256-BecZvBJsaTHIhJhWM9GZldSL6Irrc7fiedulTN9e76I=";
   };
 
-  env = {
-    OPENSSL_NO_VENDOR = true;
-  };
+  env.OPENSSL_NO_VENDOR = true;
 
   # Remove docs tests, myst-docutils in nixpkgs is not compatible with package requirements.
   # Package uses old version.
@@ -68,7 +66,7 @@ buildPythonPackage rec {
     protobuf
   ];
 
-  propagatedBuildInputs = [ jsonpickle ];
+  dependencies = [ jsonpickle ];
 
   optional-dependencies = {
     kafka = [ confluent-kafka ];
@@ -90,12 +88,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "bytewax" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python Stream Processing";
     homepage = "https://github.com/bytewax/bytewax";
     changelog = "https://github.com/bytewax/bytewax/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       mslingsby
       kfollesdal
     ];
