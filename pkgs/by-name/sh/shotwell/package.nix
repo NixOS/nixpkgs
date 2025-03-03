@@ -4,8 +4,7 @@
   fetchurl,
   meson,
   ninja,
-  adwaita-icon-theme,
-  gtk3,
+  gtk4,
   libexif,
   libgphoto2,
   libwebp,
@@ -21,7 +20,7 @@
   glib,
   glib-networking,
   json-glib,
-  gcr,
+  gcr_4,
   libgee,
   gexiv2,
   librest,
@@ -29,21 +28,21 @@
   desktop-file-utils,
   gdk-pixbuf,
   librsvg,
-  wrapGAppsHook3,
+  wrapGAppsHook4,
   gobject-introspection,
   itstool,
   libsecret,
-  libportal-gtk3,
+  libportal-gtk4,
   gsettings-desktop-schemas,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "shotwell";
-  version = "0.32.10";
+  version = "33.alpha";
 
   src = fetchurl {
     url = "mirror://gnome/sources/shotwell/${lib.versions.majorMinor finalAttrs.version}/shotwell-${finalAttrs.version}.tar.xz";
-    sha256 = "sha256-JuRaYbVDGwlv/NF28RW9B76ad6aDNYmVQhBuGeB/QA4=";
+    sha256 = "sha256-VoVbAkUGc01DWZQ6EzE+FRJMXXoJr/xsdMX7pIKj5po=";
   };
 
   nativeBuildInputs = [
@@ -54,12 +53,12 @@ stdenv.mkDerivation (finalAttrs: {
     itstool
     gettext
     desktop-file-utils
-    wrapGAppsHook3
+    wrapGAppsHook4
     gobject-introspection
   ];
 
   buildInputs = [
-    gtk3
+    gtk4
     libexif
     libgphoto2
     libwebp
@@ -81,10 +80,9 @@ stdenv.mkDerivation (finalAttrs: {
     gdk-pixbuf
     librsvg
     librest
-    gcr
-    adwaita-icon-theme
+    gcr_4
     libsecret
-    libportal-gtk3
+    libportal-gtk4
   ];
 
   passthru = {
