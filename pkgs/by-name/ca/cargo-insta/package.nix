@@ -5,14 +5,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-insta";
-  version = "1.40";
+  version = "1.42.2";
 
   src = fetchFromGitHub {
     owner = "mitsuhiko";
     repo = "insta";
-    rev = "83f33653b687c84823fe6af00806107e1dd4f4b8";
-    hash = "sha256-eau5h75oZpxufTrf0fLHfr+3TIOFXB/kSgHX+o2GtiE=";
+    rev = "e81bae9b7b7f536bd9057158fe5a219facced116";
+    hash = "sha256-5IGp4WuC34wRB7xSiDWzScLvV26yjsdw/LT/7CN9hWc=";
   };
+
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-bRxtkuNtCelcYJkWPMl8xkMuGcbGCxvdz5cCzPUk44k=";
