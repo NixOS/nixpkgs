@@ -467,7 +467,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ optionals (lib.versionAtLeast version "7.1" && lib.versionOlder version "7.1.1") [
       ./fix-fate-ffmpeg-spec-disposition-7.1.patch
     ]
-    ++ optionals (lib.versionAtLeast version "7.1.1") [
+    ++ optionals (lib.versionAtLeast version "7.1") [
       # Expose a private API for Chromium / Qt WebEngine.
       (fetchpatch2 {
         url = "https://gitlab.archlinux.org/archlinux/packaging/packages/ffmpeg/-/raw/a02c1a15706ea832c0d52a4d66be8fb29499801a/add-av_stream_get_first_dts-for-chromium.patch";
