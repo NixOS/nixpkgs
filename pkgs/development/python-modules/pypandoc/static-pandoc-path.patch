@@ -1,0 +1,12 @@
+diff --git a/pypandoc/__init__.py b/pypandoc/__init__.py
+index b8f4e9a..295e182 100644
+--- a/pypandoc/__init__.py
++++ b/pypandoc/__init__.py
+@@ -771,5 +771,5 @@ def clean_pandocpath_cache():
+     __pandoc_path = None
+ 
+ 
+-__version = None
+-__pandoc_path = None
++__version = "@pandocVersion@"
++__pandoc_path = "@pandoc@"

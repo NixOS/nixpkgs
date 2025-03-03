@@ -1,0 +1,25 @@
+From f0e66bd446d44df1d30faaad520613f5fb7f5916 Mon Sep 17 00:00:00 2001
+From: Martin Schwaighofer <mschwaig@users.noreply.github.com>
+Date: Sat, 30 Mar 2024 15:36:52 +0100
+Subject: [PATCH] set __STDC_CONSTANT_MACROS to make rocAL compile
+
+---
+ CMakeLists.txt | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 42b139b6..509915f1 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -149,6 +149,8 @@ message("-- ${Cyan}     -D MIGRAPHX=${MIGRAPHX} [Turn ON/OFF MIGraphX Module (de
+ message("-- ${Cyan}     -D BACKEND=${BACKEND} [Select MIVisionX Backend [options:CPU/OPENCL/HIP](default:HIP)]${ColourReset}")
+ message("-- ${Cyan}     -D BUILD_WITH_AMD_ADVANCE=${BUILD_WITH_AMD_ADVANCE} [Turn ON/OFF Build for AMD advanced GPUs(default:OFF)]${ColourReset}")
+ 
++add_definitions(-D__STDC_CONSTANT_MACROS)
++
+ add_subdirectory(amd_openvx)
+ add_subdirectory(amd_openvx_extensions)
+ add_subdirectory(utilities)
+-- 
+2.43.0
+

@@ -1,0 +1,24 @@
+Building nixpkgs in non-chroot, NSS modules may fail
+and that will report EAI_SYSTEM in getaddrinfo.
+https://bugzilla.novell.com/show_bug.cgi?id=794696
+
+Index: guile-2.0.7/test-suite/tests/net-db.test
+===================================================================
+--- guile-2.0.7.orig/test-suite/tests/net-db.test
++++ guile-2.0.7/test-suite/tests/net-db.test
+@@ -79,6 +79,7 @@
+                      (and (defined? 'EAI_NODATA)  ; GNU extension
+                           (= errcode EAI_NODATA))
+                      (= errcode EAI_AGAIN)
++                     (= errcode EAI_SYSTEM)
+                      (begin
+                        (format #t "unexpected error code: ~a ~s~%"
+                                errcode (gai-strerror errcode))
+@@ -105,6 +106,7 @@
+             ;; `EAI_NONAME'.)
+             (and (or (= errcode EAI_SERVICE)
+                      (= errcode EAI_NONAME)
++                     (= errcode EAI_SYSTEM)
+                      (and (defined? 'EAI_NODATA)
+                           (= errcode EAI_NODATA)))
+                  (string? (gai-strerror errcode))))))))

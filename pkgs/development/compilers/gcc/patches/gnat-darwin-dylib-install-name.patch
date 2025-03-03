@@ -1,0 +1,19 @@
+--- a/gcc/ada/gcc-interface/Makefile.in	2022-08-19 18:09:52.000000000 +1000
++++ b/gcc/ada/gcc-interface/Makefile.in	2023-01-11 01:54:06.000000000 +1100
+@@ -795,14 +795,14 @@
+ 		-o libgnat$(hyphen)$(LIBRARY_VERSION)$(soext) \
+ 		$(GNATRTL_NONTASKING_OBJS) $(LIBGNAT_OBJS) \
+ 		$(SO_OPTS) \
+-		-Wl,-install_name,@rpath/libgnat$(hyphen)$(LIBRARY_VERSION)$(soext) \
++		-Wl,-install_name,$(ADA_RTL_DSO_DIR)/libgnat$(hyphen)$(LIBRARY_VERSION)$(soext) \
+ 		$(MISCLIB)
+ 	cd $(RTSDIR); `echo "$(GCC_FOR_TARGET)" \
+                 | sed -e 's,\./xgcc,../../xgcc,' -e 's,-B\./,-B../../,'` -dynamiclib $(PICFLAG_FOR_TARGET) \
+ 		-o libgnarl$(hyphen)$(LIBRARY_VERSION)$(soext) \
+ 		$(GNATRTL_TASKING_OBJS) \
+ 		$(SO_OPTS) \
+-		-Wl,-install_name,@rpath/libgnarl$(hyphen)$(LIBRARY_VERSION)$(soext) \
++		-Wl,-install_name,$(ADA_RTL_DSO_DIR)/libgnarl$(hyphen)$(LIBRARY_VERSION)$(soext) \
+ 		$(THREADSLIB) -Wl,libgnat$(hyphen)$(LIBRARY_VERSION)$(soext)
+ 	cd $(RTSDIR); $(LN_S) libgnat$(hyphen)$(LIBRARY_VERSION)$(soext) \
+ 		libgnat$(soext)

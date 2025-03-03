@@ -1,0 +1,13 @@
+diff --git a/src/STDH.cpp b/src/STDH.cpp
+index 5f78473..47c3f8b 100644
+--- a/src/STDH.cpp
++++ b/src/STDH.cpp
+@@ -5,6 +5,8 @@
+ #include "player.h"
+ #include "drivers.h"
+ #include "cup.h"
++#include <sys/stat.h>
++#include <sys/types.h>
+ 
+ HScreen hscreen;
+ 
