@@ -4,6 +4,7 @@
   buildGoModule,
   testers,
   openbao,
+  nixosTests,
 }:
 buildGoModule rec {
   pname = "openbao";
@@ -41,7 +42,7 @@ buildGoModule rec {
   # TODO: Enable the NixOS tests after adding OpenBao as a NixOS service in an upcoming PR and
   # adding NixOS tests
   #
-  # passthru.tests = { inherit (nixosTests) vault vault-postgresql vault-dev vault-agent; };
+  passthru.tests = { inherit (nixosTests) openbao openbao-postgresql openbao-dev; };
 
   passthru.tests.version = testers.testVersion {
     package = openbao;
