@@ -35,7 +35,7 @@ let
 in
 buildPythonPackage rec {
   pname = "trio";
-  version = "0.28.0";
+  version = "0.29.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -44,7 +44,7 @@ buildPythonPackage rec {
     owner = "python-trio";
     repo = "trio";
     tag = "v${version}";
-    hash = "sha256-ru5Q7YHpnA/hLwh2Og5Hp3z6XJCv/BHHW0S26N1oTJ0=";
+    hash = "sha256-f77HXhXkPu2GMKCFqahfiP0EgpjyRqWaxzduqM2oXtA=";
   };
 
   build-system = [ setuptools ];
