@@ -12,7 +12,7 @@ buildPythonPackage rec {
   version = "0.7.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     description = "Module to interact with LG webOS based TV devices";
     homepage = "https://github.com/home-assistant-libs/aiowebostv";
     changelog = "https://github.com/home-assistant-libs/aiowebostv/releases/tag/${src.tag}";
-    license = with licenses; [ asl20 ];
+    license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };
 }
