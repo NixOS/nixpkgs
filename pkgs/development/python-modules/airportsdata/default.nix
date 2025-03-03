@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "airportsdata";
-  version = "20241001";
+  version = "20250224";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-+gvRQ7T0vjVXy4kvoGEu8hD9kakr1yC02CId5Xak+gA=";
+    hash = "sha256-f0U4phNQREShMUm+cBqsX5WZuG2kdtJrRqok/VRxTto=";
   };
 
   build-system = [ setuptools ];
