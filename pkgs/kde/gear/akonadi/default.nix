@@ -56,10 +56,10 @@ mkKdeDerivation {
     ''
       mkdir -p $out/nix-support
     ''
-    + lib.optional (backend == "mysql") ''
+    + lib.optionalString (backend == "mysql") ''
       echo "${mariadb}" > $out/nix-support/depends
     ''
-    + lib.optional (backend == "postgres") ''
+    + lib.optionalString (backend == "postgres") ''
       echo "${postgresql}" > $out/nix-support/depends
     '';
 }
