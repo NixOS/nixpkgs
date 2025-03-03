@@ -31,9 +31,13 @@
   gamescopeSupport ? true, # build mangoapp and mangohudctl
   lowerBitnessSupport ? stdenv.hostPlatform.isx86_64, # Support 32 bit on 64bit
   nvidiaSupport ? true,
+  x11Support ? true,
   nix-update-script,
   libxkbcommon,
 }:
+
+assert lib.assertMsg (gamescopeSupport -> x11Support) "gamescopeSupport requires x11Support";
+assert lib.assertMsg (nvidiaSupport -> x11Support) "nvidiaSupport requires x11Support";
 
 let
   # Derived from subprojects/imgui.wrap
@@ -167,7 +171,8 @@ stdenv.mkDerivation (finalAttrs: {
       "-Dmangoapp=true"
       "-Dmangohudctl=true"
     ]
-    ++ lib.optional (!nvidiaSupport) "-Dwith_xnvctrl=disabled";
+    ++ lib.optional (!nvidiaSupport) "-Dwith_xnvctrl=disabled"
+    ++ lib.optional (!x11Support) "-Dwith_x11=disabled";
 
   nativeBuildInputs = [
     addDriverRunpath
@@ -189,12 +194,12 @@ stdenv.mkDerivation (finalAttrs: {
       dbus
       nlohmann_json
       spdlog
+      libxkbcommon # required by x11 or wayland support
     ]
     ++ lib.optionals gamescopeSupport [
       glew
       glfw
       xorg.libXrandr
-      libxkbcommon
     ];
 
   doCheck = true;
