@@ -985,6 +985,7 @@ let
     "HiveR"
 
     # Impure network access during build
+    "minired" # is also marked as deprecated on CRAN
     "waddR"
     "tiledb"
     "switchr"
