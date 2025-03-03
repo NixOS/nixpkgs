@@ -401,6 +401,7 @@ in {
   flaresolverr = handleTest ./flaresolverr.nix {};
   flood = handleTest ./flood.nix {};
   floorp = handleTest ./firefox.nix { firefoxPackage = pkgs.floorp; };
+  fluent-bit = handleTest ./fluent-bit.nix {};
   fluentd = handleTest ./fluentd.nix {};
   fluidd = handleTest ./fluidd.nix {};
   fontconfig-default-fonts = handleTest ./fontconfig-default-fonts.nix {};
