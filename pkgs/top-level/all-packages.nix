@@ -4683,6 +4683,7 @@ with pkgs;
 
   podman-desktop = callPackage ../applications/virtualization/podman-desktop {
     inherit (darwin) autoSignDarwinBinariesHook;
+    electron = electron_34;
   };
 
   polaris = callPackage ../servers/polaris { };
