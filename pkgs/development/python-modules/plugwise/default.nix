@@ -20,7 +20,7 @@ buildPythonPackage rec {
   version = "1.7.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.11";
+  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "plugwise";
