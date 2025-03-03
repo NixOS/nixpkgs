@@ -28,6 +28,7 @@
 assert osxkeychainSupport -> stdenv.hostPlatform.isDarwin;
 assert sendEmailSupport -> perlSupport;
 assert svnSupport -> perlSupport;
+assert withManual -> perlSupport;
 
 let
   version = "2.48.1";
@@ -52,6 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
   hardeningDisable = [ "format" ];
 
   enableParallelBuilding = true;
+  enableParallelInstalling = true;
 
   patches = [
     ./docbook2texi.patch
@@ -66,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Fix references to gettext introduced by ./git-sh-i18n.patch
     substituteInPlace git-sh-i18n.sh \
         --subst-var-by gettext ${gettext}
-
+  '' + lib.optionalString doInstallCheck ''
     # ensure we are using the correct shell when executing the test scripts
     patchShebangs t/*.sh
   '' + lib.optionalString withSsh ''
@@ -129,19 +131,30 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
 
-  postBuild = lib.optionalString withManual ''
+  postBuild = ''
+    # Set up the flags array for make in the same way as for the main build
+    # phase from stdenv.
+    local flagsArray=(
+        ''${enableParallelBuilding:+-j''${NIX_BUILD_CORES}}
+        SHELL="$SHELL"
+    )
+    concatTo flagsArray makeFlags makeFlagsArray buildFlags buildFlagsArray
+    echoCmd 'build flags' "''${flagsArray[@]}"
+  '' + lib.optionalString withManual ''
     # Need to build the main Git documentation before building the
     # contrib/subtree documentation, as the latter depends on the
     # asciidoc.conf file created by the former.
-    make -C Documentation
+    make -C Documentation "''${flagsArray[@]}" all
   '' + ''
-    make -C contrib/subtree all ${lib.optionalString withManual "doc"}
+    make -C contrib/subtree "''${flagsArray[@]}" all ${lib.optionalString withManual "doc"}
   '' + lib.optionalString perlSupport ''
-    make -C contrib/diff-highlight
+    make -C contrib/diff-highlight "''${flagsArray[@]}"
   '' + lib.optionalString osxkeychainSupport ''
-    make -C contrib/credential/osxkeychain
+    make -C contrib/credential/osxkeychain "''${flagsArray[@]}"
   '' + lib.optionalString withLibsecret ''
-    make -C contrib/credential/libsecret
+    make -C contrib/credential/libsecret "''${flagsArray[@]}"
+  '' + ''
+    unset flagsArray
   '';
 
 
@@ -164,12 +177,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall =
     ''
-      notSupported() {
-        unlink $1 || true
-      }
+      # Set up the flags array for make in the same way as for the main install
+      # phase from stdenv.
+      local flagsArray=(
+          ''${enableParallelInstalling:+-j''${NIX_BUILD_CORES}}
+          SHELL="$SHELL"
+      )
+      concatTo flagsArray makeFlags makeFlagsArray installFlags installFlagsArray
+      echoCmd 'install flags' "''${flagsArray[@]}"
 
       # Install git-subtree.
-      make -C contrib/subtree install ${lib.optionalString withManual "install-doc"}
+      make -C contrib/subtree "''${flagsArray[@]}" install ${lib.optionalString withManual "install-doc"}
       rm -rf contrib/subtree
 
       # Install contrib stuff.
@@ -245,8 +263,7 @@ stdenv.mkDerivation (finalAttrs: {
           --set GITPERLLIB "$out/${perlPackages.perl.libPrefix}:${perlPackages.makePerlPath (perlLibs ++ [svn.out])}" \
           --prefix PATH : "${svn.out}/bin"
       '' else ''
-        # replace git-svn by notification script
-        notSupported $out/libexec/git-core/git-svn
+        rm -f $out/libexec/git-core/git-svn
      '')
 
    + (if sendEmailSupport then ''
@@ -254,13 +271,12 @@ stdenv.mkDerivation (finalAttrs: {
         wrapProgram $out/libexec/git-core/git-send-email \
                      --set GITPERLLIB "$out/${perlPackages.perl.libPrefix}:${perlPackages.makePerlPath smtpPerlLibs}"
       '' else ''
-        # replace git-send-email by notification script
-        notSupported $out/libexec/git-core/git-send-email
+        rm -f $out/libexec/git-core/git-send-email
       '')
 
    + lib.optionalString withManual ''
        # Install man pages
-       make -j $NIX_BUILD_CORES PERL_PATH="${buildPackages.perl}/bin/perl" cmd-list.made install install-html \
+       make "''${flagsArray[@]}" install install-html \
          -C Documentation
      ''
 
@@ -273,9 +289,8 @@ stdenv.mkDerivation (finalAttrs: {
        done
        ln -s $out/share/git/contrib/completion/git-completion.bash $out/share/bash-completion/completions/gitk
      '' else ''
-       # Don't wrap Tcl/Tk, replace them by notification scripts
        for prog in bin/gitk libexec/git-core/git-gui; do
-         notSupported "$out/$prog"
+         rm -f "$out/$prog"
        done
      '')
    + lib.optionalString osxkeychainSupport ''
@@ -286,6 +301,8 @@ stdenv.mkDerivation (finalAttrs: {
     [credential]
       helper = osxkeychain
     EOF
+  '' + ''
+    unset flagsArray
   '';
 
 
@@ -390,7 +407,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ primeos wmertens globin kashw2 ];
+    maintainers = with lib.maintainers; [ primeos wmertens globin kashw2 me-and ];
     mainProgram = "git";
   };
 })
