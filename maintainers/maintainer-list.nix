@@ -17100,6 +17100,12 @@
     name = "Guilhem Saurel";
     keys = [ { fingerprint = "9B1A 7906 5D2F 2B80 6C8A  5A1C 7D2A CDAF 4653 CF28"; } ];
   };
+  nindouja = {
+    email = "nindouja@proton.me";
+    github = "Nindouja";
+    githubId = 5629639;
+    name = "Nindouja";
+  };
   ninjafb = {
     email = "oscar@oronberg.com";
     github = "NinjaFB";
