@@ -65,9 +65,6 @@ let
   released = with compilerNames; [
     ghc8107
     ghc902
-    ghc925
-    ghc926
-    ghc927
     ghc928
     ghc947
     ghc948
@@ -565,9 +562,6 @@ let
         # work with older compilers.
         compilerNames.ghc8107
         compilerNames.ghc902
-        compilerNames.ghc925
-        compilerNames.ghc926
-        compilerNames.ghc927
         compilerNames.ghc928
         compilerNames.ghc947
         compilerNames.ghc948
@@ -687,16 +681,10 @@ let
           jobs.pkgsMusl.haskell.compiler.ghc8107Binary
           jobs.pkgsMusl.haskell.compiler.ghc8107
           jobs.pkgsMusl.haskell.compiler.ghc902
-          jobs.pkgsMusl.haskell.compiler.ghc925
-          jobs.pkgsMusl.haskell.compiler.ghc926
-          jobs.pkgsMusl.haskell.compiler.ghc927
           jobs.pkgsMusl.haskell.compiler.ghc928
           jobs.pkgsMusl.haskell.compiler.ghcHEAD
           jobs.pkgsMusl.haskell.compiler.integer-simple.ghc8107
           jobs.pkgsMusl.haskell.compiler.native-bignum.ghc902
-          jobs.pkgsMusl.haskell.compiler.native-bignum.ghc925
-          jobs.pkgsMusl.haskell.compiler.native-bignum.ghc926
-          jobs.pkgsMusl.haskell.compiler.native-bignum.ghc927
           jobs.pkgsMusl.haskell.compiler.native-bignum.ghc928
           jobs.pkgsMusl.haskell.compiler.native-bignum.ghcHEAD
         ];
