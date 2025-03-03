@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  stdenvNoCC,
   fetchurl,
   unzip,
   jre,
@@ -27,7 +27,7 @@ let
       license ? lib.licenses.mpl20,
       updateScript ? null,
     }:
-    stdenv.mkDerivation (
+    stdenvNoCC.mkDerivation (
       finalAttrs:
       let
         mainProgram = if prog == null then pname else prog;
