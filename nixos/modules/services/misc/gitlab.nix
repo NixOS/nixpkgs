@@ -465,15 +465,17 @@ in {
       extraGitlabRb = mkOption {
         type = types.str;
         default = "";
-        example = ''
-          if Rails.env.production?
-            Rails.application.config.action_mailer.delivery_method = :sendmail
-            ActionMailer::Base.delivery_method = :sendmail
-            ActionMailer::Base.sendmail_settings = {
-              location: "/run/wrappers/bin/sendmail",
-              arguments: "-i -t"
-            }
-          end
+        example = literalExpression ''
+          '''
+            if Rails.env.production?
+              Rails.application.config.action_mailer.delivery_method = :sendmail
+              ActionMailer::Base.delivery_method = :sendmail
+              ActionMailer::Base.sendmail_settings = {
+                location: "''${config.security.wrapperDir}/sendmail",
+                arguments: "-i -t"
+              }
+            end
+          '''
         '';
         description = ''
           Extra configuration to be placed in config/extra-gitlab.rb. This can
