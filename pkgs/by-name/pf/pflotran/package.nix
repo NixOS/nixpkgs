@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromBitbucket,
+  fetchzip,
   gfortran,
   mpi,
   petsc,
@@ -29,7 +30,15 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ gfortran ];
 
   buildInputs = [
-    petsc
+    # upstream petsc has lots of fortran api change since 3.22.*
+    # will keep using old petsc-3.21.4 until pflotran support latest petsc
+    (petsc.overrideAttrs rec {
+      version = "3.21.4";
+      src = fetchzip {
+        url = "https://web.cels.anl.gov/projects/petsc/download/release-snapshots/petsc-${version}.tar.gz";
+        hash = "sha256-l7v+ASBL9FLbBmBGTRWDwBihjwLe3uLz+GwXtn8u7e0=";
+      };
+    })
     blas
     lapack
     hdf5-fortran-mpi
