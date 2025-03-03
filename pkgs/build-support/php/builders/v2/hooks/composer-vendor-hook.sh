@@ -1,27 +1,27 @@
-declare composerLock
-declare version
-declare composerNoDev
-declare composerNoPlugins
-declare composerNoScripts
-declare composerStrictValidation
+source @phpScriptUtils@
+
+declare -g composerNoDev="${composerNoDev:+--no-dev}"
+declare -g composerNoPlugins="${composerNoPlugins:+--no-plugins}"
+declare -g composerNoScripts="${composerNoScripts:+--no-scripts}"
 
 preConfigureHooks+=(composerVendorConfigureHook)
 preBuildHooks+=(composerVendorBuildHook)
 preCheckHooks+=(composerVendorCheckHook)
 preInstallHooks+=(composerVendorInstallHook)
 
-source @phpScriptUtils@
-
 composerVendorConfigureHook() {
     echo "Executing composerVendorConfigureHook"
 
     setComposerRootVersion
 
+    if [[ -f "composer.lock" ]]; then
+        echo -e "\e[32mUsing \`composer.lock\` file from the source package\e[0m"
+    fi
+
     if [[ -e "$composerLock" ]]; then
         echo -e "\e[32mUsing user provided \`composer.lock\` file from \`$composerLock\`\e[0m"
         install -Dm644 $composerLock ./composer.lock
     fi
-
 
     if [[ ! -f "composer.lock" ]]; then
         composer \
@@ -30,9 +30,9 @@ composerVendorConfigureHook() {
             --no-interaction \
             --no-progress \
             --optimize-autoloader \
-            ${composerNoDev:+--no-dev} \
-            ${composerNoPlugins:+--no-plugins} \
-            ${composerNoScripts:+--no-scripts} \
+            ${composerNoDev} \
+            ${composerNoPlugins} \
+            ${composerNoScripts} \
             update
 
         if [[ -f "composer.lock" ]]; then
@@ -74,9 +74,9 @@ composerVendorBuildHook() {
         --no-interaction \
         --no-progress \
         --optimize-autoloader \
-        ${composerNoDev:+--no-dev} \
-        ${composerNoPlugins:+--no-plugins} \
-        ${composerNoScripts:+--no-scripts} \
+        ${composerNoDev} \
+        ${composerNoPlugins} \
+        ${composerNoScripts} \
         install
 
     echo "Finished composerVendorBuildHook"
@@ -96,7 +96,7 @@ composerVendorInstallHook() {
     mkdir -p $out
 
     cp -ar composer.json $(composer config vendor-dir) $out/
-    mapfile -t installer_paths < <(jq -r 'try((.extra."installer-paths") | keys[])' composer.json)
+    mapfile -t installer_paths < <(jq -r -c 'try((.extra."installer-paths") | keys[])' composer.json)
 
     for installer_path in "${installer_paths[@]}"; do
         # Remove everything after {$name} placeholder
@@ -105,6 +105,7 @@ composerVendorInstallHook() {
         # Copy the installer path if it exists
         if [[ -d "$installer_path" ]]; then
             mkdir -p $(dirname "$out_installer_path")
+            echo -e "\e[32mCopying installer path $installer_path to $out_installer_path\e[0m"
             cp -ar "$installer_path" "$out_installer_path"
             # Strip out the git repositories
             find $out_installer_path -name .git -type d -prune -print -exec rm -rf {} ";"
