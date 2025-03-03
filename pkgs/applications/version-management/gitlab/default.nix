@@ -11,9 +11,9 @@
   makeWrapper,
   nettools,
   nixosTests,
-  nodejs,
+  nodejs_20,
   replace,
-  ruby_3_2,
+  ruby_3_3,
   stdenv,
   tzdata,
   yarn,
@@ -53,7 +53,7 @@ let
 
   rubyEnv = bundlerEnv rec {
     name = "gitlab-env-${version}";
-    ruby = ruby_3_2;
+    ruby = ruby_3_3;
     gemdir = ./rubyEnv;
     gemset = import (gemdir + "/gemset.nix") src;
     gemConfig = defaultGemConfig // {
@@ -150,7 +150,7 @@ let
     nativeBuildInputs = [
       rubyEnv.wrappedRuby
       rubyEnv.bundler
-      nodejs
+      nodejs_20
       yarn
       git
       cacert
