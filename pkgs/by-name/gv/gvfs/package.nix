@@ -47,11 +47,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gvfs";
-  version = "1.56.1";
+  version = "1.57.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gvfs/${lib.versions.majorMinor finalAttrs.version}/gvfs-${finalAttrs.version}.tar.xz";
-    hash = "sha256-hnMczsZ5ZI+HNOI3sd4ZDr3ubkyMD1b0VMMViOUJqhA=";
+    hash = "sha256-8Wvvjsof1sEX6F2wEdIekVZpeQ1VhnNJxfGykSmelYU=";
   };
 
   patches = [
