@@ -15917,7 +15917,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
 
-  samplv1 = libsForQt5.callPackage ../applications/audio/samplv1 { };
+  samplv1 = qt6.callPackage ../applications/audio/samplv1 { };
 
   beancount = with python3.pkgs; toPythonApplication beancount;
 
