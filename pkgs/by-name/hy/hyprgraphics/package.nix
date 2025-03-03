@@ -1,7 +1,8 @@
 {
   lib,
-  gcc14Stdenv,
+  stdenv,
   fetchFromGitHub,
+  nix-update-script,
   cmake,
   pkg-config,
   cairo,
@@ -14,15 +15,15 @@
   pixman,
 }:
 
-gcc14Stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hyprgraphics";
-  version = "0.1.1";
+  version = "0.1.2";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprgraphics";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-FFLJzFTyNhS7tBEEECx0B8Ye/bpmxhFVEKlECgMLc6c=";
+    hash = "sha256-U62Fo0w+aIXBAsSSYsfDsoe3YmoxWMArJ7pN2HNOAqo=";
   };
 
   nativeBuildInputs = [
@@ -47,6 +48,10 @@ gcc14Stdenv.mkDerivation (finalAttrs: {
   ];
 
   doCheck = true;
+
+  passthru = {
+    updateScript = nix-update-script {};
+  };
 
   meta = {
     homepage = "https://github.com/hyprwm/hyprgraphics";
