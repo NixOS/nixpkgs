@@ -25,6 +25,13 @@ stdenv.mkDerivation rec {
     hash = "sha256-eI4sqzTaA4iRmhEY3SgySxWiCzGJ7nVebC2RVlk7OHk=";
   };
 
+  patches = [
+    # Allow building with emacs 30
+    # Submitted upstream: https://github.com/xdp-project/xdp-tools/pull/484
+    # FIXME: remove when merged
+    ./emacs-30.patch
+  ];
+
   outputs = [
     "out"
     "lib"
