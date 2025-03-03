@@ -54,11 +54,6 @@ stdenv.mkDerivation (finalAttrs: {
       --subst-var-by "HDF5_FORTRAN_INCLUDE" "${lib.getDev hdf5-fortran-mpi}/include"
   '';
 
-  configureFlags = [
-    "--with-petsc-dir=${petsc}"
-    "--with-petsc-arch=linux-gnu-c-release"
-  ];
-
   meta = with lib; {
     description = "Parallel, multi-physics simulation code for subsurface flow and transport";
     homepage = "https://pflotran.org/";

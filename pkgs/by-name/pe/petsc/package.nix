@@ -179,6 +179,8 @@ stdenv.mkDerivation rec {
     inherit mpiSupport;
   };
 
+  setupHook = ./setup-hook.sh;
+
   meta = with lib; {
     description = "Portable Extensible Toolkit for Scientific computation";
     homepage = "https://petsc.org/release/";
