@@ -4,6 +4,7 @@
   fetchFromGitHub,
   flit-core,
   flit-scm,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
 }:
@@ -22,17 +23,15 @@ buildPythonPackage rec {
     hash = "sha256-mORjMEg7Q/2CKZBLICSGF8dcdl98S6mBgJ4jujPGs6M=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "--cov" ""
-  '';
-
   nativeBuildInputs = [
     flit-core
     flit-scm
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytest-cov-stub
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "ssdp" ];
 
