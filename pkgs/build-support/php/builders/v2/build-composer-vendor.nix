@@ -8,14 +8,14 @@ let
   mkComposerVendorOverride =
     finalAttrs:
     {
-      php ? toplevel.php,
-      composer ? toplevel.php.packages.composer,
-      composerLock,
-      vendorHash ? null,
-      composerNoDev ? true,
-      composerNoPlugins ? true,
-      composerNoScripts ? true,
-      composerStrictValidation ? true,
+      php ? finalAttrs.php or toplevel.php,
+      composer ? finalAttrs.php.packages.composer or toplevel.php.packages.composer,
+      composerLock ? finalAttrs.composerLock or null,
+      vendorHash ? finalAttrs.vendorHash or "",
+      composerNoDev ? finalAttrs.composerNoDev or true,
+      composerNoPlugins ? finalAttrs.composerNoPlugins or true,
+      composerNoScripts ? finalAttrs.composerNoScripts or true,
+      composerStrictValidation ? finalAttrs.composerStrictValidation or true,
       buildInputs ? [ ],
       nativeBuildInputs ? [ ],
       dontPatchShebangs ? true,
@@ -33,8 +33,6 @@ let
 
       # See https://github.com/NixOS/nix/issues/6660
       inherit dontPatchShebangs;
-
-      inherit buildInputs strictDeps doCheck;
 
       nativeBuildInputs = nativeBuildInputs ++ [
         composer
