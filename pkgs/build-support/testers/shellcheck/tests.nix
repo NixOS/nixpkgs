@@ -13,6 +13,7 @@ lib.recurseIntoAttrs {
       {
         failure = testers.testBuildFailure (
           testers.shellcheck {
+            name = "shellcheck-example-dir";
             src = ./src;
           }
         );
@@ -29,6 +30,7 @@ lib.recurseIntoAttrs {
       {
         failure = testers.testBuildFailure (
           testers.shellcheck {
+            name = "shellcheck-example-file";
             src = ./src/example.sh;
           }
         );
