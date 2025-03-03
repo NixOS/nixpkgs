@@ -9,7 +9,6 @@
 
   # dependencies
   aiohttp,
-  attrs,
   frozendict,
   inject,
   loguru,
@@ -18,6 +17,7 @@
   nonbloat-db,
   nurl,
   platformdirs,
+  pydantic,
   typer,
 
   # tests
@@ -29,7 +29,7 @@
 }:
 buildPythonPackage rec {
   pname = "nixpkgs-updaters-library";
-  version = "1.2.0";
+  version = "2.1.1";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     owner = "PerchunPak";
     repo = "nixpkgs-updaters-library";
     tag = "v${version}";
-    hash = "sha256-MCMqqAGl6OTOapC3K0DNTOmg2Lv2KqXenEgB5sIZR5U=";
+    hash = "sha256-V9NGM3GzkI8maBo5dBH1nP7/VPVfSxq+TdVdNTOgBEs=";
   };
 
   postPatch = ''
@@ -52,15 +52,13 @@ buildPythonPackage rec {
 
   dependencies = [
     aiohttp
-    attrs
     frozendict
     inject
     loguru
     nonbloat-db
     platformdirs
+    pydantic
     typer
-    nix-prefetch-git
-    nurl
   ];
 
   nativeCheckInputs = [

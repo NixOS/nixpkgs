@@ -3812,7 +3812,8 @@
     "index.html#sec-language-texlive-lualatex-font-cache"
   ],
   "vim": [
-    "index.html#vim"
+    "index.html#vim",
+    "index.html#vim-out-of-tree-overlays"
   ],
   "vim-custom-configuration": [
     "index.html#vim-custom-configuration",
@@ -3850,9 +3851,6 @@
   ],
   "updating-plugins-in-nixpkgs": [
     "index.html#updating-plugins-in-nixpkgs"
-  ],
-  "vim-out-of-tree-overlays": [
-    "index.html#vim-out-of-tree-overlays"
   ],
   "chap-packages": [
     "index.html#chap-packages"
