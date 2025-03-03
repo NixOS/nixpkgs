@@ -286,8 +286,8 @@ let
         mktplcRef = {
           publisher = "antfu";
           name = "slidev";
-          version = "0.4.1";
-          hash = "sha256-MNQMOT9LaEVZqelvikBTpUPTsSIA2z5qvLxw51aJw1w=";
+          version = "51.3.0";
+          hash = "sha256-rRF+vVFCEgIPtCdxVYClQVZVp52DcKXiLLNWzORETTg=";
         };
         meta = {
           license = lib.licenses.mit;
@@ -1996,6 +1996,8 @@ let
           sha256 = "1nay6qs9vcxd85ra4bv93gg3aqg3r2wmcnqmcsy9n8pg1ds1vngd";
         };
       };
+
+      fstarlang.fstar-vscode-assistant = callPackage ./fstarlang.fstar-vscode-assistant { };
 
       funkyremi.vscode-google-translate = buildVscodeMarketplaceExtension {
         mktplcRef = {

@@ -369,6 +369,7 @@ with pkgs;
     gandi = python3Packages.callPackage ../tools/networking/octodns/providers/gandi { };
     hetzner = python3Packages.callPackage ../tools/networking/octodns/providers/hetzner { };
     powerdns = python3Packages.callPackage ../tools/networking/octodns/providers/powerdns { };
+    cloudflare = python3Packages.callPackage ../tools/networking/octodns/providers/cloudflare { };
   };
 
   oletools = with python3.pkgs; toPythonApplication oletools;
@@ -4921,7 +4922,7 @@ with pkgs;
 
   shiv = with python3Packages; toPythonApplication shiv;
 
-  sigil = libsForQt5.callPackage ../applications/editors/sigil { };
+  sigil = qt6.callPackage ../applications/editors/sigil { };
 
   slither-analyzer = with python3Packages; toPythonApplication slither-analyzer;
 
@@ -12070,6 +12071,8 @@ with pkgs;
   linux_6_11_hardened = linuxKernel.kernels.linux_6_11_hardened;
   linuxPackages_6_12_hardened = linuxKernel.packages.linux_6_12_hardened;
   linux_6_12_hardened = linuxKernel.kernels.linux_6_12_hardened;
+  linuxPackages_6_13_hardened = linuxKernel.packages.linux_6_13_hardened;
+  linux_6_13_hardened = linuxKernel.kernels.linux_6_13_hardened;
 
   # GNU Linux-libre kernels
   linuxPackages-libre = linuxKernel.packages.linux_libre;
@@ -14125,7 +14128,7 @@ with pkgs;
 
   ledger-web = callPackage ../applications/office/ledger-web { };
 
-  lightburn = libsForQt5.callPackage ../applications/graphics/lightburn { };
+  lightburn = callPackage ../applications/graphics/lightburn { };
 
   lighthouse-steamvr = callPackage ../tools/misc/lighthouse-steamvr {
     inherit (darwin.apple_sdk.frameworks) AppKit;

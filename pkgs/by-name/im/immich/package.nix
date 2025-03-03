@@ -31,10 +31,11 @@
   perl,
   pixman,
   vips,
+  sourcesJSON ? ./sources.json,
 }:
 let
   buildNpmPackage' = buildNpmPackage.override { inherit nodejs; };
-  sources = lib.importJSON ./sources.json;
+  sources = lib.importJSON sourcesJSON;
   inherit (sources) version;
 
   buildLock = {
