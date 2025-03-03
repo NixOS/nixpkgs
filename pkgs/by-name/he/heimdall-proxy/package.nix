@@ -38,6 +38,6 @@ buildGo124Module {
     homepage = "https://dadrus.github.io/heimdall";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ albertilagan ];
-    mainProgram = "heimdall-proxy";
+    mainProgram = "heimdall";
   };
 }
