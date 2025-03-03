@@ -8,18 +8,19 @@
   python-dateutil,
   setuptools,
   typing-extensions,
+  tzdata,
   ukpostcodeparser,
   validators,
 }:
 
 buildPythonPackage rec {
   pname = "faker";
-  version = "33.3.1";
+  version = "36.1.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Sd3jsGpWAhd7wq0BMUm29gopC3FUU5GA03tvh2rnmyA=";
+    hash = "sha256-fLK71MjwQOSjQK5AGemki2zx22pxvaTlph2NE7e+8o0=";
   };
 
   build-system = [ setuptools ];
@@ -27,6 +28,7 @@ buildPythonPackage rec {
   dependencies = [
     python-dateutil
     typing-extensions
+    tzdata
   ];
 
   nativeCheckInputs = [
