@@ -101,7 +101,6 @@ self: super: {
   # Test suite issues
   #
   call-stack = dontCheck super.call-stack; # https://github.com/sol/call-stack/issues/19
-  primitive-unlifted = dontCheck super.primitive-unlifted; # doesn't compile with primitive ==0.9.*
   hinotify = pkgs.haskell.lib.dontCheck super.hinotify; # https://github.com/kolmodin/hinotify/issues/38
 
   haskell-language-server = disableCabalFlag "retrie" (disableCabalFlag "hlint" (disableCabalFlag "stylishhaskel" (super.haskell-language-server.override {stylish-haskell = null;retrie = null;apply-refact=null;hlint = null;})));

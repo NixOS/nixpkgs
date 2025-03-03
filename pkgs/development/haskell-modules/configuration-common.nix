@@ -2433,8 +2433,9 @@ self: super: {
   # Fixes build of test suite: not yet released
   primitive-unlifted = appendPatch (fetchpatch {
     url = "https://github.com/haskell-primitive/primitive-unlifted/commit/26922952ef20c4771d857f3e96c9e710cb3c2df9.patch";
-    sha256 = "sha256-Qk/o3bkwcgh/NROSFuWc2hN+VJG1W2E+UEncB+KRTuE=";
-  }) (overrideCabal { editedCabalFile = null; revision = null; } super.primitive-unlifted);
+    sha256 = "0h9xxrv78spqi93l9206398gmsliaz0w6xy37nrvx3daqr1y4big";
+    excludes = [ "*.cabal" ];
+  }) super.primitive-unlifted;
 
   # Support tasty-quickcheck 0.11: https://github.com/nikita-volkov/stm-hamt/pull/9
   stm-hamt = appendPatch (fetchpatch {

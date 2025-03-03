@@ -66,7 +66,6 @@ self: super: {
     name = "release-0.54.2-ghc-9.8.4-patch";
     sha256 = "sha256-Mo65FfP1nh7QTY+oLia22hj4eV2v9hpXlYsrFKljA3E=";
   }) super.hevm;
-  primitive-unlifted = doJailbreak super.primitive-unlifted; # bytestring < 0.12
   hw-prim = doJailbreak super.hw-prim; # doctest < 0.22, ghc-prim < 0.11, hedgehog < 1.4
   HaskellNet-SSL = doJailbreak super.HaskellNet-SSL; # bytestring >=0.9 && <0.12
   saltine = doJailbreak super.saltine; # bytestring  && <0.12, deepseq <1.5, text > 1.2 && <1.3 || >=2.0 && <2.1
