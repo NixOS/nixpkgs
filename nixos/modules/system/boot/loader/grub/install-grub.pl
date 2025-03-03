@@ -68,6 +68,7 @@ my $extraPrepareConfig = get("extraPrepareConfig");
 my $extraPerEntryConfig = get("extraPerEntryConfig");
 my $extraEntries = get("extraEntries");
 my $extraEntriesBeforeNixOS = get("extraEntriesBeforeNixOS") eq "true";
+my $extraEntriesAtEnd = get("extraEntriesAtEnd");
 my $splashImage = get("splashImage");
 my $splashMode = get("splashMode");
 my $entryOptions = get("entryOptions");
@@ -662,6 +663,14 @@ if (get("useOSProber") eq "true") {
     my $targetpackage = ($efiTarget eq "no") ? $grub : $grubEfi;
     system(get("shell"), "-c", "pkgdatadir=$targetpackage/share/grub $targetpackage/etc/grub.d/30_os-prober >> $tmpFile");
 }
+
+## Append the extraEntriesAtEnd
+# rewrite the $conf variable from $tmpFile
+$conf = read_file($tmpFile);
+$conf .= "\n$extraEntriesAtEnd\n";
+
+#rewrite the tmp file
+writeFile($tmpFile, $conf);
 
 # Atomically switch to the new config
 rename $tmpFile, $confFile or die "cannot rename $tmpFile to $confFile: $!\n";
