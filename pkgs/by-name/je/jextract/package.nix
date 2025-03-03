@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation {
   pname = "jextract";
-  version = "unstable-2024-03-13";
+  version = "unstable-2025-01-22";
 
   src = fetchFromGitHub {
     owner = "openjdk";
     repo = "jextract";
-    rev = "b9ec8879cff052b463237fdd76382b3a5cd8ff2b";
-    hash = "sha256-+4AM8pzXPIO/CS3+Rd/jJf2xDvAo7K7FRyNE8rXvk5U=";
+    rev = "7ed79ecdf678db804f40b3494b6f1dafa760c808";
+    hash = "sha256-GfMnCjP9t0B1xufAWAeVtcO26WPdmLDPB2b4dvRxEyk=";
   };
 
   nativeBuildInputs = [
@@ -26,7 +26,7 @@ stdenv.mkDerivation {
 
   gradleFlags = [
     "-Pllvm_home=${lib.getLib llvmPackages.libclang}"
-    "-Pjdk22_home=${jdk23}"
+    "-Pjdk_home=${jdk23}"
   ];
 
   doCheck = true;
@@ -53,7 +53,5 @@ stdenv.mkDerivation {
       jlesquembre
       sharzy
     ];
-    # Not yet updated for JDK 23
-    broken = true;
   };
 }
