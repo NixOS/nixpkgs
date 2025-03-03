@@ -156,7 +156,7 @@ stdenv.mkDerivation (finalAttrs: {
 
       # Custom files
       echo $libs >> $dev/nix-support/propagated-build-inputs
-      echo ${nix-cli} >> $dev/nix-support/propagated-build-inputs
+      echo ${nix-cli} ${lib.escapeShellArgs devPaths} >> $dev/nix-support/propagated-build-inputs
 
       # Merged outputs
       lndir ${nix-cli} $out
