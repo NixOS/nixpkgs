@@ -7757,6 +7757,8 @@ self: super: with self; {
 
   llm-gguf = callPackage ../development/python-modules/llm-gguf { };
 
+  llm-jq = callPackage ../development/python-modules/llm-jq { };
+
   llm-ollama = callPackage ../development/python-modules/llm-ollama { };
 
   llmx = callPackage ../development/python-modules/llmx { };
