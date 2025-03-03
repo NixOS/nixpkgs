@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "tzlocal";
-  version = "5.2"; # version needs to be compatible with APScheduler
+  version = "5.3"; # version needs to be compatible with APScheduler
 
   disabled = pythonOlder "3.8";
 
@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-jTmSBVePGpNCgWQJzB5GqT69V1XjnqLYUzS+qRG/Dm4=";
+    hash = "sha256-L6+/wH6di0mt4Y+JjWvNN66IzjrWSGhCouTwOvaDI9I=";
   };
 
   nativeBuildInputs = [ setuptools ];
