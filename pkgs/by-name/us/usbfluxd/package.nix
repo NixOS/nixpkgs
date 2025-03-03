@@ -39,7 +39,7 @@ stdenv.mkDerivation {
     substituteInPlace configure.ac \
       --replace 'with_static_libplist=yes' 'with_static_libplist=no'
     # Patch utils.h to comment out duplicate enum definitions.
-    
+
     substituteInPlace usbfluxd/utils.h \
       --replace-fail PLIST_FORMAT_BINARY //PLIST_FORMAT_BINARY  \
       --replace-fail PLIST_FORMAT_XML, NOT_PLIST_FORMAT_XML  
@@ -49,6 +49,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/corellium/usbfluxd";
     description = "Redirects the standard usbmuxd socket to allow connections to local and remote usbmuxd instances so remote devices appear connected locally.";
     license = licenses.gpl2Plus;
-    maintainers = [];
+    maintainers = [ ];
   };
 }
