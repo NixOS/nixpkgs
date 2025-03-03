@@ -18076,7 +18076,7 @@
     githubId = 5041481;
     name = "Pierre Beucher";
   };
-  pblgomez  = {
+  pblgomez = {
     email = "pablogomez@pablogomez.com";
     github = "pblgomez";
     githubId = "2634032";
