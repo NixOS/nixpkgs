@@ -12,6 +12,7 @@
   libadwaita,
   glib,
   libgee,
+  pciutils,
   wrapGAppsHook4,
 
   mangohud,
@@ -55,8 +56,9 @@ stdenv.mkDerivation (finalAttrs: {
     let
       path = lib.makeBinPath [
         mangohud
-        mesa-demos
-        vulkan-tools
+        mesa-demos # glxgears
+        pciutils # lspci
+        vulkan-tools # vkcube
       ];
     in
     ''
