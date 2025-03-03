@@ -11242,6 +11242,8 @@ self: super: with self; {
 
   posthog = callPackage ../development/python-modules/posthog { };
 
+  posting = callPackage ../development/python-modules/posting { };
+
   pot = callPackage ../development/python-modules/pot { };
 
   potentials = callPackage ../development/python-modules/potentials { };
