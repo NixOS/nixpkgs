@@ -14,17 +14,20 @@
   secp256k1,
   zlib,
   nix-update-script,
+  autoconf,
+  automake,
+  libtool,
 }:
 
 stdenv.mkDerivation rec {
   pname = "ton";
-  version = "2024.10";
+  version = "2025.03";
 
   src = fetchFromGitHub {
     owner = "ton-blockchain";
     repo = "ton";
-    rev = "v${version}";
-    hash = "sha256-Eab5tXP5gv9v/hu/Eh2WC/SeJ/bG1u6FKbREKB/ry9c=";
+    tag = "v${version}";
+    hash = "sha256-iqAX/DlNprWosCx40KkbldwZWSwX6RI59ElOhOMNuCI=";
     fetchSubmodules = true;
   };
 
@@ -37,6 +40,8 @@ stdenv.mkDerivation rec {
     cmake
     git
     pkg-config
+    autoconf
+    automake
   ];
 
   buildInputs = [
@@ -48,16 +53,17 @@ stdenv.mkDerivation rec {
     readline
     secp256k1
     zlib
+    libtool
   ];
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Fully decentralized layer-1 blockchain designed by Telegram";
     homepage = "https://ton.org/";
     changelog = "https://github.com/ton-blockchain/ton/blob/v${version}/Changelog.md";
-    license = licenses.lgpl2Only;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ misuzu ];
+    license = lib.licenses.lgpl2Only;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ misuzu ];
   };
 }
