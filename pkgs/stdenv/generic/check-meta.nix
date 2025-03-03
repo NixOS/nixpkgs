@@ -101,6 +101,20 @@ let
 
   isMarkedBroken = attrs: attrs.meta.broken or false;
 
+  # Allow granular checks to allow only some broken packages
+  # Example:
+  # { pkgs, ... }:
+  # {
+  #   allowBroken = false;
+  #   allowBrokenPredicate = pkg: builtins.elem (pkgs.lib.getName pkg) [ "hello" ];
+  # }
+  allowBrokenPredicate = config.allowBrokenPredicate or (x: false);
+
+  hasDeniedBroken = attrs:
+    (attrs.meta.broken or false) &&
+    !allowBroken &&
+    !allowBrokenPredicate attrs;
+
   hasUnsupportedPlatform =
     pkg: !(availableOn hostPlatform pkg);
 
@@ -417,7 +431,7 @@ let
       { valid = "no"; reason = "blocklisted"; errormsg = "has a blocklisted license (‘${showLicense attrs.meta.license}’)"; }
     else if hasDeniedNonSourceProvenance attrs then
       { valid = "no"; reason = "non-source"; errormsg = "contains elements not built from source (‘${showSourceType attrs.meta.sourceProvenance}’)"; }
-    else if !allowBroken && attrs.meta.broken or false then
+    else if hasDeniedBroken attrs then
       { valid = "no"; reason = "broken"; errormsg = "is marked as broken"; }
     else if !allowUnsupportedSystem && hasUnsupportedPlatform attrs then
       let toPretty' = toPretty {
