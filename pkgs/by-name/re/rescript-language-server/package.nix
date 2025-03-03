@@ -43,7 +43,7 @@ buildNpmPackage rec {
 
     # https://github.com/rescript-lang/rescript-vscode/blob/1.62.0/.github/workflows/ci.yml#L182-L183
     mkdir analysis_binaries/${platformDir}
-    cp ${rescript-editor-analysis}/bin/* analysis_binaries/${platformDir}/
+    cp ${lib.getExe rescript-editor-analysis} analysis_binaries/${platformDir}/
 
     # https://github.com/rescript-lang/rescript-vscode/blob/1.62.0/package.json#L252
     esbuild src/cli.ts --bundle --sourcemap --outfile=out/cli.js --format=cjs --platform=node --loader:.node=file --minify
