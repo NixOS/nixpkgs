@@ -4,7 +4,6 @@
   dmg2img,
   dtc,
   dumpifs,
-  enableUnfree ? false,
   fetchFromGitHub,
   fontconfig,
   gnutar,
@@ -34,6 +33,7 @@
   zlib,
   zstd,
   _7zz,
+  makeWrapper,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -50,38 +50,24 @@ rustPlatform.buildRustPackage rec {
   useFetchCargoVendor = true;
   cargoHash = "sha256-cnJVeuvNNApEHqgZDcSgqkH3DKAr8+HkqXUH9defTCA=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    makeWrapper
+  ];
 
   # https://github.com/ReFirmLabs/binwalk/commits/master/dependencies
   buildInputs = [
     bzip2
-    cabextract
-    dmg2img
     dtc
-    dumpifs
     fontconfig
-    gnutar
-    jefferson
-    lzfse
     lzo
-    lzop
-    lz4
     openssl_3
     python3.pkgs.python-lzo
-    sasquatch
-    sleuthkit
-    srec2bin
-    ubi_reader
     ucl
-    uefi-firmware-parser
-    unyaffs
     unzip
-    vmlinux-to-elf
     xz
     zlib
-    zstd
-    _7zz
-  ] ++ lib.optionals enableUnfree [ unrar ];
+  ];
 
   # skip broken tests
   checkFlags =
@@ -109,6 +95,31 @@ rustPlatform.buildRustPackage rec {
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
   versionCheckProgramArg = "-V";
+
+  postInstall = ''
+    wrapProgram $out/bin/binwalk --prefix PATH : ${
+      lib.makeBinPath [
+        _7zz
+        cabextract
+        dmg2img
+        dumpifs
+        jefferson
+        vmlinux-to-elf
+        lz4
+        lzfse
+        lzop
+        sasquatch
+        srec2bin
+        gnutar
+        sleuthkit
+        unrar
+        ubi_reader
+        uefi-firmware-parser
+        unyaffs
+        zstd
+      ]
+    }
+  '';
 
   meta = {
     description = "Firmware Analysis Tool";
