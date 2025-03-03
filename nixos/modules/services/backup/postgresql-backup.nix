@@ -155,45 +155,46 @@ in
 
   };
 
-  config = lib.mkMerge [
-    {
-      assertions = [
-        {
-          assertion = cfg.backupAll -> cfg.databases == [ ];
-          message = "config.services.postgresqlBackup.backupAll cannot be used together with config.services.postgresqlBackup.databases";
-        }
-        {
-          assertion =
-            cfg.compression == "none"
-            || (cfg.compression == "gzip" && cfg.compressionLevel >= 1 && cfg.compressionLevel <= 9)
-            || (cfg.compression == "zstd" && cfg.compressionLevel >= 1 && cfg.compressionLevel <= 19);
-          message = "config.services.postgresqlBackup.compressionLevel must be set between 1 and 9 for gzip and 1 and 19 for zstd";
-        }
-      ];
-    }
-    (lib.mkIf cfg.enable {
-      systemd.tmpfiles.rules = [
-        "d '${cfg.location}' 0700 postgres - - -"
-      ];
-    })
-    (lib.mkIf (cfg.enable && cfg.backupAll) {
-      systemd.services.postgresqlBackup = postgresqlBackupService "all" "pg_dumpall";
-    })
-    (lib.mkIf (cfg.enable && !cfg.backupAll) {
-      systemd.services = lib.listToAttrs (
-        map (
-          db:
-          let
-            cmd = "pg_dump ${cfg.pgdumpOptions} ${db}";
-          in
-          {
-            name = "postgresqlBackup-${db}";
-            value = postgresqlBackupService db cmd;
-          }
-        ) cfg.databases
-      );
-    })
-  ];
+  config = lib.mkIf cfg.enable {
+    assertions = [
+      {
+        assertion = cfg.backupAll -> cfg.databases == [ ];
+        message = "config.services.postgresqlBackup.backupAll cannot be used together with config.services.postgresqlBackup.databases";
+      }
+      {
+        assertion =
+          cfg.compression == "none"
+          || (cfg.compression == "gzip" && cfg.compressionLevel >= 1 && cfg.compressionLevel <= 9)
+          || (cfg.compression == "zstd" && cfg.compressionLevel >= 1 && cfg.compressionLevel <= 19);
+        message = "config.services.postgresqlBackup.compressionLevel must be set between 1 and 9 for gzip and 1 and 19 for zstd";
+      }
+    ];
+
+    systemd.tmpfiles.rules = [
+      "d '${cfg.location}' 0700 postgres - - -"
+    ];
+
+    systemd.services = lib.mkMerge [
+      (lib.mkIf cfg.backupAll {
+        postgresqlBackup = postgresqlBackupService "all" "pg_dumpall";
+      })
+
+      (lib.mkIf (!cfg.backupAll) (
+        lib.listToAttrs (
+          map (
+            db:
+            let
+              cmd = "pg_dump ${cfg.pgdumpOptions} ${db}";
+            in
+            {
+              name = "postgresqlBackup-${db}";
+              value = postgresqlBackupService db cmd;
+            }
+          ) cfg.databases
+        )
+      ))
+    ];
+  };
 
   meta.maintainers = with lib.maintainers; [ Scrumplex ];
 }
