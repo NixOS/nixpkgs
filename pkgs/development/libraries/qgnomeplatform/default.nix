@@ -10,6 +10,7 @@
   glib,
   gtk3,
   qtbase,
+  qtquickcontrols2 ? null,
   qtwayland,
   replaceVars,
   gsettings-desktop-schemas,
@@ -18,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "qgnomeplatform";
-  version = "0.8.4";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "FedoraQt";
     repo = "QGnomePlatform";
     rev = version;
-    sha256 = "sha256-DaIBtWmce+58OOhqFG5802c3EprBAtDXhjiSPIImoOM=";
+    sha256 = "sha256-8hq+JapJPWOjS7ICkWnCglS8udqQ0+w45ajyyxfBIME=";
   };
 
   patches = [
@@ -32,10 +33,6 @@ stdenv.mkDerivation rec {
     (replaceVars ./hardcode-gsettings.patch {
       gds_gsettings_path = glib.getSchemaPath gsettings-desktop-schemas;
     })
-
-    # Backport cursor fix for Qt6 apps
-    # Adjusted from https://github.com/FedoraQt/QGnomePlatform/pull/138
-    ./qt6-cursor-fix.patch
   ];
 
   nativeBuildInputs = [
@@ -52,6 +49,7 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optionals (!useQt6) [
       adwaita-qt
+      qtquickcontrols2
     ]
     ++ lib.optionals useQt6 [
       adwaita-qt6
