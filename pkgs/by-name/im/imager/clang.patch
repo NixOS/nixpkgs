@@ -1,0 +1,75 @@
+diff --git a/admin/Makefile.def b/admin/Makefile.def
+index 43ef322..cad3de2 100644
+--- a/admin/Makefile.def
++++ b/admin/Makefile.def
+@@ -306,7 +306,7 @@ endif
+ 
+ # Apple CLANG flags (identical to GCC)
+ ifeq ($(GAG_COMPILER_CKIND),clang)
+-  GLOBAL_CFLAGS += -pipe -fPIC
++  GLOBAL_CFLAGS += -fPIC
+   ifeq ($(RELEASE_MODE),no)
+     OPTION_CFLAGS += -Wall
+   endif
+@@ -356,7 +356,7 @@ endif
+ 
+ # GFORTRAN flags
+ ifeq ($(GAG_COMPILER_FKIND),gfortran)
+-  GLOBAL_FFLAGS += -J$(moddir) -pipe -fno-backslash -fno-range-check
++  GLOBAL_FFLAGS += -J$(moddir) -fno-backslash -fno-range-check
+   ifeq ($(GAG_USE_SANITIZE),yes)
+     GLOBAL_FFLAGS += -fsanitize=address -fsanitize=null
+     # Can not be used with our memory(ip):
+diff --git a/admin/define-system.sh b/admin/define-system.sh
+index f68274d..dd1a9be 100644
+--- a/admin/define-system.sh
++++ b/admin/define-system.sh
+@@ -279,35 +279,22 @@ EOF
+                 else
+                     GAG_MACHINE=pc
+                 fi
+-                if which gcc > /dev/null 2>&1; then
+-                    DEFAULT_CCOMPILER=gcc
+-                fi
+-                if which g++ > /dev/null 2>&1; then
+-                    DEFAULT_CXXCOMPILER=g++
+-                elif which clang++ > /dev/null 2>&1; then
+-                    DEFAULT_CXXCOMPILER=clang++
+-                fi
+-                if which ifort > /dev/null 2>&1; then
+-                    DEFAULT_FCOMPILER=ifort
+-                elif which gfortran  > /dev/null 2>&1; then
+-                    DEFAULT_FCOMPILER=gfortran
+-                fi
+             elif [ `uname -p` = "arm" ]; then
+                 defsys_message "WARNING: experimental ARM support"
+                 GAG_MACHINE=arm64
+-                if which gcc > /dev/null 2>&1; then
+-                    DEFAULT_CCOMPILER=gcc
+-                fi
+-                if which g++ > /dev/null 2>&1; then
+-                    DEFAULT_CXXCOMPILER=g++
+-                elif which clang++ > /dev/null 2>&1; then
+-                    DEFAULT_CXXCOMPILER=clang++
+-                fi
+-                if which ifort > /dev/null 2>&1; then
+-                    DEFAULT_FCOMPILER=ifort
+-                elif which gfortran  > /dev/null 2>&1; then
+-                    DEFAULT_FCOMPILER=gfortran
+-                fi
++	    fi
++            if which clang > /dev/null 2>&1; then
++                DEFAULT_CCOMPILER=clang
++            fi
++            if which clang++ > /dev/null 2>&1; then
++                DEFAULT_CXXCOMPILER=clang++
++            elif which g++ > /dev/null 2>&1; then
++                DEFAULT_CXXCOMPILER=g++
++            fi
++            if which ifort > /dev/null 2>&1; then
++                DEFAULT_FCOMPILER=ifort
++            elif which gfortran  > /dev/null 2>&1; then
++                DEFAULT_FCOMPILER=gfortran
+             fi ;;
+         CYGWIN*)
+             if [ `uname -m | grep -c "x86_64"` -ne 0 ]; then
