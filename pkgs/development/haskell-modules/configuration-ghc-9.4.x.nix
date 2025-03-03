@@ -77,6 +77,9 @@ in
     self.base-orphans
   ] super.generically;
 
+  # Needs base-orphans for GHC < 9.8 / base < 4.19
+  some = addBuildDepend self.base-orphans super.some;
+
   # the dontHaddock is due to a GHC panic. might be this bug, not sure.
   # https://gitlab.haskell.org/ghc/ghc/-/issues/21619
   hedgehog = dontHaddock super.hedgehog;

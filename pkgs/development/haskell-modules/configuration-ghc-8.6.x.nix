@@ -100,6 +100,9 @@ self: super: {
   # ghc versions prior to 8.8.x needs additional dependency to compile successfully.
   ghc-lib-parser-ex = addBuildDepend self.ghc-lib-parser super.ghc-lib-parser-ex;
 
+  # Needs base-orphans for GHC < 9.8 / base < 4.19
+  some = addBuildDepend self.base-orphans super.some;
+
   # This became a core library in ghc 8.10., so we don’t have an "exception" attribute anymore.
   exceptions = self.exceptions_0_10_9;
 

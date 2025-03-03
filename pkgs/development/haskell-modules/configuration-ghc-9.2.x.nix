@@ -96,6 +96,9 @@ self: super: {
   # Too strict lower bound on base
   primitive-addr = doJailbreak super.primitive-addr;
 
+  # Needs base-orphans for GHC < 9.8 / base < 4.19
+  some = addBuildDepend self.base-orphans super.some;
+
   # Jailbreaks & Version Updates
   hashable-time = doJailbreak super.hashable-time;
 
