@@ -1,9 +1,7 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
 
   # build-system
   hatch-vcs,
@@ -78,6 +76,16 @@ buildPythonPackage rec {
   disabledTests = [
     # AssertionError: Regex pattern did not match.
     "test_unknown_category_transform_array"
+
+    # ValueError: cannot broadcast shape (nan,) to shape (nan,)
+    # https://github.com/dask/dask-ml/issues/1012
+    "test_fit_array"
+    "test_fit_frame"
+    "test_fit_transform_frame"
+    "test_laziness"
+    "test_lr_score"
+    "test_ok"
+    "test_scoring_string"
   ];
 
   __darwinAllowLocalNetworking = true;
