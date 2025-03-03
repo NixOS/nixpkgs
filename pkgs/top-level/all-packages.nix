@@ -10920,17 +10920,17 @@ with pkgs;
     faslExt = "fasl";
     flags = [ "--dynamic-space-size" "3000" ];
   };
-  sbcl_2_5_0 = wrapLisp {
-    pkg = callPackage ../development/compilers/sbcl { version = "2.5.0"; };
-    faslExt = "fasl";
-    flags = [ "--dynamic-space-size" "3000" ];
-  };
   sbcl_2_5_1 = wrapLisp {
     pkg = callPackage ../development/compilers/sbcl { version = "2.5.1"; };
     faslExt = "fasl";
     flags = [ "--dynamic-space-size" "3000" ];
   };
-  sbcl = sbcl_2_5_1;
+  sbcl_2_5_2 = wrapLisp {
+    pkg = callPackage ../development/compilers/sbcl { version = "2.5.2"; };
+    faslExt = "fasl";
+    flags = [ "--dynamic-space-size" "3000" ];
+  };
+  sbcl = sbcl_2_5_2;
 
   sbclPackages = recurseIntoAttrs sbcl.pkgs;
 
