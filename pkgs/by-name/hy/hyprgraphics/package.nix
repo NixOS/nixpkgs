@@ -9,6 +9,7 @@
   hyprutils,
   libjpeg,
   libjxl,
+  libspng,
   libwebp,
   pixman,
 }:
@@ -20,7 +21,7 @@ gcc14Stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprgraphics";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-FFLJzFTyNhS7tBEEECx0B8Ye/bpmxhFVEKlECgMLc6c=";
   };
 
@@ -35,6 +36,7 @@ gcc14Stdenv.mkDerivation (finalAttrs: {
     hyprutils
     libjpeg
     libjxl
+    libspng
     libwebp
     pixman
   ];
@@ -47,10 +49,10 @@ gcc14Stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
 
   meta = {
-    homepage = "https://github.com/hyprwm/hyprlang";
-    description = "Official implementation library for the hypr config language";
-    license = lib.licenses.lgpl3Only;
-    platforms = lib.platforms.all;
+    homepage = "https://github.com/hyprwm/hyprgraphics";
+    description = "Cpp graphics library for Hypr* ecosystem";
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.linux ++ lib.platforms.freebsd;
     maintainers = lib.teams.hyprland.members;
   };
 })
