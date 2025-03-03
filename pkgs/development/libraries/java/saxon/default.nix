@@ -37,8 +37,9 @@ let
         inherit pname version src;
 
         nativeBuildInputs = [ unzip ];
+        dontUnpack = true;
 
-        buildCommand = ''
+        installPhase = ''
           unzip $src -d $out
           mkdir -p $out/bin $out/share $out/share/java
           cp -s "$out"/*.jar "$out/share/java/"  # */
