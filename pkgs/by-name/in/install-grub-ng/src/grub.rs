@@ -1,0 +1,305 @@
+use std::{
+	ffi::OsStr,
+	fs,
+	io::{BufRead, BufReader},
+	path::{Component, Path, PathBuf},
+	process::{Command, Output},
+	sync::atomic::{AtomicUsize, Ordering::SeqCst},
+};
+
+use eyre::{Result, WrapErr, bail};
+
+use crate::config::{Config, FsIdentifier};
+
+#[derive(Clone, Debug, Default)]
+pub struct Grub {
+	pub path: PathBuf,
+	pub search: String,
+}
+impl Grub {
+	pub fn new(dir: &Path, config: &Config) -> Result<Self> {
+		let fs = Fs::new(dir, config.store_dir)?;
+
+		let path = dir.strip_prefix(&fs.mount)?.to_owned();
+
+		let (search, path) = if fs.fs_type == "zfs" {
+			// ZFS is completely separate logic as zpools are always identified by a label
+			// or custom UUID
+			let mut new_path = PathBuf::from("/");
+
+			let mut components = fs.device.components();
+			let label = if let Some(label) = components.next() {
+				new_path.push(components.as_path());
+
+				Path::new(label.as_os_str())
+			} else {
+				&fs.device
+			};
+
+			new_path.push("@");
+			new_path.push(path);
+
+			(format!("--label {}", label.display()), new_path)
+		} else {
+			let search = config.fs_identifier.to_search(&fs)?;
+			// BTRFS is a special case in that we need to fix the referenced path based on
+			// subvolumes
+			let path = Self::alter_path_for_btrfs(&fs, path)?;
+			(search, path)
+		};
+
+		if !search.is_empty() {
+			static DRIVE_ID: AtomicUsize = AtomicUsize::new(1);
+			let drive_id = DRIVE_ID.fetch_add(1, SeqCst);
+			let mut drive = PathBuf::from(format!("($drive{drive_id})"));
+			drive.push(path);
+
+			Ok(Grub {
+				path: drive,
+				search: format!("search --set=drive{drive_id} {search}"),
+			})
+		} else {
+			Ok(Grub { path, search })
+		}
+	}
+
+	fn alter_path_for_btrfs(fs: &Fs, path: PathBuf) -> Result<PathBuf> {
+		if fs.fs_type != "btrfs" {
+			return Ok(path);
+		}
+
+		let btrfs = env!("BTRFS");
+
+		let subvol_id = {
+			let Output {
+				status,
+				stdout: id_info,
+				..
+			} = Command::new(btrfs)
+				.arg("subvol")
+				.arg("show")
+				.arg(&fs.mount)
+				.output()
+				.context("Failed to execute btrfs subvol show")?;
+
+			if !status.success() {
+				bail!(
+					"Failed to retrieve subvolume info for {}",
+					fs.mount.display()
+				);
+			}
+
+			let mut ids = id_info.lines().filter_map(|line| {
+				if let Ok(l) = line {
+					l.trim()
+						.strip_prefix("Subvolume ID:")
+						.map(|s| s.trim().to_owned())
+				} else {
+					None
+				}
+			});
+
+			let Some(id) = ids.next() else {
+				return Ok(path);
+			};
+
+			if ids.next().is_some() {
+				bail!(
+					"Btrfs subvol name for {} listed multiple times in mount",
+					fs.mount.display()
+				);
+			}
+
+			id
+		};
+
+		let prefix = {
+			let Output {
+				status,
+				stdout: path_info,
+				..
+			} = Command::new(btrfs)
+				.arg("subvol")
+				.arg("list")
+				.arg(&fs.mount)
+				.output()
+				.context("Failed to execute btrfs subvol list")?;
+
+			if !status.success() {
+				bail!(
+					"Failed to find {} subvolume info from btrfs",
+					fs.mount.display()
+				);
+			}
+
+			let mut paths = path_info.lines().filter_map(|line| {
+				let Ok(l) = line else {
+					return None;
+				};
+
+				let mut split = l.split(' ');
+				if split.nth(1) != Some(&subvol_id) {
+					return None;
+				}
+
+				split.skip_while(|&p| p != "path").nth(1).map(String::from)
+			});
+
+			let Some(path) = paths.next() else {
+				bail!("Could not find a subvolume ID for {}", fs.mount.display())
+			};
+
+			if paths.next().is_some() {
+				bail!(
+					"Btrfs returned multiple paths for a single subvolume id, mountpoint {}",
+					fs.mount.display()
+				);
+			}
+
+			path
+		};
+
+		let mut new = Path::new("/").join(prefix);
+		new.push(path);
+		Ok(new)
+	}
+}
+
+#[derive(Clone, Debug, Default)]
+struct Fs {
+	device: PathBuf,
+	fs_type: String,
+	mount: PathBuf,
+}
+impl Fs {
+	fn new(dir: &Path, store_dir: &Path) -> Result<Self> {
+		let mut best = Self::default();
+		let mount_info = BufReader::new(fs::File::open("/proc/self/mountinfo")?);
+
+		for line in mount_info.lines() {
+			let line = line?;
+
+			let mut fields = line.split(' ');
+			let Some(mount_point) = fields.nth(4).map(Path::new) else {
+				bail!("Mount point not found in mountinfo entry: {line}")
+			};
+			// TODO: This is completely unused in the Perl version. Why is it here?
+			let Some(_mount_options) = fields.next().map(|s| s.split(',')) else {
+				bail!("Mount options not found in mountinfo entry: {line}")
+			};
+
+			// Skip the optional fields.
+			let mut fields = fields.skip_while(|&field| field != "-").skip(1);
+
+			let Some(fs_type) = fields.next() else {
+				bail!("Filesystem type not found in mountinfo entry: {line}")
+			};
+			let Some(device) = fields.next() else {
+				bail!("Device not found in mountinfo entry: {line}")
+			};
+			let Some(mut super_options) = fields.next().map(|s| s.split(',')) else {
+				bail!("Super options not found in mountinfo entry: {line}")
+			};
+
+			// Skip the bind-mount for the Nix store.
+			if mount_point == store_dir && super_options.any(|s| s == "rw") {
+				continue;
+			}
+
+			// Skip mountpoint generated by systemd-efi-boot-generator?
+			if fs_type == "autofs" {
+				continue;
+			}
+
+			// Ensure this matches the intended directory
+			if !dir.starts_with(mount_point) {
+				continue;
+			}
+
+			// Is this better than our current match?
+			if mount_point.as_os_str().len() > best.mount.as_os_str().len()
+			  // `is_dir` performs a stat, which can hang forever on network file systems, so
+			  // we only make this call last, when it's likely that this is the mount point.
+				&& mount_point.is_dir()
+			{
+				best = Fs {
+					device: PathBuf::from(device),
+					fs_type: fs_type.to_owned(),
+					mount: PathBuf::from(mount_point),
+				}
+			}
+		}
+
+		Ok(best)
+	}
+}
+
+impl FsIdentifier {
+	fn to_flag(self) -> &'static str {
+		match self {
+			Self::Uuid => "--fs-uuid",
+			Self::Label => "--label",
+			_ => unreachable!(),
+		}
+	}
+
+	fn to_search(self, fs: &Fs) -> Result<String> {
+		match self {
+			Self::Uuid => self.query_blkid(fs, "UUID"),
+			Self::Label => self.query_blkid(fs, "LABEL"),
+			Self::Provided => Ok(Self::provided_search(&fs.device).unwrap_or_default()),
+		}
+	}
+
+	fn provided_search(device: &Path) -> Option<String> {
+		// If the provided dev is identifying the partition using a label or uuid,
+		// we should get the label / uuid and do a proper search
+		let flag = match device.to_str() {
+			Some(s) if s.starts_with("/dev/disk/by-label/") => "--label",
+			Some(s) if s.starts_with("/dev/disk/by-uuid/") => "--fs-uuid",
+			_ => return None,
+		};
+
+		Some(format!(
+			"{flag}={}",
+			device
+				.file_name()?
+				.to_str()
+				.expect("Device name must be valid UTF-8")
+		))
+	}
+
+	fn query_blkid(&self, fs: &Fs, key: &str) -> Result<String> {
+		// Based on the type pull in the identifier from the system
+
+		let Output {
+			status,
+			stdout: dev_info,
+			..
+		} = Command::new("blkid")
+			.arg("-o")
+			.arg("export")
+			.arg(&fs.device)
+			.output()
+			.context("Failed to execute blkid")?;
+
+		if !status.success() {
+			bail!(
+				"Failed to get blkid info ({status}) for {} on {}",
+				fs.mount.display(),
+				fs.device.display(),
+			);
+		}
+
+		for line in dev_info.lines() {
+			let line = line?;
+			let Some((k, v)) = line.split_once('=') else {
+				continue;
+			};
+			if key == k {
+				return Ok(format!("{} {v}", self.to_flag()));
+			}
+		}
+		bail!("Couldn't find a {key} for {}", fs.device.display());
+	}
+}
