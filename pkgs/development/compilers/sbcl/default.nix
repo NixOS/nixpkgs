@@ -153,15 +153,22 @@ stdenv.mkDerivation (self: {
       # have it block a release.
       "futex-wait.test.sh"
     ];
-  patches = [
+  patches =
     # Support the NIX_SBCL_DYNAMIC_SPACE_SIZE envvar. Upstream SBCL didn’t want
     # to include this (see
     # "https://sourceforge.net/p/sbcl/mailman/sbcl-devel/thread/2cf20df7-01d0-44f2-8551-0df01fe55f1a%400brg.net/"),
     # but for Nix envvars are sufficiently useful that it’s worth maintaining
     # this functionality downstream.
-    ./dynamic-space-size-envvar-feature.patch
-    ./dynamic-space-size-envvar-tests.patch
-  ];
+    if lib.versionOlder "2.5.2" self.version then
+      [
+        ./dynamic-space-size-envvar-2.5.3-feature.patch
+        ./dynamic-space-size-envvar-2.5.3-tests.patch
+      ]
+    else
+      [
+        ./dynamic-space-size-envvar-2.5.2-feature.patch
+        ./dynamic-space-size-envvar-2.5.2-tests.patch
+      ];
   postPatch =
     lib.optionalString (self.disabledTestFiles != [ ]) ''
       (cd tests ; rm -f ${lib.concatStringsSep " " self.disabledTestFiles})
