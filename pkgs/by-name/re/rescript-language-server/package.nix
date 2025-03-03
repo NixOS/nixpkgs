@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  callPackage,
   buildNpmPackage,
   fetchFromGitHub,
   esbuild,
@@ -19,7 +20,10 @@ let
     else
       throw "Unsupported system: ${stdenv.system}";
 
-  rescript-editor-analysis = callPackage ../../../applications/editors/vscode/extensions/chenglou92.rescript-vscode/rescript-editor-analysis.nix { inherit version; };
+  rescript-editor-analysis =
+    callPackage
+      ../../../applications/editors/vscode/extensions/chenglou92.rescript-vscode/rescript-editor-analysis.nix
+      { inherit version; };
 in
 buildNpmPackage rec {
   pname = "rescript-language-server";

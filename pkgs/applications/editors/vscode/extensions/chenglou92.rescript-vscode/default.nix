@@ -7,6 +7,7 @@
 let
   version = "1.62.0";
   rescript-editor-analysis = callPackage ./rescript-editor-analysis.nix { inherit version; };
+
   arch =
     if stdenv.hostPlatform.isLinux then
       "linux"
@@ -35,6 +36,7 @@ vscode-utils.buildVscodeMarketplaceExtension rec {
       lib.maintainers.dlip
       lib.maintainers.jayesh-bhoot
     ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     license = lib.licenses.mit;
   };
 }
