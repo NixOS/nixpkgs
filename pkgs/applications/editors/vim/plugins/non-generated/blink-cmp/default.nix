@@ -48,7 +48,7 @@ vimUtils.buildVimPlugin {
   patches = [
     (fetchpatch {
       name = "blink-add-bypass-for-nix.patch";
-      url = "https://github.com/Saghen/blink.cmp/commit/6c83ef1ae34abd7ef9a32bfcd9595ac77b61037c.patch";
+      url = "https://github.com/Saghen/blink.cmp/commit/6c83ef1ae34abd7ef9a32bfcd9595ac77b61037c.diff?full_index=1";
       hash = "sha256-304F1gDDKVI1nXRvvQ0T1xBN+kHr3jdmwMMp8CNl+GU=";
     })
   ];
