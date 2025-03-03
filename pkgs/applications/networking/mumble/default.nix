@@ -144,6 +144,9 @@ let
       patches = [
         ./disable-overlay-build.patch
         ./fix-plugin-copy.patch
+        # https://github.com/mumble-voip/mumble/issues/6741
+        # https://github.com/mumble-voip/mumble/pull/6742
+        ./fix-displayed-version.patch
       ];
 
       postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''

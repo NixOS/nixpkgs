@@ -1,0 +1,12 @@
+diff --git a/macx/scripts/osxdist.py b/macx/scripts/osxdist.py
+index bdc7fcbd2..2114caf37 100755
+--- a/macx/scripts/osxdist.py
++++ b/macx/scripts/osxdist.py
+@@ -162,6 +162,7 @@ class AppBundle(object):
+ 			print(' * Changing version in Info.plist')
+ 			p = self.infoplist
+ 			p['CFBundleVersion'] = self.version
++			p['CFBundleShortVersionString'] = self.version
+ 			plistlib.dump(p, open(self.infopath, "wb"))
+
+ 	def set_min_macosx_version(self, version):
