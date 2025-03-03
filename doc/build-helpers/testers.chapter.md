@@ -167,7 +167,7 @@ The build will fail if `shellcheck` finds any issues.
 
 ## `shfmt` {#tester-shfmt}
 
-Runs files through `shfmt`, a shell script formatter.
+Run files through `shfmt`, a shell script formatter, failing if any files are reformatted.
 
 :::{.example #ex-shfmt}
 # Run `testers.shfmt`
