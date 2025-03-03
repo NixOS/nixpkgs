@@ -46,4 +46,11 @@ in
     inherit lts pkgs system;
     storageZfs = true;
   };
+
+  appArmor = incusTest {
+    inherit lts pkgs system;
+    appArmor = true;
+    initLegacy = false;
+    instanceContainer = true;
+  };
 }
