@@ -28,6 +28,9 @@
   versionCheckHook,
   writableTmpDirAsHomeHook,
 
+  fetchpatch2,
+  applyPatches,
+
   # used to generate autocompletions from manpages and for configuration editing in the browser
   usePython ? true,
 
@@ -148,16 +151,29 @@ let
       test $fenv_status -eq 0
     end # fenv
   '';
+
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fish";
   version = "4.0.0";
 
-  src = fetchFromGitHub {
-    owner = "fish-shell";
-    repo = "fish-shell";
-    tag = finalAttrs.version;
-    hash = "sha256-BLbL5Tj3FQQCOeX5TWXMaxCpvdzZtKe5dDQi66uU/BM=";
+  src = applyPatches {
+    src = fetchFromGitHub {
+      owner = "fish-shell";
+      repo = "fish-shell";
+      tag = finalAttrs.version;
+      hash = "sha256-BLbL5Tj3FQQCOeX5TWXMaxCpvdzZtKe5dDQi66uU/BM=";
+    };
+    patches = [
+      # Fix for wrong version number in Cargo.toml
+      # We need to apply this here instead of in the patch phase since we need
+      # the patched lock file for the cargo deps fetching
+      (fetchpatch2 {
+        name = "cargo_version.diff";
+        url = "https://github.com/fish-shell/fish-shell/commit/1e069b0fff20b153bc7f824f9f9b820ca4117e1e.diff?full_index=1";
+        hash = "sha256-XFJ0fT2Zanvdqt/iwgyH2IA/kIOcOHMNdsmuzjTX5qs=";
+      })
+    ];
   };
 
   env = {
@@ -168,7 +184,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
-    hash = "sha256-j1HCj1iZ5ZV8nfMmJq5ggPD4s+5V8IretDdoz+G3wWU=";
+    hash = "sha256-4ol4LvabhtjiMMWwV1wrcywFePOmU0Jub1sy+Ay7mLA=";
   };
 
   patches = [
