@@ -58,7 +58,28 @@ self: super: {
         in
         # Some dead code is not properly eliminated on aarch64-darwin, leading
         # to bogus references to some dependencies.
-        overrideCabal (old: lib.optionalAttrs (pkgs.stdenv.hostPlatform.isDarwin && pkgs.stdenv.hostPlatform.isAarch64) {
+        overrideCabal (old: {
+          # Prevent DOS line endings from Hackage from breaking a patch
+          prePatch = old.prePatch or "" + ''
+            ${pkgs.buildPackages.dos2unix}/bin/dos2unix *.cabal
+          '';
+          # Ignore unix bound intended to prevent an unix bug on 32bit systems.
+          # We apply a patch for this issue to the GHC core packages directly.
+          # See unix-fix-ctimeval-size-32-bit.patch in ../compilers/ghc/common-*.nix
+          patches =
+            old.patches or [ ]
+            ++ lib.optionals (
+              scope.unix == null
+              && lib.elem self.ghc.version [
+                "9.8.1"
+                "9.8.2"
+                "9.8.3"
+                "9.10.1"
+              ]
+            ) [
+              ./patches/cabal-install-3.14.1.1-lift-unix-bound.patch
+            ];
+        } // lib.optionalAttrs (pkgs.stdenv.hostPlatform.isDarwin && pkgs.stdenv.hostPlatform.isAarch64) {
           postInstall = ''
             ${old.postInstall or ""}
             remove-references-to -t ${scope.HTTP} "$out/bin/.cabal-wrapped"
