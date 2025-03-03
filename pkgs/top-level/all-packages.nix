@@ -15455,14 +15455,8 @@ with pkgs;
     extensionPack = virtualboxExtpack;
   });
 
-  virtualglLib = callPackage ../tools/X11/virtualgl/lib.nix {
-    fltk = fltk13;
-  };
-
   virtualgl = callPackage ../tools/X11/virtualgl {
-    virtualglLib_i686 = if stdenv.hostPlatform.system == "x86_64-linux"
-      then pkgsi686Linux.virtualglLib
-      else null;
+    fltk = fltk13;
   };
 
   primusLib = callPackage ../tools/X11/primus/lib.nix {

@@ -1564,6 +1564,7 @@ mapAliases {
   viper4linux-gui = throw "'viper4linux-gui' was removed as it is broken and not maintained upstream"; # Added 2024-12-16
   viper4linux = throw "'viper4linux' was removed as it is broken and not maintained upstream"; # Added 2024-12-16
   virtscreen = throw "'virtscreen' has been removed, as it was broken and unmaintained"; # Added 2024-10-17
+  virtualglLib = throw "virtualglLib has been removed, as virtualgl has replaced it"; # Added 2025-03-03
   vistafonts = vista-fonts; # Added 2025-02-03
   vistafonts-chs = vista-fonts-chs; # Added 2025-02-03
   vistafonts-cht = vista-fonts-cht; # Added 2025-02-03
