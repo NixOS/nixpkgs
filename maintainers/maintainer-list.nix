@@ -9078,6 +9078,11 @@
     github = "gytis-ivaskevicius";
     githubId = 23264966;
   };
+  GZGavinZhao = {
+    name = "Gavin Zhao";
+    github = "GZGavinZhao";
+    githubId = 74938940;
+  };
   h7x4 = {
     name = "h7x4";
     email = "h7x4@nani.wtf";

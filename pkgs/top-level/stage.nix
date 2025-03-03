@@ -338,6 +338,15 @@ let
       };
     });
 
+    # Full package set with rocm on cuda off
+    # Mostly useful for asserting pkgs.pkgsRocm.torchWithRocm == pkgs.torchWithRocm and similar
+    pkgsRocm = nixpkgsFun ({
+      config = super.config // {
+        cudaSupport = false;
+        rocmSupport = true;
+      };
+    });
+
     pkgsExtraHardening = nixpkgsFun {
       overlays = [
         (self': super': {
