@@ -27,6 +27,9 @@ stdenv.mkDerivation (finalAttrs: {
   outputs = [ "out" "dev" "man" ];
   setOutputFlags = false; # some aren't supported
 
+  # see other isOpenBSD clause below
+  configurePlatforms = if stdenv.hostPlatform.isOpenBSD then ["build"] else ["build" "host"];
+
   configureFlags = [
     (lib.withFeature (!enableStatic) "shared")
     "--without-debug"
@@ -64,7 +67,12 @@ stdenv.mkDerivation (finalAttrs: {
       #
       # For now we allow this with `--undefined-version`:
       "LDFLAGS=-Wl,--undefined-version"
-  ]);
+  ]) ++ lib.optionals stdenv.hostPlatform.isOpenBSD [
+    # If you don't specify the version number in the host specification, a branch gets taken in configure
+    # which assumes that your openbsd is from the 90s, leading to a truly awful compiler/linker configuration.
+    # No, autoreconfHook doesn't work.
+    "--host=${stdenv.hostPlatform.config}${stdenv.cc.libc.version}"
+  ];
 
   # Only the C compiler, and explicitly not C++ compiler needs this flag on solaris:
   CFLAGS = lib.optionalString stdenv.hostPlatform.isSunOS "-D_XOPEN_SOURCE_EXTENDED";

@@ -157,23 +157,23 @@ stdenv.mkDerivation (finalAttrs: {
         concatStringsSep "," (
           [
             stdenv.targetPlatform.rust.rustcTargetSpec
-
-            # Other targets that don't need any extra dependencies to build.
           ]
+          # Other targets that don't need any extra dependencies to build.
           ++ optionals (!fastCross) [
             "wasm32-unknown-unknown"
-
-            # (build!=target): When cross-building a compiler we need to add
-            # the build platform as well so rustc can compile build.rs
-            # scripts.
+            "wasm32v1-none"
+            "bpfel-unknown-none"
+            "bpfeb-unknown-none"
           ]
+          # (build!=target): When cross-building a compiler we need to add
+          # the build platform as well so rustc can compile build.rs
+          # scripts.
           ++ optionals (stdenv.buildPlatform != stdenv.targetPlatform && !fastCross) [
             stdenv.buildPlatform.rust.rustcTargetSpec
-
-            # (host!=target): When building a cross-targeting compiler we
-            # need to add the host platform as well so rustc can compile
-            # build.rs scripts.
           ]
+          # (host!=target): When building a cross-targeting compiler we
+          # need to add the host platform as well so rustc can compile
+          # build.rs scripts.
           ++ optionals (stdenv.hostPlatform != stdenv.targetPlatform && !fastCross) [
             stdenv.hostPlatform.rust.rustcTargetSpec
           ]
@@ -236,19 +236,19 @@ stdenv.mkDerivation (finalAttrs: {
   # library and reuse compiler
   buildPhase =
     if fastCross then
-      "
-    runHook preBuild
+      ''
+        runHook preBuild
 
-    mkdir -p build/${stdenv.hostPlatform.rust.rustcTargetSpec}/stage0-{std,rustc}/${stdenv.hostPlatform.rust.rustcTargetSpec}/release/
-    ln -s ${rustc.unwrapped}/lib/rustlib/${stdenv.hostPlatform.rust.rustcTargetSpec}/libstd-*.so build/${stdenv.hostPlatform.rust.rustcTargetSpec}/stage0-std/${stdenv.hostPlatform.rust.rustcTargetSpec}/release/libstd.so
-    ln -s ${rustc.unwrapped}/lib/rustlib/${stdenv.hostPlatform.rust.rustcTargetSpec}/librustc_driver-*.so build/${stdenv.hostPlatform.rust.rustcTargetSpec}/stage0-rustc/${stdenv.hostPlatform.rust.rustcTargetSpec}/release/librustc.so
-    ln -s ${rustc.unwrapped}/bin/rustc build/${stdenv.hostPlatform.rust.rustcTargetSpec}/stage0-rustc/${stdenv.hostPlatform.rust.rustcTargetSpec}/release/rustc-main
-    touch build/${stdenv.hostPlatform.rust.rustcTargetSpec}/stage0-std/${stdenv.hostPlatform.rust.rustcTargetSpec}/release/.libstd.stamp
-    touch build/${stdenv.hostPlatform.rust.rustcTargetSpec}/stage0-rustc/${stdenv.hostPlatform.rust.rustcTargetSpec}/release/.librustc.stamp
-    python ./x.py --keep-stage=0 --stage=1 build library
+        mkdir -p build/${stdenv.hostPlatform.rust.rustcTargetSpec}/stage0-{std,rustc}/${stdenv.hostPlatform.rust.rustcTargetSpec}/release/
+        ln -s ${rustc.unwrapped}/lib/rustlib/${stdenv.hostPlatform.rust.rustcTargetSpec}/libstd-*.so build/${stdenv.hostPlatform.rust.rustcTargetSpec}/stage0-std/${stdenv.hostPlatform.rust.rustcTargetSpec}/release/libstd.so
+        ln -s ${rustc.unwrapped}/lib/rustlib/${stdenv.hostPlatform.rust.rustcTargetSpec}/librustc_driver-*.so build/${stdenv.hostPlatform.rust.rustcTargetSpec}/stage0-rustc/${stdenv.hostPlatform.rust.rustcTargetSpec}/release/librustc.so
+        ln -s ${rustc.unwrapped}/bin/rustc build/${stdenv.hostPlatform.rust.rustcTargetSpec}/stage0-rustc/${stdenv.hostPlatform.rust.rustcTargetSpec}/release/rustc-main
+        touch build/${stdenv.hostPlatform.rust.rustcTargetSpec}/stage0-std/${stdenv.hostPlatform.rust.rustcTargetSpec}/release/.libstd.stamp
+        touch build/${stdenv.hostPlatform.rust.rustcTargetSpec}/stage0-rustc/${stdenv.hostPlatform.rust.rustcTargetSpec}/release/.librustc.stamp
+        python ./x.py --keep-stage=0 --stage=1 build library
 
-    runHook postBuild
-  "
+        runHook postBuild
+      ''
     else
       null;
 

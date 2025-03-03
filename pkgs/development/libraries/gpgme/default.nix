@@ -21,7 +21,7 @@
 
 stdenv.mkDerivation rec {
   pname = "gpgme";
-  version = "1.24.1";
+  version = "1.24.2";
   pyproject = true;
 
   outputs = [
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnupg/gpgme/gpgme-${version}.tar.bz2";
-    hash = "sha256-6gXQJY5xBh1hcWWE7DTO9ZMwqRNAVx7cRreDdJc7qF8=";
+    hash = "sha256-4RsaDjYXd+nlX0igPYkJbiq/CMY9hLcBfP4dzgZjlYE=";
   };
 
   patches = [
