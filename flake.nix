@@ -78,6 +78,59 @@
               ];
             } // builtins.removeAttrs args [ "modules" ]
           );
+
+        /**
+          The public interface to the Nixpkgs package set
+
+          This sublibrary is part of the Nixpkgs flake, but not part of the Nixpkgs library.
+         */
+        # NOTE: Almost everything about Nixpkgs lives in the `pkgs` attribute set,
+        #       so we better make very sure that if we add something here it really
+        #       belongs here and we have a good plan for whatever kind of thing that is.
+        nixpkgs = {
+          /**
+            _Create the Nixpkgs package set_
+
+            See <https://nixos.org/manual/nixpkgs/unstable/index.html#sec-nixpkgs-function> for details descriptions of the arguments.
+
+            # Inputs
+
+            - `hostPlatform` (string or platform): The platform on which the packages will run.
+
+            - `buildPlatform` (string or platform): The platform on which the derivations are built. Default: `hostPlatform`.
+
+            - `config` (attrset): See <https://nixos.org/manual/nixpkgs/unstable/index.html#sec-nixpkgs-arguments-config>.
+
+            - `overlays` (list of functions): List of overlays layers used to modify Nixpkgs.
+
+            - `crossOverlays` (list of functions): List of overlays layers used to modify the host packages only.
+
+            # Return value
+
+            The "pkgs" attribute set, containing:
+            - packages
+            - package sets
+            - other things such as functions that rely on the package set
+            - `_type = "pkgs";`
+           */
+          # Note to developers:
+          # This intentionally omits legacy arguments like `localSystem`
+          # and `crossSystem`, so that the ecosystem moves towards a more
+          # consistent terminology and usage. Please don't add them.
+          # You won't be required to use this until perhaps we deprecate
+          # inputs.nixpkgs.outPath (used by `import`), which would require a
+          # change in Nix that may take another while.
+          mkPkgs = args@{
+            hostPlatform,
+            buildPlatform ? null, # default handled downstream
+            config ? null, # default handled downstream
+            overlays ? null, # default handled downstream
+            crossOverlays ? null, # default handled downstream
+            stdenvStages ? null, # default handled downstream
+          }:
+            import ./pkgs/top-level/default.nix args;
+        };
+
       });
 
       checks = forAllSystems (system: {
