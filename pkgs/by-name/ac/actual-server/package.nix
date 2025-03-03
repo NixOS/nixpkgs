@@ -103,7 +103,7 @@ stdenv.mkDerivation {
 
     makeWrapper ${lib.getExe nodejs_20} "$out/bin/actual-server" \
       --add-flags "$out/lib/actual/app.js" \
-      --set NODE_PATH "$out/node_modules"
+      --set NODE_PATH "$out/lib/actual/node_modules"
 
     runHook postInstall
   '';
