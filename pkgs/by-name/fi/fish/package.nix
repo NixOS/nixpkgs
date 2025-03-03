@@ -187,6 +187,12 @@ stdenv.mkDerivation (finalAttrs: {
     # * <https://github.com/LnL7/nix-darwin/issues/122>
     # * <https://github.com/fish-shell/fish-shell/issues/7142>
     ./nix-darwin-path.patch
+
+    # Fixes a build issue in kitty, see https://github.com/fish-shell/fish-shell/commit/97f0809b62a1fa77df1b9fcbbfe623b6187b5013
+    # The first patch is needed since it introduces the BufferedOutputter type that's
+    # used by the second one.
+    ./reduce_writes.patch
+    ./osc_133.patch
   ];
 
   # Fix FHS paths in tests
