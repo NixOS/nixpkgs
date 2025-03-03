@@ -1,15 +1,12 @@
 {
   lib,
-  stdenv,
+  stdenvNoCC,
   fetchFromGitLab,
-  pkg-config,
   meson,
   ninja,
-  glib,
-  gnome-common,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "adwaita-fonts";
   version = "48.2";
 
@@ -22,14 +19,8 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
-    pkg-config
     meson
     ninja
-  ];
-
-  buildInputs = [
-    glib
-    gnome-common
   ];
 
   meta = {
@@ -37,6 +28,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.gnome.org/GNOME/adwaita-fonts";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.qxrein ];
+    maintainers = [ lib.maintainers.qxrein ] ++ lib.teams.gnome.members;
   };
 })
