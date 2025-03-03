@@ -8,15 +8,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "proton-vpn-local-agent";
-  version = "1.2.0";
+  version = "1.4.3";
   useFetchCargoVendor = true;
-  cargoHash = "sha256-KD+cTEmezTiGL+OmMryS/Q1mRR0n9jx80o3hb5X3ZYM=";
+  cargoHash = "sha256-dTpHtiF9PnBNt0ORYxB5bQ65Z8Ckqb56oSEBay5wTzQ=";
 
   src = fetchFromGitHub {
     owner = "ProtonVPN";
     repo = "python-proton-vpn-local-agent";
     rev = version;
-    hash = "sha256-1iUeAWojIcXbvO6YoPEh//dbVdl90cUocyO3nfDtUEM";
+    hash = "sha256-fe6XWZojCBLIuLcUaXVDS79msiu2EU6w0YXNtc3M+ME=";
   };
 
   sourceRoot = "${src.name}/python-proton-vpn-local-agent";
