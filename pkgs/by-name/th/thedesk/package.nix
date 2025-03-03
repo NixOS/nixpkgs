@@ -1,69 +1,94 @@
 {
   lib,
   stdenv,
-  fetchurl,
-  dpkg,
-  autoPatchelfHook,
+  fetchFromGitHub,
+  pnpm_9,
   makeWrapper,
-  electron,
-  alsa-lib,
-  gtk3,
-  libxshmfence,
-  libgbm,
-  nss,
+  electron_27,
+  nodejs_18,
+  makeDesktopItem,
+  copyDesktopItems,
+  nix-update-script,
+  commandLineArgs ? "",
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "thedesk";
-  version = "24.2.1";
+  version = "25.0.15";
 
-  src = fetchurl {
-    url = "https://github.com/cutls/TheDesk/releases/download/v${version}/${pname}_${version}_amd64.deb";
-    sha256 = "sha256-AdjygNnQ3qQB03cGcQ5EB0cY3XXWLrzfCqw/U8tq1Yo=";
+  src = fetchFromGitHub {
+    owner = "cutls";
+    repo = "thedesk-next";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-41uDThFA1U5cig9z5bCs4q50cNNs7Z7rz3bvFkdnWy0=";
+  };
+
+  pnpmDeps = pnpm_9.fetchDeps {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-KVfkB54oj4DSDUQ2HxmDV9juIYt4+8mAfrbJtu/M3Is=";
   };
 
   nativeBuildInputs = [
-    dpkg
-    autoPatchelfHook
+    nodejs_18
+    pnpm_9.configHook
+    copyDesktopItems
     makeWrapper
   ];
 
-  buildInputs = [
-    alsa-lib
-    gtk3
-    libxshmfence
-    libgbm
-    nss
-  ];
+  buildPhase = ''
+    runHook preBuild
 
-  dontBuild = true;
-  dontConfigure = true;
+    cp -r node_modules/.pnpm/jsonfile@6.1.0/node_modules/jsonfile node_modules/jsonfile
+    cp -r node_modules/.pnpm/universalify@2.0.1/node_modules/universalify node_modules/universalify
+    cp -r node_modules/.pnpm/mkdirp@1.0.4/node_modules/mkdirp node_modules/mkdirp
+    cp -r node_modules/.pnpm/app-root-path@3.1.0/node_modules/app-root-path node_modules/app-root-path
+    pnpm run thirdparty
+    pnpm run build-renderer
+    pnpm run build-electron
+    pnpm exec electron-builder --linux --dir \
+      -c.electronDist="${electron_27}/libexec/electron" \
+      -c.electronVersion=${electron_27.version}
+
+    runHook postBuild
+  '';
+
+  env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "thedesk";
+      desktopName = "TheDesk";
+      exec = "thedesk %U";
+      terminal = false;
+      icon = "thedesk";
+      startupWMClass = "TheDesk";
+      categories = [ "Utility" ];
+    })
+  ];
 
   installPhase = ''
     runHook preInstall
 
-    mv usr $out
-    mv opt $out
-
-    # binary is not used and probably vulnerable to CVE(s)
-    rm $out/opt/TheDesk/thedesk
-
-    substituteInPlace $out/share/applications/thedesk.desktop \
-      --replace '/opt/TheDesk' $out/bin
-
-    makeWrapper ${electron}/bin/electron $out/bin/thedesk \
-      --add-flags $out/opt/TheDesk/resources/app.asar
+    mkdir -p $out/lib/thedesk
+    cp -r dist/linux-unpacked/{resources,LICENSE*} $out/lib/thedesk
+    install -Dm644 assets/desk.png $out/share/pixmaps/thedesk.png
+    makeWrapper "${lib.getExe electron_27}" $out/bin/thedesk \
+      --inherit-argv0 \
+      --add-flags $out/lib/thedesk/resources/app.asar \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
+      --add-flags ${lib.escapeShellArg commandLineArgs}
 
     runHook postInstall
   '';
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Mastodon/Misskey Client for PC";
     homepage = "https://thedesk.top";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     maintainers = [ ];
-    platforms = [ "x86_64-linux" ];
+    platforms = lib.platforms.linux;
     mainProgram = "thedesk";
   };
-}
+})
