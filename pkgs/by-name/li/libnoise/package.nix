@@ -22,6 +22,14 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "BUILD_SHARED_LIBS" true)
   ];
 
+  installPhase = ''
+    runHook preInstall
+
+    cmake --install . --prefix $out
+
+    runHook postInstall
+  '';
+
   meta = {
     description = "Portable, open-source, coherent noise-generating library for C++";
     homepage = "https://github.com/qknight/libnoise";
