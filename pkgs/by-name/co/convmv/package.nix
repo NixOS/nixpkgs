@@ -2,7 +2,9 @@
   lib,
   stdenv,
   fetchzip,
+  makeWrapper,
   perl,
+  perlPackages,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -21,9 +23,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs = [ perl ];
+  nativeBuildInputs = [
+    makeWrapper
+    perl
+  ];
 
-  buildInputs = [ perl ];
+  buildInputs = [
+    perl
+    perlPackages.EncodeHanExtra
+    perlPackages.EncodeIMAPUTF7
+    perlPackages.EncodeJIS2K
+  ];
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"
@@ -45,6 +55,10 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
   dontPatchShebangs = true;
+
+  postFixup = ''
+    wrapProgram "$out/bin/convmv" --prefix PERL5LIB : "$PERL5LIB"
+  '';
 
   meta = with lib; {
     description = "Converts filenames from one encoding to another";
