@@ -2,6 +2,7 @@
   lib,
   stdenv,
   callPackage,
+  ctestCheckHook,
   fetchFromGitHub,
   fetchurl,
   testers,
@@ -91,6 +92,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   doCheck = true;
+  nativeCheckInputs = [ ctestCheckHook ];
+  # tests are flaky and they seem to fail less often when they don't run in
+  # parallel
+  enableParallelChecking = false;
+  checkFlags = [ "--output-on-failure" ];
 
   disabledTests = [
     # Tests failing due to TileDB library implementation, disabled also
@@ -112,14 +118,6 @@ stdenv.mkDerivation (finalAttrs: {
     # Failure
     "pdal_app_plugin_test"
   ];
-
-  checkPhase = ''
-    runHook preCheck
-    # tests are flaky and they seem to fail less often when they don't run in
-    # parallel
-    ctest -j 1 --output-on-failure -E '^${lib.concatStringsSep "|" finalAttrs.disabledTests}$'
-    runHook postCheck
-  '';
 
   passthru.tests = {
     version = testers.testVersion {
