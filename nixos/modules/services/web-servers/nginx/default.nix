@@ -1276,15 +1276,12 @@ in
     services.nginx.virtualHosts.localhost = mkIf cfg.statusPage {
       serverAliases = [ "127.0.0.1" ] ++ lib.optional config.networking.enableIPv6 "[::1]";
       listenAddresses = lib.mkDefault ([
-        "0.0.0.0"
-      ] ++ lib.optional enableIPv6 "[::]");
+        "127.0.0.1"
+      ] ++ lib.optional enableIPv6 "[::1]");
       locations."/nginx_status" = {
         extraConfig = ''
           stub_status on;
           access_log off;
-          allow 127.0.0.1;
-          ${optionalString enableIPv6 "allow ::1;"}
-          deny all;
         '';
       };
     };
