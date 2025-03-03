@@ -160,12 +160,10 @@ stdenv.mkDerivation (finalAttrs: {
 
       # Merged outputs
       lndir ${nix-cli} $out
-      (
-        libs=( ${lib.escapeShellArgs devPaths} )
-        for lib in $libs; do
-          lndir $lib $dev
-        done
-      )
+
+      for lib in ${lib.escapeShellArgs devPaths}; do
+        lndir $lib $dev
+      done
 
       # Forwarded outputs
       ln -s ${nix-manual} $doc
