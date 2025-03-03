@@ -7,6 +7,8 @@
   lmodern,
   lmmath,
   which,
+  mergeSatysfiHash,
+  packages ? [ ],
 }:
 let
   camlpdf = ocamlPackages.camlpdf.overrideAttrs (o: {
@@ -33,6 +35,15 @@ let
   };
   ocamlPackages = ocaml-ng.ocamlPackages_4_14;
   version = "0.0.11";
+  collectSATySFiPackages =
+    packages:
+    lib.foldl' (
+      acc: pkg:
+      if pkg != null && lib.elem pkg acc then
+        acc
+      else
+        acc ++ [ pkg ] ++ collectSATySFiPackages (pkg.dependencies or [ ])
+    ) [ ] packages;
 in
 ocamlPackages.buildDunePackage {
   pname = "satysfi";
@@ -85,6 +96,34 @@ ocamlPackages.buildDunePackage {
       $out/share/satysfi/dist/fonts/
     cp ${junicode}/share/fonts/truetype/Junicode-Regular.ttf \
       $out/share/satysfi/dist/fonts/Junicode.ttf
+
+    for pkg in ${
+      lib.concatStringsSep " " (map (p: "${p}/share/satysfi/dist") (collectSATySFiPackages packages))
+    }; do
+      if [ -d "$pkg" ]; then
+        for item in "$pkg"/*; do
+          bn="$(basename "$item")"
+          if [ "$bn" = "hash" ]; then
+            continue
+          fi
+          cp -r "$item" "$out/share/satysfi/dist/"
+        done
+
+        if [ -d "$pkg/hash" ]; then
+          for newHash in "$pkg/hash"/*.satysfi-hash; do
+            if [ -f "$newHash" ]; then
+              oldHash="$out/share/satysfi/dist/hash/$(basename "$newHash")"
+              if [ ! -f "$oldHash" ]; then
+                cp "$newHash" "$oldHash"
+              else
+                echo "Merging $newHash -> $oldHash"
+                ${lib.getExe mergeSatysfiHash} "$oldHash" "$newHash" "$oldHash"
+              fi
+            fi
+          done
+        fi
+      fi
+    done
   '';
 
   meta = {
