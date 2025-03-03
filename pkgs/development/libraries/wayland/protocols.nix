@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-shcReTJHwsQnY5FDkt+p/LnjcoyktKoRCtuNkV/ABok=";
   };
 
-  postPatch = lib.optionalString finalAttrs.doCheck ''
+  postPatch = lib.optionalString finalAttrs.finalPackage.doCheck ''
     patchShebangs tests/
   '';
 
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
   checkInputs = [ wayland ];
   strictDeps = true;
 
-  mesonFlags = [ "-Dtests=${lib.boolToString finalAttrs.doCheck}" ];
+  mesonFlags = [ "-Dtests=${lib.boolToString finalAttrs.finalPackage.doCheck}" ];
 
   meta = {
     description = "Wayland protocol extensions";

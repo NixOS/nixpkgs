@@ -95,9 +95,9 @@ stdenv.mkDerivation (finalAttrs: {
       (lib.cmakeBool "USE_CADICAL" useCadical)
       (lib.cmakeBool "NOCRYPTOMINISAT" useCadical)
       (lib.cmakeBool "FORCE_CMS" (!useCadical))
-      (lib.cmakeBool "ENABLE_TESTING" finalAttrs.doCheck)
+      (lib.cmakeBool "ENABLE_TESTING" finalAttrs.finalPackage.doCheck)
     ]
-    ++ lib.optional finalAttrs.doCheck (lib.cmakeFeature "LIT_ARGS" "-v")
+    ++ lib.optional finalAttrs.finalPackage.doCheck (lib.cmakeFeature "LIT_ARGS" "-v")
     ++ lib.optional useCadical (lib.cmakeFeature "CADICAL_DIR" (toString cadicalDependency));
 
   # Fixes the following warning in the aarch64 build on Linux:
@@ -124,7 +124,7 @@ stdenv.mkDerivation (finalAttrs: {
         "-DPYTHON_LIB_INSTALL_DIR=$python_install_dir"
       )
     ''
-    + lib.optionalString finalAttrs.doCheck ''
+    + lib.optionalString finalAttrs.finalPackage.doCheck ''
       # Link in gtest and the output check utility.
       mkdir -p deps
       ln -s ${gtest.src} deps/gtest
