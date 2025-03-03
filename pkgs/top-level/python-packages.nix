@@ -11818,6 +11818,8 @@ self: super: with self; {
 
   pydenticon = callPackage ../development/python-modules/pydenticon { };
 
+  pydemumble = callPackage ../development/python-modules/pydemumble { };
+
   pydeps = callPackage ../development/python-modules/pydeps {
     inherit (pkgs) graphviz;
   };

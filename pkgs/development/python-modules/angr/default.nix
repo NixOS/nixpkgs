@@ -22,6 +22,7 @@
   psutil,
   pycparser,
   pyformlang,
+  pydemumble,
   pythonOlder,
   pyvex,
   rich,
@@ -32,11 +33,12 @@
   sympy,
   unicorn,
   unique-log-filter,
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
   pname = "angr";
-  version = "9.2.141";
+  version = "9.2.144";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -45,7 +47,7 @@ buildPythonPackage rec {
     owner = "angr";
     repo = "angr";
     tag = "v${version}";
-    hash = "sha256-rrJTYe3o/Ra8+EKAA7t0M02tWVN4Ul5ueUar7lpUvMg=";
+    hash = "sha256-eR7Kz5EaHfavnKfP9wY6yBXb0AtT3IclarZlXqEmbRs=";
   };
 
   postPatch = ''
@@ -81,6 +83,7 @@ buildPythonPackage rec {
     psutil
     pycparser
     pyformlang
+    pydemumble
     pyvex
     rich
     rpyc
@@ -112,12 +115,12 @@ buildPythonPackage rec {
     "archinfo"
   ];
 
+  passthru.updateScript = nix-update-script { };
+
   meta = with lib; {
     description = "Powerful and user-friendly binary analysis platform";
     homepage = "https://angr.io/";
     license = with licenses; [ bsd2 ];
     maintainers = with maintainers; [ fab ];
-    # angr is pining unicorn
-    broken = versionAtLeast unicorn.version "2.0.1.post1";
   };
 }
