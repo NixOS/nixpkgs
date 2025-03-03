@@ -118,7 +118,7 @@ It has two modes:
 
 ## `shellcheck` {#tester-shellcheck}
 
-Runs files through `shellcheck`, a static analysis tool for shell scripts.
+Run files through `shellcheck`, a static analysis tool for shell scripts, failing if there are any issues.
 
 :::{.example #ex-shellcheck}
 # Run `testers.shellcheck`
@@ -127,7 +127,7 @@ A single script
 
 ```nix
 testers.shellcheck {
-  name = "shellcheck";
+  name = "script";
   src = ./script.sh;
 }
 ```
@@ -139,7 +139,7 @@ let
   inherit (lib) fileset;
 in
 testers.shellcheck {
-  name = "shellcheck";
+  name = "nixbsd-activate";
   src = fileset.toSource {
     root = ./.;
     fileset = fileset.unions [
@@ -154,11 +154,19 @@ testers.shellcheck {
 
 ### Inputs {#tester-shellcheck-inputs}
 
-[`src` (path or string)]{#tester-shellcheck-param-src}
+`name` (string, optional)
+: The name of the test, optionally prefixed with `shellcheck-` if `useNamePrefix` is `true`.
+  `name` will be required at a future point because it massively improves traceability of test failures, but is kept optional for now to avoid breaking existing usages.
+  Defaults to `run-shellcheck`.
 
+`src` (path-like)
 : The path to the shell script(s) to check.
   This can be a single file or a directory containing shell files.
   All files in `src` will be checked, so you may want to provide `fileset`-based source instead of a whole directory.
+
+`useNamePrefix` (boolean, optional)
+: Whether to prefix the test name with `shellcheck-`.
+  Defaults to `true`.
 
 ### Return value {#tester-shellcheck-return}
 
