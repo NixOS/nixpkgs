@@ -8,14 +8,14 @@ let
   mkComposerVendorOverride =
     finalAttrs:
     {
-      php ? toplevel.php,
-      composer ? toplevel.php.packages.composer,
-      composerLock,
-      vendorHash ? null,
-      composerNoDev ? true,
-      composerNoPlugins ? true,
-      composerNoScripts ? true,
-      composerStrictValidation ? true,
+      php ? finalAttrs.php or toplevel.php,
+      composer ? finalAttrs.php.packages.composer or toplevel.php.packages.composer,
+      composerLock ? finalAttrs.composerLock or null,
+      vendorHash ? finalAttrs.vendorHash or "",
+      composerNoDev ? finalAttrs.composerNoDev or true,
+      composerNoPlugins ? finalAttrs.composerNoPlugins or true,
+      composerNoScripts ? finalAttrs.composerNoScripts or true,
+      composerStrictValidation ? finalAttrs.composerStrictValidation or true,
       buildInputs ? [ ],
       nativeBuildInputs ? [ ],
       dontPatchShebangs ? true,
@@ -24,10 +24,9 @@ let
       doInstallCheck ? false,
       ...
     }@args:
-    assert (lib.assertMsg (args ? src) "mkComposerVendor expects src argument.");
-    assert (lib.assertMsg (args ? vendorHash) "mkComposerVendor expects vendorHash argument.");
-    assert (lib.assertMsg (args ? version) "mkComposerVendor expects version argument.");
     assert (lib.assertMsg (args ? pname) "mkComposerVendor expects pname argument.");
+    assert (lib.assertMsg (args ? version) "mkComposerVendor expects version argument.");
+    assert (lib.assertMsg (args ? src) "mkComposerVendor expects src argument.");
     {
       name = "${args.pname}-composer-vendor-${args.version}";
 
