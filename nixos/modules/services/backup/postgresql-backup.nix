@@ -104,6 +104,13 @@ in
         '';
       };
 
+      backupAllExcept = lib.mkOption {
+        type = with lib.types; listOf str;
+        default = [ ];
+        example = [ "lossy" ];
+        description = "Whether to backup all databases defined in `services.postgresqlBackup.databases` except the ones listed here.";
+      };
+
       databases = lib.mkOption {
         default = [ ];
         type = lib.types.listOf lib.types.str;
@@ -161,6 +168,10 @@ in
             message = "config.services.postgresqlBackup.backupAll cannot be used together with config.services.postgresqlBackup.databases";
           }
           {
+            assertion = cfg.backupAllExcept != [ ] -> !cfg.backupAll;
+            message = "services.postgresqlBackup.backupAllExcept cannot be used together with services.postgresqlBackup.backupAll";
+          }
+          {
             assertion =
               cfg.compression == "none"
               || (cfg.compression == "gzip" && cfg.compressionLevel >= 1 && cfg.compressionLevel <= 9)
@@ -168,6 +179,10 @@ in
             message = "config.services.postgresqlBackup.compressionLevel must be set between 1 and 9 for gzip and 1 and 19 for zstd";
           }
         ];
+
+        services.postgresqlBackup.databases = lib.mkIf (cfg.backupAllExcept != [ ]) (
+          lib.filter (db: lib.any (x: db != x) cfg.backupAllExcept) config.services.postgresql.databases
+        );
 
         systemd.tmpfiles.rules = [
           "d '${cfg.location}' 0700 postgres - - -"
