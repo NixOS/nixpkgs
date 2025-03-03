@@ -18,7 +18,7 @@ php.buildComposerProject2 (finalAttrs: {
   # Upstream doesn't provide a composer.lock.
   # More info at https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/issues/7590
   composerLock = ./composer.lock;
-  vendorHash = "sha256-lOlwQjBh/Uy+Hr3cc+NQC+2Fu3UODKOCSXpSrNOBNWY=";
+  vendorHash = "sha256-/Vn4hyX3XTAdnPPwiKGluuE3Cl56nZ3eVozLnhZ3RJM=";
 
   meta = {
     changelog = "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/releases/tag/v${finalAttrs.version}";
