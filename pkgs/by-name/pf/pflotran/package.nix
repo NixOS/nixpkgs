@@ -8,7 +8,7 @@
   blas,
   lapack,
   parmetis,
-  hdf5,
+  hdf5-fortran-mpi,
   mpiCheckPhaseHook,
   python3,
 }:
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     petsc
     blas
     lapack
-    hdf5
+    hdf5-fortran-mpi
     parmetis
   ];
 
@@ -50,8 +50,8 @@ stdenv.mkDerivation (finalAttrs: {
   */
   preConfigure = ''
     substituteInPlace src/pflotran/makefile \
-      --subst-var-by "HDF5_FORTRAN_LIBS" "${lib.getLib hdf5}/lib" \
-      --subst-var-by "HDF5_FORTRAN_INCLUDE" "${lib.getDev hdf5}/include"
+      --subst-var-by "HDF5_FORTRAN_LIBS" "${lib.getLib hdf5-fortran-mpi}/lib" \
+      --subst-var-by "HDF5_FORTRAN_INCLUDE" "${lib.getDev hdf5-fortran-mpi}/include"
   '';
 
   configureFlags = [
