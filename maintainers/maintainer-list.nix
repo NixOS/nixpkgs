@@ -18076,6 +18076,12 @@
     githubId = 5041481;
     name = "Pierre Beucher";
   };
+  pblgomez  = {
+    email = "pablogomez@pablogomez.com";
+    github = "pblgomez";
+    githubId = "2634032";
+    name = "Pablo Gómez";
+  };
   pblkt = {
     email = "pebblekite@gmail.com";
     github = "pblkt";
