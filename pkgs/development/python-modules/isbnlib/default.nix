@@ -21,6 +21,10 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
+  dependencies = [
+    setuptools # needed for 'pkg_resources'
+  ];
+
   nativeCheckInputs = [
     pytestCheckHook
     pytest-cov-stub
