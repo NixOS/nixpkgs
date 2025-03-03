@@ -1,7 +1,7 @@
 {
-  buildPythonApplication,
   lib,
   stdenv,
+  buildPythonApplication,
   fetchFromGitHub,
   pkg-config,
   setuptools,
@@ -20,47 +20,52 @@
 
 buildPythonApplication rec {
   pname = "silver-platter";
-  version = "0.5.20";
+  version = "0.5.46";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jelmer";
     repo = "silver-platter";
-    rev = version;
-    hash = "sha256-k+C4jrC4FO/yy9Eb6x4lv1zyyp/eGkpMcDqZ0KoxfBs=";
+    tag = "v${version}";
+    hash = "sha256-mLph+S86BXjD/Cuu0VR65Hoic8Dr/cIWhy/8MnxB/ik=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-hZQfzaLvHSN/hGR5vn+/2TRH6GwDTTp+UcnePXY7JlM=";
+    hash = "sha256-l5IMe+EXoSF4w5ubXJ8kUZvpbX5CX1nkOKIvTL0lMKY=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools-rust
     setuptools
+  ];
+
+  nativeBuildInputs = [
+    rustPlatform.cargoSetupHook
+    cargo
+    rustc
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
+
+  buildInputs =
+    lib.optionals stdenv.hostPlatform.isLinux [ openssl ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
+
+  dependencies = [
     breezy
     dulwich
     jinja2
     pyyaml
     ruamel-yaml
   ];
-  nativeBuildInputs = [
-    setuptools-rust
-    rustPlatform.cargoSetupHook
-    cargo
-    rustc
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
-  buildInputs =
-    lib.optionals stdenv.hostPlatform.isLinux [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   pythonImportsCheck = [ "silver_platter" ];
 
-  meta = with lib; {
+  meta = {
     description = "Automate the creation of merge proposals for scriptable changes";
     homepage = "https://jelmer.uk/code/silver-platter";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ lukegb ];
-    mainProgram = "svp";
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ lukegb ];
+    mainProgram = "debian-svp";
   };
 }
