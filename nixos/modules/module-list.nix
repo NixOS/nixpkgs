@@ -367,6 +367,7 @@
   ./security/doas.nix
   ./security/duosec.nix
   ./security/google_oslogin.nix
+  ./security/hardening.nix
   ./security/ipa.nix
   ./security/isolate.nix
   ./security/krb5
