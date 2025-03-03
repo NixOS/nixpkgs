@@ -66,6 +66,7 @@ let
         cmakeFlags = [
           (lib.cmakeBool "g15" false)
           (lib.cmakeFeature "CMAKE_CXX_STANDARD" "17") # protobuf >22 requires C++ 17
+          (lib.cmakeBool "CMAKE_UNITY_BUILD" true) # Upstream uses this in their build pipeline to speed up builds
         ] ++ (overrides.cmakeFlags or [ ]);
 
         preConfigure = ''
