@@ -9107,6 +9107,12 @@
     githubId = 33523827;
     name = "Harrison Thorne";
   };
+  harryposner = {
+    email = "nixpkgs@harryposner.com";
+    github = "harryposner";
+    githubId = 23534120;
+    name = "Harry Posner";
+  };
   haruki7049 = {
     email = "tontonkirikiri@gmail.com";
     github = "haruki7049";
