@@ -115,6 +115,10 @@ rec {
     isUClibc       = with abis; map (a: { abi = a; }) [ uclibc uclibceabi uclibceabihf ];
     isLLVMLibc     = [ { abi = abis.llvm; } ];
 
+    isUefi = [
+      { kernel = kernels.uefi; }
+    ];
+
     isEfi = [
       { cpu = { family = "arm"; version = "6"; }; }
       { cpu = { family = "arm"; version = "7"; }; }
