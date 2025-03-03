@@ -107,6 +107,29 @@ let
         fi
         return 0
     }
+
+    ${optionalString luks.savePassphrases ''
+      saved_passphrases_dir=/run/initrd-saved-passphrases
+
+      init_saved_passphrases_dir() {
+        if [ ! -e "$saved_passphrases_dir" ]; then
+          mkdir "$saved_passphrases_dir"
+          # A ramfs is used here to ensure that the passphrases never get
+          # swapped out. Do NOT remove the mount or replace with tmpfs!
+          mount -t ramfs none "$saved_passphrases_dir"
+          chmod 700 "$saved_passphrases_dir"
+        fi
+      }
+
+      save_passphrase() {
+        local name="$1"
+        local passphrase="$2"
+        local passphrase_file="$saved_passphrases_dir/$name"
+        init_saved_passphrases_dir
+        echo "Saving passphrase for $name to $passphrase_file"
+        echo -n "$passphrase" > "$passphrase_file"
+      }
+    ''}
   '';
 
   preCommands = ''
@@ -215,6 +238,9 @@ let
                   # we don't rm here because we might reuse it for the next device
                 '' else ''
                   rm -f /crypt-ramfs/passphrase
+                ''}
+                ${optionalString luks.savePassphrases ''
+                  save_passphrase ${escapeShellArg "luks-${name}"} "$passphrase"
                 ''}
                 break
             else
@@ -590,6 +616,20 @@ in
         Such setup can be useful if you use {command}`cryptsetup luksSuspend`.
         Different LUKS devices will still have
         different master keys even when using the same passphrase.
+      '';
+    };
+
+    boot.initrd.luks.savePassphrases = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Whether to save passphrases used to unlock LUKS devices to be
+        available after the initrd completes.
+
+        If enabled, than each passphrase used successfully to unlock a LUKS
+        device will be saved to file
+        <filename>/run/initrd-saved-passphrases/luks-NAME</filename>, where
+        <literal>NAME</literal> is the name of the LUKS device.
       '';
     };
 
