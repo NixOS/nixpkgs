@@ -12691,6 +12691,8 @@ self: super: with self; {
 
   pyquery = callPackage ../development/python-modules/pyquery { };
 
+  pyquerylist = callPackage ../development/python-modules/pyquerylist { };
+
   pyquaternion = callPackage ../development/python-modules/pyquaternion { };
 
   pyquil = callPackage ../development/python-modules/pyquil { };
