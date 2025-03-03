@@ -11,10 +11,14 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "antonmedv";
-    repo = pname;
-    rev = version;
+    repo = "fx";
+    tag = version;
     hash = "sha256-EirlA/gcW77UP9I4pVCjjG3pSYnCPw+idX9YS1izEpY=";
   };
+
+  ldflags = [
+    "-s"
+  ];
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -27,12 +31,12 @@ buildGoModule rec {
       --zsh <($out/bin/fx --comp zsh)
   '';
 
-  meta = with lib; {
-    description = "Terminal JSON viewer";
-    mainProgram = "fx";
-    homepage = "https://github.com/antonmedv/fx";
+  meta = {
     changelog = "https://github.com/antonmedv/fx/releases/tag/${src.rev}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    description = "Terminal JSON viewer";
+    homepage = "https://github.com/antonmedv/fx";
+    license = lib.licenses.mit;
+    mainProgram = "fx";
+    maintainers = with lib.maintainers; [ figsoda ];
   };
 }
