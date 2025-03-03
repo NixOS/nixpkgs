@@ -28,7 +28,7 @@ buildPythonPackage rec {
     hash = "sha256-ribVfvKmDMxGmeqj30SDcnbNGdRBfs1DmqQGXP3EHCk=";
   };
 
-  sourceRoot = "source/packages/http/httpx/";
+  sourceRoot = "${src.name}/packages/http/httpx/";
 
   build-system = [ poetry-core ];
 
