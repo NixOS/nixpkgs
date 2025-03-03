@@ -84,5 +84,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
       matthiasbeyer
     ];
     mainProgram = "nickel";
+    badPlatforms = [
+      # collect2: error: ld returned 1 exit status
+      # undefined reference to `PyExc_TypeError'
+      "aarch64-linux"
+    ];
   };
 })
