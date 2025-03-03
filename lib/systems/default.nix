@@ -421,6 +421,8 @@ let
           isNoStdTarget =
             any (t: hasInfix t final.rust.rustcTarget) ["-none" "nvptx" "switch" "-uefi"];
         };
+      } // {
+        override = allArgs.override or (newArgs: elaborate (allArgs // newArgs));
       };
   in assert final.useAndroidPrebuilt -> final.isAndroid;
      assert foldl
