@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "libtmux";
-  version = "0.46.0";
+  version = "0.46.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tmux-python";
     repo = "libtmux";
     tag = "v${version}";
-    hash = "sha256-xcmj6u3zqGfZED7GZeibIA2PNo6BOEc7kR0LPYXmBBw=";
+    hash = "sha256-aaKSmHh0rggt6Sa9qgBumQxr/uN3sLamEJtIjQ3KMlQ=";
   };
 
   postPatch = ''
@@ -50,11 +50,14 @@ buildPythonPackage rec {
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # tests/test_pane.py:113: AssertionError
       "test_capture_pane_start"
+      # assert (1740973920.500444 - 1740973919.015309) <= 1.1
+      "test_retry_three_times"
+      "test_function_times_out_no_raise"
+      # assert False
+      "test_retry_three_times_no_raise_assert"
     ];
 
-  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
-    "tests/test_test.py"
-  ];
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [ "tests/test/test_retry.py" ];
 
   pythonImportsCheck = [ "libtmux" ];
 
