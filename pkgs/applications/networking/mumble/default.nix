@@ -12,7 +12,6 @@
   libopus,
   libsndfile,
   protobuf,
-  speex,
   libcap,
   alsa-lib,
   python3,
@@ -102,7 +101,6 @@ let
           libvorbis
           qt5.qtsvg
           rnnoise
-          speex
           utf8proc
           microsoft-gsl
           nlohmann_json
@@ -117,7 +115,6 @@ let
         "-D server=OFF"
         "-D bundled-celt=ON"
         "-D bundled-opus=OFF"
-        "-D bundled-speex=OFF"
         "-D bundle-qt-translations=OFF"
         "-D bundled-json=OFF"
         "-D bundled-gsl=OFF"
