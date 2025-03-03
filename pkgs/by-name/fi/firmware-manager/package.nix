@@ -18,21 +18,19 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "pop-os";
-    repo = pname;
-    rev = version;
+    repo = "firmware-manager";
+    tag = version;
     hash = "sha256-Q+LJJ4xK583fAcwuOFykt6GKT0rVJgmTt+zUX4o4Tm4=";
   };
 
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "ecflash-0.1.0" = "sha256-W613wbW54R65/rs6oiPAH/qov2OVEjMMszpUJdX4TxI=";
-      "system76-firmware-1.0.51" = "sha256-+GPz7uKygGnFUptQEGYWkEdHgxBc65kLZqpwZqtwets=";
-    };
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
+    hash = "sha256-LooE5jU4G1QHYTa/sB95W6VJs7lY7sjHI9scUaZRmq4=";
   };
 
   postPatch = ''
-    substituteInPlace Makefile --replace '$(DESTDIR)/etc' '$(DESTDIR)$(prefix)/etc'
+    substituteInPlace Makefile \
+      --replace-fail '$(DESTDIR)/etc' '$(DESTDIR)$(prefix)/etc'
   '';
 
   nativeBuildInputs = [
