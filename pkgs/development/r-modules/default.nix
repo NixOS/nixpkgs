@@ -450,6 +450,7 @@ let
     PKI = [ pkgs.openssl.dev ];
     png = [ pkgs.libpng.dev ];
     protolite = [ pkgs.protobuf ];
+    prqlr = with pkgs; [ cargo rustc ];
     R2SWF = with pkgs; [ zlib libpng freetype.dev ];
     RAppArmor = [ pkgs.libapparmor ];
     rapportools = [ pkgs.which ];
@@ -1026,6 +1027,13 @@ let
     # -> arrow 14.0.0.2 on CRAN; was lagging behind libarrow release:
     #   https://github.com/apache/arrow/issues/39698 )
 
+    ACME = old.ACME.overrideAttrs (attrs: {
+      env = (attrs.env or { }) // {
+        # Avoid incompatible pointer type error
+        NIX_CFLAGS_COMPILE = attrs.env.NIX_CFLAGS_COMPILE + " -Wno-incompatible-pointer-types";
+      };
+    });
+
     vegan3d = old.vegan3d.overrideAttrs (attrs: {
       RGL_USE_NULL = "true";
     });
@@ -1101,6 +1109,12 @@ let
       ];
     });
 
+    clarabel = old.clarabel.overrideAttrs (attrs: {
+      postPatch = ''
+        patchShebangs configure
+      '';
+    });
+
     lwgeom = old.lwgeom.overrideAttrs (attrs: {
       configureFlags = [
         "--with-proj-lib=${pkgs.lib.getLib pkgs.proj}/lib"
@@ -1127,6 +1141,10 @@ let
 
     rzmq = old.rzmq.overrideAttrs (attrs: {
       preConfigure = "patchShebangs configure";
+    });
+
+    nanoparquet = old.nanoparquet.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
     });
 
     clustermq = old.clustermq.overrideAttrs (attrs: {
@@ -1162,6 +1180,10 @@ let
     });
 
    gmailr = old.gmailr.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
+    });
+
+   prqlr = old.prqlr.overrideAttrs (attrs: {
       postPatch = "patchShebangs configure";
     });
 
@@ -1566,6 +1588,9 @@ let
       buildInputs = [ cacert ] ++ attrs.buildInputs;
     });
 
+    float = old.float.overrideAttrs (attrs: {
+      enableParallelBuilding = false;
+    });
 
     immunotation = let
       MHC41alleleList = fetchurl {
@@ -1777,6 +1802,16 @@ let
 
     rgl = old.rgl.overrideAttrs (attrs: {
       RGL_USE_NULL = "true";
+    });
+
+    methylKit = old.methylKit.overrideAttrs (attrs: {
+      # resolve missing function from data.table
+      patches = [
+        (pkgs.fetchpatch {
+          url = "https://github.com/al2na/methylKit/commit/5c30347630bc064d7aefc918923f723671f35253.patch";
+          sha256 = "sha256-hwtybBmSYwVInMIEZ7i7zudJWjiRJmrD0/tU7v78pPc=";
+        })
+      ];
     });
 
     Rrdrand = old.Rrdrand.override { platforms = lib.platforms.x86_64 ++ lib.platforms.x86; };
