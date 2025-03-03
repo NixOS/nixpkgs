@@ -13,14 +13,14 @@
 
 rustPlatform.buildRustPackage.override
   { stdenv = if withMoldLinker then stdenvAdapters.useMoldLinker stdenv else stdenv; }
-  rec {
+  (finalAttrs: {
     pname = "cosmic-launcher";
     version = "1.0.0-alpha.6";
 
     src = fetchFromGitHub {
       owner = "pop-os";
       repo = "cosmic-launcher";
-      tag = "epoch-${version}";
+      tag = "epoch-${finalAttrs.version}";
       hash = "sha256-BtYnL+qkM/aw+Air5yOKH098V+TQByM5mh1DX7v+v+s=";
     };
 
@@ -67,4 +67,4 @@ rustPlatform.buildRustPackage.override
       ];
       platforms = lib.platforms.linux;
     };
-  }
+  })
