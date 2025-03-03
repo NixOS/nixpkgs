@@ -11,8 +11,8 @@
   boost,
   libopus,
   libsndfile,
+  speexdsp,
   protobuf,
-  speex,
   libcap,
   utf8proc,
   alsa-lib,
@@ -101,9 +101,9 @@ let
           libopus
           libsndfile
           libvorbis
+          speexdsp
           qt5.qtsvg
           rnnoise
-          speex
           utf8proc
           microsoft-gsl
           nlohmann_json
