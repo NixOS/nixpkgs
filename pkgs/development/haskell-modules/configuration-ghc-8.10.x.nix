@@ -88,6 +88,9 @@ self: super: {
       );
   hashable-time = doDistribute (unmarkBroken super.hashable-time);
 
+  # Needs base-orphans for GHC < 9.8 / base < 4.19
+  some = addBuildDepend self.base-orphans super.some;
+
   # Too strict lower bounds on base
   primitive-addr = doJailbreak super.primitive-addr;
 

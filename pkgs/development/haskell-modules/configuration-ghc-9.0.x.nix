@@ -68,6 +68,9 @@ self: super: {
     wherefrom-compat = null;
   };
 
+  # Needs base-orphans for GHC < 9.8 / base < 4.19
+  some = addBuildDepend self.base-orphans super.some;
+
   # Jailbreaks & Version Updates
 
   # tar > 0.6 requires os-string which can't be built with bytestring < 0.11
