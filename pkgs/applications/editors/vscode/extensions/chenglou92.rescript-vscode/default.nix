@@ -23,6 +23,10 @@ vscode-utils.buildVscodeMarketplaceExtension rec {
     inherit version;
     hash = "sha256-yUAhysTM9FXo9ZAzrto+tnjnofIUEQAGBg3tjIainrY=";
   };
+
+  # For rescript-language-server
+  passthru.rescript-editor-analysis = rescript-editor-analysis;
+
   postPatch = ''
     rm -r ${analysisDir}
     ln -s ${rescript-editor-analysis}/bin ${analysisDir}
