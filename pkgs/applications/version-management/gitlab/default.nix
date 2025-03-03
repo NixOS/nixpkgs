@@ -200,6 +200,12 @@ let
       patchShebangs node_modules/
       patchShebangs scripts/frontend/
 
+      # TODO: Try to remove --ignore-scripts
+      # Needed for the js dependency pinia to work
+      pushd node_modules/vue-demi
+      yarn run postinstall
+      popd
+
       runHook postConfigure
     '';
 
