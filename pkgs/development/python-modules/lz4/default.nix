@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "lz4";
-  version = "4.4.1";
+  version = "4.4.3";
   pyproject = true;
 
   disabled = pythonOlder "3.5";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "python-lz4";
     repo = "python-lz4";
     tag = "v${version}";
-    hash = "sha256-dqu1sRqvtb1eyjxrCFu1vom9//qDGhgCMnPhKnIktjw=";
+    hash = "sha256-Jnmi2eyTGbPuqw0llQ5xpUWlj+8QvRHMwkak/GsypU0=";
   };
 
   postPatch = ''
