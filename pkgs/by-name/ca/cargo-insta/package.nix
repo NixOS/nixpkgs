@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
 
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-bRxtkuNtCelcYJkWPMl8xkMuGcbGCxvdz5cCzPUk44k=";
+  cargoHash = "sha256-Vx26ArAcsW0NNVNZa4M5hqz/sm1gecrun/bbRWMu07Q=";
 
   checkFlags = [
   # Depends on `rustfmt` and does not matter for packaging.
