@@ -101,14 +101,6 @@ let
     };
 in
 {
-  emacs29 = import ./make-emacs.nix (mkArgs {
-    pname = "emacs";
-    version = "29.4";
-    variant = "mainline";
-    rev = "29.4";
-    hash = "sha256-FCP6ySkN9mAdp2T09n6foS2OciqZXc/54guRZ0B4Z2s=";
-  });
-
   emacs30 = import ./make-emacs.nix (mkArgs {
     pname = "emacs";
     version = "30.1";

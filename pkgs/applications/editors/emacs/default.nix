@@ -32,20 +32,6 @@ lib.makeScope pkgs.newScope (
         ;
     };
 
-    emacs29 = callPackage (self.sources.emacs29) inheritedArgs;
-
-    emacs29-gtk3 = self.emacs29.override {
-      withGTK3 = true;
-    };
-
-    emacs29-nox = self.emacs29.override {
-      noGui = true;
-    };
-
-    emacs29-pgtk = self.emacs29.override {
-      withPgtk = true;
-    };
-
     emacs30 = callPackage (self.sources.emacs30) inheritedArgs;
 
     emacs30-gtk3 = self.emacs30.override {
