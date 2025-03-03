@@ -157,21 +157,25 @@ let
       chmod u-x $out/libexec/electron/*.so*
     '';
 
-    # We don't want to wrap the contents of $out/libexec automatically
-    dontWrapGApps = true;
-
-    preFixup = ''
-      makeWrapper "$out/libexec/electron/electron" $out/bin/electron \
-        "''${gappsWrapperArgs[@]}" \
-        ${lib.optionalString needsAarch64PageSizeFix "--add-flags '--js-flags=--no-decommit-pooled-pages'"}
-    '';
+    # We use null here to not cause unnecessary rebuilds.
+    dontWrapGApps = if needsAarch64PageSizeFix then true else null;
+    preFixup =
+      if needsAarch64PageSizeFix then
+        ''
+          wrapProgram "$out/libexec/electron/chrome_crashpad_handler" "''${gappsWrapperArgs[@]}"
+          wrapProgram "$out/libexec/electron/chrome-sandbox" "''${gappsWrapperArgs[@]}"
+          wrapProgram "$out/libexec/electron/electron" "''${gappsWrapperArgs[@]}" \
+            --add-flags "--js-flags=--no-decommit-pooled-pages"
+        ''
+      else
+        null;
 
     postFixup = ''
       patchelf \
         --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
         --set-rpath "${electronLibPath}:$out/libexec/electron" \
-        $out/libexec/electron/electron \
-        $out/libexec/electron/chrome_crashpad_handler
+        $out/libexec/electron/.electron-wrapped \
+        $out/libexec/electron/.chrome_crashpad_handler-wrapped
 
       # patch libANGLE
       patchelf \
