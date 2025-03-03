@@ -46,6 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
   outputs = [ "out" ] ++ (lib.optional isFullBuild "dev");
 
   postUnpack = lib.optionalString isFullBuild ''
+    chmod +w $sourceRoot/../$pname/utils/hdrgen
     patchShebangs $sourceRoot/../$pname/utils/hdrgen/main.py
     chmod +x $sourceRoot/../$pname/utils/hdrgen/main.py
   '';
@@ -65,10 +66,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   libc = if (!isFullBuild) then stdenv.cc.libc else null;
 
-  cmakeFlags = [
-    (lib.cmakeBool "LLVM_LIBC_FULL_BUILD" isFullBuild)
-    (lib.cmakeFeature "LLVM_ENABLE_RUNTIMES" "libc")
-  ];
+  cmakeFlags =
+    [
+      (lib.cmakeBool "LLVM_LIBC_FULL_BUILD" isFullBuild)
+      (lib.cmakeFeature "LLVM_ENABLE_RUNTIMES" "libc")
+    ]
+    ++ lib.optional isFullBuild [
+      (lib.cmakeBool "CMAKE_C_COMPILER_WORKS" true)
+      (lib.cmakeBool "CMAKE_CXX_COMPILER_WORKS" true)
+    ];
+
+  NIX_CFLAGS_COMPILE = lib.optionalString isFullBuild "-Wno-unused-command-line-argument";
 
   # For the update script:
   passthru = {
