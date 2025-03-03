@@ -41,8 +41,8 @@ stdenv.mkDerivation {
     # Patch utils.h to comment out duplicate enum definitions.
 
     substituteInPlace usbfluxd/utils.h \
-      --replace-fail PLIST_FORMAT_BINARY //PLIST_FORMAT_BINARY  \
-      --replace-fail PLIST_FORMAT_XML, NOT_PLIST_FORMAT_XML  
+      --replace-fail PLIST_FORMAT_BINARY //PLIST_FORMAT_BINARY \
+      --replace-fail PLIST_FORMAT_XML, NOT_PLIST_FORMAT_XML
   '';
 
   meta = with lib; {
