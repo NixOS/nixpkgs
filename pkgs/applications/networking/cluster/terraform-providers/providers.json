@@ -271,13 +271,13 @@
     "vendorHash": "sha256-6MKWpiDq4yI3mfIJyzEsWLa7gi0+DScI5jKcOcM6Qs0="
   },
   "cloudinit": {
-    "hash": "sha256-DnMI+HoarsOwtsK37UpKXziK3fR5NOXW4OyWvA6Wdh4=",
+    "hash": "sha256-RRvLQXgF/g+jIn8hO+Ma/tNsRaZEETWu/jNqDADVYGI=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/cloudinit",
     "owner": "hashicorp",
     "repo": "terraform-provider-cloudinit",
-    "rev": "v2.3.5",
+    "rev": "v2.3.6",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-4TlCpBwXH0JNOPWRELVzUXOyFU9R8dkfZrUO86eu7Bw="
+    "vendorHash": "sha256-YdzNaMJcDiV194HiDBt+5RHw/BLn8H+wNcrpFSxqDOY="
   },
   "cloudscale": {
     "hash": "sha256-4RU1CD0WwLMd3NsnJWl2Smc8XBYlP9K8Iev16uqsetE=",
@@ -462,13 +462,13 @@
     "vendorHash": "sha256-ZbU2z7qUHPR7vDSflesSjgK7x3LYXVe/gnVsy19q6Bs="
   },
   "fortios": {
-    "hash": "sha256-BLibeS4u4tt7yRzkSVcmGLHqoRiQxUEaTu6wW5+yy6I=",
+    "hash": "sha256-N1GJNlvoy9TfI7S7TTnQyQkBdKz94cRT2Xza+gb7etw=",
     "homepage": "https://registry.terraform.io/providers/fortinetdev/fortios",
     "owner": "fortinetdev",
     "repo": "terraform-provider-fortios",
-    "rev": "1.21.1",
+    "rev": "1.22.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-Tgjrt90MSsHjX5UrgXLDTTxSos8OljLX+UgforwXIh0="
+    "vendorHash": "sha256-9BBBmuj7rEX5h3LEZzw7C7AtwvJgo7yEGReQ38lfE6U="
   },
   "gandi": {
     "hash": "sha256-fsCtmwyxkXfOtiZG27VEb010jglK35yr4EynnUWlFog=",
@@ -489,22 +489,22 @@
     "vendorHash": "sha256-d8XoZzo2XS/wAPvdODAfK31qT1c+EoTbWlzzgYPiwq4="
   },
   "github": {
-    "hash": "sha256-RD2yGXClIYBa+Gs0IunPXKm0f0d1iFCVZSKUzXhlJyc=",
+    "hash": "sha256-rmIoyGlkw2f56UwD0mfI5MiHPDFDuhtsoPmerIrJcGs=",
     "homepage": "https://registry.terraform.io/providers/integrations/github",
     "owner": "integrations",
     "repo": "terraform-provider-github",
-    "rev": "v6.5.0",
+    "rev": "v6.6.0",
     "spdx": "MIT",
     "vendorHash": null
   },
   "gitlab": {
-    "hash": "sha256-Fh1FYP5dBA7bJMOpYrASQC+3RMLx6O62ty+i0114fV4=",
+    "hash": "sha256-hl4IWZ2TdVaPze6jiFnokGSwFNYbQhNtVR+MTvFoc08=",
     "homepage": "https://registry.terraform.io/providers/gitlabhq/gitlab",
     "owner": "gitlabhq",
     "repo": "terraform-provider-gitlab",
-    "rev": "v17.8.0",
+    "rev": "v17.9.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-RoMknYUy73fiLrexhpM94qZ7l1F68o5/vfg8RXRtvHw="
+    "vendorHash": "sha256-VPJ0ekrGEzhIZ6ExrU5sLb2meFHT9cak53BO7z6BCC4="
   },
   "google": {
     "hash": "sha256-l3zmkCKI8qjYsQMXL38h00Mz/+PMS6OWjlh4qv89y2s=",
