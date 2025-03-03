@@ -6,6 +6,7 @@
   fetchFromGitHub,
   poetry-core,
   pytest-asyncio,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
   syrupy,
@@ -26,11 +27,6 @@ buildPythonPackage rec {
     hash = "sha256-bIeT+2iOXFf52ds5qLioUfUOpZ/vApdC+EiWjiXYwpg=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "--cov" ""
-  '';
-
   build-system = [ poetry-core ];
 
   dependencies = [
@@ -41,6 +37,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     aioresponses
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
     syrupy
   ];
