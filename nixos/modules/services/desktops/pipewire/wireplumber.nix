@@ -4,7 +4,7 @@ let
   inherit (builtins) concatMap;
   inherit (lib) maintainers;
   inherit (lib.attrsets) attrByPath mapAttrsToList;
-  inherit (lib.lists) flatten optional;
+  inherit (lib.lists) flatten optional optionals;
   inherit (lib.modules) mkIf;
   inherit (lib.options) literalExpression mkOption;
   inherit (lib.strings) concatStringsSep makeSearchPath;
@@ -204,6 +204,26 @@ in
           [wiki-filter-chain]: https://docs.pipewire.org/page_module_filter_chain.html
         '';
       };
+
+      alsaDisableSuspension = mkOption {
+        type = bool;
+        default = false;
+        description = ''
+          Disable the suspension of ALSA devices when they are not in use.
+
+          On some setups, one may get audio delay or audible pop/crack when starting playback,
+          or noise when no audio is playing.
+          This is caused by node suspension when inactive.
+          Disabling suspension can solve these issues.
+
+          Note that this only disables suspension for ALSA devices, not for Bluetooth devices.
+
+          See also:
+          - [Arch wiki PipeWire page - node suspension section][arch-wiki-pipewire-node-suspension]
+
+          [arch-wiki-pipewire-node-suspension]: https://wiki.archlinux.org/title/PipeWire#Noticeable_audio_delay_or_audible_pop/crack_when_starting_playback
+        '';
+      };
     };
   };
 
@@ -219,6 +239,20 @@ in
         }
       '';
 
+      alsaDisableSuspensionConfigPkg = mapConfigToFiles {
+        "51-disable-suspension" = {
+          "monitor.alsa.rules" = [
+            {
+              matches = [
+                { "node.name" = "~alsa_input.*"; } # Matches all sources
+                { "node.name" = "~alsa_output.*"; } # Matches all sinks
+              ];
+              actions.update-props."session.suspend-timeout-seconds" = 0;
+            }
+          ];
+        };
+      };
+
       extraConfigPkg = pkgs.buildEnv {
         name = "wireplumber-extra-config";
         paths = mapConfigToFiles cfg.extraConfig;
@@ -233,7 +267,8 @@ in
 
       configPackages = cfg.configPackages
         ++ [ extraConfigPkg extraScriptsPkg ]
-        ++ optional (!pwUsedForAudio) pwNotForAudioConfigPkg;
+        ++ optional (!pwUsedForAudio) pwNotForAudioConfigPkg
+        ++ optionals cfg.alsaDisableSuspension alsaDisableSuspensionConfigPkg;
 
       configs = pkgs.buildEnv {
         name = "wireplumber-configs";
