@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  callPackage,
   buildNpmPackage,
   fetchFromGitHub,
   esbuild,
@@ -19,7 +20,10 @@ let
     else
       throw "Unsupported system: ${stdenv.system}";
 
-  rescript-editor-analysis = callPackage ../../../applications/editors/vscode/extensions/chenglou92.rescript-vscode/rescript-editor-analysis.nix { inherit version; };
+  rescript-editor-analysis =
+    callPackage
+      ../../../applications/editors/vscode/extensions/chenglou92.rescript-vscode/rescript-editor-analysis.nix
+      { inherit version; };
 in
 buildNpmPackage rec {
   pname = "rescript-language-server";
@@ -35,6 +39,7 @@ buildNpmPackage rec {
   sourceRoot = "${src.name}/server";
   npmDepsHash = "sha256-Qi41qDJ0WR0QWw7guhuz1imT51SqI7mORGjNbmZWnio=";
 
+  strictDeps = true;
   nativeBuildInputs = [ esbuild ];
 
   # Tries to do funny things (install all packages for the entire repo) if you don't override it. This is just a copy paste
@@ -46,7 +51,7 @@ buildNpmPackage rec {
     mkdir analysis_binaries/${platformDir}
     cp ${lib.getExe rescript-editor-analysis} analysis_binaries/${platformDir}/rescript-editor-analysis.exe
 
-    # https://github.com/rescript-lang/rescript-vscode/blob/1e935ad0fd2257143f0c2497a737d4ea5e739273/package.json#L252
+    # https://github.com/rescript-lang/rescript-vscode/blob/79992f17373b6f6fc9af5b2e99ca16e5dbd27bf7/.github/workflows/ci.yml#L182-L183
     esbuild src/cli.ts --bundle --sourcemap --outfile=out/cli.js --format=cjs --platform=node --loader:.node=file --minify
 
     runHook postBuild
