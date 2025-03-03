@@ -11111,6 +11111,8 @@ self: super: with self; {
 
   pytorch3d = callPackage ../development/python-modules/pytorch3d { };
 
+  pytouchline-extended = callPackage ../development/python-modules/pytouchline-extended { };
+
   pytouchlinesl = callPackage ../development/python-modules/pytouchlinesl { };
 
   pyuca = callPackage ../development/python-modules/pyuca { };
