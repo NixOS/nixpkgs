@@ -75,7 +75,7 @@ self: super: builtins.intersectAttrs super {
       chmod +x "$out/bin/haskell-language-server"
       '';
     testToolDepends = [ self.cabal-install pkgs.git ];
-    testTarget = "func-test"; # wrapper test accesses internet
+    testTargets = [ "func-test" ]; # wrapper test accesses internet
     preCheck = ''
       export PATH=$PATH:$PWD/dist/build/haskell-language-server:$PWD/dist/build/haskell-language-server-wrapper
       export HOME=$TMPDIR
@@ -113,35 +113,11 @@ self: super: builtins.intersectAttrs super {
     '' + drv.preCheck or "";
   }) super.agda2lagda;
 
-  # - Disable scrypt support since the library used only works on x86 due to SSE2:
-  #   https://github.com/informatikr/scrypt/issues/8
-  # - Use crypton as the encryption backend. That override becomes obsolete with
-  #   3.1.* since cabal2nix picks crypton by default then.
-  password =
-    let
-      scryptSupported = pkgs.stdenv.hostPlatform.isx86;
-    in
-
-      lib.pipe
-        (super.password.override ({
-          cryptonite = self.crypton;
-        } // lib.optionalAttrs (!scryptSupported) {
-          scrypt = null;
-        }))
-        ([
-          (enableCabalFlag "crypton")
-          (disableCabalFlag "cryptonite")
-          # https://github.com/cdepillabout/password/pull/84
-          (appendPatch ./patches/password-3.0.4.0-scrypt-conditional.patch)
-          (overrideCabal (drv: {
-            # patch doesn't apply otherwise because of revisions
-            prePatch = drv.prePatch or "" + ''
-              ${pkgs.buildPackages.dos2unix}/bin/dos2unix *.cabal
-            '';
-          }))
-        ] ++ lib.optionals (!scryptSupported) [
-          (disableCabalFlag "scrypt")
-        ]);
+  # scrypt requires SSE2
+  password = super.password.override
+    (lib.optionalAttrs (!(lib.meta.availableOn pkgs.stdenv.hostPlatform self.scrypt)) {
+      scrypt = null;
+    });
 
   audacity = enableCabalFlag "buildExamples" (overrideCabal (drv: {
       executableHaskellDepends = [self.optparse-applicative self.soxlib];
@@ -215,31 +191,13 @@ self: super: builtins.intersectAttrs super {
       });
     in
     {
-      hledger = installHledgerExtraFiles "" super.hledger;
+      hledger = installHledgerExtraFiles "embeddedfiles" super.hledger;
       hledger-web = installHledgerExtraFiles "" (hledgerWebTestFix super.hledger-web);
       hledger-ui = installHledgerExtraFiles "" super.hledger-ui;
-
-      hledger_1_40 = installHledgerExtraFiles "embeddedfiles"
-        (doDistribute (super.hledger_1_40.override {
-          hledger-lib = self.hledger-lib_1_40;
-        }));
-      hledger-ui_1_40 = installHledgerExtraFiles ""
-        (doDistribute (super.hledger-ui_1_40.override {
-          hledger = self.hledger_1_40;
-          hledger-lib = self.hledger-lib_1_40;
-        }));
-      hledger-web_1_40 = installHledgerExtraFiles "" (hledgerWebTestFix
-        (doDistribute (super.hledger-web_1_40.override {
-          hledger = self.hledger_1_40;
-          hledger-lib = self.hledger-lib_1_40;
-        })));
     }
   ) hledger
     hledger-web
     hledger-ui
-    hledger_1_40
-    hledger-ui_1_40
-    hledger-web_1_40
     ;
 
   cufft = overrideCabal (drv: {
@@ -376,7 +334,7 @@ self: super: builtins.intersectAttrs super {
   digitalocean-kzs = dontCheck super.digitalocean-kzs;  # https://github.com/KazumaSATO/digitalocean-kzs/issues/1
   github-types = dontCheck super.github-types;          # http://hydra.cryp.to/build/1114046/nixlog/1/raw
   hadoop-rpc = dontCheck super.hadoop-rpc;              # http://hydra.cryp.to/build/527461/nixlog/2/raw
-  hjsonschema = overrideCabal (drv: { testTarget = "local"; }) super.hjsonschema;
+  hjsonschema = overrideCabal (drv: { testTargets = [ "local" ]; }) super.hjsonschema;
   marmalade-upload = dontCheck super.marmalade-upload;  # http://hydra.cryp.to/build/501904/nixlog/1/raw
   mongoDB = dontCheck super.mongoDB;
   network-transport-tcp = dontCheck super.network-transport-tcp;
@@ -640,7 +598,7 @@ self: super: builtins.intersectAttrs super {
     '';
   }) super.GLUT;
 
-  libsystemd-journal = doJailbreak (addExtraLibrary pkgs.systemd super.libsystemd-journal);
+  libsystemd-journal = addExtraLibrary pkgs.systemd super.libsystemd-journal;
 
   # does not specify tests in cabal file, instead has custom runTest cabal hook,
   # so cabal2nix will not detect test dependencies.
@@ -743,7 +701,7 @@ self: super: builtins.intersectAttrs super {
 
   # Not running the "example" test because it requires a binary from lsps test
   # suite which is not part of the output of lsp.
-  lsp-test = overrideCabal (old: { testTarget = "tests func-test"; }) super.lsp-test;
+  lsp-test = overrideCabal (old: { testTargets = [ "tests" "func-test" ]; }) super.lsp-test;
 
   # the test suite attempts to run the binaries built in this package
   # through $PATH but they aren't in $PATH
@@ -983,7 +941,6 @@ self: super: builtins.intersectAttrs super {
   # break infinite recursion with base-orphans
   primitive = dontCheck super.primitive;
   primitive_0_7_1_0 = dontCheck super.primitive_0_7_1_0;
-  primitive_0_9_0_0 = dontCheck super.primitive_0_9_0_0;
 
   cut-the-crap =
     let path = pkgs.lib.makeBinPath [ pkgs.ffmpeg pkgs.youtube-dl ];
@@ -995,8 +952,7 @@ self: super: builtins.intersectAttrs super {
     }) (addBuildTool pkgs.buildPackages.makeWrapper super.cut-the-crap);
 
   # Compiling the readme throws errors and has no purpose in nixpkgs
-  aeson-gadt-th =
-    disableCabalFlag "build-readme" (doJailbreak super.aeson-gadt-th);
+  aeson-gadt-th = disableCabalFlag "build-readme" super.aeson-gadt-th;
 
   # Fix compilation of Setup.hs by removing the module declaration.
   # See: https://github.com/tippenein/guid/issues/1
@@ -1108,7 +1064,7 @@ self: super: builtins.intersectAttrs super {
       substituteInPlace src/Nix/Diff/Types.hs \
         --replace "{-# OPTIONS_GHC -Wno-orphans #-}" "{-# OPTIONS_GHC -Wno-orphans -fconstraint-solver-iterations=0 #-}"
       '';
-  }) (doJailbreak (dontCheck super.nix-diff));
+  }) (dontCheck super.nix-diff);
 
   # mockery's tests depend on hspec-discover which dependso on mockery for its tests
   mockery = dontCheck super.mockery;
@@ -1305,7 +1261,7 @@ self: super: builtins.intersectAttrs super {
     )
     fourmolu
     fourmolu_0_15_0_0
-    fourmolu_0_16_2_0
+    fourmolu_0_17_0_0
     ;
 
   # Test suite needs to execute 'disco' binary
@@ -1318,7 +1274,7 @@ self: super: builtins.intersectAttrs super {
       "-p" "!/oeis/"
     ];
     # disco-examples needs network access
-    testTarget = "disco-tests";
+    testTargets = [ "disco-tests" ];
   }) super.disco;
 
   # Apply a patch which hardcodes the store path of graphviz instead of using
@@ -1347,12 +1303,22 @@ self: super: builtins.intersectAttrs super {
 
   # Test have become more fussy in >= 2.0. We need to have which available for
   # tests to succeed and the makefile no longer finds happy by itself.
-  happy_2_1_3 = overrideCabal (drv: {
-    buildTools = drv.buildTools or [ ] ++ [ pkgs.buildPackages.which ];
-    preCheck = drv.preCheck or "" + ''
-      export PATH="$PWD/dist/build/happy:$PATH"
-    '';
-  }) super.happy_2_1_3;
+  inherit
+    (lib.mapAttrs (_: overrideCabal (drv: {
+      buildTools = drv.buildTools or [ ] ++ [ pkgs.buildPackages.which ];
+      preCheck = drv.preCheck or "" + ''
+        export PATH="$PWD/dist/build/happy:$PATH"
+      '';
+    })) {
+      inherit (super) happy;
+      happy_2_1_5 = super.happy_2_1_5.override {
+        happy-lib = self.happy-lib_2_1_5;
+      };
+    })
+    happy_2_1_5
+    happy
+    ;
+
   # Additionally install documentation
   jacinda = overrideCabal (drv: {
     enableSeparateDocOutput = true;
@@ -1404,9 +1370,9 @@ self: super: builtins.intersectAttrs super {
   # is not commonly installed on systems, so we add it to PATH. Closure size
   # penalty is about 10MB at the time of writing this (2022-08-20).
   cabal-install = overrideCabal (old: {
-    executableToolDepends = [
+    buildTools = [
       pkgs.buildPackages.makeWrapper
-    ] ++ old.buildToolDepends or [];
+    ] ++ old.buildTools or [];
     postInstall = old.postInstall + ''
       mkdir -p "$out/share/man/man1"
       "$out/bin/cabal" man --raw > "$out/share/man/man1/cabal.1"
@@ -1467,14 +1433,21 @@ self: super: builtins.intersectAttrs super {
     __onlyPropagateKnownPkgConfigModules = true;
     }) super)
       gi-javascriptcore
+      gi-javascriptcore4
+      gi-javascriptcore6
       gi-webkit2webextension
-      gi-gtk_4_0_11
-      gi-gdk_4_0_9
+      gi-gtk_4_0_12
+      gi-gdk_4_0_10
+      gi-gdk4
+      gi-gdkx114
+      gi-gtk4
+      gi-gtksource5
       gi-gsk
       gi-adwaita
       sdl2-ttf
       sdl2
       dear-imgui
+      libremidi
       ;
 
     webkit2gtk3-javascriptcore = lib.pipe super.webkit2gtk3-javascriptcore [
@@ -1496,7 +1469,7 @@ self: super: builtins.intersectAttrs super {
         mpiImpl = pkgs.mpi.pname;
         disableUnused = with builtins; map disableCabalFlag (filter (n: n != mpiImpl) validMpi);
      in lib.pipe
-          (super.mpi-hs_0_7_3_1.override { ompi = pkgs.mpi; })
+          (super.mpi-hs.override { ompi = pkgs.mpi; })
           ( [ (addTestToolDepends [ pkgs.openssh pkgs.mpiCheckPhaseHook ]) ]
             ++ disableUnused
             ++ lib.optional (builtins.elem mpiImpl validMpi) (enableCabalFlag mpiImpl)
@@ -1509,13 +1482,27 @@ self: super: builtins.intersectAttrs super {
     mpi-hs-binary
     ;
 
-  postgresql-libpq = overrideCabal (drv: {
-    # Using use-pkg-config flag, because pg_config won't work when cross-compiling.
-    configureFlags = drv.configureFlags or [] ++ [ "-fuse-pkg-config" ];
-    # Move postgresql from SystemDepends to PkgconfigDepends
-    libraryPkgconfigDepends = drv.librarySystemDepends;
-    librarySystemDepends = [];
-  }) super.postgresql-libpq;
+  postgresql-libpq = lib.pipe super.postgresql-libpq [
+    (x: x.override { postgresql-libpq-configure = null; })
+    (appendConfigureFlag "-fuse-pkg-config")
+    (addBuildDepend self.postgresql-libpq-pkgconfig)
+  ];
+
+  postgresql-libpq-configure = overrideCabal
+    (drv: {
+      librarySystemDepends = (drv.librarySystemDepends or [ ]) ++ [ pkgs.libpq ];
+    })
+    super.postgresql-libpq-configure;
+
+  postgresql-libpq-pkgconfig = addPkgconfigDepend
+    # Building postgresql-libpq with PG17 in pkgsStatic works fine, but downstream can't link against it with:
+    # > /nix/store/7ir63m9sbqzflf3yfynn45i109w6a5iz-x86_64-unknown-linux-musl-binutils-2.43.1/bin/x86_64-unknown-linux-musl-ld:
+    #   /nix/store/vj7fwxbyvs15zrjbb9vafxbwmc05hl70-postgresql-static-x86_64-unknown-linux-musl-17.2-dev/lib/libpq.a(fe-connect.o):
+    #   in function `PQsetClientEncoding':
+    # > (.text.PQsetClientEncoding+0xdf): undefined reference to `pg_encoding_to_char'
+    # Falling back to v16 to work around it.
+    (if pkgs.stdenv.hostPlatform.isStatic then pkgs.postgresql_16 else pkgs.libpq)
+    super.postgresql-libpq-pkgconfig;
 
   # Test failure is related to a GHC implementation detail of primitives and doesn't
   # cause actual problems in dependent packages, see https://github.com/lehins/pvar/issues/4
@@ -1533,16 +1520,46 @@ self: super: builtins.intersectAttrs super {
   xmobar = enableSeparateBinOutput super.xmobar;
 
   # 2024-08-09: Disable some cabal-doctest tests pending further investigation.
-  doctest = overrideCabal (drv: {
-    testFlags = drv.testFlags or [] ++ [
-      # These tests require cabal-install
-      "--skip=/Cabal.Options"
-      "--skip=/Cabal.Paths/paths"
-    ];
-  }) super.doctest;
+  inherit (
+    lib.mapAttrs
+      (_: doctest: lib.pipe doctest [
+        (overrideCabal (drv: {
+          patches = drv.patches or [ ] ++ [
+            (pkgs.fetchpatch {
+              name = "doctest-0.23.0-ghc-9.12.patch";
+              url = "https://github.com/sol/doctest/commit/77373c5d84cd5e59ea86ec30b9ada874f50fad9e.patch";
+              sha256 = "07dx99lna17fni1ccbklijx1ckkf2p4kk9wvkwib0ihmra70zpn2";
+              includes = [ "test/**" ];
+            })
+          ];
+          testFlags = drv.testFlags or [] ++ [
+            # These tests require cabal-install (would cause infinite recursion)
+            "--skip=/Cabal.Options"
+            "--skip=/Cabal.Paths/paths"
+            "--skip=/Cabal.ReplOptions" # >= 0.23
+          ];
+        }))
+        doDistribute
+      ])
+      { inherit (super) doctest doctest_0_23_0; }
+  )
+    doctest
+    doctest_0_23_0;
 
   # tracked upstream: https://github.com/snapframework/openssl-streams/pull/11
   # certificate used only 1024 Bit RSA key and SHA-1, which is not allowed in OpenSSL 3.1+
   # security level 2
   openssl-streams = appendPatch ./patches/openssl-streams-cert.patch super.openssl-streams;
+
+  libtorch-ffi = appendConfigureFlags ([
+    "--extra-include-dirs=${lib.getDev pkgs.libtorch-bin}/include/torch/csrc/api/include"
+  ] ++ (lib.optionals pkgs.config.cudaSupport [ "-f" "cuda" ])
+  ) (super.libtorch-ffi.override ({
+    c10 = pkgs.libtorch-bin;
+    torch = pkgs.libtorch-bin;
+    torch_cpu = pkgs.libtorch-bin;
+  }));
+
+  # Upper bounds of text and bytestring too strict: https://github.com/zsedem/haskell-cpython/pull/24
+  cpython = doJailbreak super.cpython;
 }
