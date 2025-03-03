@@ -1,4 +1,4 @@
-{ stdenv, lib, pkgArches, makeSetupHook,
+{ stdenv, pkgsBuildHost, lib, pkgArches, makeSetupHook,
   pname, version, src, mingwGccs, monos, geckos, platforms,
   bison, flex, fontforge, makeWrapper, pkg-config,
   nixosTests,
@@ -54,6 +54,8 @@ lib.optionalAttrs (buildScript != null) { builder = buildScript; }
   inherit version src;
 
   pname = prevName + lib.optionalString (wineRelease != "stable" && wineRelease != "unstable") "-${wineRelease}";
+
+  outputs = [ "out" "tools" ];
 
   # Fixes "Compiler cannot create executables" building wineWow with mingwSupport
   strictDeps = true;
@@ -111,6 +113,8 @@ lib.optionalAttrs (buildScript != null) { builder = buildScript; }
   inherit patches;
 
   configureFlags = prevConfigFlags
+    ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "--with-wine-tools=${lib.getOutput "tools" pkgsBuildHost.wine64Packages.minimal}"
+    ++ lib.optional stdenv.hostPlatform.isStatic "--without-freetype" # no idea why, but it was failing with "checking for -lfreetype... <...>-musl-1.2.3-bin/bin/ldd: conftest: Not a valid dynamic program"
     ++ lib.optionals supportFlags.waylandSupport [ "--with-wayland" ]
     ++ lib.optionals supportFlags.vulkanSupport [ "--with-vulkan" ]
     ++ lib.optionals ((stdenv.hostPlatform.isDarwin && !supportFlags.xineramaSupport) || !supportFlags.x11Support) [ "--without-x" ];
@@ -140,7 +144,10 @@ lib.optionalAttrs (buildScript != null) { builder = buildScript; }
 
   postInstall = let
     links = prefix: pkg: "ln -s ${pkg} $out/${prefix}/${pkg.name}";
-  in lib.optionalString supportFlags.embedInstallers ''
+  in ''
+    mkdir -p "$tools"
+    cp -avT tools "$tools/tools" # not a typo; grep `/configure` for `$wine_cv_toolsdir`
+  '' + lib.optionalString supportFlags.embedInstallers ''
     mkdir -p $out/share/wine/gecko $out/share/wine/mono/
     ${lib.strings.concatStringsSep "\n"
           ((map (links "share/wine/gecko") geckos)
