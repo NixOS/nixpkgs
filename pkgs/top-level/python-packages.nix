@@ -11086,6 +11086,8 @@ self: super: with self; {
 
   python-pptx = callPackage ../development/python-modules/python-pptx { };
 
+  python-snoo = callPackage ../development/python-modules/python-snoo { };
+
   python-songpal = callPackage ../development/python-modules/python-songpal { };
 
   python-swiftclient = callPackage ../development/python-modules/python-swiftclient { };
