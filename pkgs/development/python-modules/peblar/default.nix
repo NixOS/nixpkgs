@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "peblar";
-  version = "0.3.3";
+  version = "0.4.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = "frenck";
     repo = "python-peblar";
     tag = "v${version}";
-    hash = "sha256-Shusro3KspiMg44DaFW8sOoiRB0mvEZXh4x6/AmJXgQ=";
+    hash = "sha256-cHb/VTaa7tkePqV7eLpDSxrnY8hAnjshwtwyWmJnt/4=";
   };
 
   postPatch = ''
