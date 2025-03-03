@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   pkg-config,
   qt5,
   cmake,
@@ -150,6 +151,12 @@ let
       patches = [
         ./disable-overlay-build.patch
         ./fix-plugin-copy.patch
+        # Can be removed before the next update of Mumble, as that fix was upstreamed
+        # fix version display in MacOS Finder
+        (fetchpatch {
+          url = "https://github.com/mumble-voip/mumble/commit/fbd21bd422367bed19f801bf278562f567cbb8b7.patch";
+          sha256 = "sha256-qFhC2j/cOWzAhs+KTccDIdcgFqfr4y4VLjHiK458Ucs=";
+        })
       ];
 
       postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
