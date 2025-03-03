@@ -4,6 +4,7 @@ import ../make-test-python.nix (
     lib,
 
     lts ? true,
+    appArmor ? false,
 
     allTests ? false,
 
@@ -138,6 +139,11 @@ import ../make-test-python.nix (
 
       networking.hostId = "01234567";
       networking.firewall.trustedInterfaces = [ "incusbr0" ];
+
+      security = {
+        apparmor.enable = appArmor;
+        dbus.apparmor = lib.optionalString appArmor "enabled";
+      };
 
       services.lvm = {
         boot.thin.enable = storageLvm;
