@@ -59,7 +59,7 @@ buildPythonPackage rec {
   ];
 
   # jaraco-path depends ob pyobjc
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   meta = {
     description = "Distutils as found in cpython";

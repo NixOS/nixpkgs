@@ -143,7 +143,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Probably broken MIME type detection on Darwin.
   # Tests fail with imprecise rendering on i686.
-  doCheck = !stdenv.isDarwin && !stdenv.hostPlatform.isi686;
+  doCheck = !stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isi686;
 
   env = {
     PKG_CONFIG_GDK_PIXBUF_2_0_GDK_PIXBUF_QUERY_LOADERS = writeShellScript "gdk-pixbuf-loader-loaders-wrapped" ''
