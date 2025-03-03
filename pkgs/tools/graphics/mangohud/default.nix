@@ -25,15 +25,19 @@
   wayland,
   nlohmann_json,
   spdlog,
+  libxkbcommon,
   glew,
   glfw,
   xorg,
+  x11Support ? true,
   nvidiaSupport ? true,
   gamescopeSupport ? true, # build mangoapp and mangohudctl
   lowerBitnessSupport ? stdenv.hostPlatform.isx86_64, # Support 32 bit on 64bit
   nix-update-script,
-  libxkbcommon,
 }:
+
+assert lib.assertMsg (nvidiaSupport -> x11Support) "nvidiaSupport requires x11Support";
+assert lib.assertMsg (gamescopeSupport -> x11Support) "gamescopeSupport requires x11Support";
 
 let
   # Derived from subprojects/imgui.wrap
@@ -162,6 +166,7 @@ stdenv.mkDerivation (finalAttrs: {
       "-Dwith_wayland=enabled"
       "-Duse_system_spdlog=enabled"
       "-Dtests=disabled" # amdgpu test segfaults in nix sandbox
+      (lib.mesonEnable "with_x11" x11Support)
       (lib.mesonEnable "with_xnvctrl" nvidiaSupport)
     ]
     ++ lib.optionals gamescopeSupport [
@@ -169,32 +174,34 @@ stdenv.mkDerivation (finalAttrs: {
       "-Dmangohudctl=true"
     ];
 
-  nativeBuildInputs = [
-    addDriverRunpath
-    glslang
-    mako
-    meson
-    ninja
-    pkg-config
-    unzip
+  nativeBuildInputs =
+    [
+      addDriverRunpath
+      glslang
+      mako
+      meson
+      ninja
+      pkg-config
+      unzip
 
-    # Only the headers are used from these packages
-    # The corresponding libraries are loaded at runtime from the app's runpath
-    libX11
-    wayland
-  ] ++ lib.optional nvidiaSupport libXNVCtrl;
+      # Only the headers are used from these packages
+      # The corresponding libraries are loaded at runtime from the app's runpath
+      wayland
+    ]
+    ++ lib.optional x11Support libX11
+    ++ lib.optional nvidiaSupport libXNVCtrl;
 
   buildInputs =
     [
       dbus
       nlohmann_json
       spdlog
+      libxkbcommon # required by x11 or wayland support
     ]
     ++ lib.optionals gamescopeSupport [
       glew
       glfw
       xorg.libXrandr
-      libxkbcommon
     ];
 
   doCheck = true;
