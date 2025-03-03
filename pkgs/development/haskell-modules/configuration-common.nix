@@ -2739,13 +2739,17 @@ self: super: {
     "--extra-include-dirs=${lib.getDev pkgs.opencascade-occt}/include/opencascade"
   ] super.opencascade-hs;
 
+  # https://github.com/haskell-grpc-native/http2-client/pull/95
   # https://github.com/haskell-grpc-native/http2-client/pull/96
-  http2-client = appendPatch
+  # https://github.com/haskell-grpc-native/http2-client/pull/97
+  # Apply patch for http2 >= 5.2, allow tls >= 2.1 and network >= 3.2
+  http2-client = appendPatches [
     (fetchpatch {
-      name = "http2-client-fix-build-with-http2-5.2.patch";
-      url = "https://github.com/haskell-grpc-native/http2-client/commit/952a57d1138dc31863a5e387dbda67cbdfcfd9f4.patch";
-      sha256 = "1q0n7338rjz7zl6xpw51lljp7xw1gl128s1d5877kfil3fc23npp";
-    }) super.http2-client;
+      name = "http2-client-fix-build-with-http2-5.3.patch";
+      url = "https://github.com/haskell-grpc-native/http2-client/pull/97/commits/95143e4843253913097838ab791ef39ddfd90b33.patch";
+      sha256 = "09205ziac59axld8v1cyxa9xl42srypaq8d1gf6y3qwpmrx3rgr9";
+    })
+  ] (doJailbreak super.http2-client);
 
   # 2025-01-23: jailbreak to allow base >= 4.17
   warp-systemd = doJailbreak super.warp-systemd;
