@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   autoreconfHook,
+  ncurses,
   nix-update-script,
   fetchpatch,
 }:
@@ -31,11 +32,28 @@ stdenv.mkDerivation rec {
       url = "https://github.com/troglobit/editline/commit/f444a316f5178b8e20fe31e7b2d979e651da077e.patch";
       hash = "sha256-m3jExTkPvE+ZBwHzf/A+ugzzfbLmeWYn726l7Po7f10=";
     })
+
+    # Pending editline new release:
+    #   https://github.com/troglobit/editline/pull/70
+    (fetchpatch {
+      name = "alt-left-and-alt-right.patch";
+      url = "https://github.com/troglobit/editline/commit/fb4d7268de024ed31ad2417f533cc0cbc2cd9b29.patch";
+      hash = "sha256-MDFe24lRDXKxEchACQXvC+Sw4sG0wpzBYdfe6UHa+iY=";
+    })
   ];
 
-  configureFlags = [ (lib.enableFeature true "sigstop") ];
+  configureFlags = [
+    # Enable SIGSTOP (Ctrl-Z) behavior.
+    (lib.enableFeature true "sigstop")
+    # Enable ANSI arrow keys.
+    (lib.enableFeature true "arrow-keys")
+    # Use termcap library to query terminal size.
+    (lib.enableFeature true "termcap")
+  ];
 
   nativeBuildInputs = [ autoreconfHook ];
+
+  propagatedBuildInputs = [ ncurses ];
 
   outputs = [
     "out"
@@ -48,7 +66,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://troglobit.com/projects/editline/";
-    description = "Readline() replacement for UNIX without termcap (ncurses)";
+    description = "Readline() replacement for UNIX";
     license = licenses.bsdOriginal;
     maintainers = with maintainers; [ oxalica ];
     platforms = platforms.all;
