@@ -15640,6 +15640,8 @@ self: super: with self; {
 
   sphinx-jinja = callPackage ../development/python-modules/sphinx-jinja { };
 
+  sphinx-markdown-builder = callPackage ../development/python-modules/sphinx-markdown-builder { };
+
   sphinx-markdown-parser = callPackage ../development/python-modules/sphinx-markdown-parser { };
 
   sphinx-markdown-tables = callPackage ../development/python-modules/sphinx-markdown-tables { };
