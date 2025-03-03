@@ -9,10 +9,10 @@ let
   buildComposerProjectOverride =
     finalAttrs:
     {
-      php ? toplevel.php,
-      composer ? toplevel.php.packages.composer,
+      php ? finalAttrs.php or toplevel.php,
+      composer ? finalAttrs.php.packages.composer or toplevel.php.packages.composer,
       composerVendor ? null,
-      vendorHash ? null,
+      vendorHash ? "",
       composerLock ? null,
       composerNoDev ? true,
       composerNoPlugins ? true,
@@ -35,6 +35,7 @@ let
         doCheck
         doInstallCheck
         ;
+
       nativeBuildInputs = nativeBuildInputs ++ [
         composer
         php
@@ -81,21 +82,18 @@ let
 
       composerVendor =
         args.composerVendor or (php.mkComposerVendor {
-          inherit
-            composer
-            composerLock
-            composerNoDev
-            composerNoPlugins
-            composerNoScripts
-            composerStrictValidation
-            vendorHash
-            ;
           inherit (finalAttrs)
-            patches
             pname
             src
             version
             ;
+          inherit php composer;
+          vendorHash = finalAttrs.vendorHash or vendorHash;
+          composerLock = finalAttrs.composerLock or composerLock;
+          composerNoDev = finalAttrs.composerNoDev or composerNoDev;
+          composerNoPlugins = finalAttrs.composerNoPlugins or composerNoPlugins;
+          composerNoScripts = finalAttrs.composerNoScripts or composerNoScripts;
+          composerStrictValidation = finalAttrs.composerStrictValidation or composerStrictValidation;
         });
 
       # Projects providing a lockfile from upstream can be automatically updated.
