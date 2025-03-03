@@ -4,12 +4,12 @@
   lib,
 }:
 let
-  version = "0.6.0";
+  version = "0.7.1";
   lovelyInjector = fetchFromGitHub {
     owner = "vgskye";
     repo = "lovely-injector";
-    rev = "3224915f4d47b557c34b5012797cf92d4cc629af";
-    hash = "sha256-fzkuuu6pmvqeJa7qlX8jhtCLC4oYRLUm1hqHTRiYEX8=";
+    rev = "5dde1ff2647683d3c7fed748146720c30cc69826";
+    hash = "sha256-j03/DOnLFfFYTwGGh+7BalS779jyg+p0UqtcTTyHgv4=";
   };
 in
 rustPlatform.buildRustPackage rec {
@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
   inherit version;
   src = lovelyInjector;
   useFetchCargoVendor = true;
-  cargoHash = "sha256-Mkmj+ENdUge1V1cVAQOV2K01sYKEyhxTse0f5o6H6Xc=";
+  cargoHash = "sha256-hHq26kSKcqEldxUb6bn1laTpKGFplP9/2uogsal8T5A=";
   # no tests
   doCheck = false;
   # lovely-injector depends on nightly rust features
