@@ -14,14 +14,14 @@
 
 rustPlatform.buildRustPackage.override
   { stdenv = if withMoldLinker then stdenvAdapters.useMoldLinker stdenv else stdenv; }
-  rec {
+  (finalAttrs: {
     pname = "cosmic-randr";
     version = "1.0.0-alpha.6";
 
     src = fetchFromGitHub {
       owner = "pop-os";
       repo = "cosmic-randr";
-      tag = "epoch-${version}";
+      tag = "epoch-${finalAttrs.version}";
       hash = "sha256-Sqxe+vKonsK9MmJGtbrZHE7frfrjkHXysm0WQt7WSU4=";
     };
 
@@ -70,4 +70,4 @@ rustPlatform.buildRustPackage.override
       platforms = lib.platforms.linux;
       mainProgram = "cosmic-randr";
     };
-  }
+  })
