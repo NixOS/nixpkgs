@@ -3,13 +3,10 @@
   buildNpmPackage,
   cargo,
   copyDesktopItems,
-  electron_32,
+  electron_34,
   fetchFromGitHub,
-  glib,
   gnome-keyring,
-  gtk3,
   jq,
-  libsecret,
   makeDesktopItem,
   makeWrapper,
   napi-rs-cli,
@@ -26,7 +23,7 @@
 let
   description = "Secure and free password manager for all of your devices";
   icon = "bitwarden";
-  electron = electron_32;
+  electron = electron_34;
 
   bitwardenDesktopNativeArch =
     {
@@ -39,13 +36,13 @@ let
 in
 buildNpmPackage rec {
   pname = "bitwarden-desktop";
-  version = "2024.12.0";
+  version = "2025.2.0";
 
   src = fetchFromGitHub {
     owner = "bitwarden";
     repo = "clients";
     rev = "desktop-v${version}";
-    hash = "sha256-1XzIrZOTcFEuY/WqPGcFESBAZOiFcHA4ZvGXhDM7a54=";
+    hash = "sha256-+RMeo+Kyum1WNm7citUe9Uk5yOtfhMPPlQRtnYL3Pj8=";
   };
 
   patches = [
@@ -69,8 +66,13 @@ buildNpmPackage rec {
     "--engine-strict"
     "--legacy-peer-deps"
   ];
+
+  npmRebuildFlags = [
+    # FIXME one of the esbuild versions fails to download @esbuild/linux-x64
+    "--ignore-scripts"
+  ];
   npmWorkspace = "apps/desktop";
-  npmDepsHash = "sha256-EtIcqbubAYN9I9wbw17oHiVshd3GtQayFtdgqWP7Pgg=";
+  npmDepsHash = "sha256-fYZJA6qV3mqxO2g+yxD0MWWQc9QYmdWJ7O7Vf88Qpbs=";
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
@@ -82,7 +84,7 @@ buildNpmPackage rec {
     ) patches;
     patchFlags = [ "-p4" ];
     sourceRoot = "${src.name}/${cargoRoot}";
-    hash = "sha256-Fh6pbmFof/qIhVETtBA1fGlC45fuu1n7g9hosvmfHZc=";
+    hash = "sha256-OldVFMI+rcGAbpDg7pHu/Lqbw5I6/+oXULteQ9mXiFc=";
   };
   cargoRoot = "apps/desktop/desktop_native";
 
@@ -98,12 +100,6 @@ buildNpmPackage rec {
     rustc
     rustPlatform.cargoCheckHook
     rustPlatform.cargoSetupHook
-  ];
-
-  buildInputs = [
-    glib
-    gtk3
-    libsecret
   ];
 
   preBuild = ''
@@ -171,7 +167,7 @@ buildNpmPackage rec {
     # This may break in the future but its better than copy-pasting it manually.
     mkdir -p $out/share/polkit-1/actions/
     pushd apps/desktop/src/key-management/biometrics
-    awk '/const polkitPolicy = `/{gsub(/^.*`/, ""); print; str=1; next} str{if (/`;/) str=0; gsub(/`;/, ""); print}' biometric.unix.main.ts > $out/share/polkit-1/actions/com.bitwarden.Bitwarden.policy
+    awk '/const polkitPolicy = `/{gsub(/^.*`/, ""); print; str=1; next} str{if (/`;/) str=0; gsub(/`;/, ""); print}' os-biometrics-linux.service.ts > $out/share/polkit-1/actions/com.bitwarden.Bitwarden.policy
     popd
 
     pushd apps/desktop/resources/icons

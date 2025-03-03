@@ -18,7 +18,7 @@
 
 let
   /*
-    dsniff's build system unconditionnaly wants static libraries and does not
+    dsniff's build system unconditionally wants static libraries and does not
     support multi output derivations. We do some overriding to give it
     satisfaction.
   */
@@ -71,8 +71,8 @@ stdenv.mkDerivation rec {
     domain = "salsa.debian.org";
     owner = "pkg-security-team";
     repo = "dsniff";
-    rev = "debian/${version}+debian-30";
-    sha256 = "1fk2k0sfdp5g27i11g0sbzm7al52raz5yr1aibzssnysv7l9xgzh";
+    rev = "debian/${version}+debian-34";
+    sha256 = "sha256-CY0+G09KZXtAwKuaYh5/qcmZjuNhdGis3zCG14hWtqw=";
     name = "dsniff.tar.gz";
   };
 

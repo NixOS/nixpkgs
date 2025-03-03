@@ -3,17 +3,17 @@
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
+  hatchling,
   setuptools,
   click,
-  urllib3,
   requests,
   packaging,
   dparse,
   ruamel-yaml,
   jinja2,
   marshmallow,
+  nltk,
   authlib,
-  rich,
   typer,
   pydantic,
   safety-schemas,
@@ -22,21 +22,19 @@
   psutil,
   git,
   pytestCheckHook,
+  tomli,
 }:
 
 buildPythonPackage rec {
   pname = "safety";
-  version = "3.12.13";
-
-  disabled = pythonOlder "3.7";
-
+  version = "3.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyupio";
     repo = "safety";
-    rev = "refs/tags/${version}";
-    hash = "sha256-pE1J2hoV4glB1PisDrhCE/4m0J1gEHz/Tp/GJE83lBc=";
+    tag = version;
+    hash = "sha256-u+ysRpWLHDQdNRBSlYXz80e/MCT4smmv/YX8sfIrn24=";
   };
 
   postPatch = ''
@@ -51,24 +49,23 @@ buildPythonPackage rec {
       --replace-fail "telemetry=True" "telemetry=False"
   '';
 
-  build-system = [ setuptools ];
+  build-system = [ hatchling ];
 
   pythonRelaxDeps = [
-    "filelock"
+    "pydantic"
   ];
 
   dependencies = [
     setuptools
     click
-    urllib3
     requests
     packaging
     dparse
     ruamel-yaml
     jinja2
     marshmallow
+    nltk
     authlib
-    rich
     typer
     pydantic
     safety-schemas
@@ -80,14 +77,16 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     git
     pytestCheckHook
+    tomli
   ];
 
-  # Disable tests depending on online services
   disabledTests = [
+    # Disable tests depending on online services
     "test_announcements_if_is_not_tty"
     "test_check_live"
     "test_debug_flag"
     "test_get_packages_licenses_without_api_key"
+    "test_init_project"
     "test_validate_with_basic_policy_file"
   ];
 
@@ -98,13 +97,13 @@ buildPythonPackage rec {
     export HOME=$(mktemp -d)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Checks installed dependencies for known vulnerabilities";
     mainProgram = "safety";
     homepage = "https://github.com/pyupio/safety";
     changelog = "https://github.com/pyupio/safety/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       thomasdesr
       dotlambda
     ];

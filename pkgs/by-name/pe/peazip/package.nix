@@ -2,14 +2,12 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  libsForQt5,
+  qt6Packages,
   fpc,
   lazarus,
   xorg,
-  libqt5pas,
   runCommand,
   _7zz,
-  archiver,
   brotli,
   upx,
   zpaq,
@@ -18,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "peazip";
-  version = "10.1.0";
+  version = "10.3.0";
 
   src = fetchFromGitHub {
     owner = "peazip";
     repo = pname;
     rev = version;
-    hash = "sha256-jYm3Ngwby75eUFM59tCQ7KWVywQOj+IzuPpATD+QhLo=";
+    hash = "sha256-rEddDg2sS/4+HK3UqPEWudWnwjMPNjA2+v4CKtFtZYM=";
   };
   sourceRoot = "${src.name}/peazip-sources";
 
@@ -34,15 +32,19 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [
-    libsForQt5.wrapQtAppsHook
+    qt6Packages.wrapQtAppsHook
     lazarus
     fpc
   ];
 
-  buildInputs = [
-    xorg.libX11
-    libqt5pas
-  ];
+  buildInputs =
+    [
+      xorg.libX11
+    ]
+    ++ (with qt6Packages; [
+      qtbase
+      libqtpas
+    ]);
 
   NIX_LDFLAGS = "--as-needed -rpath ${lib.makeLibraryPath buildInputs}";
 
@@ -51,8 +53,8 @@ stdenv.mkDerivation rec {
     export HOME=$(mktemp -d)
     pushd dev
     lazbuild --lazarusdir=${lazarus}/share/lazarus --add-package metadarkstyle/metadarkstyle.lpk
-    lazbuild --lazarusdir=${lazarus}/share/lazarus --widgetset=qt5 --build-all project_pea.lpi
-    lazbuild --lazarusdir=${lazarus}/share/lazarus --widgetset=qt5 --build-all project_peach.lpi
+    lazbuild --lazarusdir=${lazarus}/share/lazarus --widgetset=qt6 --build-all project_pea.lpi
+    lazbuild --lazarusdir=${lazarus}/share/lazarus --widgetset=qt6 --build-all project_peach.lpi
     popd
   '';
 
@@ -69,7 +71,6 @@ stdenv.mkDerivation rec {
     wrapProgram $out/lib/peazip/peazip --prefix PATH : ${
       lib.makeBinPath [
         _7z
-        archiver
         brotli
         upx
         zpaq
@@ -83,7 +84,13 @@ stdenv.mkDerivation rec {
     ln -s $out/share/peazip $out/lib/peazip/res/share
     cp -r res/share/{icons,lang,themes,presets} $out/share/peazip/
     # Install desktop entries
+    # We don't copy res/share/batch/freedesktop_integration/additional-desktop-files/*.desktop because they are just duplicates of res/share/batch/freedesktop_integration/*.desktop
     install -D res/share/batch/freedesktop_integration/*.desktop -t $out/share/applications
+    install -D res/share/batch/freedesktop_integration/KDE-servicemenus/KDE6-dolphin/*.desktop -t $out/share/kio/servicemenus
+    install -D res/share/batch/freedesktop_integration/KDE-servicemenus/KDE5-dolphin/*.desktop -t $out/share/kservices5/ServiceMenus
+    install -D res/share/batch/freedesktop_integration/KDE-servicemenus/KDE4-dolphin/*.desktop -t $out/share/kde4/services/ServiceMenus
+    install -D res/share/batch/freedesktop_integration/KDE-servicemenus/KDE3-konqueror/*.desktop -t $out/share/apps/konqueror/servicemenus
+
     # Install desktop entries's icons
     mkdir -p $out/share/icons/hicolor/256x256/apps
     ln -s $out/share/peazip/icons/peazip.png -t $out/share/icons/hicolor/256x256/apps/

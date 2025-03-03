@@ -18,16 +18,16 @@
 
 buildPythonPackage rec {
   pname = "pygmt";
-  version = "0.13.0";
+  version = "0.14.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "GenericMappingTools";
     repo = "pygmt";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-DO9KUlmt5EV+ioOSQ/BOcx4pP409f94dzmFwqK2MwMY=";
+    tag = "v${version}";
+    hash = "sha256-UwqkJxO+LbJz7BVbQnulxm4sMrKHoY3ayqLHfZy7Ji4=";
   };
 
   postPatch = ''
@@ -35,9 +35,9 @@ buildPythonPackage rec {
       --replace-fail "env.get(\"GMT_LIBRARY_PATH\")" "env.get(\"GMT_LIBRARY_PATH\", \"${gmt}/lib\")"
   '';
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     numpy
     netcdf4
     pandas
@@ -61,11 +61,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pygmt" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python interface for the Generic Mapping Tools";
     homepage = "https://github.com/GenericMappingTools/pygmt";
-    license = licenses.bsd3;
-    changelog = "https://github.com/GenericMappingTools/pygmt/releases/tag/v${version}";
-    maintainers = with maintainers; teams.geospatial.members;
+    license = lib.licenses.bsd3;
+    changelog = "https://github.com/GenericMappingTools/pygmt/releases/tag/${src.tag}";
+    maintainers = lib.teams.geospatial.members;
   };
 }

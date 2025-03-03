@@ -2,14 +2,14 @@
   appimageTools,
   fetchurl,
   version,
-  rev,
+  url,
+  hash,
   pname,
   meta,
 }:
 let
   src = fetchurl {
-    url = "https://releases.lmstudio.ai/linux/x86/${version}/${rev}/LM_Studio-${version}.AppImage";
-    hash = "sha256-ylUS6WrGavNW1WbroBnCLeeMBeBX41ontwKeQLug6/s=";
+    inherit url hash;
   };
 
   appimageContents = appimageTools.extractType2 { inherit pname version src; };

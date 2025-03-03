@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "OWASP";
     repo = "Amass";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-lhvU2fUnjQ+D+EZDRircNg/np4Ynk+HzOBgxT1L8BaQ=";
   };
 

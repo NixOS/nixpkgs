@@ -17,7 +17,6 @@
 
   openssl,
   webkitgtk_4_1,
-  apple-sdk_11,
 
   versionCheckHook,
   nix-update-script,
@@ -29,26 +28,27 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "gulbanana";
     repo = "gg";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-iQxPJgMxBtyindkNdQkehwPf7ZgWCI09PToqs2y1Hfw=";
   };
 
+  patches = [ ./native-tls.patch ];
   cargoRoot = "src-tauri";
   buildAndTestSubdir = "src-tauri";
 
   # FIXME: Switch back to cargoHash when https://github.com/NixOS/nixpkgs/issues/356811 is fixed
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit (finalAttrs) pname version src;
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs)
+      pname
+      version
+      src
+      patches
+      ;
+    # Tries to apply patches inside cargoRoot.
+    prePatch = "pushd ..";
+    postPatch = "popd";
     sourceRoot = "${finalAttrs.src.name}/${finalAttrs.cargoRoot}";
-    hash = "sha256-Lr/0GkWHvfDy/leRLxisuTzGPZYFo2beHq9UCl6XlDo=";
-
-    nativeBuildInputs = [ yq ];
-
-    # Work around https://github.com/rust-lang/cargo/issues/10801
-    # See https://discourse.nixos.org/t/rust-tauri-v2-error-no-matching-package-found/56751/4
-    preBuild = ''
-      tomlq -it '.dependencies.tauri.features += ["native-tls"]' Cargo.toml
-    '';
+    hash = "sha256-zEYU5l57VxVKKhoGfa77kT05vwoLyAu9eyt7C9dhAGM=";
   };
 
   npmDeps = fetchNpmDeps {
@@ -71,8 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     [ openssl ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       webkitgtk_4_1
-    ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin apple-sdk_11;
+    ];
 
   env.OPENSSL_NO_VENDOR = true;
 

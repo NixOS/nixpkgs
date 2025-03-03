@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
       name = "gcc-4.7.patch";
       url =
         "https://gitweb.gentoo.org/repo/gentoo.git/plain/dev-libs/"
-        + "dbus-c++/files/dbus-c++-0.9.0-gcc-4.7.patch";
+        + "dbus-c++/files/dbus-c++-0.9.0-gcc-4.7.patch?id=dec60bb6900d6ebdaaa6aa1dcb845b30b739f9b5";
       sha256 = "0rwcz9pvc13b3yfr0lkifnfz0vb5q6dg240bzgf37ni4s8rpc72g";
     })
     (fetchpatch {

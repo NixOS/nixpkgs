@@ -50,7 +50,7 @@
 
 let
   version = "2.40";
-  patchSuffix = "-36";
+  patchSuffix = "-66";
   sha256 = "sha256-GaiQF16SY9dI9ieZPeb0sa+c0h4D8IDkv7Oh+sECBaI=";
 in
 
@@ -68,8 +68,8 @@ stdenv.mkDerivation (
       [
         /*
           No tarballs for stable upstream branch, only https://sourceware.org/git/glibc.git and using git would complicate bootstrapping.
-           $ git fetch --all -p && git checkout origin/release/2.39/master && git describe
-           glibc-2.40-36-g7073164add
+           $ git fetch --all -p && git checkout origin/release/2.40/master && git describe
+           glibc-2.40-66-g7d4b6bcae9
            $ git show --minimal --reverse glibc-2.40.. ':!ADVISORIES' > 2.40-master.patch
 
           To compare the archive contents zdiff can be used.
@@ -199,9 +199,13 @@ stdenv.mkDerivation (
       ]
       ++ lib.optional withGd "--with-gd";
 
-    makeFlags = (args.makeFlags or [ ]) ++ [
-      "OBJCOPY=${stdenv.cc.targetPrefix}objcopy"
-    ];
+    makeFlags =
+      (args.makeFlags or [ ])
+      ++ [ "OBJCOPY=${stdenv.cc.targetPrefix}objcopy" ]
+      ++ lib.optionals (stdenv.cc.libc != null) [
+        "BUILD_LDFLAGS=-Wl,-rpath,${stdenv.cc.libc}/lib"
+        "OBJDUMP=${stdenv.cc.bintools.bintools}/bin/objdump"
+      ];
 
     postInstall =
       (args.postInstall or "")
@@ -283,12 +287,6 @@ stdenv.mkDerivation (
           cd ../build
 
           configureScript="`pwd`/../$sourceRoot/configure"
-
-          ${lib.optionalString (stdenv.cc.libc != null)
-            ''makeFlags="$makeFlags BUILD_LDFLAGS=-Wl,-rpath,${stdenv.cc.libc}/lib OBJDUMP=${stdenv.cc.bintools.bintools}/bin/objdump"''
-          }
-
-
         ''
         + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
           sed -i s/-lgcc_eh//g "../$sourceRoot/Makeconfig"

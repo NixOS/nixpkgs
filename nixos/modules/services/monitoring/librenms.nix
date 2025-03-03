@@ -344,9 +344,9 @@ in
       };
       description = ''
         Attrset of the LibreNMS configuration.
-        See https://docs.librenms.org/Support/Configuration/ for reference.
+        See <https://docs.librenms.org/Support/Configuration/> for reference.
         All possible options are listed [here](https://github.com/librenms/librenms/blob/master/misc/config_definitions.json).
-        See https://docs.librenms.org/Extensions/Authentication/ for setting other authentication methods.
+        See <https://docs.librenms.org/Extensions/Authentication/> for setting other authentication methods.
       '';
       default = { };
       example = {
@@ -361,7 +361,7 @@ in
       default = null;
       description = ''
         Additional config for LibreNMS that will be appended to the `config.php`. See
-        https://github.com/librenms/librenms/blob/master/misc/config_definitions.json
+        <https://github.com/librenms/librenms/blob/master/misc/config_definitions.json>
         for possible options. Useful if you want to use PHP-Functions in your config.
       '';
     };
@@ -603,11 +603,10 @@ in
         ''
       )
       + ''
-        # clear cache after update
+        # clear cache after update (before migrations)
         OLD_VERSION=$(cat ${cfg.dataDir}/version)
         if [[ $OLD_VERSION != "${package.version}" ]]; then
           rm -r ${cfg.dataDir}/cache/*
-          echo "${package.version}" > ${cfg.dataDir}/version
         fi
 
         # convert rrd files when the oneMinutePolling option is changed
@@ -619,6 +618,15 @@ in
 
         # migrate db
         ${artisanWrapper}/bin/librenms-artisan migrate --force --no-interaction
+
+        # regenerate cache after migrations after update
+        if [[ $OLD_VERSION != "${package.version}" ]]; then
+          ${artisanWrapper}/bin/librenms-artisan view:clear
+          ${artisanWrapper}/bin/librenms-artisan optimize:clear
+          ${artisanWrapper}/bin/librenms-artisan view:cache
+          ${artisanWrapper}/bin/librenms-artisan optimize
+          echo "${package.version}" > ${cfg.dataDir}/version
+        fi
       '';
     };
 

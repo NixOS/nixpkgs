@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "home-assistant-ecosystem";
     repo = "python-netdata";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-Et9T/+xonHSXjGQabgizW4pVBIYpTz0flud+vlfBNQE=";
   };
 

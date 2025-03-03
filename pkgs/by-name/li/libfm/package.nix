@@ -27,6 +27,13 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-pQQmMDBM+OXYz/nVZca9VG8ii0jJYBU+02ajTofK0eU=";
   };
 
+  patches = [
+    ./0001-fm-load-all-actions.patch
+    ./0002-exo-icon-view-key-press-event.patch
+    ./0003-ask-action-on-drop.patch
+    ./0004-create-icon-view.patch
+  ];
+
   nativeBuildInputs = [
     vala
     pkg-config

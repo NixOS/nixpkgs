@@ -21,7 +21,7 @@
   curl,
   libuuid,
   cups,
-  mesa,
+  libgbm,
   xz,
   libxkbcommon,
 }:

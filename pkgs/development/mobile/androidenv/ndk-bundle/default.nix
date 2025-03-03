@@ -8,7 +8,7 @@ let
   ]) + ":${platform-tools}/platform-tools";
 in
 deployAndroidPackage rec {
-  inherit package os;
+  inherit package;
   nativeBuildInputs = [ makeWrapper ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
   autoPatchelfIgnoreMissingDeps = [ "*" ];

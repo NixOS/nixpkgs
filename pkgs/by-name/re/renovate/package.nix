@@ -14,20 +14,15 @@
   yq-go,
 }:
 
-let
-  # fix build error, `no member named 'aligned_alloc'` on x86_64-darwin
-  # https://github.com/NixOS/nixpkgs/issues/272156#issuecomment-1839904283
-  stdenv' = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
-in
-stdenv'.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "renovate";
-  version = "39.65.2";
+  version = "39.153.1";
 
   src = fetchFromGitHub {
     owner = "renovatebot";
     repo = "renovate";
     tag = finalAttrs.version;
-    hash = "sha256-SDPyhyZtAw9jPqBGlRm3n8AkL2Y70Kf0AeXqMKCokDM=";
+    hash = "sha256-QKCUHwm6c50wTDFbmAqhh/tV8Lzx9HD4U9k7ke6t8OE=";
   };
 
   postPatch = ''
@@ -41,11 +36,11 @@ stdenv'.mkDerivation (finalAttrs: {
     pnpm_9.configHook
     python3
     yq-go
-  ] ++ lib.optional stdenv'.hostPlatform.isDarwin xcbuild;
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin xcbuild;
 
   pnpmDeps = pnpm_9.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-PwUmFy/RBptKsNSoV8rthJILVQqzPIJemnn0qO4ZQJA=";
+    hash = "sha256-MTkbRQnimEXP4XepJ+x2KGHtJTkqN9WBWvisAHH/j18=";
   };
 
   env.COREPACK_ENABLE_STRICT = 0;
@@ -58,7 +53,8 @@ stdenv'.mkDerivation (finalAttrs: {
       yq '.engines.node = "${nodejs.version}"' -i package.json
 
       pnpm build
-      pnpm prune --prod --ignore-scripts
+      find -name 'node_modules' -type d -exec rm -rf {} \; || true
+      pnpm install --offline --prod --ignore-scripts
     ''
     # The optional dependency re2 is not built by pnpm and needs to be built manually.
     # If re2 is not built, you will get an annoying warning when you run renovate.

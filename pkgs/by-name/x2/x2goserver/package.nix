@@ -143,7 +143,7 @@ stdenv.mkDerivation rec {
     done
     # We're patching @INC of the setgid wrapper, because we can't mix
     # the perl wrapper (for PERL5LIB) with security.wrappers (for setgid)
-    sed -ie "s,.\+bin/perl,#!${perl}/bin/perl -I ${perlEnv}/lib/perl5/site_perl," \
+    sed -i -e "s,.\+bin/perl,#!${perl}/bin/perl -I ${perlEnv}/lib/perl5/site_perl," \
       $out/lib/x2go/libx2go-server-db-sqlite3-wrapper.pl
   '';
 

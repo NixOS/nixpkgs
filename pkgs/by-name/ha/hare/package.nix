@@ -6,7 +6,7 @@
   scdoc,
   tzdata,
   mailcap,
-  substituteAll,
+  replaceVars,
   callPackage,
   enableCrossCompilation ? (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.is64bit),
   pkgsCross,
@@ -92,22 +92,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     # Replace FHS paths with nix store
-    (substituteAll {
-      src = ./001-tzdata.patch;
+    (replaceVars ./001-tzdata.patch {
       inherit tzdata;
     })
     # Don't build haredoc since it uses the build `hare` bin, which breaks
     # cross-compilation.
     ./002-dont-build-haredoc.patch
     # Hardcode harec and qbe.
-    (substituteAll {
-      src = ./003-hardcode-qbe-and-harec.patch;
+    (replaceVars ./003-hardcode-qbe-and-harec.patch {
       harec_bin = lib.getExe harec;
       qbe_bin = lib.getExe qbe;
     })
     # Use mailcap `/etc/mime.types` for Hare's mime module
-    (substituteAll {
-      src = ./004-use-mailcap-for-mimetypes.patch;
+    (replaceVars ./004-use-mailcap-for-mimetypes.patch {
       inherit mailcap;
     })
   ];

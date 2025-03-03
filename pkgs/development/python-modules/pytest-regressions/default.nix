@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   pythonOlder,
   matplotlib,
   numpy,
@@ -16,39 +16,25 @@
 
 buildPythonPackage rec {
   pname = "pytest-regressions";
-  version = "2.5.0";
-  format = "setuptools";
+  version = "2.7.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.9";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-gYx4hMHP87q/ie67AsvCezB4VrGYVCfCTVLLgSoQb9k=";
+  src = fetchFromGitHub {
+    owner = "ESSS";
+    repo = "pytest-regressions";
+    tag = "v${version}";
+    hash = "sha256-w9uwJJtikbjUtjpJJ3dEZ1zU0KbdyLaDuJWJr45WpCg=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [ setuptools-scm ];
 
   buildInputs = [ pytest ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     pytest-datadir
     pyyaml
-  ];
-
-  nativeCheckInputs = [
-    matplotlib
-    pandas
-    pytestCheckHook
-  ];
-
-  pytestFlagsArray = [
-    "-W"
-    "ignore::DeprecationWarning"
-  ];
-
-  pythonImportsCheck = [
-    "pytest_regressions"
-    "pytest_regressions.plugin"
   ];
 
   optional-dependencies = {
@@ -66,7 +52,24 @@ buildPythonPackage rec {
     ];
   };
 
+  nativeCheckInputs = [
+    matplotlib
+    pandas
+    pytestCheckHook
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+
+  pytestFlagsArray = [
+    "-W"
+    "ignore::DeprecationWarning"
+  ];
+
+  pythonImportsCheck = [
+    "pytest_regressions"
+    "pytest_regressions.plugin"
+  ];
+
   meta = with lib; {
+    changelog = "https://github.com/ESSS/pytest-regressions/blob/${src.tag}/CHANGELOG.rst";
     description = "Pytest fixtures to write regression tests";
     longDescription = ''
       pytest-regressions makes it simple to test general data, images,

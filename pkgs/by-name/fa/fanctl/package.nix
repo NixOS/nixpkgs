@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-XmawybmqRJ9Lj6ii8TZBFwqdQZVp0pOLN4xiSLkU/bw=";
   };
 
-  cargoHash = "sha256-tj00DXQEqC/8+3uzTMWcph+1fNTTVZLSJbV/5lLFkFs=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-CfONnF5gUnfPVmLSNzsk6xYEv70CnJfI3Gi9vCkrAcE=";
 
   meta = with lib; {
     description = "Replacement for fancontrol with more fine-grained control interface in its config file";

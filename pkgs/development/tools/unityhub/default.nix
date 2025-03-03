@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation rec {
   pname = "unityhub";
-  version = "3.10.0";
+  version = "3.11.1";
 
   src = fetchurl {
     url = "https://hub-dist.unity3d.com/artifactory/hub-debian-prod-local/pool/main/u/unity/unityhub_amd64/unityhub-amd64-${version}.deb";
-    sha256 = "sha256-9dm6tVQ5nsDC8X2clrT4cAl8jg4wLwcihE4bnFgdU+A=";
+    sha256 = "sha256-1JRV8hohI+UoNYtpuU3HChUOpOFT6ZWEak96s0NmSJU=";
   };
 
   nativeBuildInputs = [
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
         alsa-lib
         nss
         libdrm
-        mesa
+        libgbm
         nspr
         atk
         dbus

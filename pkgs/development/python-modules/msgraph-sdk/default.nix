@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "msgraph-sdk";
-  version = "1.14.0";
+  version = "1.22.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -25,8 +25,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "microsoftgraph";
     repo = "msgraph-sdk-python";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-qCrBd1RIIjVJQyWf7srdFHNQc8TYh3zDtq/nepbk6tE=";
+    tag = "v${version}";
+    hash = "sha256-zXt94Ti4xrhZO/QPPZmaPUBxDSsO1JeiWctD2ehrB4Y=";
   };
 
   build-system = [ flit-core ];
@@ -51,7 +51,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Microsoft Graph SDK for Python";
     homepage = "https://github.com/microsoftgraph/msgraph-sdk-python";
-    changelog = "https://github.com/microsoftgraph/msgraph-sdk-python/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/microsoftgraph/msgraph-sdk-python/blob/${src.tag}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "devops-kung-fu";
     repo = "bomber";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-q3x3duXc2++BvVul2a5fBTcPHWrOHpPOGHBUXL08syg=";
   };
 

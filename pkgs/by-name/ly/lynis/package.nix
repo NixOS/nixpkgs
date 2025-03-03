@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lynis";
-  version = "3.1.2";
+  version = "3.1.4";
 
   src = fetchFromGitHub {
     owner = "CISOfy";
     repo = pname;
     rev = version;
-    sha256 = "sha256-K3+E3ODXti88wGE3trxZYTKPe7tYfPI85C/5jXea2uw=";
+    sha256 = "sha256-OnEEdJGU7ma6f7aA6ihgixHWZGZDmx7nzqmJH3p+ijk=";
   };
 
   nativeBuildInputs = [

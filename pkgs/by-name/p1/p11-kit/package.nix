@@ -67,14 +67,6 @@ stdenv.mkDerivation rec {
     ))
   ];
 
-  ${
-    if stdenv.buildPlatform.isDarwin && stdenv.buildPlatform.isx86_64 then "mesonCheckFlags" else null
-  } =
-    [
-      # Tests regularly exceed the default timeout on `x86_64-darwin`.
-      "--timeout-multiplier=0"
-    ];
-
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   postPatch = ''
@@ -103,6 +95,11 @@ stdenv.mkDerivation rec {
       "https://github.com/p11-glue/p11-kit/releases/tag/${version}"
     ];
     platforms = platforms.all;
+    badPlatforms = [
+      # https://github.com/p11-glue/p11-kit/issues/355#issuecomment-778777141
+      lib.systems.inspect.platformPatterns.isStatic
+    ];
     license = licenses.bsd3;
+    mainProgram = "p11-kit";
   };
 }

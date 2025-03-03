@@ -23,7 +23,7 @@
   pango,
   xorgproto,
   librsvg,
-  testers,
+  versionCheckHook,
   nix-update-script,
   withX11 ? true,
   withWayland ? true,
@@ -31,13 +31,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dunst";
-  version = "1.12.0";
+  version = "1.12.1";
 
   src = fetchFromGitHub {
     owner = "dunst-project";
     repo = "dunst";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-rnR/AErsjsaOMM/aF8VXZHV8b8OiUMRCi8IFLT4/8Vo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-MC35UE6cA1xA1qaOppvHAjuevbl2z0Twct1G5Uv84pU=";
   };
 
   nativeBuildInputs = [
@@ -75,13 +75,16 @@ stdenv.mkDerivation (finalAttrs: {
     "man"
   ];
 
-  makeFlags = [
-    "PREFIX=$(out)"
-    "VERSION=$(version)"
-    "SYSCONFDIR=$(out)/etc"
-    "SERVICEDIR_DBUS=$(out)/share/dbus-1/services"
-    "SERVICEDIR_SYSTEMD=$(out)/lib/systemd/user"
-  ] ++ lib.optional (!withX11) "X11=0" ++ lib.optional (!withWayland) "WAYLAND=0";
+  makeFlags =
+    [
+      "PREFIX=$(out)"
+      "VERSION=$(version)"
+      "SYSCONFDIR=$(out)/etc"
+      "SERVICEDIR_DBUS=$(out)/share/dbus-1/services"
+      "SERVICEDIR_SYSTEMD=$(out)/lib/systemd/user"
+    ]
+    ++ lib.optional (!withX11) "X11=0"
+    ++ lib.optional (!withWayland) "WAYLAND=0";
 
   postInstall = ''
     wrapProgram $out/bin/dunst \
@@ -102,16 +105,20 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "jq" "${lib.getExe jq}"
   '';
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = [ "--version" ];
+  doInstallCheck = true;
+
   passthru = {
-    tests.version = testers.testVersion {
-      package = finalAttrs.finalPackage;
-    };
     updateScript = nix-update-script { };
   };
 
   meta = {
     description = "Lightweight and customizable notification daemon";
     homepage = "https://dunst-project.org/";
+    changelog = "https://github.com/dunst-project/dunst/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     mainProgram = "dunst";
     maintainers = with lib.maintainers; [

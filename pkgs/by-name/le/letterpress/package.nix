@@ -14,6 +14,7 @@
   ninja,
   pkg-config,
   python3Packages,
+  nix-update-script,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "letterpress";
@@ -67,6 +68,10 @@ python3Packages.buildPythonApplication rec {
   preFixup = ''
     makeWrapperArgs+=(''${gappsWrapperArgs[@]} --prefix PATH : ${lib.makeBinPath runtimeDeps})
   '';
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "Create beautiful ASCII art";

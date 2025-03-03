@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "openfst";
-  version = "1.8.3";
+  version = "1.8.4";
 
   src = fetchurl {
     url = "http://www.openfst.org/twiki/pub/FST/FstDownload/${pname}-${version}.tar.gz";
-    hash = "sha256-B3cUFZ1c8+OKgLbGZW08zCyLi2xQu0G7ZcX+wQeWv1M=";
+    hash = "sha256-qOu7bz2S0H5nFQBYdHJRjPyHy3m5plSlqKuy0OspgBY=";
   };
 
   configureFlags = [

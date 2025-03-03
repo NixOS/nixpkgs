@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "neffs";
     repo = "python-cometblue_lite";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-Cjd7PdZ2/neRr1jStDY5iJaGMJ/srnFmCea8aLNan6g=";
   };
 

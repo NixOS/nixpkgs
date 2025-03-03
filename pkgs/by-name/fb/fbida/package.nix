@@ -21,7 +21,7 @@
   libepoxy,
   pixman,
   poppler,
-  mesa,
+  libgbm,
   lirc,
 }:
 
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
     pixman
     poppler
     lirc
-    mesa
+    libgbm
   ];
 
   makeFlags = [

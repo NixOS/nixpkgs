@@ -11,7 +11,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Garmelon";
     repo = "PFERD";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     sha256 = "sha256-4+LlnGv/i9zDf+HeW86PJ6XsPMEkJ0JzhLr14MJ4WKM=";
   };
 

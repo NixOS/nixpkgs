@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.bsd2;
     mainProgram = "zck";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.unix;
   };
 })

@@ -1,8 +1,6 @@
 {
   lib,
   stdenv,
-  apple-sdk_11,
-  darwinMinVersionHook,
   glibcLocales,
   # The GraalVM derivation to use
   graalvmDrv,
@@ -35,8 +33,6 @@ let
   extraArgs = builtins.removeAttrs args [
     "lib"
     "stdenv"
-    "apple-sdk_11"
-    "darwinMinVersionHook"
     "glibcLocales"
     "jar"
     "dontUnpack"
@@ -58,11 +54,6 @@ stdenv.mkDerivation (
       graalvmDrv
       glibcLocales
       removeReferencesTo
-    ];
-
-    buildInputs = lib.optionals (stdenv.hostPlatform.isDarwin) [
-      apple-sdk_11
-      (darwinMinVersionHook "11.0")
     ];
 
     nativeImageBuildArgs = nativeImageBuildArgs ++ extraNativeImageBuildArgs ++ [ graalvmXmx ];

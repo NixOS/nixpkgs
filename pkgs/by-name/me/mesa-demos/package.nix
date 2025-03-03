@@ -7,6 +7,7 @@
   libGLU,
   libX11,
   libXext,
+  libgbm,
   mesa,
   meson,
   ninja,
@@ -47,7 +48,7 @@ stdenv.mkDerivation rec {
     libXext
     libGL
     libGLU
-    mesa
+    libgbm
     wayland
     wayland-protocols
     vulkan-loader

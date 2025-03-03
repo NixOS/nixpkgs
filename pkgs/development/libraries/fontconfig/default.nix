@@ -16,7 +16,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fontconfig";
-  version = "2.15.0";
+  version = "2.16.0";
 
   outputs = [
     "bin"
@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     url =
       with finalAttrs;
       "https://www.freedesktop.org/software/fontconfig/release/${pname}-${version}.tar.xz";
-    hash = "sha256-Y6BljQ4G4PqIYQZFK1jvBPIfWCAuoCqUw53g0zNdfA4=";
+    hash = "sha256-ajPcVVzJuosQyvdpWHjvE07rNtCvNmBB9jmx2ptu0iA=";
   };
 
   nativeBuildInputs = [
@@ -51,6 +51,9 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     # Requires networking.
     sed -i '/check_PROGRAMS += test-crbug1004254/d' test/Makefile.am
+
+    # Test causes error without patch shebangs.
+    patchShebangs doc/check-whitespace-in-args.py
   '';
 
   configureFlags =

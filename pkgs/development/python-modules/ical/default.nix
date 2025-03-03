@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "ical";
-  version = "8.2.0";
+  version = "9.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -25,8 +25,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "allenporter";
     repo = "ical";
-    rev = "refs/tags/${version}";
-    hash = "sha256-9mnyhDKcZTZAGRxojQN9I9ZAgBmsSSsBPzCMZO6Rl5k=";
+    tag = version;
+    hash = "sha256-uAk+VYrcifRkUBLcXjBPwxrOlo1EKQUnPjUmR7+9cVo=";
   };
 
   build-system = [ setuptools ];
@@ -51,7 +51,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library for handling iCalendar";
     homepage = "https://github.com/allenporter/ical";
-    changelog = "https://github.com/allenporter/ical/releases/tag/${version}";
+    changelog = "https://github.com/allenporter/ical/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [ dotlambda ];
   };

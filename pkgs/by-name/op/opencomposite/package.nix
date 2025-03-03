@@ -16,23 +16,25 @@
 
 stdenv.mkDerivation {
   pname = "opencomposite";
-  version = "0-unstable-2024-11-11";
+  version = "0-unstable-2025-02-08";
 
   src = fetchFromGitLab {
     owner = "znixian";
     repo = "OpenOVR";
-    rev = "34311dabf430d6051d7e97f6081842a5394d2a67";
+    rev = "175e3b3a5408ff120bd21036faa703deb57159fc";
     fetchSubmodules = true;
-    hash = "sha256-sjgnai7RJemIXuviXhW6+L/zioz7UePaOUh3mVteGww=";
+    hash = "sha256-kwu8eM/rQBcZfs91loh7QAB46a01F9n5Xm1DmMd53MQ=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+    python3
+  ];
 
   buildInputs = [
     glm
     jsoncpp
     libGL
-    python3
     vulkan-headers
     vulkan-loader
     xorg.libX11

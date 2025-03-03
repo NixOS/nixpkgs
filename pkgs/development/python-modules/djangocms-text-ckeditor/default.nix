@@ -44,7 +44,7 @@ buildPythonPackage rec {
   # Tests require module "djangocms-helper" which is not yet packaged
   doCheck = false;
 
-  pythonImportCheck = [ "djangocms_text_ckeditor" ];
+  pythonImportsCheck = [ "djangocms_text_ckeditor" ];
 
   meta = {
     description = "Text Plugin for django CMS using CKEditor 4";

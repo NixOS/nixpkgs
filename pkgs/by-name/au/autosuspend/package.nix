@@ -7,7 +7,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "autosuspend";
-  version = "7.0.3";
+  version = "7.1.0";
   pyproject = true;
 
   disabled = python3.pythonOlder "3.10";
@@ -15,8 +15,8 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "languitar";
     repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-ePQiP7NeRBPVHkd8rvbxno/NBX95e9d97F8TIazCUH4=";
+    tag = "v${version}";
+    hash = "sha256-Sug42L4D9lgtc7AWIOcgC+e9WCHfmqB4O1Gez/sR6jE=";
   };
 
   build-system = with python3.pkgs; [

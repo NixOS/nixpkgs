@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "async-upnp-client";
-  version = "0.41.0";
+  version = "0.43.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -31,11 +31,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "StevenLooman";
     repo = "async_upnp_client";
-    rev = "refs/tags/${version}";
-    hash = "sha256-36pMEyLnyl8PS8ZVt+yNdpJGAVpoWTxfTxr+WQw/Go8=";
+    tag = version;
+    hash = "sha256-oGnWo+QLSq2h6R4Iirwy9kE7U47PLYYSBMjx8/WWA0o=";
   };
 
-  pythonRelaxDeps = [ "defusedxml" ];
+  pythonRelaxDeps = [
+    "async-timeout"
+    "defusedxml"
+  ];
 
   build-system = [ setuptools ];
 

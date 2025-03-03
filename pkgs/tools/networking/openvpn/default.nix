@@ -15,6 +15,7 @@
   pkcs11Support ? false,
   pkcs11helper,
   nixosTests,
+  unixtools,
 }:
 
 let
@@ -22,14 +23,19 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "openvpn";
-  version = "2.6.12";
+  version = "2.6.13";
 
   src = fetchurl {
     url = "https://swupdate.openvpn.net/community/releases/openvpn-${finalAttrs.version}.tar.gz";
-    hash = "sha256-HGEP3etobjTxNnw0fgJ+QY4HUjoQ9NjOSiwq8vYaGSk=";
+    hash = "sha256-GvELhpIr18mYJ8wPFR3+loQze45evbOXU5FyhBrCSmo=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs =
+    [ pkg-config ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      unixtools.route
+      unixtools.ifconfig
+    ];
 
   buildInputs =
     [

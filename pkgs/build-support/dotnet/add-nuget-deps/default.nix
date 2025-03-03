@@ -3,7 +3,7 @@
   runtimeShell,
   nix,
   lib,
-  substituteAll,
+  replaceVarsWith,
   nuget-to-nix,
   nixfmt-rfc-style,
   nuget-to-json,
@@ -84,15 +84,16 @@ attrs
         let
           drv = builtins.unsafeDiscardOutputDependency fetch-drv.drvPath;
 
-          innerScript = substituteAll {
+          innerScript = replaceVarsWith {
             src = ./fetch-deps.sh;
             isExecutable = true;
-            inherit cacert;
-            binPath = lib.makeBinPath [
-              nuget-to-nix
-              nixfmt-rfc-style
-              nuget-to-json
-            ];
+            replacements = {
+              binPath = lib.makeBinPath [
+                nuget-to-nix
+                nixfmt-rfc-style
+                nuget-to-json
+              ];
+            };
           };
 
           defaultDepsFile =
@@ -114,7 +115,8 @@ attrs
 
           # this needs to be before TMPDIR is changed, so the output isn't deleted
           # if it uses mktemp
-          depsFile=$(realpath "''${1:-${lib.escapeShellArg defaultDepsFile}}")
+          ${lib.toShellVars { inherit defaultDepsFile; }}
+          depsFile=$(realpath "''${1:-$defaultDepsFile}")
 
           export TMPDIR
           TMPDIR=$(mktemp -d -t fetch-deps-${lib.escapeShellArg finalPackage.name}.XXXXXX)

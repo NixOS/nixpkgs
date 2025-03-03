@@ -8,6 +8,7 @@
   libadwaita,
   meson,
   ninja,
+  nix-update-script,
   pkg-config,
   poppler,
   stdenv,
@@ -26,6 +27,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-Jdsx5ZhujP0SgEtr4NMbXsTkMYrkQj7Vs+SSYziWpiw=";
   };
 
+  # Remove these patches after the version is bumped past 5.5.1
+  patches = [
+    ./document-Copy-using-SubprocessLauncher-instead-of-GFile-API.patch
+    ./vala-Solve-Vala-errors-at-C-compile-time.patch
+  ];
+
   nativeBuildInputs = [
     desktop-file-utils
     meson
@@ -42,6 +49,10 @@ stdenv.mkDerivation (finalAttrs: {
     libadwaita
     poppler
   ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     changelog = "https://github.com/Diego-Ivan/Paper-Clip/releases/tag/v${finalAttrs.version}";

@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "llama-index-multi-modal-llms-openai";
-  version = "0.4.0";
+  version = "0.4.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "llama_index_multi_modal_llms_openai";
     inherit version;
-    hash = "sha256-EcOsfi16zp283ZpmLye8pf786YxWgquv+33QHVl3Zlg=";
+    hash = "sha256-XmylQGnT0YwvX3yjTzcg+6HRuRJkgq04/rDIWPT+tjs=";
   };
 
   build-system = [ poetry-core ];

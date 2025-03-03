@@ -5,15 +5,15 @@
 }:
 let
   srcFetchFromGitLab = {
-    hash = "sha256-q2FwkwzjanxTIxjMpCyMpzPt782uYZiWVdZ7Eev79oM=";
     owner = "trueNAHO";
     repo = "antora-ui-default";
-    rev = "83bf9bf5f22a6dee397f8b089eb0315c14a278b5";
+    rev = "11f563294248e9b64124b9289d639e349f2e9f5f";
+    hash = "sha256-gUQLLjnWZ1OsAe005IOPIfoM0qmjoevcUuGBRD3oHXA=";
   };
 in
 stdenvNoCC.mkDerivation {
   pname = "antora-ui-default";
-  version = "0";
+  version = "0-unstable-2024-12-26";
 
   # The UI bundle is fetched from lib.maintainers.naho's antora-ui-default fork
   # for the following reasons:
@@ -37,7 +37,7 @@ stdenvNoCC.mkDerivation {
   #
   # For reference, the UI bundle from [3] is 300K large.
   #
-  # [3]: https://gitlab.com/trueNAHO/antora-ui-default/-/commit/83bf9bf5f22a6dee397f8b089eb0315c14a278b5
+  # [3]: https://gitlab.com/trueNAHO/antora-ui-default/-/commit/11f563294248e9b64124b9289d639e349f2e9f5f
   src = fetchFromGitLab srcFetchFromGitLab;
 
   phases = [ "installPhase" ];

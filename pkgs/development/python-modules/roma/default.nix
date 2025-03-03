@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "naver";
     repo = "roma";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-DuQjnHoZKQF/xnFMYb0OXhycsRcK4oHoocq6o+NoGRs=";
   };
 

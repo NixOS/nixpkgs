@@ -30,15 +30,20 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ pkg-config ];
+  strictDeps = true;
+
+  nativeBuildInputs = [
+    gengetopt
+    help2man
+    pkg-config
+    which
+  ];
+
   buildInputs = [
     json_c
     openssl
     check
     file
-    help2man
-    which
-    gengetopt
   ];
 
   meta = with lib; {

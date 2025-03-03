@@ -1,8 +1,8 @@
 {
+  stdenv,
   mkXfceDerivation,
   lib,
-  gobject-introspection,
-  vala,
+  perl,
   libICE,
   libSM,
   libepoxy,
@@ -12,6 +12,12 @@
   xfconf,
   gtk3,
   libxfce4util,
+  withIntrospection ?
+    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
+    && stdenv.hostPlatform.emulatorAvailable buildPackages,
+  buildPackages,
+  gobject-introspection,
+  vala,
 }:
 
 mkXfceDerivation {
@@ -21,10 +27,14 @@ mkXfceDerivation {
 
   sha256 = "sha256-M+OapPHQ/WxlkUzHPx+ELstVyGoZanCxCL0N8hDWSN8=";
 
-  nativeBuildInputs = [
-    gobject-introspection
-    vala
-  ];
+  nativeBuildInputs =
+    [
+      perl
+    ]
+    ++ lib.optionals withIntrospection [
+      gobject-introspection
+      vala # vala bindings require GObject introspection
+    ];
 
   buildInputs = [
     libICE

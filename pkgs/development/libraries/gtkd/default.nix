@@ -11,7 +11,6 @@
   glib,
   gtk3,
   gtksourceview4,
-  libgda,
   libpeas,
   pango,
   pkg-config,
@@ -46,7 +45,6 @@ stdenv.mkDerivation rec {
     gst-plugins-base
     gtk3
     gtksourceview4
-    libgda
     libpeas
     librsvg
     pango

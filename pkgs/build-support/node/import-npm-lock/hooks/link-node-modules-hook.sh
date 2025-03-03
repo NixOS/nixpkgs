@@ -7,7 +7,7 @@ linkNodeModulesHook() {
     fi
 
     @nodejs@ @script@ @storePrefix@ "${npmDeps}/node_modules"
-    if test -f node_modules/.bin; then
+    if test -d node_modules/.bin; then
         export PATH=$(readlink -f node_modules/.bin):$PATH
     fi
 

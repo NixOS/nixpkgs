@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "mmarkdown";
     repo = "mmark";
-    # The tag has an outdated version number and fails the versio ntest
+    # The tag has an outdated version number and fails the version ntest
     # The pinned revision includes one extra commit that fixes the issue
     # rev = "v${version}";
     rev = "158e9cca0280c58e205cb69b02bf33d7d826915e";

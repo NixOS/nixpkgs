@@ -53,6 +53,7 @@
   libjpeg,
   libjxl,
   libmysqlclient,
+  libpq,
   libpng,
   libspatialite,
   libtiff,
@@ -60,13 +61,12 @@
   libxml2,
   lz4,
   netcdf,
-  openexr,
+  openexr_3,
   openjpeg,
   openssl,
   pcre2,
   pkg-config,
   poppler,
-  postgresql,
   proj,
   python3,
   qhull,
@@ -83,13 +83,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gdal" + lib.optionalString useMinimalFeatures "-minimal";
-  version = "3.10.0";
+  version = "3.10.2";
 
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "gdal";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-pb2xKTmJB7U1jIG80ENmZrR7vFw6YDoees43u/JhU3Y=";
+    hash = "sha256-PanWqieJU1opR8iAwGsAeAt5cPXNOkwT5E6D6xPNCWs=";
   };
 
   nativeBuildInputs =
@@ -153,7 +153,7 @@ stdenv.mkDerivation (finalAttrs: {
         libhwy
       ];
       mysqlDeps = lib.optionals useMysql [ libmysqlclient ];
-      postgresDeps = lib.optionals usePostgres [ postgresql ];
+      postgresDeps = lib.optionals usePostgres [ libpq ];
       popplerDeps = lib.optionals usePoppler [ poppler ];
       arrowDeps = lib.optionals useArrow [ arrow-cpp ];
       hdfDeps = lib.optionals useHDF [
@@ -167,7 +167,7 @@ stdenv.mkDerivation (finalAttrs: {
       nonDarwinDeps = lib.optionals (!stdenv.hostPlatform.isDarwin) (
         [
           # tests for formats enabled by these packages fail on macos
-          openexr
+          openexr_3
           xercesc
         ]
         ++ arrowDeps
@@ -189,7 +189,7 @@ stdenv.mkDerivation (finalAttrs: {
       json_c
       lerc
       xz
-      (libxml2.override { enableHttp = true; })
+      libxml2
       lz4
       openjpeg
       openssl

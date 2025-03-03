@@ -5,8 +5,6 @@
   pkg-config,
   oniguruma,
   stdenv,
-  apple-sdk_11,
-  darwinMinVersionHook,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -20,20 +18,16 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-FeQPf9sCEqypvB8VrGa1nnXmxlqo6K4fpLkJakbysvI=";
   };
 
-  cargoHash = "sha256-5TvJ8h/kmXG9G7dl5/gIYhVgvmqmm24BmOJzdKVJ+uY=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-Cciop3vwRbK3JCUx+SBdIv5Ix/15p6/SmHR8ZVb6LSM=";
 
   nativeBuildInputs = [
     pkg-config
   ];
 
-  buildInputs =
-    [
-      oniguruma
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_11
-      (darwinMinVersionHook "10.13")
-    ];
+  buildInputs = [
+    oniguruma
+  ];
 
   env = {
     RUSTONIG_SYSTEM_LIBONIG = true;

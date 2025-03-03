@@ -21,7 +21,7 @@ buildDotnetModule rec {
   src = fetchFromGitHub {
     owner = "NickvisionApps";
     repo = "Cavalier";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-SFhEKtYrlnkbLMnxU4Uf4jnFsw0MJHstgZgLLnGC2d8=";
   };
 

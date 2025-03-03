@@ -678,6 +678,15 @@ runTests {
     ("%20%3F%26%3D%23%2B%25%21%3C%3E%23%22%7B%7D%7C%5C%5E%5B%5D%60%09%3A%2F%40%24%27%28%29%2A%2C%3B" == strings.escapeURL " ?&=#+%!<>#\"{}|\\^[]`\t:/@$'()*,;")
   ];
 
+  testToSentenceCase = {
+    expr = strings.toSentenceCase "hello world";
+    expected = "Hello world";
+  };
+
+  testToSentenceCasePath = testingThrow (
+    strings.toSentenceCase ./.
+  );
+
   testToInt = testAllTrue [
     # Naive
     (123 == toInt "123")
@@ -852,6 +861,30 @@ runTests {
     ([ 1 2 ] == (take 2 [  1 2 3 ]))
     ([ 1 2 3 ] == (take 3 [  1 2 3 ]))
     ([ 1 2 3 ] == (take 4 [  1 2 3 ]))
+  ];
+
+  testDrop = let inherit (lib) drop; in testAllTrue [
+    # list index -1 is out of bounds
+    # ([ 1 2 3 ] == (drop (-1) [  1 2 3 ]))
+    (drop 0 [ 1 2 3 ] == [ 1 2 3 ])
+    (drop 1 [ 1 2 3 ] == [ 2 3 ])
+    (drop 2 [ 1 2 3 ] == [ 3 ])
+    (drop 3 [ 1 2 3 ] == [ ])
+    (drop 4 [ 1 2 3 ] == [ ])
+    (drop 0 [ ] == [ ])
+    (drop 1 [ ] == [ ])
+  ];
+
+  testDropEnd = let inherit (lib) dropEnd; in testAllTrue [
+    (dropEnd 0 [ 1 2 3 ] == [ 1 2 3 ])
+    (dropEnd 1 [ 1 2 3 ] == [ 1 2 ])
+    (dropEnd 2 [ 1 2 3 ] == [ 1 ])
+    (dropEnd 3 [ 1 2 3 ] == [ ])
+    (dropEnd 4 [ 1 2 3 ] == [ ])
+    (dropEnd 0 [ ] == [ ])
+    (dropEnd 1 [ ] == [ ])
+    (dropEnd (-1) [ 1 2 3 ] == [ 1 2 3 ])
+    (dropEnd (-1) [ ] == [ ])
   ];
 
   testListHasPrefixExample1 = {
@@ -1641,7 +1674,7 @@ runTests {
     expected  = "«foo»";
   };
 
-  testToPlist = {
+  testToPlistUnescaped = {
     expr = mapAttrs (const (generators.toPlist { })) {
       value = {
         nested.values = {
@@ -1657,10 +1690,34 @@ runTests {
           emptylist = [];
           attrs = { foo = null; "foo b/ar" = "baz"; };
           emptyattrs = {};
+          "keys are not <escaped>" = "and < neither are string values";
         };
       };
     };
-    expected = { value = builtins.readFile ./test-to-plist-expected.plist; };
+    expected = { value = builtins.readFile ./test-to-plist-unescaped-expected.plist; };
+  };
+
+  testToPlistEscaped = {
+    expr = mapAttrs (const (generators.toPlist { escape = true; })) {
+      value = {
+        nested.values = {
+          int = 42;
+          float = 0.1337;
+          bool = true;
+          emptystring = "";
+          string = "fn\${o}\"r\\d";
+          newlinestring = "\n";
+          path = /. + "/foo";
+          null_ = null;
+          list = [ 3 4 "test" ];
+          emptylist = [];
+          attrs = { foo = null; "foo b/ar" = "baz"; };
+          emptyattrs = {};
+          "keys are <escaped>" = "and < so are string values";
+        };
+      };
+    };
+    expected = { value = builtins.readFile ./test-to-plist-escaped-expected.plist; };
   };
 
   testToLuaEmptyAttrSet = {
@@ -2563,5 +2620,46 @@ runTests {
       directory = ./packages-from-directory/c;
     };
     expected = "c";
+  };
+
+  testMergeTypesSimple =
+    let
+      mergedType = types.mergeTypes types.str types.str;
+    in
+  {
+    expr = mergedType.name;
+    expected = "str";
+  };
+
+  testMergeTypesFail =
+    let
+      mergedType = types.mergeTypes types.str types.int;
+    in
+  {
+    expr = types.isType "merge-error" mergedType;
+    expected = true;
+  };
+
+  testMergeTypesEnum =
+    let
+      enumAB = lib.types.enum ["A" "B"];
+      enumXY = lib.types.enum ["X" "Y"];
+      merged = lib.types.mergeTypes enumAB enumXY; # -> enum [ "A" "B" "X" "Y" ]
+    in
+  {
+    expr = {
+      checkA = merged.check "A";
+      checkB = merged.check "B";
+      checkX = merged.check "X";
+      checkY = merged.check "Y";
+      checkC = merged.check "C";
+    };
+    expected = {
+      checkA = true;
+      checkB = true;
+      checkX = true;
+      checkY = true;
+      checkC = false;
+    };
   };
 }

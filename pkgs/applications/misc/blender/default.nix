@@ -88,6 +88,8 @@
 }:
 
 let
+  stdenv' = if cudaSupport then cudaPackages.backendStdenv else stdenv;
+
   embreeSupport =
     (!stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) || stdenv.hostPlatform.isDarwin;
   openImageDenoiseSupport =
@@ -110,15 +112,15 @@ let
   };
 in
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv'.mkDerivation (finalAttrs: {
   pname = "blender";
-  version = "4.3.1";
+  version = "4.3.2";
 
   srcs = [
     (fetchzip {
       name = "source";
       url = "https://download.blender.org/source/blender-${finalAttrs.version}.tar.xz";
-      hash = "sha256-+pRZ9ZSe656pdzR60oZ5ayGJ6gvzPOMKyATKA381RKg=";
+      hash = "sha256-LCU2JpQbvQ+W/jC+H8J2suh+X5sTLOG9TcE2EeHqVh4=";
     })
     (fetchgit {
       name = "assets";
@@ -179,6 +181,7 @@ stdenv.mkDerivation (finalAttrs: {
       "-DPYTHON_NUMPY_PATH=${python3Packages.numpy_1}/${python3.sitePackages}"
       "-DPYTHON_VERSION=${python3.pythonVersion}"
       "-DWITH_ALEMBIC=ON"
+      "-DWITH_ASSERT_ABORT=OFF"
       "-DWITH_BUILDINFO=OFF"
       "-DWITH_CODEC_FFMPEG=ON"
       "-DWITH_CODEC_SNDFILE=ON"

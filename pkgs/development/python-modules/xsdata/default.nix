@@ -3,7 +3,7 @@
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
   ruff,
   click,
   click-default-group,
@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "xsdata";
-  version = "24.11";
+  version = "24.12";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -27,13 +27,12 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tefra";
     repo = "xsdata";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-hyNC9VcWkGnOYm6BpXgH3RzmHTqBVmQoADvcEvgF6yg=";
+    tag = "v${version}";
+    hash = "sha256-ARq7QNwEtnXo0Q04CNWf3bAwyjl92YnFUp/Y51sgsLU=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./paths.patch;
+    (replaceVars ./paths.patch {
       ruff = lib.getExe ruff;
     })
   ];

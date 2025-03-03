@@ -48,6 +48,7 @@
   withSsl ? true,
   withSystemdJournal ? (stdenv.hostPlatform.isLinux),
   zlib,
+  withNdsudo ? false,
 }:
 let
   stdenv' = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
@@ -181,6 +182,12 @@ stdenv'.mkDerivation (finalAttrs: {
         rm -rf $out/share/netdata/web/index.html
         cp $out/share/netdata/web/v1/index.html $out/share/netdata/web/index.html
       ''}
+      ${lib.optionalString withNdsudo ''
+        mv $out/libexec/netdata/plugins.d/ndsudo \
+          $out/libexec/netdata/plugins.d/ndsudo.org
+
+        ln -s /var/lib/netdata/ndsudo/ndsudo $out/libexec/netdata/plugins.d/ndsudo
+      ''}
     '';
 
   preConfigure = ''
@@ -234,6 +241,7 @@ stdenv'.mkDerivation (finalAttrs: {
     wrapProgram $out/bin/netdata-claim.sh --prefix PATH : ${lib.makeBinPath [ openssl ]}
     wrapProgram $out/libexec/netdata/plugins.d/cgroup-network-helper.sh --prefix PATH : ${lib.makeBinPath [ bash ]}
     wrapProgram $out/bin/netdatacli --set NETDATA_PIPENAME /run/netdata/ipc
+    substituteInPlace $out/lib/netdata/conf.d/go.d/sensors.conf --replace-fail '/usr/bin/sensors' '${lm_sensors}/bin/sensors'
 
     # Time to cleanup the output directory.
     unlink $out/sbin
@@ -269,7 +277,7 @@ stdenv'.mkDerivation (finalAttrs: {
           license = lib.licenses.gpl3Only;
         };
       }).goModules;
-    inherit withIpmi withNetworkViewer;
+    inherit withIpmi withNetworkViewer withNdsudo;
     tests.netdata = nixosTests.netdata;
   };
 
@@ -280,6 +288,8 @@ stdenv'.mkDerivation (finalAttrs: {
     changelog = "https://github.com/netdata/netdata/releases/tag/v${version}";
     license = [ licenses.gpl3Plus ] ++ lib.optionals (withCloudUi) [ licenses.ncul1 ];
     platforms = platforms.unix;
-    maintainers = [ ];
+    maintainers = with maintainers; [
+      mkg20001
+    ];
   };
 })

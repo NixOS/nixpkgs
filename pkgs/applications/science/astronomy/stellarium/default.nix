@@ -28,20 +28,20 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "stellarium";
-  version = "24.3";
+  version = "24.4";
 
   src = fetchFromGitHub {
     owner = "Stellarium";
     repo = "stellarium";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-shDp2tCOynMiEuTSx4TEK8V9h3EsMDq+kkZFhldrinM=";
+    hash = "sha256-/xF9hXlPKhmpvpx9t1IgSqpvvqrGnd0xaf0QMvu+9IA=";
   };
 
   patches = [
-    # Compatibility with INDI 2.0 series from https://github.com/Stellarium/stellarium/pull/3269
+    # Fix indi headers from https://github.com/Stellarium/stellarium/pull/4025
     (fetchpatch {
-      url = "https://github.com/Stellarium/stellarium/commit/31fd7bebf33fa710ce53ac8375238a24758312bc.patch";
-      hash = "sha256-eJEqqitZgtV6noeCi8pDBYMVTFIVWXZU1fiEvoilX8o=";
+      url = "https://github.com/Stellarium/stellarium/commit/9669d64fb4104830412c6c6c2b45811075a92300.patch";
+      hash = "sha256-CXeghxxRIV7Filveg+3pNAWymUpUuGnylvt4e8THJ8A=";
     })
   ];
 
@@ -123,5 +123,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ kilianar ];
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })

@@ -2,6 +2,7 @@
   lib,
   fetchFromGitHub,
   fetchurl,
+  ocaml,
   buildDunePackage,
   gen,
   ppxlib,
@@ -74,7 +75,7 @@ buildDunePackage rec {
     ppx_expect
   ];
 
-  doCheck = true;
+  doCheck = !lib.versionAtLeast ocaml.version "5.3";
 
   dontStrip = true;
 

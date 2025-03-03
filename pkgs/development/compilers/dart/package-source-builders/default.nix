@@ -1,7 +1,9 @@
 { callPackage }:
 
 {
+  audiotags = callPackage ./audiotags { };
   file_picker = callPackage ./file_picker { };
+  flutter_discord_rpc = callPackage ./flutter_discord_rpc { };
   flutter_secure_storage_linux = callPackage ./flutter-secure-storage-linux { };
   flutter_volume_controller = callPackage ./flutter_volume_controller { };
   fvp = callPackage ./fvp { };

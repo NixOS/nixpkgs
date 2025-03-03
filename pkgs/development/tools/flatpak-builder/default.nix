@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  substituteAll,
+  replaceVars,
   nixosTests,
 
   docbook_xml_dtd_45,
@@ -65,8 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
     ./respect-xml-catalog-files-var.patch
 
     # Hardcode paths
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       brz = "${breezy}/bin/brz";
       cp = "${coreutils}/bin/cp";
       patch = "${patch}/bin/patch";
@@ -81,8 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
       euelfcompress = "${elfutils}/bin/eu-elfcompress";
     })
 
-    (substituteAll {
-      src = ./fix-test-paths.patch;
+    (replaceVars ./fix-test-paths.patch {
       inherit glibcLocales;
     })
     ./fix-test-prefix.patch

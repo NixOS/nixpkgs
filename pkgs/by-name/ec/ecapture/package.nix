@@ -16,18 +16,19 @@
   mariadb,
   openssl,
   bash,
+  zsh,
   nix-update-script,
 }:
 
 buildGoModule rec {
   pname = "ecapture";
-  version = "0.9.0";
+  version = "0.9.4";
 
   src = fetchFromGitHub {
     owner = "gojue";
     repo = "ecapture";
     tag = "v${version}";
-    hash = "sha256-ugUoeIrAElwnGcoX4ojnz/W4kmxgYMmjr1oqSoMyYng=";
+    hash = "sha256-94aZBsQG7xVX3mnE3z3bmTM9NUIG0/huov2OVZJmOe4=";
     fetchSubmodules = true;
   };
 
@@ -73,6 +74,12 @@ buildGoModule rec {
     substituteInPlace user/config/config_nspr_linux.go \
       --replace-fail '/usr/lib/firefox/libnspr4.so' '${lib.getLib nspr}/lib/libnspr4.so'
 
+    substituteInPlace user/config/config_zsh.go \
+      --replace-fail '/bin/zsh' '${lib.getExe zsh}'
+
+    substituteInPlace user/module/probe_zsh.go \
+      --replace-fail '/bin/zsh' '${lib.getExe zsh}'
+
     substituteInPlace cli/cmd/postgres.go \
       --replace-fail '/usr/bin/postgres' '${postgresql}/bin/postgres'
 
@@ -106,7 +113,7 @@ buildGoModule rec {
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
-  vendorHash = "sha256-A+0ASVHMzNcuLsP9F55hvGjflLg68p0ckj6kPbjdg4E=";
+  vendorHash = "sha256-8ilfqPt5Phuj5Uaf90+Ir/DFN27oW5Fd+Wsp34/EU9M=";
 
   passthru.updateScript = nix-update-script { };
 

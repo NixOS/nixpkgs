@@ -16,7 +16,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "g0ldencybersec";
     repo = "EasyEASM";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-/PhoH+5k63rJL1N3V3IL1TP1oacsBfGfVw/OueN9j8M=";
   };
 

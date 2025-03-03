@@ -1,7 +1,7 @@
-diff --git a/music_assistant/server/helpers/audio.py b/music_assistant/server/helpers/audio.py
-index 80310604..0a72bcfc 100644
---- a/music_assistant/server/helpers/audio.py
-+++ b/music_assistant/server/helpers/audio.py
+diff --git a/music_assistant/helpers/audio.py b/music_assistant/helpers/audio.py
+index dad3c5db..d1398d66 100644
+--- a/music_assistant/helpers/audio.py
++++ b/music_assistant/helpers/audio.py
 @@ -74,7 +74,7 @@ async def crossfade_pcm_parts(
          await outfile.write(fade_out_part)
      args = [
@@ -20,7 +20,7 @@ index 80310604..0a72bcfc 100644
      args += [
          "-acodec",
          pcm_format.content_type.name.lower(),
-@@ -812,7 +812,7 @@ async def get_file_stream(
+@@ -734,7 +734,7 @@ async def get_file_stream(
  async def check_audio_support() -> tuple[bool, bool, str]:
      """Check if ffmpeg is present (with/without libsoxr support)."""
      # check for FFmpeg presence
@@ -29,7 +29,7 @@ index 80310604..0a72bcfc 100644
      ffmpeg_present = returncode == 0 and "FFmpeg" in output.decode()
  
      # use globals as in-memory cache
-@@ -866,7 +866,7 @@ async def get_silence(
+@@ -789,7 +789,7 @@ async def get_silence(
          return
      # use ffmpeg for all other encodings
      args = [
@@ -38,11 +38,11 @@ index 80310604..0a72bcfc 100644
          "-hide_banner",
          "-loglevel",
          "quiet",
-diff --git a/music_assistant/server/helpers/ffmpeg.py b/music_assistant/server/helpers/ffmpeg.py
-index 0aaa9dcf..88cd9cdb 100644
---- a/music_assistant/server/helpers/ffmpeg.py
-+++ b/music_assistant/server/helpers/ffmpeg.py
-@@ -200,7 +200,7 @@ def get_ffmpeg_args(
+diff --git a/music_assistant/helpers/ffmpeg.py b/music_assistant/helpers/ffmpeg.py
+index 0405fc27..570f9157 100644
+--- a/music_assistant/helpers/ffmpeg.py
++++ b/music_assistant/helpers/ffmpeg.py
+@@ -213,7 +213,7 @@ def get_ffmpeg_args(  # noqa: PLR0915
  
      # generic args
      generic_args = [
@@ -51,11 +51,11 @@ index 0aaa9dcf..88cd9cdb 100644
          "-hide_banner",
          "-loglevel",
          loglevel,
-diff --git a/music_assistant/server/helpers/tags.py b/music_assistant/server/helpers/tags.py
-index c60ea526..162c4ab7 100644
---- a/music_assistant/server/helpers/tags.py
-+++ b/music_assistant/server/helpers/tags.py
-@@ -401,7 +401,7 @@ async def parse_tags(input_file: str, file_size: int | None = None) -> AudioTags
+diff --git a/music_assistant/helpers/tags.py b/music_assistant/helpers/tags.py
+index 55def74b..7c26e13d 100644
+--- a/music_assistant/helpers/tags.py
++++ b/music_assistant/helpers/tags.py
+@@ -387,7 +387,7 @@ async def parse_tags(input_file: str, file_size: int | None = None) -> AudioTags
      Input_file may be a (local) filename or URL accessible by ffmpeg.
      """
      args = (
@@ -64,7 +64,7 @@ index c60ea526..162c4ab7 100644
          "-hide_banner",
          "-loglevel",
          "fatal",
-@@ -462,7 +462,7 @@ async def get_embedded_image(input_file: str) -> bytes | None:
+@@ -448,7 +448,7 @@ async def get_embedded_image(input_file: str) -> bytes | None:
      Input_file may be a (local) filename or URL accessible by ffmpeg.
      """
      args = (

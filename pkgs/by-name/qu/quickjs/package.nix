@@ -122,7 +122,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       stesie
-      AndersonTorres
     ];
     mainProgram = "qjs";
     platforms = lib.platforms.all;

@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  substituteAll,
+  replaceVars,
   autoreconfHook,
   pkg-config,
   fetchurl,
@@ -34,9 +34,10 @@ stdenv.mkDerivation {
   strictDeps = true;
 
   patches = [
-    (substituteAll {
-      src = ./fix-cli-paths.patch;
+    (replaceVars ./fix-cli-paths.patch {
       inherit dropboxd;
+      # patch context
+      DESKTOP_FILE_DIR = null;
     })
   ];
 

@@ -271,6 +271,7 @@ import ./make-test-python.nix (
         pleroma.succeed("provision-db")
         pleroma.wait_for_file("/var/lib/pleroma")
         pleroma.succeed("provision-secrets")
+        pleroma.systemctl("restart pleroma-migrations.service")
         pleroma.systemctl("restart pleroma.service")
         pleroma.wait_for_unit("pleroma.service")
         pleroma.succeed("provision-user")

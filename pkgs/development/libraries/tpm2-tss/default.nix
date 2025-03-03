@@ -18,6 +18,7 @@
   procps,
   which,
   libuuid,
+  libtpms,
 }:
 let
   # Avoid a circular dependency on Linux systems (systemd depends on tpm2-tss,
@@ -61,6 +62,7 @@ stdenv.mkDerivation rec {
       libgcrypt
       uthash
       libuuid
+      libtpms
     ]
     # cmocka is checked in the configure script
     # when unit and/or integration testing is enabled
@@ -68,7 +70,7 @@ stdenv.mkDerivation rec {
     # when tests are not run
     ++ lib.optional doInstallCheck cmocka;
 
-  nativeInstallCheckInputs = [
+  nativeInstallCheckInputs = lib.optionals doInstallCheck [
     cmocka
     which
     openssl
@@ -99,20 +101,43 @@ stdenv.mkDerivation rec {
     ./no-shadow.patch
   ];
 
-  postPatch = ''
-    patchShebangs script
-    substituteInPlace src/tss2-tcti/tctildr-dl.c \
-      --replace '@PREFIX@' $out/lib/
-    substituteInPlace ./test/unit/tctildr-dl.c \
-      --replace '@PREFIX@' $out/lib/
-    substituteInPlace ./bootstrap \
-      --replace 'git describe --tags --always --dirty' 'echo "${version}"'
-  '';
+  postPatch =
+    ''
+      patchShebangs script
+      substituteInPlace src/tss2-tcti/tctildr-dl.c \
+        --replace-fail '@PREFIX@' $out/lib/
+      substituteInPlace ./test/unit/tctildr-dl.c \
+        --replace-fail '@PREFIX@' $out/lib/
+      substituteInPlace ./bootstrap \
+        --replace-fail 'git describe --tags --always --dirty' 'echo "${version}"'
+      for src in src/tss2-tcti/tcti-libtpms.c test/unit/tcti-libtpms.c; do
+        substituteInPlace "$src" \
+          --replace-fail '"libtpms.so"' '"${libtpms.out}/lib/libtpms.so"' \
+          --replace-fail '"libtpms.so.0"' '"${libtpms.out}/lib/libtpms.so.0"'
+      done
+    ''
+    # tcti tests rely on mocking function calls, which appears not to be supported
+    # on clang
+    + lib.optionalString stdenv.cc.isClang ''
+      sed -i '/TESTS_UNIT / {
+        /test\/unit\/tcti-swtpm/d;
+        /test\/unit\/tcti-mssim/d;
+        /test\/unit\/tcti-device/d
+      }' Makefile-test.am
+    '';
 
-  configureFlags = lib.optionals doInstallCheck [
-    "--enable-unit"
-    "--enable-integration"
-  ];
+  configureFlags =
+    lib.optionals doInstallCheck [
+      "--enable-unit"
+      "--enable-integration"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # sys/prctl.h required
+      "--disable-tcti-cmd"
+      # uchar.h required
+      "--disable-fapi"
+      "--disable-policy"
+    ];
 
   postInstall = ''
     # Do not install the upstream udev rules, they rely on specific
@@ -121,7 +146,11 @@ stdenv.mkDerivation rec {
   '';
 
   doCheck = false;
-  doInstallCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+  doInstallCheck =
+    stdenv.buildPlatform.canExecute stdenv.hostPlatform
+    && !stdenv.hostPlatform.isDarwin
+    # Tests rely on mocking, which can't work with static libs.
+    && !stdenv.hostPlatform.isStatic;
   # Since we rewrote the load path in the dynamic loader for the TCTI
   # The various tcti implementation should be placed in their target directory
   # before we could run tests, so we make turn checkPhase into installCheckPhase
@@ -131,7 +160,7 @@ stdenv.mkDerivation rec {
     description = "OSS implementation of the TCG TPM2 Software Stack (TSS2)";
     homepage = "https://github.com/tpm2-software/tpm2-tss";
     license = licenses.bsd2;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ baloo ];
   };
 }

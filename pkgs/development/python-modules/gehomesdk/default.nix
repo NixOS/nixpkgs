@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "gehomesdk";
-  version = "0.5.30";
+  version = "2025.2.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-yBIj74n3XHPTTZRHGMPSOKVOrAsJFG70zGGIKS06N3k=";
+    hash = "sha256-c2WrY/Db2D0x+jDszDkojBKAZmwGNQnXXfSrkoSjs3w=";
   };
 
   build-system = [ setuptools ];

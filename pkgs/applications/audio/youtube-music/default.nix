@@ -13,18 +13,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "youtube-music";
-  version = "3.6.2";
+  version = "3.7.4";
 
   src = fetchFromGitHub {
     owner = "th-ch";
     repo = "youtube-music";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-S13f3vGMQJvpJbdfUstJlA8MfY5Q1efRA7QcPXYvhMI=";
+    hash = "sha256-qzvfYxM5mxxujWE0SDUapmN+Px9NkP58e1UeLEtZ7bc=";
   };
 
   pnpmDeps = pnpm.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-brHNp19BEYzgxhdNnn7n1GYhBdyi3S/2VqvKWXmKGX8=";
+    hash = "sha256-guD1yWFd+uO9H/egHS0PJ9HIIlF+wFS/98YtvjIzZW8=";
   };
 
   nativeBuildInputs = [
@@ -89,7 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
       exec = "youtube-music %u";
       icon = "youtube-music";
       desktopName = "YouTube Music";
-      startupWMClass = "YouTube Music";
+      startupWMClass = "com.github.th_ch.youtube_music";
       categories = [ "AudioVideo" ];
     })
   ];

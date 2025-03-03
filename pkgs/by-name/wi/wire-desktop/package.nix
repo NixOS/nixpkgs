@@ -12,7 +12,7 @@
   xar,
   libdbusmenu,
   alsa-lib,
-  mesa,
+  libgbm,
   nss,
   nspr,
   systemd,
@@ -28,23 +28,23 @@ let
 
   version =
     let
-      x86_64-darwin = "3.35.4861";
+      x86_64-darwin = "3.39.5211";
     in
     {
       inherit x86_64-darwin;
       aarch64-darwin = x86_64-darwin;
-      x86_64-linux = "3.36.3462";
+      x86_64-linux = "3.39.3653";
     }
     .${system} or throwSystem;
 
   hash =
     let
-      x86_64-darwin = "sha256-QPxslMEz1jOH2LceFOdCyVDtpya1SfJ8GWMIAIhie4U=";
+      x86_64-darwin = "sha256-k6CIqHt67AFL70zdK0/91aQcpbb00OIggk5TF7y1IOY=";
     in
     {
       inherit x86_64-darwin;
       aarch64-darwin = x86_64-darwin;
-      x86_64-linux = "sha256-tlX15AT4PcrmD2Vna99TGqo0b/8xv2YOAt03aCqSeXg=";
+      x86_64-linux = "sha256-BbY+7fGAWW5CR/z4GeoBl5aOewCRuWzQjpQX4x1rzls=";
     }
     .${system} or throwSystem;
 
@@ -64,7 +64,6 @@ let
     homepage = "https://wire.com/";
     downloadPage = "https://wire.com/download/";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    knownVulnerabilities = [ "CVE-2024-6775" ];
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [
       arianvp
@@ -115,7 +114,7 @@ let
 
     buildInputs = [
       alsa-lib
-      mesa
+      libgbm
       nss
       nspr
       systemd

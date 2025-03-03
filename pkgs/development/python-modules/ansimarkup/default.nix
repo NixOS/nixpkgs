@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "gvalkov";
     repo = "python-ansimarkup";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-+kZt8tv09RHrMRZtvJPBBiFaeCksXyrlHqIabPrXYDY=";
   };
 

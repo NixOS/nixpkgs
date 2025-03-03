@@ -37,14 +37,15 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "slint-lsp";
-  version = "1.8.0";
+  version = "1.10.0";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-Shgcjr0mlUNAobMAarZ7dFnXgPGzBHXs2KnUDT/8I2A=";
+    hash = "sha256-5LDEjJx+PC6pOem06DKFkPcjpIkF20gbxi/PAVZT1ns=";
   };
 
-  cargoHash = "sha256-wyzrFg3hwsJ7SV8KGLKo+gNHzLFpnMx9/jgMalGkufY=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-1/4dOlhByJDpduExu9ZOjb7JYFKehnLiLCboWUnmfp8=";
 
   nativeBuildInputs = [
     cmake

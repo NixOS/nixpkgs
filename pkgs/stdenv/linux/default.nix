@@ -443,6 +443,9 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
               configureFlags = (a.configureFlags or [ ]) ++ [
                 "--with-native-system-header-dir=/include"
                 "--with-build-sysroot=${lib.getDev self.stdenv.cc.libc}"
+                # Don't assume that `gettext` was built with iconv support, since we don't have
+                # our own `glibc` yet.
+                "--disable-nls"
               ];
 
               # This is a separate phase because gcc assembles its phase scripts
@@ -596,7 +599,6 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
             binutils
             coreutils
             gnugrep
-            gettext
             perl
             patchelf
             linuxHeaders
@@ -768,7 +770,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
               bzip2
               xz
               zlib
-              bash
+              bashNonInteractive
               binutils
               coreutils
               diffutils
@@ -804,7 +806,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
               gzip
               bzip2
               xz
-              bash
+              bashNonInteractive
               binutils.bintools
               coreutils
               diffutils
@@ -864,7 +866,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
               gzip
               bzip2
               xz
-              bash
+              bashNonInteractive
               coreutils
               diffutils
               findutils

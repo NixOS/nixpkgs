@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "att";
     repo = "ast";
     sha256 = "0cdxz0nhpq03gb9rd76fn0x1yzs2c8q289b7vcxnzlsrz1imz65j";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
   };
 
   patches = [

@@ -251,8 +251,8 @@ in
 
     environment.systemPackages = [pkgs.xpra];
 
-    hardware.pulseaudio.enable = mkDefault cfg.pulseaudio;
-    hardware.pulseaudio.systemWide = mkDefault cfg.pulseaudio;
+    services.pulseaudio.enable = mkDefault cfg.pulseaudio;
+    services.pulseaudio.systemWide = mkDefault cfg.pulseaudio;
   };
 
 }

@@ -1,12 +1,14 @@
+import json
 import logging
 import os
+import textwrap
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime
 from importlib.resources import files
 from pathlib import Path
 from string import Template
 from subprocess import PIPE, CalledProcessError
-from typing import Final
+from typing import Final, Literal
 from uuid import uuid4
 
 from . import tmpdir
@@ -17,6 +19,7 @@ from .models import (
     Flake,
     Generation,
     GenerationJson,
+    ImageVariants,
     NRError,
     Profile,
     Remote,
@@ -32,7 +35,7 @@ logger = logging.getLogger(__name__)
 def build(
     attr: str,
     build_attr: BuildAttr,
-    **build_flags: Args,
+    build_flags: Args | None = None,
 ) -> Path:
     """Build NixOS attribute using classic Nix.
 
@@ -52,7 +55,7 @@ def build(
 def build_flake(
     attr: str,
     flake: Flake,
-    **flake_build_flags: Args,
+    flake_build_flags: Args | None = None,
 ) -> Path:
     """Build NixOS attribute using Flakes.
 
@@ -70,13 +73,13 @@ def build_flake(
     return Path(r.stdout.strip())
 
 
-def remote_build(
+def build_remote(
     attr: str,
     build_attr: BuildAttr,
     build_host: Remote | None,
-    build_flags: dict[str, Args] | None = None,
-    instantiate_flags: dict[str, Args] | None = None,
-    copy_flags: dict[str, Args] | None = None,
+    realise_flags: Args | None = None,
+    instantiate_flags: Args | None = None,
+    copy_flags: Args | None = None,
 ) -> Path:
     # We need to use `--add-root` otherwise Nix will print this warning:
     # > warning: you did not specify '--add-root'; the result might be removed
@@ -89,12 +92,12 @@ def remote_build(
             build_attr.to_attr(attr),
             "--add-root",
             tmpdir.TMPDIR_PATH / uuid4().hex,
-            *dict_to_flags(instantiate_flags or {}),
+            *dict_to_flags(instantiate_flags),
         ],
         stdout=PIPE,
     )
     drv = Path(r.stdout.strip()).resolve()
-    copy_closure(drv, to_host=build_host, from_host=None, **(copy_flags or {}))
+    copy_closure(drv, to_host=build_host, from_host=None, copy_flags=copy_flags)
 
     # Need a temporary directory in remote to use in `nix-store --add-root`
     r = run_wrapper(
@@ -109,7 +112,7 @@ def remote_build(
                 drv,
                 "--add-root",
                 remote_tmpdir / uuid4().hex,
-                *dict_to_flags(build_flags or {}),
+                *dict_to_flags(realise_flags),
             ],
             remote=build_host,
             stdout=PIPE,
@@ -124,13 +127,13 @@ def remote_build(
         run_wrapper(["rm", "-rf", remote_tmpdir], remote=build_host, check=False)
 
 
-def remote_build_flake(
+def build_remote_flake(
     attr: str,
     flake: Flake,
     build_host: Remote,
-    flake_build_flags: dict[str, Args] | None = None,
-    copy_flags: dict[str, Args] | None = None,
-    build_flags: dict[str, Args] | None = None,
+    eval_flags: Args | None = None,
+    copy_flags: Args | None = None,
+    flake_build_flags: Args | None = None,
 ) -> Path:
     r = run_wrapper(
         [
@@ -139,12 +142,12 @@ def remote_build_flake(
             "eval",
             "--raw",
             flake.to_attr(attr, "drvPath"),
-            *dict_to_flags(flake_build_flags or {}),
+            *dict_to_flags(eval_flags),
         ],
         stdout=PIPE,
     )
     drv = Path(r.stdout.strip())
-    copy_closure(drv, to_host=build_host, from_host=None, **(copy_flags or {}))
+    copy_closure(drv, to_host=build_host, from_host=None, copy_flags=copy_flags)
     r = run_wrapper(
         [
             "nix",
@@ -152,7 +155,7 @@ def remote_build_flake(
             "build",
             f"{drv}^*",
             "--print-out-paths",
-            *dict_to_flags(build_flags or {}),
+            *dict_to_flags(flake_build_flags),
         ],
         remote=build_host,
         stdout=PIPE,
@@ -164,7 +167,7 @@ def copy_closure(
     closure: Path,
     to_host: Remote | None,
     from_host: Remote | None = None,
-    **copy_flags: Args,
+    copy_flags: Args | None = None,
 ) -> None:
     """Copy a nix closure to or from host to localhost.
 
@@ -192,6 +195,7 @@ def copy_closure(
             [
                 "nix",
                 "copy",
+                *dict_to_flags(copy_flags),
                 "--from",
                 f"ssh://{from_host.host}",
                 "--to",
@@ -221,7 +225,7 @@ def copy_closure(
                 nix_copy_closure(to_host, to=True)
 
 
-def edit(flake: Flake | None, **flake_flags: Args) -> None:
+def edit(flake: Flake | None, flake_flags: Args | None = None) -> None:
     "Try to find and open NixOS configuration file in editor."
     if flake:
         run_wrapper(
@@ -250,7 +254,7 @@ def edit(flake: Flake | None, **flake_flags: Args) -> None:
             raise NRError("cannot find NixOS config file")
 
 
-def find_file(file: str, **nix_flags: Args) -> Path | None:
+def find_file(file: str, nix_flags: Args | None = None) -> Path | None:
     "Find classic Nix file location."
     r = run_wrapper(
         ["nix-instantiate", "--find-file", file, *dict_to_flags(nix_flags)],
@@ -260,6 +264,57 @@ def find_file(file: str, **nix_flags: Args) -> Path | None:
     if r.returncode:
         return None
     return Path(r.stdout.strip())
+
+
+def get_build_image_variants(
+    build_attr: BuildAttr,
+    instantiate_flags: Args | None = None,
+) -> ImageVariants:
+    path = (
+        f'"{build_attr.path.resolve()}"'
+        if isinstance(build_attr.path, Path)
+        else build_attr.path
+    )
+    r = run_wrapper(
+        [
+            "nix-instantiate",
+            "--eval",
+            "--strict",
+            "--json",
+            "--expr",
+            textwrap.dedent(f"""
+            let
+              value = import {path};
+              set = if builtins.isFunction value then value {{}} else value;
+            in
+              builtins.mapAttrs (n: v: v.passthru.filePath) set.{build_attr.to_attr("config.system.build.images")}
+            """),
+            *dict_to_flags(instantiate_flags),
+        ],
+        stdout=PIPE,
+    )
+    j: ImageVariants = json.loads(r.stdout.strip())
+    return j
+
+
+def get_build_image_variants_flake(
+    flake: Flake,
+    eval_flags: Args | None = None,
+) -> ImageVariants:
+    r = run_wrapper(
+        [
+            "nix",
+            "eval",
+            "--json",
+            flake.to_attr("config.system.build.images"),
+            "--apply",
+            "builtins.mapAttrs (n: v: v.passthru.filePath)",
+            *dict_to_flags(eval_flags),
+        ],
+        stdout=PIPE,
+    )
+    j: ImageVariants = json.loads(r.stdout.strip())
+    return j
 
 
 def get_nixpkgs_rev(nixpkgs_path: Path | None) -> str | None:
@@ -378,14 +433,14 @@ def list_generations(profile: Profile) -> list[GenerationJson]:
         )
         try:
             nixos_version = (generation_path / "nixos-version").read_text().strip()
-        except IOError as ex:
+        except OSError as ex:
             logger.debug("could not get nixos-version: %s", ex)
             nixos_version = "Unknown"
         try:
             kernel_version = next(
                 (generation_path / "kernel-modules/lib/modules").iterdir()
             ).name
-        except IOError as ex:
+        except OSError as ex:
             logger.debug("could not get kernel version: %s", ex)
             kernel_version = "Unknown"
         specialisations = [
@@ -396,7 +451,7 @@ def list_generations(profile: Profile) -> list[GenerationJson]:
                 [generation_path / "sw/bin/nixos-version", "--configuration-revision"],
                 capture_output=True,
             ).stdout.strip()
-        except (CalledProcessError, IOError) as ex:
+        except (OSError, CalledProcessError) as ex:
             logger.debug("could not get configuration revision: %s", ex)
             configuration_revision = "Unknown"
 
@@ -420,14 +475,14 @@ def list_generations(profile: Profile) -> list[GenerationJson]:
         )
 
 
-def repl(attr: str, build_attr: BuildAttr, **nix_flags: Args) -> None:
+def repl(attr: str, build_attr: BuildAttr, nix_flags: Args | None = None) -> None:
     run_args = ["nix", "repl", "--file", build_attr.path]
     if build_attr.attr:
         run_args.append(build_attr.attr)
     run_wrapper([*run_args, *dict_to_flags(nix_flags)])
 
 
-def repl_flake(attr: str, flake: Flake, **flake_flags: Args) -> None:
+def repl_flake(attr: str, flake: Flake, flake_flags: Args | None = None) -> None:
     expr = Template(
         files(__package__).joinpath(FLAKE_REPL_TEMPLATE).read_text()
     ).substitute(
@@ -499,7 +554,7 @@ def set_profile(
 
 def switch_to_configuration(
     path_to_config: Path,
-    action: Action,
+    action: Literal[Action.SWITCH, Action.BOOT, Action.TEST, Action.DRY_ACTIVATE],
     target_host: Remote | None,
     sudo: bool,
     install_bootloader: bool = False,
@@ -528,7 +583,7 @@ def switch_to_configuration(
     )
 
 
-def upgrade_channels(all: bool = False) -> None:
+def upgrade_channels(all_channels: bool = False) -> None:
     """Upgrade channels for classic Nix.
 
     It will either upgrade just the `nixos` channel (including any channel
@@ -536,7 +591,7 @@ def upgrade_channels(all: bool = False) -> None:
     """
     for channel_path in Path("/nix/var/nix/profiles/per-user/root/channels/").glob("*"):
         if channel_path.is_dir() and (
-            all
+            all_channels
             or channel_path.name == "nixos"
             or (channel_path / ".update-on-nixos-rebuild").exists()
         ):

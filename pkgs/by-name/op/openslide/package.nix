@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "openslide";
     repo = "openslide";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-9LvQ7FG/0E0WpFyIUyrL4Fvn60iYWejjbgdKHMVOFdI=";
   };
 

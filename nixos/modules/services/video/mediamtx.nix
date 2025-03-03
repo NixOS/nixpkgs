@@ -66,6 +66,7 @@ in
         Group = "mediamtx";
         SupplementaryGroups = lib.mkIf cfg.allowVideoAccess "video";
         ExecStart = "${cfg.package}/bin/mediamtx /etc/mediamtx.yaml";
+        Restart = "on-failure";
       };
     };
   };

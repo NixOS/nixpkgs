@@ -29,7 +29,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "TenderOwl";
     repo = "Frog";
-    rev = "refs/tags/${version}";
+    tag = version;
     sha256 = "sha256-Zu1xUGpjqpFiPQAAgaVYtnXI4jMtyywrJqn+38K5VHo=";
   };
 

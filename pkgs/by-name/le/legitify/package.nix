@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "Legit-Labs";
     repo = "legitify";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-ijW0vvamuqcN6coV5pAtmjAUjzNXxiqr2S9EwrNlrJc=";
   };
 

@@ -105,7 +105,7 @@ lib.optionalAttrs (buildScript != null) { builder = buildScript; }
   ])
   ++ lib.optionals waylandSupport (with pkgs; [
      wayland wayland-scanner libxkbcommon wayland-protocols wayland.dev libxkbcommon.dev
-     mesa # for libgbm
+     libgbm
   ])));
 
   inherit patches;

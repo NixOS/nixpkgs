@@ -14,13 +14,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "starship";
-  version = "1.21.1";
+  version = "1.22.1";
 
   src = fetchFromGitHub {
     owner = "starship";
     repo = "starship";
     rev = "v${version}";
-    hash = "sha256-Xn9qV26/ST+3VtVq6OJP823lIVIo0zEdno+nIUv8B9c=";
+    hash = "sha256-YoLi4wxBK9TFTtZRm+2N8HO5ZiC3V2GMqKFKKLHq++s=";
   };
 
   nativeBuildInputs = [
@@ -57,7 +57,8 @@ rustPlatform.buildRustPackage rec {
         --zsh <($out/bin/starship completions zsh)
     '';
 
-  cargoHash = "sha256-YbZCe2OcX/wq0OWvWK61nWvRT0O+CyW0QY0J7vv6QaM=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-B2CCrSH2aTcGEX96oBxl/27hNMdDpdd2vxdt0/nlN6I=";
 
   nativeCheckInputs = [ git ];
 

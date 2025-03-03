@@ -24,7 +24,8 @@ rustPlatform.buildRustPackage rec {
     ]
   );
 
-  cargoHash = "sha256-loS55mQUVbIm+5VcQnPf6olERNTm3dbnQu5SPXe6a8I=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-izJRaxJhLvk064JB3hlzN50V7ZWmv/X1pbL0lRCZV60=";
 
   RUSTFLAGS = "--cfg tokio_unstable";
 

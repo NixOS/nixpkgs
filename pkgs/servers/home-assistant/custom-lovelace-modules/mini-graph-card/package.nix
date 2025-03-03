@@ -11,7 +11,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "kalkih";
     repo = "mini-graph-card";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-cDgfAfS4U3ihN808KPcG+jEQR+S2Q1M5SPqOkkYwYkI=";
   };
 

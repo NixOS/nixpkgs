@@ -98,6 +98,10 @@ let
           or lib.systems.parse.abis.musl;
       });
 
+  makeLLVMParsedPlatform = parsed:
+    (parsed // {
+      abi = lib.systems.parse.abis.llvm;
+    });
 
   stdenvAdapters = self: super:
     let
@@ -204,6 +208,19 @@ let
       crossSystem = stdenv.hostPlatform // {
         useLLVM = true;
         linker = "lld";
+      };
+    };
+
+    pkgsLLVMLibc = nixpkgsFun {
+      overlays = [ (self': super': {
+        pkgsLLVMLibc = super';
+      })] ++ overlays;
+      # Bootstrap a cross stdenv using LLVM libc.
+      # This is currently not possible when compiling natively,
+      # so we don't need to check hostPlatform != buildPlatform.
+      crossSystem = stdenv.hostPlatform // {
+        config = lib.systems.parse.tripleFromSystem (makeLLVMParsedPlatform stdenv.hostPlatform.parsed);
+        libc = "llvm";
       };
     };
 
@@ -329,7 +346,6 @@ let
             super'.stdenv.cc.defaultHardeningFlags ++ [
               "shadowstack"
               "pacret"
-              "stackclashprotection"
               "trivialautovarinit"
             ]
           ) super'.stdenv;

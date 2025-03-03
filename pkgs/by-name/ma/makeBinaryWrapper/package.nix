@@ -16,6 +16,9 @@ makeSetupHook {
   substitutions = {
     cc = "${cc}/bin/${cc.targetPrefix}cc ${
       lib.escapeShellArgs (map (s: "-fsanitize=${s}") sanitizers)
+      + lib.optionalString (
+        cc.isClang && !cc.stdenv.hostPlatform.isDarwin
+      ) "--ld-path=${cc.targetPrefix}ld"
     }";
   };
 

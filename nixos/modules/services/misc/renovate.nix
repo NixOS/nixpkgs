@@ -138,9 +138,10 @@ in
 
       script = ''
         ${lib.concatStringsSep "\n" (
-          builtins.map (name: "export ${name}=$(systemd-creds cat 'SECRET-${name}')") (
-            lib.attrNames cfg.credentials
-          )
+          builtins.map (name: ''
+            ${name}="$(systemd-creds cat 'SECRET-${name}')"
+            export ${name}
+          '') (lib.attrNames cfg.credentials)
         )}
         exec ${lib.escapeShellArg (lib.getExe cfg.package)}
       '';

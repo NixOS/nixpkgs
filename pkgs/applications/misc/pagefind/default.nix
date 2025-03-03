@@ -12,19 +12,13 @@
   npmHooks,
   python3,
   rustc,
-  wasm-bindgen-cli,
+  wasm-bindgen-cli_0_2_92,
   wasm-pack,
 }:
 
 # TODO: package python bindings
 
 let
-
-  wasm-bindgen-92 = wasm-bindgen-cli.override {
-    version = "0.2.92";
-    hash = "sha256-1VwY8vQy7soKEgbki4LD+v259751kKxSxmo/gqE6yV0=";
-    cargoHash = "sha256-aACJ+lYNEU8FFBs158G1/JG8sc6Rq080PeKCMnwdpH0=";
-  };
 
   # the lindera-unidic v0.32.2 crate uses [1] an outdated unidic-mecab fork [2] and builds it in pure rust
   # [1] https://github.com/lindera/lindera/blob/v0.32.2/lindera-unidic/build.rs#L5-L11
@@ -38,16 +32,17 @@ in
 
 rustPlatform.buildRustPackage rec {
   pname = "pagefind";
-  version = "1.2.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "cloudcannon";
     repo = "pagefind";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-OKZYy+Mm9xOEBBD/tI2GwP2+Myt5aELosRP8Tbi5bqY=";
+    tag = "v${version}";
+    hash = "sha256-NIEiXwuy8zuUDxPsD4Hiq3x4cOG3VM+slfNIBSJU2Mk=";
   };
 
-  cargoHash = "sha256-k50RyGuS66r+wWIij7yOOSlDxXYY1y+lTJgCkMREllc=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-e1JSK8RnBPGcAmgxJZ7DaYhMMaUqO412S9YvaqXll3E=";
 
   env.npmDeps_web_js = fetchNpmDeps {
     name = "npm-deps-web-js";
@@ -64,10 +59,10 @@ rustPlatform.buildRustPackage rec {
     src = "${src}/pagefind_ui/modular";
     hash = "sha256-O0RqZUsRFtByxMQdwNGNcN38Rh+sDqqNo9YlBcrnsF4=";
   };
-  env.cargoDeps_web = rustPlatform.fetchCargoTarball {
+  env.cargoDeps_web = rustPlatform.fetchCargoVendor {
     name = "cargo-deps-web";
     src = "${src}/pagefind_web/";
-    hash = "sha256-vDkVXyDePKgYTYE5ZTLLfOHwPYfgaqP9p5/fKCQQi0g=";
+    hash = "sha256-xFVMWX3q3za1w8v58Eysk6vclPd4qpCuQMjMcwwHoh0=";
   };
 
   postPatch = ''
@@ -87,8 +82,9 @@ rustPlatform.buildRustPackage rec {
 
     # patch a build-time dependency download
     (
-      cd $cargoDepsCopy/lindera-unidic
-      oldHash=$(sha256sum build.rs | cut -d " " -f 1)
+      realpath $cargoDepsCopy/* | grep lindera-unidic # debug for when version number changes
+      cd $cargoDepsCopy/lindera-unidic-0.32.2
+      #oldHash=$(sha256sum build.rs | cut -d " " -f 1)
 
       # serve lindera-unidic on localhost vacant port
       httplz_port="${
@@ -107,8 +103,9 @@ rustPlatform.buildRustPackage rec {
           "https://dlwqk3ibdg1xh.cloudfront.net/unidic-mecab-2.1.2.tar.gz" \
           "http://localhost:$httplz_port/unidic-mecab-2.1.2.tar.gz"
 
-      newHash=$(sha256sum build.rs | cut -d " " -f 1)
-      substituteInPlace .cargo-checksum.json --replace-fail $oldHash $newHash
+      # not needed with useFetchCargoVendor=true, but kept in case it is required again
+      #newHash=$(sha256sum build.rs | cut -d " " -f 1)
+      #substituteInPlace .cargo-checksum.json --replace-fail $oldHash $newHash
     )
   '';
 
@@ -121,7 +118,7 @@ rustPlatform.buildRustPackage rec {
       nodejs
       rustc
       rustc.llvmPackages.lld
-      wasm-bindgen-92
+      wasm-bindgen-cli_0_2_92
       wasm-pack
       httplz
     ]

@@ -2,9 +2,13 @@
   stdenv,
   lib,
   fetchFromGitLab,
+  fetchpatch,
   gitUpdater,
+  nixosTests,
   testers,
-  boost,
+  # dbus-cpp not compatible with Boost 1.87
+  # https://gitlab.com/ubports/development/core/lib-cpp/dbus-cpp/-/issues/8
+  boost186,
   cmake,
   cmake-extras,
   dbus,
@@ -42,6 +46,14 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ];
 
+  patches = [
+    (fetchpatch {
+      name = "0001-mediascanner2-scannerdaemon-Drop-desktop-and-MEDIASCANNER_RUN-check.patch";
+      url = "https://gitlab.com/ubports/development/core/mediascanner2/-/commit/1e65b32e32a0536b9e2f283ba563fa78b6ef6d61.patch";
+      hash = "sha256-Xhm5+/E/pP+mn+4enqdsor1oRqfYTzabg1ODVfIhra4=";
+    })
+  ];
+
   postPatch = ''
     substituteInPlace src/qml/MediaScanner.*/CMakeLists.txt \
       --replace-fail "\''${CMAKE_INSTALL_LIBDIR}/qt5/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
@@ -58,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs =
     [
-      boost
+      boost186
       cmake-extras
       dbus
       dbus-cpp
@@ -99,7 +111,12 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    tests = {
+      # music app needs mediascanner to work properly, so it can find files
+      music-app = nixosTests.lomiri-music-app;
+
+      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    };
     updateScript = gitUpdater { };
   };
 

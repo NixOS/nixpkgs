@@ -8,13 +8,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "kubetui";
-  version = "1.5.4";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "sarub0b0";
     repo = "kubetui";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Trgc3T+01u1izePfM0wPjer3IrA6PtIGsK+syEzs0V8=";
+    tag = "v${version}";
+    hash = "sha256-GCtcAoN/RjgaspTIR51TJQV2xT3dcVIFazITKVy7qYY=";
   };
 
   checkFlags = [
@@ -28,7 +28,8 @@ rustPlatform.buildRustPackage rec {
       frameworks.AppKit
     ]
   );
-  cargoHash = "sha256-f9JrowyZx4NvfGJSU/HjyTfWKhkAANNfUgcK9CRPW7I=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-bRznReljcnRRn2PsOukFHV634CkBByJZxJVyGL4f/10=";
 
   meta = {
     homepage = "https://github.com/sarub0b0/kubetui";

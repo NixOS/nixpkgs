@@ -70,6 +70,13 @@ let # un-indented, over the whole file
             --replace "ffi.load(" "ffi.load('${lib.getLib knot-dns}/lib/' .. "
         done
       ''
+      # https://gitlab.nic.cz/knot/knot-resolver/-/issues/925
+      + ''
+        patch modules/http/meson.build <<EOF
+        @@ -22 +21,0 @@
+        -  ['http', files('http.test.lua')],
+        EOF
+      ''
       # some tests have issues with network sandboxing, apparently
       + optionalString doInstallCheck ''
         echo 'os.exit(77)' > daemon/lua/trust_anchors.test/bootstrap.test.lua

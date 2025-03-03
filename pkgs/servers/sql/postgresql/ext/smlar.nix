@@ -24,7 +24,7 @@ buildPostgresqlExtension rec {
     platforms = postgresql.meta.platforms;
     license = licenses.bsd2;
     maintainers = [ ];
-    # Broken on darwin and linux (JIT) with no upstream fix available.
-    broken = lib.versionAtLeast postgresql.version "16" && stdenv.cc.isClang;
+    # Broken with no upstream fix available.
+    broken = lib.versionAtLeast postgresql.version "16";
   };
 }

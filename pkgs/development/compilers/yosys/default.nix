@@ -5,6 +5,7 @@
   boost,
   fetchFromGitHub,
   flex,
+  gtkwave,
   libffi,
   makeWrapper,
   pkg-config,
@@ -40,7 +41,7 @@
 
 let
 
-  # Provides a wrapper for creating a yosys with the specifed plugins preloaded
+  # Provides a wrapper for creating a yosys with the specified plugins preloaded
   #
   # Example:
   #
@@ -80,13 +81,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "yosys";
-  version = "0.47";
+  version = "0.50";
 
   src = fetchFromGitHub {
     owner = "YosysHQ";
     repo = "yosys";
-    rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-9u9aAPTZyt9vzZwryor3GRCGzs/mu2/XtM0XzV7uHfk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-5dV/RUNnCpBQp7tP2U7t/pqGP/v3vKiIKQG9fbf1Tfg=";
     fetchSubmodules = true;
     leaveDotGit = true;
     postFetch = ''
@@ -160,7 +161,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   checkTarget = "test";
   doCheck = true;
-  nativeCheckInputs = [ iverilog ];
+  nativeCheckInputs = [
+    gtkwave
+    iverilog
+  ];
 
   setupHook = ./setup-hook.sh;
 

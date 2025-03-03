@@ -89,9 +89,20 @@ let
       "link=${link}"
       "-sEXPAT_INCLUDE=${expat.dev}/include"
       "-sEXPAT_LIBPATH=${expat.out}/lib"
-
-      # TODO: make this unconditional
     ]
+    ++ lib.optionals (lib.versionAtLeast version "1.85") [
+      (
+        # The stacktrace from exception feature causes memory leaks when built
+        # with libc++. For all other standard library implementations, i.e.
+        # libstdc++, we must acknowledge this or stacktrace refuses to compile.
+        # Issue upstream: https://github.com/boostorg/stacktrace/issues/163
+        if (stdenv.cc.libcxx != null) then
+          "boost.stacktrace.from_exception=off"
+        else
+          "define=BOOST_STACKTRACE_LIBCXX_RUNTIME_MAY_CAUSE_MEMORY_LEAK"
+      )
+    ]
+    # TODO: make this unconditional
     ++
       lib.optionals
         (
@@ -201,7 +212,26 @@ stdenv.mkDerivation {
         extraPrefix = "libs/python/";
       })
     ]
-    ++ lib.optional (lib.versionAtLeast version "1.81" && stdenv.cc.isClang) ./fix-clang-target.patch;
+    ++ lib.optional (lib.versionAtLeast version "1.81" && stdenv.cc.isClang) ./fix-clang-target.patch
+    ++ lib.optional (lib.versionAtLeast version "1.86" && lib.versionOlder version "1.87") [
+      # Backport fix for NumPy 2 support.
+      (fetchpatch {
+        name = "boost-numpy-2-compatibility.patch";
+        url = "https://github.com/boostorg/python/commit/0474de0f6cc9c6e7230aeb7164af2f7e4ccf74bf.patch";
+        stripLen = 1;
+        extraPrefix = "libs/python/";
+        hash = "sha256-0IHK55JSujYcwEVOuLkwOa/iPEkdAKQlwVWR42p/X2U=";
+      })
+    ]
+    ++ lib.optional (lib.versionAtLeast version "1.87") [
+      # Fix operator<< for shared_ptr and intrusive_ptr
+      # https://github.com/boostorg/smart_ptr/issues/115
+      (fetchpatch {
+        url = "https://github.com/boostorg/smart_ptr/commit/e7433ba54596da97cb7859455cd37ca140305a9c.patch";
+        relative = "include";
+        hash = "sha256-9JvKQOAB19wQpWLNAhuB9eL8qKqXWTQHAJIXdLYMNG8=";
+      })
+    ];
 
   meta = with lib; {
     homepage = "http://boost.org/";
@@ -213,6 +243,8 @@ stdenv.mkDerivation {
     # a very cryptic error message.
     badPlatforms = [ lib.systems.inspect.patterns.isMips64n32 ];
     maintainers = with maintainers; [ hjones2199 ];
+    broken =
+      enableNumpy && lib.versionOlder version "1.86" && lib.versionAtLeast python.pkgs.numpy.version "2";
   };
 
   passthru = {
@@ -259,12 +291,26 @@ stdenv.mkDerivation {
     # b2 needs to be explicitly told how to find Python when cross-compiling
     + lib.optionalString enablePython ''
       cat << EOF >> user-config.jam
-      using python : : ${python.interpreter}
+      using python : : ${python.pythonOnBuildForHost.interpreter}
         : ${python}/include/python${python.pythonVersion}
         : ${python}/lib
         ;
       EOF
     '';
+
+  # Fix compilation to 32-bit ARM with clang in downstream packages
+  # https://github.com/ned14/outcome/pull/308
+  # https://github.com/boostorg/json/pull/1064
+  postPatch = lib.optionalString (lib.versionAtLeast version "1.87") ''
+    substituteInPlace \
+      boost/outcome/outcome_gdb.h \
+      boost/outcome/experimental/status-code/status_code.hpp \
+      boost/json/detail/gdb_printers.hpp \
+      boost/unordered/unordered_printers.hpp \
+      boost/interprocess/interprocess_printers.hpp \
+      libs/json/pretty_printers/generate-gdb-header.py \
+      --replace-fail ",@progbits,1" ",%progbits,1"
+  '';
 
   env = {
     NIX_CFLAGS_LINK = lib.optionalString stdenv.hostPlatform.isDarwin "-headerpad_max_install_names";

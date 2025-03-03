@@ -1,6 +1,7 @@
 {
   lib,
   buildPythonPackage,
+  isPyPy,
   pythonOlder,
   fetchFromGitHub,
   setuptools,
@@ -34,6 +35,12 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
+
+  disabledTests = lib.optionals isPyPy [
+    # tests fail due to slightly different error position
+    "test_tokenization_error_is_a_syntax_error"
+    "test_tokenization_error_but_not_syntax_error"
+  ];
 
   meta = with lib; {
     changelog = "https://github.com/PyCQA/flake8/blob/${src.rev}/docs/source/release-notes/${version}.rst";

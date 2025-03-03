@@ -8,13 +8,13 @@
   runCommandLocal,
 }:
 let
-  version = "6.6";
+  version = "6.8.3";
 
   src = fetchFromGitHub {
     owner = "retrospy";
     repo = "RetroSpy";
     rev = "v${version}";
-    hash = "sha256-vYhFpmP9CmZz/lqNwNAvpf7pQnhKR/pdetPJqorUtMY=";
+    hash = "sha256-NuLfFSRGOIB6h4b5XZ7Qs8y5L+fqozQfMr8q0xZAurQ=";
   };
 
   executables = [
@@ -76,5 +76,6 @@ buildDotnetModule {
     license = lib.licenses.gpl3;
     maintainers = [ lib.maintainers.naxdy ];
     platforms = lib.platforms.linux;
+    mainProgram = "RetroSpy";
   };
 }

@@ -15,6 +15,7 @@
   wrapGAppsHook4,
   appstream-glib,
   desktop-file-utils,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
@@ -28,10 +29,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-FyGj0180Wn8iIDTdDqnNEvFYegwdWCsCq+hmyTTUIo4=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-jXo7Aq+pXWySe6MyH9GCTQVNwbboER7RwJe6Asqbxxc=";
+    hash = "sha256-nYmH7Nu43TDJKvwfSaBKSihD0acLPmIUQpQM6kV4CAk=";
   };
 
   nativeBuildInputs = [
@@ -52,6 +53,10 @@ stdenv.mkDerivation rec {
     gtk4
     libadwaita
   ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Pick and format colors";

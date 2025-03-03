@@ -14,16 +14,16 @@
 
 buildGoModule rec {
   pname = "chart-testing";
-  version = "3.11.0";
+  version = "3.12.0";
 
   src = fetchFromGitHub {
     owner = "helm";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-eiU8omDEGDJVmumHwZkNix7qMVkoR6Irg0x9dTBzadA=";
+    hash = "sha256-q56ZM+YzL7RRC3RD3xO3K0hIDomKun5xmSKuiDTq1cU=";
   };
 
-  vendorHash = "sha256-o9oZnQPztrK6HvclPt33Y05GQFWDsnUYti5x8R7aWS8=";
+  vendorHash = "sha256-kTlqGZVOppf+WMcFw0T9FVbu9eOWAWzotR8fPPyo2Ms=";
 
   postPatch = ''
     substituteInPlace pkg/config/config.go \

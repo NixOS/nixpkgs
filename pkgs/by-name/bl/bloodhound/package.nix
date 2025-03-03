@@ -25,7 +25,7 @@
   libxcb,
   libxkbcommon,
   libxshmfence,
-  mesa,
+  libgbm,
   nspr,
   nss,
   pango,
@@ -66,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
     libuuid
     libxcb
     libxkbcommon
-    mesa
+    libgbm
     nspr
     nss
     pango

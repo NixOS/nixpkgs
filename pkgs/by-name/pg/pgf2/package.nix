@@ -11,7 +11,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "pgf-tikz";
     repo = "pgf";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-AA+XFhEkJifODJb6SppnxhR4lMlMNaH+k10UF6QisJ8=";
   };
 
@@ -32,7 +32,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "Portable Graphic Format for TeX";
     branch = lib.versions.major version;
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
   };
 })

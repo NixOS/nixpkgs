@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   postPatch = ''
-    sed -ie 's|/var/lib/wifish|${placeholder "out"}/var/lib/wifish|' wifish
+    sed -i -e 's|/var/lib/wifish|${placeholder "out"}/var/lib/wifish|' wifish
   '';
 
   dontConfigure = true;
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     description = "Simple wifi shell script for linux";
     mainProgram = "wifish";
     license = licenses.wtfpl;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [ ];
     platforms = with platforms; linux;
   };
 }

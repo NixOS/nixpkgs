@@ -41,6 +41,7 @@ let
     "1.6.2"
     "1.7.0"
     "2.0.2"
+    "2.1.0"
   ];
 
   # Manifests :: { redistrib, feature }
@@ -103,7 +104,7 @@ let
       redistArch
     ] null feature) != null;
 
-  # TODO(@connorbaker): With an auxilliary file keeping track of the CUDA versions each release supports,
+  # TODO(@connorbaker): With an auxiliary file keeping track of the CUDA versions each release supports,
   # we could filter out releases that don't support our CUDA version.
   # However, we don't have that currently, so we make a best-effort to try to build TensorRT with whatever
   # libPath corresponds to our CUDA version.

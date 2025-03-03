@@ -57,7 +57,8 @@ rustPlatform.buildRustPackage rec {
     RUSTFLAGS = "-C relro-level=partial";
   };
 
-  cargoHash = "sha256-CHagzXTG9AfrFd3WmHanQ+YddMgmVxSuB8vK98A1Mlw=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-EC+Wps6u1qXpv7ByM3NkRVCKRKCaBtC1o2vK8cKqzyU=";
 
   meta = with lib; {
     description = "Interactive Nix documentation tool";

@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "jdatetime";
-  version = "5.0.0";
+  version = "5.2.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-LMYD2RPA2OMokoRU09KVJhywN+mVAif2fJYpq0cQ/fk=";
+    hash = "sha256-yB1YmHF7grYJo84qc/i40yMLDHV+XA3p1rGs/cIk9VE=";
   };
 
   build-system = [ setuptools ];

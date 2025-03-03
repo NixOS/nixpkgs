@@ -1,53 +1,88 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, nix-update-script
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  iconv,
+  installShellFiles,
+  versionCheckHook,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "topiary";
-  version = "0.3.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "tweag";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-zt4uXkO6Y0Yc1Wt8l5O79oKbgNLrgip40ftD7UfUPwo=";
+    repo = "topiary";
+    tag = "v${version}";
+    hash = "sha256-nRVxjdEtYvgF8Vpw0w64hUd1scZh7f+NjFtbTg8L5Qc=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "tree-sitter-bash-0.19.0" = "sha256-a0/KyHV2jUpytsZSHI7tVw8GfYnuqVjfs5KScLZkB0I=";
-      "tree-sitter-facade-0.9.3" = "sha256-M/npshnHJkU70pP3I4WMXp3onlCSWM5mMIqXP45zcUs=";
-      "tree-sitter-json-0.20.0" = "sha256-cyrea0Y13OVGkXbYE0Cwc7nUsDGEZyoQmPAS9wVuHw0=";
-      "tree-sitter-nickel-0.0.1" = "sha256-aYsEx1Y5oDEqSPCUbf1G3J5Y45ULT9OkD+fn6stzrOU=";
-      "tree-sitter-ocaml-0.20.4" = "sha256-j3Hv2qOMxeBNOW+WIgIYzG3zMIFWPQpoHe94b2rT+A8=";
-      "tree-sitter-ocamllex-0.20.2" = "sha256-YhmEE7I7UF83qMuldHqc/fD/no/7YuZd6CaAIaZ1now=";
-      "tree-sitter-query-0.1.0" = "sha256-5N7FT0HTK3xzzhAlk3wBOB9xlEpKSNIfakgFnsxEi18=";
-      "tree-sitter-rust-0.20.4" = "sha256-seWoMuA87ZWCq3mUXopVeDCcTxX/Bh+B4PFLVa0CBQA=";
-      "tree-sitter-toml-0.5.1" = "sha256-5nLNBxFeOGE+gzbwpcrTVnuL1jLUA0ZLBVw2QrOLsDQ=";
-      "web-tree-sitter-sys-1.3.0" = "sha256-9rKB0rt0y9TD/HLRoB9LjEP9nO4kSWR9ylbbOXo2+2M=";
-    };
-  };
+  nativeBuildInputs = [ installShellFiles ];
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
-  cargoBuildFlags = [ "-p" "topiary-cli" ];
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-EqalIF1wx3F/5CiD21IaYsPdks6Mv1VfwL8OTRWsWaU=";
+
+  # https://github.com/NixOS/nixpkgs/pull/359145#issuecomment-2542418786
+  depsExtraArgs.postBuild = ''
+    find $out -name '*.ps1' -print | while read -r file; do
+      if [ "$(file --brief --mime-encoding "$file")" == utf-16be ]; then
+        ${iconv}/bin/iconv -f UTF-16BE -t UTF16LE "$file" > tmp && mv tmp "$file"
+      fi
+    done
+  '';
+
+  cargoBuildFlags = [
+    "-p"
+    "topiary-cli"
+  ];
   cargoTestFlags = cargoBuildFlags;
+
+  # Skip tests that cannot be executed in sandbox (operation not permitted)
+  checkFlags = [
+    "--skip=test_fmt_dir"
+    "--skip=test_fmt_files"
+    "--skip=test_fmt_files_query_fallback"
+    "--skip=test_fmt_invalid"
+    "--skip=test_fmt_stdin"
+    "--skip=test_fmt_stdin_query"
+    "--skip=test_fmt_stdin_query_fallback"
+    "--skip=test_vis"
+    "--skip=formatted_query_tester"
+    "--skip=input_output_tester"
+    "--skip=coverage_tester"
+  ];
 
   env.TOPIARY_LANGUAGE_DIR = "${placeholder "out"}/share/queries";
 
-  postInstall = ''
-    install -Dm444 queries/* -t $out/share/queries
-  '';
+  postInstall =
+    ''
+      install -Dm444 topiary-queries/queries/* -t $out/share/queries
+    ''
+    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      installShellCompletion --cmd topiary \
+        --bash <($out/bin/topiary completion bash) \
+        --fish <($out/bin/topiary completion fish) \
+        --zsh <($out/bin/topiary completion zsh)
+    '';
+
+  doInstallCheck = true;
+  versionCheckProgramArg = [ "--version" ];
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Uniform formatter for simple languages, as part of the Tree-sitter ecosystem";
     mainProgram = "topiary";
     homepage = "https://github.com/tweag/topiary";
-    changelog = "https://github.com/tweag/topiary/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    changelog = "https://github.com/tweag/topiary/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      figsoda
+      nartsiss
+    ];
   };
 }

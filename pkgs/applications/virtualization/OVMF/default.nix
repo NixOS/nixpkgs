@@ -214,7 +214,7 @@ edk2.mkDerivation projectDscPath (finalAttrs: {
     '';
 
   # TODO: Usage of -bios OVMF.fd is discouraged: https://lists.katacontainers.io/pipermail/kata-dev/2021-January/001650.html
-  # We should remove the isx86-specifc block here once we're ready to update nixpkgs to stop using that and update the
+  # We should remove the isx86-specific block here once we're ready to update nixpkgs to stop using that and update the
   # release notes accordingly.
   postInstall =
     ''
@@ -253,6 +253,7 @@ edk2.mkDerivation projectDscPath (finalAttrs: {
       prefix = "${finalAttrs.finalPackage.fd}/FV/${fwPrefix}";
     in
     {
+      mergedFirmware = "${prefix}.fd";
       firmware = "${prefix}_CODE.fd";
       variables = "${prefix}_VARS.fd";
       variablesMs =

@@ -16,11 +16,12 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "efugier";
     repo = "smartcat";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-nXuMyHV5Sln3qWXIhIDdV0thSY4YbvzGqNWGIw4QLdM=";
   };
 
-  cargoHash = "sha256-tR7+SecTS1FWwcPF25PclT6lEjY9NUEj/2EBhbgg0tw=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-AiOVIDfARztwQxOzBFWc8NXEEsxEvKAStCokcRrJyOE=";
 
   nativeBuildInputs = [
     pkg-config

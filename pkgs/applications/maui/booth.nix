@@ -53,6 +53,6 @@ mkDerivation {
     mainProgram = "booth";
     homepage = "https://invent.kde.org/maui/booth";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ milahu ];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -9,7 +9,7 @@
   avahi,
   avahi-compat,
   bluez,
-  boost185,
+  boost,
   fmt,
   ffmpeg,
   fftw,
@@ -44,13 +44,13 @@
 
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "ossia-score";
-  version = "3.2.4";
+  version = "3.4.1";
 
   src = fetchFromGitHub {
     owner = "ossia";
     repo = "score";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-O9v7hhBHVi4OuuCebG3bvjp/MOYu1iPv+lji/wS4O7o=";
+    hash = "sha256-PpIGlw3MmJYiLaKX+oHM7QUjlk6Bw/W2GwdkLgPK1Hg=";
     fetchSubmodules = true;
   };
 
@@ -65,7 +65,7 @@ clangStdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     alsa-lib
-    boost185
+    boost
     avahi
     avahi-compat
     bluez

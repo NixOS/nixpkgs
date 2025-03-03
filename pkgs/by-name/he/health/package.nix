@@ -14,6 +14,7 @@
   libsecret,
   tinysparql,
   darwin,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
@@ -28,10 +29,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-PrNPprSS98yN8b8yw2G6hzTSaoE65VbsM3q7FVB4mds=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-8fa3fa+sFi5H+49B5sr2vYPkp9C9s6CcE0zv4xB8gww=";
+    hash = "sha256-eR1ZGtTZQNhofFUEjI7IX16sMKPJmAl7aIFfPJukecg=";
   };
 
   nativeBuildInputs = [
@@ -61,6 +62,10 @@ stdenv.mkDerivation rec {
       "-Wno-error=incompatible-function-pointer-types"
     ]
   );
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "Health tracking app for the GNOME desktop";

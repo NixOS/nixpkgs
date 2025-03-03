@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Genymobile";
     repo = "scrcpy";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-XxvlwF3vqtkew+P1yuIwBJxYetD+D+v8OKaETU3qVkk=";
   };
 

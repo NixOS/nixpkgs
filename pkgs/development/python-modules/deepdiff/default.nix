@@ -53,7 +53,7 @@ buildPythonPackage rec {
   pythonRelaxDeps = [
     # Upstream develops this package as well, and from some reason pins this
     # dependency to a patch version below this one. No significant changes
-    # happend in that relase, so we shouldn't worry, especially if tests pass.
+    # happend in that release, so we shouldn't worry, especially if tests pass.
     "orderly-set"
   ];
 

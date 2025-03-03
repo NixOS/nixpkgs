@@ -9,16 +9,17 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "mini-calc";
-  version = "3.3.3";
+  version = "3.4.2";
 
   src = fetchFromGitHub {
     owner = "vanilla-extracts";
     repo = "calc";
     rev = version;
-    hash = "sha256-ra0A06dHRkHCT/K/7+jvkkd2DvTjkhd1/+hSqFuzAtU=";
+    hash = "sha256-iLKW0ibsHZyAMYvux+CrOeJZCVMPE1HtWi0VBg96hr0=";
   };
 
-  cargoHash = "sha256-4vL8zNNPyulXb0y6+G1n4X7stjqiMhEb7g3TPXolnWY=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-DMfk0F2HSFGoGM1+JCeDlPMOYBjRumc8KXzt0xsSbh0=";
 
   nativeBuildInputs = [ makeWrapper ];
   postFixup = ''

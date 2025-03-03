@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
   postPatch = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
     ln -s ${mktable}/bin/mktable mktable
     # stop make from recompiling mktable
-    sed -ie 's!mktable.*:.*!mktable:!' Makefile.in
+    sed -i -e 's!mktable.*:.*!mktable:!' Makefile.in
   '';
 
   # updateAutotoolsGnuConfigScriptsHook necessary to build on FreeBSD native pending inclusion of
@@ -103,7 +103,7 @@ stdenv.mkDerivation rec {
       "--with-gc=${boehmgc.dev}"
     ]
     ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-      "ac_cv_func_setpgrp_void=yes"
+      "ac_cv_func_setpgrp_void=${if stdenv.hostPlatform.isBSD then "no" else "yes"}"
     ]
     ++ lib.optional graphicsSupport "--enable-image=${lib.optionalString x11Support "x11,"}fb"
     ++ lib.optional (graphicsSupport && !x11Support) "--without-x";

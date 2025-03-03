@@ -15,6 +15,7 @@
       system.activationScripts.etc = lib.stringAfter [
         "users"
         "groups"
+        "specialfs"
       ] config.system.build.etcActivationCommands;
     }
 
@@ -32,8 +33,10 @@
           message = "`!system.etc.overlay.mutable` requires `systemd.sysusers.enable` or `services.userborn.enable`";
         }
         {
-          assertion = lib.versionAtLeast config.boot.kernelPackages.kernel.version "6.6";
-          message = "`system.etc.overlay.enable requires a newer kernel, at least version 6.6";
+          assertion =
+            (config.system.switch.enable)
+            -> (lib.versionAtLeast config.boot.kernelPackages.kernel.version "6.6");
+          message = "switchable systems with `system.etc.overlay.enable` require a newer kernel, at least version 6.6";
         }
       ];
 
@@ -46,7 +49,7 @@
       boot.initrd.systemd = {
         mounts = [
           {
-            where = "/run/etc-metadata";
+            where = "/run/nixos-etc-metadata";
             what = "/etc-metadata-image";
             type = "erofs";
             options = "loop,ro";
@@ -81,7 +84,7 @@
                 "relatime"
                 "redirect_dir=on"
                 "metacopy=on"
-                "lowerdir=/run/etc-metadata::/etc-basedir"
+                "lowerdir=/run/nixos-etc-metadata::/etc-basedir"
               ]
               ++ lib.optionals config.system.etc.overlay.mutable [
                 "rw"
@@ -111,7 +114,7 @@
             unitConfig = {
               RequiresMountsFor = [
                 "/sysroot/nix/store"
-                "/run/etc-metadata"
+                "/run/nixos-etc-metadata"
               ];
               DefaultDependencies = false;
             };

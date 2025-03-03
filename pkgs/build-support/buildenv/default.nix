@@ -5,13 +5,12 @@
   buildPackages,
   runCommand,
   lib,
-  substituteAll,
+  replaceVars,
   writeClosure,
 }:
 
 let
-  builder = substituteAll {
-    src = ./builder.pl;
+  builder = replaceVars ./builder.pl {
     inherit (builtins) storeDir;
   };
 in
@@ -29,6 +28,9 @@ lib.makeOverridable (
 
     # Whether to ignore collisions or abort.
     ignoreCollisions ? false,
+
+    # Whether to ignore outputs that are a single file instead of a directory.
+    ignoreSingleFileOutputs ? false,
 
     # Whether to include closures of all input paths.
     includeClosures ? false,
@@ -58,6 +60,8 @@ lib.makeOverridable (
 
     passthru ? { },
     meta ? { },
+    pname ? null,
+    version ? null,
   }:
   let
     chosenOutputs = map (drv: {
@@ -86,26 +90,35 @@ lib.makeOverridable (
     ];
   in
   runCommand name
-    rec {
-      inherit
-        manifest
-        ignoreCollisions
-        checkCollisionContents
-        passthru
-        meta
-        pathsToLink
-        extraPrefix
-        postBuild
-        nativeBuildInputs
-        buildInputs
-        ;
-      pkgs = builtins.toJSON chosenOutputs;
-      extraPathsFrom = lib.optional includeClosures (writeClosure pathsForClosure);
-      preferLocalBuild = true;
-      allowSubstitutes = false;
-      # XXX: The size is somewhat arbitrary
-      passAsFile = if builtins.stringLength pkgs >= 128 * 1024 then [ "pkgs" ] else [ ];
-    }
+    (
+      rec {
+        inherit
+          manifest
+          ignoreCollisions
+          checkCollisionContents
+          ignoreSingleFileOutputs
+          passthru
+          meta
+          pathsToLink
+          extraPrefix
+          postBuild
+          nativeBuildInputs
+          buildInputs
+          ;
+        pkgs = builtins.toJSON chosenOutputs;
+        extraPathsFrom = lib.optional includeClosures (writeClosure pathsForClosure);
+        preferLocalBuild = true;
+        allowSubstitutes = false;
+        # XXX: The size is somewhat arbitrary
+        passAsFile = if builtins.stringLength pkgs >= 128 * 1024 then [ "pkgs" ] else [ ];
+      }
+      // lib.optionalAttrs (pname != null) {
+        inherit pname;
+      }
+      // lib.optionalAttrs (version != null) {
+        inherit version;
+      }
+    )
     ''
       ${buildPackages.perl}/bin/perl -w ${builder}
       eval "$postBuild"

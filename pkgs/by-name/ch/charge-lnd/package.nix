@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "accumulator";
     repo = "charge-lnd";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-mNU8bhiZqvYbNUU8vJNk9WbpAVrCTi9Fy3hlIpb06ac=";
   };
 

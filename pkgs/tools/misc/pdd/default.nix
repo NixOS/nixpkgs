@@ -12,7 +12,7 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "jarun";
     repo = "pdd";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     sha256 = "sha256-Z+jUFu4VvrgWUtkXMkjspcRJ/JG81X9gc2tnDoCdrsk=";
   };
 

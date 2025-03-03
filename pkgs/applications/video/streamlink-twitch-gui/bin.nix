@@ -20,7 +20,7 @@
 , gtk3-x11
 , libudev0-shim
 , libuuid
-, mesa
+, libgbm
 , nss
 , nspr
 , xorg
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     glib
     pango
     gtk3-x11
-    mesa
+    libgbm
     nss
     nspr
     libuuid

@@ -32,15 +32,15 @@
 
 buildPythonPackage rec {
   pname = "gymnasium";
-  version = "1.0.0";
+  version = "1.1.0";
 
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Farama-Foundation";
     repo = "gymnasium";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Qchuz08yJ0giVrtKLC9vBgr28JrHQyAOCuoS239ivVw=";
+    tag = "v${version}";
+    hash = "sha256-o+rxEMxiw4BP1lTk0xTXjqXS2C9vuHBzE8F7ZEVHmIc=";
   };
 
   build-system = [ setuptools ];

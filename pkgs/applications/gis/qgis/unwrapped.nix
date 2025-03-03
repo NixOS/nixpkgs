@@ -27,7 +27,7 @@
 , ninja
 , openssl
 , pdal
-, postgresql
+, libpq
 , proj
 , protobuf
 , python3
@@ -80,14 +80,14 @@ let
     urllib3
   ];
 in mkDerivation rec {
-  version = "3.40.1";
+  version = "3.40.3";
   pname = "qgis-unwrapped";
 
   src = fetchFromGitHub {
     owner = "qgis";
     repo = "QGIS";
     rev = "final-${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-C86RwyeIZrflC5F2VQCw1LwF9VM4/OBEsLbGPiWKeco=";
+    hash = "sha256-AUDohf71NIuEjFrzRQ8QsdvmEjYsZK9aI4j0msVJgcQ=";
   };
 
   passthru = {
@@ -119,7 +119,7 @@ in mkDerivation rec {
     netcdf
     openssl
     pdal
-    postgresql
+    libpq
     proj
     protobuf
     qca-qt5

@@ -92,7 +92,7 @@ in
 
         ::: {.note}
         Playwright can currently leak memory.
-        See https://github.com/dgtlmoon/changedetection.io/wiki/Playwright-content-fetcher#playwright-memory-leak
+        See <https://github.com/dgtlmoon/changedetection.io/wiki/Playwright-content-fetcher#playwright-memory-leak>
         :::
       '';
     };
@@ -106,7 +106,7 @@ in
 
         ::: {.note}
         Playwright can currently leak memory.
-        See https://github.com/dgtlmoon/changedetection.io/wiki/Playwright-content-fetcher#playwright-memory-leak
+        See <https://github.com/dgtlmoon/changedetection.io/wiki/Playwright-content-fetcher#playwright-memory-leak>
         :::
       '';
     };

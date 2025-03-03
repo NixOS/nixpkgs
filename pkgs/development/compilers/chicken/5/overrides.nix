@@ -148,11 +148,7 @@ in
   plot = addToBuildInputs pkgs.plotutils;
   postgresql = addToBuildInputsWithPkgConfig pkgs.postgresql;
   rocksdb = addToBuildInputs pkgs.rocksdb_8_3;
-  scheme2c-compatibility =
-    old:
-    addToNativeBuildInputs (lib.optionals (stdenv.system == "x86_64-darwin") [
-      pkgs.memorymappingHook
-    ]) (addPkgConfig old);
+  scheme2c-compatibility = addPkgConfig;
   sdl-base =
     old:
     (

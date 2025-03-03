@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "oasis-open";
     repo = "cti-python-stix2";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-1bILZUZgPOWmFWRu4p/fmgi4QPEE1lFQH9mxoWd/saI=";
   };
 

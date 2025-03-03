@@ -8,20 +8,20 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "granian";
-  version = "1.6.2";
+  version = "1.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "emmett-framework";
     repo = "granian";
     rev = "v${version}";
-    hash = "sha256-BuGavjNgA2xsp1f1KGQ9JYmAYVL779EC5jDzuRXAjYg=";
+    hash = "sha256-OjyDwfp0d779oFQ7wUdR1eRPP35kcJa3wIdcYGrGGME=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-x/qyNnIUqEgh8fyzn7g4dw7KQxn71l+vlar04PaVI7c=";
+    hash = "sha256-jAjHvVyFhGGE/OwfusUE/GdrNrEgvh48lmC5tla4lhI=";
   };
 
   nativeBuildInputs = with rustPlatform; [

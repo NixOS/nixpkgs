@@ -28,12 +28,12 @@ let
       version,
       sha512,
       updateScript,
+      applicationName ? "Thunderbird",
     }:
     (buildMozillaMach rec {
       pname = "thunderbird";
-      inherit version updateScript;
+      inherit version updateScript applicationName;
       application = "comm/mail";
-      applicationName = "Mozilla Thunderbird";
       binaryName = pname;
       src = fetchurl {
         url = "mirror://mozilla/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.xz";
@@ -42,6 +42,12 @@ let
       extraPatches = [
         # The file to be patched is different from firefox's `no-buildconfig-ffx90.patch`.
         ./no-buildconfig.patch
+        # clang-19 fixes for char_traits build issue
+        # https://github.com/rnpgp/rnp/pull/2242/commits/e0790a2c4ff8e09d52522785cec1c9db23d304ac
+        # https://github.com/rnpgp/sexpp/pull/54/commits/46744a14ffc235330bb99cebfaf294829c31bba4
+        # Remove when upstream bumps bundled rnp version: https://bugzilla.mozilla.org/show_bug.cgi?id=1893950
+        ./0001-Removed-lookup-against-basic_string-uint8_t.patch
+        ./0001-Implemented-char_traits-for-SEXP-octet_t.patch
       ];
 
       extraPassthru = {
@@ -92,8 +98,10 @@ rec {
   thunderbird-esr = thunderbird-128;
 
   thunderbird-128 = common {
-    version = "128.5.2esr";
-    sha512 = "cbfd4b1a7245c2a2f6ef9b2cf69d95a8095eba855755d00fd397351b21ad504733084d6f41801f4114be7015332b8db65e5290bec45f5321efc753412b9acecc";
+    applicationName = "Thunderbird ESR";
+
+    version = "128.7.1esr";
+    sha512 = "3f84e1f1a83379da1f154b66dbb5f941d04548ad017aab32aa9520f4315edb524e3754ac1fe9a7ae27f7aa33e2881c6783f11ccc53cda713f107760b7d880667";
 
     updateScript = callPackage ./update.nix {
       attrPath = "thunderbirdPackages.thunderbird-128";

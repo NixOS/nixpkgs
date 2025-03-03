@@ -10,8 +10,10 @@
   rustc,
   pkg-config,
   glib,
+  grass-sass,
   gtk4,
   gtksourceview5,
+  lcms2,
   libadwaita,
   gst_all_1,
   desktop-file-utils,
@@ -28,23 +30,26 @@
 
 stdenv.mkDerivation rec {
   pname = "fractal";
-  version = "9";
+  version = "10.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "fractal";
-    rev = "refs/tags/${version}";
-    hash = "sha256-3UI727LUYw7wUKbGRCtgpkF9NNw4XuZ3tl3KV3Ku9r4=";
+    tag = version;
+    hash = "sha256-61xiHVzmLMbLNZlobH6JVcvuO9eoFwqBZBo1rVtPYOc=";
   };
 
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "matrix-sdk-0.7.1" = "sha256-AmODDuNLpI6gXuu+oPl3MqcOnywqR8lqJ0bVOIiz02E=";
-      "ruma-0.10.1" = "sha256-6U2LKMYyY7SLOh2jJcVuDBsfcidNoia1XU+JsmhMHGY=";
-    };
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit src;
+    hash = "sha256-e3IW8D4aLU6d36ErUHDUDiXF1lN4HCn5OCX6GwaT3iQ=";
   };
+
+  patches = [
+    # Disable debug symbols in release builds
+    # The debug symbols are stripped afterwards anyways, and building with them requires extra memory
+    ./disable-debug.patch
+  ];
 
   # Dirty approach to add patches after cargoSetupPostUnpackHook
   # We should eventually use a cargo vendor patch hook instead
@@ -56,6 +61,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     glib
+    grass-sass
     gtk4
     meson
     ninja
@@ -74,6 +80,7 @@ stdenv.mkDerivation rec {
       glib
       gtk4
       gtksourceview5
+      lcms2
       libadwaita
       openssl
       pipewire
@@ -87,6 +94,7 @@ stdenv.mkDerivation rec {
       gst-plugins-base
       gst-plugins-bad
       gst-plugins-good
+      gst-plugins-rs
     ]);
 
   preFixup = ''

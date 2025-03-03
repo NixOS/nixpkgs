@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "synacktiv";
     repo = "octoscan";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-7Y33HUqI3EKyWcVdJt+gj6VaMcXRp20fxuz9gNutOIo=";
   };
 

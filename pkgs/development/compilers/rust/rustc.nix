@@ -291,6 +291,12 @@ stdenv.mkDerivation (finalAttrs: {
       # Useful debugging parameter
       # export VERBOSE=1
     ''
+    + lib.optionalString (stdenv.hostPlatform.isDarwin || stdenv.targetPlatform.isDarwin) ''
+      # Replace hardcoded path to strip with llvm-strip
+      # https://github.com/NixOS/nixpkgs/issues/299606
+      substituteInPlace compiler/rustc_codegen_ssa/src/back/link.rs \
+        --replace-fail "/usr/bin/strip" "${lib.getExe' llvmShared "llvm-strip"}"
+    ''
     + lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) ''
       # See https://github.com/jemalloc/jemalloc/issues/1997
       # Using a value of 48 should work on both emulated and native x86_64-darwin.
@@ -415,5 +421,10 @@ stdenv.mkDerivation (finalAttrs: {
     # If rustc can't target a platform, we also can't build rustc for
     # that platform.
     badPlatforms = rustc.badTargetPlatforms;
+    # Builds, but can't actually compile anything
+    # https://github.com/NixOS/nixpkgs/issues/311930
+    # https://github.com/rust-lang/rust/issues/55120
+    # https://github.com/rust-lang/rust/issues/82521
+    broken = stdenv.hostPlatform.useLLVM;
   };
 })

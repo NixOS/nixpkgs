@@ -23,13 +23,14 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "9999years";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-t308Ep27iRvRHSdvVMOrRGVoajBtnTutHAkKbZkO7Wg=";
   };
 
   buildFeatures = [ "clap_mangen" ];
 
-  cargoHash = "sha256-oukVU3YZMI2Z6HqIrEe2npmCj9PtwQUT6VOPkklM0Ig=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-5YHE1NVUcZ5NeOl3Z87l3PVsmlkswhnT83Oi9loJjdM=";
 
   OPENSSL_NO_VENDOR = true;
 

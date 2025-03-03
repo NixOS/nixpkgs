@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "pydeako";
-  version = "0.5.4";
+  version = "0.6.0";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -20,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "DeakoLights";
     repo = "pydeako";
-    rev = "refs/tags/${version}";
-    hash = "sha256-Z0H5VhWfjmvvCGTX//hds9dwk2wJSPXckNac1PkQZNA=";
+    tag = version;
+    hash = "sha256-GEYuVKE3DOXJzCqTW2Ngoi6l0e4JvE9lUnZtjrNXTVk=";
   };
 
   build-system = [ setuptools ];

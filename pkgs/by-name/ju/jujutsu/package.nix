@@ -21,7 +21,7 @@
 }:
 
 let
-  version = "0.24.0";
+  version = "0.26.0";
 in
 
 rustPlatform.buildRustPackage {
@@ -29,13 +29,20 @@ rustPlatform.buildRustPackage {
   inherit version;
 
   src = fetchFromGitHub {
-    owner = "martinvonz";
+    owner = "jj-vcs";
     repo = "jj";
-    rev = "v${version}";
-    hash = "sha256-XsD4P2UygZFcnlV2o3E/hRRgsGjwKw1r9zniEeAk758";
+    tag = "v${version}";
+    hash = "sha256-jGy+0VDxQrgNhj+eX06FRhPP31V8QZVAM4j4yBosAGE=";
   };
 
-  cargoHash = "sha256-9JwRdeHo8JkwRQwPA+UsIEWar4gYQS4SIM/uj1TU2yg";
+  useFetchCargoVendor = true;
+
+  cargoPatches = [
+    # <https://github.com/jj-vcs/jj/pull/5315>
+    ./libgit2-1.9.0.patch
+  ];
+
+  cargoHash = "sha256-CtyRekrbRwUvQq2HsFwNo46RCDEGwy9e4ZU8/TwGxSU=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -89,8 +96,8 @@ rustPlatform.buildRustPackage {
       jj = "${stdenv.hostPlatform.emulator buildPackages} $out/bin/jj";
     in
     lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) ''
-      ${jj} util mangen > ./jj.1
-      installManPage ./jj.1
+      mkdir -p $out/share/man
+      ${jj} util install-man-pages $out/share/man/
 
       installShellCompletion --cmd jj \
         --bash <(COMPLETE=bash ${jj}) \
@@ -110,8 +117,8 @@ rustPlatform.buildRustPackage {
 
   meta = {
     description = "Git-compatible DVCS that is both simple and powerful";
-    homepage = "https://github.com/martinvonz/jj";
-    changelog = "https://github.com/martinvonz/jj/blob/v${version}/CHANGELOG.md";
+    homepage = "https://github.com/jj-vcs/jj";
+    changelog = "https://github.com/jj-vcs/jj/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       _0x4A6F

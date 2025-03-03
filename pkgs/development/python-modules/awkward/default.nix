@@ -1,7 +1,7 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
 
   # build-system
@@ -13,33 +13,27 @@
   fsspec,
   numpy,
   packaging,
-  typing-extensions,
-  importlib-metadata,
 
-  # checks
+  # tests
   numba,
-  setuptools,
   numexpr,
   pandas,
   pyarrow,
   pytest-xdist,
   pytestCheckHook,
-  jax,
-  jaxlib,
-
-  stdenv,
+  pythonAtLeast,
 }:
 
 buildPythonPackage rec {
   pname = "awkward";
-  version = "2.7.2";
+  version = "2.7.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scikit-hep";
     repo = "awkward";
     tag = "v${version}";
-    hash = "sha256-nOKMwAQ5t8tc64bEKz0j8JxxoVQQu39Iu8Zr9cqSx7A=";
+    hash = "sha256-OXSl+8sfrx+JlLu40wHf+98WVNNwm9uxvsnGXRDztDg=";
   };
 
   build-system = [
@@ -47,48 +41,52 @@ buildPythonPackage rec {
     hatchling
   ];
 
-  dependencies =
-    [
-      awkward-cpp
-      fsspec
-      numpy
-      packaging
-    ]
-    ++ lib.optionals (pythonOlder "3.11") [ typing-extensions ]
-    ++ lib.optionals (pythonOlder "3.12") [ importlib-metadata ];
+  dependencies = [
+    awkward-cpp
+    fsspec
+    numpy
+    packaging
+  ];
 
   dontUseCmakeConfigure = true;
 
   pythonImportsCheck = [ "awkward" ];
 
-  nativeCheckInputs =
+  nativeCheckInputs = [
+    fsspec
+    numba
+    numexpr
+    pandas
+    pyarrow
+    pytest-xdist
+    pytestCheckHook
+  ];
+
+  disabledTests =
     [
-      fsspec
-      numba
-      setuptools
-      numexpr
-      pandas
-      pyarrow
-      pytest-xdist
-      pytestCheckHook
+      # pyarrow.lib.ArrowInvalid
+      "test_recordarray"
     ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      # no support for darwin
-      jax
-      jaxlib
+    ++ lib.optionals (pythonAtLeast "3.13") [
+      # AttributeError: 'FrameLocalsProxy' object has no attribute 'clear'
+      "test_numexpr"
     ];
 
-  # The following tests have been disabled because they need to be run on a GPU platform.
-  disabledTestPaths = [
-    "tests-cuda"
-    # Disable tests dependending on jax on darwin
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "tests/test_2603_custom_behaviors_with_jax.py" ];
-
-  disabledTests = [
-    # AssertionError: Regex pattern did not match.
-    "test_serialise_with_nonserialisable_attrs"
-    "test_serialise_with_nonserialisable_attrs"
-  ];
+  disabledTestPaths =
+    [
+      # Need to be run on a GPU platform.
+      "tests-cuda"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+      # Fatal Python error: Segmentation fault at:
+      # numba/typed/typedlist.py", line 344 in append
+      "tests/test_0118_numba_cpointers.py"
+      "tests/test_0397_arrays_as_constants_in_numba.py"
+      "tests/test_1677_array_builder_in_numba.py"
+      "tests/test_2055_array_builder_check.py"
+      "tests/test_2349_growablebuffer_in_numba.py"
+      "tests/test_2408_layoutbuilder_in_numba.py"
+    ];
 
   meta = {
     description = "Manipulate JSON-like data with NumPy-like idioms";

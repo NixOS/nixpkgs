@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "keboola";
     repo = "sapi-python-client";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-30bAw5pYEUj0jeZWiJxzZ7lDs/+63tlcoLaHrUmYCs8=";
   };
 

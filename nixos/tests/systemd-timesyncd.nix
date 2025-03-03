@@ -26,13 +26,18 @@ import ./make-test-python.nix (
           # create the path that should be migrated by our activation script when
           # upgrading to a newer nixos version
           system.stateVersion = "19.03";
-          systemd.tmpfiles.settings.systemd-timesyncd-test = {
-            "/var/lib/systemd/timesync".R = { };
-            "/var/lib/systemd/timesync".L.argument = "/var/lib/private/systemd/timesync";
-            "/var/lib/private/systemd/timesync".d = {
-              user = "systemd-timesync";
-              group = "systemd-timesync";
-            };
+          systemd.services.old-timesync-state-dir = {
+            requiredBy = [ "sysinit.target" ];
+            before = [ "systemd-timesyncd.service" ];
+            after = [ "local-fs.target" ];
+            unitConfig.DefaultDependencies = false;
+            serviceConfig.Type = "oneshot";
+            script = ''
+              rm -rf /var/lib/systemd/timesync
+              mkdir -p /var/lib/systemd /var/lib/private/systemd/timesync
+              ln -s /var/lib/private/systemd/timesync /var/lib/systemd/timesync
+              chown systemd-timesync: /var/lib/private/systemd/timesync
+            '';
           };
         }
       );

@@ -7,14 +7,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "codespell";
-  version = "2.3.0";
+  version = "2.4.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "codespell-project";
     repo = "codespell";
-    rev = "v${version}";
-    sha256 = "sha256-X3Pueu0E7Q57sbKSXqCZki4/PUb1WyWk/Zmj+lhVTM8=";
+    tag = "v${version}";
+    sha256 = "sha256-9hr/QZcBESLukujzNKNjWGG3nXx+wkvQvoUYmYgtXv0=";
   };
 
   nativeBuildInputs = with python3.pkgs; [

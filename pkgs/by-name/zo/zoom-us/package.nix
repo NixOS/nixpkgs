@@ -22,7 +22,7 @@
   gtk3,
   gdk-pixbuf,
   glib,
-  mesa,
+  libgbm,
   nspr,
   nss,
   pango,
@@ -40,6 +40,7 @@
   pulseaudioSupport ? true,
   libpulseaudio,
   pulseaudio,
+  callPackage,
 }:
 
 let
@@ -47,26 +48,26 @@ let
   throwSystem = throw "Unsupported system: ${system}";
 
   # Zoom versions are released at different times for each platform
-  # and often with different versions.  We write them on three lines
+  # and often with different versions. We write them on three lines
   # like this (rather than using {}) so that the updater script can
   # find where to edit them.
-  versions.aarch64-darwin = "6.2.11.43613";
-  versions.x86_64-darwin = "6.2.11.43613";
-  versions.x86_64-linux = "6.2.11.5069";
+  versions.aarch64-darwin = "6.3.10.49367";
+  versions.x86_64-darwin = "6.3.10.49367";
+  versions.x86_64-linux = "6.3.10.7150";
 
   srcs = {
     aarch64-darwin = fetchurl {
       url = "https://zoom.us/client/${versions.aarch64-darwin}/zoomusInstallerFull.pkg?archType=arm64";
       name = "zoomusInstallerFull.pkg";
-      hash = "sha256-3W0ohT62vn6vdzGq4YVcaM1kEe9oRxWOavGP/+1fhZc=";
+      hash = "sha256-NRLloJiCpIWUdIEPaEUBYunYotrM95sc6dlpFGN5EjE=";
     };
     x86_64-darwin = fetchurl {
       url = "https://zoom.us/client/${versions.x86_64-darwin}/zoomusInstallerFull.pkg";
-      hash = "sha256-NnnY31fj0Bl1DLEghajf1bH2/bCewzzWZGP4bvIvvyk=";
+      hash = "sha256-eiEDx96Xgr14yIVtiUyN0BJNhrMjlcLM1zregT51z14=";
     };
     x86_64-linux = fetchurl {
       url = "https://zoom.us/client/${versions.x86_64-linux}/zoom_x86_64.pkg.tar.xz";
-      hash = "sha256-k8T/lmfgAFxW1nwEyh61lagrlHP5geT2tA7e5j61+qw=";
+      hash = "sha256-aWU5eGbBvrJ8T5tKWVpx1KiPjH0oMPDSAMtEdH/GAqM=";
     };
   };
 
@@ -89,7 +90,7 @@ let
       gtk3
       gdk-pixbuf
       glib
-      mesa
+      libgbm
       nspr
       nss
       pango
@@ -122,6 +123,7 @@ let
       coreutils
       glib.dev
       pciutils
+      pipewire
       procps
       util-linux
     ]
@@ -179,7 +181,7 @@ stdenv.mkDerivation {
       substituteInPlace $out/share/applications/Zoom.desktop \
           --replace-fail "Exec=/usr/bin/zoom" "Exec=$out/bin/zoom"
 
-      for i in aomhost zopen zoom ZoomLauncher ZoomWebviewHost; do
+      for i in aomhost zopen ZoomLauncher ZoomWebviewHost; do
         if [ -f $out/opt/zoom/$i ]; then
           patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $out/opt/zoom/$i
         fi
@@ -187,8 +189,14 @@ stdenv.mkDerivation {
 
       # ZoomLauncher sets LD_LIBRARY_PATH before execing zoom
       # IPC breaks if the executable name does not end in 'zoom'
+      # zoom binary does not like being touched by patchelf
+      #   => we call it indirectly via the dynamic linker
+      # zoom binary inspects /proc/self/exe to find its data files
+      #   => we must place a copy (not symlink) of the linker in zoom's data dir
       mv $out/opt/zoom/zoom $out/opt/zoom/.zoom
-      makeWrapper $out/opt/zoom/.zoom $out/opt/zoom/zoom \
+      cp "$(cat $NIX_CC/nix-support/dynamic-linker)" $out/opt/zoom/ld.so
+      makeWrapper $out/opt/zoom/ld.so $out/opt/zoom/zoom \
+        --add-flags $out/opt/zoom/.zoom \
         --prefix LD_LIBRARY_PATH ":" ${libs}
 
       rm $out/bin/zoom
@@ -220,6 +228,7 @@ stdenv.mkDerivation {
   dontPatchELF = true;
 
   passthru.updateScript = ./update.sh;
+  passthru.tests.startwindow = callPackage ./test.nix { };
 
   meta = with lib; {
     homepage = "https://zoom.us/";

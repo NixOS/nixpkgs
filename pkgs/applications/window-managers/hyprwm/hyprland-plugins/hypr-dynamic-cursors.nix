@@ -8,13 +8,13 @@
 
 mkHyprlandPlugin hyprland {
   pluginName = "hypr-dynamic-cursors";
-  version = "0-unstable-2024-12-14";
+  version = "0-unstable-2025-02-02";
 
   src = fetchFromGitHub {
     owner = "VirtCode";
     repo = "hypr-dynamic-cursors";
-    rev = "f0cef070c531e3a3a1f713b7062bded357b4c468";
-    hash = "sha256-XFQqJWxo6xUqLpAKqc0bHg1pZ21eFQ1HueDTxw7N6r8=";
+    rev = "fd6214629937949ecd8a39f4b5ebbce2afac0dd5";
+    hash = "sha256-Fg4+6Yko8V9b19/62jfKH0IWTiiRDMso1P1TnjAcs/8=";
   };
 
   dontUseCmakeConfigure = true;

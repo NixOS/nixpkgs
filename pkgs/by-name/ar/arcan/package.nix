@@ -29,7 +29,7 @@
   libxcb,
   libxkbcommon,
   makeWrapper,
-  mesa,
+  libgbm,
   mupdf,
   openal,
   openjpeg,
@@ -101,7 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
     libvncserver
     libxcb
     libxkbcommon
-    mesa
+    libgbm
     mupdf
     openal
     openjpeg
@@ -202,7 +202,7 @@ stdenv.mkDerivation (finalAttrs: {
       gpl2Plus
       lgpl2Plus
     ];
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.unix;
   };
 })

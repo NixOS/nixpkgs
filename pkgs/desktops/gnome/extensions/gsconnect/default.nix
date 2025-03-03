@@ -1,7 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, substituteAll
+, replaceVars
 , openssl
 , gsound
 , meson
@@ -35,9 +35,10 @@ stdenv.mkDerivation rec {
 
   patches = [
     # Make typelibs available in the extension
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       gapplication = "${glib.bin}/bin/gapplication";
+      # Replaced in postPatch
+      typelibPath = null;
     })
 
     # Allow installing installed tests to a separate output

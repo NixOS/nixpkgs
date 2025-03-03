@@ -109,6 +109,7 @@ stdenv.mkDerivation rec {
     "-DUSE_SYSTEM_LIBS=ON"
     "-DBUILD_IMGUI_INTERFACE=${if withImGui then "ON" else "OFF"}"
     "-DWITH_QT_GUI_WEBENGINE=${if withTauWidget then "ON" else "OFF"}"
+    "-DAPP_INSTALL_ROOT=${placeholder "out"}/app"
   ];
 
   doCheck = true;
@@ -140,9 +141,6 @@ stdenv.mkDerivation rec {
 
     # Prebuild Ruby vendored dependencies and Qt docs
     ./linux-prebuild.sh -o
-
-    # Append CMake flag depending on the value of $out
-    cmakeFlags+=" -DAPP_INSTALL_ROOT=$out/app"
   '';
 
   postBuild = ''

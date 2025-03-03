@@ -40,10 +40,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeCheckInputs = [
     cmake
+  ];
+  checkInputs = [
     doctest
   ];
   # CMake is just used for finding doctest.
   dontUseCmakeConfigure = true;
+
+  strictDeps = true;
 
   mesonFlags = [
     (lib.mesonEnable "tests" (stdenv.buildPlatform.canExecute stdenv.hostPlatform))

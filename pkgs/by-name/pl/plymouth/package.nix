@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitLab,
   writeText,
-  substituteAll,
+  replaceVars,
   meson,
   pkg-config,
   ninja,
@@ -44,8 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     # add support for loading plugins from /run to assist NixOS module
     ./add-runtime-plugin-path.patch
     # fix FHS hardcoded paths
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       fcmatch = "${fontconfig}/bin/fc-match";
     })
   ];

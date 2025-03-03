@@ -3,6 +3,8 @@
   lib,
   fetchFromGitLab,
   cmake,
+  gettext,
+  glib,
   pkg-config,
   libdrm,
   libGL,
@@ -10,7 +12,7 @@
   pcre,
   gtkmm4,
   pugixml,
-  mesa,
+  libgbm,
   pciutils,
 }:
 
@@ -28,6 +30,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
+    gettext # msgfmt
+    glib # glib-compile-resources
     pkg-config
   ];
   buildInputs = [
@@ -37,10 +41,11 @@ stdenv.mkDerivation rec {
     pcre
     gtkmm4
     pugixml
-    mesa
+    libgbm
     pciutils
   ];
 
+  # tries to download googletest
   cmakeFlags = [ "-DENABLE_UNIT_TESTS=off" ];
 
   postInstall = ''

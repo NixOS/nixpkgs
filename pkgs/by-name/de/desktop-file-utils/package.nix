@@ -10,11 +10,11 @@
 
 stdenv.mkDerivation rec {
   pname = "desktop-file-utils";
-  version = "0.27";
+  version = "0.28";
 
   src = fetchurl {
     url = "https://www.freedesktop.org/software/desktop-file-utils/releases/desktop-file-utils-${version}.tar.xz";
-    hash = "sha256-oIF985zjhbZiGIBAfFbx8pgWjAQMIDLO34jVt2r/6DY=";
+    hash = "sha256-RAHU4jHYQsLegkI5WnSjlcpGjNlvX2ENgi3zNZSJinA=";
   };
 
   nativeBuildInputs = [
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.freedesktop.org/wiki/Software/desktop-file-utils";
     description = "Command line utilities for working with .desktop files";
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = platforms.linux ++ platforms.darwin ++ platforms.freebsd;
     license = licenses.gpl2Plus;
   };
 }

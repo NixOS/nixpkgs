@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     owner = "nick87720z";
     repo = "tint2";
-    rev = version;
+    tag = version;
     hash = "sha256-9sEe/Gnj+FWLPbWBtfL1YlNNC12j7/KjQ40xdkaFJVQ=";
   };
 
@@ -44,6 +44,9 @@ stdenv.mkDerivation rec {
       hash = "sha256-K547KYlRkVl1s2THi3ZCRuM447EFJwTqUEBjKQnV8Sc=";
     })
   ];
+
+  # Fix build with gcc14
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU "-Wno-error=incompatible-pointer-types";
 
   nativeBuildInputs = [
     pkg-config

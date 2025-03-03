@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bieniu";
     repo = "nettigo-air-monitor";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-aYlnaFim4ezZ/nOAf1m6iIfE4NGswtEmPsslfrTd5tI=";
   };
 

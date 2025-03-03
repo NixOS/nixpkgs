@@ -15,6 +15,12 @@ stdenv.mkDerivation rec {
     hash = "sha256-oT7+6kIeFDgU6GbcHYQ6k0jCU84p8fTEVgUozYMkeVI=";
   };
 
+  patches = [
+    # GCC 14 errors on missing function definitions
+    # https://github.com/zohead/fbvnc/pull/3
+    ./gcc14-fix.patch
+  ];
+
   makeFlags = [
     "CC:=$(CC)"
   ];

@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "pyvlx";
-  version = "0.2.25";
+  version = "0.2.26";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -21,8 +21,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Julius2342";
     repo = "pyvlx";
-    rev = "refs/tags/${version}";
-    hash = "sha256-c0HlmqLvpIn2GXorOArBKJ0YzvWz1spmhWwm6Gow2iU=";
+    tag = version;
+    hash = "sha256-JwgElt0FFSGs3v+04AKPwTTpxvn8YzihJeD/+llbSMI=";
   };
 
   build-system = [ setuptools ];

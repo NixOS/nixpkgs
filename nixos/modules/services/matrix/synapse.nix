@@ -705,7 +705,7 @@ in
 
         withJemalloc = mkOption {
           type = types.bool;
-          default = false;
+          default = true;
           description = ''
             Whether to preload jemalloc to reduce memory fragmentation and overall usage.
           '';
@@ -1462,6 +1462,7 @@ in
         baseServiceConfig = {
           environment = optionalAttrs (cfg.withJemalloc) {
             LD_PRELOAD = "${pkgs.jemalloc}/lib/libjemalloc.so";
+            PYTHONMALLOC = "malloc";
           };
           serviceConfig = {
             Type = "notify";
@@ -1596,9 +1597,9 @@ in
   };
 
   meta = {
+    inherit (pkgs.matrix-synapse.meta) maintainers;
     buildDocsInSandbox = false;
     doc = ./synapse.md;
-    maintainers = teams.matrix.members;
   };
 
 }

@@ -11,7 +11,7 @@
   packaging,
   pytestCheckHook,
   pythonOlder,
-  substituteAll,
+  replaceVars,
 }:
 
 buildPythonPackage rec {
@@ -24,13 +24,12 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "facebookresearch";
     repo = "hydra";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-kD4BStnstr5hwyAOxdpPzLAJ9MZqU/CPiHkaD2HnUPI=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./antlr4.patch;
+    (replaceVars ./antlr4.patch {
       antlr_jar = "${antlr4.out}/share/java/antlr-${antlr4.version}-complete.jar";
     })
     # https://github.com/facebookresearch/hydra/pull/2731

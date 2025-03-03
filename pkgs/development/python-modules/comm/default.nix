@@ -18,7 +18,7 @@ buildPythonPackage {
   src = fetchFromGitHub {
     owner = "ipython";
     repo = "comm";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-51HSSULhbKb1NdLJ//b3Vh6sOLWp0B4KW469htpduqM=";
   };
 

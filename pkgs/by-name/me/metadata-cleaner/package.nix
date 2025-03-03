@@ -12,6 +12,7 @@
   librsvg,
   meson,
   ninja,
+  nix-update-script,
   pkg-config,
   poppler_gi,
   wrapGAppsHook4,
@@ -55,6 +56,10 @@ python3.pkgs.buildPythonApplication rec {
     mat2
     pygobject3
   ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "Python GTK application to view and clean metadata in files, using mat2";

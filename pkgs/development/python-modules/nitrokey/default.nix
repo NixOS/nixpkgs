@@ -17,12 +17,12 @@
 
 buildPythonPackage rec {
   pname = "nitrokey";
-  version = "0.2.3";
+  version = "0.2.4";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-8Ig2LI7waU/IbUwApyFI2TwtarT5bYolgeq14SgmbEo=";
+    hash = "sha256-XDlcOfOTGgYsg5DLsy1wJd3AzuvWSvqyFSEYrDOp0Ic=";
   };
 
   disabled = pythonOlder "3.9";

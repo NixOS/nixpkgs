@@ -6,7 +6,7 @@
 , lib
 , buildPackages
 , makeShellWrapper
-, mesa
+, libgbm
 , nss
 , stdenv
 , udev
@@ -19,7 +19,7 @@ let
   availableBinaries = {
     x86_64-linux = {
       platform = "linux-x64";
-      hash = "sha256-zS/yMXNNYlxgYyUDou2HaXuetPotqiOM8kv1Y7JouCo=";
+      hash = "sha256-1W13AfXVRWTmDSRdsaPfSSJNlf59JXdI92tXBbYwdDI=";
     };
     aarch64-linux = {
       platform = "linux-arm64";
@@ -39,7 +39,7 @@ let
   inherit (binary) platform hash;
 in stdenv.mkDerivation rec {
   pname = "cypress";
-  version = "13.13.2";
+  version = "13.17.0";
 
   src = fetchzip {
     url = "https://cdn.cypress.io/desktop/${version}/${platform}/cypress.zip";
@@ -72,7 +72,7 @@ in stdenv.mkDerivation rec {
     gtk2
     alsa-lib
     gtk3
-    mesa # for libgbm
+    libgbm
   ]) ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [
     Cocoa
     CoreServices

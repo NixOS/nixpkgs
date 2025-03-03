@@ -32,6 +32,7 @@
   zlib,
   Cocoa,
   enablePython ? false,
+  enableRtk ? true,
 }:
 
 let
@@ -65,19 +66,6 @@ let
     rev = "583288b1898dedcfb5e4d602e31020b452971383";
     hash = "sha256-1ItsLCRwRzGDSRe4xUDg09Hksu1nKichbWuM0YSVkbM=";
   };
-
-  # remove after next swig update:
-  swigUnstable = swig.overrideAttrs ({
-    version = "4.2.1-unstable-2024-08-19";
-
-    src = fetchFromGitHub {
-      owner = "swig";
-      repo = "swig";
-      rev = "5ac5d90f970759fbe705fae551d0743a7c63c67e";
-      hash = "sha256-32EFLHpP4l04nqrc8dt4Qsr8deTBqLt8lUlhnNnaIGU=";
-    };
-
-  });
 in
 
 stdenv.mkDerivation {
@@ -115,8 +103,7 @@ stdenv.mkDerivation {
       "-DBUILD_SHARED_LIBS=ON"
       "-DITK_FORBID_DOWNLOADS=ON"
       "-DITK_USE_SYSTEM_LIBRARIES=ON" # finds common libraries e.g. hdf5, libpng, libtiff, zlib, but not GDCM, NIFTI, MINC, etc.
-      "-DITK_USE_SYSTEM_EIGEN=ON"
-      "-DITK_USE_SYSTEM_EIGEN=OFF"
+      (lib.cmakeBool "ITK_USE_SYSTEM_EIGEN" (lib.versionAtLeast version "5.4"))
       "-DITK_USE_SYSTEM_GOOGLETEST=OFF" # ANTs build failure due to https://github.com/ANTsX/ANTs/issues/1489
       "-DITK_USE_SYSTEM_GDCM=ON"
       "-DITK_USE_SYSTEM_MINC=ON"
@@ -129,6 +116,8 @@ stdenv.mkDerivation {
       "-DModule_MGHIO=ON"
       "-DModule_AdaptiveDenoising=ON"
       "-DModule_GenericLabelInterpolator=ON"
+    ]
+    ++ lib.optionals enableRtk [
       "-DModule_RTK=ON"
     ]
     ++ lib.optionals enablePython [
@@ -146,16 +135,16 @@ stdenv.mkDerivation {
     ]
     ++ lib.optionals enablePython [
       castxml
-      swigUnstable
+      swig
       which
     ];
 
   buildInputs =
     [
-      eigen
       libX11
       libuuid
     ]
+    ++ lib.optionals (lib.versionAtLeast version "5.4") [ eigen ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ Cocoa ]
     ++ lib.optionals enablePython [ python ]
     ++ lib.optionals withVtk [ vtk ];
@@ -166,20 +155,23 @@ stdenv.mkDerivation {
   # These deps were propagated from VTK 9 in https://github.com/NixOS/nixpkgs/pull/206935,
   # so we simply propagate them again from ITK.
   # This admittedly is a hack and seems like an issue with VTK 9's CMake configuration.
-  propagatedBuildInputs = [
-    # The dependencies we've un-vendored from ITK, such as GDCM, must be propagated,
-    # otherwise other software built against ITK fails to configure since ITK headers
-    # refer to these previously vendored libraries:
-    expat
-    fftw
-    gdcm
-    hdf5-cpp
-    libjpeg
-    libminc
-    libpng
-    libtiff
-    zlib
-  ] ++ lib.optionals withVtk vtk.propagatedBuildInputs ++ lib.optionals enablePython [ numpy ];
+  propagatedBuildInputs =
+    [
+      # The dependencies we've un-vendored from ITK, such as GDCM, must be propagated,
+      # otherwise other software built against ITK fails to configure since ITK headers
+      # refer to these previously vendored libraries:
+      expat
+      fftw
+      gdcm
+      hdf5-cpp
+      libjpeg
+      libminc
+      libpng
+      libtiff
+      zlib
+    ]
+    ++ lib.optionals withVtk vtk.propagatedBuildInputs
+    ++ lib.optionals enablePython [ numpy ];
 
   postInstall = lib.optionalString enablePython ''
     substitute \

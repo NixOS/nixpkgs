@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "simple64-netplay-server";
-  version = "2024.10.1";
+  version = "2025.02.3";
 
   src = fetchFromGitHub {
     owner = "simple64";
     repo = "simple64-netplay-server";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-p9hHVf1LD95w280ScUkxHKmBJLJ9eiH3WEYV+kaALgQ=";
+    tag = "v${version}";
+    hash = "sha256-mtyIGS7i4+HRpjE8Z3puoIOGhv21Th27iCXpO2LxtAg=";
   };
 
-  vendorHash = "sha256-HeYA/nR0NuP/fPMJXGGuN2eP6vB4yj1yWFfFDyp34QE=";
+  vendorHash = "sha256-lcKOAPCyWKNg+l1YjziaMTn4DjLB0P+dz3FqyAy0sFk=";
 
   meta = {
     description = "Dedicated server for simple64 netplay";

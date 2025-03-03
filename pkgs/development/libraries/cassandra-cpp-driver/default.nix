@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "datastax";
     repo = "cpp-driver";
-    rev = "refs/tags/${version}";
+    tag = version;
     sha256 = "sha256-GuvmKHJknudyn7ahrn/8+kKUA4NW5UjCfkYoX3aTE+Q=";
   };
 

@@ -33,7 +33,7 @@
 
 buildPythonPackage rec {
   pname = "rasterio";
-  version = "1.4.2";
+  version = "1.4.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -41,15 +41,9 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rasterio";
     repo = "rasterio";
-    rev = "refs/tags/${version}";
-    hash = "sha256-YGSd0IG6TWnHmDiVEE3F2KNQ4dXJhkPqAJsIrWyuHos=";
+    tag = version;
+    hash = "sha256-InejYBRa4i0E2GxEWbtBpaErtcoYrhtypAlRtMlUoDk=";
   };
-
-  postPatch = ''
-    # relax numpy dependency
-    substituteInPlace pyproject.toml \
-      --replace-fail "numpy>=2" "numpy"
-  '';
 
   nativeBuildInputs = [
     cython

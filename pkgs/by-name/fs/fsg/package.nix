@@ -25,6 +25,12 @@ stdenv.mkDerivation rec {
 
   patches = [ ./wxgtk-3.2.patch ];
 
+  # use correct wx-config for cross-compiling
+  postPatch = ''
+    substituteInPlace makefile \
+      --replace-fail 'wx-config' "${lib.getExe' wxGTK32 "wx-config"}"
+  '';
+
   hardeningDisable = [ "format" ];
 
   nativeBuildInputs = [ pkg-config ];
@@ -44,6 +50,10 @@ stdenv.mkDerivation rec {
     ' -i MainFrame.cpp
     sed -re '/ctrans_prob/s/energy\[center][+]energy\[other]/(int)(fmin(energy[center]+energy[other],99))/g' -i Canvas.cpp
   '';
+
+  makeFlags = [
+    "CPP=${stdenv.cc.targetPrefix}c++"
+  ];
 
   installPhase = ''
     mkdir -p $out/bin $out/libexec

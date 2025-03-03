@@ -267,7 +267,7 @@ rec {
       # Set all entries not present to null
       mapAttrs (name: value: null) (readDir path) // value;
 
-  /*
+  /**
     A normalisation of a filesetTree suitable filtering with `builtins.path`:
     - Replace all directories that have no files with `null`.
       This removes directories that would be empty
@@ -276,7 +276,21 @@ rec {
 
     Note that this function is strict, it evaluates the entire tree
 
-    Type: Path -> filesetTree -> filesetTree
+    # Inputs
+
+    `path`
+
+    : 1\. Function argument
+
+    `tree`
+
+    : 2\. Function argument
+
+    # Type
+
+    ```
+    Path -> filesetTree -> filesetTree
+    ```
   */
   _normaliseTreeFilter =
     path: tree:
@@ -298,7 +312,7 @@ rec {
     else
       tree;
 
-  /*
+  /**
     A minimal normalisation of a filesetTree, intended for pretty-printing:
     - If all children of a path are recursively included or empty directories, the path itself is also recursively included
     - If all children of a path are fully excluded or empty directories, the path itself is an empty directory
@@ -307,7 +321,21 @@ rec {
 
     Note that this function is partially lazy.
 
-    Type: Path -> filesetTree -> filesetTree (with "emptyDir"'s)
+    # Inputs
+
+    `path`
+
+    : 1\. Function argument
+
+    `tree`
+
+    : 2\. Function argument
+
+    # Type
+
+    ```
+    Path -> filesetTree -> filesetTree (with "emptyDir"'s)
+    ```
   */
   _normaliseTreeMinimal =
     path: tree:

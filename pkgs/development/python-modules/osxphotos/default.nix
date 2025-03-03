@@ -35,14 +35,14 @@
 
 buildPythonPackage rec {
   pname = "osxphotos";
-  version = "0.68.6";
+  version = "0.69.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "RhetTbull";
     repo = "osxphotos";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-5cKxlfm4i743bJlS2HVPBO1Fbvz1c6wgkkG8Vle8Ajo=";
+    tag = "v${version}";
+    hash = "sha256-uVcoGIfxz+jKirnE3giST/v20eA5pq+LHgrsRb5b+Lc=";
   };
 
   build-system = [ setuptools ];
@@ -105,7 +105,7 @@ buildPythonPackage rec {
   meta = {
     description = "Export photos from Apple's macOS Photos app and query the Photos library database to access metadata about images";
     homepage = "https://github.com/RhetTbull/osxphotos";
-    changelog = "https://github.com/RhetTbull/osxphotos/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/RhetTbull/osxphotos/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sigmanificient ];
     broken = stdenv.hostPlatform.isDarwin;

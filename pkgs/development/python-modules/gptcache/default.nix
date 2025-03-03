@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "zilliztech";
     repo = "GPTCache";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-FRqngDyGO0ReTRtm9617TFLHVXWY9/NQlZHlBP8ukg0=";
   };
 
@@ -41,7 +41,7 @@ buildPythonPackage rec {
     description = "Semantic cache for LLMs and fully integrated with LangChain and llama_index";
     mainProgram = "gptcache_server";
     homepage = "https://github.com/zilliztech/GPTCache";
-    changelog = "https://github.com/zilliztech/GPTCache/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
+    changelog = "https://github.com/zilliztech/GPTCache/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ natsukium ];
   };

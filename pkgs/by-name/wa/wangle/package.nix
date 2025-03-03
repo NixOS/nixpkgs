@@ -15,8 +15,6 @@
   gflags,
   libevent,
   double-conversion,
-  apple-sdk_11,
-  darwinMinVersionHook,
 
   gtest,
 
@@ -25,7 +23,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wangle";
-  version = "2024.11.18.00";
+  version = "2025.02.10.00";
 
   outputs = [
     "out"
@@ -35,9 +33,13 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "wangle";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-4mqE9GgJP2f7QAykwdhMFoReE9wmPKOXqSHJ2MHP2G0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-IlMdYOQH0iqxObyFM1F4cZqOgSbCs4cOFtcsPWG8cWk=";
   };
+
+  patches = [
+    ./glog-0.7.patch
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -45,20 +47,15 @@ stdenv.mkDerivation (finalAttrs: {
     removeReferencesTo
   ];
 
-  buildInputs =
-    [
-      folly
-      fizz
-      openssl
-      glog
-      gflags
-      libevent
-      double-conversion
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_11
-      (darwinMinVersionHook "11.0")
-    ];
+  buildInputs = [
+    folly
+    fizz
+    openssl
+    glog
+    gflags
+    libevent
+    double-conversion
+  ];
 
   checkInputs = [
     gtest
@@ -100,10 +97,11 @@ stdenv.mkDerivation (finalAttrs: {
 
     ctest -j $NIX_BUILD_CORES --output-on-failure ${
       # Deterministic glibc abort 🫠
+      # SSLContextManagerTest uses 15+ GB of RAM
       lib.optionalString stdenv.hostPlatform.isLinux (
         lib.escapeShellArgs [
           "--exclude-regex"
-          "^(BootstrapTest|BroadcastPoolTest)$"
+          "^(BootstrapTest|BroadcastPoolTest|SSLContextManagerTest)$"
         ]
       )
     }

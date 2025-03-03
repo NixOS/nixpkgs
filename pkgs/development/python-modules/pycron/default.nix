@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "pycron";
-  version = "3.1.1";
+  version = "3.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kipe";
     repo = "pycron";
-    rev = "refs/tags/${version}";
-    hash = "sha256-t53u18lCk6tF4Hr/BrEM2gWG+QOFIEkjyEKNXIr3ibs=";
+    tag = version;
+    hash = "sha256-WnaQfS3VzF9fZHX9eNRjih/U7SgWeWVynLdwPZgF950=";
   };
 
   build-system = [ poetry-core ];

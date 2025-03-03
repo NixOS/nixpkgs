@@ -1,6 +1,7 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
+, fetchpatch
 , pkg-config
 , libgit2
 , openssl
@@ -10,7 +11,7 @@
 }:
 
 let
-  version = "5.14.2";
+  version = "5.14.3";
 in
 rustPlatform.buildRustPackage {
   pname = "git-mit";
@@ -20,10 +21,20 @@ rustPlatform.buildRustPackage {
     owner = "PurpleBooth";
     repo = "git-mit";
     rev = "v${version}";
-    hash = "sha256-5x+Sw1Lgi8x/8+neokPSIxq/PuuvUNt4KZ/fE8EdKQI=";
+    hash = "sha256-+7rl4wxVQq4bLBsnLSeJD+1kkRuf7FCi81pXGrNNOPI=";
   };
 
-  cargoHash = "sha256-MLSJiEZDbHcbUACuJASDuygND+ZN36rSeo4AtbsxnqA=";
+  useFetchCargoVendor = true;
+
+  cargoPatches = [
+    (fetchpatch {
+      name = "libgit2-update.patch";
+      url = "https://github.com/PurpleBooth/git-mit/pull/1543/commits/3e82a4f5017972c7d28151a468bb71fe7d2279e0.patch";
+      hash = "sha256-M9RpZHjOpZZqdHQe57LwMZ9zX6/4BNg3ymz8H3qupFk=";
+    })
+  ];
+
+  cargoHash = "sha256-uoS6vmHmOVkHS81mrsbbXqP/dAC/FNHAlpTDHSa632k=";
 
   nativeBuildInputs = [ pkg-config ];
 

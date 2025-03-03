@@ -24,7 +24,7 @@
   libstartup_notification,
   libXtst,
   libXdamage,
-  mesa,
+  libgbm,
   muffin,
   networkmanager,
   pkg-config,
@@ -76,13 +76,13 @@ in
 # TODO (after 25.05 branch-off): Rename to pkgs.cinnamon
 stdenv.mkDerivation rec {
   pname = "cinnamon-common";
-  version = "6.4.2";
+  version = "6.4.7";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "cinnamon";
     rev = version;
-    hash = "sha256-r5cSm/a+xtHwwAHQmdgviDAN3nnMAnXGY/p+ER1/gbk=";
+    hash = "sha256-WBdzlourYf2oEXUMbzNcNNsc8lBo6ujAy/K1Y6nGOjU=";
   };
 
   patches = [
@@ -109,7 +109,7 @@ stdenv.mkDerivation rec {
     libstartup_notification
     libXtst
     libXdamage
-    mesa
+    libgbm
     muffin
     networkmanager
     polkit
@@ -171,6 +171,10 @@ stdenv.mkDerivation rec {
       substituteInPlace ./modules/cs_user.py              --replace-fail "/usr/bin/passwd" "/run/wrappers/bin/passwd"
     popd
 
+    # In preFixup we make these executable.
+    substituteInPlace ./files/usr/share/cinnamon/applets/printers@cinnamon.org/applet.js \
+      --replace-fail "Util.spawn_async(['python3'," "Util.spawn_async(["
+
     substituteInPlace ./files/usr/bin/cinnamon-session-{cinnamon,cinnamon2d} \
       --replace-fail "exec cinnamon-session" "exec ${cinnamon-session}/bin/cinnamon-session"
 
@@ -198,6 +202,10 @@ stdenv.mkDerivation rec {
 
     # Called as `pkexec cinnamon-settings-users.py`.
     wrapGApp $out/share/cinnamon/cinnamon-settings-users/cinnamon-settings-users.py
+
+    # postPatch touches both but we mainly want to wrap cancel-print-dialog.
+    chmod +x $out/share/cinnamon/applets/printers@cinnamon.org/{cancel-print-dialog,lpstat-a}.py
+    wrapGApp $out/share/cinnamon/applets/printers@cinnamon.org/cancel-print-dialog.py
   '';
 
   passthru = {

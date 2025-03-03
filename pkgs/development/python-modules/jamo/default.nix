@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "JDongian";
     repo = "python-jamo";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-QHI3Rqf1aQOsW49A/qnIwRnPuerbtyerf+eWIiEvyho=";
   };
 

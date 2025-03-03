@@ -14,7 +14,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "vishen";
     repo = "go-chromecast";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-R1VGgustsKRoVZFiH2wuYRRSOolWIYq33H0DyQXHDvg=";
   };
 

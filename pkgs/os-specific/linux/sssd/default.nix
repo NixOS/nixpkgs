@@ -66,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "SSSD";
     repo = "sssd";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-wr6qFgM5XN3aizYVquj0xF+mVRgrkLWWhA3/gQOK8hQ=";
   };
 
@@ -83,7 +83,6 @@ stdenv.mkDerivation (finalAttrs: {
   preConfigure =
     ''
       export SGML_CATALOG_FILES="${docbookFiles}"
-      export PYTHONPATH=$(find ${python3.pkgs.python-ldap} -type d -name site-packages)
       export PATH=$PATH:${openldap}/libexec
 
       configureFlagsArray=(
@@ -129,7 +128,12 @@ stdenv.mkDerivation (finalAttrs: {
     samba
     nfs-utils
     p11-kit
-    python3
+    (python3.withPackages (
+      p: with p; [
+        distutils
+        python-ldap
+      ]
+    ))
     popt
     talloc
     tdb
@@ -147,7 +151,6 @@ stdenv.mkDerivation (finalAttrs: {
     libxslt
     libxml2
     libuuid
-    python3.pkgs.python-ldap
     systemd
     nspr
     check

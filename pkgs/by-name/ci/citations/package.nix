@@ -19,6 +19,7 @@
   testers,
   wrapGAppsHook4,
   clippy,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -33,9 +34,9 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-WYy6cyPmyWL/11yHf+dRbcZGBfvVfELeTwKvpJMu5ns=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     src = finalAttrs.src;
-    hash = "sha256-SmKt3oPzeJRAFjgZvJubNCTsjhqCrGZfE1LfDQ8AxZA=";
+    hash = "sha256-bqZZIA7sE0viAhI5GUFIVCXTkK+U9aWPvCPCug5SR94=";
   };
 
   nativeBuildInputs = [
@@ -80,9 +81,13 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i -e '/PATH=/d' ../src/meson.build
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = finalAttrs.finalPackage;
-    command = "citations --help";
+  passthru = {
+    tests.version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+      command = "citations --help";
+    };
+
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

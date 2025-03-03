@@ -15,7 +15,7 @@ let
   src = fetchFromGitHub {
     owner = "overcat";
     repo = "fastcrc";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-yLrv/zqsjgygJAIJtztwxlm4s9o9EBVsCyx1jUXd7hA=";
   };
 in
@@ -30,10 +30,10 @@ buildPythonPackage {
     maturinBuildHook
   ];
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-wSE7548L+ymNjN9TfygAGY1BrssXOPGXlmE83wV7zb4=";
+    hash = "sha256-9Vap8E71TkBIf4eIB2lapUqcMukdsHX4LR7U8AD77SU=";
   };
 
   pythonImportsCheck = [ "fastcrc" ];

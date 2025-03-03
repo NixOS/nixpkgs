@@ -10,20 +10,28 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "lychee";
-  version = "0.17.0";
+  version = "0.18.1";
 
   src = fetchFromGitHub {
     owner = "lycheeverse";
     repo = pname;
     rev = "lychee-v${version}";
-    hash = "sha256-flfKo7rN2//ho6q7Iv8tDK8d+5kjpAYELZZHwwZaV/E=";
+    hash = "sha256-aT7kVN2KM90M193h4Xng6+v69roW0J4GLd+29BzALhI=";
   };
 
-  cargoHash = "sha256-K0B1o27vXCoQPt1FoX1AXLeYUHiNVzYStU/dkpw6+xQ=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-TKKhT4AhV2uzXOHRnKHiZJusNoCWUliKmKvDw+Aeqnc=";
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ openssl ];
+
+  cargoTestFlags = [
+    # don't run doctests since they tend to use the network
+    "--lib"
+    "--bins"
+    "--tests"
+  ];
 
   checkFlags = [
     #  Network errors for all of these tests

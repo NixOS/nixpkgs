@@ -1,20 +1,25 @@
 {
   lib,
-  fetchPypi,
+  fetchFromGitHub,
   buildPythonPackage,
+  setuptools,
   acme,
   certbot,
 }:
 
 buildPythonPackage rec {
   pname = "certbot-dns-inwx";
-  version = "2.2.0";
-  format = "setuptools";
+  version = "3.0.1";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-v03QBHsxhl6R8YcwWIKD+pf4APy9S2vFcQe3ZEc6AjI=";
+  src = fetchFromGitHub {
+    owner = "oGGy990";
+    repo = "certbot-dns-inwx";
+    tag = "v${version}";
+    hash = "sha256-9dDSJcXlPq065CloaszwutUXsGn+Y9fIeTiGmiXGonY=";
   };
+
+  build-system = [ setuptools ];
 
   propagatedBuildInputs = [
     acme

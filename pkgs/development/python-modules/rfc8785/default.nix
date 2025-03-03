@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "trailofbits";
     repo = "rfc8785.py";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-0Gze3voFXEhf13DuTuBWDbYPmqHXs0FSRn2NprFWoB8=";
   };
 

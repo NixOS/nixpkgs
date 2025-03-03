@@ -17,6 +17,9 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
+  env = lib.optionalAttrs (stdenv.hostPlatform.libc == "glibc") {
+    CFLAGS = "-D_DEFAULT_SOURCE";
+  };
 
   meta = with lib; {
     license = licenses.mit;

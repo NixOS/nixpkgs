@@ -2,7 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
   cairo,
   cinnamon-desktop,
   dbus,
@@ -58,15 +58,13 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       inherit zenity;
     })
   ];
 
   nativeBuildInputs = [
     desktop-file-utils
-    mesa # needed for gbm
     meson
     ninja
     pkg-config
@@ -106,6 +104,7 @@ stdenv.mkDerivation rec {
     json-glib
     libXtst
     graphene
+    mesa # actually uses eglmesaext
   ];
 
   mesonFlags = [

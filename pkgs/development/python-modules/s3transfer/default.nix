@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "boto";
     repo = "s3transfer";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-EHNkYviafnuU8AADp9oyaDuAnoPOdOVNSLCcoONnHPY=";
   };
 

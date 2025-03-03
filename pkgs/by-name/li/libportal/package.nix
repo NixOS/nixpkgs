@@ -21,7 +21,7 @@ assert
 
 stdenv.mkDerivation rec {
   pname = "libportal" + lib.optionalString (variant != null) "-${variant}";
-  version = "0.8.1";
+  version = "0.9.1";
 
   outputs = [
     "out"
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     owner = "flatpak";
     repo = "libportal";
     rev = version;
-    sha256 = "sha256-NAkD5pAQpmAtVxsFZt74PwURv+RbGBfqENIwyxEEUSc=";
+    sha256 = "sha256-CXI4rBr9wxLUX537d6SNNf8YFR/J6YdeROlFt3edeOU=";
   };
 
   depsBuildBuild = [

@@ -114,7 +114,11 @@ in
     };
 
     services.mail.sendmailSetuidWrapper = lib.mkIf cfg.setSendmail (
-      security.wrappers.smtpctl // { program = "sendmail"; }
+      security.wrappers.smtpctl
+      // {
+        source = "${sendmail}/bin/sendmail";
+        program = "sendmail";
+      }
     );
 
     systemd.tmpfiles.rules = [

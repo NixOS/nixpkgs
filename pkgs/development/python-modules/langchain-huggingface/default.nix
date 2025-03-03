@@ -36,7 +36,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
-    rev = "refs/tags/langchain-huggingface==${version}";
+    tag = "langchain-huggingface==${version}";
     hash = "sha256-ACR+JzKcnYXROGOQe6DlZeqcYd40KlesgXSUOybOT20=";
   };
 
@@ -73,6 +73,8 @@ buildPythonPackage rec {
 
   passthru = {
     inherit (langchain-core) updateScript;
+    # updates the wrong fetcher rev attribute
+    skipBulkUpdate = true;
   };
 
   meta = {

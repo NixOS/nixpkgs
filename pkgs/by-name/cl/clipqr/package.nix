@@ -12,7 +12,7 @@
   libXrandr,
   libXxf86vm,
   makeDesktopItem,
-  mesa,
+  libgbm,
   pkg-config,
   stdenv,
 }:
@@ -44,7 +44,7 @@ buildGoModule rec {
     libXinerama
     libXrandr
     libXxf86vm
-    mesa
+    libgbm
   ];
 
   nativeBuildInputs = [

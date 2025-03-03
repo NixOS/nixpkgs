@@ -249,7 +249,7 @@ in {
           OIDC_NAME = "MyLogin";
           OIDC_DISPLAY_NAME_CLAIMS = "name";
           OIDC_CLIENT_ID = "bookstack";
-          OIDC_CLIENT_SECRET = {_secret = "/run/keys/oidc_secret"};
+          OIDC_CLIENT_SECRET = {_secret = "/run/keys/oidc_secret";};
           OIDC_ISSUER = "https://keycloak.example.com/auth/realms/My%20Realm";
           OIDC_ISSUER_DISCOVER = true;
         }

@@ -2,23 +2,22 @@
   lib,
   python3Packages,
   fetchPypi,
-  substituteAll,
+  replaceVars,
   ffmpeg,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "streamlink";
-  version = "7.0.0";
+  version = "7.1.3";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-UaQGKGLmeV1pQEbKbnBUnW0TWDxkDRUFlmgEsOA/7/I=";
+    hash = "sha256-9ksaSZttQq85ZaOfMK7y6eNvPS0yozEbhoivNCvVuno=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./ffmpeg-path.patch;
+    (replaceVars ./ffmpeg-path.patch {
       ffmpeg = lib.getExe ffmpeg;
     })
   ];
@@ -50,7 +49,6 @@ python3Packages.buildPythonApplication rec {
     requests
     trio
     trio-websocket
-    typing-extensions
     urllib3
     websocket-client
   ];

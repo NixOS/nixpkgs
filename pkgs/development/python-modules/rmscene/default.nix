@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ricklupton";
     repo = "rmscene";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-mgEjGfoQW73DcwMEXflR3/Ole4c5uXZJVJ699KNSqKg=";
   };
 

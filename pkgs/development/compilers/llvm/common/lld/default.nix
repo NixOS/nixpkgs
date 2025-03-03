@@ -30,7 +30,7 @@ let
       '') else src;
 
   postPatch = lib.optionalString (lib.versionOlder release_version "14") ''
-    substituteInPlace MachO/CMakeLists.txt --replace \
+    substituteInPlace MachO/CMakeLists.txt --replace-fail \
       '(''${LLVM_MAIN_SRC_DIR}/' '(../'
   '';
 in
@@ -48,8 +48,8 @@ stdenv.mkDerivation (rec {
     "-DLLVM_CONFIG_PATH=${libllvm.dev}/bin/llvm-config${lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) "-native"}"
   ] ++ lib.optionals (lib.versionAtLeast release_version "15") [
     "-DLLD_INSTALL_PACKAGE_DIR=${placeholder "dev"}/lib/cmake/lld"
-  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-    "-DLLVM_TABLEGEN_EXE=${buildLlvmTools.llvm}/bin/llvm-tblgen"
+  ] ++ [
+    "-DLLVM_TABLEGEN_EXE=${buildLlvmTools.tblgen}/bin/llvm-tblgen"
   ] ++ devExtraCmakeFlags;
 
   # Musl's default stack size is too small for lld to be able to link Firefox.

@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   pkg-config,
   installShellFiles,
   buildGoModule,
@@ -18,7 +19,7 @@
   makeWrapper,
   runtimeShell,
   symlinkJoin,
-  substituteAll,
+  replaceVars,
   extraPackages ? [ ],
   crun,
   runc,
@@ -74,18 +75,17 @@ let
 in
 buildGoModule rec {
   pname = "podman";
-  version = "5.3.1";
+  version = "5.4.0";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "podman";
     rev = "v${version}";
-    hash = "sha256-kABP10QX4r11UDUcd6Sukb+9+LRm/ba3iATz6DTOJYw=";
+    hash = "sha256-iEO4njjNByLkhXFLgZ8tO8M8RkwT+Lb0zyfedQDHcNc=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./hardcode-paths.patch;
+    (replaceVars ./hardcode-paths.patch {
       bin_path = helpersBin;
     })
 

@@ -13,7 +13,7 @@
   ninja,
   pkg-config,
   python3,
-  substituteAll,
+  replaceVars,
   systemdMinimal,
   usbutils,
   vala,
@@ -22,7 +22,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "umockdev";
-  version = "0.18.4";
+  version = "0.19.1";
 
   outputs = [
     "bin"
@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://github.com/martinpitt/umockdev/releases/download/${finalAttrs.version}/umockdev-${finalAttrs.version}.tar.xz";
-    hash = "sha256-EVMG8Xvnj4yZ4gZS4t7M3UjfOHNr8A609D/vw4CaMZw=";
+    hash = "sha256-LOzg6ONmuJtAcL508zicn3+iGspW2KU1fpbjDNjU9CY=";
   };
 
   patches = [
@@ -44,8 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Replace references to udevadm with an absolute paths, so programs using
     # umockdev will just work without having to provide it in their test environment
     # $PATH.
-    (substituteAll {
-      src = ./substitute-udevadm.patch;
+    (replaceVars ./substitute-udevadm.patch {
       udevadm = "${systemdMinimal}/bin/udevadm";
     })
   ];

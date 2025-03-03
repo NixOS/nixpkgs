@@ -102,7 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
   );
 
   # NOTE: We cannot use pythonImportsCheck for this module because it uses torch to immediately
-  #   initailize CUDA and GPU access is not allowed in the nix build environment.
+  #   initialize CUDA and GPU access is not allowed in the nix build environment.
   # NOTE: There are no tests for the C++ library or the python bindings, so we just skip the check
   #   phase -- we're not missing anything.
   doCheck = false;
@@ -116,7 +116,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   # When building the python bindings, we cannot re-use the artifacts from the C++ build so we
-  # skip the CMake confurePhase and the buildPhase.
+  # skip the CMake configurePhase and the buildPhase.
   dontUseCmakeConfigure = pythonSupport;
 
   # The configurePhase usually puts you in the build directory, so for the python bindings we

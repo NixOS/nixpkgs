@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   docbook-xsl-nons,
   libxslt,
@@ -62,20 +61,19 @@
   # tries to compile and run generate_argument_docbook.c
   withManPages ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
 
-  buildPackages,
   gnome,
   remmina,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "freerdp";
-  version = "3.9.0";
+  version = "3.12.0";
 
   src = fetchFromGitHub {
     owner = "FreeRDP";
     repo = "FreeRDP";
     rev = finalAttrs.version;
-    hash = "sha256-oThlqUpEmhcLpMMYExMA3GbtB2+lq6oc5TRZt0eKRLA=";
+    hash = "sha256-Bbpwfnz8xPyNLZ+UtcYw4arpzGEh3znqncExl4DlByA=";
   };
 
   postPatch =
@@ -84,10 +82,13 @@ stdenv.mkDerivation (finalAttrs: {
 
       # skip NIB file generation on darwin
       substituteInPlace "client/Mac/CMakeLists.txt" "client/Mac/cli/CMakeLists.txt" \
-        --replace-fail "if (NOT IS_XCODE)" "if (FALSE)"
+        --replace-fail "if(NOT IS_XCODE)" "if(FALSE)"
 
       substituteInPlace "libfreerdp/freerdp.pc.in" \
         --replace-fail "Requires:" "Requires: @WINPR_PKG_CONFIG_FILENAME@"
+
+      substituteInPlace client/SDL/SDL2/dialogs/{sdl_input.cpp,sdl_select.cpp,sdl_widget.cpp,sdl_widget.hpp} \
+        --replace-fail "<SDL_ttf.h>" "<SDL2/SDL_ttf.h>"
     ''
     + lib.optionalString (pcsclite != null) ''
       substituteInPlace "winpr/libwinpr/smartcard/smartcard_pcsc.c" \
@@ -197,8 +198,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   env.NIX_CFLAGS_COMPILE = toString (
     lib.optionals stdenv.hostPlatform.isDarwin [
-      "-DTARGET_OS_IPHONE=0"
-      "-DTARGET_OS_WATCH=0"
       "-include AudioToolbox/AudioToolbox.h"
     ]
     ++ lib.optionals stdenv.cc.isClang [

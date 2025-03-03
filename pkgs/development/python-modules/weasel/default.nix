@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "explosion";
     repo = "weasel";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-gXPHEoEY0qKcpAtqHlUw5c43/6hKseCx+vBNzEXFF2A=";
   };
 

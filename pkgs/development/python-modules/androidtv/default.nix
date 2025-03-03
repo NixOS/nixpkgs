@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "JeffLIrion";
     repo = "python-androidtv";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-2WFfGGEZkM3fWyTo5P6H3ha04Qyx2OiYetlGWv0jXac=";
   };
 

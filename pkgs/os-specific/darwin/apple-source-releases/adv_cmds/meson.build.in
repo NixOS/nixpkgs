@@ -4,8 +4,6 @@
 # Project settings
 project('adv_cmds', 'c', 'cpp', version : '@version@')
 
-sdk_version = get_option('sdk_version')
-
 
 # Dependencies
 cc = meson.get_compiler('c')
@@ -190,8 +188,7 @@ install_man('ps/ps.1')
 
 executable(
     'stty',
-    build_by_default : sdk_version.version_compare('>=11.3'),
-    install : sdk_version.version_compare('>=11.3'),
+    install : true,
     sources : [
         'stty/cchar.c',
         'stty/gfmt.c',
@@ -202,9 +199,7 @@ executable(
         'stty/util.c',
     ],
 )
-if sdk_version.version_compare('>=11.3')
-    install_man('stty/stty.1')
-endif
+install_man('stty/stty.1')
 
 executable(
     'tabs',

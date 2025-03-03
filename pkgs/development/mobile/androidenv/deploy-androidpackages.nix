@@ -1,5 +1,5 @@
 {stdenv, lib, unzip, mkLicenses}:
-{packages, os ? null, nativeBuildInputs ? [], buildInputs ? [], patchesInstructions ? {}, meta ? {}, ...}@args:
+{packages, nativeBuildInputs ? [], buildInputs ? [], patchesInstructions ? {}, meta ? {}, ...}@args:
 
 let
   extraParams = removeAttrs args [ "packages" "os" "buildInputs" "nativeBuildInputs" "patchesInstructions" ];
@@ -62,9 +62,7 @@ stdenv.mkDerivation ({
   inherit buildInputs;
   pname = "android-sdk-${lib.concatMapStringsSep "-" (package: package.name) sortedPackages}";
   version = lib.concatMapStringsSep "-" (package: package.revision) sortedPackages;
-  src = map (package:
-    if os != null && builtins.hasAttr os package.archives then package.archives.${os} else package.archives.all
-  ) packages;
+  src = map (package: package.archives) packages;
   nativeBuildInputs = [ unzip ] ++ nativeBuildInputs;
   preferLocalBuild = true;
 

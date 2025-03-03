@@ -14,18 +14,20 @@
   xdg-utils,
   ollama,
   vte-gtk4,
+  libspelling,
+  nix-update-script,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "alpaca";
-  version = "2.9.0";
+  version = "5.0.5";
   pyproject = false; # Built with meson
 
   src = fetchFromGitHub {
     owner = "Jeffser";
     repo = "Alpaca";
-    rev = "refs/tags/${version}";
-    hash = "sha256-ionioPA69haDIyXjqU84nuTNtI32jOnhd6oCTRI6vcA=";
+    tag = version;
+    hash = "sha256-VfD10mMlRNi6Ye3IXy60ygx9DGTpzG06T6zQLm+8dFo=";
   };
 
   nativeBuildInputs = [
@@ -42,6 +44,7 @@ python3Packages.buildPythonApplication rec {
     libadwaita
     gtksourceview5
     vte-gtk4
+    libspelling
   ];
 
   dependencies = with python3Packages; [
@@ -49,10 +52,13 @@ python3Packages.buildPythonApplication rec {
     requests
     pillow
     pypdf
-    pytube
     html2text
     youtube-transcript-api
     pydbus
+    odfpy
+    pyicu
+    matplotlib
+    openai
   ];
 
   dontWrapGApps = true;
@@ -70,6 +76,8 @@ python3Packages.buildPythonApplication rec {
     "--set FLATPAK_DEST ${placeholder "out"}"
   ];
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Ollama client made with GTK4 and Adwaita";
     longDescription = ''
@@ -84,7 +92,10 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://jeffser.com/alpaca";
     license = lib.licenses.gpl3Plus;
     mainProgram = "alpaca";
-    maintainers = with lib.maintainers; [ aleksana ];
-    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      aleksana
+      Gliczy
+    ];
+    platforms = lib.platforms.unix;
   };
 }

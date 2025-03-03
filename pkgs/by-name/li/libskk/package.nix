@@ -22,8 +22,14 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ueno";
     repo = "libskk";
-    rev = version;
-    sha256 = "0y279pcgs3jrsi9vzx086xhz9jbz23dqqijp4agygc9ackp9sxy5";
+    tag = version;
+    hash = "sha256-xXed7mQqseefIldGjNsQf8n0YTcI9L9T1FkO/dhNR3g=";
+  };
+
+  env = {
+    NIX_CFLAGS_COMPILE = toString [
+      "-Wno-error=int-conversion"
+    ];
   };
 
   patches = [
@@ -49,9 +55,7 @@ stdenv.mkDerivation rec {
     json-glib
   ];
 
-  preConfigure = ''
-    ./autogen.sh
-  '';
+  configureScript = "./autogen.sh";
 
   # link SKK-JISYO.L from skkdicts for the bundled tool `skk`
   preInstall = ''

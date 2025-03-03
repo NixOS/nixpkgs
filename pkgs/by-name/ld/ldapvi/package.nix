@@ -26,6 +26,12 @@ stdenv.mkDerivation {
     sha256 = "3ef3103030ecb04d7fe80180e3fd490377cf81fb2af96782323fddabc3225030";
   };
 
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-Wno-implicit-function-declaration"
+    "-Wno-error=int-conversion"
+    "-Wno-error=return-mismatch"
+  ];
+
   nativeBuildInputs = [
     pkg-config
     autoconf

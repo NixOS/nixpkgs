@@ -10,8 +10,7 @@
   xcbuild,
   udev,
   xorg,
-  mesa,
-  darwin,
+  libgbm,
   coreutils,
 }:
 
@@ -53,7 +52,7 @@ stdenv.mkDerivation {
       substituteInPlace jogl/make/build-*.xml \
         --replace-warn 'dir="''${TARGET_PLATFORM_USRLIBS}"' ""
     ''
-    # force way to do disfunctional "ant -Dsetup.addNativeBroadcom=false" and disable dependency on raspberrypi drivers
+    # force way to do dysfunctional "ant -Dsetup.addNativeBroadcom=false" and disable dependency on raspberrypi drivers
     # if arm/aarch64 support will be added, this block might be commented out on those platforms
     # on x86 compiling with default "setup.addNativeBroadcom=true" leads to unsatisfied import "vc_dispmanx_resource_delete" in libnewt.so
     + ''
@@ -78,22 +77,17 @@ stdenv.mkDerivation {
       xcbuild
     ];
 
-  buildInputs =
-    lib.optionals stdenv.hostPlatform.isLinux [
-      udev
-      xorg.libX11
-      xorg.libXrandr
-      xorg.libXcursor
-      xorg.libXi
-      xorg.libXt
-      xorg.libXxf86vm
-      xorg.libXrender
-      mesa
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk_11_0.frameworks.AppKit
-      darwin.apple_sdk_11_0.frameworks.Cocoa
-    ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    udev
+    xorg.libX11
+    xorg.libXrandr
+    xorg.libXcursor
+    xorg.libXi
+    xorg.libXt
+    xorg.libXxf86vm
+    xorg.libXrender
+    libgbm
+  ];
 
   env = {
     SOURCE_LEVEL = "1.8";

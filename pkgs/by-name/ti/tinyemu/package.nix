@@ -63,7 +63,8 @@ stdenv.mkDerivation (finalAttrs: {
       mit
       bsd2
     ];
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.unix;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })

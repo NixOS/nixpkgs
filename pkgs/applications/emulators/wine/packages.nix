@@ -5,7 +5,7 @@
   pkgsi686Linux,
   pkgsCross,
   callPackage,
-  substituteAll,
+  replaceVars,
   moltenvk,
   wineRelease ? "stable",
   supportFlags,
@@ -80,8 +80,7 @@ with src;
       mingwW64.buildPackages.gcc
     ];
     monos = [ mono ];
-    buildScript = substituteAll {
-      src = ./builder-wow.sh;
+    buildScript = replaceVars ./builder-wow.sh {
       # pkgconfig has trouble picking the right architecture
       pkgconfig64remove = lib.makeSearchPathOutput "dev" "lib/pkgconfig" [
         pkgs.glib

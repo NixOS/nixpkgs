@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dieselrabbit";
     repo = "screenlogicpy";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-z6cM0sihZvOHCA3v1DYQEev0axf4AcqEW13WA1EMhQM=";
   };
 

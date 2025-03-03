@@ -32,6 +32,13 @@
 }:
 
 let
+  kotlin_2_0_21 = kotlin.overrideAttrs (oldAttrs: {
+    version = "2.0.21";
+    src = fetchurl {
+      url = oldAttrs.src.url;
+      sha256 = "sha256-A1LApFvSL4D2sm5IXNBNqAR7ql3lSGUoH7n4mkp7zyo=";
+    };
+  });
 
   jbr = jetbrains.jdk-no-jcef-17;
 
@@ -119,6 +126,7 @@ let
     version = buildNumber;
     inherit src;
     sourceRoot = "${src.name}/native/restarter";
+    useFetchCargoVendor = true;
     cargoHash = restarterHash;
 
     # Allow static linking
@@ -147,7 +155,7 @@ let
     sourceRoot = "${src.name}/platform/jps-bootstrap";
     nativeBuildInputs = [ ant makeWrapper jbr ];
     patches = [ ../patches/kotlinc-path.patch ];
-    postPatch = "sed -i 's|KOTLIN_PATH_HERE|${kotlin}|' src/main/java/org/jetbrains/jpsBootstrap/KotlinCompiler.kt";
+    postPatch = "sed -i 's|KOTLIN_PATH_HERE|${kotlin_2_0_21}|' src/main/java/org/jetbrains/jpsBootstrap/KotlinCompiler.kt";
     buildPhase = ''
       runHook preInstall
 
@@ -211,6 +219,11 @@ let
     stripRoot = false;
   };
 
+  brokenPlugins = fetchurl {
+    url = "https://web.archive.org/web/20250224030717if_/https://downloads.marketplace.jetbrains.com/files/brokenPlugins.json";
+    hash = "sha256-wQO+qmFfBn32F//bs/a5Q/H4Kpc171jKA9EMmeatc6w=";
+  };
+
 in
 stdenvNoCC.mkDerivation rec {
   pname = "${buildType}-community";
@@ -234,13 +247,13 @@ stdenvNoCC.mkDerivation rec {
     substituteInPlace \
       platform/build-scripts/src/org/jetbrains/intellij/build/kotlin/KotlinCompilerDependencyDownloader.kt \
       --replace-fail 'JPS_PLUGIN_CLASSPATH_HERE' '${kotlin-jps-plugin-classpath}' \
-      --replace-fail 'KOTLIN_PATH_HERE' '${kotlin}'
+      --replace-fail 'KOTLIN_PATH_HERE' '${kotlin_2_0_21}'
     substituteInPlace \
       platform/build-scripts/downloader/src/org/jetbrains/intellij/build/dependencies/JdkDownloader.kt \
       --replace-fail 'JDK_PATH_HERE' '${jbr}/lib/openjdk'
     substituteInPlace \
       platform/build-scripts/src/org/jetbrains/intellij/build/impl/brokenPlugins.kt \
-      --replace-fail 'BROKEN_PLUGINS_HERE' '${./brokenPlugins.json}'
+      --replace-fail 'BROKEN_PLUGINS_HERE' '${brokenPlugins}'
     substituteInPlace \
       platform/build-scripts/src/org/jetbrains/intellij/build/impl/LinuxDistributionBuilder.kt \
       --replace-fail 'XPLAT_LAUNCHER_PREBUILT_PATH_HERE' '${xplat-launcher}'
@@ -259,7 +272,7 @@ stdenvNoCC.mkDerivation rec {
     export JPS_BOOTSTRAP_COMMUNITY_HOME=/build/source
     jps-bootstrap \
       -Dbuild.number=${buildNumber} \
-      -Djps.kotlin.home=${kotlin} \
+      -Djps.kotlin.home=${kotlin_2_0_21} \
       -Dintellij.build.target.os=linux \
       -Dintellij.build.target.arch=x64 \
       -Dintellij.build.skip.build.steps=mac_artifacts,mac_dmg,mac_sit,windows_exe_installer,windows_sign,repair_utility_bundle_step,sources_archive \
@@ -275,7 +288,7 @@ stdenvNoCC.mkDerivation rec {
     runHook preBuild
 
     java \
-      -Djps.kotlin.home=${kotlin} \
+      -Djps.kotlin.home=${kotlin_2_0_21} \
       "@java_argfile"
 
     runHook postBuild

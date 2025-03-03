@@ -11,7 +11,7 @@ python3Packages.buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nengo";
     repo = "nengo-gui";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     sha256 = "sha256-aBi4roe9pqPmpbW5zrbDoIvyH5mTKgIzL2O5j1+VBMY=";
   };
 

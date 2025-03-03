@@ -24,14 +24,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "hf_transfer";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Uh8q14OeN0fYsywYyNrH8C3wq/qRjQKEAIufi/a5RXA=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-I4APdz1r2KJ8pTfKAg8g240wYy8gtMlHwmBye4796Tk=";
+    hash = "sha256-q+tAqpPubQ7P/KiBcVpAjOh8i12EfIcdcRjyEQNQQFI=";
   };
 
   build-system = [

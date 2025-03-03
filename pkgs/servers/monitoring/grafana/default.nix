@@ -16,11 +16,22 @@
   nixosTests,
   xcbuild,
   faketty,
+  git,
 }:
 
+let
+  # Grafana seems to just set it to the latest version available
+  # nowadays.
+  patchGoVersion = ''
+    substituteInPlace go.{mod,work} apps/alerting/notifications/go.mod pkg/storage/unified/apistore/go.mod pkg/storage/unified/resource/go.mod \
+      --replace-fail "go 1.23.5" "go 1.23.4"
+    substituteInPlace Makefile \
+      --replace-fail "GO_VERSION = 1.23.5" "GO_VERSION = 1.23.4"
+  '';
+in
 buildGoModule rec {
   pname = "grafana";
-  version = "11.4.0";
+  version = "11.5.2";
 
   subPackages = [
     "pkg/cmd/grafana"
@@ -32,19 +43,13 @@ buildGoModule rec {
     owner = "grafana";
     repo = "grafana";
     rev = "v${version}";
-    hash = "sha256-47jQ+ksq6zdS73o884q0xKLtOHssTnaIPdDOejlv/gU=";
+    hash = "sha256-W0wn19SqqzxHm2fRtsEOru4khNqZziAfzWWc6H+Juew=";
   };
 
   # borrowed from: https://github.com/NixOS/nixpkgs/blob/d70d9425f49f9aba3c49e2c389fe6d42bac8c5b0/pkgs/development/tools/analysis/snyk/default.nix#L20-L22
-  env =
-    {
-      CYPRESS_INSTALL_BINARY = 0;
-    }
-    // lib.optionalAttrs (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) {
-      # Fix error: no member named 'aligned_alloc' in the global namespace.
-      # Occurs while building @esfx/equatable@npm:1.0.2 on x86_64-darwin
-      NIX_CFLAGS_COMPILE = "-D_LIBCPP_HAS_NO_LIBRARY_ALIGNED_ALLOCATION=1";
-    };
+  env = {
+    CYPRESS_INSTALL_BINARY = 0;
+  };
 
   offlineCache = stdenv.mkDerivation {
     name = "${pname}-${version}-yarn-offline-cache";
@@ -55,7 +60,9 @@ buildGoModule rec {
       cacert
       jq
       moreutils
-      python3
+      # required to run old node-gyp
+      (python3.withPackages (ps: [ ps.distutils ]))
+      git
       # @esfx/equatable@npm:1.0.2 fails to build on darwin as it requires `xcbuild`
     ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild.xcbuild ];
     buildPhase = ''
@@ -74,9 +81,9 @@ buildGoModule rec {
     outputHashMode = "recursive";
     outputHash =
       rec {
-        x86_64-linux = "sha256-5/l0vXVjHC4oG7ahVscJOwS74be7F8jei9nq6m2v2tQ=";
+        x86_64-linux = "sha256-8KoSBzcEih9UKOkbcNTN1pZz/wVTedJ8qLRe+uXV/dE=";
         aarch64-linux = x86_64-linux;
-        aarch64-darwin = "sha256-+texKSlcvtoi83ySEXy2E4SqnfyQ0l4MixTBpdemWvI=";
+        aarch64-darwin = "sha256-XW6AV0tzrEWizn4G0KEXegEcNmlTJl6mZ92ZRmz17HM=";
         x86_64-darwin = aarch64-darwin;
       }
       .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
@@ -84,7 +91,9 @@ buildGoModule rec {
 
   disallowedRequisites = [ offlineCache ];
 
-  vendorHash = "sha256-3dRXvBmorItNa2HAFhEhMxKwD4LSKSgTUSjukOV2RSg=";
+  postPatch = patchGoVersion;
+
+  vendorHash = "sha256-Pt87hb0+EuGd62ld65jTszeTy7GZZbviH8X9qCGOaJQ=";
 
   proxyVendor = true;
 
@@ -94,7 +103,8 @@ buildGoModule rec {
     jq
     moreutils
     removeReferencesTo
-    python3
+    # required to run old node-gyp
+    (python3.withPackages (ps: [ ps.distutils ]))
     faketty
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild.xcbuild ];
 

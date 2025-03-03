@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "grampelberg";
     repo = "kty";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-E9PqWDBKYJFYOUNyjiK+AM2WULMiwupFWTOQlBH+6d4=";
   };
 
@@ -38,7 +38,8 @@ rustPlatform.buildRustPackage rec {
       ]
     );
 
-  cargoHash = "sha256-mhXi4YgYT2NfIjtESjvSP5TMOl3UH3CJFwKlJriZ0/4=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-nJ+nof2YhyLrNuLVy69kYj5tw+aG4IJm6nVxHkczbko=";
 
   meta = {
     homepage = "https://kty.dev/";

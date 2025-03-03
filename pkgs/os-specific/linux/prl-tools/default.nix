@@ -20,6 +20,7 @@
   netcat,
   timetrap,
   util-linux,
+  wayland,
 }:
 
 let
@@ -29,6 +30,7 @@ let
   libPath = lib.concatStringsSep ":" [
     "${glib.out}/lib"
     "${xorg.libXrandr}/lib"
+    "${wayland.out}/lib"
   ];
   scriptPath = lib.concatStringsSep ":" [
     "${bash}/bin"
@@ -41,13 +43,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "prl-tools";
-  version = "20.1.2-55742";
+  version = "20.2.2-55879";
 
   # We download the full distribution to extract prl-tools-lin.iso from
   # => ${dmg}/Parallels\ Desktop.app/Contents/Resources/Tools/prl-tools-lin.iso
   src = fetchurl {
     url = "https://download.parallels.com/desktop/v${lib.versions.major finalAttrs.version}/${finalAttrs.version}/ParallelsDesktop-${finalAttrs.version}.dmg";
-    hash = "sha256-R7pQhmLpMOHExPwH4YM3WDnp1PcwpH5Bif3C1/N55Bg=";
+    hash = "sha256-MgToUW9H4NWjY+yBxTqg9wZ2VDNbbDu0tIeHcGZxPkM=";
   };
 
   hardeningDisable = [
@@ -115,7 +117,6 @@ stdenv.mkDerivation (finalAttrs: {
     ( # kernel modules
       cd kmods
       mkdir -p $out/lib/modules/${kernelVersion}/extra
-      cp prl_fs/SharedFolders/Guest/Linux/prl_fs/prl_fs.ko $out/lib/modules/${kernelVersion}/extra
       cp prl_fs_freeze/Snapshot/Guest/Linux/prl_freeze/prl_fs_freeze.ko $out/lib/modules/${kernelVersion}/extra
       cp prl_tg/Toolgate/Guest/Linux/prl_tg/prl_tg.ko $out/lib/modules/${kernelVersion}/extra
       ${lib.optionalString stdenv.hostPlatform.isAarch64 "cp prl_notifier/Installation/lnx/prl_notifier/prl_notifier.ko $out/lib/modules/${kernelVersion}/extra"}
@@ -168,9 +169,6 @@ stdenv.mkDerivation (finalAttrs: {
         cp $i $out/lib
         ln -s $out/$i $out/''${i%.0.0}
       done
-
-      mkdir -p $out/share/man/man8
-      install -Dm644 ../mount.prl_fs.8 $out/share/man/man8
 
       substituteInPlace ../99prltoolsd-hibernate \
         --replace "/bin/bash" "${bash}/bin/bash"

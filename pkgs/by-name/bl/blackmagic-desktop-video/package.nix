@@ -11,7 +11,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "blackmagic-desktop-video";
-  version = "14.2a1";
+  version = "14.4.1a4";
 
   buildInputs = [
     autoPatchelfHook
@@ -25,15 +25,15 @@ stdenv.mkDerivation (finalAttrs: {
   src =
     let
       # from the URL the download page where you click the "only download" button is at
-      REFERID = "b97e55f37a0042fbacd234971d8c93ed";
+      REFERID = "5baba0af3eda41ee9cd0ec7349660d74";
       # from the URL that the POST happens to, see browser console
-      DOWNLOADID = "552546307a7c4de29ea6d09a6ca08c90";
+      DOWNLOADID = "bc31044728f146859c6d9e0ccef868d8";
     in
     runCommandLocal "${finalAttrs.pname}-${lib.versions.majorMinor finalAttrs.version}-src.tar.gz"
       {
         outputHashMode = "recursive";
         outputHashAlgo = "sha256";
-        outputHash = "sha256-rfZDL1YvAuMD5u68MMyiT8cERsIHMc9K25lXt7cqrrk=";
+        outputHash = "sha256-qh305s7u1yurv58TZnlONgDmWT4RXG3fXTfun382HAs=";
 
         impureEnvVars = lib.fetchers.proxyImpureEnvVars;
 
@@ -58,7 +58,6 @@ stdenv.mkDerivation (finalAttrs: {
           "platform" = "Linux";
           "policy" = true;
         };
-
       }
       ''
         RESOLVEURL=$(curl \

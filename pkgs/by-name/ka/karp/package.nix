@@ -8,18 +8,19 @@
   ghostscript,
   qpdf,
   ninja,
+  unstableGitUpdater,
 }:
 
 stdenv.mkDerivation {
   pname = "karp";
-  version = "0-unstable-2024-11-20";
+  version = "0-unstable-2025-02-21";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "graphics";
     repo = "karp";
-    rev = "f26d6c43adc2feb2b0569df126f3a7be5d95ac2e";
-    hash = "sha256-w1wrPaqQ6NBtbY5OEtxGlc72mXuLrlefq6A02U9wWHc=";
+    rev = "1da7f1e3f9b291c5031916a213d9c71ed6c39323";
+    hash = "sha256-PxiwJ9SCq6uG2F5CJFp6ta5zPLp8FnRe1jcHIs7Eg6w=";
   };
 
   nativeBuildInputs = [
@@ -45,11 +46,15 @@ stdenv.mkDerivation {
     kdePackages.kcoreaddons
     kdePackages.kconfig
     kdePackages.ki18n
+    kdePackages.kcrash
     qt6.qtdeclarative
     qt6.qtwayland
     qt6.qtsvg
+    qpdf
     qt6.qtwebengine
   ];
+
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = {
     homepage = "https://apps.kde.org/karp/";

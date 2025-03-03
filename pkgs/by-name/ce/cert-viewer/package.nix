@@ -14,7 +14,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "mgit-at";
     repo = "cert-viewer";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-6IPr2BG3y/7cmc2WkeeFDpQ59GNU1eOhhm49HE2w0cA=";
   };
 

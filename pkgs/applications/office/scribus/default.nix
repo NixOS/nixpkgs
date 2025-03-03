@@ -32,11 +32,11 @@ in
 stdenv.mkDerivation (finalAttrs: {
   pname = "scribus";
 
-  version = "1.6.2";
+  version = "1.6.3";
 
   src = fetchurl {
     url = "mirror://sourceforge/scribus/scribus-devel/scribus-${finalAttrs.version}.tar.xz";
-    hash = "sha256-fv+bH0fjcuVrs2nx2+GP5JEBeJtea8/beJDgNGtkE4M=";
+    hash = "sha256-CuWM7UEBAegmVeO0wgoHDPF2cUWtojPc73wguLpr1Ic=";
   };
 
   nativeBuildInputs = [

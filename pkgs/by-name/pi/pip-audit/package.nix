@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "pip-audit";
-  version = "2.7.3";
+  version = "2.8.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "trailofbits";
     repo = "pip-audit";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-MRFfF5OygUCIdUnPvxhYk4IcLSWGgmlw2qgzPoZDniw=";
+    tag = "v${version}";
+    hash = "sha256-UW7pJYMcc8Myc4DmrZqAPUhAVs9J6o8/6QQb5vxskcg=";
   };
 
   build-system = with python3.pkgs; [ flit-core ];
@@ -27,6 +27,7 @@ python3.pkgs.buildPythonApplication rec {
       packaging
       pip-api
       pip-requirements-parser
+      platformdirs
       rich
       toml
     ]
@@ -62,7 +63,7 @@ python3.pkgs.buildPythonApplication rec {
     description = "Tool for scanning Python environments for known vulnerabilities";
     homepage = "https://github.com/trailofbits/pip-audit";
     changelog = "https://github.com/pypa/pip-audit/releases/tag/v${version}";
-    license = with licenses; [ asl20 ];
+    license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
     mainProgram = "pip-audit";
   };

@@ -4,7 +4,10 @@
   makeWrapper,
   fetchFromGitHub,
 
+  coreutils,
   git,
+  gnugrep,
+  gnused,
   openssh,
   inotify-tools,
 }:
@@ -41,7 +44,10 @@ runCommand "gitwatch"
     wrapProgram $dest \
       --prefix PATH ';' ${
         lib.makeBinPath [
+          coreutils
           git
+          gnugrep
+          gnused
           inotify-tools
           openssh
         ]

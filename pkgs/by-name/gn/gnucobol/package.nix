@@ -63,6 +63,10 @@ stdenv.mkDerivation (finalAttrs: {
   # XXX: Without this, we get a cycle between bin and dev
   propagatedBuildOutputs = [ ];
 
+  patches = [
+    ./fix-libxml2-include.patch
+  ];
+
   # Skips a broken test
   postPatch = ''
     sed -i '/^AT_CHECK.*crud\.cob/i AT_SKIP_IF([true])' tests/testsuite.src/listings.at

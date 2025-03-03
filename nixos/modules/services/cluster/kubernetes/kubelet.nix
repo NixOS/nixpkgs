@@ -205,9 +205,14 @@ in
     };
 
     extraConfig = mkOption {
-      description = "Kubernetes kubelet extra configuration file entries.";
+      description = ''
+        Kubernetes kubelet extra configuration file entries.
+
+        See also [Set Kubelet Parameters Via A Configuration File](https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/)
+        and [Kubelet Configuration](https://kubernetes.io/docs/reference/config-api/kubelet-config.v1beta1/).
+      '';
       default = { };
-      type = attrsOf attrs;
+      type = attrsOf ((pkgs.formats.json { }).type);
     };
 
     featureGates = mkOption {

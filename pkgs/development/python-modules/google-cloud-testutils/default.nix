@@ -10,14 +10,15 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-testutils";
-  version = "1.4.0";
+  version = "1.5.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-1oocIuKssoUA1p2dxhqFy+nJjJtp4phwQnHN/L88C8s=";
+    pname = "google_cloud_testutils";
+    inherit version;
+    hash = "sha256-ds2JgVD7rbW1A6ce41hJEodqJdtWT2wiPIuvswp3kag=";
   };
 
   propagatedBuildInputs = [

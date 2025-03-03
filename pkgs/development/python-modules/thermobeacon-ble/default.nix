@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "thermobeacon-ble";
-  version = "0.7.0";
+  version = "0.8.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -21,8 +21,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bluetooth-devices";
     repo = "thermobeacon-ble";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-XeLTY78zg+5HR+GH9bHl2t86ifcWm7AA4zSwJOknsdc=";
+    tag = "v${version}";
+    hash = "sha256-kyhLj72WzQ4LpPbW38OWlb1YQs5R+R9Fb3sBYqRkY2M=";
   };
 
   build-system = [ poetry-core ];
@@ -43,7 +43,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library for Thermobeacon BLE devices";
     homepage = "https://github.com/bluetooth-devices/thermobeacon-ble";
-    changelog = "https://github.com/Bluetooth-Devices/thermobeacon-ble/releases/tag/v${version}";
+    changelog = "https://github.com/Bluetooth-Devices/thermobeacon-ble/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

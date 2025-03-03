@@ -14,12 +14,12 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "qmk";
-  version = "1.1.5";
+  version = "1.1.6";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Lv48dSIwxrokuHGcO26FpWRL+PfQ3SN3V+2pt7fmCxE=";
+    hash = "sha256-3ENs26vy+M7G261FPeODK+AbrI5+nBkHXCmGbuIqi1A=";
   };
 
   nativeBuildInputs = with python3.pkgs; [

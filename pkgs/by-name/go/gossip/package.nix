@@ -2,6 +2,7 @@
   cmake,
   darwin,
   fetchFromGitHub,
+  SDL2,
   ffmpeg_6,
   fontconfig,
   git,
@@ -15,33 +16,26 @@
   stdenv,
   wayland,
   wayland-scanner,
-  xorg,
+  nix-update-script,
+  libX11,
+  libXcursor,
+  libXi,
+  libXrandr,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "gossip";
-  version = "0.12.0";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "mikedilger";
     repo = "gossip";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-mPM5HYPEUQ+cGrJ3G/0pmSN4ZQ9SvSNACJRTkgqTAeY=";
+    tag = "v${version}";
+    hash = "sha256-GhkILnt573deQU42uN4YnhzDxirEvCpsvBnp6hF06v4=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "egui-video-0.1.0" = "sha256-mks5wYl9s8AjaEtYx3hjOPoV7g+SbK2sC/cnqsc6sM4=";
-      "nostr-types-0.8.0-unstable" = "sha256-ewwOmJaGGRZ25xIM+8fGtB3m46MDQ2WpP0fGF6F5yR4=";
-      "ecolor-0.28.1" = "sha256-X0cUCNBCsWpeoiqbEp8o9QVl29DzIVe9jjNEq9SQ7kM=";
-      "ffmpeg-next-7.0.4" = "sha256-ED7zY944YLVR9dgRvXuCC2n7szKkPMH8DJX4jVBNRIQ=";
-      "watcher-0.1.0" = "sha256-SdwmbP8JrhkBbHEzSFALf0dF2T2xHigORizRRoPVblA=";
-      "lightning-0.0.123-beta" = "sha256-gngH0mOC9USzwUGP4bjb1foZAvg6QHuzODv7LG49MsA=";
-      "musig2-0.1.0" = "sha256-++1x7uHHR7KEhl8LF3VywooULiTzKeDu3e+0/c/8p9Y=";
-      "nip44-0.1.0" = "sha256-u2ALoHQrPVNoX0wjJmQ+BYRzIKsi0G5xPbYjgsNZZ7A=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-gKyGDk64EJMSFovBLFhkOHRoWrYRERTH2O2McHe2fMM=";
 
   # See https://github.com/mikedilger/gossip/blob/0.9/README.md.
   RUSTFLAGS = "--cfg tokio_unstable";
@@ -65,6 +59,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs =
     [
+      SDL2
       ffmpeg_6
       fontconfig
       libGL
@@ -81,10 +76,10 @@ rustPlatform.buildRustPackage rec {
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       wayland
-      xorg.libX11
-      xorg.libXcursor
-      xorg.libXi
-      xorg.libXrandr
+      libX11
+      libXcursor
+      libXi
+      libXrandr
     ];
 
   # Tests rely on local files, so disable them. (I'm too lazy to patch it.)
@@ -98,9 +93,13 @@ rustPlatform.buildRustPackage rec {
   '';
 
   postFixup = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+    # We don't want the bundled libraries.
+    rm -rf $out/lib
+
     patchelf $out/bin/gossip \
       --add-rpath ${
         lib.makeLibraryPath [
+          SDL2
           libGL
           libxkbcommon
           wayland
@@ -124,13 +123,15 @@ rustPlatform.buildRustPackage rec {
     })
   ];
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Desktop client for nostr, an open social media protocol";
     downloadPage = "https://github.com/mikedilger/gossip/releases/tag/${version}";
     homepage = "https://github.com/mikedilger/gossip";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "gossip";
-    maintainers = with maintainers; [ msanft ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ msanft ];
+    platforms = lib.platforms.unix;
   };
 }

@@ -30,7 +30,7 @@ in
         example = "01234567-89AB-CDEF-0123456789ABCDEF";
         description = ''
           Longview API key. To get this, look in Longview settings which
-          are found at https://manager.linode.com/longview/.
+          are found at <https://manager.linode.com/longview/>.
 
           Warning: this secret is stored in the world-readable Nix store!
           Use {option}`apiKeyFile` instead.
@@ -44,7 +44,7 @@ in
         description = ''
           A file containing the Longview API key.
           To get this, look in Longview settings which
-          are found at https://manager.linode.com/longview/.
+          are found at <https://manager.linode.com/longview/>.
 
           {option}`apiKeyFile` takes precedence over {option}`apiKey`.
         '';

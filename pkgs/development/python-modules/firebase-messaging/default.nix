@@ -32,7 +32,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sdb9696";
     repo = "firebase-messaging";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-duUqDioIBo2QQP/4VGGwklDt4F8pDm/sHrvOx4wcTWQ=";
   };
 

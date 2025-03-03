@@ -148,7 +148,7 @@ in
       };
       description = ''
         Override default locales within gancio.
-        See [https://framagit.org/les/gancio/tree/master/locales](default languages and locales).
+        See [default languages and locales](https://framagit.org/les/gancio/tree/master/locales).
       '';
     };
 

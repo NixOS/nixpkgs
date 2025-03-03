@@ -1,33 +1,39 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
+  installShellFiles,
   pkg-config,
   libgit2,
   openssl,
   zlib,
+  buildPackages,
   versionCheckHook,
   nix-update-script,
   vscode-extensions,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tinymist";
   # Please update the corresponding vscode extension when updating
   # this derivation.
-  version = "0.12.12";
+  version = "0.13.4";
 
   src = fetchFromGitHub {
     owner = "Myriad-Dreamin";
     repo = "tinymist";
-    tag = "v${version}";
-    hash = "sha256-BpbfedfPpYRbqJQMCeZyeV8+XSuh39SXr+ZZqbZG6cc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-vNkHaEKKixTCOxwCtg1ZWAGLqEoGZ8o4ElX0YXdGfsQ=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-1e12A4jTjFxYN3q+4KrUcHN1pmCuK7N+bzTP0eSCoOg=";
+  cargoHash = "sha256-P237gym5SG5wWW1EqUzOvuS20A2Z31oA+kJ8pC3Tsk8=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    installShellFiles
+    pkg-config
+  ];
 
   buildInputs = [
     libgit2
@@ -59,6 +65,17 @@ rustPlatform.buildRustPackage rec {
     "--skip=semantic_tokens_full::tests::test"
   ];
 
+  postInstall =
+    let
+      emulator = stdenv.hostPlatform.emulator buildPackages;
+    in
+    ''
+      installShellCompletion --cmd tinymist \
+        --bash <(${emulator} $out/bin/tinymist completion bash) \
+        --fish <(${emulator} $out/bin/tinymist completion fish) \
+        --zsh <(${emulator} $out/bin/tinymist completion zsh)
+    '';
+
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
@@ -73,9 +90,9 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = {
-    changelog = "https://github.com/Myriad-Dreamin/tinymist/blob/${src.tag}/CHANGELOG.md";
     description = "Tinymist is an integrated language service for Typst";
     homepage = "https://github.com/Myriad-Dreamin/tinymist";
+    changelog = "https://github.com/Myriad-Dreamin/tinymist/blob/v${finalAttrs.version}/editors/vscode/CHANGELOG.md";
     license = lib.licenses.asl20;
     mainProgram = "tinymist";
     maintainers = with lib.maintainers; [
@@ -83,4 +100,4 @@ rustPlatform.buildRustPackage rec {
       lampros
     ];
   };
-}
+})

@@ -48,8 +48,8 @@ let
     ];
     language = "sage";
     # just one 16x16 logo is available
-    logo32 = "${sage-src}/src/doc/common/themes/sage/static/sageicon.png";
-    logo64 = "${sage-src}/src/doc/common/themes/sage/static/sageicon.png";
+    logo32 = "${sage-src}/src/doc/common/static/sageicon.png";
+    logo64 = "${sage-src}/src/doc/common/static/sageicon.png";
   };
 
   jupyter-kernel-specs = pkgs.jupyter-kernel.create {

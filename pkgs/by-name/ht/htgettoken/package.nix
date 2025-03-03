@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "fermitools";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-1rF72zo/Jj4ZeEG2Nk6Wla+AfaDo5iPZhZP1j9WAK5I=";
   };
 

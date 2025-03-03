@@ -48,16 +48,24 @@ stdenv.mkDerivation rec {
     ./FindMagic_EP.cmake.patch
   ];
 
-  postPatch = ''
-    # copy pre-fetched external project to directory where it is expected to be
-    mkdir -p build/externals/src
-    cp -a ${ep-file-windows} build/externals/src/ep_magic
-    chmod -R u+w build/externals/src/ep_magic
+  postPatch =
+    ''
+      # copy pre-fetched external project to directory where it is expected to be
+      mkdir -p build/externals/src
+      cp -a ${ep-file-windows} build/externals/src/ep_magic
+      chmod -R u+w build/externals/src/ep_magic
 
-    # add openssl on path
-    sed -i '49i list(APPEND OPENSSL_PATHS "${openssl.dev}" "${openssl.out}")' \
-      cmake/Modules/FindOpenSSL_EP.cmake
-  '';
+      # add openssl on path
+      sed -i '49i list(APPEND OPENSSL_PATHS "${openssl.dev}" "${openssl.out}")' \
+        cmake/Modules/FindOpenSSL_EP.cmake
+    ''
+    # libcxx (as of llvm-19) does not yet support `stop_token` and `jthread`
+    # without the -fexperimental-library flag. Tiledb adds its own
+    # implementations in the std namespace which conflict with libcxx. This
+    # test can be re-enabled once libcxx supports stop_token and jthread.
+    + lib.optionalString (stdenv.cc.libcxx != null) ''
+      truncate -s0 tiledb/stdx/test/CMakeLists.txt
+    '';
 
   # upstream will hopefully fix this in some newer release
   env.CXXFLAGS = "-include random";

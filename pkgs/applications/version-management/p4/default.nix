@@ -45,6 +45,12 @@ stdenv.mkDerivation (finalAttrs: rec {
     sha256 = "sha256-6+DOJPeVzP4x0UsN9MlZRAyusapBTICX0BuyvVBQBC8=";
   };
 
+  postPatch = lib.optionals stdenv.hostPlatform.isDarwin ''
+    # same error as https://github.com/pocoproject/poco/issues/4586
+    substituteInPlace zlib/zutil.h \
+      --replace-fail '#if defined(MACOS) || defined(TARGET_OS_MAC)' '#if defined(MACOS)'
+  '';
+
   nativeBuildInputs = [ jam ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [

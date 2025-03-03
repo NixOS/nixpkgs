@@ -1,5 +1,4 @@
 {
-  apple-sdk_11,
   boost,
   cmake,
   dbus,
@@ -21,13 +20,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qbittorrent" + lib.optionalString (!guiSupport) "-nox";
-  version = "5.0.2";
+  version = "5.0.4";
 
   src = fetchFromGitHub {
     owner = "qbittorrent";
     repo = "qBittorrent";
     rev = "release-${finalAttrs.version}";
-    hash = "sha256-JIURzAkVNYjHAx8yY0WaKNK4N/z9ndqjk0EXkJH9AzY=";
+    hash = "sha256-8gSSUgYx0CSSb3ackFknZ9r0cWFLxkC7a3Tj8QJaylc=";
   };
 
   nativeBuildInputs = [
@@ -47,7 +46,6 @@ stdenv.mkDerivation (finalAttrs: {
       qt6.qttools
       zlib
     ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_11 ]
     ++ lib.optionals guiSupport [ dbus ]
     ++ lib.optionals (guiSupport && stdenv.hostPlatform.isLinux) [ qt6.qtwayland ]
     ++ lib.optionals trackerSearch [ python3 ];

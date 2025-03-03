@@ -1,0 +1,13 @@
+diff --git a/meson.build b/meson.build
+index 6e60b0b..b25da9d 100644
+--- a/meson.build
++++ b/meson.build
+@@ -125,7 +125,7 @@ mslib = custom_target(
+     'mslib',
+     output: ['mslib.a', 'mslib.h'],
+     input: 'ms-tools/lib/mslib.go',
+-    command: ['go', 'build', '-C',  join_paths(meson.current_source_dir(), 'ms-tools/lib'), '-o', join_paths(meson.current_build_dir(), '@OUTPUT0@'), '-buildmode=c-archive', 'mslib.go']
++    command: ['cp', '@MSLIB_A_PRECOMPILED@', '@MSLIB_H_PRECOMPILED@', join_paths(meson.current_build_dir(), '@OUTDIR@')]
+     
+ )
+ 

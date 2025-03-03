@@ -26,7 +26,7 @@ python311Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Guake";
     repo = "guake";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-e6Bf4HDftHBxFPcw9z02CqgZhSIvt6wlLF6dnIh9fEc=";
   };
 

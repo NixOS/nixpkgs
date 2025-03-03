@@ -11,7 +11,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "commitizen";
     repo = "cz-cli";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-4kyGxidE8dzkHL0oPv/XxDxQ3qlEE6TKSgj+1g9uvJM=";
   };
 

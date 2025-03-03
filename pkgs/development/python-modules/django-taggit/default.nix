@@ -1,37 +1,42 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
-  fetchPypi,
   django,
   djangorestframework,
+  fetchFromGitHub,
   python,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "django-taggit";
-  version = "5.0.1";
-  format = "setuptools";
+  version = "6.1.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-7c19seDzXDBOCCovYx3awuFu9SlgKVJOt5KvdDDKtMw=";
+  src = fetchFromGitHub {
+    owner = "jazzband";
+    repo = "django-taggit";
+    tag = version;
+    hash = "sha256-QLJhO517VONuf+8rrpZ6SXMP/WWymOIKfd4eyviwCsU=";
   };
 
-  propagatedBuildInputs = [ django ];
+  build-system = [ setuptools ];
 
-  pythonImportsCheck = [ "taggit" ];
+  buildInputs = [ django ];
 
   nativeCheckInputs = [ djangorestframework ];
+
+  pythonImportsCheck = [ "taggit" ];
 
   checkPhase = ''
     # prove we're running tests against installed package, not build dir
     rm -r taggit
     # Replace directory of locale
-    substituteInPlace ./tests/test_utils.py \
-      --replace 'os.path.dirname(__file__), ".."' "\"$out/lib/python${lib.versions.majorMinor python.version}/site-packages/\""
+    substituteInPlace tests/test_utils.py \
+      --replace-fail 'os.path.dirname(__file__), ".."' "\"$out/lib/python${lib.versions.majorMinor python.version}/site-packages/\""
     ${python.interpreter} -m django test --settings=tests.settings
   '';
 

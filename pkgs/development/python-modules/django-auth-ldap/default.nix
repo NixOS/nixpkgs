@@ -1,8 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  isPy27,
+  fetchFromGitHub,
 
   # buildtime
   setuptools-scm,
@@ -12,36 +11,40 @@
   python-ldap,
 
   # tests
-  python,
-  pkgs,
+  openldap,
 }:
 
 buildPythonPackage rec {
   pname = "django-auth-ldap";
-  version = "4.8.0";
-  format = "pyproject";
+  version = "5.1.0";
+  pyproject = true;
 
-  disabled = isPy27;
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-YEJQk43cn9phnyR8elmwsvBuU6fT9GoVbyiqMN1xpzg=";
+  src = fetchFromGitHub {
+    owner = "django-auth-ldap";
+    repo = "django-auth-ldap";
+    tag = version;
+    hash = "sha256-uOxncRsBwy+1ynESku7+5yaY1MPIo4V8ppE2zfcDkws=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     django
     python-ldap
   ];
 
-  # ValueError: SCHEMADIR is None, ldap schemas are missing.
+  # Duplicate attributeType: "MSADat2:102"\nslapadd: could not add entry dn="cn={4}msuser,cn=schema,cn=config" (line=1): \xd0\xbe\xff\xff\xff\x7f\n'
   doCheck = false;
+
+  preCheck = ''
+    export PATH=${openldap}/bin:${openldap}/libexec:$PATH
+    export SCHEMA=${openldap}/etc/schema
+    export DJANGO_SETTINGS_MODULE=tests.settings
+  '';
 
   checkPhase = ''
     runHook preCheck
-    export PATH=${pkgs.openldap}/bin:${pkgs.openldap}/libexec:$PATH
-    ${python.interpreter} -m django test --settings tests.settings
+    python -m django test --settings tests.settings
     runHook postCheck
   '';
 

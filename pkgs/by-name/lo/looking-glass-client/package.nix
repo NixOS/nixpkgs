@@ -14,6 +14,7 @@
   libffi,
   expat,
   libGL,
+  nanosvg,
 
   libX11,
   libxkbcommon,
@@ -63,12 +64,13 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
-    # Fix failing cmake assertion when disabling X11 whithout explicitly enabling Wayland.
+    # Fix failing cmake assertion when disabling X11 without explicitly enabling Wayland.
     (fetchpatch {
       url = "https://github.com/gnif/LookingGlass/commit/20972cfd9b940fddf9e7f3d2887a271d16398979.patch";
       hash = "sha256-CqB8AmOZ4YxnEsQkyu/ZEaun6ywpSh4B7PM+MFJF0qU=";
       stripLen = 1;
     })
+    ./nanosvg-unvendor.diff
   ];
 
   nativeBuildInputs = [
@@ -88,6 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
       nettle
       fontconfig
       libffi
+      nanosvg
     ]
     ++ lib.optionals xorgSupport [
       libxkbcommon

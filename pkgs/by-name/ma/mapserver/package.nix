@@ -17,10 +17,10 @@
   harfbuzz,
   libjpeg,
   libpng,
+  libpq,
   librsvg,
   libxml2,
   pkg-config,
-  postgresql,
   proj,
   protobufc,
   python3,
@@ -30,13 +30,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mapserver";
-  version = "8.2.2";
+  version = "8.4.0";
 
   src = fetchFromGitHub {
     owner = "MapServer";
     repo = "MapServer";
     rev = "rel-${lib.replaceStrings [ "." ] [ "-" ] version}";
-    hash = "sha256-tub0Jd1IUkONQ5Mqz8urihbrcFLlOQybLhOvzkcwW54=";
+    hash = "sha256-XEjRklbvYV7UoVX12iW6s1mS8pzIljla488CQNuFfto=";
   };
 
   nativeBuildInputs =
@@ -61,9 +61,9 @@ stdenv.mkDerivation rec {
     harfbuzz
     libjpeg
     libpng
+    libpq
     librsvg
-    (libxml2.override { enableHttp = true; })
-    postgresql
+    libxml2
     proj
     protobufc
     zlib

@@ -169,6 +169,13 @@ let
 
   libasi = buildIndi3rdParty {
     pname = "libasi";
+
+    postPatch = ''
+      substituteInPlace 99-asi.rules \
+        --replace-fail "/bin/echo" "${coreutils}/bin/echo" \
+        --replace-fail "/bin/sh" "${bash}/bin/sh"
+    '';
+
     buildInputs = [
       libusb1
       (lib.getLib stdenv.cc.cc)
@@ -344,7 +351,7 @@ let
     postPatch = ''
       substituteInPlace 99-player_one_astronomy.rules \
         --replace-fail "/bin/echo" "${coreutils}/bin/echo" \
-        --replace "/bin/sh" "${bash}/bin/sh"
+        --replace-fail "/bin/sh" "${bash}/bin/sh"
     '';
 
     buildInputs = [

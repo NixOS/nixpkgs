@@ -47,7 +47,7 @@ let
       libxml2,
       linux-pam,
       numactl,
-      fmt_8,
+      fmt_11,
       withStorageMroonga ? true,
       kytea,
       libsodium,
@@ -65,7 +65,7 @@ let
 
       mytopEnv = buildPackages.perl.withPackages (
         p: with p; [
-          DBDmysql
+          DBDMariaDB
           DBI
           TermReadKey
         ]
@@ -231,7 +231,7 @@ let
 
           buildInputs =
             common.buildInputs
-            ++ lib.optionals (lib.versionAtLeast common.version "10.7") [ fmt_8 ];
+            ++ lib.optionals (lib.versionAtLeast common.version "10.11") [ fmt_11 ];
 
           cmakeFlags = common.cmakeFlags ++ [
             "-DPLUGIN_AUTH_PAM=NO"
@@ -286,7 +286,7 @@ let
               msgpack
               zeromq
             ]
-            ++ lib.optionals (lib.versionAtLeast common.version "10.7") [ fmt_8 ];
+            ++ lib.optionals (lib.versionAtLeast common.version "10.11") [ fmt_11 ];
 
           propagatedBuildInputs = lib.optional withNuma numactl;
 
@@ -365,26 +365,26 @@ self: {
   # see https://mariadb.org/about/#maintenance-policy for EOLs
   mariadb_105 = self.callPackage generic {
     # Supported until 2025-06-24
-    version = "10.5.27";
-    hash = "sha256-76ZPpfczuCKrGmeV4evBecFgwIaQ7Ncduh6w9hru3RQ=";
+    version = "10.5.28";
+    hash = "sha256-C1BwII2gEWZA8gvQhfETZSf5mMwjJocVvL81Lnt/PME=";
     inherit (self.darwin.apple_sdk.frameworks) CoreServices;
   };
   mariadb_106 = self.callPackage generic {
     # Supported until 2026-07-06
-    version = "10.6.20";
-    hash = "sha256-R/BavH2+uz8msx51AisbOWnbvEdSxK5wH4kgpgSJbUE=";
+    version = "10.6.21";
+    hash = "sha256-jX+XFps7ogRIWJZbjPwlQ2RADfQ+kFBC+S4kuPp7DZY=";
     inherit (self.darwin.apple_sdk.frameworks) CoreServices;
   };
   mariadb_1011 = self.callPackage generic {
     # Supported until 2028-02-16
-    version = "10.11.10";
-    hash = "sha256-sGp0ZQuDoWqpqwmJhEgrAo51sABnSxH/KIdyxhmm8CI=";
+    version = "10.11.11";
+    hash = "sha256-bynU1+QPxJr0oP5giYRQnvLRU9882K/kNZ3OPKDieJA=";
     inherit (self.darwin.apple_sdk.frameworks) CoreServices;
   };
   mariadb_114 = self.callPackage generic {
     # Supported until 2029-05-29
-    version = "11.4.4";
-    hash = "sha256-lvvS5uk/t+izc+6nXYW2/qV8DhEaAgkMu+/tUlmdx3s=";
+    version = "11.4.5";
+    hash = "sha256-/2WV+MSC+ZIeObl/oRIjd6afDcvZJVPGuQMsvw6bU1Q=";
     inherit (self.darwin.apple_sdk.frameworks) CoreServices;
   };
 }

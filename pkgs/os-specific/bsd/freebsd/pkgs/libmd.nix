@@ -13,15 +13,17 @@
   # this is set to true when used as the dependency of install
   # this is set to false when used as the dependency of libc
   bootstrapInstallation ? false,
+  extraSrc ? [ ],
 }:
 
 mkDerivation (
   {
+    pname = "libmd" + lib.optionalString bootstrapInstallation "-boot";
     path = "lib/libmd";
     extraPaths = [
       "sys/crypto"
       "sys/sys"
-    ];
+    ] ++ extraSrc;
 
     outputs = [
       "out"

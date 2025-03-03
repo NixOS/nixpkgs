@@ -36,13 +36,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vengi-tools";
-  version = "0.0.34";
+  version = "0.0.35";
 
   src = fetchFromGitHub {
-    owner = "mgerhardy";
+    owner = "vengi-voxel";
     repo = "vengi";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-a78Oiwln3vyzCyjNewbK1/05bnGcSixxzKIgz4oiDmA=";
+    hash = "sha256-8rGnW+VtqNJYqUqQDp0yOVIQd7w+cq7PIpqqIQPhkbE=";
   };
 
   nativeBuildInputs = [
@@ -114,8 +114,8 @@ stdenv.mkDerivation (finalAttrs: {
       filemanager and a command line tool to convert between several voxel
       formats.
     '';
-    homepage = "https://mgerhardy.github.io/vengi/";
-    downloadPage = "https://github.com/mgerhardy/vengi/releases";
+    homepage = "https://vengi-voxel.github.io/vengi/";
+    downloadPage = "https://github.com/vengi-voxel/vengi/releases";
     license = [
       licenses.mit
       licenses.cc-by-sa-30

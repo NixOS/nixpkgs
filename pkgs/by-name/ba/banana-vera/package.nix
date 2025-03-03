@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Epitech";
     repo = "banana-vera";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-sSN3trSySJe3KVyrb/hc5HUGRS4M3c4UX9SLlzBM43c=";
   };
 

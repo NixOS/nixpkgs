@@ -22,7 +22,7 @@
   wayland,
   xdg-utils,
 
-  apple-sdk_11,
+  nix-update-script,
 }:
 let
   rpathLibs =
@@ -44,16 +44,17 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "alacritty";
-  version = "0.14.0";
+  version = "0.15.1";
 
   src = fetchFromGitHub {
     owner = "alacritty";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-ZhkuuxTx2y8vOfxfpDpJAyNyDdRWab0pqyDdbOCQ2XE=";
+    repo = "alacritty";
+    tag = "v${version}";
+    hash = "sha256-/yERMNfCFLPb1S17Y9OacVH8UobDIIZDhM2qPzf5Vds=";
   };
 
-  cargoHash = "sha256-T+/G2z7H/egJ/IlP3KA31jydg1CmFdLW8bLYSf/yWck=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-uXwefUV1NAKqwwPIWj4Slkx0c5b+RfLR3caTb42fc4M=";
 
   nativeBuildInputs = [
     cmake
@@ -65,11 +66,7 @@ rustPlatform.buildRustPackage rec {
     scdoc
   ];
 
-  buildInputs =
-    rpathLibs
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_11
-    ];
+  buildInputs = rpathLibs;
 
   outputs = [
     "out"
@@ -126,7 +123,10 @@ rustPlatform.buildRustPackage rec {
 
   dontPatchELF = true;
 
-  passthru.tests.test = nixosTests.terminal-emulators.alacritty;
+  passthru = {
+    tests.test = nixosTests.terminal-emulators.alacritty;
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "Cross-platform, GPU-accelerated terminal emulator";
@@ -135,7 +135,7 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "alacritty";
     maintainers = with maintainers; [
       Br1ght0ne
-      mic92
+      rvdp
     ];
     platforms = platforms.unix;
     changelog = "https://github.com/alacritty/alacritty/blob/v${version}/CHANGELOG.md";

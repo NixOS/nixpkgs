@@ -28,10 +28,10 @@ stdenv.mkDerivation {
     wrapProgram $out/bin/nixpkgs-lint --set PERL5LIB $PERL5LIB
   '';
 
-  meta = with lib; {
-    maintainers = [ maintainers.eelco ];
+  meta = {
+    maintainers = [ lib.maintainers.eelco ];
     description = "A utility for Nixpkgs contributors to check Nixpkgs for common errors";
     mainProgram = "nixpkgs-lint";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

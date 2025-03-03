@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "joostlek";
     repo = "python-waqi";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-YWTGEOSSkZ0XbZUE3k+Dn9qg8Pmwip9wCp8e/j1D9io=";
   };
 
@@ -44,6 +44,8 @@ buildPythonPackage rec {
     pytestCheckHook
     syrupy
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [ "aiowaqi" ];
 

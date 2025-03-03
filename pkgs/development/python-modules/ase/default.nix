@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "ase";
-  version = "3.23.0";
+  version = "3.24.0";
   pyproject = true;
 
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-kaKqMdib2QsO/f5KfoQmTzKCiyq/yfOOZeBBrXb+yK4=";
+    hash = "sha256-msyT1tqvSM0nuETFb4v0lCi52wVC+qPMMNnVuOGEIZU=";
   };
 
   build-system = [ setuptools ];
@@ -61,6 +61,7 @@ buildPythonPackage rec {
     "test_jmol_roundtrip" # missing attribute
     "test_pw_input_write_nested_flat" # Did not raise DeprecationWarning
     "test_fix_scaled" # Did not raise UserWarning
+    "test_ipi_protocol" # flaky
   ] ++ lib.optionals (pythonAtLeast "3.12") [ "test_info_calculators" ];
 
   preCheck = ''

@@ -17,14 +17,14 @@
 }:
 buildPythonPackage rec {
   pname = "essentials-openapi";
-  version = "1.0.9";
+  version = "1.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Neoteroi";
     repo = "essentials-openapi";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-/NYv0NrE8+0kQg5G3Qf2DtesMHlmKQYczNT8pFlNFZE=";
+    tag = "v${version}";
+    hash = "sha256-XPsVPeKaaDwBFrUoydSa/7UPhw46JWMu3ww3MZfy7wg=";
   };
 
   nativeBuildInputs = [ hatchling ];
@@ -62,7 +62,7 @@ buildPythonPackage rec {
   meta = {
     homepage = "https://github.com/Neoteroi/essentials-openapi";
     description = "Functions to handle OpenAPI Documentation";
-    changelog = "https://github.com/Neoteroi/essentials-openapi/releases/v${version}";
+    changelog = "https://github.com/Neoteroi/essentials-openapi/releases/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       aldoborrero

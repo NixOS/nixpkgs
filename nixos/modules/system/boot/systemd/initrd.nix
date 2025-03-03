@@ -163,7 +163,7 @@ in
       type = types.lines;
       example = "DefaultLimitCORE=infinity";
       description = ''
-        Extra config options for systemd. See systemd-system.conf(5) man page
+        Extra config options for systemd. See {manpage}`systemd-system.conf(5)` man page
         for available options.
       '';
     };
@@ -538,7 +538,9 @@ in
           "${cfg.package.util-linux}/bin/umount"
           "${cfg.package.util-linux}/bin/sulogin"
 
-          # required for script services, and some tools like xfs still want the sh symlink
+          # required for services generated with writeShellScript and friends
+          pkgs.runtimeShell
+          # some tools like xfs still want the sh symlink
           "${pkgs.bash}/bin"
 
           # so NSS can look up usernames
@@ -546,11 +548,6 @@ in
 
           # Resolving sysroot symlinks without code exec
           "${pkgs.chroot-realpath}/bin/chroot-realpath"
-        ]
-        ++ optionals cfg.package.withCryptsetup [
-          # fido2 support
-          "${cfg.package}/lib/cryptsetup/libcryptsetup-token-systemd-fido2.so"
-          "${pkgs.libfido2}/lib/libfido2.so.1"
         ]
         ++ jobScripts
         ++ map (c: builtins.removeAttrs c [ "text" ]) (builtins.attrValues cfg.contents);

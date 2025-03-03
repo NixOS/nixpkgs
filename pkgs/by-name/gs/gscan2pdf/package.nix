@@ -11,7 +11,7 @@
   imagemagick,
   libtiff,
   djvulibre,
-  poppler_utils,
+  poppler-utils,
   ghostscript,
   unpaper,
   pdftk,
@@ -98,7 +98,7 @@ perlPackages.buildPerlPackage rec {
       --prefix PATH : "${imagemagick}/bin" \
       --prefix PATH : "${libtiff}/bin" \
       --prefix PATH : "${djvulibre}/bin" \
-      --prefix PATH : "${poppler_utils}/bin" \
+      --prefix PATH : "${poppler-utils}/bin" \
       --prefix PATH : "${ghostscript}/bin" \
       --prefix PATH : "${unpaper}/bin" \
       --prefix PATH : "${pdftk}/bin"
@@ -118,7 +118,7 @@ perlPackages.buildPerlPackage rec {
       imagemagick
       libtiff
       djvulibre
-      poppler_utils
+      poppler-utils
       ghostscript
       unpaper
       pdftk
@@ -161,7 +161,7 @@ perlPackages.buildPerlPackage rec {
     description = "GUI to produce PDFs or DjVus from scanned documents";
     homepage = "https://gscan2pdf.sourceforge.net/";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ pacien ];
+    maintainers = with maintainers; [ euxane ];
     mainProgram = "gscan2pdf";
   };
 }

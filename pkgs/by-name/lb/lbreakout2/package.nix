@@ -49,7 +49,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = with lib.licenses; [ gpl2Plus ];
     mainProgram = "lbreakout2";
     maintainers = with lib.maintainers; [
-      AndersonTorres
       ciil
     ];
     platforms = lib.platforms.unix;

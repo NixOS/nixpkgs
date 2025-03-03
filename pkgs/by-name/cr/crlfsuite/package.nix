@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Nefcore";
     repo = "CRLFsuite";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     sha256 = "sha256-mK20PbVGhTEjhY5L6coCzSMIrG/PHHmNq30ZoJEs6uI=";
   };
 

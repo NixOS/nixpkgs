@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "beda-software";
     repo = "drf-writable-nested";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-+I5HsqkjCrkF9MV90NGQuUhmLcDVsv20QIyDK9WxwdQ=";
   };
 

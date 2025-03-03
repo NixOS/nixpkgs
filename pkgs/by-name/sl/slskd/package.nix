@@ -9,6 +9,7 @@
   nodejs_18,
   slskd,
   testers,
+  nix-update-script,
 }:
 
 let
@@ -18,13 +19,13 @@ let
 in
 buildDotnetModule rec {
   pname = "slskd";
-  version = "0.22.0";
+  version = "0.22.2";
 
   src = fetchFromGitHub {
     owner = "slskd";
     repo = "slskd";
-    rev = "refs/tags/${version}";
-    hash = "sha256-qRK6O2f9nbjmcTN3fr5xZDlCiTgX6m1iz2VYVBOLWaU=";
+    tag = version;
+    hash = "sha256-Arf/QOq0wYely+CYwb4sJXsxB2BbEHZ2bUNyqeGbFdg=";
   };
 
   nativeBuildInputs = [
@@ -68,6 +69,7 @@ buildDotnetModule rec {
 
   passthru = {
     tests.version = testers.testVersion { package = slskd; };
+    updateScript = nix-update-script { };
   };
 
   meta = {

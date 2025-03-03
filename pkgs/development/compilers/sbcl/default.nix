@@ -1,8 +1,8 @@
-{ lib, stdenv, callPackage, ecl, coreutils, fetchurl, strace, texinfo, which, writeText, zstd
+{ lib, stdenv, callPackage, ecl, coreutils, fetchurl, ps, strace, texinfo, which, writeText, zstd
 , version
   # Set this to a lisp binary to use a custom bootstrap lisp compiler for SBCL.
   # Leave as null to use the default.  This is useful for local development of
-  # SBCL, because you can use your existing stock SBCL as a boostrap.  On Hydra
+  # SBCL, because you can use your existing stock SBCL as a bootstrap.  On Hydra
   # of course we can’t do that because SBCL hasn’t been built yet, so we use
   # ECL but that’s much slower.
 , bootstrapLisp ? null
@@ -14,13 +14,17 @@ let
     "2.4.6" = {
       sha256 = "sha256-pImQeELa4JoXJtYphb96VmcKrqLz7KH7cCO8pnw/MJE=";
     };
-    # By unofficial and very loose convention we keep the latest version of
-    # SBCL, and the previous one in case someone quickly needs to roll back.
-    "2.4.9" = {
-      sha256 = "sha256-mXDk68XWlD3GTXyh9S2bXNn8lM75TSMyE9eOx182BeI=";
-    };
+    # Necessary for stumpwm
     "2.4.10" = {
       sha256 = "sha256-zus5a2nSkT7uBIQcKva+ylw0LOFGTD/j5FPy3hDF4vg=";
+    };
+    # By unofficial and very loose convention we keep the latest version of
+    # SBCL, and the previous one in case someone quickly needs to roll back.
+    "2.5.0" = {
+      sha256 = "sha256-Lhiv0Ijkot8ht3uuLhcM5XDRHabSdgcpImXxzGqKGbE=";
+    };
+    "2.5.1" = {
+      sha256 = "sha256-QTOzbNFtFNYzlpw3/VHCyJqOpdbhYRVSgZ2R9xshn4s=";
     };
   };
   # Collection of pre-built SBCL binaries for platforms that need them for
@@ -80,6 +84,8 @@ stdenv.mkDerivation (self: {
       which
     ] ++ lib.optionals (builtins.elem stdenv.system strace.meta.platforms) [
       strace
+    ] ++ lib.optionals (lib.versionOlder "2.4.10" self.version) [
+      ps
     ]
   );
   buildInputs = lib.optionals self.coreCompression (

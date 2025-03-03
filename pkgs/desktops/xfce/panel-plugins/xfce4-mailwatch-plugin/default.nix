@@ -2,8 +2,8 @@
   lib,
   stdenv,
   fetchurl,
+  gettext,
   pkg-config,
-  intltool,
   xfce4-panel,
   libxfce4ui,
   libxfce4util,
@@ -21,15 +21,15 @@ in
 
 stdenv.mkDerivation rec {
   pname = "xfce4-mailwatch-plugin";
-  version = "1.3.1";
+  version = "1.3.2";
 
   src = fetchurl {
     url = "mirror://xfce/src/${category}/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-BUlk6f5MpmhIZACZHOHqAdB6rHuiNfSxTUqPfZgABGo=";
+    sha256 = "sha256-xHg/FTOJHNLgw0Bm2oWYZNzkWiPKpgFbWMufqdZafkQ=";
   };
 
   nativeBuildInputs = [
-    intltool
+    gettext
     pkg-config
   ];
 

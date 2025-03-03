@@ -7,9 +7,11 @@
   cudaSupport ? config.cudaSupport,
   fetchurl,
   makeWrapper,
+  minizip,
   opencl-headers,
   ocl-icd,
   xxHash,
+  zlib,
   Foundation,
   IOKit,
   Metal,
@@ -46,8 +48,10 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [
+      minizip
       opencl-headers
       xxHash
+      zlib
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       Foundation
@@ -64,6 +68,7 @@ stdenv.mkDerivation rec {
       "VERSION_TAG=${version}"
       "USE_SYSTEM_OPENCL=1"
       "USE_SYSTEM_XXHASH=1"
+      "USE_SYSTEM_ZLIB=1"
     ]
     ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform == stdenv.buildPlatform) [
       "IS_APPLE_SILICON='${if stdenv.hostPlatform.isAarch64 then "1" else "0"}'"

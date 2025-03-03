@@ -30,6 +30,7 @@
   metalSupport ? stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 && !openclSupport,
   vulkanSupport ? false,
   rpcSupport ? false,
+  curl,
   shaderc,
   vulkan-headers,
   vulkan-loader,
@@ -81,13 +82,13 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "llama-cpp";
-  version = "4293";
+  version = "4798";
 
   src = fetchFromGitHub {
-    owner = "ggerganov";
+    owner = "ggml-org";
     repo = "llama.cpp";
-    rev = "refs/tags/b${finalAttrs.version}";
-    hash = "sha256-ab45VNNJvzp6t8Bk2GSuTBsP4bWcyOT4d+TvaIHs5qo=";
+    tag = "b${finalAttrs.version}";
+    hash = "sha256-XGtCfwBDmW7hktz+VkYnSqrmUX/SIdeeFx5rHKN+5cU=";
     leaveDotGit = true;
     postFetch = ''
       git -C "$out" rev-parse --short HEAD > $out/COMMIT
@@ -130,18 +131,20 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     ++ optionals openclSupport [ clblast ]
     ++ optionals rocmSupport rocmBuildInputs
     ++ optionals blasSupport [ blas ]
-    ++ optionals vulkanSupport vulkanBuildInputs;
+    ++ optionals vulkanSupport vulkanBuildInputs
+    ++ [ curl ];
 
   cmakeFlags =
     [
       # -march=native is non-deterministic; override with platform-specific flags if needed
       (cmakeBool "GGML_NATIVE" false)
       (cmakeBool "LLAMA_BUILD_SERVER" true)
+      (cmakeBool "LLAMA_CURL" true)
       (cmakeBool "BUILD_SHARED_LIBS" true)
       (cmakeBool "GGML_BLAS" blasSupport)
       (cmakeBool "GGML_CLBLAST" openclSupport)
       (cmakeBool "GGML_CUDA" cudaSupport)
-      (cmakeBool "GGML_HIPBLAS" rocmSupport)
+      (cmakeBool "GGML_HIP" rocmSupport)
       (cmakeBool "GGML_METAL" metalSupport)
       (cmakeBool "GGML_RPC" rpcSupport)
       (cmakeBool "GGML_VULKAN" vulkanSupport)
@@ -191,7 +194,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Inference of Meta's LLaMA model (and others) in pure C/C++";
-    homepage = "https://github.com/ggerganov/llama.cpp/";
+    homepage = "https://github.com/ggml-org/llama.cpp";
     license = licenses.mit;
     mainProgram = "llama";
     maintainers = with maintainers; [

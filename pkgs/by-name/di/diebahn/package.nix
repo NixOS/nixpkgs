@@ -14,28 +14,29 @@
   gdk-pixbuf,
   glib,
   gtk4,
+  openssl,
   libadwaita,
   pango,
   gettext,
   darwin,
   blueprint-compiler,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
   pname = "diebahn";
-  version = "2.7.1";
+  version = "2.7.3";
 
   src = fetchFromGitLab {
     owner = "schmiddi-on-mobile";
     repo = "railway";
-    rev = version;
-    hash = "sha256-SLZJiCkHUS2p7cNk3i3yO2c3tWR4T4ch+zJ1iYEkS6E=";
+    tag = version;
+    hash = "sha256-PD76zxgQJ332MVu5LL9SNDrf66xmE/td4uDv/FYq0aU=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    name = "${pname}-${src}";
-    inherit src;
-    hash = "sha256-XYlRm8yqQr9ZNV7jQeuR8kvqFNudUjJlzE6h9X0zq0Y=";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
+    hash = "sha256-3+UTN0KKnbpPm948XW4NSZkMYJUv974VtTqtG8orR/E=";
   };
 
   nativeBuildInputs = [
@@ -57,6 +58,7 @@ stdenv.mkDerivation rec {
       glib
       gtk4
       libadwaita
+      openssl
       pango
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin (
@@ -76,8 +78,12 @@ stdenv.mkDerivation rec {
     GETTEXT_LIB_DIR = "${lib.getLib gettext}/lib";
   };
 
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
   meta = {
-    changelog = "https://gitlab.com/schmiddi-on-mobile/railway/-/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://gitlab.com/schmiddi-on-mobile/railway/-/blob/${src.tag}/CHANGELOG.md";
     description = "Travel with all your train information in one place. Also known as Railway";
     homepage = "https://gitlab.com/schmiddi-on-mobile/railway";
     license = lib.licenses.gpl3Plus;

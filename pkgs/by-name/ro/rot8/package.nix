@@ -11,11 +11,12 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "efernau";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-dHx3vFY0ztyTIlzUi22TYphPD5hvgfHrWaaeoGxnvW0=";
   };
 
-  cargoHash = "sha256-KDg6Ggnm6Cl/1fXqNcc7/jRFJ6KTLVGveJ6Fs3NLlHE=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-MZz8IZDux9VEDDLQjkT96smNsygY1vYG2QBw3Q09hqw=";
 
   meta = with lib; {
     description = "screen rotation daemon for X11 and wlroots";

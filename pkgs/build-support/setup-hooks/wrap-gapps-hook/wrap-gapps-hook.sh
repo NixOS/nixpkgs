@@ -28,13 +28,13 @@ gappsWrapperArgsHook() {
     fi
 
     for v in ${wrapPrefixVariables:-} GST_PLUGIN_SYSTEM_PATH_1_0 GI_TYPELIB_PATH GRL_PLUGIN_PATH; do
-        if [ -n "${!v}" ]; then
+        if [ -n "${!v:-}" ]; then
             gappsWrapperArgs+=(--prefix "$v" : "${!v}")
         fi
     done
 }
 
-preFixupPhases+=" gappsWrapperArgsHook"
+appendToVar preFixupPhases gappsWrapperArgsHook
 
 wrapGApp() {
     local program="$1"

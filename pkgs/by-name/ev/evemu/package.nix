@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   # each time it is downloaded :/
   src = fetchgit {
     url = "git://git.freedesktop.org/git/evemu";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     sha256 = "sha256-SQDaARuqBMBVlUz+Nw6mjdxaZfVOukmzTlIqy8U2rus=";
   };
 

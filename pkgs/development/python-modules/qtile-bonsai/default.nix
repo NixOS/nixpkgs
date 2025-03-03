@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "qtile-bonsai";
-  version = "0.4.0";
+  version = "0.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aravinda0";
     repo = "qtile-bonsai";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-IWy/YEVdZc+UgIKl75ZpOkOIvpS5hCX0ihQenUOuJHo=";
+    tag = "v${version}";
+    hash = "sha256-1wiBrLQDdQGsoZAT5XUzmuloVo90y+GZu1bqPrbQl48=";
   };
 
   build-system = [
@@ -55,7 +55,7 @@ buildPythonPackage rec {
     "tests/integration/test_widget.py"
   ];
 
-  pythonImportCheck = [ "qtile_bonsai" ];
+  pythonImportsCheck = [ "qtile_bonsai" ];
 
   meta = {
     changelog = "https://github.com/aravinda0/qtile-bonsai/releases/tag/${version}";

@@ -4,7 +4,7 @@
   lib,
   python3,
   bash,
-  gitUpdater,
+  openssl,
   nixosTests,
 }:
 
@@ -14,12 +14,12 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "waagent";
-  version = "2.12.0.2";
+  version = "2.12.0.4";
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "WALinuxAgent";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-pp54J3x/+hkG4p7X1cojupdhjc0pyKcBRnE5ejd5ZpU=";
+    tag = "v${version}";
+    hash = "sha256-L8W/ijBHkNukM2G9HBRVx2wFXzgkR8gbFBljNVPs6xA=";
   };
   patches = [
     # Suppress the following error when waagent tries to configure sshd:
@@ -31,11 +31,13 @@ python.pkgs.buildPythonApplication rec {
   # Replace tools used in udev rules with their full path and ensure they are present.
   postPatch = ''
     substituteInPlace config/66-azure-storage.rules \
-      --replace-fail readlink ${coreutils}/bin/readlink \
-      --replace-fail cut ${coreutils}/bin/cut \
-      --replace-fail /bin/sh ${bash}/bin/sh
+      --replace-fail readlink '${coreutils}/bin/readlink' \
+      --replace-fail cut '${coreutils}/bin/cut' \
+      --replace-fail '/bin/sh' '${bash}/bin/sh'
     substituteInPlace config/99-azure-product-uuid.rules \
-      --replace-fail "/bin/chmod" "${coreutils}/bin/chmod"
+      --replace-fail '/bin/chmod' '${coreutils}/bin/chmod'
+    substituteInPlace azurelinuxagent/common/conf.py \
+      --replace-fail '/usr/bin/openssl' '${openssl}/bin/openssl'
   '';
 
   propagatedBuildInputs = [ python.pkgs.distro ];
@@ -65,13 +67,8 @@ python.pkgs.buildPythonApplication rec {
 
   dontWrapPythonPrograms = false;
 
-  passthru = {
-    tests = {
-      inherit (nixosTests) waagent;
-    };
-    updateScript = gitUpdater {
-      rev-prefix = "v";
-    };
+  passthru.tests = {
+    inherit (nixosTests) waagent;
   };
 
   meta = {

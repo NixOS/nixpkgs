@@ -14,7 +14,8 @@ rustPlatform.buildRustPackage rec {
     rev = "v${version}";
     sha256 = "sha256-gIOlPjZOcmVLi9oOn4gBv6F+3Eq6t5b/3fKzoFqxclw=";
   };
-  cargoHash = "sha256-ugB0r9qiGRurc30GrJH4MKM6fWZ99+f1Gy7/1lSmrwU=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-CHX+Ugy4ND36cpxNEFpnqid6ALHMPXmfXi+D4aktPRk=";
 
   meta = with lib; {
     description = "Terminal viewer for 3a format";

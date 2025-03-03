@@ -7,7 +7,7 @@
   libosmocore,
   lksctp-tools,
   libosmo-netif,
-  libosmo-sccp,
+  libosmo-sigtran,
   libasn1c,
   python3,
 }:
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     libosmocore
     lksctp-tools
     libosmo-netif
-    libosmo-sccp
+    libosmo-sigtran
     libasn1c
   ];
 

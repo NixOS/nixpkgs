@@ -14,7 +14,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "GoogleCloudPlatform";
     repo = "docker-credential-gcr";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-4sgUeEXBfP0qaR92ZulqAf1ObQBDbSjEHqhAqa0EV2Q=";
   };
 

@@ -15,16 +15,16 @@
 let
   package = buildGoModule rec {
     pname = "opentofu";
-    version = "1.8.7";
+    version = "1.9.0";
 
     src = fetchFromGitHub {
       owner = "opentofu";
       repo = "opentofu";
-      rev = "v${version}";
-      hash = "sha256-OLXR9aA94KcIsZxk8gOZxZsljMKuymScuYcoj9W5Hj4=";
+      tag = "v${version}";
+      hash = "sha256-e0ZzbQdex0DD7Bj9WpcVI5roh0cMbJuNr5nsSVaOSu4=";
     };
 
-    vendorHash = "sha256-6M/uqwhNruIPx5srbimKuDJaFiZkyosoZQXWjxa6GxY=";
+    vendorHash = "sha256-fMTbLSeW+pw6GK8/JLZzG2ER90ss2g1FSDX5+f292do=";
     ldflags = [
       "-s"
       "-w"
@@ -99,36 +99,37 @@ let
     in
     test;
 
-  plugins =
-    lib.mapAttrs
-      (
-        _: provider:
-        if provider ? override then
-          # use opentofu plugin registry over terraform's
-          provider.override (oldArgs: {
-            provider-source-address =
-              lib.replaceStrings
-                [ "https://registry.terraform.io/providers" ]
-                [
-                  "registry.opentofu.org"
-                ]
-                oldArgs.homepage;
-          })
-        else
-          provider
-      )
-      (
-        removeAttrs terraform-providers [
-          "override"
-          "overrideDerivation"
-          "recurseForDerivations"
-        ]
-      );
+  plugins = removeAttrs terraform-providers [
+    "override"
+    "overrideDerivation"
+    "recurseForDerivations"
+  ];
 
   withPlugins =
     plugins:
     let
-      actualPlugins = plugins package.plugins;
+      actualPlugins = lib.lists.map (
+        provider:
+        if provider ? override then
+          # use opentofu plugin registry over terraform's
+          provider.override (
+            oldArgs:
+            if (builtins.hasAttr "homepage" oldArgs) then
+              {
+                provider-source-address =
+                  lib.replaceStrings
+                    [ "https://registry.terraform.io/providers" ]
+                    [
+                      "registry.opentofu.org"
+                    ]
+                    oldArgs.homepage;
+              }
+            else
+              { }
+          )
+        else
+          provider
+      ) (plugins package.plugins);
 
       # Wrap PATH of plugins propagatedBuildInputs, plugins may have runtime dependencies on external binaries
       wrapperInputs = lib.unique (

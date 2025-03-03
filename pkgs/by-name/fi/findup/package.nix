@@ -4,7 +4,6 @@
   fetchFromGitHub,
   testers,
   zig_0_11,
-  apple-sdk_11,
 }:
 let
   zig = zig_0_11;
@@ -21,8 +20,6 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [ zig.hook ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_11 ];
 
   passthru.tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
 

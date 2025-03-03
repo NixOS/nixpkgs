@@ -24,14 +24,14 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "1.48.0";
+  version = "1.50.0";
   pname = "libuv";
 
   src = fetchFromGitHub {
     owner = "libuv";
     repo = "libuv";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-U68BmIQNpmIy3prS7LkYl+wvDJQNikoeFiKh50yQFoA=";
+    hash = "sha256-1Z/zf4qZYDM5upHdRtc1HGpHaGTRHm147azJZ0pT5pU=";
   };
 
   outputs = [
@@ -52,6 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
           "getaddrinfo_fail"
           "getaddrinfo_fail_sync"
           "tcp_connect6_link_local"
+          "thread_affinity" # else "test must be run with cpu 0 affinity" when affinity is set
           "threadpool_multiple_event_loops" # times out on slow machines
           "get_passwd" # passed on NixOS but failed on other Linuxes
           "tcp_writealot"
@@ -83,7 +84,6 @@ stdenv.mkDerivation (finalAttrs: {
           "tcp_ref3"
           "tcp_ref4"
           "tcp_bind6_error_inval"
-          "tcp_bind6_error_addrinuse"
           "tcp_read_stop"
           "tcp_unexpected_read"
           "tcp_write_to_half_open_connection"
@@ -98,7 +98,6 @@ stdenv.mkDerivation (finalAttrs: {
           "tcp_open"
           "tcp_write_queue_order"
           "tcp_try_write"
-          "tcp_writealot"
           "multiple_listen"
           "delayed_accept"
           "udp_recv_in_a_row"
@@ -109,7 +108,6 @@ stdenv.mkDerivation (finalAttrs: {
           "tty_pty"
           "condvar_5"
           "hrtime"
-          "udp_multicast_join"
           # Tests that fail when sandboxing is enabled.
           "fs_event_close_in_callback"
           "fs_event_watch_dir"
@@ -122,11 +120,10 @@ stdenv.mkDerivation (finalAttrs: {
           "udp_create_early_bad_bind"
           "fs_event_watch_delete_dir"
         ]
-        ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-          # fail on macos < 10.15 (starting in libuv 1.47.0)
-          "fs_write_alotof_bufs_with_offset"
-          "fs_write_multiple_bufs"
-          "fs_read_bufs"
+        ++ lib.optionals (stdenv.hostPlatform.isDarwin && lib.versionOlder finalAttrs.version "1.49.3") [
+          # https://github.com/libuv/libuv/issues/4650
+          # can enable on upgrade from 1.49.2
+          "udp_mmsg"
         ]
         ++ lib.optionals stdenv.hostPlatform.isAarch32 [
           # I observe this test failing with some regularity on ARMv7:

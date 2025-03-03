@@ -131,7 +131,7 @@ if [ "$NIX_ENFORCE_NO_NATIVE_@suffixSalt@" = 1 ]; then
     # Old bash empty array hack
     for p in ${params+"${params[@]}"}; do
         if [[ "$p" = -m*=native ]]; then
-            skip "$p"
+            >&2 echo "warning: Skipping impure flag $p because NIX_ENFORCE_NO_NATIVE is set"
         else
             kept+=("$p")
         fi
@@ -232,6 +232,12 @@ if [[ "${#positionalArgs[@]}" -gt 0 ]]; then
     extraAfter+=(-- "${positionalArgs[@]}")
 fi
 
+# if a cc-wrapper-hook exists, run it.
+if [[ -e @out@/nix-support/cc-wrapper-hook ]]; then
+    compiler=@prog@
+    source @out@/nix-support/cc-wrapper-hook
+fi
+
 # Optionally print debug info.
 if (( "${NIX_DEBUG:-0}" >= 1 )); then
     # Old bash workaround, see ld-wrapper for explanation.
@@ -245,12 +251,6 @@ fi
 
 PATH="$path_backup"
 # Old bash workaround, see above.
-
-# if a cc-wrapper-hook exists, run it.
-if [[ -e @out@/nix-support/cc-wrapper-hook ]]; then
-    compiler=@prog@
-    source @out@/nix-support/cc-wrapper-hook
-fi
 
 if (( "${NIX_CC_USE_RESPONSE_FILE:-@use_response_file_by_default@}" >= 1 )); then
     responseFile=$(@mktemp@ "${TMPDIR:-/tmp}/cc-params.XXXXXX")

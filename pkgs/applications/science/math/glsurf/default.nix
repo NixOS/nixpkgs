@@ -50,13 +50,16 @@ stdenv.mkDerivation rec {
     ]);
 
   postPatch = ''
-    for f in callbacks*/Makefile src/Makefile; do
-      substituteInPlace "$f" --replace "+camlp4" \
+    for f in callbacks*/Makefile; do
+      substituteInPlace "$f" --replace-warn "+camlp4" \
         "${ocamlPackages.camlp4}/lib/ocaml/${ocamlPackages.ocaml.version}/site-lib/camlp4"
     done
 
     # Fatal error: exception Sys_error("Mutex.unlock: Operation not permitted")
     sed -i "/gl_started/d" src/draw.ml* src/main.ml
+
+    # Compatibility with camlimages ≥ 5.0.5
+    substituteInPlace src/Makefile --replace-warn camlimages.all_formats camlimages.core
   '';
 
   installPhase = ''

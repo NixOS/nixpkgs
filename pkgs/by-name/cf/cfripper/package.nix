@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Skyscanner";
     repo = "cfripper";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-2yOATSCXqv28OE+GdF9F9Dhi3AIkxSe/YJ9ILLnd/nw=";
   };
 

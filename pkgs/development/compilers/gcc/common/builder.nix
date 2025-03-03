@@ -3,6 +3,7 @@
   stdenv,
   enableMultilib,
   targetConfig,
+  withoutTargetLibc,
 }:
 
 let
@@ -193,7 +194,7 @@ originalAttrs:
             mkdir -p ../mingw
             # --with-build-sysroot expects that:
             cp -R $libcCross/include ../mingw
-            configureFlags="$configureFlags --with-build-sysroot=`pwd`/.."
+            appendToVar configureFlags "--with-build-sysroot=`pwd`/.."
         fi
 
         # Perform the build in a different directory.
@@ -313,5 +314,8 @@ originalAttrs:
           fi
       done
     '';
+  }
+  // lib.optionalAttrs ((stdenv.targetPlatform.config != stdenv.hostPlatform.config) && withoutTargetLibc) {
+    dontCheckForBrokenSymlinks = true;
   }
 ))

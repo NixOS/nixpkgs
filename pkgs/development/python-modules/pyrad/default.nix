@@ -18,6 +18,11 @@ buildPythonPackage rec {
     hash = "sha256-5SPVeBL1oMZ/XXgKch2Hbk6BRU24HlVl4oXZ2agF1h8=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'repository =' 'Repository ='
+  '';
+
   nativeBuildInputs = [ poetry-core ];
 
   nativeCheckInputs = [ unittestCheckHook ];

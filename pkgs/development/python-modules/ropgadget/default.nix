@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "JonathanSalwan";
     repo = "ROPgadget";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-n7nVtR2HMAZeeSX/hNtDzmpEsnHbgDNO5gdzmPrgSuk=";
   };
 

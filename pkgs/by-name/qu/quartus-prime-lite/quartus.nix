@@ -40,21 +40,21 @@ let
   ) deviceIds;
 
   componentHashes = {
-    "arria_lite" = "0fg9mmncbb8vmmbc3hxgmrgvgfphn3k4glv7w2yjq66vz6nd8zql";
-    "cyclone" = "1min1hjaw8ll0c1gvl6ihp7hczw36ag8l2yzgl6avcapcw53hgyp";
-    "cyclone10lp" = "1kjjm11hjg0h6i7kilxvhmkay3v416bhwp0frg2bnwggpk29drxj";
-    "cyclonev" = "10v928qhyfqw3lszhhcdishh1875k1bki9i0czx9252jprgd1g7g";
-    "max" = "04sszzz3qnjziirisshhdqs7ks8mcvy15lc1mpp9sgm09pwlhgbb";
-    "max10" = "0dqlq477zdx4pf5hlbkl1ycxiav19vx4sk6277cpxm8y1xz70972";
+    "arria_lite" = "sha256-PNoc15Y5h+2bxhYFIxkg1qVAsXIX3IMfEQSdPLVNUp4=";
+    "cyclone" = "sha256-2huDuTkXt6jszwih0wzusoxRvECi6+tupvRcUvn6eIA=";
+    "cyclone10lp" = "sha256-i8VJKqlIfQmK2GWhm0W0FujHcup4RjeXughL2VG5gkY=";
+    "cyclonev" = "sha256-HoNJkcD96rPQEZtjbtmiRpoKh8oni7gOLVi80c1a3TM=";
+    "max" = "sha256-qh920mvu0H+fUuSJBH7fDPywzll6sGdmEtfx32ApCSA=";
+    "max10" = "sha256-XOyreAG3lYEV7Mnyh/UnFTuOwPQsd/t23Q8/P2p6U+0=";
   };
 
-  version = "23.1std.0.991";
+  version = "23.1std.1.993";
 
   download =
     { name, sha256 }:
     fetchurl {
       inherit name sha256;
-      # e.g. "23.1std.0.991" -> "23.1std/921"
+      # e.g. "23.1std.1.993" -> "23.1std/993"
       url = "https://downloads.intel.com/akdlm/software/acdsinst/${lib.versions.majorMinor version}std/${lib.elemAt (lib.splitVersion version) 4}/ib_installers/${name}";
     };
 
@@ -62,12 +62,12 @@ let
     [
       {
         name = "QuartusLiteSetup-${version}-linux.run";
-        sha256 = "1mg4db56rg407kdsvpzys96z59bls8djyddfzxi6bdikcklxz98h";
+        sha256 = "sha256-OCp2hZrfrfp1nASuVNWgg8/ODRrl67SJ+c6IWq5eWvY=";
       }
     ]
     ++ lib.optional withQuesta {
       name = "QuestaSetup-${version}-linux.run";
-      sha256 = "0f9lyphk4vf4ijif3kb4iqf18jl357z9h8g16kwnzaqwfngh2ixk";
+      sha256 = "sha256-Dne4MLFSGXUVLMd+JgiS/d5RX9t5gs6PEvexTssLdF4=";
     }
   );
   components = map (

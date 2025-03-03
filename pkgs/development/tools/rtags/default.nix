@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     '';
   };
 
-  # This should be fixed with the next verison bump
+  # This should be fixed with the next version bump
   # https://github.com/Andersbakken/rtags/issues/1411
   patches = [
     (fetchpatch {

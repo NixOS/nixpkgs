@@ -40,6 +40,13 @@ let
 
   drv = builtins.unsafeDiscardOutputDependency pkg.drvPath;
 
+  toOutputPath =
+    path:
+    let
+      root = ../../../..;
+    in
+    lib.path.removePrefix root path;
+
 in
 writeScript "update-dotnet-vmr.sh" ''
   #! ${nix}/bin/nix-shell
@@ -98,7 +105,7 @@ writeScript "update-dotnet-vmr.sh" ''
       curl -fsSL "$releaseUrl" -o release.json
 
       if [[ -z $tag && "$tagName" == "${tag}" ]]; then
-          >&2 echo "release is already $release"
+          >&2 echo "release is already $tagName"
           exit
       fi
 
@@ -123,16 +130,22 @@ writeScript "update-dotnet-vmr.sh" ''
           | .[] | .PrivateSourceBuiltArtifactsVersion' eng/Versions.props)
 
       if [[ "$artifactsVersion" != "" ]]; then
-          artifactsUrl=https://dotnetcli.azureedge.net/source-built-artifacts/assets/Private.SourceBuilt.Artifacts.$artifactsVersion.centos.9-x64.tar.gz
+          artifactsUrl=https://builds.dotnet.microsoft.com/source-built-artifacts/assets/Private.SourceBuilt.Artifacts.$artifactsVersion.centos.9-x64.tar.gz
       else
           artifactsUrl=$(xq -r '.Project.PropertyGroup |
               map(select(.PrivateSourceBuiltArtifactsUrl))
               | .[] | .PrivateSourceBuiltArtifactsUrl' eng/Versions.props)
       fi
+      artifactsUrl="''${artifactsUrl/dotnetcli.azureedge.net/builds.dotnet.microsoft.com}"
 
       artifactsHash=$(nix-hash --to-sri --type sha256 "$(nix-prefetch-url "$artifactsUrl")")
 
       sdkVersion=$(jq -r .tools.dotnet global.json)
+
+      # below needs to be run in nixpkgs because toOutputPath uses relative paths
+      cd -
+
+      cp "$tmp"/release.json "${toOutputPath releaseManifestFile}"
 
       jq --null-input \
           --arg _0 "$tarballHash" \
@@ -142,15 +155,10 @@ writeScript "update-dotnet-vmr.sh" ''
               "tarballHash": $_0,
               "artifactsUrl": $_1,
               "artifactsHash": $_2,
-          }' > "${toString releaseInfoFile}"
+          }' > "${toOutputPath releaseInfoFile}"
 
-      cp release.json "${toString releaseManifestFile}"
-
-      cd -
-
-      # needs to be run in nixpkgs
-      ${lib.escapeShellArg (toString ./update.sh)} \
-          -o ${lib.escapeShellArg (toString bootstrapSdkFile)} --sdk "$sdkVersion"
+      ${lib.escapeShellArg (toOutputPath ./update.sh)} \
+          -o ${lib.escapeShellArg (toOutputPath bootstrapSdkFile)} --sdk "$sdkVersion"
 
       $(nix-build -A $UPDATE_NIX_ATTR_PATH.fetch-deps --no-out-link)
   )

@@ -10,18 +10,19 @@
   pkg-config,
   sqlite,
   util-linux,
+  unstableGitUpdater,
   nixosTests,
 }:
 
 stdenv.mkDerivation rec {
   pname = "solanum";
-  version = "unstable-2022-07-12";
+  version = "0-unstable-2025-01-29";
 
   src = fetchFromGitHub {
     owner = "solanum-ircd";
-    repo = pname;
-    rev = "860187d02895fc953de3475da07a7a06b9380254";
-    hash = "sha256-g8hXmxTfcPDmQ/cu4AI/iJfrhPLaQJEAeMdDhNDsVXs=";
+    repo = "solanum";
+    rev = "7289d455e8f640b3a2607d8049de27f9099abe1c";
+    hash = "sha256-EQq8l48WgP8PuAyOoY6WU0FM1IHYBQisRojAUmyPOpM=";
   };
 
   patches = [
@@ -68,7 +69,10 @@ stdenv.mkDerivation rec {
   #   make[4]: *** [Makefile:634: solanum] Error 1
   enableParallelInstalling = false;
 
-  passthru.tests = { inherit (nixosTests) solanum; };
+  passthru = {
+    tests = { inherit (nixosTests) solanum; };
+    updateScript = unstableGitUpdater { };
+  };
 
   meta = with lib; {
     description = "IRCd for unified networks";

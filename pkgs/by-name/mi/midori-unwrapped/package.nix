@@ -53,17 +53,20 @@ stdenv.mkDerivation rec {
 
   passthru = {
     inherit gtk3;
+    applicationName = "Midori";
   };
 
   meta = with lib; {
     description = "Lightweight WebKitGTK web browser";
     mainProgram = "midori";
-    homepage = "https://www.midori-browser.org/";
+    homepage = "https://github.com/midori-browser/core";
     license = with licenses; [ lgpl21Plus ];
     platforms = with platforms; linux;
     maintainers = with maintainers; [
       raskin
       ramkromberg
     ];
+    # https://github.com/NixOS/nixpkgs/issues/374354
+    broken = true;
   };
 }

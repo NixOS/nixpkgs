@@ -11,14 +11,14 @@
   makeWrapper,
   ncurses5,
 
-  dotnet-sdk_8,
+  dotnetCorePackages,
   dotnetSupport ? false,
 
   alsa-lib,
   gtk3,
   libdrm,
   libGL,
-  mesa,
+  libgbm,
   nss,
   htmlRendererSupport ? false,
 
@@ -33,7 +33,7 @@
 let
   dyalogHome = "$out/lib/dyalog";
 
-  makeWrapperArgs = lib.optional dotnetSupport "--set DOTNET_ROOT ${dotnet-sdk_8}/share/dotnet";
+  makeWrapperArgs = lib.optional dotnetSupport "--set DOTNET_ROOT ${dotnetCorePackages.sdk_8_0-source}/share/dotnet";
 
   licenseUrl = "https://www.dyalog.com/uploads/documents/Developer_Software_Licence.pdf";
 
@@ -86,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
       gtk3
       libdrm
       libGL
-      mesa
+      libgbm
       nss
     ]
     ++ lib.optional sqaplSupport unixODBC;

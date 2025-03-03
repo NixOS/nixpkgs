@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bio-gappa";
-  version = "0.8.4";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "lczech";
     repo = "gappa";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-VAp9e5Cu3tTeWSOTZ8kPG1eOyocYZiJsy/s+MWbCMLI=";
+    hash = "sha256-WV8PO0v+e14tyjEm+xQGveQ0Pslgeh+osEMCqF8mue0=";
     fetchSubmodules = true;
   };
 

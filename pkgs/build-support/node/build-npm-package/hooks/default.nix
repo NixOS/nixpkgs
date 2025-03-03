@@ -40,7 +40,9 @@
       installShellFiles
       makeWrapper
       nodejsInstallManuals
-      nodejsInstallExecutables
+      (nodejsInstallExecutables.override {
+        inherit nodejs;
+      })
     ];
     substitutions = {
       jq = "${jq}/bin/jq";

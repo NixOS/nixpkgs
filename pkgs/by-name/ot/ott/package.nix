@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ott";
-  version = "0.33";
+  version = "0.34";
 
   src = fetchFromGitHub {
     owner = "ott-lang";
     repo = "ott";
     rev = version;
-    hash = "sha256-GzeEiok5kigcmfqf/K/UxvlKkl55zy0vOyiRZ2HyMiE=";
+    hash = "sha256-S6EMQgEBrtXB9hTM7x6irZPsI9c9JHeuCk/9pcpQMNg=";
   };
 
   strictDeps = true;

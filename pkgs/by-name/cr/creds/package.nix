@@ -12,14 +12,14 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "ihebski";
     repo = "DefaultCreds-cheat-sheet";
-    rev = "refs/tags/creds-v${version}";
+    tag = "creds-v${version}";
     hash = "sha256-CtwGSF3EGcPqL49paNRCsB2qxYjKpCLqyRsC67nAyVk=";
   };
 
+  pythonRelaxDeps = [ "tinydb" ];
+  pythonRemoveDeps = [ "pathlib" ];
+
   postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace "tinydb==4.3" "tinydb" \
-      --replace "pathlib" ""
     substituteInPlace creds \
       --replace "pathlib.Path(__file__).parent" "pathlib.Path.home()"
   '';

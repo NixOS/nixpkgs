@@ -3,12 +3,12 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  boost186, # (boost181) breaks on darwin
+  boost,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "quantlib";
-  version = "1.36";
+  version = "1.37";
 
   outputs = [
     "out"
@@ -19,11 +19,11 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "lballabio";
     repo = "QuantLib";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-u1ePmtgv+kAvH2/yTuxJFcafbfULZ8daHj4gKmKzV78=";
+    hash = "sha256-Q8Bz94yd4A0VCDldtiichFKgiZMN4dHHJJep/tcE/z0=";
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ boost186 ];
+  buildInputs = [ boost ];
 
   # Required by RQuantLib, may be beneficial for others too
   cmakeFlags = [ "-DQL_HIGH_RESOLUTION_DATE=ON" ];

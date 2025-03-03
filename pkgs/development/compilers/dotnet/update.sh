@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -I nixpkgs=./. -i bash -p curl jq nix gnused
+#!nix-shell -I nixpkgs=./. -i bash -p curl jq nix gnused nixfmt-rfc-style
 # shellcheck shell=bash
 
 set -Eeuo pipefail
@@ -283,7 +283,7 @@ update() {
     if [ "$patch_specified" == false ] && [ -f "$output" ]; then
         local -a versions
         IFS= readarray -d '' versions < <(
-            nix-instantiate --eval --json -E "with (import $output {
+            nix-instantiate --eval --json -E "{ output }: with (import output {
                 buildAspNetCore = { ... }: {};
                 buildNetSdk = { version, ... }: { inherit version; };
                 buildNetRuntime = { version, ... }: { inherit version; };
@@ -291,7 +291,7 @@ update() {
             }); (x: builtins.deepSeq x x) [
                 runtime_${major_minor_underscore}.version
                 sdk_${major_minor_underscore}.version
-            ]" | jq --raw-output0 .[])
+            ]" --argstr output "$output" | jq --raw-output0 .[])
         if [[ "${versions[0]}" == "$major_minor_patch" && "${versions[1]}" == "${sdk_versions[0]}" ]]; then
             echo "Nothing to update."
             return
@@ -310,7 +310,7 @@ update() {
     aspnetcore_sources="$(platform_sources "$aspnetcore_files")"
     runtime_sources="$(platform_sources "$runtime_files")"
 
-    result=$(mktemp)
+    result=$(mktemp -t dotnet-XXXXXX.nix)
     trap "rm -f $result" TERM INT EXIT
 
     (
@@ -388,9 +388,10 @@ in rec {
         echo "
   sdk_$major_minor_underscore = $latest_sdk;
 }"
-        )> "${result}"
+        )> "$result"
 
-        cp "${result}" "$output"
+    nixfmt "$result"
+    cp "$result" "$output"
     echo "Generated $output"
 }
 

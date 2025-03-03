@@ -30,7 +30,7 @@ python3.pkgs.buildPythonApplication {
     requests
   ];
 
-  # Tests for this applicaiton do not run on NixOS, and binaries were
+  # Tests for this application do not run on NixOS, and binaries were
   # manually tested instead
   doCheck = false;
 

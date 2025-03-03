@@ -351,5 +351,5 @@ Here are some additional tips that didn't fit in above.
         and work the new member into the `haskell-updates` rotation.
 
     1.  Optionally, have the new member add themselves to the Haskell
-        section in [`CODEOWNERS`](../../../.github/CODEOWNERS).  This
+        section in [`OWNERS`](../../../ci/OWNERS).  This
         will cause them to get pinged on most Haskell-related PRs.

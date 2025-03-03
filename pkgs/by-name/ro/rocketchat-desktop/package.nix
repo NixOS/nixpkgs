@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     at-spi2-core
     libdbusmenu
     libdrm
-    mesa
+    libgbm
     xorg.libxshmfence
     libxkbcommon
   ];

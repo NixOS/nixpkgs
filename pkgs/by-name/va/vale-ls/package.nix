@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "errata-ai";
     repo = "vale-ls";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-+2peLqj3/ny0hDwJVKEp2XS68VO50IvpCB2fvZoEdJo=";
   };
 
@@ -51,11 +51,12 @@ rustPlatform.buildRustPackage rec {
 
   env.OPENSSL_NO_VENDOR = true;
 
-  cargoHash = "sha256-YurMB54jeMQIAOgDQhXEYrkYUYrSl02M9JG5Wtp6Eb8=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-KPgi0wZh1+PTKUmvCkLGPf+DZW5Tt4dQVK/cdxjm/1A=";
 
   postInstall = ''
     wrapProgram $out/bin/vale-ls \
-      --prefix PATH : ${lib.makeBinPath [ vale ]}
+      --suffix PATH : ${lib.makeBinPath [ vale ]}
   '';
 
   meta = with lib; {

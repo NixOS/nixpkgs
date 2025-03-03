@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "sosreport";
-  version = "4.8.1";
+  version = "4.9.0";
 
   src = fetchFromGitHub {
     owner = "sosreport";
     repo = "sos";
-    rev = "refs/tags/${version}";
-    sha256 = "sha256-tnc0mAWk3IqQVRLj5oDhJSG4o27Ogv/Ce6oGEZ6AamM=";
+    tag = version;
+    sha256 = "sha256-UJzDRse1rjbGRV/+3JLLrXNwYTJtqlDudB1dDB7uslg=";
   };
 
   nativeBuildInputs = [

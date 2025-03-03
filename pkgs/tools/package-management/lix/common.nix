@@ -1,21 +1,13 @@
 {
   lib,
   fetchFromGitHub,
-  version,
   suffix ? "",
-  hash ? null,
-  src ? fetchFromGitHub {
-    owner = "lix-project";
-    repo = "lix";
-    rev = version;
-    inherit hash;
-  },
-  docCargoHash ? null,
-  docCargoLock ? null,
+  version,
+  src,
+  docCargoDeps,
   patches ? [ ],
   maintainers ? lib.teams.lix.members,
 }@args:
-assert (hash == null) -> (src != null);
 {
   stdenv,
   meson,
@@ -60,8 +52,7 @@ assert (hash == null) -> (src != null);
   lix-doc ? callPackage ./doc {
     inherit src;
     version = "${version}${suffix}";
-    cargoHash = docCargoHash;
-    cargoLock = docCargoLock;
+    cargoDeps = docCargoDeps;
   },
 
   enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform,
@@ -76,8 +67,6 @@ assert (hash == null) -> (src != null);
   stateDir,
   storeDir,
 }:
-assert lib.assertMsg (docCargoHash != null || docCargoLock != null)
-  "Either `lix-doc`'s cargoHash using `docCargoHash` or `lix-doc`'s `cargoLock.lockFile` using `docCargoLock` must be set!";
 let
   isLegacyParser = lib.versionOlder version "2.91";
 in

@@ -17,7 +17,7 @@
   glibc,
   gtk3,
   libsecret,
-  mesa,
+  libgbm,
   musl,
   nss,
   pango,
@@ -28,11 +28,11 @@
 
 stdenv.mkDerivation rec {
   pname = "publii";
-  version = "0.46.2";
+  version = "0.46.3";
 
   src = fetchurl {
     url = "https://getpublii.com/download/Publii-${version}.deb";
-    hash = "sha256-evNCXIhqKi23m/J3AoAW7u21neu6+hBFzAZ9MGz4YZ4=";
+    hash = "sha256-fbK9DVdwjzoxYMvR0EXpZ1Uv3CIMIVAdYcgRdD1p0F4=";
   };
 
   dontConfigure = true;
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     glibc
     gtk3
     libsecret
-    mesa
+    libgbm
     musl
     nss
     pango

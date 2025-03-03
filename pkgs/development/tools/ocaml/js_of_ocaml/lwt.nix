@@ -1,6 +1,5 @@
 {
   buildDunePackage,
-  js_of_ocaml-compiler,
   js_of_ocaml-ppx,
   js_of_ocaml,
   lwt,
@@ -10,7 +9,7 @@
 buildDunePackage {
   pname = "js_of_ocaml-lwt";
 
-  inherit (js_of_ocaml-compiler) version src;
+  inherit (js_of_ocaml) version src meta;
 
   buildInputs = [ js_of_ocaml-ppx ];
 
@@ -19,6 +18,4 @@ buildDunePackage {
     lwt
     lwt_log
   ];
-
-  meta = builtins.removeAttrs js_of_ocaml-compiler.meta [ "mainProgram" ];
 }

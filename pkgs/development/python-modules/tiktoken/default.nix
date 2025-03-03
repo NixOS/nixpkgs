@@ -16,10 +16,10 @@
 }:
 let
   pname = "tiktoken";
-  version = "0.7.0";
+  version = "0.8.0";
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-EHcmbpScJOApH2w1BDPG8JcTZezisXOiO8O5+d7+9rY=";
+    hash = "sha256-nMuydA8kVCU0NpxWNc/ZsrPCSQdUp4rIgx2Z+J+U7rI=";
   };
   postPatch = ''
     cp ${./Cargo.lock} Cargo.lock
@@ -41,10 +41,10 @@ buildPythonPackage {
     setuptools-rust
   ];
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src postPatch;
     name = "${pname}-${version}";
-    hash = "sha256-i0AQUu9ERDWBw0kjTTTyn4VHMig/k2/7wX2884MCGx8=";
+    hash = "sha256-/JwhH0Is2yNwJ0CAY3SKoH1JWhmY3JtGusQkj3k5bQY=";
   };
 
   nativeBuildInputs = [

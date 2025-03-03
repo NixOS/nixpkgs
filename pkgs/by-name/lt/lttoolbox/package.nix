@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "apertium";
     repo = "lttoolbox";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-3lHXKtwQSrMGQEGOGr27e3kB2qKkTFZcEzeAnIm89Rg=";
   };
 

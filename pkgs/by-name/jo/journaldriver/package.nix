@@ -10,7 +10,8 @@
 rustPlatform.buildRustPackage rec {
   pname = "journaldriver";
   version = "5656.0.0";
-  cargoHash = "sha256-uNzgH9UM2DuC+dBn5N9tC1/AosUP6C+RkGLOh6c+u0s=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-ycnmLHKWRwKbdY1LZJ+BSwGfXfYJCWbbbFcqfBj3y/Y=";
 
   src = fetchgit {
     url = "https://code.tvl.fyi/depot.git:/ops/journaldriver.git";

@@ -6,7 +6,6 @@
   libevent,
   pkg-config,
   libprom,
-  libpromhttp,
   libmicrohttpd,
   sqlite,
   nixosTests,
@@ -19,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "coturn";
     repo = "coturn";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-GG8aQJoCBV5wolPEzSuZhqNn//ytaTAptjY42YKga4E=";
   };
 
@@ -31,7 +30,6 @@ stdenv.mkDerivation rec {
     openssl
     (libevent.override { inherit openssl; })
     libprom
-    libpromhttp
     libmicrohttpd
     sqlite.dev
   ];
@@ -42,6 +40,11 @@ stdenv.mkDerivation rec {
     # Don't call setgroups unconditionally in mainrelay
     # https://github.com/coturn/coturn/pull/1508
     ./dont-call-setgroups-unconditionally.patch
+  ];
+
+  configureFlags = [
+    # don't install examples due to broken symlinks
+    "--examplesdir=.."
   ];
 
   # Workaround build failure on -fno-common toolchains like upstream

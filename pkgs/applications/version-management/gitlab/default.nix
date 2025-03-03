@@ -11,9 +11,9 @@
   makeWrapper,
   nettools,
   nixosTests,
-  nodejs,
+  nodejs_20,
   replace,
-  ruby_3_2,
+  ruby_3_3,
   stdenv,
   tzdata,
   yarn,
@@ -53,7 +53,7 @@ let
 
   rubyEnv = bundlerEnv rec {
     name = "gitlab-env-${version}";
-    ruby = ruby_3_2;
+    ruby = ruby_3_3;
     gemdir = ./rubyEnv;
     gemset = import (gemdir + "/gemset.nix") src;
     gemConfig = defaultGemConfig // {
@@ -69,7 +69,7 @@ let
         buildFlags = [ "--enable-system-libraries" ];
       };
       gitlab-glfm-markdown = attrs: {
-        cargoDeps = rustPlatform.fetchCargoTarball {
+        cargoDeps = rustPlatform.fetchCargoVendor {
           src = stdenv.mkDerivation {
             inherit (buildRubyGem { inherit (attrs) gemName version source; })
               name
@@ -83,7 +83,7 @@ let
               cp Cargo.lock $out
             '';
           };
-          hash = "sha256-L/URWw7NoQhi7VV8ZiKLzthbF0wl4rIUqCQdH9wmAV0=";
+          hash = "sha256-LpuQMV112Z5lspSK4M0IYdkxO8oVmucnJtqF2Y3+aNU=";
         };
 
         dontBuild = false;
@@ -150,7 +150,7 @@ let
     nativeBuildInputs = [
       rubyEnv.wrappedRuby
       rubyEnv.bundler
-      nodejs
+      nodejs_20
       yarn
       git
       cacert
@@ -199,6 +199,12 @@ let
 
       patchShebangs node_modules/
       patchShebangs scripts/frontend/
+
+      # TODO: Try to remove --ignore-scripts
+      # Needed for the js dependency pinia to work
+      pushd node_modules/vue-demi
+      yarn run postinstall
+      popd
 
       runHook postConfigure
     '';

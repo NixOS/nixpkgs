@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fugue";
     repo = "credstash";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-a6OzffGt5piHgi0AWEXJED0R/+8RETh/9hYJi/lUVu0=";
   };
 

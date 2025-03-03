@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
   # For illumina script
   BOOST_ROOT = "${boost.out}";
   ZLIBSTATIC = "${zlib.static}";
-  # For cmake : boost lib and includedir are in differernt location
+  # For cmake : boost lib and includedir are in different location
   BOOST_LIBRARYDIR = "${boost.out}/lib";
   BOOST_INCLUDEDIR = "${boost.dev}/include";
 

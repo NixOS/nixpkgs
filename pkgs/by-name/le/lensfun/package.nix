@@ -8,6 +8,7 @@
   libpng,
   cmake,
   python3,
+  python3Packages,
 }:
 
 let
@@ -37,7 +38,7 @@ stdenv.mkDerivation {
   # replace database with a more recent snapshot
   # the master branch uses version 2 profiles, while 0.3.3 requires version 1 profiles,
   # so we run the conversion tool the project provides,
-  # then untar the verson 1 profiles into the source dir before we build
+  # then untar the version 1 profiles into the source dir before we build
   prePatch = ''
     rm -R data/db
     python3 ${lensfunDatabase}/tools/lensfun_convert_db_v2_to_v1.py $TMPDIR ${lensfunDatabase}/data/db
@@ -50,8 +51,8 @@ stdenv.mkDerivation {
     cmake
     pkg-config
     python3
-    python3.pkgs.setuptools
-    python3.pkgs.lxml # For the db converison
+    python3Packages.setuptools
+    python3Packages.lxml # For the db converison
   ];
 
   buildInputs = [

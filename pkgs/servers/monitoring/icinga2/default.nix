@@ -7,11 +7,11 @@
   flex,
   bison,
   systemd,
-  boost,
+  boost186,
   openssl,
   patchelf,
   mariadb-connector-c,
-  postgresql,
+  libpq,
   zlib,
   tzdata,
   # Databases
@@ -80,10 +80,10 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    boost
+    boost186
     openssl
     systemd
-  ] ++ lib.optional withPostgresql postgresql;
+  ] ++ lib.optional withPostgresql libpq;
 
   nativeBuildInputs = [
     cmake

@@ -77,7 +77,7 @@ mkDerivation {
   '';
 
   preInstall = ''
-    makeFlags="$makeFlags ROOTDIR=$out/root"
+    appendToVar makeFlags "ROOTDIR=$out/root"
   '';
 
   outputs = [

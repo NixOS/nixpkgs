@@ -11,7 +11,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "42School";
     repo = pname;
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-SaXOUpYEbc2QhZ8aKS+JeJ22MSXZ8HZuRmVQ9fWk7tM=";
   };
 

@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch2,
 
   # build-system
   pbr,
@@ -20,9 +21,17 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Infinidat";
     repo = "munch";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-p7DvOGRhkCmtJ32EfttyKXGGmO5kfb2bQGqok/RJtU8=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      # python3.13 compat
+      url = "https://github.com/Infinidat/munch/commit/84651ee872f9ea6dbaed986fd3818202933a8b50.patch";
+      hash = "sha256-n/uBAP7pnlGZcnDuxdMKWgAEdG9gWeGoLWB97T1KloY=";
+    })
+  ];
 
   env.PBR_VERSION = version;
 

@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     rm $out/lib/*.a
   '';
 
-  # Dependants of xvidcore don't know to look in bin for dependecies. Link them
+  # Dependants of xvidcore don't know to look in bin for dependencies. Link them
   # in lib so other depedants of xvidcore can find the dlls.
   postFixup = lib.optionalString stdenv.hostPlatform.isMinGW ''
     ln -s $out/bin/*.dll $out/lib

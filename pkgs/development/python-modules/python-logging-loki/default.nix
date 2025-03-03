@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "GreyZmeem";
     repo = "python-logging-loki";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-1qHuv+xzATo11au+QAhD1lHcLJtnVKZDdQDGohHUhiI=";
   };
 

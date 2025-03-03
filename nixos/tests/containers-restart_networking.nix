@@ -39,6 +39,11 @@ import ./make-test-python.nix (
           }
         ];
 
+        networking.interfaces.eth1 = {
+          ipv4.addresses = lib.mkForce [ ];
+          ipv6.addresses = lib.mkForce [ ];
+        };
+
         specialisation.eth1.configuration = {
           networking.bridges.br0.interfaces = [ "eth1" ];
           networking.interfaces = {

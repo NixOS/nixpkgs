@@ -3,7 +3,6 @@
   stdenv,
   rustPlatform,
   fetchFromGitHub,
-  apple-sdk_11,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -17,7 +16,8 @@ rustPlatform.buildRustPackage rec {
     sha256 = "0s5q9aghncsk9834azn5cgnn5ms3zzyjan2rq06kaqcgzhld4cjh";
   };
 
-  cargoHash = "sha256-Bs6WyeHBeZDWLSidoFBLaa2ZEr8oAQcr8JmHCtw34AE=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-d5e5CpO/c6KrIQE8dJqXT19Qe0CRbIqgCDHNWz4TK8Q=";
 
   checkFlags =
     [
@@ -30,8 +30,6 @@ rustPlatform.buildRustPackage rec {
     ++ lib.optional (stdenv.hostPlatform.system != "x86_64-linux")
       # assumes the target is x86_64-unknown-linux-gnu
       "--skip simple_project::it_checks_okay_project_correctly";
-
-  buildInputs = lib.optional stdenv.hostPlatform.isDarwin apple-sdk_11;
 
   meta = with lib; {
     description = "Cargo subcommand to check rust documentation for broken links";

@@ -8,13 +8,13 @@
 
 buildGoModule rec {
   pname = "velero";
-  version = "1.15.0";
+  version = "1.15.2";
 
   src = fetchFromGitHub {
     owner = "vmware-tanzu";
     repo = "velero";
     rev = "v${version}";
-    hash = "sha256-Ba5Bjock3NmNI6XdnX7UOW35ytgnHzYAjX9Cu6iGILo=";
+    hash = "sha256-WClNupUW1Nd5Xnx58KYDRLz1/2kNCOR4AoAsUv78yPE=";
   };
 
   ldflags = [
@@ -26,7 +26,7 @@ buildGoModule rec {
     "-X github.com/vmware-tanzu/velero/pkg/buildinfo.GitSHA=none"
   ];
 
-  vendorHash = "sha256-FcyqCnOZSdoyOjBIrEC1AKM5KqWSkNxbgvXeG3Y0CO4=";
+  vendorHash = "sha256-Q3h39o78V5Lqzols3RmSDL9d5WevMnTt4bv4qBscnGs=";
 
   excludedPackages = [
     "issue-template-gen"

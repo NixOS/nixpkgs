@@ -18,13 +18,13 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "polkadot";
-  version = "2412";
+  version = "2412-2";
 
   src = fetchFromGitHub {
     owner = "paritytech";
     repo = "polkadot-sdk";
     rev = "polkadot-stable${version}";
-    hash = "sha256-0oqSABuCcyNhvCJyZuesnPvsUgHdNXdc36HeNMmToYM=";
+    hash = "sha256-iFlC/KQaq7RoQqnlOjIwxrMBdwarrNXfKyE2b1XXfzU=";
 
     # the build process of polkadot requires a .git folder in order to determine
     # the git commit hash that is being built and add it to the version string.
@@ -45,30 +45,11 @@ rustPlatform.buildRustPackage rec {
     rm .git_commit
   '';
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "ark-secret-scalar-0.0.2" = "sha256-yvgTxccxeUrnBhElI7AY3ad0PqmGCDlsoi8jH2Cceks=";
-      "common-0.1.0" = "sha256-Jbl5b0zIDFBcu2lYi5LYRdABq3vxgPlE4EsFucTWQd8=";
-      "fflonk-0.1.0" = "sha256-+BvZ03AhYNP0D8Wq9EMsP+lSgPA6BBlnWkoxTffVLwo=";
-      "ipfs-hasher-0.21.3" = "sha256-AH3NMil07F+kkWjqAbMaMbjnTisSQiCd3tJz934ZICw=";
-      "simple-mermaid-0.1.0" = "sha256-IekTldxYq+uoXwGvbpkVTXv2xrcZ0TQfyyE2i2zH+6w=";
-      "sp-ark-bls12-381-0.4.2" = "sha256-nNr0amKhSvvI9BlsoP+8v6Xppx/s7zkf0l9Lm3DW8w8=";
-      "sp-crypto-ec-utils-0.4.1" = "sha256-KXyG43YIzMG2r6kCTyQyCIHSAkXSlZv8pbFEXXvC4JU=";
-      "sp-debug-derive-8.0.0" = "sha256-/Sw1ZM/JcJBokFE4y2mv/P43ciTL5DEm0PDG0jZvMkI=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-P/pNmW6vQAB4gEDaPFYJQsqUlSBSX1krcU7C6ngRk5Q=";
 
   buildType = "production";
-
-  cargoBuildFlags = [
-    "-p"
-    "polkadot"
-    "-p"
-    "polkadot-omni-node"
-    "-p"
-    "polkadot-parachain-bin"
-  ];
+  buildAndTestSubdir = "polkadot";
 
   # NOTE: tests currently fail to compile due to an issue with cargo-auditable
   # and resolution of features flags, potentially related to this:
@@ -91,17 +72,19 @@ rustPlatform.buildRustPackage rec {
       SystemConfiguration
     ];
 
-  # NOTE: disable building `core`/`std` in wasm environment since rust-src isn't
-  # available for `rustc-wasm32`
-  WASM_BUILD_STD = 0;
+  # NOTE: currently we can't build the runtimes since it requires rebuilding rust std
+  # (-Zbuild-std), for which rust-src is required to be available in the sysroot of rustc.
+  # this should no longer be needed after: https://github.com/paritytech/polkadot-sdk/pull/7008
+  # since the new wasmv1-none target won't require rebuilding std.
+  SKIP_WASM_BUILD = 1;
 
   OPENSSL_NO_VENDOR = 1;
   PROTOC = "${protobuf}/bin/protoc";
   ROCKSDB_LIB_DIR = "${rocksdb}/lib";
 
   meta = with lib; {
-    description = "Polkadot Node Implementation";
-    homepage = "https://polkadot.network";
+    description = "Implementation of a https://polkadot.network node in Rust based on the Substrate framework";
+    homepage = "https://github.com/paritytech/polkadot-sdk";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [
       akru

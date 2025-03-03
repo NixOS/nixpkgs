@@ -155,6 +155,8 @@ with pkgs;
 
   nixos-functions = callPackage ./nixos-functions { };
 
+  nixosOptionsDoc = callPackage ../../nixos/lib/make-options-doc/tests.nix { };
+
   overriding = callPackage ./overriding.nix { };
 
   texlive = callPackage ./texlive { };
@@ -208,4 +210,6 @@ with pkgs;
   substitute = recurseIntoAttrs (callPackage ./substitute { });
 
   build-environment-info = callPackage ./build-environment-info { };
+
+  rust-hooks = recurseIntoAttrs (callPackages ../build-support/rust/hooks/test { });
 }

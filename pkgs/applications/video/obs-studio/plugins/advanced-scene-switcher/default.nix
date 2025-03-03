@@ -86,6 +86,10 @@ stdenv.mkDerivation rec {
     chmod -R +w $sourceRoot/deps/libremidi
   '';
 
+  # PipeWire support currently disabled in libremidi dependency.
+  # see https://github.com/NixOS/nixpkgs/pull/374469
+  cmakeFlags = [ (lib.cmakeBool "LIBREMIDI_NO_PIPEWIRE" true) ];
+
   env.NIX_CFLAGS_COMPILE = "-Wno-error=stringop-overflow -Wno-error=deprecated-declarations";
 
   passthru.updateScript = nix-update-script { };

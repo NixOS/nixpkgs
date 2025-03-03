@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   ];
 
   # IP_DONTFRAG is defined on macOS from Big Sur
-  postPatch = lib.optionalString (lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11") ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     sed -i '10i#undef IP_DONTFRAG' include/junkie/proto/ip.h
   '';
 

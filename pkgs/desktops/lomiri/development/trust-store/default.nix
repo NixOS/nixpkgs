@@ -2,9 +2,12 @@
   stdenv,
   lib,
   fetchFromGitLab,
+  fetchpatch,
   gitUpdater,
   testers,
-  boost,
+  # dbus-cpp not compatible with Boost 1.87
+  # https://gitlab.com/ubports/development/core/lib-cpp/dbus-cpp/-/issues/8
+  boost186,
   cmake,
   cmake-extras,
   dbus,
@@ -42,6 +45,19 @@ stdenv.mkDerivation (finalAttrs: {
     "bin"
   ];
 
+  patches = [
+    # Remove when version > 2.0.2
+    (fetchpatch {
+      name = "0001-trust-store-Fix-boost-184-compat.patch";
+      url = "https://gitlab.com/ubports/development/core/trust-store/-/commit/569f6b35d8bcdb2ae5ff84549cd92cfc0899675b.patch";
+      hash = "sha256-3lrdVIzscXGiLKwftC5oECICVv3sBoS4UedfRHx7uOs=";
+    })
+
+    # Fix compatibility with glog 0.7.x
+    # Remove when https://gitlab.com/ubports/development/core/trust-store/-/merge_requests/18 merged & in release
+    ./1001-treewide-Switch-to-glog-CMake-module.patch
+  ];
+
   postPatch =
     ''
       # pkg-config patching hook expects prefix variable
@@ -69,7 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    boost
+    boost186
     cmake-extras
     dbus-cpp
     glog

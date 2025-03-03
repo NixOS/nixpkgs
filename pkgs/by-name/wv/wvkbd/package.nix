@@ -10,17 +10,18 @@
   cairo,
   pkg-config,
   libxkbcommon,
+  scdoc,
 }:
 
 stdenv.mkDerivation rec {
   pname = "wvkbd";
-  version = "0.15";
+  version = "0.16";
 
   src = fetchFromGitHub {
     owner = "jjsullivan5196";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-9gDxMH1hghqjcXlbda7CHjDdjcjApjjie7caihKIg9M=";
+    repo = "wvkbd";
+    tag = "v${version}";
+    hash = "sha256-8KRJsx0Zv1VH/lR/QEE9kkzEY2qWihHaog2YxgNd4Rs=";
   };
 
   postPatch = ''
@@ -39,6 +40,7 @@ stdenv.mkDerivation rec {
     libxkbcommon
     pango
     wayland
+    scdoc
   ];
   installFlags = [ "PREFIX=$(out)" ];
 

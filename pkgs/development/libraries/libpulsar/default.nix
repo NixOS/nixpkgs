@@ -2,7 +2,7 @@
   lib,
   asioSupport ? true,
   asio,
-  boost180,
+  boost,
   log4cxxSupport ? false,
   log4cxx,
   snappySupport ? false,
@@ -43,18 +43,18 @@ let
     ++ lib.optional zstdSupport zstd
     ++ lib.optional log4cxxSupport log4cxx
     ++ lib.optional asioSupport asio
-    ++ lib.optional (!asioSupport) boost180;
+    ++ lib.optional (!asioSupport) boost;
 
 in
 stdenv.mkDerivation (finalAttrs: rec {
   pname = "libpulsar";
-  version = "3.6.0";
+  version = "3.7.0";
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "pulsar-client-cpp";
     rev = "v${version}";
-    hash = "sha256-P1LhUH7V3EtWBXwPHQdN11mCjuyUyVdrtZsUItvC8xU=";
+    hash = "sha256-hY6ivTKWgl/2KLeP6MMAdWcM/LJ5b7zoNVRlg6nx6Sc=";
   };
 
   nativeBuildInputs =

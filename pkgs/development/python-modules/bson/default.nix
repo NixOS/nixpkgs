@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "py-bson";
     repo = "bson";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-mirRpo27RoOBlwxVOKnHaDIzJOErp7c2VxCOunUm/u4=";
   };
 

@@ -28,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "webdataset";
     repo = "webdataset";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-L9RUQItmW/7O/eTst2Sl/415EP4Jo662bKWbYA6p5bk=";
   };
 

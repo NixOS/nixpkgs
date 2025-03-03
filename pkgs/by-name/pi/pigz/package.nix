@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "madler";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     sha256 = "sha256-PzdxyO4mCg2jE/oBk1MH+NUdWM95wIIIbncBg71BkmQ=";
   };
 
@@ -40,6 +40,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.zlib.net/pigz/";
     description = "Parallel implementation of gzip for multi-core machines";
+    mainProgram = "pigz";
     maintainers = [ ];
     license = licenses.zlib;
     platforms = platforms.unix;

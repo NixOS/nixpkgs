@@ -3,8 +3,7 @@
   stdenv,
   fetchFromGitHub,
   rustPlatform,
-  libiconv,
-  Security,
+  zlib,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -18,11 +17,11 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-q9tYKXK8RqiqbDZ/lTxUI1Dm/h28/yZR8rTQuq+roZs=";
   };
 
-  cargoHash = "sha256-275QREIcncgBk4ah/CivSz5N2m6s/XPCfp6JGChpr38=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-cwTHJ5Cd17ur8AhEQb8FTS0mcgqg83VGjvCQP00JY6s=";
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    libiconv
-    Security
+    zlib
   ];
 
   checkFlags = [ "offline_tests" ];

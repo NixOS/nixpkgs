@@ -12,7 +12,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "zephyris";
     repo = "openttd-ttf";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-Nr3oLiCEdpUhB/IczCEoLM8kb1hGDH/d6WYWRbjgOi8=";
   };
 

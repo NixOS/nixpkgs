@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "speechbrain";
     repo = "hyperpyyaml";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-eA4/wXmqlqomfRbJNi7dkBRoxneCbCbURSPvASF2sgA=";
   };
 

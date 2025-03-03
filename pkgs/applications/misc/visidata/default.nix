@@ -40,7 +40,7 @@
   zstandard,
   zulip,
   # other
-  git,
+  gitMinimal,
   withPcap ? true,
   dpkt,
   dnslib,
@@ -121,7 +121,7 @@ buildPythonApplication rec {
     ++ lib.optional withXclip xclip;
 
   nativeCheckInputs = [
-    git
+    gitMinimal
   ];
 
   # check phase uses the output bin, which is not possible when cross-compiling
@@ -165,6 +165,7 @@ buildPythonApplication rec {
 
   meta = {
     description = "Interactive terminal multitool for tabular data";
+    mainProgram = "visidata";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [
       raskin

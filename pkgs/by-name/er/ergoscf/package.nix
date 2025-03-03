@@ -31,7 +31,11 @@ stdenv.mkDerivation rec {
     "--enable-performance"
   ] ++ lib.optional stdenv.hostPlatform.isx86_64 "--enable-sse-intrinsics";
 
-  LDFLAGS = "-lblas -llapack";
+  env = {
+    # Required for compilation with gcc-14
+    NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
+    LDFLAGS = "-lblas -llapack";
+  };
 
   enableParallelBuilding = true;
 

@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.util";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-z/dYYC3s4R7j2c5HBFlAStcur2AS57AOYndsRlj/Htw=";
   };
 

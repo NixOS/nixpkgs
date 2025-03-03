@@ -91,8 +91,6 @@ stdenv.mkDerivation rec {
       "-DLIBKQUEUE_ROOT_DIR=${libkqueue}"
     ];
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-faligned-allocation";
-
   postInstall = ''
     for file in $out/share/zeek/base/frameworks/notice/actions/pp-alarms.zeek $out/share/zeek/base/frameworks/notice/main.zeek; do
       substituteInPlace $file \

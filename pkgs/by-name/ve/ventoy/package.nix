@@ -56,11 +56,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ventoy";
-  version = "1.0.99";
+  version = "1.1.05";
 
   src = fetchurl {
     url = "https://github.com/ventoy/Ventoy/releases/download/v${finalAttrs.version}/ventoy-${finalAttrs.version}-linux.tar.gz";
-    hash = "sha256-RnzdGIp/c5vHBq28HWlfYf/e/JWRatsBWUfYCCnwCj0=";
+    hash = "sha256-M3nJmJA1nc/1Wqt/ezKG+HyYjR2i/WFuap4wX7Ch3p4=";
   };
 
   patches = [
@@ -211,7 +211,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://www.ventoy.net/doc_news.html";
     license = lib.licenses.gpl3Plus;
     mainProgram = "ventoy";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     platforms = [
       "x86_64-linux"
       "i686-linux"

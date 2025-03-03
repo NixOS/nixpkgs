@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "h5io";
     repo = "h5io";
-    rev = "refs/tags/h5io-${version}";
+    tag = "h5io-${version}";
     hash = "sha256-3mrHIkfaXq06mMzUwudRO81DWTk0TO/e15IQA5fxxNc=";
   };
 
@@ -44,7 +44,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Read and write simple Python objects using HDF5";
     homepage = "https://github.com/h5io/h5io";
-    changelog = "https://github.com/h5io/h5io/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
+    changelog = "https://github.com/h5io/h5io/releases/tag/h5io-${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ mbalatsko ];
   };

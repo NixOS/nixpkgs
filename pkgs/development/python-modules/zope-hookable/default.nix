@@ -1,29 +1,42 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   setuptools,
-  zope-testing,
+  unittestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "zope-hookable";
-  version = "6.0";
+  version = "7.0";
   pyproject = true;
 
-  src = fetchPypi {
-    pname = "zope.hookable";
-    inherit version;
-    hash = "sha256-FmiZPUCnz9yGeEPdVyWSnn+DpbDBlccJrx2u+CdPQ8s=";
+  src = fetchFromGitHub {
+    owner = "zopefoundation";
+    repo = "zope.hookable";
+    tag = version;
+    hash = "sha256-qJJc646VSdNKors6Au4UAGvm7seFbvjEfpdqf//vJNE=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools<74" "setuptools"
+  '';
 
-  nativeCheckInputs = [ zope-testing ];
+  build-system = [ setuptools ];
+
+  pythonImportsCheck = [ "zope.hookable" ];
+
+  nativeCheckInputs = [ unittestCheckHook ];
+
+  unittestFlagsArray = [ "src/zope/hookable/tests" ];
+
+  pythonNamespaces = [ "zope" ];
 
   meta = with lib; {
     description = "Supports the efficient creation of “hookable” objects";
     homepage = "https://github.com/zopefoundation/zope.hookable";
+    changelog = "https://github.com/zopefoundation/zope.hookable/blob/${src.tag}/CHANGES.rst";
     license = licenses.zpl21;
   };
 }

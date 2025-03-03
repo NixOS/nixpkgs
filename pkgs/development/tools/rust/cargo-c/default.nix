@@ -23,7 +23,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-ltxd4n3oo8ZF/G/zmR4FSVtNOkxwCjDv6PdxkmWxZ+8=";
   };
 
-  cargoHash = "sha256-UfhIz87s0CLUDbIpWMPzGQ7qVmh14GuiFoquauSbTOw=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-tCJ7Giyj7Wqowhk0N7CkvAiWvF6DBNw7G7aAnn2+mp8=";
 
   nativeBuildInputs = [
     pkg-config
@@ -64,6 +65,9 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/lu-zero/cargo-c";
     changelog = "https://github.com/lu-zero/cargo-c/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ cpu ];
+    maintainers = with maintainers; [
+      cpu
+      matthiasbeyer
+    ];
   };
 }

@@ -18,7 +18,8 @@ rustPlatform.buildRustPackage rec {
     inherit pname version;
     hash = "sha256-24lUhi4IPv+asM51/BfufkOUYVellXoXsbWXWN/zoBw=";
   };
-  cargoHash = "sha256-vtuOCLo7qBOfqMynykqf9folmlETx3or35+CuTurh3s=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-7Jzr9Y6ixK1SHCHXaNKVXk0qfbtmXpr9dz1UNk7Q3XI=";
   meta = {
     description = "Utilities for working with the SGX stream format";
     homepage = "https://github.com/fortanix/rust-sgx";

@@ -5,7 +5,7 @@
 
    e.g.
 
-   $ nix-build pkgs/top-level/release-cross.nix -A crossMingw32.nixUnstable --arg supportedSystems '[builtins.currentSystem]'
+   $ nix-build pkgs/top-level/release-cross.nix -A crossMingw32.nix --arg supportedSystems '[builtins.currentSystem]'
 
    To build all of the bootstrapFiles bundles on every enabled platform, use:
 
@@ -13,11 +13,14 @@
 */
 
 { # The platforms *from* which we cross compile.
-  supportedSystems ? [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" ]
+  supportedSystems ? [ "x86_64-linux" "aarch64-linux" "aarch64-darwin" ]
 , # Strip most of attributes when evaluating to spare memory usage
   scrubJobs ? true
 , # Attributes passed to nixpkgs. Don't build packages marked as unfree.
-  nixpkgsArgs ? { config = { allowUnfree = false; inHydra = true; }; }
+  nixpkgsArgs ? {
+    config = { allowUnfree = false; inHydra = true; };
+    __allowFileset = false;
+  }
 }:
 
 let
@@ -67,7 +70,7 @@ let
     gmp = nativePlatforms;
     libcCross = nativePlatforms;
     nix = nativePlatforms;
-    nixUnstable = nativePlatforms;
+    nixVersions.git = nativePlatforms;
     mesa = nativePlatforms;
     rustc = nativePlatforms;
     cargo = nativePlatforms;
@@ -191,7 +194,7 @@ in
   fuloongminipc = mapTestOnCross systems.examples.fuloongminipc linuxCommon;
   ben-nanonote = mapTestOnCross systems.examples.ben-nanonote linuxCommon;
 
-  /* Javacript */
+  /* Javascript */
   ghcjs = mapTestOnCross systems.examples.ghcjs {
     haskell.packages.ghcjs.hello = nativePlatforms;
     haskell.packages.native-bignum.ghcHEAD.hello = nativePlatforms;

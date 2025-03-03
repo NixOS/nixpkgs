@@ -38,8 +38,8 @@ let
     pyyaml
   ];
 
-  mysqlShellVersion = "8.4.3";
-  mysqlServerVersion = "8.4.3";
+  mysqlShellVersion = "8.4.4";
+  mysqlServerVersion = "8.4.4";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mysql-shell";
@@ -48,11 +48,11 @@ stdenv.mkDerivation (finalAttrs: {
   srcs = [
     (fetchurl {
       url = "https://dev.mysql.com/get/Downloads/MySQL-${lib.versions.majorMinor mysqlServerVersion}/mysql-${mysqlServerVersion}.tar.gz";
-      hash = "sha256-eslWTEeAIvcwBf+Ju7QPZ7OB/AbVUYQWvf/sdeYluBg=";
+      hash = "sha256-+ykO90iJRDQIUknDG8pSrHGFMSREarIYuzvFAr8AgqU=";
     })
     (fetchurl {
       url = "https://dev.mysql.com/get/Downloads/MySQL-Shell/mysql-shell-${finalAttrs.version}-src.tar.gz";
-      hash = "sha256-rO+cAfQzUobMrTLGHRbaXsG+vMcjVTtDoZwmyok+dS4=";
+      hash = "sha256-wl57vU3YbWvtmzew801k8WHohY6Fjy59Uyy2pdYaHuw=";
     })
   ];
 
@@ -139,11 +139,11 @@ stdenv.mkDerivation (finalAttrs: {
     wrapProgram $out/bin/mysqlsh --set PYTHONPATH "${lib.makeSearchPath python3.sitePackages pythonDeps}"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://dev.mysql.com/doc/mysql-shell/${lib.versions.majorMinor finalAttrs.version}/en/";
     description = "New command line scriptable shell for MySQL";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ aaronjheng ];
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ aaronjheng ];
     mainProgram = "mysqlsh";
   };
 })

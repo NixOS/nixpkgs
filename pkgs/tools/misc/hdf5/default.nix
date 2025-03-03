@@ -31,7 +31,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  version = "1.14.5";
+  version = "1.14.6";
   pname =
     "hdf5"
     + lib.optionalString cppSupport "-cpp"
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     owner = "HDFGroup";
     repo = "hdf5";
     rev = "hdf5_${version}";
-    hash = "sha256-bvtSeyqqrBXVAMzUtiKOhO9RR4SCO+3GnsLux4Mig6I=";
+    hash = "sha256-mJTax+VWAL3Amkq3Ij8fxazY2nfpMOTxYMUQlTvY/rg=";
   };
 
   passthru = {

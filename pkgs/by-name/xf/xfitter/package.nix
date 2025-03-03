@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitLab,
   apfel,
   apfelgrid,
   applgrid,
@@ -19,18 +19,18 @@
   qcdnum,
   root,
   zlib,
-  memorymappingHook,
-  memstreamHook,
 }:
 
 stdenv.mkDerivation rec {
   pname = "xfitter";
   version = "2.2.0";
 
-  src = fetchurl {
-    name = "${pname}-${version}.tgz";
-    url = "https://www.xfitter.org/xFitter/xFitter/DownloadPage?action=AttachFile&do=get&target=${pname}-${version}.tgz";
-    sha256 = "sha256-ZHIQ5hOY+k0/wmpE0o4Po+RZ4MkVMk+bK1Rc6eqwwH0=";
+  src = fetchFromGitLab {
+    owner = "fitters";
+    repo = "xfitter";
+    rev = "refs/tags/2.2.0_Future_Freeze";
+    domain = "gitlab.cern.ch";
+    hash = "sha256-wanxgldvBEuAEOeVok3XgRVStcn9APd+Nj7vpRZUtGs=";
   };
 
   patches = [
@@ -60,10 +60,6 @@ stdenv.mkDerivation rec {
     ++ lib.optionals ("5" == lib.versions.major root.version) [
       apfelgrid
       applgrid
-    ]
-    ++ lib.optionals (stdenv.system == "x86_64-darwin") [
-      memorymappingHook
-      memstreamHook
     ]
     ++ lib.optional (stdenv.hostPlatform.libc == "glibc") libtirpc;
 

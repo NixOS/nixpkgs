@@ -74,10 +74,6 @@ let
       }
       // attrs'
     );
-
-  throwUnsupportaed =
-    version:
-    "${version} is no longer supported upstream. You can switch to using a newer version of the nomad package, or revert to older nixpkgs if you cannot upgrade";
 in
 rec {
   # Nomad never updates major go versions within a release series and is unsupported
@@ -86,13 +82,7 @@ rec {
   # Upstream partially documents used Go versions here
   # https://github.com/hashicorp/nomad/blob/master/contributing/golang.md
 
-  nomad = nomad_1_8;
-
-  nomad_1_4 = throwUnsupportaed "nomad_1_4";
-
-  nomad_1_5 = throwUnsupportaed "nomad_1_5";
-
-  nomad_1_6 = throwUnsupportaed "nomad_1_6";
+  nomad = nomad_1_9;
 
   nomad_1_7 = generic {
     buildGoModule = buildGo122Module;
@@ -120,9 +110,9 @@ rec {
 
   nomad_1_9 = generic {
     buildGoModule = buildGo123Module;
-    version = "1.9.3";
-    sha256 = "sha256-KjVr9NIL9Qw10EoP/C+2rjtqU2qBSF6SKpIvQWQJWuo=";
-    vendorHash = "sha256-paUI5mYa9AvMsI0f/VeVdnZzwKS9gsBIb6T4KmugPKQ=";
+    version = "1.9.6";
+    sha256 = "sha256-j+3ecQsFicdYX4GddwaKEwoIFu88kdjI5Kl8bHUQQwE=";
+    vendorHash = "sha256-frHIP86NsW6C9GRdPaZQc3PilolXJ2ojaNZYlrMcbOg=";
     license = lib.licenses.bsl11;
     passthru.tests.nomad = nixosTests.nomad;
     preCheck = ''

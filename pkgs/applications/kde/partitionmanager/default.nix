@@ -24,8 +24,6 @@
   jfsutils,
   nilfs-utils,
   ntfs3g,
-  reiser4progs,
-  reiserfsprogs,
   udftools,
   xfsprogs,
   zfs,
@@ -54,8 +52,7 @@ let
     jfsutils
     nilfs-utils
     ntfs3g
-    reiser4progs
-    reiserfsprogs
+    # reiser{4,fs}progs intentionally omitted due to filesystem removal from Linux.
     udftools
     xfsprogs
     zfs
@@ -98,7 +95,7 @@ mkDerivation {
     longDescription = ''
       KDE Partition Manager is a utility to help you manage the disks, partitions, and file systems on your computer.
       It allows you to easily create, copy, move, delete, back up, restore, and resize them without losing data.
-      It supports a large number of file systems, including ext2/3/4, btrfs, reiserfs, NTFS, FAT16/32, JFS, XFS and more.
+      It supports a large number of file systems, including ext2/3/4, btrfs, NTFS, FAT16/32, JFS, XFS and more.
 
       To install on NixOS, use the option `programs.partition-manager.enable = true`.
     '';

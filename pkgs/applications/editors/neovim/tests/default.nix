@@ -13,6 +13,7 @@ Here are some common neovim flags used in the tests:
 , neovim-unwrapped
 , fetchFromGitLab
 , runCommandLocal
+, testers
 , pkgs
 }:
 let
@@ -102,13 +103,19 @@ let
       ${pkgs.perl}/bin/perl -pe "s|\Q$NIX_STORE\E/[a-z0-9]{32}-|$NIX_STORE/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-|g" < "$luarc" > "$luarcGeneric"
     '' + buildCommand);
 
+  nvim_with_rocks_nvim = (
+    wrapNeovimUnstable neovim-unwrapped {
+      extraName = "with-rocks-nvim";
+      wrapperArgs = "--set NVIM_APPNAME test-rocks-nvim";
+      plugins = [ vimPlugins.rocks-nvim ];
+    }
+  );
 in
   pkgs.recurseIntoAttrs (rec {
 
   inherit nmt;
 
-  # Disabled because of https://github.com/NixOS/nixpkgs/pull/352727
-  # failed_check = pkgs.testers.testBuildFailure nvim-run-failing-check;
+  failed_check = testers.testBuildFailure nvim-run-failing-check;
 
   vim_empty_config = vimUtils.vimrcFile { beforePlugins = ""; customRC = ""; };
 
@@ -364,8 +371,13 @@ in
   # for instance luasnip has a dependency on jsregexp
   can_require_transitive_deps =
     runTest nvim-with-luasnip ''
-    cat ${nvim-with-luasnip}/nvim
     ${nvim-with-luasnip}/bin/nvim -i NONE --cmd "lua require'jsregexp'" -e +quitall!
   '';
 
+  inherit nvim_with_rocks_nvim;
+  rocks_install_plenary = runTest nvim_with_rocks_nvim ''
+    ${nvim_with_rocks_nvim}/bin/nvim -V3log.txt -i NONE +'Rocks install plenary.nvim' +quit! -e
+  '';
+
+  inherit (vimPlugins) corePlugins;
 })

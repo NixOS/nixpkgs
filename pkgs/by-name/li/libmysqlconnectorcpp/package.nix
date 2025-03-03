@@ -17,6 +17,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
+    mysql80
   ];
 
   buildInputs = [
@@ -24,6 +25,8 @@ stdenv.mkDerivation rec {
     openssl
     mysql80
   ];
+
+  strictDeps = true;
 
   cmakeFlags = [
     # libmysqlclient is shared library

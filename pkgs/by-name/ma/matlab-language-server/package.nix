@@ -12,7 +12,7 @@ buildNpmPackage {
   src = fetchFromGitHub {
     owner = "mathworks";
     repo = "matlab-language-server";
-    # Upstream doesn't tag commits unfortunatly, but lists versions and dates
+    # Upstream doesn't tag commits unfortunately, but lists versions and dates
     # in README... See complaint at:
     # https://github.com/mathworks/MATLAB-language-server/issues/24
     rev = "c8c901956e3bbfbd6eab440a1b60c3fe016cf567";

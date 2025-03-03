@@ -16,7 +16,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-lCXDDLovUb5aSOPTyVJL25v1JT1BGrrUlUR0Mu0XX4Q=";
   };
 
-  cargoHash = "sha256-KcQZnGFtev4ckhtQ7CNB773fAsExZ9EQl9e4Jf4beGo=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-L0qwHWxMf/Nd0B2FWLIpKLgrs2LRyTOwuG/7keMI2zE=";
 
   meta = with lib; {
     homepage = "https://codeberg.org/valpackett/evscript";

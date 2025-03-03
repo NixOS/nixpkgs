@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch,
   pkg-config,
   autoconf,
   makeDesktopItem,
@@ -110,6 +111,25 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-gfs5cdwUUwSBWwJJSaxrQGWJvLkI27RMlk5QvDALEDg=";
   };
 
+  patches = [
+    (fetchpatch {
+      name = "mlterm-configure-implicit-function-declaration.patch";
+      url = "https://github.com/arakiken/mlterm/commit/1a9ee97e4574c5892bf12090b812b0538dcdf8f2.patch";
+      hash = "sha256-Kk+x5LAq+beZWE8yj5WfdS82ConLSgxNquzQd5mvOA4=";
+    })
+
+    (fetchpatch {
+      name = "mlterm-wayland-implicit-function-declaration.patch";
+      url = "https://github.com/arakiken/mlterm/commit/20ab931d5055dc5835154a75ca672fade478549f.patch";
+      hash = "sha256-rDmQ0e3dQD7UAGTX4ljOrDqTTddBqvnnRFnqDjRLAss=";
+    })
+
+    (fetchpatch {
+      url = "https://salsa.debian.org/debian/mlterm/-/raw/d9b1555e9220985e0c89a6ff5a0d58f7b18cc123/debian/patches/fix-incompat-pointer-types.patch";
+      hash = "sha256-EcI15FjQfcN8pcE1MqsBfaHQ4j+gyoeesN/WoHb7WnU=";
+    })
+  ];
+
   nativeBuildInputs =
     [
       pkg-config
@@ -165,14 +185,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   #bad configure.ac and Makefile.in everywhere
   preConfigure = ''
-    sed -ie 's;-L/usr/local/lib -R/usr/local/lib;;g' \
+    sed -i -e 's;-L/usr/local/lib -R/usr/local/lib;;g' \
       main/Makefile.in \
       tool/mlfc/Makefile.in \
       tool/mlimgloader/Makefile.in \
       tool/mlconfig/Makefile.in \
       uitoolkit/libtype/Makefile.in \
       uitoolkit/libotl/Makefile.in
-    sed -ie 's;cd ..srcdir. && rm -f ...lang..gmo.*;;g' \
+    sed -i -e 's;cd ..srcdir. && rm -f ...lang..gmo.*;;g' \
       tool/mlconfig/po/Makefile.in.in
     #utmp and mlterm-fb
     substituteInPlace configure.in \

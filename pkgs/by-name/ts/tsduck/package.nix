@@ -28,17 +28,17 @@ stdenv.mkDerivation rec {
 
   # remove tests which call out to https://tsduck.io/download/test/...
   postPatch = ''
-    sed -i"" \
+    sed -i \
       -e '/TSUNIT_TEST(testMasterPlaylist);/ d' \
       -e '/TSUNIT_TEST(testMasterPlaylistWithAlternate);/ d' \
       -e '/TSUNIT_TEST(testMediaPlaylist);/ d' \
       src/utest/utestHLS.cpp
 
-    sed -i"" \
+    sed -i \
       -e '/TSUNIT_TEST(testBetterSystemRandomGenerator);/ d' \
       src/utest/utestSystemRandomGenerator.cpp
 
-    sed -i"" \
+    sed -i \
       -e '/TSUNIT_ASSERT(request.downloadBinaryContent/ d' \
       -e '/TSUNIT_ASSERT(!request.downloadBinaryContent/ d' \
       -e '/TSUNIT_TEST(testGitHub);/ d' \
@@ -47,11 +47,11 @@ stdenv.mkDerivation rec {
       -e '/TSUNIT_TEST(testReadMeFile);/ d' \
       src/utest/utestWebRequest.cpp
 
-    sed -i"" \
+    sed -i \
       -e '/TSUNIT_TEST(testHomeDirectory);/ d' \
       src/utest/utestSysUtils.cpp
 
-    sed -i"" \
+    sed -i \
       -e '/TSUNIT_TEST(testIPv4Address);/ d' \
       -e '/TSUNIT_TEST(testIPv4AddressConstructors);/ d' \
       -e '/TSUNIT_TEST(testIPv4SocketAddressConstructors);/ d' \

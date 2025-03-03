@@ -13,6 +13,7 @@
   libadwaita,
   openssl,
   darwin,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -26,10 +27,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-FqualaTkirB+gBcgkThQpSBHhM4iaXkiGujwBUnUX0E=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
     name = "share-preview-${finalAttrs.version}";
-    hash = "sha256-Gh6bQZD1mlkj3XeGp+fF/NShC4PZCZSEqymrsSdX4Ec=";
+    hash = "sha256-XY48fQ5HLvZ1nxLk6rbuxSBAHAPUcnwu/5AwgTWhfbg=";
   };
 
   nativeBuildInputs = [
@@ -56,6 +57,10 @@ stdenv.mkDerivation (finalAttrs: {
   env.NIX_CFLAGS_COMPILE = toString (
     lib.optionals stdenv.hostPlatform.isDarwin [ "-Wno-error=incompatible-function-pointer-types" ]
   );
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Preview and debug websites metadata tags for social media share";

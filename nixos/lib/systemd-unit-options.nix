@@ -535,6 +535,18 @@ in rec {
         '';
       };
 
+      notSocketActivated = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          If set, a changed unit is never assumed to be
+          socket-activated on configuration switch, even if
+          it might have associated socket units. Instead, the unit
+          will be restarted (or stopped/started) as if it had no
+          associated sockets.
+        '';
+      };
+
       startAt = mkOption {
         type = with types; either str (listOf str);
         default = [];

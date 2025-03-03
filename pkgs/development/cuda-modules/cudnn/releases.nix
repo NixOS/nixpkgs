@@ -1,5 +1,8 @@
-# NOTE: Check https://docs.nvidia.com/deeplearning/cudnn/archives/index.html for support matrices.
+# NOTE: Check the following URLs for support matrices:
+#       v8 -> https://docs.nvidia.com/deeplearning/cudnn/archives/index.html
+#       v9 -> https://docs.nvidia.com/deeplearning/cudnn/frontend/latest/reference/support-matrix.html
 # Version policy is to keep the latest minor release for each major release.
+#             https://developer.download.nvidia.com/compute/cudnn/redist/
 {
   cudnn.releases = {
     # jetson
@@ -7,7 +10,7 @@
       {
         version = "8.9.5.30";
         minCudaVersion = "12.0";
-        maxCudaVersion = "12.2";
+        maxCudaVersion = "12.4";
         url = "https://developer.download.nvidia.com/compute/cudnn/redist/cudnn/linux-aarch64/cudnn-linux-aarch64-8.9.5.30_cuda12-archive.tar.xz";
         hash = "sha256-BJH3sC9VwiB362eL8xTB+RdSS9UHz1tlgjm/mKRyM6E=";
       }
@@ -17,6 +20,13 @@
         maxCudaVersion = "12.6";
         url = "https://developer.download.nvidia.com/compute/cudnn/redist/cudnn/linux-aarch64/cudnn-linux-aarch64-9.3.0.75_cuda12-archive.tar.xz";
         hash = "sha256-Gq5L/O1j+TC0Z3+eko4ZeHjezi7dUcqPp6uDY9Dm7WA=";
+      }
+      {
+        version = "9.7.1.26";
+        minCudaVersion = "12.0";
+        maxCudaVersion = "12.8";
+        url = "https://developer.download.nvidia.com/compute/cudnn/redist/cudnn/linux-aarch64/cudnn-linux-aarch64-9.7.1.26_cuda12-archive.tar.xz";
+        hash = "sha256-jDPWAXKOiJYpblPwg5FUSh7F0Dgg59LLnd+pX9y7r1w=";
       }
     ];
     # powerpc
@@ -75,7 +85,7 @@
       {
         version = "8.9.7.29";
         minCudaVersion = "12.0";
-        maxCudaVersion = "12.2";
+        maxCudaVersion = "12.4";
         url = "https://developer.download.nvidia.com/compute/cudnn/redist/cudnn/linux-sbsa/cudnn-linux-sbsa-8.9.7.29_cuda12-archive.tar.xz";
         hash = "sha256-6Yt8gAEHheXVygHuTOm1sMjHNYfqb4ZIvjTT+NHUe9E=";
       }
@@ -92,6 +102,20 @@
         maxCudaVersion = "11.8";
         url = "https://developer.download.nvidia.com/compute/cudnn/redist/cudnn/linux-sbsa/cudnn-linux-sbsa-9.3.0.75_cuda11-archive.tar.xz";
         hash = "sha256-BLVvv3vuFcJOM5wrqU0Xqoi54zTQzRnnWFPcVFJ5S/c=";
+      }
+      {
+        version = "9.7.1.26";
+        minCudaVersion = "12.0";
+        maxCudaVersion = "12.8";
+        url = "https://developer.download.nvidia.com/compute/cudnn/redist/cudnn/linux-sbsa/cudnn-linux-sbsa-9.7.1.26_cuda12-archive.tar.xz";
+        hash = "sha256-koJFUKlesnWwbJCZhBDhLOBRQOBQjwkFZExlTJ7Xp2Q=";
+      }
+      {
+        version = "9.7.1.26";
+        minCudaVersion = "11.8";
+        maxCudaVersion = "11.8";
+        url = "https://developer.download.nvidia.com/compute/cudnn/redist/cudnn/linux-sbsa/cudnn-linux-sbsa-9.7.1.26_cuda11-archive.tar.xz";
+        hash = "sha256-JcpY/ylUAaj37bzrJlerSDxO5KgPmpL40Mvl8VquHN4=";
       }
     ];
     # x86_64
@@ -183,7 +207,7 @@
       {
         version = "8.9.7.29";
         minCudaVersion = "12.0";
-        maxCudaVersion = "12.2";
+        maxCudaVersion = "12.4";
         url = "https://developer.download.nvidia.com/compute/cudnn/redist/cudnn/linux-x86_64/cudnn-linux-x86_64-8.9.7.29_cuda12-archive.tar.xz";
         hash = "sha256-R1MzYlx+QqevPKCy91BqEG4wyTsaoAgc2cE++24h47s=";
       }
@@ -201,7 +225,20 @@
         url = "https://developer.download.nvidia.com/compute/cudnn/redist/cudnn/linux-x86_64/cudnn-linux-x86_64-9.3.0.75_cuda11-archive.tar.xz";
         hash = "sha256-Bp2ghM02jzn7gw1MTpMYAwZPtl52b0z33y2ko0aiup8";
       }
-
+      {
+        version = "9.7.1.26";
+        minCudaVersion = "12.0";
+        maxCudaVersion = "12.8";
+        url = "https://developer.download.nvidia.com/compute/cudnn/redist/cudnn/linux-x86_64/cudnn-linux-x86_64-9.7.1.26_cuda12-archive.tar.xz";
+        hash = "sha256-EJpeXGvN9Dlub2Pz+GLtLc8W7pPuA03HBKGxG98AwLE=";
+      }
+      {
+        version = "9.7.1.26";
+        minCudaVersion = "11.8";
+        maxCudaVersion = "11.8";
+        url = "https://developer.download.nvidia.com/compute/cudnn/redist/cudnn/linux-x86_64/cudnn-linux-x86_64-9.7.1.26_cuda11-archive.tar.xz";
+        hash = "sha256-c6rfLRtyGjS9e5CQjQKQYlfyrdvSRs+NtY4h1o2FXqI=";
+      }
     ];
   };
 }

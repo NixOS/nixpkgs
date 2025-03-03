@@ -136,12 +136,12 @@ stdenv.mkDerivation rec {
     echo rt-${version} > .tag
   '';
   preConfigure = ''
-    configureFlags="$configureFlags --with-web-user=$UID"
-    configureFlags="$configureFlags --with-web-group=$(id -g)"
-    configureFlags="$configureFlags --with-rt-group=$(id -g)"
-    configureFlags="$configureFlags --with-bin-owner=$UID"
-    configureFlags="$configureFlags --with-libs-owner=$UID"
-    configureFlags="$configureFlags --with-libs-group=$(id -g)"
+    appendToVar configureFlags "--with-web-user=$UID"
+    appendToVar configureFlags "--with-web-group=$(id -g)"
+    appendToVar configureFlags "--with-rt-group=$(id -g)"
+    appendToVar configureFlags "--with-bin-owner=$UID"
+    appendToVar configureFlags "--with-libs-owner=$UID"
+    appendToVar configureFlags "--with-libs-group=$(id -g)"
   '';
   configureFlags = [
     "--enable-graphviz"

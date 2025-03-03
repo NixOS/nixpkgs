@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libui-ng";
-  version = "4.1-unstable-2024-05-19";
+  version = "4.1-unstable-2024-12-14";
 
   src = fetchFromGitHub {
     owner = "libui-ng";
     repo = "libui-ng";
-    rev = "49b04c4cf8ae4d3e38e389f446ef75170eb62762";
-    hash = "sha256-W9LnUBUKwx1x3+BEeUanisBGR2Q4dnbcMM5k8mCondM=";
+    rev = "533953b82c8510b447fe52a89ee0a3ae6d60921b";
+    hash = "sha256-NrDY1EjHcSA0w/WR2UIAQQa6mbPSkVjp41h7uQzz838=";
   };
 
   postPatch = lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) ''

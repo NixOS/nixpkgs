@@ -4,7 +4,6 @@
   fetchFromGitHub,
   zig_0_13,
   callPackage,
-  apple-sdk_11,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -24,8 +23,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [ zig_0_13.hook ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_11 ];
 
   postPatch = ''
     ln -s ${callPackage ./deps.nix { }} $ZIG_GLOBAL_CACHE_DIR/p

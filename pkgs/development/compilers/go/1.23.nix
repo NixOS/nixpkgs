@@ -3,9 +3,8 @@
   stdenv,
   fetchurl,
   tzdata,
-  substituteAll,
+  replaceVars,
   iana-etc,
-  apple-sdk_11,
   xcbuild,
   mailcap,
   buildPackages,
@@ -50,11 +49,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "go";
-  version = "1.23.3";
+  version = "1.23.6";
 
   src = fetchurl {
     url = "https://go.dev/dl/go${finalAttrs.version}.src.tar.gz";
-    hash = "sha256-jWp3MySHVXxq+iQhExtQ+D20rjxXnDvHLmcO4faWhZk=";
+    hash = "sha256-A5xbBOZSedrO7opvcecL0Fz1uAF4K293xuGeLtBREiI=";
   };
 
   strictDeps = true;
@@ -64,7 +63,6 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals (stdenv.hostPlatform.libc == "glibc") [ stdenv.cc.libc.static ];
 
   depsTargetTargetPropagated = lib.optionals stdenv.targetPlatform.isDarwin [
-    apple-sdk_11
     xcbuild
   ];
 
@@ -77,24 +75,21 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   patches = [
-    (substituteAll {
-      src = ./iana-etc-1.17.patch;
+    (replaceVars ./iana-etc-1.17.patch {
       iana = iana-etc;
     })
     # Patch the mimetype database location which is missing on NixOS.
     # but also allow static binaries built with NixOS to run outside nix
-    (substituteAll {
-      src = ./mailcap-1.17.patch;
+    (replaceVars ./mailcap-1.17.patch {
       inherit mailcap;
     })
     # prepend the nix path to the zoneinfo files but also leave the original value for static binaries
     # that run outside a nix server
-    (substituteAll {
-      src = ./tzdata-1.19.patch;
+    (replaceVars ./tzdata-1.19.patch {
       inherit tzdata;
     })
     ./remove-tools-1.11.patch
-    ./go_no_vendor_checks-1.22.patch
+    ./go_no_vendor_checks-1.23.patch
   ];
 
   GOOS = if stdenv.targetPlatform.isWasi then "wasip1" else stdenv.targetPlatform.parsed.kernel.name;
@@ -192,7 +187,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    changelog = "https://go.dev/doc/devel/release#go${lib.versions.majorMinor finalAttrs.version}";
+    changelog = "https://go.dev/doc/devel/release#go${finalAttrs.version}";
     description = "Go Programming language";
     homepage = "https://go.dev/";
     license = licenses.bsd3;

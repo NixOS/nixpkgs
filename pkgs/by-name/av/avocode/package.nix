@@ -28,7 +28,7 @@
   libuuid,
   at-spi2-core,
   libdrm,
-  mesa,
+  libgbm,
   libxkbcommon,
 }:
 
@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
       libXScrnSaver
       libuuid
       libdrm
-      mesa
+      libgbm
     ]
   );
 

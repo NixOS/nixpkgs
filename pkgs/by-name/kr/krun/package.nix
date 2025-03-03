@@ -9,7 +9,6 @@
   passt,
   sommelier,
   mesa,
-  opengl-driver ? mesa.drivers,
   withSommelier ? false,
 }:
 
@@ -35,7 +34,8 @@ rustPlatform.buildRustPackage rec {
     })
   ];
 
-  cargoHash = "sha256-NahnigxJaY2QwWnySCRrnf3JyqZ+7jRA1CpE7ON0OOE=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-5zrwxyzt9ZEdUNUMnCaFUVpaO53RAabVdtib9LG6Q1s=";
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
@@ -56,7 +56,7 @@ rustPlatform.buildRustPackage rec {
 
   postFixup = ''
     wrapProgram $out/bin/krun $wrapArgs \
-      --set-default OPENGL_DRIVER ${opengl-driver}
+      --set-default OPENGL_DRIVER ${mesa.driverLink}
   '';
 
   meta = {

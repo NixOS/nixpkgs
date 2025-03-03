@@ -3,6 +3,7 @@
   "binfmt.d(5)": "https://www.freedesktop.org/software/systemd/man/binfmt.d.html",
   "bootctl(1)": "https://www.freedesktop.org/software/systemd/man/bootctl.html",
   "bootup(7)": "https://www.freedesktop.org/software/systemd/man/bootup.html",
+  "btrbk(1)": "https://digint.ch/btrbk/doc/btrbk.1.html",
   "busctl(1)": "https://www.freedesktop.org/software/systemd/man/busctl.html",
   "cat(1)": "https://www.gnu.org/software/coreutils/manual/html_node/cat-invocation.html",
   "coredump.conf(5)": "https://www.freedesktop.org/software/systemd/man/coredump.conf.html",

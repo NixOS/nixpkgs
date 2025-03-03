@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "recurring-ical-events";
-  version = "3.3.4";
+  version = "3.4.1";
 
   disabled = pythonOlder "3.8";
 
@@ -25,8 +25,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "niccokunzmann";
     repo = "python-recurring-ical-events";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-3KlmJJmak3X9adUlcmclnCv9D1Ddr+woFokrinZBYoE=";
+    tag = "v${version}";
+    hash = "sha256-JhGKowFtRJwLj/5J1lNpgMTl1d+oWsmV4wI3hfOW5io=";
   };
 
   build-system = [ setuptools ];
@@ -48,7 +48,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "recurring_ical_events" ];
 
   meta = {
-    changelog = "https://github.com/niccokunzmann/python-recurring-ical-events/blob/${src.rev}/README.rst#changelog";
+    changelog = "https://github.com/niccokunzmann/python-recurring-ical-events/blob/${src.tag}/README.rst#changelog";
     description = "Repeat ICalendar events by RRULE, RDATE and EXDATE";
     homepage = "https://github.com/niccokunzmann/python-recurring-ical-events";
     license = lib.licenses.lgpl3Plus;

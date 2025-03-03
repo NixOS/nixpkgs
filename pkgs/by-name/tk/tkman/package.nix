@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     (fetchpatch {
-      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/app-text/tkman/files/tkman-CVE-2008-5137.diff";
+      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/app-text/tkman/files/tkman-CVE-2008-5137.diff?id=dec60bb6900d6ebdaaa6aa1dcb845b30b739f9b5";
       hash = "sha256-l97SY2/YnMgzHYKnVYCVJKV7oGLN1hXNpeHFlLVzTMA=";
     })
   ];

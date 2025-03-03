@@ -16,18 +16,17 @@ let
       aarch64-darwin = "arm64-apple-darwin";
     }
     ."${stdenvNoCC.system}" or (throw "unsupported system ${stdenvNoCC.hostPlatform.system}");
-
   hash =
     {
-      x86_64-linux = "sha256-Y9vWtuv1eyrPmJn/XpAw4uDHxhLUdhKszwJZmMIOCqI=";
-      x86_64-darwin = "sha256-p8Y6XKHb/CmRcnQ7po3s3oUZh0f+1iIHk38sAu2qym8=";
-      aarch64-darwin = "sha256-Qfqeo5syprwtLoNdi/EwsI+EYdpKkkVlFVja8uIFDsM=";
+      x86_64-linux = "sha256-hWALcrduSO92nmPyPcL1T/6u4y4g5n6Wc/IabfB1V9o=";
+      x86_64-darwin = "sha256-PZQNhbTn0Oz1zqrgHfzX7BqUluQIHj7ocXDacgt+CLc=";
+      aarch64-darwin = "sha256-n+dqtC8rOpYNOoq5nk4259p7m741tKy1LWdUzCqfKL4=";
     }
     ."${stdenvNoCC.system}" or (throw "unsupported system ${stdenvNoCC.hostPlatform.system}");
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "bleep";
-  version = "0.0.11";
+  version = "0.0.12";
 
   src = fetchzip {
     url = "https://github.com/oyvindberg/bleep/releases/download/v${finalAttrs.version}/bleep-${platform}.tar.gz";

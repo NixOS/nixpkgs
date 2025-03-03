@@ -22,17 +22,21 @@
 }:
 buildPythonPackage rec {
   pname = "stable-baselines3";
-  version = "2.4.0";
+  version = "2.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "DLR-RM";
     repo = "stable-baselines3";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-OFmjAkUS0wrns5CkWjqR7zTjKLVPI/NrpVIKJhLAwYM=";
+    tag = "v${version}";
+    hash = "sha256-4KOF/3/PxHHSo95zaqtPy5+h53VcUsMhSx85tGvXV2o=";
   };
 
   build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    "gymnasium"
+  ];
 
   dependencies = [
     cloudpickle

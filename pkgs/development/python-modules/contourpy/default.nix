@@ -2,12 +2,14 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  python,
   pythonOlder,
 
   # build
   meson,
   meson-python,
   ninja,
+  nukeReferences,
   pybind11,
 
   # propagates
@@ -21,13 +23,15 @@
   # tests
   matplotlib,
   pillow,
+  pytest-xdist,
   pytestCheckHook,
+  wurlitzer,
 }:
 
 let
   contourpy = buildPythonPackage rec {
     pname = "contourpy";
-    version = "1.3.0";
+    version = "1.3.1";
     format = "pyproject";
 
     disabled = pythonOlder "3.8";
@@ -35,13 +39,20 @@ let
     src = fetchFromGitHub {
       owner = "contourpy";
       repo = "contourpy";
-      rev = "refs/tags/v${version}";
-      hash = "sha256-QvAIV2Y8H3oPZCF5yaqy2KWfs7aMyRX6aAU5t8E9Vpo=";
+      tag = "v${version}";
+      hash = "sha256-vZO9hHPHlfZhK/icJYE6nQPCPdXAYZFe1GF5X25MUcQ=";
     };
+
+    # prevent unnecessary references to the build python when cross compiling
+    postPatch = ''
+      substituteInPlace lib/contourpy/util/_build_config.py.in \
+        --replace-fail '@python_path@' "${python.interpreter}"
+    '';
 
     nativeBuildInputs = [
       meson
       ninja
+      nukeReferences
       pybind11
     ];
 
@@ -63,6 +74,8 @@ let
       matplotlib
       pillow
       pytestCheckHook
+      pytest-xdist
+      wurlitzer
     ];
 
     passthru.tests = {
@@ -72,6 +85,11 @@ let
     };
 
     pythonImportsCheck = [ "contourpy" ];
+
+    # remove references to buildPackages.python3, which is not allowed for cross builds.
+    preFixup = ''
+      nuke-refs $out/${python.sitePackages}/contourpy/util/{_build_config.py,__pycache__/_build_config.*}
+    '';
 
     meta = with lib; {
       changelog = "https://github.com/contourpy/contourpy/releases/tag/v${version}";

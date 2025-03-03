@@ -6,13 +6,13 @@
 }:
 buildGoModule rec {
   pname = "hyprls";
-  version = "0.3.0";
+  version = "0.5.2";
 
   src = fetchFromGitHub {
     owner = "hyprland-community";
     repo = "hyprls";
     rev = "v${version}";
-    hash = "sha256-uNT3sC81pnFqDzmhL20q5YDLBSVJwv0frNGB9wzkRkg=";
+    hash = "sha256-4PtoZWESEkRaZ4HOgXLWXRPhG1+JlWuMiYZtjbbLcz4=";
   };
 
   vendorHash = "sha256-rG+oGJOABA9ee5nIpC5/U0mMsPhwvVtQvJBlQWfxi5Y=";

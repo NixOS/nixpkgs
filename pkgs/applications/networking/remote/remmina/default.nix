@@ -8,7 +8,6 @@
   wrapGAppsHook3,
   curl,
   fuse3,
-  fetchpatch2,
   desktopToDarwinBundle,
   glib,
   gtk3,
@@ -52,13 +51,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "remmina";
-  version = "1.4.36";
+  version = "1.4.39";
 
   src = fetchFromGitLab {
     owner = "Remmina";
     repo = "Remmina";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-u+ysAFi7I7nXIiAw7VCmHbqgtRoZgkPnRfy/Mnl1b2g=";
+    hash = "sha256-gsQtPa6NLQC3nMfemmZv416hyqFg8Z1GDMALhNaPAOw=";
   };
 
   nativeBuildInputs = [
@@ -109,6 +108,8 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals withWebkitGtk [ webkitgtk_4_1 ]
     ++ lib.optionals withVte [ vte ];
 
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+
   cmakeFlags =
     [
       "-DWITH_FREERDP3=ON"
@@ -124,11 +125,6 @@ stdenv.mkDerivation (finalAttrs: {
       "-DWITH_CUPS=OFF"
       "-DWITH_ICON_CACHE=OFF"
     ];
-
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin (toString [
-    "-DTARGET_OS_IPHONE=0"
-    "-DTARGET_OS_WATCH=0"
-  ]);
 
   dontWrapQtApps = true;
 

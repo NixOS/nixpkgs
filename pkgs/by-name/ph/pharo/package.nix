@@ -55,6 +55,10 @@ stdenv.mkDerivation (finalAttrs: {
     "-DBUILD_BUNDLE=OFF"
   ];
 
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-Wno-incompatible-pointer-types"
+  ];
+
   installPhase = ''
     runHook preInstall
 

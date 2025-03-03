@@ -11,28 +11,32 @@
 }:
 
 let
-  version = "0.24.5";
+  version = "0.24.6";
   src = fetchFromGitHub {
     owner = "go-vikunja";
     repo = "vikunja";
     rev = "v${version}";
-    hash = "sha256-P5H+NfjE8wTmPD1VOI72hPi2DlDb4pCyq0nphK1VGK0=";
+    hash = "sha256-yUUZ6gPI2Bte36HzfUE6z8B/I1NlwWDSJA2pwkuzd34=";
   };
 
   frontend = stdenv.mkDerivation (finalAttrs: {
     pname = "vikunja-frontend";
     inherit version src;
 
+    patches = [
+      ./nodejs-22.12-tailwindcss-update.patch
+    ];
     sourceRoot = "${finalAttrs.src.name}/frontend";
 
     pnpmDeps = pnpm.fetchDeps {
       inherit (finalAttrs)
         pname
         version
+        patches
         src
         sourceRoot
         ;
-      hash = "sha256-D2dOyYsdsNV1ZSQdjpy6rfoix7yBACEHj/2XyHb7HWE=";
+      hash = "sha256-94ZlywOZYmW/NsvE0dtEA81MeBWGUrJsBXTUauuOmZM=";
     };
 
     nativeBuildInputs = [

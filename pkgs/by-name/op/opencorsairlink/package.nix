@@ -23,6 +23,10 @@ stdenv.mkDerivation rec {
     sha256 = "1nizicl0mc9pslc6065mnrs0fnn8sh7ca8iiw7w9ix57zrhabpld";
   };
 
+  # Fix GCC 14 build.
+  # from incompatible pointer type [-Wincompatible-pointer-types]
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+
   patches = [
     # Pull upstream fix for -fno-common toolchain
     (fetchpatch {

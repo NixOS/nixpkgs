@@ -6,20 +6,20 @@
   pkg-config,
   openssl,
   darwin,
-  nix-update-script,
+  gitUpdater,
   rustc,
   fetchurl,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "nym";
-  version = "2024.13-magura-patched";
+  version = "2024.14-crunch-patched";
 
   src = fetchFromGitHub {
     owner = "nymtech";
     repo = "nym";
     tag = "nym-binaries-v${version}";
-    hash = "sha256-N9nnDtTIvKJX1wpiAEJ2X7Dv5Qc5V6CiTR/TjJAnv3s=";
+    hash = "sha256-ze0N+Hg+jVFKaoreCrZUUA3cHGtUZFtxCh5RwTqOdsc=";
   };
 
   swagger-ui = fetchurl {
@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-SBJE0IEgl7Efuu73n3HZQrFxYX+cn5UU5jrL4T5xzNw=";
   };
 
-  cargoHash = "sha256-tkP65GG1E5356lePLVrZdPqx/b9k1lgJ1LoxCgQf08k=";
+  cargoHash = "sha256-51QdzV4eYnA+pC1b7TagSF1g+n67IvZw3euJyI3ZRtM=";
   useFetchCargoVendor = true;
 
   env = {
@@ -45,7 +45,9 @@ rustPlatform.buildRustPackage rec {
 
   checkType = "debug";
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "nym-binaries-v";
+  };
 
   env = {
     VERGEN_BUILD_TIMESTAMP = "0";

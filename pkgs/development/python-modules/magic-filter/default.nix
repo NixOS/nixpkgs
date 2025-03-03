@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "aiogram";
     repo = "magic-filter";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-MSYIZ/bzngRu6mG3EGblUotSCA+6bi+l3EymFA8NRZA=";
   };
 

@@ -1,14 +1,16 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 85c733e..02fea2c 100644
+index ba1c572..0a0ccdd 100644
 --- a/QtScrcpy/QtScrcpyCore/CMakeLists.txt
 +++ b/QtScrcpy/QtScrcpyCore/CMakeLists.txt
-@@ -139,87 +139,10 @@ target_include_directories(${QSC_PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DI
+@@ -162,87 +162,8 @@ target_include_directories(${QSC_PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DI
  target_include_directories(${QSC_PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/device/recorder)
  target_include_directories(${QSC_PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/devicemanage)
  
 -#
 -# plantform deps
 -#
++find_package(PkgConfig REQUIRED)
++pkg_check_modules(FFMPEG REQUIRED libavcodec libavformat libavutil libswscale)
  
 -# windows
 -if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
@@ -39,14 +41,14 @@ index 85c733e..02fea2c 100644
 -        COMMAND ${CMAKE_COMMAND} -E copy_if_different "${THIRD_PARTY_PATH}/scrcpy-server" "${QSC_DEPLOY_PATH}"
 -    )
 -endif()
- 
+-
 -# MacOS
 -if(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
 -    # ffmpeg
 -    # include
 -    target_include_directories(${QSC_PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/third_party/ffmpeg/include)
 -    # link
--    set(FFMPEG_LIB_PATH "${CMAKE_CURRENT_SOURCE_DIR}/src/third_party/ffmpeg/lib")
+-    set(FFMPEG_LIB_PATH "${CMAKE_CURRENT_SOURCE_DIR}/src/third_party/ffmpeg/lib/${QSC_CPU_ARCH}")
 -    target_link_directories(${QSC_PROJECT_NAME} PUBLIC ${FFMPEG_LIB_PATH})
 -    target_link_libraries(${QSC_PROJECT_NAME} PRIVATE
 -        avformat.58
@@ -55,22 +57,20 @@ index 85c733e..02fea2c 100644
 -        swscale.5
 -    )
 -
--    # copy bundle file
+-    # copy bundle file    
 -    add_custom_command(TARGET ${QSC_PROJECT_NAME} POST_BUILD
 -        # dylib,scrcpy-server,adb copy to Contents/MacOS
--        COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_CURRENT_SOURCE_DIR}/src/third_party/ffmpeg/lib/libavcodec.58.dylib" "${QSC_DEPLOY_PATH}/MacOS"
--        COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_CURRENT_SOURCE_DIR}/src/third_party/ffmpeg/lib/libavformat.58.dylib" "${QSC_DEPLOY_PATH}/MacOS"
--        COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_CURRENT_SOURCE_DIR}/src/third_party/ffmpeg/lib/libavutil.56.dylib" "${QSC_DEPLOY_PATH}/MacOS"
--        COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_CURRENT_SOURCE_DIR}/src/third_party/ffmpeg/lib/libswscale.5.dylib" "${QSC_DEPLOY_PATH}/MacOS"
--        COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_CURRENT_SOURCE_DIR}/src/third_party/ffmpeg/lib/libswresample.3.dylib" "${QSC_DEPLOY_PATH}/MacOS"
+-        COMMAND ${CMAKE_COMMAND} -E copy_if_different "${FFMPEG_LIB_PATH}/libavcodec.58.dylib" "${QSC_DEPLOY_PATH}/MacOS"
+-        COMMAND ${CMAKE_COMMAND} -E copy_if_different "${FFMPEG_LIB_PATH}/libavformat.58.dylib" "${QSC_DEPLOY_PATH}/MacOS"
+-        COMMAND ${CMAKE_COMMAND} -E copy_if_different "${FFMPEG_LIB_PATH}/libavutil.56.dylib" "${QSC_DEPLOY_PATH}/MacOS"
+-        COMMAND ${CMAKE_COMMAND} -E copy_if_different "${FFMPEG_LIB_PATH}/libswscale.5.dylib" "${QSC_DEPLOY_PATH}/MacOS"
+-        COMMAND ${CMAKE_COMMAND} -E copy_if_different "${FFMPEG_LIB_PATH}/libswresample.3.dylib" "${QSC_DEPLOY_PATH}/MacOS"
 -
 -        COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_CURRENT_SOURCE_DIR}/src/third_party/scrcpy-server" "${QSC_DEPLOY_PATH}/MacOS"
 -        COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_CURRENT_SOURCE_DIR}/src/third_party/adb/mac/adb" "${QSC_DEPLOY_PATH}/MacOS"
 -    )
 -endif()
-+find_package(PkgConfig REQUIRED)
-+pkg_check_modules(FFMPEG REQUIRED libavcodec libavformat libavutil libswscale)
- 
+-
 -# Linux
 -if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
 -    # include

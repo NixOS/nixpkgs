@@ -1,7 +1,10 @@
-{ gnustep, lib, fetchFromGitHub, fetchpatch, libxml2, openssl
-, openldap, mariadb, libmysqlclient, postgresql }:
+{ lib, clangStdenv, fetchFromGitHub, fetchpatch, libxml2, openssl
+, openldap, mariadb, libmysqlclient, libpq
+, gnustep-make
+, gnustep-base
+}:
 
-gnustep.stdenv.mkDerivation rec {
+clangStdenv.mkDerivation rec {
   pname = "sope";
   version = "5.11.2";
 
@@ -12,11 +15,10 @@ gnustep.stdenv.mkDerivation rec {
     hash = "sha256-6vec2ZgpK5jcKr3c2SLn6fLAun56MDjupWtR6dMdjag=";
   };
 
-  nativeBuildInputs = [ gnustep.make ];
-  buildInputs = [ gnustep.base libxml2 openssl ]
+  buildInputs = [ gnustep-base libxml2 openssl ]
     ++ lib.optional (openldap != null) openldap
     ++ lib.optionals (mariadb != null) [ libmysqlclient mariadb ]
-    ++ lib.optional (postgresql != null) postgresql;
+    ++ lib.optional (libpq != null) libpq;
 
   # Configure directories where files are installed to. Everything is automatically
   # put into $out (thanks GNUstep) apart from the makefiles location which is where
@@ -24,7 +26,7 @@ gnustep.stdenv.mkDerivation rec {
   # installed to in the install phase. We move them over after the installation.
   preConfigure = ''
     mkdir -p /build/Makefiles
-    ln -s ${gnustep.make}/share/GNUstep/Makefiles/* /build/Makefiles
+    ln -s ${gnustep-make}/share/GNUstep/Makefiles/* /build/Makefiles
     cat <<EOF > /build/GNUstep.conf
     GNUSTEP_MAKEFILES=/build/Makefiles
     EOF
@@ -33,7 +35,7 @@ gnustep.stdenv.mkDerivation rec {
   configureFlags = [ "--prefix=" "--disable-debug" "--enable-xml" "--with-ssl=ssl" ]
     ++ lib.optional (openldap != null) "--enable-openldap"
     ++ lib.optional (mariadb != null) "--enable-mysql"
-    ++ lib.optional (postgresql != null) "--enable-postgresql";
+    ++ lib.optional (libpq != null) "--enable-postgresql";
 
   env = {
     GNUSTEP_CONFIG_FILE = "/build/GNUstep.conf";

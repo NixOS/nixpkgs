@@ -14,15 +14,24 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "dioxus-cli";
-  version = "0.6.0";
+  version = "0.6.3";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-0Kg2/+S8EuMYZQaK4Ao+mbS7K48VhVWjPL+LnoVJMSw=";
+    hash = "sha256-wuIJq+UN1q5qYW4TXivq93C9kZiPHwBW5Ty2Vpik2oY=";
   };
 
-  cargoHash = "sha256-RMo6q/GSAV1bCMWtR+wu9xGKCgz/Ie6t/8oirBly/LQ=";
-  buildFeatures = [ "optimizations" ];
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-L9r/nJj0Rz41mg952dOgKxbDS5u4zGEjSA3EhUHfGIk=";
+  cargoPatches = [
+    # TODO: Remove once https://github.com/DioxusLabs/dioxus/issues/3659 is fixed upstream.
+    ./fix-wasm-opt-target-dir.patch
+  ];
+
+  buildFeatures = [
+    "no-downloads"
+    "optimizations"
+  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -33,11 +42,18 @@ rustPlatform.buildRustPackage rec {
 
   OPENSSL_NO_VENDOR = 1;
 
+  # wasm-opt-sys build.rs tries to verify C++17 support, but the check appears to be faulty.
+  postPatch = ''
+    substituteInPlace $cargoDepsCopy/wasm-opt-sys-*/build.rs \
+      --replace-fail 'check_cxx17_support()?;' '// check_cxx17_support()?;'
+  '';
+
   nativeCheckInputs = [ rustfmt ];
 
   checkFlags = [
     # requires network access
     "--skip=serve::proxy::test"
+    "--skip=wasm_bindgen::test"
   ];
 
   passthru = {

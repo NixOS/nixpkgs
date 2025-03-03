@@ -4,29 +4,32 @@
   stdenv,
   rustPlatform,
   pkg-config,
+  geoclue2-with-demo-agent,
   libinput,
   udev,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cosmic-settings-daemon";
-  version = "1.0.0-alpha.4";
+  version = "1.0.0-alpha.6";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-settings-daemon";
     rev = "epoch-${version}";
-    hash = "sha256-wwrbZJ/FA6qjeo9M/gIlzVyygiLT3R5OTLhTwr/QSSw=";
+    hash = "sha256-DtwW6RxHnNh87Xu0NCULfUsHNzYU9tHtFKE9HO3rvME=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-zAVBkH6ADs8uXqHD1gHQJl1e5l+g6NdnhEJa5fSvHDE=";
+  cargoHash = "sha256-lGzQBL9IXbPsaKeVHp34xkm5FnTxWvfw4wg3El4LZdA=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     libinput
     udev
   ];
+
+  env.GEOCLUE_AGENT = "${lib.getLib geoclue2-with-demo-agent}/libexec/geoclue-2.0/demos/agent";
 
   makeFlags = [
     "prefix=$(out)"

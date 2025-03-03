@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "DegateCommunity";
     repo = "Degate";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-INoA3Z6ya03ZMn6E+nOCkXZLoxoo2WgPDw9v5miI09A=";
   };
 

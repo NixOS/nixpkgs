@@ -32,13 +32,13 @@ in
 
 rustPlatform.buildRustPackage rec {
   pname = "dwm-status";
-  version = "1.8.1";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "Gerschtli";
     repo = pname;
     rev = version;
-    sha256 = "sha256-GkTPEmsnHFLUvbasAOXOQjFKs1Y9aaG87uyPvnQaT8Y=";
+    sha256 = "sha256-OFwI4evwbXLO4ufjrh5SZia79bwbAKVoSm/IPCDku68=";
   };
 
   nativeBuildInputs = [
@@ -52,7 +52,8 @@ rustPlatform.buildRustPackage rec {
     xorg.libX11
   ];
 
-  cargoHash = "sha256-eRfXUnyzOfVSEiwjLCaNbETUPXVU2Ed2VUNM9FjS5YE=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-G31p8iVRUODD4hUssXaOqEOUTW+C+GZMy/L/tgumDtA=";
 
   postInstall = lib.optionalString (bins != [ ]) ''
     wrapProgram $out/bin/dwm-status --prefix "PATH" : "${lib.makeBinPath bins}"

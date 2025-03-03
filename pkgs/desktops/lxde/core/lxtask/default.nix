@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
-    homepage = "http://lxde.sourceforge.net/";
+    homepage = "https://lxde.sourceforge.net/";
     description = "Lightweight and desktop independent task manager";
     mainProgram = "lxtask";
     longDescription = ''

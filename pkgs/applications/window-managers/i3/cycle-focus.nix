@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage {
     hash = "sha256-caZKvxOqoYgPs+Zjltj8K0/ospjkLnA4kh0rsTjeU3Y=";
   };
 
-  cargoHash = "sha256-9glaxThm/ovgvUWCyrycS/Oe5t8iN5P38fF5vO5awQE=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-6d3a9iaXKakbs7g/649nO39bh4Ka8jcBI/yJImTqoZs=";
 
   meta = with lib; {
     description = "Simple tool to cyclically switch between the windows on the active workspace";

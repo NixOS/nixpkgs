@@ -14,7 +14,7 @@
   makeWrapper,
   coreutils,
   scalingFactor ? 2, # this is to resize the fixed-size zod_launcher window
-  substituteAll,
+  replaceVars,
 }:
 let
   pname = "zod-engine";
@@ -94,9 +94,8 @@ let
     # 2,3,4 look acceptable on my 4k monitor and 1 is unreadable.
     # also the ./ in the run command is removed to have easier time starting the game
     patches = [
-      (substituteAll {
+      (replaceVars ./0002-add-scaling-factor-to-source.patch {
         inherit scalingFactor;
-        src = ./0002-add-scaling-factor-to-source.patch;
       })
     ];
     postPatch = ''
@@ -131,7 +130,7 @@ symlinkJoin {
   ];
   meta = with lib; {
     description = "Multiplayer remake of ZED";
-    homepage = "http://zod.sourceforge.net/";
+    homepage = "https://zod.sourceforge.net/";
     maintainers = with maintainers; [ zeri ];
     license = licenses.gpl3Plus; # Says the website
     platforms = platforms.linux;

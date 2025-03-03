@@ -146,7 +146,6 @@ stdenv.mkDerivation rec {
     ];
     mainProgram = "cbqn";
     maintainers = with lib.maintainers; [
-      AndersonTorres
       detegr
       shnarazk
       sternenseemann

@@ -14,7 +14,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "RDFLib";
     repo = pname;
-    rev = "refs/tags/${version}";
+    tag = version;
     sha256 = "sha256-AtqkxnpEL+580S/iKCaRcsQO6LLYhkJxyNx6fi3atbE=";
   };
 
@@ -28,10 +28,7 @@ python3.pkgs.buildPythonApplication rec {
     requests
   ];
 
-  postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace "rdflib==6.0.0" "rdflib"
-  '';
+  pythonRelaxDeps = [ "rdflib" ];
 
   # Path issues with the tests
   doCheck = false;

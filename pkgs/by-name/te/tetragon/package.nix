@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "cilium";
     repo = "tetragon";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-KOR5MMRnhrlcMPqRjzjSJXvitiZQ8/tlxEnBiQG2x/Q=";
   };
 

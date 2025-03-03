@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = "openrisk";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-8DGwNoucLpdazf9r4PZrN4DEOMpTr5U7tal2Rab92pA=";
   };
 

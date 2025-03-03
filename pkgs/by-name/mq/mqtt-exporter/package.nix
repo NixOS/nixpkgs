@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "mqtt-exporter";
-  version = "1.5.0";
+  version = "1.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kpetremann";
     repo = "mqtt-exporter";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-3gUAiujfBXJpVailx8cMmSJS7l69XpE4UGK/aebcQqY=";
+    tag = "v${version}";
+    hash = "sha256-XTgnD3H48KKclPhfmBPiWQPaJkfiBxjq2YQusOPLFJQ=";
   };
 
   pythonRelaxDeps = [ "prometheus-client" ];
@@ -21,7 +21,7 @@ python3.pkgs.buildPythonApplication rec {
   build-system = with python3.pkgs; [ setuptools ];
 
   dependencies = with python3.pkgs; [
-    paho-mqtt_2
+    paho-mqtt
     prometheus-client
   ];
 

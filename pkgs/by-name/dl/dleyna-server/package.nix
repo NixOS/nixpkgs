@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    # Fix build with meson 1.2. We use the gentoo patch intead of the
+    # Fix build with meson 1.2. We use the gentoo patch instead of the
     # usptream one because the latter only applies on the libsoup_3 based
     # merged dLeyna project.
     # https://gitlab.gnome.org/World/dLeyna/-/merge_requests/6

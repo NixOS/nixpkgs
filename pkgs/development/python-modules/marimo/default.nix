@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  pythonOlder,
 
   # build-system
   hatchling,
@@ -15,14 +16,16 @@
   narwhals,
   packaging,
   psutil,
+  pycrdt,
   pygments,
   pymdown-extensions,
+  pyyaml,
   ruff,
   starlette,
   tomlkit,
+  typing-extensions,
   uvicorn,
   websockets,
-  pyyaml,
 
   # tests
   versionCheckHook,
@@ -30,18 +33,21 @@
 
 buildPythonPackage rec {
   pname = "marimo";
-  version = "0.9.27";
+  version = "0.11.8";
   pyproject = true;
 
   # The github archive does not include the static assets
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-vs1miLjM/xRrnFYpHte65CfDt4ZRoCKjFMClWukIWZY=";
+    hash = "sha256-/Qhj+olq9SKks7gkHGRlHLrnlXO8rbAZUolwEaLUWe8=";
   };
 
   build-system = [ hatchling ];
 
-  pythonRelaxDeps = [ "websockets" ];
+  pythonRelaxDeps = [
+    "pycrdt"
+    "websockets"
+  ];
 
   dependencies = [
     click
@@ -52,15 +58,16 @@ buildPythonPackage rec {
     narwhals
     packaging
     psutil
+    pycrdt
     pygments
     pymdown-extensions
+    pyyaml
     ruff
     starlette
     tomlkit
     uvicorn
     websockets
-    pyyaml
-  ];
+  ] ++ lib.optionals (pythonOlder "3.11") [ typing-extensions ];
 
   pythonImportsCheck = [ "marimo" ];
 

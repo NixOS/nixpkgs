@@ -8,16 +8,13 @@
   SDL2,
   bzip2,
   cmake,
-  fluidsynth,
   game-music-emu,
   gtk3,
   imagemagick,
   libGL,
   libjpeg,
-  libsndfile,
   libvpx,
   libwebp,
-  mpg123,
   ninja,
   openal,
   pkg-config,
@@ -28,45 +25,42 @@
 
 stdenv.mkDerivation rec {
   pname = "gzdoom";
-  version = "4.13.2";
+  version = "4.14.1";
 
   src = fetchFromGitHub {
     owner = "ZDoom";
     repo = "gzdoom";
     rev = "g${version}";
     fetchSubmodules = true;
-    hash = "sha256-3nkdpJ3XO58YHtjVTwxdSdCL6CnMcih6mTnI7FXLm34=";
+    hash = "sha256-Hrqi2xpyMGcTJ2rI59EpcEtoJ+gCGmwEy+F396M3f/4=";
   };
 
-  outputs = [
-    "out"
-    "doc"
-  ];
+  outputs = [ "out" ] ++ lib.optionals stdenv.hostPlatform.isLinux [ "doc" ];
 
   nativeBuildInputs = [
     cmake
-    copyDesktopItems
     imagemagick
     makeWrapper
     ninja
     pkg-config
-  ];
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ copyDesktopItems ];
 
   buildInputs = [
     SDL2
+    zlib
     bzip2
-    fluidsynth
-    game-music-emu
     gtk3
+
+    # Graphics
     libGL
     libjpeg
-    libsndfile
     libvpx
     libwebp
-    mpg123
-    openal
     vulkan-loader
-    zlib
+
+    # Sound (ZMusic contain MIDI libs)
+    game-music-emu
+    openal
     zmusic
   ];
 
@@ -78,12 +72,14 @@ stdenv.mkDerivation rec {
       --replace-fail "<unknown version>" "${src.rev}"
   '';
 
+  # Apple dropped GL support
+  # Shader's loading will throw an error while linking
   cmakeFlags = [
     "-DDYN_GTK=OFF"
     "-DDYN_OPENAL=OFF"
-  ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "-DHAVE_GLES2=OFF" ];
 
-  desktopItems = [
+  desktopItems = lib.optionals stdenv.hostPlatform.isLinux [
     (makeDesktopItem {
       name = "gzdoom";
       exec = "gzdoom";
@@ -94,7 +90,12 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  postInstall = ''
+  installPhase = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p "$out/Applications"
+    mv gzdoom.app "$out/Applications/"
+  '';
+
+  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     mv $out/bin/gzdoom $out/share/games/doom/gzdoom
     makeWrapper $out/share/games/doom/gzdoom $out/bin/gzdoom \
       --set LD_LIBRARY_PATH ${lib.makeLibraryPath [ vulkan-loader ]}
@@ -115,11 +116,12 @@ stdenv.mkDerivation rec {
       ZDoom, adding an OpenGL renderer and powerful scripting capabilities.
     '';
     license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.linux;
+    platforms = with lib.platforms; linux ++ darwin;
     maintainers = with lib.maintainers; [
       azahi
       lassulus
       Gliczy
+      r4v3n6101
     ];
   };
 }

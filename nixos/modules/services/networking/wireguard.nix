@@ -15,6 +15,15 @@ let
 
     options = {
 
+      type = mkOption {
+        example = "amneziawg";
+        default = "wireguard";
+        type = types.enum ["wireguard" "amneziawg"];
+        description = ''
+          The type of the interface. Currently only "wireguard" and "amneziawg" are supported.
+        '';
+      };
+
       ips = mkOption {
         example = [ "192.168.2.1/24" ];
         default = [];
@@ -127,7 +136,8 @@ let
         default = null;
         type = with types; nullOr str;
         example = "container";
-        description = ''The pre-existing network namespace in which the
+        description = ''
+        The pre-existing network namespace in which the
         WireGuard interface is created, and which retains the socket even if the
         interface is moved via {option}`interfaceNamespace`. When
         `null`, the interface is created in the init namespace.
@@ -139,7 +149,8 @@ let
         default = null;
         type = with types; nullOr str;
         example = "init";
-        description = ''The pre-existing network namespace the WireGuard
+        description = ''
+        The pre-existing network namespace the WireGuard
         interface is moved to. The special value `init` means
         the init namespace. When `null`, the interface is not
         moved.
@@ -204,6 +215,22 @@ let
           :::
         '';
       };
+
+      extraOptions = mkOption {
+        type = with types; attrsOf (oneOf [ str int ]);
+        default = { };
+        example = {
+          Jc = 5;
+          Jmin = 10;
+          Jmax = 42;
+          S1 = 60;
+          S2 = 90;
+          H4 = 12345;
+        };
+        description = ''
+          Extra options to append to the interface section. Can be used to define AmneziaWG-specific options.
+        '';
+      };
     };
 
   };
@@ -262,7 +289,8 @@ let
       allowedIPs = mkOption {
         example = [ "10.192.122.3/32" "10.192.124.1/24" ];
         type = with types; listOf str;
-        description = ''List of IP (v4 or v6) addresses with CIDR masks from
+        description = ''
+        List of IP (v4 or v6) addresses with CIDR masks from
         which this peer is allowed to send incoming traffic and to which
         outgoing traffic for this peer is directed. The catch-all 0.0.0.0/0 may
         be specified for matching all IPv4 addresses, and ::/0 may be specified
@@ -328,7 +356,8 @@ let
         default = null;
         type = with types; nullOr int;
         example = 25;
-        description = ''This is optional and is by default off, because most
+        description = ''
+        This is optional and is by default off, because most
         users will not need it. It represents, in seconds, between 1 and 65535
         inclusive, how often to send an authenticated empty packet to the peer,
         for the purpose of keeping a stateful firewall or NAT mapping valid
@@ -342,6 +371,16 @@ let
 
   };
 
+  wgBins = {
+    wireguard = "wg";
+    amneziawg = "awg";
+  };
+
+  wgPackages = {
+    wireguard = pkgs.wireguard-tools;
+    amneziawg = pkgs.amneziawg-tools;
+  };
+
   generateKeyServiceUnit = name: values:
     assert values.generatePrivateKeyFile;
     nameValuePair "wireguard-${name}-key"
@@ -350,7 +389,7 @@ let
         wantedBy = [ "wireguard-${name}.service" ];
         requiredBy = [ "wireguard-${name}.service" ];
         before = [ "wireguard-${name}.service" ];
-        path = with pkgs; [ wireguard-tools ];
+        path = [ wgPackages.${values.type} ];
 
         serviceConfig = {
           Type = "oneshot";
@@ -366,7 +405,7 @@ let
 
           if [ ! -f "${values.privateKeyFile}" ]; then
             # Write private key file with atomically-correct permissions.
-            (set -e; umask 077; wg genkey > "${values.privateKeyFile}")
+            (set -e; umask 077; ${wgBins.${values.type}} genkey > "${values.privateKeyFile}")
           fi
         '';
       };
@@ -391,7 +430,7 @@ let
       src = interfaceCfg.socketNamespace;
       dst = interfaceCfg.interfaceNamespace;
       ip = nsWrap "ip" src dst;
-      wg = nsWrap "wg" src dst;
+      wg = nsWrap wgBins.${interfaceCfg.type} src dst;
       dynamicEndpointRefreshSeconds = dynamicRefreshSeconds interfaceCfg peer;
       dynamicRefreshEnabled = dynamicEndpointRefreshSeconds != 0;
       # We generate a different name (a `-refresh` suffix) when `dynamicEndpointRefreshSeconds`
@@ -408,7 +447,7 @@ let
         wantedBy = [ "wireguard-${interfaceName}.service" ];
         environment.DEVICE = interfaceName;
         environment.WG_ENDPOINT_RESOLUTION_RETRIES = "infinity";
-        path = with pkgs; [ iproute2 wireguard-tools ];
+        path = with pkgs; [ iproute2 wgPackages.${interfaceCfg.type} ];
 
         serviceConfig =
           if !dynamicRefreshEnabled
@@ -497,7 +536,7 @@ let
         dst = values.interfaceNamespace;
         ipPreMove  = nsWrap "ip" src null;
         ipPostMove = nsWrap "ip" src dst;
-        wg = nsWrap "wg" src dst;
+        wg = nsWrap wgBins.${values.type} src dst;
         ns = if dst == "init" then "1" else dst;
 
     in
@@ -508,7 +547,7 @@ let
         wants = [ "network.target" ];
         before = [ "network.target" ];
         environment.DEVICE = name;
-        path = with pkgs; [ kmod iproute2 wireguard-tools ];
+        path = with pkgs; [ kmod iproute2 wgPackages.${values.type} ];
 
         serviceConfig = {
           Type = "oneshot";
@@ -516,10 +555,10 @@ let
         };
 
         script = concatStringsSep "\n" (
-          optional (!config.boot.isContainer) "modprobe wireguard || true"
+          optional (!config.boot.isContainer) "modprobe ${values.type} || true"
           ++ [
             values.preSetup
-            ''${ipPreMove} link add dev "${name}" type wireguard''
+            ''${ipPreMove} link add dev "${name}" type ${values.type}''
           ]
           ++ optional (values.interfaceNamespace != null && values.interfaceNamespace != values.socketNamespace) ''${ipPreMove} link set "${name}" netns "${ns}"''
           ++ optional (values.mtu != null) ''${ipPostMove} link set "${name}" mtu ${toString values.mtu}''
@@ -531,6 +570,7 @@ let
             [ ''${wg} set "${name}" private-key "${privKey}"'' ]
             ++ optional (values.listenPort != null) ''listen-port "${toString values.listenPort}"''
             ++ optional (values.fwMark != null) ''fwmark "${values.fwMark}"''
+            ++ mapAttrsToList (k: v: ''${toLower k} "${toString v}"'') values.extraOptions
             ))
             ''${ipPostMove} link set up dev "${name}"''
             values.postSetup
@@ -550,6 +590,9 @@ let
       ns = last nsList;
     in
       if (length nsList > 0 && ns != "init") then ''ip netns exec "${ns}" "${cmd}"'' else cmd;
+
+  usingWg = any (x: x.type == "wireguard") (attrValues cfg.interfaces);
+  usingAwg = any (x: x.type == "amneziawg") (attrValues cfg.interfaces);
 in
 
 {
@@ -624,9 +667,11 @@ in
           message = "networking.wireguard.interfaces.${interfaceName} peer «${peer.publicKey}» has both presharedKey and presharedKeyFile set, but only one can be used.";
         }) all_peers;
 
-    boot.extraModulePackages = optional (versionOlder kernel.kernel.version "5.6") kernel.wireguard;
-    boot.kernelModules = [ "wireguard" ];
-    environment.systemPackages = [ pkgs.wireguard-tools ];
+    boot.extraModulePackages =
+      optional (usingWg && (versionOlder kernel.kernel.version "5.6")) kernel.wireguard
+      ++ optional usingAwg kernel.amneziawg;
+    boot.kernelModules = optional usingWg "wireguard" ++ optional usingAwg "amneziawg";
+    environment.systemPackages = optional usingWg pkgs.wireguard-tools ++ optional usingAwg pkgs.amneziawg-tools;
 
     systemd.services = mkIf (!cfg.useNetworkd) (
       (mapAttrs' generateInterfaceUnit cfg.interfaces)

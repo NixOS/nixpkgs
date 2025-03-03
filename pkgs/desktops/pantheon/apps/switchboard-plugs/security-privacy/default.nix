@@ -9,6 +9,7 @@
   vala,
   elementary-settings-daemon,
   libgee,
+  gettext,
   granite7,
   gsettings-desktop-schemas,
   gala,
@@ -21,16 +22,17 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-security-privacy";
-  version = "8.0.0";
+  version = "8.0.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-cL0kjG7IOlMOvqZj1Yx8E3xHWATnuDm08onpz091wmo=";
+    sha256 = "sha256-k6dSiiBqqbhH7rmhpBu83LX8at/qJ4gkrg4Xc+VbkIE=";
   };
 
   nativeBuildInputs = [
+    gettext # msgfmt
     meson
     ninja
     pkg-config

@@ -2,28 +2,23 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
-  pkg-config,
-  openssl,
   testers,
   zizmor,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "zizmor";
-  version = "0.9.2";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "woodruffw";
     repo = "zizmor";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-bQpjU3ztaO8Fckk51QGOnJFANXceYwiqyopOzMt6UYM=";
+    tag = "v${version}";
+    hash = "sha256-cOfFfij/w0W4FcJg6KnIQxbSgC+cp0iyZqNPSbKheoQ=";
   };
 
-  cargoHash = "sha256-IzTXLwh14v4vjNgl37sFe1hgoA+0Izc9QWelaaArgU4=";
-
-  buildInputs = [ openssl ];
-
-  nativeBuildInputs = [ pkg-config ];
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-XXV3aOIbzIZ8B7UlkhSeiHoa9H9GJiF8ZMzLS0e0R0w=";
 
   passthru.tests.version = testers.testVersion {
     package = zizmor;

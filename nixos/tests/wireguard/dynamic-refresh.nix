@@ -84,7 +84,10 @@ import ../make-test-python.nix (
       ''
         start_all()
 
+        server.systemctl("start network-online.target")
         server.wait_for_unit("network-online.target")
+
+        client.systemctl("start network-online.target")
         client.wait_for_unit("network-online.target")
 
         client.succeed("ping -n -w 1 -c 1 10.23.42.1")

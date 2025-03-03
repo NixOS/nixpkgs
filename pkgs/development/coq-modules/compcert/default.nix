@@ -42,7 +42,7 @@ let
       lib.switch coq.version [
         {
           case = range "8.14" "8.20";
-          out = "3.14";
+          out = "3.15";
         }
         {
           case = isEq "8.13";
@@ -67,6 +67,7 @@ let
       "3.13".sha256 = "sha256-ZedxgEPr1ZgKIcyhQ6zD1l2xr6RDNNUYq/4ZyR6ojM4=";
       "3.13.1".sha256 = "sha256-ldXbuzVB0Z+UVTd5S4yGSg6oRYiKbXLMmUZcQsJLcns=";
       "3.14".sha256 = "sha256-QXJMpp/BaPiK5okHeo2rcmXENToXKjB51UqljMHTDgw=";
+      "3.15".sha256 = "sha256-QFTueGZd0hAWUj+c5GZL/AyNpfN4FuJiIzCICmwRXJ8=";
     };
 
     strictDeps = true;
@@ -276,6 +277,24 @@ let
               (fetchpatch {
                 url = "https://github.com/AbsInt/CompCert/commit/20a5b48758bf8ac18e4c420df67017b371efc237.patch";
                 hash = "sha256-TJ87CvLiAv1absGnPsTXsD/HQwKgS82loUTcosulyso=";
+              })
+              # Support for Coq 8.20.1
+              (fetchpatch {
+                url = "https://github.com/AbsInt/CompCert/commit/e6c9a2d068ae67923bbc7c6b7035b6afde6ece3c.patch";
+                hash = "sha256-PtiEkG/aLRotIiqrmc6SQncQSi7IGSC5QX3e52xkOUQ=";
+              })
+            ];
+          }
+          {
+            cases = [
+              (isEq "8.20")
+              (isEq "3.15")
+            ];
+            out = [
+              # Support for Coq 8.20.1
+              (fetchpatch {
+                url = "https://github.com/AbsInt/CompCert/commit/e524b0a19ae5140f64047b1cba6ebbe1d16d5bbf.patch";
+                hash = "sha256-24kt0hA75ooyXymH+kNS5VlsuXMHbkqTw4m+BzNUwrw=";
               })
             ];
           }

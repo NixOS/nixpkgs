@@ -31,13 +31,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "dillo";
-  version = "3.1.1";
+  version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "dillo-browser";
     repo = "dillo";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-bGIOYONMtIN4IhSobOeSLiRDR13mo4W/DBX4kQ2S+hg=";
+    hash = "sha256-9nJq20iW8/UI3GgXWje+46WDSu3/omd1PN/uTlYCOac=";
   };
 
   nativeBuildInputs = [
@@ -86,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
       - Helps authors to comply with web standards by using the bug meter.
     '';
     mainProgram = "dillo";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
   };

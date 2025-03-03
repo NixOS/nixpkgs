@@ -174,7 +174,7 @@ To prevent this, set `validate = false` or omit the `[upstream.options]`.
 
 ### API {#module-services-crab-hole-api}
 The API allows a user to fetch statistic and information about the crab-hole instance.
-Basic information is availablee for everyone, while more detailed information is secured by a key, which will be set with the `admin_key` option.
+Basic information is available for everyone, while more detailed information is secured by a key, which will be set with the `admin_key` option.
 
 ```nix
 {
@@ -190,7 +190,7 @@ Basic information is availablee for everyone, while more detailed information is
 
 ```
 
-The documentation can be enabled seperately for the instance with `show_doc`.
+The documentation can be enabled separately for the instance with `show_doc`.
 This will then create an additional webserver, which hosts the API documentation.
 An additional resource is in work in the [crab-hole repository](https://github.com/LuckyTurtleDev/crab-hole).
 

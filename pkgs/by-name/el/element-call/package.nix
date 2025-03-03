@@ -37,9 +37,17 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     yarnConfigHook
     yarnBuildHook
-    yarnInstallHook
     nodejs
   ];
+
+  installPhase = ''
+    runHook preInstall
+
+    mkdir $out
+    cp -r dist/* $out
+
+    runHook postInstall
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/element-hq/element-call";

@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "Macmod";
     repo = "goblob";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-FnSlfLi40VwDyQY77PvhV7EbhUDs1uGx0VsgP8HgKTw=";
   };
 

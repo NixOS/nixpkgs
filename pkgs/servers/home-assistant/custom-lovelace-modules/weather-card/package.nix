@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "weather-card";
-  version = "1.5.0";
+  version = "2.0.0b0";
 
   src = fetchFromGitHub {
     owner = "bramkragten";
     repo = "weather-card";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-pod5cayaHP+4vgdBgBRMQ7szkyz9HLaKVJWQX36XdTY=";
+    tag = "v${version}";
+    hash = "sha256-139OhAHxulXovyywBuz552lmDqoV7aLHKKNb81dOKDo=";
   };
   dontBuild = true;
   installPhase = ''

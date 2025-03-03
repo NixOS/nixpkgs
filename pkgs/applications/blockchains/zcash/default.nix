@@ -1,13 +1,13 @@
 {
   autoreconfHook,
-  boost180,
+  boost,
   cargo,
   coreutils,
   curl,
   cxx-rs,
   db62,
   fetchFromGitHub,
-  git,
+  gitMinimal,
   hexdump,
   lib,
   libevent,
@@ -42,13 +42,14 @@ rustPlatform.buildRustPackage.override { inherit stdenv; } rec {
       --replace "linker = \"aarch64-linux-gnu-gcc\"" ""
   '';
 
-  cargoHash = "sha256-Mz8mr/RDcOfwJvXhY19rZmWHP8mUeEf9GYD+3JAPNOw=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-VBqasLpxqI4kr73Mr7OVuwb2OIhUwnY9CTyZZOyEElU=";
 
   nativeBuildInputs = [
     autoreconfHook
     cargo
     cxx-rs
-    git
+    gitMinimal
     hexdump
     makeWrapper
     pkg-config
@@ -56,7 +57,7 @@ rustPlatform.buildRustPackage.override { inherit stdenv; } rec {
 
   buildInputs =
     [
-      boost180
+      boost
       db62
       libevent
       libsodium
@@ -88,7 +89,7 @@ rustPlatform.buildRustPackage.override { inherit stdenv; } rec {
 
   configureFlags = [
     "--disable-tests"
-    "--with-boost-libdir=${lib.getLib boost180}/lib"
+    "--with-boost-libdir=${lib.getLib boost}/lib"
     "RUST_TARGET=${stdenv.hostPlatform.rust.rustcTargetSpec}"
   ];
 

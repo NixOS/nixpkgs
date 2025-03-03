@@ -2,8 +2,8 @@ import ../make-test-python.nix (
   { pkgs, ... }:
   {
     name = "matrix-synapse-workers";
-    meta = with pkgs.lib; {
-      maintainers = teams.matrix.members;
+    meta = {
+      inherit (pkgs.matrix-synapse.meta) maintainers;
     };
 
     nodes = {

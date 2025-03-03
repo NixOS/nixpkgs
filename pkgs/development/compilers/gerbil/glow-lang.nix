@@ -52,5 +52,6 @@ rec {
     license     = licenses.asl20;
     platforms   = platforms.unix;
     maintainers = with maintainers; [ fare ];
+    broken      = true; # Broken for all platforms since 2023-10-13
   };
 }

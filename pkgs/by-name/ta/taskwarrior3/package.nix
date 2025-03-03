@@ -19,21 +19,24 @@
 
   # nativeCheckInputs
   python3,
+
+  # nativeInstallCheckInputs
+  versionCheckHook,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "taskwarrior";
-  version = "3.2.0-unstable-2024-12-18";
+  version = "3.3.0";
   src = fetchFromGitHub {
     owner = "GothenburgBitFactory";
     repo = "taskwarrior";
-    rev = "dcbe916286792e6f5d2d3af3baab79918ebc5f71";
-    hash = "sha256-jma1BYZugMH+JiX5Xu6VI8ZFn4FBr1NxbNrOHX0bFk0=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-aKDwRCJ1yopRdsPxnHhgOpSho1i8/dcAurI+XhpSbn4=";
     fetchSubmodules = true;
   };
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     name = "${finalAttrs.pname}-${finalAttrs.version}-cargo-deps";
     inherit (finalAttrs) src;
-    hash = "sha256-yaIjtwZuYqyiXHxq4NDuZC9aE+mYpovXygxWENf6v1o=";
+    hash = "sha256-UbJodQBCrmXbw5+ahusBnEcoCYGFHRA6bg5hf9/prmA=";
   };
 
   postPatch = ''
@@ -90,6 +93,14 @@ stdenv.mkDerivation (finalAttrs: {
     python3
   ];
 
+  doInstallCheck = true;
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+
+  versionCheckProgram = "${placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";
+
   postInstall = ''
     # ZSH is installed automatically from some reason, only bash and fish need
     # manual installation
@@ -108,7 +119,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.tests.nixos = nixosTests.taskchampion-sync-server;
 
   meta = {
-    changelog = "https://github.com/GothenburgBitFactory/taskwarrior/blob/${finalAttrs.src.rev}/ChangeLog";
+    changelog = "https://github.com/GothenburgBitFactory/taskwarrior/releases/tag/v${finalAttrs.src.rev}";
     description = "Highly flexible command-line tool to manage TODO lists";
     homepage = "https://taskwarrior.org";
     license = lib.licenses.mit;

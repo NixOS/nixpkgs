@@ -30,7 +30,7 @@ mkDerivation rec {
     "out"
     "dev"
   ];
-  version = "15.54.3";
+  version = "15.61.3";
 
   src =
     let
@@ -39,11 +39,11 @@ mkDerivation rec {
     {
       x86_64-linux = fetchurl {
         url = "${base_url}/teamviewer_${version}_amd64.deb";
-        hash = "sha256-41zVX2svomcRKu2ow1A/EeKojBIpABO4o2EZxappzgo=";
+        hash = "sha256-o7Em+QRW4TebRTJS5xjcx1M6KPh1ziB1j0fvlO+RYa4=";
       };
       aarch64-linux = fetchurl {
         url = "${base_url}/teamviewer_${version}_arm64.deb";
-        hash = "sha256-wuQYWeYgXW54/5dpiGzJxZ9JZDlUgFgCKq8Z4xV2HlI=";
+        hash = "sha256-LDByF4u9xZV1MYApBrnlNrUPndbDrQt6DKX+r8Kmq6k=";
       };
     }
     .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
@@ -152,6 +152,8 @@ mkDerivation rec {
   dontWrapQtApps = true;
   preferLocalBuild = true;
 
+  passthru.updateScript = ./update-teamviewer.sh;
+
   meta = with lib; {
     homepage = "https://www.teamviewer.com";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
@@ -162,6 +164,7 @@ mkDerivation rec {
       jagajaga
       jraygauthier
       gador
+      c4thebomb
     ];
   };
 }

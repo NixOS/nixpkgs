@@ -2,8 +2,8 @@
   lib,
   stdenv,
   fetchurl,
+  gettext,
   pkg-config,
-  intltool,
   libxfce4util,
   xfce4-panel,
   libxfce4ui,
@@ -17,16 +17,16 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "xfce4-eyes-plugin";
-  version = "4.6.0";
+  version = "4.6.2";
 
   src = fetchurl {
     url = "mirror://xfce/src/${category}/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-rQ/wXYi6OTt8iSL4Iz7dM/wKTosAC2HeH486EMWuUyQ=";
+    sha256 = "sha256-ArSsY3YEoLkmJhbLlhPg/meX+2sPH8KImnfh4K1KAaU=";
   };
 
   nativeBuildInputs = [
+    gettext
     pkg-config
-    intltool
   ];
 
   buildInputs = [

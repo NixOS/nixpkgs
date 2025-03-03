@@ -23,14 +23,35 @@ merging is handled.
 
 `types.path`
 
-:   A filesystem path is anything that starts with a slash when
-    coerced to a string. Even if derivations can be considered as
-    paths, the more specific `types.package` should be preferred.
+:   A filesystem path that starts with a slash. Even if derivations can be
+     considered as paths, the more specific `types.package` should be preferred.
 
 `types.pathInStore`
 
 :   A path that is contained in the Nix store. This can be a top-level store
     path like `pkgs.hello` or a descendant like `"${pkgs.hello}/bin/hello"`.
+
+`types.pathWith` { *`inStore`* ? `null`, *`absolute`* ? `null` }
+
+:   A filesystem path. Either a string or something that can be coerced
+    to a string.
+
+    **Parameters**
+
+    `inStore` (`Boolean` or `null`, default `null`)
+    : Whether the path must be in the store (`true`), must not be in the store
+      (`false`), or it doesn't matter (`null`)
+
+    `absolute` (`Boolean` or `null`, default `null`)
+    : Whether the path must be absolute (`true`), must not be absolute
+      (`false`), or it doesn't matter (`null`)
+
+    **Behavior**
+    - `pathWith { inStore = true; }` is equivalent to `pathInStore`
+    - `pathWith { absolute = true; }` is equivalent to `path`
+    - `pathWith { inStore = false; absolute = true; }` requires an absolute
+      path that is not in the store. Useful for password files that shouldn't be
+      leaked into the store.
 
 `types.package`
 

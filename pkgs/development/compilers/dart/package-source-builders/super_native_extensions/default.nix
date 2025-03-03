@@ -19,16 +19,14 @@ let
 
     sourceRoot = "${src.name}/rust";
 
-    cargoLock =
+    useFetchCargoVendor = true;
+
+    cargoHash =
       rec {
-        _0_8_22 = {
-          lockFile = ./Cargo-0.8.22.lock;
-          outputHashes = {
-            "mime_guess-2.0.4" = "sha256-KSw0YUTGqNEWY9pMvQplUGajJgoP2BRwVX6qZPpB2rI=";
-          };
-        };
+        _0_9_0-dev_6 = "sha256-1yJIbBxScmkCwy/e+/z2cYA8qQBfT0yoIBmOSPVd4h4=";
         _0_9_0-dev_5 = _0_8_22;
         _0_9_0-dev_3 = _0_8_22;
+        _0_8_22 = "sha256-gYYoC3bGJrYY1uUHfqMv6pp4SK+P9fRoBsLtf34rsCg=";
         _0_8_24 = _0_8_22;
         _0_8_21 = _0_8_22;
         _0_8_20 = _0_8_22;
@@ -38,8 +36,7 @@ let
       }
       .${"_" + (lib.replaceStrings [ "." ] [ "_" ] version)} or (throw ''
         Unsupported version of pub 'super_native_extensions': '${version}'
-        Please add ${src}/rust/Cargo.lock
-        to this path, and add corresponding entry here. If the lock
+        Please add cargoHash to here. If the cargoHash
         is the same with existing versions, add an alias here.
       '');
 

@@ -21,7 +21,7 @@
   withMysql ? false,
   libmysqlclient,
   withPostgresql ? false,
-  postgresql,
+  libpq,
   withPcap ? true,
   libpcap,
   withRedis ? false,
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "FreeRADIUS";
     repo = "freeradius-server";
-    rev = "refs/tags/release_${lib.replaceStrings [ "." ] [ "_" ] version}";
+    tag = "release_${lib.replaceStrings [ "." ] [ "_" ] version}";
     hash = "sha256-1n447BpTqmkg5tyXe9yPzjfDoh7wMLZhwouUEzkwxKM=";
   };
 
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional withLdap openldap
     ++ lib.optional withMemcached libmemcached
     ++ lib.optional withMysql libmysqlclient
-    ++ lib.optional withPostgresql postgresql
+    ++ lib.optional withPostgresql libpq
     ++ lib.optional withPcap libpcap
     ++ lib.optional withRedis hiredis
     ++ lib.optional withRest curl

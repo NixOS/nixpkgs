@@ -20,19 +20,21 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "binaryen";
-  version = "119";
+  version = "120_b";
 
   src = fetchFromGitHub {
     owner = "WebAssembly";
     repo = "binaryen";
     rev = "version_${version}";
-    hash = "sha256-JYXtN3CW4qm/nnjGRvv3GxQ0x9O9wHtNYQLqHIYTTOA=";
+    hash = "sha256-gdqjsAQp4NTHROAf6i44GjkbtNyLPQZ153k3veK7eYs=";
   };
 
   nativeBuildInputs = [
     cmake
     python3
   ];
+
+  strictDeps = true;
 
   preConfigure = ''
     if [ $doCheck -eq 1 ]; then
@@ -45,10 +47,12 @@ stdenv.mkDerivation rec {
   '';
 
   nativeCheckInputs = [
-    gtest
     lit
     nodejs
     filecheck
+  ];
+  checkInputs = [
+    gtest
   ];
   checkPhase = ''
     LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$PWD/lib python3 ../check.py $tests

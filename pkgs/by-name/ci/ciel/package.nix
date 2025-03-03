@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "AOSC-Dev";
     repo = "ciel-rs";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-vV1qZLVVVc6KFZrpF4blKmbfQjf/Ltn+IhmM5Zqb2zU=";
   };
 

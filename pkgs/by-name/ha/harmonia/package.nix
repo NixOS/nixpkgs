@@ -16,11 +16,12 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "harmonia";
-    rev = "refs/tags/harmonia-v${version}";
+    tag = "harmonia-v${version}";
     hash = "sha256-tqkTzUdwnTfVuCrcFag7YKgGkiR9srR45e4v0XMXVCY=";
   };
 
-  cargoHash = "sha256-iZbIuYSC/RLmYEhBu46EEzN+WG2RoUJbZegedXkh+Rg=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-3l+mRucDFc49Y96e2m5uixKvRSkrRaBWgJhPMIxuZvo=";
 
   doCheck = false;
 

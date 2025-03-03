@@ -17,8 +17,11 @@ stdenv.mkDerivation rec {
   postPatch = ''
     sed -i -e s,/usr/local,$out, -e s,/etc,$out/etc,g Makefile
     sed -i -e s,/usr/local,$out, mbuffer/Makefile
-    makeFlags="$makeFlags PREFIX=$out"
   '';
+
+  makeFlags = [
+    "PREFIX=${placeholder "out"}"
+  ];
 
   preInstall = ''
     mkdir -p $out/man/man1 $out/bin $out/share $out/etc

@@ -1,20 +1,23 @@
 {
   fetchFromGitHub,
-  buildGo122Module,
+  buildGoModule,
   lib,
   versionCheckHook,
 }:
-buildGo122Module rec {
+
+buildGoModule rec {
   pname = "baidupcs-go";
-  version = "3.9.5-unstable-2024-06-23";
+  version = "3.9.7";
+
   src = fetchFromGitHub {
     owner = "qjfoidnh";
     repo = "BaiduPCS-Go";
-    rev = "5612fc337b9556ed330274987a2f876961639cff";
-    hash = "sha256-4mCJ5gVHjjvR6HNo47NTJvQEu7cdZZMfO8qQA7Kqzqo=";
+    rev = "v${version}";
+    hash = "sha256-C88q2tNNuX+tIvYKHbRE76xfPe81UHqfezyRXzrxzlc=";
   };
 
   vendorHash = "sha256-msTlXtidxLTe3xjxTOWCqx/epFT0XPdwGPantDJUGpc=";
+
   doCheck = false;
 
   ldflags = [
@@ -29,6 +32,7 @@ buildGo122Module rec {
 
   postInstall = ''
     rm -f $out/bin/AndroidNDKBuild
+    ln -s $out/bin/BaiduPCS-Go $out/bin/baidupcs-go
   '';
 
   postVersionCheck = ''

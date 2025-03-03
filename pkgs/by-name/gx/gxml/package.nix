@@ -15,7 +15,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gxml";
-  version = "0.20.3";
+  version = "0.20.4";
 
   outputs = [
     "out"
@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "GNOME";
     repo = "gxml";
     rev = finalAttrs.version;
-    hash = "sha256-GlctGxsLyQ2kPV3oBmusRiouG4PPncBTh3vgxhVaQOo=";
+    hash = "sha256-/gaWuUytBsvAsC95ee6MtTW6g3ltGbkD+JWqrAjJLDc=";
   };
 
   nativeBuildInputs = [
@@ -47,8 +47,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     # https://gitlab.gnome.org/GNOME/gxml/-/merge_requests/24
+    # https://gitlab.gnome.org/GNOME/gxml/-/merge_requests/28
     substituteInPlace gxml/gxml.pc.in \
-      --replace-fail "includedir=@prefix@/include" "includedir=${placeholder "dev"}/include"
+      --replace-fail "includedir=@prefix@/include" "includedir=${placeholder "dev"}/include" \
+      --replace-fail ">=2" ">= 2" \
+      --replace-fail ">=0" ">= 0"
   '';
 
   doCheck = true;

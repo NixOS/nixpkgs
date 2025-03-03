@@ -8,15 +8,16 @@
   commandLineArgs ? "",
 }:
 let
-  version = "1.15.2-2";
+  sources = import ./sources.nix;
+  version = sources.version;
   srcs = {
     x86_64-linux = fetchurl {
       url = "https://github.com/msojocs/bilibili-linux/releases/download/v${version}/io.github.msojocs.bilibili_${version}_amd64.deb";
-      hash = "sha256-juAhvdeLzjHDs59eS+wwUn3OmnDecC17Vclp0Q0LtJw=";
+      hash = sources.x86_64-hash;
     };
     aarch64-linux = fetchurl {
       url = "https://github.com/msojocs/bilibili-linux/releases/download/v${version}/io.github.msojocs.bilibili_${version}_arm64.deb";
-      hash = "sha256-8o0MX0Ih07KQ9wE+nonSZaupSOuUVyuoIbdHYmR29mc=";
+      hash = sources.arm64-hash;
     };
   };
   src =
@@ -45,6 +46,8 @@ stdenv.mkDerivation {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "Electron-based bilibili desktop client";

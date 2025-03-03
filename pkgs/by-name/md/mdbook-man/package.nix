@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-ssAk60jnwYzAjseL26/3FaDv1vBAylgdE+vLhWZ8It4=";
   };
 
-  cargoHash = "sha256-cR86eFhP9Swh+Ff8FNbAfWpWMkliOAyPwDQ6lRvU+nk=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-+CD7+pYAoKRmkMZPpEru6lug9sBakrL0rLXs78e3tqk=";
 
   meta = with lib; {
     description = "Generate manual pages from mdBooks";

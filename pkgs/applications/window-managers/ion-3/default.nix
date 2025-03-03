@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Tiling tabbed window manager designed with keyboard users in mind";
-    homepage = "https://modeemi.fi/~tuomov/ion";
+    homepage = "https://tuomov.iki.fi/software/ion/";
     platforms = with platforms; linux;
     license = licenses.lgpl21;
     maintainers = [ ];

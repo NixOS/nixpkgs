@@ -8,16 +8,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "nickel";
-  version = "1.9.0";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "tweag";
     repo = "nickel";
-    rev = "refs/tags/${version}";
-    hash = "sha256-chIpZqs1tyXk4YQBlF4K/Ofrn1CrijbYant9+SSppGU=";
+    tag = version;
+    hash = "sha256-CnEGC4SnLRfAPl3WTv83xertH2ulG5onseZpq3vxfwc=";
   };
 
-  cargoHash = "sha256-MaMzwvvWP+vmdBVCefXI6dehuTyPcPW2b6KdarxjBjA=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-CyO+W4332fJmeF2CL+9CCdPuion8MrxzkPotLA7my3U=";
 
   cargoBuildFlags = [
     "-p nickel-lang-cli"
@@ -49,6 +50,13 @@ rustPlatform.buildRustPackage rec {
   '';
 
   passthru.updateScript = nix-update-script { };
+
+  checkFlags = [
+    # https://github.com/tweag/nickel/blob/1.10.0/git/tests/main.rs#L60
+    # fails because src is not a git repo
+    # `cmd.current_dir(repo.path()).output()` errors with `NotFound`
+    "--skip=fetch_targets"
+  ];
 
   meta = with lib; {
     homepage = "https://nickel-lang.org/";

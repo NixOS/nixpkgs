@@ -27,7 +27,7 @@ let
 
     # "tcc -ar" doesn't support creating empty archives
     ./tcc-empty-ar.patch
-    # meslibc doesn't have seperate libm
+    # meslibc doesn't have separate libm
     ./dont-link-lm.patch
     # meslibc's vprintf doesn't support %ll
     ./vprintf.patch

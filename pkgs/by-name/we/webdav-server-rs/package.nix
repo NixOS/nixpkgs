@@ -21,7 +21,8 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-nTygUEjAUXD0mRTmjt8/UPVfZA4rP6oop1s/fI5mYeg=";
   };
 
-  cargoHash = "sha256-TDDfGQig4i/DpsilTPqMQ1oT0mXK5DKlZmwsPPLrzFc=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-0Ee0L3gKNP1O3SFkImBzQrT1fgnWFrrW8owxEM1dUYQ=";
 
   buildInputs = [ libtirpc ] ++ lib.optional enablePAM pam;
   nativeBuildInputs = [ rpcsvc-proto ];

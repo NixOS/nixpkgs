@@ -13,14 +13,20 @@
 
 stdenv.mkDerivation rec {
   pname = "qucsator-rf";
-  version = "1.0.3";
+  version = "1.0.4";
 
   src = fetchFromGitHub {
     owner = "ra3xdh";
     repo = "qucsator_rf";
     rev = version;
-    hash = "sha256-IvB4CTvK6x4wwUXMoXIqBku1Hh9em6ITTpwFllYsTEg=";
+    hash = "sha256-01GQmakwLzaNnPZvtYYtt5WJmYF3EytlAA0Xy1/AAsU=";
   };
+
+  # Upstream forces NO_DEFAULT_PATH on APPLE
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail '"/usr/local/opt/bison/bin/"' '"${bison}/bin"'
+  '';
 
   nativeBuildInputs = [
     cmake
@@ -43,6 +49,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     mainProgram = "qucsator_rf";
     maintainers = with lib.maintainers; [ thomaslepoix ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
   };
 }

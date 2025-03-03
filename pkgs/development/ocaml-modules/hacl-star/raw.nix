@@ -19,10 +19,6 @@ stdenv.mkDerivation rec {
     stripRoot = false;
   };
 
-  patches = [
-    ./aligned-alloc.patch
-  ];
-
   # strictoverflow is disabled because it breaks aarch64-darwin
   hardeningDisable = [ "strictoverflow" ];
 

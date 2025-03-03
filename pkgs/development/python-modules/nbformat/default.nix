@@ -1,6 +1,7 @@
 {
   lib,
   buildPythonPackage,
+  pythonAtLeast,
   pythonOlder,
   fetchPypi,
   hatchling,
@@ -43,6 +44,14 @@ buildPythonPackage rec {
     pep440
     pytestCheckHook
     testpath
+  ];
+
+  disabledTestPaths = lib.optionals (pythonAtLeast "3.13") [
+    # ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7ffff54954e0>
+    "tests/test_validator.py"
+    "tests/v4/test_convert.py"
+    "tests/v4/test_json.py"
+    "tests/v4/test_validate.py"
   ];
 
   # Some of the tests use localhost networking.

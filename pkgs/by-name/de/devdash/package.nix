@@ -13,7 +13,7 @@ buildGo122Module rec {
   src = fetchFromGitHub {
     owner = "Phantas0s";
     repo = "devdash";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-RUPpgMVl9Cm8uhztdfKnuQ6KdMn9m9PewlT59NnTSiY=";
   };
 

@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "hdate";
-  version = "0.10.11";
+  version = "0.11.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -19,8 +19,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "py-libhdate";
     repo = "py-libhdate";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-HmdXTvtNiIE2XPFhqs7WpcceEQU7F7RsLFp6/+63yDw=";
+    tag = "v${version}";
+    hash = "sha256-Il20aKOPQi4J4hWQEMEQOnLdBSHCOu214YE6pxeYbfI=";
   };
 
   pythonRelaxDeps = [

@@ -24,12 +24,12 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://m3scluster.github.io/mesos-dns/";
     changelog = "https://github.com/m3scluster/mesos-dns/releases/tag/v${version}";
     description = "DNS-based service discovery for Mesos";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ aaronjheng ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ aaronjheng ];
     mainProgram = "mesos-dns";
   };
 }

@@ -14,7 +14,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-gUKsJwbpMPSO+KPqyJRodrRLjUpTh/y6C2xhrgvJFKk=";
   };
 
-  cargoHash = "sha256-4KrFhchoIB2N89m7HrL0xj2Z+u/6/6Onxa2wIAX18Io=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-TikWh0U56x3HKca5Dj68Z59mOgedv+K5r+y7/CcpWa8=";
 
   meta = with lib; {
     description = "boring data tool. A CLI tool to query parquet, json and avro files";

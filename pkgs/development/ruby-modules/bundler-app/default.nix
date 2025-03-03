@@ -14,7 +14,7 @@
 # Then use rubyTool in the default.nix:
 
 # rubyTool { pname = "gemifiedTool"; gemdir = ./.; exes = ["gemified-tool"]; }
-# The 'exes' parameter ensures that a copy of e.g. rake doesn't polute the system.
+# The 'exes' parameter ensures that a copy of e.g. rake doesn't pollute the system.
 {
   # use the name of the name in question; its version will be picked up from the gemset
   pname,
@@ -49,7 +49,6 @@ let
 
   cmdArgs =
     removeAttrs args [
-      "pname"
       "postBuild"
       "gemConfig"
       "passthru"
@@ -58,6 +57,7 @@ let
     ]
     // {
       inherit preferLocalBuild allowSubstitutes; # pass the defaults
+      inherit (basicEnv) version;
 
       nativeBuildInputs = nativeBuildInputs ++ lib.optionals (scripts != [ ]) [ makeWrapper ];
 

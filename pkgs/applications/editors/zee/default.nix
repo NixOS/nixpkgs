@@ -33,7 +33,8 @@ rustPlatform.buildRustPackage rec {
   # see https://github.com/zee-editor/zee#syntax-highlighting
   ZEE_DISABLE_GRAMMAR_BUILD = 1;
 
-  cargoHash = "sha256-fBBjtjM7AnyAL6EOFstL4h6yS+UoLgxck6Mc0tJcXaI=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-auwbpavF/WZQIE/htYXJ4di6xoRtXkBBkP/Bj4lFp6U=";
 
   meta = with lib; {
     description = "Modern text editor for the terminal written in Rust";

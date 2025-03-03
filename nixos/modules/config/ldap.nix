@@ -135,7 +135,7 @@ in
           type = types.lines;
           description = ''
             Extra configuration options that will be added verbatim at
-            the end of the nslcd configuration file (`nslcd.conf(5)`).
+            the end of the nslcd configuration file ({manpage}`nslcd.conf(5)`).
           '';
         };
 
@@ -219,7 +219,7 @@ in
         type = types.lines;
         description = ''
           Extra configuration options that will be added verbatim at
-          the end of the ldap configuration file (`ldap.conf(5)`).
+          the end of the ldap configuration file ({manpage}`ldap.conf(5)`).
           If {option}`users.ldap.daemon` is enabled, this
           configuration will not be used. In that case, use
           {option}`users.ldap.daemon.extraConfig` instead.

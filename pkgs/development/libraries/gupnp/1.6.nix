@@ -17,7 +17,7 @@
 
 stdenv.mkDerivation rec {
   pname = "gupnp";
-  version = "1.6.7";
+  version = "1.6.8";
 
   outputs = [
     "out"
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gupnp/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    hash = "sha256-SmHYpainJw5gzpz+lmHMT6Mm8EWmVxjS64/2iv2++AU=";
+    hash = "sha256-cKADzr1oV3KT+z5q9J/5AiA7+HaLL8XWUd3B8PoeEek=";
   };
 
   depsBuildBuild = [
@@ -55,12 +55,6 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = true;
-
-  mesonCheckFlags = [
-    # The service-proxy test takes 28s on ofborg, which is too close to the time limit.
-    "--timeout-multiplier"
-    "2"
-  ];
 
   postFixup = ''
     # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.

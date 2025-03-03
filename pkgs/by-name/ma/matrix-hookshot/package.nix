@@ -11,7 +11,7 @@
   rustc,
   napi-rs-cli,
   pkg-config,
-  nodejs,
+  nodejs_22,
   openssl,
 }:
 
@@ -30,13 +30,14 @@ mkYarnPackage rec {
   };
 
   packageJSON = ./package.json;
+  nodejs = nodejs_22;
 
   offlineCache = fetchYarnDeps {
     yarnLock = src + "/yarn.lock";
     sha256 = data.yarnHash;
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
     name = "${pname}-${version}";
     hash = data.cargoHash;
@@ -70,7 +71,7 @@ mkYarnPackage rec {
   '';
 
   postInstall = ''
-    makeWrapper '${nodejs}/bin/node' "$out/bin/matrix-hookshot" --add-flags \
+    makeWrapper '${nodejs_22}/bin/node' "$out/bin/matrix-hookshot" --add-flags \
         "$out/libexec/matrix-hookshot/deps/matrix-hookshot/lib/App/BridgeApp.js"
   '';
 

@@ -11,7 +11,7 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "markdownlint-cli2";
-  version = "0.14.0";
+  version = "0.17.2";
 
   # upstream is not interested in including package-lock.json in the source
   # https://github.com/DavidAnson/markdownlint-cli2/issues/198#issuecomment-1690529976
@@ -19,7 +19,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   # so use the tarball from the archlinux mirror
   src = fetchurl {
     url = "https://us.mirrors.cicku.me/archlinux/extra/os/x86_64/markdownlint-cli2-${finalAttrs.version}-1-any.pkg.tar.zst";
-    hash = "sha256-yzKIH1RxFXlUoj/83lVEBb3Y4asuh/frPxmX5EV98f0=";
+    hash = "sha256-TuiLFP/XItJh5VQWdwCvXRQCVzmqst4Sxna0eLobEQ4=";
   };
 
   nativeBuildInputs = [
@@ -35,7 +35,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     mkdir -p $out/bin
     cp -r lib share $out
     makeWrapper "${lib.getExe nodejs}" "$out/bin/markdownlint-cli2" \
-      --add-flags "$out/lib/node_modules/markdownlint-cli2/markdownlint-cli2.js"
+      --add-flags "$out/lib/node_modules/markdownlint-cli2/markdownlint-cli2-bin.mjs"
 
     runHook postInstall
   '';

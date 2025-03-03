@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   removeReferencesTo,
   gfortran,
   perl,
@@ -47,6 +48,17 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-vUGD/LxDR3wlR5m0Kd8abldsBC50otL4s31Tey/5gVc=";
   };
 
+  patches = [
+    # This patch can be removed with the next openmpi update (>5.0.6)
+    # See https://github.com/open-mpi/ompi/issues/12784 and https://github.com/open-mpi/ompi/pull/13003
+    # Fixes issue where the shared memory backing file cannot be created because directory trees are never created
+    (fetchpatch {
+      name = "fix-singletons-session-dir";
+      url = "https://github.com/open-mpi/ompi/commit/4d4f7212decd0d0ca719688b15dc9b3ee7553a52.patch";
+      hash = "sha256-Mb8qXtAUhAQ90v0SdL24BoTASsKRq2Gu8nYqoeSc9DI=";
+    })
+  ];
+
   postPatch = ''
     patchShebangs ./
 
@@ -85,6 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
       zlib
       libevent
       hwloc
+      prrte
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       libnl
@@ -92,7 +105,6 @@ stdenv.mkDerivation (finalAttrs: {
       pmix
       ucx
       ucc
-      prrte
     ]
     ++ lib.optionals cudaSupport [ cudaPackages.cuda_cudart ]
     ++ lib.optionals (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isFreeBSD) [ rdma-core ]
@@ -119,7 +131,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-pmix=${lib.getDev pmix}"
     "--with-pmix-libdir=${lib.getLib pmix}/lib"
     # Puts a "default OMPI_PRTERUN" value to mpirun / mpiexec executables
-    (lib.withFeatureAs stdenv.hostPlatform.isLinux "prrte" (lib.getBin prrte))
+    (lib.withFeatureAs true "prrte" (lib.getBin prrte))
     (lib.withFeature enableSGE "sge")
     (lib.enableFeature enablePrefix "mpirun-prefix-by-default")
     # TODO: add UCX support, which is recommended to use with cuda for the most robust OpenMPI build

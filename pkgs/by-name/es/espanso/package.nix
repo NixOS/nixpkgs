@@ -11,6 +11,7 @@
   libXtst,
   libnotify,
   libxkbcommon,
+  libpng,
   openssl,
   xclip,
   xdotool,
@@ -19,8 +20,6 @@
   wxGTK32,
   makeWrapper,
   stdenv,
-  apple-sdk_11,
-  darwinMinVersionHook,
   waylandSupport ? false,
   x11Support ? stdenv.hostPlatform.isLinux,
   testers,
@@ -30,7 +29,7 @@
 assert stdenv.hostPlatform.isLinux -> x11Support != waylandSupport;
 assert stdenv.hostPlatform.isDarwin -> !x11Support;
 assert stdenv.hostPlatform.isDarwin -> !waylandSupport;
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "espanso";
   version = "2.2-unstable-2024-05-14";
 
@@ -73,6 +72,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs =
     [
+      libpng
       wxGTK32
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
@@ -80,10 +80,6 @@ rustPlatform.buildRustPackage rec {
       dbus
       libnotify
       libxkbcommon
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_11
-      (darwinMinVersionHook "10.13")
     ]
     ++ lib.optionals waylandSupport [
       wl-clipboard
@@ -105,6 +101,9 @@ rustPlatform.buildRustPackage rec {
       --replace-fail "<string>espanso</string>" "<string>${placeholder "out"}/Applications/Espanso.app/Contents/MacOS/espanso</string>"
     substituteInPlace espanso/src/path/macos.rs  espanso/src/path/linux.rs \
       --replace-fail '"/usr/local/bin/espanso"' '"${placeholder "out"}/bin/espanso"'
+
+    substituteInPlace espanso-modulo/build.rs \
+      --replace-fail '"--with-libpng=builtin"' '"--with-libpng=sys"'
   '';
 
   # Some tests require networking

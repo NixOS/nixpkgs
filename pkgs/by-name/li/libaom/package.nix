@@ -23,11 +23,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "libaom";
-  version = "3.10.0";
+  version = "3.11.0";
 
   src = fetchzip {
     url = "https://aomedia.googlesource.com/aom/+archive/v${version}.tar.gz";
-    hash = "sha256-7xtIT8zalh1XJfVKWeC/+jAkhOuFHw6Q0+c2YMtDark=";
+    hash = "sha256-SqXDeIApj7XEK2cChenN9pun5eNm4Q+Smpp76xHwMMU=";
     stripRoot = false;
   };
 
@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
       "-DCONFIG_TUNE_VMAF=1"
     ]
     ++ lib.optionals (isCross && !stdenv.hostPlatform.isx86) [
-      "-DCMAKE_ASM_COMPILER=${stdenv.cc.targetPrefix}as"
+      "-DCMAKE_ASM_COMPILER=${lib.getBin stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc"
     ]
     ++ lib.optionals stdenv.hostPlatform.isAarch32 [
       # armv7l-hf-multiplatform does not support NEON

@@ -7,11 +7,11 @@
   openssl,
   protobuf_21,
   catch2,
-  boost181,
+  boost,
   icu,
 }:
 let
-  boost = boost181.override { enableStatic = true; };
+  boost' = boost.override { enableStatic = true; };
   protobuf = protobuf_21.override { enableShared = false; };
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
     protobuf
     catch2
-    boost
+    boost'
     icu
   ];
 

@@ -1,33 +1,27 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  fetchpatch,
-  isPy3k,
+  fetchFromGitHub,
+  setuptools,
   pytestCheckHook,
   sphinx,
   stdenv,
+  unstableGitUpdater,
 }:
 
 buildPythonPackage rec {
   pname = "curio";
-  version = "1.6";
-  format = "setuptools";
-  disabled = !isPy3k;
+  version = "1.6-unstable-2024-04-11";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-VipYbbICFrp9K+gmPeuesHnlYEj5uJBtEdX0WqgcUkc=";
+  src = fetchFromGitHub {
+    owner = "dabeaz";
+    repo = "curio";
+    rev = "148454621f9bd8dd843f591e87715415431f6979";
+    hash = "sha256-WLu7XF5wiVzBRQH1KRdAbhluTvGE7VvnRQUS0c3SUDk=";
   };
 
-  patches = [
-    (fetchpatch {
-      # Add support for Python 3.12
-      # https://github.com/dabeaz/curio/pull/363
-      url = "https://github.com/dabeaz/curio/commit/a5590bb04de3f1f201fd1fd0ce9cfe5825db80ac.patch";
-      hash = "sha256-dwatxLOPAWLQSyNqJvkx6Cbl327tX9OpZXM5aaDX58I=";
-    })
-  ];
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -52,6 +46,9 @@ buildPythonPackage rec {
     ];
 
   pythonImportsCheck = [ "curio" ];
+
+  # curio does not package new releaseas any more
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = with lib; {
     description = "Library for performing concurrent I/O with coroutines in Python";

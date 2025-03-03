@@ -20,7 +20,7 @@ in
 {
   beamLib = callPackage ../development/beam-modules/lib.nix { };
 
-  latestVersion = "erlang_25";
+  latestVersion = "erlang_27";
 
   # Each
   interpreters = {
@@ -28,6 +28,16 @@ in
     erlang = self.interpreters.${self.latestVersion};
 
     # Standard Erlang versions, using the generic builder.
+    #
+    # Three versions are supported according to https://github.com/erlang/otp/security
+
+    erlang_28 = self.beamLib.callErlang ../development/interpreters/erlang/28.nix {
+      wxGTK = wxGTK32;
+      parallelBuild = true;
+      # ex_doc failing to build with erlang 28
+      inherit (beam_nodocs.packages.erlang_27) ex_doc;
+      inherit ex_docSupport wxSupport systemdSupport;
+    };
 
     erlang_27 = self.beamLib.callErlang ../development/interpreters/erlang/27.nix {
       wxGTK = wxGTK32;
@@ -51,27 +61,16 @@ in
       inherit wxSupport systemdSupport;
     };
 
-    erlang_24 = self.beamLib.callErlang ../development/interpreters/erlang/24.nix {
-      wxGTK = wxGTK32;
-      # Can be enabled since the bug has been fixed in https://github.com/erlang/otp/pull/2508
-      parallelBuild = true;
-      autoconf = buildPackages.autoconf269;
-      inherit wxSupport systemdSupport;
-    };
-
     # Other Beam languages. These are built with `beam.interpreters.erlang`. To
     # access for example elixir built with different version of Erlang, use
-    # `beam.packages.erlang_24.elixir`.
+    # `beam.packages.erlang_27.elixir`.
     inherit (self.packages.erlang)
       elixir
+      elixir_1_18
       elixir_1_17
       elixir_1_16
       elixir_1_15
       elixir_1_14
-      elixir_1_13
-      elixir_1_12
-      elixir_1_11
-      elixir_1_10
       elixir-ls
       lfe
       lfe_2_1
@@ -85,10 +84,10 @@ in
   # appropriate Erlang/OTP version.
   packages = {
     erlang = self.packages.${self.latestVersion};
+    erlang_28 = self.packagesWith self.interpreters.erlang_28;
     erlang_27 = self.packagesWith self.interpreters.erlang_27;
     erlang_26 = self.packagesWith self.interpreters.erlang_26;
     erlang_25 = self.packagesWith self.interpreters.erlang_25;
-    erlang_24 = self.packagesWith self.interpreters.erlang_24;
   };
 
   __attrsFailEvaluation = true;

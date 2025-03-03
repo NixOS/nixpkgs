@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "0.82";
+  version = "0.83";
   pname = "putty";
 
   src = fetchurl {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
       "https://the.earth.li/~sgtatham/putty/${version}/${pname}-${version}.tar.gz"
       "ftp://ftp.wayne.edu/putty/putty-website-mirror/${version}/${pname}-${version}.tar.gz"
     ];
-    hash = "sha256-GVYhY4u2szeEtOls3ClvMymRtSRJaNxiNSHDcDCXtdk=";
+    hash = "sha256-cYd3wT1j0N/5H+AxYrwqBbTfyLCCdjTNYLUc79/2McY=";
   };
 
   nativeBuildInputs = [ cmake perl pkg-config copyDesktopItems ];

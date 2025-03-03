@@ -18,13 +18,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "memento";
-  version = "1.4.1";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "ripose-jp";
     repo = "Memento";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-3WOtf7cgYxAMlNPSBmTzaQF1HN9mU61giLp2woBAidY=";
+    hash = "sha256-8kgMEHDLb2EtwmIOs6WQO3a1QSypwN1FX/f2n7uRBFs=";
   };
 
   nativeBuildInputs = [

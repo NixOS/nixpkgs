@@ -7,16 +7,14 @@
   vala,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tiramisu";
-  # FIXME: once a newer release in upstream is available
-  version = "2.0-unstable-2023-03-29";
+  version = "2.0.20240610";
 
   src = fetchFromGitHub {
     owner = "Sweets";
     repo = "tiramisu";
-    # FIXME: use the current HEAD commit as upstream has no releases since 2021
-    rev = "5dddd83abd695bfa15640047a97a08ff0a8d9f9b";
+    tag = finalAttrs.version;
     hash = "sha256-owYk/YFwJbqO6/dbGKPE8SnmmH4KvH+o6uWptqQtpfI=";
   };
 
@@ -29,7 +27,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     description = "Desktop notifications, the UNIX way";
     longDescription = ''
       tiramisu is a notification daemon based on dunst that outputs notifications
@@ -37,12 +35,12 @@ stdenv.mkDerivation rec {
       prefer.
     '';
     homepage = "https://github.com/Sweets/tiramisu";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       wishfort36
       moni
     ];
     mainProgram = "tiramisu";
   };
-}
+})

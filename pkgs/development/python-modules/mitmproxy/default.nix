@@ -60,6 +60,8 @@ buildPythonPackage rec {
   pythonRelaxDeps = [
     "passlib"
     "protobuf"
+    "pyparsing"
+    "ruamel.yaml"
     "urwid"
   ];
 

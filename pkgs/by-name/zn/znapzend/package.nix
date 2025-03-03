@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Sometimes there's a branch with the same name as the tag,
     # confusing fetchFromGitHub. Working around this by prefixing
     # with `refs/tags/`.
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-UvaYzzV+5mZAAwSSMzq4fjCu/mzjeSyQdwQRTZGNktM=";
   };
 

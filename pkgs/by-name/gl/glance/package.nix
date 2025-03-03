@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "glance";
-  version = "0.6.3";
+  version = "0.7.3";
 
   src = fetchFromGitHub {
     owner = "glanceapp";
     repo = "glance";
     rev = "v${version}";
-    hash = "sha256-yLcRdgxp4g4H6pxsv342ub3P4Hmg3+mtFALuVMh7/j0=";
+    hash = "sha256-kQ4XVO6sotsIjIhkECn6FYik3ITYOZcDKyzk3I8JvkU=";
   };
 
-  vendorHash = "sha256-BLWaYiWcLX+/DW7Zzp6/Mtw5uVxIVtfubB895hrZ+08=";
+  vendorHash = "sha256-lURRHlZoxbuW1SXxrxy2BkMndcEllGFmVCB4pXBad8Q=";
 
   excludedPackages = [ "scripts/build-and-ship" ];
 

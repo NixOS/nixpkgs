@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "LonamiWebs";
     repo = "Telethon";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-P7FP+Wqi3dqbBCFpI9aCDvK4k3mWv8076RO6MXg+jFQ=";
   };
 

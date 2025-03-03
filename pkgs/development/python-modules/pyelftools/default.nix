@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "eliben";
     repo = "pyelftools";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-kX89fMXqrEvhMAAjqKHzHmrYizKBt1uCWMOJtFNNhy4=";
   };
 

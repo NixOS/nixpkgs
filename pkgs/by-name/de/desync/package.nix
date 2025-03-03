@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "folbricht";
     repo = "desync";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-TwzD9WYi4cdDPKKV2XoqkGWJ9CzIwoxeFll8LqNWf/E=";
   };
 

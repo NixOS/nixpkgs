@@ -11,7 +11,7 @@
 
 let
   pname = "surrealdb-migrations";
-  version = "2.0.0";
+  version = "2.2.0";
 in
 rustPlatform.buildRustPackage rec {
   inherit pname version;
@@ -20,10 +20,11 @@ rustPlatform.buildRustPackage rec {
     owner = "Odonno";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-MrIawJr8EydfYFVzxODUZ7jDj0B0M1FAuX4Arktbf4Y=";
+    hash = "sha256-OiH3O74tJQFAW+ZyyspvOXUMcWkqjpd4GVU4cKn1jBg=";
   };
 
-  cargoHash = "sha256-ELYBEQrh80LdNYNZwcGVh9GE+dSfjF+RuO8fd0PabIw=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-dx5fGtKE0wfjQgTi5HBce6Afmc+0rJA24IRhrBirZbo=";
 
   buildInputs = [ ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 

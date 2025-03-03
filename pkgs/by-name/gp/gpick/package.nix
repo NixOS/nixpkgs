@@ -2,11 +2,10 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  wrapGAppsHook3,
   boost,
-  pkg-config,
-  gtk3,
   ragel,
+  pkg-config,
+  wrapGAppsHook3,
   lua,
   fetchpatch,
   lib,
@@ -28,26 +27,35 @@ stdenv.mkDerivation rec {
     ./dot-version.patch
 
     (fetchpatch {
-      url = "https://raw.githubusercontent.com/archlinux/svntogit-community/1d53a9aace4bb60300e52458bb1577d248cb87cd/trunk/buildfix.diff";
+      url = "https://patch-diff.githubusercontent.com/raw/thezbyg/gpick/pull/227.patch";
+      hash = "sha256-qYspUctvlPMEK/c2hMUxYc5EYdG//CBcN2PluTtXiFc=";
+    })
+
+    (fetchpatch {
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/gpick/-/raw/0.3-2/buildfix.diff";
       hash = "sha256-DnRU90VPyFhLYTk4GPJoiVYadJgtYgjMS4MLgmpYLP0=";
     })
   ];
+  # https://github.com/thezbyg/gpick/pull/227
+  postPatch = ''
+    sed '1i#include <boost/version.hpp>' -i source/dynv/Types.cpp
+  '';
 
   nativeBuildInputs = [
     cmake
     pkg-config
     wrapGAppsHook3
   ];
+
   buildInputs = [
     boost
-    gtk3
     ragel
     lua
   ];
 
   meta = with lib; {
     description = "Advanced color picker written in C++ using GTK+ toolkit";
-    homepage = "http://www.gpick.org/";
+    homepage = "https://www.gpick.org/";
     license = licenses.bsd3;
     maintainers = [ maintainers.vanilla ];
     platforms = platforms.linux;

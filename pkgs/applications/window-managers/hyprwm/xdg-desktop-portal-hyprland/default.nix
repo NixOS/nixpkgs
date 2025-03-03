@@ -13,7 +13,7 @@
   hyprutils,
   hyprwayland-scanner,
   libdrm,
-  mesa,
+  libgbm,
   pipewire,
   qtbase,
   qttools,
@@ -24,16 +24,17 @@
   wayland,
   wayland-protocols,
   wayland-scanner,
+  debug ? false,
 }:
 gcc14Stdenv.mkDerivation (finalAttrs: {
   pname = "xdg-desktop-portal-hyprland";
-  version = "1.3.8";
+  version = "1.3.9";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "xdg-desktop-portal-hyprland";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-V+CvM2UBJ6KjXD+B7T6vy8EYwLvLX88tZb8KP73MPSo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-sAObJHBZjJHzYR62g+BLNBNq19cqb5LTw73H8m57K0w=";
   };
 
   depsBuildBuild = [
@@ -53,7 +54,7 @@ gcc14Stdenv.mkDerivation (finalAttrs: {
     hyprlang
     hyprutils
     libdrm
-    mesa
+    libgbm
     pipewire
     qtbase
     qttools
@@ -64,6 +65,10 @@ gcc14Stdenv.mkDerivation (finalAttrs: {
     wayland-protocols
     wayland-scanner
   ];
+
+  cmakeBuildType = if debug then "Debug" else "RelWithDebInfo";
+
+  dontStrip = debug;
 
   dontWrapQtApps = true;
 
@@ -91,10 +96,7 @@ gcc14Stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/hyprwm/xdg-desktop-portal-hyprland/releases/tag/v${finalAttrs.version}";
     mainProgram = "hyprland-share-picker";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [
-      fufexan
-      khaneliman
-    ];
+    maintainers = lib.teams.hyprland.members;
     platforms = lib.platforms.linux;
   };
 })

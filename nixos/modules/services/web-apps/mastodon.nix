@@ -652,7 +652,7 @@ in {
           description = ''
             Automatically remove remote media attachments and preview cards older than the configured amount of days.
 
-            Recommended in https://docs.joinmastodon.org/admin/setup/.
+            Recommended in <https://docs.joinmastodon.org/admin/setup/>.
           '';
         };
 

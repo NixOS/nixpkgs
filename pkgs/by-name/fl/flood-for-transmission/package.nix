@@ -1,21 +1,24 @@
 # To use this package, use: `services.transmission.webHome = pkgs.flood-for-transmission;`
-{ lib
-, buildNpmPackage
-, fetchFromGitHub
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
 }:
 
 buildNpmPackage rec {
   pname = "flood-for-transmission";
-  version = "2024-05-18T08-04-58";
+  version = "2024-11-16T12-26-17";
 
   src = fetchFromGitHub {
     owner = "johman10";
     repo = "flood-for-transmission";
-    rev = version;
-    hash = "sha256-/vD53tFvCBOU9i/EfogjNjCEp6BBkR6eEKWnPhCUdJk=";
+    tag = version;
+    hash = "sha256-OED2Ypi1V+wwnJ5KFVRbJAyh/oTYs90E6uhSnSwJwJU=";
   };
 
-  npmDepsHash = "sha256-BKr4Gm3bTFnxgv4HlPclr8+c6jDVPFFbGXvpk5t8/X4=";
+  npmDepsHash = "sha256-J3gRzvSXXyoS0OoLrTSV1vBSupFqky0Jt99nyz+hy1k=";
+
+  strictDeps = true;
 
   installPhase = ''
     runHook preInstall
@@ -28,8 +31,9 @@ buildNpmPackage rec {
   meta = with lib; {
     description = "Flood clone for Transmission";
     homepage = "https://github.com/johman10/flood-for-transmission";
-    maintainers = with maintainers; [ al3xtjames ];
+    downloadPage = "https://github.com/johman10/flood-for-transmission/releases";
     license = licenses.gpl3Only;
+    maintainers = with maintainers; [ al3xtjames ];
     platforms = platforms.all;
   };
 }

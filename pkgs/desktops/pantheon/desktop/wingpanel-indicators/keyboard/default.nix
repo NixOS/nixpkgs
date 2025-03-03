@@ -6,7 +6,7 @@
   pkg-config,
   meson,
   ninja,
-  substituteAll,
+  replaceVars,
   vala,
   gtk3,
   granite,
@@ -30,8 +30,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       gkbd_keyboard_display = "${libgnomekbd}/bin/gkbd-keyboard-display";
     })
   ];

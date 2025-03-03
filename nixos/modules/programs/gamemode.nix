@@ -26,7 +26,7 @@ in
         default = { };
         description = ''
           System-wide configuration for GameMode (/etc/gamemode.ini).
-          See gamemoded(8) man page for available settings.
+          See {manpage}`gamemoded(8)` man page for available settings.
         '';
         example = lib.literalExpression ''
           {

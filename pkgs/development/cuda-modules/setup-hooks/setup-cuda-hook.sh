@@ -112,7 +112,7 @@ propagateCudaLibraries() {
     local propagatedBuildInputs=( "${!cudaHostPathsSeen[@]}" )
     for output in $(getAllOutputNames) ; do
         if [[ ! "$output" = "$cudaPropagateToOutput" ]] ; then
-            propagatedBuildInputs+=( "${!output}" )
+            appendToVar propagatedBuildInputs "${!output}"
         fi
         break
     done

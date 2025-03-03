@@ -100,19 +100,7 @@ let
     # video
     cdg = [ ];
     closedcaption = [ pango ];
-    dav1d = [
-      # Only dav1d < 1.3 is supported for now.
-      # https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs/-/merge_requests/1393
-      (dav1d.overrideAttrs rec {
-        version = "1.2.1";
-        src = fetchFromGitHub {
-          owner = "videolan";
-          repo = "dav1d";
-          rev = version;
-          hash = "sha256-RrEim3HXXjx2RUU7K3wPH3QbhNTRN9ZX/oAcyE9aV8I=";
-        };
-      })
-    ];
+    dav1d = [ dav1d ];
     ffv1 = [ ];
     gif = [ ];
     gtk4 = [ gtk4 ];
@@ -170,7 +158,7 @@ assert lib.assertMsg (invalidPlugins == [ ])
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gst-plugins-rs";
-  version = "0.12.8";
+  version = "0.13.3";
 
   outputs = [
     "out"
@@ -182,7 +170,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "gstreamer";
     repo = "gst-plugins-rs";
     rev = finalAttrs.version;
-    hash = "sha256-AGXKI/0Y2BdaSnpQAt3T/rkYlM8UpQpKm4kMAGd6Dyk=";
+    hash = "sha256-G6JdZXBNiZfbu6EBTOsJ4Id+BvPhIToZmHHi7zuapnE=";
     # TODO: temporary workaround for case-insensitivity problems with color-name crate - https://github.com/annymosse/color-name/pull/2
     postFetch = ''
       sedSearch="$(cat <<\EOF | sed -ze 's/\n/\\n/g'
@@ -204,17 +192,13 @@ stdenv.mkDerivation (finalAttrs: {
     '';
   };
 
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "cairo-rs-0.19.8" = "sha256-AdIUcxxuZVAWQ+KOBTrtsvTu4KtFiXkQPYWT9Avt7Z0=";
-      "color-name-1.1.0" = "sha256-RfMStbe2wX5qjPARHIFHlSDKjzx8DwJ+RjzyltM5K7A=";
-      "ffv1-0.0.0" = "sha256-af2VD00tMf/hkfvrtGrHTjVJqbl+VVpLaR0Ry+2niJE=";
-      "flavors-0.2.0" = "sha256-zBa0X75lXnASDBam9Kk6w7K7xuH9fP6rmjWZBUB5hxk=";
-      "gdk4-0.8.2" = "sha256-DZjHlhzrELZ8M5YUM5kSeOphjF7863DmywFgGbZL4Jo=";
-      "gstreamer-0.22.7" = "sha256-vTEDqmyqhj9e7r7N0QfG4uTNBizrU0gTUfLOJ8kU1JE=";
+  cargoDeps =
+    with finalAttrs;
+    rustPlatform.fetchCargoVendor {
+      inherit src;
+      name = "${pname}-${version}";
+      hash = "sha256-NFB9kNmCF3SnOgpSd7SSihma+Ooqwxtrym9Il4A+uQY=";
     };
-  };
 
   strictDeps = true;
 
@@ -272,12 +256,7 @@ stdenv.mkDerivation (finalAttrs: {
       export CSOUND_LIB_DIR=${lib.getLib csound}/lib
     '';
 
-  # give meson longer before timing out for tests
-  mesonCheckFlags = [
-    "--verbose"
-    "--timeout-multiplier"
-    "12"
-  ];
+  mesonCheckFlags = [ "--verbose" ];
 
   doInstallCheck =
     (lib.elem "webp" selectedPlugins) && !stdenv.hostPlatform.isStatic && stdenv.hostPlatform.isElf;

@@ -29,9 +29,15 @@ rec {
       "34"
       "35"
     ];
-    includeEmulator = true;
-    includeSystemImages = true;
-    includeNDK = true;
+    includeEmulator =
+      with pkgs.stdenv.hostPlatform;
+      system == "x86_64-linux" || system == "x86_64-darwin" || system == "aarch64-darwin";
+    includeSystemImages =
+      with pkgs.stdenv.hostPlatform;
+      system == "x86_64-linux" || system == "x86_64-darwin" || system == "aarch64-darwin";
+    includeNDK =
+      with pkgs.stdenv.hostPlatform;
+      system == "x86_64-linux" || system == "x86_64-darwin" || system == "aarch64-darwin";
   };
 
   test-suite = pkgs.callPackage ./test-suite.nix { };

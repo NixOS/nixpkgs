@@ -42,8 +42,9 @@ let
       StateDirectory = stateDirectory;
       User = "ceph";
       Group = if daemonType == "osd" then "disk" else "ceph";
-      ExecStart = ''${ceph.out}/bin/${if daemonType == "rgw" then "radosgw" else "ceph-${daemonType}"} \
-                    -f --cluster ${clusterName} --id ${daemonId}'';
+      ExecStart = ''
+        ${ceph.out}/bin/${if daemonType == "rgw" then "radosgw" else "ceph-${daemonType}"} \
+        -f --cluster ${clusterName} --id ${daemonId}'';
     } // lib.optionalAttrs (daemonType == "osd") {
       ExecStartPre = "${ceph.lib}/libexec/ceph/ceph-osd-prestart.sh --id ${daemonId} --cluster ${clusterName}";
       RestartSec = "20s";

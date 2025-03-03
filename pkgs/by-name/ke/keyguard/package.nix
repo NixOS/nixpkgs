@@ -3,11 +3,8 @@
   stdenv,
   fetchFromGitHub,
   gradle,
-  binutils,
-  fakeroot,
   jdk17,
   fontconfig,
-  autoPatchelfHook,
   libXinerama,
   libXrandr,
   file,
@@ -19,39 +16,27 @@
   makeDesktopItem,
   copyDesktopItems,
 }:
-stdenv.mkDerivation (finalAttrs: rec {
+
+stdenv.mkDerivation (finalAttrs: {
   pname = "keyguard";
-  version = "1.7.0";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "AChep";
     repo = "keyguard-app";
-    tag = "r20241212.2";
-    hash = "sha256-3i2+zs75Fq3wV894AkWyhj0uSw8BDDBjU/Y0+IBpnNE=";
+    tag = "r20250216";
+    hash = "sha256-hTWHy7A59Xu2h5POo0nFNF7PrRNj1LU6WhcQKXsRGS8=";
   };
+
+  postPatch = ''
+    substituteInPlace desktopLibJvm/build.gradle.kts \
+      --replace-fail 'resources.srcDir(rootDir.resolve("desktopLibNative/build/bin/universal"))' "" \
+      --replace-fail 'resourcesTask.dependsOn(":desktopLibNative:''${Tasks.compileNativeUniversal}")' ""
+  '';
 
   gradleBuildTask = ":desktopApp:createDistributable";
 
-  gradleUpdateTask = gradleBuildTask;
-
-  desktopItems = [
-    (makeDesktopItem {
-      name = "keyguard";
-      exec = "Keyguard";
-      icon = "keyguard";
-      comment = "Keyguard";
-      desktopName = "Keyguard";
-    })
-  ];
-
-  nativeBuildInputs = [
-    gradle
-    binutils
-    fakeroot
-    jdk17
-    autoPatchelfHook
-    copyDesktopItems
-  ];
+  gradleUpdateTask = finalAttrs.gradleBuildTask;
 
   mitmCache = gradle.fetchDeps {
     inherit (finalAttrs) pname;
@@ -60,13 +45,15 @@ stdenv.mkDerivation (finalAttrs: rec {
     useBwrap = false;
   };
 
-  doCheck = false;
-
-  __darwinAllowLocalNetworking = true;
+  env.JAVA_HOME = jdk17;
 
   gradleFlags = [ "-Dorg.gradle.java.home=${jdk17}" ];
 
-  env.JAVA_HOME = jdk17;
+  nativeBuildInputs = [
+    gradle
+    jdk17
+    copyDesktopItems
+  ];
 
   buildInputs = [
     fontconfig
@@ -80,21 +67,35 @@ stdenv.mkDerivation (finalAttrs: rec {
     alsa-lib
   ];
 
+  doCheck = false;
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "keyguard";
+      exec = "Keyguard";
+      icon = "keyguard";
+      comment = "Keyguard";
+      desktopName = "Keyguard";
+    })
+  ];
+
   installPhase = ''
     runHook preInstall
 
-    cp -r ./desktopApp/build/compose/binaries/main/app/Keyguard $out
+    cp -r desktopApp/build/compose/binaries/main/app/Keyguard $out
     install -Dm0644 $out/lib/Keyguard.png $out/share/pixmaps/keyguard.png
 
     runHook postInstall
   '';
+
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "Alternative client for the Bitwarden platform, created to provide the best user experience possible";
     homepage = "https://github.com/AChep/keyguard-app";
     mainProgram = "Keyguard";
     license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ aucub ];
+    maintainers = with lib.maintainers; [ ];
     sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryBytecode

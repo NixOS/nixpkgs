@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hikari-py";
     repo = "hikari";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-/A3D3nG1lSCQU92dM+6YroxWlGKrv47ntkZaJZTAJUA=";
     # The git commit is part of the `hikari.__git_sha1__` original output;
     # leave that output the same in nixpkgs. Use the `.git` directory

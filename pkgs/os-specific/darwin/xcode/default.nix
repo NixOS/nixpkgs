@@ -54,6 +54,7 @@ let
 
 in
 lib.makeExtensible (self: {
+  inherit requireXcode;
   xcode_8_1 = requireXcode "8.1" "sha256-VuAovU/b4rcLh+xMtcsZmbTWwTk35VGfMSp+fqPbsqM=";
   xcode_8_2 = requireXcode "8.2" "sha256-ohqgGD7JEEmXEvmfn/N9Ga2lM8jNwhIuh+ky7PQPzY4=";
   xcode_9_1 = requireXcode "9.1" "sha256-LG7pVMh1rNh5uP/bASvV9sKvGDrSGWH90J4gzwcgYSk=";
@@ -100,6 +101,7 @@ lib.makeExtensible (self: {
   xcode_15_4 = requireXcode "15.4" "sha256-yeo+sf6bBIJy9/1sQiMuPEMPniwGXMB6/FXXL0UrI5U=";
   xcode_16 = requireXcode "16" "sha256-i/MMcEi5wCpe5+nGo6gUTsFFCoorORydAn7D/GClEdo=";
   xcode_16_1 = requireXcode "16.1" "sha256-yYg6NRRnYM/5X3hhVMfcXcdoiOV36fIongJNQ5nviD8=";
+  xcode_16_2 = requireXcode "16.2" "sha256-wQjNuFZu/cN82mEEQbC1MaQt39jLLDsntsbnDidJFEs=";
   xcode =
     self."xcode_${
       lib.replaceStrings [ "." ] [ "_" ] (
