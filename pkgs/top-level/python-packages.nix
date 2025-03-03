@@ -427,8 +427,6 @@ self: super: with self; {
 
   aiosql = callPackage ../development/python-modules/aiosql { };
 
-  aiosseclient = callPackage ../development/python-modules/aiosseclient { };
-
   aiosenz = callPackage ../development/python-modules/aiosenz { };
 
   aioserial = callPackage ../development/python-modules/aioserial { };
