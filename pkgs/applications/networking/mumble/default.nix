@@ -12,7 +12,6 @@
   libopus,
   libsndfile,
   protobuf,
-  speex,
   libcap,
   utf8proc,
   alsa-lib,
@@ -103,7 +102,6 @@ let
           libvorbis
           qt5.qtsvg
           rnnoise
-          speex
           utf8proc
           microsoft-gsl
           nlohmann_json
@@ -122,7 +120,6 @@ let
         (lib.cmakeBool "server" false)
         (lib.cmakeBool "bundled-celt" true)
         (lib.cmakeBool "bundled-opus" false)
-        (lib.cmakeBool "bundled-speex" false)
         (lib.cmakeBool "bundle-qt-translations" false)
         (lib.cmakeBool "bundled-json" false)
         (lib.cmakeBool "bundled-gsl" false)
