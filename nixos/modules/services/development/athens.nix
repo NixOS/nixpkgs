@@ -140,12 +140,10 @@ let
     }
   );
 
-  configFile = pkgs.runCommandLocal "config.toml" { } ''
-    ${pkgs.buildPackages.jq}/bin/jq 'del(..|nulls)' \
-      < ${pkgs.writeText "config.json" (builtins.toJSON athensConfig)} | \
-    ${pkgs.buildPackages.remarshal}/bin/remarshal -if json -of toml \
-      > $out
-  '';
+  configFile = lib.pipe athensConfig [
+    (lib.filterAttrsRecursive (_k: v: v != null))
+    ((pkgs.formats.toml {}).generate "config.toml")
+  ];
 in
 {
   meta = {
