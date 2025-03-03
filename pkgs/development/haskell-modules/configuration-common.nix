@@ -1452,9 +1452,10 @@ self: super: {
       (dontCheckIf (!pkgs.postgresql.doCheck) super.persistent-postgresql);
 
   # Needs matching lsp-types
-  lsp_2_4_0_0 = super.lsp_2_4_0_0.override {
+  # Allow lens >= 5.3
+  lsp_2_4_0_0 = doDistribute (doJailbreak (super.lsp_2_4_0_0.override {
     lsp-types = self.lsp-types_2_1_1_0;
-  };
+  }));
 
   # Needs matching lsp-types;
   # Lift bound on sorted-list <0.2.2
