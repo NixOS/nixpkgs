@@ -49,6 +49,6 @@ mkDerivation rec {
     homepage = "https://kiwix.org";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = [ ];
+    maintainers = with maintainers; [ greg ];
   };
 }
