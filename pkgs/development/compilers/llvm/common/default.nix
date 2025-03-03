@@ -428,6 +428,18 @@ let
                 }
               )
           ++
+            lib.optional
+              (lib.versionAtLeast metadata.release_version "12" && lib.versionOlder metadata.release_version "19")
+              # Add missing include headers to build against gcc-15:
+              #   https://github.com/llvm/llvm-project/pull/101761
+              (
+                fetchpatch {
+                  url = "https://github.com/llvm/llvm-project/commit/7e44305041d96b064c197216b931ae3917a34ac1.patch";
+                  hash = "sha256-1htuzsaPHbYgravGc1vrR8sqpQ/NSQ8PUZeAU8ucCFk=";
+                  stripLen = 1;
+                }
+              )
+          ++
             lib.optional (lib.versionOlder metadata.release_version "16")
               # Fix musl build.
               (
