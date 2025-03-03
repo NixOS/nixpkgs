@@ -47,7 +47,9 @@ let
       extraLongDescription ? "",
       extraPatches ? [ ],
       rev ? "zfs-${version}",
-      kernelCompatible ? null,
+      kernelMinSupportedMajorMinor,
+      kernelMaxSupportedMajorMinor,
+      kernelMaxBuildableMajorMinor ? kernelMaxSupportedMajorMinor, # Only use for pre-release ZFS
       maintainers ? (with lib.maintainers; [ amarshall ]),
       tests,
     }@innerArgs:
@@ -71,6 +73,22 @@ let
         "user"
         "all"
       ];
+      kernelIsCompatible =
+        kernel:
+        let
+          nextMajorMinor =
+            ver:
+            "${lib.versions.major ver}.${
+              lib.pipe ver [
+                lib.versions.minor
+                lib.toInt
+                (x: x + 1)
+                toString
+              ]
+            }";
+        in
+        (lib.versionAtLeast kernel.version kernelMinSupportedMajorMinor)
+        && (lib.versionOlder kernel.version (nextMajorMinor kernelMaxBuildableMajorMinor));
 
       # XXX: You always want to build kernel modules with the same stdenv as the
       # kernel was built with. However, since zfs can also be built for userspace we
@@ -138,6 +156,14 @@ let
               "bashcompletiondir=$out/share/bash-completion/completions"
 
           substituteInPlace ./cmd/arc_summary --replace-fail "/sbin/modinfo" "modinfo"
+        ''
+        + ''
+          echo 'Supported Kernel versions:'
+          grep '^Linux-' META
+          echo 'Checking kernelMinSupportedMajorMinor is correct...'
+          grep --quiet '^Linux-Minimum: *${lib.escapeRegex kernelMinSupportedMajorMinor}$' META
+          echo 'Checking kernelMaxSupportedMajorMinor is correct...'
+          grep --quiet '^Linux-Maximum: *${lib.escapeRegex kernelMaxSupportedMajorMinor}$' META
         '';
 
       nativeBuildInputs =
@@ -319,7 +345,7 @@ let
 
         inherit maintainers;
         mainProgram = "zfs";
-        broken = buildKernel && (kernelCompatible != null) && !(kernelCompatible kernel);
+        broken = buildKernel && !(kernelIsCompatible kernel);
       };
     };
 in
