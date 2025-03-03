@@ -1,5 +1,5 @@
 [package]
-name = "im_using_workspaces"
+name = "im_using_workspace_lints"
 version = "1.0.0"
 publish = false
 keywords = [
