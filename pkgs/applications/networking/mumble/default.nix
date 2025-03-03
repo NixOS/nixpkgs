@@ -10,8 +10,8 @@
   boost,
   libopus,
   libsndfile,
+  speexdsp,
   protobuf,
-  speex,
   libcap,
   alsa-lib,
   python3,
@@ -102,6 +102,7 @@ let
           libopus
           libsndfile
           libvorbis
+          speexdsp
           qt5.qtsvg
           rnnoise
         ]
