@@ -27,12 +27,8 @@ rustPlatform.buildRustPackage rec {
     fetchSubmodules = true;
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "swim-0.12.0" = "sha256-9uqla3MRweQvMVLn31yHJJjRtY7YuDtofsHRE/Xqz5E=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-YMUeHr9eUOYIcO7PbaFgZa0Ib10GMF+jT10ZCSG7PNo=";
 
   # TODO: somehow respect https://nixos.org/manual/nixpkgs/stable/#var-passthru-updateScript-commit
   passthru.updateScript = _experimental-update-script-combinators.sequence [
