@@ -3,6 +3,7 @@
   stdenv,
   rustPlatform,
   fetchFromGitHub,
+  fetchpatch,
   libcosmicAppHook,
   pkg-config,
   util-linux,
@@ -47,6 +48,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   checkInputs = [ gst_all_1.gstreamer ];
+
+  # TODO: Remove this when updating to the next version
+  patches = [
+    (fetchpatch {
+      name = "cosmic-portal-fix-examples-after-ashpd-api-update.patch";
+      url = "https://github.com/pop-os/xdg-desktop-portal-cosmic/commit/df831ce7a48728aa9094fa1f30aed61cf1cc6ac3.diff?full_index=1";
+      hash = "sha256-yRrB3ds9TtN1OBZEZbnE6h2fkPyP4PP2IJ17n+0ugEo=";
+    })
+  ];
 
   # Also modifies the functionality by replacing 'false' with 'true' to enable the portal to start properly.
   postPatch = ''
