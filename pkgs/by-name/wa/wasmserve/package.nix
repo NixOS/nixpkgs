@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "wasmserve";
-  version = "1.2.0";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "hajimehoshi";
     repo = "wasmserve";
     rev = "v${version}";
-    hash = "sha256-k8g5ZCMm0xek+rToq9azE7mOUHU5eF8PxgBcXs6LrJk=";
+    hash = "sha256-sj2PPCuvh2RkQq5rAPQZdr96a8FG7RL5RCzWBDt2TeI=";
   };
 
   vendorHash = null;
