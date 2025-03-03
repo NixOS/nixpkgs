@@ -31,7 +31,9 @@ stdenv.mkDerivation rec {
   # tex2page, and probably other things for which there is no nixpkgs
   # derivation available
   buildPhase = ''
+    runHook preBuild
     make vm image libscheme48 script-interpreter go
+    runHook postBuild
   '';
   installTargets = "install-no-doc";
 
