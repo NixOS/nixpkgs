@@ -12,12 +12,12 @@
   nix-update-script,
 }:
 let
-  version = "25.1.0";
+  version = "25.3.1";
   src = fetchFromGitHub {
     owner = "actualbudget";
-    repo = "actual-server";
+    repo = "actual";
     tag = "v${version}";
-    hash = "sha256-zpZNITXd9QOJNRz8RbAuHH1hrrWPEGsrROGWJuYXqrc=";
+    hash = "sha256-UZ2Z1tkMbGJwka//cIC0aG1KCcTSxUPLzctEaOhnKQA=";
   };
 
   yarn_20 = yarn.override { nodejs = nodejs_20; };
@@ -58,7 +58,7 @@ let
       yarn config set enableTelemetry 0
       yarn config set cacheFolder $out
       yarn config set --json supportedArchitectures "$SUPPORTED_ARCHITECTURES"
-      yarn
+      yarn workspaces focus @actual-app/sync-server --production
 
       runHook postBuild
     '';
@@ -77,10 +77,10 @@ let
     outputHashMode = "recursive";
     outputHash =
       {
-        x86_64-linux = "sha256-N31aAAkznncKlygyeH5A3TrnOinXVz7CTQ8/G4QX6hY=";
-        aarch64-linux = "sha256-j7BFAKXi+TKIlmHBjbx6rwaKuAo6gnOlv6FV8rnlld0=";
-        aarch64-darwin = "sha256-YpUQYOLJHYxWuE6ToLFkXWEloAau9bLBvdbpNh8jRZQ=";
-        x86_64-darwin = "sha256-AioO82Y6mK0blSQRhhZZtWmduUcYwyVAewcXEVClJUg=";
+        x86_64-linux = "sha256-me0v+RuoleOKFRyJ7iyLTKRnV2Cz2Q1MLc/SE2sSSH8=";
+        aarch64-linux = "sha256-djE2lt/o/7kd7ci2TW3mhjSptD3etChbvtdbiWqp/wo=";
+        aarch64-darwin = "sha256-IJBfBA71PZeE/Zlu2kzQw8l/D4lVAV5I5loRyRfncKA=";
+        x86_64-darwin = "sha256-AShd87VFwqDbJZoFJPg6HsdhTx7XMVdZ5sRWLXU8ldM=";
       }
       .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
@@ -102,7 +102,7 @@ stdenv.mkDerivation {
     cp -r ./ $out/lib/actual
 
     makeWrapper ${lib.getExe nodejs_20} "$out/bin/actual-server" \
-      --add-flags "$out/lib/actual/app.js" \
+      --add-flags "$out/lib/actual/packages/sync-server/app.js" \
       --set NODE_PATH "$out/lib/actual/node_modules"
 
     runHook postInstall
