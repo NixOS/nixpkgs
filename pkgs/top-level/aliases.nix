@@ -419,6 +419,10 @@ mapAliases {
   emacs28NativeComp = emacs28; # Added 2022-06-08
   emacs28Packages = throw "'emacs28Packages' has been renamed to/replaced by 'emacs28.pkgs'"; # Converted to throw 2024-10-17
   emacs28WithPackages = throw "'emacs28WithPackages' has been renamed to/replaced by 'emacs28.pkgs.withPackages'"; # Converted to throw 2024-10-17
+  emacs29 = throw "Emacs 29 is removed due to CVEs which are fixed in Emacs 30"; # Added 2025-03-03
+  emacs29-gtk3 = throw "Emacs 29 is removed due to CVEs which are fixed in Emacs 30"; # Added 2025-03-03
+  emacs29-nox = throw "Emacs 29 is removed due to CVEs which are fixed in Emacs 30"; # Added 2025-03-03
+  emacs29-pgtk = throw "Emacs 29 is removed due to CVEs which are fixed in Emacs 30"; # Added 2025-03-03
   emacsMacport = emacs-macport; # Added 2023-08-10
   emacsNativeComp = emacs; # Added 2022-06-08
   emacsWithPackages = throw "'emacsWithPackages' has been renamed to/replaced by 'emacs.pkgs.withPackages'"; # Converted to throw 2024-10-17
