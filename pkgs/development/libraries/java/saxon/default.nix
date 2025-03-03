@@ -7,6 +7,7 @@
   jre8,
   genericUpdater,
   writeShellScript,
+  makeWrapper,
   common-updater-scripts,
   gnused,
 }:
@@ -36,22 +37,30 @@ let
       {
         inherit pname version src;
 
-        nativeBuildInputs = [ unzip ];
+        nativeBuildInputs = [
+          unzip
+          makeWrapper
+        ];
         dontUnpack = true;
 
-        installPhase = ''
-          unzip $src -d $out
-          mkdir -p $out/bin $out/share $out/share/java
-          cp -s "$out"/*.jar "$out/share/java/"  # */
-          rm -rf $out/notices
-          mv $out/doc $out/share
-          cat > $out/bin/${mainProgram} <<EOF
-          #! $shell
-          export JAVA_HOME=${jre}
-          exec ${jre}/bin/java -jar $out/${jar'}.jar "\$@"
-          EOF
-          chmod a+x $out/bin/${mainProgram}
-        '';
+        installPhase =
+          ''
+            unzip $src -d $out
+            mkdir -p $out/bin $out/share $out/share/java
+            cp -s "$out"/*.jar "$out/share/java/"  # */
+            rm -rf $out/notices
+            mv $out/doc $out/share
+
+            makeWrapper ${lib.getExe jre} $out/bin/${mainProgram} \
+              --add-flags "-jar $out/${jar'}.jar"
+          ''
+          + lib.optionalString (versionAtLeast finalAttrs.version "8") ''
+            makeWrapper ${lib.getExe jre} $out/bin/transform \
+              --add-flags "-cp $out/${jar'}.jar net.sf.saxon.Transform"
+
+            makeWrapper ${lib.getExe jre} $out/bin/query \
+              --add-flags "-cp $out/${jar'}.jar net.sf.saxon.Query"
+          '';
 
         passthru = lib.optionalAttrs (updateScript != null) {
           inherit updateScript;
