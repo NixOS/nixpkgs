@@ -49,5 +49,10 @@ buildPythonPackage rec {
     changelog = "https://github.com/lmcinnes/pynndescent/releases/tag/release-${version}";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ mic92 ];
+    badPlatforms = [
+      # The majority of tests are crashing:
+      # Fatal Python error: Segmentation fault
+      "aarch64-linux"
+    ];
   };
 }
