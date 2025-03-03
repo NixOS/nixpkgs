@@ -125,8 +125,8 @@ stdenv.mkDerivation rec {
   gradleUpdateScript = ''
     runHook preBuild
 
-    gradle nixDownloadDeps -Dos.arch=amd64
-    gradle nixDownloadDeps -Dos.arch=aarch64
+    gradle --write-verification-metadata sha256 -Dos.arch=amd64
+    gradle --write-verification-metadata sha256 -Dos.arch=aarch64
   '';
 
   meta = with lib; {
