@@ -39,8 +39,8 @@ stdenv.mkDerivation rec {
   '';
 
   cmakeFlags = [
-    "-DSYSTEMD_SUPPORT=ON"
-    "-DSSL_SUPPORT=${if tlsSupport then "ON" else "OFF"}"
+    (lib.cmakeBool "SYSTEMD_SUPPORT" true)
+    (lib.cmakeBool "SSL_SUPPORT" tlsSupport)
   ];
 
   meta = with lib; {

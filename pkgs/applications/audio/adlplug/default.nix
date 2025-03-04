@@ -47,9 +47,9 @@ stdenv.mkDerivation rec {
   };
 
   cmakeFlags = [
-    "-DADLplug_CHIP=${chip}"
-    "-DADLplug_USE_SYSTEM_FMT=ON"
-    "-DADLplug_Jack=${if withJack then "ON" else "OFF"}"
+    (lib.cmakeFeature "ADLplug_CHIP" chip)
+    (lib.cmakeBool "ADLplug_USE_SYSTEM_FMT" true)
+    (lib.cmakeBool "ADLplug_Jack" withJack)
   ];
 
   NIX_LDFLAGS = toString (

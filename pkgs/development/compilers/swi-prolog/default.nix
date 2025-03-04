@@ -155,11 +155,11 @@ stdenv.mkDerivation {
   hardeningDisable = [ "format" ];
 
   cmakeFlags =
-    [ "-DSWIPL_INSTALL_IN_LIB=ON" ]
+    [ (lib.cmakeBool "SWIPL_INSTALL_IN_LIB" true) ]
     ++ lib.optionals (!withNativeCompiler) [
       # without these options, the build will embed full compiler paths
-      "-DSWIPL_CC=${if stdenv.hostPlatform.isDarwin then "clang" else "gcc"}"
-      "-DSWIPL_CXX=${if stdenv.hostPlatform.isDarwin then "clang++" else "g++"}"
+      (lib.cmakeFeature "SWIPL_CC" (if stdenv.hostPlatform.isDarwin then "clang" else "gcc"))
+      (lib.cmakeFeature "SWIPL_CXX" (if stdenv.hostPlatform.isDarwin then "clang++" else "g++"))
     ];
 
   preInstall = ''
