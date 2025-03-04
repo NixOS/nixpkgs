@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage rec {
     export HOME=$(mktemp -d)
   '';
 
-  checkFlags = lib.optionals stdenv.isDarwin [
+  checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
     # Attempted to create a NULL object.
     "--skip=base::tests::test_complete_cmdbar"
     "--skip=base::tests::test_complete_msgbar"
