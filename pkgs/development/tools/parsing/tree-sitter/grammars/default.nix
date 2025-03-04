@@ -85,6 +85,7 @@
   tree-sitter-regex = lib.importJSON ./tree-sitter-regex.json;
   tree-sitter-rego = lib.importJSON ./tree-sitter-rego.json;
   tree-sitter-river = lib.importJSON ./tree-sitter-river.json;
+  tree-sitter-ron = lib.importJSON ./tree-sitter-ron.json;
   tree-sitter-rst = lib.importJSON ./tree-sitter-rst.json;
   tree-sitter-ruby = lib.importJSON ./tree-sitter-ruby.json;
   tree-sitter-rust = lib.importJSON ./tree-sitter-rust.json;

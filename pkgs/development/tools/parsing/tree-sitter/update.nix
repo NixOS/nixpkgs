@@ -173,6 +173,10 @@ let
       orga = "FallenAngel97";
       repo = "tree-sitter-rego";
     };
+    "tree-sitter-ron" = {
+      orga = "zee-editor";
+      repo = "tree-sitter-ron";
+    };
     "tree-sitter-rst" = {
       orga = "stsewd";
       repo = "tree-sitter-rst";
