@@ -15,7 +15,7 @@ let
   jre = openjdk21;
 in
 stdenv.mkDerivation (finalAttrs: {
-  pname = "smartgithg";
+  pname = "smartgit";
   version = "24.1.2";
 
   src = fetchurl {
