@@ -118,7 +118,6 @@ let
         "-D bundled-speex=OFF"
         "-D bundle-qt-translations=OFF"
         "-D update=OFF"
-        "-D overlay-xcompile=OFF"
         "-D oss=OFF"
         "-D warnings-as-errors=OFF" # conversion error workaround
         (lib.cmakeBool "speechd" speechdSupport)
