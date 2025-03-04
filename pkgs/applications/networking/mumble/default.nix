@@ -32,6 +32,7 @@
   libpulseaudio,
   speechdSupport ? false,
   speechd-minimal,
+  microsoft-gsl,
 }:
 
 let
@@ -57,11 +58,13 @@ let
           boost
           poco
           protobuf
+          microsoft-gsl
         ] ++ (overrides.buildInputs or [ ]);
 
         cmakeFlags = [
           "-D g15=OFF"
           "-D CMAKE_CXX_STANDARD=17" # protobuf >22 requires C++ 17
+          "-D bundled-gsl=OFF"
         ] ++ (overrides.cmakeFlags or [ ]);
 
         preConfigure = ''
