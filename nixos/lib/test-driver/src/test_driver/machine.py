@@ -574,9 +574,12 @@ class Machine:
 
         # While sh is bash on NixOS, this is not the case for every distro.
         # We explicitly call bash here to allow for the driver to boot other distros as well.
-        out_command = (
-            f"{timeout_str} bash -c {shlex.quote(command)} | (base64 -w 0; echo)\n"
-        )
+        #
+        # Other distros could send both stdout and stderr to the test-driver. Receiving both
+        # breaks the code for getting the output since the code assumes it will only receive
+        # base64 encoded stdout.
+        # Redirect stderr to /dev/null to avoid these compatibility issues.
+        out_command = f"{timeout_str} bash -c {shlex.quote(command)} 2> /dev/null | (base64 -w 0; echo)\n"
 
         assert self.shell
         self.shell.send(out_command.encode())
