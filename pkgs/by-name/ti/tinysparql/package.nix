@@ -37,7 +37,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tinysparql";
-  version = "3.8.2";
+  version = "3.9.rc";
 
   outputs = [
     "out"
@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     url =
       with finalAttrs;
       "mirror://gnome/sources/tinysparql/${lib.versions.majorMinor version}/tinysparql-${version}.tar.xz";
-    hash = "sha256-u4ZDOGyO3FkaAyBdSg7aZh3N0glEc7/7m725TpNYnLI=";
+    hash = "sha256-IWxMRC1d09R2t0YVpMwrOSs4+21NFtFqo7kV3JLy0hM=";
   };
 
   strictDeps = true;
@@ -127,12 +127,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     chmod +x \
-      docs/reference/libtracker-sparql/embed-files.py \
-      docs/reference/libtracker-sparql/generate-svgs.sh
+      docs/reference/docgen-wrapper.sh \
+      docs/reference/embed-files.py \
+      docs/reference/generate-svgs.sh
     patchShebangs \
       utils/data-generators/cc/generate \
-      docs/reference/libtracker-sparql/embed-files.py \
-      docs/reference/libtracker-sparql/generate-svgs.sh
+      docs/reference/docgen-wrapper.sh \
+      docs/reference/embed-files.py \
+      docs/reference/generate-svgs.sh
 
     # File "/build/tinysparql-3.8.0/tests/functional-tests/test_cli.py", line 233, in test_help
     # self.assertIn("TINYSPARQL-IMPORT(1)", output, "Manpage not found")
@@ -155,7 +157,7 @@ stdenv.mkDerivation (finalAttrs: {
       # though, so we need to replace the absolute path with a local one during build.
       # We are using a symlink that will be overridden during installation.
       mkdir -p $out/lib
-      ln -s $PWD/src/libtracker-sparql/libtinysparql-3.0${darwinDot0}${extension} $out/lib/libtinysparql-3.0${darwinDot0}${extension}${linuxDot0}
+      ln -s $PWD/src/libtinysparql/libtinysparql-3.0${darwinDot0}${extension} $out/lib/libtinysparql-3.0${darwinDot0}${extension}${linuxDot0}
     '';
 
   checkPhase = ''

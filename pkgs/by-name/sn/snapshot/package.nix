@@ -24,11 +24,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "snapshot";
-  version = "47.1";
+  version = "48.beta";
 
   src = fetchurl {
     url = "mirror://gnome/sources/snapshot/${lib.versions.major finalAttrs.version}/snapshot-${finalAttrs.version}.tar.xz";
-    hash = "sha256-5LFiZ5ryTH6W7m4itH1f8NqW4KD2FtE66xIHxgn4lIM=";
+    hash = "sha256-kjPO75NjPrHXGs+ChMW+Wb0LBhqBsjhvJ0iaN63dC9Q=";
   };
 
   patches = [

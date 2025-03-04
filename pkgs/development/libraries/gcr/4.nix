@@ -28,7 +28,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gcr";
-  version = "4.3.1";
+  version = "4.3.91";
 
   outputs = [
     "out"
@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gcr/${lib.versions.majorMinor finalAttrs.version}/gcr-${finalAttrs.version}.tar.xz";
-    hash = "sha256-svBw//GEDu9wVGoovoAjVCfBFqrcWTtbaMzIab46oJ0=";
+    hash = "sha256-nTJu09eK0Or7CEg5WgaK2+/ets/wTsVhXLPvdn2TOZA=";
   };
 
   strictDeps = true;
