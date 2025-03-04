@@ -125,7 +125,6 @@ let
         (lib.cmakeBool "bundled-gsl" false)
         # (lib.cmakeBool "bundled-renamenoise" false) # not packaged in nixpkgs yet
         (lib.cmakeBool "update" false)
-        (lib.cmakeBool "overlay-xcompile" false)
         (lib.cmakeBool "oss" false)
         (lib.cmakeBool "warnings-as-errors" false) # conversion error workaround
         (lib.cmakeBool "speechd" speechdSupport)
