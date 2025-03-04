@@ -27,20 +27,20 @@
 /shell.nix @infinisil @NixOS/Security
 
 # Libraries
-/lib                        @infinisil
+/lib                        @infinisil @hsjobeki
 /lib/systems                @alyssais @ericson2314 @NixOS/stdenv
-/lib/generators.nix         @infinisil @Profpatsch
-/lib/cli.nix                @infinisil @Profpatsch
-/lib/debug.nix              @infinisil @Profpatsch
-/lib/asserts.nix            @infinisil @Profpatsch
-/lib/path/*                 @infinisil
-/lib/fileset                @infinisil
+/lib/generators.nix         @infinisil @hsjobeki @Profpatsch
+/lib/cli.nix                @infinisil @hsjobeki @Profpatsch
+/lib/debug.nix              @infinisil @hsjobeki @Profpatsch
+/lib/asserts.nix            @infinisil @hsjobeki @Profpatsch
+/lib/path/*                 @infinisil @hsjobeki
+/lib/fileset                @infinisil @hsjobeki
 ## Libraries / Module system
-/lib/modules.nix            @infinisil @roberth
-/lib/types.nix              @infinisil @roberth
-/lib/options.nix            @infinisil @roberth
-/lib/tests/modules.sh       @infinisil @roberth
-/lib/tests/modules          @infinisil @roberth
+/lib/modules.nix            @infinisil @roberth @hsjobeki
+/lib/types.nix              @infinisil @roberth @hsjobeki
+/lib/options.nix            @infinisil @roberth @hsjobeki
+/lib/tests/modules.sh       @infinisil @roberth @hsjobeki
+/lib/tests/modules          @infinisil @roberth @hsjobeki
 
 # Nixpkgs Internals
 /default.nix                                     @Ericson2314

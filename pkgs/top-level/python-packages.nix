@@ -10364,6 +10364,8 @@ self: super: with self; {
 
   pebble = callPackage ../development/python-modules/pebble { };
 
+  peblar = callPackage ../development/python-modules/peblar { };
+
   pecan = callPackage ../development/python-modules/pecan { };
 
   peco = callPackage ../development/python-modules/peco { };
