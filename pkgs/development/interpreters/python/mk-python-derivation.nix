@@ -222,7 +222,7 @@ let
         else
           "setuptools";
 
-      relaxBuildDeps = finalAttrs ? pythonRelaxBuildDeps || finalAttrs ? pythonRemoveBuildDeps;
+      relaxBuildDeps = finalAttrs.pythonRelaxBuildDeps or [ ] != [ ] || finalAttrs.pythonRemoveBuildDeps or [ ] != [ ];
       withDistOutput = withDistOutput' format';
 
       validatePythonMatches =
