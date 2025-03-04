@@ -118,6 +118,7 @@ let
         (lib.cmakeBool "bundled-opus" false)
         (lib.cmakeBool "bundled-speex" false)
         (lib.cmakeBool "bundle-qt-translations" false)
+        # (lib.cmakeBool "bundled-renamenoise" false) # not packaged in nixpkgs yet
         (lib.cmakeBool "update" false)
         (lib.cmakeBool "overlay-xcompile" false)
         (lib.cmakeBool "oss" false)
