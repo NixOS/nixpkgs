@@ -372,9 +372,9 @@
   },
   "durabletask": {
     "pname": "durabletask",
-    "version": "1.0.0b2",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/durabletask-1.0.0b2-py3-none-any.whl",
-    "hash": "sha256-llVzI3aKDrxZKUdPijLEmh2gf/BY7Jl9BZYm0g15Iik=",
+    "version": "1.0.0b3",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/durabletask-1.0.0b3-py3-none-any.whl",
+    "hash": "sha256-ItQrmkZBSiyR12+Fiez6W7XvEhwwFeSKNxFPvVwdRK8=",
     "description": "Microsoft Azure Command-Line Tools Durabletask Extension"
   },
   "dynatrace": {
