@@ -8503,6 +8503,8 @@ self: super: with self; {
 
   mockito = callPackage ../development/python-modules/mockito { };
 
+  mock-django = callPackage ../development/python-modules/mock-django { };
+
   mock-open = callPackage ../development/python-modules/mock-open { };
 
   mock-services = callPackage ../development/python-modules/mock-services { };
