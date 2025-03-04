@@ -3,15 +3,16 @@
   buildGoModule,
   pulumi,
   bash,
+  nodejs,
   python3,
 }:
 buildGoModule rec {
-  pname = "pulumi-language-python";
+  pname = "pulumi-nodejs";
   inherit (pulumi) version src;
 
-  sourceRoot = "${src.name}/sdk/python/cmd/pulumi-language-python";
+  sourceRoot = "${src.name}/sdk/nodejs/cmd/pulumi-language-nodejs";
 
-  vendorHash = "sha256-2K3EIG0xRcRRJES9h72Sk9V442T6dHZbYxz1uxxEKWI=";
+  vendorHash = "sha256-vmFoMxWK5sj3vsBVFAji0Pz2wtf1H3MJhbrkHshDOno=";
 
   ldflags = [
     "-s"
@@ -23,33 +24,32 @@ buildGoModule rec {
     "-skip=^${
       lib.concatStringsSep "$|^" [
         "TestLanguage"
-        "TestDeterminePulumiPackages"
+        "TestGetProgramDependencies"
       ]
     }$"
   ];
 
   nativeCheckInputs = [
-    python3
+    python3 # for TestNonblockingStdout
+    nodejs
   ];
 
   # For patchShebangsAuto (see scripts copied in postInstall).
   buildInputs = [
     bash
-    python3
   ];
 
   postInstall = ''
     cp -t "$out/bin" \
-      ../pulumi-language-python-exec \
-      ../../dist/pulumi-resource-pulumi-python \
-      ../../dist/pulumi-analyzer-policy-python
+      ../../dist/pulumi-resource-pulumi-nodejs \
+      ../../dist/pulumi-analyzer-policy
   '';
 
   meta = {
-    homepage = "https://www.pulumi.com/docs/iac/languages-sdks/python/";
-    description = "Language host for Pulumi programs written in Python";
+    homepage = "https://www.pulumi.com/docs/iac/languages-sdks/javascript/";
+    description = "Language host for Pulumi programs written in TypeScript & JavaScript (Node.js)";
     license = lib.licenses.asl20;
-    mainProgram = "pulumi-language-python";
+    mainProgram = "pulumi-language-nodejs";
     maintainers = with lib.maintainers; [
       tie
     ];
