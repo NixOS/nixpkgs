@@ -25,7 +25,10 @@ import ./make-test-python.nix (
       machine.wait_for_open_port(80)
       machine.wait_for_unit("multi-user.target")
 
+      # This establishes _something_
       machine.succeed("curl -sSf http://localhost")
+      # The second request creates the database, unsure why both are required
+      machine.succeed("curl -sSf http://localhost/")
 
       machine.succeed(
           "curl -c cookies -sSf -X POST http://localhost/login -d 'username=admin&password=admin'"
