@@ -34,13 +34,13 @@
 
 let
   pname = "windmill";
-  version = "1.410.3";
+  version = "1.473.1";
 
   src = fetchFromGitHub {
     owner = "windmill-labs";
     repo = "windmill";
     rev = "v${version}";
-    hash = "sha256-QPabzgSs+zxgI2dHcMY9ki4jEwm5jQbzwSMaIfBbFG8=";
+    hash = "sha256-JhgqBXiX0ClEQZkWl7YBsBlQHk2Jp4jIdHy5CDvdoAM=";
   };
 
   pythonEnv = python3.withPackages (ps: [ ps.pip-tools ]);
@@ -59,9 +59,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "php-parser-rs-0.1.3" = "sha256-ZeI3KgUPmtjlRfq6eAYveqt8Ay35gwj6B9iOQRjQa9A=";
+      "postgres-native-tls-0.5.0" = "sha256-hhvZkdc2KnU6IkgeTHY4M2dp9//NL8DQjOIcAh3sSRM=";
       "progenitor-0.3.0" = "sha256-F6XRZFVIN6/HfcM8yI/PyNke45FL7jbcznIiqj22eIQ=";
-      "rustpython-ast-0.3.1" = "sha256-q9N+z3F6YICQuUMp3a10OS792tCq0GiSSlkcaLxi3Gs=";
-      "tiberius-0.12.2" = "sha256-s/S0K3hE+JNCrNVxoSCSs4myLHvukBYTwk2A5vZ7Ae8=";
       "tinyvector-0.1.0" = "sha256-NYGhofU4rh+2IAM+zwe04YQdXY8Aa4gTmn2V2HtzRfI=";
     };
   };
@@ -127,7 +126,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
     sourceRoot = "${src.name}/frontend";
 
-    npmDepsHash = "sha256-3AeDGd/4dGHm8kGKEH3sqNOuQ1LPjP5n4qOEaqVMm0w=";
+    npmDepsHash = "sha256-mNXWBNRY56w/y4ZPG99COLsLLwGJW7UbT7pDymV5mNE=";
 
     # without these you get a
     # FATAL ERROR: Ineffective mark-compacts near heap limit Allocation failed - JavaScript heap out of memory
