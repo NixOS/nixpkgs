@@ -56,6 +56,8 @@ buildNpmPackage rec {
     makeWrapper '${electron_32}/bin/electron' "$out/bin/Trakkr" \
       --add-flags "$out/share/lib/Trakkr/resources/app.asar" \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
+      --add-flags "--disable-gpu" \
+      --add-flags "--disable-gpu-rendering" \
       --set ELECTRON_FORCE_IS_PACKAGED=1 \
       --inherit-argv0
 
