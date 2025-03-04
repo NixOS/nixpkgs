@@ -261,7 +261,7 @@
   "customlocation": {
     "pname": "customlocation",
     "version": "0.1.3",
-    "url": "https://arcplatformcliextprod.blob.core.windows.net/customlocation/customlocation-0.1.3-py2.py3-none-any.whl",
+    "url": "https://arcplatformcliextprod.z13.web.core.windows.net/customlocation-0.1.3-py2.py3-none-any.whl",
     "hash": "sha256-XjZDWxqB3iXnTnDEXCrJ+YBlE4w1BQ8pIQrkDBhITig=",
     "description": "Microsoft Azure Command-Line Tools Customlocation Extension"
   },
