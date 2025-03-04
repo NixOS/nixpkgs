@@ -30,13 +30,13 @@ stdenv.mkDerivation (finalAttrs: {
     python3
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/duckdb/duckdb/releases/tag/v${finalAttrs.version}";
     description = "Embeddable property graph database management system";
     homepage = "https://kuzudb.com/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "kuzu";
-    maintainers = with maintainers; [ sdht0 ];
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ sdht0 ];
+    platforms = lib.platforms.all;
   };
 })
