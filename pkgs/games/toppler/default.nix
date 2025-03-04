@@ -43,6 +43,11 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
   ];
 
+  patches = [
+    # Based on https://gitlab.com/roever/toppler/-/merge_requests/3
+    ./gcc14.patch
+  ];
+
   # GIMP needs a writable home
   preBuild = ''
     export HOME=$(mktemp -d)
