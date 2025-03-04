@@ -14,6 +14,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook pkg-config txt2man which ];
   buildInputs = [ openssl nss p11-kit libical ldns unbound apr aprutil ];
+  configureFlags = [ "--with-openssl" "--with-nss" "--with-p11-kit" "--with-libical" "--with-ldns" "--with-unbound" "--with-bash-completion-dir=yes" ];
 
   meta = with lib; {
     homepage = "https://redwax.eu/rt/";
