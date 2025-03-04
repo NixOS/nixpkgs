@@ -19,16 +19,17 @@
   libusb-compat-0_1,
   cereal,
   minizip,
+  versionCheckHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "domoticz";
   version = "2024.7";
 
   src = fetchFromGitHub {
     owner = "domoticz";
-    repo = pname;
-    rev = version;
+    repo = "domoticz";
+    tag = finalAttrs.version;
     hash = "sha256-D8U1kK3m1zT83YvZ42hGSU9PzBfS1VGr2mxUYbM2vNQ=";
   };
 
@@ -85,19 +86,24 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/domoticz --set LD_LIBRARY_PATH ${python3}/lib;
   '';
 
-  meta = with lib; {
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+
+  meta = {
     description = "Home automation system";
     longDescription = ''
       Domoticz is a home automation system that lets you monitor and configure
       various devices like: lights, switches, various sensors/meters like
       temperature, rain, wind, UV, electra, gas, water and much more
     '';
-    maintainers = with maintainers; [ edcragg ];
+    maintainers = with lib.maintainers; [ edcragg ];
     homepage = "https://www.domoticz.com/";
-    changelog = "https://github.com/domoticz/domoticz/blob/${version}/History.txt";
-    license = licenses.gpl3Plus;
-    platforms = platforms.all;
+    changelog = "https://github.com/domoticz/domoticz/blob/${finalAttrs.version}/History.txt";
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.all;
     broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/domoticz.x86_64-darwin
     mainProgram = "domoticz";
   };
-}
+})
