@@ -689,9 +689,12 @@ def test_set_profile(mock_run: Mock) -> None:
 
 
 @patch(get_qualified_name(n.run_wrapper, n), autospec=True)
-def test_switch_to_configuration(mock_run: Mock, monkeypatch: MonkeyPatch) -> None:
+def test_switch_to_configuration_without_systemd_run(
+    mock_run: Any, monkeypatch: MonkeyPatch
+) -> None:
     profile_path = Path("/path/to/profile")
     config_path = Path("/path/to/config")
+    mock_run.return_value = CompletedProcess([], 1)
 
     with monkeypatch.context() as mp:
         mp.setenv("LOCALE_ARCHIVE", "")
@@ -740,6 +743,62 @@ def test_switch_to_configuration(mock_run: Mock, monkeypatch: MonkeyPatch) -> No
         )
     mock_run.assert_called_with(
         [
+            config_path / "specialisation/special/bin/switch-to-configuration",
+            "test",
+        ],
+        extra_env={"NIXOS_INSTALL_BOOTLOADER": "1"},
+        sudo=True,
+        remote=target_host,
+    )
+
+
+@patch(get_qualified_name(n.run_wrapper, n), autospec=True)
+def test_switch_to_configuration_with_systemd_run(
+    mock_run: Mock, monkeypatch: MonkeyPatch
+) -> None:
+    profile_path = Path("/path/to/profile")
+    config_path = Path("/path/to/config")
+    mock_run.return_value = CompletedProcess([], 0)
+
+    with monkeypatch.context() as mp:
+        mp.setenv("LOCALE_ARCHIVE", "")
+
+        n.switch_to_configuration(
+            profile_path,
+            m.Action.SWITCH,
+            sudo=False,
+            target_host=None,
+            specialisation=None,
+            install_bootloader=False,
+        )
+    mock_run.assert_called_with(
+        [
+            *n.SWITCH_TO_CONFIGURATION_CMD_PREFIX,
+            profile_path / "bin/switch-to-configuration",
+            "switch",
+        ],
+        extra_env={"NIXOS_INSTALL_BOOTLOADER": "0"},
+        sudo=False,
+        remote=None,
+    )
+
+    target_host = m.Remote("user@localhost", [], None)
+    with monkeypatch.context() as mp:
+        mp.setenv("LOCALE_ARCHIVE", "/path/to/locale")
+        mp.setenv("PATH", "/path/to/bin")
+        mp.setattr(Path, Path.exists.__name__, lambda self: True)
+
+        n.switch_to_configuration(
+            Path("/path/to/config"),
+            m.Action.TEST,
+            sudo=True,
+            target_host=target_host,
+            install_bootloader=True,
+            specialisation="special",
+        )
+    mock_run.assert_called_with(
+        [
+            *n.SWITCH_TO_CONFIGURATION_CMD_PREFIX,
             config_path / "specialisation/special/bin/switch-to-configuration",
             "test",
         ],
