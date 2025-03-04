@@ -78,6 +78,10 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
+    # Add missing dependency on libm
+    substituteInPlace src/tint2conf/CMakeLists.txt \
+      --replace-fail "RSVG_LIBRARIES} )" "RSVG_LIBRARIES} m)"
+
     for f in ./src/launcher/apps-common.c \
              ./src/launcher/icon-theme-common.c
     do
