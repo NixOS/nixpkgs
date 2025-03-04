@@ -18,6 +18,7 @@
   dvc-studio-client,
   dvc-task,
   dvc-webdav,
+  dvc-webhdfs,
   fetchFromGitHub,
   flatten-dict,
   flufl-lock,
@@ -140,6 +141,8 @@ buildPythonPackage rec {
     ssh = [ dvc-ssh ];
     ssh_gssapi = [ dvc-ssh ] ++ dvc-ssh.optional-dependencies.gssapi;
     webdav = [ dvc-webdav ];
+    webhdfs = [ dvc-webhdfs ];
+    webhdfs_kerberos = [ dvc-webhdfs ] ++ dvc-webhdfs.optional-dependencies.kerberos;
   };
 
   # Tests require access to real cloud services
