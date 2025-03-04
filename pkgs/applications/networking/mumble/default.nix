@@ -123,7 +123,6 @@ let
         "-D bundled-json=OFF"
         "-D bundled-gsl=OFF"
         "-D update=OFF"
-        "-D overlay-xcompile=OFF"
         "-D oss=OFF"
         "-D warnings-as-errors=OFF" # conversion error workaround
         (lib.cmakeBool "speechd" speechdSupport)
