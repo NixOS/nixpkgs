@@ -4042,6 +4042,8 @@ self: super: with self; {
 
   dvc-objects = callPackage ../development/python-modules/dvc-objects {  };
 
+  dvc-oss = callPackage ../development/python-modules/dvc-oss {  };
+
   dvc-render = callPackage ../development/python-modules/dvc-render {  };
 
   dvc-s3 = callPackage ../development/python-modules/dvc-s3 { };
