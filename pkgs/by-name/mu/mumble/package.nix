@@ -228,5 +228,5 @@ in
   mumble = lib.recursiveUpdate (client source) { meta.mainProgram = "mumble"; };
   murmur = lib.recursiveUpdate (server source) { meta.mainProgram = "mumble-server"; };
   # What is this meant to be used for? It's not used in nixpkgs.
-  overlay = overlay source;
+  mumble_overlay = overlay source;
 }

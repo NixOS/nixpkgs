@@ -14375,19 +14375,16 @@ with pkgs;
 
   mu-repo = python3Packages.callPackage ../applications/misc/mu-repo { };
 
-  murmur = (callPackages ../applications/networking/mumble {
+  inherit
+    (callPackages ../by-name/mu/mumble/package.nix {
       avahi = avahi-compat;
       pulseSupport = config.pulseaudio or false;
       iceSupport = config.murmur.iceSupport or true;
-    }).murmur;
-
-  mumble = (callPackages ../applications/networking/mumble {
-      avahi = avahi-compat;
-      jackSupport = config.mumble.jackSupport or false;
-      speechdSupport = config.mumble.speechdSupport or false;
-    }).mumble;
-
-  mumble_overlay = (callPackages ../applications/networking/mumble {}).overlay;
+    })
+    murmur
+    mumble
+    mumble_overlay
+    ;
 
   mup = callPackage ../applications/audio/mup {
     autoreconfHook = buildPackages.autoreconfHook269;
