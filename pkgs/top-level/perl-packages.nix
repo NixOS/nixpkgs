@@ -18821,6 +18821,13 @@ with self; {
     };
     buildInputs = [ TestDeep TestDifferences TestException TestMost TestWarn ];
     propagatedBuildInputs = [ CDDBFile Moo ];
+    patches = [
+      # https://rt.cpan.org/Public/Bug/Display.html?id=152242
+      (fetchpatch2 {
+        url = "https://sources.debian.org/data/main/libn/libnet-freedb-perl/0.10-5/debian/patches/implicit-function-declaration.patch";
+        hash = "sha256-oIfJuLzTm0JLzAUvP1mcGCm6oWGpcLWDPqHN/4pKC9Q=";
+      })
+    ];
     meta = {
       description = "OOP Interface to FreeDB Server(s)";
       license = with lib.licenses; [ artistic1 ];
