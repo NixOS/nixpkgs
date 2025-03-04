@@ -370,7 +370,7 @@ let
     diversitree = with pkgs; [ gsl fftw ];
     exactextractr = [ pkgs.geos ];
     EMCluster = [ pkgs.lapack ];
-    fangs = [ pkgs.cargo ];
+    fangs = with pkgs; [ cargo rustc ];
     fastpng = [ pkgs.zlib.dev ];
     fcl = with pkgs; [ cargo rustc ];
     fftw = [ pkgs.fftw.dev ];
