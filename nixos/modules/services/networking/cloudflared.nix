@@ -144,22 +144,48 @@ let
   };
 in
 {
+  imports = [
+    (lib.mkRemovedOptionModule
+      [
+        "services"
+        "cloudflared"
+        "user"
+      ]
+      ''
+        Cloudflared now uses a dynamic user, and this option no longer has any effect.
+
+        If the user is still necessary, please define it manually using users.users.cloudflared.
+      ''
+    )
+
+    (lib.mkRemovedOptionModule
+      [
+        "services"
+        "cloudflared"
+        "group"
+      ]
+      ''
+        Cloudflared now uses a dynamic user, and this option no longer has any effect.
+
+        If the group is still necessary, please define it manually using users.groups.cloudflared.
+      ''
+    )
+  ];
+
   options.services.cloudflared = {
     enable = lib.mkEnableOption "Cloudflare Tunnel client daemon (formerly Argo Tunnel)";
 
-    user = lib.mkOption {
-      type = lib.types.str;
-      default = "cloudflared";
-      description = "User account under which Cloudflared runs.";
-    };
-
-    group = lib.mkOption {
-      type = lib.types.str;
-      default = "cloudflared";
-      description = "Group under which cloudflared runs.";
-    };
-
     package = lib.mkPackageOption pkgs "cloudflared" { };
+
+    certificateFile = lib.mkOption {
+      type = with lib.types; nullOr path;
+      description = ''
+        Default cert.pem file to be used for all tunnels.
+
+        See [Cert.pem](https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/install-and-setup/tunnel-useful-terms/#certpem).
+      '';
+      default = null;
+    };
 
     tunnels = lib.mkOption {
       description = ''
@@ -173,7 +199,7 @@ in
               inherit originRequest;
 
               credentialsFile = lib.mkOption {
-                type = lib.types.str;
+                type = lib.types.path;
                 description = ''
                   Credential file.
 
@@ -191,6 +217,16 @@ in
                     See [Connect from WARP to a private network on Cloudflare using Cloudflare Tunnel](https://developers.cloudflare.com/cloudflare-one/tutorials/warp-to-tunnel/).
                   '';
                 };
+              };
+
+              certificateFile = lib.mkOption {
+                type = with lib.types; nullOr path;
+                description = ''
+                  Cert.pem file.
+
+                  See [Cert.pem](https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/install-and-setup/tunnel-useful-terms/#certpem).
+                '';
+                default = null;
               };
 
               default = lib.mkOption {
@@ -273,6 +309,12 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    assertions = lib.mapAttrsToList (name: tunnel: {
+      assertion =
+        tunnel.ingress == { } || (cfg.certificateFile != null || tunnel.certificateFile != null);
+      message = "Cloudflare Tunnel ${name} has a declarative configuration, but no certificate file was defined.";
+    }) cfg.tunnels;
+
     systemd.targets = lib.mapAttrs' (
       name: tunnel:
       lib.nameValuePair "cloudflared-tunnel-${name}" {
@@ -303,7 +345,7 @@ in
 
         fullConfig = filterConfig {
           tunnel = name;
-          "credentials-file" = tunnel.credentialsFile;
+          credentials-file = "/run/credentials/cloudflared-tunnel-${name}.service/credentials.json";
           warp-routing = filterConfig tunnel.warp-routing;
           originRequest = filterConfig tunnel.originRequest;
           ingress =
@@ -322,8 +364,9 @@ in
         };
 
         mkConfigFile = pkgs.writeText "cloudflared.yml" (builtins.toJSON fullConfig);
+        certFile = if (tunnel.certificateFile != null) then tunnel.certificateFile else cfg.certificateFile;
       in
-      lib.nameValuePair "cloudflared-tunnel-${name}" ({
+      lib.nameValuePair "cloudflared-tunnel-${name}" {
         after = [
           "network.target"
           "network-online.target"
@@ -334,24 +377,20 @@ in
         ];
         wantedBy = [ "multi-user.target" ];
         serviceConfig = {
-          User = cfg.user;
-          Group = cfg.group;
+          RuntimeDirectory = "cloudflared-tunnel-${name}";
+          RuntimeDirectoryMode = "0400";
+          LoadCredential = [
+            "credentials.json:${tunnel.credentialsFile}"
+          ] ++ (lib.optional (certFile != null) "cert.pem:certFile");
+
           ExecStart = "${cfg.package}/bin/cloudflared tunnel --config=${mkConfigFile} --no-autoupdate run";
           Restart = "on-failure";
+          DynamicUser = true;
         };
-      })
+
+        environment.TUNNEL_ORIGIN_CERT = lib.mkIf (certFile != null) ''%d/cert.pem'';
+      }
     ) config.services.cloudflared.tunnels;
-
-    users.users = lib.mkIf (cfg.user == "cloudflared") {
-      cloudflared = {
-        group = cfg.group;
-        isSystemUser = true;
-      };
-    };
-
-    users.groups = lib.mkIf (cfg.group == "cloudflared") {
-      cloudflared = { };
-    };
   };
 
   meta.maintainers = with lib.maintainers; [
