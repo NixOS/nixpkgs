@@ -24,8 +24,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    "-DLIBDICT_TESTS=${if finalAttrs.finalPackage.doCheck then "ON" else "OFF"}"
-    "-DLIBDICT_SHARED=${if stdenv.hostPlatform.isStatic then "OFF" else "ON"}"
+    (lib.cmakeBool "LIBDICT_TESTS" finalAttrs.finalPackage.doCheck)
+    (lib.cmakeBool "LIBDICT_SHARED" (!stdenv.hostPlatform.isStatic))
   ];
 
   env.NIX_CFLAGS_COMPILE = toString (
