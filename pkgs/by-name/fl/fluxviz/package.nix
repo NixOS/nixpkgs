@@ -6,7 +6,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "fluxvis";
-  version = "unstable-2024-11-08";
+  version = "1.0.0.alpha.4-unstable-2024-11-08";
   pyproject = true;
 
   src = fetchFromGitHub {
