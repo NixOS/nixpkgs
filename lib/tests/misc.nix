@@ -2521,6 +2521,21 @@ runTests {
     expr = (with types; either int (listOf (either bool str))).description;
     expected = "signed integer or list of (boolean or string)";
   };
+  testTypeFunctionToPropagateFunctionArgs = {
+    expr = lib.functionArgs ((types.functionTo types.null).merge [] [
+      {
+        value = {a, b ? false, ... }: null;
+      }
+      {
+        value = {b, c ? false, ... }: null;
+      }
+    ]);
+    expected = {
+      a = false;
+      b = false;
+      c = true;
+    };
+  };
 
 # Meta
   testGetExe'Output = {
