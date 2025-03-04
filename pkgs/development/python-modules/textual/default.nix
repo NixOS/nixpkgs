@@ -28,14 +28,14 @@
 
 buildPythonPackage rec {
   pname = "textual";
-  version = "1.0.0";
+  version = "2.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Textualize";
     repo = "textual";
     tag = "v${version}";
-    hash = "sha256-3pNUDkkq9X3W9DdWp4M4h4ddHN+GzUxLCFNJJdAtRJM=";
+    hash = "sha256-VKo1idLu5sYGtuK8yZzVE6QrrMOciYIesbGVlqzNjfk=";
   };
 
   build-system = [ poetry-core ];
@@ -87,6 +87,9 @@ buildPythonPackage rec {
       # https://github.com/Textualize/textual/issues/5449
       "test_setting_unknown_language"
       "test_update_highlight_query"
+
+      # Flaky, depends on CPU load
+      "test_auto_refresh"
     ]
     ++ lib.optionals (pythonAtLeast "3.13") [
       # https://github.com/Textualize/textual/issues/5327
@@ -105,7 +108,7 @@ buildPythonPackage rec {
   meta = {
     description = "TUI framework for Python inspired by modern web development";
     homepage = "https://github.com/Textualize/textual";
-    changelog = "https://github.com/Textualize/textual/releases/tag/v${version}";
+    changelog = "https://github.com/Textualize/textual/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ gepbird ];
   };
