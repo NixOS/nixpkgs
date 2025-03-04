@@ -16,6 +16,7 @@ import ./make-test-python.nix (
           virtualisation = {
             cores = 2;
             diskSize = 4096;
+            memorySize = 1024 * 2;
           };
 
           environment.systemPackages = with pkgs; [ curl ];
