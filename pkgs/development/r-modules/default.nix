@@ -603,6 +603,7 @@ let
     symbolicQspray = [ pkgs.pkg-config ];
     sphereTessellation = [ pkgs.pkg-config ];
     vapour = [ pkgs.pkg-config ];
+    xdvir = [ pkgs.freetype.dev ];
   };
 
   packagesWithBuildInputs = {
