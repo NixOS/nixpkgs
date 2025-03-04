@@ -6,6 +6,7 @@ let
   inherit (lib)
     elem
     flip
+    functionArgs
     isAttrs
     isBool
     isDerivation
@@ -15,6 +16,7 @@ let
     isList
     isString
     isStorePath
+    setFunctionArgs
     throwIf
     toDerivation
     toList
@@ -874,7 +876,13 @@ rec {
       descriptionClass = "composite";
       check = isFunction;
       merge = loc: defs:
-        fnArgs: (mergeDefinitions (loc ++ [ "<function body>" ]) elemType (map (fn: { inherit (fn) file; value = fn.value fnArgs; }) defs)).mergedValue;
+        let
+          merged = fnArgs: (mergeDefinitions (loc ++ [ "<function body>" ]) elemType (map (fn: { inherit (fn) file; value = fn.value fnArgs; }) defs)).mergedValue;
+          args = functionArgs (head defs).value;
+        in
+        if length defs == 1
+        then setFunctionArgs merged args
+        else merged;
       getSubOptions = prefix: elemType.getSubOptions (prefix ++ [ "<function body>" ]);
       getSubModules = elemType.getSubModules;
       substSubModules = m: functionTo (elemType.substSubModules m);

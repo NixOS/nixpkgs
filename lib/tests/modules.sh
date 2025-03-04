@@ -490,6 +490,7 @@ checkConfigOutput '^"b a"$' config.result ./functionTo/list-order.nix
 checkConfigOutput '^"a c"$' config.result ./functionTo/merging-attrs.nix
 checkConfigOutput '^"a bee"$' config.result ./functionTo/submodule-options.nix
 checkConfigOutput '^"fun.<function body>.a fun.<function body>.b"$' config.optionsResult ./functionTo/submodule-options.nix
+checkConfigOutput '^{"a":false,"b":false}$' config.result ./functionTo/function-args.nix
 
 # moduleType
 checkConfigOutput '^"a b"$' config.resultFoo ./declare-variants.nix ./define-variant.nix
