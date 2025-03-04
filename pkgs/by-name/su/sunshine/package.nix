@@ -55,13 +55,13 @@ let
 in
 stdenv'.mkDerivation rec {
   pname = "sunshine";
-  version = "2025.118.151840";
+  version = "2025.122.141614";
 
   src = fetchFromGitHub {
     owner = "LizardByte";
     repo = "Sunshine";
     tag = "v${version}";
-    hash = "sha256-sTZUHc1385qOmy2w3fjItIidCxnWeEjAaOFxfLBB65c=";
+    hash = "sha256-rHf+lj5dycXA//fu3RPuimYz2hrJnoVt7GA2xuHGXJk=";
     fetchSubmodules = true;
   };
 
@@ -191,6 +191,8 @@ stdenv'.mkDerivation rec {
     substituteInPlace packaging/linux/sunshine.desktop \
       --subst-var-by PROJECT_NAME 'Sunshine' \
       --subst-var-by PROJECT_DESCRIPTION 'Self-hosted game stream host for Moonlight' \
+      --subst-var-by SUNSHINE_DESKTOP_ICON 'sunshine' \
+      --subst-var-by CMAKE_INSTALL_FULL_DATAROOTDIR "$out/share" \
       --replace-fail '/usr/bin/env systemctl start --u sunshine' 'sunshine'
 
     substituteInPlace packaging/linux/sunshine.service.in \
