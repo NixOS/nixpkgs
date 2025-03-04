@@ -195,6 +195,7 @@ in
                 Extra arguments passed to restic backup.
               '';
               example = [
+                "--cleanup-cache"
                 "--exclude-file=/etc/nixos/restic-ignore"
               ];
             };
