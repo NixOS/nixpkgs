@@ -4054,6 +4054,8 @@ self: super: with self; {
 
   dvc-webdav = callPackage ../development/python-modules/dvc-webdav {  };
 
+  dvc-webhdfs = callPackage ../development/python-modules/dvc-webhdfs {  };
+
   dvclive = callPackage ../development/python-modules/dvclive {  };
 
   dwdwfsapi = callPackage ../development/python-modules/dwdwfsapi { };
