@@ -46,7 +46,7 @@ let
     ;
   inherit (libsForQt5.qt5) qtwayland;
   inherit (python311Packages)
-    boost
+    boost-python
     gitpython
     ifcopenshell
     matplotlib
@@ -88,7 +88,7 @@ freecad-utils.makeCustomizable (stdenv.mkDerivation (finalAttrs: {
   buildInputs =
     [
       gitpython # for addon manager
-      boost
+      boost-python
       coin3d
       doxygen
       eigen
