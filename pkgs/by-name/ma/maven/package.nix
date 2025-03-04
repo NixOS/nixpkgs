@@ -33,31 +33,15 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru =
-    let
-      makeOverridableMavenPackage =
-        mavenRecipe: mavenArgs:
-        let
-          drv = mavenRecipe mavenArgs;
-          overrideWith =
-            newArgs: mavenArgs // (if lib.isFunction newArgs then newArgs mavenArgs else newArgs);
-        in
-        drv
-        // {
-          overrideMavenAttrs = newArgs: makeOverridableMavenPackage mavenRecipe (overrideWith newArgs);
-        };
-    in
-    {
-      buildMaven = callPackage ./build-maven.nix {
-        maven = finalAttrs.finalPackage;
-      };
-
-      buildMavenPackage = makeOverridableMavenPackage (
-        callPackage ./build-maven-package.nix {
-          maven = finalAttrs.finalPackage;
-        }
-      );
+  passthru = {
+    buildMaven = callPackage ./build-maven.nix {
+      maven = finalAttrs.finalPackage;
     };
+
+    buildMavenPackage = callPackage ./build-maven-package.nix {
+      maven = finalAttrs.finalPackage;
+    };
+  };
 
   meta = {
     homepage = "https://maven.apache.org/";
