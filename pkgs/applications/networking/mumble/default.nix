@@ -124,7 +124,6 @@ let
         "-D bundled-gsl=OFF"
         # "-D bundled-renamenoise=OFF" # not packaged in nixpkgs yet
         "-D update=OFF"
-        "-D overlay-xcompile=OFF"
         "-D oss=OFF"
         "-D warnings-as-errors=OFF" # conversion error workaround
         (lib.cmakeBool "speechd" speechdSupport)
