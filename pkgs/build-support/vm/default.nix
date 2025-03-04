@@ -1025,6 +1025,23 @@ rec {
       packages = commonDebPackages ++ [ "diffutils" "libc-bin" ];
     };
 
+    ubuntu2404x86_64 = {
+      name = "ubuntu-24.04-noble-amd64";
+      fullName = "Ubuntu 24.04 Noble (amd64)";
+      packagesLists =
+        [ (fetchurl {
+            url = "mirror://ubuntu/dists/noble/main/binary-amd64/Packages.xz";
+            sha256 = "sha256-KmoZnhAxpcJ5yzRmRtWUmT81scA91KgqqgMjmA3ZJFE=";
+          })
+          (fetchurl {
+            url = "mirror://ubuntu/dists/noble/universe/binary-amd64/Packages.xz";
+            sha256 = "sha256-upBX+huRQ4zIodJoCNAMhTif4QHQwUliVN+XI2QFWZo=";
+          })
+        ];
+      urlPrefix = "mirror://ubuntu";
+      packages = commonDebPackages ++ [ "diffutils" "libc-bin" ];
+    };
+
     debian10i386 = {
       name = "debian-10.13-buster-i386";
       fullName = "Debian 10.13 Buster (i386)";
