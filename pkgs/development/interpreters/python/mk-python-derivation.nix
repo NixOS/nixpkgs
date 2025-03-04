@@ -306,7 +306,12 @@ let
           pythonRelaxDepsHook
         ]
         ++ optionals relaxBuildDeps [
-          pythonRelaxBuildDepsHook
+          (
+            lib.throwIf
+              (! finalAttrs.__structuredAttrs or false)
+              "${finalAttrs.pname or finalAttrs.name}: pythonRelaxBuildDepsHook requires __structuredAttrs = true."
+              pythonRelaxBuildDepsHook
+          )
         ]
         ++ optionals removeBinBytecode [
           pythonRemoveBinBytecodeHook
