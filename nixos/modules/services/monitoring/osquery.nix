@@ -65,16 +65,30 @@ in
           freeformType = attrsOf str;
           options = {
             database_path = lib.mkOption {
-              default = "osquery/osquery.db";
+              default = "/var/lib/osquery/osquery.db";
               readOnly = true;
-              description = "Path used for the database file, relative to /var/lib/.";
-              type = nonEmptyStr;
+              description = ''
+                Path used for the database file.
+
+                ::: {.note}
+                If left as the default value, this directory will be automatically created before the
+                service starts, otherwise you are responsible for ensuring the directory exists with
+                the appropriate ownership and permissions.
+              '';
+              type = path;
             };
             logger_path = lib.mkOption {
-              default = "osquery";
+              default = "/var/log/osquery";
               readOnly = true;
-              description = "Base directory used for logging, relative to /var/log/.";
-              type = nonEmptyStr;
+              description = ''
+                Base directory used for logging.
+
+                ::: {.note}
+                If left as the default value, this directory will be automatically created before the
+                service starts, otherwise you are responsible for ensuring the directory exists with
+                the appropriate ownership and permissions.
+              '';
+              type = path;
             };
             pidfile = mkOption {
               default = "/run/osquery/osqueryd.pid";
@@ -98,8 +112,8 @@ in
       serviceConfig = {
         ExecStart = "${pkgs.osquery}/bin/osqueryd --flagfile ${flagfile}";
         PIDFile = cfg.flags.pidfile;
-        LogsDirectory = cfg.flags.logger_path;
-        StateDirectory = dirname cfg.flags.database_path;
+        LogsDirectory = lib.mkIf (cfg.flags.logger_path == "/var/log/osquery") [ "osquery" ];
+        StateDirectory = lib.mkIf (cfg.flags.database_path == "/var/lib/osquery/osquery.db") [ "osquery" ];
         Restart = "always";
       };
       wantedBy = [ "multi-user.target" ];
