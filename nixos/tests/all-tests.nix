@@ -798,7 +798,7 @@ in {
   nixpkgs = pkgs.callPackage ../modules/misc/nixpkgs/test.nix { inherit evalMinimalConfig; };
   nixseparatedebuginfod = handleTest ./nixseparatedebuginfod.nix {};
   node-red = handleTest ./node-red.nix {};
-  nomad = handleTest ./nomad.nix {};
+  nomad = runTest ./nomad.nix;
   non-default-filesystems = handleTest ./non-default-filesystems.nix {};
   non-switchable-system = runTest ./non-switchable-system.nix;
   noto-fonts = handleTest ./noto-fonts.nix {};
