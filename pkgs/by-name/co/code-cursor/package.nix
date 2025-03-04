@@ -8,11 +8,10 @@
 }:
 let
   pname = "cursor";
-  version = "0.42.4";
-  appKey = "230313mzl4w4u92";
+  version = "0.45.14";
   src = fetchurl {
-    url = "https://download.todesktop.com/230313mzl4w4u92/cursor-0.42.4-build-2410291z3bdg1dy-x86_64.AppImage";
-    hash = "sha256-CD6bQ4T8DhJidiOxNRgRDL4obfEZx7hnO0VotVb6lDc=";
+    url = "https://archive.org/download/cursor-0.45.14x86_64/cursor-0.45.14x86_64.AppImage";
+    hash = "sha256-5MGWJi8TP+13jZf6YMMUU5uYY/3OBTFxtGpirvgj8ZI=";
   };
   appimageContents = appimageTools.extractType2 { inherit version pname src; };
 in
@@ -45,18 +44,15 @@ stdenvNoCC.mkDerivation {
 
   passthru.updateScript = writeScript "update.sh" ''
     #!/usr/bin/env nix-shell
-    #!nix-shell -i bash -p curl yq coreutils gnused common-updater-scripts
+    #!nix-shell -i bash -p curl nix-prefetch-url
     set -eu -o pipefail
-    latestLinux="$(curl -s https://download.todesktop.com/${appKey}/latest-linux.yml)"
-    version="$(echo "$latestLinux" | yq -r .version)"
-    filename="$(echo "$latestLinux" | yq -r '.files[] | .url | select(. | endswith(".AppImage"))')"
-    url="https://download.todesktop.com/${appKey}/$filename"
+    url="https://archive.org/download/cursor-0.45.14x86_64/cursor-${version}x86_64.AppImage"
     currentVersion=$(nix-instantiate --eval -E "with import ./. {}; code-cursor.version or (lib.getVersion code-cursor)" | tr -d '"')
 
-    if [[ "$version" != "$currentVersion" ]]; then
-      hash=$(nix-hash --to-sri --type sha256 "$(nix-prefetch-url "$url")")
-      update-source-version code-cursor "$version" "$hash" "$url" --source-key=src.src
-    fi
+    echo "Current version: $currentVersion, specified version: ${version}"
+    echo "Please manually update the version and hash in the Nix expression if needed."
+    hash=$(nix-prefetch-url "$url")
+    echo "New hash: $hash"
   '';
 
   meta = {
