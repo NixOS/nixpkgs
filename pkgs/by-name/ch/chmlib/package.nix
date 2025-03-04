@@ -22,6 +22,11 @@ stdenv.mkDerivation rec {
     NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
   };
 
+  configureFlags = [
+    "--enable-examples"
+    "--enable-devel"
+  ];
+
   meta = with lib; {
     homepage = "http://www.jedrea.com/chmlib";
     license = licenses.lgpl2;
