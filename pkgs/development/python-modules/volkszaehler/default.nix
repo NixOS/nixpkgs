@@ -22,7 +22,7 @@ buildPythonPackage rec {
     hash = "sha256-7SB0x0BO9SMeMG1M/hH4fX7oDbtwPgCzyRrrUq1/WPo=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
   dependencies = [
     aiohttp
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     description = "Python module for interacting with the Volkszahler API";
     homepage = "https://github.com/home-assistant-ecosystem/python-volkszaehler";
     changelog = "https://github.com/home-assistant-ecosystem/python-volkszaehler/releases/tag/${version}";
-    license = with licenses; [ mit ];
+    license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
 }
