@@ -120,6 +120,7 @@ let
 
       cmakeFlags = [
         (lib.cmakeBool "server" false)
+        (lib.cmakeBool "overlay" false) # defaults to client, but we have a separate target for the overlay
         (lib.cmakeBool "bundle-qt-translations" false)
         (lib.cmakeBool "bundled-json" false)
         (lib.cmakeBool "bundled-gsl" false)
