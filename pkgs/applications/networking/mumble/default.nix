@@ -33,6 +33,7 @@
   speechdSupport ? false,
   speechd-minimal,
   microsoft-gsl,
+  nlohmann_json,
 }:
 
 let
@@ -59,6 +60,7 @@ let
           poco
           protobuf
           microsoft-gsl
+          nlohmann_json
         ] ++ (overrides.buildInputs or [ ]);
 
         cmakeFlags = [
@@ -66,6 +68,7 @@ let
           "-D CMAKE_CXX_STANDARD=17" # protobuf >22 requires C++ 17
           "-D BUILD_NUMBER=${lib.versions.patch source.version}"
           "-D bundled-gsl=OFF"
+          "-D bundled-json=OFF"
         ] ++ (overrides.cmakeFlags or [ ]);
 
         preConfigure = ''
@@ -102,7 +105,6 @@ let
           libvorbis
           qt5.qtsvg
           rnnoise
-          speex
         ]
         ++ lib.optional (!jackSupport) alsa-lib
         ++ lib.optional jackSupport libjack2
