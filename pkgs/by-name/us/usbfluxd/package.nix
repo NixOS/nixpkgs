@@ -10,14 +10,14 @@
   usbmuxd,
   libplist,
 }:
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "usbfluxd";
-  version = "v1.0";
+  version = "1.0";
 
   src = fetchFromGitHub {
     owner = "corellium";
     repo = "usbfluxd";
-    rev = "v1.0";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-tfAy3e2UssPlRB/8uReLS5f8N/xUUzbjs8sKNlr40T0=";
   };
 
@@ -34,21 +34,19 @@ stdenv.mkDerivation {
     libplist
   ];
 
-  #configureFlags = [ "--without-static-libplist" ];
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace configure.ac \
-      --replace 'with_static_libplist=yes' 'with_static_libplist=no'
-    # Patch utils.h to comment out duplicate enum definitions.
-
+      --replace-fail 'with_static_libplist=yes' 'with_static_libplist=no'
     substituteInPlace usbfluxd/utils.h \
       --replace-fail PLIST_FORMAT_BINARY //PLIST_FORMAT_BINARY \
       --replace-fail PLIST_FORMAT_XML, NOT_PLIST_FORMAT_XML
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/corellium/usbfluxd";
-    description = "Redirects the standard usbmuxd socket to allow connections to local and remote usbmuxd instances so remote devices appear connected locally.";
-    license = licenses.gpl2Plus;
-    maintainers = [ ];
+    description = "Redirects the standard usbmuxd socket to allow connections to local and remote usbmuxd instances so remote devices appear connected locally";
+    license = lib.licenses.gpl2Plus;
+    mainProgram = "usbfluxctl";
+    maintainers = with lib.maintainers; [ x807x ];
   };
-}
+})
