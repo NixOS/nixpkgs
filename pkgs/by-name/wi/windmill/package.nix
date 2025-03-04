@@ -1,5 +1,6 @@
 {
   lib,
+  callPackage,
   rustPlatform,
   fetchFromGitHub,
   buildNpmPackage,
@@ -21,6 +22,14 @@
   rustfmt,
   stdenv,
   swagger-cli,
+  _experimental-update-script-combinators,
+  nix-update-script,
+  writeScript,
+  librusty_v8 ? (
+    callPackage ./librusty_v8.nix {
+      inherit (callPackage ./fetchers.nix { }) fetchLibrustyV8;
+    }
+  ),
 }:
 
 let
@@ -35,72 +44,15 @@ let
   };
 
   pythonEnv = python3.withPackages (ps: [ ps.pip-tools ]);
-
-  frontend-build = buildNpmPackage {
-    inherit version src;
-
-    pname = "windmill-ui";
-
-    sourceRoot = "${src.name}/frontend";
-
-    npmDepsHash = "sha256-3AeDGd/4dGHm8kGKEH3sqNOuQ1LPjP5n4qOEaqVMm0w=";
-
-    # without these you get a
-    # FATAL ERROR: Ineffective mark-compacts near heap limit Allocation failed - JavaScript heap out of memory
-    env.NODE_OPTIONS = "--max-old-space-size=8192";
-
-    preBuild = ''
-      npm run generate-backend-client
-    '';
-
-    buildInputs = [
-      pixman
-      cairo
-      pango
-      giflib
-    ];
-    nativeBuildInputs = [
-      python3
-      pkg-config
-    ];
-
-    installPhase = ''
-      mkdir -p $out/share
-      mv build $out/share/windmill-frontend
-    '';
-  };
 in
-rustPlatform.buildRustPackage {
-  inherit pname version;
-  src = "${src}/backend";
+rustPlatform.buildRustPackage (finalAttrs: {
+  inherit pname version src;
+  sourceRoot = "${src.name}/backend";
 
   env = {
     SQLX_OFFLINE = "true";
-    RUSTY_V8_ARCHIVE =
-      let
-        fetch_librusty_v8 =
-          args:
-          fetchurl {
-            name = "librusty_v8-${args.version}";
-            url = "https://github.com/denoland/rusty_v8/releases/download/v${args.version}/librusty_v8_release_${stdenv.hostPlatform.rust.rustcTarget}.a";
-            sha256 =
-              args.shas.${stdenv.hostPlatform.system}
-                or (throw "Unsupported platform ${stdenv.hostPlatform.system}");
-            meta = {
-              inherit (args) version;
-              sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-            };
-          };
-      in
-      fetch_librusty_v8 {
-        version = "0.83.2";
-        shas = {
-          x86_64-linux = "sha256-RJNdy5jRZK3dTgrHsWuZZAHUyy1EogyNNuBekZ3Arrk=";
-          aarch64-linux = "sha256-mpOmuqtd7ob6xvrgH4P/6GLa/hXTS/ok0WOYo7+7ZhI=";
-          x86_64-darwin = "sha256-2o8CvJ3r5+4PLNGTySqPPDTqbU0piX4D1UtZMscMdHU=";
-          aarch64-darwin = "sha256-WHeITWSHjZxfQJndxcjsp4yIERKrKXSHFZ0UBc43p8o=";
-        };
-      };
+    FRONTEND_BUILD_DIR = "${finalAttrs.passthru.web-ui}/share/windmill-frontend";
+    RUSTY_V8_ARCHIVE = librusty_v8;
   };
 
   cargoLock = {
@@ -130,14 +82,6 @@ rustPlatform.buildRustPackage {
 
     substituteInPlace src/main.rs \
       --replace 'unknown-version' 'v${version}'
-
-    pushd ..
-
-    mkdir -p frontend/build
-    cp -R ${frontend-build}/share/windmill-frontend/* frontend/build
-    cp ${src}/openflow.openapi.yaml .
-
-    popd
   '';
 
   buildInputs = [
@@ -150,7 +94,6 @@ rustPlatform.buildRustPackage {
   nativeBuildInputs = [
     pkg-config
     makeWrapper
-    swagger-cli
     cmake # for libz-ng-sys crate
   ];
 
@@ -177,6 +120,52 @@ rustPlatform.buildRustPackage {
       --set NSJAIL_PATH "${nsjail}/bin/nsjail"
   '';
 
+  passthru.web-ui = buildNpmPackage {
+    inherit version src;
+
+    pname = "windmill-ui";
+
+    sourceRoot = "${src.name}/frontend";
+
+    npmDepsHash = "sha256-3AeDGd/4dGHm8kGKEH3sqNOuQ1LPjP5n4qOEaqVMm0w=";
+
+    # without these you get a
+    # FATAL ERROR: Ineffective mark-compacts near heap limit Allocation failed - JavaScript heap out of memory
+    env.NODE_OPTIONS = "--max-old-space-size=8192";
+
+    postUnpack = ''
+      cp ${src}/openflow.openapi.yaml .
+    '';
+
+    preBuild = ''
+      npm run generate-backend-client
+    '';
+
+    buildInputs = [
+      pixman
+      cairo
+      pango
+    ];
+    nativeBuildInputs = [
+      pkg-config
+    ];
+
+    installPhase = ''
+      mkdir -p $out/share
+      mv build $out/share/windmill-frontend
+    '';
+  };
+
+  passthru.updateScript = _experimental-update-script-combinators.sequence [
+    (nix-update-script {
+      extraArgs = [
+        "--subpackage"
+        "web-ui"
+      ];
+    })
+    (./update-librusty.sh)
+  ];
+
   meta = {
     changelog = "https://github.com/windmill-labs/windmill/blob/${src.rev}/CHANGELOG.md";
     description = "Open-source developer platform to turn scripts into workflows and UIs";
@@ -194,4 +183,4 @@ rustPlatform.buildRustPackage {
       "aarch64-linux"
     ];
   };
-}
+})
