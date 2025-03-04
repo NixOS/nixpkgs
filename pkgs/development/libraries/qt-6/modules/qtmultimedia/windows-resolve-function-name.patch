@@ -1,0 +1,28 @@
+--- a/src/plugins/multimedia/ffmpeg/qwincapturablewindows.cpp
++++ b/src/plugins/multimedia/ffmpeg/qwincapturablewindows.cpp
+@@ -42,11 +42,7 @@ static QString windowTitle(HWND hwnd) {
+     return QString::fromStdWString(buffer);
+ }
+ 
+-QList<QCapturableWindow> QWinCapturableWindows::windows() const
+-{
+-    QList<QCapturableWindow> result;
+-
+-    auto windowHandler = [](HWND hwnd, LPARAM lParam) {
++static int __stdcall windowHandler(HWND hwnd, LPARAM lParam) {
+         if (!canCaptureWindow(hwnd))
+             return TRUE; // Ignore window and continue enumerating
+ 
+@@ -58,7 +54,11 @@ QList<QCapturableWindow> QWinCapturableWindows::windows() const
+         windows.push_back(windowData.release()->create());
+ 
+         return TRUE;
+-    };
++}
++
++QList<QCapturableWindow> QWinCapturableWindows::windows() const
++{
++    QList<QCapturableWindow> result;
+ 
+     ::EnumWindows(windowHandler, reinterpret_cast<LPARAM>(&result));
+ 

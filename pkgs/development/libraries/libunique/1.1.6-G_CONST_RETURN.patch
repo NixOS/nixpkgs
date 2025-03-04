@@ -1,0 +1,143 @@
+From 557b0e5045c9eadb556ce11e16965cf0d0787438 Mon Sep 17 00:00:00 2001
+From: Stef Walter <stefw@collabora.co.uk>
+Date: Tue, 14 Jun 2011 12:33:45 +0100
+Subject: [PATCH] Remove G_CONST_RETURN usage, now that its gone in glib.
+
+https://bugzilla.gnome.org/show_bug.cgi?id=652545
+
+[Alexandre Rostovtsev <tetromino@gmail.com>: backported to unique-1.1]
+---
+ unique/uniqueapp.c       |    4 ++--
+ unique/uniquebackend.c   |    4 ++--
+ unique/uniquebackend.h   |    4 ++--
+ unique/uniqueinternals.h |    4 ++--
+ unique/uniquemessage.c   |    4 ++--
+ unique/uniquemessage.h   |    4 ++--
+ 6 files changed, 12 insertions(+), 12 deletions(-)
+
+diff --git a/unique/uniqueapp.c b/unique/uniqueapp.c
+index b40a86c..e8edc94 100644
+--- a/unique/uniqueapp.c
++++ b/unique/uniqueapp.c
+@@ -781,7 +781,7 @@ unique_app_watch_window (UniqueApp *app,
+ }
+ 
+ 
+-G_CONST_RETURN gchar *
++const gchar *
+ unique_command_to_string (UniqueApp *app,
+                           gint       command)
+ {
+@@ -863,7 +863,7 @@ unique_command_from_string (UniqueApp   *app,
+   return retval;
+ }
+ 
+-G_CONST_RETURN gchar *
++const gchar *
+ unique_response_to_string (UniqueResponse response)
+ {
+   GEnumClass *enum_class;
+diff --git a/unique/uniquebackend.c b/unique/uniquebackend.c
+index a76e42e..68e2735 100644
+--- a/unique/uniquebackend.c
++++ b/unique/uniquebackend.c
+@@ -111,7 +111,7 @@ unique_backend_set_name (UniqueBackend *backend,
+  *
+  * Return value: FIXME
+  */
+-G_CONST_RETURN gchar *
++const gchar *
+ unique_backend_get_name (UniqueBackend *backend)
+ {
+   g_return_val_if_fail (UNIQUE_IS_BACKEND (backend), NULL);
+@@ -154,7 +154,7 @@ unique_backend_set_startup_id (UniqueBackend *backend,
+  *
+  * Return value: FIXME
+  */
+-G_CONST_RETURN gchar *
++const gchar *
+ unique_backend_get_startup_id (UniqueBackend *backend)
+ {
+   g_return_val_if_fail (UNIQUE_IS_BACKEND (backend), NULL);
+diff --git a/unique/uniquebackend.h b/unique/uniquebackend.h
+index a50ce4e..b19ad3e 100644
+--- a/unique/uniquebackend.h
++++ b/unique/uniquebackend.h
+@@ -94,10 +94,10 @@ GType                 unique_backend_get_type       (void) G_GNUC_CONST;
+ 
+ UniqueBackend *       unique_backend_create         (void);
+ 
+-G_CONST_RETURN gchar *unique_backend_get_name       (UniqueBackend     *backend);
++const gchar *         unique_backend_get_name       (UniqueBackend     *backend);
+ void                  unique_backend_set_name       (UniqueBackend     *backend,
+                                                      const gchar       *name);
+-G_CONST_RETURN gchar *unique_backend_get_startup_id (UniqueBackend     *backend);
++const gchar *         unique_backend_get_startup_id (UniqueBackend     *backend);
+ void                  unique_backend_set_startup_id (UniqueBackend     *backend,
+                                                      const gchar       *startup_id);
+ GdkScreen *           unique_backend_get_screen     (UniqueBackend     *backend);
+diff --git a/unique/uniqueinternals.h b/unique/uniqueinternals.h
+index 3cec152..ccae0cd 100644
+--- a/unique/uniqueinternals.h
++++ b/unique/uniqueinternals.h
+@@ -44,11 +44,11 @@ UniqueResponse unique_app_emit_message_received (UniqueApp         *app,
+  * and then back into an id
+  */
+ UniqueResponse        unique_response_from_string  (const gchar    *response);
+-G_CONST_RETURN gchar *unique_response_to_string    (UniqueResponse  response);
++const gchar *         unique_response_to_string    (UniqueResponse  response);
+ 
+ gint                  unique_command_from_string   (UniqueApp      *app,
+                                                     const gchar    *command);
+-G_CONST_RETURN gchar *unique_command_to_string     (UniqueApp      *app,
++const gchar *         unique_command_to_string     (UniqueApp      *app,
+                                                     gint            command);
+ 
+ G_END_DECLS
+diff --git a/unique/uniquemessage.c b/unique/uniquemessage.c
+index c74392d..2b2a9fc 100644
+--- a/unique/uniquemessage.c
++++ b/unique/uniquemessage.c
+@@ -185,7 +185,7 @@ unique_message_data_set (UniqueMessageData *message_data,
+  *
+  * Since: 1.0.2
+  */
+-G_CONST_RETURN guchar *
++const guchar *
+ unique_message_data_get (UniqueMessageData *message_data,
+                          gsize             *length)
+ {
+@@ -525,7 +525,7 @@ unique_message_data_get_screen (UniqueMessageData *message_data)
+  *   owned by the #UniqueMessageData structure and should not be
+  *   modified or freed
+  */
+-G_CONST_RETURN gchar *
++const gchar *
+ unique_message_data_get_startup_id (UniqueMessageData *message_data)
+ {
+   g_return_val_if_fail (message_data != NULL, NULL);
+diff --git a/unique/uniquemessage.h b/unique/uniquemessage.h
+index d3e9c3c..93eee21 100644
+--- a/unique/uniquemessage.h
++++ b/unique/uniquemessage.h
+@@ -48,7 +48,7 @@ void                   unique_message_data_free           (UniqueMessageData *me
+ void                   unique_message_data_set            (UniqueMessageData *message_data,
+                                                            const guchar      *data,
+                                                            gsize              length);
+-G_CONST_RETURN guchar *unique_message_data_get            (UniqueMessageData *message_data,
++const guchar *         unique_message_data_get            (UniqueMessageData *message_data,
+                                                            gsize             *length);
+ 
+ gboolean               unique_message_data_set_text       (UniqueMessageData *message_data,
+@@ -63,7 +63,7 @@ void                   unique_message_data_set_filename   (UniqueMessageData *me
+ gchar *                unique_message_data_get_filename   (UniqueMessageData *message_data);
+ 
+ GdkScreen *            unique_message_data_get_screen     (UniqueMessageData *message_data);
+-G_CONST_RETURN gchar * unique_message_data_get_startup_id (UniqueMessageData *message_data);
++const gchar *          unique_message_data_get_startup_id (UniqueMessageData *message_data);
+ guint                  unique_message_data_get_workspace  (UniqueMessageData *message_data);
+ 
+ G_END_DECLS
+-- 
+1.7.6
+
