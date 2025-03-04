@@ -30,6 +30,11 @@
     "hash": "sha256-7c5TRZ594tr1Fj5fNiXtPI0pcBuyX/3eU4x+it6Yzew="
   },
   {
+    "pname": "Microsoft.AspNetCore.App.Ref",
+    "version": "6.0.36",
+    "hash": "sha256-9jDkWbjw/nd8yqdzVTagCuqr6owJ/DUMi4BlUZT4hWU="
+  },
+  {
     "pname": "Microsoft.Bcl.AsyncInterfaces",
     "version": "1.1.1",
     "hash": "sha256-fAcX4sxE0veWM1CZBtXR/Unky+6sE33yrV7ohrWGKig="
@@ -81,11 +86,6 @@
   },
   {
     "pname": "Microsoft.CodeAnalysis.Analyzers",
-    "version": "3.3.3",
-    "hash": "sha256-pkZiggwLw8k+CVSXKTzsVGsT+K49LxXUS3VH5PNlpCY="
-  },
-  {
-    "pname": "Microsoft.CodeAnalysis.Analyzers",
     "version": "3.3.4",
     "hash": "sha256-qDzTfZBSCvAUu9gzq2k+LOvh6/eRvJ9++VCNck/ZpnE="
   },
@@ -101,11 +101,6 @@
   },
   {
     "pname": "Microsoft.CodeAnalysis.Common",
-    "version": "3.10.0",
-    "hash": "sha256-AXmLVmjWuDXmV/P0aeeioA5NzthnCWepT4hHWgjmR4k="
-  },
-  {
-    "pname": "Microsoft.CodeAnalysis.Common",
     "version": "3.11.0",
     "hash": "sha256-lOW5q1kAAk+Wpweb9TaZ1LztWzAODt9yZKe6SN5rkV8="
   },
@@ -118,11 +113,6 @@
     "pname": "Microsoft.CodeAnalysis.Common",
     "version": "4.8.0",
     "hash": "sha256-3IEinVTZq6/aajMVA8XTRO3LTIEt0PuhGyITGJLtqz4="
-  },
-  {
-    "pname": "Microsoft.CodeAnalysis.CSharp",
-    "version": "3.10.0",
-    "hash": "sha256-09QIyQUkYBg8ltgWtDrCg8f6wnN/sLhduDG3BGvcl14="
   },
   {
     "pname": "Microsoft.CodeAnalysis.CSharp",
@@ -223,6 +213,11 @@
     "pname": "Microsoft.NET.Test.Sdk",
     "version": "17.7.1",
     "hash": "sha256-ySyNpRodd6R6qKnGrgwLYaiHZga2GL0fQARrYGIFa6k="
+  },
+  {
+    "pname": "Microsoft.NETCore.App.Ref",
+    "version": "6.0.36",
+    "hash": "sha256-9LZgVoIFF8qNyUu8kdJrYGLutMF/cL2K82HN2ywwlx8="
   },
   {
     "pname": "Microsoft.NETCore.Platforms",
@@ -358,6 +353,11 @@
     "pname": "NuGet.Frameworks",
     "version": "5.6.0",
     "hash": "sha256-iMacMTcuvemRQ4p3gv/3MioC/OEDOju8rnmZioWq9bc="
+  },
+  {
+    "pname": "NuGet.Frameworks",
+    "version": "6.12.1",
+    "hash": "sha256-GGpkbas+PNLx35vvr3nyAVz5lY/aeoMx6qjmT368Lpg="
   },
   {
     "pname": "NuGet.Frameworks",
@@ -800,6 +800,11 @@
     "hash": "sha256-3sCEfzO4gj5CYGctl9ZXQRRhwAraMQfse7yzKoRe65E="
   },
   {
+    "pname": "System.Memory",
+    "version": "4.5.5",
+    "hash": "sha256-EPQ9o1Kin7KzGI5O3U3PUQAZTItSbk9h/i4rViN3WiI="
+  },
+  {
     "pname": "System.Net.Http",
     "version": "4.3.0",
     "hash": "sha256-UoBB7WPDp2Bne/fwxKF0nE8grJ6FzTMXdT/jfsphj8Q="
@@ -1113,6 +1118,11 @@
     "pname": "System.Text.Encoding.CodePages",
     "version": "4.5.1",
     "hash": "sha256-PIhkv59IXjyiuefdhKxS9hQfEwO9YWRuNudpo53HQfw="
+  },
+  {
+    "pname": "System.Text.Encoding.CodePages",
+    "version": "7.0.0",
+    "hash": "sha256-eCKTVwumD051ZEcoJcDVRGnIGAsEvKpfH3ydKluHxmo="
   },
   {
     "pname": "System.Text.Encoding.Extensions",
