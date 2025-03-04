@@ -391,4 +391,6 @@ rec {
   # same package in the (recursive) dependencies of the package being
   # built. Will delay failures, if any, to compile time.
   allowInconsistentDependencies = compose.allowInconsistentDependencies;
+
+  incremental = pkg: args: compose.incremental args pkg;
 }
