@@ -823,6 +823,9 @@ in {
   ollama-rocm = runTestOn ["x86_64-linux" "aarch64-linux"] ./ollama-rocm.nix;
   ombi = handleTest ./ombi.nix {};
   openarena = handleTest ./openarena.nix {};
+  openbao = handleTest ./openbao.nix {};
+  openbao-dev = handleTest ./openbao-dev.nix {};
+  openbao-postgresql = handleTest ./openbao-postgresql.nix {};
   openldap = handleTest ./openldap.nix {};
   opensearch = discoverTests (import ./opensearch.nix);
   openresty-lua = handleTest ./openresty-lua.nix {};
