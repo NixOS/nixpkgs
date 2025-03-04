@@ -68,6 +68,12 @@ in
             "docker run --rm -it nix-shell-command | grep 'This shell is interactive'"
         )
 
+    with subtest("buildNixShellImage: command override works"):
+        docker.succeed(
+            "${examples.nix-shell-command-override} | docker load",
+            "docker run --rm -it nix-shell-command-override /bin/sh -c hello | grep 'Hello, world!'"
+        )
+
     with subtest("buildNixShellImage: home directory is writable by default"):
         docker.succeed(
             "${examples.nix-shell-writable-home} | docker load",
