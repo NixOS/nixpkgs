@@ -21,6 +21,7 @@
   libXrandr,
   libXrender,
   makeWrapper,
+  nix-update-script,
   pkg-config,
   scons,
   speechd-minimal,
@@ -227,11 +228,14 @@ let
         runHook postInstall
       '';
 
-    passthru.tests = {
-      version = testers.testVersion {
-        package = finalAttrs.finalPackage;
-        version = lib.replaceStrings [ "-" ] [ "." ] version;
+    passthru = {
+      tests = {
+        version = testers.testVersion {
+          package = finalAttrs.finalPackage;
+          version = lib.replaceStrings [ "-" ] [ "." ] version;
+        };
       };
+      updateScript = nix-update-script { };
     };
 
     requiredSystemFeatures = [
