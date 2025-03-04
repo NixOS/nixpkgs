@@ -1,0 +1,36 @@
+diff --git a/macx/scripts/build-overlay-installer b/macx/scripts/build-overlay-installer
+index a4fe20aea..b198e653d 100755
+--- a/macx/scripts/build-overlay-installer
++++ b/macx/scripts/build-overlay-installer
+@@ -5,24 +5,26 @@
+ # that can be found in the LICENSE file at the root of the
+ # Mumble source tree or at <https://www.mumble.info/LICENSE>.
+
++set -xe
++
+ cp libmumbleoverlay.dylib MumbleOverlay.osax/Contents/MacOS/
+
+-productbuild \
++xcrun productbuild \
+ 	--component MumbleOverlay.osax /Library/ScriptingAdditions \
+ 	synth.pkg
+
+ root=$(mktemp -d -t mumble-overlay-installer)
+-/usr/bin/xar -f synth.pkg -x -C ${root}
++xar -f synth.pkg -x -C ${root}
+ mkdir -p ${root}/Resources
+ mv bg.png ${root}/Resources/
+-VERSION=`/usr/libexec/PlistBuddy -c "print MumbleOverlayVersion" MumbleOverlay.osax/Contents/Info.plist`
+-MINCLIENT=`/usr/libexec/PlistBuddy -c "print MumbleOverlayMinMumbleVersion" MumbleOverlay.osax/Contents/Info.plist`
++VERSION=`PlistBuddy -c "print MumbleOverlayVersion" MumbleOverlay.osax/Contents/Info.plist`
++MINCLIENT=`PlistBuddy -c "print MumbleOverlayMinMumbleVersion" MumbleOverlay.osax/Contents/Info.plist`
+ echo "<upgrade version=\"${VERSION}\" minclient=\"${MINCLIENT}\" />" > ${root}/upgrade.xml
+
+ sed -i '' -e 's,<installer-gui-script minSpecVersion="1">,<installer-gui-script minSpecVersion="1"><title>Mumble Overlay</title><background mime-type="image/png" file="bg.png" />,' ${root}/Distribution
+
+ pushd ${root}
+-/usr/bin/xar -f MumbleOverlay.pkg --no-compress "^.*$" -c ./*
++xar -f MumbleOverlay.pkg --no-compress "^.*$" -c ./*
+ popd
+
+ cp ${root}/MumbleOverlay.pkg MumbleOverlay.pkg
