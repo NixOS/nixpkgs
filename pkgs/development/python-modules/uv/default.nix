@@ -1,6 +1,7 @@
 {
   buildPythonPackage,
   installShellFiles,
+  lib,
   pkg-config,
   rustPlatform,
   pkgs,
@@ -18,6 +19,17 @@ buildPythonPackage {
     postInstall
     versionCheckProgramArg
     ;
+
+  postPatch = ''
+    cat > python/uv/_find_uv.py <<EOF
+    from __future__ import annotations
+
+
+    def find_uv_bin() -> str:
+        """Return the uv binary path."""
+        return "$out/bin/uv"
+    EOF
+  '';
 
   nativeBuildInputs = [
     pkgs.cmake

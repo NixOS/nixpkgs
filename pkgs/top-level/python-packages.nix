@@ -487,6 +487,8 @@ self: super: with self; {
 
   aioweenect = callPackage ../development/python-modules/aioweenect { };
 
+  aiowebdav2 = callPackage ../development/python-modules/aiowebdav2 { };
+
   aiowebostv = callPackage ../development/python-modules/aiowebostv { };
 
   aiowmi = callPackage ../development/python-modules/aiowmi { };
@@ -6506,6 +6508,8 @@ self: super: with self; {
 
   ioctl-opt = callPackage ../development/python-modules/ioctl-opt { };
 
+  iometer = callPackage ../development/python-modules/iometer { };
+
   ionhash = callPackage ../development/python-modules/ionhash { };
 
   ionoscloud = callPackage ../development/python-modules/ionoscloud { };
@@ -10555,6 +10559,8 @@ self: super: with self; {
 
   pymeshlab = toPythonModule (pkgs.libsForQt5.callPackage ../applications/graphics/pymeshlab { });
 
+  pypglab = callPackage ../development/python-modules/pypglab { };
+
   pyprecice = callPackage ../development/python-modules/pyprecice { };
 
   pyprobables = callPackage ../development/python-modules/pyprobables { };
@@ -10938,6 +10944,8 @@ self: super: with self; {
 
   pyskyqremote = callPackage ../development/python-modules/pyskyqremote { };
 
+  pysmhi = callPackage ../development/python-modules/pysmhi { };
+
   pysolcast = callPackage ../development/python-modules/pysolcast { };
 
   pystac = callPackage ../development/python-modules/pystac { };
@@ -11050,6 +11058,8 @@ self: super: with self; {
 
   python-pptx = callPackage ../development/python-modules/python-pptx { };
 
+  python-snoo = callPackage ../development/python-modules/python-snoo { };
+
   python-songpal = callPackage ../development/python-modules/python-songpal { };
 
   python-swiftclient = callPackage ../development/python-modules/python-swiftclient { };
@@ -11072,6 +11082,8 @@ self: super: with self; {
   pytomorrowio = callPackage ../development/python-modules/pytomorrowio { };
 
   pytorch3d = callPackage ../development/python-modules/pytorch3d { };
+
+  pytouchline-extended = callPackage ../development/python-modules/pytouchline-extended { };
 
   pytouchlinesl = callPackage ../development/python-modules/pytouchlinesl { };
 
@@ -13578,7 +13590,7 @@ self: super: with self; {
 
   python-periphery = callPackage ../development/python-modules/python-periphery { };
 
-  python-picnic-api = callPackage ../development/python-modules/python-picnic-api { };
+  python-picnic-api2 = callPackage ../development/python-modules/python-picnic-api2 { };
 
   python-pidfile = callPackage ../development/python-modules/python-pidfile { };
 
