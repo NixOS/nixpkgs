@@ -82,11 +82,8 @@ stdenv.mkDerivation rec {
     substituteInPlace src/tint2conf/CMakeLists.txt \
       --replace-fail "RSVG_LIBRARIES} )" "RSVG_LIBRARIES} m)"
 
-    for f in ./src/launcher/apps-common.c \
-             ./src/launcher/icon-theme-common.c
-    do
-      substituteInPlace $f --replace-fail /usr/share/ /run/current-system/sw/share/
-    done
+    substituteInPlace src/launcher/apps-common.c src/launcher/icon-theme-common.c \
+      --replace-fail /usr/share/ /run/current-system/sw/share/
   '';
 
   meta = with lib; {
