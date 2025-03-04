@@ -11,7 +11,7 @@
   libGL,
   libjpeg_turbo,
   makeWrapper,
-  mesa, # for built-in 3D software rendering using swrast
+  mesa-gl-headers, # for built-in 3D software rendering using swrast
   openjdk, # for the client with Java GUI
   openjdk_headless, # for the server
   openssh,
@@ -80,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
       libXfont2 # for -DTVNC_SYSTEMX11=1
       libxkbfile # for -DTVNC_SYSTEMX11=1
       libXi
-      mesa # for -DTVNC_SYSTEMX11=1
+      mesa-gl-headers # for -DTVNC_SYSTEMX11=1
       pixman # for -DTVNC_SYSTEMX11=1
       xorgproto
       xtrans # for -DTVNC_SYSTEMX11=1
@@ -97,7 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
     # to the swrast dri driver in Mesa.
     # Can also be given at runtime to its `Xvnc` as:
     #   -dridir /nix/store/...-mesa-20.1.10-drivers/lib/dri/
-    "-DXORG_DRI_DRIVER_PATH=${mesa.driverLink}/lib/dri"
+    "-DXORG_DRI_DRIVER_PATH=${libGL.driverLink}/lib/dri"
     # The build system doesn't find these files automatically.
     "-DTJPEG_JAR=${libjpeg_turbo.out}/share/java/turbojpeg.jar"
     "-DTJPEG_JNILIBRARY=${libjpeg_turbo.out}/lib/libturbojpeg.so"
