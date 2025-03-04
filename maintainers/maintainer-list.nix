@@ -12621,6 +12621,12 @@
     githubId = 36413794;
     name = "Arek Kalandyk";
   };
+  koschi13 = {
+    email = "maximilian.konter@protonmail.com";
+    github = "koschi13";
+    githubId = 17250956;
+    name = "Maximilian Konter";
+  };
   koslambrou = {
     email = "koslambrou@gmail.com";
     github = "koslambrou";
