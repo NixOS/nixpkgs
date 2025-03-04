@@ -3,7 +3,6 @@
   autoPatchelfHook,
   buildPackages,
   dbus,
-  dotnet-sdk_6,
   dotnetCorePackages,
   fetchFromGitHub,
   fontconfig,
@@ -63,14 +62,21 @@ let
 
   attrs = finalAttrs: rec {
     pname = "godot4${suffix}";
-    version = "4.3-stable";
-    commitHash = "77dcf97d82cbfe4e4615475fa52ca03da645dbd8";
+    version = "4.4-stable";
 
     src = fetchFromGitHub {
       owner = "godotengine";
       repo = "godot";
-      rev = commitHash;
-      hash = "sha256-v2lBD3GEL8CoIwBl3UoLam0dJxkLGX0oneH6DiWkEsM=";
+      tag = version;
+      hash = "sha256-GQOWGQ8f640xAqj1x6owIn0CTKFvlT873U0px0RJIL4=";
+      # Required for the commit hash to be included in the version number.
+      #
+      # `methods.py` reads the commit hash from `.git/HEAD` and manually follows
+      # refs.
+      #
+      # See also 'hash' in
+      # https://docs.godotengine.org/en/stable/classes/class_engine.html#class-engine-method-get-version-info
+      leaveDotGit = true;
     };
 
     outputs = [
@@ -88,28 +94,15 @@ let
     # https://docs.godotengine.org/en/stable/classes/class_engine.html#class-engine-method-get-version-info
     BUILD_NAME = "nixpkgs";
 
-    # Required for the commit hash to be included in the version number.
-    #
-    # `methods.py` reads the commit hash from `.git/HEAD` and manually follows
-    # refs. Since we just write the hash directly, there is no need to emulate any
-    # other parts of the .git directory.
-    #
-    # See also 'hash' in
-    # https://docs.godotengine.org/en/stable/classes/class_engine.html#class-engine-method-get-version-info
-    preConfigure =
-      ''
-        mkdir -p .git
-        echo ${commitHash} > .git/HEAD
-      ''
-      + lib.optionalString withMono ''
-        # TODO: avoid pulling in dependencies of windows-only project
-        dotnet sln modules/mono/editor/GodotTools/GodotTools.sln \
-          remove modules/mono/editor/GodotTools/GodotTools.OpenVisualStudio/GodotTools.OpenVisualStudio.csproj
+    preConfigure = lib.optionalString withMono ''
+      # TODO: avoid pulling in dependencies of windows-only project
+      dotnet sln modules/mono/editor/GodotTools/GodotTools.sln \
+        remove modules/mono/editor/GodotTools/GodotTools.OpenVisualStudio/GodotTools.OpenVisualStudio.csproj
 
-        dotnet restore modules/mono/glue/GodotSharp/GodotSharp.sln
-        dotnet restore modules/mono/editor/GodotTools/GodotTools.sln
-        dotnet restore modules/mono/editor/Godot.NET.Sdk/Godot.NET.Sdk.sln
-      '';
+      dotnet restore modules/mono/glue/GodotSharp/GodotSharp.sln
+      dotnet restore modules/mono/editor/GodotTools/GodotTools.sln
+      dotnet restore modules/mono/editor/Godot.NET.Sdk/Godot.NET.Sdk.sln
+    '';
 
     # From: https://github.com/godotengine/godot/blob/4.2.2-stable/SConstruct
     sconsFlags = mkSconsFlagsFromAttrSet {
@@ -144,7 +137,7 @@ let
       pkg-config
     ];
 
-    buildInputs = lib.optionals withMono dotnet-sdk_6.packages;
+    buildInputs = lib.optionals withMono dotnet-sdk.packages;
 
     nativeBuildInputs =
       [
@@ -272,7 +265,7 @@ stdenv.mkDerivation (
         runtimeIds = map (system: dotnetCorePackages.systemToDotnetRid system) old.meta.platforms;
         buildInputs =
           old.buildInputs
-          ++ lib.concatLists (lib.attrValues (lib.getAttrs runtimeIds dotnet-sdk_6.targetPackages));
+          ++ lib.concatLists (lib.attrValues (lib.getAttrs runtimeIds dotnet-sdk.targetPackages));
       };
     } attrs
   else
