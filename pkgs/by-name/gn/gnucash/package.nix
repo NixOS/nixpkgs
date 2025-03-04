@@ -25,7 +25,11 @@
   swig,
   webkitgtk_4_0,
   wrapGAppsHook3,
+  python ? null,
+  enablePython ? false,
 }:
+
+assert enablePython -> (python != null);
 
 stdenv.mkDerivation rec {
   pname = "gnucash";
@@ -43,6 +47,11 @@ stdenv.mkDerivation rec {
     makeWrapper
     wrapGAppsHook3
     pkg-config
+  ];
+
+  cmakeFlags = lib.optional enablePython [
+    "-DWITH_PYTHON=\"ON\""
+    "-DPYTHON_SYSCONFIG_BUILD=\"$out\""
   ];
 
   buildInputs =
@@ -68,7 +77,8 @@ stdenv.mkDerivation rec {
       JSONParse
       FinanceQuote
       perl
-    ]);
+    ])
+    ++ lib.optional enablePython python;
 
   patches = [
     # this patch disables test-gnc-timezone and test-gnc-datetime which fail due to nix datetime challenges
@@ -80,6 +90,20 @@ stdenv.mkDerivation rec {
     # this patch makes gnucash exec the Finance::Quote wrapper directly
     ./0004-exec-fq-wrapper.patch
   ];
+
+  postPatch = ''
+    patch -p0 <<END_PATCH
+      +++ bindings/python/__init__.py
+      @@ -1,3 +1,7 @@
+      +import os
+      +os.environ['GNC_DBD_DIR'] = '${libdbiDrivers}/lib/dbd'
+      +os.environ['GSETTINGS_SCHEMA_DIR'] = '${glib.makeSchemaPath "$out" "gnucash-${version}"}'
+      +
+       # import all the symbols from gnucash_core, so basic gnucash stuff can be
+       # loaded with:
+       # >>> from gnucash import thingy
+        END_PATCH
+  '';
 
   # this needs to be an environment variable and not a cmake flag to suppress
   # guile warning
