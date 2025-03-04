@@ -401,6 +401,7 @@ let
     RNiftyReg = with pkgs; [ zlib.dev ];
     highs = [ pkgs.which pkgs.cmake ];
     crc32c = [ pkgs.which pkgs.cmake ];
+    cpp11bigwig = with pkgs; [ zlib.dev curl.dev ];
     rbedrock = [ pkgs.zlib.dev pkgs.which pkgs.cmake ];
     HiCseg = [ pkgs.gsl ];
     imager = [ pkgs.xorg.libX11.dev ];
