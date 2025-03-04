@@ -1,6 +1,7 @@
 {
   buildDunePackage,
   dns,
+  cstruct,
   ipaddr,
   lwt,
   tcpip,
@@ -12,6 +13,7 @@ buildDunePackage {
   inherit (dns) version src;
 
   propagatedBuildInputs = [
+    cstruct
     dns
     ipaddr
     lwt

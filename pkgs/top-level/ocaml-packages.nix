@@ -684,6 +684,8 @@ let
 
     ### H ###
 
+    h1 = callPackage ../development/ocaml-modules/h1 { };
+
     h2 = callPackage ../development/ocaml-modules/h2 { };
 
     h2-eio = callPackage ../development/ocaml-modules/h2/eio.nix { };
