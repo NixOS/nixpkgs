@@ -14,6 +14,7 @@
   dvc-gs,
   dvc-hdfs,
   dvc-http,
+  dvc-oss,
   dvc-render,
   dvc-s3,
   dvc-ssh,
@@ -145,6 +146,7 @@ buildPythonPackage rec {
     gdrive = [ dvc-gdrive ];
     gs = [ dvc-gs ];
     hdfs = [ dvc-hdfs ];
+    oss = [ dvc-oss ];
     s3 = [ dvc-s3 ];
     ssh = [ dvc-ssh ];
     ssh_gssapi = [ dvc-ssh ] ++ dvc-ssh.optional-dependencies.gssapi;
