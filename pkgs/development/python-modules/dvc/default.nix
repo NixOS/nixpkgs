@@ -137,6 +137,7 @@ buildPythonPackage rec {
     hdfs = [ dvc-hdfs ];
     s3 = [ dvc-s3 ];
     ssh = [ dvc-ssh ];
+    ssh_gssapi = [ dvc-ssh ] ++ dvc-ssh.optional-dependencies.gssapi;
   };
 
   # Tests require access to real cloud services
