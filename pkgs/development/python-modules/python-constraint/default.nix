@@ -19,7 +19,6 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [ pytestCheckHook ];
-  dontUseSetuptoolsCheck = true;
 
   meta = with lib; {
     description = "Constraint Solving Problem resolver for Python";
