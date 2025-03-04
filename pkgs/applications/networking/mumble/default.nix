@@ -33,6 +33,7 @@
   speechdSupport ? false,
   speechd-minimal,
   microsoft-gsl,
+  nlohmann_json,
 }:
 
 let
@@ -102,6 +103,7 @@ let
           speex
           utf8proc
           microsoft-gsl
+          nlohmann_json
         ]
         ++ lib.optional (!jackSupport) alsa-lib
         ++ lib.optional jackSupport libjack2
@@ -115,6 +117,7 @@ let
         "-D bundled-opus=OFF"
         "-D bundled-speex=OFF"
         "-D bundle-qt-translations=OFF"
+        "-D bundled-json=OFF"
         "-D bundled-gsl=OFF"
         # "-D bundled-renamenoise=OFF" # not packaged in nixpkgs yet
         "-D update=OFF"
