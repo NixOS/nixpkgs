@@ -4,7 +4,6 @@
   nix-update-script,
   versionCheckHook,
 
-  withFish ? false,
   fish,
 
   lib,
@@ -75,8 +74,7 @@ buildGoModule rec {
 
       # Insert below the #!/bin/sh shebang
       echo "$addToPath" | sed "/#!\/bin\/sh/r /dev/stdin" $src/scripts/assume >> $out/bin/assume
-    ''
-    + lib.optionalString withFish ''
+
       # Install fish script
       install -Dm755 $src/scripts/assume.fish $out/share/assume.fish
       substituteInPlace $out/share/assume.fish \
