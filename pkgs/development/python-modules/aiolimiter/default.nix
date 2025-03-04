@@ -5,6 +5,7 @@
   poetry-core,
   importlib-metadata,
   pytest-asyncio,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
   toml,
@@ -30,14 +31,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
     toml
   ];
-
-  postPatch = ''
-    substituteInPlace tox.ini \
-      --replace " --cov=aiolimiter --cov-config=tox.ini --cov-report term-missing" ""
-  '';
 
   pythonImportsCheck = [ "aiolimiter" ];
 

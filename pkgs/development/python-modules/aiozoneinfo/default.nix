@@ -4,6 +4,7 @@
   fetchFromGitHub,
   poetry-core,
   pytest-asyncio,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
   tzdata,
@@ -23,17 +24,13 @@ buildPythonPackage rec {
     hash = "sha256-7qd6Yk/K4BLocu8eQK0hLaw2r1jhWIHBr9W4KsAvmx8=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "--cov=aiozoneinfo --cov-report=term-missing:skip-covered" ""
-  '';
-
   build-system = [ poetry-core ];
 
   dependencies = [ tzdata ];
 
   nativeCheckInputs = [
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
   ];
 
