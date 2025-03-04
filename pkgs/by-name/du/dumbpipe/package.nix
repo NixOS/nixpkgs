@@ -19,6 +19,15 @@ rustPlatform.buildRustPackage rec {
   useFetchCargoVendor = true;
   cargoHash = "sha256-lg/FmeCYL9WVvvEMnkQj1WaxFH+7rBBxgL9zfwSdaVE=";
 
+  __darwinAllowLocalNetworking = true;
+
+  # On Darwin, dumbpipe invokes CoreFoundation APIs that read ICU data from the
+  # system. Ensure these paths are accessible in the sandbox to avoid segfaults
+  # during checkPhase.
+  sandboxProfile = ''
+    (allow file-read* (subpath "/usr/share/icu"))
+  '';
+
   meta = with lib; {
     description = "Connect A to B - Send Data";
     homepage = "https://www.dumbpipe.dev/";
