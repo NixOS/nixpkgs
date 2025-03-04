@@ -514,6 +514,7 @@ let
     arcgisutils = with pkgs; [ cargo rustc ];
     arcgisgeocode = with pkgs; [ cargo rustc ];
     arcgisplaces = with pkgs; [ pkg-config openssl.dev cargo rustc ];
+    awdb = [ pkgs.cargo ];
     apcf = with pkgs; [ geos ];
     SemiCompRisks = [ pkgs.gsl ];
     showtext = with pkgs; [ zlib libpng icu freetype.dev ];
@@ -1107,6 +1108,12 @@ let
       configureFlags = [
         "--enable-force-openmp"
       ];
+    });
+
+    awdb = old.awdb.overrideAttrs (attrs: {
+      postPatch = ''
+        patchShebangs configure
+      '';
     });
 
     clarabel = old.clarabel.overrideAttrs (attrs: {
