@@ -8,7 +8,6 @@
   cython,
   ninja,
   scikit-build-core,
-  setuptools,
   numpy,
   hypothesis,
   pandas,
@@ -19,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "rapidfuzz";
-  version = "3.12.1";
+  version = "3.12.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -28,13 +27,8 @@ buildPythonPackage rec {
     owner = "maxbachmann";
     repo = "RapidFuzz";
     tag = "v${version}";
-    hash = "sha256-33NwGWulBJ7WAMAE0163OJM9kL04FuHa5P7m66PZL6s=";
+    hash = "sha256-keV+IBBHkdDpKuT1o6xNA5UAHlG1I9vkt13W8dafiDw=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "Cython >=3.0.11, <3.1.0" "Cython"
-  '';
 
   build-system = [
     cmake
