@@ -265,8 +265,8 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optional (!isOptimized) "--unoptimized"
     ++ lib.optional (runtimeMode == "debug") "--no-stripped"
-    ++ lib.optional finalAttrs.doCheck "--enable-unittests"
-    ++ lib.optional (!finalAttrs.doCheck) "--no-enable-unittests";
+    ++ lib.optional finalAttrs.finalPackage.doCheck "--enable-unittests"
+    ++ lib.optional (!finalAttrs.finalPackage.doCheck) "--no-enable-unittests";
 
   # NOTE: Once https://github.com/flutter/flutter/issues/127606 is fixed, use "--no-prebuilt-dart-sdk"
   configurePhase =
@@ -318,7 +318,7 @@ stdenv.mkDerivation (finalAttrs: {
       find $out/out/$outName -name '*_unittests' -delete
       find $out/out/$outName -name '*_benchmarks' -delete
     ''
-    + lib.optionalString (finalAttrs.doCheck) ''
+    + lib.optionalString (finalAttrs.finalPackage.doCheck) ''
       rm $out/out/$outName/{display_list_rendertests,flutter_tester}
     ''
     + ''
