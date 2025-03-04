@@ -32,14 +32,14 @@
 
 buildPythonPackage rec {
   pname = "pytensor";
-  version = "2.28.1";
+  version = "2.28.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pymc-devs";
     repo = "pytensor";
     tag = "rel-${version}";
-    hash = "sha256-vDgGcTDvtAxkEln4x43wZnMvn24mFzGfbxHd8Ny2/VQ=";
+    hash = "sha256-ZLCIc4fB++B7oMo+jyt5XACG9N1XAwIzJJmIXDISWtA=";
   };
 
   pythonRelaxDeps = [
@@ -163,7 +163,7 @@ buildPythonPackage rec {
     description = "Python library to define, optimize, and efficiently evaluate mathematical expressions involving multi-dimensional arrays";
     mainProgram = "pytensor-cache";
     homepage = "https://github.com/pymc-devs/pytensor";
-    changelog = "https://github.com/pymc-devs/pytensor/releases/tag/${src.tag}";
+    changelog = "https://github.com/pymc-devs/pytensor/releases/tag/red-${version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
       bcdarwin
