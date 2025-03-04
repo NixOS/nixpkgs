@@ -32,7 +32,7 @@
 
 buildPythonPackage rec {
   pname = "mypy";
-  version = "1.14.1";
+  version = "1.15.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -41,11 +41,7 @@ buildPythonPackage rec {
     owner = "python";
     repo = "mypy";
     tag = "v${version}";
-    hash = "sha256-Ha7icLFc4BL7a3NECcwX4dtWmkXctANCqu/IbrEnmjw=";
-  };
-
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "v";
+    hash = "sha256-y67kt5i8mT9TcSbUGwnNuTAeqjy9apvWIbA2QD96LS4=";
   };
 
   build-system = [
@@ -67,13 +63,14 @@ buildPythonPackage rec {
     reports = [ lxml ];
   };
 
-  # Compile mypy with mypyc, which makes mypy about 4 times faster. The compiled
-  # version is also the default in the wheels on Pypi that include binaries.
-  # is64bit: unfortunately the build would exhaust all possible memory on i686-linux.
-  env.MYPY_USE_MYPYC = stdenv.buildPlatform.is64bit;
-
-  # when testing reduce optimisation level to reduce build time by 20%
-  env.MYPYC_OPT_LEVEL = 1;
+  env = {
+    # Compile mypy with mypyc, which makes mypy about 4 times faster. The compiled
+    # version is also the default in the wheels on Pypi that include binaries.
+    # is64bit: unfortunately the build would exhaust all possible memory on i686-linux.
+    MYPY_USE_MYPYC = stdenv.buildPlatform.is64bit;
+    # when testing reduce optimisation level to reduce build time by 20%
+    MYPYC_OPT_LEVEL = 1;
+  };
 
   pythonImportsCheck =
     [
@@ -124,9 +121,12 @@ buildPythonPackage rec {
       "mypyc/test/test_run.py"
     ];
 
-  passthru.tests = {
-    # Failing typing checks on the test-driver result in channel blockers.
-    inherit (nixosTests) nixos-test-driver;
+  passthru = {
+    updateScript = gitUpdater { rev-prefix = "v"; };
+    tests = {
+      # Failing typing checks on the test-driver result in channel blockers.
+      inherit (nixosTests) nixos-test-driver;
+    };
   };
 
   meta = {
