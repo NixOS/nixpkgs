@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "SasView";
     repo = "sasmodels";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-fa6/13z11AuTRItZOEmTbjpU1aT6Ur7evi6UvVvXQck=";
   };
 

@@ -7,20 +7,21 @@
   git,
   cargo,
   versionCheckHook,
+  writableTmpDirAsHomeHook,
   darwin,
   nix-update-script,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "hatch";
-  version = "1.13.0";
+  version = "1.14.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pypa";
     repo = "hatch";
-    rev = "refs/tags/hatch-v${version}";
-    hash = "sha256-jD8mr0PXlGK9YkBPZhNTimuxmq6dJG7cfQP/UEmHTZY=";
+    tag = "hatch-v${version}";
+    hash = "sha256-JwFPNoFoNqAXkLCGhliLN98VAS+VCwRzo+JqWLIrxsw=";
   };
 
   patches = [ (replaceVars ./paths.patch { uv = lib.getExe python3Packages.uv; }) ];
@@ -63,6 +64,7 @@ python3Packages.buildPythonApplication rec {
     ++ [
       cargo
       versionCheckHook
+      writableTmpDirAsHomeHook
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.ps
@@ -70,9 +72,33 @@ python3Packages.buildPythonApplication rec {
 
   versionCheckProgramArg = [ "--version" ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d);
-  '';
+  pytestFlagsArray =
+    [
+      # AssertionError on the version metadata
+      # https://github.com/pypa/hatch/issues/1877
+      "--deselect=tests/backend/metadata/test_spec.py::TestCoreMetadataV21::test_all"
+      "--deselect=tests/backend/metadata/test_spec.py::TestCoreMetadataV21::test_license_expression"
+      "--deselect=tests/backend/metadata/test_spec.py::TestCoreMetadataV22::test_all"
+      "--deselect=tests/backend/metadata/test_spec.py::TestCoreMetadataV22::test_license_expression"
+      "--deselect=tests/backend/metadata/test_spec.py::TestCoreMetadataV23::test_all"
+      "--deselect=tests/backend/metadata/test_spec.py::TestCoreMetadataV23::test_license_expression"
+      "--deselect=tests/backend/metadata/test_spec.py::TestCoreMetadataV23::test_license_files"
+      "--deselect=tests/backend/metadata/test_spec.py::TestProjectMetadataFromCoreMetadata::test_license_files"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # Dependency/versioning errors in the CLI tests, only seem to show up on Darwin
+      # https://github.com/pypa/hatch/issues/1893
+      "--deselect=tests/cli/env/test_create.py::test_sync_dependencies_pip"
+      "--deselect=tests/cli/env/test_create.py::test_sync_dependencies_uv"
+      "--deselect=tests/cli/project/test_metadata.py::TestBuildDependenciesMissing::test_no_compatibility_check_if_exists"
+      "--deselect=tests/cli/run/test_run.py::TestScriptRunner::test_dependencies"
+      "--deselect=tests/cli/run/test_run.py::TestScriptRunner::test_dependencies_from_tool_config"
+      "--deselect=tests/cli/run/test_run.py::test_dependency_hash_checking"
+      "--deselect=tests/cli/run/test_run.py::test_sync_dependencies"
+      "--deselect=tests/cli/run/test_run.py::test_sync_project_dependencies"
+      "--deselect=tests/cli/run/test_run.py::test_sync_project_features"
+      "--deselect=tests/cli/version/test_version.py::test_no_compatibility_check_if_exists"
+    ];
 
   disabledTests =
     [
@@ -117,14 +143,21 @@ python3Packages.buildPythonApplication rec {
     ]
     ++ lib.optionals stdenv.hostPlatform.isAarch64 [ "test_resolve" ];
 
-  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
-    # AssertionError: assert [call('test h...2p32/bin/sh')] == [call('test h..., shell=True)]
-    # At index 0 diff:
-    #    call('test hatch-test.py3.10', shell=True, executable='/nix/store/b34ianga4diikh0kymkpqwmvba0mmzf7-bash-5.2p32/bin/sh')
-    # != call('test hatch-test.py3.10', shell=True)
-    "tests/cli/fmt/test_fmt.py"
-    "tests/cli/test/test_test.py"
-  ];
+  disabledTestPaths =
+    [
+      # ModuleNotFoundError: No module named 'hatchling.licenses.parse'
+      # https://github.com/pypa/hatch/issues/1850
+      "tests/backend/licenses/test_parse.py"
+      "tests/backend/licenses/test_supported.py"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # AssertionError: assert [call('test h...2p32/bin/sh')] == [call('test h..., shell=True)]
+      # At index 0 diff:
+      #    call('test hatch-test.py3.10', shell=True, executable='/nix/store/b34ianga4diikh0kymkpqwmvba0mmzf7-bash-5.2p32/bin/sh')
+      # != call('test hatch-test.py3.10', shell=True)
+      "tests/cli/fmt/test_fmt.py"
+      "tests/cli/test/test_test.py"
+    ];
 
   passthru = {
     updateScript = nix-update-script {

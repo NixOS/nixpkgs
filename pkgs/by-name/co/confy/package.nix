@@ -1,28 +1,29 @@
-{ lib
-, blueprint-compiler
-, desktop-file-utils
-, fetchFromSourcehut
-, gobject-introspection
-, gtk4
-, libadwaita
-, libnotify
-, meson
-, ninja
-, pkg-config
-, python3
-, stdenv
-, wrapGAppsHook4
+{
+  lib,
+  blueprint-compiler,
+  desktop-file-utils,
+  fetchFromSourcehut,
+  gobject-introspection,
+  gtk4,
+  libadwaita,
+  libnotify,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  stdenv,
+  wrapGAppsHook4,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "confy";
-  version = "0.7.1";
+  version = "0.8.0";
 
   src = fetchFromSourcehut {
     owner = "~fabrixxm";
     repo = "confy";
     rev = finalAttrs.version;
-    hash = "sha256-BXQDnRRt2Kuqc1Gwx6Ba6BoEWhICTCsWWkGlBsStyT8=";
+    hash = "sha256-lQZ9joLK6w+sIjCVOEHstnnQomUl2E4F8FXCZukMUkI=";
   };
 
   nativeBuildInputs = [
@@ -39,17 +40,13 @@ stdenv.mkDerivation (finalAttrs: {
     gtk4
     libadwaita
     libnotify
-    (python3.withPackages (ps: with ps; [
-      icalendar
-      pygobject3
-    ]))
+    (python3.withPackages (
+      ps: with ps; [
+        icalendar
+        pygobject3
+      ]
+    ))
   ];
-
-  postPatch = ''
-    substituteInPlace build-aux/meson/postinstall.py \
-      --replace-fail 'gtk-update-icon-cache' 'gtk4-update-icon-cache'
-    patchShebangs build-aux/meson/postinstall.py
-  '';
 
   meta = with lib; {
     changelog = "https://git.sr.ht/~fabrixxm/confy/refs/${finalAttrs.version}";

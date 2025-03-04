@@ -13,13 +13,17 @@ in
 lib.makeOverridable (lib.fetchers.withNormalizedHash { } (
 # NOTE Please document parameter additions or changes in
 #   doc/build-helpers/fetchers.chapter.md
-{ url, rev ? "HEAD", leaveDotGit ? deepClone
+{ url
+, tag ? null
+, rev ? null
+, leaveDotGit ? deepClone
 , outputHash ? lib.fakeHash, outputHashAlgo ? null
 , fetchSubmodules ? true, deepClone ? false
 , branchName ? null
 , sparseCheckout ? []
 , nonConeMode ? false
-, name ? urlToName url rev
+, name ? null
+, nativeBuildInputs ? []
 , # Shell code executed after the file has been fetched
   # successfully. This can do things like check or transform the file.
   postFetch ? ""
@@ -59,17 +63,36 @@ lib.makeOverridable (lib.fetchers.withNormalizedHash { } (
 assert deepClone -> leaveDotGit;
 assert nonConeMode -> (sparseCheckout != []);
 
+let
+  revWithTag =
+    let
+      warningMsg = "fetchgit requires one of either `rev` or `tag` to be provided (not both).";
+      otherIsNull = other: lib.assertMsg (other == null) warningMsg;
+    in
+    if tag != null then
+      assert (otherIsNull rev);
+      "refs/tags/${tag}"
+    else if rev != null then
+      assert (otherIsNull tag);
+      rev
+    else
+      # FIXME fetching HEAD if no rev or tag is provided is problematic at best
+      "HEAD";
+in
+
 if builtins.isString sparseCheckout then
   # Changed to throw on 2023-06-04
   throw "Please provide directories/patterns for sparse checkout as a list of strings. Passing a (multi-line) string is not supported any more."
 else
 stdenvNoCC.mkDerivation {
-  inherit name;
+  name = if name != null then name else urlToName url revWithTag;
+
   builder = ./builder.sh;
   fetcher = ./nix-prefetch-git;
 
   nativeBuildInputs = [ git cacert ]
-    ++ lib.optionals fetchLFS [ git-lfs ];
+    ++ lib.optionals fetchLFS [ git-lfs ]
+    ++ nativeBuildInputs;
 
   inherit outputHash outputHashAlgo;
   outputHashMode = "recursive";
@@ -79,7 +102,8 @@ stdenvNoCC.mkDerivation {
   # > from standard in as a newline-delimited list instead of from the arguments.
   sparseCheckout = builtins.concatStringsSep "\n" sparseCheckout;
 
-  inherit url rev leaveDotGit fetchLFS fetchSubmodules deepClone branchName nonConeMode postFetch;
+  inherit url leaveDotGit fetchLFS fetchSubmodules deepClone branchName nonConeMode postFetch;
+  rev = revWithTag;
 
   postHook = if netrcPhase == null then null else ''
     ${netrcPhase}
@@ -98,6 +122,7 @@ stdenvNoCC.mkDerivation {
 
   passthru = {
     gitRepoUrl = url;
+    inherit tag;
   };
 }
 ))

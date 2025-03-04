@@ -2,32 +2,43 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   zope-schema,
   zope-interface,
+  unittestCheckHook,
 }:
 
 buildPythonPackage rec {
-  pname = "zope.filerepresentation";
+  pname = "zope-filerepresentation";
   version = "6.0";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "zope.filerepresentation";
+    inherit version;
     hash = "sha256-yza3iGspJ2+C8WhfPykfQjXmac2HhdFHQtRl0Trvaqs=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     zope-interface
     zope-schema
   ];
 
-  checkPhase = ''
-    cd src/zope/filerepresentation && python -m unittest
-  '';
+  pythonImportsCheck = [ "zope.filerepresentation" ];
 
-  meta = with lib; {
-    homepage = "https://zopefilerepresentation.readthedocs.io/";
+  nativeCheckInputs = [ unittestCheckHook ];
+
+  unittestFlagsArray = [ "src/zope/filerepresentation" ];
+
+  pythonNamespaces = [ "zope" ];
+
+  meta = {
+    homepage = "https://github.com/zopefoundation/zope.filerepresentation";
     description = "File-system Representation Interfaces";
-    license = licenses.zpl20;
+    changelog = "https://github.com/zopefoundation/zope.filerepresentation/blob/${version}/CHANGES.rst";
+    license = lib.licenses.zpl21;
     maintainers = [ ];
   };
 }

@@ -53,6 +53,7 @@ let
       hash,
       version,
       prePatch ? defaultPatch,
+      patches ? [ ],
     }:
     stdenv.mkDerivation {
       pname = "haxe";
@@ -76,7 +77,7 @@ let
         inherit hash;
       };
 
-      inherit prePatch;
+      inherit prePatch patches;
 
       buildFlags = [
         "all"
@@ -165,5 +166,6 @@ in
   haxe_4_3 = generic {
     version = "4.3.6";
     hash = "sha256-m/A0xxB3fw+syPmH1GPKKCcj0a2G/HMRKOu+FKrO5jQ=";
+    patches = [ ./extlib-1.8.0.patch ];
   };
 }

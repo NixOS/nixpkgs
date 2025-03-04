@@ -1,4 +1,8 @@
-{ lib, rustPlatform, fetchFromGitea }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitea,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "dabet";
@@ -12,7 +16,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-BYE+GGwf84zENf+lPS98OzZQbXxd7kykWL+B3guyVNI=";
   };
 
-  cargoHash = "sha256-kguQmCXP5+E6e8CSKP18faa93VKToU2pcQixDOBrd+8=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-2ixdugxgc6lyLd06BeXxlrSqpVGJJ9SkFKwnAsol7V4=";
 
   meta = with lib; {
     description = "Print the duration between two times";
@@ -22,4 +27,3 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "dabet";
   };
 }
-

@@ -18,7 +18,7 @@ buildPythonPackage rec {
     hash = "sha256-6HzQ2NZmVzza8TOBare5vuyAGmSoZZXBnLX+mS7z1kk=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
   doCheck = !isPyPy;
 
@@ -30,11 +30,11 @@ buildPythonPackage rec {
 
   pythonNamespaces = [ "zope" ];
 
-  meta = with lib; {
+  meta = {
     description = "Zope testing helpers";
     homepage = "https://github.com/zopefoundation/zope.testing";
     changelog = "https://github.com/zopefoundation/zope.testing/blob/${version}/CHANGES.rst";
-    license = licenses.zpl21;
+    license = lib.licenses.zpl21;
     maintainers = [ ];
   };
 }

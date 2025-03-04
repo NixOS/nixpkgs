@@ -1,31 +1,32 @@
-{ lib
-, fetchFromGitLab
-, gettext
-, gtk3
-, python3Packages
-, gdk-pixbuf
-, libnotify
-, gst_all_1
-, libsecret
-, wrapGAppsHook3
-, gsettings-desktop-schemas
-, gnome-online-accounts
-, glib
-, gobject-introspection
-, folks
-, bash
+{
+  lib,
+  fetchFromGitLab,
+  gettext,
+  gtk3,
+  python3Packages,
+  gdk-pixbuf,
+  libnotify,
+  gst_all_1,
+  libsecret,
+  wrapGAppsHook3,
+  gsettings-desktop-schemas,
+  gnome-online-accounts,
+  glib,
+  gobject-introspection,
+  folks,
+  bash,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "bubblemail";
-  version = "1.4";
+  version = "1.9";
 
   src = fetchFromGitLab {
     domain = "framagit.org";
     owner = "razer";
     repo = "bubblemail";
     rev = "v${version}";
-    sha256 = "sha256-MPl4pXvdhwCFWTepn/Mxp8ZMs+HCzXC59qdKZp3mHdw=";
+    sha256 = "sha256-eXEFBLo7CbLRlnI2nr7qWAdLUKe6PLQJ78Ho8MP9ShY=";
   };
 
   buildInputs = [

@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, zeromq }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  zeromq,
+}:
 
 stdenv.mkDerivation rec {
   version = "4.2.1";

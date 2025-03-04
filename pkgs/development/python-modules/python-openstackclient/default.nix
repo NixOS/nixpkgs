@@ -22,7 +22,6 @@
   python-watcherclient,
   python-zaqarclient,
   python-zunclient,
-  pythonOlder,
   requests-mock,
   requests,
   setuptools,
@@ -34,14 +33,13 @@
 
 buildPythonPackage rec {
   pname = "python-openstackclient";
-  version = "7.2.0";
+  version = "7.4.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-9je3W78PU3iZJjzVMSPXPxBZ0vMYY5xSLJA9zBJ7O5I=";
+    pname = "python_openstackclient";
+    inherit version;
+    hash = "sha256-6BfhGgHLK1FvvZnc5FwJnI5BxD0RuxHmZycDqDhEnZ8=";
   };
 
   build-system = [
@@ -59,7 +57,9 @@ buildPythonPackage rec {
     python-cinderclient
     python-keystoneclient
     requests
-  ];
+  ]
+  # to support proxy envs like ALL_PROXY in requests
+  ++ requests.optional-dependencies.socks;
 
   nativeCheckInputs = [
     ddt

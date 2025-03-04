@@ -1,46 +1,57 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, fetchurl
-, povray
-, qmake
-, qttools
-, substituteAll
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchurl,
+  povray,
+  qmake,
+  qttools,
+  replaceVars,
+  zlib,
+  testers,
+  wrapQtAppsHook,
+  nix-update-script,
+  libGL,
 }:
 
 /*
-To use aditional parts libraries
-set the variable LEOCAD_LIB=/path/to/libs/ or use option -l /path/to/libs/
+  To use additional parts libraries
+  set the variable LEOCAD_LIB=/path/to/libs/ or use option -l /path/to/libs/
 */
 
 let
   parts = fetchurl {
-    url = "https://web.archive.org/web/20210705153544/https://www.ldraw.org/library/updates/complete.zip";
-    sha256 = "sha256-PW3XCbFwRaNkx4EgCnl2rXH7QgmpNgjTi17kZ5bladA=";
+    url = "https://web.archive.org/web/20241230062818/https://library.ldraw.org/library/updates/complete.zip";
+    hash = "sha256-0RIJYEU+MpE4MSfxk2HK5hQd8IsiPn2xEGUFmItzlk8=";
   };
 
 in
-mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "leocad";
-  version = "21.06";
+  version = "23.03";
 
   src = fetchFromGitHub {
     owner = "leozide";
     repo = "leocad";
-    rev = "v${version}";
-    sha256 = "1ifbxngkbmg6d8vv08amxbnfvlyjdwzykrjp98lbwvgb0b843ygq";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-IY9mr2gSMZL9pxiVTKH/f7rjsOvBDNgwVKpXA57oMGo=";
   };
 
-  nativeBuildInputs = [ qmake qttools ];
+  nativeBuildInputs = [
+    qmake
+    qttools
+    wrapQtAppsHook
+  ];
 
-  buildInputs = [ zlib ];
+  buildInputs = [
+    zlib
+    libGL
+  ];
 
   propagatedBuildInputs = [ povray ];
 
   patches = [
-    (substituteAll {
-      src = ./povray.patch;
+    (replaceVars ./povray.patch {
       inherit povray;
     })
   ];
@@ -54,12 +65,23 @@ mkDerivation rec {
     "--set-default LEOCAD_LIB ${parts}"
   ];
 
-  meta = with lib; {
+  passthru = {
+    tests.version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+      command = "env QT_QPA_PLATFORM=minimal ${lib.getExe finalAttrs.finalPackage} --version";
+    };
+    updateScript = nix-update-script { };
+  };
+
+  passthru = {
     description = "CAD program for creating virtual LEGO models";
     mainProgram = "leocad";
     homepage = "https://www.leocad.org/";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ peterhoeg ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [
+      peterhoeg
+      hetraeus
+    ];
+    platforms = lib.platforms.linux;
   };
-}
+})

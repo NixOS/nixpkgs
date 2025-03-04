@@ -1,40 +1,45 @@
-{ mkDerivation
-, substituteAll
-, extra-cmake-modules
-, kdoctools
-, kcmutils
-, kcompletion
-, kconfigwidgets
-, kcoreaddons
-, kdbusaddons
-, kdeclarative
-, ki18n
-, kiconthemes
-, kinit
-, kio
-, kitemviews
-, knotifications
-, kservice
-, kwallet
-, kwidgetsaddons
-, kwindowsystem
-, kxmlgui
-, plasma-framework
-, prison
-, solid
-, mobile-broadband-provider-info
-, openconnect
-, openvpn
-, modemmanager-qt
-, networkmanager-qt
-, qca-qt5
-, qtdeclarative
-, qttools
+{
+  mkDerivation,
+  replaceVars,
+  extra-cmake-modules,
+  kdoctools,
+  kcmutils,
+  kcompletion,
+  kconfigwidgets,
+  kcoreaddons,
+  kdbusaddons,
+  kdeclarative,
+  ki18n,
+  kiconthemes,
+  kinit,
+  kio,
+  kitemviews,
+  knotifications,
+  kservice,
+  kwallet,
+  kwidgetsaddons,
+  kwindowsystem,
+  kxmlgui,
+  plasma-framework,
+  prison,
+  solid,
+  mobile-broadband-provider-info,
+  openconnect,
+  openvpn,
+  modemmanager-qt,
+  networkmanager-qt,
+  qca-qt5,
+  qtdeclarative,
+  qttools,
 }:
 
 mkDerivation {
   pname = "plasma-nm";
-  nativeBuildInputs = [ extra-cmake-modules kdoctools qttools ];
+  nativeBuildInputs = [
+    extra-cmake-modules
+    kdoctools
+    qttools
+  ];
   buildInputs = [
     kdeclarative
     ki18n
@@ -70,8 +75,7 @@ mkDerivation {
   ];
 
   patches = [
-    (substituteAll {
-      src = ./0002-openvpn-binary-path.patch;
+    (replaceVars ./0002-openvpn-binary-path.patch {
       inherit openvpn;
     })
   ];

@@ -6,23 +6,22 @@
 
 buildGoModule rec {
   pname = "xeol";
-  version = "0.10.1";
+  version = "0.10.7";
 
   src = fetchFromGitHub {
     owner = "xeol-io";
     repo = "xeol";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-4fMH07XKMnpX54mS9pAuTBiHcP6nXj8vpuk3f/3ik+k=";
+    tag = "v${version}";
+    hash = "sha256-I7+gR4y0wVpQeDoRH2OYr38PGuyZ/lk5M3bX0VeAqfQ=";
   };
 
-  vendorHash = "sha256-MLNUmJOpgKkIe5NUWYMA5avVvt6QLit0i4hpoaadcrs=";
+  vendorHash = "sha256-hPWjXTxk/jRkzvLYNgVlgj0hjzfikwel1bxSqWquVhk=";
 
   proxyVendor = true;
 
   subPackages = [ "cmd/xeol/" ];
 
   ldflags = [
-    "-w"
     "-s"
     "-X=main.version=${version}"
     "-X=main.gitCommit=${src.rev}"

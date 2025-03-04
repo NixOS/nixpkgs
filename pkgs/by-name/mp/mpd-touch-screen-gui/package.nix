@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, autoreconfHook
-, SDL2
-, SDL2_ttf
-, SDL2_image
-, boost
-, libmpdclient
-, libwtk-sdl2
-, icu
-, libconfig
-, dejavu_fonts
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  autoreconfHook,
+  SDL2,
+  SDL2_ttf,
+  SDL2_image,
+  boost,
+  libmpdclient,
+  libwtk-sdl2,
+  icu,
+  libconfig,
+  dejavu_fonts,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

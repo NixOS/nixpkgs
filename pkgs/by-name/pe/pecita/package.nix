@@ -1,4 +1,8 @@
-{ lib, stdenvNoCC, fetchurl }:
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+}:
 
 stdenvNoCC.mkDerivation {
   pname = "pecita";
@@ -21,7 +25,7 @@ stdenvNoCC.mkDerivation {
   '';
 
   meta = with lib; {
-    homepage = "http://pecita.eu/police-en.php";
+    homepage = "https://pecita.eu/police-en.php";
     description = "Handwritten font with connected glyphs";
     license = licenses.ofl;
     platforms = platforms.all;

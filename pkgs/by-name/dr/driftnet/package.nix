@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, autoreconfHook
-, cairo
-, fetchFromGitHub
-, giflib
-, glib
-, gtk2-x11
-, libjpeg
-, libpcap
-, libpng
-, libuv
-, libwebsockets
-, libwebp
-, openssl
-, pkg-config
+{
+  lib,
+  stdenv,
+  autoreconfHook,
+  cairo,
+  fetchFromGitHub,
+  giflib,
+  glib,
+  gtk2-x11,
+  libjpeg,
+  libpcap,
+  libpng,
+  libuv,
+  libwebsockets,
+  libwebp,
+  openssl,
+  pkg-config,
 }:
 
 stdenv.mkDerivation rec {
@@ -23,7 +24,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "deiv";
     repo = "driftnet";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-lMn60vtOMPs1Tr+SnAOUZDrNIO7gEXdHpizjXiEkkoM=";
   };
 

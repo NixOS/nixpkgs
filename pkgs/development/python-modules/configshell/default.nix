@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "configshell";
-  version = "1.1.30";
+  version = "2.0.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "open-iscsi";
     repo = "${pname}-fb";
-    rev = "v${version}";
-    hash = "sha256-7iWmYVCodwncoPdpw85zrNsZSEq+ume412lyiiJqRPc=";
+    tag = "v${version}";
+    hash = "sha256-lP3WT9ASEj6WiCrurSU/e9FhIaeoQW/n9hi1XZMnV4Q=";
   };
 
   propagatedBuildInputs = [

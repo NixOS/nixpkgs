@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchurl, pkg-config, pcsclite, libzip, help2man }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  pcsclite,
+  libzip,
+  help2man,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libykneomgr";
@@ -10,7 +18,11 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ pcsclite libzip help2man ];
+  buildInputs = [
+    pcsclite
+    libzip
+    help2man
+  ];
 
   configureFlags = [
     "--with-backend=pcsc"

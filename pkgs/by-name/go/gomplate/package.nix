@@ -1,6 +1,7 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
@@ -10,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "hairyhenderson";
     repo = "gomplate";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-PupwL0VzZiWz+96Mv1o6QSmj7iLyvVIQMcdRlGqmpRs=";
   };
 
@@ -42,6 +43,9 @@ buildGoModule rec {
     homepage = "https://gomplate.ca/";
     changelog = "https://github.com/hairyhenderson/gomplate/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ris jlesquembre ];
+    maintainers = with maintainers; [
+      ris
+      jlesquembre
+    ];
   };
 }

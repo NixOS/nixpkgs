@@ -1,22 +1,23 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, appstream-glib
-, desktop-file-utils
-, glib
-, gtk4
-, libGL
-, libepoxy
-, libadwaita
-, meson
-, mpv
-, ninja
-, nix-update-script
-, pkg-config
-, python3
-, wrapGAppsHook4
-, yt-dlp
-, youtubeSupport ? true
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  appstream-glib,
+  desktop-file-utils,
+  glib,
+  gtk4,
+  libGL,
+  libepoxy,
+  libadwaita,
+  meson,
+  mpv,
+  ninja,
+  nix-update-script,
+  pkg-config,
+  python3,
+  wrapGAppsHook4,
+  yt-dlp,
+  youtubeSupport ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -76,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/celluloid-player/celluloid/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.gpl3Plus;
     mainProgram = "celluloid";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.linux;
   };
 })

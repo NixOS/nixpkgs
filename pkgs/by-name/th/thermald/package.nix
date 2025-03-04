@@ -1,31 +1,36 @@
-{ autoconf
-, autoconf-archive
-, automake
-, dbus
-, dbus-glib
-, docbook_xml_dtd_412
-, docbook-xsl-nons
-, fetchFromGitHub
-, gtk-doc
-, libevdev
-, libtool
-, libxml2
-, pkg-config
-, lib, stdenv
-, upower
+{
+  autoconf,
+  autoconf-archive,
+  automake,
+  dbus,
+  dbus-glib,
+  docbook_xml_dtd_412,
+  docbook-xsl-nons,
+  fetchFromGitHub,
+  gtk-doc,
+  libevdev,
+  libtool,
+  libxml2,
+  pkg-config,
+  lib,
+  stdenv,
+  upower,
 }:
 
 stdenv.mkDerivation rec {
   pname = "thermald";
-  version = "2.5.8";
+  version = "2.5.9";
 
-  outputs = [ "out" "devdoc" ];
+  outputs = [
+    "out"
+    "devdoc"
+  ];
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "thermal_daemon";
     rev = "v${version}";
-    sha256 = "sha256-aqNaXg+XznIgsMzORcRcwfTI5tBYmSGA2pma2oUu8K4=";
+    sha256 = "sha256-ydv6wZ3r2QxVji9bSx0sgpaOQNtgN+Y4rPZ44XtxNh8=";
   };
 
   nativeBuildInputs = [
@@ -66,7 +71,10 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/intel/thermal_daemon";
     changelog = "https://github.com/intel/thermal_daemon/blob/master/README.txt";
     license = licenses.gpl2Plus;
-    platforms = [ "x86_64-linux" "i686-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "i686-linux"
+    ];
     maintainers = with maintainers; [ abbradar ];
     mainProgram = "thermald";
   };

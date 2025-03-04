@@ -1,15 +1,16 @@
-{ stdenv
-, lib
-, fetchurl
-, cmake
-, libGLU
-, libGL
-, pkg-config
-, libpulseaudio
-, extra-cmake-modules
-, qtbase
-, qttools
-, debug ? false
+{
+  stdenv,
+  lib,
+  fetchurl,
+  cmake,
+  libGLU,
+  libGL,
+  pkg-config,
+  libpulseaudio,
+  extra-cmake-modules,
+  qtbase,
+  qttools,
+  debug ? false,
 }:
 
 let
@@ -49,22 +50,28 @@ stdenv.mkDerivation rec {
     extra-cmake-modules
   ];
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
-  env.NIX_CFLAGS_COMPILE = toString ([
-    "-fPIC"
-  ] ++ lib.optionals stdenv.cc.isClang [
-    "-Wno-error=enum-constexpr-conversion"
-  ]);
+  env.NIX_CFLAGS_COMPILE = toString (
+    [
+      "-fPIC"
+    ]
+    ++ lib.optionals stdenv.cc.isClang [
+      "-Wno-error=enum-constexpr-conversion"
+    ]
+  );
 
   cmakeBuildType = if debug then "Debug" else "Release";
 
   dontWrapQtApps = true;
 
   preConfigure = ''
-    cmakeFlags+=" -DPHONON_QT_MKSPECS_INSTALL_DIR=''${!outputDev}/mkspecs"
-    cmakeFlags+=" -DPHONON_QT_IMPORTS_INSTALL_DIR=''${!outputBin}/$qtQmlPrefix"
-    cmakeFlags+=" -DPHONON_QT_PLUGIN_INSTALL_DIR=''${!outputBin}/$qtPluginPrefix/designer"
+    appendToVar cmakeFlags "-DPHONON_QT_MKSPECS_INSTALL_DIR=''${!outputDev}/mkspecs"
+    appendToVar cmakeFlags "-DPHONON_QT_IMPORTS_INSTALL_DIR=''${!outputBin}/$qtQmlPrefix"
+    appendToVar cmakeFlags "-DPHONON_QT_PLUGIN_INSTALL_DIR=''${!outputBin}/$qtPluginPrefix/designer"
   '';
 
   postPatch = ''

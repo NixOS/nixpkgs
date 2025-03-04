@@ -1,14 +1,18 @@
-{ lib, fetchFromGitHub, buildGoModule }:
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+}:
 
 buildGoModule rec {
   pname = "gvproxy";
-  version = "0.8.0";
+  version = "0.8.3";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "gvisor-tap-vsock";
     rev = "v${version}";
-    hash = "sha256-lRQqwbhSIvoPcoOesdTumVcrjWVdOGZU1XiSBaGyke8=";
+    hash = "sha256-oJxuOl9Q94QdH0egc4BTwOESljTJ+tii0mSkaEsmq2s=";
   };
 
   vendorHash = null;

@@ -1,41 +1,60 @@
-{ lib, stdenv, fetchurl, postgresql, openssl
-, withLibiodbc ? false, libiodbc
-, withUnixODBC ? true, unixODBC
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  autoreconfHook,
+  libpq,
+  openssl,
+  withLibiodbc ? false,
+  libiodbc,
+  withUnixODBC ? true,
+  unixODBC,
 }:
 
 assert lib.xor withLibiodbc withUnixODBC;
 
 stdenv.mkDerivation rec {
   pname = "psqlodbc";
-  version = "16.00.0000";
+  version = "${builtins.replaceStrings [ "_" ] [ "." ] (lib.strings.removePrefix "REL-" src.tag)}";
 
-  src = fetchurl {
-    url = "mirror://postgresql/odbc/versions.old/src/${pname}-${version}.tar.gz";
-    hash = "sha256-r9iS+J0uzujT87IxTxvVvy0CIBhyxuNDHlwxCW7KTIs=";
+  src = fetchFromGitHub {
+    owner = "postgresql-interfaces";
+    repo = "psqlodbc";
+    tag = "REL-17_00_0002";
+    hash = "sha256-zCjoX+Ew8sS5TWkFSgoqUN5ukEF38kq+MdfgCQQGv9w=";
   };
 
-  buildInputs = [
-    postgresql
-    openssl
-  ]
-  ++ lib.optional withLibiodbc libiodbc
-  ++ lib.optional withUnixODBC unixODBC;
+  buildInputs =
+    [
+      libpq
+      openssl
+    ]
+    ++ lib.optional withLibiodbc libiodbc
+    ++ lib.optional withUnixODBC unixODBC;
 
-  passthru = lib.optionalAttrs withUnixODBC {
-    fancyName = "PostgreSQL";
-    driver = "lib/psqlodbcw.so";
-  };
+  nativeBuildInputs = [
+    autoreconfHook
+  ];
+
+  passthru =
+    {
+      updateScript = nix-update-script { };
+    }
+    // lib.optionalAttrs withUnixODBC {
+      fancyName = "PostgreSQL";
+      driver = "lib/psqlodbcw.so";
+    };
 
   configureFlags = [
-    "--with-libpq=${lib.getDev postgresql}/bin/pg_config"
-  ]
-  ++ lib.optional withLibiodbc "--with-iodbc=${libiodbc}";
+    "--with-libpq=${lib.getDev libpq}"
+  ] ++ lib.optional withLibiodbc "--with-iodbc=${libiodbc}";
 
   meta = with lib; {
     homepage = "https://odbc.postgresql.org/";
     description = "ODBC driver for PostgreSQL";
     license = licenses.lgpl2;
     platforms = platforms.unix;
-    maintainers = [ ];
+    maintainers = libpq.meta.maintainers;
   };
 }

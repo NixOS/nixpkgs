@@ -1,4 +1,9 @@
-{ lib, rustPlatform, fetchFromGitHub, installShellFiles }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  installShellFiles,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "tydra";
@@ -11,7 +16,8 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-bH/W54b7UHdkbgLXAd+l5I6UAKjWDMW+I5mfwT4yEEY=";
   };
 
-  cargoHash = "sha256-emZWQHOgYUQzCa/SmztSLa19bB1aJpPUiBg2C7w6W8M=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-sFNrpddhsqxy7HtCXV78oacyNzrTeM0rUcL7qgeJTcM=";
 
   nativeBuildInputs = [ installShellFiles ];
 

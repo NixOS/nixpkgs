@@ -61,6 +61,7 @@
   # instead of via the monado-service program. For more information see:
   # https://gitlab.freedesktop.org/monado/monado/-/blob/master/doc/targets.md#xrt_feature_service-disabled
   serviceSupport ? true,
+  tracingSupport ? false,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -89,50 +90,53 @@ stdenv.mkDerivation (finalAttrs: {
   #  - DRIVER_ULV2 - Needs proprietary Leapmotion SDK https://api.leapmotion.com/documentation/v2/unity/devguide/Leap_SDK_Overview.html (See https://github.com/NixOS/nixpkgs/issues/292624)
   #  - DRIVER_ULV5 - Needs proprietary Leapmotion SDK https://api.leapmotion.com/documentation/v2/unity/devguide/Leap_SDK_Overview.html (See https://github.com/NixOS/nixpkgs/issues/292624)
 
-  buildInputs = [
-    bluez
-    cjson
-    dbus
-    eigen
-    elfutils
-    gst-plugins-base
-    gstreamer
-    hidapi
-    libbsd
-    libdrm
-    libffi
-    libGL
-    libjpeg
-    librealsense
-    libsurvive
-    libunwind
-    libusb1
-    libuv
-    libuvc
-    libv4l
-    libXau
-    libxcb
-    libXdmcp
-    libXext
-    libXrandr
-    onnxruntime
-    opencv4
-    openhmd
-    openvr
-    orc
-    pcre2
-    SDL2
-    shaderc
-    tracy
-    udev
-    vulkan-headers
-    vulkan-loader
-    wayland
-    wayland-protocols
-    wayland-scanner
-    zlib
-    zstd
-  ];
+  buildInputs =
+    [
+      bluez
+      cjson
+      dbus
+      eigen
+      elfutils
+      gst-plugins-base
+      gstreamer
+      hidapi
+      libbsd
+      libdrm
+      libffi
+      libGL
+      libjpeg
+      librealsense
+      libsurvive
+      libunwind
+      libusb1
+      libuv
+      libuvc
+      libv4l
+      libXau
+      libxcb
+      libXdmcp
+      libXext
+      libXrandr
+      onnxruntime
+      opencv4
+      openhmd
+      openvr
+      orc
+      pcre2
+      SDL2
+      shaderc
+      udev
+      vulkan-headers
+      vulkan-loader
+      wayland
+      wayland-protocols
+      wayland-scanner
+      zlib
+      zstd
+    ]
+    ++ lib.optionals tracingSupport [
+      tracy
+    ];
 
   patches = [
     # Remove this patch on the next update
@@ -146,9 +150,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeBool "XRT_FEATURE_SERVICE" serviceSupport)
+    (lib.cmakeBool "XRT_HAVE_TRACY" tracingSupport)
+    (lib.cmakeBool "XRT_FEATURE_TRACING" tracingSupport)
     (lib.cmakeBool "XRT_OPENXR_INSTALL_ABSOLUTE_RUNTIME_PATH" true)
-    (lib.cmakeBool "XRT_HAVE_TRACY" true)
-    (lib.cmakeBool "XRT_FEATURE_TRACING" true)
     (lib.cmakeBool "XRT_HAVE_STEAM" true)
     (lib.optionals enableCuda "-DCUDA_TOOLKIT_ROOT_DIR=${cudaPackages.cudatoolkit}")
   ];

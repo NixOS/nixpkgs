@@ -1,8 +1,14 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   name = "roon-bridge";
   cfg = config.services.roon-bridge;
-in {
+in
+{
   options = {
     services.roon-bridge = {
       enable = lib.mkEnableOption "Roon Bridge";
@@ -48,7 +54,12 @@ in {
     };
 
     networking.firewall = lib.mkIf cfg.openFirewall {
-      allowedTCPPortRanges = [{ from = 9100; to = 9200; }];
+      allowedTCPPortRanges = [
+        {
+          from = 9100;
+          to = 9200;
+        }
+      ];
       allowedUDPPorts = [ 9003 ];
       extraCommands = lib.optionalString (!config.networking.nftables.enable) ''
         iptables -A INPUT -s 224.0.0.0/4 -j ACCEPT
@@ -64,14 +75,12 @@ in {
       '';
     };
 
-
-    users.groups.${cfg.group} = {};
-    users.users.${cfg.user} =
-      lib.optionalAttrs (cfg.user == "roon-bridge") {
-        isSystemUser = true;
-        description = "Roon Bridge user";
-        group = cfg.group;
-        extraGroups = [ "audio" ];
-      };
+    users.groups.${cfg.group} = { };
+    users.users.${cfg.user} = lib.optionalAttrs (cfg.user == "roon-bridge") {
+      isSystemUser = true;
+      description = "Roon Bridge user";
+      group = cfg.group;
+      extraGroups = [ "audio" ];
+    };
   };
 }

@@ -1,18 +1,19 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, pkg-config
-, wayland
-, wayland-protocols
-, libwpe
-, libwpe-fdo
-, glib-networking
-, webkitgtk_4_0
-, makeWrapper
-, wrapGAppsHook3
-, adwaita-icon-theme
-, gdk-pixbuf
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  wayland,
+  wayland-protocols,
+  libwpe,
+  libwpe-fdo,
+  glib-networking,
+  webkitgtk_4_0,
+  makeWrapper,
+  wrapGAppsHook3,
+  adwaita-icon-theme,
+  gdk-pixbuf,
 }:
 
 stdenv.mkDerivation rec {

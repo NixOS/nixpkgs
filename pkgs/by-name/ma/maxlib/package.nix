@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, puredata }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  puredata,
+}:
 
 stdenv.mkDerivation rec {
   pname = "maxlib";

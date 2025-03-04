@@ -1,4 +1,13 @@
-{ buildPackages, cmake, fetchFromGitHub, lib, ninja, stdenv, testers, quick-lint-js }:
+{
+  buildPackages,
+  cmake,
+  fetchFromGitHub,
+  lib,
+  ninja,
+  stdenv,
+  testers,
+  quick-lint-js,
+}:
 
 let
   version = "3.2.0";
@@ -14,7 +23,10 @@ let
     pname = "quick-lint-js-build-tools";
     inherit version src;
 
-    nativeBuildInputs = [ cmake ninja ];
+    nativeBuildInputs = [
+      cmake
+      ninja
+    ];
     doCheck = false;
 
     cmakeFlags = [
@@ -35,7 +47,10 @@ stdenv.mkDerivation rec {
   pname = "quick-lint-js";
   inherit version src;
 
-  nativeBuildInputs = [ cmake ninja ];
+  nativeBuildInputs = [
+    cmake
+    ninja
+  ];
   doCheck = true;
 
   cmakeFlags = [

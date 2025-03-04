@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+}:
 
 stdenv.mkDerivation rec {
   pname = "tomlcpp";
@@ -30,7 +35,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/cktan/tomlcpp";
     description = "No fanfare TOML C++ Library";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     platforms = with lib.platforms; unix;
   };
 }

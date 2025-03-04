@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "TobiX";
     repo = "screentest";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-dbag1EAD+6+srfu/eqSl3CWlZtSopioQjyBQRJcUggA=";
   };
 

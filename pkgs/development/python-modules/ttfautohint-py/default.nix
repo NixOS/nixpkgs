@@ -1,4 +1,5 @@
 {
+  stdenv,
   lib,
   buildPythonPackage,
   fetchFromGitHub,
@@ -18,14 +19,19 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fonttools";
     repo = "ttfautohint-py";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-NTog461RpyHKo/Qpicj3tflehaKj9LlZEN9qeCMM6JQ=";
   };
 
-  postPatch = ''
-    substituteInPlace src/python/ttfautohint/__init__.py \
-      --replace-fail 'find_library("ttfautohint")' '"${lib.getLib ttfautohint}/lib/libttfautohint.so"'
-  '';
+  postPatch =
+    ''
+      substituteInPlace src/python/ttfautohint/__init__.py \
+        --replace-fail 'find_library("ttfautohint")' '"${lib.getLib ttfautohint}/lib/libttfautohint${stdenv.hostPlatform.extensions.sharedLibrary}"'
+    ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
+      substituteInPlace src/python/ttfautohint/memory.py \
+        --replace-fail 'find_library("c")' '"${lib.getLib stdenv.cc.libc}/lib/libc.so.6"'
+    '';
 
   env.TTFAUTOHINTPY_BUNDLE_DLL = false;
 
@@ -33,6 +39,10 @@ buildPythonPackage rec {
     setuptools
     setuptools-scm
     distutils
+  ];
+
+  dependencies = [
+    setuptools # for pkg_resources
   ];
 
   buildInputs = [ ttfautohint ];

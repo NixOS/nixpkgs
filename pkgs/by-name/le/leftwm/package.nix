@@ -1,26 +1,31 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, libX11
-, libXinerama
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  libX11,
+  libXinerama,
 }:
 
 let
-  rpathLibs = [ libXinerama libX11 ];
+  rpathLibs = [
+    libXinerama
+    libX11
+  ];
 in
 
 rustPlatform.buildRustPackage rec {
   pname = "leftwm";
-  version = "0.5.3";
+  version = "0.5.4";
 
   src = fetchFromGitHub {
     owner = "leftwm";
     repo = "leftwm";
-    rev = "refs/tags/${version}";
-    hash = "sha256-3voGKM6MKisc+ZVdZ5sCrs3XVfeRayozIk4SXNjw820=";
+    tag = version;
+    hash = "sha256-eH7HuGZnWlXigTaUAc4S00+uOIEVftnBOD8x03KJLaE=";
   };
 
-  cargoHash = "sha256-w8qgNXxd6tZ1eMpQQqDoax76zYxTVHgVAlchQaRnMCc=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-nFyhpCp8xsYjRl+2bqPfWzq31pM/yYcDuxkWEjjcqwA=";
 
   buildInputs = rpathLibs;
 
@@ -39,7 +44,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/leftwm/leftwm";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ vuimuich yanganto ];
+    maintainers = with lib.maintainers; [
+      vuimuich
+      yanganto
+    ];
     changelog = "https://github.com/leftwm/leftwm/blob/${version}/CHANGELOG.md";
     mainProgram = "leftwm";
   };

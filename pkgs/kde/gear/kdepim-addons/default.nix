@@ -7,8 +7,6 @@
   discount,
   corrosion,
   alpaka,
-  # provided as callPackage input to enable easier overrides through overlays
-  cargoHash ? "sha256-2t4i7lTJxVNjsU5eO6svadZBIerSyXt6BMScpEl119s=",
 }:
 mkKdeDerivation rec {
   pname = "kdepim-addons";
@@ -17,12 +15,12 @@ mkKdeDerivation rec {
 
   cargoRoot = "plugins/webengineurlinterceptor/adblock";
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     # include version in the name so we invalidate the FOD
     name = "${pname}-${version}";
     src = sources.${pname};
     sourceRoot = "${pname}-${version}/${cargoRoot}";
-    hash = cargoHash;
+    hash = "sha256-v1TJ8xu4zXXig+ESYT0ZL6l1gOTbqyVA1P/6T/YnW0k=";
   };
 
   extraNativeBuildInputs = [

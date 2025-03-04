@@ -1,17 +1,18 @@
-{ buildGoModule
-, doCheck ? !stdenv.hostPlatform.isDarwin # Can't start localhost test server in MacOS sandbox.
-, fetchFromGitHub
-, installShellFiles
-, lib
-, stdenv
+{
+  buildGoModule,
+  doCheck ? !stdenv.hostPlatform.isDarwin, # Can't start localhost test server in MacOS sandbox.
+  fetchFromGitHub,
+  installShellFiles,
+  lib,
+  stdenv,
 }:
 let
-  version = "24.2.11";
+  version = "24.3.6";
   src = fetchFromGitHub {
     owner = "redpanda-data";
     repo = "redpanda";
     rev = "v${version}";
-    sha256 = "sha256-tbo7S6Vo3Uwepme/Sfbfng7DlWWryTDvg8ZMbuvJ4h0=";
+    sha256 = "sha256-OxaAWQKa1rmMf0F/Pu0ZH0DYG5UIEri/RBYJ4fEgkYI=";
   };
 in
 buildGoModule rec {
@@ -19,7 +20,7 @@ buildGoModule rec {
   inherit doCheck src version;
   modRoot = "./src/go/rpk";
   runVend = false;
-  vendorHash = "sha256-ZZRUmBx+jkZX8gqCYNlzto1D05atJ4zH+1kuZLYDeC0=";
+  vendorHash = "sha256-VR8HvU8aPBWaKH+xjn+2CO794cipB7mOJCkXtGYGsdk=";
 
   ldflags = [
     ''-X "github.com/redpanda-data/redpanda/src/go/rpk/pkg/cli/cmd/version.version=${version}"''
@@ -40,7 +41,10 @@ buildGoModule rec {
     description = "Redpanda client";
     homepage = "https://redpanda.com/";
     license = licenses.bsl11;
-    maintainers = with maintainers; [ avakhrenev happysalada ];
+    maintainers = with maintainers; [
+      avakhrenev
+      happysalada
+    ];
     platforms = platforms.all;
     mainProgram = "rpk";
   };

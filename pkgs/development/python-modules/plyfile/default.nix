@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dranjan";
     repo = "python-plyfile";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-HlyqljfjuaZoG5f2cfDQj+7KS0en7pW2PPEnpvH8U+E=";
   };
 

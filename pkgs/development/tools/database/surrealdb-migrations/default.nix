@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, testers
-, Security
-, surrealdb-migrations
-, nix-update-script
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  testers,
+  Security,
+  surrealdb-migrations,
+  nix-update-script,
 }:
 
 let
   pname = "surrealdb-migrations";
-  version = "2.0.0";
+  version = "2.2.0";
 in
 rustPlatform.buildRustPackage rec {
   inherit pname version;
@@ -19,33 +20,33 @@ rustPlatform.buildRustPackage rec {
     owner = "Odonno";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-MrIawJr8EydfYFVzxODUZ7jDj0B0M1FAuX4Arktbf4Y=";
+    hash = "sha256-OiH3O74tJQFAW+ZyyspvOXUMcWkqjpd4GVU4cKn1jBg=";
   };
 
-  cargoHash = "sha256-ELYBEQrh80LdNYNZwcGVh9GE+dSfjF+RuO8fd0PabIw=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-dx5fGtKE0wfjQgTi5HBce6Afmc+0rJA24IRhrBirZbo=";
 
-  buildInputs = [ ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
+  buildInputs = [ ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 
-   # Error: No such file or directory (os error 2)
-   # failures:
-   #   cli::apply::apply_initial_migrations
-   #   cli::apply::apply_initial_schema_changes
-   #   cli::apply::apply_new_migrations
-   #   cli::apply::apply_new_schema_changes
-   #   cli::apply::apply_should_skip_events_if_no_events_folder
-   #   cli::apply::apply_with_db_configuration
-   #   cli::apply::apply_with_skipped_migrations
-   #   cli::list::list_blog_migrations
-   #   cli::list::list_empty_migrations
-   #   library::list::list_blog_migrations
-   #   library::list::list_empty_migrations
-   #   library::up::apply_initial_migrations
-   #   library::up::apply_initial_schema_changes
-   #   library::up::apply_new_migrations
-   #   library::up::apply_new_schema_changes
-   #   library::up::apply_should_skip_events_if_no_events_folder
-   #   library::up_to::apply_with_skipped_migrations
+  # Error: No such file or directory (os error 2)
+  # failures:
+  #   cli::apply::apply_initial_migrations
+  #   cli::apply::apply_initial_schema_changes
+  #   cli::apply::apply_new_migrations
+  #   cli::apply::apply_new_schema_changes
+  #   cli::apply::apply_should_skip_events_if_no_events_folder
+  #   cli::apply::apply_with_db_configuration
+  #   cli::apply::apply_with_skipped_migrations
+  #   cli::list::list_blog_migrations
+  #   cli::list::list_empty_migrations
+  #   library::list::list_blog_migrations
+  #   library::list::list_empty_migrations
+  #   library::up::apply_initial_migrations
+  #   library::up::apply_initial_schema_changes
+  #   library::up::apply_new_migrations
+  #   library::up::apply_new_schema_changes
+  #   library::up::apply_should_skip_events_if_no_events_folder
+  #   library::up_to::apply_with_skipped_migrations
   doCheck = false;
 
   passthru = {

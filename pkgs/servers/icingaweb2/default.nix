@@ -1,4 +1,11 @@
-{ stdenvNoCC, lib, fetchFromGitHub, makeWrapper, php, nixosTests }:
+{
+  stdenvNoCC,
+  lib,
+  fetchFromGitHub,
+  makeWrapper,
+  php,
+  nixosTests,
+}:
 
 stdenvNoCC.mkDerivation rec {
   pname = "icingaweb2";
@@ -30,7 +37,7 @@ stdenvNoCC.mkDerivation rec {
       Analyse problems and act on them.
     '';
     homepage = "https://www.icinga.com/products/icinga-web-2/";
-    license = licenses.gpl2Only;
+    license = licenses.gpl2Plus;
     maintainers = teams.helsinki-systems.members;
     mainProgram = "icingacli";
     platforms = platforms.all;

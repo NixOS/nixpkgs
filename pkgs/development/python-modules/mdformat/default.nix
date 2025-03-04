@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "mdformat";
-  version = "0.7.18";
+  version = "0.7.19";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "executablebooks";
     repo = "mdformat";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-t2yx8cIq8es3XOc2nbHPKjUUium5+RPZuD8oNWZxVV0=";
   };
 

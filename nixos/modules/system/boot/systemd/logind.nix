@@ -1,10 +1,24 @@
-{ config, lib, pkgs, utils, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  utils,
+  ...
+}:
 let
   cfg = config.services.logind;
 
   logindHandlerType = lib.types.enum [
-    "ignore" "poweroff" "reboot" "halt" "kexec" "suspend"
-    "hibernate" "hybrid-sleep" "suspend-then-hibernate" "lock"
+    "ignore"
+    "poweroff"
+    "reboot"
+    "halt"
+    "kexec"
+    "suspend"
+    "hibernate"
+    "hybrid-sleep"
+    "suspend-then-hibernate"
+    "lock"
   ];
 in
 {
@@ -15,7 +29,7 @@ in
       example = "IdleAction=lock";
       description = ''
         Extra config options for systemd-logind.
-        See [logind.conf(5)](https://www.freedesktop.org/software/systemd/man/logind.conf.html)
+        See {manpage}`logind.conf(5)`
         for available options.
       '';
     };
@@ -152,21 +166,26 @@ in
   };
 
   config = {
-    systemd.additionalUpstreamSystemUnits = [
-      "systemd-logind.service"
-      "autovt@.service"
-      "systemd-user-sessions.service"
-    ] ++ lib.optionals config.systemd.package.withImportd [
-      "dbus-org.freedesktop.import1.service"
-    ] ++ lib.optionals config.systemd.package.withMachined [
-      "dbus-org.freedesktop.machine1.service"
-    ] ++ lib.optionals config.systemd.package.withPortabled [
-      "dbus-org.freedesktop.portable1.service"
-    ] ++ [
-      "dbus-org.freedesktop.login1.service"
-      "user@.service"
-      "user-runtime-dir@.service"
-    ];
+    systemd.additionalUpstreamSystemUnits =
+      [
+        "systemd-logind.service"
+        "autovt@.service"
+        "systemd-user-sessions.service"
+      ]
+      ++ lib.optionals config.systemd.package.withImportd [
+        "dbus-org.freedesktop.import1.service"
+      ]
+      ++ lib.optionals config.systemd.package.withMachined [
+        "dbus-org.freedesktop.machine1.service"
+      ]
+      ++ lib.optionals config.systemd.package.withPortabled [
+        "dbus-org.freedesktop.portable1.service"
+      ]
+      ++ [
+        "dbus-org.freedesktop.login1.service"
+        "user@.service"
+        "user-runtime-dir@.service"
+      ];
 
     environment.etc = {
       "systemd/logind.conf".text = ''

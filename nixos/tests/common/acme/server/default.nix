@@ -6,50 +6,17 @@
 # the test certificate into security.pki.certificateFiles or into package
 # overlays.
 #
-# Another value that's needed if you don't use a custom resolver (see below for
-# notes on that) is to add the acme node as a nameserver to every node
-# that needs to acquire certificates using ACME, because otherwise the API host
-# for acme.test can't be resolved.
-#
-# A configuration example of a full node setup using this would be this:
-#
-# {
-#   acme = import ./common/acme/server;
-#
-#   example = { nodes, ... }: {
-#     networking.nameservers = [
-#       nodes.acme.networking.primaryIPAddress
-#     ];
-#     security.pki.certificateFiles = [
-#       nodes.acme.test-support.acme.caCert
-#     ];
-#   };
-# }
-#
-# By default, this module runs a local resolver, generated using resolver.nix
-# from the parent directory to automatically discover all zones in the network.
-#
-# If you do not want this and want to use your own resolver, you can just
-# override networking.nameservers like this:
-#
-# {
-#   acme = { nodes, lib, ... }: {
-#     imports = [ ./common/acme/server ];
-#     networking.nameservers = lib.mkForce [
-#       nodes.myresolver.networking.primaryIPAddress
-#     ];
-#   };
-#
-#   myresolver = ...;
-# }
-#
-# Keep in mind, that currently only _one_ resolver is supported, if you have
-# more than one resolver in networking.nameservers only the first one will be
-# used.
-#
-# Also make sure that whenever you use a resolver from a different test node
-# that it has to be started _before_ the ACME service.
-{ config, pkgs, lib, ... }:
+# The hosts file of this node will be populated with a mapping of certificate
+# domains (including extraDomainNames) to their parent nodes in the test suite.
+# This negates the need for a DNS server for most testing. You can still specify
+# a custom nameserver/resolver if necessary for other reasons.
+{
+  config,
+  pkgs,
+  lib,
+  nodes ? { },
+  ...
+}:
 let
   testCerts = import ./snakeoil-certs.nix;
   domain = testCerts.domain;
@@ -68,9 +35,8 @@ let
 
   pebbleConfFile = pkgs.writeText "pebble.conf" (builtins.toJSON pebbleConf);
 
-in {
-  imports = [ ../../resolver.nix ];
-
+in
+{
   options.test-support.acme = {
     caDomain = lib.mkOption {
       type = lib.types.str;
@@ -94,21 +60,48 @@ in {
   };
 
   config = {
-    test-support = {
-      resolver.enable = let
-        isLocalResolver = config.networking.nameservers == [ "127.0.0.1" ];
-      in lib.mkOverride 900 isLocalResolver;
+    networking = {
+      firewall.allowedTCPPorts = [
+        80
+        443
+        15000
+        4002
+      ];
+
+      # Match the caDomain - nixos/lib/testing/network.nix will then add a record for us to
+      # all nodes in /etc/hosts
+      hostName = "acme";
+      domain = "test";
+
+      # Extend /etc/hosts to resolve all configured certificates to their hosts.
+      # This way, no DNS server will be needed to validate HTTP-01 certs.
+      hosts = lib.attrsets.concatMapAttrs (
+        _: node:
+        let
+          inherit (node.networking) primaryIPAddress primaryIPv6Address;
+          ips = builtins.filter (ip: ip != "") [
+            primaryIPAddress
+            primaryIPv6Address
+          ];
+          names = lib.lists.unique (
+            lib.lists.flatten (
+              lib.lists.concatMap
+                (
+                  cfg:
+                  lib.attrsets.mapAttrsToList (
+                    domain: cfg:
+                    builtins.map (builtins.replaceStrings [ "*." ] [ "" ]) ([ domain ] ++ cfg.extraDomainNames)
+                  ) cfg.configuration.security.acme.certs
+                )
+                # A specialisation's config is nested under its configuration attribute.
+                # For ease of use, nest the root node's configuration simiarly.
+                ([ { configuration = node; } ] ++ (builtins.attrValues node.specialisation))
+            )
+          );
+        in
+        builtins.listToAttrs (builtins.map (ip: lib.attrsets.nameValuePair ip names) ips)
+      ) nodes;
     };
-
-    # This has priority 140, because modules/testing/test-instrumentation.nix
-    # already overrides this with priority 150.
-    networking.nameservers = lib.mkOverride 140 [ "127.0.0.1" ];
-    networking.firewall.allowedTCPPorts = [ 80 443 15000 4002 ];
-
-    networking.extraHosts = ''
-      127.0.0.1 ${domain}
-      ${config.networking.primaryIPAddress} ${domain}
-    '';
 
     systemd.services = {
       pebble = {
@@ -117,8 +110,9 @@ in {
         wantedBy = [ "network.target" ];
         environment = {
           # We're not testing lego, we're just testing our configuration.
-          # No need to sleep.
+          # No need to sleep or randomly fail nonces.
           PEBBLE_VA_NOSLEEP = "1";
+          PEBBLE_WFE_NONCEREJECT = "0";
         };
 
         serviceConfig = {

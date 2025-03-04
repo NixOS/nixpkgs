@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "RobertCraigie";
     repo = "prisma-client-py";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-F+Up1HHslralt3NvZZ/wT+CKvzKOjhEEuMEeT0L6NZM=";
   };
 

@@ -6,8 +6,10 @@
 , python
 , withGodef ? true
 , godef
-, withGotools ? true
-, gotools
+, withGopls ? true
+, gopls
+, withRustAnalyzer ? true
+, rust-analyzer
 , withTypescript ? true
 , typescript
 , abseil-cpp
@@ -78,10 +80,14 @@ stdenv.mkDerivation {
     TARGET=$out/lib/ycmd/third_party/godef
     mkdir -p $TARGET
     ln -sf ${godef}/bin/godef $TARGET
-  '' + lib.optionalString withGotools ''
-    TARGET=$out/lib/ycmd/third_party/go/src/golang.org/x/tools/cmd/gopls
+  '' + lib.optionalString withGopls ''
+    TARGET=$out/lib/ycmd/third_party/go/bin
     mkdir -p $TARGET
-    ln -sf ${gotools}/bin/gopls $TARGET
+    ln -sf ${gopls}/bin/gopls $TARGET
+  '' + lib.optionalString withRustAnalyzer ''
+    TARGET=$out/lib/ycmd/third_party/rust-analyzer
+    mkdir -p $TARGET
+    ln -sf ${rust-analyzer} $TARGET
   '' + lib.optionalString withTypescript ''
     TARGET=$out/lib/ycmd/third_party/tsserver
     ln -sf ${typescript} $TARGET
@@ -99,7 +105,7 @@ stdenv.mkDerivation {
     mainProgram = "ycmd";
     homepage = "https://github.com/ycm-core/ycmd";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ rasendubi lnl7 siriobalmelli ];
+    maintainers = with maintainers; [ rasendubi lnl7 mel ];
     platforms = platforms.all;
   };
 }

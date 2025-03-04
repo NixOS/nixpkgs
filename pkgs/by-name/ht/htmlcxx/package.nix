@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, autoreconfHook, libiconv }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  libiconv,
+}:
 
 stdenv.mkDerivation rec {
   pname = "htmlcxx";

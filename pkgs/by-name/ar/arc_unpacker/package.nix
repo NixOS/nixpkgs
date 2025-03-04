@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, makeWrapper
-, boost
-, libpng
-, libiconv
-, libjpeg
-, zlib
-, openssl
-, libwebp
-, catch2
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  makeWrapper,
+  boost,
+  libpng,
+  libiconv,
+  libjpeg,
+  zlib,
+  openssl,
+  libwebp,
+  catch2,
 }:
 
 stdenv.mkDerivation {
@@ -41,6 +42,7 @@ stdenv.mkDerivation {
   postPatch = ''
     cp ${catch2}/include/catch2/catch.hpp tests/test_support/catch.h
     sed '1i#include <limits>' -i src/dec/eagls/pak_archive_decoder.cc # gcc12
+    sed '1i#include <vector>' -i src/flow/cli_facade.h # gcc14
   '';
 
   nativeBuildInputs = [

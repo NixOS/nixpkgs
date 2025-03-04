@@ -2,11 +2,62 @@
   "book-nixos-manual": [
     "index.html#book-nixos-manual"
   ],
+  "module-services-crab-hole": [
+    "index.html#module-services-crab-hole"
+  ],
+  "module-services-crab-hole-api": [
+    "index.html#module-services-crab-hole-api"
+  ],
+  "module-services-crab-hole-configuration": [
+    "index.html#module-services-crab-hole-configuration"
+  ],
+  "module-services-crab-hole-dnssec": [
+    "index.html#module-services-crab-hole-dnssec"
+  ],
+  "module-services-crab-hole-downstream": [
+    "index.html#module-services-crab-hole-downstream"
+  ],
+  "module-services-crab-hole-https": [
+    "index.html#module-services-crab-hole-https"
+  ],
+  "module-services-crab-hole-invalid-config": [
+    "index.html#module-services-crab-hole-invalid-config"
+  ],
+  "module-services-crab-hole-permission-error": [
+    "index.html#module-services-crab-hole-permission-error"
+  ],
+  "module-services-crab-hole-quic": [
+    "index.html#module-services-crab-hole-quic"
+  ],
+  "module-services-crab-hole-tls": [
+    "index.html#module-services-crab-hole-tls"
+  ],
+  "module-services-crab-hole-troubleshooting": [
+    "index.html#module-services-crab-hole-troubleshooting"
+  ],
+  "module-services-crab-hole-udp": [
+    "index.html#module-services-crab-hole-udp"
+  ],
+  "module-services-crab-hole-upstream-options": [
+    "index.html#module-services-crab-hole-upstream-options"
+  ],
   "preface": [
     "index.html#preface"
   ],
   "ch-installation": [
     "index.html#ch-installation"
+  ],
+  "sec-mattermost": [
+    "index.html#sec-mattermost"
+  ],
+  "sec-mattermost-derivation": [
+    "index.html#sec-mattermost-derivation"
+  ],
+  "sec-mattermost-plugins": [
+    "index.html#sec-mattermost-plugins"
+  ],
+  "sec-mattermost-plugins-build": [
+    "index.html#sec-mattermost-plugins-build"
   ],
   "sec-obtaining": [
     "index.html#sec-obtaining"
@@ -127,6 +178,9 @@
   ],
   "sec-building-image-tech-notes": [
     "index.html#sec-building-image-tech-notes"
+  ],
+  "sec-image-nixos-rebuild-build-image": [
+    "index.html#sec-image-nixos-rebuild-build-image"
   ],
   "sec-image-repart": [
     "index.html#sec-image-repart"
@@ -782,6 +836,12 @@
   "module-services-netbird-multiple-connections": [
     "index.html#module-services-netbird-multiple-connections"
   ],
+  "module-services-netbird-firewall": [
+    "index.html#module-services-netbird-firewall"
+  ],
+  "module-services-netbird-customization": [
+    "index.html#module-services-netbird-customization"
+  ],
   "module-services-mosquitto": [
     "index.html#module-services-mosquitto"
   ],
@@ -832,6 +892,12 @@
   ],
   "module-services-networking-dnsmasq-references": [
     "index.html#module-services-networking-dnsmasq-references"
+  ],
+  "module-service-doh-server": [
+    "index.html#module-service-doh-server"
+  ],
+  "module-service-doh-server-quick-start": [
+    "index.html#module-service-doh-server-quick-start"
   ],
   "module-services-samba": [
     "index.html#module-services-samba"
@@ -1844,6 +1910,30 @@
   "sec-release-25.05-notable-changes": [
     "release-notes.html#sec-release-25.05-notable-changes"
   ],
+  "sec-nixpkgs-release-25.05": [
+    "release-notes.html#sec-nixpkgs-release-25.05"
+  ],
+  "sec-nixpkgs-release-25.05-incompatibilities": [
+    "release-notes.html#sec-nixpkgs-release-25.05-incompatibilities"
+  ],
+  "sec-nixpkgs-release-25.05-incompatibilities-titanium-removed": [
+    "release-notes.html#sec-nixpkgs-release-25.05-incompatibilities-titanium-removed",
+    "index.html#titanium",
+    "index.html#building-a-titanium-app",
+    "index.html#emulating-or-simulating-the-app"
+  ],
+  "sec-nixpkgs-release-25.05-incompatibilities-nexusmods-app-upgraded": [
+    "release-notes.html#sec-nixpkgs-release-25.05-incompatibilities-nexusmods-app-upgraded"
+  ],
+  "sec-nixpkgs-release-25.05-lib": [
+    "release-notes.html#sec-nixpkgs-release-25.05-lib"
+  ],
+  "sec-nixpkgs-release-25.05-lib-breaking": [
+    "release-notes.html#sec-nixpkgs-release-25.05-lib-breaking"
+  ],
+  "sec-nixpkgs-release-25.05-lib-deprecations": [
+    "release-notes.html#sec-nixpkgs-release-25.05-lib-deprecations"
+  ],
   "sec-release-24.11": [
     "release-notes.html#sec-release-24.11"
   ],
@@ -1870,6 +1960,18 @@
   ],
   "sec-release-24.11-wiki": [
     "release-notes.html#sec-release-24.11-wiki"
+  ],
+  "sec-release-24.11-lib": [
+    "release-notes.html#sec-release-24.11-lib"
+  ],
+  "sec-release-24.11-lib-breaking": [
+    "release-notes.html#sec-release-24.11-lib-breaking"
+  ],
+  "sec-release-24.11-lib-additions-improvements": [
+    "release-notes.html#sec-release-24.11-lib-additions-improvements"
+  ],
+  "sec-release-24.11-lib-deprecations": [
+    "release-notes.html#sec-release-24.11-lib-deprecations"
   ],
   "sec-release-24.05": [
     "release-notes.html#sec-release-24.05"

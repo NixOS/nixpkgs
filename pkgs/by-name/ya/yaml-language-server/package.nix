@@ -1,11 +1,12 @@
-{ lib
-, fetchFromGitHub
-, fetchYarnDeps
-, fixup-yarn-lock
-, makeWrapper
-, nodejs
-, stdenv
-, yarn
+{
+  lib,
+  fetchFromGitHub,
+  fetchYarnDeps,
+  fixup-yarn-lock,
+  makeWrapper,
+  nodejs,
+  stdenv,
+  yarn,
 }:
 
 stdenv.mkDerivation rec {
@@ -28,11 +29,13 @@ stdenv.mkDerivation rec {
     makeWrapper
     fixup-yarn-lock
     yarn
-  ];
-
-  buildInputs = [
     nodejs
   ];
+
+  # NodeJS is also needed here so that script interpreter get patched
+  buildInputs = [ nodejs ];
+
+  strictDeps = true;
 
   configurePhase = ''
     runHook preConfigure

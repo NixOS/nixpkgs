@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   stdenv,
+  replaceVars,
 }:
 
 { version, src, ... }:
@@ -13,9 +14,13 @@ let
 
     sourceRoot = "${src.name}/rust";
 
+    useFetchCargoVendor = true;
     cargoHash =
       {
-        _0_9_1 = "sha256-Gl3ArdSuw3/yi/JX6oloKJqerSJjTfK8HXRNei/LO+4=";
+        _0_9_1 = "sha256-ZVl1nesepZnmOWeJPOgE6IDCokQm5FedbA5MBvr5S8c=";
+        _0_9_6 = "sha256-vvzb+jNN5lmRrKJ3zqvORvdduqEHRmbp85L/9Zegh/E=";
+        _0_9_8 = "sha256-cwb1wYVXOE5YABlMxUDt+OMlDpIlipqeNI7ZFAGHCqo=";
+        _0_10_0 = "sha256-2SpAj53XvZXKRpMzFXJGcx7E2TlMUD+ooHkFwg/9fe4=";
       }
       .${"_" + (lib.replaceStrings [ "." ] [ "_" ] version)} or (throw ''
         Unsupported version of pub 'rhttp': '${version}'
@@ -34,17 +39,16 @@ stdenv.mkDerivation {
   inherit version src;
   inherit (src) passthru;
 
-  patches = [ ./cargokit.patch ];
-
-  postPatch = ''
-    substituteInPlace ./cargokit/cmake/cargokit.cmake --replace-fail "OUTPUT_LIB" "${rustDep}/${rustDep.passthru.libraryPath}"
-  '';
+  patches = [
+    (replaceVars ./cargokit.patch {
+      output_lib = "${rustDep}/${rustDep.passthru.libraryPath}";
+    })
+  ];
 
   installPhase = ''
     runHook preInstall
 
-    mkdir $out/
-    cp -r ./* $out/
+    cp -r . $out
 
     runHook postInstall
   '';

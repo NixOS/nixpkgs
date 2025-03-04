@@ -1,5 +1,15 @@
-{ lib, stdenv, fetchFromGitLab, jdk17_headless, coreutils, findutils, gnused,
-gradle_8, git, makeWrapper, jre_minimal
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  jdk17_headless,
+  coreutils,
+  findutils,
+  gnused,
+  gradle_8,
+  git,
+  makeWrapper,
+  jre_minimal,
 }:
 
 let
@@ -35,7 +45,8 @@ let
   # "Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0."
   gradle = gradle_8;
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   inherit pname src version;
 
   mitmCache = gradle.fetchDeps {
@@ -55,13 +66,23 @@ in stdenv.mkDerivation {
     mkdir -p $out
     tar xvf ./build/distributions/signald.tar --strip-components=1 --directory $out/
     wrapProgram $out/bin/signald \
-      --prefix PATH : ${lib.makeBinPath [ coreutils findutils gnused ]} \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          coreutils
+          findutils
+          gnused
+        ]
+      } \
       --set JAVA_HOME "${jre'}"
 
     runHook postInstall
   '';
 
-  nativeBuildInputs = [ git gradle makeWrapper ];
+  nativeBuildInputs = [
+    git
+    gradle
+    makeWrapper
+  ];
 
   doCheck = true;
 
@@ -84,10 +105,15 @@ in stdenv.mkDerivation {
     homepage = "https://signald.org";
     sourceProvenance = with sourceTypes; [
       fromSource
-      binaryBytecode  # deps
+      binaryBytecode # deps
     ];
     license = licenses.gpl3Plus;
-    maintainers = [];
-    platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
+    maintainers = [ ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
   };
 }

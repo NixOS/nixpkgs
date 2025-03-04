@@ -1,83 +1,152 @@
-{ lib, stdenv, fetchurl, buildPackages
-, pkg-config, texinfo
-, gettext, libassuan, libgcrypt, libgpg-error, libiconv, libksba, npth
-, adns, bzip2, gnutls, libusb1, openldap, readline, sqlite, zlib
-, enableMinimal ? false
-, withPcsc ? !enableMinimal, pcsclite
-, guiSupport ? stdenv.hostPlatform.isDarwin, pinentry
-, withTpm2Tss ? !stdenv.hostPlatform.isDarwin && !enableMinimal, tpm2-tss
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchFromGitLab,
+  buildPackages,
+  pkg-config,
+  texinfo,
+  gettext,
+  libassuan,
+  libgcrypt,
+  libgpg-error,
+  libiconv,
+  libksba,
+  npth,
+  adns,
+  bzip2,
+  gnutls,
+  libusb1,
+  openldap,
+  readline,
+  sqlite,
+  zlib,
+  enableMinimal ? false,
+  withPcsc ? !enableMinimal,
+  pcsclite,
+  guiSupport ? stdenv.hostPlatform.isDarwin,
+  pinentry,
+  withTpm2Tss ? !stdenv.hostPlatform.isDarwin && !enableMinimal,
+  tpm2-tss,
+  nixosTests,
 }:
 
 assert guiSupport -> !enableMinimal;
 
 stdenv.mkDerivation rec {
   pname = "gnupg";
-  version = "2.4.5";
+  version = "2.4.7";
 
   src = fetchurl {
     url = "mirror://gnupg/gnupg/${pname}-${version}.tar.bz2";
-    hash = "sha256-9o99ddBssWNcM2002ESvl0NsP2TqFLy3yGl4L5b0Qnc=";
+    hash = "sha256-eyRwbk2n4OOwbKBoIxAnQB8jgQLEHJCWMTSdzDuF60Y=";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ pkg-config texinfo ];
-  buildInputs = [
-    gettext libassuan libgcrypt libgpg-error libiconv libksba npth
-  ] ++ lib.optionals (!enableMinimal) [
-    adns bzip2 gnutls libusb1 openldap readline sqlite zlib
-  ] ++ lib.optionals withTpm2Tss [ tpm2-tss ];
+  nativeBuildInputs = [
+    # XXX: do not add autoreconfHook without very careful testing!
+    # Problems that were identified during the last attempt:
+    #  • Prints a warning about being a development version not
+    #    suitable for production use.
+    #  • Smartcards do not work, at least without pcscd.
 
-  patches = [
-    ./fix-libusb-include-path.patch
-    ./tests-add-test-cases-for-import-without-uid.patch
-    ./accept-subkeys-with-a-good-revocation-but-no-self-sig.patch
-    ./24-allow-import-of-previously-known-keys-even-without-UI.patch
-    ./24-revert-rfc4880bis-defaults.patch
-    # Patch for DoS vuln from https://seclists.org/oss-sec/2022/q3/27
-    ./v3-0001-Disallow-compressed-signatures-and-certificates.patch
+    pkg-config
+    texinfo
+    libgpg-error
   ];
+  buildInputs =
+    [
+      gettext
+      libassuan
+      libgcrypt
+      libgpg-error
+      libiconv
+      libksba
+      npth
+    ]
+    ++ lib.optionals (!enableMinimal) [
+      adns
+      bzip2
+      gnutls
+      libusb1
+      openldap
+      readline
+      sqlite
+      zlib
+    ]
+    ++ lib.optionals withTpm2Tss [ tpm2-tss ];
 
-  postPatch = ''
-    sed -i 's,\(hkps\|https\)://keyserver.ubuntu.com,hkps://keys.openpgp.org,g' configure configure.ac doc/dirmngr.texi doc/gnupg.info-1
-    '' + lib.optionalString (stdenv.hostPlatform.isLinux && withPcsc) ''
+  freepgPatches = fetchFromGitLab {
+    domain = "gitlab.com";
+    owner = "freepg";
+    repo = "gnupg";
+    rev = "541772915dc4ec832c37f85bc629a22051f0e8f7";
+    hash = "sha256-QOUY6EfJbTTN242BtzLojDgECGjUwbLfPJgzn/mj5L8=";
+  };
+
+  patches =
+    [
+      ./fix-libusb-include-path.patch
+      ./CVE-2022-3219.patch
+      ./static.patch
+    ]
+    ++ lib.map (v: "${freepgPatches}/STABLE-BRANCH-2-4-freepg/" + v) [
+      "0002-gpg-accept-subkeys-with-a-good-revocation-but-no-sel.patch"
+      "0003-gpg-allow-import-of-previously-known-keys-even-witho.patch"
+      "0004-tests-add-test-cases-for-import-without-uid.patch"
+      "0005-gpg-drop-import-clean-from-default-keyserver-import-.patch"
+      "0006-Do-not-use-OCB-mode-even-if-AEAD-OCB-key-preference-.patch"
+      "0007-Revert-the-introduction-of-the-RFC4880bis-draft-into.patch"
+      "0008-avoid-systemd-deprecation-warning.patch"
+      "0009-Add-systemd-support-for-keyboxd.patch"
+      "0010-doc-Remove-profile-and-systemd-example-files.patch"
+    ];
+
+  postPatch =
+    ''
+      sed -i 's,\(hkps\|https\)://keyserver.ubuntu.com,hkps://keys.openpgp.org,g' configure configure.ac doc/dirmngr.texi doc/gnupg.info-1
+    ''
+    + lib.optionalString (stdenv.hostPlatform.isLinux && withPcsc) ''
       sed -i 's,"libpcsclite\.so[^"]*","${lib.getLib pcsclite}/lib/libpcsclite.so",g' scd/scdaemon.c
     '';
 
-  configureFlags = [
-    "--sysconfdir=/etc"
-    "--with-libgpg-error-prefix=${libgpg-error.dev}"
-    "--with-libgcrypt-prefix=${libgcrypt.dev}"
-    "--with-libassuan-prefix=${libassuan.dev}"
-    "--with-ksba-prefix=${libksba.dev}"
-    "GPGRT_CONFIG=${lib.getDev libgpg-error}/bin/gpgrt-config"
-  ]
-  ++ lib.optional guiSupport "--with-pinentry-pgm=${pinentry}/${pinentry.binaryPath or "bin/pinentry"}"
-  ++ lib.optional withTpm2Tss "--with-tss=intel"
-  ++ lib.optional stdenv.hostPlatform.isDarwin "--disable-ccid-driver";
+  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-Wno-implicit-function-declaration";
 
-  postInstall = if enableMinimal
-  then ''
-    rm -r $out/{libexec,sbin,share}
-    for f in $(find $out/bin -type f -not -name gpg)
-    do
-      rm $f
-    done
-  '' else ''
-    # add gpg2 symlink to make sure git does not break when signing commits
-    ln -s $out/bin/gpg $out/bin/gpg2
+  configureFlags =
+    [
+      "--sysconfdir=/etc"
+      "--with-libgpg-error-prefix=${libgpg-error.dev}"
+      "--with-libgcrypt-prefix=${libgcrypt.dev}"
+      "--with-libassuan-prefix=${libassuan.dev}"
+      "--with-ksba-prefix=${libksba.dev}"
+      "GPGRT_CONFIG=${lib.getDev libgpg-error}/bin/gpgrt-config"
+    ]
+    ++ lib.optional guiSupport "--with-pinentry-pgm=${pinentry}/${
+      pinentry.binaryPath or "bin/pinentry"
+    }"
+    ++ lib.optional withTpm2Tss "--with-tss=intel"
+    ++ lib.optional stdenv.hostPlatform.isDarwin "--disable-ccid-driver";
 
-    # Make libexec tools available in PATH
-    for f in $out/libexec/; do
-      if [[ "$(basename $f)" == "gpg-wks-client" ]]; then continue; fi
-      ln -s $f $out/bin/$(basename $f)
-    done
+  postInstall =
+    if enableMinimal then
+      ''
+        rm -r $out/{libexec,sbin,share}
+        for f in $(find $out/bin -type f -not -name gpg)
+        do
+          rm $f
+        done
+      ''
+    else
+      ''
+        # add gpg2 symlink to make sure git does not break when signing commits
+        ln -s $out/bin/gpg $out/bin/gpg2
 
-    for f in $out/libexec/; do
-      if [[ "$(basename $f)" == "gpg-wks-client" ]]; then continue; fi
-      ln -s $f $out/bin/$(basename $f)
-    done
-  '';
+        # Make libexec tools available in PATH
+        for f in $out/libexec/; do
+          if [[ "$(basename $f)" == "gpg-wks-client" ]]; then continue; fi
+          ln -s $f $out/bin/$(basename $f)
+        done
+      '';
 
   enableParallelBuilding = true;
 
@@ -99,7 +168,10 @@ stdenv.mkDerivation rec {
       frontend applications and libraries are available.  Version 2 of GnuPG
       also provides support for S/MIME.
     '';
-    maintainers = with maintainers; [ fpletz sgo ];
+    maintainers = with maintainers; [
+      fpletz
+      sgo
+    ];
     platforms = platforms.all;
     mainProgram = "gpg";
   };

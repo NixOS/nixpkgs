@@ -1,11 +1,9 @@
 {
   lib,
   buildPythonPackage,
-  cliche,
   fetchPypi,
   marshmallow,
   pythonOlder,
-  recline,
   requests,
   requests-toolbelt,
   setuptools,
@@ -14,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "netapp-ontap";
-  version = "9.15.1.1";
+  version = "9.16.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -22,7 +20,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "netapp_ontap";
     inherit version;
-    hash = "sha256-rzME9JdaaXW1JOtfcjb5mlwSl4dy7lofnKOB6X6kWuM=";
+    hash = "sha256-r55lK9dSmo/pVsvhtM0T48TdjgjlQjmQ2zVnenxQGlE=";
   };
 
   build-system = [ setuptools ];
@@ -32,9 +30,6 @@ buildPythonPackage rec {
     requests
     requests-toolbelt
     urllib3
-    # required for cli
-    cliche
-    recline
   ];
 
   # No tests in sdist and no other download available
@@ -44,7 +39,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Library for working with ONTAP's REST APIs simply in Python";
-    homepage = "https://devnet.netapp.com/restapi.php";
+    homepage = "https://library.netapp.com/ecmdocs/ECMLP3331665/html/index.html";
     license = licenses.bsd3;
     maintainers = with maintainers; [ SuperSandro2000 ];
     mainProgram = "ontap-cli";

@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, fetchurl
-, makeWrapper
-, bash
-, coreutils
-, diffstat
-, diffutils
-, findutils
-, gawk
-, gnugrep
-, gnused
-, patch
-, perl
-, unixtools
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  bash,
+  coreutils,
+  diffstat,
+  diffutils,
+  findutils,
+  gawk,
+  gnugrep,
+  gnused,
+  patch,
+  perl,
+  unixtools,
 }:
 
 stdenv.mkDerivation rec {
@@ -40,6 +41,14 @@ stdenv.mkDerivation rec {
     perl
     unixtools.column
     unixtools.getopt
+  ];
+
+  strictDeps = true;
+
+  configureFlags = [
+    # configure only looks in $PATH by default,
+    # which does not include buildInputs if strictDeps is true
+    "--with-perl=${lib.getExe perl}"
   ];
 
   postInstall = ''

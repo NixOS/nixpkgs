@@ -1,10 +1,11 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, libdrm
-, ffmpeg_6
-, wayland
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  libdrm,
+  ffmpeg_6,
+  wayland,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -18,7 +19,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-07O2YM9dOHWzriM2+uiBWjEt2hKAuXtRtnKBuzb02Us=";
   };
 
-  cargoHash = "sha256-AYirjrnk8SGTXk5IjzCep2AQJYPbgHAOOf47MUDYj4k=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-nwABNqJNqgBVwD860lSu9mcEgty/GbSYmPys3xp535Q=";
 
   nativeBuildInputs = [
     pkg-config

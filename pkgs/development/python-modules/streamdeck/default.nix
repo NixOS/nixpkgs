@@ -3,24 +3,23 @@
   stdenv,
   buildPythonPackage,
   fetchPypi,
-  substituteAll,
+  replaceVars,
   pkgs,
 }:
 
 buildPythonPackage rec {
   pname = "streamdeck";
-  version = "0.9.5";
+  version = "0.9.6";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-BHliZrRFd64D+UD1xcpp2HAH4D0Z7tibawJobAMM65E=";
+    hash = "sha256-7ELZtxGzUuonStMFputI7OHu06W//nC5KOCC3OD3iPA=";
   };
 
   patches = [
     # substitute libusb path
-    (substituteAll {
-      src = ./hardcode-libusb.patch;
+    (replaceVars ./hardcode-libusb.patch {
       libusb = "${pkgs.hidapi}/lib/libhidapi-libusb${stdenv.hostPlatform.extensions.sharedLibrary}";
     })
   ];

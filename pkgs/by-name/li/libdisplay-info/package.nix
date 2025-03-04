@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, meson
-, pkg-config
-, ninja
-, python3
-, hwdata
-, edid-decode
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  meson,
+  pkg-config,
+  ninja,
+  python3,
+  hwdata,
+  edid-decode,
 }:
 
 stdenv.mkDerivation rec {
@@ -22,7 +23,14 @@ stdenv.mkDerivation rec {
   };
 
   depsBuildBuild = [ pkg-config ];
-  nativeBuildInputs = [ meson pkg-config ninja edid-decode hwdata python3 ];
+  nativeBuildInputs = [
+    meson
+    pkg-config
+    ninja
+    edid-decode
+    hwdata
+    python3
+  ];
 
   postPatch = ''
     patchShebangs tool/gen-search-table.py

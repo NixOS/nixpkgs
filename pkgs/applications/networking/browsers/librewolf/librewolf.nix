@@ -9,7 +9,6 @@ rec {
   extraPatches = [ "${source}/patches/pref-pane/pref-pane-small.patch" ];
 
   extraConfigureFlags = [
-    "--with-app-name=librewolf"
     "--with-unsigned-addon-scopes=app,system"
   ];
 

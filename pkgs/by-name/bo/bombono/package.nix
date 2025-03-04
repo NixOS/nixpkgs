@@ -1,22 +1,24 @@
-{ lib, stdenv
-, fetchFromGitHub
-, pkg-config
-, fetchpatch
-, fetchpatch2
-, scons
-, boost
-, dvdauthor
-, dvdplusrwtools
-, enca
-, cdrkit
-, ffmpeg_6
-, gettext
-, gtk2
-, gtkmm2
-, libdvdread
-, libxmlxx
-, mjpegtools
-, wrapGAppsHook3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  fetchpatch,
+  fetchpatch2,
+  scons,
+  boost,
+  dvdauthor,
+  dvdplusrwtools,
+  enca,
+  cdrkit,
+  ffmpeg_6,
+  gettext,
+  gtk2,
+  gtkmm2,
+  libdvdread,
+  libxmlxx,
+  mjpegtools,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation {
@@ -50,7 +52,12 @@ stdenv.mkDerivation {
       --replace "lib_mbase_env['CPPDEFINES']" "list(lib_mbase_env['CPPDEFINES'])"
   '';
 
-  nativeBuildInputs = [ wrapGAppsHook3 scons pkg-config gettext ];
+  nativeBuildInputs = [
+    wrapGAppsHook3
+    scons
+    pkg-config
+    gettext
+  ];
 
   buildInputs = [
     boost
@@ -73,7 +80,13 @@ stdenv.mkDerivation {
     # fix iso authoring
     install -Dt  $out/share/bombono/resources/scons_authoring tools/scripts/SConsTwin.py
 
-    wrapProgram $out/bin/bombono-dvd --prefix PATH : ${lib.makeBinPath [ ffmpeg_6 dvdauthor cdrkit ]}
+    wrapProgram $out/bin/bombono-dvd --prefix PATH : ${
+      lib.makeBinPath [
+        ffmpeg_6
+        dvdauthor
+        cdrkit
+      ]
+    }
   '';
 
   meta = with lib; {

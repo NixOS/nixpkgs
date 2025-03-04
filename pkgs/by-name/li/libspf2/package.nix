@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libspf2";
@@ -23,16 +28,19 @@ stdenv.mkDerivation rec {
       -e '/bin_PROGRAMS/s/spf_example_static//' src/spf_example/Makefile.am
   '';
 
-  CFLAGS = lib.optionalString stdenv.cc.isClang "-Wno-implicit-function-declaration";
+  CFLAGS = "-Wno-error=implicit-function-declaration";
 
   doCheck = true;
 
   meta = with lib; {
-    description = "Implementation of the Sender Policy Framework for SMTP " +
-                  "authorization (Helsinki Systems fork)";
+    description =
+      "Implementation of the Sender Policy Framework for SMTP " + "authorization (Helsinki Systems fork)";
     homepage = "https://github.com/helsinki-systems/libspf2";
-    license = with licenses; [ lgpl21Plus bsd2 ];
-    maintainers = with maintainers; [ pacien ] ++ teams.helsinki-systems.members;
+    license = with licenses; [
+      lgpl21Plus
+      bsd2
+    ];
+    maintainers = with maintainers; [ euxane ] ++ teams.helsinki-systems.members;
     platforms = platforms.all;
   };
 }

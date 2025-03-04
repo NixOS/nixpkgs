@@ -28,7 +28,7 @@ buildGoModule rec {
   nativeBuildInputs = [ installShellFiles ];
 
   # static to be easily copied into containers since it's an in-pod pen-testing tool
-  CGO_ENABLED = 0;
+  env.CGO_ENABLED = 0;
 
   ldflags = [
     "-s"

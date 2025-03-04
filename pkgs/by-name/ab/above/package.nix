@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "casterbyte";
     repo = "Above";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-tOSAci9aIALNCL3nLui96EdvqjNxnnuj2/dMdWLY9yI=";
   };
 

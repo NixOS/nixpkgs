@@ -1,7 +1,8 @@
-{ lib
-, fetchFromGitHub
-, hiera-eyaml
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  hiera-eyaml,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -12,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "wwkimball";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     sha256 = "sha256-6N2s/LWFa3mgMQ88rt3IaWk+b2PTWfT7z1mi+ioQEyU=";
   };
 
@@ -43,12 +44,12 @@ python3.pkgs.buildPythonApplication rec {
     longDescription = ''
       Command-line get/set/merge/validate/scan/convert/diff processors for YAML/JSON/Compatible data
       using powerful, intuitive, command-line friendly syntax
-     '';
+    '';
     license = licenses.isc;
     maintainers = with maintainers; [ Flakebi ];
 
-   # No support for ruamel.yaml > 0.17.21
-   # https://github.com/wwkimball/yamlpath/issues/217
+    # No support for ruamel.yaml > 0.17.21
+    # https://github.com/wwkimball/yamlpath/issues/217
     broken = true;
   };
 }

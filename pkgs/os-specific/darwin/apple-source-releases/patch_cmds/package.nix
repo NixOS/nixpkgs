@@ -1,7 +1,6 @@
 {
   lib,
   apple-sdk,
-  libbsd,
   libutil,
   mkAppleDerivation,
   pkg-config,
@@ -19,10 +18,7 @@ mkAppleDerivation {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    [ libutil ]
-    # diff, patch, and sdiff need `strtonum`, which requires the 11.0 SDK.
-    ++ lib.optionals (lib.versionOlder (lib.getVersion apple-sdk) "11.0") [ libbsd ];
+  buildInputs = [ libutil ];
 
   meta = {
     description = "BSD patch commands for Darwin";

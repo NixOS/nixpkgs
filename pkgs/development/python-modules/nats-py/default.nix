@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nats-io";
     repo = "nats.py";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-r94dDXPpkLS1PsB9L4qlDw15tPa2vpxOS52eqJk2dNU=";
   };
 

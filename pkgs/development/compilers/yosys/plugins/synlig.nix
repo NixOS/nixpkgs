@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
   plugin = "synlig";
 
   # The module has automatic regular releases, with date + short git hash
-  GIT_VERSION = "2024-08-07-fd4b2bd";
+  GIT_VERSION = "2024-12-10-2d838ed";
 
   # Derive our package version from GIT_VERSION, remove hash, just keep date.
   version = builtins.concatStringsSep "-" (
@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "chipsalliance";
     repo  = "synlig";
     rev   = "${finalAttrs.GIT_VERSION}";
-    hash  = "sha256-yj+SBq6PqgPBcgz2zHZ9AUppllG/dqetU7lWPkFC+iE=";
+    hash  = "sha256-MsnRraAqsIkJ2PjBfoSrvUX/RHtL+FV2+iB3i7galLI=";
     fetchSubmodules = false;  # we use all dependencies from nix
   };
 
@@ -87,6 +87,5 @@ stdenv.mkDerivation (finalAttrs: {
     license     = licenses.asl20;
     maintainers = with maintainers; [ hzeller ];
     platforms   = platforms.all;
-    broken      = versionAtLeast yosys.version "0.47";
   };
 })

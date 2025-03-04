@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, postgresql
-, postgresqlTestExtension
-, testers
-, buildPostgresqlExtension
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  postgresql,
+  postgresqlTestExtension,
+  testers,
+  buildPostgresqlExtension,
 }:
 
 buildPostgresqlExtension (finalAttrs: {
   pname = "pg_repack";
-  version = "1.5.1";
+  version = "1.5.2";
 
   buildInputs = postgresql.buildInputs;
 
@@ -17,7 +18,7 @@ buildPostgresqlExtension (finalAttrs: {
     owner = "reorg";
     repo = "pg_repack";
     rev = "ver_${finalAttrs.version}";
-    sha256 = "sha256-wJwy4qIt6/kgWqT6HbckUVqDayDkixqHpYiC1liLERw=";
+    sha256 = "sha256-wfjiLkx+S3zVrAynisX1GdazueVJ3EOwQEPcgUQt7eA=";
   };
 
   passthru.tests = {

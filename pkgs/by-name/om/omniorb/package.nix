@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, python3
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  python3,
 }:
 
 stdenv.mkDerivation rec {
@@ -44,9 +45,12 @@ stdenv.mkDerivation rec {
       (for the libraries),and GNU General Public License (for the tools).
       omniORB is largely CORBA 2.6 compliant.
     '';
-    homepage    = "http://omniorb.sourceforge.net/";
-    license     = with licenses; [ gpl2Plus lgpl21Plus ];
+    homepage = "http://omniorb.sourceforge.net/";
+    license = with licenses; [
+      gpl2Plus
+      lgpl21Plus
+    ];
     maintainers = with maintainers; [ smironov ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
   };
 }

@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libfmvoice";
-  version = "0-unstable-2024-11-03";
+  version = "0-unstable-2025-02-13";
 
   src = fetchFromGitHub {
     owner = "vampirefrog";
     repo = "libfmvoice";
-    rev = "c4b069cf633e52d4b7dce6e0b4277a0daa057774";
-    hash = "sha256-ZwqzrQ3kpOAZjJcstovmoNW8bG56w1YXm5ZMYIkjQ9M=";
+    rev = "b45764b1eb939b2927fab74c0de653b968ffb58d";
+    hash = "sha256-p0XmG2wWryJuPGq0mtQhymrp9qOvZy7qZI3S/3hcO0U=";
   };
 
   outputs = [

@@ -1,13 +1,14 @@
-{ lib
-, fetchFromGitHub
-, fluxbox
-, gnused
-, makeWrapper
-, perlPackages
-, substituteAll
-, xorg
-, wrapGAppsHook3
-, gitUpdater
+{
+  lib,
+  fetchFromGitHub,
+  fluxbox,
+  gnused,
+  makeWrapper,
+  perlPackages,
+  replaceVars,
+  xorg,
+  wrapGAppsHook3,
+  gitUpdater,
 }:
 
 perlPackages.buildPerlPackage rec {
@@ -22,10 +23,11 @@ perlPackages.buildPerlPackage rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./0001-Fix-paths.patch;
+    (replaceVars ./0001-Fix-paths.patch {
       xmessage = xorg.xmessage;
       inherit fluxbox gnused;
+      # replaced in postPatch
+      fbmenugen = null;
     })
   ];
 

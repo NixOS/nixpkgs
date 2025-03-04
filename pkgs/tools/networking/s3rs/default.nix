@@ -1,4 +1,14 @@
-{ lib, stdenv, rustPlatform, python3, perl, openssl, Security, fetchFromGitHub, pkg-config }:
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  python3,
+  perl,
+  openssl,
+  Security,
+  fetchFromGitHub,
+  pkg-config,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "s3rs";
@@ -11,11 +21,15 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-mJ1bMfv/HY74TknpRvu8RIs1d2VlNreEVtHCtQSHQw8=";
   };
 
-  cargoHash = "sha256-Q1EqEyNxWIx3wD8zuU7/MO3Qz6zsfBZbtT/IIUmJccE=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-z7de/TZXyNsb+dxWcNFdJsaGsM3Ld2A0jorNMAVOZOg=";
 
-  nativeBuildInputs = [ python3 perl pkg-config ];
-  buildInputs = [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
+  nativeBuildInputs = [
+    python3
+    perl
+    pkg-config
+  ];
+  buildInputs = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 
   meta = with lib; {
     description = "S3 cli client with multi configs with diffent provider";

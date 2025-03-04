@@ -8,16 +8,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "chainsaw";
-  version = "2.9.2";
+  version = "2.10.1";
 
   src = fetchFromGitHub {
     owner = "WithSecureLabs";
     repo = "chainsaw";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-oKlLFKCZNBcHURVvT0i8Hfym6r30ikndV30uuxjYgDM=";
+    tag = "v${version}";
+    hash = "sha256-ErDIfLhzCiFm3dZzr6ThjYCplfDKbALAqcu8c0gREH4=";
   };
 
-  cargoHash = "sha256-1w3DYP69aOphoqbsZIF9aX56Lftg2niKClmImLTa5DE=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-LTvCExHQnQIbGGeh4bK6b3r9XXOxREMTOlRQv+BjKrM=";
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.CoreFoundation

@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, pkg-config, cmake, perl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  cmake,
+  perl,
+}:
 
 stdenv.mkDerivation rec {
 
@@ -11,7 +18,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  propagatedBuildInputs = [ cmake perl ];
+  propagatedBuildInputs = [
+    cmake
+    perl
+  ];
 
   meta = with lib; {
     description = "Library to implement a test protocol";
@@ -22,7 +32,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://www.shlomifish.org/open-source/projects/libtap/";
     license = licenses.bsd3;
-    maintainers = [ maintainers.AndersonTorres ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

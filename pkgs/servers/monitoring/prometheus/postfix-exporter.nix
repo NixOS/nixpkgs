@@ -1,26 +1,30 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, makeWrapper
-, nixosTests
-, systemd
-, withSystemdSupport ? true
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  makeWrapper,
+  nixosTests,
+  systemd,
+  withSystemdSupport ? true,
 }:
 
 buildGoModule rec {
   pname = "postfix_exporter";
-  version = "0.3.0";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
-    owner = "kumina";
+    owner = "Hsn723";
     repo = "postfix_exporter";
-    rev = version;
-    sha256 = "sha256-63ze51Qbjm+3CV1OFGFa9cS4ucZ+gMKaJyBF2b//CfM=";
+    tag = "v${version}";
+    sha256 = "sha256-g/Y+amX3vyyhkxvJAxPimFDgFdpcA5+zWTu2Mhq3Dyw=";
   };
 
-  vendorHash = "sha256-a4Lk4wh4mvXEjLgFksZIVVtbp+zTUyjtLVuk7vuot2k=";
+  vendorHash = "sha256-hcS7BBs54RmBu1d2EXedc9bU2eXmB9bQ4yAyYgp85xY=";
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   nativeBuildInputs = lib.optionals withSystemdSupport [ makeWrapper ];
   buildInputs = lib.optionals withSystemdSupport [ systemd ];
@@ -38,6 +42,9 @@ buildGoModule rec {
     description = "Prometheus exporter for Postfix";
     mainProgram = "postfix_exporter";
     license = licenses.asl20;
-    maintainers = with maintainers; [ willibutz globin ];
+    maintainers = with maintainers; [
+      willibutz
+      globin
+    ];
   };
 }

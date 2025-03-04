@@ -1,23 +1,27 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, nix-update-script
-, testers
-, kickstart
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  nix-update-script,
+  testers,
+  kickstart,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "kickstart";
-  version = "0.4.0";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "Keats";
     repo = "kickstart";
     rev = "v${version}";
-    hash = "sha256-GIBSHPIUq+skTx5k+94/K1FJ30BCboWPA6GadgXwp+I=";
+    hash = "sha256-4POxv6fIrp+wKb9V+6Y2YPx3FXp3hpnkq+62H9TwGII=";
   };
 
-  cargoHash = "sha256-cOcldEte7zxyxzvj7v7uCczs5AQ+v4mMfqmTK9hrv1o=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-J9sGXJbGbO9UgZfgqxqzbiJz9j6WMpq3qC2ys7OJnII=";
+
+  buildFeatures = [ "cli" ];
 
   checkFlags = [
     # remote access

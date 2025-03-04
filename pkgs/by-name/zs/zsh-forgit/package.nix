@@ -1,26 +1,27 @@
-{ stdenvNoCC
-, lib
-, bash
-, coreutils
-, findutils
-, fetchFromGitHub
-, fzf
-, gawk
-, git
-, gnugrep
-, gnused
-, makeWrapper
+{
+  stdenvNoCC,
+  lib,
+  bash,
+  coreutils,
+  findutils,
+  fetchFromGitHub,
+  fzf,
+  gawk,
+  git,
+  gnugrep,
+  gnused,
+  makeWrapper,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "zsh-forgit";
-  version = "24.11.0";
+  version = "25.03.0";
 
   src = fetchFromGitHub {
     owner = "wfxr";
     repo = "forgit";
-    rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-8BMFL3WktkkB8m6asbNeb9swnLWi3jHo012fBXGa8ls=";
+    tag = finalAttrs.version;
+    hash = "sha256-wYCuCxPv3HGEGaze/+an6ZprCtXu5ThsTCwaIquEy3Y=";
   };
 
   strictDeps = true;
@@ -41,7 +42,18 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     install -D completions/_git-forgit $out/share/zsh/site-functions/_git-forgit
     install -D forgit.plugin.zsh $out/share/zsh/${finalAttrs.pname}/forgit.plugin.zsh
     wrapProgram $out/bin/git-forgit \
-      --prefix PATH : ${lib.makeBinPath [ bash coreutils findutils fzf gawk git gnugrep gnused ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          bash
+          coreutils
+          findutils
+          fzf
+          gawk
+          git
+          gnugrep
+          gnused
+        ]
+      }
 
     runHook postInstall
   '';

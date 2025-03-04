@@ -48,12 +48,13 @@
   withSsl ? true,
   withSystemdJournal ? (stdenv.hostPlatform.isLinux),
   zlib,
+  withNdsudo ? false,
 }:
 let
   stdenv' = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
 in
 stdenv'.mkDerivation (finalAttrs: {
-  version = "1.47.4";
+  version = "1.47.5";
   pname = "netdata";
 
   src = fetchFromGitHub {
@@ -62,10 +63,10 @@ stdenv'.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     hash =
       if withCloudUi then
-        "sha256-PCaY6J3X4zUUJ8kRCGmLLbk2Pkp5CnH3rxOaoAdsKG4="
+        "sha256-+cPYwjxg/+A5bNa517zg9xKEjUa8uPM9WD67tToPH5o="
       # we delete the v2 GUI after fetching
       else
-        "sha256-W4g/ns+XfBSf6iACIW+6lfzZJLMktTfe5/n3egL27XE=";
+        "sha256-0aiBUkDymmdIT/u1y2PG30QYAvb8Zc4i8ZgjOtlzt+A=";
     fetchSubmodules = true;
 
     # Remove v2 dashboard distributed under NCUL1. Make sure an empty
@@ -181,6 +182,12 @@ stdenv'.mkDerivation (finalAttrs: {
         rm -rf $out/share/netdata/web/index.html
         cp $out/share/netdata/web/v1/index.html $out/share/netdata/web/index.html
       ''}
+      ${lib.optionalString withNdsudo ''
+        mv $out/libexec/netdata/plugins.d/ndsudo \
+          $out/libexec/netdata/plugins.d/ndsudo.org
+
+        ln -s /var/lib/netdata/ndsudo/ndsudo $out/libexec/netdata/plugins.d/ndsudo
+      ''}
     '';
 
   preConfigure = ''
@@ -234,6 +241,7 @@ stdenv'.mkDerivation (finalAttrs: {
     wrapProgram $out/bin/netdata-claim.sh --prefix PATH : ${lib.makeBinPath [ openssl ]}
     wrapProgram $out/libexec/netdata/plugins.d/cgroup-network-helper.sh --prefix PATH : ${lib.makeBinPath [ bash ]}
     wrapProgram $out/bin/netdatacli --set NETDATA_PIPENAME /run/netdata/ipc
+    substituteInPlace $out/lib/netdata/conf.d/go.d/sensors.conf --replace-fail '/usr/bin/sensors' '${lm_sensors}/bin/sensors'
 
     # Time to cleanup the output directory.
     unlink $out/sbin
@@ -269,7 +277,7 @@ stdenv'.mkDerivation (finalAttrs: {
           license = lib.licenses.gpl3Only;
         };
       }).goModules;
-    inherit withIpmi withNetworkViewer;
+    inherit withIpmi withNetworkViewer withNdsudo;
     tests.netdata = nixosTests.netdata;
   };
 
@@ -280,6 +288,8 @@ stdenv'.mkDerivation (finalAttrs: {
     changelog = "https://github.com/netdata/netdata/releases/tag/v${version}";
     license = [ licenses.gpl3Plus ] ++ lib.optionals (withCloudUi) [ licenses.ncul1 ];
     platforms = platforms.unix;
-    maintainers = [ ];
+    maintainers = with maintainers; [
+      mkg20001
+    ];
   };
 })

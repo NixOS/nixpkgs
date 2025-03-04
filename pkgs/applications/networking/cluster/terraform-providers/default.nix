@@ -39,7 +39,7 @@ let
         doCheck = false;
         # https://github.com/hashicorp/terraform-provider-scaffolding/blob/a8ac8375a7082befe55b71c8cbb048493dd220c2/.goreleaser.yml
         # goreleaser (used for builds distributed via terraform registry) requires that CGO is disabled
-        CGO_ENABLED = 0;
+        env.CGO_ENABLED = 0;
         ldflags = [ "-s" "-w" "-X main.version=${version}" "-X main.commit=${rev}" ];
         src = mkProviderFetcher {
           name = "source-${rev}";

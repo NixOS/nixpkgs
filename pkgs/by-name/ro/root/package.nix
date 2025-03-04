@@ -11,25 +11,22 @@
   coreutils,
   git,
   davix,
+  fftw,
   ftgl,
   gl2ps,
   glew,
   gnugrep,
   gnused,
   gsl,
-  gtest,
   lapack,
-  libX11,
-  libXpm,
-  libXft,
-  libXext,
   libGLU,
   libGL,
   libxcrypt,
   libxml2,
-  llvm_16,
+  llvm_18,
   lsof,
   lz4,
+  xorg,
   xz,
   man,
   openblas,
@@ -56,7 +53,7 @@
 
 stdenv.mkDerivation rec {
   pname = "root";
-  version = "6.32.08";
+  version = "6.34.04";
 
   passthru = {
     tests = import ./tests { inherit callPackage; };
@@ -64,7 +61,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://root.cern.ch/download/root_v${version}.source.tar.gz";
-    hash = "sha256-Ka1JRact/xoAnDJqZbb6XuJHhJiCMlHTzvhqLL63eyc=";
+    hash = "sha256-4yDFNzqOh7sptygJVMqDVa2MQpXPSSNWBvDIsgCss3Q=";
   };
 
   clad_src = fetchgit {
@@ -81,49 +78,49 @@ stdenv.mkDerivation rec {
     pkg-config
     git
   ];
-  propagatedBuildInputs = [ nlohmann_json ];
+  propagatedBuildInputs = [
+    nlohmann_json # link interface of target "ROOT::ROOTEve"
+  ];
   buildInputs =
     [
       davix
+      fftw
       ftgl
+      giflib
       gl2ps
       glew
-      pcre
-      zlib
-      zstd
+      gsl
       lapack
+      libjpeg
+      libpng
+      libtiff
       libxcrypt
       libxml2
-      llvm_16
+      llvm_18
       lz4
-      xz
-      gsl
-      gtest
       openblas
       openssl
-      xxHash
-      giflib
-      libjpeg
-      libtiff
-      libpng
       patchRcPathCsh
       patchRcPathFish
       patchRcPathPosix
+      pcre
       python3.pkgs.numpy
       tbb
       xrootd
+      xxHash
+      xz
+      zlib
+      zstd
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk.privateFrameworksHook ]
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      libX11
-      libXpm
-      libXft
-      libXext
       libGLU
       libGL
+      xorg.libX11
+      xorg.libXpm
+      xorg.libXft
+      xorg.libXext
     ];
-
-  patches = [ ./sw_vers.patch ];
 
   preConfigure =
     ''
@@ -135,34 +132,22 @@ stdenv.mkDerivation rec {
       substituteInPlace cmake/modules/SearchInstalledSoftware.cmake \
         --replace-fail 'set(lcgpackages ' '#set(lcgpackages '
 
-      # We have to bypass the connection check, because it would disable clad.
-      # This should probably be fixed upstream with a flag to disable the
-      # connectivity check!
-      substituteInPlace CMakeLists.txt \
-        --replace-fail 'if(clad AND NO_CONNECTION)' 'if(FALSE)'
-      # Make sure that clad is not downloaded when building
-      substituteInPlace interpreter/cling/tools/plugins/clad/CMakeLists.txt \
-        --replace-fail 'UPDATE_COMMAND ""' 'SOURCE_DIR ${clad_src} DOWNLOAD_COMMAND "" UPDATE_COMMAND ""'
       # Make sure that clad is finding the right llvm version
       substituteInPlace interpreter/cling/tools/plugins/clad/CMakeLists.txt \
-        --replace-fail '-DLLVM_DIR=''${LLVM_BINARY_DIR}' '-DLLVM_DIR=${llvm_16.dev}/lib/cmake/llvm'
+        --replace-fail '-DLLVM_DIR=''${LLVM_BINARY_DIR}' '-DLLVM_DIR=''${LLVM_CMAKE_PATH}'
 
       substituteInPlace interpreter/llvm-project/clang/tools/driver/CMakeLists.txt \
         --replace-fail 'add_clang_symlink(''${link} clang)' ""
 
-      # Don't require textutil on macOS
-      : > cmake/modules/RootCPack.cmake
-
-      # Hardcode path to fix use with cmake
-      sed -i cmake/scripts/ROOTConfig.cmake.in \
-        -e '1iset(nlohmann_json_DIR "${nlohmann_json}/lib/cmake/nlohmann_json/")'
-
-      patchShebangs build/unix/
+      patchShebangs cmake/unix/
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       # Eliminate impure reference to /System/Library/PrivateFrameworks
       substituteInPlace core/macosx/CMakeLists.txt \
         --replace-fail "-F/System/Library/PrivateFrameworks " ""
+      # Just like in libpng/12.nix to build the builtin libpng on macOS
+      substituteInPlace graf2d/asimage/src/libAfterImage/libpng/pngpriv.h \
+        --replace-fail '<fp.h>' '<math.h>'
     ''
     +
       lib.optionalString
@@ -173,11 +158,13 @@ stdenv.mkDerivation rec {
 
   cmakeFlags =
     [
+      "-DCLAD_SOURCE_DIR=${clad_src}"
       "-DCMAKE_INSTALL_BINDIR=bin"
-      "-DCMAKE_INSTALL_LIBDIR=lib"
       "-DCMAKE_INSTALL_INCLUDEDIR=include"
+      "-DCMAKE_INSTALL_LIBDIR=lib"
       "-Dbuiltin_llvm=OFF"
       "-Dfail-on-missing=ON"
+      "-Dfftw3=ON"
       "-Dfitsio=OFF"
       "-Dgnuinstall=ON"
       "-Dmathmore=ON"
@@ -246,11 +233,6 @@ stdenv.mkDerivation rec {
       ]
     }"
   '';
-
-  # error: aligned allocation function of type 'void *(std::size_t, std::align_val_t)' is only available on macOS 10.13 or newer
-  env.CXXFLAGS = lib.optionalString (
-    stdenv.hostPlatform.system == "x86_64-darwin"
-  ) "-faligned-allocation";
 
   # workaround for
   # https://github.com/root-project/root/issues/14778

@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, cmake, openssl, postgresql, zstd, fetchpatch }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  openssl,
+  libpq,
+  zstd,
+  fetchpatch,
+}:
 
 stdenv.mkDerivation rec {
   pname = "odyssey";
@@ -20,8 +29,17 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ openssl postgresql zstd ];
-  cmakeFlags = [ "-DPQ_LIBRARY=${postgresql.lib}/lib" "-DBUILD_COMPRESSION=ON" ];
+  buildInputs = [
+    openssl
+    libpq
+    zstd
+  ];
+  cmakeFlags = [
+    "-DBUILD_COMPRESSION=ON"
+    "-DPOSTGRESQL_INCLUDE_DIR=${lib.getDev libpq}/include/postgresql/server"
+    "-DPOSTGRESQL_LIBRARY=${libpq}/lib"
+    "-DPOSTGRESQL_LIBPGPORT=${lib.getDev libpq}/lib"
+  ];
 
   installPhase = ''
     install -Dm755 -t $out/bin sources/odyssey

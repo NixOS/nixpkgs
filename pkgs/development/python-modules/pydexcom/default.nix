@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "gagebenne";
     repo = "pydexcom";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-cf3AhqaA5aij2NCeFqruoeE0ovJSgZgEnVHcE3iXJ1s=";
   };
 

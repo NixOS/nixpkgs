@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, testers
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "clap";
-  version = "1.2.2";
+  version = "1.2.5";
 
   src = fetchFromGitHub {
     owner = "free-audio";
     repo = "clap";
     rev = finalAttrs.version;
-    hash = "sha256-W3cvAtBrd+zyGj7xNSuFFChUUVjRadH6aCv5Zcvq/qs=";
+    hash = "sha256-st8K6hmU2qa01qvHCe6NNnjXwx5k0ABZKZBjp5II7B8=";
   };
 
   postPatch = ''

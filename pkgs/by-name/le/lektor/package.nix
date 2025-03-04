@@ -1,11 +1,12 @@
-{ lib
-, fetchFromGitHub
-, fetchNpmDeps
-, fetchPypi
-, fetchpatch
-, nodejs
-, npmHooks
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  fetchNpmDeps,
+  fetchPypi,
+  fetchpatch,
+  nodejs,
+  npmHooks,
+  python3,
 }:
 
 let
@@ -31,7 +32,7 @@ python.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "lektor";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     # fix for case-insensitive filesystems
     postFetch = ''
       rm -f $out/tests/demo-project/content/icc-profile-test/{LICENSE,license}.txt

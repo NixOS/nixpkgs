@@ -1,6 +1,6 @@
 { lib
 , buildGraalvmNativeImage
-, graalvmCEPackages
+, graalvmPackages
 , fetchurl
 , writeScript
 , installShellFiles
@@ -9,14 +9,14 @@
 let
   babashka-unwrapped = buildGraalvmNativeImage rec {
     pname = "babashka-unwrapped";
-    version = "1.12.194";
+    version = "1.12.196";
 
     src = fetchurl {
       url = "https://github.com/babashka/babashka/releases/download/v${version}/babashka-${version}-standalone.jar";
-      sha256 = "sha256-Dx3AANMpmCPH8Zaz8/9FRNRRhcEPnZHXQje47udwwRQ=";
+      sha256 = "sha256-11HrLQi/BYX+LqqUAN3mZx13775dzXCDFxpJP33bKQY=";
     };
 
-    graalvmDrv = graalvmCEPackages.graalvm-ce;
+    graalvmDrv = graalvmPackages.graalvm-ce;
 
     executable = "bb";
 

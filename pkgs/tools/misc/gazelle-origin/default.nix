@@ -1,9 +1,10 @@
-{ lib
-, buildPythonApplication
-, fetchFromGitHub
-, bencoder
-, pyyaml
-, requests
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
+  bencoder,
+  pyyaml,
+  requests,
 }:
 buildPythonApplication rec {
   pname = "gazelle-origin";

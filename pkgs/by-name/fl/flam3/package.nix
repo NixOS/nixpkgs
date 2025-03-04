@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, libjpeg
-, libpng
-, libxml2
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libjpeg,
+  libpng,
+  libxml2,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {
@@ -36,7 +37,7 @@ stdenv.mkDerivation rec {
       is specified by a long string of numbers - a genetic code of sorts.
     '';
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
   };
 }

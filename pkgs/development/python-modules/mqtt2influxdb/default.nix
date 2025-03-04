@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hardwario";
     repo = "bch-mqtt2influxdb";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-YDgMoxnH4vCCa7b857U6iVBhYLxk8ZjytGziryn24bg=";
   };
 

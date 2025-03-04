@@ -1,5 +1,7 @@
 { config, pkgs, ... }:
-let apparmor = config.security.apparmor; in
+let
+  apparmor = config.security.apparmor;
+in
 {
-config.security.apparmor.packages = [ pkgs.apparmor-profiles ];
+  config.security.apparmor.packages = [ pkgs.apparmor-profiles ];
 }

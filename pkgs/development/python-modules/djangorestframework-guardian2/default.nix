@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "johnthagen";
     repo = "django-rest-framework-guardian2";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-LrIhOoBWC3HttjAGbul4zof++OW35pGMyFGZzUpG1Tk=";
   };
 

@@ -1,6 +1,6 @@
 { lib
 , copyDesktopItems
-, electron_32
+, electron_34
 , fetchFromGitHub
 , deltachat-rpc-server
 , makeDesktopItem
@@ -19,36 +19,36 @@
 
 let
   deltachat-rpc-server' = deltachat-rpc-server.overrideAttrs rec {
-    version = "1.148.7";
+    version = "1.155.5";
     src = fetchFromGitHub {
       owner = "deltachat";
       repo = "deltachat-core-rust";
-      rev = "v${version}";
-      hash = "sha256-mTNWSR4ea972tIOvg6RClEc44mKXoHDEWoLZXio8O4k=";
+      tag = "v${version}";
+      hash = "sha256-U0phIPkR4lt/WsCDt2TQv8NfjG04JdmCVDbMA1/ySdo=";
     };
     cargoDeps = rustPlatform.fetchCargoVendor {
       pname = "deltachat-core-rust";
       inherit version src;
-      hash = "sha256-eDj8DIvvWWj+tfHuzR35WXlKY5klGxW+MixdN++vugk=";
+      hash = "sha256-lkqBC/b128GSMpvAWpWmkrrf/E0twCDtDM1EBPOnp7Y=";
     };
   };
-  electron = electron_32;
+  electron = electron_34;
   pnpm = pnpm_9;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "deltachat-desktop";
-  version = "1.48.0";
+  version = "1.54.1";
 
   src = fetchFromGitHub {
     owner = "deltachat";
     repo = "deltachat-desktop";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-BgB12pHySJIMtBCph5UkBjioMhEYQq9i7htkrWQNlps=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-mt0y7W16ThRYQNALFPBNcnR34MDqs6m3Vt+mYALqGs8=";
   };
 
   pnpmDeps = pnpm.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-YBfHVZB6TScIKbWQrN1KJYSUZytR81UwKZ87GaxGlZ8=";
+    hash = "sha256-/1utoiKw/BycWPuwWykcJniUw9kUGk/WtPCqqZu8E+U=";
   };
 
   nativeBuildInputs = [
@@ -68,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
-    VERSION_INFO_GIT_REF = finalAttrs.src.rev;
+    VERSION_INFO_GIT_REF = finalAttrs.src.tag;
   };
 
   buildPhase = ''
@@ -110,7 +110,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     makeWrapper ${lib.getExe electron} $out/bin/${finalAttrs.meta.mainProgram} \
       --add-flags $out/opt/DeltaChat/resources/app.asar \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime}}" \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       --inherit-argv0
 
     runHook postInstall
@@ -142,7 +142,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Email-based instant messaging for Desktop";
     homepage = "https://github.com/deltachat/deltachat-desktop";
-    changelog = "https://github.com/deltachat/deltachat-desktop/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/deltachat/deltachat-desktop/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.gpl3Plus;
     mainProgram = "deltachat";
     maintainers = with lib.maintainers; [ dotlambda ];

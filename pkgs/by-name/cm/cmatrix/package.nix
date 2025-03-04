@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, ncurses }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  ncurses,
+}:
 
 stdenv.mkDerivation rec {
   pname = "cmatrix";
@@ -23,7 +29,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/abishekvashok/cmatrix";
     platforms = ncurses.meta.platforms;
-    maintainers = [ maintainers.AndersonTorres ];
+    maintainers = [ ];
     mainProgram = "cmatrix";
   };
 }

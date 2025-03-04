@@ -1,31 +1,37 @@
-{ lib
-, stdenv
-, fetchurl
-, autoPatchelfHook
-, bbe
-, makeWrapper
-, p7zip
-, perl
-, undmg
-, dbus-glib
-, fuse
-, glib
-, xorg
-, zlib
-, kernel
-, bash
-, cups
-, gawk
-, netcat
-, timetrap
-, util-linux
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoPatchelfHook,
+  bbe,
+  makeWrapper,
+  p7zip,
+  perl,
+  undmg,
+  dbus-glib,
+  fuse,
+  glib,
+  xorg,
+  zlib,
+  kernel,
+  bash,
+  cups,
+  gawk,
+  netcat,
+  timetrap,
+  util-linux,
+  wayland,
 }:
 
 let
   kernelVersion = kernel.modDirVersion;
   kernelDir = "${kernel.dev}/lib/modules/${kernelVersion}";
 
-  libPath = lib.concatStringsSep ":" [ "${glib.out}/lib" "${xorg.libXrandr}/lib" ];
+  libPath = lib.concatStringsSep ":" [
+    "${glib.out}/lib"
+    "${xorg.libXrandr}/lib"
+    "${wayland.out}/lib"
+  ];
   scriptPath = lib.concatStringsSep ":" [
     "${bash}/bin"
     "${cups}/sbin"
@@ -37,16 +43,19 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "prl-tools";
-  version = "20.1.1-55740";
+  version = "20.2.2-55879";
 
   # We download the full distribution to extract prl-tools-lin.iso from
   # => ${dmg}/Parallels\ Desktop.app/Contents/Resources/Tools/prl-tools-lin.iso
   src = fetchurl {
     url = "https://download.parallels.com/desktop/v${lib.versions.major finalAttrs.version}/${finalAttrs.version}/ParallelsDesktop-${finalAttrs.version}.dmg";
-    hash = "sha256-3Lo/tAPn3vYvHXV9r8VeMkxKjRPpr8fhADh0vyppC0k=";
+    hash = "sha256-MgToUW9H4NWjY+yBxTqg9wZ2VDNbbDu0tIeHcGZxPkM=";
   };
 
-  hardeningDisable = [ "pic" "format" ];
+  hardeningDisable = [
+    "pic"
+    "format"
+  ];
 
   nativeBuildInputs = [
     autoPatchelfHook
@@ -108,15 +117,20 @@ stdenv.mkDerivation (finalAttrs: {
     ( # kernel modules
       cd kmods
       mkdir -p $out/lib/modules/${kernelVersion}/extra
-      cp prl_fs/SharedFolders/Guest/Linux/prl_fs/prl_fs.ko $out/lib/modules/${kernelVersion}/extra
       cp prl_fs_freeze/Snapshot/Guest/Linux/prl_freeze/prl_fs_freeze.ko $out/lib/modules/${kernelVersion}/extra
       cp prl_tg/Toolgate/Guest/Linux/prl_tg/prl_tg.ko $out/lib/modules/${kernelVersion}/extra
-      ${lib.optionalString stdenv.hostPlatform.isAarch64
-      "cp prl_notifier/Installation/lnx/prl_notifier/prl_notifier.ko $out/lib/modules/${kernelVersion}/extra"}
+      ${lib.optionalString stdenv.hostPlatform.isAarch64 "cp prl_notifier/Installation/lnx/prl_notifier/prl_notifier.ko $out/lib/modules/${kernelVersion}/extra"}
     )
 
     ( # tools
-      cd tools/tools${if stdenv.hostPlatform.isAarch64 then "-arm64" else if stdenv.hostPlatform.isx86_64 then "64" else "32"}
+      cd tools/tools${
+        if stdenv.hostPlatform.isAarch64 then
+          "-arm64"
+        else if stdenv.hostPlatform.isx86_64 then
+          "64"
+        else
+          "32"
+      }
       mkdir -p $out/lib
 
       # prltoolsd contains hardcoded /bin/bash path
@@ -156,9 +170,6 @@ stdenv.mkDerivation (finalAttrs: {
         ln -s $out/$i $out/''${i%.0.0}
       done
 
-      mkdir -p $out/share/man/man8
-      install -Dm644 ../mount.prl_fs.8 $out/share/man/man8
-
       substituteInPlace ../99prltoolsd-hibernate \
         --replace "/bin/bash" "${bash}/bin/bash"
 
@@ -175,7 +186,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Parallels Tools for Linux guests";
     homepage = "https://parallels.com";
     license = licenses.unfree;
-    maintainers = with maintainers; [ catap wegank codgician ];
+    maintainers = with maintainers; [
+      wegank
+      codgician
+    ];
     platforms = platforms.linux;
   };
 })

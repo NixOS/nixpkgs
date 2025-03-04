@@ -14,6 +14,8 @@
   setuptools,
   six,
   fetchpatch2,
+  pythonAtLeast,
+  legacy-cgi,
 }:
 
 buildPythonPackage rec {
@@ -26,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "xmendez";
     repo = "wfuzz";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-RM6QM/iR00ymg0FBUtaWAtxPHIX4u9U/t5N/UT/T6sc=";
   };
 
@@ -46,14 +48,17 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  dependencies = [
-    chardet
-    distutils # src/wfuzz/plugin_api/base.py
-    pycurl
-    six
-    setuptools
-    pyparsing
-  ] ++ lib.optionals stdenv.hostPlatform.isWindows [ colorama ];
+  dependencies =
+    [
+      chardet
+      distutils # src/wfuzz/plugin_api/base.py
+      pycurl
+      six
+      setuptools
+      pyparsing
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isWindows [ colorama ]
+    ++ lib.optionals (pythonAtLeast "3.13") [ legacy-cgi ];
 
   nativeCheckInputs = [
     netaddr

@@ -2,11 +2,10 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  dtkwidget,
-  qt5integration,
-  qt5platform-plugins,
-  libsForQt5,
-  dde-qt-dbus-factory,
+  dtk6widget,
+  qt6integration,
+  qt6platform-plugins,
+  qt6Packages,
   cmake,
   pkg-config,
   gtest,
@@ -14,42 +13,42 @@
 
 stdenv.mkDerivation rec {
   pname = "deepin-calculator";
-  version = "5.8.24";
+  version = "6.5.7";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "sha256-Gv4X1vT3w3kd1FN6BBpUeG2VBz/e+OWLBQyBL7r3BrI=";
+    hash = "sha256-p3tEUIM7rxYUVLl7ZaEm20IZWRMNi12AIj9mQe6iB5I=";
   };
 
   nativeBuildInputs = [
     cmake
-    libsForQt5.qttools
+    qt6Packages.qttools
     pkg-config
-    libsForQt5.wrapQtAppsHook
+    qt6Packages.wrapQtAppsHook
   ];
 
   buildInputs = [
-    dtkwidget
-    qt5integration
-    qt5platform-plugins
-    libsForQt5.qtbase
-    libsForQt5.qtsvg
-    dde-qt-dbus-factory
+    dtk6widget
+    qt6integration
+    qt6platform-plugins
+    qt6Packages.qtbase
+    qt6Packages.qtsvg
     gtest
   ];
 
-  strictDeps = true;
+  # qtsvg can't not be found with strictDeps
+  strictDeps = false;
 
   cmakeFlags = [ "-DVERSION=${version}" ];
 
-  meta = with lib; {
+  meta = {
     description = "Easy to use calculator for ordinary users";
     mainProgram = "deepin-calculator";
     homepage = "https://github.com/linuxdeepin/deepin-calculator";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = teams.deepin.members;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = lib.teams.deepin.members;
   };
 }

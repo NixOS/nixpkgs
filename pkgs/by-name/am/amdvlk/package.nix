@@ -3,7 +3,7 @@
   callPackage,
   lib,
   fetchRepoProject,
-  writeScript,
+  nix-update-script,
   cmake,
   directx-shader-compiler,
   glslang,
@@ -23,19 +23,17 @@
 let
 
   suffix = if stdenv.system == "x86_64-linux" then "64" else "32";
-  # Fix https://github.com/NixOS/nixpkgs/issues/348903 until the glslang update to 15.0.0 is merged into master
-  glslang_fixed = glslang.overrideAttrs (finalAttrs: oldAttrs: { cmakeFlags = [ ]; });
 
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "amdvlk";
-  version = "2024.Q3.3";
+  version = "2025.Q1.2";
 
   src = fetchRepoProject {
     name = "amdvlk-src";
     manifest = "https://github.com/GPUOpen-Drivers/AMDVLK.git";
     rev = "refs/tags/v-${finalAttrs.version}";
-    hash = "sha256-wIPubMsSaNGTykD/K0gxdba128TqW5nu4CjXoLkprc0=";
+    hash = "sha256-NIRIrcCVFPxeILnfmOaE8yFBXYrXhtljXsccvoU2lf8=";
   };
 
   buildInputs =
@@ -61,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
     [
       cmake
       directx-shader-compiler
-      glslang_fixed
+      glslang
       ninja
       patchelf
       perl
@@ -104,23 +102,14 @@ stdenv.mkDerivation (finalAttrs: {
   # Keep the rpath, otherwise vulkaninfo and vkcube segfault
   dontPatchELF = true;
 
-  passthru.updateScript = writeScript "update.sh" ''
-    #!/usr/bin/env nix-shell
-    #!nix-shell -i bash -p coreutils curl gnused jq common-updater-scripts
-
-    packagePath="pkgs/by-name/am/amdvlk/package.nix"
-
-    function setHash() {
-      sed -i $packagePath -e 's,sha256 = "[^'"'"'"]*",sha256 = "'"$1"'",'
-    }
-
-    version="$(curl -sL "https://api.github.com/repos/GPUOpen-Drivers/AMDVLK/releases?per_page=1" | jq '.[0].tag_name | split("-") | .[1]' --raw-output)"
-    sed -i $packagePath -e 's/version = "[^'"'"'"]*"/version = "'"$version"'"/'
-
-    setHash "$(nix-instantiate --eval -A lib.fakeSha256 | xargs echo)"
-    hash="$(nix to-base64 $(nix-build -A amdvlk 2>&1 | tail -n3 | grep 'got:' | cut -d: -f2- | xargs echo || true))"
-    setHash "$hash"
-  '';
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--url"
+      "https://github.com/GPUOpen-Drivers/AMDVLK"
+      "--version-regex"
+      "v-(.*)"
+    ];
+  };
 
   passthru.impureTests = {
     amdvlk = callPackage ./test.nix { };

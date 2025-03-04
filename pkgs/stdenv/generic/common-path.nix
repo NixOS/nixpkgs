@@ -1,4 +1,5 @@
-{pkgs}: [
+{ pkgs }:
+[
   pkgs.coreutils
   pkgs.findutils
   pkgs.diffutils
@@ -9,7 +10,7 @@
   pkgs.gzip
   pkgs.bzip2.bin
   pkgs.gnumake
-  pkgs.bash
+  pkgs.bashNonInteractive
   pkgs.patch
   pkgs.xz.bin
 

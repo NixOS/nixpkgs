@@ -1,6 +1,7 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
@@ -10,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "praetorian-inc";
     repo = "fingerprintx";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-o0u6UOrdzORnTgfOlc0kSQ5diDtNHjjbwfuyvPoHHKs=";
   };
 

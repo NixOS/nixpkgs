@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, ninja
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
 }:
 
 let
   name = "liblc3";
-  version = "1.1.1";
+  version = "1.1.2";
 in
 stdenv.mkDerivation {
   pname = name;
@@ -17,10 +18,13 @@ stdenv.mkDerivation {
     owner = "google";
     repo = "liblc3";
     rev = "v${version}";
-    sha256 = "sha256-h9qy04FqlHXp0bOUoP4+WqI0yrM78e56S+DEn3HztYo=";
+    sha256 = "sha256-OWuj68+YztIh/dPvwqjW7ch7Ph3aiEIDvO9rMkVIrQ8=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   nativeBuildInputs = [
     meson
@@ -35,4 +39,3 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ jansol ];
   };
 }
-

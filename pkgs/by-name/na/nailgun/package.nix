@@ -1,4 +1,13 @@
-{ lib, stdenv, stdenvNoCC, fetchMavenArtifact, fetchFromGitHub, jre, makeWrapper, symlinkJoin }:
+{
+  lib,
+  stdenv,
+  stdenvNoCC,
+  fetchMavenArtifact,
+  fetchFromGitHub,
+  jre,
+  makeWrapper,
+  symlinkJoin,
+}:
 
 let
   version = "1.0.0";
@@ -61,7 +70,10 @@ symlinkJoin rec {
   inherit client server version;
 
   name = "${pname}-${version}";
-  paths = [ client server ];
+  paths = [
+    client
+    server
+  ];
 
   meta = commonMeta // {
     description = "Client, protocol, and server for running Java programs from the command line without incurring the JVM startup overhead";

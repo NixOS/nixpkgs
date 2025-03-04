@@ -727,11 +727,13 @@ in
 
       system.build.installBootLoader =
         let
-          install-grub-pl = pkgs.substituteAll {
-            src = ./install-grub.pl;
+          install-grub-pl = pkgs.replaceVars ./install-grub.pl {
             utillinux = pkgs.util-linux;
             btrfsprogs = pkgs.btrfs-progs;
             inherit (config.system.nixos) distroName;
+            # targets of a replacement in code
+            bootPath = null;
+            bootRoot = null;
           };
           perl = pkgs.perl.withPackages (p: with p; [
             FileSlurp FileCopyRecursive

@@ -1,6 +1,22 @@
-{ lib, stdenv, fetchurl, libGLU, libGL, SDL, scons, SDL_ttf, SDL_image, zlib, SDL_net
-, speex, libvorbis, libogg, boost, fribidi, bsdiff
-, fetchpatch
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libGLU,
+  libGL,
+  SDL,
+  scons,
+  SDL_ttf,
+  SDL_image,
+  zlib,
+  SDL_net,
+  speex,
+  libvorbis,
+  libogg,
+  boost,
+  fribidi,
+  bsdiff,
+  fetchpatch,
 }:
 let
   version = "0.9.4";
@@ -19,7 +35,9 @@ stdenv.mkDerivation rec {
     sha256 = "1f0l2cqp2g3llhr9jl6jj15k0wb5q8n29vqj99xy4p5hqs78jk8g";
   };
 
-  patches = [ ./header-order.patch ./public-buildproject.patch
+  patches = [
+    ./header-order.patch
+    ./public-buildproject.patch
     (fetchpatch {
       url = "https://bitbucket.org/giszmo/glob2/commits/c9dc715624318e4fea4abb24e04f0ebdd9cd8d2a/raw";
       sha256 = "0017xg5agj3dy0hx71ijdcrxb72bjqv7x6aq7c9zxzyyw0mkxj0k";
@@ -48,14 +66,37 @@ stdenv.mkDerivation rec {
     sed -i -e "s@env = Environment()@env = Environment( ENV = os.environ )@" SConstruct
   '';
 
-  nativeBuildInputs = [ scons ];
-  buildInputs = [ libGLU libGL SDL SDL_ttf SDL_image zlib SDL_net speex libvorbis libogg boost fribidi bsdiff ];
-
-  postConfigure = ''
-    sconsFlags+=" BINDIR=$out/bin"
-    sconsFlags+=" INSTALLDIR=$out/share/globulation2"
-    sconsFlags+=" DATADIR=$out/share/globulation2/glob2"
+  # fix sdl-config for cross
+  # TODO: remaining *-config, and make it work for !(build.canExecute host)
+  preBuild = ''
+    substituteInPlace SConstruct \
+      --replace-fail sdl-config "${lib.getExe' (lib.getDev SDL) "sdl-config"}"
   '';
+
+  nativeBuildInputs = [
+    scons
+    bsdiff # bspatch
+  ];
+  buildInputs = [
+    libGLU
+    libGL
+    SDL
+    SDL_ttf
+    SDL_image
+    zlib
+    SDL_net
+    speex
+    libvorbis
+    libogg
+    boost
+    fribidi
+  ];
+
+  sconsFlags = [
+    "BINDIR=${placeholder "out"}/bin"
+    "INSTALLDIR=${placeholder "out"}/share/globulation2"
+    "DATADIR=${placeholder "out"}/share/globulation2/glob2"
+  ];
 
   NIX_LDFLAGS = "-lboost_system";
 
@@ -65,6 +106,7 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;
     license = licenses.gpl3;
+    broken = !stdenv.buildPlatform.canExecute stdenv.hostPlatform;
   };
   passthru.updateInfo.downloadPage = "http://globulation2.org/wiki/Download_and_Install";
 }

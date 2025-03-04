@@ -1,20 +1,21 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, minizip
-, python3
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  minizip,
+  python3,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {
   pname = "libxlsxwriter";
-  version = "1.1.9";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "jmcnamara";
     repo = "libxlsxwriter";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-ZXVNW5cEWgMXKLnE0IpwWS0RIWBta5uhuGh4R9uFJ14=";
+    tag = "v${version}";
+    hash = "sha256-PlKUDJEYQ2LThdq8F3ylFTgusZ9wTaL9pdAznAXpwI0=";
   };
 
   buildInputs = [

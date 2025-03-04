@@ -1,4 +1,8 @@
-{ lib, fetchFromGitHub, rustPlatform }:
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "passerine";
@@ -11,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-TrbcULIJ9+DgQ4QsLYD5okxHoIusGJDw1PqJQwq1zu0=";
   };
 
-  cargoHash = "sha256-A+sOT0rloAktDdVXe2HEPK25euh9T7c0rXybZmZpqC0=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-PCSwhq4VXd/Hvvcfd2gZskXVD106Zw5PVCgMdlapWRs=";
 
   meta = with lib; {
     description = "Small extensible programming language designed for concise expression with little code";

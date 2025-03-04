@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "teslemetry-stream";
-  version = "0.4.2";
+  version = "0.6.12";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Teslemetry";
     repo = "python-teslemetry-stream";
-    rev = "v${version}";
-    hash = "sha256-Ny68yiM0LS2U7zy6K2R35ZLm+Jo4s+HIFJjuqgL49E0=";
+    tag = "v${version}";
+    hash = "sha256-0Ca8p5xuzpSfZhtTYZUgbdNHXmnn9RLOGMTSYKfnUZg=";
   };
 
   build-system = [ setuptools ];
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "teslemetry_stream" ];
 
   meta = {
-    changelog = "https://github.com/Teslemetry/python-teslemetry-stream/releases/tag/v${version}";
+    changelog = "https://github.com/Teslemetry/python-teslemetry-stream/releases/tag/${src.tag}";
     description = "Python library for the Teslemetry Streaming API";
     homepage = "https://github.com/Teslemetry/python-teslemetry-stream";
     license = lib.licenses.asl20;

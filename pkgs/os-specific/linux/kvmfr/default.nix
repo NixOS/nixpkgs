@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchpatch, kernel, looking-glass-client }:
+{
+  lib,
+  stdenv,
+  fetchpatch,
+  kernel,
+  looking-glass-client,
+}:
 
 stdenv.mkDerivation {
   pname = "kvmfr";
@@ -6,7 +12,10 @@ stdenv.mkDerivation {
 
   src = looking-glass-client.src;
   sourceRoot = "${looking-glass-client.src.name}/module";
-  hardeningDisable = [ "pic" "format" ];
+  hardeningDisable = [
+    "pic"
+    "format"
+  ];
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
   patches = [
@@ -17,7 +26,7 @@ stdenv.mkDerivation {
       stripLen = 1;
     })
 
-    # securtiy patch for potential buffer overflow
+    # security patch for potential buffer overflow
     # https://github.com/gnif/LookingGlass/issues/1133
     (fetchpatch {
       url = "https://github.com/gnif/LookingGlass/commit/3ea37b86e38a87ee35eefb5d8fcc38b8dc8e2903.patch";

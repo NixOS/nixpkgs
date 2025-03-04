@@ -696,51 +696,51 @@ version = "0.2.1"
 dependencies = ["akku-r7rs", "chez-srfi", "chibi-match", "lassik-unpack-assoc", "lassik-shell-quote"]
 dev-dependencies = []
 license = "isc"
-url = "http://snow-fort.org/s/lassi.io/lassi/lassik/dockerfile/0.1/lassik-dockerfile-0.1.tgz"
-sha256 = "7859d39d2928417c709c4f89f012fac1c1a95f2839a1a7d0ad870ba759dbea92"
+url = "http://snow-fort.org/s/lassi.io/lassi/lassik/dockerfile/0.2/distfiles/lassik-dockerfile-0.2.tgz"
+sha256 = "fbaa87155f3d5910af8bb6b1513464520a526990ca40ed43f423ed27c485c4a0"
 source = "snow-fort"
 synopsis = "Scheme DSL to build Dockerfiles"
-version = "0.1.0"
+version = "0.2.0"
 
 [lassik-shell-quote]
 dependencies = ["akku-r7rs", "chibi-match"]
 dev-dependencies = []
 license = "isc"
-url = "http://snow-fort.org/s/lassi.io/lassi/lassik/shell-quote/0.1/lassik-shell-quote-0.1.tgz"
-sha256 = "2bb3a0fa8ef30a5eea80fcea857392094b3a44548d95f400a3bbcf27d0332f0c"
+url = "http://snow-fort.org/s/lassi.io/lassi/lassik/shell-quote/0.2/distfiles/lassik-shell-quote-0.2.tgz"
+sha256 = "e985951f02a17d120e73a4e935a1aa9af9756e42ad72fe143cd5397a549dbc33"
 source = "snow-fort"
-synopsis = "Little Scheme DSL to build shell command lines"
-version = "0.1.0"
+synopsis = "Scheme DSL to build shell command lines"
+version = "0.2.0"
 
 [lassik-string-inflection]
 dependencies = ["akku-r7rs"]
 dev-dependencies = []
 license = "isc"
-url = "http://snow-fort.org/s/lassi.io/lassi/lassik/string-inflection/0.1.1/lassik-string-inflection-0.1.1.tgz"
-sha256 = "d97f986bd6a97a090b307051caf6b8310e2c22a648e6023135db5f7085aaf404"
+url = "http://snow-fort.org/s/lassi.io/lassi/lassik/string-inflection/0.2/distfiles/lassik-string-inflection-0.2.tgz"
+sha256 = "c9ad9fe11d0c5243609382d365b4ae3d81b9177ddebcb47abe76aaf1a83352ff"
 source = "snow-fort"
 synopsis = "lisp-case under_score CapsUpper capsLower"
-version = "0.1.1"
+version = "0.2.0"
 
 [lassik-trivial-tar-writer]
 dependencies = ["akku-r7rs"]
 dev-dependencies = []
 license = "isc"
-url = "http://snow-fort.org/s/lassi.io/lassi/lassik/trivial-tar-writer/0.1/lassik-trivial-tar-writer-0.1.tgz"
-sha256 = "15528c2441923a84422ac2733802bfb355d9dffcc33deff55815d8aca0bea3b0"
+url = "http://snow-fort.org/s/lassi.io/lassi/lassik/trivial-tar-writer/0.2/distfiles/lassik-trivial-tar-writer-0.2.tgz"
+sha256 = "dcb512851622b17b7eb6e8bd868f78bb4bcabd33f480a9f7260970196bf4a568"
 source = "snow-fort"
 synopsis = "Simplest way to output uncompressed .tar file"
-version = "0.1.0"
+version = "0.2.0"
 
 [lassik-unpack-assoc]
 dependencies = ["akku-r7rs"]
 dev-dependencies = []
 license = "isc"
-url = "http://snow-fort.org/s/lassi.io/lassi/lassik/unpack-assoc/0.1/lassik-unpack-assoc-0.1.tgz"
-sha256 = "109c7ac9b0be03df61103b84491bfccf7460f27367bd5abac58cf486300ac63b"
+url = "http://snow-fort.org/s/lassi.io/lassi/lassik/unpack-assoc/0.2/distfiles/lassik-unpack-assoc-0.2.tgz"
+sha256 = "6e67c4e5c2f0756f38ae4b065c0bfe8dc86f0532373d899cdbff4fbcd9d18302"
 source = "snow-fort"
 synopsis = "Alist/hash-table destructuring case macros"
-version = "0.1.0"
+version = "0.2.0"
 
 [lightweight-testing]
 dependencies = ["akku-r7rs", "chibi-test"]
@@ -1485,11 +1485,10 @@ version = "0.0.20150602"
 dependencies = ["akku-r7rs", "chez-srfi"]
 dev-dependencies = []
 license = "noassertion"
-url = "http://snow-fort.org/s/iki.fi/retropikzel/retropikzel/scgi/0.2.2/retropikzel-scgi-0.2.2.tgz"
-sha256 = "976d44ef88574bcdacaaa87ae8983adbc34ef8ea90385eb1bfe5fda87f6d191f"
+url = "http://snow-fort.org/s/iki.fi/retropikzel/retropikzel/scgi/0.3.0/retropikzel-scgi-0.3.0.tgz"
+sha256 = "ef8fee9cf34f38a1929e7007a509dc321b35c26bc3e18d23619b9094e81eae52"
 source = "snow-fort"
-synopsis = "Portable Simple Common Gateway Interface implementation"
-version = "0.2.2"
+version = "0.3.0"
 
 [robin-abbrev]
 dependencies = ["akku-r7rs", "chez-srfi"]
@@ -2430,11 +2429,11 @@ version = "1.0.0-alpha.0"
 dependencies = ["chez-srfi"]
 dev-dependencies = []
 license = "gpl-3.0-or-later"
-url = "https://archive.akkuscm.org/archive/pkg/c/chez-csv_2.0.1-alpha_repack.tar.xz"
-sha256 = "f2ce71280c76e5c8dc5b20217287c85fb66093ead4bd7da97b8f51f7001dfbea"
+url = "https://archive.akkuscm.org/archive/pkg/c/chez-csv_2.0.2-alpha_repack.tar.xz"
+sha256 = "16741d2e98fcf78bb6e040fe853a1153229e897b2c410c831e752cc26bc50ade"
 source = "akku"
 synopsis = "Chez Scheme CSV library."
-version = "2.0.1-alpha"
+version = "2.0.2-alpha"
 
 [chez-docs]
 dependencies = ["chez-srfi"]
@@ -2483,7 +2482,7 @@ license = "gpl-3.0-or-later"
 url = "https://archive.akkuscm.org/archive/pkg/c/chez-scmutils_0.0.0-alpha.0_repack.tar.xz"
 sha256 = "7b6f707f3e0d8fa7fdd46b7ba9e7773398544102943870fec3099348e1809035"
 source = "akku"
-synopsis = "A port of the ???MIT Scmutils??? library to Chez Scheme"
+synopsis = "A port of the ‘MIT Scmutils’ library to Chez Scheme"
 version = "0.0.0-alpha.0"
 
 [chez-sockets]
@@ -2510,11 +2509,11 @@ version = "1.0.0-alpha.2"
 dependencies = []
 dev-dependencies = []
 license = ["mit", "bsd-3-clause"]
-url = "https://archive.akkuscm.org/archive/pkg/c/chez-srfi_0.0.0-akku.209.552cd37_repack.tar.xz"
-sha256 = "f0f620f24a4765b85d3157b670e319d6cd30240bfc78f812af1f04cf6f8804e6"
+url = "https://archive.akkuscm.org/archive/pkg/c/chez-srfi_0.0.0-akku.244.b424440_repack.tar.xz"
+sha256 = "f4968e3d74c30d98297aaff3753b11225de45f99795cc2e3f6233e93f46d7c41"
 source = "akku"
 synopsis = "Portable SRFI collection"
-version = "0.0.0-akku.209.552cd37"
+version = "0.0.0-akku.244.b424440"
 
 [chez-stats]
 dependencies = ["chez-srfi"]
@@ -2525,6 +2524,16 @@ sha256 = "694ad3200ab1927b35e006d24b838defe28b1a58a4c075153cf93e0b25cb1639"
 source = "akku"
 synopsis = "Read and write delimited text files, compute descriptive statistics, and generate random variates in Chez Scheme."
 version = "0.1.6"
+
+[chez-tk]
+dependencies = ["thunderchez"]
+dev-dependencies = []
+license = "bsd-2-clause"
+url = "https://archive.akkuscm.org/archive/pkg/c/chez-tk_1.8.2_repack.tar.xz"
+sha256 = "6e71bac608970d9e0df3eb03f36d856c3490595a0f5e5debf53e71a5a7f16a07"
+source = "akku"
+synopsis = "A Chez Scheme Interface to the Tk GUI Toolkit"
+version = "1.8.2"
 
 [compression]
 dependencies = ["chez-srfi", "hashing", "struct-pack"]
@@ -2607,14 +2616,14 @@ synopsis = "FAT filesystem library"
 version = "0.1.0"
 
 [fs-partitions]
-dependencies = ["struct-pack", "hashing"]
-dev-dependencies = ["uuid"]
+dependencies = ["struct-pack", "hashing", "uuid"]
+dev-dependencies = []
 license = "mit"
-url = "https://archive.akkuscm.org/archive/pkg/f/fs-partitions_1.0.0-beta.0_repack.tar.xz"
-sha256 = "ccf179be9ef0bfe43f216c30ece495fa501815fbe8a140f1ace4591dd5b44a4d"
+url = "https://archive.akkuscm.org/archive/pkg/f/fs-partitions_1.0.1_repack.tar.xz"
+sha256 = "1e12fd32c6c20b0d3147ae3bc9ae5e8e53333dba89fff8c84fcbf9e943827259"
 source = "akku"
-synopsis = "Disk partition table reader (MBR/GPT)"
-version = "1.0.0-beta.0"
+synopsis = "Disk partition table reader/writer (MBR/GPT)"
+version = "1.0.1"
 
 [gnuplot-pipe]
 dependencies = ["chez-srfi"]
@@ -2665,6 +2674,16 @@ sha256 = "d1e51a65b1d5654a430437ff43c1b25a6d5d7e2f121d4c65b2156afb12522a6d"
 source = "akku"
 synopsis = "A bunch of scheme junk :)"
 version = "0.0.0-akku.42.1370c75"
+
+[image-formats]
+dependencies = ["chez-srfi", "compression", "hashing"]
+dev-dependencies = []
+license = "mit"
+url = "https://archive.akkuscm.org/archive/pkg/i/image-formats_0.1.0_repack.tar.xz"
+sha256 = "72a692ccf929ff798e464de611c8d2c70ceb7a07eff93e48a56bc298d4261efa"
+source = "akku"
+synopsis = "Library for reading/writing various image formats"
+version = "0.1.0"
 
 [industria]
 dependencies = ["chez-srfi", "hashing", "ip-address", "struct-pack"]
@@ -3037,14 +3056,14 @@ synopsis = "Structured access to bytevector contents"
 version = "1.0.6-akku.0"
 
 [scheme-langserver]
-dependencies = ["ufo-thread-pool", "ufo-threaded-function", "uuid", "chibi-pathname", "ufo-match", "arew-json", "slib-string-search", "chez-srfi"]
+dependencies = ["ufo-try", "srfi-180", "ufo-thread-pool", "ufo-threaded-function", "uuid", "chibi-pathname", "ufo-match", "slib-string-search", "chez-srfi"]
 dev-dependencies = []
 license = "mit"
-url = "https://archive.akkuscm.org/archive/pkg/s/scheme-langserver_1.2.1_repack.tar.xz"
-sha256 = "2fe6450ff9907d1b32b9fa18b9b5799e5083fc0bf498a342788e8d5959f4372a"
+url = "https://archive.akkuscm.org/archive/pkg/s/scheme-langserver_1.2.8_repack.tar.xz"
+sha256 = "902f5d2132aeb66e9b244df45f0188e1c1eb14a93ed7906a2e44053c87e38cac"
 source = "akku"
 synopsis = "This package is a language server protocol implementation helping scheme programming."
-version = "1.2.1"
+version = "1.2.8"
 
 [scheme-specs]
 dependencies = ["chez-srfi"]
@@ -3095,6 +3114,16 @@ sha256 = "03d8c1bb15e0a31cfbad5f30c5f23146ea0826947f1093d3890ebc44f66bc0f7"
 source = "akku"
 synopsis = "Portability and utility library"
 version = "0.0.0-akku.509.1bfe3b8"
+
+[srfi-180]
+dependencies = ["chez-srfi"]
+dev-dependencies = []
+license = "mit"
+url = "https://archive.akkuscm.org/archive/pkg/s/srfi-180_1.0.0-alpha.0_repack.tar.xz"
+sha256 = "7a4682649ad97ffdca566b9e0736c67c7fcb7b3347887fbcf07ec19c7ff2c233"
+source = "akku"
+synopsis = "SRFI-180, a JSON library"
+version = "1.0.0-alpha.0"
 
 [struct-pack]
 dependencies = []
@@ -3195,6 +3224,26 @@ sha256 = "87e1406850888c52debefd64d75bcf825ea215772eb11a831f895cce1fe1541c"
 source = "akku"
 synopsis = "This package contains threaded-map, threaded-vector-map and such threaded functions for chez scheme."
 version = "1.0.4"
+
+[ufo-timer]
+dependencies = ["ufo-thread-pool", "chez-srfi"]
+dev-dependencies = []
+license = "mit"
+url = "https://archive.akkuscm.org/archive/pkg/u/ufo-timer_1.0.0_repack.tar.xz"
+sha256 = "e145154e8edfbbc47662a4397b3332a1253dc3867e9e59bbf8dcbdcb41a15be5"
+source = "akku"
+synopsis = "This repository is a timer implementation based on Chez Scheme's thread mechanism."
+version = "1.0.0"
+
+[ufo-try]
+dependencies = ["chez-srfi"]
+dev-dependencies = []
+license = "mit"
+url = "https://archive.akkuscm.org/archive/pkg/u/ufo-try_1.0.0_repack.tar.xz"
+sha256 = "37bab16e0893f771e5f51c005cbd2d8884bb0c07b163c563325acc2a73957f1c"
+source = "akku"
+synopsis = "try-except to handle potential exception"
+version = "1.0.0"
 
 [uuid]
 dependencies = ["hashing", "industria", "struct-pack", "chez-srfi"]
@@ -3365,6 +3414,16 @@ sha256 = "ba53698fb0d468aedb5062d49089002924ba7b1c622b16ed8170810412f4f4d3"
 source = "akku"
 synopsis = "xUnit test utility"
 version = "0.0.0-akku.21.0b4ede2"
+
+[xyz-modem]
+dependencies = ["chez-srfi", "hashing"]
+dev-dependencies = []
+license = "mit"
+url = "https://archive.akkuscm.org/archive/pkg/x/xyz-modem_0.0.1_repack.tar.xz"
+sha256 = "97ac3c51936f5a7b4a45a954424949b119eb7f84a65196b49a479f1301dfd764"
+source = "akku"
+synopsis = "This library should contain a x/y/z-modem protocols"
+version = "0.0.1"
 
 [yxskaft]
 dependencies = ["r6rs-pffi", "struct-pack"]

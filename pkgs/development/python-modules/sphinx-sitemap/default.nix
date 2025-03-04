@@ -19,7 +19,7 @@ buildPythonPackage {
   src = fetchFromGitHub {
     owner = "jdillard";
     repo = "sphinx-sitemap";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-RERa+/MVug2OQ/FAXS4LOQHB4eEuIW2rwcdZUOrr6g8=";
   };
 

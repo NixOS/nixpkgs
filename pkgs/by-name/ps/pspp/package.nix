@@ -1,7 +1,26 @@
-{ lib, stdenv, fetchurl, libxml2, readline, zlib, perl, cairo, gtk3, gsl
-, pkg-config, gtksourceview4, pango, gettext, dconf
-, makeWrapper, gsettings-desktop-schemas, hicolor-icon-theme
-, texinfo, ssw, python3, iconv
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libxml2,
+  readline,
+  zlib,
+  perl,
+  cairo,
+  gtk3,
+  gsl,
+  pkg-config,
+  gtksourceview4,
+  pango,
+  gettext,
+  dconf,
+  makeWrapper,
+  gsettings-desktop-schemas,
+  hicolor-icon-theme,
+  texinfo,
+  ssw,
+  python3,
+  iconv,
 }:
 
 stdenv.mkDerivation rec {
@@ -13,15 +32,31 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-jtuw8J6M+AEMrZ4FWeAjDX/FquRyHHVsNQVU3zMCTAA=";
   };
 
-  nativeBuildInputs = [ pkg-config texinfo python3 makeWrapper ];
-  buildInputs = [ libxml2 readline zlib perl cairo gtk3 gsl
-                  gtksourceview4 pango gettext
-                  gsettings-desktop-schemas hicolor-icon-theme ssw iconv
-                ];
+  nativeBuildInputs = [
+    pkg-config
+    texinfo
+    python3
+    makeWrapper
+  ];
+  buildInputs = [
+    libxml2
+    readline
+    zlib
+    perl
+    cairo
+    gtk3
+    gsl
+    gtksourceview4
+    pango
+    gettext
+    gsettings-desktop-schemas
+    hicolor-icon-theme
+    ssw
+    iconv
+  ];
 
   C_INCLUDE_PATH =
-    "${libxml2.dev}/include/libxml2/:" +
-    lib.makeSearchPathOutput "dev" "include" buildInputs;
+    "${libxml2.dev}/include/libxml2/:" + lib.makeSearchPathOutput "dev" "include" buildInputs;
   LIBRARY_PATH = lib.makeLibraryPath buildInputs;
 
   doCheck = false;

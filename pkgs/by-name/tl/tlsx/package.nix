@@ -1,20 +1,21 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
   pname = "tlsx";
-  version = "1.1.8";
+  version = "1.1.9";
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = "tlsx";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-AQiwHNHfwOJYIEsFm2YiksdTUxp5vkCL80rpvxHY2rA=";
+    tag = "v${version}";
+    hash = "sha256-u83hPmmiXH7SGCyINkHFrjNDLanwJLf0o9ZyceQeSg0=";
   };
 
-  vendorHash = "sha256-KNyB+xK7TUf7XoVX/4xBTnG2lMMPVV5AOoUNi4aA/cM=";
+  vendorHash = "sha256-NF05vVLBRlWQpmTfrNEjnvH7kZMhgY73xmSgTZ8FGmo=";
 
   ldflags = [
     "-s"

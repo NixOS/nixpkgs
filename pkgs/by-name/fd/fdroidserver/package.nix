@@ -8,26 +8,27 @@
   installShellFiles,
 }:
 
-let
-  version = "2.3a2";
-in
-python3Packages.buildPythonApplication {
+python3Packages.buildPythonApplication rec {
   pname = "fdroidserver";
-  inherit version;
+  version = "2.3.5";
 
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "fdroid";
     repo = "fdroidserver";
-    rev = version;
-    hash = "sha256-nsAFBZqxo4XVWU6nBjo2T6VhU8U4I8h/FRXd1L240rk=";
+    tag = version;
+    hash = "sha256-ESSjC44tdWpmtB+VhEDnUTQz+ZJVQ4jLBjj+0hMSAQA=";
   };
 
   pythonRelaxDeps = [
     "androguard"
     "pyasn1"
     "pyasn1-modules"
+  ];
+
+  pythonRemoveDeps = [
+    "puremagic" # Only used as a fallback when magic is not installed
   ];
 
   postPatch = ''
@@ -55,16 +56,18 @@ python3Packages.buildPythonApplication {
 
   dependencies = with python3Packages; [
     androguard
-    platformdirs
+    biplist
     clint
     defusedxml
     gitpython
     libcloud
     libvirt
+    magic
     mwclient
     oscrypto
     paramiko
     pillow
+    platformdirs
     pyasn1
     pyasn1-modules
     pycountry

@@ -1,8 +1,15 @@
-{ lib, stdenv, fetchFromGitLab, postgresql, buildPostgresqlExtension }:
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  postgresql,
+  buildPostgresqlExtension,
+}:
 
 buildPostgresqlExtension rec {
   pname = "pg_ed25519";
   version = "0.2";
+
   src = fetchFromGitLab {
     owner = "dwagin";
     repo = "pg_ed25519";
@@ -16,8 +23,7 @@ buildPostgresqlExtension rec {
     maintainers = [ maintainers.renzo ];
     platforms = postgresql.meta.platforms;
     license = licenses.mit;
-    # Broken on darwin and linux (JIT) with no upstream fix available.
-    broken = lib.versionAtLeast postgresql.version "16" && stdenv.cc.isClang;
+    # Broken with no upstream fix available.
+    broken = lib.versionAtLeast postgresql.version "16";
   };
 }
-

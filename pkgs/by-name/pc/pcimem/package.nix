@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 
 stdenv.mkDerivation rec {
   pname = "pcimem";
@@ -11,7 +15,10 @@ stdenv.mkDerivation rec {
     sha256 = "0zlbvcl5q4hgna11p3w00px1p8qgn8ga79lh6a2m7d597g86kbq3";
   };
 
-  outputs = [ "out" "doc" ];
+  outputs = [
+    "out"
+    "doc"
+  ];
 
   makeFlags = [ "CFLAGS=-Wno-maybe-uninitialized" ];
 

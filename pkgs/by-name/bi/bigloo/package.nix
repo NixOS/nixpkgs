@@ -1,17 +1,29 @@
-{ fetchurl, lib, stdenv, autoconf, automake, libtool, gmp
-, darwin, libunistring
+{
+  fetchurl,
+  lib,
+  stdenv,
+  autoconf,
+  automake,
+  libtool,
+  gmp,
+  darwin,
+  libunistring,
 }:
 
 stdenv.mkDerivation rec {
   pname = "bigloo";
-  version = "4.4b";
+  version = "4.5b";
 
   src = fetchurl {
     url = "ftp://ftp-sop.inria.fr/indes/fp/Bigloo/bigloo-${version}.tar.gz";
-    sha256 = "sha256-oxOSJwKWmwo7PYAwmeoFrKaYdYvmvQquWXyutolc488=";
+    sha256 = "sha256-hk1SXuan/zOf2ajJc8xGv5piOjgn2Ev7bgSikiNwfaU=";
   };
 
-  nativeBuildInputs = [ autoconf automake libtool ];
+  nativeBuildInputs = [
+    autoconf
+    automake
+    libtool
+  ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.ApplicationServices
@@ -24,7 +36,8 @@ stdenv.mkDerivation rec {
     # For libuv on darwin
     lib.optionalString stdenv.hostPlatform.isDarwin ''
       export LIBTOOLIZE=libtoolize
-    '' + ''
+    ''
+    + ''
       # Help libgc's configure.
       export CXXCPP="$CXX -E"
     '';
@@ -56,11 +69,11 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Efficient Scheme compiler";
-    homepage    = "http://www-sop.inria.fr/indes/fp/Bigloo/";
-    license     = lib.licenses.gpl2Plus;
-    platforms   = lib.platforms.unix;
+    homepage = "http://www-sop.inria.fr/indes/fp/Bigloo/";
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ thoughtpolice ];
-    broken      = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64; # segfault during build
+    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64; # segfault during build
 
     longDescription = ''
       Bigloo is a Scheme implementation devoted to one goal: enabling

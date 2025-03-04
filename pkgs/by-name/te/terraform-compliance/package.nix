@@ -1,18 +1,19 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "terraform-compliance";
-  version = "1.3.48";
+  version = "1.3.49";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "terraform-compliance";
     repo = "cli";
-    rev = "refs/tags/${version}";
-    hash = "sha256-2nf/EJcC4KYTBItByX47UqTSs2EOgsUAgRbLEdB4Iyg=";
+    tag = version;
+    hash = "sha256-wg9n7x7KDqFecZZVmJwpE1kP0eKt1Gmld6XEcavcyU0=";
   };
 
   postPatch = ''
@@ -56,6 +57,9 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/terraform-compliance/cli";
     changelog = "https://github.com/terraform-compliance/cli/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ kalbasit kashw2 ];
+    maintainers = with maintainers; [
+      kalbasit
+      kashw2
+    ];
   };
 }

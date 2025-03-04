@@ -1,60 +1,55 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, fetchpatch
-, gitUpdater
-, testers
-, cmake
-, cmake-extras
-, curl
-, dbus
-, dbus-test-runner
-, dpkg
-, gobject-introspection
-, gtest
-, json-glib
-, libxkbcommon
-, lomiri-api
-, lttng-ust
-, pkg-config
-, properties-cpp
-, python3
-, systemd
-, ubports-click
-, validatePkgConfig
-, zeitgeist
-, withDocumentation ? true
-, doxygen
-, python3Packages
-, sphinx
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  gitUpdater,
+  testers,
+  cmake,
+  cmake-extras,
+  curl,
+  dbus,
+  dbus-test-runner,
+  dpkg,
+  gobject-introspection,
+  gtest,
+  json-glib,
+  libxkbcommon,
+  lomiri-api,
+  lttng-ust,
+  pkg-config,
+  properties-cpp,
+  python3,
+  systemd,
+  ubports-click,
+  validatePkgConfig,
+  zeitgeist,
+  withDocumentation ? true,
+  doxygen,
+  python3Packages,
+  sphinx,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-app-launch";
-  version = "0.1.9";
+  version = "0.1.11";
 
-  outputs = [
-    "out"
-    "dev"
-  ] ++ lib.optionals withDocumentation [
-    "doc"
-  ];
+  outputs =
+    [
+      "out"
+      "dev"
+    ]
+    ++ lib.optionals withDocumentation [
+      "doc"
+    ];
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-app-launch";
-    rev = finalAttrs.version;
-    hash = "sha256-vuu6tZ5eDJN2rraOpmrDddSl1cIFFBSrILKMJqcUDVc=";
+    tag = finalAttrs.version;
+    hash = "sha256-5/8RCtDvCBtxyb65WhT63jL4TryMvJfHTSieb/vTs9I=";
   };
 
   patches = [
-    # Remove when version > 0.1.9
-    (fetchpatch {
-      name = "0001-lomiri-app-launch-Fix-typelib-gir-dependency.patch";
-      url = "https://gitlab.com/ubports/development/core/lomiri-app-launch/-/commit/8466e77914e73801499df224fcd4a53c4a0eab25.patch";
-      hash = "sha256-11pEhFi39Cvqb9Hg47kT8+5hq+bz6WmySqaIdwt1MVk=";
-    })
-
     # Use /run/current-system/sw/bin fallback for desktop file Exec= lookups, propagate to launched applications
     ./2001-Inject-current-system-PATH.patch
   ];
@@ -72,18 +67,20 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs = [
-    cmake
-    dpkg # for setting LOMIRI_APP_LAUNCH_ARCH
-    gobject-introspection
-    lttng-ust
-    pkg-config
-    validatePkgConfig
-  ] ++ lib.optionals withDocumentation [
-    doxygen
-    python3Packages.breathe
-    sphinx
-  ];
+  nativeBuildInputs =
+    [
+      cmake
+      dpkg # for setting LOMIRI_APP_LAUNCH_ARCH
+      gobject-introspection
+      lttng-ust
+      pkg-config
+      validatePkgConfig
+    ]
+    ++ lib.optionals withDocumentation [
+      doxygen
+      python3Packages.breathe
+      sphinx
+    ];
 
   buildInputs = [
     cmake-extras
@@ -101,9 +98,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeCheckInputs = [
     dbus
-    (python3.withPackages (ps: with ps; [
-      python-dbusmock
-    ]))
+    (python3.withPackages (
+      ps: with ps; [
+        python-dbusmock
+      ]
+    ))
   ];
 
   checkInputs = [
@@ -114,14 +113,19 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeBool "ENABLE_MIRCLIENT" false)
     (lib.cmakeBool "ENABLE_TESTS" finalAttrs.finalPackage.doCheck)
-    (lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" (lib.concatStringsSep ";" [
-      # Exclude tests
-      "-E" (lib.strings.escapeShellArg "(${lib.concatStringsSep "|" [
-        # Flaky, randomly hangs
-        # https://gitlab.com/ubports/development/core/lomiri-app-launch/-/issues/19
-        "^helper-handshake-test"
-      ]})")
-    ]))
+    (lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" (
+      lib.concatStringsSep ";" [
+        # Exclude tests
+        "-E"
+        (lib.strings.escapeShellArg "(${
+          lib.concatStringsSep "|" [
+            # Flaky, randomly hangs
+            # https://gitlab.com/ubports/development/core/lomiri-app-launch/-/issues/19
+            "^helper-handshake-test"
+          ]
+        })")
+      ]
+    ))
   ];
 
   postBuild = lib.optionalString withDocumentation ''

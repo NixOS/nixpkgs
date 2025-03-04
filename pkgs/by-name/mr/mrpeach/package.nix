@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, puredata }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  puredata,
+}:
 
 stdenv.mkDerivation {
   pname = "mrpeach";
@@ -18,7 +23,7 @@ stdenv.mkDerivation {
 
   hardeningDisable = [ "format" ];
 
-  patchPhase = ''
+  postPatch = ''
     for D in net osc
     do
       sed -i "s@prefix = /usr/local@prefix = $out@g" $D/Makefile
@@ -29,24 +34,28 @@ stdenv.mkDerivation {
   '';
 
   buildPhase = ''
+    runHook preBuild
     for D in net osc
     do
       cd $D
       make
       cd ..
     done
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
     for D in net osc
     do
       cd $D
       make install
       cd ..
     done
+    runHook postInstall
   '';
 
-  fixupPhase = ''
+  preFixup = ''
     mv $out/lib/pd-externals/net $out
     mv $out/lib/pd-externals/osc $out
     rm -rf $out/lib

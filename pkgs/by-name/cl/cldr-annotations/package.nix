@@ -1,13 +1,17 @@
-{ lib, stdenvNoCC, fetchzip }:
+{
+  lib,
+  stdenvNoCC,
+  fetchzip,
+}:
 
 stdenvNoCC.mkDerivation rec {
   pname = "cldr-annotations";
-  version = "46.0";
+  version = "46.1";
 
   src = fetchzip {
-    url = "https://unicode.org/Public/cldr/${lib.versions.major version}/cldr-common-${version}.zip";
+    url = "https://unicode.org/Public/cldr/${version}/cldr-common-${version}.zip";
     stripRoot = false;
-    hash = "sha256-dXfbJTBlIg/+JXSrjdf8/iS4vHo7bt5YUwh+5dlsSiw=";
+    hash = "sha256-HNQVVbUIjsGOnkzUlH2m8I0IDgEfy2omCTekZlSyXQI=";
   };
 
   installPhase = ''

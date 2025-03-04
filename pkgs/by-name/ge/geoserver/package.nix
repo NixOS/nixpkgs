@@ -1,19 +1,20 @@
-{ lib
-, callPackage
-, fetchurl
-, makeWrapper
-, nixosTests
-, stdenv
-, jre
-, unzip
+{
+  lib,
+  callPackage,
+  fetchurl,
+  makeWrapper,
+  nixosTests,
+  stdenv,
+  jre,
+  unzip,
 }:
 stdenv.mkDerivation (finalAttrs: rec {
   pname = "geoserver";
-  version = "2.26.0";
+  version = "2.26.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/geoserver/GeoServer/${version}/geoserver-${version}-bin.zip";
-    hash = "sha256-WeItL0j50xWYXIFmH4EFhHjxv9Xr6rG0YO8re1jUnNM=";
+    hash = "sha256-K4OeMGnczKXVl+nxyd9unuCdoEpyF7j364Vxe49EOxo=";
   };
 
   patches = [
@@ -22,12 +23,16 @@ stdenv.mkDerivation (finalAttrs: rec {
   ];
 
   sourceRoot = ".";
-  nativeBuildInputs = [ unzip makeWrapper ];
+  nativeBuildInputs = [
+    unzip
+    makeWrapper
+  ];
 
   installPhase =
     let
       inputs = finalAttrs.buildInputs or [ ];
-      ldLibraryPathEnvName = if stdenv.hostPlatform.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH";
+      ldLibraryPathEnvName =
+        if stdenv.hostPlatform.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH";
     in
     ''
       runHook preInstall
@@ -48,28 +53,34 @@ stdenv.mkDerivation (finalAttrs: rec {
       runHook postInstall
     '';
 
-
   passthru =
     let
       geoserver = finalAttrs.finalPackage;
       extensions = lib.attrsets.filterAttrs (n: v: lib.isDerivation v) (callPackage ./extensions.nix { });
     in
     {
-      withExtensions = selector:
+      withExtensions =
+        selector:
         let
           selectedExtensions = selector extensions;
         in
-        geoserver.overrideAttrs (finalAttrs: previousAttrs: {
-          pname = previousAttrs.pname + "-with-extensions";
-          buildInputs = lib.lists.unique ((previousAttrs.buildInputs or [ ]) ++ lib.lists.concatMap (drv: drv.buildInputs) selectedExtensions);
-          postInstall = (previousAttrs.postInstall or "") + ''
-            for extension in ${builtins.toString selectedExtensions} ; do
-              cp -r $extension/* $out
-              # Some files are the same for all/several extensions. We allow overwriting them again.
-              chmod -R +w $out
-            done
-          '';
-        });
+        geoserver.overrideAttrs (
+          finalAttrs: previousAttrs: {
+            pname = previousAttrs.pname + "-with-extensions";
+            buildInputs = lib.lists.unique (
+              (previousAttrs.buildInputs or [ ]) ++ lib.lists.concatMap (drv: drv.buildInputs) selectedExtensions
+            );
+            postInstall =
+              (previousAttrs.postInstall or "")
+              + ''
+                for extension in ${builtins.toString selectedExtensions} ; do
+                  cp -r $extension/* $out
+                  # Some files are the same for all/several extensions. We allow overwriting them again.
+                  chmod -R +w $out
+                done
+              '';
+          }
+        );
       tests.geoserver = nixosTests.geoserver;
       updateScript = ./update.sh;
     };

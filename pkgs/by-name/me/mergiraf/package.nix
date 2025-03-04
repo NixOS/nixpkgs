@@ -11,25 +11,25 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mergiraf";
-  version = "0.3.0";
+  version = "0.5.1";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "mergiraf";
     repo = "mergiraf";
     rev = "refs/tags/v${version}";
-    hash = "sha256-yBLSN5+rPPoxA6Bn1O2NNGNo9cDfowZdaOtVvvUmNAM=";
+    hash = "sha256-CiZG0O5F2sidInSFUtB1q5GSfTIjX9xUr52y0TZ5tDs=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "tree-sitter-xml-0.7.0" = "sha256-RTWvOUAs3Uql9DKsP1jf9FZZHaZORE40GXd+6g6RQZw=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-32DXHg0xVfUID8/jFNm3gowjOwCOsXH9sXDGM5yK7sA=";
 
   nativeCheckInputs = [
     git
+  ];
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [
     versionCheckHook
   ];
 
@@ -38,7 +38,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Syntax-aware git merge driver for a growing collection of programming languages and file formats";
     homepage = "https://mergiraf.org/";
-    changelog = "https://codeberg.org/mergiraf/mergiraf/releases/v${version}";
+    changelog = "https://codeberg.org/mergiraf/mergiraf/releases/tag/v${version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       zimbatm

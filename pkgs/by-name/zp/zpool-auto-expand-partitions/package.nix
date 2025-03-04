@@ -1,10 +1,11 @@
-{ lib
-, rustPlatform
-, cloud-utils
-, fetchFromGitHub
-, pkg-config
-, util-linux
-, zfs
+{
+  lib,
+  rustPlatform,
+  cloud-utils,
+  fetchFromGitHub,
+  pkg-config,
+  util-linux,
+  zfs,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "zpool-auto-expand-partitions";

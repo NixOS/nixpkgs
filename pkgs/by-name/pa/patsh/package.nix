@@ -1,9 +1,10 @@
-{ lib
-, runCommand
-, rustPlatform
-, fetchFromGitHub
-, stdenv
-, coreutils
+{
+  lib,
+  runCommand,
+  rustPlatform,
+  fetchFromGitHub,
+  stdenv,
+  coreutils,
 }:
 
 let
@@ -27,7 +28,8 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-d2Br4RAlKO7Bpse8sFbIDCIYd2fYvby0ar9oIbQS2jc=";
   };
 
-  cargoHash = "sha256-hAWMm3YjwTB8ajn3QeXEOJYmPzbbitdwyO4k/IyhlOI=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-wJDWJFutOvAVou4IpAunrHnUgYmodDliqrmPUai8pVo=";
 
   nativeCheckInputs = [ custom ];
 

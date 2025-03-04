@@ -1,26 +1,53 @@
-{ fetchurl
-, stdenv
-, installShellFiles
-, lib
-, libftdi1
-, libjaylink
-, libusb1
-, pciutils
-, pkg-config
-, jlinkSupport ? false
+{
+  fetchurl,
+  stdenv,
+  bash-completion,
+  cmocka,
+  lib,
+  libftdi1,
+  libjaylink,
+  libusb1,
+  openssl,
+  meson,
+  ninja,
+  pciutils,
+  pkg-config,
+  sphinx,
+  jlinkSupport ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "flashrom";
-  version = "1.3.0";
+  version = "1.5.1";
 
   src = fetchurl {
-    url = "https://download.flashrom.org/releases/flashrom-v${version}.tar.bz2";
-    hash = "sha256-oFMjRFPM0BLnnzRDvcxhYlz5e3/Xy0zdi/v/vosUliM=";
+    url = "https://download.flashrom.org/releases/flashrom-v${finalAttrs.version}.tar.xz";
+    hash = "sha256-H5NLB27UnqziA2Vewkn8eGGmuOh/5K73MuR7bkhbYpM=";
   };
 
-  nativeBuildInputs = [ pkg-config installShellFiles ];
-  buildInputs = [ libftdi1 libusb1 ]
+  patches = [
+    # Release notes for 1.4.0 state that Promontory chipsets are unsupported, and that attempting to read flash on those systems may crash the system.
+    # The patch that removes this (broken) support only made it into the 1.3.0 release, seemingly by mistake, and the relevant code has been essentially untouched since.
+    # We cherry-pick the upstream patch from 1.3.0, though amended to reference the relevant bug in the error message, rather than requesting the user email upstream.
+    # https://ticket.coreboot.org/issues/370
+    # https://review.coreboot.org/c/flashrom/+/68824
+    ./0001-sb600spi.c-Drop-Promontory-support.patch
+  ];
+
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    sphinx
+    bash-completion
+  ];
+  buildInputs =
+    [
+      openssl
+      cmocka
+      libftdi1
+      libusb1
+    ]
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ pciutils ]
     ++ lib.optional jlinkSupport libjaylink;
 
@@ -29,13 +56,21 @@ stdenv.mkDerivation rec {
       --replace 'GROUP="plugdev"' 'TAG+="uaccess", TAG+="udev-acl"'
   '';
 
-  makeFlags = [ "PREFIX=$(out)" "libinstall" ]
-    ++ lib.optional jlinkSupport "CONFIG_JLINK_SPI=yes"
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [ "CONFIG_INTERNAL_X86=no" "CONFIG_INTERNAL_DMI=no" "CONFIG_RAYER_SPI=no" ];
+  mesonFlags = [
+    (lib.mesonOption "programmer" "auto")
+    (lib.mesonEnable "man-pages" true)
+    (lib.mesonEnable "tests" (!stdenv.buildPlatform.isDarwin))
+  ];
+
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   postInstall = ''
-    install -Dm644 util/flashrom_udev.rules $out/lib/udev/rules.d/flashrom.rules
+    install -Dm644 $NIX_BUILD_TOP/$sourceRoot/util/flashrom_udev.rules $out/lib/udev/rules.d/flashrom.rules
   '';
+
+  NIX_CFLAGS_COMPILE = lib.optionalString (
+    stdenv.cc.isClang && !stdenv.hostPlatform.isDarwin
+  ) "-Wno-gnu-folding-constant";
 
   meta = with lib; {
     homepage = "https://www.flashrom.org";
@@ -45,4 +80,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
     mainProgram = "flashrom";
   };
-}
+})

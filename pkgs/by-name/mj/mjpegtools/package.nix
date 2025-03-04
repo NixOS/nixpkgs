@@ -1,5 +1,16 @@
-{ stdenv, lib, fetchurl, gtk2, libdv, libjpeg, libpng, libX11, pkg-config, SDL, SDL_gfx
-, withMinimal ? true
+{
+  stdenv,
+  lib,
+  fetchurl,
+  gtk2,
+  libdv,
+  libjpeg,
+  libpng,
+  libX11,
+  pkg-config,
+  SDL,
+  SDL_gfx,
+  withMinimal ? true,
 }:
 
 # TODO:
@@ -16,15 +27,31 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-sYBTbX2ZYLBeACOhl7ANyxAJKaSaq3HRnVX0obIQ9Jo=";
   };
 
-  # Clang 16 defaults to C++17. `std::auto_ptr` has been removed from C++17, and the
-  # `register` type class specifier is no longer allowed.
-  patches = [ ./c++-17-fixes.patch ];
+  patches = [
+    # Clang 16 defaults to C++17. `std::auto_ptr` has been removed from C++17,
+    # and the `register` type class specifier is no longer allowed.
+    ./c++-17-fixes.patch
+
+    # Clang-19 errors out for dead code (in header) which accesses undefined
+    # class members
+    ./remove-subtract-and-union-debug.diff
+  ];
 
   hardeningDisable = [ "format" ];
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libdv libjpeg libpng ]
-              ++ lib.optionals (!withMinimal) [ gtk2 libX11 SDL SDL_gfx ];
+  buildInputs =
+    [
+      libdv
+      libjpeg
+      libpng
+    ]
+    ++ lib.optionals (!withMinimal) [
+      gtk2
+      libX11
+      SDL
+      SDL_gfx
+    ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString (!withMinimal) "-I${lib.getDev SDL}/include/SDL";
 
@@ -34,7 +61,10 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  outputs = [ "out" "lib" ];
+  outputs = [
+    "out"
+    "lib"
+  ];
 
   meta = with lib; {
     description = "Suite of programs for processing MPEG or MJPEG video";

@@ -5,7 +5,7 @@
 , writeText
 , writeShellScriptBin
 , pkgs
-, pkgsi686Linux
+, pkgsHostTarget
 }:
 
 { profile ? ""
@@ -36,6 +36,10 @@
 # /lib will link to /lib64
 
 let
+  # The splicing code does not handle `pkgsi686Linux` well, so we have to be
+  # explicit about which package set it's coming from.
+  inherit (pkgsHostTarget) pkgsi686Linux;
+
   name = if (args ? pname && args ? version)
     then "${args.pname}-${args.version}"
     else args.name;
@@ -174,7 +178,7 @@ let
 
   allPaths = paths ++ paths32;
 
-  rootfs-builder = pkgs.rustPlatform.buildRustPackage {
+  rootfs-builder = pkgs.buildPackages.rustPlatform.buildRustPackage {
     name = "fhs-rootfs-bulder";
     src = ./rootfs-builder;
     cargoLock.lockFile = ./rootfs-builder/Cargo.lock;
@@ -196,6 +200,7 @@ let
     ln -s /usr/lib32 $out/lib32
     ln -s /usr/lib64 $out/lib64
     ln -s /usr/lib64 $out/usr/lib
+    ln -s /usr/libexec $out/libexec
 
     # symlink 32-bit ld-linux so it's visible in /lib
     if [ -e $out/usr/lib32/ld-linux.so.2 ]; then
@@ -211,7 +216,7 @@ let
         ln -fsr $d/glib-2.0/schemas/*.xml $out/usr/share/glib-2.0/schemas
         ln -fsr $d/glib-2.0/schemas/*.gschema.override $out/usr/share/glib-2.0/schemas
       done
-      ${pkgs.glib.dev}/bin/glib-compile-schemas $out/usr/share/glib-2.0/schemas
+      ${pkgs.pkgsBuildBuild.glib.dev}/bin/glib-compile-schemas $out/usr/share/glib-2.0/schemas
     fi
 
     ${extraBuildCommands}

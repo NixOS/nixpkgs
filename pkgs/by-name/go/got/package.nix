@@ -1,44 +1,56 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, libressl
-, libbsd
-, libevent
-, libuuid
-, libossp_uuid
-, libmd
-, zlib
-, ncurses
-, bison
-, autoPatchelfHook
-, testers
-, signify
-, overrideSDK
-, withSsh ? true, openssh
-# Default editor to use when neither VISUAL nor EDITOR are defined
-, defaultEditor ? null
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  libressl,
+  libbsd,
+  libevent,
+  libuuid,
+  libossp_uuid,
+  libmd,
+  zlib,
+  ncurses,
+  bison,
+  autoPatchelfHook,
+  testers,
+  signify,
+  apple-sdk_15,
+  nix-update-script,
+  withSsh ? true,
+  openssh,
+  # Default editor to use when neither VISUAL nor EDITOR are defined
+  defaultEditor ? null,
 }:
 
-let
-  stdenv' = if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64
-    then overrideSDK stdenv "11.0"
-    else stdenv;
-in
-stdenv'.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "got";
-  version = "0.105";
+  version = "0.109";
 
   src = fetchurl {
     url = "https://gameoftrees.org/releases/portable/got-portable-${finalAttrs.version}.tar.gz";
-    hash = "sha256-MXPjYNzQb6JBvsMfxN+GKEP/7fKwEGBWgGgLDf1cokQ=";
+    hash = "sha256-ItLdVOFbxj+g5Vsom01YekPbM2ckFCE8LvcYxTMsaoE=";
   };
 
-  nativeBuildInputs = [ pkg-config bison ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
+  nativeBuildInputs = [
+    pkg-config
+    bison
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
 
-  buildInputs = [ libressl libbsd libevent libuuid libmd zlib ncurses ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ libossp_uuid ];
+  buildInputs =
+    [
+      libressl
+      libbsd
+      libevent
+      libuuid
+      libmd
+      zlib
+      ncurses
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      libossp_uuid
+      apple-sdk_15
+    ];
 
   preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
     # The configure script assumes dependencies on Darwin are installed via
@@ -48,25 +60,35 @@ stdenv'.mkDerivation (finalAttrs: {
   '';
 
   env.NIX_CFLAGS_COMPILE = toString (
-  lib.optionals (defaultEditor != null) [
-    ''-DGOT_DEFAULT_EDITOR="${lib.getExe defaultEditor}"''
-  ] ++ lib.optionals withSsh [
-    ''-DGOT_DIAL_PATH_SSH="${lib.getExe openssh}"''
-    ''-DGOT_TAG_PATH_SSH_KEYGEN="${lib.getExe' openssh "ssh-keygen"}"''
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    ''-DGOT_TAG_PATH_SIGNIFY="${lib.getExe signify}"''
-  ] ++ lib.optionals stdenv.cc.isClang [
-    "-Wno-error=implicit-function-declaration"
-    "-Wno-error=int-conversion"
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # error: conflicting types for 'strmode'
-    "-DHAVE_STRMODE=1"
-    # Undefined symbols for architecture arm64: "_bsd_getopt"
-    "-include getopt.h"
-  ]);
+    lib.optionals (defaultEditor != null) [
+      ''-DGOT_DEFAULT_EDITOR="${lib.getExe defaultEditor}"''
+    ]
+    ++ lib.optionals withSsh [
+      ''-DGOT_DIAL_PATH_SSH="${lib.getExe openssh}"''
+      ''-DGOT_TAG_PATH_SSH_KEYGEN="${lib.getExe' openssh "ssh-keygen"}"''
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      ''-DGOT_TAG_PATH_SIGNIFY="${lib.getExe signify}"''
+    ]
+    ++ lib.optionals stdenv.cc.isClang [
+      "-Wno-error=implicit-function-declaration"
+      "-Wno-error=int-conversion"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # error: conflicting types for 'strmode'
+      "-DHAVE_STRMODE=1"
+      # Undefined symbols for architecture arm64: "_bsd_getopt"
+      "-include getopt.h"
+    ]
+  );
 
-  passthru.tests.version = testers.testVersion {
-    package = finalAttrs.finalPackage;
+  passthru = {
+    updateScript = nix-update-script {
+      extraArgs = [ "--url=https://github.com/ThomasAdam/got-portable" ];
+    };
+    tests.version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+    };
   };
 
   meta = {
@@ -83,7 +105,10 @@ stdenv'.mkDerivation (finalAttrs: {
     '';
     homepage = "https://gameoftrees.org";
     license = lib.licenses.isc;
-    maintainers = with lib.maintainers; [ abbe afh ];
+    maintainers = with lib.maintainers; [
+      abbe
+      afh
+    ];
     mainProgram = "got";
     platforms = with lib.platforms; darwin ++ linux;
   };

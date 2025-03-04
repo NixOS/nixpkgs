@@ -1,24 +1,33 @@
-{ lib
-, buildGoModule
-, fetchFromGitea
-, testers
-, forgejo-runner
-, nixosTests
+{
+  stdenv,
+  lib,
+  buildGoModule,
+  fetchFromGitea,
+  nixosTests,
+  versionCheckHook,
+  nix-update-script,
 }:
 
+let
+  # tests which assume network access in some form
+  disabledTests = [
+    "Test_runCreateRunnerFile"
+    "Test_ping"
+  ];
+in
 buildGoModule rec {
   pname = "forgejo-runner";
-  version = "4.0.1";
+  version = "6.2.2";
 
   src = fetchFromGitea {
     domain = "code.forgejo.org";
     owner = "forgejo";
     repo = "runner";
     rev = "v${version}";
-    hash = "sha256-hG8gCohf+U8T9A9Abqey9upErJklbCp8HuzHQKFcu3E=";
+    hash = "sha256-vyJ5Fr38YvR8jjw/Tnih6c+GoctnVpgiaX7Bl+YNti0=";
   };
 
-  vendorHash = "sha256-yRXI9/LVj4f7qFdScqfpL5WCsK+lJXa6yQmdbUhfrKY=";
+  vendorHash = "sha256-KITZV8U4Hhdg9nXYd83p0joYOXulCsJ0sakiP2Q8gi0=";
 
   ldflags = [
     "-s"
@@ -26,13 +35,19 @@ buildGoModule rec {
     "-X gitea.com/gitea/act_runner/internal/pkg/ver.version=${src.rev}"
   ];
 
-  doCheck = false; # Test try to lookup code.forgejo.org.
+  checkFlags = [
+    "-skip ${lib.concatStringsSep "|" disabledTests}"
+  ];
 
-  passthru.tests = {
-    inherit (nixosTests.forgejo) sqlite3;
-    version = testers.testVersion {
-      package = forgejo-runner;
-      version = src.rev;
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgram = "${placeholder "out"}/bin/${meta.mainProgram}";
+  versionCheckProgramArg = [ "--version" ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = lib.optionalAttrs stdenv.hostPlatform.isLinux {
+      sqlite3 = nixosTests.forgejo.sqlite3;
     };
   };
 
@@ -41,7 +56,11 @@ buildGoModule rec {
     homepage = "https://code.forgejo.org/forgejo/runner";
     changelog = "https://code.forgejo.org/forgejo/runner/src/tag/${src.rev}/RELEASE-NOTES.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ kranzes emilylange ];
+    maintainers = with maintainers; [
+      adamcstephens
+      emilylange
+      christoph-heiss
+    ];
     mainProgram = "act_runner";
   };
 }

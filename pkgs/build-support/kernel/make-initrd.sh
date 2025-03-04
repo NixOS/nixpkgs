@@ -1,5 +1,3 @@
-source $stdenv/setup
-
 set -o pipefail
 
 objects=($objects)

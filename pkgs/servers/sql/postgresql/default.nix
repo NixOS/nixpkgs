@@ -16,16 +16,26 @@ let
     postgresql_17 = ./17.nix;
   };
 
-  mkAttributes = jitSupport:
-    self.lib.mapAttrs' (version: path:
+  mkAttributes =
+    jitSupport:
+    self.lib.mapAttrs' (
+      version: path:
       let
         attrName = if jitSupport then "${version}_jit" else version;
       in
-      self.lib.nameValuePair attrName (import path {
-        inherit jitSupport self;
-      })
+      self.lib.nameValuePair attrName (
+        import path {
+          inherit jitSupport self;
+        }
+      )
     ) versions;
 
+  libpq = self.callPackage ./libpq.nix { };
+
 in
-# variations without and with JIT
-(mkAttributes false) // (mkAttributes true)
+{
+  # variations without and with JIT
+  postgresqlVersions = mkAttributes false // mkAttributes true;
+
+  inherit libpq;
+}

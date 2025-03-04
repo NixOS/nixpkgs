@@ -11,6 +11,7 @@
   isodate,
   lxml,
   mock,
+  packaging,
   platformdirs,
   pretend,
   pytest-asyncio,
@@ -36,9 +37,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mvantellingen";
     repo = "python-zeep";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-Bt0QqzJMKPXV91hZYETy9DKoQAELUWlYIh8w/IFTE8E=";
   };
+
+  patches = [ ./httpx-compat.patch ];
 
   build-system = [ setuptools ];
 
@@ -47,6 +50,7 @@ buildPythonPackage rec {
     defusedxml
     isodate
     lxml
+    packaging
     platformdirs
     pytz
     requests
@@ -55,8 +59,8 @@ buildPythonPackage rec {
   ];
 
   optional-dependencies = {
-    async_require = [ httpx ];
-    xmlsec_require = [ xmlsec ];
+    async = [ httpx ];
+    xmlsec = [ xmlsec ];
   };
 
   pythonImportsCheck = [ "zeep" ];

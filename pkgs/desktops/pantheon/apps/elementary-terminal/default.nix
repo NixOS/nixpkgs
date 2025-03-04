@@ -1,32 +1,33 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, pkg-config
-, meson
-, ninja
-, vala
-, desktop-file-utils
-, gtk3
-, granite
-, libhandy
-, libnotify
-, vte
-, libgee
-, pcre2
-, wrapGAppsHook3
-, xvfb-run
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  pkg-config,
+  meson,
+  ninja,
+  vala,
+  desktop-file-utils,
+  gtk3,
+  granite,
+  libhandy,
+  libnotify,
+  vte,
+  libgee,
+  pcre2,
+  wrapGAppsHook3,
+  xvfb-run,
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-terminal";
-  version = "6.2.0";
+  version = "7.0.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "terminal";
     rev = version;
-    sha256 = "sha256-o5hMrsn6OBk/2ycCDdT8n6gQUWcRuoaHqnmkODnJ6B8=";
+    sha256 = "sha256-2Z56U6nbqwlbrSMzTYv7cSI7LT7pvDhW0w4f3wxv6ZA=";
   };
 
   nativeBuildInputs = [

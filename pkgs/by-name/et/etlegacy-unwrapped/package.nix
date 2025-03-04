@@ -1,28 +1,29 @@
-{ lib
-, stdenv
-, writeShellApplication
-, fetchFromGitHub
-, cjson
-, cmake
-, git
-, makeBinaryWrapper
-, unzip
-, curl
-, freetype
-, glew
-, libjpeg
-, libogg
-, libpng
-, libtheora
-, lua5_4
-, minizip
-, openal
-, SDL2
-, sqlite
-, zlib
+{
+  lib,
+  stdenv,
+  writeShellApplication,
+  fetchFromGitHub,
+  cjson,
+  cmake,
+  git,
+  makeBinaryWrapper,
+  unzip,
+  curl,
+  freetype,
+  glew,
+  libjpeg,
+  libogg,
+  libpng,
+  libtheora,
+  lua5_4,
+  minizip,
+  openal,
+  SDL2,
+  sqlite,
+  zlib,
 }:
 let
-  version = "2.82.1";
+  version = "2.83.2";
   fakeGit = writeShellApplication {
     name = "git";
 
@@ -40,8 +41,8 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "etlegacy";
     repo = "etlegacy";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-DA5tudbehXIU+4hX3ggcxWZ7AAOa8LUkIvUHbgMgDY8=";
+    tag = "v${version}";
+    hash = "sha256-hZwLYaYV0j3YwFi8KRr4DZV73L2yIwFJ3XqCyq6L7hE=";
   };
 
   nativeBuildInputs = [
@@ -79,10 +80,19 @@ stdenv.mkDerivation {
 
   cmakeFlags = [
     "-DCROSS_COMPILE32=0"
+    "-DCMAKE_BUILD_TYPE=Release"
     "-DBUILD_SERVER=1"
     "-DBUILD_CLIENT=1"
+    "-DBUNDLED_ZLIB=0"
+    "-DBUNDLED_CJSON=0"
     "-DBUNDLED_JPEG=0"
     "-DBUNDLED_LIBS=0"
+    "-DBUNDLED_FREETYPE=0"
+    "-DBUNDLED_OGG_VORBIS=0"
+    "-DBUNDLED_OPENAL=0"
+    "-DBUNDLED_PNG=0"
+    "-DBUNDLED_THEORA=0"
+    "-DBUNDLED_MINIZIP=0"
     "-DINSTALL_EXTRA=0"
     "-DINSTALL_OMNIBOT=0"
     "-DINSTALL_GEOIP=0"
@@ -103,7 +113,9 @@ stdenv.mkDerivation {
       for the popular online FPS game Wolfenstein: Enemy Territory - whose
       gameplay is still considered unmatched by many, despite its great age.
     '';
-    maintainers = with lib.maintainers; [ ashleyghooper drupol ];
-    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      ashleyghooper
+      drupol
+    ];
   };
 }

@@ -1,8 +1,9 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, go-md2man
-, installShellFiles
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  go-md2man,
+  installShellFiles,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -16,11 +17,15 @@ rustPlatform.buildRustPackage rec {
     sha256 = "0dlsy0c46781sb652kp80pvga7pzx6xla64axir92fcgg8k803bi";
   };
 
-  cargoHash = "sha256-Ygya/9keRyIQyjrO6medtcXww9LMG3ne6I/8q35lJPo=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-H4eKZlay0IZ8vAclGruDAyh7Vd6kCvGLxJ5y/cuF+F4=";
 
   cargoPatches = [ ./update-gerber-types-to-0.3.patch ];
 
-  nativeBuildInputs = [ go-md2man installShellFiles ];
+  nativeBuildInputs = [
+    go-md2man
+    installShellFiles
+  ];
 
   postBuild = ''
     go-md2man --in docs/spec-reference.md --out maker-panel.5

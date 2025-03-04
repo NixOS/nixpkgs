@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nelua";
-  version = "0-unstable-2024-10-18";
+  version = "0-unstable-2024-12-14";
 
   src = fetchFromGitHub {
     owner = "edubart";
     repo = "nelua-lang";
-    rev = "038c45f19842d7b18c32b6b4f7e631e15d77d453";
-    hash = "sha256-Qnr+A4nYPnBLUxNGRbUwEwuw2POV0AKXtpKKYcLtF1M=";
+    rev = "a69a12d1e1e5ee0bfab299350e5d707ff7b2e744";
+    hash = "sha256-Du6fRfAdHvdNWWkpd8dR4ZwkCETN9FWsEgq5JkwW0DY=";
   };
 
   postPatch = ''

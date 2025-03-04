@@ -1,6 +1,17 @@
-{ lib, buildDunePackage, fetchurl
-, bos, fpath, ptime, mirage-crypto, x509, astring, logs
-, cacert, alcotest, fmt
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  bos,
+  fpath,
+  ptime,
+  mirage-crypto,
+  x509,
+  astring,
+  logs,
+  cacert,
+  alcotest,
+  fmt,
 }:
 
 buildDunePackage rec {
@@ -14,11 +25,19 @@ buildDunePackage rec {
     hash = "sha256-hpDyMSNGckeZ8tihtoTsFrYnsCfUFkgDoOK34kYsCnI=";
   };
 
-  propagatedBuildInputs = [ bos fpath ptime mirage-crypto x509 astring logs ];
+  propagatedBuildInputs = [
+    bos
+    fpath
+    ptime
+    mirage-crypto
+    x509
+    astring
+    logs
+  ];
 
   doCheck = true;
   checkInputs = [
-    cacert    # for /etc/ssl/certs/ca-bundle.crt
+    cacert # for /etc/ssl/certs/ca-bundle.crt
     alcotest
     fmt
   ];

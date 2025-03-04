@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, wayland
-, cairo
-, pango
-, gtk
-, pkg-config
-, scdoc
-, libnotify
-, glib
-, wrapGAppsHook3
-, hicolor-icon-theme
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  wayland,
+  cairo,
+  pango,
+  gtk,
+  pkg-config,
+  scdoc,
+  libnotify,
+  glib,
+  wrapGAppsHook3,
+  hicolor-icon-theme,
 }:
 
 stdenv.mkDerivation rec {
@@ -26,10 +27,23 @@ stdenv.mkDerivation rec {
     hash = "sha256-/XPvy98Il4i8cDl9vH6f0/AZmiSqseSXnen7HfMqCDo=";
   };
 
-  nativeBuildInputs = [ glib meson ninja pkg-config scdoc wrapGAppsHook3 ];
+  nativeBuildInputs = [
+    glib
+    meson
+    ninja
+    pkg-config
+    scdoc
+    wrapGAppsHook3
+  ];
 
   buildInputs = [
-    cairo pango gtk libnotify wayland glib hicolor-icon-theme
+    cairo
+    pango
+    gtk
+    libnotify
+    wayland
+    glib
+    hicolor-icon-theme
   ];
 
   strictDeps = true;

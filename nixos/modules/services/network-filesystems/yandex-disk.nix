@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
 
   cfg = config.services.yandex-disk;
@@ -68,17 +73,18 @@ in
 
   };
 
-
   ###### implementation
 
   config = lib.mkIf cfg.enable {
 
-    users.users = lib.mkIf (cfg.user == null) [ {
-      name = u;
-      uid = config.ids.uids.yandexdisk;
-      group = "nogroup";
-      home = dir;
-    } ];
+    users.users = lib.mkIf (cfg.user == null) [
+      {
+        name = u;
+        uid = config.ids.uids.yandexdisk;
+        group = "nogroup";
+        home = dir;
+      }
+    ];
 
     systemd.services.yandex-disk = {
       description = "Yandex-disk server";
@@ -110,4 +116,3 @@ in
   };
 
 }
-

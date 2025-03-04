@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, bison, flex }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  bison,
+  flex,
+}:
 
 stdenv.mkDerivation rec {
   pname = "olsrd";
@@ -20,7 +27,10 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildInputs = [ bison flex ];
+  buildInputs = [
+    bison
+    flex
+  ];
 
   preConfigure = ''
     makeFlags="prefix=$out ETCDIR=$out/etc"

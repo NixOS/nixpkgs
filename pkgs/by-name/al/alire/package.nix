@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, gprbuild
-, gnat
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gprbuild,
+  gnat,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -18,7 +19,10 @@ stdenv.mkDerivation (finalAttrs: {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ gprbuild gnat ];
+  nativeBuildInputs = [
+    gprbuild
+    gnat
+  ];
 
   postPatch = ''
     patchShebangs ./dev/build.sh ./scripts/version-patcher.sh

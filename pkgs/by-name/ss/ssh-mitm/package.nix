@@ -24,7 +24,6 @@ let
 in
 with py.pkgs;
 
-
 buildPythonApplication rec {
   pname = "ssh-mitm";
   version = "5.0.0";
@@ -33,7 +32,7 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "ssh-mitm";
     repo = "ssh-mitm";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-jRheKLAXbbMyxdtDSJ4QSN4PoUM2YoK7nmU5xqPq7DY=";
   };
 

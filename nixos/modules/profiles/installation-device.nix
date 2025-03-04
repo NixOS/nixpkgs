@@ -74,8 +74,8 @@ with lib;
     # installation device for head-less systems i.e. arm boards by manually
     # mounting the storage in a different system.
     services.openssh = {
-      enable = true;
-      settings.PermitRootLogin = "yes";
+      enable = mkDefault true;
+      settings.PermitRootLogin = mkDefault "yes";
     };
 
     # Enable wpa_supplicant, but don't start it by default.

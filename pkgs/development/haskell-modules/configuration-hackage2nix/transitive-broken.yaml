@@ -481,7 +481,6 @@ dont-distribute-packages:
  - amazon-emailer-client-snap
  - amby
  - ampersand
- - amqp-streamly
  - analyze-client
  - anansi-hscolour
  - anatomy
@@ -608,7 +607,7 @@ dont-distribute-packages:
  - bamstats
  - barley
  - base32-bytestring
- - base_4_20_0_1
+ - base_4_21_0_0
  - baserock-schema
  - basic
  - batchd
@@ -623,8 +622,6 @@ dont-distribute-packages:
  - bbi
  - bdcs
  - bdcs-api
- - beam-automigrate
- - beam-postgres
  - beam-th
  - beautifHOL
  - bech32-th
@@ -795,14 +792,13 @@ dont-distribute-packages:
  - cflp
  - cfopu
  - chainweb-mining-client
- - chakra
  - chalkboard-viewer
  - chapelure
  - charade
  - chart-cli
  - chart-svg
  - chart-svg-various
- - chart-svg_0_7_0_0
+ - chart-svg_0_8_0_0
  - chart-unit
  - chassis
  - chatty
@@ -965,14 +961,14 @@ dont-distribute-packages:
  - copilot-cbmc
  - copilot-frp-sketch
  - copilot-language
- - copilot-language_4_0
+ - copilot-language_4_1
  - copilot-libraries
- - copilot-libraries_4_0
+ - copilot-libraries_4_1
  - copilot-sbv
  - copilot-theorem
- - copilot-theorem_4_0
+ - copilot-theorem_4_1
  - copilot-verifier
- - copilot_4_0
+ - copilot_4_1
  - corenlp-parser
  - coroutine-enumerator
  - coroutine-iteratee
@@ -989,7 +985,7 @@ dont-distribute-packages:
  - cqrs-test
  - cqrs-testkit
  - crackNum
- - crackNum_3_14
+ - crackNum_3_15
  - craft
  - craftwerk-cairo
  - craftwerk-gtk
@@ -1163,7 +1159,7 @@ dont-distribute-packages:
  - distribution-plot
  - dixi
  - dl-fedora
- - dl-fedora_1_2
+ - dl-fedora_1_2_1
  - dmenu-pkill
  - dmenu-pmount
  - dmenu-search
@@ -1230,7 +1226,6 @@ dont-distribute-packages:
  - elsa
  - ema-extra
  - emacs-keys
- - email
  - emailparse
  - embroidery
  - emd
@@ -1825,8 +1820,6 @@ dont-distribute-packages:
  - haddocset
  - hadoop-tools
  - haggis
- - hailgun-send
- - hailgun-simple
  - hails-bin
  - hake
  - hakyll-elm
@@ -2119,6 +2112,7 @@ dont-distribute-packages:
  - hoppy-docs
  - hoppy-runtime
  - hoppy-std
+ - hotel-california
  - hotswap
  - hp2any-graph
  - hp2any-manager
@@ -2149,6 +2143,10 @@ dont-distribute-packages:
  - hs-functors
  - hs-gen-iface
  - hs-ix
+ - hs-opentelemetry-awsxray
+ - hs-opentelemetry-instrumentation-tasty
+ - hs-opentelemetry-sdk
+ - hs-opentelemetry-utils-exceptions
  - hs-pkpass
  - hs-profunctors
  - hs-sdl-term-emulator
@@ -2248,7 +2246,6 @@ dont-distribute-packages:
  - hxournal
  - hxt-binary
  - hxt-filter
- - hxthelper
  - hxweb
  - hybrid
  - hydra-print
@@ -2317,6 +2314,7 @@ dont-distribute-packages:
  - instrument-cloudwatch
  - integreat
  - intel-aes
+ - intel-powermon
  - interpolatedstring-qq
  - interpolatedstring-qq-mwotton
  - intro-prelude
@@ -2694,6 +2692,7 @@ dont-distribute-packages:
  - mediabus-fdk-aac
  - mediabus-rtp
  - mediawiki2latex
+ - mello
  - mellon-gpio
  - mellon-web
  - memcache-conduit
@@ -2917,6 +2916,8 @@ dont-distribute-packages:
  - nri-test-encoding
  - numeric-kinds
  - numeric-ode
+ - numeric-optimization
+ - numeric-optimization-ad
  - numerical
  - numhask-hedgehog
  - numhask-histogram
@@ -2958,6 +2959,7 @@ dont-distribute-packages:
  - openpgp-crypto-api
  - openssh-github-keys
  - opentelemetry-lightstep
+ - opentelemetry-plugin
  - opentok
  - opentracing-http-client
  - opentracing-jaeger
@@ -3029,7 +3031,7 @@ dont-distribute-packages:
  - perdure
  - perf
  - perf-analysis
- - perf_0_13_0_0
+ - perf_0_14_0_1
  - perfecthash
  - periodic-client
  - periodic-client-exe
@@ -3164,6 +3166,7 @@ dont-distribute-packages:
  - potoki-hasql
  - potoki-zlib
  - powerqueue-sqs
+ - ppad-base58
  - ppad-hmac-drbg
  - ppad-secp256k1
  - pqueue-mtl
@@ -3280,6 +3283,7 @@ dont-distribute-packages:
  - random-extras
  - random-hypergeometric
  - range-space
+ - ranged-list_0_1_2_3
  - rasa
  - rasa-example-config
  - rasa-ext-bufs
@@ -3295,7 +3299,6 @@ dont-distribute-packages:
  - rascal
  - raw-feldspar
  - rawlock
- - rawr
  - razom-text-util
  - rbr
  - rc
@@ -3358,7 +3361,6 @@ dont-distribute-packages:
  - regular-web
  - regular-xmlpickler
  - reheat
- - rel8
  - relational-postgresql8
  - relational-query
  - relational-query-HDBC
@@ -3372,10 +3374,8 @@ dont-distribute-packages:
  - remote-json-server
  - remotion
  - repa-array
- - repa-convert
  - repa-flow
  - repa-plugin
- - repa-stream
  - repa-v4l2
  - replicant
  - repo-based-blog
@@ -3484,6 +3484,7 @@ dont-distribute-packages:
  - samtools-conduit
  - samtools-enumerator
  - samtools-iteratee
+ - sandwich-webdriver_0_3_0_0
  - sarsi
  - sasha
  - sasl
@@ -3595,7 +3596,6 @@ dont-distribute-packages:
  - servant-zeppelin-server
  - servant-zeppelin-swagger
  - sessiontypes-distributed
- - sgf
  - sgrep
  - shady-gen
  - shady-graphics
@@ -3737,6 +3737,7 @@ dont-distribute-packages:
  - sr-extra
  - srt-dhall
  - srt-formatting
+ - srtree_2_0_0_2
  - sscgi
  - sshd-lint
  - sssp
@@ -3818,7 +3819,7 @@ dont-distribute-packages:
  - sydtest-webdriver-screenshot_0_1_0_0
  - sydtest-webdriver-yesod
  - sydtest-yesod
- - sydtest_0_18_0_0
+ - sydtest_0_19_0_0
  - sylvia
  - symantic-atom
  - symantic-http-demo
@@ -3851,7 +3852,6 @@ dont-distribute-packages:
  - tak-ai
  - takahashi
  - tal
- - talash
  - tamarin-prover
  - tamarin-prover-term
  - tamarin-prover-theory
@@ -3875,6 +3875,7 @@ dont-distribute-packages:
  - techlab
  - telegram-bot
  - telegram-raw-api
+ - telescope
  - ten-lens
  - ten-unordered-containers
  - term-rewriting
@@ -3999,6 +4000,7 @@ dont-distribute-packages:
  - type-sets
  - type-structure
  - type-sub-th
+ - typecheck-plugin-nat-simple_0_1_0_11
  - typed-admin
  - typed-encoding-encoding
  - typed-gui
@@ -4019,8 +4021,6 @@ dont-distribute-packages:
  - ukrainian-phonetics-basic
  - unagi-bloomfilter
  - unbound
- - unbound-generics-unify
- - unbound-kind-generics
  - unfoldable-restricted
  - uni-events
  - uni-graphs
@@ -4032,6 +4032,7 @@ dont-distribute-packages:
  - unicoder
  - uniform-io
  - uniform-watch
+ - unimap
  - uniqueness-periods
  - uniqueness-periods-vector-examples
  - uniqueness-periods-vector-filters
@@ -4143,8 +4144,6 @@ dont-distribute-packages:
  - warp-grpc
  - warp-quic
  - warped
- - waterfall-cad
- - waterfall-cad-examples
  - wavesurfer
  - wavy
  - weatherhs

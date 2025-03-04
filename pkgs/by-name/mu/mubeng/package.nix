@@ -1,20 +1,21 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
   pname = "mubeng";
-  version = "0.18.0";
+  version = "0.22.0";
 
   src = fetchFromGitHub {
     owner = "kitabisa";
     repo = "mubeng";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-V+0XPuMM2Jg2LEpWzxRNLZ44YRoEnf/Fvbj51p9hwL4=";
+    tag = "v${version}";
+    hash = "sha256-YK3a975l/gMCaWxTB4gEQWAzzX+GRnYSvKksPmp3ZRA=";
   };
 
-  vendorHash = "sha256-TZDQCvcwsCa08bBBb8Zs8W0OFDYb+ZWN85+VCelFgyc=";
+  vendorHash = "sha256-qv8gAq7EohMNbwTfLeNhucKAzkYKzRbTpkoG5jTgKI0=";
 
   ldflags = [
     "-s"

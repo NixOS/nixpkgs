@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 
 ## Usage
 # In NixOS, simply add this package to services.udev.packages:
@@ -6,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "android-udev-rules";
-  version = "20241019";
+  version = "20241109";
 
   src = fetchFromGitHub {
     owner = "M0Rf30";
     repo = "android-udev-rules";
     rev = version;
-    hash = "sha256-ZKJhGobW3F339PBsIezMTbzouomYGxDJyFbJMGIeim4=";
+    hash = "sha256-WHAm9hDpXsn+Isrc5nNgw7G5DKBJb7X0ILx6lG5Y7YQ=";
   };
 
   installPhase = ''

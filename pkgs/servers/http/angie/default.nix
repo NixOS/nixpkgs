@@ -1,27 +1,30 @@
-{ callPackage
-, lib
-, fetchurl
-, nixosTests
-, withAcme ? false
-, withQuic ? false
-, ...
+{
+  callPackage,
+  lib,
+  fetchurl,
+  nixosTests,
+  withAcme ? false,
+  withQuic ? false,
+  ...
 }@args:
 
 callPackage ../nginx/generic.nix args rec {
-  version = "1.7.0";
+  version = "1.8.1";
   pname = if withQuic then "angieQuic" else "angie";
 
   src = fetchurl {
     url = "https://download.angie.software/files/angie-${version}.tar.gz";
-    hash = "sha256-B5fm4BgV/bMLvJ9wOAA4fJyLLGARManDlQmjPXPyHAE=";
+    hash = "sha256-2zC2kEXPmkDxRJEYFEFNnhtNQ3D2aT0Aj0AX3LQ3C0w=";
   };
 
-  configureFlags = lib.optionals withAcme [
-    "--with-http_acme_module"
-    "--http-acme-client-path=/var/lib/nginx/acme"
-  ] ++ lib.optionals withQuic [
-    "--with-http_v3_module"
-  ];
+  configureFlags =
+    lib.optionals withAcme [
+      "--with-http_acme_module"
+      "--http-acme-client-path=/var/lib/nginx/acme"
+    ]
+    ++ lib.optionals withQuic [
+      "--with-http_v3_module"
+    ];
 
   preInstall = ''
     if [[ -e man/angie.8 ]]; then
@@ -41,9 +44,9 @@ callPackage ../nginx/generic.nix args rec {
 
   meta = {
     description = "Angie is an efficient, powerful, and scalable web server that was forked from nginx";
-    homepage    = "https://angie.software/en/";
-    license     = lib.licenses.bsd2;
-    platforms   = lib.platforms.all;
+    homepage = "https://angie.software/en/";
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ izorkin ];
   };
 }

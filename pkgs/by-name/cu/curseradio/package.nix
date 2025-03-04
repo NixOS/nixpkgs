@@ -1,4 +1,10 @@
-{ lib, fetchFromGitHub, substituteAll, python3Packages, mpv }:
+{
+  lib,
+  fetchFromGitHub,
+  replaceVars,
+  python3Packages,
+  mpv,
+}:
 
 python3Packages.buildPythonApplication rec {
   version = "0.2";
@@ -18,8 +24,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   patches = [
-    (substituteAll {
-      src = ./mpv.patch;
+    (replaceVars ./mpv.patch {
       inherit mpv;
     })
   ];

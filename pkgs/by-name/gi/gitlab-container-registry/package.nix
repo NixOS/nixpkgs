@@ -1,8 +1,13 @@
-{ lib, buildGoModule, fetchFromGitLab }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitLab,
+  fetchpatch,
+}:
 
 buildGoModule rec {
   pname = "gitlab-container-registry";
-  version = "4.13.0";
+  version = "4.16.0";
   rev = "v${version}-gitlab";
 
   # nixpkgs-update: no auto update
@@ -10,17 +15,14 @@ buildGoModule rec {
     owner = "gitlab-org";
     repo = "container-registry";
     inherit rev;
-    hash = "sha256-V58UjlIlGllbPBTZMY5EoGNC+toy11xLCnnLHXqJUVU=";
+    hash = "sha256-PnX2pLbNqeJmvs+nFiCVW+sYVt8AJ7CEexGcYV7IN4U=";
   };
 
-  vendorHash = "sha256-LSl94y1g0sfqXWddF7f8z2YRC5D6zJP1t+gsXqdVHww=";
+  vendorHash = "sha256-oNQoKn8GPJxmUzkUHGzax2/KWyI3VXLRtAvWe9B64Ds=";
 
   postPatch = ''
-    # Disable flaky inmemory storage driver test
-    rm registry/storage/driver/inmemory/driver_test.go
-
     substituteInPlace health/checks/checks_test.go \
-      --replace \
+      --replace-fail \
         'func TestHTTPChecker(t *testing.T) {' \
         'func TestHTTPChecker(t *testing.T) { t.Skip("Test requires network connection")'
   '';

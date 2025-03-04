@@ -1,28 +1,31 @@
 {
   lib,
-  aiohttp,
   buildPythonPackage,
-  click,
   fetchFromGitHub,
-  msgpack,
+
+  # build-system
   poetry-core,
-  pythonOlder,
+
+  # dependencies
+  aiohttp,
+  click,
+  msgpack,
   textual,
+  textual-serve,
   typing-extensions,
+  versionCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "textual-dev";
-  version = "1.5.1";
+  version = "1.7.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Textualize";
     repo = "textual-dev";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-QnMKVt1WxnwGnZFNb7Gbus7xewGvyG5xJ0hIKKK5hug=";
+    tag = "v${version}";
+    hash = "sha256-f/tceRELDLONzOVVpbbqa5eiXJ1QzYw3A47R/9EqEU4=";
   };
 
   build-system = [ poetry-core ];
@@ -32,6 +35,7 @@ buildPythonPackage rec {
     click
     msgpack
     textual
+    textual-serve
     typing-extensions
   ];
 
@@ -40,12 +44,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "textual_dev" ];
 
-  meta = with lib; {
+  meta = {
     description = "Development tools for Textual";
     homepage = "https://github.com/Textualize/textual-dev";
     changelog = "https://github.com/Textualize/textual-dev/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ yannip ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ yannip ];
     mainProgram = "textual";
   };
 }

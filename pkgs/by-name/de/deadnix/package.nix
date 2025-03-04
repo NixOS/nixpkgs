@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -14,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-xaaXGzTd+t1GjD2KpiS/c8acv6bXufv/lTN+ACRGVJw=";
   };
 
-  cargoHash = "sha256-14onbdsactPJ27GTzG+culsdnwHvGdDXwBD9ZMq192Q=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-unp5W2vatSS58O+nEAVsVBN99hgYRVc1OkD2vVandw0=";
 
   meta = with lib; {
     description = "Find and remove unused code in .nix source files";

@@ -19,14 +19,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Skyscanner";
     repo = "pycfmodel";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-iCjOSwW6rdG3H4e/B/um+QioP45nOr9OcPAwXxZs3mU=";
   };
 
   pythonRelaxDeps = [ "pydantic" ];
 
   build-system = [ setuptools ];
-
 
   dependencies = [ pydantic ];
 
@@ -45,7 +44,6 @@ buildPythonPackage rec {
     "test_loose_ip"
     "test_extra_fields_not_allowed_s3_bucket"
     "test_raise_error_if_invalid_fields_in_resource"
-    ""
   ];
 
   pythonImportsCheck = [ "pycfmodel" ];

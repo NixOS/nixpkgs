@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "fyta-cli";
-  version = "0.6.10";
+  version = "0.7.0";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -22,8 +22,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dontinelli";
     repo = "fyta_cli";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-sPbN6gMPtNzYTYQ5F8w59m5DKobx/TV6v5v8Q9u1rXQ=";
+    tag = "v${version}";
+    hash = "sha256-OgpQh7WyZynFd308TjIGkQNoy8TFu9gynbDiLueqB/0=";
   };
 
   build-system = [ hatchling ];

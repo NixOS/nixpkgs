@@ -1,11 +1,12 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 
-# tests
-, git
-, mercurial
-, patch
+  # tests
+  git,
+  mercurial,
+  patch,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -16,7 +17,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "mozilla-conduit";
     repo = "review";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-HxwQ+mGtjnruppPAD01QUg3aca+k5vpj814BWM+3VfQ=";
   };
 
@@ -40,18 +41,19 @@ python3.pkgs.buildPythonApplication rec {
     setuptools
   ];
 
-  nativeCheckInputs = [
-    git
-    mercurial
-    patch
-  ]
-  ++ (with python3.pkgs; [
-    callee
-    immutabledict
-    hg-evolve
-    mock
-    pytestCheckHook
-  ]);
+  nativeCheckInputs =
+    [
+      git
+      mercurial
+      patch
+    ]
+    ++ (with python3.pkgs; [
+      callee
+      immutabledict
+      hg-evolve
+      mock
+      pytestCheckHook
+    ]);
 
   preCheck = ''
     export HOME=$(mktemp -d)

@@ -56,7 +56,7 @@ in
         type = types.nullOr types.path;
         default = null;
         description = ''
-          Environment file (see `systemd.exec(5)`
+          Environment file (see {manpage}`systemd.exec(5)`
           "EnvironmentFile=" section for the syntax) to define variables for
           Searx. This option can be used to safely include secret keys into the
           Searx configuration.
@@ -138,7 +138,7 @@ in
 
           ::: {.note}
           For available settings, see the SearXNG
-          [schema file](https://github.com/searxng/searxng/blob/master/searx/botdetection/limiter.toml).
+          [schema file](https://github.com/searxng/searxng/blob/master/searx/limiter.toml).
           :::
         '';
       };

@@ -1,10 +1,11 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, gfortran
-, autoreconfHook
-, fftwMpi
-, mpi
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  gfortran,
+  autoreconfHook,
+  fftwMpi,
+  mpi,
 }:
 
 stdenv.mkDerivation rec {
@@ -19,14 +20,22 @@ stdenv.mkDerivation rec {
     sha256 = "1c7pjrvifncbdyngs2bv185imxbcbq64nka8gshhp8n2ns6fids6";
   };
 
-  nativeBuildInputs = [ autoreconfHook gfortran ];
+  nativeBuildInputs = [
+    autoreconfHook
+    gfortran
+  ];
 
-  buildInputs = [ mpi fftwMpi ];
+  buildInputs = [
+    mpi
+    fftwMpi
+  ];
+
+  # Required for compilation with gcc-14
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
 
   preConfigure = ''
     mkdir build && cd build
 
-    export PATH=$PATH:${mpi}/bin
     configureFlagsArray+=(
       --with-mpi=${lib.getDev mpi}
       CC=mpicc
@@ -44,8 +53,11 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Portable C library of density functionals with van der Waals interactions for density functional theory";
-    license = with licenses; [ lgpl3Plus bsd3 ];
-    homepage = "https://libvdwxc.org/";
+    license = with licenses; [
+      lgpl3Plus
+      bsd3
+    ];
+    homepage = "https://libvdwxc.materialsmodeling.org/";
     platforms = platforms.unix;
     maintainers = [ maintainers.sheepforce ];
   };

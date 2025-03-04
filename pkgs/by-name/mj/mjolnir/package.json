@@ -1,6 +1,6 @@
 {
   "name": "mjolnir",
-  "version": "1.8.3",
+  "version": "1.9.1",
   "description": "A moderation tool for Matrix",
   "main": "lib/index.js",
   "repository": "git@github.com:matrix-org/mjolnir.git",
@@ -10,7 +10,7 @@
   "scripts": {
     "build": "tsc",
     "postbuild": "rm -rf lib/test/ && cp -r lib/src/* lib/ && rm -rf lib/src/",
-    "lint": "tslint --project ./tsconfig.json -t stylish",
+    "lint": "tslint --project ./tsconfig.json -t stylish && npx prettier . --check",
     "start:dev": "yarn build && node --async-stack-traces lib/index.js",
     "test": "ts-mocha --project ./tsconfig.json test/commands/**/*.ts",
     "test:integration": "NODE_ENV=harness ts-mocha --async-stack-traces --require test/integration/fixtures.ts --timeout 300000 --project ./tsconfig.json \"test/integration/**/*Test.ts\"",
@@ -58,6 +58,7 @@
     "humanize-duration-ts": "^2.1.1",
     "js-yaml": "^4.1.0",
     "jsdom": "^16.6.0",
+    "lru-cache": "^11.0.1",
     "matrix-appservice-bridge": "10.3.1",
     "nsfwjs": "^4.1.0",
     "parse-duration": "^1.0.2",
@@ -69,5 +70,6 @@
   },
   "engines": {
     "node": ">=20.0.0"
-  }
+  },
+  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
 }

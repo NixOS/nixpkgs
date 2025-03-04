@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -17,13 +22,14 @@ let
       ${cfg.package}/sbin/ngircd --config $out --configtest
     '';
   };
-in {
+in
+{
   options = {
     services.ngircd = {
       enable = mkEnableOption "the ngircd IRC server";
 
       config = mkOption {
-        description = "The ngircd configuration (see ngircd.conf(5)).";
+        description = "The ngircd configuration (see {manpage}`ngircd.conf(5)`).";
 
         type = types.lines;
       };
@@ -49,7 +55,7 @@ in {
       group = "ngircd";
       description = "ngircd user.";
     };
-    users.groups.ngircd = {};
+    users.groups.ngircd = { };
 
   };
 }

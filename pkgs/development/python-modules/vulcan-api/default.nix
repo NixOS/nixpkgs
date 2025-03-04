@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "vulcan-api";
-  version = "2.4.1";
+  version = "2.4.2";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -25,8 +25,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "kapi2289";
     repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-FEWm5DvnrEIelRnu/IgWU7h1CTvPQcZ3DbFS2swy/wQ=";
+    tag = "v${version}";
+    hash = "sha256-oWtyqFacWkKhv4QvbZCuq3KHlM/o7SfENg90O/ygXUw=";
   };
 
   pythonRemoveDeps = [ "related-without-future" ];

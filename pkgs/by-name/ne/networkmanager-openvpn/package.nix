@@ -2,7 +2,7 @@
   stdenv,
   lib,
   fetchurl,
-  substituteAll,
+  replaceVars,
   openvpn,
   gettext,
   libxml2,
@@ -30,14 +30,14 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       inherit kmod openvpn;
     })
   ];
 
   nativeBuildInputs = [
     gettext
+    glib
     pkg-config
     file
     libxml2
@@ -47,7 +47,6 @@ stdenv.mkDerivation (finalAttrs: {
     [
       openvpn
       networkmanager
-      glib
     ]
     ++ lib.optionals withGnome [
       gtk3
@@ -63,6 +62,8 @@ stdenv.mkDerivation (finalAttrs: {
     "--localstatedir=/" # needed for the management socket under /run/NetworkManager
     "--enable-absolute-paths"
   ];
+
+  strictDeps = true;
 
   passthru = {
     updateScript = gnome.updateScript {

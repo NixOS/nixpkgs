@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "sequin";
-  version = "0.2.0";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "charmbracelet";
     repo = "sequin";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-uXfpsrjkJ/qdzoaJXY4vJJPEgcnH7wwFvfHskmEK5VA=";
+    tag = "v${version}";
+    hash = "sha256-rszK2UZ3Eq9g+Di1lncDQIT4TlUcWZEu1SU2aE2uFHY=";
   };
 
-  vendorHash = "sha256-gdFmvLnf5xW7MKOlRueeoLDTCs7LgMtKiVHS0PAwomc=";
+  vendorHash = "sha256-mpmGd6liBzz9XPcB00ZhHaQzTid6lURD5I3EvehXsA8=";
 
   ldflags = [
     "-X main.Version=${version}"

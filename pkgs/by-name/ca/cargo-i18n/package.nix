@@ -1,7 +1,8 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, gettext
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  gettext,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -15,7 +16,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-azwQlXsoCgNB/TjSBBE+taUR1POBJXaPnS5Sr+HVR90=";
   };
 
-  cargoHash = "sha256-vN62QmCuhu7AjL6xSpBU6/ul4WgNLZbjWDCFyHj6rIM=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-7rqfJ3l4qdVcmfMZgZpL8qomnytiOSqWtFFZFeB047I=";
 
   # Devendor gettext in the gettext-sys crate. The paths to the bin/lib/include folders have to be specified because
   # setting `GETTEXT_SYSTEM` only works on some platforms (i.e., not Darwin).

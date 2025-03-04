@@ -1,13 +1,15 @@
-{ lib
-, python3
-, installShellFiles
-, buildPythonApplication
-, fetchFromGitHub
-, boto3
-, colorama
-, psutil
-, pluggy
-, pyyaml
+{
+  lib,
+  python3,
+  installShellFiles,
+  buildPythonApplication,
+  fetchFromGitHub,
+  boto3,
+  colorama,
+  psutil,
+  pluggy,
+  pyyaml,
+  setuptools,
 }:
 
 buildPythonApplication rec {
@@ -31,22 +33,23 @@ buildPythonApplication rec {
     psutil
     pluggy
     pyyaml
+    setuptools
   ];
 
   postPatch = ''
     patchShebangs shell_scripts
     substituteInPlace shell_scripts/{awsume,awsume.fish} --replace-fail "awsumepy" "$out/bin/awsumepy"
+    substituteInPlace awsume/configure/autocomplete.py --replace-fail "awsume-autocomplete" "$out/bin/awsume-autocomplete"
   '';
 
   postInstall = ''
     installShellCompletion --cmd awsume \
       --bash <(PYTHONPATH=./awsume/configure ${python3}/bin/python3 -c"import autocomplete; print(autocomplete.SCRIPTS['bash'])") \
-      --zsh <(PYTHONPATH=./awsume/configure ${python3}/bin/python3 -c"import autocomplete; print(autocomplete.SCRIPTS['zsh'])") \
+      --zsh <(PYTHONPATH=./awsume/configure ${python3}/bin/python3 -c"import autocomplete; print(autocomplete.ZSH_AUTOCOMPLETE_FUNCTION)") \
       --fish <(PYTHONPATH=./awsume/configure ${python3}/bin/python3 -c"import autocomplete; print(autocomplete.SCRIPTS['fish'])") \
 
     rm -f $out/bin/awsume.bat
   '';
-
 
   doCheck = false;
 

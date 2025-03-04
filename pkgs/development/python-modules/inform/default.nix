@@ -9,11 +9,12 @@
   num2words,
   pytestCheckHook,
   pythonOlder,
+  pythonAtLeast,
 }:
 
 buildPythonPackage rec {
   pname = "inform";
-  version = "1.32";
+  version = "1.33";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -21,8 +22,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "KenKundert";
     repo = "inform";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-RWcplWgGaIoiOZ28oPU4LtXQhwaTImc4bGHokHM5Kpg=";
+    tag = "v${version}";
+    hash = "sha256-YX+YT3pocauIAsxsfIM+TchiXYMGYVwiE84NnXoZDqQ=";
   };
 
   nativeBuildInputs = [ flit-core ];
@@ -38,7 +39,12 @@ buildPythonPackage rec {
     hypothesis
   ];
 
-  disabledTests = [ "test_prostrate" ];
+  disabledTests =
+    [ "test_prostrate" ]
+    ++ lib.optionals (pythonAtLeast "3.13") [
+      # doctest runs one more test than expected
+      "test_inform"
+    ];
 
   meta = with lib; {
     description = "Print and logging utilities";

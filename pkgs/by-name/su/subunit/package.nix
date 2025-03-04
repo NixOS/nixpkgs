@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchurl, pkg-config, check, cppunit, perl, python3Packages }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  check,
+  cppunit,
+  perl,
+  python3Packages,
+}:
 
 # NOTE: for subunit python library see pkgs/top-level/python-packages.nix
 
@@ -12,9 +21,17 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ check cppunit perl python3Packages.wrapPython ];
+  buildInputs = [
+    check
+    cppunit
+    perl
+    python3Packages.wrapPython
+  ];
 
-  propagatedBuildInputs = with python3Packages; [ testtools testscenarios ];
+  propagatedBuildInputs = with python3Packages; [
+    testtools
+    testscenarios
+  ];
 
   postFixup = "wrapPythonPrograms";
 

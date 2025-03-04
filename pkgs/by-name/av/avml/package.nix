@@ -16,11 +16,12 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "avml";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-MIqQ5NRWAfXm7AblsKCrUiaYN5IGUo2jWJMJZL+w3V4=";
   };
 
-  cargoHash = "sha256-gcpjrxnQDyO92OW6LZVc4x73TmTtQoaEYhmGmqhz8ng=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-husTembzDsqjI617spK6aj2de+NaajKCNYDiV2Fd6XQ=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ];

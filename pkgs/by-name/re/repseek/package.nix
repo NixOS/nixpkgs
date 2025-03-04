@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchurl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "repseek";
@@ -8,14 +12,16 @@ stdenv.mkDerivation rec {
     sha256 = "1jiknji3ivrv7zmrfbf2mccfpdwhin3lfxfsciaqwf69b3sda8nf";
   };
 
-  preConfigure = ''
-    mkdir -p $out/bin
-    substituteInPlace Makefile \
-      --replace "INSTALLDIR = \$\$HOME/bin" "INSTALLDIR = $out/bin/" \
-      --replace "CC= gcc" "CC = $CC"
-  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
-    substituteInPlace Makefile --replace "MACHINE = MACOSX" "MACHINE = LINUX"
-  '';
+  preConfigure =
+    ''
+      mkdir -p $out/bin
+      substituteInPlace Makefile \
+        --replace "INSTALLDIR = \$\$HOME/bin" "INSTALLDIR = $out/bin/" \
+        --replace "CC= gcc" "CC = $CC"
+    ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
+      substituteInPlace Makefile --replace "MACHINE = MACOSX" "MACHINE = LINUX"
+    '';
 
   meta = {
     description = "Tool to retrieve approximate repeats from large DNA sequences";

@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "prrte";
-  version = "3.0.7";
+  version = "3.0.8";
 
   src = fetchFromGitHub {
     owner = "openpmix";
     repo = "prrte";
     rev = "v${version}";
-    hash = "sha256-Jw9/M2rpGTA19qssDaZV+9FYlIvz8wgL5oUDdWwidHI=";
+    hash = "sha256-4Xc6We0mXpKCwfHlmqi+WbFjdQegWHGzWrEnMVqkqtU=";
     fetchSubmodules = true;
   };
 
@@ -35,6 +35,13 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs ./autogen.pl ./config
+
+    # This is needed for multi-node jobs.
+    # mpirun/srun/prterun does not have "prted" in its path unless
+    # it is actively pulled in. Hard-coding the nix store path
+    # as a default universally solves this issue.
+    substituteInPlace src/runtime/prte_mca_params.c --replace-fail \
+      "prte_launch_agent = \"prted\"" "prte_launch_agent = \"$out/bin/prted\""
   '';
 
   preConfigure = ''
@@ -75,6 +82,6 @@ stdenv.mkDerivation rec {
     homepage = "https://docs.prrte.org/";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ markuskowa ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
   };
 }

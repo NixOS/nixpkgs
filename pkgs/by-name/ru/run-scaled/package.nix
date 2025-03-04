@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper, bc, xorgserver, xpra, xrandr }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  bc,
+  xorgserver,
+  xpra,
+  xrandr,
+}:
 
 stdenv.mkDerivation {
   version = "unstable-2018-06-03";
@@ -17,7 +26,12 @@ stdenv.mkDerivation {
     mkdir -p $out/bin
     cp run_scaled $out/bin
     wrapProgram $out/bin/run_scaled --prefix PATH ":" \
-      ${lib.makeBinPath [ bc xorgserver xpra xrandr ]}
+      ${lib.makeBinPath [
+        bc
+        xorgserver
+        xpra
+        xrandr
+      ]}
   '';
 
   meta = with lib; {

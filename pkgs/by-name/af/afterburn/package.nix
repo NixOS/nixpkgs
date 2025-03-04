@@ -1,4 +1,10 @@
-{ lib, openssl, pkg-config, fetchFromGitHub, rustPlatform }:
+{
+  lib,
+  openssl,
+  pkg-config,
+  fetchFromGitHub,
+  rustPlatform,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "afterburn";
@@ -11,7 +17,8 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-j2eQUro0Rx1axBAaZDNICRrkygb4JAyxVAER/5BXXLY=";
   };
 
-  cargoHash = "sha256-rk/lVoPdA9Uj/MorMchVlQQB9bYmNC90NqM6w9FXLoc=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-xA5hp7a4DFMh8Xrh2ft94s6aNjORKtyCuNy4GgJbSsw=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ];

@@ -1,54 +1,45 @@
-{ lib
-, python3
-, fetchFromGitHub
-, fetchpatch
-, deterministic-uname
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+  deterministic-uname,
+  addBinToPathHook,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "zxpy";
-  version = "1.6.3";
-  format = "pyproject";
+  version = "1.6.4";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tusharsadhwani";
     repo = "zxpy";
-    rev = version;
-    hash = "sha256-/sOLSIqaAUkaAghPqe0Zoq7C8CSKAd61o8ivtjJFcJY=";
+    tag = version;
+    hash = "sha256-/VITHN517lPUmhLYgJHBYYvvlJdGg2Hhnwk47Mp9uc0=";
   };
 
-  patches = [
-    # fix test caused by `uname -p` printing unknown
-    # https://github.com/tusharsadhwani/zxpy/pull/53
-    (fetchpatch {
-      name = "allow-unknown-processor-in-injection-test.patch";
-      url = "https://github.com/tusharsadhwani/zxpy/commit/95ad80caddbab82346f60ad80a601258fd1238c9.patch";
-      hash = "sha256-iXasOKjWuxNjjTpb0umNMNhbFgBjsu5LsOpTaXllATM=";
-    })
+  build-system = with python3Packages; [
+    setuptools
   ];
 
-  nativeBuildInputs = [
-    python3.pkgs.setuptools
-    python3.pkgs.wheel
-  ];
-
-  nativeCheckInputs = [
-    deterministic-uname
-    python3.pkgs.pytestCheckHook
-  ];
-
-  preCheck = ''
-    export PATH=$out/bin:$PATH
-  '';
+  nativeCheckInputs =
+    with python3Packages;
+    [
+      deterministic-uname
+      pytestCheckHook
+    ]
+    ++ [
+      addBinToPathHook
+    ];
 
   pythonImportsCheck = [ "zx" ];
 
-  meta = with lib; {
+  meta = {
     description = "Shell scripts made simple";
     homepage = "https://github.com/tusharsadhwani/zxpy";
     changelog = "https://github.com/tusharsadhwani/zxpy/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ figsoda ];
     mainProgram = "zxpy";
   };
 }

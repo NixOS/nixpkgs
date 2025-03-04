@@ -1,14 +1,19 @@
-{ buildGoModule, fetchFromGitHub, lib, nixosTests }:
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+  nixosTests,
+}:
 
 buildGoModule rec {
   pname = "ergo";
-  version = "2.14.0";
+  version = "2.15.0";
 
   src = fetchFromGitHub {
     owner = "ergochat";
     repo = "ergo";
     rev = "v${version}";
-    sha256 = "sha256-vXspI0BkwpS9w7PQpj+U3REQcSPaPJAfIBRj62loQzQ=";
+    sha256 = "sha256-8qZ5pnbCYN/j8B5cS456HVK2hDGqJwrPo1k4oagJrqU=";
   };
 
   vendorHash = null;
@@ -21,7 +26,10 @@ buildGoModule rec {
     mainProgram = "ergo";
     homepage = "https://github.com/ergochat/ergo";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ lassulus tv ];
+    maintainers = with lib.maintainers; [
+      lassulus
+      tv
+    ];
     platforms = lib.platforms.linux;
   };
 }

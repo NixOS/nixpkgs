@@ -9,19 +9,19 @@
   python-dotenv,
   pytest-asyncio,
   croniter,
-  pynacl
+  pynacl,
 }:
 
 buildPythonPackage rec {
   pname = "hikari-crescent";
-  version = "1.0.0";
+  version = "1.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hikari-crescent";
     repo = "hikari-crescent";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-0eDPdN+3lalgHiBNXuZUEJllAKFxdKK6paTFNHU5jIM=";
+    tag = "v${version}";
+    hash = "sha256-37QA/yBBDo7w/e7SvgXnzfxeCulyYgB+xtJY25HJ9FM=";
   };
 
   build-system = [ poetry-core ];
@@ -30,12 +30,6 @@ buildPythonPackage rec {
     hikari
     sigparse
   ];
-
-  postPatch = ''
-    # pythonRelaxDepsHook did not work
-    substituteInPlace pyproject.toml \
-      --replace-fail 'hikari = "==' 'hikari = ">='
-  '';
 
   pythonImportsCheck = [ "crescent" ];
 

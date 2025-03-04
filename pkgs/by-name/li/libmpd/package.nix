@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, doxygen
-, glib
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  doxygen,
+  glib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -33,6 +34,10 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $devdoc/share/devhelp/libmpd
     cp -r doc/html $devdoc/share/devhelp/libmpd/doxygen
   '';
+
+  # Fix GCC 14 build
+  # https://hydra.nixos.org/build/281958201/nixlog/3
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=int-conversion";
 
   meta = with lib; {
     description = "Higher level access to MPD functions";

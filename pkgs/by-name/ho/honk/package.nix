@@ -1,18 +1,19 @@
-{ lib
-, buildGoModule
-, fetchurl
-, sqlite
-, installShellFiles
-, nixosTests
+{
+  lib,
+  buildGoModule,
+  fetchurl,
+  sqlite,
+  installShellFiles,
+  nixosTests,
 }:
 
 buildGoModule rec {
   pname = "honk";
-  version = "1.4.1";
+  version = "1.4.2";
 
   src = fetchurl {
     url = "https://humungus.tedunangst.com/r/honk/d/honk-${version}.tgz";
-    hash = "sha256-o9K/ht31nEbx2JmLG3OSIgKZGygpDhZYqCxs6tuSnlc=";
+    hash = "sha256-uswlReJzPjkVOazKmMHtetVukunroesqYc8XCJHiOxQ=";
   };
   vendorHash = null;
 

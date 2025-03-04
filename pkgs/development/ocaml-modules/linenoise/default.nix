@@ -1,10 +1,15 @@
-{ lib, fetchFromGitHub, buildDunePackage, result }:
+{
+  lib,
+  fetchFromGitHub,
+  buildDunePackage,
+  result,
+}:
 
 buildDunePackage rec {
   pname = "linenoise";
   version = "1.5.1";
 
-  minimalOCamlVersion = "4.03";
+  minimalOCamlVersion = "4.06";
 
   src = fetchFromGitHub {
     owner = "fxfactorial";

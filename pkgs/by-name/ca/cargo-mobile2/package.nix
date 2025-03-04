@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, openssl
-, git
-, darwin
-, makeWrapper
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  openssl,
+  git,
+  darwin,
+  makeWrapper,
 }:
 
 let
   inherit (darwin.apple_sdk.frameworks) CoreServices;
   pname = "cargo-mobile2";
-  version = "0.17.4";
+  version = "0.17.5";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
@@ -20,14 +21,15 @@ rustPlatform.buildRustPackage {
     owner = "tauri-apps";
     repo = pname;
     rev = "cargo-mobile2-v${version}";
-    hash = "sha256-1lrimBdJwur5b4wB8hZVUtJEbgXoib0ytzjzhkqNE6c=";
+    hash = "sha256-eaKj2S1qiG6qQd7yG4RrK/a+1IsgBybodSTfERDvGE4=";
   };
 
   # Manually specify the sourceRoot since this crate depends on other crates in the workspace. Relevant info at
   # https://discourse.nixos.org/t/difficulty-using-buildrustpackage-with-a-src-containing-multiple-cargo-workspaces/10202
   # sourceRoot = "${src.name}/tooling/cli";
 
-  cargoHash = "sha256-vmoR5pA8CNf4eZpQgj0Wn1/FmId4hmpSi7FYxBY5O9M=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-IW/2Xp52TlqYtvXZqSDv9/Uv9B/thM360ecbbWLXPNE=";
 
   preBuild = ''
     mkdir -p $out/share/
@@ -36,7 +38,11 @@ rustPlatform.buildRustPackage {
   '';
 
   buildInputs = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices ];
-  nativeBuildInputs = [ pkg-config git makeWrapper ];
+  nativeBuildInputs = [
+    pkg-config
+    git
+    makeWrapper
+  ];
 
   preFixup = ''
     for bin in $out/bin/cargo-*; do
@@ -48,7 +54,10 @@ rustPlatform.buildRustPackage {
   meta = with lib; {
     description = "Rust on mobile made easy!";
     homepage = "https://tauri.app/";
-    license = with licenses; [ asl20 /* or */ mit ];
+    license = with licenses; [
+      asl20 # or
+      mit
+    ];
     maintainers = with maintainers; [ happysalada ];
   };
 }

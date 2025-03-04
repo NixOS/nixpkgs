@@ -1,31 +1,36 @@
-{ lib
-, stdenv
-, fetchurl
-, cmake
-, libtool
-, libxml2
-, minizip
-, pcsclite
-, opensc
-, openssl
-, xercesc
-, pkg-config
-, xsd
-, zlib
-, xmlsec
-, xxd
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  libtool,
+  libxml2,
+  minizip,
+  pcsclite,
+  opensc,
+  openssl,
+  xercesc,
+  pkg-config,
+  xsd,
+  zlib,
+  xmlsec,
+  xxd,
 }:
 
 stdenv.mkDerivation rec {
-  version = "4.0.0";
+  version = "4.1.0";
   pname = "libdigidocpp";
 
   src = fetchurl {
     url = "https://github.com/open-eid/libdigidocpp/releases/download/v${version}/libdigidocpp-${version}.tar.gz";
-    hash = "sha256-0G7cjJEgLJ24SwHRznKJ18cRY0m50lr6HXstfbYq9f8=";
+    hash = "sha256-lY7UVAhdWadLUKR21ezUfWc1Xdv/MWhfI/by4btcvr8=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config xxd ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    xxd
+  ];
 
   buildInputs = [
     libxml2
@@ -39,7 +44,12 @@ stdenv.mkDerivation rec {
     xmlsec
   ];
 
-  outputs = [ "out" "lib" "dev" "bin" ];
+  outputs = [
+    "out"
+    "lib"
+    "dev"
+    "bin"
+  ];
 
   # This wants to link to ${CMAKE_DL_LIBS} (ltdl), and there doesn't seem to be
   # a way to tell CMake where this should be pulled from.

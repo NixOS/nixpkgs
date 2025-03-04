@@ -80,6 +80,9 @@ in {
     (lib.mkRemovedOptionModule [ "services" "mailman" "package" ] ''
       Didn't have an effect for several years.
     '')
+    (lib.mkRemovedOptionModule [ "services" "mailman" "extraPythonPackages" ] ''
+      Didn't have an effect for several years.
+    '')
   ];
 
   options = {
@@ -282,12 +285,6 @@ in {
         };
       };
 
-      extraPythonPackages = lib.mkOption {
-        description = "Packages to add to the python environment used by mailman and mailman-web";
-        type = lib.types.listOf lib.types.package;
-        default = [];
-      };
-
       settings = lib.mkOption {
         description = "Settings for mailman.cfg";
         type = lib.types.attrsOf (lib.types.attrsOf lib.types.str);
@@ -450,7 +447,7 @@ in {
       enable = lib.mkDefault true;
       virtualHosts = lib.genAttrs cfg.webHosts (webHost: {
         locations = {
-          ${cfg.serve.virtualRoot}.extraConfig = "uwsgi_pass unix:/run/mailman-web.socket;";
+          ${cfg.serve.virtualRoot}.uwsgiPass = "unix:/run/mailman-web.socket";
           "${lib.removeSuffix "/" cfg.serve.virtualRoot}/static/".alias = webSettings.STATIC_ROOT + "/";
         };
       });
@@ -595,6 +592,7 @@ in {
             plugins = ["python3"];
             home = webEnv;
             http = "127.0.0.1:18507";
+            buffer-size = 8192;
           }
           // (if cfg.serve.virtualRoot == "/"
             then { module = "mailman_web.wsgi:application"; }

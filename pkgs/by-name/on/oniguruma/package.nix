@@ -1,16 +1,25 @@
-{ lib, stdenv, fetchurl, autoreconfHook }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+}:
 
 stdenv.mkDerivation rec {
   pname = "oniguruma";
-  version = "6.9.9";
+  version = "6.9.10";
 
   # Note: do not use fetchpatch or fetchFromGitHub to keep this package available in __bootPackages
   src = fetchurl {
     url = "https://github.com/kkos/oniguruma/releases/download/v${version}/onig-${version}.tar.gz";
-    sha256 = "sha256-YBYr07n8b0iG1MegeSX/03QWdzL1Xc6MSRv9nNgYps8=";
+    sha256 = "sha256-Klz8WuJZ5Ol/hraN//wVLNr/6U4gYLdwy4JyONdp/AU=";
   };
 
-  outputs = [ "dev" "lib" "out" ];
+  outputs = [
+    "dev"
+    "lib"
+    "out"
+  ];
   outputBin = "dev"; # onig-config
 
   nativeBuildInputs = [ autoreconfHook ];

@@ -14,21 +14,20 @@
   # tests
   pytestCheckHook,
   pytest-asyncio,
+  pytest-cov-stub,
 }:
 
 buildPythonPackage rec {
   pname = "pysnmp";
-  version = "6.2.6";
+  version = "7.1.16";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lextudio";
     repo = "pysnmp";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-+FfXvsfn8XzliaGUKZlzqbozoo6vDxUkgC87JOoVasY=";
+    tag = "v${version}";
+    hash = "sha256-HGIbxvq4twyZavtjkf2Uu9SEFIXzPCT34lAJEeprwXU=";
   };
-
-  pythonRemoveDeps = [ "pytest-cov" ];
 
   build-system = [ poetry-core ];
 
@@ -41,6 +40,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pytest-asyncio
+    pytest-cov-stub
   ];
 
   disabledTests = [
@@ -54,12 +54,28 @@ buildPythonPackage rec {
     "test_v1_get"
     "test_v1_next"
     "test_v1_set"
+    #  pysnmp.error.PySnmpError: Bad IPv4/UDP transport address demo.pysnmp.com@161: [Errno -3] Temporary failure in name resolution
     "test_v2c_bulk"
+    "test_v2c_get_table_bulk"
+    "test_v2c_get_table_bulk_0_7"
+    "test_v2c_get_table_bulk_0_8"
+    "test_v2c_get_table_bulk_0_31"
+    "test_v2c_get_table_bulk_0_60"
+    "test_v2c_get_table_bulk_0_5_subtree"
+    "test_v2c_get_table_bulk_0_6_subtree"
     # pysnmp.smi.error.MibNotFoundError
     "test_send_v3_trap_notification"
     "test_addAsn1MibSource"
     "test_v1_walk"
     "test_v2_walk"
+    "test_syntax_integer"
+    "test_syntax_unsigned"
+    "test_add_asn1_mib_source"
+  ];
+
+  disabledTestPaths = [
+    # MIB file "CISCO-ENHANCED-IPSEC-FLOW-MIB.py[co]" not found in search path
+    "tests/smi/manager/test_mib-tree-inspection.py"
   ];
 
   pythonImportsCheck = [ "pysnmp" ];

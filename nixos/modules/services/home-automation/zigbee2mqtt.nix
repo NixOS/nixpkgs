@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.zigbee2mqtt;
 
@@ -7,10 +12,17 @@ let
 
 in
 {
-  meta.maintainers = with lib.maintainers; [ sweber hexa ];
+  meta.maintainers = with lib.maintainers; [
+    sweber
+    hexa
+  ];
 
   imports = [
-    (lib.mkRemovedOptionModule [ "services" "zigbee2mqtt" "config" ] "The option services.zigbee2mqtt.config was renamed to services.zigbee2mqtt.settings.")
+    (lib.mkRemovedOptionModule [
+      "services"
+      "zigbee2mqtt"
+      "config"
+    ] "The option services.zigbee2mqtt.config was renamed to services.zigbee2mqtt.settings.")
   ];
 
   options.services.zigbee2mqtt = {
@@ -71,11 +83,15 @@ in
         User = "zigbee2mqtt";
         Group = "zigbee2mqtt";
         WorkingDirectory = cfg.dataDir;
+        StateDirectory = "zigbee2mqtt";
+        StateDirectoryMode = "0700";
         Restart = "on-failure";
 
         # Hardening
         CapabilityBoundingSet = "";
-        DeviceAllow = lib.optionals (lib.hasPrefix "/" cfg.settings.serial.port) [ cfg.settings.serial.port ];
+        DeviceAllow = lib.optionals (lib.hasPrefix "/" cfg.settings.serial.port) [
+          cfg.settings.serial.port
+        ];
         DevicePolicy = "closed";
         LockPersonality = true;
         MemoryDenyWriteExecute = false;
@@ -109,6 +125,7 @@ in
         SystemCallFilter = [
           "@system-service @pkey"
           "~@privileged @resources"
+          "@chown"
         ];
         UMask = "0077";
       };

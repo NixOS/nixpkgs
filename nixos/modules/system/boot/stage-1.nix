@@ -289,11 +289,8 @@ let
 
   # The init script of boot stage 1 (loading kernel modules for
   # mounting the root FS).
-  bootStage1 = pkgs.substituteAll {
+  bootStage1 = pkgs.replaceVarsWith {
     src = ./stage-1-init.sh;
-
-    shell = "${extraUtils}/bin/ash";
-
     isExecutable = true;
 
     postInstall = ''
@@ -304,35 +301,39 @@ let
       ${pkgs.buildPackages.busybox}/bin/ash -n $target
     '';
 
-    inherit linkUnits udevRules extraUtils;
+    replacements = {
+      shell = "${extraUtils}/bin/ash";
 
-    inherit (config.boot) resumeDevice;
+      inherit linkUnits udevRules extraUtils;
 
-    inherit (config.system.nixos) distroName;
+      inherit (config.boot) resumeDevice;
 
-    inherit (config.system.build) earlyMountScript;
+      inherit (config.system.nixos) distroName;
 
-    inherit (config.boot.initrd) checkJournalingFS verbose
-      preLVMCommands preDeviceCommands postDeviceCommands postResumeCommands postMountCommands preFailCommands kernelModules;
+      inherit (config.system.build) earlyMountScript;
 
-    resumeDevices = map (sd: if sd ? device then sd.device else "/dev/disk/by-label/${sd.label}")
-                    (filter (sd: hasPrefix "/dev/" sd.device && !sd.randomEncryption.enable
-                             # Don't include zram devices
-                             && !(hasPrefix "/dev/zram" sd.device)
-                            ) config.swapDevices);
+      inherit (config.boot.initrd) checkJournalingFS verbose
+        preLVMCommands preDeviceCommands postDeviceCommands postResumeCommands postMountCommands preFailCommands kernelModules;
 
-    fsInfo =
-      let f = fs: [ fs.mountPoint (if fs.device != null then fs.device else "/dev/disk/by-label/${fs.label}") fs.fsType (builtins.concatStringsSep "," fs.options) ];
-      in pkgs.writeText "initrd-fsinfo" (concatStringsSep "\n" (concatMap f fileSystems));
+      resumeDevices = map (sd: if sd ? device then sd.device else "/dev/disk/by-label/${sd.label}")
+                      (filter (sd: hasPrefix "/dev/" sd.device && !sd.randomEncryption.enable
+                               # Don't include zram devices
+                               && !(hasPrefix "/dev/zram" sd.device)
+                              ) config.swapDevices);
 
-    setHostId = optionalString (config.networking.hostId != null) ''
-      hi="${config.networking.hostId}"
-      ${if pkgs.stdenv.hostPlatform.isBigEndian then ''
-        echo -ne "\x''${hi:0:2}\x''${hi:2:2}\x''${hi:4:2}\x''${hi:6:2}" > /etc/hostid
-      '' else ''
-        echo -ne "\x''${hi:6:2}\x''${hi:4:2}\x''${hi:2:2}\x''${hi:0:2}" > /etc/hostid
-      ''}
-    '';
+      fsInfo =
+        let f = fs: [ fs.mountPoint (if fs.device != null then fs.device else "/dev/disk/by-label/${fs.label}") fs.fsType (builtins.concatStringsSep "," fs.options) ];
+        in pkgs.writeText "initrd-fsinfo" (concatStringsSep "\n" (concatMap f fileSystems));
+
+      setHostId = optionalString (config.networking.hostId != null) ''
+        hi="${config.networking.hostId}"
+        ${if pkgs.stdenv.hostPlatform.isBigEndian then ''
+          echo -ne "\x''${hi:0:2}\x''${hi:2:2}\x''${hi:4:2}\x''${hi:6:2}" > /etc/hostid
+        '' else ''
+          echo -ne "\x''${hi:6:2}\x''${hi:4:2}\x''${hi:2:2}\x''${hi:0:2}" > /etc/hostid
+        ''}
+      '';
+    };
   };
 
 

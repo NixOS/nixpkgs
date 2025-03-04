@@ -1,36 +1,45 @@
 {
   lib,
+  fetchFromGitHub,
   buildPythonPackage,
-  unittestCheckHook,
-  fetchPypi,
   pythonOlder,
-  glibcLocales,
+  setuptools,
+  setuptools-scm,
+  importlib-metadata,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pystache";
-  version = "0.6.5";
-  format = "setuptools";
+  version = "0.6.7";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-nyONWgbxiEPg1JHY5OKS3AP+1qVMsKXDS+N6P6qXMXQ=";
+  src = fetchFromGitHub {
+    owner = "PennyDreadfulMTG";
+    repo = "pystache";
+    tag = "v${version}";
+    hash = "sha256-kfR3ZXbrCDrIVOh4bcOTXqg9D56YQrIyV0NthStga5U=";
   };
 
-  LC_ALL = "en_US.UTF-8";
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
-  buildInputs = [ glibcLocales ];
+  dependencies = lib.optionals (pythonOlder "3.10") [
+    importlib-metadata
+  ];
 
-  nativeCheckInputs = [ unittestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "pystache" ];
 
-  meta = with lib; {
+  meta = {
     description = "Framework-agnostic, logic-free templating system inspired by ctemplate and et";
     homepage = "https://github.com/defunkt/pystache";
-    license = licenses.mit;
-    maintainers = [ ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.nickcao ];
   };
 }

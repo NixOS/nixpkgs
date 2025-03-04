@@ -1,12 +1,16 @@
-{ lib, stdenvNoCC, fetchzip }:
+{
+  lib,
+  stdenvNoCC,
+  fetchzip,
+}:
 
 stdenvNoCC.mkDerivation rec {
   pname = "sudo-font";
-  version = "2.0.0";
+  version = "2.2";
 
   src = fetchzip {
     url = "https://github.com/jenskutilek/sudo-font/releases/download/v${version}/sudo.zip";
-    hash = "sha256-WjhNWwAeb6f7tlvXMr6Q7mtNnaWbHSnBtXK6Ba3YOW4=";
+    hash = "sha256-qI43FDDXcJby2EbEow0ZBzPVOQby3+WxvhJKyjrYUp8=";
   };
 
   installPhase = ''

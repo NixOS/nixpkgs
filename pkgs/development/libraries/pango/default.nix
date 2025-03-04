@@ -1,73 +1,95 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, cairo
-, harfbuzz
-, libintl
-, libthai
-, darwin
-, fribidi
-, gnome
-, gi-docgen
-, makeFontsConf
-, freefont_ttf
-, meson
-, ninja
-, glib
-, python3
-, x11Support? !stdenv.hostPlatform.isDarwin, libXft
-, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && stdenv.hostPlatform.emulatorAvailable buildPackages
-, buildPackages, gobject-introspection
-, testers
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  cairo,
+  harfbuzz,
+  libintl,
+  libthai,
+  darwin,
+  fribidi,
+  gnome,
+  gi-docgen,
+  makeFontsConf,
+  freefont_ttf,
+  meson,
+  ninja,
+  glib,
+  python3,
+  docutils,
+  x11Support ? !stdenv.hostPlatform.isDarwin,
+  libXft,
+  withIntrospection ?
+    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
+    && stdenv.hostPlatform.emulatorAvailable buildPackages,
+  buildPackages,
+  gobject-introspection,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pango";
-  version = "1.54.0";
+  version = "1.56.1";
 
-  outputs = [ "bin" "out" "dev" ] ++ lib.optional withIntrospection "devdoc";
+  outputs = [
+    "bin"
+    "out"
+    "dev"
+  ] ++ lib.optional withIntrospection "devdoc";
 
   src = fetchurl {
-    url = with finalAttrs; "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    hash = "sha256-ip7tdQIe5zTX/A/fOmXDu6Ud/v5K5RqbQUpgxwstHtg=";
+    url = "mirror://gnome/sources/pango/${lib.versions.majorMinor finalAttrs.version}/pango-${finalAttrs.version}.tar.xz";
+    hash = "sha256-QmvmZGDJi4N4Vz5/awsqtFD2u20ux87MM66BF48kZIA=";
   };
 
   depsBuildBuild = [
     pkg-config
   ];
 
-  nativeBuildInputs = [
-    meson ninja
-    glib # for glib-mkenum
-    pkg-config
-    python3
-  ] ++ lib.optionals withIntrospection [
-    gi-docgen
-    gobject-introspection
-  ];
+  nativeBuildInputs =
+    [
+      meson
+      ninja
+      glib # for glib-mkenum
+      pkg-config
+      python3
+      docutils # for rst2man, rst2html5
+    ]
+    ++ lib.optionals withIntrospection [
+      gi-docgen
+      gobject-introspection
+    ];
 
-  buildInputs = [
-    fribidi
-    libthai
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [
-    ApplicationServices
-    Carbon
-    CoreGraphics
-    CoreText
-  ]);
+  buildInputs =
+    [
+      fribidi
+      libthai
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (
+      with darwin.apple_sdk.frameworks;
+      [
+        ApplicationServices
+        Carbon
+        CoreGraphics
+        CoreText
+      ]
+    );
 
-  propagatedBuildInputs = [
-    cairo
-    glib
-    libintl
-    harfbuzz
-  ] ++ lib.optionals x11Support [
-    libXft
-  ];
+  propagatedBuildInputs =
+    [
+      cairo
+      glib
+      libintl
+      harfbuzz
+    ]
+    ++ lib.optionals x11Support [
+      libXft
+    ];
 
   mesonFlags = [
     (lib.mesonBool "documentation" withIntrospection)
+    (lib.mesonBool "man-pages" true)
     (lib.mesonEnable "introspection" withIntrospection)
     (lib.mesonEnable "xft" x11Support)
   ];
@@ -94,7 +116,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = finalAttrs.pname;
+      packageName = "pango";
       # 1.90 is alpha for API 2.
       freeze = "1.90.0";
     };

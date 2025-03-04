@@ -1,20 +1,36 @@
-{ lib, libnotify, gpgme, buildGoModule, fetchFromGitHub, pkg-config }:
+{
+  lib,
+  libnotify,
+  gpgme,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  pkg-config,
+  scdoc,
+}:
 
 buildGoModule rec {
   pname = "yubikey-touch-detector";
-  version = "1.11.0";
+  version = "1.12.5";
 
   src = fetchFromGitHub {
     owner = "maximbaz";
     repo = "yubikey-touch-detector";
     rev = version;
-    hash = "sha256-XpaCKNQpQD9dNj4EOGJ6PdjfSAxxG5dC8mIzYr7t/+I=";
+    hash = "sha256-eNRwDGTNxBtDepQvf2TXCH/5fb4kRYBn80tzvI4fzME=";
   };
-  vendorHash = "sha256-mhmYTicj/ihGNzeCZd1ZijWPkvxQZjBxaC5dyAU1O7U=";
+  vendorHash = "sha256-x8Fmhsk6MtgAtLxgH/V3KusM0BXAOaSU+2HULR5boJQ=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    scdoc
+    installShellFiles
+  ];
 
-  buildInputs = [ libnotify gpgme ];
+  buildInputs = [
+    libnotify
+    gpgme
+  ];
 
   postInstall = ''
     install -Dm444 -t $out/share/doc/${pname} *.{md,example}
@@ -27,6 +43,9 @@ buildGoModule rec {
 
     substituteInPlace $out/lib/systemd/user/*.service \
       --replace /usr/bin/yubikey-touch-detector "$out/bin/yubikey-touch-detector"
+
+    scdoc < yubikey-touch-detector.1.scd > yubikey-touch-detector.1
+    installManPage yubikey-touch-detector.1
   '';
 
   meta = with lib; {

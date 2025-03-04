@@ -1,7 +1,8 @@
-{ lib
-, python3
-, fetchFromGitHub
-, fetchpatch
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+  fetchpatch,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -12,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "cloudlinux";
     repo = "kcare-uchecker";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-SST143oi0O9PcJbw4nxHwHNY6HkIGi1WMBzveUYVhJs=";
   };
 

@@ -1,9 +1,10 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec{
+rustPlatform.buildRustPackage rec {
   pname = "shadow-tls";
   version = "0.2.25";
 
@@ -14,7 +15,8 @@ rustPlatform.buildRustPackage rec{
     hash = "sha256-T+GPIrcME6Wq5sdfIt4t426/3ew5sUQMykYeZ6zw1ko=";
   };
 
-  cargoHash = "sha256-w+DQeiQAtVsTw1VJhntX1FXymgS0fxsXiUmd6OjVWLQ=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-1oJCdqBa1pWpQ7QvZ0vZaOd73R+SzR9OPf+yoI+RwCY=";
 
   RUSTC_BOOTSTRAP = 1;
 

@@ -16,7 +16,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-tkmmu6A7vqK4yO9zHjVEeACaOHP3+hJQLBK7p/Svn7Q=";
   };
 
-  cargoHash = "sha256-m3JtibgNHsZScxziNEu1ycslJocBXRbtloMWE0G5ZyM=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-/B8T5OZMKQIj92PWWehzkO3iiI/lr5gl6jwXeglN9EU=";
 
   buildInputs = [ sqlite ];
 

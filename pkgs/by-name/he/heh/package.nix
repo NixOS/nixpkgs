@@ -16,7 +16,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-eqWBTylvXqGhWdSGHdTM1ZURSD5pkUBoBOvBJ5zmJ7w=";
   };
 
-  cargoHash = "sha256-rLZgKLL28/ZrXzHVI6m4YeV2mk4E9W58HjTzRl2bMOw=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-Sk/eL5Pza9L8GLBxqL9SqMT7KDWZenMjV+sGYaWUnzo=";
 
   meta = with lib; {
     description = "Cross-platform terminal UI used for modifying file data in hex or ASCII";

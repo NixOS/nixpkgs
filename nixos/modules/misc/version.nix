@@ -1,18 +1,34 @@
-{ config, lib, options, pkgs, ... }:
+{
+  config,
+  lib,
+  options,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.system.nixos;
   opt = options.system.nixos;
 
   inherit (lib)
-    concatStringsSep mapAttrsToList toLower optionalString
-    literalExpression mkRenamedOptionModule mkDefault mkOption trivial types;
+    concatStringsSep
+    mapAttrsToList
+    toLower
+    optionalString
+    literalExpression
+    match
+    mkRenamedOptionModule
+    mkDefault
+    mkOption
+    trivial
+    types
+    ;
 
   needsEscaping = s: null != builtins.match "[a-zA-Z0-9]+" s;
-  escapeIfNecessary = s: if needsEscaping s then s else ''"${lib.escape [ "\$" "\"" "\\" "\`" ] s}"'';
-  attrsToText = attrs:
-    concatStringsSep "\n"
-      (mapAttrsToList (n: v: ''${n}=${escapeIfNecessary (toString v)}'') attrs)
+  escapeIfNecessary = s: if needsEscaping s then s else ''"${lib.escape [ "$" "\"" "\\" "`" ] s}"'';
+  attrsToText =
+    attrs:
+    concatStringsSep "\n" (mapAttrsToList (n: v: ''${n}=${escapeIfNecessary (toString v)}'') attrs)
     + "\n";
 
   osReleaseContents =
@@ -36,14 +52,14 @@ let
       DOCUMENTATION_URL = optionalString isNixos "https://nixos.org/learn.html";
       SUPPORT_URL = optionalString isNixos "https://nixos.org/community.html";
       BUG_REPORT_URL = optionalString isNixos "https://github.com/NixOS/nixpkgs/issues";
-      ANSI_COLOR = optionalString isNixos "1;34";
+      ANSI_COLOR = optionalString isNixos "0;38;2;126;186;228";
       IMAGE_ID = optionalString (config.system.image.id != null) config.system.image.id;
       IMAGE_VERSION = optionalString (config.system.image.version != null) config.system.image.version;
       VARIANT = optionalString (cfg.variantName != null) cfg.variantName;
       VARIANT_ID = optionalString (cfg.variant_id != null) cfg.variant_id;
-      DEFAULT_HOSTNAME = config.networking.fqdnOrHostName;
-      SUPPORT_END = "2025-06-30";
-    };
+      DEFAULT_HOSTNAME = config.system.nixos.distroId;
+    }
+    // cfg.extraOSReleaseArgs;
 
   initrdReleaseContents = (removeAttrs osReleaseContents [ "BUILD_ID" ]) // {
     PRETTY_NAME = "${osReleaseContents.PRETTY_NAME} (Initrd)";
@@ -143,6 +159,26 @@ in
         default = "NixOS";
         description = "The name of the operating system vendor";
       };
+
+      extraOSReleaseArgs = mkOption {
+        internal = true;
+        type = types.attrsOf types.str;
+        default = { };
+        description = "Additional attributes to be merged with the /etc/os-release generator.";
+        example = {
+          ANSI_COLOR = "1;31";
+        };
+      };
+
+      extraLSBReleaseArgs = mkOption {
+        internal = true;
+        type = types.attrsOf types.str;
+        default = { };
+        description = "Additional attributes to be merged with the /etc/lsb-release generator.";
+        example = {
+          LSB_VERSION = "1.0";
+        };
+      };
     };
 
     image = {
@@ -181,7 +217,8 @@ in
       type = types.str;
       # TODO Remove this and drop the default of the option so people are forced to set it.
       # Doing this also means fixing the comment in nixos/modules/testing/test-instrumentation.nix
-      apply = v:
+      apply =
+        v:
         lib.warnIf (options.system.stateVersion.highestPrio == (lib.mkOptionDefault { }).priority)
           "system.stateVersion is not set, defaulting to ${v}. Read why this matters on https://nixos.org/manual/nixos/stable/options.html#opt-system.stateVersion."
           v;
@@ -227,6 +264,27 @@ in
 
   config = {
 
+    assertions = [
+      {
+        assertion = match "[0-9]{2}\\.[0-9]{2}" config.system.stateVersion != null;
+        message = ''
+          ${config.system.stateVersion} is an invalid value for 'system.stateVersion'; it must be in the format "YY.MM",
+          which corresponds to a prior release of NixOS.
+
+          If you want to switch releases or switch to unstable, you should change your channel and/or flake input URLs only.
+          *DO NOT* touch the 'system.stateVersion' option, as it will not help you upgrade.
+          Leave it exactly on the previous value, which is likely the value you had for it when you installed your system.
+
+          If you're unsure which value to set it to, use "${
+            if match "[0-9]{2}\\.[0-9]{2}" options.system.stateVersion.default != null then
+              options.system.stateVersion.default
+            else
+              options.system.nixos.release.default
+          }" as a default.
+        '';
+      }
+    ];
+
     system.nixos = {
       # These defaults are set here rather than up there so that
       # changing them would not rebuild the manual
@@ -237,13 +295,16 @@ in
     # https://www.freedesktop.org/software/systemd/man/os-release.html for the
     # format.
     environment.etc = {
-      "lsb-release".text = attrsToText {
-        LSB_VERSION = "${cfg.release} (${cfg.codeName})";
-        DISTRIB_ID = "${cfg.distroId}";
-        DISTRIB_RELEASE = cfg.release;
-        DISTRIB_CODENAME = toLower cfg.codeName;
-        DISTRIB_DESCRIPTION = "${cfg.distroName} ${cfg.release} (${cfg.codeName})";
-      };
+      "lsb-release".text = attrsToText (
+        {
+          LSB_VERSION = "${cfg.release} (${cfg.codeName})";
+          DISTRIB_ID = "${cfg.distroId}";
+          DISTRIB_RELEASE = cfg.release;
+          DISTRIB_CODENAME = toLower cfg.codeName;
+          DISTRIB_DESCRIPTION = "${cfg.distroName} ${cfg.release} (${cfg.codeName})";
+        }
+        // cfg.extraLSBReleaseArgs
+      );
 
       "os-release".text = attrsToText osReleaseContents;
     };

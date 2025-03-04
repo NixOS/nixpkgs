@@ -1,4 +1,16 @@
-{ lib, stdenv, fetchurl, boost, doxygen, gperf, pkg-config, librevenge, libxml2, perl, zlib }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  boost,
+  doxygen,
+  gperf,
+  pkg-config,
+  librevenge,
+  libxml2,
+  perl,
+  zlib,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libabw";
@@ -15,8 +27,18 @@ stdenv.mkDerivation rec {
     sed -i 's,^CPPFLAGS.*,\0 -DBOOST_ERROR_CODE_HEADER_ONLY -DBOOST_SYSTEM_NO_DEPRECATED,' src/lib/Makefile.in
   '';
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ boost doxygen gperf librevenge libxml2 perl zlib ];
+  nativeBuildInputs = [
+    doxygen
+    gperf
+    perl
+    pkg-config
+  ];
+  buildInputs = [
+    boost
+    librevenge
+    libxml2
+    zlib
+  ];
 
   meta = with lib; {
     homepage = "https://wiki.documentfoundation.org/DLP/Libraries/libabw";

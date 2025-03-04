@@ -1,14 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, python3 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python3,
+}:
 
 stdenv.mkDerivation rec {
-  version = "1.2.2";
+  version = "1.2.3";
   pname = "nginx-config-formatter";
 
   src = fetchFromGitHub {
     owner = "slomkowski";
     repo = "nginx-config-formatter";
     rev = "v${version}";
-    sha256 = "sha256-EUoOfkoVsNpIAwDaQ4NH8MkRIJZI8qeuuHUDE6LuLiI=";
+    sha256 = "sha256-nYaBdVsq7aLE9P1bQlJlQkrk/cq7C1hxM5XtCGyEzC0=";
   };
 
   buildInputs = [ python3 ];

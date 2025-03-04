@@ -1,70 +1,74 @@
-{ stdenv
-, lib
-, makeWrapper
-, openssl
-, sgx-sdk
-, sgx-psw
-, which
+{
+  stdenv,
+  lib,
+  makeWrapper,
+  openssl,
+  sgx-sdk,
+  sgx-psw,
+  which,
   # "SIM" or "HW"
-, sgxMode
+  sgxMode,
 }:
 let
   isSimulation = sgxMode == "SIM";
-  buildSample = name: stdenv.mkDerivation {
-    pname = name;
-    version = sgxMode;
+  buildSample =
+    name:
+    stdenv.mkDerivation {
+      pname = name;
+      version = sgxMode;
 
-    src = sgx-sdk.out;
-    sourceRoot = "${sgx-sdk.name}/share/SampleCode/${name}";
+      src = sgx-sdk.out;
+      sourceRoot = "${sgx-sdk.name}/share/SampleCode/${name}";
 
-    nativeBuildInputs = [
-      makeWrapper
-      openssl
-      which
-    ];
+      nativeBuildInputs = [
+        makeWrapper
+        openssl
+        which
+      ];
 
-    buildInputs = [
-      sgx-sdk
-    ];
+      buildInputs = [
+        sgx-sdk
+      ];
 
-    # The samples don't have proper support for parallel building
-    # causing them to fail randomly.
-    enableParallelBuilding = false;
+      # The samples don't have proper support for parallel building
+      # causing them to fail randomly.
+      enableParallelBuilding = false;
 
-    buildFlags = [
-      "SGX_MODE=${sgxMode}"
-    ];
+      buildFlags = [
+        "SGX_MODE=${sgxMode}"
+      ];
 
-    installPhase = ''
-      runHook preInstall
+      installPhase = ''
+        runHook preInstall
 
-      mkdir -p $out/{bin,lib}
-      install -m 755 app $out/bin
-      install *.so $out/lib
+        mkdir -p $out/{bin,lib}
+        install -m 755 app $out/bin
+        install *.so $out/lib
 
-      wrapProgram "$out/bin/app" \
-        --chdir "$out/lib" \
-        ${lib.optionalString (!isSimulation)
-        ''--prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ sgx-psw ]}"''}
+        wrapProgram "$out/bin/app" \
+          --chdir "$out/lib" \
+          ${lib.optionalString (!isSimulation)
+            ''--prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ sgx-psw ]}"''
+          }
 
-      runHook postInstall
-    '';
+        runHook postInstall
+      '';
 
-    # Breaks the signature of the enclaves
-    dontFixup = true;
+      # Breaks the signature of the enclaves
+      dontFixup = true;
 
-    # We don't have access to real SGX hardware during the build
-    doInstallCheck = isSimulation;
-    installCheckPhase = ''
-      runHook preInstallCheck
+      # We don't have access to real SGX hardware during the build
+      doInstallCheck = isSimulation;
+      installCheckPhase = ''
+        runHook preInstallCheck
 
-      pushd /
-      echo a | $out/bin/app
-      popd
+        pushd /
+        echo a | $out/bin/app
+        popd
 
-      runHook preInstallCheck
-    '';
-  };
+        runHook preInstallCheck
+      '';
+    };
 in
 {
   cxx11SGXDemo = buildSample "Cxx11SGXDemo";
@@ -82,7 +86,8 @@ in
         wrapProgram $bin \
           --chdir "$out/lib" \
           ${lib.optionalString (!isSimulation)
-          ''--prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ sgx-psw ]}"''}
+            ''--prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ sgx-psw ]}"''
+          }
       done
 
       runHook postInstall
@@ -112,7 +117,8 @@ in
   switchless = buildSample "Switchless";
   # # Requires SGX-patched openssl (sgxssl) build
   # sampleAttestedTLS = buildSample "SampleAttestedTLS";
-} // lib.optionalAttrs (!isSimulation) {
+}
+// lib.optionalAttrs (!isSimulation) {
   # # Requires kernel >= v6.2 && HW SGX
   # sampleAEXNotify = buildSample "SampleAEXNotify";
 
@@ -129,7 +135,7 @@ in
 
       wrapProgram "$out/bin/app" \
         --chdir "$out/lib" \
-        --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [sgx-psw]}"
+        --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ sgx-psw ]}"
 
       runHook postInstall
     '';

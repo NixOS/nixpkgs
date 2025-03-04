@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "kronenthaler";
     repo = "mod-pbxproj";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-srtS6ggVnpffEa57LL2OzfC2mVd9uLxUL6LzxqPVLdo=";
   };
 

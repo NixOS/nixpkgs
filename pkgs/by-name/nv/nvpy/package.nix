@@ -1,18 +1,22 @@
-{ pkgs, fetchFromGitHub, python3Packages }:
+{
+  pkgs,
+  fetchFromGitHub,
+  python3Packages,
+}:
 
 let
   pythonPackages = python3Packages;
-in pythonPackages.buildPythonApplication rec {
+in
+pythonPackages.buildPythonApplication rec {
   version = "2.3.1";
   pname = "nvpy";
 
   src = fetchFromGitHub {
     owner = "cpbotha";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     sha256 = "sha256-guNdLu/bCk89o5M3gQU7J0W4h7eZdLHM0FG5IAPLE7c=";
   };
-
 
   propagatedBuildInputs = with pythonPackages; [
     markdown

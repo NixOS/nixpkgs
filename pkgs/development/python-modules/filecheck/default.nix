@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mull-project";
     repo = "FileCheck.py";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-VbMlCqGd3MVpj0jEKjSGC2L0s/3e/d53b+2eZcXZneo=";
   };
 

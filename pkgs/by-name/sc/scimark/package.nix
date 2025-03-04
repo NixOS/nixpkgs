@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchurl
-, unzip
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -33,8 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     downloadPage = "https://math.nist.gov/scimark2/download_c.html";
     license = lib.licenses.publicDomain;
     mainProgram = "scimark4";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.all;
   };
 })
-# TODO [ AndersonTorres ]: Java version

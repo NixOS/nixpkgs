@@ -3,22 +3,39 @@
   buildGoModule,
   fetchFromGitHub,
   stdenv,
+  nix-update-script,
 }:
-let
+
+buildGoModule rec {
   pname = "abctl";
-  version = "0.13.1";
-in
-buildGoModule {
-  inherit pname version;
+  version = "0.24.0";
 
   src = fetchFromGitHub {
     owner = "airbytehq";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-ZZP5wXsPtqkZd/sdj/LU8M/DYv0gjIWRspAFrp3ETH8=";
+    repo = "abctl";
+    tag = "v${version}";
+    hash = "sha256-O+ABjageccJudXtO5wUYLIT/kI04f68RLW0B7d//jdw=";
   };
 
-  vendorHash = "sha256-uvOKH/MLIoIwYClpTIj010os9dGkkZPAVV0RYBjjzVk=";
+  checkFlags =
+    let
+      skippedTests = [
+        # network access
+        "TestManifestCmd"
+        "TestManifestCmd_Enterprise"
+        "TestManifestCmd_Nightly"
+        # docker
+        "TestValues_BadYaml"
+        "TestInvalidHostFlag_IpAddr"
+        "TestInvalidHostFlag_IpAddrWithPort"
+        "TestNewWithOptions_InitErr"
+      ];
+    in
+    [ "-skip=^${lib.concatStringsSep "$|^" skippedTests}$" ];
+
+  vendorHash = "sha256-4pi5EX7N4zf72rez2aClFezgnT70A7Crd2YTasl5CvU=";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Airbyte's CLI for managing local Airbyte installations";

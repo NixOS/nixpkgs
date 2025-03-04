@@ -1,39 +1,40 @@
-{ lib
-, stdenv
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
 
-, SDL2
-, cmake
-, curl
-, discord-rpc
-, duktape
-, expat
-, flac
-, fontconfig
-, freetype
-, gbenchmark
-, icu
-, jansson
-, libGLU
-, libiconv
-, libogg
-, libpng
-, libpthreadstubs
-, libvorbis
-, libzip
-, nlohmann_json
-, openssl
-, pkg-config
-, speexdsp
-, zlib
+  SDL2,
+  cmake,
+  curl,
+  discord-rpc,
+  duktape,
+  expat,
+  flac,
+  fontconfig,
+  freetype,
+  gbenchmark,
+  icu,
+  jansson,
+  libGLU,
+  libiconv,
+  libogg,
+  libpng,
+  libpthreadstubs,
+  libvorbis,
+  libzip,
+  nlohmann_json,
+  openssl,
+  pkg-config,
+  speexdsp,
+  zlib,
 }:
 
 let
-  openrct2-version = "0.4.15";
+  openrct2-version = "0.4.19.1";
 
   # Those versions MUST match the pinned versions within the CMakeLists.txt
   # file. The REPLAYS repository from the CMakeLists.txt is not necessary.
-  objects-version = "1.4.8";
+  objects-version = "1.5.1";
   openmsx-version = "1.6";
   opensfx-version = "1.0.5";
   title-sequences-version = "0.4.14";
@@ -42,14 +43,14 @@ let
     owner = "OpenRCT2";
     repo = "OpenRCT2";
     rev = "v${openrct2-version}";
-    hash = "sha256-VumjJGAur+2A7n0pFcNM7brYaoeaVCPBtRGFIZmq5QY=";
+    hash = "sha256-sg09JmoWF9utPG7PakKpgLgX64FAc2x8ILX3lVHkRi0=";
   };
 
   objects-src = fetchFromGitHub {
     owner = "OpenRCT2";
     repo = "objects";
     rev = "v${objects-version}";
-    hash = "sha256-A6iFaWda5qiFirGqOP6H9w0PP5Me8BRr2HXKZPHJImE=";
+    hash = "sha256-mxlabWuh8TTJs74yXdiv7XtdeGmCWQ5N1JoY7Xo0itQ=";
   };
 
   openmsx-src = fetchFromGitHub {
@@ -116,11 +117,6 @@ stdenv.mkDerivation {
     "-DDOWNLOAD_TITLE_SEQUENCES=OFF"
   ];
 
-  env.NIX_CFLAGS_COMPILE = toString [
-    # Needed with GCC 12
-    "-Wno-error=maybe-uninitialized"
-  ];
-
   postUnpack = ''
     mkdir -p $sourceRoot/data/assetpack
 
@@ -132,18 +128,18 @@ stdenv.mkDerivation {
 
   preConfigure =
     # Verify that the correct version of each third party repository is used.
-    (let
-      versionCheck = cmakeKey: version: ''
-        grep -q '^set(${cmakeKey}_VERSION "${version}")$' CMakeLists.txt \
-          || (echo "${cmakeKey} differs from expected version!"; exit 1)
-      '';
-    in
-    (versionCheck "OBJECTS" objects-version) +
-    (versionCheck "OPENMSX" openmsx-version) +
-    (versionCheck "OPENSFX" opensfx-version) +
-    (versionCheck "TITLE_SEQUENCE" title-sequences-version));
-
-  preFixup = "ln -s $out/share/openrct2 $out/bin/data";
+    (
+      let
+        versionCheck = cmakeKey: version: ''
+          grep -q '^set(${cmakeKey}_VERSION "${version}")$' CMakeLists.txt \
+            || (echo "${cmakeKey} differs from expected version!"; exit 1)
+        '';
+      in
+      (versionCheck "OBJECTS" objects-version)
+      + (versionCheck "OPENMSX" openmsx-version)
+      + (versionCheck "OPENSFX" opensfx-version)
+      + (versionCheck "TITLE_SEQUENCE" title-sequences-version)
+    );
 
   meta = with lib; {
     description = "Open source re-implementation of RollerCoaster Tycoon 2 (original game required)";

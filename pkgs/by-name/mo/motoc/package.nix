@@ -8,13 +8,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "motoc";
-  version = "0.3.3";
+  version = "0.3.4";
 
   src = fetchFromGitHub {
     owner = "galister";
     repo = "motoc";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-AmHTnCUTHoeLsOJrD35BooU9mZr5ctoCJmjW5CaTYBY=";
+    tag = "v${version}";
+    hash = "sha256-CAKgh9uddDhaFp2O62o1nNZ/ZWJbCR/7dMaI9V992Xk=";
   };
 
   cargoLock = {

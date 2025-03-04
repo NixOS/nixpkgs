@@ -1,25 +1,52 @@
-{lib, stdenv, fetchurl, fetchpatch}:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoconf,
+  automake,
+  darwin,
+  gettext,
+  libiconv,
+  libtool,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tre";
-  version = "0.8.0";
-  src = fetchurl {
-    url = "https://laurikari.net/tre/${pname}-${version}.tar.gz";
-    sha256 = "1pd7qsa7vc3ybdc6h2gr4pm9inypjysf92kab945gg4qa6jp11my";
+  version = "0.9.0";
+
+  src = fetchFromGitHub {
+    owner = "laurikari";
+    repo = "tre";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-5O8yqzv+SR8x0X7GtC2Pjo94gp0799M2Va8wJ4EKyf8=";
   };
 
-  patches = [
-    (fetchpatch {
-      url = "https://sources.debian.net/data/main/t/tre/0.8.0-6/debian/patches/03-cve-2016-8859";
-      sha256 = "0navhizym6qxd4gngrsslbij8x9r3s67p1jzzhvsnq6ky49j7w3p";
-    })
+  outputs = [
+    "out"
+    "dev"
   ];
+
+  nativeBuildInputs = [
+    autoconf
+    automake
+    gettext # autopoint
+    libtool
+  ];
+
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+  ];
+
+  preConfigure = ''
+    ./utils/autogen.sh
+  '';
 
   meta = {
     description = "Lightweight and robust POSIX compliant regexp matching library";
     homepage = "https://laurikari.net/tre/";
+    changelog = "https://github.com/laurikari/tre/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd2;
     mainProgram = "agrep";
     platforms = lib.platforms.unix;
   };
-}
+})

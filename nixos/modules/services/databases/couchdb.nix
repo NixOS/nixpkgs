@@ -1,36 +1,53 @@
-{ config, options, lib, pkgs, ... }:
+{
+  config,
+  options,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.couchdb;
   opt = options.services.couchdb;
-  configFile = pkgs.writeText "couchdb.ini" (
-    ''
-      [couchdb]
-      database_dir = ${cfg.databaseDir}
-      uri_file = ${cfg.uriFile}
-      view_index_dir = ${cfg.viewIndexDir}
-    '' + (lib.optionalString (cfg.adminPass != null) ''
-      [admins]
-      ${cfg.adminUser} = ${cfg.adminPass}
-    '' + ''
-      [chttpd]
-    '') +
-    ''
-      port = ${toString cfg.port}
-      bind_address = ${cfg.bindAddress}
 
-      [log]
-      file = ${cfg.logFile}
-    '');
+  baseConfig = {
+    couchdb = {
+      database_dir = cfg.databaseDir;
+      uri_file = cfg.uriFile;
+      view_index_dir = cfg.viewIndexDir;
+    };
+    chttpd = {
+      port = cfg.port;
+      bind_address = cfg.bindAddress;
+    };
+    log = {
+      file = cfg.logFile;
+    };
+  };
+  adminConfig = lib.optionalAttrs (cfg.adminPass != null) {
+    admins = {
+      "${cfg.adminUser}" = cfg.adminPass;
+    };
+  };
+  appConfig = lib.recursiveUpdate (lib.recursiveUpdate baseConfig adminConfig) cfg.extraConfig;
+
+  optionsConfigFile = pkgs.writeText "couchdb.ini" (lib.generators.toINI { } appConfig);
+
+  # we are actually specifying 5 configuration files:
+  # 1. the preinstalled default.ini
+  # 2. the module configuration
+  # 3. the extraConfigFiles from the module options
+  # 4. the locally writable config file, which couchdb itself writes to
+  configFiles = [
+    "${cfg.package}/etc/default.ini"
+    optionsConfigFile
+  ] ++ cfg.extraConfigFiles ++ [ cfg.configFile ];
   executable = "${cfg.package}/bin/couchdb";
-
-in {
-
+in
+{
   ###### interface
 
   options = {
-
     services.couchdb = {
-
       enable = lib.mkEnableOption "CouchDB Server";
 
       package = lib.mkPackageOption pkgs "couchdb3" { };
@@ -128,10 +145,15 @@ in {
       };
 
       extraConfig = lib.mkOption {
-        type = lib.types.lines;
-        default = "";
+        type = lib.types.attrs;
+        default = { };
+        description = "Extra configuration options for CouchDB";
+      };
+      extraConfigFiles = lib.mkOption {
+        type = lib.types.listOf lib.types.path;
+        default = [ ];
         description = ''
-          Extra configuration. Overrides any other configuration.
+          Extra configuration files. Overrides any other configuration. You can use this to setup the Admin user without putting the password in your nix store.
         '';
       };
 
@@ -146,23 +168,19 @@ in {
 
       configFile = lib.mkOption {
         type = lib.types.path;
+        default = "/var/lib/couchdb/local.ini";
         description = ''
           Configuration file for persisting runtime changes. File
           needs to be readable and writable from couchdb user/group.
         '';
       };
-
     };
-
   };
 
   ###### implementation
 
-  config = lib.mkIf config.services.couchdb.enable {
-
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
-
-    services.couchdb.configFile = lib.mkDefault "/var/lib/couchdb/local.ini";
 
     systemd.tmpfiles.rules = [
       "d '${dirOf cfg.uriFile}' - ${cfg.user} ${cfg.group} - -"
@@ -185,15 +203,10 @@ in {
       '';
 
       environment = {
-        # we are actually specifying 5 configuration files:
-        # 1. the preinstalled default.ini
-        # 2. the module configuration
-        # 3. the extraConfig from the module options
-        # 4. the locally writable config file, which couchdb itself writes to
-        ERL_FLAGS= ''-couch_ini ${cfg.package}/etc/default.ini ${configFile} ${pkgs.writeText "couchdb-extra.ini" cfg.extraConfig} ${cfg.configFile}'';
+        ERL_FLAGS = ''-couch_ini ${lib.concatStringsSep " " configFiles}'';
         # 5. the vm.args file
-        COUCHDB_ARGS_FILE=''${cfg.argsFile}'';
-        HOME =''${cfg.databaseDir}'';
+        COUCHDB_ARGS_FILE = ''${cfg.argsFile}'';
+        HOME = ''${cfg.databaseDir}'';
       };
 
       serviceConfig = {
@@ -210,6 +223,5 @@ in {
     };
 
     users.groups.couchdb.gid = config.ids.gids.couchdb;
-
   };
 }

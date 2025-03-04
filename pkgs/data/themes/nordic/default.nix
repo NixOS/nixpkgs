@@ -1,13 +1,13 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, breeze-icons
-, gtk-engine-murrine
-, jdupes
-, plasma-framework
-, plasma-workspace
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  breeze-icons,
+  gtk-engine-murrine,
+  jdupes,
+  plasma-framework,
+  plasma-workspace,
 }:
-
 stdenvNoCC.mkDerivation rec {
   pname = "nordic";
   version = "2.2.0-unstable-2024-06-25";
@@ -80,13 +80,19 @@ stdenvNoCC.mkDerivation rec {
 
   sourceRoot = ".";
 
-  outputs = [ "out" "sddm" ];
+  outputs = [
+    "out"
+    "sddm"
+  ];
 
   nativeBuildInputs = [ jdupes ];
 
   propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 
   dontWrapQtApps = true;
+
+  # FIXME: https://github.com/EliverLara/Nordic/issues/331
+  dontCheckForBrokenSymlinks = true;
 
   installPhase = ''
     runHook preInstall

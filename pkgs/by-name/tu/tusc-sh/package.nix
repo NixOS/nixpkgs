@@ -1,40 +1,46 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, writeShellApplication
-, curl
-, coreutils
-, jq
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  writeShellApplication,
+  curl,
+  coreutils,
+  jq,
 }:
 
 let
   tusc = stdenvNoCC.mkDerivation (finalAttrs: {
-  pname = "tusc-sh";
-  version = "1.1.1";
+    pname = "tusc-sh";
+    version = "1.1.1";
 
-  src = fetchFromGitHub {
-    owner = "adhocore";
-    repo = "tusc.sh";
-    rev = finalAttrs.version;
-    hash = "sha256-EKlcE+rsVh5lUd8dQzAwXDjiUvrrud5yWfF6JWSZQFE=";
-  };
+    src = fetchFromGitHub {
+      owner = "adhocore";
+      repo = "tusc.sh";
+      rev = finalAttrs.version;
+      hash = "sha256-EKlcE+rsVh5lUd8dQzAwXDjiUvrrud5yWfF6JWSZQFE=";
+    };
 
-  dontConfigure = true;
-  dontBuild = true;
+    dontConfigure = true;
+    dontBuild = true;
 
-  installPhase = ''
-    runHook preInstall
+    installPhase = ''
+      runHook preInstall
 
-    install -Dm755 tusc.sh -t $out/bin
+      install -Dm755 tusc.sh -t $out/bin
 
-    runHook postInstall
-  '';
+      runHook postInstall
+    '';
 
-});
+  });
 in
 writeShellApplication {
   name = "tusc";
-  runtimeInputs = [ tusc curl coreutils jq ];
+  runtimeInputs = [
+    tusc
+    curl
+    coreutils
+    jq
+  ];
   text = ''
     tusc.sh "$@"
   '';

@@ -1,11 +1,12 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, fontconfig
-, pkg-config
-, wayland
-, libxkbcommon
-, makeWrapper
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  fontconfig,
+  pkg-config,
+  wayland,
+  libxkbcommon,
+  makeWrapper,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -19,15 +20,22 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-q/+Ik8L58LxOllpEosYyvD38RJb+NIQHslYpgGSwjKc=";
   };
 
-  cargoHash = "sha256-8LSz/YeqdbtFXpWq2MMhEI9+8mxsLdE4LUyQHcgLkZY=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-iTTwclBbmOALjMnT89w6k8Ix8HKTbBOxKHVgePbbXkA=";
 
   libPath = lib.makeLibraryPath [
     wayland
     libxkbcommon
   ];
 
-  buildInputs = [ fontconfig libxkbcommon ];
-  nativeBuildInputs = [ makeWrapper pkg-config ];
+  buildInputs = [
+    fontconfig
+    libxkbcommon
+  ];
+  nativeBuildInputs = [
+    makeWrapper
+    pkg-config
+  ];
 
   postInstall = ''
     wrapProgram "$out/bin/kickoff" --prefix LD_LIBRARY_PATH : "${libPath}"

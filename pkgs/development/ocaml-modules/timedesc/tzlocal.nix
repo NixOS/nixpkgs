@@ -1,5 +1,6 @@
-{ buildDunePackage
-, timedesc
+{
+  buildDunePackage,
+  timedesc,
 }:
 
 buildDunePackage {

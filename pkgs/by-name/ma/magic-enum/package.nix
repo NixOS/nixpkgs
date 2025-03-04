@@ -12,7 +12,7 @@ stdenv.mkDerivation rec{
   src = fetchFromGitHub {
     owner = "Neargye";
     repo = "magic_enum";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-1pO9FWd0InXqg8+lwRF3YNFTAeVLjqoI9v15LjWxnZY=";
   };
 

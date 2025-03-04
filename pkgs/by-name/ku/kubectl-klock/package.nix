@@ -1,4 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, makeWrapper }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  makeWrapper,
+}:
 
 buildGoModule rec {
   pname = "kubectl-klock";
@@ -24,6 +29,9 @@ buildGoModule rec {
     homepage = "https://github.com/applejag/kubectl-klock";
     changelog = "https://github.com/applejag/kubectl-klock/releases/tag/v${version}";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ scm2342 applejag ];
+    maintainers = with lib.maintainers; [
+      scm2342
+      applejag
+    ];
   };
 }

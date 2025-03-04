@@ -2,7 +2,8 @@
 
 let
   version = "0.3.2";
-in python3Packages.buildPythonPackage rec {
+in
+python3Packages.buildPythonPackage rec {
   pname = "tesh";
   inherit version;
 
@@ -17,5 +18,9 @@ in python3Packages.buildPythonPackage rec {
 
   checkInputs = [ python3Packages.pytest ];
   nativeBuildInputs = [ python3Packages.poetry-core ];
-  propagatedBuildInputs = with python3Packages; [ click pexpect distutils ];
+  propagatedBuildInputs = with python3Packages; [
+    click
+    pexpect
+    distutils
+  ];
 }

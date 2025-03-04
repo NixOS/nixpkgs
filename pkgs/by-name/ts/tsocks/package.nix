@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchurl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "tsocks";
@@ -13,9 +17,14 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     sed -i -e "s,\\\/usr,"$(echo $out|sed -e "s,\\/,\\\\\\\/,g")",g" tsocks
+    substituteInPlace configure \
+      --replace-fail "main(){return(0);}" "int main(){return(0);}"
     substituteInPlace tsocks --replace /usr $out
-    export configureFlags="$configureFlags --libdir=$out/lib"
   '';
+
+  configureFlags = [
+    "--libdir=${placeholder "out"}/lib"
+  ];
 
   preBuild = ''
     # We don't need the saveme binary, it is in fact never stored and we're

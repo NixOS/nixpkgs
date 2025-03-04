@@ -12,79 +12,77 @@ import ./make-test-python.nix (
     # Found 1 error in 1 file (checked 1 source file)
     skipTypeCheck = true;
 
-    nodes.machine =
-      { config, ... }:
-      {
-        # Automatically login on tty1 as a normal user:
-        imports = [ ./common/user-account.nix ];
-        services.getty.autologinUser = "alice";
+    nodes.machine = {
+      # Automatically login on tty1 as a normal user:
+      imports = [ ./common/user-account.nix ];
+      services.getty.autologinUser = "alice";
 
-        environment = {
-          # For glinfo and wayland-info:
-          systemPackages = with pkgs; [
-            mesa-demos
-            wayland-utils
-            alacritty
-          ];
-          # Use a fixed SWAYSOCK path (for swaymsg):
-          variables = {
-            "SWAYSOCK" = "/tmp/sway-ipc.sock";
-            # TODO: Investigate if we can get hardware acceleration to work (via
-            # virtio-gpu and Virgil). We currently have to use the Pixman software
-            # renderer since the GLES2 renderer doesn't work inside the VM (even
-            # with WLR_RENDERER_ALLOW_SOFTWARE):
-            # "WLR_RENDERER_ALLOW_SOFTWARE" = "1";
-            "WLR_RENDERER" = "pixman";
-          };
-          # For convenience:
-          shellAliases = {
-            test-x11 = "glinfo | tee /tmp/test-x11.out && touch /tmp/test-x11-exit-ok";
-            test-wayland = "wayland-info | tee /tmp/test-wayland.out && touch /tmp/test-wayland-exit-ok";
-          };
-
-          # To help with OCR:
-          etc."xdg/foot/foot.ini".text = lib.generators.toINI { } {
-            main = {
-              font = "inconsolata:size=14";
-            };
-            colors = rec {
-              foreground = "000000";
-              background = "ffffff";
-              regular2 = foreground;
-            };
-          };
-
-          etc."gpg-agent.conf".text = ''
-            pinentry-timeout 86400
-          '';
+      environment = {
+        # For glinfo and wayland-info:
+        systemPackages = with pkgs; [
+          mesa-demos
+          wayland-utils
+          alacritty
+        ];
+        # Use a fixed SWAYSOCK path (for swaymsg):
+        variables = {
+          "SWAYSOCK" = "/tmp/sway-ipc.sock";
+          # TODO: Investigate if we can get hardware acceleration to work (via
+          # virtio-gpu and Virgil). We currently have to use the Pixman software
+          # renderer since the GLES2 renderer doesn't work inside the VM (even
+          # with WLR_RENDERER_ALLOW_SOFTWARE):
+          # "WLR_RENDERER_ALLOW_SOFTWARE" = "1";
+          "WLR_RENDERER" = "pixman";
+        };
+        # For convenience:
+        shellAliases = {
+          test-x11 = "glinfo | tee /tmp/test-x11.out && touch /tmp/test-x11-exit-ok";
+          test-wayland = "wayland-info | tee /tmp/test-wayland.out && touch /tmp/test-wayland-exit-ok";
         };
 
-        fonts.packages = [ pkgs.inconsolata ];
+        # To help with OCR:
+        etc."xdg/foot/foot.ini".text = lib.generators.toINI { } {
+          main = {
+            font = "inconsolata:size=14";
+          };
+          colors = rec {
+            foreground = "000000";
+            background = "ffffff";
+            regular2 = foreground;
+          };
+        };
 
-        # Automatically configure and start Sway when logging in on tty1:
-        programs.bash.loginShellInit = ''
-          if [ "$(tty)" = "/dev/tty1" ]; then
-            set -e
-
-            mkdir -p ~/.config/sway
-            sed s/Mod4/Mod1/ /etc/sway/config > ~/.config/sway/config
-
-            sway --validate
-            sway && touch /tmp/sway-exit-ok
-          fi
+        etc."gpg-agent.conf".text = ''
+          pinentry-timeout 86400
         '';
-
-        programs.sway = {
-          enable = true;
-          package = pkgs.swayfx.override { isNixOS = true; };
-        };
-
-        # To test pinentry via gpg-agent:
-        programs.gnupg.agent.enable = true;
-
-        # Need to switch to a different GPU driver than the default one (-vga std) so that Sway can launch:
-        virtualisation.qemu.options = [ "-vga none -device virtio-gpu-pci" ];
       };
+
+      fonts.packages = [ pkgs.inconsolata ];
+
+      # Automatically configure and start Sway when logging in on tty1:
+      programs.bash.loginShellInit = ''
+        if [ "$(tty)" = "/dev/tty1" ]; then
+          set -e
+
+          mkdir -p ~/.config/sway
+          sed s/Mod4/Mod1/ /etc/sway/config > ~/.config/sway/config
+
+          sway --validate
+          sway && touch /tmp/sway-exit-ok
+        fi
+      '';
+
+      programs.sway = {
+        enable = true;
+        package = pkgs.swayfx.override { isNixOS = true; };
+      };
+
+      # To test pinentry via gpg-agent:
+      programs.gnupg.agent.enable = true;
+
+      # Need to switch to a different GPU driver than the default one (-vga std) so that Sway can launch:
+      virtualisation.qemu.options = [ "-vga none -device virtio-gpu-pci" ];
+    };
 
     testScript =
       { nodes, ... }:
@@ -192,15 +190,15 @@ import ./make-test-python.nix (
         machine.screenshot("sway_exit")
 
         swaymsg("exec swaylock")
-        machine.wait_until_succeeds("pgrep -x swaylock")
+        machine.wait_until_succeeds("pgrep -xf swaylock")
         machine.sleep(3)
-        machine.send_chars("${nodes.machine.config.users.users.alice.password}")
+        machine.send_chars("${nodes.machine.users.users.alice.password}")
         machine.send_key("ret")
-        machine.wait_until_fails("pgrep -x swaylock")
+        machine.wait_until_fails("pgrep -xf swaylock")
 
         # Exit Sway and verify process exit status 0:
         swaymsg("exit", succeed=False)
-        machine.wait_until_fails("pgrep -x sway")
+        machine.wait_until_fails("pgrep -xf sway")
         machine.wait_for_file("/tmp/sway-exit-ok")
       '';
   }

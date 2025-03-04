@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ssh-mitm";
     repo = "appimage";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-d8LwZ4iZ+fwFaBP/IFoKImI/TsYtVD0rllbYN9XP/es=";
   };
 

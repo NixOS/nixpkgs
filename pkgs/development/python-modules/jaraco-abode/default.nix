@@ -33,7 +33,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jaraco";
     repo = "jaraco.abode";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-t5AI2wpSM6xMzULEZYkUgGvcODM8PVxdd2Vy/PV0Ga4=";
   };
 

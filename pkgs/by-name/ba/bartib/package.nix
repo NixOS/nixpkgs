@@ -1,4 +1,9 @@
-{ lib, rustPlatform, fetchFromGitHub, installShellFiles }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  installShellFiles,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "bartib";
@@ -11,7 +16,8 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-eVLacxKD8seD8mxVN1D3HhKZkIDXsEsSisZnFbmhpSk=";
   };
 
-  cargoHash = "sha256-s/oGv7/0LgNpdGu6dnvvbxDgFDvcvcHL01dSPxhMVWE=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-OSnBcYeTH9UqAXGhT/seEfNBejbYj/FTiMwMbvY7Bf4=";
 
   nativeBuildInputs = [ installShellFiles ];
 

@@ -28,6 +28,7 @@ stdenv.mkDerivation {
         setuptools
       ]
     ))
+    qt5.qmake
   ];
 
   buildInputs =

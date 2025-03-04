@@ -1,22 +1,27 @@
-{ stdenv
-, lib
-, fetchurl
-, gi-docgen
-, gobject-introspection
-, meson
-, ninja
-, pkg-config
-, vala
-, glib
-, liburing
-, gnome
+{
+  stdenv,
+  lib,
+  fetchurl,
+  gi-docgen,
+  gobject-introspection,
+  meson,
+  ninja,
+  pkg-config,
+  vala,
+  glib,
+  liburing,
+  gnome,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libdex";
   version = "0.8.1";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [
+    "out"
+    "dev"
+    "devdoc"
+  ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/libdex/${lib.versions.majorMinor finalAttrs.version}/libdex-${finalAttrs.version}.tar.xz";

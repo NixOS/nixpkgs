@@ -2,7 +2,7 @@
   stdenv,
   lib,
   fetchurl,
-  substituteAll,
+  replaceVars,
   dconf,
   gettext,
   meson,
@@ -37,16 +37,15 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-initial-setup";
-  version = "47.1";
+  version = "47.4";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-initial-setup/${lib.versions.major finalAttrs.version}/gnome-initial-setup-${finalAttrs.version}.tar.xz";
-    hash = "sha256-KTeKVkQG7Lzn8IzzklqA3TCCWoQ/kfzwWF45mecDUw0=";
+    hash = "sha256-LAKZ3CtxaBGCNZUNWJijUclMuduP2AjarV1uS6lbh7g=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./0001-fix-paths.patch;
+    (replaceVars ./0001-fix-paths.patch {
       inherit tzdata;
       tecla = gnome-tecla;
     })

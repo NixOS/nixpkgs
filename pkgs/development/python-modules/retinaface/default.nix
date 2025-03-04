@@ -2,14 +2,21 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  gdown,
-  numpy,
-  opencv4,
-  pillow,
-  pytestCheckHook,
-  pythonOlder,
+
+  # build-system
   setuptools,
+
+  # dependencies
+  gdown,
+  keras,
+  numpy,
+  opencv-python,
+  pillow,
   tensorflow,
+  tf-keras,
+
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -17,21 +24,12 @@ buildPythonPackage rec {
   version = "0.0.17";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "serengil";
     repo = "retinaface";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-0s1CSGlK2bF1F2V/IuG2ZqD7CkNfHGvp1M5C3zDnuKs=";
   };
-
-  postPatch = ''
-    # prevent collisions
-    substituteInPlace setup.py \
-      --replace-fail "data_files=[(\"\", [\"README.md\", \"requirements.txt\", \"package_info.json\"])]," "" \
-      --replace-fail "install_requires=requirements," ""
-  '';
 
   # requires internet connection
   disabledTestPaths = [
@@ -44,10 +42,12 @@ buildPythonPackage rec {
 
   dependencies = [
     gdown
+    keras
     numpy
-    opencv4
+    opencv-python
     pillow
     tensorflow
+    tf-keras
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];

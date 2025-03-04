@@ -15,7 +15,6 @@
   stdenv,
 }:
 
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "onscripter-en";
   version = "20110930";
@@ -56,11 +55,11 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    homepage = "http://github.com/museoa/onscripter-en";
+    homepage = "https://github.com/museoa/onscripter-en";
     description = "Japanese visual novel scripting engine";
     license = lib.licenses.gpl2Plus;
     mainProgram = "onscripter-en";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;
   };

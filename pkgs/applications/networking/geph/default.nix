@@ -38,7 +38,8 @@ in
       hash = "sha256-6YWPsSRIZpvVCIGZ1z7srobDvVzLr0o2jBcB/7kbK7I=";
     };
 
-    cargoHash = "sha256-c9Sq3mdotvB/oNIiOLTrAAUnUdkaye7y1l+29Uwjfm8=";
+    useFetchCargoVendor = true;
+    cargoHash = "sha256-igIYTlI3hqvlOTgdwouA9YussP9h0pOHUUTCjA2LE5U=";
 
     nativeBuildInputs = [ perl ];
 

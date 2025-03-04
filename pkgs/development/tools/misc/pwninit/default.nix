@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, openssl
-, elfutils
-, makeBinaryWrapper
-, pkg-config
-, xz
-, Security
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  openssl,
+  elfutils,
+  makeBinaryWrapper,
+  pkg-config,
+  xz,
+  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -21,15 +22,22 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-tbZS7PdRFvO2ifoHA/w3cSPfqqHrLeLHAg6V8oG9gVE=";
   };
 
-  buildInputs = [ openssl xz ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
-  nativeBuildInputs = [ pkg-config makeBinaryWrapper ];
+  buildInputs = [
+    openssl
+    xz
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
+  nativeBuildInputs = [
+    pkg-config
+    makeBinaryWrapper
+  ];
   postInstall = ''
     wrapProgram $out/bin/pwninit \
       --prefix PATH : "${lib.getBin elfutils}/bin"
   '';
   doCheck = false; # there are no tests to run
 
-  cargoHash = "sha256-J2uQoqStBl+qItaXWi17H/IailZ7P4YzhLNs17BY92Q=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-N0vje5ZU7B++f71BJKwkEfpbInpermH241f6oP1/fQE=";
 
   meta = {
     description = "Automate starting binary exploit challenges";

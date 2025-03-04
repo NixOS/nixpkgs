@@ -1,7 +1,13 @@
-{ lib, stdenv, fetchurl, cmake, zlib }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  zlib,
+}:
 
 stdenv.mkDerivation rec {
-  pname   = "niftyreg";
+  pname = "niftyreg";
   version = "1.3.9";
 
   src = fetchurl {
@@ -19,6 +25,6 @@ stdenv.mkDerivation rec {
     description = "Medical image registration software";
     maintainers = with maintainers; [ bcdarwin ];
     platforms = [ "x86_64-linux" ];
-    license   = licenses.bsd3;
+    license = licenses.bsd3;
   };
 }

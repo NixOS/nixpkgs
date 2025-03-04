@@ -1,14 +1,20 @@
-{ cxx-rs, fetchFromGitHub, lib, rustPlatform, testers }:
+{
+  cxx-rs,
+  fetchFromGitHub,
+  lib,
+  rustPlatform,
+  testers,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "cxx-rs";
-  version = "1.0.94";
+  version = "1.0.131";
 
   src = fetchFromGitHub {
     owner = "dtolnay";
     repo = "cxx";
     rev = version;
-    sha256 = "sha256-h6TmQyxhoOhaAWBZr9rRPCf0BE2QMBIYm5uTVKD2paE=";
+    sha256 = "sha256-KQlbJvULdc94SM0sx6JtukZPpaX4Gojc6Qgr20V3/VI=";
   };
 
   cargoLock = {
@@ -30,7 +36,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoTestFlags = [ "--workspace" ];
 
-  outputs = [ "out" "doc" "dev" ];
+  outputs = [
+    "out"
+    "doc"
+    "dev"
+  ];
 
   postInstall = ''
     mkdir -p $doc

@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "lukasschwab";
     repo = "arxiv.py";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-Niu3N0QTVxucboQx1FQq1757Hjj1VVWeDZn7O7YtjWY=";
   };
 

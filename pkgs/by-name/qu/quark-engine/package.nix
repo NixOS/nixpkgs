@@ -7,18 +7,17 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "quark-engine";
-  version = "24.11.1";
+  version = "25.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "quark-engine";
     repo = "quark-engine";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Nv4k/AN906ue13tlif+JsHLSWxdoI4maJ3EUGOZkDNI=";
+    tag = "v${version}";
+    hash = "sha256-avQT6m6DjVham+IMkY2Gcjnb1K1L5PuOxvkqAeLNNhQ=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];
-
 
   dependencies = with python3.pkgs; [
     androguard
@@ -36,7 +35,10 @@ python3.pkgs.buildPythonApplication rec {
     tqdm
   ];
 
-  pythonRelaxDeps = [ "r2pipe" ];
+  pythonRelaxDeps = [
+    "r2pipe"
+    "androguard"
+  ];
 
   # Project has no tests
   doCheck = false;

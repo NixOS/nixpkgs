@@ -1,35 +1,37 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, gobject-introspection
-, pkg-config
-, ninja
-, desktop-file-utils
-, makeWrapper
-, shared-mime-info
-, wrapGAppsHook4
-, meson
-, gtk4
-, gst_all_1
-, libGL
-, libadwaita
-, libsoup_3
-, vala
-, cmake
-, libmicrodns
-, gtuber
-, glib-networking
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gobject-introspection,
+  pkg-config,
+  ninja,
+  desktop-file-utils,
+  makeWrapper,
+  shared-mime-info,
+  wrapGAppsHook4,
+  meson,
+  gtk4,
+  gst_all_1,
+  libGL,
+  libadwaita,
+  libsoup_3,
+  vala,
+  cmake,
+  libmicrodns,
+  gtuber,
+  glib-networking,
+  libpeas2,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "clapper";
-  version = "0.6.1";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
-    owner  = "Rafostar";
-    repo   = "clapper";
-    rev    = finalAttrs.version;
-    hash = "sha256-IQJTnLB6FzYYPONOqBkvi89iF0U6fx/aWYvNOOJpBvc=";
+    owner = "Rafostar";
+    repo = "clapper";
+    tag = finalAttrs.version;
+    hash = "sha256-Yb2fWsdd8jhxkGWKanLn7CAuF4MjyQ27XTrO8ja3hfs=";
   };
 
   nativeBuildInputs = [
@@ -58,6 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     libadwaita
     libsoup_3
     libmicrodns
+    libpeas2
   ];
 
   postPatch = ''
@@ -71,15 +74,15 @@ stdenv.mkDerivation (finalAttrs: {
     )
   '';
 
-  meta = with lib; {
+  meta = {
     description = "GNOME media player built using GTK4 toolkit and powered by GStreamer with OpenGL rendering";
     longDescription = ''
       Clapper is a GNOME media player built using the GTK4 toolkit.
       The media player is using GStreamer as a media backend.
     '';
     homepage = "https://github.com/Rafostar/clapper";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ aleksana ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ aleksana ];
+    platforms = lib.platforms.linux;
   };
 })

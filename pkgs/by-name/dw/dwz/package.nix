@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, elfutils }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  elfutils,
+}:
 
 stdenv.mkDerivation rec {
   pname = "dwz";

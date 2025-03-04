@@ -7,7 +7,7 @@
   makeBinaryWrapper,
 }:
 let
-  version = "2.1.2";
+  version = "2.1.3";
 in
 buildNpmPackage {
   pname = "gfn-electron";
@@ -16,11 +16,11 @@ buildNpmPackage {
   src = fetchFromGitHub {
     owner = "hmlendea";
     repo = "gfn-electron";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-kTnM4wSDqP2V8hb4mDhbQYpVYouSnUkjuuCfITb/xgY=";
+    tag = "v${version}";
+    hash = "sha256-o5p7INuyrs4Fw0uoP9f3UpqpmJzHIFSBCBTTU2NfUMQ=";
   };
 
-  npmDepsHash = "sha256-27N0hWOfkLQGaGspm4aCoVF6PWiUOAKs+JzbdQV94lo=";
+  npmDepsHash = "sha256-xp9uZAMrsPut91tQD3XfeENr7fXFg2bE89xShG1AcZk=";
 
   nativeBuildInputs = [ makeBinaryWrapper ];
 
@@ -60,7 +60,7 @@ buildNpmPackage {
   postFixup = ''
     makeWrapper $out/dist/geforcenow-electron $out/bin/geforcenow-electron \
       --add-flags "--no-sandbox --disable-gpu-sandbox" \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime}}"
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
 
     substituteInPlace $out/share/applications/com.github.hmlendea.geforcenow-electron.desktop \
       --replace-fail "/opt/geforcenow-electron/geforcenow-electron" "geforcenow-electron" \

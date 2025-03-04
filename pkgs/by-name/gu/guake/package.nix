@@ -1,19 +1,20 @@
-{ lib
-, fetchFromGitHub
-, fetchpatch
-, python311
-, python311Packages
-, glibcLocales
-, gobject-introspection
-, wrapGAppsHook3
-, gtk3
-, keybinder3
-, libnotify
-, libutempter
-, vte
-, libwnck
-, dconf
-, nixosTests
+{
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  python311,
+  python311Packages,
+  glibcLocales,
+  gobject-introspection,
+  wrapGAppsHook3,
+  gtk3,
+  keybinder3,
+  libnotify,
+  libutempter,
+  vte,
+  libwnck,
+  dconf,
+  nixosTests,
 }:
 
 python311Packages.buildPythonApplication rec {
@@ -25,7 +26,7 @@ python311Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Guake";
     repo = "guake";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-e6Bf4HDftHBxFPcw9z02CqgZhSIvt6wlLF6dnIh9fEc=";
   };
 
@@ -97,7 +98,10 @@ python311Packages.buildPythonApplication rec {
     description = "Drop-down terminal for GNOME";
     homepage = "http://guake-project.org";
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.msteen maintainers.heywoodlh ];
+    maintainers = [
+      maintainers.msteen
+      maintainers.heywoodlh
+    ];
     platforms = platforms.linux;
   };
 }

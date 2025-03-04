@@ -20,7 +20,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-AZCsboUv4muKOw5El2Hw5O1cvAgD3JhBppacrQCJT2k=";
   };
 
-  cargoHash = "sha256-0yO1+OAkXje/ir8i8URVhIcW8gwXleYx+XL1U4bjtXk=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-X+5Ww+cnt08mleA6FzxVGprjIEQVInQPSvTWGjXuGI8=";
 
   patches = [
     ./objdump.patch

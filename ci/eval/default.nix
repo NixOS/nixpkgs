@@ -2,6 +2,7 @@
   lib,
   runCommand,
   writeShellScript,
+  writeText,
   linkFarm,
   time,
   procps,
@@ -48,10 +49,14 @@ let
         export NIX_STATE_DIR=$(mktemp -d)
         mkdir $out
         export GC_INITIAL_HEAP_SIZE=4g
-        command time -v \
+        command time -f "Attribute eval done [%MKB max resident, %Es elapsed] %C" \
           nix-instantiate --eval --strict --json --show-trace \
-          $src/pkgs/top-level/release-attrpaths-superset.nix -A paths \
-          --arg enableWarnings false > $out/paths.json
+            "$src/pkgs/top-level/release-attrpaths-superset.nix" \
+            -A paths \
+            -I "$src" \
+            --option restrict-eval true \
+            --option allow-import-from-derivation false \
+            --arg enableWarnings false > $out/paths.json
         mv "$supportedSystemsPath" $out/systems.json
       '';
 
@@ -82,8 +87,12 @@ let
         export NIX_SHOW_STATS_PATH="$outputDir/stats/$myChunk"
         echo "Chunk $myChunk on $system start"
         set +e
-        command time -f "Chunk $myChunk on $system done [%MKB max resident, %Es elapsed] %C" \
+        command time -o "$outputDir/timestats/$myChunk" \
+          -f "Chunk $myChunk on $system done [%MKB max resident, %Es elapsed] %C" \
           nix-env -f "${nixpkgs}/pkgs/top-level/release-attrpaths-parallel.nix" \
+          --eval-system "$system" \
+          --option restrict-eval true \
+          --option allow-import-from-derivation false \
           --query --available \
           --no-name --attr-path --out-path \
           --show-trace \
@@ -93,12 +102,20 @@ let
           --arg systems "[ \"$system\" ]" \
           --arg checkMeta ${lib.boolToString checkMeta} \
           --arg includeBroken ${lib.boolToString includeBroken} \
-          > "$outputDir/result/$myChunk"
+          -I ${nixpkgs} \
+          -I ${attrpathFile} \
+          > "$outputDir/result/$myChunk" \
+          2> "$outputDir/stderr/$myChunk"
         exitCode=$?
         set -e
+        cat "$outputDir/stderr/$myChunk"
+        cat "$outputDir/timestats/$myChunk"
         if (( exitCode != 0 )); then
           echo "Evaluation failed with exit code $exitCode"
           # This immediately halts all xargs processes
+          kill $PPID
+        elif [[ -s "$outputDir/stderr/$myChunk" ]]; then
+          echo "Nixpkgs on $system evaluated with warnings, aborting"
           kill $PPID
         fi
       '';
@@ -155,7 +172,7 @@ let
         ''}
 
         chunkOutputDir=$(mktemp -d)
-        mkdir "$chunkOutputDir"/{result,stats}
+        mkdir "$chunkOutputDir"/{result,stats,timestats,stderr}
 
         seq -w 0 "$seq_end" |
           command time -f "%e" -o "$out/total-time" \
@@ -238,16 +255,25 @@ let
           jq -s from_entries > $out/stats.json
       '';
 
+  compare = import ./compare {
+    inherit
+      lib
+      jq
+      runCommand
+      writeText
+      supportedSystems
+      ;
+  };
+
   full =
     {
-      # Whether to evaluate just a single system, by default all are evaluated
-      evalSystem ? if quickTest then "x86_64-linux" else null,
+      # Whether to evaluate on a specific set of systems, by default all are evaluated
+      evalSystems ? if quickTest then [ "x86_64-linux" ] else supportedSystems,
       # The number of attributes per chunk, see ./README.md for more info.
       chunkSize,
       quickTest ? false,
     }:
     let
-      systems = if evalSystem == null then supportedSystems else [ evalSystem ];
       results = linkFarm "results" (
         map (evalSystem: {
           name = evalSystem;
@@ -255,7 +281,7 @@ let
             inherit quickTest evalSystem chunkSize;
             attrpathFile = attrpathsSuperset + "/paths.json";
           };
-        }) systems
+        }) evalSystems
       );
     in
     combine {
@@ -268,6 +294,7 @@ in
     attrpathsSuperset
     singleSystem
     combine
+    compare
     # The above three are used by separate VMs in a GitHub workflow,
     # while the below is intended for testing on a single local machine
     full

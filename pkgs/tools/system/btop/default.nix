@@ -7,7 +7,6 @@
   removeReferencesTo,
   autoAddDriverRunpath,
   apple-sdk_15,
-  darwinMinVersionHook,
   versionCheckHook,
   rocmPackages,
   cudaSupport ? config.cudaSupport,
@@ -35,7 +34,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     apple-sdk_15
-    (darwinMinVersionHook "10.15")
   ];
 
   installFlags = [ "PREFIX=$(out)" ];

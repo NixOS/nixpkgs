@@ -10,14 +10,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "nix-fast-build";
-  version = "1.0.0";
+  version = "1.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Mic92";
     repo = "nix-fast-build";
     rev = "refs/tags/${version}";
-    hash = "sha256-8zW6eWvE9T03cMpo/hY8RRZIsSCfs1zmsJOkEZzuYwM=";
+    hash = "sha256-HkaJeIFgxncLm8MC1BaWRTkge9b1/+mjPcbzXTRshoM=";
   };
 
   build-system = [ python3Packages.setuptools ];

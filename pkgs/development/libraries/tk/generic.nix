@@ -1,5 +1,5 @@
 { stdenv, lib, src, pkg-config, tcl, libXft, zip, zlib, patches ? []
-, enableAqua ? stdenv.hostPlatform.isDarwin, darwin
+, enableAqua ? stdenv.hostPlatform.isDarwin
 , ... }:
 
 tcl.mkTclDerivation {
@@ -21,10 +21,6 @@ tcl.mkTclDerivation {
     for file in $(find library/demos/. -type f ! -name "*.*"); do
       substituteInPlace $file --replace "exec wish" "exec $out/bin/wish"
     done
-  ''
-  + lib.optionalString (stdenv.hostPlatform.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "11") ''
-    substituteInPlace unix/configure* \
-      --replace " -framework UniformTypeIdentifiers" ""
   '';
 
   postInstall = ''
@@ -62,11 +58,7 @@ tcl.mkTclDerivation {
 
   propagatedBuildInputs = [
     libXft
-  ] ++ lib.optionals enableAqua ([
-    darwin.apple_sdk.frameworks.Cocoa
-  ] ++ lib.optionals (lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11") [
-    darwin.apple_sdk.frameworks.UniformTypeIdentifiers
-  ]);
+  ];
 
   enableParallelBuilding = true;
 
@@ -87,6 +79,6 @@ tcl.mkTclDerivation {
     platforms = platforms.all;
     maintainers = [ ];
     broken = stdenv.hostPlatform.isDarwin
-      && lib.elem (lib.versions.majorMinor tcl.version) ["8.5" "9.0"];
+      && lib.elem (lib.versions.majorMinor tcl.version) ["8.5"];
   };
 }

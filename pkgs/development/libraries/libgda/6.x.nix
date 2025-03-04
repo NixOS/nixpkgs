@@ -1,33 +1,34 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchpatch
-, pkg-config
-, intltool
-, meson
-, ninja
-, itstool
-, libxml2
-, python3
-, gtk3
-, json-glib
-, isocodes
-, openssl
-, gnome
-, gobject-introspection
-, vala
-, libgee
-, sqlite
-, gtk-doc
-, yelp-tools
-, mysqlSupport ? false
-, libmysqlclient ? null
-, postgresSupport ? false
-, postgresql ? null
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  pkg-config,
+  intltool,
+  meson,
+  ninja,
+  itstool,
+  libxml2,
+  python3,
+  gtk3,
+  json-glib,
+  isocodes,
+  openssl,
+  gnome,
+  gobject-introspection,
+  vala,
+  libgee,
+  sqlite,
+  gtk-doc,
+  yelp-tools,
+  mysqlSupport ? false,
+  libmysqlclient ? null,
+  postgresSupport ? false,
+  libpq ? null,
 }:
 
 assert mysqlSupport -> libmysqlclient != null;
-assert postgresSupport -> postgresql != null;
+assert postgresSupport -> libpq != null;
 
 stdenv.mkDerivation rec {
   pname = "libgda";
@@ -72,18 +73,21 @@ stdenv.mkDerivation rec {
     yelp-tools
   ];
 
-  buildInputs = [
-    gtk3
-    json-glib
-    isocodes
-    openssl
-    libgee
-    sqlite
-  ] ++ lib.optionals mysqlSupport [
-    libmysqlclient
-  ] ++ lib.optionals postgresSupport [
-    postgresql
-  ];
+  buildInputs =
+    [
+      gtk3
+      json-glib
+      isocodes
+      openssl
+      libgee
+      sqlite
+    ]
+    ++ lib.optionals mysqlSupport [
+      libmysqlclient
+    ]
+    ++ lib.optionals postgresSupport [
+      libpq
+    ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=incompatible-function-pointer-types";
 

@@ -5,54 +5,55 @@
   matplotlib,
   numpy,
   pytestCheckHook,
-  pythonOlder,
+  pytest-cov-stub,
   seaborn,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pycm";
-  version = "4.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.5";
+  version = "4.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sepandhaghighi";
     repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-GyH06G7bArFBTzV/Sx/KmoJvcoed0sswW7qGqsSULHo=";
+    tag = "v${version}";
+    hash = "sha256-oceLARBP9D6NlMQiDvzIpJNNcod5D1O4xo3YzrUstso=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     matplotlib
     numpy
     seaborn
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-cov-stub
+    matplotlib
+  ];
 
   disabledTests = [
-    # Minor tolerance issues with Python 3.12; should be fixed in next release
-    # (see https://github.com/sepandhaghighi/pycm/pull/528)
-    "verified_test"
-    "function_test"
+    "plot_error_test" # broken doctest (expects matplotlib import exception)
   ];
 
   postPatch = ''
     # Remove a trivial dependency on the author's `art` Python ASCII art library
     rm pycm/__main__.py
-    # Also depends on python3Packages.notebook
-    rm Otherfiles/notebook_check.py
     substituteInPlace setup.py \
       --replace-fail '=get_requires()' '=[]'
   '';
 
   pythonImportsCheck = [ "pycm" ];
 
-  meta = with lib; {
+  meta = {
     description = "Multiclass confusion matrix library";
     homepage = "https://pycm.io";
-    license = licenses.mit;
-    maintainers = with maintainers; [ bcdarwin ];
+    changelog = "https://github.com/sepandhaghighi/pycm/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

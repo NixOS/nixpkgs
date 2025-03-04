@@ -1,19 +1,20 @@
-{ lib
-, fetchFromGitHub
-, makeWrapper
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  makeWrapper,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "responder";
-  version = "3.1.4.0";
+  version = "3.1.5.0";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "lgandx";
     repo = "Responder";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-BVSA/ZhpGz6UGyDRJUc4nlRJZ1/Y7er1vVOI+IbIqGk=";
+    tag = "v${version}";
+    hash = "sha256-iFNdGHe31TnYmC931kdO0vbliqhpsht97bDteZi4kdw=";
   };
 
   nativeBuildInputs = [
@@ -36,21 +37,21 @@ python3.pkgs.buildPythonApplication rec {
       --run "mkdir -p /tmp/Responder"
 
     substituteInPlace $out/share/Responder/Responder.conf \
-      --replace "Responder-Session.log" "/tmp/Responder/Responder-Session.log" \
-      --replace "Poisoners-Session.log" "/tmp/Responder/Poisoners-Session.log" \
-      --replace "Analyzer-Session.log" "/tmp/Responder/Analyzer-Session" \
-      --replace "Config-Responder.log" "/tmp/Responder/Config-Responder.log" \
-      --replace "Responder.db" "/tmp/Responder/Responder.db"
+      --replace-fail "Responder-Session.log" "/tmp/Responder/Responder-Session.log" \
+      --replace-fail "Poisoners-Session.log" "/tmp/Responder/Poisoners-Session.log" \
+      --replace-fail "Analyzer-Session.log" "/tmp/Responder/Analyzer-Session" \
+      --replace-fail "Config-Responder.log" "/tmp/Responder/Config-Responder.log" \
+      --replace-fail "Responder.db" "/tmp/Responder/Responder.db"
 
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "LLMNR, NBT-NS and MDNS poisoner, with built-in HTTP/SMB/MSSQL/FTP/LDAP rogue authentication server";
     mainProgram = "responder";
     homepage = "https://github.com/lgandx/Responder";
     changelog = "https://github.com/lgandx/Responder/blob/master/CHANGELOG.md";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

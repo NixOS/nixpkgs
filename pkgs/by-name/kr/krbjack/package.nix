@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -11,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "almandin";
     repo = "krbjack";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-rvK0I8WlXqJtau9f+6ximfzYCjX21dPIyDN56IMI0gE=";
   };
 
@@ -22,7 +23,6 @@ python3.pkgs.buildPythonApplication rec {
   build-system = with python3.pkgs; [
     poetry-core
   ];
-
 
   dependencies = with python3.pkgs; [
     colorama

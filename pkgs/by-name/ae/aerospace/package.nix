@@ -9,7 +9,7 @@
 
 let
   appName = "AeroSpace.app";
-  version = "0.15.2-Beta";
+  version = "0.17.1-Beta";
 in
 stdenv.mkDerivation {
   pname = "aerospace";
@@ -18,7 +18,7 @@ stdenv.mkDerivation {
 
   src = fetchzip {
     url = "https://github.com/nikitabobko/AeroSpace/releases/download/v${version}/AeroSpace-v${version}.zip";
-    sha256 = "sha256-jOSUtVSiy/S4nsgvfZZqZjxsppqNi90edn8rcTa+pFQ=";
+    sha256 = "sha256-IMU0s57dpes7Vm2Wv191LwkRgiF+ZIqNWHzrl4a1Pm0=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
@@ -39,7 +39,10 @@ stdenv.mkDerivation {
     installShellCompletion --zsh  shell-completion/zsh/_aerospace
   '';
 
-  passthru.tests.can-print-version = [ versionCheckHook ];
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
 
   passthru.updateScript = gitUpdater {
     url = "https://github.com/nikitabobko/AeroSpace.git";

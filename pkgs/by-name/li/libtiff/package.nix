@@ -1,30 +1,41 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, fetchpatch
-, nix-update-script
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  nix-update-script,
 
-, autoreconfHook
-, pkg-config
-, sphinx
+  cmake,
+  pkg-config,
+  sphinx,
 
-, lerc
-, libdeflate
-, libjpeg
-, libwebp
-, xz
-, zlib
-, zstd
+  lerc,
+  libdeflate,
+  libjpeg,
+  libwebp,
+  xz,
+  zlib,
+  zstd,
+
+  # Because lerc is C++ and static libraries don't track dependencies,
+  # that every downstream dependent of libtiff has to link with a C++
+  # compiler, or the C++ standard library won't be linked, resulting
+  # in undefined symbol errors.  Without systematic support for this
+  # in build systems, fixing this would require modifying the build
+  # system of every libtiff user.  Hopefully at some point build
+  # systems will figure this out, and then we can enable this.
+  #
+  # See https://github.com/mesonbuild/meson/issues/14234
+  withLerc ? !stdenv.hostPlatform.isStatic,
 
   # for passthru.tests
-, libgeotiff
-, python3Packages
-, imagemagick
-, graphicsmagick
-, gdal
-, openimageio
-, freeimage
-, testers
+  libgeotiff,
+  python3Packages,
+  imagemagick,
+  graphicsmagick,
+  gdal,
+  openimageio,
+  freeimage,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -39,8 +50,6 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
-    # FreeImage needs this patch
-    ./headers.patch
     # libc++abi 11 has an `#include <version>`, this picks up files name
     # `version` in the project's include paths
     ./rename-version.patch
@@ -50,23 +59,37 @@ stdenv.mkDerivation (finalAttrs: {
     mv VERSION VERSION.txt
   '';
 
-  outputs = [ "bin" "dev" "dev_private" "out" "man" "doc" ];
+  outputs = [
+    "bin"
+    "dev"
+    "dev_private"
+    "out"
+    "man"
+    "doc"
+  ];
 
   postFixup = ''
-    moveToOutput include/tif_config.h $dev_private
-    moveToOutput include/tif_dir.h $dev_private
-    moveToOutput include/tif_hash_set.h $dev_private
-    moveToOutput include/tiffiop.h $dev_private
+    mkdir -p $dev_private/include
+    mv -t $dev_private/include \
+      libtiff/tif_config.h \
+      ../libtiff/tif_dir.h \
+      ../libtiff/tif_hash_set.h \
+      ../libtiff/tiffiop.h
   '';
 
-  # If you want to change to a different build system, please make
-  # sure cross-compilation works first!
-  nativeBuildInputs = [ autoreconfHook pkg-config sphinx ];
-
-  buildInputs = [
-    lerc
-    zstd
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    sphinx
   ];
+
+  buildInputs =
+    [
+      zstd
+    ]
+    ++ lib.optionals withLerc [
+      lerc
+    ];
 
   # TODO: opengl support (bogus configure detection)
   propagatedBuildInputs = [
@@ -80,6 +103,10 @@ stdenv.mkDerivation (finalAttrs: {
     zstd
   ];
 
+  cmakeFlags = [
+    "-DCMAKE_FIND_PACKAGE_PREFER_CONFIG=ON"
+  ];
+
   enableParallelBuilding = true;
 
   doCheck = true;
@@ -88,7 +115,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     tests = {
-      inherit libgeotiff imagemagick graphicsmagick gdal openimageio freeimage;
+      inherit
+        libgeotiff
+        imagemagick
+        graphicsmagick
+        gdal
+        openimageio
+        freeimage
+        ;
       inherit (python3Packages) pillow imread;
       pkg-config = testers.hasPkgConfigModules {
         package = finalAttrs.finalPackage;

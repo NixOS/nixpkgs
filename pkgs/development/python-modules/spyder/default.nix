@@ -4,6 +4,7 @@
   fetchPypi,
 
   # nativeBuildInputs
+  pyqtwebengine,
 
   # build-system
   setuptools,
@@ -32,7 +33,6 @@
   pylint-venv,
   pyls-spyder,
   pyopengl,
-  pyqtwebengine,
   python-lsp-black,
   python-lsp-server,
   pyuca,
@@ -55,12 +55,12 @@
 
 buildPythonPackage rec {
   pname = "spyder";
-  version = "6.0.2";
+  version = "6.0.4";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-mPUrAYFn3k5NQrsk7B2aPFnkAxKSKC4I97DnFPK1pvM=";
+    hash = "sha256-4AsaO75mAH0rRDnrHGiwwfuQS7A/0/nQ7YPot6y0y+Y=";
   };
 
   patches = [ ./dont-clear-pythonpath.patch ];

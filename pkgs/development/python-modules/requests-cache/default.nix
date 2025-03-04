@@ -40,7 +40,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "requests-cache";
     repo = "requests-cache";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-juRCcBUr+Ko6kVPpUapwRbUGqWLKaRiCqppOc3S5FMU=";
   };
 
@@ -68,18 +68,21 @@ buildPythonPackage rec {
     yaml = [ pyyaml ];
   };
 
-  nativeCheckInputs = [
-    psutil
-    pytestCheckHook
-    pytest-rerunfailures
-    pytest-xdist
-    requests-mock
-    responses
-    rich
-    tenacity
-    time-machine
-    timeout-decorator
-  ] ++ optional-dependencies.json ++ optional-dependencies.security;
+  nativeCheckInputs =
+    [
+      psutil
+      pytestCheckHook
+      pytest-rerunfailures
+      pytest-xdist
+      requests-mock
+      responses
+      rich
+      tenacity
+      time-machine
+      timeout-decorator
+    ]
+    ++ optional-dependencies.json
+    ++ optional-dependencies.security;
 
   preCheck = ''
     export HOME=$(mktemp -d);

@@ -5,10 +5,9 @@
 , lib
 , lighthouse
 , nix-update-script
-, nodePackages
 , openssl
 , pkg-config
-, postgresql
+, libpq
 , protobuf
 , rustPlatform
 , rust-jemalloc-sys
@@ -131,8 +130,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   nativeCheckInputs = [
-    nodePackages.ganache
-    postgresql
+    libpq
   ];
 
   passthru = {

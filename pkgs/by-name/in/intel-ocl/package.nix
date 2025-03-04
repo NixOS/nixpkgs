@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchzip, rpmextract, ncurses5, numactl, zlib }:
+{
+  lib,
+  stdenv,
+  fetchzip,
+  rpmextract,
+  ncurses5,
+  numactl,
+  zlib,
+}:
 
 stdenv.mkDerivation rec {
   pname = "intel-ocl";

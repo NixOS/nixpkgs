@@ -1,5 +1,18 @@
-{ lib, stdenvNoCC, makeWrapper, netcat, curl, unixtools, coreutils, mktemp
-, findutils, gnugrep, fetchFromGitHub, gawk, gnused }:
+{
+  lib,
+  stdenvNoCC,
+  makeWrapper,
+  netcat,
+  curl,
+  unixtools,
+  coreutils,
+  mktemp,
+  findutils,
+  gnugrep,
+  fetchFromGitHub,
+  gawk,
+  gnused,
+}:
 
 stdenvNoCC.mkDerivation rec {
   pname = "tinystatus";

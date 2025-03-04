@@ -7,6 +7,10 @@ let
   initrdCfg = config.boot.initrd.systemd.tmpfiles;
   systemd = config.systemd.package;
 
+  attrsWith' = placeholder: elemType: types.attrsWith {
+    inherit elemType placeholder;
+  };
+
   settingsOption = {
     description = ''
       Declare systemd-tmpfiles rules to create, delete, and clean up volatile
@@ -25,10 +29,11 @@ let
       };
     };
     default = {};
-    type = types.attrsOf (types.attrsOf (types.attrsOf (types.submodule ({ name, config, ... }: {
+    type = attrsWith' "config-name" (attrsWith' "path" (attrsWith' "tmpfiles-type" (types.submodule ({ name, config, ... }: {
       options.type = mkOption {
         type = types.str;
         default = name;
+        defaultText = "‹tmpfiles-type›";
         example = "d";
         description = ''
           The type of operation to perform on the file.
@@ -318,7 +323,7 @@ in
         description = "Create Volatile Files and Directories in the Real Root";
         after = [ "initrd-fs.target" ];
         before = [
-          "initrd-nixos-activation.service"
+          "initrd.target"
           "shutdown.target" "initrd-switch-root.target"
         ];
         conflicts = [ "shutdown.target" "initrd-switch-root.target" ];

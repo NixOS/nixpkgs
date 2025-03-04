@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, pkg-config, libnfc }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  libnfc,
+}:
 
 stdenv.mkDerivation {
   pname = "mfcuk";

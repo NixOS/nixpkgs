@@ -1,17 +1,23 @@
-{ lib, buildGoModule, fetchFromGitHub, testers, vals }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  testers,
+  vals,
+}:
 
 buildGoModule rec {
   pname = "vals";
-  version = "0.37.7";
+  version = "0.39.2";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "helmfile";
     repo = pname;
-    sha256 = "sha256-iRXBT3VpEVHna3GkMxVSVRqQ2HTK7gCd6LkthwrBMx4=";
+    sha256 = "sha256-FRFkr3bic2bXC+k+Zbbi9Oni/m4uiOqY6cIgzuJZiqU=";
   };
 
-  vendorHash = "sha256-1iyJ56YKu/WVb7dPP7YE07kdbJte2/Sww8cQu+epFNc=";
+  vendorHash = "sha256-DOnoO5LaLilqlEfbZQw46l1LtHuxj6OfuwVZZNYuQB8=";
 
   proxyVendor = true;
 

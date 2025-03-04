@@ -2,7 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , installShellFiles
-, gnustep
+, gnustep-base
 , bzip2
 , zlib
 , icu
@@ -15,18 +15,29 @@
 
 stdenv.mkDerivation rec {
   pname = "unar";
-  version = "1.10.7";
+  version = "1.10.8";
 
-  src = fetchFromGitHub {
-    owner = "MacPaw";
-    # the unar repo contains a shallow clone of both XADMaster and universal-detector
-    repo = "unar";
-    rev = "v${version}";
-    sha256 = "0p846q1l66k3rnd512sncp26zpv411b8ahi145sghfcsz9w8abc4";
-  };
+  srcs = [
+    (fetchFromGitHub rec {
+      owner = "MacPaw";
+      repo = "XADMaster";
+      name = repo;
+      rev = "v${version}";
+      hash = "sha256-dmIyxpa3pq4ls4Grp0gy/6ZjcaA7rmobMn4h1inVgns=";
+    })
+    (fetchFromGitHub {
+      owner = "MacPaw";
+      repo = "universal-detector";
+      name = "UniversalDetector";
+      rev = "1.1";
+      hash = "sha256-6X1HtXhRuRwBOq5TAtL1I/vBBZokZOXIQ+oaRFigtv8=";
+    })
+  ];
 
-  postPatch =
-    if stdenv.hostPlatform.isDarwin then ''
+  postPatch = ''
+      substituteInPlace unar.m lsar.m \
+        --replace-fail "v1.10.7" "v${version}"
+    '' + (if stdenv.hostPlatform.isDarwin then ''
       substituteInPlace "./XADMaster.xcodeproj/project.pbxproj" \
         --replace "libstdc++.6.dylib" "libc++.1.dylib"
     '' else ''
@@ -40,14 +51,13 @@ stdenv.mkDerivation rec {
 
       # we need to build inside this directory as well, so we have to make it writeable
       chmod +w ../UniversalDetector -R
-    '';
+    '');
 
   buildInputs = [ bzip2 icu openssl wavpack zlib ] ++
-    lib.optionals stdenv.hostPlatform.isLinux [ gnustep.base ] ++
+    lib.optionals stdenv.hostPlatform.isLinux [ gnustep-base ] ++
     lib.optionals stdenv.hostPlatform.isDarwin [ Foundation AppKit ];
 
   nativeBuildInputs = [ installShellFiles ] ++
-    lib.optionals stdenv.hostPlatform.isLinux [ gnustep.make ] ++
     lib.optionals stdenv.hostPlatform.isDarwin [ xcbuildHook ];
 
   xcbuildFlags = lib.optionals stdenv.hostPlatform.isDarwin [
@@ -63,7 +73,7 @@ stdenv.mkDerivation rec {
 
   dontConfigure = true;
 
-  sourceRoot = "${src.name}/XADMaster";
+  sourceRoot = "XADMaster";
 
   installPhase = ''
     runHook preInstall

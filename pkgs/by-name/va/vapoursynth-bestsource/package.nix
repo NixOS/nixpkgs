@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
     fetchSubmodules = true;
     owner = "vapoursynth";
     repo = "bestsource";
-    rev = "refs/tags/R${finalAttrs.version}";
+    tag = "R${finalAttrs.version}";
     hash = "sha256-ICkdIomlkHUdK6kMeui45fvUn4OMxSrP8svB2IN+GCg=";
   };
 
@@ -55,6 +55,6 @@ stdenv.mkDerivation (finalAttrs: {
       gpl2Plus
     ];
     maintainers = with lib.maintainers; [ snaki ];
-    platforms = lib.platforms.x86_64;
+    platforms = lib.platforms.all;
   };
 })

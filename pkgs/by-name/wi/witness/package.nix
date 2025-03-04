@@ -1,24 +1,25 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
 
-# testing
-, testers
-, witness
+  # testing
+  testers,
+  witness,
 }:
 
 buildGoModule rec {
   pname = "witness";
-  version = "0.6.0";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "in-toto";
     repo = "witness";
     rev = "v${version}";
-    sha256 = "sha256-ao9mxN5cMGopCRXUkJRTNJemizzibdw0Q+oAhKjUyHA=";
+    sha256 = "sha256-KqsBeKtMLLCtGoFfYOgIy0b+fYRpV7zCHVjPzgXj6Zo=";
   };
-  vendorHash = "sha256-pDMvtSavifWfxJqfiOef0CyT8KtU8BUjEFwReElkEeM=";
+  vendorHash = "sha256-0zl+sdF6ZNAW2R9MskLvwfd1ppMtvFgkUvp5ibh23oI=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -66,6 +67,9 @@ buildGoModule rec {
     homepage = "https://github.com/testifysec/witness";
     changelog = "https://github.com/testifysec/witness/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ fkautz jk ];
+    maintainers = with maintainers; [
+      fkautz
+      jk
+    ];
   };
 }

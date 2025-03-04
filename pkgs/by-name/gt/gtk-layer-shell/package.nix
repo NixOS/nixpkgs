@@ -1,24 +1,29 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, gtk-doc
-, docbook-xsl-nons
-, docbook_xml_dtd_43
-, wayland-scanner
-, wayland
-, gtk3
-, gobject-introspection
-, vala
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  gtk-doc,
+  docbook-xsl-nons,
+  docbook_xml_dtd_43,
+  wayland-scanner,
+  wayland,
+  gtk3,
+  gobject-introspection,
+  vala,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gtk-layer-shell";
   version = "0.9.0";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [
+    "out"
+    "dev"
+    "devdoc"
+  ];
   outputBin = "devdoc"; # for demo
 
   src = fetchFromGitHub {
@@ -62,7 +67,10 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "gtk-layer-demo";
     homepage = "https://github.com/wmww/gtk-layer-shell";
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ eonpatapon donovanglover ];
+    maintainers = with maintainers; [
+      eonpatapon
+      donovanglover
+    ];
     platforms = platforms.linux;
   };
 })

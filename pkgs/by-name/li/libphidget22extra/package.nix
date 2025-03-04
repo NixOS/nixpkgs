@@ -6,14 +6,18 @@
   libusb1,
   libphidget22,
 }:
+let
 
+  # This package should be updated together with libphidget22
+  version = "1.21.20241122";
+in
 stdenv.mkDerivation {
   pname = "libphidget22extra";
-  version = "0-unstable-2024-04-11";
+  inherit version;
 
   src = fetchurl {
-    url = "https://cdn.phidgets.com/downloads/phidget22/libraries/linux/libphidget22extra.tar.gz";
-    hash = "sha256-UD6Crr1dl7c3NOAVNi3xrXJI3OYPLZBJX1MXVvbyEUE=";
+    url = "https://www.phidgets.com/downloads/phidget22/libraries/linux/libphidget22extra/libphidget22extra-${version}.tar.gz";
+    hash = "sha256-l8lwEpdR87U2pb0jOAkrI/157B+87QvSVtAtOfedaBo=";
   };
 
   nativeBuildInputs = [ automake ];

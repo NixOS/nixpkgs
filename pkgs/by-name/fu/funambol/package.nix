@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchurl, zlib, curl, autoreconfHook, unzip }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  zlib,
+  curl,
+  autoreconfHook,
+  unzip,
+}:
 
 stdenv.mkDerivation rec {
   pname = "funambol-client-cpp";
@@ -11,9 +19,15 @@ stdenv.mkDerivation rec {
 
   postUnpack = ''sourceRoot+="/sdk/cpp/build/autotools"'';
 
-  propagatedBuildInputs = [ zlib curl ];
+  propagatedBuildInputs = [
+    zlib
+    curl
+  ];
 
-  nativeBuildInputs = [ autoreconfHook unzip ];
+  nativeBuildInputs = [
+    autoreconfHook
+    unzip
+  ];
 
   meta = with lib; {
     description = "SyncML client sdk by Funambol project";

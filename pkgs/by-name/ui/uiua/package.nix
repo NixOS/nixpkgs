@@ -1,59 +1,91 @@
 {
+  uiua_versionType ? "stable",
+
   lib,
   stdenv,
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
+  versionCheckHook,
 
-  darwin,
+  libffi,
   audioSupport ? true,
   alsa-lib,
   webcamSupport ? false,
+  libGL,
+  libxkbcommon,
+  wayland,
+  xorg,
+  windowSupport ? false,
 
-  # passthru.tests.run
   runCommand,
-  uiua,
 }:
 
 let
-  inherit (darwin.apple_sdk.frameworks) AppKit AudioUnit CoreServices;
+  versionInfo =
+    {
+      "stable" = import ./stable.nix;
+      "unstable" = import ./unstable.nix;
+    }
+    .${uiua_versionType};
 in
-rustPlatform.buildRustPackage rec {
+
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "uiua";
-  version = "0.13.0";
+  inherit (versionInfo) version cargoHash;
+  useFetchCargoVendor = true;
 
   src = fetchFromGitHub {
     owner = "uiua-lang";
     repo = "uiua";
-    rev = version;
-    hash = "sha256-5IqJ/lvozXzc7LRUzxpG04M3Nir+3h+GoL7dqTgC9J8=";
+    inherit (versionInfo) tag hash;
   };
-
-  cargoHash = "sha256-0hbE2ZH7daw/VQLe51CxOIborABDF0x00kTyx9NCs9g=";
 
   nativeBuildInputs =
     lib.optionals (webcamSupport || stdenv.hostPlatform.isDarwin) [ rustPlatform.bindgenHook ]
     ++ lib.optionals audioSupport [ pkg-config ];
 
   buildInputs =
-    lib.optionals stdenv.hostPlatform.isDarwin [
-      AppKit
-      CoreServices
-    ]
-    ++ lib.optionals (audioSupport && stdenv.hostPlatform.isDarwin) [ AudioUnit ]
+    [ libffi ] # we force dynamic linking our own libffi below
     ++ lib.optionals (audioSupport && stdenv.hostPlatform.isLinux) [ alsa-lib ];
 
-  buildFeatures = lib.optional audioSupport "audio" ++ lib.optional webcamSupport "webcam";
+  buildFeatures =
+    [ "libffi/system" ] # force libffi to be linked dynamically instead of rebuilding it
+    ++ lib.optional audioSupport "audio"
+    ++ lib.optional webcamSupport "webcam"
+    ++ lib.optional windowSupport "window";
 
-  passthru.updateScript = ./update.sh;
-  passthru.tests.run = runCommand "uiua-test-run" { nativeBuildInputs = [ uiua ]; } ''
-    uiua init
-    diff -U3 --color=auto <(uiua run main.ua) <(echo '"Hello, World!"')
-    touch $out
-  '';
+  postFixup =
+    let
+      runtimeDependencies = lib.optionals windowSupport [
+        libGL
+        libxkbcommon
+        wayland
+        xorg.libX11
+        xorg.libXcursor
+        xorg.libXi
+        xorg.libXrandr
+      ];
+    in
+    lib.optionalString (runtimeDependencies != [ ] && stdenv.hostPlatform.isLinux) ''
+      patchelf --add-rpath ${lib.makeLibraryPath runtimeDependencies} $out/bin/uiua
+    '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+
+  passthru.updateScript = versionInfo.updateScript;
+  passthru.tests.run =
+    runCommand "uiua-test-run" { nativeBuildInputs = [ finalAttrs.finalPackage ]; }
+      ''
+        uiua init
+        diff -U3 --color=auto <(uiua run main.ua) <(echo '"Hello, World!"')
+        touch $out
+      '';
 
   meta = {
-    changelog = "https://github.com/uiua-lang/uiua/blob/${src.rev}/changelog.md";
+    changelog = "https://github.com/uiua-lang/uiua/blob/${finalAttrs.src.rev}/changelog.md";
     description = "Stack-oriented array programming language with a focus on simplicity, beauty, and tacit code";
     longDescription = ''
       Uiua combines the stack-oriented and array-oriented paradigms in a single
@@ -69,4 +101,4 @@ rustPlatform.buildRustPackage rec {
       defelo
     ];
   };
-}
+})

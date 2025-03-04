@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchurl, groff, ncurses, bzip2, zlib }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  groff,
+  ncurses,
+  bzip2,
+  zlib,
+}:
 
 stdenv.mkDerivation rec {
   pname = "splat";
@@ -11,9 +19,15 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs =
     # configure script needs `clear`
-    [ groff ncurses ];
+    [
+      groff
+      ncurses
+    ];
 
-  buildInputs = [ bzip2 zlib ];
+  buildInputs = [
+    bzip2
+    zlib
+  ];
 
   postPatch = "patchShebangs build utils/build";
 
@@ -45,8 +59,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     broken = stdenv.hostPlatform.isDarwin;
-    description =
-      "SPLAT! is an RF Signal Propagation, Loss, And Terrain analysis tool for the electromagnetic spectrum between 20 MHz and 20 GHz";
+    description = "SPLAT! is an RF Signal Propagation, Loss, And Terrain analysis tool for the electromagnetic spectrum between 20 MHz and 20 GHz";
     license = licenses.gpl2Only;
     homepage = "https://www.qsl.net/kd2bd/splat.html";
     maintainers = with maintainers; [ ehmry ];

@@ -1,25 +1,39 @@
-{ lib, stdenv, fetchFromGitHub, python3, nodejs, closurecompiler
-, jre, binaryen
-, llvmPackages
-, symlinkJoin, makeWrapper, substituteAll
-, buildNpmPackage
-, emscripten
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python3,
+  nodejs,
+  closurecompiler,
+  jre,
+  binaryen,
+  llvmPackages,
+  symlinkJoin,
+  makeWrapper,
+  replaceVars,
+  buildNpmPackage,
+  emscripten,
 }:
 
 stdenv.mkDerivation rec {
   pname = "emscripten";
-  version = "3.1.64";
+  version = "3.1.73";
 
   llvmEnv = symlinkJoin {
     name = "emscripten-llvm-${version}";
-    paths = with llvmPackages; [ clang-unwrapped (lib.getLib clang-unwrapped)  lld llvm ];
+    paths = with llvmPackages; [
+      clang-unwrapped
+      (lib.getLib clang-unwrapped)
+      lld
+      llvm
+    ];
   };
 
   nodeModules = buildNpmPackage {
     name = "emscripten-node-modules-${version}";
     inherit pname version src;
 
-    npmDepsHash = "sha256-2dsIuB6P+Z3wflIsn6QaZvjHeHHGzsFAI3GcP3SfiP4=";
+    npmDepsHash = "sha256-bqxUlxpIH1IAx9RbnaMq4dZW8fy+M/Q02Q7VrW/AKNQ=";
 
     dontBuild = true;
 
@@ -32,16 +46,18 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "emscripten-core";
     repo = "emscripten";
-    hash = "sha256-AbO1b4pxZ7I6n1dRzxhLC7DnXIUnaCK9SbLy96Qxqr0=";
+    hash = "sha256-QlC2k2rhF3/Pz+knnrlBDV8AfHHBSlGr7b9Ae6TNsxY=";
     rev = version;
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ nodejs python3 ];
+  buildInputs = [
+    nodejs
+    python3
+  ];
 
   patches = [
-    (substituteAll {
-      src = ./0001-emulate-clang-sysroot-include-logic.patch;
+    (replaceVars ./0001-emulate-clang-sysroot-include-logic.patch {
       resourceDir = "${llvmEnv}/lib/clang/${lib.versions.major llvmPackages.llvm.version}/";
     })
   ];
@@ -50,6 +66,9 @@ stdenv.mkDerivation rec {
     runHook preBuild
 
     patchShebangs .
+
+    # emscripten 3.1.67 requires LLVM tip-of-tree instead of LLVM 18
+    sed -i -e "s/EXPECTED_LLVM_VERSION = 20/EXPECTED_LLVM_VERSION = 19/g" tools/shared.py
 
     # fixes cmake support
     sed -i -e "s/print \('emcc (Emscript.*\)/sys.stderr.write(\1); sys.stderr.flush()/g" emcc.py
@@ -135,7 +154,12 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/emscripten-core/emscripten";
     description = "LLVM-to-JavaScript Compiler";
     platforms = platforms.all;
-    maintainers = with maintainers; [ qknight matthewbauer raitobezarius willcohen ];
+    maintainers = with maintainers; [
+      qknight
+      matthewbauer
+      raitobezarius
+      willcohen
+    ];
     license = licenses.ncsa;
   };
 }

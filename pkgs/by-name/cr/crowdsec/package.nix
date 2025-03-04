@@ -1,17 +1,22 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+}:
 
 buildGoModule rec {
   pname = "crowdsec";
-  version = "1.6.3";
+  version = "1.6.5";
 
   src = fetchFromGitHub {
     owner = "crowdsecurity";
     repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-JN2siYUUFPSz+SyQwkX6DZ9k82SGHEQ1QHBEIfEV4EM=";
+    tag = "v${version}";
+    hash = "sha256-Jt5qFY41TnkvDw2BPd+vfyskhLpnJnsiUmUJcADQ0so=";
   };
 
-  vendorHash = "sha256-fl5LkRz69QOq4aPyAhMFxw1FWozLzofDBUGvRptuyZY=";
+  vendorHash = "sha256-I9h63iePhEMCy8IQNTomhgduGOyC3aoxz/0L4JQhhF8=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -25,7 +30,7 @@ buildGoModule rec {
     "-w"
     "-X github.com/crowdsecurity/go-cs-lib/version.Version=v${version}"
     "-X github.com/crowdsecurity/go-cs-lib/version.BuildDate=1970-01-01_00:00:00"
-    "-X github.com/crowdsecurity/go-cs-lib/version.Tag=${src.rev}"
+    "-X github.com/crowdsecurity/go-cs-lib/version.Tag=v${version}"
     "-X github.com/crowdsecurity/crowdsec/pkg/cwversion.Codename=alphaga"
     "-X github.com/crowdsecurity/crowdsec/pkg/csconfig.defaultConfigDir=/etc/crowdsec"
     "-X github.com/crowdsecurity/crowdsec/pkg/csconfig.defaultDataDir=/var/lib/crowdsec/data"
@@ -37,6 +42,10 @@ buildGoModule rec {
     mkdir -p $out/share/crowdsec
     cp -r ./config $out/share/crowdsec/
 
+    mkdir -p $out/lib/systemd/system
+    substitute ./config/crowdsec.service $out/lib/systemd/system/crowdsec.service \
+      --replace-fail /usr/local $out
+
     installShellCompletion --cmd cscli \
       --bash <($out/bin/cscli completion bash) \
       --fish <($out/bin/cscli completion fish) \
@@ -44,8 +53,13 @@ buildGoModule rec {
   '';
 
   # It's important that the version is correctly set as it also determines feature capabilities
-  checkPhase = ''
-    $GOPATH/bin/cscli version 2>&1 | grep -q "version: v${version}"
+  preCheck = ''
+    version=$($GOPATH/bin/cscli version 2>&1 | sed -nE 's/^version: (.*)/\1/p')
+
+    if [ "$version" != "v${version}" ]; then
+        echo "Invalid version string: '$version'"
+        exit 1
+    fi
   '';
 
   meta = with lib; {
@@ -64,6 +78,9 @@ buildGoModule rec {
       being shared among all users to further improve everyone's security.
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ jk urandom ];
+    maintainers = with maintainers; [
+      jk
+      urandom
+    ];
   };
 }

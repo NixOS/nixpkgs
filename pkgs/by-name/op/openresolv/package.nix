@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper, coreutils }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  coreutils,
+}:
 
 stdenv.mkDerivation rec {
   pname = "openresolv";
@@ -13,18 +19,17 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  configurePhase =
-    ''
-      cat > config.mk <<EOF
-      PREFIX=$out
-      SYSCONFDIR=/etc
-      SBINDIR=$out/sbin
-      LIBEXECDIR=$out/libexec/resolvconf
-      VARDIR=/run/resolvconf
-      MANDIR=$out/share/man
-      RESTARTCMD=false
-      EOF
-    '';
+  configurePhase = ''
+    cat > config.mk <<EOF
+    PREFIX=$out
+    SYSCONFDIR=/etc
+    SBINDIR=$out/sbin
+    LIBEXECDIR=$out/libexec/resolvconf
+    VARDIR=/run/resolvconf
+    MANDIR=$out/share/man
+    RESTARTCMD=false
+    EOF
+  '';
 
   installFlags = [ "SYSCONFDIR=$(out)/etc" ];
 
@@ -38,6 +43,6 @@ stdenv.mkDerivation rec {
     homepage = "https://roy.marples.name/projects/openresolv";
     license = lib.licenses.bsd2;
     maintainers = [ ];
-    platforms = lib.platforms.linux ++ lib.platforms.freebsd;
+    platforms = lib.platforms.unix;
   };
 }

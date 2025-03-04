@@ -15,7 +15,7 @@
   libayatana-appindicator,
   gtk3,
   webkitgtk_4_0,
-  libsoup,
+  libsoup_2_4,
   openssl,
   xdotool,
 }:
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "pot-app";
     repo = "pot-desktop";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-PUXZT1kiInM/CXUoRko/5qlrRurGpQ4ym5YMTgFwuxE=";
   };
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace $cargoDepsCopy/libappindicator-sys-*/src/lib.rs \
-      --replace "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
+      --replace-fail "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
   '';
 
   pnpmDeps = pnpm.fetchDeps {
@@ -48,12 +48,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   pnpmRoot = "..";
 
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      # All other crates in the same workspace reuse this hash.
-      "tauri-plugin-autostart-0.0.0" = "sha256-rWk9Qz1XmByqPRIgR+f12743uYvnEGTHno9RrxmT8JE=";
-    };
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) src;
+    sourceRoot = "${finalAttrs.src.name}/src-tauri";
+    hash = "sha256-dyXINRttgsqCfmgtZNXxr/Rl8Yn0F2AVm8v2Ao+OBsw=";
   };
 
   nativeBuildInputs = [
@@ -69,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     gtk3
-    libsoup
+    libsoup_2_4
     libayatana-appindicator
     openssl
     webkitgtk_4_0
@@ -87,7 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
             src = fetchFromGitHub {
               owner = "evanw";
               repo = "esbuild";
-              rev = "v${version}";
+              tag = "v${version}";
               hash = "sha256-FpvXWIlt67G8w3pBKZo/mcp57LunxDmRUaCU/Ne89B8=";
             };
           }

@@ -1,14 +1,18 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "kubedb-cli";
-  version = "0.48.1";
+  version = "0.52.0";
 
   src = fetchFromGitHub {
     owner = "kubedb";
     repo = "cli";
-    rev = "v${version}";
-    sha256 = "sha256-jk+IUqM0/7qVKBMFntQFr52B3TJYEGrmT/DKcgfrw3Q=";
+    tag = "v${version}";
+    hash = "sha256-3NnQLgrcxiz2KqRMbQWxgwbe1JPFF1VforGvMwhZfoo=";
   };
 
   vendorHash = null;
@@ -18,8 +22,8 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "kubectl plugin for KubeDB by AppsCode";
-    homepage    = "https://github.com/kubedb/cli";
-    license     = licenses.unfree;
+    homepage = "https://github.com/kubedb/cli";
+    license = licenses.unfree;
     maintainers = [ maintainers.starcraft66 ];
   };
 }

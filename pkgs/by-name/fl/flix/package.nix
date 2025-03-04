@@ -1,12 +1,18 @@
-{ lib, fetchurl, stdenvNoCC, makeWrapper, jre }:
+{
+  lib,
+  fetchurl,
+  stdenvNoCC,
+  makeWrapper,
+  jre,
+}:
 
 stdenvNoCC.mkDerivation rec {
   pname = "flix";
-  version = "0.52.0";
+  version = "0.57.1";
 
   src = fetchurl {
     url = "https://github.com/flix/flix/releases/download/v${version}/flix.jar";
-    sha256 = "sha256-OJBeJyF/CmLyMNRpjcx06GB7Lc4htNTm2apbi8wQKL4=";
+    sha256 = "sha256-baUKhAC0M4nLbukxdWaxsToGGS1Zb+Oj9CTCqtwHE4o=";
   };
 
   dontUnpack = true;

@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, vala
-, pkg-config
-, glib
-, gtk3
-, libgee
-, webkitgtk_4_0
-, clutter-gtk
-, clutter-gst
-, ninja
-, wrapGAppsHook3
-, testers
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  vala,
+  pkg-config,
+  glib,
+  gtk3,
+  libgee,
+  webkitgtk_4_0,
+  clutter-gtk,
+  clutter-gst,
+  ninja,
+  wrapGAppsHook3,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "pybind11-stubgen";
-  version = "2.5.1";
+  version = "2.5.3";
   pyproject = true;
 
   build-system = [ setuptools ];
@@ -15,8 +15,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sizmailov";
     repo = "pybind11-stubgen";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-PJiiRSQ92vP5LKWCgBuowkuDdTmC22xyuax2wsH0wOM=";
+    tag = "v${version}";
+    hash = "sha256-BJ3nomJHgFkwtXA9RQIA5N4l3UHQOSejodSIR/Pp87s=";
   };
 
   # For testing purposes, the upstream source uses a shell script to build the pybind11
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pybind11_stubgen" ];
 
   meta = {
-    changelog = "https://github.com/sizmailov/pybind11-stubgen/releases/tag/v${version}";
+    changelog = "https://github.com/sizmailov/pybind11-stubgen/releases/tag/${src.tag}";
     description = "Generates stubs for python modules";
     homepage = "https://github.com/sizmailov/pybind11-stubgen";
     license = lib.licenses.bsd3Lbnl;

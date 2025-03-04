@@ -1,14 +1,21 @@
-{ lib, stdenv, fetchFromGitLab, nix-update-script, nwjs, wrapGAppsHook3 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  nix-update-script,
+  nwjs,
+  wrapGAppsHook3,
+}:
 
 stdenv.mkDerivation rec {
   pname = "gridtracker";
-  version = "1.24.0104";
+  version = "1.24.0922";
 
   src = fetchFromGitLab {
     owner = "gridtracker.org";
     repo = "gridtracker";
     rev = "v${version}";
-    hash = "sha256-p3PdYOk0yvG3QkM17grzZmf9upK1n0zo4aOrlhGTvTU=";
+    hash = "sha256-6WgP13JVOzYnYtCDH3qCQXT70X9j4yqlUb18FFf1aSY=";
   };
 
   nativeBuildInputs = [ wrapGAppsHook3 ];
@@ -23,7 +30,10 @@ stdenv.mkDerivation rec {
       --replace "/usr/share/gridtracker/gridview.png" "$out/share/gridtracker/gridview.png"
   '';
 
-  makeFlags = [ "DESTDIR=$(out)" "NO_DIST_INSTALL=1" ];
+  makeFlags = [
+    "DESTDIR=$(out)"
+    "NO_DIST_INSTALL=1"
+  ];
 
   passthru.updateScript = nix-update-script { };
 

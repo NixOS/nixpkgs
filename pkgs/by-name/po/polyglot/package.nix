@@ -1,23 +1,25 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   jre,
   makeWrapper,
   maven,
   libGL,
   xdg-utils,
+  libXxf86vm,
   zip,
   zlib,
 }:
 maven.buildMavenPackage rec {
   pname = "polyglot";
-  version = "3.5.1";
+  version = "3.6.1";
 
   src = fetchFromGitHub {
     owner = "DraqueT";
     repo = "PolyGlot";
-    rev = version;
-    hash = "sha256-E7wLhohOpWGzXe1zEO9a8aFIVT7/34Wr0dsRzpuf+eY=";
+    tag = "v${version}";
+    hash = "sha256-jDW74Hk+6vzCUm84wwMn5XBGPVlsJ3mQrjtuqMZssz0=";
   };
 
   preBuild = ''
@@ -29,7 +31,13 @@ maven.buildMavenPackage rec {
     cd ../..
   '';
 
-  mvnHash = "sha256-T7es44oNI9EXnpJd/DvYTb4LaJvR3rIdlhD4s/+Bfks=";
+  mvnHash =
+    {
+      aarch64-linux = "sha256-Tlz2I6xE8g3GqKz9N7VXRO0ObE1XOv6IfTrKZmVlscY=";
+      x86_64-linux = "sha256-nQScNCkA+eaeL3tcLCec1qIoYO6ct28FLxGp/Cm4nn4=";
+    }
+    .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+
   mvnParameters = "-DskipTests";
 
   nativeBuildInputs = [
@@ -49,7 +57,12 @@ maven.buildMavenPackage rec {
     makeWrapper ${jre}/bin/java $out/bin/PolyGlot \
       --add-flags "-Djpackage.app-version=${version}" \
       --add-flags "-jar $out/share/PolyGlotLinA/PolyGlotLinA-${version}-jar-with-dependencies.jar" \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libGL ]}"
+      --prefix LD_LIBRARY_PATH : "${
+        lib.makeLibraryPath [
+          libGL
+          libXxf86vm
+        ]
+      }"
 
     runHook postInstall
   '';

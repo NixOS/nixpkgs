@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, cmake, wrapQtAppsHook, qtbase }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  wrapQtAppsHook,
+  qtbase,
+}:
 
 stdenv.mkDerivation rec {
   pname = "QtRVSim";
@@ -7,11 +14,14 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "cvut";
     repo = "qtrvsim";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     sha256 = "sha256-+EpPDA2+mBTdQjq6i9TN11yeXqvJA28JtmdNihM1a/U=";
   };
 
-  nativeBuildInputs = [ cmake wrapQtAppsHook ];
+  nativeBuildInputs = [
+    cmake
+    wrapQtAppsHook
+  ];
 
   buildInputs = [ qtbase ];
 

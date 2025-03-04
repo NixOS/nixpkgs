@@ -14,14 +14,20 @@
 , clang-unwrapped
 , perl
 , pkg-config
+, python3
 , version
 , devExtraCmakeFlags ? []
+, ompdSupport ? true
+, ompdGdbSupport ? ompdSupport
 }:
+
+assert lib.assertMsg (ompdGdbSupport -> ompdSupport) "OMPD GDB support requires OMPD support!";
+
 let
   pname = "openmp";
   src' =
     if monorepoSrc != null then
-      runCommand "${pname}-src-${version}" {} (''
+      runCommand "${pname}-src-${version}" { inherit (monorepoSrc) passthru; } (''
         mkdir -p "$out"
       '' + lib.optionalString (lib.versionAtLeast release_version "14") ''
         cp -r ${monorepoSrc}/cmake "$out"
@@ -34,9 +40,7 @@ stdenv.mkDerivation (rec {
 
   src = src';
 
-  sourceRoot =
-    if lib.versionOlder release_version "13" then null
-    else "${src.name}/${pname}";
+  sourceRoot = "${src.name}/${pname}";
 
   outputs = [ "out" ]
     ++ lib.optionals (lib.versionAtLeast release_version "14") [ "dev" ];
@@ -47,6 +51,7 @@ stdenv.mkDerivation (rec {
 
   nativeBuildInputs = [
     cmake
+    python3.pythonOnBuildForHost
   ] ++ lib.optionals (lib.versionAtLeast release_version "15") [
     ninja
   ] ++ [ perl ] ++ lib.optionals (lib.versionAtLeast release_version "14") [
@@ -55,9 +60,15 @@ stdenv.mkDerivation (rec {
 
   buildInputs = [
     (if stdenv.buildPlatform == stdenv.hostPlatform then llvm else targetLlvm)
+  ] ++ lib.optionals (ompdSupport && ompdGdbSupport) [
+    python3
   ];
 
-  cmakeFlags = lib.optionals (lib.versions.major release_version == "13") [
+  cmakeFlags = [
+    (lib.cmakeBool "LIBOMP_ENABLE_SHARED" (!stdenv.hostPlatform.isStatic && stdenv.hostPlatform.hasSharedLibraries))
+    (lib.cmakeBool "LIBOMP_OMPD_SUPPORT" ompdSupport)
+    (lib.cmakeBool "LIBOMP_OMPD_GDB_SUPPORT" ompdGdbSupport)
+  ] ++ lib.optionals (lib.versions.major release_version == "13") [
     "-DLIBOMPTARGET_BUILD_AMDGCN_BCLIB=OFF" # Building the AMDGCN device RTL fails
   ] ++ lib.optionals (lib.versionAtLeast release_version "14") [
     "-DCLANG_TOOL=${clang-unwrapped}/bin/clang"

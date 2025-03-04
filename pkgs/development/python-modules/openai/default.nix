@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
   pythonOlder,
 
   # build-system
@@ -10,7 +11,6 @@
 
   # dependencies
   anyio,
-  cached-property,
   distro,
   httpx,
   jiter,
@@ -22,6 +22,7 @@
   numpy,
   pandas,
   pandas-stubs,
+  websockets,
 
   # check deps
   pytestCheckHook,
@@ -31,21 +32,20 @@
   pytest-asyncio,
   pytest-mock,
   respx,
-
 }:
 
 buildPythonPackage rec {
   pname = "openai";
-  version = "1.54.5";
+  version = "1.65.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.7.1";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "openai";
     repo = "openai-python";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-bDYGE8bm1+qHvhNfLSHG2bW8Wnm1yOEjD/oCzBG+CPw=";
+    tag = "v${version}";
+    hash = "sha256-az6xp84braQBvhRxIJAlpk3d/HTWPTaFWJeCtOwtaP0=";
   };
 
   build-system = [
@@ -62,13 +62,16 @@ buildPythonPackage rec {
     sniffio
     tqdm
     typing-extensions
-  ] ++ lib.optionals (pythonOlder "3.8") [ cached-property ];
+  ] ++ optional-dependencies.realtime;
 
   optional-dependencies = {
     datalib = [
       numpy
       pandas
       pandas-stubs
+    ];
+    realtime = [
+      websockets
     ];
   };
 
@@ -89,11 +92,16 @@ buildPythonPackage rec {
     "ignore::DeprecationWarning"
   ];
 
-  disabledTests = [
-    # Tests make network requests
-    "test_copy_build_request"
-    "test_basic_attribute_access_works"
-  ];
+  disabledTests =
+    [
+      # Tests make network requests
+      "test_copy_build_request"
+      "test_basic_attribute_access_works"
+    ]
+    ++ lib.optionals (pythonAtLeast "3.13") [
+      # RuntimeWarning: coroutine method 'aclose' of 'AsyncStream._iter_events' was never awaited
+      "test_multi_byte_character_multiple_chunks"
+    ];
 
   disabledTestPaths = [
     # Test makes network requests
@@ -103,7 +111,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python client library for the OpenAI API";
     homepage = "https://github.com/openai/openai-python";
-    changelog = "https://github.com/openai/openai-python/releases/tag/v${version}";
+    changelog = "https://github.com/openai/openai-python/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ malo ];
     mainProgram = "openai";

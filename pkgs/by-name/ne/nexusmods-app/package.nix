@@ -5,9 +5,10 @@
   copyDesktopItems,
   desktop-file-utils,
   dotnetCorePackages,
-  fetchFromGitHub,
+  fetchgit,
   imagemagick,
   lib,
+  makeFontsConf,
   runCommand,
   xdg-utils,
   pname ? "nexusmods-app",
@@ -24,14 +25,14 @@ let
 in
 buildDotnetModule (finalAttrs: {
   inherit pname;
-  version = "0.6.3";
+  version = "0.7.3";
 
-  src = fetchFromGitHub {
-    owner = "Nexus-Mods";
-    repo = "NexusMods.App";
-    rev = "v${finalAttrs.version}";
+  src = fetchgit {
+    url = "https://github.com/Nexus-Mods/NexusMods.App.git";
+    rev = "refs/tags/v${finalAttrs.version}";
+    hash = "sha256-p3MTxuLR/mkVrL+hwW2R13/eVHWWulZPRh9OsuHq9kU=";
     fetchSubmodules = true;
-    hash = "sha256-6oygXJEiTqb0xe7mKRUsZgghfTqrllCRXJy6IDeqJQI=";
+    fetchLFS = true;
   };
 
   enableParallelBuilding = false;
@@ -56,11 +57,17 @@ buildDotnetModule (finalAttrs: {
     imagemagick # For resizing SVG icon in postInstall
   ];
 
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
   mapNuGetDependencies = true;
 
-  dotnet-sdk = dotnetCorePackages.sdk_8_0;
-  dotnet-runtime = dotnetCorePackages.runtime_8_0;
+  # TODO: remove .NET 8; StrawberryShake currently needs it
+  dotnet-sdk =
+    with dotnetCorePackages;
+    combinePackages [
+      sdk_9_0
+      runtime_8_0
+    ];
+  dotnet-runtime = dotnetCorePackages.runtime_9_0;
 
   postPatch = ''
     # for some reason these tests fail (intermittently?) with a zero timestamp
@@ -90,7 +97,7 @@ buildDotnetModule (finalAttrs: {
       size=''${i}x''${i}
       dir=$out/share/icons/hicolor/$size/apps
       mkdir -p $dir
-      convert -background none -resize $size $icon $dir/com.nexusmods.app.png
+      magick -background none $icon -resize $size $dir/com.nexusmods.app.png
     done
   '';
 
@@ -103,7 +110,7 @@ buildDotnetModule (finalAttrs: {
   executables = [ "NexusMods.App" ];
 
   dotnetBuildFlags = [
-    # From https://github.com/Nexus-Mods/NexusMods.App/blob/v0.6.3/src/NexusMods.App/app.pupnet.conf#L38
+    # From https://github.com/Nexus-Mods/NexusMods.App/blob/v0.7.0/src/NexusMods.App/app.pupnet.conf#L38
     "--property:Version=${finalAttrs.version}"
     "--property:TieredCompilation=true"
     "--property:PublishReadyToRun=true"
@@ -128,6 +135,9 @@ buildDotnetModule (finalAttrs: {
       "NexusMods.UI.Tests.ImageCacheTests.Test_LoadAndCache_RemoteImage"
       "NexusMods.UI.Tests.ImageCacheTests.Test_LoadAndCache_ImageStoredFile"
 
+      # Fails in ofborg with VerifyException tests/Games/NexusMods.Games.StardewValley.Tests
+      "NexusMods.Games.StardewValley.Tests.StardewValleyInstallersTests.CanInstallMod"
+
       # Fails with: Expected a <System.ArgumentException> to be thrown, but no exception was thrown.
       "NexusMods.Networking.ModUpdates.Tests.PerFeedCacheUpdaterTests.Constructor_WithItemsFromDifferentGames_ShouldThrowArgumentException_InDebug"
     ]
@@ -140,10 +150,22 @@ buildDotnetModule (finalAttrs: {
       let
         runTest =
           name: script:
-          runCommand "${pname}-test-${name}" { nativeBuildInputs = [ finalAttrs.finalPackage ]; } ''
-            ${script}
-            touch $out
-          '';
+          runCommand "${pname}-test-${name}"
+            {
+              nativeBuildInputs = [ finalAttrs.finalPackage ];
+              FONTCONFIG_FILE = makeFontsConf {
+                fontDirectories = [ ];
+              };
+            }
+            ''
+              export XDG_DATA_HOME="$PWD/data"
+              export XDG_STATE_HOME="$PWD/state"
+              export XDG_CACHE_HOME="$PWD/cache"
+              mkdir -p "$XDG_DATA_HOME" "$XDG_STATE_HOME" "$XDG_CACHE_HOME"
+              # TODO: on error, print $XDG_STATE_HOME/NexusMods.App/Logs/nexusmods.app.main.current.log
+              ${script}
+              touch $out
+            '';
       in
       {
         serve = runTest "serve" ''

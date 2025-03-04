@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.hqplayerd;
   pkg = pkgs.hqplayerd;
@@ -69,22 +74,28 @@ in
   config = lib.mkIf cfg.enable {
     assertions = [
       {
-        assertion = (cfg.auth.username != null -> cfg.auth.password != null)
-                 && (cfg.auth.password != null -> cfg.auth.username != null);
+        assertion =
+          (cfg.auth.username != null -> cfg.auth.password != null)
+          && (cfg.auth.password != null -> cfg.auth.username != null);
         message = "You must set either both services.hqplayer.auth.username and password, or neither.";
       }
     ];
 
     environment = {
       etc = {
-        "hqplayer/hqplayerd.xml" = lib.mkIf (cfg.config != null) { source = pkgs.writeText "hqplayerd.xml" cfg.config; };
+        "hqplayer/hqplayerd.xml" = lib.mkIf (cfg.config != null) {
+          source = pkgs.writeText "hqplayerd.xml" cfg.config;
+        };
         "hqplayer/hqplayerd4-key.xml" = lib.mkIf (cfg.licenseFile != null) { source = cfg.licenseFile; };
       };
       systemPackages = [ pkg ];
     };
 
     networking.firewall = lib.mkIf cfg.openFirewall {
-      allowedTCPPorts = [ 8088 4321 ];
+      allowedTCPPorts = [
+        8088
+        4321
+      ];
     };
 
     systemd = {
@@ -102,21 +113,28 @@ in
 
         environment.HOME = "${stateDir}/home";
 
-        unitConfig.ConditionPathExists = [ configDir stateDir ];
+        unitConfig.ConditionPathExists = [
+          configDir
+          stateDir
+        ];
 
-        restartTriggers = lib.optionals (cfg.config != null) [ config.environment.etc."hqplayer/hqplayerd.xml".source ];
+        restartTriggers = lib.optionals (cfg.config != null) [
+          config.environment.etc."hqplayer/hqplayerd.xml".source
+        ];
 
-        preStart = ''
-          cp -r "${pkg}/var/lib/hqplayer/web" "${stateDir}"
-          chmod -R u+wX "${stateDir}/web"
+        preStart =
+          ''
+            cp -r "${pkg}/var/lib/hqplayer/web" "${stateDir}"
+            chmod -R u+wX "${stateDir}/web"
 
-          if [ ! -f "${configDir}/hqplayerd.xml" ]; then
-            echo "creating initial config file"
-            install -m 0644 "${pkg}/etc/hqplayer/hqplayerd.xml" "${configDir}/hqplayerd.xml"
-          fi
-        '' + lib.optionalString (cfg.auth.username != null && cfg.auth.password != null) ''
-          ${pkg}/bin/hqplayerd -s ${cfg.auth.username} ${cfg.auth.password}
-        '';
+            if [ ! -f "${configDir}/hqplayerd.xml" ]; then
+              echo "creating initial config file"
+              install -m 0644 "${pkg}/etc/hqplayer/hqplayerd.xml" "${configDir}/hqplayerd.xml"
+            fi
+          ''
+          + lib.optionalString (cfg.auth.username != null && cfg.auth.password != null) ''
+            ${pkg}/bin/hqplayerd -s ${cfg.auth.username} ${cfg.auth.password}
+          '';
       };
     };
 
@@ -127,7 +145,10 @@ in
     users.users = {
       hqplayer = {
         description = "hqplayer daemon user";
-        extraGroups = [ "audio" "video" ];
+        extraGroups = [
+          "audio"
+          "video"
+        ];
         group = "hqplayer";
         uid = config.ids.uids.hqplayer;
       };

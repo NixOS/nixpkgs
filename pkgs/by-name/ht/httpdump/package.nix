@@ -1,7 +1,8 @@
-{ buildGoModule
-, fetchFromGitHub
-, lib
-, libpcap
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+  libpcap,
 }:
 
 buildGoModule rec {
@@ -19,7 +20,10 @@ buildGoModule rec {
 
   propagatedBuildInputs = [ libpcap ];
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   meta = with lib; {
     description = "Parse and display HTTP traffic from network device or pcap file";

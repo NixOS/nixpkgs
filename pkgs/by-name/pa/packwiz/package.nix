@@ -1,23 +1,24 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
-, unstableGitUpdater
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  unstableGitUpdater,
 }:
 
 buildGoModule {
   pname = "packwiz";
-  version = "0-unstable-2024-05-27";
+  version = "0-unstable-2025-01-19";
 
   src = fetchFromGitHub {
     owner = "packwiz";
     repo = "packwiz";
-    rev = "7b4be47578151c36e784306b36d251ec2590e50c";
-    sha256 = "sha256-XBp8Xv55R8rhhsQiWnOPH8c3fCpV/yq41ozJDcGdWfs=";
+    rev = "241f24b550f6fe838913a56bdd58bac2fc53254a";
+    sha256 = "sha256-VmNsWzsFVNRciNIPUXUVos4cBdpawgN1/nPwMjNpx+0=";
   };
   passthru.updateScript = unstableGitUpdater { };
 
-  vendorHash = "sha256-yL5pWbVqf6mEpgYsItLnv8nwSmoMP+SE0rX/s7u2vCg=";
+  vendorHash = "sha256-krdrLQHM///dtdlfEhvSUDV2QljvxFc2ouMVQVhN7A0=";
 
   nativeBuildInputs = [
     installShellFiles

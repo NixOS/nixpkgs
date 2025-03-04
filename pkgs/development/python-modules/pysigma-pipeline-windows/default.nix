@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "SigmaHQ";
     repo = "pySigma-pipeline-windows";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Ss0OMd8urCYQUlvsm/m8Kz0jY4pVSEoZuLxs1JLWxQA=";
   };
 

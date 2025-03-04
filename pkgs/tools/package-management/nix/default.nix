@@ -8,8 +8,11 @@
 , fetchFromGitHub
 , fetchpatch2
 , runCommand
-, buildPackages
 , Security
+, pkgs
+, pkgsi686Linux
+, pkgsStatic
+, nixosTests
 
 , storeDir ? "/nix/store"
 , stateDir ? "/nix/var"
@@ -85,28 +88,6 @@ let
     requiredSystemFeatures = [ ];
   };
 
-  libgit2-thin-packfile = libgit2.overrideAttrs (args: {
-    nativeBuildInputs = args.nativeBuildInputs or []
-      # gitMinimal does not build on Windows. See packbuilder patch.
-      ++ lib.optionals (!stdenv.hostPlatform.isWindows) [
-        # Needed for `git apply`; see `prePatch`
-        buildPackages.gitMinimal
-      ];
-    # Only `git apply` can handle git binary patches
-    prePatch = args.prePatch or ""
-      + lib.optionalString (!stdenv.hostPlatform.isWindows) ''
-        patch() {
-          git apply
-        }
-      '';
-    # taken from https://github.com/NixOS/nix/tree/master/packaging/patches
-    patches = (args.patches or []) ++ [
-      ./patches/libgit2-mempack-thin-packfile.patch
-    ] ++ lib.optionals (!stdenv.hostPlatform.isWindows) [
-      ./patches/libgit2-packbuilder-callback-interruptible.patch
-    ];
-  });
-
   common = args:
     callPackage
       (import ./common.nix ({ inherit lib fetchFromGitHub; } // args))
@@ -114,7 +95,6 @@ let
         inherit Security storeDir stateDir confDir;
         boehmgc = boehmgc-nix;
         aws-sdk-cpp = if lib.versionAtLeast args.version "2.12pre" then aws-sdk-cpp-nix else aws-sdk-cpp-old-nix;
-        libgit2 = if lib.versionAtLeast args.version "2.25.0" then libgit2-thin-packfile else libgit2;
       };
 
   # https://github.com/NixOS/nix/pull/7585
@@ -172,23 +152,30 @@ in lib.makeExtensible (self: ({
     enableParallelChecking = false;
   };
 
-  nix_2_18 = common {
-    version = "2.18.9";
-    hash = "sha256-RrOFlDGmRXcVRV2p2HqHGqvzGNyWoD0Dado/BNlJ1SI=";
-    self_attribute_name = "nix_2_18";
-  };
-
   nix_2_24 = common {
-    version = "2.24.10";
-    hash = "sha256-XdeVy1/d6DEIYb3nOA6JIYF4fwMKNxtwJMgT3pHi+ko=";
+    version = "2.24.12";
+    hash = "sha256-lPiheE0D146tstoUInOUf1451stezrd8j6H6w7+RCv8=";
     self_attribute_name = "nix_2_24";
   };
 
   nix_2_25 = common {
-    version = "2.25.2";
-    hash = "sha256-MZNpb4awWHXU+kGmH58VUB7M9l6UVo33riuQLTbMh4E=";
+    version = "2.25.5";
+    hash = "sha256-9xrQhrqHCSqWsQveykZvG/ZMu0se66fUQw3xVSg6BpQ=";
     self_attribute_name = "nix_2_25";
   };
+
+  nix_2_26 = (callPackage ./2_26/componentized.nix { }).overrideAttrs (this: old: {
+    passthru = old.passthru or {} // {
+      tests =
+        old.passthru.tests or {}
+        // import ./tests.nix {
+          inherit runCommand lib stdenv pkgs pkgsi686Linux pkgsStatic nixosTests;
+          inherit (old) version src;
+          nix = this.finalPackage;
+          self_attribute_name = "nix_2_26";
+        };
+    };
+  });
 
   git = common rec {
     version = "2.25.0";
@@ -230,7 +217,7 @@ in lib.makeExtensible (self: ({
       attr = "nix_2_${toString minor}";
     in
     lib.nameValuePair attr (throw "${attr} has been removed")
-  ) (lib.range 4 17))
+  ) (lib.range 4 23))
   // {
     unstable = throw "nixVersions.unstable has been removed. For bleeding edge (Nix master, roughly weekly updated) use nixVersions.git, otherwise use nixVersions.latest.";
   }

@@ -6,11 +6,13 @@
   lib,
   pkgs,
   newScope,
-  apps,
   callPackage,
+  ncVersion,
+  nextcloud-notify_push,
 }:
 
 let
+  apps = lib.importJSON (./. + "/${ncVersion}.json");
   packages =
     self:
     let
@@ -50,10 +52,13 @@ let
             inherit pname data;
           }
         ) pkgs
+        // {
+          notify_push = nextcloud-notify_push.app;
+        }
       )
     ) generatedJson;
 
 in
 (lib.makeExtensible (_: (lib.makeScope newScope packages))).extend (
-  import ./thirdparty.nix
+  import ./thirdparty.nix { inherit ncVersion; }
 )

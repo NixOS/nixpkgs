@@ -3,8 +3,8 @@
   buildPythonPackage,
   fetchFromGitHub,
   rustPlatform,
-  stdenv,
-  libiconv,
+
+  # tests
   hypothesis,
   numpy,
   pytest-xdist,
@@ -13,29 +13,29 @@
 
 buildPythonPackage rec {
   pname = "cramjam";
-  version = "2.8.3";
+  # 2.9.1 ships with experimental decoders that were having issues.
+  # They were removed afterwards but the change has not been released yet:
+  # https://github.com/milesgranger/cramjam/pull/197
+  # TODO: update to the next stable release when available
+  version = "2.9.1-unstable-2025-01-04";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "milesgranger";
-    repo = "pyrus-cramjam";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-1KD5/oZjfdXav1ZByQoyyiDSzbmY4VJsSJg/FtUFdDE=";
+    repo = "cramjam";
+    rev = "61564e7761e38e5ec55e7939ccd6a276c2c55d11";
+    hash = "sha256-KTYTelQdN5EIJFbyQgrYcayqkAQQSNF+SHqUFFHf1Z8=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    hash = "sha256-Bp7EtyuLdLUfU3yvouNVE42klfqYt9QOwt+iGe521yI=";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname src version;
+    hash = "sha256-Jw9zbgcrX3pofW7E8b4xzZYKj3h6ufCVLjv2xD/qONo=";
   };
-
-  buildAndTestSubdir = "cramjam-python";
 
   nativeBuildInputs = with rustPlatform; [
     cargoSetupHook
     maturinBuildHook
   ];
-
-  buildInputs = lib.optional stdenv.hostPlatform.isDarwin libiconv;
 
   nativeCheckInputs = [
     hypothesis
@@ -44,22 +44,23 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "cramjam-python/tests" ];
+  env = {
+    # Makes tests less flaky by relaxing performance constraints
+    # https://github.com/HypothesisWorks/hypothesis/issues/3713
+    CI = true;
+  };
 
   disabledTestPaths = [
-    "cramjam-python/benchmarks/test_bench.py"
-    # test_variants.py appears to be flaky
-    #
-    # https://github.com/NixOS/nixpkgs/pull/311584#issuecomment-2117656380
-    "cramjam-python/tests/test_variants.py"
+    "benchmarks/test_bench.py"
   ];
 
   pythonImportsCheck = [ "cramjam" ];
 
-  meta = with lib; {
+  meta = {
     description = "Thin Python bindings to de/compression algorithms in Rust";
     homepage = "https://github.com/milesgranger/pyrus-cramjam";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ veprbl ];
+    changelog = "https://github.com/milesgranger/cramjam/releases/tag/v${version}";
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ veprbl ];
   };
 }

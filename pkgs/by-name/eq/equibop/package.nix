@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
   makeWrapper,
   makeDesktopItem,
   copyDesktopItems,
@@ -23,13 +23,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "equibop";
-  version = "2.1.1";
+  version = "2.1.2";
 
   src = fetchFromGitHub {
     owner = "Equicord";
     repo = "Equibop";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-LGgmWaC7iYj0Mx5wPKmLkYV2ozyhkiwrE4v4uFB0erg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-lDDGZUpW9LU5S/gzNJFIuVIk08pQlQLK07RwuzcYyjg=";
   };
 
   pnpmDeps = pnpm_9.fetchDeps {
@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
       src
       patches
       ;
-    hash = "sha256-dIz/HyhzFU86QqQEQ9qWSthKB9HfoRJbmpc3raWNbcA=";
+    hash = "sha256-MuCQJgUHyAKpKWM7lYE49zur+G+KtIVBVXCspWImnY8=";
   };
 
   nativeBuildInputs = [
@@ -64,10 +64,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches =
     [ ./disable_update_checking.patch ]
-    ++ lib.optional withSystemEquicord (substituteAll {
-      inherit equicord;
-      src = ./use_system_equicord.patch;
-    });
+    ++ lib.optional withSystemEquicord (
+      replaceVars ./use_system_equicord.patch {
+        inherit equicord;
+      }
+    );
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
@@ -110,7 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
       --add-flags $out/opt/Equibop/resources/app.asar \
       ${lib.optionalString withTTS "--add-flags \"--enable-speech-dispatcher\""} \
       ${lib.optionalString withMiddleClickScroll "--add-flags \"--enable-blink-features=MiddleClickAutoscroll\""} \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime}}"
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
   '';
 
   desktopItems = makeDesktopItem {

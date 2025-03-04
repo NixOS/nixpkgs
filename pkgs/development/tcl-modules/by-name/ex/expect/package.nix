@@ -1,4 +1,14 @@
-{ lib, stdenv, buildPackages, fetchurl, tcl, makeWrapper, autoreconfHook, fetchpatch, substituteAll }:
+{
+  lib,
+  stdenv,
+  buildPackages,
+  fetchurl,
+  tcl,
+  makeWrapper,
+  autoreconfHook,
+  fetchpatch,
+  replaceVars,
+}:
 
 tcl.mkTclDerivation rec {
   pname = "expect";
@@ -10,8 +20,7 @@ tcl.mkTclDerivation rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./fix-build-time-run-tcl.patch;
+    (replaceVars ./fix-build-time-run-tcl.patch {
       tcl = "${buildPackages.tcl}/bin/tclsh";
     })
     # The following patches fix compilation with clang 15+
@@ -35,7 +44,10 @@ tcl.mkTclDerivation rec {
     sed -i "s,/bin/stty,$(type -p stty),g" configure.in
   '';
 
-  nativeBuildInputs = [ autoreconfHook makeWrapper ];
+  nativeBuildInputs = [
+    autoreconfHook
+    makeWrapper
+  ];
 
   strictDeps = true;
 
@@ -50,7 +62,10 @@ tcl.mkTclDerivation rec {
     ${lib.optionalString stdenv.hostPlatform.isDarwin "tclWrapperArgs+=(--prefix DYLD_LIBRARY_PATH : $out/lib/expect${version})"}
   '';
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   meta = with lib; {
     description = "Tool for automating interactive applications";

@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "nodauf";
     repo = "Swego";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-roaAzh6Mncu4qtaxEoXk41Mrmz/l7X1+n+Yh5skA65A=";
   };
 

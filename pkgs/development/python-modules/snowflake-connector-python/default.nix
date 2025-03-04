@@ -30,7 +30,7 @@
 
 buildPythonPackage rec {
   pname = "snowflake-connector-python";
-  version = "3.12.3";
+  version = "3.13.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -38,8 +38,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "snowflakedb";
     repo = "snowflake-connector-python";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Rv4/zGoSBA3Pdu67d96sgZLgZae6yfpLsJzwsm2A690=";
+    tag = "v${version}";
+    hash = "sha256-cBfiUaUaK7rWMD5vHC9DbedaopkGB443gOm/N9XbXYo=";
   };
 
   build-system = [

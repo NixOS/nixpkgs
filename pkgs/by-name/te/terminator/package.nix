@@ -1,16 +1,17 @@
-{ lib
-, fetchFromGitHub
-, python3
-, keybinder3
-, intltool
-, file
-, gtk3
-, gobject-introspection
-, libnotify
-, makeBinaryWrapper
-, wrapGAppsHook3
-, vte
-, nixosTests
+{
+  lib,
+  fetchFromGitHub,
+  python3,
+  keybinder3,
+  intltool,
+  file,
+  gtk3,
+  gobject-introspection,
+  libnotify,
+  makeBinaryWrapper,
+  wrapGAppsHook3,
+  vte,
+  nixosTests,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -20,7 +21,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "gnome-terminator";
     repo = "terminator";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-0468d/sAM/UOiaSspwWaOGogoE8/Idth0G4CMCXWFFo=";
   };
 

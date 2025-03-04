@@ -8,15 +8,15 @@
 
 buildPythonPackage rec {
   pname = "pylsqpack";
-  version = "0.3.18";
+  version = "0.3.19";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Ra5V5yGHdQX01czUlZHWk1PypUioZz36+yUdOFs8CX8=";
+    hash = "sha256-Up+j49bxsO7JK0NFA8DsVRy3FAI8wXEJEfZl+raobr0=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

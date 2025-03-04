@@ -33,7 +33,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dictation-toolbox";
     repo = "dragonfly";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-sqEEEr5/KG3cn4rmOGJt9zMNAjeLO6h3NJgg0EyewrM=";
   };
 

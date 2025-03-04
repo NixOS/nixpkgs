@@ -1,10 +1,21 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
-  inherit (lib) mkEnableOption mkIf mkOption types;
+  inherit (lib)
+    mkEnableOption
+    mkIf
+    mkOption
+    types
+    ;
 
   cfg = config.hardware.sata.timeout;
 
-  buildRule = d:
+  buildRule =
+    d:
     lib.concatStringsSep ", " [
       ''ACTION=="add"''
       ''SUBSYSTEM=="block"''
@@ -13,23 +24,20 @@ let
       ''ENV{SYSTEMD_WANTS}="${unitName d}"''
     ];
 
-  devicePath = device:
-    "/dev/disk/by-${device.idBy}/${device.name}";
+  devicePath = device: "/dev/disk/by-${device.idBy}/${device.name}";
 
-  unitName = device:
-    "sata-timeout-${lib.strings.sanitizeDerivationName device.name}";
+  unitName = device: "sata-timeout-${lib.strings.sanitizeDerivationName device.name}";
 
-  startScript =
-    pkgs.writeShellScript "sata-timeout.sh" ''
-      set -eEuo pipefail
+  startScript = pkgs.writeShellScript "sata-timeout.sh" ''
+    set -eEuo pipefail
 
-      device="$1"
+    device="$1"
 
-      ${pkgs.smartmontools}/bin/smartctl \
-        -l scterc,${toString cfg.deciSeconds},${toString cfg.deciSeconds} \
-        --quietmode errorsonly \
-        "$device"
-    '';
+    ${pkgs.smartmontools}/bin/smartctl \
+      -l scterc,${toString cfg.deciSeconds},${toString cfg.deciSeconds} \
+      --quietmode errorsonly \
+      "$device"
+  '';
 
 in
 {
@@ -54,8 +62,8 @@ in
 
     drives = mkOption {
       description = "List of drives for which to configure the timeout.";
-      type = types.listOf
-        (types.submodule {
+      type = types.listOf (
+        types.submodule {
           options = {
             name = mkOption {
               description = "Drive name without the full path.";
@@ -64,19 +72,24 @@ in
 
             idBy = mkOption {
               description = "The method to identify the drive.";
-              type = types.enum [ "path" "wwn" ];
+              type = types.enum [
+                "path"
+                "wwn"
+              ];
               default = "path";
             };
           };
-        });
+        }
+      );
     };
   };
 
   config = mkIf cfg.enable {
     services.udev.extraRules = lib.concatMapStringsSep "\n" buildRule cfg.drives;
 
-    systemd.services = lib.listToAttrs (map
-      (e:
+    systemd.services = lib.listToAttrs (
+      map (
+        e:
         lib.nameValuePair (unitName e) {
           description = "SATA timeout for ${e.name}";
           wantedBy = [ "sata-timeout.target" ];
@@ -89,8 +102,8 @@ in
             ProtectSystem = "strict";
           };
         }
-      )
-      cfg.drives);
+      ) cfg.drives
+    );
 
     systemd.targets.sata-timeout = {
       description = "SATA timeout";

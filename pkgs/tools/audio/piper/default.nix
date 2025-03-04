@@ -1,20 +1,21 @@
-{ lib
-, stdenv
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
 
-# build time
-, cmake
-, pkg-config
+  # build time
+  cmake,
+  pkg-config,
 
-# runtime
-, fmt
-, onnxruntime
-, pcaudiolib
-, piper-phonemize
-, spdlog
+  # runtime
+  fmt,
+  onnxruntime,
+  pcaudiolib,
+  piper-phonemize,
+  spdlog,
 
-# tests
-, piper-train
+  # tests
+  piper-train,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -24,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "rhasspy";
     repo = "piper";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-3ynWyNcdf1ffU3VoDqrEMrm5Jo5Zc5YJcVqwLreRCsI=";
   };
 

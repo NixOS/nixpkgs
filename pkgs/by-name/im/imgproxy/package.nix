@@ -1,23 +1,33 @@
-{ lib, buildGoModule, fetchFromGitHub, pkg-config, vips, gobject-introspection
-, stdenv, libunwind }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  pkg-config,
+  vips,
+  gobject-introspection,
+  stdenv,
+  libunwind,
+}:
 
 buildGoModule rec {
   pname = "imgproxy";
-  version = "3.26.1";
+  version = "3.27.2";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    hash = "sha256-r8yczisCN2jfWFc0L+EIgJLw5MPK4r5+lJsW6FM2hUY=";
+    hash = "sha256-rPdo+gj1nxbrE3qbABB7H+tN6WXAdwhtPUCYCsn6vEk=";
     rev = "v${version}";
   };
 
-  vendorHash = "sha256-LGQ+JJ3OqDisT+CsnseVO54wyRTOkGpG9/zzpJw9P1I=";
+  vendorHash = "sha256-ckJ9HJkkaDx42wS/j9cwDGOku9X7yZ5uL1bun6IMfH4=";
 
-  nativeBuildInputs = [ pkg-config gobject-introspection ];
+  nativeBuildInputs = [
+    pkg-config
+    gobject-introspection
+  ];
 
-  buildInputs = [ vips ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ libunwind ];
+  buildInputs = [ vips ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libunwind ];
 
   preBuild = ''
     export CGO_LDFLAGS_ALLOW='-(s|w)'

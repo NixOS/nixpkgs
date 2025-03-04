@@ -1,15 +1,17 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, nix
-, virt-viewer
-, makeWrapper }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nix,
+  virt-viewer,
+  makeWrapper,
+}:
 
 let
   # Upstream patches fail with newer virt-viewer. These are own ports to the
   # newest virt-viewer version, see:
   # https://github.com/jollheef/appvm/issues/28
-  virt-manager-without-menu = virt-viewer.overrideAttrs(oldAttrs: {
+  virt-manager-without-menu = virt-viewer.overrideAttrs (oldAttrs: {
     patches = oldAttrs.patches ++ [
       ./0001-Remove-menu-bar.patch
       ./0002-Do-not-grab-keyboard-mouse.patch
@@ -35,13 +37,22 @@ buildGoModule rec {
 
   postFixup = ''
     wrapProgram $out/bin/appvm \
-      --prefix PATH : "${lib.makeBinPath [ nix virt-manager-without-menu ]}"
+      --prefix PATH : "${
+        lib.makeBinPath [
+          nix
+          virt-manager-without-menu
+        ]
+      }"
   '';
 
   meta = with lib; {
     description = "Nix-based app VMs";
     homepage = "https://code.dumpstack.io/tools/${pname}";
-    maintainers = with maintainers; [ dump_stack cab404 onny ];
+    maintainers = with maintainers; [
+      dump_stack
+      cab404
+      onny
+    ];
     license = licenses.gpl3;
   };
 }

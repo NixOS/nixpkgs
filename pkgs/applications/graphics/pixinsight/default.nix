@@ -1,49 +1,50 @@
-{ stdenv
-, lib
-, requireFile
-, wrapQtAppsHook
-, autoPatchelfHook
-, unixtools
-, fakeroot
-, mailcap
-, libGL
-, libpulseaudio
-, alsa-lib
-, nss
-, gd
-, gst_all_1
-, nspr
-, expat
-, fontconfig
-, dbus
-, glib
-, zlib
-, openssl
-, libdrm
-, cups
-, avahi-compat
-, xorg
-, wayland
-, libudev0-shim
-, bubblewrap
-, libjpeg8
-, gdk-pixbuf
-, gtk3
-, pango
+{
+  stdenv,
+  lib,
+  requireFile,
+  wrapQtAppsHook,
+  autoPatchelfHook,
+  unixtools,
+  fakeroot,
+  mailcap,
+  libGL,
+  libpulseaudio,
+  alsa-lib,
+  nss,
+  gd,
+  gst_all_1,
+  nspr,
+  expat,
+  fontconfig,
+  dbus,
+  glib,
+  zlib,
+  openssl,
+  libdrm,
+  cups,
+  avahi-compat,
+  xorg,
+  wayland,
+  libudev0-shim,
+  bubblewrap,
+  libjpeg8,
+  gdk-pixbuf,
+  gtk3,
+  pango,
   # Qt 6 subpackages
-, qtbase
-, qtserialport
-, qtserialbus
-, qtvirtualkeyboard
-, qtmultimedia
-, qt3d
-, mlt
-, qtlocation
-, qtwebengine
-, qtquick3d
-, qtwayland
-, qtwebview
-, qtscxml
+  qtbase,
+  qtserialport,
+  qtserialbus,
+  qtvirtualkeyboard,
+  qtmultimedia,
+  qt3d,
+  mlt,
+  qtlocation,
+  qtwebengine,
+  qtquick3d,
+  qtwayland,
+  qtwebview,
+  qtscxml,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -74,57 +75,59 @@ stdenv.mkDerivation (finalAttrs: {
     bubblewrap
   ];
 
-  buildInputs = [
-    (lib.getLib stdenv.cc.cc)
-    stdenv.cc
-    libGL
-    libpulseaudio
-    alsa-lib
-    nss
-    gd
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
-    nspr
-    expat
-    fontconfig
-    dbus
-    glib
-    zlib
-    openssl
-    libdrm
-    wayland
-    cups
-    avahi-compat
-    libjpeg8
-    gdk-pixbuf
-    gtk3
-    pango
-    # Qt stuff
-    qt3d
-    mlt
-    qtbase
-    #qtgamepad
-    qtserialport
-    qtserialbus
-    qtvirtualkeyboard
-    qtmultimedia
-    qtlocation
-    qtwebengine
-    qtquick3d
-    qtwayland
-    qtwebview
-    qtscxml
-  ] ++ (with xorg; [
-    libX11
-    libXdamage
-    xrandr
-    libXtst
-    libXcomposite
-    libXext
-    libXfixes
-    libXrandr
-    libxkbfile
-  ]);
+  buildInputs =
+    [
+      (lib.getLib stdenv.cc.cc)
+      stdenv.cc
+      libGL
+      libpulseaudio
+      alsa-lib
+      nss
+      gd
+      gst_all_1.gstreamer
+      gst_all_1.gst-plugins-base
+      nspr
+      expat
+      fontconfig
+      dbus
+      glib
+      zlib
+      openssl
+      libdrm
+      wayland
+      cups
+      avahi-compat
+      libjpeg8
+      gdk-pixbuf
+      gtk3
+      pango
+      # Qt stuff
+      qt3d
+      mlt
+      qtbase
+      #qtgamepad
+      qtserialport
+      qtserialbus
+      qtvirtualkeyboard
+      qtmultimedia
+      qtlocation
+      qtwebengine
+      qtquick3d
+      qtwayland
+      qtwebview
+      qtscxml
+    ]
+    ++ (with xorg; [
+      libX11
+      libXdamage
+      xrandr
+      libXtst
+      libXcomposite
+      libXext
+      libXfixes
+      libXrandr
+      libxkbfile
+    ]);
 
   postPatch = ''
     patchelf ./installer \

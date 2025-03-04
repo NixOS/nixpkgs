@@ -7,19 +7,22 @@
   opencensus,
   psutil,
   requests,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "opencensus-ext-azure";
-  version = "1.1.13";
-  format = "setuptools";
+  version = "1.1.14";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-rsMEchdwBTebpWpwKgl9YYxfV1WOG7ZnbsdflIEwaSo=";
+    hash = "sha256-ycbrrVQq62GBMyLmJ9WImlY+e4xOAkv1hGnQbbc6sUg=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     azure-core
     azure-identity
     opencensus

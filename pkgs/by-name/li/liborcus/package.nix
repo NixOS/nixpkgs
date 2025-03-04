@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, autoreconfHook
-, pkg-config
-, boost
-, libixion
-, mdds
-, python3
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  autoreconfHook,
+  pkg-config,
+  boost,
+  libixion,
+  mdds,
+  python3,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {
@@ -24,6 +25,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
+    python3.pythonOnBuildForHost
   ];
 
   buildInputs = [
@@ -33,6 +35,26 @@ stdenv.mkDerivation rec {
     python3
     zlib
   ];
+
+  preCheck =
+    ''
+      patchShebangs test/python
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH''${DYLD_LIBRARY_PATH:+:}${
+        lib.concatMapStringsSep ":" (d: "$(pwd)/src/${d}/.libs") [
+          "liborcus"
+          "parser"
+          "python"
+          "spreadsheet"
+        ]
+      }
+    '';
+
+  strictDeps = true;
+  doCheck = true;
+  enableParallelBuilding = true;
+  enableParallelChecking = true;
 
   meta = with lib; {
     description = "Collection of parsers and import filters for spreadsheet documents";

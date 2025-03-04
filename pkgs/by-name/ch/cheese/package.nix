@@ -1,41 +1,46 @@
-{ lib
-, stdenv
-, gettext
-, fetchurl
-, wrapGAppsHook3
-, gnome-video-effects
-, libcanberra-gtk3
-, pkg-config
-, gtk3
-, glib
-, clutter-gtk
-, clutter-gst
-, gst_all_1
-, itstool
-, vala
-, docbook_xml_dtd_43
-, docbook-xsl-nons
-, appstream-glib
-, libxslt
-, gtk-doc
-, adwaita-icon-theme
-, librsvg
-, totem
-, gdk-pixbuf
-, gnome
-, gnome-desktop
-, libxml2
-, meson
-, ninja
-, dbus
-, pipewire
+{
+  lib,
+  stdenv,
+  gettext,
+  fetchurl,
+  wrapGAppsHook3,
+  gnome-video-effects,
+  libcanberra-gtk3,
+  pkg-config,
+  gtk3,
+  glib,
+  clutter-gtk,
+  clutter-gst,
+  gst_all_1,
+  itstool,
+  vala,
+  docbook_xml_dtd_43,
+  docbook-xsl-nons,
+  appstream-glib,
+  libxslt,
+  gtk-doc,
+  adwaita-icon-theme,
+  librsvg,
+  totem,
+  gdk-pixbuf,
+  gnome,
+  gnome-desktop,
+  libxml2,
+  meson,
+  ninja,
+  dbus,
+  pipewire,
 }:
 
 stdenv.mkDerivation rec {
   pname = "cheese";
   version = "44.1";
 
-  outputs = [ "out" "man" "devdoc" ];
+  outputs = [
+    "out"
+    "man"
+    "devdoc"
+  ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/cheese/${lib.versions.major version}/cheese-${version}.tar.xz";
@@ -62,20 +67,23 @@ stdenv.mkDerivation rec {
   buildInputs = [
     adwaita-icon-theme
     clutter-gst
-    clutter-gtk
     dbus
-    gdk-pixbuf
-    glib
     gnome-desktop
     gnome-video-effects
     gst_all_1.gst-plugins-bad
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good
-    gst_all_1.gstreamer
     gtk3
     libcanberra-gtk3
     librsvg
     pipewire # PipeWire provides a gstreamer plugin for using PipeWire for video
+  ];
+
+  propagatedBuildInputs = [
+    clutter-gtk
+    gdk-pixbuf
+    glib
+    gst_all_1.gstreamer
   ];
 
   preFixup = ''
@@ -89,6 +97,11 @@ stdenv.mkDerivation rec {
       --prefix XDG_DATA_DIRS : "${totem}/share"
     )
   '';
+
+  # Fix GCC 14 build
+  # ../libcheese/cheese-flash.c:135:22: error: assignment to 'GtkWidget *' {aka 'struct _GtkWidget *'} from
+  # incompatible pointer type 'GObject *' {aka 'struct _GObject *'} [-Wincompatible-pointer-types]
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
 
   passthru = {
     updateScript = gnome.updateScript {

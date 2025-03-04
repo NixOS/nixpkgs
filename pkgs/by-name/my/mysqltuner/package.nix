@@ -1,22 +1,27 @@
-{ lib, stdenv, fetchFromGitHub, perl }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  perl,
+}:
 stdenv.mkDerivation rec {
   pname = "mysqltuner";
-  version = "1.8.3";
+  version = "2.6.0";
 
   src = fetchFromGitHub {
     owner = "major";
     repo = "MySQLTuner-perl";
-    rev = version;
-    sha256 = "sha256-ezF0zjQB/KWD5rUcbXx2uwiNLsIJ7ZKMoqkclP7oc98=";
+    rev = "v${version}";
+    hash = "sha256-JIO/auY8E6at9OCIqgKbBz9OhOeZMtQvUoUYPMEVtCg=";
   };
 
   postPatch = ''
     substituteInPlace mysqltuner.pl \
-      --replace '/usr/share' "$out/share"
+      --replace-fail '/usr/share' "$out/share"
   '';
 
   buildInputs = [ perl ];
+  dontBuild = true;
 
   installPhase = ''
     runHook preInstall
@@ -31,7 +36,10 @@ stdenv.mkDerivation rec {
     description = "Make recommendations for increased performance and stability of MariaDB/MySQL";
     homepage = "https://github.com/major/MySQLTuner-perl";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ peterhoeg shamilton ];
+    maintainers = with maintainers; [
+      peterhoeg
+      shamilton
+    ];
     mainProgram = "mysqltuner";
   };
 }

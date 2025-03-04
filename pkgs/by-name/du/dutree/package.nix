@@ -1,4 +1,8 @@
-{ fetchFromGitHub, lib, rustPlatform }:
+{
+  fetchFromGitHub,
+  lib,
+  rustPlatform,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "dutree";
@@ -16,7 +20,8 @@ rustPlatform.buildRustPackage rec {
     '';
   };
 
-  cargoHash = "sha256-/E+4yJEhZbERy4vOqn0Ruv3zOcd2FA+q41qZ0Tvg4T0=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-P3h7C6hXKhYBaf0CKlsB+4tnfj/1Aw1iFSlvMNGbSYI=";
 
   meta = with lib; {
     description = "Tool to analyze file system usage written in Rust";

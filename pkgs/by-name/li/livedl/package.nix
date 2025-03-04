@@ -1,4 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, stdenv }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  stdenv,
+}:
 
 buildGoModule rec {
   pname = "livedl";

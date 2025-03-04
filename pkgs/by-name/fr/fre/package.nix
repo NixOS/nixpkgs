@@ -1,4 +1,8 @@
-{ lib, rustPlatform, fetchFromGitHub }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "fre";
@@ -11,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-cYqEPohqUmewvBUoGJQfa4ATxw2uny5+nUKtNzrxK38=";
   };
 
-  cargoHash = "sha256-BEIrjHsIrNkFEEjCrTKwsJL9hptmVOI8x3ZWoo9ZUvQ=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-07qKG4ju2UOkTcgWAl2U0uqQZyiosK1UH/M2BvwMAaU=";
 
   meta = with lib; {
     description = "CLI tool for tracking your most-used directories and files";

@@ -1,8 +1,11 @@
-{ lib, stdenv, fetchurl
-, autoreconfHook
-, pciutils
-, pkg-config
-, xorg
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  pciutils,
+  pkg-config,
+  xorg,
 }:
 
 stdenv.mkDerivation rec {
@@ -14,7 +17,10 @@ stdenv.mkDerivation rec {
     sha256 = "0mjk9wr9rsb17yy92j6yi16hfpa6v5r1dbyiy60zp4r125wr63za";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
   buildInputs = [ xorg.libpciaccess ];
 
   meta = with lib; {

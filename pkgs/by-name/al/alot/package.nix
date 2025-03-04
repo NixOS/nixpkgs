@@ -1,31 +1,35 @@
-{ lib
-, python311
-, fetchFromGitHub
-, file
-, gnupg
-, gawk
-, procps
-, notmuch
-, withManpage ? false
+{
+  lib,
+  python311,
+  fetchFromGitHub,
+  file,
+  gnupg,
+  gawk,
+  procps,
+  notmuch,
+  withManpage ? false,
 }:
 
-with python311.pkgs; buildPythonApplication rec {
+with python311.pkgs;
+buildPythonApplication rec {
   pname = "alot";
   version = "0.11";
   pyproject = true;
 
-  outputs = [
-    "out"
-  ] ++ lib.optionals withManpage [
-    "man"
-  ];
+  outputs =
+    [
+      "out"
+    ]
+    ++ lib.optionals withManpage [
+      "man"
+    ];
 
   disabled = !isPy3k;
 
   src = fetchFromGitHub {
     owner = "pazz";
     repo = "alot";
-    rev = "refs/tags/${version}";
+    tag = version;
     sha256 = "sha256-mXaRzl7260uxio/BQ36BCBxgKhl1r0Rc6PwFZA8qNqc=";
   };
 

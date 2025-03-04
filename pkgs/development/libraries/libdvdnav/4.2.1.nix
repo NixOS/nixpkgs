@@ -1,4 +1,10 @@
-{lib, stdenv, fetchurl, pkg-config, libdvdread}:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  libdvdread,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libdvdnav";
@@ -10,12 +16,12 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [libdvdread];
+  buildInputs = [ libdvdread ];
 
   # The upstream supports two configuration workflow:
   # one is to generate ./configure via `autoconf`,
   # the other is to run ./configure2.
-  # ./configure2 is a configureation script included in the upstream source
+  # ./configure2 is a configuration script included in the upstream source
   # that supports common "--<name>" flags and generates config.mak and config.h.
   # See INSTALL inside the upstream source for detail.
   configureScript = "./configure2";

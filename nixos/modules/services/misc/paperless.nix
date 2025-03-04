@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ config, options, pkgs, lib, ... }:
 let
   cfg = config.services.paperless;
 
@@ -32,11 +32,22 @@ let
     else toString s
   ) cfg.settings);
 
-  manage = pkgs.writeShellScript "manage" ''
+  manage = pkgs.writeShellScriptBin "paperless-manage" ''
     set -o allexport # Export the following env vars
     ${lib.toShellVars env}
     ${lib.optionalString (cfg.environmentFile != null) "source ${cfg.environmentFile}"}
-    exec ${cfg.package}/bin/paperless-ngx "$@"
+
+    cd '${cfg.dataDir}'
+    sudo=exec
+    if [[ "$USER" != ${cfg.user} ]]; then
+      ${
+        if config.security.sudo.enable then
+          "sudo='exec ${config.security.wrapperDir}/sudo -u ${cfg.user} -E'"
+        else
+          ">&2 echo 'Aborting, paperless-manage must be run as user `${cfg.user}`!'; exit 2"
+      }
+    fi
+    $sudo ${lib.getExe cfg.package} "$@"
   '';
 
   defaultServiceConfig = {
@@ -70,10 +81,7 @@ let
     ProtectKernelModules = true;
     ProtectKernelTunables = true;
     ProtectProc = "invisible";
-    # Don't restrict ProcSubset because django-q requires read access to /proc/stat
-    # to query CPU and memory information.
-    # Note that /proc only contains processes of user `paperless`, so this is safe.
-    # ProcSubset = "pid";
+    ProcSubset = "pid";
     RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" ];
     RestrictNamespaces = true;
     RestrictRealtime = true;
@@ -85,7 +93,7 @@ let
   };
 in
 {
-  meta.maintainers = with lib.maintainers; [ leona SuperSandro2000 erikarvstedt ];
+  meta.maintainers = with lib.maintainers; [ leona SuperSandro2000 erikarvstedt atemu theuni ];
 
   imports = [
     (lib.mkRenamedOptionModule [ "services" "paperless-ng" ] [ "services" "paperless" ])
@@ -97,14 +105,13 @@ in
       type = lib.types.bool;
       default = false;
       description = ''
-        Enable Paperless.
+        Whether to enable Paperless-ngx.
 
-        When started, the Paperless database is automatically created if it doesn't
-        exist and updated if the Paperless package has changed.
+        When started, the Paperless database is automatically created if it doesn't exist
+        and updated if the Paperless package has changed.
         Both tasks are achieved by running a Django migration.
 
-        A script to manage the Paperless instance (by wrapping Django's manage.py) is linked to
-        `''${dataDir}/paperless-manage`.
+        A script to manage the Paperless-ngx instance (by wrapping Django's manage.py) is available as `paperless-manage`.
       '';
     };
 
@@ -142,8 +149,7 @@ in
         A file containing the superuser password.
 
         A superuser is required to access the web interface.
-        If unset, you can create a superuser manually by running
-        `''${dataDir}/paperless-manage createsuperuser`.
+        If unset, you can create a superuser manually by running `paperless-manage createsuperuser`.
 
         The default superuser name is `admin`. To change it, set
         option {option}`settings.PAPERLESS_ADMIN_USER`.
@@ -185,7 +191,6 @@ in
       '';
       example = {
         PAPERLESS_OCR_LANGUAGE = "deu+eng";
-        PAPERLESS_DBHOST = "/run/postgresql";
         PAPERLESS_CONSUMER_IGNORE_PATTERN = [ ".DS_STORE/*" "desktop.ini" ];
         PAPERLESS_OCR_USER_ARGS = {
           optimize = 1;
@@ -246,10 +251,71 @@ in
         ```
       '';
     };
+
+    database = {
+      createLocally = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = ''
+          Configure local PostgreSQL database server for Paperless.
+        '';
+      };
+    };
+
+    exporter = {
+      enable = lib.mkEnableOption "regular automatic document exports";
+
+      directory = lib.mkOption {
+        type = lib.types.str;
+        default = cfg.dataDir + "/export";
+        defaultText = lib.literalExpression "\${config.services.paperless.dataDir}/export";
+        description = "Directory to store export.";
+      };
+
+      onCalendar = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
+        default = "01:30:00";
+        description = ''
+          When to run the exporter. See {manpage}`systemd.time(7)`.
+
+          `null` disables the timer; allowing you to run the
+          `paperless-exporter` service through other means.
+        '';
+      };
+
+      settings = lib.mkOption {
+        type = with lib.types; attrsOf anything;
+        default = {
+          "no-progress-bar" = true;
+          "no-color" = true;
+          "compare-checksums" = true;
+          "delete" = true;
+        };
+        description = "Settings to pass to the document exporter as CLI arguments.";
+      };
+    };
   };
 
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf cfg.enable (lib.mkMerge [ {
+    environment.systemPackages = [ manage ];
+
     services.redis.servers.paperless.enable = lib.mkIf enableRedis true;
+
+    services.postgresql = lib.mkIf cfg.database.createLocally {
+      enable = true;
+      ensureDatabases = [ "paperless" ];
+      ensureUsers = [{
+        name = config.services.paperless.user;
+        ensureDBOwnership = true;
+      }];
+    };
+
+    services.paperless.settings = lib.mkIf cfg.database.createLocally {
+      PAPERLESS_DBENGINE = "postgresql";
+      PAPERLESS_DBHOST = "/run/postgresql";
+      PAPERLESS_DBNAME = "paperless";
+      PAPERLESS_DBUSER = "paperless";
+    };
 
     systemd.slices.system-paperless = {
       description = "Paperless Document Management System Slice";
@@ -276,11 +342,14 @@ in
         ExecStart = "${cfg.package}/bin/celery --app paperless beat --loglevel INFO";
         Restart = "on-failure";
         LoadCredential = lib.optionalString (cfg.passwordFile != null) "PAPERLESS_ADMIN_PASSWORD:${cfg.passwordFile}";
+        PrivateNetwork = cfg.database.createLocally; # defaultServiceConfig enables this by default, needs to be disabled for remote DBs
       };
       environment = env;
 
       preStart = ''
-        ln -sf ${manage} ${cfg.dataDir}/paperless-manage
+        # remove old papaerless-manage symlink
+        # TODO: drop with NixOS 25.11
+        [[ -L '${cfg.dataDir}/paperless-manage' ]] && rm '${cfg.dataDir}/paperless-manage'
 
         # Auto-migrate on first run or if the package has changed
         versionFile="${cfg.dataDir}/src-version"
@@ -318,13 +387,16 @@ in
           echo "$superuserState" > "$superuserStateFile"
         fi
       '';
-    } // lib.optionalAttrs enableRedis {
-      after = [ "redis-paperless.service" ];
+      requires = lib.optional cfg.database.createLocally "postgresql.service";
+      after = lib.optional enableRedis "redis-paperless.service"
+        ++ lib.optional cfg.database.createLocally "postgresql.service";
     };
 
     systemd.services.paperless-task-queue = {
       description = "Paperless Celery Workers";
-      after = [ "paperless-scheduler.service" ];
+      requires = lib.optional cfg.database.createLocally "postgresql.service";
+      after = [ "paperless-scheduler.service" ]
+        ++ lib.optional cfg.database.createLocally "postgresql.service";
       serviceConfig = defaultServiceConfig // {
         User = cfg.user;
         ExecStart = "${cfg.package}/bin/celery --app paperless worker --loglevel INFO";
@@ -342,11 +414,14 @@ in
       # Bind to `paperless-scheduler` so that the consumer never runs
       # during migrations
       bindsTo = [ "paperless-scheduler.service" ];
-      after = [ "paperless-scheduler.service" ];
+      requires = lib.optional cfg.database.createLocally "postgresql.service";
+      after = [ "paperless-scheduler.service" ]
+        ++ lib.optional cfg.database.createLocally "postgresql.service";
       serviceConfig = defaultServiceConfig // {
         User = cfg.user;
         ExecStart = "${cfg.package}/bin/paperless-ngx document_consumer";
         Restart = "on-failure";
+        PrivateNetwork = cfg.database.createLocally; # defaultServiceConfig enables this by default, needs to be disabled for remote DBs
       };
       environment = env;
       # Allow the consumer to access the private /tmp directory of the server.
@@ -359,7 +434,9 @@ in
       # Bind to `paperless-scheduler` so that the web server never runs
       # during migrations
       bindsTo = [ "paperless-scheduler.service" ];
-      after = [ "paperless-scheduler.service" ];
+      requires = lib.optional cfg.database.createLocally "postgresql.service";
+      after = [ "paperless-scheduler.service" ]
+        ++ lib.optional cfg.database.createLocally "postgresql.service";
       # Setup PAPERLESS_SECRET_KEY.
       # If this environment variable is left unset, paperless-ngx defaults
       # to a well-known value, which is insecure.
@@ -410,5 +487,40 @@ in
         gid = config.ids.gids.paperless;
       };
     };
-  };
+  }
+
+  (lib.mkIf cfg.exporter.enable {
+    systemd.tmpfiles.rules = [
+      "d '${cfg.exporter.directory}' - ${cfg.user} ${config.users.users.${cfg.user}.group} - -"
+    ];
+
+    services.paperless.exporter.settings = options.services.paperless.exporter.settings.default;
+
+    systemd.services.paperless-exporter = {
+      startAt = lib.defaultTo [] cfg.exporter.onCalendar;
+      serviceConfig = {
+        User = cfg.user;
+        WorkingDirectory = cfg.dataDir;
+      };
+      unitConfig = let
+        services = [
+          "paperless-consumer.service"
+          "paperless-scheduler.service"
+          "paperless-task-queue.service"
+          "paperless-web.service" ];
+      in {
+        # Shut down the paperless services while the exporter runs
+        Conflicts = services;
+        After = services;
+        # Bring them back up afterwards, regardless of pass/fail
+        OnFailure = services;
+        OnSuccess = services;
+      };
+      enableStrictShellChecks = true;
+      path = [ manage ];
+      script = ''
+        paperless-manage document_exporter ${cfg.exporter.directory} ${lib.cli.toGNUCommandLineShell {} cfg.exporter.settings}
+      '';
+    };
+  })]);
 }

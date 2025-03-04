@@ -1,4 +1,9 @@
-{ lib, fetchFromGitHub, python3, bcc }:
+{
+  lib,
+  fetchFromGitHub,
+  python3,
+  bcc,
+}:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "sockdump";
@@ -21,6 +26,9 @@ python3.pkgs.buildPythonApplication rec {
     description = "Dump unix domain socket traffic with bpf";
     mainProgram = "sockdump";
     license = lib.licenses.unlicense;
-    maintainers = with lib.maintainers; [ ehmry picnoir ];
+    maintainers = with lib.maintainers; [
+      ehmry
+      picnoir
+    ];
   };
 }

@@ -1,9 +1,9 @@
 {
-  buildDotnetModule
-  , fetchFromGitHub
-  , lib
-  , openal
-  , dotnetCorePackages
+  buildDotnetModule,
+  fetchFromGitHub,
+  lib,
+  openal,
+  dotnetCorePackages,
 }:
 
 buildDotnetModule rec {
@@ -17,10 +17,10 @@ buildDotnetModule rec {
     hash = "sha256-vlSiM6kskV4wfBZF7Rv5ICyqKG0Zhz/iU8kflYOaf0U=";
   };
 
-  patches = [ ./targetframework.patch ];
+  patches = [ ./dotnet-8-upgrade.patch ];
 
-  dotnet-sdk = dotnetCorePackages.sdk_6_0;
-  nugetDeps = ./deps.nix;
+  dotnet-sdk = dotnetCorePackages.sdk_8_0;
+  nugetDeps = ./deps.json;
   executables = [ "Knossos.NET" ];
 
   runtimeDeps = [ openal ];

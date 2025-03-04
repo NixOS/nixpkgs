@@ -1,6 +1,7 @@
-{ stdenv
-, lib
-, fetchzip
+{
+  stdenv,
+  lib,
+  fetchzip,
 }:
 
 stdenv.mkDerivation rec {
@@ -25,7 +26,6 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
-
 
   meta = with lib; {
     homepage = "https://www.kasmweb.com/";

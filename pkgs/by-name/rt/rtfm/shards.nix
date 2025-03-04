@@ -6,18 +6,18 @@
   };
   fzy = {
     url = "https://github.com/hugopl/fzy.git";
-    rev = "6c2395bcdea1889969d0d08c16163c276fe4e473";
-    sha256 = "0vpradafkwckfsq7wqrgkpsli7bfmgc27d38q06l1jzq0z0j92rw";
+    rev = "v0.6.0";
+    sha256 = "1mpw3ridzvqkf807wik6wzwpzcsk0075kifagsfnz38vx1mw2y55";
   };
   gi-crystal = {
     url = "https://github.com/hugopl/gi-crystal.git";
-    rev = "v0.22.2";
-    sha256 = "0bpa1f8iaf97z2kbgjc7nc8km7nd7bppiwna319lm2hvm8m5pw15";
+    rev = "v0.24.0";
+    sha256 = "0x356xn35008l573qhyl1sdddc9cc5i3bsa4c7865kgq9521ifyh";
   };
   gtk4 = {
     url = "https://github.com/hugopl/gtk4.cr.git";
-    rev = "v0.16.1";
-    sha256 = "1cqkbh072y70l8g0p040vf50k920p32ry1larnwn9mqabd74jwaj";
+    rev = "v0.17.0";
+    sha256 = "0lv3nvsanxi4g2322zvkf1jxx5zgzaapk228vcw2cl0ja1drm06d";
   };
   harfbuzz = {
     url = "https://github.com/hugopl/harfbuzz.cr.git";
@@ -25,7 +25,7 @@
     sha256 = "06wgqxwyib5416yp53j2iwcbr3bl4jjxb1flm7z103l365par694";
   };
   libadwaita = {
-    url = "https://github.com/geopjr/libadwaita.cr.git";
+    url = "https://github.com/hugopl/libadwaita.cr.git";
     rev = "cffabb56e911d2a90c53c2fd14d6bd08bf5ac446";
     sha256 = "0gcq04vgxg0vff9fcalgzq9phq0y76diihkzhlfn91bdxwkx7rl3";
   };

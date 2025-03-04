@@ -24,11 +24,14 @@ buildPythonPackage rec {
       --replace '"pytest-runner", ' ""
   '';
 
-  nativeBuildInputs = [
+  dependencies = [
     setuptools
     wheel
     cython
   ];
+
+  # workaround https://github.com/pytries/datrie/issues/101
+  env.CFLAGS = "-Wno-error=incompatible-pointer-types";
 
   nativeCheckInputs = [
     hypothesis

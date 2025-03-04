@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-babel";
     repo = "flask-babel";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-BAT+oupy4MCSjeZ4hFtSKMkGU9xZtc7Phnz1mIsb2Kc=";
   };
 

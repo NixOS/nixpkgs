@@ -1,7 +1,8 @@
 {
   stdenv,
   lib,
-  substituteAll,
+  replaceVars,
+  buildPackages,
   fetchurl,
   meson,
   ninja,
@@ -42,21 +43,25 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-settings-daemon";
-  version = "47.1";
+  version = "47.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-settings-daemon/${lib.versions.major finalAttrs.version}/gnome-settings-daemon-${finalAttrs.version}.tar.xz";
-    hash = "sha256-8qrL5V+jjocIWD7sCmZRBJ5TfrUFo+0s4Lqk6bZCRtE=";
+    hash = "sha256-HrdYhi6Ij1WghpGTCH8c+8x6EWNlTmMAmf9DQt0/alo=";
   };
 
   patches = [
     # https://gitlab.gnome.org/GNOME/gnome-settings-daemon/-/merge_requests/202
     ./add-gnome-session-ctl-option.patch
 
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       inherit tzdata;
     })
+  ];
+
+  depsBuildBuild = [
+    buildPackages.stdenv.cc
+    pkg-config
   ];
 
   nativeBuildInputs = [
@@ -65,6 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     perl
     gettext
+    glib
     libxml2
     libxslt
     docbook_xsl

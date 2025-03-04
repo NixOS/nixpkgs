@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, bison
-, flex
-, openldap
-, openssl
-, trousers
-, libcap
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  bison,
+  flex,
+  openldap,
+  openssl,
+  trousers,
+  libcap,
 }:
 
 stdenv.mkDerivation rec {
@@ -57,11 +58,11 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    changelog   = "https://github.com/opencryptoki/opencryptoki/blob/${src.rev}/ChangeLog";
+    changelog = "https://github.com/opencryptoki/opencryptoki/blob/${src.rev}/ChangeLog";
     description = "PKCS#11 implementation for Linux";
-    homepage    = "https://github.com/opencryptoki/opencryptoki";
-    license     = licenses.cpl10;
+    homepage = "https://github.com/opencryptoki/opencryptoki";
+    license = licenses.cpl10;
     maintainers = [ ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
   };
 }

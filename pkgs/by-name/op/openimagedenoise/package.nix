@@ -13,10 +13,7 @@
   xcodebuild,
 }:
 
-let
-  stdenv' = if stdenv.hostPlatform.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
-in
-stdenv'.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "openimagedenoise";
   version = "2.2.2";
 
@@ -28,17 +25,18 @@ stdenv'.mkDerivation (finalAttrs: {
 
   patches = lib.optional cudaSupport ./cuda.patch;
 
-  postPatch =
-    ''
-      substituteInPlace devices/metal/CMakeLists.txt \
-        --replace-fail "AppleClang" "Clang"
-    '';
+  postPatch = ''
+    substituteInPlace devices/metal/CMakeLists.txt \
+      --replace-fail "AppleClang" "Clang"
+  '';
 
-  nativeBuildInputs = [
-    cmake
-    python3
-    ispc
-  ] ++ lib.optional cudaSupport cudaPackages.cuda_nvcc
+  nativeBuildInputs =
+    [
+      cmake
+      python3
+      ispc
+    ]
+    ++ lib.optional cudaSupport cudaPackages.cuda_nvcc
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcodebuild ];
 
   buildInputs =

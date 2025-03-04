@@ -30,7 +30,7 @@
 
 buildPythonPackage rec {
   pname = "ydata-profiling";
-  version = "4.12.0";
+  version = "4.12.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -38,8 +38,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ydataai";
     repo = "ydata-profiling";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-G1qW6HcJi176nfxOBGBK2tLyY/Nnz9STYpZWluWvhP0=";
+    tag = "v${version}";
+    hash = "sha256-K2axhkshKnJO8sKqSWW4AbdQXsVlR6xwuhRP3Q5J08E=";
   };
 
   preBuild = ''
@@ -104,7 +104,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Create HTML profiling reports from Pandas DataFrames";
     homepage = "https://ydata-profiling.ydata.ai";
-    changelog = "https://github.com/ydataai/ydata-profiling/releases/tag/${version}";
+    changelog = "https://github.com/ydataai/ydata-profiling/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ bcdarwin ];
     mainProgram = "ydata_profiling";

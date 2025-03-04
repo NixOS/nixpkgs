@@ -1,9 +1,10 @@
-{ lib
-, rustPlatform
-, fetchCrate
-, dbus
-, installShellFiles
-, pkg-config
+{
+  lib,
+  rustPlatform,
+  fetchCrate,
+  dbus,
+  installShellFiles,
+  pkg-config,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -15,11 +16,15 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-6wJ4UfiwpV9zFuBR8SYj6eBiRqQitFs7wRe5R51Z3SA=";
   };
 
-  cargoHash = "sha256-xTmhgE4iHydhZBMrHWqQUcS9KDlZAzW2CmPGpJr40Fw=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-HEDkNzNCXKmBsI5fL8+UK4SHrU9eLde6Vfh4XhSrK+A=";
 
   buildInputs = [ dbus ];
 
-  nativeBuildInputs = [ installShellFiles pkg-config ];
+  nativeBuildInputs = [
+    installShellFiles
+    pkg-config
+  ];
 
   postInstall = ''
     installManPage doc/citron.1

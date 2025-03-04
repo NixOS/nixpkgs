@@ -24,7 +24,7 @@
 
 buildPythonPackage rec {
   pname = "httpcore";
-  version = "1.0.6";
+  version = "1.0.7";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -32,8 +32,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "encode";
     repo = "httpcore";
-    rev = "refs/tags/${version}";
-    hash = "sha256-sF/ymIoEnqWRX9b8knojIw+ySci/obXSttaNJLb+/nE=";
+    tag = version;
+    hash = "sha256-hEGKYJnsTjygRu++lNrPWfx/xiUR7Cp+DTUVPa0m5fM=";
   };
 
   build-system = [

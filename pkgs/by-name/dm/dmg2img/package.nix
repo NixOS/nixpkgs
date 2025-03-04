@@ -1,33 +1,50 @@
-{ lib, stdenv, fetchurl, zlib, bzip2, openssl, fetchpatch }:
+{
+  bzip2,
+  fetchFromGitHub,
+  lib,
+  openssl,
+  stdenv,
+  unstableGitUpdater,
+  zlib,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dmg2img";
-  version = "1.6.7";
+  version = "1.6.7-unstable-2020-12-27";
 
-  src = fetchurl {
-    url = "http://vu1tur.eu.org/tools/dmg2img-${version}.tar.gz";
-    sha256 = "066hqhg7k90xcw5aq86pgr4l7apzvnb4559vj5s010avbk8adbh2";
+  src = fetchFromGitHub {
+    owner = "Lekensteyn";
+    repo = "dmg2img";
+    rev = "a3e413489ccdd05431401357bf21690536425012";
+    hash = "sha256-DewU5jz2lRjIRiT0ebjPRArsoye33xlEGfhzd4xnT4A=";
   };
 
-  buildInputs = [ zlib bzip2 openssl ];
-
-  patches = [
-    (fetchpatch {
-      url = "https://raw.githubusercontent.com/Homebrew/formula-patches/85fa66a9/dmg2img/openssl-1.1.diff";
-      sha256 = "076sz69hf3ryylplg025vl8sj991cb81g3yazsmrf8anrd7ffmxx";
-    })
+  buildInputs = [
+    bzip2
+    openssl
+    zlib
   ];
 
-  patchFlags = [ "-p0" ];
-
-  installPhase = ''
-    install -D dmg2img $out/bin/dmg2img
-    install -D vfdecrypt $out/bin/vfdecrypt
+  preBuild = ''
+    sed -i "s/1.6.5/${finalAttrs.version}/" dmg2img.c
   '';
 
+  installPhase = ''
+    runHook preInstall
+
+    install -Dm755 dmg2img vfdecrypt -t $out/bin
+
+    runHook postInstall
+  '';
+
+  passthru.updateScript = unstableGitUpdater { };
+
   meta = {
+    description = "Tool which allows converting Apple compressed dmg archives to standard (hfsplus) image disk files";
+    homepage = "https://github.com/Lekensteyn/dmg2img";
+    license = lib.licenses.gpl2Only;
     platforms = lib.platforms.unix;
-    description = "Apple's compressed dmg to standard (hfsplus) image disk file convert tool";
-    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ KSJ2000 ];
+    mainProgram = "dmg2img";
   };
-}
+})

@@ -1,4 +1,17 @@
-{ stdenv, lib, fetchurl, fpc, lazarus, atk, cairo, gdk-pixbuf, glib, gtk2, libX11, pango }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  fpc,
+  lazarus,
+  atk,
+  cairo,
+  gdk-pixbuf,
+  glib,
+  gtk2,
+  libX11,
+  pango,
+}:
 
 stdenv.mkDerivation rec {
   pname = "ddrescueview";
@@ -10,9 +23,20 @@ stdenv.mkDerivation rec {
   };
   sourceRoot = "ddrescueview-source-${version}/source";
 
-  nativeBuildInputs = [ fpc lazarus ];
+  nativeBuildInputs = [
+    fpc
+    lazarus
+  ];
 
-  buildInputs = [ atk cairo gdk-pixbuf glib gtk2 libX11 pango ];
+  buildInputs = [
+    atk
+    cairo
+    gdk-pixbuf
+    glib
+    gtk2
+    libX11
+    pango
+  ];
 
   NIX_LDFLAGS = "--as-needed -rpath ${lib.makeLibraryPath buildInputs}";
 

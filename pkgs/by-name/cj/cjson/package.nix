@@ -1,4 +1,9 @@
-{ stdenv, lib, fetchFromGitHub, cmake }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+}:
 
 stdenv.mkDerivation rec {
   pname = "cjson";
@@ -12,6 +17,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
+
+  cmakeFlags = lib.optional (stdenv.cc.isClang && !stdenv.hostPlatform.isDarwin) (
+    lib.cmakeBool "ENABLE_CUSTOM_COMPILER_FLAGS" false
+  );
 
   # cJSON actually uses C99 standard, not C89
   # https://github.com/DaveGamble/cJSON/issues/275

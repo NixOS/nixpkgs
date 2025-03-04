@@ -1,24 +1,47 @@
-{ lib, stdenv, fetchurl, getopt, util-linuxMinimal, which, gperf, nix-update-script }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  getopt,
+  util-linuxMinimal,
+  which,
+  gperf,
+  nix-update-script,
+  python3Packages,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libseccomp";
-  version = "2.5.5";
+  version = "2.6.0";
 
   src = fetchurl {
     url = "https://github.com/seccomp/libseccomp/releases/download/v${version}/libseccomp-${version}.tar.gz";
-    hash = "sha256-JIosik2bmFiqa69ScSw0r+/PnJ6Ut23OAsHJqiX7M3U=";
+    hash = "sha256-g7YIUjLRWIw3ncm5yuR7s3QHzyYubnSZPGG6ctKnhNw=";
   };
 
-  outputs = [ "out" "lib" "dev" "man" "pythonsrc" ];
+  patches = [
+    ./oob-read.patch
+  ];
+
+  outputs = [
+    "out"
+    "lib"
+    "dev"
+    "man"
+    "pythonsrc"
+  ];
 
   nativeBuildInputs = [ gperf ];
   buildInputs = [ getopt ];
 
-  patchPhase = ''
+  postPatch = ''
     patchShebangs .
   '';
 
-  nativeCheckInputs = [ util-linuxMinimal which ];
+  nativeCheckInputs = [
+    util-linuxMinimal
+    which
+  ];
   doCheck = !(stdenv.targetPlatform.useLLVM or false);
 
   # Hack to ensure that patchelf --shrink-rpath get rids of a $TMPDIR reference.
@@ -33,6 +56,9 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = nix-update-script { };
+    tests = {
+      inherit (python3Packages) seccomp;
+    };
   };
 
   meta = with lib; {

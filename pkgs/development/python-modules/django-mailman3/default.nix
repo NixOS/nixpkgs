@@ -34,12 +34,15 @@ buildPythonPackage rec {
 
   build-system = [ pdm-backend ];
 
-  dependencies = [
-    django-allauth
-    django-gravatar2
-    mailmanclient
-    pytz
-  ];
+  dependencies =
+    [
+      django-allauth
+      django-gravatar2
+      mailmanclient
+      pytz
+    ]
+    ++ django-allauth.optional-dependencies.openid
+    ++ django-allauth.optional-dependencies.socialaccount;
 
   nativeCheckInputs = [
     django
@@ -62,5 +65,6 @@ buildPythonPackage rec {
     homepage = "https://gitlab.com/mailman/django-mailman3";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ qyliss ];
+    broken = lib.versionAtLeast django-allauth.version "65.0.0";
   };
 }

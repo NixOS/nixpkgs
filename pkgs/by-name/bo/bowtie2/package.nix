@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, perl
-, python3
-, tbb
-, zlib
-, runCommand
-, bowtie2
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  perl,
+  python3,
+  tbb,
+  zlib,
+  runCommand,
+  bowtie2,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -17,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "BenLangmead";
     repo = "bowtie2";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
     hash = "sha256-ZbmVOItfAgKdsMrvQIXgKiPtoQJZYfGblCGDoNPjvTU=";
   };
@@ -32,9 +33,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ tbb zlib python3 perl ];
+  buildInputs = [
+    tbb
+    zlib
+    python3
+    perl
+  ];
 
-  cmakeFlags = lib.optional (!stdenv.hostPlatform.isx86) ["-DCMAKE_CXX_FLAGS=-I${finalAttrs.src}/third_party"];
+  cmakeFlags = lib.optional (!stdenv.hostPlatform.isx86) [
+    "-DCMAKE_CXX_FLAGS=-I${finalAttrs.src}/third_party"
+  ];
 
   # ctest fails because of missing dependencies between tests
   doCheck = false;
@@ -54,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Ultrafast and memory-efficient tool for aligning sequencing reads to long reference sequences";
     license = licenses.gpl3Plus;
     homepage = "http://bowtie-bio.sf.net/bowtie2";
-    changelog = "https://github.com/BenLangmead/bowtie2/releases/tag/${lib.removePrefix "refs/tags/" finalAttrs.src.rev}";
+    changelog = "https://github.com/BenLangmead/bowtie2/releases/tag/v${finalAttrs.version}";
     maintainers = with maintainers; [ rybern ];
     platforms = platforms.all;
     mainProgram = "bowtie2";

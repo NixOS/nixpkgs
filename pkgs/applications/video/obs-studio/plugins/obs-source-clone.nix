@@ -1,22 +1,24 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, obs-studio
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  obs-studio,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "obs-source-clone";
-  version = "0.1.4-unstable-2024-02-19";
+  version = "0.1.5";
 
   src = fetchFromGitHub {
     owner = "exeldro";
     repo = "obs-source-clone";
-    rev = "d1524d5d932d6841a1fbd6061cc4a0033fb615b7";
-    hash = "sha256-W9IIIGQdreI2FQGii5NUB5tVHcqsiYAKTutOHEPCyms=";
+    tag = finalAttrs.version;
+    hash = "sha256-0rBtFPfqVvB333eeWRpVe4TgrJTiBTIzsV/SSe3EgOc=";
   };
 
   nativeBuildInputs = [ cmake ];
+
   buildInputs = [ obs-studio ];
 
   cmakeFlags = [
@@ -27,11 +29,11 @@ stdenv.mkDerivation {
     rm -rf $out/obs-plugins $out/data
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Plugin for OBS Studio to clone sources";
     homepage = "https://github.com/exeldro/obs-source-clone";
-    maintainers = with maintainers; [ flexiondotorg ];
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ flexiondotorg ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
-}
+})

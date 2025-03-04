@@ -17,8 +17,8 @@
 # This separates "what to build" (the exact gem versions) from "how to build"
 # (to make gems behave if necessary).
 
-{ lib, fetchurl, fetchpatch2, writeScript, ruby, libkrb5, libxml2, libxslt, python2, stdenv, which
-, libiconv, postgresql, nodejs, clang, sqlite, zlib, imagemagick, lasem
+{ lib, fetchurl, fetchpatch, fetchpatch2, writeScript, ruby, libkrb5, libxml2, libxslt, python2, stdenv, which
+, libiconv, libpq, nodejs, clang, sqlite, zlib, imagemagick, lasem
 , pkg-config , ncurses, xapian, gpgme, util-linux, tzdata, icu, libffi
 , cmake, libssh2, openssl, openssl_1_1, libmysqlclient, git, perl, pcre2, gecode_3, curl
 , libsodium, snappy, libossp_uuid, lxc, libpcap, xorg, gtk3, lerc, buildRubyGem
@@ -307,8 +307,7 @@ in
       substituteInPlace lib/prometheus/client/page_size.rb --replace "getconf" "${lib.getBin getconf}/bin/getconf"
     '';
   } // lib.optionalAttrs (lib.versionAtLeast attrs.version "1.0") {
-    cargoRoot = "ext/fast_mmaped_file_rs";
-    cargoDeps = rustPlatform.fetchCargoTarball {
+    cargoDeps = rustPlatform.fetchCargoVendor {
       src = stdenv.mkDerivation {
         inherit (buildRubyGem { inherit (attrs) gemName version source; })
           name
@@ -319,25 +318,27 @@ in
         dontBuilt = true;
         installPhase = ''
           cp -R ext/fast_mmaped_file_rs $out
+          cp Cargo.lock $out
         '';
       };
-      hash = if lib.versionAtLeast attrs.version "1.1.1"
-        then "sha256-RsN5XWX7Mj2ORccM0eczY+44WXsbXNTnJVcCMvnOATk="
-        else "sha256-XuQZPbFWqPHlrJvllkvLl1FjKeoAUbi8oKDrS2rY1KM=";
+      hash = "sha256-KVbmDAa9EFwTUTHPF/8ZzycbieMhAuiidiz5rqGIKOo=";
     };
+
     nativeBuildInputs = [
       cargo
       rustc
       rustPlatform.cargoSetupHook
       rustPlatform.bindgenHook
     ];
+
     disallowedReferences = [
       rustc.unwrapped
     ];
-    preBuild = ''
-      cat ../.cargo/config.toml > ext/fast_mmaped_file_rs/.cargo/config.toml
-      sed -i "s|cargo-vendor-dir|$PWD/../cargo-vendor-dir|" ext/fast_mmaped_file_rs/.cargo/config.toml
+
+    preInstall = ''
+      export CARGO_HOME="$PWD/../.cargo/"
     '';
+
     postInstall = ''
       find $out -type f -name .rustc_info.json -delete
     '';
@@ -407,15 +408,18 @@ in
       ++ lib.optional (lib.versionAtLeast attrs.version "1.53.0" && stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) autoSignDarwinBinariesHook;
     buildInputs = [ openssl ];
     hardeningDisable = [ "format" ];
-    env.NIX_CFLAGS_COMPILE = toString [
-      "-Wno-error=stringop-overflow"
-      "-Wno-error=implicit-fallthrough"
-      "-Wno-error=sizeof-pointer-memaccess"
-      "-Wno-error=cast-function-type"
-      "-Wno-error=class-memaccess"
-      "-Wno-error=ignored-qualifiers"
-      "-Wno-error=tautological-compare"
-      "-Wno-error=stringop-truncation"
+    env = lib.optionalAttrs (lib.versionOlder attrs.version "1.68.1") {
+      NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+    };
+    patches = lib.optionals (lib.versionOlder attrs.version "1.65.0") [
+      (fetchpatch {
+        name = "gcc-14-fixes.patch";
+        url = "https://boringssl.googlesource.com/boringssl/+/c70190368c7040c37c1d655f0690bcde2b109a0d%5E%21/?format=TEXT";
+        decode = "base64 -d";
+        stripLen=1;
+        extraPrefix = "third_party/boringssl-with-bazel/src/";
+        hash = "sha256-1QyQm5s55op268r72dfExNGV+UyV5Ty6boHa9DQq40U=";
+       })
     ];
     dontBuild = false;
     postPatch = ''
@@ -654,7 +658,7 @@ in
     # an unnecessary reference to the entire postgresql package.
     buildFlags = [ "--with-pg-config=ignore" ];
     nativeBuildInputs = [ pkg-config ];
-    buildInputs = [ postgresql ];
+    buildInputs = [ libpq ];
   };
 
   psych = attrs: {
@@ -807,7 +811,7 @@ in
   };
 
   sequel_pg = attrs: {
-    buildInputs = [ postgresql ];
+    buildInputs = [ libpq ];
   };
 
   snappy = attrs: {
@@ -826,6 +830,10 @@ in
     buildFlags = [
       "--with-sqlite3-include=${sqlite.dev}/include"
       "--with-sqlite3-lib=${sqlite.out}/lib"
+    ];
+    env.NIX_CFLAGS_COMPILE = toString [
+      "-Wno-error=incompatible-pointer-types"
+      "-Wno-error=int-conversion"
     ];
   };
 

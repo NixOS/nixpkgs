@@ -1,20 +1,21 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, intltool
-, glib
-, gtk3
-, json_c
-, libxml2
-, libsoup
-, upower
-, libxfce4ui
-, libxfce4util
-, xfce4-panel
-, xfconf
-, hicolor-icon-theme
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gettext,
+  pkg-config,
+  glib,
+  gtk3,
+  json_c,
+  libxml2,
+  libsoup_2_4,
+  upower,
+  libxfce4ui,
+  libxfce4util,
+  xfce4-panel,
+  xfconf,
+  hicolor-icon-theme,
+  gitUpdater,
 }:
 
 let
@@ -31,8 +32,8 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
+    gettext
     pkg-config
-    intltool
   ];
 
   buildInputs = [
@@ -40,7 +41,7 @@ stdenv.mkDerivation rec {
     gtk3
     json_c
     libxml2
-    libsoup
+    libsoup_2_4
     upower
     libxfce4ui
     libxfce4util

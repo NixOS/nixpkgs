@@ -1,23 +1,25 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, installShellFiles
-, perl
-, stdenv
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  installShellFiles,
+  perl,
+  stdenv,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "teip";
-  version = "2.3.0";
+  version = "2.3.2";
 
   src = fetchFromGitHub {
     owner = "greymd";
     repo = "teip";
     rev = "v${version}";
-    hash = "sha256-09IKAM1ha40CvF5hdQIlUab7EBBFourC70LAagrs5+4=";
+    hash = "sha256-Lr4nlAM2mEKwF3HXso/6FQEKoQK43xxLMgOU7j7orYg=";
   };
 
-  cargoHash = "sha256-cBFczgvLja6upuPnXphG2d9Rf1ZpNAVh16NHAHfXxHg=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-FFv/Msx6fXRJuRH8hjhBgc7XCg5EKWantNKQHwXpa4o=";
 
   nativeBuildInputs = [ installShellFiles ];
 

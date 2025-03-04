@@ -27,7 +27,7 @@ buildDotnetModule rec {
   enableParallelBuilding = false;
 
   projectFile = "OpenUtau.sln";
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
 
   executables = [ "OpenUtau" ];
 

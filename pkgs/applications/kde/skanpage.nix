@@ -1,12 +1,13 @@
-{ lib
-, mkDerivation
-, extra-cmake-modules
-, kirigami2
-, ktextwidgets
-, libksane
-, qtquickcontrols2
-, kpurpose
-, kquickimageedit
+{
+  lib,
+  mkDerivation,
+  extra-cmake-modules,
+  kirigami2,
+  ktextwidgets,
+  libksane,
+  qtquickcontrols2,
+  kpurpose,
+  kquickimageedit,
 }:
 
 mkDerivation {

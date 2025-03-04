@@ -1,4 +1,9 @@
-{ runCommand, lib, fontconfig, fontDirectories }:
+{
+  runCommand,
+  lib,
+  fontconfig,
+  fontDirectories,
+}:
 
 runCommand "fc-cache"
   {

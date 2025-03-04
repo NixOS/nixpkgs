@@ -1,7 +1,7 @@
 {
   stdenv,
   lib,
-  substituteAll,
+  replaceVars,
   fetchurl,
   meson,
   ninja,
@@ -14,7 +14,7 @@
   gnome,
 }:
 
-stdenv.mkDerivation (finalAttrs:{
+stdenv.mkDerivation (finalAttrs: {
   pname = "nautilus-python";
   version = "4.0.1";
 
@@ -32,8 +32,7 @@ stdenv.mkDerivation (finalAttrs:{
 
   patches = [
     # Make PyGObject’s gi library available.
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       pythonPaths = lib.concatMapStringsSep ", " (pkg: "'${pkg}/${python3.sitePackages}'") [
         python3.pkgs.pygobject3
       ];
@@ -47,6 +46,7 @@ stdenv.mkDerivation (finalAttrs:{
     gtk-doc
     docbook-xsl-nons
     docbook_xml_dtd_412
+    python3.pythonOnBuildForHost
   ];
 
   buildInputs = [

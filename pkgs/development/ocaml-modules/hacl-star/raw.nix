@@ -1,12 +1,13 @@
-{ lib
-, which
-, stdenv
-, fetchzip
-, cmake
-, ocaml
-, findlib
-, ctypes
-, cppo
+{
+  lib,
+  which,
+  stdenv,
+  fetchzip,
+  cmake,
+  ocaml,
+  findlib,
+  ctypes,
+  cppo,
 }:
 stdenv.mkDerivation rec {
   pname = "ocaml${ocaml.version}-hacl-star-raw";
@@ -17,10 +18,6 @@ stdenv.mkDerivation rec {
     hash = "sha256-6WPbdkT9IsX0Q8mF2vLBJMktEES8tU45JztOPepAL0o=";
     stripRoot = false;
   };
-
-  patches = [
-    ./aligned-alloc.patch
-  ];
 
   # strictoverflow is disabled because it breaks aarch64-darwin
   hardeningDisable = [ "strictoverflow" ];

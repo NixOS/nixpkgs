@@ -1,6 +1,7 @@
-{ lib
-, buildGoModule
-, mullvad
+{
+  lib,
+  buildGoModule,
+  mullvad,
 }:
 buildGoModule {
   pname = "libwg";
@@ -12,7 +13,7 @@ buildGoModule {
 
   modRoot = "wireguard-go-rs/libwg";
   proxyVendor = true;
-  vendorHash = "sha256-uyAzY1hoCtS7da3wtjxTGx5wBb9c9m749TzihVr94rc=";
+  vendorHash = "sha256-uzPtA9RBP5m8+18YBq+SEsgytDOWFCGPzucCzISSiLQ=";
 
   # XXX: hack to make the ar archive go to the correct place
   # This is necessary because passing `-o ...` to `ldflags` does not work
@@ -21,7 +22,11 @@ buildGoModule {
   GOBIN = "${placeholder "out"}/lib";
 
   subPackages = [ "." ];
-  ldflags = [ "-s" "-w" "-buildmode=c-archive" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-buildmode=c-archive"
+  ];
   tags = [ "daita" ];
 
   postInstall = ''

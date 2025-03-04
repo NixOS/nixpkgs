@@ -1,4 +1,9 @@
-{ lib, buildDunePackage, fetchFromGitHub, yojson }:
+{
+  lib,
+  buildDunePackage,
+  fetchFromGitHub,
+  yojson,
+}:
 
 buildDunePackage rec {
   pname = "ppx_yojson_conv_lib";

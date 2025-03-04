@@ -1,19 +1,21 @@
-{ lib
-, python3
-, fetchPypi
+{
+  lib,
+  python3Packages,
+  fetchPypi,
+  addBinToPathHook,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "pifpaf";
-  version = "3.2.1";
+  version = "3.3.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-8SSSdXBj9Yd351Iv7TdASLCfYPnkG7h6X8rBLrArgFI=";
+    hash = "sha256-xXkMj1sP1xXf6Ad/71BFbq8SHz/uHcaSqv6RQN0Ca1o=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = with python3Packages; [
     click
     daiquiri
     fixtures
@@ -23,14 +25,15 @@ python3.pkgs.buildPythonApplication rec {
     xattr
   ];
 
-  preCheck = ''
-    export PATH=$out/bin:$PATH
-  '';
-
-  nativeCheckInputs = with python3.pkgs; [
-    requests
-    testtools
-  ];
+  nativeCheckInputs =
+    with python3Packages;
+    [
+      requests
+      testtools
+    ]
+    ++ [
+      addBinToPathHook
+    ];
 
   pythonImportsCheck = [ "pifpaf" ];
 

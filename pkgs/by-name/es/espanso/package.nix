@@ -1,35 +1,35 @@
-{ lib
-, coreutils
-, fetchFromGitHub
-, rustPlatform
-, pkg-config
-, extra-cmake-modules
-, dbus
-, libX11
-, libXi
-, libXtst
-, libnotify
-, libxkbcommon
-, openssl
-, xclip
-, xdotool
-, setxkbmap
-, wl-clipboard
-, wxGTK32
-, makeWrapper
-, stdenv
-, apple-sdk_11
-, darwinMinVersionHook
-, waylandSupport ? false
-, x11Support ? stdenv.hostPlatform.isLinux
-, testers
-, espanso
+{
+  lib,
+  coreutils,
+  fetchFromGitHub,
+  rustPlatform,
+  pkg-config,
+  extra-cmake-modules,
+  dbus,
+  libX11,
+  libXi,
+  libXtst,
+  libnotify,
+  libxkbcommon,
+  libpng,
+  openssl,
+  xclip,
+  xdotool,
+  setxkbmap,
+  wl-clipboard,
+  wxGTK32,
+  makeWrapper,
+  stdenv,
+  waylandSupport ? false,
+  x11Support ? stdenv.hostPlatform.isLinux,
+  testers,
+  espanso,
 }:
 # espanso does not support building with both X11 and Wayland support at the same time
 assert stdenv.hostPlatform.isLinux -> x11Support != waylandSupport;
 assert stdenv.hostPlatform.isDarwin -> !x11Support;
 assert stdenv.hostPlatform.isDarwin -> !waylandSupport;
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "espanso";
   version = "2.2-unstable-2024-05-14";
 
@@ -56,35 +56,41 @@ rustPlatform.buildRustPackage rec {
 
   # Ref: https://github.com/espanso/espanso/blob/78df1b704fe2cc5ea26f88fdc443b6ae1df8a989/scripts/build_binary.rs#LL49C3-L62C4
   buildNoDefaultFeatures = true;
-  buildFeatures = [
-    "modulo"
-  ] ++ lib.optionals waylandSupport [
-    "wayland"
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    "vendored-tls"
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    "native-tls"
-  ];
+  buildFeatures =
+    [
+      "modulo"
+    ]
+    ++ lib.optionals waylandSupport [
+      "wayland"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      "vendored-tls"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      "native-tls"
+    ];
 
-  buildInputs = [
-    wxGTK32
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    openssl
-    dbus
-    libnotify
-    libxkbcommon
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    apple-sdk_11
-    (darwinMinVersionHook "10.13")
-  ] ++ lib.optionals waylandSupport [
-    wl-clipboard
-  ] ++ lib.optionals x11Support [
-    libXi
-    libXtst
-    libX11
-    xclip
-    xdotool
-  ];
+  buildInputs =
+    [
+      libpng
+      wxGTK32
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      openssl
+      dbus
+      libnotify
+      libxkbcommon
+    ]
+    ++ lib.optionals waylandSupport [
+      wl-clipboard
+    ]
+    ++ lib.optionals x11Support [
+      libXi
+      libXtst
+      libX11
+      xclip
+      xdotool
+    ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace scripts/create_bundle.sh \
@@ -95,27 +101,37 @@ rustPlatform.buildRustPackage rec {
       --replace-fail "<string>espanso</string>" "<string>${placeholder "out"}/Applications/Espanso.app/Contents/MacOS/espanso</string>"
     substituteInPlace espanso/src/path/macos.rs  espanso/src/path/linux.rs \
       --replace-fail '"/usr/local/bin/espanso"' '"${placeholder "out"}/bin/espanso"'
+
+    substituteInPlace espanso-modulo/build.rs \
+      --replace-fail '"--with-libpng=builtin"' '"--with-libpng=sys"'
   '';
 
   # Some tests require networking
   doCheck = false;
 
   postInstall =
-    if stdenv.hostPlatform.isDarwin then ''
-      EXEC_PATH=$out/bin/espanso BUILD_ARCH=current ${stdenv.shell} ./scripts/create_bundle.sh
-    '' else ''
-      wrapProgram $out/bin/espanso \
-        --prefix PATH : ${lib.makeBinPath (
-          lib.optionals stdenv.hostPlatform.isLinux [
-            libnotify
-            setxkbmap
-          ] ++ lib.optionals waylandSupport [
-            wl-clipboard
-          ] ++ lib.optionals x11Support [
-            xclip
-          ]
-        )}
-    '';
+    if stdenv.hostPlatform.isDarwin then
+      ''
+        EXEC_PATH=$out/bin/espanso BUILD_ARCH=current ${stdenv.shell} ./scripts/create_bundle.sh
+      ''
+    else
+      ''
+        wrapProgram $out/bin/espanso \
+          --prefix PATH : ${
+            lib.makeBinPath (
+              lib.optionals stdenv.hostPlatform.isLinux [
+                libnotify
+                setxkbmap
+              ]
+              ++ lib.optionals waylandSupport [
+                wl-clipboard
+              ]
+              ++ lib.optionals x11Support [
+                xclip
+              ]
+            )
+          }
+      '';
 
   passthru.tests.version = testers.testVersion {
     package = espanso;
@@ -128,7 +144,11 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "espanso";
     homepage = "https://espanso.org";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ kimat pyrox0 n8henrie ];
+    maintainers = with maintainers; [
+      kimat
+      pyrox0
+      n8henrie
+    ];
     platforms = platforms.unix;
 
     longDescription = ''

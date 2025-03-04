@@ -1,41 +1,51 @@
-{ lib, stdenv, fetchFromGitLab, ocaml, findlib, bzip2, autoreconfHook }:
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  ocaml,
+  findlib,
+  bzip2,
+  autoreconfHook,
+}:
 
-if lib.versionOlder ocaml.version "4.02"
-|| lib.versionAtLeast ocaml.version "5.0"
-then throw "bz2 is not available for OCaml ${ocaml.version}"
+if lib.versionOlder ocaml.version "4.02" || lib.versionAtLeast ocaml.version "5.0" then
+  throw "bz2 is not available for OCaml ${ocaml.version}"
 else
 
-stdenv.mkDerivation rec {
-  pname = "ocaml${ocaml.version}-bz2";
-  version = "0.7.0";
+  stdenv.mkDerivation rec {
+    pname = "ocaml${ocaml.version}-bz2";
+    version = "0.7.0";
 
-  src = fetchFromGitLab {
-    owner = "irill";
-    repo = "camlbz2";
-    rev = version;
-    sha256 = "sha256-jBFEkLN2fbC3LxTu7C0iuhvNg64duuckBHWZoBxrV/U=";
-  };
+    src = fetchFromGitLab {
+      owner = "irill";
+      repo = "camlbz2";
+      rev = version;
+      sha256 = "sha256-jBFEkLN2fbC3LxTu7C0iuhvNg64duuckBHWZoBxrV/U=";
+    };
 
-  autoreconfFlags = [ "-I" "." ];
+    autoreconfFlags = [
+      "-I"
+      "."
+    ];
 
-  nativeBuildInputs = [
-    autoreconfHook
-    ocaml
-    findlib
-  ];
+    nativeBuildInputs = [
+      autoreconfHook
+      ocaml
+      findlib
+    ];
 
-  propagatedBuildInputs = [
-    bzip2
-  ];
+    propagatedBuildInputs = [
+      bzip2
+    ];
 
-  strictDeps = true;
+    strictDeps = true;
 
-  preInstall = "mkdir -p $OCAMLFIND_DESTDIR/stublibs";
+    preInstall = "mkdir -p $OCAMLFIND_DESTDIR/stublibs";
 
-  meta = with lib; {
-    description = "OCaml bindings for the libbz2 (AKA, bzip2) (de)compression library";
-    downloadPage = "https://gitlab.com/irill/camlbz2";
-    license = licenses.lgpl21;
-    maintainers = [ ];
-  };
-}
+    meta = with lib; {
+      description = "OCaml bindings for the libbz2 (AKA, bzip2) (de)compression library";
+      downloadPage = "https://gitlab.com/irill/camlbz2";
+      license = licenses.lgpl21;
+      maintainers = [ ];
+    };
+  }

@@ -24,18 +24,18 @@ let
 in
 buildGoModule rec {
   pname = "nixos-facter";
-  version = "0.2.0";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "numtide";
     repo = "nixos-facter";
     rev = "v${version}";
-    hash = "sha256-Rird32KB+V1xGBZvrEaPDPOhl5YMClIljOLcFO/0vOU=";
+    hash = "sha256-HJt6FEQbzwlVMow47p1DtqXdmCxLYA6g3D1EgGnKcUo=";
   };
 
-  vendorHash = "sha256-qDzd+aq08PN9kl1YkvNLGvWaFVh7xFXJhGdx/ELwYGY=";
+  vendorHash = "sha256-WCItbRbGgclXGtJyHCkDgaPe3Mobe4mT/4c16AEdF5o=";
 
-  CGO_ENABLED = 1;
+  env.CGO_ENABLED = 1;
 
   buildInputs = [
     libusb1

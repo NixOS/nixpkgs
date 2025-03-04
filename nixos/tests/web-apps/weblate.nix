@@ -97,6 +97,7 @@ import ../make-test-python.nix (
       # TODO: Check sending and receiving email.
       # server.wait_for_unit("postfix.service")
 
+      server.succeed("sudo -iu weblate -- weblate check")
       # TODO: The goal is for this to succeed, but there are still some checks failing.
       # server.succeed("sudo -iu weblate -- weblate check --deploy")
     '';

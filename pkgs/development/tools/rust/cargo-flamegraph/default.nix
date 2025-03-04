@@ -1,19 +1,27 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, makeWrapper, perf, nix-update-script
-, Security
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  makeWrapper,
+  perf,
+  nix-update-script,
+  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-flamegraph";
-  version = "0.6.5";
+  version = "0.6.7";
 
   src = fetchFromGitHub {
     owner = "flamegraph-rs";
     repo = "flamegraph";
     rev = "v${version}";
-    sha256 = "sha256-VrC3c3a1G8mn9U6txeynsaWOL4HQQk2IOiQqS52iPGo=";
+    sha256 = "sha256-OpneGyulSreUKhmnLfsJ2sEbkDPCcrDjkRu9ccKZcJc=";
   };
 
-  cargoHash = "sha256-KwpveTiViY+C4A+fE5yeGuT9PXbDyi+YsOc75mX2KdU=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-uErlNPkacAmURNKAZp1wLsV2NB1w9HfjLZl5PgeMRu0=";
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ makeWrapper ];
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
@@ -32,7 +40,13 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Easy flamegraphs for Rust projects and everything else, without Perl or pipes <3";
     homepage = "https://github.com/flamegraph-rs/flamegraph";
-    license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ killercup matthiasbeyer ];
+    license = with licenses; [
+      asl20 # or
+      mit
+    ];
+    maintainers = with maintainers; [
+      killercup
+      matthiasbeyer
+    ];
   };
 }

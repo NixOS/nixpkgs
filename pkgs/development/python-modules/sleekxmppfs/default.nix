@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "aszymanik";
     repo = "SleekXMPP";
-    rev = "refs/tags/sleek-${version}";
+    tag = "sleek-${version}";
     hash = "sha256-E2S4fMk5dRr8g42iOYmKOknHX7NS6EZ/LAZKc1v3dPg=";
   };
 

@@ -1,18 +1,19 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "dnstwist";
-  version = "20240812";
+  version = "20250130";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "elceef";
     repo = "dnstwist";
-    rev = "refs/tags/${version}";
-    hash = "sha256-J6MfPKj7iACsiiSUU/2gxQdwtmqw9NKnjDoSdhxKoAw=";
+    tag = version;
+    hash = "sha256-cgSQ6KDCvTYX0vp0jqNzKHzo84IXrztoYqoTJNF+FiI=";
   };
 
   build-system = with python3.pkgs; [

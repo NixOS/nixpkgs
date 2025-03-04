@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
 
   npmHooks,
@@ -8,8 +7,6 @@
   nodejs,
 
   rustPlatform,
-  cargo,
-  rustc,
   cargo-tauri_1,
 
   pkg-config,
@@ -17,29 +14,26 @@
   libXtst,
   libevdev,
   gtk3,
-  libsoup,
+  libsoup_2_4,
   webkitgtk_4_0,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+rustPlatform.buildRustPackage rec {
   pname = "mouse-actions-gui";
   version = "0.4.5";
 
   src = fetchFromGitHub {
     owner = "jersou";
     repo = "mouse-actions";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${version}";
     hash = "sha256-44F4CdsDHuN2FuijnpfmoFy4a/eAbYOoBYijl9mOctg=";
   };
 
-  sourceRoot = "${finalAttrs.src.name}/config-editor";
+  sourceRoot = "${src.name}/config-editor";
 
   nativeBuildInputs = [
     npmHooks.npmConfigHook
     nodejs
-    rustPlatform.cargoSetupHook
-    cargo
-    rustc
     cargo-tauri_1.hook
     pkg-config
     wrapGAppsHook3
@@ -52,30 +46,27 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Tauri deps
     gtk3
-    libsoup
+    libsoup_2_4
     webkitgtk_4_0
   ];
 
   npmDeps = fetchNpmDeps {
-    inherit (finalAttrs) src sourceRoot;
+    inherit src sourceRoot;
     hash = "sha256-amDTYAvEoDHb7+dg39+lUne0dv0M9vVe1vHoXk2agZA=";
   };
 
   cargoRoot = "src-tauri";
-  buildAndTestSubdir = finalAttrs.cargoRoot;
+  buildAndTestSubdir = cargoRoot;
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit (finalAttrs) pname version src;
-    sourceRoot = "${finalAttrs.sourceRoot}/${finalAttrs.cargoRoot}";
-    hash = "sha256-H8TMpYFJWp227jPA5H2ZhSqTMiT/U6pT6eLyjibuoLU=";
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-G5PQWPcPOVhq11BQIplbB3mLAGFCVm+vQ4eM4/5MFwI=";
 
   postInstall = ''
     install -Dm644 ${./80-mouse-actions.rules} $out/etc/udev/rules.d/80-mouse-actions.rules
   '';
 
   meta = {
-    changelog = "https://github.com/jersou/mouse-actions/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/jersou/mouse-actions/blob/${src.rev}/CHANGELOG.md";
     description = "Mouse event based command executor, a mix between Easystroke and Comiz edge commands";
     homepage = "https://github.com/jersou/mouse-actions";
     license = lib.licenses.mit;
@@ -83,4 +74,4 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ tomasajt ];
     platforms = lib.platforms.linux;
   };
-})
+}

@@ -1,4 +1,14 @@
-{ bash, btrfs-progs, coreutils, fetchFromGitHub, gnugrep, lib, makeWrapper, stdenvNoCC, util-linuxMinimal }:
+{
+  bash,
+  btrfs-progs,
+  coreutils,
+  fetchFromGitHub,
+  gnugrep,
+  lib,
+  makeWrapper,
+  stdenvNoCC,
+  util-linuxMinimal,
+}:
 stdenvNoCC.mkDerivation rec {
   pname = "btrfs-snap";
   version = "1.7.3";
@@ -15,12 +25,14 @@ stdenvNoCC.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/bin
     cp btrfs-snap $out/bin/
-    wrapProgram $out/bin/btrfs-snap --prefix PATH : ${lib.makeBinPath [
-      btrfs-progs       # btrfs
-      coreutils         # cut, date, head, ls, mkdir, readlink, stat, tail, touch, test, [
-      gnugrep           # grep
-      util-linuxMinimal # logger, mount
-    ]}
+    wrapProgram $out/bin/btrfs-snap --prefix PATH : ${
+      lib.makeBinPath [
+        btrfs-progs # btrfs
+        coreutils # cut, date, head, ls, mkdir, readlink, stat, tail, touch, test, [
+        gnugrep # grep
+        util-linuxMinimal # logger, mount
+      ]
+    }
   '';
   meta = with lib; {
     description = "Create and maintain the history of snapshots of btrfs filesystems";
@@ -29,5 +41,5 @@ stdenvNoCC.mkDerivation rec {
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ lionello ];
     platforms = platforms.linux;
- };
+  };
 }

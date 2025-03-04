@@ -1,15 +1,18 @@
-{ python3Packages
-, lib
-, fetchFromGitHub
-, gettext
-, gtk3
-, gobject-introspection
-, intltool, wrapGAppsHook3, glib
-, librsvg
-, libayatana-appindicator
-, libpulseaudio
-, keybinder3
-, gdk-pixbuf
+{
+  python3Packages,
+  lib,
+  fetchFromGitHub,
+  gettext,
+  gtk3,
+  gobject-introspection,
+  intltool,
+  wrapGAppsHook3,
+  glib,
+  librsvg,
+  libayatana-appindicator,
+  libpulseaudio,
+  keybinder3,
+  gdk-pixbuf,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -19,7 +22,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "yktoo";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     sha256 = "sha256-Benhlhz81EgL6+pmjzyruKBOS6O7ce5PPmIIzk2Zong=";
   };
 

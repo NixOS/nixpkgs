@@ -1,4 +1,10 @@
-{ stdenv, lib, cmake, fetchFromGitHub, openssl }:
+{
+  stdenv,
+  lib,
+  cmake,
+  fetchFromGitHub,
+  openssl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "xva-img";

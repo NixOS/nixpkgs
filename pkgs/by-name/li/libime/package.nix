@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchFromGitHub
-, cmake
-, extra-cmake-modules
-, boost
-, python3
-, fcitx5
-, zstd
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchFromGitHub,
+  cmake,
+  extra-cmake-modules,
+  boost,
+  python3,
+  fcitx5,
+  zstd,
 }:
 
 let
@@ -16,10 +17,10 @@ let
     url = "https://download.fcitx-im.org/data/table-${tableVer}.tar.zst";
     hash = "sha256-Pp2HsEo5PxMXI0csjqqGDdI8N4o9T2qQBVE7KpWzYUs=";
   };
-  arpaVer = "20241001";
+  arpaVer = "20250113";
   arpa = fetchurl {
     url = "https://download.fcitx-im.org/data/lm_sc.arpa-${arpaVer}.tar.zst";
-    hash = "sha256-VJNOc5Zus46k/o6unGHf5IavN9octTFqBrGcfSieMGM=";
+    hash = "sha256-7oPs8g1S6LzNukz2zVcYPVPCV3E6Xrd+46Y9UPw3lt0=";
   };
   dictVer = "20241001";
   dict = fetchurl {
@@ -29,13 +30,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "libime";
-  version = "1.1.9";
+  version = "1.1.10";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = "libime";
     rev = version;
-    hash = "sha256-Ky4ERYQRUiPn+EYrgfmfHxdVp31a1oD4nevDniPOT20=";
+    hash = "sha256-liVJEBUYcVYjjJCMW68xXbEHKQpAgTLCPm2yIdWG3IQ=";
     fetchSubmodules = true;
   };
 

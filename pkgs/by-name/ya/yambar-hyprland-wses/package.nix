@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -14,12 +15,16 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-furHj1AAFgNiNHP9RBsVrIvrDckSKU8FXilzH9TQ99c=";
   };
 
-  cargoHash = "sha256-/ewEgrBxRw5Xii5PX1GLKzBrZjgnzYc/Hz+M1pJpncQ=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-bAJ8TTlSgXDYC7gSTuSISIS1HH0jCF9W5WswZhw94vQ=";
 
   meta = {
     description = "Enable Yambar to show Hyprland workspaces";
     homepage = "https://github.com/jonhoo/yambar-hyprland-wses";
-    license = with lib.licenses; [ asl20 mit ];
+    license = with lib.licenses; [
+      asl20
+      mit
+    ];
     maintainers = with lib.maintainers; [ ludovicopiero ];
     mainProgram = "yambar-hyprland-wses";
     platforms = lib.platforms.linux;

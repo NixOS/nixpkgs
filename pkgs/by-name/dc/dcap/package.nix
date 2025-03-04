@@ -1,12 +1,13 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, autoconf
-, automake
-, libtool
-, zlib
-, cunit
-, libxcrypt
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  autoconf,
+  automake,
+  libtool,
+  zlib,
+  cunit,
+  libxcrypt,
 }:
 stdenv.mkDerivation rec {
   pname = "dcap";
@@ -19,19 +20,34 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-hn4nkFTIbSUUhvf9UfsEqVhphAdNWmATaCrv8jOuC0Y=";
   };
 
-  nativeBuildInputs = [ autoconf automake libtool ];
-  buildInputs = [ zlib libxcrypt ];
+  nativeBuildInputs = [
+    autoconf
+    automake
+    libtool
+  ];
+  buildInputs = [
+    zlib
+    libxcrypt
+  ];
+
+  strictDeps = true;
 
   preConfigure = ''
-    patchShebangs bootstrap.sh
+    patchShebangs --build bootstrap.sh
     ./bootstrap.sh
   '';
 
   doCheck = true;
 
-  nativeCheckInputs = [ cunit ];
+  checkInputs = [ cunit ];
 
-  outputs = [ "bin" "dev" "out" "man" "doc" ];
+  outputs = [
+    "bin"
+    "dev"
+    "out"
+    "man"
+    "doc"
+  ];
 
   meta = with lib; {
     broken = stdenv.hostPlatform.isDarwin;

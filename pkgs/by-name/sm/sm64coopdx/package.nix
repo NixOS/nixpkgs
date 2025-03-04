@@ -36,13 +36,13 @@ in
 # note: there is a generic builder in pkgs/games/sm64ex/generic.nix that is meant to help build sm64ex and its forks; however sm64coopdx has departed significantly enough in its build that it doesn't make sense to use that other than the baseRom derivation
 stdenv.mkDerivation (finalAttrs: {
   pname = "sm64coopdx";
-  version = "1.0.3";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "coop-deluxe";
     repo = "sm64coopdx";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-cIH3escLFMcHgtFxeSKIo5nZXvaknti+EVt72uB4XXc=";
+    hash = "sha256-ktdvzOUYSh6H49BVDovqYt5CGyvJi4UW6nJOOD/HGGU=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -71,10 +71,6 @@ stdenv.mkDerivation (finalAttrs: {
     # remove -march flags, stdenv manages them
     substituteInPlace Makefile \
       --replace-fail ' -march=$(TARGET_ARCH)' ""
-    # workaround a bug in the build
-    # see https://github.com/coop-deluxe/sm64coopdx/issues/186#issuecomment-2216163935
-    # this can likely be removed when the next version releases
-    make build/us_pc/sound/sequences.bin
   '';
 
   installPhase = ''

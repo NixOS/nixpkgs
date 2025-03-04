@@ -51,6 +51,9 @@ let
       chmod -R u+w "$out/include/dispatch"
       find "$out/include/dispatch" -name '*.h' -exec sed -i {} -e 's/, bridgeos([^)]*)//g' \;
 
+      install -D -t "$out/include/System/i386" \
+        '${xnu}/osfmk/i386/cpu_capabilities.h'
+
       install -D -t "$out/include/kern" \
         '${xnu}/osfmk/kern/debug.h'
 
@@ -59,7 +62,11 @@ let
 
       install -D -t "$out/include/os" \
         '${Libc}/os/assumes.h' \
+        '${Libc}/os/variant_private.h' \
         '${xnu}/libkern/os/base_private.h'
+      substituteInPlace "$out/include/os/variant_private.h" \
+        --replace-fail ', bridgeos(4.0)' "" \
+        --replace-fail ', bridgeos' ""
       touch "$out/include/os/feature_private.h"
 
       install -D -t "$out/include/sys" \
@@ -80,11 +87,6 @@ mkAppleDerivation {
   releaseName = "system_cmds";
 
   xcodeHash = "sha256-gdtn3zNIneZKy6+X0mQ51CFVLNM6JQYLbd/lotG5/Tw=";
-
-  patches = [
-    # Use availability checks to fall back to older APIs on older macOS versions.
-    ./patches/0001-Add-availability-checks-to-vm_purgeable_stat.patch
-  ];
 
   postPatch = ''
     # Replace hard-coded, impure system paths with the output path in the store.

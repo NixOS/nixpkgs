@@ -1,4 +1,9 @@
-{ lib, fetchFromGitHub, stdenvNoCC, wget }:
+{
+  lib,
+  fetchFromGitHub,
+  stdenvNoCC,
+  wget,
+}:
 
 stdenvNoCC.mkDerivation rec {
   pname = "junest";
@@ -7,7 +12,7 @@ stdenvNoCC.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "fsquillace";
     repo = "junest";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-Dq4EqmeFI1TEbnc4kQwgqe71eJJpzWm2ywt1y6fD8z4=";
   };
 
@@ -36,4 +41,3 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.linux;
   };
 }
-

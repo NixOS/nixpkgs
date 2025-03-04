@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, bzip2, openssl, zlib }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  bzip2,
+  openssl,
+  zlib,
+}:
 
 stdenv.mkDerivation rec {
   pname = "imgpatchtools";
@@ -11,7 +18,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-7TOkqaXPui14VcSmMmYJ1Wg+s85wrgp+E0XcCB0Ml7M=";
   };
 
-  buildInputs = [ bzip2 openssl zlib ];
+  buildInputs = [
+    bzip2
+    openssl
+    zlib
+  ];
 
   installPhase = "install -Dt $out/bin bin/*";
 

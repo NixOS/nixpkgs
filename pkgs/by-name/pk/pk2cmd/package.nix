@@ -1,4 +1,10 @@
-{lib, stdenv, fetchurl, libusb-compat-0_1, makeWrapper}:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libusb-compat-0_1,
+  makeWrapper,
+}:
 
 stdenv.mkDerivation rec {
   pname = "pk2cmd";
@@ -8,7 +14,10 @@ stdenv.mkDerivation rec {
     sha256 = "1yjpi2qshnqfpan4w3ggakkr3znfrx5cxkny92ka7v9na3g2fc4h";
   };
 
-  makeFlags = [ "LIBUSB=${libusb-compat-0_1.dev}" "linux" ];
+  makeFlags = [
+    "LIBUSB=${libusb-compat-0_1.dev}"
+    "linux"
+  ];
 
   installPhase = ''
     mkdir -p $out/bin $out/share/pk2
@@ -22,7 +31,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://www.microchip.com/pickit2";
-    license = lib.licenses.unfree; #MicroChip-PK2
+    license = lib.licenses.unfree; # MicroChip-PK2
     description = "Microchip PIC programming software for the PICKit2 programmer";
     mainProgram = "pk2cmd";
   };

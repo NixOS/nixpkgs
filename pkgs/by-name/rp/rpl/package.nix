@@ -1,14 +1,18 @@
-{ lib, fetchPypi, python3Packages }:
+{
+  lib,
+  fetchPypi,
+  python3Packages,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "rpl";
-  version = "1.15.7";
+  version = "1.17";
 
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Xq3GLa1TnS4nobPHHCkFUEo9vgI4DGyY2/hQWtkwNRA=";
+    hash = "sha256-bx+7e0ydAz/Jd1AYM9Mz1oo9SHmG27cXF50N1IYd4gE=";
   };
 
   nativeBuildInputs = [

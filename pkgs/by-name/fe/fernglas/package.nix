@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, fetchYarnDeps
-, fixup-yarn-lock
-, python3
-, jq
-, yarn
-, nodejs-slim
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  fetchYarnDeps,
+  fixup-yarn-lock,
+  python3,
+  jq,
+  yarn,
+  nodejs-slim,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -21,7 +22,13 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-0wj5AS8RLVr+S/QWWxCsMvmVjmXUWGfR9kPaZimJEss=";
   };
 
-  nativeBuildInputs = [ yarn nodejs-slim fixup-yarn-lock python3 jq ];
+  nativeBuildInputs = [
+    yarn
+    nodejs-slim
+    fixup-yarn-lock
+    python3
+    jq
+  ];
 
   nlnog_communities = fetchFromGitHub {
     owner = "NLNOG";
@@ -30,18 +37,23 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-FlbOBX/+/LLmoqMJLvu59XuHYmiohIhDc1VjkZu4Wzo=";
   };
 
-  cargoHash = "sha256-ls9HvwtbpOwzQbi/+9IbgXurZp0LjQKGZcDuLZlX+Vk=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-aY5/dIplV8yWaQ2IdWxxC7T1DoKeRjsN5eT+UxsaA1E=";
 
   offlineCache = fetchYarnDeps {
     yarnLock = src + "/frontend/yarn.lock";
     hash = "sha256-/ubCAs4C5nG8xNC77jTH+cJVNgddSxqGGPEVLDH/Cdo=";
   };
 
-  cargoBuildFlags = lib.optionals (stdenv.hostPlatform.isMusl && stdenv.hostPlatform.isStatic) [
-    "--features" "mimalloc"
-  ] ++ [
-    "--features" "embed-static"
-  ];
+  cargoBuildFlags =
+    lib.optionals (stdenv.hostPlatform.isMusl && stdenv.hostPlatform.isStatic) [
+      "--features"
+      "mimalloc"
+    ]
+    ++ [
+      "--features"
+      "embed-static"
+    ];
 
   preBuild = ''
     python3 contrib/print_communities.py $nlnog_communities/communities | jq . > src/communities.json

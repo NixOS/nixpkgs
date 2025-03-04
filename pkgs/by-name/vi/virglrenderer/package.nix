@@ -1,7 +1,19 @@
-{ lib, stdenv, fetchurl, meson, ninja, pkg-config, python3
-, libGLU, libepoxy, libX11, libdrm, mesa
-, vaapiSupport ? true, libva
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  libGLU,
+  libepoxy,
+  libX11,
+  libdrm,
+  libgbm,
+  vaapiSupport ? !stdenv.hostPlatform.isDarwin,
+  libva,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation rec {
@@ -15,12 +27,26 @@ stdenv.mkDerivation rec {
 
   separateDebugInfo = true;
 
-  buildInputs = [ libGLU libepoxy libX11 libdrm mesa ]
-    ++ lib.optionals vaapiSupport [ libva ];
+  buildInputs =
+    [
+      libepoxy
+    ]
+    ++ lib.optionals vaapiSupport [ libva ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      libGLU
+      libX11
+      libdrm
+      libgbm
+    ];
 
-  nativeBuildInputs = [ meson ninja pkg-config python3 ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    python3
+  ];
 
-  mesonFlags= [
+  mesonFlags = [
     (lib.mesonBool "video" vaapiSupport)
   ];
 
@@ -36,7 +62,7 @@ stdenv.mkDerivation rec {
     mainProgram = "virgl_test_server";
     homepage = "https://virgil3d.github.io/";
     license = licenses.mit;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = [ maintainers.xeji ];
   };
 }

@@ -1,10 +1,11 @@
-{ lib
-, fetchFromSourcehut
-, rustPlatform
-, pkg-config
-, libxkbcommon
-, makeWrapper
-, slurp
+{
+  lib,
+  fetchFromSourcehut,
+  rustPlatform,
+  pkg-config,
+  libxkbcommon,
+  makeWrapper,
+  slurp,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -18,9 +19,13 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-kf/qloCaptxPzPEgd8fkzTfgqsI/PC3KJfHpBQWadjQ=";
   };
 
-  cargoHash = "sha256-a70zJdhPncagah/gCvkHtSvnYhnYMTINCd5ZyBeDwAE=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-ZL0dKvCX/cvMzJi05qPULlwWuUcXH/bY84sDH67UFHg=";
 
-  nativeBuildInputs = [ pkg-config makeWrapper ];
+  nativeBuildInputs = [
+    pkg-config
+    makeWrapper
+  ];
 
   buildInputs = [ libxkbcommon ];
 
@@ -34,6 +39,9 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://git.sr.ht/~whynothugo/shotman";
     license = licenses.isc;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ zendo fpletz ];
+    maintainers = with maintainers; [
+      zendo
+      fpletz
+    ];
   };
 }

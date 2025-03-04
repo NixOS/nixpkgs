@@ -1,14 +1,15 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, flac
-, libpulseaudio
-, qtbase
-, qtgraphicaleffects
-, qtquickcontrols2
-, wrapQtAppsHook
-, makeWrapper
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  flac,
+  libpulseaudio,
+  qtbase,
+  qtgraphicaleffects,
+  qtquickcontrols2,
+  wrapQtAppsHook,
+  makeWrapper,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

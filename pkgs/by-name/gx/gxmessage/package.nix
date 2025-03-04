@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchurl, gtk3, intltool, pkg-config, texinfo }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gtk3,
+  intltool,
+  pkg-config,
+  texinfo,
+}:
 
 stdenv.mkDerivation rec {
   pname = "gxmessage";
@@ -9,14 +17,20 @@ stdenv.mkDerivation rec {
     sha256 = "db4e1655fc58f31e5770a17dfca4e6c89028ad8b2c8e043febc87a0beedeef05";
   };
 
-  nativeBuildInputs = [ pkg-config intltool ];
-  buildInputs = [ gtk3 texinfo ];
+  nativeBuildInputs = [
+    pkg-config
+    intltool
+  ];
+  buildInputs = [
+    gtk3
+    texinfo
+  ];
 
   meta = {
     description = "GTK enabled dropin replacement for xmessage";
     homepage = "https://trmusson.dreamhosters.com/programs.html#gxmessage";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [jfb];
+    maintainers = with lib.maintainers; [ jfb ];
     platforms = with lib.platforms; linux;
     mainProgram = "gxmessage";
   };

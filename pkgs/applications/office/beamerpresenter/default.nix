@@ -1,40 +1,41 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, wrapGAppsHook3
-, wrapQtAppsHook
-, gst_all_1
-, qtbase
-, qtsvg
-, qtmultimedia
-, qttools
-, qtwayland
-, zlib
-# only required when using poppler
-, poppler
-# only required when using mupdf
-, freetype
-, gumbo
-, jbig2dec
-, mupdf
-, openjpeg
-# choose renderer: mupdf or poppler or both (not recommended)
-, usePoppler ? false
-, useMupdf ? true
-, useExternalRenderer ? false
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  wrapGAppsHook3,
+  wrapQtAppsHook,
+  gst_all_1,
+  qtbase,
+  qtsvg,
+  qtmultimedia,
+  qttools,
+  qtwayland,
+  zlib,
+  # only required when using poppler
+  poppler,
+  # only required when using mupdf
+  freetype,
+  gumbo,
+  jbig2dec,
+  mupdf,
+  openjpeg,
+  # choose renderer: mupdf or poppler or both (not recommended)
+  usePoppler ? false,
+  useMupdf ? true,
+  useExternalRenderer ? false,
 }:
 
 stdenv.mkDerivation rec {
   pname = "beamerpresenter";
-  version = "0.2.5";
+  version = "0.2.6";
 
   src = fetchFromGitHub {
     owner = "stiglers-eponym";
     repo = "BeamerPresenter";
     rev = "v${version}";
-    hash = "sha256-ofS0KMsn0KG8squIvMPxSCgE/qNK+Kd47psNziLBBoo=";
+    hash = "sha256-sPeWlPkWOPfLAoAC/+T7nyhPqvoaZg6aMOIVLjMqd2k=";
   };
 
   nativeBuildInputs = [
@@ -46,26 +47,30 @@ stdenv.mkDerivation rec {
 
   dontWrapGApps = true;
 
-  buildInputs = [
-    gst_all_1.gst-libav
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
-    zlib
-    qtbase
-    qtsvg
-    qtmultimedia
-    qttools
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    qtwayland
-  ] ++ lib.optionals useMupdf [
-    freetype
-    gumbo
-    jbig2dec
-    mupdf
-    openjpeg
-  ] ++ lib.optionals usePoppler [
-    poppler
-  ];
+  buildInputs =
+    [
+      gst_all_1.gst-libav
+      gst_all_1.gst-plugins-base
+      gst_all_1.gst-plugins-good
+      zlib
+      qtbase
+      qtsvg
+      qtmultimedia
+      qttools
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      qtwayland
+    ]
+    ++ lib.optionals useMupdf [
+      freetype
+      gumbo
+      jbig2dec
+      mupdf
+      openjpeg
+    ]
+    ++ lib.optionals usePoppler [
+      poppler
+    ];
 
   cmakeFlags = [
     "-DGIT_VERSION=OFF"
@@ -87,9 +92,15 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Modular multi screen pdf presentation viewer";
     homepage = "https://github.com/stiglers-eponym/BeamerPresenter";
-    license = with licenses; [ agpl3Only gpl3Plus ];
+    license = with licenses; [
+      agpl3Only
+      gpl3Plus
+    ];
     platforms = platforms.all;
-    maintainers = with maintainers; [ pacien dotlambda ];
+    maintainers = with maintainers; [
+      euxane
+      dotlambda
+    ];
     mainProgram = "beamerpresenter";
   };
 }

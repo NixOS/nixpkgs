@@ -1,8 +1,9 @@
-{ lib
-, rustPlatform
-, fetchCrate
-, installShellFiles
-, ronn
+{
+  lib,
+  rustPlatform,
+  fetchCrate,
+  installShellFiles,
+  ronn,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -14,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-1FOPe466GqQfiIpsQT9DJn+FupI2vy9b4+7p31ceY6M=";
   };
 
-  cargoHash = "sha256-Up6wvkZJ4yLrXp/2sEAv5RqGbhLOQPNHO2vEy2Vhy+E=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-SIPak7tl/fIH6WzvAl8bjhclZqQ6imC/zdxCnBnEsbk=";
 
   nativeBuildInputs = [
     installShellFiles

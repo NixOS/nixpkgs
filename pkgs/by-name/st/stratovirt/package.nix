@@ -1,7 +1,17 @@
-{ lib, rustPlatform, fetchgit
-, pkg-config, pixman, libcap_ng, cyrus_sasl
-, libpulseaudio, libclang, gtk3, libusbgx, alsa-lib
-, linuxHeaders, libseccomp
+{
+  lib,
+  rustPlatform,
+  fetchgit,
+  pkg-config,
+  pixman,
+  libcap_ng,
+  cyrus_sasl,
+  libpulseaudio,
+  gtk3,
+  libusbgx,
+  alsa-lib,
+  linuxHeaders,
+  libseccomp,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -14,7 +24,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-1Ex6ahKBoVRikSqrgHGYaBFzWkPFDm8bGVyB7KmO8tI=";
   };
 
-  cargoHash = "sha256-uuZCbmt3eIlKurwMOV7LezVSjOVG/90OdT2PC8YLi3I=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-tNFF5WdQyNqkj2ahtpOfGTHriHpMGtV1UurO3teKFcU=";
 
   nativeBuildInputs = [
     pkg-config
@@ -29,7 +40,6 @@ rustPlatform.buildRustPackage rec {
     gtk3
     libusbgx
     alsa-lib
-    libclang
     linuxHeaders
     libseccomp
   ];
@@ -39,7 +49,10 @@ rustPlatform.buildRustPackage rec {
     description = "Virtual Machine Manager from Huawei";
     license = licenses.mulan-psl2;
     maintainers = with maintainers; [ astro ];
-    platforms = [ "aarch64-linux" "x86_64-linux" ];
+    platforms = [
+      "aarch64-linux"
+      "x86_64-linux"
+    ];
     mainProgram = "stratovirt";
   };
 }

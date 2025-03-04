@@ -1,20 +1,22 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "vhdl-ls";
-  version = "0.83.0";
+  version = "0.83.1";
 
   src = fetchFromGitHub {
     owner = "VHDL-LS";
     repo = "rust_hdl";
     rev = "v${version}";
-    hash = "sha256-WLk8EHzpqUPhrmnRK6mP/4MDfSinytgVDZWi1/OfkyU=";
+    hash = "sha256-AO95J138d3m8CpJ7hWYeGP+rRd2009qQXwLxbuHDSDs=";
   };
 
-  cargoHash = "sha256-QkD1dEEphYP0eL4qPe+TAv1ATyVcw5rSPiiIkk21Dms=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-7+isSSjF4V1FQaWRzmNAAW0q3/x/Tqkt8jNzGXsJHAo=";
 
   postPatch = ''
     substituteInPlace vhdl_lang/src/config.rs \

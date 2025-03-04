@@ -17,8 +17,9 @@
   lib,
   ipopt,
   lapack,
-  llvmPackages_17, # llvm/Support/Host.h required by casadi 3.6.5 and not available in llvm 18
+  llvmPackages,
   mumps,
+  ninja,
   osqp,
   pkg-config,
   pythonSupport ? false,
@@ -52,6 +53,9 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/casadi/casadi/pull/3899/commits/274f4b23f73e60c5302bec0479fe1e92682b63d2.patch";
       hash = "sha256-3GWEWlN8dKLD6htpnOQLChldcT3hE09JWLeuCfAhY+4=";
     })
+    # update include file path and link with clangAPINotes
+    # https://github.com/casadi/casadi/issues/3969
+    ./clang-19.diff
   ];
 
   postPatch =
@@ -64,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
       # nix provide lib/clang headers in libclang, not in llvm.
       substituteInPlace casadi/interfaces/clang/CMakeLists.txt --replace-fail \
         '$'{CLANG_LLVM_LIB_DIR} \
-        ${lib.getLib llvmPackages_17.libclang}/lib
+        ${lib.getLib llvmPackages.libclang}/lib
 
       # help casadi find its own libs
       substituteInPlace casadi/core/casadi_os.cpp --replace-fail \
@@ -101,6 +105,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+    ninja
     pkg-config
   ];
 
@@ -118,9 +123,9 @@ stdenv.mkDerivation (finalAttrs: {
       hpipm
       ipopt
       lapack
-      llvmPackages_17.clang
-      llvmPackages_17.libclang
-      llvmPackages_17.llvm
+      llvmPackages.clang
+      llvmPackages.libclang
+      llvmPackages.llvm
       mumps
       osqp
       proxsuite
@@ -140,7 +145,7 @@ stdenv.mkDerivation (finalAttrs: {
       python3Packages.numpy
       python3Packages.python
     ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ llvmPackages_17.openmp ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ llvmPackages.openmp ];
 
   cmakeFlags = [
     (lib.cmakeBool "WITH_PYTHON" pythonSupport)

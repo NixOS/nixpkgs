@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, libusb-compat-0_1 }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libusb-compat-0_1,
+}:
 stdenv.mkDerivation {
   pname = "sixpair";
   version = "unstable-2007-04-18";
@@ -8,7 +13,7 @@ stdenv.mkDerivation {
     sha256 = "1b0a3k7gs544cbji7n29jxlrsscwfx6s1r2sgwdl6hmkc1l9gagr";
   };
 
-  # hcitool is depricated
+  # hcitool is deprecated
   patches = [ ./hcitool.patch ];
 
   buildInputs = [ libusb-compat-0_1 ];

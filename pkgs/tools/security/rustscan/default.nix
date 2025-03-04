@@ -11,16 +11,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rustscan";
-  version = "2.3.0";
+  version = "2.4.1";
 
   src = fetchFromGitHub {
     owner = "RustScan";
     repo = "RustScan";
-    rev = "refs/tags/${version}";
-    hash = "sha256-6heC/bHo4IqKNvPjch7AiyWTCZDCv4MZHC7DTEX3U5c=";
+    tag = version;
+    hash = "sha256-+qPSeDpOeCq+KwZb5ANXx6z+pYbgdT1hVgcrSzxyGp0=";
   };
 
-  cargoHash = "sha256-Fr+m4BeYvUOoSkewwdUgpmdNchweeLK7v/tKLEzFOBs=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-cUuInYCT2jzen9gswfFGtKum6w2X/SiKA2ccdmxk38A=";
 
   postPatch = ''
     substituteInPlace src/scripts/mod.rs \

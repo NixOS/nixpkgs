@@ -129,7 +129,7 @@ stdenv.mkDerivation (self: {
   src = fetchFromGitHub {
     owner = "avast";
     repo = "retdec";
-    rev = "refs/tags/v${self.version}";
+    tag = "v${self.version}";
     sha256 = "sha256-H4e+aSgdBBbG6X6DzHGiDEIASPwBVNVsfHyeBTQLAKI=";
   };
 

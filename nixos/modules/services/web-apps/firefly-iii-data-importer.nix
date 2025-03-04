@@ -29,7 +29,7 @@ let
     )}
     set +a
     ${artisan} package:discover
-    ${artisan} cache:clear
+    rm ${cfg.dataDir}/cache/*.php
     ${artisan} config:cache
   '';
 
@@ -239,7 +239,7 @@ in
               sendfile off;
             '';
           };
-          "~ \.php$" = {
+          "~ \\.php$" = {
             extraConfig = ''
               include ${config.services.nginx.package}/conf/fastcgi_params ;
               fastcgi_param SCRIPT_FILENAME $request_filename;

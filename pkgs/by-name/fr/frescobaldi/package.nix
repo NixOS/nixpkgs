@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, python311Packages, lilypond }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python311Packages,
+  lilypond,
+}:
 
 python311Packages.buildPythonApplication rec {
   pname = "frescobaldi";
@@ -7,7 +13,7 @@ python311Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "wbsoft";
     repo = "frescobaldi";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     sha256 = "sha256-Q6ruthNcpjLlYydUetkuTECiCIzu055bw40O8BPGq/A=";
   };
 

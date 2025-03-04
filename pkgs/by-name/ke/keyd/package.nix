@@ -1,10 +1,11 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, systemd
-, runtimeShell
-, python3
-, nixosTests
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  systemd,
+  runtimeShell,
+  python3,
+  nixosTests,
 }:
 
 let

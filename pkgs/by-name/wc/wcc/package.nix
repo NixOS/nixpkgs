@@ -1,18 +1,33 @@
-{ lib, stdenv, fetchFromGitHub, capstone, libbfd, libelf, libiberty, readline }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  capstone,
+  libbfd,
+  libelf,
+  libiberty,
+  readline,
+}:
 
 stdenv.mkDerivation {
   pname = "wcc-unstable";
-  version = "2018-04-05";
+  version = "0.0.7-unstable-2025-01-13";
 
   src = fetchFromGitHub {
     owner = "endrazine";
     repo = "wcc";
-    rev = "f141963ff193d7e1931d41acde36d20d7221e74f";
-    sha256 = "1f0w869x0176n5nsq7m70r344gv5qvfmk7b58syc0jls8ghmjvb4";
+    rev = "fe1f71d7f6c756e196b82a884dc38bb8f8aef4d3";
+    sha256 = "sha256-Kb9QIL+W0JFdfweqZL05OajXGGqXn6e6Jv3IVCr3BwQ=";
     fetchSubmodules = true;
   };
 
-  buildInputs = [ capstone libbfd libelf libiberty readline ];
+  buildInputs = [
+    capstone
+    libbfd
+    libelf
+    libiberty
+    readline
+  ];
 
   postPatch = ''
     sed -i src/wsh/include/libwitch/wsh.h src/wsh/scripts/INDEX \
@@ -24,7 +39,7 @@ stdenv.mkDerivation {
   installFlags = [ "DESTDIR=$(out)" ];
 
   preInstall = ''
-    mkdir -p $out/usr/bin
+    mkdir -p $out/usr/bin $out/lib/x86_64-linux-gnu
   '';
 
   postInstall = ''
@@ -34,9 +49,9 @@ stdenv.mkDerivation {
     cp doc/manpages/*.1 $out/share/man/man1/
   '';
 
-  preFixup = ''
-    # Let patchShebangs rewrite shebangs with wsh.
-    PATH+=:$out/bin
+  postFixup = ''
+    # not detected by patchShebangs
+    substituteInPlace $out/bin/wcch --replace-fail '#!/usr/bin/wsh' "#!$out/bin/wsh"
   '';
 
   enableParallelBuilding = true;

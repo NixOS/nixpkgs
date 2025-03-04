@@ -1,10 +1,26 @@
-{ lib, stdenv, fetchurl
-, gpm, openssl, pkg-config, libev # Misc.
-, libpng, libjpeg, libtiff, librsvg, libavif # graphic formats
-, bzip2, zlib, xz # Transfer encodings
-, enableFB ? (!stdenv.hostPlatform.isDarwin)
-, enableDirectFB ? false, directfb
-, enableX11 ? (!stdenv.hostPlatform.isDarwin), libX11, libXt, libXau # GUI support
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gpm,
+  openssl,
+  pkg-config,
+  libev, # Misc.
+  libpng,
+  libjpeg,
+  libtiff,
+  librsvg,
+  libavif, # graphic formats
+  bzip2,
+  zlib,
+  xz, # Transfer encodings
+  enableFB ? (!stdenv.hostPlatform.isDarwin),
+  enableDirectFB ? false,
+  directfb,
+  enableX11 ? (!stdenv.hostPlatform.isDarwin),
+  libX11,
+  libXt,
+  libXau, # GUI support
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -17,14 +33,33 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   buildInputs =
-    [ libev librsvg libpng libjpeg libtiff libavif openssl xz bzip2 zlib ]
+    [
+      libev
+      librsvg
+      libpng
+      libjpeg
+      libtiff
+      libavif
+      openssl
+      xz
+      bzip2
+      zlib
+    ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [ gpm ]
-    ++ lib.optionals enableX11 [ libX11 libXau libXt ]
+    ++ lib.optionals enableX11 [
+      libX11
+      libXau
+      libXt
+    ]
     ++ lib.optionals enableDirectFB [ directfb ];
 
-  nativeBuildInputs = [ pkg-config bzip2 ];
+  nativeBuildInputs = [
+    pkg-config
+    bzip2
+  ];
 
-  configureFlags = [ "--with-ssl" ]
+  configureFlags =
+    [ "--with-ssl" ]
     ++ lib.optional (enableX11 || enableFB || enableDirectFB) "--enable-graphics"
     ++ lib.optional enableX11 "--with-x"
     ++ lib.optional enableFB "--with-fb"

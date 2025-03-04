@@ -82,7 +82,7 @@ buildPythonPackage rec {
     description = "Handy python code for doing database things";
     homepage = "https://github.com/djrobstep/sqlbag";
     license = with licenses; [ unlicense ];
-    maintainers = with maintainers; [ soispha ];
+    maintainers = with maintainers; [ bpeetz ];
     broken = true; # Fails to build against the current flask version
   };
 }

@@ -1,6 +1,7 @@
-{ rustPlatform
-, lib
-, fetchFromGitHub
+{
+  rustPlatform,
+  lib,
+  fetchFromGitHub,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -14,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-sx1OW056s40uhwwgGtNKiPkKSUy7/ZzSYGnjc0UKh/E=";
   };
 
-  cargoHash = "sha256-4UEq9m5SWqmnzc++DjIeSq4ckTKgoxdt+8MekxiYGPE=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-2/i+YllfS1ZC+nzmjBMJLjcq6Q+upFX2Wc+jmBO4zp0=";
 
   meta = with lib; {
     description = "Very fast link checker for CI";

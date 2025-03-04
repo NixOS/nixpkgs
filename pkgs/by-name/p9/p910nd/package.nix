@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, installShellFiles }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  installShellFiles,
+}:
 
 stdenv.mkDerivation rec {
   pname = "p910nd";

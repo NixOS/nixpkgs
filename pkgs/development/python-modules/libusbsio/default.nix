@@ -8,13 +8,13 @@
 buildPythonPackage rec {
   pname = "libusbsio";
   format = "setuptools";
-  version = "2.1.12";
+  version = "2.1.13";
   # If the versions come back into sync switch back to inheriting from c lib
   # inherit (libusbsio) version;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-RdUhwilBOwg19ay3Po3zsxqlBV9FTy3btJDbO4YEKS8=";
+    hash = "sha256-3xudSyqfXq3wsFdOgBeGK1nSY0NZjx9UhmTqbQGXWyU=";
   };
 
   # The source includes both the python module directly and also prebuilt binaries

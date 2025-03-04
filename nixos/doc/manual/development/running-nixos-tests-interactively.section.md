@@ -10,6 +10,12 @@ $ ./result/bin/nixos-test-driver
 >>>
 ```
 
+::: {.note}
+By executing the test driver in this way,
+the VMs executed may gain network & Internet access via their backdoor control interface,
+typically recognized as `eth0`.
+:::
+
 You can then take any Python statement, e.g.
 
 ```py

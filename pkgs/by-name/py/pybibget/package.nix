@@ -1,6 +1,7 @@
-{ lib
-, python3
-, fetchPypi
+{
+  lib,
+  python3,
+  fetchPypi,
 }:
 
 let
@@ -13,7 +14,7 @@ let
   };
 
 in
-python3.pkgs.buildPythonApplication  {
+python3.pkgs.buildPythonApplication {
   inherit pname version src;
   pyproject = true;
 
@@ -29,7 +30,7 @@ python3.pkgs.buildPythonApplication  {
     requests
   ];
 
-  # Tests for this applicaiton do not run on NixOS, and binaries were
+  # Tests for this application do not run on NixOS, and binaries were
   # manually tested instead
   doCheck = false;
 

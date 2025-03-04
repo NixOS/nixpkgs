@@ -1,26 +1,33 @@
-{ fetchFromSourcehut
-, lib
-, meson
-, ninja
-, pkg-config
-, scdoc
-, stdenv
-, systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd, systemd
-, nixosTests
+{
+  fetchFromSourcehut,
+  lib,
+  meson,
+  ninja,
+  pkg-config,
+  scdoc,
+  stdenv,
+  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  systemd,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "seatd";
-  version = "0.8.0";
+  version = "0.9.1";
 
   src = fetchFromSourcehut {
     owner = "~kennylevinsen";
     repo = "seatd";
     rev = finalAttrs.version;
-    hash = "sha256-YaR4VuY+wrzbnhER4bkwdm0rTY1OVMtixdDEhu7Lnws=";
+    hash = "sha256-6F+TPSpcEwX4wW5GPy5Ck2AeHyH/Ba2oBUSUnVyAMeA=";
   };
 
-  outputs = [ "bin" "out" "dev" "man" ];
+  outputs = [
+    "bin"
+    "out"
+    "dev"
+    "man"
+  ];
 
   depsBuildBuild = [
     pkg-config

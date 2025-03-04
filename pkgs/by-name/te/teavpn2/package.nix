@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, substituteAll
-, iproute2
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  replaceVars,
+  iproute2,
 }:
 stdenv.mkDerivation {
   pname = "teavpn2";
@@ -16,8 +17,7 @@ stdenv.mkDerivation {
   };
 
   patches = [
-    (substituteAll {
-      src = ./nix.patch;
+    (replaceVars ./nix.patch {
       inherit iproute2;
     })
   ];

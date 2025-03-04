@@ -11,7 +11,7 @@
 let
   buildVscodeExtension =
     a@{
-      pname,
+      pname ? null, # Only optional for backward compatibility.
       src,
       # Same as "Unique Identifier" on the extension's web page.
       # For the moment, only serve as unique extension dir.
@@ -37,9 +37,10 @@ let
         "vscodeExtUniqueId"
         "pname"
       ])
-      // {
-
+      // (lib.optionalAttrs (pname != null) {
         pname = "vscode-extension-${pname}";
+      })
+      // {
 
         passthru = passthru // {
           inherit vscodeExtPublisher vscodeExtName vscodeExtUniqueId;

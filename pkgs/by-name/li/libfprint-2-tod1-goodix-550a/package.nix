@@ -1,4 +1,10 @@
-{ stdenv, lib, fetchzip, unzip, libfprint-tod }:
+{
+  stdenv,
+  lib,
+  fetchzip,
+  unzip,
+  libfprint-tod,
+}:
 
 stdenv.mkDerivation {
   pname = "libfprint-2-tod1-goodix-550a";

@@ -4,7 +4,6 @@
   bzip2,
   cmake,
   fetchFromGitHub,
-  fetchpatch,
   ncurses,
   python3,
   readline,
@@ -12,27 +11,16 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "spades";
-  version = "4.0.0";
+  version = "4.1.0";
 
   src = fetchFromGitHub {
     owner = "ablab";
     repo = "spades";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-k2+ddJIgGE41KGZODovU9VdurbWerEtdqNrFDwyuFjo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-JKtWlVf0nXXLgb6BxMgVVtEdjUOOYc0bPaFMDm5O6vg=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/src";
-
-  patches = [
-    # https://github.com/ablab/spades/pull/1314
-    (fetchpatch {
-      name = "copytree.patch";
-      url = "https://github.com/ablab/spades/commit/af1f756a46c5da669897b841d4f753af1eaa9588.patch";
-      hash = "sha256-tkT7hb0TqsbLkcTs9u43nzvV8bVdh3G9VKYqFFLrQv8=";
-      stripLen = 3;
-      extraPrefix = "projects/";
-    })
-  ];
 
   cmakeFlags = [
     "-DZLIB_ENABLE_TESTS=OFF"
@@ -52,8 +40,6 @@ stdenv.mkDerivation (finalAttrs: {
     python3
     readline
   ];
-
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-faligned-allocation";
 
   doCheck = true;
 

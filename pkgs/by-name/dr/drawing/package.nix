@@ -1,19 +1,20 @@
-{ lib
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, python3
-, gtk3
-, appstream-glib
-, desktop-file-utils
-, gobject-introspection
-, wrapGAppsHook3
-, glib
-, gdk-pixbuf
-, pango
-, gettext
-, itstool
+{
+  lib,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  gtk3,
+  appstream-glib,
+  desktop-file-utils,
+  gobject-introspection,
+  wrapGAppsHook3,
+  glib,
+  gdk-pixbuf,
+  pango,
+  gettext,
+  itstool,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -25,7 +26,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "maoschanz";
     repo = pname;
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-kNF9db8NoHWW1A0WEFQzxHqAQ4A7kxInMRZFJOXQX/k=";
   };
 

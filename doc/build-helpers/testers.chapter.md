@@ -169,7 +169,7 @@ The build will fail if `shellcheck` finds any issues.
 
 Checks that the output from running a command contains the specified version string in it as a whole word.
 
-NOTE: In most cases, [`versionCheckHook`](#versioncheckhook) should be preferred, but this function is provided and documented here anyway. The motivation for adding either tests would be:
+NOTE: This is a check you add to `passthru.tests` which is mainly run by OfBorg, but not in Hydra. If you want a version check failure to block the build altogether, then [`versionCheckHook`](#versioncheckhook) is the tool you're looking for (and recommended for quick builds). The motivation for adding either of these checks would be:
 
 - Catch dynamic linking errors and such and missing environment variables that should be added by wrapping.
 - Probable protection against accidentally building the wrong version, for example when using an "old" hash in a fixed-output derivation.
@@ -254,6 +254,70 @@ runCommand "example" {
 ```
 
 :::
+
+## `testBuildFailure'` {#tester-testBuildFailurePrime}
+
+This tester wraps the functionality provided by [`testers.testBuildFailure`](#tester-testBuildFailure) to make writing checks easier by simplifying checking the exit code of the builder and asserting the existence of entries in the builder's log.
+Additionally, users may specify a script containing additional checks, accessing the result of applying `testers.testBuildFailure` through the variable `failed`.
+
+NOTE: This tester will produce an empty output and exit with success if none of the checks fail; there is no need to `touch "$out"` in `script`.
+
+:::{.example #ex-testBuildFailurePrime-doc-example}
+
+# Check that a build fails, and verify the changes made during build
+
+Re-using the example from [`testers.testBuildFailure`](#ex-testBuildFailure-showingenvironmentchanges), we can see how common checks are made easier and remove the need for `runCommand`:
+
+```nix
+testers.testBuildFailure' {
+  drv = runCommand "doc-example" { } ''
+    echo ok-ish >"$out"
+    echo failing though
+    exit 3
+  '';
+  expectedBuilderExitCode = 3;
+  expectedBuilderLogEntries = [ "failing though" ];
+  script = ''
+    grep --silent -F 'ok-ish' "$failed/result"
+  '';
+}
+```
+
+:::
+
+### Inputs {#tester-testBuildFailurePrime-inputs}
+
+`drv` (derivation)
+
+: The failing derivation to wrap with `testBuildFailure`.
+
+`name` (string, optional)
+
+: The name of the test.
+  When not provided, this value defaults to `testBuildFailure-${(testers.testBuildFailure drv).name}`.
+
+`expectedBuilderExitCode` (integer, optional)
+
+: The expected exit code of the builder of `drv`.
+  When not provided, this value defaults to `1`.
+
+`expectedBuilderLogEntries` (array of string-like values, optional)
+
+: A list of string-like values which must be found in the builder's log by exact match.
+  When not provided, this value defaults to `[ ]`.
+
+  NOTE: Patterns and regular expressions are not supported.
+
+`script` (string, optional)
+
+: A string containing additional checks to run.
+  When not provided, this value defaults to `""`.
+  The result of `testers.testBuildFailure drv` is available through the variable `failed`.
+  As an example, the builder's log is at `"$failed/testBuildFailure.log"`.
+
+### Return value {#tester-testBuildFailurePrime-return}
+
+The tester produces an empty output and only succeeds when the checks using `expectedBuilderExitCode`, `expectedBuilderLogEntries`, and `script` succeed.
 
 ## `testEqualContents` {#tester-testEqualContents}
 
@@ -364,7 +428,7 @@ including `nativeBuildInputs` to specify dependencies available to the `script`.
 ```nix
 testers.runCommand {
   name = "access-the-internet";
-  command = ''
+  script = ''
     curl -o /dev/null https://example.com
     touch $out
   '';

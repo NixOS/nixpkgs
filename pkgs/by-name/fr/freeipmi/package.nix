@@ -1,20 +1,38 @@
-{ buildPackages, fetchurl, lib, stdenv, libgcrypt, readline, libgpg-error }:
+{
+  buildPackages,
+  fetchurl,
+  lib,
+  stdenv,
+  libgcrypt,
+  readline,
+  libgpg-error,
+}:
 
 stdenv.mkDerivation rec {
-  version = "1.6.14";
+  version = "1.6.15";
   pname = "freeipmi";
 
   src = fetchurl {
     url = "mirror://gnu/freeipmi/${pname}-${version}.tar.gz";
-    sha256 = "sha256-Gj2sXHa3zMTU+GqhK475shK673SJvwXombiau34U7bU=";
+    sha256 = "sha256-1pKcNUY59c51tbGJfos2brY2JcI+XEWQp66gNP4rjK8=";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
-  buildInputs = [ libgcrypt readline libgpg-error ];
+  buildInputs = [
+    libgcrypt
+    readline
+    libgpg-error
+  ];
 
-  configureFlags = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform)
-    [ "ac_cv_file__dev_urandom=true" "ac_cv_file__dev_random=true" ];
+  configureFlags = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    "ac_cv_file__dev_urandom=true"
+    "ac_cv_file__dev_random=true"
+  ];
+
+  # Fix GCC 14 build.
+  # https://savannah.gnu.org/bugs/?65203
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
 
   doCheck = true;
 
@@ -41,6 +59,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
 
     maintainers = with lib.maintainers; [ raskin ];
-    platforms = lib.platforms.gnu ++ lib.platforms.linux;  # arbitrary choice
+    platforms = lib.platforms.gnu ++ lib.platforms.linux; # arbitrary choice
   };
 }

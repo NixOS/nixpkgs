@@ -1,4 +1,8 @@
-{ lib, python3, fetchPypi }:
+{
+  lib,
+  python3,
+  fetchPypi,
+}:
 let
   localPython = python3.override {
     self = localPython;
@@ -8,6 +12,7 @@ let
       pypdf2 = super.pypdf2.overridePythonAttrs (oldAttrs: rec {
         version = "2.11.1";
         format = "setuptools";
+        pyproject = null;
         src = fetchPypi {
           pname = "PyPDF2";
           inherit version;
@@ -17,7 +22,8 @@ let
     };
   };
 in
-with localPython.pkgs; buildPythonApplication rec {
+with localPython.pkgs;
+buildPythonApplication rec {
   pname = "pdfposter";
   version = "0.8.1";
   format = "setuptools";

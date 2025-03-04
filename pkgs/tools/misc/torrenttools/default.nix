@@ -1,21 +1,22 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, bencode
-, catch2
-, cli11
-, cmake
-, ctre
-, expected-lite
-, fmt
-, gsl-lite
-, howard-hinnant-date
-, yaml-cpp
-, ninja
-, nlohmann_json
-, openssl
-, re2
-, sigslot
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  bencode,
+  catch2,
+  cli11,
+  cmake,
+  ctre,
+  expected-lite,
+  fmt,
+  gsl-lite,
+  howard-hinnant-date,
+  yaml-cpp,
+  ninja,
+  nlohmann_json,
+  openssl,
+  re2,
+  sigslot,
 }:
 
 stdenv.mkDerivation rec {
@@ -53,6 +54,10 @@ stdenv.mkDerivation rec {
     })
   ];
   sourceRoot = "torrenttools";
+
+  patches = [
+    ./fmt-9.patch
+  ];
 
   postUnpack = ''
     cp -pr cliprogress torrenttools/external/cliprogress

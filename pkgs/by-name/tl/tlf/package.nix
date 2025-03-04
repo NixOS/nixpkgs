@@ -1,5 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, autoconf, automake, pkg-config, glib
-, perl, ncurses5, hamlib, xmlrpc_c }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  autoreconfHook,
+  autoconf,
+  automake,
+  pkg-config,
+  glib,
+  perl,
+  ncurses5,
+  hamlib,
+  xmlrpc_c,
+}:
 
 stdenv.mkDerivation rec {
   pname = "tlf";
@@ -24,10 +37,24 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ autoreconfHook autoconf automake pkg-config perl ];
-  buildInputs = [ glib ncurses5 hamlib xmlrpc_c ];
+  nativeBuildInputs = [
+    autoreconfHook
+    autoconf
+    automake
+    pkg-config
+    perl
+  ];
+  buildInputs = [
+    glib
+    ncurses5
+    hamlib
+    xmlrpc_c
+  ];
 
-  configureFlags = [ "--enable-hamlib" "--enable-fldigi-xmlrpc" ];
+  configureFlags = [
+    "--enable-hamlib"
+    "--enable-fldigi-xmlrpc"
+  ];
 
   postInstall = ''
     mkdir -p $out/lib

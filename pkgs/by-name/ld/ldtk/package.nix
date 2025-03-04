@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchurl, makeWrapper, makeDesktopItem, copyDesktopItems, unzip
-, appimage-run, nix-update-script }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  makeDesktopItem,
+  copyDesktopItems,
+  unzip,
+  appimage-run,
+  nix-update-script,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ldtk";
@@ -10,7 +19,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-i7HIcKs10srfvwihGdMEnnmGoqgFWNJhC6vGf81QJWY=";
   };
 
-  nativeBuildInputs = [ unzip makeWrapper copyDesktopItems appimage-run ];
+  nativeBuildInputs = [
+    unzip
+    makeWrapper
+    copyDesktopItems
+    appimage-run
+  ];
 
   buildInputs = [ appimage-run ];
 

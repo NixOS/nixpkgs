@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, IOKit }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  IOKit,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "tab-rs";
@@ -11,7 +17,8 @@ rustPlatform.buildRustPackage rec {
     sha256 = "1crj0caimin667f9kz34c0sm77892dmqaf1kxryqakqm75az5wfr";
   };
 
-  cargoHash = "sha256-56gy9AH3i4OSvExMuR3n/2hF5pJgbn5JJpxZLXKfu2w=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-4bscAhYE3JNk4ikTH+Sw2kGDDsBWcCZZ88weg9USjC0=";
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ IOKit ];
 

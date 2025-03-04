@@ -2,7 +2,6 @@
   lib,
   fetchFromGitLab,
   rustPlatform,
-  llvmPackages,
   pkg-config,
   xen,
 }:
@@ -17,11 +16,11 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-OhzRsRwDvt0Ov+nLxQSP87G3RDYSLREMz2w9pPtSUYg=";
   };
 
-  cargoHash = "sha256-E6QKh4FFr6sLAByU5n6sLppFwPHSKtKffhQ7FfdXAu4=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-o4eQ1ORI7Rw097m6CsvWLeCW5Dtl75uRXi/tcv/Xq0Q=";
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
-    llvmPackages.clang
     pkg-config
   ];
 

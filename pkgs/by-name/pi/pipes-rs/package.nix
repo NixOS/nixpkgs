@@ -1,4 +1,8 @@
-{ rustPlatform, fetchFromGitHub, lib }:
+{
+  rustPlatform,
+  fetchFromGitHub,
+  lib,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "pipes-rs";
@@ -11,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-NrBmkA7sV1RhfG9KEqQNMR5s0l2u66b7KK0toDjQIps=";
   };
 
-  cargoHash = "sha256-cOLPkmUwNdaexgauULraBVVx6mznI9GXhHV3mSEhL0g=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-0up9S3+NjBV8zsvsyVANvITisMSBXsab6jFwt19gnQk=";
 
   doInstallCheck = true;
 

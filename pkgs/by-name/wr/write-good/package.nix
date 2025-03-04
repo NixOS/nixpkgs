@@ -1,6 +1,7 @@
-{ lib
-, buildNpmPackage
-, fetchFromGitHub
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
 }:
 
 buildNpmPackage rec {
@@ -17,6 +18,11 @@ buildNpmPackage rec {
   npmDepsHash = "sha256-0M9RzyeINmUPYcLy654iI+/ehElKrhIAibpiSqlXD2A=";
 
   dontNpmBuild = true;
+
+  postInstall = ''
+    # Remove the .bin directory as it contains broken symlinks
+    rm -rf $out/lib/node_modules/write-good/node_modules/.bin
+  '';
 
   meta = {
     description = "Naive linter for English prose";

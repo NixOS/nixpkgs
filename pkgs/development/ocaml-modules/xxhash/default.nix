@@ -1,11 +1,12 @@
-{ lib
-, fetchFromGitHub
-, buildDunePackage
-, xxHash
-, ctypes
-, ctypes-foreign
-, dune-configurator
-, ppx_expect
+{
+  lib,
+  fetchFromGitHub,
+  buildDunePackage,
+  xxHash,
+  ctypes,
+  ctypes-foreign,
+  dune-configurator,
+  ppx_expect,
 }:
 
 buildDunePackage rec {
@@ -17,7 +18,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "314eter";
     repo = "ocaml-xxhash";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-0+ac5EWV9DCVMT4wOcXC95GVEwsUIZzFn2laSzmK6jE=";
   };
 

@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "pytile";
-  version = "2023.12.0";
+  version = "2024.12.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.10";
@@ -23,8 +23,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bachya";
     repo = "pytile";
-    rev = "refs/tags/${version}";
-    hash = "sha256-oHOeEaqkh+RjhpdQ5v1tFhaS6gUzl8UzDGnPLNRY90c=";
+    tag = version;
+    hash = "sha256-6vcFGMj7E1xw01yHOq/WDpqMxd7OIiRBCmw5LForAR0=";
   };
 
   nativeBuildInputs = [ poetry-core ];

@@ -16,16 +16,16 @@
 
 buildPythonPackage rec {
   pname = "pylsp-mypy";
-  version = "0.6.9";
+  version = "0.7.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "python-lsp";
     repo = "pylsp-mypy";
-    rev = "refs/tags/${version}";
-    hash = "sha256-MP9a8dI5ggM+XEJYB6O4nYDYIXbtxi2TK5b+JQgViZQ=";
+    tag = version;
+    hash = "sha256-rS0toZaAygNJ3oe3vfP9rKJ1A0avIdp5yjNx7oGOB4o=";
   };
 
   build-system = [ setuptools ];

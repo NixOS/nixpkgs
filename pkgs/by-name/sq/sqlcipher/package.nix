@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, openssl
-, tcl
-, installShellFiles
-, buildPackages
-, readline
-, ncurses
-, zlib
-, sqlite
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  openssl,
+  tcl,
+  installShellFiles,
+  buildPackages,
+  readline,
+  ncurses,
+  zlib,
+  sqlite,
 }:
 
 stdenv.mkDerivation rec {

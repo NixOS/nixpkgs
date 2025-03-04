@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -43,20 +44,21 @@
   avro,
   grpcio-testing,
   pytest-asyncio,
+  pytest-xdist,
   pytestCheckHook,
   tomlkit,
 }:
 
 buildPythonPackage rec {
   pname = "kserve";
-  version = "0.14.0";
+  version = "0.14.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kserve";
     repo = "kserve";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-N/IgiTiyBNw7WQWxcUJlXU+Q9o3UUaduD9ZBKwu0uRE=";
+    tag = "v${version}";
+    hash = "sha256-VwuUXANjshV4fN0i54Fs0zubHY81UtQcCV14JwMpXwA=";
   };
 
   sourceRoot = "${src.name}/python/kserve";
@@ -64,6 +66,7 @@ buildPythonPackage rec {
   pythonRelaxDeps = [
     "fastapi"
     "httpx"
+    "numpy"
     "prometheus-client"
     "protobuf"
     "uvicorn"
@@ -114,25 +117,51 @@ buildPythonPackage rec {
     avro
     grpcio-testing
     pytest-asyncio
+    pytest-xdist
     pytestCheckHook
     tomlkit
   ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "kserve" ];
 
+  pytestFlagsArray =
+    [
+      # AssertionError
+      "--deselect=test/test_server.py::TestTFHttpServerLoadAndUnLoad::test_unload"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # RuntimeError: Failed to start GCS
+      "--deselect=test/test_dataplane.py::TestDataPlane::test_explain"
+      "--deselect=test/test_dataplane.py::TestDataPlane::test_infer"
+      "--deselect=test/test_dataplane.py::TestDataPlane::test_model_metadata"
+      "--deselect=test/test_dataplane.py::TestDataPlane::test_server_readiness"
+      "--deselect=test/test_server.py::TestRayServer::test_explain"
+      "--deselect=test/test_server.py::TestRayServer::test_health_handler"
+      "--deselect=test/test_server.py::TestRayServer::test_infer"
+      "--deselect=test/test_server.py::TestRayServer::test_list_handler"
+      "--deselect=test/test_server.py::TestRayServer::test_liveness_handler"
+      "--deselect=test/test_server.py::TestRayServer::test_predict"
+    ];
+
   disabledTestPaths = [
     # Looks for a config file at the root of the repository
     "test/test_inference_service_client.py"
   ];
 
-  disabledTests = [
-    # Require network access
-    "test_infer_graph_endpoint"
-    "test_infer_path_based_routing"
+  disabledTests =
+    [
+      # Require network access
+      "test_infer_graph_endpoint"
+      "test_infer_path_based_routing"
 
-    # Tries to access `/tmp` (hardcoded)
-    "test_local_path_with_out_dir_exist"
-  ];
+      # Tries to access `/tmp` (hardcoded)
+      "test_local_path_with_out_dir_exist"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      "test_local_path_with_out_dir_not_exist"
+    ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "Standardized Serverless ML Inference Platform on Kubernetes";

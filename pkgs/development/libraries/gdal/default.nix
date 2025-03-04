@@ -3,13 +3,13 @@
   stdenv,
   callPackage,
   fetchFromGitHub,
-  fetchpatch,
 
   useMinimalFeatures ? false,
   useArmadillo ? (!useMinimalFeatures),
   useArrow ? (!useMinimalFeatures),
   useHDF ? (!useMinimalFeatures),
   useJava ? (!useMinimalFeatures),
+  useLibAvif ? (!useMinimalFeatures),
   useLibHEIF ? (!useMinimalFeatures),
   useLibJXL ? (!useMinimalFeatures),
   useMysql ? (!useMinimalFeatures),
@@ -43,6 +43,7 @@
   json_c,
   lerc,
   libaom,
+  libavif,
   libde265,
   libdeflate,
   libgeotiff,
@@ -52,6 +53,7 @@
   libjpeg,
   libjxl,
   libmysqlclient,
+  libpq,
   libpng,
   libspatialite,
   libtiff,
@@ -59,13 +61,12 @@
   libxml2,
   lz4,
   netcdf,
-  openexr,
+  openexr_3,
   openjpeg,
   openssl,
   pcre2,
   pkg-config,
   poppler,
-  postgresql,
   proj,
   python3,
   qhull,
@@ -82,26 +83,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gdal" + lib.optionalString useMinimalFeatures "-minimal";
-  version = "3.9.3";
+  version = "3.10.2";
 
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "gdal";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-8LY63s5vOVK0V37jQ60qFsaW/2D/13Xuy9/2OPLyTso=";
+    hash = "sha256-PanWqieJU1opR8iAwGsAeAt5cPXNOkwT5E6D6xPNCWs=";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/OSGeo/gdal/commit/40c3212fe4ba93e5176df4cd8ae5e29e06bb6027.patch";
-      sha256 = "sha256-D55iT6E/YdpSyfN7KUDTh1gdmIDLHXW4VC5d6D9B7ls=";
-    })
-    (fetchpatch {
-      name = "arrow-18.patch";
-      url = "https://github.com/OSGeo/gdal/commit/9a8c5c031404bbc81445291bad128bc13766cafa.patch";
-      sha256 = "sha256-tF46DmF7ZReqY8ACTTPXohWLsRn8lVxhKF1s+r254KM=";
-    })
-  ];
 
   nativeBuildInputs =
     [
@@ -150,6 +139,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs =
     let
       tileDbDeps = lib.optionals useTiledb [ tiledb ];
+      libAvifDeps = lib.optionals useLibAvif [ libavif ];
       libHeifDeps = lib.optionals useLibHEIF [
         libheif
         dav1d
@@ -163,7 +153,7 @@ stdenv.mkDerivation (finalAttrs: {
         libhwy
       ];
       mysqlDeps = lib.optionals useMysql [ libmysqlclient ];
-      postgresDeps = lib.optionals usePostgres [ postgresql ];
+      postgresDeps = lib.optionals usePostgres [ libpq ];
       popplerDeps = lib.optionals usePoppler [ poppler ];
       arrowDeps = lib.optionals useArrow [ arrow-cpp ];
       hdfDeps = lib.optionals useHDF [
@@ -177,7 +167,7 @@ stdenv.mkDerivation (finalAttrs: {
       nonDarwinDeps = lib.optionals (!stdenv.hostPlatform.isDarwin) (
         [
           # tests for formats enabled by these packages fail on macos
-          openexr
+          openexr_3
           xercesc
         ]
         ++ arrowDeps
@@ -199,7 +189,7 @@ stdenv.mkDerivation (finalAttrs: {
       json_c
       lerc
       xz
-      (libxml2.override { enableHttp = true; })
+      libxml2
       lz4
       openjpeg
       openssl
@@ -218,6 +208,7 @@ stdenv.mkDerivation (finalAttrs: {
       python3.pkgs.numpy
     ]
     ++ tileDbDeps
+    ++ libAvifDeps
     ++ libHeifDeps
     ++ libJxlDeps
     ++ mysqlDeps
@@ -301,7 +292,6 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # flaky on macos
       "test_rda_download_queue"
-      "test_ogr_gpkg_arrow_stream_huge_array"
     ]
     ++ lib.optionals (lib.versionOlder proj.version "8") [
       "test_ogr_parquet_write_crs_without_id_in_datum_ensemble_members"

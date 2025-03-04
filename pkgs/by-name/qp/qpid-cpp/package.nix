@@ -1,11 +1,13 @@
-{ lib, stdenv
-, fetchpatch
-, fetchurl
-, boost
-, cmake
-, libuuid
-, python3
-, ruby
+{
+  lib,
+  stdenv,
+  fetchpatch,
+  fetchurl,
+  boost,
+  cmake,
+  libuuid,
+  python3,
+  ruby,
 }:
 
 stdenv.mkDerivation rec {
@@ -17,8 +19,15 @@ stdenv.mkDerivation rec {
     hash = "sha256-eYDQ6iHVV1WUFFdyHGnbqGIjE9CrhHzh0jP7amjoDSE=";
   };
 
-  nativeBuildInputs = [ cmake python3 ];
-  buildInputs = [ boost libuuid ruby ];
+  nativeBuildInputs = [
+    cmake
+    python3
+  ];
+  buildInputs = [
+    boost
+    libuuid
+    ruby
+  ];
 
   patches = [
     (fetchpatch {
@@ -36,11 +45,14 @@ stdenv.mkDerivation rec {
     sed -i '/management/d' CMakeLists.txt
   '';
 
-  env.NIX_CFLAGS_COMPILE = toString ([
-    "-Wno-error=maybe-uninitialized"
-  ] ++ lib.optionals stdenv.cc.isGNU [
-    "-Wno-error=deprecated-copy"
-  ]);
+  env.NIX_CFLAGS_COMPILE = toString (
+    [
+      "-Wno-error=maybe-uninitialized"
+    ]
+    ++ lib.optionals stdenv.cc.isGNU [
+      "-Wno-error=deprecated-copy"
+    ]
+  );
 
   meta = with lib; {
     homepage = "https://qpid.apache.org";

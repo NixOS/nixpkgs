@@ -1,23 +1,24 @@
-{ lib
-, boost
-, cmake
-, fetchFromGitHub
-, meson
-, ninja
-, curl
-, nix
-, nlohmann_json
-, pkg-config
-, stdenv
+{
+  lib,
+  boost,
+  cmake,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  curl,
+  nix,
+  nlohmann_json,
+  pkg-config,
+  stdenv,
 }:
 stdenv.mkDerivation rec {
   pname = "nix-eval-jobs";
-  version = "2.24.1";
+  version = "2.25.0";
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-j/p2ftkP8MXYEK7Vx65jH/Knr2QkEcRSVoDnVOUDe6Q=";
+    hash = "sha256-63i7TgirD3FiJM1z8ZuOOcXWj4ZhgK357NHmf90WNig=";
   };
   buildInputs = [
     boost
@@ -42,7 +43,10 @@ stdenv.mkDerivation rec {
     description = "Hydra's builtin hydra-eval-jobs as a standalone";
     homepage = "https://github.com/nix-community/nix-eval-jobs";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ adisbladis mic92 ];
+    maintainers = with lib.maintainers; [
+      adisbladis
+      mic92
+    ];
     platforms = lib.platforms.unix;
     mainProgram = "nix-eval-jobs";
   };

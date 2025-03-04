@@ -317,6 +317,40 @@ in {
   flip = f: a: b: f b a;
 
   /**
+    Return `maybeValue` if not null, otherwise return `default`.
+
+
+    # Inputs
+
+    `default`
+
+    : 1\. Function argument
+
+    `maybeValue`
+
+    : 2\. Function argument
+
+
+    # Examples
+    :::{.example}
+    ## `lib.trivial.defaultTo` usage example
+
+    ```nix
+    defaultTo "default" null
+    => "default"
+    defaultTo "default" "foo"
+    => "foo"
+    defaultTo "default" false
+    => false
+    ```
+
+    :::
+  */
+  defaultTo = default: maybeValue:
+    if maybeValue != null then maybeValue
+    else default;
+
+  /**
     Apply function if the supplied argument is non-null.
 
 
@@ -382,7 +416,7 @@ in {
   */
   oldestSupportedRelease =
     # Update on master only. Do not backport.
-    2405;
+    2411;
 
   /**
     Whether a feature is supported in all supported releases (at the time of

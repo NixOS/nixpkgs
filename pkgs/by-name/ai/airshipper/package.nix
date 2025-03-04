@@ -25,7 +25,7 @@
 , patchelf
 }:
 let
-  version = "0.14.0";
+  version = "0.16.0";
   # Patch for airshipper to install veloren
   patch = let
     runtimeLibs = [
@@ -63,10 +63,11 @@ rustPlatform.buildRustPackage {
     owner = "Veloren";
     repo = "airshipper";
     rev = "v${version}";
-    hash = "sha256-+ZU3WAjmPDAFAevebePcIlYcgSYSJJ3LyvwbTBKGUH4=";
+    hash = "sha256-MHwyXCAqdBzdJlYzSeUXr6bJdTVHcjJ/kGcuAsZCCW8=";
   };
 
-  cargoHash = "sha256-mwfYCVcOH2zFr76W9ZC4t/LmEwO5P2eGYXRVkwn6Fm4=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-TkeB939zV5VvqICFqJd/7uX+ydXyEQOJ3sYQbHbZhP0=";
 
   buildInputs = [
     fontconfig

@@ -15,7 +15,7 @@
 , freebsd
 , cxxabi ? if stdenv.hostPlatform.isFreeBSD then freebsd.libcxxrt else null
 , libunwind
-, enableShared ? !stdenv.hostPlatform.isStatic
+, enableShared ? stdenv.hostPlatform.hasSharedLibraries
 , devExtraCmakeFlags ? []
 }:
 
@@ -34,7 +34,7 @@ let
   useLLVM = stdenv.hostPlatform.useLLVM or false;
 
   src' = if monorepoSrc != null then
-    runCommand "${pname}-src-${version}" {} (''
+    runCommand "${pname}-src-${version}" { inherit (monorepoSrc) passthru; } (''
       mkdir -p "$out/llvm"
     '' + (lib.optionalString (lib.versionAtLeast release_version "14") ''
       cp -r ${monorepoSrc}/cmake "$out"
@@ -105,9 +105,13 @@ let
 
   cmakeFlags = [
     "-DLLVM_ENABLE_RUNTIMES=${lib.concatStringsSep ";" runtimes}"
+  ] ++ lib.optionals (
+    stdenv.hostPlatform.isWasm
+    || (lib.versions.major release_version == "12" && stdenv.hostPlatform.isDarwin)
+  ) [
+    "-DCMAKE_CXX_COMPILER_WORKS=ON"
   ] ++ lib.optionals stdenv.hostPlatform.isWasm [
     "-DCMAKE_C_COMPILER_WORKS=ON"
-    "-DCMAKE_CXX_COMPILER_WORKS=ON"
     "-DUNIX=ON" # Required otherwise libc++ fails to detect the correct linker
   ] ++ cxxCMakeFlags
     ++ lib.optionals (cxxabi == null) cxxabiCMakeFlags

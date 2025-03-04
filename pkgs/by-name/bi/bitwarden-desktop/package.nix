@@ -1,47 +1,48 @@
-{ lib
-, buildNpmPackage
-, cargo
-, copyDesktopItems
-, electron_32
-, fetchFromGitHub
-, glib
-, gnome-keyring
-, gtk3
-, jq
-, libsecret
-, makeDesktopItem
-, makeWrapper
-, napi-rs-cli
-, nix-update-script
-, nodejs_20
-, patchutils_0_4_2
-, pkg-config
-, python3
-, runCommand
-, rustc
-, rustPlatform
-, stdenv
+{
+  lib,
+  buildNpmPackage,
+  cargo,
+  copyDesktopItems,
+  electron_34,
+  fetchFromGitHub,
+  gnome-keyring,
+  jq,
+  makeDesktopItem,
+  makeWrapper,
+  napi-rs-cli,
+  nix-update-script,
+  nodejs_20,
+  patchutils_0_4_2,
+  pkg-config,
+  runCommand,
+  rustc,
+  rustPlatform,
+  stdenv,
 }:
 
 let
   description = "Secure and free password manager for all of your devices";
   icon = "bitwarden";
-  electron = electron_32;
+  electron = electron_34;
 
-  bitwardenDesktopNativeArch = {
-    aarch64 = "arm64";
-    x86_64  = "x64";
-  }.${stdenv.hostPlatform.parsed.cpu.name} or (throw "bitwarden-desktop: unsupported CPU family ${stdenv.hostPlatform.parsed.cpu.name}");
+  bitwardenDesktopNativeArch =
+    {
+      aarch64 = "arm64";
+      x86_64 = "x64";
+    }
+    .${stdenv.hostPlatform.parsed.cpu.name}
+      or (throw "bitwarden-desktop: unsupported CPU family ${stdenv.hostPlatform.parsed.cpu.name}");
 
-in buildNpmPackage rec {
+in
+buildNpmPackage rec {
   pname = "bitwarden-desktop";
-  version = "2024.11.1";
+  version = "2025.2.0";
 
   src = fetchFromGitHub {
     owner = "bitwarden";
     repo = "clients";
     rev = "desktop-v${version}";
-    hash = "sha256-4QTQgW8k3EMf07Xqs2B+VXQOUPzoOgaNvoC02x4zvu8=";
+    hash = "sha256-+RMeo+Kyum1WNm7citUe9Uk5yOtfhMPPlQRtnYL3Pj8=";
   };
 
   patches = [
@@ -61,25 +62,29 @@ in buildNpmPackage rec {
   nodejs = nodejs_20;
 
   makeCacheWritable = true;
-  npmFlags = [ "--engine-strict" "--legacy-peer-deps" ];
-  npmWorkspace = "apps/desktop";
-  npmDepsHash = "sha256-YzhCyNMvfXGmgOpl3qWj1Pqd1hY8CJ9QLwQds5ZMnqg=";
+  npmFlags = [
+    "--engine-strict"
+    "--legacy-peer-deps"
+  ];
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    name = "${pname}-${version}";
-    inherit src;
-    patches = map
-      (patch: runCommand
-        (builtins.baseNameOf patch)
-        { nativeBuildInputs = [ patchutils_0_4_2 ]; }
-        ''
-          < ${patch} filterdiff -p1 --include=${lib.escapeShellArg cargoRoot}'/*' > $out
-        ''
-      )
-      patches;
+  npmRebuildFlags = [
+    # FIXME one of the esbuild versions fails to download @esbuild/linux-x64
+    "--ignore-scripts"
+  ];
+  npmWorkspace = "apps/desktop";
+  npmDepsHash = "sha256-fYZJA6qV3mqxO2g+yxD0MWWQc9QYmdWJ7O7Vf88Qpbs=";
+
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
+    patches = map (
+      patch:
+      runCommand (builtins.baseNameOf patch) { nativeBuildInputs = [ patchutils_0_4_2 ]; } ''
+        < ${patch} filterdiff -p1 --include=${lib.escapeShellArg cargoRoot}'/*' > $out
+      ''
+    ) patches;
     patchFlags = [ "-p4" ];
     sourceRoot = "${src.name}/${cargoRoot}";
-    hash = "sha256-aurjpVzWET30O+ysyE4ZzauMe8kHjOL169tfKUR1Vpg=";
+    hash = "sha256-OldVFMI+rcGAbpDg7pHu/Lqbw5I6/+oXULteQ9mXiFc=";
   };
   cargoRoot = "apps/desktop/desktop_native";
 
@@ -92,16 +97,9 @@ in buildNpmPackage rec {
     makeWrapper
     napi-rs-cli
     pkg-config
-    (python3.withPackages (ps: with ps; [ setuptools ]))
     rustc
     rustPlatform.cargoCheckHook
     rustPlatform.cargoSetupHook
-  ];
-
-  buildInputs = [
-    glib
-    gtk3
-    libsecret
   ];
 
   preBuild = ''
@@ -161,7 +159,7 @@ in buildNpmPackage rec {
 
     makeWrapper '${lib.getExe electron}' "$out/bin/bitwarden" \
       --add-flags $out/opt/Bitwarden/resources/app.asar \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime}}" \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       --set-default ELECTRON_IS_DEV 0 \
       --inherit-argv0
 
@@ -169,7 +167,7 @@ in buildNpmPackage rec {
     # This may break in the future but its better than copy-pasting it manually.
     mkdir -p $out/share/polkit-1/actions/
     pushd apps/desktop/src/key-management/biometrics
-    awk '/const polkitPolicy = `/{gsub(/^.*`/, ""); print; str=1; next} str{if (/`;/) str=0; gsub(/`;/, ""); print}' biometric.unix.main.ts > $out/share/polkit-1/actions/com.bitwarden.Bitwarden.policy
+    awk '/const polkitPolicy = `/{gsub(/^.*`/, ""); print; str=1; next} str{if (/`;/) str=0; gsub(/`;/, ""); print}' os-biometrics-linux.service.ts > $out/share/polkit-1/actions/com.bitwarden.Bitwarden.policy
     popd
 
     pushd apps/desktop/resources/icons
@@ -197,7 +195,11 @@ in buildNpmPackage rec {
 
   passthru = {
     updateScript = nix-update-script {
-      extraArgs = [ "--commit" "--version=stable" "--version-regex=^desktop-v(.*)$" ];
+      extraArgs = [
+        "--commit"
+        "--version=stable"
+        "--version-regex=^desktop-v(.*)$"
+      ];
     };
   };
 
@@ -207,7 +209,10 @@ in buildNpmPackage rec {
     homepage = "https://bitwarden.com";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ amarshall ];
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
     mainProgram = "bitwarden";
   };
 }

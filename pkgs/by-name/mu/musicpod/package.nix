@@ -1,21 +1,26 @@
 {
   lib,
-  flutter324,
+  flutter327,
   fetchFromGitHub,
   mpv-unwrapped,
   libass,
   pulseaudio,
+  musicpod,
+  runCommand,
+  _experimental-update-script-combinators,
+  yq,
+  gitUpdater,
 }:
 
-flutter324.buildFlutterApplication rec {
+flutter327.buildFlutterApplication rec {
   pname = "musicpod";
-  version = "1.12.0";
+  version = "2.9.0";
 
   src = fetchFromGitHub {
     owner = "ubuntu-flutter-community";
     repo = "musicpod";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-gsreA8ZTLcSvIAtODZ2gopZ78iyoN18gsSi9/IoY5/0=";
+    tag = "v${version}";
+    hash = "sha256-jq133GdeuEENPb2igNWkjeFTpI5qqxF2RuCu78y6L8o=";
   };
 
   postPatch = ''
@@ -27,9 +32,11 @@ flutter324.buildFlutterApplication rec {
 
   gitHashes = {
     audio_service_mpris = "sha256-QRZ4a3w4MZP8/A4yXzP4P9FPwEVNXlntmBwE8I+s2Kk=";
-    media_kit_native_event_loop = "sha256-JBtFTYlztDQvN/qQcDxkK27mka2fSG+iiIIxk2mqEpY=";
-    media_kit_video = "sha256-JBtFTYlztDQvN/qQcDxkK27mka2fSG+iiIIxk2mqEpY=";
-    phoenix_theme = "sha256-5kgPAnK61vFi/sJ1jr3c5D2UZbxItW8YOk/IJEtHkZo=";
+    media_kit = "sha256-uRQmrV1jAxsWXFm5SimAY/VYMHBB9fPSnRXvUCvEI8g=";
+    media_kit_libs_video = "sha256-uRQmrV1jAxsWXFm5SimAY/VYMHBB9fPSnRXvUCvEI8g=";
+    media_kit_video = "sha256-uRQmrV1jAxsWXFm5SimAY/VYMHBB9fPSnRXvUCvEI8g=";
+    phoenix_theme = "sha256-HGMRQ5wdhoqYNkrjLTfz6mE/dh45IRyuQ79/E4oo+9w=";
+    yaru = "sha256-lwyl5aRf5HzWHk7aXYXFj6a9QiFpDN9piHYXzVccYWY=";
   };
 
   buildInputs = [
@@ -43,6 +50,22 @@ flutter324.buildFlutterApplication rec {
     install -Dm644 snap/gui/musicpod.desktop -t $out/share/applications
     install -Dm644 snap/gui/musicpod.png -t $out/share/pixmaps
   '';
+
+  passthru = {
+    pubspecSource =
+      runCommand "pubspec.lock.json"
+        {
+          nativeBuildInputs = [ yq ];
+          inherit (musicpod) src;
+        }
+        ''
+          cat $src/pubspec.lock | yq > $out
+        '';
+    updateScript = _experimental-update-script-combinators.sequence [
+      (gitUpdater { rev-prefix = "v"; })
+      (_experimental-update-script-combinators.copyAttrOutputToFile "musicpod.pubspecSource" ./pubspec.lock.json)
+    ];
+  };
 
   meta = {
     description = "Music, radio, television and podcast player";

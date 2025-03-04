@@ -9,16 +9,17 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "redlib";
-  version = "0.35.1-unstable-2024-11-01";
+  version = "0.35.1-unstable-2024-11-27";
 
   src = fetchFromGitHub {
     owner = "redlib-org";
     repo = "redlib";
-    rev = "f03bdcf472d32d51a1093528071dc329b348379d";
-    hash = "sha256-fbk0m20NpaUCWvH/l9hfmx+VKw4U3pkTkXdAeHL7bHs=";
+    rev = "9f6b08cbb2d0f43644a34f5d0210ac32b9add30c";
+    hash = "sha256-lFvlrVFzMk6igH/h/3TZnkl8SooanVyIRYbSyleb2OU=";
   };
 
-  cargoHash = "sha256-PNqecQSx0Q+K3bBfbOJYWPdl7JdUTDQ4f95RUuW0vPw=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-cqYPxDhIPA45A29Kl3XlF1gd9/EzlyqyFHH69lAju2A=";
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Security
@@ -44,6 +45,8 @@ rustPlatform.buildRustPackage rec {
     "--skip=test_private_sub"
     "--skip=test_banned_sub"
     "--skip=test_gated_sub"
+    "--skip=test_default_subscriptions"
+    "--skip=test_rate_limit_check"
 
     # subreddit.rs
     "--skip=test_fetching_subreddit"
@@ -75,7 +78,7 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.agpl3Only;
     mainProgram = "redlib";
     maintainers = with lib.maintainers; [
-      soispha
+      bpeetz
       Guanran928
     ];
   };

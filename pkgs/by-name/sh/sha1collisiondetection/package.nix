@@ -1,6 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, libtool, which }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libtool,
+  which,
+}:
 
-stdenv.mkDerivation  rec {
+stdenv.mkDerivation rec {
   pname = "sha1collisiondetection";
   version = "1.0.3";
 
@@ -15,7 +21,10 @@ stdenv.mkDerivation  rec {
 
   doCheck = true;
 
-  nativeBuildInputs = [ libtool which ];
+  nativeBuildInputs = [
+    libtool
+    which
+  ];
 
   meta = with lib; {
     description = "Library and command line tool to detect SHA-1 collision";
@@ -26,7 +35,7 @@ stdenv.mkDerivation  rec {
       detect cryptanalytic collision attacks against SHA-1 present in
       each file. It is very fast and takes less than twice the amount
       of time as regular SHA-1.
-      '';
+    '';
     platforms = platforms.all;
     maintainers = with maintainers; [ leenaars ];
     license = licenses.mit;

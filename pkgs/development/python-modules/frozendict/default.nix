@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Marco-Sulla";
     repo = "python-frozendict";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-cdKI0wIr0w6seV12cigqyJL6PSkLVzwVxASUB8n7lFY=";
   };
 

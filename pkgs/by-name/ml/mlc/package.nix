@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, patchelf }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  patchelf,
+}:
 stdenv.mkDerivation rec {
   pname = "mlc";
   version = "3.9a";

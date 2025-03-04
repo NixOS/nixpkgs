@@ -1,27 +1,34 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchFromGitHub
-, wrapQtAppsHook
-, python3
-, zbar
-, secp256k1
-, enableQt ? true
-, qtwayland
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchFromGitHub,
+  wrapQtAppsHook,
+  python3,
+  zbar,
+  secp256k1,
+  enableQt ? true,
+  qtwayland,
 }:
 
 let
   version = "4.2.2.1";
 
   libsecp256k1_name =
-    if stdenv.hostPlatform.isLinux then "libsecp256k1.so.0"
-    else if stdenv.hostPlatform.isDarwin then "libsecp256k1.0.dylib"
-    else "libsecp256k1${stdenv.hostPlatform.extensions.sharedLibrary}";
+    if stdenv.hostPlatform.isLinux then
+      "libsecp256k1.so.0"
+    else if stdenv.hostPlatform.isDarwin then
+      "libsecp256k1.0.dylib"
+    else
+      "libsecp256k1${stdenv.hostPlatform.extensions.sharedLibrary}";
 
   libzbar_name =
-    if stdenv.hostPlatform.isLinux then "libzbar.so.0"
-    else if stdenv.hostPlatform.isDarwin then "libzbar.0.dylib"
-    else "libzbar${stdenv.hostPlatform.extensions.sharedLibrary}";
+    if stdenv.hostPlatform.isLinux then
+      "libzbar.so.0"
+    else if stdenv.hostPlatform.isDarwin then
+      "libzbar.0.dylib"
+    else
+      "libzbar${stdenv.hostPlatform.extensions.sharedLibrary}";
 
   # Not provided in official source releases, which are what upstream signs.
   tests = fetchFromGitHub {
@@ -44,7 +51,7 @@ python3.pkgs.buildPythonApplication {
 
   src = fetchurl {
     url = "https://electrum-ltc.org/download/Electrum-LTC-${version}.tar.gz";
-    sha256 = "sha256-7F28cve+HD5JDK5igfkGD/NvTCfA33g+DmQJ5mwPM9Q=";
+    hash = "sha256-7F28cve+HD5JDK5igfkGD/NvTCfA33g+DmQJ5mwPM9Q=";
   };
 
   postUnpack = ''
@@ -54,32 +61,36 @@ python3.pkgs.buildPythonApplication {
 
   nativeBuildInputs = lib.optionals enableQt [ wrapQtAppsHook ];
 
-  propagatedBuildInputs = with python3.pkgs; [
-    aiohttp
-    aiohttp-socks
-    aiorpcx
-    attrs
-    bitstring
-    cryptography
-    dnspython
-    jsonrpclib-pelix
-    matplotlib
-    pbkdf2
-    protobuf
-    py-scrypt
-    pysocks
-    qrcode
-    requests
-    certifi
-    # plugins
-    btchip-python
-    ckcc-protocol
-    keepkey
-    trezor
-  ] ++ lib.optionals enableQt [
-    pyqt5
-    qdarkstyle
-  ];
+  propagatedBuildInputs =
+    with python3.pkgs;
+    [
+      aiohttp
+      aiohttp-socks
+      aiorpcx
+      attrs
+      bitstring
+      cryptography
+      dnspython
+      jsonrpclib-pelix
+      matplotlib
+      pbkdf2
+      protobuf
+      py-scrypt
+      pysocks
+      qrcode
+      requests
+      certifi
+      # plugins
+      btchip-python
+      ckcc-protocol
+      keepkey
+      trezor
+      distutils
+    ]
+    ++ lib.optionals enableQt [
+      pyqt5
+      qdarkstyle
+    ];
 
   patches = [
     # electrum-ltc attempts to pin to aiorpcX < 0.23, but nixpkgs
@@ -99,18 +110,28 @@ python3.pkgs.buildPythonApplication {
     # copy the patched `/run_electrum` over `/electrum/electrum`
     # so the aiorpcx compatibility patch is used
     cp run_electrum electrum_ltc/electrum-ltc
+
+    # refresh stale generated code, per electrum_ltc/paymentrequest.py line 40
+    protoc --proto_path=electrum_ltc/ --python_out=electrum_ltc/ electrum_ltc/paymentrequest.proto
   '';
 
-  preBuild = ''
-    sed -i 's,usr_share = .*,usr_share = "'$out'/share",g' setup.py
-    substituteInPlace ./electrum_ltc/ecc_fast.py \
-      --replace ${libsecp256k1_name} ${secp256k1}/lib/libsecp256k1${stdenv.hostPlatform.extensions.sharedLibrary}
-  '' + (if enableQt then ''
-    substituteInPlace ./electrum_ltc/qrscanner.py \
-      --replace ${libzbar_name} ${zbar.lib}/lib/libzbar${stdenv.hostPlatform.extensions.sharedLibrary}
-  '' else ''
-    sed -i '/qdarkstyle/d' contrib/requirements/requirements.txt
-  '');
+  preBuild =
+    ''
+      sed -i 's,usr_share = .*,usr_share = "'$out'/share",g' setup.py
+      substituteInPlace ./electrum_ltc/ecc_fast.py \
+        --replace ${libsecp256k1_name} ${secp256k1}/lib/libsecp256k1${stdenv.hostPlatform.extensions.sharedLibrary}
+    ''
+    + (
+      if enableQt then
+        ''
+          substituteInPlace ./electrum_ltc/qrscanner.py \
+            --replace ${libzbar_name} ${zbar.lib}/lib/libzbar${stdenv.hostPlatform.extensions.sharedLibrary}
+        ''
+      else
+        ''
+          sed -i '/qdarkstyle/d' contrib/requirements/requirements.txt
+        ''
+    );
 
   postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     # Despite setting usr_share above, these files are installed under
@@ -130,14 +151,18 @@ python3.pkgs.buildPythonApplication {
     wrapQtApp $out/bin/electrum-ltc
   '';
 
-  nativeCheckInputs = with python3.pkgs; [ pytestCheckHook pyaes pycryptodomex ];
+  nativeCheckInputs = with python3.pkgs; [
+    pytestCheckHook
+    pyaes
+    pycryptodomex
+  ];
   buildInputs = lib.optional stdenv.hostPlatform.isLinux qtwayland;
 
   pytestFlagsArray = [ "electrum_ltc/tests" ];
 
   disabledTests = [
-    "test_loop"  # test tries to bind 127.0.0.1 causing permission error
-    "test_is_ip_address"  # fails spuriously https://github.com/spesmilo/electrum/issues/7307
+    "test_loop" # test tries to bind 127.0.0.1 causing permission error
+    "test_is_ip_address" # fails spuriously https://github.com/spesmilo/electrum/issues/7307
     # electrum_ltc.lnutil.RemoteMisbehaving: received commitment_signed without pending changes
     "test_reestablish_replay_messages_rev_then_sig"
     "test_reestablish_replay_messages_sig_then_rev"

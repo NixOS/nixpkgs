@@ -84,7 +84,9 @@ let
             ));
         };
 
+      strictDeps = true;
       buildInputs = [ postgresql ] ++ prevAttrs.buildInputs or [ ];
+      nativeBuildInputs = [ postgresql ] ++ prevAttrs.nativeBuildInputs or [ ];
 
       installFlags = [
         "DESTDIR=${placeholder "out"}"

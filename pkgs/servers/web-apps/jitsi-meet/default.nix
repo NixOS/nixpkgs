@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, nixosTests, olm }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  nixosTests,
+  olm,
+}:
 
 stdenv.mkDerivation rec {
   pname = "jitsi-meet";

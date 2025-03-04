@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "home-assistant-bluetooth";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-+2bw4im09TyjJ5/7ct42ZCFwU7yKWQnbSo7b+44VtpE=";
   };
 

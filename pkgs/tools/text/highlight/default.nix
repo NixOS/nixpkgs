@@ -1,33 +1,55 @@
-{ lib, stdenv, fetchFromGitLab, getopt, lua, boost, libxcrypt, pkg-config, swig, perl, gcc }:
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  getopt,
+  lua,
+  boost,
+  libxcrypt,
+  pkg-config,
+  swig,
+  perl,
+  gcc,
+}:
 
 let
   self = stdenv.mkDerivation rec {
     pname = "highlight";
-    version = "4.14";
+    version = "4.15";
 
     src = fetchFromGitLab {
       owner = "saalen";
       repo = "highlight";
       rev = "v${version}";
-      hash = "sha256-UxbgYspocoy9ul2dhIhvIwqKMeWSG7vJY1df3UkgpHQ=";
+      hash = "sha256-CpbVm5Z9cKPQdOzBNOXsgrX3rfC6DTVE7xfmOAshbEs=";
     };
 
     enableParallelBuilding = true;
 
-    nativeBuildInputs = [ pkg-config swig perl ]
-      ++ lib.optional stdenv.hostPlatform.isDarwin gcc;
+    nativeBuildInputs = [
+      pkg-config
+      swig
+      perl
+    ] ++ lib.optional stdenv.hostPlatform.isDarwin gcc;
 
-    buildInputs = [ getopt lua boost libxcrypt ];
+    buildInputs = [
+      getopt
+      lua
+      boost
+      libxcrypt
+    ];
 
-    postPatch = ''
-      substituteInPlace src/makefile \
-        --replace "shell pkg-config" "shell $PKG_CONFIG"
-      substituteInPlace makefile \
-        --replace 'gzip' 'gzip -n'
-    '' + lib.optionalString stdenv.cc.isClang ''
-      substituteInPlace src/makefile \
-          --replace 'CXX=g++' 'CXX=clang++'
-    '';
+    postPatch =
+      ''
+        substituteInPlace src/makefile \
+          --replace "shell pkg-config" "shell $PKG_CONFIG"
+        substituteInPlace makefile \
+          --replace 'gzip' 'gzip -n'
+      ''
+      + lib.optionalString stdenv.cc.isClang ''
+        substituteInPlace src/makefile \
+            --replace 'CXX=g++' 'CXX=clang++'
+      '';
 
     preConfigure = ''
       makeFlags="PREFIX=$out conf_dir=$out/etc/highlight/ CXX=$CXX AR=$AR"
@@ -59,5 +81,4 @@ let
   };
 
 in
-  if stdenv.hostPlatform.isDarwin then self
-  else perl.pkgs.toPerlModule self
+if stdenv.hostPlatform.isDarwin then self else perl.pkgs.toPerlModule self

@@ -18,6 +18,7 @@
   wrapGAppsHook4,
   glib-networking,
   symlinkJoin,
+  nix-update-script,
   extraDocsPackage ? [ ],
 }:
 
@@ -28,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "workbenchdev";
     repo = "Biblioteca";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
     hash = "sha256-zrrI3u4ukGN6eb/eK/aZG4gi/xtXciyRS+JX9Js9KEw=";
   };
@@ -93,10 +94,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
   meta = {
     homepage = "https://apps.gnome.org/Biblioteca/";
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ bot-wxt1221 ];
+    maintainers = with lib.maintainers; [ bot-wxt1221 ] ++ lib.teams.gnome-circle.members;
     license = lib.licenses.gpl3Only;
     description = "Documentation viewer for GNOME";
     mainProgram = "biblioteca";

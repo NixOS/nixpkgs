@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchgit, libowfat, zlib, nixosTests }:
+{
+  lib,
+  stdenv,
+  fetchgit,
+  libowfat,
+  zlib,
+  nixosTests,
+}:
 
 stdenv.mkDerivation {
   pname = "opentracker";
@@ -10,7 +17,10 @@ stdenv.mkDerivation {
     sha256 = "sha256-SuElfmk7zONolTiyg0pyvbfvyJRn3r9OrXwpTzLw8LI=";
   };
 
-  buildInputs = [ libowfat zlib ];
+  buildInputs = [
+    libowfat
+    zlib
+  ];
 
   makeFlags = [
     "LIBOWFAT_HEADERS=${libowfat}/include/libowfat"

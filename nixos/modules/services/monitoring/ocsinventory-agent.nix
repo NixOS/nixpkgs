@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.ocsinventory-agent;
@@ -98,7 +103,8 @@ in
     let
       configFile = settingsFormat.generate "ocsinventory-agent.cfg" cfg.settings;
 
-    in lib.mkIf cfg.enable {
+    in
+    lib.mkIf cfg.enable {
       # Path of the configuration file is hard-coded and cannot be changed
       # https://github.com/OCSInventory-NG/UnixAgent/blob/v2.10.0/lib/Ocsinventory/Agent/Config.pm#L78
       #

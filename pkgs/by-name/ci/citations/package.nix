@@ -1,40 +1,42 @@
-{ cargo
-, darwin
-, desktop-file-utils
-, fetchFromGitLab
-, gettext
-, glib
-, gtk4
-, gtksourceview5
-, lib
-, libadwaita
-, meson
-, ninja
-, pkg-config
-, poppler
-, rustPlatform
-, rustc
-, stdenv
-, testers
-, wrapGAppsHook4
-, clippy
+{
+  cargo,
+  darwin,
+  desktop-file-utils,
+  fetchFromGitLab,
+  gettext,
+  glib,
+  gtk4,
+  gtksourceview5,
+  lib,
+  libadwaita,
+  meson,
+  ninja,
+  pkg-config,
+  poppler,
+  rustPlatform,
+  rustc,
+  stdenv,
+  testers,
+  wrapGAppsHook4,
+  clippy,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "citations";
-  version = "0.6.2";
+  version = "0.7.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "citations";
     rev = finalAttrs.version;
-    hash = "sha256-RV9oQcXzRsNcvZc/8Xt7qZ/88DvHofC2Av0ftxzeF6Q=";
+    hash = "sha256-WYy6cyPmyWL/11yHf+dRbcZGBfvVfELeTwKvpJMu5ns=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     src = finalAttrs.src;
-    hash = "sha256-XlqwgXuwxR6oEz0+hYAp/3b+XxH+Vd/DGr5j+iKhUjQ=";
+    hash = "sha256-bqZZIA7sE0viAhI5GUFIVCXTkK+U9aWPvCPCug5SR94=";
   };
 
   nativeBuildInputs = [
@@ -50,22 +52,26 @@ stdenv.mkDerivation (finalAttrs: {
     wrapGAppsHook4
   ];
 
-  buildInputs = [
-    glib
-    gtk4
-    gtksourceview5
-    libadwaita
-    poppler
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Foundation
-  ];
+  buildInputs =
+    [
+      glib
+      gtk4
+      gtksourceview5
+      libadwaita
+      poppler
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.Foundation
+    ];
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang (lib.concatStringsSep " " [
-    "-Wno-typedef-redefinition"
-    "-Wno-unused-parameter"
-    "-Wno-missing-field-initializers"
-    "-Wno-incompatible-function-pointer-types"
-  ]);
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang (
+    lib.concatStringsSep " " [
+      "-Wno-typedef-redefinition"
+      "-Wno-unused-parameter"
+      "-Wno-missing-field-initializers"
+      "-Wno-incompatible-function-pointer-types"
+    ]
+  );
 
   doCheck = true;
 
@@ -75,16 +81,20 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i -e '/PATH=/d' ../src/meson.build
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = finalAttrs.finalPackage;
-    command = "citations --help";
+  passthru = {
+    tests.version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+      command = "citations --help";
+    };
+
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {
     description = "Manage your bibliographies using the BibTeX format";
     homepage = "https://apps.gnome.org/app/org.gnome.World.Citations";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ benediktbroich ];
+    maintainers = with maintainers; [ benediktbroich ] ++ lib.teams.gnome-circle.members;
     platforms = platforms.unix;
     mainProgram = "citations";
   };

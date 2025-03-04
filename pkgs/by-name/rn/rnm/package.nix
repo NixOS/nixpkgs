@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, gmp
-, jpcre2
-, pcre2
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gmp,
+  jpcre2,
+  pcre2,
 }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "neurobin";
     repo = "rnm";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-cMWIxRuL7UCDjGr26+mfEYBPRA/dxEt0Us5qU92TelY=";
   };
 

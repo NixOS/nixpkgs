@@ -1,10 +1,11 @@
-{ lib
-, buildPlatform
-, hostPlatform
-, fetchurl
-, bash
-, gnumake
-, tinycc
+{
+  lib,
+  buildPlatform,
+  hostPlatform,
+  fetchurl,
+  bash,
+  gnumake,
+  tinycc,
 }:
 
 let
@@ -25,35 +26,38 @@ let
     sha256 = "0w1f5ri0g5zla31m6l6xyzbqwdvandqfnzrsw90dd6ak126w3mya";
   };
 in
-bash.runCommand "${pname}-${version}" {
-  inherit pname version meta;
+bash.runCommand "${pname}-${version}"
+  {
+    inherit pname version meta;
 
-  nativeBuildInputs = [
-    gnumake
-    tinycc.compiler
-  ];
+    nativeBuildInputs = [
+      gnumake
+      tinycc.compiler
+    ];
 
-  passthru.tests.get-version = result:
-    bash.runCommand "${pname}-get-version-${version}" {} ''
-      ${result}/bin/sed --version
-      mkdir ''${out}
-    '';
-} (''
-  # Unpack
-  ungz --file ${src} --output sed.tar
-  untar --file sed.tar
-  rm sed.tar
-  cd sed-${version}
+    passthru.tests.get-version =
+      result:
+      bash.runCommand "${pname}-get-version-${version}" { } ''
+        ${result}/bin/sed --version
+        mkdir ''${out}
+      '';
+  }
+  (''
+    # Unpack
+    ungz --file ${src} --output sed.tar
+    untar --file sed.tar
+    rm sed.tar
+    cd sed-${version}
 
-  # Configure
-  cp ${makefile} Makefile
-  catm config.h
+    # Configure
+    cp ${makefile} Makefile
+    catm config.h
 
-  # Build
-  make \
-    CC="tcc -B ${tinycc.libs}/lib" \
-    LIBC=mes
+    # Build
+    make \
+      CC="tcc -B ${tinycc.libs}/lib" \
+      LIBC=mes
 
-  # Install
-  make install PREFIX=$out
-'')
+    # Install
+    make install PREFIX=$out
+  '')

@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchurl
-, rpmextract
-, patchelf
-, makeWrapper
-, openssl
-, libxcrypt-legacy
+{
+  lib,
+  stdenv,
+  fetchurl,
+  rpmextract,
+  patchelf,
+  makeWrapper,
+  openssl,
+  libxcrypt-legacy,
 }:
 
 stdenv.mkDerivation rec {
@@ -17,9 +18,15 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-KKCCj+pIwWhuzOuxljQ8Y11mAwD/GONspbXuPAMBdhE=";
   };
 
-  nativeBuildInputs = [ rpmextract makeWrapper ];
+  nativeBuildInputs = [
+    rpmextract
+    makeWrapper
+  ];
 
-  libPath = lib.makeLibraryPath [ openssl libxcrypt-legacy ];
+  libPath = lib.makeLibraryPath [
+    openssl
+    libxcrypt-legacy
+  ];
 
   buildCommand = ''
     mkdir -p $out/bin/

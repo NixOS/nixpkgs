@@ -1,39 +1,40 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, cargo
-, meson
-, ninja
-, pkg-config
-, gst_all_1
-, protobuf
-, libspelling
-, libsecret
-, libadwaita
-, gtksourceview5
-, rustPlatform
-, rustc
-, appstream-glib
-, blueprint-compiler
-, desktop-file-utils
-, wrapGAppsHook4
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  cargo,
+  meson,
+  ninja,
+  pkg-config,
+  gst_all_1,
+  protobuf,
+  libspelling,
+  libsecret,
+  libadwaita,
+  gtksourceview5,
+  rustPlatform,
+  rustc,
+  appstream-glib,
+  blueprint-compiler,
+  desktop-file-utils,
+  wrapGAppsHook4,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "flare";
-  version = "0.15.6";
+  version = "0.15.12";
 
   src = fetchFromGitLab {
     domain = "gitlab.com";
     owner = "schmiddi-on-mobile";
     repo = "flare";
     rev = finalAttrs.version;
-    hash = "sha256-xpjxOaCN5UVBBIB6WMLCMspRWkzz4DQEcjiSL8uM2RQ=";
+    hash = "sha256-qj34x/e5Nc3wPdFaHFZHQ8uCMHIlxfVNyvlp7eb3tSo=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-iuK68GLU/4wsOLQz+7pGVDZwCuc6cwcUKn6teFuYJco=";
+    hash = "sha256-Nri3GOq7aaY3yIVQESMPUck3z8++FnAmIbIdkTe+GXw=";
   };
 
   nativeBuildInputs = [

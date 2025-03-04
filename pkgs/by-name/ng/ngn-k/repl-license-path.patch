@@ -1,13 +1,13 @@
 diff --git a/repl.k b/repl.k
-index 4c023467..10414162 100755
+index dc89832c..7a6e0dcf 100755
 --- a/repl.k
 +++ b/repl.k
-@@ -2,7 +2,7 @@
- `1:"ngn/k, (c) 2019-2022 ngn, GNU AGPLv3. type \\ for more info\n"
- \d repl
- `1:prompt:," " /use 0x0720 for emacs integration
+@@ -21,7 +21,7 @@ tbl:{[w;u;x]h:`k'!x;d:`k''.x;W:(#'h)|/'#''d
+  r,par'dd[w-2]'sem/'+@[W;&~^`i`d?_@'.x;-:]$'d}
+ cell:{$[|/`i`d=@y;-x;x]$z}
+ par:{opn,x,cls}
 -cmds:(,"a")!{`1:1:joinpath[dirname`argv 0]"LICENSE";}
 +cmds:(,"a")!{`1:1:joinpath[dirname`argv 0]"../share/ngn-k/LICENSE";}
+ basename:{*|"/"\x}
  dirname:{$[#x:"/"/-1_"/"\x;x;,"."]}
  joinpath:{$[x~,".";y;"/"~*|x;x,y;x,"/",y]}
- fmt:{$[x~(::);"";(`A~@x)&1<#x;"(",("\n "/`k'x),")\n";`k[x],"\n"]}

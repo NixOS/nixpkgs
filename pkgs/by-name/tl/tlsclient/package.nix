@@ -1,20 +1,21 @@
-{ lib
-, stdenv
-, fetchFromSourcehut
-, pkg-config
-, openssl
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromSourcehut,
+  pkg-config,
+  openssl,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tlsclient";
-  version = "1.6.5";
+  version = "1.6.6";
 
   src = fetchFromSourcehut {
     owner = "~moody";
     repo = "tlsclient";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Ff41LZ5jbrqni2ptsUlI3L17SCHnGo4utg8etFubRNI=";
+    hash = "sha256-nUvOmEwdMKuPM9KaMGxmW0Lvo3968wjDc95pLB17YnM=";
   };
 
   strictDeps = true;

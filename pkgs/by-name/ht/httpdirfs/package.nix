@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "fangfufu";
     repo = "httpdirfs";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-6TGptKWX0hSNL3Z3ioP7puzozWLiMhCybN7hATQdD/k=";
   };
 
@@ -55,7 +55,11 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/fangfufu/httpdirfs";
     license = lib.licenses.gpl3Only;
     mainProgram = "httpdirfs";
-    maintainers = with lib.maintainers; [ sbruder schnusch anthonyroussel ];
+    maintainers = with lib.maintainers; [
+      sbruder
+      schnusch
+      anthonyroussel
+    ];
     platforms = lib.platforms.linux;
   };
 })

@@ -1,28 +1,43 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.below;
   cfgContents = lib.concatStringsSep "\n" (
-    lib.mapAttrsToList (n: v: ''${n} = "${v}"'') (lib.filterAttrs (_k: v: v != null) {
-      log_dir = cfg.dirs.log;
-      store_dir = cfg.dirs.store;
-      cgroup_filter_out = cfg.cgroupFilterOut;
-    })
+    lib.mapAttrsToList (n: v: ''${n} = "${v}"'') (
+      lib.filterAttrs (_k: v: v != null) {
+        log_dir = cfg.dirs.log;
+        store_dir = cfg.dirs.store;
+        cgroup_filter_out = cfg.cgroupFilterOut;
+      }
+    )
   );
 
-  mkDisableOption = n: lib.mkOption {
-    type = lib.types.bool;
-    default = true;
-    description = "Whether to enable ${n}.";
-  };
-  optionalType = ty: x: lib.mkOption (x // {
-    description = x.description;
-    type = (lib.types.nullOr ty);
-    default = null;
-  });
+  mkDisableOption =
+    n:
+    lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+      description = "Whether to enable ${n}.";
+    };
+  optionalType =
+    ty: x:
+    lib.mkOption (
+      x
+      // {
+        description = x.description;
+        type = (lib.types.nullOr ty);
+        default = null;
+      }
+    );
   optionalPath = optionalType lib.types.path;
   optionalStr = optionalType lib.types.str;
   optionalInt = optionalType lib.types.int;
-in {
+in
+{
   options = {
     services.below = {
       enable = lib.mkEnableOption "'below' resource monitor";
@@ -33,7 +48,7 @@ in {
       };
       collect = {
         diskStats = mkDisableOption "dist_stat collection";
-        ioStats   = lib.mkEnableOption "io.stat collection for cgroups";
+        ioStats = lib.mkEnableOption "io.stat collection for cgroups";
         exitStats = mkDisableOption "eBPF-based exitstats";
       };
       compression.enable = lib.mkEnableOption "data compression";
@@ -89,15 +104,19 @@ in {
 
         serviceConfig.ExecStart = [
           ""
-          ("${lib.getExe pkgs.below} record " + (lib.concatStringsSep " " (
-            lib.optional (!cfg.collect.diskStats) "--disable-disk-stat" ++
-            lib.optional   cfg.collect.ioStats    "--collect-io-stat"   ++
-            lib.optional (!cfg.collect.exitStats) "--disable-exitstats" ++
-            lib.optional   cfg.compression.enable "--compress"          ++
+          (
+            "${lib.getExe pkgs.below} record "
+            + (lib.concatStringsSep " " (
+              lib.optional (!cfg.collect.diskStats) "--disable-disk-stat"
+              ++ lib.optional cfg.collect.ioStats "--collect-io-stat"
+              ++ lib.optional (!cfg.collect.exitStats) "--disable-exitstats"
+              ++ lib.optional cfg.compression.enable "--compress"
+              ++
 
-            lib.optional (cfg.retention.size != null) "--store-size-limit ${toString cfg.retention.size}" ++
-            lib.optional (cfg.retention.time != null) "--retain-for-s ${toString cfg.retention.time}"
-          )))
+                lib.optional (cfg.retention.size != null) "--store-size-limit ${toString cfg.retention.size}"
+              ++ lib.optional (cfg.retention.time != null) "--retain-for-s ${toString cfg.retention.time}"
+            ))
+          )
         ];
       };
     };

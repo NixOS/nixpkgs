@@ -14,7 +14,7 @@ python311Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Textualize";
     repo = "toolong";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Zd6j1BIrsLJqptg7BXb67qY3DaeHRHieWJoYYCDHaoc=";
   };
 

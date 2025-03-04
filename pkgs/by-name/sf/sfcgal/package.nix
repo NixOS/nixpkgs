@@ -29,7 +29,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
-  patches = [ ./cmake-fix.patch ];
+  patches = [
+    # https://gitlab.com/sfcgal/SFCGAL/-/merge_requests/384
+    ./cmake-fix.patch
+  ];
 
   meta = {
     description = "C++ wrapper library around CGAL with the aim of supporting ISO 191007:2013 and OGC Simple Features for 3D operations";
@@ -37,6 +40,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://gitlab.com/sfcgal/SFCGAL/-/releases/v${finalAttrs.version}";
     license = lib.licenses.lgpl2;
     platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.fqidz ];
+    maintainers = with lib; teams.geospatial.members ++ [ maintainers.fqidz ];
   };
 })

@@ -10,6 +10,7 @@
   openssl,
   pkg-config,
   protobuf,
+  cmake,
 
   llama-cpp,
 
@@ -31,7 +32,7 @@ let
   # https://github.com/NixOS/nixpkgs/blob/master/pkgs/tools/misc/ollama/default.nix
 
   pname = "tabby";
-  version = "0.19.0";
+  version = "0.24.0";
 
   availableAccelerations = flatten [
     (optional cudaSupport "cuda")
@@ -119,42 +120,23 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "TabbyML";
     repo = "tabby";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-RK81gQ5IUzZ4HXJbKBr5bqayH0Xip6ZVAgdMwqP+kx8=";
+    tag = "v${version}";
+    hash = "sha256-poWUfPp/7w6dNjh6yoP5oTbaP4lL91hb1+zQG8tjUDE=";
     fetchSubmodules = true;
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "ollama-rs-0.1.9" = "sha256-d6sKUxc8VQbRkVqMOeNFqDdKesq5k32AQShK67y2ssg=";
-      "oneshot-0.1.6" = "sha256-PmYuHuNTqToMyMHPRFDUaHUvFkVftx9ZCOBwXj+4Hc4=";
-      "ownedbytes-0.7.0" = "sha256-p0+ohtW0VLmfDTZw/LfwX2gYfuYuoOBcE+JsguK7Wn8=";
-      "sqlx-0.7.4" = "sha256-tcISzoSfOZ0jjNgGpuPPxjMxmBUPw/5FVDoALZEAHKY=";
-      "tree-sitter-c-0.21.3" = "sha256-ucbHLS2xyGo1uyKZv/K1HNXuMo4GpTY327cgdVS9F3c=";
-      "tree-sitter-cpp-0.22.1" = "sha256-3akSuQltFMF6I32HwRU08+Hcl9ojxPGk2ZuOX3gAObw=";
-      "tree-sitter-solidity-1.2.6" = "sha256-S00hdzMoIccPYBEvE092/RIMnG8YEnDGk6GJhXlr4ng=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-CTn/b42FI+Y6qy3MKVESIbIlsXmIkZBlxUXnRtHWZcc=";
 
-  # https://github.com/TabbyML/tabby/blob/v0.7.0/.github/workflows/release.yml#L39
-  cargoBuildFlags =
-    [
-      # Don't need to build llama-cpp-server (included in default build)
-      "--no-default-features"
-      "--features"
-      "ee"
-      "--package"
-      "tabby"
-    ]
-    ++ optionals enableRocm [
-      "--features"
-      "rocm"
-    ]
-    ++ optionals enableCuda [
-      "--features"
-      "cuda"
-    ];
+  # Don't need to build llama-cpp-server (included in default build)
+  # We also don't add CUDA features here since we're using the overridden llama-cpp package
+  cargoBuildFlags = [
+    "--no-default-features"
+    "--features"
+    "ee"
+    "--package"
+    "tabby"
+  ];
 
   nativeInstallCheckInputs = [
     versionCheckHook
@@ -167,6 +149,7 @@ rustPlatform.buildRustPackage {
       git
       pkg-config
       protobuf
+      cmake
     ]
     ++ optionals enableCuda [
       autoAddDriverRunpath
@@ -199,13 +182,13 @@ rustPlatform.buildRustPackage {
     ];
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/TabbyML/tabby";
     changelog = "https://github.com/TabbyML/tabby/releases/tag/v${version}";
     description = "Self-hosted AI coding assistant";
     mainProgram = "tabby";
-    license = licenses.asl20;
-    maintainers = [ maintainers.ghthor ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.ghthor ];
     broken = stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isAarch64;
   };
 }
