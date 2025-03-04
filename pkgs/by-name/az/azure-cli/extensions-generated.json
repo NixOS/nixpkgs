@@ -533,9 +533,9 @@
   },
   "image-copy-extension": {
     "pname": "image-copy-extension",
-    "version": "1.0.0",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/image_copy_extension-1.0.0-py2.py3-none-any.whl",
-    "hash": "sha256-4RO7FHmyQdJd0GY0OqdF9wxYFq5U4sAXYczPFgOUX9g=",
+    "version": "1.0.1",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/image_copy_extension-1.0.1-py2.py3-none-any.whl",
+    "hash": "sha256-XYMjEh5KX8bdlXXEBhasDLjDZx7DvFK2jDmwTnZPZZQ=",
     "description": "Support for copying managed vm images between regions"
   },
   "image-gallery": {
