@@ -25,7 +25,7 @@ import ./make-test-python.nix (
       machine.wait_for_unit("zwave-js-ui.service")
       machine.wait_for_open_port(9999)
       machine.wait_until_succeeds("journalctl --since -1m --unit zwave-js-ui --grep 'Listening on port 9999host :: protocol HTTP'")
-      machine.wait_for_file("/var/lib/zwave-js-ui/nodes.json")
+      machine.wait_for_file("/var/lib/zwave-js-ui/users.json")
     '';
   }
 )
