@@ -1,0 +1,17 @@
+diff --git a/graph500-1.2/generator/CMakeLists.txt b/graph500-1.2/generator/CMakeLists.txt
+index bf08d307..83ea8de6 100644
+--- a/graph500-1.2/generator/CMakeLists.txt
++++ b/graph500-1.2/generator/CMakeLists.txt
+@@ -7,6 +7,12 @@ if(CMAKE_C_COMPILER_ID STREQUAL "Intel")
+   target_compile_options(GraphGenlib PRIVATE "-restrict")
+ endif()
+ 
++include(CheckLibraryExists)
++CHECK_LIBRARY_EXISTS(m sqrt "" HAVE_LIB_M)
++if (HAVE_LIB_M)
++  target_link_libraries(GraphGenlib PUBLIC m)
++endif (HAVE_LIB_M)
++
+ install(DIRECTORY include/ DESTINATION include)
+ install(TARGETS GraphGenlib EXPORT CombBLASTargets
+   LIBRARY DESTINATION lib

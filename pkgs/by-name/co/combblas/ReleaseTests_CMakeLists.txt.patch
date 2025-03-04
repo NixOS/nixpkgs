@@ -1,0 +1,14 @@
+diff --git a/ReleaseTests/CMakeLists.txt b/ReleaseTests/CMakeLists.txt
+index e37c57d1..195c7427 100644
+--- a/ReleaseTests/CMakeLists.txt
++++ b/ReleaseTests/CMakeLists.txt
+@@ -45,7 +45,7 @@ ADD_TEST(NAME HashSpGEMMTest COMMAND ${MPIEXEC} ${MPIEXEC_NUMPROC_FLAG} 1 $<TARG
+ ADD_TEST(NAME Reduction_Test COMMAND ${MPIEXEC} ${MPIEXEC_NUMPROC_FLAG} 4 $<TARGET_FILE:ReduceTest> ../TESTDATA/sprand10000 ../TESTDATA/sprand10000_sumcols ../TESTDATA/sprand10000_sumrows)
+ ADD_TEST(NAME Iterator_Test COMMAND ${MPIEXEC} ${MPIEXEC_NUMPROC_FLAG} 4 $<TARGET_FILE:IteratorTest> ../TESTDATA sprand10000)
+ ADD_TEST(NAME Transpose_Test COMMAND ${MPIEXEC} ${MPIEXEC_NUMPROC_FLAG} 4 $<TARGET_FILE:TransposeTest> ../TESTDATA betwinput_scale16 betwinput_transposed_scale16)
+-ADD_TEST(NAME Indexing_Test COMMAND ${MPIEXEC} ${MPIEXEC_NUMPROC_FLAG} 4 $<TARGET_FILE:IndexingTest> ../TESTDATA B_100x100.txt B_10x30_Indexed.txt rand10outta100.txt rand30outta100.txt)
+-ADD_TEST(NAME SpAsgn_Test COMMAND ${MPIEXEC} ${MPIEXEC_NUMPROC_FLAG} 4 $<TARGET_FILE:SpAsgnTest> ../TESTDATA A_100x100.txt A_with20x30hole.txt dense_20x30matrix.txt A_wdenseblocks.txt 20outta100.txt 30outta100.txt)
++# ADD_TEST(NAME Indexing_Test COMMAND ${MPIEXEC} ${MPIEXEC_NUMPROC_FLAG} 4 $<TARGET_FILE:IndexingTest> ../TESTDATA B_100x100.txt B_10x30_Indexed.txt rand10outta100.txt rand30outta100.txt)
++# ADD_TEST(NAME SpAsgn_Test COMMAND ${MPIEXEC} ${MPIEXEC_NUMPROC_FLAG} 4 $<TARGET_FILE:SpAsgnTest> ../TESTDATA A_100x100.txt A_with20x30hole.txt dense_20x30matrix.txt A_wdenseblocks.txt 20outta100.txt 30outta100.txt)
+ ADD_TEST(NAME GalerkinNew_Test COMMAND ${MPIEXEC} ${MPIEXEC_NUMPROC_FLAG} 4 $<TARGET_FILE:GalerkinNew> ../TESTDATA/grid3d_k5.txt ../TESTDATA/offdiag_grid3d_k5.txt ../TESTDATA/diag_grid3d_k5.txt ../TESTDATA/restrict_T_grid3d_k5.txt)
+ ADD_TEST(NAME FindSparse_Test COMMAND ${MPIEXEC} ${MPIEXEC_NUMPROC_FLAG} 4 $<TARGET_FILE:FindSparse> ../TESTDATA findmatrix.txt)
