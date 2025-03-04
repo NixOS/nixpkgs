@@ -47,10 +47,10 @@
             },
             "src/electron": {
                 "fetcher": "fetchFromGitHub",
-                "hash": "sha256-3W6F30x90mLX1BdL9zY/YLShFRUGirokadzEg5QX6TU=",
+                "hash": "sha256-UpLk6Kjd50UHcUV53Gz7KnnXk8T2nd4Oc2FW7CFdL04=",
                 "owner": "electron",
                 "repo": "electron",
-                "rev": "v32.3.1"
+                "rev": "v32.3.2"
             },
             "src/media/cdm/api": {
                 "fetcher": "fetchFromGitiles",
@@ -938,7 +938,7 @@
         "electron_yarn_hash": "122y1vnizwg0rwz8qf37mvpa0i78141y98wn4h11l6b9gyshrs65",
         "modules": "128",
         "node": "20.18.1",
-        "version": "32.3.1"
+        "version": "32.3.2"
     },
     "33": {
         "chrome": "130.0.6723.191",
@@ -988,10 +988,10 @@
             },
             "src/electron": {
                 "fetcher": "fetchFromGitHub",
-                "hash": "sha256-cOiflmkAzX0U7wFoGwxYDKMMrmSdjn18oXvguS6RSeY=",
+                "hash": "sha256-kxRsRaLOJhKUcLNsyQ+9sC6oxGO/aDIYJnH5DUx61TM=",
                 "owner": "electron",
                 "repo": "electron",
-                "rev": "v33.4.1"
+                "rev": "v33.4.2"
             },
             "src/media/cdm/api": {
                 "fetcher": "fetchFromGitiles",
@@ -1241,10 +1241,10 @@
             },
             "src/third_party/electron_node": {
                 "fetcher": "fetchFromGitHub",
-                "hash": "sha256-sUbqRJTFMuGhNHNwGZmAqNfw0t6ms8WpAeCSGjNX7Cw=",
+                "hash": "sha256-ta9gw6A0aYguKYNRBW2nSPC3UTU5/7GNUPS02yyByis=",
                 "owner": "nodejs",
                 "repo": "node",
-                "rev": "v20.18.1"
+                "rev": "v20.18.3"
             },
             "src/third_party/emoji-segmenter/src": {
                 "fetcher": "fetchFromGitiles",
@@ -1890,7 +1890,7 @@
         },
         "electron_yarn_hash": "0bzsswcg62b39xinq5vikk7qz7d15276s2vc15v1gcb5wvh05ff8",
         "modules": "130",
-        "node": "20.18.1",
-        "version": "33.4.1"
+        "node": "20.18.3",
+        "version": "33.4.2"
     }
 }

@@ -1243,7 +1243,7 @@ with pkgs;
     util-linux = if stdenv.hostPlatform.isLinux then util-linuxMinimal else util-linux;
   };
 
-  git-remote-codecommit = python3Packages.callPackage ../applications/version-management/git-remote-codecommit { };
+  git-remote-codecommit = callPackage ../applications/version-management/git-remote-codecommit { };
 
   gitRepo = git-repo;
   git-repo-updater = python3Packages.callPackage ../applications/version-management/git-repo-updater { };
@@ -16727,9 +16727,7 @@ with pkgs;
 
   pdb2pqr = with python3Packages; toPythonApplication pdb2pqr;
 
-  pymol = callPackage ../applications/science/chemistry/pymol {
-    python3Packages = python311Packages;
-  };
+  pymol = callPackage ../applications/science/chemistry/pymol { };
 
   quantum-espresso = callPackage ../applications/science/chemistry/quantum-espresso {
     hdf5 = hdf5-fortran;
