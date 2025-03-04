@@ -115,7 +115,6 @@ let
 
       cmakeFlags = [
         "-D server=OFF"
-        "-D bundled-celt=ON"
         "-D bundle-qt-translations=OFF"
         "-D bundled-json=OFF"
         "-D bundled-gsl=OFF"
