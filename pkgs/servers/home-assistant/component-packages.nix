@@ -4250,7 +4250,8 @@
       ];
     "picnic" =
       ps: with ps; [
-      ]; # missing inputs: python-picnic-api2
+        python-picnic-api2
+      ];
     "picotts" =
       ps: with ps; [
       ];
@@ -7150,6 +7151,7 @@
     "pglab"
     "philips_js"
     "pi_hole"
+    "picnic"
     "ping"
     "plaato"
     "plant"
