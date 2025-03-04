@@ -33,6 +33,7 @@
   libpulseaudio,
   speechdSupport ? false,
   speechd-minimal,
+  microsoft-gsl,
 }:
 
 let
@@ -101,6 +102,7 @@ let
           rnnoise
           speex
           utf8proc
+          microsoft-gsl
         ]
         ++ lib.optional (!jackSupport) alsa-lib
         ++ lib.optional jackSupport libjack2
@@ -114,6 +116,7 @@ let
         "-D bundled-opus=OFF"
         "-D bundled-speex=OFF"
         "-D bundle-qt-translations=OFF"
+        "-D bundled-gsl=OFF"
         # "-D bundled-renamenoise=OFF" # not packaged in nixpkgs yet
         "-D update=OFF"
         "-D overlay-xcompile=OFF"
