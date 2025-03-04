@@ -18,7 +18,7 @@
 , libcrossguid, libmicrohttpd
 , bluez, doxygen, giflib, glib, harfbuzz, lcms2, libidn2, libpthreadstubs, libtasn1
 , libplist, p11-kit, zlib, flatbuffers, fstrcmp, rapidjson
-, lirc, mesa
+, lirc, mesa-gl-headers
 , x11Support ? true, libX11, xorgproto, libXt, libXmu, libXext, libXinerama, libXrandr, libXtst, libXfixes, xdpyinfo, libXdmcp
 , dbusSupport ? true, dbus
 , joystickSupport ? true, cwiid
@@ -122,7 +122,7 @@ in stdenv.mkDerivation (finalAttrs: {
       bluez giflib glib harfbuzz lcms2 libpthreadstubs
       ffmpeg flatbuffers fstrcmp rapidjson
       lirc
-      mesa # uses eglext_angle.h, which is not provided by glvnd
+      mesa-gl-headers
     ]
     ++ lib.optionals x11Support [
       libX11 xorgproto libXt libXmu libXext.dev libXdmcp
