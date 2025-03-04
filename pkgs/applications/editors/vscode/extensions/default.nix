@@ -4628,6 +4628,10 @@ let
         };
       };
 
+      streetsidesoftware.code-spell-checker-german =
+        callPackage ./streetsidesoftware.code-spell-checker-german
+          { };
+
       styled-components.vscode-styled-components = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "vscode-styled-components";

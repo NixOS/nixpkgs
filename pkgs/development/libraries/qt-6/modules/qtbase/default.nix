@@ -311,9 +311,9 @@ stdenv.mkDerivation rec {
       fixQtBuiltinPaths "$out" '*.pr?'
     ''
     + lib.optionalString stdenv.hostPlatform.isLinux ''
-
       # FIXME: not sure why this isn't added automatically?
       patchelf --add-rpath "${libmysqlclient}/lib/mariadb" $out/${qtPluginPrefix}/sqldrivers/libqsqlmysql.so
+      patchelf --add-rpath "${vulkan-loader}/lib" --add-needed "libvulkan.so" $out/lib/libQt6Gui.so
     '';
 
   dontWrapQtApps = true;
