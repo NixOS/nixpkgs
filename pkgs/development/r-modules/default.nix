@@ -496,7 +496,7 @@ let
     httpuv = [ pkgs.zlib.dev ];
     clustermq = [ pkgs.zeromq ];
     SAVE = with pkgs; [ zlib bzip2 icu xz pcre ];
-    salso = [ pkgs.cargo ];
+    salso = with pkgs; [ cargo rustc ];
     ymd = with pkgs; [ cargo rustc ];
     arcpbf = [ pkgs.cargo ];
     sdcTable = with pkgs; [ gmp glpk ];
