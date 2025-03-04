@@ -2,8 +2,9 @@ diff --git a/cli/src/lib.rs b/cli/src/lib.rs
 index 4a00747e..e17d253b 100644
 --- a/cli/src/lib.rs
 +++ b/cli/src/lib.rs
-@@ -5,7 +5,6 @@ pub mod highlight;
+@@ -6,7 +6,6 @@ pub mod highlight;
  pub mod init;
+ pub mod input;
  pub mod logger;
  pub mod parse;
 -pub mod playground;
@@ -15,15 +16,15 @@ index 1758fada..4bc56cc2 100644
 --- a/cli/src/main.rs
 +++ b/cli/src/main.rs
 @@ -23,7 +23,7 @@ use tree_sitter_cli::{
-     init::{generate_grammar_files, get_root_path, migrate_package_json, JsonConfigOpts},
+     input::{get_input, get_tmp_source_file, CliInput},
      logger,
-     parse::{self, ParseFileOptions, ParseOutput},
--    playground, query, tags,
-+    query, tags,
-     test::{self, TestOptions},
-     test_highlight, test_tags, util, wasm,
- };
-@@ -1205,10 +1205,8 @@ impl Tags {
+     parse::{self, ParseDebugType, ParseFileOptions, ParseOutput, ParseTheme},
+-    playground, query,
++    query,
+     tags::{self, TagsOptions},
+     test::{self, TestOptions, TestStats},
+     test_highlight, test_tags, util, version, wasm,
+@@ -1614,10 +1614,8 @@ impl Tags {
  
  impl Playground {
      fn run(self, current_dir: &Path) -> Result<()> {

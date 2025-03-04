@@ -8,7 +8,7 @@
   glib,
   libid3tag,
   id3lib,
-  taglib,
+  taglib_1,
   libvorbis,
   libogg,
   opusfile,
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     glib
     libid3tag
     id3lib
-    taglib
+    taglib_1
     libvorbis
     libogg
     opusfile

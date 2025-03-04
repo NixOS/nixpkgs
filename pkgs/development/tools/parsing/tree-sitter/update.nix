@@ -77,6 +77,8 @@ let
     "tree-sitter-graph"
     # abandoned
     "tree-sitter-swift"
+    # this is the swift language bindings, tree-sitter-swift is the (abandoned) grammar
+    "swift-tree-sitter"
     # abandoned
     "tree-sitter-agda"
     # abandoned
