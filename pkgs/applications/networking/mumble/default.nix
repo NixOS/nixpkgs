@@ -33,6 +33,7 @@
   libpulseaudio,
   speechdSupport ? false,
   speechd-minimal,
+  microsoft-gsl,
 }:
 
 let
@@ -101,6 +102,7 @@ let
           rnnoise
           speex
           utf8proc
+          microsoft-gsl
         ]
         ++ lib.optional (!jackSupport) alsa-lib
         ++ lib.optional jackSupport libjack2
@@ -118,6 +120,7 @@ let
         (lib.cmakeBool "bundled-opus" false)
         (lib.cmakeBool "bundled-speex" false)
         (lib.cmakeBool "bundle-qt-translations" false)
+        (lib.cmakeBool "bundled-gsl" false)
         # (lib.cmakeBool "bundled-renamenoise" false) # not packaged in nixpkgs yet
         (lib.cmakeBool "update" false)
         (lib.cmakeBool "overlay-xcompile" false)
