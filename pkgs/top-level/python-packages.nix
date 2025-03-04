@@ -7820,6 +7820,8 @@ self: super: with self; {
 
   logbook = callPackage ../development/python-modules/logbook { };
 
+  logfire-api = callPackage ../development/python-modules/logfire-api { };
+
   logfury = callPackage ../development/python-modules/logfury { };
 
   logging-journald = callPackage ../development/python-modules/logging-journald { };
@@ -11800,11 +11802,17 @@ self: super: with self; {
 
   pydantic_1 = callPackage ../development/python-modules/pydantic/1.nix { };
 
+  pydantic-ai = callPackage ../development/python-modules/pydantic-ai { };
+
+  pydantic-ai-slim = callPackage ../development/python-modules/pydantic-ai-slim { };
+
   pydantic-compat = callPackage ../development/python-modules/pydantic-compat { };
 
   pydantic-core = callPackage ../development/python-modules/pydantic-core { };
 
   pydantic-extra-types = callPackage ../development/python-modules/pydantic-extra-types { };
+
+  pydantic-graph = callPackage ../development/python-modules/pydantic-graph { };
 
   pydantic-scim = callPackage ../development/python-modules/pydantic-scim { };
 
