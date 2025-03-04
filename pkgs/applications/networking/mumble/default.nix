@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   pkg-config,
   qt5,
   cmake,
@@ -22,11 +21,12 @@
   libogg,
   libvorbis,
   stdenv_32bit,
+  alsaSupport ? stdenv.hostPlatform.isLinux,
   iceSupport ? true,
   zeroc-ice,
   jackSupport ? false,
   libjack2,
-  pipewireSupport ? true,
+  pipewireSupport ? stdenv.hostPlatform.isLinux,
   pipewire,
   pulseSupport ? true,
   libpulseaudio,
@@ -34,6 +34,8 @@
   speechd-minimal,
   microsoft-gsl,
   nlohmann_json,
+  xar,
+  makeWrapper,
 }:
 
 let
@@ -54,14 +56,16 @@ let
           qt5.qttools
         ] ++ (overrides.nativeBuildInputs or [ ]);
 
-        buildInputs = [
-          avahi
-          boost
-          poco
-          protobuf
-          microsoft-gsl
-          nlohmann_json
-        ] ++ (overrides.buildInputs or [ ]);
+        buildInputs =
+          [
+            boost
+            poco
+            protobuf
+            microsoft-gsl
+            nlohmann_json
+          ]
+          ++ lib.optionals stdenv.hostPlatform.isLinux [ avahi ]
+          ++ (overrides.buildInputs or [ ]);
 
         cmakeFlags = [
           "-D g15=OFF"
@@ -85,7 +89,7 @@ let
             felixsinger
             lilacious
           ];
-          platforms = platforms.linux;
+          platforms = platforms.linux ++ (overrides.platforms or [ ]);
         };
       }
     );
@@ -95,7 +99,13 @@ let
     generic {
       type = "mumble";
 
-      nativeBuildInputs = [ qt5.qttools ];
+      platforms = lib.platforms.darwin;
+      nativeBuildInputs =
+        [ qt5.qttools ]
+        ++ lib.optionals stdenv.hostPlatform.isDarwin [
+          makeWrapper
+        ];
+
       buildInputs =
         [
           flac
@@ -107,12 +117,14 @@ let
           qt5.qtsvg
           rnnoise
         ]
-        ++ lib.optional (!jackSupport) alsa-lib
+        ++ lib.optional (!jackSupport && alsaSupport) alsa-lib
         ++ lib.optional jackSupport libjack2
         ++ lib.optional speechdSupport speechd-minimal
         ++ lib.optional pulseSupport libpulseaudio
-        ++ lib.optional pipewireSupport pipewire;
-
+        ++ lib.optional pipewireSupport pipewire
+        ++ lib.optionals stdenv.hostPlatform.isDarwin [
+          xar
+        ];
 
       cmakeFlags = [
         "-D server=OFF"
@@ -122,16 +134,44 @@ let
         "-D overlay-xcompile=OFF"
         "-D oss=OFF"
         "-D warnings-as-errors=OFF" # conversion error workaround
+        # building the overlay on darwin does not work in nipxkgs (yet)
+        # also see the patch below to disable scripts the build option misses
+        # see https://github.com/mumble-voip/mumble/issues/6816
+        (lib.cmakeBool "overlay" (!stdenv.hostPlatform.isDarwin))
         (lib.cmakeBool "speechd" speechdSupport)
         (lib.cmakeBool "pulseaudio" pulseSupport)
         (lib.cmakeBool "pipewire" pipewireSupport)
         (lib.cmakeBool "jackaudio" jackSupport)
-        (lib.cmakeBool "alsa" (!jackSupport))
+        (lib.cmakeBool "alsa" (!jackSupport && alsaSupport))
       ];
 
       env.NIX_CFLAGS_COMPILE = lib.optionalString speechdSupport "-I${speechd-minimal}/include/speech-dispatcher";
 
-      postFixup = ''
+      patches = [
+        ./disable-overlay-build.patch
+        ./fix-plugin-copy.patch
+      ];
+
+      postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
+        # The build erraneously marks the *.dylib as executable
+        # which causes the qt-hook to wrap it, which then prevents the app from loading it
+        chmod -x $out/lib/mumble/plugins/*.dylib
+
+        # Post-processing for the app bundle
+        $NIX_BUILD_TOP/source/macx/scripts/osxdist.py \
+          --source-dir=$NIX_BUILD_TOP/source/ \
+          --binary-dir=$out \
+          --only-appbundle \
+          --version "${source.version}"
+
+        mkdir -p $out/Applications $out/bin
+        mv $out/Mumble.app $out/Applications/Mumble.app
+
+        # ensure that the app can be started from the shell
+        makeWrapper $out/Applications/Mumble.app/Contents/MacOS/mumble $out/bin/mumble
+      '';
+
+      postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
         wrapProgram $out/bin/mumble \
           --prefix LD_LIBRARY_PATH : "${
             lib.makeLibraryPath (
@@ -139,6 +179,7 @@ let
             )
           }"
       '';
+
     } source;
 
   server =
