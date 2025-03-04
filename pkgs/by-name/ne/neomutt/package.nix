@@ -33,6 +33,7 @@
   enableLua ? false,
   enableSmimeKeys ? true,
   withContrib ? true,
+  withNotmuch ? true,
 }:
 
 assert lib.warnIf (
@@ -58,7 +59,6 @@ stdenv.mkDerivation (finalAttrs: {
       libkrb5
       libidn2
       ncurses
-      notmuch
       openssl
       perl
       lmdb
@@ -66,7 +66,8 @@ stdenv.mkDerivation (finalAttrs: {
       sqlite
     ]
     ++ lib.optional enableZstd zstd
-    ++ lib.optional enableLua lua;
+    ++ lib.optional enableLua lua
+    ++ lib.optional withNotmuch notmuch;
 
   nativeBuildInputs = [
     docbook_xsl
@@ -108,7 +109,6 @@ stdenv.mkDerivation (finalAttrs: {
       "--gpgme"
       "--gss"
       "--lmdb"
-      "--notmuch"
       "--ssl"
       "--sasl"
       "--with-homespool=mailbox"
@@ -119,7 +119,8 @@ stdenv.mkDerivation (finalAttrs: {
       "--zlib"
     ]
     ++ lib.optional enableZstd "--zstd"
-    ++ lib.optional enableLua "--lua";
+    ++ lib.optional enableLua "--lua"
+    ++ lib.optional withNotmuch "--notmuch";
 
   postInstall =
     ''
