@@ -1066,6 +1066,14 @@ let
       ];
     });
 
+    gmapR = old.gmapR.overrideAttrs (attrs: {
+      env = (attrs.env or { }) // {
+        # Avoid incompatible pointer type error
+        NIX_CFLAGS_COMPILE = attrs.env.NIX_CFLAGS_COMPILE +
+          " -Wno-implicit-function-declaration -Wno-incompatible-pointer-types";
+      };
+    });
+
     timeless = old.timeless.overrideAttrs (attrs: {
       preConfigure = "patchShebangs configure";
       cargoDeps = pkgs.rustPlatform.fetchCargoVendor {
