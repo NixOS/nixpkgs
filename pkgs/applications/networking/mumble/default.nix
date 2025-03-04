@@ -114,10 +114,10 @@ let
         ++ lib.optional pulseSupport libpulseaudio
         ++ lib.optional pipewireSupport pipewire;
 
+
       cmakeFlags = [
         "-D server=OFF"
         "-D bundled-celt=ON"
-        "-D bundled-opus=OFF"
         "-D bundled-speex=OFF"
         "-D bundle-qt-translations=OFF"
         "-D bundled-json=OFF"
