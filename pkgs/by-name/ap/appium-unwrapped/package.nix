@@ -1,4 +1,4 @@
-{ fetchFromGitHub, buildNpmPackage, yq-go, lib, nodejs, fetchpatch }:
+{ fetchFromGitHub, buildNpmPackage, yq-go, lib, nodejs }:
 let
   version = "2.16.2";
 in buildNpmPackage {
@@ -30,6 +30,10 @@ in buildNpmPackage {
 
   preConfigure = ''
     yq -iPo json '. + {"bin": {"appium":"packages/appium/index.js"}}' ./package.json
+  '';
+
+  preInstall = ''
+    sed -i '/build/d' .gitignore
   '';
 
   meta = {
