@@ -1772,6 +1772,11 @@
     githubId = 301546;
     name = "Antoine Roy-Gobeil";
   };
+  anton-4 = {
+    name = "Anton";
+    github = "Anton-4";
+    githubId = 17049058;
+  };
   anton-dessiatov = {
     email = "anton.dessiatov@gmail.com";
     github = "anton-dessiatov";
