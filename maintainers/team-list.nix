@@ -378,13 +378,14 @@ with lib.maintainers;
       piegames
       infinisil
       das_j
-      tomberek
       _0x4A6F
+      MattSturgeon
+      jfly
       # Not in the maintainer list
       # Sereja313
     ];
-    scope = "Tentative Nix formatter team to be established in https://github.com/NixOS/rfcs/pull/166";
-    shortName = "Nix formatter team";
+    scope = "Nix formatting team: https://nixos.org/community/teams/formatting/";
+    shortName = "Nix formatting team";
   };
 
   freedesktop = {
