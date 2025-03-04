@@ -45,7 +45,23 @@ let
       settingsFormat.generate "caddy.json" cfg.settings
     else
       let
-        Caddyfile = pkgs.writeTextDir "Caddyfile" ''
+        writeCaddyfile =
+          text:
+          pkgs.runCommandLocal "Caddyfile"
+            {
+              inherit text;
+              passAsFile = [ "text" ];
+            }
+            ''
+              mkdir -p $out
+              cp "$textPath" $out/Caddyfile
+
+              # 'validate' cannot be used for validation, due to log location access
+              # See https://github.com/caddyserver/caddy/issues/6788
+              ${lib.getExe cfg.package} adapt --config $out/Caddyfile
+            '';
+
+        Caddyfile = writeCaddyfile ''
           {
             ${cfg.globalConfig}
           }
@@ -53,13 +69,11 @@ let
           ${concatMapStringsSep "\n" mkVHostConf virtualHosts}
         '';
 
-        Caddyfile-formatted =
-          pkgs.runCommand "Caddyfile-formatted" { nativeBuildInputs = [ cfg.package ]; }
-            ''
-              mkdir -p $out
-              cp --no-preserve=mode ${Caddyfile}/Caddyfile $out/Caddyfile
-              caddy fmt --overwrite $out/Caddyfile
-            '';
+        Caddyfile-formatted = pkgs.runCommand "Caddyfile-formatted" { } ''
+          mkdir -p $out
+          cp --no-preserve=mode ${Caddyfile}/Caddyfile $out/Caddyfile
+          ${lib.getExe cfg.package} fmt --overwrite $out/Caddyfile
+        '';
       in
       "${
         if pkgs.stdenv.buildPlatform == pkgs.stdenv.hostPlatform then Caddyfile-formatted else Caddyfile
@@ -437,7 +451,7 @@ in
           # If the empty string is assigned to this option, the list of commands to start is reset, prior assignments of this option will have no effect.
           ExecStart = [
             ""
-            ''${cfg.package}/bin/caddy run ${runOptions} ${optionalString cfg.resume "--resume"}''
+            ''${lib.getExe cfg.package} run ${runOptions} ${optionalString cfg.resume "--resume"}''
           ];
           # Validating the configuration before applying it ensures we’ll get a proper error that will be reported when switching to the configuration
           ExecReload = [
