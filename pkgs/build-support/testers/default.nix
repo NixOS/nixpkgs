@@ -190,4 +190,6 @@
   testMetaPkgConfig = callPackage ./testMetaPkgConfig/tester.nix { };
 
   shellcheck = callPackage ./shellcheck/tester.nix { };
+
+  shfmt = callPackage ./shfmt { };
 }

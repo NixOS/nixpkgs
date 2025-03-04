@@ -165,6 +165,63 @@ testers.shellcheck {
 A derivation that runs `shellcheck` on the given script(s).
 The build will fail if `shellcheck` finds any issues.
 
+## `shfmt` {#tester-shfmt}
+
+Run files through `shfmt`, a shell script formatter, failing if any files are reformatted.
+
+:::{.example #ex-shfmt}
+# Run `testers.shfmt`
+
+A single script
+
+```nix
+testers.shfmt {
+  name = "shellfmt-script";
+  src = ./script.sh;
+}
+```
+
+Multiple files
+
+```nix
+let
+  inherit (lib) fileset;
+in
+testers.shfmt {
+  name = "shellfmt-nixbsd";
+  src = fileset.toSource {
+    root = ./.;
+    fileset = fileset.unions [
+      ./lib.sh
+      ./nixbsd-activate
+    ];
+  };
+}
+```
+
+:::
+
+### Inputs {#tester-shfmt-inputs}
+
+`name` (string)
+: The name of the test.
+  `name` is required because it massively improves traceability of test failures.
+
+`src` (path-like)
+: The path to the shell script(s) to check.
+  This can be a single file or a directory containing shell files.
+  All files in `src` will be checked, so you may want to provide `fileset`-based source instead of a whole directory.
+
+`indent` (integer, optional)
+: The number of spaces to use for indentation.
+  Defaults to `2`.
+  A value of `0` indents with tabs.
+
+### Return value {#tester-shfmt-return}
+
+A derivation that runs `shfmt` on the given script(s), producing an empty output upon success.
+The build will fail if `shfmt` reformats anything.
+
 ## `testVersion` {#tester-testVersion}
 
 Checks that the output from running a command contains the specified version string in it as a whole word.
