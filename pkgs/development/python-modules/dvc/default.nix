@@ -17,6 +17,7 @@
   dvc-ssh,
   dvc-studio-client,
   dvc-task,
+  dvc-webdav,
   fetchFromGitHub,
   flatten-dict,
   flufl-lock,
@@ -138,6 +139,7 @@ buildPythonPackage rec {
     s3 = [ dvc-s3 ];
     ssh = [ dvc-ssh ];
     ssh_gssapi = [ dvc-ssh ] ++ dvc-ssh.optional-dependencies.gssapi;
+    webdav = [ dvc-webdav ];
   };
 
   # Tests require access to real cloud services
