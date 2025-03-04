@@ -643,6 +643,30 @@ buildLuarocksPackage {
   };
 }) {};
 
+grug-far-nvim = callPackage({ buildLuarocksPackage, fetchFromGitHub, fetchurl, luaOlder }:
+buildLuarocksPackage {
+  pname = "grug-far.nvim";
+  version = "scm-1";
+  knownRockspec = (fetchurl {
+    url    = "mirror://luarocks/grug-far.nvim-scm-1.rockspec";
+    sha256 = "1c2x88mgs9bba58pk2hpf6yjsirwd1xwlkc3vzmwhk48glzcyv1s";
+  }).outPath;
+  src = fetchFromGitHub {
+    owner = "MagicDuck";
+    repo = "grug-far.nvim";
+    rev = "3d39dc8b31d4ab7aad1b9ffdba136eafc6c7c360";
+    hash = "sha256-20AO7w4foC5z05GSenzXtGO2O5oGd0QHeDcjHTKuKuQ=";
+  };
+
+  disabled = luaOlder "5.1";
+
+  meta = {
+    homepage = "https://github.com/MagicDuck/grug-far.nvim";
+    description = "Find And Replace plugin for neovim.";
+    license.fullName = "MIT";
+  };
+}) {};
+
 haskell-tools-nvim = callPackage({ buildLuarocksPackage, fetchurl, fetchzip, luaOlder }:
 buildLuarocksPackage {
   pname = "haskell-tools.nvim";
