@@ -482,7 +482,6 @@ in {
   hbase_2_5 = handleTest ./hbase.nix { package=pkgs.hbase_2_5; };
   hbase_2_4 = handleTest ./hbase.nix { package=pkgs.hbase_2_4; };
   hbase3 = handleTest ./hbase.nix { package=pkgs.hbase3; };
-  hddfancontrol = handleTest ./hddfancontrol.nix {};
   hedgedoc = handleTest ./hedgedoc.nix {};
   herbstluftwm = handleTest ./herbstluftwm.nix {};
   homebox = handleTest ./homebox.nix {};
