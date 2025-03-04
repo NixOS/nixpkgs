@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     echo -n 'v${version} DEVELOPER=1 DEVOPTS=no-error USE_LIBPCRE=YesPlease NO_PERL=YesPlease NO_EXPAT=YesPlease NO_TCLTK=YesPlease NO_GETTEXT=YesPlease NO_PYTHON=YesPlease' > source/_build/deps/git-distribution.version
     echo -n 'v${version}' > source/_build/deps/git-distribution/version
   '';
-  sourceRoot = "source";
+  sourceRoot = src.name;
 
   buildFlags = [ "git" ];
 

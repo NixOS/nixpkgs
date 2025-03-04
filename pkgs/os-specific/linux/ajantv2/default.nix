@@ -9,7 +9,7 @@ stdenv.mkDerivation {
   name = "ajantv2-module-${libajantv2.version}-${kernel.version}";
 
   inherit (libajantv2) src;
-  sourceRoot = "source/driver/linux";
+  sourceRoot = "${libajantv2.src.name}/driver/linux";
 
   hardeningDisable = [ "pic" ];
 

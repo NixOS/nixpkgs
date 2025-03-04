@@ -41,7 +41,7 @@ let
     pname = "authentik-website-deps";
     inherit src version meta;
 
-    sourceRoot = "source/website";
+    sourceRoot = "${src.name}/website";
 
     outputHash = "sha256-SONw9v67uuVk8meRIuS1KaBGbej6Gbz6nZxPDnHfCwQ=";
     outputHashMode = "recursive";
@@ -73,7 +73,7 @@ let
       substituteInPlace package.json --replace-fail 'cross-env ' ""
     '';
 
-    sourceRoot = "source/website";
+    sourceRoot = "${src.name}/website";
 
     buildPhase = ''
       runHook preBuild

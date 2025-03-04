@@ -25,7 +25,7 @@ buildPythonPackage rec {
     hash = "sha256-ribVfvKmDMxGmeqj30SDcnbNGdRBfs1DmqQGXP3EHCk=";
   };
 
-  sourceRoot = "source/packages/serialization/json/";
+  sourceRoot = "${src.name}/packages/serialization/json/";
 
   build-system = [ poetry-core ];
 
