@@ -1,39 +1,46 @@
 {
   lib,
-  buildPackages,
-  callPackages,
   cargo-auditable,
   config,
-  stdenv,
-  runCommand,
-  generateSplicesForMkScope,
   makeScopeWithSplicing',
+  pkgsBuildBuild,
+  pkgsBuildHost,
+  pkgsBuildTarget,
+  pkgsHostHost,
+  pkgsHostTarget,
+  pkgsTargetTarget,
 }@prev:
 
 {
   rustc,
   cargo,
   cargo-auditable ? prev.cargo-auditable,
-  stdenv ? prev.stdenv,
   ...
 }:
 
-(makeScopeWithSplicing' {
-  otherSplices = generateSplicesForMkScope "rustPlatform";
+let
   f =
     self:
     let
       inherit (self) callPackage;
+      callPackages = callPackage ({ callPackages }: callPackages) { };
+      stdenv = callPackage ({ stdenv }: stdenv) { };
+      targetStdenv = callPackage ({ pkgsTargetTarget }: pkgsTargetTarget.stdenv) { };
     in
     {
-      fetchCargoTarball = buildPackages.callPackage ../../../build-support/rust/fetch-cargo-tarball {
-        git = buildPackages.gitMinimal;
-        inherit cargo;
-      };
+      fetchCargoTarball = callPackage (
+        { buildPackages }:
+        buildPackages.callPackage ../../../build-support/rust/fetch-cargo-tarball {
+          inherit stdenv cargo;
+        }
+      ) { };
 
-      fetchCargoVendor = buildPackages.callPackage ../../../build-support/rust/fetch-cargo-vendor.nix {
-        inherit cargo;
-      };
+      fetchCargoVendor = callPackage (
+        { buildPackages }:
+        buildPackages.callPackage ../../../build-support/rust/fetch-cargo-vendor.nix {
+          inherit cargo;
+        }
+      ) { };
 
       buildRustPackage = callPackage ../../../build-support/rust/build-rust-package {
         inherit
@@ -44,16 +51,19 @@
           ;
       };
 
-      importCargoLock = buildPackages.callPackage ../../../build-support/rust/import-cargo-lock.nix {
-        inherit cargo;
-      };
+      importCargoLock = callPackage (
+        { buildPackages }:
+        buildPackages.callPackage ../../../build-support/rust/import-cargo-lock.nix {
+          inherit cargo;
+        }
+      ) { };
 
       rustcSrc = callPackage ./rust-src.nix {
-        inherit runCommand rustc;
+        inherit rustc;
       };
 
       rustLibSrc = callPackage ./rust-lib-src.nix {
-        inherit runCommand rustc;
+        inherit rustc;
       };
 
       # Hooks
@@ -64,6 +74,7 @@
             cargo
             rustc
             callPackage
+            targetStdenv
             ;
         })
         cargoBuildHook
@@ -75,6 +86,19 @@
         bindgenHook
         ;
     };
+in
+(makeScopeWithSplicing' {
+  otherSplices = {
+    selfBuildBuild = lib.makeScope pkgsBuildBuild.newScope f;
+    selfBuildHost = lib.makeScope pkgsBuildHost.newScope f;
+    selfBuildTarget = lib.makeScope pkgsBuildTarget.newScope f;
+    selfHostHost = lib.makeScope pkgsHostHost.newScope f;
+    selfHostTarget = lib.makeScope pkgsHostTarget.newScope f;
+    selfTargetTarget = lib.optionalAttrs (pkgsTargetTarget ? newScope) (
+      lib.makeScope pkgsTargetTarget.newScope f
+    );
+  };
+  inherit f;
 })
 // lib.optionalAttrs config.allowAliases {
   rust = {
