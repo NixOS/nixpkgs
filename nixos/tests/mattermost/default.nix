@@ -33,7 +33,7 @@ import ../make-test-python.nix (
               );
             };
 
-            system.stateVersion = lib.mkDefault "25.05";
+            system.stateVersion = lib.mkDefault (lib.versions.majorMinor lib.version);
 
             services.mattermost = lib.recursiveUpdate {
               enable = true;
@@ -63,7 +63,7 @@ import ../make-test-python.nix (
             # Upgrade to the latest Mattermost.
             specialisation.latest.configuration = {
               services.mattermost.package = lib.mkForce pkgs.mattermostLatest;
-              system.stateVersion = lib.mkVMOverride "25.05";
+              system.stateVersion = lib.mkVMOverride (lib.versions.majorMinor lib.version);
             };
           }
         )
@@ -90,57 +90,60 @@ import ../make-test-python.nix (
     name = "mattermost";
 
     nodes = rec {
-      postgresMutable =
+      postgresMutable = makeMattermost {
+        mutableConfig = true;
+        preferNixConfig = false;
+        settings.SupportSettings.HelpLink = "https://search.nixos.org";
+      } { };
+      postgresMostlyMutable =
         makeMattermost
           {
             mutableConfig = true;
-            preferNixConfig = false;
-            settings.SupportSettings.HelpLink = "https://search.nixos.org";
+            preferNixConfig = true;
+            plugins = with pkgs; [
+              # Build the demo plugin.
+              (mattermost.buildPlugin {
+                pname = "mattermost-plugin-starter-template";
+                version = "0.1.0";
+                src = fetchFromGitHub {
+                  owner = "mattermost";
+                  repo = "mattermost-plugin-starter-template";
+                  # Newer versions have issues with their dependency lockfile.
+                  rev = "7c98e89ac1a268ce8614bc665571b7bbc9a70df2";
+                  hash = "sha256-uyfxB0GZ45qL9ssWUord0eKQC6S0TlCTtjTOXWtK4H0=";
+                };
+                vendorHash = "sha256-Jl4F9YkHNqiFP9/yeyi4vTntqxMk/J1zhEP6QLSvJQA=";
+                npmDepsHash = "sha256-z08nc4XwT+uQjQlZiUydJyh8mqeJoYdPFWuZpw9k99s=";
+              })
+
+              # Build the todos plugin.
+              (mattermost.buildPlugin {
+                pname = "mattermost-plugin-todo";
+                version = "0.8-pre";
+                src = fetchFromGitHub {
+                  owner = "mattermost-community";
+                  repo = "mattermost-plugin-todo";
+                  # 0.7.1 didn't work, seems to use an older set of node dependencies.
+                  rev = "f25dc91ea401c9f0dcd4abcebaff10eb8b9836e5";
+                  hash = "sha256-OM+m4rTqVtolvL5tUE8RKfclqzoe0Y38jLU60Pz7+HI=";
+                };
+                vendorHash = "sha256-5KpechSp3z/Nq713PXYruyNxveo6CwrCSKf2JaErbgg=";
+                npmDepsHash = "sha256-o2UOEkwb8Vx2lDWayNYgng0GXvmS6lp/ExfOq3peyMY=";
+                extraGoModuleAttrs = {
+                  npmFlags = [ "--legacy-peer-deps" ];
+                };
+              })
+            ];
           }
           {
             # Last version to support the "old" config layout.
             system.stateVersion = lib.mkForce "24.11";
 
-            # First version to support the "new" config layout.
-            specialisation.upgrade.configuration.system.stateVersion = lib.mkVMOverride "25.05";
+            # Supports the "new" config layout.
+            specialisation.upgrade.configuration.system.stateVersion = lib.mkVMOverride (
+              lib.versions.majorMinor lib.version
+            );
           };
-      postgresMostlyMutable = makeMattermost {
-        mutableConfig = true;
-        plugins = with pkgs; [
-          # Build the demo plugin.
-          (mattermost.buildPlugin {
-            pname = "mattermost-plugin-starter-template";
-            version = "0.1.0";
-            src = fetchFromGitHub {
-              owner = "mattermost";
-              repo = "mattermost-plugin-starter-template";
-              # Newer versions have issues with their dependency lockfile.
-              rev = "7c98e89ac1a268ce8614bc665571b7bbc9a70df2";
-              hash = "sha256-uyfxB0GZ45qL9ssWUord0eKQC6S0TlCTtjTOXWtK4H0=";
-            };
-            vendorHash = "sha256-Jl4F9YkHNqiFP9/yeyi4vTntqxMk/J1zhEP6QLSvJQA=";
-            npmDepsHash = "sha256-z08nc4XwT+uQjQlZiUydJyh8mqeJoYdPFWuZpw9k99s=";
-          })
-
-          # Build the todos plugin.
-          (mattermost.buildPlugin {
-            pname = "mattermost-plugin-todo";
-            version = "0.8-pre";
-            src = fetchFromGitHub {
-              owner = "mattermost-community";
-              repo = "mattermost-plugin-todo";
-              # 0.7.1 didn't work, seems to use an older set of node dependencies.
-              rev = "f25dc91ea401c9f0dcd4abcebaff10eb8b9836e5";
-              hash = "sha256-OM+m4rTqVtolvL5tUE8RKfclqzoe0Y38jLU60Pz7+HI=";
-            };
-            vendorHash = "sha256-5KpechSp3z/Nq713PXYruyNxveo6CwrCSKf2JaErbgg=";
-            npmDepsHash = "sha256-o2UOEkwb8Vx2lDWayNYgng0GXvmS6lp/ExfOq3peyMY=";
-            extraGoModuleAttrs = {
-              npmFlags = [ "--legacy-peer-deps" ];
-            };
-          })
-        ];
-      } { };
       postgresImmutable = makeMattermost {
         package = pkgs.mattermost.overrideAttrs (prev: {
           webapp = prev.webapp.overrideAttrs (prevWebapp: {
@@ -343,9 +346,14 @@ import ../make-test-python.nix (
         '';
       in
       ''
+        import sys
         import shlex
+        import threading
+        import queue
 
         def wait_mattermost_up(node, site_name="${siteName}"):
+          print(f"wait_mattermost_up({node.name!r}, site_name={site_name!r})", file=sys.stderr)
+          node.wait_for_unit("multi-user.target")
           node.systemctl("start mattermost.service")
           node.wait_for_unit("mattermost.service")
           node.wait_for_open_port(8065)
@@ -353,20 +361,25 @@ import ../make-test-python.nix (
           node.succeed(f"curl {shlex.quote('${url}')}/index.html | grep {shlex.quote(site_name)}")
 
         def restart_mattermost(node, site_name="${siteName}"):
+          print(f"restart_mattermost({node.name!r}, site_name={site_name!r})", file=sys.stderr)
           node.systemctl("restart mattermost.service")
           wait_mattermost_up(node, site_name)
 
         def expect_config(node, mattermost_version, *configs):
+          print(f"expect_config({node.name!r}, {mattermost_version!r}, *{configs!r})", file=sys.stderr)
           for config in configs:
             node.succeed(f"${expectConfig} {shlex.quote(config)} {shlex.quote(mattermost_version)}")
 
         def expect_plugins(node, jq_or_code):
+          print(f"expect_plugins({node.name!r}, {jq_or_code!r})", file=sys.stderr)
           node.succeed(f"${expectPlugins} {shlex.quote(str(jq_or_code))}")
 
         def ensure_post(node, fail_if_not_found=False):
+          print(f"ensure_post({node.name!r}, fail_if_not_found={fail_if_not_found!r})", file=sys.stderr)
           node.succeed(f"${ensurePost} {shlex.quote('${url}')} {1 if fail_if_not_found else 0}")
 
-        def set_config(node, *configs, nixos_version='25.05'):
+        def set_config(node, *configs, nixos_version='${lib.versions.majorMinor lib.version}'):
+          print(f"set_config({node.name!r}, *{configs!r}, nixos_version={nixos_version!r})", file=sys.stderr)
           for config in configs:
             args = [shlex.quote("${setConfig}")]
             args.append(shlex.quote(config))
@@ -374,8 +387,13 @@ import ../make-test-python.nix (
               args.append(shlex.quote(str(nixos_version)))
             node.succeed(' '.join(args))
 
-        def run_mattermost_tests(mutableToplevel: str, mutable,
-                                 mostlyMutableToplevel: str, mostlyMutable,
+        def switch_to_specialisation(node, toplevel: str, specialisation: str):
+          print(f"switch_to_specialisation({node.name!r}, {toplevel!r}, {specialisation!r})", file=sys.stderr)
+          node.succeed(f"{toplevel}/specialisation/{specialisation}/bin/switch-to-configuration switch || true")
+
+        def run_mattermost_tests(shutdown_queue: queue.Queue,
+                                 mutableToplevel: str, mutable,
+                                 mostlyMutableToplevel: str, mostlyMutablePlugins: str, mostlyMutable,
                                  immutableToplevel: str, immutable,
                                  environmentFileToplevel: str, environmentFile):
           esr, latest = '${pkgs.mattermost.version}', '${pkgs.mattermostLatest.version}'
@@ -391,8 +409,7 @@ import ../make-test-python.nix (
           set_config(
             mutable,
             '.SupportSettings.AboutLink = "https://mattermost.com"',
-            '.SupportSettings.HelpLink = "https://nixos.org/nixos/manual"',
-            nixos_version='24.11' # Default 'mutable' config is an old version
+            '.SupportSettings.HelpLink = "https://nixos.org/nixos/manual"'
           )
           ensure_post(mutable)
           restart_mattermost(mutable)
@@ -401,23 +418,14 @@ import ../make-test-python.nix (
           expect_config(mutable, esr, '.AboutLink == "https://mattermost.com" and .HelpLink == "https://nixos.org/nixos/manual"')
           ensure_post(mutable, fail_if_not_found=True)
 
-          # Switch to the newer config
-          mutable.succeed(f"{mutableToplevel}/specialisation/upgrade/bin/switch-to-configuration switch")
-          wait_mattermost_up(mutable)
-
-          # AboutLink and HelpLink should be changed, still, and the post should still exist
-          expect_config(mutable, esr, '.AboutLink == "https://mattermost.com" and .HelpLink == "https://nixos.org/nixos/manual"')
-          ensure_post(mutable, fail_if_not_found=True)
-
           # Switch to the latest Mattermost version
-          mutable.succeed(f"{mutableToplevel}/specialisation/latest/bin/switch-to-configuration switch")
+          switch_to_specialisation(mutable, mutableToplevel, "latest")
           wait_mattermost_up(mutable)
 
           # AboutLink and HelpLink should be changed, still, and the post should still exist
           expect_config(mutable, latest, '.AboutLink == "https://mattermost.com" and .HelpLink == "https://nixos.org/nixos/manual"')
           ensure_post(mutable, fail_if_not_found=True)
-
-          mutable.shutdown()
+          shutdown_queue.put(mutable)
 
           ## Mostly mutable node tests ##
           mostlyMutable.start()
@@ -434,13 +442,40 @@ import ../make-test-python.nix (
             mostlyMutable,
             '.SupportSettings.AboutLink = "https://mattermost.com"',
             '.SupportSettings.HelpLink = "https://nixos.org/nixos/manual"',
+            nixos_version='24.11' # Default 'mostlyMutable' config is an old version
+          )
+          ensure_post(mostlyMutable)
+          restart_mattermost(mostlyMutable)
+
+          # HelpLink should be changed but AboutLink should not, and the post should exist
+          expect_config(mostlyMutable, esr, '.AboutLink == "https://nixos.org" and .HelpLink == "https://nixos.org/nixos/manual"')
+          ensure_post(mostlyMutable, fail_if_not_found=True)
+
+          # Switch to the newer config and make sure the plugins directory is replaced with a directory,
+          # since it could have been a symlink on previous versions.
+          mostlyMutable.systemctl("stop mattermost.service")
+          mostlyMutable.succeed(f"[ ! -L /var/lib/mattermost/data/plugins ] && rm -rf /var/lib/mattermost/data/plugins && ln -s {mostlyMutablePlugins} /var/lib/mattermost/data/plugins || true")
+          mostlyMutable.succeed('[ -L /var/lib/mattermost/data/plugins ] && [ -d /var/lib/mattermost/data/plugins ]')
+          switch_to_specialisation(mostlyMutable, mostlyMutableToplevel, "upgrade")
+          wait_mattermost_up(mostlyMutable)
+          mostlyMutable.succeed('[ ! -L /var/lib/mattermost/data/plugins ] && [ -d /var/lib/mattermost/data/plugins ]')
+
+          # HelpLink should be changed, still, and the post should still exist
+          expect_config(mostlyMutable, esr, '.AboutLink == "https://nixos.org" and .HelpLink == "https://nixos.org/nixos/manual"')
+          ensure_post(mostlyMutable, fail_if_not_found=True)
+
+          # Edit the config and make a post
+          set_config(
+            mostlyMutable,
+            '.SupportSettings.AboutLink = "https://mattermost.com/foo"',
+            '.SupportSettings.HelpLink = "https://nixos.org/nixos/manual/bar"',
             '.PluginSettings.PluginStates."com.mattermost.plugin-todo".Enable = true'
           )
           ensure_post(mostlyMutable)
           restart_mattermost(mostlyMutable)
 
           # AboutLink should be overridden by NixOS configuration; HelpLink should be what we set above
-          expect_config(mostlyMutable, esr, '.AboutLink == "https://nixos.org" and .HelpLink == "https://nixos.org/nixos/manual"')
+          expect_config(mostlyMutable, esr, '.AboutLink == "https://nixos.org" and .HelpLink == "https://nixos.org/nixos/manual/bar"')
 
           # Single plugin that's now enabled.
           expect_plugins(mostlyMutable, 'length == 1')
@@ -449,14 +484,14 @@ import ../make-test-python.nix (
           ensure_post(mostlyMutable, fail_if_not_found=True)
 
           # Switch to the latest Mattermost version
-          mostlyMutable.succeed(f"{mostlyMutableToplevel}/specialisation/latest/bin/switch-to-configuration switch")
+          switch_to_specialisation(mostlyMutable, mostlyMutableToplevel, "latest")
           wait_mattermost_up(mostlyMutable)
 
           # AboutLink should be overridden and the post should still exist
-          expect_config(mostlyMutable, latest, '.AboutLink == "https://nixos.org" and .HelpLink == "https://nixos.org/nixos/manual"')
+          expect_config(mostlyMutable, latest, '.AboutLink == "https://nixos.org" and .HelpLink == "https://nixos.org/nixos/manual/bar"')
           ensure_post(mostlyMutable, fail_if_not_found=True)
 
-          mostlyMutable.shutdown()
+          shutdown_queue.put(mostlyMutable)
 
           ## Immutable node tests ##
           immutable.start()
@@ -484,14 +519,14 @@ import ../make-test-python.nix (
           ensure_post(immutable, fail_if_not_found=True)
 
           # Switch to the latest Mattermost version
-          immutable.succeed(f"{immutableToplevel}/specialisation/latest/bin/switch-to-configuration switch")
+          switch_to_specialisation(immutable, immutableToplevel, "latest")
           wait_mattermost_up(immutable)
 
           # AboutLink and HelpLink should be changed, still, and the post should still exist
           expect_config(immutable, latest, '.AboutLink == "https://nixos.org" and .HelpLink == "https://search.nixos.org"')
           ensure_post(immutable, fail_if_not_found=True)
 
-          immutable.shutdown()
+          shutdown_queue.put(immutable)
 
           ## Environment File node tests ##
           environmentFile.start()
@@ -503,19 +538,31 @@ import ../make-test-python.nix (
           ensure_post(environmentFile, fail_if_not_found=True)
 
           # Switch to the latest Mattermost version
-          environmentFile.succeed(f"{environmentFileToplevel}/specialisation/latest/bin/switch-to-configuration switch")
+          switch_to_specialisation(environmentFile, environmentFileToplevel, "latest")
           wait_mattermost_up(environmentFile)
 
           # AboutLink should be changed still, and the post should still exist
           expect_config(environmentFile, latest, '.AboutLink == "https://nixos.org"')
           ensure_post(environmentFile, fail_if_not_found=True)
 
-          environmentFile.shutdown()
+          shutdown_queue.put(environmentFile)
+
+        # Run shutdowns asynchronously so we can pipeline them.
+        shutdown_queue: queue.Queue = queue.Queue()
+        def shutdown_worker():
+          while True:
+            node = shutdown_queue.get()
+            print(f"Shutting down node {node.name!r} asynchronously", file=sys.stderr)
+            node.shutdown()
+            shutdown_queue.task_done()
+        threading.Thread(target=shutdown_worker, daemon=True).start()
 
         run_mattermost_tests(
+          shutdown_queue,
           "${nodes.mysqlMutable.system.build.toplevel}",
           mysqlMutable,
           "${nodes.mysqlMostlyMutable.system.build.toplevel}",
+          "${nodes.mysqlMostlyMutable.services.mattermost.pluginsBundle}",
           mysqlMostlyMutable,
           "${nodes.mysqlImmutable.system.build.toplevel}",
           mysqlImmutable,
@@ -524,15 +571,20 @@ import ../make-test-python.nix (
         )
 
         run_mattermost_tests(
+          shutdown_queue,
           "${nodes.postgresMutable.system.build.toplevel}",
           postgresMutable,
           "${nodes.postgresMostlyMutable.system.build.toplevel}",
+          "${nodes.postgresMostlyMutable.services.mattermost.pluginsBundle}",
           postgresMostlyMutable,
           "${nodes.postgresImmutable.system.build.toplevel}",
           postgresImmutable,
           "${nodes.postgresEnvironmentFile.system.build.toplevel}",
           postgresEnvironmentFile
         )
+
+        # Drain the queue
+        shutdown_queue.join()
       '';
   }
 )
