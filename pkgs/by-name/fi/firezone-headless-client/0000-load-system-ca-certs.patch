@@ -1,0 +1,210 @@
+diff --git a/rust/Cargo.lock b/rust/Cargo.lock
+index 010f55309..dd7238e3a 100644
+--- a/rust/Cargo.lock
++++ b/rust/Cargo.lock
+@@ -4319,6 +4319,12 @@ dependencies = [
+  "pathdiff",
+ ]
+ 
++[[package]]
++name = "openssl-probe"
++version = "0.1.6"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "d05e27ee213611ffe7d6348b942e8f942b37114c00cc03cec254295a4a17852e"
++
+ [[package]]
+ name = "opentelemetry"
+ version = "0.26.0"
+@@ -4665,6 +4671,8 @@ dependencies = [
+  "libc",
+  "os_info",
+  "rand_core 0.6.4",
++ "rustls",
++ "rustls-platform-verifier",
+  "secrecy",
+  "serde",
+  "serde_json",
+@@ -5364,6 +5372,18 @@ dependencies = [
+  "zeroize",
+ ]
+ 
++[[package]]
++name = "rustls-native-certs"
++version = "0.8.1"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "7fcff2dd52b58a8d98a70243663a0d234c4e2b79235637849d15913394a247d3"
++dependencies = [
++ "openssl-probe",
++ "rustls-pki-types",
++ "schannel",
++ "security-framework",
++]
++
+ [[package]]
+ name = "rustls-pemfile"
+ version = "2.2.0"
+@@ -5379,6 +5399,33 @@ version = "1.10.0"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "16f1201b3c9a7ee8039bcadc17b7e605e2945b27eee7631788c1bd2b0643674b"
+ 
++[[package]]
++name = "rustls-platform-verifier"
++version = "0.5.0"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "e012c45844a1790332c9386ed4ca3a06def221092eda277e6f079728f8ea99da"
++dependencies = [
++ "core-foundation 0.10.0",
++ "core-foundation-sys",
++ "jni",
++ "log",
++ "once_cell",
++ "rustls",
++ "rustls-native-certs",
++ "rustls-platform-verifier-android",
++ "rustls-webpki",
++ "security-framework",
++ "security-framework-sys",
++ "webpki-root-certs",
++ "windows-sys 0.52.0",
++]
++
++[[package]]
++name = "rustls-platform-verifier-android"
++version = "0.1.1"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "f87165f0995f63a9fbeea62b64d10b4d9d8e78ec6d7d51fb2125fda7bb36788f"
++
+ [[package]]
+ name = "rustls-webpki"
+ version = "0.102.8"
+@@ -5432,6 +5479,15 @@ dependencies = [
+  "winapi-util",
+ ]
+ 
++[[package]]
++name = "schannel"
++version = "0.1.27"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "1f29ebaa345f945cec9fbbc532eb307f0fdad8161f281b6369539c8d84876b3d"
++dependencies = [
++ "windows-sys 0.59.0",
++]
++
+ [[package]]
+ name = "schemars"
+ version = "0.8.21"
+@@ -5524,6 +5580,29 @@ dependencies = [
+  "zbus",
+ ]
+ 
++[[package]]
++name = "security-framework"
++version = "3.2.0"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "271720403f46ca04f7ba6f55d438f8bd878d6b8ca0a1046e8228c4145bcbb316"
++dependencies = [
++ "bitflags 2.6.0",
++ "core-foundation 0.10.0",
++ "core-foundation-sys",
++ "libc",
++ "security-framework-sys",
++]
++
++[[package]]
++name = "security-framework-sys"
++version = "2.14.0"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "49db231d56a190491cb4aeda9527f1ad45345af50b0851622a7adb8c03b01c32"
++dependencies = [
++ "core-foundation-sys",
++ "libc",
++]
++
+ [[package]]
+ name = "selectors"
+ version = "0.22.0"
+@@ -7796,6 +7875,15 @@ dependencies = [
+  "system-deps",
+ ]
+ 
++[[package]]
++name = "webpki-root-certs"
++version = "0.26.8"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "09aed61f5e8d2c18344b3faa33a4c837855fe56642757754775548fee21386c4"
++dependencies = [
++ "rustls-pki-types",
++]
++
+ [[package]]
+ name = "webpki-roots"
+ version = "0.26.6"
+diff --git a/rust/Cargo.toml b/rust/Cargo.toml
+index b2b943060..a92e51ec7 100644
+--- a/rust/Cargo.toml
++++ b/rust/Cargo.toml
+@@ -92,6 +92,7 @@ rangemap = "1.5.1"
+ reqwest = { version = "0.12.9", default-features = false }
+ rtnetlink = { version = "0.14.1", default-features = false, features = ["tokio_socket"] }
+ rustls = { version = "0.23.21", default-features = false, features = ["ring"] }
++rustls-platform-verifier = "0.5"
+ sadness-generator = "0.6.0"
+ secrecy = "0.8"
+ semver = "1.0.25"
+diff --git a/rust/phoenix-channel/Cargo.toml b/rust/phoenix-channel/Cargo.toml
+index 24cf49bc9..fe2825d04 100644
+--- a/rust/phoenix-channel/Cargo.toml
++++ b/rust/phoenix-channel/Cargo.toml
+@@ -15,6 +15,8 @@ itertools = { workspace = true }
+ libc = { workspace = true }
+ os_info = { workspace = true }
+ rand_core = { workspace = true }
++rustls = { workspace = true }
++rustls-platform-verifier = { workspace = true }
+ secrecy = { workspace = true }
+ serde = { workspace = true, features = ["derive"] }
+ serde_json = { workspace = true }
+diff --git a/rust/phoenix-channel/src/lib.rs b/rust/phoenix-channel/src/lib.rs
+index 64c5810ac..d2733b12b 100644
+--- a/rust/phoenix-channel/src/lib.rs
++++ b/rust/phoenix-channel/src/lib.rs
+@@ -21,14 +21,15 @@ use futures::{FutureExt, SinkExt, StreamExt};
+ use heartbeat::{Heartbeat, MissedLastHeartbeat};
+ use itertools::Itertools as _;
+ use rand_core::{OsRng, RngCore};
++use rustls_platform_verifier::ConfigVerifierExt;
+ use secrecy::{ExposeSecret, Secret};
+ use serde::{de::DeserializeOwned, Deserialize, Serialize};
+ use socket_factory::{SocketFactory, TcpSocket, TcpStream};
+ use std::task::{Context, Poll, Waker};
+-use tokio_tungstenite::client_async_tls;
++use tokio_tungstenite::client_async_tls_with_config;
+ use tokio_tungstenite::{
+     tungstenite::{handshake::client::Request, Message},
+-    MaybeTlsStream, WebSocketStream,
++    Connector, MaybeTlsStream, WebSocketStream,
+ };
+ use url::Url;
+ 
+@@ -99,9 +100,18 @@ async fn create_and_connect_websocket(
+         .await
+         .map_err(|_| InternalError::Timeout { duration })??;
+ 
+-    let (stream, _) = client_async_tls(make_request(url, user_agent)?, socket)
+-        .await
+-        .map_err(InternalError::WebSocket)?;
++    // Use rustls-platform-verifier to load native system certificates
++    let config = rustls::ClientConfig::with_platform_verifier();
++    let connector = Connector::Rustls(Arc::new(config));
++
++    let (stream, _) = client_async_tls_with_config(
++        make_request(url, user_agent)?,
++        socket,
++        None,
++        Some(connector),
++    )
++    .await
++    .map_err(InternalError::WebSocket)?;
+ 
+     Ok(stream)
+ }
