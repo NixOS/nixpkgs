@@ -1136,6 +1136,7 @@ in {
   systemtap = handleTest ./systemtap.nix {};
   taler = handleTest ./taler {};
   tandoor-recipes = handleTest ./tandoor-recipes.nix {};
+  tandoor-recipes-media = handleTest ./tandoor-recipes-media.nix {};
   tandoor-recipes-script-name = handleTest ./tandoor-recipes-script-name.nix {};
   tang = handleTest ./tang.nix {};
   taskserver = handleTest ./taskserver.nix {};
