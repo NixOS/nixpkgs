@@ -3,23 +3,21 @@
   php,
   fetchFromGitHub,
   makeBinaryWrapper,
+  versionCheckHook,
 }:
 
 php.buildComposerProject2 (finalAttrs: {
   pname = "phpdocumentor";
-  version = "3.6.0";
+  version = "3.7.1";
 
   src = fetchFromGitHub {
     owner = "phpDocumentor";
     repo = "phpDocumentor";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8TQlqXhZ3rHmOAuxsBYa+7JD+SxMQY0NZgCyElStFag=";
+    hash = "sha256-ylwv+tW5Lyx1rooUy7wjinsutGpbLvIvXuLDGWLv24g=";
   };
 
-  vendorHash = "sha256-LESUhPjpj1KkFkB+JEOCGU9c6LuDQJB5Dtc/q5Bt3Og=";
-
-  # Needed because of the unbound version constraint on phpdocumentor/json-path
-  composerStrictValidation = false;
+  vendorHash = "sha256-oPhe4yfOdsguXS3dF62mTr0+J1pfphsVJkMKR++c8go=";
 
   nativeBuildInputs = [ makeBinaryWrapper ];
 
@@ -28,6 +26,13 @@ php.buildComposerProject2 (finalAttrs: {
       --set-default APP_CACHE_DIR /tmp \
       --set-default APP_LOG_DIR /tmp/log
   '';
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgram = "${placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";
+  versionCheckProgramArg = [ "--version" ];
+  doInstallCheck = true;
 
   meta = {
     changelog = "https://github.com/phpDocumentor/phpDocumentor/releases/tag/v${finalAttrs.version}";
