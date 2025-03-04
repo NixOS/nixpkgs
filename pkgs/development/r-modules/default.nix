@@ -522,6 +522,7 @@ let
     ssanv = [ pkgs.proj ];
     stsm = [ pkgs.gsl ];
     stringi = [ pkgs.icu.dev ];
+    parseLatex = [ pkgs.icu.dev ];
     survSNP = [ pkgs.gsl ];
     svglite = [ pkgs.libpng.dev ];
     sysfonts = with pkgs; [ zlib libpng freetype.dev ];
