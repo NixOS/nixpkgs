@@ -1086,9 +1086,9 @@
   },
   "workloads": {
     "pname": "workloads",
-    "version": "1.1.0b3",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/workloads-1.1.0b3-py3-none-any.whl",
-    "hash": "sha256-pzc7LTdmxDs8rq/A7du0kkKXULYsePdndgubC0I2MgY=",
+    "version": "1.1.0",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/workloads-1.1.0-py3-none-any.whl",
+    "hash": "sha256-hpNEiU4IBe5krQcXEX0oIArfVCXB7Lv6O1sbkrdSAok=",
     "description": "Microsoft Azure Command-Line Tools Workloads Extension"
   }
 }
