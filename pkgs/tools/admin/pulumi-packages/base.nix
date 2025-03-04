@@ -83,6 +83,7 @@ in
 { owner
 , repo
 , rev
+, pname ? repo
 , version
 , hash
 , vendorHash
@@ -108,9 +109,7 @@ let
   };
 in
 mkBasePackage ({
-  inherit meta src version vendorHash extraLdflags env;
-
-  pname = repo;
+  inherit meta src version pname vendorHash extraLdflags env;
 
   nativeBuildInputs = [
     pulumi-gen
@@ -130,8 +129,6 @@ mkBasePackage ({
   '';
 
   passthru.sdks.python = mkPythonPackage {
-    inherit meta src version;
-
-    pname = repo;
+    inherit meta src version pname;
   };
 } // args)
