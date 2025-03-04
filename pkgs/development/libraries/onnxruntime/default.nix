@@ -2,6 +2,7 @@
 , stdenv
 , lib
 , fetchFromGitHub
+, fetchpatch
 , Foundation
 , abseil-cpp_202407
 , cmake
@@ -111,6 +112,17 @@ effectiveStdenv.mkDerivation rec {
     # We apply the referenced 1064.patch ourselves to our nix dependency.
     #  FIND_PACKAGE_ARGS for CUDA was added in https://github.com/microsoft/onnxruntime/commit/87744e5 so it might be possible to delete this patch after upgrading to 1.17.0
     ./nvcc-gsl.patch
+
+    # Enable Relocatable Device Code (RDC) with CUDA 12.8
+    # https://github.com/microsoft/onnxruntime/pull/23562
+    ./cuda-rdc.patch
+
+    # Remove thrust::unary_function which is deprecated in later versions of CUDA
+    # https://github.com/microsoft/onnxruntime/pull/23506
+    (fetchpatch {
+      url = "https://github.com/microsoft/onnxruntime/commit/e8eec94ecf8bb0f97f477ddee02006e209ec3ac7.patch";
+      hash = "sha256-US6pGXMpDxyoAkXvILTdLVkEMFw+8Xi/SeNCMXde2Tg=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -154,6 +166,7 @@ effectiveStdenv.mkDerivation rec {
     libcufft # cufft.h
     cudnn # cudnn.h
     cuda_cudart
+    cuda_cudart.static # libcudadevrt
   ] ++ lib.optionals (cudaSupport && ncclSupport) (with cudaPackages; [
     nccl
   ]));
