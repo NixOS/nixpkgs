@@ -104,7 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/lib
     cp -r . $out/lib/glitchtip
     chmod +x $out/lib/glitchtip/manage.py
-    makeWrapper $out/lib/glitchtip/manage.py $out/bin/glitchtip \
+    makeWrapper $out/lib/glitchtip/manage.py $out/bin/glitchtip-manage \
       --prefix PYTHONPATH : "$PYTHONPATH"
 
     runHook postInstall
