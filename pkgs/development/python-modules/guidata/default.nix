@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -7,9 +8,10 @@
   setuptools,
 
   # dependencies
+  distutils,
+  h5py,
   numpy,
   qtpy,
-  h5py,
   requests,
   tomli,
 
@@ -43,9 +45,10 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
+    distutils
+    h5py
     numpy
     qtpy
-    h5py
     requests
     tomli
   ];
@@ -61,6 +64,19 @@ buildPythonPackage rec {
     export QT_PLUGIN_PATH="${lib.getBin qt6.qtbase}/${qt6.qtbase.qtPluginPrefix}"
     export QT_QPA_PLATFORM=offscreen
   '';
+
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    # Fatal Python error: Segmentation fault
+    # guidata/dataset/qtitemwidgets.py", line 633 in __init__
+    "test_all_items"
+    "test_loadsave_hdf5"
+    "test_loadsave_json"
+    # guidata/dataset/qtitemwidgets.py", line 581 in __init__
+    "test_editgroupbox"
+    "test_item_order"
+    # guidata/qthelpers.py", line 710 in exec_dialog
+    "test_arrayeditor"
+  ];
 
   pythonImportsCheck = [ "guidata" ];
 
@@ -89,7 +105,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python library generating graphical user interfaces for easy dataset editing and display";
     homepage = "https://github.com/PlotPyStack/guidata";
-    changelog = "https://github.com/PlotPyStack/guidata/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/PlotPyStack/guidata/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ doronbehar ];
   };

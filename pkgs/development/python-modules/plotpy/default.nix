@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -45,12 +46,6 @@ buildPythonPackage rec {
     cython
     setuptools
   ];
-  # Both numpy versions are supported, see:
-  # https://github.com/PlotPyStack/PlotPy/blob/v2.6.2/pyproject.toml#L8-L9
-  postConfigure = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail 'numpy >= 2.0.0' numpy
-  '';
 
   dependencies = [
     guidata
@@ -75,6 +70,13 @@ buildPythonPackage rec {
     # https://github.com/NixOS/nixpkgs/issues/255262
     cd $out
   '';
+
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    # Fatal Python error: Segmentation fault
+    # in plotpy/widgets/resizedialog.py", line 99 in __init__
+    "test_resize_dialog"
+    "test_tool"
+  ];
 
   pythonImportsCheck = [
     "plotpy"
@@ -110,7 +112,7 @@ buildPythonPackage rec {
   meta = {
     description = "Curve and image plotting tools for Python/Qt applications";
     homepage = "https://github.com/PlotPyStack/PlotPy";
-    changelog = "https://github.com/PlotPyStack/PlotPy/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/PlotPyStack/PlotPy/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ doronbehar ];
   };
