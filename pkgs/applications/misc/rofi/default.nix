@@ -11,6 +11,7 @@
   git,
   cairo,
   libxcb,
+  xcb-imdkit,
   xcb-util-cursor,
   xcbutilkeysyms,
   xcbutil,
@@ -64,6 +65,7 @@ stdenv.mkDerivation rec {
     check
     libstartup_notification
     libxcb
+    xcb-imdkit
     xcb-util-cursor
     xcbutilkeysyms
     xcbutil
@@ -71,6 +73,8 @@ stdenv.mkDerivation rec {
     xcbutilxrm
     which
   ];
+
+  mesonFlags = [ "-Dimdkit=true" ];
 
   doCheck = false;
 
