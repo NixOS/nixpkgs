@@ -7975,19 +7975,6 @@ final: prev:
     meta.hydraPlatforms = [ ];
   };
 
-  mini-test = buildVimPlugin {
-    pname = "mini.test";
-    version = "2025-02-24";
-    src = fetchFromGitHub {
-      owner = "echasnovski";
-      repo = "mini.test";
-      rev = "82ae4d87a23faa27e7e4119d4a5cf5897cbf1b70";
-      sha256 = "0n3n7j8lkxp6mc0wf80ysnwxfw29zjqyfs3ghjl518xbsvjbgcz6";
-    };
-    meta.homepage = "https://github.com/echasnovski/mini.test/";
-    meta.hydraPlatforms = [ ];
-  };
-
   mini-trailspace = buildVimPlugin {
     pname = "mini.trailspace";
     version = "2025-01-31";

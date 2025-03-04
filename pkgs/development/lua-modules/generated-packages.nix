@@ -2772,6 +2772,28 @@ buildLuarocksPackage {
   };
 }) {};
 
+mini-test = callPackage({ buildLuarocksPackage, fetchurl, fetchzip, luaOlder }:
+buildLuarocksPackage {
+  pname = "mini.test";
+  version = "0.15.0-1";
+  knownRockspec = (fetchurl {
+    url    = "mirror://luarocks/mini.test-0.15.0-1.rockspec";
+    sha256 = "1shfgfcjy3ab3a1mn79w4sw3nf6mf8fmdph6h7bxn5nhyhzbfxvk";
+  }).outPath;
+  src = fetchzip {
+    url    = "https://github.com/echasnovski/mini.test/archive/v0.15.0.zip";
+    sha256 = "02zslska1g4ixy51slbvlxbjzcys0spc4wh200q8mwv4ipiignrn";
+  };
+
+  disabled = luaOlder "5.1";
+
+  meta = {
+    homepage = "https://github.com/echasnovski/mini.test";
+    description = "Test neovim plugins. Part of the mini.nvim suite.";
+    license.fullName = "MIT";
+  };
+}) {};
+
 moonscript = callPackage({ argparse, buildLuarocksPackage, fetchFromGitHub, lpeg, luaOlder, luafilesystem }:
 buildLuarocksPackage {
   pname = "moonscript";
