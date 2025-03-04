@@ -13616,8 +13616,6 @@ self: super: with self; {
 
   python-periphery = callPackage ../development/python-modules/python-periphery { };
 
-  python-picnic-api = callPackage ../development/python-modules/python-picnic-api { };
-
   python-picnic-api2 = callPackage ../development/python-modules/python-picnic-api2 { };
 
   python-pidfile = callPackage ../development/python-modules/python-pidfile { };
