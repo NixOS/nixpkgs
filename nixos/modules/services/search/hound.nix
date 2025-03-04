@@ -118,7 +118,7 @@ in
         User = cfg.user;
         Group = cfg.group;
         WorkingDirectory = cfg.home;
-        ExecStartPre = "${pkgs.git}/bin/git config --global --replace-all http.sslCAinfo /etc/ssl/certs/ca-certificates.crt";
+        ExecStartPre = "${pkgs.git}/bin/git config --global --replace-all http.sslCAinfo ${config.security.pki.caBundle}";
         ExecStart = "${cfg.package}/bin/houndd -addr ${cfg.listen} -conf /etc/hound/config.json";
       };
     };
