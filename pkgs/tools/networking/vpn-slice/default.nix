@@ -35,6 +35,7 @@ buildPythonApplication rec {
   propagatedBuildInputs = with python3Packages; [
     setproctitle
     dnspython
+    setuptools
   ];
 
   doCheck = false;
