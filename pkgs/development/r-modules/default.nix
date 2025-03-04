@@ -498,7 +498,7 @@ let
     SAVE = with pkgs; [ zlib bzip2 icu xz pcre ];
     salso = [ pkgs.cargo ];
     ymd = with pkgs; [ cargo rustc ];
-    arcpbf = [ pkgs.cargo ];
+    arcpbf = with pkgs; [ cargo rustc ];
     sdcTable = with pkgs; [ gmp glpk ];
     seewave = with pkgs; [ fftw.dev libsndfile.dev ];
     seqinr = [ pkgs.zlib.dev ];
@@ -1080,6 +1080,10 @@ let
         pkgs.rustPlatform.cargoSetupHook
         pkgs.cargo
       ];
+    });
+
+    arcpbf = old.arcpbf.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
     });
 
     stringi = old.stringi.overrideAttrs (attrs: {
