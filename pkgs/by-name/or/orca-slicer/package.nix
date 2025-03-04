@@ -26,7 +26,6 @@
   hicolor-icon-theme,
   ilmbase,
   libpng,
-  mesa,
   mpfr,
   nlopt,
   opencascade-occt_7_6,
@@ -106,9 +105,6 @@ stdenv.mkDerivation rec {
       hicolor-icon-theme
       ilmbase
       libpng
-      mesa
-      mesa.osmesa
-      mesa.drivers
       mpfr
       nlopt
       opencascade-occt_7_6
@@ -127,6 +123,8 @@ stdenv.mkDerivation rec {
     # Fix for webkitgtk linking
     ./patches/0001-not-for-upstream-CMakeLists-Link-against-webkit2gtk-.patch
     ./patches/dont-link-opencv-world-orca.patch
+    # Don't link osmesa
+    ./patches/no-osmesa.patch
   ];
 
   doCheck = true;
@@ -160,8 +158,6 @@ stdenv.mkDerivation rec {
 
   NIX_LDFLAGS = toString [
     (lib.optionalString withSystemd "-ludev")
-    "-L${mesa.osmesa}/lib"
-    "-L${mesa.drivers}/lib"
     "-L${boost186}/lib"
     "-lboost_log"
     "-lboost_log_setup"
@@ -185,19 +181,15 @@ stdenv.mkDerivation rec {
     "-DBOOST_LOG_NO_LIB=OFF"
     "-DCMAKE_CXX_FLAGS=-DGL_SILENCE_DEPRECATION"
     "-DCMAKE_EXE_LINKER_FLAGS=-Wl,--no-as-needed"
-    "-DCMAKE_EXE_LINKER_FLAGS=-Wl,-rpath,${mesa.drivers}/lib -Wl,-rpath,${mesa.osmesa}/lib"
   ];
 
   preFixup = ''
     gappsWrapperArgs+=(
       --prefix LD_LIBRARY_PATH : "$out/lib:${
         lib.makeLibraryPath [
-          mesa.drivers
-          mesa.osmesa
           glew
         ]
       }"
-      --prefix LIBGL_DRIVERS_PATH : "${mesa.drivers}/lib/dri"
       --set WEBKIT_DISABLE_COMPOSITING_MODE 1
     )
   '';
