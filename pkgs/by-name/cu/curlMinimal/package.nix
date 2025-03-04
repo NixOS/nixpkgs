@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, darwin, pkg-config, perl, nixosTests
+{ lib, stdenv, fetchurl, darwin, pkg-config, perl, nixosTests, autoreconfHook
 , brotliSupport ? false, brotli
 , c-aresSupport ? false, c-aresMinimal
 , gnutlsSupport ? false, gnutls
@@ -53,22 +53,15 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "curl";
-  version = "8.11.1";
+  version = "8.12.0";
 
   src = fetchurl {
     urls = [
       "https://curl.haxx.se/download/curl-${finalAttrs.version}.tar.xz"
       "https://github.com/curl/curl/releases/download/curl-${builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version}/curl-${finalAttrs.version}.tar.xz"
     ];
-    hash = "sha256-x8p9tIsJCXQ+rvNCUNoCwZvGHU8dzt1mA/EJQJU2q1Y=";
+    hash = "sha256-mkYox2S+axqZCVZ8E+jncQQWCd9DshWPysTgXqcJfl0=";
   };
-
-  patches = [
-    # https://github.com/curl/curl/issues/15725
-    ./fix-eventfd-free.patch
-    # https://github.com/curl/curl/issues/15767
-    ./fix-password-only-netrc.patch
-  ];
 
   # this could be accomplished by updateAutotoolsGnuConfigScriptsHook, but that causes infinite recursion
   # necessary for FreeBSD code path in configure
@@ -90,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
     NIX_LDFLAGS = "-liconv";
   };
 
-  nativeBuildInputs = [ pkg-config perl ];
+  nativeBuildInputs = [ pkg-config perl ] ++ lib.optionals stdenv.hostPlatform.isOpenBSD [ autoreconfHook ];
 
   # Zlib and OpenSSL must be propagated because `libcurl.la' contains
   # "-lz -lssl", which aren't necessary direct build inputs of
@@ -123,11 +116,6 @@ stdenv.mkDerivation (finalAttrs: {
   preConfigure = ''
     sed -e 's|/usr/bin|/no-such-path|g' -i.bak configure
     rm src/tool_hugehelp.c
-  '' + lib.optionalString (pslSupport && stdenv.hostPlatform.isStatic) ''
-    # curl doesn't understand that libpsl2 has deps because it doesn't use
-    # pkg-config.
-    # https://github.com/curl/curl/pull/12919
-    configureFlagsArray+=("LIBS=-lidn2 -lunistring")
   '';
 
   configureFlags = [
@@ -188,6 +176,8 @@ stdenv.mkDerivation (finalAttrs: {
     rm tests/data/test1592
   '';
 
+  __darwinAllowLocalNetworking = true;
+
   postInstall = ''
     moveToOutput bin/curl-config "$dev"
 
@@ -229,7 +219,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Command line tool for transferring files with URL syntax";
     homepage    = "https://curl.se/";
     license = lib.licenses.curl;
-    maintainers = with lib.maintainers; [ lovek323 ];
+    maintainers = with lib.maintainers; [ lovek323 Scrumplex ];
     platforms = lib.platforms.all;
     # Fails to link against static brotli or gss
     broken = stdenv.hostPlatform.isStatic && (brotliSupport || gssSupport);

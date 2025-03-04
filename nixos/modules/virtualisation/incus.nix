@@ -270,12 +270,9 @@ in
       };
 
       ui = {
-        enable = lib.mkEnableOption "(experimental) Incus UI";
+        enable = lib.mkEnableOption "Incus Web UI";
 
-        package = lib.mkPackageOption pkgs [
-          "incus"
-          "ui"
-        ] { };
+        package = lib.mkPackageOption pkgs [ "incus-ui-canonical" ] { };
       };
     };
   };

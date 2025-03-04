@@ -3,6 +3,7 @@
   mkCoqDerivation,
   coq,
   mathcomp,
+  stdlib,
   version ? null,
 }:
 
@@ -52,6 +53,7 @@ mkCoqDerivation {
     mathcomp.ssreflect
     mathcomp.algebra
     mathcomp.fingroup
+    stdlib
   ];
 
   meta = with lib; {

@@ -28,6 +28,11 @@ buildPythonPackage rec {
     fetchSubmodules = true;
   };
 
+  # see https://github.com/tree-sitter/py-tree-sitter/issues/330#issuecomment-2629403946
+  patches = lib.optionals (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) [
+    ./segfault-patch.diff
+  ];
+
   build-system = [ setuptools ];
 
   nativeCheckInputs = [
@@ -51,14 +56,11 @@ buildPythonPackage rec {
     "test_dot_graphs"
   ];
 
-  # Segfaults explosively for some reason, but dependents seem to work?
-  doCheck = !stdenv.hostPlatform.isAarch64;
-
-  meta = with lib; {
+  meta = {
     description = "Python bindings to the Tree-sitter parsing library";
     homepage = "https://github.com/tree-sitter/py-tree-sitter";
     changelog = "https://github.com/tree-sitter/py-tree-sitter/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

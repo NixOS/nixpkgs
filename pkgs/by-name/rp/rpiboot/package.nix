@@ -15,7 +15,8 @@ stdenv.mkDerivation rec {
     owner = "raspberrypi";
     repo = "usbboot";
     rev = version;
-    hash = "sha256-nUwero1BLSx+JORqJVWIXi2ElnN17al1jA+I4Cqe9hM=";
+    hash = "sha256-m11SX31GLmb/LGiO7X8P7eL88zvLfoJ/anAVEpg8WL4=";
+    fetchSubmodules = true;
   };
 
   buildInputs = [ libusb1 ];
@@ -29,7 +30,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     mkdir -p $out/share/rpiboot
     cp rpiboot $out/bin
-    cp -r msd firmware eeprom-erase mass-storage-gadget* recovery* secure-boot* rpi-imager-embedded $out/share/rpiboot
+    cp -r msd firmware eeprom-erase mass-storage-gadget* recovery* secure-boot* rpi-eeprom rpi-imager-embedded $out/share/rpiboot
   '';
 
   passthru.updateScript = gitUpdater { };

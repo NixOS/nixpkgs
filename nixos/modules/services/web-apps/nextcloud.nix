@@ -294,12 +294,16 @@ in {
     https = mkOption {
       type = types.bool;
       default = false;
-      description = "Use HTTPS for generated links.";
+      description = ''
+        Use HTTPS for generated links.
+
+        Be aware that this also enables HTTP Strict Transport Security (HSTS) headers.
+      '';
     };
     package = mkOption {
       type = types.package;
       description = "Which package to use for the Nextcloud instance.";
-      relatedPackages = [ "nextcloud29" "nextcloud30" ];
+      relatedPackages = [ "nextcloud29" "nextcloud30" "nextcloud31" ];
     };
     phpPackage = mkPackageOption pkgs "php" {
       example = "php82";
@@ -634,7 +638,7 @@ in {
         description = ''
           Whether to load the Redis module into PHP.
           You still need to enable Redis in your config.php.
-          See https://docs.nextcloud.com/server/14/admin_manual/configuration_server/caching_configuration.html
+          See <https://docs.nextcloud.com/server/latest/admin_manual/configuration_server/caching_configuration.html>
         '';
       };
       memcached = mkOption {
@@ -643,7 +647,7 @@ in {
         description = ''
           Whether to load the Memcached module into PHP.
           You still need to enable Memcached in your config.php.
-          See https://docs.nextcloud.com/server/14/admin_manual/configuration_server/caching_configuration.html
+          See <https://docs.nextcloud.com/server/latest/admin_manual/configuration_server/caching_configuration.html>
         '';
       };
     };
@@ -834,7 +838,7 @@ in {
 
   config = mkIf cfg.enable (mkMerge [
     { warnings = let
-        latest = 30;
+        latest = 31;
         upgradeWarning = major: nixos:
           ''
             A legacy Nextcloud install (from before NixOS ${nixos}) may be installed.
@@ -864,7 +868,9 @@ in {
         ++ (optional (versionOlder cfg.package.version "27") (upgradeWarning 26 "23.11"))
         ++ (optional (versionOlder cfg.package.version "28") (upgradeWarning 27 "24.05"))
         ++ (optional (versionOlder cfg.package.version "29") (upgradeWarning 28 "24.11"))
-        ++ (optional (versionOlder cfg.package.version "30") (upgradeWarning 29 "24.11"));
+        ++ (optional (versionOlder cfg.package.version "30") (upgradeWarning 29 "24.11"))
+        ++ (optional (versionOlder cfg.package.version "31") (upgradeWarning 30 "25.05"))
+        ;
 
       services.nextcloud.package = with pkgs;
         mkDefault (
@@ -876,7 +882,8 @@ in {
             ''
           else if versionOlder stateVersion "24.05" then nextcloud27
           else if versionOlder stateVersion "24.11" then nextcloud29
-          else nextcloud30
+          else if versionOlder stateVersion "25.05" then nextcloud30
+          else nextcloud31
         );
 
       services.nextcloud.phpPackage =

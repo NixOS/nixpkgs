@@ -26,7 +26,7 @@
 # In recent releases, the compiler-rt build seems to produce
 # many `libclang_rt*` libraries, but not a single unified
 # `libcompiler_rt` library, at least under certain configurations. Some
-# platforms stil expect this, however, so we symlink one into place.
+# platforms still expect this, however, so we symlink one into place.
 , forceLinkCompilerRt ? stdenv.hostPlatform.isOpenBSD
 , devExtraCmakeFlags ? []
 }:
@@ -188,7 +188,7 @@ stdenv.mkDerivation {
     )
   '';
 
-  # Hack around weird upsream RPATH bug
+  # Hack around weird upstream RPATH bug
   postInstall = lib.optionalString (stdenv.hostPlatform.isDarwin) ''
     ln -s "$out/lib"/*/* "$out/lib"
   '' + lib.optionalString (useLLVM && stdenv.hostPlatform.isLinux) ''
@@ -226,7 +226,7 @@ stdenv.mkDerivation {
       # compiler-rt requires a Clang stdenv on 32-bit RISC-V:
       # https://reviews.llvm.org/D43106#1019077
       (stdenv.hostPlatform.isRiscV32 && !stdenv.cc.isClang)
-      # emutls wants `<pthread.h>` which isn't avaiable (without exeprimental WASM threads proposal).
+      # emutls wants `<pthread.h>` which isn't available (without experimental WASM threads proposal).
       # `enable_execute_stack.c` Also doesn't sound like something WASM would support.
       || (stdenv.hostPlatform.isWasm && haveLibc);
   };

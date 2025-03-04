@@ -23,7 +23,7 @@ let
       homepage = "https://github.com/krobelus/git-branchstack";
       description = "Efficiently manage Git branches without leaving your local branch";
       license = lib.licenses.mit;
-      maintainers = with lib.maintainers; [ AndersonTorres ];
+      maintainers = with lib.maintainers; [ ];
     };
   };
 in

@@ -364,28 +364,10 @@ let
         apiKeyFile = pkgs.writeText "dummy-api-key" apikey;
       };
       metricProvider = {
-        services.sonarr.enable = true;
-        systemd.services.sonarr.serviceConfig.ExecStartPre =
-          let
-            sonarr_config = pkgs.writeText "config.xml" ''
-              <Config>
-                <LogLevel>info</LogLevel>
-                <EnableSsl>False</EnableSsl>
-                <Port>8989</Port>
-                <SslPort>9898</SslPort>
-                <UrlBase></UrlBase>
-                <BindAddress>*</BindAddress>
-                <ApiKey>${apikey}</ApiKey>
-                <AuthenticationMethod>None</AuthenticationMethod>
-                <UpdateMechanism>BuiltIn</UpdateMechanism>
-                <Branch>main</Branch>
-                <InstanceName>Sonarr</InstanceName>
-              </Config>
-            '';
-          in
-          [
-            ''${pkgs.coreutils}/bin/install -D -m 777 ${sonarr_config} -T /var/lib/sonarr/.config/NzbDrone/config.xml''
-          ];
+        services.sonarr = {
+          enable = true;
+          environmentFiles = [(pkgs.writeText "sonarr-env" "SONARR__AUTH__APIKEY=${apikey}")];
+        };
       };
       exporterTest = ''
         wait_for_unit("sonarr.service")
@@ -1000,6 +982,49 @@ let
             "curl -sSf http://localhost:9100/metrics | grep 'node_exporter_build_info{.\\+} 1'"
         )
       '';
+    };
+
+    node-cert = {
+      nodeName = "node_cert";
+      exporterConfig = {
+        enable = true;
+        paths = ["/run/certs"];
+      };
+      exporterTest = ''
+        wait_for_unit("prometheus-node-cert-exporter.service")
+        wait_for_open_port(9141)
+        wait_until_succeeds(
+            "curl -sSf http://localhost:9141/metrics | grep 'ssl_certificate_expiry_seconds{.\\+path=\"/run/certs/node-cert\\.cert\".\\+}'"
+        )
+      '';
+
+      metricProvider = {
+        system.activationScripts.cert.text = ''
+          mkdir -p /run/certs
+          cd /run/certs
+
+          cat >ca.template <<EOF
+          organization = "prometheus-node-cert-exporter"
+          cn = "prometheus-node-cert-exporter"
+          expiration_days = 365
+          ca
+          cert_signing_key
+          crl_signing_key
+          EOF
+
+          ${pkgs.gnutls}/bin/certtool  \
+            --generate-privkey         \
+            --key-type rsa             \
+            --sec-param High           \
+            --outfile node-cert.key
+
+          ${pkgs.gnutls}/bin/certtool     \
+            --generate-self-signed        \
+            --load-privkey node-cert.key  \
+            --template ca.template        \
+            --outfile node-cert.cert
+        '';
+      };
     };
 
     pgbouncer = {

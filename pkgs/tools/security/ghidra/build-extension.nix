@@ -12,7 +12,12 @@ let
     oldMeta:
     oldMeta
     // {
-      maintainers = (oldMeta.maintainers or [ ]) ++ (with lib.maintainers; [ vringar ]);
+      maintainers =
+        (oldMeta.maintainers or [ ])
+        ++ (with lib.maintainers; [
+          vringar
+          ivyfanchiang
+        ]);
       platforms = oldMeta.platforms or ghidra.meta.platforms;
     };
 

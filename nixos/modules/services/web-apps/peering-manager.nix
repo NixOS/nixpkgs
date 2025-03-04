@@ -52,7 +52,7 @@ in
         Enable Peering Manager.
 
         This module requires a reverse proxy that serves `/static` separately.
-        See this [example](https://github.com/peering-manager/contrib/blob/main/nginx.conf on how to configure this.
+        See this [example](https://github.com/peering-manager/contrib/blob/main/nginx.conf) on how to configure this.
       '';
     };
 

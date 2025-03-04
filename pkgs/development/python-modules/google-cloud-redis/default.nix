@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-redis";
-  version = "2.17.0";
+  version = "2.18.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "google_cloud_redis";
     inherit version;
-    hash = "sha256-DYSwTUq3JUZPe7gfQMHwV0/B9wrEoM2vgkIHV3RYTF4=";
+    hash = "sha256-vszvtwbVxWXNmaz+6yy3XxNop7x/f42Wtg4CuOwFToo=";
   };
 
   build-system = [ setuptools ];

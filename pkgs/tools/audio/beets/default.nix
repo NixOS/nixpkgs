@@ -38,7 +38,7 @@ lib.makeExtensible (self: {
     src = fetchFromGitHub {
       owner = "beetbox";
       repo = "beets";
-      rev = "v${version}";
+      tag = "v${version}";
       hash = "sha256-jhwXRgUUQJgQ/PLwvY1UfHCJ9UC8DcdBpE/janao0RM=";
     };
   };
@@ -57,6 +57,7 @@ lib.makeExtensible (self: {
   };
 
   alternatives = callPackage ./plugins/alternatives.nix { beets = self.beets-minimal; };
+  audible = callPackage ./plugins/audible.nix { beets = self.beets-minimal; };
   copyartifacts = callPackage ./plugins/copyartifacts.nix { beets = self.beets-minimal; };
 
   extrafiles = throw "extrafiles is unmaintained since 2020 and broken since beets 2.0.0";

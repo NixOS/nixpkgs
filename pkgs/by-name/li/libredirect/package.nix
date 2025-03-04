@@ -95,7 +95,7 @@ else
 
       ''
       + lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
-        # dylib will be rejected unless dylib rpath gets explictly set
+        # dylib will be rejected unless dylib rpath gets explicitly set
         install_name_tool \
           -change $libName $out/lib/$libName \
           $out/lib/$libName

@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "pyrail";
-  version = "0.4.0";
+  version = "0.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tjorim";
     repo = "pyrail";
     tag = "v${version}";
-    hash = "sha256-6CE8FrBCVcO88kGwqAMBx9dp5b27oeCm/w1PrEf6a0E=";
+    hash = "sha256-MFsFtspL9cmhwu2oo8wx0Sjx2VpQe92JP9e0M7U8CL8=";
   };
 
   build-system = [ poetry-core ];

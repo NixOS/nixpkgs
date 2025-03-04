@@ -1,11 +1,9 @@
 {
   lib,
   buildPythonPackage,
-  cliche,
   fetchPypi,
   marshmallow,
   pythonOlder,
-  recline,
   requests,
   requests-toolbelt,
   setuptools,
@@ -32,9 +30,6 @@ buildPythonPackage rec {
     requests
     requests-toolbelt
     urllib3
-    # required for cli
-    cliche
-    recline
   ];
 
   # No tests in sdist and no other download available
@@ -44,7 +39,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Library for working with ONTAP's REST APIs simply in Python";
-    homepage = "https://devnet.netapp.com/restapi.php";
+    homepage = "https://library.netapp.com/ecmdocs/ECMLP3331665/html/index.html";
     license = licenses.bsd3;
     maintainers = with maintainers; [ SuperSandro2000 ];
     mainProgram = "ontap-cli";

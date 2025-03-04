@@ -90,6 +90,8 @@ in
         install -Dm644 "$mf" "$mandir/$(basename "$mf")"
       done
 
+      install -Dm644 etc/linux-desktop/syncthing-ui.desktop $out/share/applications/syncthing-ui.desktop
+
     '' + lib.optionalString (stdenv.hostPlatform.isLinux) ''
       mkdir -p $out/lib/systemd/{system,user}
 

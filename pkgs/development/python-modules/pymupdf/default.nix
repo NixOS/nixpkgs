@@ -4,6 +4,7 @@
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
+  fetchpatch,
   python,
 
   # build-system
@@ -52,6 +53,16 @@ buildPythonPackage rec {
     tag = version;
     hash = "sha256-6XbHQ8PE9IF0kngUhYkFSGjwgt+r+19v+PeDAQin2Ko=";
   };
+
+  patches = [
+    # Fix build against mupdf-1.25.3:
+    #   https://github.com/pymupdf/PyMuPDF/pull/4248
+    (fetchpatch {
+      name = "mupdf-1.25.3.patch";
+      url = "https://github.com/pymupdf/PyMuPDF/commit/f42ef85058fee087d3f5e565f34a7657aad11240.patch";
+      hash = "sha256-X5JF8nPLj4uubdEdvUJ5aEf0yZkW+ks99pzua0vCrZc=";
+    })
+  ];
 
   # swig is not wrapped as Python package
   # libclang calls itself just clang in wheel metadata

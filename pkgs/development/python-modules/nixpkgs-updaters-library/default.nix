@@ -29,7 +29,7 @@
 }:
 buildPythonPackage rec {
   pname = "nixpkgs-updaters-library";
-  version = "1.1.0";
+  version = "1.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     owner = "PerchunPak";
     repo = "nixpkgs-updaters-library";
     tag = "v${version}";
-    hash = "sha256-gg+y3w0d2GKJ56XZ4Xw9OYTJ5GwqGkTZ/fRXwDhTEDE=";
+    hash = "sha256-MCMqqAGl6OTOapC3K0DNTOmg2Lv2KqXenEgB5sIZR5U=";
   };
 
   postPatch = ''

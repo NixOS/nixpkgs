@@ -22,7 +22,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "umockdev";
-  version = "0.19.0";
+  version = "0.19.1";
 
   outputs = [
     "bin"
@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://github.com/martinpitt/umockdev/releases/download/${finalAttrs.version}/umockdev-${finalAttrs.version}.tar.xz";
-    hash = "sha256-MF7J+i1s4yVugWHx7rwsF4ahNTbWfzHnYODgpNoNQlQ=";
+    hash = "sha256-LOzg6ONmuJtAcL508zicn3+iGspW2KU1fpbjDNjU9CY=";
   };
 
   patches = [

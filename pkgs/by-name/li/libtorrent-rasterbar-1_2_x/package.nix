@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, pkg-config, autoreconfHook
-, zlib, boost, openssl, python311, libiconv, ncurses, darwin
+, zlib, boost186, openssl, python311, libiconv, ncurses, darwin
 , boost-build
 }:
 
@@ -8,7 +8,7 @@ let
 
   # Make sure we override python, so the correct version is chosen
   # for the bindings, if overridden
-  boostPython = boost.override (_: {
+  boostPython = boost186.override (_: {
     enablePython = true;
     python = python311;
     enableStatic = true;

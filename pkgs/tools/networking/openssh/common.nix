@@ -50,10 +50,6 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     ./locale_archive.patch
 
-    (fetchurl {
-      url = "https://git.alpinelinux.org/aports/plain/main/openssh/gss-serv.c.patch?id=a7509603971ce2f3282486a43bb773b1b522af83";
-      sha256 = "sha256-eFFOd4B2nccRZAQWwdBPBoKWjfEdKEVGJvKZAzLu3HU=";
-    })
     # See discussion in https://github.com/NixOS/nixpkgs/pull/16966
     ./dont_create_privsep_path.patch
   ] ++ extraPatches;

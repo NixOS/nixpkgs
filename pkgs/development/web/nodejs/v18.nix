@@ -4,6 +4,7 @@
   openssl,
   python311,
   fetchpatch2,
+  icu75,
   enableNpm ? true,
 }:
 
@@ -11,6 +12,7 @@ let
   buildNodejs = callPackage ./nodejs.nix {
     inherit openssl;
     python = python311;
+    icu = icu75; # does not build with newer
   };
 
   gypPatches = callPackage ./gyp-patches.nix { } ++ [
@@ -19,8 +21,8 @@ let
 in
 buildNodejs {
   inherit enableNpm;
-  version = "18.20.6";
-  sha256 = "c669b48b632fa6797d4f5fa7bbd2b476ec961120957864402226cc9fd8ebbc0e";
+  version = "18.20.7";
+  sha256 = "9a89659fad80c1b6da33d29f43f5865483ccb1952ddad434ee22f8193607277f";
   patches = [
     ./configure-emulator-node18.patch
     ./configure-armv6-vfpv2.patch
@@ -75,5 +77,10 @@ buildNodejs {
       url = "https://github.com/nodejs/node/commit/f270462c09ddfd770291a7c8a2cd204b2c63d730.patch?full_index=1";
       hash = "sha256-Err0i5g7WtXcnhykKgrS3ocX7/3oV9UrT0SNeRtMZNU=";
     })
+
+    # Fix tests on OpenSSL 3.4
+    # Manual backport of https://github.com/nodejs/node/commit/7895b8eae9e4f2919028fe81e38790af07b4cc92
+    # FIXME: remove after a minor point release
+    ./openssl-3.4-v18.patch
   ] ++ gypPatches;
 }

@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   autoreconfHook,
   docbook_xsl,
   docbook_xml_dtd_43,
@@ -11,7 +12,6 @@
   libunistring,
   libxslt,
   pkg-config,
-  python3,
   buildPackages,
   publicsuffix-list,
 }:
@@ -25,13 +25,21 @@ stdenv.mkDerivation rec {
     hash = "sha256-mp9qjG7bplDPnqVUdc0XLdKEhzFoBOnHMgLZdXLNOi0=";
   };
 
+  patches = [
+    # Can be dropped on next release, or if we switch to Meson for
+    # this package.  Test pkgsStatic.curl still builds.
+    (fetchpatch {
+      name = "static.patch";
+      url = "https://github.com/rockdaboot/libpsl/commit/490bd6f98a2addcade55028ea60c36cce07e21e4.patch";
+      hash = "sha256-7Uu9gaVuA9Aly2mmnhUVgv2BYQTSBODJ2rDl5xp0uVY=";
+    })
+  ];
+
   outputs =
     [
       "out"
       "dev"
-    ]
-    # bin/psl-make-dafsa brings a large runtime closure through python3
-    ++ lib.optional (!stdenv.hostPlatform.isStatic) "bin";
+    ];
 
   nativeBuildInputs = [
     autoreconfHook
@@ -47,18 +55,16 @@ stdenv.mkDerivation rec {
     libidn2
     libunistring
     libxslt
-  ] ++ lib.optional (
-    !stdenv.hostPlatform.isStatic
-    && !stdenv.hostPlatform.isWindows
-    && (stdenv.hostPlatform.isDarwin -> stdenv.buildPlatform == stdenv.hostPlatform)
-   ) python3;
+  ];
 
   propagatedBuildInputs = [
     publicsuffix-list
   ];
 
-  postPatch = lib.optionalString (!stdenv.hostPlatform.isStatic) ''
-    patchShebangs src/psl-make-dafsa
+  # bin/psl-make-dafsa brings a large runtime closure through python3
+  # use the libpsl-with-scripts package if you need this
+  postInstall = ''
+    rm $out/bin/psl-make-dafsa $out/share/man/man1/psl-make-dafsa*
   '';
 
   preAutoreconf = ''

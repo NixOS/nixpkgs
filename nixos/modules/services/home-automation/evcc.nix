@@ -32,7 +32,7 @@ in
       description = ''
         evcc configuration as a Nix attribute set.
 
-        Check for possible options in the sample [evcc.dist.yaml](https://github.com/andig/evcc/blob/${package.version}/evcc.dist.yaml].
+        Check for possible options in the sample [evcc.dist.yaml](https://github.com/andig/evcc/blob/${package.version}/evcc.dist.yaml).
       '';
     };
   };

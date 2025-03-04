@@ -6,13 +6,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mcfly";
-  version = "0.9.2";
+  version = "0.9.3";
 
   src = fetchFromGitHub {
     owner = "cantino";
     repo = "mcfly";
     rev = "v${version}";
-    hash = "sha256-KQgoyxzTWoQok/sUFcvUazxrBMxVXvxqjJudyKYeZCo=";
+    hash = "sha256-eRuMsUN5zRWsM5BqYHI9iSfoHHMu5ugZDjeDc1GGQL8=";
   };
 
   postPatch = ''
@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-+ko1ltt3a5rst4qbIMUeiq0/0Vmqf0cHt6wv8GSmC70=";
+  cargoHash = "sha256-9oNfXNQywvgTREa0G1UbId4ezLSCem4IBkqE5X234hE=";
 
   meta = with lib; {
     homepage = "https://github.com/cantino/mcfly";

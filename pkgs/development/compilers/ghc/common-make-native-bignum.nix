@@ -34,13 +34,8 @@
   # GHC can be built with system libffi or a bundled one.
   libffi ? null,
 
-  useLLVM ?
-    !(
-      stdenv.targetPlatform.isx86
-      || stdenv.targetPlatform.isPower
-      || (lib.versionOlder version "9.4" && stdenv.targetPlatform.isSparc)
-      || (lib.versionAtLeast version "9.2" && stdenv.targetPlatform.isAarch64)
-    ),
+  useLLVM ? !(import ./common-have-ncg.nix { inherit lib stdenv version; }),
+
   # LLVM is conceptually a run-time-only dependency, but for
   # non-x86, we need LLVM to bootstrap later stages, so it becomes a
   # build-time dependency too.

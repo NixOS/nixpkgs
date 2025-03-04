@@ -86,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
       - Helps authors to comply with web standards by using the bug meter.
     '';
     mainProgram = "dillo";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
   };

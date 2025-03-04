@@ -66,7 +66,7 @@ addToLuaPath() {
 _addToLuaPath() {
   local dir="$1"
 
-  echo "_addToLuaPath called for dir $dir"
+  nix_debug "_addToLuaPath called for dir $dir"
 
   if [[ ! -d "$dir" ]]; then
     nix_debug "$dir not a directory abort"
@@ -77,7 +77,7 @@ _addToLuaPath() {
   # if [ -n "${pythonPathsSeen[$dir]}" ]; then return; fi
   if [[ -n "${luaPathsSeen[$dir]:-}" ]]; then
   # if [ -n "${luaPathsSeen[$dir]}" ]; then
-    echo "$dir already parsed"
+    nix_debug "$dir already parsed"
     return
   fi
 
@@ -103,7 +103,7 @@ _addToLuaPath() {
   if [ -e "$prop" ]; then
     local new_path
     for new_path in $(cat $prop); do
-        echo "newpath: $new_path"
+        nix_debug "newpath: $new_path"
         _addToLuaPath "$new_path"
     done
   fi
@@ -116,17 +116,12 @@ buildLuaPath() {
   local luaPath="$1"
   local path
 
-  echo "BUILD_LUA_PATH"
+  nix_debug "BUILD_LUA_PATH"
 
-#   # set -x
 #   # Create an empty table of paths (see doc on loadFromPropagatedInputs
-#   # for how this is used). Build up the program_PATH and program_LUA_PATH
-#   # variables.
-  # declare -gA luaPathsSeen=()
+#   # for how this is used). Build up the program_PATH variable.
 #   # shellcheck disable=SC2034
   program_PATH=
-  luaPathsSeen["@lua@"]=1
-#   addToSearchPath program_PATH @lua@/bin
   for path in $luaPath; do
     _addToLuaPath "$path"
   done

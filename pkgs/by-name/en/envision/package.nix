@@ -14,7 +14,7 @@ buildFHSEnv {
 
   strictDeps = true;
 
-  # TODO: I'm pretty suspicious of this list of additonal required dependencies. Are they all really needed?
+  # TODO: I'm pretty suspicious of this list of additional required dependencies. Are they all really needed?
   targetPkgs =
     pkgs:
     [ pkgs.envision-unwrapped ]

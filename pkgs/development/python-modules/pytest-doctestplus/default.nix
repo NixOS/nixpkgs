@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "pytest-doctestplus";
-  version = "1.3.0";
+  version = "1.4.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "scientific-python";
     repo = "pytest-doctestplus";
     tag = "v${version}";
-    hash = "sha256-jXT+b0aMZo8byAXNR4WcmNkMNYtwkTwsthPVXvAO2K8=";
+    hash = "sha256-hKxTniN7BHDdIHqxNGOuvD7Rk5ChSh1Zn6fo6G+Uty4=";
   };
 
   postPatch = ''
@@ -58,6 +58,7 @@ buildPythonPackage rec {
     "test_remote_data_ellipsis"
     "test_remote_data_requires"
     "test_remote_data_ignore_warnings"
+    "test_remote_data_all"
   ];
 
   meta = with lib; {

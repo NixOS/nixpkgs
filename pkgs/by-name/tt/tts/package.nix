@@ -135,7 +135,7 @@ python.pkgs.buildPythonApplication rec {
   '';
 
   disabledTests = [
-    # Requires network acccess to download models
+    # Requires network access to download models
     "test_korean_text_to_phonemes"
     "test_models_offset_0_step_3"
     "test_models_offset_1_step_3"

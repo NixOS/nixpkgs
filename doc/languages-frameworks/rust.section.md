@@ -461,17 +461,6 @@ also be used:
   the `Cargo.lock`/`Cargo.toml` files need to be patched before
   vendoring.
 
-In case the lockfile contains cargo `git` dependencies, you can use
-`fetchCargoVendor` instead.
-```nix
-{
-  cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    hash = "sha256-RqPVFovDaD2rW31HyETJfQ0qVwFxoGEvqkIgag3H6KU=";
-  };
-}
-```
-
 If a `Cargo.lock` file is available, you can alternatively use the
 `importCargoLock` function. In contrast to `fetchCargoVendor`, this
 function does not require a hash (unless git dependencies are used)

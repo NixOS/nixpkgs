@@ -3,7 +3,7 @@
 , heimdal, krb5, libsoup_2_4, libvorbis, speex, openssl, zlib, xorg, pango, gtk2
 , gnome2, libgbm, nss, nspr, gtk_engines, freetype, dconf, libpng12, libxml2
 , libjpeg, libredirect, tzdata, cacert, systemd, libcxx, symlinkJoin
-, libpulseaudio, pcsclite, glib-networking, llvmPackages_12, opencv4
+, libpulseaudio, pcsclite, glib-networking, llvmPackages, opencv4
 , libfaketime
 , libinput, libcap, libjson, libsecret, libcanberra-gtk3
 
@@ -106,7 +106,7 @@ stdenv.mkDerivation rec {
     libsoup_2_4
     libvorbis
     libxml2
-    llvmPackages_12.libunwind
+    llvmPackages.libunwind
     libgbm
     nspr
     nss

@@ -6,13 +6,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "zsh-abbr";
-  version = "6.0.1";
+  version = "6.1.0";
 
   src = fetchFromGitHub {
     owner = "olets";
     repo = "zsh-abbr";
     rev = "v${version}";
-    hash = "sha256-PWr8o0so2ZfQJkinkLRa4bFxZtw0Lgs7UXVWvd/rWF0";
+    hash = "sha256-M2HBVC72RA0OUBUz8AaJMEsGMNrRzS2Kz8QLSplxP9o=";
     fetchSubmodules = true;
   };
 
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/olets/zsh-abbr";
     description = "Zsh manager for auto-expanding abbreviations, inspired by fish shell";
-    license = with licenses; [cc-by-nc-nd-40 hl3];
+    license = with licenses; [cc-by-nc-sa-40 hl3];
     maintainers = with maintainers; [icy-thought];
     platforms = platforms.all;
   };

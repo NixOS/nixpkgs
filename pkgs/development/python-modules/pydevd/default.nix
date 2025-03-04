@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "pydevd";
-  version = "3.2.3";
+  version = "3.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "fabioz";
     repo = "PyDev.Debugger";
     rev = "pydev_debugger_${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-IJSy6BoQCHNo2YsnrHGXsEaWsLy5dq3jG6Jn4MgpgCg=";
+    hash = "sha256-V5pM0xnMFnpR1oK0purHFCV3wu+4fOmd72kmy7pVeyk=";
   };
 
   postPatch = ''
@@ -79,11 +79,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pydevd" ];
 
-  meta = with lib; {
+  meta = {
     description = "PyDev.Debugger (used in PyDev, PyCharm and VSCode Python)";
     homepage = "https://github.com/fabioz/PyDev.Debugger";
-    license = licenses.epl10;
-    maintainers = with maintainers; [ onny ];
+    license = lib.licenses.epl10;
+    maintainers = with lib.maintainers; [ onny ];
     mainProgram = "pydevd";
   };
 }

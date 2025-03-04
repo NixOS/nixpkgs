@@ -10,11 +10,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "falkor";
-  version = "0.0.92";
+  version = "0.1.0";
 
   src = fetchurl {
-    url = "https://github.com/Team-Falkor/falkor/releases/download/v${finalAttrs.version}/falkor.deb";
-    hash = "sha256-yDpYu2ehrRQuD29jcyTQla2R2IT1zfBDeWDDRnmqc8Y=";
+    url = "https://github.com/Team-Falkor/falkor/releases/download/v0.1.0-alpha/Falkor.deb";
+    hash = "sha256-L1EBJ49+g7n6NtKs1BTBD30glL/K0SerL/k5Dl2SgqM=";
   };
 
   nativeBuildInputs = [
@@ -28,8 +28,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     mkdir -p $out/bin
     mv usr/share $out/share
     mkdir -p $out/share/falkor
-    sed -i "s|Exec=.*|Exec=falkor|" $out/share/applications/*.desktop
-    mv opt/falkor/{resources,resources.pak,locales} $out/share/falkor
+    substituteInPlace $out/share/applications/falkor.desktop \
+      --replace-fail "/opt/Falkor/" ""
+    mv opt/Falkor/{resources,resources.pak,locales} $out/share/falkor
 
     makeWrapper ${lib.getExe electron} $out/bin/falkor \
       --argv0 "falkor" \

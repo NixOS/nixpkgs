@@ -5,7 +5,7 @@
   pythonAtLeast,
   pythonOlder,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
   ffmpeg,
   libopus,
   aiohttp,
@@ -34,8 +34,7 @@ buildPythonPackage rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./paths.patch;
+    (replaceVars ./paths.patch {
       ffmpeg = "${ffmpeg}/bin/ffmpeg";
       libopus = "${libopus}/lib/libopus${stdenv.hostPlatform.extensions.sharedLibrary}";
     })

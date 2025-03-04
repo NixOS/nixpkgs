@@ -8,13 +8,13 @@
 
 melpaBuild {
   pname = "elpaca";
-  version = "0-unstable-2025-02-07";
+  version = "0-unstable-2025-02-16";
 
   src = fetchFromGitHub {
     owner = "progfolio";
     repo = "elpaca";
-    rev = "9cd26d91193fea631c25484109d04c54ad8f0188";
-    hash = "sha256-Mr5uBXvtFfBnrMqnnsgStHvmcyzqpHKdovvH3xb6RBE=";
+    rev = "07b3a653e2411f4d4b5902af1c9b3f159e07bec5";
+    hash = "sha256-+YJX2BJxH3D5u7YC/yJskZu0F4Nlat3ZROe+RCZGq9w=";
   };
 
   nativeBuildInputs = [ git ];

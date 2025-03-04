@@ -74,6 +74,7 @@ buildPythonPackage rec {
     ddt
     eventlet
     fixtures
+    libredirect.hook
     oslotest
     qemu-utils
     stestr
@@ -87,7 +88,6 @@ buildPythonPackage rec {
   checkPhase = ''
     echo "nameserver 127.0.0.1" > resolv.conf
     export NIX_REDIRECTS=/etc/protocols=${iana-etc}/etc/protocols:/etc/resolv.conf=$(realpath resolv.conf)
-    export LD_PRELOAD=${libredirect}/lib/libredirect.so
 
     stestr run -e <(echo "
       oslo_utils.tests.test_netutils.NetworkUtilsTest.test_is_valid_ip

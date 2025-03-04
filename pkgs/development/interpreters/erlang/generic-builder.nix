@@ -140,6 +140,13 @@ stdenv.mkDerivation (
       libxml2
     ];
 
+    env = lib.optionalAttrs ((lib.versionAtLeast "28.0-rc1" version) && ex_docSupport) {
+      # erlang-28.0-rc> warning: jinterface.html redirects to ../lib/jinterface/doc/html/index.html, which does not exist
+      # erlang-28.0-rc>
+      # erlang-28.0-rc> warning: odbc.html redirects to ../lib/odbc/doc/html/index.html, which does not exist
+      EX_DOC_WARNINGS_AS_ERRORS = "false";
+    };
+
     buildInputs =
       [
         ncurses

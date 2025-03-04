@@ -140,7 +140,7 @@ stdenv.mkDerivation {
     description = "Scrollable, tiling Wayland compositor inspired on PaperWM";
     license = lib.licenses.gpl3Only;
     mainProgram = "cardboard";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     inherit (wayland.meta) platforms;
   };
 }

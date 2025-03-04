@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "flow";
-  version = "0.2.1";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "neurocyte";
     repo = "flow";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dXWqxV66BwtjOvmreq4+u5+xBI+1v1PAep8RQBK3rlA=";
+    hash = "sha256-D1pFP5tw323UJgWvLvh2sTiZG1hq5DP0FakdXEISRxs=";
   };
   postPatch = ''
     ln -s ${callPackage ./build.zig.zon.nix { }} $ZIG_GLOBAL_CACHE_DIR/p
@@ -23,6 +23,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     zig_0_13.hook
   ];
+
+  passthru.updateScript = ./update.sh;
 
   env.VERSION = finalAttrs.version;
 

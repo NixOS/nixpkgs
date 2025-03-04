@@ -1560,6 +1560,10 @@ intel_drv.so: undefined symbol: vgaHWFreeHWRec
 
 Adds the `-fzero-call-used-regs=used-gpr` compiler option. This causes the general-purpose registers that an architecture's calling convention considers "call-used" to be zeroed on return from the function. This can make it harder for attackers to construct useful ROP gadgets and also reduces the chance of data leakage from a function call.
 
+#### `stackclashprotection` {#stackclashprotection}
+
+This flag adds the `-fstack-clash-protection` compiler option, which causes growth of a program's stack to access each successive page in order. This should force the guard page to be accessed and cause an attempt to "jump over" this guard page to crash.
+
 ### Hardening flags disabled by default {#sec-hardening-flags-disabled-by-default}
 
 The following flags are disabled by default and should be enabled with `hardeningEnable` for packages that take untrusted input like network services.
@@ -1598,10 +1602,6 @@ This should be turned off or fixed for build errors such as:
 ```
 sorry, unimplemented: __builtin_clear_padding not supported for variable length aggregates
 ```
-
-#### `stackclashprotection` {#stackclashprotection}
-
-This flag adds the `-fstack-clash-protection` compiler option, which causes growth of a program's stack to access each successive page in order. This should force the guard page to be accessed and cause an attempt to "jump over" this guard page to crash.
 
 #### `pacret` {#pacret}
 

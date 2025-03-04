@@ -1,7 +1,7 @@
-{ deployAndroidPackage, lib, package, os, autoPatchelfHook, makeWrapper, pkgs, pkgsi686Linux, postInstall }:
+{ deployAndroidPackage, lib, stdenv, package, os, autoPatchelfHook, makeWrapper, pkgs, pkgsi686Linux, postInstall }:
 
 deployAndroidPackage {
-  inherit package os;
+  inherit package;
   nativeBuildInputs = [ makeWrapper ]
     ++ lib.optionals (os == "linux") [ autoPatchelfHook ];
   buildInputs = lib.optionals (os == "linux") (with pkgs; [
@@ -16,7 +16,6 @@ deployAndroidPackage {
       ncurses5
       libdrm
       stdenv.cc.cc
-      pkgsi686Linux.glibc
       expat
       freetype
       nss
@@ -36,7 +35,7 @@ deployAndroidPackage {
       libICE
       libSM
       libxkbfile
-    ]);
+    ]) ++ lib.optional (os == "linux" && stdenv.isx86_64) pkgsi686Linux.glibc;
   patchInstructions = lib.optionalString (os == "linux") ''
     addAutoPatchelfSearchPath $packageBaseDir/lib
     addAutoPatchelfSearchPath $packageBaseDir/lib64

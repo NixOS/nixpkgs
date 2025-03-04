@@ -300,7 +300,7 @@ stdenv.mkDerivation {
         nginx-unix-socket
         ;
       variants = lib.recurseIntoAttrs nixosTests.nginx-variants;
-      acme-integration = nixosTests.acme;
+      acme-integration = nixosTests.acme.nginx;
     } // passthru.tests;
   };
 

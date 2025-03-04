@@ -4,34 +4,39 @@
   fetchFromGitHub,
   hatchling,
   django,
-  python,
+  pytest-django,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "django-js-asset";
-  version = "3.0.1";
-  format = "pyproject";
+  version = "3.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "matthiask";
-    repo = pname;
+    repo = "django-js-asset";
     tag = version;
-    hash = "sha256-WBybDzGPoPbeUnrw6O41ton0x0rLjPcHBVMg1RZceWI=";
+    hash = "sha256-a/aYchhfb+8Xn3Mkf0UmpSzZ7JZT9KoZu/3+FUNJ7Bo=";
   };
 
-  nativeBuildInputs = [ hatchling ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [ django ];
+  dependencies = [ django ];
 
   pythonImportsCheck = [ "js_asset" ];
 
-  checkPhase = ''
-    runHook preCheck
-    ${python.interpreter} tests/manage.py test testapp
-    runHook postCheck
+  nativeCheckInputs = [
+    pytest-django
+    pytestCheckHook
+  ];
+
+  preCheck = ''
+    export DJANGO_SETTINGS_MODULE=tests.testapp.settings
   '';
 
   meta = with lib; {
+    changelog = "https://github.com/matthiask/django-js-asset/blob/${version}/CHANGELOG.rst";
     description = "Script tag with additional attributes for django.forms.Media";
     homepage = "https://github.com/matthiask/django-js-asset";
     maintainers = with maintainers; [ hexa ];

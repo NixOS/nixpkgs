@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "rclone-python";
-  version = "0.1.20";
+  version = "0.1.21";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Johannes11833";
     repo = "rclone_python";
     tag = "v${version}";
-    hash = "sha256-TGSASkvlh4ku7gZ7JhKX5yEKgSZp5VDyNz962gG6Lk0=";
+    hash = "sha256-lYrPSDBWGVQmT2/MgzbtZ6hHNZXINCmmFP+ZHFZQDw8=";
   };
 
   build-system = [ setuptools ];

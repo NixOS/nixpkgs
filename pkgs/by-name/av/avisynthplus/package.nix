@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
-    # Remove after next relaese
+    # Remove after next release
     (fetchpatch {
       name = "fix-absolute-path.patch";
       url = "https://github.com/AviSynth/AviSynthPlus/commit/818983691e962ec3e590fcad07032f8a139a6b16.patch";

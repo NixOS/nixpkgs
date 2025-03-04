@@ -40,10 +40,8 @@ buildPythonPackage rec {
       --replace-fail "data_files=[(\"\", [\"README.md\", \"requirements.txt\", \"package_info.json\"])]," "" \
       --replace-fail "install_requires=requirements," ""
 
-    substituteInPlace deepface/detectors/OpenCv.py \
-      --replace-fail "opencv_home = cv2.__file__" "opencv_home = os.readlink(cv2.__file__)" \
-      --replace-fail "folders = opencv_home.split(os.path.sep)[0:-1]" "folders = opencv_home.split(os.path.sep)[0:-4]" \
-      --replace-fail "return path + \"/data/\"" "return path + \"/share/opencv4/haarcascades/\""
+    substituteInPlace deepface/models/face_detection/OpenCv.py \
+      --replace-fail "opencv_path = self.__get_opencv_path()" "opencv_path = '/'.join(os.path.dirname(cv2.__file__).split(os.path.sep)[0:-4]) + \"/share/opencv4/haarcascades/\""
   '';
 
   build-system = [ setuptools ];

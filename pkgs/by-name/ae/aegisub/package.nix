@@ -141,7 +141,7 @@ stdenv.mkDerivation (finalAttrs: {
       built-in real-time video preview.
     '';
     # The Aegisub sources are itself BSD/ISC, but they are linked against GPL'd
-    # softwares - so the resulting program will be GPL
+    # software - so the resulting program will be GPL
     license = with lib.licenses; [
       bsd3
     ];

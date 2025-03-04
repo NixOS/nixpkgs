@@ -14,6 +14,7 @@ let
       mkRocqDerivation = lib.makeOverridable (callPackage ../build-support/rocq {});
 
       bignums = callPackage ../development/rocq-modules/bignums {};
+      rocq-elpi = callPackage ../development/rocq-modules/rocq-elpi {};
       stdlib = callPackage ../development/rocq-modules/stdlib {};
 
       filterPackages = doesFilter: if doesFilter then filterRocqPackages self else self;
@@ -40,7 +41,7 @@ in rec {
    * a set of libraries built with that specific Rocq. More libraries are known to
    * this function than what is compatible with that version of Rocq. Therefore,
    * libraries that are not known to be compatible are removed (filtered out) from
-   * the resulting set. For meta-programming purposes (inpecting the derivations
+   * the resulting set. For meta-programming purposes (inspecting the derivations
    * rather than building the libraries) this filtering can be disabled by setting
    * a `dontFilter` attribute into the Rocq derivation.
    */

@@ -5,14 +5,9 @@
   fetchFromGitHub,
   fetchurl,
   cmake,
-  boost,
-  fmt,
-  duckx,
-  expected-lite,
-  optional-lite,
-  string-view-lite,
-  variant-lite,
   qt6,
+  duckx,
+  fmt,
   shaderc,
   vulkan-headers,
   wayland,
@@ -61,20 +56,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs =
     [
-      expected-lite
-      optional-lite
-      string-view-lite
-      variant-lite
-      boost
-      fmt
       duckx
-      qt6.qtwayland
-      qt6.qtquicktimeline
-      qt6.qtsvg
-      qt6.qthttpserver
-      qt6.qtwebengine
+      fmt
       qt6.qt5compat
+      qt6.qtbase
+      qt6.qtdeclarative
+      qt6.qthttpserver
+      qt6.qtsvg
       qt6.qttools
+      qt6.qtwayland
+      qt6.qtwebengine
       shaderc
       vulkan-headers
       wayland
@@ -120,7 +111,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     mainProgram = "gpt4all";
     maintainers = with lib.maintainers; [
-      polygon
       titaniumtown
     ];
   };

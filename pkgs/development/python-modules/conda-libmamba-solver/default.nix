@@ -31,7 +31,7 @@ buildPythonPackage rec {
     libmambapy
   ];
 
-  # this package depends on conda for the import to run succesfully, but conda depends on this package to execute.
+  # this package depends on conda for the import to run successfully, but conda depends on this package to execute.
   # pythonImportsCheck = [ "conda_libmamba_solver" ];
 
   pythonRemoveDeps = [ "conda" ];

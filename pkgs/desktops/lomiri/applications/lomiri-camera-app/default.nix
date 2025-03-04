@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-x0hxOGPIxzQdwzb8f4wvllAW1hJ5lyR4qYvyX96RMoA=";
   };
 
-  # We don't want absolute paths in dekstop files
+  # We don't want absolute paths in desktop files
   postPatch = ''
     substituteInPlace CMakeLists.txt \
       --replace-fail 'CAMERA_SPLASH ''${CAMERA_APP_DIR}/assets/lomiri-camera-app-splash.svg' 'CAMERA_SPLASH lomiri-app-launch/splash/lomiri-camera-app.svg' \

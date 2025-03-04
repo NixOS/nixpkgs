@@ -10,16 +10,16 @@
 
 buildGoModule rec {
   pname = "harbor-cli";
-  version = "0.0.2";
+  version = "0.0.3";
 
   src = fetchFromGitHub {
     owner = "goharbor";
     repo = "harbor-cli";
     rev = "v${version}";
-    hash = "sha256-baS4UHjmE2eURFMDBhXbx9lcKPArb2RH2NVDt3MPE4s=";
+    hash = "sha256-Vfr7e5UQ34TkirywuYJPrkxRA6yJp3/ivfCJOnh34MY=";
   };
 
-  vendorHash = "sha256-rw2VPRi0VTm7/zVnQ8zL5f4mbzYKnmuxgCbgrpcukaU=";
+  vendorHash = "sha256-zQV3YJJ5cu24SVS6LCuZbM5EfGZyNPt8f1N0B3befD0=";
 
   excludedPackages = [ "dagger" ];
 

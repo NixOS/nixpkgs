@@ -1,8 +1,12 @@
 {
   lib,
   stdenv,
+  runCommand,
   fetchFromGitHub,
   cmake,
+  pkg-config,
+  imagemagick,
+  gtest,
   SDL2,
   SDL2_mixer,
   freetype,
@@ -14,19 +18,16 @@
   openal,
   python3,
   zlib,
+  # the GLES backend on rpi is untested as I don't have the hardware
+  backend ? if stdenv.hostPlatform.isx86 then "OpenGL" else "GLES",
 }:
 
+# Previously we only used libvlc *on* darwin, which is incorrect. According to
+# https://github.com/gemrb/gemrb/blob/master/INSTALL it is needed for some mac versions of some
+# games but there is obviously nothing wrong using those on linux.
+# Additionally, when gemrb adds support for the EE games, libvlc will be needed anyway.
+
 let
-  # the GLES backend on rpi is untested as I don't have the hardware
-  backend = if stdenv.hostPlatform.isx86 then "OpenGL" else "GLES";
-
-  withVLC = stdenv.hostPlatform.isDarwin;
-
-  inherit (lib) optional optionalString;
-
-in
-stdenv.mkDerivation rec {
-  pname = "gemrb";
   version = "0.9.4";
 
   src = fetchFromGitHub {
@@ -36,6 +37,20 @@ stdenv.mkDerivation rec {
     hash = "sha256-+aPnOJQGRblqcrblVU5ZwA8CZqeT19rxEtn3GLuofYU=";
   };
 
+  icons = runCommand "gemrb-icons" { nativeBuildInputs = [ imagemagick ]; } ''
+    for s in 48 64 96 128 256 512 1024; do
+      size=''${s}x''${s}
+      dir=$out/share/icons/hicolor/$size
+      mkdir -p $dir
+      magick -background none -size $size ${src}/artwork/logo04-rb_only.svg -format png $dir/gemrb.png
+    done
+  '';
+
+in
+stdenv.mkDerivation (finalAttrs: {
+  pname = "gemrb";
+  inherit version src;
+
   buildInputs = [
     SDL2
     SDL2_mixer
@@ -43,35 +58,36 @@ stdenv.mkDerivation rec {
     libGL
     libiconv
     libpng
+    libvlc
     libvorbis
     openal
     python3
     zlib
-  ] ++ optional withVLC libvlc;
+  ];
 
-  nativeBuildInputs = [ cmake ];
-
-  # libvlc isn't being detected properly as of 0.9.0, so set it
-  LIBVLC_INCLUDE_PATH = optionalString withVLC "${lib.getDev libvlc}/include";
-  LIBVLC_LIBRARY_PATH = optionalString withVLC "${lib.getLib libvlc}/lib";
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ] ++ lib.optionals (finalAttrs.doCheck or false) [ gtest ];
 
   cmakeFlags = [
-    "-DDATA_DIR=${placeholder "out"}/share/gemrb"
-    "-DEXAMPLE_CONF_DIR=${placeholder "out"}/share/doc/gemrb/examples"
-    "-DSYSCONF_DIR=/etc"
+    (lib.cmakeFeature "DATA_DIR" "${placeholder "out"}/share/gemrb")
+    (lib.cmakeFeature "EXAMPLE_CONF_DIR" "${placeholder "out"}/share/doc/gemrb/examples")
+    (lib.cmakeFeature "SYSCONF_DIR" "/etc")
     # use the Mesa drivers for video on ARM (harmless on x86)
-    "-DDISABLE_VIDEOCORE=ON"
-    "-DLAYOUT=opt"
-    "-DOPENGL_BACKEND=${backend}"
-    "-DOpenGL_GL_PREFERENCE=GLVND"
+    (lib.cmakeBool "DISABLE_VIDEOCORE" true)
+    (lib.cmakeFeature "LAYOUT" "opt")
+    (lib.cmakeFeature "OPENGL_BACKEND" backend)
+    (lib.cmakeFeature "OpenGL_GL_PREFERENCE" "GLVND")
+    (lib.cmakeBool "USE_TESTS" (finalAttrs.doCheck or false))
   ];
 
   postInstall = ''
-    for s in 36 48 72 96 144; do
-      install -Dm444 ../artwork/gemrb-logo-glow-''${s}px.png $out/share/icons/hicolor/''${s}x''${s}/gemrb.png
-    done
-    install -Dm444 ../artwork/gemrb-logo.png $out/share/icons/gemrb.png
+    cp -r ${icons}/share/icons $out/share/
   '';
+
+  # a bunch of tests fail in our sandbox
+  doCheck = false;
 
   meta = with lib; {
     description = "Reimplementation of the Infinity Engine, used by games such as Baldur's Gate";
@@ -84,5 +100,6 @@ stdenv.mkDerivation rec {
     homepage = "https://gemrb.org/";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ peterhoeg ];
+    mainProgram = "gemrb";
   };
-}
+})

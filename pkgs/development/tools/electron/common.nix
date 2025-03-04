@@ -66,7 +66,11 @@ in
 
   src = null;
 
-  patches = base.patches;
+  patches =
+    base.patches
+    ++ lib.optionals (lib.versions.major info.version == "32") [
+      ./fix-electron-32-patch-apply-without-git-3way.patch
+    ];
 
   unpackPhase =
     ''
@@ -161,13 +165,14 @@ in
 
   env =
     base.env
-    // lib.optionalAttrs (lib.versionOlder info.version "33" && stdenv.hostPlatform.isAarch64) {
+    // lib.optionalAttrs (lib.versionOlder info.version "33") {
       # Hydra fails to build electron_32.aarch64-linux as of 2025-01-05 due to
       # clang spamming deprecation warnings mid-build, causing the build log to
       # grow beyond the limit of 64mb and then getting killed by Hydra. This
       # renders our clang both too old for the latest chromium without the use
       # of -Wno-unknown-warning-option and also too new for electron_32 (M128).
-      # For some reason, this is exclusively happening on aarch64-linux. To
+      # For some reason, the log size limit appears to only be enforced on
+      # aarch64-linux. x86_64-linux happily succeeds to build with ~180mb. To
       # unbreak the build on h.n.o, we simply disable those warnings for now.
       # https://hydra.nixos.org/build/283952243
       NIX_CFLAGS_COMPILE = base.env.NIX_CFLAGS_COMPILE + " -Wno-deprecated";

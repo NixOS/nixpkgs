@@ -52,6 +52,8 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace tests/conftest.py --replace 'locale.setlocale(locale.LC_ALL, "en_US.UTF-8")' ""
+    substituteInPlace pyproject.toml \
+      --replace-fail '"ignore::marshmallow.warnings.ChangedInMarshmallow4Warning",' ""
   '';
 
   build-system = [ setuptools ];
@@ -129,6 +131,7 @@ buildPythonPackage rec {
   pytestFlagsArray = [ "-m 'not spark and not postgresql and not snowflake'" ];
 
   meta = {
+    broken = true; # 408 tests fail
     description = "Library for writing unit tests for data validation";
     homepage = "https://docs.greatexpectations.io";
     changelog = "https://github.com/great-expectations/great_expectations/releases/tag/${src.tag}";

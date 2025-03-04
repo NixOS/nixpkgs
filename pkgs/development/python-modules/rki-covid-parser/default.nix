@@ -35,7 +35,7 @@ buildPythonPackage rec {
   ];
 
   disabledTestPaths = [
-    # Tests require netowrk access
+    # Tests require network access
     "tests/test_districts.py"
     "tests/test_endpoint_availibility.py"
   ];

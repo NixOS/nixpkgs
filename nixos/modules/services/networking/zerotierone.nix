@@ -43,7 +43,7 @@ in
     description = ''
       Optional configuration to be written to the Zerotier JSON-based local.conf.
       If set, the configuration will be symlinked to `/var/lib/zerotier-one/local.conf` at build time.
-      To understand the configuration format, refer to https://docs.zerotier.com/config/#local-configuration-options.
+      To understand the configuration format, refer to <https://docs.zerotier.com/config/#local-configuration-options>.
     '';
     example = {
       settings.allowTcpFallbackRelay = false;

@@ -63,7 +63,7 @@ in
       type = with lib.types; attrsOf (listOf str);
       default = { };
       description = ''
-        Exposes EDID files from users-sourced database at https://github.com/linuxhw/EDID
+        Exposes EDID files from users-sourced database at <https://github.com/linuxhw/EDID>
 
         Attribute names will be mapped to EDID filenames `<NAME>.bin`.
 
@@ -100,7 +100,7 @@ in
         Attribute set of XFree86 Modelines automatically converted
         and exposed as `edid/<name>.bin` files in initrd.
         See for more information:
-        - https://en.wikipedia.org/wiki/XFree86_Modeline
+        - <https://en.wikipedia.org/wiki/XFree86_Modeline>
       '';
       example = lib.literalExpression ''
         {

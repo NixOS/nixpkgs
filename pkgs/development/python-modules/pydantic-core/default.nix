@@ -80,7 +80,7 @@ let
       description = "Core validation logic for pydantic written in rust";
       homepage = "https://github.com/pydantic/pydantic-core";
       license = licenses.mit;
-      maintainers = with maintainers; [ blaggacao ];
+      maintainers = with maintainers; [ ];
     };
   };
 in

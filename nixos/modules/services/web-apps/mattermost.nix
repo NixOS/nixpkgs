@@ -706,7 +706,7 @@ in
           ];
           description = ''
             Set commandline parameters to pass to matterircd. See
-            https://github.com/42wim/matterircd#usage for more information.
+            <https://github.com/42wim/matterircd#usage> for more information.
           '';
         };
       };

@@ -24,6 +24,7 @@
   qt6,
   slang,
   stdenv,
+  utf8proc,
   xterm,
 }:
 
@@ -120,6 +121,7 @@ stdenv.mkDerivation {
     protobuf
     qt6.qtbase
     qt6.qtwayland
+    utf8proc
   ];
 
   nativeBuildInputs = [

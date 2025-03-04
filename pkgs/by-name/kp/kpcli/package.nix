@@ -8,12 +8,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "4.1.2";
+  version = "4.1.3";
   pname = "kpcli";
 
   src = fetchurl {
     url = "mirror://sourceforge/kpcli/${pname}-${version}.pl";
-    hash = "sha256-hvyCC8eUXNm1d1g+/kEnVllRJokChgJWzuoQB5Xd8j8=";
+    hash = "sha256-yRNj5OB/NSGoZ/aNtgLJW1PcFn5DZu5/8lQlK0F2xi8=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

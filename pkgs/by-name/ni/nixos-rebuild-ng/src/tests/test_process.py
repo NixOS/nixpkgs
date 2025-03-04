@@ -106,7 +106,7 @@ def test_remote_from_name(monkeypatch: MonkeyPatch) -> None:
 
     # get_qualified_name doesn't work because getpass is aliased to another
     # function
-    with patch(f"{p.__name__}.getpass", return_value="password"):
+    with patch(f"{p.__name__}.getpass", autospec=True, return_value="password"):
         monkeypatch.setenv("NIX_SSHOPTS", "-f foo -b bar -t")
         assert m.Remote.from_arg("user@localhost", True, True) == m.Remote(
             "user@localhost",

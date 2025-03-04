@@ -2,7 +2,10 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
   setuptools,
+
   # dependencies
   bitarray,
   ckzg,
@@ -14,7 +17,8 @@
   hexbytes,
   rlp,
   websockets,
-  # nativeCheckInputs
+
+  # tests
   hypothesis,
   pydantic,
   pytestCheckHook,
@@ -23,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "eth-account";
-  version = "0.13.4";
+  version = "0.13.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ethereum";
     repo = "eth-account";
     tag = "v${version}";
-    hash = "sha256-Y55WCgWJd2AaDNKbyBe9oi1soT19RdUjQWy5884Pcq8=";
+    hash = "sha256-CBD0vJLYA+3FreOTsVXJlDJhRvPbDUn4X55o6EF+uBA=";
   };
 
   build-system = [ setuptools ];
@@ -60,8 +64,12 @@ buildPythonPackage rec {
     "test_messages_where_all_3_sigs_match"
     "test_messages_where_eth_account_matches_ethers_but_not_metamask"
     "test_messages_where_eth_account_matches_metamask_but_not_ethers"
+
     # disable flaky fuzzing test
     "test_compatibility"
+
+    # Attempts at installing the wheel
+    "test_install_local_wheel"
   ];
 
   pythonImportsCheck = [ "eth_account" ];

@@ -1,6 +1,6 @@
 { lib, stdenv
 , fetchurl
-, substituteAll
+, replaceVars
 , meson
 , nasm
 , ninja
@@ -71,8 +71,7 @@ stdenv.mkDerivation rec {
     # Reenable dynamic loading of libsoup on Darwin and use a different approach to do it.
     ./souploader-darwin.diff
     # dlopen libsoup_3 with an absolute path
-    (substituteAll {
-      src = ./souploader.diff;
+    (replaceVars ./souploader.diff {
       nixLibSoup3Path = "${lib.getLib libsoup_3}/lib";
     })
   ];

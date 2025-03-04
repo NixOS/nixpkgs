@@ -17,7 +17,7 @@ rec {
   /**
     Return an attribute from nested attribute sets.
 
-    Nix has an [attribute selection operator `. or`](https://nixos.org/manual/nix/stable/language/operators#attribute-selection) which is sufficient for such queries, as long as the number of attributes is static. For example:
+    Nix has an [attribute selection operator `.`](https://nixos.org/manual/nix/stable/language/operators#attribute-selection) which is sufficient for such queries, as long as the number of attributes is static. For example:
 
     ```nix
     (x.a.b or 6) == attrByPath ["a" "b"] 6 x
@@ -319,7 +319,7 @@ rec {
   getAttrFromPath =
     attrPath:
     set:
-    attrByPath attrPath (abort ("cannot find attribute `" + concatStringsSep "." attrPath + "'")) set;
+    attrByPath attrPath (abort ("cannot find attribute '" + concatStringsSep "." attrPath + "'")) set;
 
   /**
     Map each attribute in the given set and merge them into a new attribute set.

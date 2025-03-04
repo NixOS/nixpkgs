@@ -38,18 +38,18 @@ let
 in
 buildDotnetModule rec {
   pname = "Dafny";
-  version = "4.9.1";
+  version = "4.10.0";
 
   src = fetchFromGitHub {
     owner = "dafny-lang";
     repo = "dafny";
     tag = "v${version}";
-    hash = "sha256-fCBaOF1mDrqJaUiATZAhzLjlK3NGVFnxdOwgHbOkkgY=";
+    hash = "sha256-aPOjt4bwalhJUTJm4+pGqN88LwDP5zrVtakF26b3K4s=";
   };
 
   postPatch =
     let
-      runtimeJarVersion = "4.9.1";
+      runtimeJarVersion = "4.10.0";
     in
     ''
       cp ${writeScript "fake-gradlew-for-dafny" ''
@@ -66,13 +66,6 @@ buildDotnetModule rec {
       substituteInPlace Source/DafnyRuntime/DafnyRuntime.csproj \
         --replace-fail TargetFrameworks TargetFramework \
         --replace-fail "netstandard2.0;net452" net8.0
-
-      for f in Source/**/*.csproj ; do
-        [[ "$f" == "Source/DafnyRuntime/DafnyRuntime.csproj" ]] && continue;
-
-        substituteInPlace $f \
-          --replace-fail net6.0 net8.0
-      done
     '';
 
   dotnet-sdk = dotnetCorePackages.sdk_8_0;

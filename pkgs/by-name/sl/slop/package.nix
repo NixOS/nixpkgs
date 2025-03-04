@@ -12,7 +12,7 @@
   libX11,
   libXext,
   libXrender,
-  icu,
+  icu74,
   libSM,
 }:
 
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     libX11
     libXext
     libXrender
-    icu
+    icu74
     libSM
   ];
 

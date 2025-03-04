@@ -2,7 +2,7 @@
 , version
   # Set this to a lisp binary to use a custom bootstrap lisp compiler for SBCL.
   # Leave as null to use the default.  This is useful for local development of
-  # SBCL, because you can use your existing stock SBCL as a boostrap.  On Hydra
+  # SBCL, because you can use your existing stock SBCL as a bootstrap.  On Hydra
   # of course we can’t do that because SBCL hasn’t been built yet, so we use
   # ECL but that’s much slower.
 , bootstrapLisp ? null
@@ -20,11 +20,11 @@ let
     };
     # By unofficial and very loose convention we keep the latest version of
     # SBCL, and the previous one in case someone quickly needs to roll back.
-    "2.4.11" = {
-      sha256 = "sha256-TwPlhG81g0wQcAu+Iy2kG6S9v4G9zKyx1N4kKXZXpBU=";
-    };
     "2.5.0" = {
       sha256 = "sha256-Lhiv0Ijkot8ht3uuLhcM5XDRHabSdgcpImXxzGqKGbE=";
+    };
+    "2.5.1" = {
+      sha256 = "sha256-QTOzbNFtFNYzlpw3/VHCyJqOpdbhYRVSgZ2R9xshn4s=";
     };
   };
   # Collection of pre-built SBCL binaries for platforms that need them for

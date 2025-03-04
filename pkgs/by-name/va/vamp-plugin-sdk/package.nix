@@ -1,5 +1,5 @@
 # set VAMP_PATH ?
-# plugins availible on sourceforge and http://www.vamp-plugins.org/download.html (various licenses)
+# plugins available on sourceforge and http://www.vamp-plugins.org/download.html (various licenses)
 
 {
   lib,

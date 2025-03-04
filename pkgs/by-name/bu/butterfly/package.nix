@@ -2,21 +2,57 @@
   lib,
   fetchFromGitHub,
   flutter327,
+  runCommand,
+  butterfly,
+  yq,
+  _experimental-update-script-combinators,
+  gitUpdater,
+  pdfium-binaries,
+  stdenv,
+  replaceVars,
 }:
+
 flutter327.buildFlutterApplication rec {
   pname = "butterfly";
-  version = "2.2.3";
+  version = "2.2.4";
 
   src = fetchFromGitHub {
     owner = "LinwoodDev";
     repo = "Butterfly";
     tag = "v${version}";
-    hash = "sha256-sAgCP31Qd9XKTOvVLTazx3fqKF/FAd9WEwfcmgVqD38=";
+    hash = "sha256-lf1CCpLd7eM4iJvTsR2AI6xGCQ2NJ1mlYkR0hW03SRA=";
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
   sourceRoot = "${src.name}/app";
+
+  customSourceBuilders = {
+    # unofficial printing
+    printing =
+      { version, src, ... }:
+      stdenv.mkDerivation rec {
+        pname = "printing";
+        inherit version src;
+        inherit (src) passthru;
+
+        patches = [
+          (replaceVars ./printing.patch {
+            inherit pdfium-binaries;
+          })
+        ];
+
+        dontBuild = true;
+
+        installPhase = ''
+          runHook preInstall
+
+          cp -r . $out
+
+          runHook postInstall
+        '';
+      };
+  };
 
   gitHashes = {
     dart_leap = "sha256-eEyUqdVToybQoDwdmz47H0f3/5zRdJzmPv1d/5mTOgA=";
@@ -31,13 +67,28 @@ flutter327.buildFlutterApplication rec {
     pdf = "sha256-cIBSgePv5LIFRbc7IIx1fSVJceGEmzdZzDkOiD1z92E=";
     pdf_widget_wrapper = "sha256-hXDFdgyu2DvIqwVBvk6TVDW+FdlMGAn5v5JZKQwp8fA=";
     reorderable_grid = "sha256-g30DSPL/gsk0r8c2ecoKU4f1P3BF15zLnBVO6RXvDGQ=";
+    printing = "sha256-0JdMld1TN2EtJVQSuYdSIfi/q96roVUJEAY8dWK9xCM=";
   };
 
   postInstall = ''
     cp -r linux/debian/usr/share $out/share
   '';
 
-  passthru.updateScript = ./update.sh;
+  passthru = {
+    pubspecSource =
+      runCommand "pubspec.lock.json"
+        {
+          buildInputs = [ yq ];
+          inherit (butterfly) src;
+        }
+        ''
+          cat $src/app/pubspec.lock | yq > $out
+        '';
+    updateScript = _experimental-update-script-combinators.sequence [
+      (gitUpdater { rev-prefix = "v"; })
+      (_experimental-update-script-combinators.copyAttrOutputToFile "butterfly.pubspecSource" ./pubspec.lock.json)
+    ];
+  };
 
   meta = {
     description = "Powerful, minimalistic, cross-platform, opensource note-taking app";

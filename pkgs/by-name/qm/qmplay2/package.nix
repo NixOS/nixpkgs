@@ -108,7 +108,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.lgpl3Plus;
     mainProgram = "qmplay2";
     maintainers = with lib.maintainers; [
-      AndersonTorres
       kashw2
     ];
     platforms = lib.platforms.linux;

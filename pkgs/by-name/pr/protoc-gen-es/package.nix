@@ -32,6 +32,15 @@ buildNpmPackage rec {
   # copy npm workspace modules while properly resolving symlinks
   # TODO: workaround can be removed once this is merged: https://github.com/NixOS/nixpkgs/pull/333759
   postInstall = ''
+    rm -rf $out/lib/node_modules/protobuf-es/node_modules/ts4.*
+    cp -rL node_modules/ts4.* $out/lib/node_modules/protobuf-es/node_modules/
+
+    rm -rf $out/lib/node_modules/protobuf-es/node_modules/ts5.*
+    cp -rL node_modules/ts5.* $out/lib/node_modules/protobuf-es/node_modules/
+
+    rm -rf $out/lib/node_modules/protobuf-es/node_modules/upstream-protobuf
+    cp -rL node_modules/upstream-protobuf $out/lib/node_modules/protobuf-es/node_modules/
+
     rm -rf $out/lib/node_modules/protobuf-es/node_modules/@bufbuild
     cp -rL node_modules/@bufbuild $out/lib/node_modules/protobuf-es/node_modules/
   '';

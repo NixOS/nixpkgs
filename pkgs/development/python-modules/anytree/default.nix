@@ -8,7 +8,7 @@
   pytest7CheckHook,
   pythonOlder,
   six,
-  substituteAll,
+  replaceVars,
   withGraphviz ? true,
 }:
 
@@ -27,8 +27,7 @@ buildPythonPackage rec {
   };
 
   patches = lib.optionals withGraphviz [
-    (substituteAll {
-      src = ./graphviz.patch;
+    (replaceVars ./graphviz.patch {
       inherit graphviz;
     })
   ];

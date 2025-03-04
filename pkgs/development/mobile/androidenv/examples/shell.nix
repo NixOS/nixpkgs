@@ -16,7 +16,10 @@
     config.allowUnfree = true;
   },
 
-  config ? pkgs.config
+  config ? pkgs.config,
+  # You probably need to set it to true to express consent.
+  licenseAccepted ?
+    config.android_sdk.accept_license or (builtins.getEnv "NIXPKGS_ACCEPT_ANDROID_SDK_LICENSE" == "1"),
 }:
 
 # Copy this file to your Android project.
@@ -57,9 +60,7 @@ let
 
   # Otherwise, just use the in-tree androidenv:
   androidEnv = pkgs.callPackage ./.. {
-    inherit config pkgs;
-    # You probably need to uncomment below line to express consent.
-    # licenseAccepted = true;
+    inherit config pkgs licenseAccepted;
   };
 
   androidComposition = androidEnv.composeAndroidPackages {
@@ -121,7 +122,7 @@ let
 in
 pkgs.mkShell rec {
   name = "androidenv-demo";
-  packages = [ androidSdk platformTools jdk pkgs.android-studio ];
+  packages = [ androidSdk platformTools jdk ];
 
   LANG = "C.UTF-8";
   LC_ALL = "C.UTF-8";

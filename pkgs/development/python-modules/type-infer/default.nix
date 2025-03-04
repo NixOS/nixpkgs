@@ -28,7 +28,7 @@ let
     ];
   };
 
-  version = "0.0.20";
+  version = "0.0.21";
   tag = "v${version}";
 in
 buildPythonPackage rec {
@@ -42,7 +42,7 @@ buildPythonPackage rec {
     owner = "mindsdb";
     repo = "type_infer";
     inherit tag;
-    hash = "sha256-2Y+NPwUnQMj0oXoCMfUOG40lqduy9GTcqxfyuFDOkHc=";
+    hash = "sha256-Q5f4WihaT88R+x4jMUuRNBvWglkGdS5oi+o9jOk+tSE=";
   };
 
   pythonRelaxDeps = [
@@ -87,5 +87,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/mindsdb/type_infer";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ mbalatsko ];
+    # ModuleNotFoundError: No module named 'imghdr', unrelated
+    broken = true;
   };
 }

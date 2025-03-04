@@ -39,13 +39,13 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "rquickshare" + (app-type-either "" "-legacy");
-  version = "0.11.3";
+  version = "0.11.4";
 
   src = fetchFromGitHub {
     owner = "Martichou";
     repo = "rquickshare";
     tag = "v${version}";
-    hash = "sha256-6gXt1UGcjOFInsCep56s3K5Zk/KIz2ZrFlmrgXP7/e8=";
+    hash = "sha256-Gq78vxM9hJ+dAHM3RAKHtkFIsoV0XQN4vNbOO3amvTs=";
   };
 
   # from https://github.com/NixOS/nixpkgs/blob/04e40bca2a68d7ca85f1c47f00598abb062a8b12/pkgs/by-name/ca/cargo-tauri/test-app.nix#L23-L26
@@ -66,7 +66,7 @@ rustPlatform.buildRustPackage rec {
   cargoRoot = "app/${app-type}/src-tauri";
   buildAndTestSubdir = cargoRoot;
   cargoPatches = [ ./remove-duplicate-versions-of-sys-metrics.patch ];
-  cargoHash = app-type-either "sha256-R1RDBV8lcEuFdkh9vrNxFRSPSYVOWDvafPQAmQiJV2s=" "sha256-tgnSOICA/AFASIIlxnRoSjq5nx30Z7C6293bcvnWl0k=";
+  cargoHash = app-type-either "sha256-wraCzzC7YVCXEXBTd8c1cbtCdBunENpUMQ1vZGwfGMs=" "sha256-TBsHlFwbWWa2LEZdmDyz/9vWiFOXKX39PCsjW6OqEGY=";
 
   nativeBuildInputs = [
     proper-cargo-tauri.hook
@@ -97,17 +97,16 @@ rustPlatform.buildRustPackage rec {
       libsoup_2_4
     ];
 
-  passthru.updateScript =
-    let
+  passthru =
+    # Don't set an update script for the legacy version
+    # so r-ryantm won't create two duplicate PRs
+    lib.optionalAttrs (app-type == "main") {
       updateScript = writeShellScript "update-rquickshare.sh" ''
         ${lib.getExe nix-update} rquickshare
         sed -i 's/version = "0.0.0";/' pkgs/by-name/rq/rquickshare/package.nix
         ${lib.getExe nix-update} rquickshare-legacy
       '';
-    in
-    # Don't set an update script for the legacy version
-    # so r-ryantm won't create two duplicate PRs
-    app-type-either updateScript null;
+    };
 
   meta = {
     description = "Rust implementation of NearbyShare/QuickShare from Android for Linux and macOS";

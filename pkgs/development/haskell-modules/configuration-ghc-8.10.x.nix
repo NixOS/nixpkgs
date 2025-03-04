@@ -133,7 +133,7 @@ self: super: {
   # bundled with GHC < 9.0.
   wai-extra = dontHaddock super.wai-extra;
 
-  # Overly-strict bounds introducted by a revision in version 0.3.2.
+  # Overly-strict bounds introduced by a revision in version 0.3.2.
   text-metrics = doJailbreak super.text-metrics;
 
   # Doesn't build with 9.0, see https://github.com/yi-editor/yi/issues/1125

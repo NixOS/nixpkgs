@@ -89,7 +89,7 @@ patchShebangs() {
         if [[ "$oldPath" == *"/bin/env" ]]; then
             if [[ $arg0 == "-S" ]]; then
                 arg0=${args%% *}
-                args=${args#* }
+                [[ "$args" == *" "* ]] && args=${args#* } || args=
                 newPath="$(PATH="${!pathName}" type -P "env" || true)"
                 args="-S $(PATH="${!pathName}" type -P "$arg0" || true) $args"
 

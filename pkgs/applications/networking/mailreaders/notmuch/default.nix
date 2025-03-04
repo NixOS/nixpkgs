@@ -1,4 +1,5 @@
 {
+  fetchpatch,
   fetchurl,
   lib,
   stdenv,
@@ -66,6 +67,14 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optional withRuby ruby
     ++ lib.optional withSfsexp sfsexp;
+
+  patches = [
+    (fetchpatch {
+      name = "add-workaround-for-Emacs-30-pp-changes.patch";
+      url = "https://git.notmuchmail.org/git?p=notmuch;a=patch;h=e3d4721b1ba4836c7646e057b50123fe994652eb";
+      hash = "sha256-phfNSOlTajTmaf+DjtdmBAWSm+2tUbrQEChInUlwn5k=";
+    })
+  ];
 
   postPatch =
     ''

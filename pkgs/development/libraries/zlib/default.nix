@@ -4,7 +4,7 @@
   fetchurl,
   shared ? !stdenv.hostPlatform.isStatic,
   static ? true,
-  # If true, a separate .static ouput is created and the .a is moved there.
+  # If true, a separate .static output is created and the .a is moved there.
   # In this case `pkg-config` auto detection does not currently work if the
   # .static output is given as `buildInputs` to another package (#66461), because
   # the `.pc` file lists only the main output's lib dir.
@@ -114,7 +114,7 @@ stdenv.mkDerivation (finalAttrs: {
       NIX_CFLAGS_COMPILE = "-static-libgcc";
     }
     // lib.optionalAttrs (stdenv.hostPlatform.linker == "lld") {
-      # lld 16 enables --no-undefined-version by defualt
+      # lld 16 enables --no-undefined-version by default
       # This makes configure think it can't build dynamic libraries
       # this may be removed when a version is packaged with https://github.com/madler/zlib/issues/960 fixed
       NIX_LDFLAGS = "--undefined-version";

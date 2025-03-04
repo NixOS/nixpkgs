@@ -14,7 +14,7 @@ end
 
 # Please see https://docs.gitlab.com/ee/development/feature_categorization/#gemfile
 ignore_feature_category = Module.new do
-  def gem(*arguments, feature_category: nil, **keyword_arguments) # rubocop:disable Lint/UnusedMethodArgument
+  def gem(*arguments, feature_category: nil, **keyword_arguments) # rubocop:disable Lint/UnusedMethodArgument -- Ignoring feature_category intentionally
     super(*arguments, **keyword_arguments)
   end
 end
@@ -36,6 +36,10 @@ else
 end
 
 gem 'activerecord-gitlab', path: 'gems/activerecord-gitlab', feature_category: :shared
+# This can be dropped after upgrading to Rails 7.2: https://github.com/rails/rails/pull/49674
+gem 'mutex_m', '~> 0.3', feature_category: :shared
+# Need by Rails
+gem 'drb', '~> 2.2', feature_category: :shared
 
 gem 'bootsnap', '~> 1.18.3', require: false, feature_category: :shared
 
@@ -44,7 +48,6 @@ gem 'bootsnap', '~> 1.18.3', require: false, feature_category: :shared
 gem 'ffi', '~> 1.17', force_ruby_platform: true, feature_category: :shared
 
 gem 'openssl', '~> 3.0', feature_category: :shared
-gem 'ipaddr', '~> 1.2.5', feature_category: :shared
 
 gem 'gitlab-safe_request_store', path: 'gems/gitlab-safe_request_store', feature_category: :shared
 
@@ -55,7 +58,7 @@ end
 
 gem 'gitlab-backup-cli', path: 'gems/gitlab-backup-cli', require: 'gitlab/backup/cli', feature_category: :backup_restore
 
-gem 'gitlab-secret_detection', path: 'gems/gitlab-secret_detection', feature_category: :secret_detection
+gem 'gitlab-secret_detection', '< 1.0', feature_category: :secret_detection
 
 # Responders respond_to and respond_with
 gem 'responders', '~> 3.0', feature_category: :shared
@@ -67,8 +70,6 @@ gem 'view_component', '~> 3.21.0', feature_category: :shared
 
 # Supported DBs
 gem 'pg', '~> 1.5.6', feature_category: :database
-
-gem 'neighbor', '~> 0.3.2', feature_category: :duo_chat
 
 gem 'rugged', '~> 1.6', feature_category: :gitaly
 
@@ -93,7 +94,7 @@ gem 'bcrypt', '~> 3.1', '>= 3.1.14', feature_category: :system_access
 gem 'doorkeeper', '~> 5.8', '>= 5.8.1', feature_category: :system_access
 gem 'doorkeeper-openid_connect', '~> 1.8.10', feature_category: :system_access
 gem 'doorkeeper-device_authorization_grant', '~> 1.0.0', feature_category: :system_access
-gem 'rexml', '~> 3.3.2', feature_category: :shared
+gem 'rexml', '~> 3.4.0', feature_category: :shared
 gem 'ruby-saml', '~> 1.17.0', feature_category: :system_access
 gem 'omniauth', '~> 2.1.0', feature_category: :system_access
 gem 'omniauth-auth0', '~> 3.1', feature_category: :system_access
@@ -179,7 +180,7 @@ gem 'gitlab-duo-workflow-service-client', '~> 0.1',
   feature_category: :duo_workflow
 
 # Generate Fake data
-gem 'ffaker', '~> 2.23', feature_category: :shared
+gem 'ffaker', '~> 2.24', feature_category: :shared
 
 gem 'hashie', '~> 5.0.0', feature_category: :shared
 
@@ -220,7 +221,7 @@ gem 'google-apis-core', '~> 0.11.0', '>= 0.11.1', feature_category: :shared
 gem 'google-apis-compute_v1', '~> 0.57.0', feature_category: :shared
 gem 'google-apis-container_v1', '~> 0.43.0', feature_category: :shared
 gem 'google-apis-container_v1beta1', '~> 0.43.0', feature_category: :shared
-gem 'google-apis-cloudbilling_v1', '~> 0.21.0', feature_category: :shared
+gem 'google-apis-cloudbilling_v1', '~> 0.22.0', feature_category: :shared
 gem 'google-apis-cloudresourcemanager_v1', '~> 0.31.0', feature_category: :shared
 gem 'google-apis-iam_v1', '~> 0.36.0', feature_category: :shared
 gem 'google-apis-serviceusage_v1', '~> 0.28.0', feature_category: :shared
@@ -238,9 +239,9 @@ gem 'seed-fu', '~> 2.3.7', feature_category: :shared
 gem 'elasticsearch-model', '~> 7.2', feature_category: :global_search
 gem 'elasticsearch-rails', '~> 7.2', require: 'elasticsearch/rails/instrumentation', feature_category: :global_search
 gem 'elasticsearch-api', '7.17.11', feature_category: :global_search
-gem 'aws-sdk-core', '~> 3.214.0', feature_category: :global_search
+gem 'aws-sdk-core', '~> 3.215.0', feature_category: :global_search
 gem 'aws-sdk-cloudformation', '~> 1', feature_category: :global_search
-gem 'aws-sdk-s3', '~> 1.176.0', feature_category: :global_search
+gem 'aws-sdk-s3', '~> 1.177.0', feature_category: :global_search
 gem 'faraday-typhoeus', '~> 1.1', feature_category: :global_search
 gem 'faraday_middleware-aws-sigv4', '~> 1.0.1', feature_category: :global_search
 # Used with Elasticsearch to support http keep-alive connections
@@ -254,7 +255,7 @@ gem 'html-pipeline', '~> 2.14.3', feature_category: :markdown
 gem 'deckar01-task_list', '2.3.4', feature_category: :markdown
 gem 'gitlab-markup', '~> 1.9.0', require: 'github/markup', feature_category: :markdown
 gem 'commonmarker', '~> 0.23.10', feature_category: :markdown
-gem 'kramdown', '~> 2.4.0', feature_category: :markdown
+gem 'kramdown', '~> 2.5.0', feature_category: :markdown
 gem 'RedCloth', '~> 4.3.3', feature_category: :markdown
 gem 'org-ruby', '~> 0.9.12', feature_category: :markdown
 gem 'creole', '~> 0.5.0', feature_category: :markdown
@@ -263,9 +264,9 @@ gem 'asciidoctor', '~> 2.0.18', feature_category: :markdown
 gem 'asciidoctor-include-ext', '~> 0.4.0', require: false, feature_category: :markdown
 gem 'asciidoctor-plantuml', '~> 0.0.16', feature_category: :markdown
 gem 'asciidoctor-kroki', '~> 0.10.0', require: false, feature_category: :markdown
-gem 'rouge', '~> 4.4.0', feature_category: :shared
+gem 'rouge', '~> 4.5.0', feature_category: :shared
 gem 'truncato', '~> 0.7.12', feature_category: :team_planning
-gem 'nokogiri', '~> 1.16', feature_category: :shared
+gem 'nokogiri', '~> 1.18', feature_category: :shared
 gem 'gitlab-glfm-markdown', '~> 0.0.21', feature_category: :markdown
 gem 'tanuki_emoji', '~> 0.13', feature_category: :markdown
 gem 'unicode-emoji', '~> 4.0', feature_category: :markdown
@@ -311,11 +312,11 @@ gem 'rainbow', '~> 3.0', feature_category: :shared
 gem 'ruby-progressbar', '~> 1.10', feature_category: :shared
 
 # Linear-time regex library for untrusted regular expressions
-gem 're2', '2.7.0', feature_category: :shared
+gem 're2', '~> 2.15', feature_category: :shared
 
 # Misc
 
-gem 'semver_dialects', '~> 3.0', feature_category: :software_composition_analysis
+gem 'semver_dialects', '~> 3.6', feature_category: :software_composition_analysis
 gem 'version_sorter', '~> 2.3', feature_category: :shared
 gem 'csv_builder', path: 'gems/csv_builder', feature_category: :shared
 
@@ -326,7 +327,6 @@ gem 'js_regex', '~> 3.8', feature_category: :shared
 gem 'device_detector', feature_category: :shared
 
 # Redis
-gem 'redis-namespace', '~> 1.11.0', feature_category: :redis
 gem 'redis', '~> 5.3.0', feature_category: :redis
 gem 'redis-clustering', '~> 5.3.0', feature_category: :redis
 gem 'connection_pool', '~> 2.4', feature_category: :shared
@@ -359,7 +359,7 @@ gem 'sanitize', '~> 6.0.2', feature_category: :shared
 gem 'babosa', '~> 2.0', feature_category: :shared
 
 # Sanitizes SVG input
-gem 'loofah', '~> 2.22.0', feature_category: :shared
+gem 'loofah', '~> 2.24.0', feature_category: :shared
 
 # Used to provide license templates
 gem 'licensee', '~> 9.16', feature_category: :shared
@@ -411,7 +411,7 @@ gem 'thrift', '>= 0.16.0', feature_category: :shared
 # I18n
 gem 'rails-i18n', '~> 7.0', '>= 7.0.9', feature_category: :internationalization
 gem 'gettext_i18n_rails', '~> 1.13.0', feature_category: :internationalization
-gem 'gettext', '~> 3.4', '>= 3.4.9',
+gem 'gettext', '~> 3.5', '>= 3.5.1',
   require: false,
   group: [:development, :test],
   feature_category: :internationalization
@@ -432,11 +432,11 @@ gem 'snowplow-tracker', '~> 0.8.0', feature_category: :product_analytics
 
 # Metrics
 gem 'webrick', '~> 1.8.1', require: false, feature_category: :shared
-gem 'prometheus-client-mmap', '1.1.2', require: 'prometheus/client', feature_category: :shared
+gem 'prometheus-client-mmap', '~> 1.2.9', require: 'prometheus/client', feature_category: :shared
 
 # Event-driven reactor for Ruby
 # Required manually in config/initializers/require_async_gem
-gem 'async', '~> 2.12.1', require: false, feature_category: :shared
+gem 'async', '~> 2.22.0', require: false, feature_category: :shared
 
 # Security report schemas used to validate CI job artifacts of security jobs
 gem 'gitlab-security_report_schemas', '0.1.2.min15.0.0.max15.2.1', feature_category: :vulnerability_management
@@ -488,7 +488,7 @@ group :development do
 
   gem 'listen', '~> 3.7', feature_category: :shared
 
-  gem 'ruby-lsp', "~> 0.22.0", require: false, feature_category: :tooling
+  gem 'ruby-lsp', "~> 0.23.0", require: false, feature_category: :tooling
 
   gem 'ruby-lsp-rails', "~> 0.3.6", feature_category: :tooling
 
@@ -504,8 +504,8 @@ end
 
 group :development, :test do
   gem 'deprecation_toolkit', '~> 1.5.1', require: false, feature_category: :shared
-  gem 'bullet', '~> 7.1.2', feature_category: :shared
-  gem 'parser', '= 3.3.6.0', feature_category: :shared
+  gem 'bullet', '~> 7.2.0', feature_category: :shared
+  gem 'parser', '= 3.3.7.1', feature_category: :shared
   gem 'pry-byebug', feature_category: :shared
   gem 'pry-rails', '~> 0.3.9', feature_category: :shared
   gem 'pry-shell', '~> 0.6.4', feature_category: :shared
@@ -522,13 +522,11 @@ group :development, :test do
   gem 'spring', '~> 4.1.0', feature_category: :shared
   gem 'spring-commands-rspec', '~> 1.0.4', feature_category: :shared
 
-  gem 'gitlab-styles', '~> 13.0.2', feature_category: :tooling
+  gem 'gitlab-styles', '~> 13.1.0', feature_category: :tooling, require: false
   gem 'haml_lint', '~> 0.58', feature_category: :tooling
 
-  gem 'bundler-audit', '~> 0.9.1', require: false, feature_category: :shared
-
   # Benchmarking & profiling
-  gem 'benchmark-ips', '~> 2.11.0', require: false, feature_category: :shared
+  gem 'benchmark-ips', '~> 2.14.0', require: false, feature_category: :shared
   gem 'benchmark-memory', '~> 0.1', require: false, feature_category: :shared
 
   # Profiling data from CI/CD pipelines
@@ -579,7 +577,6 @@ group :development, :test, :monorepo do
 end
 
 group :test do
-  gem 'fuubar', '~> 2.2.0', feature_category: :tooling
   gem 'rspec-retry', '~> 0.6.2', feature_category: :tooling
   gem 'rspec_profiling', '~> 0.0.9', feature_category: :tooling
   gem 'rspec-benchmark', '~> 0.6.0', feature_category: :tooling
@@ -593,8 +590,8 @@ group :test do
   gem 'graphlyte', '~> 1.0.0', feature_category: :shared
 
   gem 'shoulda-matchers', '~> 5.1.0', require: false, feature_category: :shared
-  gem 'email_spec', '~> 2.2.0', feature_category: :shared
-  gem 'webmock', '~> 3.24.0', feature_category: :shared
+  gem 'email_spec', '~> 2.3.0', feature_category: :shared
+  gem 'webmock', '~> 3.25.0', feature_category: :shared
   gem 'rails-controller-testing', feature_category: :shared
   gem 'concurrent-ruby', '~> 1.1', feature_category: :shared
   gem 'test-prof', '~> 1.4.0', feature_category: :tooling
@@ -642,10 +639,10 @@ gem 'ssh_data', '~> 1.3', feature_category: :shared
 gem 'spamcheck', '~> 1.3.0', feature_category: :insider_threat
 
 # Gitaly GRPC protocol definitions
-gem 'gitaly', '~> 17.7.0', feature_category: :gitaly
+gem 'gitaly', '~> 17.8.0', feature_category: :gitaly
 
 # KAS GRPC protocol definitions
-gem 'gitlab-kas-grpc', '~> 17.7.0', feature_category: :deployment_management
+gem 'gitlab-kas-grpc', '~> 17.9.0.pre.rc2', feature_category: :deployment_management
 
 # Lock the version before issues below are resolved:
 # https://gitlab.com/gitlab-org/gitlab/-/issues/473169#note_2028352939
@@ -669,7 +666,7 @@ gem 'lograge', '~> 0.5', feature_category: :shared
 gem 'grape_logging', '~> 1.8', '>= 1.8.4', feature_category: :api
 
 # DNS Lookup
-gem 'gitlab-net-dns', '~> 0.9.2', feature_category: :shared
+gem 'gitlab-net-dns', '~> 0.10.0', feature_category: :shared
 
 # Countries list
 gem 'countries', '~> 4.0.0', feature_category: :shared
@@ -722,7 +719,7 @@ gem 'ed25519', '~> 1.3.0', feature_category: :shared
 gem 'error_tracking_open_api', path: 'gems/error_tracking_open_api', feature_category: :shared
 
 # Vulnerability advisories
-gem 'cvss-suite', '~> 3.0.1', require: 'cvss_suite', feature_category: :software_composition_analysis
+gem 'cvss-suite', '~> 3.3.0', require: 'cvss_suite', feature_category: :software_composition_analysis
 
 # Work with RPM packages
 gem 'arr-pm', '~> 0.0.12', feature_category: :package_registry
@@ -740,6 +737,7 @@ gem 'telesignenterprise', '~> 2.2', feature_category: :insider_threat
 # BufferedIO patch
 # Updating this version will require updating scripts/allowed_warnings.txt
 gem 'net-protocol', '~> 0.1.3', feature_category: :shared
+gem "nkf", "~> 0.2.0", feature_category: :shared
 
 # This is locked to 0.6.0 because we patch Net::HTTP#connect in
 # gems/gitlab-http/lib/net_http/connect_patch.rb.
@@ -754,10 +752,8 @@ gem 'duo_api', '~> 1.3', feature_category: :system_access
 
 gem 'gitlab-sdk', '~> 0.3.0', feature_category: :application_instrumentation
 
-gem 'openbao_client', path: 'gems/openbao_client', feature_category: :artifact_security
-
 gem 'paper_trail', '~> 15.0', feature_category: :shared
 
 gem "i18n_data", "~> 0.13.1", feature_category: :system_access
 
-gem "gitlab-cloud-connector", "~> 0.2.5", require: 'cloud_connector', feature_category: :cloud_connector
+gem "gitlab-cloud-connector", "~> 1.0.0", require: 'gitlab/cloud_connector', feature_category: :cloud_connector

@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "asdf-astropy";
-  version = "0.7.0";
+  version = "0.7.1";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -28,15 +28,15 @@ buildPythonPackage rec {
     owner = "astropy";
     repo = "asdf-astropy";
     tag = version;
-    hash = "sha256-xtDpKlAExMTYNopS9cAhLU2ZnHhtHHaV3KjWCq0yapE=";
+    hash = "sha256-hP77qhNTE89cuz9Z8vWlWYo2En0SV4uoHaBnxQDNEvI=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     asdf
     asdf-coordinates-schemas
     asdf-standard
@@ -61,7 +61,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Extension library for ASDF to provide support for Astropy";
     homepage = "https://github.com/astropy/asdf-astropy";
-    changelog = "https://github.com/astropy/asdf-astropy/blob/${version}/CHANGES.rst";
+    changelog = "https://github.com/astropy/asdf-astropy/blob/${src.tag}/CHANGES.rst";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fab ];
   };

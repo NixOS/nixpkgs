@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   pname = "socket_wrapper";
-  version = "1.4.3";
+  version = "1.4.4";
 
   src = fetchurl {
     url = "mirror://samba/cwrap/socket_wrapper-${version}.tar.gz";
-    sha256 = "sha256-CWz7TqucebUtss51JsVeUI8GZb/qxsS8ZqPIMh2HU1g=";
+    sha256 = "sha256-KJAALRQ3tvt//cZ8NzTxPQ4r99Y7sJfWA6n24uBdw8g=";
   };
 
   nativeBuildInputs = [

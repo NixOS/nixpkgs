@@ -9,17 +9,17 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "argon";
-  version = "2.0.22";
+  version = "2.0.23";
 
   src = fetchFromGitHub {
     owner = "argon-rbx";
     repo = "argon";
     tag = version;
-    hash = "sha256-Nno6uZIlD4tA3opzhzO4ylPPGq3RDDrhAIQnt/rTXdA=";
+    hash = "sha256-Pj6czSNFaMtu5fZV51lFDYEiWlMcj1peu7i8JUnFSXk=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-W3Z/WVGP+RBbnqgcgIcrfkmgfmdKdH8kG/LBfvtArqo=";
+  cargoHash = "sha256-Lc9k6WDp7ZU4lBGbXJJATcH/+SQkbutMTgzmxZh2JCk=";
 
   nativeBuildInputs = [ pkg-config ];
 

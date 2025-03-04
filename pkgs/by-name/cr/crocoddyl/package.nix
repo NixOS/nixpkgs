@@ -59,11 +59,17 @@ stdenv.mkDerivation (finalAttrs: {
       python3Packages.scipy
     ];
 
-  cmakeFlags = [
-    (lib.cmakeBool "INSTALL_DOCUMENTATION" true)
-    (lib.cmakeBool "BUILD_EXAMPLES" pythonSupport)
-    (lib.cmakeBool "BUILD_PYTHON_INTERFACE" pythonSupport)
-  ];
+  cmakeFlags =
+    [
+      (lib.cmakeBool "INSTALL_DOCUMENTATION" true)
+      (lib.cmakeBool "BUILD_EXAMPLES" pythonSupport)
+      (lib.cmakeBool "BUILD_PYTHON_INTERFACE" pythonSupport)
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # ref. https://github.com/stack-of-tasks/pinocchio/issues/2563
+      # remove this for crocoddyl >= 3.0.0
+      (lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" "--exclude-regex;test_pybinds_*")
+    ];
 
   prePatch = ''
     substituteInPlace \

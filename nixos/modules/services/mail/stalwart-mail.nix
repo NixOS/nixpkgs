@@ -53,6 +53,21 @@ in
         Data directory for stalwart
       '';
     };
+
+    credentials = lib.mkOption {
+      description = ''
+        Credentials envs used to configure Stalwart-Mail secrets.
+        These secrets can be accessed in configuration values with
+        the macros such as
+        `%{file:/run/credentials/stalwart-mail.service/VAR_NAME}%`.
+      '';
+      type = lib.types.attrsOf lib.types.str;
+      default = { };
+      example = {
+        user_admin_password = "/run/keys/stalwart_admin_password";
+      };
+    };
+
   };
 
   config = lib.mkIf cfg.enable {
@@ -149,6 +164,7 @@ in
             ""
             "${cfg.package}/bin/stalwart-mail --config=${configFile}"
           ];
+          LoadCredential = lib.mapAttrsToList (key: value: "${key}:${value}") cfg.credentials;
 
           StandardOutput = "journal";
           StandardError = "journal";

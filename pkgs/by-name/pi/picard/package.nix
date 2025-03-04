@@ -21,14 +21,14 @@ in
 pythonPackages.buildPythonApplication rec {
   pname = "picard";
   # nix-update --commit picard --version-regex 'release-(.*)'
-  version = "2.13.1";
+  version = "2.13.3";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "metabrainz";
     repo = "picard";
     tag = "release-${version}";
-    hash = "sha256-0kTz8T8HvZmWOfuTlqP/0GPiXDnfvtwWaXtqfG3chWA=";
+    hash = "sha256-Q0W5Q1+PbN+yneh98jx0/UNHVfD6okX92hxNzCE+Ibc=";
   };
 
   nativeBuildInputs = [

@@ -85,7 +85,18 @@ in
       default = "[::1]";
       description = ''
         Address the server will listen on.
+        Ignored if `unixSocket` is set.
       '';
+    };
+
+    unixSocket = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
+      default = null;
+      description = ''
+        Enable Unix Socket for the server to listen on.
+        `listenAddress` and `port` will be ignored.
+      '';
+      example = "/run/netbox/netbox.sock";
     };
 
     package = lib.mkOption {
@@ -114,6 +125,7 @@ in
       default = 8001;
       description = ''
         Port the server will listen on.
+        Ignored if `unixSocket` is set.
       '';
     };
 
@@ -345,7 +357,12 @@ in
           serviceConfig = defaultServiceConfig // {
             ExecStart = ''
               ${pkg.gunicorn}/bin/gunicorn netbox.wsgi \
-                --bind ${cfg.listenAddress}:${toString cfg.port} \
+                --bind ${
+                  if (cfg.unixSocket != null) then
+                    "unix:${cfg.unixSocket}"
+                  else
+                    "${cfg.listenAddress}:${toString cfg.port}"
+                } \
                 --pythonpath ${pkg}/opt/netbox/netbox
             '';
             PrivateTmp = true;

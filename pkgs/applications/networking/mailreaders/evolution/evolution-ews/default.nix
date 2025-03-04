@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    # evolution-ews contains .so files loaded by evolution-data-server refering
+    # evolution-ews contains .so files loaded by evolution-data-server referring
     # schemas from evolution. evolution-data-server is not wrapped with
     # evolution's schemas because it would be a circular dependency with
     # evolution.

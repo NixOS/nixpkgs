@@ -23,7 +23,7 @@ buildPythonPackage rec {
   '';
 
   patches = [
-    # fix pyasn1 0.5.0 compability
+    # fix pyasn1 0.5.0 compatibility
     # https://github.com/cannatag/ldap3/pull/983
     (fetchpatch {
       url = "https://github.com/cannatag/ldap3/commit/ca689f4893b944806f90e9d3be2a746ee3c502e4.patch";

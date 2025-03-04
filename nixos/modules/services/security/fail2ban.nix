@@ -91,7 +91,7 @@ in
         description = ''
           Whether to enable the fail2ban service.
 
-          See the documentation of {option}`services.fail2ban.jails`
+          See the documentation of [](#opt-services.fail2ban.jails)
           for what jails are enabled by default.
         '';
       };
@@ -326,7 +326,7 @@ in
 
           NixOS comes with a default `sshd` jail;
           for it to work well,
-          {option}`services.openssh.logLevel` should be set to
+          [](#opt-services.openssh.settings.LogLevel) should be set to
           `"VERBOSE"` or higher so that fail2ban
           can observe failed login attempts.
           This module sets it to `"VERBOSE"` if

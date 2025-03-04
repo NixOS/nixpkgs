@@ -1,48 +1,45 @@
 {
   lib,
   stdenv,
-  anytree,
   buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
   setuptools,
+
+  # dependencies
+  anytree,
   cached-property,
   cgen,
   click,
   codepy,
   distributed,
-  fetchFromGitHub,
-  gcc,
   llvmPackages,
-  matplotlib,
   multidict,
   nbval,
   psutil,
   py-cpuinfo,
-  pytest-xdist,
-  pytestCheckHook,
-  pythonOlder,
   scipy,
   sympy,
+
+  # tests
+  gcc,
+  matplotlib,
+  pytest-xdist,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "devito";
-  version = "4.8.11";
+  version = "4.8.12";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "devitocodes";
     repo = "devito";
     tag = "v${version}";
-    hash = "sha256-c8/b2dRwfH4naSVRaRon6/mBDva7RSDmi/TJUJp26g0=";
+    hash = "sha256-Eqyq96mVB5ZhPaLASesWhzjjHcXz/tAIOPP//8yGoBM=";
   };
-
-  # packaging.metadata.InvalidMetadata: 'python_version_3.8_' is invalid for 'provides-extra'
-  postPatch = ''
-    substituteInPlace requirements-testing.txt \
-      --replace-fail 'pooch; python_version >= "3.8"' "pooch"
-  '';
 
   pythonRemoveDeps = [ "pip" ];
 
@@ -99,6 +96,10 @@ buildPythonPackage rec {
       "test_stability_mpi"
       "test_subdomainset_mpi"
       "test_subdomains_mpi"
+
+      # Download dataset from the internet
+      "test_gs_2d_float"
+      "test_gs_2d_int"
     ]
     ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
       # FAILED tests/test_unexpansion.py::Test2Pass::test_v0 - assert False
@@ -115,6 +116,10 @@ buildPythonPackage rec {
       # Numerical tests
       "test_lm_fb"
       "test_lm_ds"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
+      # Numerical error
+      "test_pow_precision"
     ];
 
   disabledTestPaths =

@@ -17,7 +17,7 @@ index 2c1289a..8128362 100644
      download_project(PROJ cudd
 -            URL https://sourceforge.net/projects/cudd-mirror/files/cudd-3.0.0.tar.gz/download
 -            URL_MD5 4fdafe4924b81648b908881c81fe6c30
-+            SOURCE_DIR @cudd.src@
++            SOURCE_DIR @cudd@
              )
  
      if(NOT EXISTS ${cudd_SOURCE_DIR}/Makefile)

@@ -42,10 +42,7 @@ rustPlatform.buildRustPackage rec {
     description = "Check the health of your Nix setup";
     homepage = "https://github.com/juspay/nix-health";
     license = licenses.asl20;
-    maintainers = with maintainers; [
-      srid
-      shivaraj-bh
-    ];
+    maintainers = with maintainers; [ shivaraj-bh ];
     mainProgram = "nix-health";
   };
 }

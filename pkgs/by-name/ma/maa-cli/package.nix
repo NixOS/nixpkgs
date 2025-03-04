@@ -47,7 +47,7 @@ rustPlatform.buildRustPackage rec {
   useFetchCargoVendor = true;
   cargoHash = "sha256-FjPvjlAq3Xj2WTRvzvhZ87CaUjhJf9R1VDUs+XQchtU=";
 
-  # maa-cli would only seach libMaaCore.so and resources in itself's path
+  # maa-cli would only search libMaaCore.so and resources in itself's path
   # https://github.com/MaaAssistantArknights/maa-cli/issues/67
   postInstall =
     ''

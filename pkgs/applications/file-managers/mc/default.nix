@@ -27,11 +27,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mc";
-  version = "4.8.32";
+  version = "4.8.33";
 
   src = fetchurl {
     url = "https://www.midnight-commander.org/downloads/${pname}-${version}.tar.xz";
-    hash = "sha256-TdyD0e3pryNjs+q5h/VLh89mGTJBEM4tOg5wlE0TWf4=";
+    hash = "sha256-yuFJ1C+ETlGF2MgdfbOROo+iFMZfhSIAqdiWtGivFkw=";
   };
 
   nativeBuildInputs =

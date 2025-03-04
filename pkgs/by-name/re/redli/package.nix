@@ -1,27 +1,27 @@
 {
-  buildGoModule,
-  fetchFromGitHub,
   lib,
+  fetchFromGitHub,
+  buildGo124Module,
 }:
 
-buildGoModule rec {
+buildGo124Module rec {
   pname = "redli";
-  version = "0.14.0";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "IBM-Cloud";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-BbhjelDY8z4ME2zzataMfDGyice0XZSb1r3wCLxspks=";
+    repo = "redli";
+    tag = "v${version}";
+    hash = "sha256-/D+kE45PN0rWYvBBm4oxjPWgS8kN/LNf76OTC5rBt1g=";
   };
 
-  vendorHash = "sha256-6zCkor/fQXKw2JxOKyVjsdsSI6BT7beAs4P0AlSXupE=";
+  vendorHash = "sha256-30a/cZNkXsR0+fv74mfFZnvsylqJDRU72t/cwJur1dU=";
 
-  meta = with lib; {
+  meta = {
     description = "Humane alternative to the Redis-cli and TLS";
     homepage = "https://github.com/IBM-Cloud/redli";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ tchekda ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ tchekda ];
     mainProgram = "redli";
   };
 }

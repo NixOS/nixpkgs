@@ -12,12 +12,12 @@
 let
   # finalAttrs when 🥺 (buildGoModule does not support them)
   # https://github.com/NixOS/nixpkgs/issues/273815
-  version = "1.8.4";
+  version = "1.9.1";
   src = fetchFromGitHub {
     owner = "thomiceli";
     repo = "opengist";
     tag = "v${version}";
-    hash = "sha256-vpl3ztLHeVZndAwDgobfiI+3Xu3CFU38qgXy83p06As=";
+    hash = "sha256-Zjn38OGnDtgD2OfIhgUxWo0Cx+ZmNv6UjJanASbjiYU=";
   };
 
   frontend = buildNpmPackage {
@@ -40,13 +40,13 @@ let
       cp -R public $out
     '';
 
-    npmDepsHash = "sha256-l09TPGBGhWcsl3x14ovilDd1zZWv4XzFCAmAfapKtAE=";
+    npmDepsHash = "sha256-Uh+oXd//G/lPAMXRxijjEOpQNmeXK/XCIU7DJN3ujaY=";
   };
 in
 buildGoModule {
   pname = "opengist";
   inherit version src;
-  vendorHash = "sha256-mLFjRL4spAWuPLVOtt88KH+p2g9lGCYzaHokVxdrLOw=";
+  vendorHash = "sha256-aqfr3yGyTXDtZDU8d1lbWWvFfY4fo6/PsSDwpiDtM90=";
   tags = [ "fs_embed" ];
   ldflags = [
     "-s"

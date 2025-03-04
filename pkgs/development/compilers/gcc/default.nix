@@ -164,7 +164,7 @@ assert stdenv.buildPlatform.isDarwin -> gnused != null;
 assert langGo -> langCC;
 assert langAda -> gnat-bootstrap != null;
 
-# TODO: fixup D bootstapping, probably by using gdc11 (and maybe other changes).
+# TODO: fixup D bootstrapping, probably by using gdc11 (and maybe other changes).
 #   error: GDC is required to build d
 assert atLeast12 -> !langD;
 
@@ -319,7 +319,7 @@ pipe ((callFile ./common/builder.nix {}) ({
     ${if hostPlatform.system == "x86_64-solaris" then "CC" else null} = "gcc -m64";
 
     # Setting $CPATH and $LIBRARY_PATH to make sure both `gcc' and `xgcc' find the
-    # library headers and binaries, regarless of the language being compiled.
+    # library headers and binaries, regardless of the language being compiled.
     #
     # The LTO code doesn't find zlib, so we just add it to $CPATH and
     # $LIBRARY_PATH in this case.

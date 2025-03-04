@@ -2,29 +2,34 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  jinja2,
+
+  # build-system
+  poetry-core,
+
+  # dependencies
   markdown-it-py,
   platformdirs,
-  poetry-core,
+  rich,
+  typing-extensions,
+
+  # optional-dependencies
+  tree-sitter,
+  tree-sitter-languages,
+
+  # tests
+  jinja2,
   pytest-aiohttp,
   pytest-xdist,
   pytestCheckHook,
-  pythonAtLeast,
-  pythonOlder,
-  rich,
   syrupy,
   time-machine,
-  tree-sitter,
-  tree-sitter-languages,
-  typing-extensions,
+  pythonAtLeast,
 }:
 
 buildPythonPackage rec {
   pname = "textual";
   version = "1.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Textualize";
@@ -37,8 +42,8 @@ buildPythonPackage rec {
 
   dependencies =
     [
-      platformdirs
       markdown-it-py
+      platformdirs
       rich
       typing-extensions
     ]
@@ -64,6 +69,10 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # Snapshot tests require syrupy<4
     "tests/snapshot_tests/test_snapshots.py"
+
+    # Flaky: https://github.com/Textualize/textual/issues/5511
+    # RuntimeError: There is no current event loop in thread 'MainThread'.
+    "tests/test_focus.py"
   ];
 
   disabledTests =
@@ -93,11 +102,11 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "TUI framework for Python inspired by modern web development";
     homepage = "https://github.com/Textualize/textual";
     changelog = "https://github.com/Textualize/textual/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = [ ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ gepbird ];
   };
 }

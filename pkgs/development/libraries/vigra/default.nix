@@ -28,6 +28,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-ZmHj1BSyoMBCuxI5hrRiBEb5pDUsGzis+T5FSX27UN8=";
   };
 
+  patches = [
+    # Pathes to fix compiling on LLVM 19 from https://github.com/ukoethe/vigra/pull/592
+    ./fix-llvm-19-1.patch
+    ./fix-llvm-19-2.patch
+  ];
+
   nativeBuildInputs = [ cmake ];
   buildInputs = [
     boost

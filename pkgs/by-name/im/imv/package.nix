@@ -9,7 +9,7 @@
   meson,
   ninja,
   pkg-config,
-  icu,
+  icu75,
   pango,
   inih,
   withWindowSystem ? null,
@@ -116,7 +116,7 @@ stdenv.mkDerivation rec {
   buildInputs =
     [
       cmocka
-      icu
+      icu75
       libxkbcommon
       pango
       inih

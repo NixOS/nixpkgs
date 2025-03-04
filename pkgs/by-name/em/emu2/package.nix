@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/dmsc/emu2/";
     description = "Simple text-mode x86 + DOS emulator";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [ ];
     license = licenses.gpl2Plus;
     mainProgram = "emu2";
   };

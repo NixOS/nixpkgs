@@ -4,15 +4,18 @@
   fetchFromSourcehut,
   nix-update-script,
 }:
+let
+  version = "3.0.0";
+in
 vimUtils.buildVimPlugin {
   pname = "lsp_lines.nvim";
-  version = "3.0.0";
+  inherit version;
 
   src = fetchFromSourcehut {
     owner = "~whynothugo";
     repo = "lsp_lines.nvim";
-    rev = "a92c755f182b89ea91bd8a6a2227208026f27b4d";
-    hash = "sha256-jHiIZemneQACTDYZXBJqX2/PRTBoxq403ILvt1Ej1ZM=";
+    rev = "v${version}";
+    hash = "sha256-QsvmPOer7JgO7Y+N/iaNJD7Kmy69gnlV4CeyaQesNvA=";
   };
 
   passthru.updateScript = nix-update-script { };

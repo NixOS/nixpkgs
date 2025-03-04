@@ -55,7 +55,7 @@ buildPythonPackage rec {
   patches = [
     # fix segfault when running tests due to missing default Metal devices
     (fetchpatch2 {
-      url = "https://github.com/ggerganov/llama.cpp/commit/acd38efee316f3a5ed2e6afcbc5814807c347053.patch?full_index=1";
+      url = "https://github.com/ggml-org/llama.cpp/commit/acd38efee316f3a5ed2e6afcbc5814807c347053.patch?full_index=1";
       stripLen = 1;
       extraPrefix = "vendor/llama.cpp/";
       hash = "sha256-71+Lpg9z5KPlaQTX9D85KS2LXFWLQNJJ18TJyyq3/pU=";
@@ -80,9 +80,7 @@ buildPythonPackage rec {
     ]
   );
 
-  preBuild = ''
-    export CMAKE_BUILD_PARALLEL_LEVEL="$NIX_BUILD_CORES"
-  '';
+  enableParallelBuilding = true;
 
   nativeBuildInputs = [
     cmake

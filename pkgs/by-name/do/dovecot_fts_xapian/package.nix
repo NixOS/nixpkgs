@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dovecot-fts-xapian";
-  version = "1.8.4";
+  version = "1.9";
 
   src = fetchFromGitHub {
     owner = "grosjo";
     repo = "fts-xapian";
     rev = version;
-    hash = "sha256-BJ8G515j4QxQCiQoVd/w+JGZSZpHKAu20Y63m/dHjm8=";
+    hash = "sha256-jHXeCJVdRWGdLMooh5cq5ZeZPM5fDo1lO6U5VMcwf3g=";
   };
 
   buildInputs = [

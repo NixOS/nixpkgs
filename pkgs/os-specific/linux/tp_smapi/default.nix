@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/linux-thinkpad/tp_smapi";
     license = lib.licenses.gpl2Plus;
     maintainers = [ ];
-    # driver is only ment for linux thinkpads i think  bellow platforms should cover it.
+    # driver is only meant for linux thinkpads i think  bellow platforms should cover it.
     platforms = [
       "x86_64-linux"
       "i686-linux"

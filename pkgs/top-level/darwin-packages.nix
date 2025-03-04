@@ -98,7 +98,6 @@ makeScopeWithSplicing' {
           "configdHeaders"
           "darwin-stubs"
           "dtrace"
-          "dyld"
           "eap8021x"
           "hfs"
           "hfsHeaders"

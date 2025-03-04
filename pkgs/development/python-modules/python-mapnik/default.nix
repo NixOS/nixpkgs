@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
   isPyPy,
   python,
   setuptools,
@@ -43,8 +43,7 @@ buildPythonPackage rec {
   patches = [
     # python-mapnik seems to depend on having the mapnik src directory
     # structure available at build time. We just hardcode the paths.
-    (substituteAll {
-      src = ./find-libmapnik.patch;
+    (replaceVars ./find-libmapnik.patch {
       libmapnik = "${mapnik}/lib";
     })
     # Use `std::optional` rather than `boost::optional`

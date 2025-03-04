@@ -13,7 +13,7 @@ in
 mkAppleDerivation {
   releaseName = "top";
 
-  xcodeHash = "sha256-b7Qv9ks9JmilY9GaEU3/iXoHBNyHRYr4IB0jVf0fYdo=";
+  xcodeHash = "sha256-YeBhEstvPh8IX8ArVc7U8IRU6vqPoOE6kBTqcqZonGc=";
 
   patches = [
     # Upstream removed aarch64 support from the 137 source release, but the removal can be reverted.

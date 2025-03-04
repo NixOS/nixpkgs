@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2025.2.2";
+  version = "2025.2.5";
   components = {
     "3_day_blinds" =
       ps: with ps; [
@@ -2225,7 +2225,7 @@
       ];
     "hive" =
       ps: with ps; [
-        pyhiveapi
+        pyhive-integration
       ];
     "hko" =
       ps: with ps; [
@@ -4214,7 +4214,8 @@
       ];
     "peblar" =
       ps: with ps; [
-      ]; # missing inputs: peblar
+        peblar
+      ];
     "peco" =
       ps: with ps; [
         peco
@@ -7144,6 +7145,7 @@
     "palazzetti"
     "panasonic_viera"
     "panel_custom"
+    "peblar"
     "peco"
     "pegel_online"
     "permobil"

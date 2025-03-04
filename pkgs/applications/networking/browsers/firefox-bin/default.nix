@@ -20,6 +20,7 @@
 , runtimeShell
 , systemLocale ? config.i18n.defaultLocale or "en_US"
 , patchelfUnstable  # have to use patchelfUnstable to support --no-clobber-old-sections
+, applicationName? "Firefox"
 }:
 
 let
@@ -97,7 +98,7 @@ stdenv.mkDerivation {
     '';
 
   passthru = {
-    inherit binaryName;
+    inherit applicationName binaryName;
     libName = "firefox-bin-${version}";
     ffmpegSupport = true;
     gssSupport = true;

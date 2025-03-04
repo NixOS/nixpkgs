@@ -4,7 +4,7 @@
   fetchFromGitHub,
 
   # build-system
-  poetry-core,
+  pdm-backend,
 
   # dependencies
   aiohttp,
@@ -13,15 +13,12 @@
   langchain,
   langchain-core,
   langsmith,
+  numpy,
   pydantic-settings,
   pyyaml,
   requests,
   sqlalchemy,
   tenacity,
-
-  # optional-dependencies
-  typer,
-  numpy,
 
   # tests
   httpx,
@@ -39,19 +36,19 @@
 
 buildPythonPackage rec {
   pname = "langchain-community";
-  version = "0.3.15";
+  version = "0.3.17";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-community==${version}";
-    hash = "sha256-2/Zrl/wED/zm1m+NqgAD4AdrEh/LjFOeQoOSSM05e+s=";
+    hash = "sha256-+10Q8em74G5RU6VtDqhQJuDsjJ4/EjGM4a3xQzs3Qzo=";
   };
 
   sourceRoot = "${src.name}/libs/community";
 
-  build-system = [ poetry-core ];
+  build-system = [ pdm-backend ];
 
   pythonRelaxDeps = [
     "numpy"
@@ -66,17 +63,13 @@ buildPythonPackage rec {
     langchain
     langchain-core
     langsmith
+    numpy
     pydantic-settings
     pyyaml
     requests
     sqlalchemy
     tenacity
   ];
-
-  optional-dependencies = {
-    cli = [ typer ];
-    numpy = [ numpy ];
-  };
 
   pythonImportsCheck = [ "langchain_community" ];
 

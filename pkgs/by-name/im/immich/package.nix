@@ -17,17 +17,25 @@
   cacert,
   unzip,
   # runtime deps
+  cairo,
   exiftool,
+  giflib,
   jellyfin-ffmpeg, # Immich depends on the jellyfin customizations, see https://github.com/NixOS/nixpkgs/issues/351943
   imagemagick,
+  libjpeg,
+  libpng,
   libraw,
   libheif,
+  librsvg,
+  pango,
   perl,
+  pixman,
   vips,
+  sourcesJSON ? ./sources.json,
 }:
 let
   buildNpmPackage' = buildNpmPackage.override { inherit nodejs; };
-  sources = lib.importJSON ./sources.json;
+  sources = lib.importJSON sourcesJSON;
   inherit (sources) version;
 
   buildLock = {
@@ -116,6 +124,23 @@ let
       rm node_modules/@immich/sdk
       ln -s ${openapi} node_modules/@immich/sdk
     '';
+
+    env.npm_config_build_from_source = "true";
+
+    nativeBuildInputs = [
+      pkg-config
+    ];
+
+    buildInputs = [
+      # https://github.com/Automattic/node-canvas/blob/master/Readme.md#compiling
+      cairo
+      giflib
+      libjpeg
+      libpng
+      librsvg
+      pango
+      pixman
+    ];
 
     installPhase = ''
       runHook preInstall

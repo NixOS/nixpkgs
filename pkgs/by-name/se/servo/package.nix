@@ -36,6 +36,9 @@
   vulkan-loader,
   wayland,
   xorg,
+
+  # tests
+  nixosTests,
 }:
 
 let
@@ -59,17 +62,24 @@ in
 
 rustPlatform.buildRustPackage {
   pname = "servo";
-  version = "0-unstable-2025-01-14";
+  version = "0-unstable-2025-03-01";
 
   src = fetchFromGitHub {
     owner = "servo";
     repo = "servo";
-    rev = "f5ef8aaed32e6a6da3faca3a710e73cd35c31059";
-    hash = "sha256-LaAg07Lp/oWNsrtqM6UrqmPAm/ajmPJPZb5O7q9eLO8=";
+    rev = "ce977636f63c2cded3c2d26cce548efbb91312b2";
+    hash = "sha256-m+VWSuxXRdY2Pqs7akmtpzrGmFLCY/5WSD/5cQU8RU4=";
+    # Breaks reproducibility depending on whether the picked commit
+    # has other ref-names or not, which may change over time, i.e. with
+    # "ref-names: HEAD -> main" as long this commit is the branch HEAD
+    # and "ref-names:" when it is not anymore.
+    postFetch = ''
+      rm $out/tests/wpt/tests/tools/third_party/attrs/.git_archival.txt
+    '';
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-a5Dv/AiPs/fnKcboBej9H7BiRKCIjm0GaQ2ICiH9SpQ=";
+  cargoHash = "sha256-O7M1NJRaUPyh1+i8Ab2vvCwHMLBSMfwgEkfFCuIA9TA=";
 
   postPatch = ''
     # Remap absolute path between modules to include SEMVER
@@ -143,11 +153,19 @@ rustPlatform.buildRustPackage {
       --prefix LD_LIBRARY_PATH : ${runtimePaths}
   '';
 
+  passthru = {
+    updateScript = ./update.sh;
+    tests = { inherit (nixosTests) servo; };
+  };
+
   meta = {
     description = "The embeddable, independent, memory-safe, modular, parallel web rendering engine";
     homepage = "https://servo.org";
     license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [ supinie ];
+    maintainers = with lib.maintainers; [
+      hexa
+      supinie
+    ];
     mainProgram = "servo";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };

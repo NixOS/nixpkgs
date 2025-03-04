@@ -8,6 +8,7 @@
   getent,
   iproute2,
   iptables,
+  lsof,
   shadow,
   procps,
   nixosTests,
@@ -16,7 +17,7 @@
 }:
 
 let
-  version = "1.80.0";
+  version = "1.80.2";
 in
 buildGo123Module {
   pname = "tailscale";
@@ -31,7 +32,7 @@ buildGo123Module {
     owner = "tailscale";
     repo = "tailscale";
     rev = "v${version}";
-    hash = "sha256-wb52Ffoh56EEVToGGK1Rzfb5DHiR2dLxDJRLcUgYhFg=";
+    hash = "sha256-5HGY9hVSnzqmAdXNJdQ+ZvsK/PmyZ94201UHlHclQE8=";
   };
 
   patches = [
@@ -43,9 +44,10 @@ buildGo123Module {
     })
   ];
 
-  vendorHash = "sha256-a+d02h0AXqr2FuWRAOUACiYVSpm276onkwKxGSJTL5s=";
+  vendorHash = "sha256-81UOjoC5GJqhNs4vWcQ2/B9FMaDWtl0rbuFXmxbu5dI=";
 
-  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ makeWrapper ] ++ [
+  nativeBuildInputs = [
+    makeWrapper
     installShellFiles
   ];
 
@@ -76,6 +78,16 @@ buildGo123Module {
       ln -s $out/bin/tailscaled $out/bin/tailscale
       moveToOutput "bin/derper" "$derper"
       moveToOutput "bin/derpprobe" "$derper"
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      wrapProgram $out/bin/tailscaled \
+        --prefix PATH : ${
+          lib.makeBinPath [
+            # Uses lsof only on macOS to detect socket location
+            # See tailscale safesocket_darwin.go
+            lsof
+          ]
+        }
     ''
     + lib.optionalString stdenv.hostPlatform.isLinux ''
       wrapProgram $out/bin/tailscaled \

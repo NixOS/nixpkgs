@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
 
   # build-system
   setuptools,
@@ -59,24 +58,15 @@
 
 buildPythonPackage rec {
   pname = "transformers";
-  version = "4.48.3";
+  version = "4.49.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "transformers";
     tag = "v${version}";
-    hash = "sha256-gDPJx/kgFa8KCoX8XCMtFrSY/z2as22yDSNEW3UDm/0=";
+    hash = "sha256-drq7RWoRaRejiQjCUHIYuzaKa9rA4eQZI2do74scp1c=";
   };
-
-  patches = [
-    # Remove on the next major version bump
-    (fetchpatch {
-      url = "https://github.com/huggingface/transformers/commit/db864b5526d56fd99143619abff969bfcb5596d5.patch?full_index=1";
-      name = "dont-import-torch-distributed-if-not-available.patch";
-      hash = "sha256-XOraJmSt9Rp/oNiil6vDUBqZhd8MDbA0nz1Tx16Mk14=";
-    })
-  ];
 
   build-system = [ setuptools ];
 
@@ -200,7 +190,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/huggingface/transformers";
     description = "Natural Language Processing for TensorFlow 2.0 and PyTorch";
     mainProgram = "transformers-cli";
-    changelog = "https://github.com/huggingface/transformers/releases/tag/${src.tag}";
+    changelog = "https://github.com/huggingface/transformers/releases/tag/v${version}";
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [

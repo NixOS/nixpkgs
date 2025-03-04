@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "cookidoo-api";
-  version = "0.12.2";
+  version = "0.12.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "miaucl";
     repo = "cookidoo-api";
     tag = version;
-    hash = "sha256-7FDnaiq/c3ug96usjgPXtrR5oFb10gDaDokYfApktsk=";
+    hash = "sha256-hkKYIfnvDIT+eNEMfPxTzcSEs7VZLkHFoOqWms5Pt6w=";
   };
 
   build-system = [ setuptools ];

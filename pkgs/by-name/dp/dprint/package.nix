@@ -11,7 +11,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "dprint";
-  version = "0.48.0";
+  version = "0.49.0";
 
   # Prefer repository rather than crate here
   #   - They have Cargo.lock in the repository
@@ -20,11 +20,11 @@ rustPlatform.buildRustPackage rec {
     owner = "dprint";
     repo = "dprint";
     tag = version;
-    hash = "sha256-Zem37oHku90c7PDV8ep/7FN128eGRUvfIvRsaXa7X9g=";
+    hash = "sha256-IhxtHOf4IY95B7UQPSOyLj4LqvcD2I9RxEu8B+OjtCE=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-sSxtqg4VQhY84F8GZ0mbXzmsN2VFrr77z95LEly1ROo=";
+  cargoHash = "sha256-OdtUzlvbezeNk06AB6mzR3Rybh08asJJ3roNX0WOg54=";
 
   nativeBuildInputs = lib.optionals (stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
     installShellFiles
@@ -36,6 +36,8 @@ rustPlatform.buildRustPackage rec {
     "--skip=utils::lax_single_process_fs_flag::test"
     # Require cargo is running
     "--skip=utils::process::test"
+    # Requires deno for the testing, and making unstable results on darwin
+    "--skip=utils::url::test::unsafe_ignore_cert"
   ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''

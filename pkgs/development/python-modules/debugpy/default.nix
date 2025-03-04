@@ -5,7 +5,7 @@
   pythonOlder,
   pythonAtLeast,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
   gdb,
   lldb,
   pytestCheckHook,
@@ -39,8 +39,7 @@ buildPythonPackage rec {
   patches =
     [
       # Use nixpkgs version instead of versioneer
-      (substituteAll {
-        src = ./hardcode-version.patch;
+      (replaceVars ./hardcode-version.patch {
         inherit version;
       })
 
@@ -62,15 +61,13 @@ buildPythonPackage rec {
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       # Hard code GDB path (used to attach to process)
-      (substituteAll {
-        src = ./hardcode-gdb.patch;
+      (replaceVars ./hardcode-gdb.patch {
         inherit gdb;
       })
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # Hard code LLDB path (used to attach to process)
-      (substituteAll {
-        src = ./hardcode-lldb.patch;
+      (replaceVars ./hardcode-lldb.patch {
         inherit lldb;
       })
     ];

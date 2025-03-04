@@ -1,0 +1,328 @@
+From 099f663adc119ade6509569505358a0955c2b02a Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Wed, 13 Nov 2024 13:53:14 -0500
+Subject: [PATCH 06/18] Add Meson build system
+
+---
+ meson.build                 | 42 +++++++++++++++++++
+ meson.options               |  5 +++
+ src/abstraction/meson.build |  3 ++
+ src/ld/meson.build          | 68 +++++++++++++++++++++++++++++++
+ src/ld/parsers/meson.build  | 26 ++++++++++++
+ src/mach_o/meson.build      | 13 ++++++
+ src/meson.build             | 16 ++++++++
+ src/other/meson.build       | 80 +++++++++++++++++++++++++++++++++++++
+ 8 files changed, 253 insertions(+)
+ create mode 100644 meson.build
+ create mode 100644 meson.options
+ create mode 100644 src/abstraction/meson.build
+ create mode 100644 src/ld/meson.build
+ create mode 100644 src/ld/parsers/meson.build
+ create mode 100644 src/mach_o/meson.build
+ create mode 100644 src/meson.build
+ create mode 100644 src/other/meson.build
+
+diff --git a/meson.build b/meson.build
+new file mode 100644
+index 0000000..cd4e8da
+--- /dev/null
++++ b/meson.build
+@@ -0,0 +1,42 @@
++project(
++    'ld64',
++    'c', 'cpp',
++    default_options : {'c_std': 'c23', 'cpp_std': 'c++23'},
++    license : 'APSL-2.0',
++    license_files : 'APPLE_LICENSE',
++    meson_version : '>=1.6.0',
++    version : '954.16',
++)
++
++add_project_arguments(
++    # Avoid needing to link libSupport, which helps avoid a dependency on LLVM in packages
++    # that link libprunetrie.a (such as cctools).
++    '-DLLVM_DISABLE_ABI_BREAKING_CHECKS_ENFORCING=1',
++    language : 'cpp',
++)
++
++
++cc = meson.get_compiler('c')
++cxx = meson.get_compiler('cpp')
++
++
++libcodedirectory_dep = dependency(
++    'libcodedirectory',
++    version : '=819.6.1',
++)
++libtapi_dep = dependency(
++    'libtapi',
++    version : [ '>=1500' , '<1600' ],
++)
++llvm_dep = dependency(
++    'llvm',
++    version : '>=19.1'
++).partial_dependency(includes : true) # ld64 only needs LLVM headers for ADTs.
++openssl_dep = dependency(
++    'openssl',
++    version : '>=3.0'
++)
++xar_dep = cc.find_library('xar')
++
++
++subdir('src')
+diff --git a/meson.options b/meson.options
+new file mode 100644
+index 0000000..dd40e66
+--- /dev/null
++++ b/meson.options
+@@ -0,0 +1,5 @@
++option(
++    'libllvm_path',
++    type : 'string',
++    description: 'Specifies the default path to LLVM for `libLTO.dylib`'
++)
+diff --git a/src/abstraction/meson.build b/src/abstraction/meson.build
+new file mode 100644
+index 0000000..eae50ea
+--- /dev/null
++++ b/src/abstraction/meson.build
+@@ -0,0 +1,3 @@
++abstraction_dep = declare_dependency(
++    include_directories : [ '.' ]
++)
+diff --git a/src/ld/meson.build b/src/ld/meson.build
+new file mode 100644
+index 0000000..8bc85b7
+--- /dev/null
++++ b/src/ld/meson.build
+@@ -0,0 +1,68 @@
++subdir('parsers')
++
++executable(
++    'ld',
++    cpp_args : [
++        '-Wno-c23-extensions',
++        '-Wno-vla-cxx-extension',
++    ],
++    dependencies : [
++        abstraction_dep,
++        libcodedirectory_dep,
++        libtapi_dep,
++        llvm_dep,
++        mach_o_dep,
++        openssl_dep,
++        parsers_dep,
++        xar_dep,
++    ],
++    include_directories : [
++        'code-sign-blobs',
++        'parsers',
++        'passes',
++    ],
++    install : true,
++    # These linker flags mirror those used in a release build of the Xcode project.
++    # See: https://github.com/apple-oss-distributions/ld64/blob/47f477cb721755419018f7530038b272e9d0cdea/ld64.xcodeproj/project.pbxproj#L1292-L1299.
++    link_args : [
++        '-Wl,-exported_symbol,__mh_execute_header',
++        '-Wl,-stack_size,0x02000000',
++        '-Wl,-client_name,ld',
++    ],
++    sources : [
++        configure_h,
++        'FatFile.cpp',
++        'InputFiles.cpp',
++        'Mangling.cpp',
++        'Options.cpp',
++        'OutputFile.cpp',
++        'PlatformSupport.cpp',
++        'Resolver.cpp',
++        'ResponseFiles.cpp',
++        'Snapshot.cpp',
++        'SymbolTable.cpp',
++        'code-sign-blobs/blob.cpp',
++        'code-sign-blobs/blob.h',
++        'debugline.c',
++        'ld.cpp',
++        'libcodedirectory.c',
++        'passes/bitcode_bundle.cpp',
++        'passes/branch_island.cpp',
++        'passes/branch_shim.cpp',
++        'passes/code_dedup.cpp',
++        'passes/compact_unwind.cpp',
++        'passes/dtrace_dof.cpp',
++        'passes/dylibs.cpp',
++        'passes/got.cpp',
++        'passes/huge.cpp',
++        'passes/inits.cpp',
++        'passes/objc.cpp',
++        'passes/objc_constants.cpp',
++        'passes/objc_stubs.cpp',
++        'passes/order.cpp',
++        'passes/stubs/stubs.cpp',
++        'passes/thread_starts.cpp',
++        'passes/tlvp.cpp',
++    ],
++)
++install_man(meson.global_source_root() / 'doc/man/man1/ld-classic.1')
+diff --git a/src/ld/parsers/meson.build b/src/ld/parsers/meson.build
+new file mode 100644
+index 0000000..a88f651
+--- /dev/null
++++ b/src/ld/parsers/meson.build
+@@ -0,0 +1,26 @@
++parsers = static_library(
++    'parsers',
++    cpp_args : [ '-Wno-vla-cxx-extension' ],
++    dependencies : [
++        abstraction_dep,
++        libtapi_dep,
++    ],
++    include_directories : [
++        '..',    # For ld64 headers
++    ],
++    sources : [
++        configure_h,
++        'archive_file.cpp',
++        'generic_dylib_file.cpp',
++        'lto_file.cpp',
++        'macho_dylib_file.cpp',
++        'macho_relocatable_file.cpp',
++        'opaque_section_file.cpp',
++        'textstub_dylib_file.cpp',
++    ],
++)
++
++parsers_dep = declare_dependency(
++    include_directories : [ '.' ],
++    link_with : parsers,
++)
+diff --git a/src/mach_o/meson.build b/src/mach_o/meson.build
+new file mode 100644
+index 0000000..88d4f7a
+--- /dev/null
++++ b/src/mach_o/meson.build
+@@ -0,0 +1,13 @@
++mach_o = static_library(
++    'mach_o',
++    cpp_args : [ '-Wno-vla-cxx-extension' ],
++    sources : [
++        'Error.cpp',
++        'ExportsTrie.cpp',
++    ],
++)
++
++mach_o_dep = declare_dependency(
++    include_directories : [ '.' ],
++    link_with : mach_o,
++)
+diff --git a/src/meson.build b/src/meson.build
+new file mode 100644
+index 0000000..e1e3b1a
+--- /dev/null
++++ b/src/meson.build
+@@ -0,0 +1,16 @@
++configure_h = custom_target(
++    'configure_h',
++    command : [ find_program('bash'), '@INPUT@' ],
++    env : {
++        'DERIVED_FILE_DIR' : meson.current_build_dir(),
++        'RC_ProjectSourceVersion': meson.project_version(),
++    },
++    input : 'create_configure',
++    output : 'configure.h',
++)
++
++subdir('abstraction')
++subdir('mach_o')
++
++subdir('ld')
++subdir('other')
+diff --git a/src/other/meson.build b/src/other/meson.build
+new file mode 100644
+index 0000000..067a69c
+--- /dev/null
++++ b/src/other/meson.build
+@@ -0,0 +1,80 @@
++machocheck = executable(
++    'machocheck',
++    dependencies : [
++        abstraction_dep,
++        llvm_dep,
++    ],
++    include_directories : [ '../ld' ],
++    install : true,
++    sources : [
++        configure_h,
++        'machochecker.cpp',
++    ],
++)
++
++ObjectDump = executable(
++    'ObjectDump',
++    cpp_args : [ '-Wno-vla-cxx-extension' ],
++    dependencies : [
++        abstraction_dep,
++        libtapi_dep,
++        parsers_dep,
++    ],
++    include_directories : [ '../ld' ],
++    install : true,
++    sources : [
++        configure_h,
++        '../ld/PlatformSupport.cpp',
++        '../ld/debugline.c',
++        'ObjectDump.cpp',
++    ],
++)
++
++objcimageinfo = executable(
++    'objcimageinfo',
++    dependencies : [
++        abstraction_dep,
++        llvm_dep,
++    ],
++    include_directories : [ '../ld' ],
++    install : true,
++    sources : [
++        configure_h,
++        'objcimageinfo.cpp',
++    ],
++)
++
++unwinddump = executable(
++    'unwinddump',
++    dependencies : [
++        abstraction_dep,
++        llvm_dep,
++    ],
++    include_directories : [ '../ld' ],
++    install : true,
++    sources : [
++        configure_h,
++        'UnwindDump.cpp',
++    ],
++)
++install_man(meson.global_source_root() / 'doc/man/man1/unwinddump.1')
++
++static_library(
++    'prunetrie',
++    cpp_args : [ '-Wno-vla-cxx-extension' ],
++    dependencies : [
++        abstraction_dep,
++        mach_o_dep
++    ],
++    include_directories : [ '../ld' ],
++    install : true,
++    override_options : {'b_lto': false},
++    sources : [
++        configure_h,
++        'PruneTrie.cpp',
++    ],
++)
++install_headers(
++    'prune_trie.h',
++    subdir : 'mach-o',
++)
+-- 
+2.47.2
+

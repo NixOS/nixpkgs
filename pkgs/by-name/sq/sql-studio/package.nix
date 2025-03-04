@@ -1,19 +1,20 @@
 {
   lib,
   stdenv,
+  darwin,
   rustPlatform,
   buildNpmPackage,
   fetchFromGitHub,
 }:
 let
   pname = "sql-studio";
-  version = "0.1.32";
+  version = "0.1.35";
 
   src = fetchFromGitHub {
     owner = "frectonz";
     repo = "sql-studio";
     rev = version;
-    hash = "sha256-PDNTOzzoJ3a/OljnZux9ttts/ntwep2rC01IxIfMU1k=";
+    hash = "sha256-ZWGV4DYf+85LIGVDc8hcWSEJsM6UisuCB2Wd2kiw/sk=";
   };
 
   ui = buildNpmPackage {
@@ -30,19 +31,21 @@ rustPlatform.buildRustPackage {
   inherit pname version src;
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-pvoQ73aW5XbnQJVCuV7lyrN3mg85Ye4913RzrA3S8J4=";
+
+  cargoHash = "sha256-rWG5iPXiG7kCf0yLAqcQi8AM3qv/WTUiY4cVrjpUc/Y=";
 
   preBuild = ''
     cp -pr --reflink=auto -- ${ui} ui/dist
   '';
 
+  buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Foundation ];
+
   meta = {
-    description = "SQL Database Explorer [SQLite, libSQL, PostgreSQL, MySQL/MariaDB, DuckDB, ClickHouse]";
+    description = "SQL Database Explorer [SQLite, libSQL, PostgreSQL, MySQL/MariaDB, ClickHouse, Microsoft SQL Server]";
     homepage = "https://github.com/frectonz/sql-studio";
     mainProgram = "sql-studio";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.frectonz ];
     platforms = lib.platforms.all;
-    broken = stdenv.hostPlatform.isDarwin;
   };
 }

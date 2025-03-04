@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "hcledit";
-  version = "0.2.16";
+  version = "0.2.17";
 
   src = fetchFromGitHub {
     owner = "minamijoyo";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-ULoqb9+GQB+Rg5p/Lqa1gHvZDDAmcfNE6FOK/R5mVK8=";
+    hash = "sha256-4PBEcOK16YXQhrQ6Yrtcb6vTE6h6sSY3Ymuxi+mEUt8=";
   };
 
-  vendorHash = "sha256-V7Ppb5u6to8bc0TWgJirC04N9lMOYav/dgEPWHzvGro=";
+  vendorHash = "sha256-d1cxzGVBOwNAoOxGanRJas4jocxj6B6k5C1hxZi7/Ak=";
 
   meta = with lib; {
     description = "Command line editor for HCL";

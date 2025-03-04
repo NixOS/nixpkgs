@@ -1,17 +1,19 @@
 {
   lib,
+  stdenv,
   fetchPypi,
   buildPythonPackage,
   setuptools,
   matplotlib,
   numpy,
   scipy,
+  shapely,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
-  version = "1.1.1";
   pname = "matplotlib-venn";
+  version = "1.1.1";
 
   pyproject = true;
 
@@ -26,6 +28,12 @@ buildPythonPackage rec {
     matplotlib
     numpy
     scipy
+    shapely
+  ];
+
+  disabledTests = [
+    # See https://github.com/konstantint/matplotlib-venn/issues/85
+    "matplotlib_venn.layout.venn3.cost_based.LayoutAlgorithm"
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
@@ -36,5 +44,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/konstantint/matplotlib-venn/releases/tag/${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ moraxyc ];
+    broken = stdenv.hostPlatform.isDarwin; # https://github.com/konstantint/matplotlib-venn/issues/87
   };
 }

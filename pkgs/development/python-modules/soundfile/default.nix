@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "soundfile";
-  version = "0.13.0";
+  version = "0.13.1";
   pyproject = true;
   # https://github.com/bastibe/python-soundfile/issues/157
   disabled = isPyPy || stdenv.hostPlatform.isi686;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-6DOZ2L3n1zsRfDPWoeyFcTGDOPic5y9MPUV+l2h5g1U=";
+    hash = "sha256-ssaNqx4wKXMXCApbQ99X4wJYTEnilC3v3eCszMU/Dls=";
   };
 
   postPatch = ''

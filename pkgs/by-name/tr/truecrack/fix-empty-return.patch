@@ -1,0 +1,11 @@
+--- a/src/Common/CpuCore.c
++++ b/src/Common/CpuCore.c
+@@ -96,7 +96,7 @@
+ 		derive_key_whirlpool (  word, wordlength+1, salt, PKCS5_SALT_SIZE, 1000, headerKey, cpu_GetMaxPkcs5OutSize ());
+ 	else{
+ 		perror("Key derivation function not supported");
+-		return;
++		return 0;
+ 	}
+ 
+ 	value=cpu_Xts(encryptionAlgorithm,encryptedHeader,headerKey,cpu_GetMaxPkcs5OutSize(), masterKey, &length);

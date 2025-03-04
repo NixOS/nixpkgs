@@ -3,7 +3,7 @@
   buildGoModule,
   fetchFromGitHub,
 
-  # required for completion and cross-complilation
+  # required for completion and cross-compilation
   installShellFiles,
   buildPackages,
   stdenv,

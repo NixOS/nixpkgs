@@ -226,9 +226,6 @@ stdenv.mkDerivation (finalAttrs: {
     # injected by the pkgsStatic stdenv
     # <https://github.com/NixOS/nixpkgs/issues/83667>
     rm -f $out/nix-support/propagated-build-inputs
-  '' + lib.optionalString finalAttrs.separateDebugInfo ''
-    # HACK: remove broken symlink created by hook
-    rm -f $debug/lib/debug/s390-ccw.img
   '';
   preBuild = "cd build";
 
@@ -272,7 +269,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   # Add a ‘qemu-kvm’ wrapper for compatibility/convenience.
-  postInstall = lib.optionalString (!minimal) ''
+  postInstall = lib.optionalString (!minimal && !xenSupport) ''
     ln -s $out/bin/qemu-system-${stdenv.hostPlatform.qemuArch} $out/bin/qemu-kvm
   '';
 

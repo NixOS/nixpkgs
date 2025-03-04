@@ -4,6 +4,8 @@
   fetchFromGitHub,
   nix-update-script,
   platformdirs,
+  jinja2,
+  overrides,
   pyyaml,
   setuptools-scm,
   pytest-check,
@@ -13,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "craft-cli";
-  version = "2.13.0";
+  version = "2.15.0";
 
   pyproject = true;
 
@@ -21,7 +23,7 @@ buildPythonPackage rec {
     owner = "canonical";
     repo = "craft-cli";
     tag = version;
-    hash = "sha256-IqK+eU2z63yDMJrHAhETHWoTz5lWK1er9bwYH9Oml18=";
+    hash = "sha256-L8hOQJhjVAMo/WxEHHEk2QorlSdDFMGdcL/Q3Pv6mT4=";
   };
 
   postPatch = ''
@@ -32,6 +34,8 @@ buildPythonPackage rec {
   build-system = [ setuptools-scm ];
 
   dependencies = [
+    jinja2
+    overrides
     platformdirs
     pyyaml
   ];

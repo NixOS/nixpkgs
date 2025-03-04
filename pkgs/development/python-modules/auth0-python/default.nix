@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "auth0-python";
-  version = "4.8.0";
+  version = "4.8.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "auth0";
     repo = "auth0-python";
     tag = version;
-    hash = "sha256-E+vZJ4yuWA5iy5/7PAGnk8rcSd9gWbgIoezyfnnvP7M=";
+    hash = "sha256-nokrrfI0+ExAEIIS6AS9VeMmYIVUQuNLUWEsTm2CJMM=";
   };
 
   nativeBuildInputs = [
@@ -67,7 +67,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Auth0 Python SDK";
     homepage = "https://github.com/auth0/auth0-python";
-    changelog = "https://github.com/auth0/auth0-python/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/auth0/auth0-python/blob/${src.tag}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = [ ];
   };
