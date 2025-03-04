@@ -21,7 +21,7 @@ let
     lqx = {
       version = "6.13.5"; # lqx
       suffix = "lqx1"; # lqx
-      sha256 = "1qk6h4g91mn0l4c78jwsbhgprajd4yqm8gzzgh89rpm151kggs82"; # lqx
+      sha256 = "1bawcicv2qr5bm7zq5vhq6c1idvjlqxidbcv1wxbw9dkg6scffla"; # lqx
       isLqx = true;
     };
   };
