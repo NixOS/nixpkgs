@@ -93,14 +93,14 @@ let
     VideoToolbox
     ;
   inherit (darwin) libobjc;
-  version = "1.9.0";
+  version = "1.9.2";
 
   src = fetchFromGitHub {
     owner = "HandBrake";
     repo = "HandBrake";
     # uses version commit for logic in version.txt
-    rev = "fa9154a20f3f64fdc183a097e6b63f7fd4bc6cab";
-    hash = "sha256-Asf8NgYk4xxIkevYA0B62T8CTSaB7SHq0lHXkawVxb8=";
+    rev = "e117cfe7fca37abeec59ea4201e5d93ed7477746";
+    hash = "sha256-cOEgFVvBgV0kYnTc7d1CdzoN7mMjd8rxSmc6i/dbRWI=";
   };
 
   # Handbrake maintains a set of ffmpeg patches. In particular, these
