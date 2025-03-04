@@ -22,6 +22,7 @@ let
       strictDeps ? true,
       doCheck ? true,
       doInstallCheck ? false,
+      dontCheckForBrokenSymlinks ? true,
       ...
     }@args:
     assert (lib.assertMsg (args ? pname) "mkComposerVendor expects pname argument.");
@@ -33,7 +34,11 @@ let
       # See https://github.com/NixOS/nix/issues/6660
       inherit dontPatchShebangs;
 
-      inherit buildInputs strictDeps doCheck;
+      inherit
+        buildInputs
+        strictDeps
+        doCheck
+        ;
 
       nativeBuildInputs = nativeBuildInputs ++ [
         composer

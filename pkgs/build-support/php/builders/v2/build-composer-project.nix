@@ -23,6 +23,7 @@ let
       patches ? [ ],
       doCheck ? true,
       doInstallCheck ? true,
+      dontCheckForBrokenSymlinks ? true,
       passthru ? { },
       meta ? { },
       ...
@@ -33,6 +34,7 @@ let
         strictDeps
         doCheck
         doInstallCheck
+        dontCheckForBrokenSymlinks
         ;
 
       nativeBuildInputs = nativeBuildInputs ++ [
@@ -95,6 +97,7 @@ let
             composerNoPlugins
             composerNoScripts
             composerStrictValidation
+            dontCheckForBrokenSymlinks
             ;
         });
 
