@@ -119,7 +119,6 @@ let
 
       cmakeFlags = [
         (lib.cmakeBool "server" false)
-        (lib.cmakeBool "bundled-celt" true)
         (lib.cmakeBool "bundle-qt-translations" false)
         (lib.cmakeBool "bundled-json" false)
         (lib.cmakeBool "bundled-gsl" false)
