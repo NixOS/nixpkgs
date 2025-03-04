@@ -22,6 +22,7 @@
   libXdmcp,
   libstartup_notification,
   wrapGAppsHook3,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -85,6 +86,9 @@ stdenv.mkDerivation rec {
     substituteInPlace src/launcher/apps-common.c src/launcher/icon-theme-common.c \
       --replace-fail /usr/share/ /run/current-system/sw/share/
   '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = with lib; {
     homepage = "https://gitlab.com/nick87720z/tint2";
