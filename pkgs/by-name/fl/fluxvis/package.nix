@@ -2,6 +2,11 @@
   lib,
   python3,
   fetchFromGitHub,
+
+  # tests
+  fluxvis,
+  fetchurl,
+  runCommand,
 }:
 
 python3.pkgs.buildPythonApplication {
@@ -33,6 +38,16 @@ python3.pkgs.buildPythonApplication {
   ];
 
   pythonImportsCheck = [ "fluxvis" ];
+
+  # FIXME: should use the drv itself (via finalAttrs) but this doesn't seem to work with buildPyApp
+  passthru.tests.galactix = let
+    floppyImage = fetchurl {
+      url = "https://archive.org/download/galactix_202209/Galactix_d2.scp";
+      hash = "sha256-9Y8okEPMcqwBOKmue4b9Qg90BTD/rrXIDhmhs6yRc5Y=";
+    };
+  in runCommand "galactix.png" { preferLocalBuild = true; } ''
+    ${lib.getExe fluxvis} --tracks 40 write ${floppyImage} $out
+  '';
 
   meta = {
     description = "A magnetic flux visualizer for Greazeweazle-compatible floppy images";
