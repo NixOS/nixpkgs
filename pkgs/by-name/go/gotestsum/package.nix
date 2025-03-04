@@ -8,18 +8,17 @@ let
 in
 buildGoModule {
   pname = "gotestsum";
-
-  # move back to stable releases when build is successful
-  version = "${version}-unstable-2024-09-17";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "gotestyourself";
     repo = "gotestsum";
-    rev = "2f61a73f997821b2e5a1823496e8362630e213f9";
-    hash = "sha256-5zgchATcpoM4g5Mxex9wYanzrR0Pie9GYqx48toORkM=";
+    rev = "v${version}";
+    hash = "sha256-eve3G5JhvaUapAenoIDn2ClHqljpviVpmJl4ZaAUqTs=";
   };
 
-  vendorHash = "sha256-DR4AyEhgD71hFFEAnPfSxaWYFFV7FlPugZBHUjDynEE=";
+  vendorHash = "sha256-JT9x1xuWKTiMQ8jxZuW+ZwRRQt2Y4Lk8peESvgTgimc=";
+  proxyVendor = true;
 
   doCheck = false;
 
