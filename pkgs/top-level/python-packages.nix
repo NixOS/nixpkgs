@@ -13616,6 +13616,8 @@ self: super: with self; {
 
   python-picnic-api = callPackage ../development/python-modules/python-picnic-api { };
 
+  python-picnic-api2 = callPackage ../development/python-modules/python-picnic-api2 { };
+
   python-pidfile = callPackage ../development/python-modules/python-pidfile { };
 
   python-pipedrive = callPackage ../development/python-modules/python-pipedrive { };
