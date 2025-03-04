@@ -12,13 +12,13 @@
 stdenv.mkDerivation rec {
   pname = "follow";
 
-  version = "0.2.0-beta.2";
+  version = "0.3.7";
 
   src = fetchFromGitHub {
     owner = "RSSNext";
     repo = "Follow";
     rev = "v${version}";
-    hash = "sha256-7KSPZj9QG6zksji/eY8jczBDHr/9tStlw26LKVqXTAw=";
+    hash = "sha256-TPzrQo6214fXQmF45p5agQ1zqLYzpmMpYb89ASPsWio=";
   };
 
   nativeBuildInputs = [
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   pnpmDeps = pnpm_9.fetchDeps {
     inherit pname version src;
-    hash = "sha256-FzMjN0rIjYxexf6tix4qi3mnuPkadjKihhN0Pj5y2nU=";
+    hash = "sha256-xNGLYzEz1G5sZSqmji+ItJ9D1vvZcwkkygnDeuypcIM=";
   };
 
   env = {
@@ -38,11 +38,10 @@ stdenv.mkDerivation rec {
 
     # This environment variables inject the production Vite config at build time.
     # Copy from:
-    # 1. https://github.com/RSSNext/Follow/blob/v0.2.0-beta.2/.github/workflows/build.yml#L18
+    # 1. https://github.com/RSSNext/Follow/blob/v0.3.7/.github/workflows/build.yml#L18
     # 2. And logs in the corresponding GitHub Actions: https://github.com/RSSNext/Follow/actions/workflows/build.yml
     VITE_WEB_URL = "https://app.follow.is";
     VITE_API_URL = "https://api.follow.is";
-    VITE_IMGPROXY_URL = "https://thumbor.follow.is";
     VITE_SENTRY_DSN = "https://e5bccf7428aa4e881ed5cb713fdff181@o4507542488023040.ingest.us.sentry.io/4507570439979008";
     VITE_OPENPANEL_CLIENT_ID = "0e477ab4-d92d-4d6e-b889-b09d86ab908e";
     VITE_OPENPANEL_API_URL = "https://openpanel.follow.is/api";
@@ -56,6 +55,8 @@ stdenv.mkDerivation rec {
       measurementId = "G-SJE57D4F14";
     };
   };
+
+  dontCheckForBrokenSymlinks = true;
 
   desktopItem = makeDesktopItem {
     name = "follow";
