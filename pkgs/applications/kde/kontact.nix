@@ -20,7 +20,6 @@
   akregator,
   kaddressbook,
   kmail,
-  knotes,
   korganizer,
   zanshin,
 }:
@@ -59,7 +58,6 @@ mkDerivation {
     akregator
     kaddressbook
     kmail
-    knotes
     korganizer
     zanshin
   ];

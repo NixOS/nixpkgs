@@ -73,11 +73,6 @@
       "kio",
       "kmime"
     ],
-    "akonadi-notes": [
-      "akonadi",
-      "extra-cmake-modules",
-      "kmime"
-    ],
     "akonadi-search": [
       "akonadi",
       "akonadi-mime",
