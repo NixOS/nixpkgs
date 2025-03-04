@@ -114,6 +114,7 @@ let
         "-D bundled-opus=OFF"
         "-D bundled-speex=OFF"
         "-D bundle-qt-translations=OFF"
+        # "-D bundled-renamenoise=OFF" # not packaged in nixpkgs yet
         "-D update=OFF"
         "-D overlay-xcompile=OFF"
         "-D oss=OFF"
