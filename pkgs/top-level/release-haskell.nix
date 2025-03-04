@@ -65,9 +65,6 @@ let
   released = with compilerNames; [
     ghc8107
     ghc902
-    ghc925
-    ghc926
-    ghc927
     ghc928
     ghc947
     ghc948
@@ -310,7 +307,6 @@ let
         happy
         haskell-ci
         haskell-language-server
-        hasura-graphql-engine
         hci
         hercules-ci-agent
         hinit
@@ -455,6 +451,7 @@ let
                 cabal2nix
                 terminfo # isn't bundled for cross
                 xhtml # isn't bundled for cross
+                postgrest
                 ;
             };
 
@@ -467,6 +464,7 @@ let
                 cabal2nix
                 terminfo # isn't bundled for cross
                 xhtml # isn't bundled for cross
+                postgrest
                 ;
             };
 
@@ -501,6 +499,16 @@ let
                   ghc
                   hello
                   microlens
+                  ;
+              };
+
+              haskell.packages.ghc912 = {
+                inherit (packagePlatforms pkgs.pkgsCross.ghcjs.haskell.packages.ghc912)
+                  ghc
+                  hello
+                  microlens
+                  miso
+                  reflex-dom
                   ;
               };
 
@@ -554,16 +562,13 @@ let
         # work with older compilers.
         compilerNames.ghc8107
         compilerNames.ghc902
-        compilerNames.ghc925
-        compilerNames.ghc926
-        compilerNames.ghc927
         compilerNames.ghc928
         compilerNames.ghc947
         compilerNames.ghc948
       ] released;
       Cabal_3_10_3_0 = released;
       Cabal_3_12_1_0 = released;
-      Cabal_3_14_1_0 = released;
+      Cabal_3_14_1_1 = released;
       cabal2nix = released;
       cabal2nix-unstable = released;
       funcmp = released;
@@ -603,6 +608,11 @@ let
       ] released;
       hashable = released;
       primitive = released;
+      semaphore-compat = [
+        # Compiler < 9.8 don't have the semaphore-compat core package, but
+        # requires unix >= 2.8.1.0 which implies GHC >= 9.6 for us.
+        compilerNames.ghc966
+      ];
       weeder = lib.subtractLists [
         compilerNames.ghc9101
         compilerNames.ghc9121
@@ -671,16 +681,10 @@ let
           jobs.pkgsMusl.haskell.compiler.ghc8107Binary
           jobs.pkgsMusl.haskell.compiler.ghc8107
           jobs.pkgsMusl.haskell.compiler.ghc902
-          jobs.pkgsMusl.haskell.compiler.ghc925
-          jobs.pkgsMusl.haskell.compiler.ghc926
-          jobs.pkgsMusl.haskell.compiler.ghc927
           jobs.pkgsMusl.haskell.compiler.ghc928
           jobs.pkgsMusl.haskell.compiler.ghcHEAD
           jobs.pkgsMusl.haskell.compiler.integer-simple.ghc8107
           jobs.pkgsMusl.haskell.compiler.native-bignum.ghc902
-          jobs.pkgsMusl.haskell.compiler.native-bignum.ghc925
-          jobs.pkgsMusl.haskell.compiler.native-bignum.ghc926
-          jobs.pkgsMusl.haskell.compiler.native-bignum.ghc927
           jobs.pkgsMusl.haskell.compiler.native-bignum.ghc928
           jobs.pkgsMusl.haskell.compiler.native-bignum.ghcHEAD
         ];

@@ -283,7 +283,22 @@ stdenv.mkDerivation (
     ];
 
     patches =
-      lib.optionals (lib.versionOlder version "9.4") [
+      [
+        # Determine size of time related types using hsc2hs instead of assuming CLong.
+        # Prevents failures when e.g. stat(2)ing on 32bit systems with 64bit time_t etc.
+        # https://github.com/haskell/ghcup-hs/issues/1107
+        # https://gitlab.haskell.org/ghc/ghc/-/issues/25095
+        # Note that in normal situations this shouldn't be the case since nixpkgs
+        # doesn't set -D_FILE_OFFSET_BITS=64 and friends (yet).
+        (fetchpatch {
+          name = "unix-fix-ctimeval-size-32-bit.patch";
+          url = "https://github.com/haskell/unix/commit/8183e05b97ce870dd6582a3677cc82459ae566ec.patch";
+          sha256 = "17q5yyigqr5kxlwwzb95sx567ysfxlw6bp3j4ji20lz0947aw6gv";
+          stripLen = 1;
+          extraPrefix = "libraries/unix/";
+        })
+      ]
+      ++ lib.optionals (lib.versionOlder version "9.4") [
         # fix hyperlinked haddock sources: https://github.com/haskell/haddock/pull/1482
         (fetchpatch {
           url = "https://patch-diff.githubusercontent.com/raw/haskell/haddock/pull/1482.patch";
