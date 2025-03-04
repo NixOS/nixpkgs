@@ -26,6 +26,10 @@ buildPythonPackage {
     scipy
   ];
 
+  pythonRemoveDeps = [
+    "nvidia-nccl-cu12"
+  ];
+
   # Override existing logic for locating libxgboost.so which is not appropriate for Nix
   prePatch =
     let
