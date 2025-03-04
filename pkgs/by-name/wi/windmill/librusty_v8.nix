@@ -2,10 +2,10 @@
 { fetchLibrustyV8 }:
 
 fetchLibrustyV8 {
-  version = "0.106.0";
+  version = "130.0.7";
   shas = {
     # NOTE; Follows supported platforms of package (see meta.platforms attribute)!
-    x86_64-linux = "18r0bdsl5xpf0x9q6kkylgq52azqmqg9d6danya9znb94by2bdlc";
-    aarch64-linux = "175p9ly6fvfy04vhx2rif0riv8drxlq4yz5p42d0yp491qr022dq";
+    x86_64-linux = "0pdp6h7vbjvq5l9lh25qilmp6xrxg7mj8m263h44f0lv9swnqix6";
+    aarch64-linux = "0nli54vqcrfh9nkz7ma7230k0xmhcrk0jmfbyxcp3rxybarygvxy";
   };
 }
