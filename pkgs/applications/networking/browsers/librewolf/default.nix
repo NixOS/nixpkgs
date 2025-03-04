@@ -46,6 +46,6 @@ in
   };
 }).override
   {
-    crashreporterSupport = false;
+    enableCrashReporter = false;
     enableOfficialBranding = false;
   }
