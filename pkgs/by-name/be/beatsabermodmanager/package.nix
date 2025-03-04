@@ -33,12 +33,6 @@ buildDotnetModule rec {
 
   nugetDeps = ./deps.json;
 
-  preConfigureNuGet = ''
-    # This should really be in the upstream nuget.config
-    dotnet nuget add source https://api.nuget.org/v3/index.json \
-      -n nuget.org --configfile nuget.config
-  '';
-
   # Required for OneClick
   makeWrapperArgs = [
     ''--suffix PATH : "${lib.makeBinPath [ xdg-utils ]}"''
