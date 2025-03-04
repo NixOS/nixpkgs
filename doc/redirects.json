@@ -8,6 +8,9 @@
   "ex-build-helpers-extendMkDerivation": [
     "index.html#ex-build-helpers-extendMkDerivation"
   ],
+  "ex-dockerTools-writeImageStream-streamNixShellImage": [
+    "index.html#ex-dockerTools-writeImageStream-streamNixShellImage"
+  ],
   "ex-shfmt": [
     "index.html#ex-shfmt"
   ],
@@ -316,6 +319,18 @@
   ],
   "sec-tools-of-stdenv": [
     "index.html#sec-tools-of-stdenv"
+  ],
+  "ssec-pkgs-dockerTools-writeImageStream": [
+    "index.html#ssec-pkgs-dockerTools-writeImageStream"
+  ],
+  "ssec-pkgs-dockerTools-writeImageStream-examples": [
+    "index.html#ssec-pkgs-dockerTools-writeImageStream-examples"
+  ],
+  "ssec-pkgs-dockerTools-writeImageStream-inputs": [
+    "index.html#ssec-pkgs-dockerTools-writeImageStream-inputs"
+  ],
+  "ssec-pkgs-dockerTools-writeImageStream-passthru-outputs": [
+    "index.html#ssec-pkgs-dockerTools-writeImageStream-passthru-outputs"
   ],
   "ssec-stdenv-dependencies": [
     "index.html#ssec-stdenv-dependencies"
