@@ -11,6 +11,7 @@
   pip,
   setuptools,
   pytestCheckHook,
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
@@ -62,6 +63,13 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "mrsqm" ];
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "v\\.(.*)"
+    ];
+  };
 
   meta = {
     description = "MrSQM (Multiple Representations Sequence Miner) is a time series classifier";
