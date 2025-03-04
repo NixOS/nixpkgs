@@ -951,6 +951,23 @@ rec {
     '';
   };
 
+  nix-shell-command-override = streamNixShellImage {
+    name = "nix-shell-command-override";
+    tag = "latest";
+    drv = pkgs.mkShell {
+      packages = [
+        pkgs.hello
+      ];
+    };
+    includeBuildDerivation = false;
+    extraContents = [
+      (pkgs.runCommand "bin-sh" { } ''
+        mkdir -p $out/bin
+        ln -s ${pkgs.bashInteractive}/bin/bash $out/bin/sh
+      '')
+    ];
+  };
+
   nix-shell-writable-home = streamNixShellImage {
     name = "nix-shell-writable-home";
     tag = "latest";
