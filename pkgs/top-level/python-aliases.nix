@@ -592,6 +592,7 @@ mapAliases ({
   pytorchWithCuda = torchWithCuda; # added 2022-09-30
   pytorchWithoutCuda = torchWithoutCuda; # added 2022-09-30
   pytwitchapi = twitchapi; # added 2022-03-07
+  pytzdata = throw "pytzdata has been removed, because iit is unmaintained upstream. Use pytz or tzdata instead."; # added 2025-03-03
   pyuavcan = throw "pyuavcan has been renamed to pycyphal and the old package deprecated, use pycyphal instead"; # added 2024-02-09
   pyunifiprotect = throw "pyunifiprotect has disappeared from GitHub and PyPI, use uiprotect instead"; # added 2024-09-17
   pyutilib = throw "pyutilib has been removed, since it is no longer maintained"; # added 2024-07-28
