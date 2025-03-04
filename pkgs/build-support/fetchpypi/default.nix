@@ -1,8 +1,10 @@
 # `fetchPypi` function for fetching artifacts from PyPI.
-{ fetchurl
-, makeOverridable
+{
+  fetchurl,
+  makeOverridable,
+  jq,
+  cacert,
 }:
-
 let
   computeUrl = {format ? "setuptools", ... } @attrs: let
     computeWheelUrl = {pname, version, dist ? "py2.py3", python ? "py2.py3", abi ? "none", platform ? "any"}:
@@ -18,11 +20,48 @@ let
       else if format == "setuptools" then computeSourceUrl
       else throw "Unsupported format ${format}");
 
-  in compute (builtins.removeAttrs attrs ["format"]);
 
-in makeOverridable( {format ? "setuptools", sha256 ? "", hash ? "", ... } @attrs:
+  in compute (builtins.removeAttrs attrs ["format"]);
+in
+makeOverridable (
+  {
+    format ? "setuptools",
+    sha256 ? "",
+    hash ? "",
+    pname,
+    version,
+    checkTls ? false,
+    ...
+  }@attrs:
   let
-    url = computeUrl (builtins.removeAttrs attrs ["sha256" "hash"]) ;
-  in fetchurl {
-    inherit url sha256 hash;
+    url = computeUrl (builtins.removeAttrs attrs ["sha256" "hash" "checkTls"]);
+    packagetype = if format == "wheel" then "wheel" else "sdist";
+  in
+  (fetchurl {
+    inherit
+      sha256
+      hash;
+      name = baseNameOf url;
+
+      urlScript =
+      ''
+curl=(
+    curl
+    --location
+    --max-redirs 20
+    --retry 3
+    --disable-epsv
+    --cookie-jar cookies
+    --user-agent "curl/$curlVersion Nixpkgs/$nixpkgsVersion"
+)
+
+${if checkTls then "SSL_CERT_FILE = ${cacert}/etc/ssl/certs/ca-bundle.crt" else "/no-cert-file.crt"}
+
+if ! [ -f "$SSL_CERT_FILE" ]; then
+    curl+=(--insecure)
+fi
+
+$\{curl[@]\} https://pypi.org/pypi/${pname}/json  | ${jq}/bin/jq -r '.releases."${version}".[] | select(.packagetype == "${packagetype}") .url'
+'';
   })
+)
