@@ -2,6 +2,7 @@
   lib,
   python3Packages,
   fetchPypi,
+  nixosTests,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -156,6 +157,10 @@ python3Packages.buildPythonApplication rec {
     "--prefix PYTHONPATH : ${python3Packages.makePythonPath dependencies}"
     "--prefix PYTHONPATH : $out/${python3Packages.python.sitePackages}"
   ];
+
+  passthru.tests = {
+    inherit (nixosTests) prefect;
+  };
 
   # Tests are not included in the pypi source
   doCheck = false;
