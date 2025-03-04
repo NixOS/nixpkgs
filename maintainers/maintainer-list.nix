@@ -20647,6 +20647,11 @@
     githubId = 47790121;
     name = "Ryan Burns";
   };
+  rtfeldman = {
+    github = "rtfeldman";
+    githubId = 1094080;
+    name = "Richard Feldman";
+  };
   rtimush = {
     email = "rtimush@gmail.com";
     github = "rtimush";
