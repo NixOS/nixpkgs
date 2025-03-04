@@ -40,14 +40,6 @@ mkMesonLibrary (finalAttrs: {
     rapidcheck
   ];
 
-  preConfigure =
-    # "Inline" .version so it's not a symlink, and includes the suffix.
-    # Do the meson utils, without modification.
-    ''
-      chmod u+w ./.version
-      echo ${version} > ../../.version
-    '';
-
   mesonFlags = [
   ];
 
