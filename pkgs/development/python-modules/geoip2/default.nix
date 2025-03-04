@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "geoip2";
-  version = "4.8.1";
+  version = "5.0.1";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-muouq0s+YlL0dFZSiunDWxBMRSd2OcE/zhvofJL4Qlc=";
+    hash = "sha256-kK+LbTaH877yUfJwitAXsw1ifRFEwAQOq8TJAXqAfYY=";
   };
 
   build-system = [
