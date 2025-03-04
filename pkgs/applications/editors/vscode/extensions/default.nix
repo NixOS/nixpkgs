@@ -4615,8 +4615,8 @@ let
         mktplcRef = {
           name = "code-spell-checker";
           publisher = "streetsidesoftware";
-          version = "4.0.21";
-          hash = "sha256-AcZAhmJeAD4nGDhBXieUxldzNZhTPCOg6W44Sc7W4H0=";
+          version = "4.0.41";
+          hash = "sha256-M/uqzU64nqSdRtxxQ1H+pg0YdkqYXEHlxmXrVcn/UqA=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/streetsidesoftware.code-spell-checker/changelog";
