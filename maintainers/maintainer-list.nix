@@ -4529,6 +4529,12 @@
     github = "CnTeng";
     githubId = 56501688;
   };
+  coat = {
+    email = "kentsmith@gmail.com";
+    name = "Kent Smith";
+    github = "coat";
+    githubId = 1661;
+  };
   cobalt = {
     email = "cobalt@cobalt.rocks";
     github = "Chaostheorie";
