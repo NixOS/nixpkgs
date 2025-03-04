@@ -2,14 +2,17 @@
   lib,
   stdenv,
   fetchFromGitLab,
+  nix-update-script,
+  writableTmpDirAsHomeHook,
 
+  buildPackages,
   pkg-config,
   gettext,
   povray,
   imagemagick,
   gimp,
 
-  SDL2,
+  sdl2-compat,
   SDL2_mixer,
   SDL2_image,
   libpng,
@@ -27,19 +30,31 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-ecEaELu52Nmov/BD9VzcUw6wyWeHJcsKQkEzTnaW330=";
   };
 
+  strictDeps = true;
+  enableParallelBuilding = true;
+
+  depsBuildBuild = [
+    buildPackages.stdenv.cc
+    pkg-config
+    sdl2-compat
+    SDL2_image
+    libpng
+    zlib
+  ];
+
   nativeBuildInputs = [
     pkg-config
     gettext
     povray
     imagemagick
     gimp
+    # GIMP needs a writable home
+    writableTmpDirAsHomeHook
   ];
 
   buildInputs = [
-    SDL2
+    sdl2-compat
     SDL2_mixer
-    SDL2_image
-    libpng
     zlib
   ];
 
@@ -48,20 +63,29 @@ stdenv.mkDerivation (finalAttrs: {
     ./gcc14.patch
   ];
 
-  # GIMP needs a writable home
+  makeFlags = [
+    "CXX_NATIVE=$(CXX_FOR_BUILD)"
+    "PKG_CONFIG_NATIVE=$(PKG_CONFIG_FOR_BUILD)"
+    "PREFIX=${placeholder "out"}"
+  ];
+
   preBuild = ''
-    export HOME=$(mktemp -d)
+    # The `$` is escaped in `makeFlags` so using it for these parameters results in infinite recursion
+    makeFlagsArray+=(CXX=$CXX PKG_CONFIG=$PKG_CONFIG);
   '';
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  passthru.updateScript = nix-update-script { };
 
-  hardeningDisable = [ "format" ];
-
-  meta = with lib; {
+  meta = {
     description = "Jump and run game, reimplementation of Tower Toppler/Nebulus";
     homepage = "https://gitlab.com/roever/toppler";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ fgaz ];
-    platforms = platforms.all;
+    license = with lib.licenses; [
+      gpl2Plus
+      # Makefile
+      gpl3Plus
+    ];
+    maintainers = with lib.maintainers; [ fgaz ];
+    platforms = lib.platforms.all;
+    mainProgram = "toppler";
   };
 })
