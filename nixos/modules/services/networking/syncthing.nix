@@ -132,7 +132,7 @@ let
   "folders" or "devices". */
   (lib.pipe cleanedConfig [
     builtins.attrNames
-    (lib.subtractLists ["folders" "devices"])
+    (lib.subtractLists ["folders" "devices" "guiPasswordFile"])
     (map (subOption: ''
       curl -X PUT -d ${lib.escapeShellArg (builtins.toJSON cleanedConfig.${subOption})} ${curlAddressArgs "/rest/config/${subOption}"}
     ''))
@@ -143,7 +143,13 @@ let
        ${jq} -e .requiresRestart > /dev/null; then
         curl -X POST ${curlAddressArgs "/rest/system/restart"}
     fi
-  '');
+  ''
+  +
+  (lib.optionalString (cfg.guiPasswordFile != null) ''
+     ${pkgs.mkpasswd}/bin/mkpasswd -m bcrypt --stdin <"${cfg.guiPasswordFile}" | tr -d "\n" >$RUNTIME_DIRECTORY/password_bcrypt
+     curl -X PATCH --variable "pw_bcrypt@$RUNTIME_DIRECTORY/password_bcrypt" --expand-json '{ "password": "{{pw_bcrypt}}" }' ${curlAddressArgs "/rest/config/gui"}
+  '')
+  );
 in {
   ###### interface
   options = {
@@ -166,6 +172,14 @@ in {
         description = ''
           Path to the `key.pem` file, which will be copied into Syncthing's
           [configDir](#opt-services.syncthing.configDir).
+        '';
+      };
+
+      guiPasswordFile = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = ''
+          Path to file containing the plaintext password for Syncthing's GUI.
         '';
       };
 
