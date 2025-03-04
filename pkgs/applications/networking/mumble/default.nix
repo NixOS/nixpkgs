@@ -115,6 +115,7 @@ let
 
       cmakeFlags = [
         "-D server=OFF"
+        "-D overlay=OFF" # defaults to client, but we have a separate target for the overlay
         "-D bundle-qt-translations=OFF"
         "-D bundled-json=OFF"
         "-D bundled-gsl=OFF"
