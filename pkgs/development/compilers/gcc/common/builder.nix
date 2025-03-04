@@ -169,6 +169,9 @@ originalAttrs:
           fi
       fi
 
+    '' + lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform) ''
+      export targetConfig=${stdenv.targetPlatform.config}
+    '' + ''
       eval "$oldOpts"
     '';
 
