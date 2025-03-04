@@ -3231,6 +3231,11 @@
     githubId = 24254289;
     name = "Payas Relekar";
   };
+  bhansconnect = {
+    github = "bhansconnect";
+    githubId = 8334696;
+    name = "Brendan Hansknecht";
+  };
   bhasherbel = {
     email = "nixos.maintainer@bhasher.com";
     github = "BhasherBEL";
