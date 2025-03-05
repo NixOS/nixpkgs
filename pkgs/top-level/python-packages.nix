@@ -3366,6 +3366,8 @@ self: super: with self; {
 
   dissect-ffs = callPackage ../development/python-modules/dissect-ffs { };
 
+  dissect-fve = callPackage ../development/python-modules/dissect-fve { };
+
   dissect-esedb = callPackage ../development/python-modules/dissect-esedb { };
 
   dissect-etl = callPackage ../development/python-modules/dissect-etl { };
