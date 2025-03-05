@@ -17,7 +17,7 @@
 
 stdenv.mkDerivation rec {
   pname = "1oom";
-  version = "1.11.1";
+  version = "1.11.2";
 
   src = fetchFromGitHub {
     owner = "1oom-fork";
