@@ -991,6 +991,7 @@ let
     "HierO"
     "HIBAG"
     "HiveR"
+    "minired" # deprecated on CRAN
 
     # Impure network access during build
     "waddR"
