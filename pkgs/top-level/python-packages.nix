@@ -11405,6 +11405,11 @@ self: super: with self; {
     inherit (pkgs.__splicedPackages) protobuf;
   };
 
+  # Protobuf 6.x
+  protobuf6 = callPackage ../development/python-modules/protobuf/6.nix {
+    inherit (pkgs.__splicedPackages) protobuf_30;
+  };
+
   proton-client = callPackage ../development/python-modules/proton-client { };
 
   proton-core = callPackage ../development/python-modules/proton-core { };
