@@ -8,13 +8,13 @@
 }:
 let
   pname = "open-webui";
-  version = "0.5.18";
+  version = "0.5.19";
 
   src = fetchFromGitHub {
     owner = "open-webui";
     repo = "open-webui";
     tag = "v${version}";
-    hash = "sha256-SFw5bCzMSBuzIzZmhA+ylXXkouZ+OSsMBfc7QG7OSLU=";
+    hash = "sha256-RFU8tzi0nT7QOc8C3SAguY73xzuOvUQTea1V2vT5e/o=";
   };
 
   frontend = buildNpmPackage rec {
@@ -22,13 +22,15 @@ let
 
     # the backend for run-on-client-browser python execution
     # must match lock file in open-webui
+    # TODO: should we automate this?
+    # TODO: with JQ? "jq -r '.packages["node_modules/pyodide"].version' package-lock.json"
     pyodideVersion = "0.27.2";
     pyodide = fetchurl {
       hash = "sha256-sZ47IxPiL1e12rmpH3Zv2v6L2+1tz/kIrT4uYbng+Ec=";
       url = "https://github.com/pyodide/pyodide/releases/download/${pyodideVersion}/pyodide-${pyodideVersion}.tar.bz2";
     };
 
-    npmDepsHash = "sha256-rEV68SizR7NyYsRzlndg/ulvr8BeiDq3MpiBmaCUn2M=";
+    npmDepsHash = "sha256-0Ldr780V0AEupLMkxaINe+og6tDDco37vlizFyK8ryg=";
 
     # Disabling `pyodide:fetch` as it downloads packages during `buildPhase`
     # Until this is solved, running python packages from the browser will not work.
@@ -102,6 +104,7 @@ python312.pkgs.buildPythonApplication rec {
       docx2txt
       duckduckgo-search
       einops
+      elasticsearch
       extract-msg
       fake-useragent
       fastapi

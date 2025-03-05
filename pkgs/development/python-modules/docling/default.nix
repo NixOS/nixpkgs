@@ -48,14 +48,14 @@
 
 buildPythonPackage rec {
   pname = "docling";
-  version = "2.25.1";
+  version = "2.25.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "DS4SD";
     repo = "docling";
     tag = "v${version}";
-    hash = "sha256-uJZIwXVwGd9xDBQkZ/uz2XLJ+lL1ZAZHJv/jHtW/LCk=";
+    hash = "sha256-QHjcyHxfpmz65EfzNNEmjonGs3YOyMY43J2pIi65LNo=";
   };
 
   build-system = [
@@ -163,7 +163,7 @@ buildPythonPackage rec {
   meta = {
     description = "Get your documents ready for gen AI";
     homepage = "https://github.com/DS4SD/docling";
-    changelog = "https://github.com/DS4SD/docling/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/DS4SD/docling/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ happysalada ];
     mainProgram = "docling";
