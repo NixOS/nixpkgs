@@ -104,9 +104,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     rm -rf updater
 
     # patch cargo-deps
-    patch -d $cargoDepsCopy/tauri-plugin-shell-* -p1 < ./src-tauri/patches/tauri-plugin-shell+*.patch
+    patch -d $cargoDepsCopy/*/tauri-plugin-shell-* -p1 < ./src-tauri/patches/tauri-plugin-shell+*.patch
 
-    substituteInPlace $cargoDepsCopy/libappindicator-sys-*/src/lib.rs \
+    substituteInPlace $cargoDepsCopy/*/libappindicator-sys-*/src/lib.rs \
       --replace-fail "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
 
     # disable pre-build script and disable auto-updater
