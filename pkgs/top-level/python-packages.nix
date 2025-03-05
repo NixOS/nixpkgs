@@ -1805,6 +1805,8 @@ self: super: with self; {
 
   bloodyad = callPackage ../development/python-modules/bloodyad { };
 
+  bloom = callPackage ../development/python-modules/bloom { };
+
   blosc2 = callPackage ../development/python-modules/blosc2 { };
 
   bluecurrent-api = callPackage ../development/python-modules/bluecurrent-api { };
@@ -2140,6 +2142,8 @@ self: super: with self; {
   };
 
   catkin-pkg = callPackage ../development/python-modules/catkin-pkg { };
+
+  catkin-tools = callPackage ../development/python-modules/catkin-tools { };
 
   catppuccin = callPackage ../development/python-modules/catppuccin { };
 
@@ -10110,6 +10114,8 @@ self: super: with self; {
 
   osqp = callPackage ../development/python-modules/osqp { };
 
+  osrf-pycommon = callPackage ../development/python-modules/osrf-pycommon { };
+
   oss2 = callPackage ../development/python-modules/oss2 { };
 
   ossfs = callPackage ../development/python-modules/ossfs { };
@@ -14550,6 +14556,12 @@ self: super: with self; {
 
   ropper = callPackage ../development/python-modules/ropper { };
 
+  rosdep = callPackage ../development/python-modules/rosdep { };
+
+  rosdistro = callPackage ../development/python-modules/rosdistro { };
+
+  rospkg = callPackage ../development/python-modules/rospkg { };
+
   rotary-embedding-torch = callPackage ../development/python-modules/rotary-embedding-torch { };
 
   rouge-score = callPackage ../development/python-modules/rouge-score { };
@@ -18097,6 +18109,8 @@ self: super: with self; {
   vcard = callPackage ../development/python-modules/vcard { };
 
   vcrpy = callPackage ../development/python-modules/vcrpy { };
+
+  vcstools = callPackage ../development/python-modules/vcstools { };
 
   vcver = callPackage ../development/python-modules/vcver { };
 
