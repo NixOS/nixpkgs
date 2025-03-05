@@ -20,8 +20,7 @@ buildPythonPackage rec {
     owner = "maxbachmann";
     repo = "Levenshtein";
     tag = "v${version}";
-    hash = "sha256-YMXT0rfd7S4jisMdHqOrsHKLzQ2hm8UfxhIFU7BbWBQ=";
-    fetchSubmodules = true; # # for vendored `rapidfuzz-cpp`
+    hash = "sha256-EFEyP7eqB4sUQ2ksD67kCr0BEShTiKWbk1PxXOUOGc4=";
   };
 
   build-system = [
