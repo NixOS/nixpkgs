@@ -358,8 +358,8 @@ let
         mktplcRef = {
           name = "nix-env-selector";
           publisher = "arrterian";
-          version = "1.0.10";
-          hash = "sha256-b3Sr0bwU2VJgl2qcdsUROZ3jnK+YUuzJMySvSD7goj8=";
+          version = "1.0.12";
+          hash = "sha256-xykKAEd+/eKMzKdufQ+wzEIhHFRh4qghWVDKgEJMTs0=";
         };
         meta = {
           license = lib.licenses.mit;
@@ -2274,8 +2274,8 @@ let
         mktplcRef = {
           name = "haskell";
           publisher = "haskell";
-          version = "2.2.2";
-          hash = "sha256-zWdIVdz+kZg7KZQ7LeBCB4aB9wg8dUbkWfzGlM0Fq7Q=";
+          version = "2.4.4";
+          hash = "sha256-O7tfZ1bQmlMgZGoWuECjSno6DLCO0+CCteRhT6PjZBY=";
         };
         meta = {
           license = lib.licenses.mit;
@@ -2635,14 +2635,14 @@ let
         mktplcRef = {
           name = "nix-ide";
           publisher = "jnoortheen";
-          version = "0.3.1";
-          hash = "sha256-05oMDHvFM/dTXB6T3rcDK3EiNG2T0tBN9Au9b+Bk7rI=";
+          version = "0.4.12";
+          hash = "sha256-3pXypgAwg/iEBUqPeNsyoX2oYqlKMVdemEhmhy1PuGU=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/jnoortheen.nix-ide/changelog";
           description = "Nix language support with formatting and error report";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=jnoortheen.nix-ide";
-          homepage = "https://github.com/jnoortheen/vscode-nix-ide";
+          homepage = "https://github.com/nix-community/vscode-nix-ide";
           license = lib.licenses.mit;
           maintainers = [ ];
         };
@@ -2910,8 +2910,8 @@ let
         mktplcRef = {
           name = "vscode-clangd";
           publisher = "llvm-vs-code-extensions";
-          version = "0.1.24";
-          hash = "sha256-yOpsYjjwHRXxbiHDPgrtswUtgbQAo+3RgN2s6UYe9mg=";
+          version = "0.1.33";
+          hash = "sha256-NAQ7qT99vudcb/R55pKY3M5H6sV32aB4P8IWZKVQJas=";
         };
         meta = {
           description = "C/C++ completion, navigation, and insights";
@@ -4548,8 +4548,8 @@ let
         mktplcRef = {
           name = "code-spell-checker";
           publisher = "streetsidesoftware";
-          version = "4.0.21";
-          hash = "sha256-AcZAhmJeAD4nGDhBXieUxldzNZhTPCOg6W44Sc7W4H0=";
+          version = "4.0.41";
+          hash = "sha256-M/uqzU64nqSdRtxxQ1H+pg0YdkqYXEHlxmXrVcn/UqA=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/streetsidesoftware.code-spell-checker/changelog";
@@ -5245,8 +5245,8 @@ let
         mktplcRef = {
           name = "vim";
           publisher = "vscodevim";
-          version = "1.26.1";
-          hash = "sha256-zshuABicdkT52Nqj1L2RrfMziBRgO+R15fM32SCnyXI=";
+          version = "1.29.0";
+          hash = "sha256-J3V8SZJZ2LSL8QfdoOtHI1ZDmGDVerTRYP4NZU17SeQ=";
         };
         meta = {
           license = lib.licenses.mit;

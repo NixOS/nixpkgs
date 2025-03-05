@@ -35,5 +35,9 @@
   "fullscreen-to-empty-workspace": [
     "fullscreen-to-empty-workspace@aiono.dev",
     "fullscreen-to-empty-workspace2@corgijan.dev"
+  ],
+  "eur-usd": [
+    "eur-usd-gshell@vezza.github.com",
+    "usd-mxn-gshell@kinduff.github.com"
   ]
 }
