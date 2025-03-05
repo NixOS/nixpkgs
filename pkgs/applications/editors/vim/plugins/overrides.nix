@@ -4035,6 +4035,7 @@ in
       "lzextras"
       "lzn-auto-require"
       "middleclass"
+      "mini-test"
       "neorg"
       "neotest"
       "nui-nvim"
