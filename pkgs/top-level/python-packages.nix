@@ -11173,6 +11173,8 @@ self: super: with self; {
 
   pkuseg = callPackage ../development/python-modules/pkuseg { };
 
+  pyluach = callPackage ../development/python-modules/pyluach { };
+
   plac = callPackage ../development/python-modules/plac { };
 
   plaid-python = callPackage ../development/python-modules/plaid-python { };
