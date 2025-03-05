@@ -7433,6 +7433,7 @@ with pkgs;
     electron-chromedriver_32
     electron-chromedriver_33
     electron-chromedriver_34
+    electron-chromedriver_35
     ;
 
   electron_32 = electron_32-bin;
