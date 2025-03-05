@@ -21,6 +21,7 @@
   jax,
   jaxlib,
   numba,
+  pytest-timeout,
   pymc,
   pytestCheckHook,
   setuptools,
@@ -29,20 +30,20 @@
 
 buildPythonPackage rec {
   pname = "nutpie";
-  version = "0.14.0";
+  version = "0.14.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pymc-devs";
     repo = "nutpie";
     tag = "v${version}";
-    hash = "sha256-6D+6+GbtTw4piWFseigEHK7PxmCHXKS0pgW6PrkLPg4=";
+    hash = "sha256-9sHs2JbzVRvAJEoLcz5NxkbElbXblDzxA6oCBtb4yFE=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-kmssvkrB44mCvNw54LominTNRhgUI6KFaRYjzKy+eNo=";
+    hash = "sha256-j7Vasy4BwOYzH43mWdbu+QsNCdRfvJC6ZvYU8XB5s4E=";
   };
 
   build-system = [
@@ -74,6 +75,7 @@ buildPythonPackage rec {
     jax
     jaxlib
     pymc
+    pytest-timeout
     pytestCheckHook
     setuptools
     writableTmpDirAsHomeHook
