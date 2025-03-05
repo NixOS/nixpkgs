@@ -47,7 +47,7 @@
   libudevSupport ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid,
   sndioSupport ? false,
   testSupport ? true,
-  waylandSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid,
+  waylandSupport ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid,
   x11Support ? !stdenv.hostPlatform.isAndroid && !stdenv.hostPlatform.isWindows,
 }:
 

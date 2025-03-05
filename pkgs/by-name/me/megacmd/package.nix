@@ -26,7 +26,7 @@ let
   pname = "megacmd";
   version = "1.7.0";
   srcOptions =
-    if stdenv.isLinux then
+    if stdenv.hostPlatform.isLinux then
       {
         tag = "${version}_Linux";
         hash = "sha256-UlSqwM8GQKeG8/K0t5DbM034NQOeBg+ujNi/MMsVCuM=";
@@ -56,7 +56,7 @@ stdenv.mkDerivation {
   ];
 
   buildInputs =
-    lib.optionals stdenv.isLinux [ gcc-unwrapped ] # fix: ld: cannot find lib64/libstdc++fs.a
+    lib.optionals stdenv.hostPlatform.isLinux [ gcc-unwrapped ] # fix: ld: cannot find lib64/libstdc++fs.a
     ++ [
       c-ares
       cryptopp

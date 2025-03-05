@@ -10,7 +10,7 @@
   ffmpeg,
 
   # Current derivation only suports linux-x86_64 (contributions welcome, without libTensorflow builtin webassembly can be used)
-  useLibTensorflow ? stdenv.isx86_64 && stdenv.isLinux,
+  useLibTensorflow ? stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.isLinux,
 
   ncVersion,
 }:

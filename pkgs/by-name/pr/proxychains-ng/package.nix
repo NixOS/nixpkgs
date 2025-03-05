@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  configureFlags = lib.optionals stdenv.isDarwin [
+  configureFlags = lib.optionals stdenv.hostPlatform.isDarwin [
     "--hookmethod=${darwinHookMethod}"
   ];
 
