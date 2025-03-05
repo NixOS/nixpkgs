@@ -217,7 +217,7 @@ stdenv.mkDerivation (finalAttrs: {
     # layer under the same name.
     lib.optionalString (layerPlatform != null) ''
       substituteInPlace $out/share/vulkan/implicit_layer.d/MangoHud.${layerPlatform}.json \
-        --replace "VK_LAYER_MANGOHUD_overlay" "VK_LAYER_MANGOHUD_overlay_${toString stdenv.hostPlatform.parsed.cpu.bits}"
+        --replace-fail "VK_LAYER_MANGOHUD_overlay" "VK_LAYER_MANGOHUD_overlay_${toString stdenv.hostPlatform.parsed.cpu.bits}"
     ''
     + ''
       # Add OpenGL driver and libXNVCtrl paths to RUNPATH to support NVIDIA cards
