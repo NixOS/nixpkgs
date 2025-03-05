@@ -5058,8 +5058,6 @@ with pkgs;
   mpi = openmpi; # this attribute should used to build MPI applications
   openmodelica = recurseIntoAttrs (callPackage ../applications/science/misc/openmodelica {});
 
-  prowlarr = callPackage ../servers/prowlarr { };
-
   qarte = libsForQt5.callPackage ../applications/video/qarte { };
 
   qdrant = darwin.apple_sdk_11_0.callPackage ../servers/search/qdrant {
@@ -5419,8 +5417,7 @@ with pkgs;
 
   inherit (callPackages ../servers/teleport {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security AppKit;
-    buildGoModule = buildGo122Module;
-  }) teleport_15 teleport_16 teleport;
+  }) teleport_15 teleport_16 teleport_17 teleport;
 
   telepresence = callPackage ../tools/networking/telepresence {
     pythonPackages = python3Packages;

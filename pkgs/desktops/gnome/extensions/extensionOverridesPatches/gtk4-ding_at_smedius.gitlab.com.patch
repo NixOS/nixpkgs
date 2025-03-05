@@ -1,7 +1,7 @@
 diff --git a/app/ding.js b/app/ding.js
 index 1062bc7..c312d48 100755
---- a/app/ding.js
-+++ b/app/ding.js
+--- a/app/adw-ding.js
++++ b/app/adw-ding.js
 @@ -1,4 +1,4 @@
 -#!/usr/bin/env -S gjs -m
 +#!@gjs@/bin/gjs -m
