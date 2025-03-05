@@ -1,0 +1,26 @@
+diff --git a/tests/dataflow_test.py b/tests/dataflow_test.py
+index e9ac3cdb..edef8200 100644
+--- a/tests/dataflow_test.py
++++ b/tests/dataflow_test.py
+@@ -5,7 +5,7 @@ import sys
+ sys.path.append('.')
+ 
+ import collections
+-import mock
++from unittest import mock
+ import unittest
+ from androguard.decompiler.dad import dataflow
+ from androguard.decompiler.dad import graph
+diff --git a/tests/test_types.py b/tests/test_types.py
+index 127dfc20..f1c89f07 100644
+--- a/tests/test_types.py
++++ b/tests/test_types.py
+@@ -182,7 +182,7 @@ class TypesTest(unittest.TestCase):
+             for i in filter(lambda x: 'const' in x.get_name(), method.get_instructions()):
+                 i.show(0)
+                 # ins should only have one literal
+-                self.assertEquals(len(i.get_literals()), 1)
++                self.assertEqual(len(i.get_literals()), 1)
+ 
+                 fmt, value = VALUES[method.full_name].pop(0)
+                 converted = format_value(i.get_literals()[0], i, fmt)

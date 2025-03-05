@@ -1,0 +1,20 @@
+diff --git a/CLPS2C-Compiler/CLPS2C-Compiler.csproj b/CLPS2C-Compiler/CLPS2C-Compiler.csproj
+index 867533e..17a3aca 100644
+--- a/CLPS2C-Compiler/CLPS2C-Compiler/CLPS2C-Compiler.csproj
++++ b/CLPS2C-Compiler/CLPS2C-Compiler/CLPS2C-Compiler.csproj
+@@ -28,16 +29,7 @@
+   </ItemGroup>
+
+   <ItemGroup>
+-    <Reference Include="Keystone.Net">
+-      <HintPath>Keystone.Net.dll</HintPath>
+-      <Private>True</Private>
+-    </Reference>
+-  </ItemGroup>
+-
+-  <ItemGroup>
+-    <None Update="keystone.dll">
+-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+-    </None>
++    <ProjectReference Include="..\..\keystone\bindings\csharp\Keystone.Net\Keystone.Net.csproj"/>
+   </ItemGroup>

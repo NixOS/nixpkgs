@@ -1,0 +1,138 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Nikolay Amiantov <ab@fmap.me>
+Date: Tue, 11 Oct 2016 13:12:08 +0300
+Subject: [PATCH] Change /usr/share/zoneinfo to /etc/zoneinfo
+
+NixOS uses this path.
+---
+ man/localtime.xml         | 4 ++--
+ src/basic/time-util.c     | 8 ++++----
+ src/firstboot/firstboot.c | 2 +-
+ src/nspawn/nspawn.c       | 4 ++--
+ src/timedate/timedated.c  | 8 ++++----
+ 5 files changed, 13 insertions(+), 13 deletions(-)
+
+diff --git a/man/localtime.xml b/man/localtime.xml
+index 3a13e04a27..4fd58068a1 100644
+--- a/man/localtime.xml
++++ b/man/localtime.xml
+@@ -20,7 +20,7 @@
+   </refnamediv>
+ 
+   <refsynopsisdiv>
+-    <para><filename>/etc/localtime</filename> -&gt; <filename>../usr/share/zoneinfo/…</filename></para>
++    <para><filename>/etc/localtime</filename> -&gt; <filename>zoneinfo/…</filename></para>
+   </refsynopsisdiv>
+ 
+   <refsect1>
+@@ -30,7 +30,7 @@
+     system-wide timezone of the local system that is used by
+     applications for presentation to the user. It should be an
+     absolute or relative symbolic link pointing to
+-    <filename>/usr/share/zoneinfo/</filename>, followed by a timezone
++    <filename>/etc/zoneinfo/</filename>, followed by a timezone
+     identifier such as <literal>Europe/Berlin</literal> or
+     <literal>Etc/UTC</literal>. The resulting link should lead to the
+     corresponding binary
+diff --git a/src/basic/time-util.c b/src/basic/time-util.c
+index b94f37c31c..48f5a2526b 100644
+--- a/src/basic/time-util.c
++++ b/src/basic/time-util.c
+@@ -1412,7 +1412,7 @@ static int get_timezones_from_zone1970_tab(char ***ret) {
+ 
+         assert(ret);
+ 
+-        f = fopen("/usr/share/zoneinfo/zone1970.tab", "re");
++        f = fopen("/etc/zoneinfo/zone1970.tab", "re");
+         if (!f)
+                 return -errno;
+ 
+@@ -1453,7 +1453,7 @@ static int get_timezones_from_tzdata_zi(char ***ret) {
+ 
+         assert(ret);
+ 
+-        f = fopen("/usr/share/zoneinfo/tzdata.zi", "re");
++        f = fopen("/etc/zoneinfo/tzdata.zi", "re");
+         if (!f)
+                 return -errno;
+ 
+@@ -1565,7 +1565,7 @@ int verify_timezone(const char *name, int log_level) {
+         if (p - name >= PATH_MAX)
+                 return -ENAMETOOLONG;
+ 
+-        t = strjoina("/usr/share/zoneinfo/", name);
++        t = strjoina("/etc/zoneinfo/", name);
+ 
+         fd = open(t, O_RDONLY|O_CLOEXEC);
+         if (fd < 0)
+@@ -1617,7 +1617,7 @@ int get_timezone(char **ret) {
+         if (r < 0)
+                 return r; /* Return EINVAL if not a symlink */
+ 
+-        const char *e = PATH_STARTSWITH_SET(t, "/usr/share/zoneinfo/", "../usr/share/zoneinfo/");
++        const char *e = PATH_STARTSWITH_SET(t, "/etc/zoneinfo/", "../etc/zoneinfo/");
+         if (!e)
+                 return -EINVAL;
+         if (!timezone_is_valid(e, LOG_DEBUG))
+diff --git a/src/firstboot/firstboot.c b/src/firstboot/firstboot.c
+index 6afabef430..c1e3af77e1 100644
+--- a/src/firstboot/firstboot.c
++++ b/src/firstboot/firstboot.c
+@@ -648,7 +648,7 @@ static int process_timezone(int rfd) {
+         if (isempty(arg_timezone))
+                 return 0;
+ 
+-        e = strjoina("../usr/share/zoneinfo/", arg_timezone);
++        e = strjoina("zoneinfo/", arg_timezone);
+ 
+         r = symlinkat_atomic_full(e, pfd, f, /* make_relative= */ false);
+         if (r < 0)
+diff --git a/src/nspawn/nspawn.c b/src/nspawn/nspawn.c
+index 756ce11b1f..436804b3bd 100644
+--- a/src/nspawn/nspawn.c
++++ b/src/nspawn/nspawn.c
+@@ -1862,8 +1862,8 @@ int userns_mkdir(const char *root, const char *path, mode_t mode, uid_t uid, gid
+ static const char *timezone_from_path(const char *path) {
+         return PATH_STARTSWITH_SET(
+                         path,
+-                        "../usr/share/zoneinfo/",
+-                        "/usr/share/zoneinfo/");
++                        "../etc/zoneinfo/",
++                        "/etc/zoneinfo/");
+ }
+ 
+ static bool etc_writable(void) {
+diff --git a/src/timedate/timedated.c b/src/timedate/timedated.c
+index 448aa7e94d..2161e09579 100644
+--- a/src/timedate/timedated.c
++++ b/src/timedate/timedated.c
+@@ -280,7 +280,7 @@ static int context_read_data(Context *c) {
+ 
+         r = get_timezone(&t);
+         if (r == -EINVAL)
+-                log_warning_errno(r, "/etc/localtime should be a symbolic link to a time zone data file in /usr/share/zoneinfo/.");
++                log_warning_errno(r, "/etc/localtime should be a symbolic link to a time zone data file in /etc/zoneinfo/.");
+         else if (r < 0)
+                 log_warning_errno(r, "Failed to get target of /etc/localtime: %m");
+ 
+@@ -304,7 +304,7 @@ static int context_write_data_timezone(Context *c) {
+ 
+         if (isempty(c->zone) || streq(c->zone, "UTC")) {
+ 
+-                if (access("/usr/share/zoneinfo/UTC", F_OK) < 0) {
++                if (access("/etc/zoneinfo/UTC", F_OK) < 0) {
+ 
+                         if (unlink("/etc/localtime") < 0 && errno != ENOENT)
+                                 return -errno;
+@@ -312,9 +312,9 @@ static int context_write_data_timezone(Context *c) {
+                         return 0;
+                 }
+ 
+-                source = "../usr/share/zoneinfo/UTC";
++                source = "../etc/zoneinfo/UTC";
+         } else {
+-                p = path_join("../usr/share/zoneinfo", c->zone);
++                p = path_join("../etc/zoneinfo", c->zone);
+                 if (!p)
+                         return -ENOMEM;
+ 

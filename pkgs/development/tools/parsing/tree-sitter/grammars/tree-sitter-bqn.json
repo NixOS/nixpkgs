@@ -1,0 +1,12 @@
+{
+  "url": "https://github.com/shnarazk/tree-sitter-bqn",
+  "rev": "a90b371503f158699042423918e4c5e9285f5519",
+  "date": "2023-10-12T14:03:08+09:00",
+  "path": "/nix/store/l8jagwjzgm9kwgda2rqgkzxpszlmf6br-tree-sitter-bqn",
+  "sha256": "0xma9dmz591xfy20g7sk535d5w21migs9zajjw2nd1c5czj00nzw",
+  "hash": "sha256-/FsA5GeFhWYFl1L9pF+sQfDSyihTnweEdz2k8mtLqnY=",
+  "fetchLFS": false,
+  "fetchSubmodules": false,
+  "deepClone": false,
+  "leaveDotGit": false
+}

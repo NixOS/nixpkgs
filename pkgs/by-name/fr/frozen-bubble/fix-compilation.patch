@@ -1,0 +1,33 @@
+diff --git a/Build.PL b/Build.PL
+index b029d1e..8737395 100644
+--- a/Build.PL
++++ b/Build.PL
+@@ -16,13 +16,14 @@ use Games::FrozenBubble;
+ my $prefix = Alien::SDL->config('prefix');
+ my $cflags = '-I'
+   . File::Spec->catfile( $prefix, 'include' )
++  . ' ' . `pkg-config --cflags SDL_mixer`
+   ;
+ $cflags .= ' -fnested-functions' if $^O =~ /darwin/;
+ ###!!! this looks strange, you perhaps meant "$cflags .= ..."
+ ###!!! I intended Alien::SDL to add -I$prefix/include automatically, please tell me when it does not work (kmx)
+ my $devnull = File::Spec->devnull();
+ my @cflags =  ExtUtils::CBuilder->new->split_like_shell( $cflags );
+-my @linkers = ( ExtUtils::CBuilder->new->split_like_shell( Alien::SDL->config('libs', '-lSDL_mixer', '-lSDL_Pango') ) );
++my @linkers = ( ExtUtils::CBuilder->new->split_like_shell( Alien::SDL->config('libs', '-lSDL_Pango',`pkg-config --libs SDL_mixer`) ) );
+ push @linkers, '-liconv'
+   if $^O =~ /win/i;    ###!!! really only Win needs this? ; BEWARE this matches also 'darwin', 'cygwin'!!!!
+ 
+diff --git a/inc/My/Builder.pm b/inc/My/Builder.pm
+index 2ebaf91..c420b9a 100644
+--- a/inc/My/Builder.pm
++++ b/inc/My/Builder.pm
+@@ -123,7 +123,7 @@ sub ACTION_server {
+             push @ofiles, $cbuilder->compile(
+                 source               => catfile($server_directory, $cfile),
+                 extra_compiler_flags => [
+-                    qw(-g -Wall -Werror -pipe), # verbatim from Makefile
++                    qw(-g -pipe), # verbatim from Makefile
+                     '-I' . $server_directory, # does not seem to be necessary
+                     $cbuilder->split_like_shell(`pkg-config glib-2.0 --cflags`),
+                     $cbuilder->split_like_shell(`pkg-config glib-2.0 --libs`),

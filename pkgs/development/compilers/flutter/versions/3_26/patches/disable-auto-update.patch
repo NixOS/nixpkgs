@@ -1,0 +1,30 @@
+diff --git a/packages/flutter_tools/lib/src/runner/flutter_command.dart b/packages/flutter_tools/lib/src/runner/flutter_command.dart
+index e4e474ab6e..5548599802 100644
+--- a/packages/flutter_tools/lib/src/runner/flutter_command.dart
++++ b/packages/flutter_tools/lib/src/runner/flutter_command.dart
+@@ -1693,7 +1693,7 @@ Run 'flutter -h' (or 'flutter <command> -h') for available flutter commands and
+ 
+     // Populate the cache. We call this before pub get below so that the
+     // sky_engine package is available in the flutter cache for pub to find.
+-    if (shouldUpdateCache) {
++    if (false) {
+       // First always update universal artifacts, as some of these (e.g.
+       // ios-deploy on macOS) are required to determine `requiredArtifacts`.
+       final bool offline;
+diff --git a/packages/flutter_tools/lib/src/runner/flutter_command_runner.dart b/packages/flutter_tools/lib/src/runner/flutter_command_runner.dart
+index 50783f8435..db94062840 100644
+--- a/packages/flutter_tools/lib/src/runner/flutter_command_runner.dart
++++ b/packages/flutter_tools/lib/src/runner/flutter_command_runner.dart
+@@ -377,11 +377,7 @@ class FlutterCommandRunner extends CommandRunner<void> {
+           globals.analytics.suppressTelemetry();
+         }
+ 
+-        globals.flutterVersion.ensureVersionFile();
+         final bool machineFlag = topLevelResults[FlutterGlobalOptions.kMachineFlag] as bool? ?? false;
+-        if (await _shouldCheckForUpdates(topLevelResults, topLevelMachineFlag: machineFlag)) {
+-          await globals.flutterVersion.checkFlutterVersionFreshness();
+-        }
+ 
+         // See if the user specified a specific device.
+         final String? specifiedDeviceId = topLevelResults[FlutterGlobalOptions.kDeviceIdOption] as String?;
+

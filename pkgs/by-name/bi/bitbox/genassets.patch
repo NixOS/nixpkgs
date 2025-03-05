@@ -1,0 +1,13 @@
+diff --git a/frontends/qt/genassets.sh b/frontends/qt/genassets.sh
+index 4b1ba87be..b5a9ad279 100755
+--- a/frontends/qt/genassets.sh
++++ b/frontends/qt/genassets.sh
+@@ -20,7 +20,7 @@ if [ ! -d ../web/build ]; then
+ fi
+ 
+ echo '<!DOCTYPE RCC><RCC version="1.0"><qresource>' > assets.qrc
+-/usr/bin/find ../web/build/ -maxdepth 3 -type f | sed -e "s|../web/build/||" | awk '{ print "<file alias=\"" $1 "\">../web/build/" $1 "</file>" '} >> assets.qrc
++find ../web/build/ -maxdepth 3 -type f | sort | sed -e "s|../web/build/||" | awk '{ print "<file alias=\"" $1 "\">../web/build/" $1 "</file>" '} >> assets.qrc
+ 
+ echo '<file alias="trayicon.png">resources/trayicon.png</file>' >> assets.qrc
+ echo '</qresource></RCC>' >> assets.qrc
