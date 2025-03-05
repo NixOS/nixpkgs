@@ -14968,6 +14968,8 @@ self: super: with self; {
 
   sensorpush-ble = callPackage ../development/python-modules/sensorpush-ble { };
 
+  sensorpush-ha = callPackage ../development/python-modules/sensorpush-ha { };
+
   sensoterra = callPackage ../development/python-modules/sensoterra { };
 
   sentencepiece = callPackage ../development/python-modules/sentencepiece {
