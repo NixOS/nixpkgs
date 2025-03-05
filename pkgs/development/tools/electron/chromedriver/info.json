@@ -1,37 +1,4 @@
 {
-    "29": {
-        "hashes": {
-            "aarch64-darwin": "8a100f4e7a84862847ab0804446ee805fbba0a68657420b369f80db417c1c87a",
-            "aarch64-linux": "232c375e4789b887a7f8712a64ac5849cf41904808b9aa00f6f6fbbf6621105d",
-            "armv7l-linux": "2c639a32c9436f135ef69db9640dcf4489b2dea30e865a0f63a87bb92d9ccf88",
-            "headers": "0swfh30yilw6w0qi6cl6ccm3rdvdmpr5s2vaxy5bbmizc88a4jkv",
-            "x86_64-darwin": "4364c264c932099d09fe67cc0072e6071739ad67ca1fecf5bfd7e8c1fdcc8671",
-            "x86_64-linux": "1c2b450b99929b49269a56db2dc60920f027ec92ae01a4620fa3f64473539caa"
-        },
-        "version": "29.4.6"
-    },
-    "30": {
-        "hashes": {
-            "aarch64-darwin": "3de7da4462c7690f75680aecac8fddedc4b998d0da769136d8eff2932b36004e",
-            "aarch64-linux": "3722d46929fd2c7b33c17d37464a08150e60d9269053eb67195795254fb5e947",
-            "armv7l-linux": "a786d51f834c24b768bd415bf9a2fc5c1d9abdf9dc0b1a091bf9a8ff101becfe",
-            "headers": "0db38ndw9rrd8ixa14761cbff6ns31b6302bzx5q4in8i4dkrrs3",
-            "x86_64-darwin": "d89b89f7c2ba45cb10df7fc23722bacf6f77e13002c42648762cd18ae3fa9182",
-            "x86_64-linux": "688e4da8dbcb7dbfacab6f29341d96736e6d06e4c8029835b83ef30b69885b01"
-        },
-        "version": "30.5.1"
-    },
-    "31": {
-        "hashes": {
-            "aarch64-darwin": "17015acc125d2a453ff9e7a6623ce856113c0f435bfffd65b60d73e9cd81d40e",
-            "aarch64-linux": "7a545397292b405153b2d73b525fcd0821ea5a2200330a9bb4f48cd83010a30b",
-            "armv7l-linux": "ace8b955b12b196d442d315ad62911eeda1ee4957cba4423e3cfe2703ff85673",
-            "headers": "1dakbhv1f1cc8zr8rvhjgbmly43db1l1gcf0l8c7yn8h0lb17aq5",
-            "x86_64-darwin": "7c8886bed6128791b6637a54a3d76712e9b37a34252376478d3c843ed93c9ff9",
-            "x86_64-linux": "39b59f8dbca6cb2f7d9c2299bd6885a7041d3242d18fe3beedf89028b7e0376a"
-        },
-        "version": "31.7.7"
-    },
     "32": {
         "hashes": {
             "aarch64-darwin": "50ffb73f7ac2705dc1500977dfe391f21895eefdb1eac642786ff9e3904f667e",

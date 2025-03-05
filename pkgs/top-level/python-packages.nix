@@ -5410,6 +5410,8 @@ self: super: with self; {
 
   globus-sdk = callPackage ../development/python-modules/globus-sdk { };
 
+  glocaltokens = callPackage ../development/python-modules/glocaltokens { };
+
   glom = callPackage ../development/python-modules/glom { };
 
   glueviz = callPackage ../development/python-modules/glueviz { };
@@ -10875,6 +10877,8 @@ self: super: with self; {
   pylddwrap = callPackage ../development/python-modules/pylddwrap { };
 
   pyloadapi = callPackage ../development/python-modules/pyloadapi { };
+
+  pylibrespot-java = callPackage ../development/python-modules/pylibrespot-java { };
 
   pylsl = callPackage ../development/python-modules/pylsl { };
 

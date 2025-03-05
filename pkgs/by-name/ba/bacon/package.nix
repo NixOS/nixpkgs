@@ -3,10 +3,12 @@
   stdenv,
   rustPlatform,
   fetchFromGitHub,
+  installShellFiles,
   pkg-config,
   alsa-lib,
   versionCheckHook,
   bacon,
+  buildPackages,
   nix-update-script,
 
   withSound ? false,
@@ -41,15 +43,30 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "sound"
   ];
 
-  nativeBuildInputs = lib.optionals withSound [
-    pkg-config
-  ];
+  nativeBuildInputs =
+    [
+      installShellFiles
+    ]
+    ++ lib.optionals withSound [
+      pkg-config
+    ];
 
   buildInputs = lib.optionals withSound soundDependencies;
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = [ "--version" ];
   doInstallCheck = true;
+
+  postInstall =
+    let
+      bacon = "${stdenv.hostPlatform.emulator buildPackages} $out/bin/bacon";
+    in
+    lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) ''
+      installShellCompletion --cmd bacon \
+        --bash <(COMPLETE=bash ${bacon}) \
+        --fish <(COMPLETE=fish ${bacon}) \
+        --zsh <(COMPLETE=zsh ${bacon})
+    '';
 
   passthru = {
     tests = {
