@@ -1013,81 +1013,6 @@ let
         # Previously monorepoSrc was erroneously not being passed through.
         // lib.optionalAttrs (lib.versionOlder metadata.release_version "14") { monorepoSrc = null; } # Preserve a bug during #307211, TODO: remove; causes llvm 13 rebuild.
       );
-
-      compiler-rtPatches =
-        lib.optional (lib.versionOlder metadata.release_version "15") (
-          metadata.getVersionFile "compiler-rt/codesign.patch"
-        ) # Revert compiler-rt commit that makes codesign mandatory
-        ++ [
-          (metadata.getVersionFile "compiler-rt/X86-support-extension.patch") # Add support for i486 i586 i686 by reusing i386 config
-        ]
-        ++ lib.optional (lib.versions.major metadata.release_version == "12") (fetchpatch {
-          # fixes the parallel build on aarch64 darwin
-          name = "fix-symlink-race-aarch64-darwin.patch";
-          url = "https://github.com/llvm/llvm-project/commit/b31080c596246bc26d2493cfd5e07f053cf9541c.patch";
-          relative = "compiler-rt";
-          hash = "sha256-Cv2NC8402yU7QaTR6TzdH+qyWRy+tTote7KKWtKRWFQ=";
-        })
-        ++ lib.optional (
-          lib.versions.major metadata.release_version == "12"
-          || (
-            lib.versionAtLeast metadata.release_version "14" && lib.versionOlder metadata.release_version "18"
-          )
-        ) (metadata.getVersionFile "compiler-rt/gnu-install-dirs.patch")
-        ++
-          lib.optional
-            (lib.versionAtLeast metadata.release_version "13" && lib.versionOlder metadata.release_version "18")
-            (fetchpatch {
-              name = "cfi_startproc-after-label.patch";
-              url = "https://github.com/llvm/llvm-project/commit/7939ce39dac0078fef7183d6198598b99c652c88.patch";
-              stripLen = 1;
-              hash = "sha256-tGqXsYvUllFrPa/r/dsKVlwx5IrcJGccuR1WAtUg7/o=";
-            })
-        ++ [
-          # ld-wrapper dislikes `-rpath-link //nix/store`, so we normalize away the
-          # extra `/`.
-          (metadata.getVersionFile "compiler-rt/normalize-var.patch")
-        ]
-        ++
-          lib.optional
-            (lib.versionAtLeast metadata.release_version "13" && lib.versionOlder metadata.release_version "18")
-            # Prevent a compilation error on darwin
-            (metadata.getVersionFile "compiler-rt/darwin-targetconditionals.patch")
-        # TODO: make unconditional and remove in <15 section below. Causes rebuilds.
-        ++ lib.optionals (lib.versionAtLeast metadata.release_version "15") [
-          # See: https://github.com/NixOS/nixpkgs/pull/186575
-          ./compiler-rt/darwin-plistbuddy-workaround.patch
-        ]
-        ++
-          lib.optional (lib.versions.major metadata.release_version == "15")
-            # See: https://github.com/NixOS/nixpkgs/pull/194634#discussion_r999829893
-            ./compiler-rt/armv7l-15.patch
-        ++ lib.optionals (lib.versionOlder metadata.release_version "15") [
-          ./compiler-rt/darwin-plistbuddy-workaround.patch
-          (metadata.getVersionFile "compiler-rt/armv7l.patch")
-          # Fix build on armv6l
-          ./compiler-rt/armv6-mcr-dmb.patch
-          ./compiler-rt/armv6-sync-ops-no-thumb.patch
-        ]
-        ++
-          lib.optionals
-            (lib.versionAtLeast metadata.release_version "13" && lib.versionOlder metadata.release_version "18")
-            [
-              # Fix build on armv6l
-              ./compiler-rt/armv6-scudo-no-yield.patch
-            ]
-        ++ [
-          # Fix build on armv6l
-          ./compiler-rt/armv6-no-ldrexd-strexd.patch
-        ]
-        ++ lib.optionals (lib.versionAtLeast metadata.release_version "13") [
-          (metadata.getVersionFile "compiler-rt/armv6-scudo-libatomic.patch")
-        ]
-        ++ lib.optional (lib.versions.major metadata.release_version == "19") (fetchpatch {
-          url = "https://github.com/llvm/llvm-project/pull/99837/commits/14ae0a660a38e1feb151928a14f35ff0f4487351.patch";
-          hash = "sha256-JykABCaNNhYhZQxCvKiBn54DZ5ZguksgCHnpdwWF2no=";
-          relative = "compiler-rt";
-        });
     in
     (
       {
@@ -1104,7 +1029,6 @@ let
                 args.stdenv;
           in
           {
-            patches = compiler-rtPatches;
             inherit stdenv;
           }
           // lib.optionalAttrs (stdenv.hostPlatform.useLLVM or false) {
@@ -1115,7 +1039,6 @@ let
         );
 
         compiler-rt-no-libc = callPackage ./compiler-rt {
-          patches = compiler-rtPatches;
           doFakeLibgcc = stdenv.hostPlatform.useLLVM or false;
           stdenv =
             # Darwin needs to use a bootstrap stdenv to avoid an infinite recursion when cross-compiling.

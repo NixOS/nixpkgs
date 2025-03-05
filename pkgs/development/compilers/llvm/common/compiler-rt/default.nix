@@ -3,7 +3,6 @@
 , llvm_meta
 , release_version
 , version
-, patches ? []
 , src ? null
 , monorepoSrc ? null
 , runCommand
@@ -29,6 +28,8 @@
 # platforms still expect this, however, so we symlink one into place.
 , forceLinkCompilerRt ? stdenv.hostPlatform.isOpenBSD
 , devExtraCmakeFlags ? []
+, getVersionFile
+, fetchpatch
 }:
 
 let
@@ -57,10 +58,85 @@ let
 in
 
 stdenv.mkDerivation {
-  inherit pname version patches;
+  inherit pname version;
 
   src = src';
   sourceRoot = "${src'.name}/${baseName}";
+
+  patches =
+    lib.optional (lib.versionOlder release_version "15") (
+      getVersionFile "compiler-rt/codesign.patch"
+    ) # Revert compiler-rt commit that makes codesign mandatory
+    ++ [
+      (getVersionFile "compiler-rt/X86-support-extension.patch") # Add support for i486 i586 i686 by reusing i386 config
+    ]
+    ++ lib.optional (lib.versions.major release_version == "12") (fetchpatch {
+      # fixes the parallel build on aarch64 darwin
+      name = "fix-symlink-race-aarch64-darwin.patch";
+      url = "https://github.com/llvm/llvm-project/commit/b31080c596246bc26d2493cfd5e07f053cf9541c.patch";
+      relative = "compiler-rt";
+      hash = "sha256-Cv2NC8402yU7QaTR6TzdH+qyWRy+tTote7KKWtKRWFQ=";
+    })
+    ++ lib.optional (
+      lib.versions.major release_version == "12"
+      || (
+        lib.versionAtLeast release_version "14" && lib.versionOlder release_version "18"
+      )
+    ) (getVersionFile "compiler-rt/gnu-install-dirs.patch")
+    ++
+      lib.optional
+        (lib.versionAtLeast release_version "13" && lib.versionOlder release_version "18")
+        (fetchpatch {
+          name = "cfi_startproc-after-label.patch";
+          url = "https://github.com/llvm/llvm-project/commit/7939ce39dac0078fef7183d6198598b99c652c88.patch";
+          stripLen = 1;
+          hash = "sha256-tGqXsYvUllFrPa/r/dsKVlwx5IrcJGccuR1WAtUg7/o=";
+        })
+      ++ [
+        # ld-wrapper dislikes `-rpath-link //nix/store`, so we normalize away the
+        # extra `/`.
+        (getVersionFile "compiler-rt/normalize-var.patch")
+      ]
+      ++
+        lib.optional
+          (lib.versionAtLeast release_version "13" && lib.versionOlder release_version "18")
+          # Prevent a compilation error on darwin
+          (getVersionFile "compiler-rt/darwin-targetconditionals.patch")
+      # TODO: make unconditional and remove in <15 section below. Causes rebuilds.
+      ++ lib.optionals (lib.versionAtLeast release_version "15") [
+        # See: https://github.com/NixOS/nixpkgs/pull/186575
+        ./darwin-plistbuddy-workaround.patch
+      ]
+      ++
+        lib.optional (lib.versions.major release_version == "15")
+          # See: https://github.com/NixOS/nixpkgs/pull/194634#discussion_r999829893
+          ./armv7l-15.patch
+      ++ lib.optionals (lib.versionOlder release_version "15") [
+        ./darwin-plistbuddy-workaround.patch
+        (getVersionFile "compiler-rt/armv7l.patch")
+        # Fix build on armv6l
+        ./armv6-mcr-dmb.patch
+        ./armv6-sync-ops-no-thumb.patch
+      ]
+      ++
+        lib.optionals
+          (lib.versionAtLeast release_version "13" && lib.versionOlder release_version "18")
+          [
+            # Fix build on armv6l
+            ./armv6-scudo-no-yield.patch
+          ]
+      ++ [
+        # Fix build on armv6l
+        ./armv6-no-ldrexd-strexd.patch
+      ]
+      ++ lib.optionals (lib.versionAtLeast release_version "13") [
+        (getVersionFile "compiler-rt/armv6-scudo-libatomic.patch")
+      ]
+      ++ lib.optional (lib.versions.major release_version == "19") (fetchpatch {
+        url = "https://github.com/llvm/llvm-project/pull/99837/commits/14ae0a660a38e1feb151928a14f35ff0f4487351.patch";
+        hash = "sha256-JykABCaNNhYhZQxCvKiBn54DZ5ZguksgCHnpdwWF2no=";
+        relative = "compiler-rt";
+      });
 
   nativeBuildInputs = [ cmake ]
     ++ (lib.optional (lib.versionAtLeast release_version "15") ninja)
