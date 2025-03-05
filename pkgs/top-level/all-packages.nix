@@ -17776,12 +17776,8 @@ with pkgs;
 
   xdragon = lowPrio (callPackage ../tools/X11/xdragon { });
 
-  sail-riscv-rv32 = callPackage ../applications/virtualization/sail-riscv {
-    arch = "RV32";
-  };
-
-  sail-riscv-rv64 = callPackage ../applications/virtualization/sail-riscv {
-    arch = "RV64";
+  sail-riscv = callPackage ../applications/virtualization/sail-riscv {
+    inherit (ocamlPackages) sail;
   };
 
   timeloop = pkgs.darwin.apple_sdk_11_0.callPackage ../applications/science/computer-architecture/timeloop { };
