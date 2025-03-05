@@ -15,6 +15,8 @@
 , quarto
 , extraPythonPackages ? ps: []
 , sysctl
+, julia
+, extraJuliaPackages ? []
 }:
 stdenv.mkDerivation (final: {
   pname = "quarto";
@@ -43,7 +45,8 @@ stdenv.mkDerivation (final: {
       --prefix QUARTO_DART_SASS : ${lib.getExe dart-sass} \
       --prefix QUARTO_TYPST : ${lib.getExe typst} \
       ${lib.optionalString (rWrapper != null) "--prefix QUARTO_R : ${rWrapper.override { packages = [ rPackages.rmarkdown ] ++ extraRPackages; }}/bin/R"} \
-      ${lib.optionalString (python3 != null) "--prefix QUARTO_PYTHON : ${python3.withPackages (ps: with ps; [ jupyter ipython ] ++ (extraPythonPackages ps))}/bin/python3"}
+      ${lib.optionalString (python3 != null) "--prefix QUARTO_PYTHON : ${python3.withPackages (ps: with ps; [ jupyter ipython ] ++ (extraPythonPackages ps))}/bin/python3"} \
+      ${lib.optionalString (julia != null) "--prefix QUARTO_JULIA : ${julia.withPackages ([ "QuartoNotebookRunner" ] ++ extraJuliaPackages)}/bin/julia"}
   '';
 
   installPhase = ''
