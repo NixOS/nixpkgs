@@ -192,6 +192,11 @@
     github = "2gn";
     githubId = 101851090;
   };
+  _34j = {
+    name = "34j";
+    github = "34j";
+    githubId = 55338215;
+  };
   _360ied = {
     name = "Brian Zhu";
     email = "therealbarryplayer@gmail.com";
