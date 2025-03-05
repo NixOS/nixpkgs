@@ -4042,6 +4042,8 @@ self: super: with self; {
 
   dvc-objects = callPackage ../development/python-modules/dvc-objects {  };
 
+  dvc-oss = callPackage ../development/python-modules/dvc-oss {  };
+
   dvc-render = callPackage ../development/python-modules/dvc-render {  };
 
   dvc-s3 = callPackage ../development/python-modules/dvc-s3 { };
@@ -4051,6 +4053,10 @@ self: super: with self; {
   dvc-studio-client = callPackage ../development/python-modules/dvc-studio-client {  };
 
   dvc-task = callPackage ../development/python-modules/dvc-task {  };
+
+  dvc-webdav = callPackage ../development/python-modules/dvc-webdav {  };
+
+  dvc-webhdfs = callPackage ../development/python-modules/dvc-webhdfs {  };
 
   dvclive = callPackage ../development/python-modules/dvclive {  };
 
