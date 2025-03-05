@@ -10779,12 +10779,14 @@ with pkgs;
     zig_0_11 = zigPackages."0.11";
     zig_0_12 = zigPackages."0.12";
     zig_0_13 = zigPackages."0.13";
+    zig_0_14 = zigPackages."0.14";
   }) zigPackages
      zig_0_11
      zig_0_12
-     zig_0_13;
+     zig_0_13
+     zig_0_14;
 
-  zig = zig_0_13;
+  zig = zig_0_14;
 
   zigStdenv = if stdenv.cc.isZig then stdenv else lowPrio zig.passthru.stdenv;
 
