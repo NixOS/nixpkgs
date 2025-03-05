@@ -4,8 +4,6 @@
   nix-update-script,
   versionCheckHook,
 
-  fish,
-
   lib,
   makeWrapper,
   xdg-utils,
@@ -78,7 +76,7 @@ buildGoModule rec {
       # Install fish script
       install -Dm755 $src/scripts/assume.fish $out/share/assume.fish
       substituteInPlace $out/share/assume.fish \
-        --replace /bin/fish ${fish}/bin/fish
+        --replace-fail "#!/bin/fish" "#!/usr/bin/env fish"
     '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
