@@ -63,6 +63,15 @@ let
       flask-appbuilder = pySuper.flask-appbuilder.overridePythonAttrs (o: {
         meta.broken = false;
       });
+      flask-login = pySuper.flask-login.overridePythonAttrs (o: rec {
+        version = "0.6.3";
+        src = fetchPypi {
+          pname = "Flask-Login";
+          inherit version;
+          hash = "sha256-XiPRSmB+8SgGxplZC4nQ8ODWe67sWZ11lHv5wUczAzM=";
+        };
+        nativeBuildInputs = [ pySelf.setuptools ];
+      });
       # a knock-on effect from overriding the sqlalchemy version
       flask-sqlalchemy = pySuper.flask-sqlalchemy.overridePythonAttrs (o: {
         src = fetchPypi {
