@@ -124,7 +124,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   postPatch = ''
     # Dynamically link WebRTC instead of static
-    substituteInPlace $cargoDepsCopy/webrtc-sys-*/build.rs \
+    substituteInPlace $cargoDepsCopy/*/webrtc-sys-*/build.rs \
       --replace-fail "cargo:rustc-link-lib=static=webrtc" "cargo:rustc-link-lib=dylib=webrtc"
 
     # The generate-licenses script wants a specific version of cargo-about eventhough
