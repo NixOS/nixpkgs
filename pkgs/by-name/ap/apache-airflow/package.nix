@@ -72,6 +72,20 @@ let
         };
         nativeBuildInputs = [ pySelf.setuptools ];
       });
+      flask-session = pySuper.flask-session.overridePythonAttrs (o: rec {
+        version = "0.5.0";
+        src = fetchFromGitHub {
+          owner = "pallets-eco";
+          repo = "flask-session";
+          rev = "refs/tags/${version}";
+          hash = "sha256-t8w6ZS4gBDpnnKvL3DLtn+rRLQNJbrT2Hxm4f3+a3Xc=";
+        };
+        pytestFlagsArray = [
+          "-k"
+          "'null_session or filesystem_session'"
+        ];
+        disabledTestPaths = [];
+      });
       # a knock-on effect from overriding the sqlalchemy version
       flask-sqlalchemy = pySuper.flask-sqlalchemy.overridePythonAttrs (o: {
         src = fetchPypi {
