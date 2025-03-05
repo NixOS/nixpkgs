@@ -10219,7 +10219,7 @@ with pkgs;
 
   prospector = callPackage ../development/tools/prospector { };
 
-  protobuf = protobuf_29;
+  protobuf = protobuf_30;
 
   inherit
     ({
