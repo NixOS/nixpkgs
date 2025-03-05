@@ -2,7 +2,9 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  pythonAtLeast,
   requests,
+  standard-telnetlib,
 }:
 
 buildPythonPackage rec {
@@ -15,7 +17,9 @@ buildPythonPackage rec {
     sha256 = "0q52rb0kshgbligxjqrwz0v7kgqjbv6jahdb66ndxy93mfr0ig3a";
   };
 
-  propagatedBuildInputs = [ requests ];
+  propagatedBuildInputs = [
+    requests
+  ] ++ lib.optionals (pythonAtLeast "3.13") [ standard-telnetlib ];
 
   # Project has no tests
   doCheck = false;
