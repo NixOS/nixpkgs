@@ -13,7 +13,7 @@ let
     self = python3;
     packageOverrides = _: super: { tree-sitter = super.tree-sitter_0_21; };
   };
-  version = "0.74.1";
+  version = "0.75.1";
   aider-chat = python3.pkgs.buildPythonPackage {
     pname = "aider-chat";
     inherit version;
@@ -23,7 +23,7 @@ let
       owner = "Aider-AI";
       repo = "aider";
       tag = "v${version}";
-      hash = "sha256-JXzkvuSOOEUxNqF6l5USzIPftpnIW+CptEv/0yp0eGM=";
+      hash = "sha256-TQDYrkSW58E1/lIBuJsgpXst8OAbaTyNX1SM8mdFgzU";
     };
 
     pythonRelaxDeps = true;
@@ -101,6 +101,7 @@ let
       smmap
       sniffio
       sounddevice
+      socksio
       soundfile
       soupsieve
       tiktoken

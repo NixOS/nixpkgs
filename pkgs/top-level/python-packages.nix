@@ -4042,6 +4042,8 @@ self: super: with self; {
 
   dvc-objects = callPackage ../development/python-modules/dvc-objects {  };
 
+  dvc-oss = callPackage ../development/python-modules/dvc-oss {  };
+
   dvc-render = callPackage ../development/python-modules/dvc-render {  };
 
   dvc-s3 = callPackage ../development/python-modules/dvc-s3 { };
@@ -4051,6 +4053,10 @@ self: super: with self; {
   dvc-studio-client = callPackage ../development/python-modules/dvc-studio-client {  };
 
   dvc-task = callPackage ../development/python-modules/dvc-task {  };
+
+  dvc-webdav = callPackage ../development/python-modules/dvc-webdav {  };
+
+  dvc-webhdfs = callPackage ../development/python-modules/dvc-webhdfs {  };
 
   dvclive = callPackage ../development/python-modules/dvclive {  };
 
@@ -5899,6 +5905,8 @@ self: super: with self; {
   hatasmota = callPackage ../development/python-modules/hatasmota { };
 
   hatchling = callPackage ../development/python-modules/hatchling { };
+
+  hatch-babel = callPackage ../development/python-modules/hatch-babel { };
 
   hatch-fancy-pypi-readme = callPackage ../development/python-modules/hatch-fancy-pypi-readme { };
 
@@ -7756,6 +7764,8 @@ self: super: with self; {
   llm-cmd = callPackage ../development/python-modules/llm-cmd { };
 
   llm-gguf = callPackage ../development/python-modules/llm-gguf { };
+
+  llm-jq = callPackage ../development/python-modules/llm-jq { };
 
   llm-ollama = callPackage ../development/python-modules/llm-ollama { };
 
@@ -10737,6 +10747,8 @@ self: super: with self; {
   proxy-tools = callPackage ../development/python-modules/proxy-tools { };
 
   proxy-db = callPackage ../development/python-modules/proxy-db { };
+
+  py-deviceid = callPackage ../development/python-modules/py-deviceid { };
 
   py-nextbusnext = callPackage ../development/python-modules/py-nextbusnext { };
 

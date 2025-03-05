@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "temporal-cli";
-  version = "1.2.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "temporalio";
     repo = "cli";
     rev = "v${version}";
-    hash = "sha256-79ANKgtKOxLmgp0qqybYJ78yWTjaOOdnEaPs0qCHje4=";
+    hash = "sha256-9O+INXJhNwgwwvC0751ifdHmxbD0qI5A3LdDb4Krk/o=";
   };
 
-  vendorHash = "sha256-u4kLRdKMd27Jglk1+6SARjNm3WwFswGrnwxbyWmvsao=";
+  vendorHash = "sha256-Xe/qrlqg6DpCNmsO/liTKjWIaY3KznkOQdXSSoJVZq4=";
 
   overrideModAttrs = old: {
     # https://gitlab.com/cznic/libc/-/merge_requests/10
