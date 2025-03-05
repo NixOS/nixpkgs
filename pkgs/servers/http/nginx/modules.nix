@@ -432,10 +432,11 @@ let self = {
     name = "modsecurity";
     src = fetchFromGitHub {
       name = "modsecurity-nginx";
-      owner = "SpiderLabs";
+      owner = "owasp-modsecurity";
       repo = "ModSecurity-nginx";
-      rev = "v1.0.3";
-      sha256 = "sha256-xp0/eqi5PJlzb9NaUbNnzEqNcxDPyjyNwZOwmlv1+ag=";
+      # unstable 2025-02-17
+      rev = "0b4f0cf38502f34a30c8543039f345cfc075670d";
+      hash = "sha256-P3IwKFR4NbaMXYY+O9OHfZWzka4M/wr8sJpX94LzQTU=";
     };
 
     inputs = [ curl geoip libmodsecurity libxml2 lmdb yajl ];
