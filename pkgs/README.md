@@ -400,6 +400,8 @@ If there is only one version of a package, its Nix expression should be named (e
 
 ## Meta attributes
 
+The `meta` attribute set should always be placed last in the derivativion and any other "meta"-like attribute sets like `passthru` should be written before it.
+
 * `meta.description` must:
   * Be short, just one sentence.
   * Be capitalized.
