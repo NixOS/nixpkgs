@@ -5410,6 +5410,8 @@ self: super: with self; {
 
   globus-sdk = callPackage ../development/python-modules/globus-sdk { };
 
+  glocaltokens = callPackage ../development/python-modules/glocaltokens { };
+
   glom = callPackage ../development/python-modules/glom { };
 
   glueviz = callPackage ../development/python-modules/glueviz { };
