@@ -71,6 +71,8 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   meta = llvm_meta // {
+    # Very broken since the dependencies aren't propagating at all with tblgen through the CMake.
+    broken = lib.versionAtLeast release_version "20";
     homepage = "https://mlir.llvm.org/";
     description = "Multi-Level IR Compiler Framework";
     longDescription = ''
