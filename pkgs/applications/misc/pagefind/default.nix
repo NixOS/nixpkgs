@@ -82,8 +82,8 @@ rustPlatform.buildRustPackage rec {
 
     # patch a build-time dependency download
     (
-      realpath $cargoDepsCopy/* | grep lindera-unidic # debug for when version number changes
-      cd $cargoDepsCopy/lindera-unidic-0.32.2
+      realpath $cargoDepsCopy/*/* | grep lindera-unidic # debug for when version number changes
+      cd $cargoDepsCopy/*/lindera-unidic-0.32.2
       #oldHash=$(sha256sum build.rs | cut -d " " -f 1)
 
       # serve lindera-unidic on localhost vacant port

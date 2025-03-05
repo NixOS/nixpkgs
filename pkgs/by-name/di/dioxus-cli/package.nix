@@ -44,7 +44,7 @@ rustPlatform.buildRustPackage rec {
 
   # wasm-opt-sys build.rs tries to verify C++17 support, but the check appears to be faulty.
   postPatch = ''
-    substituteInPlace $cargoDepsCopy/wasm-opt-sys-*/build.rs \
+    substituteInPlace $cargoDepsCopy/*/wasm-opt-sys-*/build.rs \
       --replace-fail 'check_cxx17_support()?;' '// check_cxx17_support()?;'
   '';
 

@@ -126,7 +126,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   postPatch =
     # Dynamically link WebRTC instead of static
     ''
-      substituteInPlace $cargoDepsCopy/webrtc-sys-*/build.rs \
+      substituteInPlace $cargoDepsCopy/*/webrtc-sys-*/build.rs \
         --replace-fail "cargo:rustc-link-lib=static=webrtc" "cargo:rustc-link-lib=dylib=webrtc"
     ''
     # nixpkgs ships cargo-about 0.7, which is a seamless upgrade from 0.6
