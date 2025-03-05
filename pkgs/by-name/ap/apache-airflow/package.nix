@@ -2,11 +2,11 @@
   fetchFromGitHub,
   fetchpatch,
   fetchPypi,
-  python3,
+  python311,
 }:
 
 let
-  python = python3.override {
+  python = python311.override {
     self = python;
     packageOverrides = pySelf: pySuper: {
       connexion = pySuper.connexion.overridePythonAttrs (o: rec {
