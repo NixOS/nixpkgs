@@ -53,10 +53,10 @@ rustPlatform.buildRustPackage {
     substituteInPlace src-tauri/src/core/service_ipc.rs \
       --replace-fail "/tmp/clash-verge-service.sock" "/run/clash-verge-rev/service.sock"
 
-    substituteInPlace $cargoDepsCopy/libappindicator-sys-*/src/lib.rs \
+    substituteInPlace $cargoDepsCopy/*/libappindicator-sys-*/src/lib.rs \
       --replace-fail "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
 
-    substituteInPlace $cargoDepsCopy/sysproxy-*/src/linux.rs \
+    substituteInPlace $cargoDepsCopy/*/sysproxy-*/src/linux.rs \
       --replace-fail '"gsettings"' '"${glib.bin}/bin/gsettings"' \
       --replace-fail '"kreadconfig5"' '"${libsForQt5.kconfig}/bin/kreadconfig5"' \
       --replace-fail '"kreadconfig6"' '"${kdePackages.kconfig}/bin/kreadconfig6"' \
