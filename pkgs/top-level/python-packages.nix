@@ -10876,6 +10876,8 @@ self: super: with self; {
 
   pyloadapi = callPackage ../development/python-modules/pyloadapi { };
 
+  pylibrespot-java = callPackage ../development/python-modules/pylibrespot-java { };
+
   pylsl = callPackage ../development/python-modules/pylsl { };
 
   pynfsclient = callPackage ../development/python-modules/pynfsclient { };
