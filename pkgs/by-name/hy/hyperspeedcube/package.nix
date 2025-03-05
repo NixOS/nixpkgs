@@ -46,16 +46,12 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "HactarCE";
     repo = "Hyperspeedcube";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-ykFf0dfc8j88Y25tx+G9lic09eHDz3WR+h6+owTeWbU=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "key-names-1.5.1" = "sha256-ZO3mlCoUHCaMnxD2vQno6GNx0+JmwZ8OiqpyveiVfvc=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-VFb4zZgMXGZrmoNn5A+G1kjlW0n8IR8dvO9g2v+HqU8=";
 
   nativeBuildInputs = [
     cmake
