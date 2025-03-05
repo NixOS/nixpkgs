@@ -107,22 +107,22 @@ let
         ++ lib.optional pulseSupport libpulseaudio
         ++ lib.optional pipewireSupport pipewire;
 
-      cmakeFlags =
-        [
-          "-D server=OFF"
-          "-D bundled-celt=ON"
-          "-D bundled-opus=OFF"
-          "-D bundled-speex=OFF"
-          "-D bundle-qt-translations=OFF"
-          "-D update=OFF"
-          "-D overlay-xcompile=OFF"
-          "-D oss=OFF"
-          "-D warnings-as-errors=OFF" # conversion error workaround
-        ]
-        ++ lib.optional (!speechdSupport) "-D speechd=OFF"
-        ++ lib.optional (!pulseSupport) "-D pulseaudio=OFF"
-        ++ lib.optional (!pipewireSupport) "-D pipewire=OFF"
-        ++ lib.optional jackSupport "-D alsa=OFF -D jackaudio=ON";
+      cmakeFlags = [
+        "-D server=OFF"
+        "-D bundled-celt=ON"
+        "-D bundled-opus=OFF"
+        "-D bundled-speex=OFF"
+        "-D bundle-qt-translations=OFF"
+        "-D update=OFF"
+        "-D overlay-xcompile=OFF"
+        "-D oss=OFF"
+        "-D warnings-as-errors=OFF" # conversion error workaround
+        (lib.cmakeBool "speechd" speechdSupport)
+        (lib.cmakeBool "pulseaudio" pulseSupport)
+        (lib.cmakeBool "pipewire" pipewireSupport)
+        (lib.cmakeBool "jackaudio" jackSupport)
+        (lib.cmakeBool "alsa" (!jackSupport))
+      ];
 
       env.NIX_CFLAGS_COMPILE = lib.optionalString speechdSupport "-I${speechd-minimal}/include/speech-dispatcher";
 
@@ -144,8 +144,8 @@ let
       cmakeFlags =
         [
           "-D client=OFF"
+          (lib.cmakeBool "ice" iceSupport)
         ]
-        ++ lib.optional (!iceSupport) "-D ice=OFF"
         ++ lib.optionals iceSupport [
           "-D Ice_HOME=${lib.getDev zeroc-ice};${lib.getLib zeroc-ice}"
           "-D CMAKE_PREFIX_PATH=${lib.getDev zeroc-ice};${lib.getLib zeroc-ice}"
