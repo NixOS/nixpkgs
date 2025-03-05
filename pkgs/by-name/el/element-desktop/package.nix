@@ -4,12 +4,11 @@
   fetchFromGitHub,
   makeWrapper,
   makeDesktopItem,
-  fixup-yarn-lock,
   yarn,
   nodejs,
-  fetchYarnDeps,
+  typescript,
   jq,
-  electron_33,
+  electron_34,
   element-web,
   sqlcipher,
   callPackage,
@@ -23,7 +22,7 @@ let
   pinData = import ./element-desktop-pin.nix;
   inherit (pinData.hashes) desktopSrcHash desktopYarnHash;
   executableName = "element-desktop";
-  electron = electron_33;
+  electron = electron_34;
   keytar = callPackage ./keytar {
     inherit electron;
   };
@@ -42,15 +41,20 @@ stdenv.mkDerivation (
       hash = desktopSrcHash;
     };
 
-    offlineCache = fetchYarnDeps {
-      yarnLock = finalAttrs.src + "/yarn.lock";
-      sha256 = desktopYarnHash;
+    # TODO: fetchYarnDeps currently does not deal properly with a dependency
+    # declared as a pin to a commit in a specific git repository.
+    # While it does download everything correctly, `yarn install --offline`
+    # always wants to `git ls-remote` to the repository, ignoring the local
+    # cached tarball.
+    offlineCache = callPackage ./yarn.nix {
+      inherit (finalAttrs) version src;
+      hash = desktopYarnHash;
     };
 
     nativeBuildInputs = [
       yarn
-      fixup-yarn-lock
       nodejs
+      typescript
       makeWrapper
       jq
     ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
@@ -60,11 +64,9 @@ stdenv.mkDerivation (
     configurePhase = ''
       runHook preConfigure
 
-      export HOME=$(mktemp -d)
-      yarn config --offline set yarn-offline-mirror $offlineCache
-      fixup-yarn-lock yarn.lock
-      yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
-      patchShebangs node_modules/
+      mkdir -p node_modules/
+      cp -r $offlineCache/node_modules/* node_modules/
+      substituteInPlace package.json --replace-fail "tsx " "node node_modules/tsx/dist/cli.mjs "
 
       runHook postConfigure
     '';
@@ -78,7 +80,8 @@ stdenv.mkDerivation (
       runHook preBuild
 
       yarn --offline run build:ts
-      yarn --offline run i18n
+      node node_modules/matrix-web-i18n/scripts/gen-i18n.js
+      yarn --offline run i18n:sort
       yarn --offline run build:res
 
       rm -rf node_modules/matrix-seshat node_modules/keytar
@@ -96,6 +99,7 @@ stdenv.mkDerivation (
       ln -s '${element-web}' "$out/share/element/webapp"
       cp -r '.' "$out/share/element/electron"
       cp -r './res/img' "$out/share/element"
+      chmod -R "a+w" "$out/share/element/electron/node_modules"
       rm -rf "$out/share/element/electron/node_modules"
       cp -r './node_modules' "$out/share/element/electron"
       cp $out/share/element/electron/lib/i18n/strings/en_EN.json $out/share/element/electron/lib/i18n/strings/en-us.json
