@@ -111,7 +111,11 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
   postBuild =
-    if lib.versionAtLeast finalAttrs.version "0.13" then
+    if lib.versionAtLeast finalAttrs.version "0.14" then
+      ''
+        stage3/bin/zig build langref --zig-lib-dir $(pwd)/stage3/lib/zig
+      ''
+    else if lib.versionAtLeast finalAttrs.version "0.13" then
       ''
         stage3/bin/zig build langref
       ''
