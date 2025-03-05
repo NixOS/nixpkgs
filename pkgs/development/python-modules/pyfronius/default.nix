@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pyfronius";
-  version = "0.7.5";
+  version = "0.7.6";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "nielstron";
     repo = "pyfronius";
     tag = version;
-    hash = "sha256-dwqFT6UuXYTTaJxDTe5sH8FJxANw6pJakOadHplBFog=";
+    hash = "sha256-zyRcMueKZbk2QWhF3d500NUpvljikO8fsDnePy6Tq90=";
   };
 
   build-system = [ setuptools ];
