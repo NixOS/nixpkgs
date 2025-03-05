@@ -2,8 +2,6 @@
 , stdenv
 , llvm_meta
 , pkgsBuildBuild
-, pollyPatches ? []
-, patches ? []
 , src ? null
 , monorepoSrc ? null
 , runCommand
@@ -39,6 +37,8 @@
 , enablePolly ? lib.versionAtLeast release_version "14"
 , enableTerminfo ? true
 , devExtraCmakeFlags ? []
+, getVersionFile
+, fetchpatch
 }:
 
 let
@@ -94,15 +94,12 @@ let
       chmod u+w "$out/${pname}/tools"
       cp -r ${monorepoSrc}/polly "$out/${pname}/tools"
     '') else src;
-
-  patches' = patches ++ lib.optionals enablePolly pollyPatches;
 in
 
 stdenv.mkDerivation (finalAttrs: {
   inherit pname version;
 
   src = src';
-  patches = patches';
 
   sourceRoot = "${finalAttrs.src.name}/${pname}";
 
@@ -112,6 +109,159 @@ stdenv.mkDerivation (finalAttrs: {
     "trivialautovarinit"
     "shadowstack"
   ];
+
+  patches =
+    lib.optional (lib.versionOlder release_version "14") ./llvm-config-link-static.patch
+    ++ lib.optionals (lib.versions.major release_version == "12") [
+      (getVersionFile "llvm/fix-llvm-issue-49955.patch")
+
+      # On older CPUs (e.g. Hydra/wendy) we'd be getting an error in this test.
+      (fetchpatch {
+        name = "uops-CMOV16rm-noreg.diff";
+        url = "https://github.com/llvm/llvm-project/commit/9e9f991ac033.diff";
+        sha256 = "sha256:12s8vr6ibri8b48h2z38f3afhwam10arfiqfy4yg37bmc054p5hi";
+        stripLen = 1;
+      })
+    ]
+    ++ [ (getVersionFile "llvm/gnu-install-dirs.patch") ]
+    ++ lib.optionals (lib.versionAtLeast release_version "15") [
+      # Running the tests involves invoking binaries (like `opt`) that depend on
+      # the LLVM dylibs and reference them by absolute install path (i.e. their
+      # nix store path).
+      #
+      # Because we have not yet run the install phase (we're running these tests
+      # as part of `checkPhase` instead of `installCheckPhase`) these absolute
+      # paths do not exist yet; to work around this we point the loader (`ld` on
+      # unix, `dyld` on macOS) at the `lib` directory which will later become this
+      # package's `lib` output.
+      #
+      # Previously we would just set `LD_LIBRARY_PATH` to include the build `lib`
+      # dir but:
+      #   - this doesn't generalize well to other platforms; `lit` doesn't forward
+      #     `DYLD_LIBRARY_PATH` (macOS):
+      #     + https://github.com/llvm/llvm-project/blob/0d89963df354ee309c15f67dc47c8ab3cb5d0fb2/llvm/utils/lit/lit/TestingConfig.py#L26
+      #   - even if `lit` forwarded this env var, we actually cannot set
+      #     `DYLD_LIBRARY_PATH` in the child processes `lit` launches because
+      #     `DYLD_LIBRARY_PATH` (and `DYLD_FALLBACK_LIBRARY_PATH`) is cleared for
+      #     "protected processes" (i.e. the python interpreter that runs `lit`):
+      #     https://stackoverflow.com/a/35570229
+      #   - other LLVM subprojects deal with this issue by having their `lit`
+      #     configuration set these env vars for us; it makes sense to do the same
+      #     for LLVM:
+      #     + https://github.com/llvm/llvm-project/blob/4c106cfdf7cf7eec861ad3983a3dd9a9e8f3a8ae/clang-tools-extra/test/Unit/lit.cfg.py#L22-L31
+      #
+      # !!! TODO: look into upstreaming this patch
+      (getVersionFile "llvm/llvm-lit-cfg-add-libs-to-dylib-path.patch")
+
+      # `lit` has a mode where it executes run lines as a shell script which is
+      # constructs; this is problematic for macOS because it means that there's
+      # another process in between `lit` and the binaries being tested. As noted
+      # above, this means that `DYLD_LIBRARY_PATH` is cleared which means that our
+      # tests fail with dyld errors.
+      #
+      # To get around this we patch `lit` to reintroduce `DYLD_LIBRARY_PATH`, when
+      # present in the test configuration.
+      #
+      # It's not clear to me why this isn't an issue for LLVM developers running
+      # on macOS (nothing about this _seems_ nix specific)..
+      (getVersionFile "llvm/lit-shell-script-runner-set-dyld-library-path.patch")
+    ]
+    ++
+      lib.optional (lib.versions.major release_version == "13")
+        # Fix random compiler crashes: https://bugs.llvm.org/show_bug.cgi?id=50611
+        (
+          fetchpatch {
+            url = "https://raw.githubusercontent.com/archlinux/svntogit-packages/4764a4f8c920912a2bfd8b0eea57273acfe0d8a8/trunk/no-strict-aliasing-DwarfCompileUnit.patch";
+            sha256 = "18l6mrvm2vmwm77ckcnbjvh6ybvn72rhrb799d4qzwac4x2ifl7g";
+            stripLen = 1;
+          }
+        )
+    ++
+      lib.optional (lib.versionOlder release_version "16")
+        # Fix musl build.
+        (
+          fetchpatch {
+            url = "https://github.com/llvm/llvm-project/commit/5cd554303ead0f8891eee3cd6d25cb07f5a7bf67.patch";
+            relative = "llvm";
+            hash = "sha256-XPbvNJ45SzjMGlNUgt/IgEvM2dHQpDOe6woUJY+nUYA=";
+          }
+        )
+    ++ lib.optionals (lib.versionOlder release_version "14") [
+      # Backport gcc-13 fixes with missing includes.
+      (fetchpatch {
+        name = "signals-gcc-13.patch";
+        url = "https://github.com/llvm/llvm-project/commit/ff1681ddb303223973653f7f5f3f3435b48a1983.patch";
+        hash = "sha256-CXwYxQezTq5vdmc8Yn88BUAEly6YZ5VEIA6X3y5NNOs=";
+        stripLen = 1;
+      })
+      (fetchpatch {
+        name = "base64-gcc-13.patch";
+        url = "https://github.com/llvm/llvm-project/commit/5e9be93566f39ee6cecd579401e453eccfbe81e5.patch";
+        hash = "sha256-PAwrVrvffPd7tphpwCkYiz+67szPRzRB2TXBvKfzQ7U=";
+        stripLen = 1;
+      })
+    ]
+    ++
+      lib.optionals
+        (
+          (lib.versionAtLeast (lib.versions.major release_version) "14")
+          && (lib.versionOlder (lib.versions.major release_version) "17")
+        )
+        [
+          # fix RuntimeDyld usage on aarch64-linux (e.g. python312Packages.numba tests)
+          # See also: https://github.com/numba/numba/issues/9109
+          (fetchpatch {
+            url = "https://github.com/llvm/llvm-project/commit/2e1b838a889f9793d4bcd5dbfe10db9796b77143.patch";
+            relative = "llvm";
+            hash = "sha256-Ot45P/iwaR4hkcM3xtLwfryQNgHI6pv6ADjv98tgdZA=";
+          })
+        ]
+        ++
+          lib.optional (lib.versions.major release_version == "17")
+            # resolves https://github.com/llvm/llvm-project/issues/75168
+            (
+              fetchpatch {
+                name = "fix-fzero-call-used-regs.patch";
+                url = "https://github.com/llvm/llvm-project/commit/f800c1f3b207e7bcdc8b4c7192928d9a078242a0.patch";
+                stripLen = 1;
+                hash = "sha256-e8YKrMy2rGcSJGC6er2V66cOnAnI+u1/yImkvsRsmg8=";
+              }
+            )
+        ++ lib.optionals (lib.versions.major release_version == "18") [
+          # Reorgs one test so the next patch applies
+          (fetchpatch {
+            name = "osabi-test-reorg.patch";
+            url = "https://github.com/llvm/llvm-project/commit/06cecdc60ec9ebfdd4d8cdb2586d201272bdf6bd.patch";
+            stripLen = 1;
+            hash = "sha256-s9GZTNgzLS511Pzh6Wb1hEV68lxhmLWXjlybHBDMhvM=";
+          })
+          # Sets the OSABI for OpenBSD, needed for an LLD patch for OpenBSD.
+          # https://github.com/llvm/llvm-project/pull/98553
+          (fetchpatch {
+            name = "mc-set-openbsd-osabi.patch";
+            url = "https://github.com/llvm/llvm-project/commit/b64c1de714c50bec7493530446ebf5e540d5f96a.patch";
+            stripLen = 1;
+            hash = "sha256-fqw5gTSEOGs3kAguR4tINFG7Xja1RAje+q67HJt2nGg=";
+          })
+        ]
+        ++
+          lib.optionals
+            (lib.versionAtLeast release_version "17" && lib.versionOlder release_version "19")
+            [
+              # Fixes test-suite on glibc 2.40 (https://github.com/llvm/llvm-project/pull/100804)
+              (fetchpatch {
+                url = "https://github.com/llvm/llvm-project/commit/1e8df9e85a1ff213e5868bd822877695f27504ad.patch";
+                hash = "sha256-mvBlG2RxpZPFnPI7jvCMz+Fc8JuM15Ye3th1FVZMizE=";
+                stripLen = 1;
+              })
+            ]
+        ++
+          lib.optionals enablePolly [
+            (getVersionFile "llvm/gnu-install-dirs-polly.patch")
+          ]
+          ++ lib.optional (lib.versionAtLeast release_version "15")
+            # Just like the `llvm-lit-cfg` patch, but for `polly`.
+            (getVersionFile "llvm/polly-lit-cfg-add-libs-to-dylib-path.patch");
 
   nativeBuildInputs = [
     cmake
