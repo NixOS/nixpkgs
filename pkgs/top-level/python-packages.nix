@@ -3194,6 +3194,8 @@ self: super: with self; {
 
   deezer-python = callPackage ../development/python-modules/deezer-python { };
 
+  deezer-python-async = callPackage ../development/python-modules/deezer-python-async { };
+
   defang = callPackage ../development/python-modules/defang { };
 
   defcon = callPackage ../development/python-modules/defcon { };
