@@ -1025,16 +1025,6 @@ let
   ];
 
   otherOverrides = old: new: {
-    # it can happen that the major version of arrow-cpp is ahead of the
-    # rPackages.arrow that would be built from CRAN sources; therefore, to avoid
-    # build failures and manual updates of the hash, we use the R source at
-    # the GitHub release state of libarrow (arrow-cpp) in Nixpkgs. This may
-    # not exactly represent the CRAN sources, but because patching of the
-    # CRAN R package is mostly done to meet special CRAN build requirements,
-    # this is a straightforward approach. Example where patching was necessary
-    # -> arrow 14.0.0.2 on CRAN; was lagging behind libarrow release:
-    #   https://github.com/apache/arrow/issues/39698 )
-
     ACME = old.ACME.overrideAttrs (attrs: {
       env = (attrs.env or { }) // {
         # Avoid incompatible pointer type error
@@ -1046,6 +1036,15 @@ let
       RGL_USE_NULL = "true";
     });
 
+    # it can happen that the major version of arrow-cpp is ahead of the
+    # rPackages.arrow that would be built from CRAN sources; therefore, to avoid
+    # build failures and manual updates of the hash, we use the R source at
+    # the GitHub release state of libarrow (arrow-cpp) in Nixpkgs. This may
+    # not exactly represent the CRAN sources, but because patching of the
+    # CRAN R package is mostly done to meet special CRAN build requirements,
+    # this is a straightforward approach. Example where patching was necessary
+    # -> arrow 14.0.0.2 on CRAN; was lagging behind libarrow release:
+    #   https://github.com/apache/arrow/issues/39698 )
     arrow = old.arrow.overrideAttrs (attrs: {
       src = pkgs.arrow-cpp.src;
       name = "r-arrow-${pkgs.arrow-cpp.version}";
