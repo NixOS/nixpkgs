@@ -1191,9 +1191,6 @@ let
         );
 
         libunwind = callPackage ./libunwind {
-          patches = lib.optional (lib.versionOlder metadata.release_version "17") (
-            metadata.getVersionFile "libunwind/gnu-install-dirs.patch"
-          );
           stdenv = overrideCC stdenv buildLlvmTools.clangWithLibcAndBasicRt;
         };
 
