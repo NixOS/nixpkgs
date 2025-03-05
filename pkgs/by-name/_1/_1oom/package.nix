@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     owner = "1oom-fork";
     repo = "1oom";
     tag = "v${version}";
-    hash = "sha256-nHg9QPZNl9ieRkn8m+aOhaYg4y2WssYmolj/A5sMvF8=";
+    hash = "sha256-xvVl/XzOnItIvW0T3RpQ4tswqANHGWFvwnoY0+uHhx8=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
