@@ -45,11 +45,11 @@ stdenv.mkDerivation {
 
   passthru.tests.vmtest = nixosTests.cups-pdf;
 
-  meta = with lib; {
+  meta = {
     description = "CUPS backend that turns print jobs into searchable PDF files";
     homepage = "https://github.com/alexivkin/CUPS-PDF-to-PDF";
-    license = licenses.gpl2Only;
-    maintainers = [ maintainers.yarny ];
+    license = lib.licenses.gpl2Only;
+    maintainers = [ lib.maintainers.yarny ];
     longDescription = ''
       cups-pdf is a CUPS backend that generates a PDF file for each print job and puts this file
       into a folder on the local machine such that the print job's owner can access the file.
