@@ -589,6 +589,7 @@ let
     rrd = [ pkgs.pkg-config ];
     surveyvoi = [ pkgs.pkg-config ];
     Rbwa = [ pkgs.zlib.dev ];
+    tergo = with pkgs; [ cargo rustc ];
     trackViewer = [ pkgs.zlib.dev ];
     themetagenomics = [ pkgs.zlib.dev ];
     Rsymphony = [ pkgs.pkg-config ];
