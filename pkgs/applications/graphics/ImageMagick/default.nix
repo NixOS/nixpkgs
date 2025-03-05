@@ -204,7 +204,7 @@ stdenv.mkDerivation (finalAttrs: {
       "ImageMagick"
       "MagickWand"
     ];
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = platforms.unix;
     maintainers = with maintainers; [
       dotlambda
       rhendric
