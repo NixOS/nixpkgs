@@ -10,6 +10,7 @@
   meson,
   ninja,
   pkg-config,
+  buildPackages,
 
   # Build inputs
   ApplicationServices,
@@ -42,6 +43,9 @@
   openslide,
   pango,
   poppler,
+  withIntrospection ?
+    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
+    && stdenv.hostPlatform.emulatorAvailable buildPackages,
 
   # passthru
   testers,
@@ -128,6 +132,7 @@ stdenv.mkDerivation (finalAttrs: {
     [
       (lib.mesonEnable "pdfium" false)
       (lib.mesonEnable "nifti" false)
+      (lib.mesonEnable "introspection" withIntrospection)
     ]
     ++ lib.optional (!stdenv.hostPlatform.isDarwin) (lib.mesonBool "gtk_doc" true)
     ++ lib.optional (imagemagick == null) (lib.mesonEnable "magick" false);
