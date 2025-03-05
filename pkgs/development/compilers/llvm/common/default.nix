@@ -658,23 +658,6 @@ let
       };
 
       lld = callPackage ./lld {
-        patches =
-          [ (metadata.getVersionFile "lld/gnu-install-dirs.patch") ]
-          ++ lib.optional (lib.versions.major metadata.release_version == "14") (
-            metadata.getVersionFile "lld/fix-root-src-dir.patch"
-          )
-          ++ lib.optional (
-            lib.versionAtLeast metadata.release_version "16" && lib.versionOlder metadata.release_version "18"
-          ) (metadata.getVersionFile "lld/add-table-base.patch")
-          ++ lib.optional (lib.versions.major metadata.release_version == "18") (
-            # https://github.com/llvm/llvm-project/pull/97122
-            fetchpatch {
-              name = "more-openbsd-program-headers.patch";
-              url = "https://github.com/llvm/llvm-project/commit/d7fd8b19e560fbb613159625acd8046d0df75115.patch";
-              stripLen = 1;
-              hash = "sha256-7wTy7XDTx0+fhWQpW1KEuz7xJvpl42qMTUfd20KGOfA=";
-            }
-          );
       };
 
       lldbPlugins = lib.makeExtensible (
