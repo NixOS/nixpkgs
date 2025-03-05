@@ -909,6 +909,7 @@ let
     "MSnID"
     "OmnipathR"
     "orthGS"
+    "pannotator"
     "precommit"
     "protGear"
     "PCRA"
