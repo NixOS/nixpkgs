@@ -21,7 +21,8 @@ stdenv.mkDerivation {
   buildInputs = [ cups ];
 
   postPatch = ''
-    sed -r 's|(gscall, size, ")cp |\1${coreutils}/bin/cp |' cups-pdf.c -i
+    substituteInPlace cups-pdf.c \
+      --replace-fail '"cp ' '"${lib.getExe' coreutils "cp"} '
   '';
 
   # gcc command line is taken from original cups-pdf's README file
