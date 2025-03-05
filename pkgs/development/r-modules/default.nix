@@ -375,6 +375,7 @@ let
     fcl = with pkgs; [ cargo rustc ];
     fftw = [ pkgs.fftw.dev ];
     fftwtools = with pkgs; [ fftw.dev pkg-config ];
+    flint = with pkgs; [ pkg-config gmp.dev mpfr.dev flint3 ];
     fingerPro = [ pkgs.gsl ];
     Formula = [ pkgs.gmp ];
     frailtyMMpen = [ pkgs.gsl ];
