@@ -5,6 +5,7 @@
   arcan,
   audit,
   dbus,
+  dri-pkgconfig-stub,
   libepoxy,
   fontutil,
   libGL,
@@ -21,7 +22,7 @@
   libxkbfile,
   libxshmfence,
   libgbm,
-  mesa,
+  mesa-gl-headers,
   meson,
   nettle,
   ninja,
@@ -60,6 +61,7 @@ stdenv.mkDerivation (finalPackages: {
     arcan
     audit
     dbus
+    dri-pkgconfig-stub
     libepoxy
     fontutil
     libGL
@@ -76,7 +78,7 @@ stdenv.mkDerivation (finalPackages: {
     libxkbfile
     libxshmfence
     libgbm
-    mesa # uses dri_interface.h
+    mesa-gl-headers
     nettle
     openssl
     pixman
