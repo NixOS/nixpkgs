@@ -117,7 +117,7 @@
   withRav1e ? withFullDeps, # AV1 encoder (focused on speed and safety)
   withRist ? withHeadlessDeps, # Reliable Internet Stream Transport (RIST) protocol
   withRtmp ? withFullDeps, # RTMP[E] support
-  withRubberband ? withFullDeps && withGPL, # Rubberband filter
+  withRubberband ? withFullDeps && withGPL && !stdenv.hostPlatform.isFreeBSD, # Rubberband filter
   withSamba ? withFullDeps && !stdenv.hostPlatform.isDarwin && withGPLv3, # Samba protocol
   withSdl2 ? withSmallDeps,
   withShaderc ? withFullDeps && !stdenv.hostPlatform.isDarwin && lib.versionAtLeast version "5.0",
@@ -793,10 +793,7 @@ stdenv.mkDerivation (
         cuda_nvcc
       ]
       ++ optionals withDav1d [ dav1d ]
-      ++ optionals withDc1394 [
-        libdc1394
-        libraw1394
-      ]
+      ++ optionals withDc1394 ([ libdc1394 ] ++ (lib.optional stdenv.hostPlatform.isLinux libraw1394))
       ++ optionals withDrm [ libdrm ]
       ++ optionals withDvdnav [ libdvdnav ]
       ++ optionals withDvdread [ libdvdread ]
