@@ -1507,6 +1507,7 @@
   ./services/web-apps/gotosocial.nix
   ./services/web-apps/grav.nix
   ./services/web-apps/grocy.nix
+  ./services/web-apps/part-db.nix
   ./services/web-apps/pixelfed.nix
   ./services/web-apps/goatcounter.nix
   ./services/web-apps/guacamole-client.nix
