@@ -12,15 +12,15 @@
 with python3Packages;
 buildPythonApplication rec {
   pname = "platformio";
-  version = "6.1.15";
+  version = "6.1.17";
   pyproject = true;
 
   # pypi tarballs don't contain tests - https://github.com/platformio/platformio-core/issues/1964
   src = fetchFromGitHub {
     owner = "platformio";
     repo = "platformio-core";
-    rev = "v${version}";
-    hash = "sha256-w5JUAqQRNxq8ZrX8ffny2K7xWBkGr2H3+apYqCPXw9c=";
+    tag = "v${version}";
+    hash = "sha256-OQEbEAVLS4DdbdBf4S9KS1RVHCC91vFtX6lz2u6Xouc=";
   };
 
   outputs = [
