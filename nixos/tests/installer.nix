@@ -3,6 +3,7 @@
   config ? { },
   pkgs ? import ../.. { inherit system config; },
   systemdStage1 ? false,
+  rebuildNg ? false,
 }:
 
 with import ../lib/testing-python.nix { inherit system pkgs; };
@@ -702,6 +703,7 @@ let
 
             hardware.enableAllFirmware = mkForce false;
 
+            system.rebuild.enableNg = rebuildNg;
             # The test cannot access the network, so any packages we
             # need must be included in the VM.
             system.extraDependencies =
