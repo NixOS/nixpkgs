@@ -4934,6 +4934,8 @@ self: super: with self; {
 
   flower = callPackage ../development/python-modules/flower { };
 
+  flowjax = callPackage ../development/python-modules/flowjax { };
+
   flowlogs-reader = callPackage ../development/python-modules/flowlogs-reader { };
 
   flowmc = callPackage ../development/python-modules/flowmc { };
