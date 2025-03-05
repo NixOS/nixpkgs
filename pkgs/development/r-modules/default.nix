@@ -1197,6 +1197,17 @@ let
       postPatch = "patchShebangs configure";
     });
 
+    EBSeq = old.EBSeq.overrideAttrs (attrs: {
+      postPatch = ''
+        # https://code.bioconductor.org/browse/EBSeq/commit/d18c41cc3eb96ca82a7c55f0d60287e28785281e
+        substituteInPlace "DESCRIPTION" \
+          --replace-fail "c++11" "c++14"
+        # https://code.bioconductor.org/browse/EBSeq/commit/fd9ccf425b3c8c0f209de77e7d6e9a1d0c839d68
+        substituteInPlace "src/Makevars" \
+          --replace-fail "#CXX_STD = CXX11" "CXX_STD = CXX14"
+      '';
+    });
+
    gmailr = old.gmailr.overrideAttrs (attrs: {
       postPatch = "patchShebangs configure";
     });
