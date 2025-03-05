@@ -1,12 +1,12 @@
 {
-  lib,
-  stdenv,
+  cmake,
   fetchFromGitLab,
+  lib,
   qtbase,
   qtsvg,
-  qtwayland,
-  qmake,
   qttools,
+  qtwayland,
+  stdenv,
   wrapQtAppsHook,
 }:
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
-    qmake
+    cmake
     qttools
     wrapQtAppsHook
   ];
@@ -34,11 +34,10 @@ stdenv.mkDerivation (finalAttrs: {
     qtwayland
   ];
 
-  qmakeFlags = [
-    "LRELEASE_EXECUTABLE=${lib.getDev qttools}/bin/lrelease"
-    "PLUGINDIR=${placeholder "out"}/${qtbase.qtPluginPrefix}"
-    "LIBDIR=${placeholder "out"}/lib"
-  ];
+  postPatch = ''
+    substituteInPlace src/qt6ct-qtplugin/CMakeLists.txt src/qt6ct-style/CMakeLists.txt \
+      --replace-fail "\''${PLUGINDIR}" "$out/${qtbase.qtPluginPrefix}"
+  '';
 
   meta = {
     description = "Qt6 Configuration Tool";
