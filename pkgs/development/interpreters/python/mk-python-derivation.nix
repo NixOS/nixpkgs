@@ -4,6 +4,8 @@
   lib,
   config,
   python,
+  # Allow passing in a custom stdenv to buildPython*.override
+  stdenv,
   wrapPython,
   unzip,
   ensureNewerSourcesForZipFilesHook,
@@ -196,9 +198,6 @@ in
   doCheck ? true,
 
   disabledTestPaths ? [ ],
-
-  # Allow passing in a custom stdenv to buildPython*
-  stdenv ? python.stdenv,
 
   ...
 }@attrs:
