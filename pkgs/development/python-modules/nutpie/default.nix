@@ -16,6 +16,8 @@
 
   # tests
   # bridgestan, (not packaged)
+  equinox,
+  flowjax,
   jax,
   jaxlib,
   numba,
@@ -27,20 +29,20 @@
 
 buildPythonPackage rec {
   pname = "nutpie";
-  version = "0.13.4";
+  version = "0.14.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pymc-devs";
     repo = "nutpie";
     tag = "v${version}";
-    hash = "sha256-BpKt/EWBefCQUGDxyqF6Xjrj/HUvY4M26gk79R/CyZo=";
+    hash = "sha256-6D+6+GbtTw4piWFseigEHK7PxmCHXKS0pgW6PrkLPg4=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-d0Qk01YwosHlOy3yb/2PV5Op1Wz+yB5ROVbUWfHooEk=";
+    hash = "sha256-kmssvkrB44mCvNw54LominTNRhgUI6KFaRYjzKy+eNo=";
   };
 
   build-system = [
@@ -66,6 +68,8 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     # bridgestan
+    equinox
+    flowjax
     numba
     jax
     jaxlib
