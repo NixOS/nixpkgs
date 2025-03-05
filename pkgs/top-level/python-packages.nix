@@ -14964,6 +14964,8 @@ self: super: with self; {
 
   sensorpro-ble = callPackage ../development/python-modules/sensorpro-ble { };
 
+  sensorpush-api = callPackage ../development/python-modules/sensorpush-api { };
+
   sensorpush-ble = callPackage ../development/python-modules/sensorpush-ble { };
 
   sensoterra = callPackage ../development/python-modules/sensoterra { };
