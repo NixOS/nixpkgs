@@ -8,13 +8,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "lenovo-legion-app";
-  version = "0.0.18";
+  version = "0.0.19-unstable-2025-02-20";
 
   src = fetchFromGitHub {
     owner = "johnfanv2";
     repo = "LenovoLegionLinux";
-    rev = "e9c1d8157a7b25e4334d0b1d887338c670e39f6a";
-    hash = "sha256-6JYOTDzz9/flyEDQo1UPjWT5+Cuea5fsdbdc6AooDxU=";
+    rev = "43f2ad0ea67b69f509a0c5f0254272fe85f3b070";
+    hash = "sha256-k7CHL59tRjfly1xV+TXjNitkhV7q6qtMhuc+QO5ASkI=";
   };
 
   sourceRoot = "${src.name}/python/legion_linux";
@@ -33,7 +33,7 @@ python3.pkgs.buildPythonApplication rec {
     # only fixup application (legion-linux-gui), service (legiond) currently not installed so do not fixup
     # version
     substituteInPlace ./setup.cfg \
-      --replace-fail "_VERSION" "${version}"
+      --replace-fail "_VERSION" "${builtins.head (lib.splitString "-" version)}"
 
     # /etc
     substituteInPlace ./legion_linux/legion.py \

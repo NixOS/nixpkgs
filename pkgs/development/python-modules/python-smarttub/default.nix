@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "python-smarttub";
-  version = "0.0.38";
+  version = "0.0.39";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "mdz";
     repo = "python-smarttub";
     tag = "v${version}";
-    hash = "sha256-ErGBOO5aes4Avmt2M6rkZPmjwsCMZdNnLhMDYhlULzU=";
+    hash = "sha256-yZrBFUsablu67gfIsWBYc/0k8J5zU1mrWD8kzuNkT+U=";
   };
 
   build-system = [ setuptools ];

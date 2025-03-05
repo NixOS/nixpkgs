@@ -12,6 +12,7 @@
   gnupg,
   gpgme,
   libkrb5,
+  zlib,
   headerCache ? true,
   sslSupport ? true,
   saslSupport ? true,
@@ -61,7 +62,10 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs =
-    [ ncurses ]
+    [
+      ncurses
+      zlib
+    ]
     ++ lib.optional headerCache gdbm
     ++ lib.optional sslSupport openssl
     ++ lib.optional gssSupport libkrb5

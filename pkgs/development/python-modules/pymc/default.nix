@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "pymc-devs";
     repo = "pymc";
     tag = "v${version}";
-    hash = "sha256-Zn6Yyacq7k+Xzu2VwdvXl5IRZbgYUIiOkZ0Q87I/BXo=";
+    hash = "sha256-AHQ1x5Adhn0wQOzh9H+m0D7JpAB2XfCU0ovgkmS+Hzc=";
   };
 
   postPatch = ''

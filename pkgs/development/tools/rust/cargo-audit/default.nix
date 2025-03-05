@@ -12,15 +12,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-audit";
-  version = "0.21.1";
+  version = "0.21.2";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-h8fB+aA/MPeOm9w9Clf4IAR/h1yRGwUU8EoWCJ3JaMc=";
+    hash = "sha256-bRBQpZ0YoKDh959a1a7+qEs2vh+dbP8vYcwbkNZQ5cQ=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-LMExTkuk7v2YkqzmsjAn1jHgteAHRzGoLG8sGvYwd3c=";
+  cargoHash = "sha256-MIwKgQM3LoNV9vcs8FfxTzqXhIhLkYd91dMEgPH++zk=";
 
   nativeBuildInputs = [
     pkg-config

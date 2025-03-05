@@ -17,6 +17,7 @@
   rarfile,
   requests,
   platformdirs,
+  setuptools,
   stevedore,
   tomli,
 
@@ -41,6 +42,8 @@ buildPythonPackage rec {
     tag = version;
     hash = "sha256-g7gg2qdLKl7bg/nNXRWN9wZaNShOOc38sVASZrIycMU=";
   };
+
+  build-system = [ setuptools ];
 
   propagatedBuildInputs = [
     babelfish
