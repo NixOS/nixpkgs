@@ -33,7 +33,7 @@ let
 
       export-templates-bin = (
         callPackage ./export-templates-bin.nix {
-          inherit version;
+          inherit version godot;
           hash = exportTemplatesHash;
         }
       );
