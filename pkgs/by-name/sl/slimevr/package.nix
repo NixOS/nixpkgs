@@ -82,13 +82,13 @@ rustPlatform.buildRustPackage rec {
     ''
     + lib.optionalString stdenv.hostPlatform.isLinux ''
       # Both libappindicator-rs and SlimeVR need to know where Nix's appindicator lib is.
-      substituteInPlace $cargoDepsCopy/libappindicator-sys-*/src/lib.rs \
+      substituteInPlace $cargoDepsCopy/*/libappindicator-sys-*/src/lib.rs \
         --replace-fail "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
       substituteInPlace gui/src-tauri/src/tray.rs \
         --replace-fail "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
 
       # tao < version 0.31 has a GTK crash. Manually apply the fix.
-      pushd $cargoDepsCopy/tao-0.30.*
+      pushd $cargoDepsCopy/*/tao-0.30.*
       patch -p1 < ${
         fetchpatch {
           name = "fix-gtk-crash.patch";

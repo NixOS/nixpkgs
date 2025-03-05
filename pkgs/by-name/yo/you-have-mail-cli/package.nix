@@ -27,7 +27,9 @@ rustPlatform.buildRustPackage {
     export GOCACHE=$TMPDIR/go-cache
     export GOPATH="$TMPDIR/go"
     export GOPROXY=off
-    cp -r --reflink=auto "$goModules" "$cargoDepsCopy/go-srp-$goSrpVersion/go/vendor"
+    pushd "$cargoDepsCopy"/*/"go-srp-$goSrpVersion"/go
+    cp -r --reflink=auto "$goModules" ./vendor
+    popd
   '';
 
   goModules =

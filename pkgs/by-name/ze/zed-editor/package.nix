@@ -128,7 +128,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   postPatch =
     # Dynamically link WebRTC instead of static
     ''
-      substituteInPlace $cargoDepsCopy/webrtc-sys-*/build.rs \
+      substituteInPlace $cargoDepsCopy/*/webrtc-sys-*/build.rs \
         --replace-fail "cargo:rustc-link-lib=static=webrtc" "cargo:rustc-link-lib=dylib=webrtc"
 
       # Zed team renamed the function but forgot to update its usage in this file
