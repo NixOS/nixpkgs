@@ -30,6 +30,6 @@ buildPythonPackage rec {
   meta = {
     description = "PyTorch Extension Library for High-Performance Clustering Algorithms";
     homepage = "https://github.com/rusty1s/pytorch_cluster";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }
