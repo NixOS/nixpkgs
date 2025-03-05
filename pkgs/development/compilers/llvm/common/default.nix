@@ -1147,37 +1147,6 @@ let
 
         libcxx = callPackage ./libcxx (
           {
-            patches = lib.optionals (lib.versionOlder metadata.release_version "16") (
-              lib.optional (lib.versions.major metadata.release_version == "15")
-                # See:
-                #   - https://reviews.llvm.org/D133566
-                #   - https://github.com/NixOS/nixpkgs/issues/214524#issuecomment-1429146432
-                # !!! Drop in LLVM 16+
-                (
-                  fetchpatch {
-                    url = "https://github.com/llvm/llvm-project/commit/57c7bb3ec89565c68f858d316504668f9d214d59.patch";
-                    hash = "sha256-B07vHmSjy5BhhkGSj3e1E0XmMv5/9+mvC/k70Z29VwY=";
-                  }
-                )
-              ++ [
-                (substitute {
-                  src = ./libcxxabi/wasm.patch;
-                  substitutions = [
-                    "--replace-fail"
-                    "/cmake/"
-                    "/llvm/cmake/"
-                  ];
-                })
-              ]
-              ++ lib.optional stdenv.hostPlatform.isMusl (substitute {
-                src = ./libcxx/libcxx-0001-musl-hacks.patch;
-                substitutions = [
-                  "--replace-fail"
-                  "/include/"
-                  "/libcxx/include/"
-                ];
-              })
-            );
             stdenv =
               if stdenv.hostPlatform.isDarwin then
                 overrideCC darwin.bootstrapStdenv buildLlvmTools.clangWithLibcAndBasicRt
