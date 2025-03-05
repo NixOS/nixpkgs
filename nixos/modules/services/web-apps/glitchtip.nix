@@ -53,7 +53,7 @@ in
 
       settings = lib.mkOption {
         description = ''
-          Configuration of GlitchTip. See <https://glitchtip.com/documentation/install#configuration> for more information.
+          Configuration of GlitchTip. See <https://glitchtip.com/documentation/install#configuration> for more information and required settings.
         '';
         default = { };
         defaultText = lib.literalExpression ''
@@ -61,6 +61,7 @@ in
             DEBUG = 0;
             DEBUG_TOOLBAR = 0;
             DATABASE_URL = lib.mkIf config.services.glitchtip.database.createLocally "postgresql://@/glitchtip";
+            GLITCHTIP_DOMAIN = lib.mkIf config.services.glitchtip.nginx.createLocally "https://''${config.services.glitchtip.nginx.domain}";
             GLITCHTIP_VERSION = config.services.glitchtip.package.version;
             GRANIAN_HOST = "127.0.0.1";
             GRANIAN_PORT = 8000;
@@ -71,6 +72,7 @@ in
           }
         '';
         example = {
+          GLITCHTIP_DOMAIN = "https://glitchtip.example.com";
           DATABASE_URL = "postgres://postgres:postgres@postgres/postgres";
         };
 
@@ -84,6 +86,13 @@ in
             ]);
 
           options = {
+            GLITCHTIP_DOMAIN = lib.mkOption {
+              type = lib.types.nullOr lib.types.str;
+              description = "The URL under which GlitchTip is externally reachable.";
+              example = "https://glitchtip.example.com";
+              default = null;
+            };
+
             GLITCHTIP_ENABLE_MCP = lib.mkOption {
               type = lib.types.bool;
               description = "Whether to enable the MCP api.";
@@ -135,17 +144,31 @@ in
       database.createLocally = lib.mkOption {
         type = lib.types.bool;
         default = true;
-        description = ''
-          Whether to enable and configure a local PostgreSQL database server.
-        '';
+        description = "Whether to enable and configure a local PostgreSQL database server.";
+      };
+
+      nginx = {
+        createLocally = lib.mkOption {
+          type = lib.types.bool;
+          default = false;
+          description = "Whether to enable and configure a local Nginx server.";
+        };
+
+        domain = lib.mkOption {
+          type = lib.types.str;
+          example = "glitchtip.example.com";
+          description = ''
+            Domain under which GlitchTip will be reachable.
+            In contrast to `settings.GLITCHTIP_DOMAIN` this option has no protocol.
+            It will also set `settings.GLITCHTIP_DOMAIN` with the `https://` protocol.
+          '';
+        };
       };
 
       redis.createLocally = lib.mkOption {
         type = lib.types.bool;
         default = true;
-        description = ''
-          Whether to enable and configure a local Redis instance.
-        '';
+        description = "Whether to enable and configure a local Redis instance.";
       };
     };
   };
@@ -180,6 +203,7 @@ in
       PYTHONUNBUFFERED = lib.mkDefault 1;
     }
     // lib.optionalAttrs cfg.database.createLocally { DATABASE_URL = "postgresql://@/glitchtip"; }
+    // lib.optionalAttrs cfg.nginx.createLocally { GLITCHTIP_DOMAIN = "https://${cfg.nginx.domain}"; }
     // lib.optionalAttrs cfg.redis.createLocally {
       REDIS_URL = "unix://${config.services.redis.servers.glitchtip.unixSocket}";
     };
@@ -285,6 +309,17 @@ in
           };
         };
       };
+
+    services.nginx = lib.mkIf cfg.nginx.createLocally {
+      enable = true;
+      virtualHosts.${cfg.nginx.domain} = {
+        forceSSL = lib.mkDefault true;
+        locations = {
+          "/".proxyPass = "http://${cfg.settings.GRANIAN_HOST}:${toString cfg.settings.GRANIAN_PORT}";
+          "/static/".root = "${pkg}/lib/glitchtip";
+        };
+      };
+    };
 
     services.postgresql = lib.mkIf cfg.database.createLocally {
       enable = true;
