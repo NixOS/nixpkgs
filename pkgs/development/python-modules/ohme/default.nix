@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "ohme";
-  version = "1.2.9";
+  version = "1.4.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "dan-r";
     repo = "ohmepy";
     tag = "v${version}";
-    hash = "sha256-wsYANCe32LG2rAWhMt8x51pHVTZVcgR+0aBTjY56tnE=";
+    hash = "sha256-SZNvqariqe4MrJikchY5I2PUDVxpWYo++kNWfOOBWS8=";
   };
 
   build-system = [ setuptools ];
@@ -33,7 +33,7 @@ buildPythonPackage rec {
   meta = {
     description = "Module for interacting with the Ohme API";
     homepage = "https://github.com/dan-r/ohmepy";
-    changelog = "https://github.com/dan-r/ohmepy/releases/tag/v${version}";
+    changelog = "https://github.com/dan-r/ohmepy/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
