@@ -133,7 +133,7 @@ stdenv.mkDerivation rec {
     # Allows disabling the update nag screen
     (fetchpatch {
       name = "pr-7650-configurable-update-check.patch";
-      url = "https://github.com/SoftFever/OrcaSlicer/pull/7650.patch";
+      url = "https://github.com/SoftFever/OrcaSlicer/commit/d10a06ae11089cd1f63705e87f558e9392f7a167.patch";
       hash = "sha256-t4own5AwPsLYBsGA15id5IH1ngM0NSuWdFsrxMRXmTk=";
     })
   ];
