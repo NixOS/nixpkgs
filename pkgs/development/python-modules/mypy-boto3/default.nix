@@ -314,8 +314,8 @@ rec {
       "sha256-MK11RuIgZfoy8vvZWHFEJjkSsJSzqKjXvm9GCjt3QH4=";
 
   mypy-boto3-cognito-idp =
-    buildMypyBoto3Package "cognito-idp" "1.37.0"
-      "sha256-I1twKtJqOUuHA+gkOzmRGr7GuDQ6GsYQeAGeX9ZVf8c=";
+    buildMypyBoto3Package "cognito-idp" "1.37.5"
+      "sha256-FAMF7HEM+StH7vkhPomIxh2GRSIhNxQaCZx0o6/EoYc=";
 
   mypy-boto3-cognito-sync =
     buildMypyBoto3Package "cognito-sync" "1.37.0"
@@ -446,8 +446,8 @@ rec {
       "sha256-wvOqjmqNMbCG7E1o+ZSOlWEwBdcCKjD/qVFlepZ51ec=";
 
   mypy-boto3-ec2 =
-    buildMypyBoto3Package "ec2" "1.37.2"
-      "sha256-vWMLnpS6zvwdzAEyiNH33SrKS57WH6sRHsTUxjLKISI=";
+    buildMypyBoto3Package "ec2" "1.37.5"
+      "sha256-0isaGfUCSEUl8CpbmwXHO5PWIHbl+/k9xVR+2mpJiUs=";
 
   mypy-boto3-ec2-instance-connect =
     buildMypyBoto3Package "ec2-instance-connect" "1.37.0"
@@ -1158,8 +1158,8 @@ rec {
       "sha256-/4XdwWIkx8VYxrUp7I8IDCPZ34cFudV+gp3xR4uS8jk=";
 
   mypy-boto3-rum =
-    buildMypyBoto3Package "rum" "1.37.0"
-      "sha256-fpotQHQ8Hksw/08bg9IMwyeh0ZdY+7lOpRypbSmn/j8=";
+    buildMypyBoto3Package "rum" "1.37.5"
+      "sha256-/cLHocPVefBea8g6oIRrSis6JOL7wFw+AEYyGNEOdx0=";
 
   mypy-boto3-s3 =
     buildMypyBoto3Package "s3" "1.37.0"
@@ -1174,8 +1174,8 @@ rec {
       "sha256-c0vXkW5sR7JkdzvsS/rMFme9EwY1x5eZAbRWYKew0v4=";
 
   mypy-boto3-sagemaker =
-    buildMypyBoto3Package "sagemaker" "1.37.3"
-      "sha256-9iExn7nmPWu1/Bk9gY39yYTMtpP1lnJM9cfPWwKEfl0=";
+    buildMypyBoto3Package "sagemaker" "1.37.5"
+      "sha256-CZmB3zmQwsWy85vzK891HXuRfmgNBg2YXEasihOrbUY=";
 
   mypy-boto3-sagemaker-a2i-runtime =
     buildMypyBoto3Package "sagemaker-a2i-runtime" "1.37.0"
@@ -1366,8 +1366,8 @@ rec {
       "sha256-mGqJUJF826MADOYCDXwPNbk+x82zumHRb+cTazCEzAY=";
 
   mypy-boto3-transcribe =
-    buildMypyBoto3Package "transcribe" "1.37.0"
-      "sha256-oOjD14VrJrc7De48X2YAnPOC5BDKtouPj3ZBQmewqCI=";
+    buildMypyBoto3Package "transcribe" "1.37.5"
+      "sha256-UonLSCWk8CUYjVBkxwbwxnR+NdQnsFTx11dZXIesDv0=";
 
   mypy-boto3-transfer =
     buildMypyBoto3Package "transfer" "1.37.0"
