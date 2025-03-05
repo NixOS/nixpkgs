@@ -10243,6 +10243,8 @@ self: super: with self; {
 
   param = callPackage ../development/python-modules/param { };
 
+  paramax = callPackage ../development/python-modules/paramax { };
+
   parameter-expansion-patched = callPackage ../development/python-modules/parameter-expansion-patched { };
 
   parameterized = callPackage ../development/python-modules/parameterized { };
