@@ -10,10 +10,13 @@ DOWNLOAD_URL=$(echo "$XML_DATA" | xmllint --xpath 'string(//item[1]/enclosure/@u
 
 HASH=$(nix-prefetch-url $DOWNLOAD_URL | xargs nix hash convert --hash-algo sha256)
 
-cat > source.nix << _EOF_
+NIXPKGS_CHATGPT_PATH="$(cd $(dirname ${BASH_SOURCE[0]}) && pwd)"
+SOURCE_NIX="${NIXPKGS_CHATGPT_PATH}"/source.nix
+
+cat > "${SOURCE_NIX}" << _EOF_
 {
   version = "$LATEST_VERSION";
-  src = fetchurl {
+  src = {
     url = "$DOWNLOAD_URL";
     sha256 = "$HASH";
   };
