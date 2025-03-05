@@ -22,6 +22,7 @@
   rustfmt,
   stdenv,
   swagger-cli,
+  perl,
   _experimental-update-script-combinators,
   nix-update-script,
   writeScript,
@@ -30,6 +31,19 @@
       inherit (callPackage ./fetchers.nix { }) fetchLibrustyV8;
     }
   ),
+  libxml2,
+  xmlsec,
+  libxslt,
+  flock,
+  powershell,
+  uv,
+  bun,
+  dotnet-sdk_9,
+  php,
+  procps,
+  cargo,
+  coreutils,
+  withEnterpriseFeatures ? false,
 }:
 
 let
@@ -42,8 +56,6 @@ let
     rev = "v${version}";
     hash = "sha256-JhgqBXiX0ClEQZkWl7YBsBlQHk2Jp4jIdHy5CDvdoAM=";
   };
-
-  pythonEnv = python3.withPackages (ps: [ ps.pip-tools ]);
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   inherit pname version src;
@@ -65,22 +77,62 @@ rustPlatform.buildRustPackage (finalAttrs: {
     };
   };
 
+  buildFeatures =
+    [
+      "embedding"
+      "parquet"
+      "prometheus"
+      "openidconnect"
+      "cloud"
+      "jemalloc"
+      "deno_core"
+      "license"
+      "http_trigger"
+      "zip"
+      "oauth2"
+      "kafka"
+      "otel"
+      "dind"
+      "php"
+      "mysql"
+      "mssql"
+      "bigquery"
+      "websocket"
+      "python"
+      "smtp"
+      "csharp"
+      "static_frontend"
+      # "rust" # compiler environment is incomplete
+    ]
+    ++ (lib.optionals withEnterpriseFeatures [
+      "enterprise"
+      "enterprise_saml"
+      "tantivy"
+      "stripe"
+    ]);
+
   patches = [
-    ./swagger-cli.patch
-    ./run.go.config.proto.patch
-    ./run.python3.config.proto.patch
+    ./download.py.config.proto.patch
+    ./python_executor.patch
+    ./run.ansible.config.proto.patch
     ./run.bash.config.proto.patch
+    ./run.bun.config.proto.patch
+    ./run.csharp.config.proto.patch
+    ./run.go.config.proto.patch
+    ./run.php.config.proto.patch
+    ./run.powershell.config.proto.patch
+    ./run.python3.config.proto.patch
+    ./run.rust.config.proto.patch
+    ./rust_executor.patch
+    ./swagger-cli.patch
   ];
 
   postPatch = ''
-    substituteInPlace windmill-worker/src/bash_executor.rs \
-      --replace '"/bin/bash"' '"${bash}/bin/bash"'
+    substituteInPlace windmill-common/src/utils.rs \
+      --replace-fail 'unknown-version' 'v${version}'
 
-    substituteInPlace windmill-api/src/lib.rs \
-      --replace 'unknown-version' 'v${version}'
-
-    substituteInPlace src/main.rs \
-      --replace 'unknown-version' 'v${version}'
+    substituteInPlace windmill-worker/src/python_executor.rs \
+      --replace-fail 'unknown_system_python_version' '${python3.version}'
   '';
 
   buildInputs = [
@@ -88,35 +140,46 @@ rustPlatform.buildRustPackage (finalAttrs: {
     rustfmt
     lld
     (lib.getLib stdenv.cc.cc)
+    libxml2
+    xmlsec
+    libxslt
   ];
 
   nativeBuildInputs = [
     pkg-config
     makeWrapper
     cmake # for libz-ng-sys crate
+    perl
   ];
 
   # needs a postgres database running
   doCheck = false;
 
+  # TODO; Check if the rpath is still required
+  # patchelf --set-rpath ${lib.makeLibraryPath [ openssl ]} $out/bin/windmill
   postFixup = ''
-    patchelf --set-rpath ${lib.makeLibraryPath [ openssl ]} $out/bin/windmill
-
     wrapProgram "$out/bin/windmill" \
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ stdenv.cc.cc ]} \
       --prefix PATH : ${
         lib.makeBinPath [
-          go
-          pythonEnv
-          deno
-          nsjail
-          bash
+          python3 # uv searches PATH for system python
+          procps # bash_executor
+          coreutils # bash_executor
         ]
       } \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ stdenv.cc.cc ]} \
-      --set PYTHON_PATH "${pythonEnv}/bin/python3" \
+      --set PYTHON_PATH "${python3}/bin/python3" \
       --set GO_PATH "${go}/bin/go" \
       --set DENO_PATH "${deno}/bin/deno" \
-      --set NSJAIL_PATH "${nsjail}/bin/nsjail"
+      --set NSJAIL_PATH "${nsjail}/bin/nsjail" \
+      --set FLOCK_PATH "${flock}/bin/flock" \
+      --set BASH_PATH "${bash}/bin/bash" \
+      --set POWERSHELL_PATH "${powershell}/bin/pwsh" \
+      --set BUN_PATH "${bun}/bin/bun" \
+      --set UV_PATH "${uv}/bin/uv" \
+      --set DOTNET_PATH "${dotnet-sdk_9}/bin/dotnet" \
+      --set DOTNET_ROOT "${dotnet-sdk_9}/share/dotnet" \
+      --set PHP_PATH "${php}/bin/php" \
+      --set CARGO_PATH "${cargo}/bin/cargo"
   '';
 
   passthru.web-ui = buildNpmPackage {
