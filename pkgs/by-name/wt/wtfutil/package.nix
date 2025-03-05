@@ -42,7 +42,10 @@ buildGoModule rec {
     homepage = "https://wtfutil.com/";
     changelog = "https://github.com/wtfutil/wtf/raw/v${version}/CHANGELOG.md";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ kalbasit ];
+    maintainers = with maintainers; [
+      xiaoxiangmoe
+      kalbasit
+    ];
     mainProgram = "wtfutil";
     platforms = platforms.linux ++ platforms.darwin;
   };
