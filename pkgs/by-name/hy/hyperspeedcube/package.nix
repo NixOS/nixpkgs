@@ -41,17 +41,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "hyperspeedcube";
-  version = "1.0.7";
+  version = "1.0.12";
 
   src = fetchFromGitHub {
     owner = "HactarCE";
     repo = "Hyperspeedcube";
     tag = "v${version}";
-    hash = "sha256-ykFf0dfc8j88Y25tx+G9lic09eHDz3WR+h6+owTeWbU=";
+    hash = "sha256-ctBvc2xANM/gGzDDv8ygSO4nTOiG6iKyuSKnz385PIw=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-VFb4zZgMXGZrmoNn5A+G1kjlW0n8IR8dvO9g2v+HqU8=";
+  cargoHash = "sha256-ebjkEWYeeXHuKQzqbMe8+zVol2vPyLiu7ke5Ng7gbs8=";
 
   nativeBuildInputs = [
     cmake
