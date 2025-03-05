@@ -148,7 +148,6 @@ let
         ]
         ++ lib.optionals iceSupport [
           "-D Ice_HOME=${lib.getDev zeroc-ice};${lib.getLib zeroc-ice}"
-          "-D CMAKE_PREFIX_PATH=${lib.getDev zeroc-ice};${lib.getLib zeroc-ice}"
           "-D Ice_SLICE_DIR=${lib.getDev zeroc-ice}/share/ice/slice"
         ];
 
