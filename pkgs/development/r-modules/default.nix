@@ -1593,6 +1593,18 @@ let
       enableParallelBuilding = false;
     });
 
+    redatamx = old.redatamx.overrideAttrs (attrs: {
+      preConfigure = let
+        redatam-core = pkgs.fetchzip {
+          url = "https://redatam-core.s3.us-west-2.amazonaws.com/core-dev/linux/redatamx-core-linux-20241222.zip";
+          hash = "sha256-CagDpv7v5fj/NgaC5fmYc5UuKuBVlT3gauH2ItVnIIY=";
+        };
+      in ''
+        mkdir -p ./inst/redengine/
+        cp ${redatam-core}/lib/libredengine-1.0.0-rc2.so ./inst/redengine/libredengine-1.0.0-rc2.so
+      '';
+    });
+
     immunotation = let
       MHC41alleleList = fetchurl {
         url = "https://services.healthtech.dtu.dk/services/NetMHCpan-4.1/allele.list";
