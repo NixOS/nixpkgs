@@ -24450,6 +24450,11 @@
     github = "deviant";
     githubId = 68829907;
   };
+  vaavaav = {
+    name = "Pedro Peixoto";
+    github = "vaavaav";
+    githubId = 56087034;
+  };
   vaci = {
     email = "vaci@vaci.org";
     github = "vaci";
