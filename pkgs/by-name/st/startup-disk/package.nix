@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   postPatch = ''
     # Fix sudo crate's hardcoded /usr/bin/sudo
-    substituteInPlace $cargoDepsCopy/sudo-0.6.0/src/lib.rs \
+    substituteInPlace $cargoDepsCopy/*/sudo-0.6.0/src/lib.rs \
       --replace-fail 'Command::new("/usr/bin/sudo")' 'Command::new("sudo")'
   '';
 
