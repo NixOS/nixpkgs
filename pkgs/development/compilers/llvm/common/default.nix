@@ -687,65 +687,6 @@ let
 
       lldb = callPackage ./lldb.nix (
         {
-          patches =
-            let
-              resourceDirPatch = callPackage (
-                { replaceVars, libclang }:
-                (replaceVars (metadata.getVersionFile "lldb/resource-dir.patch") {
-
-                  clangLibDir = "${lib.getLib libclang}/lib";
-                }).overrideAttrs
-                  (_: _: { name = "resource-dir.patch"; })
-              ) { };
-            in
-            lib.optionals (lib.versionOlder metadata.release_version "15") [
-              # Fixes for SWIG 4
-              (fetchpatch2 {
-                url = "https://github.com/llvm/llvm-project/commit/81fc5f7909a4ef5a8d4b5da2a10f77f7cb01ba63.patch?full_index=1";
-                stripLen = 1;
-                hash = "sha256-Znw+C0uEw7lGETQLKPBZV/Ymo2UigZS+Hv/j1mUo7p0=";
-              })
-              (fetchpatch2 {
-                url = "https://github.com/llvm/llvm-project/commit/f0a25fe0b746f56295d5c02116ba28d2f965c175.patch?full_index=1";
-                stripLen = 1;
-                hash = "sha256-QzVeZzmc99xIMiO7n//b+RNAvmxghISKQD93U2zOgFI=";
-              })
-            ]
-            ++ lib.optionals (lib.versionOlder metadata.release_version "16") [
-              # Fixes for SWIG 4
-              (fetchpatch2 {
-                url = "https://github.com/llvm/llvm-project/commit/ba35c27ec9aa9807f5b4be2a0c33ca9b045accc7.patch?full_index=1";
-                stripLen = 1;
-                hash = "sha256-LXl+WbpmWZww5xMDrle3BM2Tw56v8k9LO1f1Z1/wDTs=";
-              })
-              (fetchpatch2 {
-                url = "https://github.com/llvm/llvm-project/commit/9ec115978ea2bdfc60800cd3c21264341cdc8b0a.patch?full_index=1";
-                stripLen = 1;
-                hash = "sha256-u0zSejEjfrH3ZoMFm1j+NVv2t5AP9cE5yhsrdTS1dG4=";
-              })
-
-              # FIXME: do we need this after 15?
-              (metadata.getVersionFile "lldb/procfs.patch")
-            ]
-            ++ lib.optional (lib.versionOlder metadata.release_version "18") (fetchpatch {
-              name = "libcxx-19-char_traits.patch";
-              url = "https://github.com/llvm/llvm-project/commit/68744ffbdd7daac41da274eef9ac0d191e11c16d.patch";
-              stripLen = 1;
-              hash = "sha256-QCGhsL/mi7610ZNb5SqxjRGjwJeK2rwtsFVGeG3PUGc=";
-            })
-            ++ lib.optionals (lib.versionOlder metadata.release_version "17") [
-              resourceDirPatch
-              (fetchpatch {
-                name = "add-cstdio.patch";
-                url = "https://github.com/llvm/llvm-project/commit/73e15b5edb4fa4a77e68c299a6e3b21e610d351f.patch";
-                stripLen = 1;
-                hash = "sha256-eFcvxZaAuBsY/bda1h9212QevrXyvCHw8Cr9ngetDr0=";
-              })
-            ]
-            ++ lib.optional (lib.versionOlder metadata.release_version "14") (
-              metadata.getVersionFile "lldb/gnu-install-dirs.patch"
-            )
-            ++ lib.optional (lib.versionAtLeast metadata.release_version "14") ./lldb/gnu-install-dirs.patch;
         }
         // lib.optionalAttrs (lib.versions.major metadata.release_version == "16") {
           src = callPackage (
