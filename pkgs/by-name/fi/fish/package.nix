@@ -268,6 +268,7 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags =
     [
       "-DCMAKE_INSTALL_DOCDIR=${placeholder "doc"}/share/doc/fish"
+      "-DRust_CARGO_TARGET=${stdenv.hostPlatform.rust.rustcTarget}"
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       "-DMAC_CODESIGN_ID=OFF"
