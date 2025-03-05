@@ -88,6 +88,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-cv83nqoJob8rvBOFDUIr8kVSZQesG/ml+6n7yuZqP90=";
   };
 
+  postPatch = ''
+    echo 'import os
+    ALLAUTH_TRUSTED_CLIENT_IP_HEADER = os.getenv(
+        "ALLAUTH_TRUSTED_CLIENT_IP_HEADER",
+        None
+    )' >> glitchtip/settings.py
+  '';
+
   propagatedBuildInputs = pythonPackages;
 
   nativeBuildInputs = [
