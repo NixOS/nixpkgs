@@ -1,10 +1,9 @@
 { callPackage }:
-callPackage ./generic.nix { } rec {
+callPackage ./generic.nix { } {
   pname = "signal-desktop";
   version = "7.46.0-1";
 
-  dir = "Signal";
-  libdir = "usr/lib64/${pname}";
+  libdir = "usr/lib64/signal-desktop";
   bindir = "usr/bin";
   extractPkg = ''
     mkdir -p $out

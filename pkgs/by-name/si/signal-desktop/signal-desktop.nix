@@ -3,8 +3,7 @@ callPackage ./generic.nix { } rec {
   pname = "signal-desktop";
   version = "7.46.0";
 
-  dir = "Signal";
-  libdir = "opt/${dir}";
+  libdir = "opt/Signal";
   bindir = libdir;
   extractPkg = "dpkg-deb -x $downloadedFile $out";
 
