@@ -13,6 +13,7 @@
 , iproute2
 , pipewire
 , withICUCalendar ? false
+, withNotmuch ? true
 , withPipewire ? true
 }:
 
@@ -33,15 +34,14 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ pkg-config makeWrapper ]
     ++ (lib.optionals withPipewire [ rustPlatform.bindgenHook ]);
 
-  buildInputs = [ dbus libpulseaudio notmuch openssl lm_sensors ]
+  buildInputs = [ dbus libpulseaudio openssl lm_sensors ]
+    ++ (lib.optionals withNotmuch [ notmuch ])
     ++ (lib.optionals withPipewire [ pipewire ]);
 
-  buildFeatures = [
-    "notmuch"
-    "maildir"
-    "pulseaudio"
-  ] ++ (lib.optionals withICUCalendar [ "icu_calendar" ])
-  ++ (lib.optionals withPipewire [ "pipewire" ]);
+  buildFeatures = [ "maildir" "pulseaudio" ]
+    ++ (lib.optionals withICUCalendar [ "icu_calendar" ])
+    ++ (lib.optionals withNotmuch [ "notmuch" ])
+    ++ (lib.optionals withPipewire [ "pipewire" ]);
 
   prePatch = ''
     substituteInPlace src/util.rs \
