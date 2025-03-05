@@ -11446,6 +11446,11 @@ self: super: with self; {
     inherit (pkgs.__splicedPackages) protobuf;
   };
 
+  # Protobuf 6.x
+  protobuf6 = callPackage ../development/python-modules/protobuf/6.nix {
+    inherit (pkgs.__splicedPackages) protobuf_30;
+  };
+
   # If a protobuf upgrade causes many Python packages to fail, please pin it here to the previous version.
   protobuf = protobuf5;
 
