@@ -487,6 +487,8 @@ self: super: with self; {
 
   aioweenect = callPackage ../development/python-modules/aioweenect { };
 
+  aiowebdav2 = callPackage ../development/python-modules/aiowebdav2 { };
+
   aiowebostv = callPackage ../development/python-modules/aiowebostv { };
 
   aiowmi = callPackage ../development/python-modules/aiowmi { };
@@ -5577,6 +5579,8 @@ self: super: with self; {
     inherit (pkgs) crc32c;
   };
 
+  google-genai = callPackage ../development/python-modules/google-genai { };
+
   google-generativeai = callPackage ../development/python-modules/google-generativeai { };
 
   google-i18n-address = callPackage ../development/python-modules/google-i18n-address { };
@@ -6525,6 +6529,8 @@ self: super: with self; {
   iocextract = callPackage ../development/python-modules/iocextract { };
 
   ioctl-opt = callPackage ../development/python-modules/ioctl-opt { };
+
+  iometer = callPackage ../development/python-modules/iometer { };
 
   ionhash = callPackage ../development/python-modules/ionhash { };
 
@@ -10158,9 +10164,7 @@ self: super: with self; {
 
   paginate = callPackage ../development/python-modules/paginate { };
 
-  paho-mqtt_1 = callPackage ../development/python-modules/paho-mqtt/1.nix { };
-  paho-mqtt_2 = callPackage ../development/python-modules/paho-mqtt/default.nix { };
-  paho-mqtt = paho-mqtt_2;
+  paho-mqtt = callPackage ../development/python-modules/paho-mqtt/default.nix { };
 
   paintcompiler = callPackage ../development/python-modules/paintcompiler { };
 
@@ -10579,6 +10583,8 @@ self: super: with self; {
 
   pymeshlab = toPythonModule (pkgs.libsForQt5.callPackage ../applications/graphics/pymeshlab { });
 
+  pypglab = callPackage ../development/python-modules/pypglab { };
+
   pyprecice = callPackage ../development/python-modules/pyprecice { };
 
   pyprobables = callPackage ../development/python-modules/pyprobables { };
@@ -10964,6 +10970,8 @@ self: super: with self; {
 
   pyskyqremote = callPackage ../development/python-modules/pyskyqremote { };
 
+  pysmhi = callPackage ../development/python-modules/pysmhi { };
+
   pysolcast = callPackage ../development/python-modules/pysolcast { };
 
   pystac = callPackage ../development/python-modules/pystac { };
@@ -11076,6 +11084,8 @@ self: super: with self; {
 
   python-pptx = callPackage ../development/python-modules/python-pptx { };
 
+  python-snoo = callPackage ../development/python-modules/python-snoo { };
+
   python-songpal = callPackage ../development/python-modules/python-songpal { };
 
   python-swiftclient = callPackage ../development/python-modules/python-swiftclient { };
@@ -11098,6 +11108,8 @@ self: super: with self; {
   pytomorrowio = callPackage ../development/python-modules/pytomorrowio { };
 
   pytorch3d = callPackage ../development/python-modules/pytorch3d { };
+
+  pytouchline-extended = callPackage ../development/python-modules/pytouchline-extended { };
 
   pytouchlinesl = callPackage ../development/python-modules/pytouchlinesl { };
 
@@ -13604,7 +13616,7 @@ self: super: with self; {
 
   python-periphery = callPackage ../development/python-modules/python-periphery { };
 
-  python-picnic-api = callPackage ../development/python-modules/python-picnic-api { };
+  python-picnic-api2 = callPackage ../development/python-modules/python-picnic-api2 { };
 
   python-pidfile = callPackage ../development/python-modules/python-pidfile { };
 
@@ -14948,7 +14960,11 @@ self: super: with self; {
 
   sensorpro-ble = callPackage ../development/python-modules/sensorpro-ble { };
 
+  sensorpush-api = callPackage ../development/python-modules/sensorpush-api { };
+
   sensorpush-ble = callPackage ../development/python-modules/sensorpush-ble { };
+
+  sensorpush-ha = callPackage ../development/python-modules/sensorpush-ha { };
 
   sensoterra = callPackage ../development/python-modules/sensoterra { };
 
