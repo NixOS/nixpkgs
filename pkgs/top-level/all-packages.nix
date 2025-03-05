@@ -18156,8 +18156,6 @@ with pkgs;
   };
 
   or-tools = callPackage ../by-name/or/or-tools/package.nix {
-    inherit (darwin) DarwinTools;
-    python = python3;
     protobuf = protobuf_29.override {
       abseil-cpp = abseil-cpp_202407;
     };
