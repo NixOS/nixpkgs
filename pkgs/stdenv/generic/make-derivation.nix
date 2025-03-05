@@ -451,7 +451,7 @@ else let
       inherit enableParallelBuilding;
       enableParallelChecking = attrs.enableParallelChecking or true;
       enableParallelInstalling = attrs.enableParallelInstalling or true;
-    } // optionalAttrs (hardeningDisable != [] || hardeningEnable != [] || stdenv.hostPlatform.isMusl) {
+    } // optionalAttrs (hardeningDisable != [] || hardeningEnable != [] || stdenv.hostPlatform.isMusl || stdenv.hostPlatform.isNone) {
       NIX_HARDENING_ENABLE = builtins.concatStringsSep " " enabledHardeningOptions;
     } // optionalAttrs (stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform ? gcc.arch) {
       requiredSystemFeatures = attrs.requiredSystemFeatures or [] ++ [ "gccarch-${stdenv.hostPlatform.gcc.arch}" ];
