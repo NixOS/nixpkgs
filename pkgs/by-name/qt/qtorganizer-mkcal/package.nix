@@ -51,7 +51,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontWrapQtApps = true;
 
-  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+  # Flaky: https://github.com/dcaliste/qtorganizer-mkcal/issues/9
+  doCheck = false;
 
   preCheck =
     let
