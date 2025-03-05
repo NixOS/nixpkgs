@@ -18155,7 +18155,7 @@ with pkgs;
     nodejs = nodejs_20;
   };
 
-  or-tools = callPackage ../development/libraries/science/math/or-tools {
+  or-tools = callPackage ../by-name/or/or-tools/package.nix {
     inherit (darwin) DarwinTools;
     python = python3;
     protobuf = protobuf_29.override {
