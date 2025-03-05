@@ -4614,6 +4614,8 @@ self: super: with self; {
 
   exceptiongroup = callPackage ../development/python-modules/exceptiongroup { };
 
+  exchange-calendars = callPackage ../development/python-modules/exchange-calendars { };
+
   exchangelib = callPackage ../development/python-modules/exchangelib { };
 
   exdown = callPackage ../development/python-modules/exdown { };
