@@ -13,34 +13,31 @@
   xorg,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-files";
   version = "1.0.0-alpha.1";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-files";
-    rev = "epoch-${version}";
+    tag = "epoch-${finalAttrs.version}";
     hash = "sha256-UwQwZRzOyMvLRRmU2noxGrqblezkR8J2PNMVoyG0M0w=";
   };
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-me/U4LtnvYtf77qxF2Z1ncHRVOLp3inDVlwnCjwlj08=";
 
-  # COSMIC applications now uses vergen for the About page
-  # Update the COMMIT_DATE to match when the commit was made
-  env.VERGEN_GIT_COMMIT_DATE = "2024-08-05";
-  env.VERGEN_GIT_SHA = src.rev;
-
-  postPatch = ''
-    substituteInPlace justfile --replace '#!/usr/bin/env' "#!$(command -v env)"
-  '';
+  env = {
+    VERGEN_GIT_COMMIT_DATE = "2024-08-05";
+    VERGEN_GIT_SHA = finalAttrs.src.tag;
+  };
 
   nativeBuildInputs = [
     just
     pkg-config
     makeBinaryWrapper
   ];
+
   buildInputs = [
     glib
     libxkbcommon
@@ -73,14 +70,14 @@ rustPlatform.buildRustPackage rec {
       }
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/pop-os/cosmic-files";
     description = "File Manager for the COSMIC Desktop Environment";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
       ahoneybun
       nyabinary
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-}
+})
