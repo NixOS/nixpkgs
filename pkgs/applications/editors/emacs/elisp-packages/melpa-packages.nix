@@ -153,8 +153,10 @@ let
         # https://github.com/Golevka/emacs-clang-complete-async/issues/90
         auto-complete-clang-async = (addPackageRequires super.auto-complete-clang-async [ self.auto-complete ]).overrideAttrs (old: {
           buildInputs = old.buildInputs ++ [ pkgs.llvmPackages.llvm ];
-          CFLAGS = "-I${lib.getLib pkgs.llvmPackages.libclang}/include";
-          LDFLAGS = "-L${lib.getLib pkgs.llvmPackages.libclang}/lib";
+          env = old.env or { } // {
+            CFLAGS = "-I${lib.getLib pkgs.llvmPackages.libclang}/include";
+            LDFLAGS = "-L${lib.getLib pkgs.llvmPackages.libclang}/lib";
+          };
         });
 
         # part of a larger package
@@ -242,7 +244,7 @@ let
           #   - https://github.com/vedang/pdf-tools/issues/102
           #   - https://github.com/vedang/pdf-tools/issues/103
           #   - https://github.com/vedang/pdf-tools/issues/109
-          CXXFLAGS = "-std=c++17";
+          env = old.env or { } // { CXXFLAGS = "-std=c++17"; };
 
           nativeBuildInputs = old.nativeBuildInputs ++ [
             pkgs.autoconf
