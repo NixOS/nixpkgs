@@ -478,8 +478,8 @@ rec {
       "sha256-duU3LIeW3FNiplVmduZsNXBoDK7vbO6ecrBt1Y7C9rU=";
 
   mypy-boto3-elasticache =
-    buildMypyBoto3Package "elasticache" "1.37.0"
-      "sha256-27ayjkuTkHSiWUvV+YiA4OU4yufrFFM+atENNrp6sSY=";
+    buildMypyBoto3Package "elasticache" "1.37.6"
+      "sha256-qLRD+/08rWFA4cocIKyjXR8FQaX/Ho2nPHySbQEvu6Q=";
 
   mypy-boto3-elasticbeanstalk =
     buildMypyBoto3Package "elasticbeanstalk" "1.37.0"
@@ -682,8 +682,8 @@ rec {
       "sha256-cbEk1zLlN9p39j2ieLX0cnbazR/pp/tcBB2lDM80c04=";
 
   mypy-boto3-iotsitewise =
-    buildMypyBoto3Package "iotsitewise" "1.37.0"
-      "sha256-x+Ca4JkuisX6kKFyZn+QAAx08Yk6UgH9ek0Zhgx1o+Q=";
+    buildMypyBoto3Package "iotsitewise" "1.37.6"
+      "sha256-orP5EctM9M8hGTIMNcFjKlWLm4CNKR9KjQo3yUqPTlY=";
 
   mypy-boto3-iotthingsgraph =
     buildMypyBoto3Package "iotthingsgraph" "1.37.0"
@@ -1086,8 +1086,8 @@ rec {
       "sha256-csr3DYjsomhq4T+97ZEQdjt0RfsXbo8kBFGrB6cUUmM=";
 
   mypy-boto3-rds =
-    buildMypyBoto3Package "rds" "1.37.0"
-      "sha256-58klRnnw/x4pMIWyJpgbf5n+QPAo7EfFeluMvZi+aU8=";
+    buildMypyBoto3Package "rds" "1.37.6"
+      "sha256-IoXZZE9YwtHROZYy3A/nmSfhkpCpt6GE+AyF2KTmXlg=";
 
   mypy-boto3-rds-data =
     buildMypyBoto3Package "rds-data" "1.37.0"
