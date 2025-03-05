@@ -1819,6 +1819,13 @@
     githubId = 8436007;
     name = "Aria Edmonds";
   };
+  arbel-arad = {
+    email = "arbel@spacetime.technology";
+    github = "arbel-arad";
+    githubId = 65590498;
+    matrix = "@arbel:matrix.spacetime.technology";
+    name = "Arbel Arad";
+  };
   arcadio = {
     email = "arc@well.ox.ac.uk";
     github = "arcadio";
