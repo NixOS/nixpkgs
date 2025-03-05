@@ -8,7 +8,7 @@
   nodejs,
   fetchYarnDeps,
   jq,
-  electron_33,
+  electron_34,
   element-web,
   sqlcipher,
   callPackage,
@@ -22,7 +22,7 @@ let
   pinData = import ./element-desktop-pin.nix;
   inherit (pinData.hashes) desktopSrcHash desktopYarnHash;
   executableName = "element-desktop";
-  electron = electron_33;
+  electron = electron_34;
   keytar = callPackage ./keytar {
     inherit electron;
   };
