@@ -1,9 +1,9 @@
 { lib, stdenv, fetchFromGitHub
 , runtimeShell, nixosTests
-, autoreconfHook, bison, flex
+, autoreconfHook, bison, binlore, flex
 , docbook_xml_dtd_45, docbook_xsl
 , itstool, libxml2, libxslt
-, libxcrypt, pkg-config
+, libxcrypt, pkg-config, shadow
 , glibcCross ? null
 , pam ? null
 , withLibbsd ? lib.meta.availableOn stdenv.hostPlatform libbsd, libbsd
@@ -93,6 +93,11 @@ stdenv.mkDerivation rec {
   };
 
   passthru = {
+    # Nothing in passwd --help or passwd’s man page mentions anything about
+    # passwd executing its arguments.
+    binlore.out = binlore.synthesize shadow ''
+      execer cannot bin/passwd
+    '';
     shellPath = "/bin/nologin";
     tests = { inherit (nixosTests) shadow; };
   };
