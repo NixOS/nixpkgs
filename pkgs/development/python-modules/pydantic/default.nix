@@ -29,7 +29,7 @@
 
 buildPythonPackage rec {
   pname = "pydantic";
-  version = "2.10.5";
+  version = "2.10.6";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     owner = "pydantic";
     repo = "pydantic";
     tag = "v${version}";
-    hash = "sha256-SEgBuhof1rqnKFI7O1aajkgp17EgaPNcfJzbh/j4ebg=";
+    hash = "sha256-vkXvHQ5ipcLfx4qJKY6J4rKXCAfP2rj88GnwGMjM2go=";
   };
 
   buildInputs = lib.optionals (pythonOlder "3.9") [ libxcrypt ];
