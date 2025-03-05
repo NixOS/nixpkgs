@@ -10,7 +10,7 @@
   fixup-yarn-lock,
   stdenv,
   yarn,
-  nodejs,
+  nodejs_20,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -61,7 +61,7 @@ rustPlatform.buildRustPackage rec {
 
     nativeBuildInputs = [
       yarn
-      nodejs
+      nodejs_20
       fixup-yarn-lock
     ];
 
