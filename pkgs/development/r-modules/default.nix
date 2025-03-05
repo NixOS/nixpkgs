@@ -603,6 +603,7 @@ let
     qqconf = [ pkgs.pkg-config ];
     qspray = [ pkgs.pkg-config ];
     ratioOfQsprays = [ pkgs.pkg-config ];
+    watcher = with pkgs; [ cmake which ];
     symbolicQspray = [ pkgs.pkg-config ];
     sphereTessellation = [ pkgs.pkg-config ];
     vapour = [ pkgs.pkg-config ];
