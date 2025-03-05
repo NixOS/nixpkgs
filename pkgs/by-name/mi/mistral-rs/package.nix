@@ -85,7 +85,7 @@ rustPlatform.buildRustPackage rec {
   # Otherwise, fails with
   # failed to get `anyhow` as a dependency of package
   postPatch = ''
-    rm "$cargoDepsCopy"/llguidance-*/build.rs
+    rm "$cargoDepsCopy"/*/llguidance-*/build.rs
   '';
 
   nativeBuildInputs = [
