@@ -11,15 +11,15 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.4";
+  version = "0.4.01";
   pname = "pywinctl";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Kalmat";
     repo = "pywinctl";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-n7P12+8e1pPnJQrsYnRiYlzsKJTIYPH+iF1FuRx8A7M=";
+    tag = "v${version}";
+    hash = "sha256-l9wUnEjOpKrjulruUX+AqQIjduDfX+iMmSv/V32jpdc=";
   };
 
   build-system = [ setuptools ];
