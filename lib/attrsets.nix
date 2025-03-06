@@ -679,19 +679,7 @@ rec {
     :::
   */
   filterAttrsRecursive =
-    pred:
-    set:
-    listToAttrs (
-      concatMap (name:
-        let v = set.${name}; in
-        if pred name v then [
-          (nameValuePair name (
-            if isAttrs v then filterAttrsRecursive pred v
-            else v
-          ))
-        ] else []
-      ) (attrNames set)
-    );
+    pred: set: recurse (f: attrs: mapAttrs f (filterAttrs pred attrs)) (_: _: true) (_: v: v) set;
 
    /**
     Like [`lib.lists.foldl'`](#function-library-lib.lists.foldl-prime) but for attribute sets.
