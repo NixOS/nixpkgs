@@ -6,6 +6,7 @@
   dotnetCorePackages,
   fetchFromGitHub,
   fontconfig,
+  hash,
   installShellFiles,
   lib,
   libdecor,
@@ -27,12 +28,14 @@
   stdenv,
   testers,
   udev,
+  version,
   vulkan-loader,
   wayland,
   wayland-scanner,
   withDbus ? true,
   withFontconfig ? true,
   withMono ? false,
+  nugetDeps ? null,
   withPlatform ? "linuxbsd",
   withPrecision ? "single",
   withPulseaudio ? true,
@@ -62,13 +65,13 @@ let
 
   attrs = finalAttrs: rec {
     pname = "godot4${suffix}";
-    version = "4.3-stable";
+    inherit version;
 
     src = fetchFromGitHub {
       owner = "godotengine";
       repo = "godot";
       tag = version;
-      hash = "sha256-MzElflwXHWLgPtoOIhPLA00xX8eEdQsexZaGIEOzbj0=";
+      inherit hash;
       # Required for the commit hash to be included in the version number.
       #
       # `methods.py` reads the commit hash from `.git/HEAD` and manually follows
@@ -235,10 +238,12 @@ let
         runHook postInstall
       '';
 
-    passthru.tests = {
-      version = testers.testVersion {
-        package = finalAttrs.finalPackage;
-        version = lib.replaceStrings [ "-" ] [ "." ] version;
+    passthru = {
+      tests = {
+        version = testers.testVersion {
+          package = finalAttrs.finalPackage;
+          version = lib.replaceStrings [ "-" ] [ "." ] version;
+        };
       };
     };
 
@@ -268,7 +273,7 @@ in
 stdenv.mkDerivation (
   if withMono then
     dotnetCorePackages.addNuGetDeps {
-      nugetDeps = ./deps.json;
+      inherit nugetDeps;
       overrideFetchAttrs = old: rec {
         runtimeIds = map (system: dotnetCorePackages.systemToDotnetRid system) old.meta.platforms;
         buildInputs =
