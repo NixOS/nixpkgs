@@ -49,6 +49,7 @@ let
     extends
     filter
     filterAttrs
+    filterAttrsRecursive
     fix
     fold
     foldAttrs
@@ -1170,6 +1171,18 @@ runTests {
         hello = true;
         world = false;
       };
+    };
+  };
+
+  # code from example
+  testFilterAttrsRecursive = {
+    expr = filterAttrsRecursive (n: v: v != null) {
+      foo = {
+        bar = null;
+      };
+    };
+    expected = {
+      foo = { };
     };
   };
 
