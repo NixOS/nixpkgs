@@ -86,7 +86,6 @@ stdenv.mkDerivation (finalAttrs: {
     icon = "smartgit";
     desktopName = "SmartGit";
     categories = [
-      "Application"
       "Development"
       "RevisionControl"
     ];
