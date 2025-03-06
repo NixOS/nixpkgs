@@ -3,10 +3,10 @@
   buildGoModule,
   lib,
 }:
+
 buildGoModule rec {
   pname = "ory-hydra";
   version = "2.3.0";
-  commit = "ee8c339ddada3a42529c0416897abc32bad03bbb";
   src = fetchFromGitHub {
     owner = "ory";
     repo = "hydra";
@@ -18,12 +18,11 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
-  # Pass versioning information via ldflags
   ldflags = [
     "-s"
     "-w"
     "-X github.com/ory/hydra/v2/driver/config.Version=${version}"
-    "-X github.com/ory/hydra/v2/driver/config.Commit=${commit}"
+    "-X github.com/ory/hydra/v2/driver/config.Commit=${src.rev}"
   ];
 
   meta = {
