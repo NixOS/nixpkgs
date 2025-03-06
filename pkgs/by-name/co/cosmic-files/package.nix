@@ -45,7 +45,40 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--set"
     "bin-src"
     "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-files"
+    "--set"
+    "applet-src"
+    "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-files-applet"
   ];
+
+  # This is needed since by setting cargoBuildFlags, it would build both the applet and the main binary
+  # at the same time, which would cause problems with the desktop items applet
+  buildPhase = ''
+    runHook preBuild
+
+    defaultCargoBuildFlags="$cargoBuildFlags"
+
+    cargoBuildFlags="$defaultCargoBuildFlags --package cosmic-files"
+    runHook cargoBuildHook
+
+    cargoBuildFlags="$defaultCargoBuildFlags --package cosmic-files-applet"
+    runHook cargoBuildHook
+
+    runHook postBuild
+  '';
+
+  checkPhase = ''
+    runHook preCheck
+
+    defaultCargoTestFlags="$cargoTestFlags"
+
+    cargoTestFlags="$defaultCargoTestFlags --package cosmic-files"
+    runHook cargoCheckHook
+
+    cargoTestFlags="$defaultCargoTestFlags --package cosmic-files-applet"
+    runHook cargoCheckHook
+
+    runHook postCheck
+  '';
 
   passthru.updateScript = nix-update-script {
     extraArgs = [
