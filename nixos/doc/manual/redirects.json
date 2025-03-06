@@ -1289,6 +1289,12 @@
   "module-services-foundationdb-full-docs": [
     "index.html#module-services-foundationdb-full-docs"
   ],
+  "module-service-umurmur": [
+    "index.html#module-service-umurmur"
+  ],
+  "module-service-umurmur-quick-start": [
+    "index.html#module-service-umurmur-quick-start"
+  ],
   "module-borgbase": [
     "index.html#module-borgbase"
   ],
