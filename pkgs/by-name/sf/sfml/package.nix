@@ -15,10 +15,6 @@
   libXrender,
   udev,
   xcbutilimage,
-  IOKit,
-  Foundation,
-  AppKit,
-  OpenAL,
 }:
 
 stdenv.mkDerivation rec {
@@ -60,12 +56,6 @@ stdenv.mkDerivation rec {
       libXrandr
       libXrender
       xcbutilimage
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      IOKit
-      Foundation
-      AppKit
-      OpenAL
     ];
 
   cmakeFlags = [
