@@ -34,6 +34,8 @@ stdenv.mkDerivation rec {
     mv $out/bin/external-ip.sh $out/bin/external-ip
   '';
 
+  __darwinAllowLocalNetworking = true;
+
   passthru.tests = {
     inherit (nixosTests) upnp;
   };
