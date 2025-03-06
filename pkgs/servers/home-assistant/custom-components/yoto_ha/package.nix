@@ -8,13 +8,13 @@
 buildHomeAssistantComponent rec {
   owner = "cdnninja";
   domain = "yoto";
-  version = "1.23.0";
+  version = "1.23.2";
 
   src = fetchFromGitHub {
     owner = "cdnninja";
     repo = "yoto_ha";
     tag = "v${version}";
-    hash = "sha256-FB711ofk5BV/U0ZWfa6Q2aheZkzbwxDUfqNDu9wj2aQ=";
+    hash = "sha256-RErsZGSoBhBGg852znZq6W8oDZmDDoPTZihUBhWCO5w=";
   };
 
   dependencies = [
