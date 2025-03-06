@@ -12,14 +12,14 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ukmm";
   version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "NiceneNerd";
     repo = "ukmm";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-NZN+T2N+N+oxrjBRvVbRWbB2KY5im9SN7gPHzfvovl8=";
   };
 
@@ -41,12 +41,13 @@ rustPlatform.buildRustPackage rec {
   # Force linking to libEGL, which is always dlopen()ed, and to
   # libwayland-client & libxkbcommon, which is dlopen()ed based on the
   # winit backend.
-  RUSTFLAGS = map (a: "-C link-arg=${a}") [
-    "-Wl,--push-state,--no-as-needed"
+  NIX_LDFLAGS = [
+    "--push-state"
+    "--no-as-needed"
     "-lEGL"
     "-lwayland-client"
     "-lxkbcommon"
-    "-Wl,--pop-state"
+    "--pop-state"
   ];
 
   cargoTestFlags = [
@@ -72,11 +73,11 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "New mod manager for The Legend of Zelda: Breath of the Wild";
     homepage = "https://github.com/NiceneNerd/ukmm";
-    changelog = "https://github.com/NiceneNerd/ukmm/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/NiceneNerd/ukmm/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ kira-bruneau ];
     platforms = platforms.linux;
     broken = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64;
     mainProgram = "ukmm";
   };
-}
+})
