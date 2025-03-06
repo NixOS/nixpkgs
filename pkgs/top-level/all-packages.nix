@@ -13502,11 +13502,6 @@ with pkgs;
 
   gtk-pipe-viewer = perlPackages.callPackage ../applications/video/pipe-viewer { withGtk3 = true; };
 
-  hydrus = python3Packages.callPackage ../applications/graphics/hydrus {
-    inherit miniupnpc swftools;
-    inherit (qt6) wrapQtAppsHook qtbase qtcharts;
-  };
-
   kemai = qt6Packages.callPackage ../applications/misc/kemai { };
 
   jetbrains = (recurseIntoAttrs (callPackages ../applications/editors/jetbrains {

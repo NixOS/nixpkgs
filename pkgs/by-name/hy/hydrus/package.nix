@@ -1,15 +1,12 @@
 {
   lib,
   fetchFromGitHub,
-  wrapQtAppsHook,
   miniupnpc,
   ffmpeg,
   enableSwftools ? false,
   swftools,
   python3Packages,
-  pythonOlder,
-  qtbase,
-  qtcharts,
+  qt6,
   makeDesktopItem,
   copyDesktopItems,
 }:
@@ -27,14 +24,14 @@ python3Packages.buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    wrapQtAppsHook
+    qt6.wrapQtAppsHook
     python3Packages.mkdocs-material
     copyDesktopItems
   ];
 
   buildInputs = [
-    qtbase
-    qtcharts
+    qt6.qtbase
+    qt6.qtcharts
   ];
 
   desktopItems = [
