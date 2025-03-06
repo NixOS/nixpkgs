@@ -1,30 +1,30 @@
 {
   lib,
-  cosmic-icons,
+  stdenv,
+  rustPlatform,
   fetchFromGitHub,
+  pkg-config,
+  just,
   fontconfig,
   freetype,
-  just,
   libglvnd,
   libinput,
   libxkbcommon,
   makeBinaryWrapper,
-  pkg-config,
-  rustPlatform,
-  stdenv,
   vulkan-loader,
   wayland,
+  cosmic-icons,
   xorg,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-term";
   version = "1.0.0-alpha.6";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-term";
-    rev = "epoch-${version}";
+    tag = "epoch-${finalAttrs.version}";
     hash = "sha256-sdeRkT6UcyBKIFnJZn3aGf8LZQimqVPqtXo7RtwUs5M=";
   };
 
@@ -33,12 +33,10 @@ rustPlatform.buildRustPackage rec {
 
   # COSMIC applications now uses vergen for the About page
   # Update the COMMIT_DATE to match when the commit was made
-  env.VERGEN_GIT_COMMIT_DATE = "2025-02-21";
-  env.VERGEN_GIT_SHA = src.rev;
-
-  postPatch = ''
-    substituteInPlace justfile --replace-fail '#!/usr/bin/env' "#!$(command -v env)"
-  '';
+  env = {
+    VERGEN_GIT_COMMIT_DATE = "2025-02-21";
+    VERGEN_GIT_SHA = finalAttrs.src.tag;
+  };
 
   nativeBuildInputs = [
     just
@@ -58,6 +56,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   dontUseJustBuild = true;
+  dontUseJustCheck = true;
 
   justFlags = [
     "--set"
@@ -83,15 +82,15 @@ rustPlatform.buildRustPackage rec {
       --suffix XDG_DATA_DIRS : "${cosmic-icons}/share"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/pop-os/cosmic-term";
     description = "Terminal for the COSMIC Desktop Environment";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
       ahoneybun
       nyabinary
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "cosmic-term";
   };
-}
+})
