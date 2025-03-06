@@ -241,7 +241,7 @@ in
           cd ${cfg.dataDir}
           sudo=exec
           if [[ "$USER" != ${cfg.user} ]]; then
-            sudo='exec /run/wrappers/bin/sudo -u ${cfg.user}'
+            sudo='exec ${config.security.wrapperDir}/sudo -u ${cfg.user}'
           fi
           $sudo ${lib.getExe cfg.package} "$@"
         '';

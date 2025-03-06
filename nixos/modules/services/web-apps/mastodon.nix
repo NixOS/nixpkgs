@@ -117,7 +117,7 @@ let
 
     sudo=exec
     if [[ "$USER" != ${cfg.user} ]]; then
-      sudo='exec /run/wrappers/bin/sudo -u ${cfg.user} --preserve-env'
+      sudo='exec ${config.security.wrapperDir}/sudo -u ${cfg.user} --preserve-env'
     fi
     $sudo ${cfg.package}/bin/tootctl "$@"
   '';

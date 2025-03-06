@@ -262,7 +262,7 @@ in
         DBUser = cfg.database.user;
         PidFile = "${runtimeDir}/zabbix_server.pid";
         SocketDir = runtimeDir;
-        FpingLocation = "/run/wrappers/bin/fping";
+        FpingLocation = "${config.security.wrapperDir}/fping";
         LoadModule = builtins.attrNames cfg.modules;
       }
       (mkIf (cfg.database.createLocally != true) { DBPort = cfg.database.port; })

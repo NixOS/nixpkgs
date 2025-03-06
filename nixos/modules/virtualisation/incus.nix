@@ -11,7 +11,7 @@ let
 
   nvidiaEnabled = (lib.elem "nvidia" config.services.xserver.videoDrivers);
 
-  serverBinPath = ''/run/wrappers/bin:${pkgs.qemu_kvm}/libexec:${
+  serverBinPath = ''${config.security.wrapperDir}:${pkgs.qemu_kvm}/libexec:${
     lib.makeBinPath (
       with pkgs;
       [

@@ -168,7 +168,7 @@ in
           };
         }
         (lib.mkIf (cfg.ubridge.enable) {
-          Server.ubridge_path = lib.mkDefault "/run/wrappers/bin/ubridge";
+          Server.ubridge_path = lib.mkDefault "${config.security.wrapperDir}/ubridge";
         })
         (lib.mkIf (cfg.auth.enable) {
           Server = {
