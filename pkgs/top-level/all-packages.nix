@@ -964,6 +964,7 @@ with pkgs;
   };
 
   alice-tools-qt5 = libsForQt5.callPackage ../tools/games/alice-tools { };
+  isobiscuit = callPackage ../tools/virtualization/isobiscuit {};
 
   alice-tools-qt6 = qt6Packages.callPackage ../tools/games/alice-tools { };
 
@@ -1659,8 +1660,7 @@ with pkgs;
   brakeman = callPackage ../development/tools/analysis/brakeman { };
 
   brewtarget = libsForQt5.callPackage ../applications/misc/brewtarget { } ;
-  isobiscuit = callPackage ../tools/virtualization/isobiscuit {};
-
+  
   # Derivation's result is not used by nixpkgs. Useful for validation for
   # regressions of bootstrapTools on hydra and on ofborg. Example:
   #     pkgsCross.aarch64-multiplatform.freshBootstrapTools.build
