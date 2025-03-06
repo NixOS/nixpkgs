@@ -27,6 +27,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ./0001-napi-fix-build-error-in-cargo-auditable.patch
   ];
 
+  # error: linker `aarch64-linux-gnu-gcc` not found
+  postPatch = ''
+    rm .cargo/config.toml
+  '';
+
   buildFeatures = [
     "cli"
   ];
