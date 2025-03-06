@@ -4,7 +4,6 @@
   fetchFromGitHub,
   setuptools,
   bleak,
-  construct,
   construct-typing,
   pytest-asyncio,
   pytestCheckHook,
@@ -26,7 +25,6 @@ buildPythonPackage rec {
 
   dependencies = [
     bleak
-    construct
     construct-typing
   ];
 
