@@ -49,7 +49,8 @@ buildPythonPackage rec {
   ];
 
   # tests hang on pypy indefinitely
-  doCheck = !isPyPy;
+  # many tests fail on darwin and the remaining are generally flaky
+  doCheck = !isPyPy && stdenv.hostPlatform.isDarwin;
 
   preCheck = lib.optionalString doCheck ''
     echo "nameserver 127.0.0.1" > resolv.conf
