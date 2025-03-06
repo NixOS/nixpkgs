@@ -12,14 +12,14 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pixi";
   version = "0.40.3";
 
   src = fetchFromGitHub {
     owner = "prefix-dev";
     repo = "pixi";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-PxG5bbHcpPOc4wAqxsiGkw1NeS3ya4/cZcDSg4LgX6Q=";
   };
 
@@ -76,4 +76,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "pixi";
   };
-}
+})
