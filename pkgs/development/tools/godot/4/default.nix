@@ -64,13 +64,28 @@ let
   attrs = finalAttrs: rec {
     pname = "godot4${suffix}";
     version = "4.3-stable";
-    commitHash = "77dcf97d82cbfe4e4615475fa52ca03da645dbd8";
 
     src = fetchFromGitHub {
       owner = "godotengine";
       repo = "godot";
-      rev = commitHash;
-      hash = "sha256-v2lBD3GEL8CoIwBl3UoLam0dJxkLGX0oneH6DiWkEsM=";
+      tag = version;
+      hash = "sha256-MzElflwXHWLgPtoOIhPLA00xX8eEdQsexZaGIEOzbj0=";
+      # Required for the commit hash to be included in the version number.
+      #
+      # `methods.py` reads the commit hash from `.git/HEAD` and manually follows
+      # refs.
+      #
+      # See also 'hash' in
+      # https://docs.godotengine.org/en/stable/classes/class_engine.html#class-engine-method-get-version-info
+      leaveDotGit = true;
+      # Only keep HEAD, because leaveDotGit is non-deterministic:
+      # https://github.com/NixOS/nixpkgs/issues/8567
+      postFetch = ''
+        hash=$(git -C "$out" rev-parse HEAD)
+        rm -r "$out"/.git
+        mkdir "$out"/.git
+        echo "$hash" > "$out"/.git/HEAD
+      '';
     };
 
     outputs = [
@@ -88,28 +103,15 @@ let
     # https://docs.godotengine.org/en/stable/classes/class_engine.html#class-engine-method-get-version-info
     BUILD_NAME = "nixpkgs";
 
-    # Required for the commit hash to be included in the version number.
-    #
-    # `methods.py` reads the commit hash from `.git/HEAD` and manually follows
-    # refs. Since we just write the hash directly, there is no need to emulate any
-    # other parts of the .git directory.
-    #
-    # See also 'hash' in
-    # https://docs.godotengine.org/en/stable/classes/class_engine.html#class-engine-method-get-version-info
-    preConfigure =
-      ''
-        mkdir -p .git
-        echo ${commitHash} > .git/HEAD
-      ''
-      + lib.optionalString withMono ''
-        # TODO: avoid pulling in dependencies of windows-only project
-        dotnet sln modules/mono/editor/GodotTools/GodotTools.sln \
-          remove modules/mono/editor/GodotTools/GodotTools.OpenVisualStudio/GodotTools.OpenVisualStudio.csproj
+    preConfigure = lib.optionalString withMono ''
+      # TODO: avoid pulling in dependencies of windows-only project
+      dotnet sln modules/mono/editor/GodotTools/GodotTools.sln \
+        remove modules/mono/editor/GodotTools/GodotTools.OpenVisualStudio/GodotTools.OpenVisualStudio.csproj
 
-        dotnet restore modules/mono/glue/GodotSharp/GodotSharp.sln
-        dotnet restore modules/mono/editor/GodotTools/GodotTools.sln
-        dotnet restore modules/mono/editor/Godot.NET.Sdk/Godot.NET.Sdk.sln
-      '';
+      dotnet restore modules/mono/glue/GodotSharp/GodotSharp.sln
+      dotnet restore modules/mono/editor/GodotTools/GodotTools.sln
+      dotnet restore modules/mono/editor/Godot.NET.Sdk/Godot.NET.Sdk.sln
+    '';
 
     # From: https://github.com/godotengine/godot/blob/4.2.2-stable/SConstruct
     sconsFlags = mkSconsFlagsFromAttrSet {
