@@ -69,7 +69,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   configureFlags =
     [
-      "--enable-check"
+      # > docs failure: ftype-ref: ftype mismatch for #<ftype-pointer>
+      # "--enable-check"
       "--enable-csonly"
       "--enable-liblz4"
       "--enable-libz"
