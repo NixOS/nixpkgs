@@ -872,6 +872,102 @@ rec {
       [];
 
   /**
+    Recursively apply `fAttrs` function to a potentially nested attribute set
+    graph’s root and branches, and apply `f` to leaf attributes. The traversal
+    is depth-first pre-order, controlled by the `isBranch` predicate.
+
+    The root of a graph is a final argument `attrs`. Every attribute value that
+    is not an attribute set or does not satisfy `isBranch` is considered a leaf.
+    Branches are always attribute sets.
+
+    # Inputs
+
+    `fAttrs :: (String -> a -> b) -> AttrSet -> c`
+
+    : Given a function and an attribute set, produce the value by applying the
+      function to the set's attribute names and values.
+
+      The first argument is a function that either recurses into a branch using
+      `fAttrs` or applies `f` to a leaf attribute.
+
+    `isBranch :: [String] -> AttrSet -> Bool`
+
+    : Given a nested attribute set's path and value, determine if recursion
+      should continue, that is, whether the value is a branch.
+
+      If the predicate returns false, `recurse` does not recurse, but instead
+      applies the `f` mapping function.
+
+      If the predicate returns true, it does recurse, and does not apply the
+      mapping function.
+
+      If `isBranch` always returns false, `recurse` behaves like a non-recursive
+      `fAttrs` function.
+
+    `f :: [String] -> a -> b`
+
+    : Given an attribute's path and value, produce the value for a leaf
+      attribute mapped with `fAttrs`.
+
+      Note that `isAttrs value` implies `isBranch path value == false`.
+
+    `attrs`
+
+    : The attribute set to recurse into.
+
+    # Type
+
+    ```
+    recurse :: ((String -> a -> b) -> AttrSet -> c) -> ([String] -> AttrSet -> Bool) -> ([String] -> a -> b) -> AttrSet -> c
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.attrsets.recurse` usage example
+
+    ```nix
+    attrs = {
+      a = 1;
+      b = attrs;
+    }
+    attrsets.recurse mapAttrs
+      (path: _: length path < 3)
+      (path: value: { inherit path value; })
+      attrs
+    => {
+         a = { path = [ "a" ]; value = 1; };
+         b = {
+           a = { path = [ "b" "a" ]; value = 1; };
+           b = {
+             a = { path = [ "b" "b" "a" ]; value = 1; };
+             b = { path = [ "b" "b" "b" ]; value = attrs; };
+           };
+         };
+       }
+    attrsets.recurse (_: attrs: attrs) (_: _: throw "no recursion") (_: _: throw "no recursion") { a = { }; }
+    => { a = { }; }
+    ```
+
+    :::
+  */
+  recurse =
+    fAttrs: isBranch: f: attrs:
+    let
+      recurse' =
+        path:
+        fAttrs (
+          name: value:
+          let
+            pathToValue = path ++ [ name ];
+            valueIsBranch = isAttrs value && isBranch pathToValue value;
+            visit = if valueIsBranch then recurse' else f;
+          in
+          visit pathToValue value
+        );
+    in
+    recurse' [ ] attrs;
+
+  /**
     Return the cartesian product of attribute set value combinations.
 
 
