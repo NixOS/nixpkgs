@@ -4934,6 +4934,8 @@ self: super: with self; {
 
   flower = callPackage ../development/python-modules/flower { };
 
+  flowjax = callPackage ../development/python-modules/flowjax { };
+
   flowlogs-reader = callPackage ../development/python-modules/flowlogs-reader { };
 
   flowmc = callPackage ../development/python-modules/flowmc { };
@@ -10242,6 +10244,8 @@ self: super: with self; {
   parallel-ssh = callPackage ../development/python-modules/parallel-ssh { };
 
   param = callPackage ../development/python-modules/param { };
+
+  paramax = callPackage ../development/python-modules/paramax { };
 
   parameter-expansion-patched = callPackage ../development/python-modules/parameter-expansion-patched { };
 
