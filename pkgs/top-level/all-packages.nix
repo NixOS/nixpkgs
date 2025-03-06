@@ -5964,7 +5964,7 @@ with pkgs;
       if stdenv.hostPlatform == stdenv.targetPlatform
          && stdenv.buildPlatform == stdenv.hostPlatform
       then buildPackages.gnat-bootstrap14
-      else buildPackages.gnat13;
+      else buildPackages.gnat14;
     stdenv =
       if stdenv.hostPlatform == stdenv.targetPlatform
          && stdenv.buildPlatform == stdenv.hostPlatform
