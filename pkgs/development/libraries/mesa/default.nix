@@ -91,6 +91,7 @@
     "intel-nullhw"
   ]
 , mesa
+, mesa-gl-headers
 , makeSetupHook
 }:
 
@@ -138,9 +139,6 @@ in stdenv.mkDerivation {
 
   patches = [
     ./opencl.patch
-    # cherry-picked from https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/32719
-    # safe to remove for versions > 24.3.2
-    ./cross_clc.patch
   ];
 
   postPatch = ''
@@ -154,15 +152,28 @@ in stdenv.mkDerivation {
     substituteInPlace src/amd/vulkan/meson.build --replace \
       "get_option('datadir')" "'${placeholder "out"}/share'"
 
+    for header in ${toString mesa-gl-headers.headers}; do
+      if ! diff -q $header ${mesa-gl-headers}/$header; then
+        echo "File $header does not match between mesa and mesa-gl-headers, please update mesa-gl-headers first!"
+        exit 42
+      fi
+    done
+
     ${copyRustDeps}
   '';
 
   outputs = [
-    "out" "dev" "drivers" "driversdev" "opencl" "teflon" "osmesa"
+    "out" "dev"
+    "drivers"
+    # OpenCL drivers pull in ~1G of extra LLVM stuff, so don't install them
+    # if the user didn't explicitly ask for it
+    "opencl"
     # the Dozen drivers depend on libspirv2dxil, but link it statically, and
     # libspirv2dxil itself is pretty chonky, so relocate it to its own output in
     # case anything wants to use it at some point
     "spirv2dxil"
+    # tools for the host platform to be used when cross-compiling
+    "cross_tools"
   ];
 
   # Keep build-ids so drivers can use them for caching, etc.
@@ -196,8 +207,10 @@ in stdenv.mkDerivation {
     # Enable glvnd for dynamic libGL dispatch
     (lib.mesonEnable "glvnd" true)
 
-    (lib.mesonBool "gallium-nine" true) # Direct3D in Wine
-    (lib.mesonBool "osmesa" true) # used by wine
+    (lib.mesonBool "gallium-nine" false) # Direct3D9 in Wine, largely supplanted by DXVK
+    (lib.mesonBool "osmesa" false) # deprecated upstream
+    (lib.mesonEnable "gallium-xa" false) # old and mostly dead
+
     (lib.mesonBool "teflon" true) # TensorFlow frontend
 
     # Enable all freedreno kernel mode drivers. (For example, virtio can be
@@ -206,14 +219,13 @@ in stdenv.mkDerivation {
     (lib.mesonOption "freedreno-kmds" "msm,kgsl,virtio,wsl")
 
     # Enable Intel RT stuff when available
-    (lib.mesonBool "install-intel-clc" true)
-    (lib.mesonBool "install-mesa-clc" true)
     (lib.mesonEnable "intel-rt" stdenv.hostPlatform.isx86_64)
+
+    # Required for OpenCL
     (lib.mesonOption "clang-libdir" "${lib.getLib llvmPackages.clang-unwrapped}/lib")
 
     # Clover, old OpenCL frontend
     (lib.mesonOption "gallium-opencl" "icd")
-    (lib.mesonBool "opencl-spirv" true)
 
     # Rusticl, new OpenCL frontend
     (lib.mesonBool "gallium-rusticl" true)
@@ -221,12 +233,18 @@ in stdenv.mkDerivation {
     # meson auto_features enables this, but we do not want it
     (lib.mesonEnable "android-libbacktrace" false)
     (lib.mesonEnable "microsoft-clc" false) # Only relevant on Windows (OpenCL 1.2 API on top of D3D12)
+
+    # Build and install extra tools for cross
+    (lib.mesonBool "install-mesa-clc" true)
+    (lib.mesonBool "install-precomp-compiler" true)
+
+    # Disable valgrind on targets where it's not available
     (lib.mesonEnable "valgrind" withValgrind)
   ] ++ lib.optionals enablePatentEncumberedCodecs [
     (lib.mesonOption "video-codecs" "all")
   ] ++ lib.optionals needNativeCLC [
-    (lib.mesonOption "intel-clc" "system")
     (lib.mesonOption "mesa-clc" "system")
+    (lib.mesonOption "precomp-compiler" "system")
   ];
 
   strictDeps = true;
@@ -295,11 +313,11 @@ in stdenv.mkDerivation {
     wayland-scanner
   ] ++ lib.optionals needNativeCLC [
     # `or null` to not break eval with `attribute missing` on darwin to linux cross
-    (buildPackages.mesa.driversdev or null)
+    (buildPackages.mesa.cross_tools or null)
   ];
 
   disallowedRequisites = lib.optionals needNativeCLC [
-    (buildPackages.mesa.driversdev or null)
+    (buildPackages.mesa.cross_tools or null)
   ];
 
   propagatedBuildInputs = [ libdrm ];
@@ -308,13 +326,14 @@ in stdenv.mkDerivation {
 
   postInstall = ''
     # Move driver-related bits to $drivers
+    moveToOutput "lib/gallium-pipe" $drivers
     moveToOutput "lib/gbm" $drivers
     moveToOutput "lib/lib*_mesa*" $drivers
     moveToOutput "lib/libgallium*" $drivers
     moveToOutput "lib/libglapi*" $drivers
     moveToOutput "lib/libpowervr_rogue*" $drivers
     moveToOutput "lib/libvulkan_*" $drivers
-    moveToOutput "lib/libxatracker*" $drivers
+    moveToOutput "lib/libteflon.so" $drivers
 
     # Update search path used by glvnd (it's pointing to $out but drivers are in $drivers)
     for js in $drivers/share/glvnd/egl_vendor.d/*.json; do
@@ -337,14 +356,14 @@ in stdenv.mkDerivation {
     echo $opencl/lib/libMesaOpenCL.so > $opencl/etc/OpenCL/vendors/mesa.icd
     echo $opencl/lib/libRusticlOpenCL.so > $opencl/etc/OpenCL/vendors/rusticl.icd
 
-    moveToOutput bin/intel_clc $driversdev
-    moveToOutput bin/mesa_clc $driversdev
-    moveToOutput lib/gallium-pipe $opencl
+    moveToOutput bin/intel_clc $cross_tools
+    moveToOutput bin/mesa_clc $cross_tools
+    moveToOutput bin/vtn_bindgen $cross_tools
+
     moveToOutput "lib/lib*OpenCL*" $opencl
-    moveToOutput "lib/libOSMesa*" $osmesa
+
     moveToOutput bin/spirv2dxil $spirv2dxil
     moveToOutput "lib/libspirv_to_dxil*" $spirv2dxil
-    moveToOutput lib/libteflon.so $teflon
   '';
 
   postFixup = ''
@@ -356,15 +375,9 @@ in stdenv.mkDerivation {
     # remove pkgconfig files for GL/EGL; they are provided by libGL.
     rm -f $dev/lib/pkgconfig/{gl,egl}.pc
 
-    # Move development files for libraries in $drivers to $driversdev
-    mkdir -p $driversdev/include
-    mv $dev/include/xa_* $dev/include/d3d* -t $driversdev/include || true
-    mkdir -p $driversdev/lib/pkgconfig
-    for pc in lib/pkgconfig/{xatracker,d3d}.pc; do
-      if [ -f "$dev/$pc" ]; then
-        substituteInPlace "$dev/$pc" --replace $out $drivers
-        mv $dev/$pc $driversdev/$pc
-      fi
+    # remove headers moved to mesa-gl-headers
+    for header in ${toString mesa-gl-headers.headers}; do
+      rm -f $dev/$header
     done
 
     # update symlinks pointing to libgallium in $out
@@ -392,7 +405,7 @@ in stdenv.mkDerivation {
 
   env.NIX_CFLAGS_COMPILE = toString ([
     "-UPIPE_SEARCH_DIR"
-    "-DPIPE_SEARCH_DIR=\"${placeholder "opencl"}/lib/gallium-pipe\""
+    "-DPIPE_SEARCH_DIR=\"${placeholder "drivers"}/lib/gallium-pipe\""
   ]);
 
   passthru = {

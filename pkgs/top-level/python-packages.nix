@@ -6099,7 +6099,7 @@ self: super: with self; {
   hopcroftkarp = callPackage ../development/python-modules/hopcroftkarp { };
 
   horizon-eda = callPackage ../development/python-modules/horizon-eda {
-    inherit (pkgs) horizon-eda mesa;
+    inherit (pkgs) horizon-eda;
   };
 
   howdoi = callPackage ../development/python-modules/howdoi { };
