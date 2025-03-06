@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   autoreconfHook,
   openssl,
   protobufc,
@@ -26,10 +27,13 @@ stdenv.mkDerivation rec {
     libconfig
   ];
 
-  # https://github.com/umurmur/umurmur/issues/176
-  postPatch = ''
-    sed -i '/CRYPTO_mem_ctrl(CRYPTO_MEM_CHECK_ON);/d' src/ssli_openssl.c
-  '';
+  patches = [
+    # https://github.com/umurmur/umurmur/issues/175
+    (fetchpatch {
+      url = "https://github.com/umurmur/umurmur/commit/2c7353eaabb88544affc0b0d32d2611994169159.patch";
+      hash = "sha256-Ws4Eqb6yI5Vnwfeu869hDtisi8NcobEK6dC7RWnWSJA=";
+    })
+  ];
 
   configureFlags = [
     "--with-ssl=openssl"
@@ -43,6 +47,7 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
     # never built on aarch64-darwin since first introduction in nixpkgs
     broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
+    maintainers = with lib.maintainers; [ _3JlOy-PYCCKUi ];
     mainProgram = "umurmurd";
   };
 }
