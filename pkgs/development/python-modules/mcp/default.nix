@@ -75,6 +75,8 @@ buildPythonPackage rec {
     "test_command_execution"
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = {
     changelog = "https://github.com/modelcontextprotocol/python-sdk/releases/tag/${src.tag}";
     description = "Official Python SDK for Model Context Protocol servers and clients";
