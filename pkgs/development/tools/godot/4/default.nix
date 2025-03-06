@@ -3,7 +3,6 @@
   autoPatchelfHook,
   buildPackages,
   dbus,
-  dotnet-sdk_6,
   dotnetCorePackages,
   fetchFromGitHub,
   fontconfig,
@@ -146,7 +145,7 @@ let
       pkg-config
     ];
 
-    buildInputs = lib.optionals withMono dotnet-sdk_6.packages;
+    buildInputs = lib.optionals withMono dotnet-sdk.packages;
 
     nativeBuildInputs =
       [
@@ -274,7 +273,7 @@ stdenv.mkDerivation (
         runtimeIds = map (system: dotnetCorePackages.systemToDotnetRid system) old.meta.platforms;
         buildInputs =
           old.buildInputs
-          ++ lib.concatLists (lib.attrValues (lib.getAttrs runtimeIds dotnet-sdk_6.targetPackages));
+          ++ lib.concatLists (lib.attrValues (lib.getAttrs runtimeIds dotnet-sdk.targetPackages));
       };
     } attrs
   else
