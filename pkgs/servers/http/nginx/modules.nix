@@ -1,5 +1,6 @@
 { lib
 , config
+, nixosTests
 , fetchFromGitHub
 , fetchFromGitLab
 , fetchhg
@@ -518,17 +519,19 @@ let self = {
       mkdir -p "$(dirname "$NJS_SOURCE_DIR")"
       cp --recursive "${src}" "$NJS_SOURCE_DIR"
       chmod -R u+rwX,go+rX "$NJS_SOURCE_DIR"
-      export configureFlags="''${configureFlags/"${src}"/"$NJS_SOURCE_DIR/nginx"}"
+      export configureFlags="''${configureFlags/"${src}"/"$NJS_SOURCE_DIR/nginx"} --with-ld-opt='-lz'"
       unset NJS_SOURCE_DIR
     '';
 
-    inputs = [ which ];
+    inputs = [ which zlib ];
+
+    passthru.tests = nixosTests.nginx-njs;
 
     meta = with lib; {
       description = "Subset of the JavaScript language that allows extending nginx functionality";
       homepage = "https://nginx.org/en/docs/njs/";
       license = with licenses; [ bsd2 ];
-      maintainers = [ ];
+      maintainers = with maintainers; [ jvanbruegge ];
     };
   };
 
