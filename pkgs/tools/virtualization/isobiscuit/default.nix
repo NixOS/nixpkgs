@@ -1,4 +1,9 @@
-{ lib, buildPythonPackage, fetchPypi, python3Packages }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  python3Packages,
+}:
 
 buildPythonPackage rec {
   pname = "isobiscuit";
