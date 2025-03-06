@@ -328,7 +328,8 @@ in
                   ++ map (x: "gccarch-${x}") (
                     systems.architectures.inferiors.${pkgs.stdenv.hostPlatform.gcc.arch} or [ ]
                   )
-                );
+                )
+                ++ lib.map (v: "pages-${builtins.toString (v / 1024)}") pkgs.stdenv.hostPlatform.pageSize.range;
               defaultText = literalExpression ''[ "nixos-test" "benchmark" "big-parallel" "kvm" "gccarch-<arch>" ]'';
               description = ''
                 The set of features supported by the machine. Derivations
