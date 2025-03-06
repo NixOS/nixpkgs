@@ -4529,6 +4529,12 @@
     github = "CnTeng";
     githubId = 56501688;
   };
+  coat = {
+    email = "kentsmith@gmail.com";
+    name = "Kent Smith";
+    github = "coat";
+    githubId = 1661;
+  };
   cobalt = {
     email = "cobalt@cobalt.rocks";
     github = "Chaostheorie";
@@ -4586,6 +4592,11 @@
     githubId = 50145141;
     email = "jupiter@m.rdis.dev";
     name = "Scott Little";
+  };
+  coderofsalvation = {
+    github = "coderofsalvation";
+    githubId = 180068;
+    name = "Leon van Kammen";
   };
   codgician = {
     email = "codgician@outlook.com";
@@ -9799,6 +9810,12 @@
     github = "hzeller";
     githubId = 140937;
     name = "Henner Zeller";
+  };
+  i01011001 = {
+    email = "yugen.m7@gmail.com";
+    github = "i01011001";
+    githubId = 134605846;
+    name = "Yugen";
   };
   i077 = {
     email = "nixpkgs@imranhossa.in";

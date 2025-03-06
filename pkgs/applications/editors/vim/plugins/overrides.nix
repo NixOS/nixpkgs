@@ -2631,10 +2631,6 @@ in
     ];
   };
 
-  orgmode = super.orgmode.overrideAttrs {
-    dependencies = with self; [ (nvim-treesitter.withPlugins (p: [ p.org ])) ];
-  };
-
   otter-nvim = super.otter-nvim.overrideAttrs {
     dependencies = [ self.nvim-lspconfig ];
   };

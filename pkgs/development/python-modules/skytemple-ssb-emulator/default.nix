@@ -29,29 +29,19 @@
 }:
 buildPythonPackage rec {
   pname = "skytemple-ssb-emulator";
-  version = "1.8.1";
+  version = "1.8.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SkyTemple";
     repo = "skytemple-ssb-emulator";
     tag = version;
-    hash = "sha256-WDTSW0Vg0oL9+2J5/nIx6sd/ZWqsiDu1trpzuXNw0Kg=";
+    hash = "sha256-zmLEvE96gkElTggcRG9fZDrJPLOXeNuSk49zXQAB69Y=";
   };
-
-  # Otherwise, fails with:
-  # [-Wimplicit-function-declaration] and [-Wint-conversion] errors
-  # https://github.com/SkyTemple/desmume-rs/pull/38
-  postPatch = ''
-    substituteInPlace "$cargoDepsCopy"/desmume-sys-*/build.rs \
-      --replace-fail \
-        '.arg("-Dbuildtype=release")' \
-        '.arg("-Dbuildtype=release").arg("-Dc_std=gnu11").arg("-Dcpp_std=gnu++14")'
-  '';
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src pname;
-    hash = "sha256-Fgc0gFzDrdcV73HU39cqyw74nln4EKHokz86V8k8TAI=";
+    hash = "sha256-MSPqQmC70pq+sEM8zJrrFiz32dorOJxr2G/y2H4EUQI=";
   };
 
   build-system = [
