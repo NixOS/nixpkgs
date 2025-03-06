@@ -53,6 +53,7 @@ vimUtils.buildVimPlugin {
 
   dependencies = with vimPlugins; [
     dressing-nvim
+    img-clip-nvim
     nui-nvim
     nvim-treesitter
     plenary-nvim

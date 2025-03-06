@@ -6401,6 +6401,19 @@ final: prev:
     meta.hydraPlatforms = [ ];
   };
 
+  lackluster-nvim = buildVimPlugin {
+    pname = "lackluster.nvim";
+    version = "2024-12-29";
+    src = fetchFromGitHub {
+      owner = "slugbyte";
+      repo = "lackluster.nvim";
+      rev = "662fba7e6719b7afc155076385c00d79290bc347";
+      sha256 = "1jp02km6hmryb9g36z239qkv34hmjx0hbwmg2ns1aq7cqzy1m5x1";
+    };
+    meta.homepage = "https://github.com/slugbyte/lackluster.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   lalrpop-vim = buildVimPlugin {
     pname = "lalrpop.vim";
     version = "2017-11-22";
@@ -7972,19 +7985,6 @@ final: prev:
       sha256 = "19n37b89dxssx3p3lzr9l7pxmbdh0k2mb14ankpq3cy0ax3mi79c";
     };
     meta.homepage = "https://github.com/echasnovski/mini.tabline/";
-    meta.hydraPlatforms = [ ];
-  };
-
-  mini-test = buildVimPlugin {
-    pname = "mini.test";
-    version = "2025-02-24";
-    src = fetchFromGitHub {
-      owner = "echasnovski";
-      repo = "mini.test";
-      rev = "82ae4d87a23faa27e7e4119d4a5cf5897cbf1b70";
-      sha256 = "0n3n7j8lkxp6mc0wf80ysnwxfw29zjqyfs3ghjl518xbsvjbgcz6";
-    };
-    meta.homepage = "https://github.com/echasnovski/mini.test/";
     meta.hydraPlatforms = [ ];
   };
 

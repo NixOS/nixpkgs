@@ -16,13 +16,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "zigbee2mqtt";
-  version = "2.1.2";
+  version = "2.1.3";
 
   src = fetchFromGitHub {
     owner = "Koenkk";
     repo = "zigbee2mqtt";
     tag = finalAttrs.version;
-    hash = "sha256-ZQAM2i2bO+5Yl1jc1EdEHEV4V2fLSqF8OHn4YCL6m80=";
+    hash = "sha256-ouZPbgZMnm0GCSfuIkIA4fv1k4TOsSH49stMn9IQBBs=";
   };
 
   pnpmDeps = pnpm.fetchDeps {

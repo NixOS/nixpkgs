@@ -82,14 +82,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mangohud";
-  version = "0.8.0";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "flightlessmango";
     repo = "MangoHud";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-yITiu+2l7PItAmL+6gX9p5Tvf/P8ovttGIo6kJAOqxs=";
+    hash = "sha256-FvPhnOvcYE8vVB5R+ZRmuZxrC9U4GA338V7VAuUlHCE=";
   };
 
   outputs = [
@@ -128,11 +128,6 @@ stdenv.mkDerivation (finalAttrs: {
       libdbus = dbus.lib;
       inherit hwdata;
     })
-
-    # Fix crash when starting hidden
-    # Upstream PR: https://github.com/flightlessmango/MangoHud/pull/1570
-    # FIXME: remove when merged
-    ./fix-crash.patch
   ];
 
   postPatch = ''
@@ -222,7 +217,7 @@ stdenv.mkDerivation (finalAttrs: {
     # layer under the same name.
     lib.optionalString (layerPlatform != null) ''
       substituteInPlace $out/share/vulkan/implicit_layer.d/MangoHud.${layerPlatform}.json \
-        --replace "VK_LAYER_MANGOHUD_overlay" "VK_LAYER_MANGOHUD_overlay_${toString stdenv.hostPlatform.parsed.cpu.bits}"
+        --replace-fail "VK_LAYER_MANGOHUD_overlay" "VK_LAYER_MANGOHUD_overlay_${toString stdenv.hostPlatform.parsed.cpu.bits}"
     ''
     + ''
       # Add OpenGL driver and libXNVCtrl paths to RUNPATH to support NVIDIA cards

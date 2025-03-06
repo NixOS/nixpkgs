@@ -13,6 +13,7 @@
   tcpip,
   tls,
   tls-mirage,
+  mirage-crypto-rng-mirage,
   dnssec,
   alcotest,
 }:
@@ -37,6 +38,7 @@ buildDunePackage {
     tcpip
     tls
     tls-mirage
+    mirage-crypto-rng-mirage
   ];
 
   doCheck = true;

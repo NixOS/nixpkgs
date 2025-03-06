@@ -50,7 +50,7 @@ python3Packages.buildPythonApplication rec {
     # would silently downgrade the whole system to be i686 NixOS on the
     # next reboot.
     # The binary will be included in the wrapper for Python.
-    nix
+    (lib.getBin nix)
   ];
 
   postPatch = ''

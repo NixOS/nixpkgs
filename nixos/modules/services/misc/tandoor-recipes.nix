@@ -92,14 +92,14 @@ in
 
   config = lib.mkIf cfg.enable {
     users.users = lib.mkIf (cfg.user == "tandoor_recipes") {
-      tandoor-recipes = {
+      tandoor_recipes = {
         inherit (cfg) group;
         isSystemUser = true;
       };
     };
 
     users.groups = lib.mkIf (cfg.group == "tandoor_recipes") {
-      tandoor-recipes = { };
+      tandoor_recipes = { };
     };
 
     systemd.services.tandoor-recipes = {

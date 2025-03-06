@@ -23,6 +23,10 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace CMakeLists.txt --replace-fail \
       "FetchContent_MakeAvailable(googletest)" \
       "add_subdirectory(${gtest.src} googletest SYSTEM)"
+
+    # broken by https://gitlab.com/libeigen/eigen/-/merge_requests/688
+    # ref. https://github.com/NixOS/nixpkgs/pull/364362
+    rm test/test_mv.cpp
   '';
 
   postInstall = ''

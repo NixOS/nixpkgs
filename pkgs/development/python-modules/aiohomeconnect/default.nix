@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "aiohomeconnect";
-  version = "0.15.1";
+  version = "0.16.2";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "MartinHjelmare";
     repo = "aiohomeconnect";
     tag = "v${version}";
-    hash = "sha256-kHZUlaO0BQS9oVoqrFhaoHQPJgb5WEzWbvsc4EGcnHI=";
+    hash = "sha256-AlmlZoqQxd4RE667rBYFzyAhFN9GJ0Rmk1lniDZKRnM=";
   };
 
   build-system = [ setuptools ];

@@ -4,7 +4,7 @@
   lib,
 }:
 let
-  version = "0.15.7";
+  version = "0.15.8";
 in
 buildGo124Module {
   pname = "heimdall-proxy";
@@ -15,10 +15,10 @@ buildGo124Module {
     owner = "dadrus";
     repo = "heimdall";
     tag = "v${version}";
-    hash = "sha256-vHPojkcKW3CfPavhN8s6frio46qvv0M2Ujq0bHW+VJs=";
+    hash = "sha256-UUQWYChZEb/5mc2YYwIJSQ+pCUXIwvB09KaR0FoKrA4=";
   };
 
-  vendorHash = "sha256-hoQYMDEEwT5g8CJBT3AGDzmv/A65DLVcS79VS/CgL8k=";
+  vendorHash = "sha256-4bnVqUV3H/mZ9FiApZk6pVbRWAqpy17+/dGxXR0fjW0=";
 
   tags = [ "sqlite" ];
 
@@ -38,6 +38,6 @@ buildGo124Module {
     homepage = "https://dadrus.github.io/heimdall";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ albertilagan ];
-    mainProgram = "heimdall-proxy";
+    mainProgram = "heimdall";
   };
 }

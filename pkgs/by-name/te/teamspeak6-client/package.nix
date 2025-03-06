@@ -74,7 +74,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       name = "TeamSpeak";
       exec = "TeamSpeak";
       icon = "teamspeak6-client";
-      desktopName = "teamspeak6-client";
+      desktopName = "TeamSpeak";
       comment = "TeamSpeak Voice Communication Client";
       categories = [
         "Audio"

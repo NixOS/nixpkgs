@@ -67,16 +67,23 @@ stdenv'.mkDerivation rec {
       boost
     ]
     ++ lib.optionals (backend == "eigen") [ eigen ]
-    ++ lib.optionals (backend == "cuda") [
-      cudaPackages.cuda_cudart
-      cudaPackages.cudnn
-      cudaPackages.cudatoolkit
-    ]
-    ++ lib.optionals (backend == "tensorrt") [
-      cudaPackages.cuda_cudart
-      cudaPackages.cudatoolkit
-      cudaPackages.tensorrt
-    ]
+    ++ lib.optionals (backend == "cuda") (
+      with cudaPackages;
+      [
+        cuda_cccl
+        cuda_cudart
+        cuda_nvcc
+        cudnn
+        libcublas
+      ]
+    )
+    ++ lib.optionals (backend == "tensorrt") (
+      with cudaPackages;
+      [
+        cuda_cudart
+        tensorrt
+      ]
+    )
     ++ lib.optionals (backend == "opencl") [
       opencl-headers
       ocl-icd
@@ -103,7 +110,7 @@ stdenv'.mkDerivation rec {
       cd cpp/
     ''
     + lib.optionalString (backend == "cuda" || backend == "tensorrt") ''
-      export CUDA_PATH="${cudaPackages.cudatoolkit}"
+      export CUDA_PATH="${cudaPackages.cuda_nvcc}"
       export EXTRA_LDFLAGS="-L/run/opengl-driver/lib"
     '';
 

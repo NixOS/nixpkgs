@@ -11,7 +11,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "RubyMetric";
-    repo = finalAttrs.pname;
+    repo = "chsrc";
     rev = "v${finalAttrs.version}";
     hash = "sha256-MwT6SuDisJ2ynxlOqAUA8WjhrTeUcyoAMArehnby8Yw=";
   };

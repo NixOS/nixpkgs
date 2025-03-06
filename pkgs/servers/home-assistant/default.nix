@@ -45,17 +45,6 @@ let
         ];
       });
 
-      aiomqtt = super.aiomqtt.overridePythonAttrs (rec {
-        version = "2.0.1";
-        src = fetchFromGitHub {
-          owner = "sbtinstruments";
-          repo = "aiomqtt";
-          tag = "v${version}";
-          hash = "sha256-bV1elEO1518LVLwNDN5pzjxRgcG34K1XUsK7fTw8h+8=";
-        };
-        meta.broken = false;
-      });
-
       aioskybell = super.aioskybell.overridePythonAttrs (oldAttrs: rec {
         version = "22.7.0";
         src = fetchFromGitHub {
@@ -129,13 +118,13 @@ let
         build-system = with self; [ poetry-core ];
       });
 
-      govee-local-api = super.govee-local-api.overridePythonAttrs (oldAttrs: rec {
-        version = "1.5.3";
+      google-genai = super.google-genai.overridePythonAttrs (old: rec {
+        version = "1.1.0";
         src = fetchFromGitHub {
-          owner = "Galorhallen";
-          repo = "govee-local-api";
+          owner = "googleapis";
+          repo = "python-genai";
           tag = "v${version}";
-          hash = "sha256-qBT0Xub+eL7rfF+lQWlheBJSahEKWjREGJQD6sHjTPk=";
+          hash = "sha256-CszKr2dvo0dLMAD/FZHSosCczeAFDD0xxKysGNv4RxM=";
         };
       });
 
@@ -168,16 +157,6 @@ let
         ];
       });
 
-      letpot = super.letpot.overridePythonAttrs (rec {
-        version = "0.3.0";
-        src = fetchFromGitHub {
-          owner = "jpelgrom";
-          repo = "python-letpot";
-          tag = "v${version}";
-          hash = "sha256-OFLQ0DV7roqUlm6zJWAzMRpcmAi/oco8lEHbmfqNaVs=";
-        };
-      });
-
       openhomedevice = super.openhomedevice.overridePythonAttrs (oldAttrs: rec {
         version = "2.2";
         src = fetchFromGitHub {
@@ -186,8 +165,6 @@ let
           hash = "sha256-GGp7nKFH01m1KW6yMkKlAdd26bDi8JDWva6OQ0CWMIw=";
         };
       });
-
-      paho-mqtt = super.paho-mqtt_1;
 
       pymelcloud = super.pymelcloud.overridePythonAttrs (oldAttrs: {
         version = "2.5.9";
@@ -284,6 +261,16 @@ let
         };
       });
 
+      pyopenweathermap = super.pyopenweathermap.overridePythonAttrs (old: rec {
+        version = "0.2.1";
+        src = fetchFromGitHub {
+          owner = "freekode";
+          repo = "pyopenweathermap";
+          tag = "v${version}";
+          hash = "sha256-UcnELAJf0Ltf0xJOlyzsHb4HQGSBTJ+/mOZ/XSTkA0w=";
+        };
+      });
+
       pyrail = super.pyrail.overridePythonAttrs (rec {
         version = "0.0.3";
         src = fetchPypi {
@@ -367,6 +354,7 @@ let
       });
 
       # internal python packages only consumed by home-assistant itself
+      hass-web-proxy-lib = self.callPackage ./python-modules/hass-web-proxy-lib { };
       home-assistant-frontend = self.callPackage ./frontend.nix { };
       home-assistant-intents = self.callPackage ./intents.nix { };
       homeassistant = self.toPythonModule home-assistant;
@@ -395,7 +383,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run update-component-packages.py after updating
-  hassVersion = "2025.2.5";
+  hassVersion = "2025.3.0";
 
 in
 python.pkgs.buildPythonApplication rec {
@@ -415,14 +403,14 @@ python.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "home-assistant";
     repo = "core";
-    rev = "refs/tags/${version}";
-    hash = "sha256-8adHpOiuWddgqQjInc92FjEwVyg2Rvgx7wNOj3+Kxsk=";
+    tag = version;
+    hash = "sha256-zMsJ/YAwMIdLDF256rxj63QsZD26p71SgYpf4zwzD1A=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-JD2xus356qNzT5jqZOHr5gn4WGeC189rM83D81xVtWo=";
+    hash = "sha256-jsRIStPIbWXj24qjh9ZxH0QPN+zUOZeP6efRGYovUms=";
   };
 
   build-system = with python.pkgs; [
@@ -442,6 +430,7 @@ python.pkgs.buildPythonApplication rec {
     "jinja2"
     "orjson"
     "pillow"
+    "propcache"
     "pyjwt"
     "pyopenssl"
     "pyyaml"
@@ -642,6 +631,7 @@ python.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://home-assistant.io/";
+    changelog = "https://github.com/home-assistant/core/releases/tag/${src.tag}";
     description = "Open source home automation that puts local control and privacy first";
     license = licenses.asl20;
     maintainers = teams.home-assistant.members;

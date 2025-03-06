@@ -34,9 +34,10 @@ stdenv.mkDerivation (finalAttrs: {
   postFixup =
     let
       libExt = stdenv.hostPlatform.extensions.sharedLibrary;
+      qtVersion = lib.versions.major qtbase.version;
     in
     ''
-      ln -s $out/lib/libqscintilla2_qt5${libExt} $out/lib/libqscintilla2${libExt}
+      ln -s $out/lib/libqscintilla2_qt${qtVersion}${libExt} $out/lib/libqscintilla2${libExt}
     '';
 
   dontWrapQtApps = true;

@@ -30,6 +30,17 @@ mkKdeDerivation {
     ./0003-plugins-qpa-allow-using-nixos-wrapper.patch
     ./0001-NixOS-Unwrap-executable-name-for-.desktop-search.patch
     ./0001-Lower-CAP_SYS_NICE-from-the-ambient-set.patch
+
+    # Backport fix for crashes with multiple displays as recommended by upstream
+    # FIXME: remove in 6.3.3
+    (fetchpatch {
+      url = "https://invent.kde.org/plasma/kwin/-/commit/bb263454548f65796e249adcf374aaebdc5e2db6.patch";
+      hash = "sha256-BsQq42LRilz9YZyfisNChBEQcf1YXeBNCiF3ASVXmug=";
+    })
+    (fetchpatch {
+      url = "https://invent.kde.org/plasma/kwin/-/commit/e652bdd3118fa55563caf0125deb0999f5ebd503.patch";
+      hash = "sha256-4WnyyucIawsFqqSYRT8uY+a1GSDhjtGoqaxEu0o4Il4=";
+    })
   ];
 
   postPatch = ''
