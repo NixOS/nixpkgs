@@ -19,6 +19,7 @@ let
 
       # runtime dependencies
       darwin,
+      freebsd,
       glibc,
       libuuid,
       libxml2,
@@ -38,6 +39,7 @@ let
       makeWrapper,
       pkg-config,
       removeReferencesTo,
+      buildPackages,
 
       # passthru
       buildEnv,
@@ -265,7 +267,7 @@ let
           "--with-system-tzdata=${tzdata}/share/zoneinfo"
           "--enable-debug"
           (lib.optionalString systemdSupport "--with-systemd")
-          "--with-uuid=e2fs"
+          (if stdenv.hostPlatform.isFreeBSD then "--with-uuid=bsd" else "--with-uuid=e2fs")
         ]
         ++ lib.optionals lz4Enabled [ "--with-lz4" ]
         ++ lib.optionals zstdEnabled [ "--with-zstd" ]
@@ -277,6 +279,18 @@ let
         ++ lib.optionals (stdenv'.hostPlatform.isDarwin && atLeast "16" && olderThan "18") [
           "LDFLAGS_EX_BE=-Wl,-export_dynamic"
         ]
+        # some version of this flag is required in all cross configurations
+        # since it cannot be automatically detected
+        ++
+          lib.optionals
+            (
+              (!stdenv'.hostPlatform.isDarwin)
+              && (!(stdenv'.buildPlatform.canExecute stdenv.hostPlatform))
+              && atLeast "16"
+            )
+            [
+              "LDFLAGS_EX_BE=-Wl,--export-dynamic"
+            ]
         ++ lib.optionals (atLeast "17" && !perlSupport) [ "--without-perl" ]
         ++ lib.optionals ldapSupport [ "--with-ldap" ]
         ++ lib.optionals tclSupport [ "--with-tcl" ]
@@ -304,7 +318,12 @@ let
 
           (replaceVars ./patches/locale-binary-path.patch {
             locale = "${
-              if stdenv.hostPlatform.isDarwin then darwin.adv_cmds else lib.getBin stdenv.cc.libc
+              if stdenv.hostPlatform.isDarwin then
+                darwin.adv_cmds
+              else if stdenv.hostPlatform.isFreeBSD then
+                freebsd.locale
+              else
+                lib.getBin stdenv.cc.libc
             }/bin/locale";
           })
         ]
