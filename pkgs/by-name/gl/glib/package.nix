@@ -249,7 +249,6 @@ stdenv.mkDerivation (finalAttrs: {
       "-Dlibelf=disabled"
     ]
     ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
-      "-Db_lundef=false"
       "-Dxattr=false"
       "-Dsysprof=disabled" # sysprof-capture does not build on FreeBSD
     ];
