@@ -40,7 +40,7 @@
 
 buildPythonPackage rec {
   pname = "langchain";
-  version = "0.3.18";
+  version = "0.3.20";
   pyproject = true;
 
   src = fetchFromGitHub {
