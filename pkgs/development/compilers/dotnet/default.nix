@@ -37,6 +37,7 @@ makeScopeWithSplicing' {
       dotnet_7_0 = buildDotnetSdk ./versions/7.0.nix;
       dotnet_8_0 = buildDotnetSdk ./versions/8.0.nix;
       dotnet_9_0 = buildDotnetSdk ./versions/9.0.nix;
+      dotnet_10_0 = buildDotnetSdk ./versions/10.0.nix;
 
       runtimeIdentifierMap = {
         "x86_64-linux" = "linux-x64";
@@ -69,6 +70,7 @@ makeScopeWithSplicing' {
 
       dotnet_8 = recurseIntoAttrs (callPackage ./8 { });
       dotnet_9 = recurseIntoAttrs (callPackage ./9 { });
+      dotnet_10 = recurseIntoAttrs (callPackage ./10 { });
     }
     // lib.optionalAttrs config.allowAliases {
       # EOL
@@ -82,5 +84,6 @@ makeScopeWithSplicing' {
     // dotnet_7_0
     // dotnet_8_0
     // dotnet_9_0
+    // dotnet_10_0
   );
 }
