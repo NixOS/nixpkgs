@@ -54,6 +54,7 @@ python3Packages.buildPythonApplication rec {
   # skip impure tests
   disabledTests = [
     "test_pkgrepo_pmaports"
+    "test_random_valid_deviceinfos"
   ];
 
   versionCheckProgramArg = "--version";
