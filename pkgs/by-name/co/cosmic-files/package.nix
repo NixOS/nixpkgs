@@ -96,6 +96,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       ahoneybun
       nyabinary
+      HeitorAugustoLN
     ];
     platforms = lib.platforms.linux;
   };
