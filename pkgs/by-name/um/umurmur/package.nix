@@ -6,6 +6,7 @@
   openssl,
   protobufc,
   libconfig,
+  nixosTests,
 }:
 
 stdenv.mkDerivation rec {
@@ -35,6 +36,12 @@ stdenv.mkDerivation rec {
     "--with-ssl=openssl"
     "--enable-shmapi"
   ];
+
+  passthru = {
+    tests = {
+      inherit (nixosTests) umurmur;
+    };
+  };
 
   meta = with lib; {
     description = "Minimalistic Murmur (Mumble server)";
