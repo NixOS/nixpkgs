@@ -15900,6 +15900,8 @@ self: super: with self; {
 
   standard-telnetlib = if pythonAtLeast "3.13" then callPackage ../development/python-modules/standard-telnetlib { } else null;
 
+  standardwebhooks = callPackage ../development/python-modules/standardwebhooks { };
+
   stone = callPackage ../development/python-modules/stone { };
 
   stookalert = callPackage ../development/python-modules/stookalert { };
