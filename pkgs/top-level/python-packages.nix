@@ -6099,7 +6099,7 @@ self: super: with self; {
   hopcroftkarp = callPackage ../development/python-modules/hopcroftkarp { };
 
   horizon-eda = callPackage ../development/python-modules/horizon-eda {
-    inherit (pkgs) horizon-eda mesa;
+    inherit (pkgs) horizon-eda;
   };
 
   howdoi = callPackage ../development/python-modules/howdoi { };
@@ -15929,6 +15929,8 @@ self: super: with self; {
   standard-pipes = if pythonAtLeast "3.13" then callPackage ../development/python-modules/standard-pipes { } else null;
 
   standard-telnetlib = if pythonAtLeast "3.13" then callPackage ../development/python-modules/standard-telnetlib { } else null;
+
+  standardwebhooks = callPackage ../development/python-modules/standardwebhooks { };
 
   stone = callPackage ../development/python-modules/stone { };
 
