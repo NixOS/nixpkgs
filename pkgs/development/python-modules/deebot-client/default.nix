@@ -7,8 +7,6 @@
   defusedxml,
   docker,
   fetchFromGitHub,
-  numpy,
-  pillow,
   pkg-config,
   pycountry,
   pytest-asyncio,
@@ -16,7 +14,6 @@
   pytestCheckHook,
   pythonOlder,
   rustPlatform,
-  svg-py,
   testfixtures,
   xz,
 }:
@@ -26,7 +23,7 @@ buildPythonPackage rec {
   version = "12.3.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.12";
+  disabled = pythonOlder "3.13";
 
   src = fetchFromGitHub {
     owner = "DeebotUniverse";
@@ -45,12 +42,11 @@ buildPythonPackage rec {
     "defusedxml"
   ];
 
-  build-system = with rustPlatform; [
-    cargoSetupHook
-    maturinBuildHook
+  nativeBuildInputs = [
+    pkg-config
+    rustPlatform.cargoSetupHook
+    rustPlatform.maturinBuildHook
   ];
-
-  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ xz ];
 
@@ -59,9 +55,6 @@ buildPythonPackage rec {
     aiomqtt
     cachetools
     defusedxml
-    numpy
-    pillow
-    svg-py
   ];
 
   nativeCheckInputs = [

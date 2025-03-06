@@ -172,9 +172,6 @@ makeScopeWithSplicing' {
 
       libSystem = callPackage ../os-specific/darwin/libSystem { };
 
-      # TODO(@connorbaker): See https://github.com/NixOS/nixpkgs/issues/229389.
-      cf-private = self.apple_sdk.frameworks.CoreFoundation;
-
       DarwinTools = callPackage ../os-specific/darwin/DarwinTools { };
 
       print-reexports = callPackage ../os-specific/darwin/print-reexports { };

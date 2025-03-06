@@ -32,14 +32,14 @@
 
 buildPythonPackage rec {
   pname = "pytensor";
-  version = "2.28.2";
+  version = "2.28.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pymc-devs";
     repo = "pytensor";
     tag = "rel-${version}";
-    hash = "sha256-ZLCIc4fB++B7oMo+jyt5XACG9N1XAwIzJJmIXDISWtA=";
+    hash = "sha256-MtY0JbziboJNHKe8wXaPtOWgFnpv8yQZeg6hNirnSEI=";
   };
 
   pythonRelaxDeps = [
