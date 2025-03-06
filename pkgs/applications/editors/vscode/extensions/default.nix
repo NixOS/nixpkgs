@@ -2103,8 +2103,8 @@ let
           publisher = "github";
           name = "copilot";
           # Verify which version is available with nix run nixpkgs#vsce -- show github.copilot --json
-          version = "1.275.0"; # compatible with vscode ^1.97
-          hash = "sha256-pxH8hHRN36/ggqfMWOUYxANrblJ6S5GfslN15ZttumQ=";
+          version = "1.277.1411"; # compatible with vscode ^1.97
+          hash = "sha256-HLn+2fagcBi1ZVjLCb+v8eg+Je7wApQs2Qpd1uJ3YG8=";
         };
 
         meta = {
