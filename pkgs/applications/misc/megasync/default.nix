@@ -104,11 +104,11 @@ mkDerivation rec {
       hash = "sha256-11XWctv1veUEguc9Xvz2hMYw26CaCwu6M4hyA+5r81U=";
     })
     ./megasync-fix-cmake-install-bindir.patch
-    ./megasync-disable-isolated-gfx.patch # it requires freeimage. Did not work when set as cmakeFlag
     ./dont-fetch-clang-format.patch
   ];
 
   postPatch = ''
+    substituteInPlace cmake/modules/desktopapp_options.cmake --replace-fail "ENABLE_ISOLATED_GFX ON" "ENABLE_ISOLATED_GFX OFF"
     for file in $(find src/ -type f \( -iname configure -o -iname \*.sh \) ); do
       substituteInPlace "$file" --replace "/bin/bash" "${stdenv.shell}"
     done
