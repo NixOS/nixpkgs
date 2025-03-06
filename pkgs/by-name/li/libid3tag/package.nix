@@ -23,6 +23,12 @@ stdenv.mkDerivation rec {
     ./CVE-2017-11550-and-CVE-2017-11551.patch
   ];
 
+  # this can be removed when upstream autoreconfs itself
+  # since it's broken for FreeBSD and autoreconfHook doesn't work
+  postPatch = ''
+    sed -E -i -e 's/objformat=.*/objformat=elf/g' configure
+  '';
+
   preConfigure = ''
     configureFlagsArray+=(
       --includedir=$dev/include
