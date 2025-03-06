@@ -2,36 +2,26 @@
   lib,
   buildHomeAssistantComponent,
   fetchFromGitHub,
-  fetchpatch,
   aiofiles,
-  broadlink,
+  distutils,
   nix-update-script,
 }:
 
 buildHomeAssistantComponent rec {
   owner = "smartHomeHub";
   domain = "smartir";
-  version = "1.17.9";
+  version = "1.18.0";
 
   src = fetchFromGitHub {
     owner = "smartHomeHub";
     repo = "SmartIR";
-    rev = version;
-    hash = "sha256-E6TM761cuaeQzlbjA+oZ+wt5HTJAfkF2J3i4P1Wbuic=";
+    tag = version;
+    hash = "sha256-Sy1wxVUApKWm9TlDia2Gwd+mIi7WbDkzJrAtyb0tTbM=";
   };
-
-  patches = [
-    # Replace distutils.version.StrictVersion with packaging.version.Version
-    # https://github.com/smartHomeHub/SmartIR/pull/1250
-    (fetchpatch {
-      url = "https://github.com/smartHomeHub/SmartIR/commit/1ed8ef23a8f7b9dcae75721eeab8d5f79013b851.patch";
-      hash = "sha256-IhdnTDtUa7mS+Vw/+BqfqWIKK4hbshbVgJNjfKjgAvI=";
-    })
-  ];
 
   dependencies = [
     aiofiles
-    broadlink
+    distutils
   ];
 
   dontBuild = true;
