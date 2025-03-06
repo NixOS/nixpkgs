@@ -9905,6 +9905,7 @@ with pkgs;
   mesa_i686 = pkgsi686Linux.mesa; # make it build on Hydra
 
   libgbm = callPackage ../development/libraries/mesa/gbm.nix {};
+  mesa-gl-headers = callPackage ../development/libraries/mesa/headers.nix {};
 
   ## End libGL/libGLU/Mesa stuff
 
