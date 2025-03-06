@@ -93,6 +93,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/pop-os/cosmic-files";
     description = "File Manager for the COSMIC Desktop Environment";
     license = lib.licenses.gpl3Only;
+    mainProgram = "cosmic-files";
     maintainers = with lib.maintainers; [
       ahoneybun
       nyabinary
