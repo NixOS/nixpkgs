@@ -8158,6 +8158,8 @@ self: super: with self; {
 
   mautrix-appservice = self.mautrix; # alias 2019-12-28
 
+  mawk = callPackage ../development/python-modules/mawk { };
+
   maxcube-api = callPackage ../development/python-modules/maxcube-api { };
 
   maxminddb = callPackage ../development/python-modules/maxminddb { };
