@@ -26281,6 +26281,11 @@
     github = "zfnmxt";
     githubId = 37446532;
   };
+  zh4ngx = {
+    github = "zh4ngx";
+    githubId = 1329212;
+    name = "Andy Zhang";
+  };
   zhaofengli = {
     email = "hello@zhaofeng.li";
     matrix = "@zhaofeng:zhaofeng.li";
