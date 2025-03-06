@@ -38,7 +38,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  # Ignore tests which require setup, check again if disabledTestFiles can be used
+  # Ignore tests which require setup, check again if disabledTestPaths can be used
   pytestFlagsArray = [ "--ignore tests/io_" ];
 
   pythonImportsCheck = [ "slicedimage" ];
