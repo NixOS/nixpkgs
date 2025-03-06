@@ -1,4 +1,4 @@
-{ lib, buildGo124Module, fetchFromGitHub, go-mockery, runCommand, go }:
+{ lib, buildGo124Module, fetchFromGitHub, go-mockery, runCommand, go_1_24 }:
 
 buildGo124Module rec {
   pname = "go-mockery";
@@ -31,7 +31,7 @@ buildGo124Module rec {
   passthru.tests = {
     generateMock = runCommand "${pname}-test" {
       nativeBuildInputs = [ go-mockery ];
-      buildInputs = [ go ];
+      buildInputs = [ go_1_24 ];
     } ''
       if [[ $(mockery --version) != *"${version}"* ]]; then
         echo "Error: program version does not match package version"
