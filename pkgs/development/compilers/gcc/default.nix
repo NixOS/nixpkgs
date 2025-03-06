@@ -29,6 +29,7 @@
 , gnused ? null
 , buildPackages
 , pkgsBuildTarget
+, pkgsTargetTarget
 , libxcrypt
 , disableGdbPlugin ? !enablePlugin || (stdenv.targetPlatform.isAvr && stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)
 , nukeReferences
@@ -77,7 +78,8 @@ let
     disableBootstrap = atLeast11 && !stdenv.hostPlatform.isDarwin && (atLeast12 -> !profiledCompiler);
 
     inherit (stdenv) buildPlatform hostPlatform targetPlatform;
-    targetConfig = if targetPlatform != hostPlatform then targetPlatform.config else null;
+    targetConfig' = targetPlatform.config + lib.optionalString targetPlatform.isFreeBSD (lib.versions.major targetPackages.stdenv.cc.libc.version);
+    targetConfig = if targetPlatform != hostPlatform then targetConfig' else null;
 
     patches = callFile ./patches {};
 
@@ -95,6 +97,7 @@ let
         hostPlatform
         targetPlatform
         targetConfig
+        targetConfig'
         patches
         crossMingw
         stageNameAddon
@@ -143,6 +146,7 @@ let
         patchelf
         perl
         pkgsBuildTarget
+        pkgsTargetTarget
         profiledCompiler
         reproducibleBuild
         staticCompiler
@@ -388,7 +392,7 @@ pipe ((callFile ./common/builder.nix {}) ({
 }
 ))
 ([
-  (callPackage ./common/libgcc.nix   { inherit version langC langCC langJit targetPlatform hostPlatform withoutTargetLibc enableShared libcCross; })
+  (callPackage ./common/libgcc.nix   { inherit version langC langCC langJit targetPlatform targetConfig hostPlatform withoutTargetLibc enableShared libcCross; })
 ] ++ optionals atLeast11 [
   (callPackage ./common/checksum.nix { inherit langC langCC; })
 ]

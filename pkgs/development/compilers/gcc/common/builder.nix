@@ -3,6 +3,8 @@
   stdenv,
   enableMultilib,
   targetConfig,
+  targetConfig',
+  targetPackages,
   withoutTargetLibc,
 }:
 
@@ -201,6 +203,13 @@ originalAttrs:
         mkdir ../build
         cd ../build
         configureScript=../$sourceRoot/configure
+      ''
+      + lib.optionalString stdenv.targetPlatform.isFreeBSD ''
+        mkdir -p "$TMP/bin"
+        export PATH="$PATH:$TMP/bin"
+        ln -s "$(which ${targetPackages.stdenv.cc.bintools.targetPrefix}ar)" "$TMP/bin/${targetConfig'}-ar"
+        ln -s "$(which ${targetPackages.stdenv.cc.bintools.targetPrefix}ranlib)" "$TMP/bin/${targetConfig'}-ranlib"
+        ln -s "$(which ${targetPackages.stdenv.cc.bintools.targetPrefix}nm)" "$TMP/bin/${targetConfig'}-nm"
       '';
 
     postConfigure = ''
@@ -317,5 +326,9 @@ originalAttrs:
   }
   // lib.optionalAttrs ((stdenv.targetPlatform.config != stdenv.hostPlatform.config) && withoutTargetLibc) {
     dontCheckForBrokenSymlinks = true;
+  }
+  // lib.optionalAttrs (stdenv.targetPlatform.isFreeBSD || stdenv.hostPlatform.isFreeBSD || stdenv.buildPlatform.isFreeBSD) {
+    # the version number must be passed or gcc gets very mad. Flags are in configure-flags.nix
+    configurePlatforms = [ "build" "host" ] ++ lib.optional (!stdenv.targetPlatform.isFreeBSD) "target";
   }
 ))
