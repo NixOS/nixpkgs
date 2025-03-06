@@ -4273,8 +4273,6 @@ self: super: with self; {
 
   enturclient = callPackage ../development/python-modules/enturclient { };
 
-  enum34 = callPackage ../development/python-modules/enum34 { };
-
   env-canada = callPackage ../development/python-modules/env-canada { };
 
   environmental-override = callPackage ../development/python-modules/environmental-override { };
