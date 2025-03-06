@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "rlancaste";
-    repo = finalAttrs.pname;
+    repo = "stellarsolver";
     rev = finalAttrs.version;
     sha256 = "sha256-6WDiHaBhi9POtXynGU/eTeuqZSK81JJeuZv4SxOeVoE=";
   };
