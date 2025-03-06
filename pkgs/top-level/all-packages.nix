@@ -8526,6 +8526,7 @@ with pkgs;
   catboost = callPackage ../by-name/ca/catboost/package.nix {
     # https://github.com/catboost/catboost/issues/2540
     cudaPackages = cudaPackages_11;
+    llvmPackagesCuda = llvmPackages_14;
   };
 
   cctag = callPackage ../development/libraries/cctag {
