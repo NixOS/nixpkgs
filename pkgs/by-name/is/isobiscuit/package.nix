@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "isobiscuit";
-  version = "0.8.1";
+  version = "0.1.81";
 
   src = fetchPypi {
     inherit pname version;
