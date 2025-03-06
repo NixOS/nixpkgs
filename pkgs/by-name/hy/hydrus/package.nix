@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   python3Packages,
   fetchFromGitHub,
   qt6,
@@ -141,6 +142,10 @@ python3Packages.buildPythonApplication rec {
 
     runHook postCheck
   '';
+
+  # Tests crash even with __darwinAllowLocalNetworking enabled
+  # hydrus.core.HydrusExceptions.DataMissing: That service was not found!
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   dontWrapQtApps = true;
   preFixup = ''
