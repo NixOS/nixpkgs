@@ -5,16 +5,10 @@
   fetchFromGitHub,
   pkg-config,
   just,
+  libcosmicAppHook,
   fontconfig,
   freetype,
-  libglvnd,
   libinput,
-  libxkbcommon,
-  makeBinaryWrapper,
-  vulkan-loader,
-  wayland,
-  cosmic-icons,
-  xorg,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -41,18 +35,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [
     just
     pkg-config
-    makeBinaryWrapper
+    libcosmicAppHook
   ];
 
   buildInputs = [
     fontconfig
     freetype
-    libglvnd
     libinput
-    libxkbcommon
-    vulkan-loader
-    wayland
-    xorg.libX11
   ];
 
   dontUseJustBuild = true;
@@ -66,21 +55,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "bin-src"
     "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-term"
   ];
-
-  # Force linking to libEGL, which is always dlopen()ed, and to
-  # libwayland-client, which is always dlopen()ed except by the
-  # obscure winit backend.
-  RUSTFLAGS = map (a: "-C link-arg=${a}") [
-    "-Wl,--push-state,--no-as-needed"
-    "-lEGL"
-    "-lwayland-client"
-    "-Wl,--pop-state"
-  ];
-
-  postInstall = ''
-    wrapProgram "$out/bin/cosmic-term" \
-      --suffix XDG_DATA_DIRS : "${cosmic-icons}/share"
-  '';
 
   meta = {
     homepage = "https://github.com/pop-os/cosmic-term";
