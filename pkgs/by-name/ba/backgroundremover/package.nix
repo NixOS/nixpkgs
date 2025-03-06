@@ -11,14 +11,14 @@ let
   p = python3.pkgs;
   self = p.buildPythonApplication rec {
     pname = "backgroundremover";
-    version = "0.2.8";
+    version = "0.2.9";
     pyproject = true;
 
     src = fetchFromGitHub {
       owner = "nadermx";
       repo = "backgroundremover";
       rev = "v${version}";
-      hash = "sha256-LjVT4j0OzfbVSQgU0z/gzRTLm7N0RQRrfxtTugWwOxs=";
+      hash = "sha256-tQ8J3xamOzPPSbFMxIDYKv1TzK1AVwF/DWXdZlrlYvM=";
     };
 
     models = runCommand "background-remover-models" { } ''
