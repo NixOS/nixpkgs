@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
       src
       ;
 
-    hash = "sha256-zG4TmZlZ6oPvbDr3a8RlhM6ivtMG+vWox/OJETSUR2A=";
+    hash = "sha256-qomBrnpJeFuDr3Vz173uYrMxTvVgu/qJvMAOYII4smI=";
   };
 
   nativeBuildInputs = [
