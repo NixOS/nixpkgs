@@ -21,7 +21,7 @@
 
   postPatch = ''
     ln -s ${./package-lock.json} package-lock.json
-    sed -E -i -e 's/sys.platform/"${stdenv.targetPlatform.parsed.kernel.name}"/g' gyp/pylib/gyp/**.py
+    substituteInPlace gyp/pylib/gyp/**.py --replace-fail sys.platform '"${stdenv.targetPlatform.parsed.kernel.name}"'
   '';
 
   dontNpmBuild = true;
