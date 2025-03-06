@@ -1280,7 +1280,7 @@ rec {
     ```nix
     mapAttrsRecursiveCond
       (as: !(as ? "type" && as.type == "derivation"))
-      (x: x.name)
+      (_: x: x.name)
       attrs
     ```
     :::
@@ -1291,19 +1291,8 @@ rec {
     ```
   */
   mapAttrsRecursiveCond =
-    cond:
-    f:
-    set:
-    let
-      recurse = path:
-        mapAttrs
-          (name: value:
-            if isAttrs value && cond value
-            then recurse (path ++ [ name ]) value
-            else f (path ++ [ name ]) value);
-    in
-    recurse [ ] set;
-
+    cond: f: set:
+    recurse mapAttrs (_: cond) f set;
 
   /**
     Generate an attribute set by mapping a function over a list of
