@@ -6401,6 +6401,19 @@ final: prev:
     meta.hydraPlatforms = [ ];
   };
 
+  lackluster-nvim = buildVimPlugin {
+    pname = "lackluster.nvim";
+    version = "2024-12-29";
+    src = fetchFromGitHub {
+      owner = "slugbyte";
+      repo = "lackluster.nvim";
+      rev = "662fba7e6719b7afc155076385c00d79290bc347";
+      sha256 = "1jp02km6hmryb9g36z239qkv34hmjx0hbwmg2ns1aq7cqzy1m5x1";
+    };
+    meta.homepage = "https://github.com/slugbyte/lackluster.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   lalrpop-vim = buildVimPlugin {
     pname = "lalrpop.vim";
     version = "2017-11-22";
