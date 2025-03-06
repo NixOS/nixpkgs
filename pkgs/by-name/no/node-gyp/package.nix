@@ -1,4 +1,5 @@
 {
+  stdenv,
   buildNpmPackage,
   fetchFromGitHub,
   lib,
@@ -20,6 +21,7 @@
 
   postPatch = ''
     ln -s ${./package-lock.json} package-lock.json
+    sed -E -i -e 's/sys.platform/"${stdenv.targetPlatform.parsed.kernel.name}"/g' gyp/pylib/gyp/**.py
   '';
 
   dontNpmBuild = true;
