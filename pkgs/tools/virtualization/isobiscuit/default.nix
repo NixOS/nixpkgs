@@ -22,7 +22,6 @@ buildPythonPackage rec {
     pyyaml
     colorama
     poetry-core
-
   ];
 
   meta = with lib; {
