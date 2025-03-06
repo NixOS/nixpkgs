@@ -6,7 +6,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "asus-ec-sensors-${version}-${kernel.version}";
+  pname = "asus-ec-sensors";
   version = "unstable-2022-07-10";
 
   src = fetchFromGitHub {

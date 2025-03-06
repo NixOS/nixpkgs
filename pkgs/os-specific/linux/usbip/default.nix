@@ -11,9 +11,8 @@
 }:
 
 stdenv.mkDerivation {
-  name = "usbip-${kernel.name}";
-
-  src = kernel.src;
+  pname = "usbip";
+  inherit (kernel) version src;
 
   patches =
     lib.optionals (kernelOlder "5.4") [

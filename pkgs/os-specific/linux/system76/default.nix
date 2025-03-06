@@ -9,7 +9,8 @@ let
   hash = "sha256-9/t+Mvfnq0KkPbe1mnrVy4mzNaK7vAgLuhUnOeEvBfI=";
 in
 stdenv.mkDerivation {
-  name = "system76-module-${version}-${kernel.version}";
+  pname = "system76-module";
+  inherit version;
 
   passthru.moduleName = "system76";
 

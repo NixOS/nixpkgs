@@ -11,7 +11,7 @@ let
   version = "1.63";
 in
 stdenv.mkDerivation {
-  name = "ndiswrapper-${version}-${kernel.version}";
+  pname = "ndiswrapper";
   inherit version;
 
   hardeningDisable = [ "pic" ];

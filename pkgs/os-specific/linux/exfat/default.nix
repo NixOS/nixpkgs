@@ -6,7 +6,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "exfat-nofuse-${version}-${kernel.version}";
+  pname = "exfat-nofuse";
   version = "2020-04-15";
 
   src = fetchFromGitHub {

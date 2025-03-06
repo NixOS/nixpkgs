@@ -13,7 +13,8 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "netatop-${kernel.version}-${version}";
+  pname = "netatop";
+  inherit version;
 
   src = fetchurl {
     url = "http://www.atoptool.nl/download/netatop-${version}.tar.gz";
