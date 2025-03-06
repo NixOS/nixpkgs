@@ -103,10 +103,8 @@ stdenv.mkDerivation rec {
 
   patches =
     [
-      # Make dovecot look for plugins in /etc/dovecot/modules
-      # so we can symlink plugins from several packages there.
-      # The symlinking needs to be done in NixOS.
-      ./2.3.x-module_dir.patch
+      # Fix loading extended modules.
+      ./load-extended-modules.patch
       # fix openssl 3.0 compatibility
       (fetchpatch {
         url = "https://salsa.debian.org/debian/dovecot/-/raw/debian/1%252.3.19.1+dfsg1-2/debian/patches/Support-openssl-3.0.patch";
@@ -125,6 +123,7 @@ stdenv.mkDerivation rec {
       "--localstatedir=/var"
       # We need this so utilities default to reading /etc/dovecot/dovecot.conf file.
       "--sysconfdir=/etc"
+      "--with-moduledir=${placeholder "out"}/lib/dovecot/modules"
       "--with-ldap"
       "--with-ssl=openssl"
       "--with-zlib"
