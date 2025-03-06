@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "mrkite";
-    repo = finalAttrs.pname;
+    repo = "minutor";
     tag = finalAttrs.version;
     sha256 = "0ldjnrk429ywf8cxdpjkam5k73s6fq7lvksandfn3xn7gl9np5rk";
   };
