@@ -14,13 +14,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "marble-marcher-ce";
-  version = "1.4.5";
+  version = "1.4.6";
 
   src = fetchFromGitHub {
     owner = "WAUthethird";
     repo = "Marble-Marcher-Community-Edition";
     rev = version;
-    hash = "sha256-m5i/Q4k5S4wcojHqMYS7e1W/Ph7q/95j3oOK2xbrHSk=";
+    hash = "sha256-xzmbC0CnhHaUJ9UHvLDLJsABD/TaJAl+SLVRQRbD9P8=";
   };
 
   buildInputs = [
