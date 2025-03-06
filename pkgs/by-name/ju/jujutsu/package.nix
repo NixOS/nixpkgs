@@ -9,8 +9,6 @@
   libgit2,
   libssh2,
   openssl,
-  darwin,
-  libiconv,
   git,
   gnupg,
   openssh,
@@ -49,18 +47,11 @@ rustPlatform.buildRustPackage {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      zstd
-      libgit2
-      libssh2
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Security
-      darwin.apple_sdk.frameworks.SystemConfiguration
-      libiconv
-    ];
+  buildInputs = [
+    zstd
+    libgit2
+    libssh2
+  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ openssl ];
 
   nativeCheckInputs = [
     git
