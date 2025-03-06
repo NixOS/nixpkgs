@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "apio-udev-rules";
   version = "0.9.5";
 
   src = fetchFromGitHub {
     owner = "FPGAwars";
     repo = "apio";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-VU4tOszGkw20DWW2SerFsnjFiSkrSwqBcwosGnHJfU8=";
   };
 
@@ -32,4 +32,4 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ zh4ngx ];
   };
-}
+})
