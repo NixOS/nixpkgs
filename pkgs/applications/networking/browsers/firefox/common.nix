@@ -63,7 +63,6 @@ in
 , gnum4
 , gtk3
 , icu73
-, icu74
 , libGL
 , libGLU
 , libevent
@@ -237,7 +236,8 @@ buildStdenv.mkDerivation {
   patches = lib.optionals (lib.versionAtLeast version "111" && lib.versionOlder version "133") [ ./env_var_for_system_dir-ff111.patch ]
   ++ lib.optionals (lib.versionAtLeast version "133") [ ./env_var_for_system_dir-ff133.patch ]
   ++ lib.optionals (lib.versionAtLeast version "96" && lib.versionOlder version "121") [ ./no-buildconfig-ffx96.patch ]
-  ++ lib.optionals (lib.versionAtLeast version "121") [ ./no-buildconfig-ffx121.patch ]
+  ++ lib.optionals (lib.versionAtLeast version "121" && lib.versionOlder version "136") [ ./no-buildconfig-ffx121.patch ]
+  ++ lib.optionals (lib.versionAtLeast version "136") [ ./no-buildconfig-ffx136.patch ]
   ++ lib.optionals (lib.versionOlder version "128.2" || (lib.versionAtLeast version "129" && lib.versionOlder version "130")) [
     (fetchpatch {
       # https://bugzilla.mozilla.org/show_bug.cgi?id=1912663
@@ -392,13 +392,15 @@ buildStdenv.mkDerivation {
     "--with-distribution-id=org.nixos"
     "--with-libclang-path=${lib.getLib llvmPackagesBuildBuild.libclang}/lib"
     "--with-system-ffi"
-    "--with-system-icu"
+    # Firefox 136 fails to link with our icu76.1
+    (lib.optionalString (lib.versionOlder version "136") "--with-system-icu")
     "--with-system-jpeg"
     "--with-system-libevent"
     "--with-system-libvpx"
     "--with-system-nspr"
     "--with-system-nss"
-    "--with-system-png" # needs APNG support
+    # Firefox 136 requires libpng>=1.6.45
+    (lib.optionalString (lib.versionOlder version "136") "--with-system-png") # needs APNG support
     "--with-system-webp"
     "--with-system-zlib"
     "--with-wasi-sysroot=${wasiSysRoot}"
@@ -453,7 +455,6 @@ buildStdenv.mkDerivation {
     libGLU
     libevent
     libjpeg
-    libpng
     libstartup_notification
     libvpx
     libwebp
@@ -475,9 +476,7 @@ buildStdenv.mkDerivation {
     zip
     zlib
   ]
-  # icu74 fails to build on 127 and older
-  # https://bugzilla.mozilla.org/show_bug.cgi?id=1862601
-  ++ [ (if (lib.versionAtLeast version "134") then icu74 else icu73) ]
+  ++ lib.optionals (lib.versionOlder version "136") [ icu73 libpng ]
   ++ [ (if (lib.versionAtLeast version "116") then nss_latest else nss_esr/*3.90*/) ]
   ++ lib.optional  alsaSupport alsa-lib
   ++ lib.optional  jackSupport libjack2
