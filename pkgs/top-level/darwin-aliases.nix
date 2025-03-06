@@ -63,6 +63,8 @@ mapAliases ({
   cctools-llvm = pkgs.cctools; # added 2024-07-01
   cctools-port = pkgs.cctools; # added 2024-07-17
 
+  cf-private = throw "'cf-private' has been renamed to 'apple_sdk.frameworks.CoreFoundation'.";
+
   ### D ###
 
   discrete-scroll = pkgs.discrete-scroll; # added 2024-11-27

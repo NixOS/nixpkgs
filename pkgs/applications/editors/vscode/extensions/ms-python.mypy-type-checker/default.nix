@@ -7,8 +7,8 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     publisher = "ms-python";
     name = "mypy-type-checker";
-    version = "2025.1.10451009";
-    hash = "sha256-Q6wfbm3FMNe0VB29QOf5ulTelGVmZVHUnmK17vbrqWc=";
+    version = "2025.2.0";
+    hash = "sha256-VJ/XSC4cbIjgxKLsXxUxwko+HR0U59c8OrhYnKPJu4g=";
   };
 
   meta = {
