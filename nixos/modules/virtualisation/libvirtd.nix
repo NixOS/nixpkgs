@@ -17,14 +17,6 @@ let
     ${cfg.extraConfig}
   '';
   qemuConfigFile = pkgs.writeText "qemu.conf" ''
-    ${optionalString cfg.qemu.ovmf.enable ''
-      nvram = [
-        "/run/libvirt/nix-ovmf/AAVMF_CODE.fd:/run/libvirt/nix-ovmf/AAVMF_VARS.fd",
-        "/run/libvirt/nix-ovmf/AAVMF_CODE.ms.fd:/run/libvirt/nix-ovmf/AAVMF_VARS.ms.fd",
-        "/run/libvirt/nix-ovmf/OVMF_CODE.fd:/run/libvirt/nix-ovmf/OVMF_VARS.fd",
-        "/run/libvirt/nix-ovmf/OVMF_CODE.ms.fd:/run/libvirt/nix-ovmf/OVMF_VARS.ms.fd"
-      ]
-    ''}
     ${optionalString (!cfg.qemu.runAsRoot) ''
       user = "qemu-libvirtd"
       group = "qemu-libvirtd"
@@ -33,6 +25,47 @@ let
   '';
   dirName = "libvirt";
   subDirs = list: [ dirName ] ++ map (e: "${dirName}/${e}") list;
+
+  jsonFormat = pkgs.formats.json { };
+  mkFirmwareJson =
+    p:
+    jsonFormat.generate "${lib.getName p}-json-${lib.getVersion p}" {
+      description = "OVMF UEFI firmware";
+      interface-types = [ "uefi" ];
+      mapping = {
+        device = "flash";
+        executable = {
+          filename = "/run/libvirt/nix-ovmf/${builtins.baseNameOf p.firmware}";
+          format = "raw";
+        };
+        nvram-template = {
+          filename = "/run/libvirt/nix-ovmf/${builtins.baseNameOf p.variables}";
+          format = "raw";
+        };
+      };
+      targets = [
+        {
+          architecture = p.stdenv.hostPlatform.qemuArch;
+          machines =
+            if p.stdenv.hostPlatform.isx86 then
+              [
+                "pc-q35-*"
+              ]
+              ++ lib.optional (!p.secureBoot) [ "pc-i440fx-*" ]
+            else
+              [ "virt-*" ];
+        }
+      ];
+      features =
+        [
+          "verbose-dynamic"
+        ]
+        ++ lib.optional p.stdenv.hostPlatform.isx86 "acpi-s3"
+        ++ lib.optional (!p.secureBoot) "amd-sev"
+        ++ lib.optional p.secureBoot "secure-boot"
+        ++ lib.optional p.systemManagementModeRequired "requires-smm";
+      tags = [ ];
+    };
 
   ovmfModule = types.submodule {
     options = {
@@ -592,18 +625,25 @@ in
     # https://libvirt.org/daemons.html#monolithic-systemd-integration
     systemd.sockets.libvirtd.wantedBy = [ "sockets.target" ];
 
-    systemd.tmpfiles.rules =
+    systemd.tmpfiles.settings.libvirtd =
       let
         vhostUserCollection = pkgs.buildEnv {
           name = "vhost-user";
           paths = cfg.qemu.vhostUserPackages;
           pathsToLink = [ "/share/qemu/vhost-user" ];
         };
+        firmwareCollection = pkgs.linkFarm "qemu-firmware" (
+          map (p: {
+            name = "${p.name}.json";
+            path = mkFirmwareJson p;
+          }) cfg.qemu.ovmf.packages
+        );
       in
-      [
-        "L+ /var/lib/qemu/vhost-user - - - - ${vhostUserCollection}/share/qemu/vhost-user"
-        "L+ /var/lib/qemu/firmware - - - - ${cfg.qemu.package}/share/qemu/firmware"
-      ];
+      {
+        "/var/lib/qemu/vhost-user"."L+".argument = "${vhostUserCollection}/share/qmeu/vhost-user";
+        "/var/lib/qemu/firmware"."L+".argument =
+          if cfg.qemu.ovmf.enable then "${firmwareCollection}" else "${cfg.qemu.package}/share/qmeu/firmware";
+      };
 
     security.polkit = {
       enable = true;
