@@ -1,17 +1,19 @@
 {
   lib,
-  fetchFromGitHub,
-  miniupnpc,
-  ffmpeg,
-  enableSwftools ? false,
-  swftools,
   python3Packages,
+  fetchFromGitHub,
   qt6,
-  makeDesktopItem,
   copyDesktopItems,
+  makeDesktopItem,
+  writableTmpDirAsHomeHook,
+  swftools,
+  ffmpeg,
+  miniupnpc,
+
+  enableSwftools ? false,
 }:
 
-python3Packages.buildPythonPackage rec {
+python3Packages.buildPythonApplication rec {
   pname = "hydrus";
   version = "609";
   format = "other";
@@ -50,7 +52,7 @@ python3Packages.buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  dependencies = with python3Packages; [
     beautifulsoup4
     cbor2
     chardet
@@ -82,10 +84,14 @@ python3Packages.buildPythonPackage rec {
     twisted
   ];
 
-  nativeCheckInputs = with python3Packages; [
-    mock
-    httmock
-  ];
+  nativeCheckInputs =
+    (with python3Packages; [
+      mock
+      httmock
+    ])
+    ++ [
+      writableTmpDirAsHomeHook
+    ];
 
   outputs = [
     "out"
@@ -131,7 +137,6 @@ python3Packages.buildPythonPackage rec {
     runHook preCheck
 
     export QT_QPA_PLATFORM=offscreen
-    export HOME=$(mktemp -d)
     $out/bin/hydrus-test
 
     runHook postCheck
@@ -148,11 +153,12 @@ python3Packages.buildPythonPackage rec {
     })
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Danbooru-like image tagging and searching system for the desktop";
-    license = licenses.wtfpl;
+    license = lib.licenses.wtfpl;
     homepage = "https://hydrusnetwork.github.io/hydrus/";
-    maintainers = with maintainers; [
+    changelog = "https://github.com/hydrusnetwork/hydrus/releases/tag/v${version}";
+    maintainers = with lib.maintainers; [
       dandellion
       evanjs
     ];
