@@ -124,6 +124,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  __darwinAllowLocalNetworking = true;
+
   passthru.tests = {
     smoke-test = nixosTests.bitcoind;
   };
