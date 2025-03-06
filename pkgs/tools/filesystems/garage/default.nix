@@ -7,7 +7,6 @@
   pkg-config,
   protobuf,
   cacert,
-  garage,
   nixosTests,
 }:
 let
@@ -133,10 +132,10 @@ rec {
     broken = stdenv.hostPlatform.isDarwin;
   };
 
-  garage_1_0_1 = generic {
-    version = "1.0.1";
-    hash = "sha256-f6N2asycN04I6U5XQ5LEAqYu/v5jYZiFCxZ8YQ32XyM=";
-    cargoHash = "sha256-DX20Uv4g8JO3PlRsTbvr8nF4g9aw1/hW0bfQm6zGBd4=";
+  garage_1_1_0 = generic {
+    version = "1.1.0";
+    hash = "sha256-ysf/GYR39trXTPRdw8uB6E4YDp4nAR8dbU9k9rQTxz0=";
+    cargoHash = "sha256-SkDr/e9YZ3raTGucaiv/RV2zF9tEDIeqZeri6Xk3xEU=";
     broken = stdenv.hostPlatform.isDarwin;
   };
 
@@ -144,7 +143,7 @@ rec {
 
   garage_0_9 = garage_0_9_4;
 
-  garage_1_x = garage_1_0_1;
+  garage_1_x = garage_1_1_0;
 
   garage = garage_1_x;
 }
