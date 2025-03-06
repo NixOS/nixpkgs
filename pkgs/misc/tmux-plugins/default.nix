@@ -795,6 +795,44 @@ in rec {
     };
   };
 
+  tmux-sessionx = mkTmuxPlugin {
+    pluginName = "sessionx";
+    version = "0-unstable-2024-09-22";
+    src = fetchFromGitHub {
+      owner = "omerxx";
+      repo = "tmux-sessionx";
+      rev = "508359b8a6e2e242a9270292160624406be3bbca";
+      hash = "sha256-nbzn3qxMGRzxFnLBVrjqGl09++9YOK4QrLoYiHUS9jY=";
+    };
+    nativeBuildInputs = [ pkgs.makeWrapper ];
+    postPatch = ''
+      substituteInPlace sessionx.tmux \
+        --replace-fail "\$CURRENT_DIR/scripts/sessionx.sh" "$out/share/tmux-plugins/sessionx/scripts/sessionx.sh"
+      substituteInPlace scripts/sessionx.sh \
+        --replace-fail "/tmux-sessionx/scripts/preview.sh" "$out/share/tmux-plugins/sessionx/scripts/preview.sh"
+      substituteInPlace scripts/sessionx.sh \
+        --replace-fail "/tmux-sessionx/scripts/reload_sessions.sh" "$out/share/tmux-plugins/sessionx/scripts/reload_sessions.sh"
+    '';
+    postInstall = ''
+      chmod +x $target/scripts/sessionx.sh
+      wrapProgram $target/scripts/sessionx.sh \
+        --prefix PATH : ${with pkgs; lib.makeBinPath [ zoxide fzf gnugrep gnused coreutils ]}
+      chmod +x $target/scripts/preview.sh
+      wrapProgram $target/scripts/preview.sh \
+        --prefix PATH : ${with pkgs; lib.makeBinPath [ coreutils gnugrep gnused ]}
+      chmod +x $target/scripts/reload_sessions.sh
+      wrapProgram $target/scripts/reload_sessions.sh \
+        --prefix PATH : ${with pkgs; lib.makeBinPath [ coreutils gnugrep gnused ]}
+    '';
+    meta = {
+      description = "Tmux session manager, with preview, fuzzy finding, and MORE";
+      homepage = "https://github.com/omerxx/tmux-sessionx";
+      license = lib.licenses.gpl3Only;
+      maintainers = with lib.maintainers; [ okwilkins ];
+      platforms = lib.platforms.all;
+    };
+  };
+
   tmux-thumbs = pkgs.callPackage ./tmux-thumbs {
     inherit mkTmuxPlugin;
   };
