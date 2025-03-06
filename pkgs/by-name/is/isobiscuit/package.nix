@@ -27,6 +27,6 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "IsoBiscuit is a tool for virtualization, where processes are running in biscuits.";
     license = licenses.asl20;
-    maintainers = with maintainers; [ "TrollMii" ];
+    maintainers = with maintainers; [ trollmii ];
   };
 }
