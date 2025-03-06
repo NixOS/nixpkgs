@@ -38,6 +38,7 @@ let
     "dovecot"
     "fastly"
     "flow"
+    "folder-size"
     "fritz"
     "fritzbox"
     "frr"
