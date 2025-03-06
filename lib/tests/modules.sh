@@ -572,6 +572,9 @@ checkConfigOutput '^true$' config.enable ./declare-enable.nix ./define-enable-wi
 checkConfigError 'Expected a module, but found a value of type .*"configuration".*, while trying to load a module into .*/import-configuration.nix.' config ./import-configuration.nix
 checkConfigError 'please only import the modules that make up the configuration' config ./import-configuration.nix
 
+checkConfigOutput '"foo"' config.foo ./no-ellipsis-module.nix
+checkConfigOutput '"foo"' config.foo ./module-with-at-pattern.nix
+
 # doRename works when `warnings` does not exist.
 checkConfigOutput '^1234$' config.c.d.e ./doRename-basic.nix
 # doRename adds a warning.
