@@ -1,0 +1,48 @@
+diff --git a/main.go b/main.go
+index 678094d..8ba55ba 100644
+--- a/main.go
++++ b/main.go
+@@ -21,7 +21,6 @@ import (
+ 	"github.com/hashicorp/hcp/internal/pkg/format"
+ 	"github.com/hashicorp/hcp/internal/pkg/iostreams"
+ 	"github.com/hashicorp/hcp/internal/pkg/profile"
+-	"github.com/hashicorp/hcp/internal/pkg/versioncheck"
+ 	"github.com/hashicorp/hcp/version"
+ 	"github.com/mitchellh/cli"
+ 	"github.com/posener/complete"
+@@ -63,21 +62,6 @@ func realMain() int {
+ 		}
+ 	}()
+ 
+-	// Create the version checker
+-	checker, err := versioncheck.New(io, versionCheckStatePath)
+-	if err != nil {
+-		// On error, a nil checker is returned but it is still safe to call
+-		// Check/Display.
+-		fmt.Fprintf(os.Stderr, "failed to configure version checker: %v\n", err)
+-	}
+-
+-	// Start checking for a new version as soon as possible
+-	go func() {
+-		if err := checker.Check(shutdownCtx); err != nil && !errors.Is(err, context.Canceled) {
+-			fmt.Fprintf(os.Stderr, "failed to check for new version: %v\n", err)
+-		}
+-	}()
+-
+ 	// Create the HCP Config
+ 	hcpCfg, err := auth.GetHCPConfig(hcpconf.WithoutBrowserLogin())
+ 	if err != nil {
+@@ -138,13 +122,6 @@ func realMain() int {
+ 		fmt.Fprintf(io.Err(), "Error executing hcp: %s\n", err.Error())
+ 	}
+ 
+-	// Display the check results if we aren't being run in autocomplete. The
+-	// check results will only be displayed if there is a new version and we
+-	// haven't prompted recently.
+-	if !isAutocomplete() {
+-		checker.Display()
+-	}
+-
+ 	return status
+ }
+ 
