@@ -11,20 +11,20 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-files";
-  version = "1.0.0-alpha.1";
+  version = "1.0.0-alpha.6";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-files";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-UwQwZRzOyMvLRRmU2noxGrqblezkR8J2PNMVoyG0M0w=";
+    hash = "sha256-i1CVhfieexeiKPwp0y29QyrKspzEFkp1+zwIaM9D/Qc=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-me/U4LtnvYtf77qxF2Z1ncHRVOLp3inDVlwnCjwlj08=";
+  cargoHash = "sha256-I5WRuEogMwa0dB6wxhWDxivqhCdUugvsPrwUvjjDnt8=";
 
   env = {
-    VERGEN_GIT_COMMIT_DATE = "2024-08-05";
+    VERGEN_GIT_COMMIT_DATE = "2025-02-21";
     VERGEN_GIT_SHA = finalAttrs.src.tag;
   };
 
