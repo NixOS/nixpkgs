@@ -964,7 +964,7 @@ with pkgs;
   };
 
   alice-tools-qt5 = libsForQt5.callPackage ../tools/games/alice-tools { };
-  isobiscuit = callPackage ../tools/virtualization/isobiscuit {};
+  isobiscuit = callPackage ../tools/virtualization/isobiscuit { };
 
   alice-tools-qt6 = qt6Packages.callPackage ../tools/games/alice-tools { };
 
