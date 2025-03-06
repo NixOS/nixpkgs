@@ -3,12 +3,12 @@
 
 let
   pname = "ex_doc";
-  version = "0.37.2";
+  version = "0.37.3";
   src = fetchFromGitHub {
     owner = "elixir-lang";
     repo = "${pname}";
     rev = "v${version}";
-    hash = "sha256-BQbqaZq8pCfXrxJh03uV/WpH07bGoVUciX1wh8hFlxM=";
+    hash = "sha256-2tam+3vYLC216Q78GIUI3fGnE5FJ/lECJAUQMSxz46w=";
   };
 in
 mixRelease {
