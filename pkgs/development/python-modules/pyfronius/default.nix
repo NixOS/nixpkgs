@@ -1,6 +1,7 @@
 {
   lib,
   aiohttp,
+  aiounittest,
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
@@ -10,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pyfronius";
-  version = "0.7.3";
+  version = "0.7.6";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -18,25 +19,26 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nielstron";
     repo = "pyfronius";
-    tag = "release-${version}";
-    hash = "sha256-7GtY/6uuLe7K9T7xMVt2ytpA6MKVWnyEoLtA5dSMiH4=";
+    tag = version;
+    hash = "sha256-zyRcMueKZbk2QWhF3d500NUpvljikO8fsDnePy6Tq90=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [ aiohttp ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    aiounittest
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "pyfronius" ];
 
   meta = with lib; {
     description = "Python module to communicate with Fronius Symo";
     homepage = "https://github.com/nielstron/pyfronius";
-    changelog = "https://github.com/nielstron/pyfronius/releases/tag/release-${version}";
+    changelog = "https://github.com/nielstron/pyfronius/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
-    # https://github.com/nielstron/pyfronius/issues/18
-    broken = versionAtLeast aiohttp.version "3.10.1";
   };
 }

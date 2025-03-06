@@ -1,19 +1,21 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, makeWrapper
-, dbus
-, libpulseaudio
-, notmuch
-, openssl
-, ethtool
-, lm_sensors
-, iw
-, iproute2
-, pipewire
-, withICUCalendar ? false
-, withPipewire ? true
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  makeWrapper,
+  dbus,
+  libpulseaudio,
+  notmuch,
+  openssl,
+  ethtool,
+  lm_sensors,
+  iw,
+  iproute2,
+  pipewire,
+  withICUCalendar ? false,
+  withPipewire ? true,
+  withNotmuch ? true,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -30,18 +32,29 @@ rustPlatform.buildRustPackage rec {
   useFetchCargoVendor = true;
   cargoHash = "sha256-EFFmH9aG7DvSA5rsAuszc1B8kcLdruSk3Hhp4V9t9Gk=";
 
-  nativeBuildInputs = [ pkg-config makeWrapper ]
-    ++ (lib.optionals withPipewire [ rustPlatform.bindgenHook ]);
+  nativeBuildInputs = [
+    pkg-config
+    makeWrapper
+  ] ++ (lib.optionals withPipewire [ rustPlatform.bindgenHook ]);
 
-  buildInputs = [ dbus libpulseaudio notmuch openssl lm_sensors ]
-    ++ (lib.optionals withPipewire [ pipewire ]);
+  buildInputs =
+    [
+      dbus
+      libpulseaudio
+      openssl
+      lm_sensors
+    ]
+    ++ (lib.optionals withPipewire [ pipewire ])
+    ++ (lib.optionals withNotmuch [ notmuch ]);
 
-  buildFeatures = [
-    "notmuch"
-    "maildir"
-    "pulseaudio"
-  ] ++ (lib.optionals withICUCalendar [ "icu_calendar" ])
-  ++ (lib.optionals withPipewire [ "pipewire" ]);
+  buildFeatures =
+    [
+      "maildir"
+      "pulseaudio"
+    ]
+    ++ (lib.optionals withICUCalendar [ "icu_calendar" ])
+    ++ (lib.optionals withPipewire [ "pipewire" ])
+    ++ (lib.optionals withNotmuch [ "notmuch" ]);
 
   prePatch = ''
     substituteInPlace src/util.rs \
@@ -54,7 +67,13 @@ rustPlatform.buildRustPackage rec {
   '';
 
   postFixup = ''
-    wrapProgram $out/bin/i3status-rs --prefix PATH : ${lib.makeBinPath [ iproute2 ethtool iw ]}
+    wrapProgram $out/bin/i3status-rs --prefix PATH : ${
+      lib.makeBinPath [
+        iproute2
+        ethtool
+        iw
+      ]
+    }
   '';
 
   # Currently no tests are implemented, so we avoid building the package twice
@@ -65,7 +84,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/greshake/i3status-rust";
     license = licenses.gpl3Only;
     mainProgram = "i3status-rs";
-    maintainers = with maintainers; [ backuitist globin ];
+    maintainers = with maintainers; [
+      backuitist
+      globin
+    ];
     platforms = platforms.linux;
   };
 }
