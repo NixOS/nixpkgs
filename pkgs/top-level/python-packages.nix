@@ -185,6 +185,8 @@ self: super: with self; {
 
   aioasuswrt = callPackage ../development/python-modules/aioasuswrt { };
 
+  aioaudiobookshelf = callPackage ../development/python-modules/aioaudiobookshelf { };
+
   aioautomower = callPackage ../development/python-modules/aioautomower { };
 
   aioazuredevops = callPackage ../development/python-modules/aioazuredevops { };
@@ -3194,6 +3196,8 @@ self: super: with self; {
 
   deezer-python = callPackage ../development/python-modules/deezer-python { };
 
+  deezer-python-async = callPackage ../development/python-modules/deezer-python-async { };
+
   defang = callPackage ../development/python-modules/defang { };
 
   defcon = callPackage ../development/python-modules/defcon { };
@@ -4035,6 +4039,8 @@ self: super: with self; {
   dungeon-eos = callPackage ../development/python-modules/dungeon-eos { };
 
   duo-client = callPackage ../development/python-modules/duo-client { };
+
+  duration-parser = callPackage ../development/python-modules/duration-parser { };
 
   durationpy = callPackage ../development/python-modules/durationpy { };
 
