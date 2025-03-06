@@ -16,9 +16,12 @@
 
   # tests
   # bridgestan, (not packaged)
+  equinox,
+  flowjax,
   jax,
   jaxlib,
   numba,
+  pytest-timeout,
   pymc,
   pytestCheckHook,
   setuptools,
@@ -27,20 +30,20 @@
 
 buildPythonPackage rec {
   pname = "nutpie";
-  version = "0.13.4";
+  version = "0.14.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pymc-devs";
     repo = "nutpie";
     tag = "v${version}";
-    hash = "sha256-BpKt/EWBefCQUGDxyqF6Xjrj/HUvY4M26gk79R/CyZo=";
+    hash = "sha256-9sHs2JbzVRvAJEoLcz5NxkbElbXblDzxA6oCBtb4yFE=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-d0Qk01YwosHlOy3yb/2PV5Op1Wz+yB5ROVbUWfHooEk=";
+    hash = "sha256-j7Vasy4BwOYzH43mWdbu+QsNCdRfvJC6ZvYU8XB5s4E=";
   };
 
   build-system = [
@@ -66,10 +69,13 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     # bridgestan
+    equinox
+    flowjax
     numba
     jax
     jaxlib
     pymc
+    pytest-timeout
     pytestCheckHook
     setuptools
     writableTmpDirAsHomeHook

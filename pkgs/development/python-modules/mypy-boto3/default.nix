@@ -382,8 +382,8 @@ rec {
       "sha256-BYB0ALiPT1lcGrt+r/BFcgtQRoxoG6sXj9T6b9IAPVE=";
 
   mypy-boto3-datasync =
-    buildMypyBoto3Package "datasync" "1.37.0"
-      "sha256-wx488+wrT7IVomfKF4DKzOidr/UxCSbHAz5nbOvejmM=";
+    buildMypyBoto3Package "datasync" "1.37.7"
+      "sha256-xRN7cKNbVOVrmFkYLyy9TPd9OTQIRX8Ix3vyGO3xXe8=";
 
   mypy-boto3-dax =
     buildMypyBoto3Package "dax" "1.37.0"
@@ -674,8 +674,8 @@ rec {
       "sha256-eEq8LDmORpA464IecxTI6FqVIitn3t+t4ElsHkfSAs4=";
 
   mypy-boto3-iotfleetwise =
-    buildMypyBoto3Package "iotfleetwise" "1.37.2"
-      "sha256-VEXpL5IiyU+M33+s3QctkqbKubPwK0ouag5F1MSpO1Q=";
+    buildMypyBoto3Package "iotfleetwise" "1.37.7"
+      "sha256-kZo2Ovxe0zRKVbeVdXR5hOJs9vznrk2h4fuBX0LiKd0=";
 
   mypy-boto3-iotsecuretunneling =
     buildMypyBoto3Package "iotsecuretunneling" "1.37.0"
@@ -1426,8 +1426,8 @@ rec {
       "sha256-s/XZZvav3P9Fr6vyBII7NubWRChEg4HASNzN4UypcPo=";
 
   mypy-boto3-workspaces =
-    buildMypyBoto3Package "workspaces" "1.37.0"
-      "sha256-Vr38dmh6k0XF/mI10tem3R31QP4hUk870YE9QGsFagA=";
+    buildMypyBoto3Package "workspaces" "1.37.7"
+      "sha256-/ALXuHcQcD9f78ewEITB+6Ui28Yr/Bm07Gh7it6bjSY=";
 
   mypy-boto3-workspaces-web =
     buildMypyBoto3Package "workspaces-web" "1.37.0"

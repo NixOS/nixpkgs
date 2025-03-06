@@ -1175,6 +1175,8 @@ self: super: with self; {
 
   azure-ai-documentintelligence = callPackage ../development/python-modules/azure-ai-documentintelligence { };
 
+  azure-ai-vision-imageanalysis = callPackage ../development/python-modules/azure-ai-vision-imageanalysis { };
+
   azure-appconfiguration = callPackage ../development/python-modules/azure-appconfiguration { };
 
   azure-applicationinsights = callPackage ../development/python-modules/azure-applicationinsights { };
@@ -4409,6 +4411,8 @@ self: super: with self; {
 
   ewmh = callPackage ../development/python-modules/ewmh { };
 
+  ewmhlib = callPackage ../development/python-modules/ewmhlib { };
+
   example-robot-data = toPythonModule (pkgs.example-robot-data.override {
     pythonSupport = true;
     python3Packages = self;
@@ -4929,6 +4933,8 @@ self: super: with self; {
   flow-record = callPackage ../development/python-modules/flow-record { };
 
   flower = callPackage ../development/python-modules/flower { };
+
+  flowjax = callPackage ../development/python-modules/flowjax { };
 
   flowlogs-reader = callPackage ../development/python-modules/flowlogs-reader { };
 
@@ -7284,6 +7290,8 @@ self: super: with self; {
   lark = callPackage ../development/python-modules/lark { };
 
   laspy = callPackage ../development/python-modules/laspy { };
+
+  lastversion = callPackage ../development/python-modules/lastversion { };
 
   laszip = callPackage ../development/python-modules/laszip {
     inherit (pkgs) cmake ninja;
@@ -10239,6 +10247,8 @@ self: super: with self; {
 
   param = callPackage ../development/python-modules/param { };
 
+  paramax = callPackage ../development/python-modules/paramax { };
+
   parameter-expansion-patched = callPackage ../development/python-modules/parameter-expansion-patched { };
 
   parameterized = callPackage ../development/python-modules/parameterized { };
@@ -12441,6 +12451,8 @@ self: super: with self; {
 
   pymodbus = callPackage ../development/python-modules/pymodbus { };
 
+  pymonctl = callPackage ../development/python-modules/pymonctl { };
+
   pymongo = callPackage ../development/python-modules/pymongo { };
 
   pymongo-inmemory = callPackage ../development/python-modules/pymongo-inmemory { };
@@ -12640,6 +12652,8 @@ self: super: with self; {
   pypeg2 = callPackage ../development/python-modules/pypeg2 { };
 
   pyperclip = callPackage ../development/python-modules/pyperclip { };
+
+  pyperclipfix = callPackage ../development/python-modules/pyperclipfix { };
 
   pyperscan = callPackage ../development/python-modules/pyperscan { };
 
@@ -13872,6 +13886,8 @@ self: super: with self; {
 
   pyvoro = callPackage ../development/python-modules/pyvoro { };
 
+  pyvows = callPackage ../development/python-modules/pyvows { };
+
   pywal = callPackage ../development/python-modules/pywal { };
 
   pywatchman = callPackage ../development/python-modules/pywatchman { };
@@ -13907,6 +13923,10 @@ self: super: with self; {
   pywikibot = callPackage ../development/python-modules/pywikibot { };
 
   pywilight = callPackage ../development/python-modules/pywilight { };
+
+  pywinbox = callPackage ../development/python-modules/pywinbox { };
+
+  pywinctl = callPackage ../development/python-modules/pywinctl { };
 
   pywinrm = callPackage ../development/python-modules/pywinrm { };
 
