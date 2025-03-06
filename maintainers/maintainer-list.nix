@@ -24097,6 +24097,7 @@
     email = "trollmii@outlook.de";
     github = "TrollMii";
     githubId = 140972023;
+    name = "Titus E."
   };
   tropf = {
     name = "tropf";
