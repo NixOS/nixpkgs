@@ -5,7 +5,7 @@
   cmake,
   pkg-config,
   removeReferencesTo,
-  alsaSupport ? !stdenv.hostPlatform.isDarwin,
+  alsaSupport ? stdenv.hostPlatform.isLinux,
   alsa-lib,
   dbusSupport ? !stdenv.hostPlatform.isDarwin,
   dbus,
