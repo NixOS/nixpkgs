@@ -2810,6 +2810,8 @@ let
         };
       };
 
+      johnpapa.winteriscoming = callPackage ./johnpapa.winteriscoming { };
+
       jgclark.vscode-todo-highlight = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "vscode-todo-highlight";
