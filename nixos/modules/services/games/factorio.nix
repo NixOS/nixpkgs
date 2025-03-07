@@ -46,7 +46,24 @@ let
     lib.optionalString (
       list != [ ]
     ) "--${name}=${pkgs.writeText "${name}.json" (builtins.toJSON list)}";
-  modDir = pkgs.factorio-utils.mkModDirDrv cfg.mods cfg.mods-dat;
+  modDir = pkgs.factorio-utils.mkModDirDrv cfg.mods cfg.mods-dat [
+    {
+      "name" = "base";
+      "enabled" = true;
+    }
+    {
+      "name" = "elevated-rails";
+      "enabled" = cfg.internalMods.elevatedRails;
+    }
+    {
+      "name" = "quality";
+      "enabled" = cfg.internalMods.quality;
+    }
+    {
+      "name" = "space-age";
+      "enabled" = cfg.internalMods.spaceAge;
+    }
+  ];
 in
 {
   options = {
@@ -194,6 +211,30 @@ in
           Mods settings can be changed by specifying a dat file, in the [mod
           settings file
           format](https://wiki.factorio.com/Mod_settings_file_format).
+        '';
+      };
+      internalMods.spaceAge = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
+        description = ''
+          Whether to enable `Space Age` mod.
+          Requires Space Age expansion pack to join a server with this enabled.
+        '';
+      };
+      internalMods.quality = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
+        description = ''
+          Whether to enable `Quality` mod.
+          Requires Space Age expansion pack to join a server with this enabled.
+        '';
+      };
+      internalMods.elevatedRails = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
+        description = ''
+          Whether to enable `Elevated Rails` mod.
+          Requires Space Age expansion pack to join a server with this enabled.
         '';
       };
       game-name = lib.mkOption {
