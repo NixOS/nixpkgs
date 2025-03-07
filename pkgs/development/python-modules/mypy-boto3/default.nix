@@ -250,8 +250,8 @@ rec {
       "sha256-6tc2bij0RUtPFNgefY9R60Zh6mSEvWTYTWoaeNweNpg=";
 
   mypy-boto3-cloudtrail =
-    buildMypyBoto3Package "cloudtrail" "1.37.0"
-      "sha256-qBBsxvlXnJHiRrGUQFWMoEeIvLJsC8TVnV7UtBbSRWQ=";
+    buildMypyBoto3Package "cloudtrail" "1.37.8"
+      "sha256-suak3UAocfflKU1C3wylZ2rDtPqC9+UGlY99uSTCj5A=";
 
   mypy-boto3-cloudtrail-data =
     buildMypyBoto3Package "cloudtrail-data" "1.37.0"
@@ -702,8 +702,8 @@ rec {
       "sha256-62NDO0fNYeXWPqgst4EtVywX55vN5x7+1Qv2Q0IxxKg=";
 
   mypy-boto3-ivs-realtime =
-    buildMypyBoto3Package "ivs-realtime" "1.37.0"
-      "sha256-puoVTYPdhSKc1oKZ+sDYvz85UN//IO40OY98lvTWkdA=";
+    buildMypyBoto3Package "ivs-realtime" "1.37.8"
+      "sha256-PDc9eX2Q4d9mOLhT3jHBkoFvMXbg/PwsOxgPBbdxBPk=";
 
   mypy-boto3-ivschat =
     buildMypyBoto3Package "ivschat" "1.37.0"
@@ -1098,8 +1098,8 @@ rec {
       "sha256-wG3bvzu38UyCF8n0J8gXnzzPMeJND22iRkjAbTADVNI=";
 
   mypy-boto3-redshift-data =
-    buildMypyBoto3Package "redshift-data" "1.37.0"
-      "sha256-gYDvPgcW0seMssURndWp29BxBzNnPPvPLDRXHW6PncA=";
+    buildMypyBoto3Package "redshift-data" "1.37.8"
+      "sha256-A7lagOiAMhlsJqg7wQQm75l5dAUK22x3qK3P98r4gbg=";
 
   mypy-boto3-redshift-serverless =
     buildMypyBoto3Package "redshift-serverless" "1.37.3"
@@ -1398,8 +1398,8 @@ rec {
       "sha256-nBigZ8YNNcy6TrQQ+dThN62xZ5IOq92EHbC3/tZbbuE=";
 
   mypy-boto3-wafv2 =
-    buildMypyBoto3Package "wafv2" "1.37.0"
-      "sha256-yonNSXiST3CS+I4xh1RpSAc7iqWYbpFluL5JzyrG+nQ=";
+    buildMypyBoto3Package "wafv2" "1.37.8"
+      "sha256-kFDCZkFA474JtReUOZlN3Si0qZU21sUWOAUVTNl7uFo=";
 
   mypy-boto3-wellarchitected =
     buildMypyBoto3Package "wellarchitected" "1.37.0"
@@ -1426,8 +1426,8 @@ rec {
       "sha256-s/XZZvav3P9Fr6vyBII7NubWRChEg4HASNzN4UypcPo=";
 
   mypy-boto3-workspaces =
-    buildMypyBoto3Package "workspaces" "1.37.7"
-      "sha256-/ALXuHcQcD9f78ewEITB+6Ui28Yr/Bm07Gh7it6bjSY=";
+    buildMypyBoto3Package "workspaces" "1.37.8"
+      "sha256-90SHx94sQuuHlnshgsO9WeTOj/l9eVerDmz1Wf584/o=";
 
   mypy-boto3-workspaces-web =
     buildMypyBoto3Package "workspaces-web" "1.37.0"

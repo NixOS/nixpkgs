@@ -4258,7 +4258,7 @@ with pkgs;
   inherit (callPackage ../servers/web-apps/netbox { }) netbox_3_7;
 
   # Not in aliases because it wouldn't get picked up by callPackage
-  netbox = netbox_4_1;
+  netbox = netbox_4_2;
 
   netcat = libressl.nc.overrideAttrs (old: {
     meta = old.meta // {
@@ -11431,12 +11431,6 @@ with pkgs;
   osrm-backend = callPackage ../servers/osrm-backend {
     tbb = tbb_2021_11;
   };
-
-  postfix = callPackage ../servers/mail/postfix { };
-
-  pfixtools = callPackage ../servers/mail/postfix/pfixtools.nix { };
-
-  pflogsumm = callPackage ../servers/mail/postfix/pflogsumm.nix { };
 
   system-sendmail = lowPrio (callPackage ../servers/mail/system-sendmail { });
 
