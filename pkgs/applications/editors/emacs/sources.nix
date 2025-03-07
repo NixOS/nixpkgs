@@ -155,6 +155,11 @@ in
         name = "inhibit-lexical-cookie-warning-67916.patch";
         path = ./inhibit-lexical-cookie-warning-67916-30.patch;
       })
+      (fetchpatch {
+        # bug#63288 and bug#76523
+        url = "https://git.savannah.gnu.org/cgit/emacs.git/patch/?id=53a5dada413662389a17c551a00d215e51f5049f";
+        hash = "sha256-AEvsQfpdR18z6VroJkWoC3sBoApIYQQgeF/P2DprPQ8=";
+      })
     ];
   });
 
