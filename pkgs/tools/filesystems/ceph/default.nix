@@ -242,11 +242,11 @@ let
             hash = "sha256-J9N1kDrIJhz+QEf2cJ0W99GNObHskqr3KvmJVSplDr0=";
           };
           cargoRoot = "src/_bcrypt";
-          cargoDeps = rustPlatform.fetchCargoTarball {
+          cargoDeps = rustPlatform.fetchCargoVendor {
             inherit src;
             sourceRoot = "${pname}-${version}/${cargoRoot}";
             name = "${pname}-${version}";
-            hash = "sha256-lDWX69YENZFMu7pyBmavUZaalGvFqbHSHfkwkzmDQaY=";
+            hash = "sha256-8PyCgh/rUO8uynzGdgylAsb5k55dP9fCnf40UOTCR/M=";
           };
         });
 
@@ -522,7 +522,7 @@ rec {
       #          |       ^~~~~~~~~~~~~~~~~~
       # Looks like `close()` is somehow not included.
       # But the relevant code is already removed in `open-telemetry` 1.10: https://github.com/open-telemetry/opentelemetry-cpp/pull/2031
-      # So it's proably not worth trying to fix that for this Ceph version,
+      # So it's probably not worth trying to fix that for this Ceph version,
       # and instead just disable Ceph's Jaeger support.
       "-DWITH_JAEGER:BOOL=OFF"
       "-DWITH_TESTS:BOOL=OFF"
