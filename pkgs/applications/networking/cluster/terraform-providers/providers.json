@@ -354,11 +354,11 @@
     "vendorHash": "sha256-quoFrJbB1vjz+MdV+jnr7FPACHuUe5Gx9POLubD2IaM="
   },
   "digitalocean": {
-    "hash": "sha256-MOKhwnrGfeg71d2LFcNGSZU6WI5byP8BYdnHqktjQeU=",
+    "hash": "sha256-smGK6ZRcKMf5Wcxd7Sv6LQkbT6swVNOK0o0JbeNacY0=",
     "homepage": "https://registry.terraform.io/providers/digitalocean/digitalocean",
     "owner": "digitalocean",
     "repo": "terraform-provider-digitalocean",
-    "rev": "v2.49.0",
+    "rev": "v2.49.1",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -642,13 +642,13 @@
     "vendorHash": null
   },
   "ibm": {
-    "hash": "sha256-dmHsNNA4gKOiNLmhJ74ryNfgh2kl3zVRMVLg4UUQCPo=",
+    "hash": "sha256-VMiTOItbL8GV3gUlUu68WCzWgGLTh6Lk6S/fUkuMI68=",
     "homepage": "https://registry.terraform.io/providers/IBM-Cloud/ibm",
     "owner": "IBM-Cloud",
     "repo": "terraform-provider-ibm",
-    "rev": "v1.75.2",
+    "rev": "v1.76.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-k1EQbBnpdkC7FdvyRTM8AAhUIAk3hY4CBD9wOVQnMIs="
+    "vendorHash": "sha256-YUCyq1GiFnXSmx9VvhYc3MGnrMXdnOuAVx9BKp1R2N8="
   },
   "icinga2": {
     "hash": "sha256-Y/Oq0aTzP+oSKPhHiHY9Leal4HJJm7TNDpcdqkUsCmk=",
@@ -913,13 +913,13 @@
     "vendorHash": null
   },
   "okta": {
-    "hash": "sha256-Nub3S2RDz9ubnHT657xF+usnrOFPiAIDEqxPyKMS9CA=",
+    "hash": "sha256-QvJ7yQmyOxhBltfckFC5Nkv7DXdpH79JRVF4BRAx+zs=",
     "homepage": "https://registry.terraform.io/providers/okta/okta",
     "owner": "okta",
     "repo": "terraform-provider-okta",
-    "rev": "v4.14.0",
+    "rev": "v4.14.1",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-KoKjPoIFlzASSCevd/pyLnkVAwf4GZn2cHlRl7QGSXo="
+    "vendorHash": "sha256-pykDVH44iZoOihiRr9rA9rEsCc9N6TD+UMbHelab6Nw="
   },
   "oktaasa": {
     "hash": "sha256-2LhxgowqKvDDDOwdznusL52p2DKP+UiXALHcs9ZQd0U=",
@@ -1183,13 +1183,13 @@
     "vendorHash": "sha256-F1AuO/dkldEDRvkwrbq2EjByxjg3K2rohZAM4DzKPUw="
   },
   "snowflake": {
-    "hash": "sha256-s5jtG1UOAtvFVf4GZ3ruGjow1MRaKd8wpze9pxOAz6k=",
+    "hash": "sha256-enDKtqIulPbDSftkDFH783CJlTK5VyImvVpKePuZXh8=",
     "homepage": "https://registry.terraform.io/providers/Snowflake-Labs/snowflake",
     "owner": "Snowflake-Labs",
     "repo": "terraform-provider-snowflake",
-    "rev": "v1.0.3",
+    "rev": "v1.0.4",
     "spdx": "MIT",
-    "vendorHash": "sha256-Nf3MBMjsGDOdxTrhHo72NxIXx2xYCU/SEmYGHO6C/3s="
+    "vendorHash": "sha256-9tHeFnNa5tnmB74p3VJtkw+ldhnDXsP5p3oTOAri1tY="
   },
   "sops": {
     "hash": "sha256-MdsWKV98kWpZpTK5qC7x6vN6cODxeeiVVc+gtlh1s88=",

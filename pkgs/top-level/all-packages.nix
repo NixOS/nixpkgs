@@ -3345,7 +3345,7 @@ with pkgs;
     garage
       garage_0_8 garage_0_9
       garage_0_8_7 garage_0_9_4
-      garage_1_0_1 garage_1_x;
+      garage_1_1_0 garage_1_x;
 
   gauge-unwrapped = callPackage ../development/tools/gauge { };
   gauge = callPackage ../development/tools/gauge/wrapper.nix { };
@@ -3865,8 +3865,6 @@ with pkgs;
   peruse = libsForQt5.callPackage ../tools/misc/peruse { };
 
   ksmoothdock = libsForQt5.callPackage ../applications/misc/ksmoothdock { };
-
-  kstars = libsForQt5.callPackage ../applications/science/astronomy/kstars { };
 
   ligo =
     let ocaml_p = ocaml-ng.ocamlPackages_4_14.overrideScope (self: super: {
@@ -8522,6 +8520,7 @@ with pkgs;
   catboost = callPackage ../by-name/ca/catboost/package.nix {
     # https://github.com/catboost/catboost/issues/2540
     cudaPackages = cudaPackages_11;
+    llvmPackagesCuda = llvmPackages_14;
   };
 
   cctag = callPackage ../development/libraries/cctag {
@@ -9901,6 +9900,7 @@ with pkgs;
   mesa_i686 = pkgsi686Linux.mesa; # make it build on Hydra
 
   libgbm = callPackage ../development/libraries/mesa/gbm.nix {};
+  mesa-gl-headers = callPackage ../development/libraries/mesa/headers.nix {};
 
   ## End libGL/libGLU/Mesa stuff
 
@@ -17271,8 +17271,6 @@ with pkgs;
   spyder = with python3.pkgs; toPythonApplication spyder;
 
   stellarium = qt6Packages.callPackage ../applications/science/astronomy/stellarium { };
-
-  stellarsolver = libsForQt5.callPackage ../development/libraries/science/astronomy/stellarsolver { };
 
   tulip = libsForQt5.callPackage ../applications/science/misc/tulip { };
 
