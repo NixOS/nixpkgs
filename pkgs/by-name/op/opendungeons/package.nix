@@ -7,7 +7,7 @@
   ogre_13,
   cegui,
   boost,
-  sfml,
+  sfml_2,
   openal,
   ois,
 }:
@@ -54,20 +54,20 @@ stdenv.mkDerivation {
     ogre'
     cegui'
     boost
-    sfml
+    sfml_2
     openal
     ois
   ];
 
   cmakeFlags = [
-    "-DOD_TREAT_WARNINGS_AS_ERRORS=FALSE"
+    (lib.cmakeBool "OD_TREAT_WARNINGS_AS_ERRORS" false)
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Open source, real time strategy game sharing game elements with the Dungeon Keeper series and Evil Genius";
     mainProgram = "opendungeons";
     homepage = "https://opendungeons.github.io";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl3Plus
       zlib
       mit
@@ -76,6 +76,6 @@ stdenv.mkDerivation {
       ofl
       cc-by-30
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }
