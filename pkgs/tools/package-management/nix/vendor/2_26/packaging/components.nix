@@ -51,7 +51,7 @@ let
 
   setVersionLayer = finalAttrs: prevAttrs: {
     preConfigure =
-      prevAttrs.prevAttrs or ""
+      prevAttrs.preConfigure or ""
       +
         # Update the repo-global .version file.
         # Symlink ./.version points there, but by default only workDir is writable.
