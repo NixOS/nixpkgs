@@ -260,6 +260,7 @@ in
     maintainers = with maintainers; [
       yayayayaka
       teutat3s
+      tomasajt
     ];
     mainProgram = "electron";
     hydraPlatforms =
