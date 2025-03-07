@@ -7,7 +7,7 @@
   node-gyp,
   python3,
   util-linux,
-  ffmpeg,
+  ffmpeg-headless,
 
   # Current derivation only supports linux-x86_64 (contributions welcome, without libTensorflow builtin webassembly can be used)
   useLibTensorflow ? stdenv.isx86_64 && stdenv.isLinux,
@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
     # Skip trying to install it... (less warnings in the log)
     sed  -i '/public function run/areturn ; //skip' recognize/lib/Migration/InstallDeps.php
 
-    ln -s ${lib.getExe ffmpeg} recognize/node_modules/ffmpeg-static/ffmpeg
+    ln -s ${lib.getExe ffmpeg-headless} recognize/node_modules/ffmpeg-static/ffmpeg
   '';
 
   nativeBuildInputs = lib.optionals useLibTensorflow [
