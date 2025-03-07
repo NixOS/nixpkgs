@@ -23,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "gitingest";
-  version = "0.1.3";
+  version = "0.1.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cyclotruc";
     repo = "gitingest";
     tag = "v${version}";
-    hash = "sha256-RGrenW0modLH9h5pQOexPvEDQ9Bczoj1qInYmgUoGdo=";
+    hash = "sha256-2zt4pYgj5fieYS74QCMA9Kw9FUNb13ZJB/tX7WkMQew=";
   };
 
   build-system = [
@@ -71,7 +71,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/cyclotruc/gitingest/releases/tag/v${version}";
+    changelog = "https://github.com/cyclotruc/gitingest/releases/tag/${src.tag}";
     description = "Replace 'hub' with 'ingest' in any github url to get a prompt-friendly extract of a codebase";
     homepage = "https://github.com/cyclotruc/gitingest";
     license = lib.licenses.mit;
