@@ -48,7 +48,7 @@ runCommand "flutter-engine-source-${version}-${buildPlatform.system}-${targetPla
     gclient = writeText "flutter-engine-${version}.gclient" ''
       solutions = [{
         "managed": False,
-        "name": "${lib.optionalString (lib.versionAtLeast version "3.29") "engine/"}src/flutter",
+        "name": "${lib.optionalString (lib.versionAtLeast flutterVersion "3.29") "engine/"}src/flutter",
         "url": "${url}",
         "custom_vars": {
           "download_fuchsia_deps": False,
@@ -94,7 +94,7 @@ runCommand "flutter-engine-source-${version}-${buildPlatform.system}-${targetPla
 
     ''
     + (
-      if lib.versionAtLeast version "3.29" then
+      if lib.versionAtLeast flutterVersion "3.29" then
         ''
           mkdir -p source
           cp $gclient source/.gclient
@@ -112,8 +112,9 @@ runCommand "flutter-engine-source-${version}-${buildPlatform.system}-${targetPla
       export PATH=$PATH:$depot_tools
       python3 $depot_tools/gclient.py sync --no-history --shallow --nohooks -j $NIX_BUILD_CORES
     ''
-    + lib.optionalString (lib.versionAtLeast version "3.29") ''
-      mv engine $out
+    + lib.optionalString (lib.versionAtLeast flutterVersion "3.29") ''
+      cp -r engine/src/flutter/third_party/* engine/src/flutter/engine/src/flutter/third_party/
+      mv engine/src/flutter/engine $out
     ''
     + ''
       find $out -name '.git' -exec rm -rf {} \; || true
