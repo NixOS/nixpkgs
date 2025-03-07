@@ -83,6 +83,9 @@ let
     exit 0
   '';
   maybeDebugFlag = lib.optionalString (buildType != "release") "--debug";
+  maybeTargetFlag = lib.optionalString (
+    stdenv.buildPlatform != stdenv.hostPlatform
+  ) "--target ${stdenv.hostPlatform.config}";
   maybeEnterBuildAndTestSubdir = lib.optionalString (buildAndTestSubdir != null) ''
     export CARGO_TARGET_DIR="$(pwd)/target"
     pushd "${buildAndTestSubdir}"
@@ -90,24 +93,30 @@ let
   maybeLeaveBuildAndTestSubdir = lib.optionalString (buildAndTestSubdir != null) "popd";
 
   pgrxPostgresMajor = lib.versions.major postgresql.version;
-  preBuildAndTest = ''
-    export PGRX_HOME="$(mktemp -d)"
-    export PGDATA="$PGRX_HOME/data-${pgrxPostgresMajor}/"
-    cargo-pgrx pgrx init "--pg${pgrxPostgresMajor}" ${lib.getDev postgresql}/bin/pg_config
+  preBuildAndTest =
+    ''
+      export PGRX_HOME="$(mktemp -d)"
 
-    # unix sockets work in sandbox, too.
-    export PGHOST="$(mktemp -d)"
-    cat > "$PGDATA/postgresql.conf" <<EOF
-    listen_addresses = ''\''
-    unix_socket_directories = '$PGHOST'
-    EOF
+      export PGDATA="$PGRX_HOME/data-${pgrxPostgresMajor}/"
+      cargo-pgrx pgrx init "--pg${pgrxPostgresMajor}" ${lib.getDev postgresql}/bin/pg_config${
+        lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) "_native --no-run"
+      }
+    ''
+    + lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
 
-    # This is primarily for Mac or other Nix systems that don't use the nixbld user.
-    export USER="$(whoami)"
-    pg_ctl start
-    createuser --superuser --createdb "$USER" || true
-    pg_ctl stop
-  '';
+      # unix sockets work in sandbox, too.
+      export PGHOST="$(mktemp -d)"
+      cat > "$PGDATA/postgresql.conf" <<EOF
+      listen_addresses = ''\''
+      unix_socket_directories = '$PGHOST'
+      EOF
+
+      # This is primarily for Mac or other Nix systems that don't use the nixbld user.
+      export USER="$(whoami)"
+      pg_ctl start
+      createuser --superuser --createdb "$USER" || true
+      pg_ctl stop
+    '';
 
   argsForBuildRustPackage = builtins.removeAttrs args [
     "postgresql"
@@ -140,8 +149,10 @@ let
       PGRX_BUILD_FLAGS="--frozen -j $NIX_BUILD_CORES ${builtins.concatStringsSep " " cargoBuildFlags}" \
       ${lib.optionalString stdenv.hostPlatform.isDarwin ''RUSTFLAGS="''${RUSTFLAGS:+''${RUSTFLAGS} }-Clink-args=-Wl,-undefined,dynamic_lookup"''} \
       cargo pgrx package \
-        --pg-config ${lib.getDev postgresql}/bin/pg_config \
-        ${maybeDebugFlag} \
+        --pg-config ${lib.getDev postgresql}/bin/pg_config${
+          lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) "_native"
+        } \
+        ${maybeDebugFlag} ${maybeTargetFlag} \
         --features "${builtins.concatStringsSep " " buildFeatures}" \
         --out-dir "$out"
 
