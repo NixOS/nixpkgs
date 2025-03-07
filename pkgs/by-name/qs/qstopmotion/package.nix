@@ -1,78 +1,73 @@
 {
   lib,
   stdenv,
-  libsForQt5,
   fetchurl,
-  ffmpeg,
-  guvcview,
+
+  # nativeBuildInputs
   cmake,
-  ninja,
-  libxml2,
-  gettext,
-  pkg-config,
-  libgphoto2,
-  gphoto2,
-  v4l-utils,
-  libv4l,
-  pcre,
   extra-cmake-modules,
+  gettext,
+  gphoto2,
+  libgphoto2,
+  libsForQt5,
+  libv4l,
+  libxml2,
+  ninja,
+  pkg-config,
+
+  # buildInputs
+  guvcview,
+  pcre,
+  v4l-utils,
+
+  ffmpeg,
 }:
 
-let
-  guvcview' = guvcview.override {
-    useQt = true;
-    useGtk = false;
-  };
-
-  inherit (libsForQt5)
-    qtbase
-    qtmultimedia
-    qtquickcontrols
-    qtimageformats
-    qtxmlpatterns
-    qwt
-    ;
-in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qstopmotion";
   version = "2.5.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/${pname}/Version_${
-      builtins.replaceStrings [ "." ] [ "_" ] version
-    }/${pname}-${version}-Source.tar.gz";
-    sha256 = "sha256-jyBUyadkSuQKXOrr5XZ1jy6of1Qw8S2HPxuOrPc7RnE=";
+    url = "mirror://sourceforge/project/qstopmotion/Version_${
+      lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version
+    }/qstopmotion-${finalAttrs.version}-Source.tar.gz";
+    hash = "sha256-jyBUyadkSuQKXOrr5XZ1jy6of1Qw8S2HPxuOrPc7RnE=";
   };
 
-  buildInputs = [
-    qtbase
-    qtmultimedia
-    qtquickcontrols
-    qtimageformats
-    qtxmlpatterns
-    v4l-utils
-    libv4l
-    pcre
-    guvcview'
-    qwt
-  ];
-
   nativeBuildInputs = [
-    pkg-config
     cmake
     extra-cmake-modules
-    ninja
     gettext
-    libgphoto2
     gphoto2
-    libxml2
+    libgphoto2
+    libsForQt5.wrapQtAppsHook
     libv4l
+    libxml2
+    ninja
+    pkg-config
   ];
 
-  patchPhase = ''
+  buildInputs = [
+    (guvcview.override {
+      useQt = true;
+      useGtk = false;
+    })
+    libsForQt5.qtbase
+    libsForQt5.qtimageformats
+    libsForQt5.qtmultimedia
+    libsForQt5.qtquickcontrols
+    libsForQt5.qtxmlpatterns
+    libsForQt5.qwt
+    libv4l
+    pcre
+    v4l-utils
+  ];
+
+  postPatch = ''
     substituteInPlace CMakeLists.txt \
-      --replace "find_package(Qt5 REQUIRED COMPONENTS Core Widgets Xml" \
-                "find_package(Qt5 REQUIRED COMPONENTS Core Widgets Xml Multimedia"
+      --replace-fail \
+        "find_package(Qt5 REQUIRED COMPONENTS Core Widgets Xml" \
+        "find_package(Qt5 REQUIRED COMPONENTS Core Widgets Xml Multimedia"
     grep -rl 'qwt' . | xargs sed -i 's@<qwt/qwt_slider.h>@<qwt_slider.h>@g'
   '';
 
@@ -83,7 +78,7 @@ stdenv.mkDerivation rec {
     (lib.makeBinPath [ ffmpeg ])
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.qstopmotion.org";
     description = "Create stopmotion animation with a (web)camera";
     longDescription = ''
@@ -92,11 +87,9 @@ stdenv.mkDerivation rec {
       imported from a camera or from the harddrive and export the
       animation to different video formats such as mpeg or avi.
     '';
-
     license = lib.licenses.gpl2Plus;
-    maintainers = [ maintainers.leenaars ];
-    broken = stdenv.hostPlatform.isAarch64;
+    maintainers = [ lib.maintainers.leenaars ];
     platforms = lib.platforms.gnu ++ lib.platforms.linux;
     mainProgram = "qstopmotion";
   };
-}
+})
