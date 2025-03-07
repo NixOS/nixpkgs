@@ -1,10 +1,10 @@
-diff --git a/windmill-worker/nsjail/run.python3.config.proto b/windmill-worker/nsjail/run.python3.config.proto
-index b49b9cfbf..35241bbd0 100644
---- a/windmill-worker/nsjail/run.python3.config.proto
-+++ b/windmill-worker/nsjail/run.python3.config.proto
-@@ -18,16 +18,24 @@ keep_caps: false
+diff --git a/windmill-worker/nsjail/run.bun.config.proto b/windmill-worker/nsjail/run.bun.config.proto
+index 527d49cf7..b5e64beec 100644
+--- a/windmill-worker/nsjail/run.bun.config.proto
++++ b/windmill-worker/nsjail/run.bun.config.proto
+@@ -17,16 +17,24 @@ clone_newcgroup: false
+ keep_caps: false
  keep_env: true
- mount_proc: true
  
 +mount {
 +    src: "/nix/store"
@@ -26,8 +26,8 @@ index b49b9cfbf..35241bbd0 100644
 +    mandatory: false
  }
  
- 
-@@ -43,6 +51,7 @@ mount {
+ mount {
+@@ -47,6 +55,7 @@ mount {
      src: "/usr"
      dst: "/usr"
  	is_bind: true

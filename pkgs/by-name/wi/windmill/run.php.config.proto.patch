@@ -1,8 +1,8 @@
-diff --git a/windmill-worker/nsjail/run.python3.config.proto b/windmill-worker/nsjail/run.python3.config.proto
-index b49b9cfbf..35241bbd0 100644
---- a/windmill-worker/nsjail/run.python3.config.proto
-+++ b/windmill-worker/nsjail/run.python3.config.proto
-@@ -18,16 +18,24 @@ keep_caps: false
+diff --git a/windmill-worker/nsjail/run.php.config.proto b/windmill-worker/nsjail/run.php.config.proto
+index d3752d33b..9e4b19793 100644
+--- a/windmill-worker/nsjail/run.php.config.proto
++++ b/windmill-worker/nsjail/run.php.config.proto
+@@ -15,16 +15,24 @@ keep_caps: false
  keep_env: true
  mount_proc: true
  
@@ -27,7 +27,7 @@ index b49b9cfbf..35241bbd0 100644
  }
  
  
-@@ -43,6 +51,7 @@ mount {
+@@ -40,6 +48,7 @@ mount {
      src: "/usr"
      dst: "/usr"
  	is_bind: true
