@@ -3374,6 +3374,8 @@ self: super: with self; {
 
   dissect-ffs = callPackage ../development/python-modules/dissect-ffs { };
 
+  dissect-fve = callPackage ../development/python-modules/dissect-fve { };
+
   dissect-esedb = callPackage ../development/python-modules/dissect-esedb { };
 
   dissect-etl = callPackage ../development/python-modules/dissect-etl { };
@@ -7616,6 +7618,8 @@ self: super: with self; {
   liccheck = callPackage ../development/python-modules/liccheck { };
 
   license-expression = callPackage ../development/python-modules/license-expression { };
+
+  lida = callPackage ../development/python-modules/lida { };
 
   lief = (toPythonModule (pkgs.lief.override {
     inherit python;
