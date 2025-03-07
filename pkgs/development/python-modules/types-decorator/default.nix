@@ -7,15 +7,16 @@
 
 buildPythonPackage rec {
   pname = "types-decorator";
-  version = "5.1.8.20240310";
+  version = "5.2.0.20250224";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-UuMWsDeDiGqKKr3CKPcHFoC6ZYlFRc0ghevjz4hoSg4=";
+    pname = "types_decorator";
+    inherit version;
+    hash = "sha256-1oqi9Vz1BFEN19AbSeaN0yw6IA0LwMu4RZXboaEZVP8=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
   # Modules doesn't have tests
   doCheck = false;
