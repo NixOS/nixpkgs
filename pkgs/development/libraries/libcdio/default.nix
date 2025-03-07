@@ -20,6 +20,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-b4+99NGJz2Pyp6FUnFFs1yDHsiLHqq28kkom50WkhTk=";
   };
 
+  env = lib.optionalAttrs stdenv.is32bit {
+    NIX_CFLAGS_COMPILE = "-D_LARGEFILE64_SOURCE";
+  };
+
   postPatch = ''
     patchShebangs .
   '';

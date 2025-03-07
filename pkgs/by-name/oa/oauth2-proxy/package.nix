@@ -1,10 +1,11 @@
 {
   lib,
-  buildGoModule,
+  buildGo123Module,
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+# tests fail in a weird way on 1.24
+buildGo123Module rec {
   pname = "oauth2-proxy";
   version = "7.8.1";
 
