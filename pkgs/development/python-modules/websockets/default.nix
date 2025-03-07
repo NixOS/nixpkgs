@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "websockets";
-  version = "15.0";
+  version = "15.0.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "aaugustin";
     repo = "websockets";
     tag = version;
-    hash = "sha256-PlR2a0KNycdq/FhUX0qpthrrRckuE61FYV4uqHOMsY0=";
+    hash = "sha256-DC1nK+TvCoCqchyWJOyT4Ul4gkTYXixu7XmTqvytqEo=";
   };
 
   build-system = [ setuptools ];
