@@ -8,13 +8,23 @@
 
 stdenv.mkDerivation rec {
   pname = "csfml";
-  version = "2.5.2";
+  version = "2.6.1";
   src = fetchFromGitHub {
     owner = "SFML";
     repo = "CSFML";
     rev = version;
-    sha256 = "sha256-A5C/4SnxUX7mW1wkPWJWX3dwMhrJ79DkBuZ7UYzTOqE=";
+    sha256 = "sha256-ECt0ySDpYWF0zuDBSnQzDwUm4Xj4z1+XSC55D6yivac=";
   };
+
+  # Fix incorrect path joining in cmake
+  # https://github.com/NixOS/nixpkgs/issues/144170
+  postPatch = ''
+    substituteInPlace tools/pkg-config/csfml-*.pc.in \
+      --replace-fail \
+        'libdir=''${exec_prefix}/@CMAKE_INSTALL_LIBDIR@' \
+        "libdir=@CMAKE_INSTALL_FULL_LIBDIR@"
+  '';
+
   nativeBuildInputs = [ cmake ];
   buildInputs = [ sfml ];
   cmakeFlags = [ "-DCMAKE_MODULE_PATH=${sfml}/share/SFML/cmake/Modules/" ];
