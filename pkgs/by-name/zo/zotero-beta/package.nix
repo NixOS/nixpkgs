@@ -20,7 +20,7 @@
 
 stdenv.mkDerivation rec {
   pname = "zotero";
-  version = "7.0.0-beta.111+b4f6c050e";
+  version = "7.1-beta.17+05f3ea3b8";
 
   src =
     let
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     in
     fetchurl {
       url = "https://download.zotero.org/client/beta/${escapedVersion}/Zotero-${escapedVersion}_linux-x86_64.tar.bz2";
-      hash = "sha256-pZsmS4gKCT8UAjz9IJg5C7n4kk7bWT/7H5ONF20CzPM=";
+      hash = "sha256-L2pUBoZXrWVc2aYnnuFih64OwNJZtJa+gQ2EPRq0yxI=";
     };
 
   dontPatchELF = true;
