@@ -4,9 +4,11 @@
   src,
   version,
   tilt-assets,
+  stdenv,
+  installShellFiles,
 }:
 
-buildGoModule rec {
+(buildGoModule rec {
   pname = "tilt";
   /*
     Do not use "dev" as a version. If you do, Tilt will consider itself
@@ -21,6 +23,8 @@ buildGoModule rec {
 
   ldflags = [ "-X main.version=${version}" ];
 
+  nativeBuildInputs = [ installShellFiles ];
+
   preBuild = ''
     mkdir -p pkg/assets/build
     cp -r ${tilt-assets}/* pkg/assets/build/
@@ -33,4 +37,14 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ anton-dessiatov ];
   };
-}
+}).overrideAttrs
+  (old: {
+    postInstall =
+      (old.postInstall or "")
+      + ''
+        installShellCompletion --cmd tilt \
+          --bash <($out/bin/tilt completion bash) \
+          --fish <($out/bin/tilt completion fish) \
+          --zsh <($out/bin/tilt completion zsh)
+      '';
+  })
