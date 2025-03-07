@@ -996,6 +996,8 @@ self: super: with self; {
 
   atomicwrites-homeassistant = callPackage ../development/python-modules/atomicwrites-homeassistant { };
 
+  atopile = callPackage ../development/python-modules/atopile { };
+
   atomman = callPackage ../development/python-modules/atomman { };
 
   atproto = callPackage ../development/python-modules/atproto { };
