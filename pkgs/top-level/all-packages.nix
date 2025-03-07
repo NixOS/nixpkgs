@@ -4914,6 +4914,8 @@ with pkgs;
   semgrep = python3.pkgs.toPythonApplication python3.pkgs.semgrep;
   inherit (semgrep.passthru) semgrep-core;
 
+  semgrep-search = python3.pkgs.toPythonApplication python3.pkgs.semgrep-search;
+
   seqdiag = with python3Packages; toPythonApplication seqdiag;
 
   shadowsocks-rust = callPackage ../tools/networking/shadowsocks-rust { };
