@@ -557,6 +557,7 @@ let
   sdInitrdGidsAreUnique = idsAreUnique (filterAttrs (n: g: g.gid != null) config.boot.initrd.systemd.groups) "gid";
   groupNames = lib.mapAttrsToList (n: g: g.name) cfg.groups;
   usersWithoutExistingGroup = lib.filterAttrs (n: u: u.group != "" && !lib.elem u.group groupNames) cfg.users;
+  usersWithNullShells = attrNames (filterAttrs (name: cfg: cfg.shell == null) cfg.users);
 
   spec = pkgs.writeText "users-groups.json" (builtins.toJSON {
     inherit (cfg) mutableUsers;
@@ -910,12 +911,21 @@ in {
               ${lib.concatStringsSep "\n  " (map mkConfigHint missingGroups)}
           '';
       }
+      {
+        assertion = !cfg.mutableUsers -> length usersWithNullShells == 0;
+        message = ''
+          users.mutableUsers = false has been set,
+          but found users that have their shell set to null.
+          If you wish to disable login, set their shell to pkgs.shadow (the default).
+          Misconfigured users: ${lib.concatStringsSep " " usersWithNullShells}
+        '';
+      }
       { # If mutableUsers is false, to prevent users creating a
         # configuration that locks them out of the system, ensure that
         # there is at least one "privileged" account that has a
         # password or an SSH authorized key. Privileged accounts are
         # root and users in the wheel group.
-        # The check does not apply when users.disableLoginPossibilityAssertion
+        # The check does not apply when users.allowNoPasswordLogin
         # The check does not apply when users.mutableUsers
         assertion = !cfg.mutableUsers -> !cfg.allowNoPasswordLogin ->
           any id (mapAttrsToList (name: cfg:
