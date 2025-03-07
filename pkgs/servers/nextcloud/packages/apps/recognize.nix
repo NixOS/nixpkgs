@@ -9,7 +9,7 @@
   util-linux,
   ffmpeg,
 
-  # Current derivation only suports linux-x86_64 (contributions welcome, without libTensorflow builtin webassembly can be used)
+  # Current derivation only supports linux-x86_64 (contributions welcome, without libTensorflow builtin webassembly can be used)
   useLibTensorflow ? stdenv.isx86_64 && stdenv.isLinux,
 
   ncVersion,
@@ -37,9 +37,8 @@ let
   currentVersionInfo = latestVersionForNc.${ncVersion};
 in
 stdenv.mkDerivation rec {
-
   pname = "nextcloud-app-recognize";
-  version = currentVersionInfo.version;
+  inherit (currentVersionInfo) version;
 
   srcs =
     [
@@ -77,9 +76,9 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     # Make it clear we are not reading the node in settings
-    sed -i "/'node_binary'/s:'""':'Nix Controled':" recognize/lib/Service/SettingsService.php
+    sed -i "/'node_binary'/s:'""':'Nix Controlled':" recognize/lib/Service/SettingsService.php
 
-    # Replace all occurences of node (and check that we actually remved them all)
+    # Replace all occurrences of node (and check that we actually removed them all)
     test "$(grep "get[a-zA-Z]*('node_binary'" recognize/lib/**/*.php | wc -l)" -gt 0
     substituteInPlace recognize/lib/**/*.php \
       --replace-quiet "\$this->settingsService->getSetting('node_binary')" "'${lib.getExe nodejs}'" \
