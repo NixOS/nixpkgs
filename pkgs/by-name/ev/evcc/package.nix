@@ -117,5 +117,6 @@ buildGo124Module rec {
     description = "EV Charge Controller";
     homepage = "https://evcc.io";
     changelog = "https://github.com/evcc-io/evcc/releases/tag/${version}";
+    mainProgram = "evcc";
   };
 }
