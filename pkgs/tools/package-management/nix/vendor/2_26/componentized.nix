@@ -31,7 +31,6 @@ let
             officialRelease
             pkgs
             src
-            stdenv
             ;
         };
       };
