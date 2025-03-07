@@ -79,8 +79,7 @@ buildNpmPackage rec {
             which
           ]
         } \
-        --add-flags "$out/share/teams-for-linux/app.asar" \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
+        --add-flags "$out/share/teams-for-linux/app.asar"
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       mkdir -p $out/Applications

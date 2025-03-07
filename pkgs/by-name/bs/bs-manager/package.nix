@@ -67,7 +67,6 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper ${lib.getExe electron} $out/bin/bs-manager \
       --set-default ELECTRON_FORCE_IS_PACKAGED 1 \
       --add-flags $out/opt/BSManager/resources \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       --inherit-argv0
 
     runHook postInstall
