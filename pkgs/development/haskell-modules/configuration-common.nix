@@ -71,6 +71,12 @@ self: super: {
             ++ lib.optionals (
               scope.unix == null
               && lib.elem self.ghc.version [
+                "9.6.1"
+                "9.6.2"
+                "9.6.3"
+                "9.6.4"
+                "9.6.5"
+                "9.6.6"
                 "9.8.1"
                 "9.8.2"
                 "9.8.3"
