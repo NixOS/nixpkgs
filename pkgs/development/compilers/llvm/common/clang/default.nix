@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , llvm_meta
-, patches ? []
 , src ? null
 , monorepoSrc ? null
 , runCommand
@@ -16,6 +15,9 @@
 , fixDarwinDylibNames
 , enableManpages ? false
 , devExtraCmakeFlags ? []
+, replaceVars
+, getVersionFile
+, fetchpatch
 }:
 
 let
@@ -32,11 +34,90 @@ let
     '') else src;
 
   self = stdenv.mkDerivation (finalAttrs: rec {
-    inherit pname version patches;
+    inherit pname version;
 
     src = src';
 
     sourceRoot = "${src.name}/${pname}";
+
+    patches =
+      [
+        (getVersionFile "clang/purity.patch")
+        # https://reviews.llvm.org/D51899
+        (getVersionFile "clang/gnu-install-dirs.patch")
+      ]
+      ++ lib.optionals (lib.versionOlder release_version "20") [
+        # https://github.com/llvm/llvm-project/pull/116476
+        # prevent clang ignoring warnings / errors for unsuppored
+        # options when building & linking a source file with trailing
+        # libraries. eg: `clang -munsupported hello.c -lc`
+        ./clang-unsupported-option.patch
+      ]
+        ++
+          lib.optional (lib.versions.major release_version == "13")
+            # Revert of https://reviews.llvm.org/D100879
+            # The malloc alignment assumption is incorrect for jemalloc and causes
+            # mis-compilation in firefox.
+            # See: https://bugzilla.mozilla.org/show_bug.cgi?id=1741454
+            (getVersionFile "clang/revert-malloc-alignment-assumption.patch")
+        ++ lib.optional (lib.versionOlder release_version "17") (
+          if lib.versionAtLeast release_version "14" then
+            fetchpatch {
+              name = "ignore-nostd-link.patch";
+              url = "https://github.com/llvm/llvm-project/commit/5b77e752dcd073846b89559d6c0e1a7699e58615.patch";
+              relative = "clang";
+              hash = "sha256-qzSAmoGY+7POkDhcGgQRPaNQ3+7PIcIc9cZuiE/eLkc=";
+            }
+          else
+            ./ignore-nostd-link-13.diff
+        )
+        ++ [
+          (replaceVars
+            (
+              if (lib.versionOlder release_version "16") then
+                ./clang-11-15-LLVMgold-path.patch
+              else
+                ./clang-at-least-16-LLVMgold-path.patch
+            )
+            {
+              libllvmLibdir = "${libllvm.lib}/lib";
+            }
+          )
+        ]
+        # Backport version logic from Clang 16. This is needed by the following patch.
+        ++ lib.optional (lib.versions.major release_version == "15") (fetchpatch {
+          name = "clang-darwin-Use-consistent-version-define-stringifying-logic.patch";
+          url = "https://github.com/llvm/llvm-project/commit/60a33ded751c86fff9ac1c4bdd2b341fbe4b0649.patch?full_index=1";
+          includes = [ "lib/Basic/Targets/OSTargets.cpp" ];
+          stripLen = 1;
+          hash = "sha256-YVTSg5eZLz3po2AUczPNXCK26JA3CuTh6Iqp7hAAKIs=";
+        })
+        # Backport `__ENVIRONMENT_OS_VERSION_MIN_REQUIRED__` support from Clang 17.
+        # This is needed by newer SDKs (14+).
+        ++
+          lib.optional
+            (
+              lib.versionAtLeast (lib.versions.major release_version) "15"
+              && lib.versionOlder (lib.versions.major release_version) "17"
+            )
+            (fetchpatch {
+              name = "clang-darwin-An-OS-version-preprocessor-define.patch";
+              url = "https://github.com/llvm/llvm-project/commit/c8e2dd8c6f490b68e41fe663b44535a8a21dfeab.patch?full_index=1";
+              includes = [ "lib/Basic/Targets/OSTargets.cpp" ];
+              stripLen = 1;
+              hash = "sha256-Vs32kql7N6qtLqc12FtZHURcbenA7+N3E/nRRX3jdig=";
+            })
+        ++ lib.optional (lib.versions.major release_version == "18") (fetchpatch {
+          name = "tweak-tryCaptureVariable-for-unevaluated-lambdas.patch";
+          url = "https://github.com/llvm/llvm-project/commit/3d361b225fe89ce1d8c93639f27d689082bd8dad.patch";
+          # TreeTransform.h is not affected in LLVM 18.
+          excludes = [
+            "docs/ReleaseNotes.rst"
+            "lib/Sema/TreeTransform.h"
+          ];
+          stripLen = 1;
+          hash = "sha256-1NKej08R9SPlbDY/5b0OKUsHjX07i9brR84yXiPwi7E=";
+        });
 
     nativeBuildInputs = [ cmake ]
       ++ (lib.optional (lib.versionAtLeast release_version "15") ninja)
