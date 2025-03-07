@@ -25,6 +25,7 @@ python3Packages.buildPythonApplication rec {
     kicad-small
   ];
 
+  # has no tests
   doCheck = false;
 
   meta = {
