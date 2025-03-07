@@ -1040,12 +1040,12 @@ in {
           restartTriggers = [ overrideConfig ];
           script = ''
             ${optionalString (c.dbpassFile != null) ''
-              if [ -z "$(<$CREDENTIALS_DIRECTORY/dbpass)" ]; then
+              if [ -z "$(<"$CREDENTIALS_DIRECTORY/dbpass")" ]; then
                 echo "dbpassFile ${c.dbpassFile} is empty!"
                 exit 1
               fi
             ''}
-            if [ -z "$(<$CREDENTIALS_DIRECTORY/adminpass)" ]; then
+            if [ -z "$(<"$CREDENTIALS_DIRECTORY/adminpass")" ]; then
               echo "adminpassFile ${c.adminpassFile} is empty!"
               exit 1
             fi
