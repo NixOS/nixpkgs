@@ -59,7 +59,6 @@ mkAppleDerivation {
   env.NIX_CFLAGS_COMPILE = "-I${privateHeaders}/include";
 
   buildInputs = [
-    apple-sdk.privateFrameworksHook
     libutil
     removefile
   ];

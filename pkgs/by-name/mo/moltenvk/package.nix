@@ -13,6 +13,7 @@
   spirv-tools,
   vulkan-headers,
   xcbuildHook,
+  cctools,
   enableStatic ? stdenv.hostPlatform.isStatic,
   # MoltenVK supports using private APIs to implement some Vulkan functionality.
   # Applications that use private APIs can’t be distributed on the App Store,
@@ -37,7 +38,10 @@ stdenv.mkDerivation (finalAttrs: {
     vulkan-headers
   ];
 
-  nativeBuildInputs = [ xcbuildHook ];
+  nativeBuildInputs = [
+    xcbuildHook
+    cctools.libtool
+  ];
 
   outputs = [
     "out"
