@@ -1102,6 +1102,10 @@ let
       postPatch = "patchShebangs configure";
     });
 
+    findpython = old.findpython.overrideAttrs (attrs: {
+      propagatedBuildInputs = attrs.propagatedBuildInputs ++ [ pkgs.python3 ];
+    });
+
     stringi = old.stringi.overrideAttrs (attrs: {
       postInstall = let
         icuName = "icudt52l";
