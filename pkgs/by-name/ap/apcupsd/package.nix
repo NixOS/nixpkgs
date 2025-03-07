@@ -4,7 +4,7 @@
   fetchurl,
   pkg-config,
   systemd,
-  util-linux,
+  unixtools,
   coreutils,
   wall,
   hostname,
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkg-config
     man
-    util-linux
+    unixtools.col
   ];
   buildInputs = lib.optional enableCgiScripts gd;
 
