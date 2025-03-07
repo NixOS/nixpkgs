@@ -40,7 +40,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xdg-desktop-portal";
-  version = "1.19.2";
+  version = "1.20.0";
 
   outputs = [
     "out"
@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "flatpak";
     repo = "xdg-desktop-portal";
     tag = finalAttrs.version;
-    hash = "sha256-LV9+t8VAA+gdUKzPMALP9q6EE0Y2hJe/i8zfh7Zgmu4=";
+    hash = "sha256-FHMa8fTr8qNEM5WptuMjMs/XOsvmFxi8pDaCrwJ3/ww=";
   };
 
   patches = [
@@ -131,6 +131,7 @@ stdenv.mkDerivation (finalAttrs: {
     python3.pkgs.python-dbusmock
     python3.pkgs.pygobject3
     python3.pkgs.dbus-python
+    umockdev
   ];
 
   mesonFlags =
@@ -156,16 +157,9 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace meson.build \
       --replace-fail "find_program('bwrap'"  "find_program('${lib.getExe bubblewrap}'"
 
-    # Disable test failing with libportal 0.9.0
-    ${
-      assert (lib.versionOlder finalAttrs.version "1.20.0");
-      "# TODO: Remove when updating to x-d-p 1.20.0"
-    }
-    substituteInPlace tests/test-portals.c \
-      --replace-fail 'g_test_add_func ("/portal/notification/bad-arg", test_notification_bad_arg);' ""
-
     patchShebangs src/generate-method-info.py
     patchShebangs doc/fix-rst-dbus.py
+    patchShebangs tests/run-test.sh
   '';
 
   preCheck = ''
