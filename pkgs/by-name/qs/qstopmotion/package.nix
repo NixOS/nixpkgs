@@ -1,13 +1,8 @@
 {
   lib,
   stdenv,
-  mkDerivation,
+  libsForQt5,
   fetchurl,
-  qtbase,
-  qtmultimedia,
-  qtquickcontrols,
-  qtimageformats,
-  qtxmlpatterns,
   ffmpeg,
   guvcview,
   cmake,
@@ -20,11 +15,25 @@
   v4l-utils,
   libv4l,
   pcre,
-  qwt,
   extra-cmake-modules,
 }:
 
-mkDerivation rec {
+let
+  guvcview' = guvcview.override {
+    useQt = true;
+    useGtk = false;
+  };
+
+  inherit (libsForQt5)
+    qtbase
+    qtmultimedia
+    qtquickcontrols
+    qtimageformats
+    qtxmlpatterns
+    qwt
+    ;
+in
+stdenv.mkDerivation rec {
   pname = "qstopmotion";
   version = "2.5.2";
 
@@ -44,7 +53,7 @@ mkDerivation rec {
     v4l-utils
     libv4l
     pcre
-    guvcview
+    guvcview'
     qwt
   ];
 
