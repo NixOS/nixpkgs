@@ -89,7 +89,6 @@ buildNpmPackage {
 
     makeWrapper '${lib.getExe electron}' $out/bin/anytype \
       --set-default ELECTRON_IS_DEV 0 \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       --add-flags $out/lib/node_modules/anytype/ \
       --add-flags ${lib.escapeShellArg commandLineArgs}
 

@@ -59,8 +59,7 @@ buildNpmPackage {
 
   postFixup = ''
     makeWrapper $out/dist/geforcenow-electron $out/bin/geforcenow-electron \
-      --add-flags "--no-sandbox --disable-gpu-sandbox" \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
+      --add-flags "--no-sandbox --disable-gpu-sandbox"
 
     substituteInPlace $out/share/applications/com.github.hmlendea.geforcenow-electron.desktop \
       --replace-fail "/opt/geforcenow-electron/geforcenow-electron" "geforcenow-electron" \
