@@ -21,8 +21,8 @@
   pkg-config,
   unzip,
   libX11,
-  libXNVCtrl,
   wayland,
+  libXNVCtrl,
   nlohmann_json,
   spdlog,
   libxkbcommon,
@@ -30,11 +30,16 @@
   glfw,
   xorg,
   x11Support ? true,
+  waylandSupport ? true,
   nvidiaSupport ? true,
   gamescopeSupport ? true, # build mangoapp and mangohudctl
   lowerBitnessSupport ? stdenv.hostPlatform.isx86_64, # Support 32 bit on 64bit
   nix-update-script,
 }:
+
+assert lib.assertMsg (
+  x11Support || waylandSupport
+) "either x11Support or waylandSupport should be enabled";
 
 assert lib.assertMsg (nvidiaSupport -> x11Support) "nvidiaSupport requires x11Support";
 assert lib.assertMsg (gamescopeSupport -> x11Support) "gamescopeSupport requires x11Support";
@@ -163,10 +168,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonFlags =
     [
-      "-Dwith_wayland=enabled"
       "-Duse_system_spdlog=enabled"
       "-Dtests=disabled" # amdgpu test segfaults in nix sandbox
       (lib.mesonEnable "with_x11" x11Support)
+      (lib.mesonEnable "with_wayland" waylandSupport)
       (lib.mesonEnable "with_xnvctrl" nvidiaSupport)
     ]
     ++ lib.optionals gamescopeSupport [
@@ -183,12 +188,11 @@ stdenv.mkDerivation (finalAttrs: {
       ninja
       pkg-config
       unzip
-
-      # Only the headers are used from these packages
-      # The corresponding libraries are loaded at runtime from the app's runpath
-      wayland
     ]
+    # Only the headers are used from these packages
+    # The corresponding libraries are loaded at runtime from the app's runpath
     ++ lib.optional x11Support libX11
+    ++ lib.optional waylandSupport wayland
     ++ lib.optional nvidiaSupport libXNVCtrl;
 
   buildInputs =
@@ -196,8 +200,8 @@ stdenv.mkDerivation (finalAttrs: {
       dbus
       nlohmann_json
       spdlog
-      libxkbcommon # required by x11 or wayland support
     ]
+    ++ lib.optional (x11Support || waylandSupport) libxkbcommon
     ++ lib.optionals gamescopeSupport [
       glew
       glfw
