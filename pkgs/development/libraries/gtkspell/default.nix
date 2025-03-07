@@ -1,15 +1,16 @@
-{ stdenv
-, lib
-, fetchurl
-, fetchpatch
-, autoreconfHook
-, docbook_xsl
-, gtk-doc
-, intltool
-, pkg-config
-, aspell
-, enchant
-, gtk2
+{
+  stdenv,
+  lib,
+  fetchurl,
+  fetchpatch,
+  autoreconfHook,
+  docbook_xsl,
+  gtk-doc,
+  intltool,
+  pkg-config,
+  aspell,
+  enchant,
+  gtk2,
 }:
 
 stdenv.mkDerivation rec {
@@ -33,6 +34,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook
     docbook_xsl
+    gtk2 # GLIB_GNU_GETTEXT
     gtk-doc
     intltool
     pkg-config

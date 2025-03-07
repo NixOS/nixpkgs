@@ -1,4 +1,13 @@
-{ lib, fetchFromGitLab, buildDunePackage, ocaml, bigstring, alcotest, cstruct, hex }:
+{
+  lib,
+  fetchFromGitLab,
+  buildDunePackage,
+  ocaml,
+  bigstring,
+  alcotest,
+  cstruct,
+  hex,
+}:
 
 buildDunePackage rec {
   pname = "uecc";

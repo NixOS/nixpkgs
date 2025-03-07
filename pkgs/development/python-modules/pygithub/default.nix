@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "pygithub";
-  version = "2.5.0";
+  version = "2.6.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -23,8 +23,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "PyGithub";
     repo = "PyGithub";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-rKa441hiO4M/sC6wxU9yeCu6IQJMZroyi7bad/j6brw=";
+    tag = "v${version}";
+    hash = "sha256-CfAgN5vxHbVyDSeP0KR1QFnL6gDQsd46Q0zosr0ALqM=";
   };
 
   build-system = [
@@ -49,7 +49,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library to access the GitHub API v3";
     homepage = "https://github.com/PyGithub/PyGithub";
-    changelog = "https://github.com/PyGithub/PyGithub/raw/v${version}/doc/changes.rst";
+    changelog = "https://github.com/PyGithub/PyGithub/raw/${src.tag}/doc/changes.rst";
     license = licenses.lgpl3Plus;
     maintainers = [ ];
   };

@@ -52,7 +52,7 @@ let
       libGL
 
       libdrm
-      mesa  # for libgbm
+      libgbm
       udev
       libudev0-shim
       libva
@@ -88,6 +88,15 @@ let
       export __EGL_VENDOR_LIBRARY_DIRS=/run/opengl-driver/share/glvnd/egl_vendor.d:/run/opengl-driver-32/share/glvnd/egl_vendor.d
       export LIBVA_DRIVERS_PATH=/run/opengl-driver/lib/dri:/run/opengl-driver-32/lib/dri
       export VDPAU_DRIVER_PATH=/run/opengl-driver/lib/vdpau:/run/opengl-driver-32/lib/vdpau
+
+      # Steam gets confused by the symlinks to bind mounts to symlinks /etc/localtime ends up being, so help it out.
+      # See also: https://github.com/flathub/com.valvesoftware.Steam/blob/28481f09f33c12b6ac7421d13af9ed1523c54ec4/steam_wrapper/steam_wrapper.py#L160
+      if [ -z ''${TZ+x} ]; then
+        new_TZ="$(readlink -f /etc/localtime | grep -P -o '(?<=/zoneinfo/).*$')"
+        if [ $? -eq 0 ]; then
+          export TZ="$new_TZ"
+        fi
+      fi
 
       set -a
       ${lib.toShellVars extraEnv}

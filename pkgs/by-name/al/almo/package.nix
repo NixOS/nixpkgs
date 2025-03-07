@@ -5,18 +5,15 @@
   gcc,
   python312Packages,
 }:
-let
-  version = "0.9.5-alpha";
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "almo";
-  inherit version;
+  version = "0.9.6-alpha";
 
   src = fetchFromGitHub {
     owner = "abap34";
     repo = "almo";
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-Cz+XDJmdp+utzwm1c7ThTNS6kfNF6r4B16tnGQSCVMc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-eNigZUeUz6ZjQsn+0S6+Orv0WoLbqGgoA3+wG5ZcSBI=";
   };
 
   buildInputs = [
@@ -45,7 +42,8 @@ stdenv.mkDerivation {
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
     homepage = "https://github.com/abap34/almo";
+    changelog = "https://github.com/abap34/almo/releases/tag/${finalAttrs.src.tag}";
     maintainers = with lib.maintainers; [ momeemt ];
     mainProgram = "almo";
   };
-}
+})

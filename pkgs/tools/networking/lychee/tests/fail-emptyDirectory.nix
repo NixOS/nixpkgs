@@ -1,4 +1,8 @@
-{ runCommand, testers, emptyDirectory }:
+{
+  runCommand,
+  testers,
+  emptyDirectory,
+}:
 let
   sitePkg = runCommand "site" { } ''
     dist=$out/dist
@@ -19,10 +23,10 @@ let
 
   failure = testers.testBuildFailure check;
 in
-  runCommand "link-check-fail" { inherit failure; } ''
-    # The details of the message might change, but we have to make sure the
-    # correct error is reported, so that we know it's not something else that
-    # went wrong.
-    grep 'empty-directory/foo.*Cannot find file' $failure/testBuildFailure.log >/dev/null
-    touch $out
-  ''
+runCommand "link-check-fail" { inherit failure; } ''
+  # The details of the message might change, but we have to make sure the
+  # correct error is reported, so that we know it's not something else that
+  # went wrong.
+  grep 'empty-directory/foo.*Cannot find file' $failure/testBuildFailure.log >/dev/null
+  touch $out
+''

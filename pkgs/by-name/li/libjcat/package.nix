@@ -1,33 +1,41 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, docbook_xml_dtd_43
-, docbook-xsl-nons
-, glib
-, json-glib
-, gnutls
-, gpgme
-, gobject-introspection
-, vala
-, gtk-doc
-, meson
-, ninja
-, pkg-config
-, python3
-, nixosTests
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  docbook_xml_dtd_43,
+  docbook-xsl-nons,
+  glib,
+  json-glib,
+  gnutls,
+  gpgme,
+  gobject-introspection,
+  vala,
+  gtk-doc,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  nixosTests,
 }:
 
 stdenv.mkDerivation rec {
   pname = "libjcat";
-  version = "0.2.2";
+  version = "0.2.3";
 
-  outputs = [ "bin" "out" "dev" "devdoc" "man" "installedTests" ];
+  outputs = [
+    "bin"
+    "out"
+    "dev"
+    "devdoc"
+    "man"
+    "installedTests"
+  ];
 
   src = fetchFromGitHub {
     owner = "hughsie";
     repo = "libjcat";
     rev = version;
-    sha256 = "sha256-Vn5Qjyo2FHCmQC2pmb1qgU81VaFKsXnSIwlSYk/8Rig=";
+    sha256 = "sha256-3Ttk5nwVLB/Ll4Xz25JODOKHsGrOxKeSF2f+6QhDI2Q=";
   };
 
   patches = [

@@ -1,11 +1,20 @@
-{ lib, stdenv, fetchurl, makeWrapper, jre
-, htmlunit-driver, chromedriver, chromeSupport ? true }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  jre,
+  htmlunit-driver,
+  chromedriver,
+  chromeSupport ? true,
+}:
 
 let
   minorVersion = "3.141";
   patchVersion = "59";
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "selenium-server-standalone";
   version = "${minorVersion}.${patchVersion}";
 
@@ -33,7 +42,10 @@ in stdenv.mkDerivation rec {
     description = "Selenium Server for remote WebDriver";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.asl20;
-    maintainers = with maintainers; [ coconnor offline ];
+    maintainers = with maintainers; [
+      coconnor
+      offline
+    ];
     mainProgram = "selenium-server";
     platforms = platforms.all;
   };

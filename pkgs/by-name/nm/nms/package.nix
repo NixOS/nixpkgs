@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 
 stdenv.mkDerivation rec {
   pname = "nms";
@@ -11,7 +15,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-QVCEpplsZCSQ+Fq1LBtCuPBvnzgLsmLcSrxR+e4nA5I=";
   };
 
-  buildFlags = [ "nms" "sneakers" ];
+  buildFlags = [
+    "nms"
+    "sneakers"
+  ];
   installFlags = [ "prefix=$(out)" ];
 
   meta = with lib; {

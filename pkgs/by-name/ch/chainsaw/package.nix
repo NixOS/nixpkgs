@@ -13,11 +13,12 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "WithSecureLabs";
     repo = "chainsaw";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-ErDIfLhzCiFm3dZzr6ThjYCplfDKbALAqcu8c0gREH4=";
   };
 
-  cargoHash = "sha256-WuPfYxI61wsQyOKqPF7/a3Hx9vMBCkTkoXsZczgeKpg=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-LTvCExHQnQIbGGeh4bK6b3r9XXOxREMTOlRQv+BjKrM=";
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.CoreFoundation

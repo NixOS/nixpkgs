@@ -20,6 +20,7 @@
   platformdirs,
   propcache,
   pydantic,
+  pydantic-extra-types,
   pyjwt,
   rich,
   typer,
@@ -39,7 +40,7 @@
 
 buildPythonPackage rec {
   pname = "uiprotect";
-  version = "6.4.0";
+  version = "7.5.1";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -47,8 +48,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "uilibs";
     repo = "uiprotect";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-+BHxcwQhx4lOqS0ATk1PjLbyTu7xQakM3HMrydXeGUc=";
+    tag = "v${version}";
+    hash = "sha256-moGS1hfCU8BCdAzvr0Np7lF32RucigM9YANZI6+sALw=";
   };
 
   build-system = [ poetry-core ];
@@ -71,6 +72,7 @@ buildPythonPackage rec {
     platformdirs
     propcache
     pydantic
+    pydantic-extra-types
     pyjwt
     rich
     typer
@@ -95,6 +97,11 @@ buildPythonPackage rec {
     # https://127.0.0.1 vs https://127.0.0.1:0
     "test_base_url"
     "test_bootstrap"
+  ];
+
+  disabledTestPaths = [
+    # hangs the test suite
+    "tests/test_api_ws.py"
   ];
 
   pythonImportsCheck = [ "uiprotect" ];

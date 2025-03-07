@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchgit
-, ninja
-, pkg-config
-, ed
-, wrapGAppsHook3
-, webkitgtk_4_0
-, libxml2
-, glib-networking
-, gettext
+{
+  lib,
+  stdenv,
+  fetchgit,
+  ninja,
+  pkg-config,
+  ed,
+  wrapGAppsHook3,
+  webkitgtk_4_0,
+  libxml2,
+  glib-networking,
+  gettext,
 }:
 
 stdenv.mkDerivation rec {
@@ -42,8 +43,14 @@ stdenv.mkDerivation rec {
     description = "Minimalist and privacy-oriented WebKitGTK+ browser";
     mainProgram = "badwolf";
     homepage = "https://hacktivis.me/projects/badwolf";
-    license = with licenses; [ bsd3 cc-by-sa-40 ];
+    license = with licenses; [
+      bsd3
+      cc-by-sa-40
+    ];
     platforms = platforms.linux;
-    maintainers = with maintainers; [ laalsaas aleksana ];
+    maintainers = with maintainers; [
+      laalsaas
+      aleksana
+    ];
   };
 }

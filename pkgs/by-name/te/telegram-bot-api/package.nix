@@ -6,17 +6,18 @@
   gperf,
   openssl,
   zlib,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation {
   pname = "telegram-bot-api";
-  version = "8.0";
+  version = "8.2";
 
   src = fetchFromGitHub {
     owner = "tdlib";
     repo = "telegram-bot-api";
-    rev = "53e15345b04fcea73b415897f10d7543005044ce";
-    hash = "sha256-OnYoJM2f9+/W4m1Ew9nDQQ/Mk0NnGr1dL5jCvLAXc1c=";
+    rev = "fa6706fc8f6e22b3c25b512ede6474613f32b32b";
+    hash = "sha256-0ra1sL121ksUIhpV738tL3y1gu1csMf0rK95G8ElMuo=";
     fetchSubmodules = true;
   };
 
@@ -24,10 +25,16 @@ stdenv.mkDerivation {
     cmake
     gperf
   ];
+
   buildInputs = [
     openssl
     zlib
   ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  doInstallCheck = true;
+  versionCheckProgramArg = [ "--version" ];
 
   meta = {
     description = "Telegram Bot API server";

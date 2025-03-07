@@ -1,40 +1,35 @@
 {
   lib,
+  bitvector-for-humans,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch2,
-  poetry-core,
-  pytestCheckHook,
-  pytest-mock,
-  bitvector-for-humans,
   hidapi,
   loguru,
+  poetry-core,
   pyserial,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
   typer,
   webcolors,
 }:
+
 buildPythonPackage rec {
   pname = "busylight-for-humans";
-  version = "0.32.0";
+  version = "0.33.2";
   pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "JnyJny";
     repo = "busylight";
-    rev = version;
-    hash = "sha256-rdgkTk9x3bO5H01Bo2yOGIIxkoLv1k7kkJidJu/1HDQ=";
+    tag = version;
+    hash = "sha256-66XJumC++/Wa6hY/A3m6IR2ALCH4vLSut9ERW8msLY4=";
   };
 
-  patches = [
-    (fetchpatch2 {
-      # https://github.com/JnyJny/busylight/pull/369
-      name = "fix-poetry-core.patch";
-      url = "https://github.com/helsinki-systems/busylight/commit/74ca283e2250564f422d904ece1b9ab0dd9a8f6c.patch";
-      hash = "sha256-eif9ycSYL8ZpXsvNCOHDJlpj12oauyzlMKUScZMzllc=";
-    })
-  ];
-
   build-system = [ poetry-core ];
+
   dependencies = [
     bitvector-for-humans
     hidapi
@@ -43,6 +38,7 @@ buildPythonPackage rec {
     typer
     webcolors
   ];
+
   nativeCheckInputs = [
     pytestCheckHook
     pytest-mock
@@ -58,10 +54,11 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
+    description = "Control USB connected presence lights from multiple vendors via the command-line or web API";
     homepage = "https://github.com/JnyJny/busylight";
-    description = "Control USB connected presence lights from multiple vendors via the command-line or web API.";
-    mainProgram = "busylight";
+    changelog = "https://github.com/JnyJny/busylight/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = teams.helsinki-systems.members;
+    mainProgram = "busylight";
   };
 }

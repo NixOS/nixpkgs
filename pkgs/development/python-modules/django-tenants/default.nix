@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "django-tenants";
     repo = "django-tenants";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-QdEONKVFW/DWBjXWRTG+ahvirw9BP8M6PztUMZGZ33Q=";
   };
 

@@ -512,6 +512,17 @@ let
         '';
       };
 
+      updateDaemon = {
+        commandFlags = mkOption {
+          type = types.str;
+          default = "--quiet";
+          description = ''
+            Command-line flags passed to the update daemon.
+            The default --quiet flag mutes all logging, including errors.
+          '';
+        };
+      };
+
       extraConfig = mkOption {
         type = types.lines;
         default = "";
@@ -622,7 +633,7 @@ let
         serviceConfig = {
           User = "${cfg.user}";
           Group = "tt_rss";
-          ExecStart = "${phpPackage}/bin/php ${cfg.root}/www/update.php --daemon --quiet";
+          ExecStart = "${phpPackage}/bin/php ${cfg.root}/www/update.php --daemon ${cfg.updateDaemon.commandFlags}";
           Restart = "on-failure";
           RestartSec = "60";
           SyslogIdentifier = "tt-rss";

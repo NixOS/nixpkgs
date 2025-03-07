@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, autoreconfHook
-, guile
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  autoreconfHook,
+  guile,
+  pkg-config,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

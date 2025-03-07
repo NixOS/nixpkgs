@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "john-kurkowski";
     repo = "tldextract";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-gcgQGZS/dsTTC4Szpjreb2fAsVZxxOCE1erVvU1q4xM=";
   };
 

@@ -1,5 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, boost, flac, id3lib, pkg-config
-, taglib, zlib }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  boost,
+  flac,
+  id3lib,
+  pkg-config,
+  taglib,
+  zlib,
+}:
 
 stdenv.mkDerivation rec {
   pname = "dsf2flac";
@@ -12,9 +22,18 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-VlXfywgYhI2QuGQvpD33BspTTgT0jOKUV3gENq4HiBU=";
   };
 
-  buildInputs = [ boost flac id3lib taglib zlib ];
+  buildInputs = [
+    boost
+    flac
+    id3lib
+    taglib
+    zlib
+  ];
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
 
   enableParallelBuilding = true;
 

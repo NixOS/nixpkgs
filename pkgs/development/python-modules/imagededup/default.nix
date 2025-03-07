@@ -41,7 +41,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "idealo";
     repo = "imagededup";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-B2IuNMTZnzBi6IxrHBoMDsmIcqGQpznd/2f1XKo1Oa4=";
   };
 
@@ -88,7 +88,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://idealo.github.io/imagededup/";
-    changelog = "https://github.com/idealo/imagededup/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
+    changelog = "https://github.com/idealo/imagededup/releases/tag/v${version}";
     description = "Finding duplicate images made easy";
     license = licenses.asl20;
     maintainers = with maintainers; [ stunkymonkey ];

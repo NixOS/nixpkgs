@@ -27,9 +27,9 @@
 }:
 
 let
-  version = "2.8.1";
+  version = "2.9.1";
 in
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "paddleocr";
   inherit version;
   format = "setuptools";
@@ -37,8 +37,8 @@ buildPythonPackage {
   src = fetchFromGitHub {
     owner = "PaddlePaddle";
     repo = "PaddleOCR";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-TLNpb+CwLKvtmPppDuUbGyJorhmkVVW01J61+XUICYk=";
+    tag = "v${version}";
+    hash = "sha256-QCddxgVdLaAJLfKCy+tnQsxownfl1Uv0TXhFRiFi9cY=";
   };
 
   patches = [
@@ -100,7 +100,7 @@ buildPythonPackage {
       PaddleOCR aims to create multilingual, awesome, leading, and practical OCR
       tools that help users train better models and apply them into practice.
     '';
-    changelog = "https://github.com/PaddlePaddle/PaddleOCR/releases/tag/v${version}";
+    changelog = "https://github.com/PaddlePaddle/PaddleOCR/releases/tag/${src.tag}";
     maintainers = with maintainers; [ happysalada ];
     platforms = [
       "x86_64-linux"

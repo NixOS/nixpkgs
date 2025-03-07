@@ -1,10 +1,11 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, alsa-lib
-, libpcap
-, expect
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  alsa-lib,
+  libpcap,
+  expect,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -18,7 +19,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-v7GO+d4b0N3heN10+WSUJEpcShKmx4BPR1FyZoELWzc=";
   };
 
-  cargoHash = "sha256-0yLMscmjHeU8dRDzx3kgniCRsekg9ZJWdN13hyqJgDI=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-Psu47S39/46ksv7YUU/Ppq3IB70tL2D5ZjaPdpOrrdM=";
 
   nativeBuildInputs = [
     pkg-config

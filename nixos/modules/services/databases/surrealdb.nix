@@ -1,8 +1,14 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
 
   cfg = config.services.surrealdb;
-in {
+in
+{
 
   options = {
     services.surrealdb = {
@@ -40,8 +46,14 @@ in {
 
       extraFlags = lib.mkOption {
         type = lib.types.listOf lib.types.str;
-        default = [];
-        example = [ "--allow-all" "--user" "root" "--pass" "root" ];
+        default = [ ];
+        example = [
+          "--allow-all"
+          "--user"
+          "root"
+          "--pass"
+          "root"
+        ];
         description = ''
           Specify a list of additional command line flags.
         '';
@@ -52,7 +64,7 @@ in {
   config = lib.mkIf cfg.enable {
 
     # Used to connect to the running service
-    environment.systemPackages = [ cfg.package ] ;
+    environment.systemPackages = [ cfg.package ];
 
     systemd.services.surrealdb = {
       description = "A scalable, distributed, collaborative, document-graph database, for the realtime web";
@@ -81,7 +93,10 @@ in {
         RestrictNamespaces = true;
         LockPersonality = true;
         RemoveIPC = true;
-        SystemCallFilter = [ "@system-service" "~@privileged" ];
+        SystemCallFilter = [
+          "@system-service"
+          "~@privileged"
+        ];
       };
     };
   };

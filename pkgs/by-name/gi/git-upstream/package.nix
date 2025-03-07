@@ -3,30 +3,32 @@
   fetchFromGitHub,
   rustPlatform,
   nix-update-script,
-}: let
+}:
+let
   pname = "git-upstream";
-  version = "1.2.0";
+  version = "1.5.0";
 in
-  rustPlatform.buildRustPackage {
-    inherit pname version;
+rustPlatform.buildRustPackage {
+  inherit pname version;
 
-    src = fetchFromGitHub {
-      owner = "9999years";
-      repo = pname;
-      rev = "refs/tags/v${version}";
-      hash = "sha256-GnsqZSztDLXMO4T16nfcOKMKXap88CJzJ5nObzGwhMA=";
-    };
+  src = fetchFromGitHub {
+    owner = "9999years";
+    repo = pname;
+    tag = "v${version}";
+    hash = "sha256-ooqz2Xp/nljx2+zQsc/RjVbGG/5YTeggU6pB8lGK0o8=";
+  };
 
-    cargoHash = "sha256-a12C/fpeo0ZJ0MFQlKHVZER9dVrXF95YI1i8MwCTCJo=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-oIrUjb+yJgDR5GYrG3hPLpXYJynR9eeX00emcrcjmZY=";
 
-    meta = {
-      homepage = "https://github.com/9999years/git-upstream";
-      changelog = "https://github.com/9999years/git-upstream/releases/tag/v${version}";
-      description = "Shortcut for `git push --set-upstream`";
-      license = [lib.licenses.mit];
-      maintainers = [lib.maintainers._9999years];
-      mainProgram = "git-upstream";
-    };
+  meta = {
+    homepage = "https://github.com/9999years/git-upstream";
+    changelog = "https://github.com/9999years/git-upstream/releases/tag/v${version}";
+    description = "Shortcut for `git push --set-upstream`";
+    license = [ lib.licenses.mit ];
+    maintainers = [ lib.maintainers._9999years ];
+    mainProgram = "git-upstream";
+  };
 
-    passthru.updateScript = nix-update-script {};
-  }
+  passthru.updateScript = nix-update-script { };
+}

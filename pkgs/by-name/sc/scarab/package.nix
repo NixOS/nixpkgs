@@ -16,12 +16,12 @@ buildDotnetModule rec {
   src = fetchFromGitHub {
     owner = "fifty-six";
     repo = "scarab";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-xnvS3FDY4hi3yauwoSzO1fO6tJJAwFCkAc0Wzfs/puQ=";
   };
 
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
   projectFile = "Scarab/Scarab.csproj";
   testProjectFile = "Scarab.Tests/Scarab.Tests.csproj";
   executables = [ "Scarab" ];

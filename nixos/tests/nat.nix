@@ -11,28 +11,35 @@
 #
 # The client is behind the nat (read: protected by the nat) and the server is on the external network, attempting to access services behind the NAT.
 
-import ./make-test-python.nix ({ pkgs, lib, withFirewall ? false, nftables ? false, ... }:
+import ./make-test-python.nix (
+  {
+    pkgs,
+    lib,
+    withFirewall ? false,
+    nftables ? false,
+    ...
+  }:
   let
     unit = if nftables then "nftables" else (if withFirewall then "firewall" else "nat");
 
     routerAlternativeExternalIp = "192.168.2.234";
 
     makeNginxConfig = hostname: {
-        enable = true;
-        virtualHosts."${hostname}" = {
-            root = "/etc";
-            locations."/".index = "hostname";
-            listen = [
-                {
-                    addr = "0.0.0.0";
-                    port = 80;
-                }
-                {
-                    addr = "0.0.0.0";
-                    port = 8080;
-                }
-            ];
-        };
+      enable = true;
+      virtualHosts."${hostname}" = {
+        root = "/etc";
+        locations."/".index = "hostname";
+        listen = [
+          {
+            addr = "0.0.0.0";
+            port = 80;
+          }
+          {
+            addr = "0.0.0.0";
+            port = 8080;
+          }
+        ];
+      };
     };
 
     makeCommonConfig = hostname: {
@@ -51,78 +58,94 @@ import ./make-test-python.nix ({ pkgs, lib, withFirewall ? false, nftables ? fal
       networking.useDHCP = false;
 
       environment.systemPackages = [
-        (pkgs.writeScriptBin "check-connection"
-          ''
-            #!/usr/bin/env bash
+        (pkgs.writeScriptBin "check-connection" ''
+          #!/usr/bin/env bash
 
-            set -e
+          set -e
 
-            if [[ "$2" == "" || "$3" == "" || "$1" == "--help" || "$1" == "-h" ]];
-            then
-                echo "check-connection <target-address> <target-hostname> <[expect-success|expect-failure]>"
-                exit 1
-            fi
+          if [[ "$2" == "" || "$3" == "" || "$1" == "--help" || "$1" == "-h" ]];
+          then
+              echo "check-connection <target-address> <target-hostname> <[expect-success|expect-failure]>"
+              exit 1
+          fi
 
-            ADDRESS="$1"
-            HOSTNAME="$2"
+          ADDRESS="$1"
+          HOSTNAME="$2"
 
-            function test_icmp() { timeout 3 ping -c 1 $ADDRESS; }
-            function test_http() { [[ `timeout 3 curl $ADDRESS` == "$HOSTNAME" ]]; }
-            function test_ftp() { timeout 3 curl ftp://$ADDRESS; }
+          function test_icmp() { timeout 3 ping -c 1 $ADDRESS; }
+          function test_http() { [[ `timeout 3 curl $ADDRESS` == "$HOSTNAME" ]]; }
+          function test_ftp() { timeout 3 curl ftp://$ADDRESS; }
 
-            if [[ "$3" == "expect-success" ]];
-            then
-                test_icmp; test_http; test_ftp
-            else
-                ! test_icmp; ! test_http; ! test_ftp
-            fi
-          ''
-        )
-        (pkgs.writeScriptBin "check-last-clients-ip"
-          ''
-            #!/usr/bin/env bash
-            set -e
+          if [[ "$3" == "expect-success" ]];
+          then
+              test_icmp; test_http; test_ftp
+          else
+              ! test_icmp; ! test_http; ! test_ftp
+          fi
+        '')
+        (pkgs.writeScriptBin "check-last-clients-ip" ''
+          #!/usr/bin/env bash
+          set -e
 
-            [[ `cat /var/log/nginx/access.log | tail -n1 | awk '{print $1}'` == "$1" ]]
-          ''
-        )
+          [[ `cat /var/log/nginx/access.log | tail -n1 | awk '{print $1}'` == "$1" ]]
+        '')
       ];
     };
 
+  in
   # VLANS:
   # 1 -- simulates the internal network
   # 2 -- simulates the external network
-  in
   {
-    name = "nat" + (lib.optionalString nftables "Nftables")
-                 + (if withFirewall then "WithFirewall" else "Standalone");
+    name =
+      "nat"
+      + (lib.optionalString nftables "Nftables")
+      + (if withFirewall then "WithFirewall" else "Standalone");
     meta = with pkgs.lib.maintainers; {
-      maintainers = [ tne rob ];
+      maintainers = [
+        tne
+        rob
+      ];
     };
 
-    nodes =
-      { client =
-          { pkgs, nodes, ... }:
-          lib.mkMerge [
-            ( makeCommonConfig "client" )
-            { virtualisation.vlans = [ 1 ];
-              networking.defaultGateway =
-                (pkgs.lib.head nodes.router.networking.interfaces.eth1.ipv4.addresses).address;
-              networking.nftables.enable = nftables;
-              networking.firewall.enable = false;
-            }
-          ];
+    nodes = {
+      client =
+        { pkgs, nodes, ... }:
+        lib.mkMerge [
+          (makeCommonConfig "client")
+          {
+            virtualisation.vlans = [ 1 ];
+            networking.defaultGateway =
+              (pkgs.lib.head nodes.router.networking.interfaces.eth1.ipv4.addresses).address;
+            networking.nftables.enable = nftables;
+            networking.firewall.enable = false;
+          }
+        ];
 
-        router =
-        { nodes, ... }: lib.mkMerge [
-          ( makeCommonConfig "router" )
-          { virtualisation.vlans = [ 1 2 ];
+      router =
+        { nodes, ... }:
+        lib.mkMerge [
+          (makeCommonConfig "router")
+          {
+            virtualisation.vlans = [
+              1
+              2
+            ];
             networking.firewall = {
               enable = withFirewall;
               filterForward = nftables;
-              allowedTCPPorts = [ 21 80 8080 ];
+              allowedTCPPorts = [
+                21
+                80
+                8080
+              ];
               # For FTP passive mode
-              allowedTCPPortRanges = [ { from = 51000; to = 51999; } ];
+              allowedTCPPortRanges = [
+                {
+                  from = 51000;
+                  to = 51999;
+                }
+              ];
             };
             networking.nftables.enable = nftables;
             networking.nat =
@@ -148,13 +171,19 @@ import ./make-test-python.nix ({ pkgs, lib, withFirewall ? false, nftables ? fal
                 ];
               };
 
-            networking.interfaces.eth2.ipv4.addresses =
-              lib.mkOrder 10000 [ { address = routerAlternativeExternalIp; prefixLength = 24; } ];
+            networking.interfaces.eth2.ipv4.addresses = lib.mkOrder 10000 [
+              {
+                address = routerAlternativeExternalIp;
+                prefixLength = 24;
+              }
+            ];
 
-            services.nginx.virtualHosts.router.listen = lib.mkOrder (-1) [ {
-              addr = routerAlternativeExternalIp;
-              port = 8080;
-            } ];
+            services.nginx.virtualHosts.router.listen = lib.mkOrder (-1) [
+              {
+                addr = routerAlternativeExternalIp;
+                port = 8080;
+              }
+            ];
 
             specialisation.no-nat.configuration = {
               networking.nat.enable = lib.mkForce false;
@@ -162,24 +191,28 @@ import ./make-test-python.nix ({ pkgs, lib, withFirewall ? false, nftables ? fal
           }
         ];
 
-        server =
-          { nodes, ... }: lib.mkMerge [
-            ( makeCommonConfig "server" )
-            { virtualisation.vlans = [ 2 ];
-              networking.firewall.enable = false;
+      server =
+        { nodes, ... }:
+        lib.mkMerge [
+          (makeCommonConfig "server")
+          {
+            virtualisation.vlans = [ 2 ];
+            networking.firewall.enable = false;
 
-              networking.defaultGateway =
-                (pkgs.lib.head nodes.router.networking.interfaces.eth2.ipv4.addresses).address;
-            }
-          ];
-      };
+            networking.defaultGateway =
+              (pkgs.lib.head nodes.router.networking.interfaces.eth2.ipv4.addresses).address;
+          }
+        ];
+    };
 
     testScript =
-      { nodes, ... }: let
+      { nodes, ... }:
+      let
         clientIp = (pkgs.lib.head nodes.client.networking.interfaces.eth1.ipv4.addresses).address;
         serverIp = (pkgs.lib.head nodes.server.networking.interfaces.eth1.ipv4.addresses).address;
         routerIp = (pkgs.lib.head nodes.router.networking.interfaces.eth2.ipv4.addresses).address;
-      in ''
+      in
+      ''
         def wait_for_machine(m):
           m.wait_for_unit("network.target")
           m.wait_for_unit("nginx.service")
@@ -275,4 +308,5 @@ import ./make-test-python.nix ({ pkgs, lib, withFirewall ? false, nftables ? fal
         server.succeed('[[ `timeout 3 curl http://${routerIp}:8080` == "router" ]]')
         router.succeed('[[ `timeout 3 curl http://${routerIp}:8080` == "router" ]]')
       '';
-})
+  }
+)

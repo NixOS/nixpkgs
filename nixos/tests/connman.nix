@@ -1,59 +1,67 @@
-import ./make-test-python.nix ({ pkgs, lib, ...}:
-{
-  name = "connman";
-  meta = with lib.maintainers; {
-    maintainers = [ rnhmjoj ];
-  };
-
-  # Router running radvd on VLAN 1
-  nodes.router = { ... }: {
-    imports = [ ../modules/profiles/minimal.nix ];
-
-    virtualisation.vlans = [ 1 ];
-
-    boot.kernel.sysctl."net.ipv6.conf.all.forwarding" = true;
-
-    networking = {
-      useDHCP = false;
-      interfaces.eth1.ipv6.addresses =
-        [ { address = "fd12::1"; prefixLength = 64; } ];
+import ./make-test-python.nix (
+  { pkgs, lib, ... }:
+  {
+    name = "connman";
+    meta = with lib.maintainers; {
+      maintainers = [ rnhmjoj ];
     };
 
-    services.radvd = {
-      enable = true;
-      config = ''
-        interface eth1 {
-          AdvSendAdvert on;
-          AdvManagedFlag on;
-          AdvOtherConfigFlag on;
-          prefix fd12::/64 {
-            AdvAutonomous off;
-          };
+    # Router running radvd on VLAN 1
+    nodes.router =
+      { ... }:
+      {
+        imports = [ ../modules/profiles/minimal.nix ];
+
+        virtualisation.vlans = [ 1 ];
+
+        boot.kernel.sysctl."net.ipv6.conf.all.forwarding" = true;
+
+        networking = {
+          useDHCP = false;
+          interfaces.eth1.ipv6.addresses = [
+            {
+              address = "fd12::1";
+              prefixLength = 64;
+            }
+          ];
         };
-      '';
-    };
-  };
 
-  # Client running connman, connected to VLAN 1
-  nodes.client = { ... }: {
-    virtualisation.vlans = [ 1 ];
+        services.radvd = {
+          enable = true;
+          config = ''
+            interface eth1 {
+              AdvSendAdvert on;
+              AdvManagedFlag on;
+              AdvOtherConfigFlag on;
+              prefix fd12::/64 {
+                AdvAutonomous off;
+              };
+            };
+          '';
+        };
+      };
 
-    # add a virtual wlan interface
-    boot.kernelModules = [ "mac80211_hwsim" ];
-    boot.extraModprobeConfig = ''
-      options mac80211_hwsim radios=1
-    '';
+    # Client running connman, connected to VLAN 1
+    nodes.client =
+      { ... }:
+      {
+        virtualisation.vlans = [ 1 ];
 
-    # Note: the overrides are needed because the wifi is
-    # disabled with mkVMOverride in qemu-vm.nix.
-    services.connman.enable = lib.mkOverride 0 true;
-    services.connman.networkInterfaceBlacklist = [ "eth0" ];
-    networking.wireless.enable = lib.mkOverride 0 true;
-    networking.wireless.interfaces = [ "wlan0" ];
-  };
+        # add a virtual wlan interface
+        boot.kernelModules = [ "mac80211_hwsim" ];
+        boot.extraModprobeConfig = ''
+          options mac80211_hwsim radios=1
+        '';
 
-  testScript =
-    ''
+        # Note: the overrides are needed because the wifi is
+        # disabled with mkVMOverride in qemu-vm.nix.
+        services.connman.enable = lib.mkOverride 0 true;
+        services.connman.networkInterfaceBlacklist = [ "eth0" ];
+        networking.wireless.enable = lib.mkOverride 0 true;
+        networking.wireless.interfaces = [ "wlan0" ];
+      };
+
+    testScript = ''
       start_all()
 
       with subtest("Router is ready"):
@@ -73,5 +81,5 @@ import ./make-test-python.nix ({ pkgs, lib, ...}:
           client.wait_until_succeeds("connmanctl tether wifi on nixos-test reproducibility | grep -q 'Enabled'")
           client.wait_until_succeeds("iw wlan0 info | grep -q nixos-test")
     '';
-})
-
+  }
+)

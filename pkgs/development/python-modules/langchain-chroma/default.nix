@@ -4,41 +4,43 @@
   fetchFromGitHub,
   chromadb,
   langchain-core,
+  langchain-tests,
   numpy,
-  poetry-core,
+  pdm-backend,
   pytestCheckHook,
   pytest-asyncio,
 }:
 
 buildPythonPackage rec {
   pname = "langchain-chroma";
-  version = "0.1.4";
+  version = "0.2.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
-    rev = "refs/tags/langchain-chroma==${version}";
-    hash = "sha256-pU7H8OYXa+JjdkSO36xESPI6r3xA+9cFXxeJnfpYuHc=";
+    tag = "langchain-chroma==${version}";
+    hash = "sha256-GFDaUA0E25YDHYLwrpsAuOiBWFvHByl61XhwK5NmJbg=";
   };
 
   sourceRoot = "${src.name}/libs/partners/chroma";
 
   patches = [ ./001-async-test.patch ];
 
-  build-system = [ poetry-core ];
+  build-system = [ pdm-backend ];
 
-  pythonRelaxDeps = [ "chromadb" ];
+  pythonRelaxDeps = [ "numpy" ];
 
   dependencies = [
-    langchain-core
     chromadb
+    langchain-core
     numpy
   ];
 
   pythonImportsCheck = [ "langchain_chroma" ];
 
   nativeCheckInputs = [
+    langchain-tests
     pytest-asyncio
     pytestCheckHook
   ];
@@ -50,6 +52,8 @@ buildPythonPackage rec {
 
   passthru = {
     inherit (langchain-core) updateScript;
+    # updates the wrong fetcher rev attribute
+    skipBulkUpdate = true;
   };
 
   meta = {

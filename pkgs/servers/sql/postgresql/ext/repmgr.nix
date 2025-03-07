@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, postgresql
-, flex
-, curl
-, json_c
-, buildPostgresqlExtension
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  postgresql,
+  flex,
+  curl,
+  json_c,
+  buildPostgresqlExtension,
 }:
 
 buildPostgresqlExtension rec {
@@ -21,7 +22,10 @@ buildPostgresqlExtension rec {
 
   nativeBuildInputs = [ flex ];
 
-  buildInputs = postgresql.buildInputs ++ [ curl json_c ];
+  buildInputs = postgresql.buildInputs ++ [
+    curl
+    json_c
+  ];
 
   meta = with lib; {
     homepage = "https://repmgr.org/";
@@ -31,4 +35,3 @@ buildPostgresqlExtension rec {
     maintainers = with maintainers; [ zimbatm ];
   };
 }
-

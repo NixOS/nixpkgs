@@ -1,7 +1,8 @@
-{ lib
-, python3
-, fetchFromGitHub
-, ffmpeg
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+  ffmpeg,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -58,7 +59,10 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/woodruffw/shaq";
     changelog = "https://github.com/woodruffw/shaq/releases/tag/${src.rev}";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda mig4ng ];
+    maintainers = with maintainers; [
+      figsoda
+      mig4ng
+    ];
     mainProgram = "shaq";
   };
 }

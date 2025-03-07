@@ -1,16 +1,30 @@
-{ lib, stdenv, fetchurl, pkg-config, systemd
-, boost, libsodium, libedit, re2
-, net-snmp, lua, protobuf, openssl, zlib, h2o
-, nghttp2, nixosTests
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  systemd,
+  boost,
+  libsodium,
+  libedit,
+  re2,
+  net-snmp,
+  lua,
+  protobuf,
+  openssl,
+  zlib,
+  h2o,
+  nghttp2,
+  nixosTests,
 }:
 
 stdenv.mkDerivation rec {
   pname = "dnsdist";
-  version = "1.8.3";
+  version = "1.9.8";
 
   src = fetchurl {
     url = "https://downloads.powerdns.com/releases/dnsdist-${version}.tar.bz2";
-    hash = "sha256-hYMj8u1RgUiLt1WPv0+E7HGYYAsHCyxTddFdQGlXJ/Q=";
+    hash = "sha256-9mT3Opao1zQ9MmlqzLcP2LHtQyjXPNsKYnpWHW4v2Z4=";
   };
 
   patches = [
@@ -19,8 +33,23 @@ stdenv.mkDerivation rec {
     ./disable-network-tests.patch
   ];
 
-  nativeBuildInputs = [ pkg-config protobuf ];
-  buildInputs = [ systemd boost libsodium libedit re2 net-snmp lua openssl zlib h2o nghttp2 ];
+  nativeBuildInputs = [
+    pkg-config
+    protobuf
+  ];
+  buildInputs = [
+    systemd
+    boost
+    libsodium
+    libedit
+    re2
+    net-snmp
+    lua
+    openssl
+    zlib
+    h2o
+    nghttp2
+  ];
 
   configureFlags = [
     "--with-libsodium"

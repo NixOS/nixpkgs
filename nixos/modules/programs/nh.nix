@@ -1,7 +1,8 @@
-{ config
-, lib
-, pkgs
-, ...
+{
+  config,
+  lib,
+  pkgs,
+  ...
 }:
 let
   cfg = config.programs.nh;
@@ -53,9 +54,12 @@ in
 
   config = {
     warnings =
-      if (!(cfg.clean.enable -> !config.nix.gc.automatic)) then [
-        "programs.nh.clean.enable and nix.gc.automatic are both enabled. Please use one or the other to avoid conflict."
-      ] else [ ];
+      if (!(cfg.clean.enable -> !config.nix.gc.automatic)) then
+        [
+          "programs.nh.clean.enable and nix.gc.automatic are both enabled. Please use one or the other to avoid conflict."
+        ]
+      else
+        [ ];
 
     assertions = [
       # Not strictly required but probably a good assertion to have

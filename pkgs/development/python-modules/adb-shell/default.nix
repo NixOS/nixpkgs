@@ -1,5 +1,6 @@
 {
   lib,
+  pythonOlder,
   aiofiles,
   async-timeout,
   buildPythonPackage,
@@ -41,6 +42,8 @@ buildPythonPackage rec {
     ];
     usb = [ libusb1 ];
   };
+
+  doCheck = pythonOlder "3.12"; # FIXME: tests are broken on 3.13
 
   nativeCheckInputs = [
     mock

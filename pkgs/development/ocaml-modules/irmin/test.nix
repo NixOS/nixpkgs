@@ -1,6 +1,21 @@
-{ buildDunePackage, irmin, ppx_irmin, mtime, astring, fmt, jsonm, logs, lwt
-, metrics-unix, ocaml-syntax-shims, cmdliner, metrics, alcotest-lwt
-, hex, vector, qcheck-alcotest
+{
+  buildDunePackage,
+  irmin,
+  ppx_irmin,
+  mtime,
+  astring,
+  fmt,
+  jsonm,
+  logs,
+  lwt,
+  metrics-unix,
+  ocaml-syntax-shims,
+  cmdliner,
+  metrics,
+  alcotest-lwt,
+  hex,
+  vector,
+  qcheck-alcotest,
 }:
 
 buildDunePackage {
@@ -28,7 +43,11 @@ buildDunePackage {
   ];
 
   doCheck = true;
-  checkInputs = [ hex qcheck-alcotest vector ];
+  checkInputs = [
+    hex
+    qcheck-alcotest
+    vector
+  ];
 
   meta = irmin.meta // {
     description = "Irmin test suite";

@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, byacc
-, fetchFromSourcehut
-, gitUpdater
+{
+  lib,
+  stdenv,
+  byacc,
+  fetchFromSourcehut,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

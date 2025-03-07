@@ -1,36 +1,28 @@
-{ lib
-, fetchFromGitHub
-, fetchpatch
-, python3Packages
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
 }:
 
-python3Packages.buildPythonPackage rec {
+python3Packages.buildPythonApplication rec {
   pname = "cc2538-bsl";
-  version = "2.1-unstable-2023-10-03";
-  format = "pyproject";
+  version = "2.1-unstable-2025-01-14";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "JelmerT";
     repo = "cc2538-bsl";
-    rev = "4d64ac633dbaf29d098842c5937ed6eea2fd7c45";
-    hash = "sha256-NX2jPYAz15bSucj/YR5E/0eJy/cbszSrNxyJHRsbXxo=";
+    rev = "bb6471103c2bddd319e5fda46fe4e872ce1de407";
+    hash = "sha256-iVdwwZozoFsHpLMiZq3i9wldfusAsCCZy6isKfvGqKo=";
   };
-
-  patches = [
-    (fetchpatch {
-      # fix extras specification in setup.py; https://github.com/JelmerT/cc2538-bsl/pull/143
-      url = "https://github.com/JelmerT/cc2538-bsl/commit/c70f58ec0222357db8020176711d6d45cf24da35.patch";
-      hash = "sha256-Rxm/TRcm87WgRfq60cu0loyrbJmZou09XYR7uhrhhj8=";
-    })
-  ];
 
   env.SETUPTOOLS_SCM_PRETEND_VERSION = "0.1.dev0+g${lib.substring 0 7 src.rev}";
 
-  nativeBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [
     setuptools-scm
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  dependencies = with python3Packages; [
     intelhex
     pyserial
     python-magic
@@ -54,4 +46,3 @@ python3Packages.buildPythonPackage rec {
     mainProgram = "cc2538-bsl";
   };
 }
-

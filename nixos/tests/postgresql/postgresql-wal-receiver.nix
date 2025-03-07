@@ -1,6 +1,7 @@
 {
   pkgs,
   makeTest,
+  genTests,
 }:
 
 let
@@ -19,7 +20,7 @@ let
     in
     makeTest {
       name = "postgresql-wal-receiver-${package.name}";
-      meta.maintainers = with lib.maintainers; [ pacien ];
+      meta.maintainers = with lib.maintainers; [ euxane ];
 
       nodes.machine =
         { ... }:
@@ -108,9 +109,4 @@ let
       '';
     };
 in
-lib.recurseIntoAttrs (
-  lib.concatMapAttrs (n: p: { ${n} = makeTestFor p; }) pkgs.postgresqlVersions
-  // {
-    passthru.override = p: makeTestFor p;
-  }
-)
+genTests { inherit makeTestFor; }

@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchurl, fetchpatch, pkg-config, ncurses, readline, autoreconfHook }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  pkg-config,
+  ncurses,
+  readline,
+  autoreconfHook,
+}:
 
 stdenv.mkDerivation rec {
   pname = "abook";
@@ -17,8 +26,14 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ pkg-config autoreconfHook ];
-  buildInputs = [ ncurses readline ];
+  nativeBuildInputs = [
+    pkg-config
+    autoreconfHook
+  ];
+  buildInputs = [
+    ncurses
+    readline
+  ];
 
   meta = {
     homepage = "http://abook.sourceforge.net/";

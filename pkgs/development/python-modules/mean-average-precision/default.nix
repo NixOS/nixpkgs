@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bes-dev";
     repo = "mean_average_precision";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-qo160L+oJsHERVOV0qdiRIZPMjvSlUmMTrAzThfrQSs=";
   };
 

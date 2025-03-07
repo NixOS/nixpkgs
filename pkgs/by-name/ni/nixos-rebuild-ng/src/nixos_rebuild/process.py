@@ -1,22 +1,22 @@
+import atexit
 import logging
 import os
 import shlex
 import subprocess
+from collections.abc import Sequence
 from dataclasses import dataclass
 from getpass import getpass
-from pathlib import Path
-from tempfile import TemporaryDirectory
-from typing import Self, Sequence, TypedDict, Unpack
+from typing import Final, Self, TypedDict, Unpack
+
+from . import tmpdir
 
 logger = logging.getLogger(__name__)
 
-TMPDIR = TemporaryDirectory(prefix="nixos-rebuild.")
-TMPDIR_PATH = Path(TMPDIR.name)
-SSH_DEFAULT_OPTS = [
+SSH_DEFAULT_OPTS: Final = [
     "-o",
     "ControlMaster=auto",
     "-o",
-    f"ControlPath={TMPDIR_PATH / "ssh-%n"}",
+    f"ControlPath={tmpdir.TMPDIR_PATH / 'ssh-%n'}",
     "-o",
     "ControlPersist=60",
 ]
@@ -70,13 +70,15 @@ class RunKwargs(TypedDict, total=False):
 
 def cleanup_ssh() -> None:
     "Close SSH ControlMaster connection."
-    for ctrl in TMPDIR_PATH.glob("ssh-*"):
+    for ctrl in tmpdir.TMPDIR_PATH.glob("ssh-*"):
         run_wrapper(
             ["ssh", "-o", f"ControlPath={ctrl}", "-O", "exit", "dummyhost"],
             check=False,
             capture_output=True,
         )
-    TMPDIR.cleanup()
+
+
+atexit.register(cleanup_ssh)
 
 
 def run_wrapper(
@@ -90,7 +92,7 @@ def run_wrapper(
 ) -> subprocess.CompletedProcess[str]:
     "Wrapper around `subprocess.run` that supports extra functionality."
     env = None
-    input = None
+    process_input = None
     if remote:
         if extra_env:
             extra_env_args = [f"{env}={value}" for env, value in extra_env.items()]
@@ -98,7 +100,7 @@ def run_wrapper(
         if sudo:
             if remote.sudo_password:
                 args = ["sudo", "--prompt=", "--stdin", *args]
-                input = remote.sudo_password + "\n"
+                process_input = remote.sudo_password + "\n"
             else:
                 args = ["sudo", *args]
         args = [
@@ -131,7 +133,7 @@ def run_wrapper(
             args,
             check=check,
             env=env,
-            input=input,
+            input=process_input,
             # Hope nobody is using NixOS with non-UTF8 encodings, but "surrogateescape"
             # should still work in those systems.
             text=True,

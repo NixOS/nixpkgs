@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   fetchzip,
   makeWrapper,
   premake5,
@@ -138,6 +139,14 @@ let
       openal
       SDL2
       sqlite
+    ];
+
+    patches = [
+      (fetchpatch {
+        name = "libgit2-version.patch";
+        url = "https://github.com/edo9300/edopro/commit/f8ddbfff51231827a8dd1dcfcb2dda85f50a56d9.patch";
+        hash = "sha256-w9VTmWfw6vEyVvsOH+AK9lAbUOV+MagzGQ3Wa5DCS/U=";
+      })
     ];
 
     # nixpkgs' gcc stack currently appears to not support LTO
@@ -292,7 +301,7 @@ symlinkJoin {
       platforms
       maintainers
       ;
-    # To differenciate it from the original YGOPro
+    # To differentiate it from the original YGOPro
     mainProgram = "edopro";
   };
 }

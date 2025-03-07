@@ -1,4 +1,8 @@
-{ maven, lib, fetchFromGitHub }:
+{
+  maven,
+  lib,
+  fetchFromGitHub,
+}:
 
 maven.buildMavenPackage rec {
   pname = "keycloak-restrict-client-auth";

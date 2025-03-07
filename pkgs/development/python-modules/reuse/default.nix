@@ -14,7 +14,7 @@
   binaryornot,
   boolean-py,
   click,
-  debian,
+  python-debian,
   jinja2,
   license-expression,
   tomlkit,
@@ -32,7 +32,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fsfe";
     repo = "reuse-tool";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-MzI3AY5WLNyCLJZM7Q5wUH3ttx+FHPlSgAfngzOgzec=";
   };
 
@@ -56,7 +56,7 @@ buildPythonPackage rec {
     binaryornot
     boolean-py
     click
-    debian
+    python-debian
     jinja2
     license-expression
     tomlkit

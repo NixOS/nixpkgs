@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
 
@@ -27,12 +32,22 @@ let
   cups-pdf-wrapped = pkgs.buildEnv {
     name = "${pkgs.cups-pdf-to-pdf.name}-wrapped";
     # using the wrapper as first path ensures it is used
-    paths = [ cups-pdf-wrapper pkgs.cups-pdf-to-pdf ];
+    paths = [
+      cups-pdf-wrapper
+      pkgs.cups-pdf-to-pdf
+    ];
     ignoreCollisions = true;
   };
 
   instanceSettings = name: {
-    freeformType = with lib.types; nullOr (oneOf [ int str path package ]);
+    freeformType =
+      with lib.types;
+      nullOr (oneOf [
+        int
+        str
+        path
+        package
+      ]);
     # override defaults:
     # inject instance name into paths,
     # also avoid conflicts between user names and special dirs
@@ -78,42 +93,50 @@ let
     };
   };
 
-  instanceConfig = { name, config, ... }: {
-    options = {
-      enable = (lib.mkEnableOption "this cups-pdf instance") // { default = true; };
-      installPrinter = (lib.mkEnableOption ''
-        a CUPS printer queue for this instance.
-        The queue will be named after the instance and will use the {file}`CUPS-PDF_opt.ppd` ppd file.
-        If this is disabled, you need to add the queue yourself to use the instance
-      '') // { default = true; };
-      confFileText = lib.mkOption {
-        type = lib.types.lines;
-        description = ''
-          This will contain the contents of {file}`cups-pdf.conf` for this instance, derived from {option}`settings`.
-          You can use this option to append text to the file.
-        '';
-      };
-      settings = lib.mkOption {
-        type = lib.types.submodule (instanceSettings name);
-        default = {};
-        example = {
-          Out = "\${HOME}/cups-pdf";
-          UserUMask = "0033";
+  instanceConfig =
+    { name, config, ... }:
+    {
+      options = {
+        enable = (lib.mkEnableOption "this cups-pdf instance") // {
+          default = true;
         };
-        description = ''
-          Settings for a cups-pdf instance, see the descriptions in the template config file in the cups-pdf package.
-          The key value pairs declared here will be translated into proper key value pairs for {file}`cups-pdf.conf`.
-          Setting a value to `null` disables the option and removes it from the file.
-        '';
+        installPrinter =
+          (lib.mkEnableOption ''
+            a CUPS printer queue for this instance.
+            The queue will be named after the instance and will use the {file}`CUPS-PDF_opt.ppd` ppd file.
+            If this is disabled, you need to add the queue yourself to use the instance
+          '')
+          // {
+            default = true;
+          };
+        confFileText = lib.mkOption {
+          type = lib.types.lines;
+          description = ''
+            This will contain the contents of {file}`cups-pdf.conf` for this instance, derived from {option}`settings`.
+            You can use this option to append text to the file.
+          '';
+        };
+        settings = lib.mkOption {
+          type = lib.types.submodule (instanceSettings name);
+          default = { };
+          example = {
+            Out = "\${HOME}/cups-pdf";
+            UserUMask = "0033";
+          };
+          description = ''
+            Settings for a cups-pdf instance, see the descriptions in the template config file in the cups-pdf package.
+            The key value pairs declared here will be translated into proper key value pairs for {file}`cups-pdf.conf`.
+            Setting a value to `null` disables the option and removes it from the file.
+          '';
+        };
       };
+      config.confFileText = lib.pipe config.settings [
+        (lib.filterAttrs (key: value: value != null))
+        (lib.mapAttrs (key: builtins.toString))
+        (lib.mapAttrsToList (key: value: "${key} ${value}\n"))
+        lib.concatStrings
+      ];
     };
-    config.confFileText = lib.pipe config.settings [
-      (lib.filterAttrs (key: value: value != null))
-      (lib.mapAttrs (key: builtins.toString))
-      (lib.mapAttrsToList (key: value: "${key} ${value}\n"))
-      lib.concatStrings
-    ];
-  };
 
   cupsPdfCfg = config.services.printing.cups-pdf;
 
@@ -121,20 +144,26 @@ let
     (lib.filterAttrs (name: lib.getAttr "enable"))
     (lib.mapAttrs (name: lib.getAttr "confFileText"))
     (lib.mapAttrs (name: pkgs.writeText "cups-pdf-${name}.conf"))
-    (lib.mapAttrsToList (name: confFile: "ln --symbolic --no-target-directory ${confFile} /var/lib/cups/cups-pdf-${name}.conf\n"))
+    (lib.mapAttrsToList (
+      name: confFile:
+      "ln --symbolic --no-target-directory ${confFile} /var/lib/cups/cups-pdf-${name}.conf\n"
+    ))
     lib.concatStrings
   ];
 
   printerSettings = lib.pipe cupsPdfCfg.instances [
     (lib.filterAttrs (name: lib.getAttr "enable"))
     (lib.filterAttrs (name: lib.getAttr "installPrinter"))
-    (lib.mapAttrsToList (name: instance: (lib.mapAttrs (key: lib.mkDefault) {
-      inherit name;
-      model = "CUPS-PDF_opt.ppd";
-      deviceUri = "cups-pdf:/${name}";
-      description = "virtual printer for cups-pdf instance ${name}";
-      location = instance.settings.Out;
-    })))
+    (lib.mapAttrsToList (
+      name: instance:
+      (lib.mapAttrs (key: lib.mkDefault) {
+        inherit name;
+        model = "CUPS-PDF_opt.ppd";
+        deviceUri = "cups-pdf:/${name}";
+        description = "virtual printer for cups-pdf instance ${name}";
+        location = instance.settings.Out;
+      })
+    ))
   ];
 
 in
@@ -149,7 +178,7 @@ in
     '';
     instances = lib.mkOption {
       type = lib.types.attrsOf (lib.types.submodule instanceConfig);
-      default.pdf = {};
+      default.pdf = { };
       example.pdf.settings = {
         Out = "\${HOME}/cups-pdf";
         UserUMask = "0033";

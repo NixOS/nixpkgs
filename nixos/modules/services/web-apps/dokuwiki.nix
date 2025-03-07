@@ -436,7 +436,7 @@ in
             extraConfig = "internal;";
           };
 
-          "~ ^/lib.*\.(js|css|gif|png|ico|jpg|jpeg)$" = {
+          "~ ^/lib.*\\.(js|css|gif|png|ico|jpg|jpeg)$" = {
             extraConfig = "expires 365d;";
           };
 
@@ -475,7 +475,7 @@ in
     services.caddy = {
       enable = true;
       virtualHosts = mapAttrs' (hostName: cfg: (
-        nameValuePair "http://${hostName}" {
+        nameValuePair hostName {
           extraConfig = ''
             root * ${pkg hostName cfg}/share/dokuwiki
             file_server

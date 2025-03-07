@@ -3,6 +3,7 @@
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
+  fetchpatch2,
   setuptools,
   versioningit,
   cffi,
@@ -25,9 +26,17 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "QCoDeS";
     repo = "Qcodes_contrib_drivers";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     sha256 = "sha256-/W5oC5iqYifMR3/s7aSQ2yTJNmkemkc0KVxIU0Es3zY=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      name = "numpy-v2-compat.patch";
+      url = "https://github.com/QCoDeS/Qcodes_contrib_drivers/commit/fc792779dbc0b023bdccfe8877dac192d75a88db.patch?full_index=1";
+      hash = "sha256-G+/IVG9a4mOFudpqEpI+Q/+WwF6lm2nRKjODCdzWHe0=";
+    })
+  ];
 
   build-system = [
     setuptools

@@ -1,6 +1,11 @@
-{ lib, fetchurl, buildDunePackage
-, ppx_cstruct, stdlib-shims
-, cstruct, lwt
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+  ppx_cstruct,
+  stdlib-shims,
+  cstruct,
+  lwt,
 }:
 
 buildDunePackage rec {
@@ -15,7 +20,11 @@ buildDunePackage rec {
   };
 
   buildInputs = [ ppx_cstruct ];
-  propagatedBuildInputs = [ cstruct lwt stdlib-shims ];
+  propagatedBuildInputs = [
+    cstruct
+    lwt
+    stdlib-shims
+  ];
 
   meta = with lib; {
     description = "Collect runtime profiling information in CTF format";

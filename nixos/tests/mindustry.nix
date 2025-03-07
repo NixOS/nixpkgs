@@ -1,22 +1,25 @@
-import ./make-test-python.nix ({ pkgs, ... }: {
-  name = "mindustry";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ fgaz ];
-  };
+import ./make-test-python.nix (
+  { pkgs, ... }:
+  {
+    name = "mindustry";
+    meta = with pkgs.lib.maintainers; {
+      maintainers = [ fgaz ];
+    };
 
-  nodes.machine = { config, pkgs, ... }: {
-    imports = [
-      ./common/x11.nix
-    ];
+    nodes.machine =
+      { config, pkgs, ... }:
+      {
+        imports = [
+          ./common/x11.nix
+        ];
 
-    services.xserver.enable = true;
-    environment.systemPackages = [ pkgs.mindustry ];
-  };
+        services.xserver.enable = true;
+        environment.systemPackages = [ pkgs.mindustry ];
+      };
 
-  enableOCR = true;
+    enableOCR = true;
 
-  testScript =
-    ''
+    testScript = ''
       machine.wait_for_x()
       machine.execute("mindustry >&2 &")
       machine.wait_for_window("Mindustry")
@@ -25,4 +28,5 @@ import ./make-test-python.nix ({ pkgs, ... }: {
       machine.wait_for_text(r"(Play|Database|Editor|Mods|Settings|Quit)")
       machine.screenshot("screen")
     '';
-})
+  }
+)

@@ -1,13 +1,14 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, boost
-, glibmm
-, gtkmm2
-, gerbv
-, librsvg
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  boost,
+  glibmm,
+  gtkmm2,
+  gerbv,
+  librsvg,
 }:
 
 stdenv.mkDerivation rec {
@@ -21,9 +22,18 @@ stdenv.mkDerivation rec {
     hash = "sha256-c5YabBqZn6ilIkF3lifTsYyLZMsZN21jDj1hNu0PRAc=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
 
-  buildInputs = [ boost glibmm gtkmm2 gerbv librsvg ];
+  buildInputs = [
+    boost
+    glibmm
+    gtkmm2
+    gerbv
+    librsvg
+  ];
 
   postPatch = ''
     substituteInPlace ./Makefile.am \

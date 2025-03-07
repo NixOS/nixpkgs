@@ -1,24 +1,39 @@
-{ lib, stdenv, fetchFromGitHub, cmake, doxygen }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  doxygen,
+}:
 
 stdenv.mkDerivation rec {
   pname = "geographiclib";
-  version = "2.4";
+  version = "2.5";
 
   src = fetchFromGitHub {
     owner = "geographiclib";
     repo = "geographiclib";
-    rev = "v${version}";
-    hash = "sha256-1CuB3H4KFFRo8wdFaa9NQLBdT8HxK2AdiVkEhbeYagM=";
+    tag = "v${version}";
+    hash = "sha256-hFheJ6Q1GEfqPVq7t4SHN/n2JniqCQUzwl7GEVG0jgo=";
   };
 
-  nativeBuildInputs = [ cmake doxygen ];
-
-  cmakeFlags = [
-    "-DBUILD_DOCUMENTATION=ON"
-    "-DCMAKE_INSTALL_LIBDIR=lib"
+  outputs = [
+    "dev"
+    "doc"
+    "out"
   ];
 
-  meta = with lib; {
+  nativeBuildInputs = [
+    cmake
+    doxygen
+  ];
+
+  cmakeFlags = [
+    (lib.cmakeBool "BUILD_DOCUMENTATION" true)
+    (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "lib")
+  ];
+
+  meta = {
     description = "C++ geographic library";
     longDescription = ''
       GeographicLib is a small C++ library for:
@@ -27,8 +42,8 @@ stdenv.mkDerivation rec {
       * gravity (e.g., EGM2008) and geomagnetic field (e.g., WMM2020) calculations
     '';
     homepage = "https://geographiclib.sourceforge.io/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ sikmir ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ sikmir ];
+    platforms = lib.platforms.unix;
   };
 }

@@ -1,4 +1,10 @@
-{ lib, buildDunePackage, dns-client-mirage, mimic, happy-eyeballs-mirage }:
+{
+  lib,
+  buildDunePackage,
+  dns-client-mirage,
+  mimic,
+  happy-eyeballs-mirage,
+}:
 
 buildDunePackage {
   pname = "mimic-happy-eyeballs";

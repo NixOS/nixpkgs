@@ -1,39 +1,58 @@
-{ lib
-, stdenv
-, env
-, fetchFromGitHub
-, pkg-config
-, qbs
-, wrapQtAppsHook
-, qtbase
-, qtdeclarative
-, qttools
-, qtwayland
-, qtsvg
-, zlib
-, zstd
-, libGL
+{
+  lib,
+  stdenv,
+  env,
+  fetchFromGitHub,
+  pkg-config,
+  qbs,
+  wrapQtAppsHook,
+  qtbase,
+  qtdeclarative,
+  qttools,
+  qtwayland,
+  qtsvg,
+  zlib,
+  zstd,
+  libGL,
 }:
 
 let
-  qtEnv = env "tiled-qt-env" [ qtbase qtdeclarative qtsvg qttools qtwayland ];
+  qtEnv = env "tiled-qt-env" [
+    qtbase
+    qtdeclarative
+    qtsvg
+    qttools
+    qtwayland
+  ];
 in
 
 stdenv.mkDerivation rec {
   pname = "tiled";
-  version = "1.11.0";
+  version = "1.11.2";
 
   src = fetchFromGitHub {
     owner = "mapeditor";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-cFS1OSYfGMsnw+VkZD/HO4+D+pxNKuifWjNhy0FoxN0=";
+    sha256 = "sha256-9oUKn51MQcsStgIJrp9XW5YAIpAUcO0kzfGnYA3gz/E=";
   };
 
-  nativeBuildInputs = [ pkg-config qbs wrapQtAppsHook ];
-  buildInputs = [ qtEnv zlib zstd libGL ];
+  nativeBuildInputs = [
+    pkg-config
+    qbs
+    wrapQtAppsHook
+  ];
+  buildInputs = [
+    qtEnv
+    zlib
+    zstd
+    libGL
+  ];
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   strictDeps = true;
 
@@ -67,10 +86,13 @@ stdenv.mkDerivation rec {
     description = "Free, easy to use and flexible tile map editor";
     homepage = "https://www.mapeditor.org/";
     license = with licenses; [
-      bsd2	# libtiled and tmxviewer
-      gpl2Plus	# all the rest
+      bsd2 # libtiled and tmxviewer
+      gpl2Plus # all the rest
     ];
-    maintainers = with maintainers; [ dywedir ryan4yin ];
+    maintainers = with maintainers; [
+      dywedir
+      ryan4yin
+    ];
     platforms = platforms.linux;
   };
 }

@@ -1,15 +1,18 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, SDL2
-, SDL2_image
-, rtaudio
-, rtmidi
-, glew
-, alsa-lib
-, cmake
-, pkg-config
-, zenity
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  SDL2,
+  SDL2_image,
+  rtaudio,
+  rtmidi,
+  glew,
+  alsa-lib,
+  angelscript,
+  cmake,
+  pkg-config,
+  zenity,
 }:
 let
   # package depends on SDL2main static library
@@ -19,14 +22,22 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "theforceengine";
-  version = "1.10.000";
+  version = "1.15.000";
 
   src = fetchFromGitHub {
     owner = "luciusDXL";
     repo = "TheForceEngine";
     rev = "v${version}";
-    hash = "sha256-oEcjHb6HY5qxKuPoNBuobPbdi39hUUWtKSb7FbAfEpc=";
+    hash = "sha256-pcPR2KCGbyL1JABF30yJrlcLPGU2h0//Ghf7e7zYO0s=";
   };
+
+  patches = [
+    # https://github.com/luciusDXL/TheForceEngine/pull/493 -- fixes finding data files outside program directory
+    (fetchpatch {
+      url = "https://github.com/luciusDXL/TheForceEngine/commit/476a5277666bfdffb33ed10bdd1177bfe8ec3a70.diff";
+      hash = "sha256-ZcfKIXQMcWMmnM4xfQRd/Ozl09vkQr3jUxZ5e4Mw5CU=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -40,6 +51,14 @@ stdenv.mkDerivation rec {
     rtmidi
     glew
     alsa-lib
+    angelscript
+  ];
+
+  hardeningDisable = [ "format" ];
+
+  cmakeFlags = [
+    (lib.cmakeBool "ENABLE_EDITOR" true)
+    (lib.cmakeBool "ENABLE_FORCE_SCRIPT" true)
   ];
 
   prePatch = ''

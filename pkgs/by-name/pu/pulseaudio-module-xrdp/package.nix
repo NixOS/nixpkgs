@@ -1,11 +1,12 @@
-{ stdenv
-, fetchFromGitHub
-, lib
-, pulseaudio
-, autoreconfHook
-, pkg-config
-, nixosTests
-, gitUpdater
+{
+  stdenv,
+  fetchFromGitHub,
+  lib,
+  pulseaudio,
+  autoreconfHook,
+  pkg-config,
+  nixosTests,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation rec {
@@ -24,7 +25,7 @@ stdenv.mkDerivation rec {
     mv pulseaudio-* pulseaudio-src
     chmod +w -Rv pulseaudio-src
     cp ${pulseaudio.dev}/include/pulse/config.h pulseaudio-src
-    configureFlags="$configureFlags PULSE_DIR=$(realpath ./pulseaudio-src)"
+    appendToVar configureFlags "PULSE_DIR=$(realpath ./pulseaudio-src)"
   '';
 
   installPhase = ''

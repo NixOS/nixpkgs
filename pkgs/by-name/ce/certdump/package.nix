@@ -17,7 +17,7 @@ buildDotnetModule rec {
   };
 
   projectFile = [ "CertDump.sln" ];
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
 
   selfContainedBuild = true;
   executables = [ "CertDump" ];

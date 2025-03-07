@@ -1,29 +1,29 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, substituteAll
+{
+  lib,
+  buildGo124Module,
+  fetchFromGitHub,
+  replaceVars,
 }:
 
-buildGoModule rec {
+buildGo124Module rec {
   pname = "govulncheck";
-  version = "1.1.3";
+  version = "1.1.4";
 
   src = fetchFromGitHub {
     owner = "golang";
     repo = "vuln";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-ydJ8AeoCnLls6dXxjI05+THEqPPdJqtAsKTriTIK9Uc=";
+    tag = "v${version}";
+    hash = "sha256-d1JWh/K+65p0TP5vAQbSyoatjN4L5nm3VEA+qBSrkAA=";
   };
 
   patches = [
     # patch in version information
-    (substituteAll {
-      src = ./version.patch;
+    (replaceVars ./version.patch {
       inherit version;
     })
   ];
 
-  vendorHash = "sha256-jESQV4Na4Hooxxd0RL96GHkA7Exddco5izjnhfH6xTg=";
+  vendorHash = "sha256-MSTKDeWVxD2Fa6fNoku4EwFwC90XZ5acnM67crcgXDg=";
 
   subPackages = [
     "cmd/govulncheck"
@@ -65,6 +65,9 @@ buildGoModule rec {
       reported for a Linux build.
     '';
     license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ jk SuperSandro2000 ];
+    maintainers = with maintainers; [
+      jk
+      SuperSandro2000
+    ];
   };
 }

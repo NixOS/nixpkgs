@@ -1,6 +1,7 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
@@ -18,7 +19,9 @@ buildGoModule rec {
     let
       t = "github.com/prometheus/common/version";
     in
-    [ "-s" "-w"
+    [
+      "-s"
+      "-w"
       "-X ${t}.Version=${version}"
       "-X ${t}.Revision=unknown"
       "-X ${t}.Branch=unknown"
@@ -34,6 +37,9 @@ buildGoModule rec {
     homepage = "https://github.com/prometheus/statsd_exporter";
     changelog = "https://github.com/prometheus/statsd_exporter/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ benley ivan ];
+    maintainers = with maintainers; [
+      benley
+      ivan
+    ];
   };
 }

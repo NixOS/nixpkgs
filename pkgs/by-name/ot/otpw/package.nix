@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, coreutils
-, fetchurl
-, libxcrypt
-, pam
-, procps
-, unixtools
-, util-linux
+{
+  lib,
+  stdenv,
+  coreutils,
+  fetchurl,
+  libxcrypt,
+  pam,
+  procps,
+  unixtools,
+  util-linux,
 }:
 
 stdenv.mkDerivation rec {

@@ -3,7 +3,11 @@
 kubernetes.overrideAttrs (_: rec {
   pname = "kubectl";
 
-  outputs = [ "out" "man" "convert" ];
+  outputs = [
+    "out"
+    "man"
+    "convert"
+  ];
 
   WHAT = lib.concatStringsSep " " [
     "cmd/kubectl"

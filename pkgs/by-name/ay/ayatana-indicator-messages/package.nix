@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "AyatanaIndicators";
     repo = "ayatana-indicator-messages";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-D1181eD2mAVXEa7RLXXC4b2tVGrxbh0WWgtbC1anHH0=";
   };
 
@@ -39,6 +39,11 @@ stdenv.mkDerivation (finalAttrs: {
     "out"
     "dev"
   ] ++ lib.optionals withDocumentation [ "devdoc" ];
+
+  patches = [
+    # Remove when https://github.com/AyatanaIndicators/ayatana-indicator-messages/pull/39 merged & in release
+    ./fix-pie.patch
+  ];
 
   postPatch =
     ''

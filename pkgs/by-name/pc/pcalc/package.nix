@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, bison, flex }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  bison,
+  flex,
+}:
 
 stdenv.mkDerivation rec {
   pname = "pcalc";
@@ -12,7 +18,10 @@ stdenv.mkDerivation rec {
   };
 
   makeFlags = [ "DESTDIR= BINDIR=$(out)/bin" ];
-  nativeBuildInputs = [ bison flex ];
+  nativeBuildInputs = [
+    bison
+    flex
+  ];
 
   enableParallelBuilding = true;
 

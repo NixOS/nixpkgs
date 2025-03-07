@@ -1,8 +1,9 @@
-{ lib
-, fetchFromGitLab
-, makeWrapper
-, python3
-, antlr4_9
+{
+  lib,
+  fetchFromGitLab,
+  makeWrapper,
+  python3,
+  antlr4_9,
 }:
 
 let
@@ -36,7 +37,8 @@ let
   };
 in
 
-with python.pkgs; buildPythonApplication rec {
+with python.pkgs;
+buildPythonApplication rec {
   pname = "baserow";
   version = "1.12.1";
   format = "setuptools";

@@ -1,15 +1,16 @@
-{ lib
-, fetchFromGitHub
-, python3Packages
-, intltool
-, mate
-, libnotify
-, gtk3
-, gdk-pixbuf
-, gobject-introspection
-, wrapGAppsHook3
-, glib
-, gitUpdater
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+  intltool,
+  mate,
+  libnotify,
+  gtk3,
+  gdk-pixbuf,
+  gobject-introspection,
+  wrapGAppsHook3,
+  glib,
+  gitUpdater,
 }:
 
 python3Packages.buildPythonApplication rec {

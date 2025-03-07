@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, cmake
-, zlib
-, openssl
-, libsodium
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  cmake,
+  zlib,
+  openssl,
+  libsodium,
 
-# for passthru.tests
-, ffmpeg
-, sshping
-, wireshark
+  # for passthru.tests
+  ffmpeg,
+  sshping,
+  wireshark,
 }:
 
 stdenv.mkDerivation rec {
@@ -22,7 +23,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-FLfcxy6R4IFRxYuYGntXCrJmP2MOfSg3ZF1anGEsG3k=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   postPatch = ''
     # Fix headers to use libsodium instead of NaCl
@@ -33,9 +37,16 @@ stdenv.mkDerivation rec {
   # included in `buildInputs` such as libX11.
   cmakeFlags = [ "-DWITH_EXAMPLES=OFF" ];
 
-  buildInputs = [ zlib openssl libsodium ];
+  buildInputs = [
+    zlib
+    openssl
+    libsodium
+  ];
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
   postFixup = ''
     substituteInPlace $dev/lib/cmake/libssh/libssh-config.cmake \

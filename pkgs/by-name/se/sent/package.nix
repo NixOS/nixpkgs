@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchurl, farbfeld, libX11, libXft, makeWrapper
-, patches ? [] }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  farbfeld,
+  libX11,
+  libXft,
+  makeWrapper,
+  patches ? [ ],
+}:
 
 stdenv.mkDerivation rec {
   pname = "sent";
@@ -10,7 +18,10 @@ stdenv.mkDerivation rec {
     sha256 = "0cxysz5lp25mgww73jl0mgip68x7iyvialyzdbriyaff269xxwvv";
   };
 
-  buildInputs = [ libX11 libXft ];
+  buildInputs = [
+    libX11
+    libXft
+  ];
   nativeBuildInputs = [ makeWrapper ];
 
   # unpacking doesn't create a directory

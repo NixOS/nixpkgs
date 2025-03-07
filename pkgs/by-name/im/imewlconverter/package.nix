@@ -7,16 +7,16 @@
 
 buildDotnetModule {
   pname = "imewlconverter";
-  version = "3.1.1";
+  version = "3.2.0";
   src = fetchFromGitHub {
     owner = "studyzy";
     repo = "imewlconverter";
-    rev = "v3.1.1";
-    hash = "sha256-lrYqQWh+PZreJ6oJg+OCipiqUyfG/2moP/n+jR+Kcj8=";
+    rev = "v3.2.0";
+    hash = "sha256-7rKWbLbRCnMmJ9pwqMYZZZujyxbX84g4rFQ/Ms/R+uE=";
   };
 
   projectFile = "src/ImeWlConverterCmd/ImeWlConverterCmd.csproj";
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
 
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
   dotnet-runtime = dotnetCorePackages.aspnetcore_8_0;

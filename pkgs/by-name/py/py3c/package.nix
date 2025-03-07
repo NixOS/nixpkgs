@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, python311 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python311,
+}:
 
 stdenv.mkDerivation rec {
   pname = "py3c";

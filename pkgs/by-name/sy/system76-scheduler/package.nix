@@ -1,14 +1,17 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, pipewire
-, pkg-config
-, bcc
-, dbus }:
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  pipewire,
+  pkg-config,
+  bcc,
+  dbus,
+}:
 
 let
   version = "2.0.2";
-in rustPlatform.buildRustPackage {
+in
+rustPlatform.buildRustPackage {
   pname = "system76-scheduler";
   inherit version;
   src = fetchFromGitHub {
@@ -17,10 +20,17 @@ in rustPlatform.buildRustPackage {
     rev = version;
     hash = "sha256-5GiHmu++YRCewDHm/qxKmQwDIAZwlW5Eya/fDriVSdA=";
   };
-  cargoHash = "sha256-HxNqGe+KrmOoLgaKY9pniPWFF/hehSi1dgZn4LPE7OA=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-o2Ma9WNmBz+18SSMBPXYK4BXzHFLQwa3JWhq4S7jSBg=";
 
-  nativeBuildInputs = [ pkg-config rustPlatform.bindgenHook ];
-  buildInputs = [ dbus pipewire ];
+  nativeBuildInputs = [
+    pkg-config
+    rustPlatform.bindgenHook
+  ];
+  buildInputs = [
+    dbus
+    pipewire
+  ];
 
   EXECSNOOP_PATH = "${bcc}/bin/execsnoop";
 
@@ -38,7 +48,11 @@ in rustPlatform.buildRustPackage {
     mainProgram = "system76-scheduler";
     homepage = "https://github.com/pop-os/system76-scheduler";
     license = licenses.mpl20;
-    platforms = [ "x86_64-linux" "x86-linux" "aarch64-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "x86-linux"
+      "aarch64-linux"
+    ];
     maintainers = [ maintainers.cmm ];
   };
 }

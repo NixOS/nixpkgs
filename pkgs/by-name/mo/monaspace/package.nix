@@ -1,24 +1,29 @@
-{ lib
-, stdenvNoCC
-, fetchzip
+{
+  lib,
+  stdenvNoCC,
+  fetchzip,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "monaspace";
-  version = "1.101";
+  version = "1.200";
 
   src = fetchzip {
     url = "https://github.com/githubnext/monaspace/releases/download/v${finalAttrs.version}/monaspace-v${finalAttrs.version}.zip";
     stripRoot = false;
-    hash = "sha256-o5s4XBuwqA4sJ5KhEn5oYttBj4ojekr/LO6Ww9oQRGw=";
+    hash = "sha256-j1xQYVxfTNDVuzCKvT5FbU29t8XsH4XqcZ477sjydts=";
   };
 
-  outputs = [ "out" "woff" ];
+  outputs = [
+    "out"
+    "woff"
+  ];
 
   installPhase = ''
     runHook preInstall
 
     pushd monaspace-v${finalAttrs.version}/fonts/
+    install -Dm644 frozen/*.ttf -t $out/share/fonts/truetype
     install -Dm644 otf/*.otf -t $out/share/fonts/opentype
     install -Dm644 variable/*.ttf -t $out/share/fonts/truetype
     install -Dm644 webfonts/*.woff -t $woff/share/fonts/woff
@@ -50,7 +55,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     '';
     homepage = "https://monaspace.githubnext.com/";
     license = lib.licenses.ofl;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.all;
   };
 })

@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchCrate
-, rustPlatform
-, openssl
-, pkg-config
-, Security
-, SystemConfiguration
+{
+  lib,
+  stdenv,
+  fetchCrate,
+  rustPlatform,
+  openssl,
+  pkg-config,
+  Security,
+  SystemConfiguration,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -17,7 +18,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-YjGfnYK22RIVa8D8CWnAxHGDqXENGAPIeQQ606Q3JW8=";
   };
 
-  cargoHash = "sha256-Fx/XNmml/5opekmH1qs/f3sD45KWfNZjdOxTuNJfZiw=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-CwucGAwAvxePNQu5p1OWx9o9xsvpzX1abH6HyF43nEE=";
 
   prePatch = ''
     rm .cargo/config.toml
@@ -27,12 +29,14 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs = [
-    openssl
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    Security
-    SystemConfiguration
-  ];
+  buildInputs =
+    [
+      openssl
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      Security
+      SystemConfiguration
+    ];
 
   meta = with lib; {
     description = "Command-line tool for downloading APK files from various sources";

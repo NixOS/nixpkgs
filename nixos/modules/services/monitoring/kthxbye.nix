@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   cfg = config.services.kthxbye;
 in
@@ -19,7 +24,7 @@ in
 
     extraOptions = lib.mkOption {
       type = with lib.types; listOf str;
-      default = [];
+      default = [ ];
       description = ''
         Extra command line options.
 

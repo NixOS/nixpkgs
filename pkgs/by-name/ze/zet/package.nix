@@ -1,7 +1,8 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, fetchpatch2
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  fetchpatch2,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -24,7 +25,8 @@ rustPlatform.buildRustPackage rec {
     })
   ];
 
-  cargoHash = "sha256-kHIOsSR7ZxBzp4dtm2hbi8ddtlQ86x5EASk5HFmnhFo=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-1nuYdaQ6p0tnd7a7/H8wVtzOCGr0pCTcsT+Q0X9/DGc=";
 
   # tests fail with `--release`
   # https://github.com/yarrow/zet/pull/7
@@ -35,7 +37,10 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "zet";
     homepage = "https://github.com/yarrow/zet";
     changelog = "https://github.com/yarrow/zet/blob/${src.rev}/CHANGELOG.md";
-    license = with licenses; [ asl20 mit ];
+    license = with licenses; [
+      asl20
+      mit
+    ];
     maintainers = with maintainers; [ figsoda ];
   };
 }

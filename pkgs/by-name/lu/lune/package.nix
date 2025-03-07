@@ -1,15 +1,10 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, darwin
-, cmake
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  cmake,
 }:
-
-let
-  inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
-in
 rustPlatform.buildRustPackage rec {
   pname = "lune";
   version = "0.8.9";
@@ -22,16 +17,12 @@ rustPlatform.buildRustPackage rec {
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-yTpklksOV+AFuW3Bc0L6sbAiJsQ+mseF1yz37FcWt1k=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-oOz7r/5NTzdNbVvO2erWlWR0f0fH7HWBo9LVkZN65pU=";
 
   nativeBuildInputs = [
     pkg-config
     cmake # required for libz-ng-sys
-  ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    Security
-    SystemConfiguration
   ];
 
   # error: linker `aarch64-linux-gnu-gcc` not found
@@ -63,7 +54,5 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/lune-org/lune/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mpl20;
     maintainers = with maintainers; [ lammermann ];
-    # note: Undefined symbols for architecture x86_64
-    broken = stdenv.hostPlatform.isDarwin;
   };
 }

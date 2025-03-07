@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "mtytel";
     repo = "helm";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-pI1umrJGMRBB3ifiWrInG7/Rwn+8j9f8iKkzC/cW2p8=";
   };
 

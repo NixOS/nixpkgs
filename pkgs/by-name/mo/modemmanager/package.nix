@@ -1,29 +1,32 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, fetchpatch
-, glib
-, libgudev
-, ppp
-, gettext
-, pkg-config
-, libxslt
-, python3
-, libmbim
-, libqmi
-, bash-completion
-, meson
-, ninja
-, vala
-, dbus
-, bash
-, gobject-introspection
-, buildPackages
-, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && stdenv.hostPlatform.emulatorAvailable buildPackages
-, polkit
-, withPolkit ? lib.meta.availableOn stdenv.hostPlatform polkit
-, systemd
-, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  fetchpatch,
+  glib,
+  libgudev,
+  ppp,
+  gettext,
+  pkg-config,
+  libxslt,
+  python3,
+  libmbim,
+  libqmi,
+  bash-completion,
+  meson,
+  ninja,
+  vala,
+  dbus,
+  bash,
+  gobject-introspection,
+  buildPackages,
+  withIntrospection ?
+    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
+    && stdenv.hostPlatform.emulatorAvailable buildPackages,
+  polkit,
+  withPolkit ? lib.meta.availableOn stdenv.hostPlatform polkit,
+  systemd,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
 }:
 
 stdenv.mkDerivation rec {
@@ -52,33 +55,38 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    gettext
-    glib
-    pkg-config
-    libxslt
-    python3
-  ] ++ lib.optionals withIntrospection [
-    gobject-introspection
-    vala
-  ];
+  nativeBuildInputs =
+    [
+      meson
+      ninja
+      gettext
+      glib
+      pkg-config
+      libxslt
+      python3
+    ]
+    ++ lib.optionals withIntrospection [
+      gobject-introspection
+      vala
+    ];
 
-  buildInputs = [
-    glib
-    libgudev
-    ppp
-    libmbim
-    libqmi
-    bash-completion
-    dbus
-    bash # shebangs in share/ModemManager/fcc-unlock.available.d/
-  ] ++ lib.optionals withPolkit [
-    polkit
-  ] ++ lib.optionals withSystemd [
-    systemd
-  ];
+  buildInputs =
+    [
+      glib
+      libgudev
+      ppp
+      libmbim
+      libqmi
+      bash-completion
+      dbus
+      bash # shebangs in share/ModemManager/fcc-unlock.available.d/
+    ]
+    ++ lib.optionals withPolkit [
+      polkit
+    ]
+    ++ lib.optionals withSystemd [
+      systemd
+    ];
 
   nativeInstallCheckInputs = [
     python3

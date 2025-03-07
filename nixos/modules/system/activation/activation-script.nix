@@ -110,14 +110,19 @@ in
       default = {};
 
       example = literalExpression ''
-        { stdio.text =
-          '''
-            # Needed by some programs.
-            ln -sfn /proc/self/fd /dev/fd
-            ln -sfn /proc/self/fd/0 /dev/stdin
-            ln -sfn /proc/self/fd/1 /dev/stdout
-            ln -sfn /proc/self/fd/2 /dev/stderr
-          ''';
+        {
+          stdio = {
+            # Run after /dev has been mounted
+            deps = [ "specialfs" ];
+            text =
+              '''
+                # Needed by some programs.
+                ln -sfn /proc/self/fd /dev/fd
+                ln -sfn /proc/self/fd/0 /dev/stdin
+                ln -sfn /proc/self/fd/1 /dev/stdout
+                ln -sfn /proc/self/fd/2 /dev/stderr
+              ''';
+          };
         }
       '';
 
@@ -198,7 +203,7 @@ in
       type = types.nullOr types.path;
       visible = false;
       description = ''
-        The env(1) executable that is linked system-wide to
+        The {manpage}`env(1)` executable that is linked system-wide to
         `/usr/bin/env`.
       '';
     };
@@ -255,7 +260,8 @@ in
       ''
       else ''
         rm -f /usr/bin/env
-        rmdir --ignore-fail-on-non-empty /usr/bin /usr
+        if test -d /usr/bin; then rmdir --ignore-fail-on-non-empty /usr/bin; fi
+        if test -d /usr; then rmdir --ignore-fail-on-non-empty /usr; fi
       '';
 
     system.activationScripts.specialfs =

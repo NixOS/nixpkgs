@@ -1,8 +1,9 @@
-{ stdenv
-, jdk
-, lib
-, callPackage
-, modules ? [ "java.base" ]
+{
+  stdenv,
+  jdk,
+  lib,
+  callPackage,
+  modules ? [ "java.base" ],
 }:
 
 let
@@ -31,9 +32,10 @@ let
     passthru = {
       home = "${jre}";
       tests = {
-        jre_minimal-hello = callPackage ./tests/test_jre_minimal.nix {};
-        jre_minimal-hello-logging = callPackage ./tests/test_jre_minimal_with_logging.nix {};
+        jre_minimal-hello = callPackage ./tests/test_jre_minimal.nix { };
+        jre_minimal-hello-logging = callPackage ./tests/test_jre_minimal_with_logging.nix { };
       };
     };
   };
-in jre
+in
+jre

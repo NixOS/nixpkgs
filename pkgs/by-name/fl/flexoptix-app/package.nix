@@ -1,4 +1,10 @@
-{ lib, appimageTools, fetchurl, asar }: let
+{
+  lib,
+  appimageTools,
+  fetchurl,
+  asar,
+}:
+let
   pname = "flexoptix-app";
   version = "5.21.2-latest";
 
@@ -10,7 +16,7 @@
 
   udevRules = fetchurl {
     url = "https://www.flexoptix.net/static/frontend/Flexoptix/default/en_US/files/99-tprogrammer.rules";
-    hash = "sha256-OZe5dV50xq99olImbo7JQxPjRd7hGyBIVwFvtR9cIVc=";
+    hash = "sha256-faowRYdrk88WUpOpaEfedzybBgxVRZhvAaYP9HAuzAE=";
   };
 
   appimageContents = (appimageTools.extract { inherit pname version src; }).overrideAttrs (oA: {
@@ -24,7 +30,8 @@
     '';
   });
 
-in appimageTools.wrapAppImage {
+in
+appimageTools.wrapAppImage {
   inherit pname version;
   src = appimageContents;
 

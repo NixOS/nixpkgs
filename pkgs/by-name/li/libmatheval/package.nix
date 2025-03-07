@@ -1,10 +1,21 @@
-{ lib, stdenv, fetchurl, pkg-config, guile, flex, fetchpatch }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  guile,
+  flex,
+  fetchpatch,
+}:
 
 stdenv.mkDerivation rec {
   version = "1.1.11";
   pname = "libmatheval";
 
-  nativeBuildInputs = [ pkg-config flex ];
+  nativeBuildInputs = [
+    pkg-config
+    flex
+  ];
   buildInputs = [ guile ];
 
   src = fetchurl {
@@ -47,4 +58,3 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
   };
 }
-

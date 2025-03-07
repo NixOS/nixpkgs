@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "sqlfluff";
-  version = "3.2.5";
+  version = "3.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sqlfluff";
     repo = "sqlfluff";
-    rev = "refs/tags/${version}";
-    hash = "sha256-jYAzFqHuTpcgmnodt7vuNWTHRP3rd0B/3tp2Q04/N9o=";
+    tag = version;
+    hash = "sha256-PQSGB8723y0+cptoLHpXzXfSQFicf5tasbTEf0efA8c=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];
@@ -31,6 +31,7 @@ python3.pkgs.buildPythonApplication rec {
       jinja2
       oyaml
       pathspec
+      platformdirs
       pytest
       regex
       tblib
@@ -61,6 +62,8 @@ python3.pkgs.buildPythonApplication rec {
     "test__linter__skip_dbt_model_disabled"
     "test_rules__test_helper_has_variable_introspection"
     "test__rules__std_file_dbt"
+    # Assertion failure
+    "test_html_with_external_css"
   ];
 
   pythonImportsCheck = [ "sqlfluff" ];

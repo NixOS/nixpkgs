@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "ktor-cli";
-  version = "0.3.0";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "ktorio";
     repo = "ktor-cli";
-    rev = "refs/tags/${version}";
-    hash = "sha256-6KPi7CntJjzKfpOgHlGOv20ifIu+FT63dLeq+ko4jMc=";
+    tag = version;
+    hash = "sha256-TGwkGm1Rsg82f6FJeTnhyvfS2MRMe5+DTdxTsOwwb1Q=";
   };
 
   subPackages = "cmd/ktor";

@@ -6,19 +6,19 @@
 
 buildGoModule rec {
   pname = "k8sgpt";
-  version = "0.3.46";
+  version = "0.3.50";
 
   src = fetchFromGitHub {
     owner = "k8sgpt-ai";
     repo = "k8sgpt";
     rev = "v${version}";
-    hash = "sha256-QOxE1OnRXoTrIU9ilyRbqxGvlBLNV6fsD2ZosvSOUA8=";
+    hash = "sha256-KPS30xoOmGwfws5dlY/77FblVqKJWa4182YIsdiZxA8=";
   };
 
-  vendorHash = "sha256-bR20FpjALms5jqBaIwzMr/g0AognCUVj5u095qWnEFI=";
+  vendorHash = "sha256-QwLIDUtNMJarwQYWSp739Nfgf7lGmohAXaMga4g93DI=";
 
   # https://nixos.org/manual/nixpkgs/stable/#var-go-CGO_ENABLED
-  CGO_ENABLED = 0;
+  env.CGO_ENABLED = 0;
 
   # https://nixos.org/manual/nixpkgs/stable/#ssec-skip-go-tests
   checkFlags = [

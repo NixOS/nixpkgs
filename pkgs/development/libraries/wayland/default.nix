@@ -1,23 +1,24 @@
-{ lib
-, stdenv
-, fetchurl
-, meson
-, pkg-config
-, ninja
-, wayland-scanner
-, withTests ? stdenv.hostPlatform.isLinux
-, libffi
-, epoll-shim
-, withDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform
-, graphviz-nox
-, doxygen
-, libxslt
-, xmlto
-, python3
-, docbook_xsl
-, docbook_xml_dtd_45
-, docbook_xml_dtd_42
-, testers
+{
+  lib,
+  stdenv,
+  fetchurl,
+  meson,
+  pkg-config,
+  ninja,
+  wayland-scanner,
+  withTests ? stdenv.hostPlatform.isLinux,
+  libffi,
+  epoll-shim,
+  withDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform,
+  graphviz-nox,
+  doxygen,
+  libxslt,
+  xmlto,
+  python3,
+  docbook_xsl,
+  docbook_xml_dtd_45,
+  docbook_xml_dtd_42,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -25,7 +26,9 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.23.1";
 
   src = fetchurl {
-    url = with finalAttrs; "https://gitlab.freedesktop.org/wayland/wayland/-/releases/${version}/downloads/${pname}-${version}.tar.xz";
+    url =
+      with finalAttrs;
+      "https://gitlab.freedesktop.org/wayland/wayland/-/releases/${version}/downloads/${pname}-${version}.tar.xz";
     hash = "sha256-hk+yqDmeLQ7DnVbp2bdTwJN3W+rcYCLOgfRBkpqB5e0=";
   };
 
@@ -33,15 +36,25 @@ stdenv.mkDerivation (finalAttrs: {
     ./darwin.patch
   ];
 
-  postPatch = lib.optionalString withDocumentation ''
-    patchShebangs doc/doxygen/gen-doxygen.py
-  '' + lib.optionalString stdenv.hostPlatform.isStatic ''
-    # delete line containing os-wrappers-test, disables
-    # the building of os-wrappers-test
-    sed -i '/os-wrappers-test/d' tests/meson.build
-  '';
+  postPatch =
+    lib.optionalString withDocumentation ''
+      patchShebangs doc/doxygen/gen-doxygen.py
+    ''
+    + lib.optionalString stdenv.hostPlatform.isStatic ''
+      # delete line containing os-wrappers-test, disables
+      # the building of os-wrappers-test
+      sed -i '/os-wrappers-test/d' tests/meson.build
+    '';
 
-  outputs = [ "out" "dev" ] ++ lib.optionals withDocumentation [ "doc" "man" ];
+  outputs =
+    [
+      "out"
+      "dev"
+    ]
+    ++ lib.optionals withDocumentation [
+      "doc"
+      "man"
+    ];
   separateDebugInfo = true;
 
   mesonFlags = [
@@ -54,30 +67,35 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  nativeBuildInputs = [
-    meson
-    pkg-config
-    ninja
-    wayland-scanner
-  ] ++ lib.optionals withDocumentation [
-    (graphviz-nox.override { pango = null; }) # To avoid an infinite recursion
-    doxygen
-    libxslt
-    xmlto
-    python3
-    docbook_xml_dtd_45
-    docbook_xsl
-  ];
+  nativeBuildInputs =
+    [
+      meson
+      pkg-config
+      ninja
+      wayland-scanner
+    ]
+    ++ lib.optionals withDocumentation [
+      (graphviz-nox.override { pango = null; }) # To avoid an infinite recursion
+      doxygen
+      libxslt
+      xmlto
+      python3
+      docbook_xml_dtd_45
+      docbook_xsl
+    ];
 
-  buildInputs = [
-    libffi
-  ] ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
-    epoll-shim
-  ] ++ lib.optionals withDocumentation [
-    docbook_xsl
-    docbook_xml_dtd_45
-    docbook_xml_dtd_42
-  ];
+  buildInputs =
+    [
+      libffi
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
+      epoll-shim
+    ]
+    ++ lib.optionals withDocumentation [
+      docbook_xsl
+      docbook_xml_dtd_45
+      docbook_xml_dtd_42
+    ];
 
   passthru = {
     tests.pkg-config = testers.hasPkgConfigModules {
@@ -99,7 +117,11 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://wayland.freedesktop.org/";
     license = licenses.mit; # Expat version
     platforms = platforms.unix;
-    maintainers = with maintainers; [ primeos codyopel qyliss ];
+    maintainers = with maintainers; [
+      primeos
+      codyopel
+      qyliss
+    ];
     pkgConfigModules = [
       "wayland-client"
       "wayland-cursor"

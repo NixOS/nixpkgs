@@ -1,5 +1,6 @@
-{ system ? builtins.currentSystem
-, pkgs ? import ../../.. { inherit system; }
+{
+  system ? builtins.currentSystem,
+  pkgs ? import ../../.. { inherit system; },
 }:
 
 {

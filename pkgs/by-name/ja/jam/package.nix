@@ -120,7 +120,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       impl
       orivej
-      AndersonTorres
     ];
     platforms = lib.platforms.unix;
   };

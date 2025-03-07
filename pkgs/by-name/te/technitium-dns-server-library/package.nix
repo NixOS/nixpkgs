@@ -12,14 +12,14 @@ buildDotnetModule rec {
   src = fetchFromGitHub {
     owner = "TechnitiumSoftware";
     repo = "TechnitiumLibrary";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-stfxYe0flE1daPuXw/GAgY52ZD7pkqnBIBvmSVPWWjI=";
     name = "${pname}-${version}";
   };
 
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
 
-  nugetDeps = ./nuget-deps.nix;
+  nugetDeps = ./nuget-deps.json;
 
   projectFile = [
     "TechnitiumLibrary.ByteTree/TechnitiumLibrary.ByteTree.csproj"

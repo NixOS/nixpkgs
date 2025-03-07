@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, updateAutotoolsGnuConfigScriptsHook }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  updateAutotoolsGnuConfigScriptsHook,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libpipeline";

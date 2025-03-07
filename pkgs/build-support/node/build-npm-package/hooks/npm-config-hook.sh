@@ -81,9 +81,11 @@ npmConfigHook() {
         cachePath="$TMPDIR/cache"
     fi
 
-    npm config set cache "$cachePath"
-    npm config set offline true
-    npm config set progress false
+    echo "Setting npm_config_cache to $cachePath"
+    # do not use npm config to avoid modifying .npmrc
+    export npm_config_cache="$cachePath"
+    export npm_config_offline="true"
+    export npm_config_progress="false"
 
     echo "Installing dependencies"
 

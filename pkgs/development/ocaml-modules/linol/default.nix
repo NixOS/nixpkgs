@@ -1,7 +1,15 @@
-{ lib, fetchurl, buildDunePackage, yojson, logs, lsp, ppx_yojson_conv_lib, trace }:
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+  yojson,
+  logs,
+  lsp,
+  ppx_yojson_conv_lib,
+  trace,
+}:
 
-buildDunePackage
-rec {
+buildDunePackage rec {
   pname = "linol";
   version = "0.6";
 

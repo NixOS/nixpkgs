@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -15,8 +20,8 @@ in
     enable = mkEnableOption "i3 window manager";
 
     configFile = mkOption {
-      default     = null;
-      type        = with types; nullOr path;
+      default = null;
+      type = with types; nullOr path;
       description = ''
         Path to the i3 configuration file.
         If left at the default value, $HOME/.i3/config will be used.
@@ -33,8 +38,8 @@ in
     };
 
     extraSessionCommands = mkOption {
-      default     = "";
-      type        = types.lines;
+      default = "";
+      type = types.lines;
       description = ''
         Shell commands executed just before i3 is started.
       '';
@@ -44,7 +49,11 @@ in
 
     extraPackages = mkOption {
       type = with types; listOf package;
-      default = with pkgs; [ dmenu i3status i3lock ];
+      default = with pkgs; [
+        dmenu
+        i3status
+        i3lock
+      ];
       defaultText = literalExpression ''
         with pkgs; [
           dmenu
@@ -59,19 +68,19 @@ in
   };
 
   config = mkIf cfg.enable {
-    services.xserver.windowManager.session = [{
-      name  = "i3";
-      start = ''
-        ${cfg.extraSessionCommands}
+    services.xserver.windowManager.session = [
+      {
+        name = "i3";
+        start = ''
+          ${cfg.extraSessionCommands}
 
-        ${lib.optionalString cfg.updateSessionEnvironment updateSessionEnvironmentScript}
+          ${lib.optionalString cfg.updateSessionEnvironment updateSessionEnvironmentScript}
 
-        ${cfg.package}/bin/i3 ${optionalString (cfg.configFile != null)
-          "-c /etc/i3/config"
-        } &
-        waitPID=$!
-      '';
-    }];
+          ${cfg.package}/bin/i3 ${optionalString (cfg.configFile != null) "-c /etc/i3/config"} &
+          waitPID=$!
+        '';
+      }
+    ];
     environment.systemPackages = [ cfg.package ] ++ cfg.extraPackages;
     environment.etc."i3/config" = mkIf (cfg.configFile != null) {
       source = cfg.configFile;
@@ -79,7 +88,12 @@ in
   };
 
   imports = [
-    (mkRemovedOptionModule [ "services" "xserver" "windowManager" "i3-gaps" "enable" ]
-      "i3-gaps was merged into i3. Use services.xserver.windowManager.i3.enable instead.")
+    (mkRemovedOptionModule [
+      "services"
+      "xserver"
+      "windowManager"
+      "i3-gaps"
+      "enable"
+    ] "i3-gaps was merged into i3. Use services.xserver.windowManager.i3.enable instead.")
   ];
 }

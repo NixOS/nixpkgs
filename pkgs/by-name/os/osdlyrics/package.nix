@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
 
-, autoreconfHook
-, pkg-config
-, intltool
+  autoreconfHook,
+  pkg-config,
+  intltool,
 
-, glib
-, gtk2
-, dbus-glib
-, libappindicator-gtk2
-, libnotify
-, python3
-, runtimeShell
+  glib,
+  gtk2,
+  dbus-glib,
+  libappindicator-gtk2,
+  libnotify,
+  python3,
+  runtimeShell,
 }:
 
 stdenv.mkDerivation rec {
@@ -39,12 +40,14 @@ stdenv.mkDerivation rec {
     libappindicator-gtk2
     libnotify
     python3.pkgs.wrapPython
-    (python3.withPackages (pp: with pp; [
-      chardet
-      dbus-python
-      pycurl
-      pygobject3
-    ]))
+    (python3.withPackages (
+      pp: with pp; [
+        chardet
+        dbus-python
+        pycurl
+        pygobject3
+      ]
+    ))
   ];
 
   postFixup = ''

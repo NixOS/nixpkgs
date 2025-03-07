@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "palantir";
     repo = "python-jsonrpc-server";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-hlMw+eL1g+oe5EG7mwK8jSX0UcOQo7La+BZ3tjEojl0=";
   };
 

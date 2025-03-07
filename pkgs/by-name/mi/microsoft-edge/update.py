@@ -1,5 +1,5 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -i python3 -p python3Packages.packaging python3Packages.debian common-updater-scripts
+#! nix-shell -i python3 -p python3Packages.packaging python3Packages.python-debian common-updater-scripts
 
 import base64
 import textwrap

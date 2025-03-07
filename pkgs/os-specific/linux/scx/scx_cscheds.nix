@@ -2,7 +2,6 @@
   lib,
   llvmPackages,
   fetchFromGitHub,
-  fetchpatch,
   writeShellScript,
   bash,
   meson,
@@ -28,22 +27,6 @@ in
 llvmPackages.stdenv.mkDerivation (finalAttrs: {
   pname = "scx_cscheds";
   inherit (scx-common) version src;
-
-  patches = [
-    # TODO: remove at the next point release
-    (fetchpatch {
-      url = "https://github.com/sched-ext/scx/commit/22d45e6ddbea81efc17a91ca6d713a7e396cea52.patch?full_index=1";
-      hash = "sha256-SLSQNqRpKNT1HuuuT1h+fR1o3nbbVpfRCB30cFieIeg=";
-    })
-    (fetchpatch {
-      url = "https://github.com/sched-ext/scx/commit/a72c24e7e5670b4533c4508d6d6c980d8487cb50.patch?full_index=1";
-      hash = "sha256-RUo7tl3V8iPN/fEm0oyj8UBwiWdna/ttZh+/OtcvflE=";
-    })
-    (fetchpatch {
-      url = "https://github.com/sched-ext/scx/commit/21cf3ccd1d263cf7aac3afe337911f18ba329dca.patch?full_index=1";
-      hash = "sha256-vOHM+1QvVxI89azqoIrOhjfSyYHTMGuIWAAupcGQ7Oc=";
-    })
-  ];
 
   # scx needs specific commits of bpftool and libbpf
   # can be found in meson.build of scx src
@@ -84,13 +67,16 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
       --replace-fail '[build_bpftool' "['${misbehaviorBash}', build_bpftool"
   '';
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    jq
-    pkg-config
-    zstd
-  ] ++ bpftools.buildInputs ++ bpftools.nativeBuildInputs;
+  nativeBuildInputs =
+    [
+      meson
+      ninja
+      jq
+      pkg-config
+      zstd
+    ]
+    ++ bpftools.buildInputs
+    ++ bpftools.nativeBuildInputs;
 
   buildInputs = [
     elfutils
@@ -109,7 +95,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     (lib.mapAttrsToList lib.mesonBool {
       # needed libs are already fetched as FOD
       "offline" = true;
-      # rust based schedulers are built seperately
+      # rust based schedulers are built separately
       "enable_rust" = false;
     })
     # Clang to use when compiling .bpf.c

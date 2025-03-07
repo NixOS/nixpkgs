@@ -12,7 +12,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "MikeMirzayanov";
     repo = "testlib";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-AttzDYLDlpfL3Zvds6yBR/m6W/3UZKR+1LVylqOTQcw=";
   };
 

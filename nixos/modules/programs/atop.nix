@@ -1,8 +1,14 @@
 # Global configuration for atop.
 
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
-let cfg = config.programs.atop;
+let
+  cfg = config.programs.atop;
 
 in
 {
@@ -95,40 +101,49 @@ in
 
   config = lib.mkIf cfg.enable (
     let
-      atop =
-        if cfg.atopgpu.enable then
-          (cfg.package.override { withAtopgpu = true; })
-        else
-          cfg.package;
+      atop = if cfg.atopgpu.enable then (cfg.package.override { withAtopgpu = true; }) else cfg.package;
     in
     {
       environment.etc = lib.mkIf (cfg.settings != { }) {
-        atoprc.text = lib.concatStrings
-          (lib.mapAttrsToList
-            (n: v: ''
-              ${n} ${builtins.toString v}
-            '')
-            cfg.settings);
+        atoprc.text = lib.concatStrings (
+          lib.mapAttrsToList (n: v: ''
+            ${n} ${builtins.toString v}
+          '') cfg.settings
+        );
       };
-      environment.systemPackages = [ atop (lib.mkIf cfg.netatop.enable cfg.netatop.package) ];
+      environment.systemPackages = [
+        atop
+        (lib.mkIf cfg.netatop.enable cfg.netatop.package)
+      ];
       boot.extraModulePackages = [ (lib.mkIf cfg.netatop.enable cfg.netatop.package) ];
       systemd =
         let
           mkSystemd = type: name: restartTriggers: {
             ${name} = {
               inherit restartTriggers;
-              wantedBy = [ (if type == "services" then "multi-user.target" else if type == "timers" then "timers.target" else null) ];
+              wantedBy = [
+                (
+                  if type == "services" then
+                    "multi-user.target"
+                  else if type == "timers" then
+                    "timers.target"
+                  else
+                    null
+                )
+              ];
             };
           };
           mkService = mkSystemd "services";
           mkTimer = mkSystemd "timers";
         in
         {
-          packages = [ atop (lib.mkIf cfg.netatop.enable cfg.netatop.package) ];
+          packages = [
+            atop
+            (lib.mkIf cfg.netatop.enable cfg.netatop.package)
+          ];
           services = lib.mkMerge [
-            (lib.mkIf cfg.atopService.enable (lib.recursiveUpdate
-              (mkService "atop" [ atop ])
-              {
+            (lib.mkIf cfg.atopService.enable (
+              lib.recursiveUpdate (mkService "atop" [ atop ]) {
                 # always convert logs to newer version first
                 # XXX might trigger TimeoutStart but restarting atop.service will
                 # convert remainings logs and start eventually
@@ -149,7 +164,8 @@ in
                     fi
                   done
                 '';
-              }))
+              }
+            ))
             (lib.mkIf cfg.atopacctService.enable (mkService "atopacct" [ atop ]))
             (lib.mkIf cfg.netatop.enable (mkService "netatop" [ cfg.netatop.package ]))
             (lib.mkIf cfg.atopgpu.enable (mkService "atopgpu" [ atop ]))

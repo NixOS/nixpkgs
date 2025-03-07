@@ -23,11 +23,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ludeeus";
     repo = "aiogithubapi";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-z7l7Qx9Kg1FZ9nM0V2NzTyi3gbE2hakbc/GZ1CzDmKw=";
   };
 
   __darwinAllowLocalNetworking = true;
+
+  pythonRelaxDeps = [ "async-timeout" ];
 
   postPatch = ''
     # Upstream is releasing with the help of a CI to PyPI, GitHub releases

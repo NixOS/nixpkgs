@@ -20,7 +20,7 @@
 
 stdenv.mkDerivation rec {
   pname = "nfs-ganesha";
-  version = "6.3";
+  version = "6.5";
 
   outputs = [
     "out"
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     owner = "nfs-ganesha";
     repo = "nfs-ganesha";
     rev = "V${version}";
-    hash = "sha256-4gPhmBC42uCcaEhdJj9ZWw4ECB9UYwP+c2ndBFbBK0k=";
+    hash = "sha256-OHGmEzHu8y/TPQ70E2sicaLtNgvlf/bRq8JRs6S1tpY=";
   };
 
   preConfigure = "cd src";

@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
 
@@ -7,8 +12,11 @@
   config = lib.mkMerge [
 
     {
-      system.activationScripts.etc =
-        lib.stringAfter [ "users" "groups" ] config.system.build.etcActivationCommands;
+      system.activationScripts.etc = lib.stringAfter [
+        "users"
+        "groups"
+        "specialfs"
+      ] config.system.build.etcActivationCommands;
     }
 
     (lib.mkIf config.system.etc.overlay.enable {
@@ -19,24 +27,32 @@
           message = "`system.etc.overlay.enable` requires `boot.initrd.systemd.enable`";
         }
         {
-          assertion = (!config.system.etc.overlay.mutable) -> (config.systemd.sysusers.enable || config.services.userborn.enable);
+          assertion =
+            (!config.system.etc.overlay.mutable)
+            -> (config.systemd.sysusers.enable || config.services.userborn.enable);
           message = "`!system.etc.overlay.mutable` requires `systemd.sysusers.enable` or `services.userborn.enable`";
         }
         {
-          assertion = lib.versionAtLeast config.boot.kernelPackages.kernel.version "6.6";
-          message = "`system.etc.overlay.enable requires a newer kernel, at least version 6.6";
+          assertion =
+            (config.system.switch.enable)
+            -> (lib.versionAtLeast config.boot.kernelPackages.kernel.version "6.6");
+          message = "switchable systems with `system.etc.overlay.enable` require a newer kernel, at least version 6.6";
         }
       ];
 
-      boot.initrd.availableKernelModules = [ "loop" "erofs" "overlay" ];
+      boot.initrd.availableKernelModules = [
+        "loop"
+        "erofs"
+        "overlay"
+      ];
 
       boot.initrd.systemd = {
         mounts = [
           {
-            where = "/run/etc-metadata";
+            where = "/run/nixos-etc-metadata";
             what = "/etc-metadata-image";
             type = "erofs";
-            options = "loop";
+            options = "loop,ro";
             unitConfig = {
               # Since this unit depends on the nix store being mounted, it cannot
               # be a dependency of local-fs.target, because if it did, we'd have
@@ -63,34 +79,42 @@
             where = "/sysroot/etc";
             what = "overlay";
             type = "overlay";
-            options = lib.concatStringsSep "," ([
-              "relatime"
-              "redirect_dir=on"
-              "metacopy=on"
-              "lowerdir=/run/etc-metadata::/etc-basedir"
-            ] ++ lib.optionals config.system.etc.overlay.mutable [
-              "rw"
-              "upperdir=/sysroot/.rw-etc/upper"
-              "workdir=/sysroot/.rw-etc/work"
-            ] ++ lib.optionals (!config.system.etc.overlay.mutable) [
-              "ro"
-            ]);
+            options = lib.concatStringsSep "," (
+              [
+                "relatime"
+                "redirect_dir=on"
+                "metacopy=on"
+                "lowerdir=/run/nixos-etc-metadata::/etc-basedir"
+              ]
+              ++ lib.optionals config.system.etc.overlay.mutable [
+                "rw"
+                "upperdir=/sysroot/.rw-etc/upper"
+                "workdir=/sysroot/.rw-etc/work"
+              ]
+              ++ lib.optionals (!config.system.etc.overlay.mutable) [
+                "ro"
+              ]
+            );
             requiredBy = [ "initrd-fs.target" ];
             before = [ "initrd-fs.target" ];
-            requires = [
-              config.boot.initrd.systemd.services.initrd-find-etc.name
-            ] ++ lib.optionals config.system.etc.overlay.mutable [
-              config.boot.initrd.systemd.services."rw-etc".name
-            ];
-            after = [
-              config.boot.initrd.systemd.services.initrd-find-etc.name
-            ] ++ lib.optionals config.system.etc.overlay.mutable [
-              config.boot.initrd.systemd.services."rw-etc".name
-            ];
+            requires =
+              [
+                config.boot.initrd.systemd.services.initrd-find-etc.name
+              ]
+              ++ lib.optionals config.system.etc.overlay.mutable [
+                config.boot.initrd.systemd.services."rw-etc".name
+              ];
+            after =
+              [
+                config.boot.initrd.systemd.services.initrd-find-etc.name
+              ]
+              ++ lib.optionals config.system.etc.overlay.mutable [
+                config.boot.initrd.systemd.services."rw-etc".name
+              ];
             unitConfig = {
               RequiresMountsFor = [
                 "/sysroot/nix/store"
-                "/run/etc-metadata"
+                "/run/nixos-etc-metadata"
               ];
               DefaultDependencies = false;
             };
@@ -134,17 +158,18 @@
                 RemainAfterExit = true;
               };
 
-              script = /* bash */ ''
-                set -uo pipefail
+              script = # bash
+                ''
+                  set -uo pipefail
 
-                closure="$(realpath /nixos-closure)"
+                  closure="$(realpath /nixos-closure)"
 
-                metadata_image="$(${pkgs.chroot-realpath}/bin/chroot-realpath /sysroot "$closure/etc-metadata-image")"
-                ln -s "/sysroot$metadata_image" /etc-metadata-image
+                  metadata_image="$(${pkgs.chroot-realpath}/bin/chroot-realpath /sysroot "$closure/etc-metadata-image")"
+                  ln -s "/sysroot$metadata_image" /etc-metadata-image
 
-                basedir="$(${pkgs.chroot-realpath}/bin/chroot-realpath /sysroot "$closure/etc-basedir")"
-                ln -s "/sysroot$basedir" /etc-basedir
-              '';
+                  basedir="$(${pkgs.chroot-realpath}/bin/chroot-realpath /sysroot "$closure/etc-basedir")"
+                  ln -s "/sysroot$basedir" /etc-basedir
+                '';
             };
           }
         ];

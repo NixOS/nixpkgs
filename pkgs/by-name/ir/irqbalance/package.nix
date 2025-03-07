@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, glib, ncurses, libcap_ng }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  glib,
+  ncurses,
+  libcap_ng,
+}:
 
 stdenv.mkDerivation rec {
   pname = "irqbalance";
@@ -11,20 +20,26 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-7es7wwsPnDSF37uL5SCgAQB+u+qGWmWDHOh3JkHuXMs=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ glib ncurses libcap_ng ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
+  buildInputs = [
+    glib
+    ncurses
+    libcap_ng
+  ];
 
   LDFLAGS = "-lncurses";
 
-  postInstall =
-    ''
-      # Systemd service
-      mkdir -p $out/lib/systemd/system
-      grep -vi "EnvironmentFile" misc/irqbalance.service >$out/lib/systemd/system/irqbalance.service
-      substituteInPlace $out/lib/systemd/system/irqbalance.service \
-        --replace /usr/sbin/irqbalance $out/bin/irqbalance \
-        --replace ' $IRQBALANCE_ARGS' ""
-    '';
+  postInstall = ''
+    # Systemd service
+    mkdir -p $out/lib/systemd/system
+    grep -vi "EnvironmentFile" misc/irqbalance.service >$out/lib/systemd/system/irqbalance.service
+    substituteInPlace $out/lib/systemd/system/irqbalance.service \
+      --replace /usr/sbin/irqbalance $out/bin/irqbalance \
+      --replace ' $IRQBALANCE_ARGS' ""
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/Irqbalance/irqbalance";

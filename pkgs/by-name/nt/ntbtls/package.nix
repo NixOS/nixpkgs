@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchurl, gettext, libgpg-error, libgcrypt, libksba, zlib }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gettext,
+  libgpg-error,
+  libgcrypt,
+  libksba,
+  zlib,
+}:
 
 stdenv.mkDerivation rec {
   pname = "ntbtls";
@@ -9,10 +18,17 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-vfy5kCSs7JxsS5mK1juzkh30z+5KdyrWwMoyTbvysHw=";
   };
 
-  outputs = [ "dev" "out" ];
+  outputs = [
+    "dev"
+    "out"
+  ];
 
-  buildInputs = [ libgcrypt libgpg-error libksba zlib ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin gettext;
+  buildInputs = [
+    libgcrypt
+    libgpg-error
+    libksba
+    zlib
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin gettext;
 
   postInstall = ''
     moveToOutput "bin/ntbtls-config" $dev

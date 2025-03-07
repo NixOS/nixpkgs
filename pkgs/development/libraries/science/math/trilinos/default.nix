@@ -1,15 +1,16 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, blas
-, boost
-, cmake
-, gfortran
-, lapack
-, mpi
-, suitesparse
-, swig
-, withMPI ? false
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  blas,
+  boost,
+  cmake,
+  gfortran,
+  lapack,
+  mpi,
+  suitesparse,
+  swig,
+  withMPI ? false,
 }:
 
 # NOTE: Not all packages are enabled.  We specifically enable the ones
@@ -66,21 +67,37 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "trilinos";
     repo = "Trilinos";
-    rev = "${pname}-release-${lib.replaceStrings [ "." ] [ "-" ] version}";
+    tag = "trilinos-release-${lib.replaceStrings [ "." ] [ "-" ] version}";
     sha256 = "sha256-Nqjr7RAlUHm6vs87a1P84Y7BIZEL0Vs/A1Z6dykfv+o=";
   };
 
-  nativeBuildInputs = [ cmake gfortran swig ];
+  nativeBuildInputs = [
+    cmake
+    gfortran
+    swig
+  ];
 
-  buildInputs = [ blas boost lapack suitesparse ] ++ lib.optionals withMPI [ mpi ];
+  buildInputs = [
+    blas
+    boost
+    lapack
+    suitesparse
+  ] ++ lib.optionals withMPI [ mpi ];
 
   preConfigure =
-    if withMPI then ''
-      cmakeFlagsArray+=(${flagsBase} ${flagsParallel})
-    ''
-    else ''
-      cmakeFlagsArray+=(${flagsBase})
-    '';
+    if withMPI then
+      ''
+        cmakeFlagsArray+=(${flagsBase} ${flagsParallel})
+      ''
+    else
+      ''
+        cmakeFlagsArray+=(${flagsBase})
+      '';
+
+  postInstall = ''
+    # remove dangling symlink
+    rm $out/lib/cmake/tribits/doc/developers_guide/TribitsBuildReference.html
+  '';
 
   passthru = {
     inherit withMPI;

@@ -67,7 +67,7 @@
   ============================
   The example file pkgs/applications/editors/vim/plugins/default.nix provides
   both:
-  * manually mantained plugins
+  * manually maintained plugins
   * plugins created by VAM's nix#ExportPluginsForNix implementation
 
   I highly recommend to lookup vim plugin attribute names at the [vim-pi] project
@@ -499,8 +499,15 @@ rec {
       nativeBuildInputs =
         oldAttrs.nativeBuildInputs or [ ]
         ++ lib.optionals (stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-          vimCommandCheckHook
           vimGenDocHook
+        ];
+
+      doCheck = oldAttrs.doCheck or true;
+
+      nativeCheckInputs =
+        oldAttrs.nativeCheckInputs or [ ]
+        ++ lib.optionals (stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+          vimCommandCheckHook
           # many neovim plugins keep using buildVimPlugin
           neovimRequireCheckHook
         ];

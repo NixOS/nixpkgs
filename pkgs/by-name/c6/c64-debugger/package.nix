@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchgit
-, alsa-lib
-, gtk3
-, libGL
-, libGLU
-, libX11
-, pkg-config
-, upx
-, xcbutil
+{
+  lib,
+  stdenv,
+  fetchgit,
+  alsa-lib,
+  gtk3,
+  libGL,
+  libGLU,
+  libX11,
+  pkg-config,
+  upx,
+  xcbutil,
 }:
 
 stdenv.mkDerivation {
@@ -18,7 +19,7 @@ stdenv.mkDerivation {
   src = fetchgit {
     url = "https://git.code.sf.net/p/c64-debugger/code";
     rev = "f97772e3f5c8b4fa99e8ed212ed1c4cb1e2389f1";
-    sha256 = "sha256-3SR73AHQlYSEYpJLtQ/aJ1UITZGq7aA9tQKxBsn/yuc=";
+    hash = "sha256-3SR73AHQlYSEYpJLtQ/aJ1UITZGq7aA9tQKxBsn/yuc=";
   };
 
   buildInputs = [
@@ -84,10 +85,19 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  env = {
+    NIX_CFLAGS_COMPILE = toString [
+      "-Wno-error=narrowing"
+      "-Wno-error=implicit-function-declaration"
+      "-Wno-error=int-conversion"
+      "-Wno-error=incompatible-pointer-types"
+    ];
+  };
+
+  meta = {
     homepage = "https://sourceforge.net/projects/c64-debugger";
     description = "Commodore 64, Atari XL/XE and NES code and memory debugger that works in real time";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl3Only # c64-debugger
       mit # MTEngine
       # emulators included in c64-debugger
@@ -95,7 +105,7 @@ stdenv.mkDerivation {
       gpl2 # nestopiaue
     ];
     mainProgram = "c64debugger";
-    maintainers = [ maintainers.detegr ];
-    platforms = platforms.linux;
+    maintainers = [ lib.maintainers.detegr ];
+    platforms = lib.platforms.linux;
   };
 }

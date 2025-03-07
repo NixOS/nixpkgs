@@ -1,4 +1,9 @@
-{ lib, stdenv, perlPackages, fetchurl }:
+{
+  lib,
+  stdenv,
+  perlPackages,
+  fetchurl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "dkimproxy";
@@ -21,7 +26,13 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [ perlPackages.perl ];
-  propagatedBuildInputs = with perlPackages; [ CryptX Error MailDKIM MIMETools NetServer ];
+  propagatedBuildInputs = with perlPackages; [
+    CryptX
+    Error
+    MailDKIM
+    MIMETools
+    NetServer
+  ];
 
   meta = with lib; {
     description = "SMTP-proxy that signs and/or verifies emails";

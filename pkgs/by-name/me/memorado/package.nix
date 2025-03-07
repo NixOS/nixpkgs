@@ -1,27 +1,28 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, gtk4
-, pkg-config
-, libadwaita
-, blueprint-compiler
-, python3
-, desktop-file-utils
-, gobject-introspection
-, wrapGAppsHook4
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  gtk4,
+  pkg-config,
+  libadwaita,
+  blueprint-compiler,
+  python3,
+  desktop-file-utils,
+  gobject-introspection,
+  wrapGAppsHook4,
 }:
 
 stdenv.mkDerivation rec {
   pname = "memorado";
-  version = "0.4";
+  version = "0.5";
 
   src = fetchFromGitHub {
     owner = "wbernard";
     repo = "Memorado";
-    rev = "refs/tags/${version}";
-    hash = "sha256-yWu2+VAa5FkpLs/KLI0lcNzFLGN/kiq6frtW8SHN+W4=";
+    tag = version;
+    hash = "sha256-HNZdWRATjSfMk0e99CERPuR891549+wS/WeA7XGFxto=";
   };
 
   nativeBuildInputs = [
@@ -37,9 +38,11 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gtk4
     libadwaita
-    (python3.withPackages (ps: with ps; [
-      pygobject3
-    ]))
+    (python3.withPackages (
+      ps: with ps; [
+        pygobject3
+      ]
+    ))
   ];
 
   meta = with lib; {

@@ -1,28 +1,38 @@
-{ lib, stdenv, fetchurl, ncurses, coreutils }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ncurses,
+  coreutils,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ncftp";
-  version = "3.2.6";
+  version = "3.2.7";
 
   src = fetchurl {
-    url = "ftp://ftp.ncftp.com/ncftp/ncftp-${version}-src.tar.xz";
-    sha256 = "1389657cwgw5a3kljnqmhvfh4vr2gcr71dwz1mlhf22xq23hc82z";
+    url = "https://www.ncftp.com/public_ftp/ncftp/ncftp-${finalAttrs.version}-src.tar.xz";
+    hash = "sha256-1BxcTWYUqOri7U5NetprbTr8yftlpO2bhxE0S+8k9+g=";
   };
 
   buildInputs = [ ncurses ];
 
   enableParallelBuilding = true;
 
-  # Workaround build failure on -fno-common toolchains like upstream
-  # gcc-10. Otherwise build fails as:
-  #   ld: bookmark.o: (.bss+0x20): multiple definition of `gBm';
-  #     gpshare.o:(.bss+0x0): first defined here
-  env.NIX_CFLAGS_COMPILE = toString ([ "-fcommon" ]
-    # these are required for the configure script to work with clang
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+  env = {
+    NIX_CFLAGS_COMPILE = toString [
+      # Workaround build failure on -fno-common toolchains like upstream
+      # gcc-10. Otherwise build fails as:
+      #   ld: bookmark.o: (.bss+0x20): multiple definition of `gBm';
+      #     gpshare.o:(.bss+0x0): first defined here
+      "-fcommon"
+      # configure fails due to ancient sample C program:
+      # error: installation or configuration problem: C compiler cannot create executables.
       "-Wno-implicit-int"
+      # error: two or more data types in declaration specifiers
       "-Wno-implicit-function-declaration"
-    ]);
+    ];
+  };
 
   preConfigure = ''
     find -name Makefile.in | xargs sed -i '/^TMPDIR=/d'
@@ -49,5 +59,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ bjornfor ];
     platforms = platforms.unix;
     license = licenses.clArtistic;
+    mainProgram = "ncftp";
   };
-}
+})

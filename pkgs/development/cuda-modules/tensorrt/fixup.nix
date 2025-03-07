@@ -75,6 +75,11 @@ finalAttrs: prevAttrs: {
         rm "$dir"
         mv "targets/${targetArch}/$dir" "$dir"
       done
+
+      # Remove broken symlinks
+      for dir in include samples; do
+        rm "targets/${targetArch}/$dir" || :
+      done
     '';
 
   # Tell autoPatchelf about runtime dependencies.

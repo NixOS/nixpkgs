@@ -1,10 +1,8 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   rustPlatform,
   installShellFiles,
-  apple-sdk_11,
   pandoc,
   testers,
   lsd,
@@ -21,14 +19,13 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-LlMcBMb40yN+rlvGVsh7JaC3j9sF60YxitQQXe1q/oI=";
   };
 
-  cargoHash = "sha256-yyXFtMyiMq6TaN9/7+BaBERHgubeA8SJGOr08Mn3RnY=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-yOJKXfPtzaYF012YCyW3m+9ffag4En4ZfTaiVh/85dM=";
 
   nativeBuildInputs = [
     installShellFiles
     pandoc
   ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_11 ];
 
   postInstall = ''
     pandoc --standalone --to man doc/lsd.md -o lsd.1

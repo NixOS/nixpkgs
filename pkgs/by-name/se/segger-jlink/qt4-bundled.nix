@@ -1,11 +1,11 @@
 {
-  lib
-, stdenv
-, src
-, version
-, autoPatchelfHook
-, fontconfig
-, xorg
+  lib,
+  stdenv,
+  src,
+  version,
+  autoPatchelfHook,
+  fontconfig,
+  xorg,
 }:
 
 stdenv.mkDerivation {
@@ -71,4 +71,3 @@ stdenv.mkDerivation {
     ];
   };
 }
-

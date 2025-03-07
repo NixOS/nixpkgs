@@ -11,7 +11,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Garmelon";
     repo = "PFERD";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     sha256 = "sha256-4+LlnGv/i9zDf+HeW86PJ6XsPMEkJ0JzhLr14MJ4WKM=";
   };
 
@@ -31,7 +31,7 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/Garmelon/PFERD";
     description = "Tool for downloading course-related files from ILIAS";
     license = licenses.mit;
-    maintainers = with maintainers; [_0xbe7a];
+    maintainers = with maintainers; [ _0xbe7a ];
     mainProgram = "pferd";
   };
 }

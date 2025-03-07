@@ -1,4 +1,10 @@
-{ lib, rustPlatform, fetchFromGitHub, nixVersions, nix-update-script }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  nixVersions,
+  nix-update-script,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "nil";
@@ -11,7 +17,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-DqsN/VkYVr4M0PVRQKXPPOTaind5miYZURIYqM4MxYM=";
   };
 
-  cargoHash = "sha256-E4wmVunaX5SeBlXaLEpzMZ+IY0YVeJ1NORPo9msHr6M=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-7TR/xTc66WpPszJDrpisVvHXl2+FGrUOskZAkGyY04Q=";
 
   nativeBuildInputs = [
     (lib.getBin nixVersions.latest)
@@ -30,8 +37,14 @@ rustPlatform.buildRustPackage rec {
     description = "Yet another language server for Nix";
     homepage = "https://github.com/oxalica/nil";
     changelog = "https://github.com/oxalica/nil/releases/tag/${version}";
-    license = with licenses; [ mit asl20 ];
-    maintainers = with maintainers; [ figsoda oxalica ];
+    license = with licenses; [
+      mit
+      asl20
+    ];
+    maintainers = with maintainers; [
+      figsoda
+      oxalica
+    ];
     mainProgram = "nil";
   };
 }

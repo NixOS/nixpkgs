@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, libiconv }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libiconv,
+}:
 
 stdenv.mkDerivation rec {
   version = "3.16";
@@ -16,7 +21,7 @@ stdenv.mkDerivation rec {
     cd src
   '';
 
-  installPhase= ''
+  installPhase = ''
     mkdir -p $out/bin
     cp aescrypt $out/bin
     cp aescrypt_keygen $out/bin
@@ -26,10 +31,13 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Encrypt files with Advanced Encryption Standard (AES)";
-    homepage    = "https://www.aescrypt.com/";
-    license     = licenses.gpl2Only;
-    maintainers = with maintainers; [ lovek323 qknight ];
-    platforms   = lib.platforms.all;
+    homepage = "https://www.aescrypt.com/";
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [
+      lovek323
+      qknight
+    ];
+    platforms = lib.platforms.all;
     hydraPlatforms = with platforms; unix;
   };
 }

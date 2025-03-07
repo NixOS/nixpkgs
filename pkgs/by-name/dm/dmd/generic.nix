@@ -1,46 +1,48 @@
-{ version
-, dmdHash
-, phobosHash
+{
+  version,
+  dmdHash,
+  phobosHash,
 }:
 
-{ stdenv
-, lib
-, fetchFromGitHub
-, removeReferencesTo
-, makeWrapper
-, which
-, writeTextFile
-, curl
-, tzdata
-, gdb
-, Foundation
-, callPackage
-, targetPackages
-, fetchpatch
-, bash
-, installShellFiles
-, git
-, unzip
-, dmdBootstrap ? callPackage ./bootstrap.nix { }
-, dmdBin ? "${dmdBootstrap}/bin"
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  removeReferencesTo,
+  makeWrapper,
+  which,
+  writeTextFile,
+  curl,
+  tzdata,
+  gdb,
+  Foundation,
+  callPackage,
+  targetPackages,
+  fetchpatch,
+  bash,
+  installShellFiles,
+  git,
+  unzip,
+  dmdBootstrap ? callPackage ./bootstrap.nix { },
+  dmdBin ? "${dmdBootstrap}/bin",
 }:
 
 let
   dmdConfFile = writeTextFile {
     name = "dmd.conf";
-    text = (lib.generators.toINI { } {
-      Environment = {
-        DFLAGS = ''-I@out@/include/dmd -L-L@out@/lib -fPIC ${lib.optionalString (!targetPackages.stdenv.cc.isClang) "-L--export-dynamic"}'';
-      };
-    });
+    text = (
+      lib.generators.toINI { } {
+        Environment = {
+          DFLAGS = ''-I@out@/include/dmd -L-L@out@/lib -fPIC ${
+            lib.optionalString (!targetPackages.stdenv.cc.isClang) "-L--export-dynamic"
+          }'';
+        };
+      }
+    );
   };
 
   bits = builtins.toString stdenv.hostPlatform.parsed.cpu.bits;
-  osname =
-    if stdenv.hostPlatform.isDarwin then
-      "osx"
-    else
-      stdenv.hostPlatform.parsed.kernel.name;
+  osname = if stdenv.hostPlatform.isDarwin then "osx" else stdenv.hostPlatform.parsed.kernel.name;
 
   pathToDmd = "\${NIX_BUILD_TOP}/dmd/generated/${osname}/release/${bits}/dmd";
 in
@@ -73,72 +75,85 @@ stdenv.mkDerivation (finalAttrs: {
   # https://issues.dlang.org/show_bug.cgi?id=19553
   hardeningDisable = [ "fortify" ];
 
-  patches = lib.optionals (lib.versionOlder version "2.088.0") [
-    # Migrates D1-style operator overloads in DMD source, to allow building with
-    # a newer DMD
-    (fetchpatch {
-      url = "https://github.com/dlang/dmd/commit/c4d33e5eb46c123761ac501e8c52f33850483a8a.patch";
-      stripLen = 1;
-      extraPrefix = "dmd/";
-      hash = "sha256-N21mAPfaTo+zGCip4njejasraV5IsWVqlGR5eOdFZZE=";
-    })
-  ] ++ lib.optionals (lib.versionOlder version "2.110.0") [
-    (fetchpatch {
-      url = "https://github.com/dlang/dmd/commit/fdd25893e0ac04893d6eba8652903d499b7b0dfc.patch";
-      stripLen = 1;
-      extraPrefix = "dmd/";
-      hash = "sha256-Uccb8rBPBLAEPWbOYWgdR5xN3wJoIkKKhLGu58IK1sM=";
-    })
-  ];
+  patches =
+    lib.optionals (lib.versionOlder version "2.088.0") [
+      # Migrates D1-style operator overloads in DMD source, to allow building with
+      # a newer DMD
+      (fetchpatch {
+        url = "https://github.com/dlang/dmd/commit/c4d33e5eb46c123761ac501e8c52f33850483a8a.patch";
+        stripLen = 1;
+        extraPrefix = "dmd/";
+        hash = "sha256-N21mAPfaTo+zGCip4njejasraV5IsWVqlGR5eOdFZZE=";
+      })
+    ]
+    ++ lib.optionals (lib.versionOlder version "2.110.0") [
+      (fetchpatch {
+        url = "https://github.com/dlang/dmd/commit/fdd25893e0ac04893d6eba8652903d499b7b0dfc.patch";
+        stripLen = 1;
+        extraPrefix = "dmd/";
+        hash = "sha256-Uccb8rBPBLAEPWbOYWgdR5xN3wJoIkKKhLGu58IK1sM=";
+      })
+    ];
 
-  postPatch = ''
-    patchShebangs dmd/compiler/test/{runnable,fail_compilation,compilable,tools}{,/extra-files}/*.sh
+  postPatch =
+    ''
+      patchShebangs dmd/compiler/test/{runnable,fail_compilation,compilable,tools}{,/extra-files}/*.sh
 
-    rm dmd/compiler/test/runnable/gdb1.d
-    rm dmd/compiler/test/runnable/gdb10311.d
-    rm dmd/compiler/test/runnable/gdb14225.d
-    rm dmd/compiler/test/runnable/gdb14276.d
-    rm dmd/compiler/test/runnable/gdb14313.d
-    rm dmd/compiler/test/runnable/gdb14330.d
-    rm dmd/compiler/test/runnable/gdb15729.sh
-    rm dmd/compiler/test/runnable/gdb4149.d
-    rm dmd/compiler/test/runnable/gdb4181.d
-    rm dmd/compiler/test/compilable/ddocYear.d
+      rm dmd/compiler/test/runnable/gdb1.d
+      rm dmd/compiler/test/runnable/gdb10311.d
+      rm dmd/compiler/test/runnable/gdb14225.d
+      rm dmd/compiler/test/runnable/gdb14276.d
+      rm dmd/compiler/test/runnable/gdb14313.d
+      rm dmd/compiler/test/runnable/gdb14330.d
+      rm dmd/compiler/test/runnable/gdb15729.sh
+      rm dmd/compiler/test/runnable/gdb4149.d
+      rm dmd/compiler/test/runnable/gdb4181.d
+      rm dmd/compiler/test/compilable/ddocYear.d
 
-    # Disable tests that rely on objdump whitespace until fixed upstream:
-    #   https://issues.dlang.org/show_bug.cgi?id=23317
-    rm dmd/compiler/test/runnable/cdvecfill.sh
-    rm dmd/compiler/test/compilable/cdcmp.d
-  '' + lib.optionalString (lib.versionAtLeast version "2.089.0" && lib.versionOlder version "2.092.2") ''
-    rm dmd/compiler/test/dshell/test6952.d
-  '' + lib.optionalString (lib.versionAtLeast version "2.092.2") ''
-    substituteInPlace dmd/compiler/test/dshell/test6952.d --replace-fail "/usr/bin/env bash" "${bash}/bin/bash"
-  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
-    substituteInPlace phobos/std/socket.d --replace-fail "assert(ih.addrList[0] == 0x7F_00_00_01);" ""
-  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    substituteInPlace phobos/std/socket.d --replace-fail "foreach (name; names)" "names = []; foreach (name; names)"
-  '';
+      # Disable tests that rely on objdump whitespace until fixed upstream:
+      #   https://issues.dlang.org/show_bug.cgi?id=23317
+      rm dmd/compiler/test/runnable/cdvecfill.sh
+      rm dmd/compiler/test/compilable/cdcmp.d
+    ''
+    + lib.optionalString (lib.versionAtLeast version "2.089.0" && lib.versionOlder version "2.092.2") ''
+      rm dmd/compiler/test/dshell/test6952.d
+    ''
+    + lib.optionalString (lib.versionAtLeast version "2.092.2") ''
+      substituteInPlace dmd/compiler/test/dshell/test6952.d --replace-fail "/usr/bin/env bash" "${bash}/bin/bash"
+    ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
+      substituteInPlace phobos/std/socket.d --replace-fail "assert(ih.addrList[0] == 0x7F_00_00_01);" ""
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      substituteInPlace phobos/std/socket.d --replace-fail "foreach (name; names)" "names = []; foreach (name; names)"
+    '';
 
-  nativeBuildInputs = [
-    makeWrapper
-    which
-    installShellFiles
-  ] ++ lib.optionals (lib.versionOlder version "2.088.0") [
-    git
-  ];
+  nativeBuildInputs =
+    [
+      makeWrapper
+      which
+      installShellFiles
+    ]
+    ++ lib.optionals (lib.versionOlder version "2.088.0") [
+      git
+    ];
 
-  buildInputs = [
-    curl
-    tzdata
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    Foundation
-  ];
+  buildInputs =
+    [
+      curl
+      tzdata
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      Foundation
+    ];
 
-  nativeCheckInputs = [
-    gdb
-  ] ++ lib.optionals (lib.versionOlder version "2.089.0") [
-    unzip
-  ];
+  nativeCheckInputs =
+    [
+      gdb
+    ]
+    ++ lib.optionals (lib.versionOlder version "2.089.0") [
+      unzip
+    ];
 
   buildFlags = [
     "BUILD=release"
@@ -227,8 +242,16 @@ stdenv.mkDerivation (finalAttrs: {
     # https://github.com/dlang/dmd/pull/6680
     license = licenses.boost;
     mainProgram = "dmd";
-    maintainers = with maintainers; [ lionello dukc jtbx ];
-    platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" ];
+    maintainers = with maintainers; [
+      lionello
+      dukc
+      jtbx
+    ];
+    platforms = [
+      "x86_64-linux"
+      "i686-linux"
+      "x86_64-darwin"
+    ];
     # ld: section __DATA/__thread_bss has type zero-fill but non-zero file offset file '/private/tmp/nix-build-dmd-2.109.1.drv-0/.rdmd-301/rdmd-build.d-A1CF043A7D87C5E88A58F3C0EF5A0DF7/objs/build.o' for architecture x86_64
     # clang-16: error: linker command failed with exit code 1 (use -v to see invocation)
     broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64;

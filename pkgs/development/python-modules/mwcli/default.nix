@@ -19,7 +19,6 @@ buildPythonPackage rec {
   # Prevent circular dependency
   pythonRemoveDeps = [ "mwxml" ];
 
-
   propagatedBuildInputs = [
     docopt
     para

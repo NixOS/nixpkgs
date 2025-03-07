@@ -1,17 +1,22 @@
-{ stdenv
-, lib
-, fetchzip
-, openssl
-, enableShared ? !stdenv.hostPlatform.isStatic
-, enableManpages ? false
-, pandoc
+{
+  stdenv,
+  lib,
+  fetchzip,
+  openssl,
+  enableShared ? !stdenv.hostPlatform.isStatic,
+  enableManpages ? false,
+  pandoc,
 }:
 
 stdenv.mkDerivation rec {
   pname = "fsverity-utils";
   version = "1.6";
 
-  outputs = [ "out" "lib" "dev" ] ++ lib.optional enableManpages "man";
+  outputs = [
+    "out"
+    "lib"
+    "dev"
+  ] ++ lib.optional enableManpages "man";
 
   src = fetchzip {
     url = "https://git.kernel.org/pub/scm/fs/fsverity/fsverity-utils.git/snapshot/fsverity-utils-v${version}.tar.gz";
@@ -28,7 +33,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = lib.optional enableManpages pandoc;
   buildInputs = [ openssl ];
 
-  makeFlags = [ "DESTDIR=$(out)" "PREFIX=" ] ++ lib.optional enableShared "USE_SHARED_LIB=1";
+  makeFlags = [
+    "DESTDIR=$(out)"
+    "PREFIX="
+  ] ++ lib.optional enableShared "USE_SHARED_LIB=1";
 
   doCheck = true;
 

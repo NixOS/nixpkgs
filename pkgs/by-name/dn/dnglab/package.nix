@@ -1,6 +1,7 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "dnglab";
@@ -17,7 +18,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-k0tKNtVDzE5vVi/953aEQihh+5BsVneqauTr9WRFFrY=";
   };
 
-  cargoHash = "sha256-6qJFNfgWh3i1CpuM/QdLksVAFz4XIV8uT5oz5BZ3U30=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-PsTv7OG1dHxPvid2gTA/8KZwWc6/g2XB1UvhQpvTStE=";
 
   postInstall = ''
     rm $out/bin/benchmark $out/bin/identify

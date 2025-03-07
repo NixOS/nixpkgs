@@ -1,26 +1,27 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, aml
-, cyrus_sasl
-, ffmpeg
-, gnutls
-, libGL
-, libdrm
-, libgcrypt
-, libjpeg
-, libpng
-, libxkbcommon
-, lzo
-, mesa
-, meson
-, ninja
-, openssl
-, pkg-config
-, pixman
-, wayland
-, wayland-scanner
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  aml,
+  cyrus_sasl,
+  ffmpeg,
+  gnutls,
+  libGL,
+  libdrm,
+  libgcrypt,
+  libjpeg,
+  libpng,
+  libxkbcommon,
+  lzo,
+  libgbm,
+  meson,
+  ninja,
+  openssl,
+  pkg-config,
+  pixman,
+  wayland,
+  wayland-scanner,
+  zlib,
 }:
 stdenv.mkDerivation {
   pname = "wlvncc";
@@ -52,7 +53,7 @@ stdenv.mkDerivation {
     libpng
     libxkbcommon
     lzo
-    mesa
+    libgbm
     openssl
     pixman
     wayland

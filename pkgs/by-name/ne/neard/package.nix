@@ -1,22 +1,26 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, autoreconfHook
-, autoconf-archive
-, gobject-introspection
-, pkg-config
-, wrapGAppsHook3
-, glib
-, dbus
-, libnl
-, python3Packages
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  autoreconfHook,
+  autoconf-archive,
+  gobject-introspection,
+  pkg-config,
+  wrapGAppsHook3,
+  glib,
+  dbus,
+  libnl,
+  python3Packages,
 }:
 
 stdenv.mkDerivation {
   pname = "neard";
   version = "0.19-unstable-2024-07-02";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchFromGitHub {
     owner = "linux-nfc";

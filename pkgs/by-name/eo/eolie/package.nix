@@ -1,7 +1,24 @@
-{ lib, fetchgit, meson, ninja, pkg-config, nix-update-script
-, python3, gtk3, libsecret, gst_all_1, webkitgtk_4_0, glib
-, glib-networking, gtkspell3, hunspell, desktop-file-utils
-, gobject-introspection, wrapGAppsHook3, gnome-settings-daemon }:
+{
+  lib,
+  fetchgit,
+  meson,
+  ninja,
+  pkg-config,
+  nix-update-script,
+  python3,
+  gtk3,
+  libsecret,
+  gst_all_1,
+  webkitgtk_4_0,
+  glib,
+  glib-networking,
+  gtkspell3,
+  hunspell,
+  desktop-file-utils,
+  gobject-introspection,
+  wrapGAppsHook3,
+  gnome-settings-daemon,
+}:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "eolie";
@@ -12,7 +29,7 @@ python3.pkgs.buildPythonApplication rec {
 
   src = fetchgit {
     url = "https://gitlab.gnome.org/World/eolie";
-    rev = "refs/tags/${version}";
+    tag = version;
     fetchSubmodules = true;
     sha256 = "077jww5mqg6bbqbj0j1gss2j3dxlfr2xw8bc43k8vg52drqg6g8w";
   };
@@ -73,7 +90,7 @@ python3.pkgs.buildPythonApplication rec {
     description = "New GNOME web browser";
     mainProgram = "eolie";
     homepage = "https://gitlab.gnome.org/World/eolie";
-    license  = licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ samdroid-apps ];
     platforms = platforms.linux;
   };

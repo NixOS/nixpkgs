@@ -1,4 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "shadowsocks-v2ray-plugin";
@@ -25,4 +29,3 @@ buildGoModule rec {
     mainProgram = "v2ray-plugin";
   };
 }
-

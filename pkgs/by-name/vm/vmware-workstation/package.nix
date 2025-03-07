@@ -47,7 +47,8 @@ let
   };
 
   vmware-unpack-env = buildFHSEnv rec {
-    name = "vmware-unpack-env";
+    pname = "vmware-unpack-env";
+    inherit version;
     targetPkgs = pkgs: [ zlib ];
   };
 

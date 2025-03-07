@@ -7,12 +7,12 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "tmuxp";
-  version = "1.49.0";
+  version = "1.50.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Fip2HnwIa03khiYlL5FkhVo84oS0OSD9f79bEFLBoNc=";
+    hash = "sha256-v7k0S0dMmpmwZkCJhPKiE+sEtVkOL+tE4Io66EIEXP0=";
   };
 
   build-system = with python3Packages; [

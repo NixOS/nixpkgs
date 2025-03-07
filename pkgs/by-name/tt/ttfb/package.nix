@@ -1,8 +1,9 @@
-{ darwin
-, fetchCrate
-, lib
-, rustPlatform
-, stdenv
+{
+  darwin,
+  fetchCrate,
+  lib,
+  rustPlatform,
+  stdenv,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -18,7 +19,8 @@ rustPlatform.buildRustPackage rec {
     darwin.apple_sdk.frameworks.Security
   ];
 
-  cargoHash = "sha256-lB1AgigYsPwaIvD0HmgOnKK28pIpn1iIDKsvCpKvlfM=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-NXwSqTshaC5hnyruSQFgFQRqRTmINMnMZsaisuudqvY=";
 
   # The bin feature activates all dependencies of the binary. Otherwise,
   # only the library is build.
@@ -38,4 +40,3 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ phip1611 ];
   };
 }
-

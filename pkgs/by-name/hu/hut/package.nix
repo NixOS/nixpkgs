@@ -1,7 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromSourcehut
-, scdoc
+{
+  lib,
+  buildGoModule,
+  fetchFromSourcehut,
+  scdoc,
 }:
 
 buildGoModule rec {

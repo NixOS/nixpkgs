@@ -1,7 +1,14 @@
-{ lib, stdenv, fetchurl, dovecot, openssl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  dovecot,
+  openssl,
+}:
 let
   dovecotMajorMinor = lib.versions.majorMinor dovecot.version;
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "dovecot-pigeonhole";
   version = "0.5.21.1";
 
@@ -10,7 +17,10 @@ in stdenv.mkDerivation rec {
     hash = "sha256-A3fbKEtiByPeBgQxEV+y53keHfQyFBGvcYIB1pJcRpI=";
   };
 
-  buildInputs = [ dovecot openssl ];
+  buildInputs = [
+    dovecot
+    openssl
+  ];
 
   preConfigure = ''
     substituteInPlace src/managesieve/managesieve-settings.c --replace \

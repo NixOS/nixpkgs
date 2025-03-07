@@ -1,8 +1,12 @@
-{ lib, fetchFromGitHub, python3Packages }:
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "peru";
-  version = "1.2.0";
+  version = "1.3.3";
 
   disabled = python3Packages.pythonOlder "3.5";
 
@@ -10,10 +14,13 @@ python3Packages.buildPythonApplication rec {
     owner = "buildinspace";
     repo = "peru";
     rev = version;
-    sha256 = "0p4j51m89glx12cd65lcnbwpvin0v49wkhrx06755skr7v37pm2a";
+    sha256 = "FCyR14jcFjI6epoFPNVyFZ4k1URZ1NraX1+ajVcCQ2A=";
   };
 
-  propagatedBuildInputs = with python3Packages; [ pyyaml docopt ];
+  propagatedBuildInputs = with python3Packages; [
+    pyyaml
+    docopt
+  ];
 
   # No tests in archive
   doCheck = false;

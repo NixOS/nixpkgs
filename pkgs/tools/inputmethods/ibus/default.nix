@@ -1,38 +1,39 @@
-{ lib
-, stdenv
-, substituteAll
-, fetchFromGitHub
-, autoreconfHook
-, gettext
-, makeWrapper
-, pkg-config
-, vala
-, wrapGAppsHook3
-, dbus
-, systemd
-, dconf ? null
-, glib
-, gdk-pixbuf
-, gobject-introspection
-, gtk3
-, gtk4
-, gtk-doc
-, libdbusmenu-gtk3
-, runCommand
-, isocodes
-, cldr-annotations
-, unicode-character-database
-, unicode-emoji
-, python3
-, json-glib
-, libnotify ? null
-, enableUI ? true
-, withWayland ? true
-, libxkbcommon
-, wayland
-, buildPackages
-, runtimeShell
-, nixosTests
+{
+  lib,
+  stdenv,
+  replaceVars,
+  fetchFromGitHub,
+  autoreconfHook,
+  gettext,
+  makeWrapper,
+  pkg-config,
+  vala,
+  wrapGAppsHook3,
+  dbus,
+  systemd,
+  dconf ? null,
+  glib,
+  gdk-pixbuf,
+  gobject-introspection,
+  gtk3,
+  gtk4,
+  gtk-doc,
+  libdbusmenu-gtk3,
+  runCommand,
+  isocodes,
+  cldr-annotations,
+  unicode-character-database,
+  unicode-emoji,
+  python3,
+  json-glib,
+  libnotify ? null,
+  enableUI ? true,
+  withWayland ? true,
+  libxkbcommon,
+  wayland,
+  buildPackages,
+  runtimeShell,
+  nixosTests,
 }:
 
 let
@@ -47,13 +48,15 @@ let
   };
   # make-dconf-override-db.sh needs to execute dbus-launch in the sandbox,
   # it will fail to read /etc/dbus-1/session.conf unless we add this flag
-  dbus-launch = runCommand "sandbox-dbus-launch"
-    {
-      nativeBuildInputs = [ makeWrapper ];
-    } ''
-    makeWrapper ${dbus}/bin/dbus-launch $out/bin/dbus-launch \
-      --add-flags --config-file=${dbus}/share/dbus-1/session.conf
-  '';
+  dbus-launch =
+    runCommand "sandbox-dbus-launch"
+      {
+        nativeBuildInputs = [ makeWrapper ];
+      }
+      ''
+        makeWrapper ${dbus}/bin/dbus-launch $out/bin/dbus-launch \
+          --add-flags --config-file=${dbus}/share/dbus-1/session.conf
+      '';
 in
 
 stdenv.mkDerivation rec {
@@ -68,15 +71,24 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       pythonInterpreter = python3Runtime.interpreter;
       pythonSitePackages = python3.sitePackages;
+      # patch context
+      prefix = null;
+      datarootdir = null;
+      localedir = null;
+      # removed line only
+      PYTHON = null;
     })
     ./build-without-dbus-launch.patch
   ];
 
-  outputs = [ "out" "dev" "installedTests" ];
+  outputs = [
+    "out"
+    "dev"
+    "installedTests"
+  ];
 
   postPatch = ''
     # Maintainer does not want to create separate tarballs for final release candidate and release versions,
@@ -120,7 +132,6 @@ stdenv.mkDerivation rec {
     "test_sourcesdir=${placeholder "installedTests"}/share/installed-tests/ibus"
   ];
 
-
   depsBuildBuild = [
     pkg-config
   ];
@@ -142,23 +153,25 @@ stdenv.mkDerivation rec {
     glib
   ];
 
-  buildInputs = [
-    dbus
-    systemd
-    dconf
-    gdk-pixbuf
-    python3.pkgs.pygobject3 # for pygobject overrides
-    gtk3
-    gtk4
-    isocodes
-    json-glib
-    libnotify
-    libdbusmenu-gtk3
-    vala # for share/vala/Makefile.vapigen (PKG_CONFIG_VAPIGEN_VAPIGEN)
-  ] ++ lib.optionals withWayland [
-    libxkbcommon
-    wayland
-  ];
+  buildInputs =
+    [
+      dbus
+      systemd
+      dconf
+      gdk-pixbuf
+      python3.pkgs.pygobject3 # for pygobject overrides
+      gtk3
+      gtk4
+      isocodes
+      json-glib
+      libnotify
+      libdbusmenu-gtk3
+      vala # for share/vala/Makefile.vapigen (PKG_CONFIG_VAPIGEN_VAPIGEN)
+    ]
+    ++ lib.optionals withWayland [
+      libxkbcommon
+      wayland
+    ];
 
   enableParallelBuilding = true;
 

@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
+  pythonAtLeast,
   construct,
   typing-extensions,
   arrow,
@@ -20,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "timrid";
     repo = "construct-typing";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-zXpxu+VUcepEoAPLQnSlMCZkt8fDsMCLS0HBKhaYD20=";
   };
 
@@ -46,11 +47,17 @@ buildPythonPackage rec {
     ruamel-yaml
   ];
 
-  disabledTests = [
-    # tests fail with construct>=2.10.70
-    "test_bitsinteger"
-    "test_bytesinteger"
-  ];
+  disabledTests =
+    [
+      # tests fail with construct>=2.10.70
+      "test_bitsinteger"
+      "test_bytesinteger"
+    ]
+    ++ lib.optionals (pythonAtLeast "3.13") [
+      # https://github.com/timrid/construct-typing/issues/31
+      "test_tenum_docstring"
+      "test_tenum_flags_docstring"
+    ];
 
   meta = {
     changelog = "https://github.com/timrid/construct-typing/releases/tag/v${version}";

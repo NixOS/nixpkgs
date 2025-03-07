@@ -1,4 +1,8 @@
-{ lib, buildNimPackage, fetchFromSourcehut }:
+{
+  lib,
+  buildNimPackage,
+  fetchFromSourcehut,
+}:
 
 buildNimPackage (finalAttrs: {
   pname = "base45";
@@ -12,7 +16,7 @@ buildNimPackage (finalAttrs: {
   meta = finalAttrs.src.meta // {
     description = "Base45 library for Nim";
     license = lib.licenses.unlicense;
-    mainProgram = finalAttrs.pname;
+    mainProgram = "base45";
     maintainers = with lib.maintainers; [ ehmry ];
   };
 })

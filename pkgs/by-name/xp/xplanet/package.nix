@@ -1,5 +1,17 @@
-{lib, stdenv, fetchurl, fetchpatch, pkg-config, freetype, pango, libpng, libtiff
-, giflib, libjpeg, netpbm}:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  pkg-config,
+  freetype,
+  pango,
+  libpng,
+  libtiff,
+  giflib,
+  libjpeg,
+  netpbm,
+}:
 
 stdenv.mkDerivation rec {
   pname = "xplanet";
@@ -11,7 +23,15 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ freetype pango libpng libtiff giflib libjpeg netpbm ];
+  buildInputs = [
+    freetype
+    pango
+    libpng
+    libtiff
+    giflib
+    libjpeg
+    netpbm
+  ];
 
   patches = [
     (fetchpatch {
@@ -33,7 +53,10 @@ stdenv.mkDerivation rec {
     mainProgram = "xplanet";
     homepage = "https://xplanet.sourceforge.net";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ lassulus sander ];
+    maintainers = with maintainers; [
+      lassulus
+      sander
+    ];
     platforms = platforms.all;
   };
 }

@@ -24,8 +24,7 @@
   xorg,
 }:
 
-symlinkJoin rec {
-  name = "${pname}-${version}";
+symlinkJoin {
   pname = "modrinth-app";
   inherit (modrinth-app-unwrapped) version;
 

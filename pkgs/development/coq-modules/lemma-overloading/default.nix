@@ -1,17 +1,57 @@
-{ lib, mkCoqDerivation, coq, mathcomp-ssreflect, version ? null }:
+{
+  lib,
+  mkCoqDerivation,
+  coq,
+  mathcomp-ssreflect,
+  version ? null,
+}:
 
 mkCoqDerivation rec {
   pname = "lemma-overloading";
   inherit version;
 
-  defaultVersion = with lib.versions;
-     lib.switch [ coq.coq-version mathcomp-ssreflect.version ] [
-       { cases = [ (range "8.10" "8.12") (range "1.7" "1.11") ]; out = "8.12.0"; }
-       { cases = [ (range "8.10" "8.11") (range "1.7" "1.11") ]; out = "8.11.0"; }
-       { cases = [ (range "8.8" "8.11") (range "1.7" "1.10") ]; out = "8.10.0"; }
-       { cases = [ (range "8.8" "8.9") (range "1.7" "1.8") ]; out = "8.9.0"; }
-       { cases = [ (isEq "8.8") (range "1.6.2" "1.7") ]; out = "8.8.0"; }
-     ] null;
+  defaultVersion =
+    with lib.versions;
+    lib.switch
+      [ coq.coq-version mathcomp-ssreflect.version ]
+      [
+        {
+          cases = [
+            (range "8.10" "8.12")
+            (range "1.7" "1.11")
+          ];
+          out = "8.12.0";
+        }
+        {
+          cases = [
+            (range "8.10" "8.11")
+            (range "1.7" "1.11")
+          ];
+          out = "8.11.0";
+        }
+        {
+          cases = [
+            (range "8.8" "8.11")
+            (range "1.7" "1.10")
+          ];
+          out = "8.10.0";
+        }
+        {
+          cases = [
+            (range "8.8" "8.9")
+            (range "1.7" "1.8")
+          ];
+          out = "8.9.0";
+        }
+        {
+          cases = [
+            (isEq "8.8")
+            (range "1.6.2" "1.7")
+          ];
+          out = "8.8.0";
+        }
+      ]
+      null;
 
   release = {
     "8.12.0".sha256 = "sha256-ul1IhxFwhLTy3+rmo3gvjHI3Z8A8avN0Rzq0YDy2bjs=";

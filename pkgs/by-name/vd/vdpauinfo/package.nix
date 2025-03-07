@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, autoreconfHook, pkg-config, libvdpau }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  pkg-config,
+  libvdpau,
+}:
 
 stdenv.mkDerivation rec {
   pname = "vdpauinfo";
@@ -9,7 +16,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-uOs/r8Ow7KvSpY1NhD2A+D4Qs6iWJe4fZGfVj6nIiCw=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
 
   buildInputs = [ libvdpau ];
 

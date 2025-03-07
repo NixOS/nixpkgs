@@ -1,12 +1,16 @@
-{lib, stdenv, fetchurl}:
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 
 stdenv.mkDerivation rec {
   version = "6.10.0";
   pname = "commons-bcel";
 
   src = fetchurl {
-    url    = "mirror://apache/commons/bcel/binaries/bcel-${version}-bin.tar.gz";
-    hash   = "sha256-RRVXxPtwbT9AX92T60uDJpFWF6DiotcG1KvKrlFfEWU=";
+    url = "mirror://apache/commons/bcel/binaries/bcel-${version}-bin.tar.gz";
+    hash = "sha256-RRVXxPtwbT9AX92T60uDJpFWF6DiotcG1KvKrlFfEWU=";
   };
 
   installPhase = ''
@@ -16,11 +20,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage    = "https://commons.apache.org/proper/commons-bcel/";
+    homepage = "https://commons.apache.org/proper/commons-bcel/";
     description = "Gives users a convenient way to analyze, create, and manipulate (binary) Java class files";
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     maintainers = with lib.maintainers; [ copumpkin ];
-    license     = lib.licenses.asl20;
+    license = lib.licenses.asl20;
     platforms = with lib.platforms; unix;
   };
 }

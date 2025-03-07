@@ -13,6 +13,10 @@ let
       inherit sha256;
     };
 
+    patches = [
+      (./. + "/dont-set-cmake-skip-rpath-${version}.patch")
+    ];
+
     nativeBuildInputs = [ cmake doxygen ];
 
     buildInputs = [ zlib ]

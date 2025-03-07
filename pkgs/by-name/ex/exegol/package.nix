@@ -6,7 +6,7 @@
 }:
 python3.pkgs.buildPythonApplication rec {
   pname = "exegol";
-  version = "4.3.8";
+  version = "4.3.9";
   format = "setuptools";
 
   # Project has no unit tests
@@ -26,7 +26,7 @@ python3.pkgs.buildPythonApplication rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-x2kIQOwbokJ0/uOafWZp0X67FmuEjF0WvI4D4jCLWnk=";
+    hash = "sha256-CoPQMEk8eagYU/TfaPAM6ItfSCZbrvzUww8H9ND8VUk=";
   };
 
   meta = with lib; {

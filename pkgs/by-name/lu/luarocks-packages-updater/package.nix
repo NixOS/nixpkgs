@@ -1,15 +1,18 @@
-{ nix
-, makeWrapper
-, python3Packages
-, lib
-, nix-prefetch-scripts
-, luarocks-nix
-, pluginupdate
+{
+  nix,
+  makeWrapper,
+  python3Packages,
+  lib,
+  nix-prefetch-scripts,
+  luarocks-nix,
+  pluginupdate,
 }:
 let
 
   path = lib.makeBinPath [
-    nix nix-prefetch-scripts luarocks-nix
+    nix
+    nix-prefetch-scripts
+    luarocks-nix
   ];
 
   attrs = builtins.fromTOML (builtins.readFile ./pyproject.toml);
@@ -51,5 +54,3 @@ python3Packages.buildPythonApplication {
     maintainers = with lib.maintainers; [ teto ];
   };
 }
-
-

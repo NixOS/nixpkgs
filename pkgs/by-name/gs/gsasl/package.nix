@@ -1,5 +1,10 @@
-{ fetchurl, lib, stdenv, libidn, libkrb5
-, testers
+{
+  fetchurl,
+  lib,
+  stdenv,
+  libidn,
+  libkrb5,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -11,7 +16,10 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-1FtWLhO9E7n8ILNy9LUyaXQM9iefg28JzhG50yvO4HU=";
   };
 
-  buildInputs = [ libidn libkrb5 ];
+  buildInputs = [
+    libidn
+    libkrb5
+  ];
 
   configureFlags = [ "--with-gssapi-impl=mit" ];
 

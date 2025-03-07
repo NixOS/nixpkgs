@@ -5,22 +5,24 @@
 , mandown
 , protobuf
 , nixosTests
+, go-md2man
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "netavark";
-  version = "1.7.0";
+  version = "1.14.0";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-amvy8sR2gpTYU7wcfkFeYyaTvrhZC558zidNdHwxqaI=";
+    hash = "sha256-/95tYUqjIPoyO2+YGza9RJ88YAbsIOzEB//d2FXfNZY=";
   };
 
-  cargoHash = "sha256-v8djyU+MvBmg929oFVPZlRPtj7zK8eZg3/KmCsFNWpw=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-6XSKuohY7gpnGmRK/Y+c3+0es/KRbkXjt5XQU/HksQ0=";
 
-  nativeBuildInputs = [ installShellFiles mandown protobuf ];
+  nativeBuildInputs = [ installShellFiles mandown protobuf go-md2man ];
 
   postBuild = ''
     make -C docs netavark.1

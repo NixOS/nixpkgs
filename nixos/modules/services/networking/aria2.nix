@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.aria2;
@@ -7,30 +12,49 @@ let
   defaultRpcListenPort = 6800;
   defaultDir = "${homeDir}/Downloads";
 
-  portRangesToString = ranges: lib.concatStringsSep "," (map
-    (x:
-      if x.from == x.to
-      then builtins.toString x.from
-      else builtins.toString x.from + "-" + builtins.toString x.to
-    )
-    ranges);
+  portRangesToString =
+    ranges:
+    lib.concatStringsSep "," (
+      map (
+        x:
+        if x.from == x.to then
+          builtins.toString x.from
+        else
+          builtins.toString x.from + "-" + builtins.toString x.to
+      ) ranges
+    );
 
   customToKeyValue = lib.generators.toKeyValue {
-    mkKeyValue = lib.generators.mkKeyValueDefault
-      {
-        mkValueString = v:
-          if builtins.isList v then portRangesToString v
-          else lib.generators.mkValueStringDefault { } v;
-      } "=";
+    mkKeyValue = lib.generators.mkKeyValueDefault {
+      mkValueString =
+        v: if builtins.isList v then portRangesToString v else lib.generators.mkValueStringDefault { } v;
+    } "=";
   };
 in
 {
   imports = [
-    (lib.mkRemovedOptionModule [ "services" "aria2" "rpcSecret" ] "Use services.aria2.rpcSecretFile instead")
-    (lib.mkRemovedOptionModule [ "services" "aria2" "extraArguments" ] "Use services.aria2.settings instead")
-    (lib.mkRenamedOptionModule [ "services" "aria2" "downloadDir" ] [ "services" "aria2" "settings" "dir" ])
-    (lib.mkRenamedOptionModule [ "services" "aria2" "listenPortRange" ] [ "services" "aria2" "settings" "listen-port" ])
-    (lib.mkRenamedOptionModule [ "services" "aria2" "rpcListenPort" ] [ "services" "aria2" "settings" "rpc-listen-port" ])
+    (lib.mkRemovedOptionModule [
+      "services"
+      "aria2"
+      "rpcSecret"
+    ] "Use services.aria2.rpcSecretFile instead")
+    (lib.mkRemovedOptionModule [
+      "services"
+      "aria2"
+      "extraArguments"
+    ] "Use services.aria2.settings instead")
+    (lib.mkRenamedOptionModule
+      [ "services" "aria2" "downloadDir" ]
+      [ "services" "aria2" "settings" "dir" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "aria2" "listenPortRange" ]
+      [ "services" "aria2" "settings" "listen-port" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "aria2" "rpcListenPort" ]
+      [ "services" "aria2" "settings" "rpc-listen-port" ]
+    )
   ];
 
   options = {
@@ -101,7 +125,14 @@ in
         '';
         default = { };
         type = lib.types.submodule {
-          freeformType = with lib.types; attrsOf (oneOf [ bool int float singleLineStr ]);
+          freeformType =
+            with lib.types;
+            attrsOf (oneOf [
+              bool
+              int
+              float
+              singleLineStr
+            ]);
           options = {
             save-session = lib.mkOption {
               type = lib.types.singleLineStr;
@@ -125,7 +156,12 @@ in
             };
             listen-port = lib.mkOption {
               type = with lib.types; listOf (attrsOf port);
-              default = [{ from = 6881; to = 6999; }];
+              default = [
+                {
+                  from = 6881;
+                  to = 6999;
+                }
+              ];
               description = "Set UDP listening port range used by DHT(IPv4, IPv6) and UDP tracker.";
             };
             rpc-listen-port = lib.mkOption {

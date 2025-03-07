@@ -26,7 +26,6 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-
   dependencies = [
     llama-index-agent-openai
     llama-index-core

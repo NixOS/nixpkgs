@@ -1,4 +1,12 @@
-{ fetchFromGitHub, lib, stdenv, coin3d, qtbase, cmake, pkg-config }:
+{
+  fetchFromGitHub,
+  lib,
+  stdenv,
+  coin3d,
+  qtbase,
+  cmake,
+  pkg-config,
+}:
 
 stdenv.mkDerivation rec {
   pname = "soqt";
@@ -13,9 +21,15 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  buildInputs = [ coin3d qtbase ];
+  buildInputs = [
+    coin3d
+    qtbase
+  ];
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
   dontWrapQtApps = true;
 

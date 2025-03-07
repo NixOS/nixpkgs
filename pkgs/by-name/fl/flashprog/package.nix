@@ -1,15 +1,18 @@
-{ fetchgit
-, installShellFiles
-, lib
-, libftdi1
-, libgpiod
-, libjaylink
-, libusb1
-, pciutils
-, pkg-config
-, stdenv
-, withJlink ? true
-, withGpio ? stdenv.hostPlatform.isLinux
+{
+  fetchgit,
+  fetchpatch,
+  lib,
+  libftdi1,
+  libgpiod,
+  libjaylink,
+  libusb1,
+  meson,
+  ninja,
+  pciutils,
+  pkg-config,
+  stdenv,
+  withJlink ? true,
+  withGpio ? stdenv.hostPlatform.isLinux,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -22,41 +25,49 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-S+UKDtpKYenwm+zR+Bg8HHxb2Jr7mFHAVCZdZTqCyRQ=";
   };
 
-  nativeBuildInputs = [
-    installShellFiles
-    pkg-config
-  ];
-  buildInputs = [
-    libftdi1
-    libusb1
-  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-    pciutils
-  ] ++ lib.optionals (withJlink) [
-    libjaylink
-  ] ++ lib.optionals (withGpio) [
-    libgpiod
+  patches = [
+    # fixes compiler warnings on Darwin
+    (fetchpatch {
+      url = "https://review.sourcearcade.org/changes/flashprog~309/revisions/2/patch?download";
+      hash = "sha256-eiEenR8+CHCJcNx9YY09I7gxRGUQWmaQlmXtykvXyMU=";
+      decode = "base64 -d";
+    })
   ];
 
-  makeFlags =
-    let
-      yesNo = flag: if flag then "yes" else "no";
-    in
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+  ];
+
+  buildInputs =
     [
-      "libinstall"
-      "PREFIX=$(out)"
-      "CONFIG_JLINK_SPI=${yesNo withJlink}"
-      "CONFIG_LINUX_GPIO_SPI=${yesNo withGpio}"
-      "CONFIG_ENABLE_LIBPCI_PROGRAMMERS=${yesNo (!stdenv.hostPlatform.isDarwin)}"
-      "CONFIG_INTERNAL_X86=${yesNo (!(stdenv.hostPlatform.isDarwin) && stdenv.hostPlatform.isx86_64)}"
-      "CONFIG_INTERNAL_DMI=${yesNo (!(stdenv.hostPlatform.isDarwin) && stdenv.hostPlatform.isx86_64)}"
-      "CONFIG_RAYER_SPI=${yesNo (!(stdenv.hostPlatform.isDarwin) && stdenv.hostPlatform.isx86_64)}"
+      libftdi1
+      libusb1
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+      pciutils
+    ]
+    ++ lib.optionals (withJlink) [
+      libjaylink
+    ]
+    ++ lib.optionals (withGpio) [
+      libgpiod
     ];
+
+  postInstall = ''
+    cd "$src"
+    install -Dm644 util/50-flashprog.rules "$out/lib/udev/rules.d/50-flashprog.rules"
+  '';
 
   meta = with lib; {
     homepage = "https://flashprog.org";
     description = "Utility for reading, writing, erasing and verifying flash ROM chips";
-    license = with licenses; [ gpl2Plus ];
-    maintainers = with maintainers; [ felixsinger funkeleinhorn ];
+    license = with licenses; [ gpl2 ];
+    maintainers = with maintainers; [
+      felixsinger
+      funkeleinhorn
+    ];
     platforms = platforms.all;
     mainProgram = "flashprog";
   };

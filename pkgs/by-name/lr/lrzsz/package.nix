@@ -1,4 +1,10 @@
-{ lib, stdenv, gettext, fetchurl, fetchpatch }:
+{
+  lib,
+  stdenv,
+  gettext,
+  fetchurl,
+  fetchpatch,
+}:
 
 stdenv.mkDerivation rec {
   pname = "lrzsz";
@@ -25,7 +31,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--program-transform-name=s/^l//" ];
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=implicit-function-declaration -Wno-error=implicit-int";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration -Wno-error=implicit-int -Wno-error=incompatible-pointer-types";
 
   meta = with lib; {
     homepage = "https://ohse.de/uwe/software/lrzsz.html";

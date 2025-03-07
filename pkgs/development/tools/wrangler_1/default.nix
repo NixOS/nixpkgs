@@ -1,4 +1,16 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, pkg-config, openssl, curl, Security, CoreServices, CoreFoundation, libiconv }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  pkg-config,
+  openssl,
+  curl,
+  Security,
+  CoreServices,
+  CoreFoundation,
+  libiconv,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "wrangler";
@@ -11,12 +23,20 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-GfuU+g4tPU3TorzymEa9q8n4uKYsG0ZTz8rJirGOLfQ=";
   };
 
-  cargoHash = "sha256-tPLqDm6kOVBKrLvhgZ9xD6vVBNjBBk9uLF7WOPgz8qE=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-MJFXcmRzvzDJ8cd0WdcNiHr3Wxgp/hKO1xKRfmbxRLA=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ curl CoreFoundation CoreServices Security libiconv ];
+  buildInputs =
+    [ openssl ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      curl
+      CoreFoundation
+      CoreServices
+      Security
+      libiconv
+    ];
 
   OPENSSL_NO_VENDOR = 1;
 
@@ -27,7 +47,10 @@ rustPlatform.buildRustPackage rec {
     description = "CLI tool designed for folks who are interested in using Cloudflare Workers";
     mainProgram = "wrangler";
     homepage = "https://github.com/cloudflare/wrangler";
-    license = with licenses; [ asl20 /* or */ mit ];
+    license = with licenses; [
+      asl20 # or
+      mit
+    ];
     maintainers = with maintainers; [ Br1ght0ne ];
   };
 }

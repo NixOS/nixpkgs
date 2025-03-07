@@ -1,16 +1,18 @@
-{ lib
-, stdenv
-, mkDerivation
-, fetchFromGitHub
-, alsa-lib
-, cmake
-, libpulseaudio
-, libmt32emu
-, pkg-config
-, portaudio
-, qtbase
-, qtmultimedia
-, withJack ? stdenv.hostPlatform.isUnix, libjack2
+{
+  lib,
+  stdenv,
+  mkDerivation,
+  fetchFromGitHub,
+  alsa-lib,
+  cmake,
+  libpulseaudio,
+  libmt32emu,
+  pkg-config,
+  portaudio,
+  qtbase,
+  qtmultimedia,
+  withJack ? stdenv.hostPlatform.isUnix,
+  libjack2,
 }:
 
 let
@@ -36,17 +38,18 @@ mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs = [
-    libmt32emu
-    portaudio
-    qtbase
-    qtmultimedia
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    alsa-lib
-    libpulseaudio
-  ]
-  ++ lib.optional withJack libjack2;
+  buildInputs =
+    [
+      libmt32emu
+      portaudio
+      qtbase
+      qtmultimedia
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      alsa-lib
+      libpulseaudio
+    ]
+    ++ lib.optional withJack libjack2;
 
   dontFixCmake = true;
 

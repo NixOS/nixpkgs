@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
 
@@ -67,7 +72,11 @@ let
     "fabric"
   ];
 
-  obsoleteServices = renamedServices ++ [ "static" "mgmt" "zebra" ];
+  obsoleteServices = renamedServices ++ [
+    "static"
+    "mgmt"
+    "zebra"
+  ];
 
   allDaemons = builtins.attrNames daemonDefaultOptions;
 
@@ -110,7 +119,9 @@ let
         '';
       };
     }
-    // (if (builtins.elem service daemons) then { enable = lib.mkEnableOption "FRR ${service}"; } else { });
+    // (
+      if (builtins.elem service daemons) then { enable = lib.mkEnableOption "FRR ${service}"; } else { }
+    );
 
 in
 
@@ -159,21 +170,66 @@ in
       { options.services.frr = (lib.genAttrs allDaemons serviceOptions); }
       (lib.mkRemovedOptionModule [ "services" "frr" "zebra" "enable" ] "FRR zebra is always enabled")
     ]
-    ++ (map (d: lib.mkRenamedOptionModule [ "services" "frr" d "enable" ] [ "services" "frr" "${d}d" "enable" ]) renamedServices)
-    ++ (map (d: lib.mkRenamedOptionModule [ "services" "frr" d "extraOptions" ] [ "services" "frr" "${d}d" "extraOptions" ]) (renamedServices ++ [ "static" "mgmt" ]))
-    ++ (map (d: lib.mkRemovedOptionModule [ "services" "frr" d "enable" ] "FRR ${d}d is always enabled") [ "static" "mgmt" ])
-    ++ (map (d: lib.mkRemovedOptionModule [ "services" "frr" d "config" ] "FRR switched to integrated-vtysh-config, please use services.frr.config") obsoleteServices)
-    ++ (map (d: lib.mkRemovedOptionModule [ "services" "frr" d "configFile" ] "FRR switched to integrated-vtysh-config, please use services.frr.config or services.frr.configFile") obsoleteServices)
-    ++ (map (d: lib.mkRemovedOptionModule [ "services" "frr" d "vtyListenAddress" ] "Please change -A option in services.frr.${d}.options instead") obsoleteServices)
-    ++ (map (d: lib.mkRemovedOptionModule [ "services" "frr" d "vtyListenPort" ] "Please use `-P «vtyListenPort»` option with services.frr.${d}.extraOptions instead, or change services.frr.${d}.options accordingly") obsoleteServices)
-    ;
+    ++ (map (
+      d: lib.mkRenamedOptionModule [ "services" "frr" d "enable" ] [ "services" "frr" "${d}d" "enable" ]
+    ) renamedServices)
+    ++ (map
+      (
+        d:
+        lib.mkRenamedOptionModule
+          [ "services" "frr" d "extraOptions" ]
+          [ "services" "frr" "${d}d" "extraOptions" ]
+      )
+      (
+        renamedServices
+        ++ [
+          "static"
+          "mgmt"
+        ]
+      )
+    )
+    ++ (map (d: lib.mkRemovedOptionModule [ "services" "frr" d "enable" ] "FRR ${d}d is always enabled")
+      [
+        "static"
+        "mgmt"
+      ]
+    )
+    ++ (map (
+      d:
+      lib.mkRemovedOptionModule [
+        "services"
+        "frr"
+        d
+        "config"
+      ] "FRR switched to integrated-vtysh-config, please use services.frr.config"
+    ) obsoleteServices)
+    ++ (map (
+      d:
+      lib.mkRemovedOptionModule [ "services" "frr" d "configFile" ]
+        "FRR switched to integrated-vtysh-config, please use services.frr.config or services.frr.configFile"
+    ) obsoleteServices)
+    ++ (map (
+      d:
+      lib.mkRemovedOptionModule [
+        "services"
+        "frr"
+        d
+        "vtyListenAddress"
+      ] "Please change -A option in services.frr.${d}.options instead"
+    ) obsoleteServices)
+    ++ (map (
+      d:
+      lib.mkRemovedOptionModule [ "services" "frr" d "vtyListenPort" ]
+        "Please use `-P «vtyListenPort»` option with services.frr.${d}.extraOptions instead, or change services.frr.${d}.options accordingly"
+    ) obsoleteServices);
 
   ###### implementation
 
   config =
     let
       daemonList = lib.concatStringsSep "\n" (map daemonLine daemons);
-      daemonOptionLine = d: "${d}_options=\"${lib.concatStringsSep " " (cfg.${d}.options ++ cfg.${d}.extraOptions)}\"";
+      daemonOptionLine =
+        d: "${d}_options=\"${lib.concatStringsSep " " (cfg.${d}.options ++ cfg.${d}.extraOptions)}\"";
       daemonOptions = lib.concatStringsSep "\n" (map daemonOptionLine allDaemons);
     in
     lib.mkIf (lib.any isEnabled daemons || cfg.configFile != null || cfg.config != "") {

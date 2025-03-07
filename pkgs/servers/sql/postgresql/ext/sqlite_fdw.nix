@@ -8,14 +8,13 @@
 
 buildPostgresqlExtension rec {
   pname = "sqlite_fdw";
-  # TODO: Check whether PostgreSQL 17 is still broken after next update.
-  version = "2.4.0";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "pgspider";
     repo = "sqlite_fdw";
     rev = "v${version}";
-    hash = "sha256-u51rcKUH2nZyZbI2g3crzHt5jiacbTq4xmfP3JgqnnM=";
+    hash = "sha256-zPVIFzUv6UFFHq0Zi5MeQOcvgsfZAKGkkNIGxkTJ+oo=";
   };
 
   buildInputs = [ sqlite ];
@@ -29,6 +28,5 @@ buildPostgresqlExtension rec {
     maintainers = with lib.maintainers; [ apfelkuchen6 ];
     platforms = lib.platforms.unix;
     license = lib.licenses.postgresql;
-    broken = lib.versionAtLeast postgresql.version "17";
   };
 }

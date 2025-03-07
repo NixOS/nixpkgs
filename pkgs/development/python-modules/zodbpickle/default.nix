@@ -38,11 +38,14 @@ buildPythonPackage rec {
     "test_loads"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Fork of Python's pickle module to work with ZODB";
     homepage = "https://github.com/zopefoundation/zodbpickle";
     changelog = "https://github.com/zopefoundation/zodbpickle/blob/${version}/CHANGES.rst";
-    license = licenses.asl20;
+    license = with lib.licenses; [
+      psfl
+      zpl21
+    ];
     maintainers = [ ];
   };
 }

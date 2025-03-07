@@ -1,4 +1,12 @@
-{ mkDerivation, lib, fetchFromGitLab, udisks2, qtbase, cmake, ninja }:
+{
+  mkDerivation,
+  lib,
+  fetchFromGitLab,
+  udisks2,
+  qtbase,
+  cmake,
+  ninja,
+}:
 
 mkDerivation rec {
   pname = "libcsys";

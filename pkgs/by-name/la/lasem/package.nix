@@ -1,21 +1,48 @@
-{ fetchurl, lib, stdenv, pkg-config, intltool, gobject-introspection, glib, gdk-pixbuf
-, libxml2, cairo, pango, gnome }:
+{
+  fetchurl,
+  lib,
+  stdenv,
+  pkg-config,
+  intltool,
+  gobject-introspection,
+  glib,
+  gdk-pixbuf,
+  libxml2,
+  cairo,
+  pango,
+  gnome,
+}:
 
 stdenv.mkDerivation rec {
   pname = "lasem";
   version = "0.4.4";
 
-  outputs = [ "bin" "out" "dev" "man" "doc" "devdoc" ];
+  outputs = [
+    "bin"
+    "out"
+    "dev"
+    "man"
+    "doc"
+    "devdoc"
+  ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0fds3fsx84ylsfvf55zp65y8xqjj5n8gbhcsk02vqglivk7izw4v";
   };
 
-  nativeBuildInputs = [ pkg-config intltool gobject-introspection ];
+  nativeBuildInputs = [
+    pkg-config
+    intltool
+    gobject-introspection
+  ];
 
   propagatedBuildInputs = [
-    glib gdk-pixbuf libxml2 cairo pango
+    glib
+    gdk-pixbuf
+    libxml2
+    cairo
+    pango
   ];
 
   enableParallelBuilding = true;

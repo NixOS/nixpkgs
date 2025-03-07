@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, pkg-config, gdk-pixbuf, popt }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gdk-pixbuf,
+  popt,
+}:
 stdenv.mkDerivation rec {
   pname = "icon-slicer";
   version = "0.3";
@@ -16,7 +23,10 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ popt pkg-config ];
+  nativeBuildInputs = [
+    popt
+    pkg-config
+  ];
   buildInputs = [ gdk-pixbuf ];
 
   meta = with lib; {

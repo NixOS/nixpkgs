@@ -5,14 +5,14 @@ set -xeu -o pipefail
 
 PACKAGE_DIR="$(realpath "$(dirname "$0")")"
 cd "$PACKAGE_DIR/.."
-while ! test -f flake.nix; do cd .. ; done
+while ! test -f flake.nix; do cd ..; done
 NIXPKGS_DIR="$PWD"
 
 version="$(
-  list-git-tags --url=https://github.com/google/protobuf.dart \
-  | rg '^protobuf-v(.*)' -r '$1' \
-  | sort --version-sort \
-  | tail -n1
+  list-git-tags --url=https://github.com/google/protobuf.dart |
+    rg '^protoc_plugin-v(.*)' -r '$1' |
+    sort --version-sort |
+    tail -n1
 )"
 
 cd "$NIXPKGS_DIR"
@@ -28,6 +28,6 @@ if ! test -f pubspec.lock; then
   dart pub update
 fi
 
-yq . pubspec.lock > "$PACKAGE_DIR/pubspec.lock.json"
+yq . pubspec.lock >"$PACKAGE_DIR/pubspec.lock.json"
 
 rm -rf "$TMPDIR"

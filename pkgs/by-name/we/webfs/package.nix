@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, mailcap, openssl }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  mailcap,
+  openssl,
+}:
 
 stdenv.mkDerivation {
   pname = "webfs";

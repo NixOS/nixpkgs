@@ -18,7 +18,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "dooit-org";
     repo = "dooit";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-tqSWDW3nj+nMt7t5vgSqWvtx7YA3y2GV29gI1MYFMhc=";
   };
 

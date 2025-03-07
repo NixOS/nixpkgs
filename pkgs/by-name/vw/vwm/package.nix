@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchurl
-, ncurses
-, pkg-config
-, glib
-, libviper
-, libpseudo
-, gpm
-, libvterm
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ncurses,
+  pkg-config,
+  glib,
+  libviper,
+  libpseudo,
+  gpm,
+  libvterm,
 }:
 
 stdenv.mkDerivation rec {
@@ -36,7 +37,14 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ ncurses glib libviper libpseudo gpm libvterm ];
+  buildInputs = [
+    ncurses
+    glib
+    libviper
+    libpseudo
+    gpm
+    libvterm
+  ];
 
   meta = with lib; {
     homepage = "https://vwm.sourceforge.net/";

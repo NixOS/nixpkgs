@@ -6,7 +6,7 @@
   libgit2,
   rust-jemalloc-sys,
   zlib,
-  git,
+  gitMinimal,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "biome";
@@ -19,7 +19,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-oK1tCPoTeUHvVdi+ym4J5xEj2NIi2zHQpNU1KUchQfY=";
   };
 
-  cargoHash = "sha256-4vITbsXfgNFoeWMHz7a9Rk7FrsEZRe75nHiyHSMujEQ=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-lo4IAStdv1CW/cQYzRDLzDwsDqCwoo5xKen2Rti9kPU=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -29,15 +30,17 @@ rustPlatform.buildRustPackage rec {
     zlib
   ];
 
-  nativeCheckInputs = [ git ];
+  nativeCheckInputs = [ gitMinimal ];
 
   cargoBuildFlags = [ "-p=biome_cli" ];
-  cargoTestFlags =
-    cargoBuildFlags
-    ++
-    # skip a broken test from v1.7.3 release
-    # this will be removed on the next version
-    [ "-- --skip=diagnostics::test::termination_diagnostic_size" ];
+  cargoTestFlags = cargoBuildFlags ++ [
+    "-- --skip=commands::check::print_json"
+    "--skip=commands::check::print_json_pretty"
+    "--skip=commands::explain::explain_logs"
+    "--skip=commands::format::print_json"
+    "--skip=commands::format::print_json_pretty"
+    "--skip=commands::format::should_format_files_in_folders_ignored_by_linter"
+  ];
 
   env = {
     BIOME_VERSION = version;

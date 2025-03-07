@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -85,7 +90,7 @@ in
 
     define = mkOption {
       type = types.attrs;
-      default = {};
+      default = { };
       description = "List of settings.js overrides to pass via -D to Node-RED.";
       example = literalExpression ''
         {
@@ -118,12 +123,17 @@ in
       environment = {
         HOME = cfg.userDir;
       };
-      path = lib.optionals cfg.withNpmAndGcc [ pkgs.nodejs pkgs.gcc ];
+      path = lib.optionals cfg.withNpmAndGcc [
+        pkgs.nodejs
+        pkgs.gcc
+      ];
       serviceConfig = mkMerge [
         {
           User = cfg.user;
           Group = cfg.group;
-          ExecStart = "${cfg.package}/bin/node-red ${pkgs.lib.optionalString cfg.safe "--safe"} --settings ${cfg.configFile} --port ${toString cfg.port} --userDir ${cfg.userDir} ${concatStringsSep " " (mapAttrsToList (name: value: "-D ${name}=${value}") cfg.define)}";
+          ExecStart = "${cfg.package}/bin/node-red ${pkgs.lib.optionalString cfg.safe "--safe"} --settings ${cfg.configFile} --port ${toString cfg.port} --userDir ${cfg.userDir} ${
+            concatStringsSep " " (mapAttrsToList (name: value: "-D ${name}=${value}") cfg.define)
+          }";
           PrivateTmp = true;
           Restart = "always";
           WorkingDirectory = cfg.userDir;

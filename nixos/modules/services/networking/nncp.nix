@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 with lib;
 
 let
@@ -9,7 +14,8 @@ let
   settingsFormat = pkgs.formats.json { };
   jsonCfgFile = settingsFormat.generate "nncp.json" programCfg.settings;
   pkg = programCfg.package;
-in {
+in
+{
   options = {
 
     services.nncp = {
@@ -57,16 +63,21 @@ in {
 
   config = mkIf (programCfg.enable or callerCfg.enable or daemonCfg.enable) {
 
-    assertions = [{
-      assertion = with builtins;
-        let
-          callerCongfigured =
-            let neigh = config.programs.nncp.settings.neigh or { };
-            in lib.lists.any (x: hasAttr "calls" x && x.calls != [ ])
-            (attrValues neigh);
-        in !callerCfg.enable || callerCongfigured;
-      message = "NNCP caller enabled but call configuration is missing";
-    }];
+    assertions = [
+      {
+        assertion =
+          with builtins;
+          let
+            callerCongfigured =
+              let
+                neigh = config.programs.nncp.settings.neigh or { };
+              in
+              lib.lists.any (x: hasAttr "calls" x && x.calls != [ ]) (attrValues neigh);
+          in
+          !callerCfg.enable || callerCongfigured;
+        message = "NNCP caller enabled but call configuration is missing";
+      }
+    ];
 
     systemd.services."nncp-caller" = {
       inherit (callerCfg) enable;
@@ -75,10 +86,7 @@ in {
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
-        ExecStart = ''
-          ${pkg}/bin/nncp-caller -noprogress -cfg "${nncpCfgFile}" ${
-            lib.strings.escapeShellArgs callerCfg.extraArgs
-          }'';
+        ExecStart = ''${pkg}/bin/nncp-caller -noprogress -cfg "${nncpCfgFile}" ${lib.strings.escapeShellArgs callerCfg.extraArgs}'';
         Group = "uucp";
         UMask = "0002";
       };
@@ -91,10 +99,7 @@ in {
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
-        ExecStart = ''
-          ${pkg}/bin/nncp-daemon -noprogress -cfg "${nncpCfgFile}" ${
-            lib.strings.escapeShellArgs daemonCfg.extraArgs
-          }'';
+        ExecStart = ''${pkg}/bin/nncp-daemon -noprogress -cfg "${nncpCfgFile}" ${lib.strings.escapeShellArgs daemonCfg.extraArgs}'';
         Restart = "on-failure";
         Group = "uucp";
         UMask = "0002";
@@ -106,10 +111,7 @@ in {
       documentation = [ "http://www.nncpgo.org/nncp_002ddaemon.html" ];
       after = [ "network.target" ];
       serviceConfig = {
-        ExecStart = ''
-          ${pkg}/bin/nncp-daemon -noprogress -ucspi -cfg "${nncpCfgFile}" ${
-            lib.strings.escapeShellArgs daemonCfg.extraArgs
-          }'';
+        ExecStart = ''${pkg}/bin/nncp-daemon -noprogress -ucspi -cfg "${nncpCfgFile}" ${lib.strings.escapeShellArgs daemonCfg.extraArgs}'';
         Group = "uucp";
         UMask = "0002";
         StandardInput = "socket";

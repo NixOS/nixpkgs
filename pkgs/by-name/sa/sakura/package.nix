@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, glib
-, gtk3
-, gettext
-, pango
-, makeWrapper
-, pcre2
-, perl
-, pkg-config
-, vte
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  glib,
+  gtk3,
+  gettext,
+  pango,
+  makeWrapper,
+  pcre2,
+  perl,
+  pkg-config,
+  vte,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -66,8 +67,11 @@ stdenv.mkDerivation (finalAttrs: {
       options. No more no less.
     '';
     license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ astsmtl codyopel ];
+    maintainers = with lib.maintainers; [
+      astsmtl
+      codyopel
+    ];
     platforms = lib.platforms.linux;
     mainProgram = "sakura";
- };
+  };
 })

@@ -1,9 +1,16 @@
-{ lib, stdenv
-, nixosTests
-, fetchpatch
-, fetchurl, autoreconfHook
-, zlib, pcre, w3m, man
-, openssl, brotli
+{
+  lib,
+  stdenv,
+  nixosTests,
+  fetchpatch,
+  fetchurl,
+  autoreconfHook,
+  zlib,
+  pcre,
+  w3m,
+  man,
+  openssl,
+  brotli,
 }:
 
 stdenv.mkDerivation rec {
@@ -27,8 +34,17 @@ stdenv.mkDerivation rec {
 
   hardeningEnable = [ "pie" ];
 
-  nativeBuildInputs = [ autoreconfHook w3m man ];
-  buildInputs = [ zlib pcre openssl brotli ];
+  nativeBuildInputs = [
+    autoreconfHook
+    w3m
+    man
+  ];
+  buildInputs = [
+    zlib
+    pcre
+    openssl
+    brotli
+  ];
 
   makeFlags = [ "STRIP=" ];
   configureFlags = [

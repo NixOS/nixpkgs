@@ -1,18 +1,25 @@
-{ lib
-, stdenv
-, fetchurl
-, alsa-lib
-, libopus
-, libogg
-, gmp
-, ncurses
+{
+  lib,
+  stdenv,
+  fetchurl,
+  alsa-lib,
+  libopus,
+  libogg,
+  gmp,
+  ncurses,
 }:
 
 stdenv.mkDerivation rec {
   pname = "seren";
   version = "0.0.21";
 
-  buildInputs = [ alsa-lib libopus libogg gmp ncurses ];
+  buildInputs = [
+    alsa-lib
+    libopus
+    libogg
+    gmp
+    ncurses
+  ];
 
   src = fetchurl {
     url = "http://holdenc.altervista.org/seren/downloads/${pname}-${version}.tar.gz";
@@ -32,7 +39,10 @@ stdenv.mkDerivation rec {
     homepage = "http://holdenc.altervista.org/seren/";
     changelog = "http://holdenc.altervista.org/seren/";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ matthewcroughan nixinator ];
+    maintainers = with maintainers; [
+      matthewcroughan
+      nixinator
+    ];
     platforms = platforms.linux;
   };
 }

@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, bison, lzo, db4 }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  bison,
+  lzo,
+  db4,
+}:
 
 stdenv.mkDerivation rec {
   pname = "netboot";
@@ -9,7 +16,11 @@ stdenv.mkDerivation rec {
     sha256 = "09w09bvwgb0xzn8hjz5rhi3aibysdadbg693ahn8rylnqfq4hwg0";
   };
 
-  buildInputs = [ bison lzo db4 ];
+  buildInputs = [
+    bison
+    lzo
+    db4
+  ];
 
   hardeningDisable = [ "format" ];
 
@@ -20,7 +31,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Mini PXE server";
     maintainers = [ maintainers.raskin ];
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
     license = lib.licenses.free;
   };
 }

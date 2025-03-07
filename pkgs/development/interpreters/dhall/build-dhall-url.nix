@@ -1,4 +1,11 @@
-{ cacert, dhall, dhall-docs, haskell, lib, runCommand }:
+{
+  cacert,
+  dhall,
+  dhall-docs,
+  haskell,
+  lib,
+  runCommand,
+}:
 
 # `buildDhallUrl` is similar to `buildDhallDirectoryPackage` or
 # `buildDhallGitHubPackage`, but instead builds a Nixpkgs Dhall package
@@ -12,20 +19,21 @@
 #
 # This function is primarily used by `dhall-to-nixpkgs directory --fixed-output-derivations`.
 
-{ # URL of the input Dhall file.
+{
+  # URL of the input Dhall file.
   # example: "https://raw.githubusercontent.com/cdepillabout/example-dhall-repo/c1b0d0327146648dcf8de997b2aa32758f2ed735/example1.dhall"
-  url
+  url,
 
   # Nix hash of the input Dhall file.
   # example: "sha256-ZTSiQUXpPbPfPvS8OeK6dDQE6j6NbP27ho1cg9YfENI="
-, hash
+  hash,
 
   # Dhall hash of the input Dhall file.
   # example: "sha256:6534a24145e93db3df3ef4bc39e2ba743404ea3e8d6cfdbb868d5c83d61f10d2"
-, dhallHash
+  dhallHash,
 
   # Name for this derivation.
-, name ? (baseNameOf url + "-cache")
+  name ? (baseNameOf url + "-cache"),
 
   # `buildDhallUrl` can include both a "source distribution" in
   # `source.dhall` and a "binary distribution" in `binary.dhall`:
@@ -40,7 +48,7 @@
   # By default, `buildDhallUrl` only includes "binary.dhall" to conserve
   # space within the Nix store, but if you set the following `source` option to
   # `true` then the package will also include `source.dhall`.
-, source ? false
+  source ? false,
 }:
 
 let
@@ -52,8 +60,7 @@ let
   # The output Dhall file has all imports resolved, and then is
   # alpha-normalized and binary-encoded.
   downloadedEncodedFile =
-    runCommand
-      (baseNameOf url)
+    runCommand (baseNameOf url)
       {
         outputHashAlgo = null;
         outputHash = hash;
@@ -66,19 +73,19 @@ let
         ${dhall}/bin/dhall --alpha --plain --file in-dhall-file | ${dhallNoHTTP}/bin/dhall encode > $out
       '';
 
-   cache = ".cache";
+  cache = ".cache";
 
-   data = ".local/share";
+  data = ".local/share";
 
-   cacheDhall = "${cache}/dhall";
+  cacheDhall = "${cache}/dhall";
 
-   dataDhall = "${data}/dhall";
+  dataDhall = "${data}/dhall";
 
-   sourceFile = "source.dhall";
+  sourceFile = "source.dhall";
 
 in
-  runCommand name { }
- (''
+runCommand name { } (
+  ''
     set -eu
 
     mkdir -p ${cacheDhall} $out/${cacheDhall}
@@ -92,7 +99,8 @@ in
     cp ${downloadedEncodedFile} $out/${cacheDhall}/$HASH_FILE
 
     echo "missing $SHA_HASH" > $out/binary.dhall
-  '' +
-  lib.optionalString source ''
+  ''
+  + lib.optionalString source ''
     ${dhallNoHTTP}/bin/dhall decode --file ${downloadedEncodedFile} > $out/${sourceFile}
-  '')
+  ''
+)

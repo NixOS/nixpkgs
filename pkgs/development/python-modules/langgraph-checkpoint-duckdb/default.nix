@@ -9,21 +9,18 @@
   pytestCheckHook,
   langgraph-sdk,
   poetry-core,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "langgraph-checkpoint-duckdb";
-  version = "2.0.1";
+  version = "2.0.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
-    rev = "refs/tags/checkpointduckdb==${version}";
-    hash = "sha256-wSrlFBfTcTgyE46uwv9GCyxRT1xVafgWyP2g87KUTAU=";
+    tag = "checkpointduckdb==${version}";
+    hash = "sha256-ppgViNRkkCTOGPfdB04DOnEzFgHN1KGDLLVjuwhRgNE=";
   };
 
   sourceRoot = "${src.name}/libs/checkpoint-duckdb";
@@ -36,6 +33,9 @@ buildPythonPackage rec {
     langgraph-checkpoint
   ];
 
+  # Checkpoint clients are lagging behind langgraph-checkpoint
+  pythonRelaxDeps = [ "langgraph-checkpoint" ];
+
   pythonImportsCheck = [ "langgraph.checkpoint.duckdb" ];
 
   nativeCheckInputs = [
@@ -46,7 +46,9 @@ buildPythonPackage rec {
   disabledTests = [ "test_basic_store_ops" ]; # depends on networking
 
   passthru = {
-    updateScript = langgraph-sdk.updateScript;
+    inherit (langgraph-sdk) updateScript;
+
+    skipBulkUpdate = true; # Broken, see https://github.com/NixOS/nixpkgs/issues/379898
   };
 
   meta = {

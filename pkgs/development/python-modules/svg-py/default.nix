@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "orsinium-labs";
     repo = "svg.py";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-Lxzk3IVCD4PG36Pozz2crccwxCAAAM2QfS4rgwbjs6g=";
   };
 

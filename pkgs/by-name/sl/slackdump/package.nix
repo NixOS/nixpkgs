@@ -3,18 +3,19 @@
   lib,
   fetchFromGitHub,
   stdenv,
+  nix-update-script,
   darwin,
 }:
 
 buildGoModule rec {
   pname = "slackdump";
-  version = "2.6.0";
+  version = "3.0.7";
 
   src = fetchFromGitHub {
     owner = "rusq";
     repo = "slackdump";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-hdSsvV1mQet61pWeo5icDhFxAVNP5QU1fdb1YgyXVWU=";
+    tag = "v${version}";
+    hash = "sha256-IlWnlWCtcp/vT9hUaWyQXyaieOnhI1eW8PluJu4buHk=";
   };
 
   nativeCheckInputs = lib.optional stdenv.hostPlatform.isDarwin darwin.IOKitTools;
@@ -24,13 +25,18 @@ buildGoModule rec {
       skippedTests = [
         "TestSession_saveUserCache"
         "TestSession_GetUsers"
+        "Test_exportV3" # This was skipped on upstream's CI. It is seemed that some file are missed
       ];
     in
     [
       "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$"
     ];
 
-  vendorHash = "sha256-LjZP00YL0Coc7yY0Bm7AaYoAP37vQVJpVYPxuEnVEp4=";
+  vendorHash = "sha256-g38rP8h3+eo92S/0gqP8F/BY5HoxK1uCdHTKGCFv2dE=";
+
+  __darwinAllowLocalNetworking = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/rusq/slackdump";

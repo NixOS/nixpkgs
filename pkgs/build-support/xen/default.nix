@@ -60,7 +60,7 @@
   branch ? lib.versions.majorMinor version,
   version,
   vendor ? "nixos",
-  upstreamVersion,
+  upstreamVersion ? version,
   withFlask ? false,
   withSeaBIOS ? true,
   withOVMF ? true,
@@ -94,7 +94,7 @@ let
     ;
 
   # Mark versions older than minSupportedVersion as EOL.
-  minSupportedVersion = "4.16";
+  minSupportedVersion = "4.17";
 
   #TODO: fix paths instead.
   scriptEnvPath = makeSearchPathOutput "out" "bin" [
@@ -171,7 +171,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--disable-qemu-traditional"
     "--with-system-qemu"
     (if withSeaBIOS then "--with-system-seabios=${systemSeaBIOS.firmware}" else "--disable-seabios")
-    (if withOVMF then "--with-system-ovmf=${OVMF.firmware}" else "--disable-ovmf")
+    (if withOVMF then "--with-system-ovmf=${OVMF.mergedFirmware}" else "--disable-ovmf")
     (if withIPXE then "--with-system-ipxe=${ipxe.firmware}" else "--disable-ipxe")
     (enableFeature withFlask "xsmpolicy")
   ];

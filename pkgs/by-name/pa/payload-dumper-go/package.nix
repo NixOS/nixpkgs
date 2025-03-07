@@ -1,7 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, xz
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  xz,
 }:
 
 buildGoModule rec {
@@ -11,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "ssut";
     repo = "payload-dumper-go";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-TFnBWylOoyleuBx3yYfHl1kWO6jVBiqsi8AMYLMuuk0=";
   };
 

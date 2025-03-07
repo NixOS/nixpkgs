@@ -1,4 +1,8 @@
-{ lib, swiftPackages, fetchFromGitHub }:
+{
+  lib,
+  swiftPackages,
+  fetchFromGitHub,
+}:
 
 let
   inherit (swiftPackages) stdenv swift;
@@ -30,6 +34,9 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/jdek/openwith";
     license = licenses.unlicense;
     maintainers = with maintainers; [ zowoq ];
-    platforms = [ "aarch64-darwin" "x86_64-darwin" ];
+    platforms = [
+      "aarch64-darwin"
+      "x86_64-darwin"
+    ];
   };
 }

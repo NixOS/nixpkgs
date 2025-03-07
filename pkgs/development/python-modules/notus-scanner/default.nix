@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "greenbone";
     repo = "notus-scanner";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-PPwQjZIKSQ1OmyYJ8ErkqdbHZfH4iHPMiDdKZ3imBwo=";
   };
 
@@ -33,7 +33,6 @@ buildPythonPackage rec {
   ];
 
   build-system = [ poetry-core ];
-
 
   propagatedBuildInputs = [
     paho-mqtt

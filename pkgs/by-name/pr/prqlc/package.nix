@@ -1,44 +1,38 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, openssl
-, sqlite
-, zlib
-, stdenv
-, darwin
-, python3
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  openssl,
+  sqlite,
+  zlib,
+  python3,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "prqlc";
-  version = "0.13.2";
+  version = "0.13.3";
 
   src = fetchFromGitHub {
     owner = "prql";
     repo = "prql";
     rev = version;
-    hash = "sha256-DuuWeXuqOKpC4NbaQ6xhYxzZLtxOMzqDl7eOd9zTIuY=";
+    hash = "sha256-PplIDbAWsFhfnhZ7G4XL7Y/+sfp6y1HQSbg5dAnZHHE=";
   };
 
-  cargoHash = "sha256-ZOlbKmSHAcgYMYbeyyljltf56WbP5dK7ezpmgSA3CyQ=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-iHXrizKT1vMR8rGxEtCYdzmcHCD5eiy2XqZjql0cKG0=";
 
   nativeBuildInputs = [
     pkg-config
     rustPlatform.bindgenHook
   ];
 
-  buildInputs =
-    [
-      openssl
-      sqlite
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.CoreFoundation
-      darwin.apple_sdk.frameworks.CoreServices
-      darwin.apple_sdk.frameworks.Security
-    ];
+  buildInputs = [
+    openssl
+    sqlite
+    zlib
+  ];
 
   env = {
     PYO3_PYTHON = "${python3}/bin/python3";

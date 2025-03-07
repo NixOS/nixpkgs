@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, boost
-, glibc
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  boost,
+  glibc,
 }:
 let
   boost' = boost.override {
@@ -11,25 +12,26 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "autodock-vina";
-  version = "1.2.5";
+  version = "1.2.6";
 
   src = fetchFromGitHub {
     owner = "ccsb-scripps";
     repo = "autodock-vina";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-yguUMEX0tn75wKrPKyqlCYbBFaEwC5b1s3k9xept1Fw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Y0whqBecZt5D/5HEfL005rCq4lAJTr2mUxy5rygCEtc=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/build/${
-    if stdenv.hostPlatform.isDarwin then "mac"
-    else "linux"
+    if stdenv.hostPlatform.isDarwin then "mac" else "linux"
   }/release";
 
-  buildInputs = [
-    boost'
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    glibc.static
-  ];
+  buildInputs =
+    [
+      boost'
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      glibc.static
+    ];
 
   makeFlags = [
     "GPP=${stdenv.cc.targetPrefix}c++"

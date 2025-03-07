@@ -1,4 +1,13 @@
-{lib, stdenv, fetchurl, libXxf86vm, libXext, libX11, libXrandr, gcc}:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libXxf86vm,
+  libXext,
+  libX11,
+  libXrandr,
+  gcc,
+}:
 stdenv.mkDerivation {
   pname = "xflux";
   version = "unstable-2013-09-01";

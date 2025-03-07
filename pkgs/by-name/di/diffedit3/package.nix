@@ -1,5 +1,10 @@
-{ lib, rustPlatform, fetchCrate
-, testers, nix-update-script, diffedit3
+{
+  lib,
+  rustPlatform,
+  fetchCrate,
+  testers,
+  nix-update-script,
+  diffedit3,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -11,7 +16,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-zBdLz8O2WCR8SN0UXUAaEdIpmmL+LIaGt44STBw6nyU=";
   };
 
-  cargoHash = "sha256-jZTXM+2Gd4N9D4Pj2KsuQ2MFPuWJdHg30u/5BlM3HEE=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-Ao2agqYChyrcrRVOjzKvPHYwmYGabQUVZAUaVBpAFJM=";
 
   passthru = {
     updateScript = nix-update-script { };

@@ -22,7 +22,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ socat ];
 
-  outputs = [ "out" "doc" ];
+  outputs = [
+    "out"
+    "doc"
+  ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 
@@ -45,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Mpc-like control interface for mpv";
     license = lib.licenses.mit;
     mainProgram = "mpvc";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.linux;
   };
 })

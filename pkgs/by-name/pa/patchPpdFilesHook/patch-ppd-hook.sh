@@ -174,7 +174,7 @@ patchPpdFileCommands () {
             # The end result might contain too many
             # propagated dependencies for multi-output packages,
             # but never a broken package.
-            propagatedBuildInputs+=("$path")
+            appendToVar propagatedBuildInputs "$path"
         done  < sorted-dependencies
     fi
 

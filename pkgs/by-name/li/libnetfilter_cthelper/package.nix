@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, pkg-config, libmnl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  libmnl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libnetfilter_cthelper";
@@ -9,7 +15,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-FAc9VIcjOJc1XT/wTdwcjQPMW6jSNWI2qogWGp8tyRI=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libmnl ];

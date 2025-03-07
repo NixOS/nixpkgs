@@ -3,19 +3,23 @@
   buildPythonApplication,
   fetchFromGitHub,
   isPyPy,
+  pythonOlder,
   lib,
   defusedxml,
   packaging,
   psutil,
   setuptools,
-  pydantic,
   nixosTests,
+  pytestCheckHook,
+  which,
+  podman,
+  selenium,
   # Optional dependencies:
   fastapi,
   jinja2,
   pysnmp,
   hddtemp,
-  netifaces, # IP module
+  netifaces2, # IP module
   uvicorn,
   requests,
   prometheus-client,
@@ -23,16 +27,16 @@
 
 buildPythonApplication rec {
   pname = "glances";
-  version = "4.2.0";
+  version = "4.3.0.8";
   pyproject = true;
 
-  disabled = isPyPy;
+  disabled = isPyPy || pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "nicolargo";
     repo = "glances";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-liyrMaqBgK7UZjWIKIgIFbskTGaWfyrK8L74DKmaDmY=";
+    tag = "v${version}";
+    hash = "sha256-BLOGsqeVrMZf2fLRqu1BIopWxgQF/z9KgsQopFfvdvo=";
   };
 
   build-system = [ setuptools ];
@@ -50,17 +54,9 @@ buildPythonApplication rec {
   # some tests fail in darwin sandbox
   doCheck = !stdenv.hostPlatform.isDarwin;
 
-  checkPhase = ''
-    runHook preCheck
-
-    python unittest-core.py
-
-    runHook postCheck
-  '';
-
   dependencies = [
     defusedxml
-    netifaces
+    netifaces2
     packaging
     psutil
     pysnmp
@@ -68,6 +64,7 @@ buildPythonApplication rec {
     uvicorn
     requests
     jinja2
+    which
     prometheus-client
   ] ++ lib.optional stdenv.hostPlatform.isLinux hddtemp;
 
@@ -75,11 +72,23 @@ buildPythonApplication rec {
     service = nixosTests.glances;
   };
 
+  nativeCheckInputs = [
+    which
+    pytestCheckHook
+    selenium
+    podman
+  ];
+
+  disabledTestPaths = [
+    # Message: Unable to obtain driver for chrome
+    "tests/test_webui.py"
+  ];
+
   meta = {
     homepage = "https://nicolargo.github.io/glances/";
     description = "Cross-platform curses-based monitoring tool";
     mainProgram = "glances";
-    changelog = "https://github.com/nicolargo/glances/blob/v${version}/NEWS.rst";
+    changelog = "https://github.com/nicolargo/glances/blob/${src.tag}/NEWS.rst";
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [
       primeos

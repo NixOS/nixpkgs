@@ -1,23 +1,24 @@
-{ stdenv
-, alsa-lib
-, autoPatchelfHook
-, dpkg
-, evince
-, fetchurl
-, flac
-, lib
-, libmicrohttpd
-, libogg
-, libusb-compat-0_1
-, llvmPackages
-, mpfr
-, qtcharts
-, qtdeclarative
-, qtwayland
-, qtwebengine
-, qtwebview
-, wavpack
-, wrapQtAppsHook
+{
+  stdenv,
+  alsa-lib,
+  autoPatchelfHook,
+  dpkg,
+  evince,
+  fetchurl,
+  flac,
+  lib,
+  libmicrohttpd,
+  libogg,
+  libusb-compat-0_1,
+  llvmPackages,
+  mpfr,
+  qtcharts,
+  qtdeclarative,
+  qtwayland,
+  qtwebengine,
+  qtwebview,
+  wavpack,
+  wrapQtAppsHook,
 }:
 
 let
@@ -37,7 +38,8 @@ stdenv.mkDerivation {
   pname = "hqplayer-desktop";
   inherit version;
 
-  src = srcs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+  src =
+    srcs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   nativeBuildInputs = [
     autoPatchelfHook
@@ -90,7 +92,10 @@ stdenv.mkDerivation {
   '';
 
   # doc has dependencies on evince that is not required by main app
-  outputs = [ "out" "doc" ];
+  outputs = [
+    "out"
+    "doc"
+  ];
 
   postInstall = ''
     for desktopFile in $out/share/applications/hqplayer5{client,desktop}.desktop; do

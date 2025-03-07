@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "pywikibot";
-  version = "9.5.0";
+  version = "9.6.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ZUOsiadQ2zekQDc+wc9MvNgLBXQkguvrDufpC8+1kLo=";
+    hash = "sha256-tSEo6o9/YZRt0ZWt7N0WmM6wOK6lQc7wLYyPt4L7hhg=";
   };
 
   propagatedBuildInputs = [

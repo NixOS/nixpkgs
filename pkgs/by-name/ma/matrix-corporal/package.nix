@@ -1,4 +1,8 @@
-{ lib, fetchFromGitHub, buildGoModule }:
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+}:
 
 buildGoModule rec {
   pname = "matrix-corporal";
@@ -12,7 +16,13 @@ buildGoModule rec {
   };
 
   ldflags = [
-    "-s" "-w" "-X main.GitCommit=${version}" "-X main.GitBranch=${version}" "-X main.GitState=nixpkgs" "-X main.GitSummary=${version}" "-X main.Version=${version}"
+    "-s"
+    "-w"
+    "-X main.GitCommit=${version}"
+    "-X main.GitBranch=${version}"
+    "-X main.GitState=nixpkgs"
+    "-X main.GitSummary=${version}"
+    "-X main.Version=${version}"
   ];
 
   vendorHash = "sha256-sC9JA6VRmHGuO3anaZW2Ih5QnRrUom9IIOE7yi3TTG8=";

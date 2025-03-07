@@ -1,13 +1,21 @@
-{ lib, stdenv, pg-dump-anon, postgresql, runtimeShell, jitSupport, llvm, buildPostgresqlExtension, nixosTests }:
+{
+  lib,
+  stdenv,
+  pg-dump-anon,
+  postgresql,
+  runtimeShell,
+  jitSupport,
+  llvm,
+  buildPostgresqlExtension,
+  nixosTests,
+}:
 
 buildPostgresqlExtension (finalAttrs: {
   pname = "postgresql_anonymizer";
 
   inherit (pg-dump-anon) version src;
 
-  nativeBuildInputs = [ postgresql ] ++ lib.optional jitSupport llvm;
-
-  strictDeps = true;
+  nativeBuildInputs = lib.optional jitSupport llvm;
 
   # Needs to be after postInstall, where removeNestedNixStore runs
   preFixup = ''

@@ -1,6 +1,7 @@
-{ lib
-, python3
-, fetchFromGitLab
+{
+  lib,
+  python3,
+  fetchFromGitLab,
 }:
 
 python3.pkgs.buildPythonApplication rec {

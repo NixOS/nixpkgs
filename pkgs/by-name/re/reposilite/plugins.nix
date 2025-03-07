@@ -3,7 +3,7 @@
   makeScopeWithSplicing',
 }:
 makeScopeWithSplicing' {
-  otherSplices = generateSplicesForMkScope;
+  otherSplices = generateSplicesForMkScope "reposilitePlugins";
   f =
     self:
     {
@@ -40,10 +40,10 @@ makeScopeWithSplicing' {
       ) { };
     }
     // builtins.mapAttrs (name: hash: self.fetchPlugin { inherit name hash; }) {
-      checksum = "sha256-ocvjjcrZW8I7hMdWiUn36XEbx3TqNYi0okemo9zWelA=";
-      groovy = "sha256-2NSTaivUAUMnAPHNqTNHWGqA8AF8jU9CE2ab9VGIFLo=";
-      migration = "sha256-+BfbLEy2gc81HVCyI2JREIIYMirKwPV48shMBAMbWlU=";
-      prometheus = "sha256-aukYUIS6S37ut9h+gO/JLrBUX/6RND5BhLqsrArxSUo=";
-      swagger = "sha256-zD2ihVEfQeH3S1df3o2gF19kGIODW2yIRWCGbk4npJY=";
+      checksum = "sha256-s7GADQqFsoEDM2vtJFE/C/F5jGyQeYlT3BntvHS4DtQ=";
+      groovy = "sha256-8HWMqZZNIqCBpkMuCjKxqTLcQ2dYaOAAYON9QrXYEyo=";
+      migration = "sha256-Xv0+RsXZzyGV/4v0IT3hfNANiC1OWVYFoTZHDxduKh0=";
+      prometheus = "sha256-F5fSUo6wt7L3R/xCike0SlfG3CyxHKrlrg+SNrUYtm4=";
+      swagger = "sha256-wyXKrYBhigHVtxq/RZiJhnigc3Z/UCbYotrF6VLLTGA=";
     };
 }

@@ -5,22 +5,23 @@
   makeBinaryWrapper,
   makeDesktopItem,
   jdk17,
-  gradle_7,
+  gradle_8,
   which,
+  copyDesktopItems,
 }:
 
 let
   pname = "freeplane";
-  version = "1.11.14";
+  version = "1.12.8";
 
   jdk = jdk17;
-  gradle = gradle_7;
+  gradle = gradle_8;
 
   src = fetchFromGitHub {
     owner = "freeplane";
     repo = "freeplane";
     rev = "release-${version}";
-    hash = "sha256-zEQjB57iiKVQnH8VtynpEGKNAa2e+WpqnGt6fnv5Rjs=";
+    hash = "sha256-yzjzaobXuQH8CHz183ditL2LsCXU5xLh4+3El4Ffu20=";
   };
 
 in
@@ -31,6 +32,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     makeBinaryWrapper
     jdk
     gradle
+    copyDesktopItems
   ];
 
   mitmCache = gradle.fetchDeps {

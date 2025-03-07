@@ -1,4 +1,8 @@
-{ lib, rustPlatform, fetchFromGitHub }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "peep";
@@ -11,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-6Y7ZI0kIPE7uMMOkXgm75JMEec090xZPBJFJr9DaswA=";
   };
 
-  cargoHash = "sha256-CDWa03H8vWfhx2dwZU5rAV3fSwAGqCIPcvl+lTG4npE=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-9VybBzW+saOjtQiyGu2pKHm94yCPw35Y56mhayCeW/c=";
 
   meta = with lib; {
     description = "CLI text viewer tool that works like less command on small pane within the terminal window";

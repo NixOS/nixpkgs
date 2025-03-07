@@ -21,14 +21,14 @@
 
 stdenv.mkDerivation rec {
   pname = "grandorgue";
-  version = "3.15.2-1";
+  version = "3.15.4-1";
 
   src = fetchFromGitHub {
     owner = "GrandOrgue";
     repo = "grandorgue";
     rev = version;
     fetchSubmodules = true;
-    hash = "sha256-U0DAWCzhXqdL2klSFQjnLiWp7yTdw/n0dmNUJSAg/5c=";
+    hash = "sha256-9H7YpTtv9Y36Nc0WCyRy/ohpOQ3WVUd9gMahnGhANRc=";
   };
 
   patches = [ ./darwin-fixes.patch ];
@@ -46,8 +46,6 @@ stdenv.mkDerivation rec {
     "-DGO_USE_JACK=OFF"
     "-DINSTALL_DEPEND=OFF"
   ] ++ lib.optional (!includeDemo) "-DINSTALL_DEMO=OFF";
-
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-DTARGET_OS_IPHONE=0";
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/{Applications,bin,lib}

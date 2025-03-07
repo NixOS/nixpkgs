@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, fetchzip
-, libusb1
-, glibc
-, libGL
-, xorg
-, makeWrapper
-, qtx11extras
-, wrapQtAppsHook
-, autoPatchelfHook
-, libX11
-, libXtst
-, libXi
-, libXrandr
-, libXinerama
+{
+  lib,
+  stdenv,
+  fetchzip,
+  libusb1,
+  glibc,
+  libGL,
+  xorg,
+  makeWrapper,
+  qtx11extras,
+  wrapQtAppsHook,
+  autoPatchelfHook,
+  libX11,
+  libXtst,
+  libXi,
+  libXrandr,
+  libXinerama,
 }:
 
 let

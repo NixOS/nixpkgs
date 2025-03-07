@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "molobrakos";
     repo = "tellduslive";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     sha256 = "sha256-fWL+VSvoT+dT0jzD8DZEMxzTlqj4TYGCJPLpeui5q64=";
   };
 

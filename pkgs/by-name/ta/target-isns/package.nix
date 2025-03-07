@@ -1,4 +1,10 @@
-{ lib, stdenv, cmake, fetchFromGitHub, fetchpatch } :
+{
+  lib,
+  stdenv,
+  cmake,
+  fetchFromGitHub,
+  fetchpatch,
+}:
 
 stdenv.mkDerivation rec {
   pname = "target-isns";
@@ -12,7 +18,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    # fix absoulute paths
+    # fix absolute paths
     ./install_prefix_path.patch
 
     # fix gcc 10 compiler warning, remove with next update

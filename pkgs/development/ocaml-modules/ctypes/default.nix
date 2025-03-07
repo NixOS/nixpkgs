@@ -1,11 +1,12 @@
-{ lib
-, ocaml
-, fetchFromGitHub
-, buildDunePackage
-, dune-configurator
-, integers
-, bigarray-compat
-, ounit2
+{
+  lib,
+  ocaml,
+  fetchFromGitHub,
+  buildDunePackage,
+  dune-configurator,
+  integers,
+  bigarray-compat,
+  ounit2,
 }:
 
 buildDunePackage rec {
@@ -21,7 +22,10 @@ buildDunePackage rec {
 
   buildInputs = [ dune-configurator ];
 
-  propagatedBuildInputs = [ integers bigarray-compat ];
+  propagatedBuildInputs = [
+    integers
+    bigarray-compat
+  ];
 
   doCheck = lib.versionAtLeast ocaml.version "4.08";
   checkInputs = [ ounit2 ];

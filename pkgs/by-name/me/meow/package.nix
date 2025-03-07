@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-iskpT0CU/cGp+8myWaVmdw/uC0VoP8Sv+qbjpDDKS3o=";
   };
 
-  cargoHash = "sha256-/XzXgbmgJ1EN3cQmgWNMUpYtNWRlwJ0mvaQWCsP3FMk=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-c+Nz3PH5a5CAG4HaIEz7U+b4rp6sgAuo+/uRL70/Tbs=";
 
   postInstall = ''
     mv $out/bin/meow-cli $out/bin/meow

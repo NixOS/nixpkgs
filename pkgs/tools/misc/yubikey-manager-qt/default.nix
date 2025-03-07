@@ -1,16 +1,17 @@
-{ lib
-, mkDerivation
-, fetchurl
-, imagemagick
-, pcsclite
-, pyotherside
-, python3
-, qmake
-, qtbase
-, qtgraphicaleffects
-, qtquickcontrols2
-, yubikey-manager
-, yubikey-personalization
+{
+  lib,
+  mkDerivation,
+  fetchurl,
+  imagemagick,
+  pcsclite,
+  pyotherside,
+  python3,
+  qmake,
+  qtbase,
+  qtgraphicaleffects,
+  qtquickcontrols2,
+  yubikey-manager,
+  yubikey-personalization,
 }:
 
 mkDerivation rec {
@@ -67,7 +68,13 @@ mkDerivation rec {
   '';
 
   qtWrapperArgs = [
-    "--prefix" "LD_LIBRARY_PATH" ":" (lib.makeLibraryPath [ pcsclite yubikey-personalization ])
+    "--prefix"
+    "LD_LIBRARY_PATH"
+    ":"
+    (lib.makeLibraryPath [
+      pcsclite
+      yubikey-personalization
+    ])
   ];
 
   preFixup = ''

@@ -17,7 +17,6 @@
   mupdf,
   fontconfig,
   freetype,
-  apple-sdk_11,
 }:
 
 buildGoModule rec {
@@ -27,7 +26,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "richardwilkes";
     repo = "gcs";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
 
     nativeBuildInputs = [
       cacert
@@ -88,9 +87,6 @@ buildGoModule rec {
       libXxf86vm
       fontconfig
       freetype
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_11
     ];
 
   # flags are based on https://github.com/richardwilkes/gcs/blob/master/build.sh

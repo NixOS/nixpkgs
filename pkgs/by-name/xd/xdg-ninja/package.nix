@@ -1,4 +1,11 @@
-{ lib, stdenvNoCC, fetchFromGitHub, makeWrapper, jq, glow }:
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  makeWrapper,
+  jq,
+  glow,
+}:
 
 stdenvNoCC.mkDerivation rec {
   pname = "xdg-ninja";
@@ -22,7 +29,12 @@ stdenvNoCC.mkDerivation rec {
     ln -s "$out/share/xdg-ninja/xdg-ninja.sh" "$out/bin/xdg-ninja"
 
     wrapProgram "$out/bin/xdg-ninja" \
-      --prefix PATH : "${lib.makeBinPath [ glow jq ]}"
+      --prefix PATH : "${
+        lib.makeBinPath [
+          glow
+          jq
+        ]
+      }"
     runHook postInstall
   '';
 

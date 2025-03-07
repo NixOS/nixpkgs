@@ -1,11 +1,12 @@
-{ stdenv
-, lib
-, pkg-config
-, libevent
-, libressl
-, libbsd
-, fetchurl
-, readline
+{
+  stdenv,
+  lib,
+  pkg-config,
+  libevent,
+  libressl,
+  libbsd,
+  fetchurl,
+  readline,
 }:
 
 stdenv.mkDerivation rec {

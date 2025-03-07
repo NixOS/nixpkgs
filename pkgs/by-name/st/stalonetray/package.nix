@@ -1,12 +1,13 @@
-{ autoreconfHook
-, docbook_xml_dtd_44
-, docbook-xsl-ns
-, fetchFromGitHub
-, lib
-, libX11
-, libXpm
-, libxslt
-, stdenv
+{
+  autoreconfHook,
+  docbook_xml_dtd_44,
+  docbook-xsl-ns,
+  fetchFromGitHub,
+  lib,
+  libX11,
+  libXpm,
+  libxslt,
+  stdenv,
 }:
 
 stdenv.mkDerivation rec {
@@ -26,9 +27,9 @@ stdenv.mkDerivation rec {
       ac_str = "AC_SUBST(DOCBOOK_ROOT)";
       ac_str_sub = "DOCBOOK_ROOT=${db_root}; ${ac_str}";
     in
-      ''
-        substituteInPlace configure.ac --replace '${ac_str}' '${ac_str_sub}'
-      '';
+    ''
+      substituteInPlace configure.ac --replace '${ac_str}' '${ac_str_sub}'
+    '';
 
   nativeBuildInputs = [
     autoreconfHook

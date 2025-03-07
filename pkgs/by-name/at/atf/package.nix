@@ -10,33 +10,28 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "atf";
-  version = "0.21-unstable-2021-09-01"; # Match the commit used in FreeBSD’s port.
+  version = "0.22";
 
   src = fetchFromGitHub {
     owner = "freebsd";
     repo = "atf";
-    rev = "55c21b2c5fb189bbdfccb2b297bfa89236502542";
-    hash = "sha256-u0YBPcoIBvqBVaytaO9feBaRnQygtzEPGJV0ItI1Vco=";
+    tag = "atf-${finalAttrs.version}";
+    hash = "sha256-vZfBk/lH+04d3NbTUYjAaxwGFHtnagl/kY04hgkE4Iw=";
   };
 
   patches = [
-    # Fixes use after free that causes failures in Kyua’s test suite.
-    # https://github.com/freebsd/atf/pull/57
-    # https://github.com/freebsd/kyua/issues/223
+    # https://github.com/freebsd/atf/issues/88
+    # https://github.com/freebsd/atf/pull/85
+    # Maintainer say it fix some tests in issue 88.
+    ./pr-85.patch
     (fetchpatch {
-      name = "fix-use-after-free.patch";
-      url = "https://github.com/freebsd/atf/commit/fb22f3837bcfdce5ce8b3c0e18af131bb6902a02.patch";
-      hash = "sha256-p4L3sxSYfMSzwKrUDlEZpoJydbaK3Hcbvn90KlPHkic=";
+      url = "https://github.com/freebsd/atf/commit/b42c98612cb99fa3f52766a46203263dc1de7187.patch?full_index=1";
+      hash = "sha256-goDPIdIF8vHXDengVIYbxw5W/JT5kfsG5japgtranas=";
     })
   ];
 
   postPatch =
     lib.optionalString finalAttrs.doInstallCheck ''
-      # https://github.com/freebsd/atf/issues/61
-      substituteInPlace atf-c/check_test.c \
-        --replace-fail 'ATF_TP_ADD_TC(tp, build_cpp)' ""
-      substituteInPlace atf-c++/check_test.cpp \
-        --replace-fail 'ATF_ADD_TEST_CASE(tcs, build_cpp);' ""
       # Can’t find `c_helpers` in the work folder.
       substituteInPlace test-programs/Kyuafile \
         --replace-fail 'atf_test_program{name="srcdir_test"}' ""
@@ -60,12 +55,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [
     # ATF isn’t compatible with C++17, which is the default on current clang and GCC.
-    "CXXFLAGS=-std=c++11"
+    "CXXFLAGS=-std=c++14"
   ];
 
   doInstallCheck = true;
 
-  nativeInstallCheckInputs = [ kyua ];
+  nativeInstallCheckInputs = [
+    kyua
+  ];
 
   installCheckPhase = ''
     runHook preInstallCheck

@@ -36,7 +36,6 @@ in
 
   };
 
-
   ###### implementation
 
   config = mkIf (cfg != null) {

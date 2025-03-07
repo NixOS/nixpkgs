@@ -1,9 +1,10 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, perlPackages
-, perl
-, installShellFiles
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  perlPackages,
+  perl,
+  installShellFiles,
 }:
 
 stdenvNoCC.mkDerivation rec {

@@ -14,7 +14,7 @@
 }:
 let
   pname = "tracexec";
-  version = "0.8.0";
+  version = "0.8.2";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
@@ -22,11 +22,12 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "kxxt";
     repo = "tracexec";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-ZoYqmjqY9eAHGDIbFX9FY1yGF210C60UWcHi0lxzL7g=";
+    tag = "v${version}";
+    hash = "sha256-qLvox7ef9eU1Vvg4gZGCKkic4+mcOIz9BZWTi/Q2grk=";
   };
 
-  cargoHash = "sha256-mZSj45im5b25mt8mGYLq03blvFCyS02kVK7yV3bIlUg=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-uFuMuSDcNKrlf2kpk/7+jaM7079Il63d/TtRiRIQZD4=";
 
   hardeningDisable = [ "zerocallusedregs" ];
 

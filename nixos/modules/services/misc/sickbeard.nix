@@ -1,4 +1,10 @@
-{ config, lib, options, pkgs, ... }:
+{
+  config,
+  lib,
+  options,
+  pkgs,
+  ...
+}:
 let
 
   name = "sickbeard";
@@ -55,7 +61,6 @@ in
     };
   };
 
-
   ###### implementation
 
   config = lib.mkIf cfg.enable {
@@ -76,7 +81,7 @@ in
 
     systemd.services.sickbeard = {
       description = "Sickbeard Server";
-      wantedBy    = [ "multi-user.target" ];
+      wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
 
       serviceConfig = {

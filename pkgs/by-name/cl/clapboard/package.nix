@@ -1,20 +1,22 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "clapboard";
-  version = "0.1.1";
+  version = "1.0.3";
 
   src = fetchFromGitHub {
     owner = "bjesus";
     repo = "clapboard";
     rev = "v${version}";
-    hash = "sha256-/4HBhsW2C3xYzKVw9TuSj8b7LdirWbNg4OxLm/ebf40=";
+    hash = "sha256-TM07BcluIh+MEcVg1ApZu85rj36ZBUfn125A0eALNMo=";
   };
 
-  cargoHash = "sha256-bq+r2J2lhhZKTEV69OnsXiAGKspOZ0kF0q2hDnbIXn8=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-uPMaw36y9773LTu02muLot8I42VM2GE/MJSAHClLNgs=";
 
   meta = with lib; {
     description = "Wayland clipboard manager that will make you clap";

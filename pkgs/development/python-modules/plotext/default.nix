@@ -12,7 +12,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "piccolomo";
     repo = pname;
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-V7N7p5RxLKYLmJeojikYJ/tT/IpVGzG3ZPVvUisDAVs=";
   };
 

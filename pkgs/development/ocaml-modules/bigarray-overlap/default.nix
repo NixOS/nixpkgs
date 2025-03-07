@@ -1,5 +1,9 @@
-{ lib, buildDunePackage, fetchurl
-, alcotest, pkg-config
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  alcotest,
+  pkg-config,
 }:
 
 buildDunePackage rec {

@@ -1,12 +1,13 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, makeWrapper
-, installShellFiles
-, getent
-, nix-update-script
-, testers
-, prometheus-php-fpm-exporter
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  makeWrapper,
+  installShellFiles,
+  getent,
+  nix-update-script,
+  testers,
+  prometheus-php-fpm-exporter,
 }:
 
 buildGoModule rec {
@@ -22,7 +23,10 @@ buildGoModule rec {
 
   vendorHash = "sha256-OK36tHkBtosdfEWFPYMtlbzCkh5cF35NBWYyJrb9fwg=";
 
-  nativeBuildInputs = [ makeWrapper installShellFiles ];
+  nativeBuildInputs = [
+    makeWrapper
+    installShellFiles
+  ];
 
   ldflags = [
     "-X main.version=${version}"

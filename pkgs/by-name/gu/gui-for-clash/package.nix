@@ -1,7 +1,7 @@
 {
   stdenv,
   nodejs,
-  pnpm,
+  pnpm_9,
   fetchFromGitHub,
   buildGoModule,
   lib,
@@ -9,32 +9,34 @@
   webkitgtk_4_0,
   pkg-config,
   libsoup_3,
-  wrapGAppsHook3,
   autoPatchelfHook,
   makeDesktopItem,
   copyDesktopItems,
+  replaceVars,
 }:
 let
   pname = "gui-for-clash";
-  version = "1.8.9";
+  version = "1.9.0";
+
   src = fetchFromGitHub {
     owner = "GUI-for-Cores";
     repo = "GUI.for.Clash";
-    rev = "v${version}";
-    hash = "sha256-jNYMv3gPbZV2JlTV0v0NQ06HkXDzgHXuEdJrBgQ+p2g=";
+    tag = "v${version}";
+    hash = "sha256-0PNFiOZ+POp1P/HDJmAIMKNGIjft6bfwPiRDLswY2ns=";
   };
+
   frontend = stdenv.mkDerivation (finalAttrs: {
     inherit pname version src;
 
     nativeBuildInputs = [
       nodejs
-      pnpm.configHook
+      pnpm_9.configHook
     ];
 
-    pnpmDeps = pnpm.fetchDeps {
+    pnpmDeps = pnpm_9.fetchDeps {
       inherit (finalAttrs) pname version src;
       sourceRoot = "${finalAttrs.src.name}/frontend";
-      hash = "sha256-RQtU61H1YklCgJrlyHALxUZp8OvVs2MgFThWBsYk2cs=";
+      hash = "sha256-mG8b16PP876EyaX3Sc4WM41Yc/oDGZDiilZPaxPvvuQ=";
     };
 
     sourceRoot = "${finalAttrs.src.name}/frontend";
@@ -42,7 +44,7 @@ let
     buildPhase = ''
       runHook preBuild
 
-      pnpm run build
+      pnpm run build-only
 
       runHook postBuild
     '';
@@ -50,8 +52,7 @@ let
     installPhase = ''
       runHook preInstall
 
-      mkdir $out/
-      cp -r ./dist/* $out/
+      cp -r ./dist $out
 
       runHook postInstall
     '';
@@ -59,7 +60,7 @@ let
     meta = {
       description = "GUI program developed by vue3";
       license = with lib.licenses; [ gpl3Plus ];
-      maintainers = with lib.maintainers; [ aucub ];
+      maintainers = with lib.maintainers; [ ];
       platforms = lib.platforms.linux;
     };
   });
@@ -67,12 +68,19 @@ in
 buildGoModule {
   inherit pname version src;
 
-  vendorHash = "sha256-rDbJOj8t/qu04Rd8J0LnXiBoIDmdzBQ9avAhImK7dFg=";
+  patches = [ ./bridge.patch ];
+
+  postPatch = ''
+    # As we need the $out reference, we can't use `replaceVars` here.
+    substituteInPlace bridge/bridge.go \
+      --replace-fail '@basepath@' "$out"
+  '';
+
+  vendorHash = "sha256-OrysyJF+lUMf+0vWmOZHjxUdE6fQCKArmpV4alXxtYs=";
 
   nativeBuildInputs = [
     wails
     pkg-config
-    wrapGAppsHook3
     autoPatchelfHook
     copyDesktopItems
   ];
@@ -84,9 +92,9 @@ buildGoModule {
 
   desktopItems = [
     (makeDesktopItem {
-      name = "GUI.for.Clash";
+      name = "gui-for-clash";
       exec = "GUI.for.Clash";
-      icon = "GUI.for.Clash";
+      icon = "gui-for-clash";
       genericName = "GUI.for.Clash";
       desktopName = "GUI.for.Clash";
       categories = [
@@ -98,17 +106,8 @@ buildGoModule {
     })
   ];
 
-  postUnpack = ''
-    cp -r ${frontend} $sourceRoot/frontend/dist
-  '';
-
-  postPatch = ''
-    sed -i '/exePath, err := os.Executable()/,+3d' bridge/bridge.go
-    substituteInPlace bridge/bridge.go \
-      --replace-fail "Env.BasePath = filepath.Dir(exePath)" "" \
-      --replace-fail "Env.AppName = filepath.Base(exePath)" "Env.AppName = \"GUI.for.Clash\"
-        Env.BasePath = filepath.Join(os.Getenv(\"HOME\"), \".config\", Env.AppName)" \
-      --replace-fail 'exePath := Env.BasePath' 'exePath := "${placeholder "out"}/bin"'
+  preBuild = ''
+    cp -r ${frontend} ./frontend/dist
   '';
 
   buildPhase = ''
@@ -122,9 +121,8 @@ buildGoModule {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/share/pixmaps
-    cp -r ./build/bin $out/bin
-    cp build/appicon.png $out/share/pixmaps/GUI.for.Clash.png
+    install -Dm 0755 ./build/bin/GUI.for.Clash $out/bin/GUI.for.Clash
+    install -Dm 0644 build/appicon.png $out/share/pixmaps/gui-for-clash.png
 
     runHook postInstall
   '';
@@ -134,7 +132,7 @@ buildGoModule {
     homepage = "https://github.com/GUI-for-Cores/GUI.for.Clash";
     mainProgram = "GUI.for.Clash";
     license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ aucub ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.linux;
   };
 }

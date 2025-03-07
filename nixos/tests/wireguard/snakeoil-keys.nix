@@ -1,4 +1,6 @@
 {
+  presharedKey = "7myEJlGAWLTg83y7Py29pp7REQBVmZfI4xcawjcZpjg=";
+
   peer0 = {
     privateKey = "OPuVRS2T0/AtHDp3PXkNuLQYDiqJaBEEnYe42BSnJnQ=";
     publicKey = "IujkG119YPr2cVQzJkSLYCdjpHIDjvr/qH1w1tdKswY=";

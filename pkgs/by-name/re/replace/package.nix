@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchurl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "replace";
@@ -9,7 +13,10 @@ stdenv.mkDerivation rec {
     sha256 = "18hkwhaz25s6209n5mpx9hmkyznlzygqj488p2l7nvp9zrlxb9sf";
   };
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   makeFlags = [
     "TREE=\$(out)"
@@ -24,7 +31,7 @@ stdenv.mkDerivation rec {
   preInstall = "mkdir -p \$out/share/man";
   postInstall = "mv \$out/bin/replace \$out/bin/replace-literal";
 
-  patches = [./malloc.patch];
+  patches = [ ./malloc.patch ];
 
   meta = {
     description = "Tool to replace verbatim strings";

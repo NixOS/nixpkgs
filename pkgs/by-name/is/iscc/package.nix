@@ -1,9 +1,10 @@
-{ stdenv
-, fetchurl
-, innoextract
-, runtimeShell
-, wineWow64Packages
-, lib
+{
+  stdenv,
+  fetchurl,
+  innoextract,
+  runtimeShell,
+  wineWow64Packages,
+  lib,
 }:
 
 let
@@ -51,7 +52,6 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
-
 
   meta = with lib; {
     description = "Compiler for Inno Setup, a tool for creating Windows installers";

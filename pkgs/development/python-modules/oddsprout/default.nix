@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  poetry-core,
+  hatchling,
   pytestCheckHook,
   pythonOlder,
   dahlia,
@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "oddsprout";
-  version = "0.1.1";
+  version = "0.1.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -19,20 +19,17 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "trag1c";
     repo = "oddsprout";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-BOUYq4yny3ScgzCzx2cpeK4e7nxxwTj8mJ42nr59mFA=";
+    tag = "v${version}";
+    hash = "sha256-RfAU3/Je3aC8JjQ51DqRCSAIfW2tQmQPP6G0/bfa1ZE=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     dahlia
     ixia
   ];
 
-  # has one test `test_main_recursion_error`
-  # that has a very low (~1%) but nonzero chance to fail,
-  # this is known upstream (https://github.com/trag1c/oddsprout/issues/5)
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "oddsprout" ];
@@ -46,5 +43,6 @@ buildPythonPackage rec {
       itepastra
       sigmanificient
     ];
+    mainProgram = "oddsprout";
   };
 }

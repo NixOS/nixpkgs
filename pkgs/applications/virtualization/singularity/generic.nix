@@ -25,7 +25,7 @@ in
   lib,
   buildGoModule,
   runCommandLocal,
-  substituteAll,
+  replaceVars,
   # Native build inputs
   addDriverRunpath,
   makeWrapper,
@@ -64,7 +64,7 @@ in
   # SingularityCE 3.10.0 and above requires explicit --without-seccomp when libseccomp is not available.
   enableSeccomp ? true,
   # Whether the configure script treat SUID support as default
-  # When equal to enableSuid, it supress the --with-suid / --without-suid build flag
+  # When equal to enableSuid, it suppress the --with-suid / --without-suid build flag
   # It can be set to `null` to always pass either --with-suid or --without-suided
   # Type: null or boolean
   defaultToSuid ? true,
@@ -109,8 +109,7 @@ in
   inherit pname version src;
 
   patches = lib.optionals (projectName == "apptainer") [
-    (substituteAll {
-      src = ./apptainer/0001-ldCache-patch-for-driverLink.patch;
+    (replaceVars ./apptainer/0001-ldCache-patch-for-driverLink.patch {
       inherit (addDriverRunpath) driverLink;
     })
   ];
@@ -209,16 +208,14 @@ in
     # Patching the hard-coded defaultPath by prefixing the packages in defaultPathInputs
     ${lib.concatMapAttrsStringSep "\n" (fileName: originalDefaultPaths: ''
       substituteInPlace ${lib.escapeShellArg fileName} \
-        ${
-          lib.concatMapStringsSep " \\\n  " (
-            originalDefaultPath:
-            lib.concatStringsSep " " [
-              "--replace-fail"
-              (addShellDoubleQuotes (lib.escapeShellArg originalDefaultPath))
-              (addShellDoubleQuotes ''$systemDefaultPath''${systemDefaultPath:+:}${lib.escapeShellArg originalDefaultPath}''${inputsDefaultPath:+:}$inputsDefaultPath'')
-            ]
-          ) originalDefaultPaths
-        }
+        ${lib.concatMapStringsSep " \\\n  " (
+          originalDefaultPath:
+          lib.concatStringsSep " " [
+            "--replace-fail"
+            (addShellDoubleQuotes (lib.escapeShellArg originalDefaultPath))
+            (addShellDoubleQuotes ''$systemDefaultPath''${systemDefaultPath:+:}${lib.escapeShellArg originalDefaultPath}''${inputsDefaultPath:+:}$inputsDefaultPath'')
+          ]
+        ) originalDefaultPaths}
     '') sourceFilesWithDefaultPaths}
 
     substituteInPlace internal/pkg/util/gpu/nvidia.go \

@@ -1,6 +1,7 @@
-{ lib
-, buildGoModule
-, fetchgit
+{
+  lib,
+  buildGoModule,
+  fetchgit,
 }:
 buildGoModule {
   pname = "kontemplate";
@@ -21,7 +22,10 @@ buildGoModule {
     mainProgram = "kontemplate";
     homepage = "https://code.tvl.fyi/about/ops/kontemplate";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ mbode tazjin ];
+    maintainers = with lib.maintainers; [
+      mbode
+      tazjin
+    ];
     platforms = lib.platforms.unix;
 
     longDescription = ''

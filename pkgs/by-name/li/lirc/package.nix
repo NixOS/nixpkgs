@@ -1,25 +1,31 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchpatch
-, autoreconfHook
-, pkg-config
-, help2man
-, python3
-, linuxHeaders
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  autoreconfHook,
+  pkg-config,
+  help2man,
+  python3,
+  linuxHeaders,
 
-, alsa-lib
-, libxslt
-, systemd
-, libusb-compat-0_1
-, libftdi1
-, libICE
-, libSM
-, libX11
+  alsa-lib,
+  libxslt,
+  systemd,
+  libusb-compat-0_1,
+  libftdi1,
+  libICE,
+  libSM,
+  libX11,
 }:
 
 let
-  pythonEnv = python3.pythonOnBuildForHost.withPackages (p: with p; [ pyyaml setuptools ]);
+  pythonEnv = python3.pythonOnBuildForHost.withPackages (
+    p: with p; [
+      pyyaml
+      setuptools
+    ]
+  );
 in
 stdenv.mkDerivation rec {
   pname = "lirc";
@@ -40,6 +46,11 @@ stdenv.mkDerivation rec {
     # Add a workaround for linux-headers-5.18 until upstream adapts:
     #   https://sourceforge.net/p/lirc/git/merge-requests/45/
     ./linux-headers-5.18.patch
+
+    # remove check for `Ubuntu` in /proc/version which will override
+    # --with-systemdsystemunitdir
+    # https://sourceforge.net/p/lirc/tickets/385/
+    ./ubuntu.diff
   ];
 
   postPatch = ''
@@ -66,9 +77,23 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  nativeBuildInputs = [ autoreconfHook help2man libxslt pythonEnv pkg-config ];
+  nativeBuildInputs = [
+    autoreconfHook
+    help2man
+    libxslt
+    pythonEnv
+    pkg-config
+  ];
 
-  buildInputs = [ alsa-lib systemd libusb-compat-0_1 libftdi1 libICE libSM libX11 ];
+  buildInputs = [
+    alsa-lib
+    systemd
+    libusb-compat-0_1
+    libftdi1
+    libICE
+    libSM
+    libX11
+  ];
 
   DEVINPUT_HEADER = "${linuxHeaders}/include/linux/input-event-codes.h";
 
@@ -86,6 +111,9 @@ stdenv.mkDerivation rec {
     "sysconfdir=$out/etc"
     "localstatedir=$TMPDIR"
   ];
+
+  # Upstream ships broken symlinks in docs
+  dontCheckForBrokenSymlinks = true;
 
   meta = with lib; {
     description = "Allows to receive and send infrared signals";

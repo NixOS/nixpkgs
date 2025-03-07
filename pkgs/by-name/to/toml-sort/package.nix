@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication {
   src = fetchFromGitHub {
     owner = "pappasam";
     repo = "toml-sort";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-PuTXG8RIN8Mui5J8DV0yxe94y6FNs4TgPyHjEhpcKqM=";
   };
 

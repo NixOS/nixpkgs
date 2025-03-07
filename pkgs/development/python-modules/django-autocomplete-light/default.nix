@@ -1,74 +1,48 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
-  django,
-  six,
-  pytestCheckHook,
-  django-debug-toolbar,
-  django-extensions,
   django-taggit,
-  django-tagging,
-  mock,
-  pytest-django,
-  selenium,
-  splinter,
-  sqlparse,
-  tenacity,
-  whitenoise,
+  django,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "django-autocomplete-light";
-  version = "3.9.4";
-  format = "setuptools";
+  version = "3.11.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "yourlabs";
     repo = "django-autocomplete-light";
-    rev = version;
-    hash = "sha256-YUiGN6q7ARM/rg7d+ykeDEYZDYjB+DHxMCmdme6QccU=";
+    tag = version;
+    hash = "sha256-Lcl14CVmpDoEdEq49sL4GFtWWqFcVoSjOJOBU7oWeH4=";
   };
 
-  propagatedBuildInputs = [
-    django
-    six
-  ];
+  build-system = [ setuptools ];
+
+  dependencies = [ django ];
+
+  optional-dependencies = {
+    tags = [ django-taggit ];
+    # nested = [ django-nested-admin ];
+    # genericm2m = [ django-generic-m2m ];
+    # gfk = [ django-querysetsequence ];
+  };
 
   # Too many un-packaged dependencies
   doCheck = false;
-
-  nativeCheckInputs = [
-    pytestCheckHook
-    django-debug-toolbar
-    django-extensions
-    django-taggit
-    django-tagging
-    mock
-    pytest-django
-    selenium
-    splinter
-    sqlparse
-    tenacity
-    whitenoise
-
-    # FIXME: not packaged
-    # django-generic-m2m
-    # django-gm2m
-    # django-querysetsequence
-    # pytest-splinter
-    # dango-nested-admin
-    # djhacker
-  ];
-
-  # Taken from tox.ini
-  preCheck = "cd test_project";
 
   pythonImportsCheck = [ "dal" ];
 
   meta = with lib; {
     description = "Fresh approach to autocomplete implementations, specially for Django";
     homepage = "https://django-autocomplete-light.readthedocs.io";
+    changelog = "https://github.com/yourlabs/django-autocomplete-light/blob/${version}/CHANGELOG";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ambroisie ];
   };

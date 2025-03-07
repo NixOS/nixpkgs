@@ -1,27 +1,29 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cairo
-, fontconfig
-, libevdev
-, libinput
-, libxkbcommon
-, xcbutilwm
-, makeWrapper
-, mesa
-, meson
-, ninja
-, nixosTests
-, pango
-, pixman
-, pkg-config
-, scdoc
-, systemd
-, wayland
-, wayland-protocols
-, wayland-scanner
-, withXwayland ? true , xwayland
-, wlroots
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cairo,
+  fontconfig,
+  libdrm,
+  libevdev,
+  libinput,
+  libxkbcommon,
+  xcbutilwm,
+  makeWrapper,
+  meson,
+  ninja,
+  nixosTests,
+  pango,
+  pixman,
+  pkg-config,
+  scdoc,
+  systemd,
+  wayland,
+  wayland-protocols,
+  wayland-scanner,
+  withXwayland ? true,
+  xwayland,
+  wlroots,
 }:
 
 stdenv.mkDerivation rec {
@@ -47,11 +49,11 @@ stdenv.mkDerivation rec {
   buildInputs = [
     cairo
     fontconfig
+    libdrm
     libevdev
     libinput
     libxkbcommon
     xcbutilwm
-    mesa # for libEGL headers
     pango
     pixman
     systemd

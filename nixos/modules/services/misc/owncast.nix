@@ -1,6 +1,13 @@
-{ lib, pkgs, config, ... }:
-let cfg = config.services.owncast;
-in {
+{
+  lib,
+  pkgs,
+  config,
+  ...
+}:
+let
+  cfg = config.services.owncast;
+in
+{
 
   options.services.owncast = {
 
@@ -89,9 +96,12 @@ in {
 
     users.groups = lib.mkIf (cfg.group == "owncast") { owncast = { }; };
 
-    networking.firewall =
-      lib.mkIf cfg.openFirewall { allowedTCPPorts = [ cfg.rtmp-port ] ++ lib.optional (cfg.listen != "127.0.0.1") cfg.port; };
+    networking.firewall = lib.mkIf cfg.openFirewall {
+      allowedTCPPorts = [ cfg.rtmp-port ] ++ lib.optional (cfg.listen != "127.0.0.1") cfg.port;
+    };
 
   };
-  meta = { maintainers = with lib.maintainers; [ MayNiklas ]; };
+  meta = {
+    maintainers = with lib.maintainers; [ MayNiklas ];
+  };
 }

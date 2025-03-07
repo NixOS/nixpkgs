@@ -31,7 +31,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "xchwarze";
     repo = "samsung-tv-ws-api";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-CU59Kg8kSEE71x6wifCKCaVFdaMftodtkrAOpD+qvWY=";
   };
 
@@ -51,11 +51,14 @@ buildPythonPackage rec {
     ];
   };
 
-  nativeCheckInputs = [
-    aioresponses
-    pytest-asyncio
-    pytestCheckHook
-  ] ++ optional-dependencies.async ++ optional-dependencies.encrypted;
+  nativeCheckInputs =
+    [
+      aioresponses
+      pytest-asyncio
+      pytestCheckHook
+    ]
+    ++ optional-dependencies.async
+    ++ optional-dependencies.encrypted;
 
   pythonImportsCheck = [ "samsungtvws" ];
 

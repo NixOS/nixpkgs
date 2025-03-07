@@ -2,16 +2,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "udpt";
-  version = "3.1.1";
+  version = "3.1.2";
 
   src = fetchFromGitHub {
     owner = "naim94a";
     repo = "udpt";
-    rev = "${pname}-${version}";
-    sha256 = "sha256-G3LzbV3b1Y/2SPIBS1kZDuLuGF5gV/H1LFBRhevpdjU=";
+    rev = "v${version}";
+    sha256 = "sha256-dWZRl5OiuEmCx7+Id0/feCohH5k/HA47nbPUEo8BBwQ=";
   };
 
-  cargoHash = "sha256-ebLVyUB65fW8BWctxXnYxrnl/2IESd4YJXeiMsMXn9s=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-AtqtANpxsmvdEoISyGZKDVR7/IxMBPwGGNelgf7ZlH4=";
 
   postInstall = ''
     install -D udpt.toml $out/share/udpt/udpt.toml

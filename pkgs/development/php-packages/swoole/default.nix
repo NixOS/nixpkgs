@@ -9,7 +9,7 @@
 }:
 
 let
-  version = "5.1.2";
+  version = "6.0.1";
 in
 buildPecl {
   inherit version;
@@ -19,7 +19,7 @@ buildPecl {
     owner = "swoole";
     repo = "swoole-src";
     rev = "v${version}";
-    hash = "sha256-WTsntvauiooj081mOoFcK6CVpnCCR/cEQtJbsOIJ/wo=";
+    hash = "sha256-WeTl+/OVcXFl39qfYoYRk2MQ7PYKlbjHxddp/kFov6g=";
   };
 
   buildInputs = [ pcre2 ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ valgrind ];
@@ -33,6 +33,5 @@ buildPecl {
     homepage = "https://www.swoole.com";
     license = lib.licenses.asl20;
     maintainers = lib.teams.php.members;
-    broken = lib.versionAtLeast php.version "8.4";
   };
 }

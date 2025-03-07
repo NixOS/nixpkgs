@@ -1,9 +1,10 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   pythonOlder,
   setuptools,
+  setuptools-scm,
   joblib,
   keras,
   numpy,
@@ -17,19 +18,24 @@
 
 buildPythonPackage rec {
   pname = "imbalanced-learn";
-  version = "0.12.4";
+  version = "0.13.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-gVO6OF0pawfZfgkBomJKhsBrSMlML5LaOlNUgnaXt6M=";
+  src = fetchFromGitHub {
+    owner = "scikit-learn-contrib";
+    repo = "imbalanced-learn";
+    tag = version;
+    hash = "sha256-osmALi5vTV+3kgldY/VhYkNvpXX11KwJ/dIX/5E7Uhc=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     joblib
     numpy
     scikit-learn

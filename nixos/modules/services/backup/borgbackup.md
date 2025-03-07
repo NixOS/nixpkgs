@@ -23,7 +23,7 @@ A complete list of options for the Borgbase module may be found
 A very basic configuration for backing up to a locally accessible directory is:
 ```nix
 {
-    opt.services.borgbackup.jobs = {
+    services.borgbackup.jobs = {
       rootBackup = {
         paths = "/";
         exclude = [ "/nix" "/path/to/local/repo" ];

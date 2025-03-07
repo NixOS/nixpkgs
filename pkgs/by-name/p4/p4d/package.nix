@@ -1,7 +1,8 @@
-{ stdenv
-, fetchurl
-, lib
-, autoPatchelfHook
+{
+  stdenv,
+  fetchurl,
+  lib,
+  autoPatchelfHook,
 }:
 
 let
@@ -22,7 +23,8 @@ stdenv.mkDerivation {
   version = "2023.1.2513900";
 
   src =
-    assert lib.assertMsg (builtins.hasAttr stdenv.hostPlatform.system srcs) "p4d is not available for ${stdenv.hostPlatform.system}";
+    assert lib.assertMsg (builtins.hasAttr stdenv.hostPlatform.system srcs)
+      "p4d is not available for ${stdenv.hostPlatform.system}";
     srcs.${stdenv.hostPlatform.system};
 
   sourceRoot = ".";
@@ -43,6 +45,9 @@ stdenv.mkDerivation {
     license = licenses.unfree;
     mainProgram = "p4d";
     platforms = builtins.attrNames srcs;
-    maintainers = with maintainers; [ corngood impl ];
+    maintainers = with maintainers; [
+      corngood
+      impl
+    ];
   };
 }

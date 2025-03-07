@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "miketeo";
     repo = "pysmb";
-    rev = "refs/tags/pysmb-${version}";
+    tag = "pysmb-${version}";
     hash = "sha256-Zid6KGNr7BBuyHaxdXkhRC/Ug93HmVXKMtreFf+M7OE=";
   };
 

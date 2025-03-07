@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "json-schema-for-humans";
-  version = "1.0.3";
+  version = "1.3.4";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -27,9 +27,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "coveooss";
     repo = "json-schema-for-humans";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-QMDbuiHfL8JLYJwceyxGR3Zc8+ZBVlCGHOBeH5x4BmQ=";
+    tag = "v${version}";
+    hash = "sha256-+IvLFejEcu477BNY8F0h4WLqe18f6i2+gXyx/mRHzpI=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'markdown2 = "^2.5.0"' 'markdown2 = "^2.4.1"'
+  '';
 
   pythonRelaxDeps = [ "dataclasses-json" ];
 
@@ -65,7 +70,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Quickly generate HTML documentation from a JSON schema";
     homepage = "https://github.com/coveooss/json-schema-for-humans";
-    changelog = "https://github.com/coveooss/json-schema-for-humans/releases/tag/v${version}";
+    changelog = "https://github.com/coveooss/json-schema-for-humans/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [ astro ];
     mainProgram = "generate-schema-doc";

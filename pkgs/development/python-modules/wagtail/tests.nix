@@ -7,6 +7,7 @@
   elasticsearch,
   freezegun,
   jinja2,
+  msrest,
   python-dateutil,
   python,
   pytz,
@@ -23,17 +24,18 @@ buildPythonPackage {
   dontInstall = true;
 
   checkInputs = [
-    wagtail
-    wagtail-factories
-    jinja2
-    freezegun
-    elasticsearch
     azure-mgmt-cdn
-    python-dateutil
-    pytz
+    azure-mgmt-frontdoor
     boto3
     django-pattern-library
-    azure-mgmt-frontdoor
+    elasticsearch
+    freezegun
+    jinja2
+    msrest
+    python-dateutil
+    pytz
+    wagtail
+    wagtail-factories
   ];
 
   checkPhase = ''

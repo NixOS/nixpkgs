@@ -1,4 +1,10 @@
-{ lib, buildGoModule, fetchFromGitea, installShellFiles, perl }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitea,
+  installShellFiles,
+  perl,
+}:
 
 buildGoModule rec {
   pname = "ssh-tools";

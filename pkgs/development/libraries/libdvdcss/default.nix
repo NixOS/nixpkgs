@@ -1,4 +1,9 @@
-{lib, stdenv, fetchurl, IOKit}:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  IOKit,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libdvdcss";
@@ -15,6 +20,6 @@ stdenv.mkDerivation rec {
     homepage = "http://www.videolan.org/developers/libdvdcss.html";
     description = "Library for decrypting DVDs";
     license = licenses.gpl2;
-    platforms = with platforms; linux ++ darwin;
+    platforms = platforms.unix;
   };
 }

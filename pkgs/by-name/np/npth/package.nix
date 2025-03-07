@@ -1,21 +1,19 @@
-{ lib, stdenv, fetchurl, fetchpatch, autoreconfHook, pkgsCross }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  pkgsCross,
+}:
 
 stdenv.mkDerivation rec {
   pname = "npth";
-  version = "1.7";
+  version = "1.8";
 
   src = fetchurl {
     url = "mirror://gnupg/npth/npth-${version}.tar.bz2";
-    sha256 = "sha256-hYn1aTe3XOM7KNMS/MvzArO3HsPzlF/eaqp0AnkUrQU=";
+    hash = "sha256-i9JLTyOjBl1uWybpirqc54PqT9eBBpwbNdFJaU6Qyj4=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "musl.patch";
-      url = "https://git.gnupg.org/cgi-bin/gitweb.cgi?p=npth.git;a=patch;h=417abd56fd7bf45cd4948414050615cb1ad59134";
-      hash = "sha256-0g2tLFjW1bybNi6oxlW7vPimsQLjmTih4JZSoATjESI=";
-    })
-  ];
 
   nativeBuildInputs = [ autoreconfHook ];
 
@@ -27,7 +25,6 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "New GNU Portable Threads Library";
-    mainProgram = "npth-config";
     longDescription = ''
       This is a library to provide the GNU Pth API and thus a non-preemptive
       threads implementation.

@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "databricks-sdk";
-  version = "0.38.0";
+  version = "0.44.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "databricks";
     repo = "databricks-sdk-py";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-g00NRo0FSHujN2mCLZCc1hKGsBFiN7ztEneUMziuQpk=";
+    tag = "v${version}";
+    hash = "sha256-+zRsw+nQjkee7AGg0xW7HHbROUAz6cVO91XDlgGtJfs=";
   };
 
   build-system = [
@@ -57,7 +57,7 @@ buildPythonPackage rec {
   disabledTests =
     [
       # Require internet access
-      # ValueError: default auth: cannot configure default credentials, please chec...
+      # ValueError: default auth: cannot configure default credentials, please check...
       "test_azure_cli_does_not_specify_tenant_id_with_msi"
       "test_azure_cli_fallback"
       "test_azure_cli_user_no_management_access"
@@ -82,7 +82,7 @@ buildPythonPackage rec {
   meta = {
     description = "Databricks SDK for Python";
     homepage = "https://github.com/databricks/databricks-sdk-py";
-    changelog = "https://github.com/databricks/databricks-sdk-py/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/databricks/databricks-sdk-py/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };

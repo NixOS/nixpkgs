@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "datafolklabs";
     repo = "cement";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-weBqmNEjeSh5YQfHK48VVFW3UbZQmV4MiIQ3UPQKTTI=";
   };
 

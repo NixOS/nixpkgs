@@ -13,7 +13,7 @@
   extraNativeBuildInputs ? [ ],
   ## Location of resulting RetroArch core on $out
   libretroCore ? "/lib/retroarch/cores",
-  ## The core filename is derivated from the core name
+  ## The core filename is derived from the core name
   ## Setting `normalizeCore` to `true` will convert `-` to `_` on the core filename
   normalizeCore ? true,
   ...
@@ -83,7 +83,9 @@ stdenv.mkDerivation (
 
     passthru = {
       inherit core libretroCore;
-      updateScript = unstableGitUpdater { };
+      # libretro repos sometimes has a fake tag like "Current", ignore
+      # it by setting hardcodeZeroVersion
+      updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
     } // (args.passthru or { });
 
     meta =

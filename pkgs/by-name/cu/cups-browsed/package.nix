@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cups-browsed";
-  version = "2.1.0";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "OpenPrinting";
     repo = "cups-browsed";
     rev = version;
-    hash = "sha256-UkPJqVWG6obIW0jGXsnnYB2lmIm/uiMuPYSGY3+M4Gw=";
+    hash = "sha256-Cfk28rxxgzzQs7B+tNmeUzDYL1eCx9zYwRsS/J6QX9s=";
   };
 
   nativeBuildInputs = [

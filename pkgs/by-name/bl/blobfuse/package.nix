@@ -1,4 +1,11 @@
-{ lib, buildGoModule, fetchFromGitHub, fuse3, testers, blobfuse }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  fuse3,
+  testers,
+  blobfuse,
+}:
 
 let
   version = "2.1.2";
@@ -8,7 +15,8 @@ let
     rev = "blobfuse2-${version}";
     sha256 = "sha256-KzpD+6g1WwviydYE0v5pSH35zC41MrPlk5MitwAIgnE=";
   };
-in buildGoModule {
+in
+buildGoModule {
   pname = "blobfuse";
   inherit version src;
 

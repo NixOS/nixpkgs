@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
 
-, callPackage
+  callPackage,
 
   # for passthru.tests
-, imagemagick
-, libheif
-, imlib2Full
-, gst_all_1
+  imagemagick,
+  libheif,
+  imlib2Full,
+  gst_all_1,
 }:
 
 stdenv.mkDerivation (finalAttrs: rec {
@@ -20,11 +21,14 @@ stdenv.mkDerivation (finalAttrs: rec {
   src = fetchFromGitHub {
     owner = "strukturag";
     repo = "libde265";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-guiLM4RNe5O0qpeCoQUbs1Z7j0wp8iK9za2+6NIB8yY=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
   enableParallelBuilding = true;
 

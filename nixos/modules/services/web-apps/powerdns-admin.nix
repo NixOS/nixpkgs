@@ -1,21 +1,27 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
 let
   cfg = config.services.powerdns-admin;
 
-  configText = ''
-    ${cfg.config}
-  ''
-  + optionalString (cfg.secretKeyFile != null) ''
-    with open('${cfg.secretKeyFile}') as file:
-      SECRET_KEY = file.read()
-  ''
-  + optionalString (cfg.saltFile != null) ''
-    with open('${cfg.saltFile}') as file:
-      SALT = file.read()
-  '';
+  configText =
+    ''
+      ${cfg.config}
+    ''
+    + optionalString (cfg.secretKeyFile != null) ''
+      with open('${cfg.secretKeyFile}') as file:
+        SECRET_KEY = file.read()
+    ''
+    + optionalString (cfg.saltFile != null) ''
+      with open('${cfg.saltFile}') as file:
+        SALT = file.read()
+    '';
 in
 {
   options.services.powerdns-admin = {
@@ -36,14 +42,21 @@ in
       type = types.str;
       default = "";
       example = ''
+        import cachelib
+
         BIND_ADDRESS = '127.0.0.1'
         PORT = 8000
         SQLALCHEMY_DATABASE_URI = 'postgresql://powerdnsadmin@/powerdnsadmin?host=/run/postgresql'
+        SESSION_TYPE = 'cachelib'
+        SESSION_CACHELIB = cachelib.simple.SimpleCache()
       '';
       description = ''
         Configuration python file.
         See [the example configuration](https://github.com/ngoduykhanh/PowerDNS-Admin/blob/v${pkgs.powerdns-admin.version}/configs/development.py)
         for options.
+        Also see [Flask Session configuration](https://flask-session.readthedocs.io/en/latest/config.html#SESSION_TYPE)
+        as the version shipped with NixOS is more recent than the one PowerDNS-Admin expects
+        and it requires explicit configuration.
       '';
     };
 
@@ -79,7 +92,7 @@ in
       serviceConfig = {
         ExecStart = "${pkgs.powerdns-admin}/bin/powerdns-admin --pid /run/powerdns-admin/pid ${escapeShellArgs cfg.extraArgs}";
         # Set environment variables only for starting flask database upgrade
-        ExecStartPre = "${pkgs.coreutils}/bin/env FLASK_APP=${pkgs.powerdns-admin}/share/powerdnsadmin/__init__.py SESSION_TYPE= ${pkgs.python3Packages.flask}/bin/flask db upgrade -d ${pkgs.powerdns-admin}/share/migrations";
+        ExecStartPre = "${pkgs.coreutils}/bin/env FLASK_APP=${pkgs.powerdns-admin}/share/powerdnsadmin/__init__.py ${pkgs.python3Packages.flask}/bin/flask db upgrade -d ${pkgs.powerdns-admin}/share/migrations";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         ExecStop = "${pkgs.coreutils}/bin/kill -TERM $MAINPID";
         PIDFile = "/run/powerdns-admin/pid";
@@ -87,15 +100,16 @@ in
         User = "powerdnsadmin";
         Group = "powerdnsadmin";
 
-        BindReadOnlyPaths = [
-          "/nix/store"
-          "-/etc/resolv.conf"
-          "-/etc/nsswitch.conf"
-          "-/etc/hosts"
-          "-/etc/localtime"
-        ]
-        ++ (optional (cfg.secretKeyFile != null) cfg.secretKeyFile)
-        ++ (optional (cfg.saltFile != null) cfg.saltFile);
+        BindReadOnlyPaths =
+          [
+            "/nix/store"
+            "-/etc/resolv.conf"
+            "-/etc/nsswitch.conf"
+            "-/etc/hosts"
+            "-/etc/localtime"
+          ]
+          ++ (optional (cfg.secretKeyFile != null) cfg.secretKeyFile)
+          ++ (optional (cfg.saltFile != null) cfg.saltFile);
         # ProtectClock= adds DeviceAllow=char-rtc r
         DeviceAllow = "";
         # Implies ProtectSystem=strict, which re-mounts all paths
@@ -120,7 +134,11 @@ in
         ProtectKernelModules = true;
         ProtectKernelTunables = true;
         ProtectProc = "invisible";
-        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_UNIX" ];
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+          "AF_UNIX"
+        ];
         RestrictNamespaces = true;
         RestrictRealtime = true;
         RestrictSUIDSGID = true;

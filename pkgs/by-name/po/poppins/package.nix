@@ -15,7 +15,7 @@ stdenvNoCC.mkDerivation rec {
     hash = "sha256-7+RQHYxNFqOw2EeS2hgrbK/VbUAiPorUtkyRb5MFh5w=";
   };
 
-  nativeBuildInputs = [unzip];
+  nativeBuildInputs = [ unzip ];
 
   installPhase = ''
     runHook preInstall
@@ -29,7 +29,7 @@ stdenvNoCC.mkDerivation rec {
     description = "Devanagari + Latin family for Google Fonts";
     homepage = "https://github.com/itfoundry/Poppins/";
     license = lib.licenses.ofl;
-    maintainers = with lib.maintainers; [nyawox];
+    maintainers = with lib.maintainers; [ nyawox ];
     platforms = lib.platforms.all;
   };
 }

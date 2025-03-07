@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchurl, love, lua, makeWrapper, makeDesktopItem }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  love,
+  lua,
+  makeWrapper,
+  makeDesktopItem,
+}:
 
 let
   pname = "mrrescue";
@@ -29,12 +37,15 @@ stdenv.mkDerivation {
     sha256 = "0kzahxrgpb4vsk9yavy7f8nc34d62d1jqjrpsxslmy9ywax4yfpi";
   };
 
-  nativeBuildInputs = [ lua love makeWrapper ];
+  nativeBuildInputs = [
+    lua
+    love
+    makeWrapper
+  ];
 
   dontUnpack = true;
 
-  installPhase =
-  ''
+  installPhase = ''
     mkdir -p $out/bin
     mkdir -p $out/share/games/lovegames
 

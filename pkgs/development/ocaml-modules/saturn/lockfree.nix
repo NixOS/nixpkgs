@@ -1,5 +1,9 @@
-{ lib, fetchurl, buildDunePackage
-, backoff, multicore-magic
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+  backoff,
+  multicore-magic,
 }:
 
 buildDunePackage rec {
@@ -13,7 +17,10 @@ buildDunePackage rec {
     hash = "sha256-ZmmxwIe5PiPYTTdvOHbOjRbv2b/bb9y0IekByfREPjk=";
   };
 
-  propagatedBuildInputs = [ backoff multicore-magic ];
+  propagatedBuildInputs = [
+    backoff
+    multicore-magic
+  ];
 
   meta = {
     description = "Lock-free data structures for multicore OCaml";

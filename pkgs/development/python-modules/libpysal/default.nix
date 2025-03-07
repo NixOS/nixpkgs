@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pysal";
     repo = "libpysal";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-snhCEKeGKKj/bTDYi6ZVv5F4b/2rz/JHIFG2IoINQ+Q=";
   };
 

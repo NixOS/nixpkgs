@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "asdf-format";
     repo = "asdf-wcs-schemas";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-4CxKLMYXdNkNwkfFRX3YKkS4e+Z3wQgmz8ogbC4Z1vI=";
   };
 

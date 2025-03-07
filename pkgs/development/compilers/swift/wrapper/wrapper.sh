@@ -12,6 +12,8 @@ cc_wrapper="${NIX_CC:-@default_cc_wrapper@}"
 
 source $cc_wrapper/nix-support/utils.bash
 
+source $cc_wrapper/nix-support/darwin-sdk-setup.bash
+
 expandResponseParams "$@"
 
 # Check if we should wrap this Swift invocation at all, and how. Specifically,

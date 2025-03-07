@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, mfcj6510dwlpr, makeWrapper, bash }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  mfcj6510dwlpr,
+  makeWrapper,
+  bash,
+}:
 
 stdenv.mkDerivation rec {
   pname = "mfcj6510dw-cupswrapper";
@@ -14,7 +21,11 @@ stdenv.mkDerivation rec {
     bash # shebang
   ];
 
-  makeFlags = [ "-C" "brcupsconfig" "all" ];
+  makeFlags = [
+    "-C"
+    "brcupsconfig"
+    "all"
+  ];
 
   installPhase = ''
     runHook preInstall

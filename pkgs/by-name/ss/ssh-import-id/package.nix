@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication rec {
 
   src = fetchgit {
     url = "https://git.launchpad.net/ssh-import-id";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-tYbaJGH59qyvjp4kwo3ZFVs0EaE0Lsd2CQ6iraFkAdI=";
   };
 

@@ -1,14 +1,16 @@
-{ stdenv
-, callPackage
-, rocmUpdateScript
-, llvm
-, clang
-, spirv-llvm-translator
+{
+  stdenv,
+  callPackage,
+  rocmUpdateScript,
+  llvm,
+  clang,
+  spirv-llvm-translator,
 }:
 
 let
   spirv = (spirv-llvm-translator.override { inherit llvm; });
-in callPackage ../base.nix rec {
+in
+callPackage ../base.nix rec {
   inherit stdenv rocmUpdateScript;
   buildDocs = false; # No documentation to build
   buildMan = false; # No man pages to build

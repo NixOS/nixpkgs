@@ -1,6 +1,7 @@
-{ lib
-, buildGo122Module
-, fetchFromGitHub
+{
+  lib,
+  buildGo122Module,
+  fetchFromGitHub,
 }:
 
 buildGo122Module rec {
@@ -10,7 +11,7 @@ buildGo122Module rec {
   src = fetchFromGitHub {
     owner = "nakabonne";
     repo = "ali";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-/pdHlI20IzSTX2pnsbxPiJiWmOCbp13eJWLi0Tcsueg=";
   };
 

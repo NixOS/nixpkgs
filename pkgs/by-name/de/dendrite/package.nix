@@ -1,25 +1,26 @@
-{ lib
-, stdenv
-, buildGoModule
-, fetchFromGitHub
-, nix-update-script
-, nixosTests
-, postgresql
-, postgresqlTestHook
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  nix-update-script,
+  nixosTests,
+  postgresql,
+  postgresqlTestHook,
 }:
 
 buildGoModule rec {
   pname = "matrix-dendrite";
-  version = "0.13.8";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
-    owner = "matrix-org";
+    owner = "element-hq";
     repo = "dendrite";
     rev = "v${version}";
-    hash = "sha256-zUpZdG2cdZ95L70qLG2HaUlD+G66XTi4f1V4+ZZAh30=";
+    hash = "sha256-b/kybHF9WcP88kQuG7LB0/pgflYUeWNqEHfUyKfUCIU=";
   };
 
-  vendorHash = "sha256-rGOB1ikY3BgChvD1YZUF66g8P6gE29b/k9kxvHR0+WQ=";
+  vendorHash = "sha256-380xuwMD9gxrjUsLfO8R08wruyWZwjRhiIDmSc/FGwA=";
 
   subPackages = [
     # The server
@@ -58,14 +59,17 @@ buildGoModule rec {
     inherit (nixosTests) dendrite;
   };
   passthru.updateScript = nix-update-script {
-    extraArgs = [ "--version-regex" "v(.+)" ];
+    extraArgs = [
+      "--version-regex"
+      "v(.+)"
+    ];
   };
 
   meta = with lib; {
-    homepage = "https://matrix-org.github.io/dendrite";
+    homepage = "https://element-hq.github.io/dendrite";
     description = "Second-generation Matrix homeserver written in Go";
-    changelog = "https://github.com/matrix-org/dendrite/releases/tag/v${version}";
-    license = licenses.asl20;
+    changelog = "https://github.com/element-hq/dendrite/releases/tag/v${version}";
+    license = licenses.agpl3Plus;
     maintainers = teams.matrix.members;
     platforms = platforms.unix;
   };

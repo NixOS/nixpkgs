@@ -1,6 +1,11 @@
 # This module manages the terminfo database
 # and its integration in the system.
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 {
 
   options = with lib; {
@@ -38,6 +43,7 @@
           alacritty
           contour
           foot
+          ghostty
           kitty
           mtm
           rio

@@ -1,20 +1,39 @@
-{ lib, stdenv, fetchurl
-, # required for both
-  unzip, zlib, curl, libjpeg, libpng, libvorbis, libtheora
-, libogg, libmodplug
-, # glx
-  libX11, libGLU, libGL, libXpm, libXext, libXxf86vm, libXxf86dga, alsa-lib
-, # sdl
-  SDL
-, # icon
-  copyDesktopItems, makeDesktopItem
+{
+  lib,
+  stdenv,
+  fetchurl,
+  # required for both
+  unzip,
+  zlib,
+  curl,
+  libjpeg,
+  libpng,
+  libvorbis,
+  libtheora,
+  libogg,
+  libmodplug,
+  # glx
+  libX11,
+  libGLU,
+  libGL,
+  libXpm,
+  libXext,
+  libXxf86vm,
+  libXxf86dga,
+  alsa-lib,
+  # sdl
+  SDL,
+  # icon
+  copyDesktopItems,
+  makeDesktopItem,
 }:
 
 let
   version = "2.5.2";
 
   version_short = lib.replaceStrings [ "." ] [ "" ] version;
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "nexuiz";
   inherit version;
 
@@ -23,10 +42,20 @@ in stdenv.mkDerivation {
     sha256 = "0010jrxc68qqinkvdh1qn2b8z3sa5v1kcd8d1m4llp3pr6y7xqm5";
   };
 
-  nativeBuildInputs = [ unzip copyDesktopItems ];
+  nativeBuildInputs = [
+    unzip
+    copyDesktopItems
+  ];
   buildInputs = [
     # glx
-    libX11 libGLU libGL libXpm libXext libXxf86vm libXxf86dga alsa-lib
+    libX11
+    libGLU
+    libGL
+    libXpm
+    libXext
+    libXxf86vm
+    libXxf86dga
+    alsa-lib
     # sdl
     SDL
   ];
@@ -80,7 +109,10 @@ in stdenv.mkDerivation {
       icon = "nexuiz";
       desktopName = "Nexuiz";
       comment = "A free first-person shooter video game developed and published by Alientrap";
-      categories = [ "Game" "ActionGame" ];
+      categories = [
+        "Game"
+        "ActionGame"
+      ];
     })
   ];
 

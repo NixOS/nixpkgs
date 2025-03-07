@@ -59,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/tvraman/emacspeak/blob/${finalAttrs.src.rev}/etc/NEWS";
     license = with lib.licenses; [ gpl2Plus ];
     mainProgram = "emacspeak";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.linux;
     # Emacspeak requires a minimal Emacs version; let's use the broken flag
     broken = lib.versionOlder (lib.getVersion emacs) "29.1";

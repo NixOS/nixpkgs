@@ -1,4 +1,8 @@
-{ lib, rustPlatform, fetchCrate }:
+{
+  lib,
+  rustPlatform,
+  fetchCrate,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "svd2rust";
@@ -9,7 +13,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-KLwIwJtPBQ8Sa94/IEJhIGTx/n3oYQKINmNV5L5TJV0=";
   };
 
-  cargoHash = "sha256-4a89Do57KFKu/RDTB4BxUxVlO46HL5aEhhHmnzLuZGo=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-hac29ixPEjm/07isiEndlxyFFDib2K5FAAEN3WsdHmw=";
 
   # error: linker `aarch64-linux-gnu-gcc` not found
   postPatch = ''
@@ -21,7 +26,10 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "svd2rust";
     homepage = "https://github.com/rust-embedded/svd2rust";
     changelog = "https://github.com/rust-embedded/svd2rust/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [ mit asl20 ];
+    license = with licenses; [
+      mit
+      asl20
+    ];
     maintainers = with maintainers; [ newam ];
   };
 }

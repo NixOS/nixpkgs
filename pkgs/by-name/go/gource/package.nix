@@ -1,5 +1,21 @@
-{ lib, stdenv, fetchurl, SDL2, ftgl, pkg-config, libpng, libjpeg, pcre2
-, SDL2_image, freetype, glew, libGLU, libGL, boost, glm, tinyxml
+{
+  lib,
+  stdenv,
+  fetchurl,
+  SDL2,
+  ftgl,
+  pkg-config,
+  libpng,
+  libjpeg,
+  pcre2,
+  SDL2_image,
+  freetype,
+  glew,
+  libGLU,
+  libGL,
+  boost,
+  glm,
+  tinyxml,
 }:
 
 stdenv.mkDerivation rec {
@@ -18,8 +34,19 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    glew SDL2 ftgl libpng libjpeg pcre2 SDL2_image libGLU libGL
-    boost glm freetype tinyxml
+    glew
+    SDL2
+    ftgl
+    libpng
+    libjpeg
+    pcre2
+    SDL2_image
+    libGLU
+    libGL
+    boost
+    glm
+    freetype
+    tinyxml
   ];
 
   configureFlags = [

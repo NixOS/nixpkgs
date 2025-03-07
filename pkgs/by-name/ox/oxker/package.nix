@@ -1,4 +1,8 @@
-{ lib, fetchCrate, rustPlatform }:
+{
+  lib,
+  fetchCrate,
+  rustPlatform,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "oxker";
@@ -9,7 +13,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-XY3LwDagxSi1yeAfqhnbtNRBqJxp0BkhaYZM/T59tGw=";
   };
 
-  cargoHash = "sha256-SeNrVw1m0B9CV31Pa41YinviWbEdiw50sdcrQpndiCI=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-Z14XLNvu7lcTD5DjaN7+raswnw7A+jyA/ZjFq6b3Vqk=";
 
   meta = with lib; {
     description = "Simple tui to view & control docker containers";

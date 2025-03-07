@@ -1,14 +1,21 @@
-{ config, lib, ... }: let
+{ config, lib, ... }:
+let
 
   cfg = config.systemd.oomd;
 
-in {
+in
+{
   imports = [
-    (lib.mkRenamedOptionModule [ "systemd" "oomd" "enableUserServices" ] [ "systemd" "oomd" "enableUserSlices" ])
+    (lib.mkRenamedOptionModule
+      [ "systemd" "oomd" "enableUserServices" ]
+      [ "systemd" "oomd" "enableUserSlices" ]
+    )
   ];
 
   options.systemd.oomd = {
-    enable = lib.mkEnableOption "the `systemd-oomd` OOM killer" // { default = true; };
+    enable = lib.mkEnableOption "the `systemd-oomd` OOM killer" // {
+      default = true;
+    };
 
     # Fedora enables the first and third option by default. See the 10-oomd-* files here:
     # https://src.fedoraproject.org/rpms/systemd/tree/806c95e1c70af18f81d499b24cd7acfa4c36ffd6
@@ -17,8 +24,14 @@ in {
     enableUserSlices = lib.mkEnableOption "oomd on all user slices (`user@.slice`) and all user owned slices";
 
     extraConfig = lib.mkOption {
-      type = with lib.types; attrsOf (oneOf [ str int bool ]);
-      default = {};
+      type =
+        with lib.types;
+        attrsOf (oneOf [
+          str
+          int
+          bool
+        ]);
+      default = { };
       example = lib.literalExpression ''{ DefaultMemoryPressureDurationSec = "20s"; }'';
       description = ''
         Extra config options for `systemd-oomd`. See {command}`man oomd.conf`
@@ -34,7 +47,7 @@ in {
     ];
     systemd.services.systemd-oomd.wantedBy = [ "multi-user.target" ];
 
-    environment.etc."systemd/oomd.conf".text = lib.generators.toINI {} {
+    environment.etc."systemd/oomd.conf".text = lib.generators.toINI { } {
       OOM = cfg.extraConfig;
     };
 

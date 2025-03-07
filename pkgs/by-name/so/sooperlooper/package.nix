@@ -1,23 +1,24 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, autoreconfHook
-, pkg-config
-, which
-, libtool
-, liblo
-, libxml2
-, libjack2
-, libsndfile
-, wxGTK32
-, libsigcxx
-, libsamplerate
-, rubberband
-, gettext
-, ncurses
-, alsa-lib
-, fftw
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  autoreconfHook,
+  pkg-config,
+  which,
+  libtool,
+  liblo,
+  libxml2,
+  libjack2,
+  libsndfile,
+  wxGTK32,
+  libsigcxx,
+  libsamplerate,
+  rubberband,
+  gettext,
+  ncurses,
+  alsa-lib,
+  fftw,
 }:
 
 stdenv.mkDerivation rec {

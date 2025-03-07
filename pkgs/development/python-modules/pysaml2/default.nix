@@ -17,7 +17,7 @@
   requests,
   responses,
   setuptools,
-  substituteAll,
+  replaceVars,
   xmlschema,
   xmlsec,
   zope-interface,
@@ -33,13 +33,12 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "IdentityPython";
     repo = "pysaml2";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-M/tdKGu6K38TeBZc8/dt376bHhPB0svHB3iis/se0DY=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./hardcode-xmlsec1-path.patch;
+    (replaceVars ./hardcode-xmlsec1-path.patch {
       inherit xmlsec;
     })
   ];
@@ -97,5 +96,8 @@ buildPythonPackage rec {
     changelog = "https://github.com/IdentityPython/pysaml2/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = [ ];
+    # Does not support pyopenssl above 24.3.0 due to use of a deprecated API,
+    # see https://github.com/IdentityPython/pysaml2/issues/975
+    broken = true;
   };
 }

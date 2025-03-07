@@ -1,4 +1,8 @@
-{ buildDunePackage, junit, alcotest }:
+{
+  buildDunePackage,
+  junit,
+  alcotest,
+}:
 
 buildDunePackage ({
   pname = "junit_alcotest";

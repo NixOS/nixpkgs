@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, libxslt, html-tidy }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  libxslt,
+  html-tidy,
+}:
 
 stdenv.mkDerivation rec {
   pname = "html-tidy";
@@ -12,13 +20,17 @@ stdenv.mkDerivation rec {
   };
 
   # https://github.com/htacg/tidy-html5/pull/1036
-  patches = (fetchpatch {
-    url = "https://github.com/htacg/tidy-html5/commit/e9aa038bd06bd8197a0dc049380bc2945ff55b29.diff";
-    sha256 = "sha256-Q2GjinNBWLL+HXUtslzDJ7CJSTflckbjweiSMCnIVwg=";
-  });
+  patches = (
+    fetchpatch {
+      url = "https://github.com/htacg/tidy-html5/commit/e9aa038bd06bd8197a0dc049380bc2945ff55b29.diff";
+      sha256 = "sha256-Q2GjinNBWLL+HXUtslzDJ7CJSTflckbjweiSMCnIVwg=";
+    }
+  );
 
-  nativeBuildInputs = [ cmake libxslt/*manpage*/ ]
-    ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) html-tidy;
+  nativeBuildInputs = [
+    cmake
+    libxslt # manpage
+  ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) html-tidy;
 
   cmakeFlags = lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "-DHOST_TIDY=tidy"

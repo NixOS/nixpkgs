@@ -1,7 +1,8 @@
-{ stdenv
-, lib
-, fetchurl
-, dpkg
+{
+  stdenv,
+  lib,
+  fetchurl,
+  dpkg,
 }:
 
 stdenv.mkDerivation rec {
@@ -34,7 +35,9 @@ stdenv.mkDerivation rec {
     # they are unfree. See https://github.com/Mellanox/bootimages/issues/3
     license = licenses.unfree;
     platforms = [ "aarch64-linux" ];
-    maintainers = with maintainers; [ nikstur thillux ];
+    maintainers = with maintainers; [
+      nikstur
+      thillux
+    ];
   };
 }
-

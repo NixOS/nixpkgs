@@ -1,11 +1,12 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, hyperscan
-, pkg-config
-, protobuf
-, protoc-gen-go
-, protoc-gen-go-grpc
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  hyperscan,
+  pkg-config,
+  protobuf,
+  protoc-gen-go,
+  protoc-gen-go-grpc,
 }:
 
 buildGoModule rec {
@@ -15,7 +16,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "deepfence";
     repo = "SecretScanner";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     fetchSubmodules = true;
     hash = "sha256-lTUZLuEiC9xpHYWn3uv4ZtbvHX6ETsjxacjd/O0kU8I=";
   };
@@ -56,4 +57,3 @@ buildGoModule rec {
     maintainers = with maintainers; [ fab ];
   };
 }
-

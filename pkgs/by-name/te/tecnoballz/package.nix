@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchurl
-, autoconf
-, automake
-, SDL
-, SDL_mixer
-, SDL_image
-, libmikmod
-, tinyxml
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoconf,
+  automake,
+  SDL,
+  SDL_mixer,
+  SDL_image,
+  libmikmod,
+  tinyxml,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "albertogeniola";
     repo = "MerossIot";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-CEBZVbUkRMWw95imL1k3q7Z3Nkyzwleh5C/s0XxfhfQ=";
   };
 
@@ -41,6 +41,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "meross_iot" ];
 
   meta = with lib; {
+    # https://github.com/albertogeniola/MerossIot/pull/413
+    broken = lib.versionAtLeast paho-mqtt.version "2";
     description = "Python library to interact with Meross devices";
     homepage = "https://github.com/albertogeniola/MerossIot";
     changelog = "https://github.com/albertogeniola/MerossIot/releases/tag/${version}";

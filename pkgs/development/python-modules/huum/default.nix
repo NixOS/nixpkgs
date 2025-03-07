@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "frwickst";
     repo = "pyhuum";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-IyPsRtVaxsI9Y0BpzKCSsc2oAqdGQI92UqxaRGpGmak=";
   };
 

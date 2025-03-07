@@ -1,21 +1,47 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   inherit (lib)
-    maintainers types literalExpression
-    escapeShellArg escapeShellArgs
-    mkEnableOption mkOption mkRemovedOptionModule mkIf
-    mkPackageOption optionalString concatMapStrings concatStringsSep;
+    maintainers
+    types
+    literalExpression
+    escapeShellArg
+    escapeShellArgs
+    mkEnableOption
+    mkOption
+    mkRemovedOptionModule
+    mkIf
+    mkPackageOption
+    optionalString
+    concatMapStrings
+    concatStringsSep
+    ;
 
   cfg = config.services.mtr-exporter;
 
-  jobsConfig = pkgs.writeText "mtr-exporter.conf" (concatMapStrings (job: ''
-    ${job.name} -- ${job.schedule} -- ${concatStringsSep " " job.flags} ${job.address}
-  '') cfg.jobs);
-in {
+  jobsConfig = pkgs.writeText "mtr-exporter.conf" (
+    concatMapStrings (job: ''
+      ${job.name} -- ${job.schedule} -- ${concatStringsSep " " job.flags} ${job.address}
+    '') cfg.jobs
+  );
+in
+{
   imports = [
-    (mkRemovedOptionModule [ "services" "mtr-exporter" "target" ] "Use services.mtr-exporter.jobs instead.")
-    (mkRemovedOptionModule [ "services" "mtr-exporter" "mtrFlags" ] "Use services.mtr-exporter.jobs.<job>.flags instead.")
+    (mkRemovedOptionModule [
+      "services"
+      "mtr-exporter"
+      "target"
+    ] "Use services.mtr-exporter.jobs instead.")
+    (mkRemovedOptionModule [
+      "services"
+      "mtr-exporter"
+      "mtrFlags"
+    ] "Use services.mtr-exporter.jobs.<job>.flags instead.")
   ];
 
   options = {
@@ -37,8 +63,8 @@ in {
 
         extraFlags = mkOption {
           type = types.listOf types.str;
-          default = [];
-          example = ["-flag.deprecatedMetrics"];
+          default = [ ];
+          example = [ "-flag.deprecatedMetrics" ];
           description = ''
             Extra command line options to pass to MTR exporter.
           '';
@@ -50,34 +76,36 @@ in {
 
         jobs = mkOption {
           description = "List of MTR jobs. Will be added to /etc/mtr-exporter.conf";
-          type = types.nonEmptyListOf (types.submodule {
-            options = {
-              name = mkOption {
-                type = types.str;
-                description = "Name of ICMP pinging job.";
-              };
+          type = types.nonEmptyListOf (
+            types.submodule {
+              options = {
+                name = mkOption {
+                  type = types.str;
+                  description = "Name of ICMP pinging job.";
+                };
 
-              address = mkOption {
-                type = types.str;
-                example = "host.example.org:1234";
-                description = "Target address for MTR client.";
-              };
+                address = mkOption {
+                  type = types.str;
+                  example = "host.example.org:1234";
+                  description = "Target address for MTR client.";
+                };
 
-              schedule = mkOption {
-                type = types.str;
-                default = "@every 60s";
-                example = "@hourly";
-                description = "Schedule of MTR checks. Also accepts Cron format.";
-              };
+                schedule = mkOption {
+                  type = types.str;
+                  default = "@every 60s";
+                  example = "@hourly";
+                  description = "Schedule of MTR checks. Also accepts Cron format.";
+                };
 
-              flags = mkOption {
-                type = with types; listOf str;
-                default = [];
-                example = ["-G1"];
-                description = "Additional flags to pass to MTR.";
+                flags = mkOption {
+                  type = with types; listOf str;
+                  default = [ ];
+                  example = [ "-G1" ];
+                  description = "Additional flags to pass to MTR.";
+                };
               };
-            };
-          });
+            }
+          );
         };
       };
     };

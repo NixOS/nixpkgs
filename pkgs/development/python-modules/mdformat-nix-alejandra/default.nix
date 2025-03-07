@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "aldoborrero";
     repo = "mdformat-nix-alejandra";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-jUXApGsxCA+pRm4m4ZiHWlxmVkqCPx3A46oQdtyKz5g=";
   };
 

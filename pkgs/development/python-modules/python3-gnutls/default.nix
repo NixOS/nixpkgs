@@ -1,7 +1,7 @@
 {
   lib,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
   buildPythonPackage,
   isPy3k,
   gnutls,
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "AGProjects";
     repo = "python3-gnutls";
-    rev = "refs/tags/release-${version}";
+    tag = "release-${version}";
     hash = "sha256-AdFRF3ZlkkAoSm5rvf/09FSYIo7SsZ38sD2joOLyukA=";
   };
 
@@ -34,8 +34,7 @@ buildPythonPackage rec {
   ];
 
   patches = [
-    (substituteAll {
-      src = ./libgnutls-path.patch;
+    (replaceVars ./libgnutls-path.patch {
       gnutlslib = "${lib.getLib gnutls}/lib";
     })
   ];

@@ -1,4 +1,16 @@
-{ lib, stdenv, fetchFromGitHub, unzip, cmake, alsa-lib, Carbon, CoreAudio, CoreFoundation, CoreMIDI, CoreServices }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  unzip,
+  cmake,
+  alsa-lib,
+  Carbon,
+  CoreAudio,
+  CoreFoundation,
+  CoreMIDI,
+  CoreServices,
+}:
 
 stdenv.mkDerivation rec {
   pname = "portmidi";
@@ -22,16 +34,29 @@ stdenv.mkDerivation rec {
     ./missing-header.diff
   ];
 
-  postInstall = let ext = stdenv.hostPlatform.extensions.sharedLibrary; in ''
-    ln -s libportmidi${ext} "$out/lib/libporttime${ext}"
-  '';
+  postInstall =
+    let
+      ext = stdenv.hostPlatform.extensions.sharedLibrary;
+    in
+    ''
+      ln -s libportmidi${ext} "$out/lib/libporttime${ext}"
+    '';
 
-  nativeBuildInputs = [ unzip cmake ];
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
-    alsa-lib
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    Carbon CoreAudio CoreFoundation CoreMIDI CoreServices
+  nativeBuildInputs = [
+    unzip
+    cmake
   ];
+  buildInputs =
+    lib.optionals stdenv.hostPlatform.isLinux [
+      alsa-lib
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      Carbon
+      CoreAudio
+      CoreFoundation
+      CoreMIDI
+      CoreServices
+    ];
 
   hardeningDisable = [ "format" ];
 

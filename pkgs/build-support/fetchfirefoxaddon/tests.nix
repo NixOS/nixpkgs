@@ -1,4 +1,9 @@
-{ testers, fetchFirefoxAddon, fetchurl, ... }:
+{
+  testers,
+  fetchFirefoxAddon,
+  fetchurl,
+  ...
+}:
 
 {
   simple = testers.invalidateFetcherByDrvHash fetchFirefoxAddon {

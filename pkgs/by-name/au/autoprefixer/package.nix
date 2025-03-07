@@ -5,8 +5,9 @@
   pnpm_9,
   fetchFromGitHub,
   callPackage,
-  nix-update-script
-}: stdenv.mkDerivation (finalAttrs: {
+  nix-update-script,
+}:
+stdenv.mkDerivation (finalAttrs: {
   pname = "autoprefixer";
   version = "10.4.20";
 

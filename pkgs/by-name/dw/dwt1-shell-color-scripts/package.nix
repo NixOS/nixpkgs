@@ -1,7 +1,8 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitLab
-, installShellFiles
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitLab,
+  installShellFiles,
 }:
 
 stdenvNoCC.mkDerivation {

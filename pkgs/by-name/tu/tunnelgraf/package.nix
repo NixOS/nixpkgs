@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "denniswalker";
     repo = "tunnelgraf";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-pwHP9eAf2S08ucUawxrQvzMBJNITxbddoLzEoSNUdao=";
   };
 

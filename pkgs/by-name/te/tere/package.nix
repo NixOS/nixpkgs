@@ -1,4 +1,11 @@
-{ lib, fetchFromGitHub, rustPlatform, ncurses, stdenv, python3 }:
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  ncurses,
+  stdenv,
+  python3,
+}:
 
 rustPlatform.buildRustPackage {
   pname = "tere";
@@ -11,7 +18,8 @@ rustPlatform.buildRustPackage {
     sha256 = "sha256-oY4oeSttM8LLXLirYq/B7Nzajkg4Pw26uig5gZxqU3s=";
   };
 
-  cargoHash = "sha256-UWZWm6wDiQqUNcWV1nDUWXVhWgqoVUCDWz09cRkiPKg=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-E3gLxuxidjjjmMVWCQYZCbz8sov1a+MkLiOj4/TU6MI=";
 
   nativeCheckInputs = [
     # ncurses provides the tput command needed for integration tests
@@ -29,7 +37,7 @@ rustPlatform.buildRustPackage {
   # See https://github.com/NixOS/nixpkgs/issues/145726#issuecomment-971331986
   preBuild =
     let
-      python-with-toml = python3.withPackages (ps: [ps.toml]);
+      python-with-toml = python3.withPackages (ps: [ ps.toml ]);
       script = builtins.toFile "clear_linkers.py" ''
         from os import path
         import toml
@@ -47,7 +55,7 @@ rustPlatform.buildRustPackage {
           exit(1)
       '';
     in
-      "${python-with-toml}/bin/python3 ${script}";
+    "${python-with-toml}/bin/python3 ${script}";
 
   meta = with lib; {
     description = "Faster alternative to cd + ls";

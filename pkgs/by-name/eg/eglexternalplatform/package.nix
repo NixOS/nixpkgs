@@ -1,8 +1,9 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, meson
-, ninja
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  meson,
+  ninja,
 }:
 
 stdenv.mkDerivation rec {
@@ -16,7 +17,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-t0dka5aUv5hB4G8PbSGiIY74XIFAsmo5a7dfWb2QCLM=";
   };
 
-  nativeBuildInputs = [ meson ninja ];
+  nativeBuildInputs = [
+    meson
+    ninja
+  ];
 
   meta = with lib; {
     description = "EGL External Platform interface";

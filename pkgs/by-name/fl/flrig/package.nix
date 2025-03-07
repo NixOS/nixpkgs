@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchurl
-, fltk13
-, libjpeg
-, eudev
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fltk13,
+  libjpeg,
+  eudev,
+  pkg-config,
 }:
 
 stdenv.mkDerivation rec {
@@ -25,6 +26,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkg-config
   ];
+
+  env.FLTK_CONFIG = lib.getExe' (lib.getDev fltk13) "fltk-config";
 
   meta = {
     description = "Digital modem rig control program";

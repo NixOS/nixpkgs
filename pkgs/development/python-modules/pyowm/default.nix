@@ -20,14 +20,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "csparpa";
     repo = "pyowm";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-cSOhm3aDksLBChZzgw1gjUjLQkElR2/xGFMOb9K9RME=";
   };
 
   pythonRelaxDeps = [ "geojson" ];
 
   build-system = [ setuptools ];
-
 
   dependencies = [
     geojson

@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "DinoTools";
     repo = "python-ssdeep";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-I5ci5BS+B3OE0xdLSahu3HCh99jjhnRHJFz830SvFpg=";
   };
 

@@ -15,7 +15,7 @@
 , freebsd
 , cxxabi ? if stdenv.hostPlatform.isFreeBSD then freebsd.libcxxrt else null
 , libunwind
-, enableShared ? !stdenv.hostPlatform.isStatic
+, enableShared ? stdenv.hostPlatform.hasSharedLibraries
 , devExtraCmakeFlags ? []
 }:
 
@@ -34,7 +34,7 @@ let
   useLLVM = stdenv.hostPlatform.useLLVM or false;
 
   src' = if monorepoSrc != null then
-    runCommand "${pname}-src-${version}" {} (''
+    runCommand "${pname}-src-${version}" { inherit (monorepoSrc) passthru; } (''
       mkdir -p "$out/llvm"
     '' + (lib.optionalString (lib.versionAtLeast release_version "14") ''
       cp -r ${monorepoSrc}/cmake "$out"

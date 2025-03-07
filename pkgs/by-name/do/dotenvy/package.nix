@@ -1,4 +1,8 @@
-{ lib, fetchCrate, rustPlatform }:
+{
+  lib,
+  fetchCrate,
+  rustPlatform,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "dotenvy";
@@ -9,9 +13,13 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-virK/TpYBmwTf5UCQCqC/df8iKYAzPBfsQ1nQkFKF2Y=";
   };
 
-  cargoHash = "sha256-qjFTv15FSvgYgQ4nTEIo0KUqaCbg6E+W5B2B5BH6sp4=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-eDmSPl1wsEriOtesv0KpLlpdeJPSQzbwh+QeZcFzDbc=";
 
-  cargoBuildFlags = [ "--bin=dotenvy" "--features=cli" ];
+  cargoBuildFlags = [
+    "--bin=dotenvy"
+    "--features=cli"
+  ];
 
   # just run unittests and skip doc-tests
   cargoTestFlags = [ "--lib" ];

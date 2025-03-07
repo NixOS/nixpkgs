@@ -144,7 +144,7 @@ in
             Note that the application option must be either a package or a
             list with package as the first element.
 
-            See https://github.com/WiVRn/WiVRn/blob/master/docs/configuration.md
+            See <https://github.com/WiVRn/WiVRn/blob/master/docs/configuration.md>
           '';
           default = { };
           example = literalExpression ''

@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch2,
   hatchling,
   jupyter,
   nbconvert,
@@ -22,9 +23,18 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "arogozhnikov";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-6x9AttvSvgYrHaS5ESKOwyEnXxD2BitYTGtqqSKur+0=";
   };
+
+  patches = [
+    # https://github.com/arogozhnikov/einops/pull/325
+    (fetchpatch2 {
+      name = "numpy_2-compatibility.patch";
+      url = "https://github.com/arogozhnikov/einops/commit/11680b457ce2216d9827330d0b794565946847d7.patch";
+      hash = "sha256-OKWp319ClYarNrek7TdRHt+NKTOEfBdJaV0U/6vLeMc=";
+    })
+  ];
 
   nativeBuildInputs = [ hatchling ];
 

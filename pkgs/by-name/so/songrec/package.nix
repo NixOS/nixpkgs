@@ -1,13 +1,14 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, gtk3
-, openssl
-, alsa-lib
-, pkg-config
-, ffmpeg
-, dbus
-, libpulseaudio
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  gtk3,
+  openssl,
+  alsa-lib,
+  pkg-config,
+  ffmpeg,
+  dbus,
+  libpulseaudio,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -21,7 +22,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-pTonrxlYvfuLRKMXW0Lao4KCoNFlMzE9rH+hwpa60JY=";
   };
 
-  cargoHash = "sha256-2BXUZD63xzHpUi8lk2fV5qBmeq6Gzpq0uEcKfbReANI=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-wSRn1JY067RVqGGdiox87+zRb2/2OMcvKLYZE1QUs/s=";
 
   nativeBuildInputs = [ pkg-config ];
 

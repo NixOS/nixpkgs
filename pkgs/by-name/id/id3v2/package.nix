@@ -1,4 +1,11 @@
-{lib, stdenv, fetchurl, id3lib, groff, zlib}:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  id3lib,
+  groff,
+  zlib,
+}:
 
 stdenv.mkDerivation rec {
   pname = "id3v2";
@@ -10,10 +17,16 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ groff ];
-  buildInputs = [ id3lib zlib ];
+  buildInputs = [
+    id3lib
+    zlib
+  ];
 
   makeFlags = [ "PREFIX=$(out)" ];
-  buildFlags = [ "clean" "all" ];
+  buildFlags = [
+    "clean"
+    "all"
+  ];
 
   preInstall = ''
     mkdir -p $out/{bin,share/man/man1}

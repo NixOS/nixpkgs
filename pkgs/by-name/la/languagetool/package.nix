@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchzip, jre, makeWrapper, nixosTests }:
+{
+  lib,
+  stdenv,
+  fetchzip,
+  jre,
+  makeWrapper,
+  nixosTests,
+}:
 
 stdenv.mkDerivation rec {
   pname = "LanguageTool";

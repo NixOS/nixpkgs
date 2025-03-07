@@ -8,6 +8,7 @@
   pugixml,
   libzip,
   libuuid,
+  libxml2,
   tinyxml-2,
 }:
 
@@ -34,6 +35,7 @@ stdenv.mkDerivation rec {
     pugixml
     libzip
     libuuid
+    libxml2
     tinyxml-2
   ];
 

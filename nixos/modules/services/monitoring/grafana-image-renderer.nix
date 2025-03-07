@@ -1,11 +1,17 @@
-{ lib, pkgs, config, ... }:
+{
+  lib,
+  pkgs,
+  config,
+  ...
+}:
 let
   cfg = config.services.grafana-image-renderer;
 
   format = pkgs.formats.json { };
 
   configFile = format.generate "grafana-image-renderer-config.json" cfg.settings;
-in {
+in
+{
   options.services.grafana-image-renderer = {
     enable = lib.mkEnableOption "grafana-image-renderer";
 
@@ -34,7 +40,12 @@ in {
               '';
             };
             logging.level = lib.mkOption {
-              type = lib.types.enum [ "error" "warning" "info" "debug" ];
+              type = lib.types.enum [
+                "error"
+                "warning"
+                "info"
+                "debug"
+              ];
               default = "info";
               description = ''
                 The log-level of the {file}`grafana-image-renderer.service`-unit.
@@ -58,7 +69,11 @@ in {
             };
             mode = lib.mkOption {
               default = "default";
-              type = lib.types.enum [ "default" "reusable" "clustered" ];
+              type = lib.types.enum [
+                "default"
+                "reusable"
+                "clustered"
+              ];
               description = ''
                 Rendering mode of `grafana-image-renderer`:
 
@@ -82,7 +97,7 @@ in {
         };
       };
 
-      default = {};
+      default = { };
 
       description = ''
         Configuration attributes for `grafana-image-renderer`.
@@ -95,7 +110,8 @@ in {
 
   config = lib.mkIf cfg.enable {
     assertions = [
-      { assertion = cfg.provisionGrafana -> config.services.grafana.enable;
+      {
+        assertion = cfg.provisionGrafana -> config.services.grafana.enable;
         message = ''
           To provision a Grafana instance to use grafana-image-renderer,
           `services.grafana.enable` must be set to `true`!

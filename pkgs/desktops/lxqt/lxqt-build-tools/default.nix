@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, pcre
-, qtbase
-, glib
-, perl
-, wrapQtAppsHook
-, gitUpdater
-, version ? "2.1.0"
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  pcre,
+  qtbase,
+  glib,
+  perl,
+  wrapQtAppsHook,
+  gitUpdater,
+  version ? "2.1.0",
 }:
 
 stdenv.mkDerivation rec {
@@ -20,10 +21,12 @@ stdenv.mkDerivation rec {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    hash = {
-      "0.13.0" = "sha256-4/hVlEdqqqd6CNitCRkIzsS1R941vPJdirIklp4acXA=";
-      "2.1.0" = "sha256-fZ5DbXnYm6oWDZdwiw2DpWFQMYd7VZ4oKkGIzQkaV94=";
-    }."${version}";
+    hash =
+      {
+        "0.13.0" = "sha256-4/hVlEdqqqd6CNitCRkIzsS1R941vPJdirIklp4acXA=";
+        "2.1.0" = "sha256-fZ5DbXnYm6oWDZdwiw2DpWFQMYd7VZ4oKkGIzQkaV94=";
+      }
+      ."${version}";
   };
 
   postPatch = ''

@@ -48,6 +48,8 @@ buildGoModule rec {
       --zsh <($out/bin/deepsource completion zsh)
   '';
 
+  doInstallCheck = true;
+  versionCheckProgramArg = [ "version" ];
   nativeInstallCheckInputs = [
     versionCheckHook
   ];

@@ -1,4 +1,10 @@
-{ lib, buildGoModule, fetchFromGitHub, testers, ghz }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  testers,
+  ghz,
+}:
 
 buildGoModule rec {
   pname = "ghz";
@@ -13,7 +19,10 @@ buildGoModule rec {
 
   vendorHash = "sha256-7TrYWmVKxHKVTyiIak7tRYKE4hgG/4zfsM76bJRxnAk=";
 
-  subPackages = [ "cmd/ghz" "cmd/ghz-web" ];
+  subPackages = [
+    "cmd/ghz"
+    "cmd/ghz-web"
+  ];
 
   ldflags = [
     "-s"

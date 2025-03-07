@@ -1,24 +1,26 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, clang
-, bpftools
-, docutils
-, libbpf
-, libcap
-, libnl
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  clang,
+  bpftools,
+  docutils,
+  libbpf,
+  libcap,
+  libnl,
+  nixosTests,
+  unstableGitUpdater,
 }:
 
 stdenv.mkDerivation rec {
   pname = "bpftune";
-  version = "0-unstable-2024-10-25";
+  version = "0-unstable-2025-02-13";
 
   src = fetchFromGitHub {
     owner = "oracle";
     repo = "bpftune";
-    rev = "6a50f5ff619caeea6f04d889e3a60de6c12feb76";
-    hash = "sha256-yol6VFelqQiPKLg1UUeP+r/+XO4fjYeDbIeI29gZ7j4=";
+    rev = "2f73157b0e6f15034d898f3f92a376e89c3e3819";
+    hash = "sha256-0hgTJkGEU1xw2aCvTbhMVOz6EKtICrBqVPwIh5vxCOI=";
   };
 
   postPatch = ''
@@ -58,8 +60,11 @@ stdenv.mkDerivation rec {
     "zerocallusedregs"
   ];
 
-  passthru.tests = {
-    inherit (nixosTests) bpftune;
+  passthru = {
+    tests = {
+      inherit (nixosTests) bpftune;
+    };
+    updateScript = unstableGitUpdater { };
   };
 
   enableParallelBuilding = true;

@@ -22,7 +22,7 @@ _doStrip() {
     #   push arrays all the way through this logic.
 
     # Strip only host paths by default. Leave targets as is.
-    stripDebugList=${stripDebugList[*]:-lib lib32 lib64 libexec bin sbin}
+    stripDebugList=${stripDebugList[*]:-lib lib32 lib64 libexec bin sbin Applications Library/Frameworks}
     stripDebugListTarget=${stripDebugListTarget[*]:-}
     stripAllList=${stripAllList[*]:-}
     stripAllListTarget=${stripAllListTarget[*]:-}

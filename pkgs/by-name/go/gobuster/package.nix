@@ -1,6 +1,7 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
@@ -10,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "OJ";
     repo = "gobuster";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-LZL9Zje2u0v6iAQinfjflvusV57ys5J5Il6Q7br3Suc=";
   };
 
@@ -27,6 +28,9 @@ buildGoModule rec {
     homepage = "https://github.com/OJ/gobuster";
     changelog = "https://github.com/OJ/gobuster/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ fab pamplemousse ];
+    maintainers = with maintainers; [
+      fab
+      pamplemousse
+    ];
   };
 }

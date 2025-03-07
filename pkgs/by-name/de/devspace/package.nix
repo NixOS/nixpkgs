@@ -1,8 +1,9 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, testers
-, devspace
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  testers,
+  devspace,
 }:
 
 buildGoModule rec {
@@ -24,7 +25,7 @@ buildGoModule rec {
     "-X main.version=${version}"
   ];
 
-  # Check are disable since they requiered a working K8S cluster
+  # Check are disable since they required a working K8S cluster
   # TODO: add a nixosTest to be able to perform the package check
   doCheck = false;
 

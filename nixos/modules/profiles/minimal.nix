@@ -1,40 +1,46 @@
 # This module defines a small NixOS configuration.  It does not
 # contain any graphical stuff.
 
-{ config, lib, ... }:
-
-with lib;
-
 {
-  documentation.enable = mkDefault false;
+  lib,
+  ...
+}:
+let
+  inherit (lib) mkDefault;
+in
+{
+  documentation = {
+    enable = mkDefault false;
+    doc.enable = mkDefault false;
+    info.enable = mkDefault false;
+    man.enable = mkDefault false;
+    nixos.enable = mkDefault false;
+  };
 
-  documentation.doc.enable = mkDefault false;
+  environment = {
+    # Perl is a default package.
+    defaultPackages = mkDefault [ ];
+    stub-ld.enable = mkDefault false;
+  };
 
-  documentation.info.enable = mkDefault false;
-
-  documentation.man.enable = mkDefault false;
-
-  documentation.nixos.enable = mkDefault false;
-
-  # Perl is a default package.
-  environment.defaultPackages = mkDefault [ ];
-
-  environment.stub-ld.enable = mkDefault false;
-
-  # The lessopen package pulls in Perl.
-  programs.less.lessopen = mkDefault null;
+  programs = {
+    # The lessopen package pulls in Perl.
+    less.lessopen = mkDefault null;
+    command-not-found.enable = mkDefault false;
+  };
 
   # This pulls in nixos-containers which depends on Perl.
   boot.enableContainers = mkDefault false;
 
-  programs.command-not-found.enable = mkDefault false;
+  services = {
+    logrotate.enable = mkDefault false;
+    udisks2.enable = mkDefault false;
+  };
 
-  services.logrotate.enable = mkDefault false;
-
-  services.udisks2.enable = mkDefault false;
-
-  xdg.autostart.enable = mkDefault false;
-  xdg.icons.enable = mkDefault false;
-  xdg.mime.enable = mkDefault false;
-  xdg.sounds.enable = mkDefault false;
+  xdg = {
+    autostart.enable = mkDefault false;
+    icons.enable = mkDefault false;
+    mime.enable = mkDefault false;
+    sounds.enable = mkDefault false;
+  };
 }

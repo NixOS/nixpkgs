@@ -1,4 +1,9 @@
-{ lib, symlinkJoin, kdevelop-unwrapped, plugins ? null }:
+{
+  lib,
+  symlinkJoin,
+  kdevelop-unwrapped,
+  plugins ? null,
+}:
 
 symlinkJoin {
   name = "kdevelop-with-plugins";

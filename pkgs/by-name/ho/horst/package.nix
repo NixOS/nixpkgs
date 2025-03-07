@@ -1,4 +1,12 @@
-{lib, stdenv, fetchFromGitHub, fetchpatch, pkg-config, ncurses, libnl }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  pkg-config,
+  ncurses,
+  libnl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "horst";
@@ -28,7 +36,10 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ ncurses libnl ];
+  buildInputs = [
+    ncurses
+    libnl
+  ];
 
   installFlags = [ "DESTDIR=${placeholder "out"}" ];
 

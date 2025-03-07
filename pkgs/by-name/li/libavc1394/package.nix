@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, pkg-config, libraw1394, argp-standalone }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  libraw1394,
+  argp-standalone,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libavc1394";

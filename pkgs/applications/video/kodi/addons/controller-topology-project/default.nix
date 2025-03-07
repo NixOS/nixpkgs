@@ -1,14 +1,20 @@
-{ lib, stdenv, fetchFromGitHub, toKodiAddon, addonDir }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  toKodiAddon,
+  addonDir,
+}:
 let
   drv = stdenv.mkDerivation rec {
     pname = "controller-topology-project";
-    version = "1.0.0";
+    version = "1.0.2";
 
     src = fetchFromGitHub {
       owner = "kodi-game";
       repo = "controller-topology-project";
       rev = "v${version}";
-      sha256 = "sha256-6g4dyR34b0YgxlzRRS2C/gY3wjlO9MMYEB2fHLSCqC4=";
+      sha256 = "sha256-pbYFNCDhKhYKREffWbMbcd9xBL4ZiKWR7hMZUCTUHRg=";
     };
 
     postPatch = ''
@@ -34,4 +40,4 @@ let
     };
   };
 in
-  toKodiAddon drv
+toKodiAddon drv

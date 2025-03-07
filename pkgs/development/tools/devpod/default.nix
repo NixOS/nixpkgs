@@ -46,7 +46,7 @@ rec {
 
     vendorHash = null;
 
-    CGO_ENABLED = 0;
+    env.CGO_ENABLED = 0;
 
     ldflags = [
       "-X github.com/loft-sh/devpod/pkg/version.version=v${version}"

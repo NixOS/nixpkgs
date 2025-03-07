@@ -1,21 +1,22 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, meson
-, ninja
-, pkg-config
-, python3
-, vala
-, wrapGAppsHook3
-, glib
-, gtk3
-, json-glib
-, libevdev
-, libgee
-, libgudev
-, libsoup_2_4
-, pantheon
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  vala,
+  wrapGAppsHook3,
+  glib,
+  gtk3,
+  json-glib,
+  libevdev,
+  libgee,
+  libgudev,
+  libsoup_2_4,
+  pantheon,
 }:
 
 stdenv.mkDerivation rec {
@@ -61,7 +62,13 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Create simple and beautiful presentations";
     homepage = "https://github.com/Philip-Scott/Spice-up";
-    maintainers = with maintainers; [ samdroid-apps xiorcale ] ++ teams.pantheon.members;
+    maintainers =
+      with maintainers;
+      [
+        samdroid-apps
+        xiorcale
+      ]
+      ++ teams.pantheon.members;
     platforms = platforms.linux;
     # The COPYING file has GPLv3; some files have GPLv2+ and some have GPLv3+
     license = licenses.gpl3Plus;

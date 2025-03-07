@@ -6,7 +6,8 @@
   pythonOlder,
   setuptools,
   six,
-  versioneer,
+  poetry-core,
+  fetchFromGitLab,
 }:
 
 buildPythonPackage rec {
@@ -16,33 +17,32 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.9";
 
-  src = fetchPypi {
-    pname = "hcs_utils";
-    inherit version;
-    hash = "sha256-a2xO+hdyJQjgIEcjtmDZLicyz2kzKRjtpEhge5yaa7M=";
+  src = fetchFromGitLab {
+    owner = "hcs";
+    repo = "hcs_utils";
+    rev = "77668de42895dedb6b4baddf4207f331776de897"; # No tags for 2.1
+    hash = "sha256-T0a2lYi3umRZQInEsxnLf5p6+IxkUmGJhgW8l2ESDd0=";
   };
-
-  postPatch = ''
-    # Remove vendorized versioneer.py
-    rm versioneer.py
-  '';
 
   build-system = [
     setuptools
-    versioneer
+    poetry-core
   ];
 
-  dependencies = [ six ];
+  dependencies = [
+    six
+  ];
+
+  disabledTests = [
+    "test_expand" # It depends on FHS
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  disabledTests = [ "test_expand" ];
-
-  meta = with lib; {
+  meta = {
     description = "Library collecting some useful snippets";
     homepage = "https://gitlab.com/hcs/hcs_utils";
-    license = licenses.isc;
-    maintainers = with maintainers; [ lovek323 ];
-    platforms = platforms.unix;
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ lovek323 ];
   };
 }

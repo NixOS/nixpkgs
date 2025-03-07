@@ -45,17 +45,20 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = with xorg; [
-    freetype
-    gfortran
-    openssl
-    libX11
-    libXaw
-    libXft
-    libXt
-    libxcrypt
-    motif
-  ] ++ lib.optional stdenv.hostPlatform.isLinux libnsl;
+  buildInputs =
+    with xorg;
+    [
+      freetype
+      gfortran
+      openssl
+      libX11
+      libXaw
+      libXft
+      libXt
+      libxcrypt
+      motif
+    ]
+    ++ lib.optional stdenv.hostPlatform.isLinux libnsl;
 
   setupHook = ./setup-hook.sh;
 

@@ -1,5 +1,11 @@
-{ lib, buildDunePackage, fetchurl
-, domain-local-await, mtime, multicore-magic, yojson
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  domain-local-await,
+  mtime,
+  multicore-magic,
+  yojson,
 }:
 
 buildDunePackage rec {
@@ -11,7 +17,12 @@ buildDunePackage rec {
     hash = "sha256-iCx5QvhYo/e53cW23Sza2as4aez4HeESVvLPF1DW85A=";
   };
 
-  propagatedBuildInputs = [ domain-local-await mtime multicore-magic yojson ];
+  propagatedBuildInputs = [
+    domain-local-await
+    mtime
+    multicore-magic
+    yojson
+  ];
 
   meta = {
     description = "Framework for writing multicore benchmark executables to run on current-bench";

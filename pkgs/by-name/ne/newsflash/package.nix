@@ -32,18 +32,13 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitLab {
     owner = "news-flash";
     repo = "news_flash_gtk";
-    rev = "refs/tags/v.${finalAttrs.version}";
+    tag = "v.${finalAttrs.version}";
     hash = "sha256-H2/qKnsByidziUldX5MZBrMyMHfuQ4SN9wXizJUGQ8I=";
   };
 
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "article_scraper-2.1.0" = "sha256-0jDXH5kkX34tAWK+3hpmW1LWBsFksVgTnSuQX+XXVEM=";
-      "clapper-0.1.0" = "sha256-IFFqfSq2OpzfopQXSYfnJ68HGLY+rvcLqk7NTdDd+28=";
-      "news-flash-2.3.0-alpha.0" = "sha256-L7siGYdb8v57nBGYs86smlw971fvurYQJKK/AdTpi6s=";
-      "newsblur_api-0.3.0" = "sha256-m2178zdJzeskl3BQpZr6tlxTAADehxz8uYcZzi15nhQ=";
-    };
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-hyu1sk/VcRLjxUFYiFeTvwlFVYq5crMMg+4Afb34Hvc=";
   };
 
   postPatch = ''
@@ -99,10 +94,13 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Modern feed reader designed for the GNOME desktop";
     homepage = "https://gitlab.com/news-flash/news_flash_gtk";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [
-      kira-bruneau
-      stunkymonkey
-    ];
+    maintainers =
+      with lib.maintainers;
+      [
+        kira-bruneau
+        stunkymonkey
+      ]
+      ++ lib.teams.gnome-circle.members;
     platforms = lib.platforms.unix;
     mainProgram = "io.gitlab.news_flash.NewsFlash";
   };

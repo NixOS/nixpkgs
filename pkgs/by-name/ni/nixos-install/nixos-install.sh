@@ -246,6 +246,8 @@ if [[ -z $noBootLoader ]]; then
     export mountPoint
     NIXOS_INSTALL_BOOTLOADER=1 nixos-enter --root "$mountPoint" -c "$(cat <<'EOF'
       set -e
+      # Clear the cache for executable locations. They were invalidated by the chroot.
+      hash -r
       # Create a bind mount for each of the mount points inside the target file
       # system. This preserves the validity of their absolute paths after changing
       # the root with `nixos-enter`.

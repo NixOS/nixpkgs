@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -11,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "terraform-compliance";
     repo = "cli";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-wg9n7x7KDqFecZZVmJwpE1kP0eKt1Gmld6XEcavcyU0=";
   };
 
@@ -56,6 +57,9 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/terraform-compliance/cli";
     changelog = "https://github.com/terraform-compliance/cli/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ kalbasit kashw2 ];
+    maintainers = with maintainers; [
+      kalbasit
+      kashw2
+    ];
   };
 }

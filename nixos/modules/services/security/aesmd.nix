@@ -1,23 +1,43 @@
-{ config, options, pkgs, lib, ... }:
+{
+  config,
+  options,
+  pkgs,
+  lib,
+  ...
+}:
 let
-  inherit (lib) concatStringsSep literalExpression makeLibraryPath mkEnableOption
-    mkForce mkIf mkOption mkPackageOption mkRemovedOptionModule optional types;
+  inherit (lib)
+    concatStringsSep
+    literalExpression
+    makeLibraryPath
+    mkEnableOption
+    mkForce
+    mkIf
+    mkOption
+    mkPackageOption
+    mkRemovedOptionModule
+    optional
+    types
+    ;
 
   cfg = config.services.aesmd;
   opt = options.services.aesmd;
 
   sgx-psw = cfg.package;
 
-  configFile = with cfg.settings; pkgs.writeText "aesmd.conf" (
-    concatStringsSep "\n" (
-      optional (whitelistUrl != null) "whitelist url = ${whitelistUrl}" ++
-      optional (proxy != null) "aesm proxy = ${proxy}" ++
-      optional (proxyType != null) "proxy type = ${proxyType}" ++
-      optional (defaultQuotingType != null) "default quoting type = ${defaultQuotingType}" ++
-      # Newline at end of file
-      [ "" ]
-    )
-  );
+  configFile =
+    with cfg.settings;
+    pkgs.writeText "aesmd.conf" (
+      concatStringsSep "\n" (
+        optional (whitelistUrl != null) "whitelist url = ${whitelistUrl}"
+        ++ optional (proxy != null) "aesm proxy = ${proxy}"
+        ++ optional (proxyType != null) "proxy type = ${proxyType}"
+        ++ optional (defaultQuotingType != null) "default quoting type = ${defaultQuotingType}"
+        ++
+          # Newline at end of file
+          [ "" ]
+      )
+    );
 in
 {
   imports = [
@@ -64,7 +84,13 @@ in
           description = "HTTP network proxy.";
         };
         options.proxyType = mkOption {
-          type = with types; nullOr (enum [ "default" "direct" "manual" ]);
+          type =
+            with types;
+            nullOr (enum [
+              "default"
+              "direct"
+              "manual"
+            ]);
           default = if (cfg.settings.proxy != null) then "manual" else null;
           defaultText = literalExpression ''
             if (config.${opt.settings}.proxy != null) then "manual" else null
@@ -78,7 +104,13 @@ in
           '';
         };
         options.defaultQuotingType = mkOption {
-          type = with types; nullOr (enum [ "ecdsa_256" "epid_linkable" "epid_unlinkable" ]);
+          type =
+            with types;
+            nullOr (enum [
+              "ecdsa_256"
+              "epid_linkable"
+              "epid_unlinkable"
+            ]);
           default = null;
           example = "ecdsa_256";
           description = "Attestation quote type.";
@@ -88,10 +120,12 @@ in
   };
 
   config = mkIf cfg.enable {
-    assertions = [{
-      assertion = !(config.boot.specialFileSystems."/dev".options ? "noexec");
-      message = "SGX requires exec permission for /dev";
-    }];
+    assertions = [
+      {
+        assertion = !(config.boot.specialFileSystems."/dev".options ? "noexec");
+        message = "SGX requires exec permission for /dev";
+      }
+    ];
 
     hardware.cpu.intel.sgx.provision.enable = true;
 
@@ -110,7 +144,10 @@ in
         description = "Intel Architectural Enclave Service Manager";
         wantedBy = [ "multi-user.target" ];
 
-        after = [ "auditd.service" "network.target" ];
+        after = [
+          "auditd.service"
+          "network.target"
+        ];
 
         environment = {
           NAME = "aesm_service";

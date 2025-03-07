@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "django";
     repo = "daphne";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-RAK2CaKKVmVIv1MBK+9xyADOrHq664MQOry4KaGTNCw=";
   };
 

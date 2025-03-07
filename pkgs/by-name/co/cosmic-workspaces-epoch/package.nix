@@ -1,33 +1,41 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, libxkbcommon
-, libinput
-, libglvnd
-, mesa
-, udev
-, wayland
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  libxkbcommon,
+  libinput,
+  libglvnd,
+  libgbm,
+  udev,
+  wayland,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cosmic-workspaces-epoch";
-  version = "1.0.0-alpha.2";
+  version = "1.0.0-alpha.5.1";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-workspaces-epoch";
     rev = "epoch-${version}";
-    hash = "sha256-z3xQ6Vgqkm8hYLo2550NbFRkTMRQ0F9zn85iobnykH5=";
+    hash = "sha256-lAK7DZWwNMr30u6Uopew9O/6FIG6e2SgcdA+cD/K5Ok=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-QRBgFTXPWQ0RCSfCA2WpBs+vKTFD7Xfz60cIDtbYb5Y=";
+  cargoHash = "sha256-w1lQdzy2mJ5NfqngvOLqFCxyhWgvIySDDXCCtCCtTjg=";
 
   separateDebugInfo = true;
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libxkbcommon libinput libglvnd mesa udev wayland ];
+  buildInputs = [
+    libxkbcommon
+    libinput
+    libglvnd
+    libgbm
+    udev
+    wayland
+  ];
 
   postInstall = ''
     mkdir -p $out/share/{applications,icons/hicolor/scalable/apps}

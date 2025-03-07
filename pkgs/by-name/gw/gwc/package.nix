@@ -1,13 +1,15 @@
-{ lib, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, alsa-lib
-, libpulseaudio
-, gtk2
-, hicolor-icon-theme
-, libsndfile
-, fftw
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  alsa-lib,
+  libpulseaudio,
+  gtk2,
+  hicolor-icon-theme,
+  libsndfile,
+  fftw,
 }:
 
 stdenv.mkDerivation rec {

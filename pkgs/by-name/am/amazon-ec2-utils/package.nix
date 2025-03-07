@@ -1,12 +1,18 @@
 {
-  stdenv,
   lib,
   bash,
+  coreutils,
   curl,
   fetchFromGitHub,
   gawk,
+  gnugrep,
+  gnused,
   installShellFiles,
+  makeWrapper,
+  nix-update-script,
   python3,
+  stdenv,
+  util-linux,
 }:
 
 stdenv.mkDerivation rec {
@@ -16,19 +22,15 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "amazonlinux";
     repo = "amazon-ec2-utils";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-plTBh2LAXkYVSxN0IZJQuPr7QxD7+OAqHl/Zl8JPCmg=";
   };
-
-  outputs = [
-    "out"
-    "man"
-  ];
 
   strictDeps = true;
 
   nativeBuildInputs = [
     installShellFiles
+    makeWrapper
   ];
 
   buildInputs = [
@@ -36,51 +38,76 @@ stdenv.mkDerivation rec {
     python3
   ];
 
-  postInstall = ''
-    install -Dm755 -t $out/bin/ ebsnvme-id
-    install -Dm755 -t $out/bin/ ec2-metadata
-    install -Dm755 -t $out/bin/ ec2nvme-nsid
-    install -Dm755 -t $out/bin/ ec2udev-vbd
+  installPhase = ''
+    mkdir $out
 
-    install -Dm644 -t $out/lib/udev/rules.d/ 51-ec2-hvm-devices.rules
-    install -Dm644 -t $out/lib/udev/rules.d/ 51-ec2-xen-vbd-devices.rules
-    install -Dm644 -t $out/lib/udev/rules.d/ 53-ec2-read-ahead-kb.rules
-    install -Dm644 -t $out/lib/udev/rules.d/ 70-ec2-nvme-devices.rules
-    install -Dm644 -t $out/lib/udev/rules.d/ 60-cdrom_id.rules
+    for file in {ebsnvme-id,ec2-metadata,ec2nvme-nsid,ec2udev-vbd}; do
+      install -D -m 755 -t $out/bin "$file"
+    done
+
+    wrapProgram $out/bin/ec2-metadata \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          coreutils
+          curl
+          util-linux
+        ]
+      }
+
+    wrapProgram $out/bin/ec2nvme-nsid \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          coreutils
+        ]
+      }
+
+    wrapProgram $out/bin/ec2udev-vbd \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          coreutils
+          gnugrep
+          gnused
+        ]
+      }
+
+    for file in *.rules; do
+      install -D -m 644 -t $out/lib/udev/rules.d "$file"
+    done
+
+    substituteInPlace $out/lib/udev/rules.d/{51-ec2-hvm-devices,70-ec2-nvme-devices}.rules \
+      --replace-fail /usr/sbin $out/bin
+
+    substituteInPlace $out/lib/udev/rules.d/53-ec2-read-ahead-kb.rules \
+      --replace-fail /bin/awk ${gawk}/bin/awk
 
     installManPage doc/*.8
   '';
 
-  postFixup = ''
-    substituteInPlace $out/lib/udev/rules.d/{51-ec2-hvm-devices,70-ec2-nvme-devices}.rules \
-      --replace-fail '/usr/sbin' "$out/bin"
-
-    substituteInPlace $out/lib/udev/rules.d/53-ec2-read-ahead-kb.rules \
-      --replace-fail '/bin/awk' '${gawk}/bin/awk'
-
-    substituteInPlace "$out/bin/ec2-metadata" \
-      --replace-fail 'curl' '${curl}/bin/curl'
-  '';
+  outputs = [
+    "out"
+    "man"
+  ];
 
   doInstallCheck = true;
 
-  # We cannot run
-  #     ec2-metadata --help
-  # because it actually checks EC2 metadata even if --help is given
-  # so it won't work in the test sandbox.
+  # We can't run `ec2-metadata` since it calls IMDS even with `--help`.
   installCheckPhase = ''
     $out/bin/ebsnvme-id --help
   '';
 
-  meta = with lib; {
-    changelog = "https://github.com/amazonlinux/amazon-ec2-utils/releases/tag/v${version}";
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
+  meta = {
     description = "Contains a set of utilities and settings for Linux deployments in EC2";
     homepage = "https://github.com/amazonlinux/amazon-ec2-utils";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      anthonyroussel
+      arianvp
       ketzacoatl
       thefloweringash
-      anthonyroussel
     ];
   };
 }

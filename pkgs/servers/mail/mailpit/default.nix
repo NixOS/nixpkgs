@@ -18,7 +18,8 @@ let
 
   inherit (source)
     version
-    vendorHash;
+    vendorHash
+    ;
 
   src = fetchFromGitHub {
     owner = "axllent";
@@ -37,12 +38,6 @@ let
     npmDeps = fetchNpmDeps {
       inherit src;
       hash = source.npmDepsHash;
-    };
-
-    env = lib.optionalAttrs (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) {
-      # Make sure libc++ uses `posix_memalign` instead of `aligned_alloc` on x86_64-darwin.
-      # Otherwise, nodejs would require the 11.0 SDK and macOS 10.15+.
-      NIX_CFLAGS_COMPILE = "-D__ENVIRONMENT_MAC_OS_X_VERSION_MIN_REQUIRED__=101300";
     };
 
     nativeBuildInputs = [
@@ -67,7 +62,7 @@ buildGoModule {
   pname = "mailpit";
   inherit src version vendorHash;
 
-  CGO_ENABLED = 0;
+  env.CGO_ENABLED = 0;
 
   ldflags = [
     "-s"

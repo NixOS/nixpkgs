@@ -1,10 +1,11 @@
-{ lib
-, fetchurl
-, python3
-, gettext
-, makeDesktopItem
-, copyDesktopItems
-, wrapGAppsHook3
+{
+  lib,
+  fetchurl,
+  python3,
+  gettext,
+  makeDesktopItem,
+  copyDesktopItems,
+  wrapGAppsHook3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -17,7 +18,11 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "sha256-qwH2mt3Va62QJKJGOpt5WV3QksqQaRGEif4CcPC5F2E=";
   };
 
-  nativeBuildInputs = [ python3.pkgs.wrapPython copyDesktopItems wrapGAppsHook3 ];
+  nativeBuildInputs = [
+    python3.pkgs.wrapPython
+    copyDesktopItems
+    wrapGAppsHook3
+  ];
 
   pythonPath = with python3.pkgs; [
     wxpython
@@ -38,7 +43,10 @@ python3.pkgs.buildPythonApplication rec {
       comment = "Display and navigate information on a timeline";
       icon = "timeline";
       exec = "timeline";
-      categories = [ "Office" "Calendar" ];
+      categories = [
+        "Office"
+        "Calendar"
+      ];
     })
   ];
 
@@ -88,7 +96,10 @@ python3.pkgs.buildPythonApplication rec {
     changelog = "https://thetimelineproj.sourceforge.net/changelog.html";
     description = "Display and navigate information on a timeline";
     mainProgram = "timeline";
-    license = with licenses; [ gpl3Only cc-by-sa-30 ];
+    license = with licenses; [
+      gpl3Only
+      cc-by-sa-30
+    ];
     platforms = with platforms; unix;
     maintainers = with maintainers; [ davidak ];
   };

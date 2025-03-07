@@ -1,6 +1,7 @@
-{ fetchCrate
-, lib
-, rustPlatform
+{
+  fetchCrate,
+  lib,
+  rustPlatform,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -12,7 +13,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-c9+79zrIU/M1Rh+DiaLJzbrNSa4IKrYk1gP0dsabUiw=";
   };
 
-  cargoHash = "sha256-+SOoZFVJ6mASRKufQE4JmHGKR5rbBgg1PmCrI6dvvko=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-aw3p0Lr/gWC1yDpVCXVibj4eU7ZFCQDy8kHtE6d6Yjg=";
 
   # Tests do not work in the package published on crates.io, since the folder
   # with test resources is not packaged.

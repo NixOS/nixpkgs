@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromGitHub,
+  backports-shutil-which,
   bech32,
   buildPythonPackage,
   setuptools,
@@ -29,7 +30,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "romanz";
     repo = "trezor-agent";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-NmpFyLjLdR9r1tc06iDNH8Tc7isUelTg13mWPrQvxSc=";
   };
 
@@ -46,6 +47,7 @@ buildPythonPackage rec {
   pythonRemoveDeps = [ "backports.shutil-which" ];
 
   dependencies = [
+    backports-shutil-which
     unidecode
     configargparse
     python-daemon

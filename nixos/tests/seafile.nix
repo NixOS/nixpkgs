@@ -1,43 +1,57 @@
-import ./make-test-python.nix ({ pkgs, ... }:
+import ./make-test-python.nix (
+  { pkgs, ... }:
   let
-    client = { config, pkgs, ... }: {
-      environment.systemPackages = [ pkgs.seafile-shared pkgs.curl ];
-    };
-  in {
+    client =
+      { config, pkgs, ... }:
+      {
+        environment.systemPackages = [
+          pkgs.seafile-shared
+          pkgs.curl
+        ];
+      };
+  in
+  {
     name = "seafile";
     meta = with pkgs.lib.maintainers; {
-      maintainers = [ kampfschlaefer schmittlauch ];
+      maintainers = [
+        kampfschlaefer
+        schmittlauch
+      ];
     };
 
     nodes = {
-      server = { config, pkgs, ... }: {
-        services.seafile = {
-          enable = true;
-          ccnetSettings.General.SERVICE_URL = "http://server";
-          seafileSettings.fileserver.host = "unix:/run/seafile/server.sock";
-          adminEmail = "admin@example.com";
-          initialAdminPassword = "seafile_password";
-        };
-        services.nginx = {
-          enable = true;
-          virtualHosts."server" = {
-            locations."/".proxyPass = "http://unix:/run/seahub/gunicorn.sock";
-            locations."/seafhttp" = {
-              proxyPass = "http://unix:/run/seafile/server.sock";
-              extraConfig = ''
-                rewrite ^/seafhttp(.*)$ $1 break;
-                client_max_body_size 0;
-                proxy_connect_timeout  36000s;
-                proxy_read_timeout  36000s;
-                proxy_send_timeout  36000s;
-                send_timeout  36000s;
-                proxy_http_version 1.1;
-              '';
+      server =
+        { config, pkgs, ... }:
+        {
+          services.seafile = {
+            enable = true;
+            ccnetSettings.General.SERVICE_URL = "http://server";
+            seafileSettings.fileserver.host = "unix:/run/seafile/server.sock";
+            adminEmail = "admin@example.com";
+            initialAdminPassword = "seafile_password";
+          };
+          services.nginx = {
+            enable = true;
+            virtualHosts."server" = {
+              locations."/".proxyPass = "http://unix:/run/seahub/gunicorn.sock";
+              locations."/seafhttp" = {
+                proxyPass = "http://unix:/run/seafile/server.sock";
+                extraConfig = ''
+                  rewrite ^/seafhttp(.*)$ $1 break;
+                  client_max_body_size 0;
+                  proxy_connect_timeout  36000s;
+                  proxy_read_timeout  36000s;
+                  proxy_send_timeout  36000s;
+                  send_timeout  36000s;
+                  proxy_http_version 1.1;
+                '';
+              };
             };
           };
+          networking.firewall = {
+            allowedTCPPorts = [ 80 ];
+          };
         };
-        networking.firewall = { allowedTCPPorts = [ 80 ]; };
-      };
       client1 = client pkgs;
       client2 = client pkgs;
     };
@@ -113,4 +127,5 @@ import ./make-test-python.nix ({ pkgs, ... }:
 
           client2.succeed('[ `cat test01/first_file` = "bla" ]')
     '';
-  })
+  }
+)

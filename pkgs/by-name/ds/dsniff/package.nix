@@ -1,16 +1,33 @@
-{ stdenv, lib, fetchFromGitLab, autoreconfHook, libpcap, db, glib, libnet, libnids, symlinkJoin, openssl
-, rpcsvc-proto, libtirpc, libnsl, libnl
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  autoreconfHook,
+  libpcap,
+  db,
+  glib,
+  libnet,
+  libnids,
+  symlinkJoin,
+  openssl,
+  rpcsvc-proto,
+  libtirpc,
+  libnsl,
+  libnl,
 }:
 
 let
   /*
-  dsniff's build system unconditionnaly wants static libraries and does not
-  support multi output derivations. We do some overriding to give it
-  satisfaction.
+    dsniff's build system unconditionally wants static libraries and does not
+    support multi output derivations. We do some overriding to give it
+    satisfaction.
   */
   staticdb = symlinkJoin {
     inherit (db) name;
-    paths = with db.overrideAttrs { dontDisableStatic = true; }; [ out dev ];
+    paths = with db.overrideAttrs { dontDisableStatic = true; }; [
+      out
+      dev
+    ];
     postBuild = ''
       rm $out/lib/*.so*
     '';
@@ -37,9 +54,13 @@ let
   };
   ssl = symlinkJoin {
     inherit (openssl) name;
-    paths = with openssl.override { static = true; }; [ out dev ];
+    paths = with openssl.override { static = true; }; [
+      out
+      dev
+    ];
   };
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "dsniff";
   version = "2.4b1";
   # upstream is so old that nearly every distribution packages the beta version.
@@ -50,13 +71,22 @@ in stdenv.mkDerivation rec {
     domain = "salsa.debian.org";
     owner = "pkg-security-team";
     repo = "dsniff";
-    rev = "debian/${version}+debian-30";
-    sha256 = "1fk2k0sfdp5g27i11g0sbzm7al52raz5yr1aibzssnysv7l9xgzh";
+    rev = "debian/${version}+debian-34";
+    sha256 = "sha256-CY0+G09KZXtAwKuaYh5/qcmZjuNhdGis3zCG14hWtqw=";
     name = "dsniff.tar.gz";
   };
 
-  nativeBuildInputs = [ autoreconfHook rpcsvc-proto ];
-  buildInputs = [ glib pcap libtirpc libnsl libnl ];
+  nativeBuildInputs = [
+    autoreconfHook
+    rpcsvc-proto
+  ];
+  buildInputs = [
+    glib
+    pcap
+    libtirpc
+    libnsl
+    libnl
+  ];
   NIX_CFLAGS_LINK = "-lglib-2.0 -lpthread -ltirpc -lnl-3 -lnl-genl-3";
   env.NIX_CFLAGS_COMPILE = toString [ "-I${libtirpc.dev}/include/tirpc" ];
   postPatch = ''

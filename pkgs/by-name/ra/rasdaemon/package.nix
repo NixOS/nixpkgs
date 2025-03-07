@@ -1,47 +1,56 @@
-{ lib, stdenv, fetchFromGitHub
-, autoreconfHook, pkg-config
-, glibcLocales, kmod, coreutils, perl
-, dmidecode, hwdata, sqlite, libtraceevent
-, fetchpatch
-, nixosTests
+{
+  autoreconfHook,
+  fetchFromGitHub,
+  lib,
+  libtraceevent,
+  nix-update-script,
+  nixosTests,
+  perl,
+  pkg-config,
+  sqlite,
+  stdenv,
+  # Options
+  enableDmidecode ? stdenv.hostPlatform.isx86_64,
+  dmidecode,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rasdaemon";
-  version = "0.8.0";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "mchehab";
     repo = "rasdaemon";
-    rev = "v${version}";
-    sha256 = "sha256-BX3kc629FOh5cnD6Sa/69wKdhmhT3Rpz5ZvhnD4MclQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-veaqAbSJvoUzkn1OLYY3t3y9Bh8dzuenpLGO2yz/yaM=";
   };
 
-  patches = [
-    (fetchpatch { # fix #295002 (segfault on AMD), will be in the release after 0.8.0
-      name = "fix crash on AMD";
-      url = "https://github.com/mchehab/rasdaemon/commit/f1ea76375281001cdf4a048c1a4a24d86c6fbe48.patch";
-      hash = "sha256-1VPDTrAsvZGiGbh52EUdG6tYV/n6wUS0mphOSXzran0=";
-    })
+  strictDeps = true;
+
+  enableParallelBuilding = true;
+
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
   ];
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
-
-  buildInputs = [
-    coreutils
-    glibcLocales
-    hwdata
-    kmod
-    sqlite
-    libtraceevent
-    (perl.withPackages (ps: with ps; [ DBI DBDSQLite ]))
-  ]
-  ++ lib.optionals (!stdenv.hostPlatform.isAarch64) [ dmidecode ];
+  buildInputs =
+    [
+      libtraceevent
+      (perl.withPackages (
+        ps: with ps; [
+          DBDSQLite
+        ]
+      ))
+      sqlite
+    ]
+    ++ lib.optionals enableDmidecode [
+      dmidecode
+    ];
 
   configureFlags = [
     "--sysconfdir=/etc"
     "--localstatedir=/var"
-    "--with-sysconfdefdir=${placeholder "out"}/etc/sysconfig"
     "--enable-all"
   ];
 
@@ -63,33 +72,41 @@ stdenv.mkDerivation rec {
   # therefore, stripping these from the generated Makefile
   # (needed in the config flags because those set where the tools look for these)
 
-# easy way out, ends up installing /nix/store/...rasdaemon/bin in $out
+  # easy way out, ends up installing /nix/store/...rasdaemon/bin in $out
 
-  postConfigure = ''
-    substituteInPlace Makefile \
-      --replace '"$(DESTDIR)/etc/ras/dimm_labels.d"' '"$(prefix)/etc/ras/dimm_labels.d"'
+  postPatch = ''
+    patchShebangs contrib/
   '';
 
-  outputs = [ "out" "dev" "man" "inject" ];
+  preConfigure = ''
+    substituteInPlace Makefile.am \
+      --replace-fail '"$(DESTDIR)@sysconfdir@/ras/dimm_labels.d"' '"$(prefix)@sysconfdir@/ras/dimm_labels.d"' \
+      --replace-fail '"$(DESTDIR)@SYSCONFDEFDIR@/rasdaemon"' '"$(prefix)@SYSCONFDEFDIR@/rasdaemon"' \
+      --replace-fail '"$(DESTDIR)@sysconfdir@/ras/triggers' '"$(prefix)@sysconfdir@/ras/triggers'
+  '';
+
+  outputs = [
+    "out"
+    "dev"
+    "man"
+    "inject"
+  ];
 
   postInstall = ''
     install -Dm 0755 contrib/edac-fake-inject $inject/bin/edac-fake-inject
     install -Dm 0755 contrib/edac-tests $inject/bin/edac-tests
   '';
 
-  postFixup = ''
-    # Fix dmidecode and modprobe paths
+  postFixup = lib.optionalString enableDmidecode ''
     substituteInPlace $out/bin/ras-mc-ctl \
-      --replace 'find_prog ("modprobe")  or exit (1)' '"${kmod}/bin/modprobe"'
-  ''
-  + lib.optionalString (!stdenv.hostPlatform.isAarch64) ''
-    substituteInPlace $out/bin/ras-mc-ctl \
-      --replace 'find_prog ("dmidecode")' '"${dmidecode}/bin/dmidecode"'
+      --replace-fail 'find_prog ("dmidecode")' '"${dmidecode}/bin/dmidecode"'
   '';
 
   passthru.tests = nixosTests.rasdaemon;
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = ''
       A Reliability, Availability and Serviceability (RAS) logging tool using EDAC kernel tracing events
     '';
@@ -101,9 +118,9 @@ stdenv.mkDerivation rec {
       drivers for other architectures like arm also exists.
     '';
     homepage = "https://github.com/mchehab/rasdaemon";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    changelog = "https://github.com/mchehab/rasdaemon/blob/v${version}/ChangeLog";
-    maintainers = with maintainers; [ evils ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    changelog = "${finalAttrs.meta.homepage}/releases/tag/v${finalAttrs.version}";
+    maintainers = with lib.maintainers; [ evils ];
   };
-}
+})

@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, makeWrapper
-, samba
-, perl
-, openldap
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  samba,
+  perl,
+  openldap,
 }:
 
 stdenv.mkDerivation rec {
@@ -35,7 +36,12 @@ stdenv.mkDerivation rec {
     cp enum4linux.pl $out/bin/enum4linux
 
     wrapProgram $out/bin/enum4linux \
-      --prefix PATH : ${lib.makeBinPath [ samba openldap ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          samba
+          openldap
+        ]
+      }
   '';
 
   meta = with lib; {
@@ -47,4 +53,3 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
   };
 }
-

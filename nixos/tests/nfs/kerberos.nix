@@ -1,85 +1,95 @@
-import ../make-test-python.nix ({ pkgs, lib, ... }:
+import ../make-test-python.nix (
+  { pkgs, lib, ... }:
 
-let
-  security.krb5 = {
-    enable = true;
-    settings = {
-      domain_realm."nfs.test" = "NFS.TEST";
-      libdefaults.default_realm = "NFS.TEST";
-      realms."NFS.TEST" = {
-        admin_server = "server.nfs.test";
-        kdc = "server.nfs.test";
+  let
+    security.krb5 = {
+      enable = true;
+      settings = {
+        domain_realm."nfs.test" = "NFS.TEST";
+        libdefaults.default_realm = "NFS.TEST";
+        realms."NFS.TEST" = {
+          admin_server = "server.nfs.test";
+          kdc = "server.nfs.test";
+        };
       };
     };
-  };
 
-  hosts =
-    ''
+    hosts = ''
       192.168.1.1 client.nfs.test
       192.168.1.2 server.nfs.test
     '';
 
-  users = {
-    users.alice = {
+    users = {
+      users.alice = {
         isNormalUser = true;
         name = "alice";
         uid = 1000;
       };
-  };
+    };
 
-in
+  in
 
-{
-  name = "nfsv4-with-kerberos";
+  {
+    name = "nfsv4-with-kerberos";
 
-  nodes = {
-    client = { lib, ... }:
-      { inherit security users;
+    nodes = {
+      client =
+        { lib, ... }:
+        {
+          inherit security users;
 
-        networking.extraHosts = hosts;
-        networking.domain = "nfs.test";
-        networking.hostName = "client";
+          networking.extraHosts = hosts;
+          networking.domain = "nfs.test";
+          networking.hostName = "client";
 
-        virtualisation.fileSystems =
-          { "/data" = {
-              device  = "server.nfs.test:/";
-              fsType  = "nfs";
-              options = [ "nfsvers=4" "sec=krb5p" "noauto" ];
+          virtualisation.fileSystems = {
+            "/data" = {
+              device = "server.nfs.test:/";
+              fsType = "nfs";
+              options = [
+                "nfsvers=4"
+                "sec=krb5p"
+                "noauto"
+              ];
             };
           };
-      };
+        };
 
-    server = { lib, ...}:
-      { inherit security users;
+      server =
+        { lib, ... }:
+        {
+          inherit security users;
 
-        networking.extraHosts = hosts;
-        networking.domain = "nfs.test";
-        networking.hostName = "server";
+          networking.extraHosts = hosts;
+          networking.domain = "nfs.test";
+          networking.hostName = "server";
 
-        networking.firewall.allowedTCPPorts = [
-          111  # rpc
-          2049 # nfs
-          88   # kerberos
-          749  # kerberos admin
-        ];
+          networking.firewall.allowedTCPPorts = [
+            111 # rpc
+            2049 # nfs
+            88 # kerberos
+            749 # kerberos admin
+          ];
 
-        services.kerberos_server.enable = true;
-        services.kerberos_server.realms =
-          { "NFS.TEST".acl =
-            [ { access = "all"; principal = "admin/admin"; } ];
+          services.kerberos_server.enable = true;
+          services.kerberos_server.realms = {
+            "NFS.TEST".acl = [
+              {
+                access = "all";
+                principal = "admin/admin";
+              }
+            ];
           };
 
-        services.nfs.server.enable = true;
-        services.nfs.server.createMountPoints = true;
-        services.nfs.server.exports =
-          ''
+          services.nfs.server.enable = true;
+          services.nfs.server.createMountPoints = true;
+          services.nfs.server.exports = ''
             /data *(rw,no_root_squash,fsid=0,sec=krb5p)
           '';
-      };
-  };
+        };
+    };
 
-  testScript =
-    ''
+    testScript = ''
       server.succeed("mkdir -p /data/alice")
       server.succeed("chown alice:users /data/alice")
 
@@ -132,5 +142,6 @@ in
           assert ids == expected, f"ids incorrect: got {ids} expected {expected}"
     '';
 
-  meta.maintainers = [ lib.maintainers.dblsaiko ];
-})
+    meta.maintainers = [ lib.maintainers.dblsaiko ];
+  }
+)

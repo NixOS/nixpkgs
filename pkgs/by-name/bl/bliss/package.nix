@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, unzip, doxygen }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
+  doxygen,
+}:
 
 stdenv.mkDerivation rec {
   pname = "bliss";
@@ -14,7 +20,10 @@ stdenv.mkDerivation rec {
     sha256 = "815868d6586bcd49ff3c28e14ccb536d38b2661151088fe08187c13909c5dab0";
   };
 
-  nativeBuildInputs = [ unzip doxygen ];
+  nativeBuildInputs = [
+    unzip
+    doxygen
+  ];
 
   preBuild = ''
     doxygen Doxyfile
@@ -33,6 +42,10 @@ stdenv.mkDerivation rec {
     mainProgram = "bliss";
     homepage = "http://www.tcs.hut.fi/Software/bliss/";
     license = licenses.lgpl3;
-    platforms = [ "i686-linux" "x86_64-linux" "aarch64-linux" ];
+    platforms = [
+      "i686-linux"
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
   };
 }

@@ -1,4 +1,8 @@
-{ buildDunePackage, pgocaml, ppx_optcomp }:
+{
+  buildDunePackage,
+  pgocaml,
+  ppx_optcomp,
+}:
 
 buildDunePackage {
   pname = "pgocaml_ppx";

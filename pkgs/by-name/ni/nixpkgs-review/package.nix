@@ -18,14 +18,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "nixpkgs-review";
-  version = "2.12.0";
+  version = "3.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Mic92";
     repo = "nixpkgs-review";
-    rev = "refs/tags/${version}";
-    hash = "sha256-yNdBqL3tceuoUHx8/j2y5ZTq1zeVDAm37RZtlCbC6rg=";
+    tag = version;
+    hash = "sha256-yqHqtH4NhNL+JsqN/QXWPlW/28I4kaFvjwxx819zZkw=";
   };
 
   build-system = [
@@ -44,12 +44,20 @@ python3Packages.buildPythonApplication rec {
       python3Packages.argcomplete
     ];
 
+  nativeCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = [ "--version" ];
+
   makeWrapperArgs =
     let
-      binPath = [
-        nix
-        git
-      ] ++ lib.optional withSandboxSupport bubblewrap ++ lib.optional withNom nix-output-monitor;
+      binPath =
+        [
+          nix
+          git
+        ]
+        ++ lib.optional withSandboxSupport bubblewrap
+        ++ lib.optional withNom nix-output-monitor;
     in
     [
       "--prefix PATH : ${lib.makeBinPath binPath}"
@@ -66,11 +74,6 @@ python3Packages.buildPythonApplication rec {
         --zsh <(register-python-argcomplete $cmd -s zsh)
     done
   '';
-
-  nativeCheckInputs = [
-    versionCheckHook
-  ];
-  versionCheckProgramArg = [ "--version" ];
 
   meta = {
     changelog = "https://github.com/Mic92/nixpkgs-review/releases/tag/${version}";

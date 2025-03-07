@@ -1,7 +1,8 @@
-{ buildOctavePackage
-, lib
-, fetchFromBitbucket
-, proj # >= 6.3.0
+{
+  buildOctavePackage,
+  lib,
+  fetchFromBitbucket,
+  proj, # >= 6.3.0
 }:
 
 buildOctavePackage rec {

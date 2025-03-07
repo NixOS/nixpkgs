@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "nuclei";
-  version = "3.3.7";
+  version = "3.3.9";
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = "nuclei";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-cvbxLEXPvJgAWHAMmHXPyHtBkYOOXj9xz1zfrm8oLG4=";
+    tag = "v${version}";
+    hash = "sha256-9P8KSuhTI/m0m51PUTZGU+qRbnT3izPbHTzsqZNbMJE=";
   };
 
-  vendorHash = "sha256-+eAZ/YJc8nqeTu8oRu2H6EFUyI5HDQZNO+hCUARPtcA=";
+  vendorHash = "sha256-CTdB/+aVaXKqtiwHn8pgmhXjZ0mIDrmLvnKmisExi74=";
 
   proxyVendor = true; # hash mismatch between Linux and Darwin
 

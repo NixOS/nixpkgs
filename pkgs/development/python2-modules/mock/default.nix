@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
-, funcsigs
-, six
-, pbr
-, unittestCheckHook
-, pytest
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy27,
+  funcsigs,
+  six,
+  pbr,
+  unittestCheckHook,
+  pytest,
 }:
 
 buildPythonPackage rec {
@@ -18,7 +19,10 @@ buildPythonPackage rec {
     sha256 = "83657d894c90d5681d62155c82bda9c1187827525880eda8ff5df4ec813437c3";
   };
 
-  propagatedBuildInputs = [ six pbr ] ++ lib.optionals isPy27 [ funcsigs ];
+  propagatedBuildInputs = [
+    six
+    pbr
+  ] ++ lib.optionals isPy27 [ funcsigs ];
 
   # On PyPy for Python 2.7 in particular, Mock's tests have a known failure.
   # Mock upstream has a decoration to disable the failing test and make

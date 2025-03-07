@@ -1,4 +1,13 @@
-{ fetchurl, lib, stdenv, gettext, npth, libgpg-error, buildPackages, gitUpdater }:
+{
+  fetchurl,
+  lib,
+  stdenv,
+  gettext,
+  npth,
+  libgpg-error,
+  buildPackages,
+  gitUpdater,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libassuan";
@@ -9,11 +18,18 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-AQMIH/wng4ouUEeRU8oQXoc9PWXYqVkygunJTH5q+3Y=";
   };
 
-  outputs = [ "out" "dev" "info" ];
+  outputs = [
+    "out"
+    "dev"
+    "info"
+  ];
   outputBin = "dev"; # libassuan-config
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  buildInputs = [ npth gettext ];
+  buildInputs = [
+    npth
+    gettext
+  ];
 
   configureFlags = [
     # Required for cross-compilation.

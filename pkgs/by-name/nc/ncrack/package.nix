@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, openssl, zlib }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  openssl,
+  zlib,
+}:
 
 stdenv.mkDerivation rec {
   pname = "ncrack";
@@ -24,7 +31,10 @@ stdenv.mkDerivation rec {
   # Our version is good; the check is bad.
   configureFlags = [ "--without-zlib-version-check" ];
 
-  buildInputs = [ openssl zlib ];
+  buildInputs = [
+    openssl
+    zlib
+  ];
 
   meta = with lib; {
     description = "Network authentication tool";

@@ -1,21 +1,22 @@
-{ lib
-, python3
-, fetchFromGitHub
-, gobject-introspection
-, wrapGAppsHook3
-, killall
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+  gobject-introspection,
+  wrapGAppsHook3,
+  killall,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "waypaper";
-  version = "2.3";
+  version = "2.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "anufrievroman";
     repo = "waypaper";
-    rev = "refs/tags/${version}";
-    hash = "sha256-ty3KiKkIyv6aqTua3YUB2smYJv7dXGPP5k3lXoxDzI0=";
+    tag = version;
+    hash = "sha256-g1heJUBVJzRZXcNQCwRcqp6cTUaroKVpcTjG0KldlxU=";
   };
 
   nativeBuildInputs = [
@@ -28,8 +29,10 @@ python3.pkgs.buildPythonApplication rec {
   dependencies = [
     python3.pkgs.pygobject3
     python3.pkgs.platformdirs
-    python3.pkgs.importlib-metadata
     python3.pkgs.pillow
+    python3.pkgs.imageio
+    python3.pkgs.imageio-ffmpeg
+    python3.pkgs.screeninfo
   ];
 
   propagatedBuildInputs = [ killall ];

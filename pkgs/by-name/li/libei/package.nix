@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchFromGitLab
-, libevdev
-, libxkbcommon
-, meson
-, ninja
-, pkg-config
-, protobuf
-, protobufc
-, systemd
-, buildPackages
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchFromGitLab,
+  libevdev,
+  libxkbcommon,
+  meson,
+  ninja,
+  pkg-config,
+  protobuf,
+  protobufc,
+  systemd,
+  buildPackages,
 }:
 let
   munit = fetchFromGitHub {
@@ -22,14 +23,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "libei";
-  version = "1.3.0";
+  version = "1.4.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "libinput";
     repo = "libei";
     rev = version;
-    hash = "sha256-yKeMHgR3s83xwoXgLW28ewF2tvs6l0Hq0cCAroCgq0U=";
+    hash = "sha256-lSrIC93Cke90/Xc8dqd3e/TU32tflYHYqc5fE8wglBI=";
   };
 
   buildInputs = [
@@ -43,14 +44,16 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    (buildPackages.python3.withPackages (ps: with ps; [
-      attrs
-      jinja2
-      pytest
-      python-dbusmock
-      strenum
-      structlog
-    ]))
+    (buildPackages.python3.withPackages (
+      ps: with ps; [
+        attrs
+        jinja2
+        pytest
+        python-dbusmock
+        strenum
+        structlog
+      ]
+    ))
   ];
 
   postPatch = ''

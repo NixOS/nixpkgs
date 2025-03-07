@@ -6,6 +6,7 @@
   cython,
   poetry-core,
   pytest-benchmark,
+  pytest-codspeed,
   pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
@@ -14,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "bluetooth-data-tools";
-  version = "1.20.0";
+  version = "1.23.4";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -22,8 +23,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
     repo = "bluetooth-data-tools";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-qg2QZc95DD2uTO0fTwoNaPfL+QSrcqDwJvx41lIZDRs=";
+    tag = "v${version}";
+    hash = "sha256-WYwcczYqUd7JH68zKBQ9xl5sxX1YAHTEpi0gc81k6DY=";
   };
 
   # The project can build both an optimized cython version and an unoptimized
@@ -40,7 +41,9 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-benchmark
+    pytest-codspeed
     pytest-cov-stub
+    pytest-codspeed
     pytestCheckHook
   ];
 
@@ -51,7 +54,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library for converting bluetooth data and packets";
     homepage = "https://github.com/Bluetooth-Devices/bluetooth-data-tools";
-    changelog = "https://github.com/Bluetooth-Devices/bluetooth-data-tools/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/Bluetooth-Devices/bluetooth-data-tools/blob/${src.tag}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };

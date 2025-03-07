@@ -1,10 +1,11 @@
-{ cmake
-, fetchFromGitLab
-, fetchpatch
-, sqlite
-, boost
-, lib
-, stdenv
+{
+  cmake,
+  fetchFromGitLab,
+  fetchpatch,
+  sqlite,
+  boost,
+  lib,
+  stdenv,
 }:
 
 stdenv.mkDerivation rec {

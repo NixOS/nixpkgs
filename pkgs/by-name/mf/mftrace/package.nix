@@ -1,12 +1,13 @@
-{ stdenv
-, fetchFromGitHub
-, lib
-, makeWrapper
-, autoreconfHook
-, python3
-, fontforge
-, potrace
-, texlive
+{
+  stdenv,
+  fetchFromGitHub,
+  lib,
+  makeWrapper,
+  autoreconfHook,
+  python3,
+  fontforge,
+  potrace,
+  texlive,
 }:
 
 /*
@@ -33,9 +34,17 @@ stdenv.mkDerivation (finalAttrs: rec {
     sha256 = "02ik25aczkbi10jrjlnxby3fmixxrwm2k5r4fkfif3bjfym7nqbc";
   };
 
-  nativeBuildInputs = [ makeWrapper autoreconfHook python3 potrace ];
+  nativeBuildInputs = [
+    makeWrapper
+    autoreconfHook
+    python3
+    potrace
+  ];
 
-  buildInputs = [ fontforge potrace ];
+  buildInputs = [
+    fontforge
+    potrace
+  ];
 
   postInstall = ''
     wrapProgram $out/bin/mftrace --prefix PATH : ${lib.makeBinPath finalAttrs.buildInputs}
@@ -43,7 +52,11 @@ stdenv.mkDerivation (finalAttrs: rec {
 
   # experimental texlive.combine support
   # (note that only the bin/ folder will be combined into texlive)
-  passthru.tlDeps = with texlive; [ kpathsea t1utils metafont ];
+  passthru.tlDeps = with texlive; [
+    kpathsea
+    t1utils
+    metafont
+  ];
 
   meta = with lib; {
     description = "Scalable PostScript Fonts for MetaFont";
@@ -53,7 +66,10 @@ stdenv.mkDerivation (finalAttrs: rec {
       TTF (TrueType) font.
     '';
     homepage = "https://lilypond.org/mftrace/";
-    license = with licenses; [ gpl2Only mit ];
+    license = with licenses; [
+      gpl2Only
+      mit
+    ];
     maintainers = with maintainers; [ xworld21 ];
     platforms = platforms.all;
   };

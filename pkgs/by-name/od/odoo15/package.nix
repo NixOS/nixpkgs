@@ -1,10 +1,11 @@
-{ lib
-, fetchFromGitHub
-, fetchzip
-, python310
-, rtlcss
-, wkhtmltopdf
-, nixosTests
+{
+  lib,
+  fetchFromGitHub,
+  fetchzip,
+  python310,
+  rtlcss,
+  wkhtmltopdf,
+  nixosTests,
 }:
 
 let
@@ -26,11 +27,15 @@ let
 
         dependencies = [ self.setuptools ];
 
-        nativeCheckInputs = with self; [ pytestCheckHook pillow ];
+        nativeCheckInputs = with self; [
+          pytestCheckHook
+          pillow
+        ];
       });
     };
   };
-in python.pkgs.buildPythonApplication rec {
+in
+python.pkgs.buildPythonApplication rec {
   pname = "odoo";
   version = "${odoo_version}.${odoo_release}";
 
@@ -47,7 +52,10 @@ in python.pkgs.buildPythonApplication rec {
     "--prefix"
     "PATH"
     ":"
-    "${lib.makeBinPath [ wkhtmltopdf rtlcss ]}"
+    "${lib.makeBinPath [
+      wkhtmltopdf
+      rtlcss
+    ]}"
   ];
 
   propagatedBuildInputs = with python.pkgs; [

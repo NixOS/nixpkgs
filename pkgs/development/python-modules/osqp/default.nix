@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "osqp";
-  version = "0.6.7.post1";
+  version = "0.6.7.post3";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-VUqhDcqEgZeLTTNOKCAfJO0Y8pTFqENQziAiqLePTXI=";
+    hash = "sha256-sMXgpyHyHJckCXpP1QEIME0pZGjRJOFvNKxnBG9wIOE=";
   };
 
   postPatch = ''

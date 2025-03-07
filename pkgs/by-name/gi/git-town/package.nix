@@ -1,19 +1,32 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles, git, testers, git-town, makeWrapper }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  git,
+  testers,
+  git-town,
+  makeWrapper,
+  writableTmpDirAsHomeHook,
+}:
 
 buildGoModule rec {
   pname = "git-town";
-  version = "16.4.1";
+  version = "18.0.0";
 
   src = fetchFromGitHub {
     owner = "git-town";
     repo = "git-town";
-    rev = "v${version}";
-    hash = "sha256-8Xr1R6txsJBGzBtvvKOCg2lcAHksl4hNPc9zySkTfdg=";
+    tag = "v${version}";
+    hash = "sha256-vn0Cq53gqe0HGrtYMUHCFsE13CpaBJqC4LxrkJSel1Y=";
   };
 
   vendorHash = null;
 
-  nativeBuildInputs = [ installShellFiles makeWrapper ];
+  nativeBuildInputs = [
+    installShellFiles
+    makeWrapper
+  ];
 
   buildInputs = [ git ];
 
@@ -28,11 +41,12 @@ buildGoModule rec {
       "-X ${modulePath}/src/cmd.buildDate=nix"
     ];
 
-  nativeCheckInputs = [ git ];
+  nativeCheckInputs = [
+    git
+    writableTmpDirAsHomeHook
+  ];
 
   preCheck = ''
-    HOME=$(mktemp -d)
-
     # this runs tests requiring local operations
     rm main_test.go
   '';
@@ -43,6 +57,7 @@ buildGoModule rec {
       skippedTests = [
         "TestGodog"
         "TestMockingRunner/MockCommand"
+        "TestMockingRunner/MockCommitMessage"
         "TestMockingRunner/QueryWith"
         "TestTestCommands/CreateChildFeatureBranch"
       ];
@@ -64,11 +79,14 @@ buildGoModule rec {
     inherit version;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Generic, high-level git support for git-flow workflows";
     homepage = "https://www.git-town.com/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ allonsy blaggacao gabyx ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      allonsy
+      gabyx
+    ];
     mainProgram = "git-town";
   };
 }

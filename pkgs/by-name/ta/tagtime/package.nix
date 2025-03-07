@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, perl, xterm, coreutils }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  perl,
+  xterm,
+  coreutils,
+}:
 
 stdenv.mkDerivation {
   pname = "tagtime";
@@ -72,7 +79,7 @@ stdenv.mkDerivation {
 
       [maintainer’s note]: This is the original perl script implementation.
     '';
-    homepage = "http://messymatters.com/tagtime/";
+    homepage = "https://messymatters.com/tagtime/";
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.Profpatsch ];
     mainProgram = "tagtimed";

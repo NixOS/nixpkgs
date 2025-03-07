@@ -25,6 +25,7 @@
   libXtst,
   libinput,
   libdrm,
+  libgbm,
   gsettings-desktop-schemas,
   glib,
   gtk3,
@@ -32,7 +33,7 @@
   pipewire,
   libgudev,
   libwacom,
-  mesa,
+  mesa-gl-headers,
   meson,
   nix-update-script,
   validatePkgConfig,
@@ -86,13 +87,13 @@ stdenv.mkDerivation (finalAttrs: {
     libXtst
     libcap_ng
     graphene
+    mesa-gl-headers
   ];
 
   nativeBuildInputs = [
     desktop-file-utils
     gettext
     libxcvt
-    mesa # needed for gbm
     meson
     ninja
     xvfb-run
@@ -114,6 +115,7 @@ stdenv.mkDerivation (finalAttrs: {
     gtk3
     libcanberra
     libdrm
+    libgbm
     libgudev
     libinput
     libstartup_notification

@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "yuxincs";
     repo = "aioapcaccess";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-nI8hfHfSLMOKPcG5idYqqa/msJuR/Xt+JmgzdftlN28=";
   };
 

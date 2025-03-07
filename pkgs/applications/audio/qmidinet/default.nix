@@ -1,4 +1,13 @@
-{ mkDerivation, lib, fetchurl, pkg-config, qtbase, qttools, alsa-lib, libjack2 }:
+{
+  mkDerivation,
+  lib,
+  fetchurl,
+  pkg-config,
+  qtbase,
+  qttools,
+  alsa-lib,
+  libjack2,
+}:
 
 mkDerivation rec {
   version = "0.9.4";
@@ -11,7 +20,12 @@ mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  buildInputs = [  qtbase qttools alsa-lib libjack2 ];
+  buildInputs = [
+    qtbase
+    qttools
+    alsa-lib
+    libjack2
+  ];
 
   nativeBuildInputs = [ pkg-config ];
 

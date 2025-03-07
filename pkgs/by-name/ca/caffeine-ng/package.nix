@@ -1,19 +1,20 @@
-{ fetchFromGitea
-, meson
-, ninja
-, pkg-config
-, scdoc
-, gobject-introspection
-, lib
-, libayatana-appindicator
-, libnotify
-, python3Packages
-, procps
-, xset
-, xautolock
-, xscreensaver
-, xfce
-, wrapGAppsHook3
+{
+  fetchFromGitea,
+  meson,
+  ninja,
+  pkg-config,
+  scdoc,
+  gobject-introspection,
+  lib,
+  libayatana-appindicator,
+  libnotify,
+  python3Packages,
+  procps,
+  xset,
+  xautolock,
+  xscreensaver,
+  xfce,
+  wrapGAppsHook3,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -29,7 +30,13 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-uYzLRZ+6ZgIwhSuJWRBpLYHgonX7sFXgUZid0V26V0Q=";
   };
 
-  nativeBuildInputs = [ gobject-introspection meson ninja pkg-config wrapGAppsHook3 ];
+  nativeBuildInputs = [
+    gobject-introspection
+    meson
+    ninja
+    pkg-config
+    wrapGAppsHook3
+  ];
 
   buildInputs = [
     libayatana-appindicator
@@ -62,7 +69,15 @@ python3Packages.buildPythonApplication rec {
 
   preFixup = ''
     gappsWrapperArgs+=(
-      --prefix PATH : ${lib.makeBinPath [ procps xautolock xscreensaver xfce.xfconf xset ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          procps
+          xautolock
+          xscreensaver
+          xfce.xfconf
+          xset
+        ]
+      }
     )
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';

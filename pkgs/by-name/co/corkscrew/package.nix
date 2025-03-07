@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+}:
 
 stdenv.mkDerivation rec {
   pname = "corkscrew";
@@ -20,4 +25,3 @@ stdenv.mkDerivation rec {
     mainProgram = "corkscrew";
   };
 }
-

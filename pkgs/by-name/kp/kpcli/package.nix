@@ -1,12 +1,19 @@
-{ lib, stdenv, fetchurl, makeWrapper, perl, perlPackages }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  perl,
+  perlPackages,
+}:
 
 stdenv.mkDerivation rec {
-  version = "4.1.2";
+  version = "4.1.3";
   pname = "kpcli";
 
   src = fetchurl {
     url = "mirror://sourceforge/kpcli/${pname}-${version}.pl";
-    hash = "sha256-hvyCC8eUXNm1d1g+/kEnVllRJokChgJWzuoQB5Xd8j8=";
+    hash = "sha256-yRNj5OB/NSGoZ/aNtgLJW1PcFn5DZu5/8lQlK0F2xi8=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -20,13 +27,37 @@ stdenv.mkDerivation rec {
     chmod +x $out/share/kpcli.pl
 
     makeWrapper $out/share/kpcli.pl $out/bin/kpcli --set PERL5LIB \
-      "${with perlPackages; makePerlPath ([
-         BHooksEndOfScope CaptureTiny Clipboard Clone CryptRijndael CryptX DevelGlobalDestruction ModuleImplementation
-         ModuleRuntime SortNaturally SubExporterProgressive TermReadKey TermShellUI TryTiny FileKDBX FileKeePass
-         PackageStash RefUtil TermReadLineGnu XMLParser boolean namespaceclean
-      ] ++ lib.optional stdenv.hostPlatform.isDarwin MacPasteboard)}"
+      "${
+        with perlPackages;
+        makePerlPath (
+          [
+            BHooksEndOfScope
+            CaptureTiny
+            Clipboard
+            Clone
+            CryptRijndael
+            CryptX
+            DevelGlobalDestruction
+            ModuleImplementation
+            ModuleRuntime
+            SortNaturally
+            SubExporterProgressive
+            TermReadKey
+            TermShellUI
+            TryTiny
+            FileKDBX
+            FileKeePass
+            PackageStash
+            RefUtil
+            TermReadLineGnu
+            XMLParser
+            boolean
+            namespaceclean
+          ]
+          ++ lib.optional stdenv.hostPlatform.isDarwin MacPasteboard
+        )
+      }"
   '';
-
 
   meta = with lib; {
     description = "KeePass Command Line Interface";

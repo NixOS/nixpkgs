@@ -1,26 +1,29 @@
-{ lib, stdenv
-, fetchFromGitHub
-, jdk
-, gradle_8
-, jre
-, makeWrapper
-, makeDesktopItem
-, copyDesktopItems
-, testers
-, git
-, key
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  jdk,
+  gradle_8,
+  jre,
+  makeWrapper,
+  makeDesktopItem,
+  copyDesktopItems,
+  testers,
+  git,
+  key,
 }:
 
 let
   gradle = gradle_8;
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "key";
   version = "2.12.2";
   src = fetchFromGitHub {
     owner = "KeYProject";
     repo = "key";
-    rev = "refs/tags/KeY-${version}";
+    tag = "KeY-${version}";
     hash = "sha256-veqaWyWEiTot2cAjvyPG+Ra8/pqS4i6w6iR+qhozIM4=";
   };
 
@@ -70,11 +73,10 @@ in stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  passthru.tests.version =
-    testers.testVersion {
-      package = key;
-      command = "KeY --help";
-    };
+  passthru.tests.version = testers.testVersion {
+    package = key;
+    command = "KeY --help";
+  };
 
   meta = {
     description = "Java formal verification tool";
@@ -88,7 +90,10 @@ in stdenv.mkDerivation rec {
       Dynamic Logic for Java with a user-friendly graphical interface.
     '';
     license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ fgaz fliegendewurst ];
+    maintainers = with lib.maintainers; [
+      fgaz
+      fliegendewurst
+    ];
     mainProgram = "KeY";
     platforms = jdk.meta.platforms;
   };

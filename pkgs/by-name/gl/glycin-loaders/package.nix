@@ -1,32 +1,33 @@
-{ stdenv
-, lib
-, fetchurl
-, substituteAll
-, bubblewrap
-, cairo
-, cargo
-, git
-, gnome
-, gtk4
-, lcms2
-, libheif
-, libjxl
-, librsvg
-, libseccomp
-, libxml2
-, meson
-, ninja
-, pkg-config
-, rustc
+{
+  stdenv,
+  lib,
+  fetchurl,
+  replaceVars,
+  bubblewrap,
+  cairo,
+  cargo,
+  git,
+  gnome,
+  gtk4,
+  lcms2,
+  libheif,
+  libjxl,
+  librsvg,
+  libseccomp,
+  libxml2,
+  meson,
+  ninja,
+  pkg-config,
+  rustc,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "glycin-loaders";
-  version = "1.1.2";
+  version = "1.1.4";
 
   src = fetchurl {
     url = "mirror://gnome/sources/glycin/${lib.versions.majorMinor finalAttrs.version}/glycin-${finalAttrs.version}.tar.xz";
-    hash = "sha256-Qccr4eybpV2pDIL8GFc7dC3/WCsJr8N7RWXEfpnMj/Q=";
+    hash = "sha256-0bbVkLaZtmgaZ9ARmKWBp/cQ2Mp0UJNN1/XbJB+hJQA=";
   };
 
   patches = [
@@ -69,8 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
       packageName = "glycin";
     };
 
-    glycinPathsPatch = substituteAll {
-      src = ./fix-glycin-paths.patch;
+    glycinPathsPatch = replaceVars ./fix-glycin-paths.patch {
       bwrap = "${bubblewrap}/bin/bwrap";
     };
   };
@@ -79,7 +79,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Glycin loaders for several formats";
     homepage = "https://gitlab.gnome.org/sophie-h/glycin";
     maintainers = teams.gnome.members;
-    license = with licenses; [ mpl20 /* or */ lgpl21Plus ];
+    license = with licenses; [
+      mpl20 # or
+      lgpl21Plus
+    ];
     platforms = platforms.linux;
   };
 })

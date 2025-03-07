@@ -1,10 +1,11 @@
-{ lib
-, makeWrapper
-, fetchFromGitHub
-, rustPackages
-, pkg-config
-, elfutils
-, zlib
+{
+  lib,
+  makeWrapper,
+  fetchFromGitHub,
+  rustPackages,
+  pkg-config,
+  elfutils,
+  zlib,
 }:
 let
   inherit (rustPackages.rustc) llvmPackages;
@@ -64,7 +65,8 @@ rustPlatform.buildRustPackage rec {
 
   sourceRoot = "${src.name}/compiler/cmd";
 
-  cargoHash = "sha256-t8sPwAha90SMC/SJqZngXD9hpoaWh9e91X/kuHN4G7o=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-iYceYwRqnYA6KxCQxOieR8JZ6TQlIL+OSzAjyr4Cu/g=";
 
   nativeBuildInputs = [
     pkg-config
@@ -111,7 +113,15 @@ rustPlatform.buildRustPackage rec {
   postFixup = ''
     wrapProgram $out/bin/ecc-rs \
       --prefix LIBCLANG_PATH : ${lib.getLib llvmPackages.libclang}/lib \
-      --prefix PATH : ${lib.makeBinPath (with llvmPackages; [clang bintools-unwrapped])}
+      --prefix PATH : ${
+        lib.makeBinPath (
+          with llvmPackages;
+          [
+            clang
+            bintools-unwrapped
+          ]
+        )
+      }
   '';
 
   meta = with lib; {

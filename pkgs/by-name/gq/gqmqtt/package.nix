@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "klumw";
     repo = "gqmqtt";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-4FV2Z3eow69v/Z6sfVfJew/N8ceiXX+JtvLidmiysPk=";
   };
 

@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tomaszsluszniak";
     repo = "sanix_py";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-D2w3hmL8ym63liWOYdZS4ry3lJ0utbbYGagWoOTT1TQ=";
   };
 

@@ -80,7 +80,7 @@ buildPythonPackage rec {
     name = "ibis-source";
     repo = "ibis";
     owner = "ibis-project";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-6ebw/E3jZFMHKqC5ZY//2Ke0NrklyoGp5JGKBfDxy40=";
   };
 
@@ -111,6 +111,10 @@ buildPythonPackage rec {
 
   dontBypassPoetryDynamicVersioning = true;
   env.POETRY_DYNAMIC_VERSIONING_BYPASS = lib.head (lib.strings.splitString "-" version);
+
+  pythonRelaxDeps = [
+    "toolz"
+  ];
 
   dependencies = [
     atpublic
@@ -219,6 +223,7 @@ buildPythonPackage rec {
       pyarrow
       pyarrow-hotfix
       numpy
+      packaging
       pandas
       rich
     ];

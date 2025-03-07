@@ -1,24 +1,25 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, cglm
-, gtk3
-, libepoxy
-, libGLU
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  cglm,
+  gtk3,
+  libepoxy,
+  libGLU,
 }:
 
 stdenv.mkDerivation rec {
-  pname   = "fsv";
+  pname = "fsv";
   version = "3.0";
 
   src = fetchFromGitHub {
     owner = "jabl";
-    repo  = "fsv";
-    rev   = "${pname}-${version}";
-    hash  = "sha256-fxsA3qcBPvK4H5P4juGTe6eg1lkygvzFpNW36B9lsE4=";
+    repo = "fsv";
+    rev = "${pname}-${version}";
+    hash = "sha256-fxsA3qcBPvK4H5P4juGTe6eg1lkygvzFpNW36B9lsE4=";
   };
 
   nativeBuildInputs = [
@@ -44,7 +45,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description     = "File system visualizer in cyberspace";
+    description = "File system visualizer in cyberspace";
     longDescription = ''
       fsv (pronounced eff-ess-vee) is a file system visualizer in cyberspace.
       It lays out files and directories in three dimensions, geometrically
@@ -53,9 +54,9 @@ stdenv.mkDerivation rec {
       hard drive, or any arbitrarily large collection of files, limited only
       by the host computer's memory and graphics hardware.
     '';
-    homepage    = "https://github.com/jabl/fsv";
-    license     = licenses.lgpl2;
-    platforms   = platforms.linux;
+    homepage = "https://github.com/jabl/fsv";
+    license = licenses.lgpl2;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ rnhmjoj ];
     mainProgram = "fsv";
   };

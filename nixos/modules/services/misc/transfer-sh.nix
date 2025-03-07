@@ -1,10 +1,25 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.transfer-sh;
   inherit (lib)
-    mkDefault mkEnableOption mkPackageOption mkIf mkOption
-    types mapAttrs isBool getExe boolToString optionalAttrs;
+    mkDefault
+    mkEnableOption
+    mkPackageOption
+    mkIf
+    mkOption
+    types
+    mapAttrs
+    isBool
+    getExe
+    boolToString
+    optionalAttrs
+    ;
 in
 {
   options.services.transfer-sh = {
@@ -13,7 +28,15 @@ in
     package = mkPackageOption pkgs "transfer-sh" { };
 
     settings = mkOption {
-      type = types.submodule { freeformType = with types; attrsOf (oneOf [ bool int str ]); };
+      type = types.submodule {
+        freeformType =
+          with types;
+          attrsOf (oneOf [
+            bool
+            int
+            str
+          ]);
+      };
       default = { };
       example = {
         LISTENER = ":8080";
@@ -30,7 +53,12 @@ in
     };
 
     provider = mkOption {
-      type = types.enum [ "local" "s3" "storj" "gdrive" ];
+      type = types.enum [
+        "local"
+        "s3"
+        "storj"
+        "gdrive"
+      ];
       default = "local";
       description = "Storage providers to use";
     };
@@ -56,19 +84,21 @@ in
       localProvider = (cfg.provider == "local");
       stateDirectory = "/var/lib/transfer.sh";
     in
-    mkIf cfg.enable
-      {
-        services.transfer-sh.settings = {
+    mkIf cfg.enable {
+      services.transfer-sh.settings =
+        {
           LISTENER = mkDefault ":8080";
-        } // optionalAttrs localProvider {
+        }
+        // optionalAttrs localProvider {
           BASEDIR = mkDefault stateDirectory;
         };
 
-        systemd.services.transfer-sh = {
-          after = [ "network.target" ];
-          wantedBy = [ "multi-user.target" ];
-          environment = mapAttrs (_: v: if isBool v then boolToString v else toString v) cfg.settings;
-          serviceConfig = {
+      systemd.services.transfer-sh = {
+        after = [ "network.target" ];
+        wantedBy = [ "multi-user.target" ];
+        environment = mapAttrs (_: v: if isBool v then boolToString v else toString v) cfg.settings;
+        serviceConfig =
+          {
             DevicePolicy = "closed";
             DynamicUser = true;
             ExecStart = "${getExe cfg.package} --provider ${cfg.provider}";
@@ -83,19 +113,24 @@ in
             ProtectKernelModules = true;
             ProtectKernelTunables = true;
             ProtectProc = "invisible";
-            RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
+            RestrictAddressFamilies = [
+              "AF_INET"
+              "AF_INET6"
+            ];
             RestrictNamespaces = true;
             RestrictRealtime = true;
             SystemCallArchitectures = [ "native" ];
             SystemCallFilter = [ "@system-service" ];
             StateDirectory = baseNameOf stateDirectory;
-          } // optionalAttrs (cfg.secretFile != null) {
+          }
+          // optionalAttrs (cfg.secretFile != null) {
             EnvironmentFile = cfg.secretFile;
-          } // optionalAttrs localProvider {
+          }
+          // optionalAttrs localProvider {
             ReadWritePaths = cfg.settings.BASEDIR;
           };
-        };
       };
+    };
 
   meta.maintainers = with lib.maintainers; [ ocfox ];
 }

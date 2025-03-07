@@ -1,8 +1,10 @@
-{ stdenv,
+{
+  stdenv,
   lib,
   fetchFromGitHub,
   readline,
-  autoreconfHook }:
+  autoreconfHook,
+}:
 
 stdenv.mkDerivation rec {
   pname = "microcom";

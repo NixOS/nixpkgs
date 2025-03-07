@@ -17,8 +17,6 @@
   zlib,
   zstd,
   xxHash,
-  apple-sdk_11,
-  darwinMinVersionHook,
 
   mvfst,
 
@@ -27,7 +25,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fbthrift";
-  version = "2024.11.18.00";
+  version = "2025.02.10.00";
 
   outputs = [
     # Trying to split this up further into `bin`, `out`, and `dev`
@@ -40,14 +38,16 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "fbthrift";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-dJf4vaIcat24WiKLFNEqeCnJYiO+c5YkuFu+hrS6cPE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-130BHYUFDo11T9bI7cQ7Y+lTnFSr3WNgJ7IA+3BE9+g=";
   };
 
   patches = [
     # Remove a line that breaks the build due to the CMake classic of
     # incorrect path concatenation.
     ./remove-cmake-install-rpath.patch
+
+    ./glog-0.7.patch
   ];
 
   nativeBuildInputs = [
@@ -56,22 +56,17 @@ stdenv.mkDerivation (finalAttrs: {
     removeReferencesTo
   ];
 
-  buildInputs =
-    [
-      openssl
-      gflags
-      glog
-      folly
-      fizz
-      wangle
-      zlib
-      zstd
-      xxHash
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_11
-      (darwinMinVersionHook "11.0")
-    ];
+  buildInputs = [
+    openssl
+    gflags
+    glog
+    folly
+    fizz
+    wangle
+    zlib
+    zstd
+    xxHash
+  ];
 
   propagatedBuildInputs = [
     mvfst

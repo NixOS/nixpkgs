@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchurl
-, unzip
-, makeBinaryWrapper
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
+  makeBinaryWrapper,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -16,7 +17,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontUnpack = true;
 
-  nativeBuildInputs = [ unzip makeBinaryWrapper ];
+  nativeBuildInputs = [
+    unzip
+    makeBinaryWrapper
+  ];
 
   installPhase = ''
     runHook preInstall

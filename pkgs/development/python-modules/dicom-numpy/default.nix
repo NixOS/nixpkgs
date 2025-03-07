@@ -4,6 +4,7 @@
   fetchFromGitHub,
   pythonOlder,
   pytestCheckHook,
+  setuptools,
   numpy,
   pydicom,
 }:
@@ -18,9 +19,18 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "innolitics";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-pgmREQlstr0GY2ThIWt4hbcSWmaNWgkr2gO4PSgGHqE=";
   };
+
+  postPatch = ''
+    substituteInPlace dicom_numpy/zip_archive.py \
+      --replace-fail "pydicom.read_file" "pydicom.dcmread"
+  '';
+
+  build-system = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     numpy

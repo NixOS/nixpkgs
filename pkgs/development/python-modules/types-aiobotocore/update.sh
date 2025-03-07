@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p nix-update nixfmt-classic curl jq
+#!nix-shell -i bash -p nix-update curl jq
 
 set -eu -o pipefail
 
@@ -163,8 +163,8 @@ packages=(
   types-aiobotocore-iot-data
   types-aiobotocore-iot-jobs-data
   # types-aiobotocore-iot-roborunner  Obsolete, will be removed soon
-  types-aiobotocore-iot1click-devices
-  types-aiobotocore-iot1click-projects
+  # types-aiobotocore-iot1click-devices
+  # types-aiobotocore-iot1click-projects
   types-aiobotocore-iotanalytics
   types-aiobotocore-iotdeviceadvisor
   types-aiobotocore-iotevents
@@ -355,7 +355,7 @@ packages=(
   types-aiobotocore-wellarchitected
   types-aiobotocore-wisdom
   types-aiobotocore-workdocs
-  types-aiobotocore-worklink
+  # types-aiobotocore-worklink
   types-aiobotocore-workmail
   types-aiobotocore-workmailmessageflow
   types-aiobotocore-workspaces
@@ -392,5 +392,3 @@ for package in "${packages[@]}"; do
   }' ${source_file}
 
 done
-
-nixfmt ${source_file}

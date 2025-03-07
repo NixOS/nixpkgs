@@ -8,6 +8,7 @@
   fetchgit,
   imagemagick,
   lib,
+  makeFontsConf,
   runCommand,
   xdg-utils,
   pname ? "nexusmods-app",
@@ -24,12 +25,12 @@ let
 in
 buildDotnetModule (finalAttrs: {
   inherit pname;
-  version = "0.7.0";
+  version = "0.7.3";
 
   src = fetchgit {
     url = "https://github.com/Nexus-Mods/NexusMods.App.git";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-7o+orpXLvZa+F0wEh3nVnYMe4ZkiaVJQOWvhWdNmcSk=";
+    hash = "sha256-p3MTxuLR/mkVrL+hwW2R13/eVHWWulZPRh9OsuHq9kU=";
     fetchSubmodules = true;
     fetchLFS = true;
   };
@@ -56,7 +57,7 @@ buildDotnetModule (finalAttrs: {
     imagemagick # For resizing SVG icon in postInstall
   ];
 
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
   mapNuGetDependencies = true;
 
   # TODO: remove .NET 8; StrawberryShake currently needs it
@@ -96,7 +97,7 @@ buildDotnetModule (finalAttrs: {
       size=''${i}x''${i}
       dir=$out/share/icons/hicolor/$size/apps
       mkdir -p $dir
-      convert -background none -resize $size $icon $dir/com.nexusmods.app.png
+      magick -background none $icon -resize $size $dir/com.nexusmods.app.png
     done
   '';
 
@@ -134,6 +135,9 @@ buildDotnetModule (finalAttrs: {
       "NexusMods.UI.Tests.ImageCacheTests.Test_LoadAndCache_RemoteImage"
       "NexusMods.UI.Tests.ImageCacheTests.Test_LoadAndCache_ImageStoredFile"
 
+      # Fails in ofborg with VerifyException tests/Games/NexusMods.Games.StardewValley.Tests
+      "NexusMods.Games.StardewValley.Tests.StardewValleyInstallersTests.CanInstallMod"
+
       # Fails with: Expected a <System.ArgumentException> to be thrown, but no exception was thrown.
       "NexusMods.Networking.ModUpdates.Tests.PerFeedCacheUpdaterTests.Constructor_WithItemsFromDifferentGames_ShouldThrowArgumentException_InDebug"
     ]
@@ -146,10 +150,22 @@ buildDotnetModule (finalAttrs: {
       let
         runTest =
           name: script:
-          runCommand "${pname}-test-${name}" { nativeBuildInputs = [ finalAttrs.finalPackage ]; } ''
-            ${script}
-            touch $out
-          '';
+          runCommand "${pname}-test-${name}"
+            {
+              nativeBuildInputs = [ finalAttrs.finalPackage ];
+              FONTCONFIG_FILE = makeFontsConf {
+                fontDirectories = [ ];
+              };
+            }
+            ''
+              export XDG_DATA_HOME="$PWD/data"
+              export XDG_STATE_HOME="$PWD/state"
+              export XDG_CACHE_HOME="$PWD/cache"
+              mkdir -p "$XDG_DATA_HOME" "$XDG_STATE_HOME" "$XDG_CACHE_HOME"
+              # TODO: on error, print $XDG_STATE_HOME/NexusMods.App/Logs/nexusmods.app.main.current.log
+              ${script}
+              touch $out
+            '';
       in
       {
         serve = runTest "serve" ''

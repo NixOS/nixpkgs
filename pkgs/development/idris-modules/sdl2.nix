@@ -1,10 +1,11 @@
-{ build-idris-package
-, fetchFromGitHub
-, effects
-, lib
-, pkg-config
-, SDL2
-, SDL2_gfx
+{
+  build-idris-package,
+  fetchFromGitHub,
+  effects,
+  lib,
+  pkg-config,
+  SDL2,
+  SDL2_gfx,
 }:
 build-idris-package rec {
   pname = "sdl2";

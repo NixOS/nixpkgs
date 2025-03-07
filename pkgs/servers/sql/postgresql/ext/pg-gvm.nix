@@ -14,21 +14,18 @@
 
 buildPostgresqlExtension (finalAttrs: {
   pname = "pg-gvm";
-  version = "22.6.5";
+  version = "22.6.7";
 
   src = fetchFromGitHub {
     owner = "greenbone";
     repo = "pg-gvm";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-19ZmQdLjfwJwOMoO16rKJYKOnRyt7SQOdkYTxt8WQ2A=";
+    hash = "sha256-Sa9ltW3KV/69OCxD3gRcp5owL0oW+z3fs4fRBHbSh30=";
   };
-
-  strictDeps = true;
 
   nativeBuildInputs = [
     cmake
     pkg-config
-    postgresql
   ];
 
   buildInputs = [

@@ -1,6 +1,7 @@
-{ buildGoModule
-, fetchFromGitHub
-, lib
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
 }:
 
 buildGoModule rec {
@@ -16,14 +17,23 @@ buildGoModule rec {
 
   vendorHash = "sha256-v7zSvCp63z+xZIuXbqHueamEBN/jZBr2Kysvq03e8L0=";
 
-  subPackages = [ "cmd/loop" "cmd/loopd" ];
+  subPackages = [
+    "cmd/loop"
+    "cmd/loopd"
+  ];
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   meta = with lib; {
     description = "Lightning Loop Client";
     homepage = "https://github.com/lightninglabs/loop";
     license = licenses.mit;
-    maintainers = with maintainers; [ proofofkeags prusnak ];
+    maintainers = with maintainers; [
+      proofofkeags
+      prusnak
+    ];
   };
 }

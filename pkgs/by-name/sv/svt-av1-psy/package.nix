@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "gianni-rosato";
     repo = "svt-av1-psy";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-qySrYZDwmoKf7oAQJlBSWInXeOceGSeL2Kc09SJ5Zs0=";
   };
 

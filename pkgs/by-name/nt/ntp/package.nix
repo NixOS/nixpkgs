@@ -1,4 +1,13 @@
-{ stdenv, lib, fetchurl, openssl, perl, pps-tools, libcap }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  autoreconfHook,
+  openssl,
+  perl,
+  pps-tools,
+  libcap,
+}:
 
 stdenv.mkDerivation rec {
   pname = "ntp";
@@ -9,6 +18,12 @@ stdenv.mkDerivation rec {
     hash = "sha256-z4TF8/saKVKElCYk2CP/+mNBROCWz8T5lprJjvX0aOU=";
   };
 
+  # fix for gcc-14 compile failure
+  postPatch = ''
+    substituteInPlace sntp/m4/openldap-thread-check.m4 \
+      --replace-fail "pthread_detach(NULL)" "pthread_detach(pthread_self())"
+  '';
+
   configureFlags = [
     "--sysconfdir=/etc"
     "--localstatedir=/var"
@@ -18,8 +33,17 @@ stdenv.mkDerivation rec {
     "--with-yielding-select=yes"
   ] ++ lib.optional stdenv.hostPlatform.isLinux "--enable-linuxcaps";
 
-  buildInputs = [ openssl perl ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ pps-tools libcap ];
+  nativeBuildInputs = [ autoreconfHook ];
+
+  buildInputs =
+    [
+      openssl
+      perl
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      pps-tools
+      libcap
+    ];
 
   hardeningEnable = [ "pie" ];
 

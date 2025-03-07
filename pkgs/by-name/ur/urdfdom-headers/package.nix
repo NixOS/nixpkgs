@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, validatePkgConfig }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  validatePkgConfig,
+}:
 
 stdenv.mkDerivation rec {
   pname = "urdfdom-headers";
@@ -19,7 +26,10 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ cmake validatePkgConfig ];
+  nativeBuildInputs = [
+    cmake
+    validatePkgConfig
+  ];
 
   meta = with lib; {
     description = "URDF (U-Robot Description Format) headers provides core data structure headers for URDF";

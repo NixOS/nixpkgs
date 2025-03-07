@@ -1,37 +1,46 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, meson
-, ninja
-, pkg-config
-, wayland-scanner
-, libGL
-, wayland
-, wayland-protocols
-, libinput
-, libxkbcommon
-, pixman
-, libcap
-, mesa
-, xorg
-, libpng
-, ffmpeg
-, hwdata
-, seatd
-, vulkan-loader
-, glslang
-, libliftoff
-, libdisplay-info
-, lcms2
-, nixosTests
-, testers
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  meson,
+  ninja,
+  pkg-config,
+  wayland-scanner,
+  libGL,
+  wayland,
+  wayland-protocols,
+  libinput,
+  libxkbcommon,
+  pixman,
+  libcap,
+  libgbm,
+  xorg,
+  libpng,
+  ffmpeg,
+  hwdata,
+  seatd,
+  vulkan-loader,
+  glslang,
+  libliftoff,
+  libdisplay-info,
+  lcms2,
+  nixosTests,
+  testers,
 
-, enableXWayland ? true
-, xwayland ? null
+  enableXWayland ? true,
+  xwayland ? null,
 }:
 
 let
-  generic = { version, hash, extraBuildInputs ? [ ], extraNativeBuildInputs ? [ ], patches ? [ ], postPatch ? "" }:
+  generic =
+    {
+      version,
+      hash,
+      extraBuildInputs ? [ ],
+      extraNativeBuildInputs ? [ ],
+      patches ? [ ],
+      postPatch ? "",
+    }:
     stdenv.mkDerivation (finalAttrs: {
       pname = "wlroots";
       inherit version;
@@ -49,38 +58,49 @@ let
       inherit patches postPatch;
 
       # $out for the library and $examples for the example programs (in examples):
-      outputs = [ "out" "examples" ];
+      outputs = [
+        "out"
+        "examples"
+      ];
 
       strictDeps = true;
       depsBuildBuild = [ pkg-config ];
 
-      nativeBuildInputs = [ meson ninja pkg-config wayland-scanner glslang ]
-        ++ extraNativeBuildInputs;
+      nativeBuildInputs = [
+        meson
+        ninja
+        pkg-config
+        wayland-scanner
+        glslang
+        hwdata
+      ] ++ extraNativeBuildInputs;
 
-      buildInputs = [
-        libGL
-        libcap
-        libinput
-        libpng
-        libxkbcommon
-        mesa
-        pixman
-        seatd
-        vulkan-loader
-        wayland
-        wayland-protocols
-        xorg.libX11
-        xorg.xcbutilerrors
-        xorg.xcbutilimage
-        xorg.xcbutilrenderutil
-        xorg.xcbutilwm
-      ]
-      ++ lib.optional finalAttrs.enableXWayland xwayland
-      ++ extraBuildInputs;
+      buildInputs =
+        [
+          ffmpeg
+          libliftoff
+          libdisplay-info
+          libGL
+          libcap
+          libinput
+          libpng
+          libxkbcommon
+          libgbm
+          pixman
+          seatd
+          vulkan-loader
+          wayland
+          wayland-protocols
+          xorg.libX11
+          xorg.xcbutilerrors
+          xorg.xcbutilimage
+          xorg.xcbutilrenderutil
+          xorg.xcbutilwm
+        ]
+        ++ lib.optional finalAttrs.enableXWayland xwayland
+        ++ extraBuildInputs;
 
-      mesonFlags =
-        lib.optional (!finalAttrs.enableXWayland) "-Dxwayland=disabled"
-      ;
+      mesonFlags = lib.optional (!finalAttrs.enableXWayland) "-Dxwayland=disabled";
 
       postFixup = ''
         # Install ALL example programs to $examples:
@@ -112,11 +132,18 @@ let
         changelog = "https://gitlab.freedesktop.org/wlroots/wlroots/-/tags/${version}";
         license = lib.licenses.mit;
         platforms = lib.platforms.linux;
-        maintainers = with lib.maintainers; [ primeos synthetica rewine ];
+        maintainers = with lib.maintainers; [
+          primeos
+          synthetica
+          rewine
+        ];
         pkgConfigModules = [
-          (if lib.versionOlder finalAttrs.version "0.18"
-           then "wlroots"
-           else "wlroots-${lib.versions.majorMinor finalAttrs.version}")
+          (
+            if lib.versionOlder finalAttrs.version "0.18" then
+              "wlroots"
+            else
+              "wlroots-${lib.versions.majorMinor finalAttrs.version}"
+          )
         ];
       };
     });
@@ -126,26 +153,12 @@ rec {
   wlroots_0_17 = generic {
     version = "0.17.4";
     hash = "sha256-AzmXf+HMX/6VAr0LpfHwfmDB9dRrrLQHt7l35K98MVo=";
-    extraNativeBuildInputs = [
-      hwdata
-    ];
-    extraBuildInputs = [
-      ffmpeg
-      libliftoff
-      libdisplay-info
-    ];
   };
 
   wlroots_0_18 = generic {
-    version = "0.18.1";
-    hash = "sha256-BlI3EUoGEHdO6IBh99o/Aadct2dd7Xjc4PG0Sv+flqI=";
-    extraNativeBuildInputs = [
-      hwdata
-    ];
+    version = "0.18.2";
+    hash = "sha256-vKvMWRPPJ4PRKWVjmKKCdNSiqsQm+uQBoBnBUFElLNA=";
     extraBuildInputs = [
-      ffmpeg
-      libliftoff
-      libdisplay-info
       lcms2
     ];
   };

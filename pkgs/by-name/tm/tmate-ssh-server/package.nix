@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, cmake
-, libtool
-, pkg-config
-, zlib
-, openssl
-, libevent
-, ncurses
-, ruby
-, msgpack-c
-, libssh
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  cmake,
+  libtool,
+  pkg-config,
+  zlib,
+  openssl,
+  libevent,
+  ncurses,
+  ruby,
+  msgpack-c,
+  libssh,
+  nixosTests,
 }:
 
 stdenv.mkDerivation {

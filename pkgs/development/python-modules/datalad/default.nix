@@ -51,14 +51,14 @@
 
 buildPythonPackage rec {
   pname = "datalad";
-  version = "1.1.4";
+  version = "1.1.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "datalad";
     repo = "datalad";
-    rev = "refs/tags/${version}";
-    hash = "sha256-l3II9xebSq09He5e4GGGiGtfe6ERtIQD00eHKGx46WA=";
+    tag = version;
+    hash = "sha256-XwzYlSP2MbEb0U3tuVOq3NNqLTS08UzSfSFBidHbpAY=";
   };
 
   postPatch = ''
@@ -228,6 +228,12 @@ buildPythonPackage rec {
     git-annex
     curl
     httpretty
+  ];
+
+  pytestFlagsArray = [
+    # Deprecated in 3.13. Use exc_type_str instead.
+    "-W"
+    "ignore::DeprecationWarning"
   ];
 
   pythonImportsCheck = [ "datalad" ];

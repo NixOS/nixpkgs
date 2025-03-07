@@ -1,23 +1,24 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, fetchpatch
-, pkg-config
-, qmake
-, qttools
-, boost
-, kirigami2
-, kyotocabinet
-, libmicrohttpd
-, libosmscout
-, libpostal
-, marisa
-, osrm-backend
-, protobuf
-, qtquickcontrols2
-, qtlocation
-, sqlite
-, valhalla
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  fetchpatch,
+  pkg-config,
+  qmake,
+  qttools,
+  boost,
+  kirigami2,
+  kyotocabinet,
+  libmicrohttpd,
+  libosmscout,
+  libpostal,
+  marisa,
+  osrm-backend,
+  protobuf,
+  qtquickcontrols2,
+  qtlocation,
+  sqlite,
+  valhalla,
 }:
 
 let
@@ -40,11 +41,26 @@ mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ qmake pkg-config qttools ];
+  nativeBuildInputs = [
+    qmake
+    pkg-config
+    qttools
+  ];
   buildInputs = [
-    kirigami2 qtquickcontrols2 qtlocation
-    valhalla libosmscout osrm-backend libmicrohttpd
-    libpostal sqlite marisa kyotocabinet boost protobuf date
+    kirigami2
+    qtquickcontrols2
+    qtlocation
+    valhalla
+    libosmscout
+    osrm-backend
+    libmicrohttpd
+    libpostal
+    sqlite
+    marisa
+    kyotocabinet
+    boost
+    protobuf
+    date
   ];
 
   qmakeFlags = [

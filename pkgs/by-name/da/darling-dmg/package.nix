@@ -1,5 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, cmake, fuse, zlib, bzip2, openssl, libxml2, icu, lzfse, libiconv
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  fuse,
+  zlib,
+  bzip2,
+  openssl,
+  libxml2,
+  icu,
+  lzfse,
+  libiconv,
+  nixosTests,
 }:
 
 stdenv.mkDerivation {
@@ -14,8 +26,15 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ fuse openssl zlib bzip2 libxml2 icu lzfse ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
+  buildInputs = [
+    fuse
+    openssl
+    zlib
+    bzip2
+    libxml2
+    icu
+    lzfse
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   CXXFLAGS = [
     "-DCOMPILE_WITH_LZFSE=1"

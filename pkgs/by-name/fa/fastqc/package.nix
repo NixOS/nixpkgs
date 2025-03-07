@@ -1,4 +1,5 @@
-{ lib,
+{
+  lib,
   stdenv,
   fetchzip,
   jre,
@@ -8,7 +9,7 @@
   makeDesktopItem,
   copyDesktopItems,
   desktopToDarwinBundle,
-  testers
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -22,19 +23,28 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontBuild = true;
 
-  nativeBuildInputs = [ makeWrapper imagemagick ]
-                      ++ lib.optional stdenv.hostPlatform.isLinux copyDesktopItems # postInstallHook
-                      ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle; #fixupOutputHook
-  buildInputs = [ jre perl];
+  nativeBuildInputs =
+    [
+      makeWrapper
+      imagemagick
+    ]
+    ++ lib.optional stdenv.hostPlatform.isLinux copyDesktopItems # postInstallHook
+    ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle; # fixupOutputHook
+  buildInputs = [
+    jre
+    perl
+  ];
 
-  desktopItem = (makeDesktopItem {
-    name = "FastQC";
-    exec = "fastqc";
-    icon = "fastqc";
-    desktopName = "FastQC";
-    comment = finalAttrs.meta.description;
-    categories = [ "Science" ];
-  });
+  desktopItem = (
+    makeDesktopItem {
+      name = "FastQC";
+      exec = "fastqc";
+      icon = "fastqc";
+      desktopName = "FastQC";
+      comment = finalAttrs.meta.description;
+      categories = [ "Science" ];
+    }
+  );
   desktopItems = [ finalAttrs.desktopItem ];
 
   installPhase = ''
@@ -63,19 +73,22 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "A quality control application for high throughput sequence data";
     longDescription = ''
-    FastQC aims to provide a simple way to do some quality control checks on raw sequence data coming from high throughput sequencing pipelines. It provides a modular set of analyses which you can use to give a quick impression of whether your data has any problems of which you should be aware before doing any further analysis.
+      FastQC aims to provide a simple way to do some quality control checks on raw sequence data coming from high throughput sequencing pipelines. It provides a modular set of analyses which you can use to give a quick impression of whether your data has any problems of which you should be aware before doing any further analysis.
 
-    The main functions of FastQC are
+      The main functions of FastQC are
 
-    - Import of data from BAM, SAM or FastQ files (any variant)
-    - Providing a quick overview to tell you in which areas there may be problems
-    - Summary graphs and tables to quickly assess your data
-    - Export of results to an HTML based permanent report
-    - Offline operation to allow automated generation of reports without running the interactive application
+      - Import of data from BAM, SAM or FastQ files (any variant)
+      - Providing a quick overview to tell you in which areas there may be problems
+      - Summary graphs and tables to quickly assess your data
+      - Export of results to an HTML based permanent report
+      - Offline operation to allow automated generation of reports without running the interactive application
     '';
     homepage = "https://www.bioinformatics.babraham.ac.uk/projects/fastqc/";
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
-    license = with lib.licenses; [ gpl3Plus asl20 ];
+    license = with lib.licenses; [
+      gpl3Plus
+      asl20
+    ];
     maintainers = [ lib.maintainers.dflores ];
     mainProgram = "fastqc";
     platforms = lib.platforms.unix;

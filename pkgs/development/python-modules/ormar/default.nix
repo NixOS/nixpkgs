@@ -27,7 +27,7 @@
 
 buildPythonPackage rec {
   pname = "ormar";
-  version = "0.20.1";
+  version = "0.20.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -35,8 +35,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "collerek";
     repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-DzvmJpWJANIoc5lvWAD0b2bhbKdDEpNL2l3TqXSZSnc=";
+    tag = version;
+    hash = "sha256-jg1qgOJiRBJCRThhq/jaXNmSoL0FmceIOWMKNxtyGJI=";
   };
 
   pythonRelaxDeps = [
@@ -142,7 +142,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Async ORM with fastapi in mind and pydantic validation";
     homepage = "https://github.com/collerek/ormar";
-    changelog = "https://github.com/collerek/ormar/releases/tag/${version}";
+    changelog = "https://github.com/collerek/ormar/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ andreasfelix ];
     broken = true;

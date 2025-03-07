@@ -21,9 +21,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "playpauseandstop";
     repo = "aiohttp-middlewares";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-jUH1XhkytRwR76wUTsGQGu6m8s+SZ/GO114Lz9atwE8=";
   };
+
+  pythonRelaxDeps = [ "async-timeout" ];
 
   postPatch = ''
     sed -i "/addopts/d" pyproject.toml

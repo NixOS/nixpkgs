@@ -1,36 +1,44 @@
-{ lib
-, stdenv
-, buildGoModule
-, fetchFromGitHub
-, pam
-, coreutils
-, installShellFiles
-, scdoc
-, nixosTests
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  pam,
+  coreutils,
+  installShellFiles,
+  scdoc,
+  nixosTests,
 }:
 
 buildGoModule rec {
   pname = "maddy";
-  version = "0.7.1";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "foxcpp";
     repo = "maddy";
     rev = "v${version}";
-    sha256 = "sha256-jVlIjeBvxc82GQn8vW2RqcAErxZqftGj32d+IbBxQxY=";
+    sha256 = "sha256-cR5qRUYQnFfm+ZOwwwNNRo1odq/ntI2QlGmhJBTjaF4=";
   };
 
-  vendorHash = "sha256-bSBk68w6T/Wy5klj5oC/ZW5TqDESG3mW9cIQ3auNmCk=";
+  vendorHash = "sha256-YbXhxcRDTkNDdlCAKtQS2G8fwRIrRGpouIYx+5RG2lY=";
 
   tags = [ "libpam" ];
 
-  ldflags = [ "-s" "-w" "-X github.com/foxcpp/maddy.Version=${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/foxcpp/maddy.Version=${version}"
+  ];
 
   subPackages = [ "cmd/maddy" ];
 
   buildInputs = [ pam ];
 
-  nativeBuildInputs = [ installShellFiles scdoc ];
+  nativeBuildInputs = [
+    installShellFiles
+    scdoc
+  ];
 
   postInstall = ''
     for f in docs/man/*.scd; do

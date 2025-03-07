@@ -1,12 +1,13 @@
-{ mkDerivation
-, lib
-, extra-cmake-modules
-, cmake
-, karchive
-, ki18n
-, kiconthemes
-, kdelibs4support
-, ktexteditor
+{
+  mkDerivation,
+  lib,
+  extra-cmake-modules,
+  cmake,
+  karchive,
+  ki18n,
+  kiconthemes,
+  kdelibs4support,
+  ktexteditor,
 }:
 
 mkDerivation {
@@ -17,9 +18,14 @@ mkDerivation {
     license = [ lib.licenses.gpl2 ];
   };
   nativeBuildInputs = [
-    cmake extra-cmake-modules
+    cmake
+    extra-cmake-modules
   ];
   propagatedBuildInputs = [
-    karchive ki18n kiconthemes kdelibs4support ktexteditor
+    karchive
+    ki18n
+    kiconthemes
+    kdelibs4support
+    ktexteditor
   ];
 }

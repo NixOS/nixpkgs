@@ -1,4 +1,14 @@
-{ lib, stdenv, fetchurl, pkg-config, libpng, libX11, libXext, libXi, libXtst }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  libpng,
+  libX11,
+  libXext,
+  libXi,
+  libXtst,
+}:
 
 stdenv.mkDerivation rec {
   pname = "xautomation";
@@ -9,7 +19,13 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libpng libX11 libXext libXi libXtst ];
+  buildInputs = [
+    libpng
+    libX11
+    libXext
+    libXi
+    libXtst
+  ];
 
   meta = {
     homepage = "https://www.hoopajoo.net/projects/xautomation.html";

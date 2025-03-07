@@ -13,15 +13,15 @@
 
 buildPythonPackage rec {
   pname = "ua-parser";
-  version = "1.0.0";
+  version = "1.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ua-parser";
     repo = "uap-python";
-    rev = "refs/tags/${version}";
+    tag = version;
     fetchSubmodules = true;
-    hash = "sha256-byKtxmuYIsEYyuUmfnbLhfe7EKj0k7QGkK5HewiTiy4=";
+    hash = "sha256-l8EBQq5Hqw/Vx4zvWy2QQ1m7mrAiqYNK2x3yUmJj8Xw=";
   };
 
   build-system = [
@@ -45,7 +45,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "ua_parser" ];
 
   meta = {
-    changelog = "https://github.com/ua-parser/uap-python/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
+    changelog = "https://github.com/ua-parser/uap-python/releases/tag/${version}";
     description = "Python implementation of the UA Parser";
     homepage = "https://github.com/ua-parser/uap-python";
     license = lib.licenses.asl20;

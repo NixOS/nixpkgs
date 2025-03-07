@@ -1,30 +1,36 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   cfg = config.services.collectd;
 
   baseDirLine = ''BaseDir "${cfg.dataDir}"'';
   unvalidated_conf = pkgs.writeText "collectd-unvalidated.conf" cfg.extraConfig;
 
-  conf = if cfg.validateConfig then
-    pkgs.runCommand "collectd.conf" {} ''
-      echo testing ${unvalidated_conf}
-      cp ${unvalidated_conf} collectd.conf
-      # collectd -t fails if BaseDir does not exist.
-      substituteInPlace collectd.conf --replace ${lib.escapeShellArgs [ baseDirLine ]} 'BaseDir "."'
-      ${package}/bin/collectd -t -C collectd.conf
-      cp ${unvalidated_conf} $out
-    '' else unvalidated_conf;
+  conf =
+    if cfg.validateConfig then
+      pkgs.runCommand "collectd.conf" { } ''
+        echo testing ${unvalidated_conf}
+        cp ${unvalidated_conf} collectd.conf
+        # collectd -t fails if BaseDir does not exist.
+        substituteInPlace collectd.conf --replace ${lib.escapeShellArgs [ baseDirLine ]} 'BaseDir "."'
+        ${package}/bin/collectd -t -C collectd.conf
+        cp ${unvalidated_conf} $out
+      ''
+    else
+      unvalidated_conf;
 
-  package =
-    if cfg.buildMinimalPackage
-    then minimalPackage
-    else cfg.package;
+  package = if cfg.buildMinimalPackage then minimalPackage else cfg.package;
 
   minimalPackage = cfg.package.override {
     enabledPlugins = [ "syslog" ] ++ builtins.attrNames cfg.plugins;
   };
 
-in {
+in
+{
   options.services.collectd = with lib.types; {
     enable = lib.mkEnableOption "collectd agent";
 
@@ -73,7 +79,7 @@ in {
     };
 
     include = lib.mkOption {
-      default = [];
+      default = [ ];
       description = ''
         Additional paths to load config from.
       '';
@@ -81,8 +87,12 @@ in {
     };
 
     plugins = lib.mkOption {
-      default = {};
-      example = { cpu = ""; memory = ""; network = "Server 192.168.1.1 25826"; };
+      default = { };
+      example = {
+        cpu = "";
+        memory = "";
+        network = "Server 192.168.1.1 25826";
+      };
       description = ''
         Attribute set of plugin names to plugin config segments
       '';
@@ -113,12 +123,14 @@ in {
         NotifyLevel "OKAY"
       </Plugin>
 
-      ${lib.concatStrings (lib.mapAttrsToList (plugin: pluginConfig: ''
-        LoadPlugin ${plugin}
-        <Plugin "${plugin}">
-        ${pluginConfig}
-        </Plugin>
-      '') cfg.plugins)}
+      ${lib.concatStrings (
+        lib.mapAttrsToList (plugin: pluginConfig: ''
+          LoadPlugin ${plugin}
+          <Plugin "${plugin}">
+          ${pluginConfig}
+          </Plugin>
+        '') cfg.plugins
+      )}
 
       ${lib.concatMapStrings (f: ''
         Include "${f}"
@@ -150,7 +162,7 @@ in {
     };
 
     users.groups = lib.optionalAttrs (cfg.user == "collectd") {
-      collectd = {};
+      collectd = { };
     };
   };
 }

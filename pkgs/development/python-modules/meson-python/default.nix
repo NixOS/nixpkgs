@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "meson-python";
-  version = "0.16.0";
+  version = "0.17.1";
   format = "pyproject";
 
   src = fetchPypi {
     inherit version;
     pname = "meson_python";
-    hash = "sha256-kGjBfjbInWx/9wn/+yqKmSXozQsCYpco5c6vLsUFy18=";
+    hash = "sha256-77kfafLhnu97yaRx7SpOcwCIzGs56srz5J/E+TDrX4M=";
   };
 
   nativeBuildInputs = [

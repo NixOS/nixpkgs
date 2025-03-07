@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
   antlr4_9,
   libargs,
   catch2,
@@ -24,8 +24,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./fix-lib-paths.patch;
+    (replaceVars ./fix-lib-paths.patch {
       antlr4RuntimeCpp = antlr4.runtime.cpp.dev;
       yamlCpp = yaml-cpp;
       inherit libargs catch2;
@@ -38,10 +37,6 @@ stdenv.mkDerivation rec {
     antlr4.runtime.cpp
     yaml-cpp
   ];
-
-  env.NIX_CFLAGS_COMPILE = lib.optionalString (
-    stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64
-  ) "-D_LIBCPP_HAS_NO_LIBRARY_ALIGNED_ALLOCATION=1";
 
   meta = with lib; {
     description = "Code formatter for Lua";

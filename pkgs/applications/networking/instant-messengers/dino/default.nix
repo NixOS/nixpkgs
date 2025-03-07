@@ -25,13 +25,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dino";
-  version = "0.4.4";
+  version = "0.4.5";
 
   src = fetchFromGitHub {
     owner = "dino";
     repo = "dino";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-I0ASeEjdXyxhz52QisU0q8mIBTKMfjaspJbxRIyOhD4=";
+    sha256 = "sha256-lF2cUalCrVD6274Ey8wggEXNvKXydlRjvX+815geL1c=";
   };
 
   postPatch = ''
@@ -125,6 +125,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/dino/dino";
     license = licenses.gpl3Plus;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ qyliss tomfitzhenry ];
+    maintainers = with maintainers; [ qyliss ];
   };
 })

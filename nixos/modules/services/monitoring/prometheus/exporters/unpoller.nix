@@ -1,22 +1,31 @@
-{ config, lib, pkgs, options, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  options,
+  ...
+}:
 
 let
   cfg = config.services.prometheus.exporters.unpoller;
   inherit (lib) mkEnableOption generators;
 
-  configFile = pkgs.writeText "prometheus-unpoller-exporter.json" (generators.toJSON {} {
-    poller = { inherit (cfg.log) debug quiet; };
-    unifi = { inherit (cfg) controllers; };
-    influxdb.disable = true;
-    datadog.disable = true; # workaround for https://github.com/unpoller/unpoller/issues/442
-    prometheus = {
-      http_listen = "${cfg.listenAddress}:${toString cfg.port}";
-      report_errors = cfg.log.prometheusErrors;
-    };
-    inherit (cfg) loki;
-  });
+  configFile = pkgs.writeText "prometheus-unpoller-exporter.json" (
+    generators.toJSON { } {
+      poller = { inherit (cfg.log) debug quiet; };
+      unifi = { inherit (cfg) controllers; };
+      influxdb.disable = true;
+      datadog.disable = true; # workaround for https://github.com/unpoller/unpoller/issues/442
+      prometheus = {
+        http_listen = "${cfg.listenAddress}:${toString cfg.port}";
+        report_errors = cfg.log.prometheusErrors;
+      };
+      inherit (cfg) loki;
+    }
+  );
 
-in {
+in
+{
   port = 9130;
 
   extraOpts = {

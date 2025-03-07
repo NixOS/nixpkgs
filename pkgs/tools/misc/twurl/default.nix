@@ -1,4 +1,8 @@
-{ lib, bundlerApp, bundlerUpdateScript }:
+{
+  lib,
+  bundlerApp,
+  bundlerUpdateScript,
+}:
 
 bundlerApp {
   pname = "twurl";
@@ -9,10 +13,10 @@ bundlerApp {
 
   meta = with lib; {
     description = "OAuth-enabled curl for the Twitter API";
-    homepage    = "https://github.com/twitter/twurl";
-    license     = "MIT";
+    homepage = "https://github.com/twitter/twurl";
+    license = "MIT";
     maintainers = with maintainers; [ brecht ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
     mainProgram = "twurl";
   };
 }

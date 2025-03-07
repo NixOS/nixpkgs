@@ -1,7 +1,13 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.sysstat;
-in {
+in
+{
   options = {
     services.sysstat = {
       enable = lib.mkEnableOption "sar system activity collection";

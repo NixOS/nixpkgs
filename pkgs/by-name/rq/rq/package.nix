@@ -1,4 +1,8 @@
-{ lib, rustPlatform, fetchFromGitHub }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "rq";
@@ -11,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-QyYTbMXikLSe3eYJRUALQJxUJjA6VlvaLMwGrxIKfZI=";
   };
 
-  cargoHash = "sha256-WAgWc9rAQBjrsaHP6s3Djpg3iYmfRVC9J9yq0T/zMqA=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-BwbGiLoygNUua+AAKw/JAAG1kuWLdnP+8o+FFuvbFlM=";
 
   postPatch = ''
     # Remove #[deny(warnings)] which is equivalent to -Werror in C.
@@ -31,6 +36,10 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "rq";
     homepage = "https://github.com/dflemstr/rq";
     license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ aristid Br1ght0ne figsoda ];
+    maintainers = with maintainers; [
+      aristid
+      Br1ght0ne
+      figsoda
+    ];
   };
 }

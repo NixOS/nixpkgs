@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, blas, lapack, mpi } :
+{
+  lib,
+  stdenv,
+  fetchurl,
+  blas,
+  lapack,
+  mpi,
+}:
 
 assert (!blas.isILP64) && (!lapack.isILP64);
 
@@ -20,7 +27,11 @@ stdenv.mkDerivation rec {
     install -D testing/ptest/HPL.dat $out/share/hpl/HPL.dat
   '';
 
-  buildInputs = [ blas lapack mpi ];
+  buildInputs = [
+    blas
+    lapack
+    mpi
+  ];
 
   meta = with lib; {
     description = "Portable Implementation of the Linpack Benchmark for Distributed-Memory Computers";

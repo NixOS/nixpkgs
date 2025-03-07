@@ -1,13 +1,14 @@
-{ lib
-, buildPlatform
-, hostPlatform
-, fetchurl
-, bash
-, tinycc
-, gnumake
-, gnupatch
-, gnused
-, gnugrep
+{
+  lib,
+  buildPlatform,
+  hostPlatform,
+  fetchurl,
+  bash,
+  tinycc,
+  gnumake,
+  gnupatch,
+  gnused,
+  gnugrep,
 }:
 let
   inherit (import ./common.nix { inherit lib; }) meta;
@@ -25,46 +26,49 @@ let
     ./no-stamp.patch
   ];
 in
-bash.runCommand "${pname}-${version}" {
-  inherit pname version meta;
+bash.runCommand "${pname}-${version}"
+  {
+    inherit pname version meta;
 
-  nativeBuildInputs = [
-    tinycc.compiler
-    gnumake
-    gnupatch
-    gnused
-    gnugrep
-  ];
+    nativeBuildInputs = [
+      tinycc.compiler
+      gnumake
+      gnupatch
+      gnused
+      gnugrep
+    ];
 
-  passthru.tests.get-version = result:
-    bash.runCommand "${pname}-get-version-${version}" {} ''
-      ${result}/bin/awk --version
-      mkdir $out
-    '';
-} ''
-  # Unpack
-  ungz --file ${src} --output gawk.tar
-  untar --file gawk.tar
-  rm gawk.tar
-  cd gawk-${version}
+    passthru.tests.get-version =
+      result:
+      bash.runCommand "${pname}-get-version-${version}" { } ''
+        ${result}/bin/awk --version
+        mkdir $out
+      '';
+  }
+  ''
+    # Unpack
+    ungz --file ${src} --output gawk.tar
+    untar --file gawk.tar
+    rm gawk.tar
+    cd gawk-${version}
 
-  # Patch
-  ${lib.concatMapStringsSep "\n" (f: "patch -Np0 -i ${f}") patches}
+    # Patch
+    ${lib.concatMapStringsSep "\n" (f: "patch -Np0 -i ${f}") patches}
 
-  # Configure
-  export CC="tcc -B ${tinycc.libs}/lib"
-  export ac_cv_func_getpgrp_void=yes
-  export ac_cv_func_tzset=yes
-  bash ./configure \
-    --build=${buildPlatform.config} \
-    --host=${hostPlatform.config} \
-    --disable-nls \
-    --prefix=$out
+    # Configure
+    export CC="tcc -B ${tinycc.libs}/lib"
+    export ac_cv_func_getpgrp_void=yes
+    export ac_cv_func_tzset=yes
+    bash ./configure \
+      --build=${buildPlatform.config} \
+      --host=${hostPlatform.config} \
+      --disable-nls \
+      --prefix=$out
 
-  # Build
-  make gawk
+    # Build
+    make gawk
 
-  # Install
-  install -D gawk $out/bin/gawk
-  ln -s gawk $out/bin/awk
-''
+    # Install
+    install -D gawk $out/bin/gawk
+    ln -s gawk $out/bin/awk
+  ''

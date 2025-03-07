@@ -1,9 +1,21 @@
-{ config, lib, options, pkgs, ... }:
+{
+  config,
+  lib,
+  options,
+  pkgs,
+  ...
+}:
 let
-  cfg   = config.services.terraria;
-  opt   = options.services.terraria;
-  worldSizeMap = { small = 1; medium = 2; large = 3; };
-  valFlag = name: val: lib.optionalString (val != null) "-${name} \"${lib.escape ["\\" "\""] (toString val)}\"";
+  cfg = config.services.terraria;
+  opt = options.services.terraria;
+  worldSizeMap = {
+    small = 1;
+    medium = 2;
+    large = 3;
+  };
+  valFlag =
+    name: val:
+    lib.optionalString (val != null) "-${name} \"${lib.escape [ "\\" "\"" ] (toString val)}\"";
   boolFlag = name: val: lib.optionalString val "-${name}";
   flags = [
     (valFlag "port" cfg.port)
@@ -44,8 +56,8 @@ in
   options = {
     services.terraria = {
       enable = lib.mkOption {
-        type        = lib.types.bool;
-        default     = false;
+        type = lib.types.bool;
+        default = false;
         description = ''
           If enabled, starts a Terraria server. The server can be connected to via `tmux -S ''${config.${opt.dataDir}}/terraria.sock attach`
           for administration by users who are a part of the `terraria` group (use `C-b d` shortcut to detach again).
@@ -53,40 +65,40 @@ in
       };
 
       port = lib.mkOption {
-        type        = lib.types.port;
-        default     = 7777;
+        type = lib.types.port;
+        default = 7777;
         description = ''
           Specifies the port to listen on.
         '';
       };
 
       maxPlayers = lib.mkOption {
-        type        = lib.types.ints.u8;
-        default     = 255;
+        type = lib.types.ints.u8;
+        default = 255;
         description = ''
           Sets the max number of players (between 1 and 255).
         '';
       };
 
       password = lib.mkOption {
-        type        = lib.types.nullOr lib.types.str;
-        default     = null;
+        type = lib.types.nullOr lib.types.str;
+        default = null;
         description = ''
           Sets the server password. Leave `null` for no password.
         '';
       };
 
       messageOfTheDay = lib.mkOption {
-        type        = lib.types.nullOr lib.types.str;
-        default     = null;
+        type = lib.types.nullOr lib.types.str;
+        default = null;
         description = ''
           Set the server message of the day text.
         '';
       };
 
       worldPath = lib.mkOption {
-        type        = lib.types.nullOr lib.types.path;
-        default     = null;
+        type = lib.types.nullOr lib.types.path;
+        default = null;
         description = ''
           The path to the world file (`.wld`) which should be loaded.
           If no world exists at this path, one will be created with the size
@@ -95,8 +107,12 @@ in
       };
 
       autoCreatedWorldSize = lib.mkOption {
-        type        = lib.types.enum [ "small" "medium" "large" ];
-        default     = "medium";
+        type = lib.types.enum [
+          "small"
+          "medium"
+          "large"
+        ];
+        default = "medium";
         description = ''
           Specifies the size of the auto-created world if `worldPath` does not
           point to an existing world.
@@ -104,22 +120,22 @@ in
       };
 
       banListPath = lib.mkOption {
-        type        = lib.types.nullOr lib.types.path;
-        default     = null;
+        type = lib.types.nullOr lib.types.path;
+        default = null;
         description = ''
           The path to the ban list.
         '';
       };
 
       secure = lib.mkOption {
-        type        = lib.types.bool;
-        default     = false;
+        type = lib.types.bool;
+        default = false;
         description = "Adds additional cheat protection to the server.";
       };
 
       noUPnP = lib.mkOption {
-        type        = lib.types.bool;
-        default     = false;
+        type = lib.types.bool;
+        default = false;
         description = "Disables automatic Universal Plug and Play.";
       };
 
@@ -130,9 +146,9 @@ in
       };
 
       dataDir = lib.mkOption {
-        type        = lib.types.str;
-        default     = "/var/lib/terraria";
-        example     = "/srv/terraria";
+        type = lib.types.str;
+        default = "/var/lib/terraria";
+        example = "/srv/terraria";
         description = "Path to variable state data directory for terraria.";
       };
     };
@@ -141,10 +157,10 @@ in
   config = lib.mkIf cfg.enable {
     users.users.terraria = {
       description = "Terraria server service user";
-      group       = "terraria";
-      home        = cfg.dataDir;
-      createHome  = true;
-      uid         = config.ids.uids.terraria;
+      group = "terraria";
+      home = cfg.dataDir;
+      createHome = true;
+      uid = config.ids.uids.terraria;
     };
 
     users.groups.terraria = {
@@ -152,16 +168,16 @@ in
     };
 
     systemd.services.terraria = {
-      description   = "Terraria Server Service";
-      wantedBy      = [ "multi-user.target" ];
-      after         = [ "network.target" ];
+      description = "Terraria Server Service";
+      wantedBy = [ "multi-user.target" ];
+      after = [ "network.target" ];
 
       serviceConfig = {
-        User    = "terraria";
+        User = "terraria";
         Group = "terraria";
         Type = "forking";
         GuessMainPID = true;
-        UMask = 007;
+        UMask = 7;
         ExecStart = "${tmuxCmd} new -d ${pkgs.terraria-server}/bin/TerrariaServer ${lib.concatStringsSep " " flags}";
         ExecStop = "${stopScript} $MAINPID";
       };

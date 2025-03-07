@@ -1,20 +1,21 @@
-{ lib
-, stdenv
-, buildDunePackage
-, fetchFromGitHub
-, fetchpatch
-, cmdliner
-, ctypes
-, ctypes-foreign
-, dune-configurator
-, npy
-, ocaml-compiler-libs
-, ppx_custom_printf
-, ppx_expect
-, ppx_sexp_conv
-, sexplib
-, stdio
-, torch
+{
+  lib,
+  stdenv,
+  buildDunePackage,
+  fetchFromGitHub,
+  fetchpatch,
+  cmdliner,
+  ctypes,
+  ctypes-foreign,
+  dune-configurator,
+  npy,
+  ocaml-compiler-libs,
+  ppx_custom_printf,
+  ppx_expect,
+  ppx_sexp_conv,
+  sexplib,
+  stdio,
+  torch,
 }:
 
 buildDunePackage rec {

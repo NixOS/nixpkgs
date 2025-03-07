@@ -1,4 +1,8 @@
-{ lib, stdenv, uhk-agent }:
+{
+  lib,
+  stdenv,
+  uhk-agent,
+}:
 
 stdenv.mkDerivation {
   pname = "uhk-udev-rules";

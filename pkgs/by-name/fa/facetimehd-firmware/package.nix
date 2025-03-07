@@ -1,9 +1,15 @@
-{ lib, stdenvNoCC, fetchurl, cpio, xz, pkgs }:
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  cpio,
+  xz,
+  pkgs,
+}:
 
 let
 
   version = "1.43_5";
-
 
   # Updated according to https://github.com/patjak/bcwc_pcie/pull/81/files
   # and https://github.com/patjak/bcwc_pcie/blob/5a7083bd98b38ef3bd223f7ee531d58f4fb0fe7c/firmware/Makefile#L3-L9
@@ -23,7 +29,6 @@ let
   # The following are from the extract-firmware.sh
   firmwareOffset = "81920"; # Variable: firmw_offsets
   firmwareSize = "603715"; # Variable: firmw_sizes
-
 
   # separated this here as the script will fail without the 'exit 0'
   unpack = pkgs.writeScriptBin "unpack" ''
@@ -46,7 +51,10 @@ stdenvNoCC.mkDerivation {
   dontUnpack = true;
   dontInstall = true;
 
-  buildInputs = [ cpio xz ];
+  buildInputs = [
+    cpio
+    xz
+  ];
 
   buildPhase = ''
     ${unpack}/bin/unpack
@@ -59,8 +67,14 @@ stdenvNoCC.mkDerivation {
     description = "facetimehd firmware";
     homepage = "https://support.apple.com/kb/DL1877";
     license = licenses.unfree;
-    maintainers = with maintainers; [ womfoo grahamc ];
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    maintainers = with maintainers; [
+      womfoo
+      grahamc
+    ];
+    platforms = [
+      "i686-linux"
+      "x86_64-linux"
+    ];
   };
 
 }

@@ -1,12 +1,18 @@
-{ lib, stdenvNoCC, nodejs-slim, fetchzip, testers }:
+{
+  lib,
+  stdenvNoCC,
+  nodejs-slim,
+  fetchzip,
+  testers,
+}:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "twilio-cli";
-  version = "5.22.6";
+  version = "5.22.11";
 
   src = fetchzip {
     url = "https://twilio-cli-prod.s3.amazonaws.com/twilio-v${finalAttrs.version}/twilio-v${finalAttrs.version}.tar.gz";
-    hash = "sha256-2t/KtUoDRgDJtA/kN31hTZN0CWOVyX4/BXYZGTl9CdY=";
+    hash = "sha256-SeSv16lZ2Dmfngkq1TtvzlM3oIJkVPsdnkc1hRuSZU4=";
   };
 
   buildInputs = [ nodejs-slim ];

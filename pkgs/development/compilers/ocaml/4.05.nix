@@ -9,11 +9,15 @@ import ./generic.nix {
 
   patches = [
     # Compatibility with Glibc 2.34
-    { url = "https://github.com/ocaml/ocaml/commit/50c2d1275e537906ea144bd557fde31e0bf16e5f.patch";
-      sha256 = "sha256:0ck9b2dpgg5k2p9ndbgniql24h35pn1bbpxjvk69j715lswzy4mh"; }
+    {
+      url = "https://github.com/ocaml/ocaml/commit/50c2d1275e537906ea144bd557fde31e0bf16e5f.patch";
+      sha256 = "sha256:0ck9b2dpgg5k2p9ndbgniql24h35pn1bbpxjvk69j715lswzy4mh";
+    }
     # Compatibility with Binutils 2.29
-    { url = "https://github.com/ocaml/ocaml/commit/b00000c6679804731692362b0baac27fa3fddfd5.patch";
-      sha256 = "sha256-CuEXGK3EsOevyUrc9TmSZo9DVBwjunQX7mKnDVHFpkY="; }
+    {
+      url = "https://github.com/ocaml/ocaml/commit/b00000c6679804731692362b0baac27fa3fddfd5.patch";
+      sha256 = "sha256-CuEXGK3EsOevyUrc9TmSZo9DVBwjunQX7mKnDVHFpkY=";
+    }
   ];
 
   # Workaround build failure on -fno-common toolchains like upstream

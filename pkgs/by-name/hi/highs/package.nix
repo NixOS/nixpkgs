@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, clang
-, cmake
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  clang,
+  cmake,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "highs";
-  version = "1.8.1";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "ERGO-Code";
     repo = "HiGHS";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-JuUPnsCNImWpkeh0B//7yM1Wix9SpnfApp8cxX9WeYk=";
+    hash = "sha256-VUbYg1NRoRk0IzO6y+NaWnfjOuIYoM8pfPPqJcG7Bbo=";
   };
 
   strictDeps = true;
@@ -26,7 +27,10 @@ stdenv.mkDerivation (finalAttrs: {
     "$out/bin/highs" --version
   '';
 
-  nativeBuildInputs = [ clang cmake ];
+  nativeBuildInputs = [
+    clang
+    cmake
+  ];
 
   enableParallelBuilding = true;
 

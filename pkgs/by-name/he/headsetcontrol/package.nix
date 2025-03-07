@@ -1,9 +1,10 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, hidapi
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  hidapi,
 }:
 
 stdenv.mkDerivation rec {

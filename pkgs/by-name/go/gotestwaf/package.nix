@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "wallarm";
     repo = "gotestwaf";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-bZ8cNREPUgIO7lJg0WBtc9qvkDUnfqtFNi612Ctcxo8=";
   };
 

@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, libX11
-, libXi
-, libXrandr
-, txt2man
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libX11,
+  libXi,
+  libXrandr,
+  txt2man,
 }:
 
 stdenv.mkDerivation rec {

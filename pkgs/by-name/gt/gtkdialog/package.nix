@@ -1,4 +1,11 @@
-{lib, stdenv, fetchurl, fetchpatch, gtk2, pkg-config }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  gtk2,
+  pkg-config,
+}:
 
 stdenv.mkDerivation rec {
   pname = "gtkdialog";

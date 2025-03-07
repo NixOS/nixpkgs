@@ -1,4 +1,13 @@
-{ lib, mkDerivation, fetchFromGitHub, cmake, qttools, wrapQtAppsHook, qtbase, qtsvg }:
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  cmake,
+  qttools,
+  wrapQtAppsHook,
+  qtbase,
+  qtsvg,
+}:
 
 mkDerivation rec {
   pname = "tbe";
@@ -7,7 +16,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "kaa-ching";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     sha256 = "1ag2cp346f9bz9qy6za6q54id44d2ypvkyhvnjha14qzzapwaysj";
   };
 
@@ -18,8 +27,15 @@ mkDerivation rec {
     substituteInPlace i18n/CMakeLists.txt --replace qt5_create_translation qt_add_translation
   '';
 
-  nativeBuildInputs = [ cmake qttools wrapQtAppsHook ];
-  buildInputs = [ qtbase qtsvg ];
+  nativeBuildInputs = [
+    cmake
+    qttools
+    wrapQtAppsHook
+  ];
+  buildInputs = [
+    qtbase
+    qtsvg
+  ];
   strictDeps = true;
 
   installPhase = ''

@@ -1,16 +1,25 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, boost
-, nix
-, pkg-config
-# Whether to build the nix-doc plugin for Nix
-, withPlugin ? false # no longer needed for nix 2.24
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  boost,
+  nix,
+  pkg-config,
+  # Whether to build the nix-doc plugin for Nix
+  withPlugin ? false, # no longer needed for nix 2.24
 }:
 
 let
-  packageFlags = [ "-p" "nix-doc" ] ++ lib.optionals withPlugin [ "-p" "nix-doc-plugin" ];
+  packageFlags =
+    [
+      "-p"
+      "nix-doc"
+    ]
+    ++ lib.optionals withPlugin [
+      "-p"
+      "nix-doc-plugin"
+    ];
 in
 rustPlatform.buildRustPackage rec {
   pname = "nix-doc";
@@ -24,9 +33,15 @@ rustPlatform.buildRustPackage rec {
   };
 
   doCheck = true;
-  buildInputs = lib.optionals withPlugin [ boost nix ];
+  buildInputs = lib.optionals withPlugin [
+    boost
+    nix
+  ];
 
-  nativeBuildInputs = lib.optionals withPlugin [ pkg-config nix ];
+  nativeBuildInputs = lib.optionals withPlugin [
+    pkg-config
+    nix
+  ];
 
   cargoBuildFlags = packageFlags;
   cargoTestFlags = packageFlags;
@@ -42,7 +57,8 @@ rustPlatform.buildRustPackage rec {
     RUSTFLAGS = "-C relro-level=partial";
   };
 
-  cargoHash = "sha256-CHagzXTG9AfrFd3WmHanQ+YddMgmVxSuB8vK98A1Mlw=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-EC+Wps6u1qXpv7ByM3NkRVCKRKCaBtC1o2vK8cKqzyU=";
 
   meta = with lib; {
     description = "Interactive Nix documentation tool";

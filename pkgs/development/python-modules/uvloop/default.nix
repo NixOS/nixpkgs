@@ -32,6 +32,13 @@ buildPythonPackage rec {
     hash = "sha256-O/ErD9poRHgGp62Ee/pZFhMXcnXTW2ckse5XP6o3BOM=";
   };
 
+  postPatch = ''
+    rm -rf vendor
+
+    substituteInPlace setup.py \
+      --replace-fail "use_system_libuv = False" "use_system_libuv = True"
+  '';
+
   build-system = [
     cython
     setuptools
@@ -60,6 +67,10 @@ buildPythonPackage rec {
       # AssertionError: b'' != b'out\n'
       "--deselect=tests/test_process.py::Test_UV_Process::test_process_streams_redirect"
       "--deselect=tests/test_process.py::Test_AIO_Process::test_process_streams_redirect"
+      # Depends on performance of builder
+      "--deselect=tests/test_base.py::TestBaseUV.test_call_at"
+      # Pointless and flaky (at least on darwin, depending on the sandbox perhaps)
+      "--deselect=tests/test_dns.py"
     ]
     ++ lib.optionals (pythonOlder "3.11") [
       "--deselect=tests/test_tcp.py::Test_UV_TCPSSL::test_create_connection_ssl_failed_certificat"

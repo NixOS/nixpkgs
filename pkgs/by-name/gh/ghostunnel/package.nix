@@ -1,19 +1,20 @@
-{ stdenv
-, buildGoModule
-, fetchFromGitHub
-, lib
-, nixosTests
+{
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+  nixosTests,
 }:
 
 buildGoModule rec {
   pname = "ghostunnel";
-  version = "1.8.2";
+  version = "1.8.4";
 
   src = fetchFromGitHub {
     owner = "ghostunnel";
     repo = "ghostunnel";
     rev = "v${version}";
-    hash = "sha256-OWjYa8LOWClAWhZERJ24e6tIaOJZUuOzaYXN04rvv8s=";
+    hash = "sha256-NnRm1HEdfK6WI5ntilLSwdR2B5czG5CIcMFzl2TzEds=";
   };
 
   vendorHash = null;

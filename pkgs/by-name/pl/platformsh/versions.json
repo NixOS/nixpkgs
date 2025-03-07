@@ -1,19 +1,19 @@
 {
-  "version": "5.0.22",
+  "version": "5.0.23",
   "darwin-amd64": {
-    "hash": "sha256-2pMflIUyFWUUe7wXMawIlSqf1S/w7is75yzli26p+LM=",
-    "url": "https://github.com/platformsh/cli/releases/download/5.0.22/platform_5.0.22_darwin_all.tar.gz"
+    "hash": "sha256-u82W5pwJQi0RqhRkQgY9SDahi4HvintFwXG6q+FlBR0=",
+    "url": "https://github.com/platformsh/cli/releases/download/5.0.23/platform_5.0.23_darwin_all.tar.gz"
   },
   "darwin-arm64": {
-    "hash": "sha256-2pMflIUyFWUUe7wXMawIlSqf1S/w7is75yzli26p+LM=",
-    "url": "https://github.com/platformsh/cli/releases/download/5.0.22/platform_5.0.22_darwin_all.tar.gz"
+    "hash": "sha256-u82W5pwJQi0RqhRkQgY9SDahi4HvintFwXG6q+FlBR0=",
+    "url": "https://github.com/platformsh/cli/releases/download/5.0.23/platform_5.0.23_darwin_all.tar.gz"
   },
   "linux-amd64": {
-    "hash": "sha256-j/aInQwN3K3pfXzIkDE6pA/6nc7TSndWZkFFdqlsJW4=",
-    "url": "https://github.com/platformsh/cli/releases/download/5.0.22/platform_5.0.22_linux_amd64.tar.gz"
+    "hash": "sha256-Yve4EeMe9j90MqeelqT6S6NwTc1PL5JlzX4aTjR5XUU=",
+    "url": "https://github.com/platformsh/cli/releases/download/5.0.23/platform_5.0.23_linux_amd64.tar.gz"
   },
   "linux-arm64": {
-    "hash": "sha256-xZ3i7KG/NdoHD6kB3Mtq1jC2BufhcxWXhodD8FQvIpI=",
-    "url": "https://github.com/platformsh/cli/releases/download/5.0.22/platform_5.0.22_linux_arm64.tar.gz"
+    "hash": "sha256-ejeWn98wCSum6SqdW6RlQ7YvF7dzDRw/vftm82uZAio=",
+    "url": "https://github.com/platformsh/cli/releases/download/5.0.23/platform_5.0.23_linux_arm64.tar.gz"
   }
 }

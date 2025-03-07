@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchurl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation rec {
   pname = "cl-launch";
   version = "4.1.4.1";
@@ -9,9 +13,12 @@ stdenv.mkDerivation rec {
   };
 
   preConfigure = ''
-    export makeFlags="$makeFlags PREFIX='$out'"
     mkdir -p "$out/bin"
   '';
+
+  makeFlags = [
+    "PREFIX=${placeholder "out"}"
+  ];
 
   preBuild = ''
     sed -e 's/\t\t@/\t\t/g' -i Makefile

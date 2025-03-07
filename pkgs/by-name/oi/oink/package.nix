@@ -1,6 +1,7 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
@@ -25,6 +26,9 @@ buildGoModule rec {
     homepage = "https://github.com/rlado/oink";
     license = lib.licenses.mit;
     mainProgram = "oink";
-    maintainers = with lib.maintainers; [ jtbx pmw ];
+    maintainers = with lib.maintainers; [
+      jtbx
+      pmw
+    ];
   };
 }

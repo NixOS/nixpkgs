@@ -25,7 +25,7 @@ buildGoModule rec {
     "cmd/rewritepkg"
   ];
 
-  CGO_ENABLED = "0";
+  env.CGO_ENABLED = "0";
 
   vendorHash = "sha256-s4bQLXNFhyAk+UNI1xJXQABjBXtPFXiWvmdttV/6Bm8=";
 

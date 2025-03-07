@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Lash-L";
     repo = "anova_wifi";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-TRiv5ljdVqc4qeX+fSH+aTDf5UyNII8/twlNx3KC6oI=";
   };
 

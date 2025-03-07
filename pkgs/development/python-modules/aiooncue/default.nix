@@ -4,38 +4,42 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "aiooncue";
-  version = "0.3.7";
-  format = "setuptools";
+  version = "0.3.9";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "bdraco";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-TKOpx+twnG9zj7RcwOn53ebT7eyLOFKyxChp9lCdoU8=";
+    repo = "aiooncue";
+    tag = version;
+    hash = "sha256-0Cdt/rUsl4OMLUTSC8WJXEiwzrhyn7JJIcVE/55LlgU=";
   };
 
-  propagatedBuildInputs = [ aiohttp ];
-
-  # Module doesn't have tests
-  doCheck = false;
-
   postPatch = ''
-    substituteInPlace setup.py \
-      --replace '"pytest-runner",' ""
+    substituteInPlace pyproject.toml \
+      --replace '"setuptools>=75.8.0"' ""
   '';
+
+  build-system = [ setuptools ];
+
+  dependencies = [ aiohttp ];
+
+  # Tests are out-dated
+  doCheck = false;
 
   pythonImportsCheck = [ "aiooncue" ];
 
   meta = with lib; {
     description = "Module to interact with the Kohler Oncue API";
     homepage = "https://github.com/bdraco/aiooncue";
-    license = with licenses; [ asl20 ];
+    changelog = "https://github.com/bdraco/aiooncue/releases/tag/${version}";
+    license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };
 }

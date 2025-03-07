@@ -1,28 +1,40 @@
-{ lib
-, _experimental-update-script-combinators
-, curl
-, darwin
-, duktape
-, fetchFromGitHub
-, gi-docgen
-, gitUpdater
-, glib
-, gobject-introspection
-, gsettings-desktop-schemas
-, makeHardcodeGsettingsPatch
-, meson
-, ninja
-, pkg-config
-, stdenv
-, substituteAll
-, vala
+{
+  lib,
+  _experimental-update-script-combinators,
+  curl,
+  darwin,
+  duktape,
+  fetchFromGitHub,
+  gi-docgen,
+  gitUpdater,
+  glib,
+  gobject-introspection,
+  gsettings-desktop-schemas,
+  makeHardcodeGsettingsPatch,
+  meson,
+  ninja,
+  pkg-config,
+  stdenv,
+  replaceVars,
+  vala,
+  buildPackages,
+  withIntrospection ?
+    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
+    && stdenv.hostPlatform.emulatorAvailable buildPackages,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libproxy";
   version = "0.5.9";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs =
+    [
+      "out"
+      "dev"
+    ]
+    ++ lib.optionals withIntrospection [
+      "devdoc"
+    ];
 
   src = fetchFromGitHub {
     owner = "libproxy";
@@ -31,20 +43,20 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-Z70TjLk5zulyYMAK+uMDhpsdvLa6m25pY8jahUA6ASE=";
   };
 
-  patches = [
-  ]
-  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-    # Disable schema presence detection, it would fail because it cannot be autopatched,
-    # and it will be hardcoded by the next patch anyway.
-    ./skip-gsettings-detection.patch
+  patches =
+    [
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+      # Disable schema presence detection, it would fail because it cannot be autopatched,
+      # and it will be hardcoded by the next patch anyway.
+      ./skip-gsettings-detection.patch
 
-    # Hardcode path to Settings schemas for GNOME & related desktops.
-    # Otherwise every app using libproxy would need to be wrapped individually.
-    (substituteAll {
-      src = ./hardcode-gsettings.patch;
-      gds = glib.getSchemaPath gsettings-desktop-schemas;
-    })
-  ];
+      # Hardcode path to Settings schemas for GNOME & related desktops.
+      # Otherwise every app using libproxy would need to be wrapped individually.
+      (replaceVars ./hardcode-gsettings.patch {
+        gds = glib.getSchemaPath gsettings-desktop-schemas;
+      })
+    ];
 
   postPatch = ''
     # Fix running script that will try to install git hooks.
@@ -59,32 +71,45 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "requires_private: 'gobject-2.0'" "requires: 'gobject-2.0'"
   '';
 
-  nativeBuildInputs = [
-    gi-docgen
-    gobject-introspection
-    meson
-    ninja
-    pkg-config
-    vala
-  ];
+  nativeBuildInputs =
+    [
+      meson
+      ninja
+      pkg-config
+    ]
+    ++ lib.optionals withIntrospection [
+      gi-docgen
+      gobject-introspection
+      vala
+    ];
 
-  buildInputs = [
-    curl
-    duktape
-  ] ++ (if stdenv.hostPlatform.isDarwin then (with darwin.apple_sdk.frameworks; [
-    Foundation
-  ]) else [
-    glib
-    gsettings-desktop-schemas
-  ]);
+  buildInputs =
+    [
+      curl
+      duktape
+    ]
+    ++ (
+      if stdenv.hostPlatform.isDarwin then
+        (with darwin.apple_sdk.frameworks; [
+          Foundation
+        ])
+      else
+        [
+          glib
+          gsettings-desktop-schemas
+        ]
+    );
 
-  mesonFlags = [
-    # Prevent installing commit hook.
-    "-Drelease=true"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    "-Dconfig-gnome=false"
-  ];
+  mesonFlags =
+    [
+      # Prevent installing commit hook.
+      "-Drelease=true"
+      (lib.mesonBool "docs" withIntrospection)
+      (lib.mesonBool "introspection" withIntrospection)
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      "-Dconfig-gnome=false"
+    ];
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 
@@ -121,6 +146,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://libproxy.github.io/libproxy/";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux ++ platforms.darwin;
+    badPlatforms = [
+      # Mandatory libpxbackend-1.0 shared library.
+      lib.systems.inspect.platformPatterns.isStatic
+    ];
     mainProgram = "proxy";
   };
 })

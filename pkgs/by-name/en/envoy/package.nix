@@ -4,6 +4,7 @@
   bazel-gazelle,
   buildBazelPackage,
   fetchFromGitHub,
+  applyPatches,
   stdenv,
   cacert,
   cargo,
@@ -18,6 +19,10 @@
   python3,
   linuxHeaders,
   nixosTests,
+  runCommandLocal,
+  gnutar,
+  gnugrep,
+  envoy,
 
   # v8 (upstream default), wavm, wamr, wasmtime, disabled
   wasmRuntime ? "wamr",
@@ -29,32 +34,45 @@ let
     # However, the version string is more useful for end-users.
     # These are contained in a attrset of their own to make it obvious that
     # people should update both.
-    version = "1.32.0";
-    rev = "86dc7ef91ca15fb4957a74bd599397413fc26a24";
-    hash = "sha256-Wcbt62RfaNcTntmPjaAM0cP3LJangm4ht7Q0bzEpu5A=";
+    version = "1.33.0";
+    rev = "b0f43d67aa25c1b03c97186a200cc187f4c22db3";
+    hash = "sha256-zqekRpOlaA2IrwwFUEwASa1uokET98h5sr7EwzWgcbU=";
   };
 
   # these need to be updated for any changes to fetchAttrs
   depsHash =
     {
-      x86_64-linux = "sha256-LkDNPFT7UUCsGPG1dMnwzdIw0lzc5+3JYDoblF5oZVk=";
-      aarch64-linux = "sha256-DkibjmY1YND9Q2aQ41bhNdch0SKM5ghY2mjYSQfV30M=";
+      x86_64-linux = "sha256-4CQkHlXbDpRiqzeyserVf9PpLx3ME7TtZ2H88ggog6U=";
+      aarch64-linux = "sha256-FxkfBWiG0NIInl28w+l4YvaV2VFuCtjn5VBAKvJoxM8=";
     }
     .${stdenv.system} or (throw "unsupported system ${stdenv.system}");
+
 in
 buildBazelPackage rec {
   pname = "envoy";
   inherit (srcVer) version;
   bazel = bazel_6;
-  src = fetchFromGitHub {
-    owner = "envoyproxy";
-    repo = "envoy";
-    inherit (srcVer) hash rev;
 
-    postFetch = ''
-      chmod -R +w $out
-      rm $out/.bazelversion
-      echo ${srcVer.rev} > $out/SOURCE_VERSION
+  src = applyPatches {
+    src = fetchFromGitHub {
+      owner = "envoyproxy";
+      repo = "envoy";
+      inherit (srcVer) hash rev;
+    };
+    patches = [
+      # use system Python, not bazel-fetched binary Python
+      ./0001-nixpkgs-use-system-Python.patch
+
+      # use system Go, not bazel-fetched binary Go
+      ./0002-nixpkgs-use-system-Go.patch
+
+      # use system C/C++ tools
+      ./0003-nixpkgs-use-system-C-C-toolchains.patch
+    ];
+    postPatch = ''
+      chmod -R +w .
+      rm ./.bazelversion
+      echo ${srcVer.rev} > ./SOURCE_VERSION
     '';
   };
 
@@ -79,17 +97,6 @@ buildBazelPackage rec {
     cat bazel/nix/rules_rust_extra.patch bazel/rules_rust.patch > bazel/nix/rules_rust.patch
     mv bazel/nix/rules_rust.patch bazel/rules_rust.patch
   '';
-
-  patches = [
-    # use system Python, not bazel-fetched binary Python
-    ./0001-nixpkgs-use-system-Python.patch
-
-    # use system Go, not bazel-fetched binary Go
-    ./0002-nixpkgs-use-system-Go.patch
-
-    # use system C/C++ tools
-    ./0003-nixpkgs-use-system-C-C-toolchains.patch
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -128,7 +135,9 @@ buildBazelPackage rec {
         -e 's,${stdenv.shellPackage},__NIXSHELL__,' \
         $bazelOut/external/com_github_luajit_luajit/build.py \
         $bazelOut/external/local_config_sh/BUILD \
-        $bazelOut/external/*_pip3/BUILD.bazel
+        $bazelOut/external/*_pip3/BUILD.bazel \
+        $bazelOut/external/rules_rust/util/process_wrapper/private/process_wrapper.sh \
+        $bazelOut/external/rules_rust/crate_universe/src/metadata/cargo_tree_rustc_wrapper.sh
 
       rm -r $bazelOut/external/go_sdk
       rm -r $bazelOut/external/local_jdk
@@ -194,6 +203,8 @@ buildBazelPackage rec {
       "--noexperimental_strict_action_env"
       "--cxxopt=-Wno-error"
       "--linkopt=-Wl,-z,noexecstack"
+      "--config=gcc"
+      "--verbose_failures"
 
       # Force use of system Java.
       "--extra_toolchains=@local_jdk//:all"
@@ -237,6 +248,38 @@ buildBazelPackage rec {
     envoy = nixosTests.envoy;
     # tested as a core component of Pomerium
     pomerium = nixosTests.pomerium;
+
+    deps-store-free =
+      runCommandLocal "${envoy.name}-deps-store-free-test"
+        {
+          nativeBuildInputs = [
+            gnutar
+            gnugrep
+          ];
+        }
+        ''
+          touch $out
+          tar -xf ${envoy.deps}
+          grep -r /nix/store external && status=$? || status=$?
+          case $status in
+            1)
+              echo "No match found."
+              ;;
+            0)
+              echo
+              echo "Error: Found references to /nix/store in envoy.deps derivation"
+              echo "This is a reproducibility issue, as the hash of the fixed-output derivation"
+              echo "will change in case the store path of the input changes."
+              echo
+              echo "Replace the store path in fetcherAttrs.preInstall."
+              exit 1
+              ;;
+            *)
+              echo "An unexpected error occurred."
+              exit $status
+              ;;
+          esac
+        '';
   };
 
   meta = with lib; {

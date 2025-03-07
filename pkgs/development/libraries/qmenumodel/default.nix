@@ -1,18 +1,19 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, gitUpdater
-, testers
-, cmake
-, cmake-extras
-, dbus
-, dbus-test-runner
-, glib
-, pkg-config
-, python3
-, qtbase
-, qtdeclarative
-, gobject-introspection
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  gitUpdater,
+  testers,
+  cmake,
+  cmake-extras,
+  dbus,
+  dbus-test-runner,
+  glib,
+  pkg-config,
+  python3,
+  qtbase,
+  qtdeclarative,
+  gobject-introspection,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -26,18 +27,23 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-zbKAfq9R5fD2IqVYOAhy903QX1TDom9m6Ib2qpkFMak=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
-  postPatch = ''
-    substituteInPlace libqmenumodel/src/qmenumodel.pc.in \
-      --replace "\''${exec_prefix}/@CMAKE_INSTALL_LIBDIR@" "\''${prefix}/lib" \
-      --replace "\''${prefix}/@CMAKE_INSTALL_INCLUDEDIR@" "\''${prefix}/include"
+  postPatch =
+    ''
+      substituteInPlace libqmenumodel/src/qmenumodel.pc.in \
+        --replace "\''${exec_prefix}/@CMAKE_INSTALL_LIBDIR@" "\''${prefix}/lib" \
+        --replace "\''${prefix}/@CMAKE_INSTALL_INCLUDEDIR@" "\''${prefix}/include"
 
-    substituteInPlace libqmenumodel/QMenuModel/CMakeLists.txt \
-      --replace "\''${CMAKE_INSTALL_LIBDIR}/qt5/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
-  '' + lib.optionalString finalAttrs.finalPackage.doCheck ''
-    patchShebangs tests/{client,script}/*.py
-  '';
+      substituteInPlace libqmenumodel/QMenuModel/CMakeLists.txt \
+        --replace "\''${CMAKE_INSTALL_LIBDIR}/qt5/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
+    ''
+    + lib.optionalString finalAttrs.finalPackage.doCheck ''
+      patchShebangs tests/{client,script}/*.py
+    '';
 
   strictDeps = true;
 
@@ -57,10 +63,12 @@ stdenv.mkDerivation (finalAttrs: {
     dbus
     dbus-test-runner
     gobject-introspection
-    (python3.withPackages (ps: with ps; [
-      dbus-python
-      pygobject3
-    ]))
+    (python3.withPackages (
+      ps: with ps; [
+        dbus-python
+        pygobject3
+      ]
+    ))
   ];
 
   dontWrapQtApps = true;

@@ -1,19 +1,26 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "ots";
-  version = "0.2.0";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "sniptt-official";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-Oxs2ytf0rY9QYzVaLUkqyX15oWjas3ukSkq9D1TYbDE=";
+    hash = "sha256-GOCuH9yiVs3N3sHCCoSGaQkaaJs4NY/klNBRWjZGLE4=";
   };
 
-  vendorHash = "sha256-qYk8T0sYIO0wJ0R0j+0VetCy11w8usIRRdBm/Z6grJE=";
+  vendorHash = "sha256-fLElExANWdPCCqpCAofqp0kba/FsQEHEhlxOFaC/kZw=";
 
-  ldflags = [ "-X main.version=${version}" "-X main.buildSource=nix" ];
+  ldflags = [
+    "-X main.version=${version}"
+    "-X main.buildSource=nix"
+  ];
 
   meta = with lib; {
     description = "Share end-to-end encrypted secrets with others via a one-time URL";

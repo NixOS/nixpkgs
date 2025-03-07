@@ -1,6 +1,16 @@
-{ lib, stdenv, fetchFromGitHub
-, cmake, makeWrapper
-, alsa-lib, fontconfig, mesa_glu, libXcursor, libXinerama, libXrandr, xorg
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  makeWrapper,
+  alsa-lib,
+  fontconfig,
+  mesa_glu,
+  libXcursor,
+  libXinerama,
+  libXrandr,
+  xorg,
 }:
 
 stdenv.mkDerivation rec {
@@ -14,10 +24,20 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-hwK3C+p1hRwnuY2/vBrA0QsJGIcJatqq+U5/hzVCXEg=";
   };
 
-  nativeBuildInputs = [ cmake makeWrapper ];
+  nativeBuildInputs = [
+    cmake
+    makeWrapper
+  ];
   buildInputs = [
-    alsa-lib fontconfig mesa_glu
-    libXcursor libXinerama libXrandr xorg.xinput xorg.libXi xorg.libXext
+    alsa-lib
+    fontconfig
+    mesa_glu
+    libXcursor
+    libXinerama
+    libXrandr
+    xorg.xinput
+    xorg.libXi
+    xorg.libXext
   ];
 
   postFixup = ''
@@ -29,7 +49,10 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/gargaj/bonzomatic";
     license = licenses.unlicense;
     maintainers = [ maintainers.ilian ];
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    platforms = [
+      "i686-linux"
+      "x86_64-linux"
+    ];
     mainProgram = "bonzomatic";
   };
 }

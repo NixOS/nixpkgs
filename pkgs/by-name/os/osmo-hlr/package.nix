@@ -1,32 +1,28 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, libosmocore
-, libosmoabis
-, sqlite
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  libosmocore,
+  libosmoabis,
+  sqlite,
 }:
-
-let
-  inherit (stdenv.hostPlatform) isLinux;
-in
 
 stdenv.mkDerivation rec {
   pname = "osmo-hlr";
-  version = "1.8.0";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "osmocom";
     repo = "osmo-hlr";
     rev = version;
-    hash = "sha256-c8dnDXZ5K8hjHWq/AjsPFJlamuuasz7mQS5iIBjWCG0=";
+    hash = "sha256-W9j/p7rQDF2/9L02fEeu85pV4lUrHT3xI7jUB2WkpKg=";
   };
 
   postPatch = ''
     echo "${version}" > .tarball-version
   '';
-
 
   nativeBuildInputs = [
     autoreconfHook
@@ -45,7 +41,7 @@ stdenv.mkDerivation rec {
     description = "Osmocom implementation of 3GPP Home Location Registr (HLR)";
     homepage = "https://osmocom.org/projects/osmo-hlr";
     license = lib.licenses.agpl3Plus;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.markuskowa ];
     platforms = lib.platforms.linux;
     mainProgram = "osmo-hlr";
   };

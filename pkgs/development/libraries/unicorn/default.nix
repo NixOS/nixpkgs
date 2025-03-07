@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "unicorn-engine";
     repo = "unicorn";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-ZlQ2WVTToT0OMxK6brsHnchxDwAR5n1wdtZtkTTgWV4=";
   };
 

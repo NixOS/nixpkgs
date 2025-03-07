@@ -1,5 +1,6 @@
 {
-  lib, stdenv,
+  lib,
+  stdenv,
   cmake,
   fetchFromGitHub,
   fetchpatch,
@@ -51,9 +52,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     # See https://github.com/asmaloney/libE57Format/blob/9372bdea8db2cc0c032a08f6d655a53833d484b8/test/README.md
-    (if finalAttrs.finalPackage.doCheck
-      then "-DE57_TEST_DATA_PATH=${finalAttrs.libE57Format-test-data_src}"
-      else "-DE57_BUILD_TEST=OFF"
+    (
+      if finalAttrs.finalPackage.doCheck then
+        "-DE57_TEST_DATA_PATH=${finalAttrs.libE57Format-test-data_src}"
+      else
+        "-DE57_BUILD_TEST=OFF"
     )
   ];
 
@@ -84,7 +87,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Library for reading & writing the E57 file format";
     homepage = "https://github.com/asmaloney/libE57Format";
     license = licenses.boost;
-    maintainers = with maintainers; [ chpatrick nh2 ];
+    maintainers = with maintainers; [
+      chpatrick
+      nh2
+    ];
     platforms = platforms.linux; # because of the .so buiding in `postInstall` above
   };
 })

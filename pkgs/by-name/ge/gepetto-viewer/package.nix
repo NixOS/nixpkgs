@@ -20,13 +20,13 @@
 let
   gepetto-viewer = stdenv.mkDerivation (finalAttrs: {
     pname = "gepetto-viewer";
-    version = "5.2.0";
+    version = "6.0.0";
 
     src = fetchFromGitHub {
       owner = "gepetto";
       repo = "gepetto-viewer";
       rev = "v${finalAttrs.version}";
-      hash = "sha256-kAQPi7bO48H0CZKz1bxfkvMiNy8RsXvRvpDK0KF7XLM=";
+      hash = "sha256-nbA+JNogtlktkByUD2Urx3kJpe/8jgIjO59XXOAPpNs=";
     };
 
     cmakeFlags = [

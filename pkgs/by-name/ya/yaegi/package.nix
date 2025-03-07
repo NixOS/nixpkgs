@@ -1,8 +1,9 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, testers
-, yaegi
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  testers,
+  yaegi,
 }:
 
 buildGoModule rec {

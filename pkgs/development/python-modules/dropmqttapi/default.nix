@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ChandlerSystems";
     repo = "dropmqttapi";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-njReF9Mu5E9o5WcbK60CCBWaIhZ3tpQHHlY/iEyyHGg=";
   };
 

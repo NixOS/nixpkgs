@@ -1,29 +1,31 @@
-{ lib
-, fetchFromGitHub
-, buildDartApplication
+{
+  lib,
+  fetchFromGitHub,
+  buildDartApplication,
 }:
 
 buildDartApplication rec {
   pname = "protoc-gen-dart";
-  version = "3.1.0";
+  version = "21.1.2";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "protobuf.dart";
-    rev = "protobuf-v${version}";
-    sha256 = "sha256-2QnLS6GHhDHMCnAY+2c1wMyPY3EKtlijWHQC+9AVt0k=";
+    tag = "protoc_plugin-v${version}";
+    hash = "sha256-luptbRgOtOBapWmyIJ35GqOClpcmDuKSPu3QoDfp2FU=";
   };
+
   sourceRoot = "${src.name}/protoc_plugin";
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     description = "Protobuf plugin for generating Dart code";
     mainProgram = "protoc-gen-dart";
     homepage = "https://pub.dev/packages/protoc_plugin";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ lelgenio ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ lelgenio ];
   };
 }

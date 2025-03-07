@@ -16,6 +16,9 @@
   gpm,
   libarchive,
   nix-update-script,
+  cargo,
+  rustPlatform,
+  rustc,
 }:
 
 stdenv.mkDerivation rec {
@@ -40,17 +43,30 @@ stdenv.mkDerivation rec {
     zlib
     curl.dev
     re2c
+    cargo
+    rustPlatform.cargoSetupHook
+    rustc
   ];
-  buildInputs = [
-    bzip2
-    ncurses
-    pcre2
-    readline
-    sqlite
-    curl
-    gpm
-    libarchive
-  ];
+  buildInputs =
+    [
+      bzip2
+      ncurses
+      pcre2
+      readline
+      sqlite
+      curl
+      libarchive
+    ]
+    ++ lib.optionals (!stdenv.isDarwin) [
+      gpm
+    ];
+
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    src = "${src}/src/third-party/prqlc-c";
+    hash = "sha256-jfmr6EuNW2mEHTEVHn6YnBDMzKxKI097vEFHXC4NT2Y=";
+  };
+
+  cargoRoot = "src/third-party/prqlc-c";
 
   preConfigure = ''
     ./autogen.sh
@@ -75,6 +91,7 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [
       dochang
       symphorien
+      pcasaretto
     ];
     platforms = platforms.unix;
     mainProgram = "lnav";

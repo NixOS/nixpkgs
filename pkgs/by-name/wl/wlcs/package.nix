@@ -1,14 +1,16 @@
-{ stdenv
-, lib
-, gitUpdater
-, fetchFromGitHub
-, testers
-, cmake
-, pkg-config
-, boost
-, gtest
-, wayland
-, wayland-scanner
+{
+  stdenv,
+  lib,
+  gitUpdater,
+  fetchFromGitHub,
+  fetchpatch,
+  testers,
+  cmake,
+  pkg-config,
+  boost,
+  gtest,
+  wayland,
+  wayland-scanner,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -21,6 +23,15 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     hash = "sha256-BQPRymkbGu4YvTYXTaTMuyP5fHpqMWI4xPwjDRHZNEQ=";
   };
+
+  patches = [
+    # Remove when version > 1.7.0
+    (fetchpatch {
+      name = "0001-wlcs-Fix-GCC14-compat.patch";
+      url = "https://github.com/canonical/wlcs/commit/5c812e560052e2cbff4c6d26439935020ddee52f.patch";
+      hash = "sha256-8YrVKhgpTYZi8n4dZ4pRWJoAcZtr9eaFMv0NNV7/kWU=";
+    })
+  ];
 
   strictDeps = true;
 
@@ -36,6 +47,9 @@ stdenv.mkDerivation (finalAttrs: {
     wayland
     wayland-scanner # needed by cmake
   ];
+
+  # GCC14-exclusive maybe-uninitialized error at higher optimisation levels that looks weird
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU "-Wno-error=maybe-uninitialized";
 
   passthru = {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;

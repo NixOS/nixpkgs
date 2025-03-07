@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, libpcap
-, yascreen
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libpcap,
+  yascreen,
 }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "bbonev";
     repo = "bpfmon";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-+W+3RLvgXXtUImzLkJr9mSWExvAUgjMp+lR9sg14VaY=";
   };
 

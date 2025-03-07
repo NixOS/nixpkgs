@@ -1,13 +1,15 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, makeWrapper
-, substituteAll
-, perlPackages
-# Flags to enable processors
-# Currently, Markdown.pl does not work
-, usePandoc ? true
-, pandoc }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  makeWrapper,
+  replaceVars,
+  perlPackages,
+  # Flags to enable processors
+  # Currently, Markdown.pl does not work
+  usePandoc ? true,
+  pandoc,
+}:
 
 let
   inherit (perlPackages) TextMarkdown;
@@ -16,7 +18,8 @@ let
   markdownpl_path = "${perlPackages.TextMarkdown}/bin/Markdown.pl";
   pandoc_path = "${pandoc}/bin/pandoc";
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "bashblog";
   version = "unstable-2022-03-26";
 
@@ -29,12 +32,10 @@ in stdenv.mkDerivation {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  buildInputs = [ TextMarkdown ]
-    ++ lib.optionals usePandoc [ pandoc ];
+  buildInputs = [ TextMarkdown ] ++ lib.optionals usePandoc [ pandoc ];
 
   patches = [
-    (substituteAll {
-      src = ./0001-Setting-markdown_bin.patch;
+    (replaceVars ./0001-Setting-markdown_bin.patch {
       markdown_path = if usePandoc then pandoc_path else markdownpl_path;
     })
   ];

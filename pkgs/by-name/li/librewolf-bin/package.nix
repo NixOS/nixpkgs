@@ -6,11 +6,11 @@
 
 let
   pname = "librewolf-bin";
-  upstreamVersion = "131.0.2-1";
+  upstreamVersion = "135.0-1";
   version = lib.replaceStrings [ "-" ] [ "." ] upstreamVersion;
   src = fetchurl {
     url = "https://gitlab.com/api/v4/projects/24386000/packages/generic/librewolf/${upstreamVersion}/LibreWolf.x86_64.AppImage";
-    hash = "sha256-Sj3WkY3t8UHsh2v3xPaDb0IGp66YQIw9MKmmFFQCGvk=";
+    hash = "sha256-Qg4hc3bpJh3NFMUlq65K1fVtp6Slgtk2OjvcELp4aH8=";
   };
   appimageContents = appimageTools.extract { inherit pname version src; };
 in
@@ -27,7 +27,7 @@ appimageTools.wrapType2 {
     description = "Fork of Firefox, focused on privacy, security and freedom (upstream AppImage release)";
     homepage = "https://librewolf.net";
     license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ dwrege ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "librewolf";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];

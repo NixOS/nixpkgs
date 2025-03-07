@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, blas, lapack } :
+{
+  lib,
+  stdenv,
+  fetchurl,
+  blas,
+  lapack,
+}:
 
 stdenv.mkDerivation rec {
   pname = "ergoscf";
@@ -9,7 +15,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-U0NVREEZ8HI0Q0ZcbwvZsYA76PWMh7bqgDG1uaUc01c=";
   };
 
-  buildInputs = [ blas lapack ];
+  buildInputs = [
+    blas
+    lapack
+  ];
 
   patches = [ ./math-constants.patch ];
 
@@ -22,7 +31,11 @@ stdenv.mkDerivation rec {
     "--enable-performance"
   ] ++ lib.optional stdenv.hostPlatform.isx86_64 "--enable-sse-intrinsics";
 
-  LDFLAGS = "-lblas -llapack";
+  env = {
+    # Required for compilation with gcc-14
+    NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
+    LDFLAGS = "-lblas -llapack";
+  };
 
   enableParallelBuilding = true;
 

@@ -4,7 +4,7 @@
   lib,
 }:
 let
-  version = "0.3.0";
+  version = "0.4.1";
 in
 buildGoModule {
   pname = "wush";
@@ -14,16 +14,16 @@ buildGoModule {
     owner = "coder";
     repo = "wush";
     rev = "v${version}";
-    hash = "sha256-2mFe1p15HRyy86pw5LoBtiW9lKrw/N9V81/jkiT4jo4=";
+    hash = "sha256-K83peIfr1+OHuuq6gdgco0RhfF1tAAewb4pxNT6vV+w=";
   };
 
-  vendorHash = "sha256-Po1DDKP9ekScRDGMjCXZr9HUUwFenQx3bzIZrNI+ctY=";
+  vendorHash = "sha256-3/DDtqVj7NNoJlNmKC+Q+XGS182E9OYkKMZ/2viANNQ=";
 
   ldflags = [
     "-s -w -X main.version=${version}"
   ];
 
-  CGO_ENABLED = 0;
+  env.CGO_ENABLED = 0;
 
   meta = with lib; {
     homepage = "https://github.com/coder/wush";

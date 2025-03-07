@@ -1,11 +1,12 @@
-{ lib
-, fetchurl
-, buildDunePackage
-, angstrom
-, ptime
-, seq
-, timedesc-tzdb
-, timedesc-tzlocal
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+  angstrom,
+  ptime,
+  seq,
+  timedesc-tzdb,
+  timedesc-tzlocal,
 }:
 
 buildDunePackage rec {

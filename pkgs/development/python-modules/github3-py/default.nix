@@ -1,12 +1,12 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   requests,
   uritemplate,
   python-dateutil,
   pyjwt,
+  pytest-xdist,
   pytestCheckHook,
   betamax,
   betamax-matchers,
@@ -15,31 +15,15 @@
 }:
 
 buildPythonPackage rec {
-  pname = "github3.py";
+  pname = "github3-py";
   version = "4.0.1";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.6";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "github3.py";
+    inherit version;
     hash = "sha256-MNVxB2dT78OJ7cf5qu8zik/LJLVNiWjV85sTQvRd3TY=";
   };
-
-  nativeBuildInputs = [ hatchling ];
-
-  propagatedBuildInputs = [
-    pyjwt
-    python-dateutil
-    requests
-    uritemplate
-  ] ++ pyjwt.optional-dependencies.crypto;
-
-  nativeCheckInputs = [
-    pytestCheckHook
-    betamax
-    betamax-matchers
-  ];
 
   patches = [
     (fetchpatch {
@@ -49,20 +33,29 @@ buildPythonPackage rec {
     })
   ];
 
-  # Solves "__main__.py: error: unrecognized arguments: -nauto"
-  preCheck = ''
-    rm tox.ini
-  '';
+  build-system = [ hatchling ];
 
-  disabledTests = [
-    # FileNotFoundError: [Errno 2] No such file or directory: 'tests/id_rsa.pub'
-    "test_delete_key"
+  dependencies = [
+    pyjwt
+    python-dateutil
+    requests
+    uritemplate
+  ] ++ pyjwt.optional-dependencies.crypto;
+
+  pythonImportsCheck = [ "github3" ];
+
+  nativeCheckInputs = [
+    pytest-xdist
+    pytestCheckHook
+    betamax
+    betamax-matchers
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github3py.readthedocs.org/en/master/";
     description = "Wrapper for the GitHub API written in python";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ pSub ];
+    changelog = "https://github.com/sigmavirus24/github3.py/blob/${version}/docs/source/release-notes/${version}.rst";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ pSub ];
   };
 }

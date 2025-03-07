@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, extra-cmake-modules
-, glfw3
-, libX11
-, libXau
-, libXdmcp
-, libepoxy
-, libffi
-, libxcb
-, pkg-config
-, wayland
-, wayland-scanner
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  extra-cmake-modules,
+  glfw3,
+  libX11,
+  libXau,
+  libXdmcp,
+  libepoxy,
+  libffi,
+  libxcb,
+  pkg-config,
+  wayland,
+  wayland-scanner,
 }:
 
 stdenv.mkDerivation {
@@ -51,7 +52,7 @@ stdenv.mkDerivation {
     homepage = "https://github.com/atx/wlay";
     description = "Graphical output management for Wayland";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     inherit (wayland.meta) platforms;
     mainProgram = "wlay";
   };

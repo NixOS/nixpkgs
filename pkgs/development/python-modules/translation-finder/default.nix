@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   setuptools,
   charset-normalizer,
   ruamel-yaml,
@@ -11,16 +11,16 @@
 
 buildPythonPackage rec {
   pname = "translation-finder";
-  version = "2.16";
+  version = "2.19";
 
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-a1C+j4Zo0DJ9BWDn5Zsu4zAftcUixfPktAWdqiFJpiU=";
+  src = fetchFromGitHub {
+    owner = "WeblateOrg";
+    repo = "translation-finder";
+    tag = version;
+    hash = "sha256-Hc1KxmzlFqCLHSAgFF8cgxH0dTdUnBV/2T2ZkfzVvSw=";
   };
-
-  patches = [ ./fix_tests.patch ];
 
   build-system = [ setuptools ];
 

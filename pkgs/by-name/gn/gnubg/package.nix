@@ -1,5 +1,15 @@
-{ lib, stdenv, fetchurl, pkg-config, glib, python3, gtk2, readline,
-  copyDesktopItems, makeDesktopItem }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  glib,
+  python3,
+  gtk2,
+  readline,
+  copyDesktopItems,
+  makeDesktopItem,
+}:
 
 stdenv.mkDerivation rec {
   pname = "gnubg";
@@ -10,13 +20,24 @@ stdenv.mkDerivation rec {
     hash = "sha256-cjmXKUGcrZ8RLDBmoS0AANpFCkVq3XsJTYkVUGnWgh4=";
   };
 
-  nativeBuildInputs = [ copyDesktopItems pkg-config python3 glib ];
+  nativeBuildInputs = [
+    copyDesktopItems
+    pkg-config
+    python3
+    glib
+  ];
 
-  buildInputs = [ gtk2 readline ];
+  buildInputs = [
+    gtk2
+    readline
+  ];
 
   strictDeps = true;
 
-  configureFlags = [ "--with-gtk" "--with--board3d" ];
+  configureFlags = [
+    "--with-gtk"
+    "--with--board3d"
+  ];
 
   desktopItems = [
     (makeDesktopItem {
@@ -26,15 +47,19 @@ stdenv.mkDerivation rec {
       comment = meta.description;
       exec = pname;
       icon = pname;
-      categories = [ "Game" "GTK" "StrategyGame" ];
+      categories = [
+        "Game"
+        "GTK"
+        "StrategyGame"
+      ];
     })
   ];
 
-  meta = with lib;
-    { description = "World class backgammon application";
-      homepage = "https://www.gnu.org/software/gnubg/";
-      license = licenses.gpl3;
-      maintainers = [ maintainers.ehmry ];
-      platforms = platforms.linux;
-    };
+  meta = with lib; {
+    description = "World class backgammon application";
+    homepage = "https://www.gnu.org/software/gnubg/";
+    license = licenses.gpl3;
+    maintainers = [ maintainers.ehmry ];
+    platforms = platforms.linux;
+  };
 }

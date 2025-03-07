@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, autoreconfHook
-, cg3
-, fetchFromGitHub
-, fetchpatch
-, hfst
-, hfst-ospell
-, icu
-, libvoikko
-, makeWrapper
-, pkg-config
-, python3
-, zip
+{
+  lib,
+  stdenv,
+  autoreconfHook,
+  cg3,
+  fetchFromGitHub,
+  fetchpatch,
+  hfst,
+  hfst-ospell,
+  icu,
+  libvoikko,
+  makeWrapper,
+  pkg-config,
+  python3,
+  zip,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -21,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "flammie";
     repo = "omorfi";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-UoqdwNWCNOPX6u1YBlnXUcB/fmcvcy/HXbYciVrMBOY=";
   };
 

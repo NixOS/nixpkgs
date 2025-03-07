@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitea,
   xorg,
-  installShellFiles
+  installShellFiles,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -18,7 +18,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-rYmbbdZjeLCvGvNocI3+KVU2KBkYvRisayTyScTRay8=";
   };
 
-  buildInputs = [ xorg.libX11 xorg.libXcursor ];
+  buildInputs = [
+    xorg.libX11
+    xorg.libXcursor
+  ];
   nativeBuildInputs = [ installShellFiles ];
 
   buildPhase = ''
@@ -27,7 +30,10 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postBuild
   '';
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   installPhase = ''
     runHook preInstall

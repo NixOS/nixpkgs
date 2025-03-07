@@ -1,4 +1,10 @@
-{ lib, fetchFromGitHub, crystal, makeWrapper, nix-prefetch-git }:
+{
+  lib,
+  fetchFromGitHub,
+  crystal,
+  makeWrapper,
+  nix-prefetch-git,
+}:
 
 crystal.buildCrystalPackage rec {
   pname = "crystal2nix";
@@ -31,6 +37,9 @@ crystal.buildCrystalPackage rec {
     description = "Utility to convert Crystal's shard.lock files to a Nix file";
     mainProgram = "crystal2nix";
     license = licenses.mit;
-    maintainers = with maintainers; [ manveru peterhoeg ];
+    maintainers = with maintainers; [
+      manveru
+      peterhoeg
+    ];
   };
 }

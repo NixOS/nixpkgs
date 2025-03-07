@@ -4,7 +4,7 @@
   buildPythonPackage,
   setuptools,
   fetchPypi,
-  substituteAll,
+  replaceVars,
 
   # build
   autoPatchelfHook,
@@ -27,7 +27,7 @@
   libXtst,
   libXxf86vm,
   libglvnd,
-  mesa,
+  libgbm,
   pango,
   SDL,
   webkitgtk_4_0,
@@ -52,8 +52,7 @@ buildPythonPackage rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./4.2-ctypes.patch;
+    (replaceVars ./4.2-ctypes.patch {
       libgdk = "${gtk3.out}/lib/libgdk-3.so";
       libpangocairo = "${pango}/lib/libpangocairo-1.0.so";
       libcairo = "${cairo}/lib/libcairo.so";
@@ -93,7 +92,7 @@ buildPythonPackage rec {
       libXtst
       libXxf86vm
       libglvnd
-      mesa
+      libgbm
       webkitgtk_4_0
       xorgproto
     ];

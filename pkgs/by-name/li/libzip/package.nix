@@ -1,34 +1,45 @@
-{ lib, stdenv
-, cmake
-, fetchurl
-, perl
-, zlib
-, groff
-, withBzip2 ? false
-, bzip2
-, withLZMA ? false
-, xz
-, withOpenssl ? false
-, openssl
-, withZstd ? false
-, zstd
-, testers
+{
+  lib,
+  stdenv,
+  cmake,
+  fetchurl,
+  perl,
+  zlib,
+  groff,
+  withBzip2 ? false,
+  bzip2,
+  withLZMA ? false,
+  xz,
+  withOpenssl ? false,
+  openssl,
+  withZstd ? false,
+  zstd,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libzip";
-  version = "1.11.1";
+  version = "1.11.3";
 
   src = fetchurl {
     url = "https://libzip.org/download/libzip-${finalAttrs.version}.tar.gz";
-    hash = "sha256-wOb6UqYroR79MCYikNxpcJR67zLgzClO5Q6QBc6sCSo=";
+    hash = "sha256-dmU/E13eMDYDbFAOEYYWSP+/nh/FsjP/RzxgiX2dsOo=";
   };
 
-  outputs = [ "out" "dev" "man" ];
+  outputs = [
+    "out"
+    "dev"
+    "man"
+  ];
 
-  nativeBuildInputs = [ cmake perl groff ];
+  nativeBuildInputs = [
+    cmake
+    perl
+    groff
+  ];
   propagatedBuildInputs = [ zlib ];
-  buildInputs = lib.optionals withLZMA [ xz ]
+  buildInputs =
+    lib.optionals withLZMA [ xz ]
     ++ lib.optionals withBzip2 [ bzip2 ]
     ++ lib.optionals withOpenssl [ openssl ]
     ++ lib.optionals withZstd [ zstd ];

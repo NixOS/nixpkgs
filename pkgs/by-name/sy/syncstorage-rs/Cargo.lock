@@ -1141,6 +1141,17 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "40ecd4077b5ae9fd2e9e169b102c6c330d0605168eb0e8bf79952b256dbefffd"
 
 [[package]]
+name = "glean"
+version = "0.18.2"
+dependencies = [
+ "chrono",
+ "serde 1.0.203",
+ "serde_derive",
+ "serde_json",
+ "uuid",
+]
+
+[[package]]
 name = "glob"
 version = "0.3.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1230,9 +1241,9 @@ dependencies = [
 
 [[package]]
 name = "heck"
-version = "0.4.1"
+version = "0.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "95505c38b4572b2d910cecb0281560f54b440a19336cbbcb27bf6ce6adc6f5a8"
+checksum = "2304e00983f87ffb38b55b444b5e3b60a884b5d30c0fca7d82fe33449bbe55ea"
 
 [[package]]
 name = "hermit-abi"
@@ -2034,15 +2045,15 @@ checksum = "106dd99e98437432fed6519dedecfade6a06a73bb7b2a1e019fdd2bee5778d94"
 
 [[package]]
 name = "pyo3"
-version = "0.21.2"
+version = "0.22.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a5e00b96a521718e08e03b1a622f01c8a8deb50719335de3f60b3b3950f069d8"
+checksum = "3d922163ba1f79c04bc49073ba7b32fd5a8d3b76a87c955921234b8e77333c51"
 dependencies = [
  "cfg-if",
  "indoc",
  "libc",
  "memoffset",
- "parking_lot",
+ "once_cell",
  "portable-atomic",
  "pyo3-build-config",
  "pyo3-ffi",
@@ -2052,9 +2063,9 @@ dependencies = [
 
 [[package]]
 name = "pyo3-build-config"
-version = "0.21.2"
+version = "0.22.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7883df5835fafdad87c0d888b266c8ec0f4c9ca48a5bed6bbb592e8dedee1b50"
+checksum = "bc38c5feeb496c8321091edf3d63e9a6829eab4b863b4a6a65f26f3e9cc6b179"
 dependencies = [
  "once_cell",
  "target-lexicon",
@@ -2062,9 +2073,9 @@ dependencies = [
 
 [[package]]
 name = "pyo3-ffi"
-version = "0.21.2"
+version = "0.22.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "01be5843dc60b916ab4dad1dca6d20b9b4e6ddc8e15f50c47fe6d85f1fb97403"
+checksum = "94845622d88ae274d2729fcefc850e63d7a3ddff5e3ce11bd88486db9f1d357d"
 dependencies = [
  "libc",
  "pyo3-build-config",
@@ -2072,9 +2083,9 @@ dependencies = [
 
 [[package]]
 name = "pyo3-macros"
-version = "0.21.2"
+version = "0.22.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "77b34069fc0682e11b31dbd10321cbf94808394c56fd996796ce45217dfac53c"
+checksum = "e655aad15e09b94ffdb3ce3d217acf652e26bbc37697ef012f5e5e348c716e5e"
 dependencies = [
  "proc-macro2",
  "pyo3-macros-backend",
@@ -2084,9 +2095,9 @@ dependencies = [
 
 [[package]]
 name = "pyo3-macros-backend"
-version = "0.21.2"
+version = "0.22.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "08260721f32db5e1a5beae69a55553f56b99bd0e1c3e6e0a5e8851a9d0f5a85c"
+checksum = "ae1e3f09eecd94618f60a455a23def79f79eba4dc561a97324bf9ac8c6df30ce"
 dependencies = [
  "heck",
  "proc-macro2",
@@ -2444,8 +2455,9 @@ checksum = "61697e0a1c7e512e84a621326239844a24d8207b4669b41bc18b32ea5cbf988b"
 
 [[package]]
 name = "sentry"
-version = "0.34.0"
-source = "git+https://github.com/getsentry/sentry-rust?rev=1b65b5c#1b65b5c99af975496880e7325218479e0037d097"
+version = "0.35.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "016958f51b96861dead7c1e02290f138411d05e94fad175c8636a835dee6e51e"
 dependencies = [
  "curl",
  "httpdate",
@@ -2458,8 +2470,9 @@ dependencies = [
 
 [[package]]
 name = "sentry-backtrace"
-version = "0.34.0"
-source = "git+https://github.com/getsentry/sentry-rust?rev=1b65b5c#1b65b5c99af975496880e7325218479e0037d097"
+version = "0.35.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e57712c24e99252ef175b4b06c485294f10ad6bc5b5e1567ff3803ee7a0b7d3f"
 dependencies = [
  "backtrace",
  "once_cell",
@@ -2469,8 +2482,9 @@ dependencies = [
 
 [[package]]
 name = "sentry-contexts"
-version = "0.34.0"
-source = "git+https://github.com/getsentry/sentry-rust?rev=1b65b5c#1b65b5c99af975496880e7325218479e0037d097"
+version = "0.35.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "eba8754ec3b9279e00aa6d64916f211d44202370a1699afde1db2c16cbada089"
 dependencies = [
  "hostname",
  "libc",
@@ -2482,8 +2496,9 @@ dependencies = [
 
 [[package]]
 name = "sentry-core"
-version = "0.34.0"
-source = "git+https://github.com/getsentry/sentry-rust?rev=1b65b5c#1b65b5c99af975496880e7325218479e0037d097"
+version = "0.35.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f9f8b6dcd4fbae1e3e22b447f32670360b27e31b62ab040f7fb04e0f80c04d92"
 dependencies = [
  "once_cell",
  "rand",
@@ -2494,8 +2509,9 @@ dependencies = [
 
 [[package]]
 name = "sentry-debug-images"
-version = "0.34.0"
-source = "git+https://github.com/getsentry/sentry-rust?rev=1b65b5c#1b65b5c99af975496880e7325218479e0037d097"
+version = "0.35.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "8982a69133d3f5e4efdbfa0776937fca43c3a2e275a8fe184f50b1b0aa92e07c"
 dependencies = [
  "findshlibs",
  "once_cell",
@@ -2504,8 +2520,9 @@ dependencies = [
 
 [[package]]
 name = "sentry-tracing"
-version = "0.34.0"
-source = "git+https://github.com/getsentry/sentry-rust?rev=1b65b5c#1b65b5c99af975496880e7325218479e0037d097"
+version = "0.35.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "263f73c757ed7915d3e1e34625eae18cad498a95b4261603d4ce3f87b159a6f0"
 dependencies = [
  "sentry-backtrace",
  "sentry-core",
@@ -2515,8 +2532,9 @@ dependencies = [
 
 [[package]]
 name = "sentry-types"
-version = "0.34.0"
-source = "git+https://github.com/getsentry/sentry-rust?rev=1b65b5c#1b65b5c99af975496880e7325218479e0037d097"
+version = "0.35.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a71ed3a389948a6a6d92b98e997a2723ca22f09660c5a7b7388ecd509a70a527"
 dependencies = [
  "debugid",
  "hex",
@@ -2807,7 +2825,7 @@ checksum = "a7065abeca94b6a8a577f9bd45aa0867a2238b74e8eb67cf10d492bc39351394"
 
 [[package]]
 name = "syncserver"
-version = "0.17.15"
+version = "0.18.2"
 dependencies = [
  "actix-cors",
  "actix-http",
@@ -2821,6 +2839,7 @@ dependencies = [
  "docopt",
  "dyn-clone",
  "futures 0.3.30",
+ "glean",
  "hawk",
  "hex",
  "hmac",
@@ -2862,7 +2881,7 @@ dependencies = [
 
 [[package]]
 name = "syncserver-common"
-version = "0.17.15"
+version = "0.18.2"
 dependencies = [
  "actix-web",
  "backtrace",
@@ -2882,7 +2901,7 @@ dependencies = [
 
 [[package]]
 name = "syncserver-db-common"
-version = "0.17.15"
+version = "0.18.2"
 dependencies = [
  "backtrace",
  "deadpool",
@@ -2896,7 +2915,7 @@ dependencies = [
 
 [[package]]
 name = "syncserver-settings"
-version = "0.17.15"
+version = "0.18.2"
 dependencies = [
  "config",
  "num_cpus",
@@ -2910,7 +2929,7 @@ dependencies = [
 
 [[package]]
 name = "syncstorage-db"
-version = "0.17.15"
+version = "0.18.2"
 dependencies = [
  "async-trait",
  "cadence",
@@ -2933,7 +2952,7 @@ dependencies = [
 
 [[package]]
 name = "syncstorage-db-common"
-version = "0.17.15"
+version = "0.18.2"
 dependencies = [
  "async-trait",
  "backtrace",
@@ -2952,7 +2971,7 @@ dependencies = [
 
 [[package]]
 name = "syncstorage-mysql"
-version = "0.17.15"
+version = "0.18.2"
 dependencies = [
  "async-trait",
  "backtrace",
@@ -2975,7 +2994,7 @@ dependencies = [
 
 [[package]]
 name = "syncstorage-settings"
-version = "0.17.15"
+version = "0.18.2"
 dependencies = [
  "rand",
  "serde 1.0.203",
@@ -2985,8 +3004,9 @@ dependencies = [
 
 [[package]]
 name = "syncstorage-spanner"
-version = "0.17.15"
+version = "0.18.2"
 dependencies = [
+ "actix-web",
  "async-trait",
  "backtrace",
  "cadence",
@@ -3129,7 +3149,7 @@ checksum = "1f3ccbac311fea05f86f61904b462b55fb3df8837a366dfc601a0161d0532f20"
 
 [[package]]
 name = "tokenserver-auth"
-version = "0.17.15"
+version = "0.18.2"
 dependencies = [
  "async-trait",
  "base64 0.22.1",
@@ -3156,7 +3176,7 @@ dependencies = [
 
 [[package]]
 name = "tokenserver-common"
-version = "0.17.15"
+version = "0.18.2"
 dependencies = [
  "actix-web",
  "backtrace",
@@ -3171,7 +3191,7 @@ dependencies = [
 
 [[package]]
 name = "tokenserver-db"
-version = "0.17.15"
+version = "0.18.2"
 dependencies = [
  "async-trait",
  "backtrace",
@@ -3196,7 +3216,7 @@ dependencies = [
 
 [[package]]
 name = "tokenserver-settings"
-version = "0.17.15"
+version = "0.18.2"
 dependencies = [
  "jsonwebtoken",
  "serde 1.0.203",
@@ -3431,9 +3451,9 @@ checksum = "06abde3611657adf66d383f00b093d7faecc7fa57071cce2578660c9f1010821"
 
 [[package]]
 name = "uuid"
-version = "1.8.0"
+version = "1.11.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a183cf7feeba97b4dd1c0d46788634f6221d87fa961b305bed08c851829efcc0"
+checksum = "f8c5f0a0af699448548ad1a2fbf920fb4bee257eae39953ba95cb84891a0446a"
 dependencies = [
  "getrandom",
  "serde 1.0.203",

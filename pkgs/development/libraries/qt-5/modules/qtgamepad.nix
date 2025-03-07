@@ -1,8 +1,20 @@
-{ qtModule, qtbase, qtdeclarative, pkg-config }:
+{
+  qtModule,
+  qtbase,
+  qtdeclarative,
+  pkg-config,
+}:
 
 qtModule {
   pname = "qtgamepad";
-  propagatedBuildInputs = [ qtbase qtdeclarative ];
+  propagatedBuildInputs = [
+    qtbase
+    qtdeclarative
+  ];
   nativeBuildInputs = [ pkg-config ];
-  outputs = [ "out" "dev" "bin" ];
+  outputs = [
+    "out"
+    "dev"
+    "bin"
+  ];
 }

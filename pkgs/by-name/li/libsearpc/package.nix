@@ -1,23 +1,24 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, python3
-, glib
-, jansson
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  python3,
+  glib,
+  jansson,
 }:
 
 stdenv.mkDerivation rec {
-  version = "3.3-20230626";
-  commit = "783141fb694f3bd1f8bd8a783670dd25a53b9fc1";
+  version = "3.3-20241031";
+  commit = "d00c062d76d86b76c8c179bfb4babc9e2200b3f1";
   pname = "libsearpc";
 
   src = fetchFromGitHub {
     owner = "haiwen";
     repo = "libsearpc";
     rev = commit;
-    sha256 = "sha256-nYYp3EyA8nufhbWaw4Lv/c4utGYaxC+PoFyamUEVJx4=";
+    sha256 = "sha256-Ze1dOEFUIA16OlqkyDjQw6c6JcDECjYsdCm5um0kG/c=";
   };
 
   nativeBuildInputs = [
@@ -31,12 +32,12 @@ stdenv.mkDerivation rec {
     jansson
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/haiwen/libsearpc";
     description = "Simple and easy-to-use C language RPC framework based on GObject System";
     mainProgram = "searpc-codegen.py";
-    license = licenses.lgpl3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ greizgh ];
+    license = lib.licenses.lgpl3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ greizgh ];
   };
 }

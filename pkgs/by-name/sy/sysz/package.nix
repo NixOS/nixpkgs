@@ -1,4 +1,11 @@
-{ lib, stdenvNoCC, fetchFromGitHub, makeWrapper, fzf, gawk }:
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  makeWrapper,
+  fzf,
+  gawk,
+}:
 
 stdenvNoCC.mkDerivation rec {
   pname = "sysz";
@@ -18,7 +25,12 @@ stdenvNoCC.mkDerivation rec {
     runHook preInstall
     install -Dm755 sysz $out/libexec/sysz
     makeWrapper $out/libexec/sysz $out/bin/sysz \
-      --prefix PATH : ${lib.makeBinPath [ fzf gawk ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          fzf
+          gawk
+        ]
+      }
     runHook postInstall
   '';
 

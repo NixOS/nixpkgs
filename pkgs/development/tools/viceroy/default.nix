@@ -1,4 +1,10 @@
-{ rustPlatform, fetchFromGitHub, lib, stdenv, Security }:
+{
+  rustPlatform,
+  fetchFromGitHub,
+  lib,
+  stdenv,
+  Security,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "viceroy";
@@ -13,7 +19,8 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin Security;
 
-  cargoHash = "sha256-3wkO4w66FJ996cahLvP8wFQSL4RKuw5959qo9rlbTcY=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-UrfxNjKOHQCYKMr83W7XSpQIYxnZkCgIWfp/YtTKpIc=";
 
   cargoTestFlags = [
     "--package viceroy-lib"
@@ -24,7 +31,10 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "viceroy";
     homepage = "https://github.com/fastly/Viceroy";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ereslibre shyim ];
+    maintainers = with maintainers; [
+      ereslibre
+      shyim
+    ];
     platforms = platforms.unix;
   };
 }

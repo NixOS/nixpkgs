@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "eventphone";
     repo = "python-yate";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-AdnlNsEOFuzuGTBmfV9zKyv2iFHEJ4eLMrC6SHHf7m0=";
   };
 

@@ -1,6 +1,7 @@
-{ lib
-, rustPlatform
-, fetchCrate
+{
+  lib,
+  rustPlatform,
+  fetchCrate,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -12,7 +13,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-eyRI4ZVp9HPMvpzyV9sQdh2r966pCdyUPnEhxGkzH3Q=";
   };
 
-  cargoHash = "sha256-QQ43dT9BTu7qCzpnTGKzlVL6jKDXofXStYWYNLHSuVs=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-rJgbTJGRZNev5hPyH7NuRB0Utpdbh6zoYQL4rbfhn2Y=";
 
   nativeBuildInputs = [ rustPlatform.bindgenHook ];
 

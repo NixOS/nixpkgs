@@ -63,7 +63,7 @@ if [[ -z "${__nix_wrapQtAppsHook-}" ]]; then
         qtHostPathHook "${!outputBin}"
     }
 
-    preFixupPhases+=" qtOwnPathsHook"
+    appendToVar preFixupPhases qtOwnPathsHook
 
     # Note: $qtWrapperArgs still gets defined even if ${dontWrapQtApps-} is set.
     wrapQtAppsHook() {

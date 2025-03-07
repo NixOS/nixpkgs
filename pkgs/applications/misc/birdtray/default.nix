@@ -1,12 +1,13 @@
-{ mkDerivation
-  , lib
-  , fetchFromGitHub
+{
+  mkDerivation,
+  lib,
+  fetchFromGitHub,
 
-  , cmake
-  , pkg-config
-  , qtbase
-  , qttools
-  , qtx11extras
+  cmake,
+  pkg-config,
+  qtbase,
+  qttools,
+  qtx11extras,
 }:
 
 mkDerivation rec {
@@ -20,9 +21,14 @@ mkDerivation rec {
     sha256 = "sha256-rj8tPzZzgW0hXmq8c1LiunIX1tO/tGAaqDGJgCQda5M=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
   buildInputs = [
-    qtbase qttools qtx11extras
+    qtbase
+    qttools
+    qtx11extras
   ];
 
   # Wayland support is broken.

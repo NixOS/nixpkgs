@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-, hatch-fancy-pypi-readme
-, hatch-vcs
-, hatchling
+  hatch-fancy-pypi-readme,
+  hatch-vcs,
+  hatchling,
 
-, tenacity
-, typing-extensions
+  tenacity,
+  typing-extensions,
 
-, anyio
-, pytestCheckHook
+  anyio,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -21,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hynek";
     repo = "stamina";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-DasubVqKRhX4CRyKyJ3fIA9Rxmy+kGxkW0pDdu8OPPo=";
   };
 

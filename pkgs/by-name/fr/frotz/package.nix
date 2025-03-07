@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, fetchpatch
-, libao
-, libmodplug
-, libsamplerate
-, libsndfile
-, libvorbis
-, ncurses
-, which
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  fetchpatch,
+  libao,
+  libmodplug,
+  libsamplerate,
+  libsndfile,
+  libvorbis,
+  ncurses,
+  which,
+  pkg-config,
 }:
 
 stdenv.mkDerivation rec {
@@ -32,8 +33,18 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ which pkg-config ];
-  buildInputs = [ libao libmodplug libsamplerate libsndfile libvorbis ncurses ];
+  nativeBuildInputs = [
+    which
+    pkg-config
+  ];
+  buildInputs = [
+    libao
+    libmodplug
+    libsamplerate
+    libsndfile
+    libvorbis
+    ncurses
+  ];
 
   installFlags = [ "PREFIX=$(out)" ];
 
@@ -43,7 +54,10 @@ stdenv.mkDerivation rec {
     description = "Z-machine interpreter for Infocom games and other interactive fiction";
     mainProgram = "frotz";
     platforms = platforms.unix;
-    maintainers = with maintainers; [ nicknovitski ddelabru ];
+    maintainers = with maintainers; [
+      nicknovitski
+      ddelabru
+    ];
     license = licenses.gpl2Plus;
   };
 }

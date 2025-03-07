@@ -1,12 +1,13 @@
-{ fetchFromGitHub
-, lib
-, gobject-introspection
-, gtk3
-, python3Packages
-, wrapGAppsHook3
-, gdk-pixbuf
-, libappindicator
-, librsvg
+{
+  fetchFromGitHub,
+  lib,
+  gobject-introspection,
+  gtk3,
+  python3Packages,
+  wrapGAppsHook3,
+  gdk-pixbuf,
+  libappindicator,
+  librsvg,
 }:
 
 # Although we copy in the udev rules here, you probably just want to use
@@ -14,16 +15,19 @@
 # instead of adding this to `services.udev.packages` on NixOS,
 python3Packages.buildPythonApplication rec {
   pname = "solaar";
-  version = "1.1.13";
+  version = "1.1.14";
 
   src = fetchFromGitHub {
     owner = "pwr-Solaar";
     repo = "Solaar";
-    rev = "refs/tags/${version}";
-    hash = "sha256-sYJrVAeZi0a7yD0i/zIIxcu9X/c5HvgoI/n50eXD47s=";
+    tag = version;
+    hash = "sha256-cAM4h0OOXxItSf0Gb9PfHn385FXMKwvIUuYTrjgABwA=";
   };
 
-  outputs = [ "out" "udev" ];
+  outputs = [
+    "out"
+    "udev"
+  ];
 
   nativeBuildInputs = [
     gdk-pixbuf
@@ -45,7 +49,14 @@ python3Packages.buildPythonApplication rec {
     pygobject3
     pyudev
     pyyaml
+    typing-extensions
     xlib
+  ];
+
+  nativeCheckInputs = with python3Packages; [
+    pytestCheckHook
+    pytest-mock
+    pytest-cov
   ];
 
   # the -cli symlink is just to maintain compabilility with older versions where
@@ -62,10 +73,10 @@ python3Packages.buildPythonApplication rec {
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-  # no tests
-  doCheck = false;
-
-  pythonImportsCheck = [ "solaar" ];
+  pythonImportsCheck = [
+    "solaar"
+    "solaar.gtk"
+  ];
 
   meta = with lib; {
     description = "Linux devices manager for the Logitech Unifying Receiver";
@@ -81,7 +92,11 @@ python3Packages.buildPythonApplication rec {
     '';
     homepage = "https://pwr-solaar.github.io/Solaar/";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ spinus ysndr oxalica ];
+    maintainers = with maintainers; [
+      spinus
+      ysndr
+      oxalica
+    ];
     platforms = platforms.linux;
   };
 }

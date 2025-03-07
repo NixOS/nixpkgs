@@ -1,7 +1,8 @@
 { lib, stdenv, writeScript, ncurses5, callPackage, buildFHSEnv, unwrapped ? callPackage ./runtime.nix {} }:
 
-buildFHSEnv rec {
-  name = "houdini-${unwrapped.version}";
+buildFHSEnv {
+  pname = "houdini";
+  inherit (unwrapped) version;
 
   # houdini spawns hserver (and other license tools) that is supposed to live beyond the lifespan of houdini process
   dieWithParent = false;
@@ -76,7 +77,8 @@ buildFHSEnv rec {
       "houdini/sbin/sesinetd"
     ];
   in ''
-    WRAPPER=$out/bin/${name}
+    mv $out/bin/houdini $out/bin/houdini-wrapper
+    WRAPPER=$out/bin/houdini-wrapper
     EXECUTABLES="${lib.concatStringsSep " " executables}"
     for executable in $EXECUTABLES; do
       mkdir -p $out/$(dirname $executable)
@@ -94,7 +96,7 @@ buildFHSEnv rec {
     "--ro-bind-try /etc/OpenCL/vendors /etc/OpenCL/vendors"  # this is the case of not NixOS
   ];
 
-  runScript = writeScript "${name}-wrapper" ''
+  runScript = writeScript "houdini-wrapper" ''
     # ncurses5 is needed by hfs ocl backend
     # workaround for this issue: https://github.com/NixOS/nixpkgs/issues/89769
     export LD_LIBRARY_PATH=${lib.makeLibraryPath [ncurses5]}:$LD_LIBRARY_PATH

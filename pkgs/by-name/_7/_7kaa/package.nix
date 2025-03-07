@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, gccStdenv
-, autoreconfHook
-, autoconf-archive
-, pkg-config
-, fetchurl
-, fetchFromGitHub
-, openal
-, enet
-, SDL2
-, curl
-, gettext
-, libiconv
+{
+  lib,
+  stdenv,
+  gccStdenv,
+  autoreconfHook,
+  autoconf-archive,
+  pkg-config,
+  fetchurl,
+  fetchFromGitHub,
+  openal,
+  enet,
+  SDL2,
+  curl,
+  gettext,
+  libiconv,
 }:
 
 let
@@ -46,15 +47,28 @@ gccStdenv.mkDerivation (finalAttrs: {
     hash = "sha256-kkM+kFQ+tGHS5NrVPeDMRWFQb7waESt8xOLfFGaGdgo=";
   };
 
-  nativeBuildInputs = [ autoreconfHook autoconf-archive pkg-config ];
+  nativeBuildInputs = [
+    autoreconfHook
+    autoconf-archive
+    pkg-config
+  ];
 
-  buildInputs = [ openal enet SDL2 curl gettext libiconv ];
+  buildInputs = [
+    openal
+    enet
+    SDL2
+    curl
+    gettext
+    libiconv
+  ];
 
   preAutoreconf = ''
     autoupdate
   '';
 
-  hardeningDisable = lib.optionals (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isDarwin) [ "stackprotector" ];
+  hardeningDisable = lib.optionals (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isDarwin) [
+    "stackprotector"
+  ];
 
   postInstall = ''
     mkdir $out/share/7kaa/MUSIC

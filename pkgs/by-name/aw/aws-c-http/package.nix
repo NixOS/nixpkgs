@@ -1,23 +1,26 @@
-{ lib, stdenv
-, fetchFromGitHub
-, aws-c-cal
-, aws-c-common
-, aws-c-compression
-, aws-c-io
-, cmake
-, nix
-, s2n-tls
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  aws-c-cal,
+  aws-c-common,
+  aws-c-compression,
+  aws-c-io,
+  cmake,
+  nix,
+  s2n-tls,
 }:
 
 stdenv.mkDerivation rec {
   pname = "aws-c-http";
-  version = "0.8.2";
+  # nixpkgs-update: no auto update
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "aws-c-http";
     rev = "v${version}";
-    hash = "sha256-86auAZGoaYIpoTVlB9uC+nKMNt1QRNor+/68B5D36r8=";
+    hash = "sha256-3nT64dFUcuwPfhQDwY5MTe/xPdr7XZMBpVL7V0y9tng=";
   };
 
   nativeBuildInputs = [

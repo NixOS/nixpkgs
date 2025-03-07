@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, automake, autoconf, pkg-config, gtk3 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  automake,
+  autoconf,
+  pkg-config,
+  gtk3,
+}:
 
 stdenv.mkDerivation rec {
   pname = "gsimplecal";
@@ -12,12 +20,16 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = ''
-    sed -ie '/sys\/sysctl.h/d' src/Unique.cpp
+    sed -i -e '/sys\/sysctl.h/d' src/Unique.cpp
   '';
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ pkg-config automake autoconf ];
+  nativeBuildInputs = [
+    pkg-config
+    automake
+    autoconf
+  ];
   buildInputs = [ gtk3 ];
 
   preConfigure = "./autogen.sh";

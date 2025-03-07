@@ -1,14 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, cmake, dmenu }:
+{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, dmenu, fmt, spdlog }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "j4-dmenu-desktop";
-  version = "unstable-2023-09-12";
+  version = "3.2";
 
   src = fetchFromGitHub {
     owner = "enkore";
     repo = "j4-dmenu-desktop";
-    rev = "7e3fd045482a8ea70619e422975b52feabc75175";
-    hash = "sha256-8PmfzQkHlEdMbrcQO0bPruP3jaKEcr/17x0/Z7Jedh0=";
+    rev = "r${finalAttrs.version}";
+    hash = "sha256-Yrn6d2x9xOSV5FK0YP/mfD6BG9DeWlWobVafEzVYVJY=";
   };
 
   postPatch = ''
@@ -16,12 +16,22 @@ stdenv.mkDerivation (finalAttrs: {
         --replace "dmenu -i" "${lib.getExe dmenu} -i"
   '';
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+  ];
 
-  # tests are fetching an external git repository
-  cmakeFlags = [
-    "-DWITH_TESTS=OFF"
-    "-DWITH_GIT_CATCH=OFF"
+  buildInputs = [
+    fmt
+    spdlog
+  ];
+
+  mesonFlags = [
+    # Disable unit tests.
+    "-Denable-tests=false"
+    # Copy pre-generated shell completions.
+    "-Dgenerate-shell-completions=disabled"
   ];
 
   meta = with lib; {

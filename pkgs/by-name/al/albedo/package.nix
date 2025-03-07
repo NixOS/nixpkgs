@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "coreruleset";
     repo = "albedo";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-HMW0SIcPDCy2QNfxpMke+/d1XCNpyx6RL6RCZAmU+WE=";
   };
 

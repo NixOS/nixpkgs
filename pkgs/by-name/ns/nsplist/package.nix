@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, flex
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  flex,
 }:
 
 stdenv.mkDerivation {

@@ -1,6 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch
-, audiofile, libvorbis, fltk, fftw, fftwFloat
-, minixml, pkg-config, libmad, libjack2, portaudio, libsamplerate
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  audiofile,
+  libvorbis,
+  fltk,
+  fftw,
+  fftwFloat,
+  minixml,
+  pkg-config,
+  libmad,
+  libjack2,
+  portaudio,
+  libsamplerate,
 }:
 
 stdenv.mkDerivation {
@@ -53,7 +66,7 @@ stdenv.mkDerivation {
       special effects by "spectral smoothing" the sounds.
       It can transform any sound/music to a texture.
     '';
-    homepage = "https://hypermammut.sourceforge.net/paulstretch/";
+    homepage = "https://github.com/paulnasca/paulstretch_cpp/";
     platforms = platforms.linux;
     license = licenses.gpl2;
     mainProgram = "paulstretch";

@@ -1,6 +1,7 @@
-{ fetchurl
-, optionalAttrs
-, system
+{
+  fetchurl,
+  optionalAttrs,
+  system,
 }:
 # This file preloads all the archives which Arduino's build/build.xml
 # would otherwise try to download itself. When updating this for a new

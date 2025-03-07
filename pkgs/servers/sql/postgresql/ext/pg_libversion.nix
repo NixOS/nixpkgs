@@ -1,11 +1,12 @@
- { lib
-, stdenv
-, fetchFromGitHub
-, gitUpdater
-, pkg-config
-, postgresql
-, libversion
-, buildPostgresqlExtension
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gitUpdater,
+  pkg-config,
+  postgresql,
+  libversion,
+  buildPostgresqlExtension,
 }:
 
 buildPostgresqlExtension (finalAttrs: {
@@ -37,4 +38,3 @@ buildPostgresqlExtension (finalAttrs: {
     platforms = postgresql.meta.platforms;
   };
 })
-

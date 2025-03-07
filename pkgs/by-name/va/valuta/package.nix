@@ -1,16 +1,18 @@
-{ lib
-, python3Packages
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, blueprint-compiler
-, desktop-file-utils
-, gtk4
-, gst_all_1
-, libsoup_3
-, libadwaita
-, wrapGAppsHook4
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  blueprint-compiler,
+  desktop-file-utils,
+  gtk4,
+  gst_all_1,
+  libsoup_3,
+  libadwaita,
+  wrapGAppsHook4,
+  nix-update-script,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -55,11 +57,15 @@ python3Packages.buildPythonApplication rec {
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
   meta = with lib; {
     description = "Simple application for converting currencies, with support for various APIs";
     homepage = "https://github.com/ideveCore/Valuta";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ arthsmn ];
+    maintainers = with maintainers; [ arthsmn ] ++ lib.teams.gnome-circle.members;
     mainProgram = "currencyconverter";
     platforms = platforms.linux;
   };

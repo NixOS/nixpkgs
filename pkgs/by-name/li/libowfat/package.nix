@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libowfat";
-  version = "0.33";
+  version = "0.34";
 
   src = fetchurl {
     url = "https://www.fefe.de/libowfat/${pname}-${version}.tar.xz";
-    sha256 = "sha256-MR7Is/S3K7RC4yP7ATqY+Vb6dFVH8ryUVih7INAnzX0=";
+    sha256 = "sha256-1DMNNzrJWBs5e8JKIq0ff11Yp/422dI5/jUs7/xdMEs=";
   };
 
   # Fix for glibc 2.34 from Gentoo

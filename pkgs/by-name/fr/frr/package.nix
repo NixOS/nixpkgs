@@ -1,98 +1,94 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
 
-# build time
-, autoreconfHook
-, flex
-, bison
-, perl
-, pkg-config
-, texinfo
-, buildPackages
+  # build time
+  autoreconfHook,
+  flex,
+  bison,
+  perl,
+  pkg-config,
+  texinfo,
+  buildPackages,
+  grpc,
+  protobuf,
+  which,
 
-# runtime
-, c-ares
-, json_c
-, libcap
-, elfutils
-, libunwind
-, libyang
-, net-snmp
-, openssl
-, pam
-, pcre2
-, python3
-, readline
-, rtrlib
-, protobufc
-, zeromq
+  # runtime
+  c-ares,
+  json_c,
+  libcap,
+  elfutils,
+  libunwind,
+  libyang,
+  net-snmp,
+  openssl,
+  pam,
+  pcre2,
+  python3,
+  readline,
+  rtrlib,
+  protobufc,
+  zeromq,
 
-# tests
-, nettools
-, nixosTests
+  # tests
+  nettools,
+  nixosTests,
 
-# FRR's configure.ac gets SNMP options by executing net-snmp-config on the build host
-# This leads to compilation errors when cross compiling.
-# E.g. net-snmp-config for x86_64 does not return the ARM64 paths.
-#
-#   SNMP_LIBS="`${NETSNMP_CONFIG} --agent-libs`"
-#   SNMP_CFLAGS="`${NETSNMP_CONFIG} --base-cflags`"
-, snmpSupport ? stdenv.buildPlatform.canExecute stdenv.hostPlatform
+  # general options
+  snmpSupport ? true,
+  rpkiSupport ? true,
+  numMultipath ? 64,
+  watchfrrSupport ? true,
+  cumulusSupport ? false,
+  rtadvSupport ? true,
+  irdpSupport ? true,
+  routeReplacementSupport ? true,
+  mgmtdSupport ? true,
+  # Experimental as of 10.1, reconsider if upstream changes defaults
+  grpcSupport ? false,
 
-# other general options besides snmp support
-, rpkiSupport ? true
-, numMultipath ? 64
-, watchfrrSupport ? true
-, cumulusSupport ? false
-, rtadvSupport ? true
-, irdpSupport ? true
-, routeReplacementSupport ? true
-, mgmtdSupport ? true
+  # routing daemon options
+  bgpdSupport ? true,
+  ripdSupport ? true,
+  ripngdSupport ? true,
+  ospfdSupport ? true,
+  ospf6dSupport ? true,
+  ldpdSupport ? true,
+  nhrpdSupport ? true,
+  eigrpdSupport ? true,
+  babeldSupport ? true,
+  isisdSupport ? true,
+  pimdSupport ? true,
+  pim6dSupport ? true,
+  sharpdSupport ? true,
+  fabricdSupport ? true,
+  vrrpdSupport ? true,
+  pathdSupport ? true,
+  bfddSupport ? true,
+  pbrdSupport ? true,
+  staticdSupport ? true,
 
-# routing daemon options
-, bgpdSupport ? true
-, ripdSupport ? true
-, ripngdSupport ? true
-, ospfdSupport ? true
-, ospf6dSupport ? true
-, ldpdSupport ? true
-, nhrpdSupport ? true
-, eigrpdSupport ? true
-, babeldSupport ? true
-, isisdSupport ? true
-, pimdSupport ? true
-, pim6dSupport ? true
-, sharpdSupport ? true
-, fabricdSupport ? true
-, vrrpdSupport ? true
-, pathdSupport ? true
-, bfddSupport ? true
-, pbrdSupport ? true
-, staticdSupport ? true
+  # BGP options
+  bgpAnnounce ? true,
+  bgpBmp ? true,
+  bgpVnc ? true,
 
-# BGP options
-, bgpAnnounce ? true
-, bgpBmp ? true
-, bgpVnc ? true
-
-# OSPF options
-, ospfApi ? true
+  # OSPF options
+  ospfApi ? true,
 }:
-
-lib.warnIf (!(stdenv.buildPlatform.canExecute stdenv.hostPlatform))
-  "cannot enable SNMP support due to cross-compilation issues with net-snmp-config"
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "frr";
-  version = "10.1";
+  version = "10.2.1";
 
   src = fetchFromGitHub {
     owner = "FRRouting";
-    repo = finalAttrs.pname;
-    rev = "${finalAttrs.pname}-${finalAttrs.version}";
-    hash = "sha256-pmFdxL8QpyXvpX2YiSOZ+KIoNaj1OOH6/qnVAWZLE9s=";
+    repo = "frr";
+    rev = "frr-${finalAttrs.version}";
+    hash = "sha256-TWqW6kI5dDl6IW2Ql6eeySDSyxp0fPgcJOOX1JxjAxs=";
   };
 
   patches = [
@@ -103,37 +99,52 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  nativeBuildInputs = [
-    autoreconfHook
-    bison
-    flex
-    perl
-    pkg-config
-    python3.pkgs.sphinx
-    texinfo
-    protobufc
-  ];
+  # Without the std explicitly set, we may run into abseil-cpp
+  # compilation errors.
+  CXXFLAGS = "-std=gnu++23";
 
-  buildInputs = [
-    c-ares
-    json_c
-    libunwind
-    libyang
-    openssl
-    pam
-    pcre2
-    protobufc
-    python3
-    readline
-    rtrlib
-    zeromq
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    libcap
-  ] ++ lib.optionals snmpSupport [
-    net-snmp
-  ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform elfutils) [
-    elfutils
-  ];
+  nativeBuildInputs =
+    [
+      autoreconfHook
+      bison
+      flex
+      perl
+      pkg-config
+      protobufc
+      python3.pkgs.sphinx
+      texinfo
+    ]
+    ++ lib.optionals grpcSupport [
+      which
+    ];
+
+  buildInputs =
+    [
+      c-ares
+      json_c
+      libunwind
+      libyang
+      openssl
+      pam
+      pcre2
+      python3
+      readline
+      rtrlib
+      zeromq
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      libcap
+    ]
+    ++ lib.optionals snmpSupport [
+      net-snmp
+    ]
+    ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform elfutils) [
+      elfutils
+    ]
+    ++ lib.optionals grpcSupport [
+      grpc
+      protobuf
+    ];
 
   # otherwise in cross-compilation: "configure: error: no working python version found"
   depsBuildBuild = [
@@ -142,59 +153,68 @@ stdenv.mkDerivation (finalAttrs: {
 
   # cross-compiling: clippy is compiled with the build host toolchain, split it out to ease
   # navigation in dependency hell
-  clippy-helper = buildPackages.callPackage ./clippy-helper.nix { frrVersion = finalAttrs.version; frrSource = finalAttrs.src; };
+  clippy-helper = buildPackages.callPackage ./clippy-helper.nix {
+    frrVersion = finalAttrs.version;
+    frrSource = finalAttrs.src;
+  };
 
-  configureFlags = [
-    "--disable-silent-rules"
-    "--disable-exampledir"
-    "--enable-configfile-mask=0640"
-    "--enable-group=frr"
-    "--enable-logfile-mask=0640"
-    "--enable-multipath=${toString numMultipath}"
-    "--enable-user=frr"
-    "--enable-vty-group=frrvty"
-    "--localstatedir=/run/frr"
-    "--sbindir=${placeholder "out"}/libexec/frr"
-    "--sysconfdir=/etc/frr"
-    "--with-clippy=${finalAttrs.clippy-helper}/bin/clippy"
-    # general options
-    (lib.strings.enableFeature snmpSupport "snmp")
-    (lib.strings.enableFeature rpkiSupport "rpki")
-    (lib.strings.enableFeature watchfrrSupport "watchfrr")
-    (lib.strings.enableFeature rtadvSupport "rtadv")
-    (lib.strings.enableFeature irdpSupport "irdp")
-    (lib.strings.enableFeature routeReplacementSupport "rr-semantics")
-    (lib.strings.enableFeature mgmtdSupport "mgmtd")
+  configureFlags =
+    [
+      "--disable-silent-rules"
+      "--disable-exampledir"
+      "--enable-configfile-mask=0640"
+      "--enable-group=frr"
+      "--enable-logfile-mask=0640"
+      "--enable-multipath=${toString numMultipath}"
+      "--enable-user=frr"
+      "--enable-vty-group=frrvty"
+      "--localstatedir=/run/frr"
+      "--sbindir=${placeholder "out"}/libexec/frr"
+      "--sysconfdir=/etc/frr"
+      "--with-clippy=${finalAttrs.clippy-helper}/bin/clippy"
+      # general options
+      (lib.strings.enableFeature snmpSupport "snmp")
+      (lib.strings.enableFeature rpkiSupport "rpki")
+      (lib.strings.enableFeature watchfrrSupport "watchfrr")
+      (lib.strings.enableFeature rtadvSupport "rtadv")
+      (lib.strings.enableFeature irdpSupport "irdp")
+      (lib.strings.enableFeature routeReplacementSupport "rr-semantics")
+      (lib.strings.enableFeature mgmtdSupport "mgmtd")
+      (lib.strings.enableFeature grpcSupport "grpc")
 
-    # routing protocols
-    (lib.strings.enableFeature bgpdSupport "bgpd")
-    (lib.strings.enableFeature ripdSupport "ripd")
-    (lib.strings.enableFeature ripngdSupport "ripngd")
-    (lib.strings.enableFeature ospfdSupport "ospfd")
-    (lib.strings.enableFeature ospf6dSupport "ospf6d")
-    (lib.strings.enableFeature ldpdSupport "ldpd")
-    (lib.strings.enableFeature nhrpdSupport "nhrpd")
-    (lib.strings.enableFeature eigrpdSupport "eigrpd")
-    (lib.strings.enableFeature babeldSupport "babeld")
-    (lib.strings.enableFeature isisdSupport "isisd")
-    (lib.strings.enableFeature pimdSupport "pimd")
-    (lib.strings.enableFeature pim6dSupport "pim6d")
-    (lib.strings.enableFeature sharpdSupport "sharpd")
-    (lib.strings.enableFeature fabricdSupport "fabricd")
-    (lib.strings.enableFeature vrrpdSupport "vrrpd")
-    (lib.strings.enableFeature pathdSupport "pathd")
-    (lib.strings.enableFeature bfddSupport "bfdd")
-    (lib.strings.enableFeature pbrdSupport "pbrd")
-    (lib.strings.enableFeature staticdSupport "staticd")
-    # BGP options
-    (lib.strings.enableFeature bgpAnnounce "bgp-announce")
-    (lib.strings.enableFeature bgpBmp "bgp-bmp")
-    (lib.strings.enableFeature bgpVnc "bgp-vnc")
-    # OSPF options
-    (lib.strings.enableFeature ospfApi "ospfapi")
-    # Cumulus options
-    (lib.strings.enableFeature cumulusSupport "cumulus")
-  ];
+      # routing protocols
+      (lib.strings.enableFeature bgpdSupport "bgpd")
+      (lib.strings.enableFeature ripdSupport "ripd")
+      (lib.strings.enableFeature ripngdSupport "ripngd")
+      (lib.strings.enableFeature ospfdSupport "ospfd")
+      (lib.strings.enableFeature ospf6dSupport "ospf6d")
+      (lib.strings.enableFeature ldpdSupport "ldpd")
+      (lib.strings.enableFeature nhrpdSupport "nhrpd")
+      (lib.strings.enableFeature eigrpdSupport "eigrpd")
+      (lib.strings.enableFeature babeldSupport "babeld")
+      (lib.strings.enableFeature isisdSupport "isisd")
+      (lib.strings.enableFeature pimdSupport "pimd")
+      (lib.strings.enableFeature pim6dSupport "pim6d")
+      (lib.strings.enableFeature sharpdSupport "sharpd")
+      (lib.strings.enableFeature fabricdSupport "fabricd")
+      (lib.strings.enableFeature vrrpdSupport "vrrpd")
+      (lib.strings.enableFeature pathdSupport "pathd")
+      (lib.strings.enableFeature bfddSupport "bfdd")
+      (lib.strings.enableFeature pbrdSupport "pbrd")
+      (lib.strings.enableFeature staticdSupport "staticd")
+      # BGP options
+      (lib.strings.enableFeature bgpAnnounce "bgp-announce")
+      (lib.strings.enableFeature bgpBmp "bgp-bmp")
+      (lib.strings.enableFeature bgpVnc "bgp-vnc")
+      # OSPF options
+      (lib.strings.enableFeature ospfApi "ospfapi")
+      # Cumulus options
+      (lib.strings.enableFeature cumulusSupport "cumulus")
+    ]
+    ++ lib.optionals snmpSupport [
+      # Used during build for paths, `dev` has build shebangs so can be run during build.
+      "NETSNMP_CONFIG=${lib.getDev net-snmp}/bin/net-snmp-config"
+    ];
 
   postPatch = ''
     substituteInPlace tools/frr-reload \
@@ -236,8 +256,14 @@ stdenv.mkDerivation (finalAttrs: {
       infrastructure, web 2.0 businesses, hyperscale services, and Fortune 500
       private clouds.
     '';
-    license = with licenses; [ gpl2Plus lgpl21Plus ];
-    maintainers = with maintainers; [ woffs thillux ];
+    license = with licenses; [
+      gpl2Plus
+      lgpl21Plus
+    ];
+    maintainers = with maintainers; [
+      woffs
+      thillux
+    ];
     # adapt to platforms stated in http://docs.frrouting.org/en/latest/overview.html#supported-platforms
     platforms = (platforms.linux ++ platforms.freebsd ++ platforms.netbsd ++ platforms.openbsd);
   };

@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.programs.starship;
@@ -7,21 +12,24 @@ let
 
   userSettingsFile = settingsFormat.generate "starship.toml" cfg.settings;
 
-  settingsFile = if cfg.presets == [] then userSettingsFile else pkgs.runCommand "starship.toml"
-    {
-      nativeBuildInputs = [ pkgs.yq ];
-    } ''
-    tomlq -s -t 'reduce .[] as $item ({}; . * $item)' \
-      ${lib.concatStringsSep " " (map (f: "${cfg.package}/share/starship/presets/${f}.toml") cfg.presets)} \
-      ${userSettingsFile} \
-      > $out
-  '';
-
-  initOption =
-    if cfg.interactiveOnly then
-      "promptInit"
+  settingsFile =
+    if cfg.presets == [ ] then
+      userSettingsFile
     else
-      "shellInit";
+      pkgs.runCommand "starship.toml"
+        {
+          nativeBuildInputs = [ pkgs.yq ];
+        }
+        ''
+          tomlq -s -t 'reduce .[] as $item ({}; . * $item)' \
+            ${
+              lib.concatStringsSep " " (map (f: "${cfg.package}/share/starship/presets/${f}.toml") cfg.presets)
+            } \
+            ${userSettingsFile} \
+            > $out
+        '';
+
+  initOption = if cfg.interactiveOnly then "promptInit" else "shellInit";
 
 in
 {
@@ -30,10 +38,14 @@ in
 
     package = lib.mkPackageOption pkgs "starship" { };
 
-    interactiveOnly = lib.mkEnableOption ''
-      starship only when the shell is interactive.
-      Some plugins require this to be set to false to function correctly
-    '' // { default = true; };
+    interactiveOnly =
+      lib.mkEnableOption ''
+        starship only when the shell is interactive.
+        Some plugins require this to be set to false to function correctly
+      ''
+      // {
+        default = true;
+      };
 
     presets = lib.mkOption {
       default = [ ];

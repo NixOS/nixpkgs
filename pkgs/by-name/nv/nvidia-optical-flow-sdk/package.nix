@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, cudaPackages }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cudaPackages,
+}:
 
 stdenv.mkDerivation {
   pname = "nvidia-optical-flow-sdk";

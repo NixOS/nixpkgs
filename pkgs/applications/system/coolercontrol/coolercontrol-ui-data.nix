@@ -11,7 +11,7 @@ buildNpmPackage {
   inherit version src;
   sourceRoot = "${src.name}/coolercontrol-ui";
 
-  npmDepsHash = "sha256-j+bGOGIG9H/1z0dN8BfvWSi6gPvYmCV7l0ZNH8h3yeU=";
+  npmDepsHash = "sha256-t+QShKaXpQuEzeeu/ljBBEzeYsxqvMpx5waDZ2gyPAI=";
 
   preBuild = ''
     autoPatchelf node_modules/sass-embedded-linux-x64/dart-sass/src/dart

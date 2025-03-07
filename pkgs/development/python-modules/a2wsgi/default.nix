@@ -2,37 +2,37 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  asgiref,
+  baize,
   httpx,
   pdm-backend,
   pytest-asyncio,
   pytestCheckHook,
   starlette,
-  baize,
 }:
 
 buildPythonPackage rec {
   pname = "a2wsgi";
-  version = "1.10.7";
+  version = "1.10.8";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-zkYv9+HarAvFcYPG+ADwmnHCp6mN3VzeyhSePqvzM44=";
+    hash = "sha256-/AC6sfx5L4mozhtJGyrRcXsUXYyu+3XQqFhpRu3JfLI=";
   };
 
-  nativeBuildInputs = [ pdm-backend ];
-
-  nativeCheckInputs = [
-    asgiref
-    httpx
-    pytest-asyncio
-    pytestCheckHook
-  ];
+  build-system = [ pdm-backend ];
 
   dependencies = [
     starlette
     baize
+  ];
+
+  nativeCheckInputs = [
+    baize
+    httpx
+    pytest-asyncio
+    pytestCheckHook
+    starlette
   ];
 
   meta = {

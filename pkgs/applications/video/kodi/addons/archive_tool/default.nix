@@ -1,4 +1,9 @@
-{ lib, buildKodiAddon, fetchFromGitHub, vfs-libarchive }:
+{
+  lib,
+  buildKodiAddon,
+  fetchFromGitHub,
+  vfs-libarchive,
+}:
 buildKodiAddon rec {
   pname = "archive_tool";
   namespace = "script.module.archive_tool";

@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, installShellFiles
-, pkg-config
-, pcsclite
-, udev
-, PCSC
-, IOKit
-, CoreFoundation
-, AppKit
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  installShellFiles,
+  pkg-config,
+  pcsclite,
+  udev,
+  PCSC,
+  IOKit,
+  CoreFoundation,
+  AppKit,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -23,13 +24,26 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-7tpO5ir42mIKJXD0NJzEPXi/Xe6LdyEeBQWNfOdgX5I=";
   };
 
-  cargoHash = "sha256-X+IEeztSL312Yq9Loi3cNJuVfSGk/tRRBCsy0Juji7Y=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-qD185H6wfW9yuYImTm9hqSgQpUQcKuCESM8riZwmGY0=";
 
-  nativeBuildInputs = [ installShellFiles pkg-config ];
+  nativeBuildInputs = [
+    installShellFiles
+    pkg-config
+  ];
 
-  buildInputs = [ ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ pcsclite udev ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ PCSC IOKit CoreFoundation AppKit ];
+  buildInputs =
+    [ ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      pcsclite
+      udev
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      PCSC
+      IOKit
+      CoreFoundation
+      AppKit
+    ];
 
   postInstall = ''
     install -D 70-solo2.rules $out/lib/udev/rules.d/70-solo2.rules
@@ -44,7 +58,10 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "CLI tool for managing SoloKeys' Solo2 USB security keys";
     homepage = "https://github.com/solokeys/solo2-cli";
-    license = with licenses; [ asl20 mit ]; # either at your option
+    license = with licenses; [
+      asl20
+      mit
+    ]; # either at your option
     maintainers = with maintainers; [ lukegb ];
     mainProgram = "solo2";
   };

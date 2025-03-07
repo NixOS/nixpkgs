@@ -39,7 +39,7 @@
   libxkbcommon,
   lua,
   makeWrapper,
-  mesa,
+  libgbm,
   meson,
   mujs,
   ninja,
@@ -187,7 +187,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals cmsSupport [ lcms2 ]
     ++ lib.optionals drmSupport [
       libdrm
-      mesa
+      libgbm
     ]
     ++ lib.optionals dvdnavSupport [
       libdvdnav
@@ -306,7 +306,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     mainProgram = "mpv";
     maintainers = with lib.maintainers; [
-      AndersonTorres
       fpletz
       globin
       ma27

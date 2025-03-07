@@ -1,13 +1,19 @@
-{ lib, stdenv, fetchurl, jre, makeWrapper }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  jre,
+  makeWrapper,
+}:
 
 stdenv.mkDerivation rec {
   pname = "opengrok";
-  version = "1.13.24";
+  version = "1.13.26";
 
   # binary distribution
   src = fetchurl {
     url = "https://github.com/oracle/opengrok/releases/download/${version}/${pname}-${version}.tar.gz";
-    hash = "sha256-rAiibbNsEH+mjRq2qDKk+8pdAfnCFRpAm1Opgmw+FTY=";
+    hash = "sha256-MPKPbKi7u7SFBBkIxZDrE4TV8RRjGWpRBp6vmeeagwM=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

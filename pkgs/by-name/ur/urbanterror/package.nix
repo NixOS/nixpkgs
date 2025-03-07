@@ -1,17 +1,18 @@
-{ lib
-, fetchzip
-, stdenv
-, copyDesktopItems
-, imagemagick
-, libicns
-, makeBinaryWrapper
-, curl
-, libGL
-, libGLU
-, openal
-, libXxf86vm
-, SDL
-, makeDesktopItem
+{
+  lib,
+  fetchzip,
+  stdenv,
+  copyDesktopItems,
+  imagemagick,
+  libicns,
+  makeBinaryWrapper,
+  curl,
+  libGL,
+  libGLU,
+  openal,
+  libXxf86vm,
+  SDL,
+  makeDesktopItem,
 }:
 
 let
@@ -19,7 +20,9 @@ let
 
   urbanterror-maps = fetchzip {
     name = "urbanterror-maps";
-    url = "http://cdn.urbanterror.info/urt/43/releases/zips/UrbanTerror${builtins.replaceStrings ["."] [""] version}_full.zip";
+    url = "http://cdn.urbanterror.info/urt/43/releases/zips/UrbanTerror${
+      builtins.replaceStrings [ "." ] [ "" ] version
+    }_full.zip";
     hash = "sha256-C6Gb5PPECAOjQhmkrzkV6dpY/zHVtUj9oq3507o2PUI=";
   };
 
@@ -93,7 +96,10 @@ stdenv.mkDerivation {
       icon = "urbanterror";
       comment = "A multiplayer tactical FPS on top of Quake 3 engine";
       desktopName = "Urban Terror";
-      categories = [ "Game" "ActionGame" ];
+      categories = [
+        "Game"
+        "ActionGame"
+      ];
     })
   ];
 
@@ -109,7 +115,10 @@ stdenv.mkDerivation {
       realism". This results in a very unique, enjoyable and addictive game.
     '';
     mainProgram = "urbanterror";
-    maintainers = with lib.maintainers; [ astsmtl drupol ];
+    maintainers = with lib.maintainers; [
+      astsmtl
+      drupol
+    ];
     platforms = lib.platforms.linux;
   };
 }

@@ -1,8 +1,11 @@
-{ lib
-, python3
-, fetchFromGitHub
-, espeak-ng
-, tts
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+  espeak-ng,
+  tts,
+  addBinToPathHook,
+  writableTmpDirAsHomeHook,
 }:
 
 let
@@ -16,51 +19,48 @@ let
   };
 in
 python.pkgs.buildPythonApplication rec {
-  pname = "tts";
-  version = "0.20.2";
+  pname = "coqui-tts";
+  version = "0.25.1";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "coqui-ai";
-    repo = "TTS";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-1nlSf15IEX1qKfDtR6+jQqskjxIuzaIWatkj9Z1fh8Y=";
+    owner = "idiap";
+    repo = "coqui-ai-TTS";
+    tag = "v${version}";
+    hash = "sha256-5w1Y9wdoJ+EV/WBwK3nqyY60NEsMjQsfE4g+sJB7VwQ=";
   };
 
-  postPatch = let
-    relaxedConstraints = [
-      "bnunicodenormalizer"
-      "cython"
-      "gruut"
-      "inflect"
-      "librosa"
-      "mecab-python3"
-      "numba"
-      "numpy"
-      "unidic-lite"
-      "trainer"
-    ];
-  in ''
-    sed -r -i \
-      ${lib.concatStringsSep "\n" (map (package:
-        ''-e 's/${package}\s*[<>=]+.+/${package}/g' \''
-      ) relaxedConstraints)}
-    requirements.txt
-
-    sed -r -i \
-      ${lib.concatStringsSep "\n" (map (package:
-        ''-e 's/${package}\s*[<>=]+[^"]+/${package}/g' \''
-      ) relaxedConstraints)}
-    pyproject.toml
-    # only used for notebooks and visualization
-    sed -r -i -e '/umap-learn/d' requirements.txt
-  '';
+  postPatch =
+    let
+      relaxedConstraints = [
+        "bnunicodenormalizer"
+        "cython"
+        "gruut"
+        "inflect"
+        "librosa"
+        "mecab-python3"
+        "numba"
+        "numpy"
+        "unidic-lite"
+        "trainer"
+        "spacy\\[ja\\]"
+        "transformers"
+      ];
+    in
+    ''
+      sed -r -i \
+        ${lib.concatStringsSep "\n" (
+          map (package: ''-e 's/${package}\s*[<>=]+[^"]+/${package}/g' \'') relaxedConstraints
+        )}
+      pyproject.toml
+    '';
 
   nativeBuildInputs = with python.pkgs; [
     cython
     numpy
     packaging
     setuptools
+    hatchling
   ];
 
   propagatedBuildInputs = with python.pkgs; [
@@ -99,33 +99,34 @@ python.pkgs.buildPythonApplication rec {
     transformers
     unidic-lite
     webrtcvad
+    spacy
+    monotonic-alignment-search
   ];
 
   postInstall = ''
     cp -r TTS/server/templates/ $out/${python.sitePackages}/TTS/server
-    # cython modules are not installed for some reasons
-    (
-      cd TTS/tts/utils/monotonic_align
-      ${python.pythonOnBuildForHost.interpreter} setup.py install --prefix=$out
-    )
   '';
 
   # tests get stuck when run in nixpkgs-review, tested in passthru
   doCheck = false;
-  passthru.tests.pytest = tts.overridePythonAttrs (_: { doCheck = true; });
+  passthru.tests.pytest = tts.overridePythonAttrs (_: {
+    doCheck = true;
+  });
 
-  nativeCheckInputs = with python.pkgs; [
-    espeak-ng
-    pytestCheckHook
-  ];
+  nativeCheckInputs =
+    with python.pkgs;
+    [
+      espeak-ng
+      pytestCheckHook
+    ]
+    ++ [
+      addBinToPathHook
+      writableTmpDirAsHomeHook
+    ];
 
   preCheck = ''
     # use the installed TTS in $PYTHONPATH instead of the one from source to also have cython modules.
     mv TTS{,.old}
-    export PATH=$out/bin:$PATH
-
-    # numba tries to write to HOME directory
-    export HOME=$TMPDIR
 
     for file in $(grep -rl 'python TTS/bin' tests); do
       substituteInPlace "$file" \
@@ -134,7 +135,7 @@ python.pkgs.buildPythonApplication rec {
   '';
 
   disabledTests = [
-    # Requires network acccess to download models
+    # Requires network access to download models
     "test_korean_text_to_phonemes"
     "test_models_offset_0_step_3"
     "test_models_offset_1_step_3"
@@ -156,14 +157,14 @@ python.pkgs.buildPythonApplication rec {
     "tests/text_tests/test_phonemizer.py"
     # no training, it takes too long
     "tests/aux_tests/test_speaker_encoder_train.py"
-    "tests/tts_tests/test_align_tts_train.py"
-    "tests/tts_tests/test_fast_pitch_speaker_emb_train.py"
-    "tests/tts_tests/test_fast_pitch_train.py"
-    "tests/tts_tests/test_fastspeech_2_speaker_emb_train.py"
-    "tests/tts_tests/test_fastspeech_2_train.py"
-    "tests/tts_tests/test_glow_tts_d-vectors_train.py"
-    "tests/tts_tests/test_glow_tts_speaker_emb_train.py"
-    "tests/tts_tests/test_glow_tts_train.py"
+    "tests/tts_tests2/test_align_tts_train.py"
+    "tests/tts_tests2/test_fast_pitch_speaker_emb_train.py"
+    "tests/tts_tests2/test_fast_pitch_train.py"
+    "tests/tts_tests2/test_fastspeech_2_speaker_emb_train.py"
+    "tests/tts_tests2/test_fastspeech_2_train.py"
+    "tests/tts_tests2/test_glow_tts_d-vectors_train.py"
+    "tests/tts_tests2/test_glow_tts_speaker_emb_train.py"
+    "tests/tts_tests2/test_glow_tts_train.py"
     "tests/tts_tests/test_neuralhmm_tts_train.py"
     "tests/tts_tests/test_overflow_train.py"
     "tests/tts_tests/test_speedy_speech_train.py"
@@ -192,11 +193,11 @@ python.pkgs.buildPythonApplication rec {
   };
 
   meta = with lib; {
-    homepage = "https://github.com/coqui-ai/TTS";
-    changelog = "https://github.com/coqui-ai/TTS/releases/tag/v${version}";
+    homepage = "https://github.com/idiap/coqui-ai-TTS";
+    changelog = "https://github.com/idiap/coqui-ai-TTS/releases/tag/v${version}";
     description = "Deep learning toolkit for Text-to-Speech, battle-tested in research and production";
     license = licenses.mpl20;
     maintainers = teams.tts.members;
-    broken = true; # added 2024-04-08
+    broken = false;
   };
 }

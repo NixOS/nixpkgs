@@ -7,6 +7,7 @@ import logging
 import subprocess
 import urllib.error
 import urllib.request
+from contextlib import contextmanager
 from operator import itemgetter
 from pathlib import Path
 from typing import List, Dict, Optional, Any, Tuple, Set
@@ -53,9 +54,19 @@ def fetch_extension_data(uuid: str, version: str) -> Tuple[str, str]:
     url: str = f"https://extensions.gnome.org/extension-data/{uuid}.v{version}.shell-extension.zip"
 
     # Download extension and add the zip content to nix-store
-    process = subprocess.run(
-        ["nix-prefetch-url", "--unpack", "--print-path", url], capture_output=True, text=True
-    )
+    for _ in range(0, 10):
+        process = subprocess.run(
+            ["nix-prefetch-url", "--unpack", "--print-path", url], capture_output=True, text=True
+        )
+        if process.returncode == 0:
+            break
+        else:
+            logging.warning(f"Nix-prefetch-url failed for {url}:")
+            logging.warning(f"Stderr: {process.stderr}")
+            logging.warning(f"Retrying")
+
+    if process.returncode != 0:
+        raise Exception("Retried 10 times, but still failed to download the extension. Exiting.")
 
     lines = process.stdout.splitlines()
 
@@ -215,6 +226,20 @@ def process_extension(extension: Dict[str, Any]) -> Optional[Dict[str, Any]]:
     }
 
 
+@contextmanager
+def request(url: str, retries: int = 5, retry_codes: List[int] = [ 500, 502, 503, 504 ]):
+    for attempt in range(retries + 1):
+        try:
+            with urllib.request.urlopen(url) as response:
+                yield response
+                break
+        except urllib.error.HTTPError as e:
+            if e.code in retry_codes and attempt < retries:
+                logging.warning(f"Error while fetching {url}. Retrying: {e}")
+            else:
+                raise e
+
+
 def scrape_extensions_index() -> List[Dict[str, Any]]:
     """
     Scrape the list of extensions by sending search queries to the API. We simply go over it
@@ -228,7 +253,8 @@ def scrape_extensions_index() -> List[Dict[str, Any]]:
         page += 1
         logging.info("Scraping page " + str(page))
         try:
-            with urllib.request.urlopen(
+
+            with request(
                     f"https://extensions.gnome.org/extension-query/?n_per_page=25&page={page}"
             ) as response:
                 data = json.loads(response.read().decode())["extensions"]

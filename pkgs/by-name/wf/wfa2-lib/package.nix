@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, llvmPackages
-, enableOpenMP ? true
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  llvmPackages,
+  enableOpenMP ? true,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,14 +1,12 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, openssl
-, libgit2
-, IOKit
-, CoreFoundation
-, Security
-, fetchpatch
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  openssl,
+  libgit2,
+  zlib,
+  fetchpatch,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -22,7 +20,8 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-XAO3Qg5I2lYZVNx4+Z5jKHRIFdNwBJsUQwJXFb4CbvM=";
   };
 
-  cargoHash = "sha256-mS8kNkZs8jX99ryG4XkU+U/iWIIcmET2vOfG1YNNZFU=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-irgekVTWCujzSbZQMNJw3NZ3cjaUftpSJha6iZQqYJ8=";
 
   cargoPatches = [
     # Update git2 https://github.com/foriequal0/git-trim/pull/202
@@ -36,8 +35,11 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl libgit2 ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ IOKit CoreFoundation Security ];
+  buildInputs = [
+    openssl
+    libgit2
+    zlib
+  ];
 
   postInstall = ''
     install -Dm644 -t $out/share/man/man1/ docs/git-trim.1

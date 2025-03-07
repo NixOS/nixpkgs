@@ -1,20 +1,44 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   cfg = config.services.nzbget;
   stateDir = "/var/lib/nzbget";
   configFile = "${stateDir}/nzbget.conf";
-  configOpts = lib.concatStringsSep " " (lib.mapAttrsToList (name: value: "-o ${name}=${lib.escapeShellArg (toStr value)}") cfg.settings);
-  toStr = v:
-    if v == true then "yes"
-    else if v == false then "no"
-    else if lib.isInt v then toString v
-    else v;
+  configOpts = lib.concatStringsSep " " (
+    lib.mapAttrsToList (name: value: "-o ${name}=${lib.escapeShellArg (toStr value)}") cfg.settings
+  );
+  toStr =
+    v:
+    if v == true then
+      "yes"
+    else if v == false then
+      "no"
+    else if lib.isInt v then
+      toString v
+    else
+      v;
 in
 {
   imports = [
-    (lib.mkRemovedOptionModule [ "services" "misc" "nzbget" "configFile" ] "The configuration of nzbget is now managed by users through the web interface.")
-    (lib.mkRemovedOptionModule [ "services" "misc" "nzbget" "dataDir" ] "The data directory for nzbget is now /var/lib/nzbget.")
-    (lib.mkRemovedOptionModule [ "services" "misc" "nzbget" "openFirewall" ] "The port used by nzbget is managed through the web interface so you should adjust your firewall rules accordingly.")
+    (lib.mkRemovedOptionModule [
+      "services"
+      "misc"
+      "nzbget"
+      "configFile"
+    ] "The configuration of nzbget is now managed by users through the web interface.")
+    (lib.mkRemovedOptionModule [
+      "services"
+      "misc"
+      "nzbget"
+      "dataDir"
+    ] "The data directory for nzbget is now /var/lib/nzbget.")
+    (lib.mkRemovedOptionModule [ "services" "misc" "nzbget" "openFirewall" ]
+      "The port used by nzbget is managed through the web interface so you should adjust your firewall rules accordingly."
+    )
   ];
 
   # interface
@@ -38,8 +62,14 @@ in
       };
 
       settings = lib.mkOption {
-        type = with lib.types; attrsOf (oneOf [ bool int str ]);
-        default = {};
+        type =
+          with lib.types;
+          attrsOf (oneOf [
+            bool
+            int
+            str
+          ]);
+        default = { };
         description = ''
           NZBGet configuration, passed via command line using switch -o. Refer to
           <https://github.com/nzbget/nzbget/blob/master/nzbget.conf>

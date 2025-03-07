@@ -1,10 +1,11 @@
-{ lib
-, gccStdenv
-, fetchFromGitHub
-, autoreconfHook269
-, xorgproto
-, libX11
-, libXpm
+{
+  lib,
+  gccStdenv,
+  fetchFromGitHub,
+  autoreconfHook269,
+  xorgproto,
+  libX11,
+  libXpm,
 }:
 
 gccStdenv.mkDerivation rec {
@@ -19,7 +20,11 @@ gccStdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook269 ];
-  buildInputs = [ libX11 xorgproto libXpm ];
+  buildInputs = [
+    libX11
+    xorgproto
+    libXpm
+  ];
 
   configureFlags = [ "--with-x" ];
 
@@ -36,7 +41,7 @@ gccStdenv.mkDerivation rec {
     homepage = "https://github.com/hackndev/0verkill";
     description = "ASCII-ART bloody 2D action deathmatch-like game";
     license = with licenses; gpl2Only;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [ ];
     platforms = with platforms; unix;
   };
 }

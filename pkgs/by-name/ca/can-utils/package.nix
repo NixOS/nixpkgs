@@ -1,14 +1,18 @@
-{ lib, stdenv, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 
 stdenv.mkDerivation rec {
   pname = "can-utils";
-  version = "2023.03";
+  version = "2025.01";
 
   src = fetchFromGitHub {
     owner = "linux-can";
     repo = "can-utils";
     rev = "v${version}";
-    hash = "sha256-FaopviBJOmO0lXoJcdKNdtsoaJ8JrFEJGyO1aNBv+Pg=";
+    hash = "sha256-wum0hqPj3rCHHubNsOnj89tvrRQxoXrGQvZFcMKAGME=";
   };
 
   makeFlags = [ "PREFIX=$(out)" ];
@@ -18,6 +22,9 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/linux-can/can-utils";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ bjornfor Luflosi ];
+    maintainers = with maintainers; [
+      bjornfor
+      Luflosi
+    ];
   };
 }

@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, zlib
-, libdeflate
-, isa-l
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  zlib,
+  libdeflate,
+  isa-l,
 }:
 
 stdenv.mkDerivation rec {
@@ -17,7 +18,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Jl2Os/6yLWXTDv6irInYlUHpz6QTw8CEMVGFXblAay0=";
   };
 
-  buildInputs = [ zlib libdeflate isa-l ];
+  buildInputs = [
+    zlib
+    libdeflate
+    isa-l
+  ];
 
   installPhase = ''
     install -D fastp $out/bin/fastp

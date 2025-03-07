@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchgit
-, fetchpatch
-, cargo
-, pkg-config
-, rustPlatform
-, aemu
-, gfxstream
-, libdrm
-, libiconv
+{
+  lib,
+  stdenv,
+  fetchgit,
+  fetchpatch,
+  cargo,
+  pkg-config,
+  rustPlatform,
+  aemu,
+  gfxstream,
+  libdrm,
+  libiconv,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -39,24 +40,39 @@ stdenv.mkDerivation (finalAttrs: {
     })
     # Install the dylib on Darwin.
     ./darwin-install.patch
+    # Patch for libc++, drop in next update
+    # https://chromium.googlesource.com/crosvm/crosvm/+/8ae3c23b2e3899de33b973fc636909f1eb3dc98c
+    ./link-cxx.patch
   ];
 
-  nativeBuildInputs = [ cargo pkg-config rustPlatform.cargoSetupHook ];
-  buildInputs = [ libiconv ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform gfxstream) ([
-    aemu
-    gfxstream
-  ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform libdrm) [
-    libdrm
-  ]);
+  env = lib.optionalAttrs stdenv.hostPlatform.useLLVM {
+    USE_CLANG = true;
+  };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  nativeBuildInputs = [
+    cargo
+    pkg-config
+    rustPlatform.cargoSetupHook
+  ];
+  buildInputs =
+    [ libiconv ]
+    ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform gfxstream) (
+      [
+        aemu
+        gfxstream
+      ]
+      ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform libdrm) [
+        libdrm
+      ]
+    );
+
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
-    hash = "sha256-wuF3Isrp+u5J8jPQoPsIOWYGNKLSNa2pLfvladAWkLs=";
+    hash = "sha256-53xCzKuXtnnbS0TWdQrh4Rwy+V+D9soK41ycYd656Uc=";
   };
 
   CARGO_BUILD_TARGET = stdenv.hostPlatform.rust.rustcTargetSpec;
-  "CARGO_TARGET_${stdenv.hostPlatform.rust.cargoEnvVarTarget}_LINKER" =
-    "${stdenv.cc.targetPrefix}cc";
+  "CARGO_TARGET_${stdenv.hostPlatform.rust.cargoEnvVarTarget}_LINKER" = "${stdenv.cc.targetPrefix}cc";
 
   postConfigure = ''
     cd rutabaga_gfx/ffi

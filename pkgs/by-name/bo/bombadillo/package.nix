@@ -1,4 +1,9 @@
-{ lib, fetchgit, buildGoModule, installShellFiles }:
+{
+  lib,
+  fetchgit,
+  buildGoModule,
+  installShellFiles,
+}:
 
 buildGoModule rec {
   pname = "bombadillo";
@@ -14,7 +19,10 @@ buildGoModule rec {
 
   vendorHash = null;
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   postInstall = ''
     installManPage bombadillo.1

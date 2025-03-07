@@ -15,7 +15,7 @@
   jupyter-server,
   jupyter-server-mathjax,
   jinja2,
-  git,
+  gitMinimal,
   pytest-tornado,
   pytestCheckHook,
 }:
@@ -51,7 +51,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    git
+    gitMinimal
     pytest-tornado
     pytestCheckHook
   ];

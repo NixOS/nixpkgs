@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "SheffieldML";
     repo = "GPy";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-kggXePDKJcgw8qwLIBTxbwhiLw2H4dkx7082FguKP0Y=";
   };
 

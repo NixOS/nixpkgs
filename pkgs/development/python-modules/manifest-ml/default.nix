@@ -36,7 +36,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "HazyResearch";
     repo = "manifest";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-6m1XZOXzflBYyq9+PinbrW+zqvNGFN/aRDHH1b2Me5E=";
   };
 
@@ -107,7 +107,7 @@ buildPythonPackage rec {
     "test_run_chat"
     "test_run"
     "test_score_run"
-    # Test is time-senstive
+    # Test is time-sensitive
     "test_timing"
   ];
 

@@ -1,4 +1,9 @@
-{ lib, eggDerivation, fetchFromGitHub, chickenEggs }:
+{
+  lib,
+  eggDerivation,
+  fetchFromGitHub,
+  chickenEggs,
+}:
 
 # Note: This mostly reimplements the default.nix already contained in
 # the tarball. Is there a nicer way than duplicating code?

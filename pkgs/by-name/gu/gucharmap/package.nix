@@ -1,38 +1,39 @@
-{ stdenv
-, lib
-, intltool
-, fetchFromGitLab
-, meson
-, mesonEmulatorHook
-, ninja
-, pkg-config
-, python3
-, gtk3
-, pcre2
-, glib
-, desktop-file-utils
-, gtk-doc
-, wrapGAppsHook3
-, itstool
-, libxml2
-, yelp-tools
-, docbook_xsl
-, docbook_xml_dtd_412
-, gsettings-desktop-schemas
-, unzip
-, unicode-character-database
-, unihan-database
-, runCommand
-, symlinkJoin
-, gobject-introspection
-, gitUpdater
+{
+  stdenv,
+  lib,
+  intltool,
+  fetchFromGitLab,
+  meson,
+  mesonEmulatorHook,
+  ninja,
+  pkg-config,
+  python3,
+  gtk3,
+  pcre2,
+  glib,
+  desktop-file-utils,
+  gtk-doc,
+  wrapGAppsHook3,
+  itstool,
+  libxml2,
+  yelp-tools,
+  docbook_xsl,
+  docbook_xml_dtd_45,
+  gsettings-desktop-schemas,
+  unzip,
+  unicode-character-database,
+  unihan-database,
+  runCommand,
+  symlinkJoin,
+  gobject-introspection,
+  gitUpdater,
 }:
 
 let
   # TODO: make upstream patch allowing to use the uncompressed file,
   # preferably from XDG_DATA_DIRS.
   # https://gitlab.gnome.org/GNOME/gucharmap/issues/13
-  unihanZip = runCommand "unihan" {} ''
+  unihanZip = runCommand "unihan" { } ''
     mkdir -p $out/share/unicode
     ln -s ${unihan-database.src} $out/share/unicode/Unihan.zip
   '';
@@ -43,40 +44,48 @@ let
       unicode-character-database
     ];
   };
-in stdenv.mkDerivation (finalAttrs: {
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "gucharmap";
-  version = "16.0.1";
+  version = "16.0.2";
 
-  outputs = [ "out" "lib" "dev" "devdoc" ];
+  outputs = [
+    "out"
+    "lib"
+    "dev"
+    "devdoc"
+  ];
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "gucharmap";
     rev = finalAttrs.version;
-    hash = "sha256-eQ27TIggwQ2RjDQO5ytVrUT7iNtbP5HOwMcpzweMW8A=";
+    hash = "sha256-UaXgQIhAoI27iYWgZuZeO7Lv6J9pj06HPp0SZs/5abM=";
   };
 
   strictDeps = true;
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-    python3
-    wrapGAppsHook3
-    unzip
-    intltool
-    itstool
-    gtk-doc
-    docbook_xsl
-    docbook_xml_dtd_412
-    yelp-tools
-    libxml2
-    desktop-file-utils
-    gobject-introspection
-  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-    mesonEmulatorHook
-  ];
+  nativeBuildInputs =
+    [
+      meson
+      ninja
+      pkg-config
+      python3
+      wrapGAppsHook3
+      unzip
+      intltool
+      itstool
+      gtk-doc
+      docbook_xsl
+      docbook_xml_dtd_45
+      yelp-tools
+      libxml2
+      desktop-file-utils
+      gobject-introspection
+    ]
+    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+      mesonEmulatorHook
+    ];
 
   buildInputs = [
     gtk3

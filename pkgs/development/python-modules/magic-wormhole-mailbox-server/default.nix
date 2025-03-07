@@ -24,12 +24,15 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  dependencies = [
-    attrs
-    autobahn
-    setuptools # pkg_resources is referenced at runtime
-    twisted
-  ] ++ autobahn.optional-dependencies.twisted ++ twisted.optional-dependencies.tls;
+  dependencies =
+    [
+      attrs
+      autobahn
+      setuptools # pkg_resources is referenced at runtime
+      twisted
+    ]
+    ++ autobahn.optional-dependencies.twisted
+    ++ twisted.optional-dependencies.tls;
 
   pythonImportsCheck = [ "wormhole_mailbox_server" ];
 

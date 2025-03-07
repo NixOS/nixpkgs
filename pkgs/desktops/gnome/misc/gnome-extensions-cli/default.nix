@@ -1,26 +1,27 @@
-{ lib
-, fetchPypi
-, buildPythonApplication
-, poetry-core
-, colorama
-, packaging
-, pydantic
-, requests
-, pygobject3
-, tqdm
-, gobject-introspection
-, wrapGAppsNoGuiHook
+{
+  lib,
+  fetchPypi,
+  buildPythonApplication,
+  poetry-core,
+  colorama,
+  packaging,
+  pydantic,
+  requests,
+  pygobject3,
+  tqdm,
+  gobject-introspection,
+  wrapGAppsNoGuiHook,
 }:
 
 buildPythonApplication rec {
   pname = "gnome-extensions-cli";
-  version = "0.10.3";
+  version = "0.10.4";
   format = "pyproject";
 
   src = fetchPypi {
     pname = "gnome_extensions_cli";
     inherit version;
-    hash = "sha256-Z4MbiWB9IoRIsgH5ZGKnCh327FzGtOsW5vpjJ1ZAfTs=";
+    hash = "sha256-S+kSVvWVbg/ATaF0xacPeUnu84Xx2ot6AOLmdGQIeWo=";
   };
 
   nativeBuildInputs = [

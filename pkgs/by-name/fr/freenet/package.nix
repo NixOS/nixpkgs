@@ -3,34 +3,19 @@
   stdenv,
   fetchurl,
   fetchFromGitHub,
-  jdk17_headless,
-  jre17_minimal,
-  gradle_7,
+  jdk_headless,
+  jre,
+  gradle_8,
   bash,
   coreutils,
-  substituteAll,
+  replaceVars,
   nixosTests,
-  fetchpatch,
   writeText,
 }:
 
 let
-  gradle = gradle_7;
-  jdk = jdk17_headless;
-  # Reduce closure size
-  jre = jre17_minimal.override {
-    modules = [
-      "java.base"
-      "java.logging"
-      "java.naming"
-      "java.sql"
-      "java.desktop"
-      "java.management"
-    ];
-    jdk = jdk17_headless;
-  };
-
-  version = "01497";
+  gradle = gradle_8;
+  jdk = jdk_headless;
 
   freenet_ext = fetchurl {
     url = "https://github.com/freenet/fred/releases/download/build01495/freenet-ext.jar";
@@ -48,44 +33,32 @@ let
     '';
   };
 
-  patches = [
-    # gradle 7 support
-    # https://github.com/freenet/fred/pull/827
-    (fetchpatch {
-      url = "https://github.com/freenet/fred/commit/8991303493f2c0d9933f645337f0a7a5a979e70a.patch";
-      hash = "sha256-T1zymxRTADVhhwp2TyB+BC/J4gZsT/CUuMrT4COlpTY=";
-    })
-  ];
-
 in
 stdenv.mkDerivation rec {
   pname = "freenet";
-  inherit version patches;
+  version = "01501";
 
   src = fetchFromGitHub {
     owner = "freenet";
     repo = "fred";
-    rev = "refs/tags/build${version}";
-    hash = "sha256-pywNPekofF/QotNVF28McojqK7c1Zzucds5rWV0R7BQ=";
+    tag = "build${version}";
+    hash = "sha256-XtcTQlgUNv6IQD89oelCyjb9r6wIbT3hCH+QHkjtgP8=";
   };
-
-  postPatch = ''
-    rm gradle/verification-{keyring.keys,metadata.xml}
-  '';
 
   nativeBuildInputs = [
     gradle
     jdk
   ];
 
-  wrapper = substituteAll {
-    src = ./freenetWrapper;
+  wrapper = replaceVars ./freenetWrapper {
     inherit
       bash
       coreutils
       jre
       seednodes
       ;
+    # replaced in installPhase
+    CLASSPATH = null;
   };
 
   mitmCache = gradle.fetchDeps {
@@ -126,5 +99,6 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ nagy ];
     platforms = with lib.platforms; linux;
     changelog = "https://github.com/freenet/fred/blob/build${version}/NEWS.md";
+    mainProgram = "freenet";
   };
 }

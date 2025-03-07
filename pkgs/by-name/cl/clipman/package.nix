@@ -1,9 +1,10 @@
-{ buildGoModule
-, fetchFromGitHub
-, lib
-, wl-clipboard
-, makeWrapper
-, installShellFiles
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+  wl-clipboard,
+  makeWrapper,
+  installShellFiles,
 }:
 
 buildGoModule rec {
@@ -19,11 +20,17 @@ buildGoModule rec {
 
   vendorHash = "sha256-I1RWyjyOfppGi+Z5nvAei5zEvl0eQctcH8NP0MYSTbg=";
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   doCheck = false;
 
-  nativeBuildInputs = [ makeWrapper installShellFiles ];
+  nativeBuildInputs = [
+    makeWrapper
+    installShellFiles
+  ];
 
   postInstall = ''
     wrapProgram $out/bin/clipman \

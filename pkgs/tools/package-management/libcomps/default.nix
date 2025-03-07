@@ -1,21 +1,26 @@
-{ lib
-, check
-, cmake
-, doxygen
-, expat
-, fetchFromGitHub
-, libxml2
-, python
-, sphinx
-, stdenv
-, zlib
+{
+  lib,
+  check,
+  cmake,
+  doxygen,
+  expat,
+  fetchFromGitHub,
+  libxml2,
+  python,
+  sphinx,
+  stdenv,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {
   pname = "libcomps";
   version = "0.1.21";
 
-  outputs = [ "out" "dev" "py" ];
+  outputs = [
+    "out"
+    "dev"
+    "py"
+  ];
 
   src = fetchFromGitHub {
     owner = "rpm-software-management";

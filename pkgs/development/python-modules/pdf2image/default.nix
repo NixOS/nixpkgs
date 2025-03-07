@@ -3,7 +3,7 @@
   buildPythonPackage,
   fetchPypi,
   pillow,
-  poppler_utils,
+  poppler-utils,
   pythonOlder,
 }:
 
@@ -20,10 +20,10 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
-    # replace all default values of paths to poppler_utils
+    # replace all default values of paths to poppler-utils
     substituteInPlace pdf2image/pdf2image.py \
       --replace-fail 'poppler_path: Union[str, PurePath] = None' \
-                     'poppler_path: Union[str, PurePath] = "${poppler_utils}/bin"'
+                     'poppler_path: Union[str, PurePath] = "${poppler-utils}/bin"'
   '';
 
   propagatedBuildInputs = [ pillow ];

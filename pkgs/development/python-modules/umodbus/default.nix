@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "AdvancedClimateSystems";
     repo = "uModbus";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-5IXadb5mjrMwr+L9S1iMN5kba5VGrzYt1p8nBvvLCh4=";
   };
 

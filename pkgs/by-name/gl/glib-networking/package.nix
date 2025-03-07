@@ -1,36 +1,38 @@
-{ stdenv
-, lib
-, fetchurl
-, substituteAll
-, meson
-, ninja
-, nixosTests
-, pkg-config
-, glib
-, gettext
-, makeWrapper
-, gnutls
-, p11-kit
-, libproxy
-, gnome
-, gsettings-desktop-schemas
-, bash
+{
+  stdenv,
+  lib,
+  fetchurl,
+  replaceVars,
+  meson,
+  ninja,
+  nixosTests,
+  pkg-config,
+  glib,
+  gettext,
+  makeWrapper,
+  gnutls,
+  libproxy,
+  gnome,
+  gsettings-desktop-schemas,
+  bash,
 }:
 
 stdenv.mkDerivation rec {
   pname = "glib-networking";
-  version = "2.80.0";
+  version = "2.80.1";
 
-  outputs = [ "out" "installedTests" ];
+  outputs = [
+    "out"
+    "installedTests"
+  ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    hash = "sha256-2PTxqrITF5rjNRYXtZ2rXea8yeeFAh7uF4mY69S7Os8=";
+    url = "mirror://gnome/sources/glib-networking/${lib.versions.majorMinor version}/glib-networking-${version}.tar.xz";
+    hash = "sha256-uA4odBV81VBx8bZxD6C5EdWsXeEGqe4qTJx77mF4L44=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./hardcode-gsettings.patch;
+    (replaceVars ./hardcode-gsettings.patch {
       gds_gsettings_path = glib.getSchemaPath gsettings-desktop-schemas;
     })
 
@@ -57,7 +59,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     glib
     gnutls
-    p11-kit
     libproxy
     gsettings-desktop-schemas
     bash # installed-tests shebangs
@@ -80,7 +81,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "glib-networking";
       versionPolicy = "odd-unstable";
     };
 
@@ -95,5 +96,9 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl21Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.unix;
+    badPlatforms = [
+      # GIO shared modules are mandatory.
+      lib.systems.inspect.platformPatterns.isStatic
+    ];
   };
 }

@@ -1,6 +1,7 @@
-{ lib
-, buildGo122Module
-, fetchFromGitHub
+{
+  lib,
+  buildGo122Module,
+  fetchFromGitHub,
 }:
 buildGo122Module {
   pname = "honeytrap";

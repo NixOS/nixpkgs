@@ -1,8 +1,9 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, installShellFiles
-, patsh
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  installShellFiles,
+  patsh,
 }:
 
 stdenvNoCC.mkDerivation rec {

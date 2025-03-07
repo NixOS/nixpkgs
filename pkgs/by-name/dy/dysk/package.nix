@@ -1,21 +1,23 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, installShellFiles
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  installShellFiles,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "dysk";
-  version = "2.9.1";
+  version = "2.10.0";
 
   src = fetchFromGitHub {
     owner = "Canop";
     repo = "dysk";
     rev = "v${version}";
-    hash = "sha256-PGl2pUeLPznut/ETJdaQlin9thDBPvqBE30cgXwV+KM=";
+    hash = "sha256-VJFcdxwj+038d9oj178e0uGQQyKF9JbDytxDmit2tiA=";
   };
 
-  cargoHash = "sha256-ppOAQ6Y9GJNLwGbbg1qfQ7ArVKiYxt26oEEWMOjbu0w=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-vVU10Mj+dRIAOREQiGIO0S+mDBeLtM5v0KjmmoCn3/g=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -31,7 +33,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/Canop/dysk";
     changelog = "https://github.com/Canop/dysk/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda koral ];
+    maintainers = with maintainers; [
+      figsoda
+      koral
+    ];
     mainProgram = "dysk";
   };
 }

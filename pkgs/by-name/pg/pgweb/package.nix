@@ -1,8 +1,10 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, testers
-, pgweb
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  testers,
+  pgweb,
+  nixosTests,
 }:
 
 buildGoModule rec {
@@ -23,7 +25,10 @@ buildGoModule rec {
 
   vendorHash = "sha256-Jpvf6cST3kBvYzCQLoJ1fijUC/hP1ouptd2bQZ1J/Lo=";
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   checkFlags =
     let
@@ -32,13 +37,19 @@ buildGoModule rec {
         "TestParseOptions"
       ];
     in
-    [ "-skip" "${builtins.concatStringsSep "|" skippedTests}" ];
+    [
+      "-skip"
+      "${builtins.concatStringsSep "|" skippedTests}"
+    ];
 
-    passthru.tests.version = testers.testVersion {
+  passthru.tests = {
+    version = testers.testVersion {
       version = "v${version}";
       package = pgweb;
       command = "pgweb --version";
     };
+    integration_test = nixosTests.pgweb;
+  };
 
   meta = with lib; {
     changelog = "https://github.com/sosedoff/pgweb/releases/tag/v${version}";
@@ -50,6 +61,9 @@ buildGoModule rec {
     homepage = "https://sosedoff.github.io/pgweb/";
     license = licenses.mit;
     mainProgram = "pgweb";
-    maintainers = with maintainers; [ zupo luisnquin ];
+    maintainers = with maintainers; [
+      zupo
+      luisnquin
+    ];
   };
 }

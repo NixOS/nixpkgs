@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
 
   # build-system
   setuptools,
@@ -41,10 +42,19 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "magic-wormhole";
     repo = "magic-wormhole";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-BxPF4iQ91wLBagdvQ/Y89VIZBkMxFiEHnK+BU55Bwr4=";
   };
 
+  patches = [
+    # TODO: drop patch for magic-wormhole > 0.17.0
+    # fix test for twisted 24.10.0 (https://github.com/magic-wormhole/magic-wormhole/pull/554)
+    (fetchpatch {
+      name = "fix-twisted-24.10.0.patch";
+      url = "https://github.com/magic-wormhole/magic-wormhole/commit/d7353cad6fe9d43620a0de33a634f395757d2e5c.patch";
+      hash = "sha256-mvgVFW3Fa2I8/39ron0bYYsJNm2r97jnLFCfhtHSIP0=";
+    })
+  ];
   postPatch =
     # enable tests by fixing the location of the wormhole binary
     ''
@@ -59,21 +69,24 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  dependencies = [
-    attrs
-    autobahn
-    automat
-    click
-    humanize
-    iterable-io
-    pynacl
-    six
-    spake2
-    tqdm
-    twisted
-    txtorcon
-    zipstream-ng
-  ] ++ autobahn.optional-dependencies.twisted ++ twisted.optional-dependencies.tls;
+  dependencies =
+    [
+      attrs
+      autobahn
+      automat
+      click
+      humanize
+      iterable-io
+      pynacl
+      six
+      spake2
+      tqdm
+      twisted
+      txtorcon
+      zipstream-ng
+    ]
+    ++ autobahn.optional-dependencies.twisted
+    ++ twisted.optional-dependencies.tls;
 
   optional-dependencies = {
     dilation = [ noiseprotocol ];

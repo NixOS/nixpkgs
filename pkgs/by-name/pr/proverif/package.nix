@@ -1,17 +1,25 @@
-{ lib, stdenv, fetchurl, ocamlPackages }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ocamlPackages,
+}:
 
 stdenv.mkDerivation rec {
   pname = "proverif";
   version = "2.05";
 
   src = fetchurl {
-    url    = "https://bblanche.gitlabpages.inria.fr/proverif/proverif${version}.tar.gz";
+    url = "https://bblanche.gitlabpages.inria.fr/proverif/proverif${version}.tar.gz";
     hash = "sha256-SHH1PDKrSgRmmgYMSIa6XZCASWlj+5gKmmLSxCnOq8Q=";
   };
 
   strictDeps = true;
 
-  nativeBuildInputs = with ocamlPackages; [ ocaml findlib ];
+  nativeBuildInputs = with ocamlPackages; [
+    ocaml
+    findlib
+  ];
 
   buildPhase = "./build -nointeract";
   installPhase = ''
@@ -23,9 +31,12 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Cryptographic protocol verifier in the formal model";
-    homepage    = "https://bblanche.gitlabpages.inria.fr/proverif/";
-    license     = lib.licenses.gpl2;
-    platforms   = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ thoughtpolice vbgl ];
+    homepage = "https://bblanche.gitlabpages.inria.fr/proverif/";
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
+      thoughtpolice
+      vbgl
+    ];
   };
 }

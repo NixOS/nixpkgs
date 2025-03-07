@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "jantman";
     repo = "awslimitchecker";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-+8F7qOfAFoFNZ6GG5ezTA/LWENpJvbcPdtpQH/8k1tw=";
   };
 

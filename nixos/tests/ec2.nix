@@ -55,7 +55,7 @@ let
       }
     ];
   }).config;
-  image = "${imageCfg.system.build.amazonImage}/${imageCfg.amazonImage.name}.qcow2";
+  image = "${imageCfg.system.build.amazonImage}/${imageCfg.image.imageFile}";
 
   sshKeys = import ./ssh-keys.nix pkgs;
   snakeOilPrivateKey = sshKeys.snakeOilPrivateKey.text;

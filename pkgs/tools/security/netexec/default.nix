@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, python3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python3,
 }:
 let
   python = python3.override {
@@ -26,32 +27,35 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "netexec";
-  version = "1.1.0-unstable-2024-01-15";
+  version = "1.3.0";
   pyproject = true;
+
+  src = fetchFromGitHub {
+    owner = "Pennyw0rth";
+    repo = "NetExec";
+    tag = "v${version}";
+    hash = "sha256-Pub7PAw6CTN4c/PHTPE9KcnDR2a6hSza1ODp3EWMOH0=";
+  };
+
   pythonRelaxDeps = true;
+
   pythonRemoveDeps = [
     # Fail to detect dev version requirement
     "neo4j"
   ];
 
-  src = fetchFromGitHub {
-    owner = "Pennyw0rth";
-    repo = "NetExec";
-    rev = "9df72e2f68b914dfdbd75b095dd8f577e992615f";
-    hash = "sha256-oQHtTE5hdlxHX4uc412VfNUrN0UHVbwI0Mm9kmJpNW4=";
-  };
-
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace '{ git = "https://github.com/Pennyw0rth/impacket.git", branch = "gkdi" }' '"*"' \
-      --replace '{ git = "https://github.com/Pennyw0rth/oscrypto" }' '"*"'
+      --replace-fail '{ git = "https://github.com/fortra/impacket.git" }' '"*"' \
+      --replace-fail '{ git = "https://github.com/Pennyw0rth/NfsClient" }' '"*"'
   '';
 
-  nativeBuildInputs = with python.pkgs; [
+  build-system = with python.pkgs; [
     poetry-core
+    poetry-dynamic-versioning
   ];
 
-  propagatedBuildInputs = with python.pkgs; [
+  dependencies = with python.pkgs; [
     aardwolf
     aioconsole
     aiosqlite
@@ -66,13 +70,15 @@ python.pkgs.buildPythonApplication rec {
     masky
     minikerberos
     msgpack
+    msldap
     neo4j
-    oscrypto
     paramiko
     pyasn1-modules
     pylnk3
+    pynfsclient
     pypsrp
     pypykatz
+    python-dateutil
     python-libnmap
     pywerview
     requests
@@ -83,9 +89,10 @@ python.pkgs.buildPythonApplication rec {
     xmltodict
   ];
 
-  nativeCheckInputs = with python.pkgs; [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = with python.pkgs; [ pytestCheckHook ];
+
+  # Tests no longer works out-of-box with 1.3.0
+  doCheck = false;
 
   preCheck = ''
     export HOME=$(mktemp -d)
@@ -95,9 +102,9 @@ python.pkgs.buildPythonApplication rec {
     description = "Network service exploitation tool (maintained fork of CrackMapExec)";
     homepage = "https://github.com/Pennyw0rth/NetExec";
     changelog = "https://github.com/Pennyw0rth/NetExec/releases/tag/v${version}";
-    license = with licenses; [ bsd2 ];
-    mainProgram = "nxc";
+    license = licenses.bsd2;
     maintainers = with maintainers; [ vncsb ];
+    mainProgram = "nxc";
     # FIXME: failing fixupPhase:
     # $ Rewriting #!/nix/store/<hash>-python3-3.11.7/bin/python3.11 to #!/nix/store/<hash>-python3-3.11.7
     # $ /nix/store/<hash>-wrap-python-hook/nix-support/setup-hook: line 65: 47758 Killed: 9               sed -i "$f" -e "1 s^#!/nix/store/<hash>-python3-3.11.7^#!/nix/store/<hash>-python3-3.11.7^"

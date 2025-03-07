@@ -1,4 +1,11 @@
-{ lib, buildGoModule, fetchFromGitHub, pkg-config, pulseaudio }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  pkg-config,
+  pulseaudio,
+  nix-update-script,
+}:
 
 buildGoModule rec {
   pname = "kappanhang";
@@ -6,7 +13,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "nonoo";
-    repo = pname;
+    repo = "kappanhang";
     rev = "v${version}";
     hash = "sha256-l0V2NVzLsnpPe5EJcr5i9U7OGaYzNRDd1f/ogrdCnvk=";
   };
@@ -16,12 +23,14 @@ buildGoModule rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ pulseaudio ];
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     homepage = "https://github.com/nonoo/kappanhang";
     description = "Remote control for Icom radio transceivers";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ mvs ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ mvs ];
     mainProgram = "kappanhang";
   };
 }

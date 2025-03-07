@@ -1,11 +1,17 @@
-{ lib, stdenv, fetchurl, tcl, usb-modeswitch }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  tcl,
+  usb-modeswitch,
+}:
 
 stdenv.mkDerivation rec {
   pname = "usb-modeswitch-data";
   version = "20191128";
 
   src = fetchurl {
-    url    = "http://www.draisberghof.de/usb_modeswitch/${pname}-${version}.tar.bz2";
+    url = "http://www.draisberghof.de/usb_modeswitch/${pname}-${version}.tar.bz2";
     sha256 = "1ygahl3r26r38ai8yyblq9nhf3v5i6n6r6672p5wf88wg5h9n0rz";
   };
 

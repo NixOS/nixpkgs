@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "adext";
-  version = "0.4.3";
+  version = "0.4.4";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -18,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ajschmidt8";
     repo = "adext";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-y8BvcSc3vD0FEWiyzW2Oh6PBS2Itjs2sz+9Dzh5yqSg=";
+    tag = "v${version}";
+    hash = "sha256-KzL9yNdWgeO4Q5NzyHgxWv5gy2Awr86qYD526dyZCtM=";
   };
 
   build-system = [ setuptools-scm ];

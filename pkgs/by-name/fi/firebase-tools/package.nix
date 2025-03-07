@@ -6,21 +6,18 @@
   python3,
   xcbuild,
 }:
+buildNpmPackage rec {
+  pname = "firebase-tools";
+  version = "13.32.0";
 
-let
-  version = "13.28.0";
   src = fetchFromGitHub {
     owner = "firebase";
     repo = "firebase-tools";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-bOuOBzEEfVi+0lGqKgZQVmxKUBWoWWdaQ1jlCR1xBcM=";
+    tag = "v${version}";
+    hash = "sha256-KImt8se4pf/W1XAV8PprYmJRWQqMIAH9FVCEFSV/3Ys=";
   };
-in
-buildNpmPackage {
-  pname = "firebase-tools";
-  inherit version src;
 
-  npmDepsHash = "sha256-3wc1DPZ+yYlBtUTWpa4XFaetS7caNqX5JFSXkmzHyqg=";
+  npmDepsHash = "sha256-/EWfXiITSV1r4zVvnHk+9U7MpcUlp7/MNUBJWRw3wRk=";
 
   postPatch = ''
     ln -s npm-shrinkwrap.json package-lock.json
@@ -39,11 +36,14 @@ buildNpmPackage {
   };
 
   meta = {
-    changelog = "https://github.com/firebase/firebase-tools/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/firebase/firebase-tools/blob/v${version}/CHANGELOG.md";
     description = "Manage, and deploy your Firebase project from the command line";
     homepage = "https://github.com/firebase/firebase-tools";
     license = lib.licenses.mit;
     mainProgram = "firebase";
-    maintainers = with lib.maintainers; [ momeemt ];
+    maintainers = with lib.maintainers; [
+      momeemt
+      sarahec
+    ];
   };
 }

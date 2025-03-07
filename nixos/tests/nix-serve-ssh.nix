@@ -1,45 +1,50 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }:
-let inherit (import ./ssh-keys.nix pkgs)
-      snakeOilPrivateKey snakeOilPublicKey;
+import ./make-test-python.nix (
+  { pkgs, lib, ... }:
+  let
+    inherit (import ./ssh-keys.nix pkgs)
+      snakeOilPrivateKey
+      snakeOilPublicKey
+      ;
     ssh-config = builtins.toFile "ssh.conf" ''
       UserKnownHostsFile=/dev/null
       StrictHostKeyChecking=no
     '';
-in
-   { name = "nix-ssh-serve";
-     meta.maintainers = [ lib.maintainers.shlevy ];
-     nodes =
-       { server.nix.sshServe =
-           { enable = true;
-             keys = [ snakeOilPublicKey ];
-             protocol = "ssh-ng";
-           };
-         server.nix.package = pkgs.nix;
-         client.nix.package = pkgs.nix;
-       };
-     testScript = ''
-       start_all()
+  in
+  {
+    name = "nix-ssh-serve";
+    meta.maintainers = [ lib.maintainers.shlevy ];
+    nodes = {
+      server.nix.sshServe = {
+        enable = true;
+        keys = [ snakeOilPublicKey ];
+        protocol = "ssh-ng";
+      };
+      server.nix.package = pkgs.nix;
+      client.nix.package = pkgs.nix;
+    };
+    testScript = ''
+      start_all()
 
-       client.succeed("mkdir -m 700 /root/.ssh")
-       client.succeed(
-           "cat ${ssh-config} > /root/.ssh/config"
-       )
-       client.succeed(
-           "cat ${snakeOilPrivateKey} > /root/.ssh/id_ecdsa"
-       )
-       client.succeed("chmod 600 /root/.ssh/id_ecdsa")
+      client.succeed("mkdir -m 700 /root/.ssh")
+      client.succeed(
+          "cat ${ssh-config} > /root/.ssh/config"
+      )
+      client.succeed(
+          "cat ${snakeOilPrivateKey} > /root/.ssh/id_ecdsa"
+      )
+      client.succeed("chmod 600 /root/.ssh/id_ecdsa")
 
-       client.succeed("nix-store --add /etc/machine-id > mach-id-path")
+      client.succeed("nix-store --add /etc/machine-id > mach-id-path")
 
-       server.wait_for_unit("sshd")
+      server.wait_for_unit("sshd")
 
-       client.fail("diff /root/other-store$(cat mach-id-path) /etc/machine-id")
-       # Currently due to shared store this is a noop :(
-       client.succeed("nix copy --experimental-features 'nix-command' --to ssh-ng://nix-ssh@server $(cat mach-id-path)")
-       client.succeed(
-           "nix-store --realise $(cat mach-id-path) --store /root/other-store --substituters ssh-ng://nix-ssh@server"
-       )
-       client.succeed("diff /root/other-store$(cat mach-id-path) /etc/machine-id")
-     '';
-   }
+      client.fail("diff /root/other-store$(cat mach-id-path) /etc/machine-id")
+      # Currently due to shared store this is a noop :(
+      client.succeed("nix copy --experimental-features 'nix-command' --to ssh-ng://nix-ssh@server $(cat mach-id-path)")
+      client.succeed(
+          "nix-store --realise $(cat mach-id-path) --store /root/other-store --substituters ssh-ng://nix-ssh@server"
+      )
+      client.succeed("diff /root/other-store$(cat mach-id-path) /etc/machine-id")
+    '';
+  }
 )

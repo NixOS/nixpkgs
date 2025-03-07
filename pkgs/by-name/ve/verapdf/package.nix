@@ -10,7 +10,7 @@
 }:
 maven.buildMavenPackage rec {
   pname = "verapdf";
-  version = "1.26.2";
+  version = "1.26.4";
 
   mvnParameters = "-pl '!installer' -Dverapdf.timestamp=1980-01-01T00:00:02Z -Dproject.build.outputTimestamp=1980-01-01T00:00:02Z";
 
@@ -18,12 +18,12 @@ maven.buildMavenPackage rec {
     owner = "veraPDF";
     repo = "veraPDF-apps";
     rev = "v${version}";
-    hash = "sha256-bWj4dX1qRQ2zzfF9GfskvMnrNU9pKC738Zllx6JsFww=";
+    hash = "sha256-2g16PJdbC4OgFzLonfZgE7LRw2dKGjLCb2AYvrr8lxA=";
   };
 
   patches = [ ./stable-maven-plugins.patch ];
 
-  mvnHash = "sha256-sVuzd4TUmrfvqhtiZL1L4obOF1DihMANbZNIy/LKyfw=";
+  mvnHash = "sha256-VXivLGt440MfloWedtQlGukuZk0yui1QhjrpXGNNzqY=";
 
   nativeBuildInputs = [
     makeWrapper

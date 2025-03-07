@@ -1,4 +1,10 @@
-{ config, lib, pkgs, utils, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  utils,
+  ...
+}:
 
 let
   cfg = config.services.lldap;
@@ -111,16 +117,18 @@ in
       # an attacker could create a valid admin jwt access token fairly trivially.
       # Because there are 3 different ways `jwt_secret` can be provided, we check if any one of them is present,
       # and if not, bootstrap a secret in `/var/lib/lldap/jwt_secret_file` and give that to lldap.
-      script = lib.optionalString (!cfg.settings ? jwt_secret) ''
-        if [[ -z "$LLDAP_JWT_SECRET_FILE" ]] && [[ -z "$LLDAP_JWT_SECRET" ]]; then
-          if [[ ! -e "./jwt_secret_file" ]]; then
-            ${lib.getExe pkgs.openssl} rand -base64 -out ./jwt_secret_file 32
+      script =
+        lib.optionalString (!cfg.settings ? jwt_secret) ''
+          if [[ -z "$LLDAP_JWT_SECRET_FILE" ]] && [[ -z "$LLDAP_JWT_SECRET" ]]; then
+            if [[ ! -e "./jwt_secret_file" ]]; then
+              ${lib.getExe pkgs.openssl} rand -base64 -out ./jwt_secret_file 32
+            fi
+            export LLDAP_JWT_SECRET_FILE="./jwt_secret_file"
           fi
-          export LLDAP_JWT_SECRET_FILE="./jwt_secret_file"
-        fi
-      '' + ''
-         ${lib.getExe cfg.package} run --config-file ${format.generate "lldap_config.toml" cfg.settings}
-      '';
+        ''
+        + ''
+          ${lib.getExe cfg.package} run --config-file ${format.generate "lldap_config.toml" cfg.settings}
+        '';
       serviceConfig = {
         StateDirectory = "lldap";
         StateDirectoryMode = "0750";

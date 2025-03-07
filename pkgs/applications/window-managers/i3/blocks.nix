@@ -1,4 +1,11 @@
-{ fetchFromGitHub, fetchpatch, lib, stdenv, autoreconfHook, pkg-config }:
+{
+  fetchFromGitHub,
+  fetchpatch,
+  lib,
+  stdenv,
+  autoreconfHook,
+  pkg-config,
+}:
 
 stdenv.mkDerivation {
   pname = "i3blocks";
@@ -20,7 +27,10 @@ stdenv.mkDerivation {
     })
   ];
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
 
   meta = with lib; {
     description = "Flexible scheduler for your i3bar blocks";

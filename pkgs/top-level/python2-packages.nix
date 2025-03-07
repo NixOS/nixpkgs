@@ -1,13 +1,17 @@
-# Extension with Python 2 packages that is overlayed on top
+# Extension with Python 2 packages that is overlaid on top
 # of the Python 3 packages set. This way, Python 2+3 compatible
 # packages can still be used.
 
 self: super:
 
-with self; with super; {
+with self;
+with super;
+{
   attrs = callPackage ../development/python2-modules/attrs { };
 
-  backports-functools-lru-cache = callPackage ../development/python2-modules/backports-functools-lru-cache { };
+  backports-functools-lru-cache =
+    callPackage ../development/python2-modules/backports-functools-lru-cache
+      { };
 
   bootstrapped-pip = toPythonModule (callPackage ../development/python2-modules/bootstrapped-pip { });
 
@@ -21,7 +25,7 @@ with self; with super; {
 
   enum = callPackage ../development/python2-modules/enum { };
 
-  filelock =  callPackage ../development/python2-modules/filelock { };
+  filelock = callPackage ../development/python2-modules/filelock { };
 
   futures = callPackage ../development/python2-modules/futures { };
 
@@ -59,13 +63,12 @@ with self; with super; {
 
   pytest = pytest_4;
 
-  pytest_4 = callPackage
-    ../development/python2-modules/pytest {
-      # hypothesis tests require pytest that causes dependency cycle
-      hypothesis = self.hypothesis.override {
-        doCheck = false;
-      };
+  pytest_4 = callPackage ../development/python2-modules/pytest {
+    # hypothesis tests require pytest that causes dependency cycle
+    hypothesis = self.hypothesis.override {
+      doCheck = false;
     };
+  };
 
   pytest-xdist = callPackage ../development/python2-modules/pytest-xdist { };
 
@@ -84,7 +87,7 @@ with self; with super; {
   typing = callPackage ../development/python2-modules/typing { };
 
   six = super.six.overridePythonAttrs (_: {
-    doCheck = false;  # circular dependency with pytest
+    doCheck = false; # circular dependency with pytest
   });
 
   wcwidth = callPackage ../development/python2-modules/wcwidth {

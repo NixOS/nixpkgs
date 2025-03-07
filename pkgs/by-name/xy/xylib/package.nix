@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchurl
-, boost
-, zlib
-, bzip2
-, wxGTK32
+{
+  lib,
+  stdenv,
+  fetchurl,
+  boost,
+  zlib,
+  bzip2,
+  wxGTK32,
 }:
 
 stdenv.mkDerivation rec {
@@ -21,6 +22,10 @@ stdenv.mkDerivation rec {
     zlib
     bzip2
     wxGTK32
+  ];
+
+  configureFlags = [
+    "--with-wx-config=${lib.getExe' (lib.getDev wxGTK32) "wx-config"}"
   ];
 
   meta = with lib; {

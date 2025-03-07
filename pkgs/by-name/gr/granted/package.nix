@@ -4,9 +4,6 @@
   nix-update-script,
   versionCheckHook,
 
-  withFish ? false,
-  fish,
-
   lib,
   makeWrapper,
   xdg-utils,
@@ -14,16 +11,16 @@
 
 buildGoModule rec {
   pname = "granted";
-  version = "0.36.3";
+  version = "0.38.0";
 
   src = fetchFromGitHub {
     owner = "common-fate";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-fLnrc+Aek2bFrJfCCwI9HRAocokb3IlGZbjYzur7LHk=";
+    sha256 = "sha256-xHpYtHG0fJ/VvJ/4lJ90ept3yGzJRnmtFQFbYxJtxwY=";
   };
 
-  vendorHash = "sha256-imArhe/TjrXv68ZF7moOcKjvxAvQzm7XfBkyWfwNJJs=";
+  vendorHash = "sha256-Y8g5495IYgQ2lvq5qbnQmoxwEYfzzx12KfMS6wF2QXE=";
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -75,12 +72,11 @@ buildGoModule rec {
 
       # Insert below the #!/bin/sh shebang
       echo "$addToPath" | sed "/#!\/bin\/sh/r /dev/stdin" $src/scripts/assume >> $out/bin/assume
-    ''
-    + lib.optionalString withFish ''
+
       # Install fish script
       install -Dm755 $src/scripts/assume.fish $out/share/assume.fish
       substituteInPlace $out/share/assume.fish \
-        --replace /bin/fish ${fish}/bin/fish
+        --replace-fail "#!/bin/fish" "#!/usr/bin/env fish"
     '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];

@@ -1,22 +1,23 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, meson
-, ninja
-, vala
-, pkg-config
-, desktop-file-utils
-, glib
-, gtk3
-, glib-networking
-, libgee
-, libsoup_2_4
-, json-glib
-, sqlite
-, webkitgtk_4_0
-, libmanette
-, libXtst
-, wrapGAppsHook3
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  vala,
+  pkg-config,
+  desktop-file-utils,
+  glib,
+  gtk3,
+  glib-networking,
+  libgee,
+  libsoup_2_4,
+  json-glib,
+  sqlite,
+  webkitgtk_4_0,
+  libmanette,
+  libXtst,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation rec {

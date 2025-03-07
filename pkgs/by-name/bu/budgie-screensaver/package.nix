@@ -56,7 +56,9 @@ stdenv.mkDerivation (finalAttrs: {
     xorg.libXxf86vm
   ];
 
-  env.NIX_CFLAGS_COMPILE = "-D_POSIX_C_SOURCE";
+  # Fix GCC 14 build.
+  # https://hydra.nixos.org/build/282164464/nixlog/3
+  env.NIX_CFLAGS_COMPILE = "-D_POSIX_C_SOURCE -Wno-error=implicit-function-declaration";
 
   passthru = {
     tests.version = testers.testVersion {

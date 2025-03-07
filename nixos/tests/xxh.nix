@@ -1,4 +1,5 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }:
+import ./make-test-python.nix (
+  { pkgs, lib, ... }:
 
   let
     inherit (import ./ssh-keys.nix pkgs) snakeOilPrivateKey snakeOilPublicKey;
@@ -38,16 +39,23 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
     };
 
     nodes = {
-      server = { ... }: {
-        services.openssh.enable = true;
-        users.users.root.openssh.authorizedKeys.keys = [ snakeOilPublicKey ];
-      };
+      server =
+        { ... }:
+        {
+          services.openssh.enable = true;
+          users.users.root.openssh.authorizedKeys.keys = [ snakeOilPublicKey ];
+        };
 
-      client = { ... }: {
-        programs.zsh.enable = true;
-        users.users.root.shell = pkgs.zsh;
-        environment.systemPackages = with pkgs; [ xxh git ];
-      };
+      client =
+        { ... }:
+        {
+          programs.zsh.enable = true;
+          users.users.root.shell = pkgs.zsh;
+          environment.systemPackages = with pkgs; [
+            xxh
+            git
+          ];
+        };
     };
 
     testScript = ''
@@ -64,4 +72,5 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
 
       client.succeed("xxh server -i /root/.ssh/id_ecdsa +hc \'echo $0\' +i +s zsh +I xxh-shell-zsh+path+${xxh-shell-zsh} | grep -Fq '/root/.xxh/.xxh/shells/xxh-shell-zsh/build/zsh-bin/bin/zsh'")
     '';
-  })
+  }
+)

@@ -1,17 +1,28 @@
-{ pkgs, lib, stdenvNoCC, themeConfig ? null }:
+{
+  pkgs,
+  lib,
+  stdenvNoCC,
+  themeConfig ? null,
+  embeddedTheme ? "astronaut",
+}:
 stdenvNoCC.mkDerivation rec {
   pname = "sddm-astronaut";
-  version = "1.0";
+  version = "1.0-unstable-2025-01-05";
 
   src = pkgs.fetchFromGitHub {
     owner = "Keyitdev";
     repo = "sddm-astronaut-theme";
-    rev = "48ea0a792711ac0c58cc74f7a03e2e7ba3dc2ac0";
-    hash = "sha256-kXovz813BS+Mtbk6+nNNdnluwp/7V2e3KJLuIfiWRD0=";
+    rev = "11c0bf6147bbea466ce2e2b0559e9a9abdbcc7c3";
+    hash = "sha256-gBSz+k/qgEaIWh1Txdgwlou/Lfrfv3ABzyxYwlrLjDk=";
   };
 
   dontWrapQtApps = true;
-  propagatedBuildInputs = with pkgs.kdePackages; [ qt5compat qtsvg ];
+
+  propagatedBuildInputs = with pkgs.kdePackages; [
+    qtsvg
+    qtmultimedia
+    qtvirtualkeyboard
+  ];
 
   installPhase =
     let
@@ -19,12 +30,21 @@ stdenvNoCC.mkDerivation rec {
       configFile = iniFormat.generate "" { General = themeConfig; };
 
       basePath = "$out/share/sddm/themes/sddm-astronaut-theme";
+      sedString = "ConfigFile=Themes/";
     in
     ''
       mkdir -p ${basePath}
       cp -r $src/* ${basePath}
-    '' + lib.optionalString (themeConfig != null) ''
-      ln -sf ${configFile} ${basePath}/theme.conf.user
+    ''
+    + lib.optionalString (embeddedTheme != "astronaut") ''
+
+      # Replaces astronaut.conf with embedded theme in metadata.desktop on line 9.
+      # ConfigFile=Themes/astronaut.conf.
+      sed -i "s|^${sedString}.*\\.conf$|${sedString}${embeddedTheme}.conf|" ${basePath}/metadata.desktop
+    ''
+    + lib.optionalString (themeConfig != null) ''
+      chmod u+w ${basePath}/Themes/
+      ln -sf ${configFile} ${basePath}/Themes/${embeddedTheme}.conf.user
     '';
 
   meta = {
@@ -33,6 +53,9 @@ stdenvNoCC.mkDerivation rec {
     license = lib.licenses.gpl3;
 
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ danid3v ];
+    maintainers = with lib.maintainers; [
+      danid3v
+      uxodb
+    ];
   };
 }

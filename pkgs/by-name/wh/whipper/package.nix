@@ -1,24 +1,32 @@
-{ lib
-, python3
-, fetchFromGitHub
-, fetchpatch
-, installShellFiles
-, wrapGAppsNoGuiHook
-, gobject-introspection
-, libcdio-paranoia
-, cdrdao
-, libsndfile
-, glib
-, flac
-, sox
-, util-linux
-, testers
-, whipper
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+  fetchpatch,
+  installShellFiles,
+  wrapGAppsNoGuiHook,
+  gobject-introspection,
+  libcdio-paranoia,
+  cdrdao,
+  libsndfile,
+  glib,
+  flac,
+  sox,
+  util-linux,
+  testers,
+  whipper,
 }:
 
 let
-  bins = [ libcdio-paranoia cdrdao flac sox util-linux ];
-in python3.pkgs.buildPythonApplication rec {
+  bins = [
+    libcdio-paranoia
+    cdrdao
+    flac
+    sox
+    util-linux
+  ];
+in
+python3.pkgs.buildPythonApplication rec {
   pname = "whipper";
   version = "0.10.0";
   pyproject = true;
@@ -61,21 +69,33 @@ in python3.pkgs.buildPythonApplication rec {
     setuptools
   ];
 
-  buildInputs = [ libsndfile glib ];
+  buildInputs = [
+    libsndfile
+    glib
+  ];
 
-  nativeCheckInputs = with python3.pkgs; [
-    twisted
-    pytestCheckHook
-  ] ++ bins;
+  nativeCheckInputs =
+    with python3.pkgs;
+    [
+      twisted
+      pytestCheckHook
+    ]
+    ++ bins;
 
   makeWrapperArgs = [
-    "--prefix" "PATH" ":" (lib.makeBinPath bins)
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath bins)
     "\${gappsWrapperArgs[@]}"
   ];
 
   dontWrapGApps = true;
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
   postBuild = ''
     make -C man
   '';

@@ -17,6 +17,7 @@
   xvfb-run,
   libadwaita,
   libxcvt,
+  libGL,
   libICE,
   libX11,
   libXcomposite,
@@ -35,6 +36,7 @@
   libXau,
   libinput,
   libdrm,
+  libgbm,
   libei,
   libdisplay-info,
   gsettings-desktop-schemas,
@@ -49,7 +51,7 @@
   libwacom,
   libSM,
   xwayland,
-  mesa,
+  mesa-gl-headers,
   meson,
   gnome-settings-daemon,
   xorgserver,
@@ -68,7 +70,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mutter";
-  version = "47.3";
+  version = "47.5";
 
   outputs = [
     "out"
@@ -79,7 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/mutter/${lib.versions.major finalAttrs.version}/mutter-${finalAttrs.version}.tar.xz";
-    hash = "sha256-dkIa9vkFCc/fGrhR1e5YJx4n6Uqo99tSHVqgba6mxWA=";
+    hash = "sha256-ZVGjPOiH5oQVsTlSr21rQw6VMG+Sl63IwRGVPplcUVs=";
   };
 
   mesonFlags = [
@@ -100,13 +102,14 @@ stdenv.mkDerivation (finalAttrs: {
   propagatedBuildInputs = [
     # required for pkg-config to detect mutter-mtk
     graphene
+    mesa-gl-headers
   ];
 
   nativeBuildInputs = [
     desktop-file-utils
     gettext
+    glib
     libxcvt
-    mesa # needed for gbm
     meson
     ninja
     xvfb-run
@@ -131,8 +134,10 @@ stdenv.mkDerivation (finalAttrs: {
     harfbuzz
     libcanberra
     libdrm
+    libgbm
     libei
     libdisplay-info
+    libGL
     libgudev
     libinput
     libstartup_notification
@@ -175,10 +180,6 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "libadwaita-1.so.0" "${libadwaita}/lib/libadwaita-1.so.0"
   '';
 
-  postInstall = ''
-    ${glib.dev}/bin/glib-compile-schemas "$out/share/glib-2.0/schemas"
-  '';
-
   postFixup = ''
     # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
     # TODO: Move this into a directory devhelp can find.
@@ -189,6 +190,7 @@ stdenv.mkDerivation (finalAttrs: {
   PKG_CONFIG_UDEV_UDEVDIR = "${placeholder "out"}/lib/udev";
 
   separateDebugInfo = true;
+  strictDeps = true;
 
   passthru = {
     libdir = "${finalAttrs.finalPackage}/lib/mutter-15";

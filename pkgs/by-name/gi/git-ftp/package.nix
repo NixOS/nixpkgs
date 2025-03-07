@@ -1,19 +1,20 @@
-{ lib
-, resholve
-, fetchFromGitHub
-, fetchpatch
-, bash
-, coreutils
-, git
-, gnugrep
-, gawk
-, curl
-, hostname
-, gnused
-, findutils
-, lftp
-, pandoc
-, man
+{
+  lib,
+  resholve,
+  fetchFromGitHub,
+  fetchpatch,
+  bash,
+  coreutils,
+  git,
+  gnugrep,
+  gawk,
+  curl,
+  hostname,
+  gnused,
+  findutils,
+  lftp,
+  pandoc,
+  man,
 }:
 
 resholve.mkDerivation rec {
@@ -42,7 +43,10 @@ resholve.mkDerivation rec {
     make install-all prefix=$out
   '';
 
-  nativeBuildInputs = [ pandoc man ];
+  nativeBuildInputs = [
+    pandoc
+    man
+  ];
 
   solutions = {
     git-ftp = {
@@ -76,13 +80,13 @@ resholve.mkDerivation rec {
         # checked and see no obvious subexec for now
         "cannot:${git}/bin/git"
         /*
-        Mild uncertainty here. There *are* commandlikes in
-        the arguments (especially wait & cd), but I think they are
-        fine as-is, because I'm reading them as:
-        1. ftp commands
-        2. running on the remote anyways
+          Mild uncertainty here. There *are* commandlikes in
+          the arguments (especially wait & cd), but I think they are
+          fine as-is, because I'm reading them as:
+          1. ftp commands
+          2. running on the remote anyways
 
-        See https://github.com/git-ftp/git-ftp/blob/057f7d8e9f00ffc5a8c6ceaa4be30af2939df41a/git-ftp#L1214-L1221
+          See https://github.com/git-ftp/git-ftp/blob/057f7d8e9f00ffc5a8c6ceaa4be30af2939df41a/git-ftp#L1214-L1221
         */
         "cannot:${lftp}/bin/lftp"
       ];

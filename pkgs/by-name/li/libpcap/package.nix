@@ -1,24 +1,25 @@
-{ lib
-, stdenv
-, fetchurl
-, flex
-, bison
-, bluez
-, libnl
-, libxcrypt
-, pkg-config
-, withBluez ? false
-, withRemote ? false
+{
+  lib,
+  stdenv,
+  fetchurl,
+  flex,
+  bison,
+  bluez,
+  libnl,
+  libxcrypt,
+  pkg-config,
+  withBluez ? false,
+  withRemote ? false,
 
-# for passthru.tests
-, ettercap
-, nmap
-, ostinato
-, tcpreplay
-, vde2
-, wireshark
-, python3
-, haskellPackages
+  # for passthru.tests
+  ettercap,
+  nmap,
+  ostinato,
+  tcpreplay,
+  vde2,
+  wireshark,
+  python3,
+  haskellPackages,
 }:
 
 stdenv.mkDerivation rec {
@@ -30,23 +31,31 @@ stdenv.mkDerivation rec {
     hash = "sha256-N87ZChmjAqfzLkWCJKAMNlwReQXCzTWsVEtogKgUiPA=";
   };
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ libnl ]
+  buildInputs =
+    lib.optionals stdenv.hostPlatform.isLinux [ libnl ]
     ++ lib.optionals withRemote [ libxcrypt ];
 
-  nativeBuildInputs = [ flex bison ]
+  nativeBuildInputs =
+    [
+      flex
+      bison
+    ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ]
     ++ lib.optionals withBluez [ bluez.dev ];
 
   # We need to force the autodetection because detection doesn't
   # work in pure build environments.
-  configureFlags = [
-    "--with-pcap=${if stdenv.hostPlatform.isLinux then "linux" else "bpf"}"
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    "--disable-universal"
-  ] ++ lib.optionals withRemote [
-    "--enable-remote"
-  ] ++ lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform)
-    [ "ac_cv_linux_vers=2" ];
+  configureFlags =
+    [
+      "--with-pcap=${if stdenv.hostPlatform.isLinux then "linux" else "bpf"}"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      "--disable-universal"
+    ]
+    ++ lib.optionals withRemote [
+      "--enable-remote"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform) [ "ac_cv_linux_vers=2" ];
 
   postInstall = ''
     if [ "$dontDisableStatic" -ne "1" ]; then
@@ -57,7 +66,14 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   passthru.tests = {
-    inherit ettercap nmap ostinato tcpreplay vde2 wireshark;
+    inherit
+      ettercap
+      nmap
+      ostinato
+      tcpreplay
+      vde2
+      wireshark
+      ;
     inherit (python3.pkgs) pcapy-ng scapy;
     haskell-pcap = haskellPackages.pcap;
   };

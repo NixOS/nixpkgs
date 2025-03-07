@@ -1,6 +1,11 @@
-{ lib, stdenv, fetchFromGitHub
-, xorg, bdf2psf, bdftopcf
-, libfaketime
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  xorg,
+  bdf2psf,
+  bdftopcf,
+  libfaketime,
 }:
 
 stdenv.mkDerivation rec {
@@ -8,16 +13,19 @@ stdenv.mkDerivation rec {
   version = "2.1";
 
   src = fetchFromGitHub {
-    owner  = "hchargois";
-    repo   = "gohufont";
-    rev    = "cc36b8c9fed7141763e55dcee0a97abffcf08224";
+    owner = "hchargois";
+    repo = "gohufont";
+    rev = "cc36b8c9fed7141763e55dcee0a97abffcf08224";
     sha256 = "1hmp11mrr01b29phw0xyj4h9b92qz19cf56ssf6c47c5j2c4xmbv";
   };
 
-  nativeBuildInputs =
-    [ xorg.mkfontscale bdf2psf bdftopcf
-      xorg.fonttosfnt libfaketime
-    ];
+  nativeBuildInputs = [
+    xorg.mkfontscale
+    bdf2psf
+    bdftopcf
+    xorg.fonttosfnt
+    libfaketime
+  ];
 
   buildPhase = ''
     # convert bdf fonts to psf
@@ -62,8 +70,8 @@ stdenv.mkDerivation rec {
     description = ''
       A monospace bitmap font well suited for programming and terminal use
     '';
-    homepage    = "https://font.gohu.org/";
-    license     = licenses.wtfpl;
+    homepage = "https://font.gohu.org/";
+    license = licenses.wtfpl;
     maintainers = with maintainers; [ rnhmjoj ];
   };
 }

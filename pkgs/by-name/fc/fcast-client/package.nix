@@ -17,7 +17,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   sourceRoot = "${src.name}/clients/terminal";
-  cargoHash = "sha256-VVG7AbwbbgCANMcFYNAIF76MQr7Fkmq5HXPxL3MnEhI=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-yzsAe+fr1yX8RBJPtXSr/R7W0iJpeF3JW3E4ius+8nU=";
 
   meta = {
     description = "FCast Client Terminal, a terminal open-source media streaming client";

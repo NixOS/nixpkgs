@@ -9,7 +9,7 @@ stdenv.mkDerivation {
   name = "spacy-annotation-test";
 
   src = lib.fileset.toSource {
-    root  = ./.;
+    root = ./.;
     fileset = lib.fileset.unions [
       ./annotate.py
     ];

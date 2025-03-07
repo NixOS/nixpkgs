@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, pkg-config, libpng, zlib }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  libpng,
+  zlib,
+}:
 
 stdenv.mkDerivation rec {
   pname = "pngnq";
@@ -10,7 +17,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libpng zlib ];
+  buildInputs = [
+    libpng
+    zlib
+  ];
 
   patchPhase = ''
     sed -i '/png.h/a \#include <zlib.h>' src/rwpng.c

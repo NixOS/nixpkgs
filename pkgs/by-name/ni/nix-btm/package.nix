@@ -1,4 +1,10 @@
-{ lib, stdenv, rustPlatform, fetchCrate, darwin }:
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchCrate,
+  darwin,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "nix-btm";
@@ -10,10 +16,16 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-f8XFWlx+gwhF/OD8+tPcLGV/v0QnsDWOcqpY3Js+FAo=";
   };
 
-  cargoHash = "sha256-qUZ3zJjQrteFQerBKFH/+Ys0uOzvI7DH9rCaVtseJMM=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-zMQw3Q9t6JSMDt7xHMGTgAu9LW6MhG+Rrjpp5IEs/qQ=";
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin
-    (with darwin.apple_sdk.frameworks; [ CoreServices SystemConfiguration ]);
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin (
+    with darwin.apple_sdk.frameworks;
+    [
+      CoreServices
+      SystemConfiguration
+    ]
+  );
 
   meta = with lib; {
     description = "Rust tool to monitor Nix processes";

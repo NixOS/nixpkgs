@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, boost
-, cmake
-, libGL
-, libGLU
-, libX11
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  boost,
+  cmake,
+  libGL,
+  libGLU,
+  libX11,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

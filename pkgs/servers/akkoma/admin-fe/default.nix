@@ -1,9 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitea, fetchYarnDeps
-, fixup-yarn-lock, yarn, nodejs
-, git
-, python3, pkg-config, libsass
+{
+  lib,
+  stdenv,
+  fetchFromGitea,
+  fetchYarnDeps,
+  fixup-yarn-lock,
+  yarn,
+  nodejs,
+  git,
+  python3,
+  pkg-config,
+  libsass,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

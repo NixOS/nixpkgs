@@ -1,17 +1,28 @@
-{ stdenv, lib, fetchFromGitHub, installShellFiles, testers, nix-update-script, nb }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  installShellFiles,
+  testers,
+  nix-update-script,
+  nb,
+  bashInteractive,
+}:
 
 stdenv.mkDerivation rec {
   pname = "nb";
-  version = "7.14.6";
+  version = "7.16.1";
 
   src = fetchFromGitHub {
     owner = "xwmx";
     repo = "nb";
     rev = version;
-    hash = "sha256-VcYE1luwNtdrOmjTDKkIAX9rmcbFyCBtnib+c9FyJuA=";
+    hash = "sha256-RX3DEjk+/tivTyv0+j3lZAKYgca4Zq9zQ+P1a/RXj2I=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
+
+  buildInputs = [ bashInteractive ];
 
   dontBuild = true;
 

@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "VirusTotal";
     repo = "vt-py";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-r6pEtq/GQzVY+gRzY2KZfSQEyp4ZoFRLBd8tlXp/aM8=";
   };
 
@@ -34,7 +34,6 @@ buildPythonPackage rec {
   pythonRelaxDeps = [ "aiohttp" ];
 
   build-system = [ setuptools ];
-
 
   dependencies = [
     aiofiles

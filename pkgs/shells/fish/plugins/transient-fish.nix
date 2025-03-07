@@ -1,6 +1,7 @@
-{ lib
-, buildFishPlugin
-, fetchFromGitHub
+{
+  lib,
+  buildFishPlugin,
+  fetchFromGitHub,
 }:
 buildFishPlugin {
   pname = "transient-fish";

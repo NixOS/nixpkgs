@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, makeWrapper, perl, ncurses5, taskwarrior2 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  makeWrapper,
+  perl,
+  ncurses5,
+  taskwarrior2,
+}:
 
 stdenv.mkDerivation rec {
   version = "2020-12-17";
@@ -41,7 +50,6 @@ stdenv.mkDerivation rec {
 
     wrapProgram $out/bin/tasknc --prefix PATH : ${taskwarrior2}/bin
   '';
-
 
   meta = with lib; {
     homepage = "https://github.com/lharding/tasknc";

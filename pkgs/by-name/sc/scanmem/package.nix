@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, gobject-introspection
-, intltool
-, wrapGAppsHook3
-, procps
-, python3
-, readline
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  gobject-introspection,
+  intltool,
+  wrapGAppsHook3,
+  procps,
+  python3,
+  readline,
 }:
 
 stdenv.mkDerivation rec {
@@ -15,15 +16,23 @@ stdenv.mkDerivation rec {
   version = "0.17";
 
   src = fetchFromGitHub {
-    owner  = "scanmem";
-    repo   = "scanmem";
-    rev    = "v${version}";
+    owner = "scanmem";
+    repo = "scanmem";
+    rev = "v${version}";
     sha256 = "17p8sh0rj8yqz36ria5bp48c8523zzw3y9g8sbm2jwq7sc27i7s9";
   };
 
-  nativeBuildInputs = [ autoreconfHook gobject-introspection intltool wrapGAppsHook3 ];
-  buildInputs = [ readline python3 ];
-  configureFlags = ["--enable-gui"];
+  nativeBuildInputs = [
+    autoreconfHook
+    gobject-introspection
+    intltool
+    wrapGAppsHook3
+  ];
+  buildInputs = [
+    readline
+    python3
+  ];
+  configureFlags = [ "--enable-gui" ];
 
   # we don't need to wrap the main executable, just the GUI
   dontWrapGApps = true;

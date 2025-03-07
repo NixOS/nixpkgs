@@ -1,4 +1,11 @@
-{ lib, fetchgit, stdenv, bitlbee, autoreconfHook, pkg-config }:
+{
+  lib,
+  fetchgit,
+  stdenv,
+  bitlbee,
+  autoreconfHook,
+  pkg-config,
+}:
 
 stdenv.mkDerivation rec {
   pname = "bitlbee-mastodon";
@@ -10,7 +17,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-8vmq/YstuBYUxe00P4NrxD/eMYI++R9uvn1sCcMTr7I=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
   buildInputs = [ bitlbee ];
 
   preConfigure = ''

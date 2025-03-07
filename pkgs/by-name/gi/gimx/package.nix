@@ -1,4 +1,16 @@
-{ stdenv, lib, fetchFromGitHub, makeWrapper, curl, libusb1, bluez, libxml2, ncurses5, libmhash, xorg }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  makeWrapper,
+  curl,
+  libusb1,
+  bluez,
+  libxml2,
+  ncurses5,
+  libmhash,
+  xorg,
+}:
 
 let
   gimx-config = fetchFromGitHub {
@@ -8,7 +20,8 @@ let
     hash = "sha256-t/Ttlvc9LCRW624oSsFaP8EmswJ3OAn86QgF1dCUjAs=";
   };
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "gimx";
   version = "8.0";
 
@@ -21,10 +34,22 @@ in stdenv.mkDerivation rec {
   };
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error";
-  patches = [ ./conf.patch ./gcc14.patch ];
+  patches = [
+    ./conf.patch
+    ./gcc14.patch
+  ];
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ curl libusb1 bluez libxml2 ncurses5 libmhash xorg.libX11 xorg.libXi ];
+  buildInputs = [
+    curl
+    libusb1
+    bluez
+    libxml2
+    ncurses5
+    libmhash
+    xorg.libX11
+    xorg.libXi
+  ];
   makeFlags = [ "build-core" ];
 
   installPhase = ''

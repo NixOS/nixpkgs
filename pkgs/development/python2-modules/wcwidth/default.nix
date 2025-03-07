@@ -1,10 +1,11 @@
-{ backports-functools-lru-cache
-, wcwidth
-, lib
+{
+  backports-functools-lru-cache,
+  wcwidth,
+  lib,
 }:
 
-wcwidth.overridePythonAttrs(oldAttrs: {
-  propagatedBuildInputs = oldAttrs.propagatedBuildInputs or [] ++ [
+wcwidth.overridePythonAttrs (oldAttrs: {
+  propagatedBuildInputs = oldAttrs.propagatedBuildInputs or [ ] ++ [
     backports-functools-lru-cache
   ];
 
@@ -17,8 +18,10 @@ wcwidth.overridePythonAttrs(oldAttrs: {
   disabled = false;
 
   meta = oldAttrs.meta // {
-    /** maintainers overridden here for python2; this makes sure that python3
-        maintainers are not blamed for the breakage here. */
+    /**
+      maintainers overridden here for python2; this makes sure that python3
+       maintainers are not blamed for the breakage here.
+    */
     maintainers = with lib.maintainers; [ bryango ];
   };
 })

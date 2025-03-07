@@ -153,6 +153,8 @@ in
         '';
       };
 
+      package = lib.mkPackageOption pkgs "keepalived" { };
+
       openFirewall = mkOption {
         type = types.bool;
         default = false;
@@ -334,7 +336,7 @@ in
           umask 077
           ${pkgs.envsubst}/bin/envsubst -i "${keepalivedConf}" > ${finalConfigFile}
         '');
-        ExecStart = "${pkgs.keepalived}/sbin/keepalived"
+        ExecStart = "${lib.getExe cfg.package}"
           + " -f ${finalConfigFile}"
           + " -p ${pidFile}"
           + optionalString cfg.snmp.enable " --snmp";

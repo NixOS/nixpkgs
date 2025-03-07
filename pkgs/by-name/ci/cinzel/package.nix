@@ -1,4 +1,10 @@
-{ lib, stdenvNoCC, fetchFromGitHub, rename, nix-update-script }:
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  rename,
+  nix-update-script,
+}:
 
 stdenvNoCC.mkDerivation {
   pname = "cinzel";
@@ -11,7 +17,10 @@ stdenvNoCC.mkDerivation {
     hash = "sha256-V3vSxe5eHN0BUplzmmBchzuV+gz36WfgZZezJ6NfaWg=";
   };
 
-  outputs = [ "out" "variable" ];
+  outputs = [
+    "out"
+    "variable"
+  ];
 
   nativeBuildInputs = [ rename ];
 

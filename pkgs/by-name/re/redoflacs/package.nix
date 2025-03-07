@@ -1,10 +1,11 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, makeWrapper
-, installShellFiles
-, flac
-, sox
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  makeWrapper,
+  installShellFiles,
+  flac,
+  sox,
 }:
 
 stdenv.mkDerivation rec {
@@ -20,7 +21,10 @@ stdenv.mkDerivation rec {
 
   dontBuild = true;
 
-  nativeBuildInputs = [ installShellFiles makeWrapper ];
+  nativeBuildInputs = [
+    installShellFiles
+    makeWrapper
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -34,7 +38,12 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     wrapProgram $out/bin/redoflacs \
-      --prefix PATH : ${lib.makeBinPath ([ flac sox ])}
+      --prefix PATH : ${
+        lib.makeBinPath ([
+          flac
+          sox
+        ])
+      }
   '';
 
   meta = with lib; {

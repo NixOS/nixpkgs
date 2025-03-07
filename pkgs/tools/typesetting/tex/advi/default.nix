@@ -1,11 +1,12 @@
-{ fetchurl
-, lib
-, makeWrapper
-, writeShellScriptBin
-, ghostscriptX
-, ocamlPackages
-, texliveMedium
-, which
+{
+  fetchurl,
+  lib,
+  makeWrapper,
+  writeShellScriptBin,
+  ghostscriptX,
+  ocamlPackages,
+  texliveMedium,
+  which,
 }:
 
 let
@@ -51,8 +52,18 @@ ocamlPackages.buildDunePackage rec {
 
   duneVersion = "3";
 
-  nativeBuildInputs = [ fake-opam kpsexpand makeWrapper texliveMedium which ];
-  buildInputs = with ocamlPackages; [ camlimages ghostscriptX graphics ];
+  nativeBuildInputs = [
+    fake-opam
+    kpsexpand
+    makeWrapper
+    texliveMedium
+    which
+  ];
+  buildInputs = with ocamlPackages; [
+    camlimages
+    ghostscriptX
+    graphics
+  ];
 
   # install additional files (such as man pages)
   preInstall = ''

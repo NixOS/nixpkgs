@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, udev
-, freebsd
-, runtimeShellPackage
-, runtimeShell
-, nixosTests
-, enablePrivSep ? false
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  udev,
+  freebsd,
+  runtimeShellPackage,
+  runtimeShell,
+  nixosTests,
+  enablePrivSep ? false,
 }:
 
 stdenv.mkDerivation rec {
@@ -22,14 +23,17 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [
-    runtimeShellPackage # So patchShebangs finds a bash suitable for the installed scripts
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    udev
-  ] ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
-    freebsd.libcapsicum
-    freebsd.libcasper
-  ];
+  buildInputs =
+    [
+      runtimeShellPackage # So patchShebangs finds a bash suitable for the installed scripts
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      udev
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
+      freebsd.libcapsicum
+      freebsd.libcasper
+    ];
 
   postPatch = ''
     substituteInPlace hooks/dhcpcd-run-hooks.in --replace /bin/sh ${runtimeShell}
@@ -47,10 +51,15 @@ stdenv.mkDerivation rec {
 
   # Hack to make installation succeed.  dhcpcd will still use /var/lib
   # at runtime.
-  installFlags = [ "DBDIR=$(TMPDIR)/db" "SYSCONFDIR=${placeholder "out"}/etc" ];
+  installFlags = [
+    "DBDIR=$(TMPDIR)/db"
+    "SYSCONFDIR=${placeholder "out"}/etc"
+  ];
 
   # Check that the udev plugin got built.
-  postInstall = lib.optionalString (udev != null && stdenv.hostPlatform.isLinux) "[ -e ${placeholder "out"}/lib/dhcpcd/dev/udev.so ]";
+  postInstall = lib.optionalString (
+    udev != null && stdenv.hostPlatform.isLinux
+  ) "[ -e ${placeholder "out"}/lib/dhcpcd/dev/udev.so ]";
 
   passthru.tests = {
     inherit (nixosTests.networking.scripted) macvlan dhcpSimple dhcpOneIf;
@@ -59,7 +68,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Client for the Dynamic Host Configuration Protocol (DHCP)";
     homepage = "https://roy.marples.name/projects/dhcpcd";
-    platforms = platforms.linux ++ platforms.freebsd;
+    platforms = platforms.linux ++ platforms.freebsd ++ platforms.openbsd;
     license = licenses.bsd2;
     maintainers = [ ];
     mainProgram = "dhcpcd";

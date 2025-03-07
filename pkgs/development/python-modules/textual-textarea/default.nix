@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "textual-textarea";
-  version = "0.14.4";
+  version = "0.15.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -20,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tconbeer";
     repo = "textual-textarea";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-tmbSCU1VgxR9aXG22UVpweD71dVmhKSRBTDm1Gf33jM=";
+    tag = "v${version}";
+    hash = "sha256-aaeXgD6RMQ3tlK5H/2lk3ueTyA3yYjHrYL51w/1tvSI=";
   };
 
   build-system = [ poetry-core ];

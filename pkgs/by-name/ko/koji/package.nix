@@ -1,10 +1,11 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, perl
-, udev
-, openssl
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  perl,
+  udev,
+  openssl,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -18,7 +19,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-2kBjHX7izo4loJ8oyPjE9FtCvUODC3Sm4T8ETIdeGZM=";
   };
 
-  cargoHash = "sha256-owppYDt0YdWoDvfmzVfiIPjLgTAT9eTI1LpRr4Y3XQA=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-ZHti7nMfHiYur1kjxj+ySIF4/l0UU9q2urabUWZyk6E=";
 
   OPENSSL_NO_VENDOR = 1;
 

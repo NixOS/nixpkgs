@@ -1,8 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, mkDerivation, cmake }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  mkDerivation,
+  cmake,
+}:
 
 mkDerivation rec {
   pname = "fstl";
-  version = "0.10.0";
+  version = "0.11.0";
 
   nativeBuildInputs = [ cmake ];
 
@@ -19,7 +25,7 @@ mkDerivation rec {
     owner = "fstl-app";
     repo = "fstl";
     rev = "v" + version;
-    hash = "sha256-z2X78GW/IeiPCnwkeLBCLjILhfMe2sT3V9Gbw4TSf4c=";
+    hash = "sha256-6V1L5aUZQl4zAkXD7yY8Ap0+QXgogQNxaTyZAxHFqM4=";
   };
 
   meta = with lib; {

@@ -1,7 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
 }:
 
 buildGoModule rec {
@@ -39,7 +40,7 @@ buildGoModule rec {
   doInstallCheck = true;
 
   installCheckPhase = ''
-      $out/bin/metal --version | grep ${version}
+    $out/bin/metal --version | grep ${version}
   '';
 
   meta = with lib; {
@@ -47,7 +48,11 @@ buildGoModule rec {
     homepage = "https://github.com/equinix/metal-cli/";
     changelog = "https://github.com/equinix/metal-cli/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ Br1ght0ne nshalman teutat3s ];
+    maintainers = with maintainers; [
+      Br1ght0ne
+      nshalman
+      teutat3s
+    ];
     mainProgram = "metal";
   };
 }

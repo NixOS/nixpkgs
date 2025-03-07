@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchzip, python3Packages, makeWrapper }:
+{
+  lib,
+  stdenv,
+  fetchzip,
+  python3Packages,
+  makeWrapper,
+}:
 
 with python3Packages;
 
@@ -38,10 +44,13 @@ stdenv.mkDerivation rec {
     homepage = "https://cloud.google.com/appengine/docs/go/";
     sourceProvenance = with sourceTypes; [
       fromSource
-      binaryNativeCode  # includes golang toolchain binaries
+      binaryNativeCode # includes golang toolchain binaries
     ];
     license = licenses.asl20;
-    platforms = ["x86_64-linux" "x86_64-darwin"];
+    platforms = [
+      "x86_64-linux"
+      "x86_64-darwin"
+    ];
     maintainers = with maintainers; [ lufia ];
   };
 }

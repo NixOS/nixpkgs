@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchurl
-, flex
-, db
-, makeWrapper
-, pax
+{
+  lib,
+  stdenv,
+  fetchurl,
+  flex,
+  db,
+  makeWrapper,
+  pax,
 }:
 
 stdenv.mkDerivation rec {
@@ -18,7 +19,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  buildInputs = [ flex db ];
+  buildInputs = [
+    flex
+    db
+  ];
 
   doCheck = false; # needs "y" tool
 

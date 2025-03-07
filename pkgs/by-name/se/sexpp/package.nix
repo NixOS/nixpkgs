@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, bzip2
-, cmake
-, fetchFromGitHub
-, gtest
-, pkg-config
-, zlib
+{
+  lib,
+  stdenv,
+  bzip2,
+  cmake,
+  fetchFromGitHub,
+  gtest,
+  pkg-config,
+  zlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -19,7 +20,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-mNt6J8nhzT5sF28ktl3jOkQMKn6x9iE04MMrwwVxyZs=";
   };
 
-  buildInputs = [ zlib bzip2 ];
+  buildInputs = [
+    zlib
+    bzip2
+  ];
 
   cmakeFlags = [
     "-DCMAKE_INSTALL_PREFIX=${placeholder "out"}"
@@ -30,9 +34,17 @@ stdenv.mkDerivation (finalAttrs: {
     "-DWITH_SANITIZERS=off"
   ];
 
-  nativeBuildInputs = [ cmake gtest pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    gtest
+    pkg-config
+  ];
 
-  outputs = [ "out" "lib" "dev" ];
+  outputs = [
+    "out"
+    "lib"
+    "dev"
+  ];
 
   preConfigure = ''
     echo "v${finalAttrs.version}" > version.txt

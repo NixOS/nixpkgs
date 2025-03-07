@@ -1,4 +1,10 @@
-{ options, config, pkgs, lib, ... }:
+{
+  options,
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
 
   cfg = config.services.matterbridge;
@@ -88,19 +94,18 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    warnings = lib.optional options.services.matterbridge.configFile.isDefined
-      "The option services.matterbridge.configFile is insecure and should be replaced with services.matterbridge.configPath";
+    warnings = lib.optional options.services.matterbridge.configFile.isDefined "The option services.matterbridge.configFile is insecure and should be replaced with services.matterbridge.configPath";
 
-    users.users = lib.optionalAttrs (cfg.user == "matterbridge")
-      { matterbridge = {
-          group = "matterbridge";
-          isSystemUser = true;
-        };
+    users.users = lib.optionalAttrs (cfg.user == "matterbridge") {
+      matterbridge = {
+        group = "matterbridge";
+        isSystemUser = true;
       };
+    };
 
-    users.groups = lib.optionalAttrs (cfg.group == "matterbridge")
-      { matterbridge = { };
-      };
+    users.groups = lib.optionalAttrs (cfg.group == "matterbridge") {
+      matterbridge = { };
+    };
 
     systemd.services.matterbridge = {
       description = "Matterbridge chat platform bridge";

@@ -1,20 +1,21 @@
-{ lib
-, buildNpmPackage
-, fetchFromGitHub
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
 }:
 
 buildNpmPackage rec {
   pname = "carbon-now-cli";
-  version = "2.0.0";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "mixn";
     repo = "carbon-now-cli";
     rev = "v${version}";
-    hash = "sha256-2fqZdPkVM3qBZKacBv9dX99Q9WnM5m7OpChG2n1TnXg=";
+    hash = "sha256-J7H1oofgosFGxoHzcx+UxaRbqGwqrmk6MYmMISpNB6w=";
   };
 
-  npmDepsHash = "sha256-UgrgnaA+GXRQT3dtAoMq6tsZZ2gV1CQNoYG58IuSZUM=";
+  npmDepsHash = "sha256-/YWsk+GNfudSG0Rof1eCXeoK6dfyzzQqvWBLkpfahE0=";
 
   postPatch = ''
     substituteInPlace package.json \

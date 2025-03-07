@@ -23,6 +23,7 @@
 , appstream-glib
 , desktop-file-utils
 , glycin-loaders
+, nix-update-script
 }:
 
 clangStdenv.mkDerivation rec {
@@ -37,10 +38,10 @@ clangStdenv.mkDerivation rec {
     hash = "sha256-qSPuEVW+FwC9OJa+dseIy4/2bhVdTryJSJNSpes9tpY=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-MbfukvqlzZPnWNtWCwYn7lABqBxtZWvPDba9Deah+w8=";
+    hash = "sha256-xQlzSsvwDNK3Z8xnUQgCU6Q8+ls0Urks778pYwN2X1Y=";
   };
 
   preFixup = ''
@@ -80,12 +81,16 @@ clangStdenv.mkDerivation rec {
     gst-plugins-rs # for gtk4paintablesink
   ];
 
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
   meta = with lib; {
     description = "Scan and Generate QR Codes";
     homepage = "https://gitlab.gnome.org/World/decoder";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     mainProgram = "decoder";
-    maintainers = with maintainers; [ zendo ];
+    maintainers = with maintainers; [ zendo ] ++ lib.teams.gnome-circle.members;
   };
 }

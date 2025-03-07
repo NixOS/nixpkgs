@@ -14,13 +14,32 @@ let
     mapAttrsToList
     nameValuePair
     ;
-  inherit (lib.lists) concatMap concatLists;
+  inherit (lib.lists)
+    concatMap
+    concatLists
+    filter
+    flatten
+    ;
   inherit (lib.modules) mkIf;
   inherit (lib.options) literalExpression mkOption;
-  inherit (lib.strings) hasInfix;
-  inherit (lib.trivial) flip;
+  inherit (lib.strings) hasInfix replaceStrings;
+  inherit (lib.trivial) flip pipe;
 
   removeNulls = filterAttrs (_: v: v != null);
+
+  escapeCredentialName = input: replaceStrings [ "\\" ] [ "_" ] input;
+
+  privateKeyCredential = interfaceName: escapeCredentialName "wireguard-${interfaceName}-private-key";
+  presharedKeyCredential =
+    interfaceName: peer: escapeCredentialName "wireguard-${interfaceName}-${peer.name}-preshared-key";
+
+  interfaceCredentials =
+    interfaceName: interface:
+    [ "${privateKeyCredential interfaceName}:${interface.privateKeyFile}" ]
+    ++ pipe interface.peers [
+      (filter (peer: peer.presharedKeyFile != null))
+      (map (peer: "${presharedKeyCredential interfaceName peer}:${peer.presharedKeyFile}"))
+    ];
 
   generateNetdev =
     name: interface:
@@ -31,20 +50,21 @@ let
         MTUBytes = interface.mtu;
       };
       wireguardConfig = removeNulls {
-        PrivateKeyFile = interface.privateKeyFile;
+        PrivateKey = "@${privateKeyCredential name}";
         ListenPort = interface.listenPort;
         FirewallMark = interface.fwMark;
         RouteTable = if interface.allowedIPsAsRoutes then interface.table else null;
         RouteMetric = interface.metric;
       };
-      wireguardPeers = map generateWireguardPeer interface.peers;
+      wireguardPeers = map (generateWireguardPeer name) interface.peers;
     };
 
   generateWireguardPeer =
-    peer:
+    interfaceName: peer:
     removeNulls {
       PublicKey = peer.publicKey;
-      PresharedKeyFile = peer.presharedKeyFile;
+      PresharedKey =
+        if peer.presharedKeyFile == null then null else "@${presharedKeyCredential interfaceName peer}";
       AllowedIPs = peer.allowedIPs;
       Endpoint = peer.endpoint;
       PersistentKeepalive = peer.persistentKeepalive;
@@ -129,7 +149,7 @@ in
     #
     # socketNamespace and interfaceNamespace can be implemented once networkd
     # supports setting a netdev's namespace. See:
-    # https://github.com/systemd/systemd/issues/11629
+    # https://github.com/systemd/systemd/issues/11103
     # https://github.com/systemd/systemd/pull/14915
 
     assertions = concatLists (
@@ -169,6 +189,10 @@ in
             assertion = interface.interfaceNamespace == null;
             message = "networking.wireguard.interfaces.${name}.interfaceNamespace cannot be used with networkd.";
           }
+          {
+            assertion = interface.type == "wireguard";
+            message = "networking.wireguard.interfaces.${name}.type value must be \"wireguard\" when used with networkd.";
+          }
         ]
         ++ flip concatMap interface.ips (ip: [
           # IP assertions
@@ -202,6 +226,10 @@ in
     };
 
     systemd.timers = mapAttrs' generateRefreshTimer refreshEnabledInterfaces;
-    systemd.services = mapAttrs' generateRefreshService refreshEnabledInterfaces;
+    systemd.services = (mapAttrs' generateRefreshService refreshEnabledInterfaces) // {
+      systemd-networkd.serviceConfig.LoadCredential = flatten (
+        mapAttrsToList interfaceCredentials cfg.interfaces
+      );
+    };
   };
 }

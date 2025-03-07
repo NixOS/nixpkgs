@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "igraph";
     repo = "python-igraph";
-    rev = "refs/tags/${version}";
+    tag = version;
     postFetch = ''
       # export-subst prevents reproducability
       rm $out/.git_archival.json

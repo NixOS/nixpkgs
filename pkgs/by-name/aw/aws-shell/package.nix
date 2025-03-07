@@ -3,6 +3,7 @@
   lib,
   fetchFromGitHub,
   awscli,
+  writableTmpDirAsHomeHook,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -38,11 +39,8 @@ python3Packages.buildPythonApplication rec {
 
   nativeCheckInputs = with python3Packages; [
     pytestCheckHook
+    writableTmpDirAsHomeHook
   ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   meta = {
     homepage = "https://github.com/awslabs/aws-shell";

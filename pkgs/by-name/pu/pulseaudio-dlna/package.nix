@@ -1,19 +1,20 @@
-{ fetchFromGitHub
-, lib
-, python3Packages
-, mp3Support ? true
-, lame
-, opusSupport ? true
-, opusTools
-, faacSupport ? false
-, faac
-, flacSupport ? true
-, flac
-, soxSupport ? true
-, sox
-, vorbisSupport ? true
-, vorbis-tools
-, pulseaudio
+{
+  fetchFromGitHub,
+  lib,
+  python3Packages,
+  mp3Support ? true,
+  lame,
+  opusSupport ? true,
+  opusTools,
+  faacSupport ? false,
+  faac,
+  flacSupport ? true,
+  flac,
+  soxSupport ? true,
+  sox,
+  vorbisSupport ? true,
+  vorbis-tools,
+  pulseaudio,
 }:
 
 python3Packages.buildPythonApplication {
@@ -31,29 +32,31 @@ python3Packages.buildPythonApplication {
     ./0001-setup.py-remove-dbus-python-from-list.patch
   ];
 
-  propagatedBuildInputs = with python3Packages; [
-    dbus-python
-    docopt
-    requests
-    setproctitle
-    protobuf
-    psutil
-    chardet
-    netifaces
-    notify2
-    pyroute2
-    pygobject3
-    pychromecast
-    lxml
-    setuptools
-    zeroconf
-  ]
-  ++ lib.optional mp3Support lame
-  ++ lib.optional opusSupport opusTools
-  ++ lib.optional faacSupport faac
-  ++ lib.optional flacSupport flac
-  ++ lib.optional soxSupport sox
-  ++ lib.optional vorbisSupport vorbis-tools;
+  propagatedBuildInputs =
+    with python3Packages;
+    [
+      dbus-python
+      docopt
+      requests
+      setproctitle
+      protobuf
+      psutil
+      chardet
+      netifaces
+      notify2
+      pyroute2
+      pygobject3
+      pychromecast
+      lxml
+      setuptools
+      zeroconf
+    ]
+    ++ lib.optional mp3Support lame
+    ++ lib.optional opusSupport opusTools
+    ++ lib.optional faacSupport faac
+    ++ lib.optional flacSupport flac
+    ++ lib.optional soxSupport sox
+    ++ lib.optional vorbisSupport vorbis-tools;
 
   # pulseaudio-dlna shells out to pactl to configure sinks and sources.
   # As pactl might not be in $PATH, add --suffix it (so pactl configured by the

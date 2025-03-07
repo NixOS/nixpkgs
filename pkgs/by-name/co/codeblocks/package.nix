@@ -1,5 +1,17 @@
-{ lib, stdenv, fetchurl, fetchpatch, pkg-config, file, zip, wxGTK32, gtk3
-, contribPlugins ? false, hunspell, boost, wrapGAppsHook3
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  pkg-config,
+  file,
+  zip,
+  wxGTK32,
+  gtk3,
+  contribPlugins ? false,
+  hunspell,
+  boost,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation rec {
@@ -12,9 +24,21 @@ stdenv.mkDerivation rec {
     sha256 = "1idaksw1vacmm83krxh5zlb12kad3dkz9ixh70glw1gaibib7vhm";
   };
 
-  nativeBuildInputs = [ pkg-config file zip wrapGAppsHook3 ];
-  buildInputs = [ wxGTK32 gtk3 ]
-    ++ lib.optionals contribPlugins [ hunspell boost ];
+  nativeBuildInputs = [
+    pkg-config
+    file
+    zip
+    wrapGAppsHook3
+  ];
+  buildInputs =
+    [
+      wxGTK32
+      gtk3
+    ]
+    ++ lib.optionals contribPlugins [
+      hunspell
+      boost
+    ];
   enableParallelBuilding = true;
   patches = [
     ./writable-projects.patch
@@ -95,6 +119,11 @@ stdenv.mkDerivation rec {
       hash = "sha256-XI7JW9Nuueb7muKpaC2icM/CxhrCJtO48cLHK+BVWXI=";
     })
     (fetchpatch {
+      name = "fix-build-with-clang-2.patch";
+      url = "https://github.com/arnholm/codeblocks_sfmirror/commit/edc6b145bcdcaf2823ef9c7da51a211f65d6f5d0.patch";
+      hash = "sha256-GuttBL4gp1IBn3ia2O8wtOR6xOSGrzwCKXwFLI3RO5o=";
+    })
+    (fetchpatch {
       name = "fix-normalize.patch";
       url = "https://github.com/archlinux/svntogit-community/raw/458eacb60bc0e71e3d333943cebbc41e75ed0956/trunk/sc_wxtypes-normalize.patch";
       hash = "sha256-7wEwDLwuNUWHUwHjFyq74sHiuEha1VexRLEX42rPZSs=";
@@ -118,10 +147,15 @@ stdenv.mkDerivation rec {
   ];
   preConfigure = "substituteInPlace ./configure --replace /usr/bin/file ${file}/bin/file";
   postConfigure = lib.optionalString stdenv.hostPlatform.isLinux "substituteInPlace libtool --replace ldconfig ${stdenv.cc.libc.bin}/bin/ldconfig";
-  configureFlags = [ "--enable-pch=no" ] ++ lib.optionals contribPlugins [
-    ("--with-contrib-plugins=all,-FileManager" + lib.optionalString stdenv.hostPlatform.isDarwin ",-NassiShneiderman")
-    "--with-boost-libdir=${boost}/lib"
-  ];
+  configureFlags =
+    [ "--enable-pch=no" ]
+    ++ lib.optionals contribPlugins [
+      (
+        "--with-contrib-plugins=all,-FileManager"
+        + lib.optionalString stdenv.hostPlatform.isDarwin ",-NassiShneiderman"
+      )
+      "--with-boost-libdir=${boost}/lib"
+    ];
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     ln -s $out/lib/codeblocks/plugins $out/share/codeblocks/plugins
   '';
@@ -130,12 +164,11 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.linquize ];
     platforms = platforms.all;
     description = "Open source, cross platform, free C, C++ and Fortran IDE";
-    longDescription =
-      ''
-        Code::Blocks is a free C, C++ and Fortran IDE built to meet the most demanding needs of its users.
-        It is designed to be very extensible and fully configurable.
-        Finally, an IDE with all the features you need, having a consistent look, feel and operation across platforms.
-      '';
+    longDescription = ''
+      Code::Blocks is a free C, C++ and Fortran IDE built to meet the most demanding needs of its users.
+      It is designed to be very extensible and fully configurable.
+      Finally, an IDE with all the features you need, having a consistent look, feel and operation across platforms.
+    '';
     homepage = "http://www.codeblocks.org";
     license = licenses.gpl3;
   };

@@ -1,4 +1,10 @@
-{ fetchurl, lib, stdenv, zlib, bzip2 }:
+{
+  fetchurl,
+  lib,
+  stdenv,
+  zlib,
+  bzip2,
+}:
 
 stdenv.mkDerivation rec {
   pname = "tokyocabinet";
@@ -9,7 +15,10 @@ stdenv.mkDerivation rec {
     sha256 = "140zvr0n8kvsl0fbn2qn3f2kh3yynfwnizn4dgbj47m975yg80x0";
   };
 
-  buildInputs = [ zlib bzip2 ];
+  buildInputs = [
+    zlib
+    bzip2
+  ];
 
   postInstall = ''
     sed -i "$out/lib/pkgconfig/tokyocabinet.pc" \

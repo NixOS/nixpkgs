@@ -1,18 +1,20 @@
-{ lib, stdenv
-, pkg-config
-, python3
-, fetchFromGitLab
-, fetchpatch
-, gtk3
-, glib
-, gdbm
-, gtkspell3
-, ofono
-, itstool
-, libayatana-appindicator
-, perlPackages
-, meson
-, ninja
+{
+  lib,
+  stdenv,
+  pkg-config,
+  python3,
+  fetchFromGitLab,
+  fetchpatch,
+  gtk3,
+  glib,
+  gdbm,
+  gtkspell3,
+  ofono,
+  itstool,
+  libayatana-appindicator,
+  perlPackages,
+  meson,
+  ninja,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -79,7 +81,10 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://linuxonly.ru/page/modem-manager-gui";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ ahuzik galagora ];
+    maintainers = with maintainers; [
+      ahuzik
+      galagora
+    ];
     platforms = platforms.linux;
     mainProgram = "modem-manager-gui";
   };

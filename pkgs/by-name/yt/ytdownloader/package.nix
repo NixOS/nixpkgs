@@ -12,16 +12,16 @@
 
 buildNpmPackage rec {
   pname = "ytDownloader";
-  version = "3.18.4";
+  version = "3.19.0";
 
   src = fetchFromGitHub {
     owner = "aandrew-me";
     repo = "ytDownloader";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-3kR4UOEwHmp63289H7onVU48q9vGpS0oPRj0Qb1s47w=";
+    tag = "v${version}";
+    hash = "sha256-Oj462x1oyhaLFbVNr90hKmg0S+BZXUv1DyNdxsc2L7Y=";
   };
 
-  npmDepsHash = "sha256-ifo3O9cF52hRsPKD70pJ42O7XhzrBg//iXzBWrpv+5I=";
+  npmDepsHash = "sha256-ZJdPfNndYOWzvJpgra16/tCuWTvPLd4ZhSFualJB00E=";
 
   nativeBuildInputs = [
     copyDesktopItems

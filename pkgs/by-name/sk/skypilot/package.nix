@@ -6,13 +6,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "skypilot";
-  version = "0.6.1";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "skypilot-org";
     repo = "skypilot";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-ZrNI9s7U39SMHqIzOtyuth8Wrkn+T2KSsMfpqO1pxoI=";
+    tag = "v${version}";
+    hash = "sha256-WM2glbjRFwAxyrIV5ID0bRaGb8UCQXiIgm0Praf7mU4=";
   };
 
   pyproject = true;

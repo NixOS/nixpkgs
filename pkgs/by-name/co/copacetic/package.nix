@@ -14,7 +14,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "project-copacetic";
     repo = "copacetic";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-hvSbjkqrd//thUex2It31Z4Vrj1u07WEAQFAnWiPo6M=";
   };
 
@@ -22,7 +22,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  CGO_ENABLED = "0";
+  env.CGO_ENABLED = "0";
   ldflags = [
     "-s"
     "-w"

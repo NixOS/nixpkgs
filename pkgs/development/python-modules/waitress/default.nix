@@ -1,26 +1,46 @@
 {
+  stdenv,
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
+  pytestCheckHook,
+  pytest-cov-stub,
 }:
 
 buildPythonPackage rec {
   pname = "waitress";
-  version = "3.0.0";
-  format = "setuptools";
+  version = "3.0.2";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-AF2kebBBNM3Z3WAtHufEnXneBTdhDWU2dMxsveIiuKE=";
+    hash = "sha256-aCqq8q8MRK2kq/tw3tNjk/DjB/SrlFaiFc4AILrvwx8=";
   };
 
-  doCheck = false;
+  build-system = [ setuptools ];
+
+  pythonImportsCheck = [ "waitress" ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-cov-stub
+  ];
+
+  doCheck = !stdenv.isDarwin;
+  disabledTests = [
+    # access to socket
+    "test_service_port"
+  ];
+
+  # Tests use sockets
+  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     homepage = "https://github.com/Pylons/waitress";
     description = "Waitress WSGI server";
     mainProgram = "waitress-serve";
-    license = licenses.zpl20;
+    license = licenses.zpl21;
     maintainers = with maintainers; [ domenkozar ];
   };
 }

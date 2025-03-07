@@ -1,8 +1,9 @@
-{ lib
-, buildDunePackage
-, fetchFromGitHub
-, re
-, xmlplaylist
+{
+  lib,
+  buildDunePackage,
+  fetchFromGitHub,
+  re,
+  xmlplaylist,
 }:
 
 buildDunePackage rec {

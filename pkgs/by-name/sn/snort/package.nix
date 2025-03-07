@@ -1,40 +1,70 @@
-{lib, stdenv, pkg-config, luajit, openssl, fetchurl, libpcap, pcre, libdnet, daq, zlib, flex, bison, makeWrapper
-, libtirpc
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  libdaq,
+  libdnet,
+  flex,
+  hwloc,
+  luajit,
+  openssl,
+  libpcap,
+  pcre2,
+  pkg-config,
+  zlib,
+  xz,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
-  version = "2.9.20";
+stdenv.mkDerivation (finalAttrs: {
   pname = "snort";
+  version = "3.7.0.0";
 
-  src = fetchurl {
-    name = "${pname}-${version}.tar.gz";
-    url = "https://snort.org/downloads/archive/snort/${pname}-${version}.tar.gz";
-    sha256 = "sha256-KUAOE/U7GDHguLEOwSJKHLqm3BUzpTIqIN2Au4S0mBw=";
+  src = fetchFromGitHub {
+    owner = "snort3";
+    repo = "snort3";
+    tag = finalAttrs.version;
+    hash = "sha256-KwKgKY+zcH7bZrtfMpkwb0LopGeImTwOf79hqZeYv/k=";
   };
 
-  nativeBuildInputs = [ makeWrapper pkg-config ];
-  buildInputs = [ luajit openssl libpcap pcre libdnet daq zlib flex bison libtirpc ];
+  nativeBuildInputs = [
+    libdaq
+    pkg-config
+    cmake
+  ];
 
-  env.NIX_CFLAGS_COMPILE = toString [ "-I${libtirpc.dev}/include/tirpc" ];
+  buildInputs = [
+    libdaq
+    libpcap
+    stdenv.cc.cc # libstdc++
+    libdnet
+    flex
+    hwloc
+    luajit
+    openssl
+    libpcap
+    pcre2
+    zlib
+    xz
+  ];
+
+  # Patch that is tracking upstream PR https://github.com/snort3/snort3/pull/399
+  patches = [ ./0001-cmake-fix-pkg-config-path-for-libdir.patch ];
 
   enableParallelBuilding = true;
 
-  configureFlags = [
-    "--disable-static-daq"
-    "--enable-control-socket"
-    "--with-daq-includes=${daq}/includes"
-    "--with-daq-libraries=${daq}/lib"
-  ];
-
-  postInstall = ''
-    wrapProgram $out/bin/snort --add-flags "--daq-dir ${daq}/lib/daq --dynamic-preprocessor-lib-dir $out/lib/snort_dynamicpreprocessor/ --dynamic-engine-lib-dir $out/lib/snort_dynamicengine"
-  '';
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Network intrusion prevention and detection system (IDS/IPS)";
     homepage = "https://www.snort.org";
-    maintainers = with lib.maintainers; [ aycanirican ];
+    maintainers = with lib.maintainers; [
+      aycanirican
+      brianmcgillion
+    ];
+    changelog = "https://github.com/snort3/snort3/releases/tag/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.gpl2;
     platforms = with lib.platforms; linux;
   };
-}
+})

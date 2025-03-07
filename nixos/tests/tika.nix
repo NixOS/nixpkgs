@@ -4,11 +4,13 @@
   name = "tika-server";
 
   nodes = {
-    machine = { pkgs, ... }: {
-      services.tika = {
-        enable = true;
+    machine =
+      { pkgs, ... }:
+      {
+        services.tika = {
+          enable = true;
+        };
       };
-    };
   };
 
   testScript = ''

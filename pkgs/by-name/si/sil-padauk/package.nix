@@ -1,12 +1,16 @@
-{ lib, stdenvNoCC, fetchzip }:
+{
+  lib,
+  stdenvNoCC,
+  fetchzip,
+}:
 
 stdenvNoCC.mkDerivation rec {
   pname = "sil-padauk";
-  version = "5.001";
+  version = "5.100";
 
   src = fetchzip {
     url = "https://software.sil.org/downloads/r/padauk/Padauk-${version}.zip";
-    hash = "sha256-rLzuDUd+idjTN0xQxblXQ9V2rQtJPN2EtWGmTRY1R7U=";
+    hash = "sha256-Y4ZcxbPcgF349wDuT352xqaJji+FMfBH6P7WSWOw2iI=";
   };
 
   installPhase = ''

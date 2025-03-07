@@ -17,16 +17,19 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pallets-eco";
     repo = "flask-sqlalchemy-lite";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-LpdPp5Gp74DSJqD1DJqwNeaMKdN5pEAUkxnKGYZcVis=";
   };
 
   build-system = [ flit-core ];
 
-  dependencies = [
-    flask
-    sqlalchemy
-  ] ++ flask.optional-dependencies.async ++ sqlalchemy.optional-dependencies.asyncio;
+  dependencies =
+    [
+      flask
+      sqlalchemy
+    ]
+    ++ flask.optional-dependencies.async
+    ++ sqlalchemy.optional-dependencies.asyncio;
 
   pythonImportsCheck = [ "flask_sqlalchemy_lite" ];
 

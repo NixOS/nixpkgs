@@ -1,10 +1,11 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, mpi
-, scalapack
-, llvmPackages
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  mpi,
+  scalapack,
+  llvmPackages,
 }:
 
 stdenv.mkDerivation rec {
@@ -28,7 +29,6 @@ stdenv.mkDerivation rec {
     "-DCOSTA_SCALAPACK=CUSTOM"
     "-DSCALAPACK_ROOT=${scalapack}"
   ];
-
 
   meta = with lib; {
     description = "Distributed Communication-Optimal Shuffle and Transpose Algorithm";

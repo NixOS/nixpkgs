@@ -1,10 +1,11 @@
-{ lib
-, fetchFromSourcehut
-, rustPlatform
-, installShellFiles
-, scdoc
-, nixosTests
-, nix-update-script
+{
+  lib,
+  fetchFromSourcehut,
+  rustPlatform,
+  installShellFiles,
+  scdoc,
+  nixosTests,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -18,14 +19,18 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-0vbQDHuLrgrsWiOb2hb6lYylJm5o/wOzoDIw85H8Eh0=";
   };
 
-  cargoHash = "sha256-EtRJsm6jo0fSEN9s0cS4IBWV/NnuUeDTa/x1utbh85k=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-KdHYyuH1RMLRueqYbfADUktBx9aL8yTagB0KxEGQsCs=";
 
   passthru = {
     tests.basic-functionality = nixosTests.stargazer;
     updateScript = nix-update-script { };
   };
 
-  nativeBuildInputs = [ installShellFiles scdoc ];
+  nativeBuildInputs = [
+    installShellFiles
+    scdoc
+  ];
 
   postInstall = ''
     scdoc < doc/stargazer.scd  > stargazer.1

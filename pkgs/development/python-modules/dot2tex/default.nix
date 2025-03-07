@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  substituteAll,
+  replaceVars,
   pyparsing,
   graphviz,
   pytestCheckHook,
@@ -20,8 +20,7 @@ buildPythonPackage rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./path.patch;
+    (replaceVars ./path.patch {
       inherit graphviz;
     })
     ./test.patch # https://github.com/kjellmf/dot2tex/issues/5

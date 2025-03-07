@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "miketheman";
     repo = "pytest-socket";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-19YF3q85maCVdVg2HOOPbN45RNjBf6kiFAhLut8B2tQ=";
   };
 

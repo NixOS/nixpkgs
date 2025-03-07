@@ -1,20 +1,19 @@
-{ substituteAll
-, diffutils
-, stdenv
-, patchPpdFilesHook
+{
+  replaceVars,
+  diffutils,
+  stdenv,
+  patchPpdFilesHook,
 }:
 
 let
-  input = substituteAll {
-    src = ./test.ppd;
+  input = replaceVars ./test.ppd {
     keep = "cmp";
     patch = "cmp";
     pathkeep = "/bin/cmp";
     pathpatch = "/bin/cmp";
   };
 
-  output = substituteAll {
-    src = ./test.ppd;
+  output = replaceVars ./test.ppd {
     keep = "cmp";
     patch = "${diffutils}/bin/cmp";
     pathkeep = "/bin/cmp";
@@ -25,7 +24,10 @@ in
 stdenv.mkDerivation {
   name = "${patchPpdFilesHook.name}-test";
   buildInputs = [ diffutils ];
-  nativeBuildInputs = [ diffutils patchPpdFilesHook ];
+  nativeBuildInputs = [
+    diffutils
+    patchPpdFilesHook
+  ];
   dontUnpack = true;
   dontInstall = true;
   ppdFileCommands = [ "cmp" ];

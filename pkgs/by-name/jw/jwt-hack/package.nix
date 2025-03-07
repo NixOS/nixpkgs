@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "hahwul";
     repo = "jwt-hack";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-IHR+ItI4ToINLpkVc7yrgpNTS17nD02G6x3pNMEfIW4=";
   };
 

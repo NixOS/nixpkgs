@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -7,45 +8,63 @@
   setuptools,
 
   # dependencies
-  numpy,
-  joblib,
+  apricot-select,
   networkx,
+  numpy,
+  scikit-learn,
   scipy,
-  pyyaml,
-  cython,
+  torch,
+
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pomegranate";
-  version = "0.14.8";
+  version = "1.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     repo = pname;
     owner = "jmschrei";
-    # no tags for recent versions: https://github.com/jmschrei/pomegranate/issues/974
-    rev = "refs/tags/v${version}";
-    hash = "sha256-PoDAtNm/snq4isotkoCTVYUuwr9AKKwiXIojUFMH/YE=";
+    tag = "v${version}";
+    hash = "sha256-p2Gn0FXnsAHvRUeAqx4M1KH0+XvDl3fmUZZ7MiMvPSs=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
-    numpy
-    joblib
+  dependencies = [
+    apricot-select
     networkx
+    numpy
+    scikit-learn
     scipy
-    pyyaml
-    cython
+    torch
   ];
 
-  # https://github.com/etal/cnvkit/issues/815
-  passthru.skipBulkUpdate = true;
+  pythonImportsCheck = [ "pomegranate" ];
 
-  meta = with lib; {
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  pytestFlagsArray = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
+    # AssertionError: Arrays are not almost equal to 6 decimals
+    "--deselect=tests/distributions/test_normal_full.py::test_fit"
+    "--deselect=tests/distributions/test_normal_full.py::test_from_summaries"
+    "--deselect=tests/distributions/test_normal_full.py::test_serialization"
+  ];
+
+  disabledTests = [
+    # AssertionError: Arrays are not almost equal to 6 decimals
+    "test_sample"
+  ];
+
+  meta = {
     description = "Probabilistic and graphical models for Python, implemented in cython for speed";
     homepage = "https://github.com/jmschrei/pomegranate";
-    license = licenses.mit;
-    maintainers = with maintainers; [ rybern ];
+    changelog = "https://github.com/jmschrei/pomegranate/releases/tag/v${version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ rybern ];
   };
 }

@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   inherit (lib) mkOption types;
@@ -6,7 +11,10 @@ let
 in
 {
   meta = {
-    maintainers = with lib.maintainers; [ rizary zimbatm ];
+    maintainers = with lib.maintainers; [
+      rizary
+      zimbatm
+    ];
   };
   options = {
     services.nar-serve = {

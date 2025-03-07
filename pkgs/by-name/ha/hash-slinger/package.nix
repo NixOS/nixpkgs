@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, python3
-, unbound
-, libreswan
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python3,
+  unbound,
+  libreswan,
 }:
 
 stdenv.mkDerivation rec {

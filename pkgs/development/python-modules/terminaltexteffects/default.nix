@@ -8,15 +8,15 @@
 
 buildPythonPackage rec {
   pname = "terminaltexteffects";
-  version = "0.11.0";
+  version = "0.12.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
-   # no tests on pypi, no tags on github
+  # no tests on pypi, no tags on github
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-FDDLc7oAOgSpaxmuS6Wzej+vEOuSx3WT2ntpfoET3LI=";
+    hash = "sha256-hL+n7vxNA+3jual5TSaiJN80hRU0+ZPfaiN/23RFQu8=";
   };
 
   build-system = [ poetry-core ];

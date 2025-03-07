@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "snakemake";
     repo = "snakemake-interface-common";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-PMEs7yeVfSnZKbabLrbXfIKCIPteNV1wzbt9RIDG3qU=";
   };
 

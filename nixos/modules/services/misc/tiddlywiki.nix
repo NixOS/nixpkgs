@@ -1,13 +1,21 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
 
   cfg = config.services.tiddlywiki;
-  listenParams = lib.concatStrings (lib.mapAttrsToList (n: v: " '${n}=${toString v}' ") cfg.listenOptions);
+  listenParams = lib.concatStrings (
+    lib.mapAttrsToList (n: v: " '${n}=${toString v}' ") cfg.listenOptions
+  );
   exe = "${pkgs.nodePackages.tiddlywiki}/lib/node_modules/.bin/tiddlywiki";
   name = "tiddlywiki";
   dataDir = "/var/lib/" + name;
 
-in {
+in
+{
 
   options.services.tiddlywiki = {
 
@@ -15,10 +23,10 @@ in {
 
     listenOptions = lib.mkOption {
       type = lib.types.attrs;
-      default = {};
+      default = { };
       example = {
         credentials = "../credentials.csv";
-        readers="(authenticated)";
+        readers = "(authenticated)";
         port = 3456;
       };
       description = ''

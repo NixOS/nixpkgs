@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, installShellFiles
-, blas
-, gfortran
-, lapack
-, openssl
-, Security
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  installShellFiles,
+  blas,
+  gfortran,
+  lapack,
+  openssl,
+  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -21,18 +22,21 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-suzivynlgk4VvDOC2dQR40n5IJHoJ736+ObdrM9dIqE=";
   };
 
-  cargoHash = "sha256-HekjmctuzOWs5k/ihhsV8vVkm6906jEnFf3yvhkrA5Y=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-X8ENEtjH1RHU2+VwtkHsyVYK37O8doMlLk94O2BGqy0=";
 
   nativeBuildInputs = [ installShellFiles ];
 
-  buildInputs = [
-    blas
-    gfortran.cc.lib
-    lapack
-    openssl
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    Security
-  ];
+  buildInputs =
+    [
+      blas
+      gfortran.cc.lib
+      lapack
+      openssl
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      Security
+    ];
 
   # Enables build against a generic BLAS.
   buildFeatures = [ "netlib" ];

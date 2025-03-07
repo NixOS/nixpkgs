@@ -1,34 +1,40 @@
-{ stdenv
-, lib
-, fetchurl
-, pkg-config
-, meson
-, ninja
-, gettext
-, gnupg
-, p11-kit
-, glib
-, libgcrypt
-, libtasn1
-, gtk3
-, pango
-, libsecret
-, openssh
-, systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd, systemd
-, gobject-introspection
-, wrapGAppsHook3
-, gi-docgen
-, vala
-, gnome
-, python3
-, shared-mime-info
+{
+  stdenv,
+  lib,
+  fetchurl,
+  pkg-config,
+  meson,
+  ninja,
+  gettext,
+  gnupg,
+  p11-kit,
+  glib,
+  libgcrypt,
+  libtasn1,
+  gtk3,
+  pango,
+  libsecret,
+  openssh,
+  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  systemd,
+  gobject-introspection,
+  wrapGAppsHook3,
+  gi-docgen,
+  vala,
+  gnome,
+  python3,
+  shared-mime-info,
 }:
 
 stdenv.mkDerivation rec {
   pname = "gcr";
   version = "3.41.2";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [
+    "out"
+    "dev"
+    "devdoc"
+  ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
@@ -51,15 +57,17 @@ stdenv.mkDerivation rec {
     openssh
   ];
 
-  buildInputs = [
-    libgcrypt
-    libtasn1
-    pango
-    libsecret
-    openssh
-  ] ++ lib.optionals (systemdSupport) [
-    systemd
-  ];
+  buildInputs =
+    [
+      libgcrypt
+      libtasn1
+      pango
+      libsecret
+      openssh
+    ]
+    ++ lib.optionals (systemdSupport) [
+      systemd
+    ];
 
   propagatedBuildInputs = [
     glib
@@ -71,14 +79,16 @@ stdenv.mkDerivation rec {
     python3
   ];
 
-  mesonFlags = [
-    # We are still using ssh-agent from gnome-keyring.
-    # https://github.com/NixOS/nixpkgs/issues/140824
-    "-Dssh_agent=false"
-    "-Dgpg_path=${lib.getBin gnupg}/bin/gpg"
-  ] ++ lib.optionals (!systemdSupport) [
-    "-Dsystemd=disabled"
-  ];
+  mesonFlags =
+    [
+      # We are still using ssh-agent from gnome-keyring.
+      # https://github.com/NixOS/nixpkgs/issues/140824
+      "-Dssh_agent=false"
+      "-Dgpg_path=${lib.getBin gnupg}/bin/gpg"
+    ]
+    ++ lib.optionals (!systemdSupport) [
+      "-Dsystemd=disabled"
+    ];
 
   doCheck = false; # fails 21 out of 603 tests, needs dbus daemon
 

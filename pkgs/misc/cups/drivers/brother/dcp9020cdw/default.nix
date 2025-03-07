@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, fetchurl
-, cups
-, dpkg
-, gnused
-, makeWrapper
-, ghostscript
-, file
-, a2ps
-, coreutils
-, gnugrep
-, which
-, gawk
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cups,
+  dpkg,
+  gnused,
+  makeWrapper,
+  ghostscript,
+  file,
+  a2ps,
+  coreutils,
+  gnugrep,
+  which,
+  gawk,
 }:
 
 let
@@ -28,8 +29,16 @@ rec {
       sha256 = "1z6nma489s0a0b0a8wyg38yxanz4k99dg29fyjs4jlprsvmwk56y";
     };
 
-    nativeBuildInputs = [ dpkg makeWrapper ];
-    buildInputs = [ cups ghostscript a2ps gawk ];
+    nativeBuildInputs = [
+      dpkg
+      makeWrapper
+    ];
+    buildInputs = [
+      cups
+      ghostscript
+      a2ps
+      gawk
+    ];
     unpackPhase = "dpkg-deb -x $src $out";
 
     installPhase = ''
@@ -43,16 +52,18 @@ rec {
       ln -s $out/opt/brother/Printers/${model}/lpd/filter${model} $out/lib/cups/filter/brother_lpdwrapper_${model}
 
       wrapProgram $out/opt/brother/Printers/${model}/lpd/filter${model} \
-        --prefix PATH ":" ${lib.makeBinPath [
-          gawk
-          ghostscript
-          a2ps
-          file
-          gnused
-          gnugrep
-          coreutils
-          which
-        ]}
+        --prefix PATH ":" ${
+          lib.makeBinPath [
+            gawk
+            ghostscript
+            a2ps
+            file
+            gnused
+            gnugrep
+            coreutils
+            which
+          ]
+        }
     '';
 
     meta = with lib; {
@@ -75,13 +86,28 @@ rec {
       sha256 = "04yqm1qv9p4hgp1p6mqq4siygl4056s6flv6kqln8mvmcr8zaq1s";
     };
 
-    nativeBuildInputs = [ dpkg makeWrapper ];
-    buildInputs = [ cups ghostscript a2ps gawk ];
+    nativeBuildInputs = [
+      dpkg
+      makeWrapper
+    ];
+    buildInputs = [
+      cups
+      ghostscript
+      a2ps
+      gawk
+    ];
     unpackPhase = "dpkg-deb -x $src $out";
 
     installPhase = ''
       for f in $out/opt/brother/Printers/${model}/cupswrapper/cupswrapper${model}; do
-        wrapProgram $f --prefix PATH : ${lib.makeBinPath [ coreutils ghostscript gnugrep gnused ]}
+        wrapProgram $f --prefix PATH : ${
+          lib.makeBinPath [
+            coreutils
+            ghostscript
+            gnugrep
+            gnused
+          ]
+        }
       done
 
       mkdir -p $out/share/cups/model

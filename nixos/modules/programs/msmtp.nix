@@ -1,10 +1,16 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.programs.msmtp;
 
-in {
-  meta.maintainers = with lib.maintainers; [ pacien ];
+in
+{
+  meta.maintainers = with lib.maintainers; [ euxane ];
 
   options = {
     programs.msmtp = {
@@ -20,7 +26,7 @@ in {
 
       defaults = lib.mkOption {
         type = lib.types.attrs;
-        default = {};
+        default = { };
         example = {
           aliases = "/etc/aliases";
           port = 587;
@@ -28,13 +34,13 @@ in {
         };
         description = ''
           Default values applied to all accounts.
-          See msmtp(1) for the available options.
+          See {manpage}`msmtp(1)` for the available options.
         '';
       };
 
       accounts = lib.mkOption {
         type = with lib.types; attrsOf attrs;
-        default = {};
+        default = { };
         example = {
           "default" = {
             host = "smtp.example";
@@ -46,7 +52,7 @@ in {
         description = ''
           Named accounts and their respective configurations.
           The special name "default" allows a default account to be defined.
-          See msmtp(1) for the available options.
+          See {manpage}`msmtp(1)` for the available options.
 
           Use `programs.msmtp.extraConfig` instead of this attribute set-based
           option if ordered account inheritance is needed.
@@ -62,7 +68,7 @@ in {
         default = "";
         description = ''
           Extra lines to add to the msmtp configuration verbatim.
-          See msmtp(1) for the syntax and available options.
+          See {manpage}`msmtp(1)` for the syntax and available options.
         '';
       };
     };
@@ -80,25 +86,31 @@ in {
       group = "root";
     };
 
-    environment.etc."msmtprc".text = let
-      mkValueString = v:
-        if v == true then "on"
-        else if v == false then "off"
-        else lib.generators.mkValueStringDefault {} v;
-      mkKeyValueString = k: v: "${k} ${mkValueString v}";
-      mkInnerSectionString =
-        attrs: builtins.concatStringsSep "\n" (lib.mapAttrsToList mkKeyValueString attrs);
-      mkAccountString = name: attrs: ''
-        account ${name}
-        ${mkInnerSectionString attrs}
+    environment.etc."msmtprc".text =
+      let
+        mkValueString =
+          v:
+          if v == true then
+            "on"
+          else if v == false then
+            "off"
+          else
+            lib.generators.mkValueStringDefault { } v;
+        mkKeyValueString = k: v: "${k} ${mkValueString v}";
+        mkInnerSectionString =
+          attrs: builtins.concatStringsSep "\n" (lib.mapAttrsToList mkKeyValueString attrs);
+        mkAccountString = name: attrs: ''
+          account ${name}
+          ${mkInnerSectionString attrs}
+        '';
+      in
+      ''
+        defaults
+        ${mkInnerSectionString cfg.defaults}
+
+        ${builtins.concatStringsSep "\n" (lib.mapAttrsToList mkAccountString cfg.accounts)}
+
+        ${cfg.extraConfig}
       '';
-    in ''
-      defaults
-      ${mkInnerSectionString cfg.defaults}
-
-      ${builtins.concatStringsSep "\n" (lib.mapAttrsToList mkAccountString cfg.accounts)}
-
-      ${cfg.extraConfig}
-    '';
   };
 }

@@ -18,7 +18,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "pdfarranger";
     repo = "pdfarranger";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-94qziqJaKW8/L/6+U1yojxdG8BmeAStn+qbfGemTrVA=";
   };
 

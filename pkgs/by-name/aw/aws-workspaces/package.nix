@@ -1,26 +1,27 @@
-{ stdenv
-, lib
-, makeWrapper
-, dpkg
-, fetchurl
-, autoPatchelfHook
-, curl
-, libkrb5
-, lttng-ust
-, libpulseaudio
-, gtk3
-, openssl_1_1
-, icu70
-, webkitgtk_4_0
-, librsvg
-, gdk-pixbuf
-, libsoup_2_4
-, glib-networking
-, graphicsmagick_q16
-, libva
-, libusb1
-, hiredis
-, xcbutil
+{
+  stdenv,
+  lib,
+  makeWrapper,
+  dpkg,
+  fetchurl,
+  autoPatchelfHook,
+  curl,
+  libkrb5,
+  lttng-ust,
+  libpulseaudio,
+  gtk3,
+  openssl_1_1,
+  icu70,
+  webkitgtk_4_0,
+  librsvg,
+  gdk-pixbuf,
+  libsoup_2_4,
+  glib-networking,
+  graphicsmagick_q16,
+  libva,
+  libusb1,
+  hiredis,
+  xcbutil,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -98,7 +99,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://clients.amazonworkspaces.com";
     license = licenses.unfree;
     mainProgram = "workspacesclient";
-    maintainers = with maintainers; [ mausch dylanmtaylor ];
+    maintainers = with maintainers; [
+      mausch
+      dylanmtaylor
+    ];
     platforms = [ "x86_64-linux" ]; # TODO Mac support
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };

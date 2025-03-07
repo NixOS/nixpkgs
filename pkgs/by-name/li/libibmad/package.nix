@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, libibumad }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libibumad,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libibmad";

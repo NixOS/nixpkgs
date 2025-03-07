@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, fetchurl
-, cmake
-, extra-cmake-modules
-, pkg-config
-, qtbase
-, qtdeclarative
-, qtx11extras ? null  # qt5 only
-, kcoreaddons
-, ki18n
-, knotifications
-, kpipewire
-, kstatusnotifieritem ? null  # qt6 only
-, kwindowsystem
-, wrapQtAppsHook
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  extra-cmake-modules,
+  pkg-config,
+  qtbase,
+  qtdeclarative,
+  qtx11extras ? null, # qt5 only
+  kcoreaddons,
+  ki18n,
+  knotifications,
+  kpipewire,
+  kstatusnotifieritem ? null, # qt6 only
+  kwindowsystem,
+  wrapQtAppsHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -44,12 +45,16 @@ stdenv.mkDerivation (finalAttrs: {
     kwindowsystem
   ];
 
-  cmakeFlags = ["-DQT_MAJOR_VERSION=${lib.versions.major qtbase.version}"];
+  cmakeFlags = [ "-DQT_MAJOR_VERSION=${lib.versions.major qtbase.version}" ];
 
   meta = {
     description = "Utility to allow streaming Wayland windows to X applications";
     homepage = "https://invent.kde.org/system/xwaylandvideobridge";
-    license = with lib.licenses; [ bsd3 cc0 gpl2Plus ];
+    license = with lib.licenses; [
+      bsd3
+      cc0
+      gpl2Plus
+    ];
     maintainers = with lib.maintainers; [ stepbrobd ];
     platforms = lib.platforms.linux;
     mainProgram = "xwaylandvideobridge";

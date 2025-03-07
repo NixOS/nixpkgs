@@ -13,6 +13,8 @@
   zlib,
   version,
   hash,
+  replaceVars,
+  versionCheckHook,
 
   # downstream dependencies
   python3,
@@ -31,13 +33,13 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "protocolbuffers";
     repo = "protobuf";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     inherit hash;
   };
 
-  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+  postPatch = lib.optionalString (stdenv.hostPlatform.isDarwin && lib.versionOlder version "29") ''
     substituteInPlace src/google/protobuf/testing/googletest.cc \
-      --replace 'tmpnam(b)' '"'$TMPDIR'/foo"'
+      --replace-fail 'tmpnam(b)' '"'$TMPDIR'/foo"'
   '';
 
   patches = lib.optionals (lib.versionOlder version "22") [
@@ -49,15 +51,17 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  nativeBuildInputs =
-    [
-      cmake
-    ]
-    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-      # protoc of the same version must be available for build. For non-cross builds, it's able to
-      # re-use the executable generated as part of the build
+  # hook to provide the path to protoc executable, used at build time
+  build_protobuf =
+    if (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) then
       buildPackages."protobuf_${lib.versions.major version}"
-    ];
+    else
+      (placeholder "out");
+  setupHook = ./setup-hook.sh;
+
+  nativeBuildInputs = [
+    cmake
+  ];
 
   buildInputs = [
     gtest
@@ -84,15 +88,18 @@ stdenv.mkDerivation (finalAttrs: {
     ];
 
   doCheck =
-    # FIXME: investigate.  24.x and 23.x have different errors.
-    # At least some of it is not reproduced on some other machine; example:
-    # https://hydra.nixos.org/build/235677717/nixlog/4/tail
-    !(stdenv.hostPlatform.isDarwin && lib.versionAtLeast version "23")
     # Tests fail to build on 32-bit platforms; fixed in 22.x
     # https://github.com/protocolbuffers/protobuf/issues/10418
     # Also AnyTest.TestPackFromSerializationExceedsSizeLimit fails on 32-bit platforms
     # https://github.com/protocolbuffers/protobuf/issues/8460
-    && !stdenv.hostPlatform.is32bit;
+    !stdenv.hostPlatform.is32bit;
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgram = [ "${placeholder "out"}/bin/protoc" ];
+  versionCheckProgramArg = [ "--version" ];
+  doInstallCheck = true;
 
   passthru = {
     tests = {

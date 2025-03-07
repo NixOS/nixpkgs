@@ -875,6 +875,12 @@
     "project_path": "documentation/docs-krita-org",
     "repo_path": "documentation/docs-krita-org"
   },
+  "documentation-docs-labplot-org": {
+    "description": "Documentation for Labplot",
+    "name": "documentation-docs-labplot-org",
+    "project_path": "documentation/docs-labplot-org",
+    "repo_path": "documentation/docs-labplot-org"
+  },
   "documentation-docs-plasma-mobile-org": {
     "description": "Plasma Mobile documentation based on Sphinx",
     "name": "documentation-docs-plasma-mobile-org",
@@ -1421,6 +1427,12 @@
     "project_path": "playground/edu/kard",
     "repo_path": "education/kard"
   },
+  "karp": {
+    "description": "Simple PDF editor to arrange, merge and improve PDF file(s)",
+    "name": "karp",
+    "project_path": "playground/graphics/karp",
+    "repo_path": "graphics/karp"
+  },
   "kartesio": {
     "description": "Calculate best fit curves with experimental points using regression or neural networks",
     "name": "kartesio",
@@ -1440,7 +1452,7 @@
     "repo_path": "libraries/kasync"
   },
   "kate": {
-    "description": "Modern text editor built on the KDE Frameworks and Qt",
+    "description": "Advanced text editor",
     "name": "kate",
     "project_path": "kde/applications/kate",
     "repo_path": "utilities/kate"
@@ -6185,6 +6197,12 @@
     "project_path": "kde/kdebindings/smoke/smokeqt",
     "repo_path": "unmaintained/smokeqt"
   },
+  "snap-kcm": {
+    "description": "KCM allowing changing permissions which have granted to installed Snap applications.",
+    "name": "snap-kcm",
+    "project_path": "kdereview/snap-kcm",
+    "repo_path": "plasma/snap-kcm"
+  },
   "snap-kf5": {
     "description": "Content Snap for Qt5 and KF5",
     "name": "snap-kf5",
@@ -6431,6 +6449,12 @@
     "project_path": "sysadmin/bugzilla-bot",
     "repo_path": "sysadmin/bugzilla-bot"
   },
+  "sysadmin-ci-images": {
+    "description": "Images for use on the KDE CI System",
+    "name": "sysadmin-ci-images",
+    "project_path": "sysadmin/ci-images",
+    "repo_path": "sysadmin/ci-images"
+  },
   "sysadmin-ci-management": {
     "description": "Contains all management jobs and other data needed to run our Gitlab CI infrastructure.",
     "name": "sysadmin-ci-management",
@@ -6634,6 +6658,12 @@
     "name": "sysadmin-neon-sftp-bridge",
     "project_path": "sysadmin/neon-sftp-bridge",
     "repo_path": "sysadmin/neon-sftp-bridge"
+  },
+  "sysadmin-neon-tooling": {
+    "description": "",
+    "name": "sysadmin-neon-tooling",
+    "project_path": "sysadmin/neon-tooling",
+    "repo_path": "sysadmin/neon-tooling"
   },
   "sysadmin-projects-api": {
     "description": "",

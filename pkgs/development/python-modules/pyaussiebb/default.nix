@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "pyaussiebb";
-  version = "0.1.4";
+  version = "0.1.5";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -20,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "yaleman";
     repo = "aussiebb";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-IW2HraJbgvf0G1eRXNpnsPMWlLXi2P9DTyk+tG5Hc2U=";
+    tag = "v${version}";
+    hash = "sha256-ejaHweoRNrJJq6XGeTrENco8SPwwu6rSpGzksu0CsCY=";
   };
 
   postPatch = ''

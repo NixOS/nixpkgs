@@ -1,73 +1,116 @@
 {
   lib,
   stdenv,
+  cargo,
+  desktop-file-utils,
   fetchurl,
-  pkg-config,
+  glib,
   gnome,
-  gtk3,
-  wrapGAppsHook3,
-  librsvg,
-  gsound,
-  gettext,
+  gtk4,
   itstool,
+  libadwaita,
+  librsvg,
   libxml2,
-  libgnome-games-support,
-  libgee,
+  gst_all_1,
   meson,
   ninja,
-  vala,
-  python3,
-  desktop-file-utils,
-  adwaita-icon-theme,
+  pkg-config,
+  rustc,
+  rustPlatform,
+  wrapGAppsHook4,
+  _experimental-update-script-combinators,
+  common-updater-scripts,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-robots";
-  version = "40.0";
+  version = "41.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-robots/${lib.versions.major version}/gnome-robots-${version}.tar.xz";
-    hash = "sha256-b78viFdQ8aURCnJPjzWt3ZvGEYTuMc8MDLiZU+T0yxE=";
+    url = "mirror://gnome/sources/gnome-robots/${lib.versions.major finalAttrs.version}/gnome-robots-${finalAttrs.version}.tar.xz";
+    hash = "sha256-K4BQcFrIPpOL56iREyYB62XHk/IJzX6RDGzWQphzBHg=";
+  };
+
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) src;
+    name = "gnome-robots-${finalAttrs.version}";
+    hash = "sha256-7kwjpZJqAqqKlt6mOFyjaaxZ1Tr2WuhE72jwjCZpX9E=";
   };
 
   nativeBuildInputs = [
     pkg-config
     meson
     ninja
-    vala
-    python3
-    libxml2
-    wrapGAppsHook3
-    gettext
+    cargo
+    rustc
+    rustPlatform.cargoSetupHook
+    gtk4 # for gtk4-update-icon-cache
+    wrapGAppsHook4
     itstool
     desktop-file-utils
   ];
 
   buildInputs = [
-    gtk3
+    glib
+    gtk4
+    libadwaita
     librsvg
-    gsound
-    libgnome-games-support
-    libgee
-    adwaita-icon-theme
+    libxml2
+    # Sound playback, not checked at build time.
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
   ];
 
   postPatch = ''
-    chmod +x build-aux/meson_post_install.py
-    patchShebangs build-aux/meson_post_install.py
+    # https://gitlab.gnome.org/GNOME/gnome-robots/-/merge_requests/38
+    substituteInPlace data/icons/meson.build \
+      --replace-fail 'gtk-update-icon-cache' 'gtk4-update-icon-cache'
+  '';
+
+  preFixup = ''
+    # Seal GStreamer plug-ins so that we can notice when they are missing.
+    gappsWrapperArgs+=(--set "GST_PLUGIN_SYSTEM_PATH_1_0" "$GST_PLUGIN_SYSTEM_PATH_1_0")
+    unset GST_PLUGIN_SYSTEM_PATH_1_0
   '';
 
   passthru = {
-    updateScript = gnome.updateScript { packageName = "gnome-robots"; };
+    updateScript =
+      let
+        updateSource = gnome.updateScript {
+          packageName = "gnome-robots";
+        };
+
+        updateLockfile = {
+          command = [
+            "sh"
+            "-c"
+            ''
+              PATH=${
+                lib.makeBinPath [
+                  common-updater-scripts
+                ]
+              }
+              update-source-version gnome-robots --ignore-same-version --source-key=cargoDeps > /dev/null
+            ''
+          ];
+          # Experimental feature: do not copy!
+          supportedFeatures = [ "silent" ];
+        };
+      in
+      _experimental-update-script-combinators.sequence [
+        updateSource
+        updateLockfile
+      ];
   };
 
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/GNOME/gnome-robots";
-    changelog = "https://gitlab.gnome.org/GNOME/gnome-robots/-/blob/${version}/NEWS?ref_type=tags";
+    changelog = "https://gitlab.gnome.org/GNOME/gnome-robots/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     description = "Avoid the robots and make them crash into each other";
     mainProgram = "gnome-robots";
     maintainers = teams.gnome.members;
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
   };
-}
+})

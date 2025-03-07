@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ncbi";
     repo = "ncbi-vdb";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-HBiheN8XfYYwmY5gw7j8qTczn6WZZNTzY2/fGtpgs/8=";
   };
 

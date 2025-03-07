@@ -30,7 +30,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "StormLib MPQ archiving utility";
     license = lib.licenses.gpl3Only;
     mainProgram = "smpq";
-    maintainers = with lib.maintainers; [ aanderse karolchmist ];
+    maintainers = with lib.maintainers; [
+      aanderse
+      karolchmist
+    ];
     platforms = lib.platforms.all;
   };
 })

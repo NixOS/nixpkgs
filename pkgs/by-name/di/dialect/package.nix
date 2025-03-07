@@ -27,7 +27,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "dialect-app";
     repo = "dialect";
-    rev = "refs/tags/${version}";
+    tag = version;
     fetchSubmodules = true;
     hash = "sha256-TWXJlzuSBy+Ij3s0KS02bh8vdXP10hQpgdz4QMTLf/Q=";
   };
@@ -78,7 +78,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     homepage = "https://github.com/dialect-app/dialect";
     description = "Translation app for GNOME";
-    maintainers = with lib.maintainers; [ aleksana ];
+    maintainers = lib.teams.gnome-circle.members;
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     mainProgram = "dialect";

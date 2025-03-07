@@ -1,11 +1,21 @@
-{ lib, stdenv, fetchurl, fetchzip, yasm, perl, cmake, pkg-config, python3
-, enableVmaf ? true, libvmaf
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchzip,
+  yasm,
+  perl,
+  cmake,
+  pkg-config,
+  python3,
+  enableVmaf ? true,
+  libvmaf,
+  gitUpdater,
 
-# for passthru.tests
-, ffmpeg
-, libavif
-, libheif
+  # for passthru.tests
+  ffmpeg,
+  libavif,
+  libheif,
 }:
 
 let
@@ -13,31 +23,43 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "libaom";
-  version = "3.10.0";
+  version = "3.11.0";
 
   src = fetchzip {
     url = "https://aomedia.googlesource.com/aom/+archive/v${version}.tar.gz";
-    hash = "sha256-7xtIT8zalh1XJfVKWeC/+jAkhOuFHw6Q0+c2YMtDark=";
+    hash = "sha256-SqXDeIApj7XEK2cChenN9pun5eNm4Q+Smpp76xHwMMU=";
     stripRoot = false;
   };
 
-  patches = [
-    ./outputs.patch
-  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-    # This patch defines `_POSIX_C_SOURCE`, which breaks system headers
-    # on Darwin.
-    (fetchurl {
-      name = "musl.patch";
-      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/media-libs/libaom/files/libaom-3.4.0-posix-c-source-ftello.patch?id=50c7c4021e347ee549164595280cf8a23c960959";
-      hash = "sha256-6+u7GTxZcSNJgN7D+s+XAVwbMnULufkTcQ0s7l+Ydl0=";
-    })
-  ];
+  patches =
+    [
+      ./outputs.patch
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+      # This patch defines `_POSIX_C_SOURCE`, which breaks system headers
+      # on Darwin.
+      (fetchurl {
+        name = "musl.patch";
+        url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/media-libs/libaom/files/libaom-3.4.0-posix-c-source-ftello.patch?id=50c7c4021e347ee549164595280cf8a23c960959";
+        hash = "sha256-6+u7GTxZcSNJgN7D+s+XAVwbMnULufkTcQ0s7l+Ydl0=";
+      })
+    ];
 
   nativeBuildInputs = [
-    yasm perl cmake pkg-config python3
+    yasm
+    perl
+    cmake
+    pkg-config
+    python3
   ];
 
   propagatedBuildInputs = lib.optional enableVmaf libvmaf;
+
+  env = lib.optionalAttrs stdenv.hostPlatform.isFreeBSD {
+    # This can be removed when we switch to libcxx from llvm 20
+    # https://github.com/llvm/llvm-project/pull/122361
+    NIX_CFLAGS_COMPILE = "-D_XOPEN_SOURCE=700";
+  };
 
   preConfigure = ''
     # build uses `git describe` to set the build version
@@ -52,26 +74,37 @@ stdenv.mkDerivation rec {
   # Configuration options:
   # https://aomedia.googlesource.com/aom/+/refs/heads/master/build/cmake/aom_config_defaults.cmake
 
-  cmakeFlags = [
-    "-DBUILD_SHARED_LIBS=ON"
-    "-DENABLE_TESTS=OFF"
-  ] ++ lib.optionals enableVmaf [
-    "-DCONFIG_TUNE_VMAF=1"
-  ] ++ lib.optionals (isCross && !stdenv.hostPlatform.isx86) [
-    "-DCMAKE_ASM_COMPILER=${stdenv.cc.targetPrefix}as"
-  ] ++ lib.optionals stdenv.hostPlatform.isAarch32 [
-    # armv7l-hf-multiplatform does not support NEON
-    # see lib/systems/platform.nix
-    "-DENABLE_NEON=0"
+  cmakeFlags =
+    [
+      "-DBUILD_SHARED_LIBS=ON"
+      "-DENABLE_TESTS=OFF"
+    ]
+    ++ lib.optionals enableVmaf [
+      "-DCONFIG_TUNE_VMAF=1"
+    ]
+    ++ lib.optionals (isCross && !stdenv.hostPlatform.isx86) [
+      "-DCMAKE_ASM_COMPILER=${lib.getBin stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isAarch32 [
+      # armv7l-hf-multiplatform does not support NEON
+      # see lib/systems/platform.nix
+      "-DENABLE_NEON=0"
+    ];
+
+  postFixup =
+    ''
+      moveToOutput lib/libaom.a "$static"
+    ''
+    + lib.optionalString stdenv.hostPlatform.isStatic ''
+      ln -s $static $out
+    '';
+
+  outputs = [
+    "out"
+    "bin"
+    "dev"
+    "static"
   ];
-
-  postFixup = ''
-    moveToOutput lib/libaom.a "$static"
-  '' + lib.optionalString stdenv.hostPlatform.isStatic ''
-    ln -s $static $out
-  '';
-
-  outputs = [ "out" "bin" "dev" "static" ];
 
   passthru = {
     updateScript = gitUpdater {
@@ -92,10 +125,14 @@ stdenv.mkDerivation rec {
       for Open Media. It contains an AV1 library as well as applications like
       an encoder (aomenc) and a decoder (aomdec).
     '';
-    homepage    = "https://aomedia.org/av1-features/get-started/";
-    changelog   = "https://aomedia.googlesource.com/aom/+/refs/tags/v${version}/CHANGELOG";
-    maintainers = with maintainers; [ primeos kiloreux dandellion ];
-    platforms   = platforms.all;
+    homepage = "https://aomedia.org/av1-features/get-started/";
+    changelog = "https://aomedia.googlesource.com/aom/+/refs/tags/v${version}/CHANGELOG";
+    maintainers = with maintainers; [
+      primeos
+      kiloreux
+      dandellion
+    ];
+    platforms = platforms.all;
     outputsToInstall = [ "bin" ];
     license = licenses.bsd2;
   };

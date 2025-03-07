@@ -1,12 +1,17 @@
-{ stdenv, fetchurl, lib, nixosTests }:
+{
+  stdenv,
+  fetchurl,
+  lib,
+  nixosTests,
+}:
 
 stdenv.mkDerivation rec {
   pname = "wiki-js";
-  version = "2.5.305";
+  version = "2.5.306";
 
   src = fetchurl {
     url = "https://github.com/Requarks/wiki/releases/download/v${version}/${pname}.tar.gz";
-    sha256 = "sha256-beP9k1msJjg9IQbU/CmzTodjMvUnWrLYcw0EleR1OJk=";
+    sha256 = "sha256-BYJTzPUfd+eYRzHuNVO/L3NvGej0pBnWL6+7AjiGJ/Q=";
   };
 
   # Unpack the tarball into a subdir. All the contents are copied into `$out`.

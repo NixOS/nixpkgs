@@ -1,37 +1,66 @@
-{ stdenv, lib, python3Packages, fetchPypi }:
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+  versionCheckHook,
+  gitUpdater,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "piston-cli";
-  version = "1.4.3";
-  format = "pyproject";
+  version = "1.5.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "qvDGVJcaMXUajdUQWl4W1dost8k0PsS9XX/o8uQrtfY=";
+  src = fetchFromGitHub {
+    owner = "Shivansh-007";
+    repo = "piston-cli";
+    tag = "v${version}";
+    hash = "sha256-5S+1YGoPMprWnlsTGGPHtlQT974TsFgct3jVPngTT1k=";
   };
 
-  propagatedBuildInputs = with python3Packages; [ rich prompt-toolkit requests pygments pyyaml more-itertools ];
-
-  checkPhase = ''
-    $out/bin/piston --help > /dev/null
-  '';
-
-  nativeBuildInputs = with python3Packages; [
-    poetry-core
+  build-system = [
+    python3Packages.poetry-core
   ];
+
+  dependencies = with python3Packages; [
+    appdirs
+    click
+    coloredlogs
+    more-itertools
+    prompt-toolkit
+    rich
+    requests-cache
+    pygments
+    pyyaml
+    more-itertools
+  ];
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'piston = "piston:main"' 'piston = "piston.cli:cli_app"'
+  '';
 
   pythonRelaxDeps = [
     "rich"
     "more-itertools"
     "PyYAML"
+    "requests-cache"
   ];
 
-  meta = with lib; {
-    broken = stdenv.hostPlatform.isDarwin;
+  nativeCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgram = "${placeholder "out"}/bin/piston";
+
+  pythonImportsCheck = [ "piston" ];
+
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
+
+  meta = {
     description = "Piston api tool";
     homepage = "https://github.com/Shivansh-007/piston-cli";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ethancedwards8 ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ ethancedwards8 ];
     mainProgram = "piston";
   };
 }

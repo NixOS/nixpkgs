@@ -1,7 +1,15 @@
-{ fetchFromGitHub, silver-searcher, tree, man, lib, stdenv,
+{
+  fetchFromGitHub,
+  silver-searcher,
+  tree,
+  man,
+  lib,
+  stdenv,
   git,
-  pandocSupport ? true, pandoc ? null
-  , ... }:
+  pandocSupport ? true,
+  pandoc ? null,
+  ...
+}:
 
 assert pandocSupport -> pandoc != null;
 
@@ -12,30 +20,30 @@ stdenv.mkDerivation rec {
   version = "0.8";
 
   src = fetchFromGitHub {
-    owner  = "mrVanDalo";
-    repo   = "memo";
-    rev    = version;
+    owner = "mrVanDalo";
+    repo = "memo";
+    rev = version;
     sha256 = "0azx2bx6y7j0637fg3m8zigcw09zfm2mw9wjfg218sx88cm1wdkp";
   };
 
-  installPhase = let
-    pandocReplacement = if pandocSupport then
-      "pandoc_cmd=${pandoc}/bin/pandoc"
-    else
-      "#pandoc_cmd=pandoc";
-  in ''
-    mkdir -p $out/{bin,share/man/man1,share/bash-completion/completions,share/zsh/site-functions}
-    substituteInPlace memo \
-      --replace "ack_cmd=ack"       "ack_cmd=${silver-searcher}/bin/ag" \
-      --replace "tree_cmd=tree"     "tree_cmd=${tree}/bin/tree" \
-      --replace "man_cmd=man"       "man_cmd=${man}/bin/man" \
-      --replace "git_cmd=git"       "git_cmd=${git}/bin/git" \
-      --replace "pandoc_cmd=pandoc" "${pandocReplacement}"
-    mv memo $out/bin/
-    mv doc/memo.1 $out/share/man/man1/memo.1
-    mv completion/bash/memo.sh $out/share/bash-completion/completions/memo.sh
-    mv completion/zsh/_memo    $out/share/zsh/site-functions/_memo
-  '';
+  installPhase =
+    let
+      pandocReplacement =
+        if pandocSupport then "pandoc_cmd=${pandoc}/bin/pandoc" else "#pandoc_cmd=pandoc";
+    in
+    ''
+      mkdir -p $out/{bin,share/man/man1,share/bash-completion/completions,share/zsh/site-functions}
+      substituteInPlace memo \
+        --replace "ack_cmd=ack"       "ack_cmd=${silver-searcher}/bin/ag" \
+        --replace "tree_cmd=tree"     "tree_cmd=${tree}/bin/tree" \
+        --replace "man_cmd=man"       "man_cmd=${man}/bin/man" \
+        --replace "git_cmd=git"       "git_cmd=${git}/bin/git" \
+        --replace "pandoc_cmd=pandoc" "${pandocReplacement}"
+      mv memo $out/bin/
+      mv doc/memo.1 $out/share/man/man1/memo.1
+      mv completion/bash/memo.sh $out/share/bash-completion/completions/memo.sh
+      mv completion/zsh/_memo    $out/share/zsh/site-functions/_memo
+    '';
 
   meta = {
     description = "Simple tool written in bash to memorize stuff";

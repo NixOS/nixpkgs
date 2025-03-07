@@ -49,7 +49,9 @@ stdenv.mkDerivation rec {
     '';
 
   configureFlags =
-    [ "--enable-swanctl"
+    [
+      "--sysconfdir=/etc"
+      "--enable-swanctl"
       "--enable-cmd"
       "--enable-openssl"
       "--enable-eap-sim" "--enable-eap-sim-file" "--enable-eap-simaka-pseudonym"
@@ -93,10 +95,9 @@ stdenv.mkDerivation rec {
       "--disable-scripts"
     ];
 
-  postInstall = ''
-    # this is needed for l2tp
-    echo "include /etc/ipsec.secrets" >> $out/etc/ipsec.secrets
-  '';
+  installFlags = [
+    "sysconfdir=${placeholder "out"}/etc"
+  ];
 
   NIX_LDFLAGS = lib.optionalString stdenv.cc.isGNU "-lgcc_s" ;
 

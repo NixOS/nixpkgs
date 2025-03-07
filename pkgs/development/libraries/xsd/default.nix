@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, xercesc }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  xercesc,
+}:
 
 let
 in

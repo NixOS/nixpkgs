@@ -1,4 +1,5 @@
-import ./make-test-python.nix ({ lib, pkgs, ... }:
+import ./make-test-python.nix (
+  { lib, pkgs, ... }:
 
   {
     name = "jellyfin";
@@ -16,9 +17,11 @@ import ./make-test-python.nix ({ lib, pkgs, ... }:
     testScript =
       let
         payloads = {
-          auth = pkgs.writeText "auth.json" (builtins.toJSON {
-            Username = "jellyfin";
-          });
+          auth = pkgs.writeText "auth.json" (
+            builtins.toJSON {
+              Username = "jellyfin";
+            }
+          );
           empty = pkgs.writeText "empty.json" (builtins.toJSON { });
         };
       in
@@ -152,4 +155,5 @@ import ./make-test-python.nix ({ lib, pkgs, ... }:
             if duration.strip() != "5.000000":
                 raise Exception("Downloaded video has wrong duration")
       '';
-  })
+  }
+)

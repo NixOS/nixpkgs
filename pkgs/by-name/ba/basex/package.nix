@@ -1,15 +1,29 @@
-{ lib, stdenv, fetchurl, unzip, jre, coreutils, makeDesktopItem, copyDesktopItems }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
+  jre,
+  coreutils,
+  makeDesktopItem,
+  copyDesktopItems,
+}:
 
 stdenv.mkDerivation rec {
   pname = "basex";
-  version = "11.6";
+  version = "11.7";
 
   src = fetchurl {
-    url = "http://files.basex.org/releases/${version}/BaseX${builtins.replaceStrings ["."] [""] version}.zip";
-    hash = "sha256-JGf+eBBlzbg0UYQqpx/IjGhjOKWCvl5rfnYpYE+JWM4=";
+    url = "http://files.basex.org/releases/${version}/BaseX${
+      builtins.replaceStrings [ "." ] [ "" ] version
+    }.zip";
+    hash = "sha256-4xeMdmfk6JmfetfDGlqKQYTMtf15vRGRKYRdyrC90Cc=";
   };
 
-  nativeBuildInputs = [ unzip copyDesktopItems ];
+  nativeBuildInputs = [
+    unzip
+    copyDesktopItems
+  ];
   buildInputs = [ jre ];
 
   desktopItems = lib.optional (!stdenv.hostPlatform.isDarwin) (makeDesktopItem {
@@ -19,7 +33,11 @@ stdenv.mkDerivation rec {
     comment = "Visually query and analyse your XML data";
     desktopName = "BaseX XML Database";
     genericName = "XML database tool";
-    categories = [ "Development" "Utility" "Database" ];
+    categories = [
+      "Development"
+      "Utility"
+      "Database"
+    ];
     mimeTypes = [ "text/xml" ];
   });
 

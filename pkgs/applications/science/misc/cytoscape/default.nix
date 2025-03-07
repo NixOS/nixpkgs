@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchurl, jre, makeWrapper, substituteAll, coreutils }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  jre,
+  makeWrapper,
+  replaceVars,
+  coreutils,
+}:
 
 stdenv.mkDerivation rec {
   pname = "cytoscape";
@@ -12,8 +20,7 @@ stdenv.mkDerivation rec {
   patches = [
     # By default, gen_vmoptions.sh tries to store custom options in $out/share
     # at run time. This patch makes sure $HOME is used instead.
-    (substituteAll {
-      src = ./gen_vmoptions_to_homedir.patch;
+    (replaceVars ./gen_vmoptions_to_homedir.patch {
       inherit coreutils;
     })
   ];
@@ -39,7 +46,7 @@ stdenv.mkDerivation rec {
     description = "General platform for complex network analysis and visualization";
     mainProgram = "cytoscape";
     license = lib.licenses.lgpl21;
-    maintainers = [lib.maintainers.mimame];
+    maintainers = [ lib.maintainers.mimame ];
     platforms = lib.platforms.unix;
   };
 }

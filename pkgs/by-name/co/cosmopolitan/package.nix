@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, bintools-unwrapped
-, callPackage
-, coreutils
-, substituteAll
-, unzip
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  bintools-unwrapped,
+  callPackage,
+  coreutils,
+  replaceVars,
+  unzip,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -21,8 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     # make sure tests set PATH correctly
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       inherit coreutils;
     })
   ];
@@ -34,7 +34,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  outputs = [ "out" "dist" ];
+  outputs = [
+    "out"
+    "dist"
+  ];
 
   # slashes are significant because upstream uses o/$(MODE)/foo.o
   buildFlags = [
@@ -53,16 +56,18 @@ stdenv.mkDerivation (finalAttrs: {
   dontConfigure = true;
   dontFixup = true;
 
-  preCheck = let
-    failingTests = [
-      # some syscall tests fail because we're in a sandbox
-      "test/libc/calls/sched_setscheduler_test.c"
-      "test/libc/thread/pthread_create_test.c"
-      "test/libc/calls/getgroups_test.c"
-      # fails
-      "test/libc/stdio/posix_spawn_test.c"
-    ];
-  in lib.concatStringsSep ";\n" (map (t: "rm -v ${t}") failingTests);
+  preCheck =
+    let
+      failingTests = [
+        # some syscall tests fail because we're in a sandbox
+        "test/libc/calls/sched_setscheduler_test.c"
+        "test/libc/thread/pthread_create_test.c"
+        "test/libc/calls/getgroups_test.c"
+        # fails
+        "test/libc/stdio/posix_spawn_test.c"
+      ];
+    in
+    lib.concatStringsSep ";\n" (map (t: "rm -v ${t}") failingTests);
 
   installPhase = ''
     runHook preInstall

@@ -1,4 +1,10 @@
-{ stdenv, lib, fetchFromGitHub, glib, gnome-shell }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  glib,
+  gnome-shell,
+}:
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-tilingnome";

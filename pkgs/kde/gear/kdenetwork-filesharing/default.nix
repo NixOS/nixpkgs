@@ -1,7 +1,7 @@
 {
   lib,
   mkKdeDerivation,
-  substituteAll,
+  replaceVars,
   samba,
   shadow,
   qtdeclarative,
@@ -10,14 +10,12 @@ mkKdeDerivation {
   pname = "kdenetwork-filesharing";
 
   patches = [
-    (substituteAll {
-      src = ./dependency-paths.patch;
+    (replaceVars ./dependency-paths.patch {
       inherit samba;
       usermod = lib.getExe' shadow "usermod";
     })
 
-    # Provide a better looking and more NixOS specific Samba hint
-    # Proposed upstream: https://invent.kde.org/network/kdenetwork-filesharing/-/merge_requests/56
+    # Provide a more NixOS specific Samba hint
     ./samba-hint.patch
   ];
 

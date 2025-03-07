@@ -19,12 +19,12 @@
 
 buildPythonPackage rec {
   pname = "botocore";
-  version = "1.35.30"; # N.B: if you change this, change boto3 and awscli to a matching version
+  version = "1.35.99"; # N.B: if you change this, change boto3 and awscli to a matching version
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-q1NQ6KUOSNNx+i1RfWXCmkDEN4jLmhU4f5PqxaI98P0=";
+    hash = "sha256-HqtE6WnDnF89mjEEoINsJHFVeaRV8Ss5eaMdfN5Rs8M=";
   };
 
   pythonRelaxDeps = [ "urllib3" ];

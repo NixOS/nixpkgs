@@ -1,8 +1,9 @@
-{ mkDerivation
-, extra-cmake-modules
-, python3
-, plasma-framework
-, kcmutils
+{
+  mkDerivation,
+  extra-cmake-modules,
+  python3,
+  plasma-framework,
+  kcmutils,
 }:
 mkDerivation {
   pname = "plasma-firewall";

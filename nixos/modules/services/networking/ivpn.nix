@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.ivpn;
 in
@@ -17,7 +22,10 @@ in
   config = lib.mkIf cfg.enable {
     boot.kernelModules = [ "tun" ];
 
-    environment.systemPackages = with pkgs; [ ivpn ivpn-service ];
+    environment.systemPackages = with pkgs; [
+      ivpn
+      ivpn-service
+    ];
 
     # iVPN writes to /etc/iproute2/rt_tables
     networking.iproute2.enable = true;
@@ -26,7 +34,10 @@ in
     systemd.services.ivpn-service = {
       description = "iVPN daemon";
       wantedBy = [ "multi-user.target" ];
-      wants = [ "network.target" "network-online.target" ];
+      wants = [
+        "network.target"
+        "network-online.target"
+      ];
       after = [
         "network-online.target"
         "NetworkManager.service"

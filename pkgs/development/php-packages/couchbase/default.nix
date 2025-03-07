@@ -4,7 +4,7 @@
   fetchFromGitHub,
   libcouchbase,
   zlib,
-  substituteAll,
+  replaceVars,
   php,
 }:
 let
@@ -29,8 +29,7 @@ buildPecl {
   ];
 
   patches = [
-    (substituteAll {
-      src = ./libcouchbase.patch;
+    (replaceVars ./libcouchbase.patch {
       inherit libcouchbase;
     })
   ];

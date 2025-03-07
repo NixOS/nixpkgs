@@ -34,7 +34,7 @@ in
         default = ["/run/docker.sock"];
         description = ''
             A list of unix and tcp docker should listen to. The format follows
-            ListenStream as described in systemd.socket(5).
+            ListenStream as described in {manpage}`systemd.socket(5)`.
           '';
       };
 

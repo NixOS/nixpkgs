@@ -1,11 +1,12 @@
-{ stdenv
-, overrideCC
-, wrapCCWith
-, llvm
-, clang-unwrapped
-, lld
-, runtimes
-, bintools
+{
+  stdenv,
+  overrideCC,
+  wrapCCWith,
+  llvm,
+  clang-unwrapped,
+  lld,
+  runtimes,
+  bintools,
 }:
 
 overrideCC stdenv (wrapCCWith rec {

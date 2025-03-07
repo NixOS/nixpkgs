@@ -1,20 +1,27 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "sem";
-  version = "0.30.1";
+  version = "0.31.0";
 
   src = fetchFromGitHub {
     owner = "semaphoreci";
     repo = "cli";
     rev = "v${version}";
-    sha256 = "sha256-C4n6pmqNdZr4kEz/MZgQjwATpjhelkCA0nDyCR/k0mc=";
+    sha256 = "sha256-w/QxN8ntfyoHKVLRIawN0SoUI2oTQg8gNzVUiXR7Klc=";
   };
 
   vendorHash = "sha256-p8+M+pRp12P7tYlFpXjU94JcJOugQpD8rFdowhonh74=";
   subPackages = [ "." ];
 
-  ldflags = [ "-X main.version=${version}" "-X main.buildSource=nix" ];
+  ldflags = [
+    "-X main.version=${version}"
+    "-X main.buildSource=nix"
+  ];
 
   postInstall = ''
     install -m755 $out/bin/cli $out/bin/sem

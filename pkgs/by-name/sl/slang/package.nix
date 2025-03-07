@@ -1,11 +1,14 @@
-{ lib, stdenv, fetchurl
-, libiconv
-, libpng
-, ncurses
-, pcre
-, readline
-, zlib
-, writeScript
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libiconv,
+  libpng,
+  ncurses,
+  pcre,
+  readline,
+  zlib,
+  writeScript,
 }:
 
 stdenv.mkDerivation rec {
@@ -17,14 +20,19 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-+RRQVK4TGXPGEgjqgkhtXdEOPFza0jt8SgYXdDyPWhg=";
   };
 
-  outputs = [ "out" "dev" "man" "doc" ];
+  outputs = [
+    "out"
+    "dev"
+    "man"
+    "doc"
+  ];
 
   # Fix some wrong hardcoded paths
   preConfigure = ''
-    sed -ie "s|/usr/lib/terminfo|${ncurses.out}/lib/terminfo|" configure
-    sed -ie "s|/usr/lib/terminfo|${ncurses.out}/lib/terminfo|" src/sltermin.c
-    sed -ie "s|/bin/ln|ln|" src/Makefile.in
-    sed -ie "s|-ltermcap|-lncurses|" ./configure
+    sed -i -e "s|/usr/lib/terminfo|${ncurses.out}/lib/terminfo|" configure
+    sed -i -e "s|/usr/lib/terminfo|${ncurses.out}/lib/terminfo|" src/sltermin.c
+    sed -i -e "s|/bin/ln|ln|" src/Makefile.in
+    sed -i -e "s|-ltermcap|-lncurses|" ./configure
   '';
 
   configureFlags = [
@@ -95,7 +103,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://www.jedsoft.org/slang/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [ ];
     mainProgram = "slsh";
     platforms = platforms.unix;
   };

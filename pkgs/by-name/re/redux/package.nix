@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchurl
-, writeScript
-, libX11
-, libXext
-, alsa-lib
-, autoPatchelfHook
-, releasePath ? null
+{
+  lib,
+  stdenv,
+  fetchurl,
+  writeScript,
+  libX11,
+  libXext,
+  alsa-lib,
+  autoPatchelfHook,
+  releasePath ? null,
 }:
 
 # To use the full release version (same as renoise):
@@ -19,14 +20,21 @@ stdenv.mkDerivation rec {
   pname = "redux";
   version = "1.3.5";
 
-  src = if releasePath != null then releasePath
-    else fetchurl {
-      urls = [
-        "https://files.renoise.com/demo/Renoise_Redux_${lib.replaceStrings ["."] ["_"] version}_Demo_Linux_x86_64.tar.gz"
-        "https://files.renoise.com/demo/archive/Renoise_Redux_${lib.replaceStrings ["."] ["_"] version}_Demo_Linux_x86_64.tar.gz"
-      ];
-      sha256 = "sha256-eznsdLzgdJ7MyWe5WAEg1MHId5VlfyanoZ6+I9nI/0I=";
-    };
+  src =
+    if releasePath != null then
+      releasePath
+    else
+      fetchurl {
+        urls = [
+          "https://files.renoise.com/demo/Renoise_Redux_${
+            lib.replaceStrings [ "." ] [ "_" ] version
+          }_Demo_Linux_x86_64.tar.gz"
+          "https://files.renoise.com/demo/archive/Renoise_Redux_${
+            lib.replaceStrings [ "." ] [ "_" ] version
+          }_Demo_Linux_x86_64.tar.gz"
+        ];
+        sha256 = "sha256-eznsdLzgdJ7MyWe5WAEg1MHId5VlfyanoZ6+I9nI/0I=";
+      };
 
   nativeBuildInputs = [
     autoPatchelfHook
@@ -48,7 +56,6 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
-
 
   passthru.updateScript = writeScript "update-redux" ''
     #!/usr/bin/env nix-shell

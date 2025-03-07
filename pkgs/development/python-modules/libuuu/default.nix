@@ -6,18 +6,18 @@
   setuptools,
   setuptools-scm,
   autoPatchelfHook,
-  pytestCheckHook,
   udev,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "libuuu";
-  version = "1.5.182";
+  version = "1.5.182.post1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-k6JwGxYeFbGNl7zcuKN6SbRq8Z4yD1dXXL3ORyGqhYE=";
+    hash = "sha256-Hf0GwhrzKQL5w+OXQ39yuG4xmbk/1HgCCdCulIORSU8=";
   };
 
   build-system = [
@@ -51,7 +51,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    description = "Python wraper for libuuu";
+    description = "Python wrapper for libuuu";
     homepage = "https://github.com/nxp-imx/mfgtools/tree/master/wrapper";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ GaetanLepage ];

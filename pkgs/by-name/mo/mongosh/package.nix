@@ -1,8 +1,9 @@
-{ lib
-, buildNpmPackage
-, fetchurl
-, testers
-, mongosh
+{
+  lib,
+  buildNpmPackage,
+  fetchurl,
+  testers,
+  mongosh,
 }:
 
 let

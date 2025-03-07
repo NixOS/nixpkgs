@@ -1,4 +1,12 @@
-{ stdenvNoCC, fetchurl, dpkg, lib, qt5, autoPatchelfHook, SDL2 }:
+{
+  stdenvNoCC,
+  fetchurl,
+  dpkg,
+  lib,
+  qt5,
+  autoPatchelfHook,
+  SDL2,
+}:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "gamepad-tool";
@@ -9,7 +17,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     hash = "sha256-ZuB0TOyT2B5QkU1o5h3/8PL85tBq06hlz5YclRanD88=";
   };
 
-  nativeBuildInputs = [ dpkg qt5.wrapQtAppsHook autoPatchelfHook ];
+  nativeBuildInputs = [
+    dpkg
+    qt5.wrapQtAppsHook
+    autoPatchelfHook
+  ];
 
   dontBuild = true;
 

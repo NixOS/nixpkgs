@@ -1,8 +1,9 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, substituteAll
-, stdenv
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  replaceVars,
+  stdenv,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -16,11 +17,11 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-cFwBck+bdOjhF6rQQj03MOO+XCsrII5c4Xvhsw12ETA=";
   };
 
-  cargoHash = "sha256-zkPLas+fQQzm7LlWNpTooUR/e30KMS9OET6PMwQ2yAA=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-c0xota0APLm/xQSH2Orn0PgCKuhUVhXEtzNge/GeYo0=";
 
   patches = [
-    (substituteAll {
-      src = ./use-correct-binary-path-in-tests.patch;
+    (replaceVars ./use-correct-binary-path-in-tests.patch {
       target_triple = stdenv.hostPlatform.rust.rustcTarget;
     })
   ];
@@ -37,7 +38,10 @@ rustPlatform.buildRustPackage rec {
     description = "LR(1) parser generator for Rust";
     homepage = "https://github.com/lalrpop/lalrpop";
     changelog = "https://github.com/lalrpop/lalrpop/blob/${src.rev}/RELEASES.md";
-    license = with licenses; [ asl20 /* or */ mit ];
+    license = with licenses; [
+      asl20 # or
+      mit
+    ];
     mainProgram = "lalrpop";
     maintainers = with maintainers; [ chayleaf ];
   };

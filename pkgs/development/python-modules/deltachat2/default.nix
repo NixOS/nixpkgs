@@ -1,9 +1,10 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, deltachat-rpc-server
-, setuptools-scm
-, substituteAll
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  deltachat-rpc-server,
+  setuptools-scm,
+  replaceVars,
 }:
 
 buildPythonPackage rec {
@@ -14,13 +15,12 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "adbenitez";
     repo = "deltachat2";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-bp4bi+EeMaWP8zOaPp0eaPKn71F055QgMOOSDzIJUH4=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./paths.patch;
+    (replaceVars ./paths.patch {
       deltachatrpcserver = lib.getExe deltachat-rpc-server;
     })
   ];

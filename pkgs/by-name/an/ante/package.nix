@@ -1,10 +1,11 @@
-{ fetchFromGitHub
-, lib
-, libffi
-, libxml2
-, llvmPackages_16
-, ncurses
-, rustPlatform
+{
+  fetchFromGitHub,
+  lib,
+  libffi,
+  libxml2,
+  llvmPackages_16,
+  ncurses,
+  rustPlatform,
 }:
 
 rustPlatform.buildRustPackage {
@@ -29,7 +30,11 @@ rustPlatform.buildRustPackage {
      that is not the same as the one included by default with rustPlatform.
   */
   nativeBuildInputs = [ llvmPackages_16.llvm ];
-  buildInputs = [ libffi libxml2 ncurses ];
+  buildInputs = [
+    libffi
+    libxml2
+    ncurses
+  ];
 
   postPatch = ''
     substituteInPlace tests/golden_tests.rs --replace \

@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Santandersecurityresearch";
     repo = "corsair_scan";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-s94ZiTL7tBrhUaeB/O3Eh8o8zqtfdt0z8LKep1bZWiY=";
   };
 

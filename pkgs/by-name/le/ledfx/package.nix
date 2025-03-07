@@ -26,7 +26,6 @@ python3.pkgs.buildPythonPackage rec {
     poetry-core
   ];
 
-
   dependencies = with python3.pkgs; [
     aiohttp
     aiohttp-cors

@@ -166,12 +166,14 @@ let
         alderlake      = versionAtLeast ccVersion "12.0";
         sapphirerapids = versionAtLeast ccVersion "11.0";
         emeraldrapids  = versionAtLeast ccVersion "13.0";
+        sierraforest   = versionAtLeast ccVersion "13.0";
 
         # AMD
         znver1         = true;
         znver2         = versionAtLeast ccVersion "9.0";
         znver3         = versionAtLeast ccVersion "11.0";
         znver4         = versionAtLeast ccVersion "13.0";
+        znver5         = versionAtLeast ccVersion "14.0";
       }.${arch} or true
     else if isClang then
       { #Generic
@@ -193,6 +195,7 @@ let
         znver2         = versionAtLeast ccVersion "9.0";
         znver3         = versionAtLeast ccVersion "12.0";
         znver4         = versionAtLeast ccVersion "16.0";
+        znver5         = versionAtLeast ccVersion "19.1";
       }.${arch} or true
     else
       false;
@@ -255,7 +258,7 @@ let
 
   machineFlags =
     # Always add -march based on cpu in triple. Sometimes there is a
-    # discrepency (x86_64 vs. x86-64), so we provide an "arch" arg in
+    # discrepancy (x86_64 vs. x86-64), so we provide an "arch" arg in
     # that case.
     optional (targetPlatform ? gcc.arch && !(targetPlatform.isDarwin && targetPlatform.isAarch64) && isGccArchSupported targetPlatform.gcc.arch) "-march=${targetPlatform.gcc.arch}" ++
     # TODO: aarch64-darwin has mcpu incompatible with gcc
@@ -339,6 +342,10 @@ stdenvNoCC.mkDerivation {
   dontBuild = true;
   dontConfigure = true;
   enableParallelBuilding = true;
+
+  # TODO(@connorbaker):
+  # This is a quick fix unblock builds broken by https://github.com/NixOS/nixpkgs/pull/370750.
+  dontCheckForBrokenSymlinks = true;
 
   unpackPhase = ''
     src=$PWD
@@ -629,6 +636,20 @@ stdenvNoCC.mkDerivation {
       echo " -L${libcxx_solib}" >> $out/nix-support/cc-ldflags
     ''
 
+    ## Prevent clang from seeing /usr/include. There is a desire to achieve this
+    ## through alternate means because it breaks -sysroot and related functionality.
+    #
+    # This flag prevents global system header directories from
+    # leaking through on non‐NixOS Linux. However, on macOS, the
+    # SDK path is used as the sysroot, and forcing `-nostdlibinc`
+    # breaks `-isysroot` with an unwrapped compiler. As macOS has
+    # no `/usr/include`, there’s essentially no risk to dropping
+    # the flag there. See discussion in NixOS/nixpkgs#191152.
+    #
+    + optionalString ((cc.isClang or false) && !(cc.isROCm or false) && !targetPlatform.isDarwin) ''
+      echo " -nostdlibinc" >> $out/nix-support/cc-cflags
+    ''
+
     ##
     ## Man page and info support
     ##
@@ -680,10 +701,6 @@ stdenvNoCC.mkDerivation {
       for isa in avr5 avr3 avr4 avr6 avr25 avr31 avr35 avr51 avrxmega2 avrxmega4 avrxmega5 avrxmega6 avrxmega7 tiny-stack; do
         echo "-B${getLib libc}/avr/lib/$isa" >> $out/nix-support/libc-crt1-cflags
       done
-    ''
-
-    + optionalString targetPlatform.isDarwin ''
-        echo "-arch ${targetPlatform.darwinArch}" >> $out/nix-support/cc-cflags
     ''
 
     + optionalString targetPlatform.isAndroid ''

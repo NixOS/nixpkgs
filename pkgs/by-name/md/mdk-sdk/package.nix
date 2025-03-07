@@ -8,10 +8,10 @@
   libX11,
   libcxx,
   libdrm,
+  libgbm,
   libglvnd,
   libpulseaudio,
   libxcb,
-  mesa,
   wayland,
   xz,
   zlib,
@@ -48,10 +48,10 @@ stdenv.mkDerivation rec {
     libX11
     libcxx
     libdrm
+    libgbm
     libglvnd
     libpulseaudio
     libxcb
-    mesa
     wayland
     xz
     zlib

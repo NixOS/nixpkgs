@@ -1,41 +1,57 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitLab,
+  fetchPypi,
   numpy,
   cvxopt,
   python,
   networkx,
+  scipy,
+  pythonOlder,
+  stdenv,
 }:
 
 buildPythonPackage rec {
   pname = "picos";
-  version = "2.0";
+  version = "2.6.0";
   format = "setuptools";
 
-  src = fetchFromGitLab {
-    owner = "picos-api";
-    repo = "picos";
-    rev = "v${version}";
-    sha256 = "1k65iq791k5r08gh2kc6iz0xw1wyzqik19j6iam8ip732r7jm607";
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-LU5OxinhDBewQ/32cxyOSQyUexMD8xdJIkrsiaWBils=";
   };
 
   # Needed only for the tests
   nativeCheckInputs = [ networkx ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     numpy
     cvxopt
+    scipy
   ];
 
+  postPatch =
+    lib.optionalString (pythonOlder "3.12") ''
+      substituteInPlace picos/modeling/problem.py \
+        --replace-fail "mappingproxy(OrderedDict({'x': <3×1 Real Variable: x>}))" "mappingproxy(OrderedDict([('x', <3×1 Real Variable: x>)]))"
+    ''
+    # TypeError: '<=' not supported between instances of 'ComplexAffineExpression' and 'float'
+    + lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
+      rm tests/ptest_quantentr.py
+    '';
+
   checkPhase = ''
+    runHook preCheck
+
     ${python.interpreter} test.py
+
+    runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Python interface to conic optimization solvers";
     homepage = "https://gitlab.com/picos-api/picos";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ tobiasBora ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ tobiasBora ];
   };
 }

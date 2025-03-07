@@ -1,15 +1,16 @@
-{ autoPatchelfHook
-, cairo
-, e2fsprogs
-, fetchurl
-, gmp
-, gtk3
-, libGL
-, libX11
-, lib
-, stdenv
-, libgcrypt
-, wrapGAppsHook3
+{
+  autoPatchelfHook,
+  cairo,
+  e2fsprogs,
+  fetchurl,
+  gmp,
+  gtk3,
+  libGL,
+  libX11,
+  lib,
+  stdenv,
+  libgcrypt,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation {

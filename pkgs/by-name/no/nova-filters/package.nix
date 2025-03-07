@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchurl
-, scons
-, boost
-, ladspaH
+{
+  lib,
+  stdenv,
+  fetchurl,
+  scons,
+  boost,
+  ladspaH,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

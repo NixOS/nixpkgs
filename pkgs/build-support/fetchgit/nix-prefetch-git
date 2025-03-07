@@ -453,8 +453,9 @@ else
     # If we don't know the hash or a path with that hash doesn't exist,
     # download the file and add it to the store.
     if test -z "$finalPath"; then
-
-        tmpPath="$(mktemp -d "${TMPDIR:-/tmp}/git-checkout-tmp-XXXXXXXX")"
+        # nix>=2.20 rejects adding symlinked paths to the store, so use realpath
+        # to resolve to a physical path. https://github.com/NixOS/nix/issues/11941
+        tmpPath="$(realpath "$(mktemp -d --tmpdir git-checkout-tmp-XXXXXXXX)")"
         exit_handlers+=(remove_tmpPath)
 
         tmpFile="$tmpPath/$(url_to_name "$url" "$rev")"

@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "oasis-open";
     repo = "cti-taxii-client";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-e22bJdLAlm30vv/xIgLSjcwmzfN0Pwt2JydLgEbA+Is=";
   };
 

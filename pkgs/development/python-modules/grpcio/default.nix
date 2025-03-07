@@ -18,14 +18,14 @@
 # nixpkgs-update: no auto update
 buildPythonPackage rec {
   pname = "grpcio";
-  version = "1.67.0";
+  version = "1.70.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-4JCyVT4Noch1RJyOdQc91EFd1xyb3mpAYkD99MDuRnw=";
+    hash = "sha256-jRWEpo1ZIjMAJYgeY6bBtUzIEXKR04Lk+mkzm22RTFY=";
   };
 
   outputs = [

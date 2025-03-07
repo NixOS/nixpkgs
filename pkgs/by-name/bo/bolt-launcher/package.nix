@@ -10,7 +10,7 @@
   libcef,
   luajit,
   xorg,
-  mesa,
+  libgbm,
   glib,
   nss,
   nspr,
@@ -56,7 +56,7 @@ let
           xorg.libXext
           xorg.libXfixes
           xorg.libXrandr
-          mesa
+          libgbm
           gtk3
           pango
           cairo
@@ -106,7 +106,7 @@ let
     ];
 
     buildInputs = [
-      mesa
+      libgbm
       xorg.libX11
       xorg.libxcb
       libarchive
@@ -162,7 +162,7 @@ let
   });
 in
 buildFHSEnv {
-  inherit (bolt) name version;
+  inherit (bolt) pname version;
 
   targetPkgs =
     pkgs:

@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "vanstinator";
     repo = "melnor-bluetooth";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-BQKXQrPT/+qm9cRO7pfScPwW0iwdhliTfX4XJ/kRQG0=";
   };
 

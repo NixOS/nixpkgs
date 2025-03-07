@@ -1,13 +1,23 @@
-{ lib, stdenv, fetchFromGitHub, cmake
-, curl, openssl, zlib, zstd
-, libiconv
-, version, hash, ...
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  curl,
+  openssl,
+  zlib,
+  zstd,
+  libiconv,
+  version,
+  hash,
+  ...
 }:
 
 let
   isVer33 = lib.versionAtLeast version "3.3";
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "mariadb-connector-c";
   inherit version;
 
@@ -18,7 +28,10 @@ in stdenv.mkDerivation {
     inherit hash;
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   cmakeFlags = [
     "-DMARIADB_UNIX_ADDR=/run/mysqld/mysqld.sock"
@@ -27,21 +40,23 @@ in stdenv.mkDerivation {
     "-DWITH_MYSQLCOMPAT=ON"
   ];
 
-  postPatch = ''
-    substituteInPlace mariadb_config/mariadb_config.c.in \
-      --replace '#define INCLUDE "-I%s/@INSTALL_INCLUDEDIR@ -I%s/@INSTALL_INCLUDEDIR@/mysql"' "#define INCLUDE \"-I$dev/include -I$dev/include/mysql\"" \
-      --replace '#define LIBS    "-L%s/@INSTALL_LIBDIR@/ -lmariadb"' "#define LIBS    \"-L$out/lib/mariadb -lmariadb\"" \
-      --replace '#define PKG_LIBDIR "%s/@INSTALL_LIBDIR@"' "#define PKG_LIBDIR \"$out/lib/mariadb\"" \
-      --replace '#define PLUGIN_DIR "%s/@INSTALL_PLUGINDIR@"' "#define PLUGIN_DIR \"$out/lib/mariadb/plugin\"" \
-      --replace '#define PKG_PLUGINDIR "%s/@INSTALL_PLUGINDIR@"' "#define PKG_PLUGINDIR \"$out/lib/mariadb/plugin\""
-  '' + lib.optionalString stdenv.hostPlatform.isStatic ''
-    # Disables all dynamic plugins
-    substituteInPlace cmake/plugins.cmake \
-      --replace 'if(''${CC_PLUGIN_DEFAULT} STREQUAL "DYNAMIC")' 'if(''${CC_PLUGIN_DEFAULT} STREQUAL "INVALID")'
-    # Force building static libraries
-    substituteInPlace libmariadb/CMakeLists.txt \
-      --replace 'libmariadb SHARED' 'libmariadb STATIC'
-  '';
+  postPatch =
+    ''
+      substituteInPlace mariadb_config/mariadb_config.c.in \
+        --replace '#define INCLUDE "-I%s/@INSTALL_INCLUDEDIR@ -I%s/@INSTALL_INCLUDEDIR@/mysql"' "#define INCLUDE \"-I$dev/include -I$dev/include/mysql\"" \
+        --replace '#define LIBS    "-L%s/@INSTALL_LIBDIR@/ -lmariadb"' "#define LIBS    \"-L$out/lib/mariadb -lmariadb\"" \
+        --replace '#define PKG_LIBDIR "%s/@INSTALL_LIBDIR@"' "#define PKG_LIBDIR \"$out/lib/mariadb\"" \
+        --replace '#define PLUGIN_DIR "%s/@INSTALL_PLUGINDIR@"' "#define PLUGIN_DIR \"$out/lib/mariadb/plugin\"" \
+        --replace '#define PKG_PLUGINDIR "%s/@INSTALL_PLUGINDIR@"' "#define PKG_PLUGINDIR \"$out/lib/mariadb/plugin\""
+    ''
+    + lib.optionalString stdenv.hostPlatform.isStatic ''
+      # Disables all dynamic plugins
+      substituteInPlace cmake/plugins.cmake \
+        --replace 'if(''${CC_PLUGIN_DEFAULT} STREQUAL "DYNAMIC")' 'if(''${CC_PLUGIN_DEFAULT} STREQUAL "INVALID")'
+      # Force building static libraries
+      substituteInPlace libmariadb/CMakeLists.txt \
+        --replace 'libmariadb SHARED' 'libmariadb STATIC'
+    '';
 
   # The cmake setup-hook uses $out/lib by default, this is not the case here.
   preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -49,7 +64,11 @@ in stdenv.mkDerivation {
   '';
 
   nativeBuildInputs = [ cmake ];
-  propagatedBuildInputs = [ curl openssl zlib ] ++ lib.optional isVer33 zstd;
+  propagatedBuildInputs = [
+    curl
+    openssl
+    zlib
+  ] ++ lib.optional isVer33 zstd;
   buildInputs = [ libiconv ];
 
   postInstall = ''

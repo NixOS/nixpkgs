@@ -24,6 +24,9 @@
         [pi3]
         kernel=u-boot-rpi3.bin
 
+        # Otherwise the serial output will be garbled.
+        core_freq=250
+
         [pi02]
         kernel=u-boot-rpi3.bin
 

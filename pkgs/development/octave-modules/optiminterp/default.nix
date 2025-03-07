@@ -1,7 +1,8 @@
-{ buildOctavePackage
-, lib
-, fetchurl
-, gfortran
+{
+  buildOctavePackage,
+  lib,
+  fetchurl,
+  gfortran,
 }:
 
 buildOctavePackage rec {
@@ -23,9 +24,9 @@ buildOctavePackage rec {
     maintainers = with maintainers; [ KarlJoad ];
     description = "Optimal interpolation toolbox for octave";
     longDescription = ''
-       An optimal interpolation toolbox for octave. This package provides
-       functions to perform a n-dimensional optimal interpolations of
-       arbitrarily distributed data points.
+      An optimal interpolation toolbox for octave. This package provides
+      functions to perform a n-dimensional optimal interpolations of
+      arbitrarily distributed data points.
     '';
   };
 }

@@ -1,4 +1,10 @@
-{ buildDunePackage, fetchFromGitHub, lib, printbox-text, reason }:
+{
+  buildDunePackage,
+  fetchFromGitHub,
+  lib,
+  printbox-text,
+  reason,
+}:
 
 buildDunePackage rec {
   pname = "reperf";

@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Jc2k";
     repo = "pytest-docker-tools";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-6F3aSUyDlBBYG1kwOQvey7rujDdK83uJ3Q1dr8Uo1pw=";
   };
 

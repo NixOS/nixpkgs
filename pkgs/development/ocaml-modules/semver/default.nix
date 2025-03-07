@@ -1,4 +1,10 @@
-{ lib, fetchurl, buildDunePackage, ocaml, alcotest }:
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+  ocaml,
+  alcotest,
+}:
 
 buildDunePackage rec {
   pname = "semver";

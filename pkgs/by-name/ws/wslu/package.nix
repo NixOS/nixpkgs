@@ -1,38 +1,38 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, copyDesktopItems
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  copyDesktopItems,
 }:
 
 stdenv.mkDerivation rec {
   pname = "wslu";
-  version = "4.1.3";
+  version = "4.1.4";
 
   src = fetchFromGitHub {
     owner = "wslutilities";
     repo = "wslu";
     rev = "v${version}";
-    hash = "sha256-lyJk8nOADq+s7GkZXsd1T4ilrDzMRsoALOesG8NxYK8=";
+    hash = "sha256-ssiwYkQg2rOirC/ZZVq2bJm4Ggc364uRkoS2y365Eb0=";
   };
 
   nativeBuildInputs = [ copyDesktopItems ];
 
   patches = [
     ./fallback-conf-nix-store.diff
-    ./fix-desktop-item.patch
   ];
 
   postPatch = ''
     substituteInPlace src/wslu-header \
       --subst-var out
+    substituteInPlace src/etc/wslview.desktop \
+      --replace-fail /usr/bin/wslview wslview
   '';
 
   makeFlags = [
     "DESTDIR=$(out)"
     "PREFIX="
   ];
-
-  desktopItems = [ "src/etc/wslview.desktop" ];
 
   meta = with lib; {
     description = "Collection of utilities for Windows Subsystem for Linux";

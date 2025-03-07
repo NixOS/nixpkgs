@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, netpbm
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  netpbm,
 }:
 
 stdenv.mkDerivation rec {
@@ -33,4 +34,3 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
   };
 }
-

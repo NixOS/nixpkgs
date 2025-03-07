@@ -1,4 +1,8 @@
-{ lib, rustPlatform, fetchFromGitHub }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "mcfly-fzf";
@@ -17,7 +21,8 @@ rustPlatform.buildRustPackage rec {
     substituteInPlace shell/mcfly-fzf.fish --replace '(command -v mcfly-fzf)' '${placeholder "out"}/bin/mcfly-fzf'
   '';
 
-  cargoHash = "sha256-xMXM56ulfKAY2HwRTXTG9h3garxDeu+zthMKSve5seQ=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-xHYOhq/vDmjP7RfgRR15Isj7rg/nIV9tz9XznHBENig=";
 
   meta = with lib; {
     homepage = "https://github.com/bnprks/mcfly-fzf";

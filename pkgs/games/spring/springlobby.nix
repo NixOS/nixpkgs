@@ -1,26 +1,27 @@
-{ lib
-, stdenv
-, fetchurl
-, cmake
-, wxGTK32
-, openal
-, pkg-config
-, curl
-, libtorrent-rasterbar
-, libpng
-, libX11
-, gettext
-, boost
-, libnotify
-, gtk3
-, doxygen
-, spring
-, makeWrapper
-, glib
-, minizip
-, alure
-, pcre
-, jsoncpp
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  wxGTK32,
+  openal,
+  pkg-config,
+  curl,
+  libtorrent-rasterbar,
+  libpng,
+  libX11,
+  gettext,
+  boost,
+  libnotify,
+  gtk3,
+  doxygen,
+  spring,
+  makeWrapper,
+  glib,
+  minizip,
+  alure,
+  pcre,
+  jsoncpp,
 }:
 
 stdenv.mkDerivation rec {
@@ -32,7 +33,13 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-XkU6i6ABCgw3H9vJu0xjHRO1BglueYM1LyJxcZdOrDk=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config gettext doxygen makeWrapper ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    gettext
+    doxygen
+    makeWrapper
+  ];
   buildInputs = [
     wxGTK32
     openal
@@ -65,7 +72,13 @@ stdenv.mkDerivation rec {
     homepage = "https://springlobby.springrts.com";
     description = "Cross-platform lobby client for the Spring RTS project";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ qknight domenkozar ];
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    maintainers = with maintainers; [
+      qknight
+      domenkozar
+    ];
+    platforms = [
+      "i686-linux"
+      "x86_64-linux"
+    ];
   };
 }

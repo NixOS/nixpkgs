@@ -18,7 +18,7 @@ buildDotnetModule rec {
   dotnet-runtime = dotnetCorePackages.runtime_8_0;
   useDotnetFromEnv = true;
 
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
 
   projectFile = "src/DotNetOutdated/DotNetOutdated.csproj";
   executables = "dotnet-outdated";

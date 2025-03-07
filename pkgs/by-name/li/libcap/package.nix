@@ -1,6 +1,8 @@
 { stdenv, lib, buildPackages, fetchurl, runtimeShell
+, pkgsBuildHost
 , usePam ? !isStatic, pam ? null
 , isStatic ? stdenv.hostPlatform.isStatic
+, withGo ? pkgsBuildHost.go.meta.available
 
 # passthru.tests
 , bind
@@ -19,17 +21,23 @@ assert usePam -> pam != null;
 
 stdenv.mkDerivation rec {
   pname = "libcap";
-  version = "2.70";
+  version = "2.73";
 
   src = fetchurl {
     url = "mirror://kernel/linux/libs/security/linux-privs/libcap2/${pname}-${version}.tar.xz";
-    sha256 = "sha256-I6bviq2vHj6HX2M7stEWz++JUtunvHxWmxNFjhlSsw8=";
+    hash = "sha256-ZAX2CJz0zdjCcVQM2ZBlTXjdCxmJstm9og+TOnWnlaU=";
   };
 
   outputs = [ "out" "dev" "lib" "man" "doc" ]
     ++ lib.optional usePam "pam";
 
-  depsBuildBuild = [ buildPackages.stdenv.cc ];
+  depsBuildBuild = [
+    buildPackages.stdenv.cc
+  ];
+
+  nativeBuildInputs = lib.optionals withGo [
+    pkgsBuildHost.go
+  ];
 
   buildInputs = lib.optional usePam pam;
 
@@ -39,6 +47,12 @@ stdenv.mkDerivation rec {
     "BUILD_CC=$(CC_FOR_BUILD)"
     "CC:=$(CC)"
     "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
+  ] ++ lib.optionals withGo [
+    "GOLANG=yes"
+    ''GOCACHE=''${TMPDIR}/go-cache''
+    "GOFLAGS=-trimpath"
+    "GOARCH=${pkgsBuildHost.go.GOARCH}"
+    "GOOS=${pkgsBuildHost.go.GOOS}"
   ] ++ lib.optionals isStatic [ "SHARED=no" "LIBCSTATIC=yes" ];
 
   postPatch = ''
@@ -54,6 +68,10 @@ stdenv.mkDerivation rec {
       --replace 'lib_prefix=$(exec_prefix)' "lib_prefix=$lib" \
       --replace 'inc_prefix=$(prefix)' "inc_prefix=$dev" \
       --replace 'man_prefix=$(prefix)' "man_prefix=$doc"
+  '' + lib.optionalString withGo ''
+    # disable cross compilation for artifacts which are run as part of the build
+    substituteInPlace go/Makefile \
+      --replace-fail '$(GO) run' 'GOOS= GOARCH= $(GO) run'
   '';
 
   installFlags = [ "RAISE_SETFCAP=no" ];
@@ -66,6 +84,12 @@ stdenv.mkDerivation rec {
     mkdir -p "$pam/lib/security"
     mv "$lib"/lib/security "$pam/lib"
   '';
+
+  strictDeps = true;
+
+  disallowedReferences = lib.optionals withGo [
+    pkgsBuildHost.go
+  ];
 
   passthru.tests = {
     inherit

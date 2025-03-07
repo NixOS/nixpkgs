@@ -48,7 +48,8 @@ in
     ./xmonad.nix
     ./yeahwm.nix
     ./qtile.nix
-    ./none.nix ];
+    ./none.nix
+  ];
 
   options = {
 
@@ -56,19 +57,25 @@ in
 
       session = mkOption {
         internal = true;
-        default = [];
-        example = [{
-          name = "wmii";
-          start = "...";
-        }];
+        default = [ ];
+        example = [
+          {
+            name = "wmii";
+            start = "...";
+          }
+        ];
         description = ''
           Internal option used to add some common line to window manager
           scripts before forwarding the value to the
           `displayManager`.
         '';
-        apply = map (d: d // {
-          manage = "window";
-        });
+        apply = map (
+          d:
+          d
+          // {
+            manage = "window";
+          }
+        );
       };
 
     };

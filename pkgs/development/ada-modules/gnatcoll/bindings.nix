@@ -27,19 +27,20 @@ let
     python3 = [ python3 ncurses ];
     syslog = [ ];
     zlib = [ zlib ];
+    cpp = [ ];
   };
 in
 
 
 stdenv.mkDerivation rec {
   pname = "gnatcoll-${component}";
-  version = "24.0.0";
+  version = "25.0.0";
 
   src = fetchFromGitHub {
     owner = "AdaCore";
     repo = "gnatcoll-bindings";
     rev = "v${version}";
-    sha256 = "00aakpmr67r72l1h3jpkaw83p1a2mjjvfk635yy5c1nss3ji1qjm";
+    sha256 = "0ayc7zvv8w90v0xzhrjk2x88zrsk62xxcm27ya9crlp6affn5idk";
   };
 
   nativeBuildInputs = [
@@ -59,7 +60,7 @@ stdenv.mkDerivation rec {
     gnatcoll-core
   ] ++ libsFor."${component}" or [];
 
-  # explicit flag for GPL acceptance because upstreams
+  # explicit flag for GPL acceptance because upstream
   # allows a gcc runtime exception for all bindings
   # except for readline (since it is GPL w/o exceptions)
   buildFlags = lib.optionals (component == "readline") [

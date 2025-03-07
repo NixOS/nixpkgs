@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  setuptools
+  setuptools,
 }:
 
 buildPythonPackage rec {

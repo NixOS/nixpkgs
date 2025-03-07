@@ -1,37 +1,45 @@
-{ config, stdenv, pkgs, lib }:
+{
+  config,
+  stdenv,
+  pkgs,
+  lib,
+}:
 
-lib.makeScope pkgs.newScope (self: with self; {
+lib.makeScope pkgs.newScope (
+  self: with self; {
 
-#### PLATFORM
+    #### PLATFORM
 
-  libIDL = callPackage ./platform/libIDL {
-    gettext = if stdenv.hostPlatform.isDarwin then pkgs.gettext else null;
-  };
+    libIDL = callPackage ./platform/libIDL {
+      gettext = if stdenv.hostPlatform.isDarwin then pkgs.gettext else null;
+    };
 
-  ORBit2 = callPackage ./platform/ORBit2 { };
+    ORBit2 = callPackage ./platform/ORBit2 { };
 
-  libart_lgpl = callPackage ./platform/libart_lgpl { };
+    libart_lgpl = callPackage ./platform/libart_lgpl { };
 
-  libglade = callPackage ./platform/libglade { };
+    libglade = callPackage ./platform/libglade { };
 
-  GConf = callPackage ./platform/GConf { };
+    GConf = callPackage ./platform/GConf { };
 
-  libgnomecanvas = callPackage ./platform/libgnomecanvas { };
+    libgnomecanvas = callPackage ./platform/libgnomecanvas { };
 
-  # for git-head builds
-  gnome-common = callPackage platform/gnome-common { };
+    # for git-head builds
+    gnome-common = callPackage platform/gnome-common { };
 
-  gnome_mime_data = callPackage ./platform/gnome-mime-data { };
+    gnome_mime_data = callPackage ./platform/gnome-mime-data { };
 
-  gtkglext = callPackage ./platform/gtkglext { };
+    gtkglext = callPackage ./platform/gtkglext { };
 
-#### DESKTOP
+    #### DESKTOP
 
-  gtksourceview = callPackage ./desktop/gtksourceview {
-    autoreconfHook = pkgs.autoreconfHook269;
-  };
+    gtksourceview = callPackage ./desktop/gtksourceview {
+      autoreconfHook = pkgs.autoreconfHook269;
+    };
 
-}) // lib.optionalAttrs config.allowAliases {
+  }
+)
+// lib.optionalAttrs config.allowAliases {
   # added 2024-12-02
   glib = throw "gnome2.glib has been removed, please use top-level glib";
   glibmm = throw "gnome2.glibmm has been removed, please use top-level glibmm";

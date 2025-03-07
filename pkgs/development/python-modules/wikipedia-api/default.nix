@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "wikipedia-api";
-  version = "0.7.1";
+  version = "0.8.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "martin-majlis";
     repo = "Wikipedia-API";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-bjmvUZpwDJJrB2k13NMSMHNyiJFXCvo007PPHwBVeq8=";
+    tag = "v${version}";
+    hash = "sha256-5wi1HVkD36RnmIAKSKRYTc30HtYMiFrRoYzZRWENd/M=";
   };
 
   propagatedBuildInputs = [ requests ];
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python wrapper for Wikipedia";
     homepage = "https://github.com/martin-majlis/Wikipedia-API";
-    changelog = "https://github.com/martin-majlis/Wikipedia-API/blob/${src.rev}/CHANGES.rst";
+    changelog = "https://github.com/martin-majlis/Wikipedia-API/blob/${src.tag}/CHANGES.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ mbalatsko ];
   };

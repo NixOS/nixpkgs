@@ -1,7 +1,8 @@
 { lib
 , stdenv
 , fetchurl
-, substituteAll
+, fetchpatch
+, replaceVars
 , meson
 , ninja
 , gettext
@@ -46,6 +47,7 @@
 , flite
 , gsm
 , json-glib
+, ajaSupport ? lib.meta.availableOn stdenv.hostPlatform libajantv2
 , libajantv2
 , libaom
 , libdc1394
@@ -114,20 +116,25 @@
 
 stdenv.mkDerivation rec {
   pname = "gst-plugins-bad";
-  version = "1.24.7";
+  version = "1.24.10";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-ddUT/AumNfsfOXhtiQtz+6xfS8iP858qn/YvS49CjyI=";
+    hash = "sha256-FwfjEDlQybrtNkqK8roEldaxE/zTbhBi3aX1grj4kE0=";
   };
 
   patches = [
     # Add fallback paths for nvidia userspace libraries
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       inherit (addDriverRunpath) driverLink;
+    })
+    # Add support for newer AJA SDK from next GStreamer release
+    (fetchpatch {
+      url = "https://github.com/GStreamer/gstreamer/commit/d68ac0db571f44cae42b57c876436b3b09df616b.patch";
+      hash = "sha256-ZXwlHzuPT8kUKt5+HkqFH5tzL9l5NusDXImabj4fBbI=";
+      relative = "subprojects/${pname}";
     })
   ];
 
@@ -214,6 +221,8 @@ stdenv.mkDerivation rec {
     libmicrodns
   ] ++ lib.optionals openh264Support [
     openh264
+  ] ++ lib.optionals ajaSupport [
+    libajantv2
   ] ++ lib.optionals (gst-plugins-base.waylandEnabled && stdenv.hostPlatform.isLinux) [
     libva # vaapi requires libva -> libdrm -> libpciaccess, which is Linux-only in nixpkgs
     wayland
@@ -224,7 +233,6 @@ stdenv.mkDerivation rec {
 
     chromaprint
     flite
-    libajantv2
     libdrm
     libgudev
     sbc
@@ -300,7 +308,7 @@ stdenv.mkDerivation rec {
     "-Donnx=disabled" # depends on `libonnxruntime` not packaged in nixpkgs as of writing
     "-Dopenaptx=enabled" # since gstreamer-1.20.1 `libfreeaptx` is supported for circumventing the dubious license conflict with `libopenaptx`
     "-Dopencv=${if opencvSupport then "enabled" else "disabled"}" # Reduces rebuild size when `config.cudaSupport = true`
-    "-Daja=disabled" # should pass libajantv2 via aja-sdk-dir instead
+    "-Daja=${if ajaSupport then "enabled" else "disabled"}"
     "-Dmicrodns=${if microdnsSupport then "enabled" else "disabled"}"
     "-Dbluez=${if bluezSupport then "enabled" else "disabled"}"
     (lib.mesonEnable "openh264" openh264Support)

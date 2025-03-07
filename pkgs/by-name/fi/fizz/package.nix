@@ -14,8 +14,6 @@
   zstd,
   gflags,
   libevent,
-  apple-sdk_11,
-  darwinMinVersionHook,
 
   folly,
   libsodium,
@@ -28,7 +26,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fizz";
-  version = "2024.11.18.00";
+  version = "2025.02.10.00";
 
   outputs = [
     "bin"
@@ -39,9 +37,13 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "facebookincubator";
     repo = "fizz";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-mNe+CHEXhkwzek9qy2l6zvPXim9tJV44s+naSm6bQ4Q=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-czGCQNigLveQu0lvu1Dbamk6Upngr2i3njvLSNKSNj0=";
   };
+
+  patches = [
+    ./glog-0.7.patch
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -49,19 +51,14 @@ stdenv.mkDerivation (finalAttrs: {
     removeReferencesTo
   ];
 
-  buildInputs =
-    [
-      openssl
-      glog
-      double-conversion
-      zstd
-      gflags
-      libevent
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_11
-      (darwinMinVersionHook "11.0")
-    ];
+  buildInputs = [
+    openssl
+    glog
+    double-conversion
+    zstd
+    gflags
+    libevent
+  ];
 
   propagatedBuildInputs = [
     folly

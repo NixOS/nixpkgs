@@ -12,13 +12,13 @@ with python3.pkgs;
 
 buildPythonApplication rec {
   pname = "thonny";
-  version = "4.1.6";
+  version = "4.1.7";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-/ms2RESnV3bsJpK1zYYLHNUu1FtA6PntaseTbKMfUMc=";
+    tag = "v${version}";
+    hash = "sha256-RnjnXB5jU13uwRpL/Pn14QY7fRbRkq09Vopc3fv+z+Y=";
   };
 
   nativeBuildInputs = [

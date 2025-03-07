@@ -3,7 +3,7 @@ use warnings;
 use Class::Struct;
 use XML::LibXML;
 use File::Basename;
-use File::Path;
+use File::Path qw(make_path rmtree);
 use File::stat;
 use File::Copy;
 use File::Copy::Recursive qw(rcopy pathrm);
@@ -37,7 +37,8 @@ sub readFile {
     my ($fn) = @_;
     # enable slurp mode: read entire file in one go
     local $/ = undef;
-    open my $fh, "<$fn" or return undef;
+    open my $fh, "<", $fn
+        or return;
     my $s = <$fh>;
     close $fh;
     # disable slurp mode
@@ -48,7 +49,7 @@ sub readFile {
 
 sub writeFile {
     my ($fn, $s) = @_;
-    open my $fh, ">$fn" or die "cannot create $fn: $!\n";
+    open my $fh, ">", $fn or die "cannot create $fn: $!\n";
     print $fh $s or die "cannot write to $fn: $!\n";
     close $fh or die "cannot close $fn: $!\n";
 }
@@ -98,7 +99,7 @@ $ENV{'PATH'} = get("path");
 
 print STDERR "updating GRUB 2 menu...\n";
 
-mkpath("$bootPath/grub", 0, 0700);
+make_path("$bootPath/grub", {  mode => 0700 });
 
 # Discover whether the bootPath is on the same filesystem as / and
 # /nix/store.  If not, then all kernels and initrds must be copied to
@@ -438,7 +439,7 @@ $conf .= "$extraConfig\n";
 $conf .= "\n";
 
 my %copied;
-mkpath("$bootPath/kernels", 0, 0755) if $copyKernels;
+make_path("$bootPath/kernels", { mode => 0755 }) if $copyKernels;
 
 sub copyToKernelsDir {
     my ($path) = @_;
@@ -471,7 +472,7 @@ sub addEntry {
         my $systemName = basename(Cwd::abs_path("$path"));
         my $initrdSecretsPath = "$bootPath/kernels/$systemName-secrets";
 
-        mkpath(dirname($initrdSecretsPath), 0, 0755);
+        make_path(dirname($initrdSecretsPath), { mode => 0755 });
         my $oldUmask = umask;
         # Make sure initrd is not world readable (won't work if /boot is FAT)
         umask 0137;
@@ -527,7 +528,7 @@ sub addGeneration {
     my @links = sort (glob "$path/specialisation/*");
 
     if ($current != 1 && scalar(@links) != 0) {
-        $conf .= "submenu \"> $name$nameSuffix\" --class submenu {\n";
+        $conf .= "submenu \"$name$nameSuffix\" --class submenu {\n";
     }
 
     addEntry("$name" . (scalar(@links) == 0 ? "" : " - Default") . $nameSuffix, $path, $options, $current);
@@ -690,17 +691,17 @@ struct(GrubState => {
 # because it is read line-by-line.
 sub readGrubState {
     my $defaultGrubState = GrubState->new(name => "", version => "", efi => "", devices => "", efiMountPoint => "", extraGrubInstallArgs => () );
-    open FILE, "<$bootPath/grub/state" or return $defaultGrubState;
+    open my $fh, "<", "$bootPath/grub/state" or return $defaultGrubState;
     local $/ = "\n";
-    my $name = <FILE>;
+    my $name = <$fh>;
     chomp($name);
-    my $version = <FILE>;
+    my $version = <$fh>;
     chomp($version);
-    my $efi = <FILE>;
+    my $efi = <$fh>;
     chomp($efi);
-    my $devices = <FILE>;
+    my $devices = <$fh>;
     chomp($devices);
-    my $efiMountPoint = <FILE>;
+    my $efiMountPoint = <$fh>;
     chomp($efiMountPoint);
     # Historically, arguments in the state file were one per each line, but that
     # gets really messy when newlines are involved, structured arguments
@@ -708,7 +709,7 @@ sub readGrubState {
     # when we need to remove a setting in the future. Thus, the 6th line is a JSON
     # object that can store structured data, with named keys, and all new state
     # should go in there.
-    my $jsonStateLine = <FILE>;
+    my $jsonStateLine = <$fh>;
     # For historical reasons we do not check the values above for un-definedness
     # (that is, when the state file has too few lines and EOF is reached),
     # because the above come from the first version of this logic and are thus
@@ -720,7 +721,7 @@ sub readGrubState {
     }
     my %jsonState = %{decode_json($jsonStateLine)};
     my @extraGrubInstallArgs = exists($jsonState{'extraGrubInstallArgs'}) ? @{$jsonState{'extraGrubInstallArgs'}} : ();
-    close FILE;
+    close $fh;
     my $grubState = GrubState->new(name => $name, version => $version, efi => $efi, devices => $devices, efiMountPoint => $efiMountPoint, extraGrubInstallArgs => \@extraGrubInstallArgs );
     return $grubState
 }
@@ -787,18 +788,18 @@ if ($requireNewInstall != 0) {
     my $stateFile = "$bootPath/grub/state";
     my $stateFileTmp = $stateFile . ".tmp";
 
-    open FILE, ">$stateFileTmp" or die "cannot create $stateFileTmp: $!\n";
-    print FILE get("fullName"), "\n" or die;
-    print FILE get("fullVersion"), "\n" or die;
-    print FILE $efiTarget, "\n" or die;
-    print FILE join( ",", @deviceTargets ), "\n" or die;
-    print FILE $efiSysMountPoint, "\n" or die;
+    open my $fh, ">", "$stateFileTmp" or die "cannot create $stateFileTmp: $!\n";
+    print $fh get("fullName"), "\n" or die;
+    print $fh get("fullVersion"), "\n" or die;
+    print $fh $efiTarget, "\n" or die;
+    print $fh join( ",", @deviceTargets ), "\n" or die;
+    print $fh $efiSysMountPoint, "\n" or die;
     my %jsonState = (
         extraGrubInstallArgs => \@extraGrubInstallArgs
     );
     my $jsonStateLine = encode_json(\%jsonState);
-    print FILE $jsonStateLine, "\n" or die;
-    close FILE or die;
+    print $fh $jsonStateLine, "\n" or die;
+    close $fh or die;
 
     # Atomically switch to the new state file
     rename $stateFileTmp, $stateFile or die "cannot rename $stateFileTmp to $stateFile: $!\n";

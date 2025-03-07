@@ -1,9 +1,10 @@
-{ stdenv
-, fetchurl
-, ffmpeg-headless
-, lib
-, nixosTests
-, dataDir ? "/var/lib/castopod"
+{
+  stdenv,
+  fetchurl,
+  ffmpeg-headless,
+  lib,
+  nixosTests,
+  dataDir ? "/var/lib/castopod",
 }:
 stdenv.mkDerivation {
   pname = "castopod";

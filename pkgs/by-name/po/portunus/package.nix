@@ -1,8 +1,9 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, libxcrypt
-, nixosTests
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  libxcrypt,
+  nixosTests,
 }:
 
 buildGoModule rec {

@@ -1,6 +1,7 @@
-{ lib
-, rustPlatform
-, fetchCrate
+{
+  lib,
+  rustPlatform,
+  fetchCrate,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -12,7 +13,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-3VebLFkeJLK97jqoPXt4Wt6QTR0Zyu+eQV9oaLBSeHE=";
   };
 
-  cargoHash = "sha256-EIsKb9BzM+H3BO7OpoTmvIvGd578gYSq5vU18BejT0s=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-RwpRxSD/oRAYD1udrHt3fy/SrrNUTVdGf+CdzQnJZ2U=";
 
   meta = with lib; {
     description = "Take a csv as input and outputs svg";

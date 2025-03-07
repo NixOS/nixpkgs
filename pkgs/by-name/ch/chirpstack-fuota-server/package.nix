@@ -24,12 +24,10 @@ buildGoModule rec {
     "-X main.version=${version}"
   ];
 
-  nativeInstallCheckInputs = [
-    versionCheckHook
-  ];
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
   doInstallCheck = true;
   versionCheckProgramArg = "version";
-
   checkFlags = [
     "-skip=TestStorage" # Depends on external database server
   ];

@@ -1,6 +1,7 @@
-{ lib
-, bundlerApp
-, bundlerUpdateScript
+{
+  lib,
+  bundlerApp,
+  bundlerUpdateScript,
 }:
 
 bundlerApp {
@@ -19,4 +20,3 @@ bundlerApp {
     platforms = platforms.unix;
   };
 }
-

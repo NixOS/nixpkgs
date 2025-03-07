@@ -1,4 +1,8 @@
-{ buildDartApplication, fetchFromGitHub, lib }:
+{
+  buildDartApplication,
+  fetchFromGitHub,
+  lib,
+}:
 
 buildDartApplication rec {
   pname = "domine";

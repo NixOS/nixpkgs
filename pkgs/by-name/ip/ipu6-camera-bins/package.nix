@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoPatchelfHook
-, expat
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoPatchelfHook,
+  expat,
+  zlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: rec {

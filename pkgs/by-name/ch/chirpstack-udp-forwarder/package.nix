@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  darwin,
   rustPlatform,
   fetchFromGitHub,
   nix-update-script,
@@ -19,15 +18,14 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-Snj5nKyFsq8WJJNw1d8O/YX/dZ/tCTVBw5R8kXJvsa4=";
   };
 
-  cargoHash = "sha256-7ugrIVT4SYrqPqF0CrLU+/Ep/p9H7/on3hkZ5JzY9AE=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-ntY0Ze9MlbdRnmzA5AJN4Hjlhv18Iboj83gba8A4xHw=";
 
   nativeBuildInputs = [ protobuf ];
 
-  nativeInstallCheckInputs = [
-    versionCheckHook
-  ];
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
   doInstallCheck = true;
-  versionCheckProgramArg = "--version";
 
   passthru.updateScript = nix-update-script { };
 

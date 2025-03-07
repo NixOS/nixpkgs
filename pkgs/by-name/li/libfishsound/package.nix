@@ -1,4 +1,14 @@
-{ lib, stdenv, fetchurl, libvorbis, speex, flac, pkg-config }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  autoreconfHook,
+  libvorbis,
+  speex,
+  flac,
+  pkg-config,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libfishsound";
@@ -9,9 +19,40 @@ stdenv.mkDerivation rec {
     sha256 = "1iz7mn6hw2wg8ljaw74f4g2zdj68ib88x4vjxxg3gjgc5z75f2rf";
   };
 
-  propagatedBuildInputs = [ libvorbis speex flac ];
+  patches =
+    let
+      fetchDebPatch =
+        { name, hash }:
+        fetchpatch {
+          inherit name hash;
+          url = "https://salsa.debian.org/multimedia-team/libfishsound/-/raw/f25f31a13dd2ce008614427889b08e6f2222898f/debian/patches/${name}";
+        };
+    in
+    map fetchDebPatch [
+      {
+        name = "0001-Patch-configure.ac-to-specify-config-macro-dir.patch";
+        hash = "sha256-3cijMhgxqwFisc5nt8826QUwOqPI7H425QkDcjnD4iM=";
+      }
+      {
+        name = "0002-flac-set-vendor_string.length-0.patch";
+        hash = "sha256-8195rU9IAhFL3MgB4jLwtJv6BWgz22A38+RmIymIQoo=";
+      }
+      {
+        name = "0003-Fix-incompatible-flac-callback-types.patch";
+        hash = "sha256-BxG1hlThzhJ6VeGcsNpDEtVyKSJTLGFKeHFpFoXW54A=";
+      }
+    ];
 
-  nativeBuildInputs = [ pkg-config ];
+  propagatedBuildInputs = [
+    libvorbis
+    speex
+    flac
+  ];
+
+  nativeBuildInputs = [
+    pkg-config
+    autoreconfHook
+  ];
 
   meta = with lib; {
     homepage = "https://xiph.org/fishsound/";

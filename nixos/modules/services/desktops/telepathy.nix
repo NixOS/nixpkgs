@@ -1,5 +1,10 @@
 # Telepathy daemon.
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 {
 
   meta = {
@@ -24,7 +29,6 @@
     };
 
   };
-
 
   ###### implementation
 

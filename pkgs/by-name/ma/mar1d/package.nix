@@ -12,7 +12,7 @@
   fetchpatch,
 }:
 
-stdenv.mkDerivation (finalAttrs:{
+stdenv.mkDerivation (finalAttrs: {
   pname = "MAR1D";
   version = "unstable-2023-02-02";
 

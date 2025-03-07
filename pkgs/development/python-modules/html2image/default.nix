@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "vgalin";
     repo = "html2image";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-k5y89nUF+fhUj9uzTAPkkAdOb2TsTL2jm/ZXwHlxu/A=";
   };
 

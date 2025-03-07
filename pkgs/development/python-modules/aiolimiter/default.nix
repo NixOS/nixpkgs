@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "aiolimiter";
-  version = "1.1.0";
+  version = "1.2.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -20,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mjpieters";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-BpLh9utf2oJe+83rsIZeV5+MjbJ3aO5slMNVbUywQIo=";
+    tag = "v${version}";
+    hash = "sha256-wgHR0GzaPXlhL4ErklFqmWNFO49dvd5X5MgyYHVH4Eo=";
   };
 
   nativeBuildInputs = [ poetry-core ];

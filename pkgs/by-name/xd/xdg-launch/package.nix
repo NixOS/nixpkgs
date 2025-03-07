@@ -1,14 +1,15 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, autoconf
-, automake
-, gettext
-, libtool
-, perl
-, pkg-config
-, glib
-, xorg
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  autoconf,
+  automake,
+  gettext,
+  libtool,
+  perl,
+  pkg-config,
+  glib,
+  xorg,
 }:
 stdenv.mkDerivation rec {
   pname = "xdg-launch";

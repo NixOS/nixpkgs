@@ -1,7 +1,8 @@
-{ lib
-, pkgs
-, config
-, ...
+{
+  lib,
+  pkgs,
+  config,
+  ...
 }:
 
 let
@@ -9,301 +10,355 @@ let
 
   format = pkgs.formats.yaml { };
 
-  autheliaOpts = with lib; { name, ... }: {
-    options = {
-      enable = mkEnableOption "Authelia instance";
+  autheliaOpts =
+    with lib;
+    { name, ... }:
+    {
+      options = {
+        enable = mkEnableOption "Authelia instance";
 
-      name = mkOption {
-        type = types.str;
-        default = name;
-        description = ''
-          Name is used as a suffix for the service name, user, and group.
-          By default it takes the value you use for `<instance>` in:
-          {option}`services.authelia.<instance>`
-        '';
-      };
+        name = mkOption {
+          type = types.str;
+          default = name;
+          description = ''
+            Name is used as a suffix for the service name, user, and group.
+            By default it takes the value you use for `<instance>` in:
+            {option}`services.authelia.<instance>`
+          '';
+        };
 
-      package = mkPackageOption pkgs "authelia" { };
+        package = mkPackageOption pkgs "authelia" { };
 
-      user = mkOption {
-        default = "authelia-${name}";
-        type = types.str;
-        description = "The name of the user for this authelia instance.";
-      };
+        user = mkOption {
+          default = "authelia-${name}";
+          type = types.str;
+          description = "The name of the user for this authelia instance.";
+        };
 
-      group = mkOption {
-        default = "authelia-${name}";
-        type = types.str;
-        description = "The name of the group for this authelia instance.";
-      };
+        group = mkOption {
+          default = "authelia-${name}";
+          type = types.str;
+          description = "The name of the group for this authelia instance.";
+        };
 
-      secrets = mkOption {
-        description = ''
-          It is recommended you keep your secrets separate from the configuration.
-          It's especially important to keep the raw secrets out of your nix configuration,
-          as the values will be preserved in your nix store.
-          This attribute allows you to configure the location of secret files to be loaded at runtime.
+        secrets = mkOption {
+          description = ''
+            It is recommended you keep your secrets separate from the configuration.
+            It's especially important to keep the raw secrets out of your nix configuration,
+            as the values will be preserved in your nix store.
+            This attribute allows you to configure the location of secret files to be loaded at runtime.
 
-          https://www.authelia.com/configuration/methods/secrets/
-        '';
-        default = { };
-        type = types.submodule {
-          options = {
-            manual = mkOption {
-              default = false;
-              example = true;
-              description = ''
-                Configuring authelia's secret files via the secrets attribute set
-                is intended to be convenient and help catch cases where values are required
-                to run at all.
-                If a user wants to set these values themselves and bypass the validation they can set this value to true.
-              '';
-              type = types.bool;
-            };
+            https://www.authelia.com/configuration/methods/secrets/
+          '';
+          default = { };
+          type = types.submodule {
+            options = {
+              manual = mkOption {
+                default = false;
+                example = true;
+                description = ''
+                  Configuring authelia's secret files via the secrets attribute set
+                  is intended to be convenient and help catch cases where values are required
+                  to run at all.
+                  If a user wants to set these values themselves and bypass the validation they can set this value to true.
+                '';
+                type = types.bool;
+              };
 
-            # required
-            jwtSecretFile = mkOption {
-              type = types.nullOr types.path;
-              default = null;
-              description = ''
-                Path to your JWT secret used during identity verificaton.
-              '';
-            };
+              # required
+              jwtSecretFile = mkOption {
+                type = types.nullOr types.path;
+                default = null;
+                description = ''
+                  Path to your JWT secret used during identity verificaton.
+                '';
+              };
 
-            oidcIssuerPrivateKeyFile = mkOption {
-              type = types.nullOr types.path;
-              default = null;
-              description = ''
-                Path to your private key file used to encrypt OIDC JWTs.
-              '';
-            };
+              oidcIssuerPrivateKeyFile = mkOption {
+                type = types.nullOr types.path;
+                default = null;
+                description = ''
+                  Path to your private key file used to encrypt OIDC JWTs.
+                '';
+              };
 
-            oidcHmacSecretFile = mkOption {
-              type = types.nullOr types.path;
-              default = null;
-              description = ''
-                Path to your HMAC secret used to sign OIDC JWTs.
-              '';
-            };
+              oidcHmacSecretFile = mkOption {
+                type = types.nullOr types.path;
+                default = null;
+                description = ''
+                  Path to your HMAC secret used to sign OIDC JWTs.
+                '';
+              };
 
-            sessionSecretFile = mkOption {
-              type = types.nullOr types.path;
-              default = null;
-              description = ''
-                Path to your session secret. Only used when redis is used as session storage.
-              '';
-            };
+              sessionSecretFile = mkOption {
+                type = types.nullOr types.path;
+                default = null;
+                description = ''
+                  Path to your session secret. Only used when redis is used as session storage.
+                '';
+              };
 
-            # required
-            storageEncryptionKeyFile = mkOption {
-              type = types.nullOr types.path;
-              default = null;
-              description = ''
-                Path to your storage encryption key.
-              '';
+              # required
+              storageEncryptionKeyFile = mkOption {
+                type = types.nullOr types.path;
+                default = null;
+                description = ''
+                  Path to your storage encryption key.
+                '';
+              };
             };
           };
         };
-      };
 
-      environmentVariables = mkOption {
-        type = types.attrsOf types.str;
-        description = ''
-          Additional environment variables to provide to authelia.
-          If you are providing secrets please consider the options under {option}`services.authelia.<instance>.secrets`
-          or make sure you use the `_FILE` suffix.
-          If you provide the raw secret rather than the location of a secret file that secret will be preserved in the nix store.
-          For more details: https://www.authelia.com/configuration/methods/secrets/
-        '';
-        default = { };
-      };
+        environmentVariables = mkOption {
+          type = types.attrsOf types.str;
+          description = ''
+            Additional environment variables to provide to authelia.
+            If you are providing secrets please consider the options under {option}`services.authelia.<instance>.secrets`
+            or make sure you use the `_FILE` suffix.
+            If you provide the raw secret rather than the location of a secret file that secret will be preserved in the nix store.
+            For more details: https://www.authelia.com/configuration/methods/secrets/
+          '';
+          default = { };
+        };
 
-      settings = mkOption {
-        description = ''
-          Your Authelia config.yml as a Nix attribute set.
-          There are several values that are defined and documented in nix such as `default_2fa_method`,
-          but additional items can also be included.
+        settings = mkOption {
+          description = ''
+            Your Authelia config.yml as a Nix attribute set.
+            There are several values that are defined and documented in nix such as `default_2fa_method`,
+            but additional items can also be included.
 
-          https://github.com/authelia/authelia/blob/master/config.template.yml
-        '';
-        default = { };
-        example = ''
-          {
-            theme = "light";
-            default_2fa_method = "totp";
-            log.level = "debug";
-            server.disable_healthcheck = true;
-          }
-        '';
-        type = types.submodule {
-          freeformType = format.type;
-          options = {
-            theme = mkOption {
-              type = types.enum [ "light" "dark" "grey" "auto" ];
-              default = "light";
-              example = "dark";
-              description = "The theme to display.";
-            };
-
-            default_2fa_method = mkOption {
-              type = types.enum [ "" "totp" "webauthn" "mobile_push" ];
-              default = "";
-              example = "webauthn";
-              description = ''
-                Default 2FA method for new users and fallback for preferred but disabled methods.
-              '';
-            };
-
-            server = {
-              address = mkOption {
-                type = types.str;
-                default = "tcp://:9091/";
-                example = "unix:///var/run/authelia.sock?path=authelia&umask=0117";
-                description = "The address to listen on.";
-              };
-            };
-
-            log = {
-              level = mkOption {
-                type = types.enum [ "trace" "debug" "info" "warn" "error" ];
-                default = "debug";
-                example = "info";
-                description = "Level of verbosity for logs.";
+            https://github.com/authelia/authelia/blob/master/config.template.yml
+          '';
+          default = { };
+          example = ''
+            {
+              theme = "light";
+              default_2fa_method = "totp";
+              log.level = "debug";
+              server.disable_healthcheck = true;
+            }
+          '';
+          type = types.submodule {
+            freeformType = format.type;
+            options = {
+              theme = mkOption {
+                type = types.enum [
+                  "light"
+                  "dark"
+                  "grey"
+                  "auto"
+                ];
+                default = "light";
+                example = "dark";
+                description = "The theme to display.";
               };
 
-              format = mkOption {
-                type = types.enum [ "json" "text" ];
-                default = "json";
-                example = "text";
-                description = "Format the logs are written as.";
+              default_2fa_method = mkOption {
+                type = types.enum [
+                  ""
+                  "totp"
+                  "webauthn"
+                  "mobile_push"
+                ];
+                default = "";
+                example = "webauthn";
+                description = ''
+                  Default 2FA method for new users and fallback for preferred but disabled methods.
+                '';
               };
 
-              file_path = mkOption {
-                type = types.nullOr types.path;
-                default = null;
-                example = "/var/log/authelia/authelia.log";
-                description = "File path where the logs will be written. If not set logs are written to stdout.";
+              server = {
+                address = mkOption {
+                  type = types.str;
+                  default = "tcp://:9091/";
+                  example = "unix:///var/run/authelia.sock?path=authelia&umask=0117";
+                  description = "The address to listen on.";
+                };
               };
 
-              keep_stdout = mkOption {
-                type = types.bool;
-                default = false;
-                example = true;
-                description = "Whether to also log to stdout when a `file_path` is defined.";
-              };
-            };
+              log = {
+                level = mkOption {
+                  type = types.enum [
+                    "trace"
+                    "debug"
+                    "info"
+                    "warn"
+                    "error"
+                  ];
+                  default = "debug";
+                  example = "info";
+                  description = "Level of verbosity for logs.";
+                };
 
-            telemetry = {
-              metrics = {
-                enabled = mkOption {
+                format = mkOption {
+                  type = types.enum [
+                    "json"
+                    "text"
+                  ];
+                  default = "json";
+                  example = "text";
+                  description = "Format the logs are written as.";
+                };
+
+                file_path = mkOption {
+                  type = types.nullOr types.path;
+                  default = null;
+                  example = "/var/log/authelia/authelia.log";
+                  description = "File path where the logs will be written. If not set logs are written to stdout.";
+                };
+
+                keep_stdout = mkOption {
                   type = types.bool;
                   default = false;
                   example = true;
-                  description = "Enable Metrics.";
+                  description = "Whether to also log to stdout when a `file_path` is defined.";
                 };
+              };
 
-                address = mkOption {
-                  type = types.str;
-                  default = "tcp://127.0.0.1:9959";
-                  example = "tcp://0.0.0.0:8888";
-                  description = "The address to listen on for metrics. This should be on a different port to the main `server.port` value.";
+              telemetry = {
+                metrics = {
+                  enabled = mkOption {
+                    type = types.bool;
+                    default = false;
+                    example = true;
+                    description = "Enable Metrics.";
+                  };
+
+                  address = mkOption {
+                    type = types.str;
+                    default = "tcp://127.0.0.1:9959";
+                    example = "tcp://0.0.0.0:8888";
+                    description = "The address to listen on for metrics. This should be on a different port to the main `server.port` value.";
+                  };
                 };
               };
             };
           };
         };
-      };
 
-      settingsFiles = mkOption {
-        type = types.listOf types.path;
-        default = [ ];
-        example = [ "/etc/authelia/config.yml" "/etc/authelia/access-control.yml" "/etc/authelia/config/" ];
-        description = ''
-          Here you can provide authelia with configuration files or directories.
-          It is possible to give authelia multiple files and use the nix generated configuration
-          file set via {option}`services.authelia.<instance>.settings`.
-        '';
+        settingsFiles = mkOption {
+          type = types.listOf types.path;
+          default = [ ];
+          example = [
+            "/etc/authelia/config.yml"
+            "/etc/authelia/access-control.yml"
+            "/etc/authelia/config/"
+          ];
+          description = ''
+            Here you can provide authelia with configuration files or directories.
+            It is possible to give authelia multiple files and use the nix generated configuration
+            file set via {option}`services.authelia.<instance>.settings`.
+          '';
+        };
       };
     };
-  };
 
-  writeOidcJwksConfigFile = oidcIssuerPrivateKeyFile: pkgs.writeText "oidc-jwks.yaml" ''
-    identity_providers:
-      oidc:
-        jwks:
-          - key: {{ secret "${oidcIssuerPrivateKeyFile}" | mindent 10 "|" | msquote }}
-  '';
+  writeOidcJwksConfigFile =
+    oidcIssuerPrivateKeyFile:
+    pkgs.writeText "oidc-jwks.yaml" ''
+      identity_providers:
+        oidc:
+          jwks:
+            - key: {{ secret "${oidcIssuerPrivateKeyFile}" | mindent 10 "|" | msquote }}
+    '';
 
   # Remove an attribute in a nested set
   # https://discourse.nixos.org/t/modify-an-attrset-in-nix/29919/5
-  removeAttrByPath = set: pathList:
-    lib.updateManyAttrsByPath [{
-      path = lib.init pathList;
-      update = old:
-        lib.filterAttrs (n: v: n != (lib.last pathList)) old;
-    }]
-      set;
+  removeAttrByPath =
+    set: pathList:
+    lib.updateManyAttrsByPath [
+      {
+        path = lib.init pathList;
+        update = old: lib.filterAttrs (n: v: n != (lib.last pathList)) old;
+      }
+    ] set;
 in
 {
-  options.services.authelia.instances = with lib; mkOption {
-    default = { };
-    type = types.attrsOf (types.submodule autheliaOpts);
-    description = ''
-      Multi-domain protection currently requires multiple instances of Authelia.
-      If you don't require multiple instances of Authelia you can define just the one.
+  options.services.authelia.instances =
+    with lib;
+    mkOption {
+      default = { };
+      type = types.attrsOf (types.submodule autheliaOpts);
+      description = ''
+        Multi-domain protection currently requires multiple instances of Authelia.
+        If you don't require multiple instances of Authelia you can define just the one.
 
-      https://www.authelia.com/roadmap/active/multi-domain-protection/
-    '';
-    example = ''
-      {
-        main = {
-          enable = true;
-          secrets.storageEncryptionKeyFile = "/etc/authelia/storageEncryptionKeyFile";
-          secrets.jwtSecretFile = "/etc/authelia/jwtSecretFile";
-          settings = {
-            theme = "light";
-            default_2fa_method = "totp";
-            log.level = "debug";
-            server.disable_healthcheck = true;
+        https://www.authelia.com/roadmap/active/multi-domain-protection/
+      '';
+      example = ''
+        {
+          main = {
+            enable = true;
+            secrets.storageEncryptionKeyFile = "/etc/authelia/storageEncryptionKeyFile";
+            secrets.jwtSecretFile = "/etc/authelia/jwtSecretFile";
+            settings = {
+              theme = "light";
+              default_2fa_method = "totp";
+              log.level = "debug";
+              server.disable_healthcheck = true;
+            };
           };
-        };
-        preprod = {
-          enable = false;
-          secrets.storageEncryptionKeyFile = "/mnt/pre-prod/authelia/storageEncryptionKeyFile";
-          secrets.jwtSecretFile = "/mnt/pre-prod/jwtSecretFile";
-          settings = {
-            theme = "dark";
-            default_2fa_method = "webauthn";
-            server.host = "0.0.0.0";
+          preprod = {
+            enable = false;
+            secrets.storageEncryptionKeyFile = "/mnt/pre-prod/authelia/storageEncryptionKeyFile";
+            secrets.jwtSecretFile = "/mnt/pre-prod/jwtSecretFile";
+            settings = {
+              theme = "dark";
+              default_2fa_method = "webauthn";
+              server.host = "0.0.0.0";
+            };
           };
-        };
-        test.enable = true;
-        test.secrets.manual = true;
-        test.settings.theme = "grey";
-        test.settings.server.disable_healthcheck = true;
-        test.settingsFiles = [ "/mnt/test/authelia" "/mnt/test-authelia.conf" ];
-        };
-      }
-    '';
-  };
+          test.enable = true;
+          test.secrets.manual = true;
+          test.settings.theme = "grey";
+          test.settings.server.disable_healthcheck = true;
+          test.settingsFiles = [ "/mnt/test/authelia" "/mnt/test-authelia.conf" ];
+          };
+        }
+      '';
+    };
 
   config =
     let
-      mkInstanceServiceConfig = instance:
+      mkInstanceServiceConfig =
+        instance:
         let
           cleanedSettings =
-            if (instance.settings.server?host || instance.settings.server?port || instance.settings.server?path) then
-            # Old settings are used: display a warning and remove the default value of server.address
-            # as authelia does not allow both old and new settings to be set
-              lib.warn "Please replace services.authelia.instances.${instance.name}.settings.{host,port,path} with services.authelia.instances.${instance.name}.settings.address, before release 5.0.0"
-                (removeAttrByPath instance.settings [ "server" "address" ])
+            if
+              (
+                instance.settings.server ? host
+                || instance.settings.server ? port
+                || instance.settings.server ? path
+              )
+            then
+              # Old settings are used: display a warning and remove the default value of server.address
+              # as authelia does not allow both old and new settings to be set
+              lib.warn
+                "Please replace services.authelia.instances.${instance.name}.settings.{host,port,path} with services.authelia.instances.${instance.name}.settings.address, before release 5.0.0"
+                (
+                  removeAttrByPath instance.settings [
+                    "server"
+                    "address"
+                  ]
+                )
             else
               instance.settings;
 
           execCommand = "${instance.package}/bin/authelia";
           configFile = format.generate "config.yml" cleanedSettings;
-          oidcJwksConfigFile = lib.optional (instance.secrets.oidcIssuerPrivateKeyFile != null) (writeOidcJwksConfigFile instance.secrets.oidcIssuerPrivateKeyFile);
-          configArg = "--config ${builtins.concatStringsSep "," (lib.concatLists [[configFile] instance.settingsFiles oidcJwksConfigFile])}";
+          oidcJwksConfigFile = lib.optional (instance.secrets.oidcIssuerPrivateKeyFile != null) (
+            writeOidcJwksConfigFile instance.secrets.oidcIssuerPrivateKeyFile
+          );
+          configArg = "--config ${
+            builtins.concatStringsSep "," (
+              lib.concatLists [
+                [ configFile ]
+                instance.settingsFiles
+                oidcJwksConfigFile
+              ]
+            )
+          }";
         in
         {
           description = "Authelia authentication and authorization server";
@@ -352,7 +407,11 @@ in
             ProtectProc = "noaccess";
             ProtectSystem = "strict";
 
-            RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_UNIX" ];
+            RestrictAddressFamilies = [
+              "AF_INET"
+              "AF_INET6"
+              "AF_UNIX"
+            ];
             RestrictNamespaces = true;
             RestrictRealtime = true;
             RestrictSUIDSGID = true;
@@ -372,46 +431,49 @@ in
           };
         };
       mkInstanceUsersConfig = instance: {
-        groups."authelia-${instance.name}" =
-          lib.mkIf (instance.group == "authelia-${instance.name}") {
-            name = "authelia-${instance.name}";
-          };
-        users."authelia-${instance.name}" =
-          lib.mkIf (instance.user == "authelia-${instance.name}") {
-            name = "authelia-${instance.name}";
-            isSystemUser = true;
-            group = instance.group;
-          };
+        groups."authelia-${instance.name}" = lib.mkIf (instance.group == "authelia-${instance.name}") {
+          name = "authelia-${instance.name}";
+        };
+        users."authelia-${instance.name}" = lib.mkIf (instance.user == "authelia-${instance.name}") {
+          name = "authelia-${instance.name}";
+          isSystemUser = true;
+          group = instance.group;
+        };
       };
       instances = lib.attrValues cfg.instances;
     in
     {
-      assertions = lib.flatten (lib.flip lib.mapAttrsToList cfg.instances (name: instance:
-        [
-          {
-            assertion = instance.secrets.manual || (instance.secrets.jwtSecretFile != null && instance.secrets.storageEncryptionKeyFile != null);
-            message = ''
-              Authelia requires a JWT Secret and a Storage Encryption Key to work.
-              Either set them like so:
-              services.authelia.${name}.secrets.jwtSecretFile = /my/path/to/jwtsecret;
-              services.authelia.${name}.secrets.storageEncryptionKeyFile = /my/path/to/encryptionkey;
-              Or set services.authelia.${name}.secrets.manual = true and provide them yourself via
-              environmentVariables or settingsFiles.
-              Do not include raw secrets in nix settings.
-            '';
-          }
-        ]
-      ));
+      assertions = lib.flatten (
+        lib.flip lib.mapAttrsToList cfg.instances (
+          name: instance: [
+            {
+              assertion =
+                instance.secrets.manual
+                || (instance.secrets.jwtSecretFile != null && instance.secrets.storageEncryptionKeyFile != null);
+              message = ''
+                Authelia requires a JWT Secret and a Storage Encryption Key to work.
+                Either set them like so:
+                services.authelia.${name}.secrets.jwtSecretFile = /my/path/to/jwtsecret;
+                services.authelia.${name}.secrets.storageEncryptionKeyFile = /my/path/to/encryptionkey;
+                Or set services.authelia.${name}.secrets.manual = true and provide them yourself via
+                environmentVariables or settingsFiles.
+                Do not include raw secrets in nix settings.
+              '';
+            }
+          ]
+        )
+      );
 
-      systemd.services = lib.mkMerge
-        (map
-          (instance: lib.mkIf instance.enable {
+      systemd.services = lib.mkMerge (
+        map (
+          instance:
+          lib.mkIf instance.enable {
             "authelia-${instance.name}" = mkInstanceServiceConfig instance;
-          })
-          instances);
-      users = lib.mkMerge
-        (map
-          (instance: lib.mkIf instance.enable (mkInstanceUsersConfig instance))
-          instances);
+          }
+        ) instances
+      );
+      users = lib.mkMerge (
+        map (instance: lib.mkIf instance.enable (mkInstanceUsersConfig instance)) instances
+      );
     };
 }

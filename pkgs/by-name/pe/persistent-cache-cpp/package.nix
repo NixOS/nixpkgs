@@ -1,18 +1,19 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, fetchpatch
-, gitUpdater
-, testers
-, boost
-, cmake
-, doxygen
-, gtest
-, leveldb
-, lomiri
-, pkg-config
-, python3
-, validatePkgConfig
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  fetchpatch,
+  gitUpdater,
+  testers,
+  boost,
+  cmake,
+  doxygen,
+  gtest,
+  leveldb,
+  lomiri,
+  pkg-config,
+  python3,
+  validatePkgConfig,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -51,20 +52,22 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  postPatch = ''
-    # Wrong concatenation
-    substituteInPlace data/libpersistent-cache-cpp.pc.in \
-      --replace "\''${prefix}/@CMAKE_INSTALL_LIBDIR@" "\''${prefix}/lib"
+  postPatch =
+    ''
+      # Wrong concatenation
+      substituteInPlace data/libpersistent-cache-cpp.pc.in \
+        --replace "\''${prefix}/@CMAKE_INSTALL_LIBDIR@" "\''${prefix}/lib"
 
-    # Runs in parallel to other tests, limit to 1 thread
-    substituteInPlace tests/headers/compile_headers.py \
-      --replace 'multiprocessing.cpu_count()' '1'
+      # Runs in parallel to other tests, limit to 1 thread
+      substituteInPlace tests/headers/compile_headers.py \
+        --replace 'multiprocessing.cpu_count()' '1'
 
-    sed '1i#include <iomanip>' \
-      -i tests/core/persistent_string_cache/speed_test.cpp
-  '' + lib.optionalString finalAttrs.finalPackage.doCheck ''
-    patchShebangs tests/{headers,whitespace}/*.py
-  '';
+      sed '1i#include <iomanip>' \
+        -i tests/core/persistent_string_cache/speed_test.cpp
+    ''
+    + lib.optionalString finalAttrs.finalPackage.doCheck ''
+      patchShebangs tests/{headers,whitespace}/*.py
+    '';
 
   nativeBuildInputs = [
     cmake

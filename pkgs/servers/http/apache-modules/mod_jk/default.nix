@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "apache";
     repo = "tomcat-connectors";
-    rev = "refs/tags/JK_${lib.replaceStrings [ "." ] [ "_" ] version}";
+    tag = "JK_${lib.replaceStrings [ "." ] [ "_" ] version}";
     hash = "sha256-hlwlx7Sb4oeZIzHQYOC3e9xEZK9u6ZG8Q2U/XdKMe3U=";
   };
 

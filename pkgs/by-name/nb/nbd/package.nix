@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchpatch
-, pkg-config
-, glib
-, which
-, bison
-, nixosTests
-, libnl
-, linuxHeaders
-, gnutls
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  pkg-config,
+  glib,
+  which,
+  bison,
+  nixosTests,
+  libnl,
+  linuxHeaders,
+  gnutls,
 }:
 
 stdenv.mkDerivation rec {
@@ -36,13 +37,15 @@ stdenv.mkDerivation rec {
     bison
   ];
 
-  buildInputs = [
-    glib
-    gnutls
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    libnl
-    linuxHeaders
-  ];
+  buildInputs =
+    [
+      glib
+      gnutls
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      libnl
+      linuxHeaders
+    ];
 
   configureFlags = [
     "--sysconfdir=/etc"

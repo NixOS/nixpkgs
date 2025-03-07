@@ -1,7 +1,12 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
-  cfg  = config.programs.winbox;
+  cfg = config.programs.winbox;
 in
 {
   options.programs.winbox = {

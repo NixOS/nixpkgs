@@ -1,4 +1,10 @@
-{ buildDunePackage, lablgtk, ocamlgraph, stdlib-shims, ... }:
+{
+  buildDunePackage,
+  lablgtk,
+  ocamlgraph,
+  stdlib-shims,
+  ...
+}:
 
 buildDunePackage rec {
   pname = "ocamlgraph_gtk";

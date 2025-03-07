@@ -1,22 +1,26 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
   pname = "open-in-mpv";
-  version = "2.3.0";
+  version = "2.4.3";
 
   src = fetchFromGitHub {
     owner = "Baldomo";
     repo = "open-in-mpv";
     rev = "v${version}";
-    hash = "sha256-XlP8bGlftyNHoJI+yiVHVvd2Qa80miJdXqt+qljYNys=";
+    hash = "sha256-mr1c2L5D1v+4VoPA4i5q7/RCdWLLZ1UfTGayiG5Nm6M=";
   };
 
   vendorHash = "sha256-G6GZO2+CfEAYcf7zBcqDa808A0eJjM8dq7+4VGZ+P4c=";
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   postInstall = ''
     install -Dm444 -t $out/share/applications scripts/open-in-mpv.desktop

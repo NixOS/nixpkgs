@@ -1,4 +1,8 @@
-{ lib, fetchFromGitHub, ocamlPackages }:
+{
+  lib,
+  fetchFromGitHub,
+  ocamlPackages,
+}:
 
 ocamlPackages.buildDunePackage rec {
   pname = "beluga";
@@ -7,7 +11,7 @@ ocamlPackages.buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "Beluga-lang";
     repo = "Beluga";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-QUZ3mmd0gBQ+hnAeo/TbvFsETnThAdAoQyfpz2F//4g=";
   };
 

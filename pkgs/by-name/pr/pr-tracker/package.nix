@@ -1,9 +1,10 @@
-{ rustPlatform
-, lib
-, fetchzip
-, openssl
-, pkg-config
-, systemd
+{
+  rustPlatform,
+  lib,
+  fetchzip,
+  openssl,
+  pkg-config,
+  systemd,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -15,10 +16,14 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-O+dtGxVhn3hW+vFQzEt7kQRTnZgc1R938BJ6pAkIW4E=";
   };
 
-  cargoHash = "sha256-t+jiOr5pjJNMpaOLYKlk194b2njT1XWKKlPQtKsUu3E=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-4RCgu6t8qbOfTpl3rX35f/fqyMWGBbsnw1TYhhLnxZ4=";
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openssl systemd ];
+  buildInputs = [
+    openssl
+    systemd
+  ];
 
   meta = with lib; {
     changelog = "https://git.qyliss.net/pr-tracker/plain/NEWS?h=${version}";
@@ -30,7 +35,10 @@ rustPlatform.buildRustPackage rec {
     platforms = platforms.linux;
     homepage = "https://git.qyliss.net/pr-tracker";
     license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ qyliss sumnerevans ];
+    maintainers = with maintainers; [
+      qyliss
+      sumnerevans
+    ];
     mainProgram = "pr-tracker";
   };
 }

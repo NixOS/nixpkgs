@@ -1,10 +1,18 @@
-{ fetchurl, fetchpatch, lib, stdenv }:
+{
+  fetchurl,
+  fetchpatch,
+  lib,
+  stdenv,
+}:
 
 stdenv.mkDerivation rec {
   pname = "gsl";
   version = "2.8";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchurl {
     url = "mirror://gnu/gsl/${pname}-${version}.tar.gz";
@@ -19,9 +27,15 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  preConfigure = if (lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11" && stdenv.hostPlatform.isDarwin) then ''
-    MACOSX_DEPLOYMENT_TARGET=10.16
-  '' else null;
+  preConfigure =
+    if
+      (lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11" && stdenv.hostPlatform.isDarwin)
+    then
+      ''
+        MACOSX_DEPLOYMENT_TARGET=10.16
+      ''
+    else
+      null;
 
   postInstall = ''
     moveToOutput bin/gsl-config "$dev"

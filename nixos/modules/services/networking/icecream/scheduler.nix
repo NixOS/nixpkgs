@@ -1,10 +1,16 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
 let
   cfg = config.services.icecream.scheduler;
-in {
+in
+{
 
   ###### interface
 
@@ -58,7 +64,7 @@ in {
 
       extraArgs = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         description = "Additional command line parameters";
         example = [ "-v" ];
       };
@@ -79,13 +85,19 @@ in {
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
-        ExecStart = escapeShellArgs ([
-          "${getBin cfg.package}/bin/icecc-scheduler"
-          "-p" (toString cfg.port)
-        ]
-        ++ optionals (cfg.netName != null) [ "-n" (toString cfg.netName) ]
-        ++ optional cfg.persistentClientConnection "-r"
-        ++ cfg.extraArgs);
+        ExecStart = escapeShellArgs (
+          [
+            "${getBin cfg.package}/bin/icecc-scheduler"
+            "-p"
+            (toString cfg.port)
+          ]
+          ++ optionals (cfg.netName != null) [
+            "-n"
+            (toString cfg.netName)
+          ]
+          ++ optional cfg.persistentClientConnection "-r"
+          ++ cfg.extraArgs
+        );
 
         DynamicUser = true;
       };

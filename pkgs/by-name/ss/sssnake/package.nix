@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace makefile --replace '-lncursesw' '-lncursesw -D_XOPEN_SOURCE=500'
   '';
-  buildInputs = [ncurses];
+  buildInputs = [ ncurses ];
   makeFlags = [
     "PREFIX=$(out)"
   ];
@@ -24,8 +24,8 @@ stdenv.mkDerivation rec {
     description = "Cli snake game that plays itself";
     mainProgram = "sssnake";
     homepage = "https://github.com/angeljumbo/sssnake";
-    license = with licenses; [mit];
+    license = with licenses; [ mit ];
     platforms = platforms.unix;
-    maintainers = with maintainers; [quantenzitrone];
+    maintainers = with maintainers; [ quantenzitrone ];
   };
 }

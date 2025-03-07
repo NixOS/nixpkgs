@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "viewflow";
     repo = "django-fsm";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-woN0F4hTaPk8HTGNT6zQlZDJ9SCVRut9maKSlDmalUE=";
   };
 

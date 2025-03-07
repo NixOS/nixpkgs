@@ -1,18 +1,20 @@
-{ lib, stdenv
-, fetchFromGitLab
-, pkg-config
-, gtk-doc
-, autoconf
-, automake
-, which
-, libtool
-, gobject-introspection
-, glib
-, gtk2
-, libGLU
-, libGL
-, pango
-, xorg
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  pkg-config,
+  gtk-doc,
+  autoconf,
+  automake,
+  which,
+  libtool,
+  gobject-introspection,
+  glib,
+  gtk2,
+  libGLU,
+  libGL,
+  pango,
+  xorg,
 }:
 
 stdenv.mkDerivation rec {

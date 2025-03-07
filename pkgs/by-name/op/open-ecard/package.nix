@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchurl, jre, pcsclite, makeDesktopItem, makeWrapper }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  jre,
+  pcsclite,
+  makeDesktopItem,
+  makeWrapper,
+}:
 
 let
   version = "1.2.4";
@@ -16,7 +24,8 @@ let
       sha256 = "0rpmyv10vjx2yfpm03mqliygcww8af2wnrnrppmsazdplksaxkhs";
     };
   };
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "open-ecard";
   inherit version;
 
@@ -33,7 +42,10 @@ in stdenv.mkDerivation rec {
     comment = "Client side implementation of the eCard-API-Framework";
     icon = "oec_logo_bg-transparent.svg";
     exec = pname;
-    categories = [ "Utility" "Security" ];
+    categories = [
+      "Utility"
+      "Security"
+    ];
   };
 
   installPhase = ''

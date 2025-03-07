@@ -1,8 +1,16 @@
-{ lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, m4, bison }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoconf,
+  automake,
+  libtool,
+  m4,
+  bison,
+}:
 
 let
-  openbsd_version =
-    "OPENBSD_6_8"; # This has to be equal to ${src}/OPENBSD_BRANCH
+  openbsd_version = "OPENBSD_6_8"; # This has to be equal to ${src}/OPENBSD_BRANCH
   openbsd = fetchFromGitHub {
     name = "portable";
     owner = "openbgpd-portable";
@@ -10,7 +18,8 @@ let
     rev = openbsd_version;
     sha256 = "sha256-vCVK5k4g6aW2z2fg7Kv0uvkX7f34aRc8K2myb3jjl6w=";
   };
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "opengpd";
   version = "6.8p0";
 
@@ -21,7 +30,13 @@ in stdenv.mkDerivation rec {
     sha256 = "sha256-TKs6tt/SCWes6kYAGIrSShZgOLf7xKh26xG3Zk7wCCw=";
   };
 
-  nativeBuildInputs = [ autoconf automake libtool m4 bison ];
+  nativeBuildInputs = [
+    autoconf
+    automake
+    libtool
+    m4
+    bison
+  ];
 
   preConfigure = ''
     mkdir ./openbsd
@@ -42,8 +57,7 @@ in stdenv.mkDerivation rec {
   env.NIX_CFLAGS_COMPILE = "-fcommon";
 
   meta = with lib; {
-    description =
-      "A free implementation of the Border Gateway Protocol, Version 4. It allows ordinary machines to be used as routers exchanging routes with other systems speaking the BGP protocol";
+    description = "A free implementation of the Border Gateway Protocol, Version 4. It allows ordinary machines to be used as routers exchanging routes with other systems speaking the BGP protocol";
     license = licenses.isc;
     homepage = "http://www.openbgpd.org/";
     maintainers = with maintainers; [ kloenk ];

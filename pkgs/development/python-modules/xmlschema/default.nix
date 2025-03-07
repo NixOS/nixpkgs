@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sissaschool";
     repo = "xmlschema";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-7RA9lQwuty8aZghwTKNbU+oL+BATH2FVIRQBe9fIpHI=";
   };
 

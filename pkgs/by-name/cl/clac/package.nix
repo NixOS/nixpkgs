@@ -1,14 +1,19 @@
-{ lib, stdenv, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "clac";
-  version = "0.3.3-unstable-2021-09-06";
+  version = "0.3.4";
 
   src = fetchFromGitHub {
     owner = "soveran";
     repo = "clac";
-    rev = "beae8c4bc89912f4cd66bb875585fa471692cd54";
-    sha256 = "XaULDkFF9OZW7Hbh60wbGgvCJ6L+3gZNGQ9uQv3G0zU=";
+    tag = finalAttrs.version;
+    hash = "sha256-DcW35jKIZQqkNa5Y6am2e5/TAEg3Fo2n+fHG3nOpNzM=";
   };
 
   makeFlags = [ "PREFIX=$(out)" ];
@@ -18,12 +23,18 @@ stdenv.mkDerivation rec {
     cp README* LICENSE "$out/share/doc/clac"
   '';
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Interactive stack-based calculator";
     homepage = "https://github.com/soveran/clac";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ raskin ];
-    platforms = platforms.unix;
+    changelog = "https://github.com/soveran/clac/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [
+      gepbird
+      raskin
+    ];
+    platforms = lib.platforms.unix;
     mainProgram = "clac";
   };
-}
+})

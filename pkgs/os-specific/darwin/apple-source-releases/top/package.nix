@@ -1,5 +1,5 @@
 {
-  apple-sdk_11,
+  apple-sdk,
   fetchpatch2,
   libutil,
   mkAppleDerivation,
@@ -8,12 +8,12 @@
 }:
 
 let
-  xnu = apple-sdk_11.sourceRelease "xnu";
+  xnu = apple-sdk.sourceRelease "xnu";
 in
 mkAppleDerivation {
   releaseName = "top";
 
-  xcodeHash = "sha256-b7Qv9ks9JmilY9GaEU3/iXoHBNyHRYr4IB0jVf0fYdo=";
+  xcodeHash = "sha256-YeBhEstvPh8IX8ArVc7U8IRU6vqPoOE6kBTqcqZonGc=";
 
   patches = [
     # Upstream removed aarch64 support from the 137 source release, but the removal can be reverted.
@@ -33,7 +33,6 @@ mkAppleDerivation {
   '';
 
   buildInputs = [
-    apple-sdk_11
     libutil
     ncurses
   ];

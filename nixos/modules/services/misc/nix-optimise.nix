@@ -22,6 +22,34 @@ in
           which the optimiser will run.
         '';
       };
+
+      randomizedDelaySec = lib.mkOption {
+        default = "1800";
+        type = lib.types.singleLineStr;
+        example = "45min";
+        description = ''
+          Add a randomized delay before the optimizer will run.
+          The delay will be chosen between zero and this value.
+          This value must be a time span in the format specified by
+          {manpage}`systemd.time(7)`
+        '';
+      };
+
+      persistent = lib.mkOption {
+        default = true;
+        type = lib.types.bool;
+        example = false;
+        description = ''
+          Takes a boolean argument. If true, the time when the service
+          unit was last triggered is stored on disk. When the timer is
+          activated, the service unit is triggered immediately if it
+          would have been triggered at least once during the time when
+          the timer was inactive. Such triggering is nonetheless
+          subject to the delay imposed by RandomizedDelaySec=. This is
+          useful to catch up on missed runs of the service when the
+          system was powered down.
+        '';
+      };
     };
   };
 
@@ -44,8 +72,8 @@ in
 
       timers.nix-optimise = lib.mkIf cfg.automatic {
         timerConfig = {
-          Persistent = true;
-          RandomizedDelaySec = 1800;
+          RandomizedDelaySec = cfg.randomizedDelaySec;
+          Persistent = cfg.persistent;
         };
       };
     };

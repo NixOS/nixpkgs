@@ -1,8 +1,9 @@
-{ lib
-, fetchFromGitHub
-, unstableGitUpdater
-, stdenv
-, openssl
+{
+  lib,
+  fetchFromGitHub,
+  unstableGitUpdater,
+  stdenv,
+  openssl,
 }:
 
 stdenv.mkDerivation rec {
@@ -32,7 +33,10 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/catchpoint/Networking.traceroute/";
     changelog = "https://github.com/catchpoint/Networking.traceroute/blob/${src.rev}/ChangeLog";
-    license = with licenses; [ gpl2Only lgpl21Only ];
+    license = with licenses; [
+      gpl2Only
+      lgpl21Only
+    ];
     mainProgram = "traceroute";
     maintainers = with maintainers; [ nicoo ];
     platforms = platforms.all;

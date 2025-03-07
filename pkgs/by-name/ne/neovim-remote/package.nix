@@ -1,11 +1,13 @@
-{ lib
-, fetchFromGitHub
-, python3
-, neovim
-, fetchpatch
+{
+  lib,
+  fetchFromGitHub,
+  python3,
+  neovim,
+  fetchpatch,
 }:
 
-with python3.pkgs; buildPythonApplication rec {
+with python3.pkgs;
+buildPythonApplication rec {
   pname = "neovim-remote";
   version = "2.5.1";
 

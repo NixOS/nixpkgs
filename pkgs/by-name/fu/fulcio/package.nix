@@ -3,7 +3,7 @@
   buildGoModule,
   fetchFromGitHub,
 
-  # required for completion and cross-complilation
+  # required for completion and cross-compilation
   installShellFiles,
   buildPackages,
   stdenv,
@@ -15,13 +15,13 @@
 
 buildGoModule rec {
   pname = "fulcio";
-  version = "1.6.5";
+  version = "1.6.6";
 
   src = fetchFromGitHub {
     owner = "sigstore";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-TCWZrTqNXTcTsLqTnwnJPXN+kMYVVwLm2J3Y6gd2CV8=";
+    hash = "sha256-CfkHGHxeDUxHWX98FgmA4RNCVlgi9XA9eYkb+G5cZTA=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -33,7 +33,7 @@ buildGoModule rec {
       find "$out" -name .git -print0 | xargs -0 rm -rf
     '';
   };
-  vendorHash = "sha256-3E2Y0UlJMjTiM4ILEiaNqVmt4fWMvCRAqzm//CvRIl4=";
+  vendorHash = "sha256-qQsaX/xaqD1qb9wH6riohm+NU49cN3EkO012oz9n4tw=";
 
   nativeBuildInputs = [ installShellFiles ];
 

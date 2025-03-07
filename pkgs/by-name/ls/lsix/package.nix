@@ -1,4 +1,10 @@
-{ lib, stdenvNoCC, fetchFromGitHub, makeWrapper, imagemagick }:
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  makeWrapper,
+  imagemagick,
+}:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "lsix";
@@ -23,7 +29,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   postFixup = ''
     wrapProgram $out/bin/lsix \
-      --prefix PATH : ${lib.makeBinPath [ (imagemagick.override { ghostscriptSupport = true;}) ]}
+      --prefix PATH : ${lib.makeBinPath [ (imagemagick.override { ghostscriptSupport = true; }) ]}
   '';
 
   meta = with lib; {
@@ -31,7 +37,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://github.com/hackerb9/lsix";
     license = licenses.gpl3Only;
     platforms = platforms.all;
-    maintainers = with maintainers; [ justinlime kidonng ];
+    maintainers = with maintainers; [
+      justinlime
+      kidonng
+    ];
     mainProgram = "lsix";
   };
 })

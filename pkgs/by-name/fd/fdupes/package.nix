@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, ncurses
-, pcre2
-, sqlite
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  ncurses,
+  pcre2,
+  sqlite,
 }:
 
 stdenv.mkDerivation rec {

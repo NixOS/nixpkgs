@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-humanize";
     repo = pname;
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-C6u7t7RedInHJtN4yHli22Wc7llnrxn4YeKssyQ+hS4=";
   };
 

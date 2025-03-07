@@ -1,25 +1,29 @@
 # Setup hook for setuptools.
+# shellcheck shell=bash
+
 echo "Sourcing setuptools-build-hook"
 
 setuptoolsBuildPhase() {
     echo "Executing setuptoolsBuildPhase"
-    local args setuptools_has_parallel=@setuptools_has_parallel@
+    local setuptools_has_parallel=@setuptools_has_parallel@
     runHook preBuild
 
     cp -f @setuppy@ nix_run_setup
-    args=""
-    if [ -n "$setupPyGlobalFlags" ]; then
-        args+="$setupPyGlobalFlags"
+    local -a flagsArray=()
+    if [ -n "${setupPyGlobalFlags[*]-}" ]; then
+        concatTo flagsArray setupPyGlobalFlags
     fi
     if [ -n "$enableParallelBuilding" ]; then
         if [ -n "$setuptools_has_parallel" ]; then
-            setupPyBuildFlags+=" --parallel $NIX_BUILD_CORES"
+            appendToVar setupPyBuildFlags --parallel "$NIX_BUILD_CORES"
         fi
     fi
-    if [ -n "$setupPyBuildFlags" ]; then
-        args+=" build_ext $setupPyBuildFlags"
+    if [ -n "${setupPyBuildFlags[*]-}" ]; then
+        flagsArray+=(build_ext)
+        concatTo flagsArray setupPyBuildFlags
     fi
-    eval "@pythonInterpreter@ nix_run_setup $args bdist_wheel"
+    echoCmd 'setup.py build flags' "${flagsArray[@]}"
+    @pythonInterpreter@ nix_run_setup "${flagsArray[@]}" bdist_wheel
 
     runHook postBuild
     echo "Finished executing setuptoolsBuildPhase"

@@ -1,4 +1,9 @@
-{ mkDerivation, haskellPackages, fetchFromGitHub, lib }:
+{
+  mkDerivation,
+  haskellPackages,
+  fetchFromGitHub,
+  lib,
+}:
 
 mkDerivation {
   pname = "fffuu";

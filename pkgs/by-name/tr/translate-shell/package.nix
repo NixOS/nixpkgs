@@ -1,4 +1,16 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper, curl, fribidi, rlwrap, gawk, groff, ncurses, hexdump }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  curl,
+  fribidi,
+  rlwrap,
+  gawk,
+  groff,
+  ncurses,
+  hexdump,
+}:
 
 stdenv.mkDerivation rec {
   pname = "translate-shell";
@@ -17,15 +29,17 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/trans \
-      --prefix PATH : ${lib.makeBinPath [
-        gawk
-        curl
-        ncurses
-        rlwrap
-        groff
-        fribidi
-        hexdump
-      ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          gawk
+          curl
+          ncurses
+          rlwrap
+          groff
+          fribidi
+          hexdump
+        ]
+      }
   '';
 
   meta = with lib; {

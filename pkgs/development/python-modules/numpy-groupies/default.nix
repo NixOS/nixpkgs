@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ml31415";
     repo = "numpy-groupies";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Eu+5SR28jIasKe1p7rvbq2yo3PGZRQWWdG3A5vGhnyM=";
   };
 

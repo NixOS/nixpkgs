@@ -1,30 +1,35 @@
-{ stdenv
-, lib
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, glib
-, gobject-introspection
-, flex
-, bison
-, vala
-, gettext
-, gnome
-, gtk-doc
-, docbook_xsl
-, docbook_xml_dtd_43
+{
+  stdenv,
+  lib,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  glib,
+  gobject-introspection,
+  flex,
+  bison,
+  vala,
+  gettext,
+  gnome,
+  gtk-doc,
+  docbook_xsl,
+  docbook_xml_dtd_43,
 }:
 
 stdenv.mkDerivation rec {
   pname = "template-glib";
-  version = "3.36.2";
+  version = "3.36.3";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [
+    "out"
+    "dev"
+    "devdoc"
+  ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    hash = "sha256-ACDzpAGIjOdjs6F1CML1jpGXKkg6DFR6/bfMviVhmUg=";
+    url = "mirror://gnome/sources/template-glib/${lib.versions.majorMinor version}/template-glib-${version}.tar.xz";
+    hash = "sha256-1SizWyz5Dgfa5Q4l4S+62w6wSPV/1RUc+fbpjM4d8g4=";
   };
 
   nativeBuildInputs = [
@@ -54,7 +59,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "template-glib";
       versionPolicy = "odd-unstable";
     };
   };

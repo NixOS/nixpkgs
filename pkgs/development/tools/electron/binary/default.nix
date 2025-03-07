@@ -7,8 +7,7 @@ in
 let
   mkElectron = callPackage ./generic.nix { };
 in
-lib.mapAttrs' (majorVersion: info:
-  lib.nameValuePair
-    "electron_${majorVersion}-bin"
-    (mkElectron info.version info.hashes)
+lib.mapAttrs' (
+  majorVersion: info:
+  lib.nameValuePair "electron_${majorVersion}-bin" (mkElectron info.version info.hashes)
 ) infoJson

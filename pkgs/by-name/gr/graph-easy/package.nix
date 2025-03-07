@@ -1,4 +1,8 @@
-{ lib, perlPackages, fetchurl }:
+{
+  lib,
+  perlPackages,
+  fetchurl,
+}:
 
 perlPackages.buildPerlPackage {
   pname = "graph-easy";

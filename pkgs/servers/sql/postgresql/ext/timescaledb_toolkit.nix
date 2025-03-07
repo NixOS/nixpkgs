@@ -1,10 +1,11 @@
-{ lib
-, fetchFromGitHub
-, buildPgrxExtension
-, postgresql
-, nixosTests
-, cargo-pgrx_0_12_6
-, nix-update-script
+{
+  lib,
+  fetchFromGitHub,
+  buildPgrxExtension,
+  postgresql,
+  nixosTests,
+  cargo-pgrx_0_12_6,
+  nix-update-script,
 }:
 
 (buildPgrxExtension.override { cargo-pgrx = cargo-pgrx_0_12_6; }) rec {
@@ -20,7 +21,8 @@
     hash = "sha256-7yUbtWbYL4AnuUX8OXG4OVqYCY2Lf0pISSTlcFdPqog=";
   };
 
-  cargoHash = "sha256-+uD4UU7QwNISQZ7a2kDkY/y3fQWk/K0fFcrFq4yq6RU=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-g5pIIifsJAs0C02o/+y+ILLnTXFqwG9tZcvY6NqfnDA=";
   buildAndTestSubdir = "extension";
 
   passthru = {

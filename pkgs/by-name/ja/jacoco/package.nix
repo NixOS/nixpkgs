@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchzip
-, makeWrapper
-, jre
+{
+  lib,
+  stdenv,
+  fetchzip,
+  makeWrapper,
+  jre,
 }:
 
 stdenv.mkDerivation rec {
@@ -15,7 +16,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-7bN68fcUycehJDJeBAyCloz8rb3SXgjwmC9zpob8YdI=";
   };
 
-  outputs = [ "out" "doc" ];
+  outputs = [
+    "out"
+    "doc"
+  ];
 
   nativeBuildInputs = [ makeWrapper ];
 

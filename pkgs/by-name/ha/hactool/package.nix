@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 
 stdenv.mkDerivation rec {
   pname = "hactool";
@@ -21,7 +25,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   installPhase = ''
-    install -D hactool $out/bin/hactool
+    install -D hactool${stdenv.hostPlatform.extensions.executable} $out/bin/hactool${stdenv.hostPlatform.extensions.executable}
   '';
 
   meta = with lib; {
@@ -30,7 +34,7 @@ stdenv.mkDerivation rec {
     longDescription = "A tool to view information about, decrypt, and extract common file formats for the Nintendo Switch, especially Nintendo Content Archives";
     license = licenses.isc;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = platforms.all;
     mainProgram = "hactool";
   };
 }

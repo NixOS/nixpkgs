@@ -9,20 +9,20 @@
 }:
 
 let
-  version = "2024.11.1";
+  version = "2025.1.3";
 
   product =
     if proEdition then
       {
         productName = "pro";
         productDesktop = "Burp Suite Professional Edition";
-        hash = "sha256-T2mihC/E9P2ARDs3aN6Acg62W86zNR4rTjngriGl3aU=";
+        hash = "sha256-BlVAQe6KLn9THVJTk+rDZoLeAbIW8IA3rDpS6xPhDLo=";
       }
     else
       {
         productName = "community";
         productDesktop = "Burp Suite Community Edition";
-        hash = "sha256-feTqtqnYtT7i+HtJAERcKK3QAdPkXm+JUtl6JZLEHJA=";
+        hash = "sha256-M1T7atQmB0fRmH9NDZ3uyc3rQpqBc2u3WRZO5rDBj+g=";
       };
 
   src = fetchurl {
@@ -72,7 +72,7 @@ buildFHSEnv {
       libdrm
       udev
       libxkbcommon
-      mesa
+      libgbm
       nspr
       nss
       pango

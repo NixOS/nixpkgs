@@ -1,4 +1,9 @@
-{ lib, stdenvNoCC, fetchFromGitHub, python3 }:
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  python3,
+}:
 
 stdenvNoCC.mkDerivation rec {
   pname = "shellnoob";

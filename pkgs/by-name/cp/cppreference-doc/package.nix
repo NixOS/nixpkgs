@@ -1,12 +1,16 @@
-{ lib, stdenvNoCC, fetchurl }:
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+}:
 
 stdenvNoCC.mkDerivation rec {
   pname = "cppreference-doc";
-  version = "20241110";
+  version = "20250209";
 
   src = fetchurl {
     url = "https://github.com/PeterFeicht/${pname}/releases/download/v${version}/html-book-${version}.tar.xz";
-    hash = "sha256-Qx6Ahi63D9R5OmDX07bBPIYFKEl4+eoFKVcuj9FWLMY=";
+    hash = "sha256-rFBnGh9S1/CrCRHRRFDrNejC+BLt0OQmss0ePZ25HW8=";
   };
 
   sourceRoot = ".";

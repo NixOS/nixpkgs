@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "archspec";
-  version = "0.2.4";
+  version = "0.2.5";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -19,9 +19,9 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "archspec";
     repo = "archspec";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-Xg1XdmKk2b6fqzOdedU3SGIgy65CjExxDByt/Xvmr24=";
+    hash = "sha256-BfjFNwfNyT/da0Z5/bBdbv+RT8lqM0s2q64cz79vuF0=";
   };
 
   build-system = [ poetry-core ];
@@ -38,7 +38,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library for detecting, labeling, and reasoning about microarchitectures";
     homepage = "https://archspec.readthedocs.io/";
-    changelog = "https://github.com/archspec/archspec/releases/tag/v${version}";
+    changelog = "https://github.com/archspec/archspec/releases/tag/${src.tag}";
     license = with licenses; [
       mit
       asl20

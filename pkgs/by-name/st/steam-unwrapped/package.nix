@@ -1,16 +1,31 @@
-{ lib, stdenv, fetchurl, bash }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  bash,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "steam-unwrapped";
-  version = "1.0.0.81";
+  version = "1.0.0.82";
 
   src = fetchurl {
     # use archive url so the tarball doesn't 404 on a new release
     url = "https://repo.steampowered.com/steam/archive/stable/steam_${finalAttrs.version}.tar.gz";
-    hash = "sha256-Gia5182s4J4E3Ia1EeC5kjJX9mSltsr+b+1eRtEXtPk=";
+    hash = "sha256-r6Lx3WJx/StkW6MLjzq0Cv02VONUJBoxy9UQAPfm/Hc=";
   };
 
-  makeFlags = [ "DESTDIR=$(out)" "PREFIX=" ];
+  patches = [
+    # We copy the bootstrap file from the store, where it's read-only,
+    # so future attempts to update it with bare "cp" will fail.
+    # So, use "cp -f" to force an overwrite.
+    ./force-overwrite-bootstrap.patch
+  ];
+
+  makeFlags = [
+    "DESTDIR=$(out)"
+    "PREFIX="
+  ];
 
   postInstall = ''
     rm $out/bin/steamdeps

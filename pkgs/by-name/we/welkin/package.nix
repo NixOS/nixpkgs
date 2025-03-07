@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchsvn, jre, makeWrapper }:
+{
+  lib,
+  stdenv,
+  fetchsvn,
+  jre,
+  makeWrapper,
+}:
 
 stdenv.mkDerivation rec {
   pname = "welkin";
@@ -30,7 +36,7 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [
       raskin
     ];
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.bsd3;
     platforms = with lib.platforms; unix;

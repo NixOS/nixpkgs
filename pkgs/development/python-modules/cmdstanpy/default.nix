@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
   cmdstan,
   setuptools,
   pandas,
@@ -16,19 +16,18 @@
 
 buildPythonPackage rec {
   pname = "cmdstanpy";
-  version = "1.2.4";
+  version = "1.2.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "stan-dev";
     repo = "cmdstanpy";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-SKDqLvWbzaBcL13E87kcphBJNIZfdkPp2g4SIDEKA0U=";
+    tag = "v${version}";
+    hash = "sha256-/MiWawB1Y4/eMBHXQLjd+P+Pe8EtsLbGFrzQa1RNf6g=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./use-nix-cmdstan-path.patch;
+    (replaceVars ./use-nix-cmdstan-path.patch {
       cmdstan = "${cmdstan}/opt/cmdstan";
     })
   ];

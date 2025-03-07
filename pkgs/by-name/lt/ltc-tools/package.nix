@@ -1,4 +1,12 @@
-{lib, stdenv, fetchFromGitHub, pkg-config, libltc, libsndfile, jack2}:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  libltc,
+  libsndfile,
+  jack2,
+}:
 
 stdenv.mkDerivation rec {
   pname = "ltc-tools";
@@ -12,7 +20,11 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libltc libsndfile jack2 ];
+  buildInputs = [
+    libltc
+    libsndfile
+    jack2
+  ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 

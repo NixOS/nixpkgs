@@ -1,8 +1,7 @@
-declare composerVendor
-declare version
-declare composerNoDev
-declare composerNoPlugins
-declare composerNoScripts
+declare -g version
+declare -g pname
+declare -g composerVendor
+declare -g -i composerStrictValidation="${composerStrictValidation:-0}"
 
 preConfigureHooks+=(composerInstallConfigureHook)
 preBuildHooks+=(composerInstallBuildHook)
@@ -17,42 +16,21 @@ composerInstallConfigureHook() {
     setComposerRootVersion
 
     if [[ ! -e "${composerVendor}" ]]; then
-        echo "No local composer vendor found."
+        echo "No local composer vendor found." >&2
         exit 1
     fi
 
-    install -Dm644 ${composerVendor}/composer.{json,lock} .
+    install -Dm644 ${composerVendor}/composer.json .
 
-    if [[ ! -f "composer.lock" ]]; then
-        composer \
-            --no-install \
-            --no-interaction \
-            --no-progress \
-            --optimize-autoloader \
-            ${composerNoDev:+--no-dev} \
-            ${composerNoPlugins:+--no-plugins} \
-            ${composerNoScripts:+--no-scripts} \
-            update
-
-        install -Dm644 composer.lock -t $out/
-
-        echo
-        echo -e "\e[31mERROR: No composer.lock found\e[0m"
-        echo
-        echo -e '\e[31mNo composer.lock file found, consider adding one to your repository to ensure reproducible builds.\e[0m'
-        echo -e "\e[31mIn the meantime, a composer.lock file has been generated for you in $out/composer.lock\e[0m"
-        echo
-        echo -e '\e[31mTo fix the issue:\e[0m'
-        echo -e "\e[31m1. Copy the composer.lock file from $out/composer.lock to the project's source:\e[0m"
-        echo -e "\e[31m  cp $out/composer.lock <path>\e[0m"
-        echo -e '\e[31m2. Add the composerLock attribute, pointing to the copied composer.lock file:\e[0m'
-        echo -e '\e[31m  composerLock = ./composer.lock;\e[0m'
-        echo
-
-        exit 1
+    if [[ -f "${composerVendor}/composer.lock" ]]; then
+        install -Dm644 ${composerVendor}/composer.lock .
     fi
 
-    chmod +w composer.{json,lock}
+    if [[ -f "composer.lock" ]]; then
+        chmod +w composer.lock
+    fi
+
+    chmod +w composer.json
 
     echo "Finished composerInstallConfigureHook"
 }
@@ -81,10 +59,11 @@ composerInstallInstallHook() {
     cp -r . "$out"/share/php/"${pname}"/
 
     # Create symlinks for the binaries.
-    jq -r -c 'try (.bin[] | select(test(".bat$")? | not) )' composer.json | while read -r bin; do
+    mapfile -t BINS < <(jq -r -c 'try (.bin[] | select(test(".bat$")? | not) )' composer.json)
+    for bin in "${BINS[@]}"; do
         echo -e "\e[32mCreating symlink ${bin}...\e[0m"
-        mkdir -p "$out"/bin
-        ln -s "$out"/share/php/"${pname}"/"$bin" "$out"/bin/"$(basename "$bin")"
+        mkdir -p "$out/bin"
+        ln -s "$out/share/php/${pname}/${bin}" "$out/bin/$(basename "$bin")"
     done
 
     echo "Finished composerInstallInstallHook"

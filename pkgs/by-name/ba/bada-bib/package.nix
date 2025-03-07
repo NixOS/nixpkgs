@@ -1,20 +1,21 @@
-{ lib
-, meson
-, ninja
-, fetchFromGitHub
-, appstream-glib
-, desktop-file-utils
-, gdk-pixbuf
-, gettext
-, glib
-, gobject-introspection
-, gtk4
-, gtksourceview5
-, libadwaita
-, libxml2
-, pkg-config
-, python3Packages
-, wrapGAppsHook4
+{
+  lib,
+  meson,
+  ninja,
+  fetchFromGitHub,
+  appstream-glib,
+  desktop-file-utils,
+  gdk-pixbuf,
+  gettext,
+  glib,
+  gobject-introspection,
+  gtk4,
+  gtksourceview5,
+  libadwaita,
+  libxml2,
+  pkg-config,
+  python3Packages,
+  wrapGAppsHook4,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -25,7 +26,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "RogerCrocker";
     repo = "BadaBib";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     sha256 = "sha256-8lpkmQCVh94+qhFJijAIVyYeJRFz2u/OYR1C5E+gtOE=";
   };
 

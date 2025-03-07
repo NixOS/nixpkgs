@@ -24,7 +24,7 @@ insert_final_newline = false
 # see https://nixos.org/nixpkgs/manual/#chap-conventions
 
 # Match json/lockfiles/markdown/nix/perl/python/ruby/shell/docbook files, set indent to spaces
-[*.{json,lock,md,nix,pl,pm,py,rb,sh,xml}]
+[*.{bash,json,lock,md,nix,pl,pm,py,rb,sh,xml}]
 indent_style = space
 
 # Match docbook files, set indent width of one
@@ -36,7 +36,7 @@ indent_size = 1
 indent_size = 2
 
 # Match perl/python/shell scripts, set indent width of four
-[*.{pl,pm,py,sh}]
+[*.{bash,pl,pm,py,sh}]
 indent_size = 4
 
 # Match gemfiles, set indent to spaces with width of two
@@ -90,7 +90,7 @@ indent_style = unset
 insert_final_newline = unset
 trim_trailing_whitespace = unset
 
-[pkgs/development/compilers/elm/registry.dat]
+[registry.dat]
 end_of_line = unset
 insert_final_newline = unset
 

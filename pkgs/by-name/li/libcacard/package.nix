@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, pkg-config, glib, nss }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  glib,
+  nss,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libcacard";
@@ -15,7 +22,10 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ glib nss ];
+  buildInputs = [
+    glib
+    nss
+  ];
 
   meta = with lib; {
     description = "Smart card emulation library";

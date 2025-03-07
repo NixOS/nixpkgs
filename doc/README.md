@@ -95,6 +95,7 @@ Inlining HTML is not allowed. Parts of the documentation gets rendered to variou
 #### Roles
 
 If you want to link to a man page, you can use `` {manpage}`nix.conf(5)` ``. The references will turn into links when a mapping exists in [`doc/manpage-urls.json`](./manpage-urls.json).
+Please keep the `manpage-urls.json` file alphabetically sorted.
 
 A few markups for other kinds of literals are also available:
 

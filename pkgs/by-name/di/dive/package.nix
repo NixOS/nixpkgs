@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, buildGoModule
-, fetchFromGitHub
-, fetchpatch
-, pkg-config
-, btrfs-progs
-, gpgme
-, lvm2
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  fetchpatch,
+  pkg-config,
+  btrfs-progs,
+  gpgme,
+  lvm2,
 }:
 
 buildGoModule rec {
@@ -24,7 +25,11 @@ buildGoModule rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ btrfs-progs gpgme lvm2 ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    btrfs-progs
+    gpgme
+    lvm2
+  ];
 
   patches = [
     # fix scrolling
@@ -46,8 +51,11 @@ buildGoModule rec {
     })
   ];
 
-
-  ldflags = [ "-s" "-w" "-X main.version=${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.version=${version}"
+  ];
 
   meta = with lib; {
     description = "Tool for exploring each layer in a docker image";

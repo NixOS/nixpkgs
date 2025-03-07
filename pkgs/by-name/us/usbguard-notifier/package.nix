@@ -34,8 +34,17 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ autoreconfHook pkg-config asciidoc ];
-  buildInputs = [ libqb usbguard librsvg libnotify ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+    asciidoc
+  ];
+  buildInputs = [
+    libqb
+    usbguard
+    librsvg
+    libnotify
+  ];
 
   configureFlags = [ "CPPFLAGS=-I${catch2}/include/catch2" ];
 
@@ -51,5 +60,6 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ fpletz ];
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2Plus;
+    mainProgram = "usbguard-notifier";
   };
 }

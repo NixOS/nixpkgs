@@ -1,8 +1,11 @@
 {
   lib,
+  beautifulsoup4,
   buildPythonPackage,
   fetchFromGitHub,
   griffe,
+  inline-snapshot,
+  mkdocs-autorefs,
   mkdocs-material,
   mkdocstrings,
   pdm-backend,
@@ -12,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "mkdocstrings-python";
-  version = "1.12.2";
+  version = "1.13.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -20,18 +23,21 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mkdocstrings";
     repo = "python";
-    rev = "refs/tags/${version}";
-    hash = "sha256-dc9RXbrwZS/7eAF0BrGS2kJxG62rB5RLxf3yNZ6+g4Q=";
+    tag = version;
+    hash = "sha256-NgVCKV3AWk4pRT7/+6YGXmKSZETL4ZOWDWGeb/qjdng=";
   };
 
   build-system = [ pdm-backend ];
 
   dependencies = [
     griffe
+    mkdocs-autorefs
     mkdocstrings
   ];
 
   nativeCheckInputs = [
+    beautifulsoup4
+    inline-snapshot
     mkdocs-material
     pytestCheckHook
   ];
@@ -41,6 +47,8 @@ buildPythonPackage rec {
   disabledTests = [
     # Tests fails with AssertionError
     "test_windows_root_conversion"
+    # TypeError
+    "test_format_code"
   ];
 
   meta = with lib; {

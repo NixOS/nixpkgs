@@ -1,17 +1,21 @@
-{ buildGoModule, fetchFromGitHub, lib }:
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+}:
 
 buildGoModule rec {
   pname = "grafana-dash-n-grab";
-  version = "0.7.1";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "esnet";
     repo = "gdg";
-    sha256 = "sha256-oJ0wXBfanpYS95ET+7lpKzLdQG5g/uKFs5+Qd+hPjHo=";
+    sha256 = "sha256-0F4kdyQ4TXV2vb2IkPx7CisTmJAQjlSRtOAFhmZqaD8=";
   };
 
-  vendorHash = "sha256-jnPnWcow5SiFHGfoAxBR8ncGHLyS7sFKNJT8YuUTg88=";
+  vendorHash = "sha256-Ufg4eeSLRHFkI577hPT5KWOf82o7//Y3n5GAlZl8IoQ=";
 
   ldflags = [
     "-s"
@@ -30,7 +34,6 @@ buildGoModule rec {
     homepage = "https://github.com/esnet/gdg";
     maintainers = with maintainers; teams.bitnomial.members;
     mainProgram = "gdg";
-    changelog =
-      "https://github.com/esnet/gdg/releases/tag/v${version}";
+    changelog = "https://github.com/esnet/gdg/releases/tag/v${version}";
   };
 }

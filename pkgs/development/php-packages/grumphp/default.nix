@@ -6,16 +6,16 @@
 
 php.buildComposerProject2 (finalAttrs: {
   pname = "grumphp";
-  version = "2.9.0";
+  version = "2.11.0";
 
   src = fetchFromGitHub {
     owner = "phpro";
     repo = "grumphp";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-6SO5LUK39pEVcJqL86CwuyU7xpi8ydJxin5sHqBYwmg=";
+    hash = "sha256-JRLx9laFdtHSwyUmnAQY4Rcaac6buhbA2vfBCIAzk04=";
   };
 
-  vendorHash = "sha256-pupoPA4VZKACv4nPiRIwe1BOXojnnXrjKOpq0JGl9Uc=";
+  vendorHash = "sha256-ptRWX0W0UylsaDjpjdaYq+KBx9aAxYzKGeI44lby+OY=";
 
   meta = {
     changelog = "https://github.com/phpro/grumphp/releases/tag/v${finalAttrs.version}";

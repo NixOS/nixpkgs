@@ -1,4 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, buildPackages, perl, which, ncurses, nukeReferences, freebsd, ed }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  buildPackages,
+  perl,
+  which,
+  ncurses,
+  nukeReferences,
+  freebsd,
+  ed,
+}:
 
 let
   dialect = lib.last (lib.splitString "-" stdenv.hostPlatform.system);
@@ -15,29 +26,38 @@ stdenv.mkDerivation rec {
     hash = "sha256-JyvQV/JOMaL/3jUr6O0YIzJU/JcXVR65CJf5ip7334w=";
   };
 
-  postPatch = ''
-    patchShebangs --build lib/dialects/*/Mksrc
-    # Do not re-build version.h in every 'make' to allow nuke-refs below.
-    # We remove phony 'FRC' target that forces rebuilds:
-    #   'version.h: FRC ...' is translated to 'version.h: ...'.
-    sed -i lib/dialects/*/Makefile -e 's/version.h:\s*FRC/version.h:/'
-  ''
+  postPatch =
+    ''
+      patchShebangs --build lib/dialects/*/Mksrc
+      # Do not re-build version.h in every 'make' to allow nuke-refs below.
+      # We remove phony 'FRC' target that forces rebuilds:
+      #   'version.h: FRC ...' is translated to 'version.h: ...'.
+      sed -i lib/dialects/*/Makefile -e 's/version.h:\s*FRC/version.h:/'
+    ''
     # help Configure find libproc.h in $SDKROOT
-   + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    sed -i -e 's|lcurses|lncurses|g' \
-           -e "s|/Library.*/MacOSX.sdk/|\"$SDKROOT\"/|" Configure
-  '';
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      sed -i -e 's|lcurses|lncurses|g' \
+             -e "s|/Library.*/MacOSX.sdk/|\"$SDKROOT\"/|" Configure
+    '';
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ nukeReferences perl which ed ];
+  nativeBuildInputs = [
+    nukeReferences
+    perl
+    which
+    ed
+  ];
   buildInputs = [ ncurses ];
 
   # Stop build scripts from searching global include paths
   LSOF_INCLUDE = "${lib.getDev stdenv.cc.libc}/include";
-  configurePhase = let genericFlags = "LSOF_CC=$CC LSOF_AR=\"$AR cr\" LSOF_RANLIB=$RANLIB";
-    linuxFlags = lib.optionalString stdenv.hostPlatform.isLinux "LINUX_CONF_CC=$CC_FOR_BUILD";
-    freebsdFlags = lib.optionalString stdenv.hostPlatform.isFreeBSD "FREEBSD_SYS=${freebsd.sys.src}/sys";
-    in "${genericFlags} ${linuxFlags} ${freebsdFlags} ./Configure -n ${dialect}";
+  configurePhase =
+    let
+      genericFlags = "LSOF_CC=$CC LSOF_AR=\"$AR cr\" LSOF_RANLIB=$RANLIB";
+      linuxFlags = lib.optionalString stdenv.hostPlatform.isLinux "LINUX_CONF_CC=$CC_FOR_BUILD";
+      freebsdFlags = lib.optionalString stdenv.hostPlatform.isFreeBSD "FREEBSD_SYS=${freebsd.sys.src}/sys";
+    in
+    "${genericFlags} ${linuxFlags} ${freebsdFlags} ./Configure -n ${dialect}";
 
   preBuild = ''
     for filepath in $(find dialects/${dialect} -type f); do

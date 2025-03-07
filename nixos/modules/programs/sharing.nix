@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 {
   options.programs.sharing = {
     enable = lib.mkEnableOption ''
@@ -11,8 +16,8 @@
     let
       cfg = config.programs.sharing;
     in
-      lib.mkIf cfg.enable {
-        environment.systemPackages = [ pkgs.sharing ];
-        networking.firewall.allowedTCPPorts = [ 7478 ];
-      };
+    lib.mkIf cfg.enable {
+      environment.systemPackages = [ pkgs.sharing ];
+      networking.firewall.allowedTCPPorts = [ 7478 ];
+    };
 }

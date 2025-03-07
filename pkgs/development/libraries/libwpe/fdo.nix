@@ -1,18 +1,19 @@
-{ stdenv
-, lib
-, fetchurl
-, meson
-, pkg-config
-, ninja
-, wayland-scanner
-, wayland
-, libepoxy
-, glib
-, libwpe
-, libxkbcommon
-, libGL
-, libX11
- }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  meson,
+  pkg-config,
+  ninja,
+  wayland-scanner,
+  wayland,
+  libepoxy,
+  glib,
+  libwpe,
+  libxkbcommon,
+  libGL,
+  libX11,
+}:
 
 stdenv.mkDerivation rec {
   pname = "wpebackend-fdo";

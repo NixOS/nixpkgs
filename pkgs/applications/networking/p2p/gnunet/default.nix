@@ -3,15 +3,15 @@
 , makeWrapper, ncurses, pkg-config, libxml2, sqlite, zlib
 , libpulseaudio, libopus, libogg, jansson, libsodium
 
-, postgresqlSupport ? true, postgresql }:
+, postgresqlSupport ? true, libpq }:
 
 stdenv.mkDerivation rec {
   pname = "gnunet";
-  version = "0.22.1";
+  version = "0.23.1";
 
   src = fetchurl {
     url = "mirror://gnu/gnunet/gnunet-${version}.tar.gz";
-    hash = "sha256-gWsgufvA4tLWosnpAYPdAIs4yJOWfjYj4E11/Ezgr6o=";
+    hash = "sha256-b9BbaQdrOxqOfiCyVOBE/dTG2lMTGWMX894Ij30CXPI=";
   };
 
   enableParallelBuilding = true;
@@ -21,19 +21,19 @@ stdenv.mkDerivation rec {
     adns curl gmp gnutls libextractor libgcrypt libgnurl libidn
     libmicrohttpd libunistring libxml2 ncurses gettext libsodium
     sqlite zlib libpulseaudio libopus libogg jansson
-  ] ++ lib.optional postgresqlSupport postgresql;
+  ] ++ lib.optional postgresqlSupport libpq;
 
   preConfigure = ''
     # Brute force: since nix-worker chroots don't provide
     # /etc/{resolv.conf,hosts}, replace all references to `localhost'
     # by their IPv4 equivalent.
     find . \( -name \*.c -or -name \*.conf \) | \
-      xargs sed -ie 's|\<localhost\>|127.0.0.1|g'
+      xargs sed -i -e 's|\<localhost\>|127.0.0.1|g'
 
     # Make sure the tests don't rely on `/tmp', for the sake of chroot
     # builds.
     find . \( -iname \*test\*.c -or -name \*.conf \) | \
-      xargs sed -ie "s|/tmp|$TMPDIR|g"
+      xargs sed -i -e "s|/tmp|$TMPDIR|g"
   '';
 
   # unfortunately, there's still a few failures with impure tests

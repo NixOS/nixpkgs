@@ -1,11 +1,13 @@
-{ lib, stdenv
-, cmake
-, fetchFromGitHub
-, libjpeg
-, libmcrypt
-, libmhash
-, libtool
-, zlib
+{
+  lib,
+  stdenv,
+  cmake,
+  fetchFromGitHub,
+  libjpeg,
+  libmcrypt,
+  libmhash,
+  libtool,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {
@@ -29,9 +31,11 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
-  doCheck = true;
+  # tests get stuck on aarch64-linux
+  doCheck = stdenv.isx86_64 && stdenv.isLinux;
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Tool to crack steganography";
     longDescription = ''
       Stegseek is a lightning fast steghide cracker that can be

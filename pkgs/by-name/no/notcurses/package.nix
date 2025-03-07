@@ -1,29 +1,35 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, libdeflate
-, libunistring
-, ncurses
-, pandoc
-, pkg-config
-, zlib
-, multimediaSupport ? true, ffmpeg
-, qrcodegenSupport ? true, qrcodegen
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  libdeflate,
+  libunistring,
+  ncurses,
+  pandoc,
+  pkg-config,
+  zlib,
+  multimediaSupport ? true,
+  ffmpeg,
+  qrcodegenSupport ? true,
+  qrcodegen,
 }:
 
 stdenv.mkDerivation rec {
   pname = "notcurses";
-  version = "3.0.11";
+  version = "3.0.13";
 
   src = fetchFromGitHub {
     owner = "dankamongmen";
     repo = "notcurses";
     rev = "v${version}";
-    sha256 = "sha256-3ddiHzPZ74GN2Hu+6Oe1DaNFn6S9gegGwXSX8fbtPp8=";
+    sha256 = "sha256-i3UNd1y88aOGBp2r9itBFd9w+UJQhleJQHZOiK0d26w=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -31,14 +37,15 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs = [
-    libdeflate
-    libunistring
-    ncurses
-    zlib
-  ]
-  ++ lib.optional qrcodegenSupport qrcodegen
-  ++ lib.optional multimediaSupport ffmpeg;
+  buildInputs =
+    [
+      libdeflate
+      libunistring
+      ncurses
+      zlib
+    ]
+    ++ lib.optional qrcodegenSupport qrcodegen
+    ++ lib.optional multimediaSupport ffmpeg;
 
   cmakeFlags =
     lib.optional (qrcodegenSupport) "-DUSE_QRCODEGEN=ON"
@@ -73,7 +80,7 @@ stdenv.mkDerivation rec {
       replacement for NCURSES on existing systems.
     '';
     license = licenses.asl20;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [ ];
     inherit (ncurses.meta) platforms;
   };
 }

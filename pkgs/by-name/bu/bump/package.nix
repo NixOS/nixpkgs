@@ -1,4 +1,8 @@
-{ buildGoModule, fetchFromGitHub, lib }:
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+}:
 
 buildGoModule rec {
   pname = "bump";
@@ -16,7 +20,9 @@ buildGoModule rec {
   doCheck = false;
 
   ldflags = [
-    "-X main.buildVersion=${version}" "-X main.buildCommit=${version}" "-X main.buildDate=1970-01-01"
+    "-X main.buildVersion=${version}"
+    "-X main.buildCommit=${version}"
+    "-X main.buildDate=1970-01-01"
   ];
 
   meta = with lib; {

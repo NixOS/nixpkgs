@@ -13,7 +13,7 @@
   };
   vendorHash = "sha256-SWcQYF8LP6lw5kWlAVFt3qiwDnvpSOXenmdm6TSfJSc=";
 
-  CGO_ENABLED = 1;
+  env.CGO_ENABLED = 1;
   # These tests use internet, so are failing in Nix build.
   # See also: https://todo.sr.ht/~bouncepaw/betula/91
   checkFlags = "-skip=TestTitles|TestHEntries";

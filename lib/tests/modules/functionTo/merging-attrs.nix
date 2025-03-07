@@ -1,7 +1,8 @@
 { lib, config, ... }:
 let
   inherit (lib) types;
-in {
+in
+{
   options = {
     fun = lib.mkOption {
       type = types.functionTo (types.attrsOf types.str);
@@ -9,11 +10,15 @@ in {
 
     result = lib.mkOption {
       type = types.str;
-      default = toString (lib.attrValues (config.fun {
-        a = "a";
-        b = "b";
-        c = "c";
-      }));
+      default = toString (
+        lib.attrValues (
+          config.fun {
+            a = "a";
+            b = "b";
+            c = "c";
+          }
+        )
+      );
     };
   };
 

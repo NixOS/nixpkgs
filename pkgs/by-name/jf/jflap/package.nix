@@ -1,10 +1,11 @@
-{ lib
-, stdenvNoCC
-, fetchurl
-, jre8
-, makeWrapper
-, makeDesktopItem
-, copyDesktopItems
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  jre8,
+  makeWrapper,
+  makeDesktopItem,
+  copyDesktopItems,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -64,7 +65,10 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://www.jflap.org/";
     license = licenses.unfree;
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    maintainers = with maintainers; [ grnnja yuu ];
+    maintainers = with maintainers; [
+      grnnja
+      yuu
+    ];
     platforms = jre8.meta.platforms;
   };
 }

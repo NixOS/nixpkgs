@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchzip, makeWrapper, perlPackages,
-... }:
+{
+  lib,
+  stdenv,
+  fetchzip,
+  makeWrapper,
+  perlPackages,
+  ...
+}:
 
 stdenv.mkDerivation rec {
   appname = "popfile";
@@ -13,21 +19,24 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = (with perlPackages; [
-    ## These are all taken from the popfile documentation as applicable to Linux
-    ## https://getpopfile.org/docs/howtos:allplatformsrequireperl
-    perl
-    DBI
-    DBDSQLite
-    HTMLTagset
-    TimeDate # == DateParse
-    HTMLTemplate
-    # IO::Socket::Socks is not in nixpkgs
-    # IOSocketSocks
-    IOSocketSSL
-    NetSSLeay
-    SOAPLite
-  ]);
+  buildInputs = (
+    with perlPackages;
+    [
+      ## These are all taken from the popfile documentation as applicable to Linux
+      ## https://getpopfile.org/docs/howtos:allplatformsrequireperl
+      perl
+      DBI
+      DBDSQLite
+      HTMLTagset
+      TimeDate # == DateParse
+      HTMLTemplate
+      # IO::Socket::Socks is not in nixpkgs
+      # IOSocketSocks
+      IOSocketSSL
+      NetSSLeay
+      SOAPLite
+    ]
+  );
 
   installPhase = ''
     mkdir -p $out/bin

@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "karousel";
-  version = "0.10";
+  version = "0.11";
 
   src = fetchFromGitHub {
     owner = "peterfajdiga";
     repo = "karousel";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-lI3VaCd4eYhWbnYLEIeFiB88SWjd/DF8CUGFmxEXDXo=";
+    hash = "sha256-KAbOOOF8rMA6lwgn0gUQleh5EF7ISIvvi3OubuM/50w=";
   };
 
   postPatch = ''

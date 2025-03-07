@@ -1,9 +1,7 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   rustPlatform,
-  apple-sdk_11,
   nix-update-script,
 }:
 
@@ -22,11 +20,8 @@ rustPlatform.buildRustPackage {
     rustPlatform.bindgenHook
   ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    apple-sdk_11
-  ];
-
-  cargoHash = "sha256-MHZlXmHAYIiaB6Isutqjrh45jppRzTZRSE3VqzpFBBA=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-zS4g/uMh1eOoPo/RZfanL6afCEU5cnyzHrIqkvuQVrg=";
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 

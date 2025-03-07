@@ -1,5 +1,7 @@
-{ lib, buildDunePackage
-, menhirLib
+{
+  lib,
+  buildDunePackage,
+  menhirLib,
 }:
 
 buildDunePackage rec {
@@ -12,4 +14,3 @@ buildDunePackage rec {
     license = with lib.licenses; [ gpl2Only ];
   };
 }
-

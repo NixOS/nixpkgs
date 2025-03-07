@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, pam }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pam,
+}:
 
 stdenv.mkDerivation rec {
   pname = "vlock";
@@ -17,7 +22,10 @@ stdenv.mkDerivation rec {
 
   patches = [ ./eintr.patch ];
 
-  configureFlags = [ "VLOCK_GROUP=root" "ROOT_GROUP=root" ];
+  configureFlags = [
+    "VLOCK_GROUP=root"
+    "ROOT_GROUP=root"
+  ];
 
   buildInputs = [ pam ];
 

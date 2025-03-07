@@ -1,5 +1,13 @@
-{ lib, buildDunePackage, opam
-, jsonm, ocamlgraph, re, sha, swhid_core, uutf
+{
+  lib,
+  buildDunePackage,
+  opam,
+  jsonm,
+  ocamlgraph,
+  re,
+  sha,
+  swhid_core,
+  uutf,
 }:
 
 buildDunePackage {
@@ -7,7 +15,14 @@ buildDunePackage {
 
   inherit (opam) src version;
 
-  propagatedBuildInputs = [ jsonm ocamlgraph uutf re sha swhid_core ];
+  propagatedBuildInputs = [
+    jsonm
+    ocamlgraph
+    uutf
+    re
+    sha
+    swhid_core
+  ];
 
   # get rid of check for curl at configure time
   # opam-core does not call curl at run time

@@ -1,4 +1,8 @@
-{lib, stdenv, fetchurl}:
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libdaemon";
@@ -9,14 +13,19 @@ stdenv.mkDerivation rec {
     sha256 = "0d5qlq5ab95wh1xc87rqrh1vx6i8lddka1w3f1zcqvcqdxgyn8zx";
   };
 
-  outputs = [ "out" "dev" "doc" ];
+  outputs = [
+    "out"
+    "dev"
+    "doc"
+  ];
 
   patches = [ ./fix-includes.patch ];
 
-  configureFlags = [ "--disable-lynx" ]
-    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform)
-    [ # Can't run this test while cross-compiling
-      "ac_cv_func_setpgrp_void=yes"
+  configureFlags =
+    [ "--disable-lynx" ]
+    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+      # Can't run this test while cross-compiling
+      "ac_cv_func_setpgrp_void=${if stdenv.hostPlatform.isBSD then "no" else "yes"}"
     ];
 
   meta = {

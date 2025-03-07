@@ -1,24 +1,26 @@
-{ lib
-, buildPackages
-, fetchFromGitHub
-, openssl
-, pkg-config
-, protobuf
-, rustPlatform
+{
+  lib,
+  buildPackages,
+  fetchFromGitHub,
+  openssl,
+  pkg-config,
+  protobuf,
+  rustPlatform,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "fedimint";
-  version = "0.4.4";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "fedimint";
     repo = "fedimint";
     rev = "v${version}";
-    hash = "sha256-YyvppmKs6RCIzmn9bezNxjoCSlPY6GCWmy+bsSbCA2A=";
+    hash = "sha256-0MM5xpxBam95vSepDvVtpt/997XyC8aOqDiyPykHRRc=";
   };
 
-  cargoHash = "sha256-nWwAmthTOzKDLrHN0v/usC8DfmHzywNJs/6xdyCBBZY=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-mSj8B9Ma9Zoz5SYmVj2yW0ZK6dqaMgq+nNPPFG0aIrY=";
 
   nativeBuildInputs = [
     protobuf
@@ -30,7 +32,14 @@ rustPlatform.buildRustPackage rec {
     openssl
   ];
 
-  outputs = [ "out" "fedimintCli" "fedimint" "gateway" "gatewayCli" "devimint" ];
+  outputs = [
+    "out"
+    "fedimintCli"
+    "fedimint"
+    "gateway"
+    "gatewayCli"
+    "devimint"
+  ];
 
   postInstall = ''
     mkdir -p $fedimint/bin $fedimintCli/bin $gateway/bin $gatewayCli/bin $devimint/bin

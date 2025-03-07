@@ -29,8 +29,6 @@
   stdenv,
   testers,
   zlib-ng,
-  apple-sdk_15,
-  darwinMinVersionHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -81,11 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
       speexdsp
       zlib-ng
     ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_15
-      (darwinMinVersionHook "10.15") # from https://www.dosbox-staging.org/releases/macos/
-    ];
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib ];
 
   outputs = [ "out" "man" ];
 
@@ -130,7 +124,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
       joshuafern
-      AndersonTorres
     ];
     platforms = lib.platforms.unix;
     priority = 101;

@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, cmake
-, extra-cmake-modules
-, leptonica
-, libsForQt5
-, qt5
-, tesseract4
-, gst_all_1
-, testers
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  cmake,
+  extra-cmake-modules,
+  leptonica,
+  libsForQt5,
+  qt5,
+  tesseract4,
+  gst_all_1,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -36,18 +37,20 @@ stdenv.mkDerivation (finalAttrs: {
     qt5.wrapQtAppsHook
   ];
 
-  buildInputs = [
-    libsForQt5.kwayland
-    leptonica
-    tesseract4
-    qt5.qtmultimedia
-    qt5.qtx11extras
-  ] ++ (with gst_all_1; [
-    gstreamer
-    gst-plugins-base
-    gst-plugins-good
-    gst-plugins-bad
-  ]);
+  buildInputs =
+    [
+      libsForQt5.kwayland
+      leptonica
+      tesseract4
+      qt5.qtmultimedia
+      qt5.qtx11extras
+    ]
+    ++ (with gst_all_1; [
+      gstreamer
+      gst-plugins-base
+      gst-plugins-good
+      gst-plugins-bad
+    ]);
 
   preFixup = ''
     qtWrapperArgs+=(--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0")

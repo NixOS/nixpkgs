@@ -19,24 +19,29 @@ let
 in
 buildDotnetModule (finalAttrs: {
   pname = "recyclarr";
-  version = "7.2.4";
+  version = "7.4.1";
 
   src = fetchFromGitHub {
     owner = "recyclarr";
     repo = "recyclarr";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-FFaGyMOXivorXVqCcYskEibnHnzhJ/AlxR46AtWFkI4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-eutlnIHOcRnucgFDwJIheTPXA7avqvp4H0xUX2Cv2z8=";
   };
 
   projectFile = "Recyclarr.sln";
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
 
   prePatch = ''
-    substituteInPlace src/Recyclarr.Cli/Program.cs \
+    substituteInPlace src/Recyclarr.Cli/Console/CliSetup.cs \
       --replace-fail '$"v{GitVersionInformation.SemVer} ({GitVersionInformation.FullBuildMetaData})"' '"${finalAttrs.version}-nixpkgs"'
 
     substituteInPlace src/Recyclarr.Cli/Console/Setup/ProgramInformationDisplayTask.cs \
       --replace-fail 'GitVersionInformation.InformationalVersion' '"${finalAttrs.version}-nixpkgs"'
+
+    substituteInPlace Recyclarr.sln \
+      --replace-fail ".config\dotnet-tools.json = .config\dotnet-tools.json" ""
+
+    rm .config/dotnet-tools.json
   '';
   patches = [ ./001-Git-Version.patch ];
 
@@ -46,9 +51,9 @@ buildDotnetModule (finalAttrs: {
 
   doCheck = false;
 
-  dotnet-sdk = dotnetCorePackages.sdk_8_0;
-  dotnet-runtime = dotnetCorePackages.runtime_8_0;
-  dotnet-test-sdk = dotnetCorePackages.sdk_8_0;
+  dotnet-sdk = dotnetCorePackages.sdk_9_0;
+  dotnet-runtime = dotnetCorePackages.runtime_9_0;
+  dotnet-test-sdk = dotnetCorePackages.sdk_9_0;
 
   executables = [ "recyclarr" ];
   makeWrapperArgs = [

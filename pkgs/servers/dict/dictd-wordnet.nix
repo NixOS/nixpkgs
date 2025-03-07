@@ -1,10 +1,21 @@
-{lib, stdenv, python3, wordnet, writeScript, libfaketime}:
+{
+  lib,
+  stdenv,
+  python3,
+  wordnet,
+  writeScript,
+  libfaketime,
+}:
 
 stdenv.mkDerivation rec {
   version = "542";
   pname = "dict-db-wordnet";
 
-  buildInputs = [python3 wordnet libfaketime];
+  buildInputs = [
+    python3
+    wordnet
+    libfaketime
+  ];
   convert = ./wordnet_structures.py;
 
   builder = writeScript "builder.sh" ''

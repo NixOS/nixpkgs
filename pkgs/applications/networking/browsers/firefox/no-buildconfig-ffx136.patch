@@ -1,0 +1,26 @@
+diff --git a/docshell/base/nsAboutRedirector.cpp b/docshell/base/nsAboutRedirector.cpp
+index 16888323d7..b96450a247 100644
+--- a/docshell/base/nsAboutRedirector.cpp
++++ b/docshell/base/nsAboutRedirector.cpp
+@@ -90,9 +90,6 @@ static const RedirEntry kRedirMap[] = {
+     {"addons", "chrome://mozapps/content/extensions/aboutaddons.html",
+      nsIAboutModule::ALLOW_SCRIPT | nsIAboutModule::IS_SECURE_CHROME_UI},
+ #endif
+-    {"buildconfig", "chrome://global/content/buildconfig.html",
+-     nsIAboutModule::URI_SAFE_FOR_UNTRUSTED_CONTENT |
+-         nsIAboutModule::IS_SECURE_CHROME_UI},
+     {"checkerboard", "chrome://global/content/aboutCheckerboard.html",
+      nsIAboutModule::URI_SAFE_FOR_UNTRUSTED_CONTENT |
+          nsIAboutModule::ALLOW_SCRIPT},
+diff --git a/toolkit/content/jar.mn b/toolkit/content/jar.mn
+index eb6c179b60..57568668b1 100644
+--- a/toolkit/content/jar.mn
++++ b/toolkit/content/jar.mn
+@@ -40,7 +40,6 @@ toolkit.jar:
+    content/global/aboutUrlClassifier.js
+    content/global/aboutUrlClassifier.xhtml
+    content/global/aboutUrlClassifier.css
+-*   content/global/buildconfig.html
+    content/global/buildconfig.css
+    content/global/contentAreaUtils.js
+    content/global/datepicker.xhtml

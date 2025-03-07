@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, pkg-config, freerdp, openssl, libssh2 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  pkg-config,
+  freerdp,
+  openssl,
+  libssh2,
+}:
 
 stdenv.mkDerivation rec {
   pname = "medusa-unstable";
@@ -21,12 +30,19 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   configureFlags = [ "--enable-module-ssh=yes" ];
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ freerdp openssl libssh2 ];
+  buildInputs = [
+    freerdp
+    openssl
+    libssh2
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/jmk-foofus/medusa";

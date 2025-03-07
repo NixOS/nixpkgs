@@ -1,24 +1,42 @@
-{ lib, stdenv, fetchFromGitHub
-, cmake, pkg-config, gtest
-, withZlibCompat ? false
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  gtest,
+  withZlibCompat ? false,
 }:
 
 stdenv.mkDerivation rec {
   pname = "zlib-ng";
-  version = "2.2.2";
+  version = "2.2.4";
 
   src = fetchFromGitHub {
     owner = "zlib-ng";
     repo = "zlib-ng";
     rev = version;
-    hash = "sha256-FeOIFlFMDDd+5EDyr8KKW3G03UDM2xx4QF/wyKyDjq4=";
+    hash = "sha256-Khmrhp5qy4vvoQe4WgoogpjWrgcUB/q8zZeqIydthYg=";
   };
 
-  outputs = [ "out" "dev" "bin" ];
+  outputs = [
+    "out"
+    "dev"
+    "bin"
+  ];
 
   strictDeps = true;
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
+
+  env = lib.optionalAttrs stdenv.hostPlatform.isFreeBSD {
+    # This can be removed when we switch to libcxx from llvm 20
+    # https://github.com/llvm/llvm-project/pull/122361
+    NIX_CFLAGS_COMPILE = "-D_XOPEN_SOURCE=700";
+  };
 
   buildInputs = [ gtest ];
 
@@ -30,9 +48,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "zlib data compression library for the next generation systems";
-    homepage    = "https://github.com/zlib-ng/zlib-ng";
-    license     = licenses.zlib;
-    platforms   = platforms.all;
+    homepage = "https://github.com/zlib-ng/zlib-ng";
+    license = licenses.zlib;
+    platforms = platforms.all;
     maintainers = with maintainers; [ izorkin ];
   };
 }

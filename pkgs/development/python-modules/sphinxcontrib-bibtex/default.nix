@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mcmtroffaes";
     repo = "sphinxcontrib-bibtex";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-cqz5Jamtlflo5rFhWPCPlYoymApUtXPG4oTRjfDI+WY=";
   };
 

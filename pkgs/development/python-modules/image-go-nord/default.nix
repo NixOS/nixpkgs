@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Schrodinger-Hat";
     repo = "ImageGoNord-pip";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-rPp4QrkbDhrdpfynRUYgxpNgUNxU+3h54Ea7s/+u1kI=";
   };
 

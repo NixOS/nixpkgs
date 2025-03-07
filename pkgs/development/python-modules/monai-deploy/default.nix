@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Project-MONAI";
     repo = "monai-deploy-app-sdk";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-a5WtU+1XjsYsXB/uZS8ufE0fOOWDf+Wy7mOX2xPEQEg=";
   };
 

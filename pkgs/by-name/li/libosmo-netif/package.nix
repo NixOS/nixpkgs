@@ -1,21 +1,22 @@
-{ lib
-, stdenv
-, autoreconfHook
-, fetchFromGitHub
-, lksctp-tools
-, pkg-config
-, libosmocore
+{
+  lib,
+  stdenv,
+  autoreconfHook,
+  fetchFromGitHub,
+  lksctp-tools,
+  pkg-config,
+  libosmocore,
 }:
 
 stdenv.mkDerivation rec {
   pname = "libosmo-netif";
-  version = "1.5.1";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "osmocom";
     repo = "libosmo-netif";
     rev = version;
-    hash = "sha256-C8lIURQmu15RQij7c09+F/c8XSzTcgHt4MkgdkqTa3Q=";
+    hash = "sha256-X2sRjhlB63ffkLB4c/M11iFpprG0DUzq2NL6mRN9H+c=";
   };
 
   postPatch = ''

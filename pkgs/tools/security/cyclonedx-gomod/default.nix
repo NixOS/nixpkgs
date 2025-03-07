@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "cyclonedx-gomod";
-  version = "1.8.0";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "CycloneDX";
     repo = "cyclonedx-gomod";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-s5kzyQPf29RZPnPtgFf4IVHnOtVZOtGSQqy1BNVVykQ=";
+    tag = "v${version}";
+    hash = "sha256-iD8mDqQl18ufJBoRkpqYZc+I259HfnFNp29guvBtGDk=";
   };
 
-  vendorHash = "sha256-Sz2NCznyD0tMuho9kr+U35I8bS/WK276nPdt83k1zfU=";
+  vendorHash = "sha256-Yw+lci0vBDWeJVjOX83LKNb7afcsIK/AC5GZPRSzcdo=";
 
   ldflags = [
     "-w"

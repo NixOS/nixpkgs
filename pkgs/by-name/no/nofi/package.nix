@@ -1,4 +1,10 @@
-{ lib, rustPlatform, fetchFromGitHub, dbus, pkg-config}:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  dbus,
+  pkg-config,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "nofi";
@@ -11,7 +17,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-hQYIcyNCxb8qVpseNsmjyPxlwbMxDpXeZ+H1vpv62rQ=";
   };
 
-  cargoHash = "sha256-0TYIycuy2LIhixVvH++U8CbmfQugc+0TF8DTiViWSbE=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-dWqMwS0TgspZqlpi8hhwtA7sbqGunw0FIqjJXOTiFKA=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ dbus ];
@@ -20,7 +27,10 @@ rustPlatform.buildRustPackage rec {
     description = "Interruption-free notification system for Linux";
     homepage = "https://github.com/ellsclytn/nofi/";
     changelog = "https://github.com/ellsclytn/nofi/raw/v${version}/CHANGELOG.md";
-    license = [ licenses.asl20 /* or */ licenses.mit ];
+    license = [
+      licenses.asl20 # or
+      licenses.mit
+    ];
     mainProgram = "nofi";
     maintainers = [ maintainers.magnetophon ];
   };

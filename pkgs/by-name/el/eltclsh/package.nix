@@ -1,11 +1,12 @@
-{ lib
-, fetchgit
-, automake
-, autoconf
-, libtool
-, libedit
-, tcl
-, tk
+{
+  lib,
+  fetchgit,
+  automake,
+  autoconf,
+  libtool,
+  libedit,
+  tcl,
+  tk,
 }:
 
 tcl.mkTclDerivation rec {

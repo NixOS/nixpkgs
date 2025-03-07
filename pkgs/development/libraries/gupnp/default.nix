@@ -1,30 +1,33 @@
-{ stdenv
-, lib
-, fetchurl
-, fetchpatch2
-, meson
-, ninja
-, pkg-config
-, gobject-introspection
-, vala
-, gtk-doc
-, docbook_xsl
-, docbook_xml_dtd_412
-, docbook_xml_dtd_45
-, glib
-, gssdp
-, libsoup_2_4
-, libxml2
-, libuuid
-, gnome
+{
+  stdenv,
+  lib,
+  fetchurl,
+  fetchpatch2,
+  meson,
+  ninja,
+  pkg-config,
+  gobject-introspection,
+  vala,
+  gtk-doc,
+  docbook_xsl,
+  docbook_xml_dtd_412,
+  docbook_xml_dtd_45,
+  glib,
+  gssdp,
+  libsoup_2_4,
+  libxml2,
+  libuuid,
+  gnome,
 }:
 
 stdenv.mkDerivation rec {
   pname = "gupnp";
   version = "1.4.4";
 
-  outputs = [ "out" "dev" ]
-    ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [ "devdoc" ];
+  outputs = [
+    "out"
+    "dev"
+  ] ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [ "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gupnp/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";

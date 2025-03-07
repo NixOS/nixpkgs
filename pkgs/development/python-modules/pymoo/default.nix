@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "anyoptimization";
     repo = "pymoo";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-CbeJwv51lu4cABgGieqy/8DCDJCb8wOPPVqUHk8Jb7E=";
   };
 

@@ -1,15 +1,16 @@
-{ lib
-, buildPythonApplication
-, fetchFromGitHub
-, fleep
-, ifaddr
-, libarchive-c
-, pillow
-, requests-toolbelt
-, setuptools
-, zeroconf
-, pytestCheckHook
-, openssl
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
+  fleep,
+  ifaddr,
+  libarchive-c,
+  pillow,
+  requests-toolbelt,
+  setuptools,
+  zeroconf,
+  pytestCheckHook,
+  openssl,
 }:
 
 buildPythonApplication rec {

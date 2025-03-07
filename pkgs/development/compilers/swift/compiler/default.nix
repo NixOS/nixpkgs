@@ -28,7 +28,7 @@
 , glibc
 , libuuid
 # Darwin-specific
-, substituteAll
+, replaceVars
 , fixDarwinDylibNames
 , xcbuild
 , cctools # libtool
@@ -234,13 +234,11 @@ in stdenv.mkDerivation {
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       apple-sdk_swift
-      (darwinMinVersionHook deploymentVersion)
     ];
 
   # Will effectively be `buildInputs` when swift is put in `nativeBuildInputs`.
   depsTargetTargetPropagated = lib.optionals stdenv.targetPlatform.isDarwin [
     apple-sdk_swift
-    (darwinMinVersionHook deploymentVersion)
   ];
 
   # This is a partial reimplementation of our setup hook. Because we reuse
@@ -302,12 +300,10 @@ in stdenv.mkDerivation {
     patch -p1 -d swift -i ${./patches/swift-linux-fix-libc-paths.patch}
     patch -p1 -d swift -i ${./patches/swift-linux-fix-linking.patch}
     patch -p1 -d swift -i ${./patches/swift-darwin-libcxx-flags.patch}
-    patch -p1 -d swift -i ${substituteAll {
-      src = ./patches/swift-darwin-plistbuddy-workaround.patch;
+    patch -p1 -d swift -i ${replaceVars ./patches/swift-darwin-plistbuddy-workaround.patch {
       inherit swiftArch;
     }}
-    patch -p1 -d swift -i ${substituteAll {
-      src = ./patches/swift-prevent-sdk-dirs-warning.patch;
+    patch -p1 -d swift -i ${replaceVars ./patches/swift-prevent-sdk-dirs-warning.patch {
       inherit (builtins) storeDir;
     }}
 
@@ -541,7 +537,7 @@ in stdenv.mkDerivation {
     ";
     buildProject lldb llvm-project/lldb
 
-    ${lib.optionalString stdenv.hostPlatform.isDarwin ''
+    ${lib.optionalString stdenv.targetPlatform.isDarwin ''
     # Need to do a standalone build of concurrency for Darwin back deployment.
     # Based on: utils/swift_build_support/swift_build_support/products/backdeployconcurrency.py
     cmakeFlags="

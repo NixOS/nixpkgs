@@ -1,11 +1,16 @@
-{ stdenv, lib, fetchurl, perl }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  perl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "vcal";
   version = "2.8";
 
   src = fetchurl {
-    url    = "https://waynemorrison.com/software/vcal";
+    url = "https://waynemorrison.com/software/vcal";
     sha256 = "0jrm0jzqxb1xjp24hwbzlxsh22gjssay9gj4zszljzdm68r5afvc";
   };
 

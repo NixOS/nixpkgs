@@ -1,25 +1,21 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, darwin
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "unison-fsmonitor";
-  version = "0.3.4";
+  version = "0.3.8";
 
   src = fetchFromGitHub {
     owner = "autozimu";
     repo = "unison-fsmonitor";
     rev = "v${version}";
-    hash = "sha256-U/KMKYqYVSeYBmW+PnXtvjnyUTjTJgtpwy1GPefqJOk=";
+    hash = "sha256-1W05b9s0Pg2LzNu0mFo/JKpPw0QORqZkXhbbSuCZIUo=";
   };
-  cargoHash = "sha256-eKRayFU3xq2uo6YeFqcTPLInZYlympH6Z01vOCVsVqQ=";
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.CoreServices
-  ];
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-FhENsOGv4jN9A0HS0TIPJMiXA4mYBL668jyckVNGOKc=";
 
   checkFlags = [
     # accesses /usr/bin/env

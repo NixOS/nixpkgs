@@ -83,6 +83,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
+    # 10s timeout for Mir startup is too tight for VM tests on weaker hardwre (aarch64)
+    substituteInPlace src/platforms/mirserver/qmirserver_p.cpp \
+      --replace-fail 'const int timeout = RUNNING_ON_VALGRIND ? 100 : 10' 'const int timeout = RUNNING_ON_VALGRIND ? 900 : 90' \
+      --replace-fail 'const int timeout = 10' 'const int timeout = 90'
+
     substituteInPlace CMakeLists.txt \
       --replace-fail "\''${CMAKE_INSTALL_FULL_LIBDIR}/qt5/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}" \
       --replace-fail "\''${CMAKE_INSTALL_FULL_LIBDIR}/qt5/plugins/platforms" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtPluginPrefix}/platforms" \

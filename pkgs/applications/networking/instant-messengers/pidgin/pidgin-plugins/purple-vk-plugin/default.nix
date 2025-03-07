@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchhg, pidgin, cmake, libxml2 } :
+{
+  lib,
+  stdenv,
+  fetchhg,
+  pidgin,
+  cmake,
+  libxml2,
+}:
 
 let
   version = "40ddb6d";
@@ -14,7 +21,10 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ pidgin libxml2 ];
+  buildInputs = [
+    pidgin
+    libxml2
+  ];
 
   preConfigure = ''
     sed -i -e 's|DESTINATION.*PURPLE_PLUGIN_DIR}|DESTINATION lib/purple-2|' CMakeLists.txt

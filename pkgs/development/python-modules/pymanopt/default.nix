@@ -13,16 +13,14 @@
 
 buildPythonPackage rec {
   pname = "pymanopt";
-  version = "2.2.0-unstable-2024-07-10";
+  version = "2.2.1";
   pyproject = true;
-
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = "2.2.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "1de3b6f47258820fdc072fceaeaa763b9fd263b0";
-    hash = "sha256-j/fVeMgoLLBgRYFtSj2ZyNJb8iuWlnn2/YpBqUoCAFk=";
+    tag = version;
+    hash = "sha256-LOEulticgCWZBCf3qj5KFBHt0lMd4H85368IhG3DQ4g=";
   };
 
   preConfigure = ''

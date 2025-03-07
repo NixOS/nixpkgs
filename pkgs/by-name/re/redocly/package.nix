@@ -1,23 +1,24 @@
-{ lib
-, buildNpmPackage
-, fetchFromGitHub
-, makeWrapper
-, redocly
-, testers
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
+  makeWrapper,
+  redocly,
+  testers,
 }:
 
 buildNpmPackage rec {
   pname = "redocly";
-  version = "1.25.11";
+  version = "1.28.0";
 
   src = fetchFromGitHub {
     owner = "Redocly";
     repo = "redocly-cli";
     rev = "@redocly/cli@${version}";
-    hash = "sha256-mZrD+ex1AZfQopnroA9gu7z5DeuC79k90KIWGhgAgrQ=";
+    hash = "sha256-TCBPcYbyMlmz7O1c/6/72I3Tb9ZnhBc5W5S/yDQ0AHo=";
   };
 
-  npmDepsHash = "sha256-pavWVmCOM40eaYgIcese/XTumV8Jsb8nKU86AyNdsz4=";
+  npmDepsHash = "sha256-soAnln7K3vNMCDTGPX+j2qaatvoWTrhFzL7hjHuE6QQ=";
 
   npmBuildScript = "prepare";
 

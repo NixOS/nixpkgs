@@ -5,22 +5,24 @@
   meta.maintainers = lib.teams.c3d2.members;
 
   nodes = {
-    pretalx = { config, ... }: {
-      networking.extraHosts = ''
-        127.0.0.1 talks.local
-      '';
+    pretalx =
+      { config, ... }:
+      {
+        networking.extraHosts = ''
+          127.0.0.1 talks.local
+        '';
 
-      services.pretalx = {
-        enable = true;
-        plugins = with config.services.pretalx.package.plugins; [
-          pages
-        ];
-        nginx.domain = "talks.local";
-        settings = {
-          site.url = "http://talks.local";
+        services.pretalx = {
+          enable = true;
+          plugins = with config.services.pretalx.package.plugins; [
+            pages
+          ];
+          nginx.domain = "talks.local";
+          settings = {
+            site.url = "http://talks.local";
+          };
         };
       };
-    };
   };
 
   testScript = ''

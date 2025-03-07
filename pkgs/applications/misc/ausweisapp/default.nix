@@ -12,17 +12,17 @@
   qttools,
   qtwayland,
   qtwebsockets,
-  gitUpdater
+  gitUpdater,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "ausweisapp";
-  version = "2.2.2";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "Governikus";
     repo = "AusweisApp2";
     rev = finalAttrs.version;
-    hash = "sha256-YjnMDHXzL16XMVwewoQztE5yjwn1MA1KAiEmEjIYoPY=";
+    hash = "sha256-/X+S91EA7jrjSYb/jafmRhbbZJUQyg1DoTkzd4ZRjWY=";
   };
 
   nativeBuildInputs = [
@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.ausweisapp.bund.de/open-source-software";
     license = lib.licenses.eupl12;
     mainProgram = "AusweisApp";
-    maintainers = with lib.maintainers; [b4dm4n];
+    maintainers = with lib.maintainers; [ b4dm4n ];
     platforms = lib.platforms.linux;
   };
 })

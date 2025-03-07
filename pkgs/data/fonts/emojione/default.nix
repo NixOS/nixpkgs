@@ -1,4 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, inkscape, imagemagick, potrace, svgo, scfbuild }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  inkscape,
+  imagemagick,
+  potrace,
+  svgo,
+  scfbuild,
+}:
 
 stdenv.mkDerivation rec {
   pname = "emojione";
@@ -33,7 +43,13 @@ stdenv.mkDerivation rec {
     export HOME="$NIX_BUILD_ROOT"
   '';
 
-  nativeBuildInputs = [ inkscape imagemagick potrace svgo scfbuild ];
+  nativeBuildInputs = [
+    inkscape
+    imagemagick
+    potrace
+    svgo
+    scfbuild
+  ];
 
   enableParallelBuilding = true;
 

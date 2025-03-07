@@ -1,9 +1,10 @@
-{ buildOctavePackage
-, lib
-, fetchurl
-, zeromq
-, pkg-config
-, autoreconfHook
+{
+  buildOctavePackage,
+  lib,
+  fetchurl,
+  zeromq,
+  pkg-config,
+  autoreconfHook,
 }:
 
 buildOctavePackage rec {

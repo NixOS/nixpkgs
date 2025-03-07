@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, which
-, enableStatic ? stdenv.hostPlatform.isStatic
-, gettext
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  which,
+  enableStatic ? stdenv.hostPlatform.isStatic,
+  gettext,
 }:
 
 stdenv.mkDerivation rec {
@@ -17,7 +18,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-3CW41ULdXoID4cOgrcG2j85tgIJ/sz5hU7A83qpuxf4=";
   };
 
-  patches = [ ./dont-fail-ln.patch ./do-link-so.patch ];
+  patches = [
+    ./dont-fail-ln.patch
+    ./do-link-so.patch
+  ];
 
   nativeBuildInputs = [ which ];
   buildInputs = lib.optionals stdenv.hostPlatform.isFreeBSD [ gettext ];
@@ -38,12 +42,14 @@ stdenv.mkDerivation rec {
 
   checkTarget = "test-full";
 
-  installTargets = [
-    "install"
-    "install-lib-headers"
-  ] ++ lib.optionals (!enableStatic) [
-    "install-lib-so-link"
-  ];
+  installTargets =
+    [
+      "install"
+      "install-lib-headers"
+    ]
+    ++ lib.optionals (!enableStatic) [
+      "install-lib-so-link"
+    ];
 
   meta = with lib; {
     homepage = "https://rhash.sourceforge.net/";

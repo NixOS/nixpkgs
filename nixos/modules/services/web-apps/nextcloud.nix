@@ -44,10 +44,9 @@ let
     };
   };
 
-  webroot = pkgs.runCommandLocal
-    "${cfg.package.name or "nextcloud"}-with-apps"
-    { }
-    ''
+  webroot = pkgs.runCommand "${cfg.package.name or "nextcloud"}-with-apps" {
+    preferLocalBuild = true;
+  } ''
       mkdir $out
       ln -sfv "${cfg.package}"/* "$out"
       ${concatStrings
@@ -295,15 +294,28 @@ in {
     https = mkOption {
       type = types.bool;
       default = false;
-      description = "Use HTTPS for generated links.";
+      description = ''
+        Use HTTPS for generated links.
+
+        Be aware that this also enables HTTP Strict Transport Security (HSTS) headers.
+      '';
     };
     package = mkOption {
       type = types.package;
       description = "Which package to use for the Nextcloud instance.";
-      relatedPackages = [ "nextcloud28" "nextcloud29" "nextcloud30" ];
+      relatedPackages = [ "nextcloud29" "nextcloud30" "nextcloud31" ];
     };
     phpPackage = mkPackageOption pkgs "php" {
       example = "php82";
+    };
+
+    finalPackage = mkOption {
+      type = types.package;
+      readOnly = true;
+      description = ''
+        Package to the finalized Nextcloud package, including all installed apps.
+        This is automatically set by the module.
+      '';
     };
 
     maxUploadSize = mkOption {
@@ -375,14 +387,18 @@ in {
       type = with types; attrsOf (oneOf [ str int bool ]);
       default = {
         "pm" = "dynamic";
-        "pm.max_children" = "32";
-        "pm.start_servers" = "2";
-        "pm.min_spare_servers" = "2";
-        "pm.max_spare_servers" = "4";
+        "pm.max_children" = "120";
+        "pm.start_servers" = "12";
+        "pm.min_spare_servers" = "6";
+        "pm.max_spare_servers" = "18";
         "pm.max_requests" = "500";
       };
       description = ''
-        Options for nextcloud's PHP pool. See the documentation on `php-fpm.conf` for details on configuration directives.
+        Options for nextcloud's PHP pool. See the documentation on `php-fpm.conf` for details on
+        configuration directives. The above are recommended for a server with 4GiB of RAM.
+
+        It's advisable to read the [section about PHPFPM tuning in the upstream manual](https://docs.nextcloud.com/server/30/admin_manual/installation/server_tuning.html#tune-php-fpm)
+        and consider customizing the values.
       '';
     };
 
@@ -417,7 +433,6 @@ in {
     config = {
       dbtype = mkOption {
         type = types.enum [ "sqlite" "pgsql" "mysql" ];
-        default = "sqlite";
         description = "Database type.";
       };
       dbname = mkOption {
@@ -623,7 +638,7 @@ in {
         description = ''
           Whether to load the Redis module into PHP.
           You still need to enable Redis in your config.php.
-          See https://docs.nextcloud.com/server/14/admin_manual/configuration_server/caching_configuration.html
+          See <https://docs.nextcloud.com/server/latest/admin_manual/configuration_server/caching_configuration.html>
         '';
       };
       memcached = mkOption {
@@ -632,7 +647,7 @@ in {
         description = ''
           Whether to load the Memcached module into PHP.
           You still need to enable Memcached in your config.php.
-          See https://docs.nextcloud.com/server/14/admin_manual/configuration_server/caching_configuration.html
+          See <https://docs.nextcloud.com/server/latest/admin_manual/configuration_server/caching_configuration.html>
         '';
       };
     };
@@ -768,15 +783,17 @@ in {
       description = ''
         Extra options which should be appended to Nextcloud's config.php file.
       '';
-      example = literalExpression '' {
-        redis = {
-          host = "/run/redis/redis.sock";
-          port = 0;
-          dbindex = 0;
-          password = "secret";
-          timeout = 1.5;
-        };
-      } '';
+      example = literalExpression ''
+        {
+          redis = {
+            host = "/run/redis/redis.sock";
+            port = 0;
+            dbindex = 0;
+            password = "secret";
+            timeout = 1.5;
+          };
+        }
+      '';
     };
 
     secretFile = mkOption {
@@ -821,7 +838,7 @@ in {
 
   config = mkIf cfg.enable (mkMerge [
     { warnings = let
-        latest = 30;
+        latest = 31;
         upgradeWarning = major: nixos:
           ''
             A legacy Nextcloud install (from before NixOS ${nixos}) may be installed.
@@ -851,7 +868,9 @@ in {
         ++ (optional (versionOlder cfg.package.version "27") (upgradeWarning 26 "23.11"))
         ++ (optional (versionOlder cfg.package.version "28") (upgradeWarning 27 "24.05"))
         ++ (optional (versionOlder cfg.package.version "29") (upgradeWarning 28 "24.11"))
-        ++ (optional (versionOlder cfg.package.version "30") (upgradeWarning 29 "24.11"));
+        ++ (optional (versionOlder cfg.package.version "30") (upgradeWarning 29 "24.11"))
+        ++ (optional (versionOlder cfg.package.version "31") (upgradeWarning 30 "25.05"))
+        ;
 
       services.nextcloud.package = with pkgs;
         mkDefault (
@@ -863,7 +882,8 @@ in {
             ''
           else if versionOlder stateVersion "24.05" then nextcloud27
           else if versionOlder stateVersion "24.11" then nextcloud29
-          else nextcloud30
+          else if versionOlder stateVersion "25.05" then nextcloud30
+          else nextcloud31
         );
 
       services.nextcloud.phpPackage =
@@ -920,6 +940,8 @@ in {
       ] ++ [
         "L+ ${datadir}/config/override.config.php - - - - ${overrideConfig}"
       ];
+
+      services.nextcloud.finalPackage = webroot;
 
       systemd.services = {
         # When upgrading the Nextcloud package, Nextcloud can report errors such as

@@ -5,17 +5,18 @@
   nodejs_22,
   gitMinimal,
   pnpm_8,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vtsls";
-  version = "0.2.6";
+  version = "0.2.8";
 
   src = fetchFromGitHub {
     owner = "yioneko";
     repo = "vtsls";
     rev = "server-v${finalAttrs.version}";
-    hash = "sha256-HCi9WLh4IEfhgkQNUVk6IGkQfYagg805Rix78zG6xt0=";
+    hash = "sha256-Ng+aOBnxFRbMjoUy6+DvIk2yVpvJT+AMsbvDb+IlYpY=";
     fetchSubmodules = true;
   };
 
@@ -37,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
       src
       version
       ;
-    hash = "sha256-4XxQ0Z2atTBItrD9iY7q5rJaCmb1EeDBvQ5+L3ceRXI=";
+    hash = "sha256-xenPpKsIjEIyVeZDjwjLaBbpWLqWQDBaLLfyzxtrsTI=";
   };
 
   # Patches to get submodule sha from file instead of 'git submodule status'
@@ -81,6 +82,10 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "LSP wrapper for typescript extension of vscode.";

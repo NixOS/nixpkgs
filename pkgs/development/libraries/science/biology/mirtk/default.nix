@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, python3
-, boost
-, eigen
-, libGLU
-, fltk
-, itk
-, vtk
-, zlib
-, tbb
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  python3,
+  boost186,
+  eigen,
+  libGLU,
+  fltk,
+  itk,
+  vtk,
+  zlib,
+  tbb,
 }:
 
 stdenv.mkDerivation rec {
@@ -51,7 +52,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [
-    boost
+    boost186
     eigen
     fltk
     itk

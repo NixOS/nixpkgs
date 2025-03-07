@@ -1,20 +1,21 @@
-{ stdenv
-, lib
-, fetchurl
-, pkg-config
-, expat
-, enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdMinimal
-, systemdMinimal
-, audit
-, libapparmor
-, dbus
-, docbook_xml_dtd_44
-, docbook-xsl-nons
-, xmlto
-, autoreconfHook
-, autoconf-archive
-, x11Support ? (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin)
-, xorg
+{
+  stdenv,
+  lib,
+  fetchurl,
+  pkg-config,
+  expat,
+  enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdMinimal,
+  systemdMinimal,
+  audit,
+  libapparmor,
+  dbus,
+  docbook_xml_dtd_44,
+  docbook-xsl-nons,
+  xmlto,
+  autoreconfHook,
+  autoconf-archive,
+  x11Support ? (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin),
+  xorg,
 }:
 
 stdenv.mkDerivation rec {
@@ -28,21 +29,30 @@ stdenv.mkDerivation rec {
 
   patches = lib.optional stdenv.hostPlatform.isSunOS ./implement-getgrouplist.patch;
 
-  postPatch = ''
-    substituteInPlace bus/Makefile.am \
-      --replace 'install-data-hook:' 'disabled:' \
-      --replace '$(mkinstalldirs) $(DESTDIR)$(localstatedir)/run/dbus' ':'
-    substituteInPlace tools/Makefile.am \
-      --replace 'install-data-local:' 'disabled:' \
-      --replace 'installcheck-local:' 'disabled:'
-  '' + /* cleanup of runtime references */ ''
-    substituteInPlace ./dbus/dbus-sysdeps-unix.c \
-      --replace 'DBUS_BINDIR "/dbus-launch"' "\"$lib/bin/dbus-launch\""
-    substituteInPlace ./tools/dbus-launch.c \
-      --replace 'DBUS_DAEMONDIR"/dbus-daemon"' '"/run/current-system/sw/bin/dbus-daemon"'
-  '';
+  postPatch =
+    ''
+      substituteInPlace bus/Makefile.am \
+        --replace 'install-data-hook:' 'disabled:' \
+        --replace '$(mkinstalldirs) $(DESTDIR)$(localstatedir)/run/dbus' ':'
+      substituteInPlace tools/Makefile.am \
+        --replace 'install-data-local:' 'disabled:' \
+        --replace 'installcheck-local:' 'disabled:'
+    ''
+    # cleanup of runtime references
+    + ''
+      substituteInPlace ./dbus/dbus-sysdeps-unix.c \
+        --replace 'DBUS_BINDIR "/dbus-launch"' "\"$lib/bin/dbus-launch\""
+      substituteInPlace ./tools/dbus-launch.c \
+        --replace 'DBUS_DAEMONDIR"/dbus-daemon"' '"/run/current-system/sw/bin/dbus-daemon"'
+    '';
 
-  outputs = [ "out" "dev" "lib" "doc" "man" ];
+  outputs = [
+    "out"
+    "dev"
+    "lib"
+    "doc"
+    "man"
+  ];
   separateDebugInfo = true;
 
   strictDeps = true;
@@ -60,32 +70,44 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs =
-    lib.optionals x11Support (with xorg; [
-      libX11
-      libICE
-      libSM
-    ]) ++ lib.optional enableSystemd systemdMinimal
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ audit libapparmor ];
+    lib.optionals x11Support (
+      with xorg;
+      [
+        libX11
+        libICE
+        libSM
+      ]
+    )
+    ++ lib.optional enableSystemd systemdMinimal
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      audit
+      libapparmor
+    ];
   # ToDo: optional selinux?
 
   __darwinAllowLocalNetworking = true;
 
-  configureFlags = [
-    "--enable-user-session"
-    "--enable-xml-docs"
-    "--libexecdir=${placeholder "out"}/libexec"
-    "--datadir=/etc"
-    "--localstatedir=/var"
-    "--runstatedir=/run"
-    "--sysconfdir=/etc"
-    "--with-session-socket-dir=/tmp"
-    "--with-system-pid-file=/run/dbus/pid"
-    "--with-system-socket=/run/dbus/system_bus_socket"
-    "--with-systemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
-    "--with-systemduserunitdir=${placeholder "out"}/etc/systemd/user"
-  ] ++ lib.optional (!x11Support) "--without-x"
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ "--enable-apparmor" "--enable-libaudit" ]
-  ++ lib.optionals enableSystemd [ "SYSTEMCTL=${systemdMinimal}/bin/systemctl" ];
+  configureFlags =
+    [
+      "--enable-user-session"
+      "--enable-xml-docs"
+      "--libexecdir=${placeholder "out"}/libexec"
+      "--datadir=/etc"
+      "--localstatedir=/var"
+      "--runstatedir=/run"
+      "--sysconfdir=/etc"
+      "--with-session-socket-dir=/tmp"
+      "--with-system-pid-file=/run/dbus/pid"
+      "--with-system-socket=/run/dbus/system_bus_socket"
+      "--with-systemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
+      "--with-systemduserunitdir=${placeholder "out"}/etc/systemd/user"
+    ]
+    ++ lib.optional (!x11Support) "--without-x"
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      "--enable-apparmor"
+      "--enable-libaudit"
+    ]
+    ++ lib.optionals enableSystemd [ "SYSTEMCTL=${systemdMinimal}/bin/systemctl" ];
 
   NIX_CFLAGS_LINK = lib.optionalString (!stdenv.hostPlatform.isDarwin) "-Wl,--as-needed";
 

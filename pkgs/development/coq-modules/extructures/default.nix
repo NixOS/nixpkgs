@@ -1,6 +1,10 @@
-{ lib, mkCoqDerivation, coq, version ? null
-, ssreflect
-, deriving
+{
+  lib,
+  mkCoqDerivation,
+  coq,
+  version ? null,
+  ssreflect,
+  deriving,
 }:
 
 (mkCoqDerivation {
@@ -8,15 +12,52 @@
   owner = "arthuraa";
 
   inherit version;
-  defaultVersion = with lib.versions; lib.switch [coq.coq-version ssreflect.version] [
-    { cases = [(range "8.17" "8.20") (isGe "2.0.0")  ]; out = "0.4.0"; }
-    { cases = [(range "8.11" "8.20") (range "1.12.0" "1.19.0") ]; out = "0.3.1"; }
-    { cases = [(range "8.11" "8.14") (isLe "1.12.0") ]; out = "0.3.0"; }
-    { cases = [(range "8.10" "8.12") (isLe "1.12.0") ]; out = "0.2.2"; }
-  ] null;
+  defaultVersion =
+    with lib.versions;
+    lib.switch
+      [ coq.coq-version ssreflect.version ]
+      [
+        {
+          cases = [
+            (range "8.17" "9.0")
+            (isGe "2.0.0")
+          ];
+          out = "0.5.0";
+        }
+        {
+          cases = [
+            (range "8.17" "8.20")
+            (isGe "2.0.0")
+          ];
+          out = "0.4.0";
+        }
+        {
+          cases = [
+            (range "8.11" "8.20")
+            (range "1.12.0" "1.19.0")
+          ];
+          out = "0.3.1";
+        }
+        {
+          cases = [
+            (range "8.11" "8.14")
+            (isLe "1.12.0")
+          ];
+          out = "0.3.0";
+        }
+        {
+          cases = [
+            (range "8.10" "8.12")
+            (isLe "1.12.0")
+          ];
+          out = "0.2.2";
+        }
+      ]
+      null;
 
   releaseRev = v: "v${v}";
 
+  release."0.5.0".sha256 = "sha256-Guu2+tmHym52DA6SB5Rq/rYWIQEl47Q7YvMaUkfOH2k=";
   release."0.4.0".sha256 = "sha256-hItFO2XY2LTPSofPTKt3AfOEfiLliaYdzUXgDv4ea9Y=";
   release."0.3.1".sha256 = "sha256-KcuG/11Yq5ACem4FyVnQqHKvy3tNK7hd0ir2SJzzMN0=";
   release."0.3.0".sha256 = "sha256:14rm0726f1732ldds495qavg26gsn30w6dfdn36xb12g5kzavp38";
@@ -30,7 +71,10 @@
     maintainers = [ maintainers.vbgl ];
   };
 
-}).overrideAttrs (o: {
-  propagatedBuildInputs = o.propagatedBuildInputs
-  ++ lib.optional (lib.versionAtLeast o.version "0.3.0") deriving;
-})
+}).overrideAttrs
+  (o: {
+    propagatedBuildInputs =
+      o.propagatedBuildInputs
+      ++ lib.optional (lib.versionAtLeast o.version "0.3.0"
+                       || o.version == "dev") deriving;
+  })

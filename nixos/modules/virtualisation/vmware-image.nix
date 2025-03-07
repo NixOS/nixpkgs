@@ -16,7 +16,8 @@ let
     "streamOptimized"
   ];
 
-in {
+in
+{
   imports = [
     ../image/file-options.nix
     (lib.mkRenamedOptionModuleWith {

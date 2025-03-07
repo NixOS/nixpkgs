@@ -1,9 +1,10 @@
-{ fetchgit
-, pkg-config
-, stdenv
-, lib
-# Package dependencies
-, qt5
+{
+  fetchgit,
+  pkg-config,
+  stdenv,
+  lib,
+  # Package dependencies
+  qt5,
 }:
 
 stdenv.mkDerivation rec {

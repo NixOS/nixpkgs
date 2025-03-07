@@ -1,4 +1,10 @@
-{ config, lib, pkgs, options, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  options,
+  ...
+}:
 
 let
   cfg = config.services.prometheus.exporters.bird;
@@ -13,7 +19,10 @@ in
   port = 9324;
   extraOpts = {
     birdVersion = mkOption {
-      type = types.enum [ 1 2 ];
+      type = types.enum [
+        1
+        2
+      ];
       default = 2;
       description = ''
         Specifies whether BIRD1 or BIRD2 is in use.
@@ -36,7 +45,7 @@ in
   };
   serviceOpts = {
     serviceConfig = {
-      SupplementaryGroups = singleton (if cfg.birdVersion == 1 then "bird" else "bird2");
+      SupplementaryGroups = "bird";
       ExecStart = ''
         ${pkgs.prometheus-bird-exporter}/bin/bird_exporter \
           -web.listen-address ${cfg.listenAddress}:${toString cfg.port} \

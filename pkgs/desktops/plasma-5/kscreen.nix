@@ -1,22 +1,23 @@
-{ mkDerivation
-, extra-cmake-modules
-, kconfig
-, kcmutils
-, kconfigwidgets
-, kdbusaddons
-, kglobalaccel
-, ki18n
-, kwidgetsaddons
-, kxmlgui
-, libkscreen
-, qtdeclarative
-, qtgraphicaleffects
-, qtsensors
-, kwindowsystem
-, kdeclarative
-, plasma-framework
-, qtx11extras
-, layer-shell-qt
+{
+  mkDerivation,
+  extra-cmake-modules,
+  kconfig,
+  kcmutils,
+  kconfigwidgets,
+  kdbusaddons,
+  kglobalaccel,
+  ki18n,
+  kwidgetsaddons,
+  kxmlgui,
+  libkscreen,
+  qtdeclarative,
+  qtgraphicaleffects,
+  qtsensors,
+  kwindowsystem,
+  kdeclarative,
+  plasma-framework,
+  qtx11extras,
+  layer-shell-qt,
 }:
 
 mkDerivation {

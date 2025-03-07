@@ -1,18 +1,19 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, fetchpatch
-, bash
-, makeWrapper
-, bc
-, jq
-, coreutils
-, util-linux
-, wimlib
-, file
-, syslinux
-, busybox
-, gnugrep # We can't use busybox's 'grep' as it doesn't support perl '-P' expressions.
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  fetchpatch,
+  bash,
+  makeWrapper,
+  bc,
+  jq,
+  coreutils,
+  util-linux,
+  wimlib,
+  file,
+  syslinux,
+  busybox,
+  gnugrep, # We can't use busybox's 'grep' as it doesn't support perl '-P' expressions.
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -47,7 +48,19 @@ stdenvNoCC.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/bootiso \
-      --prefix PATH : ${lib.makeBinPath [ bc jq coreutils util-linux wimlib file syslinux gnugrep busybox ]} \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          bc
+          jq
+          coreutils
+          util-linux
+          wimlib
+          file
+          syslinux
+          gnugrep
+          busybox
+        ]
+      } \
   '';
 
   meta = with lib; {

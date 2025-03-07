@@ -130,7 +130,7 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelChecking = false;
 
   preFixup = ''
-    for exampleExe in content-hub-test-{importer,exporter,sharer}; do
+    for exampleExe in lomiri-content-hub-test-{importer,exporter,sharer}; do
       moveToOutput bin/$exampleExe $examples
       moveToOutput share/applications/$exampleExe.desktop $examples
     done

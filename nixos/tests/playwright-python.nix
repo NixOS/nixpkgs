@@ -25,19 +25,20 @@ import ./make-test-python.nix (
               from playwright.sync_api import expect
 
               browsers = {
-                "chromium": ["--headless", "--disable-gpu"],
-                "firefox": [],
-                "webkit": []
+                "chromium": {'args': ["--headless", "--disable-gpu"], 'channel': 'chromium'},
+                "firefox": {},
+                "webkit": {}
               }
               if len(sys.argv) != 3 or sys.argv[1] not in browsers.keys():
                   print(f"usage: {sys.argv[0]} [{'|'.join(browsers.keys())}] <url>")
                   sys.exit(1)
               browser_name = sys.argv[1]
               url = sys.argv[2]
-              browser_args = browsers.get(browser_name)
-              print(f"Running test on {browser_name} {' '.join(browser_args)}")
+              browser_kwargs = browsers.get(browser_name)
+              args = ' '.join(browser_kwargs.get('args', []))
+              print(f"Running test on {browser_name} {args}")
               with sync_playwright() as p:
-                  browser = getattr(p, browser_name).launch(args=browser_args)
+                  browser = getattr(p, browser_name).launch(**browser_kwargs)
                   context = browser.new_context()
                   page = context.new_page()
                   page.goto(url)

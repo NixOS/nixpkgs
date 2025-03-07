@@ -1,22 +1,23 @@
-{ lib
-, stdenv
-, SDL2
-, fetchurl
-, gzip
-, libvorbis
-, libmad
-, flac
-, libopus
-, opusfile
-, libogg
-, curl
-, libxmp
-, mpg123
-, vulkan-headers
-, vulkan-loader
-, copyDesktopItems
-, makeDesktopItem
-, pkg-config
+{
+  lib,
+  stdenv,
+  SDL2,
+  fetchurl,
+  gzip,
+  libvorbis,
+  libmad,
+  flac,
+  libopus,
+  opusfile,
+  libogg,
+  curl,
+  libxmp,
+  mpg123,
+  vulkan-headers,
+  vulkan-loader,
+  copyDesktopItems,
+  makeDesktopItem,
+  pkg-config,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

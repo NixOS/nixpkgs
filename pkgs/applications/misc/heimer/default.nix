@@ -1,9 +1,10 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, cmake
-, qttools
-, qtbase
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  cmake,
+  qttools,
+  qtbase,
 }:
 
 mkDerivation rec {
@@ -32,7 +33,7 @@ mkDerivation rec {
     homepage = "https://github.com/juzzlin/Heimer";
     changelog = "https://github.com/juzzlin/Heimer/blob/${version}/CHANGELOG";
     license = licenses.gpl3Plus;
-    maintainers  = [ ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

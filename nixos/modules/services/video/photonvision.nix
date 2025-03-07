@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   cfg = config.services.photonvision;
@@ -8,7 +13,7 @@ in
     services.photonvision = {
       enable = lib.mkEnableOption "PhotonVision";
 
-      package = lib.mkPackageOption pkgs "photonvision" {};
+      package = lib.mkPackageOption pkgs "photonvision" { };
 
       openFirewall = lib.mkOption {
         description = ''
@@ -58,7 +63,12 @@ in
 
     networking.firewall = lib.mkIf cfg.openFirewall {
       allowedTCPPorts = [ 5800 ];
-      allowedTCPPortRanges = [{ from = 1180; to = 1190; }];
+      allowedTCPPortRanges = [
+        {
+          from = 1180;
+          to = 1190;
+        }
+      ];
     };
   };
 }

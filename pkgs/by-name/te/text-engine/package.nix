@@ -1,15 +1,16 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, fetchpatch
-, meson
-, ninja
-, json-glib
-, gtk4
-, libxml2
-, gobject-introspection
-, pkg-config
-, libadwaita
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  meson,
+  ninja,
+  json-glib,
+  gtk4,
+  libxml2,
+  gobject-introspection,
+  pkg-config,
+  libadwaita,
 }:
 
 stdenv.mkDerivation rec {
@@ -30,15 +31,28 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ gobject-introspection gtk4 meson ninja pkg-config ];
+  nativeBuildInputs = [
+    gobject-introspection
+    gtk4
+    meson
+    ninja
+    pkg-config
+  ];
 
-  buildInputs = [ libadwaita json-glib libxml2 ];
+  buildInputs = [
+    libadwaita
+    json-glib
+    libxml2
+  ];
 
   meta = with lib; {
     description = "Rich text framework for GTK";
     mainProgram = "text-engine-demo";
     homepage = "https://github.com/mjakeman/text-engine";
-    license = with licenses; [ mpl20 lgpl21Plus ];
+    license = with licenses; [
+      mpl20
+      lgpl21Plus
+    ];
     maintainers = with maintainers; [ foo-dogsquared ];
   };
 }

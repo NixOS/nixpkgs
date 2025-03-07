@@ -1,31 +1,38 @@
 # restart using 'killall -TERM fcron; fcron -b
 # use convert-fcrontab to update fcrontab files
 
-{ lib, stdenv, fetchurl, perl, busybox, vim }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  perl,
+  busybox,
+  vim,
+}:
 
 stdenv.mkDerivation rec {
   pname = "fcron";
-  version = "3.3.1";
+  version = "3.3.3";
 
   src = fetchurl {
     url = "http://fcron.free.fr/archives/${pname}-${version}.src.tar.gz";
-    sha256 = "sha256-81naoIpj3ft/4vlkuz9cUiRMJao2+SJaPMVNNvRoEQY=";
+    sha256 = "sha256-5bSMm3jLOM+ySgONyxOgi1EhiJN1N49C88lLwlDSFJc=";
   };
 
   buildInputs = [ perl ];
 
   patches = [ ./relative-fcronsighup.patch ];
 
-  configureFlags =
-    [ "--with-sendmail=${busybox}/sbin/sendmail"
-      "--with-editor=${vim}/bin/vi"  # TODO customizable
-      "--with-bootinstall=no"
-      "--localstatedir=/var"
-      "--sysconfdir=/etc"
-      "--with-rootname=root"
-      "--with-rootgroup=root"
-      "--disable-checks"
-    ];
+  configureFlags = [
+    "--with-sendmail=${busybox}/sbin/sendmail"
+    "--with-editor=${vim}/bin/vi" # TODO customizable
+    "--with-bootinstall=no"
+    "--localstatedir=/var"
+    "--sysconfdir=/etc"
+    "--with-rootname=root"
+    "--with-rootgroup=root"
+    "--disable-checks"
+  ];
 
   installTargets = [ "install-staged" ]; # install does also try to change permissions of /etc/* files
 
@@ -53,7 +60,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description="Command scheduler with extended capabilities over cron and anacron";
+    description = "Command scheduler with extended capabilities over cron and anacron";
     homepage = "http://fcron.free.fr";
     license = licenses.gpl2Plus;
     platforms = lib.platforms.all;

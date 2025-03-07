@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, cmake, bison, flex }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  bison,
+  flex,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libcue";
@@ -11,7 +18,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-ZMUUa8CmpFNparPsM/P2yvRto9E85EdTxpID5sKQbNI=";
   };
 
-  nativeBuildInputs = [ cmake bison flex ];
+  nativeBuildInputs = [
+    cmake
+    bison
+    flex
+  ];
 
   doCheck = true;
 

@@ -1,12 +1,17 @@
-{ lib, stdenv, fetchurl, gmp }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gmp,
+}:
 
 stdenv.mkDerivation {
   pname = "lrs";
-  version = "7.2";
+  version = "7.3";
 
   src = fetchurl {
-    url = "http://cgm.cs.mcgill.ca/~avis/C/lrslib/archive/lrslib-072.tar.gz";
-    sha256 = "1w1jsnfgny8cihndr5gfm99pvwp48qsvxkqfsi2q87gd3m57aj7w";
+    url = "http://cgm.cs.mcgill.ca/~avis/C/lrslib/archive/lrslib-073.tar.gz";
+    sha256 = "sha256-xJpOvYVhg0c9HVpieF/N/hBX1dZx1LlvOhJQ6xr+ToM=";
   };
 
   buildInputs = [ gmp ];

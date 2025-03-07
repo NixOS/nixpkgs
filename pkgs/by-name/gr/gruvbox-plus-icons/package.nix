@@ -42,6 +42,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://github.com/SylEleuth/gruvbox-plus-icon-pack";
     license = licenses.gpl3Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ eureka-cpu RGBCube ];
+    maintainers = with maintainers; [ eureka-cpu ];
   };
 })

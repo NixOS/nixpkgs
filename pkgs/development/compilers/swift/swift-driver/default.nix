@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, callPackage
-, fetchpatch
-, swift
-, swiftpm
-, swiftpm2nix
-, Foundation
-, XCTest
-, sqlite
-, ncurses
-, substituteAll
+{
+  lib,
+  stdenv,
+  callPackage,
+  fetchpatch,
+  swift,
+  swiftpm,
+  swiftpm2nix,
+  Foundation,
+  XCTest,
+  sqlite,
+  ncurses,
+  replaceVars,
 }:
 let
   sources = callPackage ../sources.nix { };
@@ -27,7 +28,10 @@ stdenv.mkDerivation {
   inherit (sources) version;
   src = sources.swift-driver;
 
-  nativeBuildInputs = [ swift swiftpm ];
+  nativeBuildInputs = [
+    swift
+    swiftpm
+  ];
   buildInputs = [
     Foundation
     XCTest
@@ -46,20 +50,23 @@ stdenv.mkDerivation {
       hash = "sha256-eVBaKN6uzj48ZnHtwGV0k5ChKjak1tDCyE+wTdyGq2c=";
     })
     # Prevent a warning about SDK directories we don't have.
-    (substituteAll {
-      src = ./patches/prevent-sdk-dirs-warnings.patch;
+    (replaceVars ./patches/prevent-sdk-dirs-warnings.patch {
       inherit (builtins) storeDir;
     })
   ];
 
-  configurePhase = generated.configure + ''
-    swiftpmMakeMutable swift-tools-support-core
-    patch -p1 -d .build/checkouts/swift-tools-support-core -i ${fetchpatch {
-      url = "https://github.com/apple/swift-tools-support-core/commit/990afca47e75cce136d2f59e464577e68a164035.patch";
-      hash = "sha256-PLzWsp+syiUBHhEFS8+WyUcSae5p0Lhk7SSRdNvfouE=";
-      includes = [ "Sources/TSCBasic/FileSystem.swift" ];
-    }}
-  '';
+  configurePhase =
+    generated.configure
+    + ''
+      swiftpmMakeMutable swift-tools-support-core
+      patch -p1 -d .build/checkouts/swift-tools-support-core -i ${
+        fetchpatch {
+          url = "https://github.com/apple/swift-tools-support-core/commit/990afca47e75cce136d2f59e464577e68a164035.patch";
+          hash = "sha256-PLzWsp+syiUBHhEFS8+WyUcSae5p0Lhk7SSRdNvfouE=";
+          includes = [ "Sources/TSCBasic/FileSystem.swift" ];
+        }
+      }
+    '';
 
   # TODO: Tests depend on indexstore-db being provided by an existing Swift
   # toolchain. (ie. looks for `../lib/libIndexStore.so` relative to swiftc.

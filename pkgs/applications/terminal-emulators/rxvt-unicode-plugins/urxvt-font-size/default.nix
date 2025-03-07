@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, xrdb, xlsfonts }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  xrdb,
+  xlsfonts,
+}:
 
 stdenv.mkDerivation rec {
   pname = "urxvt-font-size";

@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "LennP";
     repo = "motionblindsble";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-1dA3YTjoAhe+p5vk6Xb42a+rE63m2mn5iHhVV/6tlQ0=";
   };
 
@@ -46,7 +46,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "motionblindsble" ];
 
   disabledTests = [
-    # AssertionEror
+    # AssertionError
     "test_establish_connection"
   ];
 

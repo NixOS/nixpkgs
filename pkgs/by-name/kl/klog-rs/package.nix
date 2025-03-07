@@ -7,15 +7,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "klog-rs";
-  version = "0.3.1";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "tobifroe";
     repo = "klog";
     rev = version;
-    hash = "sha256-E3oL6XAp9N0ptDTpGBd6pmg4DJx9GDJv3ZSbkc6at60=";
+    hash = "sha256-t53HC5eBC587jyvJKxlG3B3Im7RM6bDcZfUO4npgGfM=";
   };
-  cargoHash = "sha256-S2F9oVPZH52luSsFUlQCLANPJudjJvecv8S6BBUnC78=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-HmKMxI94j0cLLAjmUJQhymop9qiH71Rm8dnVVs2VDF8=";
   checkFlags = [
     # this integration test depends on a running kubernetes cluster
     "--skip=k8s::tests::test_get_pod_list"

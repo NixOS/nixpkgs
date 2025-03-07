@@ -1,17 +1,21 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, autoreconfHook
-, bison
-, libevent
-, ncurses
-, pkg-config
-, runCommand
-, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd, systemd
-, withUtf8proc ? true, utf8proc # gets Unicode updates faster than glibc
-, withUtempter ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isMusl, libutempter
-, withSixel ? true
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  autoreconfHook,
+  bison,
+  libevent,
+  ncurses,
+  pkg-config,
+  runCommand,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  systemd,
+  withUtf8proc ? true,
+  utf8proc, # gets Unicode updates faster than glibc
+  withUtempter ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isMusl,
+  libutempter,
+  withSixel ? true,
 }:
 
 let
@@ -29,7 +33,10 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "tmux";
   version = "3.5a";
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   src = fetchFromGitHub {
     owner = "tmux";
@@ -44,43 +51,54 @@ stdenv.mkDerivation (finalAttrs: {
     bison
   ];
 
-  buildInputs = [
-    ncurses
-    libevent
-  ] ++ lib.optionals withSystemd [ systemd ]
-  ++ lib.optionals withUtf8proc [ utf8proc ]
-  ++ lib.optionals withUtempter [ libutempter ];
+  buildInputs =
+    [
+      ncurses
+      libevent
+    ]
+    ++ lib.optionals withSystemd [ systemd ]
+    ++ lib.optionals withUtf8proc [ utf8proc ]
+    ++ lib.optionals withUtempter [ libutempter ];
 
-  configureFlags = [
-    "--sysconfdir=/etc"
-    "--localstatedir=/var"
-  ] ++ lib.optionals withSystemd [ "--enable-systemd" ]
-  ++ lib.optionals withSixel [ "--enable-sixel" ]
-  ++ lib.optionals withUtempter [ "--enable-utempter" ]
-  ++ lib.optionals withUtf8proc [ "--enable-utf8proc" ];
+  configureFlags =
+    [
+      "--sysconfdir=/etc"
+      "--localstatedir=/var"
+    ]
+    ++ lib.optionals withSystemd [ "--enable-systemd" ]
+    ++ lib.optionals withSixel [ "--enable-sixel" ]
+    ++ lib.optionals withUtempter [ "--enable-utempter" ]
+    ++ lib.optionals withUtf8proc [ "--enable-utf8proc" ];
 
   enableParallelBuilding = true;
 
-  postInstall = ''
-    mkdir -p $out/share/bash-completion/completions
-    cp -v ${bashCompletion}/completions/tmux $out/share/bash-completion/completions/tmux
-  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    mkdir $out/nix-support
-    echo "${finalAttrs.passthru.terminfo}" >> $out/nix-support/propagated-user-env-packages
-  '';
+  postInstall =
+    ''
+      mkdir -p $out/share/bash-completion/completions
+      cp -v ${bashCompletion}/completions/tmux $out/share/bash-completion/completions/tmux
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      mkdir $out/nix-support
+      echo "${finalAttrs.passthru.terminfo}" >> $out/nix-support/propagated-user-env-packages
+    '';
 
   passthru = {
-    terminfo = runCommand "tmux-terminfo" { nativeBuildInputs = [ ncurses ]; } (if stdenv.hostPlatform.isDarwin then ''
-      mkdir -p $out/share/terminfo/74
-      cp -v ${ncurses}/share/terminfo/74/tmux $out/share/terminfo/74
-      # macOS ships an old version (5.7) of ncurses which does not include tmux-256color so we need to provide it from our ncurses.
-      # However, due to a bug in ncurses 5.7, we need to first patch the terminfo before we can use it with macOS.
-      # https://gpanders.com/blog/the-definitive-guide-to-using-tmux-256color-on-macos/
-      tic -o $out/share/terminfo -x <(TERMINFO_DIRS=${ncurses}/share/terminfo infocmp -x tmux-256color | sed 's|pairs#0x10000|pairs#32767|')
-    '' else ''
-      mkdir -p $out/share/terminfo/t
-      ln -sv ${ncurses}/share/terminfo/t/{tmux,tmux-256color,tmux-direct} $out/share/terminfo/t
-    '');
+    terminfo = runCommand "tmux-terminfo" { nativeBuildInputs = [ ncurses ]; } (
+      if stdenv.hostPlatform.isDarwin then
+        ''
+          mkdir -p $out/share/terminfo/74
+          cp -v ${ncurses}/share/terminfo/74/tmux $out/share/terminfo/74
+          # macOS ships an old version (5.7) of ncurses which does not include tmux-256color so we need to provide it from our ncurses.
+          # However, due to a bug in ncurses 5.7, we need to first patch the terminfo before we can use it with macOS.
+          # https://gpanders.com/blog/the-definitive-guide-to-using-tmux-256color-on-macos/
+          tic -o $out/share/terminfo -x <(TERMINFO_DIRS=${ncurses}/share/terminfo infocmp -x tmux-256color | sed 's|pairs#0x10000|pairs#32767|')
+        ''
+      else
+        ''
+          mkdir -p $out/share/terminfo/t
+          ln -sv ${ncurses}/share/terminfo/t/{tmux,tmux-256color,tmux-direct} $out/share/terminfo/t
+        ''
+    );
   };
 
   meta = {
@@ -102,6 +120,9 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
     mainProgram = "tmux";
-    maintainers = with lib.maintainers; [ thammers fpletz ];
+    maintainers = with lib.maintainers; [
+      thammers
+      fpletz
+    ];
   };
 })

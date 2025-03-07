@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage {
   sourceRoot = "${src.name}/coolercontrold";
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-ZAjaegUgNkKygXqskyeUkWpcqi1Jt7pE8GtqWlaP6/I=";
+  cargoHash = "sha256-5gqtSZs/unFobEl1MHec2uhGDrWnO6ITlYbB78VasZg=";
 
   buildInputs = [ libdrm ];
 

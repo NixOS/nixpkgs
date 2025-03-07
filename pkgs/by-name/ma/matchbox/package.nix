@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchurl, fetchpatch, pkg-config, libmatchbox, libX11, libXext }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  pkg-config,
+  libmatchbox,
+  libX11,
+  libXext,
+}:
 
 stdenv.mkDerivation rec {
   pname = "matchbox";

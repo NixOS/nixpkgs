@@ -1,6 +1,7 @@
-{ lib
-, stdenv
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
 }:
 
 let
@@ -32,4 +33,3 @@ stdenv.mkDerivation {
     mainProgram = "aquosctl";
   };
 }
-

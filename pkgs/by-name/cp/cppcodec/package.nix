@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -26,6 +27,9 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://github.com/tplgy/cppcodec";
     license = licenses.mit;
-    maintainers = with maintainers; [ panicgh raitobezarius ];
+    maintainers = with maintainers; [
+      panicgh
+      raitobezarius
+    ];
   };
 })

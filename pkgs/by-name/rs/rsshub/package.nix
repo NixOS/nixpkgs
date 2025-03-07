@@ -3,19 +3,19 @@
   fetchFromGitHub,
   makeBinaryWrapper,
   nodejs,
-  pnpm,
+  pnpm_9,
   replaceVars,
   stdenv,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "rsshub";
-  version = "0-unstable-2024-09-16";
+  version = "0-unstable-2025-02-03";
 
   src = fetchFromGitHub {
     owner = "DIYgod";
     repo = "RSSHub";
-    rev = "6de50fb35dbdb93be43f315a8c2651e90c5195a9";
-    hash = "sha256-fxkK1prrKfAmB5yqiOKdLPeJp/hO07KJNHLnYSQGPNE=";
+    rev = "72f78e2bfbcf000a6f374a92894430cf845fd1fd";
+    hash = "sha256-okavLIYJZ+0iCsYtBc2r3FS18MVE/ap2OwRae7rWTrw=";
   };
 
   patches = [
@@ -24,15 +24,15 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = pnpm_9.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-mAAo4SdJ8cj8aqnbm+azcnxq8lFBvOy3BlSEKz9MA0Q=";
+    hash = "sha256-c16Ue5YiRWlF7ldt/8WLi1/xYhGqqr6XqvUieQbvbWg=";
   };
 
   nativeBuildInputs = [
     makeBinaryWrapper
     nodejs
-    pnpm.configHook
+    pnpm_9.configHook
   ];
 
   buildPhase = ''

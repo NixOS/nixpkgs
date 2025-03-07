@@ -6,16 +6,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mdbook-alerts";
-  version = "0.6.10";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "lambdalisue";
     repo = "rs-mdbook-alerts";
     rev = "v${version}";
-    hash = "sha256-xyjLrqNb/YC2FWQXsCFJgiIDZz4xWACnrUiBuXS2Nio=";
+    hash = "sha256-MZS9TESITj3tzdaXYu5S2QUCW7cZuTpH1skFKeVi/sQ=";
   };
 
-  cargoHash = "sha256-ZKnpOgTyUETCW0qxAjEj2E75mgHWLxmaTTfpdW+y3OY=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-ZL8M9Ces8qs8ClayjJTt5FvlG+WcRpJLuZBNATEbLtQ=";
 
   meta = {
     description = "Preprocessor for mdbook to support the inclusion of Markdown alerts";

@@ -1,4 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k, python, stdenv }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy3k,
+  python,
+  stdenv,
+}:
 
 buildPythonPackage rec {
   pname = "futures";

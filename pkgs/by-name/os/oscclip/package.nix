@@ -1,6 +1,7 @@
-{ lib
-, python3Packages
-, fetchFromGitHub
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -27,6 +28,9 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/rumpelsepp/oscclip";
 
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ rumpelsepp traxys ];
+    maintainers = with maintainers; [
+      rumpelsepp
+      traxys
+    ];
   };
 }

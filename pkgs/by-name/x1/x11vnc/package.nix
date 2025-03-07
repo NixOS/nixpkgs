@@ -1,6 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch,
-  openssl, zlib, libjpeg, xorg, coreutils, libvncserver,
-  autoreconfHook, pkg-config }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  openssl,
+  zlib,
+  libjpeg,
+  xorg,
+  coreutils,
+  libvncserver,
+  autoreconfHook,
+  pkg-config,
+}:
 
 stdenv.mkDerivation rec {
   pname = "x11vnc";
@@ -29,16 +40,27 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
 
-  buildInputs =
-    [ xorg.libXfixes xorg.xorgproto openssl xorg.libXdamage
-      zlib xorg.libX11 libjpeg
-      xorg.libXtst xorg.libXinerama xorg.libXrandr
-      xorg.libXext
-      xorg.libXi xorg.libXrender
-      libvncserver
-    ];
+  buildInputs = [
+    xorg.libXfixes
+    xorg.xorgproto
+    openssl
+    xorg.libXdamage
+    zlib
+    xorg.libX11
+    libjpeg
+    xorg.libXtst
+    xorg.libXinerama
+    xorg.libXrandr
+    xorg.libXext
+    xorg.libXi
+    xorg.libXrender
+    libvncserver
+  ];
 
   postPatch = ''
     substituteInPlace src/unixpw.c \

@@ -12,7 +12,7 @@
   libbacktrace,
   libpcap,
   libwebp,
-  llvmPackages_17,
+  llvmPackages,
   lz4,
   makeWrapper,
   pkg-config,
@@ -37,7 +37,7 @@ let
     wrapQtAppsHook
     ;
 in
-llvmPackages_17.stdenv.mkDerivation (finalAttrs: {
+llvmPackages.stdenv.mkDerivation (finalAttrs: {
   inherit (sources.pcsx2) pname version src;
 
   patches = [
@@ -130,13 +130,10 @@ llvmPackages_17.stdenv.mkDerivation (finalAttrs: {
     ];
     mainProgram = "pcsx2-qt";
     maintainers = with lib.maintainers; [
-      AndersonTorres
       hrdinka
       govanify
       matteopacini
     ];
-    platforms = lib.systems.inspect.patternLogicalAnd
-      lib.systems.inspect.patterns.isLinux
-      lib.systems.inspect.patterns.isx86_64;
+    platforms = lib.systems.inspect.patternLogicalAnd lib.systems.inspect.patterns.isLinux lib.systems.inspect.patterns.isx86_64;
   };
 })

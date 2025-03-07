@@ -28,31 +28,37 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-3n65SrZiEq53WDdlJDaKirIII0szeWYlymMFR9vIODI=";
   };
 
-  outputs = [ "out" "doc" ];
+  outputs = [
+    "out"
+    "doc"
+  ];
 
   nativeBuildInputs = [
     SDL2
     pkg-config
   ];
 
-  buildInputs = [
-    SDL2
-    SDL2_net
-    flac
-    libglut
-    libcdio
-    libjack2
-    libsamplerate
-    libsndfile
-    zlib
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    alsa-lib
-    libGL
-    libGLU
-    libX11
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    libiconv
-  ];
+  buildInputs =
+    [
+      SDL2
+      SDL2_net
+      flac
+      libglut
+      libcdio
+      libjack2
+      libsamplerate
+      libsndfile
+      zlib
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      alsa-lib
+      libGL
+      libGLU
+      libX11
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      libiconv
+    ];
 
   hardeningDisable = [
     "format"
@@ -104,7 +110,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.gpl2Plus;
     mainProgram = "mednafen";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.unix;
   };
 })

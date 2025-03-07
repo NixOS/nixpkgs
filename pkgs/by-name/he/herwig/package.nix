@@ -1,4 +1,18 @@
-{ lib, stdenv, fetchurl, boost, fastjet, gfortran, gsl, lhapdf, thepeg, zlib, autoconf, automake, libtool }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  boost,
+  fastjet,
+  gfortran,
+  gsl,
+  lhapdf,
+  thepeg,
+  zlib,
+  autoconf,
+  automake,
+  libtool,
+}:
 
 stdenv.mkDerivation rec {
   pname = "herwig";
@@ -9,11 +23,26 @@ stdenv.mkDerivation rec {
     hash = "sha256-JiSBnS3/EFupUuobXPEutvSSbUlRd0pBkHaZ4vVnaGw=";
   };
 
-  nativeBuildInputs = [ autoconf automake libtool gfortran ];
+  nativeBuildInputs = [
+    autoconf
+    automake
+    libtool
+    gfortran
+  ];
 
-  buildInputs = [ boost fastjet gsl thepeg zlib ]
+  buildInputs =
+    [
+      boost
+      fastjet
+      gsl
+      thepeg
+      zlib
+    ]
     # There is a bug that requires for default PDF's to be present during the build
-    ++ (with lhapdf.pdf_sets; [ CT14lo CT14nlo ]);
+    ++ (with lhapdf.pdf_sets; [
+      CT14lo
+      CT14nlo
+    ]);
 
   postPatch = ''
     patchShebangs ./

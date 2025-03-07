@@ -9,7 +9,7 @@
   cffi,
   cloudpickle,
   cmake,
-  cython_0,
+  cython,
   fsspec,
   hypothesis,
   numpy,
@@ -37,7 +37,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     cmake
-    cython_0
+    cython
     pkg-config
     setuptools
     setuptools-scm

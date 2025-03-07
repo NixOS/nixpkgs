@@ -1,4 +1,8 @@
-{ lib, rustPlatform, fetchFromGitHub }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "rslint";
@@ -11,11 +15,14 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-3DEwi+bhqwP8aMpZYl07GZbe7IecraB3m54lZ5LViVc=";
   };
 
-  cargoHash = "sha256-bqF5v52uxbvmVmphXAmcWlCI6nbQzZemCxlTcqhRDTY=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-4DzQSnrUUNaeyNLKvnx4HKM4dAS10y5mu5S2NpzfFRQ=";
 
   cargoBuildFlags = [
-    "-p" "rslint_cli"
-    "-p" "rslint_lsp"
+    "-p"
+    "rslint_cli"
+    "-p"
+    "rslint_lsp"
   ];
 
   meta = with lib; {

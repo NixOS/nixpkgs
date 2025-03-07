@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, wayland
-, wayland-protocols
-, fetchpatch
-, wayland-scanner
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  wayland,
+  wayland-protocols,
+  fetchpatch,
+  wayland-scanner,
 }:
 
 stdenv.mkDerivation {
@@ -30,9 +31,17 @@ stdenv.mkDerivation {
   ];
 
   strictDeps = true;
-  nativeBuildInputs = [ meson ninja pkg-config wayland-scanner ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    wayland-scanner
+  ];
 
-  buildInputs = [ wayland wayland-protocols ];
+  buildInputs = [
+    wayland
+    wayland-protocols
+  ];
 
   installPhase = ''
     runHook preInstall

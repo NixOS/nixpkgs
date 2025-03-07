@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, sharutils, makeWrapper }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  sharutils,
+  makeWrapper,
+}:
 
 stdenv.mkDerivation rec {
   pname = "aespipe";
@@ -11,7 +17,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  configureFlags = [ "--enable-padlock" "--enable-intelaes" ];
+  configureFlags = [
+    "--enable-padlock"
+    "--enable-intelaes"
+  ];
 
   postInstall = ''
     cp bz2aespipe $out/bin

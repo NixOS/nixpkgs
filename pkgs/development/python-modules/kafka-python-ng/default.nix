@@ -24,14 +24,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "wbarnha";
     repo = "kafka-python-ng";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-a2RFiBRh3S2YQBekpwEK74ow8bGlgWCGqSf2vcgYPYk=";
   };
 
   build-system = [ setuptools-scm ];
 
   optional-dependencies = {
-    crc32c =  [ crc32c ];
+    crc32c = [ crc32c ];
     lz4 = [ lz4 ];
     snappy = [ python-snappy ];
     zstd = [ zstandard ];

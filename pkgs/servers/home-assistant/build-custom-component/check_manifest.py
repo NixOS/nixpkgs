@@ -1,19 +1,31 @@
 #!/usr/bin/env python3
 
+import argparse
 import json
 import os
 import sys
 
-import importlib_metadata
+import importlib.metadata
+from typing import Dict, List
 from packaging.requirements import InvalidRequirement, Requirement
 
 
-def error(msg: str, ret: bool = False) -> None:
+def error(msg: str, ret: bool = False) -> bool:
     print(f"  - {msg}", file=sys.stderr)
     return ret
 
 
-def check_requirement(req: str):
+def check_derivation_name(manifest: Dict) -> bool:
+    derivation_domain = os.environ.get("domain")
+    manifest_domain = manifest["domain"]
+    if derivation_domain != manifest_domain:
+        return error(
+            f"Derivation attribute domain ({derivation_domain}) should match manifest domain ({manifest_domain})"
+        )
+    return True
+
+
+def test_requirement(req: str, ignore_version_requirement: List[str]) -> bool:
     # https://packaging.pypa.io/en/stable/requirements.html
     try:
         requirement = Requirement(req)
@@ -21,44 +33,55 @@ def check_requirement(req: str):
         return error(f"{req} could not be parsed", ret=True)
 
     try:
-        version = importlib_metadata.distribution(requirement.name).version
-    except importlib_metadata.PackageNotFoundError:
-        return error(f"{requirement.name}{requirement.specifier} not present")
+        version = importlib.metadata.distribution(requirement.name).version
+    except importlib.metadata.PackageNotFoundError:
+        return error(f"{requirement.name}{requirement.specifier} not installed")
 
     # https://packaging.pypa.io/en/stable/specifiers.html
-    if version not in requirement.specifier:
+    if (
+        requirement.name not in ignore_version_requirement
+        and version not in requirement.specifier
+    ):
         return error(
-            f"{requirement.name}{requirement.specifier} expected, but got {version}"
+            f"{requirement.name}{requirement.specifier} not satisfied by version {version}"
         )
 
     return True
 
 
-def check_manifest(manifest_file: str):
-    with open(manifest_file) as fd:
-        manifest = json.load(fd)
-
+def check_requirements(manifest: Dict, ignore_version_requirement: List[str]):
     ok = True
 
-    derivation_domain = os.environ.get("domain")
-    manifest_domain = manifest["domain"]
-    if derivation_domain != manifest_domain:
-        ok = False
-        error(
-            f"Derivation attribute domain ({derivation_domain}) must match manifest domain ({manifest_domain})"
-        )
+    for requirement in manifest.get("requirements", []):
+        ok &= test_requirement(requirement, ignore_version_requirement)
 
-    if "requirements" in manifest:
-        for requirement in manifest["requirements"]:
-            ok &= check_requirement(requirement)
+    return ok
+
+
+def main(args):
+    ok = True
+
+    manifests = []
+    for fd in args.manifests:
+        manifests.append(json.load(fd))
+
+    # At least one manifest should match the component name
+    ok &= any(check_derivation_name(manifest) for manifest in manifests)
+
+    # All requirements need to match, use `ignoreRequirementVersion` to ignore too strict version constraints
+    ok &= all(
+        check_requirements(manifest, args.ignore_version_requirement)
+        for manifest in manifests
+    )
 
     if not ok:
-        error("Manifest check failed.")
         sys.exit(1)
 
 
 if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        raise RuntimeError(f"Usage {sys.argv[0]} <manifest>")
-    manifest_file = sys.argv[1]
-    check_manifest(manifest_file)
+    parser = argparse.ArgumentParser()
+    parser.add_argument("manifests", type=argparse.FileType("r"), nargs="+")
+    parser.add_argument("--ignore-version-requirement", action="append", default=[])
+    args = parser.parse_args()
+
+    main(args)

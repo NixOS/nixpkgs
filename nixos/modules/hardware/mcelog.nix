@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 {
   meta.maintainers = with lib.maintainers; [ grahamc ];
   options = {

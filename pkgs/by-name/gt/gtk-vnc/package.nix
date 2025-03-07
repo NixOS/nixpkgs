@@ -1,36 +1,44 @@
-{ lib
-, stdenv
-, fetchurl
-, meson
-, ninja
-, gobject-introspection
-, gnutls
-, cairo
-, glib
-, pkg-config
-, cyrus_sasl
-, pulseaudioSupport ? stdenv.hostPlatform.isLinux
-, libpulseaudio
-, libgcrypt
-, gtk3
-, vala
-, gettext
-, perl
-, python3
-, gnome
-, gdk-pixbuf
-, zlib
+{
+  lib,
+  stdenv,
+  fetchurl,
+  meson,
+  ninja,
+  gobject-introspection,
+  gnutls,
+  cairo,
+  glib,
+  pkg-config,
+  cyrus_sasl,
+  pulseaudioSupport ? stdenv.hostPlatform.isLinux,
+  libpulseaudio,
+  gmp,
+  gtk3,
+  vala,
+  gettext,
+  perl,
+  python3,
+  gi-docgen,
+  gnome,
+  gdk-pixbuf,
+  zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gtk-vnc";
-  version = "1.3.1";
+  version = "1.5.0";
 
-  outputs = [ "out" "bin" "man" "dev" ];
+  outputs = [
+    "out"
+    "bin"
+    "man"
+    "dev"
+    "devdoc"
+  ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "USdjrE4FWdAVi2aCyl3Ro71jPwgvXkNJ1xWOa1+A8c4=";
+    url = "mirror://gnome/sources/gtk-vnc/${lib.versions.majorMinor finalAttrs.version}/gtk-vnc-${finalAttrs.version}.tar.xz";
+    sha256 = "wL60dHUorZMdpDrMVnxqAZD3/GJEZVce2czs4Cw03SM=";
   };
 
   nativeBuildInputs = [
@@ -42,28 +50,36 @@ stdenv.mkDerivation rec {
     gettext
     perl # for pod2man
     python3
+    gi-docgen
   ];
 
-  buildInputs = [
-    gnutls
-    cairo
-    gdk-pixbuf
-    zlib
-    glib
-    libgcrypt
-    cyrus_sasl
-    gtk3
-  ] ++ lib.optionals pulseaudioSupport [
-    libpulseaudio
-  ];
+  buildInputs =
+    [
+      gnutls
+      cairo
+      gdk-pixbuf
+      zlib
+      glib
+      gmp
+      cyrus_sasl
+      gtk3
+    ]
+    ++ lib.optionals pulseaudioSupport [
+      libpulseaudio
+    ];
 
   mesonFlags = lib.optionals (!pulseaudioSupport) [
     "-Dpulseaudio=disabled"
   ];
 
+  postFixup = ''
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    moveToOutput "share/doc" "$devdoc"
+  '';
+
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "gtk-vnc";
       versionPolicy = "none";
     };
   };
@@ -72,8 +88,11 @@ stdenv.mkDerivation rec {
     description = "GTK VNC widget";
     homepage = "https://gitlab.gnome.org/GNOME/gtk-vnc";
     license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ raskin offline ];
+    maintainers = with maintainers; [
+      raskin
+      offline
+    ];
     platforms = platforms.unix;
     mainProgram = "gvnccapture";
   };
-}
+})

@@ -27,8 +27,8 @@ buildDotnetModule rec {
   # Fixes application reporting 0.0.0.0 as its version.
   MINVERVERSIONOVERRIDE = version;
 
-  dotnet-sdk = dotnetCorePackages.sdk_6_0;
-  dotnet-runtime = dotnetCorePackages.aspnetcore_6_0;
+  dotnet-sdk = dotnetCorePackages.sdk_6_0-bin;
+  dotnet-runtime = dotnetCorePackages.aspnetcore_6_0-bin;
 
   nativeBuildInputs = [ git glibcLocales bintools ];
 
@@ -42,7 +42,7 @@ buildDotnetModule rec {
     "EventStore.Projections.Core.Tests.Services.grpc_service.ServerFeaturesTests<LogFormat+V3,UInt32>.should_receive_expected_endpoints"
   ];
 
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
 
   projectFile = "src/EventStore.ClusterNode/EventStore.ClusterNode.csproj";
 

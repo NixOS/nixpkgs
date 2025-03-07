@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   inherit (lib) types;
   cfg = config.services.croc;
@@ -9,7 +14,13 @@ in
     enable = lib.mkEnableOption "croc relay";
     ports = lib.mkOption {
       type = with types; listOf port;
-      default = [9009 9010 9011 9012 9013];
+      default = [
+        9009
+        9010
+        9011
+        9012
+        9013
+      ];
       description = "Ports of the relay.";
     };
     pass = lib.mkOption {
@@ -26,7 +37,9 @@ in
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
-        ExecStart = "${pkgs.croc}/bin/croc --pass '${cfg.pass}' ${lib.optionalString cfg.debug "--debug"} relay --ports ${lib.concatMapStringsSep "," toString cfg.ports}";
+        ExecStart = "${pkgs.croc}/bin/croc --pass '${cfg.pass}' ${lib.optionalString cfg.debug "--debug"} relay --ports ${
+          lib.concatMapStringsSep "," toString cfg.ports
+        }";
         # The following options are only for optimizing:
         # systemd-analyze security croc
         AmbientCapabilities = "";
@@ -54,7 +67,10 @@ in
         ProtectProc = "invisible";
         ProtectSystem = "strict";
         RemoveIPC = true;
-        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+        ];
         RestrictNamespaces = true;
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
@@ -68,11 +84,17 @@ in
         # to allow traversal of directories they create in RootDirectory=.
         UMask = "0066";
         # Create rootDir in the host's mount namespace.
-        RuntimeDirectory = [(baseNameOf rootDir)];
+        RuntimeDirectory = [ (baseNameOf rootDir) ];
         RuntimeDirectoryMode = "700";
         SystemCallFilter = [
           "@system-service"
-          "~@aio" "~@keyring" "~@memlock" "~@privileged" "~@setuid" "~@sync" "~@timer"
+          "~@aio"
+          "~@keyring"
+          "~@memlock"
+          "~@privileged"
+          "~@setuid"
+          "~@sync"
+          "~@timer"
         ];
         SystemCallArchitectures = "native";
         SystemCallErrorNumber = "EPERM";
@@ -82,5 +104,8 @@ in
     networking.firewall.allowedTCPPorts = lib.mkIf cfg.openFirewall cfg.ports;
   };
 
-  meta.maintainers = with lib.maintainers; [ hax404 julm ];
+  meta.maintainers = with lib.maintainers; [
+    hax404
+    julm
+  ];
 }
