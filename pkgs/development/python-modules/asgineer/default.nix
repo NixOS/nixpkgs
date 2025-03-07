@@ -26,6 +26,8 @@ buildPythonPackage rec {
     requests
   ];
 
+  pythonImportsCheck = [ "asgineer" ];
+
   meta = with lib; {
     description = "Really thin ASGI web framework";
     homepage = "https://asgineer.readthedocs.io";
