@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   version = "0.2.4";
 
   src = fetchFromGitHub {
-    repo = pname;
+    repo = "drip";
     owner = "ninjudd";
     rev = version;
     sha256 = "1zl62wdwfak6z725asq5lcqb506la1aavj7ag78lvp155wyh8aq1";

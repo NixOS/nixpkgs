@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "Canop";
-    repo = pname;
+    repo = "broot";
     rev = "v${version}";
     hash = "sha256-GaOPC1lIu48qFo99AQ99f49e8qH/TEQubpluptLc0jY=";
   };

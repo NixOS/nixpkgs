@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "containers";
-    repo = pname;
+    repo = "youki";
     rev = "v${version}";
     hash = "sha256-w8NCAjOLkb2vJYgtB5gAqvtNGnD/1TRc3KmoEygJNbQ=";
   };
