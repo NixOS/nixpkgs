@@ -6141,9 +6141,7 @@ with pkgs;
   spicedb-zed = callPackage ../servers/spicedb/zed.nix { };
 
   tamarin-prover =
-    (haskellPackages.callPackage ../applications/science/logic/tamarin-prover {
-      # NOTE: do not use the haskell packages 'graphviz' and 'maude'
-      inherit maude which;
+    (callPackage ../applications/science/logic/tamarin-prover {
       graphviz = graphviz-nox;
     });
 
