@@ -209,7 +209,7 @@ in
         chfn.rootOK = true;
         su = {
           rootOK = true;
-          forwardXAuth = true;
+          forwardXAuth = config.services.graphical-desktop.enable;
           logFailures = true;
         };
         passwd = { };
