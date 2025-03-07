@@ -10,6 +10,7 @@
   autoreconfHook,
   pkg-config,
   pandoc,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {
@@ -41,6 +42,7 @@ stdenv.mkDerivation rec {
     lame
     libid3tag
     libvorbis
+    zlib
   ];
 
   enableParallelBuilding = true;
