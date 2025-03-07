@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   buildNpmPackage,
   nodejs_20,
   nixosTests,
@@ -34,6 +35,14 @@ let
     tag = "v${version}";
     hash = "sha256-p3eUEb/ZPK11NbqE4LU+3TE1Xny9sjfYvVVmABkoAEQ=";
   };
+
+  patches = [
+    # Fix frontend tests in March (yes, it's date dependent)
+    (fetchpatch {
+      url = "https://github.com/paperless-ngx/paperless-ngx/commit/bc90ccc5551f184a683128def772652ad74c65e3.patch";
+      hash = "sha256-KArPyKZLi5LfaTDTY3DxA3cdQYYadpQo052Xk9eH14c=";
+    })
+  ];
 
   # subpath installation is broken with uvicorn >= 0.26
   # https://github.com/NixOS/nixpkgs/issues/298719
@@ -78,7 +87,7 @@ let
 
   frontend = buildNpmPackage {
     pname = "paperless-ngx-frontend";
-    inherit version src;
+    inherit version src patches;
 
     nodejs = nodejs_20; # does not build with 22
 
@@ -134,7 +143,7 @@ python.pkgs.buildPythonApplication rec {
   pname = "paperless-ngx";
   pyproject = false;
 
-  inherit version src;
+  inherit version src patches;
 
   postPatch = ''
     # pytest-xdist with to many threads makes the tests flaky
