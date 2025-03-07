@@ -3,7 +3,6 @@
   lib,
   fetchFromGitHub,
   monado,
-  ninja,
   nix-update-script,
   SDL2_ttf,
   SDL2_net,
@@ -30,7 +29,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    ninja
   ];
 
   buildInputs = [
