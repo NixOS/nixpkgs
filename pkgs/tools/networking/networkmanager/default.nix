@@ -60,11 +60,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "networkmanager";
-  version = "1.50.2";
+  version = "1.52.0";
 
   src = fetchurl {
     url = "https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/releases/${finalAttrs.version}/downloads/NetworkManager-${finalAttrs.version}.tar.xz";
-    hash = "sha256-EEc76dOrifiiemi3v1vJVXhRpRg7dLYkHl4PpcaSH+8=";
+    hash = "sha256-NW8hoV2lHkIY/U0P14zqYeBnsRFqJc3e5K+d8FBi6S0=";
   };
 
   outputs = [ "out" "dev" "devdoc" "man" "doc" ];
@@ -106,7 +106,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     # DHCP clients
     "-Ddhcpcd=${dhcpcd}/bin/dhcpcd"
-    "-Ddhcpcanon=no"
 
     # Miscellaneous
     # almost cross-compiles, however fails with
