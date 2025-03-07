@@ -37,7 +37,9 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-4ac0LGQtLldHyXJ2GIRMHV+VZfUrRFdBYLiAHX5lWcw=";
   };
 
-  deps = callPackage ./build.zig.zon.nix { };
+  deps = callPackage ./build.zig.zon.nix {
+    zig = zig_0_13;
+  };
 
   nativeBuildInputs = [
     pkg-config

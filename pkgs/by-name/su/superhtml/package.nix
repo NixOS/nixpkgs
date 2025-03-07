@@ -3,7 +3,7 @@
   callPackage,
   fetchFromGitHub,
   stdenv,
-  zig,
+  zig_0_13,
 }:
 stdenv.mkDerivation rec {
   pname = "superhtml";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    zig.hook
+    zig_0_13.hook
   ];
 
   postPatch = ''
