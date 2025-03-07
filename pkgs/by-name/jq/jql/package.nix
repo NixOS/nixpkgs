@@ -9,7 +9,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "yamafaktory";
-    repo = pname;
+    repo = "jql";
     rev = "jql-v${version}";
     hash = "sha256-J+Zqmfev2DyD0SLFGaI0egVgmEC+a2nqBrNDGX4zNnE=";
   };
