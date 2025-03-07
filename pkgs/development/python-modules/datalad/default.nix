@@ -240,6 +240,6 @@ buildPythonPackage rec {
     description = "Keep code, data, containers under control with git and git-annex";
     homepage = "https://www.datalad.org";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ renesat ];
+    maintainers = with lib.maintainers; [ renesat malik ];
   };
 }
