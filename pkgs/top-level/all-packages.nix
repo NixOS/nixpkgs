@@ -6142,6 +6142,9 @@ with pkgs;
 
   tamarin-prover =
     (callPackage ../applications/science/logic/tamarin-prover {
+      # 2025-03-07: dependency fclabels doesn't compile with GHC >= 9.8
+      # https://github.com/sebastiaanvisser/fclabels/issues/46
+      haskellPackages = haskell.packages.ghc96;
       graphviz = graphviz-nox;
     });
 
