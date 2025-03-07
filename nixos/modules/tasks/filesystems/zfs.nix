@@ -58,6 +58,7 @@ let
   # (eventually) boot even with a degraded pool.
   importLib = {zpoolCmd, awkCmd, pool}: let
     devNodes = if pool != null && cfgZfs.pools ? ${pool} then cfgZfs.pools.${pool}.devNodes else cfgZfs.devNodes;
+    devArgs = lib.optionalString (devNodes != null) "-d \"${devNodes}\"";
   in ''
     # shellcheck disable=SC2013
     for o in $(cat /proc/cmdline); do
@@ -69,7 +70,7 @@ let
     done
     poolReady() {
       pool="$1"
-      state="$("${zpoolCmd}" import -d "${devNodes}" 2>/dev/null | "${awkCmd}" "/pool: $pool/ { found = 1 }; /state:/ { if (found == 1) { print \$2; exit } }; END { if (found == 0) { print \"MISSING\" } }")"
+      state="$("${zpoolCmd}" import ${devArgs} 2>/dev/null | "${awkCmd}" "/pool: $pool/ { found = 1 }; /state:/ { if (found == 1) { print \$2; exit } }; END { if (found == 0) { print \"MISSING\" } }")"
       if [[ "$state" = "ONLINE" ]]; then
         return 0
       else
@@ -84,7 +85,7 @@ let
     poolImport() {
       pool="$1"
       # shellcheck disable=SC2086
-      "${zpoolCmd}" import -d "${devNodes}" -N $ZFS_FORCE "$pool"
+      "${zpoolCmd}" import ${devArgs} -N $ZFS_FORCE "$pool"
     }
   '';
 
@@ -271,14 +272,13 @@ in
       };
 
       devNodes = lib.mkOption {
-        type = lib.types.path;
-        default = "/dev/disk/by-id";
+        type = lib.types.nullOr lib.types.path;
+        default = null;
         description = ''
           Name of directory from which to import ZFS device, this is passed to `zpool import`
-          as the value of the `-d` option.
-
-          For guidance on choosing this value, see
-          [the ZFS documentation](https://openzfs.github.io/openzfs-docs/Project%20and%20Community/FAQ.html#selecting-dev-names-when-creating-a-pool-linux).
+          as the value of the `-d` option. When set to `null` (the default), the `zpool`
+          command will not have a `-d` arg which means it will search for the device using
+          `libblkid`. Leaving it to `null` should suffice for most cases.
         '';
       };
 
@@ -339,7 +339,7 @@ in
         type = lib.types.attrsOf (lib.types.submodule {
           options = {
             devNodes = lib.mkOption {
-              type = lib.types.path;
+              type = lib.types.nullOr lib.types.path;
               default = cfgZfs.devNodes;
               defaultText = "config.boot.zfs.devNodes";
               description = options.boot.zfs.devNodes.description;
