@@ -77,7 +77,7 @@ in
     };
 
     # Apply overlay if elanmoc2 is enabled
-    nixpkgs.overlays = mkIf cfg.elanmoc2.enable [ myOverlay ];
+    nixpkgs.overlays = lib.mkIf cfg.elanmoc2.enable [ myOverlay ];
 
   };
 }
