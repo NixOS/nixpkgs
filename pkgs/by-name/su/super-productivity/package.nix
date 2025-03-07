@@ -91,7 +91,6 @@ buildNpmPackage rec {
 
           makeWrapper '${lib.getExe electron}' "$out/bin/super-productivity" \
             --add-flags "$out/share/super-productivity/app/resources/app.asar" \
-            --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
             --set-default ELECTRON_FORCE_IS_PACKAGED 1 \
             --inherit-argv0
         ''

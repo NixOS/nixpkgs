@@ -96,8 +96,7 @@ stdenv.mkDerivation rec {
       "$out/share/icons/hicolor/64x64/apps/whalebird.png"
 
     makeWrapper "${electron}/bin/electron" "$out/bin/whalebird" \
-      --add-flags "$out/opt/Whalebird/resources/app.asar" \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
+      --add-flags "$out/opt/Whalebird/resources/app.asar"
 
     runHook postInstall
   '';
