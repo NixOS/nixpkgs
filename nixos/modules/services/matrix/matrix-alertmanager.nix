@@ -112,6 +112,7 @@ in
         MATRIX_ROOMS = concatenatedRooms;
         MATRIX_USER = cfg.matrixUser;
         MENTION_ROOM = if cfg.mention then "1" else "0";
+        NODE_ENV = "production";
       };
 
       script = ''
