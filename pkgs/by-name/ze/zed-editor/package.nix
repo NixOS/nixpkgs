@@ -24,7 +24,7 @@
   makeFontsConf,
   vulkan-loader,
   envsubst,
-  gitUpdater,
+  nix-update-script,
   cargo-about,
   versionCheckHook,
   buildFHSEnv,
@@ -301,13 +301,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
     versionCheckHook
   ];
   versionCheckProgram = "${placeholder "out"}/bin/zeditor";
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {
-    updateScript = gitUpdater {
-      rev-prefix = "v";
-      ignoredVersions = "(*-pre|0.999999.0|0.9999-temporary)";
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "^v(?!.*(?:-pre|0\.999999\.0|0\.9999-temporary)$)(.+)$"
+      ];
     };
     fhs = fhs { zed-editor = finalAttrs.finalPackage; };
     fhsWithPackages =
