@@ -25,9 +25,15 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace src/mp3fs.cc \
-      --replace "#include <fuse_darwin.h>" "" \
-      --replace "osxfuse_version()" "fuse_version()"
+      --replace-fail "#include <fuse_darwin.h>" "" \
+      --replace-fail "osxfuse_version()" "fuse_version()"
   '';
+
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+    pandoc
+  ];
 
   buildInputs = [
     flac
@@ -35,11 +41,6 @@ stdenv.mkDerivation rec {
     lame
     libid3tag
     libvorbis
-  ];
-  nativeBuildInputs = [
-    autoreconfHook
-    pkg-config
-    pandoc
   ];
 
   enableParallelBuilding = true;
