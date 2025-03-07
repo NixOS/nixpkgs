@@ -15760,6 +15760,8 @@ with pkgs;
     autoconf = buildPackages.autoconf269;
   };
 
+  zed-editor-fhs = zed-editor.fhs;
+
   zgv = callPackage ../applications/graphics/zgv {
     # Enable the below line for terminal display. Note
     # that it requires sixel graphics compatible terminals like mlterm
