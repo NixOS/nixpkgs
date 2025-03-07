@@ -89,7 +89,10 @@ stdenv.mkDerivation rec {
     homepage = "https://mosquitto.org/";
     changelog = "https://github.com/eclipse/mosquitto/blob/v${version}/ChangeLog.txt";
     license = lib.licenses.epl10;
-    maintainers = [ lib.maintainers.peterhoeg ];
+    maintainers = with lib.maintainers; [
+      peterhoeg
+      sikmir
+    ];
     platforms = lib.platforms.unix;
     mainProgram = "mosquitto";
   };
