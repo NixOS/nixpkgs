@@ -33,7 +33,7 @@
   git,
   apple-sdk_15,
   darwinMinVersionHook,
-  makeWrapper,
+  makeBinaryWrapper,
   nodejs,
   libGL,
   libX11,
@@ -93,18 +93,24 @@ let
         '';
       };
     };
-in
-rustPlatform.buildRustPackage rec {
-  pname = "zed-editor";
-  version = "0.176.1";
 
-  outputs = [ "out" ] ++ lib.optional buildRemoteServer "remote_server";
+  gpu-lib = if withGLES then libglvnd else vulkan-loader;
+in
+rustPlatform.buildRustPackage (finalAttrs: {
+  pname = "zed-editor";
+  version = "0.176.2";
+
+  outputs =
+    [ "out" ]
+    ++ lib.optionals buildRemoteServer [
+      "remote_server"
+    ];
 
   src = fetchFromGitHub {
     owner = "zed-industries";
     repo = "zed";
-    tag = "v${version}";
-    hash = "sha256-Onf3mce327oLbvBPTkJIzJNAf145/ogFK+J6+Asuh9w=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-uTq9/skBMz8n2NjGBQKOIOMp/rTDL+azEUzV4jTUJvE=";
   };
 
   patches = [
@@ -125,12 +131,12 @@ rustPlatform.buildRustPackage rec {
 
   # Dynamically link WebRTC instead of static
   postPatch = ''
-    substituteInPlace ../${pname}-${version}-vendor/webrtc-sys-*/build.rs \
+    substituteInPlace $cargoDepsCopy/webrtc-sys-*/build.rs \
       --replace-fail "cargo:rustc-link-lib=static=webrtc" "cargo:rustc-link-lib=dylib=webrtc"
   '';
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-hlX4IMpsEqwYrzDvzFUhh6PVqM9U+4kp/bBYG08BPQA=";
+  cargoHash = "sha256-b4YTVrz2nOwQnVU42E+LD1YjsUAWN7+fCr2z8IVwH6o=";
 
   nativeBuildInputs =
     [
@@ -143,7 +149,7 @@ rustPlatform.buildRustPackage rec {
       rustPlatform.bindgenHook
       cargo-about
     ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ makeWrapper ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ makeBinaryWrapper ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ cargo-bundle ];
 
   dontUseCmakeConfigure = true;
@@ -179,7 +185,7 @@ rustPlatform.buildRustPackage rec {
   cargoBuildFlags = [
     "--package=zed"
     "--package=cli"
-  ] ++ lib.optional buildRemoteServer "--package=remote_server";
+  ] ++ lib.optionals buildRemoteServer [ "--package=remote_server" ];
 
   # Required on darwin because we don't have access to the
   # proprietary Metal shader compiler.
@@ -189,20 +195,19 @@ rustPlatform.buildRustPackage rec {
     ZSTD_SYS_USE_PKG_CONFIG = true;
     FONTCONFIG_FILE = makeFontsConf {
       fontDirectories = [
-        "${src}/assets/fonts/plex-mono"
-        "${src}/assets/fonts/plex-sans"
+        "${finalAttrs.src}/assets/fonts/plex-mono"
+        "${finalAttrs.src}/assets/fonts/plex-sans"
       ];
     };
     # Setting this environment variable allows to disable auto-updates
     # https://zed.dev/docs/development/linux#notes-for-packaging-zed
     ZED_UPDATE_EXPLANATION = "Zed has been installed using Nix. Auto-updates have thus been disabled.";
     # Used by `zed --version`
-    RELEASE_VERSION = version;
+    RELEASE_VERSION = finalAttrs.version;
     LK_CUSTOM_WEBRTC = livekit-libwebrtc;
   };
 
-  RUSTFLAGS = if withGLES then "--cfg gles" else "";
-  gpu-lib = if withGLES then libglvnd else vulkan-loader;
+  RUSTFLAGS = lib.optionalString withGLES "--cfg gles";
 
   preBuild = ''
     bash script/generate-licenses
@@ -270,8 +275,8 @@ rustPlatform.buildRustPackage rec {
       install -Dm755 $release_target/zed $out/libexec/zed-editor
       install -Dm755 $release_target/cli $out/bin/zeditor
 
-      install -Dm644 ${src}/crates/zed/resources/app-icon@2x.png $out/share/icons/hicolor/1024x1024@2x/apps/zed.png
-      install -Dm644 ${src}/crates/zed/resources/app-icon.png $out/share/icons/hicolor/512x512/apps/zed.png
+      install -Dm644 $src/crates/zed/resources/app-icon@2x.png $out/share/icons/hicolor/1024x1024@2x/apps/zed.png
+      install -Dm644 $src/crates/zed/resources/app-icon.png $out/share/icons/hicolor/512x512/apps/zed.png
 
       # extracted from https://github.com/zed-industries/zed/blob/v0.141.2/script/bundle-linux (envsubst)
       # and https://github.com/zed-industries/zed/blob/v0.141.2/script/install.sh (final desktop file name)
@@ -310,7 +315,7 @@ rustPlatform.buildRustPackage rec {
       {
         remoteServerVersion = testers.testVersion {
           package = zed-editor.remote_server;
-          command = "zed-remote-server-stable-${version} version";
+          command = "zed-remote-server-stable-${finalAttrs.version} version";
         };
       }
       // lib.optionalAttrs stdenv.hostPlatform.isLinux {
@@ -321,7 +326,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "High-performance, multiplayer code editor from the creators of Atom and Tree-sitter";
     homepage = "https://zed.dev";
-    changelog = "https://github.com/zed-industries/zed/releases/tag/v${version}";
+    changelog = "https://github.com/zed-industries/zed/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       GaetanLepage
@@ -330,4 +335,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "zeditor";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})
