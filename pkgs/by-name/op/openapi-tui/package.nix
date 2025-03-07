@@ -8,17 +8,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "openapi-tui";
-  version = "0.10.0";
+  version = "0.10.2";
 
   src = fetchFromGitHub {
     owner = "zaghaghi";
     repo = "openapi-tui";
     rev = version;
-    hash = "sha256-EUWL16cHgPF88CoCD9sqnxLOlmWoe1tu5ps01AYwwzc=";
+    hash = "sha256-rC0lfWZpiiAAShyVDqr1gKTeWmWC+gVp4UmL96Y81mE=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-JlfsWR0NAvGBljxlBuyIT1vffvXaGkf6AVW70/c+JBs=";
+  cargoHash = "sha256-911ARjYvTNqLVVUWxATbtiKXOC9AqalFvDvp/qAef1Q=";
 
   OPENSSL_NO_VENDOR = true;
 
