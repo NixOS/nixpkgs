@@ -2116,6 +2116,8 @@ self: super: with self; {
 
   casbin = callPackage ../development/python-modules/casbin { };
 
+  case-converter = callPackage ../development/python-modules/case-converter { };
+
   cashaddress = callPackage ../development/python-modules/cashaddress { };
 
   cashews = callPackage ../development/python-modules/cashews {  };
