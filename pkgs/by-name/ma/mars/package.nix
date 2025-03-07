@@ -5,11 +5,11 @@
   cmake,
   libGLU,
   libGL,
-  sfml,
+  sfml_2,
   fribidi,
   taglib,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "mars";
   version = "unstable-17.10.2021";
 
@@ -23,11 +23,13 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libGLU
     libGL
-    sfml
+    sfml_2
     fribidi
     taglib
   ];
   installPhase = ''
+    runHook preInstall
+
     cd ..
     mkdir -p "$out/share/mars/"
     mkdir -p "$out/bin/"
@@ -39,12 +41,14 @@ stdenv.mkDerivation rec {
     exec "$out/bin/mars.bin" "\$@"
     EOF
     chmod +x "$out/bin/mars"
+
+    runHook postInstall
   '';
-  meta = with lib; {
+  meta = {
     homepage = "https://mars-game.sourceforge.net/";
     description = "Game about fighting with ships in a 2D space setting";
-    license = licenses.gpl3Plus;
-    maintainers = [ maintainers.astsmtl ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ lib.maintainers.astsmtl ];
+    platforms = lib.platforms.linux;
   };
 }
