@@ -16,6 +16,7 @@ buildGoModule rec {
   nativeBuildInputs = [ installShellFiles ];
 
   env.CGO_ENABLED = 0;
+  subPackages = [ "." ];
   ldflags = [ "-s" "-w" "-X main.version=${version}" ];
 
   preCheck = ''
