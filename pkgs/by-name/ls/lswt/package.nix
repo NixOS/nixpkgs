@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromSourcehut {
     owner = "~leon_plickat";
-    repo = pname;
+    repo = "lswt";
     rev = "v${version}";
     hash = "sha256-8jP6I2zsDt57STtuq4F9mcsckrjvaCE5lavqKTjhNT0=";
   };

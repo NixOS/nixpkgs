@@ -21,8 +21,8 @@ stdenv.mkDerivation rec {
   version = "1.13";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "rauc";
+    repo = "rauc";
     rev = "v${version}";
     sha256 = "sha256-Vq1dudB8OQveclAIVgiB8jbtp4o2Ga5v61Y6JUjOpbs=";
   };

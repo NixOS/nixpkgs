@@ -17,8 +17,8 @@ stdenv.mkDerivation rec {
   version = "0.6.3";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "xmlroff";
+    repo = "xmlroff";
     rev = "v${version}";
     sha256 = "0dgp72094lx9i9gvg21pp8ak7bg39707rdf6wz011p9s6n6lrq5g";
   };

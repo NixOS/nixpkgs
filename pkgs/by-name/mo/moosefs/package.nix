@@ -15,8 +15,8 @@ stdenv.mkDerivation rec {
   version = "4.56.6";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "moosefs";
+    repo = "moosefs";
     rev = "v${version}";
     sha256 = "sha256-/ZvOwPE8SIwAbGITggzYwGuU1nAFIv0zF1IYu6FHGN8=";
   };

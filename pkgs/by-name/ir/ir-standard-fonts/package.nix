@@ -10,7 +10,7 @@ stdenvNoCC.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "molaeiali";
-    repo = pname;
+    repo = "ir-standard-fonts";
     rev = version;
     hash = "sha256-o1d8SBX3nf7g6Gh4OP+JRS+LNrHTQOIiHhW3VNCkDV0=";
   };
