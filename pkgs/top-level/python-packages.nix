@@ -1865,12 +1865,7 @@ self: super: with self; {
 
   boolean-py = callPackage ../development/python-modules/boolean-py { };
 
-  # Build boost for this specific Python version
-  # TODO: use separate output for libboost_python.so
-  boost = toPythonModule (pkgs.boost.override {
-    inherit (self) python numpy;
-    enablePython = true;
-  });
+  boost-python = toPythonModule (pkgs.boost.pythonLib python);
 
   borb = callPackage ../development/python-modules/borb { };
 
@@ -1880,9 +1875,7 @@ self: super: with self; {
 
   bottombar = callPackage ../development/python-modules/bottombar { };
 
-  boost-histogram = callPackage ../development/python-modules/boost-histogram {
-    inherit (pkgs) boost;
-  };
+  boost-histogram = callPackage ../development/python-modules/boost-histogram { };
 
   boto3 = callPackage ../development/python-modules/boto3 { };
 
@@ -2056,7 +2049,7 @@ self: super: with self; {
 
   caffe = toPythonModule (pkgs.caffe.override {
     pythonSupport = true;
-    inherit (self) python numpy boost;
+    inherit (self) python numpy;
   });
 
   caio = callPackage ../development/python-modules/caio { };
@@ -13567,15 +13560,11 @@ self: super: with self; {
 
   python-mapnik = callPackage ../development/python-modules/python-mapnik rec {
     inherit (pkgs) pkg-config cairo icu libjpeg libpng libtiff libwebp proj zlib;
-    boost = pkgs.boost.override {
-      enablePython = true;
-      inherit python;
-    };
     harfbuzz = pkgs.harfbuzz.override {
       withIcu = true;
     };
     mapnik = pkgs.mapnik.override {
-      inherit boost harfbuzz;
+      inherit harfbuzz;
     };
   };
 
@@ -14211,12 +14200,7 @@ self: super: with self; {
 
   rdflib = callPackage ../development/python-modules/rdflib { };
 
-  rdkit = callPackage ../development/python-modules/rdkit {
-    boost = pkgs.boost.override {
-      enablePython = true;
-      inherit python;
-    };
-  };
+  rdkit = callPackage ../development/python-modules/rdkit { };
 
   re-assert = callPackage ../development/python-modules/re-assert { };
 

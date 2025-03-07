@@ -1,7 +1,7 @@
 {
   alembic,
   bison,
-  boost,
+  boost-python,
   buildPythonPackage,
   cmake,
   darwin,
@@ -152,7 +152,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs =
     [
-      boost
+      boost-python
       jinja2
       numpy
       pyopengl
