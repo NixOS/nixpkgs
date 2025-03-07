@@ -29,6 +29,8 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
+  pythonRelaxDeps = [ "async-timeout" ];
+
   postPatch = ''
     # Upstream is releasing with the help of a CI to PyPI, GitHub releases
     # are not in their focus
