@@ -46,6 +46,7 @@ let
     maintainers = with maintainers; [
       yayayayaka
       teutat3s
+      tomasajt
     ];
     platforms = [
       "x86_64-darwin"
