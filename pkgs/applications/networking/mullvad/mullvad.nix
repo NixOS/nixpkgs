@@ -29,18 +29,18 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "mullvad";
-  version = "2025.3";
+  version = "2025.4";
 
   src = fetchFromGitHub {
     owner = "mullvad";
     repo = "mullvadvpn-app";
     tag = version;
     fetchSubmodules = true;
-    hash = "sha256-IpGTqi0gSE2yXXou5fp+CryHfIKx0n3y/V4K2+ZO3k8=";
+    hash = "sha256-LdUzS6KjrOZASUCLjKt1ACjBrrceed2kopRHMKLx+m8=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-EJ8yk11H1QB+7CGjJYY5BjBAFTDK4d02/DJOQTVGFho=";
+  cargoHash = "sha256-GRh7A1hokFvpB/2kdkmJCkHsDrYaSpDPwidG3NjEuyw=";
 
   checkFlags = [
     "--skip=version_check"
