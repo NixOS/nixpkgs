@@ -4131,8 +4131,6 @@ with pkgs;
 
   liquidctl = with python3Packages; toPythonApplication liquidctl;
 
-  localstack = with python3Packages; toPythonApplication localstack;
-
   xz = callPackage ../tools/compression/xz { };
 
   lzwolf = callPackage ../games/lzwolf { SDL2_mixer = SDL2_mixer_2_0; };
