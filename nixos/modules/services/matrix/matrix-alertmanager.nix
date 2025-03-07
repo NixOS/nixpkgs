@@ -116,7 +116,9 @@ in
       };
 
       script = ''
+        # shellcheck disable=SC2155
         export APP_ALERTMANAGER_SECRET=$(cat "''${CREDENTIALS_DIRECTORY}/secret")
+        # shellcheck disable=SC2155
         export MATRIX_TOKEN=$(cat "''${CREDENTIALS_DIRECTORY}/token")
         exec ${lib.getExe cfg.package}
       '';
