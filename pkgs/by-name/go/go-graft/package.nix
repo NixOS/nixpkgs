@@ -38,7 +38,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "Command-line tool for one-click proxy in your research and development without installing v2ray or anything else";
     homepage = "https://github.com/mzz2017/gg";
-    license = licenses.agpl3Plus;
+    license = licenses.agpl3Only;
     maintainers = with maintainers; [
       xyenon
       oluceps
