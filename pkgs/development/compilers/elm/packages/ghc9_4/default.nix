@@ -1,7 +1,7 @@
 { pkgs, lib }:
 
 self:
-pkgs.haskell.packages.ghc92.override {
+pkgs.haskell.packages.ghc94.override {
   overrides =
     self: super:
     let
@@ -49,12 +49,5 @@ pkgs.haskell.packages.ghc92.override {
       elm-format-lib = fixHaddock (doJailbreak (self.callPackage ./elm-format/elm-format-lib.nix { }));
       elm-format-test-lib = fixHaddock (self.callPackage ./elm-format/elm-format-test-lib.nix { });
       elm-format-markdown = fixHaddock (self.callPackage ./elm-format/elm-format-markdown.nix { });
-
-      # elm-format requires text >= 2.0
-      text = self.text_2_0_2;
-      # unordered-container's tests indirectly depend on text < 2.0
-      unordered-containers = overrideCabal (drv: { doCheck = false; }) super.unordered-containers;
-      # relude-1.1.0.0's tests depend on hedgehog < 1.2, which indirectly depends on text < 2.0
-      relude = overrideCabal (drv: { doCheck = false; }) super.relude;
     };
 }
