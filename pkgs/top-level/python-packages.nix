@@ -7832,8 +7832,6 @@ self: super: with self; {
 
   localimport = callPackage ../development/python-modules/localimport { };
 
-  localstack = callPackage ../development/python-modules/localstack { };
-
   localstack-client = callPackage ../development/python-modules/localstack-client { };
 
   localstack-ext = callPackage ../development/python-modules/localstack-ext { };
@@ -9396,6 +9394,8 @@ self: super: with self; {
   netdata-pandas = callPackage ../development/python-modules/netdata-pandas { };
 
   netdisco = callPackage ../development/python-modules/netdisco { };
+
+  netgen = toPythonModule (pkgs.netgen.override { python3Packages = self; });
 
   nethsm = callPackage ../development/python-modules/nethsm { };
 
