@@ -6,6 +6,7 @@
   newScope,
   pkgs,
   stdenv,
+  maintainers,
   ...
 }:
 let
@@ -27,6 +28,7 @@ let
         f = import ./packaging/components.nix {
           inherit
             lib
+            maintainers
             officialRelease
             pkgs
             src
