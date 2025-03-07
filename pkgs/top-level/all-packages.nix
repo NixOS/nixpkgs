@@ -4133,8 +4133,6 @@ with pkgs;
 
   xz = callPackage ../tools/compression/xz { };
 
-  lzwolf = callPackage ../games/lzwolf { SDL2_mixer = SDL2_mixer_2_0; };
-
   madlang = haskell.lib.compose.justStaticExecutables haskellPackages.madlang;
 
   mailnag = callPackage ../applications/networking/mailreaders/mailnag {
@@ -8504,7 +8502,11 @@ with pkgs;
   inherit (callPackages ../development/libraries/c-blosc { })
     c-blosc c-blosc2;
 
-  cachix = lib.getBin haskellPackages.cachix;
+  cachix = (lib.getBin haskellPackages.cachix).overrideAttrs (old: {
+    meta = (old.meta or {}) // {
+      mainProgram = old.meta.mainProgram or "cachix";
+    };
+  });
 
   cubeb = callPackage ../development/libraries/audio/cubeb {
     inherit (darwin.apple_sdk.frameworks) AudioUnit CoreAudio CoreServices;
@@ -15751,6 +15753,8 @@ with pkgs;
   zexy = callPackage ../applications/audio/pd-plugins/zexy {
     autoconf = buildPackages.autoconf269;
   };
+
+  zed-editor-fhs = zed-editor.fhs;
 
   zgv = callPackage ../applications/graphics/zgv {
     # Enable the below line for terminal display. Note
