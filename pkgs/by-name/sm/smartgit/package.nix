@@ -15,14 +15,14 @@ let
   jre = openjdk21;
 in
 stdenv.mkDerivation (finalAttrs: {
-  pname = "smartgithg";
-  version = "24.1.1";
+  pname = "smartgit";
+  version = "24.1.2";
 
   src = fetchurl {
     url = "https://www.syntevo.com/downloads/smartgit/smartgit-linux-${
       builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version
     }.tar.gz";
-    hash = "sha256-Lv5U/D1p5+Xiq/IeQJGDu3t6j6sP0r0vMYpfAEeExfI=";
+    hash = "sha256-bPiPb/k5f9dRpwm4Wj+c2mhFhH9WOz2hzKeDfQLRLHQ=";
   };
 
   nativeBuildInputs = [ wrapGAppsHook3 ];
@@ -86,7 +86,6 @@ stdenv.mkDerivation (finalAttrs: {
     icon = "smartgit";
     desktopName = "SmartGit";
     categories = [
-      "Application"
       "Development"
       "RevisionControl"
     ];
@@ -101,7 +100,11 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "GUI for Git, Mercurial, Subversion";
+    description = "Git GUI client";
+    longDescription = ''
+      SmartGit is a multi-platform Git GUI client, free to use for active Open Source developers and users from academic institutions.
+      Command line Git is required.
+    '';
     homepage = "https://www.syntevo.com/smartgit/";
     changelog = "https://www.syntevo.com/smartgit/changelog.txt";
     license = lib.licenses.unfree;
