@@ -20,13 +20,13 @@
 
 buildDunePackage rec {
   pname = "awa";
-  version = "0.4.0";
+  version = "0.5.0";
 
   minimalOCamlVersion = "4.10";
 
   src = fetchurl {
     url = "https://github.com/mirage/awa-ssh/releases/download/v${version}/awa-${version}.tbz";
-    hash = "sha256-uATKGr+J18jBx5vErB93Q9+BCR7ezi1Q+ueQGolpybQ=";
+    hash = "sha256-SYSkhB43KmYaCEYGwFihMPLvh1Zr9xeWFio5atY19A8=";
   };
 
   propagatedBuildInputs = [
