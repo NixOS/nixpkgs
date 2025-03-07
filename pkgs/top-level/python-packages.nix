@@ -12592,6 +12592,16 @@ self: super: with self; {
 
   pyopenssl = callPackage ../development/python-modules/pyopenssl { };
 
+  pyopenssl_24_2_1 = pyopenssl.overridePythonAttrs (old: rec {
+    version = "24.2.1";
+    src = pkgs.fetchFromGitHub {
+      owner = "pyca";
+      repo = "pyopenssl";
+      tag = version;
+      hash = "sha256-/TQnDWdycN4hQ7ZGvBhMJEZVafmL+0wy9eJ8hC6rfio=";
+    };
+  });
+
   pyopenuv = callPackage ../development/python-modules/pyopenuv { };
 
   pyopenweathermap = callPackage ../development/python-modules/pyopenweathermap { };
