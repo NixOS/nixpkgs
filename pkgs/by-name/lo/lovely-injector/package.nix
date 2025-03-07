@@ -4,20 +4,19 @@
   lib,
 }:
 let
-  version = "0.6.0";
-  lovelyInjector = fetchFromGitHub {
-    owner = "vgskye";
-    repo = "lovely-injector";
-    rev = "3224915f4d47b557c34b5012797cf92d4cc629af";
-    hash = "sha256-fzkuuu6pmvqeJa7qlX8jhtCLC4oYRLUm1hqHTRiYEX8=";
-  };
+  version = "0.7.1";
 in
 rustPlatform.buildRustPackage rec {
   pname = "lovely-injector";
   inherit version;
-  src = lovelyInjector;
+  src = fetchFromGitHub {
+    owner = "ethangreen-dev";
+    repo = "lovely-injector";
+    hash = "sha256-fzkuuu6pmvqeJa7qlX8jhtCLC4oYRLUm1hqHTRiYEX8=";
+    tag = "v${version}";
+  };
   useFetchCargoVendor = true;
-  cargoHash = "sha256-Mkmj+ENdUge1V1cVAQOV2K01sYKEyhxTse0f5o6H6Xc=";
+  cargoHash = "sha256-hHq26kSKcqEldxUb6bn1laTpKGFplP9/2uogsal8T5A=";
   # no tests
   doCheck = false;
   # lovely-injector depends on nightly rust features
@@ -34,6 +33,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/ethangreen-dev/lovely-injector";
     downloadPage = "https://github.com/ethangreen-dev/lovely-injector/releases";
     maintainers = [ lib.maintainers.antipatico ];
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    platforms = [ "x86_64-linux" ];
   };
 }
