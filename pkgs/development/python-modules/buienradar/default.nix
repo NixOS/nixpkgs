@@ -5,26 +5,29 @@
   docopt,
   pytz,
   requests,
+  requests-mock,
   setuptools,
   vincenty,
   xmltodict,
+  syrupy,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "buienradar";
-  version = "1.0.7";
-  format = "setuptools";
+  version = "1.0.9";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mjj4791";
     repo = "python-buienradar";
-    # https://github.com/mjj4791/python-buienradar/issues/14
     tag = version;
-    hash = "sha256-DwOysdA6B9DMH1j/1Oetx2rCgqwk/UggCdH0lBVS6Hw=";
+    hash = "sha256-DTdxzBe9fBOH5fHME++oq62xMtBKnjY7BCevwjl8VZ8=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     docopt
     pytz
     requests
@@ -33,7 +36,13 @@ buildPythonPackage rec {
     xmltodict
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    requests-mock
+    syrupy
+  ];
+
+  pytestFlagsArray = [ "--snapshot-update" ];
 
   disabledTests = [
     # require network connection
