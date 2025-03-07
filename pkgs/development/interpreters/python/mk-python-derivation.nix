@@ -455,7 +455,7 @@ let
         lib.mapAttrs
           (
             name: value:
-            lib.throwIf (finalAttrs.doInstallCheck && attrs.${name} == [ ])
+            lib.throwIf (attrs.${name} == [ ])
               "${lib.getName finalAttrs}: ${name} must be unspecified, null or a non-empty list when doInstallCheck is true."
               attrs.${name}
           )
