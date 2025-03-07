@@ -68,6 +68,8 @@ in {
 
     pg_cron = super.callPackage ./pg_cron.nix { };
 
+    pg_tle = super.callPackage ./pg_tle.nix { };
+
     pg_topn = super.callPackage ./pg_topn.nix { };
 
     pg_net = super.callPackage ./pg_net.nix { };
