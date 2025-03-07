@@ -2,7 +2,6 @@
   lib,
   pkgs,
   src,
-  stdenv,
   officialRelease,
 }:
 
@@ -11,6 +10,15 @@ scope:
 let
   inherit (scope)
     callPackage
+    ;
+  inherit
+    (scope.callPackage (
+      { stdenv }:
+      {
+        inherit stdenv;
+      }
+    ) { })
+    stdenv
     ;
   inherit (pkgs.buildPackages)
     meson
