@@ -27,7 +27,6 @@
   gitUpdater,
   cargo-about,
   versionCheckHook,
-  zed-editor,
   buildFHSEnv,
   cargo-bundle,
   git,
@@ -59,6 +58,7 @@ let
   # extension tooling without significant pain.
   fhs =
     {
+      zed-editor,
       additionalPkgs ? pkgs: [ ],
     }:
     buildFHSEnv {
@@ -309,17 +309,22 @@ rustPlatform.buildRustPackage (finalAttrs: {
       rev-prefix = "v";
       ignoredVersions = "(*-pre|0.999999.0|0.9999-temporary)";
     };
-    fhs = fhs { };
-    fhsWithPackages = f: fhs { additionalPkgs = f; };
+    fhs = fhs { zed-editor = finalAttrs.finalPackage; };
+    fhsWithPackages =
+      f:
+      fhs {
+        zed-editor = finalAttrs.finalPackage;
+        additionalPkgs = f;
+      };
     tests =
       {
         remoteServerVersion = testers.testVersion {
-          package = zed-editor.remote_server;
+          package = finalAttrs.finalPackage.remote_server;
           command = "zed-remote-server-stable-${finalAttrs.version} version";
         };
       }
       // lib.optionalAttrs stdenv.hostPlatform.isLinux {
-        withGles = zed-editor.override { withGLES = true; };
+        withGles = finalAttrs.finalPackage.override { withGLES = true; };
       };
   };
 
