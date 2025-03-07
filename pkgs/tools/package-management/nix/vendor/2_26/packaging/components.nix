@@ -3,6 +3,7 @@
   pkgs,
   src,
   officialRelease,
+  maintainers,
 }:
 
 scope:
@@ -195,7 +196,7 @@ let
           environments.
         '';
       license = prevAttrs.meta.license or lib.licenses.lgpl21Plus;
-      maintainers = prevAttrs.meta.maintainers or [ ] ++ lib.teams.nix.members;
+      maintainers = prevAttrs.meta.maintainers or [ ] ++ scope.maintainers;
       platforms = prevAttrs.meta.platforms or (lib.platforms.unix ++ lib.platforms.windows);
     };
   };
@@ -217,7 +218,7 @@ in
 {
   version = baseVersion + versionSuffix;
   inherit versionSuffix;
-  maintainers = lib.teams.nix.members;
+  inherit maintainers;
 
   inherit filesetToSource;
 

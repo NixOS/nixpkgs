@@ -249,6 +249,7 @@ in lib.makeExtensible (self: ({
   };
 
   nix_2_26 = addTests "nix_2_26" (callPackage ./vendor/2_26/componentized.nix {
+    inherit (self.nix_2_24.meta) maintainers;
     inherit libgit2-thin-packfile;
   });
 

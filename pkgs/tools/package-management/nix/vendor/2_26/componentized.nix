@@ -7,6 +7,7 @@
   pkgs,
   stdenv,
   libgit2-thin-packfile,
+  maintainers,
   ...
 }:
 let
@@ -28,6 +29,7 @@ let
         f = import ./packaging/components.nix {
           inherit
             lib
+            maintainers
             officialRelease
             pkgs
             src
