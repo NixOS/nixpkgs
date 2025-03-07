@@ -16,13 +16,13 @@
 
 buildGoModule rec {
   pname = "v2ray-core";
-  version = "5.29.1";
+  version = "5.29.2";
 
   src = fetchFromGitHub {
     owner = "v2fly";
     repo = "v2ray-core";
     rev = "v${version}";
-    hash = "sha256-gDIbv0KeYsd6BZ/De/ATT74TKLImaoMjAAfL1EAn7vc=";
+    hash = "sha256-OWq26mpCCR6auBOdbUwcutwDlYHFzJXQRbhXqLbPodM=";
   };
 
   # `nix-update` doesn't support `vendorHash` yet.
