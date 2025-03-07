@@ -3860,6 +3860,8 @@ self: super: with self; {
 
   docopt-ng = callPackage ../development/python-modules/docopt-ng { };
 
+  docopt-subcommands = callPackage ../development/python-modules/docopt-subcommands { };
+
   docplex = callPackage ../development/python-modules/docplex { };
 
   docrep = callPackage ../development/python-modules/docrep { };
