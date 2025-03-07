@@ -1,5 +1,9 @@
 # To run these tests:
-# nix-build -A tests.stdenv
+# `nix build -f . tests.stdenv`
+
+# If everything other than these tests is cached then
+# `nix build --impure --expr 'with import ./. {}; callPackage ./pkgs/test/stdenv { stdenv = lib.removeAttrs stdenv [ "__bootPackages" ]; }'`
+# can be used to not download packages from ``__bootPackages``
 
 { stdenv
 , pkgs
@@ -8,13 +12,15 @@
 }:
 
 let
+  # `stdenv` won't have a `__bootPackages` if it's `setupScript` has been overriden
+  # `stdenv.override { setupScript = ./pkgs/stdenv/generic/setup.sh; }`
+  stdenvHasBootPackages = stdenv ? __bootPackages;
   # early enough not to rebuild gcc but late enough to have patchelf
-  earlyPkgs = stdenv.__bootPackages.stdenv.__bootPackages;
-  earlierPkgs = stdenv.__bootPackages.stdenv.__bootPackages.stdenv.__bootPackages.stdenv.__bootPackages.stdenv.__bootPackages;
+  earlyPkgs = if stdenvHasBootPackages then stdenv.__bootPackages.stdenv.__bootPackages else pkgs;
+  earlierPkgs = if stdenvHasBootPackages then stdenv.__bootPackages.stdenv.__bootPackages.stdenv.__bootPackages.stdenv.__bootPackages.stdenv.__bootPackages else pkgs;
   # use a early stdenv so when hacking on stdenv this test can be run quickly
-  bootStdenv = stdenv.__bootPackages.stdenv.__bootPackages.stdenv.__bootPackages.stdenv.__bootPackages.stdenv;
-  pkgsStructured = import pkgs.path { config = { structuredAttrsByDefault = true; }; inherit (stdenv.hostPlatform) system; };
-  bootStdenvStructuredAttrsByDefault = pkgsStructured.stdenv.__bootPackages.stdenv.__bootPackages.stdenv.__bootPackages.stdenv.__bootPackages.stdenv;
+  bootStdenv = if stdenvHasBootPackages then stdenv.__bootPackages.stdenv.__bootPackages.stdenv.__bootPackages.stdenv.__bootPackages.stdenv else stdenv;
+  structuredBootStdenv = bootStdenv.override { config = pkgs.config // { structuredAttrsByDefault = true; }; };
 
   runCommand = earlierPkgs.runCommand;
 
@@ -293,23 +299,24 @@ in
     stdenv' = bootStdenv;
   };
 
-  structuredAttrsByDefault = lib.recurseIntoAttrs {
+  structuredAttrs = lib.recurseIntoAttrs {
 
-    hooks = lib.recurseIntoAttrs (import ./hooks.nix { stdenv = bootStdenvStructuredAttrsByDefault; pkgs = earlyPkgs; inherit lib; });
+    hooks = lib.recurseIntoAttrs (import ./hooks.nix { stdenv = structuredBootStdenv; pkgs = earlyPkgs; inherit lib; });
 
     test-cc-wrapper-substitutions = ccWrapperSubstitutionsTest {
-      name = "test-cc-wrapper-substitutions-structuredAttrsByDefault";
-      stdenv' = bootStdenvStructuredAttrsByDefault;
+      name = "test-cc-wrapper-substitutions-structuredBootStdenv";
+      stdenv' = structuredBootStdenv;
+      extraAttrs = { __structuredAttrs = true; };
     };
 
     test-structured-env-attrset = testEnvAttrset {
-      name = "test-structured-env-attrset-structuredAttrsByDefault";
-      stdenv' = bootStdenvStructuredAttrsByDefault;
+      name = "test-structured-env-attrset-structuredBootStdenv";
+      stdenv' = structuredBootStdenv;
     };
 
     test-prepend-append-to-var = testPrependAndAppendToVar {
-      name = "test-prepend-append-to-var-structuredAttrsByDefault";
-      stdenv' = bootStdenvStructuredAttrsByDefault;
+      name = "test-prepend-append-to-var-structuredBootStdenv";
+      stdenv' = structuredBootStdenv;
       extraAttrs = {
         # will be a bash indexed array in attrs.sh
         # declare -a list=('a' 'b' )
@@ -342,8 +349,8 @@ in
     };
 
     test-concat-to = testConcatTo {
-      name = "test-concat-to-structuredAttrsByDefault";
-      stdenv' = bootStdenvStructuredAttrsByDefault;
+      name = "test-concat-to-structuredBootStdenv";
+      stdenv' = structuredBootStdenv;
       extraAttrs = {
         # test that whitespace is kept in the bash array for structuredAttrs
         listWithSpaces = [ "c c" "d d" ];
@@ -360,8 +367,8 @@ in
     };
 
     test-concat-strings-sep = testConcatStringsSep {
-      name = "test-concat-strings-sep-structuredAttrsByDefault";
-      stdenv' = bootStdenvStructuredAttrsByDefault;
+      name = "test-concat-strings-sep-structuredBootStdenv";
+      stdenv' = structuredBootStdenv;
     };
 
     test-golden-example-structuredAttrs =
@@ -406,8 +413,8 @@ in
           }
         '';
       in
-      bootStdenvStructuredAttrsByDefault.mkDerivation {
-        name = "test-golden-example-structuredAttrsByDefault";
+      structuredBootStdenv.mkDerivation {
+        name = "test-golden-example-structuredBootStdenv";
         nativeBuildInputs = [ earlyPkgs.jq ];
 
         EXAMPLE_BOOL_TRUE = true;
