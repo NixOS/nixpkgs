@@ -103,12 +103,6 @@ let
     "doInstallCheck"
     "pyproject"
     "format"
-    "disabledTestPaths"
-    "disabledTests"
-    "pytestFlags"
-    "pytestFlagsArray"
-    "unittestFlags"
-    "unittestFlagsArray"
     "outputs"
     "stdenv"
     "dependencies"
@@ -195,8 +189,6 @@ in
   meta ? { },
 
   doCheck ? true,
-
-  disabledTestPaths ? [ ],
 
   # Allow passing in a custom stdenv to buildPython*
   stdenv ? python.stdenv,
