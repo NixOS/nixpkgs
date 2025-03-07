@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation {
   pname = "flatter";
-  version = "0-unstable-2024-03-04";
+  version = "0-unstable-2025-02-03";
 
   src = fetchFromGitHub {
     owner = "keeganryan";
     repo = "flatter";
-    rev = "c2ed0ee94b6d281df7bcbce31ca275197ef9a562";
-    hash = "sha256-1Pjn0lANXaMOqlwwdOx6X/7jtAvfa2ZWa0nDfS3T5XU=";
+    rev = "96993e47874c302395721d76d06f7ab4fee09839";
+    hash = "sha256-eMZZsgLeTzMAHohmvR13KQERtYQpB2nj/v5MCKtGFaI=";
   };
 
   strictDeps = true;
