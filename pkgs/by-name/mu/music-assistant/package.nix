@@ -3,6 +3,7 @@
   python3,
   fetchFromGitHub,
   ffmpeg-headless,
+  librespot,
   nixosTests,
   replaceVars,
   providers ? [ ],
@@ -12,27 +13,16 @@ let
   python = python3.override {
     self = python;
     packageOverrides = self: super: {
-      aiojellyfin = super.aiojellyfin.overridePythonAttrs (oldAttrs: rec {
-        version = "0.10.1";
-
-        src = fetchFromGitHub {
-          owner = "Jc2k";
-          repo = "aiojellyfin";
-          tag = "v${version}";
-          hash = "sha256-A+uvM1/7HntRMIdknfHr0TMGIjHk7BCwsZopXdVoEO8=";
-        };
-      });
-
       music-assistant-frontend = self.callPackage ./frontend.nix { };
 
       music-assistant-models = super.music-assistant-models.overridePythonAttrs (oldAttrs: rec {
-        version = "1.1.4";
+        version = "1.1.30";
 
         src = fetchFromGitHub {
           owner = "music-assistant";
           repo = "models";
           tag = version;
-          hash = "sha256-keig18o32X53q/QcoaPO0o9AT4XTEZ+dQ3L6u6BVkLU=";
+          hash = "sha256-ZLTRHarjVFAk+tYPkgLm192rE+C82vNzqs8PmJhGSeg=";
         };
 
         postPatch = ''
@@ -54,20 +44,23 @@ in
 
 python.pkgs.buildPythonApplication rec {
   pname = "music-assistant";
-  version = "2.3.6";
+  version = "2.4.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "music-assistant";
     repo = "server";
     tag = version;
-    hash = "sha256-CSGpG1E4ou1TGz/S1mXFHyk49p7dStEwxUTB+xxfNEc=";
+    hash = "sha256-5FIIXIn4tEz6w/uAh6PGkU4tU+mz7Jpb3+bq1mRNr2Y=";
   };
 
   patches = [
     (replaceVars ./ffmpeg.patch {
       ffmpeg = "${lib.getBin ffmpeg-headless}/bin/ffmpeg";
       ffprobe = "${lib.getBin ffmpeg-headless}/bin/ffprobe";
+    })
+    (replaceVars ./librespot.patch {
+      librespot = lib.getExe librespot;
     })
 
     # Disable interactive dependency resolution, which clashes with the immutable Python environment
@@ -77,6 +70,8 @@ python.pkgs.buildPythonApplication rec {
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail "0.0.0" "${version}"
+
+    rm -rv music_assistant/providers/spotify/bin
   '';
 
   build-system = with python.pkgs; [
@@ -85,6 +80,7 @@ python.pkgs.buildPythonApplication rec {
 
   pythonRelaxDeps = [
     "aiohttp"
+    "aiosqlite"
     "certifi"
     "colorlog"
     "cryptography"
@@ -123,8 +119,10 @@ python.pkgs.buildPythonApplication rec {
       memory-tempfile
       music-assistant-frontend
       music-assistant-models
+      mutagen
       orjson
       pillow
+      podcastparser
       python-slugify
       shortuuid
       unidecode
@@ -136,7 +134,6 @@ python.pkgs.buildPythonApplication rec {
   nativeCheckInputs =
     with python.pkgs;
     [
-      aiojellyfin
       pytest-aiohttp
       pytest-cov-stub
       pytest-timeout
@@ -144,7 +141,9 @@ python.pkgs.buildPythonApplication rec {
       syrupy
       pytest-timeout
     ]
-    ++ lib.flatten (lib.attrValues optional-dependencies);
+    ++ lib.flatten (lib.attrValues optional-dependencies)
+    ++ (providerPackages.jellyfin python.pkgs)
+    ++ (providerPackages.opensubsonic python.pkgs);
 
   pytestFlagsArray = [
     # blocks in poll()

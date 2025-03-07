@@ -185,6 +185,8 @@ self: super: with self; {
 
   aioasuswrt = callPackage ../development/python-modules/aioasuswrt { };
 
+  aioaudiobookshelf = callPackage ../development/python-modules/aioaudiobookshelf { };
+
   aioautomower = callPackage ../development/python-modules/aioautomower { };
 
   aioazuredevops = callPackage ../development/python-modules/aioazuredevops { };
@@ -1172,6 +1174,8 @@ self: super: with self; {
   ayla-iot-unofficial = callPackage ../development/python-modules/ayla-iot-unofficial { };
 
   azure-ai-documentintelligence = callPackage ../development/python-modules/azure-ai-documentintelligence { };
+
+  azure-ai-vision-imageanalysis = callPackage ../development/python-modules/azure-ai-vision-imageanalysis { };
 
   azure-appconfiguration = callPackage ../development/python-modules/azure-appconfiguration { };
 
@@ -3194,6 +3198,8 @@ self: super: with self; {
 
   deezer-python = callPackage ../development/python-modules/deezer-python { };
 
+  deezer-python-async = callPackage ../development/python-modules/deezer-python-async { };
+
   defang = callPackage ../development/python-modules/defang { };
 
   defcon = callPackage ../development/python-modules/defcon { };
@@ -4036,6 +4042,8 @@ self: super: with self; {
 
   duo-client = callPackage ../development/python-modules/duo-client { };
 
+  duration-parser = callPackage ../development/python-modules/duration-parser { };
+
   durationpy = callPackage ../development/python-modules/durationpy { };
 
   durus = callPackage ../development/python-modules/durus {  };
@@ -4402,6 +4410,8 @@ self: super: with self; {
   evtx = callPackage ../development/python-modules/evtx { };
 
   ewmh = callPackage ../development/python-modules/ewmh { };
+
+  ewmhlib = callPackage ../development/python-modules/ewmhlib { };
 
   example-robot-data = toPythonModule (pkgs.example-robot-data.override {
     pythonSupport = true;
@@ -4923,6 +4933,8 @@ self: super: with self; {
   flow-record = callPackage ../development/python-modules/flow-record { };
 
   flower = callPackage ../development/python-modules/flower { };
+
+  flowjax = callPackage ../development/python-modules/flowjax { };
 
   flowlogs-reader = callPackage ../development/python-modules/flowlogs-reader { };
 
@@ -6093,7 +6105,7 @@ self: super: with self; {
   hopcroftkarp = callPackage ../development/python-modules/hopcroftkarp { };
 
   horizon-eda = callPackage ../development/python-modules/horizon-eda {
-    inherit (pkgs) horizon-eda mesa;
+    inherit (pkgs) horizon-eda;
   };
 
   howdoi = callPackage ../development/python-modules/howdoi { };
@@ -7278,6 +7290,8 @@ self: super: with self; {
   lark = callPackage ../development/python-modules/lark { };
 
   laspy = callPackage ../development/python-modules/laspy { };
+
+  lastversion = callPackage ../development/python-modules/lastversion { };
 
   laszip = callPackage ../development/python-modules/laszip {
     inherit (pkgs) cmake ninja;
@@ -10231,6 +10245,8 @@ self: super: with self; {
 
   param = callPackage ../development/python-modules/param { };
 
+  paramax = callPackage ../development/python-modules/paramax { };
+
   parameter-expansion-patched = callPackage ../development/python-modules/parameter-expansion-patched { };
 
   parameterized = callPackage ../development/python-modules/parameterized { };
@@ -12433,6 +12449,8 @@ self: super: with self; {
 
   pymodbus = callPackage ../development/python-modules/pymodbus { };
 
+  pymonctl = callPackage ../development/python-modules/pymonctl { };
+
   pymongo = callPackage ../development/python-modules/pymongo { };
 
   pymongo-inmemory = callPackage ../development/python-modules/pymongo-inmemory { };
@@ -12632,6 +12650,8 @@ self: super: with self; {
   pypeg2 = callPackage ../development/python-modules/pypeg2 { };
 
   pyperclip = callPackage ../development/python-modules/pyperclip { };
+
+  pyperclipfix = callPackage ../development/python-modules/pyperclipfix { };
 
   pyperscan = callPackage ../development/python-modules/pyperscan { };
 
@@ -13864,6 +13884,8 @@ self: super: with self; {
 
   pyvoro = callPackage ../development/python-modules/pyvoro { };
 
+  pyvows = callPackage ../development/python-modules/pyvows { };
+
   pywal = callPackage ../development/python-modules/pywal { };
 
   pywatchman = callPackage ../development/python-modules/pywatchman { };
@@ -13899,6 +13921,10 @@ self: super: with self; {
   pywikibot = callPackage ../development/python-modules/pywikibot { };
 
   pywilight = callPackage ../development/python-modules/pywilight { };
+
+  pywinbox = callPackage ../development/python-modules/pywinbox { };
+
+  pywinctl = callPackage ../development/python-modules/pywinctl { };
 
   pywinrm = callPackage ../development/python-modules/pywinrm { };
 
@@ -15921,6 +15947,8 @@ self: super: with self; {
   standard-pipes = if pythonAtLeast "3.13" then callPackage ../development/python-modules/standard-pipes { } else null;
 
   standard-telnetlib = if pythonAtLeast "3.13" then callPackage ../development/python-modules/standard-telnetlib { } else null;
+
+  standardwebhooks = callPackage ../development/python-modules/standardwebhooks { };
 
   stone = callPackage ../development/python-modules/stone { };
 

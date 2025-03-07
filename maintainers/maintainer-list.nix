@@ -192,6 +192,12 @@
     github = "2gn";
     githubId = 101851090;
   };
+  _2hexed = {
+    name = "n";
+    email = "2hexed@protonmail.com";
+    github = "2hexed";
+    githubId = 54501296;
+  };
   _360ied = {
     name = "Brian Zhu";
     email = "therealbarryplayer@gmail.com";
@@ -14357,6 +14363,12 @@
     githubId = 50797868;
     name = "Shaolong Chen";
   };
+  mapperfr = {
+    email = "jeremy@mapper.fr";
+    github = "mapperfr";
+    githubId = 3398608;
+    name = "Jérémy Garniaux";
+  };
   maralorn = {
     email = "mail@maralorn.de";
     matrix = "@maralorn:maralorn.de";
@@ -17444,6 +17456,12 @@
     github = "ok-nick";
     githubId = 25470747;
     name = "Nick";
+  };
+  okwilkins = {
+    email = "okwilkins@gmail.com";
+    github = "okwilkins";
+    githubId = 5969778;
+    name = "Oliver Wilkins";
   };
   olcai = {
     email = "dev@timan.info";
@@ -25118,6 +25136,12 @@
     github = "wegank";
     githubId = 9713184;
   };
+  weirdrock = {
+    name = "weirdrock";
+    email = "weirdrock@riseup.net";
+    github = "weirdrock";
+    githubId = 142561048;
+  };
   weitzj = {
     name = "Jan Weitz";
     email = "nixpkgs@janweitz.de";
@@ -26010,6 +26034,11 @@
     github = "yunfachi";
     githubId = 73419713;
     name = "Yunfachi";
+  };
+  yunz = {
+    github = "yunz-dev";
+    githubId = 112053367;
+    name = "Yunus";
   };
   yureien = {
     email = "contact@sohamsen.me";

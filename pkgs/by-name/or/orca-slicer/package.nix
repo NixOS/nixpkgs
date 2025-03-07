@@ -3,6 +3,7 @@
   lib,
   binutils,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   pkg-config,
   wrapGAppsHook3,
@@ -26,7 +27,6 @@
   hicolor-icon-theme,
   ilmbase,
   libpng,
-  mesa,
   mpfr,
   nlopt,
   opencascade-occt_7_6,
@@ -106,9 +106,6 @@ stdenv.mkDerivation rec {
       hicolor-icon-theme
       ilmbase
       libpng
-      mesa
-      mesa.osmesa
-      mesa.drivers
       mpfr
       nlopt
       opencascade-occt_7_6
@@ -126,7 +123,17 @@ stdenv.mkDerivation rec {
   patches = [
     # Fix for webkitgtk linking
     ./patches/0001-not-for-upstream-CMakeLists-Link-against-webkit2gtk-.patch
+    # Link opencv_core and opencv_imgproc instead of opencv_world
     ./patches/dont-link-opencv-world-orca.patch
+    # Don't link osmesa
+    ./patches/no-osmesa.patch
+    # The changeset from https://github.com/SoftFever/OrcaSlicer/pull/7650, can be removed when that PR gets merged
+    # Allows disabling the update nag screen
+    (fetchpatch {
+      name = "pr-7650-configurable-update-check.patch";
+      url = "https://github.com/SoftFever/OrcaSlicer/commit/d10a06ae11089cd1f63705e87f558e9392f7a167.patch";
+      hash = "sha256-t4own5AwPsLYBsGA15id5IH1ngM0NSuWdFsrxMRXmTk=";
+    })
   ];
 
   doCheck = true;
@@ -160,8 +167,6 @@ stdenv.mkDerivation rec {
 
   NIX_LDFLAGS = toString [
     (lib.optionalString withSystemd "-ludev")
-    "-L${mesa.osmesa}/lib"
-    "-L${mesa.drivers}/lib"
     "-L${boost186}/lib"
     "-lboost_log"
     "-lboost_log_setup"
@@ -185,19 +190,16 @@ stdenv.mkDerivation rec {
     "-DBOOST_LOG_NO_LIB=OFF"
     "-DCMAKE_CXX_FLAGS=-DGL_SILENCE_DEPRECATION"
     "-DCMAKE_EXE_LINKER_FLAGS=-Wl,--no-as-needed"
-    "-DCMAKE_EXE_LINKER_FLAGS=-Wl,-rpath,${mesa.drivers}/lib -Wl,-rpath,${mesa.osmesa}/lib"
+    "-DORCA_VERSION_CHECK_DEFAULT=OFF"
   ];
 
   preFixup = ''
     gappsWrapperArgs+=(
       --prefix LD_LIBRARY_PATH : "$out/lib:${
         lib.makeLibraryPath [
-          mesa.drivers
-          mesa.osmesa
           glew
         ]
       }"
-      --prefix LIBGL_DRIVERS_PATH : "${mesa.drivers}/lib/dri"
       --set WEBKIT_DISABLE_COMPOSITING_MODE 1
     )
   '';

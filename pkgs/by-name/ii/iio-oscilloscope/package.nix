@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "analogdevicesinc";
-    repo = finalAttrs.pname;
+    repo = "iio-oscilloscope";
     rev = "v${finalAttrs.version}-master";
     hash = "sha256-wCeOLAkrytrBaXzUbNu8z2Ayz44M+b+mbyaRoWHpZYU=";
   };
