@@ -41,7 +41,7 @@ let
 
   godotPackages_4_3 = mkGodotPackages "4.3";
   godotPackages_4_4 = mkGodotPackages "4.4";
-  godotPackages_4 = godotPackages_4_3;
+  godotPackages_4 = godotPackages_4_4;
   godotPackages = godotPackages_4;
 in
 rec {
