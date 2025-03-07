@@ -6,7 +6,7 @@
 }:
 
 python3Packages.buildPythonApplication rec {
-  pname = "interactiveHtmlBom";
+  pname = "interactive-html-bom";
   version = "2.9.0";
   pyproject = true;
 
