@@ -1,0 +1,34 @@
+diff --git a/build.gradle b/build.gradle
+index c206e2f..b1fda33 100644
+--- a/build.gradle
++++ b/build.gradle
+@@ -69,19 +69,7 @@ launch4j {
+   messagesInstanceAlreadyExists="Stirling-PDF is already running."
+ }
+ 
+-spotless {
+-    java {
+-        target project.fileTree('src/main/java')
+ 
+-        googleJavaFormat('1.19.1').aosp().reorderImports(false)
+-
+-        importOrder('java', 'javax', 'org', 'com', 'net', 'io')
+-        toggleOffOn()
+-        trimTrailingWhitespace()
+-        indentWithSpaces()
+-        endWithNewline()
+-    }
+-}
+ 
+ dependencies {
+     //security updates
+@@ -163,9 +151,6 @@ dependencies {
+     annotationProcessor 'org.projectlombok:lombok:1.18.28'
+ }
+ 
+-tasks.withType(JavaCompile) {
+-    dependsOn 'spotlessApply'
+-}
+ compileJava {
+     options.compilerArgs << '-parameters'
+ }

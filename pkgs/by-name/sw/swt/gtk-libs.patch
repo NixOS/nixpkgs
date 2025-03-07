@@ -1,0 +1,14 @@
+--- a/make_linux.mak
++++ b/make_linux.mak
+@@ -53,9 +53,4 @@
+
+-# Do not use pkg-config to get libs because it includes unnecessary dependencies (i.e. pangoxft-1.0)
+-GTKCFLAGS = `pkg-config --cflags gtk+-$(GTK_VERSION) gtk+-unix-print-$(GTK_VERSION)`
++GTKCFLAGS = `pkg-config --cflags gtk+-$(GTK_VERSION) gthread-2.0 gtk+-unix-print-$(GTK_VERSION) x11 xtst`
++GTKLIBS = `pkg-config --libs gtk+-$(GTK_VERSION) gthread-2.0 gtk+-unix-print-$(GTK_VERSION) x11 xtst`
+-ifeq ($(GTK_VERSION), 3.0)
+-GTKLIBS = `pkg-config --libs-only-L gtk+-$(GTK_VERSION) gthread-2.0` $(XLIB64) -L/usr/X11R6/lib -lgtk-3 -lgdk-3 -lcairo -lgthread-2.0 -lXtst
+-else
+-GTKLIBS = `pkg-config --libs-only-L gtk+-$(GTK_VERSION) gthread-2.0` $(XLIB64) -L/usr/X11R6/lib -lgtk-x11-$(GTK_VERSION) -lgthread-2.0 -lXtst
+-endif
+

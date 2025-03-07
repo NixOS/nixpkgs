@@ -1,0 +1,37 @@
+diff --git a/xpra/x11/fakeXinerama.py b/xpra/x11/fakeXinerama.py
+index d5c1c8bb10..88c77e8142 100755
+--- a/xpra/x11/fakeXinerama.py
++++ b/xpra/x11/fakeXinerama.py
+@@ -22,31 +22,7 @@ fakeXinerama_config_files = [
+            ]
+ 
+ def find_libfakeXinerama():
+-    libname = "fakeXinerama"
+-    try:
+-        from ctypes.util import find_library
+-        flibname = find_library("fakeXinerama")
+-        if flibname:
+-            libname = flibname
+-    except Exception:
+-        pass
+-    if POSIX:
+-        for lib_dir in os.environ.get("LD_LIBRARY_PATH", "/usr/lib").split(os.pathsep):
+-            lib_path = os.path.join(lib_dir, libname)
+-            if not os.path.exists(lib_dir):
+-                continue
+-            if os.path.exists(lib_path) and os.path.isfile(lib_path):
+-                return lib_path
+-    if LINUX:
+-        try:
+-            libpath = find_lib_ldconfig("fakeXinerama")
+-            if libpath:
+-                return libpath
+-        except Exception as e:
+-            log("find_libfakeXinerama()", exc_info=True)
+-            log.error("Error: cannot launch ldconfig -p to locate libfakeXinerama:")
+-            log.error(" %s", e)
+-    return find_lib("libfakeXinerama.so.1")
++    return "@libfakeXinerama@/lib/libfakeXinerama.so.1.0"
+ 
+ current_xinerama_config = None
+ 

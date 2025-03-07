@@ -1,0 +1,13 @@
+diff --git a/xsdata/codegen/writer.py b/xsdata/codegen/writer.py
+index 0301631f..3185c526 100644
+--- a/xsdata/codegen/writer.py
++++ b/xsdata/codegen/writer.py
+@@ -73,7 +73,7 @@ class CodeWriter:
+         """Run ruff format on the src code."""
+         commands = [
+             [
+-                "ruff",
++                "@ruff@",
+                 "format",
+                 "--stdin-filename",
+                 str(file_path),

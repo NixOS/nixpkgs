@@ -1,0 +1,29 @@
+diff --git a/test/run b/test/run
+index 43a57312..398be8d8 100755
+--- a/test/run
++++ b/test/run
+@@ -148,21 +148,17 @@ file_size() {
+ objdump_cmd() {
+     local file="$1"
+ 
+-    if $HOST_OS_APPLE; then
+-        xcrun dwarfdump -r 0 "$file"
+-    elif $HOST_OS_WINDOWS || $HOST_OS_CYGWIN; then
++    if $HOST_OS_WINDOWS || $HOST_OS_CYGWIN; then
+         # For some reason objdump only shows the basename of the file, so fall
+         # back to brute force and ignorance.
+         strings "$1"
+     else
+-        objdump -W "$file"
++        @objdump@ -W "$file"
+     fi
+ }
+ 
+ objdump_grep_cmd() {
+-    if $HOST_OS_APPLE; then
+-        grep -Fq "\"$1\""
+-    elif $HOST_OS_WINDOWS || $HOST_OS_CYGWIN; then
++    if $HOST_OS_WINDOWS || $HOST_OS_CYGWIN; then
+         grep -Fq "$1"
+     else
+         grep -Fq ": $1"

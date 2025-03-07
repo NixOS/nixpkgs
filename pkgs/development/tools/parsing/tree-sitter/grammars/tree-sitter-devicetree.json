@@ -1,0 +1,12 @@
+{
+  "url": "https://github.com/joelspadin/tree-sitter-devicetree",
+  "rev": "05f12c50cdaafcd8969c9c712245f51a0611df23",
+  "date": "2024-03-15T23:40:59-05:00",
+  "path": "/nix/store/rlbnn034jn2vb5bg06ynrsc6xyxs9sa0-tree-sitter-devicetree",
+  "sha256": "1iw1az1xm3nlq61365lrj8prhx8417ha4f82a90hwfpb58dnf30m",
+  "hash": "sha256-FQxnGyrrOg5BUgI5ouAJBHWYL5KZFjOCwdSO2sNXgcc=",
+  "fetchLFS": false,
+  "fetchSubmodules": false,
+  "deepClone": false,
+  "leaveDotGit": false
+}

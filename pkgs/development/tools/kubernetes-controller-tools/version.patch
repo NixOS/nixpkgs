@@ -1,0 +1,23 @@
+diff --git a/pkg/version/version.go b/pkg/version/version.go
+index 09c8efcf..b9ec798a 100644
+--- a/pkg/version/version.go
++++ b/pkg/version/version.go
+@@ -20,14 +20,12 @@ import (
+ 	"runtime/debug"
+ )
+ 
++var version string
++
+ // Version returns the version of the main module
+ func Version() string {
+-	info, ok := debug.ReadBuildInfo()
+-	if !ok || info == nil || info.Main.Version == "" {
+-		// binary has not been built with module support or doesn't contain a version.
+-		return "(unknown)"
+-	}
+-	return info.Main.Version
++	_ = debug.ReadBuildInfo
++	return version
+ }
+ 
+ // Print prints the main module version on stdout.

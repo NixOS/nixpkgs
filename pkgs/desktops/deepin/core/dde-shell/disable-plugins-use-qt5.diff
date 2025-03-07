@@ -1,0 +1,18 @@
+diff --git a/panels/dock/CMakeLists.txt b/panels/dock/CMakeLists.txt
+index 1a20179..83c5ff2 100644
+--- a/panels/dock/CMakeLists.txt
++++ b/panels/dock/CMakeLists.txt
+@@ -85,11 +85,11 @@ add_subdirectory(searchitem)
+ add_subdirectory(launcherItem)
+ add_subdirectory(showdesktop)
+ add_subdirectory(taskmanager)
+-add_subdirectory(tray)
++ add_subdirectory(tray)
+ add_subdirectory(multitaskview)
+ 
+ # dock plugin load program
+-add_subdirectory(dockplugin)
++#add_subdirectory(dockplugin)
+ 
+ # dock qml element(include Dock.xx defines and DockCompositor)
+ file(

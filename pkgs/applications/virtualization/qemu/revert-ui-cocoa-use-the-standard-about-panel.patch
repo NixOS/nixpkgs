@@ -1,0 +1,145 @@
+diff --git a/ui/cocoa.m b/ui/cocoa.m
+index 25e0db9dd0..4af0712036 100644
+--- a/ui/cocoa.m
++++ b/ui/cocoa.m
+@@ -93,6 +93,7 @@ static void cocoa_switch(DisplayChangeListener *dcl,
+ 
+ static void cocoa_refresh(DisplayChangeListener *dcl);
+ 
++static NSWindow *about_window;
+ static const DisplayChangeListenerOps dcl_ops = {
+     .dpy_name          = "cocoa",
+     .dpy_gfx_update = cocoa_update,
+@@ -1180,6 +1181,7 @@ - (void)changeDeviceMedia:(id)sender;
+ - (BOOL)verifyQuit;
+ - (void)openDocumentation:(NSString *)filename;
+ - (IBAction) do_about_menu_item: (id) sender;
++- (void)make_about_window;
+ - (void)adjustSpeed:(id)sender;
+ @end
+ 
+@@ -1227,6 +1229,8 @@ - (id) init
+         [pauseLabel setFont: [NSFont fontWithName: @"Helvetica" size: 90]];
+         [pauseLabel setTextColor: [NSColor blackColor]];
+         [pauseLabel sizeToFit];
++
++        [self make_about_window];
+     }
+     return self;
+ }
+@@ -1549,29 +1553,92 @@ - (BOOL)verifyQuit
+ /* The action method for the About menu item */
+ - (IBAction) do_about_menu_item: (id) sender
+ {
+-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+-    char *icon_path_c = get_relocated_path(CONFIG_QEMU_ICONDIR "/hicolor/512x512/apps/qemu.png");
+-    NSString *icon_path = [NSString stringWithUTF8String:icon_path_c];
+-    g_free(icon_path_c);
+-    NSImage *icon = [[NSImage alloc] initWithContentsOfFile:icon_path];
+-    NSString *version = @"QEMU emulator version " QEMU_FULL_VERSION;
+-    NSString *copyright = @QEMU_COPYRIGHT;
+-    NSDictionary *options;
+-    if (icon) {
+-        options = @{
+-            NSAboutPanelOptionApplicationIcon : icon,
+-            NSAboutPanelOptionApplicationVersion : version,
+-            @"Copyright" : copyright,
+-        };
+-        [icon release];
+-    } else {
+-        options = @{
+-            NSAboutPanelOptionApplicationVersion : version,
+-            @"Copyright" : copyright,
+-        };
+-    }
+-    [NSApp orderFrontStandardAboutPanelWithOptions:options];
+-    [pool release];
++    [about_window makeKeyAndOrderFront: nil];
++}
++
++/* Create and display the about dialog */
++- (void)make_about_window
++{
++    /* Make the window */
++    int x = 0, y = 0, about_width = 400, about_height = 200;
++    NSRect window_rect = NSMakeRect(x, y, about_width, about_height);
++    about_window = [[NSWindow alloc] initWithContentRect:window_rect
++                    styleMask:NSWindowStyleMaskTitled | NSWindowStyleMaskClosable |
++                    NSWindowStyleMaskMiniaturizable
++                    backing:NSBackingStoreBuffered
++                    defer:NO];
++    [about_window setTitle: @"About"];
++    [about_window setReleasedWhenClosed: NO];
++    [about_window center];
++    NSView *superView = [about_window contentView];
++
++    /* Create the dimensions of the picture */
++    int picture_width = 80, picture_height = 80;
++    x = (about_width - picture_width)/2;
++    y = about_height - picture_height - 10;
++    NSRect picture_rect = NSMakeRect(x, y, picture_width, picture_height);
++
++    /* Make the picture of QEMU */
++    NSImageView *picture_view = [[NSImageView alloc] initWithFrame:
++                                                     picture_rect];
++    char *qemu_image_path_c = get_relocated_path(CONFIG_QEMU_ICONDIR "/hicolor/512x512/apps/qemu.png");
++    NSString *qemu_image_path = [NSString stringWithUTF8String:qemu_image_path_c];
++    g_free(qemu_image_path_c);
++    NSImage *qemu_image = [[NSImage alloc] initWithContentsOfFile:qemu_image_path];
++    [picture_view setImage: qemu_image];
++    [picture_view setImageScaling: NSImageScaleProportionallyUpOrDown];
++    [superView addSubview: picture_view];
++
++    /* Make the name label */
++    NSBundle *bundle = [NSBundle mainBundle];
++    if (bundle) {
++        x = 0;
++        y = y - 25;
++        int name_width = about_width, name_height = 20;
++        NSRect name_rect = NSMakeRect(x, y, name_width, name_height);
++        NSTextField *name_label = [[NSTextField alloc] initWithFrame: name_rect];
++        [name_label setEditable: NO];
++        [name_label setBezeled: NO];
++        [name_label setDrawsBackground: NO];
++        [name_label setAlignment: NSTextAlignmentCenter];
++        NSString *qemu_name = [[bundle executablePath] lastPathComponent];
++        [name_label setStringValue: qemu_name];
++        [superView addSubview: name_label];
++    }
++
++    /* Set the version label's attributes */
++    x = 0;
++    y = 50;
++    int version_width = about_width, version_height = 20;
++    NSRect version_rect = NSMakeRect(x, y, version_width, version_height);
++    NSTextField *version_label = [[NSTextField alloc] initWithFrame:
++                                                      version_rect];
++    [version_label setEditable: NO];
++    [version_label setBezeled: NO];
++    [version_label setAlignment: NSTextAlignmentCenter];
++    [version_label setDrawsBackground: NO];
++
++    /* Create the version string*/
++    NSString *version_string;
++    version_string = [[NSString alloc] initWithFormat:
++    @"QEMU emulator version %s", QEMU_FULL_VERSION];
++    [version_label setStringValue: version_string];
++    [superView addSubview: version_label];
++
++    /* Make copyright label */
++    x = 0;
++    y = 35;
++    int copyright_width = about_width, copyright_height = 20;
++    NSRect copyright_rect = NSMakeRect(x, y, copyright_width, copyright_height);
++    NSTextField *copyright_label = [[NSTextField alloc] initWithFrame:
++                                                        copyright_rect];
++    [copyright_label setEditable: NO];
++    [copyright_label setBezeled: NO];
++    [copyright_label setDrawsBackground: NO];
++    [copyright_label setAlignment: NSTextAlignmentCenter];
++    [copyright_label setStringValue: [NSString stringWithFormat: @"%s",
++                                     QEMU_COPYRIGHT]];
++    [superView addSubview: copyright_label];
+ }
+ 
+ /* Used by the Speed menu items */

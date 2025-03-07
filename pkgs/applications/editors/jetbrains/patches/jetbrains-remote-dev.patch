@@ -1,0 +1,17 @@
+--- a/plugins/remote-dev-server/bin/launcher.sh
++++ b/plugins/remote-dev-server/bin/launcher.sh
+@@ -366,6 +366,8 @@
+   REMOTE_DEV_SERVER_USE_SELF_CONTAINED_LIBS=1
+ fi
+
++REMOTE_DEV_SERVER_USE_SELF_CONTAINED_LIBS=0
++
+ if [ $REMOTE_DEV_SERVER_USE_SELF_CONTAINED_LIBS -eq 1 ]; then
+   SELFCONTAINED_LIBS="$REMOTE_DEV_SERVER_DIR/selfcontained/lib"
+   if [ ! -d "$SELFCONTAINED_LIBS" ]; then
+@@ -596,3 +598,5 @@
+     "$LAUNCHER" "$STARTER_COMMAND" "$PROJECT_PATH" "$@"
+     ;;
+ esac
++
++unset REMOTE_DEV_SERVER_USE_SELF_CONTAINED_LIBS

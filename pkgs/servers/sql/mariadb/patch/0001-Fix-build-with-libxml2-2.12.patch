@@ -1,0 +1,167 @@
+From 1f1ee5d3776af7ef56ffa3f4dcd22532c2c86c74 Mon Sep 17 00:00:00 2001
+From: Jan Tojnar <jtojnar@gmail.com>
+Date: Sun, 7 Jan 2024 10:19:54 +0100
+Subject: [PATCH] Fix build with libxml2 2.12
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+libxml2 2.12.0 made `xmlGetLastError()` return `const` pointer:
+
+https://gitlab.gnome.org/GNOME/libxml2/-/commit/61034116d0a3c8b295c6137956adc3ae55720711
+
+Clang 16 does not like this:
+
+    error: assigning to 'xmlErrorPtr' (aka '_xmlError *') from 'const xmlError *' (aka 'const _xmlError *') discards qualifiers
+    error: cannot initialize a variable of type 'xmlErrorPtr' (aka '_xmlError *') with an rvalue of type 'const xmlError *' (aka 'const _xmlError *')
+
+Let’s update the variables to `const`.
+For older versions, it will be automatically converted.
+
+But then `xmlResetError(xmlError*)` will not like the `const` pointer:
+
+    error: no matching function for call to 'xmlResetError'
+    note: candidate function not viable: 1st argument ('const xmlError *' (aka 'const _xmlError *')) would lose const qualifier
+
+Let’s replace it with `xmlResetLastError()`.
+
+ALso remove `LIBXMLDOC::Xerr` protected member property.
+It was introduced in 65b0e5455b547a3d574fa77b34cce23ae3bea0a0
+along with the `xmlResetError` calls.
+It does not appear to be used for anything.
+---
+ storage/connect/libdoc.cpp | 39 +++++++++++++++++++-------------------
+ 1 file changed, 19 insertions(+), 20 deletions(-)
+
+diff --git a/storage/connect/libdoc.cpp b/storage/connect/libdoc.cpp
+index e414aa88355..10edcbc3ffa 100644
+--- a/storage/connect/libdoc.cpp
++++ b/storage/connect/libdoc.cpp
+@@ -93,7 +93,6 @@ class LIBXMLDOC : public XMLDOCUMENT {
+   xmlXPathContextPtr Ctxp;
+   xmlXPathObjectPtr  Xop;
+   xmlXPathObjectPtr  NlXop;
+-  xmlErrorPtr        Xerr;
+   char              *Buf;                  // Temporary
+   bool               Nofreelist;
+ }; // end of class LIBXMLDOC
+@@ -327,7 +326,6 @@ LIBXMLDOC::LIBXMLDOC(char *nsl, char *nsdf, char *enc, PFBLOCK fp)
+   Ctxp = NULL;
+   Xop = NULL;
+   NlXop = NULL;
+-  Xerr = NULL;
+   Buf = NULL;
+   Nofreelist = false;
+   } // end of LIBXMLDOC constructor
+@@ -365,8 +363,8 @@ bool LIBXMLDOC::ParseFile(PGLOBAL g, char *fn)
+       Encoding = (char*)Docp->encoding;
+ 
+     return false;
+-  } else if ((Xerr = xmlGetLastError()))
+-    xmlResetError(Xerr);
++  } else if (xmlGetLastError())
++    xmlResetLastError();
+ 
+   return true;
+   } // end of ParseFile
+@@ -505,9 +503,9 @@ int LIBXMLDOC::DumpDoc(PGLOBAL g, char *ofn)
+ #if 1
+   // This function does not crash (
+   if (xmlSaveFormatFileEnc((const char *)ofn, Docp, Encoding, 0) < 0) {
+-    xmlErrorPtr err = xmlGetLastError();
++    const xmlError *err = xmlGetLastError();
+     strcpy(g->Message, (err) ? err->message : "Error saving XML doc");
+-    xmlResetError(Xerr);
++    xmlResetLastError();
+     rc = -1;
+     } // endif Save
+ //  rc = xmlDocDump(of, Docp);
+@@ -546,8 +544,8 @@ void LIBXMLDOC::CloseDoc(PGLOBAL g, PFBLOCK xp)
+     if (Nlist) {
+       xmlXPathFreeNodeSet(Nlist);
+ 
+-      if ((Xerr = xmlGetLastError()))
+-        xmlResetError(Xerr);
++      if (xmlGetLastError())
++        xmlResetLastError();
+ 
+       Nlist = NULL;
+       } // endif Nlist
+@@ -555,8 +553,8 @@ void LIBXMLDOC::CloseDoc(PGLOBAL g, PFBLOCK xp)
+     if (Xop) {
+       xmlXPathFreeObject(Xop);
+ 
+-      if ((Xerr = xmlGetLastError()))
+-        xmlResetError(Xerr);
++      if (xmlGetLastError())
++        xmlResetLastError();
+ 
+       Xop = NULL;
+       } // endif Xop
+@@ -564,8 +562,8 @@ void LIBXMLDOC::CloseDoc(PGLOBAL g, PFBLOCK xp)
+     if (NlXop) {
+       xmlXPathFreeObject(NlXop);
+ 
+-      if ((Xerr = xmlGetLastError()))
+-        xmlResetError(Xerr);
++      if (xmlGetLastError())
++        xmlResetLastError();
+ 
+       NlXop = NULL;
+       } // endif NlXop
+@@ -573,8 +571,8 @@ void LIBXMLDOC::CloseDoc(PGLOBAL g, PFBLOCK xp)
+     if (Ctxp) {
+       xmlXPathFreeContext(Ctxp);
+ 
+-      if ((Xerr = xmlGetLastError()))
+-        xmlResetError(Xerr);
++      if (xmlGetLastError())
++        xmlResetLastError();
+ 
+       Ctxp = NULL;
+       } // endif Ctxp
+@@ -590,6 +588,7 @@ void LIBXMLDOC::CloseDoc(PGLOBAL g, PFBLOCK xp)
+ /******************************************************************/
+ xmlNodeSetPtr LIBXMLDOC::GetNodeList(PGLOBAL g, xmlNodePtr np, char *xp)
+   {
++  const xmlError *xerr;
+   xmlNodeSetPtr nl;
+ 
+   if (trace(1))
+@@ -649,11 +648,11 @@ xmlNodeSetPtr LIBXMLDOC::GetNodeList(PGLOBAL g, xmlNodePtr np, char *xp)
+     } else
+       xmlXPathFreeObject(Xop);            // Caused node not found
+ 
+-    if ((Xerr = xmlGetLastError())) {
+-      strcpy(g->Message, Xerr->message);
+-      xmlResetError(Xerr);
++    if ((xerr = xmlGetLastError())) {
++      strcpy(g->Message, xerr->message);
++      xmlResetLastError();
+       return NULL;
+-      } // endif Xerr
++      } // endif xerr
+ 
+     } // endif Xop
+ 
+@@ -1079,7 +1078,7 @@ void XML2NODE::AddText(PGLOBAL g, PCSZ txtp)
+ /******************************************************************/
+ void XML2NODE::DeleteChild(PGLOBAL g, PXNODE dnp)
+   {
+-  xmlErrorPtr xerr;
++  const xmlError *xerr;
+ 
+   if (trace(1))
+     htrc("DeleteChild: node=%p\n", dnp);
+@@ -1122,7 +1121,7 @@ void XML2NODE::DeleteChild(PGLOBAL g, PXNODE dnp)
+   if (trace(1))
+     htrc("DeleteChild: errmsg=%-.256s\n", xerr->message);
+ 
+-  xmlResetError(xerr);
++  xmlResetLastError();
+   } // end of DeleteChild
+ 
+ /* -------------------- class XML2NODELIST ---------------------- */
+-- 
+2.42.0
+

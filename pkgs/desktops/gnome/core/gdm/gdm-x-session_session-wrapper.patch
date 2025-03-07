@@ -1,0 +1,40 @@
+diff --git a/daemon/gdm-x-session.c b/daemon/gdm-x-session.c
+index 88fe96f..b1b140a 100644
+--- a/daemon/gdm-x-session.c
++++ b/daemon/gdm-x-session.c
+@@ -664,18 +664,34 @@ spawn_session (State        *state,
+                                                           state->session_command,
+                                                           NULL);
+         } else {
++                char const *session_wrapper;
++                char *eff_session_command;
+                 int ret;
+                 char **argv;
+ 
+-                ret = g_shell_parse_argv (state->session_command,
++                session_wrapper = g_getenv("GDM_X_SESSION_WRAPPER");
++                if (session_wrapper != NULL) {
++                        char *quoted_wrapper = g_shell_quote(session_wrapper);
++                        eff_session_command = g_strjoin(" ", quoted_wrapper, state->session_command, NULL);
++                        g_free(quoted_wrapper);
++                } else {
++                        eff_session_command = state->session_command;
++                }
++
++                ret = g_shell_parse_argv (eff_session_command,
+                                           NULL,
+                                           &argv,
+                                           &error);
+ 
++                if (session_wrapper != NULL) {
++                        g_free(eff_session_command);
++                }
++
+                 if (!ret) {
+                         g_debug ("could not parse session arguments: %s", error->message);
+                         goto out;
+                 }
++
+                 subprocess = g_subprocess_launcher_spawnv (launcher,
+                                                            (const char * const *) argv,
+                                                            &error);

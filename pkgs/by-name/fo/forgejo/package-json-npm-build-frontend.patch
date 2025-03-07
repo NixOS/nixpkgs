@@ -1,0 +1,14 @@
+diff --git a/package.json b/package.json
+index b50c52cf43..d6aafb8775 100644
+--- a/package.json
++++ b/package.json
+@@ -98,5 +98,8 @@
+   },
+   "browserslist": [
+     "defaults"
+-  ]
++  ],
++  "scripts": {
++    "build": "node_modules/.bin/webpack"
++  }
+ }

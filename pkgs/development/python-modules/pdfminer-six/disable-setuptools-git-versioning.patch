@@ -1,0 +1,14 @@
+--- a/setup.py
++++ b/setup.py
+@@ -7,10 +7,7 @@
+ 
+ setup(
+     name="pdfminer.six",
+-    setuptools_git_versioning={
+-        "enabled": True,
+-    },
+-    setup_requires=["setuptools-git-versioning<2"],
++    version="@version@",
+     packages=["pdfminer"],
+     package_data={"pdfminer": ["cmap/*.pickle.gz", "py.typed"]},
+     install_requires=[

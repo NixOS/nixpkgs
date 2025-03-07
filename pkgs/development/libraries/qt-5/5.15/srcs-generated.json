@@ -1,0 +1,202 @@
+{
+  "qt3d": {
+    "url": "https://invent.kde.org/qt/qt/qt3d.git",
+    "rev": "9bf4d03e2515f7c454647d54542330b6e90f8191",
+    "sha256": "1w1lq332q270vld7sz0xqpa0f7mvi5gizycfsx9zz9c73qy4idlp"
+  },
+  "qtactiveqt": {
+    "url": "https://invent.kde.org/qt/qt/qtactiveqt.git",
+    "rev": "91bfd21f86c450b129ac2dde9d33b32e140d8a0c",
+    "sha256": "06fbiggjq1c1z1wgx63ir8rj1ppd1c046xwz4nzsrf1pi8dqcyl7"
+  },
+  "qtandroidextras": {
+    "url": "https://invent.kde.org/qt/qt/qtandroidextras.git",
+    "rev": "197a7e05cda87a4645f30c8ef5044b342442ebd1",
+    "sha256": "0j5al7h2gy67cb2lj4yymdsidr1dcvvahqfysbdl2lwz3zzpdql1"
+  },
+  "qtbase": {
+    "url": "https://invent.kde.org/qt/qt/qtbase.git",
+    "rev": "2b9835f5c9bcfe3105b60a8dd33c1db7d8611378",
+    "sha256": "1yms1r42yps06bg8gjbzb5y7x03ks11vg97s2j7r1aplp7kjf7wm"
+  },
+  "qtcharts": {
+    "url": "https://invent.kde.org/qt/qt/qtcharts.git",
+    "rev": "7315c48bcec88014e78165bbda54abfcd557e0af",
+    "sha256": "043lbxkaw53qah9ny4nbpp8g7q4rq9x2k21vkprk7nim66d6pmy3"
+  },
+  "qtconnectivity": {
+    "url": "https://invent.kde.org/qt/qt/qtconnectivity.git",
+    "rev": "99f30db37c63447c59d5fac15bc8feb832a7fd04",
+    "sha256": "09v76kb7fx7bq4vplyk3cf7il3a6f9p673z1l28nrv4w308bhqfy"
+  },
+  "qtdatavis3d": {
+    "url": "https://invent.kde.org/qt/qt/qtdatavis3d.git",
+    "rev": "79cd0fb6cafcd42e4037ae1363fda3bc2cec934a",
+    "sha256": "19y33v3l4crzrk7qf5qhx7phxkiax14c2q4xjd1klw7n333d43cq"
+  },
+  "qtdeclarative": {
+    "url": "https://invent.kde.org/qt/qt/qtdeclarative.git",
+    "rev": "50c8def854806485d66aabcf6918e8b987032e55",
+    "sha256": "0qvw72w0m1q4yg4l35rh7ydqgp35xqfwpq0pc7q5578n1xspihhn"
+  },
+  "qtdoc": {
+    "url": "https://invent.kde.org/qt/qt/qtdoc.git",
+    "rev": "bc4503b8b70f4cd435d6e64a9e6c623ca44b9fcd",
+    "sha256": "0pvimmw5c6gh6xi2iblzyikgaw7cr8gqjdvyappcahjpalxxsjbw"
+  },
+  "qtgamepad": {
+    "url": "https://invent.kde.org/qt/qt/qtgamepad.git",
+    "rev": "b1c2f272f69e222a532485e6f820776c220b3535",
+    "sha256": "1zga6sa901g0fpqyjlyj73s2f94yjm0z3599gngnlvvd7jsnlgnv"
+  },
+  "qtgraphicaleffects": {
+    "url": "https://invent.kde.org/qt/qt/qtgraphicaleffects.git",
+    "rev": "2c39e673d6c15a84dcc7882d3772fa04cc79f9ed",
+    "sha256": "177xkhi3syx6r3my5rly5bncgjfhdvgrhf6fw5ajqplik6yln4pq"
+  },
+  "qtimageformats": {
+    "url": "https://invent.kde.org/qt/qt/qtimageformats.git",
+    "rev": "4e4f5fc6bdac96f5281a3ebeb0fee78df7b1a498",
+    "sha256": "1w68v55y1l1biv7krzv9vmi2czz84jk89f4pymq3ri1w3y4rc1id"
+  },
+  "qtlocation": {
+    "url": "https://invent.kde.org/qt/qt/qtlocation.git",
+    "rev": "3beb9c810611337fde61d89aa981e9f177a9ede9",
+    "sha256": "1fwn9x3n01dlkhw53n12z5kb06qj2lmangzvj3fjr5ff0yy47df9"
+  },
+  "qtlottie": {
+    "url": "https://invent.kde.org/qt/qt/qtlottie.git",
+    "rev": "b8c1fa109dce6f8bff9f55738d2f1e21ff677796",
+    "sha256": "0qydaqj8945hikby7a9529i0g5ycpvhws6y0zc566jv50qida725"
+  },
+  "qtmacextras": {
+    "url": "https://invent.kde.org/qt/qt/qtmacextras.git",
+    "rev": "e66cba7cf02aa8aecce03540cd167621f2cda5f0",
+    "sha256": "0q7d3lh3fpkrakxx1sqx9csa7l7rxzskcavbidxb5298jxn49wn8"
+  },
+  "qtmultimedia": {
+    "url": "https://invent.kde.org/qt/qt/qtmultimedia.git",
+    "rev": "53069c9c6eb52b744333812f42aed36c3db6e752",
+    "sha256": "0y8km2mp5mj1zw1v3acsdvzrc1jyiwpxy3rmif5ssn40wwxifilp"
+  },
+  "qtnetworkauth": {
+    "url": "https://invent.kde.org/qt/qt/qtnetworkauth.git",
+    "rev": "28180f28c98e329676463e24cef0097cba45bc00",
+    "sha256": "1g6clwmrpdvl9m6flyrk4vlckjnjv3phqhy1xbxlra3zcfn3357r"
+  },
+  "qtpurchasing": {
+    "url": "https://invent.kde.org/qt/qt/qtpurchasing.git",
+    "rev": "d4903bf08c576a6c085278c1960a2676cd83dca7",
+    "sha256": "04bry3ys15bd6kaiwyb8fh037s50mcplircpzvrwdc1h8milx7y7"
+  },
+  "qtquick3d": {
+    "url": "https://invent.kde.org/qt/qt/qtquick3d.git",
+    "rev": "ad229f0c135f74801fba2bcd22c78abc0e3cf1d2",
+    "sha256": "17jdsahdw72l5lpbng8733qv2fp2qkfzlzrayzigz2slfdqgjxnk"
+  },
+  "qtquickcontrols": {
+    "url": "https://invent.kde.org/qt/qt/qtquickcontrols.git",
+    "rev": "9325659ec390eda5b160736a926ba58ccb445cce",
+    "sha256": "0r1kkn6pr6yynk8x2ggkfqqrh27g1qra102ilglj7chsmrp92xgc"
+  },
+  "qtquickcontrols2": {
+    "url": "https://invent.kde.org/qt/qt/qtquickcontrols2.git",
+    "rev": "69fea340f8f4c483a9b2889e4e24a4b1b52ebc87",
+    "sha256": "0v6g146ryabks0sff5dgyx42690xckaqpx44c6g7x0b0w24lj6ws"
+  },
+  "qtquicktimeline": {
+    "url": "https://invent.kde.org/qt/qt/qtquicktimeline.git",
+    "rev": "bf6c73064c82b07fcb1f7e72c263b249e137e224",
+    "sha256": "0pnn5ds6sxls8i6pzzmraalvln2pabgga3gnv761b2skgkv26gnq"
+  },
+  "qtremoteobjects": {
+    "url": "https://invent.kde.org/qt/qt/qtremoteobjects.git",
+    "rev": "3873bdc809ca8d58d91968cb0de34da26646bc79",
+    "sha256": "0bncsi45zjwd6q3g40gxdqxqq4zhjrgw7xnxj1v53npbyw4vd0h5"
+  },
+  "qtscxml": {
+    "url": "https://invent.kde.org/qt/qt/qtscxml.git",
+    "rev": "6834b183966d08d9f061642ee7ea2d482cbbf073",
+    "sha256": "1h88idcfcsbpx2x2djcg1lzazadm676miz19x6n0n6n4gwp46738"
+  },
+  "qtsensors": {
+    "url": "https://invent.kde.org/qt/qt/qtsensors.git",
+    "rev": "bf0b718cd0b6c7823e9d2037d3bdece44185f444",
+    "sha256": "1my7ls1nsaf26kh3hn75jjnxp6gm0ilyfzcczqps0xj7xj9bzwzd"
+  },
+  "qtserialbus": {
+    "url": "https://invent.kde.org/qt/qt/qtserialbus.git",
+    "rev": "616bc5b962cdcacb1c1ba985d7236392e9cadb8c",
+    "sha256": "0njahb52kshci23xw89j1rgffmrmric8kz54dzmqsmlcqp181qkh"
+  },
+  "qtserialport": {
+    "url": "https://invent.kde.org/qt/qt/qtserialport.git",
+    "rev": "34c19c6441cd440dc65b59ae7670eadf099d51f8",
+    "sha256": "0hiqfvz5jc6ha6ln8jl8vv4ijsdz55f3zp801dbh2r68cmf9qsrm"
+  },
+  "qtspeech": {
+    "url": "https://invent.kde.org/qt/qt/qtspeech.git",
+    "rev": "8ad0f08ad7e2a8d27dc5e69806812c6a3f298946",
+    "sha256": "0pyiiqj18c2gvbqvgnaki2hzcizi1lam82x761y2lp717sgb09v9"
+  },
+  "qtsvg": {
+    "url": "https://invent.kde.org/qt/qt/qtsvg.git",
+    "rev": "690128b2b8fb6d6fbdc43b2b2633f0f1de3f0638",
+    "sha256": "1iiml673isnqakjzspq5gf6818zmmd7pj6z9y2jwxb2xkkn8ahpc"
+  },
+  "qttools": {
+    "url": "https://invent.kde.org/qt/qt/qttools.git",
+    "rev": "f82ed367d1b80b69d738cfcde534b75854a45476",
+    "sha256": "1pv7af4z3f9d1ifqjwbf7fhgglpnjfby8h2fg5h114mpils661bn"
+  },
+  "qttranslations": {
+    "url": "https://invent.kde.org/qt/qt/qttranslations.git",
+    "rev": "c601106c8b5d5495f951c8ea0ad6a9e171416ae0",
+    "sha256": "0w8ggzc4sxfa1y3n40m24zxp59c2y1mfb2c7zdd8nmlrg7xnqsf0"
+  },
+  "qtvirtualkeyboard": {
+    "url": "https://invent.kde.org/qt/qt/qtvirtualkeyboard.git",
+    "rev": "7389450a5de5fdd210f1459abcf73621ec0496bd",
+    "sha256": "1hv8yi4lq3mdxqkcln2b75drdyfiaqj63khzvy09gdf1x6fyjnn5"
+  },
+  "qtwayland": {
+    "url": "https://invent.kde.org/qt/qt/qtwayland.git",
+    "rev": "75f434f14499eb47ede2cb66f0946527bf555791",
+    "sha256": "17d7bcc3v55ywakaybp88c493bfx63vyiz7n8f5kcijj5q5hdf1r"
+  },
+  "qtwebchannel": {
+    "url": "https://invent.kde.org/qt/qt/qtwebchannel.git",
+    "rev": "fca83088ef430f96257d2014e77d08bd350259af",
+    "sha256": "1jc7myns24mzfnfybzzjqkpnl235c0fm0zqkai55xwi3vcv9xyr5"
+  },
+  "qtwebglplugin": {
+    "url": "https://invent.kde.org/qt/qt/qtwebglplugin.git",
+    "rev": "3681356904277e055759693551357e7e488d1be9",
+    "sha256": "14v9r4mhqq453dzkc5gvv660gq11zsmzngvwgi44srhzcx7k1qqv"
+  },
+  "qtwebsockets": {
+    "url": "https://invent.kde.org/qt/qt/qtwebsockets.git",
+    "rev": "dbbdc64b804f7c4d0ed92198aaab49b07fa15e7f",
+    "sha256": "1gbgga8qy26nxxq0537hm3h6la04xb6m4cc2aifjhhhj8py95170"
+  },
+  "qtwebview": {
+    "url": "https://invent.kde.org/qt/qt/qtwebview.git",
+    "rev": "bbb1891595aba23ff3c6d137aa74442f9e54479b",
+    "sha256": "0j59r6dj4wvassng39whnidd6nzhndwssfwjppppqbs5xy57zh2z"
+  },
+  "qtwinextras": {
+    "url": "https://invent.kde.org/qt/qt/qtwinextras.git",
+    "rev": "907009a4f7e5d2b99805547caf4b901bdbb0d4d6",
+    "sha256": "0aam2imp4rkbrjir5gsk4ja7vf7vv68ybsh7qchavb3zdmjsvxcd"
+  },
+  "qtx11extras": {
+    "url": "https://invent.kde.org/qt/qt/qtx11extras.git",
+    "rev": "6c3605fcb3b34e55951f597e06c135d97dfa6cd7",
+    "sha256": "0dqmw2yqh5b5ayq93px2na50ghfk55y55zsgwraxglly0zgm39w9"
+  },
+  "qtxmlpatterns": {
+    "url": "https://invent.kde.org/qt/qt/qtxmlpatterns.git",
+    "rev": "087f6f35bd027f940818b1696d0aad822e034377",
+    "sha256": "0y3hkz7ss6iibpfr7dc855bzhdanz79ix0jm6b28viqjy3bdzgar"
+  }
+}

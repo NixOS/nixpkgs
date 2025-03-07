@@ -1,0 +1,47 @@
+diff --git a/spnav.c b/spnav.c
+index f9e10f8..27149f7 100644
+--- a/spnav.c
++++ b/spnav.c
+@@ -36,7 +36,7 @@ OF SUCH DAMAGE.
+ #include <sys/select.h>
+ #include "spnav.h"
+ 
+-#define SPNAV_SOCK_PATH "/var/run/spnav.sock"
++#define DEFAULT_SPNAV_SOCK_PATH "/run/spnav.sock"
+ 
+ #ifdef USE_X11
+ #include <X11/Xlib.h>
+@@ -70,6 +70,24 @@ static struct event_node *ev_queue, *ev_queue_tail;
+ /* AF_UNIX socket used for alternative communication with daemon */
+ static int sock = -1;
+ 
++static char *spath = NULL;
++
++static char *socket_path()
++{
++	char *xdg_runtime_dir;
++	if((xdg_runtime_dir = getenv("XDG_RUNTIME_DIR"))) {
++		if ( spath == NULL ) {
++			spath = malloc(strlen(xdg_runtime_dir) + strlen("/spnav.sock") + 1);
++			if ( spath != NULL ) {
++				sprintf(spath, "%s/spnav.sock", xdg_runtime_dir);
++			}
++		}
++		if(access(spath, F_OK) != -1){
++			return spath;
++		}
++	}
++	return DEFAULT_SPNAV_SOCK_PATH;
++}
+ 
+ int spnav_open(void)
+ {
+@@ -92,7 +110,7 @@ int spnav_open(void)
+ 
+ 	memset(&addr, 0, sizeof addr);
+ 	addr.sun_family = AF_UNIX;
+-	strncpy(addr.sun_path, SPNAV_SOCK_PATH, sizeof(addr.sun_path));
++	strncpy(addr.sun_path, socket_path(), sizeof(addr.sun_path));
+ 
+ 
+ 	if(connect(s, (struct sockaddr*)&addr, sizeof addr) == -1) {

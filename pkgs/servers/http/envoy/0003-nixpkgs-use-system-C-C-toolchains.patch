@@ -1,0 +1,30 @@
+From d2fbc618ea040360e08b3c462bcdf0f8f44dd434 Mon Sep 17 00:00:00 2001
+From: Paul Meyer <49727155+katexochen@users.noreply.github.com>
+Date: Mon, 22 Apr 2024 11:59:22 +0200
+Subject: [PATCH 3/4] nixpkgs: use system C/C++ toolchains
+
+Signed-off-by: Paul Meyer <49727155+katexochen@users.noreply.github.com>
+---
+ bazel/dependency_imports.bzl | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/bazel/dependency_imports.bzl b/bazel/dependency_imports.bzl
+index df19c84755..9732a5d646 100644
+--- a/bazel/dependency_imports.bzl
++++ b/bazel/dependency_imports.bzl
+@@ -25,7 +25,11 @@ JQ_VERSION = "1.7"
+ YQ_VERSION = "4.24.4"
+ 
+ def envoy_dependency_imports(go_version = GO_VERSION, jq_version = JQ_VERSION, yq_version = YQ_VERSION):
+-    rules_foreign_cc_dependencies()
++    rules_foreign_cc_dependencies(
++        register_default_tools=False,  # no prebuilt toolchains
++	    register_built_tools=False,  # nor from source
++	    register_preinstalled_tools=True,  # use host tools (default)
++    )
+     go_rules_dependencies()
+     go_register_toolchains(go_version)
+     if go_version != "host":
+-- 
+2.44.0
+

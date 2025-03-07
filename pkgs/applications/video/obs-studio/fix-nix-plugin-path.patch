@@ -1,0 +1,26 @@
+diff --git a/cmake/Modules/ObsDefaults_Linux.cmake b/cmake/Modules/ObsDefaults_Linux.cmake
+index d1e58a083..a03c6b98e 100644
+--- a/cmake/Modules/ObsDefaults_Linux.cmake
++++ b/cmake/Modules/ObsDefaults_Linux.cmake
+@@ -76,7 +76,7 @@ macro(setup_obs_project)
+     set(OBS_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}/")
+     set(OBS_DATA_PATH "${OBS_DATA_DESTINATION}")
+ 
+-    set(OBS_SCRIPT_PLUGIN_PATH "${CMAKE_INSTALL_PREFIX}/${OBS_SCRIPT_PLUGIN_DESTINATION}")
++    set(OBS_SCRIPT_PLUGIN_PATH "${OBS_SCRIPT_PLUGIN_DESTINATION}")
+     set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/${OBS_LIBRARY_DESTINATION}")
+   else()
+     set(OBS_EXECUTABLE_DESTINATION "bin/${_ARCH_SUFFIX}bit")
+diff --git a/libobs/obs-nix.c b/libobs/obs-nix.c
+index b006a5598..531655eb3 100644
+--- a/libobs/obs-nix.c
++++ b/libobs/obs-nix.c
+@@ -56,7 +56,7 @@ const char *get_module_extension(void)
+ #define FLATPAK_PLUGIN_PATH "/app/plugins"
+ 
+ static const char *module_bin[] = {
+-	OBS_INSTALL_PREFIX "/" OBS_PLUGIN_DESTINATION,
++	OBS_PLUGIN_DESTINATION,
+ 	"../../obs-plugins/" BIT_STRING,
+ 	FLATPAK_PLUGIN_PATH "/" OBS_PLUGIN_DESTINATION,
+ };

@@ -1,0 +1,20 @@
+diff --git a/src/pretix/_build_settings.py b/src/pretix/_build_settings.py
+index c03f56a1a..d1ea73b84 100644
+--- a/src/pretix/_build_settings.py
++++ b/src/pretix/_build_settings.py
+@@ -24,6 +24,8 @@
+ This file contains settings that we need at wheel require time. All settings that we only need at runtime are set
+ in settings.py.
+ """
++from importlib_metadata import entry_points
++
+ from ._base_settings import *  # NOQA
+ 
+ ENTROPY = {
+@@ -47,3 +49,6 @@ HAS_MEMCACHED = False
+ HAS_CELERY = False
+ HAS_GEOIP = False
+ SENTRY_ENABLED = False
++
++for entry_point in entry_points(group='pretix.plugin'):
++    INSTALLED_APPS.append(entry_point.module) # noqa: F405
