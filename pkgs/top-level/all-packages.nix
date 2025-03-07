@@ -4133,8 +4133,6 @@ with pkgs;
 
   xz = callPackage ../tools/compression/xz { };
 
-  lzwolf = callPackage ../games/lzwolf { SDL2_mixer = SDL2_mixer_2_0; };
-
   madlang = haskell.lib.compose.justStaticExecutables haskellPackages.madlang;
 
   mailnag = callPackage ../applications/networking/mailreaders/mailnag {
