@@ -479,18 +479,11 @@ let
         # Rebased variant of patch to build M126+ with LLVM 17.
         # staging-next will bump LLVM to 18, so we will be able to drop this soon.
         ./patches/chromium-126-llvm-17.patch
-      ]
-      ++ lib.optionals (versionRange "126" "129") [
         # Partial revert of https://github.com/chromium/chromium/commit/3687976b0c6d36cf4157419a24a39f6770098d61
         # allowing us to use our rustc and our clang.
-        # Rebased variant of patch right above to build M126+ with our rust and our clang.
-        ./patches/chromium-126-rust.patch
-      ]
-      ++ lib.optionals (chromiumVersionAtLeast "129") [
-        # Rebased variant of patch right above to build M129+ with our rust and our clang.
         ./patches/chromium-129-rust.patch
       ]
-      ++ lib.optionals (chromiumVersionAtLeast "130" && !ungoogled) [
+      ++ lib.optionals (!ungoogled) [
         # Our rustc.llvmPackages is too old for std::hardware_destructive_interference_size
         # and std::hardware_constructive_interference_size.
         # So let's revert the change for now and hope that our rustc.llvmPackages and
