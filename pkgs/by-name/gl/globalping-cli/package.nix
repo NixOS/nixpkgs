@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles, nix-update-script }:
+{ lib, buildGoModule, fetchFromGitHub, stdenv, installShellFiles, nix-update-script }:
 
 buildGoModule rec {
   pname = "globalping-cli";
@@ -39,7 +39,8 @@ buildGoModule rec {
     [ "-skip=^${builtins.concatStringsSep "|^" skippedTests}" ];
 
   postInstall = ''
-    mv $out/bin/${pname} $out/bin/globalping
+    mv $out/bin/globalping-cli $out/bin/globalping
+  '' + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd globalping \
       --bash <($out/bin/globalping completion bash) \
       --fish <($out/bin/globalping completion fish) \
