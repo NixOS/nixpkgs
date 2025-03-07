@@ -1,0 +1,146 @@
+From 11501d99348a04c608a19330d984188f4766e603 Mon Sep 17 00:00:00 2001
+From: Bingwu Zhang <xtex@aosc.io>
+Date: Sat, 7 Dec 2024 23:01:26 +0800
+Subject: [PATCH 09/10] FROM AOSC: Use linux/aperture.c for removing
+ conflicting PCI devices on Linux 6.13.0-rc1+
+
+Link: https://github.com/torvalds/linux/commit/689274a56c0c088796d359f6c6267323931a2429
+Link: https://github.com/torvalds/linux/commit/7283f862bd991c8657e9bf1c02db772fcf018f13
+Link: https://github.com/NVIDIA/open-gpu-kernel-modules/issues/749
+Signed-off-by: Eric Naim <dnaim@cachyos.org>
+---
+ kernel-open/conftest.sh                       | 19 +++++++++++++++++++
+ kernel-open/header-presence-tests.mk          |  1 +
+ kernel-open/nvidia-drm/nvidia-drm-drv.c       | 15 +++++++++++++++
+ .../nvidia-drm/nvidia-drm-os-interface.h      | 10 ++++++++++
+ kernel-open/nvidia-drm/nvidia-drm-sources.mk  |  1 +
+ 5 files changed, 46 insertions(+)
+
+diff --git a/kernel-open/conftest.sh b/kernel-open/conftest.sh
+index fdceda72..5a0f39e0 100755
+--- a/kernel-open/conftest.sh
++++ b/kernel-open/conftest.sh
+@@ -6615,6 +6615,8 @@ compile_test() {
+             # Added by commit 2916059147ea ("drm/aperture: Add infrastructure
+             # for aperture ownership") in v5.14.
+             #
++            # Removed by commit 689274a56c0c ("drm: Remove DRM aperture helpers") in v6.13.
++            #
+             CODE="
+             #if defined(NV_DRM_DRM_APERTURE_H_PRESENT)
+             #include <drm/drm_aperture.h>
+@@ -6626,6 +6628,23 @@ compile_test() {
+             compile_check_conftest "$CODE" "NV_DRM_APERTURE_REMOVE_CONFLICTING_PCI_FRAMEBUFFERS_PRESENT" "" "functions"
+         ;;
+ 
++        aperture_remove_conflicting_pci_devices)
++            #
++            # Determine whether aperture_remove_conflicting_pci_devices is present.
++            #
++            # Added by commit 7283f862bd99 ("drm: Implement DRM aperture helpers under video/") in v6.0.
++            #
++            CODE="
++            #if defined(NV_LINUX_APERTURE_H_PRESENT)
++            #include <linux/aperture.h>
++            #endif
++            void conftest_aperture_remove_conflicting_pci_devices(void) {
++                aperture_remove_conflicting_pci_devices();
++            }"
++
++            compile_check_conftest "$CODE" "NV_APERTURE_REMOVE_CONFLICTING_PCI_DEVICES_PRESENT" "" "functions"
++        ;;
++
+         drm_aperture_remove_conflicting_pci_framebuffers_has_driver_arg)
+             #
+             # Determine whether drm_aperture_remove_conflicting_pci_framebuffers
+diff --git a/kernel-open/header-presence-tests.mk b/kernel-open/header-presence-tests.mk
+index 9d5217a9..b0268541 100644
+--- a/kernel-open/header-presence-tests.mk
++++ b/kernel-open/header-presence-tests.mk
+@@ -34,6 +34,7 @@ NV_HEADER_PRESENCE_TESTS = \
+   generated/autoconf.h \
+   generated/compile.h \
+   generated/utsrelease.h \
++  linux/aperture.h \
+   linux/efi.h \
+   linux/kconfig.h \
+   linux/platform/tegra/mc_utils.h \
+diff --git a/kernel-open/nvidia-drm/nvidia-drm-drv.c b/kernel-open/nvidia-drm/nvidia-drm-drv.c
+index 8f905f82..2e4f6404 100644
+--- a/kernel-open/nvidia-drm/nvidia-drm-drv.c
++++ b/kernel-open/nvidia-drm/nvidia-drm-drv.c
+@@ -65,7 +65,16 @@
+ #endif
+ 
+ #if defined(NV_DRM_FBDEV_AVAILABLE)
++// Commit 7283f862bd99 ("drm: Implement DRM aperture helpers under video/")
++//  moved implementation of drm_aperture_... to linux/aperture.c.
++// Commit 689274a56c0c ("drm: Remove DRM aperture helpers")
++//  removed drm/drm_aperture.h.
++#if defined(NV_DRM_APERTURE_REMOVE_CONFLICTING_PCI_FRAMEBUFFERS_PRESENT)
+ #include <drm/drm_aperture.h>
++#endif
++#if defined(NV_APERTURE_REMOVE_CONFLICTING_PCI_DEVICES_PRESENT)
++#include <linux/aperture.h>
++#endif
+ #include <drm/drm_fb_helper.h>
+ #endif
+ 
+@@ -2013,10 +2022,16 @@ void nv_drm_register_drm_device(const nv_gpu_info_t *gpu_info)
+         if (bus_is_pci) {
+             struct pci_dev *pdev = to_pci_dev(device);
+ 
++#if defined(NV_DRM_APERTURE_REMOVE_CONFLICTING_PCI_FRAMEBUFFERS_PRESENT)
++            printk(KERN_INFO "%s: using drm_aperture for old kernels\n", nv_drm_driver.name);
+ #if defined(NV_DRM_APERTURE_REMOVE_CONFLICTING_PCI_FRAMEBUFFERS_HAS_DRIVER_ARG)
+             drm_aperture_remove_conflicting_pci_framebuffers(pdev, &nv_drm_driver);
+ #else
+             drm_aperture_remove_conflicting_pci_framebuffers(pdev, nv_drm_driver.name);
++#endif
++#elif defined(NV_APERTURE_REMOVE_CONFLICTING_PCI_DEVICES_PRESENT)
++            printk(KERN_INFO "%s: using linux/aperture workaround for Linux 6.13+\n", nv_drm_driver.name);
++            aperture_remove_conflicting_pci_devices(pdev, nv_drm_driver.name);
+ #endif
+             nvKms->framebufferConsoleDisabled(nv_dev->pDevice);
+         }
+diff --git a/kernel-open/nvidia-drm/nvidia-drm-os-interface.h b/kernel-open/nvidia-drm/nvidia-drm-os-interface.h
+index a6b0f947..71ca5f22 100644
+--- a/kernel-open/nvidia-drm/nvidia-drm-os-interface.h
++++ b/kernel-open/nvidia-drm/nvidia-drm-os-interface.h
+@@ -63,11 +63,21 @@ typedef struct nv_timer nv_drm_timer;
+ #define NV_DRM_FBDEV_GENERIC_AVAILABLE
+ #endif
+ 
++#if defined(NV_DRM_FBDEV_GENERIC_SETUP_PRESENT) && defined(NV_APERTURE_REMOVE_CONFLICTING_PCI_DEVICES_PRESENT)
++#define NV_DRM_FBDEV_AVAILABLE
++#define NV_DRM_FBDEV_GENERIC_AVAILABLE
++#endif
++
+ #if defined(NV_DRM_FBDEV_TTM_SETUP_PRESENT) && defined(NV_DRM_APERTURE_REMOVE_CONFLICTING_PCI_FRAMEBUFFERS_PRESENT)
+ #define NV_DRM_FBDEV_AVAILABLE
+ #define NV_DRM_FBDEV_TTM_AVAILABLE
+ #endif
+ 
++#if defined(NV_DRM_FBDEV_TTM_SETUP_PRESENT) && defined(NV_APERTURE_REMOVE_CONFLICTING_PCI_DEVICES_PRESENT)
++#define NV_DRM_FBDEV_AVAILABLE
++#define NV_DRM_FBDEV_TTM_AVAILABLE
++#endif
++
+ struct page;
+ 
+ /* Set to true when the atomic modeset feature is enabled. */
+diff --git a/kernel-open/nvidia-drm/nvidia-drm-sources.mk b/kernel-open/nvidia-drm/nvidia-drm-sources.mk
+index 9aaebd04..a4dcad6d 100644
+--- a/kernel-open/nvidia-drm/nvidia-drm-sources.mk
++++ b/kernel-open/nvidia-drm/nvidia-drm-sources.mk
+@@ -66,6 +66,7 @@ NV_CONFTEST_FUNCTION_COMPILE_TESTS += dma_fence_set_error
+ NV_CONFTEST_FUNCTION_COMPILE_TESTS += fence_set_error
+ NV_CONFTEST_FUNCTION_COMPILE_TESTS += sync_file_get_fence
+ NV_CONFTEST_FUNCTION_COMPILE_TESTS += drm_aperture_remove_conflicting_pci_framebuffers
++NV_CONFTEST_FUNCTION_COMPILE_TESTS += aperture_remove_conflicting_pci_devices
+ NV_CONFTEST_FUNCTION_COMPILE_TESTS += drm_fbdev_generic_setup
+ NV_CONFTEST_FUNCTION_COMPILE_TESTS += drm_fbdev_ttm_setup
+ NV_CONFTEST_FUNCTION_COMPILE_TESTS += drm_connector_attach_hdr_output_metadata_property
+-- 
+2.47.1
+

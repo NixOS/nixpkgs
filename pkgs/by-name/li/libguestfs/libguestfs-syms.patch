@@ -1,0 +1,13 @@
+diff --git a/lib/Makefile.am b/lib/Makefile.am
+--- a/lib/Makefile.am
++++ b/lib/Makefile.am
+@@ -168,8 +168,7 @@ libguestfs_la_LIBADD = \
+ # Force libtool to name the library 'libguestfs.so.0.$(MAX_PROC_NR).0'.
+ # Include the version script to limit which symbols are exported.
+ libguestfs_la_LDFLAGS = \
+-	-version-info $(MAX_PROC_NR):0:$(MAX_PROC_NR) \
+-	$(VERSION_SCRIPT_FLAGS)$(srcdir)/libguestfs.syms
++	-version-info $(MAX_PROC_NR):0:$(MAX_PROC_NR)
+ 
+ if HAVE_FUSE
+ # XXX Unfortunately FUSE_CFLAGS defines _FILE_OFFSET_BITS=64.

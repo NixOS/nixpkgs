@@ -1,0 +1,72 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "04664aa86ba468bc6c83825839823dd7",
+    "packages": [
+        {
+            "name": "nix-community/composer-local-repo-plugin",
+            "version": "1.1.0",
+            "dist": {
+                "type": "path",
+                "url": "./src",
+                "reference": "56bd0f1fb990aa295ca43fc23141b7147a3b5490"
+            },
+            "require": {
+                "composer-plugin-api": "^2",
+                "php": ">= 7.2"
+            },
+            "require-dev": {
+                "composer/composer": "^2.6 || ^2.7",
+                "phpunit/phpunit": "^8"
+            },
+            "type": "composer-plugin",
+            "extra": {
+                "class": "NixCommunity\\ComposerLocalRepoPlugin\\Plugin"
+            },
+            "autoload": {
+                "psr-4": {
+                    "NixCommunity\\ComposerLocalRepoPlugin\\": "src"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "test\\NixCommunity\\ComposerLocalRepoPlugin\\": "test"
+                }
+            },
+            "scripts": {
+                "changelog-unreleased": [
+                    "auto-changelog -c .auto-changelog -u"
+                ],
+                "changelog-version": [
+                    "auto-changelog -c .auto-changelog -v"
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "description": "A plugin for Composer which provides a command to create local Composer repository for your projects.",
+            "homepage": "https://github.com/nix-community/composer-local-repo-plugin",
+            "funding": [
+                {
+                    "type": "github",
+                    "url": "https://github.com/drupol"
+                }
+            ],
+            "transport-options": {
+                "relative": true
+            }
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": [],
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": [],
+    "platform-dev": [],
+    "plugin-api-version": "2.6.0"
+}

@@ -1,0 +1,10 @@
+--- a/catalog.xml
++++ b/catalog.xml
+@@ -5,4 +5,7 @@
+   <rewriteSystem systemIdStartString="http://cdn.docbook.org/release/xsl@suffix@/current/" rewritePrefix="./"/>
+   <rewriteURI uriStartString="http://cdn.docbook.org/release/xsl@suffix@/@version@/" rewritePrefix="./"/>
+   <rewriteSystem systemIdStartString="http://cdn.docbook.org/release/xsl@suffix@/@version@/" rewritePrefix="./"/>
++  <!-- legacy URIs -->
++  <rewriteURI uriStartString="http://docbook.sourceforge.net/release/xsl@legacySuffix@/current/" rewritePrefix="./"/>
++  <rewriteSystem systemIdStartString="http://docbook.sourceforge.net/release/xsl@legacySuffix@/current/" rewritePrefix="./"/>
+ </catalog>
