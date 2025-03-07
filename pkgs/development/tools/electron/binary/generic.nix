@@ -161,8 +161,9 @@ let
     dontWrapGApps = true;
 
     preFixup = ''
-      makeWrapper "$out/libexec/electron/electron" $out/bin/electron \
+      makeShellWrapper "$out/libexec/electron/electron" $out/bin/electron \
         "''${gappsWrapperArgs[@]}" \
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
         ${lib.optionalString needsAarch64PageSizeFix "--add-flags '--js-flags=--no-decommit-pooled-pages'"}
     '';
 
