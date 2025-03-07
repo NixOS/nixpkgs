@@ -2,8 +2,9 @@
   lib,
   buildPgrxExtension,
   cargo-pgrx_0_12_0_alpha_1,
-  clang_16,
+  buildPackages,
   fetchFromGitHub,
+  fetchpatch,
   nix-update-script,
   nixosTests,
   openssl,
@@ -18,7 +19,7 @@ let
   # Upstream only works with clang 16, so we're pinning it here to
   # avoid future incompatibility.
   # See https://docs.pgvecto.rs/developers/development.html#environment, step 4
-  clang = clang_16;
+  clang = buildPackages.clang_16;
   rustPlatform' = rustPlatform // {
     bindgenHook = rustPlatform.bindgenHook.override { inherit clang; };
   };
@@ -60,13 +61,41 @@ in
       lockFile = ./Cargo.lock;
       outputHashes = {
         "pgrx-0.12.0-alpha.1" = "sha256-HSQrAR9DFJsi4ZF4hLiJ1sIy+M9Ygva2+WxeUzflOLk=";
+        # https://github.com/pnkfelix/cee-scape/pull/27
+        "cee-scape-0.2.0" = "sha256-hFGWthVN9vRE/QyscQb0N/T4W+EJxnMNCMIlYI0TMwA=";
       };
     };
 
-    # Set appropriate version on vectors.control, otherwise it won't show up on PostgreSQL
-    postPatch = ''
-      substituteInPlace ./vectors.control --subst-var-by CARGO_VERSION ${version}
+    postUnpack = ''
+      rm source/Cargo.lock
+      cp ${./Cargo.lock} source/Cargo.lock
+      chmod +w source/Cargo.lock
     '';
+
+    postPatch =
+      # Set appropriate version on vectors.control, otherwise it won't show up on PostgreSQL
+      ''
+        substituteInPlace ./vectors.control --subst-var-by CARGO_VERSION ${version}
+      ''
+      # https://github.com/jemalloc/jemalloc/pull/2812
+      + (
+        let
+          patch = fetchpatch {
+            name = "jemalloc-dep-shared-pthread.patch";
+            url = "https://github.com/jemalloc/jemalloc/commit/86988bb5a8024854a91e27361b35af410019cdc4.patch";
+            hash = "sha256-7ffCaniNx7mIridHbWcX2NOTCEb6S09pYr/lPGm1gV4=";
+          };
+        in
+        ''
+          for jemalloc in $(find .. -name jemalloc); do
+            pushd $jemalloc
+            if [[ -e src/background_thread.c ]]; then
+              patch -p1 <${patch}
+            fi
+            popd
+          done
+        ''
+      );
 
     # Include upgrade scripts in the final package
     # https://github.com/tensorchord/pgvecto.rs/blob/v0.2.0/scripts/ci_package.sh#L6-L8
@@ -74,13 +103,20 @@ in
       cp sql/upgrade/* $out/share/postgresql/extension/
     '';
 
-    env = {
-      # Needed to get openssl-sys to use pkg-config.
-      OPENSSL_NO_VENDOR = 1;
+    env =
+      {
+        # Needed to get openssl-sys to use pkg-config.
+        OPENSSL_NO_VENDOR = 1;
 
-      # Bypass rust nightly features not being available on rust stable
-      RUSTC_BOOTSTRAP = 1;
-    };
+        # Bypass rust nightly features not being available on rust stable
+        RUSTC_BOOTSTRAP = 1;
+
+        "CC_${stdenv.buildPlatform.config}" =
+          "${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}cc";
+      }
+      // lib.optionalAttrs (stdenv.buildPlatform.config != stdenv.hostPlatform.config) {
+        "CC_${stdenv.hostPlatform.config}" = "${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc";
+      };
 
     # This crate does not have the "pg_test" feature
     usePgTestCheckFeature = false;

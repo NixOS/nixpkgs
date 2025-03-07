@@ -577,8 +577,7 @@ checksum = "41c270e7540d725e65ac7f1b212ac8ce349719624d7bcff99f8e2e488e8cf03f"
 [[package]]
 name = "cee-scape"
 version = "0.2.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4d67dfb052149f779f77e9ce089cea126e00657e8f0d11dafc7901fde4291101"
+source = "git+https://github.com/rhelmot/cee-scape.git?rev=a7a46f10c957560fcf56f2f574da4f2713bae40e#a7a46f10c957560fcf56f2f574da4f2713bae40e"
 dependencies = [
  "cc",
  "libc",
