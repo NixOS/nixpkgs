@@ -4131,8 +4131,6 @@ with pkgs;
 
   liquidctl = with python3Packages; toPythonApplication liquidctl;
 
-  localstack = with python3Packages; toPythonApplication localstack;
-
   xz = callPackage ../tools/compression/xz { };
 
   lzwolf = callPackage ../games/lzwolf { SDL2_mixer = SDL2_mixer_2_0; };
@@ -10758,12 +10756,14 @@ with pkgs;
     zig_0_11 = zigPackages."0.11";
     zig_0_12 = zigPackages."0.12";
     zig_0_13 = zigPackages."0.13";
+    zig_0_14 = zigPackages."0.14";
   }) zigPackages
      zig_0_11
      zig_0_12
-     zig_0_13;
+     zig_0_13
+     zig_0_14;
 
-  zig = zig_0_13;
+  zig = zig_0_14;
 
   zigStdenv = if stdenv.cc.isZig then stdenv else lowPrio zig.passthru.stdenv;
 
