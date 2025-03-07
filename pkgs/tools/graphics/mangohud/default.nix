@@ -28,11 +28,13 @@
   libxkbcommon,
   glew,
   glfw,
-  xorg,
+  libXrandr,
   x11Support ? true,
   waylandSupport ? true,
   nvidiaSupport ? true,
-  gamescopeSupport ? true, # build mangoapp and mangohudctl
+  gamescopeSupport ? true,
+  mangoappSupport ? gamescopeSupport,
+  mangohudctlSupport ? gamescopeSupport,
   lowerBitnessSupport ? stdenv.hostPlatform.isx86_64, # Support 32 bit on 64bit
   nix-update-script,
 }:
@@ -42,7 +44,7 @@ assert lib.assertMsg (
 ) "either x11Support or waylandSupport should be enabled";
 
 assert lib.assertMsg (nvidiaSupport -> x11Support) "nvidiaSupport requires x11Support";
-assert lib.assertMsg (gamescopeSupport -> x11Support) "gamescopeSupport requires x11Support";
+assert lib.assertMsg (mangoappSupport -> x11Support) "mangoappSupport requires x11Support";
 
 let
   # Derived from subprojects/imgui.wrap
@@ -166,18 +168,15 @@ stdenv.mkDerivation (finalAttrs: {
     )
   '';
 
-  mesonFlags =
-    [
-      "-Duse_system_spdlog=enabled"
-      "-Dtests=disabled" # amdgpu test segfaults in nix sandbox
-      (lib.mesonEnable "with_x11" x11Support)
-      (lib.mesonEnable "with_wayland" waylandSupport)
-      (lib.mesonEnable "with_xnvctrl" nvidiaSupport)
-    ]
-    ++ lib.optionals gamescopeSupport [
-      "-Dmangoapp=true"
-      "-Dmangohudctl=true"
-    ];
+  mesonFlags = [
+    "-Duse_system_spdlog=enabled"
+    "-Dtests=disabled" # amdgpu test segfaults in nix sandbox
+    (lib.mesonEnable "with_x11" x11Support)
+    (lib.mesonEnable "with_wayland" waylandSupport)
+    (lib.mesonEnable "with_xnvctrl" nvidiaSupport)
+    (lib.mesonBool "mangoapp" mangoappSupport)
+    (lib.mesonBool "mangohudctl" mangohudctlSupport)
+  ];
 
   nativeBuildInputs =
     [
@@ -202,10 +201,10 @@ stdenv.mkDerivation (finalAttrs: {
       spdlog
     ]
     ++ lib.optional (x11Support || waylandSupport) libxkbcommon
-    ++ lib.optionals gamescopeSupport [
+    ++ lib.optionals mangoappSupport [
       glew
       glfw
-      xorg.libXrandr
+      libXrandr
     ];
 
   doCheck = true;
@@ -241,7 +240,7 @@ stdenv.mkDerivation (finalAttrs: {
       addDriverRunpath "$out/lib/mangohud/libMangoHud.so"
       patchelf --add-rpath ${libXNVCtrl}/lib "$out/lib/mangohud/libMangoHud.so"
     ''
-    + lib.optionalString gamescopeSupport ''
+    + lib.optionalString mangoappSupport ''
       addDriverRunpath "$out/bin/mangoapp"
     '';
 
