@@ -17,13 +17,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "plasma-panel-colorizer";
-  version = "2.3.0";
+  version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = "luisbocanegra";
     repo = "plasma-panel-colorizer";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Q7qSky/wY5l72EVhTGnwQ8lI3Uu3TnZpgqXaClCxWZQ=";
+    hash = "sha256-1wq2zh9diKD/81yFTxrYFQ52DosiXBAsqlTWUdxlaC8=";
   };
 
   nativeBuildInputs = [
@@ -51,10 +51,13 @@ stdenv.mkDerivation (finalAttrs: {
 
     substituteInPlace package/contents/ui/DBusFallback.qml \
       --replace-fail 'gdbus' '${lib.getExe' glib "gdbus"}'
+
+    substituteInPlace package/contents/ui/tools/gdbus_get_signal.sh \
+      --replace-fail 'gdbus' '${lib.getExe' glib "gdbus"}'
   '';
 
   postInstall = ''
-    chmod 755 $out/share/plasma/plasmoids/luisbocanegra.panel.colorizer/contents/ui/tools/{list_presets.sh,service.py}
+    chmod 755 $out/share/plasma/plasmoids/luisbocanegra.panel.colorizer/contents/ui/tools/{{gdbus_get_signal,list_presets}.sh,service.py}
 
     wrapProgram $out/share/plasma/plasmoids/luisbocanegra.panel.colorizer/contents/ui/tools/service.py \
       --prefix GI_TYPELIB_PATH : "${glib.out}/lib/girepository-1.0"
