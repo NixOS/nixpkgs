@@ -4293,6 +4293,8 @@ self: super: with self; {
 
   es-client = callPackage ../development/python-modules/es-client { };
 
+  eseries = callPackage ../development/python-modules/eseries { };
+
   esig = callPackage ../development/python-modules/esig { };
 
   espeak-phonemizer = callPackage ../development/python-modules/espeak-phonemizer { };
