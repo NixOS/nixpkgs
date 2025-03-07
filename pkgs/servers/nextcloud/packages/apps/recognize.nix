@@ -27,7 +27,9 @@ let
       modelHash = "sha256-M/j5wVOBLR7xMVJQWDUWAzLajRUBYEzHSNBsRSBUgfM=";
     };
   };
-  currentVersionInfo = latestVersionForNc.${ncVersion};
+  currentVersionInfo =
+    latestVersionForNc.${ncVersion}
+      or (throw "recognize currently does not support nextcloud version ${ncVersion}");
 in
 stdenv.mkDerivation rec {
   pname = "nextcloud-app-recognize";
