@@ -210,6 +210,32 @@ in
     '';
   });
 
+  grug-far-nvim = prev.grug-far-nvim.overrideAttrs({
+    doCheck = lua.luaversion == "5.1";
+    nativeCheckInputs = [
+      final.busted
+      final.mini-test
+      final.nlua
+      final.nvim-web-devicons
+      ripgrep
+
+      # gitMinimal
+      # writableTmpDirAsHomeHook
+      neovim-unwrapped
+    ];
+    checkPhase = ''
+      runHook preCheck
+      ls -l tests
+      # # busted --lua=nlua --lpath='lua/?.lua' --lpath='lua/?/init.lua' tests/
+      # nvim --headless --noplugin -u ./scripts/minimal_init.lua -l ./scripts/test_cli.lua
+      # we remove the astgrep tests since astgrep is not available in nixpkgs
+      rm -rf tests/astgrep
+      make test
+      runHook postCheck
+    '';
+
+  });
+
   http = prev.http.overrideAttrs (oa: {
     patches = [
       (fetchpatch {

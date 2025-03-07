@@ -4021,6 +4021,7 @@ in
     luarocksPackageNames = [
       "fidget-nvim"
       "gitsigns-nvim"
+      "grug-far-nvim"
       "image-nvim"
       "lsp-progress-nvim"
       "lualine-nvim"
