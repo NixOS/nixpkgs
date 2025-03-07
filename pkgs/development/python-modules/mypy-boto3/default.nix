@@ -1098,8 +1098,8 @@ rec {
       "sha256-wG3bvzu38UyCF8n0J8gXnzzPMeJND22iRkjAbTADVNI=";
 
   mypy-boto3-redshift-data =
-    buildMypyBoto3Package "redshift-data" "1.37.0"
-      "sha256-gYDvPgcW0seMssURndWp29BxBzNnPPvPLDRXHW6PncA=";
+    buildMypyBoto3Package "redshift-data" "1.37.8"
+      "sha256-A7lagOiAMhlsJqg7wQQm75l5dAUK22x3qK3P98r4gbg=";
 
   mypy-boto3-redshift-serverless =
     buildMypyBoto3Package "redshift-serverless" "1.37.3"
