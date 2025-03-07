@@ -8,8 +8,8 @@
   nlohmann_json,
   pybind11,
   pyvirtualdisplay,
-  sfml,
   replaceVars,
+  sfml_2,
 }:
 
 buildPythonPackage rec {
@@ -40,7 +40,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [ cmake ];
   dontUseCmakeConfigure = true;
 
-  buildInputs = [ sfml ];
+  buildInputs = [ sfml_2 ];
 
   # hydra-core and pyvirtualdisplay are not declared as dependences but they are requirements
   propagatedBuildInputs = [
