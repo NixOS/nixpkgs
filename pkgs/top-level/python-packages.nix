@@ -7617,6 +7617,8 @@ self: super: with self; {
 
   license-expression = callPackage ../development/python-modules/license-expression { };
 
+  lida = callPackage ../development/python-modules/lida { };
+
   lief = (toPythonModule (pkgs.lief.override {
     inherit python;
   })).py;
