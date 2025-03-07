@@ -4,8 +4,7 @@ wafConfigurePhase() {
     runHook preConfigure
 
     if ! [ -f "${wafPath:=./waf}" ]; then
-        echo "copying waf to $wafPath..."
-        cp @waf@/bin/waf "$wafPath"
+        wafPath="@waf@/bin/waf"
     fi
 
     if [ -z "${dontAddPrefix:-}" ] && [ -n "$prefix" ]; then
