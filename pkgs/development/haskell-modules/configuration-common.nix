@@ -377,6 +377,9 @@ self: super: {
   # As well as deepseq < 1.5 (so it forbids GHC 9.8)
   hw-fingertree = doJailbreak super.hw-fingertree;
 
+  # hedgehog < 1.5
+  hw-prim = doJailbreak super.hw-prim;
+
   # Test suite is slow and sometimes comes up with counter examples.
   # Upstream is aware (https://github.com/isovector/nspace/issues/1),
   # if it's a bug, at least doesn't seem to be nixpkgs-specific.
