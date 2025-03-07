@@ -32,13 +32,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "mosquitto";
-  version = "2.0.20";
+  version = "2.0.21";
 
   src = fetchFromGitHub {
     owner = "eclipse";
     repo = "mosquitto";
     rev = "v${version}";
-    hash = "sha256-oZo6J6mxMC05jJ8RXIunOMB3kptA6FElchKlg4qmuQ8=";
+    hash = "sha256-E47NqiaMk67pNgf151DMhQ4DMyLvfzrECEQtk3jASPU=";
   };
 
   postPatch = ''
