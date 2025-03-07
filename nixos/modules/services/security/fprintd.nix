@@ -56,7 +56,7 @@ in
 
       elanmoc2 = {
 
-        enable = mkEnableOption "Compile elanmoc2 to enable support for 04f3:0c00 fingerprint reader";
+        enable = lib.mkEnableOption "Compile elanmoc2 to enable support for 04f3:0c00 fingerprint reader";
 
       };
     };
