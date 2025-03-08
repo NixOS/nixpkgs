@@ -1,0 +1,14 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index d7cf256..cb94e5a 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -6,8 +6,7 @@ project(ebpf_verifier)
+ include(FetchContent)
+ FetchContent_Declare(
+   Catch2
+-  GIT_REPOSITORY https://github.com/catchorg/Catch2.git
+-  GIT_TAG        ac93f1943762f6fc92f0dc5bac0d720a33a27530
++  SOURCE_DIR @catch2Src@
+ )
+ FetchContent_MakeAvailable(Catch2)
+ 

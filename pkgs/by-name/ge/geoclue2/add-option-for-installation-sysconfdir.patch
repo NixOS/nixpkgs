@@ -1,0 +1,73 @@
+diff --git a/data/meson.build b/data/meson.build
+index b22ff55..01c5910 100644
+--- a/data/meson.build
++++ b/data/meson.build
+@@ -1,6 +1,6 @@
+ if get_option('enable-backend')
+     conf = configuration_data()
+-    conf.set('sysconfdir', sysconfdir)
++    conf.set('sysconfdir', sysconfdir_install)
+ 
+     if get_option('demo-agent')
+         conf.set('demo_agent', 'geoclue-demo-agent;')
+@@ -14,7 +14,7 @@ if get_option('enable-backend')
+         conf.set('default_wifi_enable', 'false')
+     endif
+ 
+-    conf_dir = join_paths(sysconfdir, 'geoclue')
++    conf_dir = join_paths(sysconfdir_install, 'geoclue')
+     configure_file(output: 'geoclue.conf',
+                    input: 'geoclue.conf.in',
+                    configuration: conf,
+@@ -23,7 +23,7 @@ if get_option('enable-backend')
+     conf = configuration_data()
+     conf.set('libexecdir', libexecdir)
+     conf.set('dbus_srv_user', get_option('dbus-srv-user'))
+-    conf.set('sysconfdir', sysconfdir)
++    conf.set('sysconfdir', sysconfdir_install)
+ 
+     confd_dir = join_paths(conf_dir, 'conf.d')
+     install_emptydir(confd_dir)
+diff --git a/demo/meson.build b/demo/meson.build
+index 1427fbe..2623f16 100644
+--- a/demo/meson.build
++++ b/demo/meson.build
+@@ -54,7 +54,7 @@ if get_option('demo-agent')
+                                    install_dir: desktop_dir)
+ 
+     # Also install in the autostart directory.
+-    autostart_dir = join_paths(sysconfdir, 'xdg', 'autostart')
++    autostart_dir = join_paths(sysconfdir_install, 'xdg', 'autostart')
+     meson.add_install_script('install-file.py',
+                              desktop_file.full_path(),
+                              autostart_dir)
+diff --git a/meson.build b/meson.build
+index c561572..bca0cb3 100644
+--- a/meson.build
++++ b/meson.build
+@@ -13,6 +13,11 @@ datadir = join_paths(get_option('prefix'), get_option('datadir'))
+ includedir = join_paths(get_option('prefix'), get_option('includedir'))
+ libexecdir = join_paths(get_option('prefix'), get_option('libexecdir'))
+ sysconfdir = join_paths(get_option('prefix'), get_option('sysconfdir'))
++if get_option('sysconfdir_install') != ''
++  sysconfdir_install = join_paths(get_option('prefix'), get_option('sysconfdir_install'))
++else
++  sysconfdir_install = sysconfdir
++endif
+ localedir = join_paths(datadir, 'locale')
+ 
+ header_dir = 'libgeoclue-' + gclue_api_version
+diff --git a/meson_options.txt b/meson_options.txt
+index 4d55a63..682b39c 100644
+--- a/meson_options.txt
++++ b/meson_options.txt
+@@ -31,6 +31,9 @@ option('enable-backend',
+ option('demo-agent',
+        type: 'boolean', value: true,
+        description: 'Build demo agent')
++option('sysconfdir_install',
++       type: 'string', value: '',
++       description: 'sysconfdir to use during installation')
+ option('dbus-sys-dir',
+        type: 'string',
+        description: 'where D-BUS system.d directory is')

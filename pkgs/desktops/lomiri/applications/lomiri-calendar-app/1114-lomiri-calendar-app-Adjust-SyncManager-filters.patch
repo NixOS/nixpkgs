@@ -1,0 +1,39 @@
+From 54a2d60a5c1c4be00a9696d587d933c771ee7b4b Mon Sep 17 00:00:00 2001
+From: Lionel Duboeuf <lduboeuf@ouvaton.org>
+Date: Thu, 13 Feb 2025 10:58:14 +0100
+Subject: [PATCH] Adjust SyncManager filters
+
+---
+ src/qml/CalendarChoicePopup.qml | 2 +-
+ src/qml/EventActions.qml        | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/qml/CalendarChoicePopup.qml b/src/qml/CalendarChoicePopup.qml
+index 3964c3c1..aa2dfdb4 100644
+--- a/src/qml/CalendarChoicePopup.qml
++++ b/src/qml/CalendarChoicePopup.qml
+@@ -83,7 +83,7 @@ Page {
+     SyncManager {
+         id: buteoSync
+         filterDisabled: true
+-        filterHidden: true
++        filterHidden: false
+         filterBy.key: "category"
+         filterBy.value: "calendar"
+     }
+diff --git a/src/qml/EventActions.qml b/src/qml/EventActions.qml
+index 579981d5..eb79da45 100644
+--- a/src/qml/EventActions.qml
++++ b/src/qml/EventActions.qml
+@@ -88,7 +88,7 @@ Item {
+     SyncManager {
+         id: buteoSync
+         filterDisabled: true
+-        filterHidden: true
++        filterHidden: false
+         filterBy.key: "category"
+         filterBy.value: "calendar"
+     }
+-- 
+GitLab
+

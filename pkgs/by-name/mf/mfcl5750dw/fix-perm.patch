@@ -1,0 +1,10 @@
+--- a/opt/brother/Printers/MFCL5750DW/cupswrapper/lpdwrapper	2020-01-29 08:26:18.000000000 +0100
++++ b/opt/brother/Printers/MFCL5750DW/cupswrapper/lpdwrapper	2023-12-29 14:12:44.522567053 +0100
+@@ -383,6 +383,7 @@
+ close $temprch;
+ 
+ `cp  $basedir/inf/br${PRINTER}rc  $TEMPRC`;
++`chmod 666 $TEMPRC`;
+ $ENV{BRPRINTERRCFILE} = $TEMPRC;
+ 
+ logprint( 0 , "TEMPRC    = $TEMPRC\n");

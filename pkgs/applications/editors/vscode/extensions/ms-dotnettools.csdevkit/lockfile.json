@@ -1,0 +1,39 @@
+{
+  "version": "1.16.6",
+  "linux-x64": {
+    "hash": "sha256-/ONaevRlpGc4xaYr9vV8maZUP3HbjmgUk/AbXAJM4tg=",
+    "binaries": [
+      "components/vs-green-server/platforms/linux-x64/node_modules/@microsoft/servicehub-controller-net60.linux-x64/Microsoft.ServiceHub.Controller",
+      "components/vs-green-server/platforms/linux-x64/node_modules/@microsoft/visualstudio-code-servicehost.linux-x64/Microsoft.VisualStudio.Code.ServiceHost",
+      "components/vs-green-server/platforms/linux-x64/node_modules/@microsoft/visualstudio-reliability-monitor.linux-x64/Microsoft.VisualStudio.Reliability.Monitor",
+      "components/vs-green-server/platforms/linux-x64/node_modules/@microsoft/visualstudio-server.linux-x64/Microsoft.VisualStudio.Code.Server"
+    ]
+  },
+  "linux-arm64": {
+    "hash": "sha256-yhzozbnTsAddbx0Hior/DnN+vjRFWtIW8Z4zu1xfrhY=",
+    "binaries": [
+      "components/vs-green-server/platforms/linux-arm64/node_modules/@microsoft/servicehub-controller-net60.linux-arm64/Microsoft.ServiceHub.Controller",
+      "components/vs-green-server/platforms/linux-arm64/node_modules/@microsoft/visualstudio-code-servicehost.linux-arm64/Microsoft.VisualStudio.Code.ServiceHost",
+      "components/vs-green-server/platforms/linux-arm64/node_modules/@microsoft/visualstudio-reliability-monitor.linux-arm64/Microsoft.VisualStudio.Reliability.Monitor",
+      "components/vs-green-server/platforms/linux-arm64/node_modules/@microsoft/visualstudio-server.linux-arm64/Microsoft.VisualStudio.Code.Server"
+    ]
+  },
+  "darwin-x64": {
+    "hash": "sha256-PZwhzd9yVAJiVz5g7ogICUIgwJvS2MyGQMZbNN+7QRM=",
+    "binaries": [
+      "components/vs-green-server/platforms/darwin-x64/node_modules/@microsoft/servicehub-controller-net60.darwin-x64/Microsoft.ServiceHub.Controller",
+      "components/vs-green-server/platforms/darwin-x64/node_modules/@microsoft/visualstudio-code-servicehost.darwin-x64/Microsoft.VisualStudio.Code.ServiceHost",
+      "components/vs-green-server/platforms/darwin-x64/node_modules/@microsoft/visualstudio-reliability-monitor.darwin-x64/Microsoft.VisualStudio.Reliability.Monitor",
+      "components/vs-green-server/platforms/darwin-x64/node_modules/@microsoft/visualstudio-server.darwin-x64/Microsoft.VisualStudio.Code.Server"
+    ]
+  },
+  "darwin-arm64": {
+    "hash": "sha256-iR0jJnkcA12+CJUI0ECrRSR2+j2emtfmLt2Uz4ke7YY=",
+    "binaries": [
+      "components/vs-green-server/platforms/darwin-arm64/node_modules/@microsoft/servicehub-controller-net60.darwin-arm64/Microsoft.ServiceHub.Controller",
+      "components/vs-green-server/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-code-servicehost.darwin-arm64/Microsoft.VisualStudio.Code.ServiceHost",
+      "components/vs-green-server/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-reliability-monitor.darwin-arm64/Microsoft.VisualStudio.Reliability.Monitor",
+      "components/vs-green-server/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-server.darwin-arm64/Microsoft.VisualStudio.Code.Server"
+    ]
+  }
+}
