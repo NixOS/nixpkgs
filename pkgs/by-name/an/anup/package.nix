@@ -21,11 +21,10 @@ rustPlatform.buildRustPackage rec {
   useFetchCargoVendor = true;
   cargoHash = "sha256-925R5pG514JiA7iUegFkxrDpA3o7T/Ct4Igqqcdo3rw=";
 
-  buildInputs =
-    [
-      sqlite
-      xdg-utils
-    ];
+  buildInputs = [
+    sqlite
+    xdg-utils
+  ];
 
   meta = {
     homepage = "https://github.com/Acizza/anup";
