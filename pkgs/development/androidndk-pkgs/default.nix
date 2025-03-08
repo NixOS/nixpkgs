@@ -61,4 +61,5 @@ lib.recurseIntoAttrs {
   "25" = makeNdkPkgs "25.2.9519653" pkgs.llvmPackages_14;
   "26" = makeNdkPkgs "26.3.11579264" pkgs.llvmPackages_17;
   "27" = makeNdkPkgs "27.0.12077973" pkgs.llvmPackages_18;
+  "28" = makeNdkPkgs "28.0.13004108" pkgs.llvmPackages_19;
 }
