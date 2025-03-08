@@ -54,7 +54,7 @@ in stdenv.mkDerivation {
     description = "DevSecOps for Air Gap & Limited-Connection Systems. https://zarf.dev";
     homepage = "https://github.com/zarf-dev/zarf";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ragingpastry ];
+    maintainers = with maintainers; [ ragingpastry brandtkeller ];
     platforms = builtins.attrNames urls;
   };
 }
