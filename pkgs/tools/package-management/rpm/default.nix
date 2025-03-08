@@ -44,10 +44,16 @@ stdenv.mkDerivation rec {
     hash = "sha256-UmR+EmODZFM6tnHLyOSFyW+fCIidk/4O0QSmYyZhEk8=";
   };
 
-  postPatch = ''
-    sed -i 's#''${Python3_SITEARCH}#${placeholder "out"}/${python3.sitePackages}#' python/CMakeLists.txt
-    sed -i 's#PATHS ENV MYPATH#PATHS ENV PATH#' CMakeLists.txt
-  '';
+  postPatch =
+    ''
+      sed -i 's#''${Python3_SITEARCH}#${placeholder "out"}/${python3.sitePackages}#' python/CMakeLists.txt
+      sed -i 's#PATHS ENV MYPATH#PATHS ENV PATH#' CMakeLists.txt
+    ''
+    # clang: error: unknown argument: '-fhardened'
+    + lib.optionalString stdenv.cc.isClang ''
+      substituteInPlace CMakeLists.txt \
+        --replace-fail "-fhardened" ""
+    '';
 
   outputs =
     [
