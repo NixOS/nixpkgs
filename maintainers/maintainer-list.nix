@@ -3428,7 +3428,7 @@
   brandtkeller = {
     email = "brandtkeller@gmail.com";
     github = "brandtkeller";
-    githubId = "43887158";
+    githubId = 43887158;
     name = "Brandt Keller";
   };
   braydenjw = {
