@@ -27,15 +27,8 @@ stdenvNoCC.mkDerivation (self: {
     # Extract the DMG using 7zip
     7zz x "$src" -oextracted -y
 
-    # Find the extracted app bundle
-    appPath=$(find extracted -name 'macOS InstantView.app' -type d | head -n 1)
-
-    if [ -z "$appPath" ]; then
-      echo "Error: macOS InstantView.app not found in extracted DMG"
-      exit 1
-    fi
-
-    mv "$appPath" "$out/Applications/"
+    # Move the extracted contents to $out
+    cp -r extracted/* "$out/Applications/"
 
     runHook postInstall
   '';
