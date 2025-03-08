@@ -766,6 +766,8 @@ self: super: with self; {
 
   apycula = callPackage ../development/python-modules/apycula { };
 
+  apykuma = callPackage ../development/python-modules/apykuma { };
+
   aqipy-atmotech = callPackage ../development/python-modules/aqipy-atmotech { };
 
   aqualogic = callPackage ../development/python-modules/aqualogic { };
