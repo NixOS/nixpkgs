@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
   makeFlags = [
     "-Clinux"
     "VERSION=${finalAttrs.version}"
-    "CFLAGS+=-I${SDL2.dev}/include/SDL2"
+    "CFLAGS+=-I${lib.getInclude SDL2}/include/SDL2"
     "CFLAGS+=-I${SDL2_image}/include/SDL2"
     "DIST_PATH=$(out)"
     "CC=${stdenv.cc.targetPrefix}cc"
