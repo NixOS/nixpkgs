@@ -14902,6 +14902,8 @@ self: super: with self; {
 
   scripttest = callPackage ../development/python-modules/scripttest { };
 
+  scrypt = callPackage ../development/python-modules/scrypt { };
+
   scikit-survival = callPackage ../development/python-modules/scikit-survival { };
 
   scs = callPackage ../development/python-modules/scs {
