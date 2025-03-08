@@ -9,7 +9,7 @@
 let
   librewolf-src = callPackage ./librewolf.nix { };
 in
-(buildMozillaMach rec {
+(buildMozillaMach {
   pname = "librewolf";
   applicationName = "LibreWolf";
   binaryName = "librewolf";
