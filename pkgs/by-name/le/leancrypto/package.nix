@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
         publicDomain
         cc0
       ]
-      ++ lib.optional withCertGenerators [
+      ++ lib.optionals withCertGenerators [
         gpl2Only
         unfree
       ];
