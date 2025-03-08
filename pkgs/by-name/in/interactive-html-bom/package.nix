@@ -1,6 +1,5 @@
 {
   fetchFromGitHub,
-  kicad-small,
   lib,
   python3Packages,
 }:
@@ -22,7 +21,7 @@ python3Packages.buildPythonApplication rec {
   dependencies = [
     python3Packages.jsonschema
     python3Packages.wxpython
-    kicad-small
+    python3Packages.kicad
   ];
 
   # has no tests
