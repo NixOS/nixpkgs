@@ -1,36 +1,28 @@
 {
   lib,
   fetchFromGitHub,
-  buildPythonPackage,
-  pythonOlder,
-  pytestCheckHook,
-  beancount-black,
-  beancount-parser,
-  beanhub-extract,
-  jinja2,
-  poetry-core,
-  pydantic,
-  pytz,
-  pyyaml,
+  python3,
 }:
 
-buildPythonPackage rec {
+python3.pkgs.buildPythonPackage rec {
   pname = "beanhub-import";
-  version = "1.0.7";
+  version = "1.1.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = python3.pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "LaunchPlatform";
     repo = "beanhub-import";
     tag = version;
-    hash = "sha256-lafSOk+MS9MqB9KSxVR7S1HJJ6R6RZeCrFK8JGCZAIg=";
+    hash = "sha256-emBeDx1f5TqM5KJvzgHHDU7jF4OD3hdjaFqkjHkTh70=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = with python3.pkgs; [
+    hatchling
+  ];
 
-  dependencies = [
+  dependencies = with python3.pkgs; [
     beancount-black
     beancount-parser
     beanhub-extract
@@ -40,7 +32,9 @@ buildPythonPackage rec {
     pyyaml
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = with python3.pkgs; [
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "beanhub_import" ];
 

@@ -1621,8 +1621,6 @@ self: super: with self; {
 
   beanhub-forms = callPackage ../development/python-modules/beanhub-forms { };
 
-  beanhub-import = callPackage ../development/python-modules/beanhub-import { };
-
   beanquery = callPackage ../development/python-modules/beanquery { };
 
   beanstalkc = callPackage ../development/python-modules/beanstalkc { };
