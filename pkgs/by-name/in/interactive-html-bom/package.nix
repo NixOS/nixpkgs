@@ -1,7 +1,9 @@
 {
   fetchFromGitHub,
   lib,
+  kicad,
   python3Packages,
+  xvfb-run,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -24,8 +26,18 @@ python3Packages.buildPythonApplication rec {
     python3Packages.kicad
   ];
 
-  # has no tests
-  doCheck = false;
+  nativeCheckInputs = [
+    xvfb-run
+  ];
+
+  checkPhase = ''
+    runHook preCheck
+
+    cp ${kicad.base}/share/kicad/demos/stickhub/StickHub.kicad_pcb .
+    HOME=$(mktemp -d) xvfb-run $out/bin/generate_interactive_bom --no-browser StickHub.kicad_pcb
+
+    runHook postCheck
+  '';
 
   meta = {
     description = "Interactive HTML BOM generation for KiCad, EasyEDA, Eagle, Fusion360 and Allegro PCB designer";
