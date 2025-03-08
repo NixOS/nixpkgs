@@ -5,6 +5,7 @@
   pkg-config,
   gettext,
   itstool,
+  glib,
   gtk3,
   libxml2,
   libxslt,
@@ -28,13 +29,14 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkg-config
     gettext
+    glib # glib-compile-schemas
     itstool
+    libxml2 # xmllint
+    libxslt # xsltproc
   ];
 
   buildInputs = [
     gtk3
-    libxml2
-    libxslt
     libatasmart
     libnotify
     lm_sensors
