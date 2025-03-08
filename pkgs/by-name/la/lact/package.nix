@@ -76,10 +76,6 @@ rustPlatform.buildRustPackage rec {
     # read() looks for the database in /usr/share so we use read_from_file() instead
     substituteInPlace lact-daemon/src/server/handler.rs \
       --replace-fail 'Database::read()' 'Database::read_from_file("${hwdata}/share/hwdata/pci.ids")'
-
-    # test data is probably incorrect for these since the other intel tests pass
-    rm -r lact-daemon/src/tests/data/intel/a380-xe
-    rm -r lact-daemon/src/tests/data/intel/a380-i915
   '';
 
   postInstall = ''
