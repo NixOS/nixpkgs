@@ -28,7 +28,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^iwe-v(.*)$"
+    ];
+  };
 
   meta = {
     description = "Personal knowledge management system (editor plugin & command line utility)";
