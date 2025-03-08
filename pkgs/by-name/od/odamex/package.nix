@@ -1,5 +1,4 @@
   {
-    callPackage,
     lib,
     stdenv,
     fetchFromGitHub,
@@ -10,10 +9,12 @@
     portmidi,
     zlib,
     curl,
+    deutex,
     libpng,
     pkg-config,
     makeWrapper,
     SDL2,
+    SDL2_mixer,
     wxGTK32,
     miniupnpc,
     enableUPnP ? true,
@@ -23,10 +24,6 @@
 
   }:
 
-  let
-  deutex = callPackage ./deutex.nix {};
-  SDL2_mixer_fix = callPackage ./SDL2_mixer.nix {};
-  in
   stdenv.mkDerivation rec {
     pname = "odamex";
     version = "11.0.0";
@@ -53,7 +50,7 @@
     buildInputs = [
       deutex
       SDL2
-      SDL2_mixer_fix
+      SDL2_mixer
       wxGTK32
       zlib
       curl
