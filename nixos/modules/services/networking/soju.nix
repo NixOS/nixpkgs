@@ -18,7 +18,6 @@ let
     ${listenCfg}
     hostname ${cfg.hostName}
     ${tlsCfg}
-    db sqlite3 ${stateDir}/soju.db
     ${logCfg}
     http-origin ${concatStringsSep " " cfg.httpOrigins}
     accept-proxy-ip ${concatStringsSep " " cfg.acceptProxyIP}
@@ -148,6 +147,7 @@ in
         ExecStart = "${lib.getExe' cfg.package "soju"} -config ${cfg.configFile}";
         StateDirectory = "soju";
         RuntimeDirectory = "soju";
+        WorkingDirectory = stateDir;
       };
     };
   };
