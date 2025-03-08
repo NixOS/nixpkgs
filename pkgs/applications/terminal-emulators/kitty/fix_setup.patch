@@ -1,0 +1,13 @@
+diff --git a/setup.py b/setup.py
+index 9e9c3f177..8183a3b69 100755
+--- a/setup.py
++++ b/setup.py
+@@ -1778,7 +1778,7 @@ def repl(name: str, raw: str, defval: Union[str, float, FrozenSet[str]], val: Un
+             return raw
+         tname = type(defval).__name__
+         if tname == 'frozenset':
+-            tname = 'typing.FrozenSet[str]'
++            tname = 'frozenset[str]'
+         prefix = f'{name}: {tname} ='
+         nraw = raw.replace(f'{prefix} {defval!r}', f'{prefix} {val!r}', 1)
+         if nraw == raw:
