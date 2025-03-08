@@ -26488,6 +26488,12 @@
     githubId = 73885403;
     keys = [ { fingerprint = "F779 4E05 D8BB A608 73D0  1312 4FD6 B0D5 1C9A B6BD"; } ];
   };
+  solomonv = {
+    name = "Solomon Victorino";
+    github = "sgvictorino";
+    githubId = 9170316;
+    matrix = "@solomon:pub.solar";
+  };
   solson = {
     email = "scott@solson.me";
     matrix = "@solson:matrix.org";
