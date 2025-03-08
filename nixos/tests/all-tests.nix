@@ -913,6 +913,7 @@ in
   nitter = handleTest ./nitter.nix { };
   nix-config = handleTest ./nix-config.nix { };
   nix-ld = runTest ./nix-ld.nix;
+  nix-ld-32bit = runTest ./nix-ld-32bit.nix;
   nix-misc = handleTest ./nix/misc.nix { };
   nix-upgrade = handleTest ./nix/upgrade.nix { inherit (pkgs) nixVersions; };
   nix-required-mounts = runTest ./nix-required-mounts;
