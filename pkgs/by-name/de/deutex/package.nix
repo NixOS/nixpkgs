@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, libpng
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  libpng,
 }:
 
 stdenv.mkDerivation rec {
@@ -25,7 +26,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libpng
   ];
-
 
   installPhase = ''
     mkdir -p $out/bin
