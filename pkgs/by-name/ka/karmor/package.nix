@@ -9,13 +9,13 @@
 
 buildGoModule rec {
   pname = "karmor";
-  version = "1.3.1";
+  version = "1.3.3";
 
   src = fetchFromGitHub {
     owner = "kubearmor";
     repo = "kubearmor-client";
     rev = "v${version}";
-    hash = "sha256-XZ/FGZK6whh32sO7TuBooPRB1u2I0p5aDePcZ5AaY/8=";
+    hash = "sha256-sn2Zpr/Z63MAf0d9FnT3GJW48DI/aynC1naAHsMYGR4=";
   };
 
   vendorHash = "sha256-HH3U1reZXG9w7uwnXbY33hsKlPCxbVb2yvw4KmBfOa0=";
