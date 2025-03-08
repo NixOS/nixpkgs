@@ -1,35 +1,30 @@
 {
-  stdenv,
   lib,
+  stdenv,
   fetchFromGitHub,
   fetchpatch,
+
+  gobject-introspection,
+  gtk4,
   meson,
   ninja,
-  json-glib,
-  gtk4,
-  libxml2,
-  gobject-introspection,
   pkg-config,
+
+  json-glib,
   libadwaita,
+  libxml2,
 }:
 
 stdenv.mkDerivation rec {
   pname = "text-engine";
-  version = "0.1.1";
+  version = "0.1.1-unstable-2024-09-16";
+
   src = fetchFromGitHub {
     owner = "mjakeman";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-YSG4Vk3hrmtaJkK1WAlQcdgiDdgC4Un0t6UdaoIcUes=";
+    rev = "4c26887556fd8e28211324c4058d49508eb5f557";
+    hash = "sha256-0rMBz2s3wYv7gZiJTj8rixWxBjT6Dd6SaINP8kDbTyw=";
   };
-
-  patches = [
-    # Fixes build with newer versions of clang
-    (fetchpatch {
-      url = "https://github.com/mjakeman/text-engine/commit/749c94d853c0b0e29e79a1b270ec61947b65c319.patch";
-      hash = "sha256-vs/a8IBovArw8tc1ZLUsaDHRVyA71KMB1NGENOKNOdk=";
-    })
-  ];
 
   nativeBuildInputs = [
     gobject-introspection
@@ -41,18 +36,23 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libadwaita
-    json-glib
     libxml2
   ];
 
-  meta = with lib; {
+  postPatch = ''
+    # See https://github.com/mjakeman/text-engine/pull/42
+    substituteInPlace src/meson.build \
+      --replace-fail "dependency('json-glib-1.0')," ""
+  '';
+
+  meta = {
     description = "Rich text framework for GTK";
     mainProgram = "text-engine-demo";
     homepage = "https://github.com/mjakeman/text-engine";
-    license = with licenses; [
+    license = with lib.licenses; [
       mpl20
       lgpl21Plus
     ];
-    maintainers = with maintainers; [ foo-dogsquared ];
+    maintainers = with lib.maintainers; [ foo-dogsquared ];
   };
 }
