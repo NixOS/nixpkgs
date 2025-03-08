@@ -687,7 +687,6 @@ in
 
         crowdsec = {
           description = "CrowdSec is a free, modern & collaborative behavior detection engine, coupled with a global IP reputation network.";
-          path = [ cscli ];
           wantedBy = [ "multi-user.target" ];
           after = [ "network-online.target" ];
           wants = [ "network-online.target" ];
@@ -728,56 +727,56 @@ in
                   [
                     "#!${pkgs.runtimeShell}"
                     "set -euxo pipefail"
-                    "cscli hub update"
+                    "${lib.getExe cscli} hub update"
                   ]
                   ++ lib.optionals (cfg.hub.collections != [ ]) [
-                    "cscli collections install ${
+                    "${lib.getExe cscli} collections install ${
                       lib.strings.concatMapStringsSep " " (x: lib.escapeShellArg x) cfg.hub.collections
                     }"
                   ]
                   ++ lib.optionals (cfg.hub.scenarios != [ ]) [
-                    "cscli scenarios install ${
+                    "${lib.getExe cscli} scenarios install ${
                       lib.strings.concatMapStringsSep " " (x: lib.escapeShellArg x) cfg.hub.scenarios
                     }"
                   ]
                   ++ lib.optionals (cfg.hub.parsers != [ ]) [
-                    "cscli parsers install ${
+                    "${lib.getExe cscli} parsers install ${
                       lib.strings.concatMapStringsSep " " (x: lib.escapeShellArg x) cfg.hub.parsers
                     }"
                   ]
                   ++ lib.optionals (cfg.hub.postOverflows != [ ]) [
-                    "cscli postoverflows install ${
+                    "${lib.getExe cscli} postoverflows install ${
                       lib.strings.concatMapStringsSep " " (x: lib.escapeShellArg x) cfg.hub.postOverflows
                     }"
                   ]
                   ++ lib.optionals (cfg.hub.appSecConfigs != [ ]) [
-                    "cscli appsec-configs install ${
+                    "${lib.getExe cscli} appsec-configs install ${
                       lib.strings.concatMapStringsSep " " (x: lib.escapeShellArg x) cfg.hub.appSecConfigs
                     }"
                   ]
                   ++ lib.optionals (cfg.hub.appSecRules != [ ]) [
-                    "cscli appsec-rules install ${
+                    "${lib.getExe cscli} appsec-rules install ${
                       lib.strings.concatMapStringsSep " " (x: lib.escapeShellArg x) cfg.hub.appSecRules
                     }"
                   ]
                   ++ lib.optionals (cfg.settings.general.api.server.enable) [
                     ''
                       if [ ! -s "${cfg.settings.general.api.client.credentials_path}" ]; then
-                        cscli machine add "${cfg.name}" --auto
+                        ${lib.getExe cscli} machine add "${cfg.name}" --auto
                       fi
                     ''
                   ]
                   ++ lib.optionals (capiFile != null) [
                     ''
                       if ! grep -q password "${capiFile}" ]; then
-                        cscli capi register
+                        ${lib.getExe cscli} capi register
                       fi
                     ''
                   ]
                   ++ lib.optionals (tokenFile != null) [
                     ''
                       if [ ! -e "${tokenFile}" ]; then
-                        cscli console enroll "$(cat ${tokenFile})" --name ${cfg.name}
+                        ${lib.getExe cscli} console enroll "$(cat ${tokenFile})" --name ${cfg.name}
                       fi
                     ''
                   ];
