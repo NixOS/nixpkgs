@@ -505,21 +505,19 @@ in
         name = "crowdsec-patterns";
         paths = [
           cfg.localConfig.patterns
-          (lib.attrsets.getOutput "patterns" pkg)
+          (lib.attrsets.getOutput "patterns" cfg.package)
         ];
       };
 
-      pkg = cfg.package;
-
-      cscli = pkgs.writeScriptBin "cscli" ''
-        #!${pkgs.runtimeShell}
-        set -eu
-        set -o pipefail
-
+      cscli = pkgs.writeShellScriptBin "cscli" ''
+        set -euo pipefail
         # cscli needs crowdsec on it's path in order to be able to run `cscli explain`
-        export PATH=$PATH:${lib.makeBinPath [ pkg ]}
-
-        exec ${lib.getExe' pkg "cscli"} -c=${configFile} "''${@}"
+        export PATH="$PATH:${lib.makeBinPath [ cfg.package ]}"
+        sudo=exec
+        if [ "$USER" != "${cfg.user}" ]; then
+            sudo='exec /run/wrappers/bin/sudo -u ${cfg.user}'
+        fi
+        $sudo ${lib.getExe' cfg.package "cscli"} -c=${configFile} "$@"
       '';
 
       localScenariosMap = (map (format.generate "scenario.yaml") cfg.localConfig.scenarios);
@@ -639,7 +637,8 @@ in
         systemPackages = [ cscli ];
       };
 
-      systemd.packages = [ pkg ];
+      systemd.packages = [ cfg.package ];
+
       systemd.timers.crowdsec-update-hub = lib.mkIf (cfg.autoUpdateService) {
         description = "Update the crowdsec hub index";
         wantedBy = [ "timers.target" ];
@@ -724,18 +723,17 @@ in
             NoExecPaths = [ "/" ];
             ExecReload = lib.mkForce [
               " " # This is needed to clear the ExecReload definitions from upstream
-              "${lib.getExe' pkg "crowdsec"} -c ${configFile} -t -error"
+              "${lib.getExe' cfg.package "crowdsec"} -c ${configFile} -t -error"
               "${lib.getExe' pkgs.util-linux "kill"} -HUP $MAINPID"
             ];
             ExecStart = [
               " " # This is needed to clear the ExecStart definitions from upstream
-              "${lib.getExe' pkg "crowdsec"} -c ${configFile}"
+              "${lib.getExe' cfg.package "crowdsec"} -c ${configFile}"
             ];
             ExecStartPre =
               let
                 scriptArray =
                   [
-                    "#!${pkgs.runtimeShell}"
                     "set -euxo pipefail"
                     "${lib.getExe cscli} hub update"
                   ]
@@ -791,12 +789,12 @@ in
                     ''
                   ];
 
-                script = pkgs.writeScriptBin "crowdsec-setup" (lib.strings.concatStringsSep "\n" scriptArray);
+                script = pkgs.writeShellScriptBin "crowdsec-setup" (lib.strings.concatStringsSep "\n" scriptArray);
               in
               [
                 " " # This is needed to clear the ExecStartPre definitions from upstream
                 "${lib.getExe script}"
-                "${lib.getExe' pkg "crowdsec"} -c ${configFile} -t -error"
+                "${lib.getExe' cfg.package "crowdsec"} -c ${configFile} -t -error"
               ];
           };
         };
