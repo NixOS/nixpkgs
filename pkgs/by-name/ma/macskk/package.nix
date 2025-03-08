@@ -6,15 +6,16 @@
   cpio,
   xar,
   darwin,
+  nix-update-script,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "macskk";
-  version = "1.4.1";
+  version = "1.11.0";
 
   src = fetchurl {
     url = "https://github.com/mtgto/macSKK/releases/download/${finalAttrs.version}/macSKK-${finalAttrs.version}.dmg";
-    hash = "sha256-lLIFVGwt3VDsXRRGczY5VeqUyUgkX+G9tB3SGrO0voM=";
+    hash = "sha256-CqtW6bfSuAo+9VRmRTgx0aKpBKBEDIxidOh7V5vD7ww=";
   };
 
   nativeBuildInputs = [
@@ -45,6 +46,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Yet Another macOS SKK Input Method";
