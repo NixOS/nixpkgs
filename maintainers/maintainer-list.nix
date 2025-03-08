@@ -13553,6 +13553,12 @@
     githubId = 516527;
     name = "Lukas Werling";
   };
+  lnajt = {
+    github = "ElleNajt";
+    githubId = 26446393;
+    name = "Elle Najt";
+    email = "lnajt4@gmail.com";
+  };
   lnl7 = {
     email = "daiderd@gmail.com";
     github = "LnL7";
