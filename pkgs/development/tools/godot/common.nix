@@ -23,9 +23,11 @@
   libXrender,
   makeWrapper,
   pkg-config,
+  runCommand,
   scons,
   speechd-minimal,
   stdenv,
+  stdenvNoCC,
   testers,
   udev,
   version,
@@ -240,12 +242,121 @@ let
       '';
 
     passthru = {
-      tests = {
-        version = testers.testVersion {
-          package = finalAttrs.finalPackage;
-          version = lib.replaceStrings [ "-" ] [ "." ] version;
+      tests =
+        let
+          pkg = finalAttrs.finalPackage;
+          dottedVersion = lib.replaceStrings [ "-" ] [ "." ] version;
+          exportedProject = stdenvNoCC.mkDerivation {
+            name = "${pkg.name}-project-export";
+
+            nativeBuildInputs = [
+              pkg
+              autoPatchelfHook
+            ];
+
+            runtimeDependencies = map lib.getLib [
+              alsa-lib
+              libGL
+              libpulseaudio
+              libX11
+              libXcursor
+              libXext
+              libXi
+              libXrandr
+              udev
+              vulkan-loader
+            ];
+
+            unpackPhase = ''
+              runHook preUnpack
+
+              mkdir test
+              cd test
+              touch project.godot
+
+              cat >create-scene.gd <<'EOF'
+              extends SceneTree
+
+              func _initialize():
+                var node = Node.new()
+                var script = ResourceLoader.load("res://test.gd")
+                print(script)
+                node.set_script(script)
+                var scene = PackedScene.new()
+                var scenePath = "res://test.tscn"
+                scene.pack(node)
+                var x = ResourceSaver.save(scene, scenePath)
+                ProjectSettings["application/run/main_scene"] = scenePath
+                ProjectSettings.save()
+                node.free()
+                quit()
+              EOF
+
+              cat >test.gd <<'EOF'
+              extends Node
+              func _ready():
+                print("Hello, World!")
+                get_tree().quit()
+              EOF
+
+              cat >export_presets.cfg <<'EOF'
+              [preset.0]
+              name="build"
+              platform="Linux"
+              runnable=true
+              export_filter="all_resources"
+              include_filter=""
+              exclude_filter=""
+              [preset.0.options]
+              __empty=""
+              EOF
+
+              runHook postUnpack
+            '';
+
+            buildPhase = ''
+              runHook preBuild
+
+              export HOME=$(mktemp -d)
+              mkdir -p $HOME/.local/share/godot/export_templates
+              ln -s "${pkg.export-templates-bin}" "$HOME/.local/share/godot/export_templates/${dottedVersion}"
+
+              godot --headless -s create-scene.gd
+
+              runHook postBuild
+            '';
+
+            installPhase = ''
+              runHook preInstall
+
+              mkdir -p "$out"/bin
+              godot --headless --export-release build "$out"/bin/test
+
+              runHook postInstall
+            '';
+          };
+        in
+        {
+          version = testers.testVersion {
+            package = pkg;
+            version = dottedVersion;
+          };
+
+          project-runs = runCommand "${pkg.name}-project-runs" { } ''
+            (
+              set -eo pipefail
+              HOME=$(mktemp -d)
+              "${exportedProject}"/bin/test --headless | tail -n1 | (
+                read output
+                if [[ "$output" != "Hello, World!" ]]; then
+                  echo "unexpected output: $output" >&2
+                  exit 1
+                fi
+              )
+              touch "$out"
+            )
+          '';
         };
-      };
     };
 
     requiredSystemFeatures = [
