@@ -84,6 +84,12 @@ rustPlatform.buildRustPackage {
     "jj-cli"
   ];
 
+  checkFlags = [
+    # Does not work in the sandbox
+    "--skip"
+    "test_git::test_push_bookmarks_deletion::use_git2_for_remote_calls"
+  ];
+
   env = {
     # Disable vendored libraries.
     ZSTD_SYS_USE_PKG_CONFIG = "1";
@@ -125,6 +131,7 @@ rustPlatform.buildRustPackage {
       thoughtpolice
       emily
       bbigras
+      RossSmyth
     ];
     mainProgram = "jj";
   };
