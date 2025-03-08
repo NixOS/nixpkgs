@@ -27,19 +27,26 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "festvox";
     repo = "flite";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Tq5pyg3TiQt8CPqGXTyLOaGgaeLTmPp+Duw3+2VAF9g=";
   };
 
-  # https://github.com/festvox/flite/pull/60.
-  # Replaces `ar` with `$(AR)` in config/common_make_rules.
-  # Improves cross-compilation compatibility.
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/festvox/flite/commit/54c65164840777326bbb83517568e38a128122ef.patch";
-      hash = "sha256-hvKzdX7adiqd9D+9DbnfNdqEULg1Hhqe1xElYxNM1B8=";
-    })
-  ];
+  patches =
+    [
+      # https://github.com/festvox/flite/pull/60.
+      # Replaces `ar` with `$(AR)` in config/common_make_rules.
+      # Improves cross-compilation compatibility.
+      (fetchpatch {
+        url = "https://github.com/festvox/flite/commit/54c65164840777326bbb83517568e38a128122ef.patch";
+        hash = "sha256-hvKzdX7adiqd9D+9DbnfNdqEULg1Hhqe1xElYxNM1B8=";
+      })
+    ]
+    # Fixes (fortified) builds with clang against glibc >= 2.40
+    # https://lists.openembedded.org/g/openembedded-devel/message/111217
+    # https://github.com/NixOS/nixpkgs/issues/384409
+    ++ lib.optional (
+      stdenv.cc.isClang && stdenv.hostPlatform.libc == "glibc"
+    ) ./0001-Remove-defining-const-as-nothing.patch;
 
   buildInputs = lib.optional stdenv.hostPlatform.isLinux (
     {
