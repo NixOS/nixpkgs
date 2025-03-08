@@ -4,8 +4,7 @@
   fetchFromGitHub,
   makeWrapper,
   makeDesktopItem,
-  fixup-yarn-lock,
-  yarn,
+  yarnConfigHook,
   nodejs,
   fetchYarnDeps,
   jq,
@@ -48,26 +47,13 @@ stdenv.mkDerivation (
     };
 
     nativeBuildInputs = [
-      yarn
-      fixup-yarn-lock
+      yarnConfigHook
       nodejs
       makeWrapper
       jq
     ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
 
     inherit seshat;
-
-    configurePhase = ''
-      runHook preConfigure
-
-      export HOME=$(mktemp -d)
-      yarn config --offline set yarn-offline-mirror $offlineCache
-      fixup-yarn-lock yarn.lock
-      yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
-      patchShebangs node_modules/
-
-      runHook postConfigure
-    '';
 
     # Only affects unused scripts in $out/share/element/electron/scripts. Also
     # breaks because there are some `node`-scripts with a `npx`-shebang and
