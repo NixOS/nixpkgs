@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromSourcehut,
+  fetchpatch,
   asciidoc,
   cmocka,
   docbook_xsl,
@@ -17,7 +18,6 @@
   libxkbcommon,
   libGLU,
   wayland,
-  # "libnsgif" is disabled until https://todo.sr.ht/~exec64/imv/55 is solved
   withBackends ? [
     "libjxl"
     "libtiff"
@@ -25,6 +25,7 @@
     "libpng"
     "librsvg"
     "libheif"
+    "libnsgif"
   ],
   freeimage,
   libtiff,
@@ -123,6 +124,15 @@ stdenv.mkDerivation rec {
     ]
     ++ windowSystems."${withWindowSystem'}"
     ++ builtins.map (b: backends."${b}") withBackends;
+
+  patches = [
+    (fetchpatch {
+      # https://lists.sr.ht/~exec64/imv-devel/patches/55937
+      name = "update libnsgif backend";
+      url = "https://lists.sr.ht/~exec64/imv-devel/%3C20241113012702.30521-2-reallyjohnreed@gmail.com%3E/raw";
+      hash = "sha256-/OQeDfIkPtJIIZwL8jYVRy0B7LSBi9/NvAdPoDm851k=";
+    })
+  ];
 
   postInstall = ''
     install -Dm644 ../files/imv.desktop $out/share/applications/
