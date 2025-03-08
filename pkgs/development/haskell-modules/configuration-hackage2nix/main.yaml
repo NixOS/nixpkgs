@@ -369,8 +369,6 @@ package-maintainers:
     - shake
   nomeata:
     - cabal-plan-bounds
-    - candid
-    - leb128-cereal
     - lhs2tex
     - rec-def
     - tasty-expected-failure
