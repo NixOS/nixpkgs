@@ -17934,6 +17934,8 @@ self: super: with self; {
 
   ultraheat-api = callPackage ../development/python-modules/ultraheat-api { };
 
+  ultralytics = callPackage ../development/python-modules/ultralytics { };
+
   ultralytics-thop = callPackage ../development/python-modules/ultralytics-thop { };
 
   umalqurra = callPackage ../development/python-modules/umalqurra { };
