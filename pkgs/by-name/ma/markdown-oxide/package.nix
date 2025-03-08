@@ -3,14 +3,14 @@
   rustPlatform,
   fetchFromGitHub,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "markdown-oxide";
   version = "0.25.1";
 
   src = fetchFromGitHub {
     owner = "Feel-ix-343";
     repo = "markdown-oxide";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-hgXqJwmIpXJNIl67Jjbg5MR4PlwB5XbqnFo+rNLoqbE=";
   };
 
@@ -27,4 +27,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "markdown-oxide";
   };
-}
+})
