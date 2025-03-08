@@ -13,6 +13,7 @@
 , src
 , location ? null
 , generate ? false
+, isBroken ? false
 , ...
 }@args:
 
@@ -32,6 +33,12 @@ stdenv.mkDerivation ({
     cd ${location}
   '' + lib.optionalString generate ''
     tree-sitter generate
+  '';
+
+  doCheck = !isBroken;
+  checkPhase = ''
+    # HOME is needed because tree-sitter needs a writable home folder
+    HOME=. ${lib.getExe tree-sitter} test
   '';
 
   # When both scanner.{c,cc} exist, we should not link both since they may be the same but in
@@ -58,4 +65,9 @@ stdenv.mkDerivation ({
     fi
     runHook postInstall
   '';
+
+  meta = {
+    broken = isBroken;
+  };
+
 } // removeAttrs args [ "language" "location" "generate" ])
