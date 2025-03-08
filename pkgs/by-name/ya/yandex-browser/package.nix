@@ -54,15 +54,15 @@
 
 let
   version = {
-    corporate = "24.7.1.1195-1";
-    beta = "24.7.1.1124-1";
-    stable = "24.7.1.1120-1";
+    corporate = "24.12.4.1094-1";
+    beta = "24.12.4.1056-1";
+    stable = "24.12.4.1055-1";
   }.${edition};
 
   hash = {
-    corporate = "sha256-HPEUeIZl9nRhMzrMv4MzIOnbF8mJ789vCtTWf9TcCH4=";
-    beta = "sha256-vcX/9MWqeUd/YlczHivcL6+TignE8Nk6rO5DaCjf2SQ=";
-    stable = "sha256-wrYPQ8WrttF/tlafA0+e3eDZMq9SFmLk5NOIeHQr14U=";
+    corporate = "sha256-GGbO0TfUiedrNywRRXhEBSfJjJXrizJk0KNG9eam8V4=";
+    beta = "sha256-3I1sMxPH1654k7wMYHWXcQ3dsYH2UPvT2hXIHotaLoQ=";
+    stable = "sha256-rmSf9xS2oSYlhKkhrdKiCC2BgascaKgqkSe8meBkz08=";
   }.${edition};
 
   app = {
