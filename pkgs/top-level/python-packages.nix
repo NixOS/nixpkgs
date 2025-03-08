@@ -15932,6 +15932,8 @@ self: super: with self; {
 
   stevedore = callPackage ../development/python-modules/stevedore { };
 
+  stgpytools = callPackage ../development/python-modules/stgpytools { };
+
   stickytape = callPackage ../development/python-modules/stickytape { };
 
   stim = callPackage ../development/python-modules/stim { };
@@ -18142,6 +18144,8 @@ self: super: with self; {
     inherit (pkgs) vapoursynth;
   };
 
+  vapoursynth-havsfunc = callPackage ../development/python-modules/vapoursynth-havsfunc { };
+
   variants = callPackage ../development/python-modules/variants { };
 
   varint = callPackage ../development/python-modules/varint { };
@@ -18281,6 +18285,24 @@ self: super: with self; {
   vprof = callPackage ../development/python-modules/vprof { };
 
   vqgan-jax = callPackage ../development/python-modules/vqgan-jax { };
+
+  vsaa = callPackage ../development/python-modules/vsaa { };
+
+  vsdenoise = callPackage ../development/python-modules/vsdenoise { };
+
+  vsexprtools = callPackage ../development/python-modules/vsexprtools { };
+
+  vskernels = callPackage ../development/python-modules/vskernels { };
+
+  vsmasktools = callPackage ../development/python-modules/vsmasktools { };
+
+  vspyplugin = callPackage ../development/python-modules/vspyplugin { };
+
+  vsrgtools = callPackage ../development/python-modules/vsrgtools { };
+
+  vsscale = callPackage ../development/python-modules/vsscale { };
+
+  vstools = callPackage ../development/python-modules/vstools { };
 
   vsts = callPackage ../development/python-modules/vsts { };
 
