@@ -4,6 +4,7 @@
   lib,
   stdenv,
   writeTextFile,
+  fetchurl,
 }:
 let
   inherit (lib)
@@ -83,4 +84,45 @@ in
         cp $src $out/$srcBase
       '';
     };
+
+  modsFromLock =
+    lockFile:
+    let
+      lock = builtins.fromJSON (builtins.readFile lockFile);
+      downloadMod =
+        {
+          name,
+          version,
+          download_url,
+          file_name,
+          sha1,
+        }:
+        let
+          # It is up to the user to tell curl how to authenticate against mods.factorio.com.
+          # The easiest way is to prefetch the file.
+          src = fetchurl {
+            name = file_name;
+            url = "https://mods.factorio.com${download_url}";
+            inherit sha1;
+          };
+
+          mod = stdenv.mkDerivation {
+            inherit src;
+            name = "${name}-${version}";
+            pname = name;
+            inherit version;
+            preferLocalBuild = true;
+            buildCommand = ''
+              mkdir -p $out
+              ln -s $src $out/${file_name}
+            '';
+
+            # The mod has no _Nix_ dependencies
+            deps = [ ];
+          };
+
+        in
+        mod;
+    in
+    map downloadMod lock;
 }
