@@ -228,19 +228,37 @@ def test_execute_nix_boot(mock_run: Mock, tmp_path: Path) -> None:
         elif args[0] == "nix-build":
             return CompletedProcess([], 0, str(config_path))
         else:
-            return CompletedProcess([], 0)
+            return CompletedProcess([], 0, "")
 
     mock_run.side_effect = run_side_effect
 
     nr.execute(["nixos-rebuild", "boot", "--no-flake", "-vvv", "--no-reexec"])
 
-    assert mock_run.call_count == 6
+    assert mock_run.call_count == 7
     mock_run.assert_has_calls(
         [
             call(
-                ["nix-instantiate", "--find-file", "nixpkgs", "-vvv"],
-                stdout=PIPE,
+                [
+                    "nix-instantiate",
+                    "--eval",
+                    "--expr",
+                    textwrap.dedent("""
+                      (import <nixpkgs/nixos> {
+                        configuration = {
+                          imports = [ <nixos-config> ];
+                          _module.check = false;
+                        };
+                      }).config.nixpkgs.source
+                    """)
+                ],
                 check=False,
+                capture_output=True,
+                **DEFAULT_RUN_KWARGS
+            ),
+            call(
+                ["nix-instantiate", "--find-file", "nixpkgs", "-vvv"],
+                check=False,
+                stdout=PIPE,
                 **DEFAULT_RUN_KWARGS,
             ),
             call(
@@ -257,7 +275,7 @@ def test_execute_nix_boot(mock_run: Mock, tmp_path: Path) -> None:
             call(
                 [
                     "nix-build",
-                    "<nixpkgs/nixos>",
+                    str(nixpkgs_path / "nixos"),
                     "--attr",
                     "config.system.build.toplevel",
                     "-vvv",
@@ -357,7 +375,7 @@ def test_execute_nix_build_image_flake(mock_run: Mock, tmp_path: Path) -> None:
         elif args[0] == "nix":
             return CompletedProcess([], 0, str(config_path))
         else:
-            return CompletedProcess([], 0)
+            return CompletedProcess([], 0, "")
 
     mock_run.side_effect = run_side_effect
 
@@ -372,7 +390,7 @@ def test_execute_nix_build_image_flake(mock_run: Mock, tmp_path: Path) -> None:
         ]
     )
 
-    assert mock_run.call_count == 2
+    assert mock_run.call_count == 3
     mock_run.assert_has_calls(
         [
             call(
@@ -415,7 +433,7 @@ def test_execute_nix_switch_flake(mock_run: Mock, tmp_path: Path) -> None:
         if args[0] == "nix":
             return CompletedProcess([], 0, str(config_path))
         else:
-            return CompletedProcess([], 0)
+            return CompletedProcess([], 0, "")
 
     mock_run.side_effect = run_side_effect
 
@@ -436,7 +454,7 @@ def test_execute_nix_switch_flake(mock_run: Mock, tmp_path: Path) -> None:
         ]
     )
 
-    assert mock_run.call_count == 3
+    assert mock_run.call_count == 4
     mock_run.assert_has_calls(
         [
             call(
@@ -689,7 +707,7 @@ def test_execute_nix_switch_flake_target_host(
         if args[0] == "nix":
             return CompletedProcess([], 0, str(config_path))
         else:
-            return CompletedProcess([], 0)
+            return CompletedProcess([], 0, "")
 
     mock_run.side_effect = run_side_effect
 
@@ -706,7 +724,7 @@ def test_execute_nix_switch_flake_target_host(
         ]
     )
 
-    assert mock_run.call_count == 4
+    assert mock_run.call_count == 5
     mock_run.assert_has_calls(
         [
             call(
@@ -780,7 +798,7 @@ def test_execute_nix_switch_flake_build_host(
         elif args[0] == "ssh" and "nix" in args:
             return CompletedProcess([], 0, str(config_path))
         else:
-            return CompletedProcess([], 0)
+            return CompletedProcess([], 0, "")
 
     mock_run.side_effect = run_side_effect
 
@@ -796,7 +814,7 @@ def test_execute_nix_switch_flake_build_host(
         ]
     )
 
-    assert mock_run.call_count == 6
+    assert mock_run.call_count == 7
     mock_run.assert_has_calls(
         [
             call(
@@ -940,15 +958,37 @@ def test_execute_build(mock_run: Mock, tmp_path: Path) -> None:
     config_path = tmp_path / "test"
     config_path.touch()
     mock_run.side_effect = [
+        # nix-instantiate
+        CompletedProcess([], 1, ""),
         # nixos_build_flake
         CompletedProcess([], 0, str(config_path)),
     ]
 
     nr.execute(["nixos-rebuild", "build", "--no-flake", "--no-reexec"])
 
-    assert mock_run.call_count == 1
+    assert mock_run.call_count == 2
     mock_run.assert_has_calls(
         [
+            call(
+                [
+                    "nix-instantiate",
+                    "--eval",
+                    "--expr",
+                    textwrap.dedent("""
+                      (import <nixpkgs/nixos> {
+                        configuration = {
+                          imports = [ <nixos-config> ];
+                          _module.check = false;
+                        };
+                      }).config.nixpkgs.source
+                    """)
+
+                ],
+                check=False,
+                capture_output=True,
+                **DEFAULT_RUN_KWARGS,
+
+            ),
             call(
                 [
                     "nix-build",
@@ -973,7 +1013,7 @@ def test_execute_test_flake(mock_run: Mock, tmp_path: Path) -> None:
         if args[0] == "nix":
             return CompletedProcess([], 0, str(config_path))
         else:
-            return CompletedProcess([], 0)
+            return CompletedProcess([], 0, "")
 
     mock_run.side_effect = run_side_effect
 
@@ -981,7 +1021,7 @@ def test_execute_test_flake(mock_run: Mock, tmp_path: Path) -> None:
         ["nixos-rebuild", "test", "--flake", "github:user/repo#hostname", "--no-reexec"]
     )
 
-    assert mock_run.call_count == 2
+    assert mock_run.call_count == 3
     mock_run.assert_has_calls(
         [
             call(
@@ -1026,7 +1066,7 @@ def test_execute_test_rollback(
                 """),
             )
         else:
-            return CompletedProcess([], 0)
+            return CompletedProcess([], 0, "")
 
     mock_run.side_effect = run_side_effect
 
@@ -1034,7 +1074,7 @@ def test_execute_test_rollback(
         ["nixos-rebuild", "test", "--rollback", "--profile-name", "foo", "--no-reexec"]
     )
 
-    assert mock_run.call_count == 2
+    assert mock_run.call_count == 3
     mock_run.assert_has_calls(
         [
             call(

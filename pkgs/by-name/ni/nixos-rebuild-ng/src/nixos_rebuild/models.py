@@ -1,6 +1,8 @@
 import platform
 import re
+import os
 import subprocess
+import textwrap
 from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
@@ -57,7 +59,30 @@ class BuildAttr:
     @classmethod
     def from_arg(cls, attr: str | None, file: str | None) -> Self:
         if not (attr or file):
-            return cls("<nixpkgs/nixos>", None)
+            # If present, use config.nixpkgs.source
+            nixos_config = os.getenv("NIXOS_CONFIG", "<nixos-config>")
+            r = run_wrapper(
+                [
+                    "nix-instantiate",
+                    "--eval",
+                    "--expr",
+                    textwrap.dedent(f"""
+                      (import <nixpkgs/nixos> {{
+                        configuration = {{
+                          imports = [ {nixos_config} ];
+                          _module.check = false;
+                        }};
+                      }}).config.nixpkgs.source
+                    """),
+                ],
+                check=False,
+                capture_output=True,
+            )
+            if r.returncode == 0:
+                return cls(r.stdout.strip('"\n') + "/nixos", None)
+            else:
+                # Fall back to nixpkgs channel
+                return cls("<nixpkgs/nixos>", None)
         return cls(Path(file or "default.nix"), attr)
 
 
