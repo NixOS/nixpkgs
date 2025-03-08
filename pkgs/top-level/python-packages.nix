@@ -3250,8 +3250,6 @@ self: super: with self; {
 
   deploykit = callPackage ../development/python-modules/deploykit { };
 
-  deprecat = callPackage ../development/python-modules/deprecat { };
-
   deprecated = callPackage ../development/python-modules/deprecated { };
 
   deprecation = callPackage ../development/python-modules/deprecation { };

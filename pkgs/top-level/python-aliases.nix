@@ -152,6 +152,7 @@ mapAliases ({
   debian = python-debian; # added 2024-12-10
   deep_merge = throw "deep_merge has been removed, since it is no longer maintained and may be broken."; # added 2023-10-09
   demjson = throw "demjson has been removed, it was using setuptools 2to3 translation feature, which has been removed in setuptools 58"; # added 2022-01-18
+  deprecat  = throw "deprecat has been removed, it unmaintained and archived by upstream"; # added 2025-03-08
   descartes = throw "descartes has been removed, since it is abandoned and broken"; # added 2023-06-21
   detox = throw "detox is no longer maintained, and was broken since may 2019"; # added 2020-07-04
   dftfit = throw "dftfit dependency lammps-cython no longer builds"; # added 2021-07-04
