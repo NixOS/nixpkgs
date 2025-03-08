@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libfreeaptx";
-  version = "0.1.1";
+  version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "iamthehorker";
     repo = pname;
     rev = version;
-    sha256 = "sha256-eEUhOrKqb2hHWanY+knpY9FBEnjkkFTB+x6BZgMBpbo=";
+    sha256 = "sha256-wx9ndhJH9IiJfCbBoRVqrgvxO4E4qYvKe3AWHfp5fpQ=";
   };
 
   outputs = [
