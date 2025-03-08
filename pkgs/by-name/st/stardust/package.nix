@@ -38,6 +38,8 @@ stdenv.mkDerivation rec {
     libGL
   ];
 
+  patches = [ ./pointer-fix.patch ];
+
   installFlags = [ "bindir=\${out}/bin" ];
 
   hardeningDisable = [ "format" ];
