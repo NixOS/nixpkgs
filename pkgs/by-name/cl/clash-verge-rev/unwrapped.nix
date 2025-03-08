@@ -16,6 +16,7 @@
   webkitgtk_4_1,
   openssl,
 }:
+
 rustPlatform.buildRustPackage {
   inherit version src meta;
   pname = "${pname}-unwrapped";
@@ -27,11 +28,6 @@ rustPlatform.buildRustPackage {
   env = {
     OPENSSL_NO_VENDOR = 1;
   };
-
-  patches = [
-    # https://github.com/clash-verge-rev/clash-verge-rev/pull/2582
-    ./0001-enable-format_bytes_speed-for-every-platform.patch
-  ];
 
   postPatch = ''
     substituteInPlace $cargoDepsCopy/libappindicator-sys-*/src/lib.rs \
@@ -49,6 +45,8 @@ rustPlatform.buildRustPackage {
       --replace-fail '"beforeBuildCommand": "pnpm run web:build"' '"beforeBuildCommand": ""'
     sed -i -e '/externalBin/d' -e '/resources/d' tauri.conf.json
     sed -i -e '/sidecar/d' -e '/resources/d' tauri.linux.conf.json
+    chmod 777 ../.cargo
+    rm ../.cargo/config.toml
   '';
 
   nativeBuildInputs = [

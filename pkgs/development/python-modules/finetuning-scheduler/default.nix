@@ -1,13 +1,20 @@
 {
-  stdenv,
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
   setuptools,
-  pythonOlder,
-  pytestCheckHook,
-  torch,
+
+  # dependencies
   pytorch-lightning,
+  torch,
+
+  # tests
+  pythonOlder,
+  pythonAtLeast,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -39,12 +46,17 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
   pytestFlagsArray = [ "tests" ];
   disabledTests =
-    # torch._dynamo.exc.BackendCompilerFailed: backend='inductor' raised:
-    # LoweringException: ImportError: cannot import name 'triton_key' from 'triton.compiler.compiler'
     lib.optionals (pythonOlder "3.12") [
+      # torch._dynamo.exc.BackendCompilerFailed: backend='inductor' raised:
+      # LoweringException: ImportError: cannot import name 'triton_key' from 'triton.compiler.compiler'
       "test_fts_dynamo_enforce_p0"
       "test_fts_dynamo_resume"
       "test_fts_dynamo_intrafit"
+    ]
+    ++ lib.optionals (pythonAtLeast "3.13") [
+      # RuntimeError: Dynamo is not supported on Python 3.13+
+      "test_fts_dynamo_enforce_p0"
+      "test_fts_dynamo_resume"
     ]
     ++ lib.optionals (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) [
       # slightly exceeds numerical tolerance on aarch64-linux:

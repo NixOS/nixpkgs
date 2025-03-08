@@ -14,24 +14,25 @@ let
   src = fetchFromGitHub {
     owner = "definite";
     repo = "ibus-table-chinese";
-    rev = "f1f6a3384f021caa3b84c517e2495086f9c34507";
-    sha256 = "14wpw3pvyrrqvg7al37jk2dxqfj9r4zf88j8k2n2lmdc50f3xs7k";
+    rev = "3380c96b5230721e9b80685a719508c505b8137a";
+    hash = "sha256-Ymzkim1k6KQxcSX2LaczRsxV2DYCFxIWI5xulmhOrw8=";
   };
 
   cmakeFedoraSrc = fetchgit {
     url = "https://pagure.io/cmake-fedora.git";
     rev = "7d5297759aef4cd086bdfa30cf6d4b2ad9446992";
-    sha256 = "0mx9jvxpiva9v2ffaqlyny48iqr073h84yw8ln43z2avv11ipr7n";
+    hash = "sha256-9uQbQ9hbiT+IpYh7guA4IOOIiLeeYuWc2EntePuWqVc=";
   };
 in
 stdenv.mkDerivation {
   pname = "ibus-table-chinese";
-  version = "1.8.2";
+  version = "1.8.3";
 
   srcs = [
     src
     cmakeFedoraSrc
   ];
+
   sourceRoot = src.name;
 
   postUnpack = ''
@@ -73,18 +74,19 @@ stdenv.mkDerivation {
     cmake
     pkg-config
   ];
+
   buildInputs = [
     ibus
     ibus-table
     python3
   ];
 
-  meta = with lib; {
+  meta = {
     isIbusEngine = true;
     description = "Chinese tables for IBus-Table";
     homepage = "https://github.com/definite/ibus-table-chinese";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ pneumaticat ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ pneumaticat ];
   };
 }

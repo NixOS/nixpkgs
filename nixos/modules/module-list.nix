@@ -742,6 +742,7 @@
   ./services/matrix/dendrite.nix
   ./services/matrix/hebbot.nix
   ./services/matrix/hookshot.nix
+  ./services/matrix/matrix-alertmanager.nix
   ./services/matrix/maubot.nix
   ./services/matrix/mautrix-meta.nix
   ./services/matrix/mautrix-signal.nix
@@ -751,6 +752,7 @@
   ./services/matrix/mx-puppet-discord.nix
   ./services/matrix/pantalaimon.nix
   ./services/matrix/synapse.nix
+  ./services/matrix/synapse-auto-compressor.nix
   ./services/misc/airsonic.nix
   ./services/misc/amazon-ssm-agent.nix
   ./services/misc/ananicy.nix
@@ -1315,6 +1317,7 @@
   ./services/networking/trickster.nix
   ./services/networking/twingate.nix
   ./services/networking/ucarp.nix
+  ./services/networking/umurmur.nix
   ./services/networking/unbound.nix
   ./services/networking/unifi.nix
   ./services/networking/uptermd.nix
@@ -1502,10 +1505,12 @@
   ./services/web-apps/gancio.nix
   ./services/web-apps/gerrit.nix
   ./services/web-apps/glance.nix
+  ./services/web-apps/glitchtip.nix
   ./services/web-apps/gotify-server.nix
   ./services/web-apps/gotosocial.nix
   ./services/web-apps/grav.nix
   ./services/web-apps/grocy.nix
+  ./services/web-apps/part-db.nix
   ./services/web-apps/pixelfed.nix
   ./services/web-apps/goatcounter.nix
   ./services/web-apps/guacamole-client.nix

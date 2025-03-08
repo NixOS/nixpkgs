@@ -216,6 +216,7 @@ let
 
   isElectron = packageName == "electron";
   needsCompgen = chromiumVersionAtLeast "133";
+  rustcVersion = buildPackages.rustc.version;
 
   chromiumDeps = lib.mapAttrs (
     path: args:
@@ -478,18 +479,11 @@ let
         # Rebased variant of patch to build M126+ with LLVM 17.
         # staging-next will bump LLVM to 18, so we will be able to drop this soon.
         ./patches/chromium-126-llvm-17.patch
-      ]
-      ++ lib.optionals (versionRange "126" "129") [
         # Partial revert of https://github.com/chromium/chromium/commit/3687976b0c6d36cf4157419a24a39f6770098d61
         # allowing us to use our rustc and our clang.
-        # Rebased variant of patch right above to build M126+ with our rust and our clang.
-        ./patches/chromium-126-rust.patch
-      ]
-      ++ lib.optionals (chromiumVersionAtLeast "129") [
-        # Rebased variant of patch right above to build M129+ with our rust and our clang.
         ./patches/chromium-129-rust.patch
       ]
-      ++ lib.optionals (chromiumVersionAtLeast "130" && !ungoogled) [
+      ++ lib.optionals (!ungoogled) [
         # Our rustc.llvmPackages is too old for std::hardware_destructive_interference_size
         # and std::hardware_constructive_interference_size.
         # So let's revert the change for now and hope that our rustc.llvmPackages and
@@ -522,6 +516,9 @@ let
           revert = true;
           hash = "sha256-PuinMLhJ2W4KPXI5K0ujw85ENTB1wG7Hv785SZ55xnY=";
         })
+      ]
+      ++ lib.optionals (chromiumVersionAtLeast "134" && lib.versionOlder rustcVersion "1.86") [
+        ./patches/chromium-134-rust-adler2.patch
       ];
 
     postPatch =
@@ -726,7 +723,20 @@ let
         # Disable PGO because the profile data requires a newer compiler version (LLVM 14 isn't sufficient):
         chrome_pgo_phase = 0;
         clang_base_path = "${llvmCcAndBintools}";
-        use_qt = false;
+      }
+      // (
+        # M134 changed use_qt to use_qt5 (and use_qt6)
+        if chromiumVersionAtLeast "134" then
+          {
+            use_qt5 = false;
+            use_qt6 = false;
+          }
+        else
+          {
+            use_qt = false;
+          }
+      )
+      // {
         # To fix the build as we don't provide libffi_pic.a
         # (ld.lld: error: unable to find library -l:libffi_pic.a):
         use_system_libffi = true;
@@ -738,7 +748,7 @@ let
         enable_rust = true;
         # While we technically don't need the cache-invalidation rustc_version provides, rustc_version
         # is still used in some scripts (e.g. build/rust/std/find_std_rlibs.py).
-        rustc_version = buildPackages.rustc.version;
+        rustc_version = rustcVersion;
       }
       // lib.optionalAttrs (!(stdenv.buildPlatform.canExecute stdenv.hostPlatform)) {
         # https://www.mail-archive.com/v8-users@googlegroups.com/msg14528.html

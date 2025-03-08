@@ -7,7 +7,7 @@ index 4a58243..831aa04 100644
    def Install(self):
      import os
 -    installLibPath = os.path.join(self.installDir, 'lib')
-+    installLibPath = os.path.join(self.installDir, 'lib', '@PYTHON_SITEPACKAGES@')
++    installLibPath = os.path.join(self.installDir, '@PYTHON_SITEPACKAGES@')
      if self.setCompilers.isDarwin(self.log):
        apple = 'You may need to\n (csh/tcsh) setenv MACOSX_DEPLOYMENT_TARGET 10.X\n (sh/bash) MACOSX_DEPLOYMENT_TARGET=10.X; export MACOSX_DEPLOYMENT_TARGET\nbefore running make on PETSc'
      else:

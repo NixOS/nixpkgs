@@ -2,8 +2,8 @@
   lib,
   stdenv,
   callPackage,
-  version ? "0.3.6",
-  rev ? "8",
+  version ? "0.3.11",
+  rev ? "1",
   ...
 }@args:
 let
@@ -23,6 +23,7 @@ let
       "aarch64-darwin"
     ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    broken = stdenv.hostPlatform.isDarwin; # Upstream issue: https://github.com/lmstudio-ai/lmstudio-bug-tracker/issues/347
   };
 in
 if stdenv.hostPlatform.isDarwin then
@@ -35,7 +36,7 @@ if stdenv.hostPlatform.isDarwin then
     url =
       args.url
         or "https://installers.lmstudio.ai/darwin/arm64/${version}-${rev}/LM-Studio-${version}-${rev}-arm64.dmg";
-    hash = args.hash or "sha256-x4IRT1PjBz9eafmwNRyLVq+4/Rkptz6RVWDFdRrGnGY=";
+    hash = args.hash or "sha256-kXH3tAazEtl019IBxuavEI9QUamEH3b6UFYRYAO3Fxs=";
   }
 else
   callPackage ./linux.nix {
@@ -47,5 +48,5 @@ else
     url =
       args.url
         or "https://installers.lmstudio.ai/linux/x64/${version}-${rev}/LM-Studio-${version}-${rev}-x64.AppImage";
-    hash = args.hash or "sha256-laROBUr1HLoaQT6rYhhhulR1KZuKczNomKbrXXkDANY=";
+    hash = args.hash or "sha256-T8j0l2ZP53Zc0hgb2EyFeR0mH5YrNlz4UfzN0rO7bKU=";
   }

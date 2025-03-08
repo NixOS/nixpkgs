@@ -53,6 +53,6 @@ stdenv.mkDerivation rec {
     description = "Abstraction library for audio visualisations";
     homepage = "https://sourceforge.net/projects/libvisual/";
     license = lib.licenses.lgpl21Plus;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.freebsd;
   };
 }

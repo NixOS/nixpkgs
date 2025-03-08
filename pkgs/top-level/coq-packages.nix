@@ -44,6 +44,7 @@ let
       coq-elpi = callPackage ../development/coq-modules/coq-elpi {};
       coq-hammer = callPackage ../development/coq-modules/coq-hammer { };
       coq-hammer-tactics = callPackage ../development/coq-modules/coq-hammer/tactics.nix { };
+      CoqMatrix = callPackage ../development/coq-modules/coq-matrix { };
       coq-haskell = callPackage ../development/coq-modules/coq-haskell { };
       coq-lsp = callPackage ../development/coq-modules/coq-lsp {};
       coq-record-update = callPackage ../development/coq-modules/coq-record-update { };

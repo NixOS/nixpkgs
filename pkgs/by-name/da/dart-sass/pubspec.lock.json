@@ -170,11 +170,11 @@
       "dependency": "transitive",
       "description": {
         "name": "dart_mappable",
-        "sha256": "6eda273146ed930c1f161d0b29f4bc9ef9e87ecfb9341607833bf76b008fb7d5",
+        "sha256": "a88d1637354b8e3120433cbdf2b816dd9e38659b8a9b6ed8cb19cd101e12c545",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "4.3.1"
+      "version": "4.4.0"
     },
     "dartdoc": {
       "dependency": "direct dev",
@@ -500,11 +500,11 @@
       "dependency": "direct dev",
       "description": {
         "name": "pub_api_client",
-        "sha256": "1b95df9b91bc1d5edf21a46e74b7aad64eaf33d56467781bfd8d730539a1f57d",
+        "sha256": "b9c0184ce4a562d8cf2ebd7be235a25aa158b7c01bdef863cccadc5894644e26",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "3.1.0"
+      "version": "3.1.1"
     },
     "pub_semver": {
       "dependency": "direct main",
@@ -750,11 +750,11 @@
       "dependency": "transitive",
       "description": {
         "name": "web",
-        "sha256": "cd3543bd5798f6ad290ea73d210f423502e71900302dde696f8bff84bf89a1cb",
+        "sha256": "868d88a33d8a87b18ffc05f9f030ba328ffefba92d6c127917a2ba740f9cfe4a",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "1.1.0"
+      "version": "1.1.1"
     },
     "web_socket": {
       "dependency": "transitive",

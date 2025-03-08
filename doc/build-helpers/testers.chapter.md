@@ -118,7 +118,7 @@ It has two modes:
 
 ## `shellcheck` {#tester-shellcheck}
 
-Runs files through `shellcheck`, a static analysis tool for shell scripts.
+Run files through `shellcheck`, a static analysis tool for shell scripts, failing if there are any issues.
 
 :::{.example #ex-shellcheck}
 # Run `testers.shellcheck`
@@ -127,7 +127,7 @@ A single script
 
 ```nix
 testers.shellcheck {
-  name = "shellcheck";
+  name = "script";
   src = ./script.sh;
 }
 ```
@@ -139,7 +139,7 @@ let
   inherit (lib) fileset;
 in
 testers.shellcheck {
-  name = "shellcheck";
+  name = "nixbsd-activate";
   src = fileset.toSource {
     root = ./.;
     fileset = fileset.unions [
@@ -154,16 +154,79 @@ testers.shellcheck {
 
 ### Inputs {#tester-shellcheck-inputs}
 
-[`src` (path or string)]{#tester-shellcheck-param-src}
+`name` (string, optional)
+: The name of the test.
+  `name` will be required at a future point because it massively improves traceability of test failures, but is kept optional for now to avoid breaking existing usages.
+  Defaults to `run-shellcheck`.
+  The name of the derivation produced by the tester is `shellcheck-${name}` when `name` is supplied.
 
+`src` (path-like)
 : The path to the shell script(s) to check.
   This can be a single file or a directory containing shell files.
   All files in `src` will be checked, so you may want to provide `fileset`-based source instead of a whole directory.
 
 ### Return value {#tester-shellcheck-return}
 
-A derivation that runs `shellcheck` on the given script(s).
+A derivation that runs `shellcheck` on the given script(s), producing an empty output if no issues are found.
 The build will fail if `shellcheck` finds any issues.
+
+## `shfmt` {#tester-shfmt}
+
+Run files through `shfmt`, a shell script formatter, failing if any files are reformatted.
+
+:::{.example #ex-shfmt}
+# Run `testers.shfmt`
+
+A single script
+
+```nix
+testers.shfmt {
+  name = "script";
+  src = ./script.sh;
+}
+```
+
+Multiple files
+
+```nix
+let
+  inherit (lib) fileset;
+in
+testers.shfmt {
+  name = "nixbsd";
+  src = fileset.toSource {
+    root = ./.;
+    fileset = fileset.unions [
+      ./lib.sh
+      ./nixbsd-activate
+    ];
+  };
+}
+```
+
+:::
+
+### Inputs {#tester-shfmt-inputs}
+
+`name` (string)
+: The name of the test.
+  `name` is required because it massively improves traceability of test failures.
+  The name of the derivation produced by the tester is `shfmt-${name}`.
+
+`src` (path-like)
+: The path to the shell script(s) to check.
+  This can be a single file or a directory containing shell files.
+  All files in `src` will be checked, so you may want to provide `fileset`-based source instead of a whole directory.
+
+`indent` (integer, optional)
+: The number of spaces to use for indentation.
+  Defaults to `2`.
+  A value of `0` indents with tabs.
+
+### Return value {#tester-shfmt-return}
+
+A derivation that runs `shfmt` on the given script(s), producing an empty output upon success.
+The build will fail if `shfmt` reformats anything.
 
 ## `testVersion` {#tester-testVersion}
 
@@ -346,6 +409,97 @@ testers.testEqualContents {
 ```
 
 :::
+
+## `testEqualArrayOrMap` {#tester-testEqualArrayOrMap}
+
+Check that bash arrays (including associative arrays, referred to as "maps") are populated correctly.
+
+This can be used to ensure setup hooks are registered in a certain order, or to write unit tests for shell functions which transform arrays.
+
+:::{.example #ex-testEqualArrayOrMap-test-function-add-cowbell}
+
+# Test a function which appends a value to an array
+
+```nix
+testers.testEqualArrayOrMap {
+  name = "test-function-add-cowbell";
+  valuesArray = [
+    "cowbell"
+    "cowbell"
+  ];
+  expectedArray = [
+    "cowbell"
+    "cowbell"
+    "cowbell"
+  ];
+  script = ''
+    addCowbell() {
+      local -rn arrayNameRef="$1"
+      arrayNameRef+=( "cowbell" )
+    }
+
+    nixLog "appending all values in valuesArray to actualArray"
+    for value in "''${valuesArray[@]}"; do
+      actualArray+=( "$value" )
+    done
+
+    nixLog "applying addCowbell"
+    addCowbell actualArray
+  '';
+}
+```
+
+:::
+
+### Inputs {#tester-testEqualArrayOrMap-inputs}
+
+NOTE: Internally, this tester uses `__structuredAttrs` to handle marshalling between Nix expressions and shell variables.
+This imposes the restriction that arrays and "maps" have values which are string-like.
+
+NOTE: At least one of `expectedArray` and `expectedMap` must be provided.
+
+`name` (string)
+
+: The name of the test.
+
+`script` (string)
+
+: The singular task of `script` is to populate `actualArray` or `actualMap` (it may populate both).
+  To do this, `script` may access the following shell variables:
+
+  - `valuesArray` (available when `valuesArray` is provided to the tester)
+  - `valuesMap` (available when `valuesMap` is provided to the tester)
+  - `actualArray` (available when `expectedArray` is provided to the tester)
+  - `actualMap` (available when `expectedMap` is provided to the tester)
+
+  While both `expectedArray` and `expectedMap` are in scope during the execution of `script`, they *must not* be accessed or modified from within `script`.
+
+`valuesArray` (array of string-like values, optional)
+
+: An array of string-like values.
+  This array may be used within `script`.
+
+`valuesMap` (attribute set of string-like values, optional)
+
+: An attribute set of string-like values.
+  This attribute set may be used within `script`.
+
+`expectedArray` (array of string-like values, optional)
+
+: An array of string-like values.
+  This array *must not* be accessed or modified from within `script`.
+  When provided, `script` is expected to populate `actualArray`.
+
+`expectedMap` (attribute set of string-like values, optional)
+
+: An attribute set of string-like values.
+  This attribute set *must not* be accessed or modified from within `script`.
+  When provided, `script` is expected to populate `actualMap`.
+
+### Return value {#tester-testEqualArrayOrMap-return}
+
+The tester produces an empty output and only succeeds when `expectedArray` and `expectedMap` match `actualArray` and `actualMap`, respectively, when non-null.
+The build log will contain differences encountered.
 
 ## `testEqualDerivation` {#tester-testEqualDerivation}
 

@@ -2,27 +2,22 @@
   buildPythonPackage,
   fetchFromGitHub,
   lib,
-  nclib,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "nhc";
-  version = "0.3.9";
+  version = "0.4.10";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "vandeurenglenn";
     repo = "nhc";
     tag = "v${version}";
-    hash = "sha256-OoWRAELy6w+LVfhBJyKReQUYD/yr4POFH+ScOgp3xyU=";
+    hash = "sha256-oweR7SX8ltL49JJJK3yRNnXL952kEbcLVnmIYXRcLUA=";
   };
 
   build-system = [ setuptools ];
-
-  dependencies = [
-    nclib
-  ];
 
   pythonImportsCheck = [ "nhc" ];
 

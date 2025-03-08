@@ -10,12 +10,12 @@
 stdenv.mkDerivation {
   pname = "pikchr";
   # To update, use the last check-in in https://pikchr.org/home/timeline?r=trunk
-  version = "0-unstable-2024-02-12";
+  version = "0-unstable-2025-02-28";
 
   src = fetchfossil {
     url = "https://pikchr.org/home";
-    rev = "ae3317b0ec2e635c";
-    hash = "sha256-kCbd6XAaUCwFVYOPPLIux7wW62KRfVnfaxT8Z1RGFfc=";
+    rev = "b7fbd56c4eb82ab9";
+    hash = "sha256-7oW1IYYk3YKPjOUPP6qYIdR0oGo9pRDDlyu30J4B3bI=";
   };
 
   # can't open generated html files

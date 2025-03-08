@@ -21,18 +21,30 @@
   pkg-config,
   unzip,
   libX11,
-  libXNVCtrl,
   wayland,
+  libXNVCtrl,
   nlohmann_json,
   spdlog,
+  libxkbcommon,
   glew,
   glfw,
-  xorg,
-  gamescopeSupport ? true, # build mangoapp and mangohudctl
+  libXrandr,
+  x11Support ? true,
+  waylandSupport ? true,
+  nvidiaSupport ? true,
+  gamescopeSupport ? true,
+  mangoappSupport ? gamescopeSupport,
+  mangohudctlSupport ? gamescopeSupport,
   lowerBitnessSupport ? stdenv.hostPlatform.isx86_64, # Support 32 bit on 64bit
   nix-update-script,
-  libxkbcommon,
 }:
+
+assert lib.assertMsg (
+  x11Support || waylandSupport
+) "either x11Support or waylandSupport should be enabled";
+
+assert lib.assertMsg (nvidiaSupport -> x11Support) "nvidiaSupport requires x11Support";
+assert lib.assertMsg (mangoappSupport -> x11Support) "mangoappSupport requires x11Support";
 
 let
   # Derived from subprojects/imgui.wrap
@@ -82,14 +94,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mangohud";
-  version = "0.8.0";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "flightlessmango";
     repo = "MangoHud";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-yITiu+2l7PItAmL+6gX9p5Tvf/P8ovttGIo6kJAOqxs=";
+    hash = "sha256-FvPhnOvcYE8vVB5R+ZRmuZxrC9U4GA338V7VAuUlHCE=";
   };
 
   outputs = [
@@ -128,11 +140,6 @@ stdenv.mkDerivation (finalAttrs: {
       libdbus = dbus.lib;
       inherit hwdata;
     })
-
-    # Fix crash when starting hidden
-    # Upstream PR: https://github.com/flightlessmango/MangoHud/pull/1570
-    # FIXME: remove when merged
-    ./fix-crash.patch
   ];
 
   postPatch = ''
@@ -156,32 +163,31 @@ stdenv.mkDerivation (finalAttrs: {
     )
   '';
 
-  mesonFlags =
+  mesonFlags = [
+    "-Duse_system_spdlog=enabled"
+    "-Dtests=disabled" # amdgpu test segfaults in nix sandbox
+    (lib.mesonEnable "with_x11" x11Support)
+    (lib.mesonEnable "with_wayland" waylandSupport)
+    (lib.mesonEnable "with_xnvctrl" nvidiaSupport)
+    (lib.mesonBool "mangoapp" mangoappSupport)
+    (lib.mesonBool "mangohudctl" mangohudctlSupport)
+  ];
+
+  nativeBuildInputs =
     [
-      "-Dwith_wayland=enabled"
-      "-Duse_system_spdlog=enabled"
-      "-Dtests=disabled" # amdgpu test segfaults in nix sandbox
+      addDriverRunpath
+      glslang
+      mako
+      meson
+      ninja
+      pkg-config
+      unzip
     ]
-    ++ lib.optionals gamescopeSupport [
-      "-Dmangoapp=true"
-      "-Dmangohudctl=true"
-    ];
-
-  nativeBuildInputs = [
-    addDriverRunpath
-    glslang
-    mako
-    meson
-    ninja
-    pkg-config
-    unzip
-
     # Only the headers are used from these packages
     # The corresponding libraries are loaded at runtime from the app's runpath
-    libX11
-    libXNVCtrl
-    wayland
-  ];
+    ++ lib.optional x11Support libX11
+    ++ lib.optional waylandSupport wayland
+    ++ lib.optional nvidiaSupport libXNVCtrl;
 
   buildInputs =
     [
@@ -189,11 +195,11 @@ stdenv.mkDerivation (finalAttrs: {
       nlohmann_json
       spdlog
     ]
-    ++ lib.optionals gamescopeSupport [
+    ++ lib.optional (x11Support || waylandSupport) libxkbcommon
+    ++ lib.optionals mangoappSupport [
       glew
       glfw
-      xorg.libXrandr
-      libxkbcommon
+      libXrandr
     ];
 
   doCheck = true;
@@ -222,14 +228,14 @@ stdenv.mkDerivation (finalAttrs: {
     # layer under the same name.
     lib.optionalString (layerPlatform != null) ''
       substituteInPlace $out/share/vulkan/implicit_layer.d/MangoHud.${layerPlatform}.json \
-        --replace "VK_LAYER_MANGOHUD_overlay" "VK_LAYER_MANGOHUD_overlay_${toString stdenv.hostPlatform.parsed.cpu.bits}"
+        --replace-fail "VK_LAYER_MANGOHUD_overlay" "VK_LAYER_MANGOHUD_overlay_${toString stdenv.hostPlatform.parsed.cpu.bits}"
     ''
-    + ''
+    + lib.optionalString nvidiaSupport ''
       # Add OpenGL driver and libXNVCtrl paths to RUNPATH to support NVIDIA cards
       addDriverRunpath "$out/lib/mangohud/libMangoHud.so"
       patchelf --add-rpath ${libXNVCtrl}/lib "$out/lib/mangohud/libMangoHud.so"
     ''
-    + lib.optionalString gamescopeSupport ''
+    + lib.optionalString mangoappSupport ''
       addDriverRunpath "$out/bin/mangoapp"
     '';
 

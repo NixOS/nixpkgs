@@ -20,13 +20,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "noto-fonts${suffix}";
-  version = "2025.02.01";
+  version = "2025.03.01";
 
   src = fetchFromGitHub {
     owner = "notofonts";
     repo = "notofonts.github.io";
     rev = "noto-monthly-release-${version}";
-    hash = "sha256-IXQmHBG7yvngifLTVLwkL+10lfqofgERtNmgZSvgrt8=";
+    hash = "sha256-49p4LFGywuA6zNZEw0VmtykmDUBtRkzOKYAb4sG4fK4=";
   };
 
   outputs = [

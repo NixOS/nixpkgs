@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
       # Expects SDL2.framework in specific location, which we don't have
       # Change where SDL2 headers are searched for to match what we do have
       substituteInPlace RecastDemo/CMakeLists.txt \
-        --replace 'include_directories(''${SDL2_LIBRARY}/Headers)' 'include_directories(${SDL2.dev}/include/SDL2)'
+        --replace 'include_directories(''${SDL2_LIBRARY}/Headers)' 'include_directories(${lib.getInclude SDL2}/include/SDL2)'
     '';
 
   doCheck = true;

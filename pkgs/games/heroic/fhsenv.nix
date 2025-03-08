@@ -35,6 +35,7 @@ buildFHSEnv {
       perl
       psmisc
       python3
+      umu-launcher
       unzip
       which
       xorg.xrandr

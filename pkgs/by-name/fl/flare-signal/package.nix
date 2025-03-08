@@ -22,19 +22,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "flare";
-  version = "0.15.9";
+  version = "0.15.12";
 
   src = fetchFromGitLab {
     domain = "gitlab.com";
     owner = "schmiddi-on-mobile";
     repo = "flare";
     rev = finalAttrs.version;
-    hash = "sha256-48BJ2k0j6y2IjwZg6ZBwdVNUV+u3lLNYdA04vyKP2U4=";
+    hash = "sha256-qj34x/e5Nc3wPdFaHFZHQ8uCMHIlxfVNyvlp7eb3tSo=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-ckTROUWLAkkWfqOyUjEa/RQGd7CYSupqf4Sr6dOLfwU=";
+    hash = "sha256-Nri3GOq7aaY3yIVQESMPUck3z8++FnAmIbIdkTe+GXw=";
   };
 
   nativeBuildInputs = [

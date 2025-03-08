@@ -9,7 +9,7 @@
 (
   (buildMozillaMach rec {
     pname = "floorp";
-    packageVersion = "11.23.1";
+    packageVersion = "11.24.0";
     applicationName = "Floorp";
     binaryName = "floorp";
     branding = "browser/branding/official";
@@ -17,14 +17,14 @@
     allowAddonSideload = true;
 
     # Must match the contents of `browser/config/version.txt` in the source tree
-    version = "128.8.0";
+    version = "128.9.0";
 
     src = fetchFromGitHub {
       owner = "Floorp-Projects";
       repo = "Floorp";
       fetchSubmodules = true;
       rev = "v${packageVersion}";
-      hash = "sha256-oKLpxOXukoTksJag+o4JNwSeNQA0kYP2wUTOWFTCVqk=";
+      hash = "sha256-3Y34HUtxEqcEr2DC2frOdbCiq59oWcDLIFABl+N5K+Q=";
     };
 
     extraConfigureFlags = [

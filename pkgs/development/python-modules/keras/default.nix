@@ -14,6 +14,7 @@
   ml-dtypes,
   namex,
   numpy,
+  tf2onnx,
   onnxruntime,
   optree,
   packaging,
@@ -30,18 +31,19 @@
   pytestCheckHook,
   tf-keras,
   torch,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "keras";
-  version = "3.8.0";
+  version = "3.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "keras-team";
     repo = "keras";
     tag = "v${version}";
-    hash = "sha256-sbAGiI1Ai0MPiQ8AMpa5qX6hYt/plsIqhn9xYLBb120=";
+    hash = "sha256-T1QY1GwE0X5ARtAueB6kF310kTaeOA+8Obdzx0NrOUs=";
   };
 
   build-system = [
@@ -54,6 +56,7 @@ buildPythonPackage rec {
     ml-dtypes
     namex
     numpy
+    tf2onnx
     onnxruntime
     optree
     packaging
@@ -75,40 +78,26 @@ buildPythonPackage rec {
     pytestCheckHook
     tf-keras
     torch
+    writableTmpDirAsHomeHook
   ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
+  disabledTests = [
+    # Tries to install the package in the sandbox
+    "test_keras_imports"
 
-  disabledTests =
-    [
-      # Requires onnx which is currently broken
-      "test_export_onnx"
-
-      # Tries to install the package in the sandbox
-      "test_keras_imports"
-
-      # TypeError: this __dict__ descriptor does not support '_DictWrapper' objects
-      "test_reloading_default_saved_model"
-
-      # ValueError: The truth value of an empty array is ambiguous.
-      # Use `array.size > 0` to check that an array is not empty.
-      "test_min_max_norm"
-    ]
-    ++ lib.optionals stdenv.isDarwin [
-      # TypeError: Cannot convert a MPS Tensor to float64 dtype as the MPS framework doesn't support float64. Please use float32 instead.
-      "test_dynamic_backend_torch"
-      # AttributeError: module 'numpy' has no attribute 'float128'. Did you mean: 'float16'?
-      "test_spectrogram_error"
-    ];
+    # TypeError: this __dict__ descriptor does not support '_DictWrapper' objects
+    "test_reloading_default_saved_model"
+  ];
 
   disabledTestPaths = [
-    # Require onnx which is currently broken
+    # These tests succeed when run individually, but crash within the full test suite:
+    # ImportError: /nix/store/4bw0x7j3wfbh6i8x3plmzknrdwdzwfla-abseil-cpp-20240722.1/lib/libabsl_cord_internal.so.2407.0.0:
+    # undefined symbol: _ZN4absl12lts_2024072216strings_internal13StringifySink6AppendESt17basic_string_viewIcSt11char_traitsIcEE
     "keras/src/export/onnx_test.py"
 
-    # Datasets are downloaded from the internet
+    # Require internet access
     "integration_tests/dataset_tests"
+    "keras/src/applications/applications_test.py"
 
     # TypeError: test_custom_fit.<locals>.CustomModel.train_step() missing 1 required positional argument: 'data'
     "integration_tests/jax_custom_fit_test.py"
@@ -124,14 +113,8 @@ buildPythonPackage rec {
     # AssertionError: 0 != 2
     "integration_tests/torch_workflow_test.py"
 
-    # Most tests require internet access
-    "keras/src/applications/applications_test.py"
-
     # TypeError: this __dict__ descriptor does not support '_DictWrapper' objects
     "keras/src/backend/tensorflow/saved_model_test.py"
-
-    # KeyError: 'Unable to synchronously open object (bad object header version number)'
-    "keras/src/saving/file_editor_test.py"
   ];
 
   meta = {

@@ -157,6 +157,10 @@ qtModule (
         stripLen = 1;
         extraPrefix = "src/3rdparty/";
       })
+
+      # Fix race condition exposed by missing dependency
+      # https://bugs.gentoo.org/933368
+      ./qtwebengine-fix_build_pdf_extension_util.patch
     ];
 
     postPatch =

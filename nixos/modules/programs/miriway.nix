@@ -65,7 +65,10 @@ in
 
   config = lib.mkIf cfg.enable {
     environment = {
-      systemPackages = [ pkgs.miriway ];
+      systemPackages = with pkgs; [
+        miriway
+        vanilla-dmz
+      ];
       etc = {
         "xdg/xdg-miriway/miriway-shell.config".text = cfg.config;
       };
@@ -80,6 +83,11 @@ in
     services.displayManager.sessionPackages = [ pkgs.miriway ];
 
     xdg.icons.enable = true;
+    xdg.icons.fallbackCursorThemes = lib.mkDefault [
+      # Miriway looks for "default" theme, fails to start if not present
+      # Mir normally looks for DMZ-White theme if none specified, so make that present as the default
+      "DMZ-White"
+    ];
   };
 
   meta.maintainers = with lib.maintainers; [ OPNA2608 ];
