@@ -1,94 +1,120 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, wrapQtAppsHook
-, python3
-, zbar
-, secp256k1
-, enableQt ? true
-, qtwayland
+{
+  lib,
+  stdenv,
+  enableQt ? true,
+  fetchFromGitHub,
+  python3,
+  qtwayland,
+  secp256k1,
+  grpc-tools,
+  wrapQtAppsHook,
+  zbar,
 }:
 
 let
   version = "4.5.4";
 
   libsecp256k1_name =
-    if stdenv.hostPlatform.isLinux then "libsecp256k1.so.{v}"
-    else if stdenv.hostPlatform.isDarwin then "libsecp256k1.{v}.dylib"
-    else "libsecp256k1${stdenv.hostPlatform.extensions.sharedLibrary}";
+    if stdenv.hostPlatform.isLinux then
+      "libsecp256k1.so.{v}"
+    else if stdenv.hostPlatform.isDarwin then
+      "libsecp256k1.{v}.dylib"
+    else
+      "libsecp256k1${stdenv.hostPlatform.extensions.sharedLibrary}";
 
   libzbar_name =
-    if stdenv.hostPlatform.isLinux then "libzbar.so.0"
-    else if stdenv.hostPlatform.isDarwin then "libzbar.0.dylib"
-    else "libzbar${stdenv.hostPlatform.extensions.sharedLibrary}";
+    if stdenv.hostPlatform.isLinux then
+      "libzbar.so.0"
+    else if stdenv.hostPlatform.isDarwin then
+      "libzbar.0.dylib"
+    else
+      "libzbar${stdenv.hostPlatform.extensions.sharedLibrary}";
 
 in
 
 python3.pkgs.buildPythonApplication {
   pname = "electrum-grs";
   inherit version;
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Groestlcoin";
     repo = "electrum-grs";
     rev = "refs/tags/v${version}";
-    sha256 = "1k078jg3bw4n3kcxy917m30x1skxm679w8hcw8mlxb94ikrjc66h";
+    hash = "sha256-0Bgm84wkrU4r4gwino6pferQwagnJN/ZHJbwNZ5EB8w=";
   };
 
-  nativeBuildInputs = lib.optionals enableQt [ wrapQtAppsHook ];
+  pythonRelaxDeps = [ "aiorpcx" ];
+
+  postPatch =
+    ''
+      # make compatible with protobuf4 by easing dependencies ...
+      substituteInPlace ./contrib/requirements/requirements.txt \
+        --replace-fail "protobuf>=3.20,<4" "protobuf>=3.20"
+      # ... and regenerating the paymentrequest_pb2.py file
+      protoc --python_out=. electrum_grs/paymentrequest.proto
+
+      substituteInPlace ./electrum_grs/ecc_fast.py \
+        --replace-fail ${libsecp256k1_name} ${secp256k1}/lib/libsecp256k1${stdenv.hostPlatform.extensions.sharedLibrary}
+    ''
+    + (
+      if enableQt then
+        ''
+          substituteInPlace ./electrum_grs/qrscanner.py \
+            --replace-fail ${libzbar_name} ${zbar.lib}/lib/libzbar${stdenv.hostPlatform.extensions.sharedLibrary}
+        ''
+      else
+        ''
+          sed -i '/qdarkstyle/d' contrib/requirements/requirements.txt
+        ''
+    );
+
+  build-system = with python3.pkgs; [ setuptools ];
+
+  nativeBuildInputs = [ grpc-tools ] ++ lib.optionals enableQt [ wrapQtAppsHook ];
+
   buildInputs = lib.optional (stdenv.hostPlatform.isLinux && enableQt) qtwayland;
 
-  propagatedBuildInputs = with python3.pkgs; [
-    aiohttp
-    aiohttp-socks
-    aiorpcx
-    attrs
-    bitstring
-    cryptography
-    dnspython
-    groestlcoin-hash
-    jsonrpclib-pelix
-    matplotlib
-    pbkdf2
-    protobuf
-    pysocks
-    qrcode
-    requests
-    certifi
-    jsonpatch
-    # plugins
-    btchip-python
-    ledger-bitcoin
-    ckcc-protocol
-    keepkey
-    trezor
-    bitbox02
-    cbor
-    pyserial
-  ] ++ lib.optionals enableQt [
-    pyqt5
-    qdarkstyle
-  ];
+  dependencies =
+    with python3.pkgs;
+    [
+      aiohttp
+      aiohttp-socks
+      aiorpcx
+      attrs
+      bitstring
+      certifi
+      cryptography
+      dnspython
+      groestlcoin-hash
+      jsonpatch
+      jsonrpclib-pelix
+      matplotlib
+      pbkdf2
+      protobuf
+      pysocks
+      qrcode
+      requests
+      # plugins
+      bitbox02
+      btchip-python
+      cbor
+      ckcc-protocol
+      keepkey
+      ledger-bitcoin
+      pyserial
+      trezor
+    ]
+    ++ lib.optionals enableQt [
+      pyqt6
+      qdarkstyle
+    ];
 
-  checkInputs = with python3.pkgs; lib.optionals enableQt [
-    pyqt6
-  ];
-
-  postPatch = ''
-    # make compatible with protobuf4 by easing dependencies ...
-    substituteInPlace ./contrib/requirements/requirements.txt \
-      --replace "protobuf>=3.20,<4" "protobuf>=3.20"
-    # ... and regenerating the paymentrequest_pb2.py file
-    protoc --python_out=. electrum_grs/paymentrequest.proto
-
-    substituteInPlace ./electrum_grs/ecc_fast.py \
-      --replace ${libsecp256k1_name} ${secp256k1}/lib/libsecp256k1${stdenv.hostPlatform.extensions.sharedLibrary}
-  '' + (if enableQt then ''
-    substituteInPlace ./electrum_grs/qrscanner.py \
-      --replace ${libzbar_name} ${zbar.lib}/lib/libzbar${stdenv.hostPlatform.extensions.sharedLibrary}
-  '' else ''
-    sed -i '/qdarkstyle/d' contrib/requirements/requirements.txt
-  '');
+  checkInputs =
+    with python3.pkgs;
+    lib.optionals enableQt [
+      pyqt6
+    ];
 
   postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace $out/share/applications/electrum-grs.desktop \
