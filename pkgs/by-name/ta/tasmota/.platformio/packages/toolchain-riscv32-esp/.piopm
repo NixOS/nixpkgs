@@ -1,0 +1,12 @@
+{
+  "type": "tool",
+  "name": "toolchain-riscv32-esp",
+  "version": "13.2.0+20240530",
+  "spec": {
+    "owner": "platformio",
+    "id": 16927,
+    "name": "toolchain-riscv32-esp",
+    "requirements": null,
+    "uri": null
+  }
+}
