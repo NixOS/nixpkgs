@@ -1505,7 +1505,8 @@ mapAliases {
   transmission = lib.warnOnInstantiate (transmission3Warning {}) transmission_3; # Added 2024-06-10
   transmission-gtk = lib.warnOnInstantiate (transmission3Warning {suffix = "-gtk";}) transmission_3-gtk; # Added 2024-06-10
   transmission-qt = lib.warnOnInstantiate (transmission3Warning {suffix = "-qt";}) transmission_3-qt; # Added 2024-06-10
-  treefmt = treefmt2; # 2024-06-28
+  treefmt1 = throw "treefmt1 has been removed as it is not maintained anymore. Consider using `treefmt` instead."; # 2025-03-06
+  treefmt2 = lib.warnOnInstantiate "treefmt2 has been renamed to treefmt" treefmt; # 2025-03-06
   libtransmission = lib.warnOnInstantiate (transmission3Warning {prefix = "lib";}) libtransmission_3; # Added 2024-06-10
   tracker = lib.warnOnInstantiate "tracker has been renamed to tinysparql" tinysparql; # Added 2024-09-30
   tracker-miners = lib.warnOnInstantiate "tracker-miners has been renamed to localsearch" localsearch; # Added 2024-09-30
