@@ -13,7 +13,7 @@
   icu75,
   pango,
   inih,
-  withWindowSystem ? null,
+  withWindowSystem ? if stdenv.hostPlatform.isLinux then "all" else "x11",
   xorg,
   libxkbcommon,
   libGLU,
@@ -38,15 +38,6 @@
 }:
 
 let
-  # default value of withWindowSystem
-  withWindowSystem' =
-    if withWindowSystem != null then
-      withWindowSystem
-    else if stdenv.hostPlatform.isLinux then
-      "all"
-    else
-      "x11";
-
   windowSystems = {
     all = windowSystems.x11 ++ windowSystems.wayland;
     x11 = [
@@ -76,7 +67,7 @@ let
 in
 
 # check that given window system is valid
-assert lib.assertOneOf "withWindowSystem" withWindowSystem' (builtins.attrNames windowSystems);
+assert lib.assertOneOf "withWindowSystem" withWindowSystem (builtins.attrNames windowSystems);
 # check that every given backend is valid
 assert builtins.all (
   b: lib.assertOneOf "each backend" b (builtins.attrNames backends)
@@ -98,7 +89,7 @@ stdenv.mkDerivation rec {
   };
 
   mesonFlags = [
-    "-Dwindows=${withWindowSystem'}"
+    "-Dwindows=${withWindowSystem}"
     "-Dtest=enabled"
     "-Dman=enabled"
   ] ++ backendFlags;
@@ -122,7 +113,7 @@ stdenv.mkDerivation rec {
       pango
       inih
     ]
-    ++ windowSystems."${withWindowSystem'}"
+    ++ windowSystems."${withWindowSystem}"
     ++ builtins.map (b: backends."${b}") withBackends;
 
   patches = [
@@ -138,7 +129,7 @@ stdenv.mkDerivation rec {
     install -Dm644 ../files/imv.desktop $out/share/applications/
   '';
 
-  postFixup = lib.optionalString (withWindowSystem' == "all") ''
+  postFixup = lib.optionalString (withWindowSystem == "all") ''
     # The `bin/imv` script assumes imv-wayland or imv-x11 in PATH,
     # so we have to fix those to the binaries we installed into the /nix/store
 
