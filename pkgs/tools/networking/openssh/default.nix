@@ -19,7 +19,7 @@ in
     };
 
     extraPatches = [ ./ssh-keysign-8.5.patch ];
-    extraMeta.maintainers = lib.teams.helsinki-systems.members;
+    extraMeta.maintainers = lib.teams.helsinki-systems.members ++ [ lib.maintainers.philiptaron ];
   };
 
   openssh_hpn = common rec {

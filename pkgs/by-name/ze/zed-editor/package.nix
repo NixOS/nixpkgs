@@ -24,10 +24,9 @@
   makeFontsConf,
   vulkan-loader,
   envsubst,
-  gitUpdater,
+  nix-update-script,
   cargo-about,
   versionCheckHook,
-  zed-editor,
   buildFHSEnv,
   cargo-bundle,
   git,
@@ -59,6 +58,7 @@ let
   # extension tooling without significant pain.
   fhs =
     {
+      zed-editor,
       additionalPkgs ? pkgs: [ ],
     }:
     buildFHSEnv {
@@ -98,7 +98,7 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zed-editor";
-  version = "0.176.2";
+  version = "0.176.3";
 
   outputs =
     [ "out" ]
@@ -110,7 +110,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "zed-industries";
     repo = "zed";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-uTq9/skBMz8n2NjGBQKOIOMp/rTDL+azEUzV4jTUJvE=";
+    hash = "sha256-5bn70R5phHZmAf/71IK8o2laHcCo92cCiaKQ7xo0Uag=";
   };
 
   patches = [
@@ -136,7 +136,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-b4YTVrz2nOwQnVU42E+LD1YjsUAWN7+fCr2z8IVwH6o=";
+  cargoHash = "sha256-IaAY1u5xLomvUtb4FjE4uE0w01rMmyR/DH0QD9cOK5Y=";
 
   nativeBuildInputs =
     [
@@ -301,25 +301,32 @@ rustPlatform.buildRustPackage (finalAttrs: {
     versionCheckHook
   ];
   versionCheckProgram = "${placeholder "out"}/bin/zeditor";
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {
-    updateScript = gitUpdater {
-      rev-prefix = "v";
-      ignoredVersions = "(*-pre|0.999999.0|0.9999-temporary)";
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "^v(?!.*(?:-pre|0\.999999\.0|0\.9999-temporary)$)(.+)$"
+      ];
     };
-    fhs = fhs { };
-    fhsWithPackages = f: fhs { additionalPkgs = f; };
+    fhs = fhs { zed-editor = finalAttrs.finalPackage; };
+    fhsWithPackages =
+      f:
+      fhs {
+        zed-editor = finalAttrs.finalPackage;
+        additionalPkgs = f;
+      };
     tests =
       {
         remoteServerVersion = testers.testVersion {
-          package = zed-editor.remote_server;
+          package = finalAttrs.finalPackage.remote_server;
           command = "zed-remote-server-stable-${finalAttrs.version} version";
         };
       }
       // lib.optionalAttrs stdenv.hostPlatform.isLinux {
-        withGles = zed-editor.override { withGLES = true; };
+        withGles = finalAttrs.finalPackage.override { withGLES = true; };
       };
   };
 

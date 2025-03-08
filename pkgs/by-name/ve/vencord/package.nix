@@ -7,32 +7,45 @@
   lib,
   nix-update,
   nodejs,
-  pnpm_9,
+  pnpm,
+  fetchurl,
   stdenv,
   writeShellScript,
   buildWebExtension ? false,
 }:
+let
+  # Credit to: @ScarsTRF (https://github.com/ScarsTRF/nixcord/blob/652dc8067b8004517ea43ebcc8d93a64f95d4327/vencord.nix#L28-L37)
+  # Due to pnpm package 10.5.2 there is a issue when building.
+  # Substituting pnpm with version 10.4.1 fixes this issue.
+  # This should be fixed in a newer version of pnpm.
+  pnpm_10-4 = pnpm.overrideAttrs (oldAttrs: {
+    version = "10.4.1";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/pnpm/-/pnpm-10.4.1.tgz";
+      sha256 = "sha256-S3Aoh5hplZM9QwCDawTW0CpDvHK1Lk9+k6TKYIuVkZc=";
+    };
+  });
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "vencord";
-  version = "1.11.5";
+  version = "1.11.6";
 
   src = fetchFromGitHub {
     owner = "Vendicated";
     repo = "Vencord";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-hdlFL95DFVeUs08/wg6EA5CfV6KeUGaS9kcLGRMyNgY=";
+    hash = "sha256-8KAt7yFGT/DBlg2VJ7ejsOJ67Sp5cuuaKEWK3+VpL4E=";
   };
 
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = pnpm_10-4.fetchDeps {
     inherit (finalAttrs) pname src;
-
-    hash = "sha256-0afgeJkK0OQWoqF0b8pHPMsiTKox84YmwBhtNWGyVAg=";
+    hash = "sha256-g9BSVUKpn74D9eIDj/lS1Y6w/+AnhCw++st4s4REn+A=";
   };
 
   nativeBuildInputs = [
     git
     nodejs
-    pnpm_9.configHook
+    pnpm_10-4.configHook
   ];
 
   env = {
@@ -89,15 +102,15 @@ stdenv.mkDerivation (finalAttrs: {
     exec nix-update --version "$latestTag" "$@"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Vencord web extension";
     homepage = "https://github.com/Vendicated/Vencord";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
+      donteatoreo
       FlafyDev
       NotAShelf
       Scrumplex
-      donteatoreo
     ];
   };
 })
