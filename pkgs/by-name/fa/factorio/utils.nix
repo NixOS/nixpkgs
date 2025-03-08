@@ -9,12 +9,7 @@
 let
   inherit (lib)
     flatten
-    head
-    optionals
     optionalString
-    removeSuffix
-    replaceStrings
-    splitString
     unique
     ;
 in
@@ -24,8 +19,7 @@ in
     modsDatFile: # data file for mod settings
     extraModList: # extra content for mod-list.json
     let
-      recursiveDeps = modDrv: [ modDrv ] ++ map recursiveDeps modDrv.deps;
-      modDrvs = unique (flatten (map recursiveDeps mods));
+      modDrvs = unique (flatten mods);
 
       modList = map (mod: {
         name = mod.pname;
@@ -52,37 +46,6 @@ in
         + (optionalString (modsDatFile != null) ''
           cp ${modsDatFile} $out/mod-settings.dat
         '');
-    };
-
-  modDrv =
-    { allRecommendedMods, allOptionalMods }:
-    {
-      src,
-      name ? null,
-      deps ? [ ],
-      optionalDeps ? [ ],
-      recommendedDeps ? [ ],
-    }:
-    stdenv.mkDerivation {
-
-      inherit src;
-
-      # Use the name of the zip, but endstrip ".zip" and possibly the querystring that gets left in by fetchurl
-      name = replaceStrings [ "_" ] [ "-" ] (
-        if name != null then name else removeSuffix ".zip" (head (splitString "?" src.name))
-      );
-
-      deps =
-        deps ++ optionals allOptionalMods optionalDeps ++ optionals allRecommendedMods recommendedDeps;
-
-      preferLocalBuild = true;
-      buildCommand = ''
-        mkdir -p $out
-        srcBase=$(basename $src)
-        srcBase=''${srcBase#*-}  # strip nix hash
-        srcBase=''${srcBase%\?*} # strip querystring leftover from fetchurl
-        cp $src $out/$srcBase
-      '';
     };
 
   modsFromLock =
@@ -116,9 +79,6 @@ in
               mkdir -p $out
               ln -s $src $out/${file_name}
             '';
-
-            # The mod has no _Nix_ dependencies
-            deps = [ ];
           };
 
         in
