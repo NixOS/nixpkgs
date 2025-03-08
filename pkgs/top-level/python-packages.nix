@@ -6034,6 +6034,8 @@ self: super: with self; {
 
   hid-parser = callPackage ../development/python-modules/hid-parser { };
 
+  hier-config = callPackage ../development/python-modules/hier-config { };
+
   hieroglyph = callPackage ../development/python-modules/hieroglyph { };
 
   hijri-converter = callPackage ../development/python-modules/hijri-converter { };
