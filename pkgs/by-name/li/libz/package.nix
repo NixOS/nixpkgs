@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libz";
-  version = "1.2.8.2015.12.26-unstable-2018-03-31";
+  version = "1.2.8.2025.03.07-unstable-2025-03-07";
 
   src = fetchFromGitLab {
     owner = "sortix";
     repo = "libz";
-    rev = "752c1630421502d6c837506d810f7918ac8cdd27";
-    hash = "sha256-AQuZ0BOl1iP5Nub+tVwctlE2tfJe4Sq/KDGkjwBbsV4=";
+    rev = "4b22c6e013fe0ca21a7e7bc4f0661af42fb463e3";
+    hash = "sha256-uumSGFBaXV6rpV4CNtnu7py7wxUUdwiFxTe7ecCgcYI=";
   };
 
   outputs = [
