@@ -172,7 +172,13 @@ in stdenv.mkDerivation {
     # libspirv2dxil itself is pretty chonky, so relocate it to its own output in
     # case anything wants to use it at some point
     "spirv2dxil"
-    # tools for the host platform to be used when cross-compiling
+  ] ++ lib.optionals (!needNativeCLC) [
+    # tools for the host platform to be used when cross-compiling.
+    # mesa builds these only when not already built. hence:
+    # - for a non-cross build (needNativeCLC = false), we do not provide mesa
+    #   with any `*-clc` binaries, so it builds them and installs them.
+    # - for a cross build (needNativeCLC = true), we provide mesa with `*-clc`
+    #   binaries, so it skips building & installing any new CLC files.
     "cross_tools"
   ];
 
