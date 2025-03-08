@@ -4424,6 +4424,8 @@ self: super: with self; {
 
   exceptiongroup = callPackage ../development/python-modules/exceptiongroup { };
 
+  exchange-calendars = callPackage ../development/python-modules/exchange-calendars { };
+
   exchangelib = callPackage ../development/python-modules/exchangelib { };
 
   execnb = callPackage ../development/python-modules/execnb { };
@@ -10909,6 +10911,8 @@ self: super: with self; {
   pylibrespot-java = callPackage ../development/python-modules/pylibrespot-java { };
 
   pylsl = callPackage ../development/python-modules/pylsl { };
+
+  pyluach = callPackage ../development/python-modules/pyluach { };
 
   pynfsclient = callPackage ../development/python-modules/pynfsclient { };
 
