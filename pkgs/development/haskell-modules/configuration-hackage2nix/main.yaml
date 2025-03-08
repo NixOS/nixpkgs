@@ -217,7 +217,6 @@ package-maintainers:
     - nfc
   dalpd:
     - dhall-lsp-server
-    - espial
     - ghc-vis
     - patat
     - svgcairo
