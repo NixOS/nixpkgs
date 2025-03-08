@@ -24,6 +24,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       linsui
       jukremer
+      HeitorAugustoLN
     ];
     mainProgram = "markdown-oxide";
   };
