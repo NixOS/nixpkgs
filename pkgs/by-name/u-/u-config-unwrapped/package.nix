@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   versionCheckHook,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -47,6 +48,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   versionCheckProgram = "${placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";
   doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Smaller, simpler, portable pkg-config clone";
