@@ -505,7 +505,7 @@ in
         name = "crowdsec-patterns";
         paths = [
           cfg.localConfig.patterns
-          (lib.attrsets.getOutput "patterns" cfg.package)
+          "${lib.attrsets.getOutput "out" cfg.package}/share/crowdsec/config/patterns/"
         ];
       };
 
