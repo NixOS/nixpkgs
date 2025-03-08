@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "sipa";
-    repo = pname;
+    repo = "miniscript";
     rev = "6806dfb15a1fafabf7dd28aae3c9d2bc49db01f1";
     sha256 = "sha256-qkYDzsl2Y4WEDDXs9cE/jIXm01jclkYUQbDGe1S0wYs=";
   };

@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "WeiDUorg";
-    repo = pname;
+    repo = "elkhound";
     rev = "a7eb4bb2151c00cc080613a770d37560f62a285c";
     sha256 = "sha256-Y96OFpBNrD3vrKoEZ4KdJuI1Q4RmYANsu7H3ZzfaA6g=";
   };
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
       install -Dm444 -t $out/lib $d/*.a
       install -Dm444 -t $out/include/$d $src/src/$d/*.h
     done
-    install -Dm444 -t $out/share/doc/${pname} $src/src/elkhound/*.txt
+    install -Dm444 -t $out/share/doc/elkhound $src/src/elkhound/*.txt
 
     runHook postInstall
   '';

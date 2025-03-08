@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "nwoltman";
-    repo = pname;
+    repo = "srt-to-vtt-cl";
     rev = "ce3d0776906eb847c129d99a85077b5082f74724";
     sha256 = "0qxysj08gjr6npyvg148llmwmjl2n9cyqjllfnf3gxb841dy370n";
   };

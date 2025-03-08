@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "libharu";
-    repo = pname;
+    repo = "libharu";
     rev = "v${version}";
     hash = "sha256-tw/E79Cg/8kIei6NUu1W+mP0sUDCm8KTB7ZjzxsqpeM=";
   };

@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "planetbeing";
-    repo = pname;
+    repo = "xpwn";
     rev = "ac362d4ffe4d0489a26144a1483ebf3b431da899";
     sha256 = "1qw9vbk463fpnvvvfgzxmn9add2p30k832s09mlycr7z1hrh3wyf";
   };

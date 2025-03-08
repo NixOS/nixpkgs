@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromSourcehut {
     owner = "~steef";
-    repo = pname;
+    repo = "snixembed";
     rev = version;
     sha256 = "sha256-co32Xlklg6KVyi+xEoDJ6TeN28V+wCSx73phwnl/05E=";
   };

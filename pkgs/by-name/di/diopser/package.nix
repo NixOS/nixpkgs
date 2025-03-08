@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "robbert-vdh";
-    repo = pname;
+    repo = "diopser";
     fetchSubmodules = true;
     rev = "d5fdc92f1caf5a828e071dac99e106e58f06d84d";
     sha256 = "06y1h895yxh44gp4vxzrna59lf7nlfw7aacd3kk4l1g56jhy9pdx";

@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitLab {
     owner = "sagemath";
-    repo = pname;
+    repo = "lcalc";
     tag = version;
     hash = "sha256-v+7Uh6tPOfb3E9dqxx//RqD22XM4S/8ejS2v+D5G5pE=";
   };

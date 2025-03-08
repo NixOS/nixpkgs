@@ -17,7 +17,7 @@ perlPackages.buildPerlPackage rec {
 
   src = fetchFromGitHub {
     owner = "trizen";
-    repo = pname;
+    repo = "fbmenugen";
     rev = version;
     sha256 = "A0yhoK/cPp3JlNZacgLaDhaU838PpFna7luQKNDvyOg=";
   };
@@ -59,13 +59,13 @@ perlPackages.buildPerlPackage rec {
 
   installPhase = ''
     runHook preInstall
-    install -D -t $out/bin ${pname}
-    install -D -t $out/etc/xdg/${pname} schema.pl
+    install -D -t $out/bin fbmenugen
+    install -D -t $out/etc/xdg/fbmenugen schema.pl
     runHook postInstall
   '';
 
   postFixup = ''
-    wrapProgram "$out/bin/${pname}" --prefix PERL5LIB : "$PERL5LIB"
+    wrapProgram "$out/bin/fbmenugen" --prefix PERL5LIB : "$PERL5LIB"
   '';
 
   passthru.updateScript = gitUpdater { };

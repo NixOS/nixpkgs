@@ -6,13 +6,13 @@
   pkg-config,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "catfs";
   version = "0.9.0-unstable-2023-10-09";
 
   src = fetchFromGitHub {
     owner = "kahing";
-    repo = pname;
+    repo = "catfs";
     rev = "35430f800e68da18fb6bbd25a8f15bf32fa1f166";
     hash = "sha256-hbv4SNe0yqjO6Oomev9uKqG29TiJeI8G7LH+Wxn7hnQ=";
   };

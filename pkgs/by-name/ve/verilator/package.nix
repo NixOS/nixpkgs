@@ -25,8 +25,8 @@ stdenv.mkDerivation rec {
   VERILATOR_SRC_VERSION = "v${version}";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "verilator";
+    repo = "verilator";
     rev = "v${version}";
     hash = "sha256-YgK60fAYG5575uiWmbCODqNZMbRfFdOVcJXz5h5TLuE=";
   };

@@ -9,7 +9,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "KSXGitHub";
-    repo = pname;
+    repo = "parallel-disk-usage";
     rev = version;
     hash = "sha256-0SK7v5xKMPuukyYKaGk13PE3WygHginjnyoatkA5xFQ=";
   };

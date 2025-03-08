@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "jeffmhubbard";
-    repo = pname;
+    repo = "multilockscreen";
     rev = "v${version}";
     sha256 = "1bfpbazvhaz9x356nsghz0czysh9b75g79cd9s35v0x0rrzdr9qj";
   };

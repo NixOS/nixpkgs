@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "jpochyla";
-    repo = pname;
+    repo = "psst";
     rev = "02923198ba0e27b2b6271340cf57dd8ce109049b";
     hash = "sha256-gEK0yf37eREsI6kCIYTBlkkM6Fnjy0KGnd0XqcawGjU=";
   };
@@ -55,7 +55,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   postInstall = ''
-    install -Dm444 psst-gui/assets/logo_512.png $out/share/icons/hicolor/512x512/apps/${pname}.png
+    install -Dm444 psst-gui/assets/logo_512.png $out/share/icons/hicolor/512x512/apps/psst.png
     install -Dm444 -t $out/share/applications ${desktopItem}/share/applications/*
   '';
 

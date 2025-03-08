@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitea {
     domain = "codeberg.org";
-    owner = pname;
-    repo = pname;
+    owner = "mlmmj";
+    repo = "mlmmj";
     rev = "refs/tags/RELEASE_" + lib.replaceStrings [ "." ] [ "_" ] version;
     hash = "sha256-kAo04onxVve3kCaM4h1APsjs3C4iePabkBFJeqvnPxo=";
   };

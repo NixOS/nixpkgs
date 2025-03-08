@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "mozilla-services";
-    repo = pname;
+    repo = "syncstorage-rs";
     tag = version;
     hash = "sha256-YIj9yoZrVRMcWFczyy5RR2Djwhu1/CyQuumzPoApp3I=";
   };

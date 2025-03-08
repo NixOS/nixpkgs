@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "aclements";
-    repo = pname;
+    repo = "libelfin";
     rev = "ac45a094fadba77ad840063fb7aab82571546be0";
     sha256 = "143x680c6hsy51kngs04ypg4ql3lp498llcwj4lh1v0qp5qvjhyz";
   };

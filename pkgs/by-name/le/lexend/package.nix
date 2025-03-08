@@ -10,7 +10,7 @@ stdenvNoCC.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "googlefonts";
-    repo = pname;
+    repo = "lexend";
     rev = "cd26b9c2538d758138c20c3d2f10362ed613854b";
     sha256 = "ZKogntyJ/44GBZmFwbtw5Ujw5Gnvv0tVB59ciKqR4c8=";
   };

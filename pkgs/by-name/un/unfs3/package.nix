@@ -15,8 +15,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "unfs3";
-    repo = pname;
-    rev = "refs/tags/${pname}-${version}";
+    repo = "unfs3";
+    rev = "refs/tags/unfs3-${version}";
     hash = "sha256-5iAriIutBhwyZVS7AG2fnkrHOI7pNAKfYv062Cy0WXw=";
   };
 

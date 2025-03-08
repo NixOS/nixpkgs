@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "samyk";
-    repo = pname;
+    repo = "pwnat";
     rev = "8ec62cdae53a2d573c9f9c906133ca45bbd3360a";
     sha256 = "sha256-QodNw3ab8/TurKamg6AgMfQ08aalp4j6q663B+sWmRM=";
   };
