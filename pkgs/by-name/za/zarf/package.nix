@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  installShellFiles,
+}:
 
 let
   version = "0.49.1";
@@ -11,15 +16,13 @@ let
     "aarch64-darwin" = "https://github.com/zarf-dev/zarf/releases/download/v${version}/zarf_v${version}_Darwin_arm64";
   };
 
-  # Define architecture-specific hashes (update these with correct hashes)
   hashes = {
-    "x86_64-linux" = "sha256-8e77c8194a73fc82496f745f6517ef80f472560a574769eea8460d7d809c42eb";
-    "aarch64-linux" = "sha256-3b6d45becb7c507a699c402744a84c578297b303716aff8e3078a3c479282722";
-    "x86_64-darwin" = "sha256-94cbb26d0b2030ce416354f225e7dd04c6aa227a350b955af57b515de02c5709";
-    "aarch64-darwin" = "sha256-203f6a0061331a30625308cad60f2f58eaaea4e1f8fd968463d1a1f876f94120";
+    "x86_64-linux" = "1ss2kj07s3a6m3p6jisp19b75x40xwbnapvldx4q5z3k98cwhxwf";
+    "aarch64-linux" = "08i751ww98vq627gyski0frrg0jp9jl489s0kilpll3wrfz4av9v";
+    "x86_64-darwin" = "02ap5kh5slbvymd9a2rmg8iamih4vpkjbwjlcd0wwc101dnv5jwl";
+    "aarch64-darwin" = "0821z5vgi8ficf29dzgqw6jaxsjq5w7xdjh8adi306ikc406lgr0";
   };
 
-  # Select the correct binary URL and hash for the current system
   platform = stdenv.hostPlatform.system;
   src = fetchurl {
     url = urls.${platform} or (throw "Unsupported platform: ${platform}");
@@ -31,6 +34,8 @@ in stdenv.mkDerivation {
   inherit version src;
 
   nativeBuildInputs = [ installShellFiles ];
+
+  unpackPhase = "true";
 
   installPhase = ''
     mkdir -p $out/bin
