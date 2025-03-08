@@ -5180,7 +5180,7 @@ with pkgs;
 
   translatepy = with python3.pkgs; toPythonApplication translatepy;
 
-  trenchbroom = libsForQt5.callPackage ../applications/misc/trenchbroom { };
+  trenchbroom = callPackage ../applications/misc/trenchbroom { };
 
   inherit (callPackage ../applications/office/trilium {})
     trilium-desktop
