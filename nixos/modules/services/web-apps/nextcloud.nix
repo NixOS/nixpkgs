@@ -19,7 +19,7 @@ let
     "opcache.memory_consumption" = "128";
     "opcache.revalidate_freq" = "1";
     "opcache.fast_shutdown" = "1";
-    "openssl.cafile" = "/etc/ssl/certs/ca-certificates.crt";
+    "openssl.cafile" = config.security.pki.caBundle;
     catch_workers_output = "yes";
   };
 
@@ -400,7 +400,7 @@ in {
 
     phpOptions = mkOption {
       type = with types; attrsOf (oneOf [ str int ]);
-      defaultText = literalExpression (generators.toPretty { } defaultPHPSettings);
+      defaultText = literalExpression (generators.toPretty { } (defaultPHPSettings // { "openssl.cafile" = literalExpression "config.security.pki.caBundle"; }));
       description = ''
         Options for PHP's php.ini file for nextcloud.
 
