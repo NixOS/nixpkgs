@@ -1,0 +1,21 @@
+diff --git a/linux_kernel/sphincs_shake_256f/leancrypto_kernel_sphincs_shake_256s_tester_akcipher.c b/linux_kernel/sphincs_shake_256f/leancrypto_kernel_sphincs_shake_256s_tester_akcipher.c
+index 631b29b9..a73280f8 120000
+--- a/linux_kernel/sphincs_shake_256f/leancrypto_kernel_sphincs_shake_256s_tester_akcipher.c
++++ b/linux_kernel/sphincs_shake_256f/leancrypto_kernel_sphincs_shake_256s_tester_akcipher.c
+@@ -1 +1 @@
+-../../../slh-dsa/tests/leancrypto_kernel_sphincs_shake_256s_tester_akcipher.c
+\ No newline at end of file
++../../slh-dsa/tests/leancrypto_kernel_sphincs_shake_256s_tester_akcipher.c
+\ No newline at end of file
+diff --git a/linux_kernel/sphincs_shake_256f/leancrypto_kernel_sphincs_shake_256s_tester_sig.c b/linux_kernel/sphincs_shake_256f/leancrypto_kernel_sphincs_shake_256s_tester_sig.c
+index c43e7c11..3e44a4f6 120000
+--- a/linux_kernel/sphincs_shake_256f/leancrypto_kernel_sphincs_shake_256s_tester_sig.c
++++ b/linux_kernel/sphincs_shake_256f/leancrypto_kernel_sphincs_shake_256s_tester_sig.c
+@@ -1 +1 @@
+-../../../slh-dsa/tests/leancrypto_kernel_sphincs_shake_256s_tester_sig.c
+\ No newline at end of file
++../../slh-dsa/tests/leancrypto_kernel_sphincs_shake_256s_tester_sig.c
+\ No newline at end of file
+-- 
+2.48.1
+
