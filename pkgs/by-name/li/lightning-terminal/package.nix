@@ -79,7 +79,7 @@ buildGoModule rec {
     pname = "lightning-app";
     src = "${src}/app";
     version = "0.0.1";
-    packageJSON = ./package.json;
+    packageJSON = "${src}/app/package.json";
     yarnLock = "${src}/app/yarn.lock";
     offlineCache = fetchYarnDeps {
       yarnLock = "${src}/app/yarn.lock";
