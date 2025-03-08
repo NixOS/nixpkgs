@@ -17,14 +17,14 @@
 
 stdenv.mkDerivation rec {
   pname = "chess-clock";
-  version = "0.6.1";
+  version = "0.6.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-XDOCHFZC3s3b/4kD1ZkhWar3kozW3vXc0pk7O6oQfiE=";
+    hash = "sha256-wwNOop2V84vZO3JV0+VZ+52cKPx8xJg2rLkjfgc/+n4=";
   };
 
   nativeBuildInputs = [
