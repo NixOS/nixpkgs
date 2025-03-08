@@ -78,6 +78,9 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace python/CMakeLists.txt \
       --replace-fail ''\'''${CMAKE_INSTALL_PREFIX}/''${NG_INSTALL_DIR_PYTHON}' \
                      ''\'''${CMAKE_INSTALL_PREFIX}/''${NG_INSTALL_DIR_PYTHON}:$ENV{PYTHONPATH}'
+
+    substituteInPlace ng/ng.tcl ng/onetcl.cpp \
+      --replace-fail "libnggui" "$out/lib/libnggui"
   '';
 
   nativeBuildInputs = [
@@ -120,11 +123,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "BUILD_TESTING" finalAttrs.finalPackage.doInstallCheck)
     (lib.cmakeBool "ENABLE_UNIT_TESTS" finalAttrs.finalPackage.doInstallCheck)
   ];
-
-  # Tcl script used by netgen need to be aware of environment NETGENDIR
-  postInstall = ''
-    wrapProgram "$out/bin/netgen" --set NETGENDIR "$out/bin"
-  '';
 
   # mesh generation differs on x86_64 and aarch64 platform
   # tests will fail on aarch64 platform
