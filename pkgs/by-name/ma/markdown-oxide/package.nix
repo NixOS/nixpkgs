@@ -10,7 +10,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Feel-ix-343";
     repo = "markdown-oxide";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-hgXqJwmIpXJNIl67Jjbg5MR4PlwB5XbqnFo+rNLoqbE=";
   };
 
