@@ -14,9 +14,12 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "Acizza";
     repo = "anup";
-    rev = version;
-    sha256 = "sha256-4pXF4p4K8+YihVB9NdgT6bOidmQEgWXUbcbvgXJ0IDA=";
+    tag = version;
+    hash = "sha256-4pXF4p4K8+YihVB9NdgT6bOidmQEgWXUbcbvgXJ0IDA=";
   };
+
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-925R5pG514JiA7iUegFkxrDpA3o7T/Ct4Igqqcdo3rw=";
 
   buildInputs =
     [
@@ -24,18 +27,11 @@ rustPlatform.buildRustPackage rec {
       xdg-utils
     ];
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "tui-utils-0.10.0" = "sha256-xazeXTGiMFZEcSFEF26te3LQ5oFFcskIiYkLzfsXf/A=";
-    };
-  };
-
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Acizza/anup";
     description = "Anime tracker for AniList featuring a TUI";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ natto1784 ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ natto1784 ];
     mainProgram = "anup";
   };
 }
