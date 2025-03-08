@@ -11,7 +11,7 @@ let
 in
 
 rec {
-  inherit (builtins) attrNames listToAttrs hasAttr isAttrs getAttr removeAttrs intersectAttrs;
+  inherit (builtins) attrNames listToAttrs hasAttr isAttrs getAttr removeAttrs intersectAttrs isBool;
 
 
   /**
@@ -2037,6 +2037,52 @@ rec {
 
   /**
     Make various Nix tools consider the contents of the resulting
+    attribute set when looking for what to build, find, etc if a
+    condition is true.
+
+    This function only affects a single attribute set; it does not
+    apply itself recursively for nested attribute sets.
+
+    # Inputs
+
+    `condition`
+
+    :A boolean that says whether a tool should consider the attrset
+    values.
+
+    `attrs`
+
+    :An attribute set to scan for derivations.
+
+    # Type
+
+    ````
+    recurseIntoAttrsIf :: Bool -> AttrSet -> AttrSet
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.attrsets.recurseIntoAttrsIf` usage example
+    ```nix
+    { pkgs ? import <nixpkgs> {} }:
+    {
+      myTools = pkgs.lib.recurseIntoAttrsIf true {
+        inherit (pkgs) hello figlet;
+      };
+    }
+    ```
+
+    :::
+  */
+  recurseIntoAttrsIf =
+    condition:
+    attrs:
+    assert isBool condition;
+    attrs // { recurseForDerivations = condition; };
+
+
+  /**
+    Make various Nix tools consider the contents of the resulting
     attribute set when looking for what to build, find, etc.
 
     This function only affects a single attribute set; it does not
@@ -2070,9 +2116,7 @@ rec {
 
     :::
   */
-  recurseIntoAttrs =
-    attrs:
-    attrs // { recurseForDerivations = true; };
+  recurseIntoAttrs = recurseIntoAttrsIf true;
 
   /**
     Undo the effect of recurseIntoAttrs.
@@ -2090,9 +2134,7 @@ rec {
     dontRecurseIntoAttrs :: AttrSet -> AttrSet
     ```
   */
-  dontRecurseIntoAttrs =
-    attrs:
-    attrs // { recurseForDerivations = false; };
+  dontRecurseIntoAttrs = recurseIntoAttrsIf false;
 
   /**
     `unionOfDisjoint x y` is equal to `x // y // z` where the
