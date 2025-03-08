@@ -10,10 +10,14 @@ let
 
   # Define the architecture-specific URLs
   urls = {
-    "x86_64-linux" = "https://github.com/zarf-dev/zarf/releases/download/v${version}/zarf_v${version}_Linux_amd64";
-    "aarch64-linux" = "https://github.com/zarf-dev/zarf/releases/download/v${version}/zarf_v${version}_Linux_arm64";
-    "x86_64-darwin" = "https://github.com/zarf-dev/zarf/releases/download/v${version}/zarf_v${version}_Darwin_amd64";
-    "aarch64-darwin" = "https://github.com/zarf-dev/zarf/releases/download/v${version}/zarf_v${version}_Darwin_arm64";
+    "x86_64-linux" =
+      "https://github.com/zarf-dev/zarf/releases/download/v${version}/zarf_v${version}_Linux_amd64";
+    "aarch64-linux" =
+      "https://github.com/zarf-dev/zarf/releases/download/v${version}/zarf_v${version}_Linux_arm64";
+    "x86_64-darwin" =
+      "https://github.com/zarf-dev/zarf/releases/download/v${version}/zarf_v${version}_Darwin_amd64";
+    "aarch64-darwin" =
+      "https://github.com/zarf-dev/zarf/releases/download/v${version}/zarf_v${version}_Darwin_arm64";
   };
 
   hashes = {
@@ -29,7 +33,8 @@ let
     sha256 = hashes.${platform} or (throw "Missing hash for platform: ${platform}");
   };
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "zarf";
   inherit version src;
 
@@ -54,7 +59,10 @@ in stdenv.mkDerivation {
     description = "DevSecOps for Air Gap & Limited-Connection Systems. https://zarf.dev";
     homepage = "https://github.com/zarf-dev/zarf";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ragingpastry brandtkeller ];
+    maintainers = with maintainers; [
+      ragingpastry
+      brandtkeller
+    ];
     platforms = builtins.attrNames urls;
   };
 }
