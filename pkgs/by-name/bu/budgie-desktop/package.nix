@@ -36,7 +36,7 @@
   sassc,
   testers,
   upower,
-  vala,
+  vala_0_56_18,
   validatePkgConfig,
   xfce,
   wrapGAppsHook3,
@@ -86,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     pkg-config
-    vala
+    vala_0_56_18
     validatePkgConfig
     wrapGAppsHook3
   ];

@@ -135,5 +135,10 @@ rec {
     hash = "sha256-JhAMTk7wBJxhknXxQNl89WWIPQDHVDyCvM5aQmk07Wo=";
   };
 
+  vala_0_56_18 = generic {
+    version = "0.56.18";
+    hash = "sha256-8q/+fUCrY9uOe57MP2vcnC/H4xNMhP8teV9IL+kmo4I=";
+  };
+
   vala = vala_0_56;
 }
