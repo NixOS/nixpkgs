@@ -9,6 +9,16 @@
   src,
   version,
 }:
+let
+  # debugservers on macOS require the 'com.apple.security.cs.debugger'
+  # entitlement which nixpkgs' lldb-server does not yet provide; see
+  # <https://github.com/NixOS/nixpkgs/pull/38624> for details
+  lldbServer =
+    if stdenv.hostPlatform.isDarwin then
+      "/Applications/Xcode.app/Contents/SharedFrameworks/LLDB.framework/Versions/A/Resources/debugserver"
+    else
+      "${lldb.out}/bin/lldb-server";
+in
 rustPlatform.buildRustPackage {
   pname = "${pname}-adapter";
   inherit version src;
@@ -43,11 +53,13 @@ rustPlatform.buildRustPackage {
     cp -t $out/share/formatters formatters/*.py
     ln -s ${lib.getLib lldb} $out/share/lldb
     makeWrapper $out/share/adapter/codelldb $out/bin/codelldb \
-      --set-default LLDB_DEBUGSERVER_PATH "${lldb.out}/bin/lldb-server"
+      --set-default LLDB_DEBUGSERVER_PATH "${lldbServer}"
   '';
 
   patches = [ ./patches/adapter-output-shared_object.patch ];
 
   # Tests are linked to liblldb but it is not available here.
   doCheck = false;
+
+  passthru = { inherit lldbServer; };
 }
