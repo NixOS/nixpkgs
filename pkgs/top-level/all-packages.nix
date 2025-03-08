@@ -4692,7 +4692,7 @@ with pkgs;
     jdk = jdk8;
   };
 
-  projectm = libsForQt5.callPackage ../applications/audio/projectm { };
+  projectm_3 = libsForQt5.callPackage ../applications/audio/projectm_3 { };
 
   proxmark3 = libsForQt5.callPackage ../tools/security/proxmark3/default.nix {
     inherit (darwin.apple_sdk_11_0.frameworks) Foundation AppKit;

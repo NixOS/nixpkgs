@@ -20,6 +20,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = lib.optional stdenv.hostPlatform.isFreeBSD freebsd.libstdthreads;
 
+  env = lib.optionalAttrs stdenv.hostPlatform.isFreeBSD {
+    NIX_LDFLAGS = "-lstdthreads";
+  };
+
   meta = with lib; {
     description = "Intel Processor Trace decoder library";
     homepage = "https://github.com/intel/libipt";
