@@ -10,13 +10,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "polaris";
-  version = "0.14.3";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "agersant";
     repo = "polaris";
-    rev = version;
-    hash = "sha256-2GHYIlEzRS7KXahdrxMjyIcPCNw8gXJw5/4ZpB/zT3Y=";
+    tag = version;
+    hash = "sha256-uwYNyco4IY6lF+QSVEOVVhZCJ4nRkj8gsgRA0UydLHU=";
 
     # The polaris version upstream in Cargo.lock is "0.0.0".
     # We're unable to simply patch it in the patch phase due to
@@ -31,7 +31,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-bVXz/rSfkmdQlAa3B4zamZebpRBOkch6zNOFiyEQBbY=";
+  cargoHash = "sha256-EUUxKLLdXgNp7GWTWAkzdNHKogu4Voo8wjeFFzM9iEg=";
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.Security
@@ -40,25 +40,26 @@ rustPlatform.buildRustPackage rec {
   # Compile-time environment variables for where to find assets needed at runtime
   env = {
     POLARIS_WEB_DIR = "${polaris-web}/share/polaris-web";
-    POLARIS_SWAGGER_DIR = "${placeholder "out"}/share/polaris-swagger";
   };
-
-  postInstall = ''
-    mkdir -p $out/share
-    cp -a docs/swagger $out/share/polaris-swagger
-  '';
 
   preCheck = ''
     # 'Err' value: Os { code: 24, kind: Uncategorized, message: "Too many open files" }
     ulimit -n 4096
+    # to debug bumps
+    export RUST_BACKTRACE=1
   '';
+
+  checkFlags = [
+    # requires network
+    "--skip=server::test::settings::put_settings_golden_path"
+  ];
 
   __darwinAllowLocalNetworking = true;
 
-  passthru.tests = nixosTests.polaris;
+  passthru.tests.nixos = nixosTests.polaris;
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Self-host your music collection, and access it from any computer and mobile device";
     longDescription = ''
       Polaris is a FOSS music streaming application, designed to let you enjoy your music collection
@@ -67,9 +68,10 @@ rustPlatform.buildRustPackage rec {
       The only requirement is that your computer stays on while it streams your music!
     '';
     homepage = "https://github.com/agersant/polaris";
-    license = licenses.mit;
-    maintainers = with maintainers; [ pbsds ];
-    platforms = platforms.unix;
+    changelog = "https://github.com/agersant/polaris/blob/master/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ pbsds ];
+    platforms = lib.platforms.unix;
     mainProgram = "polaris";
   };
 }
