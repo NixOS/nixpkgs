@@ -24,8 +24,8 @@ Assuming you are using the kernel from `pkgs.linux_latest`:
 pkgs.linux_latest.override {
   ignoreConfigErrors = true;
   autoModules = false;
-  kernelPreferBuiltin = true;
-  extraStructuredConfig = with lib.kernel; {
+  preferBuiltin = true;
+  structuredExtraConfig = with lib.kernel; {
     DEBUG_KERNEL = yes;
     FRAME_POINTER = yes;
     KGDB = yes;
