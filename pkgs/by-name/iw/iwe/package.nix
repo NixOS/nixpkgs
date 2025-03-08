@@ -39,7 +39,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Personal knowledge management system (editor plugin & command line utility)";
     homepage = "https://iwe.md/";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ phrmendes ];
+    maintainers = with lib.maintainers; [
+      phrmendes
+      HeitorAugustoLN
+    ];
     mainProgram = "iwe";
   };
 })
