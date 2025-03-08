@@ -15,10 +15,8 @@ rec {
 
   extraPostPatch = ''
     while read patch_name; do
-      if ! sed -n '/nvidia-wayland-backported-fixes-.*-Bug-1898476/p'; then
-        echo "applying LibreWolf patch: $patch_name"
-        patch -p1 < ${source}/$patch_name
-      fi
+      echo "applying LibreWolf patch: $patch_name"
+      patch -p1 < ${source}/$patch_name
     done <${source}/assets/patches.txt
 
     cp -r ${source}/themes/browser .
