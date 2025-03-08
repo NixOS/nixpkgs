@@ -19,8 +19,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share
     cp -r kanata $out/share/arsenik
+
+    runHook postInstall
   '';
 
   meta = {
