@@ -1208,6 +1208,71 @@ rec {
     in
     recurse [ ] set;
 
+  /**
+    This function recursively searches for attrsets `attrs` that are *not* derivations and
+    where a given function `f` applied to the current path `path` is applicable,
+    and replaces `attrs` by `f path attrs`.
+
+    A function `f` is applicable to an attrset `attrs` at the current path `path` when
+    `builtins.intersectAttrs (builtins.functionArgs (f path)) attrs == attrs`.
+
+    If `f path` does not have formal arguments (see `builtins.functionArgs`):
+    - A new function with formal arguments can be created;
+    - Formal arguments can be set via `lib.trivial.setFunctionArgs` or `lib.trivial.mirrorFunctionArgs`.
+
+    # Inputs
+
+    `f`
+
+    : A function, given the current path and an attrset at this path, returns a value.
+
+    `set`
+    
+    : An attrset.
+
+    # Type
+    ```
+    mapAttrsRecursiveFunc :: ([String] -> AttrSet -> a) -> AttrSet -> AttrSet
+    ```
+
+    :::{#map-attrs-recursive-func-example .example}
+    # Map attrsets to scripts
+    
+    Attrsets are searched for using `builtins.functionArgs pkgs.writeShellApplication`.
+
+    ```nix
+    mapAttrsRecursiveFunc
+      (path: args@{ text, name ? lib.concatStringsSep "-" path, runtimeInputs ? [ pkgs.docker-compose ] }:
+        pkgs.writeShellApplication (args // { inherit name runtimeInputs; }))
+      {
+        service1.start.text = "docker compose up service1";
+        service1.stop.text = "docker compose down service1";
+      }
+    ```
+    :::
+  */
+  mapAttrsRecursiveFunc =
+    f:
+    set:
+    let
+      recurse =
+        path:
+        mapAttrs (
+          name: value:
+          let
+            path' = path ++ [ name ];
+          in
+          if isAttrs value && !(lib.isDerivation value) then
+            if builtins.intersectAttrs (builtins.functionArgs (f path')) value == value then
+              f path' value
+            else
+              recurse path' value
+          else
+            value
+        );
+    in
+    recurse [ ] set;
+
 
   /**
     Generate an attribute set by mapping a function over a list of
