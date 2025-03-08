@@ -690,11 +690,14 @@ in
           wantedBy = [ "multi-user.target" ];
           after = [ "network-online.target" ];
           wants = [ "network-online.target" ];
+          environment = {
+            LC_ALL = "C";
+            LANG = "C";
+          };
           serviceConfig = {
             User = cfg.user;
             Group = cfg.group;
-            Restart = "on-failure";
-
+            RestartSec = 60;
             LimitNOFILE = lib.mkDefault 65536;
             CapabilityBoundingSet = lib.mkDefault [ ];
             NoNewPrivileges = lib.mkDefault true;
@@ -719,8 +722,15 @@ in
             RestrictSUIDSGID = lib.mkDefault true;
             ExecPaths = [ "/nix/store" ];
             NoExecPaths = [ "/" ];
-
-            ExecStart = "${lib.getExe' pkg "crowdsec"} -c ${configFile}";
+            ExecReload = lib.mkForce [
+              " " # This is needed to clear the ExecReload definitions from upstream
+              "${lib.getExe' pkg "crowdsec"} -c ${configFile} -t -error"
+              "${lib.getExe' pkgs.util-linux "kill"} -HUP $MAINPID"
+            ];
+            ExecStart = [
+              " " # This is needed to clear the ExecStart definitions from upstream
+              "${lib.getExe' pkg "crowdsec"} -c ${configFile}"
+            ];
             ExecStartPre =
               let
                 scriptArray =
@@ -783,7 +793,11 @@ in
 
                 script = pkgs.writeScriptBin "crowdsec-setup" (lib.strings.concatStringsSep "\n" scriptArray);
               in
-              [ "${lib.getExe script}" ];
+              [
+                " " # This is needed to clear the ExecStartPre definitions from upstream
+                "${lib.getExe script}"
+                "${lib.getExe' pkg "crowdsec"} -c ${configFile} -t -error"
+              ];
           };
         };
       };
