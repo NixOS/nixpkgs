@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "isobiscuit";
-  version = "0.2.27.1";
+  version = "0.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1vdm2nibncjbxn0q0c66fk8jjf8jw3iwd4ba1b5q6b494kmfrnca";
+    sha256 = "1bdimhz7jzjj1jiz9gvl8vwrm1il1ja08n0j1g22an7s3gx10n32";
   };
 
   propagatedBuildInputs = with python3Packages; [
