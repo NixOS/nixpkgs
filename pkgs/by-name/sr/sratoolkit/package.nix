@@ -16,13 +16,13 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "sratoolkit";
 
   # NOTE: When updating make sure to update ncbi-vdb as well for versions to match
-  version = "3.1.1";
+  version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "ncbi";
     repo = "sra-tools";
     tag = finalAttrs.version;
-    hash = "sha256-WVPiAz3EFYuhBnl7BsEjJ2BTi1wAownEunVM4sdLaj8=";
+    hash = "sha256-P8daeNg4hbWuj/KIDIZgd/g6rlijJwLziBiIsWuJLhM=";
   };
 
   cmakeFlags = [
