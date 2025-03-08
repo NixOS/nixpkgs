@@ -5,14 +5,14 @@
   versionCheckHook,
   nix-update-script,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "iwe";
   version = "0.0.17";
 
   src = fetchFromGitHub {
     owner = "iwe-org";
     repo = "iwe";
-    tag = "iwe-v${version}";
+    tag = "iwe-v${finalAttrs.version}";
     hash = "sha256-eE84KzYJTJ39UDQt3VZpSIba/P+7VFR9K6+MSMlg0Wc=";
   };
 
@@ -37,4 +37,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ phrmendes ];
     mainProgram = "iwe";
   };
-}
+})
