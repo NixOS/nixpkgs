@@ -35473,8 +35473,6 @@ with pkgs;
 
   gzdoom = callPackage ../games/doom-ports/gzdoom { };
 
-  odamex = callPackage ../games/doom-ports/odamex { };
-
   prboom-plus = callPackage ../games/doom-ports/prboom-plus { };
 
   rbdoom-3-bfg = callPackage ../games/doom-ports/rbdoom-3-bfg { };
