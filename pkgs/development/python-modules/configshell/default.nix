@@ -5,12 +5,14 @@
   pyparsing,
   six,
   urwid,
+  hatchling,
+  hatch-vcs,
 }:
 
 buildPythonPackage rec {
   pname = "configshell";
   version = "2.0.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "open-iscsi";
@@ -18,6 +20,11 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-lP3WT9ASEj6WiCrurSU/e9FhIaeoQW/n9hi1XZMnV4Q=";
   };
+
+  build-system = [
+    hatchling
+    hatch-vcs
+  ];
 
   propagatedBuildInputs = [
     pyparsing
