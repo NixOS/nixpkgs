@@ -42,7 +42,15 @@ let
             if [ -f "$prg" ]; then
               rm -f "$out/bin/$prg"
               if [ -x "$prg" ]; then
-                makeWrapper "$path/bin/$prg" "$out/bin/$prg" --set NIX_PYTHONPREFIX "$out" --set NIX_PYTHONEXECUTABLE ${pythonExecutable} --set NIX_PYTHONPATH ${pythonPath} ${lib.optionalString (!permitUserSite) ''--set PYTHONNOUSERSITE "true"''} ${lib.concatStringsSep " " makeWrapperArgs}
+                if [ -f ".$prg-wrapped" ] && ( cat ".$prg-wrapped" | head -n 1 | grep -q "python" ) ; then
+                  echo "#!${pythonExecutable}" >> "$out/bin/$prg"
+                  echo "import os" >> "$out/bin/$prg"
+                  echo 'os.environ["NIX_PYTHON_IN_ENV"] = "true"' >> "$out/bin/$prg"
+                  cat ".$prg-wrapped" >> "$out/bin/$prg"
+                  chmod +x "$out/bin/$prg"
+                else
+                  makeWrapper "$path/bin/$prg" "$out/bin/$prg" --inherit-argv0 --resolve-argv0 ${lib.optionalString (!permitUserSite) ''--set PYTHONNOUSERSITE "true"''} ${lib.concatStringsSep " " makeWrapperArgs}
+                fi
               fi
             fi
           done
