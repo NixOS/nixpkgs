@@ -234,7 +234,7 @@ def test_execute_nix_boot(mock_run: Mock, tmp_path: Path) -> None:
 
     nr.execute(["nixos-rebuild", "boot", "--no-flake", "-vvv", "--no-reexec"])
 
-    assert mock_run.call_count == 6
+    assert mock_run.call_count == 7
     mock_run.assert_has_calls(
         [
             call(
@@ -279,7 +279,16 @@ def test_execute_nix_boot(mock_run: Mock, tmp_path: Path) -> None:
                 **DEFAULT_RUN_KWARGS,
             ),
             call(
-                [config_path / "bin/switch-to-configuration", "boot"],
+                ["test", "-d", "/run/systemd/system"],
+                check=False,
+                **DEFAULT_RUN_KWARGS,
+            ),
+            call(
+                [
+                    *nr.nix.SWITCH_TO_CONFIGURATION_CMD_PREFIX,
+                    config_path / "bin/switch-to-configuration",
+                    "boot",
+                ],
                 check=True,
                 **(DEFAULT_RUN_KWARGS | {"env": {"NIXOS_INSTALL_BOOTLOADER": "0"}}),
             ),
@@ -436,7 +445,7 @@ def test_execute_nix_switch_flake(mock_run: Mock, tmp_path: Path) -> None:
         ]
     )
 
-    assert mock_run.call_count == 3
+    assert mock_run.call_count == 4
     mock_run.assert_has_calls(
         [
             call(
@@ -470,7 +479,17 @@ def test_execute_nix_switch_flake(mock_run: Mock, tmp_path: Path) -> None:
                 **DEFAULT_RUN_KWARGS,
             ),
             call(
-                ["sudo", config_path / "bin/switch-to-configuration", "switch"],
+                ["test", "-d", "/run/systemd/system"],
+                check=False,
+                **DEFAULT_RUN_KWARGS,
+            ),
+            call(
+                [
+                    "sudo",
+                    *nr.nix.SWITCH_TO_CONFIGURATION_CMD_PREFIX,
+                    config_path / "bin/switch-to-configuration",
+                    "switch",
+                ],
                 check=True,
                 **(DEFAULT_RUN_KWARGS | {"env": {"NIXOS_INSTALL_BOOTLOADER": "1"}}),
             ),
@@ -529,7 +548,7 @@ def test_execute_nix_switch_build_target_host(
         ]
     )
 
-    assert mock_run.call_count == 10
+    assert mock_run.call_count == 11
     mock_run.assert_has_calls(
         [
             call(
@@ -661,9 +680,23 @@ def test_execute_nix_switch_build_target_host(
                     *nr.process.SSH_DEFAULT_OPTS,
                     "user@target-host",
                     "--",
+                    "test",
+                    "-d",
+                    "/run/systemd/system",
+                ],
+                check=False,
+                **DEFAULT_RUN_KWARGS,
+            ),
+            call(
+                [
+                    "ssh",
+                    *nr.process.SSH_DEFAULT_OPTS,
+                    "user@target-host",
+                    "--",
                     "sudo",
                     "env",
                     "NIXOS_INSTALL_BOOTLOADER=0",
+                    *nr.nix.SWITCH_TO_CONFIGURATION_CMD_PREFIX,
                     str(config_path / "bin/switch-to-configuration"),
                     "switch",
                 ],
@@ -706,7 +739,7 @@ def test_execute_nix_switch_flake_target_host(
         ]
     )
 
-    assert mock_run.call_count == 4
+    assert mock_run.call_count == 5
     mock_run.assert_has_calls(
         [
             call(
@@ -750,9 +783,23 @@ def test_execute_nix_switch_flake_target_host(
                     *nr.process.SSH_DEFAULT_OPTS,
                     "user@localhost",
                     "--",
+                    "test",
+                    "-d",
+                    "/run/systemd/system",
+                ],
+                check=False,
+                **DEFAULT_RUN_KWARGS,
+            ),
+            call(
+                [
+                    "ssh",
+                    *nr.process.SSH_DEFAULT_OPTS,
+                    "user@localhost",
+                    "--",
                     "sudo",
                     "env",
                     "NIXOS_INSTALL_BOOTLOADER=0",
+                    *nr.nix.SWITCH_TO_CONFIGURATION_CMD_PREFIX,
                     str(config_path / "bin/switch-to-configuration"),
                     "switch",
                 ],
@@ -796,7 +843,7 @@ def test_execute_nix_switch_flake_build_host(
         ]
     )
 
-    assert mock_run.call_count == 6
+    assert mock_run.call_count == 7
     mock_run.assert_has_calls(
         [
             call(
@@ -857,7 +904,16 @@ def test_execute_nix_switch_flake_build_host(
                 **DEFAULT_RUN_KWARGS,
             ),
             call(
-                [config_path / "bin/switch-to-configuration", "switch"],
+                ["test", "-d", "/run/systemd/system"],
+                check=False,
+                **DEFAULT_RUN_KWARGS,
+            ),
+            call(
+                [
+                    *nr.nix.SWITCH_TO_CONFIGURATION_CMD_PREFIX,
+                    config_path / "bin/switch-to-configuration",
+                    "switch",
+                ],
                 check=True,
                 **DEFAULT_RUN_KWARGS,
             ),
@@ -875,6 +931,8 @@ def test_execute_switch_rollback(mock_run: Mock, tmp_path: Path) -> None:
             return CompletedProcess([], 0, str(nixpkgs_path))
         elif args[0] == "git":
             return CompletedProcess([], 0, "")
+        elif args[0] == "test":
+            return CompletedProcess([], 1)
         else:
             return CompletedProcess([], 0)
 
@@ -891,7 +949,7 @@ def test_execute_switch_rollback(mock_run: Mock, tmp_path: Path) -> None:
         ]
     )
 
-    assert mock_run.call_count == 4
+    assert mock_run.call_count == 5
     mock_run.assert_has_calls(
         [
             call(
@@ -921,6 +979,11 @@ def test_execute_switch_rollback(mock_run: Mock, tmp_path: Path) -> None:
                     Path("/nix/var/nix/profiles/system"),
                 ],
                 check=True,
+                **DEFAULT_RUN_KWARGS,
+            ),
+            call(
+                ["test", "-d", "/run/systemd/system"],
+                check=False,
                 **DEFAULT_RUN_KWARGS,
             ),
             call(
@@ -972,6 +1035,8 @@ def test_execute_test_flake(mock_run: Mock, tmp_path: Path) -> None:
     def run_side_effect(args: list[str], **kwargs: Any) -> CompletedProcess[str]:
         if args[0] == "nix":
             return CompletedProcess([], 0, str(config_path))
+        elif args[0] == "test":
+            return CompletedProcess([], 1)
         else:
             return CompletedProcess([], 0)
 
@@ -981,7 +1046,7 @@ def test_execute_test_flake(mock_run: Mock, tmp_path: Path) -> None:
         ["nixos-rebuild", "test", "--flake", "github:user/repo#hostname", "--no-reexec"]
     )
 
-    assert mock_run.call_count == 2
+    assert mock_run.call_count == 3
     mock_run.assert_has_calls(
         [
             call(
@@ -995,6 +1060,11 @@ def test_execute_test_flake(mock_run: Mock, tmp_path: Path) -> None:
                 ],
                 check=True,
                 stdout=PIPE,
+                **DEFAULT_RUN_KWARGS,
+            ),
+            call(
+                ["test", "-d", "/run/systemd/system"],
+                check=False,
                 **DEFAULT_RUN_KWARGS,
             ),
             call(
@@ -1025,6 +1095,8 @@ def test_execute_test_rollback(
                 2084   2024-11-07 23:54:17   (current)
                 """),
             )
+        elif args[0] == "test":
+            return CompletedProcess([], 1)
         else:
             return CompletedProcess([], 0)
 
@@ -1034,7 +1106,7 @@ def test_execute_test_rollback(
         ["nixos-rebuild", "test", "--rollback", "--profile-name", "foo", "--no-reexec"]
     )
 
-    assert mock_run.call_count == 2
+    assert mock_run.call_count == 3
     mock_run.assert_has_calls(
         [
             call(
@@ -1046,6 +1118,11 @@ def test_execute_test_rollback(
                 ],
                 check=True,
                 stdout=PIPE,
+                **DEFAULT_RUN_KWARGS,
+            ),
+            call(
+                ["test", "-d", "/run/systemd/system"],
+                check=False,
                 **DEFAULT_RUN_KWARGS,
             ),
             call(
