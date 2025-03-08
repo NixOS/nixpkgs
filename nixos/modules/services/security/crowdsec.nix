@@ -33,6 +33,8 @@ in
 
     autoUpdateService = mkEnableOption "Auto Hub Update";
 
+    openFirewall = mkEnableOption "opening the ports in the firewall";
+
     user = mkOption {
       type = types.str;
       description = "The user to run crowdsec as";
@@ -848,6 +850,11 @@ in
       };
 
       users.groups.${cfg.group} = lib.mapAttrs (name: lib.mkDefault) { };
+
+      networking.firewall.allowedTCPPorts = lib.mkIf cfg.openFirewall [
+        6060
+        8080
+      ];
     };
 
   meta = {
