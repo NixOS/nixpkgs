@@ -751,6 +751,7 @@
   ./services/matrix/mjolnir.nix
   ./services/matrix/mx-puppet-discord.nix
   ./services/matrix/pantalaimon.nix
+  ./services/matrix/matrix-authentication-service.nix
   ./services/matrix/synapse.nix
   ./services/matrix/synapse-auto-compressor.nix
   ./services/misc/airsonic.nix
