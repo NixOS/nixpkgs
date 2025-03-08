@@ -1,0 +1,24 @@
+diff --git a/Makefile b/Makefile
+index 296634e..07b8904 100644
+--- a/Makefile
++++ b/Makefile
+@@ -7,4 +7,4 @@ builddeb: checktestdata
+ checktestdata: support/checktestdata/bootstrap
+ 
+ support/checktestdata/bootstrap:
+-	git submodule update --init
++	# git submodule update --init
+diff --git a/support/Makefile b/support/Makefile
+index d90a363..874540e 100644
+--- a/support/Makefile
++++ b/support/Makefile
+@@ -16,7 +16,7 @@ $(CONF): checktestdata/bootstrap
+ 	cd checktestdata && ./bootstrap
+ 
+ checktestdata/bootstrap:
+-	git submodule update --init
++	# git submodule update --init
+ 
+ clean:
+ 	$(foreach prog,$(PROGRAMS),$(MAKE) -C $(prog) clean;)
+
