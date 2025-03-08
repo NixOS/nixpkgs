@@ -28,13 +28,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gdlauncher-carbon";
-  version = "2.0.22";
+  version = "2.0.24";
 
   src = appimageTools.extract {
     inherit (finalAttrs) pname version;
     src = fetchurl {
       url = "https://cdn-raw.gdl.gg/launcher/GDLauncher__${finalAttrs.version}__linux__x64.AppImage";
-      hash = "sha256-b1d39cSuVJ17rx8vjlYlyIUvqkBbhCWXuq4Z96K1I3M=";
+      hash = "sha256-d5ZvWSLA/7mY0540TDLMW9qmEFA5xC6Zd83IWakOmGo=";
     };
   };
 
