@@ -21,17 +21,22 @@
   libvorbis,
   libopus,
   nlohmann_json,
+  expat,
+  libGL,
+  curl,
+  webkitgtk_4_1,
+  gtk3,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "giada";
-  version = "1.0.0";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "monocasual";
     repo = "giada";
-    rev = finalAttrs.version;
-    hash = "sha256-vTOUS9mI4B3yRNnM2dNCH7jgMuD3ztdhe1FMgXUIt58=";
+    tag = finalAttrs.version;
+    hash = "sha256-t24S8tmx9VFcpEwe5EzoMQ7xhX8dj92Mq43gaWc+C50=";
     fetchSubmodules = true;
   };
 
@@ -67,6 +72,11 @@ stdenv.mkDerivation (finalAttrs: {
       libvorbis
       libopus
       libXrandr
+      expat
+      libGL
+      curl
+      webkitgtk_4_1
+      gtk3
     ]
     ++ lib.optionals (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isFreeBSD) [
       fontconfig
