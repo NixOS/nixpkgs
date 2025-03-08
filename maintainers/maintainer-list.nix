@@ -9396,6 +9396,12 @@
     matrix = "@chris:netsoj.nl";
     name = "Chris Josten";
   };
+  henkkuli = {
+    github = "henkkuli";
+    githubId = 5155857;
+    name = "Henrik Lievonen";
+    keys = [ { fingerprint = "7A71 5471 419A D31F 74F5  7483 E8EB 11CE 4135 CD6A"; } ];
+  };
   hennk = {
     email = "henning.kiel@gmail.com";
     github = "hennk";
