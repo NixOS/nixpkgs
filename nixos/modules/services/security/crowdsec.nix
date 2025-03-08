@@ -535,16 +535,16 @@ in
       );
       localContextsMap = (map (format.generate "context.yaml") cfg.localConfig.contexts);
       localNotificationsMap = (map (format.generate "notification.yaml") cfg.localConfig.notifications);
-      localProfilesFile = pkgs.writeText "local_profiles.yaml" (
-        lib.strings.concatMapStringsSep "\n---\n" (filename: builtins.readFile filename) (
-          map (prof: format.generate "profile.yaml" prof) cfg.localConfig.profiles
-        )
-      );
-      localAcquisisionFile = pkgs.writeText "local_acquisisions.yaml" (
-        lib.strings.concatMapStringsSep "\n---\n" (filename: builtins.readFile filename) (
-          map (prof: format.generate "acquisition.yaml" prof) cfg.localConfig.acquisitions
-        )
-      );
+      localProfilesFile = pkgs.writeText "local_profiles.yaml" ''
+        ---
+        ${lib.strings.concatMapStringsSep "\n---\n" builtins.toJSON cfg.localConfig.profiles}
+        ---
+      '';
+      localAcquisisionFile = pkgs.writeText "local_acquisisions.yaml" ''
+        ---
+        ${lib.strings.concatMapStringsSep "\n---\n" builtins.toJSON cfg.localConfig.acquisitions}
+        ---
+      '';
 
     in
     lib.mkIf (cfg.enable) {
@@ -734,7 +734,7 @@ in
               let
                 scriptArray =
                   [
-                    "set -euxo pipefail"
+                    "set -euo pipefail"
                     "${lib.getExe cscli} hub update"
                   ]
                   ++ lib.optionals (cfg.hub.collections != [ ]) [
