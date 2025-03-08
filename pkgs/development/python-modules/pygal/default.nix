@@ -55,6 +55,10 @@ buildPythonPackage rec {
     export LANG=en_US.UTF-8
   '';
 
+  # Cairo tries to load system fonts by default.
+  # It's surfaced as a Cairo "out of memory" error in tests.
+  __impureHostDeps = [ "/System/Library/Fonts" ];
+
   meta = with lib; {
     description = "Module for dynamic SVG charting";
     homepage = "http://www.pygal.org";
