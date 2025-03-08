@@ -3,7 +3,6 @@
   stdenv,
   rustPlatform,
   fetchFromGitHub,
-  Security,
   sqlite,
   xdg-utils,
 }:
@@ -23,9 +22,6 @@ rustPlatform.buildRustPackage rec {
     [
       sqlite
       xdg-utils
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Security
     ];
 
   cargoLock = {
