@@ -1,65 +1,3 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  installShellFiles,
-  stdenv,
-}:
-
-buildGoModule rec {
-  pname = "zarf";
-  version = "0.41.0";
-
-  src = fetchFromGitHub {
-    owner = "defenseunicorns";
-    repo = "zarf";
-    rev = "v${version}";
-    hash = "sha256-rY9xWqJ+2Yfs6VRHTF89LmuEruAavDI7MgBm4UFEuBs=";
-  };
-
-  vendorHash = "sha256-Cz+w0tOEamCxf61hvQ03X/kXPY+qrmdBN8s26lr/wZ8=";
-  proxyVendor = true;
-
-  nativeBuildInputs = [ installShellFiles ];
-
-  preBuild = ''
-    mkdir -p build/ui
-    touch build/ui/index.html
-  '';
-
-  doCheck = false;
-
-  ldflags = [
-    "-s"
-    "-w"
-    "-X"
-    "github.com/defenseunicorns/zarf/src/config.CLIVersion=${src.rev}"
-    "-X"
-    "k8s.io/component-base/version.gitVersion=v0.0.0+zarf${src.rev}"
-    "-X"
-    "k8s.io/component-base/version.gitCommit=${src.rev}"
-    "-X"
-    "k8s.io/component-base/version.buildDate=1970-01-01T00:00:00Z"
-  ];
-
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    export K9S_LOGS_DIR=$(mktemp -d)
-    installShellCompletion --cmd zarf \
-      --bash <($out/bin/zarf completion --no-log-file bash) \
-      --fish <($out/bin/zarf completion --no-log-file fish) \
-      --zsh  <($out/bin/zarf completion --no-log-file zsh)
-  '';
-
-  meta = with lib; {
-    description = "DevSecOps for Air Gap & Limited-Connection Systems. https://zarf.dev";
-    mainProgram = "zarf";
-    homepage = "https://github.com/defenseunicorns/zarf.git";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ ragingpastry ];
-  };
-}
-
-
 { lib, stdenv, fetchurl }:
 
 let
@@ -75,10 +13,10 @@ let
 
   # Define architecture-specific hashes (update these with correct hashes)
   hashes = {
-    "x86_64-linux" = "sha256-UPDATE_THIS_HASH_AMD64";
-    "aarch64-linux" = "sha256-UPDATE_THIS_HASH_ARM64";
-    "x86_64-darwin" = "sha256-UPDATE_THIS_HASH_MAC_AMD64";
-    "aarch64-darwin" = "sha256-UPDATE_THIS_HASH_MAC_ARM64";
+    "x86_64-linux" = "sha256-8e77c8194a73fc82496f745f6517ef80f472560a574769eea8460d7d809c42eb";
+    "aarch64-linux" = "sha256-3b6d45becb7c507a699c402744a84c578297b303716aff8e3078a3c479282722";
+    "x86_64-darwin" = "sha256-94cbb26d0b2030ce416354f225e7dd04c6aa227a350b955af57b515de02c5709";
+    "aarch64-darwin" = "sha256-203f6a0061331a30625308cad60f2f58eaaea4e1f8fd968463d1a1f876f94120";
   };
 
   # Select the correct binary URL and hash for the current system
@@ -92,11 +30,19 @@ in stdenv.mkDerivation {
   pname = "zarf";
   inherit version src;
 
-  nativeBuildInputs = [];
+  nativeBuildInputs = [ installShellFiles ];
 
   installPhase = ''
     mkdir -p $out/bin
     install -m755 $src $out/bin/zarf
+  '';
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    export K9S_LOGS_DIR=$(mktemp -d)
+    installShellCompletion --cmd zarf \
+      --bash <($out/bin/zarf completion --no-log-file bash) \
+      --fish <($out/bin/zarf completion --no-log-file fish) \
+      --zsh  <($out/bin/zarf completion --no-log-file zsh)
   '';
 
   meta = with lib; {
@@ -104,6 +50,6 @@ in stdenv.mkDerivation {
     homepage = "https://github.com/zarf-dev/zarf";
     license = licenses.asl20;
     maintainers = with maintainers; [ ragingpastry ];
-    platforms = builtins.attrNames urls; # Automatically set supported platforms
+    platforms = builtins.attrNames urls;
   };
 }
