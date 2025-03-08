@@ -7,6 +7,9 @@
 # ordering should match defaultNativeBuildInputs
 
 {
+  no-broken-symlinks = lib.recurseIntoAttrs (
+    import ./no-broken-symlinks.nix { inherit stdenv lib pkgs; }
+  );
   # TODO: add audit-tmpdir
   compress-man-pages =
     let
@@ -97,7 +100,6 @@
       [[ -e $out/bin/foo ]]
     '';
   };
-  no-broken-symlinks = import ./no-broken-symlinks.nix { inherit stdenv lib pkgs; };
   # TODO: add multiple-outputs
   patch-shebangs = import ./patch-shebangs.nix { inherit stdenv lib pkgs; };
   prune-libtool-files =
