@@ -3528,7 +3528,7 @@ with pkgs;
     garage
       garage_0_8 garage_0_9
       garage_0_8_7 garage_0_9_4
-      garage_1_0_1 garage_1_x;
+      garage_1_1_0 garage_1_x;
 
   gauge-unwrapped = callPackage ../development/tools/gauge { };
   gauge = callPackage ../development/tools/gauge/wrapper.nix { };
@@ -7888,7 +7888,7 @@ with pkgs;
   electron_29 = electron_29-bin;
   electron_30 = electron_30-bin;
   electron_31 = electron_31-bin;
-  electron_32 = if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_32 then electron-source.electron_32 else electron_32-bin;
+  electron_32 = electron_32-bin;
   electron_33 = if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_33 then electron-source.electron_33 else electron_33-bin;
   electron_34 = electron_34-bin;
   electron = electron_33;

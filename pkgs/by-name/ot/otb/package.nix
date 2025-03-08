@@ -42,13 +42,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "otb";
-  version = "9.0.0";
+  version = "9.1.0";
 
   src = fetchFromGitHub {
     owner = "orfeotoolbox";
     repo = "otb";
     tag = finalAttrs.version;
-    hash = "sha256-Ut2aimQL6Reg62iceoaM7/nRuEV8PBWtOK7KFHKp0ws=";
+    hash = "sha256-NRyq6WTGxtPpBHXBXLCQyq60n0cJ/575xPs7QYSziYo=";
   };
 
   nativeBuildInputs = [
