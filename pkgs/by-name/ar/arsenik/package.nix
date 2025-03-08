@@ -24,7 +24,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "A 33-key layout that works with all keyboards";
+    description = "33-key layout that works with all keyboards";
     homepage = "https://github.com/OneDeadKey/arsenik";
     license = lib.licenses.unlicense;
     maintainers = with lib.maintainers; [ nim65s ];
