@@ -38,6 +38,7 @@
   webkitgtk_4_0,
   wxGTK31,
   xorg,
+  libnoise,
   withSystemd ? stdenv.hostPlatform.isLinux,
 }:
 let
@@ -56,13 +57,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "orca-slicer";
-  version = "v2.2.0-unstable-2025-01-23";
+  version = "v2.3.0-beta2";
 
   src = fetchFromGitHub {
     owner = "SoftFever";
     repo = "OrcaSlicer";
-    rev = "1b1288c4353afca44edee323061bdd5c87fcafb9";
-    hash = "sha256-IPdKusP2cB5jgr6JjQVu8ZjJ2kiG6mfmfZtDVSlAFNg=";
+    tag = version;
+    hash = "sha256-WdMzjsE/Ym6T/2Ad6xWx+a3cqZJvDdvN0oqJHqHqC/4=";
   };
 
   nativeBuildInputs = [
@@ -116,6 +117,7 @@ stdenv.mkDerivation rec {
       wxGTK'
       xorg.libX11
       opencv
+      libnoise
     ]
     ++ lib.optionals withSystemd [ systemd ]
     ++ checkInputs;
@@ -174,6 +176,7 @@ stdenv.mkDerivation rec {
 
   prePatch = ''
     sed -i 's|nlopt_cxx|nlopt|g' cmake/modules/FindNLopt.cmake
+    sed -i 's|"libnoise/noise.h"|"noise/noise.h"|' src/libslic3r/PerimeterGenerator.cpp
   '';
 
   cmakeFlags = [
@@ -191,6 +194,9 @@ stdenv.mkDerivation rec {
     "-DCMAKE_CXX_FLAGS=-DGL_SILENCE_DEPRECATION"
     "-DCMAKE_EXE_LINKER_FLAGS=-Wl,--no-as-needed"
     "-DORCA_VERSION_CHECK_DEFAULT=OFF"
+    "-DLIBNOISE_INCLUDE_DIR=${libnoise}/include/noise"
+    "-DLIBNOISE_LIBRARY=${libnoise}/lib/libnoise-static.a"
+    "-Wno-dev"
   ];
 
   preFixup = ''
