@@ -12961,6 +12961,8 @@ self: super: with self; {
 
   pysignalclirestapi = callPackage ../development/python-modules/pysignalclirestapi { };
 
+  pysignalr = callPackage ../development/python-modules/pysignalr { };
+
   pysigset = callPackage ../development/python-modules/pysigset { };
 
   pysim = callPackage ../development/python-modules/pysim { };
@@ -13751,6 +13753,8 @@ self: super: with self; {
   };
 
   pyeapi = callPackage ../development/python-modules/pyeapi { };
+
+  pyeasee = callPackage ../development/python-modules/pyeasee { };
 
   pyeverlights = callPackage ../development/python-modules/pyeverlights { };
 
