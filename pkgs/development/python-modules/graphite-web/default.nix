@@ -1,36 +1,39 @@
 {
   lib,
   buildPythonPackage,
-  python,
+  fetchFromGitHub,
+  fetchpatch,
+
+  # dependencies
   cairocffi,
   django,
   django-tagging,
-  fetchFromGitHub,
-  fetchpatch,
   gunicorn,
-  mock,
   pyparsing,
   python-memcached,
-  pythonOlder,
   pytz,
   six,
   txamqp,
   urllib3,
   whisper,
+
+  # tests
+  mock,
+  python,
+
+  # passthru
   nixosTests,
 }:
 
 buildPythonPackage rec {
   pname = "graphite-web";
   version = "1.1.10";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "graphite-project";
-    repo = pname;
-    rev = version;
+    repo = "graphite-web";
+    tag = version;
     hash = "sha256-2HgCBKwLfxJLKMopoIdsEW5k/j3kNAiifWDnJ98a7Qo=";
   };
 
@@ -47,7 +50,12 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail "cf.readfp" "cf.read"
+  '';
+
+  dependencies = [
     cairocffi
     django
     django-tagging
@@ -61,11 +69,10 @@ buildPythonPackage rec {
     whisper
   ];
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "Django>=1.8,<3.1" "Django" \
-      --replace "django-tagging==0.4.3" "django-tagging"
-  '';
+  pythonRelaxDeps = [
+    "django"
+    "django-tagging"
+  ];
 
   # Carbon-s default installation is /opt/graphite. This env variable ensures
   # carbon is installed as a regular Python module.
@@ -73,7 +80,7 @@ buildPythonPackage rec {
 
   preConfigure = ''
     substituteInPlace webapp/graphite/settings.py \
-      --replace "join(WEBAPP_DIR, 'content')" "join('$out', 'webapp', 'content')"
+      --replace-fail "join(WEBAPP_DIR, 'content')" "join('$out', 'webapp', 'content')"
   '';
 
   checkInputs = [ mock ];
@@ -99,11 +106,14 @@ buildPythonPackage rec {
     inherit (nixosTests) graphite;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Enterprise scalable realtime graphing";
+    changelog = "https://graphite.readthedocs.io/en/latest/releases/${
+      builtins.replaceStrings [ "." ] [ "_" ] version
+    }.html";
     homepage = "http://graphiteapp.org/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       offline
       basvandijk
     ];
