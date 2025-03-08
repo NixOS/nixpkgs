@@ -12,7 +12,7 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "open-web-calendar";
-  version = "1.47";
+  version = "1.48";
   pyproject = true;
 
   disabled = python.pythonOlder "3.9";
@@ -20,7 +20,7 @@ python.pkgs.buildPythonApplication rec {
   src = fetchPypi {
     inherit version;
     pname = "open_web_calendar";
-    hash = "sha256-Nou+ZiJK21hzZkru7Z+/eBOrxgw08H+TLbgNjMJenBA=";
+    hash = "sha256-SSe5vkrfTpUFdSLglBxo5//VZfuXYnWs5sUKJL2zWOw=";
   };
 
   # The Pypi tarball doesn't contain open_web_calendars/features
@@ -46,6 +46,9 @@ python.pkgs.buildPythonApplication rec {
       flask
       icalendar
       icalendar-compatibility
+      cryptography
+      bcrypt
+      caldav
       requests
       pyyaml
       recurring-ical-events
