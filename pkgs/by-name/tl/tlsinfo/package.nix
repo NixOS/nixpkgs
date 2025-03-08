@@ -1,5 +1,6 @@
 {
   lib,
+  gitUpdater,
   buildGoModule,
   fetchFromGitHub,
 }:
@@ -21,6 +22,8 @@ buildGoModule rec {
     "-s"
     "-w"
   ];
+
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   meta = {
     changelog = "https://github.com/paepckehh/tlsinfo/releases/tag/v${version}";
