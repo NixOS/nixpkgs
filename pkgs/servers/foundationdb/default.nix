@@ -17,6 +17,9 @@
   toml11,
   jemalloc,
   doctest,
+  zlib,
+
+  nixosTests,
 }@args:
 
 let
@@ -24,8 +27,8 @@ let
 in
 {
   foundationdb73 = cmakeBuild {
-    version = "7.3.42";
-    hash = "sha256-jQcm+HLai5da2pZZ7iLdN6fpQZxf5+/kkfv9OSXQ57c=";
+    version = "7.3.62";
+    hash = "sha256-tPB/jJbdC11wQvPOI5KtlpQgw9yVLBhxABGgDSBpwBU=";
     boost = boost186;
     ssl = openssl;
 
@@ -45,5 +48,9 @@ in
         hash = "sha256-ZLIcmcfirm1+96DtTIr53HfM5z38uTLZrRNHAmZL6rc=";
       })
     ];
+  };
+
+  passthru = {
+    tests.foundationdb = nixosTests.foundationdb;
   };
 }
