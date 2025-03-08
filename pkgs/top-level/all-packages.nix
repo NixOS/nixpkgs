@@ -13423,6 +13423,13 @@ with pkgs;
     libName = "librewolf";
   };
 
+  firedragon-unwrapped = callPackage ../applications/networking/browsers/firedragon {};
+
+  firedragon = wrapFirefox firedragon-unwrapped {
+    inherit (firedragon-unwrapped) extraPrefsFiles extraPoliciesFiles;
+    libName = "firedragon";
+  };
+
   firefox_decrypt = python3Packages.callPackage ../tools/security/firefox_decrypt { };
 
   floorp-unwrapped = import ../applications/networking/browsers/floorp {
