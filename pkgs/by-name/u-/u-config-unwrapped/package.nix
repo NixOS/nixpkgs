@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "u-config";
-  version = "0.33.2";
+  version = "0.33.3";
 
   src = fetchFromGitHub {
     owner = "skeeto";
     repo = "u-config";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-T0reHSgPmX+fhiL+6whqQFIg3etfYveYc4WA9z7Oh7Q=";
+    hash = "sha256-2chZwS8aC7mbPJwsf5tju2ZNZNda650qT+ARjNJ2k2g=";
   };
 
   dontConfigure = true;
