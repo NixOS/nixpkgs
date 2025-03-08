@@ -30,6 +30,9 @@ python311Packages.buildPythonApplication {
   pythonImportsCheck = [ "toolong" ];
   doCheck = false; # no tests
 
+  # From https://github.com/Textualize/toolong/pull/63, also fixes https://github.com/NixOS/nixpkgs/issues/360671
+  patches = [ ./0001-log-view.patch ];
+
   passthru.tests.version = testers.testVersion {
     package = toolong;
     command = "${lib.getExe toolong} --version";
