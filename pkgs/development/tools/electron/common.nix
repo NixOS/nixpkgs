@@ -198,7 +198,6 @@ in
     allow_runtime_configurable_key_storage = true;
     enable_cet_shadow_stack = false;
     is_cfi = false;
-    use_qt = false;
     v8_builtins_profiling_log_file = "";
     enable_dangling_raw_ptr_checks = false;
     dawn_use_built_dxc = false;
