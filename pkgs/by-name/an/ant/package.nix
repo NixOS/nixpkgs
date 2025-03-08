@@ -2,7 +2,7 @@
   fetchurl,
   lib,
   stdenv,
-  coreutils,
+  jre,
   makeWrapper,
   gitUpdater,
 }:
@@ -10,6 +10,8 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "ant";
   version = "1.10.15";
+
+  buildInputs = [ jre ];
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -24,64 +26,27 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   installPhase = ''
-    mkdir -p $out/bin $out/share/ant
+    mkdir -p $out/share/ant
     mv * $out/share/ant/
 
     # Get rid of the manual (35 MiB).  Maybe we should put this in a
-    # separate output.  Keep the antRun script since it's vanilla sh
-    # and needed for the <exec/> task (but since we set ANT_HOME to
-    # a weird value, we have to move antRun to a weird location).
-    # Get rid of the other Ant scripts since we provide our own.
-    mv $out/share/ant/bin/antRun $out/bin/
-    rm -rf $out/share/ant/{manual,bin,WHATSNEW}
-    mkdir $out/share/ant/bin
-    mv $out/bin/antRun $out/share/ant/bin/
+    # separate output.
+    rm -rf $out/share/ant/{manual,WHATSNEW}
+
+    # Link Ant's special $ANT_HOME/bin to the standard /bin location
+    ln -s $out/share/ant/bin $out
 
     # Install ant-contrib.
     unpackFile $contrib
     cp -p ant-contrib/ant-contrib-*.jar $out/share/ant/lib/
 
-    cat >> $out/bin/ant <<EOF
-    #! ${stdenv.shell} -e
-
-    ANT_HOME=$out/share/ant
-
-    # Find the JDK by looking for javac.  As a fall-back, find the
-    # JRE by looking for java.  The latter allows just the JRE to be
-    # used with (say) ECJ as the compiler.  Finally, allow the GNU
-    # JVM.
-    if [ -z "\''${JAVA_HOME-}" ]; then
-        for i in javac java gij; do
-            if p="\$(type -p \$i)"; then
-                export JAVA_HOME="\$(${coreutils}/bin/dirname \$(${coreutils}/bin/dirname \$(${coreutils}/bin/readlink -f \$p)))"
-                break
-            fi
-        done
-        if [ -z "\''${JAVA_HOME-}" ]; then
-            echo "\$0: cannot find the JDK or JRE" >&2
-            exit 1
-        fi
-    fi
-
-    if [ -z \$NIX_JVM ]; then
-        if [ -e \$JAVA_HOME/bin/java ]; then
-            NIX_JVM=\$JAVA_HOME/bin/java
-        elif [ -e \$JAVA_HOME/bin/gij ]; then
-            NIX_JVM=\$JAVA_HOME/bin/gij
-        else
-            NIX_JVM=java
-        fi
-    fi
-
-    LOCALCLASSPATH="\$ANT_HOME/lib/ant-launcher.jar\''${LOCALCLASSPATH:+:}\$LOCALCLASSPATH"
-
-    exec \$NIX_JVM \$NIX_ANT_OPTS \$ANT_OPTS -classpath "\$LOCALCLASSPATH" \
-        -Dant.home=\$ANT_HOME -Dant.library.dir="\$ANT_LIB" \
-        org.apache.tools.ant.launch.Launcher \$NIX_ANT_ARGS \$ANT_ARGS \
-        -cp "\$CLASSPATH" "\$@"
-    EOF
-
-    chmod +x $out/bin/ant
+    # Wrap the wrappers.
+    for wrapper in ant runant.py runant.pl; do
+      wrapProgram "$out/share/ant/bin/$wrapper" \
+        --set JAVA_HOME "${jre.home}" \
+        --set ANT_HOME "$out/share/ant" \
+        --prefix CLASSPATH : "$out/share/ant/lib"
+    done
   '';
 
   passthru = {
