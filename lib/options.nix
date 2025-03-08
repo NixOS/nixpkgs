@@ -418,7 +418,7 @@ rec {
   mergeDefaultOption = loc: defs:
     let list = getValues defs; in
     if length list == 1 then head list
-    else if all isFunction list then x: mergeDefaultOption loc (map (f: f x) list)
+    else if all isFunction list then x: mergeDefaultOption loc (map (def: def // { value = def.value x; }) defs)
     else if all isList list then concatLists list
     else if all isAttrs list then foldl' lib.mergeAttrs {} list
     else if all isBool list then foldl' lib.or false list
