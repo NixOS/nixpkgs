@@ -31,6 +31,7 @@ in
     maintainers = with lib.maintainers; [
       squalus
       dwrege
+      fpletz
     ];
     platforms = lib.platforms.unix;
     badPlatforms = lib.platforms.darwin;
