@@ -649,150 +649,145 @@ in
           Unit = "crowdsec-update-hub.service";
         };
       };
-      systemd.services =
-        let
-          sudo_doas =
-            if config.security.doas.enable == true then "${pkgs.doas}/bin/doas" else "${pkgs.sudo}/bin/sudo";
-        in
-        {
-          crowdsec-update-hub = lib.mkIf (cfg.autoUpdateService) {
-            description = "Update the crowdsec hub index";
-            serviceConfig = {
-              Type = "oneshot";
-              User = cfg.user;
-              Group = cfg.group;
-              LimitNOFILE = lib.mkDefault 65536;
-              CapabilityBoundingSet = lib.mkDefault [ ];
-              NoNewPrivileges = lib.mkDefault true;
-              LockPersonality = lib.mkDefault true;
-              RemoveIPC = lib.mkDefault true;
-              ReadWritePaths = [
-                rootDir
-                confDir
-              ];
-              ProtectSystem = lib.mkDefault "strict";
-              PrivateUsers = lib.mkDefault true;
-              ProtectHome = lib.mkDefault true;
-              PrivateTmp = lib.mkDefault true;
-              PrivateDevices = lib.mkDefault true;
-              ProtectHostname = lib.mkDefault true;
-              ProtectKernelTunables = lib.mkDefault true;
-              ProtectKernelModules = lib.mkDefault true;
-              ProtectControlGroups = lib.mkDefault true;
-              ProtectProc = lib.mkDefault "invisible";
-              RestrictNamespaces = lib.mkDefault true;
-              RestrictRealtime = lib.mkDefault true;
-              RestrictSUIDSGID = lib.mkDefault true;
-              ExecPaths = [ "/nix/store" ];
-              NoExecPaths = [ "/" ];
-              ExecStart = "${lib.getExe cscli} --error hub update";
-              ExecStartPost = "systemctl reload crowdsec.service";
-            };
-          };
-
-          crowdsec = {
-            description = "CrowdSec is a free, modern & collaborative behavior detection engine, coupled with a global IP reputation network.";
-            path = [ cscli ];
-            wantedBy = [ "multi-user.target" ];
-            after = [ "network-online.target" ];
-            wants = [ "network-online.target" ];
-            serviceConfig = {
-              User = cfg.user;
-              Group = cfg.group;
-              Restart = "on-failure";
-
-              LimitNOFILE = lib.mkDefault 65536;
-              CapabilityBoundingSet = lib.mkDefault [ ];
-              NoNewPrivileges = lib.mkDefault true;
-              LockPersonality = lib.mkDefault true;
-              RemoveIPC = lib.mkDefault true;
-              ReadWritePaths = [
-                rootDir
-                confDir
-              ];
-              ProtectSystem = lib.mkDefault "strict";
-              PrivateUsers = lib.mkDefault true;
-              ProtectHome = lib.mkDefault true;
-              PrivateTmp = lib.mkDefault true;
-              PrivateDevices = lib.mkDefault true;
-              ProtectHostname = lib.mkDefault true;
-              ProtectKernelTunables = lib.mkDefault true;
-              ProtectKernelModules = lib.mkDefault true;
-              ProtectControlGroups = lib.mkDefault true;
-              ProtectProc = lib.mkDefault "invisible";
-              RestrictNamespaces = lib.mkDefault true;
-              RestrictRealtime = lib.mkDefault true;
-              RestrictSUIDSGID = lib.mkDefault true;
-              ExecPaths = [ "/nix/store" ];
-              NoExecPaths = [ "/" ];
-
-              ExecStart = "${lib.getExe' pkg "crowdsec"} -c ${configFile}";
-              ExecStartPre =
-                let
-                  scriptArray =
-                    [
-                      "#!${pkgs.runtimeShell}"
-                      "set -euxo pipefail"
-                      "cscli hub update"
-                    ]
-                    ++ lib.optionals (cfg.hub.collections != [ ]) [
-                      "cscli collections install ${
-                        lib.strings.concatMapStringsSep " " (x: lib.escapeShellArg x) cfg.hub.collections
-                      }"
-                    ]
-                    ++ lib.optionals (cfg.hub.scenarios != [ ]) [
-                      "cscli scenarios install ${
-                        lib.strings.concatMapStringsSep " " (x: lib.escapeShellArg x) cfg.hub.scenarios
-                      }"
-                    ]
-                    ++ lib.optionals (cfg.hub.parsers != [ ]) [
-                      "cscli parsers install ${
-                        lib.strings.concatMapStringsSep " " (x: lib.escapeShellArg x) cfg.hub.parsers
-                      }"
-                    ]
-                    ++ lib.optionals (cfg.hub.postOverflows != [ ]) [
-                      "cscli postoverflows install ${
-                        lib.strings.concatMapStringsSep " " (x: lib.escapeShellArg x) cfg.hub.postOverflows
-                      }"
-                    ]
-                    ++ lib.optionals (cfg.hub.appSecConfigs != [ ]) [
-                      "cscli appsec-configs install ${
-                        lib.strings.concatMapStringsSep " " (x: lib.escapeShellArg x) cfg.hub.appSecConfigs
-                      }"
-                    ]
-                    ++ lib.optionals (cfg.hub.appSecRules != [ ]) [
-                      "cscli appsec-rules install ${
-                        lib.strings.concatMapStringsSep " " (x: lib.escapeShellArg x) cfg.hub.appSecRules
-                      }"
-                    ]
-                    ++ lib.optionals (cfg.settings.general.api.server.enable) [
-                      ''
-                        if [ ! -s "${cfg.settings.general.api.client.credentials_path}" ]; then
-                          cscli machine add "${cfg.name}" --auto
-                        fi
-                      ''
-                    ]
-                    ++ lib.optionals (capiFile != null) [
-                      ''
-                        if ! grep -q password "${capiFile}" ]; then
-                          cscli capi register
-                        fi
-                      ''
-                    ]
-                    ++ lib.optionals (tokenFile != null) [
-                      ''
-                        if [ ! -e "${tokenFile}" ]; then
-                          cscli console enroll "$(cat ${tokenFile})" --name ${cfg.name}
-                        fi
-                      ''
-                    ];
-
-                  script = pkgs.writeScriptBin "crowdsec-setup" (lib.strings.concatStringsSep "\n" scriptArray);
-                in
-                [ "${lib.getExe script}" ];
-            };
+      systemd.services = {
+        crowdsec-update-hub = lib.mkIf (cfg.autoUpdateService) {
+          description = "Update the crowdsec hub index";
+          serviceConfig = {
+            Type = "oneshot";
+            User = cfg.user;
+            Group = cfg.group;
+            LimitNOFILE = lib.mkDefault 65536;
+            CapabilityBoundingSet = lib.mkDefault [ ];
+            NoNewPrivileges = lib.mkDefault true;
+            LockPersonality = lib.mkDefault true;
+            RemoveIPC = lib.mkDefault true;
+            ReadWritePaths = [
+              rootDir
+              confDir
+            ];
+            ProtectSystem = lib.mkDefault "strict";
+            PrivateUsers = lib.mkDefault true;
+            ProtectHome = lib.mkDefault true;
+            PrivateTmp = lib.mkDefault true;
+            PrivateDevices = lib.mkDefault true;
+            ProtectHostname = lib.mkDefault true;
+            ProtectKernelTunables = lib.mkDefault true;
+            ProtectKernelModules = lib.mkDefault true;
+            ProtectControlGroups = lib.mkDefault true;
+            ProtectProc = lib.mkDefault "invisible";
+            RestrictNamespaces = lib.mkDefault true;
+            RestrictRealtime = lib.mkDefault true;
+            RestrictSUIDSGID = lib.mkDefault true;
+            ExecPaths = [ "/nix/store" ];
+            NoExecPaths = [ "/" ];
+            ExecStart = "${lib.getExe cscli} --error hub update";
+            ExecStartPost = "systemctl reload crowdsec.service";
           };
         };
+
+        crowdsec = {
+          description = "CrowdSec is a free, modern & collaborative behavior detection engine, coupled with a global IP reputation network.";
+          path = [ cscli ];
+          wantedBy = [ "multi-user.target" ];
+          after = [ "network-online.target" ];
+          wants = [ "network-online.target" ];
+          serviceConfig = {
+            User = cfg.user;
+            Group = cfg.group;
+            Restart = "on-failure";
+
+            LimitNOFILE = lib.mkDefault 65536;
+            CapabilityBoundingSet = lib.mkDefault [ ];
+            NoNewPrivileges = lib.mkDefault true;
+            LockPersonality = lib.mkDefault true;
+            RemoveIPC = lib.mkDefault true;
+            ReadWritePaths = [
+              rootDir
+              confDir
+            ];
+            ProtectSystem = lib.mkDefault "strict";
+            PrivateUsers = lib.mkDefault true;
+            ProtectHome = lib.mkDefault true;
+            PrivateTmp = lib.mkDefault true;
+            PrivateDevices = lib.mkDefault true;
+            ProtectHostname = lib.mkDefault true;
+            ProtectKernelTunables = lib.mkDefault true;
+            ProtectKernelModules = lib.mkDefault true;
+            ProtectControlGroups = lib.mkDefault true;
+            ProtectProc = lib.mkDefault "invisible";
+            RestrictNamespaces = lib.mkDefault true;
+            RestrictRealtime = lib.mkDefault true;
+            RestrictSUIDSGID = lib.mkDefault true;
+            ExecPaths = [ "/nix/store" ];
+            NoExecPaths = [ "/" ];
+
+            ExecStart = "${lib.getExe' pkg "crowdsec"} -c ${configFile}";
+            ExecStartPre =
+              let
+                scriptArray =
+                  [
+                    "#!${pkgs.runtimeShell}"
+                    "set -euxo pipefail"
+                    "cscli hub update"
+                  ]
+                  ++ lib.optionals (cfg.hub.collections != [ ]) [
+                    "cscli collections install ${
+                      lib.strings.concatMapStringsSep " " (x: lib.escapeShellArg x) cfg.hub.collections
+                    }"
+                  ]
+                  ++ lib.optionals (cfg.hub.scenarios != [ ]) [
+                    "cscli scenarios install ${
+                      lib.strings.concatMapStringsSep " " (x: lib.escapeShellArg x) cfg.hub.scenarios
+                    }"
+                  ]
+                  ++ lib.optionals (cfg.hub.parsers != [ ]) [
+                    "cscli parsers install ${
+                      lib.strings.concatMapStringsSep " " (x: lib.escapeShellArg x) cfg.hub.parsers
+                    }"
+                  ]
+                  ++ lib.optionals (cfg.hub.postOverflows != [ ]) [
+                    "cscli postoverflows install ${
+                      lib.strings.concatMapStringsSep " " (x: lib.escapeShellArg x) cfg.hub.postOverflows
+                    }"
+                  ]
+                  ++ lib.optionals (cfg.hub.appSecConfigs != [ ]) [
+                    "cscli appsec-configs install ${
+                      lib.strings.concatMapStringsSep " " (x: lib.escapeShellArg x) cfg.hub.appSecConfigs
+                    }"
+                  ]
+                  ++ lib.optionals (cfg.hub.appSecRules != [ ]) [
+                    "cscli appsec-rules install ${
+                      lib.strings.concatMapStringsSep " " (x: lib.escapeShellArg x) cfg.hub.appSecRules
+                    }"
+                  ]
+                  ++ lib.optionals (cfg.settings.general.api.server.enable) [
+                    ''
+                      if [ ! -s "${cfg.settings.general.api.client.credentials_path}" ]; then
+                        cscli machine add "${cfg.name}" --auto
+                      fi
+                    ''
+                  ]
+                  ++ lib.optionals (capiFile != null) [
+                    ''
+                      if ! grep -q password "${capiFile}" ]; then
+                        cscli capi register
+                      fi
+                    ''
+                  ]
+                  ++ lib.optionals (tokenFile != null) [
+                    ''
+                      if [ ! -e "${tokenFile}" ]; then
+                        cscli console enroll "$(cat ${tokenFile})" --name ${cfg.name}
+                      fi
+                    ''
+                  ];
+
+                script = pkgs.writeScriptBin "crowdsec-setup" (lib.strings.concatStringsSep "\n" scriptArray);
+              in
+              [ "${lib.getExe script}" ];
+          };
+        };
+      };
 
       systemd.tmpfiles.rules = (
         [
