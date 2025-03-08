@@ -5,15 +5,21 @@
 }:
 
 let
+  inherit (lib.strings)
+    replaceStrings
+    ;
+
   majorVersion = "0";
   minorVersion = "701";
 in
-stdenvNoCC.mkDerivation {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "vegur";
   version = "${majorVersion}.${minorVersion}";
 
   src = fetchzip {
-    url = "https://dotcolon.net/download/fonts/vegur_${majorVersion}${minorVersion}.zip";
+    url = "https://dotcolon.net/files/fonts/vegur_${
+      replaceStrings [ "." ] [ "" ] finalAttrs.version
+    }.zip";
     hash = "sha256-sGb3mEb3g15ZiVCxEfAanly8zMUopLOOjw8W4qbXLPA=";
     stripRoot = false;
   };
@@ -27,10 +33,13 @@ stdenvNoCC.mkDerivation {
   '';
 
   meta = with lib; {
-    homepage = "http://dotcolon.net/font/vegur/";
+    homepage = "http://dotcolon.net/fonts/vegur/";
     description = "Humanist sans serif font";
     platforms = platforms.all;
-    maintainers = with maintainers; [ minijackson ];
+    maintainers = with maintainers; [
+      djacu
+      minijackson
+    ];
     license = licenses.cc0;
   };
-}
+})
