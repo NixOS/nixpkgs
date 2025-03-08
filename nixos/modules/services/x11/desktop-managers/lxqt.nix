@@ -3,8 +3,7 @@
 with lib;
 
 let
-  xcfg = config.services.xserver;
-  cfg = xcfg.desktopManager.lxqt;
+  cfg = config.services.xserver.desktopManager.lxqt;
 
 in
 
@@ -15,16 +14,28 @@ in
 
   options = {
 
-    services.xserver.desktopManager.lxqt.enable = mkOption {
-      type = types.bool;
-      default = false;
-      description = "Enable the LXQt desktop manager";
+    services.xserver.desktopManager.lxqt.enable = mkEnableOption "the LXQt desktop manager";
+
+    services.xserver.desktopManager.lxqt.enableWaylandSession = mkEnableOption "the experimental LXQt Wayland session";
+
+    services.xserver.desktopManager.lxqt.iconThemePackage =
+      lib.mkPackageOption pkgs [ "kdePackages" "breeze-icons" ] { } // {
+        description = "The package that provides a default icon theme.";
+      };
+
+    services.xserver.desktopManager.lxqt.extraPackages = lib.mkOption {
+      type = with lib.types; listOf package;
+      default = with pkgs; [ openbox lxqt.obconf-qt ];
+      defaultText = lib.literalExpression "with pkgs; [ openbox lxqt.obconf-qt ]";
+      example = lib.literalExpression "with pkgs; [ xscreensaver ]";
+      description = "Extra packages to be installed system wide.";
     };
 
     environment.lxqt.excludePackages = mkOption {
-      default = [];
-      example = literalExpression "[ pkgs.lxqt.qterminal ]";
-      type = types.listOf types.package;
+      type = with lib.types; listOf package;
+      default = [ ];
+      defaultText = lib.literalExpression "[ ]";
+      example = lib.literalExpression "with pkgs; [ lxqt.qterminal lxqt.screengrab ]";
       description = "Which LXQt packages to exclude from the default environment";
     };
 
@@ -32,8 +43,14 @@ in
 
   config = mkIf cfg.enable {
 
-    services.xserver.desktopManager.session = singleton {
+    services.xserver.desktopManager.session =
+      let lxqtSession = if cfg.enableWaylandSession
+                        then "${pkgs.lxqt.lxqt-wayland-session}/bin/startlxqtwayland"
+                        else "${pkgs.lxqt.lxqt-session}/bin/startlxqt";
+      in singleton {
       name = "lxqt";
+      prettyName = "LXQt Session";
+      desktopNames = [ "LXQt " ];
       bgSupport = true;
       start = ''
         # Upstream installs default configuration files in
@@ -48,16 +65,33 @@ in
         #
         export XDG_CONFIG_DIRS=$XDG_CONFIG_DIRS''${XDG_CONFIG_DIRS:+:}${config.system.path}/share
 
-        exec ${pkgs.lxqt.lxqt-session}/bin/startlxqt
+        exec ${lxqtSession}
       '';
-    };
+      };
 
     environment.systemPackages =
       pkgs.lxqt.preRequisitePackages ++
       pkgs.lxqt.corePackages ++
-      (utils.removePackagesByName
-        pkgs.lxqt.optionalPackages
-        config.environment.lxqt.excludePackages);
+      optionals cfg.enableWaylandSession
+        [
+          pkgs.kdePackages.layer-shell-qt
+          pkgs.lxqt.lxqt-wayland-session
+          pkgs.qt6.qtwayland
+
+          # used in the default sway configuration for LXQt
+          pkgs.libnotify
+          pkgs.swaybg
+          pkgs.swayidle
+        ] ++
+      [
+        cfg.iconThemePackage
+      ] ++
+      (
+        utils.removePackagesByName
+          pkgs.lxqt.optionalPackages
+          config.environment.lxqt.excludePackages
+      ) ++
+      cfg.extraPackages;
 
     # Link some extra directories in /run/current-system/software/share
     environment.pathsToLink = [ "/share" ];
@@ -65,7 +99,7 @@ in
     programs.gnupg.agent.pinentryPackage = mkDefault pkgs.pinentry-qt;
 
     # virtual file systems support for PCManFM-QT
-    services.gvfs.enable = true;
+    services.gvfs.enable = mkDefault true;
 
     services.upower.enable = config.powerManagement.enable;
 
@@ -75,6 +109,8 @@ in
 
     # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1050804
     xdg.portal.config.lxqt.default = mkDefault [ "lxqt" "gtk" ];
+
+    programs.labwc.enable = mkDefault (cfg.enableWaylandSession);
   };
 
 }
