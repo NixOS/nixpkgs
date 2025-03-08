@@ -1,12 +1,18 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
+  installShellFiles,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "dstask";
   version = "1.0.1";
+
+  nativeBuildInputs = [
+    installShellFiles
+  ];
 
   src = fetchFromGitHub {
     owner = "naggie";
@@ -23,6 +29,13 @@ buildGoModule (finalAttrs: {
   vendorHash = "sha256-HSqAbxkkjuMulFymeqApWr/JZ+a7OUTu5EYLGPL/j2U=";
 
   doCheck = false;
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd dstask \
+      --bash <($out/bin/dstask bash-completion) \
+      --fish <($out/bin/dstask fish-completion) \
+      --zsh <($out/bin/dstask zsh-completion)
+  '';
 
   # The ldflags reduce the executable size by stripping some debug stuff.
   # The other variables are set so that the output of dstask version shows the
