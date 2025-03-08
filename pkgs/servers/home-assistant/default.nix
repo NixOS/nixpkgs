@@ -383,7 +383,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run update-component-packages.py after updating
-  hassVersion = "2025.3.0";
+  hassVersion = "2025.3.1";
 
 in
 python.pkgs.buildPythonApplication rec {
@@ -404,13 +404,13 @@ python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     tag = version;
-    hash = "sha256-zMsJ/YAwMIdLDF256rxj63QsZD26p71SgYpf4zwzD1A=";
+    hash = "sha256-tM23n0/98kzB7fqCNZ0+qREQnLxlc6oBmPAKv//TDNk=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-jsRIStPIbWXj24qjh9ZxH0QPN+zUOZeP6efRGYovUms=";
+    hash = "sha256-s+4l9FZQ5A0cvPXXypxzxzpMgrEnrgogzH/S7VwUZe4=";
   };
 
   build-system = with python.pkgs; [
@@ -554,6 +554,7 @@ python.pkgs.buildPythonApplication rec {
       # some components are needed even if tests in tests/components are disabled
       "default_config"
       "hue"
+      "qwikswitch"
     ];
 
   pytestFlagsArray = [
@@ -566,17 +567,6 @@ python.pkgs.buildPythonApplication rec {
     "--showlocals"
     # AssertionError: assert 1 == 0
     "--deselect tests/test_config.py::test_merge"
-    # AssertionError: assert 6 == 5
-    "--deselect=tests/helpers/test_translation.py::test_caching"
-    # assert "Detected that integration 'hue' attempted to create an asyncio task from a thread at homeassistant/components/hue/light.py, line 23
-    "--deselect=tests/util/test_async.py::test_create_eager_task_from_thread_in_integration"
-    # Services were renamed to Actions in language strings, but the tests are lagging behind
-    "--deselect=tests/test_core.py::test_serviceregistry_service_that_not_exists"
-    "--deselect=tests/test_core.py::test_services_call_return_response_requires_blocking"
-    "--deselect=tests/test_core.py::test_serviceregistry_return_response_arguments"
-    "--deselect=tests/helpers/test_script.py::test_parallel_error"
-    "--deselect=tests/helpers/test_script.py::test_propagate_error_service_not_found"
-    "--deselect=tests/helpers/test_script.py::test_continue_on_error_automation_issue"
     # checks whether pip is installed
     "--deselect=tests/util/test_package.py::test_check_package_fragment"
     # tests are located in tests/

@@ -11481,6 +11481,14 @@
     ];
     name = "Ioannis Koutras";
   };
+  jolars = {
+    email = "jolars@posteo.com";
+    matrix = "@jola:mozilla.org";
+    github = "jolars";
+    githubId = 13087841;
+    name = "Johan Larsson";
+    keys = [ { fingerprint = "F0D6 BDE7 C7D1 6B3F 7883  73E7 2A41 C0FE DD6F F540"; } ];
+  };
   jonaenz = {
     name = "Jona Enzinger";
     email = "5xt3zyy5l@mozmail.com";
