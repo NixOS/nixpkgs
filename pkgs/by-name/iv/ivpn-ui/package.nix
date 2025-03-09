@@ -19,7 +19,7 @@ buildNpmPackage {
   src = fetchFromGitHub {
     owner = "ivpn";
     repo = "desktop-app";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-8JScty/sGyxzC2ojRpatHpCqEXZw9ksMortIhZnukoU=";
   };
 
