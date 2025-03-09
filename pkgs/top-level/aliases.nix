@@ -259,6 +259,7 @@ mapAliases {
   cargo-deps = throw "cargo-deps has been removed as the repository is deleted"; # Added 2024-04-09
   cargo-espflash = espflash;
   cargo-kcov = throw "'cargo-kcov' has been removed due to lack of upstream maintenance"; # Added 2025-01-25
+  cargo-information = throw "'cargo-information' has been removed due to being merged upstream into 'cargo'"; # Added 2025-03-09
   cargo-inspect = throw "'cargo-inspect' has been removed due to lack of upstream maintenance. Upstream recommends cargo-expand."; # Added 2025-01-26
   cargo-web = throw "'cargo-web' has been removed due to lack of upstream maintenance"; # Added 2025-01-26
   cawbird = throw "cawbird has been abandoned upstream and is broken anyways due to Twitter closing its API";
