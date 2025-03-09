@@ -17,6 +17,10 @@ stdenv.mkDerivation rec {
     sha256 = "bcb1407cc35b3f6dd3606b2c6072273b6a912cbd9ed1ae22fb2d26694541309c";
   };
 
+  postPatch = ''
+    sed -i '48i #include <stdlib.h>' gifout.c
+  '';
+
   nativeBuildInputs = [
     imake
     gccmakedep
