@@ -216,9 +216,16 @@ in
     };
     users.groups.openbao = { };
 
-    systemd.tmpfiles.rules = lib.optional (
-      cfg.storagePath != null
-    ) "d '${cfg.storagePath}' 0700 openbao openbao - -";
+    systemd.tmpfiles.settings = lib.mkIf (cfg.storagePath != null) {
+      openbao = {
+        ${cfg.storagePath} = {
+          d = {
+            mode = "0700";
+            group = "openbao";
+          };
+        };
+      };
+    };
 
     systemd.services.openbao = {
       description = "OpenBao server daemon";
