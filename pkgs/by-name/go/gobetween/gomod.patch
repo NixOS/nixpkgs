@@ -1,0 +1,13 @@
+diff --git a/src/go.mod b/src/go.mod
+index 3242342..795c306 100644
+--- a/src/go.mod
++++ b/src/go.mod
+@@ -28,7 +28,7 @@ require (
+ 	github.com/juju/go4 v0.0.0-20160222163258-40d72ab9641a // indirect
+ 	github.com/juju/persistent-cookiejar v0.0.0-20171026135701-d5e5a8405ef9 // indirect
+ 	github.com/juju/webbrowser v1.0.0 // indirect
+-	github.com/lxc/lxd v0.0.0-20200706202337-814c96fcec74
++	github.com/lxc/lxd v0.0.0-20200727014606-0d408e8e8ebb
+ 	github.com/mattn/go-colorable v0.1.7 // indirect
+ 	github.com/miekg/dns v1.1.30
+ 	github.com/mitchellh/go-testing-interface v1.14.0 // indirect

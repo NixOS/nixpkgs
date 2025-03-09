@@ -1,0 +1,24 @@
+From 4535666b23d2ad3fa4066c720fc9b9e51fe4c549 Mon Sep 17 00:00:00 2001
+From: Pavel Sobolev <paveloom@riseup.net>
+Date: Sat, 18 Nov 2023 16:11:05 +0300
+Subject: [PATCH] Add a space after `Type` in `check-response-opt.sh`
+
+---
+ test-scripts/check-response-opt.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/test-scripts/check-response-opt.sh b/test-scripts/check-response-opt.sh
+index 2322bc8..f0e7e66 100755
+--- a/test-scripts/check-response-opt.sh
++++ b/test-scripts/check-response-opt.sh
+@@ -50,7 +50,7 @@ fi
+ # Make text file with expected responses.
+ cat > $tmpdir/opt.gold <<EOF
+ Name: <Root>
+-Type: OPT (41)
++Type: OPT (41) 
+ UDP payload size: 4096
+ Higher bits in extended RCODE: 0x00
+ EDNS0 version: 0
+--
+2.42.0

@@ -1,0 +1,18 @@
+# https://rt.cpan.org/Public/Bug/Display.html?id=75112
+diff --git a/master/lib/Munin/Master/HTMLOld.pm b/master/lib/Munin/Master/HTMLOld.pm
+index 2b6e71f..c0aa2c0 100644
+--- a/master/lib/Munin/Master/HTMLOld.pm
++++ b/master/lib/Munin/Master/HTMLOld.pm
+@@ -711,10 +711,12 @@ sub emit_main_index {
+ 
+ sub copy_web_resources {
+     my ($staticdir, $htmldir) = @_;
++       local $File::Copy::Recursive::KeepMode = 0;
+ 	unless(dircopy($staticdir, "$htmldir/static")){
+ 		ERROR "[ERROR] Could not copy contents from $staticdir to $htmldir";
+ 		die "[ERROR] Could not copy contents from $staticdir to $htmldir";
+ 	}
++       local $File::Copy::Recursive::KeepMode = 1;
+ }
+ 
+ sub instanciate_comparison_templates {
