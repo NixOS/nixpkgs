@@ -24,12 +24,7 @@ buildLua {
     runHook postInstall
   '';
 
-  passthru.extraWrapperArgs = [
-    "--prefix"
-    "PATH"
-    ":"
-    (lib.makeBinPath [ yt-dlp ])
-  ];
+  runtime-dependencies = [ yt-dlp ];
 
   meta = {
     description = "MPV script to overlay youtube chat on top of a video using yt-dlp";
