@@ -4,6 +4,7 @@
   rustPlatform,
   bc,
   util-linux,
+  gnused,
   makeWrapper,
   installShellFiles,
   stdenv,
@@ -22,6 +23,11 @@ rustPlatform.buildRustPackage rec {
     rev = version;
     hash = "sha256-N9G/2G8+vrpr1/K7XLwgW+X2oAyAaz4qvN+EbLOCU1Q=";
   };
+
+  patches = [
+    # https://github.com/amber-lang/amber/pull/686
+    ./fix_gnused_detection.patch
+  ];
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-e5+L7Qgd6hyqT1Pb9X7bVtRr+xm428Z5J4hhsYNnGtU=";
