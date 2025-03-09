@@ -170,6 +170,14 @@ in
               "test_print"
             ] ++ previousPythonAttrs.disabledTests or [ ];
           });
+          disabledTests-expression = objprint.overridePythonAttrs (previousPythonAttrs: {
+            __structuredAttrs = true;
+            pname = "test-pytestCheckHook-disabledTests-expression-${previousPythonAttrs.pname}";
+            disabledTests = [
+              "TestBasic and test_print"
+              "test_str"
+            ] ++ previousPythonAttrs.disabledTests or [ ];
+          });
           disabledTestPaths = objprint.overridePythonAttrs (previousPythonAttrs: {
             pname = "test-pytestCheckHook-disabledTestPaths-${previousPythonAttrs.pname}";
             disabledTestPaths = [

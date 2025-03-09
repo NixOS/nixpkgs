@@ -57,7 +57,8 @@ EOF
     done
 
     if [ -n "${disabledTests[*]-}" ]; then
-        disabledTestsString="not $(concatStringsSep " and not " disabledTests)"
+        # not (keyword1) and not (keyword2)
+        disabledTestsString="not ($(concatStringsSep ") and not (" disabledTests))"
         flagsArray+=(-k "$disabledTestsString")
     fi
 
