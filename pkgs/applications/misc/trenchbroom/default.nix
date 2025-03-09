@@ -22,24 +22,23 @@
   miniz,
   tinyxml-2,
   xorg,
-  qtbase,
-  qtwayland,
-  wrapQtAppsHook,
+  qt6,
   copyDesktopItems,
   makeDesktopItem,
 }:
 
 stdenv.mkDerivation rec {
   pname = "TrenchBroom";
-  version = "2024.1";
+  version = "2025.2";
 
   src = fetchFromGitHub {
     owner = "TrenchBroom";
     repo = "TrenchBroom";
-    rev = "v${version}";
-    hash = "sha256-HNK/gLbew7MKN6GVStxDb2tyMgyw2l1+dhPr6fSaZ4A=";
+    tag = "v${version}";
+    hash = "sha256-aOHhL0yBDgFTMcDY7RKZXRrReRiThcQdf7QMHEpRuks=";
     fetchSubmodules = true;
   };
+
   # Manually simulate a vcpkg installation so that it can link the libraries
   # properly.
   postUnpack =
@@ -87,13 +86,14 @@ stdenv.mkDerivation rec {
       ln -s ${miniz}/lib/lib* $VCPKG_ROOT/installed/${vcpkg_target}/lib/
       ln -s ${tinyxml-2}/lib/lib* $VCPKG_ROOT/installed/${vcpkg_target}/lib/
     '';
+
   postPatch = ''
     substituteInPlace common/src/Version.h.in \
       --subst-var-by APP_VERSION_YEAR ${lib.versions.major version} \
       --subst-var-by APP_VERSION_NUMBER ${lib.versions.minor version} \
       --subst-var-by GIT_DESCRIBE v${version}
     substituteInPlace app/CMakeLists.txt \
-      --replace 'set(CPACK_PACKAGING_INSTALL_PREFIX "/usr")' 'set(CPACK_PACKAGING_INSTALL_PREFIX "'$out'")'
+      --replace-fail 'set(CPACK_PACKAGING_INSTALL_PREFIX "/usr")' 'set(CPACK_PACKAGING_INSTALL_PREFIX "'$out'")'
   '';
 
   nativeBuildInputs = [
@@ -102,12 +102,13 @@ stdenv.mkDerivation rec {
     curl
     git
     pandoc
-    wrapQtAppsHook
+    qt6.wrapQtAppsHook
     copyDesktopItems
     pkg-config
     unzip
     zip
   ];
+
   buildInputs = [
     libGL
     libGLU
@@ -115,8 +116,9 @@ stdenv.mkDerivation rec {
     xorg.libSM
     freeimage
     freetype
-    qtbase
-    qtwayland
+    qt6.qtbase
+    qt6.qtwayland
+    qt6.qtsvg
     catch2
     fmt
     glew
@@ -124,7 +126,9 @@ stdenv.mkDerivation rec {
     tinyxml-2
     assimp
   ];
-  QT_PLUGIN_PATH = "${qtbase}/${qtbase.qtPluginPrefix}";
+
+  QT_PLUGIN_PATH = "${qt6.qtbase}/${qt6.qtbase.qtPluginPrefix}";
+
   QT_QPA_PLATFORM = "offscreen";
 
   cmakeFlags = [
@@ -134,6 +138,7 @@ stdenv.mkDerivation rec {
     # https://github.com/TrenchBroom/TrenchBroom/issues/4002#issuecomment-1125390780
     "-DCMAKE_PREFIX_PATH=cmake/packages"
   ];
+
   ninjaFlags = [
     "TrenchBroom"
   ];
@@ -162,12 +167,12 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://trenchbroom.github.io/";
     changelog = "https://github.com/TrenchBroom/TrenchBroom/releases/tag/v${version}";
     description = "Level editor for Quake-engine based games";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ astro ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ astro ];
     platforms = [ "x86_64-linux" ];
   };
 }
