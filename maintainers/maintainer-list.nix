@@ -18854,6 +18854,12 @@
     githubId = 4201956;
     name = "pongo1231";
   };
+  poopsicles = {
+    name = "Fumnanya";
+    email = "fmowete@outlook.com";
+    github = "poopsicles";
+    githubId = 87488715;
+  };
   PopeRigby = {
     name = "PopeRigby";
     github = "poperigby";
