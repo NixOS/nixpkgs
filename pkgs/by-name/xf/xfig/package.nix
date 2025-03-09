@@ -16,11 +16,11 @@
 
 stdenv.mkDerivation rec {
   pname = "xfig";
-  version = "3.2.9";
+  version = "3.2.9a";
 
   src = fetchurl {
     url = "mirror://sourceforge/mcj/xfig-${version}.tar.xz";
-    hash = "sha256-E+2dBNG7wt7AnafvSc7sJ4OC0pD2zZJkdMLy0Bb+wvc=";
+    hash = "sha256-vFcqGIHl4gmHrFkBWLBBq3gDhFqWkQNtO6XpgvZtnKM=";
   };
 
   nativeBuildInputs = [
@@ -39,8 +39,8 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    substituteInPlace src/main.c --replace '"fig2dev"' '"${fig2dev}/bin/fig2dev"'
-    substituteInPlace xfig.desktop --replace "/usr/bin/" "$out/bin/"
+    substituteInPlace src/main.c --replace-fail '"fig2dev"' '"${fig2dev}/bin/fig2dev"'
+    substituteInPlace org.xfig.xfig.desktop --replace-fail "Exec=xfig" "Exec=$out/bin/xfig"
   '';
 
   postInstall = ''
