@@ -244,7 +244,7 @@ in
       serviceConfig = {
         User = "openbao";
         Group = "openbao";
-        ExecStart = "${cfg.package}/bin/bao server ${configOptions}";
+        ExecStart = "${lib.getExe cfg.package} server ${configOptions}";
         ExecReload = "${pkgs.coreutils}/bin/kill -SIGHUP $MAINPID";
         StateDirectory = "openbao";
         # In `dev` mode openbao will put its token here
