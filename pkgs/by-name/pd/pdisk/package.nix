@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pdisk";
-  version = "0.9";
+  version = "0.10";
 
   src = fetchFromGitHub {
     owner = "apple-oss-distributions";
