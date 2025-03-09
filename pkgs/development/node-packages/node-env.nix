@@ -494,11 +494,13 @@ let
       extraArgs = removeAttrs args [ "name" "dependencies" "buildInputs" "dontStrip" "dontNpmInstall" "preRebuild" "unpackPhase" "buildPhase" "meta" ];
     in
     stdenv.mkDerivation ({
-      name = "${name}${if version == null then "" else "-${version}"}";
-      buildInputs = [ tarWrapper python nodejs ]
+      name = name + lib.optionalString (version != null) "-${version}";
+      strictDeps = true;
+      buildInputs = [ tarWrapper ]
         ++ lib.optional (stdenv.hostPlatform.isLinux) pkgs.util-linux
         ++ lib.optional (stdenv.hostPlatform.isDarwin) libtool
         ++ buildInputs;
+      propagatedNativeBuildInputs = [ nodejs python ];
 
       inherit nodejs;
 
