@@ -9,14 +9,14 @@
   scdoc,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "swww";
   version = "0.9.5";
 
   src = fetchFromGitHub {
     owner = "LGFae";
     repo = "swww";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ldy9HhIsWdtTdvtRLV3qDT80oX646BI4Q+YX5wJXbsc=";
   };
 
@@ -60,4 +60,4 @@ rustPlatform.buildRustPackage rec {
     platforms = lib.platforms.linux;
     mainProgram = "swww";
   };
-}
+})
