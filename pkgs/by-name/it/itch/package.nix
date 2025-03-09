@@ -1,54 +1,122 @@
 {
   lib,
   stdenvNoCC,
-  fetchzip,
   fetchFromGitHub,
-  electron,
-  steam-run,
-  makeWrapper,
-  copyDesktopItems,
+  fetchNpmDeps,
+  fetchzip,
+  replaceVars,
+  runCommand,
   makeDesktopItem,
+
+  nodejs,
+  npmHooks,
+  electron,
+  makeBinaryWrapper,
+  copyDesktopItems,
+  zip,
+
+  nix-update-script,
 }:
-
 let
-  version = "26.1.9";
+  # See release/common.js
+  arches = {
+    "x86_64" = {
+      electron = "x64";
+      itch = "amd64";
+    };
+    "i686" = {
+      electron = "ia32";
+      itch = "386";
+    };
+  };
+
+  os = stdenvNoCC.hostPlatform.parsed.kernel.name;
+  arch = arches.${stdenvNoCC.hostPlatform.parsed.cpu.name};
+
+  # FIXME: build from source once possible
   butler = fetchzip {
-    url = "https://broth.itch.zone/butler/linux-amd64/15.21.0/butler.zip";
+    url = "https://broth.itch.zone/butler/${os}-${arch.itch}/15.24.0/butler.zip";
     stripRoot = false;
-    hash = "sha256-jHni/5qf7xST6RRonP2EW8fJ6647jobzrnHe8VMx4IA=";
+    hash = "sha256-/0rwqkWfvQd1p8NbjQLARILBfpwmwC6dsR2ZYje4fXs=";
   };
-
-  itch-setup = fetchzip {
-    url = "https://broth.itch.ovh/itch-setup/linux-amd64/1.26.0/itch-setup.zip";
-    stripRoot = false;
-    hash = "sha256-5MP6X33Jfu97o5R1n6Og64Bv4ZMxVM0A8lXeQug+bNA=";
-  };
-
-  sparseCheckout = "/release/images/itch-icons";
-  icons =
-    fetchFromGitHub {
-      owner = "itchio";
-      repo = "itch";
-      rev = "v${version}";
-      hash = "sha256-jugg+hdP0y0OkFhdQuEI9neWDuNf2p3+DQuwxe09Zck=";
-      sparseCheckout = [ sparseCheckout ];
-    }
-    + sparseCheckout;
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "itch";
-  inherit version;
+  version = "26.1.9";
 
-  src = fetchzip {
-    url = "https://broth.itch.ovh/itch/linux-amd64/${finalAttrs.version}/archive/default#.zip";
-    stripRoot = false;
-    hash = "sha256-4k6afBgOKGs7rzXAtIBpmuQeeT/Va8/0bZgNYjuJhgI=";
+  src = fetchFromGitHub {
+    owner = "itchio";
+    repo = "itch";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-+fjgQDQKeHLGqVKSAgort8fJ2laAKfHkpKAKeQcte4Y=";
+  };
+
+  patches = [
+    (replaceVars ./patch-build-scripts.patch {
+      electronVersion = electron.version;
+
+      # For some reason, electron-packager only allows one to skip downloading Electron
+      # if and only if `electronZipDir` is set to a directory containing a zip file
+      # named `electron-v${electron.version}-${os}-${arch}.zip`. I don't know why,
+      # though it seems unavoidable.
+      electronZipDir = runCommand "electron-zip-dir" { nativeBuildInputs = [ zip ]; } ''
+        cp -r ${electron.dist} electron-dist
+        (cd electron-dist; zip -0Xqr ../electron-v${electron.version}-${os}-${arch.electron}.zip *)
+        install -D *.zip -t $out
+      '';
+    })
+  ];
+
+  npmDeps = fetchNpmDeps {
+    pname = "itch-npm-deps";
+    inherit (finalAttrs) version src;
+    hash = "sha256-mSPoXdKogE+mX6efjW8VcKYwtiXEkKJ00YznsR9jtfs=";
   };
 
   nativeBuildInputs = [
+    nodejs
+    npmHooks.npmConfigHook
     copyDesktopItems
-    makeWrapper
+    makeBinaryWrapper
   ];
+
+  env = {
+    ELECTRON_SKIP_BINARY_DOWNLOAD = true;
+    # For proper version identification
+    CI_COMMIT_TAG = finalAttrs.src.tag;
+  };
+
+  buildPhase = ''
+    runHook preBuild
+
+    # TODO: figure out why electron-packager fails to create this itself
+    mkdir -p build/${finalAttrs.src.tag}/${os}-${arch.electron}-template/{locales,resources}/
+
+    node release/build.js --os ${os} --arch ${arch.itch}
+    node release/package.js --os ${os} --arch ${arch.itch}
+
+    runHook postBuild
+  '';
+
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out/share/itch
+    cp -r artifacts/${os}-${arch.itch}/{locales,resources{,.pak}} -t $out/share/itch
+
+    makeWrapper ${lib.getExe electron} $out/bin/itch \
+      --add-flags "$out/share/itch/resources/app.asar" \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
+      --set BROTH_USE_LOCAL butler \
+      --prefix PATH : ${butler}
+
+    for size in 16 32 36 48 64 72 114 128 144 150 256 512 1024; do
+      install -D release/images/itch-icons/icon''${size}.png \
+         $out/share/icons/hicolor/''${size}x''${size}/apps/itch.png
+    done
+
+    runHook postInstall
+  '';
 
   desktopItems = [
     (makeDesktopItem {
@@ -66,44 +134,24 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     })
   ];
 
-  # As taken from https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=itch-bin
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p $out/bin $out/share/itch/resources/app
-    cp -r resources/app "$out/share/itch/resources/"
-
-    install -Dm644 LICENSE -t "$out/share/licenses/$pkgname/"
-    install -Dm644 LICENSES.chromium.html -t "$out/share/licenses/$pkgname/"
-
-    for icon in ${icons}/icon*.png
-    do
-      iconsize="''${icon#${icons}/icon}"
-      iconsize="''${iconsize%.png}"
-      icondir="$out/share/icons/hicolor/''${iconsize}x''${iconsize}/apps/"
-      install -Dm644 "$icon" "$icondir/itch.png"
-    done
-
-    runHook postInstall
-  '';
-
-  postFixup = ''
-    makeWrapper ${steam-run}/bin/steam-run $out/bin/itch \
-      --add-flags ${electron}/bin/electron \
-      --add-flags $out/share/itch/resources/app \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
-      --set BROTH_USE_LOCAL butler,itch-setup \
-      --prefix PATH : ${butler}:${itch-setup}
-  '';
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Best way to play itch.io games";
     homepage = "https://github.com/itchio/itch";
-    changelog = "https://github.com/itchio/itch/releases/tag/v${version}-canary";
+    changelog = "https://github.com/itchio/itch/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
-    platforms = lib.platforms.linux;
-    sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
-    maintainers = with lib.maintainers; [ pasqui23 ];
+    # https://itchio.itch.io/itch only provides up-to-date binaries for these platforms
+    platforms = [
+      "x86_64-linux"
+      "x86_64-darwin"
+      "x86_64-windows"
+      "i686-windows"
+    ];
+    maintainers = with lib.maintainers; [
+      pasqui23
+      pluiedev
+    ];
     mainProgram = "itch";
   };
 })
