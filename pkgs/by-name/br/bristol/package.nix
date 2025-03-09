@@ -33,7 +33,10 @@ stdenv.mkDerivation rec {
     xorg.xorgproto
   ];
 
-  patchPhase = "sed -i '41,43d' libbristolaudio/audioEngineJack.c"; # disable alsa/iatomic
+  postPatch = ''
+    sed -i '41,43d' libbristolaudio/audioEngineJack.c  # disable alsa/iatomic
+    sed -i '35i void doPitchWheel(Baudio *baudio);' bristol/bristolmemorymoog.c
+  '';
 
   configurePhase = "./configure --prefix=$out --enable-jack-default-audio --enable-jack-default-midi";
 
@@ -41,7 +44,7 @@ stdenv.mkDerivation rec {
   # gcc-10. Otherwise build fails as:
   #  ld: brightonCLI.o:/build/bristol-0.60.11/brighton/brightonCLI.c:139: multiple definition of
   #    `event'; brightonMixerMenu.o:/build/bristol-0.60.11/brighton/brightonMixerMenu.c:1182: first defined here
-  env.NIX_CFLAGS_COMPILE = "-fcommon";
+  env.NIX_CFLAGS_COMPILE = "-fcommon -Wno-implicit-int";
 
   preInstall = ''
     sed -e "s@\`which bristol\`@$out/bin/bristol@g" -i bin/startBristol
