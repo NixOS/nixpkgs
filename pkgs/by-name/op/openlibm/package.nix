@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "openlibm";
-  version = "0.8.5";
+  version = "0.8.6";
 
   src = fetchFromGitHub {
     owner = "JuliaLang";
     repo = "openlibm";
     rev = "v${version}";
-    sha256 = "sha256-z2PMovHk9M4Wb5K4EWOrp0b+3RLRHDVUKDzIxHsKrXg=";
+    sha256 = "sha256-HFSRrTdIhbbSyeU/FSo5e2ZI5tff2ZDEFgYcI412ATU=";
   };
 
   makeFlags = [
