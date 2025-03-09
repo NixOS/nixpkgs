@@ -211,10 +211,10 @@ in
     users.users.openbao = {
       name = "openbao";
       group = "openbao";
-      uid = config.ids.uids.openbao;
+      isSystemUser = true;
       description = "OpenBao daemon user";
     };
-    users.groups.openbao.gid = config.ids.gids.openbao;
+    users.groups.openbao = { };
 
     systemd.tmpfiles.rules = lib.optional (
       cfg.storagePath != null
