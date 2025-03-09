@@ -111,9 +111,12 @@
 , microdnsSupport ? false
 # Checks meson.is_cross_build(), so even canExecute isn't enough.
 , enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform, hotdoc
-, guiSupport ? true, directfb
+, guiSupport ? true
+, directfb
+, directfbSupport ? false
 }:
 
+assert (directfbSupport -> guiSupport);
 stdenv.mkDerivation rec {
   pname = "gst-plugins-bad";
   version = "1.24.10";
@@ -253,7 +256,7 @@ stdenv.mkDerivation rec {
     libGLU
   ] ++ lib.optionals guiSupport [
     gtk3
-  ] ++ lib.optionals (stdenv.hostPlatform.isLinux && guiSupport) [
+  ] ++ lib.optionals (directfbSupport) [
     directfb
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # For unknown reasons the order is important, e.g. if
@@ -319,8 +322,8 @@ stdenv.mkDerivation rec {
     "-Dnvcodec=disabled" # Linux-only
   ] ++ lib.optionals (!stdenv.hostPlatform.isLinux || !gst-plugins-base.waylandEnabled) [
     "-Dva=disabled" # see comment on `libva` in `buildInputs`
-  ] ++ lib.optionals (!stdenv.hostPlatform.isLinux || !guiSupport) [
-    "-Ddirectfb=disabled"
+  ] ++ [
+    (lib.mesonEnable "directfb" directfbSupport)
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "-Daja=disabled"
     "-Dchromaprint=disabled"
