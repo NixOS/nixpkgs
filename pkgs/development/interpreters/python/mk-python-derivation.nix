@@ -18,6 +18,7 @@
   pythonImportsCheckHook,
   pythonNamespacesHook,
   pythonOutputDistHook,
+  pythonRelaxBuildDepsHook,
   pythonRelaxDepsHook,
   pythonRemoveBinBytecodeHook,
   pythonRemoveTestsDirHook,
@@ -218,6 +219,7 @@ let
         else
           "setuptools";
 
+      relaxBuildDeps = finalAttrs.pythonRelaxBuildDeps or [ ] != [ ] || finalAttrs.pythonRemoveBuildDeps or [ ] != [ ];
       withDistOutput = withDistOutput' format';
 
       validatePythonMatches =
@@ -302,6 +304,14 @@ let
         ++ optionals (attrs ? pythonRelaxDeps || attrs ? pythonRemoveDeps) [
           pythonRelaxDepsHook
         ]
+        ++ optionals relaxBuildDeps [
+          (
+            lib.throwIf
+              (! finalAttrs.__structuredAttrs or false)
+              "${finalAttrs.pname or finalAttrs.name}: pythonRelaxBuildDepsHook requires __structuredAttrs = true."
+              pythonRelaxBuildDepsHook
+          )
+        ]
         ++ optionals removeBinBytecode [
           pythonRemoveBinBytecodeHook
         ]
@@ -361,6 +371,9 @@ let
         ]
         ++ nativeBuildInputs
         ++ build-system;
+
+      # pythonRelaxBuildDepsHook expects attrs in JSON
+      __structuredAttrs = relaxBuildDeps;
 
       buildInputs = validatePythonMatches "buildInputs" (buildInputs ++ pythonPath);
 
