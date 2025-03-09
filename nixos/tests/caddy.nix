@@ -89,6 +89,16 @@ import ./make-test-python.nix (
               '';
             };
           };
+          specialisation.invalid-config-fail.configuration = {
+            services.caddy = {
+              validateConfigFile = false;
+              extraConfig = ''
+                not-a-real-directive {
+                  this-should-fail
+                }
+              '';
+            };
+          };
         };
     };
 
@@ -101,6 +111,7 @@ import ./make-test-python.nix (
         multipleHostnames = "${nodes.webserver.system.build.toplevel}/specialisation/multiple-hostnames";
         rfc42Config = "${nodes.webserver.system.build.toplevel}/specialisation/rfc42";
         withPluginsConfig = "${nodes.webserver.system.build.toplevel}/specialisation/with-plugins";
+        invalidConfigFail = "${nodes.webserver.system.build.toplevel}/specialisation/invalid-config-fail";
       in
       ''
         url = "http://localhost/example.html"
@@ -150,6 +161,11 @@ import ./make-test-python.nix (
             )
             webserver.wait_for_open_port(80)
             webserver.succeed("curl http://localhost | grep caddy")
+
+        with subtest("invalid config fails to switch to, as validation was not enforced"):
+            webserver.fail(
+                "${invalidConfigFail}/bin/switch-to-configuration test >&2"
+            )
       '';
   }
 )
