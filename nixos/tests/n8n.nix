@@ -12,8 +12,10 @@ import ./make-test-python.nix (
     ];
 
     nodes.machine =
-      { pkgs, ... }:
+      { ... }:
       {
+        nixpkgs.config.allowUnfree = true;
+
         services.n8n = {
           enable = true;
           webhookUrl = webhookUrl;
