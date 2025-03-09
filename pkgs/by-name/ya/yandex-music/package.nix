@@ -11,16 +11,18 @@
   fetchFromGitHub,
   electronArguments ? "",
   trayEnabled ? true,
+  # Whether to leave application in tray disregarding of its play state
+  trayAlways ? false,
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "yandex-music";
-  version = "5.28.4";
+  version = "5.41.1";
 
   src = fetchFromGitHub {
     owner = "cucumber-sp";
     repo = "yandex-music-linux";
     rev = "v${version}";
-    hash = "sha256-0YUZKklwHkZ3bDI4OLmXyj0v2wzWzJbJpQ8QQa356fI=";
+    hash = "sha256-/Mz8lazGMZmziqSEK8zS6dI1PvnAc5PNAGd+MqTCoo4=";
   };
 
   nativeBuildInputs = [
@@ -48,6 +50,20 @@ stdenvNoCC.mkDerivation rec {
     runHook postBuild
   '';
 
+  config =
+    let
+      inherit (lib) optionalString;
+    in
+    ''
+      ELECTRON_ARGS="${electronArguments}"
+    ''
+    + optionalString trayEnabled ''
+      TRAY_ENABLED=1
+    ''
+    + optionalString trayAlways ''
+      ALWAYS_LEAVE_TO_TRAY=1
+    '';
+
   installPhase = ''
     runHook preInstall
 
@@ -55,9 +71,7 @@ stdenvNoCC.mkDerivation rec {
     mv app/yandex-music.asar "$out/share/nodejs"
 
     CONFIG_FILE="$out/share/yandex-music.conf"
-    echo "TRAY_ENABLED=${if trayEnabled then "1" else "0"}" >> "$CONFIG_FILE"
-    echo "ELECTRON_ARGS=\"${electronArguments}\"" >> "$CONFIG_FILE"
-
+    echo "$config" >> "$CONFIG_FILE"
 
     install -Dm755 "$src/templates/yandex-music.sh" "$out/bin/yandex-music"
     substituteInPlace "$out/bin/yandex-music"                                  \
