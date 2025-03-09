@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail poetry-core==2.0.1 poetry-core
+      --replace-fail "poetry-core==" "poetry-core>="
   '';
 
   build-system = [ poetry-core ];
