@@ -53,7 +53,7 @@ in
         Name of the machine when registering it at the central or local api.
       '';
       default = config.networking.hostName;
-      defaultText = "${config.networking.hostName}";
+      defaultText = lib.literalExpression "config.networking.hostName";
     };
 
     localConfig = mkOption {
@@ -102,14 +102,16 @@ in
                   type = types.listOf format.type;
                   default = [ ];
                   description = ''
-                    A list of stage s00-raw specifications. Most of the time, those are already included in the hub, but are presented here anyway. See <https://docs.crowdsec.net/docs/parsers/intro> for details.
+                    A list of stage s00-raw specifications. Most of the time, those are already included in the hub, but are presented here anyway.
+                    See <https://docs.crowdsec.net/docs/parsers/intro> for details.
                   '';
                 };
                 s01Parse = mkOption {
                   type = types.listOf format.type;
                   default = [ ];
                   description = ''
-                    A list of stage s01-parse specifications. See <https://docs.crowdsec.net/docs/parsers/intro> for details.
+                    A list of stage s01-parse specifications.
+                    See <https://docs.crowdsec.net/docs/parsers/intro> for details.
                   '';
                   example = [
                     {
@@ -135,7 +137,8 @@ in
                   type = types.listOf format.type;
                   default = [ ];
                   description = ''
-                    A list of stage s02-enrich specifications. Inside this list, you can specify Parser Whitelists. See <https://docs.crowdsec.net/docs/whitelist/intro> for details.
+                    A list of stage s02-enrich specifications. Inside this list, you can specify Parser Whitelists.
+                    See <https://docs.crowdsec.net/docs/whitelist/intro> for details.
                   '';
                   example = [
                     {
@@ -164,7 +167,8 @@ in
                   type = types.listOf format.type;
                   default = [ ];
                   description = ''
-                    A list of stage s01-whitelist specifications. Inside this list, you can specify Postoverflows Whitelists. See <https://docs.crowdsec.net/docs/whitelist/intro> for details.
+                    A list of stage s01-whitelist specifications. Inside this list, you can specify Postoverflows Whitelists.
+                    See <https://docs.crowdsec.net/docs/whitelist/intro> for details.
                   '';
                   example = [
                     {
@@ -186,7 +190,8 @@ in
           contexts = mkOption {
             type = types.listOf format.type;
             description = ''
-              A list of additional contexts to specify. See <https://docs.crowdsec.net/docs/next/log_processor/alert_context/intro> for details.
+              A list of additional contexts to specify.
+              See <https://docs.crowdsec.net/docs/next/log_processor/alert_context/intro> for details.
             '';
             example = [
               {
@@ -203,7 +208,8 @@ in
           notifications = mkOption {
             type = types.listOf format.type;
             description = ''
-              A list of notifications to enable and use in your profiles. Note that for now, only the plugins shipped by default with CrowdSec are supported. See <https://docs.crowdsec.net/docs/notification_plugins/intro> for details.
+              A list of notifications to enable and use in your profiles. Note that for now, only the plugins shipped by default with CrowdSec are supported.
+              See <https://docs.crowdsec.net/docs/notification_plugins/intro> for details.
             '';
             example = [
               {
@@ -213,7 +219,7 @@ in
                 format = ''
                   {{.|toJson}}
                 '';
-                url = "http://example.com/hook";
+                url = "https://example.com/hook";
                 method = "POST";
               }
             ];
@@ -222,7 +228,8 @@ in
           profiles = mkOption {
             type = types.listOf format.type;
             description = ''
-              A list of profiles to enable. See <https://docs.crowdsec.net/docs/profiles/intro> for more details.
+              A list of profiles to enable.
+              See <https://docs.crowdsec.net/docs/profiles/intro> for more details.
             '';
             example = [
               {
@@ -350,8 +357,8 @@ in
         options = {
           general = mkOption {
             description = ''
-              Settings for the main CrowdSec configuration file. Refer to the defaults at
-              <https://github.com/crowdsecurity/crowdsec/blob/master/config/config.yaml>.
+              Settings for the main CrowdSec configuration file.
+              Refer to the defaults at <https://github.com/crowdsecurity/crowdsec/blob/master/config/config.yaml>.
             '';
             type = format.type;
             default = { };
@@ -381,7 +388,8 @@ in
                     cert_path = "example";
                   };
                   description = ''
-                    Attributes inside the local_api_credentials file. This is not the most secure way to define settings, as this is put in the Nix store. Use of lapi.credentialsFile is preferred.
+                    Attributes inside the local_api_credentials file.
+                    This is not the most secure way to define settings, as this is put in the Nix store. Use of lapi.credentialsFile is preferred.
                   '';
                 };
                 credentialsFile = mkOption {
@@ -512,7 +520,7 @@ in
       };
 
       cscli = pkgs.writeShellScriptBin "cscli" ''
-        set -euo pipefail
+        set -euox pipefail
         # cscli needs crowdsec on it's path in order to be able to run `cscli explain`
         export PATH="$PATH:${lib.makeBinPath [ cfg.package ]}"
         sudo=exec
@@ -548,6 +556,67 @@ in
         ---
       '';
 
+      scriptArray =
+        [
+          "set -euox pipefail"
+          "${lib.getExe cscli} hub update"
+        ]
+        ++ lib.optionals (cfg.hub.collections != [ ]) [
+          "${lib.getExe cscli} collections install ${
+            lib.strings.concatMapStringsSep " " (x: lib.escapeShellArg x) cfg.hub.collections
+          }"
+        ]
+        ++ lib.optionals (cfg.hub.scenarios != [ ]) [
+          "${lib.getExe cscli} scenarios install ${
+            lib.strings.concatMapStringsSep " " (x: lib.escapeShellArg x) cfg.hub.scenarios
+          }"
+        ]
+        ++ lib.optionals (cfg.hub.parsers != [ ]) [
+          "${lib.getExe cscli} parsers install ${
+            lib.strings.concatMapStringsSep " " (x: lib.escapeShellArg x) cfg.hub.parsers
+          }"
+        ]
+        ++ lib.optionals (cfg.hub.postOverflows != [ ]) [
+          "${lib.getExe cscli} postoverflows install ${
+            lib.strings.concatMapStringsSep " " (x: lib.escapeShellArg x) cfg.hub.postOverflows
+          }"
+        ]
+        ++ lib.optionals (cfg.hub.appSecConfigs != [ ]) [
+          "${lib.getExe cscli} appsec-configs install ${
+            lib.strings.concatMapStringsSep " " (x: lib.escapeShellArg x) cfg.hub.appSecConfigs
+          }"
+        ]
+        ++ lib.optionals (cfg.hub.appSecRules != [ ]) [
+          "${lib.getExe cscli} appsec-rules install ${
+            lib.strings.concatMapStringsSep " " (x: lib.escapeShellArg x) cfg.hub.appSecRules
+          }"
+        ]
+        ++ lib.optionals (cfg.settings.general.api.server.enable) [
+          ''
+            if [ ! -s "${cfg.settings.general.api.client.credentials_path}" ]; then
+              ${lib.getExe cscli} machine add "${cfg.name}" --auto
+            fi
+          ''
+        ]
+        ++ lib.optionals (capiFile != null) [
+          ''
+            if ! grep -q password "${capiFile}" ]; then
+              ${lib.getExe cscli} capi register
+            fi
+          ''
+        ]
+        ++ lib.optionals (tokenFile != null) [
+          ''
+            if [ ! -e "${tokenFile}" ]; then
+              ${lib.getExe cscli} console enroll "$(cat ${tokenFile})" --name ${cfg.name}
+            fi
+          ''
+        ];
+
+      setupScript = pkgs.writeShellScriptBin "crowdsec-setup" (
+        lib.strings.concatStringsSep "\n" scriptArray
+      );
+
     in
     lib.mkIf (cfg.enable) {
 
@@ -562,37 +631,27 @@ in
 
       warnings =
         [ ]
-        ++ (
-          if cfg.localConfig.profiles == [ ] then
-            [
-              "By not specifying profiles in services.crowdsec.localConfig.profiles, CrowdSec will not react to any alert by default"
-            ]
-          else
-            [ ]
-        )
-        ++ (
-          if cfg.localConfig.acquisitions == [ ] then
-            [
-              "By not specifying acquisitions in services.crowdsec.localConfig.acquisitions, CrowdSec will not look for any data source"
-            ]
-          else
-            [ ]
-        );
+        ++ lib.optionals (cfg.localConfig.profiles == [ ]) [
+          "By not specifying profiles in services.crowdsec.localConfig.profiles, CrowdSec will not react to any alert by default."
+        ]
+        ++ lib.optionals (cfg.localConfig.acquisitions == [ ]) [
+          "By not specifying acquisitions in services.crowdsec.localConfig.acquisitions, CrowdSec will not look for any data source."
+        ];
 
       services.crowdsec.settings.general = with lib; {
         common = {
-          daemonize = mkDefault false;
-          log_media = mkDefault "stdout";
+          daemonize = false;
+          log_media = "stdout";
         };
         config_paths = {
-          config_dir = mkDefault confDir;
-          data_dir = mkDefault stateDir;
-          simulation_path = mkDefault simulationFile;
-          hub_dir = mkDefault hubDir;
-          index_path = mkDefault (lib.strings.normalizePath "${stateDir}/hub/.index.json");
-          notification_dir = mkDefault notificationsDir;
-          plugin_dir = mkDefault pluginDir;
-          pattern_dir = mkDefault patternsDir;
+          config_dir = confDir;
+          data_dir = stateDir;
+          simulation_path = simulationFile;
+          hub_dir = hubDir;
+          index_path = lib.strings.normalizePath "${stateDir}/hub/.index.json";
+          notification_dir = notificationsDir;
+          plugin_dir = pluginDir;
+          pattern_dir = patternsDir;
         };
         db_config = {
           type = mkDefault "sqlite";
@@ -657,30 +716,55 @@ in
             Type = "oneshot";
             User = cfg.user;
             Group = cfg.group;
-            LimitNOFILE = lib.mkDefault 65536;
-            CapabilityBoundingSet = lib.mkDefault [ ];
-            NoNewPrivileges = lib.mkDefault true;
-            LockPersonality = lib.mkDefault true;
-            RemoveIPC = lib.mkDefault true;
+            LimitNOFILE = 65536;
+            NoNewPrivileges = true;
+            LockPersonality = true;
+            RemoveIPC = true;
             ReadWritePaths = [
               rootDir
               confDir
             ];
-            ProtectSystem = lib.mkDefault "strict";
-            PrivateUsers = lib.mkDefault true;
-            ProtectHome = lib.mkDefault true;
-            PrivateTmp = lib.mkDefault true;
-            PrivateDevices = lib.mkDefault true;
-            ProtectHostname = lib.mkDefault true;
-            ProtectKernelTunables = lib.mkDefault true;
-            ProtectKernelModules = lib.mkDefault true;
-            ProtectControlGroups = lib.mkDefault true;
-            ProtectProc = lib.mkDefault "invisible";
-            RestrictNamespaces = lib.mkDefault true;
-            RestrictRealtime = lib.mkDefault true;
-            RestrictSUIDSGID = lib.mkDefault true;
-            ExecPaths = [ "/nix/store" ];
-            NoExecPaths = [ "/" ];
+            ProtectSystem = "strict";
+            PrivateUsers = true;
+            ProtectHome = true;
+            PrivateTmp = true;
+            PrivateDevices = true;
+            ProtectHostname = true;
+            UMask = "0077";
+            ProtectKernelTunables = true;
+            ProtectKernelModules = true;
+            ProtectControlGroups = true;
+            ProtectProc = "invisible";
+            SystemCallFilter = [
+              " " # This is needed to clear the SystemCallFilter existing definitions
+              "~@reboot"
+              "~@swap"
+              "~@obsolete"
+              "~@mount"
+              "~@module"
+              "~@debug"
+              "~@cpu-emulation"
+              "~@clock"
+              "~@raw-io"
+              "~@privileged"
+              "~@resources"
+            ];
+            CapabilityBoundingSet = [
+              " " # Reset all capabilities to an empty set
+            ];
+            RestrictAddressFamilies = [
+              " " # This is needed to clear the RestrictAddressFamilies existing definitions
+              "none" # Remove all addresses families
+              "AF_UNIX"
+              "AF_INET"
+              "AF_INET6"
+            ];
+            DevicePolicy = "closed";
+            ProtectKernelLogs = true;
+            SystemCallArchitectures = "native";
+            RestrictNamespaces = true;
+            RestrictRealtime = true;
+            RestrictSUIDSGID = true;
             ExecStart = "${lib.getExe cscli} --error hub update";
             ExecStartPost = "systemctl reload crowdsec.service";
           };
@@ -691,6 +775,7 @@ in
           wantedBy = [ "multi-user.target" ];
           after = [ "network-online.target" ];
           wants = [ "network-online.target" ];
+          path = lib.mkForce [ ];
           environment = {
             LC_ALL = "C";
             LANG = "C";
@@ -698,106 +783,71 @@ in
           serviceConfig = {
             User = cfg.user;
             Group = cfg.group;
+            Type = "simple";
             RestartSec = 60;
-            LimitNOFILE = lib.mkDefault 65536;
-            CapabilityBoundingSet = lib.mkDefault [ ];
-            NoNewPrivileges = lib.mkDefault true;
-            LockPersonality = lib.mkDefault true;
-            RemoveIPC = lib.mkDefault true;
+            LimitNOFILE = 65536;
+            NoNewPrivileges = true;
+            LockPersonality = true;
+            RemoveIPC = true;
             ReadWritePaths = [
               rootDir
               confDir
             ];
-            ProtectSystem = lib.mkDefault "strict";
-            PrivateUsers = lib.mkDefault true;
-            ProtectHome = lib.mkDefault true;
-            PrivateTmp = lib.mkDefault true;
-            PrivateDevices = lib.mkDefault true;
-            ProtectHostname = lib.mkDefault true;
-            ProtectKernelTunables = lib.mkDefault true;
-            ProtectKernelModules = lib.mkDefault true;
-            ProtectControlGroups = lib.mkDefault true;
-            ProtectProc = lib.mkDefault "invisible";
-            RestrictNamespaces = lib.mkDefault true;
-            RestrictRealtime = lib.mkDefault true;
-            RestrictSUIDSGID = lib.mkDefault true;
-            ExecPaths = [ "/nix/store" ];
-            NoExecPaths = [ "/" ];
-            ExecReload = lib.mkForce [
+            ProtectSystem = "strict";
+            PrivateUsers = true;
+            ProtectHome = true;
+            PrivateTmp = true;
+            PrivateDevices = true;
+            ProtectHostname = true;
+            ProtectClock = true;
+            UMask = "0077";
+            ProtectKernelTunables = true;
+            ProtectKernelModules = true;
+            ProtectControlGroups = true;
+            ProtectProc = "invisible";
+            SystemCallFilter = [
+              " " # This is needed to clear the SystemCallFilter existing definitions
+              "~@reboot"
+              "~@swap"
+              "~@obsolete"
+              "~@mount"
+              "~@module"
+              "~@debug"
+              "~@cpu-emulation"
+              "~@clock"
+              "~@raw-io"
+              "~@privileged"
+              "~@resources"
+            ];
+            CapabilityBoundingSet = [
+              " " # Reset all capabilities to an empty set
+              "CAP_SYSLOG" # Add capability to read syslog
+            ];
+            RestrictAddressFamilies = [
+              " " # This is needed to clear the RestrictAddressFamilies existing definitions
+              "none" # Remove all addresses families
+              "AF_UNIX"
+              "AF_INET"
+              "AF_INET6"
+            ];
+            DevicePolicy = "closed";
+            ProtectKernelLogs = true;
+            SystemCallArchitectures = "native";
+            RestrictNamespaces = true;
+            RestrictRealtime = true;
+            RestrictSUIDSGID = true;
+            ExecReload = [
               " " # This is needed to clear the ExecReload definitions from upstream
-              "${lib.getExe' cfg.package "crowdsec"} -c ${configFile} -t -error"
-              "${lib.getExe' pkgs.util-linux "kill"} -HUP $MAINPID"
             ];
             ExecStart = [
               " " # This is needed to clear the ExecStart definitions from upstream
-              "${lib.getExe' cfg.package "crowdsec"} -c ${configFile}"
+              "${lib.getExe' cfg.package "crowdsec"} -c ${configFile} -info"
             ];
-            ExecStartPre =
-              let
-                scriptArray =
-                  [
-                    "set -euo pipefail"
-                    "${lib.getExe cscli} hub update"
-                  ]
-                  ++ lib.optionals (cfg.hub.collections != [ ]) [
-                    "${lib.getExe cscli} collections install ${
-                      lib.strings.concatMapStringsSep " " (x: lib.escapeShellArg x) cfg.hub.collections
-                    }"
-                  ]
-                  ++ lib.optionals (cfg.hub.scenarios != [ ]) [
-                    "${lib.getExe cscli} scenarios install ${
-                      lib.strings.concatMapStringsSep " " (x: lib.escapeShellArg x) cfg.hub.scenarios
-                    }"
-                  ]
-                  ++ lib.optionals (cfg.hub.parsers != [ ]) [
-                    "${lib.getExe cscli} parsers install ${
-                      lib.strings.concatMapStringsSep " " (x: lib.escapeShellArg x) cfg.hub.parsers
-                    }"
-                  ]
-                  ++ lib.optionals (cfg.hub.postOverflows != [ ]) [
-                    "${lib.getExe cscli} postoverflows install ${
-                      lib.strings.concatMapStringsSep " " (x: lib.escapeShellArg x) cfg.hub.postOverflows
-                    }"
-                  ]
-                  ++ lib.optionals (cfg.hub.appSecConfigs != [ ]) [
-                    "${lib.getExe cscli} appsec-configs install ${
-                      lib.strings.concatMapStringsSep " " (x: lib.escapeShellArg x) cfg.hub.appSecConfigs
-                    }"
-                  ]
-                  ++ lib.optionals (cfg.hub.appSecRules != [ ]) [
-                    "${lib.getExe cscli} appsec-rules install ${
-                      lib.strings.concatMapStringsSep " " (x: lib.escapeShellArg x) cfg.hub.appSecRules
-                    }"
-                  ]
-                  ++ lib.optionals (cfg.settings.general.api.server.enable) [
-                    ''
-                      if [ ! -s "${cfg.settings.general.api.client.credentials_path}" ]; then
-                        ${lib.getExe cscli} machine add "${cfg.name}" --auto
-                      fi
-                    ''
-                  ]
-                  ++ lib.optionals (capiFile != null) [
-                    ''
-                      if ! grep -q password "${capiFile}" ]; then
-                        ${lib.getExe cscli} capi register
-                      fi
-                    ''
-                  ]
-                  ++ lib.optionals (tokenFile != null) [
-                    ''
-                      if [ ! -e "${tokenFile}" ]; then
-                        ${lib.getExe cscli} console enroll "$(cat ${tokenFile})" --name ${cfg.name}
-                      fi
-                    ''
-                  ];
-
-                script = pkgs.writeShellScriptBin "crowdsec-setup" (lib.strings.concatStringsSep "\n" scriptArray);
-              in
-              [
-                " " # This is needed to clear the ExecStartPre definitions from upstream
-                "${lib.getExe script}"
-                "${lib.getExe' cfg.package "crowdsec"} -c ${configFile} -t -error"
-              ];
+            ExecStartPre = [
+              " " # This is needed to clear the ExecStartPre definitions from upstream
+              "${lib.getExe setupScript}"
+              "${lib.getExe' cfg.package "crowdsec"} -c ${configFile} -t -error"
+            ];
           };
         };
       };
@@ -842,10 +892,10 @@ in
       );
 
       users.users.${cfg.user} = {
-        name = lib.mkDefault cfg.user;
+        name = cfg.user;
         description = lib.mkDefault "CrowdSec service user";
-        isSystemUser = lib.mkDefault true;
-        group = lib.mkDefault cfg.group;
+        isSystemUser = true;
+        group = cfg.group;
         extraGroups = [ "systemd-journal" ];
       };
 
@@ -862,6 +912,5 @@ in
       m0ustach3
       jk
     ];
-    buildDocsInSandbox = true;
   };
 }
