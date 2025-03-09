@@ -1,0 +1,12 @@
+diff --git a/rott/audiolib/Makefile b/rott/audiolib/Makefile
+index 54d3cc2..6886cbf 100644
+--- a/audiolib/Makefile
++++ b/audiolib/Makefile
+@@ -8,6 +8,7 @@ ARFLAGS ?= rcT
+ CFLAGS ?= -g -O2
+ CFLAGS += -Wall
+ CFLAGS += $(shell sdl-config --cflags)
++CFLAGS += $(EXTRACFLAGS)
+ 
+ OBJS :=
+ OBJS += fx_man.o
