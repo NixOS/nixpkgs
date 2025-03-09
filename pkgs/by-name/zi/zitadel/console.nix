@@ -20,6 +20,7 @@
 let
   protobufGenerated = generateProtobufCode {
     pname = "zitadel-console";
+    inherit version;
     nativeBuildInputs = [
       grpc-gateway
       protoc-gen-grpc-web
@@ -28,7 +29,7 @@ let
     workDir = "console";
     bufArgs = "../proto --include-imports --include-wkt";
     outputPath = "src/app/proto";
-    hash = "sha256-n6BJ1gSSm66yOGdHcSea/nQbjiHZX2YX2zbFT4o75/4=";
+    hash = "sha256-3WvfbhLpp03yP7Nb8bmZXYSlGJuEnBkBuyEzNVkIYZg=";
   };
 in
 stdenv.mkDerivation {
@@ -41,7 +42,7 @@ stdenv.mkDerivation {
 
   offlineCache = fetchYarnDeps {
     yarnLock = "${zitadelRepo}/console/yarn.lock";
-    hash = "sha256-MWATjfhIbo3cqpzOdXP52f/0Td60n99OTU1Qk6oWmXU=";
+    hash = "sha256-+7CFBEKfRsqXbJR+BkLdB+pZ/dEEk4POGwZOVQ1LAUo=";
   };
 
   nativeBuildInputs = [
