@@ -86,8 +86,8 @@ lib.makeOverridable (
                 "--prefix"
                 "PATH"
                 ":"
+                (lib.makeBinPath runtime-dependencies)
               ]
-              ++ (map lib.makeBinPath runtime-dependencies)
               ++ args.passthru.extraWrapperArgs or [ ];
           };
         meta =
