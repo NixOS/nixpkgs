@@ -112,10 +112,13 @@ in
         MATRIX_ROOMS = concatenatedRooms;
         MATRIX_USER = cfg.matrixUser;
         MENTION_ROOM = if cfg.mention then "1" else "0";
+        NODE_ENV = "production";
       };
 
       script = ''
+        # shellcheck disable=SC2155
         export APP_ALERTMANAGER_SECRET=$(cat "''${CREDENTIALS_DIRECTORY}/secret")
+        # shellcheck disable=SC2155
         export MATRIX_TOKEN=$(cat "''${CREDENTIALS_DIRECTORY}/token")
         exec ${lib.getExe cfg.package}
       '';
