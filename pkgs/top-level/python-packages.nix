@@ -2362,7 +2362,7 @@ self: super: with self; {
 
   cirq-web = callPackage ../development/python-modules/cirq-web { };
 
-  ciscoconfparse = callPackage ../development/python-modules/ciscoconfparse { };
+  ciscoconfparse2 = callPackage ../development/python-modules/ciscoconfparse2 { };
 
   ciscomobilityexpress = callPackage ../development/python-modules/ciscomobilityexpress { };
 
@@ -3249,8 +3249,6 @@ self: super: with self; {
   dependency-injector = callPackage ../development/python-modules/dependency-injector { };
 
   deploykit = callPackage ../development/python-modules/deploykit { };
-
-  deprecat = callPackage ../development/python-modules/deprecat { };
 
   deprecated = callPackage ../development/python-modules/deprecated { };
 
@@ -6035,6 +6033,8 @@ self: super: with self; {
   };
 
   hid-parser = callPackage ../development/python-modules/hid-parser { };
+
+  hier-config = callPackage ../development/python-modules/hier-config { };
 
   hieroglyph = callPackage ../development/python-modules/hieroglyph { };
 
@@ -14903,6 +14903,8 @@ self: super: with self; {
   screenlogicpy = callPackage ../development/python-modules/screenlogicpy { };
 
   scripttest = callPackage ../development/python-modules/scripttest { };
+
+  scrypt = callPackage ../development/python-modules/scrypt { };
 
   scikit-survival = callPackage ../development/python-modules/scikit-survival { };
 
