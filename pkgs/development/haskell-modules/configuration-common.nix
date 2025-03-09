@@ -1621,11 +1621,19 @@ self: super: {
       }))
       (addTestToolDepends deps)
       # Patch for hnix compat.
-      (appendPatch (fetchpatch {
-        url = "https://github.com/expipiplus1/update-nix-fetchgit/commit/dfa34f9823e282aa8c5a1b8bc95ad8def0e8d455.patch";
-        sha256 = "sha256-yBjn1gVihVTlLewKgJc2I9gEj8ViNBAmw0bcsb5rh1A=";
-        excludes = [ "cabal.project" ];
-      }))
+      (appendPatches [
+        (fetchpatch {
+          url = "https://github.com/expipiplus1/update-nix-fetchgit/commit/dfa34f9823e282aa8c5a1b8bc95ad8def0e8d455.patch";
+          sha256 = "sha256-yBjn1gVihVTlLewKgJc2I9gEj8ViNBAmw0bcsb5rh1A=";
+          excludes = [ "cabal.project" ];
+        })
+        # Fix for GHC >= 9.8
+        (fetchpatch {
+          name = "update-nix-fetchgit-base-4.19.patch";
+          url = "https://github.com/expipiplus1/update-nix-fetchgit/commit/384d2e259738abf94f5a20717b12648996cf24e2.patch";
+          sha256 = "11489rpxrrz98f7d3j9mz6npgfg0zp005pghxv9c86rkyg5b10d5";
+        })
+      ])
     ];
 
   # Raise version bounds: https://github.com/idontgetoutmuch/binary-low-level/pull/16
