@@ -7,14 +7,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "system76-power";
   version = "1.2.3";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "system76-power";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-fyatAoWw/4ORojayA90er+H5weRykg+2ZzTsGThpW5g=";
   };
 
@@ -48,4 +48,4 @@ rustPlatform.buildRustPackage rec {
       ahoneybun
     ];
   };
-}
+})
