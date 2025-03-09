@@ -76,4 +76,9 @@
     name = "export-rt-sched-migrate";
     patch = ./export-rt-sched-migrate.patch;
   };
+
+  linux-612-rust-185 = {
+    name = "linux-612-rust-185";
+    patch = ./linux-612-rust-185.patch;
+  };
 }
