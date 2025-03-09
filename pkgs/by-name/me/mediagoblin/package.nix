@@ -15,6 +15,12 @@ let
       celery = prev.celery.overridePythonAttrs {
         doCheck = false;
       };
+
+      kombu = prev.kombu.overridePythonAttrs {
+        # avoid conflicts with test only dependencies
+        doCheck = false;
+      };
+
       sqlalchemy = prev.sqlalchemy_1_4;
     };
   };
