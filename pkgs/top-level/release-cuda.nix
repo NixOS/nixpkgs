@@ -42,6 +42,9 @@ in
       inherit allowUnfreePredicate;
       "${variant}Support" = true;
       inHydra = true;
+
+      # Don't evaluate duplicate and/or deprecated attributes
+      allowAliases = false;
     };
 
     __allowFileset = false;
@@ -68,12 +71,61 @@ let
     pkgs
     ;
 
-  # Package sets to evaluate whole
-  packageSets = builtins.filter (lib.strings.hasPrefix "cudaPackages") (builtins.attrNames pkgs);
-  evalPackageSet = pset: mapTestOn { ${pset} = packagePlatforms pkgs.${pset}; };
+  # Packages that match the following predicates won't be evaluated on any platforms
+  # Each predicate takes a human-readable, dot-delimited attribute path and the derivation itself
+  filterPackagePredicates =
+    let
+      matchCudaPackageByName = name: path: null != builtins.match "cudaPackages[^\.]*\.${name}" path;
+      knownBrokenConditions =
+        conds: drv: builtins.any (cond: drv.brokenConditions.${cond} or false) conds;
+    in
+    [
+      # TensorRT currently can't be built on hydra/nix-community builders due to requiring the user
+      # to explicitly agree to the NVIDIA TensorRT License (and a developer account on developer.nvidia.com)
+      # See https://docs.nvidia.com/deeplearning/tensorrt/latest/reference/sla.html
+      (drv: matchCudaPackageByName "tensorrt[^\.]*")
 
+      # It is expected that some combinations of CUDA and cuDNN versions aren't compatible,
+      # so we don't want to count these "broken" derivations as eval errors
+      (
+        drv: path:
+        matchCudaPackageByName "cudnn[^\.]*" path
+        && knownBrokenConditions [ "CUDA version is too old" "CUDA version is too new" ] drv
+      )
+
+      # NVIDIA Nsight Systems requires CUDA version >=11.8, so all prior versions are marked
+      # as broken, but we don't want to count these derivations as eval errors
+      (
+        drv: path:
+        matchCudaPackageByName "nsight_systems" path && knownBrokenConditions [ "CUDA too old (<11.8)" ] drv
+      )
+
+      # Getting NVIDIA drivers from cudaPackages instead of linuxPackages is unsupported,
+      # so we don't want to count these "broken" derivations as eval errors
+      (drv: matchCudaPackageByName "nvidia_driver")
+    ];
+  filterPackageFn =
+    path: platforms:
+    if
+      builtins.any (
+        pred: pred (lib.getAttrFromPath path pkgs) (lib.showAttrPath path)
+      ) filterPackagePredicates
+    then
+      [ ]
+    else
+      platforms;
+  mapTestOnFiltered = platforms: mapTestOn (lib.mapAttrsRecursive filterPackageFn platforms);
+
+  # Package sets to evaluate whole
+  # Derivations from these package sets are selected based on the value
+  # of their meta.{hydraPlatforms,platforms,badPlatforms} attributes
+  packageSets = builtins.filter (lib.strings.hasPrefix "cudaPackages") (builtins.attrNames pkgs);
+  evalPackageSetPlatforms = lib.genAttrs packageSets (pset: packagePlatforms pkgs.${pset});
+
+  # Explicitly select additional packages to also evaluate
+  # The desired platforms must be set explicitly here
   jobs =
-    mapTestOn {
+    mapTestOnFiltered {
       blas = linux;
       blender = linux;
       faiss = linux;
@@ -126,7 +178,7 @@ let
         grad-cam = linux;
         jaxlib = linux;
         jax = linux;
-        Keras = linux;
+        keras = linux;
         kornia = linux;
         mmcv = linux;
         mxnet = linux;
@@ -140,15 +192,13 @@ let
         pymc = linux;
         pyrealsense2WithCuda = linux;
         pytorch-lightning = linux;
-        pytorch = linux;
-        scikitimage = linux;
+        scikit-image = linux;
         scikit-learn = linux; # Only affected by MKL?
         scipy = linux; # Only affected by MKL?
         spacy-transformers = linux;
         tensorflow = linux;
         tensorflow-probability = linux;
         tesserocr = linux;
-        Theano = linux;
         tiny-cuda-nn = linux;
         torchaudio = linux;
         torch = linux;
@@ -159,6 +209,6 @@ let
         vllm = linux;
       };
     }
-    // (lib.genAttrs packageSets evalPackageSet);
+    // mapTestOnFiltered evalPackageSetPlatforms;
 in
 jobs
