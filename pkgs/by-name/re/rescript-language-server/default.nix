@@ -7,6 +7,7 @@
   esbuild,
   nix-update-script,
   versionCheckHook,
+  rescript-editor-analysis,
 }:
 
 let
@@ -20,10 +21,6 @@ let
     else
       throw "Unsupported system: ${stdenv.system}";
 
-  rescript-editor-analysis =
-    callPackage
-      ../../../applications/editors/vscode/extensions/chenglou92.rescript-vscode/rescript-editor-analysis.nix
-      { inherit version; };
 in
 buildNpmPackage rec {
   pname = "rescript-language-server";
