@@ -5,26 +5,26 @@
   makeDesktopItem,
   copyDesktopItems,
   fetchFromGitHub,
-  sfml,
+  sfml_2,
   anttweakbar,
   glm,
   eigen,
   glew,
   cmake,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "marble-marcher-ce";
-  version = "1.4.5";
+  version = "1.4.6";
 
   src = fetchFromGitHub {
     owner = "WAUthethird";
     repo = "Marble-Marcher-Community-Edition";
-    rev = version;
-    hash = "sha256-m5i/Q4k5S4wcojHqMYS7e1W/Ph7q/95j3oOK2xbrHSk=";
+    tag = finalAttrs.version;
+    hash = "sha256-xzmbC0CnhHaUJ9UHvLDLJsABD/TaJAl+SLVRQRbD9P8=";
   };
 
   buildInputs = [
-    sfml
+    sfml_2
     anttweakbar
     glm
     eigen
@@ -37,43 +37,44 @@ stdenv.mkDerivation rec {
   ];
   installFlags = [ "DESTDIR=$(out)" ];
 
-  prePatch = ''
+  prePatch =
     # the path /home/MMCE is always added to DESTDIR
     # we change this to a more sensible path
     # see https://github.com/WAUthethird/Marble-Marcher-Community-Edition/issues/23
-    substituteInPlace CMakeLists.txt \
-      --replace '/home/MMCE' '/share/MMCE'
-  '';
+    ''
+      substituteInPlace CMakeLists.txt \
+        --replace-fail '/home/MMCE' '/share/MMCE'
+    '';
 
   postInstall = ''
     mkdir $out/bin
     mkdir -p $out/share/icons/
     # The executable has to be run from the same directory the assets are in
-    makeWrapper $out/share/MMCE/MarbleMarcher $out/bin/${pname} --chdir $out/share/MMCE
-    ln -s $out/share/MMCE/images/MarbleMarcher.png $out/share/icons/${pname}.png
+    makeWrapper $out/share/MMCE/MarbleMarcher $out/bin/marble-marcher-ce --chdir $out/share/MMCE
+    ln -s $out/share/MMCE/images/MarbleMarcher.png $out/share/icons/marble-marcher-ce.png
   '';
 
   desktopItems = [
     (makeDesktopItem {
-      name = pname;
-      exec = pname;
-      icon = pname;
-      desktopName = pname;
-      comment = meta.description;
+      name = "marble-marcher-ce";
+      exec = "marble-marcher-ce";
+      icon = "marble-marcher-ce";
+      desktopName = "marble-marcher-ce";
+      comment = finalAttrs.meta.description;
       categories = [ "Game" ];
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "A community-developed version of the original Marble Marcher - a fractal physics game";
     mainProgram = "marble-marcher-ce";
     homepage = "https://michaelmoroz.itch.io/mmce";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Plus # Code
       cc-by-30 # Assets
       ofl # Fonts
     ];
-    maintainers = with maintainers; [ rampoina ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ rampoina ];
+    platforms = lib.platforms.linux;
   };
-}
+})
