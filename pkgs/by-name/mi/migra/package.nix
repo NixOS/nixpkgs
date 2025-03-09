@@ -2,7 +2,6 @@
   lib,
   python3,
   fetchFromGitHub,
-  postgresql,
   postgresqlTestHook,
 }:
 python3.pkgs.buildPythonApplication rec {
@@ -29,7 +28,6 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook
-    postgresql
     postgresqlTestHook
   ];
   preCheck = ''

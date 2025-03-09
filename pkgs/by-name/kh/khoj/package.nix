@@ -1,7 +1,6 @@
 { lib
 , fetchFromGitHub
 , python3
-, postgresql
 , postgresqlTestHook
 }:
 
@@ -76,8 +75,9 @@ python3.pkgs.buildPythonApplication rec {
     pytest-django
     pytestCheckHook
   ] ++ [
-    (postgresql.withPackages (p: with p; [ pgvector ]))
-    postgresqlTestHook
+    (postgresqlTestHook.override (old: {
+      postgresql = old.postgresql.withPackages (p: with p; [ pgvector ]);
+    }))
   ];
 
   preCheck = ''

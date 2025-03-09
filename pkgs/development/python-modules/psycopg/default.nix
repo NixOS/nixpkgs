@@ -29,7 +29,6 @@
   pproxy,
   pytest-randomly,
   pytestCheckHook,
-  postgresql,
   postgresqlTestHook,
 }:
 
@@ -179,7 +178,6 @@ buildPythonPackage rec {
       pproxy
       pytest-randomly
       pytestCheckHook
-      postgresql
     ]
     ++ lib.optional stdenv.hostPlatform.isLinux postgresqlTestHook
     ++ optional-dependencies.c

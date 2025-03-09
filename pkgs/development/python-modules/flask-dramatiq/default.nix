@@ -10,7 +10,6 @@
   pytestCheckHook,
   flask-migrate,
   periodiq,
-  postgresql,
   postgresqlTestHook,
   psycopg2,
 }:
@@ -51,7 +50,6 @@ buildPythonPackage {
     requests
     flask-migrate
     periodiq
-    postgresql
     postgresqlTestHook
     psycopg2
   ] ++ dramatiq.optional-dependencies.rabbitmq;

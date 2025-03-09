@@ -15,8 +15,9 @@ stdenvNoCC.mkDerivation (
     dontUnpack = true;
     doCheck = true;
     nativeCheckInputs = [
-      postgresqlTestHook
-      (postgresql.withPackages (ps: [ finalPackage ] ++ (map (p: ps."${p}") withPackages)))
+      (postgresqlTestHook.override {
+        postgresql = postgresql.withPackages (ps: [ finalPackage ] ++ (map (p: ps."${p}") withPackages));
+      })
     ];
     postgresqlTestUserOptions = "LOGIN SUPERUSER";
     passAsFile = [ "sql" ];

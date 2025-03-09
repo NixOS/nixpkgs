@@ -6,7 +6,6 @@
   sqlalchemy,
   sqlalchemy-utils,
   six,
-  postgresql,
   postgresqlTestHook,
   psycopg2,
   pytestCheckHook,
@@ -34,7 +33,6 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "sqlalchemy_i18n" ];
 
   nativeCheckInputs = [
-    postgresql
     postgresqlTestHook
     psycopg2
     pytestCheckHook

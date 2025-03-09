@@ -7,7 +7,6 @@
   geos,
   pnpm_9,
   nodejs,
-  postgresql,
   postgresqlTestHook,
   playwright-driver,
 }:
@@ -117,8 +116,9 @@ python.pkgs.buildPythonApplication rec {
   '';
 
   nativeCheckInputs = with python.pkgs; [
-    (postgresql.withPackages (p: [ p.postgis ]))
-    postgresqlTestHook
+    (postgresqlTestHook.override (old: {
+      postgresql = old.postgresql.withPackages (p: [ p.postgis ]);
+    }))
     pytest-django
     pytest-playwright
     pytestCheckHook

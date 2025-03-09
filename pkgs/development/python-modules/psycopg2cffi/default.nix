@@ -4,7 +4,6 @@
   fetchFromGitHub,
   lib,
   libpq,
-  postgresql,
   postgresqlTestHook,
   pytestCheckHook,
   setuptools,
@@ -47,7 +46,6 @@ buildPythonPackage rec {
   doCheck = !stdenv.hostPlatform.isDarwin;
 
   nativeCheckInputs = [
-    postgresql
     postgresqlTestHook
     pytestCheckHook
   ];

@@ -4,7 +4,6 @@
   fetchCrate,
   darwin,
   postgresqlTestHook,
-  postgresql,
   stdenv,
 }:
 
@@ -26,7 +25,6 @@ rustPlatform.buildRustPackage rec {
 
   nativeCheckInputs = [
     postgresqlTestHook
-    postgresql
   ];
 
   dontUseCargoParallelTests = true;

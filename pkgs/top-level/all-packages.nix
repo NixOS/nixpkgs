@@ -11506,7 +11506,11 @@ with pkgs;
 
   inherit (import ../servers/sql/postgresql pkgs)
     postgresqlVersions
-    libpq;
+    libpq
+    postgresqlForTests;
+
+  # By passing this here, we make it overrideable via "postgresql".
+  postgresqlTestHook = callPackage ../by-name/po/postgresqlTestHook/package.nix { postgresql = postgresqlForTests; };
 
   inherit (postgresqlVersions)
     postgresql_13

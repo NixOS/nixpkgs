@@ -3,7 +3,6 @@ postCheckHooks+=(postgresqlStop)
 
 
 postgresqlStart() {
-
   # Add default environment variable values
   #
   # Client variables:

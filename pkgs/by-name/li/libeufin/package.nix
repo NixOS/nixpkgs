@@ -6,7 +6,6 @@
   jdk17_headless,
   gradle_8,
   makeWrapper,
-  postgresql,
   postgresqlTestHook,
 }:
 let
@@ -91,7 +90,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Tests need a database to run
   nativeCheckInputs = [
-    postgresql
     postgresqlTestHook
   ];
 
