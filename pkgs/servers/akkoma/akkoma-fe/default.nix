@@ -13,19 +13,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "akkoma-fe";
-  version = "3.11.0";
+  version = "3.15.0";
 
   src = fetchFromGitea {
     domain = "akkoma.dev";
     owner = "AkkomaGang";
     repo = "akkoma-fe";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Z7psmIyOo8Rvwcip90JgxLhZ5SkkGB94QInEgm8UOjQ=";
+    hash = "sha256-VKYeJwAc4pMpF1dWBnx5D39ffNk7eGpJI2es+GAxdow=";
   };
 
   offlineCache = fetchYarnDeps {
     yarnLock = finalAttrs.src + "/yarn.lock";
-    hash = "sha256-Uet3zdjLdI4qpiuU4CtW2WwWGcFaOhotLLKfnsAUqho=";
+    hash = "sha256-QB523QZX8oBMHWBSFF7MpaWWXc+MgEUaw/2gsCPZ9a4=";
   };
 
   nativeBuildInputs = [
