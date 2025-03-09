@@ -7,7 +7,7 @@
       "bom-ref": "pkg:nim/nim_lk",
       "name": "nim_lk",
       "description": "Tool for generating Nim lockfiles",
-      "version": "20241025",
+      "version": "20250309",
       "authors": [
         {
           "name": "Emery Hemingway"
