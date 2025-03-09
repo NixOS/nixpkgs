@@ -2736,6 +2736,12 @@ self: super: {
       sha256 = "sha256-ZdCXMhni+RGisRODiElObW5c4hKy2giWQmWnatqeRJo=";
     }))
   ];
+
+  # jailbreak to allow rerefined >=0.7.0
+  binrep = doJailbreak super.binrep;
+
+  # jailbreak to allow deepseq >= 1.5
+  blucontrol = doJailbreak super.blucontrol;
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
 
 # Gogol Packages
