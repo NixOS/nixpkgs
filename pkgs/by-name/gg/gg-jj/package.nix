@@ -43,11 +43,8 @@ stdenv.mkDerivation (finalAttrs: {
       version
       src
       patches
+      cargoRoot
       ;
-    # Tries to apply patches inside cargoRoot.
-    prePatch = "pushd ..";
-    postPatch = "popd";
-    sourceRoot = "${finalAttrs.src.name}/${finalAttrs.cargoRoot}";
     hash = "sha256-zEYU5l57VxVKKhoGfa77kT05vwoLyAu9eyt7C9dhAGM=";
   };
 
