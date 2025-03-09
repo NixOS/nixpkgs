@@ -16089,6 +16089,12 @@
     githubId = 220262;
     name = "Ion Mudreac";
   };
+  Mulligansecurity = {
+    email = "mulligansecurity@riseup.net";
+    github = "MulliganSecurity";
+    githubId = 196982523;
+    name = "MulliganSecurity";
+  };
   multisn8 = {
     email = "all-things-nix@multisamplednight.com";
     github = "MultisampledNight";
