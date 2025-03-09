@@ -1,0 +1,100 @@
+diff --git a/exMifsLzo.c b/exMifsLzo.c
+index 3173db5..a077bbf 100644
+--- a/exMifsLzo.c
++++ b/exMifsLzo.c
+@@ -73,8 +73,8 @@ int main(int argc, char **argv)
+ 		printf("Block count=%d Total Size=%d + 2048=%d (%x)\n", v2, v7, v7+2048, v7+2048);
+ 		v7=0;maxBlkSize=0;
+ 		if(lzo_init() != LZO_E_OK) {
+-			error(1, "decompression init failure");
+-			return 0;
++			fprintf(stderr, "decompression init failure");
++			exit(1);
+ 		}
+ 
+ 		for(readBlk=blockInfo;readBlk!=currBlockInfo;readBlk++)
+diff --git a/fixdecifs.c b/fixdecifs.c
+index 1404732..ebb44a3 100644
+--- a/fixdecifs.c
++++ b/fixdecifs.c
+@@ -7,6 +7,7 @@
+ 
+ #include "sys/image.h"
+ #include "sys/startup.h"
++#include <string.h>
+ 
+ #define ENDIAN_RET32(x)		((((x) >> 24) & 0xff) | \
+ 							(((x) >> 8) & 0xff00) | \
+diff --git a/fixencifs.c b/fixencifs.c
+index d52f0fa..d5f69c2 100644
+--- a/fixencifs.c
++++ b/fixencifs.c
+@@ -3,6 +3,7 @@
+ #include <stdarg.h>
+ #include "sys/image.h"
+ #include "sys/startup.h"
++#include <string.h>
+ 
+ #define ENDIAN_RET32(x)		((((x) >> 24) & 0xff) | \
+ 							(((x) >> 8) & 0xff00) | \
+diff --git a/uuu.c b/uuu.c
+index 7f8c712..f245a9b 100644
+--- a/uuu.c
++++ b/uuu.c
+@@ -1,12 +1,12 @@
+ #include <stdio.h>
+ #include <ucl/ucl.h>
+-
+ #ifndef QNX
+-#include <error.h>
+ #else
+ #define error(p,q,r)	printf(r)
+ #endif
+ 
++#include <stdlib.h>
++
+ int main(int ac, char**av)
+ {
+     FILE *fpr, *fpw;
+@@ -38,8 +38,8 @@ int main(int ac, char**av)
+ 				printf("buf[0-4] = %02X %02X %02X %02X, Package %d bytes \n", buf[0], buf[1], buf[2], buf[3], len);
+ 				status = ucl_nrv2b_99_compress(buf, len, out_buf, &out_len, NULL, 9, NULL, NULL);//= ucl_nrv2b_decompress_8(buf, len, out_buf, &out_len, NULL);
+ 				if(status != 0) {
+-					error(1, 0, "compression failure.\n");
+-					break;
++					fprintf(stderr, "compression failure.\n");
++					exit(1);
+ 				}
+ 				packSize[0] = (out_len >> 8) & 0xff;
+ 				packSize[1] = out_len & 0xff;
+diff --git a/zzz.c b/zzz.c
+index 0870840..d2d86e5 100644
+--- a/zzz.c
++++ b/zzz.c
+@@ -1,12 +1,13 @@
+ #include <stdio.h>
+ #ifndef QNX
+ #include <lzo/lzo1x.h>
+-#include <error.h>
+ #else
+ #include <lzo1x.h>
+ #define error(p,q,r)	printf(r)
+ #endif
+ 
++#include <stdlib.h>
++
+ int main(int ac, char**av)
+ {
+     FILE *fpr, *fpw;
+@@ -40,8 +41,8 @@ retry:
+ 				//status = ucl_nrv2b_99_compress(buf, len, out_buf, &out_len, NULL, 9, NULL, NULL);//= ucl_nrv2b_decompress_8(buf, len, out_buf, &out_len, NULL);
+ 				status = lzo1x_999_compress(buf, len, out_buf, &out_len, work);
+ 				if(status != 0) {
+-					error(1, 0, "compression failure.\n");
+-					break;
++					fprintf(stderr, "compression failure.\n");
++					exit(1);
+ 				}
+ 				if(out_len > 0xffff) {
+ 					printf("!!!! Packed size too big! Need retry!\n");
+

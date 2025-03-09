@@ -1,0 +1,138 @@
+From 4b83f714c821d6d4d2306673ee3a87907cfec80e Mon Sep 17 00:00:00 2001
+From: Ivan Trubach <mr.trubach@icloud.com>
+Date: Fri, 19 Jul 2024 10:45:13 +0300
+Subject: [PATCH] build: support setting an emulator from configure script
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+V8’s JIT infrastructure requires binaries such as mksnapshot to be run
+during the build. However, these binaries must have the same bit-width
+as the host platform (e.g. a x86_64 build platform targeting ARMv6 needs
+to produce a 32-bit binary).
+
+To work around this issue, allow building the binaries for the host
+platform and running them on the build platform with an emulator.
+
+Based on Buildroot’s nodejs-src 0001-add-qemu-wrapper-support.patch.
+https://gitlab.com/buildroot.org/buildroot/-/blob/c1d5eada4d4db9eeaa1c44dd1dea95a67c8a70ca/package/nodejs/nodejs-src/0001-add-qemu-wrapper-support.patch
+
+Upstream: https://github.com/nodejs/node/pull/53899
+---
+ common.gypi              |  1 +
+ configure.py             | 14 ++++++++++++++
+ node.gyp                 |  3 +++
+ tools/v8_gypfiles/v8.gyp |  4 ++++
+ 4 files changed, 22 insertions(+)
+
+diff --git a/common.gypi b/common.gypi
+index ec92c9df4c..6474495ab6 100644
+--- a/common.gypi
++++ b/common.gypi
+@@ -13,6 +13,7 @@
+     'enable_pgo_generate%': '0',
+     'enable_pgo_use%': '0',
+     'python%': 'python',
++    'emulator%': [],
+ 
+     'node_shared%': 'false',
+     'force_dynamic_crt%': 0,
+diff --git a/configure.py b/configure.py
+index 82916748fd..10dc0becbb 100755
+--- a/configure.py
++++ b/configure.py
+@@ -112,6 +112,12 @@ parser.add_argument('--dest-cpu',
+     choices=valid_arch,
+     help=f"CPU architecture to build for ({', '.join(valid_arch)})")
+ 
++parser.add_argument('--emulator',
++    action='store',
++    dest='emulator',
++    default=None,
++    help='emulator command that can run executables built for the target system')
++
+ parser.add_argument('--cross-compiling',
+     action='store_true',
+     dest='cross_compiling',
+@@ -2160,6 +2166,14 @@ write('config.mk', do_not_edit + config_str)
+ gyp_args = ['--no-parallel', '-Dconfiguring_node=1']
+ gyp_args += ['-Dbuild_type=' + config['BUILDTYPE']]
+ 
++if options.emulator is not None:
++  if not options.cross_compiling:
++    # Note that emulator is a list so we have to quote the variable.
++    gyp_args += ['-Demulator=' + shlex.quote(options.emulator)]
++  else:
++    # TODO: perhaps use emulator for tests?
++    warn('The `--emulator` option has no effect when cross-compiling.')
++
+ if options.use_ninja:
+   gyp_args += ['-f', 'ninja-' + flavor]
+ elif flavor == 'win' and sys.platform != 'msys':
+diff --git a/node.gyp b/node.gyp
+index 08cb3f38e8..515b305933 100644
+--- a/node.gyp
++++ b/node.gyp
+@@ -332,6 +332,7 @@
+                     '<(SHARED_INTERMEDIATE_DIR)/node_snapshot.cc',
+                   ],
+                   'action': [
++                    '<@(emulator)',
+                     '<(node_mksnapshot_exec)',
+                     '--build-snapshot',
+                     '<(node_snapshot_main)',
+@@ -351,6 +352,7 @@
+                     '<(SHARED_INTERMEDIATE_DIR)/node_snapshot.cc',
+                   ],
+                   'action': [
++                    '<@(emulator)',
+                     '<@(_inputs)',
+                     '<@(_outputs)',
+                   ],
+@@ -1520,6 +1522,7 @@
+                '<(PRODUCT_DIR)/<(node_core_target_name).def',
+              ],
+              'action': [
++               '<@(emulator)',
+                '<(PRODUCT_DIR)/gen_node_def.exe',
+                '<@(_inputs)',
+                '<@(_outputs)',
+diff --git a/tools/v8_gypfiles/v8.gyp b/tools/v8_gypfiles/v8.gyp
+index ba8b161f0f..d5c90dad50 100644
+--- a/tools/v8_gypfiles/v8.gyp
++++ b/tools/v8_gypfiles/v8.gyp
+@@ -99,6 +99,7 @@
+             '<@(torque_outputs_inc)',
+           ],
+           'action': [
++            '<@(emulator)',
+             '<(PRODUCT_DIR)/<(EXECUTABLE_PREFIX)torque<(EXECUTABLE_SUFFIX)',
+             '-o', '<(SHARED_INTERMEDIATE_DIR)/torque-generated',
+             '-v8-root', '<(V8_ROOT)',
+@@ -219,6 +220,7 @@
+           'action': [
+             '<(python)',
+             '<(V8_ROOT)/tools/run.py',
++            '<@(emulator)',
+             '<@(_inputs)',
+             '<@(_outputs)',
+           ],
+@@ -442,6 +444,7 @@
+              }],
+           ],
+           'action': [
++            '<@(emulator)',
+             '>@(_inputs)',
+             '>@(mksnapshot_flags)',
+           ],
+@@ -1577,6 +1580,7 @@
+           'action': [
+             '<(python)',
+             '<(V8_ROOT)/tools/run.py',
++            '<@(emulator)',
+             '<@(_inputs)',
+             '<@(_outputs)',
+           ],
+-- 
+2.44.1
+

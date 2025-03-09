@@ -1,0 +1,40 @@
+Index: gyp/pylib/gyp/xcode_emulation.py
+===================================================================
+--- gyp/pylib/gyp/xcode_emulation.py
++++ gyp/pylib/gyp/xcode_emulation.py
+@@ -483,9 +483,6 @@
+     if self._Test('GCC_CHAR_IS_UNSIGNED_CHAR', 'YES', default='NO'):
+       cflags.append('-funsigned-char')
+ 
+-    if self._Test('GCC_CW_ASM_SYNTAX', 'YES', default='YES'):
+-      cflags.append('-fasm-blocks')
+-
+     if 'GCC_DYNAMIC_NO_PIC' in self._Settings():
+       if self._Settings()['GCC_DYNAMIC_NO_PIC'] == 'YES':
+         cflags.append('-mdynamic-no-pic')
+@@ -495,9 +492,6 @@
+       # mdynamic-no-pic by default for executable and possibly static lib
+       # according to mento
+ 
+-    if self._Test('GCC_ENABLE_PASCAL_STRINGS', 'YES', default='YES'):
+-      cflags.append('-mpascal-strings')
+-
+     self._Appendf(cflags, 'GCC_OPTIMIZATION_LEVEL', '-O%s', default='s')
+ 
+     if self._Test('GCC_GENERATE_DEBUGGING_SYMBOLS', 'YES', default='YES'):
+@@ -553,7 +541,6 @@
+       # TODO: Supporting fat binaries will be annoying.
+       self._WarnUnimplemented('ARCHS')
+       archs = ['i386']
+-    cflags.append('-arch ' + archs[0])
+ 
+     if archs[0] in ('i386', 'x86_64'):
+       if self._Test('GCC_ENABLE_SSE3_EXTENSIONS', 'YES', default='NO'):
+@@ -811,7 +798,6 @@
+       # TODO: Supporting fat binaries will be annoying.
+       self._WarnUnimplemented('ARCHS')
+       archs = ['i386']
+-    ldflags.append('-arch ' + archs[0])
+ 
+     # Xcode adds the product directory by default.
+     ldflags.append('-L' + product_dir)

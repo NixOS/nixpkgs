@@ -1,0 +1,10 @@
+--- a/textext/textext.inx
++++ b/textext/textext.inx
+@@ -8,6 +8,6 @@
+     </effects-menu>
+   </effect>
+   <script>
+-    <command location="inx" interpreter="python">__main__.py</command>
++    <command location="inx" interpreter="shell">launch.sh</command>
+   </script>
+ </inkscape-extension>

@@ -1,0 +1,20 @@
+--- a/src/sh2_dynarec/linkage_x64.s	2013-03-11 20:29:53.112870900 +0100
++++ b/src/sh2_dynarec/linkage_x64.s	2013-03-11 20:31:48.856778600 +0100
+@@ -747,3 +747,7 @@ breakpoint:
+ 	ret
+ 	/* Set breakpoint here for debugging */
+ 	.size	breakpoint, .-breakpoint
++
++#if defined(__linux__) && defined(__ELF__)
++.section .note.GNU-stack,"",%progbits
++#endif
+--- a/src/sh2_dynarec/linkage_x86.s	2013-03-11 20:30:08.157693100 +0100
++++ b/src/sh2_dynarec/linkage_x86.s	2013-03-11 20:32:30.993310600 +0100
+@@ -743,3 +743,7 @@ breakpoint:
+ 	ret
+ 	/* Set breakpoint here for debugging */
+ 	.size	breakpoint, .-breakpoint
++
++#if defined(__linux__) && defined(__ELF__)
++.section .note.GNU-stack,"",%progbits
++#endif
