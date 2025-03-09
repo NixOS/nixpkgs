@@ -376,27 +376,11 @@ in
           lapi = mkOption {
             type = types.submodule {
               options = {
-                credentials = mkOption {
-                  type = types.nullOr format.type;
-                  default = null;
-                  example = {
-                    url = "http://localhost:8080";
-                    login = "login";
-                    password = "password";
-                    ca_cert_path = "example";
-                    key_path = "example";
-                    cert_path = "example";
-                  };
-                  description = ''
-                    Attributes inside the local_api_credentials file.
-                    This is not the most secure way to define settings, as this is put in the Nix store. Use of lapi.credentialsFile is preferred.
-                  '';
-                };
                 credentialsFile = mkOption {
                   type = types.nullOr types.path;
                   example = "/run/crowdsec/lapi.yaml";
                   description = ''
-                    The credential file to use. This is strongly preferred instead of putting secrets in the Nix store.
+                    The LAPI credential file to use.
                   '';
                   default = null;
                 };
@@ -410,23 +394,11 @@ in
           capi = mkOption {
             type = types.submodule {
               options = {
-                credentials = mkOption {
-                  type = types.nullOr format.type;
-                  default = null;
-                  example = {
-                    url = "https://api.crowdsec.net/";
-                    login = "abcdefghijklmnopqrstuvwxyz";
-                    password = "abcdefghijklmnopqrstuvwxyz";
-                  };
-                  description = ''
-                    Attributes inside the central_api_credentials.yaml file. This is not the most secure way to define settings, as this is put in the Nix store. Use of capi.credentialsFile is preferred.
-                  '';
-                };
                 credentialsFile = mkOption {
                   type = types.nullOr types.path;
                   example = "/run/crowdsec/capi.yaml";
                   description = ''
-                    The credential file to use. This is strongly preferred instead of putting secrets in the Nix store.
+                    The CAPI credential file to use.
                   '';
                   default = null;
                 };
@@ -440,19 +412,11 @@ in
           console = mkOption {
             type = types.submodule {
               options = {
-                token = mkOption {
-                  type = types.nullOr types.str;
-                  default = null;
-                  example = "abcde";
-                  description = ''
-                    The console token to enroll to the web console. This is not the most secure way to define settings, as this is put in the Nix store. Use of console.tokenFile is preferred.
-                  '';
-                };
                 tokenFile = mkOption {
                   type = types.nullOr types.path;
                   example = "/run/crowdsec/console_token.yaml";
                   description = ''
-                    The credential file to use. This is strongly preferred instead of putting secrets in the Nix store.
+                    The Console Token file to use.
                   '';
                   default = null;
                 };
@@ -483,32 +447,6 @@ in
     let
       cfg = config.services.crowdsec;
       configFile = format.generate "crowdsec.yaml" cfg.settings.general;
-      lapiFile =
-        if cfg.settings.lapi.credentialsFile != null then
-          cfg.settings.lapi.credentialsFile
-        else
-          format.generate "local_api_credentials.yaml" cfg.settings.lapi.credentials;
-      capiFile =
-        if cfg.settings.capi.credentialsFile != null then
-          cfg.settings.capi.credentialsFile
-        else
-          (
-            if cfg.settings.capi.credentials != null then
-              format.generate "central_api_credentials.yaml" cfg.settings.capi.credentials
-            else
-              null
-          );
-
-      tokenFile =
-        if cfg.settings.console.tokenFile != null then
-          cfg.settings.console.tokenFile
-        else
-          (
-            if cfg.settings.console.token != null then
-              pkgs.writeText "console_token.txt" cfg.settings.console.token
-            else
-              null
-          );
       simulationFile = format.generate "simulation.yaml" cfg.settings.simulation;
       consoleFile = format.generate "console.yaml" cfg.settings.console.configuration;
       patternsDir = pkgs.buildPackages.symlinkJoin {
@@ -520,7 +458,7 @@ in
       };
 
       cscli = pkgs.writeShellScriptBin "cscli" ''
-        set -euox pipefail
+        set -euo pipefail
         # cscli needs crowdsec on it's path in order to be able to run `cscli explain`
         export PATH="$PATH:${lib.makeBinPath [ cfg.package ]}"
         sudo=exec
@@ -558,7 +496,7 @@ in
 
       scriptArray =
         [
-          "set -euox pipefail"
+          "set -euo pipefail"
           "${lib.getExe cscli} hub update"
         ]
         ++ lib.optionals (cfg.hub.collections != [ ]) [
@@ -598,17 +536,17 @@ in
             fi
           ''
         ]
-        ++ lib.optionals (capiFile != null) [
+        ++ lib.optionals (cfg.settings.capi.credentialsFile != null) [
           ''
-            if ! grep -q password "${capiFile}" ]; then
+            if ! grep -q password "${cfg.settings.capi.credentialsFile}" ]; then
               ${lib.getExe cscli} capi register
             fi
           ''
         ]
-        ++ lib.optionals (tokenFile != null) [
+        ++ lib.optionals (cfg.settings.console.tokenFile != null) [
           ''
-            if [ ! -e "${tokenFile}" ]; then
-              ${lib.getExe cscli} console enroll "$(cat ${tokenFile})" --name ${cfg.name}
+            if [ ! -e "${cfg.settings.console.tokenFile}" ]; then
+              ${lib.getExe cscli} console enroll "$(cat ${cfg.settings.console.tokenFile})" --name ${cfg.name}
             fi
           ''
         ];
@@ -619,15 +557,6 @@ in
 
     in
     lib.mkIf (cfg.enable) {
-
-      assertions = [
-        {
-          assertion = lib.trivial.xor (cfg.settings.lapi.credentials != null) (
-            cfg.settings.lapi.credentialsFile != null
-          );
-          message = "Please specify either services.crowdsec.settings.lapi.credentialsFile or services.crowdsec.settings.lapi.credentials, not more, not less.";
-        }
-      ];
 
       warnings =
         [ ]
@@ -664,7 +593,7 @@ in
         };
         api = {
           client = {
-            credentials_path = mkDefault lapiFile;
+            credentials_path = cfg.settings.lapi.credentialsFile;
           };
           server = {
             enable = mkDefault false;
@@ -679,7 +608,7 @@ in
                 community = mkDefault true;
                 blocklists = mkDefault true;
               };
-              credentials_path = mkDefault capiFile;
+              credentials_path = cfg.settings.capi.credentialsFile;
             };
           };
         };
