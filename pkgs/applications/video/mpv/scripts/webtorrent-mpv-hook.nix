@@ -56,8 +56,6 @@ let
       # don't fetch node headers
       substituteInPlace node_modules/cmake-js/lib/dist.js \
           --replace-fail '!this.downloaded' 'false'
-
-      npm rebuild --verbose
     '';
 
     installPhase = ''
