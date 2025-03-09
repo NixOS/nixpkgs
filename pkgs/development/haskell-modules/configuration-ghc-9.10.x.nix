@@ -101,7 +101,9 @@ self: super: {
   # Test suite issues
   #
   call-stack = dontCheck super.call-stack; # https://github.com/sol/call-stack/issues/19
+  fsnotify = dontCheck super.fsnotify; # https://github.com/haskell-fswatch/hfsnotify/issues/115
   hinotify = pkgs.haskell.lib.dontCheck super.hinotify; # https://github.com/kolmodin/hinotify/issues/38
+  monad-dijkstra = dontCheck super.monad-dijkstra; # needs hlint 3.10
 
   haskell-language-server = disableCabalFlag "retrie" (disableCabalFlag "hlint" (disableCabalFlag "stylishhaskel" (super.haskell-language-server.override {stylish-haskell = null;retrie = null;apply-refact=null;hlint = null;})));
 

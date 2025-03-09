@@ -75,7 +75,6 @@ self: super: {
   #
   # Test suite issues
   #
-  unordered-containers = dontCheck super.unordered-containers; # ChasingBottoms doesn't support base 4.20
   pcre-heavy = dontCheck super.pcre-heavy; # GHC warnings cause the tests to fail
 
   #
