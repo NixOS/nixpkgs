@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "openrgb";
-  version = "0.9";
+  version = "0.9-unstable-2025-02-13";
 
   src = fetchFromGitLab {
     owner = "CalcProgrammer1";
     repo = "OpenRGB";
-    rev = "release_${version}";
-    hash = "sha256-XBLj4EfupyeVHRc0pVI7hrXFoCNJ7ak2yO0QSfhBsGU=";
+    rev = "bb6f8e2dddc1f5ba218275150b22f37b095b9e4f";
+    hash = "sha256-6zOyY2CcUUIyhrp2H2jBAJqcjAbppDUGewCZZSUUeHo=";
   };
 
   nativeBuildInputs = with libsForQt5; [
@@ -76,12 +76,12 @@ stdenv.mkDerivation rec {
       ];
     });
 
-  meta = with lib; {
+  meta = {
     description = "Open source RGB lighting control";
     homepage = "https://gitlab.com/CalcProgrammer1/OpenRGB";
-    maintainers = [ ];
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ liberodark ];
     mainProgram = "openrgb";
   };
 }

@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "openrgb-plugin-hardwaresync";
-  version = "0.9";
+  version = "0.9-unstable-2025-02-07";
 
   src = fetchFromGitLab {
     owner = "OpenRGBDevelopers";
     repo = "OpenRGBHardwareSyncPlugin";
-    rev = "release_${finalAttrs.version}";
-    hash = "sha256-3sQFiqmXhuavce/6v3XBpp6PAduY7t440nXfbfCX9a0=";
+    rev = "506f206fc14a6967528158c9ac1376c9463549e6";
+    hash = "sha256-7RrNVqHV2CDTHWtCaDyDoTujyuXNIjZobsnemTpkgKI=";
   };
 
   postPatch = ''
@@ -42,11 +42,14 @@ stdenv.mkDerivation (finalAttrs: {
     wrapQtAppsHook
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.com/OpenRGBDevelopers/OpenRGBHardwareSyncPlugin";
     description = "Sync your ARGB devices colors with hardware measures (CPU, GPU, fan speed, etc...)";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ fgaz ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      fgaz
+      liberodark
+    ];
   };
 })
