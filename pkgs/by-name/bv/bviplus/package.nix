@@ -35,6 +35,8 @@ stdenv.mkDerivation rec {
 
   buildFlags = [ "CFLAGS=-fgnu89-inline" ];
 
+  env.NIX_CFLAGS_COMPILE = "-Wno-implicit-int";
+
   meta = with lib; {
     description = "Ncurses based hex editor with a vim-like interface";
     homepage = "https://bviplus.sourceforge.net";
