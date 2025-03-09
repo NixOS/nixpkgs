@@ -28,8 +28,13 @@ stdenv.mkDerivation rec {
   #   does.
   # - perl shebang patches for acpi/sys scripts
   # - unhardcode path to checker scripts
-  patchPhase = ''
-    patch -p1 < ${./sys-by-default.patch}
+  # - add missing return type in main function
+  patches = [ ./sys-by-default.patch ];
+
+  postPatch = ''
+    substituteInPlace xbattbar.c \
+      --replace-fail "main(int argc" "int main(int argc"
+
     sed -i -e "s,/usr/lib/xbattbar/,$out/libexec/," xbattbar.c
     sed -i -e "s,/usr/bin/perl,${perl}/bin/perl," xbattbar-check-acpi
     sed -i -e "s,/usr/bin/perl,${perl}/bin/perl," xbattbar-check-sys
