@@ -1233,36 +1233,14 @@ test run would be:
 However, many repositories' test suites do not translate well to nix's build
 sandbox, and will generally need many tests to be disabled.
 
-To filter tests using pytest, one can do the following:
+This is achievable by
+- Including paths or test items (`path/to/file.py::MyClass` or `path/to/file.py::MyClass::test_method`) with positional arguments.
+- Excluding paths with `--ignore` or globbed paths with `--ignore-glob`.
+- Excluding test items using the `--deselect` flag.
+- Including or excluding classes or test methods by their name using the `-k` flag.
+- Including or excluding test by their marks using the `-m` flag.
 
-```nix
-{
-  nativeCheckInputs = [ pytest ];
-  # avoid tests which need additional data or touch network
-  checkPhase = ''
-    runHook preCheck
-
-    pytest tests/ --ignore=tests/integration -k 'not download and not update' --ignore=tests/test_failing.py
-
-    runHook postCheck
-  '';
-}
-```
-
-`--ignore` will tell pytest to ignore that file or directory from being
-collected as part of a test run. This is useful is a file uses a package
-which is not available in nixpkgs, thus skipping that test file is much
-easier than having to create a new package.
-
-`-k` is used to define a predicate for test names. In this example, we are
-filtering out tests which contain `download` or `update` in their test case name.
-Only one `-k` argument is allowed, and thus a long predicate should be concatenated
-with “\\” and wrapped to the next line.
-
-::: {.note}
-In pytest==6.0.1, the use of “\\” to continue a line (e.g. `-k 'not download \'`) has
-been removed, in this case, it's recommended to use `pytestCheckHook`.
-:::
+We highly recommend `pytestCheckHook` for an easier and more structural setup.
 
 #### Using pytestCheckHook {#using-pytestcheckhook}
 
@@ -1272,7 +1250,27 @@ when a package may need many items disabled to run the test suite.
 Most packages use `pytest` or `unittest`, which is compatible with `pytest`,
 so you will most likely use `pytestCheckHook`.
 
-Using the example above, the analogous `pytestCheckHook` usage would be:
+To use `pytestCheckHook`, add it to `nativeCheckInputs`. Adding `pytest` explicitly is not required.
+
+```nix
+{
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+}
+```
+
+`pytestCheckHook` recognizes the following attributes to include or exclude tests:
+
+- `enabledTestPaths` and `disabledTestPaths`: to specify path globs (files or directories) or test items.
+- `enabledTests` and `disabledTests`: to specify keywords for class names or test method names.
+- `enabledTestMarks` and `disabledTestMarks`: to specify test marks.
+
+By default, `pytest` automatically discovers which tests to run.
+If tests are explicitly enabled, only those tests will run.
+A test, that is both enabled and disabled, will not run.
+
+The following example demonstrates the use of the "enabled" and "disabled" pytestCheckHook attributes:
 
 ```nix
 {
@@ -1280,26 +1278,77 @@ Using the example above, the analogous `pytestCheckHook` usage would be:
     pytestCheckHook
   ];
 
-  # requires additional data
-  pytestFlags = [
+  # Allow running the following test paths and test objects.
+  enabledTestPaths = [
+    # Find tests under the tests directory.
+    # The trailing slash is not necessary.
     "tests/"
-    "--ignore=tests/integration"
+
+    # Additionally run test_foo
+    "other-tests/test_foo.py::Foo::test_foo"
   ];
 
-  disabledTests = [
-    # touches network
-    "download"
-    "update"
-  ];
-
+  # Override the above-enabled test paths and test objects.
   disabledTestPaths = [
-    "tests/test_failing.py"
+    # Tests under tests/integration requires additional data.
+    "tests/integration"
+  ];
+
+  # Allow tests by keywords matching their class names or method names.
+  enabledTests = [
+    # pytest by default only runs test methods begin with "test_" or end with "_test".
+    # This includes all functions whose name contains "test".
+    "test"
+  ];
+
+  # Override the above-enabled tests by keywords matching their class names or method names.
+  disabledTests = [
+    # Tests touching networks.
+    "upload"
+    "download"
   ];
 }
 ```
 
-This is especially useful when tests need to be conditionally disabled,
-for example:
+The `<enabled/disabled>TestsPaths` expands Unix-style globs.
+If the test paths to include/exclude contain characters like `*`, `?`, `[`, and `]`,
+quote them with square brackets (`[*]`, `[?]`, `[[]`, and `[]]`) to match literally.
+
+The `<enabled/disabled>Tests` and `<enabled/disabled>TestMarks` attribute pairs
+form a logical expression `((included_element1) or (included_element2)) and not (excluded_element1) and not (excluded_element2)`
+which will be passed to pytest's `-k` and `-m` flags respectively.
+With `__structuredAttrs = true` enabled, they additionally support sub-expressions.
+
+For example,
+the following `disabledTests` specification excludes test items like
+`TestFoo::test_bar_functionality`:
+
+```nix
+{
+  __structuredAttrs = true;
+
+  disabledTests = [
+    "Foo and bar"
+  ];
+}
+```
+
+`pytestCheckHook` supports `pytestFlags` to append command-line arguments to `pytest`.
+It requires `__structuredAttrs = true` to pass arguments containing spaces.
+
+```nix
+{
+  # Additional pytest flags
+  pytestFlags = [
+    # Disable benchmarks and run benchmarking tests only once.
+    "--benchmark-disable"
+  ];
+}
+```
+
+The main benefits of constructing `pytest` commands from `pytestCheckHook`-supported attributes/variables
+is structuralization and eval-time accessibility.
+This is especially helpful to select tests or specify flags conditionally:
 
 ```nix
 {
@@ -1316,10 +1365,6 @@ for example:
   ];
 }
 ```
-
-Trying to concatenate the related strings to disable tests in a regular
-[`checkPhase`](#ssec-check-phase) would be much harder to read. This also enables us to comment on
-why specific tests are disabled.
 
 #### Using pythonImportsCheck {#using-pythonimportscheck}
 
@@ -2007,36 +2052,6 @@ This will reconfigure the checkPhase to make use of that particular test framewo
 Occasionally packages don't make use of a common test framework, which may then require a custom checkPhase.
 
 #### Common issues {#common-issues}
-
-* Non-working tests can often be deselected. Most Python modules
-  do follow the standard test protocol where the pytest runner can be used.
-  `pytest` supports the `-k` and `--ignore-glob` parameters to ignore test
-  methods or classes as well as whole files. For `pytestCheckHook` these are
-  conveniently exposed as `disabledTests` and `disabledTestPaths` respectively.
-
-  ```nix
-  buildPythonPackage {
-    # ...
-    nativeCheckInputs = [
-      pytestCheckHook
-    ];
-
-    disabledTests = [
-      "function_name"
-      "other_function"
-    ];
-
-    disabledTestPaths = [
-      "path/to/performance.py"
-      "path/to/connect-*.py"
-    ];
-  }
-  ```
-
-  ::: {.note}
-  If the test path to disable contains characters like `*`, `?`, `[`, and `]`,
-  quote them with square brackets (`[*]`, `[?]`, `[[]`, and `[]]`) to match literally.
-  :::
 
 * Tests that attempt to access `$HOME` can be fixed by using the following
   work-around before running tests (e.g. `preCheck`): `export HOME=$(mktemp -d)`
