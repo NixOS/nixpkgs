@@ -4,7 +4,6 @@
 , fetchFromGitHub
 , fetchpatch
 , git
-, postgresql
 , postgresqlTestHook
 , redis
 }:
@@ -85,7 +84,6 @@ py.pkgs.buildPythonPackage rec {
   nativeCheckInputs = [
     git
     redis
-    postgresql
     postgresqlTestHook
   ] ++ (with py.pkgs; [
     pytest-asyncio

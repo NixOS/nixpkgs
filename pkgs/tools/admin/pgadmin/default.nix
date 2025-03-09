@@ -213,7 +213,6 @@ pythonPackages.buildPythonApplication rec {
 
   nativeCheckInputs = [
     postgresqlTestHook
-    postgresql
     pythonPackages.testscenarios
     pythonPackages.selenium
   ];

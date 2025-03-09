@@ -6,7 +6,6 @@
   isPyPy,
   fetchPypi,
   libpq,
-  postgresql,
   postgresqlTestHook,
   openssl,
   sphinxHook,
@@ -55,7 +54,6 @@ buildPythonPackage rec {
   doCheck = false;
 
   nativeCheckInputs = [
-    postgresql
     postgresqlTestHook
   ];
 

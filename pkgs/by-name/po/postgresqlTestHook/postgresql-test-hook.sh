@@ -3,6 +3,7 @@ postCheckHooks+=(postgresqlStop)
 
 
 postgresqlStart() {
+  PATH="@postgresqlDev@/bin:@postgresql@/bin:$PATH"
 
   # Add default environment variable values
   #

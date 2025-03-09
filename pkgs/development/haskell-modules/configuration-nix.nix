@@ -1021,7 +1021,6 @@ self: super: builtins.intersectAttrs super {
       export PGDATABASE=relocant
     '';
     testToolDepends = drv.testToolDepends or [] ++ [
-      pkgs.postgresql
       pkgs.postgresqlTestHook
     ];
   }) super.relocant;
@@ -1171,9 +1170,9 @@ self: super: builtins.intersectAttrs super {
     }) super.nvfetcher);
 
   rel8 = pkgs.lib.pipe super.rel8 [
-    (addTestToolDepend pkgs.postgresql)
+    (addTestToolDepend pkgs.postgresqlForTests)
     # https://github.com/NixOS/nixpkgs/issues/198495
-    (dontCheckIf (!pkgs.postgresql.doCheck))
+    (dontCheckIf (!pkgs.postgresqlForTests.doCheck))
   ];
 
   cloudy =

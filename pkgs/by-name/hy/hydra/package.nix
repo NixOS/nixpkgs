@@ -16,7 +16,7 @@
 , bzip2
 , libxslt
 , perl
-, postgresql
+, postgresqlForTests
 , prometheus-cpp
 , nukeReferences
 , git
@@ -207,7 +207,7 @@ stdenv.mkDerivation (finalAttrs: {
     libressl.nc
     nix-eval-jobs'
     openldap
-    postgresql
+    postgresqlForTests
   ];
 
   env = {

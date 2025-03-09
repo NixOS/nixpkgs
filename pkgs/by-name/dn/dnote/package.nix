@@ -9,7 +9,6 @@
   nix-update-script,
   versionCheckHook,
   postgresqlTestHook,
-  postgresql,
   defaultApiEndPoint ? "https://api.getdnote.com",
 }:
 
@@ -62,7 +61,6 @@ buildGoModule rec {
 
   nativeCheckInputs = [
     postgresqlTestHook
-    postgresql
   ];
 
   tags = [
