@@ -1,17 +1,20 @@
 {
   lib,
   SDL2,
+  sdl2-compat,
   cmake,
   darwin,
   fetchFromGitHub,
   libGLU,
   libiconv,
+  libX11,
   mesa,
   pkg-config,
   stdenv,
   # Boolean flags
   libGLSupported ? lib.elem stdenv.hostPlatform.system mesa.meta.platforms,
   openglSupport ? libGLSupported,
+  useSDL3 ? true,
 }:
 
 let
@@ -39,7 +42,10 @@ stdenv.mkDerivation (finalAttrs: {
     ];
 
   propagatedBuildInputs =
-    [ SDL2 ]
+    [
+      libX11
+      (if useSDL3 then sdl2-compat else SDL2)
+    ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       libiconv
       Cocoa
