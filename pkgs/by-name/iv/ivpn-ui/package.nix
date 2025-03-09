@@ -80,12 +80,14 @@ buildNpmPackage {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "UI interface for IVPN";
     mainProgram = "ivpn-ui";
     homepage = "https://www.ivpn.net";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ blenderfreaky ];
+    downloadPage = "https://github.com/ivpn/desktop-app";
+    changelog = "https://github.com/ivpn/desktop-app/releases/tag/v${version}";
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ blenderfreaky ];
     platforms = [ "x86_64-linux" ];
   };
 }
