@@ -7,7 +7,9 @@
   dotnetCorePackages,
   exportTemplatesHash,
   fetchFromGitHub,
+  fetchpatch,
   fontconfig,
+  glib,
   hash,
   installShellFiles,
   lib,
@@ -38,6 +40,7 @@
   vulkan-loader,
   wayland,
   wayland-scanner,
+  withAlsa ? true,
   withDbus ? true,
   withFontconfig ? true,
   withMono ? false,
@@ -145,6 +148,7 @@ let
         debug_symbols = true;
 
         # Options from 'platform/linuxbsd/detect.py'
+        alsa = withAlsa;
         dbus = withDbus; # Use D-Bus to handle screensaver and portal desktop settings
         fontconfig = withFontconfig; # Use fontconfig for system fonts support
         pulseaudio = withPulseaudio; # Use PulseAudio
@@ -157,6 +161,8 @@ let
         module_mono_enabled = withMono;
 
         linkflags = "-Wl,--build-id";
+
+        use_sowrap = false;
       };
 
       enableParallelBuilding = true;
@@ -164,6 +170,11 @@ let
       strictDeps = true;
 
       patches = lib.optionals (lib.versionOlder version "4.4") [
+        (fetchpatch {
+          name = "wayland-header-fix.patch";
+          url = "https://github.com/godotengine/godot/commit/6ce71f0fb0a091cffb6adb4af8ab3f716ad8930b.patch";
+          hash = "sha256-hgAtAtCghF5InyGLdE9M+9PjPS1BWXWGKgIAyeuqkoU=";
+        })
         # Fix a crash in the mono test project build. It no longer seems to
         # happen in 4.4, but an existing fix couldn't be identified.
         ./CSharpLanguage-fix-crash-in-reload_assemblies-after-.patch
@@ -172,6 +183,26 @@ let
       postPatch = ''
         # this stops scons from hiding e.g. NIX_CFLAGS_COMPILE
         perl -pi -e '{ $r += s:(env = Environment\(.*):\1\nenv["ENV"] = os.environ: } END { exit ($r != 1) }' SConstruct
+
+        substituteInPlace thirdparty/glad/egl.c \
+          --replace-fail \
+            'static const char *NAMES[] = {"libEGL.so.1", "libEGL.so"}' \
+            'static const char *NAMES[] = {"${lib.getLib libGL}/lib/libEGL.so"}'
+
+        substituteInPlace thirdparty/glad/gl.c \
+          --replace-fail \
+            'static const char *NAMES[] = {"libGLESv2.so.2", "libGLESv2.so"}' \
+            'static const char *NAMES[] = {"${lib.getLib libGL}/lib/libGLESv2.so"}' \
+
+        substituteInPlace thirdparty/glad/gl{,x}.c \
+          --replace-fail \
+            '"libGL.so.1"' \
+            '"${lib.getLib libGL}/lib/libGL.so"'
+
+        substituteInPlace thirdparty/volk/volk.c \
+          --replace-fail \
+            'dlopen("libvulkan.so.1"' \
+            'dlopen("${lib.getLib vulkan-loader}/lib/libvulkan.so"'
       '';
 
       depsBuildBuild = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
@@ -179,11 +210,39 @@ let
         pkg-config
       ];
 
-      buildInputs = lib.optionals withMono dotnet-sdk.packages;
+      buildInputs =
+        lib.optionals withMono dotnet-sdk.packages
+        ++ lib.optional withAlsa alsa-lib
+        ++ lib.optional (withX11 || withWayland) libxkbcommon
+        ++ lib.optionals withX11 [
+          libX11
+          libXcursor
+          libXext
+          libXfixes
+          libXi
+          libXinerama
+          libXrandr
+          libXrender
+        ]
+        ++ lib.optionals withWayland [
+          # libdecor
+          wayland
+        ]
+        ++ lib.optionals withDbus [
+          dbus
+        ]
+        ++ lib.optionals withFontconfig [
+          fontconfig
+        ]
+        ++ lib.optional withPulseaudio libpulseaudio
+        ++ lib.optionals withSpeechd [
+          speechd-minimal
+          glib
+        ]
+        ++ lib.optional withUdev udev;
 
       nativeBuildInputs =
         [
-          autoPatchelfHook
           installShellFiles
           perl
           pkg-config
@@ -201,39 +260,6 @@ let
         echo "Building C#/.NET Assemblies"
         python modules/mono/build_scripts/build_assemblies.py --godot-output-dir bin --precision=${withPrecision}
       '';
-
-      runtimeDependencies =
-        [
-          alsa-lib
-          libGL
-          vulkan-loader
-        ]
-        ++ lib.optionals withX11 [
-          libX11
-          libXcursor
-          libXext
-          libXfixes
-          libXi
-          libXinerama
-          libxkbcommon
-          libXrandr
-          libXrender
-        ]
-        ++ lib.optionals withWayland [
-          libdecor
-          wayland
-        ]
-        ++ lib.optionals withDbus [
-          dbus
-          dbus.lib
-        ]
-        ++ lib.optionals withFontconfig [
-          fontconfig
-          fontconfig.lib
-        ]
-        ++ lib.optionals withPulseaudio [ libpulseaudio ]
-        ++ lib.optionals withSpeechd [ speechd-minimal ]
-        ++ lib.optionals withUdev [ udev ];
 
       installPhase =
         ''
@@ -300,14 +326,6 @@ let
         + ''
           runHook postInstall
         '';
-
-      # patching $debug can crash patchelf
-      # (https://github.com/NixOS/patchelf/issues/373), so explicitly patch $out
-      dontAutoPatchelf = true;
-
-      postFixup = ''
-        autoPatchelf "$out"
-      '';
 
       passthru =
         {
