@@ -45,6 +45,7 @@ stdenv.mkDerivation {
 
   patches = [
     # Fix build with Pipewire 1.4
+    # Submitted upstream: https://webrtc-review.googlesource.com/c/src/+/380500
     ./tg_owt-pipewire-1.4.patch
   ];
 
