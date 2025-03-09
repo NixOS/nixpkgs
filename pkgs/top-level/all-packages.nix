@@ -3574,10 +3574,6 @@ with pkgs;
 
   gzip = callPackage ../tools/compression/gzip { };
 
-  pdisk = callPackage ../tools/system/pdisk {
-    inherit (darwin.apple_sdk.frameworks) CoreFoundation IOKit;
-  };
-
   plplot = callPackage ../development/libraries/plplot {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
