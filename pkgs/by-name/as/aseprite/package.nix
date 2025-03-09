@@ -33,14 +33,14 @@
 
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "aseprite";
-  version = "1.3.7";
+  version = "1.3.12";
 
   src = fetchFromGitHub {
     owner = "aseprite";
     repo = "aseprite";
-    rev = "v" + finalAttrs.version;
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-75kYJXmyags0cW2D5Ksq1uUrFSCAkFOdmn7Ya/6jLXc=";
+    hash = "sha256-hs+pKk7GcVGVyelRfipy5JQCgygrBhPb7E5uXVapflw=";
   };
 
   nativeBuildInputs = [
@@ -75,13 +75,6 @@ clangStdenv.mkDerivation (finalAttrs: {
   ];
 
   patches = [
-    # https://github.com/aseprite/aseprite/issues/4486
-    # FIXME: remove on next release.
-    (fetchpatch {
-      name = "ENABLE_UPDATER-fix.patch";
-      url = "https://github.com/aseprite/aseprite/commit/8fce589.patch";
-      hash = "sha256-DbL6kK//gQXbsXEn/t+KTuoM7E9ocPAsVqEO+lYrka4=";
-    })
     ./shared-fmt.patch
     ./shared-libwebp.patch
     ./shared-skia-deps.patch
@@ -93,8 +86,8 @@ clangStdenv.mkDerivation (finalAttrs: {
       strings = fetchFromGitHub {
         owner = "aseprite";
         repo = "strings";
-        rev = "e18a09fefbb6cd904e506183d5fbe08558a52ed4";
-        hash = "sha256-GyCCxbhgf0vST20EH/+KkNLrF+U9Xzgpxlao8s925PQ=";
+        rev = "7b0af61dec1d98242d7eb2e9cab835d442d21235";
+        hash = "sha256-8OwwHCFP55pwLjk5O+a36hDZf9uX3P7cNliJM5SZdAg=";
       };
     in
     ''
