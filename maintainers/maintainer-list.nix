@@ -13371,6 +13371,12 @@
     githubId = 54590679;
     name = "Liam Murphy";
   };
+  Liamolucko = {
+    name = "Liam Murphy";
+    email = "liampm32@gmail.com";
+    github = "Liamolucko";
+    githubId = 43807659;
+  };
   liarokapisv = {
     email = "liarokapis.v@gmail.com";
     github = "liarokapisv";
