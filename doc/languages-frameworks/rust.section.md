@@ -589,8 +589,8 @@ In some projects, the Rust crate is not in the main Python source
 directory.  In such cases, the `cargoRoot` attribute can be used to
 specify the crate's directory relative to `sourceRoot`. In the
 following example, the crate is in `src/rust`, as specified in the
-`cargoRoot` attribute. Note that we also need to specify the correct
-path for `fetchCargoVendor`.
+`cargoRoot` attribute. Note that we also need to pass in `cargoRoot`
+to `fetchCargoVendor`.
 
 ```nix
 
@@ -611,8 +611,12 @@ buildPythonPackage rec {
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
-    sourceRoot = "${pname}-${version}/${cargoRoot}";
+    inherit
+      pname
+      version
+      src
+      cargoRoot
+      ;
     hash = "sha256-ctUt8maCjnGddKPf+Ii++wKsAXA1h+JM6zKQNXXwJqQ=";
   };
 
