@@ -25,6 +25,8 @@ stdenv.mkDerivation (finalAttrs: {
     SDL2_ttf
   ];
 
+  enableParallelBuilding = true;
+
   passthru.updateScript = directoryListingUpdater {
     inherit (finalAttrs) pname version;
     url = "https://lgames.sourceforge.io/LPairs/";
