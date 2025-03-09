@@ -243,8 +243,12 @@ let
           };
           cargoRoot = "src/_bcrypt";
           cargoDeps = rustPlatform.fetchCargoVendor {
-            inherit pname version src;
-            sourceRoot = "${pname}-${version}/${cargoRoot}";
+            inherit
+              pname
+              version
+              src
+              cargoRoot
+              ;
             hash = "sha256-8PyCgh/rUO8uynzGdgylAsb5k55dP9fCnf40UOTCR/M=";
           };
         });
