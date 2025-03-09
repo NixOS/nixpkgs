@@ -1,0 +1,8 @@
+diff --git a/meson.options b/meson.options
+new file mode 100644
+index 00000000..33b2625c
+--- /dev/null
++++ b/meson.options
+@@ -0,0 +1,2 @@
++option('art_lib', type : 'string', value : '', description : 'Path to art_standalone')
++option('bionic_lib', type : 'string', value : '', description : 'Path to bionic_translation')
