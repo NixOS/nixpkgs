@@ -40,7 +40,7 @@
 
 stdenv.mkDerivation rec {
   pname = "ART";
-  version = "1.24.2";
+  version = "1.25.3.1";
 
   src = fetchFromGitHub {
     owner = "artpixls";
