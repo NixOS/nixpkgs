@@ -34,6 +34,23 @@
   unique-log-filter,
 }:
 
+let
+  unicorn' = unicorn.overridePythonAttrs (old: rec {
+    pname = "unicorn";
+    version = "2.0.1.post1";
+    src = fetchFromGitHub {
+      owner = "unicorn-engine";
+      repo = pname;
+      tag = version;
+      sha256 = "sha256-Jz5C35rwnDz0CXcfcvWjkwScGNQO1uijF7JrtZhM7mI=";
+    };
+    postPatch = ''
+      # support python 3.12
+      substituteInPlace unicorn/unicorn.py \
+        --replace-quiet 'import distutils' '__import__("setuptools"); import distutils'
+    '';
+  });
+in
 buildPythonPackage rec {
   pname = "angr";
   version = "9.2.141";
@@ -48,18 +65,9 @@ buildPythonPackage rec {
     hash = "sha256-rrJTYe3o/Ra8+EKAA7t0M02tWVN4Ul5ueUar7lpUvMg=";
   };
 
-  postPatch = ''
-    # unicorn is also part of build-system
-    substituteInPlace pyproject.toml \
-      --replace-fail "unicorn==2.0.1.post1" "unicorn"
-  '';
-
-  pythonRelaxDeps = [
-    "capstone"
-    "unicorn"
+  build-system = [
+    unicorn'
   ];
-
-  build-system = [ setuptools ];
 
   dependencies = [
     ailment
@@ -87,7 +95,7 @@ buildPythonPackage rec {
     sortedcontainers
     sqlalchemy
     sympy
-    unicorn
+    unicorn'
     unique-log-filter
   ];
 
@@ -116,8 +124,9 @@ buildPythonPackage rec {
     description = "Powerful and user-friendly binary analysis platform";
     homepage = "https://angr.io/";
     license = with licenses; [ bsd2 ];
-    maintainers = with maintainers; [ fab ];
-    # angr is pining unicorn
-    broken = versionAtLeast unicorn.version "2.0.1.post1";
+    maintainers = with maintainers; [
+      fab
+      scoder12
+    ];
   };
 }
