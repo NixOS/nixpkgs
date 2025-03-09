@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
     sha256 = "0dx4n2y736lv04sj41cp1dw8n5zkw5gyd946a6zsiv0k796s9ra9";
   };
 
+  env.NIX_CFLAGS_COMPILE = "-Wno-implicit-int";
+
   buildInputs = [
     xorg.xbitmaps
     xorg.libX11
