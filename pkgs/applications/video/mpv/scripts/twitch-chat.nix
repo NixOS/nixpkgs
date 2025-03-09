@@ -22,12 +22,7 @@ buildLua (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.extraWrapperArgs = [
-    "--prefix"
-    "PATH"
-    ":"
-    (lib.makeBinPath [ curl ])
-  ];
+  runtime-dependencies = [ curl ];
 
   passthru.updateScript = nix-update-script {
     extraArgs = [ "--version=branch" ];
