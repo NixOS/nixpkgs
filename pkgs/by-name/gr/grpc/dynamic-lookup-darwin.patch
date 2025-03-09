@@ -1,0 +1,11 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 053b9e3784..0979b504da 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -38083,3 +38083,6 @@ generate_pkgconfig(
+   "-lgrpcpp_otel_plugin"
+   "-laddress_sorting -lupb_textformat_lib -lupb_json_lib -lupb_wire_lib -lupb_message_lib -lutf8_range_lib -lupb_mini_descriptor_lib -lupb_mem_lib -lupb_base_lib"
+   "grpcpp_otel_plugin.pc")
++
++target_link_options(upb_textformat_lib PRIVATE -Wl,-undefined,dynamic_lookup)
++target_link_options(upb_json_lib PRIVATE -Wl,-undefined,dynamic_lookup)

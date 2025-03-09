@@ -1,0 +1,18 @@
+diff --git a/sbin/fsck/fsck.c b/sbin/fsck/fsck.c
+index 3757ed062ba5..584ada116386 100644
+--- a/sbin/fsck/fsck.c
++++ b/sbin/fsck/fsck.c
+@@ -375,11 +375,8 @@ checkfs(const char *pvfstype, const char *spec, const char *mntpt,
+ 			_exit(0);
+ 
+ 		/* Go find an executable. */
+-		execvP(execbase, _PATH_SYSPATH, __DECONST(char * const *, argv));
+-		if (spec)
+-			warn("exec %s for %s in %s", execbase, spec, _PATH_SYSPATH);
+-		else
+-			warn("exec %s in %s", execbase, _PATH_SYSPATH);
++		execvp(execbase, __DECONST(char * const *, argv));
++		warn("exec %s not found", execbase);
+ 		_exit(1);
+ 		/* NOTREACHED */
+ 

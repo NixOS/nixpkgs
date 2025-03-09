@@ -1,0 +1,150 @@
+diff --git a/Cargo.lock b/Cargo.lock
+index c0d18e4..45686a0 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -1514,7 +1514,7 @@ dependencies = [
+  "httpdate",
+  "itoa",
+  "pin-project-lite",
+- "socket2 0.5.7",
++ "socket2 0.4.10",
+  "tokio",
+  "tower-service",
+  "tracing",
+@@ -2240,7 +2240,7 @@ version = "5.0.0-rc.1"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "23d385da3c602d29036d2f70beed71c36604df7570be17fed4c5b839616785bf"
+ dependencies = [
+- "base64 0.22.1",
++ "base64 0.21.7",
+  "chrono",
+  "getrandom",
+  "http 1.1.0",
+@@ -2354,7 +2354,7 @@ dependencies = [
+  "clap",
+  "dirs",
+  "futures",
+- "progenitor-client 0.8.0 (registry+https://github.com/rust-lang/crates.io-index)",
++ "progenitor-client",
+  "rand",
+  "regress",
+  "reqwest",
+@@ -2684,9 +2684,10 @@ dependencies = [
+ [[package]]
+ name = "progenitor"
+ version = "0.8.0"
+-source = "git+https://github.com/oxidecomputer/progenitor#04da1197662209339ae8dd3768a0157c65ff5d67"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "293df5b79211fbf0c1ebad6513ba451d267e9c15f5f19ee5d3da775e2dd27331"
+ dependencies = [
+- "progenitor-client 0.8.0 (git+https://github.com/oxidecomputer/progenitor)",
++ "progenitor-client",
+  "progenitor-impl",
+  "progenitor-macro",
+ ]
+@@ -2706,24 +2707,11 @@ dependencies = [
+  "serde_urlencoded",
+ ]
+ 
+-[[package]]
+-name = "progenitor-client"
+-version = "0.8.0"
+-source = "git+https://github.com/oxidecomputer/progenitor#04da1197662209339ae8dd3768a0157c65ff5d67"
+-dependencies = [
+- "bytes",
+- "futures-core",
+- "percent-encoding",
+- "reqwest",
+- "serde",
+- "serde_json",
+- "serde_urlencoded",
+-]
+-
+ [[package]]
+ name = "progenitor-impl"
+ version = "0.8.0"
+-source = "git+https://github.com/oxidecomputer/progenitor#04da1197662209339ae8dd3768a0157c65ff5d67"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "d85934a440963a69f9f04f48507ff6e7aa2952a5b2d8f96cc37fa3dd5c270f66"
+ dependencies = [
+  "heck",
+  "http 1.1.0",
+@@ -2736,7 +2724,7 @@ dependencies = [
+  "serde",
+  "serde_json",
+  "syn",
+- "thiserror 2.0.6",
++ "thiserror 1.0.69",
+  "typify",
+  "unicode-ident",
+ ]
+@@ -2744,7 +2732,8 @@ dependencies = [
+ [[package]]
+ name = "progenitor-macro"
+ version = "0.8.0"
+-source = "git+https://github.com/oxidecomputer/progenitor#04da1197662209339ae8dd3768a0157c65ff5d67"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "d99a5a259e2d65a4933054aa51717c70b6aba0522695731ac354a522124efc9b"
+ dependencies = [
+  "openapiv3",
+  "proc-macro2",
+@@ -4069,7 +4058,8 @@ checksum = "42ff0bf0c66b8238c6f3b578df37d0b7848e55df8577b3f74f92a69acceeb825"
+ [[package]]
+ name = "typify"
+ version = "0.2.0"
+-source = "git+https://github.com/oxidecomputer/typify#f3e0cc9d6a5cee617a636136b99db650817bcbde"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "b4c644dda9862f0fef3a570d8ddb3c2cfb1d5ac824a1f2ddfa7bc8f071a5ad8a"
+ dependencies = [
+  "typify-impl",
+  "typify-macro",
+@@ -4078,7 +4068,8 @@ dependencies = [
+ [[package]]
+ name = "typify-impl"
+ version = "0.2.0"
+-source = "git+https://github.com/oxidecomputer/typify#f3e0cc9d6a5cee617a636136b99db650817bcbde"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "d59ab345b6c0d8ae9500b9ff334a4c7c0d316c1c628dc55726b95887eb8dbd11"
+ dependencies = [
+  "heck",
+  "log",
+@@ -4090,14 +4081,15 @@ dependencies = [
+  "serde",
+  "serde_json",
+  "syn",
+- "thiserror 2.0.6",
++ "thiserror 1.0.69",
+  "unicode-ident",
+ ]
+ 
+ [[package]]
+ name = "typify-macro"
+ version = "0.2.0"
+-source = "git+https://github.com/oxidecomputer/typify#f3e0cc9d6a5cee617a636136b99db650817bcbde"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "785e2cdcef0df8160fdd762ed548a637aaec1e83704fdbc14da0df66013ee8d0"
+ dependencies = [
+  "proc-macro2",
+  "quote",
+@@ -4413,7 +4405,7 @@ version = "0.1.9"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "cf221c93e13a30d793f7645a0e7762c55d169dbb0a49671918a2319d289b10bb"
+ dependencies = [
+- "windows-sys 0.59.0",
++ "windows-sys 0.48.0",
+ ]
+ 
+ [[package]]
+diff --git a/Cargo.toml b/Cargo.toml
+index 8ef28ff..15739d7 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -40,7 +40,7 @@ oxide-httpmock = { path = "sdk-httpmock", version = "0.9.0" }
+ oxnet = { git = "https://github.com/oxidecomputer/oxnet" }
+ predicates = "3.1.2"
+ pretty_assertions = "1.4.1"
+-progenitor = { git = "https://github.com/oxidecomputer/progenitor" }
++progenitor = "0.8.0"
+ progenitor-client = "0.8.0"
+ rand = "0.8.5"
+ ratatui = "0.26.3"

@@ -1,0 +1,63 @@
+On Darwin, the SDK is a directory of stubs, and libc++ lives separately. We
+need to patch the CMake files in several places to make the build for C++
+interop succeed. The required flags can be read from cc-wrapper support files.
+
+--- a/SwiftCompilerSources/CMakeLists.txt
++++ b/SwiftCompilerSources/CMakeLists.txt
+@@ -105,18 +105,11 @@ function(add_swift_compiler_modules_library name)
+       get_filename_component(swift_exec_bin_dir ${ALS_SWIFT_EXEC} DIRECTORY)
+       set(sdk_option ${sdk_option} "-resource-dir" "${swift_exec_bin_dir}/../bootstrapping0/lib/swift")
+     endif()
+-    if(NOT EXISTS "${sdk_path}/usr/include/c++")
+-      # Darwin SDKs in Xcode 12 or older do not include libc++, which prevents clang from finding libc++ when invoked
+-      # from ClangImporter. This results in build errors. To workaround this, let's explicitly pass the path to libc++
+-      # to clang.
+-      message(WARNING "Building with an outdated Darwin SDK: libc++ missing from the ${SWIFT_HOST_VARIANT_SDK} SDK. Will use libc++ from the toolchain.")
+-      get_filename_component(absolute_libcxx_path "${CMAKE_C_COMPILER}/../../include/c++/v1" REALPATH)
+-      if (EXISTS "${absolute_libcxx_path}")
+-        set(sdk_option ${sdk_option} "-Xcc" "-isystem" "-Xcc" "${absolute_libcxx_path}")
+-      else()
+-        message(ERROR "libc++ not found in the toolchain.")
+-      endif()
+-    endif()
++    file(READ "$ENV{NIX_CC}/nix-support/libcxx-cxxflags" nix_libcxx_cxxflags)
++    separate_arguments(nix_libcxx_cxxflags)
++    foreach(nix_libcxx_cxxflag ${nix_libcxx_cxxflags})
++      set(sdk_option ${sdk_option} "-Xcc" "${nix_libcxx_cxxflag}")
++    endforeach()
+   elseif(BOOTSTRAPPING_MODE STREQUAL "CROSSCOMPILE")
+     set(sdk_option "-sdk" "${SWIFT_SDK_${SWIFT_HOST_VARIANT_SDK}_ARCH_${SWIFT_HOST_VARIANT_ARCH}_PATH}")
+     get_filename_component(swift_exec_bin_dir ${ALS_SWIFT_EXEC} DIRECTORY)
+--- a/cmake/modules/SwiftConfigureSDK.cmake
++++ b/cmake/modules/SwiftConfigureSDK.cmake
+@@ -270,6 +270,18 @@ macro(configure_sdk_darwin
+   # Add this to the list of known SDKs.
+   list(APPEND SWIFT_CONFIGURED_SDKS "${prefix}")
+ 
++  set(cxx_overlay_opt "")
++  if("${prefix}" STREQUAL "OSX")
++    file(READ "$ENV{NIX_CC}/nix-support/libcxx-cxxflags" nix_libcxx_cxxflags)
++    separate_arguments(nix_libcxx_cxxflags)
++    foreach(nix_libcxx_cxxflag ${nix_libcxx_cxxflags})
++      set(cxx_overlay_opt ${cxx_overlay_opt} "-Xcc" "${nix_libcxx_cxxflag}")
++    endforeach()
++  endif()
++  set(SWIFT_SDK_${prefix}_CXX_OVERLAY_SWIFT_COMPILE_FLAGS
++      ${cxx_overlay_opt}
++    CACHE STRING "Extra flags for compiling the C++ overlay")
++
+   _report_sdk("${prefix}")
+ endmacro()
+ 
+--- a/stdlib/public/Cxx/std/CMakeLists.txt
++++ b/stdlib/public/Cxx/std/CMakeLists.txt
+@@ -145,6 +145,9 @@ add_swift_target_library(swiftstd STATIC NO_LINK_NAME IS_STDLIB
+     SWIFT_COMPILE_FLAGS_LINUX
+     ${SWIFT_SDK_LINUX_CXX_OVERLAY_SWIFT_COMPILE_FLAGS}
+ 
++    SWIFT_COMPILE_FLAGS_OSX
++    ${SWIFT_SDK_OSX_CXX_OVERLAY_SWIFT_COMPILE_FLAGS}
++
+     LINK_FLAGS "${SWIFT_RUNTIME_SWIFT_LINK_FLAGS}"
+     TARGET_SDKS ALL_APPLE_PLATFORMS LINUX
+     INSTALL_IN_COMPONENT compiler

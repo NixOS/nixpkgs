@@ -1,0 +1,40 @@
+diff --git a/pkg/pip/setup_pip.py b/pkg/pip/setup_pip.py
+index c65795b10..e56b6a6f3 100644
+--- a/pkg/pip/setup_pip.py
++++ b/pkg/pip/setup_pip.py
+@@ -101,7 +101,7 @@ setup(
+
+     entry_points={
+         'console_scripts': ['pgadmin4=pgadmin4.pgAdmin4:main',
+-                            'pgadmin4-cli=pgadmin4.setup:main'],
++                            'pgadmin4-cli=pgadmin4.setup:app'],
+     },
+
+ )
+diff --git a/web/pgadmin/model/__init__.py b/web/pgadmin/model/__init__.py
+index 4c36dd1..a492365 100644
+--- a/web/pgadmin/model/__init__.py
++++ b/web/pgadmin/model/__init__.py
+@@ -23,7 +23,6 @@ from flask_sqlalchemy import SQLAlchemy
+ from sqlalchemy.ext.mutable import MutableDict
+ import sqlalchemy.types as types
+ import uuid
+-import config
+
+ ##########################################################################
+ #
+@@ -41,10 +40,12 @@ SCHEMA_VERSION = 35
+ #
+ ##########################################################################
+
++# hardcode poolsize and max_overflow due to a circular import (config imports model,
++# model now tries to import config)
+ db = SQLAlchemy(
+     engine_options={
+-        'pool_size': config.CONFIG_DATABASE_CONNECTION_POOL_SIZE,
+-        'max_overflow': config.CONFIG_DATABASE_CONNECTION_MAX_OVERFLOW})
++        'pool_size': 5,
++        'max_overflow': 100})
+
+
+ USER_ID = 'user.id'

@@ -1,0 +1,12 @@
+diff --git a/image/png_image.cpp b/image/png_image.cpp
+index 37875fc..1531d6f 100644
+--- a/image/png_image.cpp
++++ b/image/png_image.cpp
+@@ -4,6 +4,7 @@
+ 
+ #include <stdio.h>
+ #include <stdlib.h>
++#include <string.h>
+ 
+ #include <png.h>
+ #include "png_image.h"

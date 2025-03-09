@@ -1,0 +1,64 @@
+diff --git a/pidgin/Makefile.am b/pidgin/Makefile.am
+index 84d927b..1467c19 100644
+--- a/pidgin/Makefile.am
++++ b/pidgin/Makefile.am
+@@ -151,6 +151,7 @@ pidgin_LDADD = \
+ 	$(GLIB_LIBS) \
+ 	$(DBUS_LIBS) \
+ 	$(GSTREAMER_LIBS) \
++	$(GSTINTERFACES_LIBS) \
+ 	$(GSTVIDEO_LIBS) \
+ 	$(XSS_LIBS) \
+ 	$(SM_LIBS) \
+@@ -171,6 +172,7 @@ AM_CPPFLAGS = \
+ 	-I$(top_srcdir) \
+ 	$(GLIB_CFLAGS) \
+ 	$(GSTREAMER_CFLAGS) \
++	$(GSTINTERFACES_CFLAGS) \
+ 	$(DEBUG_CFLAGS) \
+ 	$(GTK_CFLAGS) \
+ 	$(DBUS_CFLAGS) \
+diff --git a/pidgin/Makefile.in b/pidgin/Makefile.in
+index 0d51e25..dd5d879 100644
+--- a/pidgin/Makefile.in
++++ b/pidgin/Makefile.in
+@@ -703,6 +703,7 @@ EXTRA_DIST = \
+ @ENABLE_GTK_TRUE@	$(GLIB_LIBS) \
+ @ENABLE_GTK_TRUE@	$(DBUS_LIBS) \
+ @ENABLE_GTK_TRUE@	$(GSTREAMER_LIBS) \
++@ENABLE_GTK_TRUE@	$(GSTINTERFACES_LIBS) \
+ @ENABLE_GTK_TRUE@	$(GSTVIDEO_LIBS) \
+ @ENABLE_GTK_TRUE@	$(XSS_LIBS) \
+ @ENABLE_GTK_TRUE@	$(SM_LIBS) \
+@@ -723,6 +724,7 @@ EXTRA_DIST = \
+ @ENABLE_GTK_TRUE@	-I$(top_srcdir) \
+ @ENABLE_GTK_TRUE@	$(GLIB_CFLAGS) \
+ @ENABLE_GTK_TRUE@	$(GSTREAMER_CFLAGS) \
++@ENABLE_GTK_TRUE@	$(GSTINTERFACES_CFLAGS) \
+ @ENABLE_GTK_TRUE@	$(DEBUG_CFLAGS) \
+ @ENABLE_GTK_TRUE@	$(GTK_CFLAGS) \
+ @ENABLE_GTK_TRUE@	$(DBUS_CFLAGS) \
+diff --git a/pidgin/plugins/Makefile.am b/pidgin/plugins/Makefile.am
+index 3bb8c22..6d1e869 100644
+--- a/pidgin/plugins/Makefile.am
++++ b/pidgin/plugins/Makefile.am
+@@ -145,6 +145,7 @@ AM_CPPFLAGS = \
+ 	$(GTK_CFLAGS) \
+ 	$(UNITY_CFLAGS) \
+ 	$(GSTREAMER_CFLAGS) \
++	$(GSTINTERFACES_CFLAGS) \
+ 	$(PLUGIN_CFLAGS)
+ 
+ #
+diff --git a/pidgin/plugins/Makefile.in b/pidgin/plugins/Makefile.in
+index 82a34aa..1f7db00 100644
+--- a/pidgin/plugins/Makefile.in
++++ b/pidgin/plugins/Makefile.in
+@@ -781,6 +781,7 @@ AM_CPPFLAGS = \
+ 	$(GTK_CFLAGS) \
+ 	$(UNITY_CFLAGS) \
+ 	$(GSTREAMER_CFLAGS) \
++	$(GSTINTERFACES_CFLAGS) \
+ 	$(PLUGIN_CFLAGS)
+ 
+ 

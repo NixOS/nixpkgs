@@ -1,0 +1,11 @@
+--- a/Makefile
++++ b/Makefile
+@@ -92,7 +92,7 @@
+ install: all install-bin install-include install-lib install-man
+ install-bin: $(INSTALLABLE)
+ 	$(INSTALL) -d "$(DESTDIR)$(BINDIR)"
+-	$(INSTALL) $^ "$(DESTDIR)$(BINDIR)"
++	$(INSTALL) $(^:=.exe) "$(DESTDIR)$(BINDIR)"
+ install-include:
+ 	$(INSTALL) -d "$(DESTDIR)$(INCDIR)"
+ 	$(INSTALL) -m 644 gif_lib.h "$(DESTDIR)$(INCDIR)"

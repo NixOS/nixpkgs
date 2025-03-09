@@ -1,0 +1,87 @@
+diff --git a/util/stumpish/stumpish b/util/stumpish/stumpish
+index 830cb1b..64213dc 100755
+--- a/util/stumpish/stumpish
++++ b/util/stumpish/stumpish
+@@ -28,8 +28,8 @@ then
+ fi
+ 
+ # replace -E with -r option for old versions of GNU sed
+-if ! sed -E 1p /dev/null 2>/dev/null; then
+-    sed() { shift; command sed -r "$@"; }
++if ! @sed@ -E 1p /dev/null 2>/dev/null; then
++    sed() { shift; command @sed@ -r "$@"; }
+ fi
+ 
+ # parse C-style backslash sequences by default
+@@ -41,9 +41,9 @@ wait_result ()
+ {
+     while true
+     do
+-	RESULT=$(xprop -root -f STUMPWM_COMMAND_RESULT 8s \
++	RESULT=$(@xprop@ -root -f STUMPWM_COMMAND_RESULT 8s \
+ 	    STUMPWM_COMMAND_RESULT 2>/dev/null |
+-	    sed -E 's/\\([[:digit:]]+)/\\0\1/g')
++	    @sed@ -E 's/\\([[:digit:]]+)/\\0\1/g')
+ 	if echo "$RESULT" | grep -v -q 'not found.$'
+ 	then
+ 	    break
+@@ -52,7 +52,7 @@ wait_result ()
+ 	sleep $DELAY
+     done
+ 
+-    xprop -root -remove STUMPWM_COMMAND_RESULT
++    @xprop@ -root -remove STUMPWM_COMMAND_RESULT
+ 
+     if echo "$RESULT" | grep -q '= $'
+     then
+@@ -60,7 +60,7 @@ wait_result ()
+     fi
+ 
+     echo "$RESULT" |
+-    sed -E 's/[^"\\n]+"//
++    @sed@ -E 's/[^"\\n]+"//
+             /^"[[:space:]]*$/d
+             s/(^|[^\\])\\n/\1\
+ /g
+@@ -80,7 +80,7 @@ send_cmd ()
+ 	exit
+     fi
+ 
+-    xprop -root -f STUMPWM_COMMAND 8s -set STUMPWM_COMMAND "$cmd"
++    @xprop@ -root -f STUMPWM_COMMAND 8s -set STUMPWM_COMMAND "$cmd"
+ 
+     wait_result
+ }
+@@ -123,8 +123,8 @@ tput ()
+     local cap1=$1 cap2=$2
+     shift 2
+ 
+-    command tput $cap1 $@ 2>/dev/null ||
+-    command tput $cap2 $@ 2>/dev/null
++    command @tput@ $cap1 $@ 2>/dev/null ||
++    command @tput@ $cap2 $@ 2>/dev/null
+ }
+ 
+ READLINE=yes
+@@ -156,18 +156,18 @@ then
+ else
+     if [ -t 0 ]
+     then
+-	if ! type rlwrap 2>/dev/null >&2
++	if ! type @rlwrap@ 2>/dev/null >&2
+ 	then
+ 	    warn rlwrap not found, command completion won\'t work
+ 	elif [ $READLINE = yes ]
+ 	then
+ 	    COMMANDS="${TMPDIR:-/tmp}/stumpish.commands.$$"
+ 	    echo $(send_cmd "commands") |
+-	    sed -E 's/[[:space:]]+/\
++	    @sed@ -E 's/[[:space:]]+/\
+ /g' |
+ 	    sort > "$COMMANDS"
+ 	    trap 'rm -f "$COMMANDS"' exit int term
+-	    rlwrap -b '' -f "$COMMANDS" "$0" -r
++	    @rlwrap@ -b '' -f "$COMMANDS" "$0" -r
+ 	    exit
+ 	fi
+ 

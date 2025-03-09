@@ -1,0 +1,13 @@
+diff --git i/src/lib.rs w/src/lib.rs
+index 5e98cfa..539434f 100644
+--- i/src/lib.rs
++++ w/src/lib.rs
+@@ -1755,7 +1755,7 @@ pub fn search_path(ro: &mut RunOptions, item: &EnvOptions) -> Option<String> {
+     let dirs = if item.search_path.is_some() {
+         item.search_path.as_ref().unwrap()
+     } else {
+-        "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
++        "/run/wrappers/bin:/run/current-system/sw/sbin:/run/current-system/sw/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+     };
+ 
+     for dir in dirs.split(':') {
