@@ -1,0 +1,55 @@
+From 97cb18bee646a23bd08e3959d6544e703e0bb862 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?J=C3=B6rg=20Thalheim?= <joerg@thalheim.io>
+Date: Tue, 26 Nov 2024 08:39:30 +0100
+Subject: [PATCH] fix build against nix 2.24
+
+---
+ cbits/nix.cpp      | 6 +++---
+ nix-serve-ng.cabal | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/cbits/nix.cpp b/cbits/nix.cpp
+index 8872af1..6305001 100644
+--- a/cbits/nix.cpp
++++ b/cbits/nix.cpp
+@@ -1,6 +1,7 @@
+ #include <cstddef>
+ #include <cstdlib>
+ #include <nix/store-api.hh>
++#include <nix/shared.hh>
+ #include <nix/log-store.hh>
+ #include "nix.hh"
+
+@@ -14,8 +15,7 @@ static ref<Store> getStore()
+     static std::shared_ptr<Store> _store;
+
+     if (!_store) {
+-        initLibStore();
+-        loadConfFile();
++        initLibStore(true);
+
+         _store = openStore();
+     }
+@@ -120,7 +120,7 @@ void queryPathInfo
+         output->deriver = emptyString;
+     };
+
+-    copyString(validPathInfo->narHash.to_string(Base32, true), &output->narHash);
++    copyString(validPathInfo->narHash.to_string(nix::HashFormat::Nix32, true), &output->narHash);
+
+     output->narSize = validPathInfo->narSize;
+
+diff --git a/nix-serve-ng.cabal b/nix-serve-ng.cabal
+index 9298f9a..8443b04 100644
+--- a/nix-serve-ng.cabal
++++ b/nix-serve-ng.cabal
+@@ -36,7 +36,7 @@ executable nix-serve
+     cxx-sources:      cbits/nix.cpp
+                     , cbits/nix.hh
+
+-    cxx-options:      -std=c++17
++    cxx-options:      -std=c++20
+
+     build-depends:    base < 5
+                     , base16 >= 1.0
+

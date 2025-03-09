@@ -1,0 +1,16 @@
+diff --git a/Makefile.am b/Makefile.am
+index 2137932..93abdb6 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -198,11 +198,7 @@ test_integration_uv_SOURCES = \
+   test/integration/test_uv_bootstrap.c \
+   test/integration/test_uv_load.c \
+   test/integration/test_uv_recover.c \
+-  test/integration/test_uv_recv.c \
+-  test/integration/test_uv_send.c \
+   test/integration/test_uv_set_term.c \
+-  test/integration/test_uv_tcp_connect.c \
+-  test/integration/test_uv_tcp_listen.c \
+   test/integration/test_uv_snapshot_put.c \
+   test/integration/test_uv_truncate.c \
+   test/integration/test_uv_work.c

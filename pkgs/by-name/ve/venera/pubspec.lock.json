@@ -1,0 +1,1415 @@
+{
+  "packages": {
+    "app_links": {
+      "dependency": "direct main",
+      "description": {
+        "name": "app_links",
+        "sha256": "ad1a6d598e7e39b46a34f746f9a8b011ee147e4c275d407fa457e7a62f84dd99",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "6.3.2"
+    },
+    "app_links_linux": {
+      "dependency": "transitive",
+      "description": {
+        "name": "app_links_linux",
+        "sha256": "f5f7173a78609f3dfd4c2ff2c95bd559ab43c80a87dc6a095921d96c05688c81",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "1.0.3"
+    },
+    "app_links_platform_interface": {
+      "dependency": "transitive",
+      "description": {
+        "name": "app_links_platform_interface",
+        "sha256": "05f5379577c513b534a29ddea68176a4d4802c46180ee8e2e966257158772a3f",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "2.0.2"
+    },
+    "app_links_web": {
+      "dependency": "transitive",
+      "description": {
+        "name": "app_links_web",
+        "sha256": "af060ed76183f9e2b87510a9480e56a5352b6c249778d07bd2c95fc35632a555",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "1.0.4"
+    },
+    "archive": {
+      "dependency": "transitive",
+      "description": {
+        "name": "archive",
+        "sha256": "cb6a278ef2dbb298455e1a713bda08524a175630ec643a242c399c932a0a1f7d",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "3.6.1"
+    },
+    "args": {
+      "dependency": "transitive",
+      "description": {
+        "name": "args",
+        "sha256": "bf9f5caeea8d8fe6721a9c358dd8a5c1947b27f1cfaa18b39c301273594919e6",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "2.6.0"
+    },
+    "async": {
+      "dependency": "transitive",
+      "description": {
+        "name": "async",
+        "sha256": "947bfcf187f74dbc5e146c9eb9c0f10c9f8b30743e341481c1e2ed3ecc18c20c",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "2.11.0"
+    },
+    "barcode": {
+      "dependency": "transitive",
+      "description": {
+        "name": "barcode",
+        "sha256": "ab180ce22c6555d77d45f0178a523669db67f95856e3378259ef2ffeb43e6003",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "2.2.8"
+    },
+    "battery_plus": {
+      "dependency": "direct main",
+      "description": {
+        "name": "battery_plus",
+        "sha256": "220c8f1961efb01d6870493b5ac5a80afaeaffc8757f7a11ed3025a8570d29e7",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "6.2.0"
+    },
+    "battery_plus_platform_interface": {
+      "dependency": "transitive",
+      "description": {
+        "name": "battery_plus_platform_interface",
+        "sha256": "e8342c0f32de4b1dfd0223114b6785e48e579bfc398da9471c9179b907fa4910",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "2.0.1"
+    },
+    "bidi": {
+      "dependency": "transitive",
+      "description": {
+        "name": "bidi",
+        "sha256": "9a712c7ddf708f7c41b1923aa83648a3ed44cfd75b04f72d598c45e5be287f9d",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "2.0.12"
+    },
+    "boolean_selector": {
+      "dependency": "transitive",
+      "description": {
+        "name": "boolean_selector",
+        "sha256": "6cfb5af12253eaf2b368f07bacc5a80d1301a071c73360d746b7f2e32d762c66",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "2.1.1"
+    },
+    "build_cli_annotations": {
+      "dependency": "transitive",
+      "description": {
+        "name": "build_cli_annotations",
+        "sha256": "b59d2769769efd6c9ff6d4c4cede0be115a566afc591705c2040b707534b1172",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "2.1.0"
+    },
+    "characters": {
+      "dependency": "transitive",
+      "description": {
+        "name": "characters",
+        "sha256": "04a925763edad70e8443c99234dc3328f442e811f1d8fd1a72f1c8ad0f69a605",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "1.3.0"
+    },
+    "clock": {
+      "dependency": "transitive",
+      "description": {
+        "name": "clock",
+        "sha256": "cb6d7f03e1de671e34607e909a7213e31d7752be4fb66a86d29fe1eb14bfb5cf",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "1.1.1"
+    },
+    "collection": {
+      "dependency": "transitive",
+      "description": {
+        "name": "collection",
+        "sha256": "a1ace0a119f20aabc852d165077c036cd864315bd99b7eaa10a60100341941bf",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "1.19.0"
+    },
+    "convert": {
+      "dependency": "transitive",
+      "description": {
+        "name": "convert",
+        "sha256": "b30acd5944035672bc15c6b7a8b47d773e41e2f17de064350988c5d02adb1c68",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "3.1.2"
+    },
+    "cross_file": {
+      "dependency": "transitive",
+      "description": {
+        "name": "cross_file",
+        "sha256": "7caf6a750a0c04effbb52a676dce9a4a592e10ad35c34d6d2d0e4811160d5670",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "0.3.4+2"
+    },
+    "crypto": {
+      "dependency": "direct main",
+      "description": {
+        "name": "crypto",
+        "sha256": "1e445881f28f22d6140f181e07737b22f1e099a5e1ff94b0af2f9e4a463f4855",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "3.0.6"
+    },
+    "csslib": {
+      "dependency": "transitive",
+      "description": {
+        "name": "csslib",
+        "sha256": "09bad715f418841f976c77db72d5398dc1253c21fb9c0c7f0b0b985860b2d58e",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "1.0.2"
+    },
+    "dbus": {
+      "dependency": "transitive",
+      "description": {
+        "name": "dbus",
+        "sha256": "365c771ac3b0e58845f39ec6deebc76e3276aa9922b0cc60840712094d9047ac",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "0.7.10"
+    },
+    "desktop_webview_window": {
+      "dependency": "direct main",
+      "description": {
+        "path": "packages/desktop_webview_window",
+        "ref": "HEAD",
+        "resolved-ref": "b8f7e94c576acf4ca3dce5b9f8fb8076e5eaca5e",
+        "url": "https://github.com/wgh136/flutter_desktop_webview"
+      },
+      "source": "git",
+      "version": "0.2.4"
+    },
+    "dio": {
+      "dependency": "direct main",
+      "description": {
+        "name": "dio",
+        "sha256": "5598aa796bbf4699afd5c67c0f5f6e2ed542afc956884b9cd58c306966efc260",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "5.7.0"
+    },
+    "dio_web_adapter": {
+      "dependency": "transitive",
+      "description": {
+        "name": "dio_web_adapter",
+        "sha256": "33259a9276d6cea88774a0000cfae0d861003497755969c92faa223108620dc8",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "2.0.0"
+    },
+    "dynamic_color": {
+      "dependency": "direct main",
+      "description": {
+        "name": "dynamic_color",
+        "sha256": "eae98052fa6e2826bdac3dd2e921c6ce2903be15c6b7f8b6d8a5d49b5086298d",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "1.7.0"
+    },
+    "fake_async": {
+      "dependency": "transitive",
+      "description": {
+        "name": "fake_async",
+        "sha256": "511392330127add0b769b75a987850d136345d9227c6b94c96a04cf4a391bf78",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "1.3.1"
+    },
+    "ffi": {
+      "dependency": "transitive",
+      "description": {
+        "name": "ffi",
+        "sha256": "16ed7b077ef01ad6170a3d0c57caa4a112a38d7a2ed5602e0aca9ca6f3d98da6",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "2.1.3"
+    },
+    "file": {
+      "dependency": "transitive",
+      "description": {
+        "name": "file",
+        "sha256": "a3b4f84adafef897088c160faf7dfffb7696046cb13ae90b508c2cbc95d3b8d4",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "7.0.1"
+    },
+    "file_selector": {
+      "dependency": "direct main",
+      "description": {
+        "name": "file_selector",
+        "sha256": "5019692b593455127794d5718304ff1ae15447dea286cdda9f0db2a796a1b828",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "1.0.3"
+    },
+    "file_selector_android": {
+      "dependency": "transitive",
+      "description": {
+        "name": "file_selector_android",
+        "sha256": "98ac58e878b05ea2fdb204e7f4fc4978d90406c9881874f901428e01d3b18fbc",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "0.5.1+12"
+    },
+    "file_selector_ios": {
+      "dependency": "transitive",
+      "description": {
+        "name": "file_selector_ios",
+        "sha256": "94b98ad950b8d40d96fee8fa88640c2e4bd8afcdd4817993bd04e20310f45420",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "0.5.3+1"
+    },
+    "file_selector_linux": {
+      "dependency": "transitive",
+      "description": {
+        "name": "file_selector_linux",
+        "sha256": "54cbbd957e1156d29548c7d9b9ec0c0ebb6de0a90452198683a7d23aed617a33",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "0.9.3+2"
+    },
+    "file_selector_macos": {
+      "dependency": "transitive",
+      "description": {
+        "name": "file_selector_macos",
+        "sha256": "271ab9986df0c135d45c3cdb6bd0faa5db6f4976d3e4b437cf7d0f258d941bfc",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "0.9.4+2"
+    },
+    "file_selector_platform_interface": {
+      "dependency": "transitive",
+      "description": {
+        "name": "file_selector_platform_interface",
+        "sha256": "a3994c26f10378a039faa11de174d7b78eb8f79e4dd0af2a451410c1a5c3f66b",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "2.6.2"
+    },
+    "file_selector_web": {
+      "dependency": "transitive",
+      "description": {
+        "name": "file_selector_web",
+        "sha256": "c4c0ea4224d97a60a7067eca0c8fd419e708ff830e0c83b11a48faf566cec3e7",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "0.9.4+2"
+    },
+    "file_selector_windows": {
+      "dependency": "transitive",
+      "description": {
+        "name": "file_selector_windows",
+        "sha256": "8f5d2f6590d51ecd9179ba39c64f722edc15226cc93dcc8698466ad36a4a85a4",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "0.9.3+3"
+    },
+    "fixnum": {
+      "dependency": "transitive",
+      "description": {
+        "name": "fixnum",
+        "sha256": "b6dc7065e46c974bc7c5f143080a6764ec7a4be6da1285ececdc37be96de53be",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "1.1.1"
+    },
+    "flutter": {
+      "dependency": "direct main",
+      "description": "flutter",
+      "source": "sdk",
+      "version": "0.0.0"
+    },
+    "flutter_file_dialog": {
+      "dependency": "direct main",
+      "description": {
+        "name": "flutter_file_dialog",
+        "sha256": "9344b8f07be6a1b6f9854b723fb0cf84a8094ba94761af1d213589d3cb087488",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "3.0.2"
+    },
+    "flutter_inappwebview": {
+      "dependency": "direct main",
+      "description": {
+        "name": "flutter_inappwebview",
+        "sha256": "80092d13d3e29b6227e25b67973c67c7210bd5e35c4b747ca908e31eb71a46d5",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "6.1.5"
+    },
+    "flutter_inappwebview_android": {
+      "dependency": "transitive",
+      "description": {
+        "name": "flutter_inappwebview_android",
+        "sha256": "62557c15a5c2db5d195cb3892aab74fcaec266d7b86d59a6f0027abd672cddba",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "1.1.3"
+    },
+    "flutter_inappwebview_internal_annotations": {
+      "dependency": "transitive",
+      "description": {
+        "name": "flutter_inappwebview_internal_annotations",
+        "sha256": "787171d43f8af67864740b6f04166c13190aa74a1468a1f1f1e9ee5b90c359cd",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "1.2.0"
+    },
+    "flutter_inappwebview_ios": {
+      "dependency": "transitive",
+      "description": {
+        "name": "flutter_inappwebview_ios",
+        "sha256": "5818cf9b26cf0cbb0f62ff50772217d41ea8d3d9cc00279c45f8aabaa1b4025d",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "1.1.2"
+    },
+    "flutter_inappwebview_macos": {
+      "dependency": "transitive",
+      "description": {
+        "name": "flutter_inappwebview_macos",
+        "sha256": "c1fbb86af1a3738e3541364d7d1866315ffb0468a1a77e34198c9be571287da1",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "1.1.2"
+    },
+    "flutter_inappwebview_platform_interface": {
+      "dependency": "transitive",
+      "description": {
+        "name": "flutter_inappwebview_platform_interface",
+        "sha256": "cf5323e194096b6ede7a1ca808c3e0a078e4b33cc3f6338977d75b4024ba2500",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "1.3.0+1"
+    },
+    "flutter_inappwebview_web": {
+      "dependency": "transitive",
+      "description": {
+        "name": "flutter_inappwebview_web",
+        "sha256": "55f89c83b0a0d3b7893306b3bb545ba4770a4df018204917148ebb42dc14a598",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "1.1.2"
+    },
+    "flutter_inappwebview_windows": {
+      "dependency": "transitive",
+      "description": {
+        "name": "flutter_inappwebview_windows",
+        "sha256": "8b4d3a46078a2cdc636c4a3d10d10f2a16882f6be607962dbfff8874d1642055",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "0.6.0"
+    },
+    "flutter_lints": {
+      "dependency": "direct dev",
+      "description": {
+        "name": "flutter_lints",
+        "sha256": "5398f14efa795ffb7a33e9b6a08798b26a180edac4ad7db3f231e40f82ce11e1",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "5.0.0"
+    },
+    "flutter_localizations": {
+      "dependency": "direct main",
+      "description": "flutter",
+      "source": "sdk",
+      "version": "0.0.0"
+    },
+    "flutter_memory_info": {
+      "dependency": "direct main",
+      "description": {
+        "name": "flutter_memory_info",
+        "sha256": "1f112f1d7503aa1681fc8e923f6cd0e847bb2fbeec3753ed021cf1e5f7e9cd74",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "0.0.1"
+    },
+    "flutter_plugin_android_lifecycle": {
+      "dependency": "transitive",
+      "description": {
+        "name": "flutter_plugin_android_lifecycle",
+        "sha256": "9b78450b89f059e96c9ebb355fa6b3df1d6b330436e0b885fb49594c41721398",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "2.0.23"
+    },
+    "flutter_qjs": {
+      "dependency": "direct main",
+      "description": {
+        "path": ".",
+        "ref": "1657f62fe7545ac43a339e0a5ee2b82bacd81e9f",
+        "resolved-ref": "1657f62fe7545ac43a339e0a5ee2b82bacd81e9f",
+        "url": "https://github.com/wgh136/flutter_qjs"
+      },
+      "source": "git",
+      "version": "0.3.7"
+    },
+    "flutter_reorderable_grid_view": {
+      "dependency": "direct main",
+      "description": {
+        "name": "flutter_reorderable_grid_view",
+        "sha256": "732bcb1b29d5130c11a70e6acec512941fafe241f0e80bffd93ca6e415819915",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "5.4.0"
+    },
+    "flutter_rust_bridge": {
+      "dependency": "transitive",
+      "description": {
+        "name": "flutter_rust_bridge",
+        "sha256": "fb9d3c9395eae3c71d4fe3ec343b9f30636c9988150c8bb33b60047549b34e3d",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "2.6.0"
+    },
+    "flutter_saf": {
+      "dependency": "direct main",
+      "description": {
+        "path": ".",
+        "ref": "7637b8b67d0a831f3cd7e702b8173e300880d32e",
+        "resolved-ref": "7637b8b67d0a831f3cd7e702b8173e300880d32e",
+        "url": "https://github.com/pkuislm/flutter_saf.git"
+      },
+      "source": "git",
+      "version": "0.0.1"
+    },
+    "flutter_test": {
+      "dependency": "direct dev",
+      "description": "flutter",
+      "source": "sdk",
+      "version": "0.0.0"
+    },
+    "flutter_to_arch": {
+      "dependency": "direct dev",
+      "description": {
+        "name": "flutter_to_arch",
+        "sha256": "656cffc182b05af38aa96a1115931620b8865c4b0cfe00813b26fcff0875f2ab",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "1.0.0"
+    },
+    "flutter_to_debian": {
+      "dependency": "direct dev",
+      "description": {
+        "name": "flutter_to_debian",
+        "sha256": "d23534407334b331ce20fbaa8395b9ecc255d0c047136b8998715f36933ee696",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "2.0.2"
+    },
+    "flutter_web_plugins": {
+      "dependency": "transitive",
+      "description": "flutter",
+      "source": "sdk",
+      "version": "0.0.0"
+    },
+    "freezed_annotation": {
+      "dependency": "transitive",
+      "description": {
+        "name": "freezed_annotation",
+        "sha256": "c2e2d632dd9b8a2b7751117abcfc2b4888ecfe181bd9fca7170d9ef02e595fe2",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "2.4.4"
+    },
+    "gtk": {
+      "dependency": "transitive",
+      "description": {
+        "name": "gtk",
+        "sha256": "e8ce9ca4b1df106e4d72dad201d345ea1a036cc12c360f1a7d5a758f78ffa42c",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "2.1.0"
+    },
+    "html": {
+      "dependency": "direct main",
+      "description": {
+        "name": "html",
+        "sha256": "1fc58edeaec4307368c60d59b7e15b9d658b57d7f3125098b6294153c75337ec",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "0.15.5"
+    },
+    "http": {
+      "dependency": "transitive",
+      "description": {
+        "name": "http",
+        "sha256": "b9c29a161230ee03d3ccf545097fccd9b87a5264228c5d348202e0f0c28f9010",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "1.2.2"
+    },
+    "http_parser": {
+      "dependency": "transitive",
+      "description": {
+        "name": "http_parser",
+        "sha256": "76d306a1c3afb33fe82e2bbacad62a61f409b5634c915fceb0d799de1a913360",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "4.1.1"
+    },
+    "http_profile": {
+      "dependency": "transitive",
+      "description": {
+        "name": "http_profile",
+        "sha256": "7e679e355b09aaee2ab5010915c932cce3f2d1c11c3b2dc177891687014ffa78",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "0.1.0"
+    },
+    "image": {
+      "dependency": "transitive",
+      "description": {
+        "name": "image",
+        "sha256": "f31d52537dc417fdcde36088fdf11d191026fd5e4fae742491ebd40e5a8bea7d",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "4.3.0"
+    },
+    "intl": {
+      "dependency": "direct main",
+      "description": {
+        "name": "intl",
+        "sha256": "d6f56758b7d3014a48af9701c085700aac781a92a87a62b1333b46d8879661cf",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "0.19.0"
+    },
+    "io": {
+      "dependency": "transitive",
+      "description": {
+        "name": "io",
+        "sha256": "dfd5a80599cf0165756e3181807ed3e77daf6dd4137caaad72d0b7931597650b",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "1.0.5"
+    },
+    "js": {
+      "dependency": "transitive",
+      "description": {
+        "name": "js",
+        "sha256": "c1b2e9b5ea78c45e1a0788d29606ba27dc5f71f019f32ca5140f61ef071838cf",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "0.7.1"
+    },
+    "json_annotation": {
+      "dependency": "transitive",
+      "description": {
+        "name": "json_annotation",
+        "sha256": "1ce844379ca14835a50d2f019a3099f419082cfdd231cd86a142af94dd5c6bb1",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "4.9.0"
+    },
+    "leak_tracker": {
+      "dependency": "transitive",
+      "description": {
+        "name": "leak_tracker",
+        "sha256": "7bb2830ebd849694d1ec25bf1f44582d6ac531a57a365a803a6034ff751d2d06",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "10.0.7"
+    },
+    "leak_tracker_flutter_testing": {
+      "dependency": "transitive",
+      "description": {
+        "name": "leak_tracker_flutter_testing",
+        "sha256": "9491a714cca3667b60b5c420da8217e6de0d1ba7a5ec322fab01758f6998f379",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "3.0.8"
+    },
+    "leak_tracker_testing": {
+      "dependency": "transitive",
+      "description": {
+        "name": "leak_tracker_testing",
+        "sha256": "6ba465d5d76e67ddf503e1161d1f4a6bc42306f9d66ca1e8f079a47290fb06d3",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "3.0.1"
+    },
+    "lints": {
+      "dependency": "transitive",
+      "description": {
+        "name": "lints",
+        "sha256": "4a16b3f03741e1252fda5de3ce712666d010ba2122f8e912c94f9f7b90e1a4c3",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "5.1.0"
+    },
+    "local_auth": {
+      "dependency": "direct main",
+      "description": {
+        "name": "local_auth",
+        "sha256": "434d854cf478f17f12ab29a76a02b3067f86a63a6d6c4eb8fbfdcfe4879c1b7b",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "2.3.0"
+    },
+    "local_auth_android": {
+      "dependency": "transitive",
+      "description": {
+        "name": "local_auth_android",
+        "sha256": "6763aaf8965f21822624cb2fd3c03d2a8b3791037b5efb0fe4b13e110f5afc92",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "1.0.46"
+    },
+    "local_auth_darwin": {
+      "dependency": "transitive",
+      "description": {
+        "name": "local_auth_darwin",
+        "sha256": "6d2950da311d26d492a89aeb247c72b4653ddc93601ea36a84924a396806d49c",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "1.4.1"
+    },
+    "local_auth_platform_interface": {
+      "dependency": "transitive",
+      "description": {
+        "name": "local_auth_platform_interface",
+        "sha256": "1b842ff177a7068442eae093b64abe3592f816afd2a533c0ebcdbe40f9d2075a",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "1.0.10"
+    },
+    "local_auth_windows": {
+      "dependency": "transitive",
+      "description": {
+        "name": "local_auth_windows",
+        "sha256": "bc4e66a29b0fdf751aafbec923b5bed7ad6ed3614875d8151afe2578520b2ab5",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "1.0.11"
+    },
+    "lodepng_flutter": {
+      "dependency": "direct main",
+      "description": {
+        "path": ".",
+        "ref": "9a784b193af5d55b2a35e58fa390bda3e4f35d00",
+        "resolved-ref": "9a784b193af5d55b2a35e58fa390bda3e4f35d00",
+        "url": "https://github.com/venera-app/lodepng_flutter"
+      },
+      "source": "git",
+      "version": "0.0.1"
+    },
+    "matcher": {
+      "dependency": "transitive",
+      "description": {
+        "name": "matcher",
+        "sha256": "d2323aa2060500f906aa31a895b4030b6da3ebdcc5619d14ce1aada65cd161cb",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "0.12.16+1"
+    },
+    "material_color_utilities": {
+      "dependency": "transitive",
+      "description": {
+        "name": "material_color_utilities",
+        "sha256": "f7142bb1154231d7ea5f96bc7bde4bda2a0945d2806bb11670e30b850d56bdec",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "0.11.1"
+    },
+    "meta": {
+      "dependency": "transitive",
+      "description": {
+        "name": "meta",
+        "sha256": "bdb68674043280c3428e9ec998512fb681678676b3c54e773629ffe74419f8c7",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "1.15.0"
+    },
+    "mime": {
+      "dependency": "direct main",
+      "description": {
+        "name": "mime",
+        "sha256": "41a20518f0cb1256669420fdba0cd90d21561e560ac240f26ef8322e45bb7ed6",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "2.0.0"
+    },
+    "mime_type": {
+      "dependency": "transitive",
+      "description": {
+        "name": "mime_type",
+        "sha256": "d652b613e84dac1af28030a9fba82c0999be05b98163f9e18a0849c6e63838bb",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "1.0.1"
+    },
+    "path": {
+      "dependency": "direct main",
+      "description": {
+        "name": "path",
+        "sha256": "087ce49c3f0dc39180befefc60fdb4acd8f8620e5682fe2476afd0b3688bb4af",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "1.9.0"
+    },
+    "path_parsing": {
+      "dependency": "transitive",
+      "description": {
+        "name": "path_parsing",
+        "sha256": "883402936929eac138ee0a45da5b0f2c80f89913e6dc3bf77eb65b84b409c6ca",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "1.1.0"
+    },
+    "path_provider": {
+      "dependency": "direct main",
+      "description": {
+        "name": "path_provider",
+        "sha256": "50c5dd5b6e1aaf6fb3a78b33f6aa3afca52bf903a8a5298f53101fdaee55bbcd",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "2.1.5"
+    },
+    "path_provider_android": {
+      "dependency": "transitive",
+      "description": {
+        "name": "path_provider_android",
+        "sha256": "4adf4fd5423ec60a29506c76581bc05854c55e3a0b72d35bb28d661c9686edf2",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "2.2.15"
+    },
+    "path_provider_foundation": {
+      "dependency": "transitive",
+      "description": {
+        "name": "path_provider_foundation",
+        "sha256": "4843174df4d288f5e29185bd6e72a6fbdf5a4a4602717eed565497429f179942",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "2.4.1"
+    },
+    "path_provider_linux": {
+      "dependency": "transitive",
+      "description": {
+        "name": "path_provider_linux",
+        "sha256": "f7a1fe3a634fe7734c8d3f2766ad746ae2a2884abe22e241a8b301bf5cac3279",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "2.2.1"
+    },
+    "path_provider_platform_interface": {
+      "dependency": "transitive",
+      "description": {
+        "name": "path_provider_platform_interface",
+        "sha256": "88f5779f72ba699763fa3a3b06aa4bf6de76c8e5de842cf6f29e2e06476c2334",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "2.1.2"
+    },
+    "path_provider_windows": {
+      "dependency": "transitive",
+      "description": {
+        "name": "path_provider_windows",
+        "sha256": "bd6f00dbd873bfb70d0761682da2b3a2c2fccc2b9e84c495821639601d81afe7",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "2.3.0"
+    },
+    "pdf": {
+      "dependency": "direct main",
+      "description": {
+        "name": "pdf",
+        "sha256": "05df53f8791587402493ac97b9869d3824eccbc77d97855f4545cf72df3cae07",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "3.11.1"
+    },
+    "petitparser": {
+      "dependency": "transitive",
+      "description": {
+        "name": "petitparser",
+        "sha256": "c15605cd28af66339f8eb6fbe0e541bfe2d1b72d5825efc6598f3e0a31b9ad27",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "6.0.2"
+    },
+    "photo_view": {
+      "dependency": "direct main",
+      "description": {
+        "path": ".",
+        "ref": "94724a0b",
+        "resolved-ref": "94724a0b7f94167fd1ae061f84e14ae04cae5c39",
+        "url": "https://github.com/wgh136/photo_view"
+      },
+      "source": "git",
+      "version": "0.14.0"
+    },
+    "platform": {
+      "dependency": "transitive",
+      "description": {
+        "name": "platform",
+        "sha256": "5d6b1b0036a5f331ebc77c850ebc8506cbc1e9416c27e59b439f917a902a4984",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "3.1.6"
+    },
+    "plugin_platform_interface": {
+      "dependency": "transitive",
+      "description": {
+        "name": "plugin_platform_interface",
+        "sha256": "4820fbfdb9478b1ebae27888254d445073732dae3d6ea81f0b7e06d5dedc3f02",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "2.1.8"
+    },
+    "pointycastle": {
+      "dependency": "direct main",
+      "description": {
+        "name": "pointycastle",
+        "sha256": "4be0097fcf3fd3e8449e53730c631200ebc7b88016acecab2b0da2f0149222fe",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "3.9.1"
+    },
+    "qr": {
+      "dependency": "transitive",
+      "description": {
+        "name": "qr",
+        "sha256": "5a1d2586170e172b8a8c8470bbbffd5eb0cd38a66c0d77155ea138d3af3a4445",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "3.0.2"
+    },
+    "rhttp": {
+      "dependency": "direct main",
+      "description": {
+        "name": "rhttp",
+        "sha256": "581d57b5b6056d31489af94db8653a1c11d7b59050cbbc41ece4279e50414de5",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "0.9.6"
+    },
+    "screen_retriever": {
+      "dependency": "transitive",
+      "description": {
+        "name": "screen_retriever",
+        "sha256": "570dbc8e4f70bac451e0efc9c9bb19fa2d6799a11e6ef04f946d7886d2e23d0c",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "0.2.0"
+    },
+    "screen_retriever_linux": {
+      "dependency": "transitive",
+      "description": {
+        "name": "screen_retriever_linux",
+        "sha256": "f7f8120c92ef0784e58491ab664d01efda79a922b025ff286e29aa123ea3dd18",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "0.2.0"
+    },
+    "screen_retriever_macos": {
+      "dependency": "transitive",
+      "description": {
+        "name": "screen_retriever_macos",
+        "sha256": "71f956e65c97315dd661d71f828708bd97b6d358e776f1a30d5aa7d22d78a149",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "0.2.0"
+    },
+    "screen_retriever_platform_interface": {
+      "dependency": "transitive",
+      "description": {
+        "name": "screen_retriever_platform_interface",
+        "sha256": "ee197f4581ff0d5608587819af40490748e1e39e648d7680ecf95c05197240c0",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "0.2.0"
+    },
+    "screen_retriever_windows": {
+      "dependency": "transitive",
+      "description": {
+        "name": "screen_retriever_windows",
+        "sha256": "449ee257f03ca98a57288ee526a301a430a344a161f9202b4fcc38576716fe13",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "0.2.0"
+    },
+    "scrollable_positioned_list": {
+      "dependency": "direct main",
+      "description": {
+        "path": "packages/scrollable_positioned_list",
+        "ref": "09e756b1f1b04e6298318d99ec20a787fb360f59",
+        "resolved-ref": "09e756b1f1b04e6298318d99ec20a787fb360f59",
+        "url": "https://github.com/venera-app/flutter.widgets"
+      },
+      "source": "git",
+      "version": "0.3.8+1"
+    },
+    "share_plus": {
+      "dependency": "direct main",
+      "description": {
+        "name": "share_plus",
+        "sha256": "9c9bafd4060728d7cdb2464c341743adbd79d327cb067ec7afb64583540b47c8",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "10.1.2"
+    },
+    "share_plus_platform_interface": {
+      "dependency": "transitive",
+      "description": {
+        "name": "share_plus_platform_interface",
+        "sha256": "c57c0bbfec7142e3a0f55633be504b796af72e60e3c791b44d5a017b985f7a48",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "5.0.1"
+    },
+    "shimmer": {
+      "dependency": "direct main",
+      "description": {
+        "name": "shimmer",
+        "sha256": "5f88c883a22e9f9f299e5ba0e4f7e6054857224976a5d9f839d4ebdc94a14ac9",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "3.0.0"
+    },
+    "sky_engine": {
+      "dependency": "transitive",
+      "description": "flutter",
+      "source": "sdk",
+      "version": "0.0.0"
+    },
+    "sliver_tools": {
+      "dependency": "direct main",
+      "description": {
+        "name": "sliver_tools",
+        "sha256": "eae28220badfb9d0559207badcbbc9ad5331aac829a88cb0964d330d2a4636a6",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "0.2.12"
+    },
+    "source_span": {
+      "dependency": "transitive",
+      "description": {
+        "name": "source_span",
+        "sha256": "53e943d4206a5e30df338fd4c6e7a077e02254531b138a15aec3bd143c1a8b3c",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "1.10.0"
+    },
+    "sprintf": {
+      "dependency": "transitive",
+      "description": {
+        "name": "sprintf",
+        "sha256": "1fc9ffe69d4df602376b52949af107d8f5703b77cda567c4d7d86a0693120f23",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "7.0.0"
+    },
+    "sqlite3": {
+      "dependency": "direct main",
+      "description": {
+        "name": "sqlite3",
+        "sha256": "cb7f4e9dc1b52b1fa350f7b3d41c662e75fc3d399555fa4e5efcf267e9a4fbb5",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "2.5.0"
+    },
+    "sqlite3_flutter_libs": {
+      "dependency": "direct main",
+      "description": {
+        "name": "sqlite3_flutter_libs",
+        "sha256": "636b0fe8a2de894e5455572f6cbbc458f4ffecfe9f860b79439e27041ea4f0b9",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "0.5.27"
+    },
+    "stack_trace": {
+      "dependency": "transitive",
+      "description": {
+        "name": "stack_trace",
+        "sha256": "9f47fd3630d76be3ab26f0ee06d213679aa425996925ff3feffdec504931c377",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "1.12.0"
+    },
+    "stream_channel": {
+      "dependency": "transitive",
+      "description": {
+        "name": "stream_channel",
+        "sha256": "ba2aa5d8cc609d96bbb2899c28934f9e1af5cddbd60a827822ea467161eb54e7",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "2.1.2"
+    },
+    "string_scanner": {
+      "dependency": "transitive",
+      "description": {
+        "name": "string_scanner",
+        "sha256": "688af5ed3402a4bde5b3a6c15fd768dbf2621a614950b17f04626c431ab3c4c3",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "1.3.0"
+    },
+    "term_glyph": {
+      "dependency": "transitive",
+      "description": {
+        "name": "term_glyph",
+        "sha256": "a29248a84fbb7c79282b40b8c72a1209db169a2e0542bce341da992fe1bc7e84",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "1.2.1"
+    },
+    "test_api": {
+      "dependency": "transitive",
+      "description": {
+        "name": "test_api",
+        "sha256": "664d3a9a64782fcdeb83ce9c6b39e78fd2971d4e37827b9b06c3aa1edc5e760c",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "0.7.3"
+    },
+    "typed_data": {
+      "dependency": "transitive",
+      "description": {
+        "name": "typed_data",
+        "sha256": "f9049c039ebfeb4cf7a7104a675823cd72dba8297f264b6637062516699fa006",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "1.4.0"
+    },
+    "upower": {
+      "dependency": "transitive",
+      "description": {
+        "name": "upower",
+        "sha256": "cf042403154751180affa1d15614db7fa50234bc2373cd21c3db666c38543ebf",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "0.7.0"
+    },
+    "url_launcher": {
+      "dependency": "direct main",
+      "description": {
+        "name": "url_launcher",
+        "sha256": "9d06212b1362abc2f0f0d78e6f09f726608c74e3b9462e8368bb03314aa8d603",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "6.3.1"
+    },
+    "url_launcher_android": {
+      "dependency": "transitive",
+      "description": {
+        "name": "url_launcher_android",
+        "sha256": "6fc2f56536ee873eeb867ad176ae15f304ccccc357848b351f6f0d8d4a40d193",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "6.3.14"
+    },
+    "url_launcher_ios": {
+      "dependency": "transitive",
+      "description": {
+        "name": "url_launcher_ios",
+        "sha256": "16a513b6c12bb419304e72ea0ae2ab4fed569920d1c7cb850263fe3acc824626",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "6.3.2"
+    },
+    "url_launcher_linux": {
+      "dependency": "transitive",
+      "description": {
+        "name": "url_launcher_linux",
+        "sha256": "4e9ba368772369e3e08f231d2301b4ef72b9ff87c31192ef471b380ef29a4935",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "3.2.1"
+    },
+    "url_launcher_macos": {
+      "dependency": "transitive",
+      "description": {
+        "name": "url_launcher_macos",
+        "sha256": "17ba2000b847f334f16626a574c702b196723af2a289e7a93ffcb79acff855c2",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "3.2.2"
+    },
+    "url_launcher_platform_interface": {
+      "dependency": "transitive",
+      "description": {
+        "name": "url_launcher_platform_interface",
+        "sha256": "552f8a1e663569be95a8190206a38187b531910283c3e982193e4f2733f01029",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "2.3.2"
+    },
+    "url_launcher_web": {
+      "dependency": "transitive",
+      "description": {
+        "name": "url_launcher_web",
+        "sha256": "772638d3b34c779ede05ba3d38af34657a05ac55b06279ea6edd409e323dca8e",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "2.3.3"
+    },
+    "url_launcher_windows": {
+      "dependency": "transitive",
+      "description": {
+        "name": "url_launcher_windows",
+        "sha256": "44cf3aabcedde30f2dba119a9dea3b0f2672fbe6fa96e85536251d678216b3c4",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "3.1.3"
+    },
+    "uuid": {
+      "dependency": "direct main",
+      "description": {
+        "name": "uuid",
+        "sha256": "a5be9ef6618a7ac1e964353ef476418026db906c4facdedaa299b7a2e71690ff",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "4.5.1"
+    },
+    "vector_math": {
+      "dependency": "transitive",
+      "description": {
+        "name": "vector_math",
+        "sha256": "80b3257d1492ce4d091729e3a67a60407d227c27241d6927be0130c98e741803",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "2.1.4"
+    },
+    "vm_service": {
+      "dependency": "transitive",
+      "description": {
+        "name": "vm_service",
+        "sha256": "f6be3ed8bd01289b34d679c2b62226f63c0e69f9fd2e50a6b3c1c729a961041b",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "14.3.0"
+    },
+    "web": {
+      "dependency": "transitive",
+      "description": {
+        "name": "web",
+        "sha256": "cd3543bd5798f6ad290ea73d210f423502e71900302dde696f8bff84bf89a1cb",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "1.1.0"
+    },
+    "webdav_client": {
+      "dependency": "direct main",
+      "description": {
+        "path": ".",
+        "ref": "285f87f15bccd2d5d5ff443761348c6ee47b98d1",
+        "resolved-ref": "285f87f15bccd2d5d5ff443761348c6ee47b98d1",
+        "url": "https://github.com/wgh136/webdav_client"
+      },
+      "source": "git",
+      "version": "1.2.2"
+    },
+    "win32": {
+      "dependency": "transitive",
+      "description": {
+        "name": "win32",
+        "sha256": "8b338d4486ab3fbc0ba0db9f9b4f5239b6697fcee427939a40e720cbb9ee0a69",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "5.9.0"
+    },
+    "window_manager": {
+      "dependency": "direct main",
+      "description": {
+        "name": "window_manager",
+        "sha256": "732896e1416297c63c9e3fb95aea72d0355f61390263982a47fd519169dc5059",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "0.4.3"
+    },
+    "xdg_directories": {
+      "dependency": "transitive",
+      "description": {
+        "name": "xdg_directories",
+        "sha256": "7a3f37b05d989967cdddcbb571f1ea834867ae2faa29725fd085180e0883aa15",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "1.1.0"
+    },
+    "xml": {
+      "dependency": "transitive",
+      "description": {
+        "name": "xml",
+        "sha256": "b015a8ad1c488f66851d762d3090a21c600e479dc75e68328c52774040cf9226",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "6.5.0"
+    },
+    "yaml": {
+      "dependency": "direct main",
+      "description": {
+        "name": "yaml",
+        "sha256": "75769501ea3489fca56601ff33454fe45507ea3bfb014161abc3b43ae25989d5",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "3.1.2"
+    },
+    "zip_flutter": {
+      "dependency": "direct main",
+      "description": {
+        "name": "zip_flutter",
+        "sha256": "955b53d58709fcd9feefbed3d41b5522bc5273e677603e9fc67017a81e568d24",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "0.0.5"
+    }
+  },
+  "sdks": {
+    "dart": ">=3.6.0 <4.0.0",
+    "flutter": ">=3.27.1"
+  }
+}

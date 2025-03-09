@@ -1,0 +1,47 @@
+diff --git a/src/Makevars b/src/Makevars
+index 713b44c..704ac17 100644
+--- a/src/Makevars
++++ b/src/Makevars
+@@ -1,5 +1,5 @@
+ RHDF5_LIBS = $(shell "$(R_HOME)/bin${R_ARCH_BIN}/Rscript" -e 'Rhdf5lib::pkgconfig("PKG_C_LIBS")')
+-PKG_LIBS = $(RHDF5_LIBS)
++PKG_LIBS = $(RHDF5_LIBS) -lhdf5
+ 
+ #PKG_CFLAGS = -Wall
+ 
+diff --git a/src/h5testLock.c b/src/h5testLock.c
+index b326444..5d58b4a 100644
+--- a/src/h5testLock.c
++++ b/src/h5testLock.c
+@@ -8,16 +8,16 @@ SEXP _h5fileLock(SEXP _file_name) {
+   int lk = -1;
+ 
+   /* create the temporary file */
+-  fd = HDopen(file_name, O_RDWR | O_CREAT | O_TRUNC, 0666);
++  fd = open(file_name, O_RDWR | O_CREAT | O_TRUNC, 0666);
+ 
+   /* try to lock file */
+-  lk = HDflock(fd, LOCK_EX | LOCK_NB);
++  lk = flock(fd, LOCK_EX | LOCK_NB);
+   
+   /* unlock so we can remove */
+-  HDflock(fd, LOCK_UN);
++  flock(fd, LOCK_UN);
+   
+   /* close */
+-  HDclose(fd);
++  close(fd);
+   
+   /* return value of lock attempt */
+   PROTECT(Rval = allocVector(INTSXP, 1));
+diff --git a/src/h5testLock.h b/src/h5testLock.h
+index 2c1c5e4..25914ff 100644
+--- a/src/h5testLock.h
++++ b/src/h5testLock.h
+@@ -1,5 +1,5 @@
+ #include <fcntl.h>
++#include <unistd.h>
+ #include "myhdf5.h"
+-#include <H5private.h>
+ 
+ SEXP _h5fileLock();

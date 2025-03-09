@@ -1,0 +1,131 @@
+diff --git a/execute.c b/execute.c
+index be06068..3468fa7 100644
+--- a/execute.c
++++ b/execute.c
+@@ -242,7 +242,7 @@ verify_ssh_agent() {
+ 	char *output;
+ 	char *argv[32];
+ 
+-	append(argv, 0, "ssh-add", "-l", NULL);
++	append(argv, 0, "@ssh-add@", "-l", NULL);
+ 	output = cmd_pipe_stdout(argv, &error_code, &output_size);
+ 	free(output);
+ 
+@@ -282,7 +282,7 @@ start_connection(char *socket_path, Label *route_label, int http_port, const cha
+ 	}
+ 
+ 	argc = 0;
+-	argc = append(argv, argc, "ssh", "-fN", "-R", port_forwarding, "-S",
++	argc = append(argv, argc, "@ssh@", "-fN", "-R", port_forwarding, "-S",
+ 		socket_path, "-M", NULL);
+ 	if (ssh_config)
+ 		(void) append(argv, argc, "-F", ssh_config, host_name, NULL);
+@@ -292,12 +292,12 @@ start_connection(char *socket_path, Label *route_label, int http_port, const cha
+ 		return -1;
+ 
+ 	snprintf(tmp_path, sizeof(tmp_path), "mkdir " REMOTE_TMP_PATH, http_port);
+-	append(argv, 0, "ssh", "-S", socket_path, host_name, tmp_path, NULL);
++	append(argv, 0, "@ssh@", "-S", socket_path, host_name, tmp_path, NULL);
+ 	if (run(argv) != 0)
+ 		return -1;
+ 
+-	snprintf(cmd, PATH_MAX, "tar -cf - %s -C " REPLICATED_DIRECTORY " ./ | "
+-	   "exec ssh -q -S %s %s tar -xf - -C " REMOTE_TMP_PATH,
++	snprintf(cmd, PATH_MAX, "@tar@ -cf - %s -C " REPLICATED_DIRECTORY " ./ | "
++	   "exec @ssh@ -q -S %s %s tar -xf - -C " REMOTE_TMP_PATH,
+ 	    array_to_str(route_label->export_paths), socket_path, host_name,
+ 	    http_port);
+ 	if (system(cmd) != 0) {
+@@ -326,7 +326,7 @@ ssh_command_pipe(char *host_name, char *socket_path, Label *host_label, int http
+ 
+ 	/* construct ssh command */
+ 	argc = 0;
+-	argc = append(argv, argc, "ssh", "-T", "-S", socket_path, NULL);
++	argc = append(argv, argc, "@ssh@", "-T", "-S", socket_path, NULL);
+ 
+ 	(void) append(argv, argc, host_name, cmd, NULL);
+ 	return cmd_pipe_stdin(argv, host_label->content, host_label->content_size);
+@@ -344,7 +344,7 @@ ssh_command_tty(char *host_name, char *socket_path, Label *host_label, int http_
+ 	    http_port);
+ 	/* construct ssh command */
+ 	argc = 0;
+-	argc = append(argv, argc, "ssh", "-T", "-S", socket_path, NULL);
++	argc = append(argv, argc, "@ssh@", "-T", "-S", socket_path, NULL);
+ 	(void) append(argv, argc, host_name, cmd, NULL);
+ 	cmd_pipe_stdin(argv, host_label->content, host_label->content_size);
+ 
+@@ -360,7 +360,7 @@ ssh_command_tty(char *host_name, char *socket_path, Label *host_label, int http_
+ 
+ 	/* construct ssh command */
+ 	argc = 0;
+-	argc = append(argv, argc, "ssh", "-t", "-S", socket_path, NULL);
++	argc = append(argv, argc, "@ssh@", "-t", "-S", socket_path, NULL);
+ 
+ 	(void) append(argv, argc, host_name, cmd, NULL);
+ 	return run(argv);
+@@ -375,11 +375,11 @@ end_connection(char *socket_path, char *host_name, int http_port) {
+ 		return;
+ 
+ 	snprintf(tmp_path, sizeof(tmp_path), REMOTE_TMP_PATH, http_port);
+-	append(argv, 0, "ssh", "-S", socket_path, host_name, "rm", "-rf", tmp_path , NULL);
++	append(argv, 0, "@ssh@", "-S", socket_path, host_name, "rm", "-rf", tmp_path , NULL);
+ 	if (run(argv) != 0)
+ 		warn("remote tmp dir");
+ 
+-	append(argv, 0, "ssh", "-q", "-S", socket_path, "-O", "exit", host_name, NULL);
++	append(argv, 0, "@ssh@", "-q", "-S", socket_path, "-O", "exit", host_name, NULL);
+ 	if (run(argv) != 0)
+ 		warn("exec ssh -O exit");
+ }
+diff --git a/rset.c b/rset.c
+index 383fc82..9c20f65 100644
+--- a/rset.c
++++ b/rset.c
+@@ -128,10 +128,8 @@ int main(int argc, char *argv[])
+ 		hostnames[i] = argv[optind+i];
+ 	hostnames[i] = NULL;
+ 
+-	if ((rinstall_bin = findprog("rinstall")) == 0)
+-		not_found("rinstall");
+-	if ((rsub_bin = findprog("rsub")) == 0)
+-		not_found("rsub");
++  rinstall_bin = "@rinstall@";
++  rsub_bin = "@rsub@";
+ 
+ 	/* all operations must be relative to the routes file */
+ 	if (realpath(xdirname(routes_file), routes_realpath) == NULL)
+@@ -159,10 +157,9 @@ int main(int argc, char *argv[])
+ 
+ 	/* Convert http server command line into a vector */
+ 	inputstring = malloc(PATH_MAX);
+-	snprintf(inputstring, PATH_MAX, "miniquark -p %d -d " PUBLIC_DIRECTORY, http_port);
++	snprintf(inputstring, PATH_MAX, "@miniquark@ -p %d -d " PUBLIC_DIRECTORY, http_port);
+ 	str_to_array(http_srv_argv, inputstring, sizeof(http_srv_argv));
+-	if ((httpd_bin = findprog(http_srv_argv[0])) == 0)
+-		not_found(http_srv_argv[0]);
++	httpd_bin = "@miniquark@";
+ 
+ 	/* start the web server */
+ 	pipe(stdout_pipe);
+@@ -397,7 +394,7 @@ handle_exit(int sig) {
+ 		printf("caught signal %d, terminating connection to '%s'\n", sig,
+ 			hostname);
+ 		/* clean up socket and SSH connection; leaving staging dir */
+-		execlp("ssh", "ssh", "-S", socket_path, "-O", "exit", hostname, NULL);
++		execlp("@ssh@", "@ssh@", "-S", socket_path, "-O", "exit", hostname, NULL);
+ 		err(1, "ssh -O exit");
+ 	}
+ }
+diff --git a/rutils.c b/rutils.c
+index 1e182d8..9aef76d 100644
+--- a/rutils.c
++++ b/rutils.c
+@@ -77,7 +77,7 @@ install_if_new(const char *src, const char *dst) {
+ 
+ 	pid = fork();
+ 	if (pid == 0) {
+-		if (execl("/usr/bin/install", "/usr/bin/install", src, dst, NULL) != -1)
++		if (execl("@install@", "@install@", src, dst, NULL) != -1)
+ 			err(1, "%s", dst);
+ 	}
+ 	waitpid(pid, &status, 0);

@@ -1,0 +1,28 @@
+diff --git a/usr/bin/fxlputil b/usr/bin/fxlputil
+index cdac66d..aa86d02 100755
+--- a/usr/bin/fxlputil
++++ b/usr/bin/fxlputil
+@@ -7,17 +7,19 @@
+ #	TCL=`which fxlputil`
+ #fi
+ 
++wrapper=$(dirname $0)/fxlputil
++
+ #set LC_ALL
+-locale=`tclsh $0lo.tcl`
++locale=`tclsh ${wrapper}lo.tcl`
+ 
+ case $locale in
+ 	"ja")
+-		env LC_ALL=ja_JP.UTF-8 wish $0.tcl $1
++		env LC_ALL=ja_JP.UTF-8 wish ${wrapper}.tcl $1
+ 		;;
+ 	"en")
+-		env LC_ALL=en_US.ISO8859-1 wish $0.tcl $1
++		env LC_ALL=en_US.ISO8859-1 wish ${wrapper}.tcl $1
+ 		;;
+ 	*)
+-		env LC_ALL=C wish $0.tcl $1
++		env LC_ALL=C wish ${wrapper}.tcl $1
+ 		;;
+ esac

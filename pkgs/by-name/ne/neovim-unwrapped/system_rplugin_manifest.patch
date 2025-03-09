@@ -1,0 +1,29 @@
+diff --git a/runtime/autoload/remote/host.vim b/runtime/autoload/remote/host.vim
+index 6266b312b..965fabf1e 100644
+--- a/runtime/autoload/remote/host.vim
++++ b/runtime/autoload/remote/host.vim
+@@ -71,7 +71,8 @@ function! remote#host#RegisterPlugin(host, path, specs) abort
+ 
+   for plugin in plugins
+     if plugin.path == a:path
+-      throw 'Plugin "'.a:path.'" is already registered'
++      " plugin already registered
++      return
+     endif
+   endfor
+ 
+diff --git a/runtime/plugin/rplugin.vim b/runtime/plugin/rplugin.vim
+index 122d8d47f..83fbf8b57 100644
+--- a/runtime/plugin/rplugin.vim
++++ b/runtime/plugin/rplugin.vim
+@@ -54,6 +54,10 @@ function! s:GetManifest() abort
+ endfunction
+ 
+ function! s:LoadRemotePlugins() abort
++  if exists('$NVIM_SYSTEM_RPLUGIN_MANIFEST')
++    let g:system_remote_plugins = fnamemodify($NVIM_SYSTEM_RPLUGIN_MANIFEST, ':p')
++    execute 'source' fnameescape(g:system_remote_plugins)
++  endif
+   let g:loaded_remote_plugins = s:GetManifest()
+   if filereadable(g:loaded_remote_plugins)
+     execute 'source' fnameescape(g:loaded_remote_plugins)

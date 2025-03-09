@@ -1,0 +1,38 @@
+https://github.com/file/file/commit/218fdf813fd5ccecbb8887a1b62509cd1c6dd3a1.patch
+
+From 218fdf813fd5ccecbb8887a1b62509cd1c6dd3a1 Mon Sep 17 00:00:00 2001
+From: Christos Zoulas <christos@zoulas.com>
+Date: Fri, 28 Jul 2023 14:38:25 +0000
+Subject: [PATCH] deal with 32 bit time_t
+
+---
+ src/file.h | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
+
+diff --git a/src/file.h b/src/file.h
+index 2e0494d2f..78f574ea1 100644
+--- a/src/file.h
++++ b/src/file.h
+@@ -27,7 +27,7 @@
+  */
+ /*
+  * file.h - definitions for file(1) program
+- * @(#)$File: file.h,v 1.247 2023/07/27 19:40:22 christos Exp $
++ * @(#)$File: file.h,v 1.248 2023/07/28 14:38:25 christos Exp $
+  */
+ 
+ #ifndef __file_h__
+@@ -159,9 +159,11 @@
+ /*
+  * Dec 31, 23:59:59 9999
+  * we need to make sure that we don't exceed 9999 because some libc
+- * implementations like muslc crash otherwise
++ * implementations like muslc crash otherwise. If you are unlucky
++ * to be running on a system with a 32 bit time_t, then it is even less.
+  */
+-#define	MAX_CTIME	CAST(time_t, 0x3afff487cfULL)
++#define	MAX_CTIME \
++    CAST(time_t, sizeof(time_t) > 4 ? 0x3afff487cfULL : 0x7fffffffULL)
+ 
+ #define FILE_BADSIZE CAST(size_t, ~0ul)
+ #define MAXDESC	64		/* max len of text description/MIME type */

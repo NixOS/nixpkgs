@@ -1,0 +1,11 @@
+./test/Target/LLVMIR/openmp-llvm.mlir
+./test/mlir-spirv-cpu-runner/double.mlir
+./test/mlir-spirv-cpu-runner/simple_add.mlir
+./test/mlir-vulkan-runner/addf.mlir
+./test/mlir-vulkan-runner/addi.mlir
+./test/mlir-vulkan-runner/addi8.mlir
+./test/mlir-vulkan-runner/mulf.mlir
+./test/mlir-vulkan-runner/smul_extended.mlir
+./test/mlir-vulkan-runner/subf.mlir
+./test/mlir-vulkan-runner/time.mlir
+./test/mlir-vulkan-runner/umul_extended.mlir
