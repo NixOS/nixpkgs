@@ -16251,7 +16251,7 @@ with pkgs;
   };
 
   macopix = callPackage ../games/macopix {
-    gtk = gtk2;
+    gtk = gtk3;
   };
 
   maptool = callPackage ../games/maptool {
