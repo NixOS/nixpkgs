@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "xmountains";
-  version = "2.10";
+  version = "2.11";
 
   src = fetchFromGitHub {
     owner = "spbooth";
     repo = pname;
     rev = "aa3bcbfed228adf3fff0fe4295589f13fc194f0b";
-    sha256 = "0dx4n2y736lv04sj41cp1dw8n5zkw5gyd946a6zsiv0k796s9ra9";
+    hash = "sha256-SeWkTToT7Ki/UYak5l/h8xeLeAuXBSI1AZuacbywpDc=";
   };
 
   env.NIX_CFLAGS_COMPILE = "-Wno-implicit-int";
