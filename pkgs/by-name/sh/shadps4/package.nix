@@ -24,6 +24,7 @@
   rapidjson,
   renderdoc,
   robin-map,
+  sdl3,
   sndio,
   stb,
   vulkan-headers,
@@ -37,20 +38,15 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "shadps4";
-  version = "0.5.0-unstable-2025-01-20";
+  version = "0.6.0-unstable-2025-03-07";
 
   src = fetchFromGitHub {
     owner = "shadps4-emu";
     repo = "shadPS4";
-    rev = "95a30b2b3e1aa4e20c3db632955cc67bbded0fb1";
-    hash = "sha256-52BhGKSUv+9asACNkppxiNm3Gja7r3LcXOIwhQR5ALs=";
+    rev = "6b3746f3a688cd4c7c2acfbbe8238ebd97235d37";
+    hash = "sha256-j5gIrSmQsc7nbDJ0OeFPpauHBOCADFykN0RMjCA8P8A=";
     fetchSubmodules = true;
   };
-
-  patches = [
-    # Fix controls without a numpad
-    ./laptop-controls.patch
-  ];
 
   buildInputs = [
     alsa-lib
@@ -78,6 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
     rapidjson
     renderdoc
     robin-map
+    sdl3
     sndio
     stb
     vulkan-headers
