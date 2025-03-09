@@ -467,6 +467,14 @@ lib.mapAttrs mkLicense ({
     spdxId = "ECL-2.0";
   };
 
+  efilib = {
+    fullName = "Intel EFI Application Toolkit License";
+    # Official copies have been lost, GNU-EFI and its forks seems to have one
+    # of the only surviving copies. Seems to be a variant of BSD-2-Clause with
+    # efilib and Intel specific disclaimers.
+    url = "https://raw.githubusercontent.com/ncroxon/gnu-efi/refs/tags/4.0.0/licenses/LICENSE.efilib";
+  };
+
   efl10 = {
     spdxId = "EFL-1.0";
     fullName = "Eiffel Forum License v1.0";
