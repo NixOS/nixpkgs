@@ -5,6 +5,7 @@
   cups,
   libusb-compat-0_1,
   libxml2,
+  perl,
 }:
 
 let
@@ -14,12 +15,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "samsung-unified-linux-driver";
-  version = "1.00.37";
+  version = "1.00.39";
 
   src = fetchurl {
-    sha256 = "0r66l9zp0p1qgakh4j08hynwsr4lsgq5yrpxyr0x4ldvl0z2b1bb";
     url = "http://www.bchemnet.com/suldr/driver/UnifiedLinuxDriver-${version}.tar.gz";
+    hash = "sha256-DDghO4RmRFAFJr8oHKqm42xAuPIkHKwvA5jJfDgUVA4=";
   };
+
+  nativeBuildInputs = [ perl ];
 
   buildInputs = [
     cups
@@ -37,6 +40,13 @@ stdenv.mkDerivation rec {
     install -m644 noarch/etc/smfp.conf $out/etc/sane.d
     echo smfp >> $out/etc/sane.d/dll.d/smfp-scanner.conf
 
+    mkdir -p $out/etc/smfp-common/scanner/share/
+    install -m644 noarch/libsane-smfp.cfg $out/etc/smfp-common/scanner/share/
+    install -m644 noarch/pagesize.xml $out/etc/smfp-common/scanner/share/
+
+    mkdir -p $out/etc/samsung/scanner/share/
+    install -m644 noarch/oem.conf $out/etc/samsung/scanner/share/
+
     mkdir -p $out/lib
     install -m755 ${arch}/libscmssc.so* $out/lib
 
@@ -51,6 +61,15 @@ stdenv.mkDerivation rec {
     install -m755 ${arch}/libsane-smfp.so* $out/lib/sane
     ln -s libsane-smfp.so.1.0.1 $out/lib/sane/libsane-smfp.so.1
     ln -s libsane-smfp.so.1     $out/lib/sane/libsane-smfp.so
+
+    perl -pi -e \
+      's|/opt/smfp-common/scanner/.usedby/|/tmp/\0\0fp-common/scanner/.usedby/|g' \
+       $out/lib/sane/libsane-smfp.so.1.0.1
+    perl -pi -e 's|/opt|/etc|g' \
+       $out/lib/sane/libsane-smfp.so.1.0.1 \
+       $out/bin/rastertospl \
+       noarch/package_utils \
+       noarch/pre_install.sh
 
     mkdir -p $out/lib/udev/rules.d
     (
@@ -94,15 +113,16 @@ stdenv.mkDerivation rec {
   # we did this in prefixup already
   dontPatchELF = true;
 
-  meta = with lib; {
+  meta = {
     description = "Unified Linux Driver for Samsung printers and scanners";
     homepage = "http://www.bchemnet.com/suldr";
     downloadPage = "http://www.bchemnet.com/suldr/driver/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
 
     # Tested on linux-x86_64. Might work on linux-i386.
     # Probably won't work on anything else.
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ onny ];
   };
 }
