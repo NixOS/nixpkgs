@@ -28,9 +28,7 @@ stdenv.mkDerivation rec {
     libmhash
   ];
 
-  env = lib.optionalAttrs stdenv.cc.isClang {
-    NIX_CFLAGS_COMPILE = "-Wno-implicit-function-declaration";
-  };
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
 
   meta = {
     description = "Replacement for old UNIX crypt(1)";
