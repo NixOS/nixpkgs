@@ -39,9 +39,6 @@ buildGoModule rec {
     mv $out/bin/openbao $out/bin/bao
   '';
 
-  # TODO: Enable the NixOS tests after adding OpenBao as a NixOS service in an upcoming PR and
-  # adding NixOS tests
-  #
   passthru.tests = { inherit (nixosTests) openbao openbao-postgresql openbao-dev; };
 
   passthru.tests.version = testers.testVersion {
