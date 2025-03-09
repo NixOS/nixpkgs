@@ -244,7 +244,7 @@ let
         ${optionalString (cfg.smtp.authentication != null) "authentication: :${cfg.smtp.authentication},"}
         enable_starttls_auto: ${boolToString cfg.smtp.enableStartTLSAuto},
         tls: ${boolToString cfg.smtp.tls},
-        ca_file: "/etc/ssl/certs/ca-certificates.crt",
+        ca_file: "${config.security.pki.caBundle}",
         openssl_verify_mode: '${cfg.smtp.opensslVerifyMode}'
       }
     end

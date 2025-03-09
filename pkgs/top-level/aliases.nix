@@ -58,7 +58,7 @@ let
       marble merkuro milou minuet okular oxygen oxygen-icons5 picmi
       plasma-browser-integration plasma-desktop plasma-integration plasma-nano
       plasma-nm plasma-pa plasma-mobile plasma-systemmonitor plasma-thunderbolt
-      plasma-vault plasma-workspace plasma-workspace-wallpapers polkit-kde-agent
+      plasma-vault plasma-workspace plasma-workspace-wallpapers
       powerdevil qqc2-breeze-style sddm-kcm skanlite skanpage spectacle
       systemsettings xdg-desktop-portal-kde yakuake zanshin
       ;
@@ -933,7 +933,7 @@ mapAliases {
   matrique = throw "'matrique' has been renamed to/replaced by 'spectral'"; # Converted to throw 2024-10-17
   matrix-sliding-sync = throw "matrix-sliding-sync has been removed as matrix-synapse 114.0 and later covers its functionality"; # Added 2024-10-20
   matrix-synapse-tools = recurseIntoAttrs {
-    rust-synapse-state-compress = lib.warnOnInstantiate "`matrix-synapse-tools.rust-synapse-compress-state` has been renamed to `rust-synapse-compress-state`" rust-synapse-state-compress;
+    rust-synapse-compress-state = lib.warnOnInstantiate "`matrix-synapse-tools.rust-synapse-compress-state` has been renamed to `rust-synapse-compress-state`" rust-synapse-compress-state;
     synadm = lib.warnOnInstantiate "`matrix-synapse-tools.synadm` has been renamed to `synadm`" synadm;
   }; # Added 2025-02-20
   maui-nota = libsForQt5.mauiPackages.nota; # added 2022-05-17
@@ -1181,8 +1181,17 @@ mapAliases {
   plots = throw "'plots' has been replaced by 'gnome-graphs'"; # Added 2025-02-05
   pltScheme = racket; # just to be sure
   poac = cabinpkg; # Added 2025-01-22
+  polkit-kde-agent = throw ''
+    The top-level polkit-kde-agent alias has been removed.
+
+    Please explicitly use kdePackages.polkit-kde-agent-1 for the latest Qt 6-based version,
+    or libsForQt5.polkit-kde-agent for the deprecated Qt 5 version.
+
+    Note that Qt 5 versions of most KDE software will be removed in NixOS 25.11.
+  ''; # Added 2025-03-07
   poretools = throw "poretools has been removed from nixpkgs, as it was broken and unmaintained"; # Added 2024-06-03
   powerdns = pdns; # Added 2022-03-28
+  projectm = throw "Since version 4, 'projectm' has been split into 'libprojectm' (the library) and 'projectm-sdl-cpp' (the SDL2 frontend). ProjectM 3 has been moved to 'projectm_3'"; # Added 2024-11-10
 
   # postgresql plugins
   cstore_fdw = postgresqlPackages.cstore_fdw;
@@ -1312,6 +1321,7 @@ mapAliases {
   rtx = mise; # Added 2024-01-05
   runCommandNoCC = runCommand;
   runCommandNoCCLocal = runCommandLocal;
+  rust-synapse-state-compress = rust-synapse-compress-state;
   rustc-wasm32 = rustc; # Added 2023-12-01
   rustfilt = throw "'rustfilt' has been removed due to lack of upstream maintenance"; # Added 2025-01-26
   rustic-rs = rustic; # Added 2024-08-02
@@ -1496,7 +1506,8 @@ mapAliases {
   transmission = lib.warnOnInstantiate (transmission3Warning {}) transmission_3; # Added 2024-06-10
   transmission-gtk = lib.warnOnInstantiate (transmission3Warning {suffix = "-gtk";}) transmission_3-gtk; # Added 2024-06-10
   transmission-qt = lib.warnOnInstantiate (transmission3Warning {suffix = "-qt";}) transmission_3-qt; # Added 2024-06-10
-  treefmt = treefmt2; # 2024-06-28
+  treefmt1 = throw "treefmt1 has been removed as it is not maintained anymore. Consider using `treefmt` instead."; # 2025-03-06
+  treefmt2 = lib.warnOnInstantiate "treefmt2 has been renamed to treefmt" treefmt; # 2025-03-06
   libtransmission = lib.warnOnInstantiate (transmission3Warning {prefix = "lib";}) libtransmission_3; # Added 2024-06-10
   tracker = lib.warnOnInstantiate "tracker has been renamed to tinysparql" tinysparql; # Added 2024-09-30
   tracker-miners = lib.warnOnInstantiate "tracker-miners has been renamed to localsearch" localsearch; # Added 2024-09-30

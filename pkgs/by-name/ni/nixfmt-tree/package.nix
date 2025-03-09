@@ -4,7 +4,7 @@
   buildEnv,
   makeWrapper,
   writers,
-  treefmt2,
+  treefmt,
   nixfmt-rfc-style,
   nixfmt-tree,
 
@@ -27,7 +27,7 @@ buildEnv {
   name = "nixfmt-tree";
 
   # Allows this derivation to be used as a shell providing both treefmt and nixfmt
-  paths = [ treefmt2 ] ++ runtimePackages;
+  paths = [ treefmt ] ++ runtimePackages;
   pathsToLink = [ "/bin" ];
 
   nativeBuildInputs = [
