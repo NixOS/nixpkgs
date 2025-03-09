@@ -1,0 +1,50 @@
+From aa6c313d2d677f6abf0e4f2c71437a289982fcb2 Mon Sep 17 00:00:00 2001
+From: Zane van Iperen <zane@zanevaniperen.com>
+Date: Mon, 10 Mar 2025 00:04:56 +0900
+Subject: [PATCH] treewide: add missing includes
+
+---
+ libs/cppdap/include/dap/any.h     | 1 +
+ libs/cppdap/src/io.cpp            | 1 +
+ src/SHADERed/Engine/AudioPlayer.h | 1 +
+ 3 files changed, 3 insertions(+)
+
+diff --git a/libs/cppdap/include/dap/any.h b/libs/cppdap/include/dap/any.h
+index 187ca5d..2ca0063 100644
+--- a/libs/cppdap/include/dap/any.h
++++ b/libs/cppdap/include/dap/any.h
+@@ -18,6 +18,7 @@
+ #include "typeinfo.h"
+ 
+ #include <assert.h>
++#include <stdint.h>
+ 
+ namespace dap {
+ 
+diff --git a/libs/cppdap/src/io.cpp b/libs/cppdap/src/io.cpp
+index 3ee972e..b4133e5 100644
+--- a/libs/cppdap/src/io.cpp
++++ b/libs/cppdap/src/io.cpp
+@@ -21,6 +21,7 @@
+ #include <cstring>  // strlen
+ #include <deque>
+ #include <mutex>
++#include <string>
+ 
+ namespace {
+ 
+diff --git a/src/SHADERed/Engine/AudioPlayer.h b/src/SHADERed/Engine/AudioPlayer.h
+index 7085699..7512d5d 100644
+--- a/src/SHADERed/Engine/AudioPlayer.h
++++ b/src/SHADERed/Engine/AudioPlayer.h
+@@ -2,6 +2,7 @@
+ #include <misc/miniaudio.h>
+ #include <string>
+ #include <string.h>
++#include <cstdint>
+ 
+ namespace ed {
+ 	namespace eng {
+-- 
+2.48.1
+
