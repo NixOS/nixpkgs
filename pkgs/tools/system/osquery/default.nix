@@ -105,6 +105,7 @@ stdenvNoCC.mkDerivation rec {
       znewman01
       lewo
       squalus
+      lesuisse
     ];
   };
 }
