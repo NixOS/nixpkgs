@@ -6,6 +6,7 @@
   openssl,
   setuptools,
   cryptography,
+  typing-extensions,
   pytestCheckHook,
   pretend,
   sphinxHook,
@@ -15,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "pyopenssl";
-  version = "24.3.0";
+  version = "25.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyca";
     repo = "pyopenssl";
     tag = version;
-    hash = "sha256-otK7Y7Kb/l3QOErhAcuDHB/CKG9l1vH2BTnOieAWNc0=";
+    hash = "sha256-CQHLEtNb2jX7WNAYlmv5EIgepetMl81Xl3AJuRqOHow=";
   };
 
   outputs = [
@@ -41,7 +42,10 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [ "cryptography" ];
 
-  dependencies = [ cryptography ];
+  dependencies = [
+    cryptography
+    typing-extensions
+  ];
 
   nativeCheckInputs = [
     pretend

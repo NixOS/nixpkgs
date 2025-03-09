@@ -26,7 +26,7 @@
 
 buildPythonPackage rec {
   pname = "inline-snapshot";
-  version = "0.19.3";
+  version = "0.20.5";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -35,7 +35,7 @@ buildPythonPackage rec {
     owner = "15r10nk";
     repo = "inline-snapshot";
     tag = version;
-    hash = "sha256-bgzDjlcZOxS3OCv8xj7qKllaZcfJaxySXOu7OwY2EIQ=";
+    hash = "sha256-hIOavNdD2SaYuvG1rdlIkVRALjaJDfXkanrlF9TcPo0=";
   };
 
   build-system = [ hatchling ];

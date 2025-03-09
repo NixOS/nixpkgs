@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "django-cors-headers";
-  version = "4.6.0";
+  version = "4.7.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "adamchainz";
     repo = "django-cors-headers";
     tag = version;
-    hash = "sha256-Dvsuj+U1YFC9jT5qkh2h1aL71JkRsAyXW4rxhLzEbOw=";
+    hash = "sha256-xKdHUGsl9H724IQn/AFtdumB/TH8m2pUUXs263gYsEg=";
   };
 
   build-system = [ setuptools ];
