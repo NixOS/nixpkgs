@@ -24,11 +24,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "gnumeric";
-  version = "1.12.57";
+  version = "1.12.59";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "r/ULG2I0DCT8z0U9X60+f7c/S8SzT340tsPS2a9qHk8=";
+    sha256 = "yzdQsXbWQflCPfchuDFljIKVV1UviIf+34pT2Qfs61E=";
   };
 
   configureFlags = [ "--disable-component" ];
