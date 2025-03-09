@@ -41,6 +41,8 @@
   xorgserver,
   xxHash,
   clang,
+  withHtml ? true,
+  xpra-html5,
 }@args:
 
 let
@@ -240,16 +242,20 @@ buildPythonApplication rec {
       )
     '';
 
-  postInstall = ''
-    # append module paths to xorg.conf
-    cat ${xorgModulePaths} >> $out/etc/xpra/xorg.conf
-    cat ${xorgModulePaths} >> $out/etc/xpra/xorg-uinput.conf
+  postInstall =
+    ''
+      # append module paths to xorg.conf
+      cat ${xorgModulePaths} >> $out/etc/xpra/xorg.conf
+      cat ${xorgModulePaths} >> $out/etc/xpra/xorg-uinput.conf
 
-    # make application icon visible to desktop environemnts
-    icon_dir="$out/share/icons/hicolor/64x64/apps"
-    mkdir -p "$icon_dir"
-    ln -sr "$out/share/icons/xpra.png" "$icon_dir"
-  '';
+      # make application icon visible to desktop environemnts
+      icon_dir="$out/share/icons/hicolor/64x64/apps"
+      mkdir -p "$icon_dir"
+      ln -sr "$out/share/icons/xpra.png" "$icon_dir"
+    ''
+    + lib.optionalString withHtml ''
+      ln -s ${xpra-html5}/share/xpra/www $out/share/xpra/www;
+    '';
 
   doCheck = false;
 
