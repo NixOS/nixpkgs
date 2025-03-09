@@ -17,12 +17,7 @@ buildLua rec {
     hash = "sha256-H8WIKfQnle27eiwnz2sxC8D1EwQplY4N7Qg5+c1e/uU=";
   };
 
-  passthru.extraWrapperArgs = [
-    "--prefix"
-    "PATH"
-    ":"
-    (lib.makeBinPath [ libnotify ])
-  ];
+  runtime-dependencies = [ libnotify ];
 
   passthru.updateScript = unstableGitUpdater { };
 
