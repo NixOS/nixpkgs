@@ -6,13 +6,13 @@
   libmhash,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "2.6.8";
   pname = "mcrypt";
 
   src = fetchurl {
-    url = "mirror://sourceforge/mcrypt/MCrypt/${version}/mcrypt-${version}.tar.gz";
-    sha256 = "5145aa844e54cca89ddab6fb7dd9e5952811d8d787c4f4bf27eb261e6c182098";
+    url = "mirror://sourceforge/mcrypt/MCrypt/${finalAttrs.version}/mcrypt-${finalAttrs.version}.tar.gz";
+    hash = "sha256-UUWqhE5UzKid2rb7fdnllSgR2NeHxPS/J+smHmwYIJg=";
   };
 
   patches = [
@@ -38,8 +38,8 @@ stdenv.mkDerivation rec {
       ever-wider range of algorithms and modes.
     '';
     homepage = "https://mcrypt.sourceforge.net";
-    license = lib.licenses.gpl3Only;
+    license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.qknight ];
   };
-}
+})
