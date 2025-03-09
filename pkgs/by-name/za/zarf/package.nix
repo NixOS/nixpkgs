@@ -1,46 +1,51 @@
 {
   lib,
-  buildGoModule,
-  fetchFromGitHub,
-  installShellFiles,
   stdenv,
+  fetchurl,
+  installShellFiles,
 }:
 
-buildGoModule rec {
-  pname = "zarf";
-  version = "0.41.0";
+let
+  version = "0.49.1";
 
-  src = fetchFromGitHub {
-    owner = "defenseunicorns";
-    repo = "zarf";
-    rev = "v${version}";
-    hash = "sha256-rY9xWqJ+2Yfs6VRHTF89LmuEruAavDI7MgBm4UFEuBs=";
+  # Define the architecture-specific URLs
+  urls = {
+    "x86_64-linux" =
+      "https://github.com/zarf-dev/zarf/releases/download/v${version}/zarf_v${version}_Linux_amd64";
+    "aarch64-linux" =
+      "https://github.com/zarf-dev/zarf/releases/download/v${version}/zarf_v${version}_Linux_arm64";
+    "x86_64-darwin" =
+      "https://github.com/zarf-dev/zarf/releases/download/v${version}/zarf_v${version}_Darwin_amd64";
+    "aarch64-darwin" =
+      "https://github.com/zarf-dev/zarf/releases/download/v${version}/zarf_v${version}_Darwin_arm64";
   };
 
-  vendorHash = "sha256-Cz+w0tOEamCxf61hvQ03X/kXPY+qrmdBN8s26lr/wZ8=";
-  proxyVendor = true;
+  hashes = {
+    "x86_64-linux" = "1ss2kj07s3a6m3p6jisp19b75x40xwbnapvldx4q5z3k98cwhxwf";
+    "aarch64-linux" = "08i751ww98vq627gyski0frrg0jp9jl489s0kilpll3wrfz4av9v";
+    "x86_64-darwin" = "02ap5kh5slbvymd9a2rmg8iamih4vpkjbwjlcd0wwc101dnv5jwl";
+    "aarch64-darwin" = "0821z5vgi8ficf29dzgqw6jaxsjq5w7xdjh8adi306ikc406lgr0";
+  };
+
+  platform = stdenv.hostPlatform.system;
+  src = fetchurl {
+    url = urls.${platform} or (throw "Unsupported platform: ${platform}");
+    sha256 = hashes.${platform} or (throw "Missing hash for platform: ${platform}");
+  };
+
+in
+stdenv.mkDerivation {
+  pname = "zarf";
+  inherit version src;
 
   nativeBuildInputs = [ installShellFiles ];
 
-  preBuild = ''
-    mkdir -p build/ui
-    touch build/ui/index.html
+  unpackPhase = "true";
+
+  installPhase = ''
+    mkdir -p $out/bin
+    install -m755 $src $out/bin/zarf
   '';
-
-  doCheck = false;
-
-  ldflags = [
-    "-s"
-    "-w"
-    "-X"
-    "github.com/defenseunicorns/zarf/src/config.CLIVersion=${src.rev}"
-    "-X"
-    "k8s.io/component-base/version.gitVersion=v0.0.0+zarf${src.rev}"
-    "-X"
-    "k8s.io/component-base/version.gitCommit=${src.rev}"
-    "-X"
-    "k8s.io/component-base/version.buildDate=1970-01-01T00:00:00Z"
-  ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     export K9S_LOGS_DIR=$(mktemp -d)
@@ -52,9 +57,12 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "DevSecOps for Air Gap & Limited-Connection Systems. https://zarf.dev";
-    mainProgram = "zarf";
-    homepage = "https://github.com/defenseunicorns/zarf.git";
+    homepage = "https://github.com/zarf-dev/zarf";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ragingpastry ];
+    maintainers = with maintainers; [
+      ragingpastry
+      brandtkeller
+    ];
+    platforms = builtins.attrNames urls;
   };
 }
