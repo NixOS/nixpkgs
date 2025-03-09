@@ -875,6 +875,7 @@
   ./services/misc/rkvm.nix
   ./services/misc/rshim.nix
   ./services/misc/safeeyes.nix
+  ./services/misc/samsung-unified-linux-driver.nix
   ./services/misc/sdrplay.nix
   ./services/misc/servarr/lidarr.nix
   ./services/misc/servarr/prowlarr.nix
