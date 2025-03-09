@@ -7,7 +7,6 @@
   nodes.machine =
     { pkgs, ... }:
     {
-      environment.systemPackages = [ pkgs.openbao ];
       environment.variables.VAULT_ADDR = "http://127.0.0.1:8200";
       services.openbao.enable = true;
     };

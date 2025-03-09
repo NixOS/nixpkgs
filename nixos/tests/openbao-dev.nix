@@ -9,7 +9,6 @@
   nodes.machine =
     { pkgs, config, ... }:
     {
-      environment.systemPackages = [ pkgs.openbao ];
       environment.variables.VAULT_ADDR = "http://127.0.0.1:8200";
       environment.variables.VAULT_TOKEN = "phony-secret";
 
