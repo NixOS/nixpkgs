@@ -1934,10 +1934,11 @@ self: super: {
 
   # 2023-04-09: haskell-ci needs Cabal-syntax 3.10
   # 2024-03-21: pins specific version of ShellCheck
-  haskell-ci = super.haskell-ci.overrideScope (self: super: {
+  # 2025-03-10: jailbreak, https://github.com/haskell-CI/haskell-ci/issues/771
+  haskell-ci = doJailbreak (super.haskell-ci.overrideScope (self: super: {
     Cabal-syntax = self.Cabal-syntax_3_10_3_0;
     ShellCheck = self.ShellCheck_0_9_0;
-  });
+  }));
 
   # ShellCheck < 0.10.0 needs to be adjusted for changes in fgl >= 5.8
   # https://github.com/koalaman/shellcheck/issues/2677
