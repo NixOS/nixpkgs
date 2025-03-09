@@ -24,7 +24,10 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/bin
-    gcc -lXss -lX11 $src -o $out/bin/x11idle
+
+    cp $src main.c
+    substituteInPlace main.c --replace-fail "main()" "int main()"
+    gcc -lXss -lX11 main.c -o $out/bin/x11idle
   '';
 
   meta = with lib; {
