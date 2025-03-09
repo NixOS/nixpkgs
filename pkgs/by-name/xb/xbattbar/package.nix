@@ -4,10 +4,9 @@
   fetchgit,
   libX11,
   perl,
-  ...
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xbattbar";
   version = "1.4.9";
 
@@ -15,8 +14,8 @@ stdenv.mkDerivation rec {
   # repository.
   src = fetchgit {
     url = "https://salsa.debian.org/debian/xbattbar.git";
-    rev = "upstream/${version}";
-    sha256 = "10w7gs0l4hzhdn38yqyr3az7n4ncmfnd6hhhly6lk5dg7k441ck6";
+    rev = "upstream/${finalAttrs.version}";
+    hash = "sha256-ZrJAyDyvlUmNpxBC06yrzBJ7vhrZY4+GbfBDQoF+h4M=";
   };
 
   buildInputs = [ libX11 ];
@@ -41,19 +40,23 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    mkdir -p $out/bin
-    mkdir -p $out/libexec
+    runHook preInstall
+
+    mkdir -p $out/{bin,libexec}
+
     install -m 0755 xbattbar $out/bin/
     install -m 0755 xbattbar-check-acpi $out/libexec/
     install -m 0755 xbattbar-check-sys $out/libexec/
+
+    runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Display battery status in X11";
     homepage = "https://salsa.debian.org/debian/xbattbar";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.q3k ];
+    license = with lib; licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ q3k ];
     mainProgram = "xbattbar";
   };
-}
+})
