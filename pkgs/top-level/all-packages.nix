@@ -1105,6 +1105,14 @@ with pkgs;
     withNtfs = true;
   };
 
+  ventoy-full-gtk = ventoy-full.override {
+    defaultGuiType = "gtk3";
+  };
+
+  ventoy-full-qt = ventoy-full.override {
+    defaultGuiType = "qt5";
+  };
+
   vprof = with python3Packages; toPythonApplication vprof;
 
   vrc-get = callPackage ../tools/misc/vrc-get { };
