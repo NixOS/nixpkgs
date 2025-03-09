@@ -638,6 +638,7 @@ let
       clevisTest ? false,
       clevisFallbackTest ? false,
       disableFileSystems ? false,
+      selectNixPackage ? pkgs: pkgs.nixStable,
     }:
     let
       isEfi = bootLoader == "systemd-boot" || (bootLoader == "grub" && grubUseEfi);
@@ -701,6 +702,7 @@ let
             virtualisation.rootDevice = "/dev/vdb";
 
             hardware.enableAllFirmware = mkForce false;
+            nix.package = selectNixPackage pkgs;
 
             # The test cannot access the network, so any packages we
             # need must be included in the VM.
@@ -1101,6 +1103,9 @@ in
   # The (almost) simplest partitioning scheme: a swap partition and
   # one big filesystem partition.
   simple = makeInstallerTest "simple" simple-test-config;
+  lix-simple = makeInstallerTest "simple" simple-test-config // {
+    selectNixPackage = pkgs: pkgs.lix;
+  };
 
   switchToFlake = makeInstallerTest "switch-to-flake" simple-test-config-flake;
 
