@@ -5,7 +5,7 @@
   lib,
   nix-update-script,
 }:
-buildLua (finalAttrs: {
+buildLua {
   pname = "twitch-chat";
   version = "0-unstable-2024-06-23";
 
@@ -34,4 +34,4 @@ buildLua (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.naho ];
   };
-})
+}
