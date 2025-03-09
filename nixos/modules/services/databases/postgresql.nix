@@ -439,7 +439,8 @@ in
             ]);
             options = {
               shared_preload_libraries = mkOption {
-                type = nullOr (coercedTo (listOf str) (concatStringsSep ", ") str);
+                type = nullOr (listOf str);
+                apply = x: if lib.isList x then concatStringsSep "," x else x;
                 default = null;
                 example = literalExpression ''[ "auto_explain" "anon" ]'';
                 description = ''
