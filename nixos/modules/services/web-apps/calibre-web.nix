@@ -3,7 +3,7 @@
 let
   cfg = config.services.calibre-web;
 
-  inherit (lib) concatStringsSep mkEnableOption mkIf mkOption optional optionalString types;
+  inherit (lib) concatStringsSep mkEnableOption mkIf mkOption optional optionals optionalString types;
 in
 {
   options = {
@@ -120,8 +120,10 @@ in
           "config_reverse_proxy_login_header_name = '${cfg.options.reverseProxyAuth.header}'"
         ]
         ++ optional (cfg.options.calibreLibrary != null) "config_calibre_dir = '${cfg.options.calibreLibrary}'"
-        ++ optional cfg.options.enableBookConversion "config_converterpath = '${pkgs.calibre}/bin/ebook-convert'"
-        ++ optional cfg.options.enableBookConversion "config_binariesdir = '${pkgs.calibre}/bin/'"
+        ++ optionals cfg.options.enableBookConversion [
+          "config_converterpath = '${pkgs.calibre}/bin/ebook-convert'"
+          "config_binariesdir = '${pkgs.calibre}/bin/'"
+        ]
         ++ optional cfg.options.enableKepubify "config_kepubifypath = '${pkgs.kepubify}/bin/kepubify'"
       );
     in
