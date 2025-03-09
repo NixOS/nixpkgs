@@ -1,0 +1,72 @@
+diff --git a/ACKNOWLEDGMENTS.md b/ACKNOWLEDGMENTS.md
+index aed1048..bfb8b17 100644
+--- a/ACKNOWLEDGMENTS.md
++++ b/ACKNOWLEDGMENTS.md
+@@ -745,7 +745,7 @@ Signal Desktop makes use of the following open source projects.
+     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+     SOFTWARE.
+ 
+-## emoji-datasource-apple
++## emoji-datasource-google
+ 
+     The MIT License (MIT)
+ 
+diff --git a/package.json b/package.json
+index 3a6ac26..a2c17c8 100644
+--- a/package.json
++++ b/package.json
+@@ -130,7 +130,7 @@
+     "dashdash": "2.0.0",
+     "direction": "1.0.4",
+     "emoji-datasource": "15.1.2",
+-    "emoji-datasource-apple": "15.1.2",
++    "emoji-datasource-google": "15.1.2",
+     "emoji-regex": "10.4.0",
+     "encoding": "0.1.13",
+     "fabric": "4.6.0",
+diff --git a/pnpm-lock.yaml b/pnpm-lock.yaml
+index ba2f205..8d05e45 100644
+--- a/pnpm-lock.yaml
++++ b/pnpm-lock.yaml
+@@ -169,7 +169,7 @@ importers:
+       emoji-datasource:
+         specifier: 15.1.2
+         version: 15.1.2
+-      emoji-datasource-apple:
++      emoji-datasource-google:
+         specifier: 15.1.2
+         version: 15.1.2
+       emoji-regex:
+@@ -4790,8 +4790,8 @@ packages:
+     resolution: {integrity: sha512-DeWwawk6r5yR9jFgnDKYt4sLS0LmHJJi3ZOnb5/JdbYwj3nW+FxQnHIjhBKz8YLC7oRNPVM9NQ47I3CVx34eqQ==}
+     engines: {node: '>=12'}
+ 
+-  emoji-datasource-apple@15.1.2:
+-    resolution: {integrity: sha512-32UZTK36x4DlvgD1smkmBlKmmJH7qUr5Qut4U/on2uQLGqNXGbZiheq6/LEA8xRQEUrmNrGEy25wpEI6wvYmTg==}
++  emoji-datasource-google@15.1.2:
++    resolution: {integrity: sha512-RzBMQtclTnSDgjf/QbcNAkgZmA7al3TSnQxKJvZNwdDjOOlYdzBSmkvGYP9ZzHpBS4HBQ8IOQDsueV1YCA64LA==}
+ 
+   emoji-datasource@15.1.2:
+     resolution: {integrity: sha512-tXAqGsrDVhgCRpFePtaD9P4Z8Ro2SUQSL/4MIJBG0SxqQJaMslEbin8J53OaFwEBu6e7JxFaIF6s4mw9+8acAQ==}
+@@ -14929,7 +14929,7 @@ snapshots:
+ 
+   emittery@0.13.1: {}
+ 
+-  emoji-datasource-apple@15.1.2: {}
++  emoji-datasource-google@15.1.2: {}
+ 
+   emoji-datasource@15.1.2: {}
+ 
+diff --git a/ts/components/emoji/lib.ts b/ts/components/emoji/lib.ts
+index 9753017..c8e370b 100644
+--- a/ts/components/emoji/lib.ts
++++ b/ts/components/emoji/lib.ts
+@@ -102,7 +102,7 @@ const ROOT_PATH = get(
+ );
+ 
+ const makeImagePath = (src: string) => {
+-  return `${ROOT_PATH}node_modules/emoji-datasource-apple/img/apple/64/${src}`;
++  return `${ROOT_PATH}node_modules/emoji-datasource-google/img/google/64/${src}`;
+ };
+ 
+ const imageQueue = new PQueue({
