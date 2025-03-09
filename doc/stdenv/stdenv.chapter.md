@@ -1109,7 +1109,7 @@ They cannot be overridden without rebuilding the package.
 
 If dependencies should be resolved at runtime, use `--suffix` to append fallback values to `PATH`.
 
-There’s many more kinds of arguments, they are documented in `nixpkgs/pkgs/build-support/setup-hooks/make-wrapper.sh` for the `makeWrapper` implementation and in `nixpkgs/pkgs/build-support/setup-hooks/make-binary-wrapper/make-binary-wrapper.sh` for the `makeBinaryWrapper` implementation.
+There’s many more kinds of arguments, they are documented in `nixpkgs/pkgs/build-support/setup-hooks/make-wrapper.sh` for the `makeWrapper` implementation and in `nixpkgs/pkgs/by-name/ma/makeBinaryWrapper/make-binary-wrapper.sh` for the `makeBinaryWrapper` implementation.
 
 `wrapProgram` is a convenience function you probably want to use most of the time, implemented by both `makeWrapper` and `makeBinaryWrapper`.
 
