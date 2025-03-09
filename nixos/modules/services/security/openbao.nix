@@ -71,7 +71,7 @@ in
         type = lib.types.nullOr lib.types.str;
         default = null;
         description = ''
-          Initial root token. This only applies when {option}`services.openbao.dev` is true
+          Initial root token. This requires {option}`services.openbao.dev` to be set to true
         '';
       };
 
@@ -205,6 +205,10 @@ in
           && (cfg.storagePath != null -> (cfg.storageBackend == "file" || cfg.storageBackend == "raft"))
         );
         message = ''You must set services.openbao.storagePath only when using the "file" or "raft" backend'';
+      }
+      {
+        assertion = cfg.dev || cfg.devRootTokenID == null;
+        message = "If devRootTokenID is set then dev must also be set";
       }
     ];
 
