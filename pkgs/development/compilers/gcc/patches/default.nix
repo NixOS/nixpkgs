@@ -137,6 +137,18 @@ in
   })
 ]
 
+## mlibc
+++ optionals (stdenv.targetPlatform.isMlibc && atLeast14) [
+  (fetchpatch {
+    url = "https://github.com/managarm/gcc/commit/092cb31af8ed12dbecc02327444f030a7c40c344.diff";
+    hash = "sha256-Ix95v0UxC73tfW2UliWiRgS0wC1wVUo5waM38qFlRFM=";
+  })
+  (fetchpatch {
+    url = "https://github.com/managarm/gcc/commit/b5cdfff8afc4a668e65541eec5b512d080116a43.diff";
+    hash = "sha256-0xbw/vRbUvsIIhXM8iyAxm2FWXDnYXblAJ1gFEgeOPg=";
+  })
+]
+
 ## Darwin
 
 # Fixes detection of Darwin on x86_64-darwin. Otherwise, GCC uses a deployment target of 10.5, which crashes ld64.
