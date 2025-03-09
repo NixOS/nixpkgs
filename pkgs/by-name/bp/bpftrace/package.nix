@@ -8,6 +8,7 @@
   libbpf,
   libbfd,
   libopcodes,
+  libpcap,
   glibc,
   cereal,
   asciidoctor,
@@ -16,7 +17,6 @@
   flex,
   bison,
   util-linux,
-  fetchpatch,
   nixosTests,
 }:
 
@@ -39,6 +39,7 @@ stdenv.mkDerivation rec {
     libbpf
     libbfd
     libopcodes
+    libpcap
     cereal
     asciidoctor
   ];
