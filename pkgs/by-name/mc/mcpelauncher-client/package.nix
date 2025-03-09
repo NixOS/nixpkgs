@@ -109,6 +109,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       aleksana
       morxemplum
+      phanirithvij
     ];
     mainProgram = "mcpelauncher-client";
     platforms = lib.platforms.unix;
