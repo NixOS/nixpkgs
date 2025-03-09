@@ -30,30 +30,19 @@
       # systemd.services.openbao.unitConfig.RequiresMountsFor = "/run/keys/";
 
       services.postgresql.enable = true;
-      services.postgresql.initialScript = pkgs.writeText "init.psql" ''
-        CREATE USER openbaouser WITH ENCRYPTED PASSWORD 'thisisthepass';
-        GRANT CONNECT ON DATABASE postgres TO openbaouser;
-
-        -- https://www.openbaoproject.io/docs/configuration/storage/postgresql
-        CREATE TABLE openbao_kv_store (
-          parent_path TEXT COLLATE "C" NOT NULL,
-          path        TEXT COLLATE "C",
-          key         TEXT COLLATE "C",
-          value       BYTEA,
-          CONSTRAINT pkey PRIMARY KEY (path, key)
-        );
-        CREATE INDEX parent_path_idx ON openbao_kv_store (parent_path);
-        ALTER TABLE openbao_kv_store OWNER TO openbaouser;
-
-        GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO openbaouser;
-        GRANT CREATE ON SCHEMA public TO openbaouser;
-      '';
+      services.postgresql.ensureDatabases = [ "openbao" ];
+      services.postgresql.ensureUsers = [
+        {
+          name = "openbao";
+          ensureDBOwnership = true;
+        }
+      ];
     };
 
   testScript = ''
     secretConfig = """
         storage "postgresql" {
-          connection_url = "postgres://openbaouser:thisisthepass@localhost/postgres?sslmode=disable"
+          connection_url = "postgres:///openbao?sslmode=disable"
         }
         """
 
