@@ -18,7 +18,12 @@ let
           owner = "Eisa01";
           repo = "mpv-scripts";
           rev = "48d68283cea47ff8e904decc9003b3abc3e2123e";
-          hash = "sha256-95CAKjBRELX2f7oWSHFWJnI0mikAoxhfUphe9k51Qf4=";
+          hash = "sha256-edJfotlC5T8asqPIygR67BEWjP4i54Wx54StLfjpc48=";
+          # avoid downloading screenshots and videos
+          sparseCheckout = [
+            "scripts/"
+            "script-opts/"
+          ];
         };
         passthru.updateScript = unstableGitUpdater { };
 
