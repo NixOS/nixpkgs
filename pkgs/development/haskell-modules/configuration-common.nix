@@ -536,10 +536,14 @@ self: super: {
   # Tests require older versions of tasty.
   hzk = dontCheck super.hzk;
 
-  # Test suite doesn't compile with 9.6, 9.8
+  # Test suite doesn't compile with 9.6
   # https://github.com/sebastiaanvisser/fclabels/issues/45
+  # Doesn't compile with 9.8 at all
   # https://github.com/sebastiaanvisser/fclabels/issues/46
-  fclabels = dontCheck super.fclabels;
+  fclabels =
+    if lib.versionOlder self.ghc.version "9.8"
+    then dontCheck super.fclabels
+    else dontDistribute (markBroken super.fclabels);
 
   # Tests require a Kafka broker running locally
   haskakafka = dontCheck super.haskakafka;

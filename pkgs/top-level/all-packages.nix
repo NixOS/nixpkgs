@@ -6141,9 +6141,10 @@ with pkgs;
   spicedb-zed = callPackage ../servers/spicedb/zed.nix { };
 
   tamarin-prover =
-    (haskellPackages.callPackage ../applications/science/logic/tamarin-prover {
-      # NOTE: do not use the haskell packages 'graphviz' and 'maude'
-      inherit maude which;
+    (callPackage ../applications/science/logic/tamarin-prover {
+      # 2025-03-07: dependency fclabels doesn't compile with GHC >= 9.8
+      # https://github.com/sebastiaanvisser/fclabels/issues/46
+      haskellPackages = haskell.packages.ghc96;
       graphviz = graphviz-nox;
     });
 
