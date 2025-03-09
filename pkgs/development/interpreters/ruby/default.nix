@@ -327,12 +327,12 @@ let
               mkdir -p $out/nix-support
               cat > $out/nix-support/setup-hook <<EOF
               addGemPath() {
-                addToSearchPath GEM_PATH \$1/${finalAttrs.passthru.gemPath}
+                appendToSearchPath GEM_PATH \$1/${finalAttrs.passthru.gemPath}
               }
               addRubyLibPath() {
-                addToSearchPath RUBYLIB \$1/lib/ruby/site_ruby
-                addToSearchPath RUBYLIB \$1/lib/ruby/site_ruby/${ver.libDir}
-                addToSearchPath RUBYLIB \$1/lib/ruby/site_ruby/${ver.libDir}/${stdenv.hostPlatform.system}
+                appendToSearchPath RUBYLIB \$1/lib/ruby/site_ruby
+                appendToSearchPath RUBYLIB \$1/lib/ruby/site_ruby/${ver.libDir}
+                appendToSearchPath RUBYLIB \$1/lib/ruby/site_ruby/${ver.libDir}/${stdenv.hostPlatform.system}
               }
 
               addEnvHooks "$hostOffset" addGemPath

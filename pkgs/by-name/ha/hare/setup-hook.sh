@@ -3,14 +3,14 @@
 addHarepath() {
     local -r thirdparty="${1-}/src/hare/third-party"
     if [[ -d "$thirdparty" ]]; then
-        addToSearchPath HAREPATH "$thirdparty"
+        appendToSearchPath HAREPATH "$thirdparty"
     fi
 }
 
 # Hare's stdlib should come after its third party libs, since the latter may
 # expand or shadow the former.
 readonly hareSetStdlibPhase='
-addToSearchPath HAREPATH "@hare_stdlib@"
+appendToSearchPath HAREPATH "@hare_stdlib@"
 '
 readonly hareInfoPhase='
 echoCmd "HARECACHE" "$HARECACHE"

@@ -174,7 +174,7 @@ in
             ) [ ] pkgConfigPackages
           )
         }; do
-          addToSearchPath FLUTTER_PKG_CONFIG_PATH "$path"
+          appendToSearchPath FLUTTER_PKG_CONFIG_PATH "$path"
         done
 
         mkdir -p $out/bin

@@ -80,7 +80,7 @@ minimal.overrideAttrs (
       */
       ''
         for lib_path in ${libPaths}; do
-            addToSearchPath ${libPathsVar} $lib_path
+            appendToSearchPath ${libPathsVar} $lib_path
         done
       ''
       # Fixes Fontconfig errors

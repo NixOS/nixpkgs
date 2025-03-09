@@ -12,7 +12,7 @@ dartFixupHook() {
     # which is not what application authors expect.
     APPLICATION_LD_LIBRARY_PATH=""
     for runtimeDependency in "${runtimeDependencies[@]}"; do
-      addToSearchPath APPLICATION_LD_LIBRARY_PATH "${runtimeDependency}/lib"
+      appendToSearchPath APPLICATION_LD_LIBRARY_PATH "${runtimeDependency}/lib"
     done
     if [[ ! -z "$APPLICATION_LD_LIBRARY_PATH" ]]; then
         wrapProgramArgs+=(--suffix LD_LIBRARY_PATH : \"$APPLICATION_LD_LIBRARY_PATH\")

@@ -23,9 +23,9 @@ appendToVar preInstallPhases addGnustepInstallFlags
 addGNUstepEnvVars() {
     local filename
 
-    gsAddToSearchPath() {
+    gsAppendToSearchPath() {
         if [[ -d "$2" && "${!1-}" != *"$2"* ]]; then
-            addToSearchPath "$1" "$2"
+            appendToSearchPath "$1" "$2"
         fi
     }
 
@@ -48,17 +48,17 @@ addGNUstepEnvVars() {
 
     export NIX_GNUSTEP_MAKEFILES_ADDITIONAL
 
-    gsAddToSearchPath NIX_GNUSTEP_SYSTEM_APPS "$1/lib/GNUstep/Applications"
-    gsAddToSearchPath NIX_GNUSTEP_SYSTEM_ADMIN_APPS "$1/lib/GNUstep/Applications"
-    gsAddToSearchPath NIX_GNUSTEP_SYSTEM_WEB_APPS "$1/lib/GNUstep/WebApplications"
-    gsAddToSearchPath NIX_GNUSTEP_SYSTEM_TOOLS "$1/bin"
-    gsAddToSearchPath NIX_GNUSTEP_SYSTEM_ADMIN_TOOLS "$1/sbin"
-    gsAddToSearchPath NIX_GNUSTEP_SYSTEM_LIBRARY "$1/lib/GNUstep"
+    gsAppendToSearchPath NIX_GNUSTEP_SYSTEM_APPS "$1/lib/GNUstep/Applications"
+    gsAppendToSearchPath NIX_GNUSTEP_SYSTEM_ADMIN_APPS "$1/lib/GNUstep/Applications"
+    gsAppendToSearchPath NIX_GNUSTEP_SYSTEM_WEB_APPS "$1/lib/GNUstep/WebApplications"
+    gsAppendToSearchPath NIX_GNUSTEP_SYSTEM_TOOLS "$1/bin"
+    gsAppendToSearchPath NIX_GNUSTEP_SYSTEM_ADMIN_TOOLS "$1/sbin"
+    gsAppendToSearchPath NIX_GNUSTEP_SYSTEM_LIBRARY "$1/lib/GNUstep"
     gsAddToIncludeSearchPath NIX_GNUSTEP_SYSTEM_HEADERS "$1/include"
-    gsAddToSearchPath NIX_GNUSTEP_SYSTEM_LIBRARIES "$1/lib"
-    gsAddToSearchPath NIX_GNUSTEP_SYSTEM_DOC "$1/share/GNUstep/Documentation"
-    gsAddToSearchPath NIX_GNUSTEP_SYSTEM_DOC_MAN "$1/share/man"
-    gsAddToSearchPath NIX_GNUSTEP_SYSTEM_DOC_INFO "$1/share/info"
+    gsAppendToSearchPath NIX_GNUSTEP_SYSTEM_LIBRARIES "$1/lib"
+    gsAppendToSearchPath NIX_GNUSTEP_SYSTEM_DOC "$1/share/GNUstep/Documentation"
+    gsAppendToSearchPath NIX_GNUSTEP_SYSTEM_DOC_MAN "$1/share/man"
+    gsAppendToSearchPath NIX_GNUSTEP_SYSTEM_DOC_INFO "$1/share/info"
 }
 addEnvHooks "$targetOffset" addGNUstepEnvVars
 

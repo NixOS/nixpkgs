@@ -340,18 +340,22 @@ trap "exitHandler" EXIT
 # Helper functions.
 
 
-addToSearchPathWithCustomDelimiter() {
-    local delimiter="$1"
-    local varName="$2"
-    local dir="$3"
-    if [[ -d "$dir" && "${!varName:+${delimiter}${!varName}${delimiter}}" \
+appendToSearchPathWithCustomDelimiter() {
+    if (($# != 3)); then
+        nixErrorLog "wrong number of arguments (expected 3 but got $#)"
+        exit 1
+    fi
+    local -r delimiter="$1"
+    local -nr varName="$2"
+    local -r dir="$3"
+    if [[ -d "$dir" && "${varName:+${delimiter}${varName}${delimiter}}" \
           != *"${delimiter}${dir}${delimiter}"* ]]; then
-        export "${varName}=${!varName:+${!varName}${delimiter}}${dir}"
+        export "${!varName}=${varName:+${varName}${delimiter}}${dir}"
     fi
 }
 
-addToSearchPath() {
-    addToSearchPathWithCustomDelimiter ":" "$@"
+appendToSearchPath() {
+    appendToSearchPathWithCustomDelimiter ":" "$@"
 }
 
 # Prepend elements to variable "$1", which may come from an attr.
@@ -607,13 +611,13 @@ PATH=
 HOST_PATH=
 for i in $initialPath; do
     if [ "$i" = / ]; then i=; fi
-    addToSearchPath PATH "$i/bin"
+    appendToSearchPath PATH "$i/bin"
 
     # For backward compatibility, we add initial path to HOST_PATH so
     # it can be used in auto patch-shebangs. Unfortunately this will
     # not work with cross compilation.
     if [ -z "${strictDeps-}" ]; then
-        addToSearchPath HOST_PATH "$i/bin"
+        appendToSearchPath HOST_PATH "$i/bin"
     fi
 done
 
@@ -858,15 +862,15 @@ activatePackage() {
     #
     # TODO(@Ericson2314): Don't special-case native compilation
     if [[ -z "${strictDeps-}" || "$hostOffset" -le -1 ]]; then
-        addToSearchPath _PATH "$pkg/bin"
+        appendToSearchPath _PATH "$pkg/bin"
     fi
 
     if (( hostOffset <= -1 )); then
-        addToSearchPath _XDG_DATA_DIRS "$pkg/share"
+        appendToSearchPath _XDG_DATA_DIRS "$pkg/share"
     fi
 
     if [[ "$hostOffset" -eq 0 && -d "$pkg/bin" ]]; then
-        addToSearchPath _HOST_PATH "$pkg/bin"
+        appendToSearchPath _HOST_PATH "$pkg/bin"
     fi
 
     if [[ -f "$pkg/nix-support/setup-hook" ]]; then

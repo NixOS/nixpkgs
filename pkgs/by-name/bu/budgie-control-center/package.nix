@@ -153,7 +153,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   preConfigure = ''
     # For ITS rules
-    addToSearchPath "XDG_DATA_DIRS" "${polkit.out}/share"
+    appendToSearchPath "XDG_DATA_DIRS" "${polkit.out}/share"
   '';
 
   postInstall = ''

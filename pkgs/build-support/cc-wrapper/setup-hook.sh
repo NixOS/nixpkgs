@@ -90,17 +90,17 @@ addEnvHooks "$targetOffset" ccWrapper_addCVars
 
 # shellcheck disable=SC2157
 if [ -n "@cc@" ]; then
-    addToSearchPath _PATH @cc@/bin
+    appendToSearchPath _PATH @cc@/bin
 fi
 
 # shellcheck disable=SC2157
 if [ -n "@libc_bin@" ]; then
-    addToSearchPath _PATH @libc_bin@/bin
+    appendToSearchPath _PATH @libc_bin@/bin
 fi
 
 # shellcheck disable=SC2157
 if [ -n "@coreutils_bin@" ]; then
-    addToSearchPath _PATH @coreutils_bin@/bin
+    appendToSearchPath _PATH @coreutils_bin@/bin
 fi
 
 # Export tool environment variables so various build systems use the right ones.

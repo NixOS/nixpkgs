@@ -34,10 +34,10 @@ _addToAsdfPath ()  {
         while read file; do
             case "${file##*.}" in
                 jar) addFileToSearchPath "CLASSPATH" "$file" ;;
-                class) addToSearchPath "CLASSPATH" "${file%/*}" ;;
-                so) addToSearchPath "LD_LIBRARY_PATH" "${file%/*}" ;;
-                dylib) addToSearchPath "DYLD_LIBRARY_PATH" "${file%/*}" ;;
-                asd) addToSearchPath "CL_SOURCE_REGISTRY" "$path//" ;;
+                class) appendToSearchPath "CLASSPATH" "${file%/*}" ;;
+                so) appendToSearchPath "LD_LIBRARY_PATH" "${file%/*}" ;;
+                dylib) appendToSearchPath "DYLD_LIBRARY_PATH" "${file%/*}" ;;
+                asd) appendToSearchPath "CL_SOURCE_REGISTRY" "$path//" ;;
             esac
         done < <(find "$path" -type f,l -name '*.asd' -o -name '*.jar' \
                       -o -name '*.class' -o -name '*.so' -o -name '*.dylib')

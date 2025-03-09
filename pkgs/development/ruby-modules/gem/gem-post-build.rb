@@ -45,9 +45,9 @@ end
 
 # add this gem to the GEM_PATH for dependencies
 File.open("#{out}/nix-support/setup-hook", "a") do |f|
-  f.puts("addToSearchPath GEM_PATH #{gem_home}")
+  f.puts("appendToSearchPath GEM_PATH #{gem_home}")
   spec.require_paths.each do |dir|
-    f.puts("addToSearchPath RUBYLIB #{install_path}/#{dir}")
+    f.puts("appendToSearchPath RUBYLIB #{install_path}/#{dir}")
   end
 end
 

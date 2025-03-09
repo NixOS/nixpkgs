@@ -13,8 +13,8 @@ pkgConfigWrapper_addPkgConfigPath () {
     local role_post
     getHostRoleEnvHook
 
-    addToSearchPath "PKG_CONFIG_PATH${role_post}" "$1/lib/pkgconfig"
-    addToSearchPath "PKG_CONFIG_PATH${role_post}" "$1/share/pkgconfig"
+    appendToSearchPath "PKG_CONFIG_PATH${role_post}" "$1/lib/pkgconfig"
+    appendToSearchPath "PKG_CONFIG_PATH${role_post}" "$1/share/pkgconfig"
 }
 
 # See ../setup-hooks/role.bash

@@ -3,8 +3,8 @@
 # shellcheck disable=SC2164
 
 ecmEnvHook() {
-    addToSearchPath XDG_DATA_DIRS "$1/share"
-    addToSearchPath XDG_CONFIG_DIRS "$1/etc/xdg"
+    appendToSearchPath XDG_DATA_DIRS "$1/share"
+    appendToSearchPath XDG_CONFIG_DIRS "$1/etc/xdg"
 }
 addEnvHooks "$hostOffset" ecmEnvHook
 

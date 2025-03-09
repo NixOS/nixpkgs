@@ -3,8 +3,8 @@ fixupOutputHooks+=(_linkDLLs)
 addEnvHooks "$targetOffset" linkDLLGetFolders
 
 linkDLLGetFolders() {
-    addToSearchPath "LINK_DLL_FOLDERS" "$1/lib"
-    addToSearchPath "LINK_DLL_FOLDERS" "$1/bin"
+    appendToSearchPath "LINK_DLL_FOLDERS" "$1/lib"
+    appendToSearchPath "LINK_DLL_FOLDERS" "$1/bin"
 }
 
 _linkDLLs() {
@@ -46,7 +46,7 @@ linkDLLsInfolder() {
         local DLLPATH=""
         local outName
         for outName in $(getAllOutputNames); do
-            addToSearchPath DLLPATH "${!outName}/bin"
+            appendToSearchPath DLLPATH "${!outName}/bin"
         done
         DLLPATH="$DLLPATH:$LINK_DLL_FOLDERS"
 

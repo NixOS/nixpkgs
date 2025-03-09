@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/nix-support
     cat > $out/nix-support/setup-hook <<EOF
       addGemPath() {
-        addToSearchPath GEM_PATH \$1/${finalAttrs.passthru.gemPath}
+        appendToSearchPath GEM_PATH \$1/${finalAttrs.passthru.gemPath}
       }
 
       addEnvHooks "$hostOffset" addGemPath

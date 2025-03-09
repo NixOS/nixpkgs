@@ -19,7 +19,7 @@ GAUCHE_LOAD_PATH
 '
 
 addToAkkuEnv () {
-    adder="addToSearchPath"
+    adder="appendToSearchPath"
     for env_var in $scheme_vars; do
         $adder $env_var "$1/lib/scheme-libs"
     done
