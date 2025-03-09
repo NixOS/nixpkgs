@@ -16,13 +16,8 @@ buildLua {
     hash = "sha256-uZC7iDYqLUuXnqSLke4j6rLoufc/vFTE6Ehnpu//dxY=";
   };
 
-  scriptPath = "youtube-chat";
-
-  installPhase = ''
-    runHook preInstall
-    install -D -t $out/share/mpv/scripts/youtube-chat main.lua
-    runHook postInstall
-  '';
+  scriptPath = ".";
+  passthru.scriptName = "youtube-chat";
 
   runtime-dependencies = [ yt-dlp ];
 
