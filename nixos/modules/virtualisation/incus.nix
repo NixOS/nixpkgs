@@ -335,6 +335,14 @@ in
           include ${cfg.lxcPackage}/etc/apparmor.d/lxc-containers
         '';
       };
+      includes."abstractions/base" = ''
+        # Allow incusd's various AA profiles to load dynamic libraries from Nix store
+        # https://discuss.linuxcontainers.org/t/creating-new-containers-vms-blocked-by-apparmor-on-nixos/21908/6
+        mr /nix/store/*/lib/*.so*,
+        r ${pkgs.stdenv.cc.libc}/lib/gconv/gconv-modules,
+        r ${pkgs.stdenv.cc.libc}/lib/gconv/gconv-modules.d/,
+        r ${pkgs.stdenv.cc.libc}/lib/gconv/gconv-modules.d/gconv-modules-extra.conf,
+      '';
     };
 
     systemd.services.incus = {
