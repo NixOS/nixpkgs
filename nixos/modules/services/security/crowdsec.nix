@@ -781,44 +781,122 @@ in
         };
       };
 
-      systemd.tmpfiles.rules = (
-        [
-          "d ${stateDir} 0750 ${cfg.user} ${cfg.group} - -"
-          "d ${hubDir} 0750 ${cfg.user} ${cfg.group} - -"
-          "d ${confDir} 0750 ${cfg.user} ${cfg.group} - -"
-          "d ${localScenariosDir} 0750 ${cfg.user} ${cfg.group} - -"
-          "d ${localPostOverflowsDir} 0750 ${cfg.user} ${cfg.group} - -"
-          "d ${localPostOverflowsS01WhitelistDir} 0750 ${cfg.user} ${cfg.group} - -"
-          "d ${parsersDir} 0750 ${cfg.user} ${cfg.group} - -"
-          "d ${localParsersS00RawDir} 0750 ${cfg.user} ${cfg.group} - -"
-          "d ${localParsersS01ParseDir} 0750 ${cfg.user} ${cfg.group} - -"
-          "d ${localParsersS02EnrichDir} 0750 ${cfg.user} ${cfg.group} - -"
-          "d ${localContextsDir} 0750 ${cfg.user} ${cfg.group} - -"
-          "d ${notificationsDir} 0750 ${cfg.user} ${cfg.group} - -"
-          "d ${pluginDir} 0750 ${cfg.user} ${cfg.group} - -"
-        ]
-        ++ (map (
-          file: "L+ ${localScenariosDir}/${builtins.baseNameOf file} - - - - ${file}"
-        ) localScenariosMap)
-        ++ (map (
-          file: "L+ ${localParsersS00RawDir}/${builtins.baseNameOf file} - - - - ${file}"
-        ) localParsersS00RawMap)
-        ++ (map (
-          file: "L+ ${localParsersS01ParseDir}/${builtins.baseNameOf file} - - - - ${file}"
-        ) localParsersS01ParseMap)
-        ++ (map (
-          file: "L+ ${localParsersS02EnrichDir}/${builtins.baseNameOf file} - - - - ${file}"
-        ) localParsersS02EnrichMap)
-        ++ (map (
-          file: "L+ ${localPostOverflowsS01WhitelistDir}/${builtins.baseNameOf file} - - - - ${file}"
-        ) localPostOverflowsS01WhitelistMap)
-        ++ (map (
-          file: "L+ ${localContextsDir}/${builtins.baseNameOf file} - - - - ${file}"
-        ) localContextsMap)
-        ++ (map (
-          file: "L+ ${notificationsDir}/${builtins.baseNameOf file} - - - - ${file}"
-        ) localNotificationsMap)
-      );
+      systemd.tmpfiles.settings = {
+        "10-crowdsec" =
+          builtins.listToAttrs (
+            map
+              (dirName: {
+                inherit cfg;
+                name = lib.strings.normalizePath dirName;
+                value = {
+                  d = {
+                    user = cfg.user;
+                    group = cfg.group;
+                    mode = "0750";
+                  };
+                };
+              })
+              [
+                stateDir
+                hubDir
+                confDir
+                localScenariosDir
+                localPostOverflowsDir
+                localPostOverflowsS01WhitelistDir
+                parsersDir
+                localParsersS00RawDir
+                localParsersS01ParseDir
+                localParsersS02EnrichDir
+                localContextsDir
+                notificationsDir
+                pluginDir
+              ]
+          )
+          // builtins.listToAttrs (
+            map (scenarioFile: {
+              inherit cfg;
+              name = lib.strings.normalizePath "${localScenariosDir}/${builtins.unsafeDiscardStringContext (builtins.baseNameOf scenarioFile)}";
+              value = {
+                link = {
+                  type = "L+";
+                  argument = "${scenarioFile}";
+                };
+              };
+            }) localScenariosMap
+          )
+          // builtins.listToAttrs (
+            map (parser: {
+              inherit cfg;
+              name = lib.strings.normalizePath "${localParsersS00RawDir}/${builtins.unsafeDiscardStringContext (builtins.baseNameOf parser)}";
+              value = {
+                link = {
+                  type = "L+";
+                  argument = "${parser}";
+                };
+              };
+            }) localParsersS00RawMap
+          )
+          // builtins.listToAttrs (
+            map (parser: {
+              inherit cfg;
+              name = lib.strings.normalizePath "${localParsersS01ParseDir}/${builtins.unsafeDiscardStringContext (builtins.baseNameOf parser)}";
+              value = {
+                link = {
+                  type = "L+";
+                  argument = "${parser}";
+                };
+              };
+            }) localParsersS01ParseMap
+          )
+          // builtins.listToAttrs (
+            map (parser: {
+              inherit cfg;
+              name = lib.strings.normalizePath "${localParsersS02EnrichDir}/${builtins.unsafeDiscardStringContext (builtins.baseNameOf parser)}";
+              value = {
+                link = {
+                  type = "L+";
+                  argument = "${parser}";
+                };
+              };
+            }) localParsersS02EnrichMap
+          )
+          // builtins.listToAttrs (
+            map (postoverflow: {
+              inherit cfg;
+              name = lib.strings.normalizePath "${localPostOverflowsS01WhitelistDir}/${builtins.unsafeDiscardStringContext (builtins.baseNameOf postoverflow)}";
+              value = {
+                link = {
+                  type = "L+";
+                  argument = "${postoverflow}";
+                };
+              };
+            }) localPostOverflowsS01WhitelistMap
+          )
+          // builtins.listToAttrs (
+            map (context: {
+              inherit cfg;
+              name = lib.strings.normalizePath "${localContextsDir}/${builtins.unsafeDiscardStringContext (builtins.baseNameOf context)}";
+              value = {
+                link = {
+                  type = "L+";
+                  argument = "${context}";
+                };
+              };
+            }) localContextsMap
+          )
+          // builtins.listToAttrs (
+            map (notification: {
+              inherit cfg;
+              name = lib.strings.normalizePath "${notificationsDir}/${builtins.unsafeDiscardStringContext (builtins.baseNameOf notification)}";
+              value = {
+                link = {
+                  type = "L+";
+                  argument = "${notification}";
+                };
+              };
+            }) localNotificationsMap
+          );
+      };
 
       users.users.${cfg.user} = {
         name = cfg.user;
