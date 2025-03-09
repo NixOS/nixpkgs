@@ -6,17 +6,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "tantivy-go";
-  version = "0.3.1";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "anyproto";
     repo = "tantivy-go";
     tag = "v${version}";
-    hash = "sha256-IlGtyTjOAvmrbgmvy4NelTOgOWopxNta3INq2QcMEqY=";
+    hash = "sha256-iTGIm5C7SMBZv2OcKCQCyEZS/eeMJQ5nFSpuFJbTEXU=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-3+HtZ7SAnvTNXtYlokX/Z9VD1lDw+nh6R/njYOZeGoE=";
+  cargoHash = "sha256-nqoLR6rHEhEU/tbiD1wxGhEKjQzyaTf+Mc5Srm+xDoY=";
 
   cargoPatches = [
     ./add-Cargo.lock.patch
