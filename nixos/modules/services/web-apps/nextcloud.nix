@@ -19,7 +19,7 @@ let
     "opcache.memory_consumption" = "128";
     "opcache.revalidate_freq" = "1";
     "opcache.fast_shutdown" = "1";
-    "openssl.cafile" = "/etc/ssl/certs/ca-certificates.crt";
+    "openssl.cafile" = config.security.pki.caBundle;
     catch_workers_output = "yes";
   };
 
@@ -309,7 +309,7 @@ in {
       '';
       example = literalExpression ''
         {
-          inherit (pkgs.nextcloud25Packages.apps) mail calendar contact;
+          inherit (pkgs.nextcloud31Packages.apps) mail calendar contact;
           phonetrack = pkgs.fetchNextcloudApp {
             name = "phonetrack";
             sha256 = "0qf366vbahyl27p9mshfma1as4nvql6w75zy2zk5xwwbp343vsbc";
@@ -400,7 +400,7 @@ in {
 
     phpOptions = mkOption {
       type = with types; attrsOf (oneOf [ str int ]);
-      defaultText = literalExpression (generators.toPretty { } defaultPHPSettings);
+      defaultText = literalExpression (generators.toPretty { } (defaultPHPSettings // { "openssl.cafile" = literalExpression "config.security.pki.caBundle"; }));
       description = ''
         Options for PHP's php.ini file for nextcloud.
 
@@ -1040,12 +1040,12 @@ in {
           restartTriggers = [ overrideConfig ];
           script = ''
             ${optionalString (c.dbpassFile != null) ''
-              if [ -z "$(<$CREDENTIALS_DIRECTORY/dbpass)" ]; then
+              if [ -z "$(<"$CREDENTIALS_DIRECTORY/dbpass")" ]; then
                 echo "dbpassFile ${c.dbpassFile} is empty!"
                 exit 1
               fi
             ''}
-            if [ -z "$(<$CREDENTIALS_DIRECTORY/adminpass)" ]; then
+            if [ -z "$(<"$CREDENTIALS_DIRECTORY/adminpass")" ]; then
               echo "adminpassFile ${c.adminpassFile} is empty!"
               exit 1
             fi

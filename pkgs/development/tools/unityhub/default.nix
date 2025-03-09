@@ -109,6 +109,7 @@ stdenv.mkDerivation rec {
 
         # Unity Editor 6000 specific dependencies
         harfbuzz
+        vulkan-loader
       ]
       ++ extraLibs pkgs;
   };

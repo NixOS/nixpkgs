@@ -27,8 +27,8 @@
 }:
 
 let
-  version = "1.37.1";
-  patterns_version = "1.37.1";
+  version = "1.37.4";
+  patterns_version = "1.37.4";
 
   patterns_src = fetchFromGitHub {
     name = "ImHex-Patterns-source-${patterns_version}";
@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "WerWolv";
     repo = "ImHex";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0vfetOUYQmi3FNWI8+QkBHJe2Crg4LNrKeT1vSTdsjM=";
+    hash = "sha256-uenwAaIjtBzrtiLdy6fh5TxtbWtUJbtybNOLP3+8blA=";
   };
 
   strictDeps = true;

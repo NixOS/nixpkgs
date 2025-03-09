@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   ];
 
   # pass in correct sdl-config for cross builds
-  env.SDL_CONFIG = lib.getExe' SDL.dev "sdl-config";
+  env.SDL_CONFIG = lib.getExe' (lib.getDev SDL) "sdl-config";
 
   makeFlags = [
     "AR=${stdenv.cc.targetPrefix}ar"
