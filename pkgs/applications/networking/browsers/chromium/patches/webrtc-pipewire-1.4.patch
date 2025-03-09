@@ -1,5 +1,5 @@
---- a/src/modules/video_capture/linux/pipewire_session.cc
-+++ b/src/modules/video_capture/linux/pipewire_session.cc
+--- a/third_party/webrtc/modules/video_capture/linux/pipewire_session.cc
++++ b/third_party/webrtc/modules/video_capture/linux/pipewire_session.cc
 @@ -87,7 +87,7 @@ PipeWireNode::PipeWireNode(PipeWireSession* session,
        .param = OnNodeParam,
    };
