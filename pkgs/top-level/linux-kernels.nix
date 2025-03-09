@@ -194,6 +194,7 @@ in {
       kernelPatches = [
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
+        kernelPatches.linux-612-rust-185
       ];
     };
 
@@ -337,6 +338,8 @@ in {
     ajantv2 = callPackage ../os-specific/linux/ajantv2 { };
 
     akvcam = callPackage ../os-specific/linux/akvcam { };
+
+    amdgpu-i2c = callPackage ../os-specific/linux/amdgpu-i2c { };
 
     amneziawg = callPackage ../os-specific/linux/amneziawg { };
 
