@@ -1516,7 +1516,7 @@ with pkgs;
 
   cool-retro-term = libsForQt5.callPackage ../applications/terminal-emulators/cool-retro-term { };
 
-  kitty = darwin.apple_sdk_11_0.callPackage ../applications/terminal-emulators/kitty {
+  kitty = darwin.apple_sdk_11_0.callPackage ../by-name/ki/kitty/package.nix {
     harfbuzz = harfbuzz.override { withCoreText = stdenv.hostPlatform.isDarwin; };
     inherit (darwin) autoSignDarwinBinariesHook;
     inherit (darwin.apple_sdk_11_0) Libsystem;
@@ -1527,8 +1527,6 @@ with pkgs;
       UserNotifications
     ;
   };
-
-  kitty-themes  = callPackage ../applications/terminal-emulators/kitty/themes.nix { };
 
   mlterm = darwin.apple_sdk_11_0.callPackage ../applications/terminal-emulators/mlterm { };
   mlterm-wayland = mlterm.override {
