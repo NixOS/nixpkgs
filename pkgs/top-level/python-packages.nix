@@ -18576,6 +18576,8 @@ self: super: with self; {
 
   worldengine = callPackage ../development/python-modules/worldengine { };
 
+  wrapcco = callPackage ../development/python-modules/wrapcco { };
+
   wrapio = callPackage ../development/python-modules/wrapio { };
 
   wrapt = callPackage ../development/python-modules/wrapt { };
