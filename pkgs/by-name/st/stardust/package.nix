@@ -58,7 +58,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Space flight simulator";
     homepage = "http://iwar.free.fr/spip/rubrique2.html";
     mainProgram = "stardust";
-    maintainers = with lib.maintainers; [ raskin ];
+    maintainers = with lib.maintainers; [
+      raskin
+      marcin-serwin
+    ];
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2Plus;
   };
