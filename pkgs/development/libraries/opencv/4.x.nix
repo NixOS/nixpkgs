@@ -488,6 +488,7 @@ effectiveStdenv.mkDerivation {
     [
       (cmakeBool "OPENCV_GENERATE_PKGCONFIG" true)
       (cmakeBool "WITH_OPENMP" true)
+      (cmakeFeature "CMAKE_CXX_STANDARD" "17") # required to enable protobuf
       (cmakeBool "BUILD_PROTOBUF" false)
       (cmakeBool "PROTOBUF_UPDATE_FILES" true)
       (cmakeBool "OPENCV_ENABLE_NONFREE" enableUnfree)
