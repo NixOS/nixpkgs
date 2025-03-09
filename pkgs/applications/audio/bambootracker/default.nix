@@ -18,14 +18,14 @@ assert lib.versionAtLeast qtbase.version "6.0" -> qt5compat != null;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bambootracker";
-  version = "0.6.4";
+  version = "0.6.5";
 
   src = fetchFromGitHub {
     owner = "BambooTracker";
     repo = "BambooTracker";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-tFUliKR55iZybNyYIF1FXh8RGf8jKEsGrWBuldB277g=";
+    hash = "sha256-WoyOqInOOOIEwsMOc2yoTdh9UhJOvFKE1GfkxOuXDe0=";
   };
 
   postPatch = lib.optionalString (lib.versionAtLeast qtbase.version "6.0") ''
