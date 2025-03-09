@@ -13,7 +13,6 @@ let
   common-config =
     { config, ... }:
     {
-      imports = [ ./module.nix ];
       services.local-ai = {
         enable = true;
         package = self;
@@ -25,6 +24,9 @@ let
   inherit (self.lib) genModels;
 in
 {
+  name = "local-ai";
+  meta.maintainers = with lib.maintainers; [ onny ];
+
   version = testers.testVersion {
     package = self;
     version = "v" + self.version;
