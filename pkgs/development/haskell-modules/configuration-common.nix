@@ -2748,6 +2748,9 @@ self: super: {
 
     # jailbreak to allow base >= 4.19
   taskwarrior = doJailbreak super.taskwarrior;
+
+  # jailbreak to allow network >= 3.2
+  zre = doJailbreak super.zre;
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
 
 # Gogol Packages
