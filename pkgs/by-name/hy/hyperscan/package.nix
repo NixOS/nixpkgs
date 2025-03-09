@@ -58,6 +58,12 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace libhs.pc.in \
       --replace-fail "libdir=@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_LIBDIR@" "libdir=@CMAKE_INSTALL_LIBDIR@" \
       --replace-fail "includedir=@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_INCLUDEDIR@" "includedir=@CMAKE_INSTALL_INCLUDEDIR@"
+
+    substituteInPlace cmake/pcre.cmake --replace-fail 'CHECK_C_SOURCE_COMPILES("#include <pcre.h.generic>
+        #if PCRE_MAJOR != ''${PCRE_REQUIRED_MAJOR_VERSION} || PCRE_MINOR < ''${PCRE_REQUIRED_MINOR_VERSION}
+        #error Incorrect pcre version
+        #endif
+        main() {}" CORRECT_PCRE_VERSION)' 'set(CORRECT_PCRE_VERSION TRUE)'
   '';
 
   doCheck = true;
