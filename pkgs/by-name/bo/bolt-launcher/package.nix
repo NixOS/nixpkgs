@@ -34,12 +34,10 @@
   enableRS3 ? false,
 }:
 let
-  cef = libcef.overrideAttrs (oldAttrs: {
+  cef = libcef.overrideAttrs (_: {
     installPhase =
       let
-        gl_rpath = lib.makeLibraryPath [
-          stdenv.cc.cc.lib
-        ];
+        gl_rpath = lib.makeLibraryPath [ stdenv.cc.cc.lib ];
         rpath = lib.makeLibraryPath [
           glib
           nss
@@ -138,7 +136,7 @@ let
     '';
 
     postFixup = ''
-      makeWrapper "$out/opt/bolt-launcher/bolt" "$out/bin/${finalAttrs.pname}-${finalAttrs.version}" \
+      makeWrapper "$out/opt/bolt-launcher/bolt" "$out/bin/${finalAttrs.pname}" \
       --set JAVA_HOME ${jdk17}
       mkdir -p $out/lib
       cp $out/usr/local/lib/libbolt-plugin.so $out/lib
@@ -154,7 +152,7 @@ let
         desktopName = "Bolt Launcher";
         genericName = finalAttrs.pname;
         comment = "An alternative launcher for RuneScape";
-        exec = "${finalAttrs.pname}-${finalAttrs.version}";
+        exec = "${finalAttrs.pname}";
         icon = finalAttrs.pname;
         categories = [ "Game" ];
       })
@@ -198,7 +196,7 @@ buildFHSEnv {
     ln -s ${bolt}/share/icons/hicolor/256x256/apps/*.png $out/share/icons/hicolor/256x256/apps/
   '';
 
-  runScript = "${bolt.name}";
+  runScript = "${bolt.pname}";
 
   meta = {
     homepage = "https://github.com/Adamcake/Bolt";
@@ -209,6 +207,6 @@ buildFHSEnv {
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [ nezia ];
     platforms = lib.platforms.linux;
-    mainProgram = "${bolt.name}";
+    mainProgram = "${bolt.pname}";
   };
 }
