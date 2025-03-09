@@ -69,6 +69,10 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/flightaware/dump1090";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ earldouglas ];
+    maintainers = with maintainers; [
+      earldouglas
+      aciceri
+    ];
+    mainProgram = "dump1090";
   };
 }
