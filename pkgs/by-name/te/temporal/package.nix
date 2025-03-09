@@ -2,21 +2,22 @@
 
 buildGoModule rec {
   pname = "temporal";
-  version = "1.26.2";
+  version = "1.27.1";
 
   src = fetchFromGitHub {
     owner = "temporalio";
     repo = "temporal";
     rev = "v${version}";
-    hash = "sha256-tyMR0LpZDa1QbSe/Ba8fBhtRc8ZI+gwayfi7ZKDa8gI=";
+    hash = "sha256-hQs2rSTbNqknQ/N0mZ8BxeKQn2Pm9Yt/5eKGB2Kc+ME=";
   };
 
-  vendorHash = "sha256-Ljx0LocoowYwqy7MIumGnOcUwxpy+EY5rdTEehIq8Yo=";
+  vendorHash = "sha256-kasKs692fHojyCLsSdho5LWej11Asu8JJb61rbg1k2k=";
 
   excludedPackages = [ "./build" ];
 
   env.CGO_ENABLED = 0;
 
+  tags = [ "test_dep" ];
   ldflags = [ "-s" "-w" ];
 
   # There too many integration tests.

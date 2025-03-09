@@ -14414,6 +14414,13 @@
     githubId = 30194994;
     name = "Felix Nilles";
   };
+  marcin-serwin = {
+    name = "Marcin Serwin";
+    github = "marcin-serwin";
+    githubId = 12128106;
+    email = "marcin@serwin.dev";
+    keys = [ { fingerprint = "F311 FA15 1A66 1875 0C4D  A88D 82F5 C70C DC49 FD1D"; } ];
+  };
   marcovergueira = {
     email = "vergueira.marco@gmail.com";
     github = "marcovergueira";
@@ -23349,6 +23356,12 @@
     github = "Thao-Tran";
     githubId = 7060816;
     name = "Thao-Tran Le-Phuong";
+  };
+  thardin = {
+    email = "th020394@gmail.com";
+    github = "Tyler-Hardin";
+    githubId = 5404976;
+    name = "Tyler Hardin";
   };
   thblt = {
     name = "Thibault Polge";
