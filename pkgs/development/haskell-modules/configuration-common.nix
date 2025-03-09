@@ -2745,6 +2745,9 @@ self: super: {
 
   # jailbreak to allow ansi-terminal >= 1.1
   patat = doJailbreak super.patat;
+
+    # jailbreak to allow base >= 4.19
+  taskwarrior = doJailbreak super.taskwarrior;
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
 
 # Gogol Packages
