@@ -111,6 +111,7 @@ let
       base_dir = ${baseDir}
       protocols = ${concatStringsSep " " cfg.protocols}
       sendmail_path = /run/wrappers/bin/sendmail
+      mail_plugin_dir = /etc/dovecot/modules
       # defining mail_plugins must be done before the first protocol {} filter because of https://doc.dovecot.org/configuration_manual/config_file/config_file_syntax/#variable-expansion
       mail_plugins = $mail_plugins ${concatStringsSep " " cfg.mailPlugins.globally.enable}
     ''
@@ -209,7 +210,7 @@ let
 
   modulesDir = pkgs.symlinkJoin {
     name = "dovecot-modules";
-    paths = map (pkg: "${pkg}/lib/dovecot") (
+    paths = map (pkg: "${pkg}/etc/dovecot/modules") (
       [ dovecotPkg ] ++ map (module: module.override { dovecot = dovecotPkg; }) cfg.modules
     );
   };
