@@ -5,6 +5,8 @@ npmInstallHook() {
 
     runHook preInstall
 
+    export NIX_NODEJS_BUILDNPMPACKAGE=1
+
     local -r packageOut="$out/lib/node_modules/$(@jq@ --raw-output '.name' package.json)"
 
     # `npm pack` writes to cache so temporarily override it
