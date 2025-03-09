@@ -10,7 +10,6 @@
   knewstuff,
   akonadi-calendar,
   akonadi-contacts,
-  akonadi-notes,
   akonadi-search,
   calendarsupport,
   eventviews,
@@ -51,7 +50,6 @@ mkDerivation {
     knewstuff
     akonadi-calendar
     akonadi-contacts
-    akonadi-notes
     akonadi-search
     calendarsupport
     eventviews
