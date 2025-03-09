@@ -35,7 +35,7 @@
 
 stdenv.mkDerivation rec {
   pname = "dovecot";
-  version = "2.3.21.1";
+  version = "2.4.0";
 
   nativeBuildInputs = [
     perl
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://dovecot.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.gz";
-    hash = "sha256-LZCheMQpdhEIi/farlSSo7w9WrYyjDoDLrQl0sJJCX4=";
+    hash = "sha256-6Q5J+MMbCaUIJJpP7oYF+qZf4yCBm/ytryUkEmJT1a4=";
   };
 
   enableParallelBuilding = true;
@@ -87,7 +87,7 @@ stdenv.mkDerivation rec {
       patchShebangs src/config/settings-get.pl
 
       # DES-encrypted passwords are not supported by NixPkgs anymore
-      sed '/test_password_scheme("CRYPT"/d' -i src/auth/test-libpassword.c
+      sed '/test_password_scheme("CRYPT"/d' -i src/lib-auth/test-password-scheme.c
     ''
     + lib.optionalString stdenv.hostPlatform.isLinux ''
       export systemdsystemunitdir=$out/etc/systemd/system
@@ -106,12 +106,7 @@ stdenv.mkDerivation rec {
       # Make dovecot look for plugins in /etc/dovecot/modules
       # so we can symlink plugins from several packages there.
       # The symlinking needs to be done in NixOS.
-      ./2.3.x-module_dir.patch
-      # fix openssl 3.0 compatibility
-      (fetchpatch {
-        url = "https://salsa.debian.org/debian/dovecot/-/raw/debian/1%252.3.19.1+dfsg1-2/debian/patches/Support-openssl-3.0.patch";
-        hash = "sha256-PbBB1jIY3jIC8Js1NY93zkV0gISGUq7Nc67Ul5tN7sw=";
-      })
+      ./2.4.x-module_dir.patch
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # fix timespec calls
