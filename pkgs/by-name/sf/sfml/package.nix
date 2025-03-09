@@ -2,41 +2,44 @@
   lib,
   stdenv,
   fetchFromGitHub,
+
+  # nativeBuildInputs
   cmake,
-  libX11,
-  freetype,
-  libjpeg,
-  openal,
+
+  # buildInputs
   flac,
-  libvorbis,
+  freetype,
   glew,
+  libjpeg,
+  libvorbis,
+  openal,
+  udev,
+  libX11,
   libXcursor,
   libXrandr,
   libXrender,
-  udev,
   xcbutilimage,
 }:
-
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sfml";
   version = "2.6.2";
 
   src = fetchFromGitHub {
     owner = "SFML";
     repo = "SFML";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-m8FVXM56qjuRKRmkcEcRI8v6IpaJxskoUQ+sNsR1EhM=";
   };
 
   nativeBuildInputs = [ cmake ];
   buildInputs =
     [
-      freetype
-      libjpeg
-      openal
       flac
-      libvorbis
+      freetype
       glew
+      libjpeg
+      libvorbis
+      openal
     ]
     ++ lib.optional stdenv.hostPlatform.isLinux udev
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
@@ -48,22 +51,23 @@ stdenv.mkDerivation rec {
     ];
 
   cmakeFlags = [
-    "-DSFML_INSTALL_PKGCONFIG_FILES=yes"
-    "-DSFML_MISC_INSTALL_PREFIX=share/SFML"
-    "-DSFML_BUILD_FRAMEWORKS=no"
-    "-DSFML_USE_SYSTEM_DEPS=yes"
+    (lib.cmakeBool "SFML_INSTALL_PKGCONFIG_FILES" true)
+    (lib.cmakeFeature "SFML_MISC_INSTALL_PREFIX" "share/SFML")
+    (lib.cmakeBool "SFML_BUILD_FRAMEWORKS" false)
+    (lib.cmakeBool "SFML_USE_SYSTEM_DEPS" true)
   ];
 
-  meta = with lib; {
-    homepage = "https://www.sfml-dev.org/";
+  meta = {
     description = "Simple and fast multimedia library";
+    homepage = "https://www.sfml-dev.org/";
+    changelog = "https://github.com/SFML/SFML/blob/${finalAttrs.version}/changelog.md";
     longDescription = ''
       SFML is a simple, fast, cross-platform and object-oriented multimedia API.
       It provides access to windowing, graphics, audio and network.
       It is written in C++, and has bindings for various languages such as C, .Net, Ruby, Python.
     '';
-    license = licenses.zlib;
-    maintainers = [ maintainers.astsmtl ];
-    platforms = platforms.unix;
+    license = lib.licenses.zlib;
+    maintainers = [ lib.maintainers.astsmtl ];
+    platforms = lib.platforms.unix;
   };
-}
+})
