@@ -7196,6 +7196,7 @@ with pkgs;
   python313FreeThreading = python313.override {
     pythonAttr = "python313FreeThreading";
     enableGIL = false;
+    enableJIT = true;
   };
   python314FreeThreading = python314.override {
     pythonAttr = "python313FreeThreading";
