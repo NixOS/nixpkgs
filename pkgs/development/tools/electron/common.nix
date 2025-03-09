@@ -64,6 +64,9 @@ in
     hash = info.chromium_npm_hash;
   };
 
+  # Needed for header generation in electron 35 and above
+  env.ELECTRON_OUT_DIR = lib.optionals (lib.versions.major info.version >= "35") "Release";
+
   src = null;
 
   patches =
@@ -197,7 +200,6 @@ in
     allow_runtime_configurable_key_storage = true;
     enable_cet_shadow_stack = false;
     is_cfi = false;
-    use_qt = false;
     v8_builtins_profiling_log_file = "";
     enable_dangling_raw_ptr_checks = false;
     dawn_use_built_dxc = false;
