@@ -41,7 +41,7 @@
   html2text,
   imagemagick,
   installShellFiles,
-  jdk,
+  jdk8,
   libarchive,
   libcaca,
   libxmlb,
@@ -223,7 +223,7 @@ python.pkgs.buildPythonApplication rec {
         gnupg
         hdf5
         imagemagick
-        jdk
+        jdk8
         libcaca
         llvm
         mono
@@ -277,6 +277,11 @@ python.pkgs.buildPythonApplication rec {
 
       # Fails because it fails to determine llvm version
       "test_item3_deflate_llvm_bitcode"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+      # OSError: [Errno 8] Exec format error: 'aapt2'
+      "test_compare_non_existing"
+      "test_no_differences"
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # Disable flaky tests on Darwin
