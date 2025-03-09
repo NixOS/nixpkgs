@@ -5,13 +5,13 @@
   m4,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "beecrypt";
   version = "4.2.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/beecrypt/beecrypt-${version}.tar.gz";
-    sha256 = "0pf5k1c4nsj77jfq5ip0ra1gzx2q47xaa0s008fnn6hd11b1yvr8";
+    url = "mirror://sourceforge/beecrypt/beecrypt-${finalAttrs.version}.tar.gz";
+    hash = "sha256-KG8fVggNGmsdAkADpfohWPT/gsrgxoKdPEdqS1iYxV0=";
   };
 
   postPatch = ''
@@ -19,13 +19,16 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [ m4 ];
+
   configureFlags = [
     "--disable-optimized"
     "--enable-static"
   ];
 
   meta = {
+    description = "Strong and fast cryptography toolkit library";
     platforms = lib.platforms.linux;
     license = lib.licenses.lgpl2;
+    maintainers = [ ];
   };
-}
+})
