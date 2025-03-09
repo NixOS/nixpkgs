@@ -9447,6 +9447,8 @@ self: super: with self; {
     inherit (pkgs) nftables;
   };
 
+  ngsolve = toPythonModule (pkgs.ngsolve.override { python3Packages = self; });
+
   nh3 = callPackage ../development/python-modules/nh3 { };
 
   nhc = callPackage ../development/python-modules/nhc { };

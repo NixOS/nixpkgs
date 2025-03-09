@@ -1,0 +1,13 @@
+diff --git a/comp/hypre_precond.hpp b/comp/hypre_precond.hpp
+index 8ebf4921f..61278bd9d 100644
+--- a/comp/hypre_precond.hpp
++++ b/comp/hypre_precond.hpp
+@@ -16,7 +16,7 @@
+ 
+ #include "HYPRE.h"
+ #include "HYPRE_parcsr_ls.h"
+-
++#include <paralleldofs.hpp>
+ 
+ namespace ngcomp
+ {

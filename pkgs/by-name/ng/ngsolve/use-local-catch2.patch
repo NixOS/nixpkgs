@@ -1,0 +1,30 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index efa206a79..6bce06429 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -121,9 +121,9 @@ if(INTEL_MIC)
+ endif(INTEL_MIC)
+ 
+ #######################################################################
+-if(ENABLE_UNIT_TESTS)
+-  include(${CMAKE_CURRENT_LIST_DIR}/cmake/external_projects/catch.cmake)
+-endif(ENABLE_UNIT_TESTS)
++# if(ENABLE_UNIT_TESTS)
++#   include(${CMAKE_CURRENT_LIST_DIR}/cmake/external_projects/catch.cmake)
++# endif(ENABLE_UNIT_TESTS)
+ 
+ #######################################################################
+ # append install paths of software in non-standard paths (e.g. openmpi, metis, intel mkl, ...)
+diff --git a/tests/catch/CMakeLists.txt b/tests/catch/CMakeLists.txt
+index 1b482f760..222c53cbf 100644
+--- a/tests/catch/CMakeLists.txt
++++ b/tests/catch/CMakeLists.txt
+@@ -10,7 +10,7 @@ include_directories(${CATCH_INCLUDE_DIR})
+ add_library(catch_main STATIC main.cpp)
+ set_target_properties(catch_main PROPERTIES CXX_STANDARD 17)
+ add_dependencies(unit_tests catch_main)
+-add_dependencies(catch_main project_catch)
++# add_dependencies(catch_main project_catch)
+ 
+ # ensure the test targets are built before testing
+ add_test(NAME unit_tests_built COMMAND ${CMAKE_COMMAND} --build . --target unit_tests --config ${CMAKE_BUILD_TYPE} WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/../.. )
