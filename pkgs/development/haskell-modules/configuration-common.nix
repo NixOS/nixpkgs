@@ -2742,6 +2742,9 @@ self: super: {
 
   # jailbreak to allow deepseq >= 1.5
   blucontrol = doJailbreak super.blucontrol;
+
+  # jailbreak to allow ansi-terminal >= 1.1
+  patat = doJailbreak super.patat;
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
 
 # Gogol Packages
