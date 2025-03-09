@@ -35,7 +35,6 @@ let
       clr
       rccl
       miopen
-      miopengemm
       rocrand
       rocblas
       rocsparse
@@ -48,9 +47,9 @@ let
       rocsolver
       hipfft
       hipsolver
+      hipblas-common
       hipblas
       rocminfo
-      rocm-thunk
       rocm-comgr
       rocm-device-libs
       rocm-runtime
