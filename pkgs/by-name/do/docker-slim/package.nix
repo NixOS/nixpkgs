@@ -3,17 +3,19 @@
   buildGoModule,
   fetchFromGitHub,
   makeBinaryWrapper,
+  nix-update-script,
+  versionCheckHook,
 }:
 
 buildGoModule rec {
   pname = "docker-slim";
-  version = "1.40.11";
+  version = "1.41.7";
 
   src = fetchFromGitHub {
-    owner = "slimtoolkit";
-    repo = "slim";
-    rev = version;
-    hash = "sha256-X+1euWp4W53axbiBpL82bUPfod/JNhGVGWgOqKyhz6A=";
+    owner = "mintoolkit";
+    repo = "mint";
+    tag = version;
+    hash = "sha256-gPssqt3/irMeKQXxwSA2UZ0j1zLumdc1NLO9kogvjOI=";
   };
 
   vendorHash = null;
@@ -21,9 +23,11 @@ buildGoModule rec {
   env.CGO_ENABLED = 0;
 
   subPackages = [
-    "cmd/slim"
-    "cmd/slim-sensor"
+    "cmd/mint"
+    "cmd/mint-sensor"
   ];
+
+  tags = [ "containers_image_openpgp" ];
 
   nativeBuildInputs = [ makeBinaryWrapper ];
 
@@ -34,21 +38,31 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/slimtoolkit/slim/pkg/version.appVersionTag=${version}"
-    "-X github.com/slimtoolkit/slim/pkg/version.appVersionRev=${src.rev}"
+    "-X github.com/mintoolkit/mint/pkg/version.appVersionTag=${version}"
+    "-X github.com/mintoolkit/mint/pkg/version.appVersionRev=${src.rev}"
   ];
 
   # docker-slim tries to create its state dir next to the binary (inside the nix
   # store), so we set it to use the working directory at the time of invocation
   postInstall = ''
-    wrapProgram "$out/bin/slim" --add-flags '--state-path "$(pwd)"'
+    wrapProgram "$out/bin/mint" --add-flags '--state-path "$(pwd)"'
   '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgram = "${placeholder "out"}/bin/mint";
+  versionCheckProgramArg = "--version";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Minify and secure Docker containers";
-    homepage = "https://slimtoolkit.org/";
-    changelog = "https://github.com/slimtoolkit/slim/raw/${version}/CHANGELOG.md";
+    homepage = "https://github.com/mintoolkit/mint"; # no domain registered yet
+    changelog = "https://github.com/mintoolkit/mint/raw/${version}/CHANGELOG.md";
     license = licenses.asl20;
+    mainProgram = "mint";
     maintainers = with maintainers; [
       Br1ght0ne
       mbrgm
