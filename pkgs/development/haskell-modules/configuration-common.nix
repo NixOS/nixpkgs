@@ -2736,6 +2736,9 @@ self: super: {
       sha256 = "sha256-ZdCXMhni+RGisRODiElObW5c4hKy2giWQmWnatqeRJo=";
     }))
   ];
+
+  # jailbreak to allow deepseq >= 1.5, https://github.com/jumper149/blucontrol/issues/3
+  blucontrol = doJailbreak super.blucontrol;
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
 
 # Gogol Packages
