@@ -195,6 +195,9 @@ self: super:
     ;
 
   singletons-base = dontCheck super.singletons-base;
+
+  # A given major version of ghc-exactprint only supports one version of GHC.
+  ghc-exactprint = addBuildDepend self.extra super.ghc-exactprint_1_7_1_0;
 }
 # super.ghc is required to break infinite recursion as Nix is strict in the attrNames
 //
