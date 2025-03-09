@@ -18,6 +18,9 @@ stdenv.mkDerivation rec {
 
   runtimeDependencies = [ wirelesstools ];
 
+  # fix
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+
   installPhase = ''
     runHook preInstall
     make -C osdep install
