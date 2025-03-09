@@ -3,7 +3,7 @@
   buildLua,
   fetchFromGitHub,
 }:
-buildLua (finalAttrs: {
+buildLua {
   pname = "mpv-osc-tethys";
   version = "0-unstable-2024-08-19";
 
@@ -23,4 +23,4 @@ buildLua (finalAttrs: {
     license = lib.licenses.unfree; # no license specified
     maintainers = with lib.maintainers; [ luftmensch-luftmensch ];
   };
-})
+}

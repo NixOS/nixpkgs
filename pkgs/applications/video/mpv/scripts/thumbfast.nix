@@ -18,12 +18,7 @@ buildLua {
   };
   passthru.updateScript = unstableGitUpdater { };
 
-  passthru.extraWrapperArgs = [
-    "--prefix"
-    "PATH"
-    ":"
-    (lib.makeBinPath [ mpv-unwrapped ])
-  ];
+  runtime-dependencies = [ mpv-unwrapped ];
 
   meta = {
     description = "High-performance on-the-fly thumbnailer for mpv";
