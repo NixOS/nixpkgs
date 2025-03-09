@@ -3,14 +3,17 @@
 , fetchFromGitHub
 , makeWrapper
 , copyDesktopItems
-, electron
+, electron_34
 , nodejs
 , pnpm_9
 , makeDesktopItem
-, autoSignDarwinBinariesHook
+, darwin
 , nix-update-script
 }:
 
+let
+  electron = electron_34;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "podman-desktop";
   version = "1.16.2";
@@ -31,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     # podman should be installed with nix; disable auto-installation
-    ./patches/extension-no-download-podman.patch
+    ./extension-no-download-podman.patch
   ];
 
   ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
@@ -43,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     copyDesktopItems
     makeWrapper
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    autoSignDarwinBinariesHook
+    darwin.autoSignDarwinBinariesHook
   ];
 
   buildPhase = ''
