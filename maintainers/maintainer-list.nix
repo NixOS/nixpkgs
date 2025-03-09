@@ -16089,7 +16089,7 @@
     githubId = 220262;
     name = "Ion Mudreac";
   };
-  Mulligansecurity = {
+  MulliganSecurity = {
     email = "mulligansecurity@riseup.net";
     github = "MulliganSecurity";
     githubId = 196982523;
