@@ -3,3 +3,9 @@ version = "1.0.0"
 
 [workspace.dependencies]
 foo = { version = "1.0.0", features = ["meow"] }
+
+[workspace.lints.rust]
+unsafe_code = "forbid"
+
+[workspace.lints.clippy]
+pedantic = "warn"
