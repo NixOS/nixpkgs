@@ -7,9 +7,9 @@
   node-gyp,
   python3,
   util-linux,
-  ffmpeg,
+  ffmpeg-headless,
 
-  # Current derivation only suports linux-x86_64 (contributions welcome, without libTensorflow builtin webassembly can be used)
+  # Current derivation only supports linux-x86_64 (contributions welcome, without libTensorflow builtin webassembly can be used)
   useLibTensorflow ? stdenv.isx86_64 && stdenv.isLinux,
 
   ncVersion,
@@ -31,20 +31,14 @@ let
       appHash = "sha256-qR4SrTHFAc4YWiZAsL94XcH4VZqYtkRLa0y+NdiFZus=";
       modelHash = "sha256-M/j5wVOBLR7xMVJQWDUWAzLajRUBYEzHSNBsRSBUgfM=";
     };
-    "28" = {
-      # Once this version is no longer supported, we can remove the getAppValue replacements below
-      # The getAppValueString stuff will need to remain
-      version = "6.1.0";
-      appHash = "sha256-225r2JnDOoURvLmzpmHp/QL6GDx9124/YTywbxH3/rk=";
-      modelHash = "sha256-4mhQM/ajpwjqTb8jSbEIdtSRrWZEOaMZQXAwcfSRQ/M=";
-    };
   };
-  currentVersionInfo = latestVersionForNc.${ncVersion};
+  currentVersionInfo =
+    latestVersionForNc.${ncVersion}
+      or (throw "recognize currently does not support nextcloud version ${ncVersion}");
 in
 stdenv.mkDerivation rec {
-
   pname = "nextcloud-app-recognize";
-  version = currentVersionInfo.version;
+  inherit (currentVersionInfo) version;
 
   srcs =
     [
@@ -82,16 +76,14 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     # Make it clear we are not reading the node in settings
-    sed -i "/'node_binary'/s:'""':'Nix Controled':" recognize/lib/Service/SettingsService.php
+    sed -i "/'node_binary'/s:'""':'Nix Controlled':" recognize/lib/Service/SettingsService.php
 
-    # Replace all occurences of node (and check that we actually remved them all)
+    # Replace all occurrences of node (and check that we actually removed them all)
     test "$(grep "get[a-zA-Z]*('node_binary'" recognize/lib/**/*.php | wc -l)" -gt 0
     substituteInPlace recognize/lib/**/*.php \
       --replace-quiet "\$this->settingsService->getSetting('node_binary')" "'${lib.getExe nodejs}'" \
       --replace-quiet "\$this->config->getAppValueString('node_binary', '""')" "'${lib.getExe nodejs}'" \
-      --replace-quiet "\$this->config->getAppValueString('node_binary')" "'${lib.getExe nodejs}'" \
-      --replace-quiet "\$this->config->getAppValue('node_binary', '""')" "'${lib.getExe nodejs}'" \
-      --replace-quiet "\$this->config->getAppValue('node_binary')" "'${lib.getExe nodejs}'"
+      --replace-quiet "\$this->config->getAppValueString('node_binary')" "'${lib.getExe nodejs}'"
     test "$(grep "get[a-zA-Z]*('node_binary'" recognize/lib/**/*.php | wc -l)" -eq 0
 
 
@@ -99,7 +91,7 @@ stdenv.mkDerivation rec {
     # Skip trying to install it... (less warnings in the log)
     sed  -i '/public function run/areturn ; //skip' recognize/lib/Migration/InstallDeps.php
 
-    ln -s ${lib.getExe ffmpeg} recognize/node_modules/ffmpeg-static/ffmpeg
+    ln -s ${lib.getExe ffmpeg-headless} recognize/node_modules/ffmpeg-static/ffmpeg
   '';
 
   nativeBuildInputs = lib.optionals useLibTensorflow [
