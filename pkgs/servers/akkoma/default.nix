@@ -10,14 +10,14 @@
 
 beamPackages.mixRelease rec {
   pname = "akkoma";
-  version = "3.14.1";
+  version = "3.15.1";
 
   src = fetchFromGitea {
     domain = "akkoma.dev";
     owner = "AkkomaGang";
     repo = "akkoma";
     tag = "v${version}";
-    hash = "sha256-Ygb51jQatdyX/DzJk84X1AEliBGD938f83UnI5OqBPM=";
+    hash = "sha256-6qsqTguEVu9t6dW8c+VAE5Z7D3FbQ0S2ZfAN5qy7Xak=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -26,7 +26,7 @@ beamPackages.mixRelease rec {
   mixFodDeps = beamPackages.fetchMixDeps {
     pname = "mix-deps-${pname}";
     inherit src version;
-    hash = "sha256-nxxryKFBiFmjGQ8n83M7uOp37G9p/sKkUrf7ni8ceaM=";
+    hash = "sha256-nWtY5eohP9pv/vS9FuCh2nlPxLJ2Y4IRmve5in328DU=";
 
     postInstall = ''
       substituteInPlace "$out/http_signatures/mix.exs" \
