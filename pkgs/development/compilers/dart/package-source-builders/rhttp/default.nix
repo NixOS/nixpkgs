@@ -12,7 +12,7 @@ let
     pname = "rhttp-rs";
     inherit version src;
 
-    sourceRoot = "${src.name}/rust";
+    setSourceRoot = "sourceRoot=$(if [ -d ${src.name}/rhttp ]; then echo ${src.name}/rhttp/rust; else echo ${src.name}/rust; fi)";
 
     useFetchCargoVendor = true;
     cargoHash =
@@ -39,11 +39,19 @@ stdenv.mkDerivation {
   inherit version src;
   inherit (src) passthru;
 
+  prePatch = ''
+    if [ -d rhttp ]; then pushd rhttp; fi
+  '';
+
   patches = [
     (replaceVars ./cargokit.patch {
       output_lib = "${rustDep}/${rustDep.passthru.libraryPath}";
     })
   ];
+
+  postPatch = ''
+    popd || true
+  '';
 
   installPhase = ''
     runHook preInstall
