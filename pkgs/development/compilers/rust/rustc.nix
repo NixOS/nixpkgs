@@ -355,7 +355,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ optional (!withBundledLLVM) llvmShared.lib
     ++ optional (useLLVM && !withBundledLLVM && !stdenv.targetPlatform.isFreeBSD) [
       llvmPackages.libunwind
-      # Hack which is used upstream https://github.com/gentoo/gentoo/blob/master/dev-lang/rust/rust-1.78.0.ebuild#L284
+      # Hack which is used by Gentoo https://github.com/gentoo/gentoo/blob/fefcc699604e1f6a29b29a612d39edd7e019b0e0/dev-lang/rust/rust-1.78.0.ebuild#L284-L301
       (runCommandLocal "libunwind-libgcc" { } ''
         mkdir -p $out/lib
         ln -s ${llvmPackages.libunwind}/lib/libunwind.so $out/lib/libgcc_s.so
