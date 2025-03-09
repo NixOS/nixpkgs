@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "lox";
-  version = "0.12.0";
+  version = "0.13.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "BrianPugh";
     repo = "lox";
     tag = "v${version}";
-    hash = "sha256-Iv3ZdfsvFLU6lhlH1n+eQ+KIrXESsnC1S2lVFnKFV08=";
+    hash = "sha256-I/+/wl+H3OLAN26qJVqyqgW72GoTddm59j2Y6fsz8AM=";
   };
 
   build-system = [ setuptools ];
@@ -53,7 +53,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Threading and Multiprocessing made easy";
-    changelog = "https://github.com/BrianPugh/lox/releases/tag/v${version}";
+    changelog = "https://github.com/BrianPugh/lox/releases/tag/${src.tag}";
     homepage = "https://github.com/BrianPugh/lox";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.greg ];
