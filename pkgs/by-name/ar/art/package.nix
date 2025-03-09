@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromBitbucket,
+  fetchFromGitHub,
   cmake,
   pkg-config,
   util-linux,
@@ -39,12 +39,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "art";
+  pname = "ART";
   version = "1.24.2";
 
-  src = fetchFromBitbucket {
-    owner = "agriggio";
-    repo = "art";
+  src = fetchFromGitHub {
+    owner = "artpixls";
+    repo = "ART";
     rev = version;
     hash = "sha256-TpjmmDeXuxnlvCimsq6mZZk15VOVU3WGrPd3vmcIClI=";
   };
@@ -106,7 +106,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A raw converter based on RawTherapee";
-    homepage = "https://bitbucket.org/agriggio/art/";
+    homepage = "http://art.pixls.us/";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ paperdigits ];
     mainProgram = "art";
