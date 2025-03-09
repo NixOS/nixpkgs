@@ -43,6 +43,9 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = ./update.sh;
 
+  # Workaround: otherwise the build fails with broken symlinks
+  dontCheckForBrokenSymlinks = true;
+
   nativeBuildInputs = [
     wrapGAppsHook3
     autoPatchelfHook
