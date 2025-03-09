@@ -42,7 +42,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "evince";
-  version = "46.3.1";
+  version = "48.rc";
 
   outputs = [
     "out"
@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/evince/${lib.versions.major finalAttrs.version}/evince-${finalAttrs.version}.tar.xz";
-    hash = "sha256-lFwgpvI4ObDVMycpFxRY6QaA2oJk6Zxvn0HCGcfu7nw=";
+    hash = "sha256-obPvuB1KbIK4Rz7yKnzZmE31Ht7Hy0gqtVqqorFvOyU=";
   };
 
   depsBuildBuild = [

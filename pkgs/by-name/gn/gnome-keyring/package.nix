@@ -24,7 +24,7 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-keyring";
-  version = "46.2";
+  version = "48.beta";
 
   outputs = [
     "out"
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-keyring/${lib.versions.major version}/gnome-keyring-${version}.tar.xz";
-    hash = "sha256-vybJZriot/MoXsyLs+RnucIPlTW5TcRRycVZ3c/2GSU=";
+    hash = "sha256-JGNWvtqRLlTvaxJPSptZZGmlyrr5qWHhGZYVYGBX0Fg=";
   };
 
   nativeBuildInputs = [

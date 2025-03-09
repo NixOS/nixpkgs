@@ -18,7 +18,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libmsgraph";
-  version = "0.2.3";
+  version = "0.3.3";
 
   outputs = [
     "out"
@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/msgraph/${lib.versions.majorMinor finalAttrs.version}/msgraph-${finalAttrs.version}.tar.xz";
-    hash = "sha256-7ULoAMt/CgdHfNnj50TNwaJApq16uWuKh1gGJnqf3bA=";
+    hash = "sha256-N9fhLyqZBJCuohGE8LJ+C5Feu05QlvTWYyxiBRwFQBI=";
   };
 
   nativeBuildInputs = [
