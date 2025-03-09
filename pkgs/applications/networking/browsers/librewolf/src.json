@@ -1,8 +1,8 @@
 {
-  "packageVersion": "136.0-1",
+  "packageVersion": "136.0-2",
   "source": {
-    "rev": "136.0-1",
-    "hash": "sha256-ELxcS33lYgYcBUjpfDBMGZfeWanUzcUb3gXI2kEE7O0="
+    "rev": "136.0-2",
+    "hash": "sha256-X5DkaqqwZF4piRg/KPoV/SS1DtDG6AqR89UeWqFxZX0="
   },
   "firefox": {
     "version": "136.0",
