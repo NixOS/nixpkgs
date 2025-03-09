@@ -4,6 +4,7 @@
   buildGoModule,
   darwin,
   fetchFromGitHub,
+  fetchpatch2,
   nix-update-script,
   testers,
   vfkit,
@@ -19,6 +20,13 @@ buildGoModule rec {
     rev = "v${version}";
     hash = "sha256-uBFL3iZLpGcVUSgZSoq8FI87CDAr3NI8uu+u5UsrZCc=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      url = "https://github.com/crc-org/vfkit/pull/276/commits/97ad151b208593d2fa0227ef5117f1ff2667b562.patch?full_index=1";
+      hash = "sha256-rcKLMXk5B2JoDpsNH4+aBmOidh9HtVQeYhx5q1raFJU=";
+    })
+  ];
 
   vendorHash = "sha256-+5QZcoI+/98hyd87NV6uX/VZqd5z38fk7K7RibX/9vw=";
 
