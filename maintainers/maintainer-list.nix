@@ -16305,6 +16305,12 @@
     githubId = 6783654;
     name = "Nadrieril Feneanar";
   };
+  naelstrof = {
+    email = "naelstrof@gmail.com";
+    github = "naelstrof";
+    githubId = 1131571;
+    name = "naelstrof";
+  };
   nagisa = {
     name = "Simonas Kazlauskas";
     email = "nixpkgs@kazlauskas.me";
