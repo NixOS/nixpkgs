@@ -3515,6 +3515,8 @@ with pkgs;
 
   graylog-6_0 = callPackage ../tools/misc/graylog/6.0.nix { };
 
+  graylog-6_1 = callPackage ../tools/misc/graylog/6.1.nix { };
+
   graylogPlugins = recurseIntoAttrs (
     callPackage ../tools/misc/graylog/plugins.nix { }
   );
