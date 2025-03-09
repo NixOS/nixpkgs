@@ -8,6 +8,9 @@
 # [nixpkgs]$ lib/tests/modules.sh
 # or:
 # [nixpkgs]$ nix-build lib/tests/release.nix
+#
+# You may show all error traces, even for successful tests, by setting DUMP_TRACES=1
+# This can answer some questions about the occurrence of certain addErrorContext traces.
 
 set -o errexit -o noclobber -o nounset -o pipefail
 shopt -s failglob inherit_errexit
@@ -19,6 +22,14 @@ cd "$DIR"/modules
 
 pass=0
 fail=0
+
+if [[ -z "${DUMP_TRACES:-}" ]]; then
+    dump_traces() { :; }
+else
+    dump_traces() {
+        echo "$@"
+    }
+fi
 
 # loc
 #   prints the location of the call of to the function that calls it
@@ -96,6 +107,7 @@ checkConfigError() {
     else
         if echo "$err" | grep -zP --silent "$errorContains" ; then
             ((++pass))
+            dump_traces "$err"
         else
             logStartFailure
             echo "ACTUAL:"
@@ -103,6 +115,32 @@ checkConfigError() {
             echo "EXPECTED: error matching '$errorContains'"
             logFailure
             logEndFailure
+        fi
+    fi
+}
+
+checkConfigNotError() {
+    local errorContains=$1
+    local err=""
+    shift
+    if err="$(evalConfig "$@" 2>&1 >/dev/null)"; then
+        logStartFailure
+        echo "ACTUAL: exit code 0, output:"
+        reportFailure "$@"
+        echo "EXPECTED: non-zero exit code"
+        logFailure
+        logEndFailure
+    else
+        if echo "$err" | grep -zP --silent "$errorContains" ; then
+            logStartFailure
+            echo "ACTUAL:"
+            reportFailure "$@"
+            echo "EXPECTED: log does not contain '$errorContains'"
+            logFailure
+            logEndFailure
+        else
+            ((++pass))
+            dump_traces "$err"
         fi
     fi
 }
@@ -285,6 +323,9 @@ checkConfigOutput '^true$' "$@" ./define-_module-args-custom.nix
 set -- "$@" ./define-_module-args-custom.nix ./import-custom-arg.nix
 checkConfigError 'while evaluating the module argument .*custom.* in .*import-custom-arg.nix.*:' "$@"
 checkConfigError 'infinite recursion encountered' "$@"
+# Make sure the error context for the `config` fixpoint is not triggered
+checkConfigNotError '\*risky\* while evaluating the module fixpoint.*custom. was not provided externally through .specialArgs., so I will now attempt to load it from the module fixpoint' config.result ./error-context-module-argument-failing.nix
+checkConfigError 'while evaluating the module argument .custom.' config.result ./error-context-module-argument-failing.nix
 
 # Check _module.check.
 set -- config.enable ./declare-enable.nix ./define-enable.nix ./define-attrsOfSub-foo.nix
@@ -552,6 +593,15 @@ checkConfigError 'Type foo defines both `functor.payload` and `functor.wrapped` 
 # Anonymous submodules don't get nixed by import resolution/deduplication
 # because of an `extendModules` bug, issue 168767.
 checkConfigOutput '^1$' config.sub.specialisation.value ./extendModules-168767-imports.nix
+
+# Imports error context
+checkConfigError 'while loading imports of module .a.' config.result ./error-context-imports.nix
+checkConfigError 'while loading imports of module .a-parent.' config.result ./error-context-imports-anonymous.nix
+# Full ancestry is generally not relevant, so we don't want to pollute the trace with it. Note that addErrorContext is printed regardless of --no-show-trace.
+checkConfigNotError 'while loading imports of module .not-this-file.' config.result ./error-context-imports.nix
+checkConfigError 'while loading imports of module .a.' config.result ./error-context-imports-fail-in-body.nix
+checkConfigError 'while loading imports of module .a.' config.result ./error-context-imports-fail-in-body-structure.nix
+checkConfigError 'while loading imports of module .a.' config.result ./error-context-imports-fail-in-body-infinite-recursion.nix
 
 # Class checks, evalModules
 checkConfigOutput '^{}$' config.ok.config ./class-check.nix
