@@ -64,6 +64,9 @@ in
     hash = info.chromium_npm_hash;
   };
 
+  # Needed for header generation in electron 35 and above
+  env.ELECTRON_OUT_DIR = if (lib.versions.major info.version >= "35") then "Release" else null;
+
   src = null;
 
   patches =
