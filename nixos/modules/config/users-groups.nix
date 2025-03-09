@@ -778,27 +778,46 @@ in {
       '';
     } else ""; # keep around for backwards compatibility
 
-    systemd.services.linger-users = lib.mkIf ((length lingeringUsers) > 0) {
+    systemd.services.linger-users = let
+      lingerDir = "/var/lib/systemd/linger";
+      userPartition = lib.lists.partition (u: u.linger) (builtins.attrValues cfg.users);
+      lingeringUserNames = map (u: u.name) userPartition.right;
+      nonLingeringUserNames = map (u: u.name) userPartition.wrong;
+      allUserNames = map (u: u.name) (builtins.attrValues cfg.users);
+    in {
       wantedBy = ["multi-user.target"];
       after = ["systemd-logind.service"];
       requires = ["systemd-logind.service"];
 
-      script = let
-        lingerDir = "/var/lib/systemd/linger";
-        lingeringUsersFile = builtins.toFile "lingering-users"
-          (concatStrings (map (s: "${s}\n")
-            (sort (a: b: a < b) lingeringUsers)));  # this sorting is important for `comm` to work correctly
-      in ''
+      script = ''
+        ${lib.strings.toShellVars {inherit lingeringUserNames nonLingeringUserNames allUserNames;}}
+
+        user_configured () {
+            local user="$1"
+            local i
+            for i in "''${allUserNames[@]}"; do
+                [[ "$i" = "$user" ]] && return 0
+            done
+            return 1
+        }
+
         mkdir -vp ${lingerDir}
         cd ${lingerDir}
-        for user in $(ls); do
-          if ! id "$user" >/dev/null; then
-            echo "Removing linger for missing user $user"
-            rm --force -- "$user"
-          fi
+        shopt -s dotglob nullglob
+        for user in *; do
+            if ! user_configured "$user"; then
+                # systemd has this user configured to linger despite them not
+                # existing.
+                rm -- "$user"
+            fi
         done
-        ls | sort | comm -3 -1 ${lingeringUsersFile} - | xargs -r ${pkgs.systemd}/bin/loginctl disable-linger
-        ls | sort | comm -3 -2 ${lingeringUsersFile} - | xargs -r ${pkgs.systemd}/bin/loginctl  enable-linger
+
+        if (( ''${#nonLingeringUserNames[*]} > 0 )); then
+            ${pkgs.systemd}/bin/loginctl disable-linger "''${nonLingeringUserNames[@]}"
+        fi
+        if (( ''${#lingeringUserNames[*]} > 0 )); then
+            ${pkgs.systemd}/bin/loginctl enable-linger "''${lingeringUserNames[@]}"
+        fi
       '';
 
       serviceConfig.Type = "oneshot";
