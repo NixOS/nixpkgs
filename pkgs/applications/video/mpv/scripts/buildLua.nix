@@ -76,20 +76,17 @@ lib.makeOverridable (
           runHook postInstall
         '';
 
-        passthru =
-          {
-            inherit scriptName;
-          }
-          // lib.optionalAttrs (runtime-dependencies != [ ]) {
-            extraWrapperArgs =
-              [
-                "--prefix"
-                "PATH"
-                ":"
-              ]
-              ++ (map lib.makeBinPath runtime-dependencies)
-              ++ args.passthru.extraWrapperArgs or [ ];
-          };
+        passthru = {
+          inherit scriptName;
+          extraWrapperArgs =
+            lib.optionals (runtime-dependencies != [ ]) [
+              "--prefix"
+              "PATH"
+              ":"
+              (lib.makeBinPath runtime-dependencies)
+            ] ++ args.passthru.extraWrapperArgs or [ ];
+        };
+
         meta =
           {
             platforms = lib.platforms.all;
