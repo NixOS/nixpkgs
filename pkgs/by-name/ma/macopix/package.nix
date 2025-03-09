@@ -3,13 +3,14 @@
   stdenv,
   fetchurl,
   pkg-config,
-  gtk,
+  gtk3,
   openssl,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation rec {
   pname = "macopix";
-  version = "1.7.4";
+  version = "3.4.0";
 
   # GitHub does not contain tags
   # https://github.com/chimari/MaCoPiX/issues/6
@@ -20,7 +21,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    gtk
+    gtk3
     openssl
   ];
 
@@ -37,6 +38,11 @@ stdenv.mkDerivation rec {
   env.NIX_CFLAGS_COMPILE = "-fcommon";
 
   NIX_LDFLAGS = "-lX11";
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
 
   meta = {
     description = "Mascot Constructive Pilot for X";
