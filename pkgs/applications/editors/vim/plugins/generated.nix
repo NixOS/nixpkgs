@@ -3961,6 +3961,19 @@ final: prev:
     meta.hydraPlatforms = [ ];
   };
 
+  devdocs-nvim = buildVimPlugin {
+    pname = "devdocs.nvim";
+    version = "2025-03-09";
+    src = fetchFromGitHub {
+      owner = "maskudo";
+      repo = "devdocs.nvim";
+      rev = "1f39d611427af27befbf0edb3284ef0def830dd7";
+      sha256 = "11adw0b3kg0324gvpk9kb0s9crkg1rp1pgqgr1v08sc5lix7wjc5";
+    };
+    meta.homepage = "https://github.com/maskudo/devdocs.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   devdocs-vim = buildVimPlugin {
     pname = "devdocs.vim";
     version = "2018-08-27";
