@@ -42,6 +42,5 @@ buildNpmPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dtomvan ];
     mainProgram = "kulala-ls";
-    platforms = lib.platforms.all;
   };
 }
