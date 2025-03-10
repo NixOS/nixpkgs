@@ -3138,8 +3138,8 @@ let
         mktplcRef = {
           name = "mypy";
           publisher = "matangover";
-          version = "0.2.3";
-          hash = "sha256-m/8j89M340fiMF7Mi7FT2+Xag3fbMGWf8Gt9T8hLdmo=";
+          version = "0.4.1";
+          hash = "sha256-hCgOclEnjhWTLMZPXJkoxgFN4pqZ1MKTzmRtjeHbLeU=";
         };
         meta.license = lib.licenses.mit;
       };
