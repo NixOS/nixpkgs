@@ -4,6 +4,7 @@
 , fetchpatch
 , cmake
 , gtest
+, windows
 , static ? stdenv.hostPlatform.isStatic
 , cxxStandard ? null
 }:
@@ -48,7 +49,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ gtest ];
+  buildInputs = [
+    gtest
+  ] ++ lib.optionals stdenv.hostPlatform.isWindows [ windows.mingw_w64_pthreads ];
 
   meta = {
     description = "Open-source collection of C++ code designed to augment the C++ standard library";
