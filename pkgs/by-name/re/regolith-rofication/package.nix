@@ -16,7 +16,7 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-Bn57hHuW1yGxBBSiqXCIAbhB5ayY9TvZ8Mfn8I47y8E=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
     dbus-python
     pygobject3
   ];
