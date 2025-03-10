@@ -5695,8 +5695,8 @@ let
         mktplcRef = {
           name = "vscode-proto3";
           publisher = "zxh404";
-          version = "0.5.4";
-          sha256 = "08dfl5h1k6s542qw5qx2czm1wb37ck9w2vpjz44kp2az352nmksb";
+          version = "0.5.5";
+          sha256 = "sha256-Em+w3FyJLXrpVAe9N7zsHRoMcpvl+psmG1new7nA8iE=";
         };
         nativeBuildInputs = [
           jq
