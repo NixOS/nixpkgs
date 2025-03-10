@@ -17157,6 +17157,19 @@ final: prev:
     meta.hydraPlatforms = [ ];
   };
 
+  vim-jdaddy = buildVimPlugin {
+    pname = "vim-jdaddy";
+    version = "2022-03-26";
+    src = fetchFromGitHub {
+      owner = "tpope";
+      repo = "vim-jdaddy";
+      rev = "23b67752cb869dd9c8f3109173b69aa96a1f3acf";
+      sha256 = "1frkyq5zpwkwrrjcf0sscmr6q696vaaxnc0r93mk9psv5zbna4vl";
+    };
+    meta.homepage = "https://github.com/tpope/vim-jdaddy/";
+    meta.hydraPlatforms = [ ];
+  };
+
   vim-jetpack = buildVimPlugin {
     pname = "vim-jetpack";
     version = "2025-02-20";
