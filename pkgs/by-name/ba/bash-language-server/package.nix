@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  pnpm_8,
+  pnpm_9,
   nodejs,
   makeBinaryWrapper,
   shellcheck,
@@ -11,29 +11,29 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bash-language-server";
-  version = "5.4.0";
+  version = "5.4.3";
 
   src = fetchFromGitHub {
     owner = "bash-lsp";
     repo = "bash-language-server";
     rev = "server-${finalAttrs.version}";
-    hash = "sha256-yJ81oGd9aNsWQMLvDSgMVVH1//Mw/SVFYFIPsJTQYzE=";
+    hash = "sha256-F+GQmI8DviMYfx66VMqpF6UqYauWQdjuJZi8UR9KTdE=";
   };
 
   pnpmWorkspaces = [ "bash-language-server" ];
-  pnpmDeps = pnpm_8.fetchDeps {
+  pnpmDeps = pnpm_9.fetchDeps {
     inherit (finalAttrs)
       pname
       version
       src
       pnpmWorkspaces
       ;
-    hash = "sha256-W25xehcxncBs9QgQBt17F5YHK0b+GDEmt27XzTkyYWg=";
+    hash = "sha256-lRfVM20c2OMbPk/dUiuEv07Fu6UujM42xJ5Uc9SpQa4=";
   };
 
   nativeBuildInputs = [
     nodejs
-    pnpm_8.configHook
+    pnpm_9.configHook
     makeBinaryWrapper
     versionCheckHook
   ];
