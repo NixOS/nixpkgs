@@ -1931,8 +1931,8 @@ let
         mktplcRef = {
           name = "auto-close-tag";
           publisher = "formulahendry";
-          version = "0.5.14";
-          hash = "sha256-XYYHS2QTy8WYjtUYYWsIESzmH4dRQLlXQpJq78BolMw=";
+          version = "0.5.15";
+          hash = "sha256-8lRdNGa7Shhmko8lhKxexNj4mkGEwPihBrsQrm5a1kA=";
         };
         meta = {
           license = lib.licenses.mit;
