@@ -3493,8 +3493,8 @@ let
         mktplcRef = {
           name = "vscode-jupyter-cell-tags";
           publisher = "ms-toolsai";
-          version = "0.1.8";
-          hash = "sha256-0oPyptnUWL1h/H13SdR+FdgGzVwEpTaK9SCE7BvI/5M=";
+          version = "0.1.9";
+          hash = "sha256-XODbFbOr2kBTzFc0JtjiDUcCDBX1Hd4uajlil7mhqPY=";
         };
         meta = {
           license = lib.licenses.mit;
