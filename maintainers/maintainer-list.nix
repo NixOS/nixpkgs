@@ -9101,6 +9101,12 @@
     github = "gytis-ivaskevicius";
     githubId = 23264966;
   };
+  h3cth0r = {
+    name = "Hector Miranda";
+    email = "hector.miranda@tec.mx";
+    github = "h3cth0r";
+    githubId = 43997408;
+  };
   h7x4 = {
     name = "h7x4";
     email = "h7x4@nani.wtf";
@@ -13364,6 +13370,12 @@
     github = "liam-murphy14";
     githubId = 54590679;
     name = "Liam Murphy";
+  };
+  Liamolucko = {
+    name = "Liam Murphy";
+    email = "liampm32@gmail.com";
+    github = "Liamolucko";
+    githubId = 43807659;
   };
   liarokapisv = {
     email = "liarokapis.v@gmail.com";
