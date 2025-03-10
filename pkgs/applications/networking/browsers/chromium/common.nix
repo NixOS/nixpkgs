@@ -623,7 +623,7 @@ let
       ''
       + ''
         # Link to our own Node.js and Java (required during the build):
-        mkdir -p third_party/node/linux/node-linux-x64/bin
+        mkdir -p third_party/node/linux/node-linux-x64/bin${lib.optionalString ungoogled " third_party/jdk/current/bin/"}
         ln -sf "${pkgsBuildHost.nodejs}/bin/node" third_party/node/linux/node-linux-x64/bin/node
         ln -s "${pkgsBuildHost.jdk17_headless}/bin/java" third_party/jdk/current/bin/
 
