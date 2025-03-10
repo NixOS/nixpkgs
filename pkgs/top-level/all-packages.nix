@@ -1766,8 +1766,6 @@ with pkgs;
 
   dkimpy = with python3Packages; toPythonApplication dkimpy;
 
-  echidna = haskell.lib.compose.justStaticExecutables (haskellPackages.callPackage ../tools/security/echidna { });
-
   esbuild = callPackage ../development/tools/esbuild { };
 
   esbuild_netlify = callPackage ../development/tools/esbuild/netlify.nix { };
@@ -4543,8 +4541,6 @@ with pkgs;
 
   pakcs = callPackage ../development/compilers/pakcs { };
 
-  pandoc_3_6 = callPackage ../by-name/pa/pandoc/package.nix { selectPandocCLI = (p: p.pandoc-cli_3_6); };
-
   paperwork = callPackage ../applications/office/paperwork/paperwork-gtk.nix { };
 
   parallel = callPackage ../tools/misc/parallel { };
@@ -6088,8 +6084,8 @@ with pkgs;
     # until 9.8 is ready
     (if stdenv.hostPlatform.isStatic then haskell.packages.native-bignum.ghc94
     # JS backend can't use gmp
-    else if stdenv.hostPlatform.isGhcjs then haskell.packages.native-bignum.ghc96
-    else haskell.packages.ghc96)
+    else if stdenv.hostPlatform.isGhcjs then haskell.packages.native-bignum.ghc98
+    else haskell.packages.ghc98)
   // { __recurseIntoDerivationForReleaseJobs = true; };
 
   # haskellPackages.ghc is build->host (it exposes the compiler used to build the
@@ -6105,8 +6101,8 @@ with pkgs;
     # Use 9.4 for static over broken 9.6
     (if stdenv.targetPlatform.isStatic then haskell.compiler.native-bignum.ghc94
     # JS backend can't use GMP
-    else if stdenv.targetPlatform.isGhcjs then haskell.compiler.native-bignum.ghc96
-    else haskell.compiler.ghc96);
+    else if stdenv.targetPlatform.isGhcjs then haskell.compiler.native-bignum.ghc98
+    else haskell.compiler.ghc98);
 
   alex = haskell.lib.compose.justStaticExecutables haskellPackages.alex;
 
@@ -6149,9 +6145,10 @@ with pkgs;
   spicedb-zed = callPackage ../servers/spicedb/zed.nix { };
 
   tamarin-prover =
-    (haskellPackages.callPackage ../applications/science/logic/tamarin-prover {
-      # NOTE: do not use the haskell packages 'graphviz' and 'maude'
-      inherit maude which;
+    (callPackage ../applications/science/logic/tamarin-prover {
+      # 2025-03-07: dependency fclabels doesn't compile with GHC >= 9.8
+      # https://github.com/sebastiaanvisser/fclabels/issues/46
+      haskellPackages = haskell.packages.ghc96;
       graphviz = graphviz-nox;
     });
 
@@ -11224,8 +11221,6 @@ with pkgs;
 
   grafana = callPackage ../servers/monitoring/grafana { };
   grafanaPlugins = callPackages ../servers/monitoring/grafana/plugins { };
-
-  hasura-graphql-engine = haskell.lib.compose.justStaticExecutables haskell.packages.ghc810.graphql-engine;
 
   hasura-cli = callPackage ../servers/hasura/cli.nix { };
 

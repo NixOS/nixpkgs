@@ -58,7 +58,7 @@ Each of those compiler versions has a corresponding attribute set `packages` bui
 it. However, the non-standard package sets are not tested regularly and, as a
 result, contain fewer working packages. The corresponding package set for GHC
 9.4.8 is `haskell.packages.ghc948`. In fact `haskellPackages` (at the time of writing) is just an alias
-for `haskell.packages.ghc966`:
+for `haskell.packages.ghc984`:
 
 Every package set also re-exposes the GHC used to build its packages as `haskell.packages.*.ghc`.
 
@@ -297,8 +297,8 @@ Defaults to `false`.
 : Whether to build (HTML) documentation using [haddock][haddock].
 Defaults to `true` if supported.
 
-`testTarget`
-: Name of the test suite to build and run. If unset, all test suites will be executed.
+`testTargets`
+: Names of the test suites to build and run. If unset, all test suites will be executed.
 
 `preCompileBuildDriver`
 : Shell code to run before compiling `Setup.hs`.
@@ -764,7 +764,7 @@ that depend on that library, you may want to use:
 
 ```nix
 haskellPackages.haskell-ci.overrideScope (self: super: {
-  Cabal = self.Cabal_3_14_1_0;
+  Cabal = self.Cabal_3_14_1_1;
 })
 ```
 
