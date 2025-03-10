@@ -36,6 +36,12 @@ rustPlatform.buildRustPackage rec {
     RUSTONIG_SYSTEM_LIBONIG = true;
   };
 
+  checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
+  # Error creating config directory: Operation not permitted (os error 1)
+  # Using writableTmpDirAsHomeHomeHook is not working
+    "--skip=generate_config::tests::test_run_creates_config_file"
+  ];
+
   passthru = {
     updateScript = nix-update-script { };
   };
