@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "shadps4-emu";
     repo = "shadPS4";
     rev = "ba1eb298dec48f88431068390232e3978ae07bda";
-    hash = "sha256-52BhGKSUv+9asACNkppxiNm3Gja7r3LcXOIwhQR5ALs=";
+    hash = "sha256-ec7a5412633f68228dab2dc59b5c79ca4be0b1fb";
     fetchSubmodules = true;
   };
 
