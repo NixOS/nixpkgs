@@ -497,6 +497,19 @@ final: prev:
     meta.hydraPlatforms = [ ];
   };
 
+  YankAssassin-vim = buildVimPlugin {
+    pname = "YankAssassin.vim";
+    version = "2022-03-11";
+    src = fetchFromGitHub {
+      owner = "svban";
+      repo = "YankAssassin.vim";
+      rev = "55ce478a08333c086bcccdf087453085f85854d4";
+      sha256 = "0w0g49knan6vmmpcdj8fvdn2bmyydpihf4jfyza6iy7gsk8kmr66";
+    };
+    meta.homepage = "https://github.com/svban/YankAssassin.vim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   YankRing-vim = buildVimPlugin {
     pname = "YankRing.vim";
     version = "2015-07-29";
