@@ -10482,13 +10482,6 @@
     github = "jacbart";
     githubId = 7909687;
   };
-  jacekpoz = {
-    name = "Jacek Poziemski";
-    email = "jacek@poz.pet";
-    matrix = "@jacek:poz.pet";
-    github = "jacekpoz";
-    githubId = 64381190;
-  };
   jacfal = {
     name = "Jakub Pravda";
     email = "me@jakubpravda.net";
@@ -18931,6 +18924,13 @@
     github = "PowerUser64";
     githubId = 24578572;
     name = "Blake North";
+  };
+  poz = {
+    name = "Jacek Poziemski";
+    email = "poz@poz.pet";
+    matrix = "@poz:poz.pet";
+    github = "imnotpoz";
+    githubId = 64381190;
   };
   ppenguin = {
     name = "Jeroen Versteeg";
