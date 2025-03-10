@@ -10,7 +10,7 @@
   libinotify-kqueue,
   epoll-shim,
   systemd,
-  enableSystemd ? stdenv.hostPlatform.isLinux, # enableSystemd=false maintained by maintainers.qyliss.
+  enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd, # enableSystemd=false maintained by maintainers.qyliss.
   pkg-config,
   docutils,
   doxygen,
@@ -60,7 +60,7 @@
   ffadoSupport ?
     x11Support
     && lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform
-    && stdenv.hostPlatform.isLinux,
+    && lib.meta.availableOn stdenv.hostPlatform ffado,
   ffado,
   libselinux,
   libebur128,
@@ -73,7 +73,9 @@ let
   ];
 
   bluezSupport = stdenv.hostPlatform.isLinux;
-  modemmanagerSupport = stdenv.hostPlatform.isLinux;
+  modemmanagerSupport = lib.meta.availableOn stdenv.hostPlatform modemmanager;
+  libcameraSupport = lib.meta.availableOn stdenv.hostPlatform libcamera;
+  ldacbtSupport = lib.meta.availableOn stdenv.hostPlatform ldacbt;
 in
 
 stdenv.mkDerivation (finalAttrs: {
@@ -153,8 +155,8 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.take 1 webrtc-audio-processings
     ++ lib.optional stdenv.hostPlatform.isLinux alsa-lib
-    ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform ldacbt) ldacbt
-    ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform libcamera) libcamera
+    ++ lib.optional ldacbtSupport ldacbt
+    ++ lib.optional libcameraSupport libcamera
     ++ lib.optional zeroconfSupport avahi
     ++ lib.optional raopSupport openssl
     ++ lib.optional rocSupport roc-toolkit
@@ -218,9 +220,7 @@ stdenv.mkDerivation (finalAttrs: {
     # source code is not easily obtainable
     (lib.mesonEnable "bluez5-codec-lc3plus" false)
     (lib.mesonEnable "bluez5-codec-lc3" bluezSupport)
-    (lib.mesonEnable "bluez5-codec-ldac" (
-      bluezSupport && (lib.meta.availableOn stdenv.hostPlatform ldacbt)
-    ))
+    (lib.mesonEnable "bluez5-codec-ldac" (bluezSupport && ldacbtSupport))
     (lib.mesonEnable "opus" true)
     (lib.mesonOption "sysconfdir" "/etc")
     (lib.mesonEnable "raop" raopSupport)
