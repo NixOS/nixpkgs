@@ -468,13 +468,15 @@ The oldest supported release (`YYMM`) can be found using
 nix-instantiate --eval -A lib.trivial.oldestSupportedRelease
 ```
 
-The release branches should generally only receive backwards-compatible changes, both for the Nix expressions and derivations.
+Users should be confident tracking the stable release channels for updates worry-free from breaking changes that will affect them.
+The release branches should only receive backwards-compatible changes, both for the Nix expressions and derivations.
+
 Here are some examples of backwards-compatible changes that are okay to backport:
 - ✔️ New packages, modules and functions
 - ✔️ Security fixes
 - ✔️ Package version updates
   - ✔️ Patch versions with fixes
-  - ✔️ Minor versions with new functionality, but no breaking changes
+  - ✔️ Minor versions with new functionality, verified to include no breaking changes
 
 In addition, major package version updates with breaking changes are also acceptable for:
 - ✔️ Services that would fail without up-to-date client software, such as `spotify`, `steam`, and `discord`
