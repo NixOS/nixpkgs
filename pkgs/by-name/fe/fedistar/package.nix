@@ -62,7 +62,9 @@ rustPlatform.buildRustPackage {
     ;
   sourceRoot = "${src.name}/src-tauri";
 
-  cargoHash = "sha256-gn92yrz/6/WNBGVGXXSskSqty3qP+atzu1LB8P882KA=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-u7AHf7TJzWsnynfcvtKaxSZJKeFFmQ1nJZNWUQ8wnWc=";
+
   postPatch = ''
     substituteInPlace ./tauri.conf.json \
       --replace-fail '"frontendDist": "../out",' '"frontendDist": "${fedistar-frontend}",' \
