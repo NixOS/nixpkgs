@@ -6,6 +6,8 @@
   pkg-config,
   elfutils,
   zlib,
+  gnused,
+  bash,
 }:
 let
   inherit (rustPackages.rustc) llvmPackages;
@@ -112,15 +114,16 @@ rustPlatform.buildRustPackage rec {
 
   postFixup = ''
     wrapProgram $out/bin/ecc-rs \
-      --prefix LIBCLANG_PATH : ${lib.getLib llvmPackages.libclang}/lib \
-      --prefix PATH : ${
-        lib.makeBinPath (
-          with llvmPackages;
-          [
-            clang
-            bintools-unwrapped
-          ]
-        )
+      --unset NIX_HARDENING_ENABLE \
+      --set LIBCLANG_PATH ${lib.getLib llvmPackages.libclang}/lib \
+      --set-default EUNOMIA_HOME "\$HOME/.local/share/eunomia" \
+      --set PATH ${
+        lib.makeBinPath [
+          llvmPackages.clang
+          llvmPackages.bintools-unwrapped
+          gnused
+          bash
+        ]
       }
   '';
 
