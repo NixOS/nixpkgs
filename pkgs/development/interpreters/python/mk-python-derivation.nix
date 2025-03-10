@@ -100,6 +100,8 @@ let
   cleanAttrs = flip removeAttrs [
     "disabled"
     "checkPhase"
+    "preCheck"
+    "postCheck"
     "checkInputs"
     "nativeCheckInputs"
     "doCheck"
@@ -435,7 +437,20 @@ let
     // optionalAttrs (attrs ? checkPhase) {
       # If given use the specified checkPhase, otherwise use the setup hook.
       # Longer-term we should get rid of `checkPhase` and use `installCheckPhase`.
-      installCheckPhase = attrs.checkPhase;
+      installCheckPhase =
+        let
+          replaceRunHook =
+            lib.replaceStrings
+              [ "runHook preCheck\n" "runHook postCheck\n" ]
+              [ "runHook preInstallCheck\n" "runHook postInstallCheck\n" ];
+        in
+        replaceRunHook attrs.checkPhase;
+    }
+    // optionalAttrs (attrs ? preCheck) {
+      preInstallCheck = attrs.preInstallCheck or attrs.preCheck;
+    }
+    // optionalAttrs (attrs ? postCheck) {
+      postInstallCheck = attrs.postInstallCheck or attrs.postCheck;
     }
     // optionalAttrs (attrs.doCheck or true) (
       getOptionalAttrs [
