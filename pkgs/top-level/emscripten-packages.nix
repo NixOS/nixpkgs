@@ -6,6 +6,44 @@ with pkgs;
 # https://github.com/NixOS/nixpkgs/pull/16208
 
 rec {
+  boost = (pkgs.boost185.override {
+    stdenv = emscriptenStdenv;
+  }).overrideAttrs
+    (old:
+    let
+      b2Args = lib.concatStringsSep " " ([
+        "-q"
+        "toolset=emscripten"
+        "link=static"
+        "runtime-link=static"
+        "variant=release"
+        "threading=single"
+        "--prefix=${placeholder "out"}"
+        # The following boost libraries are excluded here as they fail to build with the emscriptenStdenv.
+        # ./boost/container/detail/thread_mutex.hpp:109:12: error: '__declspec' attributes are not enabled; use '-fdeclspec' or '-fms-extensions' to enable support for __declspec attributes
+        "--without-container"
+        "--without-json"
+        # ./boost/config/requires_threads.hpp:47:5: error: "Compiler threading support is not turned on. Please set the correct command line options for threading: -pthread (Linux), -pthreads (Solaris) or -mthreads (Mingw32)"
+        "--without-contract"
+        "--without-type_erasure"
+        # ./boost/asio/detail/impl/scheduler.ipp:136:26: error: no type named 'signal_blocker' in namespace 'boost::asio::detail'
+        "--without-log"
+        # error "LONG_BIT definition appears wrong for platform (bad gcc/glibc config?)."
+        "--without-python"
+      ]);
+    in
+    {
+      outputs = [ "out" "dev" ];
+      configurePhase = ''
+        mkdir -p .emscriptencache
+        export EM_CACHE=$(pwd)/.emscriptencache
+        emconfigure ./bootstrap.sh
+      '';
+      buildPhase = "./b2 ${b2Args}";
+      installPhase = "./b2 ${b2Args} install";
+      doCheck = false;
+    });
+
   json_c = (pkgs.json_c.override {
     stdenv = pkgs.emscriptenStdenv;
   }).overrideAttrs
