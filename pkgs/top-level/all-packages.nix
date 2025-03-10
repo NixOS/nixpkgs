@@ -9212,6 +9212,7 @@ with pkgs;
     icu74
     icu75
     icu76
+    icu77
   ;
 
   # Use Apple’s fork of ICU by default, which provides additional APIs that are not present in upstream ICU.
