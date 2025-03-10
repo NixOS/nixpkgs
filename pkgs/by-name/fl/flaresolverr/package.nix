@@ -4,6 +4,7 @@
   fetchFromGitHub,
 
   makeWrapper,
+  runCommand,
 
   chromium,
   python3,
@@ -29,6 +30,20 @@ let
       websockets
     ]
   );
+
+  chromium-wrapped =
+    runCommand "chromium-wrapped"
+      {
+        nativeBuildInputs = [ makeWrapper ];
+        meta.mainProgram = "chromium";
+      }
+      ''
+        mkdir -p $out/bin
+        makeWrapper \
+          ${chromium}/bin/chromium \
+          $out/bin/chromium \
+          --add-flags "--disable-gpu"
+      '';
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "flaresolverr";
@@ -52,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace src/utils.py \
       --replace-fail \
         'CHROME_EXE_PATH = None' \
-        'CHROME_EXE_PATH = "${lib.getExe chromium}"' \
+        'CHROME_EXE_PATH = "${lib.getExe chromium-wrapped}"' \
       --replace-fail \
         'PATCHED_DRIVER_PATH = None' \
         'PATCHED_DRIVER_PATH = "${lib.getExe undetected-chromedriver}"'
@@ -77,9 +92,10 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/FlareSolverr/FlareSolverr/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = licenses.mit;
     mainProgram = "flaresolverr";
-    maintainers = with maintainers; [ paveloom ];
+    maintainers = with maintainers; [
+      paveloom
+      xddxdd
+    ];
     inherit (undetected-chromedriver.meta) platforms;
-    # See https://github.com/NixOS/nixpkgs/issues/332776
-    broken = true;
   };
 })
