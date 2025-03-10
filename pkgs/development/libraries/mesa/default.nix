@@ -96,6 +96,8 @@
 }:
 
 let
+  withX11 = lib.elem "x11" eglPlatforms;
+
   rustDeps = [
     {
       pname = "paste";
@@ -246,6 +248,10 @@ in stdenv.mkDerivation {
 
     # Disable valgrind on targets where it's not available
     (lib.mesonEnable "valgrind" withValgrind)
+  ] ++ lib.optionals (!withX11) [
+    (lib.mesonEnable "gallium-vdpau" false)
+    (lib.mesonEnable "glx" false)
+    (lib.mesonEnable "xlib-lease" false)
   ] ++ lib.optionals enablePatentEncumberedCodecs [
     (lib.mesonOption "video-codecs" "all")
   ] ++ lib.optionals needNativeCLC [
@@ -255,7 +261,7 @@ in stdenv.mkDerivation {
 
   strictDeps = true;
 
-  buildInputs = with xorg; [
+  buildInputs = [
     directx-headers
     elfutils
     expat
@@ -264,13 +270,6 @@ in stdenv.mkDerivation {
     libunwind
     libva-minimal
     libvdpau
-    libX11
-    libxcb
-    libXext
-    libXfixes
-    libXrandr
-    libxshmfence
-    libXxf86vm
     llvmPackages.clang
     llvmPackages.clang-unwrapped
     llvmPackages.libclc
@@ -280,11 +279,20 @@ in stdenv.mkDerivation {
     spirv-llvm-translator
     udev
     vulkan-loader
+    xcbutilkeysyms
+    zstd
+  ] ++ lib.optionals withX11 (with xorg; [
+    libX11
+    libxcb
+    libXext
+    libXfixes
+    libXrandr
+    libxshmfence
+    libXxf86vm
+    xorgproto
+  ]) ++ lib.optionals (lib.elem "wayland" eglPlatforms) [
     wayland
     wayland-protocols
-    xcbutilkeysyms
-    xorgproto
-    zstd
   ] ++ lib.optionals withValgrind [
     valgrind-light
   ];
