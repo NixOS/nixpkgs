@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "yew-fmt";
-  version = "0.5.3";
+  version = "0.5.5";
 
   src = fetchFromGitHub {
     owner = "its-the-shrimp";
     repo = "yew-fmt";
     tag = "v${version}";
-    hash = "sha256-Ck6WA6ROm8APTsgoxbVGUqoblc5awW+hmmzcy4ZFoBM=";
+    hash = "sha256-2sOw8wWfnEphYsruQyhZMW3KofcGkNHJB6Q1jhFP3oo=";
   };
 
-  cargoHash = "sha256-Fp8MT1LJ1EpqwEZ+SpOomqZ7we47w2S5ExkB966Z3r0=";
+  cargoHash = "sha256-o4oRVI3+Nz8fwdwlyVvXUuhCQr4Bbg5Kife/PJoJCJY=";
   nativeCheckInputs = [ rustfmt ];
   passthru.updateScript = nix-update-script { };
   useFetchCargoVendor = true;
