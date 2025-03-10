@@ -2,6 +2,7 @@
   callPackage,
   lib,
   stdenv,
+  meta,
 }:
 let
   examples-shell = callPackage ./examples/shell.nix { licenseAccepted = true; };
@@ -25,5 +26,14 @@ stdenv.mkDerivation {
 
   passthru.tests = all-tests;
 
-  meta.timeout = 60;
+  # This is the toplevel package, so inherit the update script
+  passthru.updateScript = {
+    command = [ ./update.sh ];
+    attrPath = "androidenv.test-suite";
+    supportedFeatures = [ "commit" ];
+  };
+
+  meta = meta // {
+    timeout = 60;
+  };
 }
