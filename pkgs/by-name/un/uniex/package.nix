@@ -1,8 +1,8 @@
 {
   lib,
   buildGoModule,
-  gitUpdater,
   fetchFromGitHub,
+  nix-update-script,
 }:
 
 buildGoModule rec {
@@ -23,7 +23,7 @@ buildGoModule rec {
     "-w"
   ];
 
-  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/paepckehh/uniex/releases/tag/v${version}";
