@@ -1,59 +1,62 @@
-➜  ~ cat /media/mm/Ventoy/default.nix 
-{ lib
-, stdenv
-, fetchurl
-, wrapGAppsHook
-, alsa-lib
-, at-spi2-atk
-, at-spi2-core
-, atk
-, cairo
-, cups
-, dbus-glib
-, libnotify
-, libdrm
-, libxkbcommon
-, mesa
-, nspr
-, nss
-, pango
-, systemd
-, libpulseaudio
-, gdk-pixbuf
-, gtk3
-, makeDesktopItem
-, unzip
-, libX11
-, libXScrnSaver
-, libXcomposite
-, libXcursor
-, libXdamage
-, libXext
-, libXfixes
-, libXi
-, libXrandr
-, libXrender
-, libXtst
-, libxcb
-, writeText
-, patchelf
-, makeWrapper
-, libGL
-, ffmpeg
-, glib
-, pciutils  # Added for libpci.so
+{
+  lib,
+  stdenv,
+  fetchurl,
+  wrapGAppsHook,
+  alsa-lib,
+  at-spi2-atk,
+  at-spi2-core,
+  atk,
+  cairo,
+  cups,
+  dbus-glib,
+  libnotify,
+  libdrm,
+  libxkbcommon,
+  mesa,
+  nspr,
+  nss,
+  pango,
+  systemd,
+  libpulseaudio,
+  gdk-pixbuf,
+  gtk3,
+  makeDesktopItem,
+  unzip,
+  libX11,
+  libXScrnSaver,
+  libXcomposite,
+  libXcursor,
+  libXdamage,
+  libXext,
+  libXfixes,
+  libXi,
+  libXrandr,
+  libXrender,
+  libXtst,
+  libxcb,
+  writeText,
+  patchelf,
+  makeWrapper,
+  libGL,
+  ffmpeg,
+  glib,
+  pciutils, # Added for libpci.so
 }:
 
 let
   version = "6.5.4";
-  
+
   desktopItem = makeDesktopItem {
     name = "waterfox";
     exec = "waterfox %U";
     icon = "waterfox";
     desktopName = "Waterfox";
     genericName = "Web Browser";
-    categories = [ "Network" "WebBrowser" ];
+    categories = [
+      "Network"
+      "WebBrowser"
+    ];
     mimeTypes = [
       "text/html"
       "text/xml"
@@ -64,7 +67,7 @@ let
       "x-scheme-handler/ftp"
     ];
   };
-  
+
   prefsFile = writeText "waterfox-prefs.js" ''
     // Disable automatic updates and notifications
     pref("app.update.auto", false);
@@ -72,7 +75,8 @@ let
     pref("browser.crashReports.unsubmittedCheck.enabled", false);
   '';
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "waterfox";
   inherit version;
 
@@ -123,7 +127,7 @@ in stdenv.mkDerivation rec {
     libGL
     ffmpeg
     glib
-    pciutils  # Added here
+    pciutils # Added here
   ];
 
   dontBuild = true;
@@ -188,7 +192,7 @@ in stdenv.mkDerivation rec {
     cp -L ${nspr}/lib/libnspr4.so $out/opt/waterfox/
     cp -L ${nspr}/lib/libplc4.so $out/opt/waterfox/
     cp -L ${nspr}/lib/libplds4.so $out/opt/waterfox/
-    
+
     # Copy NSS libraries if not already present
     for lib in ${nss}/lib/lib{nss3,nssutil3,smime3,ssl3}.so; do
       if [ ! -e $out/opt/waterfox/$(basename $lib) ]; then
