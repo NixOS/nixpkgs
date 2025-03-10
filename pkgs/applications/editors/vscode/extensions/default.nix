@@ -3677,8 +3677,8 @@ let
         mktplcRef = {
           name = "remote-wsl";
           publisher = "ms-vscode-remote";
-          version = "0.88.2";
-          hash = "sha256-fl7fLNd3EHA9eMiPUIL/23SUiA81gveqZLFkqaHTX+Q=";
+          version = "0.88.5";
+          hash = "sha256-zTAGRYaOjO1xpfjh6v/lKFM1emR/OexWc1Yo8O5oUgU=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/ms-vscode-remote.remote-wsl/changelog";
