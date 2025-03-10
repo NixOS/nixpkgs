@@ -1,31 +1,52 @@
-{ python3Packages, fetchFromGitHub, lib }:
+{
+  python3Packages,
+  fetchFromGitHub,
+  fetchpatch,
+  lib,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "mnamer";
-  version = "2.5.4";
+  version = "2.5.5";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "jkwill87";
     repo = "mnamer";
     rev = version;
-    sha256 = "sha256-fONQq/RboWHFuEFU7HP1ThUpSjOIlkg54c2WlMUKwuk=";
+    sha256 = "sha256-qQu5V1GOsbrR00HOrot6TTAkc3KRasBPDEU7ZojUBio=";
   };
 
+  build-system = with python3Packages; [
+    setuptools
+    setuptools-scm
+  ];
+
+  nativeBuildInputs = with python3Packages; [ pythonRelaxDepsHook ];
+
   propagatedBuildInputs = with python3Packages; [
-    babelfish
-    requests
     appdirs
-    teletype
-    requests-cache
+    babelfish
     guessit
+    requests
+    requests-cache
+    teletype
+  ];
+
+  pythonRelaxDeps = [
+    "guessit"
+    "requests-cache"
+    "setuptools-scm"
+    "typing-extensions"
   ];
 
   patches = [
-    # requires specific old versions of dependencies which have been updated in nixpkgs
-    ./remove_requirements.patch
-
-    # author reads a private property that changed between versions
-    ./update_hack.patch
+    # https://github.com/jkwill87/mnamer/pull/291
+    (fetchpatch {
+      name = "fix-cached-session-object-error";
+      url = "https://patch-diff.githubusercontent.com/raw/jkwill87/mnamer/pull/291.patch";
+      hash = "sha256-b0mD9lLE0cUy3kk6Y04MjJfBXSj8HDApmo4xoBINAwA=";
+    })
   ];
 
   nativeCheckInputs = [ python3Packages.pytestCheckHook ];
