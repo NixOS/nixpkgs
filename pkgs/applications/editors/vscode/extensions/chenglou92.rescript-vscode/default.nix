@@ -7,6 +7,7 @@
 let
   version = "1.62.0";
   rescript-editor-analysis = callPackage ./rescript-editor-analysis.nix { inherit version; };
+
   arch =
     if stdenv.hostPlatform.isLinux then
       "linux"
@@ -23,6 +24,8 @@ vscode-utils.buildVscodeMarketplaceExtension rec {
     inherit version;
     hash = "sha256-yUAhysTM9FXo9ZAzrto+tnjnofIUEQAGBg3tjIainrY=";
   };
+
+  strictDeps = true;
   postPatch = ''
     rm -r ${analysisDir}
     ln -s ${rescript-editor-analysis}/bin ${analysisDir}
@@ -35,6 +38,7 @@ vscode-utils.buildVscodeMarketplaceExtension rec {
       lib.maintainers.dlip
       lib.maintainers.jayesh-bhoot
     ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     license = lib.licenses.mit;
   };
 }
