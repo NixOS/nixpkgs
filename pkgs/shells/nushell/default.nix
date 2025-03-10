@@ -17,8 +17,10 @@
   withDefaultFeatures ? true,
   additionalFeatures ? (p: p),
   testers,
+  runCommandLocal,
   nushell,
   nix-update-script,
+  zoxide,
 }:
 
 let
@@ -84,8 +86,24 @@ rustPlatform.buildRustPackage {
 
   passthru = {
     shellPath = "/bin/nu";
-    tests.version = testers.testVersion {
-      package = nushell;
+    tests = {
+      version = testers.testVersion {
+        package = nushell;
+      };
+      zoxide-integration =
+        runCommandLocal "test-${nushell.name}-zoxide-integration"
+          ({
+            nativeBuildInputs = [
+              nushell
+              zoxide
+            ];
+            meta.platforms = nushell.meta.platforms;
+          })
+          (''
+            mkdir $out
+            nu -c "zoxide init nushell | save zoxide.nu"
+            nu -c "source zoxide.nu"
+          '');
     };
     updateScript = nix-update-script { };
   };
