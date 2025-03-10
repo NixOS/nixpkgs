@@ -6741,6 +6741,7 @@ with pkgs;
 
   inherit (callPackage ../development/compilers/vala { })
     vala_0_56
+    vala_0_56_18
     vala;
 
   vyper = with python3Packages; toPythonApplication vyper;

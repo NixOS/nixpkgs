@@ -36,7 +36,7 @@
   sassc,
   testers,
   upower,
-  vala,
+  vala_0_56_18,
   validatePkgConfig,
   xfce,
   wrapGAppsHook3,
@@ -70,6 +70,13 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/BuddiesOfBudgie/budgie-desktop/commit/ba8170b4f3108f9de28331b6a98a9d92bb0ed4de.patch";
       hash = "sha256-T//1/NmaV81j0jiIYK7vEp8sgKCgF2i10D+Rk9qAAeE=";
     })
+
+    # Resolve vala 0.56.18 compact class inheritance removal
+    # https://github.com/BuddiesOfBudgie/budgie-desktop/issues/679
+    (fetchpatch {
+      url = "https://github.com/BuddiesOfBudgie/budgie-desktop/commit/46c83b1265b4230668da472d9ef6926941678418.patch";
+      hash = "sha256-qnA8iBEctZbE86qIPudI1vMbgFy4xDWrxxej517ORws=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -79,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     pkg-config
-    vala
+    vala_0_56_18
     validatePkgConfig
     wrapGAppsHook3
   ];
