@@ -2,11 +2,11 @@ diff --git a/CMakeLists.txt b/CMakeLists.txt
 index 98752ec..aa029b3 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -55,7 +55,15 @@ endif()
+@@ -55,7 +55,15 @@
  qt_standard_project_setup()
- 
+
  find_package(OpenSSL REQUIRED)
--find_package(lcms REQUIRED)
+-find_package(lcms2 REQUIRED)
 +SET(LCMS2_NAMES ${LCMS2_NAMES} lcms2 liblcms2 liblcms2_static)
 +FIND_LIBRARY(LCMS2_LIBRARY NAMES ${LCMS2_NAMES} )
 +FIND_PATH(LCMS2_INCLUDE_DIR lcms2.h)
