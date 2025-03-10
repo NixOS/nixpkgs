@@ -60,9 +60,9 @@ buildGoModule rec {
 
     # Increase timeouts in tests to prevent failure on heavily loaded builders
     substituteInPlace lib/storage/storage_test.go \
-      --replace "time.After(10 " "time.After(120 " \
-      --replace "time.NewTimer(30 " "time.NewTimer(120 " \
-      --replace "time.NewTimer(time.Second * 10)" "time.NewTimer(time.Second * 120)" \
+      --replace-fail "time.After(10 " "time.After(120 " \
+      --replace-fail "time.NewTimer(30 " "time.NewTimer(120 " \
+      --replace-fail "time.NewTimer(time.Second * 10)" "time.NewTimer(time.Second * 120)" \
   '';
 
   ldflags = [
@@ -82,11 +82,11 @@ buildGoModule rec {
     inherit (nixosTests) victoriametrics;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://victoriametrics.com/";
     description = "fast, cost-effective and scalable time series database, long-term remote storage for Prometheus";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       yorickvp
       ivan
       leona
