@@ -12,7 +12,7 @@
   libpng,
   libwebp,
   gdk-pixbuf,
-  openexr_3,
+  openexr,
   pkg-config,
   makeWrapper,
   zlib,
@@ -87,7 +87,7 @@ stdenv.mkDerivation rec {
     libpng
     libwebp
     gdk-pixbuf
-    openexr_3
+    openexr
     zlib
   ];
 
