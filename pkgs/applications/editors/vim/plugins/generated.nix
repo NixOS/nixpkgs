@@ -15505,6 +15505,19 @@ final: prev:
     meta.hydraPlatforms = [ ];
   };
 
+  vim-classpath = buildVimPlugin {
+    pname = "vim-classpath";
+    version = "2020-04-07";
+    src = fetchFromGitHub {
+      owner = "tpope";
+      repo = "vim-classpath";
+      rev = "88a7e8a62d4603e79787cb381fc5cac562c29bb0";
+      sha256 = "0k67r76djvhqsc76af72s11hrxschsj1rx2rb3xsi3q5rm0ff5mg";
+    };
+    meta.homepage = "https://github.com/tpope/vim-classpath/";
+    meta.hydraPlatforms = [ ];
+  };
+
   vim-clojure-highlight = buildVimPlugin {
     pname = "vim-clojure-highlight";
     version = "2015-07-05";
