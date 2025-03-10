@@ -90,6 +90,223 @@ lib.runTests (
     expr = (lib.systems.elaborate { system = "i686-linux"; parsed = (lib.systems.elaborate "x86_64-linux").parsed; }).parsed.cpu.arch;
     expected = "i686";
   };
+
+  test_elaborate_go_osArch = {
+    expr =
+      (lib.systems.elaborate {
+        system = "aarch64-linux";
+      }).go.osArch;
+    expected = "linux/arm64";
+  };
+  test_elaborate_cgo_supported = {
+    expr =
+      (lib.systems.elaborate {
+        system = "aarch64-linux";
+      }).go.cgoSupported;
+    expected = true;
+  };
+  test_elaborate_cgo_unsupported = {
+    expr =
+      (lib.systems.elaborate {
+        system = "wasm64-wasi";
+      }).go.cgoSupported;
+    expected = false;
+  };
+  test_elaborate_go_raceDetectorSupported = {
+    expr =
+      (lib.systems.elaborate {
+        system = "aarch64-linux";
+      }).go.raceDetectorSupported;
+    expected = true;
+  };
+  test_elaborate_go_raceDetectorUnsupported = {
+    expr =
+      (lib.systems.elaborate {
+        system = "armv6l-linux";
+      }).go.raceDetectorSupported;
+    expected = false;
+  };
+  test_elaborate_go386_hardfloat = {
+    expr =
+      (lib.systems.elaborate {
+        config = "i686-unknown-linux-gnu";
+      }).go.env.GO386;
+    expected = "sse2";
+  };
+  test_elaborate_go386_softfloat = {
+    expr =
+      (lib.systems.elaborate {
+        config = "i686-unknown-linux-gnueabi";
+      }).go.env.GO386;
+    expected = "softfloat";
+  };
+  test_elaborate_goarm_from_cpu_version = {
+    expr =
+      (lib.systems.elaborate {
+        system = "armv6l-linux";
+      }).go.env.GOARM;
+    expected = "6,hardfloat";
+  };
+  test_elaborate_goarm_from_cpu_version_softfloat = {
+    expr =
+      (lib.systems.elaborate {
+        config = "armv6l-unknown-linux-gnueabi";
+      }).go.env.GOARM;
+    expected = "6,softfloat";
+  };
+  test_elaborate_goarm_from_cpu_version_hardfloat = {
+    expr =
+      (lib.systems.elaborate {
+        config = "armv6l-unknown-linux-gnueabihf";
+      }).go.env.GOARM;
+    expected = "6,hardfloat";
+  };
+  test_elaborate_goarm64_from_gcc_arch_with_version = {
+    expr =
+      (lib.systems.elaborate {
+        system = "aarch64-linux";
+        gcc.arch = "armv8.3-a";
+      }).go.env.GOARM64;
+    expected = "v8.3";
+  };
+  test_elaborate_goarm64_from_gcc_arch_armv8 = {
+    expr =
+      (lib.systems.elaborate {
+        system = "aarch64-linux";
+        gcc.arch = "armv8-a";
+      }).go.env.GOARM64;
+    expected = "v8.0";
+  };
+  test_elaborate_goarm64_from_gcc_arch_armv9 = {
+    expr =
+      (lib.systems.elaborate {
+        system = "aarch64-linux";
+        gcc.arch = "armv9-a";
+      }).go.env.GOARM64;
+    expected = "v9.0";
+  };
+  test_elaborate_goarm64_from_gcc_arch_with_one_extension = {
+    expr =
+      (lib.systems.elaborate {
+        system = "aarch64-linux";
+        gcc.arch = "armv8-a+crypto";
+      }).go.env.GOARM64;
+    expected = "v8.0,crypto";
+  };
+  test_elaborate_goarm64_from_gcc_arch_with_version_and_extensions = {
+    expr =
+      (lib.systems.elaborate {
+        system = "aarch64-linux";
+        gcc.arch = "armv8.3-a+lse+unknown-filtered+crypto";
+      }).go.env.GOARM64;
+    expected = "v8.3,crypto,lse";
+  };
+  test_elaborate_goarm64_from_gcc_arch_disabled_extensions = {
+    expr =
+      (lib.systems.elaborate {
+        system = "aarch64-linux";
+        gcc.arch = "armv8.3-a+noext+lse+crypto";
+      }).go.env.GOARM64;
+    expected = "v8.3";
+  };
+  test_elaborate_goarm64_from_gcc_arch_invalid_version = {
+    expr =
+      (lib.systems.elaborate {
+        system = "aarch64-linux";
+        gcc.arch = "armv99.99-x";
+      }).go.env.GOARM64;
+    expected = "v8.0";
+  };
+  test_elaborate_goarm64 = {
+    expr =
+      (lib.systems.elaborate {
+        system = "aarch64-linux";
+      }).go.env.GOARM64;
+    expected = "v8.0";
+  };
+  test_elaborate_goamd64 = {
+    expr =
+      (lib.systems.elaborate {
+        system = "x86_64-linux";
+      }).go.env.GOAMD64;
+    expected = "v1";
+  };
+  test_elaborate_goamd64_from_gcc_arch_unknown = {
+    expr =
+      (lib.systems.elaborate {
+        system = "x86_64-linux";
+        gcc.arch = "znver5";
+      }).go.env.GOAMD64;
+    expected = "v1";
+  };
+  test_elaborate_goamd64_from_gcc_arch_level = {
+    expr =
+      (lib.systems.elaborate {
+        system = "x86_64-linux";
+        gcc.arch = "x86-64-v3";
+      }).go.env.GOAMD64;
+    expected = "v3";
+  };
+  test_elaborate_gorisv64 = {
+    expr =
+      (lib.systems.elaborate {
+        system = "riscv64-linux";
+      }).go.env.GORISCV64;
+    expected = "rva20u64";
+  };
+  test_elaborate_gorisv64_from_gcc_arch = {
+    expr =
+      (lib.systems.elaborate {
+        system = "riscv64-linux";
+        gcc.arch = "rva22u64";
+      }).go.env.GORISCV64;
+    expected = "rva22u64";
+  };
+  test_elaborate_gorisv64_from_gcc_arch_invalid = {
+    expr =
+      (lib.systems.elaborate {
+        system = "riscv64-linux";
+        gcc.arch = "rva22";
+      }).go.env.GORISCV64;
+    expected = "rva20u64";
+  };
+  test_elaborate_goppc64 = {
+    expr =
+      (lib.systems.elaborate {
+        config = "powerpc64le-unknown-linux-gnu";
+      }).go.env.GOPPC64;
+    expected = "power8";
+  };
+  test_elaborate_goppc64_from_gcc_cpu = {
+    expr =
+      (lib.systems.elaborate {
+        config = "powerpc64le-unknown-linux-gnu";
+        gcc.cpu = "power10";
+      }).go.env.GOPPC64;
+    expected = "power10";
+  };
+  test_elaborate_gowasm = {
+    expr =
+      (lib.systems.elaborate {
+        system = "wasm64-wasi";
+      }).go.env.GOWASM;
+    expected = "";
+  };
+  test_elaborate_gowasm_from_user = {
+    expr =
+      (lib.systems.elaborate {
+        system = "wasm64-wasi";
+        go.env.GOWASM = "satconv,signext";
+      }).go.env.GOWASM;
+    expected = "satconv,signext";
+  };
+  test_elaborate_goos_wasip1 = {
+    expr =
+      (lib.systems.elaborate {
+        system = "wasm64-wasi";
+      }).go.env.GOOS;
+    expected = "wasip1";
+  };
 }
 
 # Generate test cases to assert that a change in any non-function attribute makes a platform unequal
