@@ -10,8 +10,8 @@ buildNpmPackage rec {
 
   src = fetchFromGitHub {
     owner = "mistweaverco";
-    repo = pname;
-    rev = "v${version}";
+    repo = "kulala-ls";
+    tag = "v${version}";
     hash = "sha256-tnHqI3Lpi5XmCQNvjMQBOidsnkO56GBtCedybJ+Xf7M=";
   };
 
@@ -36,12 +36,12 @@ buildNpmPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
-    description = "A minimal language server for HTTP syntax.";
+  meta = {
+    description = "Minimal language server for HTTP syntax";
     homepage = "https://github.com/mistweaverco/kulala-ls";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dtomvan ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dtomvan ];
     mainProgram = "kulala-ls";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }
