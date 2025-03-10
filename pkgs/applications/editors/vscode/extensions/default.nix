@@ -5586,8 +5586,8 @@ let
         mktplcRef = {
           name = "markdown-all-in-one";
           publisher = "yzhang";
-          version = "3.6.2";
-          sha256 = "1n9d3qh7vypcsfygfr5rif9krhykbmbcgf41mcjwgjrf899f11h4";
+          version = "3.6.3";
+          sha256 = "sha256-xJhbFQSX1DDDp8iE/R8ep+1t5IRusBkvjHcNmvjrboM=";
         };
         meta = {
           description = "All you need to write Markdown (keyboard shortcuts, table of contents, auto preview and more)";
