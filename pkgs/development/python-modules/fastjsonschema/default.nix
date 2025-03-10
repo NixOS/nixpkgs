@@ -33,8 +33,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  dontUseSetuptoolsCheck = true;
-
   disabledTests =
     [
       "benchmark"

@@ -83,7 +83,6 @@ buildPythonPackage rec {
 
   PKGVER = version;
 
-  dontUseSetuptoolsCheck = true;
   pythonImportsCheck = [ "srht" ];
 
   meta = with lib; {
