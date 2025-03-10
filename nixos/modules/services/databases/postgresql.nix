@@ -439,7 +439,7 @@ in
             ]);
             options = {
               shared_preload_libraries = mkOption {
-                type = nullOr (coercedTo (listOf str) (concatStringsSep ", ") str);
+                type = nullOr (coercedTo (listOf str) (concatStringsSep ",") commas);
                 default = null;
                 example = literalExpression ''[ "auto_explain" "anon" ]'';
                 description = ''
