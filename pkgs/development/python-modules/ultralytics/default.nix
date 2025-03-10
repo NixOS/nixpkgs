@@ -30,14 +30,14 @@
 
 buildPythonPackage rec {
   pname = "ultralytics";
-  version = "8.3.85";
+  version = "8.3.86";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ultralytics";
     repo = "ultralytics";
     tag = "v${version}";
-    hash = "sha256-4EiTiy4SNinNwIUvqbckaA/5YRcv6io8ssTAhwDVgsM=";
+    hash = "sha256-9z6f/48jQVCR744ojNH+T22+JDg31+WEKWi48k5/GoY=";
   };
 
   postPatch = ''
@@ -100,7 +100,7 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://github.com/ultralytics/ultralytics";
-    changelog = "https://github.com/ultralytics/ultralytics/releases/tag/v${version}";
+    changelog = "https://github.com/ultralytics/ultralytics/releases/tag/${src.tag}";
     description = "Train YOLO models for computer vision tasks";
     mainProgram = "yolo";
     license = lib.licenses.agpl3Only;
