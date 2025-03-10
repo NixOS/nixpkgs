@@ -10,11 +10,12 @@
   extraBwrapArgs ? [ ], # extra arguments to pass to bubblewrap (real default is at usage site)
   extraArgs ? "", # arguments to always pass to steam
   extraEnv ? { }, # Environment variables to pass to Steam
+  privateTmp ? true, # if the steam bubblewrap should isolate /tmp
 }:
 let
   steamEnv = { name, runScript, passthru ? {}, meta ? {} }:
   buildFHSEnv {
-    inherit name runScript passthru meta;
+    inherit name runScript passthru meta privateTmp;
 
     multiArch = true;
     includeClosures = true;
@@ -104,8 +105,6 @@ let
 
       ${extraProfile}
     '';
-
-    privateTmp = true;
 
     inherit extraPreBwrapCmds;
 
