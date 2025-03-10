@@ -1630,6 +1630,7 @@ mapAliases {
 
   ### X ###
 
+  x11idle = throw "'x11idle' has been removed as the upstream is no longer available. Please see 'xprintidle' as an alternative"; # Added 2025-03-10
   x509-limbo = throw "'x509-limbo' has been removed from nixpkgs"; # Added 2024-10-22
   xarchive = throw "'xarchive' has been removed due to lack of maintenance upstream. Consider using 'file-roller' instead"; # Added 2024-10-19
   xbmc-retroarch-advanced-launchers = throw "'xbmc-retroarch-advanced-launchers' has been renamed to/replaced by 'kodi-retroarch-advanced-launchers'"; # Converted to throw 2024-10-17
