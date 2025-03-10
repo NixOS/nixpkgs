@@ -2,6 +2,7 @@
   lib,
   darwin,
   fetchCrate,
+  fetchpatch,
   openssl,
   pkg-config,
   rustPlatform,
@@ -14,6 +15,7 @@ let
       version,
       hash,
       cargoHash,
+      patches ? [ ],
     }:
     rustPlatform.buildRustPackage rec {
       pname = "cargo-pgrx";
@@ -34,6 +36,9 @@ let
       buildInputs = [
         openssl
       ];
+
+      inherit patches;
+      patchFlags = "-p2";
 
       preCheck = ''
         export PGRX_HOME=$(mktemp -d)
@@ -62,6 +67,19 @@ in
     version = "0.12.0-alpha.1";
     hash = "sha256-0m9oaqjU42RYyttkTihADDrRMjr2WoK/8sInZALeHws=";
     cargoHash = "sha256-zYjqE7LZLnTaVxWAPWC1ncEjCMlrhy4THtgecB7wBYY=";
+    patches = [
+      # https://github.com/pgcentralfoundation/pgrx/pull/1994
+      (fetchpatch {
+        name = "no-run.patch";
+        url = "https://github.com/rhelmot/pgrx/commit/1b23603d7344a28fca0a19875292ddab21d7a9ac.patch";
+        hash = "sha256-M2mu3wtBIo6WupodWNi11tDFyZl0GGoVvp/zm0bMRyU=";
+      })
+      (fetchpatch {
+        name = "cross-target.patch";
+        url = "https://github.com/rhelmot/pgrx/commit/aa08d873a0100f88d6c41a383718ccbed85153de.patch";
+        hash = "sha256-g5CP7ZQ25vx77QivSSYLk5SeyD/wJ45uJ0xzYqgjdBo=";
+      })
+    ];
   };
 
   cargo-pgrx_0_12_5 = generic {
