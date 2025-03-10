@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  dlib,
   gsl,
   mpfr,
   perl,
@@ -16,6 +17,14 @@ stdenv.mkDerivation rec {
     url = "https://www.tbi.univie.ac.at/RNA/download/sourcecode/2_7_x/ViennaRNA-${version}.tar.gz";
     hash = "sha256-mpn9aO04CJTe+01eaooocWKScAKM338W8KBdpujHFHM=";
   };
+
+  # use nixpkgs dlib sources instead of bundled ones
+  # using dlib-19.24.8 fixes the build with modern compilers (such as clang-19)
+  postPatch = ''
+    rm -rf ./src/dlib-19.24
+    cp -a ${dlib.src} ./src/dlib-19.24
+    find ./src/dlib-19.24 -type d -exec chmod +w {} \;
+  '';
 
   buildInputs = [
     gsl
