@@ -7,15 +7,16 @@
   nixosTests,
   python3Packages,
   writeShellScript,
+  nix-update-script,
 }:
 
 let
-  version = "2.6.0";
+  version = "2.7.1";
   src = fetchFromGitHub {
     owner = "mealie-recipes";
     repo = "mealie";
     tag = "v${version}";
-    hash = "sha256-txkHCQ/xTakPXXFki161jNOKwAH9p9z1hCNEEkbqQtM=";
+    hash = "sha256-nN8AuSzxHjIDKc8rGN+O2/vlzkH/A5LAr4aoAlOTLlk=";
   };
 
   frontend = callPackage (import ./mealie-frontend.nix src version) { };
@@ -54,11 +55,6 @@ pythonpkgs.buildPythonApplication rec {
   dontWrapPythonPrograms = true;
 
   pythonRelaxDeps = true;
-
-  patches = [
-      # compatibility with openai 1.63.0
-      ./0000_openai_1.63.0.patch
-  ];
 
   dependencies = with pythonpkgs; [
     aiofiles
@@ -141,8 +137,11 @@ pythonpkgs.buildPythonApplication rec {
     "tests/unit_tests/test_security.py"
   ];
 
-  passthru.tests = {
-    inherit (nixosTests) mealie;
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = {
+      inherit (nixosTests) mealie;
+    };
   };
 
   meta = with lib; {

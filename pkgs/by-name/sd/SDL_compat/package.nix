@@ -50,6 +50,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   setupHook = ./setup-hook.sh;
 
+  postInstall = ''
+    # allow as a drop in replacement for SDL
+    # Can be removed after treewide switch from pkg-config to pkgconf
+    ln -s $out/lib/pkgconfig/sdl12_compat.pc $out/lib/pkgconfig/sdl.pc
+  '';
+
   postFixup = ''
     for lib in $out/lib/*${stdenv.hostPlatform.extensions.sharedLibrary}* ; do
       if [[ -L "$lib" ]]; then
