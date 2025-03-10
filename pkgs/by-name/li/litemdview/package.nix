@@ -30,6 +30,9 @@ stdenv.mkDerivation {
   ];
 
   meta = with lib; {
+  # Required for build with gcc-14
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-int";
+
     homepage = "https://notabug.org/g0tsu/litemdview";
     description = "Suckless markdown viewer";
     longDescription = ''
