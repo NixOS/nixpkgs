@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "defcon";
-  version = "0.10.3";
+  version = "0.12.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Vt4m18dfFk7qA+KLwRtMdpxo1wX6GG38rrVsJ/mkzAw=";
+    hash = "sha256-x/CYyYa+UrWLziS8gh4Onvr3R5/jGri7BoPQ+7aH1vs=";
     extension = "zip";
   };
 
