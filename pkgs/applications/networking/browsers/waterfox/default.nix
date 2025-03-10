@@ -207,11 +207,11 @@ stdenv.mkDerivation rec {
     )
   '';
 
-  meta = with lib; {
-    description = "A privacy-focused, multi-platform web browser";
+  meta =  {
+    description = "Privacy-focused, multi-platform web browser";
     homepage = "https://www.waterfox.net/";
-    license = licenses.mpl20;
+    license = lib.licenses.mpl20;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ joyfulcat ];
+    maintainers = with lib.maintainers; [ joyfulcat ];
   };
 }
