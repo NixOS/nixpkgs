@@ -1,0 +1,47 @@
+diff --git a/src/commands/build.ts b/src/commands/build.ts
+index 7e7d80d..36d0326 100644
+--- a/src/commands/build.ts
++++ b/src/commands/build.ts
+@@ -1,7 +1,6 @@
+ // This Source Code Form is subject to the terms of the Mozilla Public
+ // License, v. 2.0. If a copy of the MPL was not distributed with this
+ // file, You can obtain one at http://mozilla.org/MPL/2.0/.
+-import execa from 'execa'
+ import { existsSync, readFileSync, writeFileSync } from 'node:fs'
+ import { join, resolve } from 'node:path'
+ import { bin_name, config } from '..'
+@@ -27,25 +26,6 @@ const applyConfig = async (os: string) => {
+ 
+   const brandingKey = dynamicConfig.get('brand')
+ 
+-  let changeset
+-
+-  try {
+-    // Retrieve changeset
+-    const { stdout } = await execa('git', ['rev-parse', 'HEAD'])
+-    changeset = stdout.trim()
+-  } catch (error) {
+-    log.warning(
+-      'Surfer expects that you are building your browser with git as your version control'
+-    )
+-    log.warning(
+-      'If you are using some other version control system, please migrate to git'
+-    )
+-    log.warning('Otherwise, you can setup git in this folder by running:')
+-    log.warning('   |git init|')
+-
+-    throw error
+-  }
+-
+   const templateOptions = {
+     name: config.name,
+     vendor: config.name,
+@@ -54,7 +34,7 @@ const applyConfig = async (os: string) => {
+       ? 'branding/surfer'
+       : 'branding/unofficial',
+     binName: config.binaryName,
+-    changeset,
++    changeset: process.env.REV,
+   }
+ 
+   const commonConfig = stringTemplate(
