@@ -435,7 +435,7 @@ with pkgs;
   dotnet-runtime = dotnetCorePackages.runtime_8_0;
   dotnet-aspnetcore = dotnetCorePackages.aspnetcore_8_0;
 
-  inherit (dotnetCorePackages) buildDotnetModule buildDotnetGlobalTool mkNugetSource mkNugetDeps;
+  inherit (dotnetCorePackages) buildDotnetModule buildDotnetGlobalTool mkNugetSource mkNugetDeps autoPatchcilHook;
 
   fable = callPackage ../development/tools/fable { };
 
