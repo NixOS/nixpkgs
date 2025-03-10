@@ -1,4 +1,8 @@
 {
+  src,
+  baseVersion,
+  officialRelease,
+
   lib,
   fetchFromGitHub,
   splicePackages,
@@ -9,9 +13,6 @@
   ...
 }:
 let
-  officialRelease = true;
-  src = fetchFromGitHub (builtins.fromJSON (builtins.readFile ./source.json));
-
   # A new scope, so that we can use `callPackage` to inject our own interdependencies
   # without "polluting" the top level "`pkgs`" attrset.
   # This also has the benefit of providing us with a distinct set of packages
@@ -25,7 +26,7 @@ let
       {
         otherSplices = generateSplicesForMkScope "nixComponents";
         f = import ./packaging/components.nix {
-          inherit lib officialRelease src;
+          inherit lib officialRelease src baseVersion;
         };
       };
 
