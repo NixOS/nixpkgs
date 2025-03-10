@@ -1967,8 +1967,8 @@ let
         mktplcRef = {
           name = "linter-gfortran";
           publisher = "fortran-lang";
-          version = "3.4.2024061701";
-          hash = "sha256-i357EzQ8cm8NPsMBbsV5ToMoBDa59Bh6ylC9tNjMY6s=";
+          version = "3.4.2025030111";
+          hash = "sha256-8gw7VAgT4+724cCjQcYESPTsnckd02vdBsCzskiZLKY=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/fortran-lang.linter-gfortran/changelog";
