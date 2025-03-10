@@ -27,8 +27,7 @@ python3Packages.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace src/varia-py.in \
-      --replace-fail 'aria2cexec = sys.argv[1]' 'aria2cexec = "${lib.getExe aria2}"'
-    substituteInPlace src/varia-py.in \
+      --replace-fail 'aria2cexec = sys.argv[1]' 'aria2cexec = "${lib.getExe aria2}"' \
       --replace-fail 'ffmpegexec = sys.argv[2]' 'ffmpegexec = "${lib.getExe ffmpeg}"'
   '';
 
