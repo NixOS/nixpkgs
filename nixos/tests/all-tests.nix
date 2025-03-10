@@ -460,7 +460,7 @@ in {
   gnupg = handleTest ./gnupg.nix {};
   goatcounter = handleTest ./goatcounter.nix {};
   go-camo = handleTest ./go-camo.nix { };
-  go-neb = handleTest ./go-neb.nix {};
+  go-neb = runTest ./go-neb.nix;
   gobgpd = handleTest ./gobgpd.nix {};
   gocd-agent = handleTest ./gocd-agent.nix {};
   gocd-server = handleTest ./gocd-server.nix {};
