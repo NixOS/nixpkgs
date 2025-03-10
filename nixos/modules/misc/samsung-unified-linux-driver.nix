@@ -21,13 +21,13 @@
   ...
 }:
 let
-  cfg = config.services.samsung-unified-linux-driver_1_00_36;
-  pkg = pkgs.samsung-unified-linux-driver_1_00_36;
+  cfg = config.services.samsung-unified-linux-driver;
+  pkg = pkgs.samsung-unified-linux-driver_1;
 in
 {
   options = {
-    services.samsung-unified-linux-driver_1_00_36 = {
-      enable = lib.mkEnableOption "samsung-unified-linux-driver_1_00_36";
+    services.samsung-unified-linux-driver = {
+      enable = lib.mkEnableOption "samsung-unified-linux-driver";
     };
   };
   config = lib.mkIf cfg.enable {
