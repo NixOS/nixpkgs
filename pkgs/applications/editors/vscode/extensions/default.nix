@@ -2802,8 +2802,8 @@ let
         mktplcRef = {
           name = "vscode-peacock";
           publisher = "johnpapa";
-          version = "4.2.2";
-          sha256 = "1z9crpz025ha9hgc9mxxg3vyrsfpf9d16zm1vrf4q592j9156d2m";
+          version = "4.2.3";
+          sha256 = "sha256-SVjuWjvQogtT74QRDxGJVvlXU035VMWtLiDz395URRE=";
         };
         meta = {
           license = lib.licenses.mit;
