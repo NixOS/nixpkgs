@@ -56,6 +56,8 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s $out/lib/pkgconfig/sdl12_compat.pc $out/lib/pkgconfig/sdl.pc
   '';
 
+  patches = [ ./find-headers.patch ];
+
   postFixup = ''
     for lib in $out/lib/*${stdenv.hostPlatform.extensions.sharedLibrary}* ; do
       if [[ -L "$lib" ]]; then
