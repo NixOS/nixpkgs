@@ -4573,8 +4573,8 @@ let
         mktplcRef = {
           name = "swift-lang";
           publisher = "sswg";
-          version = "1.10.4";
-          hash = "sha256-5NrWBuaNdDNF0ON0HUwdwPFsRO3Hfe0UW4AooJbjiA0=";
+          version = "1.12.0";
+          hash = "sha256-Dzf8mJCDWT2pHPJcTywEqnki8aVsMO92+wLQ4fjHzb8=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/sswg.swift-lang/changelog";
