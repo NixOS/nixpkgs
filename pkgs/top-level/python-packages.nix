@@ -10868,6 +10868,8 @@ self: super: with self; {
 
   pygerber = callPackage ../development/python-modules/pygerber { };
 
+  pyghmi = callPackage ../development/python-modules/pyghmi { };
+
   pygments-style-github = callPackage ../development/python-modules/pygments-style-github { };
 
   pygnmi = callPackage ../development/python-modules/pygnmi { };
