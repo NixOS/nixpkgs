@@ -178,7 +178,6 @@ let
       exec ${config.systemd.package}/bin/systemd-nspawn \
         --keep-unit \
         -M "$INSTANCE" -D "$root" "''${extraFlags[@]}" \
-        $EXTRA_NSPAWN_FLAGS \
         --notify-ready=yes \
         --kill-signal=SIGRTMIN+3 \
         --bind-ro=/nix/store:/nix/store$NIX_BIND_OPT \
@@ -203,6 +202,7 @@ let
         ${optionalString (cfg.tmpfs != null && cfg.tmpfs != [])
           ''--tmpfs=${concatStringsSep " --tmpfs=" cfg.tmpfs}''
         } \
+        $EXTRA_NSPAWN_FLAGS \
         ${containerInit cfg} "''${SYSTEM_PATH:-/nix/var/nix/profiles/system}/init"
     '';
 
