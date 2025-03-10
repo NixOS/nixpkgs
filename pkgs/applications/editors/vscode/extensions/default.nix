@@ -5055,8 +5055,8 @@ let
         mktplcRef = {
           name = "theme-bluloco-light";
           publisher = "uloco";
-          version = "3.7.3";
-          sha256 = "1il557x7c51ic9bjq7z431105m582kig9v2vpy3k2z3xhrbb0211";
+          version = "3.7.5";
+          sha256 = "sha256-MDrw0JWioLyg+H0XOCpULsmtM/y7RfV9ruDtskRiT3A=";
         };
         postInstall = ''
           rm -r $out/share/vscode/extensions/uloco.theme-bluloco-light/screenshots
