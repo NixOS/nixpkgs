@@ -4849,8 +4849,8 @@ let
         mktplcRef = {
           name = "rust-yew";
           publisher = "techtheawesome";
-          version = "0.2.2";
-          hash = "sha256-t9DYY1fqW7M5F1pbIUtnnodxMzIzURew4RXT78djWMI=";
+          version = "0.2.3";
+          hash = "sha256-JEFNYSyGCsmsiJ89R4fWy/cUU6pDW1HA2P1Sr90QJHU=";
         };
         meta = {
           description = "VSCode extension that provides some language features for Yew's html macro syntax";
