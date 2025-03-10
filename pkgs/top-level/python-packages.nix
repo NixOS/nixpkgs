@@ -17996,6 +17996,10 @@ self: super: with self; {
     inherit (pkgs) unicorn;
   };
 
+  unicorn-angr = callPackage ../development/python-modules/unicorn-angr {
+    inherit (pkgs) unicorn-angr;
+  };
+
   unicurses = callPackage ../development/python-modules/unicurses { };
 
   unicrypto = callPackage ../development/python-modules/unicrypto { };
