@@ -1550,6 +1550,98 @@ rec {
     in
       map (addContextFrom s) splits;
 
+  /**
+    Splits a string into segments based on specified criteria.
+
+    This function allows splitting strings at various transition points such as:
+    - From lowercase to uppercase letters
+    - From uppercase to lowercase letters
+    - From non-digit to digit characters
+    - From digit to non-digit characters
+    - At specific separator characters
+
+    # Inputs
+    `{ digit ? false, lowercase ? false, uppercase ? false, separators ? [ ] }`
+    : Configuration for splitting behavior
+      - `digit`: When `true`, split at transitions to and from digit characters
+      - `lowercase`: When `true`, split at transitions to lowercase letters
+      - `uppercase`: When `true`, split at transitions to uppercase letters
+      - `separators`: List of characters that act as separators (these will be omitted from the result)
+
+    `str`
+    : The string to split
+
+    # Type
+
+    ```
+    splitStringAt :: { digit :: bool, lowercase :: bool, uppercase :: bool, separators :: [string] } -> string -> [string]
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.strings.splitStringAt` usage example
+
+    ```nix
+    splitStringAt { uppercase = true; } "fooBarBaz"
+    => [ "foo" "Bar" "Baz" ]
+    splitStringAt { separators = [ "-" "." ]; } "foo-bar.baz"
+    => [ "foo" "bar" "baz" ]
+    splitStringAt { digit = true; } "foo123bar456baz"
+    => [ "foo" "123" "bar" "456" "baz" ]
+    ```
+
+    :::
+  */
+  splitStringAt =
+    {
+      digit ? false,
+      lowercase ? false,
+      separators ? [ ],
+      uppercase ? false,
+    }:
+    str:
+    let
+      isUpper = c: match "[A-Z]" c != null;
+      isLower = c: match "[a-z]" c != null;
+      isDigit = c: match "[0-9]" c != null;
+      isSeparator = c: elem c separators;
+
+      processString =
+        chars:
+        let
+          helper =
+            idx: currentSegment: result:
+            if idx >= length chars then
+              if currentSegment != "" then result ++ [ currentSegment ] else result
+            else
+              let
+                char = elemAt chars idx;
+                prevChar =
+                  if currentSegment != "" then substring ((stringLength currentSegment) - 1) 1 currentSegment else "";
+                nextIdx = idx + 1;
+              in
+              if isSeparator char then
+                helper nextIdx "" (result ++ [ currentSegment ])
+              else if uppercase && isUpper char && currentSegment != "" && !isUpper prevChar then
+                helper nextIdx char (result ++ [ currentSegment ])
+              else if lowercase && isLower char && currentSegment != "" && !isLower prevChar then
+                helper nextIdx char (result ++ [ currentSegment ])
+              else if digit && isDigit char && currentSegment != "" && !isDigit prevChar then
+                helper nextIdx char (result ++ [ currentSegment ])
+              else if digit && !isDigit char && currentSegment != "" && isDigit prevChar then
+                helper nextIdx char (result ++ [ currentSegment ])
+              else
+                helper nextIdx (currentSegment + char) result;
+        in
+        helper 0 "" [ ];
+    in
+    if str == "" then
+      [ (addContextFrom str "") ]
+    else
+      map (addContextFrom str) (
+        (processString (stringToCharacters str))
+        ++ lib.optionals (isSeparator (substring ((stringLength str) - 1) 1 str)) [ "" ]
+      );
 
   /**
     Return a string without the specified prefix, if the prefix matches.
