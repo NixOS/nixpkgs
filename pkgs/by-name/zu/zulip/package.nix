@@ -1,7 +1,7 @@
 { lib
 , fetchFromGitHub
 , buildNpmPackage
-, electron_32
+, electron
 , makeDesktopItem
 , makeShellWrapper
 , copyDesktopItems
@@ -34,8 +34,8 @@ buildNpmPackage rec {
     runHook preBuild
 
     npm run pack -- \
-      -c.electronDist=${electron_32}/libexec/electron \
-      -c.electronVersion=${electron_32.version}
+      -c.electronDist=${electron}/libexec/electron \
+      -c.electronVersion=${electron.version}
 
     runHook postBuild
   '';
@@ -48,7 +48,7 @@ buildNpmPackage rec {
 
     install -m 444 -D app/resources/zulip.png $out/share/icons/hicolor/512x512/apps/zulip.png
 
-    makeShellWrapper '${lib.getExe electron_32}' "$out/bin/zulip" \
+    makeShellWrapper '${lib.getExe electron}' "$out/bin/zulip" \
       --add-flags "$out/share/lib/zulip/app.asar" \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-wayland-ime=true}}" \
       --inherit-argv0
