@@ -40,7 +40,15 @@ function get_vsixpkg() {
     URL="https://$1.gallery.vsassets.io/_apis/public/gallery/publisher/$1/extension/$2/latest/assetbyname/Microsoft.VisualStudio.Services.VSIXPackage"
 
     # Quietly but delicately curl down the file, blowing up at the first sign of trouble.
-    curl --silent --show-error --retry 3 --fail -X GET -o "$EXTTMP/$N.zip" "$URL"
+    curl --silent --show-error --retry 3 --fail -X GET -o "$EXTTMP/$N.zip" "$URL" || {
+        if (($? > 128))
+        then exit $?
+        fi
+        cat >&2 <<EOF
+unable to download $N
+EOF
+        return
+    }
     # Unpack the file we need to stdout then pull out the version
     VER=$(jq -r '.version' <(unzip -qc "$EXTTMP/$N.zip" "extension/package.json"))
     # Calculate the hash
@@ -73,7 +81,7 @@ if [ -z "$CODE" ]; then
 fi
 
 # Try to be a good citizen and clean up after ourselves if we're killed.
-trap clean_up SIGINT
+trap clean_up EXIT
 
 # Begin the printing of the nix expression that will house the list of extensions.
 printf '{ extensions = [\n'
