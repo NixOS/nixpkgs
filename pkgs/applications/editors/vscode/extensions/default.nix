@@ -4032,8 +4032,8 @@ let
         mktplcRef = {
           name = "quicktype";
           publisher = "quicktype";
-          version = "12.0.46";
-          hash = "sha256-NTZ0BujnA+COg5txOLXSZSp8TPD1kZNfZPjnvZUL9lc=";
+          version = "23.0.170";
+          hash = "sha256-lK50+WXPXHgqryhlsMb+65yoebX0Rh3PNKmlUjfwlOc=";
         };
         meta = {
           description = "Infer types from sample JSON data";
