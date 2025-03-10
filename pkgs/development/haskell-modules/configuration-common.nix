@@ -1941,10 +1941,10 @@ self: super: {
 
   # 2023-04-09: haskell-ci needs Cabal-syntax 3.10
   # 2024-03-21: pins specific version of ShellCheck
-  haskell-ci = super.haskell-ci.overrideScope (self: super: {
+  haskell-ci = doJailbreak (super.haskell-ci.overrideScope (self: super: {
     Cabal-syntax = self.Cabal-syntax_3_10_3_0;
     ShellCheck = self.ShellCheck_0_9_0;
-  });
+  }));
 
   # ShellCheck < 0.10.0 needs to be adjusted for changes in fgl >= 5.8
   # https://github.com/koalaman/shellcheck/issues/2677
@@ -2739,6 +2739,21 @@ self: super: {
       sha256 = "sha256-ZdCXMhni+RGisRODiElObW5c4hKy2giWQmWnatqeRJo=";
     }))
   ];
+
+  # jailbreak to allow rerefined >=0.7.0
+  binrep = doJailbreak super.binrep;
+
+  # jailbreak to allow deepseq >= 1.5
+  blucontrol = doJailbreak super.blucontrol;
+
+  # jailbreak to allow ansi-terminal >= 1.1
+  patat = doJailbreak super.patat;
+
+    # jailbreak to allow base >= 4.19
+  taskwarrior = doJailbreak super.taskwarrior;
+
+  # jailbreak to allow network >= 3.2
+  zre = doJailbreak super.zre;
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
 
 # Gogol Packages
