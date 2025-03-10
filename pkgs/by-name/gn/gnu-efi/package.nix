@@ -10,6 +10,8 @@
   syslinux,
 }:
 
+assert lib.assertMsg stdenv.hostPlatform.isEfi "gnu-efi may only be built for EFI platforms";
+
 stdenv.mkDerivation rec {
   pname = "gnu-efi";
   version = "4.0.0";
