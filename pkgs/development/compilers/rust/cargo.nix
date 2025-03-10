@@ -1,7 +1,6 @@
 { lib, stdenv, pkgsHostHost
 , file, curl, pkg-config, python3, openssl, cmake, zlib
 , installShellFiles, makeWrapper, rustPlatform, rustc
-, CoreFoundation, Security
 , auditable ? !cargo-auditable.meta.broken
 , cargo-auditable
 , pkgsBuildBuild
@@ -32,8 +31,7 @@ rustPlatform.buildRustPackage.override {
     (lib.getDev pkgsHostHost.curl)
     zlib
   ];
-  buildInputs = [ file curl python3 openssl zlib ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ CoreFoundation Security ];
+  buildInputs = [ file curl python3 openssl zlib ];
 
   # cargo uses git-rs which is made for a version of libgit2 from recent master that
   # is not compatible with the current version in nixpkgs.

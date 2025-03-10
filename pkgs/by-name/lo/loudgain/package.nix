@@ -7,7 +7,7 @@
   ffmpeg,
   libebur128,
   libresample,
-  taglib,
+  taglib_1,
   zlib,
 }:
 
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     ffmpeg
     libebur128
     libresample
-    taglib
+    taglib_1
     zlib
   ];
 
