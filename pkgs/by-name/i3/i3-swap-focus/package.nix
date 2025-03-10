@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "olivierlemoal";
     repo = "i3-swap-focus";
-    rev = version;
+    tag = version;
     hash = "sha256-pSbwOqpK6RBpFfoMH/gl/7rNshNEpOgR6vQ022upl2Q=";
   };
 
