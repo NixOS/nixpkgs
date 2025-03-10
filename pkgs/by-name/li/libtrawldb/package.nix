@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out
     meson install --destdir $out
-    ninja 
+    ninja
     mkdir -p $out/lib
     cp -r $out/usr/lib $out
     cp -r $out/nix/store/*/* $out
