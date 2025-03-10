@@ -17,11 +17,11 @@ mkCoqDerivation {
     with lib.versions;
     lib.switch [ coq.version mathcomp.version ] [
       { cases = [ (range "8.18" "8.20") (range "2.2" "2.3") ];
-        out = "2024.07.2"; }
+        out = "2025.02.0"; }
     ] null;
   releaseRev = v: "v${v}";
 
-  release."2024.07.2".sha256 = "sha256-aF8SYY5jRxQ6iEr7t6mRN3BEmIDhJ53PGhuZiJGB+i8=";
+  release."2025.02.0".sha256 = "sha256-Jlf0+VPuYWXdWyKHKHSp7h/HuCCp4VkcrgDAmh7pi5s=";
 
   propagatedBuildInputs = [
     mathcomp-algebra-tactics
