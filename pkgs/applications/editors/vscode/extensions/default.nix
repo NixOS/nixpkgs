@@ -1742,8 +1742,8 @@ let
         mktplcRef = {
           name = "vscode-great-icons";
           publisher = "emmanuelbeziat";
-          version = "2.1.92";
-          hash = "sha256-cywFx33oTQZxFUxL9qCpV12pV2tP0ujR4osCdtSOOTc=";
+          version = "2.1.115";
+          hash = "sha256-mEVvEagl+FMHq/TUISDub2yHMPhshKSM544RcPDBrlk=";
         };
         meta = {
           license = lib.licenses.mit;
