@@ -12,6 +12,7 @@
   runCommand,
   translatelocally,
   translatelocally-models,
+  oldCpu ? false,
 }:
 
 let
@@ -65,6 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     "-DBLAS_LIBRARIES=-lblas"
     "-DCBLAS_LIBRARIES=-lcblas"
+    (lib.optionalString oldCpu "-DBUILD_ARCH=x86-64-v3")
   ];
 
   passthru.tests = {
