@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   meson,
   ninja,
   pkg-config,
@@ -201,14 +202,25 @@ let
     in
     stdenv.mkDerivation rec {
       pname = "mpd";
-      version = "0.23.15";
+      version = "0.23.17";
 
       src = fetchFromGitHub {
         owner = "MusicPlayerDaemon";
         repo = "MPD";
         rev = "v${version}";
-        sha256 = "sha256-QURq7ysSsxmBOtoBlPTPWiloXQpjEdxnM0L1fLwXfpw=";
+        sha256 = "sha256-1+eVLvwMp6mR38y39wV73rhPA998ip7clyyKcJ008z0=";
       };
+
+      patches = [
+        # Revert of https://github.com/MusicPlayerDaemon/MPD/commit/0aeda01ba6d22a8d9fc583faa67ffc6473869a43
+        # We use a yajl fork that fixed this issue in the pkg-config manifest
+        (fetchpatch2 {
+          name = "revert-yajl-include-fix.patch";
+          url = "https://github.com/MusicPlayerDaemon/MPD/commit/0aeda01ba6d22a8d9fc583faa67ffc6473869a43.diff";
+          hash = "sha256-p/sYvWpr0GTw8gjt+W9FQysadOK/QOUp81ykTI50UYg=";
+          revert = true;
+        })
+      ];
 
       buildInputs =
         [
