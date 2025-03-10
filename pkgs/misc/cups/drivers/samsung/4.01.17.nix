@@ -33,7 +33,7 @@ let
     + ":$out/lib:${lib.getLib stdenv.cc.cc}/lib${appendPath}";
 in
 stdenv.mkDerivation (finalAttrs: {
-  pname = "samsung-UnifiedLinuxDriver";
+  pname = "samsung-unified-linux-driver";
   version = "4.01.17";
 
   src = fetchurl {
