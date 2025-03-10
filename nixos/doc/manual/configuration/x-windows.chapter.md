@@ -114,6 +114,54 @@ using lightdm for a user `alice`:
 }
 ```
 
+## Running X without a display manager  {#sec-x11-startx}
+
+It is possible to avoid a display manager entirely and starting the X server
+manually from a virtual terminal. Add to your configuration
+```nix
+{
+  services.xserver.displayManager.startx = {
+    enable = true;
+    generateScript = true;
+  };
+}
+```
+then you can start the X server with the `startx` command.
+
+The second option will generate a base `xinitrc` script that will run your
+window manager and set up the systemd user session.
+You can extend the script using the [extraCommands](#opt-services.xserver.displayManager.startx.extraCommands) for example:
+```nix
+{
+  services.xserver.displayManager.startx = {
+    generateScript = true;
+    extraCommands = ''
+      xrdb -load .Xresources
+      xsetroot -solid '#666661'
+      xsetroot -cursor_name left_ptr
+    '';
+  };
+}
+```
+or, alternatively, you can write your own from scratch in `~/.xinitrc`.
+
+In this case, remember you're responsible for starting the window manager, for
+example
+```shell
+sxhkd &
+bspwm &
+```
+and if you have enabled some systemd user service, you will probably want to
+also add these lines too:
+```shell
+# import required env variables from the current shell
+systemctl --user import-environment DISPLAY XDG_SESSION_ID
+# start all graphical user services
+systemctl --user start nixos-fake-graphical-session.target
+# start the user dbus daemon
+dbus-daemon --session --address="unix:path=/run/user/$(id -u)/bus" &
+```
+
 ## Intel Graphics drivers {#sec-x11--graphics-cards-intel}
 
 The default and recommended driver for Intel Graphics in X.org is `modesetting`
