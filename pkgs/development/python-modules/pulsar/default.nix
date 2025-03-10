@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "pulsar";
-  version = "3.6.0";
+  version = "3.6.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "pulsar-client-python";
     tag = "v${version}";
-    hash = "sha256-/b3ha+FtZeLioRKGGjaW7x4jXu/cXxBX9GV2KyQpCkQ=";
+    hash = "sha256-KdPLp0BmZnobU4F6tuMj2DY/ya4QHeGcM/eEAivoXNI=";
   };
 
   disabled = pythonOlder "3.7";
@@ -50,7 +50,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Apache Pulsar Python client library";
     homepage = "https://pulsar.apache.org/docs/next/client-libraries-python/";
-    changelog = "https://github.com/apache/pulsar-client-python/releases/tag/v${version}";
+    changelog = "https://github.com/apache/pulsar-client-python/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [ gaelreyrol ];
   };
