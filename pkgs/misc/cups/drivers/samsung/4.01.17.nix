@@ -32,12 +32,12 @@ let
     ]
     + ":$out/lib:${lib.getLib stdenv.cc.cc}/lib${appendPath}";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "samsung-UnifiedLinuxDriver";
   version = "4.01.17";
 
   src = fetchurl {
-    url = "http://www.bchemnet.com/suldr/driver/UnifiedLinuxDriver-${version}.tar.gz";
+    url = "http://www.bchemnet.com/suldr/driver/UnifiedLinuxDriver-${finalAttrs.version}.tar.gz";
     sha256 = "1vv3pzvqpg1dq3xjr8161x2yp3v7ca75vil56ranhw5pkjwq66x0";
   };
 
@@ -100,4 +100,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     maintainers = with maintainers; [ joko ];
   };
-}
+})

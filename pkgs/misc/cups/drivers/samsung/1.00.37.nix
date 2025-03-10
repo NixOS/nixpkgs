@@ -12,13 +12,13 @@ let
   arch = if stdenv.hostPlatform.system == "x86_64-linux" then "x86_64" else "i386";
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "samsung-unified-linux-driver";
   version = "1.00.37";
 
   src = fetchurl {
     sha256 = "0r66l9zp0p1qgakh4j08hynwsr4lsgq5yrpxyr0x4ldvl0z2b1bb";
-    url = "http://www.bchemnet.com/suldr/driver/UnifiedLinuxDriver-${version}.tar.gz";
+    url = "http://www.bchemnet.com/suldr/driver/UnifiedLinuxDriver-${finalAttrs.version}.tar.gz";
   };
 
   buildInputs = [
@@ -105,4 +105,4 @@ stdenv.mkDerivation rec {
     # Probably won't work on anything else.
     platforms = platforms.linux;
   };
-}
+})
