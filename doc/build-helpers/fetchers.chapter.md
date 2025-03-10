@@ -849,6 +849,12 @@ This is used with GitLab repositories. It behaves similarly to `fetchFromGitHub`
 To use a specific GitLab instance, use `domain` (defaults to `"gitlab.com"`).
 
 
+It is possible to access private repositories by passing the argument `private = true`, and optionally setting a `varPrefix`. This makes `fetchFromGitLab` expect credentials in environment variables in the Nix building process (nix-daemon in multi-user mode).
+If `varPrefix` is unset, these are `NIX_GITLAB_PRIVATE_USERNAME` and `NIX_GITLAB_PRIVATE_PASSWORD`, and `NIX_MYPREFIX_GITLAB_PRIVATE_USERNAME` and `NIX_MYPREFIX_GITLAB_PRIVATE_PASSWORD` if `varPrefix = "MYPREFIX"`.
+This allows you to use different credentials for different repositories or groups thereof.
+As of now, GitLab [accepts](https://gitlab.com/gitlab-org/gitlab/-/issues/212953) any non-empty user name. The personal/project/group access token must be configured for the *Reporter* role or higher (the *Guest* role works only in [some cases](https://docs.gitlab.com/ee/user/permissions.html#project-members-permissions)) with the `read_api` [scope](https://docs.gitlab.com/ee/user/project/settings/project_access_tokens.html#scopes-for-a-project-access-token) if `fetchzip` is used as the underlying fetcher, or with the `read_repository` scope if the underlying fetcher is `fetchgit`.
+Use both scopes simultaneously if either fetcher shall be usable. In multi-user mode, the credentials can be passed to the nix-daemon service via an `EnvironmentFile`. Note however that this makes the credentials available to all users on the system.
+
 ## `fetchFromGitiles` {#fetchfromgitiles}
 
 This is used with Gitiles repositories. The arguments expected are similar to `fetchgit`.
