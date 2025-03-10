@@ -4661,8 +4661,8 @@ let
         mktplcRef = {
           name = "vscode-styled-components";
           publisher = "styled-components";
-          version = "1.7.6";
-          hash = "sha256-ZXXXFUriu//2Wmj1N+plj7xzJauGBfj+79SyrkUZAO4=";
+          version = "1.7.8";
+          hash = "sha256-VoLAjBcAizTxd+BHwXoNSlSxqXno3PjVxaickLCtnsw=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/styled-components.vscode-styled-components/changelog";
