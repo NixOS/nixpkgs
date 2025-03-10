@@ -15616,6 +15616,8 @@ self: super: with self; {
 
   sphinx-external-toc = callPackage ../development/python-modules/sphinx-external-toc { };
 
+  sphinx-favicon = callPackage ../development/python-modules/sphinx-favicon { };
+
   sphinx-fortran = callPackage ../development/python-modules/sphinx-fortran { };
 
   sphinx-hoverxref = callPackage ../development/python-modules/sphinx-hoverxref { };
@@ -17992,6 +17994,10 @@ self: super: with self; {
 
   unicorn = callPackage ../development/python-modules/unicorn {
     inherit (pkgs) unicorn;
+  };
+
+  unicorn-angr = callPackage ../development/python-modules/unicorn-angr {
+    inherit (pkgs) unicorn-angr;
   };
 
   unicurses = callPackage ../development/python-modules/unicurses { };
