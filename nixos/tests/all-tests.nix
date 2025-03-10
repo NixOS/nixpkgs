@@ -602,6 +602,7 @@ in {
   litestream = handleTest ./litestream.nix {};
   lldap = handleTest ./lldap.nix {};
   localsend = handleTest ./localsend.nix {};
+  local-ai = runTest ./local-ai.nix;
   locate = handleTest ./locate.nix {};
   login = handleTest ./login.nix {};
   logrotate = handleTest ./logrotate.nix {};
