@@ -15479,6 +15479,19 @@ final: prev:
     meta.hydraPlatforms = [ ];
   };
 
+  vim-characterize = buildVimPlugin {
+    pname = "vim-characterize";
+    version = "2024-11-14";
+    src = fetchFromGitHub {
+      owner = "tpope";
+      repo = "vim-characterize";
+      rev = "a8bffac6cead6b2869d939ecad06312b187a4c79";
+      sha256 = "0v00jq0wx2zvcyh3k8rscvq1lgp4hyb1fkjwsygyynnbcaimms8z";
+    };
+    meta.homepage = "https://github.com/tpope/vim-characterize/";
+    meta.hydraPlatforms = [ ];
+  };
+
   vim-choosewin = buildVimPlugin {
     pname = "vim-choosewin";
     version = "2021-04-22";
