@@ -2835,6 +2835,11 @@ with pkgs;
     ui = true;
   };
 
+  netbird-server = netbird.override {
+    server = true;
+    client = false;
+  };
+
   skkDictionaries = callPackages ../tools/inputmethods/skk/skk-dicts { };
 
   ibus = callPackage ../tools/inputmethods/ibus { };
