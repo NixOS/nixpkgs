@@ -16654,6 +16654,8 @@ self: super: with self; {
 
   tinytuya = callPackage ../development/python-modules/tinytuya { };
 
+  tiptapy = callPackage ../development/python-modules/tiptapy { };
+
   titlecase = callPackage ../development/python-modules/titlecase { };
 
   tivars = callPackage ../development/python-modules/tivars { };
