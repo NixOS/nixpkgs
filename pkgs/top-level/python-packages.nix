@@ -3006,6 +3006,8 @@ self: super: with self; {
 
   customtkinter = callPackage ../development/python-modules/customtkinter { };
 
+  cut-cross-entropy = callPackage ../development/python-modules/cut-cross-entropy { };
+
   cvelib = callPackage ../development/python-modules/cvelib { };
 
   cvss = callPackage ../development/python-modules/cvss { };
@@ -17476,6 +17478,8 @@ self: super: with self; {
 
   tritonclient = callPackage ../development/python-modules/tritonclient { };
 
+  trl = callPackage ../development/python-modules/trl { };
+
   trlib = toPythonModule (
     pkgs.trlib.override {
       pythonSupport = true;
@@ -18084,6 +18088,8 @@ self: super: with self; {
 
   typst = callPackage ../development/python-modules/typst { };
 
+  tyro = callPackage ../development/python-modules/tyro { };
+
   tzdata = callPackage ../development/python-modules/tzdata { };
 
   tzlocal = callPackage ../development/python-modules/tzlocal { };
@@ -18237,6 +18243,10 @@ self: super: with self; {
   unrardll = callPackage ../development/python-modules/unrardll { };
 
   unrpa = callPackage ../development/python-modules/unrpa { };
+
+  unsloth = callPackage ../development/python-modules/unsloth { };
+
+  unsloth-zoo = callPackage ../development/python-modules/unsloth-zoo { };
 
   unstructured = callPackage ../development/python-modules/unstructured { };
 
