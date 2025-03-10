@@ -1,4 +1,9 @@
 {
+  azure-storage-blob,
+  boto3,
+  google-cloud-storage,
+  pymongo,
+  redis,
   lib,
   buildPythonPackage,
   dulwich,
@@ -26,7 +31,7 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  dependencies = [
+  nativeCheckInputs = [
     dulwich
     mock
     pytestCheckHook
@@ -40,11 +45,25 @@ buildPythonPackage rec {
     "test_concurrent_mkdir"
   ];
 
+  optional-dependencies = {
+    amazon = [ boto3 ];
+    azure = [ azure-storage-blob ];
+    google = [ google-cloud-storage ];
+    redis = [ redis ];
+    mongodb = [ pymongo ];
+    git = [ dulwich ];
+    /*
+      Additional potential dependencies not exposed here:
+        sqlalchemy: Our version is too new for simplekv
+        appengine-python-standard: Not packaged in nixpkgs
+    */
+  };
+
   meta = with lib; {
     description = "Simple key-value store for binary data";
     homepage = "https://github.com/mbr/simplekv";
     changelog = "https://github.com/mbr/simplekv/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [ fab bbenne10 ];
   };
 }
