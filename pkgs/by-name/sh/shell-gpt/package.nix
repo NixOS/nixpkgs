@@ -33,6 +33,7 @@ python3.pkgs.buildPythonApplication rec {
     openai
     rich
     typer
+    litellm
   ];
 
   # Tests want to read the OpenAI API key from stdin
