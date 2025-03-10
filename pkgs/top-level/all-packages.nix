@@ -13916,6 +13916,11 @@ with pkgs;
 
   jwm-settings-manager = callPackage ../applications/window-managers/jwm/jwm-settings-manager.nix { };
 
+  inherit (callPackage ../applications/networking/cluster/k0s { })
+    k0s_1_30
+  ;
+  k0s = k0s_1_30;
+
   inherit (callPackage ../applications/networking/cluster/k3s { })
     k3s_1_29
     k3s_1_30
