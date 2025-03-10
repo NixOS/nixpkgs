@@ -1,0 +1,18 @@
+diff --git a/next.config.js b/next.config.js
+index 5e3a1225..fec4a465 100644
+--- a/next.config.js
++++ b/next.config.js
+@@ -163,6 +163,13 @@ const config = {
+   },
+   basePath,
+   output: 'standalone',
++  outputFileTracingIncludes: {
++    "*": [
++      "./node_modules/@prisma/**/*",
++      "./node_modules/prisma/**/*",
++      "./node_modules/.bin/prisma",
++    ],
++  },
+   eslint: {
+     ignoreDuringBuilds: true,
+   },
