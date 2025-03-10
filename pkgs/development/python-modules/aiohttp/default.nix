@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch2,
   replaceVars,
   isPy310,
   isPyPy,
@@ -46,26 +45,20 @@
 
 buildPythonPackage rec {
   pname = "aiohttp";
-  version = "3.11.12";
+  version = "3.11.13";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = "aiohttp";
     tag = "v${version}";
-    hash = "sha256-GveluMxw100ZllDF+MT4QkZVD9q7UWHwF7IBK85J/j0=";
+    hash = "sha256-VY7Q8m1mOppI/sUgL0Zy/jisR/Vy3zZQBMhgrBYophs=";
   };
 
   patches = [
     (replaceVars ./unvendor-llhttp.patch {
       llhttpDev = lib.getDev llhttp;
       llhttpLib = lib.getLib llhttp;
-    })
-    (fetchpatch2 {
-      # https://github.com/aio-libs/aiohttp/issues/10421
-      # https://github.com/aio-libs/aiohttp/pull/10423
-      url = "https://github.com/aio-libs/aiohttp/commit/51daf7190e7674773c22011a4e443df8b5e66437.patch";
-      hash = "sha256-fADetk2tqg92J2sSgzKVTEhbQRSYl6430dxdVZuFx5I=";
     })
   ];
 
