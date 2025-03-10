@@ -682,8 +682,8 @@ let
         mktplcRef = {
           name = "markdown-preview-github-styles";
           publisher = "bierner";
-          version = "2.0.4";
-          hash = "sha256-jJulxvjMNsqQqmsb5szQIAUuLWuHw824Caa0KArjUVw=";
+          version = "2.1.0";
+          hash = "sha256-6Gs05RcYbeKBCi67K33KIpL0aGLGykYgyy3IPlx7ybo=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/bierner.markdown-preview-github-styles/changelog";
