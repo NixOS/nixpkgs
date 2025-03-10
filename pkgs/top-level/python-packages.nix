@@ -139,6 +139,8 @@ self: super: with self; {
 
   aigpy = callPackage ../development/python-modules/aigpy { };
 
+  aigyminsper = callPackage ../development/python-modules/aigyminsper { };
+
   aio-geojson-client = callPackage ../development/python-modules/aio-geojson-client { };
 
   aio-geojson-generic-client = callPackage ../development/python-modules/aio-geojson-generic-client { };
