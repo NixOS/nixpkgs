@@ -12626,6 +12626,10 @@ self: super: with self; {
 
   pyowm = callPackage ../development/python-modules/pyowm { };
 
+  pyoxigraph = callPackage ../development/python-modules/pyoxigraph {
+    inherit (pkgs.darwin.apple_sdk.frameworks) IOKit Security;
+  };
+
   pypager = callPackage ../development/python-modules/pypager { };
 
   pypamtest = toPythonModule (pkgs.libpam-wrapper.override {
