@@ -136,5 +136,5 @@ makeScopeWithSplicing' {
   });
 } // lib.optionalAttrs config.allowAliases {
   # when removing, don't forget to remove a workaround in `pkgs/kde/default.nix`
-  stdenv = lib.warn "qt6Packages.stdenv is deprecated. Use stdenv instead." stdenv; # Added for 25.05
+  stdenv = lib.warnOnInstantiate "qt6Packages.stdenv is deprecated. Use stdenv instead." stdenv; # Added for 25.05
 }
