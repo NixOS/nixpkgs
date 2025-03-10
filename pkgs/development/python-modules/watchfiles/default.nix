@@ -12,8 +12,6 @@
   pytest-mock,
   pytest-timeout,
   pytestCheckHook,
-  typing-extensions,
-  CoreServices,
   libiconv,
 }:
 
@@ -26,19 +24,17 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "samuelcolvin";
-    repo = pname;
+    repo = "watchfiles";
     tag = "v${version}";
     hash = "sha256-0JBnUi/aRM9UFTkb8OkP9UkJV+BF2EieZptymRvAXc0=";
   };
 
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
+    hash = "sha256-5iJmtMnZKHAl/SkIjXlXkRA4ZME/ozpqFfxXKCAABoQ=";
   };
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    CoreServices
-    libiconv
-  ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   nativeBuildInputs = [
     rustPlatform.cargoSetupHook
@@ -77,11 +73,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "watchfiles" ];
 
-  meta = with lib; {
+  meta = {
     description = "File watching and code reload";
     mainProgram = "watchfiles";
     homepage = "https://watchfiles.helpmanual.io/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }
