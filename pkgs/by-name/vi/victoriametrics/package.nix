@@ -1,6 +1,6 @@
 {
   lib,
-  buildGoModule,
+  buildGo124Module,
   fetchFromGitHub,
   nixosTests,
   withServer ? true, # the actual metrics server
@@ -12,15 +12,15 @@
   withVictoriaLogs ? true, # logs server
 }:
 
-buildGoModule rec {
+buildGo124Module rec {
   pname = "VictoriaMetrics";
-  version = "1.112.0";
+  version = "1.113.0";
 
   src = fetchFromGitHub {
     owner = "VictoriaMetrics";
     repo = "VictoriaMetrics";
     rev = "v${version}";
-    hash = "sha256-9/478WcGtD7ugpumNMBsyefCh9vNUTllBjjk5OsmiU8=";
+    hash = "sha256-yjK81kT2EW8Vqykl2xelCQg54ancVfSHriG08z7tXWU=";
   };
 
   vendorHash = null;
@@ -60,9 +60,9 @@ buildGoModule rec {
 
     # Increase timeouts in tests to prevent failure on heavily loaded builders
     substituteInPlace lib/storage/storage_test.go \
-      --replace "time.After(10 " "time.After(120 " \
-      --replace "time.NewTimer(30 " "time.NewTimer(120 " \
-      --replace "time.NewTimer(time.Second * 10)" "time.NewTimer(time.Second * 120)" \
+      --replace-fail "time.After(10 " "time.After(120 " \
+      --replace-fail "time.NewTimer(30 " "time.NewTimer(120 " \
+      --replace-fail "time.NewTimer(time.Second * 10)" "time.NewTimer(time.Second * 120)" \
   '';
 
   ldflags = [
@@ -82,11 +82,11 @@ buildGoModule rec {
     inherit (nixosTests) victoriametrics;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://victoriametrics.com/";
     description = "fast, cost-effective and scalable time series database, long-term remote storage for Prometheus";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       yorickvp
       ivan
       leona
