@@ -1,7 +1,7 @@
-{
-  lib,
-  python3,
-  fetchFromGitHub,
+{ lib
+, python3
+, fetchFromGitHub
+,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -16,7 +16,7 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-Bn57hHuW1yGxBBSiqXCIAbhB5ayY9TvZ8Mfn8I47y8E=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [dbus-python pygobject3];
+  propagatedBuildInputs = with python3.pkgs; [ dbus-python pygobject3 ];
 
   build-system = [
     python3.pkgs.setuptools
