@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "upb-lib";
-  version = "0.6.0";
+  version = "0.6.1";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "gwww";
     repo = "upb-lib";
     tag = version;
-    hash = "sha256-4RDatZXEwjNVbz1/ZNA6HY2fDHMq2dE/Huf4Ui3wU3c=";
+    hash = "sha256-tjmsg8t2/WEjnRHyqN2lxsAgfISV1uAnhmq2dXAG15A=";
   };
 
   build-system = [ hatchling ];
