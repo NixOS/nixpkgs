@@ -8,11 +8,11 @@
 stdenv.mkDerivation rec {
   pname = "fortran-fpm";
 
-  version = "0.10.1";
+  version = "0.11.0";
 
   src = fetchurl {
     url = "https://github.com/fortran-lang/fpm/releases/download/v${version}/fpm-${version}.F90";
-    sha256 = "sha256-dVPQW2DCp+iJojuhCgeEFVFpugG/x+DKhG986QuE4co=";
+    sha256 = "sha256-mIozF+4kSO5yB9CilBDwinnIa92sMxSyoXWAGpz1jSc=";
   };
 
   dontUnpack = true;
