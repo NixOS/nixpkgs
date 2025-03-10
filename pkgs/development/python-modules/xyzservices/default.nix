@@ -24,9 +24,9 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  pytestFlagsArray = [
+  disabledTestMarks = [
     # requires network connections
-    "-m 'not request'"
+    "request"
   ];
 
   pythonImportsCheck = [ "xyzservices.providers" ];

@@ -1233,36 +1233,14 @@ test run would be:
 However, many repositories' test suites do not translate well to nix's build
 sandbox, and will generally need many tests to be disabled.
 
-To filter tests using pytest, one can do the following:
+This is achievable by
+- Specifying paths (files or directory) or test items (`path/to/file.py::MyClass` or `path/to/file.py::MyClass::test_method`) as positional arguments to whitelist the tests to run.
+- Excluding paths with `--ignore` or globbed paths with `--ignore-glob`.
+- Excluding test items using the `--deselect` flag.
+- Excluding classes or test methods by their name using the `-k` flag.
+- Excluding test by their marks using the `-m` flag.
 
-```nix
-{
-  nativeCheckInputs = [ pytest ];
-  # avoid tests which need additional data or touch network
-  checkPhase = ''
-    runHook preCheck
-
-    pytest tests/ --ignore=tests/integration -k 'not download and not update' --ignore=tests/test_failing.py
-
-    runHook postCheck
-  '';
-}
-```
-
-`--ignore` will tell pytest to ignore that file or directory from being
-collected as part of a test run. This is useful is a file uses a package
-which is not available in nixpkgs, thus skipping that test file is much
-easier than having to create a new package.
-
-`-k` is used to define a predicate for test names. In this example, we are
-filtering out tests which contain `download` or `update` in their test case name.
-Only one `-k` argument is allowed, and thus a long predicate should be concatenated
-with “\\” and wrapped to the next line.
-
-::: {.note}
-In pytest==6.0.1, the use of “\\” to continue a line (e.g. `-k 'not download \'`) has
-been removed, in this case, it's recommended to use `pytestCheckHook`.
-:::
+We recommend `pytestCheckHook` for an easier and more structural setup.
 
 #### Using pytestCheckHook {#using-pytestcheckhook}
 
@@ -1272,54 +1250,43 @@ when a package may need many items disabled to run the test suite.
 Most packages use `pytest` or `unittest`, which is compatible with `pytest`,
 so you will most likely use `pytestCheckHook`.
 
-Using the example above, the analogous `pytestCheckHook` usage would be:
+To use `pytstCheckHook`, add it into the `nativeBuildInputs`. (You don't have to add `pytest` explicitly for `pytestCheckHook` to work.)
 
 ```nix
 {
   nativeCheckInputs = [
     pytestCheckHook
   ];
-
-  # requires additional data
-  pytestFlags = [
-    "tests/"
-    "--ignore=tests/integration"
-  ];
-
-  disabledTests = [
-    # touches network
-    "download"
-    "update"
-  ];
-
-  disabledTestPaths = [
-    "tests/test_failing.py"
-  ];
 }
 ```
 
-This is especially useful when tests need to be conditionally disabled,
-for example:
+`pytestCheckHook` recognizes the following attributes/variables to include/whitelist tests and to exclude/blacklist tests:
+
+- `enabledTestPaths` and `disabledTestPaths`: to specify path globs (files or directories) or test items.
+- `enabledTests` and `disabledTests`: to specify keywords for class names or test method names.
+- `enabledTestMarks` and `disabledTestMarks`: to specify test marks.
+
+The `<enabled/disabled>Tests` and `<enabled/disabled>TestMarks` attribute pairs
+form a logical expression `((included_element1) or (included_element2)) and not (excluded_elemnt1) and not (excluded_elemnt2)`
+which will be passed to pytest's `-k` flag and `-m` flags respectively.
+With `__structuredAttrs = true` enabled, they additionally supports sub-expressions.
+E.g.:
 
 ```nix
 {
+  __structuredAttrs = true;
+
   disabledTests = [
-    # touches network
-    "download"
-    "update"
-  ] ++ lib.optionals (pythonAtLeast "3.8") [
-    # broken due to python3.8 async changes
-    "async"
-  ] ++ lib.optionals stdenv.buildPlatform.isDarwin [
-    # can fail when building with other packages
-    "socket"
+    "Foo and bar"
   ];
 }
 ```
 
-Trying to concatenate the related strings to disable tests in a regular
-[`checkPhase`](#ssec-check-phase) would be much harder to read. This also enables us to comment on
-why specific tests are disabled.
+excludes test items like `FooTests::test_bar_functionality`.
+
+`pytestCheckHook` supports `pytestFlags`
+to append additional command-line arguments to the constructed `pytest` command.
+It requires `__structuredAttrs = true` to pass command-line arguments containing spaces.
 
 #### Using pythonImportsCheck {#using-pythonimportscheck}
 
