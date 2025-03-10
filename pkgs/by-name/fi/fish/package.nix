@@ -292,6 +292,9 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       "-DMAC_CODESIGN_ID=OFF"
+    ]
+    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+      "-DRust_CARGO_TARGET=${stdenv.hostPlatform.rust.rustcTarget}"
     ];
 
   # Fish’s test suite needs to be able to look up process information and send signals.
