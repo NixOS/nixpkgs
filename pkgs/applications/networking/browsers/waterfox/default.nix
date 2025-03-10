@@ -130,8 +130,8 @@ stdenv.mkDerivation rec {
     pciutils # Added here
   ];
 
-  dontBuild = true;
   dontConfigure = true;
+  dontBuild = true;
 
   installPhase = ''
     runHook preInstall
