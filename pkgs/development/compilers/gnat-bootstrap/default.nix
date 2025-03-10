@@ -44,6 +44,11 @@ stdenv.mkDerivation(finalAttrs:
       gccVersion = "13.2.0";
       alireRevision = "2";
     } // {
+      aarch64-darwin = {
+        inherit url;
+        hash = "sha256-Bjl6iuM2xLknezR92j/kpDYpxqTcxK1v8rffmivOAVw=";
+        upstreamTriplet = "aarch64-apple-darwin23.2.0";
+      };
       x86_64-darwin = {
         inherit url;
         hash = "sha256-DNHcHTIi7pw0rsVtpyGTyLVElq3IoO2YX/OkDbdeQyo=";
@@ -59,6 +64,11 @@ stdenv.mkDerivation(finalAttrs:
       gccVersion = "14.2.0";
       alireRevision = "1";
     } // {
+      aarch64-darwin = {
+        inherit url;
+        hash = "sha256-/nARwdQzAMd41fslUbrgloxn0hVZp9PokfQ9yPmL1g8=";
+        upstreamTriplet = "aarch64-apple-darwin23.6.0";
+      };
       x86_64-darwin = {
         inherit url;
         hash = "sha256-3YOnvuI6Qq7huQcqgFSz/o+ZgY2wNkKDqHIuzNz1MVY=";
@@ -155,7 +165,7 @@ in {
   # [2]: https://gcc.gnu.org/onlinedocs/gcc-12.2.0/gcc/Fixed-Headers.html
 
   + lib.optionalString (stdenv.hostPlatform.isDarwin) ''
-    upstreamBuildPrefix="/Users/runner/work/GNAT-FSF-builds/GNAT-FSF-builds/sbx/x86_64-darwin/gcc/install"
+    upstreamBuildPrefix="/Users/runner/work/GNAT-FSF-builds/GNAT-FSF-builds/sbx/${stdenv.hostPlatform.system}/gcc/install"
     for i in "$out"/lib/*.dylib "$out"/lib/gcc/*/*/adalib/*.dylib; do
       if [[ -f "$i" && ! -h "$i" ]]; then
         install_name_tool -id "$i" "$i" || true
@@ -187,7 +197,12 @@ in {
     homepage = "https://www.gnu.org/software/gnat";
     license = licenses.gpl3;
     maintainers = with maintainers; [ ethindp ];
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    platforms = [
+      "x86_64-linux"
+      "x86_64-darwin"
+    ] ++ lib.optionals (lib.versionAtLeast majorVersion "13") [
+      "aarch64-darwin"
+    ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 })
