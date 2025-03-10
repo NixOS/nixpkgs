@@ -2740,6 +2740,9 @@ self: super: {
 
   # jailbreak to allow deepseq >= 1.5, https://github.com/jumper149/blucontrol/issues/3
   blucontrol = doJailbreak super.blucontrol;
+
+  # jailbreak to allow rerefined >=0.7.0, https://github.com/raehik/binrep/issues/12
+  binrep = doJailbreak super.binrep;
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
 
 # Gogol Packages
