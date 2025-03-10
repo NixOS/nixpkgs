@@ -1,14 +1,9 @@
 {
   lib,
   mkKdeDerivation,
-  qtsvg,
-  qttools,
-  qtwebchannel,
-  qtwebengine,
-  qt5compat,
   pkg-config,
   hunspell,
-  kdoctools,
+  kdePackages,
   pandoc,
   multimarkdown,
   cmark,
@@ -17,12 +12,11 @@ mkKdeDerivation {
   pname = "ghostwriter";
 
   extraNativeBuildInputs = [ pkg-config ];
-  extraBuildInputs = [
+  extraBuildInputs = with kdePackages; [
     qtsvg
     qttools
     qtwebchannel
     qtwebengine
-    qt5compat
     kdoctools
     hunspell
   ];

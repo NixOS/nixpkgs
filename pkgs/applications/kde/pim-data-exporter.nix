@@ -5,7 +5,6 @@
   extra-cmake-modules,
   kdoctools,
   akonadi,
-  akonadi-notes,
   kcalendarcore,
   kcmutils,
   kcrash,
@@ -48,7 +47,6 @@ mkDerivation {
   ];
   buildInputs = [
     akonadi
-    akonadi-notes
     kcalendarcore
     kcmutils
     kcrash
