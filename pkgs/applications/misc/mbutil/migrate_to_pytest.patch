@@ -1,0 +1,30 @@
+diff --git a/test/test.py b/test/test.py
+index e02e259..1452fda 100644
+--- a/test/test.py
++++ b/test/test.py
+@@ -1,13 +1,24 @@
+ import os, shutil
+ import sys
+ import json
+-from nose import with_setup
+ from mbutil import mbtiles_to_disk, disk_to_mbtiles
+ 
+ def clear_data():
+     try: shutil.rmtree('test/output')
+     except Exception: pass
+ 
++
++def with_setup(setup_func, teardown_func):
++    def wrapper(func):
++        def wrapped(*args, **kwargs):
++            setup_func()
++            func(*args, **kwargs)
++            teardown_func()
++
++        return wrapped
++    return wrapper
++
++
+ @with_setup(clear_data, clear_data)
+ def test_mbtiles_to_disk():
+     mbtiles_to_disk('test/data/one_tile.mbtiles', 'test/output')

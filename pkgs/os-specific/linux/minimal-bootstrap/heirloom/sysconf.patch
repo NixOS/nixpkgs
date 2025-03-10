@@ -1,0 +1,77 @@
+--- cmp/cmp.c
++++ cmp/cmp.c
+@@ -264,7 +264,7 @@ openfile(const char *fn)
+ 	struct file	*f;
+ 
+ 	if (pagesize == 0)
+-		if ((pagesize = sysconf(_SC_PAGESIZE)) < 0)
++		if ((pagesize = 4096) < 0)
+ 			pagesize = 4096;
+ 	if ((f = memalign(pagesize, sizeof *f)) == NULL) {
+ 		write(2, "no memory\n", 10);
+--- copy/copy.c
++++ copy/copy.c
+@@ -362,7 +362,7 @@ fdcopy(const char *src, const struct stat *sp, int sfd,
+ 			goto err;
+ 	}
+ #endif	/* __linux__ */
+-	if (pagesize == 0 && (pagesize = sysconf(_SC_PAGESIZE)) <= 0)
++	if (pagesize == 0 && (pagesize = 4096) <= 0)
+ 		pagesize = 4096;
+ 	if ((blksize = sp->st_blksize) <= 0)
+ 		blksize = 512;
+--- cp/cp.c
++++ cp/cp.c
+@@ -438,7 +438,7 @@ fdcopy(const char *src, const struct stat *ssp, const int sfd,
+ 	}
+ #endif	/* __linux__ */
+ 	if (pagesize == 0)
+-		if ((pagesize = sysconf(_SC_PAGESIZE)) < 0)
++		if ((pagesize = 4096) < 0)
+ 			pagesize = 4096;
+ 	if (bflag)
+ 		blksize = bflag;
+--- libcommon/ib_alloc.c
++++ libcommon/ib_alloc.c
+@@ -41,7 +41,7 @@ ib_alloc(int fd, unsigned blksize)
+ 	struct stat	st;
+ 
+ 	if (pagesize == 0)
+-		if ((pagesize = sysconf(_SC_PAGESIZE)) < 0)
++		if ((pagesize = 4096) < 0)
+ 			pagesize = 4096;
+ 	if (blksize == 0) {
+ 		if (fstat(fd, &st) < 0)
+--- libcommon/memalign.c
++++ libcommon/memalign.c
+@@ -40,7 +40,7 @@ memalign(size_t alignment, size_t size)
+ 	static long	pagesize;
+ 
+ 	if (pagesize == 0)
+-		pagesize = sysconf(_SC_PAGESIZE);
++		pagesize = 4096;
+ 	if (alignment != pagesize)
+ 		return NULL;
+ 	if (size < pagesize)
+--- libcommon/oblok.c
++++ libcommon/oblok.c
+@@ -100,7 +100,7 @@ ob_alloc(int fd, enum ob_mode bf)
+ 	struct oblok	*op;
+ 
+ 	if (pagesize == 0)
+-		if ((pagesize = sysconf(_SC_PAGESIZE)) < 0)
++		if ((pagesize = 4096) < 0)
+ 			pagesize = 4096;
+ 	if ((op = memalign(pagesize, sizeof *op)) == NULL)
+ 		return NULL;
+--- xargs/xargs.c
++++ xargs/xargs.c
+@@ -404,7 +404,7 @@ static void
+ endcmd(void)
+ {
+ 	a_agg = a_cnt;
+-	a_maxsize = sysconf(_SC_ARG_MAX) - envsz() - 2048 - a_asz;
++	a_maxsize = 65536 - envsz() - 2048 - a_asz;
+ 	if (nflag || sflag) {
+ 		long	newsize = sflag ? atol(sflag) :
+ #ifdef	WEIRD_LIMITS

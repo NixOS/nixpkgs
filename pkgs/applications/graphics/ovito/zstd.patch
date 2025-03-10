@@ -1,0 +1,13 @@
+diff --git a/src/ovito/core/CMakeLists.txt b/src/ovito/core/CMakeLists.txt
+index 1b49746a6..7fda02bf4 100755
+--- a/src/ovito/core/CMakeLists.txt
++++ b/src/ovito/core/CMakeLists.txt
+@@ -188,7 +188,7 @@ IF(ZLIB_FOUND)
+         IF(OVITO_BUILD_CONDA)
+             TARGET_LINK_LIBRARIES(Core PUBLIC zstd::libzstd)
+         ELSE()
+-            TARGET_LINK_LIBRARIES(Core PUBLIC zstd::libzstd_static)
++            TARGET_LINK_LIBRARIES(Core PUBLIC zstd::libzstd)
+         ENDIF()
+         # Build the zstd zlib-wrapper source files.
+         TARGET_INCLUDE_DIRECTORIES(Core PUBLIC "$<BUILD_INTERFACE:${OVITO_SOURCE_BASE_DIR}/src/3rdparty/zstd/zlibWrapper>")

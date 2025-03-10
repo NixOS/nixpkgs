@@ -1,0 +1,26 @@
+diff --git a/flux-core/src/ast/walk/mod.rs b/flux-core/src/ast/walk/mod.rs
+index 90f70ba6f7..a6966827e8 100644
+--- a/flux-core/src/ast/walk/mod.rs
++++ b/flux-core/src/ast/walk/mod.rs
+@@ -180,7 +180,7 @@ impl<'a> Node<'a> {
+ 
+ impl<'a> Node<'a> {
+     #[allow(missing_docs)]
+-    pub fn from_expr(expr: &'a Expression) -> Node {
++    pub fn from_expr(expr: &'a Expression) -> Node<'a> {
+         match expr {
+             Expression::Identifier(e) => Node::Identifier(e),
+             Expression::Array(e) => Node::ArrayExpr(e),
+diff --git a/flux-core/src/parser/mod.rs b/flux-core/src/parser/mod.rs
+index ac7d4b9a72..561c3a0ff6 100644
+--- a/flux-core/src/parser/mod.rs
++++ b/flux-core/src/parser/mod.rs
+@@ -41,7 +41,7 @@ pub struct Parser<'input> {
+ 
+ impl<'input> Parser<'input> {
+     /// Instantiates a new parser with the given string as input.
+-    pub fn new(src: &'input str) -> Parser {
++    pub fn new(src: &'input str) -> Parser<'input> {
+         let s = Scanner::new(src);
+         Parser {
+             s,

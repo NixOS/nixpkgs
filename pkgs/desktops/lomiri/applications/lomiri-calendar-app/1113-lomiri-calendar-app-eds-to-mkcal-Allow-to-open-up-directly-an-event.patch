@@ -1,0 +1,25 @@
+From fcca1e0fa792e69b6780017db4afc34ea83ea28a Mon Sep 17 00:00:00 2001
+From: Lionel Duboeuf <lduboeuf@ouvaton.org>
+Date: Mon, 27 Jan 2025 22:40:56 +0100
+Subject: [PATCH] eds->mkcal : Allow to open up directly an event
+
+---
+ src/qml/calendar.qml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/qml/calendar.qml b/src/qml/calendar.qml
+index 2b6e6cfd..fef622c4 100644
+--- a/src/qml/calendar.qml
++++ b/src/qml/calendar.qml
+@@ -797,7 +797,7 @@ MainView {
+                 }
+             } // End of else if (starttime)
+             else if (tabs.eventId !== "") {
+-                var prefix = "qtorganizer:eds::";
++                var prefix = "qtorganizer:mkcal::";
+                 if (tabs.eventId.indexOf(prefix) < 0)
+                     tabs.eventId  = prefix + tabs.eventId;
+ 
+-- 
+GitLab
+

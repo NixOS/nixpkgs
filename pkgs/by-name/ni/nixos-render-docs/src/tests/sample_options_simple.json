@@ -1,0 +1,17 @@
+{
+  "services.frobnicator.types.<name>.enable": {
+    "declarations": [
+      "nixos/modules/services/frobnicator.nix"
+    ],
+    "description": "Whether to enable the frobnication of this (`<name>`) type.",
+    "loc": [
+      "services",
+      "frobnicator",
+      "types",
+      "<name>",
+      "enable"
+    ],
+    "readOnly": false,
+    "type": "boolean"
+  }
+}

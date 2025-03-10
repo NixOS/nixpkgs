@@ -1,0 +1,197 @@
+[
+  {
+    "pname": "Ace4896.DBus.Services.Secrets",
+    "version": "1.2.0",
+    "sha256": "1i1rwv8z2dx0mjib7vair2w7ylngmrcpbd012sdlpvdjpx0af0bn"
+  },
+  {
+    "pname": "Cake.Tool",
+    "version": "4.0.0",
+    "sha256": "11vc5fimi6w465081sqxs4zhw7grr6v8ga7nl1mscdl43wv33ql2"
+  },
+  {
+    "pname": "CommandLineParser",
+    "version": "2.9.1",
+    "sha256": "1sldkj8lakggn4hnyabjj1fppqh50fkdrr1k99d4gswpbk5kv582"
+  },
+  {
+    "pname": "GetText.NET",
+    "version": "1.9.14",
+    "sha256": "18z4cf0dldcf41z8xgj3gdlvj9w5a9ikgj72623r0i740ndnl094"
+  },
+  {
+    "pname": "GirCore.Adw-1",
+    "version": "0.5.0-preview.3",
+    "sha256": "090kg5v99myd7hi49cz933cl36hk5n586ywy78gf5djn5im3v19l"
+  },
+  {
+    "pname": "GirCore.Cairo-1.0",
+    "version": "0.5.0-preview.3",
+    "sha256": "0bh1h2hr6givrq6096bvzcsg4lab1hlm7r7h4bqifbw0zmmcfb7k"
+  },
+  {
+    "pname": "GirCore.FreeType2-2.0",
+    "version": "0.5.0-preview.3",
+    "sha256": "194p44gd7r69x70j3qynv5v8awlyxmdazmzpwzgj5ayy2xpdk3hy"
+  },
+  {
+    "pname": "GirCore.Gdk-4.0",
+    "version": "0.5.0-preview.3",
+    "sha256": "09p097nvs7vi7l14l024m39qyhg1gyqihanq7zv66xqys4hzim1g"
+  },
+  {
+    "pname": "GirCore.GdkPixbuf-2.0",
+    "version": "0.5.0-preview.3",
+    "sha256": "0lspyra1g1rd8hj3f3daxspin5dhgplzgjh4jwhlgzzn648942j0"
+  },
+  {
+    "pname": "GirCore.Gio-2.0",
+    "version": "0.5.0-preview.3",
+    "sha256": "090svrddgpliks5r29yncih3572w7gdc552nl16qbviqbmhr0lbs"
+  },
+  {
+    "pname": "GirCore.GLib-2.0",
+    "version": "0.5.0-preview.3",
+    "sha256": "1wxwf24gabd69yxpnhv30rn7pcv49w885jdw3nqbrakl7pvv9fza"
+  },
+  {
+    "pname": "GirCore.GObject-2.0",
+    "version": "0.5.0-preview.3",
+    "sha256": "0iajydyx79f3khx0fhv8izbxlzxwn6gpps2xzmi9c4v98ly221j3"
+  },
+  {
+    "pname": "GirCore.Graphene-1.0",
+    "version": "0.5.0-preview.3",
+    "sha256": "114fbgxils50jdy891nwj70yr43lnwgbq9fzxqzywd1kk70k7mww"
+  },
+  {
+    "pname": "GirCore.Gsk-4.0",
+    "version": "0.5.0-preview.3",
+    "sha256": "0f5s6f6pwc9vc3nm7xfaa06z2klgpg4rv5cdf0cwis3vlncd7dnj"
+  },
+  {
+    "pname": "GirCore.Gtk-4.0",
+    "version": "0.5.0-preview.3",
+    "sha256": "1fn0b8lwlrmjm9phjq4amqnq3q70fl214115652cap5rz4rjmpgg"
+  },
+  {
+    "pname": "GirCore.HarfBuzz-0.0",
+    "version": "0.5.0-preview.3",
+    "sha256": "0xska2l44l0j38mlgmrwly1qal9wzbv2w2jjj8gn90sxbygb8zky"
+  },
+  {
+    "pname": "GirCore.Pango-1.0",
+    "version": "0.5.0-preview.3",
+    "sha256": "0ccw3bd3kl24mnxbjzhya11i0ln6g1g7q876pyy54cwh48x4mdia"
+  },
+  {
+    "pname": "GirCore.PangoCairo-1.0",
+    "version": "0.5.0-preview.3",
+    "sha256": "0lds340p5cci7sjp58nh94jxkjvzfky9cbs2h4q98hglxndjm7r9"
+  },
+  {
+    "pname": "Markdig",
+    "version": "0.33.0",
+    "sha256": "1dj06wgdqmjji4nfr1dysz7hwp5bjgsrk9qjkdq82d7gk6nmhs9r"
+  },
+  {
+    "pname": "Meziantou.Framework.Win32.CredentialManager",
+    "version": "1.4.5",
+    "sha256": "1ikjxj6wir2jcjwlmd4q7zz0b4g40808gx59alvad31sb2aqp738"
+  },
+  {
+    "pname": "Microsoft.Data.Sqlite.Core",
+    "version": "8.0.0",
+    "sha256": "05qjnzk1fxybks92y93487l3mj5nghjcwiy360xjgk3jykz3rv39"
+  },
+  {
+    "pname": "Microsoft.NETCore.Targets",
+    "version": "5.0.0",
+    "sha256": "0z3qyv7qal5irvabc8lmkh58zsl42mrzd1i0sssvzhv4q4kl3cg6"
+  },
+  {
+    "pname": "Microsoft.Win32.SystemEvents",
+    "version": "8.0.0",
+    "sha256": "05392f41ijgn17y8pbjcx535l1k09krnq3xdp60kyq568sn6xk2i"
+  },
+  {
+    "pname": "Nickvision.Aura",
+    "version": "2023.11.4",
+    "sha256": "0gasyglp1pgi0s6zqzmbm603j3j36vvr68grv6g93fdj2vjlmkxs"
+  },
+  {
+    "pname": "Octokit",
+    "version": "9.0.0",
+    "sha256": "0kw49w1hxk4d2x9598012z9q1yr3ml5rm06fy1jnmhy44s3d3jp5"
+  },
+  {
+    "pname": "SkiaSharp",
+    "version": "2.88.6",
+    "sha256": "0xs11zjw9ha68maw3l825kfwlrid43qwy0mswljxhpjh0y1k6k6b"
+  },
+  {
+    "pname": "SkiaSharp.NativeAssets.Linux",
+    "version": "2.88.6",
+    "sha256": "0cg38xgddww1y93xrnbfn40sin63yl39j5zm7gm5pdgp5si0cf2n"
+  },
+  {
+    "pname": "SkiaSharp.NativeAssets.macOS",
+    "version": "2.88.6",
+    "sha256": "1fp9h8c8k6sbsh48b69dc6461isd4dajq7yw5i7j6fhkas78q4zf"
+  },
+  {
+    "pname": "SkiaSharp.NativeAssets.Win32",
+    "version": "2.88.6",
+    "sha256": "1w2mwcwkqvrg4x4ybc4674xnkqwh1n2ihg520gqgpnqfc11ghc4n"
+  },
+  {
+    "pname": "SQLitePCLRaw.bundle_e_sqlcipher",
+    "version": "2.1.6",
+    "sha256": "15v2x7y4k7cl47a9jccbvgbwngwi5dz6qhv0cxpcasx4v5i9aila"
+  },
+  {
+    "pname": "SQLitePCLRaw.core",
+    "version": "2.1.6",
+    "sha256": "1w8zsgz2w2q0a9cw9cl1rzrpv48a04nhyq67ywan6xlgknds65a7"
+  },
+  {
+    "pname": "SQLitePCLRaw.lib.e_sqlcipher",
+    "version": "2.1.6",
+    "sha256": "0dl5an15whs4yl5hm2wibzbfigzck0flah8a07k99y1bhbmv080z"
+  },
+  {
+    "pname": "SQLitePCLRaw.provider.e_sqlcipher",
+    "version": "2.1.6",
+    "sha256": "1jx8d4dq5w2951b7w722gnxbfgdklwazc48kcbdzylkglwkrqgrq"
+  },
+  {
+    "pname": "System.Drawing.Common",
+    "version": "8.0.0",
+    "sha256": "1j4rsm36bnwqmh5br9mzmj0ikjnc39k26q6l9skjlrnw8hlngwy4"
+  },
+  {
+    "pname": "System.IO.Pipelines",
+    "version": "6.0.0",
+    "sha256": "08211lvckdsdbd67xz4f6cyk76cli565j0dby1grlc4k9bhwby65"
+  },
+  {
+    "pname": "System.Memory",
+    "version": "4.5.3",
+    "sha256": "0naqahm3wljxb5a911d37mwjqjdxv9l0b49p5dmfyijvni2ppy8a"
+  },
+  {
+    "pname": "System.Memory",
+    "version": "4.5.5",
+    "sha256": "08jsfwimcarfzrhlyvjjid61j02irx6xsklf32rv57x2aaikvx0h"
+  },
+  {
+    "pname": "Tmds.DBus",
+    "version": "0.15.0",
+    "sha256": "1bz5j6wfp9hn4fg5vjxl6mr9lva4gx6zqncqyqxrcb8lw7hvhwc6"
+  },
+  {
+    "pname": "Tmds.DBus.Protocol",
+    "version": "0.15.0",
+    "sha256": "0d99kcs7r9cp6gpyc7z230czkkyx4164x86dhy0mca73f2ykc2g2"
+  }
+]

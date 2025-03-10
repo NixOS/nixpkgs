@@ -1,0 +1,10 @@
+--- a/opt/brother/Printers/HLL2375DW/cupswrapper/lpdwrapper  2022-12-07 18:32:29.950543083 +0100
++++ b/opt/brother/Printers/HLL2375DW/cupswrapper/lpdwrapper      2022-12-07 18:46:03.046989151 +0100
+@@ -379,6 +379,7 @@
+
+
+ `cp  $basedir/inf/br${PRINTER}rc  $TEMPRC`;
++`chmod 666  $TEMPRC`;
+ $ENV{BRPRINTERRCFILE} = $TEMPRC;
+
+ logprint( 0 , "TEMPRC    = $TEMPRC\n");
