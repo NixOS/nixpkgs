@@ -3,39 +3,41 @@
   stdenv,
   fetchFromGitHub,
   fetchurl,
+  libsForQt5,
   ffmpeg,
   mpv,
   nodejs,
-  qmake,
-  qtwebengine,
-  wrapQtAppsHook,
 }:
-
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "stremio-shell";
   version = "4.4.168";
 
   src = fetchFromGitHub {
     owner = "Stremio";
-    repo = pname;
-    rev = "v${version}";
-    fetchSubmodules = true;
+    repo = "stremio-shell";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-pz1mie0kJov06GcyitvZu5Gg0Vz3YnigjDqFujGKqZM=";
+    fetchSubmodules = true;
+    meta.license = lib.licenses.gpl3Only;
   };
 
-  server = fetchurl {
-    url = "https://s3-eu-west-1.amazonaws.com/stremio-artifacts/four/v${version}/server.js";
-    hash = "sha256-aD3niQpgq1EiZLacnEFgmqUV+bc4rvGN9IA+9T4XF10=";
+  # check server-url.txt
+  server = fetchurl rec {
+    pname = "stremio-server";
+    version = "4.20.8";
+    url = "https://dl.strem.io/server/v${version}/desktop/server.js";
+    hash = "sha256-cRMgD1d1yVj9FBvFAqgIqwDr+7U3maE8OrCsqExftHY=";
+    meta.license = lib.licenses.unfree;
   };
 
   buildInputs = [
-    qtwebengine
+    libsForQt5.qt5.qtwebengine
     mpv
   ];
 
   nativeBuildInputs = [
-    qmake
-    wrapQtAppsHook
+    libsForQt5.qmake
+    libsForQt5.qt5.wrapQtAppsHook
   ];
 
   postInstall = ''
@@ -49,18 +51,20 @@ stdenv.mkDerivation rec {
       --suffix PATH ":" ${lib.makeBinPath [ ffmpeg ]}
   '';
 
-  meta = with lib; {
+  meta = {
     mainProgram = "stremio";
     description = "Modern media center that gives you the freedom to watch everything you want";
     homepage = "https://www.stremio.com/";
-    # (Server-side) web UI is closed source now, apparently they work on open-sourcing it.
-    # server.js appears to be MIT-licensed, but I can't find how they actually build it.
-    # https://www.reddit.com/r/StremioAddons/comments/n2ob04/a_summary_of_how_stremio_works_internally_and/
-    license = with licenses; [
-      gpl3
-      mit
+    # (Server-side) 4.x versions of the web UI are closed-source
+    license = with lib.licenses; [
+      gpl3Only
+      # server.js is unfree
+      unfree
     ];
-    maintainers = with maintainers; [ abbradar ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [
+      abbradar
+      griffi-gh
+    ];
+    platforms = lib.platforms.linux;
   };
-}
+})
