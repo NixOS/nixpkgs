@@ -3,6 +3,7 @@
   anthropic,
   backoff,
   buildPythonPackage,
+  distro,
   fetchFromGitHub,
   freezegun,
   mock,
@@ -32,6 +33,7 @@ buildPythonPackage rec {
 
   dependencies = [
     backoff
+    distro
     monotonic
     python-dateutil
     requests
