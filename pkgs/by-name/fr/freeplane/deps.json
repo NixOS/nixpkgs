@@ -16,8 +16,8 @@
   "com/github/ben-manes/versions#com.github.ben-manes.versions.gradle.plugin/0.51.0": {
    "pom": "sha256-oy92kCcy9iIN27EhlfozbDMfT2190MRscHcLOu4dR0E="
   },
-  "com/netflix/nebula/ospackage#com.netflix.nebula.ospackage.gradle.plugin/11.10.0": {
-   "pom": "sha256-2CtlPq9xjbpM5uYMynsMik4IhQb+DLO+jCoU49cBhwc="
+  "com/netflix/nebula/ospackage#com.netflix.nebula.ospackage.gradle.plugin/11.11.1": {
+   "pom": "sha256-vzFreAr1jNZu6HTiFIpSGFcYGz/pvN36tiQOXikDxPI="
   },
   "de/jflex#cup-parent/11b": {
    "pom": "sha256-c4L5m+Pbb+Uh8E1+/XMZ/jlj2nnWXFaOfoofWRLpmHw="
@@ -304,10 +304,10 @@
    "jar": "sha256-9UdeY+fonl22IiNImux6Vr0wNUN3IHehfCy1TBnKOiA=",
    "pom": "sha256-W3YhZzfy2pODlTrMybpY9uc500Rnh5nm1NCCz24da9M="
   },
-  "com/netflix/nebula#gradle-ospackage-plugin/11.10.0": {
-   "jar": "sha256-k8JksFhk+NuXmhaameS/qthMqjC4KXQ/ZyEDgt/4lhk=",
-   "module": "sha256-Ef8gYnVWXB04hmPUmjT73DnQ4OWvGiqO32HOtTtSyzA=",
-   "pom": "sha256-6hztETK2gdIShusXyuLdJHeGBR9mh/EiufxUWFaSUGQ="
+  "com/netflix/nebula#gradle-ospackage-plugin/11.11.1": {
+   "jar": "sha256-NAJ6yECtuBuA3kMILOM1plGIdSF6OKwCBNWoTcZpt6w=",
+   "module": "sha256-wb4zriytcHAJd+7KHPhLTNtJXJY7xYjXaAehe+94Lcc=",
+   "pom": "sha256-2XSxaCnczZP7kLyVaJAFVcxrgJhvSc/yxIZaIANLBPA="
   },
   "com/samskivert#jmustache/1.15": {
    "jar": "sha256-GuuWudwXvClUC4wzQujpHul01cYEFl7NRp3XawQcJQw=",
