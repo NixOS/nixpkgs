@@ -342,7 +342,7 @@ in
         ExecStart = "${cfg.package}/bin/celery --app paperless beat --loglevel INFO";
         Restart = "on-failure";
         LoadCredential = lib.optionalString (cfg.passwordFile != null) "PAPERLESS_ADMIN_PASSWORD:${cfg.passwordFile}";
-        PrivateNetwork = cfg.database.createLocally; # defaultServiceConfig enables this by default, needs to be disabled for remote DBs
+        PrivateNetwork = cfg.database.createLocally or (cfg.settings ? PAPERLESS_DBHOST == false); # defaultServiceConfig enables this by default, needs to be disabled for remote DBs
       };
       environment = env;
 
@@ -421,7 +421,7 @@ in
         User = cfg.user;
         ExecStart = "${cfg.package}/bin/paperless-ngx document_consumer";
         Restart = "on-failure";
-        PrivateNetwork = cfg.database.createLocally; # defaultServiceConfig enables this by default, needs to be disabled for remote DBs
+        PrivateNetwork = cfg.database.createLocally or (cfg.settings ? PAPERLESS_DBHOST == false); # defaultServiceConfig enables this by default, needs to be disabled for remote DBs
       };
       environment = env;
       # Allow the consumer to access the private /tmp directory of the server.
