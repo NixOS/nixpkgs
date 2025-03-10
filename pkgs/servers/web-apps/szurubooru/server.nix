@@ -2,6 +2,7 @@
   src,
   version,
   lib,
+  nixosTests,
   fetchPypi,
   python3,
 }:
@@ -62,6 +63,8 @@ python.pkgs.buildPythonApplication {
     mkdir $out/bin
     install -m0755 $src/szuru-admin $out/bin/szuru-admin
   '';
+
+  passthru.tests.szurubooru = nixosTests.szurubooru;
 
   meta = with lib; {
     description = "Server of szurubooru, an image board engine for small and medium communities";
