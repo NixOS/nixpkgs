@@ -1,0 +1,68 @@
+From 946ef3aed467626783f9ba3d2794a685208b0793 Mon Sep 17 00:00:00 2001
+From: countingbeeps <gamedungeon@protonmail.com>
+Date: Thu, 28 Nov 2024 12:05:10 -0600
+Subject: [PATCH] handle migrations
+
+---
+ mobsf/MobSF/init.py |  2 +-
+ mobsf/__main__.py   | 26 +++++++++++++++++---------
+ 2 files changed, 18 insertions(+), 10 deletions(-)
+
+diff --git a/mobsf/MobSF/init.py b/mobsf/MobSF/init.py
+index 14b6d8abde..dc9c287f29 100644
+--- a/mobsf/MobSF/init.py
++++ b/mobsf/MobSF/init.py
+@@ -45,7 +45,7 @@ def first_run(secret_file, base_dir, mobsf_home):
+         except IOError:
+             raise Exception('Secret file generation failed' % secret_file)
+         # Run Once
+-        make_migrations(base_dir)
++        #make_migrations(base_dir)
+         migrate(base_dir)
+         # Install JADX
+         thread = threading.Thread(
+diff --git a/mobsf/__main__.py b/mobsf/__main__.py
+index 6f93abfaa4..e3f20bfb30 100644
+--- a/mobsf/__main__.py
++++ b/mobsf/__main__.py
+@@ -5,23 +5,31 @@
+ from django.core.management import execute_from_command_line
+ from django.db import connection
+ 
+-
+ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'mobsf.MobSF.settings')
+-
++os.environ.setdefault('DJANGO_SUPERUSER_PASSWORD', 'mobsf')
+ 
+ def db():
++    # execute_from_command_line([
++    #     '',
++    #     'makemigrations',
++    # ])
++    # execute_from_command_line([
++    #     '',
++    #     'makemigrations',
++    #     'StaticAnalyzer',
++    # ])
+     execute_from_command_line([
+         '',
+-        'makemigrations',
+-    ])
+-    execute_from_command_line([
+-        '',
+-        'makemigrations',
+-        'StaticAnalyzer',
++        'migrate',
+     ])
+     execute_from_command_line([
+         '',
+-        'migrate',
++        'createsuperuser',
++        '--noinput',
++        '--username',
++        'mobsf',
++        '--email',
++        ''
+     ])
+     execute_from_command_line([
+         '',
