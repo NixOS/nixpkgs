@@ -26,6 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     pkg-config
+    postgresql.pg_config
   ];
 
   buildInputs =
