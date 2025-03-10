@@ -1,0 +1,89 @@
+{
+  "net-test": {
+    "checksum": "72b83f784ad1c6fb6ee3fb7b31df165bebfb21ed",
+    "dependencies": [
+      "base",
+      "at-exp-lib",
+      "compatibility-lib",
+      "eli-tester",
+      "net-lib",
+      "racket-test",
+      "rackunit-lib",
+      "sandbox-lib",
+      "web-server-lib"
+    ],
+    "description": "tests for \"net-lib\"",
+    "license": "Apache-2.0",
+    "name": "net-test",
+    "source": {
+      "args": {
+        "hash": "sha256-1oxJ9XgdlPq0Llk8RKdJtZctvL2F0NgxBe3DITCVMDM=",
+        "owner": "racket",
+        "repo": "racket"
+      },
+      "method": "github",
+      "path": "pkgs/net-test"
+    }
+  },
+  "racket-test": {
+    "checksum": "72b83f784ad1c6fb6ee3fb7b31df165bebfb21ed",
+    "dependencies": [
+      "compiler-lib",
+      "sandbox-lib",
+      "compatibility-lib",
+      "eli-tester",
+      "planet-lib",
+      "net-lib",
+      "net-test",
+      "serialize-cstruct-lib",
+      "cext-lib",
+      "pconvert-lib",
+      "racket-test-core",
+      "web-server-lib",
+      "rackunit-lib",
+      "at-exp-lib",
+      "option-contract-lib",
+      "srfi-lib",
+      "scribble-lib",
+      "racket-index",
+      "scheme-lib",
+      "base",
+      "data-lib"
+    ],
+    "description": "Base Racket test suites",
+    "license": "Apache-2.0",
+    "name": "racket-test",
+    "source": {
+      "args": {
+        "hash": "sha256-1oxJ9XgdlPq0Llk8RKdJtZctvL2F0NgxBe3DITCVMDM=",
+        "owner": "racket",
+        "repo": "racket"
+      },
+      "method": "github",
+      "path": "pkgs/racket-test"
+    }
+  },
+  "racket-test-core": {
+    "checksum": "72b83f784ad1c6fb6ee3fb7b31df165bebfb21ed",
+    "dependencies": [
+      "base",
+      "zo-lib",
+      "at-exp-lib",
+      "serialize-cstruct-lib",
+      "dynext-lib",
+      "sandbox-lib"
+    ],
+    "description": "Minimal core version of Racket test suites",
+    "license": "Apache-2.0",
+    "name": "racket-test-core",
+    "source": {
+      "args": {
+        "hash": "sha256-1oxJ9XgdlPq0Llk8RKdJtZctvL2F0NgxBe3DITCVMDM=",
+        "owner": "racket",
+        "repo": "racket"
+      },
+      "method": "github",
+      "path": "pkgs/racket-test-core"
+    }
+  }
+}
