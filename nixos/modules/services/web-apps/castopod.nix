@@ -240,7 +240,7 @@ in
           ${
             if (cfg.database.passwordFile != null) then
               ''
-                echo "database.default.password=$(cat "$CREDENTIALS_DIRECTORY/dbpasswordfile)" >> ${envFile}
+                echo "database.default.password=$(<"$CREDENTIALS_DIRECTORY/dbpasswordfile")" >> ${envFile}
               ''
             else
               ''
