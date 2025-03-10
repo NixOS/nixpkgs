@@ -25,13 +25,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "renpy";
-  version = "8.3.4.24120703";
+  version = "8.3.6.25022803";
 
   src = fetchFromGitHub {
     owner = "renpy";
     repo = "renpy";
     tag = finalAttrs.version;
-    hash = "sha256-9f1ptw+6OQ2rMytwPZPtUd+K/ihnVKHUiELs22iTTqE=";
+    hash = "sha256-ibWbYf+e8PZ8ZxLHVPLzHBS0qf+eLzJasJJFHxXlCfk=";
   };
 
   nativeBuildInputs = [
