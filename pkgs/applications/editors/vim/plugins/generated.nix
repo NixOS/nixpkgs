@@ -15115,6 +15115,19 @@ final: prev:
     meta.hydraPlatforms = [ ];
   };
 
+  vim-apathy = buildVimPlugin {
+    pname = "vim-apathy";
+    version = "2021-11-22";
+    src = fetchFromGitHub {
+      owner = "tpope";
+      repo = "vim-apathy";
+      rev = "27128a0f55189724c841843ba41cd33cf7186032";
+      sha256 = "166cvm3xr46n7bmzglkx0k4akdshhq3a1kw2011v39r64jh5p5hk";
+    };
+    meta.homepage = "https://github.com/tpope/vim-apathy/";
+    meta.hydraPlatforms = [ ];
+  };
+
   vim-apm = buildVimPlugin {
     pname = "vim-apm";
     version = "2024-02-03";
