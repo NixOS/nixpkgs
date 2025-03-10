@@ -6917,6 +6917,8 @@ self: super: with self; {
 
   jsonschema-path = callPackage ../development/python-modules/jsonschema-path { };
 
+  jsonschema-rs = callPackage ../development/python-modules/jsonschema-rs { };
+
   jsonschema-spec = callPackage ../development/python-modules/jsonschema-spec { };
 
   jsonschema-specifications = callPackage ../development/python-modules/jsonschema-specifications { };
