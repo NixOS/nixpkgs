@@ -1,8 +1,4 @@
-{ lib
-, python3
-, fetchFromGitHub
-,
-}:
+{ lib, python3, fetchFromGitHub, }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "regolith-rofication";
@@ -18,14 +14,9 @@ python3.pkgs.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3.pkgs; [ dbus-python pygobject3 ];
 
-  build-system = [
-    python3.pkgs.setuptools
-    python3.pkgs.wheel
-  ];
+  build-system = [ python3.pkgs.setuptools python3.pkgs.wheel ];
 
-  pythonImportsCheck = [
-    "rofication"
-  ];
+  pythonImportsCheck = [ "rofication" ];
 
   meta = {
     description = "Notification system that provides a Rofi front-end";
