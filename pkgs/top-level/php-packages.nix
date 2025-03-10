@@ -640,7 +640,7 @@ lib.makeScope pkgs.newScope (
               {
                 name = "pdo_pgsql";
                 internalDeps = [ php.extensions.pdo ];
-                configureFlags = [ "--with-pdo-pgsql=${lib.getDev libpq}" ];
+                configureFlags = [ "--with-pdo-pgsql=${libpq.pg_config}" ];
                 doCheck = false;
               }
               {
@@ -655,7 +655,7 @@ lib.makeScope pkgs.newScope (
                 buildInputs = [
                   pcre2
                 ];
-                configureFlags = [ "--with-pgsql=${lib.getDev libpq}" ];
+                configureFlags = [ "--with-pgsql=${libpq.pg_config}" ];
                 doCheck = false;
               }
               {

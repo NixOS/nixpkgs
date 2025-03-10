@@ -42,6 +42,7 @@ let
 
       # passthru
       buildEnv,
+      buildPackages,
       newScope,
       nixosTests,
       postgresqlTestHook,
@@ -126,8 +127,6 @@ let
           )
         else
           stdenv;
-
-      pg_config = writeShellScriptBin "pg_config" (builtins.readFile ./pg_config.sh);
     in
     stdenv'.mkDerivation (finalAttrs: {
       inherit version;
@@ -341,8 +340,7 @@ let
 
       postPatch = ''
         substituteInPlace "src/Makefile.global.in" --subst-var out
-        # Hardcode the path to pgxs so pg_config returns the path in $dev
-        substituteInPlace "src/common/config_info.c" --subst-var dev
+        cat ${./pg_config.env.mk} >> src/common/Makefile
       '';
 
       postInstall =
@@ -350,12 +348,9 @@ let
           moveToOutput "bin/ecpg" "$dev"
           moveToOutput "lib/pgxs" "$dev"
 
-          # Pretend pg_config is located in $out/bin to return correct paths, but
-          # actually have it in -dev to avoid pulling in all other outputs. See the
-          # pg_config.sh script's comments for details.
-          moveToOutput "bin/pg_config" "$dev"
-          install -c -m 755 "${pg_config}"/bin/pg_config "$out/bin/pg_config"
-          wrapProgram "$dev/bin/pg_config" --argv0 "$out/bin/pg_config"
+          rm "$out/bin/pg_config"
+          make -C src/common pg_config.env
+          install -D src/common/pg_config.env "$dev/nix-support/pg_config.env"
 
           # postgres exposes external symbols get_pkginclude_path and similar. Those
           # can't be stripped away by --gc-sections/LTO, because they could theoretically
@@ -458,6 +453,8 @@ let
             postgresql = this;
           };
 
+          pg_config = buildPackages.callPackage ./pg_config.nix { inherit (finalAttrs) finalPackage; };
+
           tests =
             {
               postgresql = nixosTests.postgresql.postgresql.passthru.override finalAttrs.finalPackage;
@@ -519,6 +516,7 @@ let
       passthru = {
         inherit installedExtensions;
         inherit (postgresql)
+          pg_config
           psqlSchema
           version
           ;
