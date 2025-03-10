@@ -27,9 +27,10 @@ stdenv.mkDerivation rec {
     };
 
   cmakeFlags = [
-    "-DDHT_BOOTSTRAP=ON"
-    "-DBOOTSTRAP_DAEMON=ON"
-  ] ++ lib.optional buildToxAV "-DMUST_BUILD_TOXAV=ON";
+    (lib.cmakeBool "DHT_BOOTSTRAP" true)
+    (lib.cmakeBool "BOOTSTRAP_DAEMON" true)
+    (lib.cmakeBool "MUST_BUILD_TOXAV" buildToxAV)
+  ];
 
   buildInputs =
     [
