@@ -426,7 +426,7 @@ in
                   ( echo 'CREATE DATABASE IF NOT EXISTS `${database.name}`;'
 
                     ${lib.optionalString (database.schema != null) ''
-                    echo 'use `${database.name}`;'
+                    echo 'USE `${database.name}`;'
 
                     # TODO: this silently falls through if database.schema does not exist,
                     # we should catch this somehow and exit, but can't do it here because we're in a subshell.
@@ -457,9 +457,9 @@ in
               ''
                 # Set up the replication slave
 
-                ( echo "stop slave;"
-                  echo "change master to master_host='${cfg.replication.masterHost}', master_user='${cfg.replication.masterUser}', master_password='${cfg.replication.masterPassword}';"
-                  echo "start slave;"
+                ( echo "STOP SLAVE;"
+                  echo "CHANGE MASTER TO MASTER_HOST='${cfg.replication.masterHost}', MASTER_USER='${cfg.replication.masterUser}', MASTER_PASSWORD='${cfg.replication.masterPassword}';"
+                  echo "START SLAVE;"
                 ) | ${cfg.package}/bin/mysql -u ${superUser} -N
               ''}
 
