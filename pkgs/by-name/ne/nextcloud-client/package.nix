@@ -8,6 +8,7 @@
 , inotify-tools
 , kdePackages
 , libcloudproviders
+, libp11
 , librsvg
 , libsecret
 , openssl
@@ -21,7 +22,7 @@
 
 stdenv.mkDerivation rec {
   pname = "nextcloud-client";
-  version = "3.15.3";
+  version = "3.16.0";
 
   outputs = [ "out" "dev" ];
 
@@ -29,7 +30,7 @@ stdenv.mkDerivation rec {
     owner = "nextcloud-releases";
     repo = "desktop";
     tag = "v${version}";
-    hash = "sha256-48iqLd1S84ZElibdgwEXl3LZeYruo9r34LPn7BzYpdk=";
+    hash = "sha256-dcdhfh/cZTpUegqf7EWporOc1j3ZZRtcz76lTZF5Gyw=";
   };
 
   patches = [
@@ -56,6 +57,7 @@ stdenv.mkDerivation rec {
     inotify-tools
     kdePackages.kio
     libcloudproviders
+    libp11
     libsecret
     openssl
     pcre
