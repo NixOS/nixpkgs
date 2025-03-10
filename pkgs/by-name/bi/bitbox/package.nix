@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     pname = "bitbox-web";
     inherit version;
     inherit src;
-    sourceRoot = "source/frontends/web";
+    sourceRoot = "${src.name}/frontends/web";
     npmDepsHash = "sha256-w98wwKHiZtor5ivKd+sh5K8HnAepu6cw9RyVJ+eTq3k=";
     installPhase = "cp -r build $out";
   };

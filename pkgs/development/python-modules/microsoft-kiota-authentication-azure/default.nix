@@ -28,7 +28,7 @@ buildPythonPackage rec {
     hash = "sha256-ribVfvKmDMxGmeqj30SDcnbNGdRBfs1DmqQGXP3EHCk=";
   };
 
-  sourceRoot = "source/packages/authentication/azure/";
+  sourceRoot = "${src.name}/packages/authentication/azure/";
 
   build-system = [ poetry-core ];
 

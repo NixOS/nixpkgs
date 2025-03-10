@@ -6,7 +6,7 @@
   stdenvNoCC,
 }:
 
-stdenvNoCC.mkDerivation {
+stdenvNoCC.mkDerivation rec {
   pname = "locale";
   version = "118";
 
@@ -20,7 +20,7 @@ stdenvNoCC.mkDerivation {
     hash = "sha256-KzaAlqXqfJW2s31qmA0D7qteaZY57Va2o86aZrwyR74=";
   };
 
-  sourceRoot = "source/usr-share-locale.tproj";
+  sourceRoot = "${src.name}/usr-share-locale.tproj";
 
   postPatch = ''
     # bmake expects `Makefile` not `BSDmakefile`.

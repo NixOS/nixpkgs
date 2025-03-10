@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     sh "$src" --noexec --target source
   '';
 
-  sourceRoot = "source";
+  sourceRoot = src.name;
 
   dontBuild = true;
 
