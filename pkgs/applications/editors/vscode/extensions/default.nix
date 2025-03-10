@@ -4342,8 +4342,8 @@ let
         mktplcRef = {
           name = "night-owl";
           publisher = "sdras";
-          version = "2.0.1";
-          hash = "sha256-AqfcVV9GYZ+GLgusXfij9z4WzrU9cCHp3sdZb0i6HzE=";
+          version = "2.1.1";
+          hash = "sha256-mTvnUw/018p/1lJTje9rZ1JJXq4NiaI0d4UnRthnZtg=";
         };
         meta = {
           changelog = "https://github.com/sdras/night-owl-vscode-theme/blob/main/CHANGELOG.md#${
