@@ -73,7 +73,7 @@ let
     hash = "sha256-DThjyZ34LajHwXZy1IhYKUGUG/ejQ9WvBNuI8eUKmSs=";
   };
 
-  version = "19.0.0";
+  version = "19.0.1";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "arrow-cpp";
@@ -83,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "apache";
     repo = "arrow";
     rev = "apache-arrow-${version}";
-    hash = "sha256-rjU/D362QfmejzjIsYaEwTMcLADbNf/pQohb323ifZI=";
+    hash = "sha256-toHwUIOZRpgR0K7pQtT5nqWpO9G7AuHYTcvA6UVg9lA=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/cpp";
