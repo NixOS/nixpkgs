@@ -4,20 +4,21 @@ import ../../make-test-python.nix (
   let
     movim = {
       domain = "movim.local";
+      port = 8080;
       info = "No ToS in tests";
       description = "NixOS testing server";
     };
-    xmpp = {
-      domain = "xmpp.local";
+    prosody = {
+      domain = "prosody.local";
       admin = rec {
-        JID = "${username}@${xmpp.domain}";
+        JID = "${username}@${prosody.domain}";
         username = "romeo";
         password = "juliet";
       };
     };
   in
   {
-    name = "movim-standard";
+    name = "movim-prosody-ejabberd";
 
     meta = {
       maintainers = with pkgs.lib.maintainers; [ toastal ];
@@ -27,13 +28,18 @@ import ../../make-test-python.nix (
       server =
         { pkgs, ... }:
         {
+          environment.systemPackages = [
+            # For testing
+            pkgs.websocat
+          ];
+
           services.movim = {
-            inherit (movim) domain;
+            inherit (movim) domain port;
             enable = true;
             verbose = true;
             podConfig = {
               inherit (movim) description info;
-              xmppdomain = xmpp.domain;
+              xmppdomain = prosody.domain;
             };
             nginx = { };
           };
@@ -43,20 +49,20 @@ import ../../make-test-python.nix (
             xmppComplianceSuite = false;
             disco_items = [
               {
-                url = "upload.${xmpp.domain}";
+                url = "upload.${prosody.domain}";
                 description = "File Uploads";
               }
             ];
-            virtualHosts."${xmpp.domain}" = {
-              inherit (xmpp) domain;
+            virtualHosts."${prosody.domain}" = {
+              inherit (prosody) domain;
               enabled = true;
               extraConfig = ''
-                Component "pubsub.${xmpp.domain}" "pubsub"
+                Component "pubsub.${prosody.domain}" "pubsub"
                     pubsub_max_items = 10000
                     expose_publisher = true
 
-                Component "upload.${xmpp.domain}" "http_file_share"
-                    http_external_url = "http://upload.${xmpp.domain}"
+                Component "upload.${prosody.domain}" "http_file_share"
+                    http_external_url = "http://upload.${prosody.domain}"
                     http_file_share_expires_after = 300 * 24 * 60 * 60
                     http_file_share_size_limit = 1024 * 1024 * 1024
                     http_file_share_daily_quota = 4 * 1024 * 1024 * 1024
@@ -73,7 +79,7 @@ import ../../make-test-python.nix (
 
           networking.extraHosts = ''
             127.0.0.1 ${movim.domain}
-            127.0.0.1 ${xmpp.domain}
+            127.0.0.1 ${prosody.domain}
           '';
         };
     };
@@ -82,11 +88,12 @@ import ../../make-test-python.nix (
       ''
         server.wait_for_unit("phpfpm-movim.service")
         server.wait_for_unit("nginx.service")
+        server.wait_for_open_port(${builtins.toString movim.port})
         server.wait_for_open_port(80)
 
         server.wait_for_unit("prosody.service")
         server.succeed('prosodyctl status | grep "Prosody is running"')
-        server.succeed("prosodyctl register ${xmpp.admin.username} ${xmpp.domain} ${xmpp.admin.password}")
+        server.succeed("prosodyctl register ${prosody.admin.username} ${prosody.domain} ${prosody.admin.password}")
 
         server.wait_for_unit("movim.service")
 
@@ -94,7 +101,7 @@ import ../../make-test-python.nix (
         server.fail("curl -L --fail-with-body --max-redirs 0 http://${movim.domain}/chat")
 
         # Test basic Websocket
-        server.succeed("echo \"\" | ${lib.getExe pkgs.websocat} 'ws://${movim.domain}/ws/?path=login&offset=0' --origin 'http://${movim.domain}'")
+        server.succeed("echo | websocat --origin 'http://${movim.domain}' 'ws://${movim.domain}/ws/?path=login&offset=0'")
 
         # Test login + create cookiejar
         login_html = server.succeed("curl --fail-with-body -c /tmp/cookies http://${movim.domain}/login")
@@ -102,7 +109,7 @@ import ../../make-test-python.nix (
         assert "${movim.info}" in login_html
 
         # Test authentication POST
-        server.succeed("curl --fail-with-body -b /tmp/cookies -X POST --data-urlencode 'username=${xmpp.admin.JID}' --data-urlencode 'password=${xmpp.admin.password}' http://${movim.domain}/login")
+        server.succeed("curl --fail-with-body -b /tmp/cookies -X POST --data-urlencode 'username=${prosody.admin.JID}' --data-urlencode 'password=${prosody.admin.password}' http://${movim.domain}/login")
 
         server.succeed("curl -L --fail-with-body --max-redirs 1 -b /tmp/cookies http://${movim.domain}/chat")
       '';
