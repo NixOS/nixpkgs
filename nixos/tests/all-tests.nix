@@ -1036,7 +1036,7 @@ in {
   slurm = handleTest ./slurm.nix {};
   snmpd = handleTest ./snmpd.nix {};
   smokeping = handleTest ./smokeping.nix {};
-  snapcast = handleTest ./snapcast.nix {};
+  snapcast = runTest ./snapcast.nix;
   snapper = handleTest ./snapper.nix {};
   snipe-it = runTest ./web-apps/snipe-it.nix;
   soapui = handleTest ./soapui.nix {};
