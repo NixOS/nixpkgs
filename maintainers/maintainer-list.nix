@@ -6472,6 +6472,13 @@
     name = "Duncan Dean";
     keys = [ { fingerprint = "9484 44FC E03B 05BA 5AB0  591E C37B 1C1D 44C7 86EE"; } ];
   };
+  DutchGerman = {
+    name = "Stefan Visser";
+    email = "stefan.visser@apm-ecampus.de";
+    github = "DutchGerman";
+    githubId = 60694691;
+    keys = [ { fingerprint = "A7C9 3DC7 E891 046A 980F  2063 F222 A13B 2053 27A5"; } ];
+  };
   dvaerum = {
     email = "nixpkgs-maintainer@varum.dk";
     github = "dvaerum";
