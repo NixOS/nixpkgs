@@ -4384,8 +4384,8 @@ let
         mktplcRef = {
           name = "crates";
           publisher = "serayuzgur";
-          version = "0.6.6";
-          hash = "sha256-HXoH1IgMLniq0kxHs2snym4rerScu9qCqUaqwEC+O/E=";
+          version = "0.6.7";
+          hash = "sha256-FVZxMZ0QpCKLD0vX7LPvBywZgQ4kptjnCW9jCefwgJo=";
         };
         meta = {
           license = lib.licenses.mit;
