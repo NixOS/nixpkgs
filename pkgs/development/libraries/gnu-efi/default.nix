@@ -1,15 +1,24 @@
-{ lib, stdenv, buildPackages, fetchFromGitHub, pciutils
-, gitUpdater, fwupd-efi, ipxe, refind, syslinux }:
+{
+  lib,
+  stdenv,
+  buildPackages,
+  fetchFromGitHub,
+  pciutils,
+  fwupd-efi,
+  ipxe,
+  refind,
+  syslinux,
+}:
 
 stdenv.mkDerivation rec {
   pname = "gnu-efi";
-  version = "3.0.18";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "ncroxon";
     repo = "gnu-efi";
     rev = version;
-    hash = "sha256-WTXUIBiyWEVCKfhUUWK5vrK6XmcvsAMl4CuhEw5oYWI=";
+    hash = "sha256-vVtJkAPe5tPDLAFZibnJRC7G7WtOg11JT5QipdO+FIk=";
   };
 
   buildInputs = [ pciutils ];
@@ -27,21 +36,24 @@ stdenv.mkDerivation rec {
       --replace "-Werror" ""
   '';
 
-  passthru = {
-    updateScript = gitUpdater {
-      # No nicer place to find latest release.
-      url = "https://git.code.sf.net/p/gnu-efi/code";
-    };
-    tests = {
-      inherit fwupd-efi ipxe refind syslinux;
-    };
+  passthru.tests = {
+    inherit
+      fwupd-efi
+      ipxe
+      refind
+      syslinux
+      ;
   };
 
-  meta = with lib; {
+  meta = {
     description = "GNU EFI development toolchain";
-    homepage = "https://sourceforge.net/projects/gnu-efi/";
-    license = licenses.bsd3;
-    platforms = platforms.linux;
-    maintainers = [ ];
+    homepage = "https://github.com/ncroxon/gnu-efi";
+    license = with lib.licenses; [
+      bsd2Patent
+      efilib
+      gpl2Plus
+    ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ lzcunt ];
   };
 }
