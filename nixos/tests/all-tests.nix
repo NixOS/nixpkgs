@@ -1265,6 +1265,7 @@ in {
   yabar = handleTest ./yabar.nix {};
   ydotool = handleTest ./ydotool.nix {};
   yggdrasil = handleTest ./yggdrasil.nix {};
+  yottadb = handleTest ./yottadb.nix {};
   your_spotify = handleTest ./your_spotify.nix {};
   zammad = handleTest ./zammad.nix {};
   zenohd = handleTest ./zenohd.nix {};
