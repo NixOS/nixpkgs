@@ -2,6 +2,11 @@
   lib,
   stdenv,
   fetchzip,
+  version ? "3.22.4",
+  source ? fetchzip {
+    url = "https://web.cels.anl.gov/projects/petsc/download/release-snapshots/petsc-${version}.tar.gz";
+    hash = "sha256-8WV1ylXytkhiNa7YpWSOIpSvzLCCjdVVe5SiGfhicas=";
+  },
   cctools,
   gfortran,
   replaceVars,
@@ -53,12 +58,9 @@ assert withMumps -> withScalapack;
 
 stdenv.mkDerivation rec {
   pname = "petsc";
-  version = "3.22.4";
+  inherit version;
 
-  src = fetchzip {
-    url = "https://web.cels.anl.gov/projects/petsc/download/release-snapshots/petsc-${version}.tar.gz";
-    hash = "sha256-8WV1ylXytkhiNa7YpWSOIpSvzLCCjdVVe5SiGfhicas=";
-  };
+  src = source;
 
   strictDeps = true;
 
