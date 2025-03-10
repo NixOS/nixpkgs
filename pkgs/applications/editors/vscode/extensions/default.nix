@@ -2220,8 +2220,8 @@ let
         mktplcRef = {
           name = "Go";
           publisher = "golang";
-          version = "0.41.4";
-          hash = "sha256-ntrEI/l+UjzqGJmtyfVf/+sZJstZy3fm/PSWKTd7/Q0=";
+          version = "0.47.1";
+          hash = "sha256-FKbPvXIO7SGt9C2lD7+0Q6yD0QNzrdef1ltsYXPmAi0=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/golang.Go/changelog";
