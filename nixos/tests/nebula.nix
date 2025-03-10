@@ -14,7 +14,10 @@ import ./make-test-python.nix (
       lib.mkMerge [
         {
           # Expose nebula for doing cert signing.
-          environment.systemPackages = [ pkgs.nebula ];
+          environment.systemPackages = [
+            pkgs.dig
+            pkgs.nebula
+          ];
           users.users.root.openssh.authorizedKeys.keys = [ snakeOilPublicKey ];
           services.openssh.enable = true;
           networking.firewall.enable = true; # Implicitly true, but let's make sure.
@@ -51,6 +54,7 @@ import ./make-test-python.nix (
       lighthouse =
         { ... }@args:
         makeNebulaNode args "lighthouse" {
+          networking.firewall.allowedUDPPorts = [ 53 ];
           networking.interfaces.eth1.ipv4.addresses = lib.mkForce [
             {
               address = "192.168.1.1";
@@ -76,6 +80,13 @@ import ./make-test-python.nix (
                   host = "any";
                 }
               ];
+            };
+            lighthouse = {
+              dns = {
+                enable = true;
+                host = "10.0.100.1"; # bind to lighthouse interface
+                port = 53; # answer on standard DNS port
+              };
             };
           };
         };
@@ -338,6 +349,8 @@ import ./make-test-python.nix (
         # allowAny can ping the lighthouse, but not allowFromLighthouse because of its inbound firewall
         allowAny.succeed("ping -c3 10.0.100.1")
         allowAny.fail("ping -c3 10.0.100.3")
+        # allowAny can also resolve DNS on lighthouse
+        allowAny.succeed("dig @10.0.100.1 allowToLighthouse | grep -E 'allowToLighthouse\.\s+[0-9]+\s+IN\s+A\s+10\.0\.100\.4'")
 
         # allowFromLighthouse can ping the lighthouse and allowAny
         allowFromLighthouse.succeed("ping -c3 10.0.100.1")
