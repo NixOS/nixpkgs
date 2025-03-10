@@ -6,12 +6,12 @@
   libX11,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "9.2.4";
   pname = "x11idle-org";
 
   src = fetchurl {
-    url = "https://code.orgmode.org/bzg/org-mode/raw/release_${version}/contrib/scripts/x11idle.c";
+    url = "https://code.orgmode.org/bzg/org-mode/raw/release_${finalAttrs.version}/contrib/scripts/x11idle.c";
     sha256 = "0fc5g57xd6bmghyl214gcff0ni3idv33i3gkr339kgn1mdjljv5g";
   };
 
@@ -23,11 +23,18 @@ stdenv.mkDerivation rec {
   dontUnpack = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
-    gcc -lXss -lX11 $src -o $out/bin/x11idle
+    cp $src main.c
+    substituteInPlace main.c \
+      --replace-fail 'main()' 'int main()'
+    gcc -lXss -lX11 main.c -o $out/bin/x11idle
+
+    runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = ''
       Compute consecutive idle time for current X11 session with millisecond resolution
     '';
@@ -35,9 +42,9 @@ stdenv.mkDerivation rec {
       Idle time passes when the user does not act, i.e. when the user doesn't move the mouse or use the keyboard.
     '';
     homepage = "https://orgmode.org/";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.swflint ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ swflint ];
     mainProgram = "x11idle";
   };
-}
+})
