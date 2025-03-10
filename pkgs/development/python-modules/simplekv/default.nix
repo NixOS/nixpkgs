@@ -64,6 +64,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/mbr/simplekv";
     changelog = "https://github.com/mbr/simplekv/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [ fab bbenne10 ];
   };
 }
