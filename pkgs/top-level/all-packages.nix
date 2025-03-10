@@ -13417,6 +13417,8 @@ with pkgs;
     wmClass = "firefox-aurora";
   };
 
+  waterfox = callPackage ../applications/networking/browsers/waterfox { };
+
   librewolf-unwrapped = import ../applications/networking/browsers/librewolf {
     inherit stdenv lib callPackage buildMozillaMach nixosTests;
   };
