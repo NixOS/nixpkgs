@@ -3557,8 +3557,8 @@ let
         mktplcRef = {
           name = "hexeditor";
           publisher = "ms-vscode";
-          version = "1.9.11";
-          hash = "sha256-w1R8z7Q/JRAsqJ1mgcvlHJ6tywfgKtS6A6zOY2p01io=";
+          version = "1.11.1";
+          hash = "sha256-RB5YOp30tfMEzGyXpOwPIHzXqZlRGc+pXiJ3foego7Y=";
         };
         meta = {
           license = lib.licenses.mit;
