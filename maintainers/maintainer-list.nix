@@ -5185,6 +5185,12 @@
     githubId = 245394;
     name = "Hannu Hartikainen";
   };
+  dandedotdev = {
+    email = "contact@dande.dev";
+    github = "dandedotdev";
+    githubId = 106054083;
+    name = "Dandelion Huang";
+  };
   dandellion = {
     email = "daniel@dodsorf.as";
     matrix = "@dandellion:dodsorf.as";

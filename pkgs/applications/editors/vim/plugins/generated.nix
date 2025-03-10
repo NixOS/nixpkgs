@@ -15479,6 +15479,19 @@ final: prev:
     meta.hydraPlatforms = [ ];
   };
 
+  vim-characterize = buildVimPlugin {
+    pname = "vim-characterize";
+    version = "2024-11-14";
+    src = fetchFromGitHub {
+      owner = "tpope";
+      repo = "vim-characterize";
+      rev = "a8bffac6cead6b2869d939ecad06312b187a4c79";
+      sha256 = "0v00jq0wx2zvcyh3k8rscvq1lgp4hyb1fkjwsygyynnbcaimms8z";
+    };
+    meta.homepage = "https://github.com/tpope/vim-characterize/";
+    meta.hydraPlatforms = [ ];
+  };
+
   vim-choosewin = buildVimPlugin {
     pname = "vim-choosewin";
     version = "2021-04-22";
@@ -15502,6 +15515,19 @@ final: prev:
       sha256 = "00l0flcgbl7dipzq6yxqwlqfi43jrdgbs4bi14lw2wzki5wy3wmr";
     };
     meta.homepage = "https://github.com/rhysd/vim-clang-format/";
+    meta.hydraPlatforms = [ ];
+  };
+
+  vim-classpath = buildVimPlugin {
+    pname = "vim-classpath";
+    version = "2020-04-07";
+    src = fetchFromGitHub {
+      owner = "tpope";
+      repo = "vim-classpath";
+      rev = "88a7e8a62d4603e79787cb381fc5cac562c29bb0";
+      sha256 = "0k67r76djvhqsc76af72s11hrxschsj1rx2rb3xsi3q5rm0ff5mg";
+    };
+    meta.homepage = "https://github.com/tpope/vim-classpath/";
     meta.hydraPlatforms = [ ];
   };
 
