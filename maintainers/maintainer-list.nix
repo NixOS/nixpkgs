@@ -22911,6 +22911,12 @@
     githubId = 203195;
     name = "Szczyp";
   };
+  szkiba = {
+    email = "iszkiba@gmail.com";
+    github = "szkiba";
+    githubId = 16244553;
+    name = "Iván Szkiba";
+  };
   szlend = {
     email = "pub.nix@zlender.si";
     github = "szlend";
