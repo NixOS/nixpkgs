@@ -37,12 +37,8 @@ rustPlatform.buildRustPackage rec {
     pango
   ];
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "satellite-0.1.0" = "sha256-R5Tz4MpRnAEnMmkx/LhWPmwRIKpnCLIB4VxApMTBn78=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-du44N+G9/nN5YuOpkWXvr1VaSQfjCpZYJ8yDc48ATIU=";
 
   preBuild = ''
     # Used by macro pointing to resource location at compile time.
