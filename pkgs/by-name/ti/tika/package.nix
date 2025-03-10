@@ -13,10 +13,10 @@
 
 let
   mvnDepsHashes = {
-    "x86_64-linux" = "sha256-M8O1EJtlTm+mVy/qxapRcBWxD14eYL/LLUxP2uOBoM4=";
-    "aarch64-linux" = "sha256-+ewdV9g0MfgiBiRAimkIZp9lrOTKnKnBB1LqhIlOSaQ=";
-    "x86_64-darwin" = "sha256-nUAy2+O8REuq6pOWb8d+/c/YxPxj+XwtCtkaxfihDzc=";
-    "aarch64-darwin" = "sha256-D6adBXtBH1IokUwwA2Z6m+6rJP2xg6BK4rcPyDSgo6o=";
+    "x86_64-linux" = "sha256-a2EIxok7Ov2QQntu3fpagzvMAQcBjKwcd1whDNdCm2E=";
+    "aarch64-linux" = "sha256-TUJmlnFJeYY4Pzrmd+9uKb07Tq7HYd4EnAXkbgGCFDk=";
+    "x86_64-darwin" = "sha256-OTctUd4lsH6Z6H7rDYbyAcrBmzpSzFELjPBRN8zUyhY=";
+    "aarch64-darwin" = "sha256-0tNFHEaxAEqrZTTrGCIX53K9MczkqIuDABD/bB6R1KU=";
   };
 
   knownMvnDepsHash =
@@ -25,13 +25,13 @@ let
 in
 maven.buildMavenPackage rec {
   pname = "tika";
-  version = "2.9.2";
+  version = "2.9.3";
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "tika";
-    rev = version;
-    hash = "sha256-4pSQcLDKgIcU+YypJ/ywdthi6tI1852fGVOCREzUFH0=";
+    tag = version;
+    hash = "sha256-nuiE+MWJNA4PLprAC0vDBadk34TFsVEDBcCZct1XRxo=";
   };
 
   buildOffline = true;
@@ -79,7 +79,7 @@ maven.buildMavenPackage rec {
 
   meta = {
     changelog = "https://github.com/apache/tika/blob/${src.rev}/CHANGES.txt";
-    description = "A toolkit for extracting metadata and text from over a thousand different file types";
+    description = "Toolkit for extracting metadata and text from over a thousand different file types";
     longDescription = ''
       The Apache Tika™ toolkit detects and extracts metadata and text
       from over a thousand different file types (such as PPT, XLS, and PDF).
