@@ -39,6 +39,12 @@ stdenv.mkDerivation {
     llvmPackages.libclang
   ];
 
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-Wno-incompatible-pointer-types"
+    "-Wno-implicit-function-declaration"
+    "-Wno-error=int-conversion"
+  ];
+
   meta = {
     description = "Higher Order Mutation Testing Tool for C and C++ programs";
     homepage = "https://github.com/yuejia/Milu";
