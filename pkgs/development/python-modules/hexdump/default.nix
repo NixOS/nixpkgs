@@ -25,7 +25,7 @@ buildPythonPackage rec {
     runHook postUnpack
   '';
 
-  sourceRoot = "source";
+  sourceRoot = src.name;
 
   pythonImportsCheck = [ "hexdump" ];
 
