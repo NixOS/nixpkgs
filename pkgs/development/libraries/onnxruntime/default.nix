@@ -2,6 +2,7 @@
 , stdenv
 , lib
 , fetchFromGitHub
+, fetchpatch
 , Foundation
 , abseil-cpp_202407
 , cmake
@@ -77,14 +78,8 @@ let
   onnx = fetchFromGitHub {
     owner = "onnx";
     repo = "onnx";
-    tag = "v1.16.1";
-    hash = "sha256-+NmWoZDXNJ8YQIWlUXV+czHyI8UtJedu2VG+1aR5L7s=";
-    # Apply backport of https://github.com/onnx/onnx/pull/6195 from 1.17.0
-    postFetch = ''
-      pushd $out
-      patch -p1 < ${src}/cmake/patches/onnx/onnx.patch
-      popd
-    '';
+    tag = "v1.17.0";
+    hash = "sha256-9oORW0YlQ6SphqfbjcYb0dTlHc+1gzy9quH/Lj6By8Q=";
   };
 
    cutlass = fetchFromGitHub {
@@ -111,6 +106,17 @@ effectiveStdenv.mkDerivation rec {
     # We apply the referenced 1064.patch ourselves to our nix dependency.
     #  FIND_PACKAGE_ARGS for CUDA was added in https://github.com/microsoft/onnxruntime/commit/87744e5 so it might be possible to delete this patch after upgrading to 1.17.0
     ./nvcc-gsl.patch
+
+    # Enable Relocatable Device Code (RDC) with CUDA 12.8
+    # https://github.com/microsoft/onnxruntime/pull/23562
+    ./cuda-rdc.patch
+
+    # Remove thrust::unary_function which is deprecated in later versions of CUDA
+    # https://github.com/microsoft/onnxruntime/pull/23506
+    (fetchpatch {
+      url = "https://github.com/microsoft/onnxruntime/commit/e8eec94ecf8bb0f97f477ddee02006e209ec3ac7.patch";
+      hash = "sha256-US6pGXMpDxyoAkXvILTdLVkEMFw+8Xi/SeNCMXde2Tg=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -201,6 +207,8 @@ effectiveStdenv.mkDerivation rec {
     (lib.cmakeFeature "onnxruntime_CUDNN_HOME" "${cudaPackages.cudnn}")
     (lib.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cudaArchitecturesString)
     (lib.cmakeFeature "onnxruntime_NVCC_THREADS" "1")
+    # help nvlink to find libcudadevrt
+    (lib.cmakeFeature "CMAKE_CUDA_FLAGS" "-L${cudaPackages.cuda_cudart.static}/lib")
   ];
 
   env = lib.optionalAttrs effectiveStdenv.cc.isClang {
