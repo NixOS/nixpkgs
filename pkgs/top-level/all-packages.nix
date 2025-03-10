@@ -1105,6 +1105,14 @@ with pkgs;
     withNtfs = true;
   };
 
+  ventoy-full-gtk = ventoy-full.override {
+    defaultGuiType = "gtk3";
+  };
+
+  ventoy-full-qt = ventoy-full.override {
+    defaultGuiType = "qt5";
+  };
+
   vprof = with python3Packages; toPythonApplication vprof;
 
   vrc-get = callPackage ../tools/misc/vrc-get { };
@@ -3445,25 +3453,30 @@ with pkgs;
 
   gnutar = callPackage ../tools/archivers/gnutar { };
 
-  godot3 = callPackage ../development/tools/godot/3 { };
-
-  godot3-export-templates = callPackage ../development/tools/godot/3/export-templates.nix { };
-
-  godot3-headless = callPackage ../development/tools/godot/3/headless.nix { };
-
-  godot3-debug-server = callPackage ../development/tools/godot/3/debug-server.nix { };
-
-  godot3-server = callPackage ../development/tools/godot/3/server.nix { };
-
-  godot3-mono = callPackage ../development/tools/godot/3/mono {};
-
-  godot3-mono-export-templates = callPackage ../development/tools/godot/3/mono/export-templates.nix { };
-
-  godot3-mono-headless = callPackage ../development/tools/godot/3/mono/headless.nix { };
-
-  godot3-mono-debug-server = callPackage ../development/tools/godot/3/mono/debug-server.nix { };
-
-  godot3-mono-server = callPackage ../development/tools/godot/3/mono/server.nix { };
+  inherit (callPackage ../development/tools/godot { })
+    godot3
+    godot3-export-templates
+    godot3-headless
+    godot3-debug-server
+    godot3-server
+    godot3-mono
+    godot3-mono-export-templates
+    godot3-mono-headless
+    godot3-mono-debug-server
+    godot3-mono-server
+    godot_4_3
+    godot_4_3-mono
+    godot_4_3-export-templates
+    godot_4_4
+    godot_4_4-mono
+    godot_4_4-export-templates
+    godot_4
+    godot_4-mono
+    godot_4-export-templates
+    godot
+    godot-mono
+    godot-export-templates
+    ;
 
   goattracker = callPackage ../applications/audio/goattracker { };
 
@@ -4677,11 +4690,6 @@ with pkgs;
   po4a = perlPackages.Po4a;
 
   podman-compose = python3Packages.callPackage ../applications/virtualization/podman-compose { };
-
-  podman-desktop = callPackage ../applications/virtualization/podman-desktop {
-    inherit (darwin) autoSignDarwinBinariesHook;
-    electron = electron_34;
-  };
 
   polaris = callPackage ../servers/polaris { };
 

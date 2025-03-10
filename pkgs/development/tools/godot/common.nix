@@ -3,10 +3,10 @@
   autoPatchelfHook,
   buildPackages,
   dbus,
-  dotnet-sdk_6,
   dotnetCorePackages,
   fetchFromGitHub,
   fontconfig,
+  hash,
   installShellFiles,
   lib,
   libdecor,
@@ -23,17 +23,21 @@
   libXrender,
   makeWrapper,
   pkg-config,
+  runCommand,
   scons,
   speechd-minimal,
   stdenv,
+  stdenvNoCC,
   testers,
   udev,
+  version,
   vulkan-loader,
   wayland,
   wayland-scanner,
   withDbus ? true,
   withFontconfig ? true,
   withMono ? false,
+  nugetDeps ? null,
   withPlatform ? "linuxbsd",
   withPrecision ? "single",
   withPulseaudio ? true,
@@ -63,14 +67,29 @@ let
 
   attrs = finalAttrs: rec {
     pname = "godot4${suffix}";
-    version = "4.3-stable";
-    commitHash = "77dcf97d82cbfe4e4615475fa52ca03da645dbd8";
+    inherit version;
 
     src = fetchFromGitHub {
       owner = "godotengine";
       repo = "godot";
-      rev = commitHash;
-      hash = "sha256-v2lBD3GEL8CoIwBl3UoLam0dJxkLGX0oneH6DiWkEsM=";
+      tag = version;
+      inherit hash;
+      # Required for the commit hash to be included in the version number.
+      #
+      # `methods.py` reads the commit hash from `.git/HEAD` and manually follows
+      # refs.
+      #
+      # See also 'hash' in
+      # https://docs.godotengine.org/en/stable/classes/class_engine.html#class-engine-method-get-version-info
+      leaveDotGit = true;
+      # Only keep HEAD, because leaveDotGit is non-deterministic:
+      # https://github.com/NixOS/nixpkgs/issues/8567
+      postFetch = ''
+        hash=$(git -C "$out" rev-parse HEAD)
+        rm -r "$out"/.git
+        mkdir "$out"/.git
+        echo "$hash" > "$out"/.git/HEAD
+      '';
     };
 
     outputs = [
@@ -88,28 +107,15 @@ let
     # https://docs.godotengine.org/en/stable/classes/class_engine.html#class-engine-method-get-version-info
     BUILD_NAME = "nixpkgs";
 
-    # Required for the commit hash to be included in the version number.
-    #
-    # `methods.py` reads the commit hash from `.git/HEAD` and manually follows
-    # refs. Since we just write the hash directly, there is no need to emulate any
-    # other parts of the .git directory.
-    #
-    # See also 'hash' in
-    # https://docs.godotengine.org/en/stable/classes/class_engine.html#class-engine-method-get-version-info
-    preConfigure =
-      ''
-        mkdir -p .git
-        echo ${commitHash} > .git/HEAD
-      ''
-      + lib.optionalString withMono ''
-        # TODO: avoid pulling in dependencies of windows-only project
-        dotnet sln modules/mono/editor/GodotTools/GodotTools.sln \
-          remove modules/mono/editor/GodotTools/GodotTools.OpenVisualStudio/GodotTools.OpenVisualStudio.csproj
+    preConfigure = lib.optionalString withMono ''
+      # TODO: avoid pulling in dependencies of windows-only project
+      dotnet sln modules/mono/editor/GodotTools/GodotTools.sln \
+        remove modules/mono/editor/GodotTools/GodotTools.OpenVisualStudio/GodotTools.OpenVisualStudio.csproj
 
-        dotnet restore modules/mono/glue/GodotSharp/GodotSharp.sln
-        dotnet restore modules/mono/editor/GodotTools/GodotTools.sln
-        dotnet restore modules/mono/editor/Godot.NET.Sdk/Godot.NET.Sdk.sln
-      '';
+      dotnet restore modules/mono/glue/GodotSharp/GodotSharp.sln
+      dotnet restore modules/mono/editor/GodotTools/GodotTools.sln
+      dotnet restore modules/mono/editor/Godot.NET.Sdk/Godot.NET.Sdk.sln
+    '';
 
     # From: https://github.com/godotengine/godot/blob/4.2.2-stable/SConstruct
     sconsFlags = mkSconsFlagsFromAttrSet {
@@ -144,7 +150,7 @@ let
       pkg-config
     ];
 
-    buildInputs = lib.optionals withMono dotnet-sdk_6.packages;
+    buildInputs = lib.optionals withMono dotnet-sdk.packages;
 
     nativeBuildInputs =
       [
@@ -231,14 +237,126 @@ let
           }"
       ''
       + ''
-        runHook postInstall
+        ln -s godot4${suffix} "$out"/bin/godot
+        runHook post Install
       '';
 
-    passthru.tests = {
-      version = testers.testVersion {
-        package = finalAttrs.finalPackage;
-        version = lib.replaceStrings [ "-" ] [ "." ] version;
-      };
+    passthru = {
+      tests =
+        let
+          pkg = finalAttrs.finalPackage;
+          dottedVersion = lib.replaceStrings [ "-" ] [ "." ] version;
+          exportedProject = stdenvNoCC.mkDerivation {
+            name = "${pkg.name}-project-export";
+
+            nativeBuildInputs = [
+              pkg
+              autoPatchelfHook
+            ];
+
+            runtimeDependencies = map lib.getLib [
+              alsa-lib
+              libGL
+              libpulseaudio
+              libX11
+              libXcursor
+              libXext
+              libXi
+              libXrandr
+              udev
+              vulkan-loader
+            ];
+
+            unpackPhase = ''
+              runHook preUnpack
+
+              mkdir test
+              cd test
+              touch project.godot
+
+              cat >create-scene.gd <<'EOF'
+              extends SceneTree
+
+              func _initialize():
+                var node = Node.new()
+                var script = ResourceLoader.load("res://test.gd")
+                print(script)
+                node.set_script(script)
+                var scene = PackedScene.new()
+                var scenePath = "res://test.tscn"
+                scene.pack(node)
+                var x = ResourceSaver.save(scene, scenePath)
+                ProjectSettings["application/run/main_scene"] = scenePath
+                ProjectSettings.save()
+                node.free()
+                quit()
+              EOF
+
+              cat >test.gd <<'EOF'
+              extends Node
+              func _ready():
+                print("Hello, World!")
+                get_tree().quit()
+              EOF
+
+              cat >export_presets.cfg <<'EOF'
+              [preset.0]
+              name="build"
+              platform="Linux"
+              runnable=true
+              export_filter="all_resources"
+              include_filter=""
+              exclude_filter=""
+              [preset.0.options]
+              __empty=""
+              EOF
+
+              runHook postUnpack
+            '';
+
+            buildPhase = ''
+              runHook preBuild
+
+              export HOME=$(mktemp -d)
+              mkdir -p $HOME/.local/share/godot/export_templates
+              ln -s "${pkg.export-templates-bin}" "$HOME/.local/share/godot/export_templates/${dottedVersion}"
+
+              godot --headless -s create-scene.gd
+
+              runHook postBuild
+            '';
+
+            installPhase = ''
+              runHook preInstall
+
+              mkdir -p "$out"/bin
+              godot --headless --export-release build "$out"/bin/test
+
+              runHook postInstall
+            '';
+          };
+        in
+        {
+          version = testers.testVersion {
+            package = pkg;
+            version = dottedVersion;
+          };
+
+          project-runs = runCommand "${pkg.name}-project-runs" { } ''
+            (
+              set -eo pipefail
+              HOME=$(mktemp -d)
+              "${exportedProject}"/bin/test --headless | tail -n1 | (
+                read output
+                if [[ "$output" != "Hello, World!" ]]; then
+                  echo "unexpected output: $output" >&2
+                  exit 1
+                fi
+              )
+              touch "$out"
+            )
+          '';
+        };
     };
 
     requiredSystemFeatures = [
@@ -267,12 +385,12 @@ in
 stdenv.mkDerivation (
   if withMono then
     dotnetCorePackages.addNuGetDeps {
-      nugetDeps = ./deps.json;
+      inherit nugetDeps;
       overrideFetchAttrs = old: rec {
         runtimeIds = map (system: dotnetCorePackages.systemToDotnetRid system) old.meta.platforms;
         buildInputs =
           old.buildInputs
-          ++ lib.concatLists (lib.attrValues (lib.getAttrs runtimeIds dotnet-sdk_6.targetPackages));
+          ++ lib.concatLists (lib.attrValues (lib.getAttrs runtimeIds dotnet-sdk.targetPackages));
       };
     } attrs
   else
