@@ -157,7 +157,12 @@ let
       registry = lib.optionalAttrs cfg.registry.enable {
         enabled = true;
         host = cfg.registry.externalAddress;
-        port = cfg.registry.externalPort;
+        port = if (
+            cfg.registry.externalPort == 80 && !cfg.https
+          ) || (
+            cfg.registry.externalPort == 443 && cfg.https
+          ) then null
+          else cfg.registry.externalPort;
         key = cfg.registry.keyFile;
         api_url = "http://${config.services.dockerRegistry.listenAddress}:${toString config.services.dockerRegistry.port}/";
         issuer = cfg.registry.issuer;
@@ -1246,6 +1251,7 @@ in {
       enable = true;
       enableDelete = true; # This must be true, otherwise GitLab won't manage it correctly
       package = cfg.registry.package;
+      port = cfg.registry.port;
       extraConfig = {
         auth.token = {
           realm = "http${optionalString (cfg.https == true) "s"}://${cfg.host}/jwt/auth";
