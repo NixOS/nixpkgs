@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  gnu-efi,
+  gnu-efi_3,
   nixosTests,
   efibootmgr,
   openssl,
@@ -54,17 +54,17 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ gnu-efi ];
+  buildInputs = [ gnu-efi_3 ];
 
   hardeningDisable = [ "stackprotector" ];
 
   makeFlags =
     [
       "prefix="
-      "EFIINC=${gnu-efi}/include/efi"
-      "EFILIB=${gnu-efi}/lib"
-      "GNUEFILIB=${gnu-efi}/lib"
-      "EFICRT0=${gnu-efi}/lib"
+      "EFIINC=${gnu-efi_3}/include/efi"
+      "EFILIB=${gnu-efi_3}/lib"
+      "GNUEFILIB=${gnu-efi_3}/lib"
+      "EFICRT0=${gnu-efi_3}/lib"
       "HOSTARCH=${hostarch}"
       "ARCH=${hostarch}"
     ]
