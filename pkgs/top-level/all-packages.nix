@@ -17197,6 +17197,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Accelerate CoreGraphics CoreVideo;
   } // (config.caffe or {}));
 
+  fetchFromMPM = callPackage ../by-name/ma/matlab-package-manager/fetcher.nix { };
+
   gap-minimal = lowPrio (gap.override { packageSet = "minimal"; });
 
   gap-full = lowPrio (gap.override { packageSet = "full"; });
