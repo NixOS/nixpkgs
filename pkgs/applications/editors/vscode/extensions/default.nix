@@ -781,8 +781,8 @@ let
         mktplcRef = {
           name = "vscode-tailwindcss";
           publisher = "bradlc";
-          version = "0.13.17";
-          hash = "sha256-hcFBMYfexNB7NMf3C7BQVTps1CBesEOxU3mW2cKXDHc=";
+          version = "0.14.8";
+          hash = "sha256-IPD8nsm6z6Pxeqjj00I/dQyGEORxFpDZ2yS8xpK1H9U=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/bradlc.vscode-tailwindcss/changelog";
