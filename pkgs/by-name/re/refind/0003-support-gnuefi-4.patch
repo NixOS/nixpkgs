@@ -1,0 +1,87 @@
+diff -Naur a/EfiLib/gnuefi-helper.c b/EfiLib/gnuefi-helper.c
+--- a/EfiLib/gnuefi-helper.c
++++ b/EfiLib/gnuefi-helper.c
+@@ -94,43 +94,6 @@
+ }
+ 
+ /**
+-  Returns the length of a Null-terminated ASCII string.
+-
+-  This function returns the number of ASCII characters in the Null-terminated
+-  ASCII string specified by String.
+-
+-  If String is NULL, then ASSERT().
+-  If PcdMaximumAsciiStringLength is not zero and String contains more than
+-  PcdMaximumAsciiStringLength ASCII characters not including the Null-terminator,
+-  then ASSERT().
+-
+-  @param  String  Pointer to a Null-terminated ASCII string.
+-
+-  @return The length of String.
+-
+-**/
+-UINTN
+-AsciiStrLen (
+-  IN      CONST CHAR8               *String
+-  )
+-{
+-  UINTN                             Length;
+-
+-  ASSERT (String != NULL);
+-
+-  for (Length = 0; *String != '\0'; String++, Length++) {
+-//     //
+-//     // If PcdMaximumUnicodeStringLength is not zero,
+-//     // length should not more than PcdMaximumUnicodeStringLength
+-//     //
+-//     if (PcdGet32 (PcdMaximumAsciiStringLength) != 0) {
+-//       ASSERT (Length < PcdGet32 (PcdMaximumAsciiStringLength));
+-//     }
+-  }
+-  return Length;
+-}
+-
+-/**
+   Determine whether a given device path is valid.
+   If DevicePath is NULL, then ASSERT().
+ 
+diff -Naur a/EfiLib/gnuefi-helper.h b/EfiLib/gnuefi-helper.h
+--- a/EfiLib/gnuefi-helper.h
++++ b/EfiLib/gnuefi-helper.h
+@@ -39,11 +39,6 @@
+ );
+ 
+ UINTN
+-AsciiStrLen (
+-   IN      CONST CHAR8               *String
+-);
+-
+-UINTN
+ EFIAPI
+ GetDevicePathSize (
+    IN CONST EFI_DEVICE_PATH_PROTOCOL  *DevicePath
+diff -Naur a/filesystems/fsw_efi.h b/filesystems/fsw_efi.h
+--- a/filesystems/fsw_efi.h
++++ b/filesystems/fsw_efi.h
+@@ -42,7 +42,8 @@
+ #include "../include/refit_call_wrapper.h"
+ 
+ #ifdef __MAKEWITH_GNUEFI
+-#define CompareGuid(a, b) CompareGuid(a, b)==0
++#undef CompareGuid
++#define CompareGuid(a, b) CompareGuid_0(a, b)==0
+ #endif
+ 
+ #define REFIND_EFI_DISK_IO_PROTOCOL_GUID \
+diff a/Make.common b/Make.common
+--- a/Make.common
++++ b/Make.common
+@@ -67,7 +67,7 @@
+ CFLAGS          = $(OPTIMFLAGS) -fno-stack-protector -fshort-wchar -Wall
+ 
+ # ...for GNU-EFI....
+-GNUEFI_CFLAGS   = -fpic -I$(EFIINC) -I$(EFIINC)/$(ARCH) -I$(EFIINC)/protocol -I../include -I../refind -I../libeg -I../mok -I../gzip
++GNUEFI_CFLAGS   = -DGNU_EFI_3_0_COMPAT -fpic -I$(EFIINC) -I$(EFIINC)/$(ARCH) -I$(EFIINC)/protocol -I../include -I../refind -I../libeg -I../mok -I../gzip
+ 
+ # ...and for TianoCore....
+ TIANO_INCLUDE_DIRS = -I $(TIANOBASE)/MdePkg \
