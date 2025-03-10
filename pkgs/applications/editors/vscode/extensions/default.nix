@@ -5023,8 +5023,8 @@ let
         mktplcRef = {
           name = "sort-lines";
           publisher = "Tyriar";
-          version = "1.10.2";
-          hash = "sha256-AI16YBmmfZ3k7OyUrh4wujhu7ptqAwfI5jBbAc6MhDk=";
+          version = "1.12.0";
+          hash = "sha256-/uzwBLQMmp5zuoE0fWG2m7Ix8k33LQG2uaF0NVQt7sk=";
         };
         meta = {
           license = lib.licenses.mit;
