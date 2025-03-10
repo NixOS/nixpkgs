@@ -30,7 +30,7 @@ let
       cups
       libusb-compat-0_1
     ]
-    + ":$out/lib:${lib.getLib stdenv.cc.cc}/lib${appendPath}";
+    + ":$out/lib:${lib.getLib stdenv.cc.cc}/lib";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "samsung-unified-linux-driver";
