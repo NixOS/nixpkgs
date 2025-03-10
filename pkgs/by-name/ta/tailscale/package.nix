@@ -16,7 +16,7 @@
 }:
 
 let
-  version = "1.80.2";
+  version = "1.80.3";
 in
 buildGo123Module {
   pname = "tailscale";
@@ -31,7 +31,7 @@ buildGo123Module {
     owner = "tailscale";
     repo = "tailscale";
     rev = "v${version}";
-    hash = "sha256-5HGY9hVSnzqmAdXNJdQ+ZvsK/PmyZ94201UHlHclQE8=";
+    hash = "sha256-UOz2EAUlYZx2XBzw8hADO0ti9bgwz19MTg60rSefSB8=";
   };
 
   patches = [
