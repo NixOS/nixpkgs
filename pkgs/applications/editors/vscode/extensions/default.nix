@@ -1027,8 +1027,8 @@ let
         mktplcRef = {
           name = "gitignore";
           publisher = "codezombiech";
-          version = "0.9.0";
-          hash = "sha256-IHoF+c8Rsi6WnXoCX7x3wKyuMwLh14nbL9sNVJHogHM=";
+          version = "0.10.0";
+          hash = "sha256-WTKVHrhBeAocP+stskFsSFtd0aR3u1TTEMYtdxj1tlY=";
         };
         meta = {
           license = lib.licenses.mit;
