@@ -1,4 +1,9 @@
 {
+  azure-storage-blob,
+  boto3,
+  google-cloud-storage,
+  pymongo,
+  redis,
   lib,
   buildPythonPackage,
   dulwich,
@@ -39,6 +44,20 @@ buildPythonPackage rec {
     # Issue with fixture
     "test_concurrent_mkdir"
   ];
+
+  optional-dependencies = {
+    amazon = [ boto3 ];
+    azure = [ azure-storage-blob ];
+    google = [ google-cloud-storage ];
+    redis = [ redis ];
+    mongodb = [ pymongo ];
+    git = [ dulwich ];
+    /*
+      Additional potential dependencies not exposed here:
+        sqlalchemy: Our version is too new for simplekv
+        appengine-python-standard: Not packaged in nixpkgs
+    */
+  };
 
   meta = with lib; {
     description = "Simple key-value store for binary data";
