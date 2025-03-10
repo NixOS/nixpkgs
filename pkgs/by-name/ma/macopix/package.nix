@@ -3,22 +3,25 @@
   stdenv,
   fetchurl,
   pkg-config,
-  gtk,
+  gtk3,
   openssl,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation rec {
   pname = "macopix";
-  version = "1.7.4";
+  version = "3.4.0";
 
+  # GitHub does not contain tags
+  # https://github.com/chimari/MaCoPiX/issues/6
   src = fetchurl {
-    url = "http://rosegray.sakura.ne.jp/macopix/macopix-${version}.tar.bz2";
-    sha256 = "0sgnr0wrw3hglcnsyvipll7icfv69ssmyw584zfhk1rgramlkzyb";
+    url = "http://rosegray.sakura.ne.jp/macopix/macopix-${version}.tar.gz";
+    hash = "sha256-1AjqdPPCc9UQWqLdWlA+Va+MmvKL8dAIfJURPifN7RI=";
   };
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    gtk
+    gtk3
     openssl
   ];
 
@@ -35,6 +38,11 @@ stdenv.mkDerivation rec {
   env.NIX_CFLAGS_COMPILE = "-fcommon";
 
   NIX_LDFLAGS = "-lX11";
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
 
   meta = {
     description = "Mascot Constructive Pilot for X";
