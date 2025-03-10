@@ -139,18 +139,15 @@ stdenv.mkDerivation rec {
     "-DCMAKE_PREFIX_PATH=cmake/packages"
   ];
 
-  ninjaFlags = [
-    "TrenchBroom"
-  ];
+  ninjaFlags = [ "TrenchBroom" ];
 
   postInstall = ''
-    pushd $out/share/TrenchBroom/icons
+    pushd ../app/resources/linux/icons
 
     for F in icon_*.png; do
       SIZE=$(echo $F|sed -e s/icon_// -e s/.png//)
       DIR=$out/share/icons/hicolor/$SIZE"x"$SIZE/apps
-      mkdir -p $DIR
-      ln -s ../../../../TrenchBroom/icons/$F $DIR/trenchbroom.png
+      install -Dm644 $F $DIR/trenchbroom.png
     done
 
     popd
