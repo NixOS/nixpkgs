@@ -3906,8 +3906,8 @@ let
         mktplcRef = {
           name = "phind";
           publisher = "phind";
-          version = "0.25.3";
-          hash = "sha256-GPFeI7tVLfzlGyal2LbsyTgPkWY/nPWnXtS38S9pvxo=";
+          version = "0.25.4";
+          hash = "sha256-qiUjDPJ35RZA4JYwFpQ//zwh9TKJ4RMtZmIzm3uThC0=";
         };
         meta = {
           description = "Using Phind AI service to provide answers based on the code context";
