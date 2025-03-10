@@ -54,7 +54,7 @@
 , gmp
 
 , # If enabled, use -fPIC when compiling static libs.
-  enableRelocatedStaticLibs ? stdenv.targetPlatform != stdenv.hostPlatform
+  enableRelocatedStaticLibs ? !stdenv.targetPlatform.canExecute stdenv.hostPlatform
 
   # Exceeds Hydra output limit (at the time of writing ~3GB) when cross compiled to riscv64.
   # A riscv64 cross-compiler fits into the limit comfortably.
@@ -71,8 +71,8 @@
   enableTerminfo ? !(stdenv.targetPlatform.isWindows
                      || stdenv.targetPlatform.isGhcjs
                      # terminfo can't be built for cross
-                     || (stdenv.buildPlatform != stdenv.hostPlatform)
-                     || (stdenv.hostPlatform != stdenv.targetPlatform))
+                     || (!stdenv.buildPlatform.canExecute stdenv.hostPlatform)
+                     || (!stdenv.hostPlatform.canExecute stdenv.targetPlatform))
 
 , # Libdw.c only supports x86_64, i686 and s390x as of 2022-08-04
   enableDwarf ? (stdenv.targetPlatform.isx86 ||
@@ -281,10 +281,7 @@ assert stdenv.buildPlatform == stdenv.hostPlatform;
 let
   inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
-  # TODO(@Ericson2314) Make unconditional
-  targetPrefix = lib.optionalString
-    (targetPlatform != hostPlatform)
-    "${targetPlatform.config}-";
+  targetPrefix = "${targetPlatform.config}-";
 
   hadrianSettings =
     # -fexternal-dynamic-refs apparently (because it's not clear from the
@@ -517,15 +514,29 @@ stdenv.mkDerivation ({
       "-j$NIX_BUILD_CORES"
       ${lib.escapeShellArgs hadrianSettings}
     )
+  ''
+  # Force the build system to always prefix executables with the target platform.
+  # Depends on changes to hadrian source code as well. Fully moved to hadrian logic in 9.12.
+  + lib.optionalString (lib.versionOlder version "9.12") ''
+    substituteInPlace configure \
+      --replace-fail 'CrossCompilePrefix=""' \
+                     'CrossCompilePrefix="''${TargetPlatformFull}-"'
+  ''
+  # "native cross", e.g. pkgsStatic & co, should not be treated as "cross" by hadrian / GHC, otherwise
+  # the internal interpreter and iserve are not built, and Template Haskell will not be supported.
+  + lib.optionalString (hostPlatform.canExecute targetPlatform) ''
+    substituteInPlace configure \
+      --replace-fail 'CrossCompiling=YES' \
+                     'CrossCompiling=NO' \
+      --replace-fail 'cross_compiling=yes' \
+                     'cross_compiling=no'
   '';
 
   ${if targetPlatform.isGhcjs then "configureScript" else null} = "emconfigure ./configure";
   # GHC currently ships an edited config.sub so ghcjs is accepted which we can not rollback
   ${if targetPlatform.isGhcjs then "dontUpdateAutotoolsGnuConfigScripts" else null} = true;
 
-  # TODO(@Ericson2314): Always pass "--target" and always prefix.
-  configurePlatforms = [ "build" "host" ]
-    ++ lib.optional (targetPlatform != hostPlatform) "target";
+  configurePlatforms = [ "build" "host" "target" ];
 
   # `--with` flags for libraries needed for RTS linker
   configureFlags = [
@@ -717,7 +728,7 @@ stdenv.mkDerivation ({
 
     # TODO(@sternenseemann): there's no stage0:exe:haddock target by default,
     # so haddock isn't available for GHC cross-compilers. Can we fix that?
-    hasHaddock = stdenv.hostPlatform == stdenv.targetPlatform;
+    hasHaddock = stdenv.hostPlatform.canExecute stdenv.targetPlatform;
   };
 
   meta = {
