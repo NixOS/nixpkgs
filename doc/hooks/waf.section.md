@@ -14,7 +14,7 @@ The variables below are exclusive of `wafHook`.
 
 Location of the `waf` tool. It defaults to `./waf`, to honor software projects that include it directly inside their source trees.
 
-If `wafPath` doesn't exist, then `wafHook` will copy the `waf` provided from Nixpkgs to it.
+If the file pointed by `wafPath` doesn't exist, then `waf` provided by Nixpkgs will be used.
 
 #### `wafFlags` {#waf-flags}
 
