@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  fetchpatch,
   pkg-config,
   protobuf,
   libsodium,
@@ -22,17 +23,16 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-oK9ZzENwpEq6W1qnhSgkr7Rhy7Fxt/BS4U5nxecyPu8=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "clap-2.33.1" = "sha256-ixyNr91VNB2ce2cIr0CdPmvKYRlckhKLeaSbqxouIAY=";
-      "configopt-0.1.0" = "sha256-76MeSoRD796ZzBqX3CoDJnunekVo2XfctpxrpspxmAU=";
-      "rants-0.6.0" = "sha256-B8uDoiqddCki3j7aC8kilEcmJjvB4ICjZjjTun2UEkY=";
-      "retry-1.0.0" = "sha256-ZaHnzOCelV4V0+MTIbH3DXxdz8QZVgcMq2YeV0S6X6o=";
-      "structopt-0.3.15" = "sha256-0vIX7J7VktKytT3ZnOm45qPRMHDkdJg20eU6pZBIH+Q=";
-      "zmq-0.9.2" = "sha256-bsDCPYLb9hUr6htPQ7rSoasKAqoWBx5FiEY1gOOtdJQ=";
-    };
-  };
+  cargoPatches = [
+    (fetchpatch {
+      name = "remove-yanked-env-crate.patch";
+      url = "https://github.com/habitat-sh/habitat/commit/27f3fa5e5baa611b2459a86f5ac37ab2363a0db8.patch";
+      hash = "sha256-mOZW5tDv4/C0+fPXBSXaL/IgOO30cJbGwiiGxutyIb4=";
+    })
+  ];
+
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-6gBqGzIE8re0v4YX+x0rqSK1O7ZgE1hJnHbDmUp+xjE=";
 
   nativeBuildInputs = [
     pkg-config
