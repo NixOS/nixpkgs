@@ -699,8 +699,8 @@ let
         mktplcRef = {
           name = "biome";
           publisher = "biomejs";
-          version = "2024.10.131712";
-          hash = "sha256-wslaPz0YwavLgP/gLXDIKsk2dvVmFgkSDCI9OfpKwwI=";
+          version = "2025.2.72227";
+          hash = "sha256-Lj5+Vy8IbU70y6ee42cjxyz/mwpIAhWSF4KtL9OYo2Q=";
         };
         meta = {
           changelog = "https://github.com/biomejs/biome-vscode/blob/main/CHANGELOG.md";
