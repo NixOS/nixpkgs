@@ -28,6 +28,8 @@ buildPythonPackage rec {
     hash = "sha256-5qkJjGfVoNVHHmr77aWajpYmyfmV/ZyO3tXY9/gj6eU=";
   };
 
+  __darwinAllowLocalNetworking = true;
+
   build-system = [ setuptools ];
 
   dependencies = [
