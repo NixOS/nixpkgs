@@ -13830,8 +13830,6 @@ self: super: with self; {
 
   pytz-deprecation-shim = callPackage ../development/python-modules/pytz-deprecation-shim { };
 
-  pytzdata = callPackage ../development/python-modules/pytzdata { };
-
   pyu2f = callPackage ../development/python-modules/pyu2f { };
 
   pyudev = callPackage ../development/python-modules/pyudev {
@@ -14601,6 +14599,8 @@ self: super: with self; {
   rollbar = callPackage ../development/python-modules/rollbar { };
 
   roma = callPackage ../development/python-modules/roma { };
+
+  roman-numerals-py = callPackage ../development/python-modules/roman-numerals-py { };
 
   roman = callPackage ../development/python-modules/roman { };
 

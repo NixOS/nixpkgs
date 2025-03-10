@@ -19,6 +19,7 @@
   packaging,
   pygments,
   requests,
+  roman-numerals-py,
   snowballstemmer,
   sphinxcontrib-applehelp,
   sphinxcontrib-devhelp,
@@ -43,10 +44,10 @@
 
 buildPythonPackage rec {
   pname = "sphinx";
-  version = "8.1.3";
+  version = "8.2.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "sphinx-doc";
@@ -59,13 +60,8 @@ buildPythonPackage rec {
       mv tests/roots/test-images/{testimäge,testimæge}.png
       sed -i 's/testimäge/testimæge/g' tests/{test_build*.py,roots/test-images/index.rst}
     '';
-    hash = "sha256-AObNQz2gKoPHfvC5aoefynXfQMe3bnQpEx6KrLNQBoQ=";
+    hash = "sha256-FoyCpDGDKNN2GMhE7gDpJLmWRWhbMCYlcVEaBTfXSEw=";
   };
-
-  patches = [
-    # https://github.com/sphinx-doc/sphinx/commit/5ff3740063c1ac57f17ecd697bcd06cc1de4e75c
-    ./pygments-2.19-compat.patch
-  ];
 
   build-system = [ flit-core ];
 
@@ -79,6 +75,7 @@ buildPythonPackage rec {
       packaging
       pygments
       requests
+      roman-numerals-py
       snowballstemmer
       sphinxcontrib-applehelp
       sphinxcontrib-devhelp
@@ -132,8 +129,11 @@ buildPythonPackage rec {
       "test_cython"
       # Could not fetch remote image: http://localhost:7777/sphinx.png
       "test_copy_images"
-      # https://github.com/sphinx-doc/sphinx/issues/13223
-      "test_html_multi_line_copyright"
+      # ModuleNotFoundError: No module named 'fish_licence.halibut'
+      "test_import_native_module_stubs"
+      # Racy tex file creation
+      "test_literalinclude_namedlink_latex"
+      "test_literalinclude_caption_latex"
     ]
     ++ lib.optionals (pythonAtLeast "3.12") [
       # https://github.com/sphinx-doc/sphinx/issues/12430

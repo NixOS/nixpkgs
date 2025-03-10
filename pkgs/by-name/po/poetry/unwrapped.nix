@@ -142,6 +142,7 @@ buildPythonPackage rec {
     "test_env_system_packages_are_relative_to_lib"
     "test_install_warning_corrupt_root"
     "test_project_plugins_are_installed_in_project_folder"
+    "test_application_command_not_found_messages"
   ];
 
   pytestFlagsArray = [
