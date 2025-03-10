@@ -1982,6 +1982,19 @@ final: prev:
     meta.hydraPlatforms = [ ];
   };
 
+  cmdalias-vim = buildVimPlugin {
+    pname = "cmdalias.vim";
+    version = "2010-10-18";
+    src = fetchFromGitHub {
+      owner = "vim-scripts";
+      repo = "cmdalias.vim";
+      rev = "fd3aea59d57f5fed1b835a0e545540c9781c4bb3";
+      sha256 = "1y34bmbzdmc1d404m2xiy4n0bz25wfarm7ybql9hsq8jc5pkzjjc";
+    };
+    meta.homepage = "https://github.com/vim-scripts/cmdalias.vim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   cmp-ai = buildVimPlugin {
     pname = "cmp-ai";
     version = "2025-01-06";
