@@ -33,6 +33,8 @@ buildPythonPackage (
     postPatch = ''
       substituteInPlace openrazer_daemon/daemon.py \
         --replace-fail "plugdev" "openrazer"
+      substituteInPlace run_openrazer_daemon.py \
+        --replace-fail "/usr" "$out"
     '';
 
     nativeBuildInputs = [
@@ -46,7 +48,7 @@ buildPythonPackage (
       gtk3
     ];
 
-    propagatedBuildInputs = [
+    dependencies = [
       daemonize
       dbus-python
       pygobject3
