@@ -130,51 +130,6 @@ in
         llvmPackages = pkgs.llvmPackages_12;
       };
       ghc90 = compiler.ghc902;
-      ghc925 = callPackage ../development/compilers/ghc/9.2.5.nix {
-        bootPkgs =
-          if stdenv.buildPlatform.isPower64 && stdenv.buildPlatform.isLittleEndian then
-            bb.packages.ghc810
-          else
-            bb.packages.ghc8107Binary;
-        inherit (buildPackages.python311Packages) sphinx; # a distutils issue with 3.12
-        python3 = buildPackages.python311; # so that we don't have two of them
-        # Need to use apple's patched xattr until
-        # https://github.com/xattr/xattr/issues/44 and
-        # https://github.com/xattr/xattr/issues/55 are solved.
-        inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
-        buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_12;
-        llvmPackages = pkgs.llvmPackages_12;
-      };
-      ghc926 = callPackage ../development/compilers/ghc/9.2.6.nix {
-        bootPkgs =
-          if stdenv.buildPlatform.isPower64 && stdenv.buildPlatform.isLittleEndian then
-            bb.packages.ghc810
-          else
-            bb.packages.ghc8107Binary;
-        inherit (buildPackages.python311Packages) sphinx; # a distutils issue with 3.12
-        python3 = buildPackages.python311; # so that we don't have two of them
-        # Need to use apple's patched xattr until
-        # https://github.com/xattr/xattr/issues/44 and
-        # https://github.com/xattr/xattr/issues/55 are solved.
-        inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
-        buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_12;
-        llvmPackages = pkgs.llvmPackages_12;
-      };
-      ghc927 = callPackage ../development/compilers/ghc/9.2.7.nix {
-        bootPkgs =
-          if stdenv.buildPlatform.isPower64 && stdenv.buildPlatform.isLittleEndian then
-            bb.packages.ghc810
-          else
-            bb.packages.ghc8107Binary;
-        inherit (buildPackages.python311Packages) sphinx; # a distutils issue with 3.12
-        python3 = buildPackages.python311; # so that we don't have two of them
-        # Need to use apple's patched xattr until
-        # https://github.com/xattr/xattr/issues/44 and
-        # https://github.com/xattr/xattr/issues/55 are solved.
-        inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
-        buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_12;
-        llvmPackages = pkgs.llvmPackages_12;
-      };
       ghc928 = callPackage ../development/compilers/ghc/9.2.8.nix {
         bootPkgs =
           if stdenv.buildPlatform.isPower64 && stdenv.buildPlatform.isLittleEndian then
@@ -522,21 +477,6 @@ in
         compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.0.x.nix { };
       };
       ghc90 = packages.ghc902;
-      ghc925 = callPackage ../development/haskell-modules {
-        buildHaskellPackages = bh.packages.ghc925;
-        ghc = bh.compiler.ghc925;
-        compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.2.x.nix { };
-      };
-      ghc926 = callPackage ../development/haskell-modules {
-        buildHaskellPackages = bh.packages.ghc926;
-        ghc = bh.compiler.ghc926;
-        compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.2.x.nix { };
-      };
-      ghc927 = callPackage ../development/haskell-modules {
-        buildHaskellPackages = bh.packages.ghc927;
-        ghc = bh.compiler.ghc927;
-        compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.2.x.nix { };
-      };
       ghc928 = callPackage ../development/haskell-modules {
         buildHaskellPackages = bh.packages.ghc928;
         ghc = bh.compiler.ghc928;

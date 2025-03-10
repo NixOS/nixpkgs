@@ -1,12 +1,29 @@
 { pkgs, haskellLib }:
 
+self: super:
+
 let
   inherit (pkgs) lib;
+
+  versionAtMost = a: b: lib.versionAtLeast b a;
+
+  warnVersion =
+    predicate: ver: pkg:
+    let
+      pname = pkg.pname;
+    in
+    lib.warnIf (predicate ver
+      super.${pname}.version
+    ) "override for haskell.packages.ghc912.${pname} may no longer be needed" pkg;
+
+  warnAfterVersion = warnVersion lib.versionOlder;
+  warnFromVersion = warnVersion versionAtMost;
+
 in
 
 with haskellLib;
 
-self: super: {
+{
   llvmPackages = lib.dontRecurseIntoAttrs self.ghc.llvmPackages;
 
   # Disable GHC core libraries
@@ -20,6 +37,7 @@ self: super: {
   deepseq = null;
   directory = null;
   exceptions = null;
+  file-io = null;
   filepath = null;
   ghc-bignum = null;
   ghc-boot = null;
@@ -32,6 +50,8 @@ self: super: {
   ghc-prim = null;
   ghc-toolchain = null;
   ghci = null;
+  haddock-api = null;
+  haddock-library = null;
   haskeline = null;
   hpc = null;
   integer-gmp = null;
@@ -50,29 +70,42 @@ self: super: {
     if pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform then
       null
     else
-      haskellLib.doDistribute self.terminfo_0_4_1_6;
+      haskellLib.doDistribute self.terminfo_0_4_1_7;
   text = null;
   time = null;
   transformers = null;
   unix = null;
   xhtml = null;
 
-  # Version upgrades
-  jailbreak-cabal = overrideCabal {
-    # Manually update jailbreak-cabal to 1.4.1 (which supports Cabal >= 3.14)
-    # since Hackage bump containing it is tied up in the update to Stackage LTS 23.
-    version = "1.4.1";
-    sha256 = "0q6l608m965s6932xabm7v2kav5cxrihb5qcbrwz0c4xiwrz4l5x";
+  doctest = self.doctest_0_23_0;
 
-    revision = null;
-    editedCabalFile = null;
-  } super.jailbreak-cabal;
   htree = doDistribute self.htree_0_2_0_0;
-  primitive = doDistribute self.primitive_0_9_0_0;
-  splitmix = doDistribute self.splitmix_0_1_1;
   tagged = doDistribute self.tagged_0_8_9;
-  tar = doDistribute self.tar_0_6_3_0;
+  time-compat = doDistribute (doJailbreak self.time-compat_1_9_8); # too strict lower bound on QuickCheck
+  ghc-syntax-highlighter = doDistribute self.ghc-syntax-highlighter_0_0_13_0;
+  ghc-lib-parser = doDistribute self.ghc-lib-parser_9_12_1_20250105;
+  ghc-lib = doDistribute self.ghc-lib_9_12_1_20250105;
+
+  #
+  # Jailbreaks
+  #
+  lucid = doJailbreak super.lucid; # base <4.21
+  ed25519 = doJailbreak super.ed25519; # https://github.com/thoughtpolice/hs-ed25519/issues/39
+  http-api-data = doJailbreak super.http-api-data; # base < 4.21
+  servant = doJailbreak super.servant; # base < 4.21
 
   # Test suite issues
   call-stack = dontCheck super.call-stack; # https://github.com/sol/call-stack/issues/19
+
+  # Cabal 3.14 regression (incorrect datadir in tests): https://github.com/haskell/cabal/issues/10717
+  alex = overrideCabal (drv: {
+    preCheck =
+      drv.preCheck or ""
+      + ''
+        export alex_datadir="$(pwd)/data"
+      '';
+  }) super.alex;
+
+  # https://github.com/sjakobi/newtype-generics/pull/28/files
+  newtype-generics = warnAfterVersion "0.6.2" (doJailbreak super.newtype-generics);
 }

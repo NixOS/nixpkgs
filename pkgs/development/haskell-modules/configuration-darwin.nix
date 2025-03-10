@@ -388,6 +388,8 @@ self: super: ({
   http-reverse-proxy = dontCheck super.http-reverse-proxy;
   servant-auth-server = dontCheck super.servant-auth-server;
 
+  sysinfo = dontCheck super.sysinfo;
+
 } // lib.optionalAttrs pkgs.stdenv.hostPlatform.isAarch64 {  # aarch64-darwin
 
   # Workarounds for justStaticExecutables on aarch64-darwin. Since dead code
