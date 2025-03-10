@@ -2,13 +2,17 @@
   stdenv,
   lib,
   fetchurl,
+  flex,
+  bison,
   perl,
   pkg-config,
   systemd,
   openssl,
   bzip2,
-  zlib,
   lz4,
+  zlib,
+  zstd,
+  xz,
   inotify-tools,
   pam,
   libcap,
@@ -22,6 +26,12 @@
   cyrus_sasl,
   nixosTests,
   fetchpatch,
+  rpcsvc-proto,
+  libtirpc,
+  withApparmor ? false,
+  libapparmor,
+  withUnwind ? false,
+  libunwind,
   # Auth modules
   withMySQL ? false,
   libmysqlclient,
@@ -38,15 +48,20 @@ stdenv.mkDerivation rec {
   version = "2.3.21.1";
 
   nativeBuildInputs = [
+    flex
+    bison
     perl
     pkg-config
-  ];
+  ] ++ lib.optionals (stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isDarwin) [ rpcsvc-proto ];
+
   buildInputs =
     [
       openssl
       bzip2
-      zlib
       lz4
+      zlib
+      zstd
+      xz
       clucene_core_2
       icu75
       libexttextcat
@@ -61,6 +76,9 @@ stdenv.mkDerivation rec {
       libcap
       inotify-tools
     ]
+    ++ lib.optional (stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isDarwin) libtirpc
+    ++ lib.optional withApparmor libapparmor
+    ++ lib.optional withUnwind libunwind
     ++ lib.optional withMySQL libmysqlclient
     ++ lib.optional withPgSQL libpq
     ++ lib.optional withSQLite sqlite
