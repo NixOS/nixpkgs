@@ -483,7 +483,7 @@ let
     RODBC = [ pkgs.libiodbc ];
     rpanel = [ pkgs.tclPackages.bwidget ];
     Rpoppler = [ pkgs.poppler ];
-    RPostgreSQL = with pkgs; [ libpq ];
+    RPostgreSQL = with pkgs; [ libpq.pg_config ];
     RProtoBuf = [ pkgs.protobuf ];
     RSclient = [ pkgs.openssl.dev ];
     Rserve = [ pkgs.openssl ];

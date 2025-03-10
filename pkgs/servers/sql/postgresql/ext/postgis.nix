@@ -73,6 +73,7 @@ buildPostgresqlExtension (finalAttrs: {
   dontDisableStatic = true;
 
   nativeCheckInputs = [
+    postgresql
     postgresqlTestHook
     cunit
     libxslt
@@ -90,6 +91,7 @@ buildPostgresqlExtension (finalAttrs: {
   '';
 
   configureFlags = [
+    "--with-pgconfig=${postgresql.pg_config}/bin/pg_config"
     "--with-gdalconfig=${gdal}/bin/gdal-config"
     "--with-jsondir=${json_c.dev}"
     "--disable-extension-upgrades-install"
