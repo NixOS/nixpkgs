@@ -3164,6 +3164,10 @@ with pkgs;
     godot3-mono-headless
     godot3-mono-debug-server
     godot3-mono-server
+    godotPackages_4_3
+    godotPackages_4_4
+    godotPackages_4
+    godotPackages
     godot_4_3
     godot_4_3-mono
     godot_4_3-export-templates-bin
