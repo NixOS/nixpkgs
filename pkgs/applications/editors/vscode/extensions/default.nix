@@ -2535,8 +2535,8 @@ let
         mktplcRef = {
           publisher = "intellsmi";
           name = "comment-translate";
-          version = "2.2.4";
-          hash = "sha256-g6mlScxv8opZuqgWtTJ3k0Yo7W7WzIkwB+8lWf6cMiU=";
+          version = "3.0.0";
+          hash = "sha256-AtM56NkivTK4cGyKBsaZTHYvDwiJb4CrEuiJiw5hTcI=";
         };
         meta = {
           description = "Visual Studio Code extension to translate the comments for computer language";
