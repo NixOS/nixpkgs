@@ -575,7 +575,7 @@ in {
   kavita = handleTest ./kavita.nix {};
   kbd-setfont-decompress = handleTest ./kbd-setfont-decompress.nix {};
   kbd-update-search-paths-patch = handleTest ./kbd-update-search-paths-patch.nix {};
-  kea = handleTest ./kea.nix {};
+  kea = runTest ./kea.nix;
   keepalived = handleTest ./keepalived.nix {};
   keepassxc = handleTest ./keepassxc.nix {};
   kerberos = handleTest ./kerberos/default.nix {};
