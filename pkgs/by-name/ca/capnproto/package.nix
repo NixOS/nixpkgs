@@ -1,7 +1,9 @@
 {
   lib,
   stdenv,
+  buildPackages,
   fetchFromGitHub,
+  makeSetupHook,
   cmake,
   openssl,
   zlib,
@@ -20,6 +22,16 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
+
+  propagatedNativeBuildInputs = lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    (makeSetupHook {
+      name = "capnproto-setup-hook";
+      substitutions = {
+        build_capnp = buildPackages.capnproto;
+      };
+    } ./setup-hook.sh)
+  ];
+
   propagatedBuildInputs = [
     openssl
     zlib
