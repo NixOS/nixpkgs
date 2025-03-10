@@ -63,6 +63,6 @@ stdenv.mkDerivation {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ sandptel ];
     mainProgram = "ilia";
-    platforms = lib.platforms.all;
+    platforms = lib.platforms.linux;
   };
 }
