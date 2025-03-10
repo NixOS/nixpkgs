@@ -983,8 +983,8 @@ let
         mktplcRef = {
           name = "path-intellisense";
           publisher = "christian-kohler";
-          version = "2.8.5";
-          sha256 = "1ndffv1m4ayiija1l42m28si44vx9y6x47zpxzqv2j4jj7ga1n5z";
+          version = "2.10.0";
+          sha256 = "sha256-bE32VmzZBsAqgSxdQAK9OoTcTgutGEtgvw6+RaieqRs=";
         };
         meta = {
           description = "Visual Studio Code plugin that autocompletes filenames";
