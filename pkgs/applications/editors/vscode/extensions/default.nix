@@ -4015,8 +4015,8 @@ let
         mktplcRef = {
           name = "gpt-pilot-vs-code";
           publisher = "PythagoraTechnologies";
-          version = "0.1.7";
-          hash = "sha256-EUddanrB6h5cn3pK2JTkEPffVb06ZMI2qDPh0kFfJjA=";
+          version = "0.2.32";
+          hash = "sha256-7wwvx1uvx2sJymCR/VYppyjDTmcF1eGJSvXTiND2fQs=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/PythagoraTechnologies.gpt-pilot-vs-code/changelog";
