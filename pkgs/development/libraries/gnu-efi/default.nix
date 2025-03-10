@@ -1,15 +1,26 @@
-{ lib, stdenv, buildPackages, fetchFromGitHub, pciutils
-, gitUpdater, fwupd-efi, ipxe, refind, syslinux }:
+{
+  lib,
+  stdenv,
+  buildPackages,
+  fetchFromGitHub,
+  pciutils,
+  fwupd-efi,
+  ipxe,
+  refind,
+  syslinux,
+}:
 
-stdenv.mkDerivation rec {
+assert lib.assertMsg stdenv.hostPlatform.isEfi "gnu-efi may only be built for EFI platforms";
+
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnu-efi";
-  version = "3.0.18";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "ncroxon";
     repo = "gnu-efi";
-    rev = version;
-    hash = "sha256-WTXUIBiyWEVCKfhUUWK5vrK6XmcvsAMl4CuhEw5oYWI=";
+    tag = finalAttrs.version;
+    hash = "sha256-vVtJkAPe5tPDLAFZibnJRC7G7WtOg11JT5QipdO+FIk=";
   };
 
   buildInputs = [ pciutils ];
@@ -27,21 +38,32 @@ stdenv.mkDerivation rec {
       --replace "-Werror" ""
   '';
 
-  passthru = {
-    updateScript = gitUpdater {
-      # No nicer place to find latest release.
-      url = "https://git.code.sf.net/p/gnu-efi/code";
-    };
-    tests = {
-      inherit fwupd-efi ipxe refind syslinux;
-    };
+  passthru.tests = {
+    inherit
+      fwupd-efi
+      ipxe
+      syslinux
+      ;
   };
 
-  meta = with lib; {
+  meta = {
     description = "GNU EFI development toolchain";
-    homepage = "https://sourceforge.net/projects/gnu-efi/";
-    license = licenses.bsd3;
-    platforms = platforms.linux;
-    maintainers = [ ];
+    homepage = "https://github.com/ncroxon/gnu-efi";
+    license = with lib.licenses; [
+      # This is a mess, upstream is aware.
+      # The source for these is Fedora's SPDX identifier for this package.
+      # Fedora also has gpl2Only here, but 4.0.0 doesn't have gpl2Only code.
+      # However, both upstream and Fedora seems to have missed
+      # bsdAxisNoDisclaimerUnmodified and MIT.
+      bsd2
+      bsd2Patent
+      bsd3
+      bsdAxisNoDisclaimerUnmodified
+      bsdOriginal
+      gpl2Plus
+      mit
+    ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ ];
   };
-}
+})
