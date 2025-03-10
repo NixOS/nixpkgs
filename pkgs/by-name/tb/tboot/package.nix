@@ -34,6 +34,13 @@ stdenv.mkDerivation rec {
     substituteInPlace docs/Makefile --replace /usr/share /share
   '';
 
+  postPatch = ''
+    # compute the allocated size from the pointed type, to avoid the warning
+    substituteInPlace lcptools-v2/pconf_legacy.c \
+      --replace-fail "digest = malloc(SHA1_DIGEST_SIZE);" \
+        "digest = malloc(sizeof *digest);"
+  '';
+
   installFlags = [ "DESTDIR=$(out)" ];
 
   meta = with lib; {
