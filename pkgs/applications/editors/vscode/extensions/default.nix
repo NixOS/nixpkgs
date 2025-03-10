@@ -1634,8 +1634,8 @@ let
         mktplcRef = {
           name = "vscode-html-css";
           publisher = "ecmel";
-          version = "2.0.11";
-          hash = "sha256-Cc22Dz29yKsD99A9o49anCDVvig+U9Xt/768pgzAr/4=";
+          version = "2.0.13";
+          hash = "sha256-2BtvIyeUaABsWjQNCSAk0WaGD75ecRA6yWbM/OiMyM0=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/ecmel.vscode-html-css/changelog";
