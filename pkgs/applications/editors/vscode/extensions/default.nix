@@ -3569,8 +3569,8 @@ let
         mktplcRef = {
           name = "live-server";
           publisher = "ms-vscode";
-          version = "0.4.8";
-          hash = "sha256-/IrLq+nNxwQB1S1NIGYkv24DOY7Mc25eQ+orUfh42pg=";
+          version = "0.5.2024091601";
+          hash = "sha256-cwntFW5McTAcFs0f+vTlLpZffz3ApYGxu0ctJ2X6EuY=";
         };
         meta = {
           description = "Launch a development local Server with live reload feature for static & dynamic pages";
