@@ -2,10 +2,18 @@
 , buildDotnetModule
 , dotnetCorePackages
 , fetchFromGitHub
-, wrapGAppsHook3
+, wrapGAppsHook4
 , iconConvTools
 , copyDesktopItems
 , makeDesktopItem
+, libX11
+, libICE
+, libSM
+, libXi
+, libXcursor
+, libXext
+, libXrandr
+, fontconfig
 , glew
 , SDL2
 , glfw
@@ -21,13 +29,18 @@
 , zlib
 , glib
 , gdk-pixbuf
+, soundfont-fluid
+
+# Path to set ROBUST_SOUNDFONT_OVERRIDE to, essentially the default soundfont used.
+, soundfont-path ? "${soundfont-fluid}/share/soundfonts/FluidR3_GM2-2.sf2"
+
 }:
 let
-  version = "0.29.1";
+  version = "0.30.2";
   pname = "space-station-14-launcher";
 in
 buildDotnetModule rec {
-  inherit pname version;
+  inherit pname;
 
   # Workaround to prevent buildDotnetModule from overriding assembly versions.
   name = "${pname}-${version}";
@@ -36,7 +49,7 @@ buildDotnetModule rec {
     owner = "space-wizards";
     repo = "SS14.Launcher";
     rev = "v${version}";
-    hash = "sha256-Gajs8zINWBJ3BvAPKYan0bCRbEVscz56pyE9WOLiOqU=";
+    hash = "sha256-Rx39FuDPh5sGVjcKjCo4mTQ8Z/x9PD1CvBQh5ICES9Q=";
     fetchSubmodules = true;
   };
 
@@ -48,15 +61,15 @@ buildDotnetModule rec {
     "SS14.Launcher/SS14.Launcher.csproj"
   ];
 
-  nugetDeps = ./deps.json;
+  nugetDeps = ./deps.nix;
 
   passthru = {
-    inherit version; # Workaround so update script works.
-    updateScript = ./update.sh;
+    inherit version;
   };
 
-  dotnet-sdk = dotnetCorePackages.sdk_8_0;
-  dotnet-runtime = dotnetCorePackages.runtime_8_0;
+  # SDK 8.0 required for Robust.LoaderApi
+  dotnet-sdk = with dotnetCorePackages; combinePackages [ sdk_9_0 sdk_8_0 ];
+  dotnet-runtime = dotnetCorePackages.runtime_9_0;
 
   dotnetFlags = [
     "-p:FullRelease=true"
@@ -64,7 +77,7 @@ buildDotnetModule rec {
     "-nologo"
   ];
 
-  nativeBuildInputs = [ wrapGAppsHook3 iconConvTools copyDesktopItems ];
+  nativeBuildInputs = [ wrapGAppsHook4 iconConvTools copyDesktopItems ];
 
   runtimeDeps = [
     # Required by the game.
@@ -86,8 +99,23 @@ buildDotnetModule rec {
     gdk-pixbuf
 
     # Avalonia UI dependencies.
+    libX11
+    libICE
+    libSM
+    libXi
+    libXcursor
+    libXext
+    libXrandr
+    fontconfig
     glew
+
+    # TODO: Figure out dependencies for CEF support.
   ];
+
+  # ${soundfont-path} is escaped here:
+  # https://github.com/NixOS/nixpkgs/blob/d29975d32b1dc7fe91d5cb275d20f8f8aba399ad/pkgs/build-support/setup-hooks/make-wrapper.sh#L126C35-L126C45
+  # via https://www.gnu.org/software/bash/manual/html_node/Shell-Parameter-Expansion.html under ${parameter@operator}
+  makeWrapperArgs = [ ''--set ROBUST_SOUNDFONT_OVERRIDE ${soundfont-path}'' ];
 
   executables = [ "SS14.Launcher" ];
 
