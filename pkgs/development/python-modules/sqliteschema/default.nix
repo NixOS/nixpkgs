@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "sqliteschema";
-  version = "1.4.0";
+  version = "2.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "thombashi";
     repo = "sqliteschema";
-    rev = "v${version}";
-    hash = "sha256-IzHdYBnh6udVsanWTPSsX4p4PG934YCdzs9Ow/NW86E=";
+    tag = "v${version}";
+    hash = "sha256-tLrdp99TifU3SwIOSIksJWepkFpZEfkf1lnSt6M2ylA=";
   };
 
   nativeBuildInputs = [ setuptools ];
