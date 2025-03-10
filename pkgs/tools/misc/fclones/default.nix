@@ -4,6 +4,7 @@
   fetchFromGitHub,
   stdenv,
   darwin,
+  installShellFiles,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -23,6 +24,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk_11_0.frameworks.AppKit
   ];
+  nativeBuildInputs = [ installShellFiles ];
 
   # device::test_physical_device_name test fails on Darwin
   doCheck = !stdenv.hostPlatform.isDarwin;
@@ -31,6 +33,15 @@ rustPlatform.buildRustPackage rec {
     # ofborg sometimes fails with "Resource temporarily unavailable"
     "--skip=cache::test::return_none_if_different_transform_was_used"
   ];
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    # setting PATH required so completion script doesn't use full path
+    export PATH="$PATH:$out/bin"
+    installShellCompletion --cmd $pname \
+      --bash <(fclones complete bash) \
+      --fish <(fclones complete fish) \
+      --zsh <(fclones complete zsh)
+  '';
 
   meta = with lib; {
     description = "Efficient Duplicate File Finder and Remover";
