@@ -2930,8 +2930,8 @@ let
         mktplcRef = {
           name = "vscode-colorize";
           publisher = "kamikillerto";
-          version = "0.11.1";
-          sha256 = "1h82b1jz86k2qznprng5066afinkrd7j3738a56idqr3vvvqnbsm";
+          version = "0.17.1";
+          sha256 = "sha256-JygJj2oZSOqklwfqMr+zwOYmaDp+3mh+jWMNOx6ccms=";
         };
         meta = {
           license = lib.licenses.asl20;
