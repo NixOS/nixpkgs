@@ -2,20 +2,21 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  stdenv,
   pkg-config,
   openssl,
   oniguruma,
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "is-fast";
   version = "0.1.3";
 
   src = fetchFromGitHub {
     owner = "Magic-JD";
     repo = "is-fast";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-exC9xD0scCa1jYomBCewaLv2kzoxSjHhc75EhEERPR8=";
   };
 
@@ -37,8 +38,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
-  # Error creating config directory: Operation not permitted (os error 1)
-  # Using writableTmpDirAsHomeHomeHook is not working
+    # Error creating config directory: Operation not permitted (os error 1)
+    # Using writableTmpDirAsHomeHomeHook is not working
     "--skip=generate_config::tests::test_run_creates_config_file"
   ];
 
@@ -53,4 +54,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ pwnwriter ];
     mainProgram = "is-fast";
   };
-}
+})
