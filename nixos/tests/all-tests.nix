@@ -970,6 +970,7 @@ in {
   ragnarwm = handleTest ./ragnarwm.nix {};
   rasdaemon = handleTest ./rasdaemon.nix {};
   rathole = handleTest ./rathole.nix {};
+  rauthy = handleTest ./rauthy.nix {};
   readarr = handleTest ./readarr.nix {};
   realm = handleTest ./realm.nix {};
   readeck = runTest ./readeck.nix;
