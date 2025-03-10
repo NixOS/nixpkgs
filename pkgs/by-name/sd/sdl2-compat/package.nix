@@ -3,7 +3,6 @@
   lib,
   fetchFromGitHub,
   monado,
-  ninja,
   nix-update-script,
   SDL2_ttf,
   SDL2_net,
@@ -30,7 +29,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    ninja
   ];
 
   buildInputs = [
@@ -59,6 +57,9 @@ stdenv.mkDerivation (finalAttrs: {
       ''
         patchelf --add-rpath ${lib.makeLibraryPath [ sdl3 ]} $out/lib/libSDL2.so
       '';
+
+  patches = [ ./find-headers.patch ];
+  setupHook = ./setup-hook.sh;
 
   passthru = {
     tests =
@@ -92,7 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/libsdl-org/sdl2-compat/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.zlib;
     maintainers = with lib.maintainers; [ nadiaholmquist ];
-    platforms = lib.platforms.unix;
+    platforms = lib.platforms.all;
     pkgConfigModules = [ "sdl2_compat" ];
   };
 })
