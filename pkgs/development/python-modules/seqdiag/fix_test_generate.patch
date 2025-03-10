@@ -1,0 +1,25 @@
+diff --git a/src/seqdiag/tests/test_generate_diagram.py b/src/seqdiag/tests/test_generate_diagram.py
+index cdd340f..a1dd2d4 100644
+--- a/src/seqdiag/tests/test_generate_diagram.py
++++ b/src/seqdiag/tests/test_generate_diagram.py
+@@ -13,19 +13,5 @@
+ #  See the License for the specific language governing permissions and
+ #  limitations under the License.
+ 
+-import os
+-
+ from blockdiag.tests.test_generate_diagram import (get_diagram_files,
+-                                                   testcase_generator)
+-
+-import seqdiag.command
+-
+-
+-def test_generate():
+-    mainfunc = seqdiag.command.main
+-    basepath = os.path.dirname(__file__)
+-    files = get_diagram_files(basepath)
+-    options = []
+-
+-    for testcase in testcase_generator(basepath, mainfunc, files, options):
+-        yield testcase
++                                                   test_generate_with_separate)

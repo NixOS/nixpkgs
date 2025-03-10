@@ -1,0 +1,3 @@
+{
+  config.enable = abort "oops";
+}

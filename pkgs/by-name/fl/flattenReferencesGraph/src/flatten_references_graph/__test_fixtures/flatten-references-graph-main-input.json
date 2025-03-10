@@ -1,0 +1,36 @@
+{
+  "graph": [
+    {
+      "closureSize": 1,
+      "narHash": "sha256:a",
+      "narSize": 2,
+      "path": "A",
+      "references": [
+        "A",
+        "B",
+        "C"
+      ]
+    },
+    {
+      "closureSize": 3,
+      "narHash": "sha256:b",
+      "narSize": 4,
+      "path": "B",
+      "references": [
+        "C"
+      ]
+    },
+    {
+      "closureSize": 5,
+      "narHash": "sha256:c",
+      "narSize": 6,
+      "path": "C",
+      "references": [
+        "C"
+      ]
+    }
+  ],
+  "pipeline": [
+    ["split_paths", ["B"]]
+  ]
+}

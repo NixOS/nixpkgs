@@ -1,0 +1,161 @@
+Description: fix buffer overflow when changing both sample format and
+ number of channels
+Origin: backport, https://github.com/mpruett/audiofile/pull/25
+Bug-Ubuntu: https://bugs.launchpad.net/ubuntu/+source/audiofile/+bug/1502721
+Bug-Debian: http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=801102
+
+Index: audiofile-0.3.6/libaudiofile/modules/ModuleState.cpp
+===================================================================
+--- audiofile-0.3.6.orig/libaudiofile/modules/ModuleState.cpp	2015-10-20 08:00:58.036128202 -0400
++++ audiofile-0.3.6/libaudiofile/modules/ModuleState.cpp	2015-10-20 08:00:58.036128202 -0400
+@@ -402,7 +402,7 @@
+		addModule(new Transform(outfc, in.pcm, out.pcm));
+
+	if (in.channelCount != out.channelCount)
+-		addModule(new ApplyChannelMatrix(infc, isReading,
++		addModule(new ApplyChannelMatrix(outfc, isReading,
+			in.channelCount, out.channelCount,
+			in.pcm.minClip, in.pcm.maxClip,
+			track->channelMatrix));
+Index: audiofile-0.3.6/test/Makefile.am
+===================================================================
+--- audiofile-0.3.6.orig/test/Makefile.am	2015-10-20 08:00:58.036128202 -0400
++++ audiofile-0.3.6/test/Makefile.am	2015-10-20 08:00:58.036128202 -0400
+@@ -26,6 +26,7 @@
+	VirtualFile \
+	floatto24 \
+	query2 \
++	sixteen-stereo-to-eight-mono \
+	sixteen-to-eight \
+	testchannelmatrix \
+	testdouble \
+@@ -139,6 +140,7 @@
+ printmarkers_LDADD = $(LIBAUDIOFILE) -lm
+
+ sixteen_to_eight_SOURCES = sixteen-to-eight.c TestUtilities.cpp TestUtilities.h
++sixteen_stereo_to_eight_mono_SOURCES = sixteen-stereo-to-eight-mono.c TestUtilities.cpp TestUtilities.h
+
+ testchannelmatrix_SOURCES = testchannelmatrix.c TestUtilities.cpp TestUtilities.h
+
+Index: audiofile-0.3.6/test/sixteen-stereo-to-eight-mono.c
+===================================================================
+--- /dev/null	1970-01-01 00:00:00.000000000 +0000
++++ audiofile-0.3.6/test/sixteen-stereo-to-eight-mono.c	2015-10-20 08:33:57.512286416 -0400
+@@ -0,0 +1,117 @@
++/*
++	Audio File Library
++
++	Copyright 2000, Silicon Graphics, Inc.
++
++	This program is free software; you can redistribute it and/or modify
++	it under the terms of the GNU General Public License as published by
++	the Free Software Foundation; either version 2 of the License, or
++	(at your option) any later version.
++
++	This program is distributed in the hope that it will be useful,
++	but WITHOUT ANY WARRANTY; without even the implied warranty of
++	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++	GNU General Public License for more details.
++
++	You should have received a copy of the GNU General Public License along
++	with this program; if not, write to the Free Software Foundation, Inc.,
++	51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
++*/
++
++/*
++	sixteen-stereo-to-eight-mono.c
++
++	This program tests the conversion from 2-channel 16-bit integers to
++	1-channel 8-bit	integers.
++*/
++
++#ifdef HAVE_CONFIG_H
++#include <config.h>
++#endif
++
++#include <stdint.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <unistd.h>
++#include <limits.h>
++
++#include <audiofile.h>
++
++#include "TestUtilities.h"
++
++int main (int argc, char **argv)
++{
++	AFfilehandle file;
++	AFfilesetup setup;
++	int16_t frames16[] = {14298, 392, 3923, -683, 958, -1921};
++	int8_t frames8[] = {28, 6, -2};
++	int i, frameCount = 3;
++	int8_t byte;
++	AFframecount result;
++
++	setup = afNewFileSetup();
++
++	afInitFileFormat(setup, AF_FILE_WAVE);
++
++	afInitSampleFormat(setup, AF_DEFAULT_TRACK, AF_SAMPFMT_TWOSCOMP, 16);
++	afInitChannels(setup, AF_DEFAULT_TRACK, 2);
++
++	char testFileName[PATH_MAX];
++	if (!createTemporaryFile("sixteen-to-eight", testFileName))
++	{
++		fprintf(stderr, "Could not create temporary file.\n");
++		exit(EXIT_FAILURE);
++	}
++
++	file = afOpenFile(testFileName, "w", setup);
++	if (file == AF_NULL_FILEHANDLE)
++	{
++		fprintf(stderr, "could not open file for writing\n");
++		exit(EXIT_FAILURE);
++	}
++
++	afFreeFileSetup(setup);
++
++	afWriteFrames(file, AF_DEFAULT_TRACK, frames16, frameCount);
++
++	afCloseFile(file);
++
++	file = afOpenFile(testFileName, "r", AF_NULL_FILESETUP);
++	if (file == AF_NULL_FILEHANDLE)
++	{
++		fprintf(stderr, "could not open file for reading\n");
++		exit(EXIT_FAILURE);
++	}
++
++	afSetVirtualSampleFormat(file, AF_DEFAULT_TRACK, AF_SAMPFMT_TWOSCOMP, 8);
++	afSetVirtualChannels(file, AF_DEFAULT_TRACK, 1);
++
++	for (i=0; i<frameCount; i++)
++	{
++		/* Read one frame. */
++		result = afReadFrames(file, AF_DEFAULT_TRACK, &byte, 1);
++
++		if (result != 1)
++			break;
++
++		/* Compare the byte read with its precalculated value. */
++		if (memcmp(&byte, &frames8[i], 1) != 0)
++		{
++			printf("error\n");
++			printf("expected %d, got %d\n", frames8[i], byte);
++			exit(EXIT_FAILURE);
++		}
++		else
++		{
++#ifdef DEBUG
++			printf("got what was expected: %d\n", byte);
++#endif
++		}
++	}
++
++	afCloseFile(file);
++	unlink(testFileName);
++
++	exit(EXIT_SUCCESS);
++}

@@ -1,0 +1,98 @@
+diff --git a/configure.ac b/configure.ac
+index 9aa25bd5..c7c0437b 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -185,6 +185,30 @@ AC_ARG_ENABLE(
+ 	]
+ )
+ 
++AC_ARG_WITH(
++	[mount-helper],
++	[AS_HELP_STRING([--with-mount-helper=BIN],[use the specified binary as mount helper @<:@default=/sbin/mount@:>@])],
++	[mount_helper="$withval"],
++	[mount_helper="/sbin/mount"]
++)
++AC_DEFINE_UNQUOTED([MOUNT_HELPER], ["$mount_helper"], [Binary used as mount helper.])
++
++AC_ARG_WITH(
++	[umount-helper],
++	[AS_HELP_STRING([--with-umount-helper=BIN],[use the specified binary as umount helper @<:@default=/sbin/umount@:>@])],
++	[umount_helper="$withval"],
++	[umount_helper="/sbin/umount"]
++)
++AC_DEFINE_UNQUOTED([UMOUNT_HELPER], ["$umount_helper"], [Binary used as umount helper.])
++
++AC_ARG_WITH(
++	[modprobe-helper],
++	[AS_HELP_STRING([--with-modprobe-helper=BIN],[use the specified binary as modprobe helper @<:@default=/sbin/modprobe@:>@])],
++	[modprobe_helper="$withval"],
++	[modprobe_helper="/sbin/modprobe"]
++)
++AC_DEFINE_UNQUOTED([MODPROBE_HELPER], ["$modprobe_helper"], [Binary used as modprobe helper.])
++
+ # pthread_rwlock_t requires _GNU_SOURCE
+ AC_GNU_SOURCE
+ 
+diff --git a/libfuse-lite/mount_util.c b/libfuse-lite/mount_util.c
+index 8b317224..ee75ace6 100644
+--- a/libfuse-lite/mount_util.c
++++ b/libfuse-lite/mount_util.c
+@@ -89,10 +89,10 @@ int fuse_mnt_add_mount(const char *progname, const char *fsname,
+             exit(1);
+         }
+         rmdir(tmp);
+-        execle("/sbin/mount", "/sbin/mount", "-F", type, "-o", opts,
++        execle(MOUNT_HELPER, MOUNT_HELPER, "-F", type, "-o", opts,
+               fsname, mnt, NULL, &env);
+-        fprintf(stderr, "%s: failed to execute /sbin/mount: %s\n", progname,
+-                strerror(errno));
++        fprintf(stderr, "%s: failed to execute %s: %s\n", progname,
++                MOUNT_HELPER, strerror(errno));
+         exit(1);
+     }
+     res = waitpid(res, &status, 0);
+@@ -126,14 +126,14 @@ int fuse_mnt_umount(const char *progname, const char *mnt, int lazy)
+ 
+         setuid(geteuid());
+         if (lazy) {
+-            execle("/sbin/umount", "/sbin/umount", mnt,
++            execle(UMOUNT_HELPER, UMOUNT_HELPER, mnt,
+                    NULL, &env);
+         } else {
+-            execle("/sbin/umount", "/sbin/umount", "-f", mnt,
++            execle(UMOUNT_HELPER, UMOUNT_HELPER, "-f", mnt,
+                    NULL, &env);
+         }
+-        fprintf(stderr, "%s: failed to execute /sbin/umount: %s\n", progname,
+-                strerror(errno));
++        fprintf(stderr, "%s: failed to execute %s: %s\n", progname,
++                UMOUNT_HELPER, strerror(errno));
+         exit(1);
+     }
+     res = waitpid(res, &status, 0);
+diff --git a/src/lowntfs-3g.c b/src/lowntfs-3g.c
+index 9330500c..dd18a93f 100644
+--- a/src/lowntfs-3g.c
++++ b/src/lowntfs-3g.c
+@@ -4463,7 +4463,7 @@ static fuse_fstype load_fuse_module(void)
+ 	int i;
+ 	struct stat st;
+ 	pid_t pid;
+-	const char *cmd = "/sbin/modprobe";
++	const char *cmd = MODPROBE_HELPER;
+ 	char *env = (char*)NULL;
+ 	struct timespec req = { 0, 100000000 };   /* 100 msec */
+ 	fuse_fstype fstype;
+diff --git a/src/ntfs-3g.c b/src/ntfs-3g.c
+index d8227e71..f5d77252 100644
+--- a/src/ntfs-3g.c
++++ b/src/ntfs-3g.c
+@@ -4171,7 +4171,7 @@ static fuse_fstype load_fuse_module(void)
+ 	int i;
+ 	struct stat st;
+ 	pid_t pid;
+-	const char *cmd = "/sbin/modprobe";
++	const char *cmd = MODPROBE_HELPER;
+ 	char *env = (char*)NULL;
+ 	struct timespec req = { 0, 100000000 };   /* 100 msec */
+ 	fuse_fstype fstype;

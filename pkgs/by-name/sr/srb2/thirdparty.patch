@@ -1,0 +1,12 @@
+diff --git a/thirdparty/CMakeLists.txt b/thirdparty/CMakeLists.txt
+index f33b3bf3f..1214f179c 100644
+--- a/thirdparty/CMakeLists.txt
++++ b/thirdparty/CMakeLists.txt
+@@ -16,6 +16,5 @@ if(NOT "${SRB2_CONFIG_SYSTEM_LIBRARIES}")
+ 	include("cpm-png.cmake")
+ 	include("cpm-curl.cmake")
+ 	include("cpm-openmpt.cmake")
++	include("cpm-libgme.cmake")
+ endif()
+-
+-include("cpm-libgme.cmake")

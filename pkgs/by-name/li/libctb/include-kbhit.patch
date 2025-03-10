@@ -1,0 +1,13 @@
+diff --git a/GNUmakefile b/GNUmakefile
+index e39a687..026f9c4 100644
+--- a/GNUmakefile
++++ b/GNUmakefile
+@@ -140,7 +140,7 @@ all: ../lib/libctb$(LIBFLAG)$(GPIBFLAG)-0.16.a ../lib/libctb$(LIBFLAG)$(GPIBFLAG
+
+ install: install_ctb_lib install_ctb_dll
+ 	$(INSTALL) -d $(DESTDIR)$(prefix)/include/ctb-0.16
+-	for f in ctb.h fifo.h getopt.h $(GPIBINC) iobase.h linux/serport.h linux/timer.h portscan.h serport.h serportx.h timer.h; do \
++	for f in ctb.h fifo.h getopt.h $(GPIBINC) iobase.h kbhit.h linux/serport.h linux/timer.h portscan.h serport.h serportx.h timer.h; do \
+ 	if test ! -d $(DESTDIR)$(prefix)/include/ctb-0.16/`dirname $$f` ; then \
+ 	$(INSTALL) -d $(DESTDIR)$(prefix)/include/ctb-0.16/`dirname $$f`; \
+ 	fi; \

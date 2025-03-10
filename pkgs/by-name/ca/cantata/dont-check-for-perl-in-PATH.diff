@@ -1,0 +1,17 @@
+diff --git a/playlists/dynamicplaylists.cpp b/playlists/dynamicplaylists.cpp
+index 07b6dce3..6a3f97c9 100644
+--- a/playlists/dynamicplaylists.cpp
++++ b/playlists/dynamicplaylists.cpp
+@@ -211,11 +211,6 @@ void DynamicPlaylists::start(const QString &name)
+         return;
+     }
+ 
+-    if (Utils::findExe("perl").isEmpty()) {
+-        emit error(tr("You need to install \"perl\" on your system in order for Cantata's dynamic mode to function."));
+-        return;
+-    }
+-
+     QString fName(Utils::dataDir(rulesDir, false)+name+constExtension);
+ 
+     if (!QFile::exists(fName)) {
+
