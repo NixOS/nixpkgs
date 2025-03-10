@@ -1955,8 +1955,8 @@ let
         mktplcRef = {
           name = "code-runner";
           publisher = "formulahendry";
-          version = "0.12.0";
-          hash = "sha256-Q2gcuclG7NLR81HjKj/0RF0jM5Eqe2vZMbpoabp/osg=";
+          version = "0.12.2";
+          hash = "sha256-TI5K6n3QfJwgFz5xhpdZ+yzi9VuYGcSzdBckZ68DsUQ=";
         };
         meta = {
           license = lib.licenses.mit;
