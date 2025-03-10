@@ -3961,6 +3961,19 @@ final: prev:
     meta.hydraPlatforms = [ ];
   };
 
+  devdocs-nvim = buildVimPlugin {
+    pname = "devdocs.nvim";
+    version = "2025-03-09";
+    src = fetchFromGitHub {
+      owner = "maskudo";
+      repo = "devdocs.nvim";
+      rev = "1f39d611427af27befbf0edb3284ef0def830dd7";
+      sha256 = "11adw0b3kg0324gvpk9kb0s9crkg1rp1pgqgr1v08sc5lix7wjc5";
+    };
+    meta.homepage = "https://github.com/maskudo/devdocs.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   devdocs-vim = buildVimPlugin {
     pname = "devdocs.vim";
     version = "2018-08-27";
@@ -15112,6 +15125,19 @@ final: prev:
       sha256 = "0fba3918ik69cndpp9wb46aim6phdc9vwwk4i5f8w5wwv2baqb5w";
     };
     meta.homepage = "https://github.com/osyo-manga/vim-anzu/";
+    meta.hydraPlatforms = [ ];
+  };
+
+  vim-apathy = buildVimPlugin {
+    pname = "vim-apathy";
+    version = "2021-11-22";
+    src = fetchFromGitHub {
+      owner = "tpope";
+      repo = "vim-apathy";
+      rev = "27128a0f55189724c841843ba41cd33cf7186032";
+      sha256 = "166cvm3xr46n7bmzglkx0k4akdshhq3a1kw2011v39r64jh5p5hk";
+    };
+    meta.homepage = "https://github.com/tpope/vim-apathy/";
     meta.hydraPlatforms = [ ];
   };
 
