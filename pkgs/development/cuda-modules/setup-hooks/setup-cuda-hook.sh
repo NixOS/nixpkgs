@@ -48,9 +48,9 @@ setupCUDAToolkit_ROOT() {
     (( "${NIX_DEBUG:-0}" >= 1 )) && echo "setupCUDAToolkit_ROOT: cudaHostPathsSeen=${!cudaHostPathsSeen[*]}" >&2
 
     for path in "${!cudaHostPathsSeen[@]}" ; do
-        addToSearchPathWithCustomDelimiter ";" CUDAToolkit_ROOT "$path"
+        appendToSearchPathWithCustomDelimiter ";" CUDAToolkit_ROOT "$path"
         if [[ -d "$path/include" ]] ; then
-            addToSearchPathWithCustomDelimiter ";" CUDAToolkit_INCLUDE_DIR "$path/include"
+            appendToSearchPathWithCustomDelimiter ";" CUDAToolkit_INCLUDE_DIR "$path/include"
         fi
     done
 

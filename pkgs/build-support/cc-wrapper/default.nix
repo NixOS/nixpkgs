@@ -104,11 +104,13 @@ let
   libc_bin = optionalString (libc != null) (getBin libc);
   libc_dev = optionalString (libc != null) (getDev libc);
   libc_lib = optionalString (libc != null) (getLib libc);
+  bintools_bin = optionalString (!nativeTools) (getBin bintools);
   cc_solib = getLib cc
     + optionalString (targetPlatform != hostPlatform) "/${targetPlatform.config}";
 
   # The wrapper scripts use 'cat' and 'grep', so we may need coreutils.
   coreutils_bin = optionalString (!nativeTools) (getBin coreutils);
+  gnugrep_bin = optionalString (!nativeTools) (getBin gnugrep);
 
   # The "suffix salt" is a arbitrary string added in the end of env vars
   # defined by cc-wrapper's hooks so that multiple cc-wrappers can be used
@@ -319,6 +321,7 @@ stdenvNoCC.mkDerivation {
     # unused middle-ground name that evokes both.
     inherit bintools;
     inherit cc libc libcxx nativeTools nativeLibc nativePrefix isGNU isClang isZig;
+    inherit libc_bin libc_dev libc_lib;
 
     emacsBufferSetup = pkgs: ''
       ; We should handle propagation here too
@@ -372,14 +375,14 @@ stdenvNoCC.mkDerivation {
 
       ccPath="${if targetPlatform.isDarwin then cc else nativePrefix}/bin"
     '' else ''
-      echo $cc > $out/nix-support/orig-cc
+      echo ${cc} > $out/nix-support/orig-cc
 
       ccPath="${cc}/bin"
     '')
 
     # Create symlinks to everything in the bintools wrapper.
     + ''
-      for bbin in $bintools/bin/*; do
+      for bbin in ${bintools_bin}/bin/*; do
         mkdir -p "$out/bin"
         ln -s "$bbin" "$out/bin/$(basename $bbin)"
       done
@@ -460,8 +463,14 @@ stdenvNoCC.mkDerivation {
     '';
 
   strictDeps = true;
-  propagatedBuildInputs = [ bintools ] ++ extraTools ++ optionals cc.langD or cc.langJava or false [ zlib ];
-  depsTargetTargetPropagated = optional (libcxx != null) libcxx ++ extraPackages;
+  propagatedBuildInputs = [
+    coreutils_bin
+    libc_bin
+    bintools_bin
+    gnugrep_bin
+  ] ++ extraTools
+    ++ optionals cc.langD or cc.langJava or false [ zlib ];
+  depsTargetTargetPropagated = [cc] ++ optional (libc != null) libc ++ optional (libcxx != null) libcxx ++ extraPackages;
 
   setupHooks = [
     ../setup-hooks/role.bash
@@ -471,9 +480,9 @@ stdenvNoCC.mkDerivation {
       name = "win-dll-hook.sh";
       dontUnpack = true;
       installPhase = ''
-        echo addToSearchPath "LINK_DLL_FOLDERS" "${cc_solib}/lib" > $out
-        echo addToSearchPath "LINK_DLL_FOLDERS" "${cc_solib}/lib64" >> $out
-        echo addToSearchPath "LINK_DLL_FOLDERS" "${cc_solib}/lib32" >> $out
+        echo appendToSearchPath "LINK_DLL_FOLDERS" "${cc_solib}/lib" > $out
+        echo appendToSearchPath "LINK_DLL_FOLDERS" "${cc_solib}/lib64" >> $out
+        echo appendToSearchPath "LINK_DLL_FOLDERS" "${cc_solib}/lib32" >> $out
       '';
     });
 
@@ -491,11 +500,11 @@ stdenvNoCC.mkDerivation {
     # TODO(@Ericson2314): Remove this after stable release and force
     # everyone to refer to bintools-wrapper directly.
     + optionalString (!isArocc) ''
-      if [[ -f "$bintools/nix-support/dynamic-linker" ]]; then
-        ln -s "$bintools/nix-support/dynamic-linker" "$out/nix-support"
+      if [[ -f "${bintools}/nix-support/dynamic-linker" ]]; then
+        ln -s "${bintools}/nix-support/dynamic-linker" "$out/nix-support"
       fi
-      if [[ -f "$bintools/nix-support/dynamic-linker-m32" ]]; then
-        ln -s "$bintools/nix-support/dynamic-linker-m32" "$out/nix-support"
+      if [[ -f "${bintools}/nix-support/dynamic-linker-m32" ]]; then
+        ln -s "${bintools}/nix-support/dynamic-linker-m32" "$out/nix-support"
       fi
     ''
 
@@ -624,7 +633,7 @@ stdenvNoCC.mkDerivation {
     '' + optionalString (cc.langAda or false && !isArocc) ''
       touch "$out/nix-support/gnat-cflags"
       touch "$out/nix-support/gnat-ldflags"
-      basePath=$(echo $cc/lib/*/*/*)
+      basePath=$(echo ${cc}/lib/*/*/*)
       ccCFlags+=" -B$basePath -I$basePath/adainclude"
       gnatCFlags="-I$basePath/adainclude -I$basePath/adalib"
 
@@ -699,7 +708,7 @@ stdenvNoCC.mkDerivation {
 
     + optionalString (libc != null && targetPlatform.isAvr && !isArocc) ''
       for isa in avr5 avr3 avr4 avr6 avr25 avr31 avr35 avr51 avrxmega2 avrxmega4 avrxmega5 avrxmega6 avrxmega7 tiny-stack; do
-        echo "-B${getLib libc}/avr/lib/$isa" >> $out/nix-support/libc-crt1-cflags
+        echo "-B${libc_lib}/avr/lib/$isa" >> $out/nix-support/libc-crt1-cflags
       done
     ''
 
@@ -753,15 +762,12 @@ stdenvNoCC.mkDerivation {
     expandResponseParams = lib.optionalString (expand-response-params != "") (lib.getExe expand-response-params);
     # TODO(@sternenseemann): rename env var via stdenv rebuild
     shell = getBin runtimeShell + runtimeShell.shellPath or "";
-    gnugrep_bin = optionalString (!nativeTools) gnugrep;
     rm = if nativeTools then "rm" else lib.getExe' coreutils "rm";
     mktemp = if nativeTools then "mktemp" else lib.getExe' coreutils "mktemp";
-    # stdenv.cc.cc should not be null and we have nothing better for now.
-    # if the native impure bootstrap is gotten rid of this can become `inherit cc;` again.
-    cc = optionalString (!nativeTools) cc;
     wrapperName = "CC_WRAPPER";
-    inherit suffixSalt coreutils_bin bintools;
-    inherit libc_bin libc_dev libc_lib;
+    bintools = optionalString (!nativeTools) bintools;
+    inherit bintools_bin;
+    inherit suffixSalt;
     inherit darwinPlatformForCC;
     default_hardening_flags_str = builtins.toString defaultHardeningFlags;
   } // lib.mapAttrs (_: lib.optionalString targetPlatform.isDarwin) {

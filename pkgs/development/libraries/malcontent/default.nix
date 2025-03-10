@@ -81,7 +81,7 @@ stdenv.mkDerivation rec {
     # `giDiscoverSelf` only picks up paths in `out` output.
     # This needs to be in `postInstall` so that it runs before
     # `gappsWrapperArgsHook` that runs as one of `preFixupPhases`.
-    addToSearchPath GI_TYPELIB_PATH "$lib/lib/girepository-1.0"
+    appendToSearchPath GI_TYPELIB_PATH "$lib/lib/girepository-1.0"
   '';
 
   passthru = {

@@ -92,7 +92,7 @@ buildPythonPackage {
 
   dontPatchShebangs = true;
   postFixup = ''
-    addToSearchPath program_PYTHONPATH $out/${python.sitePackages}
+    appendToSearchPath program_PYTHONPATH $out/${python.sitePackages}
     patchPythonScript $out/share/matrix.py
     substituteInPlace $out/${python.sitePackages}/matrix/server.py --replace-fail \"matrix_sso_helper\" \"$out/bin/matrix_sso_helper\"
     substituteInPlace $out/${python.sitePackages}/matrix/uploads.py --replace-fail \"matrix_upload\" \"$out/bin/matrix_upload\"

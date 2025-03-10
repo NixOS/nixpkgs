@@ -2,7 +2,7 @@ make_glib_find_gsettings_schemas() {
     # For packages that need gschemas of other packages (e.g. empathy)
     for maybe_dir in "$1"/share/gsettings-schemas/*; do
         if [[ -d "$maybe_dir/glib-2.0/schemas" ]]; then
-            addToSearchPath GSETTINGS_SCHEMAS_PATH "$maybe_dir"
+            appendToSearchPath GSETTINGS_SCHEMAS_PATH "$maybe_dir"
         fi
     done
 }
@@ -21,7 +21,7 @@ glibPostInstallHook() {
         mv "$prefix/share/glib-2.0/schemas" "${!outputLib}/share/gsettings-schemas/$name/glib-2.0/"
     fi
 
-    addToSearchPath GSETTINGS_SCHEMAS_PATH "${!outputLib}/share/gsettings-schemas/$name"
+    appendToSearchPath GSETTINGS_SCHEMAS_PATH "${!outputLib}/share/gsettings-schemas/$name"
 }
 
 # gappsWrapperArgsHook expects GSETTINGS_SCHEMAS_PATH variable to be set by this.

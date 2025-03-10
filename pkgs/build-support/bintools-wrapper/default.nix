@@ -106,6 +106,7 @@ let
   bintools_bin = optionalString (!nativeTools) (getBin bintools);
   # The wrapper scripts use 'cat' and 'grep', so we may need coreutils.
   coreutils_bin = optionalString (!nativeTools) (getBin coreutils);
+  gnugrep_bin = optionalString (!nativeTools) (getBin gnugrep);
 
   # See description in cc-wrapper.
   suffixSalt = replaceStrings ["-" "."] ["_" "_"] targetPlatform.config
@@ -155,6 +156,7 @@ stdenvNoCC.mkDerivation {
   passthru = {
     inherit targetPrefix suffixSalt;
     inherit bintools libc nativeTools nativeLibc nativePrefix isGNU isLLVM;
+    inherit libc_bin libc_dev libc_lib;
 
     emacsBufferSetup = pkgs: ''
       ; We should handle propagation here too
@@ -198,7 +200,7 @@ stdenvNoCC.mkDerivation {
 
       ldPath="${nativePrefix}/bin"
     '' else ''
-      echo $bintools_bin > $out/nix-support/orig-bintools
+      echo ${bintools_bin} > $out/nix-support/orig-bintools
 
       ldPath="${bintools_bin}/bin"
     ''
@@ -242,6 +244,7 @@ stdenvNoCC.mkDerivation {
     '';
 
   strictDeps = true;
+  propagatedBuildInputs = [ bintools_bin libc_bin coreutils_bin gnugrep_bin ];
   depsTargetTargetPropagated = extraPackages;
 
   setupHooks = [
@@ -303,7 +306,7 @@ stdenvNoCC.mkDerivation {
     # install the wrapper, you get tools like objdump (same for any
     # binaries of libc).
     + optionalString (!nativeTools) ''
-      printWords ${bintools_bin} ${optionalString (libc != null) libc_bin} > $out/nix-support/propagated-user-env-packages
+      printWords ${bintools_bin} ${libc_bin} > $out/nix-support/propagated-user-env-packages
     ''
 
     ##
@@ -340,7 +343,7 @@ stdenvNoCC.mkDerivation {
 
     + optionalString (libc != null && targetPlatform.isAvr) ''
       for isa in avr5 avr3 avr4 avr6 avr25 avr31 avr35 avr51 avrxmega2 avrxmega4 avrxmega5 avrxmega6 avrxmega7 tiny-stack; do
-        echo "-L${getLib libc}/avr/lib/$isa" >> $out/nix-support/libc-cflags
+        echo "-L${libc_lib}/avr/lib/$isa" >> $out/nix-support/libc-cflags
       done
     ''
 
@@ -401,13 +404,11 @@ stdenvNoCC.mkDerivation {
     # TODO(@sternenseemann): invent something cleaner than passing in "" in case of absence
     expandResponseParams = "${expand-response-params}/bin/expand-response-params";
     # TODO(@sternenseemann): rename env var via stdenv rebuild
-    shell = (getBin runtimeShell + runtimeShell.shellPath or "");
-    gnugrep_bin = optionalString (!nativeTools) gnugrep;
+    shell = getBin runtimeShell + runtimeShell.shellPath or "";
     rm = if nativeTools then "rm" else lib.getExe' coreutils "rm";
     mktemp = if nativeTools then "mktemp" else lib.getExe' coreutils "mktemp";
     wrapperName = "BINTOOLS_WRAPPER";
-    inherit dynamicLinker targetPrefix suffixSalt coreutils_bin;
-    inherit bintools_bin libc_bin libc_dev libc_lib;
+    inherit dynamicLinker targetPrefix suffixSalt;
     default_hardening_flags_str = builtins.toString defaultHardeningFlags;
   } // lib.mapAttrs (_: lib.optionalString targetPlatform.isDarwin) {
     # These will become empty strings when not targeting Darwin.

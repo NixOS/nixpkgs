@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
 
   # TODO: fix this in the binary sdk packages
   preHook = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    addToSearchPath DYLD_LIBRARY_PATH "${_icu}/lib"
+    appendToSearchPath DYLD_LIBRARY_PATH "${_icu}/lib"
     export DYLD_LIBRARY_PATH
   '';
 

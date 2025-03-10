@@ -64,7 +64,7 @@ let
         # http://erlang.org/doc/man/code.html#code-path
         # Mix also searches the code path when compiling with the --no-deps-check flag
         setupHook = attrs.setupHook or writeText "setupHook.sh" ''
-          addToSearchPath ERL_LIBS "$1/lib/erlang/lib"
+          appendToSearchPath ERL_LIBS "$1/lib/erlang/lib"
         '';
 
         buildInputs = buildInputs ++ [ ];

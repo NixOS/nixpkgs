@@ -190,7 +190,7 @@ let
         meta.broken = !stdenv.hostPlatform.isLinux || stdenv.buildPlatform != stdenv.hostPlatform;
       }
       ''
-        addToSearchPathWithCustomDelimiter : PYTHONPATH "${mercurial}/${python.sitePackages}"
+        appendToSearchPathWithCustomDelimiter : PYTHONPATH "${mercurial}/${python.sitePackages}"
 
         unpackPhase
         cd "$sourceRoot"

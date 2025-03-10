@@ -32,9 +32,9 @@ if [[ -z "${__nix_wrapGNUstepAppsHook-}" ]]; then
 
         echo "writing GNUstep config file"
 
-        gsAddToSearchPath() {
+        gsAppendToSearchPath() {
             if [[ -d "$2" && "${!1-}" != *"$2"* ]]; then
-                addToSearchPath "$1" "$2"
+                appendToSearchPath "$1" "$2"
             fi
         }
 
@@ -50,17 +50,17 @@ if [[ -z "${__nix_wrapGNUstepAppsHook-}" ]]; then
             fi
         }
 
-        gsAddToSearchPath NIX_GNUSTEP_SYSTEM_APPS "$out/lib/GNUstep/Applications"
-        gsAddToSearchPath NIX_GNUSTEP_SYSTEM_ADMIN_APPS "$out/lib/GNUstep/Applications"
-        gsAddToSearchPath NIX_GNUSTEP_SYSTEM_WEB_APPS "$out/lib/GNUstep/WebApplications"
-        gsAddToSearchPath NIX_GNUSTEP_SYSTEM_TOOLS "$out/bin"
-        gsAddToSearchPath NIX_GNUSTEP_SYSTEM_ADMIN_TOOLS "$out/sbin"
-        gsAddToSearchPath NIX_GNUSTEP_SYSTEM_LIBRARY "$out/lib/GNUstep"
+        gsAppendToSearchPath NIX_GNUSTEP_SYSTEM_APPS "$out/lib/GNUstep/Applications"
+        gsAppendToSearchPath NIX_GNUSTEP_SYSTEM_ADMIN_APPS "$out/lib/GNUstep/Applications"
+        gsAppendToSearchPath NIX_GNUSTEP_SYSTEM_WEB_APPS "$out/lib/GNUstep/WebApplications"
+        gsAppendToSearchPath NIX_GNUSTEP_SYSTEM_TOOLS "$out/bin"
+        gsAppendToSearchPath NIX_GNUSTEP_SYSTEM_ADMIN_TOOLS "$out/sbin"
+        gsAppendToSearchPath NIX_GNUSTEP_SYSTEM_LIBRARY "$out/lib/GNUstep"
         gsAddToIncludeSearchPath NIX_GNUSTEP_SYSTEM_HEADERS "$out/include"
-        gsAddToSearchPath NIX_GNUSTEP_SYSTEM_LIBRARIES "$out/lib"
-        gsAddToSearchPath NIX_GNUSTEP_SYSTEM_DOC "$out/share/GNUstep/Documentation"
-        gsAddToSearchPath NIX_GNUSTEP_SYSTEM_DOC_MAN "$out/share/man"
-        gsAddToSearchPath NIX_GNUSTEP_SYSTEM_DOC_INFO "$out/share/info"
+        gsAppendToSearchPath NIX_GNUSTEP_SYSTEM_LIBRARIES "$out/lib"
+        gsAppendToSearchPath NIX_GNUSTEP_SYSTEM_DOC "$out/share/GNUstep/Documentation"
+        gsAppendToSearchPath NIX_GNUSTEP_SYSTEM_DOC_MAN "$out/share/man"
+        gsAppendToSearchPath NIX_GNUSTEP_SYSTEM_DOC_INFO "$out/share/info"
 
         for var in "${gnustepConfigVars[@]}"; do
             if [[ -n "${!var-}" ]]; then

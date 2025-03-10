@@ -175,7 +175,7 @@ end
 if type == "git"
   File.open("#{out}/nix-support/setup-hook", "a") do |f|
     spec.require_paths.each do |dir|
-      f.puts("addToSearchPath RUBYLIB #{source.install_path}/#{dir}")
+      f.puts("appendToSearchPath RUBYLIB #{source.install_path}/#{dir}")
     end
   end
 end

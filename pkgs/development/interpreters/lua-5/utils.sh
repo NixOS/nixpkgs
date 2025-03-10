@@ -96,7 +96,7 @@ _addToLuaPath() {
 
   cd - >/dev/null
 
-  addToSearchPath program_PATH "$dir"/bin
+  appendToSearchPath program_PATH "$dir"/bin
 
   # Inspect the propagated inputs (if they exist) and recur on them.
   local prop="$dir/nix-support/propagated-build-inputs"
