@@ -202,10 +202,8 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.waterfox.net/";
     license = lib.licenses.mpl20;
     platforms = [ "x86_64-linux" ];
-    maintainers =
-      with lib.maintainers;
-      [
-        # your name here
-      ];
+    maintainers = with lib.maintainers; [
+      # your name here
+    ];
   };
 })
