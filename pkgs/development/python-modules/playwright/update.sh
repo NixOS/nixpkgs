@@ -93,6 +93,9 @@ update_browser "firefox" "darwin"
 update_browser "webkit" "darwin"
 update_browser "ffmpeg" "darwin"
 
+# Update from source chromium
+./pkgs/development/web/playwright/chromium/update.mjs
+
 # Update package-lock.json files for all npm deps that are built in playwright
 
 # Function to download `package-lock.json` for a given source path and update hash
