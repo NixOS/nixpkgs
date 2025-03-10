@@ -18,12 +18,8 @@ rustPlatform.buildRustPackage rec {
 
   cargoPatches = [ ./0001-update-time-rs.patch ];
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "serum_dex-0.4.0" = "sha256-Nzhh3OcAFE2LcbUgrA4zE2TnUMfV0dD4iH6fTi48GcI=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-CeTkYqRD5Xk61evYLGn8Gtdn2fTUmpKKPyPLtmABv6A=";
 
   checkFlags = [
     # the following test cases try to access network, skip them
