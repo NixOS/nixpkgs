@@ -2,10 +2,14 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  pythonOlder,
+
+  # dependencies
   blessed,
   prefixed,
+
+  # tests
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -20,12 +24,14 @@ buildPythonPackage rec {
     hash = "sha256-qfpY4o5i3+9wg5D+6w7jxOZHgsACdGqUhzOQ/sF3/v4=";
   };
 
-  propagatedBuildInputs = [
+  dependencies = [
     blessed
     prefixed
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "enlighten" ];
 
