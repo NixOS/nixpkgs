@@ -3,6 +3,8 @@
 # shellcheck shell=bash
 set -eu -o pipefail
 
+# pass <vscode exec or -> <format> to specify format as either json or nix (default nix)
+
 # can be added to your configuration with the following command and snippet:
 # $ ./pkgs/applications/editors/vscode/extensions/update_installed_exts.sh > extensions.nix
 #
@@ -58,7 +60,9 @@ EOF
     rm -Rf "$EXTTMP"
     # I don't like 'rm -Rf' lurking in my scripts but this seems appropriate.
 
-    cat <<-EOF
+    case $FORMAT in
+        nix)
+            cat <<-EOF
   {
     name = "$2";
     publisher = "$1";
@@ -66,13 +70,32 @@ EOF
     hash = "$HASH";
   }
 EOF
+            ;;
+        json)
+            cat <<EOF
+$COMMA
+    {
+        "name": "$2",
+        "publisher": "$1",
+        "version": "$VER",
+        "hash": "$HASH"
+EOF
+            printf '    }'
+            ;;
+    esac
 }
 
 # See if we can find our `code` binary somewhere.
-if [ $# -ne 0 ]; then
+if [ $# -ne 0 ] && [ $1 != "-" ]; then
     CODE=$1
 else
     CODE=$(command -v code || command -v codium)
+fi
+
+if [ $# -ge 2 ]; then
+    FORMAT=$2
+else
+    FORMAT=nix
 fi
 
 if [ -z "$CODE" ]; then
@@ -84,15 +107,33 @@ fi
 trap clean_up EXIT
 
 # Begin the printing of the nix expression that will house the list of extensions.
-printf '{ extensions = [\n'
+case $FORMAT in
+    nix)
+        printf '{ extensions = [\n'
+        ;;
+    json)
+        # in json mode, the newline is printed by each entry, which makes printing correct commas easier
+        printf '['
+        ;;
+esac
 
 # Note that we are only looking to update extensions that are already installed.
+# comma is for json output
+COMMA=
 for i in $($CODE --list-extensions)
 do
     OWNER=$(echo "$i" | cut -d. -f1)
     EXT=$(echo "$i" | cut -d. -f2)
 
     get_vsixpkg "$OWNER" "$EXT"
+    COMMA=,
 done
 # Close off the nix expression.
-printf '];\n}'
+case $FORMAT in
+    nix)
+        printf '];\n}'
+        ;;
+    json)
+        printf '\n]\n'
+        ;;
+esac
