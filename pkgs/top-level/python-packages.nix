@@ -6400,6 +6400,8 @@ self: super: with self; {
 
   imgdiff = callPackage ../development/python-modules/imgdiff { };
 
+  imgkit = callPackage ../development/python-modules/imgkit { };
+
   imgsize = callPackage ../development/python-modules/imgsize { };
 
   imgw-pib = callPackage ../development/python-modules/imgw-pib { };
