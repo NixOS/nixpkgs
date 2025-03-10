@@ -161,6 +161,17 @@ in
               ];
             };
 
+            unitConfig = lib.mkOption {
+              type = lib.types.nullOr (lib.types.attrsOf unitOption);
+              default = null;
+              description = ''
+                Configuration for the systemd unit.
+              '';
+              example = {
+                OnFailure = "notify-restic-failure.service";
+              };
+            };
+
             timerConfig = lib.mkOption {
               type = lib.types.nullOr (lib.types.attrsOf unitOption);
               default = {
@@ -416,6 +427,7 @@ in
               EnvironmentFile = backup.environmentFile;
             };
         }
+        // lib.optionalAttrs (backup.unitConfig != null) backup.unitConfig
         // lib.optionalAttrs (backup.initialize || doBackup || backup.backupPrepareCommand != null) {
           preStart = ''
             ${lib.optionalString (backup.backupPrepareCommand != null) ''
