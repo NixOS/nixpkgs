@@ -1881,8 +1881,8 @@ let
         mktplcRef = {
           name = "vscode-firefox-debug";
           publisher = "firefox-devtools";
-          version = "2.9.10";
-          hash = "sha256-xuvlE8L/qjOn8Qhkv9sutn/xRbwC9V/IIfEr4Ixm1vA=";
+          version = "2.15.0";
+          hash = "sha256-hBj0V42k32dj2gvsNStUBNZEG7iRYxeDMbuA15AYQqk=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/firefox-devtools.vscode-firefox-debug/changelog";
