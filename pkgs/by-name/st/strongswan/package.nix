@@ -5,6 +5,7 @@
 , systemd, pam
 , curl
 , enableTNC            ? false, trousers, sqlite, libxml2
+, enableTPM2           ? false, tpm2-tss
 , enableNetworkManager ? false, networkmanager
 , darwin
 , nixosTests
@@ -31,6 +32,7 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ curl gmp python3 ldns unbound openssl pcsclite ]
     ++ lib.optionals enableTNC [ trousers sqlite libxml2 ]
+    ++ lib.optional enableTPM2 tpm2-tss
     ++ lib.optionals stdenv.hostPlatform.isLinux [ systemd.dev pam iptables ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [ SystemConfiguration ])
     ++ lib.optionals enableNetworkManager [ networkmanager glib ];
@@ -80,6 +82,8 @@ stdenv.mkDerivation rec {
          "--with-tss=trousers"
          "--enable-aikgen"
          "--enable-sqlite" ]
+    ++ lib.optionals enableTPM2 [
+      "--enable-tpm" "--enable-tss-tss2" ]
     ++ lib.optionals enableNetworkManager [
          "--enable-nm"
          "--with-nm-ca-dir=/etc/ssl/certs" ]
