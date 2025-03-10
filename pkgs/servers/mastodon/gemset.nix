@@ -1368,10 +1368,10 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "13wcwdpdx1asjxvqpyxwlcazzsjisls28jjn28d9cqw9zwszcm1p";
+      sha256 = "06yllpzx5ib7cv1ar03279gm2qywnzsqfiz42g5y9fmp7z24yiik";
       type = "gem";
     };
-    version = "2.3.3";
+    version = "2.3.4";
   };
   flatware-rspec = {
     dependencies = [
@@ -1382,10 +1382,10 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "0dgl20mi9a5iwcy6v9jq148ljy9rrvyjhp1rpd1sgadfw6kxzbhc";
+      sha256 = "1gqkjilaqbd6qq80rx3fbjppjbllndvhd629yyd29943lrp3m9nb";
       type = "gem";
     };
-    version = "2.3.3";
+    version = "2.3.4";
   };
   fog-core = {
     dependencies = [
