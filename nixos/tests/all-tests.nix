@@ -600,6 +600,7 @@ in {
   languagetool = handleTest ./languagetool.nix {};
   lanraragi = handleTest ./lanraragi.nix {};
   latestKernel.login = handleTest ./login.nix { latestKernel = true; };
+  lavalink = handleTest ./lavalink.nix {};
   leaps = handleTest ./leaps.nix {};
   lemmy = handleTest ./lemmy.nix {};
   libinput = handleTest ./libinput.nix {};
