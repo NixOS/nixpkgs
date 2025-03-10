@@ -5316,6 +5316,12 @@
     github = "Daru-san";
     githubId = 135046711;
   };
+  darwincereska = {
+    name = "Darwin Cereska";
+    email = "darwin@durrstudios.dev";
+    github = "darwincereska";
+    githubId = 157426553;
+  };
   das-g = {
     email = "nixpkgs@raphael.dasgupta.ch";
     github = "das-g";
