@@ -11,8 +11,14 @@ import ./make-test-python.nix (
       { ... }:
       {
         users.users = {
-          alice.isNormalUser = true;
-          bob.isNormalUser = true;
+          alice = {
+            isNormalUser = true;
+            linger = true;
+          };
+          bob = {
+            isNormalUser = true;
+            linger = true;
+          };
         };
 
         systemd.user.tmpfiles = {
@@ -26,17 +32,20 @@ import ./make-test-python.nix (
       };
 
     testScript =
-      { ... }:
+      { nodes, ... }:
+      let
+        inherit (nodes.machine.users.users) alice bob;
+      in
       ''
-        machine.succeed("loginctl enable-linger alice bob")
+        machine.wait_for_unit("user@$(id -u ${alice.name})")
+        machine.wait_for_unit("systemd-tmpfiles-setup.service", "${alice.name}")
+        machine.succeed("[ -d ~${alice.name}/user_tmpfiles_created ]")
+        machine.succeed("[ -d ~${alice.name}/only_alice ]")
 
-        machine.wait_until_succeeds("systemctl --user --machine=alice@ is-active systemd-tmpfiles-setup.service")
-        machine.succeed("[ -d ~alice/user_tmpfiles_created ]")
-        machine.succeed("[ -d ~alice/only_alice ]")
-
-        machine.wait_until_succeeds("systemctl --user --machine=bob@ is-active systemd-tmpfiles-setup.service")
-        machine.succeed("[ -d ~bob/user_tmpfiles_created ]")
-        machine.succeed("[ ! -e ~bob/only_alice ]")
+        machine.wait_for_unit("user@$(id -u ${bob.name})")
+        machine.wait_for_unit("systemd-tmpfiles-setup.service", "${bob.name}")
+        machine.succeed("[ -d ~${bob.name}/user_tmpfiles_created ]")
+        machine.succeed("[ ! -e ~${bob.name}/only_alice ]")
       '';
   }
 )

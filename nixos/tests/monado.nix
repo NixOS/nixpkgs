@@ -10,6 +10,7 @@ import ./make-test-python.nix (
         hardware.graphics.enable = true;
         users.users.alice = {
           isNormalUser = true;
+          linger = true;
           uid = 1000;
         };
 
@@ -28,24 +29,24 @@ import ./make-test-python.nix (
     testScript =
       { nodes, ... }:
       let
-        userId = toString nodes.machine.users.users.alice.uid;
-        runtimePath = "/run/user/${userId}";
+        user = nodes.machine.users.users.alice;
+        runtimeUID = "$(id -u ${user.name})";
+        runtimePath = "/run/user/${runtimeUID}";
       in
       ''
         # for defaultRuntime
         machine.succeed("stat /etc/xdg/openxr/1/active_runtime.json")
 
-        machine.succeed("loginctl enable-linger alice")
-        machine.wait_for_unit("user@${userId}.service")
+        machine.wait_for_unit("user@${runtimeUID}.service")
 
-        machine.wait_for_unit("monado.socket", "alice")
-        machine.systemctl("start monado.service", "alice")
-        machine.wait_for_unit("monado.service", "alice")
+        machine.wait_for_unit("monado.socket", "${user.name}")
+        machine.systemctl("start monado.service", "${user.name}")
+        machine.wait_for_unit("monado.service", "${user.name}")
 
         # for forceDefaultRuntime
-        machine.succeed("stat /home/alice/.config/openxr/1/active_runtime.json")
+        machine.succeed("stat ~${user.name}/.config/openxr/1/active_runtime.json")
 
-        machine.succeed("su -- alice -c env XDG_RUNTIME_DIR=${runtimePath} openxr_runtime_list")
+        machine.succeed("su -- ${user.name} -c env XDG_RUNTIME_DIR=${runtimePath} openxr_runtime_list")
       '';
   }
 )
