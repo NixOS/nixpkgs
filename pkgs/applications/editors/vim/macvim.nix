@@ -9,7 +9,7 @@
   cscope,
   ruby_3_2,
   tcl,
-  perl540,
+  perl,
   luajit,
   darwin,
   libiconv,
@@ -18,7 +18,6 @@
 
 # Try to match MacVim's documented script interface compatibility
 let
-  perl = perl540;
   # Ruby 3.2
   ruby = ruby_3_2;
 
