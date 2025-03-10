@@ -5,6 +5,7 @@ let
     addErrorContext
     all
     any
+    assertMsg
     attrByPath
     attrNames
     catAttrs
@@ -101,6 +102,7 @@ let
                 , # This would be remove in the future, Prefer _module.check option instead.
                   check ? true
                 }:
+    assert assertMsg (!specialArgs?config) "Do not set config in the specialArgs argument to evalModules.";
     let
       withWarnings = x:
         warnIf (evalModulesArgs?args) "The args argument to evalModules is deprecated. Please set config._module.args instead."

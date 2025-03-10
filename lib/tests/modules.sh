@@ -137,6 +137,8 @@ checkConfigOutput '^true$' config.result ./module-argument-default.nix
 # gvariant
 checkConfigOutput '^true$' config.assertion ./gvariant.nix
 
+# specialArgs checks for evalModules
+checkConfigError 'Do not set config in the specialArgs argument to evalModules\.' config.fail.config ./specialArgs-config.nix
 checkConfigOutput '"ok"' config.result ./specialArgs-lib.nix
 
 # https://github.com/NixOS/nixpkgs/pull/131205
