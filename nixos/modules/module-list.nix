@@ -1588,6 +1588,7 @@
   ./services/web-apps/privatebin.nix
   ./services/web-apps/prosody-filer.nix
   ./services/web-apps/rimgo.nix
+  ./services/web-apps/rundeck.nix
   ./services/web-apps/rutorrent.nix
   ./services/web-apps/screego.nix
   ./services/web-apps/sftpgo.nix
