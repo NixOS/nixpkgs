@@ -7,13 +7,13 @@
 }:
 let
   pname = "filen-desktop";
-  version = "3.0.41";
+  version = "3.0.47";
 
   arch = builtins.head (builtins.split "-" stdenv.hostPlatform.system);
 
   src = fetchurl {
     url = "https://github.com/FilenCloudDienste/filen-desktop/releases/download/v${version}/Filen_linux_${arch}.AppImage";
-    hash = "sha256-Nao5By8Z8lMbRcp2Mgw+xaiiFzUxCm6S3SAE5FfDZpk=";
+    hash = "sha256-keaD5PUjkoFrFTCuap4DvmYq5X3Tjnq+njtiLgAZ9W8=";
   };
 
   desktopItem = makeDesktopItem {
