@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     domain = "gitlab.matrix.org";
     owner = "matrix-org";
-    repo = pname;
+    repo = "olm";
     rev = version;
     sha256 = "sha256-JX20mpuLO+UoNc8iQlXEHAbH9sfblkBbM1gE27Ve0ac=";
   };
