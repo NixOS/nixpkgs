@@ -18,7 +18,7 @@ callPackage ./generic.nix args {
   kernelCompatible = kernel: kernel.kernelOlder "6.13";
 
   # this package should point to the latest release.
-  version = "2.3.0";
+  version = "2.3.1";
 
   tests = {
     inherit (nixosTests.zfs) installer series_2_3;
@@ -29,5 +29,5 @@ callPackage ./generic.nix args {
     amarshall
   ];
 
-  hash = "sha256-ZWWrVwMP/DSSIxuXp6GuHCD0wiRekHbRXFGaclqd/ns=";
+  hash = "sha256-3WrxjIMuPiqBcVX4UZHpcMWNqxBE2NS810SRmvi05ZQ=";
 }
