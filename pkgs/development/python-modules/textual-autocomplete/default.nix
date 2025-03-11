@@ -1,13 +1,14 @@
 {
   lib,
-  python3,
   fetchFromGitHub,
+  buildPythonPackage,
+
   poetry-core,
   textual,
   typing-extensions,
   hatchling,
 }:
-python3.pkgs.buildPythonPackage rec {
+buildPythonPackage {
   pname = "textual_autocomplete";
   version = "3.0.0a13";
   pyproject = true;
