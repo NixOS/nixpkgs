@@ -22,6 +22,8 @@ let
 
   canExecute = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
   emulator = stdenv.hostPlatform.emulator buildPackages;
+  canEmulate = stdenv.hostPlatform.emulatorAvailable buildPackages;
+  buildNode = buildPackages."${pname}_${majorVersion}";
 
   # See valid_os and valid_arch in configure.py.
   destOS =
@@ -126,6 +128,22 @@ let
       ln -s "$cctools/bin/libtool" "$out/bin/libtool"
     '';
 
+  # a script which claims to be a different script but switches to simply touching its output
+  # when an environment variable is set. See CC_host, --cross-compiling, and postConfigure.
+  touchScript = real: writeScript "touch-script" ''
+    #!${stdenv.shell}
+    if [ -z "$FAKE_TOUCH" ]; then
+      exec "${real}" "$@"
+    fi
+    while [ "$#" != "0" ]; do
+      if [ "$1" == "-o" ]; then
+        shift
+        touch "$1"
+      fi
+      shift
+    done
+  '';
+
   package = stdenv.mkDerivation (finalAttrs:
   let
     /** the final package fixed point, after potential overrides */
@@ -148,6 +166,11 @@ let
       # Note: do not set TERM=dumb environment variable globally, it is used in
       # test-ci-js test suite to skip tests that otherwise run fine.
       NINJA = "TERM=dumb ninja";
+    } // lib.optionalAttrs (!canExecute && !canEmulate) {
+      # these are used in the --cross-compiling case. see comment at postConfigure.
+      CC_host = touchScript "${buildPackages.stdenv.cc}/bin/cc";
+      CXX_host = touchScript "${buildPackages.stdenv.cc}/bin/c++";
+      AR_host = touchScript "${buildPackages.stdenv.cc}/bin/ar";
     };
 
     # NB: technically, we do not need bash in build inputs since all scripts are
@@ -179,7 +202,7 @@ let
     dontUseNinjaCheck = true;
     dontUseNinjaInstall = true;
 
-    outputs = [ "out" "libv8" ];
+    outputs = [ "out" "libv8" ] ++ lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform) [ "dev" ];
     setOutputFlags = false;
     moveToDev = false;
 
@@ -188,13 +211,14 @@ let
         "--ninja"
         "--with-intl=system-icu"
         "--openssl-use-def-ca-store"
-        "--no-cross-compiling"
+        # --cross-compiling flag enables use of CC_host et. al
+        (if canExecute || canEmulate then "--no-cross-compiling" else "--cross-compiling")
         "--dest-os=${destOS}"
         "--dest-cpu=${destCPU}"
       ]
       ++ lib.optionals (destARMFPU != null) [ "--with-arm-fpu=${destARMFPU}" ]
       ++ lib.optionals (destARMFloatABI != null) [ "--with-arm-float-abi=${destARMFloatABI}" ]
-      ++ lib.optionals (!canExecute) [
+      ++ lib.optionals (!canExecute && canEmulate) [
         # Node.js requires matching bitness between build and host platforms, e.g.
         # for V8 startup snapshot builder (see tools/snapshot) and some other
         # tools. We apply a patch that runs these tools using a host platform
@@ -223,6 +247,15 @@ let
 
     configureScript = writeScript "nodejs-configure" ''
       exec ${python.executable} configure.py "$@"
+    '';
+
+    # In order to support unsupported cross configurations, we copy some intermediate executables
+    # from a native build and replace all the build-system tools with a script which simply touches
+    # its outfile. We have to indiana-jones-swap the build-system-targeted tools since they are
+    # tested for efficacy at configure time.
+    postConfigure = lib.optionalString (!canEmulate && !canExecute) ''
+      cp ${buildNode.dev}/bin/* out/Release
+      export FAKE_TOUCH=1
     '';
 
     enableParallelBuilding = true;
@@ -343,7 +376,11 @@ let
       ])}"
     ];
 
-    postInstall = ''
+    postInstall = lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
+      mkdir -p $dev/bin
+      cp out/Release/{bytecode_builtins_list_generator,mksnapshot,torque,node_js2c,gen-regexp-special-case} $dev/bin
+    '' + ''
+
       HOST_PATH=$out/bin patchShebangs --host $out
 
       ${lib.optionalString canExecute ''
@@ -416,7 +453,9 @@ let
       changelog = "https://github.com/nodejs/node/releases/tag/v${version}";
       license = licenses.mit;
       maintainers = with maintainers; [ aduh95 ];
-      platforms = platforms.linux ++ platforms.darwin;
+      platforms = platforms.linux ++ platforms.darwin ++ platforms.freebsd;
+      # This broken condition is likely too conservative. Feel free to loosen it if it works.
+      broken = !canExecute && !canEmulate && (stdenv.buildPlatform.parsed.cpu != stdenv.hostPlatform.parsed.cpu);
       mainProgram = "node";
       knownVulnerabilities = optional (versionOlder version "18") "This NodeJS release has reached its end of life. See https://nodejs.org/en/about/releases/.";
     };
