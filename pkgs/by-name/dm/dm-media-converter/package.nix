@@ -3,7 +3,7 @@
   fetchurl,
   ffmpeg,
   lib,
-  libqt5pas,
+  libsForQt5,
   libX11,
   makeDesktopItem,
   numactl,
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    libqt5pas
+    libsForQt5.libqtpas
     libX11
     ffmpeg
     qtbase
