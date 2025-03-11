@@ -200,6 +200,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Privacy-focused, multi-platform web browser";
     homepage = "https://www.waterfox.net/";
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.mpl20;
     platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [
