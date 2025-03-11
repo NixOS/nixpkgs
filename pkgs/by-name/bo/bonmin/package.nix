@@ -57,12 +57,6 @@ stdenv.mkDerivation rec {
     "--with-asl-lib=-lipoptamplinterface -lamplsolver"
   ];
 
-  # FIXME: ugly hack for https://github.com/NixOS/nixpkgs/pull/389009
-  postConfigure = ''
-    substituteInPlace libtool \
-      --replace 'for search_ext in .la $std_shrext .so .a' 'for search_ext in $std_shrext .so .a'
-  '';
-
   # Fix doc install. Should not be necessary after next release
   # ref https://github.com/coin-or/Bonmin/commit/4f665bc9e489a73cb867472be9aea518976ecd28
   sourceRoot = "${src.name}/Bonmin";
