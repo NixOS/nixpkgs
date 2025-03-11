@@ -9924,6 +9924,27 @@ self: super: with self; {
     pythonPackages = self;
   });
 
+  opencv4Full = opencv4.override rec {
+    enableCuda = pkgs.config.cudaSupport;
+    enableCublas = enableCuda;
+    enableCudnn = enableCuda;
+    enableCufft = enableCuda;
+    enableLto = true;
+    enableUnfree = false; # prevents cache
+    enableIpp = true;
+    enableGtk2 = true;
+    enableGtk3 = true;
+    enableVtk = true;
+    enableFfmpeg = true;
+    enableGStreamer = true;
+    enableTesseract = true;
+    enableTbb = true;
+    enableOvis = true;
+    enableGPhoto2 = true;
+    enableDC1394 = true;
+    enableDocs = true;
+  };
+
   opencv-python = callPackage ../development/python-modules/opencv-python { };
 
   opencv-python-headless = callPackage ../development/python-modules/opencv-python-headless { };
