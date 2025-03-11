@@ -189,6 +189,16 @@ in
           '';
         };
       };
+
+      waylandSessionOnly = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = ''
+          Whether to exclusively use the Wayland session.
+
+          NOTE: Many packages will still depend on X11, and this will not affect Flashback sessions.
+        '';
+      };
     };
 
     environment.gnome.excludePackages = mkOption {
@@ -215,7 +225,9 @@ in
       services.gnome.core-shell.enable = true;
       services.gnome.core-utilities.enable = mkDefault true;
 
-      services.displayManager.sessionPackages = [ pkgs.gnome-session.sessions ];
+      services.displayManager.sessionPackages = [
+        (pkgs.gnome-session.override { x11Support = !cfg.waylandSessionOnly; }).sessions
+      ];
 
       environment.extraInit = ''
         ${lib.concatMapStrings (p: ''
