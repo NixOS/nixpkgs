@@ -29,10 +29,6 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-cIholTqWxDb3CkKCY8qRhevxd7CQxBlBGmhJ/91K1g4=";
   };
 
-  postPatch = ''
-    jq '.bundle.createUpdaterArtifacts = false' src-tauri/tauri.conf.json | sponge src-tauri/tauri.conf.json
-  '';
-
   npmDeps = fetchNpmDeps {
     name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
     inherit (finalAttrs) src;
