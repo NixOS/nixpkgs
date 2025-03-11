@@ -7,6 +7,7 @@
 , coreutils
 , curl
 , xe
+, tree-sitter
 }:
 
 # Grammar list:
@@ -55,6 +56,8 @@ let
     "ruby-tree-sitter.old"
     # this is the (unmaintained) rust language bindings, tree-sitter-rust is the grammar
     "rust-tree-sitter"
+    # this is the kotlin language bindings, tree-sitter-kotlin is the grammar
+    "kotlin-tree-sitter"
     # this is the nodejs language bindings, tree-sitter-javascript is the grammar
     "node-tree-sitter"
     # this is the python language bindings, tree-sitter-python is the grammar
@@ -91,8 +94,6 @@ let
     "kotlin-tree-sitter"
     # not ready to be used
     "zig-tree-sitter"
-
-
     # Non-grammar repositories
     ".github"
     "fuzz-action"
@@ -227,7 +228,7 @@ let
       repo = "tree-sitter-commonlisp";
     };
     "tree-sitter-cuda" = {
-      orga = "thehamsta";
+      orga = "tree-sitter-grammars";
       repo = "tree-sitter-cuda";
     };
     "tree-sitter-glsl" = {
@@ -504,6 +505,7 @@ let
         curl = "${curl}/bin/curl";
         nix-prefetch-git = "${nix-prefetch-git}/bin/nix-prefetch-git";
         printf = "${coreutils}/bin/printf";
+        tree-sitter = "${lib.getExe tree-sitter}";
       };
       inherit
         knownTreeSitterOrgGrammarRepos
