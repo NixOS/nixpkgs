@@ -19,7 +19,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "stalwart-mail";
-  version = "0.11.6-unstable-2025-02-04";
+  version = "0.11.6";
 
   src = fetchFromGitHub {
     owner = "stalwartlabs";
