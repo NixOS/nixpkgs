@@ -12,7 +12,7 @@
   libotf2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "eztrace";
   version = "2.1.1";
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     owner = "eztrace";
     repo = "eztrace";
-    tag = "${version}";
+    tag = "${finalAttrs.version}";
     hash = "sha256-ccW4YjEf++tkdIJLze2x8B/SWbBBXnYt8UV9OH8+KGU=";
   };
 
@@ -79,4 +79,4 @@ stdenv.mkDerivation rec {
       lib.systems.inspect.patterns.isDarwin
     ];
   };
-}
+})
