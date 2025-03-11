@@ -60,8 +60,8 @@ in
     { });
   julia_110 = wrapJulia (callPackage
     (import ./generic.nix {
-      version = "1.10.8";
-      hash = "sha256-NPojubjOgy32CWlD/TDzI764Ca7cMsFj9r7vUdUW9Oc=";
+      version = "1.10.9";
+      hash = "sha256-u9by+X76fcXs+w159KTSvw43JeYwJ9Wvn0VyoEfniTM=";
       patches = [
         ./patches/1.10/0002-skip-failing-and-flaky-tests.patch
         # Revert https://github.com/JuliaLang/julia/pull/55354
