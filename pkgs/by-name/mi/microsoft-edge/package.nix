@@ -92,6 +92,10 @@
   # For Vulkan support (--enable-features=Vulkan)
   addDriverRunpath,
 
+  # Edge AAD sync
+  cacert,
+  libsecret,
+
   # Edge Specific
   libuuid,
 }:
@@ -107,6 +111,7 @@ let
       at-spi2-core
       atk
       bzip2
+      cacert
       cairo
       coreutils
       cups
@@ -156,6 +161,7 @@ let
       vulkan-loader
       wayland
       wget
+      libsecret
       libuuid
     ]
     ++ lib.optional pulseSupport libpulseaudio
@@ -249,6 +255,7 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix PATH            : "$binpath" \
       --suffix PATH            : "${lib.makeBinPath [ xdg-utils ]}" \
       --prefix XDG_DATA_DIRS   : "$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH:${addDriverRunpath.driverLink}/share" \
+      --set SSL_CERT_FILE "${cacert}/etc/ssl/certs/ca-bundle.crt" \
       --set CHROME_WRAPPER  "microsoft-edge-$dist" \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       --add-flags "--simulate-outdated-no-au='Tue, 31 Dec 2099 23:59:59 GMT'" \
