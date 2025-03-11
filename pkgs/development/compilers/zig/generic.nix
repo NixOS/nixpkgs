@@ -66,10 +66,6 @@ stdenv.mkDerivation (finalAttrs: {
     "doc"
   ];
 
-  # strictDeps breaks zig when clang is being used.
-  # https://github.com/NixOS/nixpkgs/issues/317055#issuecomment-2148438395
-  strictDeps = !stdenv.cc.isClang;
-
   # On Darwin, Zig calls std.zig.system.darwin.macos.detect during the build,
   # which parses /System/Library/CoreServices/SystemVersion.plist and
   # /System/Library/CoreServices/.SystemVersionPlatform.plist to determine the
