@@ -272,6 +272,9 @@
   "sec-x11-auto-login": [
     "index.html#sec-x11-auto-login"
   ],
+  "sec-x11-startx": [
+    "index.html#sec-x11-startx"
+  ],
   "sec-x11--graphics-cards-intel": [
     "index.html#sec-x11--graphics-cards-intel"
   ],

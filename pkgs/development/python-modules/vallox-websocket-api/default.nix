@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "vallox-websocket-api";
-  version = "5.3.0";
+  version = "5.4.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "yozik04";
     repo = "vallox_websocket_api";
     tag = version;
-    hash = "sha256-jJ+FFDU4w1vdCqErz6ksJDvjFcalSAwaH+G77BNI5/E=";
+    hash = "sha256-L9duL8XfDUxHgJxVbG7PPPRJRzVEckxqbB+1vX0GalU=";
   };
 
   nativeBuildInputs = [
@@ -45,7 +45,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "vallox_websocket_api" ];
 
   meta = {
-    changelog = "https://github.com/yozik04/vallox_websocket_api/releases/tag/${version}";
+    changelog = "https://github.com/yozik04/vallox_websocket_api/releases/tag/${src.tag}";
     description = "Async API for Vallox ventilation units";
     homepage = "https://github.com/yozik04/vallox_websocket_api";
     license = lib.licenses.lgpl3Only;
