@@ -24,6 +24,7 @@ import ./make-test-python.nix (
 
         services.xserver.desktopManager.gnome.enable = true;
         services.xserver.desktopManager.gnome.debug = true;
+        services.xserver.desktopManager.gnome.waylandSessionOnly = true;
 
         systemd.user.services = {
           "org.gnome.Shell@wayland" = {
