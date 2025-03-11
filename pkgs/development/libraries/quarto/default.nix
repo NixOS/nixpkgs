@@ -35,7 +35,9 @@ stdenv.mkDerivation (final: {
 
   dontStrip = true;
 
-  preFixup = ''
+  preFixup = let
+    pythonWithPackages = python3.withPackages (ps: with ps; [ jupyter ipython ] ++ (extraPythonPackages ps));
+  in ''
     wrapProgram $out/bin/quarto \
       --prefix QUARTO_DENO : ${lib.getExe deno} \
       --prefix QUARTO_PANDOC : ${lib.getExe pandoc_3_6} \
@@ -43,7 +45,8 @@ stdenv.mkDerivation (final: {
       --prefix QUARTO_DART_SASS : ${lib.getExe dart-sass} \
       --prefix QUARTO_TYPST : ${lib.getExe typst} \
       ${lib.optionalString (rWrapper != null) "--prefix QUARTO_R : ${rWrapper.override { packages = [ rPackages.rmarkdown ] ++ extraRPackages; }}/bin/R"} \
-      ${lib.optionalString (python3 != null) "--prefix QUARTO_PYTHON : ${python3.withPackages (ps: with ps; [ jupyter ipython ] ++ (extraPythonPackages ps))}/bin/python3"}
+      ${lib.optionalString (python3 != null) "--prefix QUARTO_PYTHON : ${pythonWithPackages.interpreter}"} \
+      ${lib.optionalString (rWrapper != null && python3 != null) "--prefix RETICULATE_PYTHON : ${pythonWithPackages.interpreter}"}
   '';
 
   installPhase = ''
