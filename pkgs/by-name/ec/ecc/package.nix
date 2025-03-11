@@ -8,6 +8,7 @@
   zlib,
   gnused,
   bash,
+  nixosTests,
 }:
 let
   inherit (rustPackages.rustc) llvmPackages;
@@ -126,6 +127,8 @@ rustPlatform.buildRustPackage rec {
         ]
       }
   '';
+
+  passthru.tests = { inherit (nixosTests) ecc; };
 
   meta = with lib; {
     homepage = "https://eunomia.dev";

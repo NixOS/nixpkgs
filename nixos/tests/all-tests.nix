@@ -341,6 +341,7 @@ in {
   early-mount-options = handleTest ./early-mount-options.nix {};
   ec2-config = (handleTestOn ["x86_64-linux"] ./ec2.nix {}).boot-ec2-config or {};
   ec2-nixops = (handleTestOn ["x86_64-linux"] ./ec2.nix {}).boot-ec2-nixops or {};
+  ecc = handleTest ./ecc.nix {};
   echoip = handleTest ./echoip.nix {};
   ecryptfs = handleTest ./ecryptfs.nix {};
   fscrypt = handleTest ./fscrypt.nix {};
