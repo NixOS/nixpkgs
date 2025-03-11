@@ -15392,7 +15392,7 @@ self: super: with self; {
   smtpdfix = callPackage ../development/python-modules/smtpdfix { };
 
   snack = toPythonModule (pkgs.newt.override {
-    inherit (self) python;
+    python3 = self.python;
   });
 
   snakemake = toPythonModule (pkgs.snakemake.override {
