@@ -238,7 +238,7 @@ let
       ''
       + ''
         ln -s godot4${suffix} "$out"/bin/godot
-        runHook post Install
+        runHook postInstall
       '';
 
     # patching $debug can crash patchelf
