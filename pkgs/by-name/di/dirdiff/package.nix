@@ -32,6 +32,8 @@ stdenv.mkDerivation rec {
           --subst-var-by tcl ${tcl} \
           --subst-var-by tk ${tk}
     done
+
+    sed -i "1i #include <unistd.h>" filecmp.c
   '';
 
   env = {
