@@ -20,16 +20,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "newsboat";
-  version = "2.37";
+  version = "2.38";
 
   src = fetchFromGitHub {
     owner = "newsboat";
     repo = "newsboat";
     rev = "r${version}";
-    hash = "sha256-RNvzGGvicujqkRWVHBwnlROuhpH5XqPNWmx6q7n4g+U=";
+    hash = "sha256-RekP88qZ4VaH5JG190BbVrBHnoUr+UVWvFmdPeyY8Yw=";
   };
 
-  cargoHash = "sha256-EBA+ucegXr3YtU2K7bhwli8O+knnugMMUuSksDuaY9E=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-yIRw/WMdkuaZEzA0J1bvMzf+9JOLqc6S7lWJIfih4Gw=";
 
   # TODO: Check if that's still needed
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -98,6 +99,13 @@ rustPlatform.buildRustPackage rec {
   passthru = {
     updateScript = nix-update-script { };
   };
+
+  installPhase = ''
+    runHook preInstall
+    install -Dm755 newsboat $out/bin/newsboat
+    install -Dm755 podboat $out/bin/podboat
+    runHook postInstall
+  '';
 
   meta = {
     homepage = "https://newsboat.org/";

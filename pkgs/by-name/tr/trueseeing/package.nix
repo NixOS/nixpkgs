@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "trueseeing";
-  version = "2.2.4";
+  version = "2.2.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "alterakey";
     repo = "trueseeing";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-2KELqHa6lw9wdJBaC90vTZSjD7tfkr3K6yDNhqBQrR0=";
+    tag = "v${version}";
+    hash = "sha256-EDnE1BK/nl3nqkan4gmSsP7vqkuMNJ5+oN09ZnQzsy0=";
   };
 
   build-system = with python3.pkgs; [

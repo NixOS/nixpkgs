@@ -1,8 +1,21 @@
-{ lib, stdenv, fetchFromGitHub, cmake, lua, pkg-config, rsync,
-asciidoc, libxml2, docbook_xml_dtd_45, docbook_xsl, libxslt, apple-sdk_11 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  lua,
+  pkg-config,
+  rsync,
+  asciidoc,
+  libxml2,
+  docbook_xml_dtd_45,
+  docbook_xsl,
+  libxslt,
+  apple-sdk,
+}:
 
 let
-  xnu = apple-sdk_11.sourceRelease "xnu";
+  xnu = apple-sdk.sourceRelease "xnu";
 in
 stdenv.mkDerivation rec {
   pname = "lsyncd";
@@ -30,12 +43,19 @@ stdenv.mkDerivation rec {
 
   dontUseCmakeBuildDir = true;
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
   buildInputs = [
     rsync
     lua
-    asciidoc libxml2 docbook_xml_dtd_45 docbook_xsl libxslt
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin apple-sdk_11;
+    asciidoc
+    libxml2
+    docbook_xml_dtd_45
+    docbook_xsl
+    libxslt
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/axkibe/lsyncd";

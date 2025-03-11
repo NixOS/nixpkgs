@@ -6,19 +6,21 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "tunnelgraf";
-  version = "0.7.2";
+  version = "1.0.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "denniswalker";
     repo = "tunnelgraf";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-pwHP9eAf2S08ucUawxrQvzMBJNITxbddoLzEoSNUdao=";
+    tag = "v${version}";
+    hash = "sha256-6t/rUdz0RyxWxZM0QO1ynRTNQq4GZMIAxMYBB2lfA54=";
   };
 
   pythonRelaxDeps = [
     "click"
+    "deepmerge"
     "paramiko"
+    "psutil"
     "pydantic"
   ];
 
@@ -28,10 +30,12 @@ python3.pkgs.buildPythonApplication rec {
     click
     deepmerge
     paramiko
+    psutil
     pydantic
     python-hosts
     pyyaml
     sshtunnel
+    wcwidth
   ];
 
   # Project has no tests

@@ -4,40 +4,37 @@
   cmake,
   curl,
   curlpp,
-  doctest,
+  srcOnly,
   fetchFromGitHub,
   fetchurl,
   fmt,
   nlohmann_json,
   qt5,
   spdlog,
-  substituteAll,
-  trompeloeil,
+  replaceVars,
   buildDayZLauncher ? false,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "arma3-unix-launcher";
-  version = "413";
+  version = "413-unstable-2025-02-10";
 
   src = fetchFromGitHub {
     owner = "muttleyxd";
     repo = "arma3-unix-launcher";
-    rev = "2ea62d961522f1542d4c8e669ef5fe856916f9ec";
-    hash = "sha256-uym93mYmVj9UxT8RbwdRUyIPrQX7nZTNWUUVjxCQmVU=";
+    rev = "7d4bcb166da3bb64ef10af421619d0b00136ebd5";
+    hash = "sha256-so7fjxESUAkQfO4hO5aQTzU5lHpeJlOOfEGp0Pb89sQ=";
   };
 
   patches = [
     # prevent CMake from trying to get libraries on the internet
-    (substituteAll {
-      src = ./dont_fetch_dependencies.patch;
+    (replaceVars ./dont_fetch_dependencies.patch {
       argparse_src = fetchFromGitHub {
         owner = "p-ranav";
         repo = "argparse";
         rev = "45664c4e9f05ff287731a9ff8b724d0c89fb6e77";
         hash = "sha256-qLD9zD6hbItDn6ZHHWBXrAWhySvqcs40xA5+C/5Fkhw=";
       };
-      curlpp_src = curlpp.src;
-      doctest_src = doctest;
+      curlpp_src = srcOnly curlpp;
       fmt_src = fmt;
       nlohmann_json_src = nlohmann_json;
       pugixml_src = fetchFromGitHub {
@@ -51,7 +48,9 @@ stdenv.mkDerivation (finalAttrs: {
         url = "https://github.com/julianxhokaxhiu/SteamworksSDKCI/releases/download/1.53/SteamworksSDK-v1.53.0_x64.zip";
         hash = "sha256-6PQGaPsaxBg/MHVWw2ynYW6LaNSrE9Rd9Q9ZLKFGPFA=";
       };
-      trompeloeil_src = trompeloeil;
+      # Only required for testing?
+      doctest_src = null;
+      trompeloeil_src = null;
     })
     # game won't launch with steam integration anyways, disable it
     ./disable_steam_integration.patch
@@ -60,14 +59,9 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     qt5.wrapQtAppsHook
     cmake
-  ];
-
-  buildInputs = [
     spdlog
-    curlpp.src
     curl
-    qt5.qtbase
-    qt5.qtsvg
+    curlpp
   ];
 
   cmakeFlags = [ "-Wno-dev" ] ++ lib.optionals buildDayZLauncher [ "-DBUILD_DAYZ_LAUNCHER=ON" ];

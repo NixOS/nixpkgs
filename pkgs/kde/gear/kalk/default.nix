@@ -1,7 +1,6 @@
 {
   mkKdeDerivation,
   qtdeclarative,
-  kirigami-addons,
   pkg-config,
   bison,
   flex,
@@ -19,7 +18,6 @@ mkKdeDerivation {
   ];
   extraBuildInputs = [
     qtdeclarative
-    kirigami-addons
     gmp
     mpfr
     libqalculate

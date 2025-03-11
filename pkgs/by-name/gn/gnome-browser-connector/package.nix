@@ -1,12 +1,13 @@
-{ lib
-, fetchurl
-, meson
-, ninja
-, python3
-, gnome
-, gnome-shell
-, wrapGAppsNoGuiHook
-, gobject-introspection
+{
+  lib,
+  fetchurl,
+  meson,
+  ninja,
+  python3,
+  gnome,
+  gnome-shell,
+  wrapGAppsNoGuiHook,
+  gobject-introspection,
 }:
 
 let

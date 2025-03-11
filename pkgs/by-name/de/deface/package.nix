@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, python3
-, fetchFromGitHub
-, pkgs
+{
+  lib,
+  stdenv,
+  python3,
+  fetchFromGitHub,
+  pkgs,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -15,7 +16,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "ORB-HD";
     repo = "deface";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-/mXWeL6OSgW4BMXtAZD/3UxQUGt7UE5ZvH8CXNCueJo=";
   };
 
@@ -39,7 +40,11 @@ python3.pkgs.buildPythonApplication rec {
     ''--prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ pkgs.onnxruntime ]}"''
   ];
 
-  pythonImportsCheck = [ "deface" "onnx" "onnxruntime" ];
+  pythonImportsCheck = [
+    "deface"
+    "onnx"
+    "onnxruntime"
+  ];
 
   meta = {
     description = "Video anonymization by face detection";

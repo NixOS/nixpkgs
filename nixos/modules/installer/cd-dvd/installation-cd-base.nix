@@ -6,16 +6,14 @@
     [ ./iso-image.nix
 
       # Profiles of this basic installation CD.
-      ../../profiles/all-hardware.nix
       ../../profiles/base.nix
       ../../profiles/installation-device.nix
     ];
 
+  hardware.enableAllHardware = true;
+
   # Adds terminus_font for people with HiDPI displays
   console.packages = options.console.packages.default ++ [ pkgs.terminus_font ];
-
-  # ISO naming.
-  isoImage.isoName = "${config.isoImage.isoBaseName}-${config.system.nixos.label}-${pkgs.stdenv.hostPlatform.system}.iso";
 
   # EFI booting
   isoImage.makeEfiBootable = true;

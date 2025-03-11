@@ -1,4 +1,9 @@
-{ lib, mkDerivation, fetchFromGitHub, standard-library }:
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  standard-library,
+}:
 
 mkDerivation rec {
   pname = "generics";
@@ -18,8 +23,7 @@ mkDerivation rec {
   # everythingFile = "./README.agda";
 
   meta = with lib; {
-    description =
-      "Library for datatype-generic programming in Agda";
+    description = "Library for datatype-generic programming in Agda";
     homepage = src.meta.homepage;
     license = licenses.mit;
     platforms = platforms.unix;

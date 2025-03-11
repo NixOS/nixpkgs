@@ -1,7 +1,17 @@
-{ lib, stdenv, fetchFromGitHub
-, meson, ninja, pkg-config, scdoc, wayland-scanner
-, wayland, wayland-protocols, runtimeShell
-, systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd, systemd
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  scdoc,
+  wayland-scanner,
+  wayland,
+  wayland-protocols,
+  runtimeShell,
+  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  systemd,
 }:
 
 stdenv.mkDerivation rec {
@@ -17,11 +27,22 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
   depsBuildBuild = [ pkg-config ];
-  nativeBuildInputs = [ meson ninja pkg-config scdoc wayland-scanner ];
-  buildInputs = [ wayland wayland-protocols ]
-                ++ lib.optionals systemdSupport [ systemd ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    scdoc
+    wayland-scanner
+  ];
+  buildInputs = [
+    wayland
+    wayland-protocols
+  ] ++ lib.optionals systemdSupport [ systemd ];
 
-  mesonFlags = [ "-Dman-pages=enabled" "-Dlogind=${if systemdSupport then "enabled" else "disabled"}" ];
+  mesonFlags = [
+    "-Dman-pages=enabled"
+    "-Dlogind=${if systemdSupport then "enabled" else "disabled"}"
+  ];
 
   postPatch = ''
     substituteInPlace main.c \

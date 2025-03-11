@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "robinostlund";
     repo = "volkswagencarnet";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-NpfkhFGxd3VjLjQ8pPpamYgwc5zqWt5CojONe4L1s4s=";
   };
 

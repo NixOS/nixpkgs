@@ -1,31 +1,39 @@
-{ lib
-, fetchurl
-, python3
-, readline
-, stdenv
-, enableCurrenciesUpdater ? true
+{
+  lib,
+  fetchurl,
+  python3,
+  readline,
+  stdenv,
+  enableCurrenciesUpdater ? true,
 }:
 
 let
-  pythonEnv = python3.withPackages(p: [
+  pythonEnv = python3.withPackages (p: [
     p.requests
   ]);
-in stdenv.mkDerivation (finalAttrs: {
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "units";
-  version = "2.23";
+  version = "2.24";
 
   src = fetchurl {
     url = "mirror://gnu/units/units-${finalAttrs.version}.tar.gz";
-    hash = "sha256-2Ve0USRZJcnmFMRRM5dEljDq+SvWK4SVugm741Ghc3A=";
+    hash = "sha256-HlAsTt+s8gspKEcWxy5d21GklaI2XXsD55YElMSgyQI=";
   };
 
-  outputs = [ "out" "info" "man" ];
-
-  buildInputs = [
-    readline
-  ] ++ lib.optionals enableCurrenciesUpdater [
-    pythonEnv
+  outputs = [
+    "out"
+    "info"
+    "man"
   ];
+
+  buildInputs =
+    [
+      readline
+    ]
+    ++ lib.optionals enableCurrenciesUpdater [
+      pythonEnv
+    ];
 
   prePatch = lib.optionalString enableCurrenciesUpdater ''
     substituteInPlace units_cur \
@@ -64,7 +72,7 @@ in stdenv.mkDerivation (finalAttrs: {
     '';
     license = with lib.licenses; [ gpl3Plus ];
     mainProgram = "units";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.all;
   };
 })

@@ -1,6 +1,7 @@
-{ stdenv
-, lib
-, fetchurl
+{
+  stdenv,
+  lib,
+  fetchurl,
 }:
 let
   pname = "roapi-http";

@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "planetmarshall";
     repo = "pillow-jpls";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Rc4/S8BrYoLdn7eHDBaoUt1Qy+h0TMAN5ixCAuRmfPU=";
   };
 

@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, python3, libX11, libXrandr }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python3,
+  libX11,
+  libXrandr,
+}:
 
 stdenv.mkDerivation rec {
   pname = "blugon";
@@ -11,7 +18,11 @@ stdenv.mkDerivation rec {
     sha256 = "1i67v8jxvavgax3dwvns200iwwdcvgki04liq0x64q52lg0vrh7m";
   };
 
-  buildInputs = [ python3 libX11 libXrandr ];
+  buildInputs = [
+    python3
+    libX11
+    libXrandr
+  ];
 
   # Remove at next release
   # https://github.com/jumper149/blugon/commit/d262cd05

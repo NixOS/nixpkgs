@@ -1,24 +1,57 @@
-{ config, lib, pkgs, ... }:
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
+  inherit (lib)
+    literalExpression
+    mkDefault
+    mkEnableOption
+    mkIf
+    mkOption
+    mkPackageOption
+    mkRenamedOptionModule
+    types
+    ;
+
   cfg = config.services.rss-bridge;
 
-  poolName = "rss-bridge";
-
-  cfgHalf = lib.mapAttrsRecursive (path: value: let
-    envName = lib.toUpper ("RSSBRIDGE_" + lib.concatStringsSep "_" path);
-    envValue = if lib.isList value then
-      lib.concatStringsSep "," value
-    else if lib.isBool value then
-      lib.boolToString value
-    else
-      toString value;
-  in if (value != null) then "fastcgi_param \"${envName}\" \"${envValue}\";" else null) cfg.config;
-  cfgEnv = lib.concatStringsSep "\n" (lib.collect lib.isString cfgHalf);
+  cfgEnv = lib.pipe cfg.config [
+    (lib.mapAttrsRecursive (
+      path: value:
+      lib.optionalAttrs (value != null) {
+        name = lib.toUpper "RSSBRIDGE_${lib.concatStringsSep "_" path}";
+        value =
+          if lib.isList value then
+            lib.concatStringsSep "," value
+          else if lib.isBool value then
+            lib.boolToString value
+          else
+            toString value;
+      }
+    ))
+    (lib.collect (x: lib.isString x.name or false && lib.isString x.value or false))
+    lib.listToAttrs
+  ];
 in
 {
   imports = [
-    (mkRenamedOptionModule [ "services" "rss-bridge" "whitelist" ] [ "services" "rss-bridge" "config" "system" "enabled_bridges" ])
+    (mkRenamedOptionModule
+      [
+        "services"
+        "rss-bridge"
+        "whitelist"
+      ]
+      [
+        "services"
+        "rss-bridge"
+        "config"
+        "system"
+        "enabled_bridges"
+      ]
+    )
   ];
 
   options = {
@@ -27,27 +60,30 @@ in
 
       user = mkOption {
         type = types.str;
-        default = "nginx";
+        default = if cfg.webserver == null then "rss-bridge" else cfg.webserver;
+        defaultText = "{option}`config.services.rss-bridge.webserver` or \"rss-bridge\"";
         description = ''
-          User account under which both the service and the web-application run.
+          The user account under which both the service and the web application run.
         '';
       };
 
       group = mkOption {
         type = types.str;
-        default = "nginx";
+        default = if cfg.webserver == null then "rss-bridge" else cfg.webserver;
+        defaultText = "{option}`config.services.rss-bridge.webserver` or \"rss-bridge\"";
         description = ''
-          Group under which the web-application run.
+          The group under which the web application runs.
         '';
       };
 
+      package = mkPackageOption pkgs "rss-bridge" { };
+
       pool = mkOption {
-        type = types.str;
-        default = poolName;
+        type = types.nullOr types.str;
+        default = "rss-bridge";
         description = ''
-          Name of existing phpfpm pool that is used to run web-application.
-          If not specified a pool will be created automatically with
-          default values.
+          Name of phpfpm pool that is used to run web-application.
+          If `null` specified none will be created, otherwise automatically created with default values.
         '';
       };
 
@@ -64,13 +100,26 @@ in
         type = types.nullOr types.str;
         default = "rss-bridge";
         description = ''
-          Name of the nginx virtualhost to use and setup. If null, do not setup any virtualhost.
+          Name of the nginx or caddy virtualhost to use and setup. If null, do not setup any virtualhost.
+        '';
+      };
+
+      webserver = mkOption {
+        type = types.nullOr (
+          types.enum [
+            "nginx"
+            "caddy"
+          ]
+        );
+        default = "nginx";
+        description = ''
+          Type of virtualhost to use and setup. If null, do not setup any virtualhost.
         '';
       };
 
       config = mkOption {
         type = types.submodule {
-          freeformType = (pkgs.formats.ini {}).type;
+          freeformType = (pkgs.formats.ini { }).type;
           options = {
             system = {
               enabled_bridges = mkOption {
@@ -84,12 +133,12 @@ in
                 type = types.str;
                 description = "Directory where to store cache files (if cache.type = \"file\").";
                 default = "${cfg.dataDir}/cache/";
-                defaultText = options.literalExpression "\${config.services.rss-bridge.dataDir}/cache/";
+                defaultText = literalExpression "\${config.services.rss-bridge.dataDir}/cache/";
               };
             };
           };
         };
-        example = options.literalExpression ''
+        example = literalExpression ''
           {
             system.enabled_bridges = [ "*" ];
             error = {
@@ -111,12 +160,12 @@ in
   };
 
   config = mkIf cfg.enable {
-    services.phpfpm.pools = mkIf (cfg.pool == poolName) {
-      ${poolName} = {
+    services.phpfpm.pools = mkIf (cfg.pool != null) {
+      ${cfg.pool} = {
         user = cfg.user;
-        settings = mapAttrs (name: mkDefault) {
+        settings = lib.mapAttrs (name: mkDefault) {
           "listen.owner" = cfg.user;
-          "listen.group" = cfg.user;
+          "listen.group" = cfg.group;
           "listen.mode" = "0600";
           "pm" = "dynamic";
           "pm.max_children" = 75;
@@ -131,17 +180,17 @@ in
 
     systemd.tmpfiles.settings.rss-bridge = {
       "${cfg.config.FileCache.path}".d = {
-          mode = "0750";
-          user = cfg.user;
-          group = cfg.group;
-        };
+        mode = "0750";
+        user = cfg.user;
+        group = cfg.group;
+      };
     };
 
-    services.nginx = mkIf (cfg.virtualHost != null) {
+    services.nginx = mkIf (cfg.virtualHost != null && cfg.webserver == "nginx") {
       enable = true;
       virtualHosts = {
         ${cfg.virtualHost} = {
-          root = "${pkgs.rss-bridge}";
+          root = "${cfg.package}";
 
           locations."/" = {
             tryFiles = "$uri /index.php$is_args$args";
@@ -153,11 +202,26 @@ in
               fastcgi_split_path_info ^(.+\.php)(/.+)$;
               fastcgi_pass unix:${config.services.phpfpm.pools.${cfg.pool}.socket};
               fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
-              ${cfgEnv}
+              ${lib.concatStringsSep "\n" (lib.mapAttrsToList (n: v: "fastcgi_param \"${n}\" \"${v}\";") cfgEnv)}
             '';
           };
         };
       };
     };
+
+    services.caddy = mkIf (cfg.virtualHost != null && cfg.webserver == "caddy") {
+      enable = true;
+      virtualHosts.${cfg.virtualHost} = {
+        extraConfig = ''
+          root * ${cfg.package}
+          file_server
+          php_fastcgi unix/${config.services.phpfpm.pools.${cfg.pool}.socket} {
+          ${lib.concatStringsSep "\n" (lib.mapAttrsToList (n: v: "  env ${n} \"${v}\"") cfgEnv)}
+          }
+        '';
+      };
+    };
   };
+
+  meta.maintainers = with lib.maintainers; [ quantenzitrone ];
 }

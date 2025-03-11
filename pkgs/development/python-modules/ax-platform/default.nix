@@ -13,17 +13,19 @@
   pyfakefs,
   pyre-extensions,
   pytestCheckHook,
+  pythonAtLeast,
   pythonOlder,
   setuptools-scm,
   setuptools,
   sqlalchemy,
+  tabulate,
   typeguard,
   yappi,
 }:
 
 buildPythonPackage rec {
   pname = "ax-platform";
-  version = "0.4.3";
+  version = "0.5.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -31,8 +33,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "ax";
-    rev = "refs/tags/${version}";
-    hash = "sha256-jmBjrtxqg4Iu3Qr0HRqjVfwURXzbJaGm+DBFNHYk/vA=";
+    tag = version;
+    hash = "sha256-CMKdnPvzQ9tvU9/01mRaWi/Beuyo19CtaXNJCoiwLOw=";
   };
 
   env.ALLOW_BOTORCH_LATEST = "1";
@@ -62,16 +64,13 @@ buildPythonPackage rec {
     mercurial
     pyfakefs
     pytestCheckHook
+    tabulate
     yappi
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   disabledTestPaths = [
     "ax/benchmark"
     "ax/runners/tests/test_torchx.py"
-    # requires pyre_extensions
-    "ax/telemetry/tests"
-    "ax/core/tests/test_utils.py"
-    "ax/early_stopping/tests/test_strategies.py"
     # broken with sqlalchemy 2
     "ax/core/tests/test_experiment.py"
     "ax/service/tests/test_ax_client.py"
@@ -80,16 +79,30 @@ buildPythonPackage rec {
     "ax/storage"
   ];
 
-  disabledTests = [
-    # exact comparison of floating points
-    "test_optimize_l0_homotopy"
-    # AssertionError: 5 != 2
-    "test_get_standard_plots_moo"
-    # AssertionError: Expected 'warning' to be called once. Called 3 times
-    "test_validate_kwarg_typing"
-    # uses torch.equal
-    "test_convert_observations"
-  ];
+  disabledTests =
+    [
+      # exact comparison of floating points
+      "test_optimize_l0_homotopy"
+      # AssertionError: 5 != 2
+      "test_get_standard_plots_moo"
+      # AssertionError: Expected 'warning' to be called once. Called 3 times
+      "test_validate_kwarg_typing"
+      # uses torch.equal
+      "test_convert_observations"
+      # broken with sqlalchemy 2
+      "test_sql_storage"
+    ]
+    ++ lib.optionals (pythonAtLeast "3.13") [
+      #  Both `metric_aggregation` and `criterion` must be `ReductionCriterion`
+      "test_SingleDiagnosticBestModelSelector_max_mean"
+      "test_SingleDiagnosticBestModelSelector_min_mean"
+      "test_SingleDiagnosticBestModelSelector_min_min"
+      "test_SingleDiagnosticBestModelSelector_model_cv_kwargs"
+      "test_init"
+      "test_gen"
+      # "use MIN or MAX" does not match "Both `metric_aggregation` and `criterion` must be `ReductionCriterion`
+      "test_user_input_error"
+    ];
 
   pythonImportsCheck = [ "ax" ];
 

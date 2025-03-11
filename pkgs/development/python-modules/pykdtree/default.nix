@@ -17,18 +17,13 @@
 
 buildPythonPackage rec {
   pname = "pykdtree";
-  version = "1.3.13";
+  version = "1.4.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Osz4UulGZT45nD1Nu+EZ28bT9yz9LVqVyr8L8Mf5JP4=";
+    hash = "sha256-EISP9qxzMraOZb+MLolme2tisHWq0nI0d0Smm/HIrX4=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-warn "numpy>=2.0.0rc1,<3" "numpy"
-  '';
 
   nativeBuildInputs = [
     cython

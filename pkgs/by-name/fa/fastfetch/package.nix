@@ -41,16 +41,17 @@
   vulkanSupport ? true,
   waylandSupport ? true,
   x11Support ? true,
+  flashfetchSupport ? false,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "fastfetch";
-  version = "2.30.1";
+  version = "2.38.0";
 
   src = fetchFromGitHub {
     owner = "fastfetch-cli";
     repo = "fastfetch";
-    rev = finalAttrs.version;
-    hash = "sha256-Gt5rsUDi7E2msdHzSbvc8dM2yxwws4Q5GYpHJNg9mGA=";
+    tag = finalAttrs.version;
+    hash = "sha256-9ph6Zp1x/MP0apB39L+HFUCl7qQ9UfIU89/78+qy6Vc=";
   };
 
   outputs = [
@@ -101,10 +102,10 @@ stdenv.mkDerivation (finalAttrs: {
       xorg.libXext
     ]
     ++ lib.optionals (x11Support && (!stdenv.hostPlatform.isDarwin)) [ xfce.xfconf ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin ([
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       apple-sdk_15
       moltenvk
-    ]);
+    ];
 
   cmakeFlags =
     [
@@ -116,13 +117,14 @@ stdenv.mkDerivation (finalAttrs: {
       (lib.cmakeBool "ENABLE_SYSTEM_YYJSON" true)
       (lib.cmakeBool "ENABLE_GLX" x11Support)
       (lib.cmakeBool "ENABLE_RPM" rpmSupport)
-      (lib.cmakeBool "ENABLE_VULKAN" x11Support)
+      (lib.cmakeBool "ENABLE_VULKAN" vulkanSupport)
       (lib.cmakeBool "ENABLE_WAYLAND" waylandSupport)
       (lib.cmakeBool "ENABLE_X11" x11Support)
       (lib.cmakeBool "ENABLE_XCB" x11Support)
       (lib.cmakeBool "ENABLE_XCB_RANDR" x11Support)
       (lib.cmakeBool "ENABLE_XFCONF" (x11Support && (!stdenv.hostPlatform.isDarwin)))
       (lib.cmakeBool "ENABLE_XRANDR" x11Support)
+      (lib.cmakeBool "BUILD_FLASHFETCH" flashfetchSupport)
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       (lib.cmakeOptionType "filepath" "CUSTOM_PCI_IDS_PATH" "${hwdata}/share/hwdata/pci.ids")
@@ -133,12 +135,15 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace completions/fastfetch.fish --replace-fail python3 '${python3.interpreter}'
   '';
 
-  postInstall = ''
-    wrapProgram $out/bin/fastfetch \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath finalAttrs.buildInputs}"
-    wrapProgram $out/bin/flashfetch \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath finalAttrs.buildInputs}"
-  '';
+  postInstall =
+    ''
+      wrapProgram $out/bin/fastfetch \
+        --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath finalAttrs.buildInputs}"
+    ''
+    + lib.optionalString flashfetchSupport ''
+      wrapProgram $out/bin/flashfetch \
+        --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath finalAttrs.buildInputs}"
+    '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";

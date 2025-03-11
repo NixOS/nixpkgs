@@ -1,17 +1,18 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
 }:
 
 stdenvNoCC.mkDerivation {
   pname = "sweet-folders";
-  version = "unstable-2023-03-18";
+  version = "0-unstable-2025-02-15";
 
   src = fetchFromGitHub {
     owner = "EliverLara";
     repo = "Sweet-folders";
-    rev = "b2192ff1412472f036fdf9778c6b9dbcb6c044ec";
-    hash = "sha256-QexfqXH5a1IEhKBRjWSMdrEvThvLRzd4M32Xti1DCGE=";
+    rev = "40a5d36e50437901c7eaa1119bb9ae8006e2fe5c";
+    hash = "sha256-Pb3xsNKM5yGT4uAUxrCds1JSSvU/whhTJcmqiM7EW+4=";
   };
 
   installPhase = ''

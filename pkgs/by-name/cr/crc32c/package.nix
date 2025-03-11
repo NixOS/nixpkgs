@@ -1,9 +1,10 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, gflags
-, staticOnly ? stdenv.hostPlatform.isStatic
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  gflags,
+  staticOnly ? stdenv.hostPlatform.isStatic,
 }:
 
 stdenv.mkDerivation rec {

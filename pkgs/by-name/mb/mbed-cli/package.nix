@@ -1,4 +1,10 @@
-{ lib, python3Packages, fetchPypi, git, mercurial }:
+{
+  lib,
+  python3Packages,
+  fetchPypi,
+  git,
+  mercurial,
+}:
 
 with python3Packages;
 
@@ -31,4 +37,3 @@ buildPythonApplication rec {
     maintainers = [ ];
   };
 }
-

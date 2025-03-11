@@ -1,0 +1,91 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index a9daee7..7c6da08 100755
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -17,7 +17,6 @@
+ #  CMakeLists.txt -- template and derived ESC/I ESC/I-2 protocol commands
+ 
+ project (epsonscan2)
+-set (CMAKE_INSTALL_PREFIX "/usr")
+ cmake_minimum_required (VERSION 2.8.12.2)
+ 
+ include(GNUInstallDirs)
+@@ -86,7 +85,6 @@ set(COMMON_ETC_PATH ${CMAKE_INSTALL_FULL_SYSCONFDIR})
+ set(EPSON_WORK_PATH /tmp/epsonWork/)
+ set(EPSON_SETTINGS_PATH $ENV{HOME}/.epsonscan2/)
+ 
+-SET (CMAKE_INSTALL_PREFIX /usr)
+ set(EPSON_INSTALL_PATH ${CMAKE_INSTALL_FULL_LIBDIR}/epsonscan2/)
+ set(COMMON_SHARE_PATH ${CMAKE_INSTALL_FULL_DATAROOTDIR})
+ 
+@@ -113,8 +111,8 @@ add_subdirectory(src)
+ 
+ install(DIRECTORY Resources DESTINATION ${EPSON_INSTALL_ROOT}${EPSON_INSTALL_PATH})
+ 
+-install(FILES epsonscan2.rules DESTINATION ${EPSON_INSTALL_ROOT}/lib/udev/rules.d/ RENAME 60-epsonscan2.rules)
+-install(FILES epsonscan2 DESTINATION ${EPSON_INSTALL_ROOT}/etc/sane.d/dll.d)
++install(FILES epsonscan2.rules DESTINATION ${EPSON_INSTALL_ROOT}${CMAKE_INSTALL_PREFIX}/lib/udev/rules.d/ RENAME 60-epsonscan2.rules)
++install(FILES epsonscan2 DESTINATION ${EPSON_INSTALL_ROOT}${CMAKE_INSTALL_PREFIX}/etc/sane.d/dll.d)
+ install(CODE "execute_process(COMMAND ${CMAKE_COMMAND} -E make_directory ${EPSON_INSTALL_ROOT}${CMAKE_INSTALL_FULL_LIBDIR}/sane/)")
+ install(CODE "execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink ../epsonscan2/libsane-epsonscan2.so ${EPSON_INSTALL_ROOT}${CMAKE_INSTALL_FULL_LIBDIR}/sane/libsane-epsonscan2.so.1)")
+ install(CODE "execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink ../epsonscan2/libsane-epsonscan2.so ${EPSON_INSTALL_ROOT}${CMAKE_INSTALL_FULL_LIBDIR}/sane/libsane-epsonscan2.so.1.0.0)")
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index c884d83..5ddff0c 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -26,7 +26,9 @@ add_subdirectory(ES2Command/Linux)
+ add_subdirectory(ES2FileFormat/Linux)
+ add_subdirectory(Controller)
+ add_subdirectory(SaneWrapper/Linux)
++if (NOT DEFINED NO_GUI)
+ add_subdirectory(Standalone)
+ add_subdirectory(DetectAlert)
++endif ()
+ add_subdirectory(ScanSDK)
+ 
+diff --git a/src/Controller/Src/Filter/GetOrientation.cpp b/src/Controller/Src/Filter/GetOrientation.cpp
+index 387561e..15448ad 100644
+--- a/src/Controller/Src/Filter/GetOrientation.cpp
++++ b/src/Controller/Src/Filter/GetOrientation.cpp
+@@ -12,14 +12,7 @@ namespace epsonscan
+ 
+ static std::string GetExecPath()
+ {
+-#ifdef AKBMODE
+-    std::string strDst = "/usr/libexec/";
+-    strDst = strDst + DRIVER_NAME;
+-    strDst = strDst + "-ocr/ocr-engine-getrotate";
+-    return strDst.c_str() ;
+-#else
+-    return "/usr/libexec/epsonscan2-ocr/ocr-engine-getrotate" ;
+-#endif
++    return "@OCR_ENGINE_GETROTATE@";
+ }
+ static const int kMaxBuf = 256;
+ 
+diff --git a/src/Controller/Src/Scanner/Engine.cpp b/src/Controller/Src/Scanner/Engine.cpp
+index 8bd842e..d011329 100755
+--- a/src/Controller/Src/Scanner/Engine.cpp
++++ b/src/Controller/Src/Scanner/Engine.cpp
+@@ -210,8 +210,8 @@ bool Engine::InitWithDeviceInfoDict(const char *deviceInfo) {
+ SDIError Engine::Open()
+ {
+  SDI_TRACE_LOG("Enter");
+- system("killall -9 -q es2netif > /dev/null");
+- system("killall -9 -q es2intif > /dev/null");
++ system("@KILLALL@ -9 -q es2netif > /dev/null");
++ system("@KILLALL@ -9 -q es2intif > /dev/null");
+  if (engine_) {
+   return ExchangeError(engine_->Open());
+  }
+diff --git a/src/Standalone/CMakeLists.txt b/src/Standalone/CMakeLists.txt
+index eff3dd3..c2b3803 100644
+--- a/src/Standalone/CMakeLists.txt
++++ b/src/Standalone/CMakeLists.txt
+@@ -167,5 +167,5 @@ target_link_libraries(es2standalone ${QT_LIBRARIES}
+ )
+ 
+ QT5_USE_MODULES(es2standalone Widgets)
+-install(TARGETS es2standalone DESTINATION "${EPSON_INSTALL_ROOT}/usr/bin")
++install(TARGETS es2standalone DESTINATION "${EPSON_INSTALL_ROOT}${CMAKE_INSTALL_FULL_BINDIR}")
+ 

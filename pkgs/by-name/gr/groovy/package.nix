@@ -15,11 +15,11 @@
 
 stdenv.mkDerivation rec {
   pname = "groovy";
-  version = "4.0.23";
+  version = "4.0.25";
 
   src = fetchurl {
     url = "mirror://apache/groovy/${version}/distribution/apache-groovy-binary-${version}.zip";
-    sha256 = "sha256-cIndeh6ErcgU1hb17C99fawgRKCgRX8zQbO5LTAgQik=";
+    sha256 = "sha256-giytjgM4jyO/YT03+ZC4E7tBZf44n9P8wk+LlkdsMO8=";
   };
 
   nativeBuildInputs = [

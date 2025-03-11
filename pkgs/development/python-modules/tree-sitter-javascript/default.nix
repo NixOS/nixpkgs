@@ -1,20 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, tree-sitter
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  tree-sitter,
 }:
 
 buildPythonPackage rec {
   pname = "tree-sitter-javascript";
-  version = "0.21.3";
+  version = "0.23.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tree-sitter";
     repo = "tree-sitter-javascript";
-    rev = "v${version}";
-    hash = "sha256-jsdY9Pd9WqZuBYtk088mx1bRQadC6D2/tGGVY+ZZ0J4=";
+    tag = "v${version}";
+    hash = "sha256-apgWWYD0XOvH5c3BY7kAF7UYtwPJaEvJzC5aWvJ9YQ8=";
   };
 
   build-system = [

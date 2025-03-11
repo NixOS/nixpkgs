@@ -1,10 +1,11 @@
-{ lib
-, fetchFromGitHub
-, pipewire
-, pkg-config
-, rustPlatform
-, wayland
-, wayland-protocols
+{
+  lib,
+  fetchFromGitHub,
+  pipewire,
+  pkg-config,
+  rustPlatform,
+  wayland,
+  wayland-protocols,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "wayland-pipewire-idle-inhibit";
@@ -17,7 +18,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-8oVTexYGQWyaAVJedrp4kIQ7VjBR47l65eByZr7oghg=";
   };
 
-  cargoHash = "sha256-6MzV2JOVFezD9fVDbzZ6Zm9RWOexh5LPk6AWOleOc2Q=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-dPP3umoaRMiwQ4uf98CvBqc8GOSH46HSt4xyxzCQsJc=";
 
   nativeBuildInputs = [
     pkg-config
@@ -39,4 +41,3 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "wayland-pipewire-idle-inhibit";
   };
 }
-

@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, ifaddr
-, typing
-, pythonOlder
-, netifaces
-, six
-, enum-compat
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  ifaddr,
+  typing,
+  pythonOlder,
+  netifaces,
+  six,
+  enum-compat,
 }:
 
 buildPythonPackage rec {
@@ -18,8 +19,12 @@ buildPythonPackage rec {
     sha256 = "0ykzg730n915qbrq9bn5pn06bv6rb5zawal4sqjyfnjjm66snkj3";
   };
 
-  propagatedBuildInputs = [ netifaces six enum-compat ifaddr ]
-    ++ lib.optionals (pythonOlder "3.5") [ typing ];
+  propagatedBuildInputs = [
+    netifaces
+    six
+    enum-compat
+    ifaddr
+  ] ++ lib.optionals (pythonOlder "3.5") [ typing ];
 
   meta = with lib; {
     description = "Pure python implementation of multicast DNS service discovery";

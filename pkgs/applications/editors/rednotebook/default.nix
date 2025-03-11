@@ -1,18 +1,29 @@
-{ lib, buildPythonApplication, fetchFromGitHub
-, gdk-pixbuf, glib, gobject-introspection, gtk3, gtksourceview, pango, webkitgtk_4_0
-, pygobject3, pyyaml, setuptools
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
+  gdk-pixbuf,
+  glib,
+  gobject-introspection,
+  gtk3,
+  gtksourceview,
+  pango,
+  webkitgtk_4_0,
+  pygobject3,
+  pyyaml,
+  setuptools,
 }:
 
 buildPythonApplication rec {
   pname = "rednotebook";
-  version = "2.35";
+  version = "2.37";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jendrikseipp";
     repo = "rednotebook";
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-sGwdZZ3YGm3sXJoxnYwj6HQcYMnC1pEzba3N9KLfRHM=";
+    tag = "v${version}";
+    sha256 = "sha256-ytaj29xZflq20+6Iqmynsr34Q9DP5uOvSBkg+vIWXgU=";
   };
 
   # We have not packaged tests.
@@ -23,8 +34,14 @@ buildPythonApplication rec {
   build-system = [ setuptools ];
 
   propagatedBuildInputs = [
-    gdk-pixbuf glib gtk3 gtksourceview pango webkitgtk_4_0
-    pygobject3 pyyaml
+    gdk-pixbuf
+    glib
+    gtk3
+    gtksourceview
+    pango
+    webkitgtk_4_0
+    pygobject3
+    pyyaml
   ];
 
   makeWrapperArgs = [

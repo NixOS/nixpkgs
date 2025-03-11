@@ -5,9 +5,10 @@
   cmake,
   libcxx,
   zlib,
+  nix-update-script,
 }:
 let
-  version = "0.30.0";
+  version = "0.31.2";
 in
 stdenv.mkDerivation {
   pname = "splitcode";
@@ -16,11 +17,9 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "pachterlab";
     repo = "splitcode";
-    rev = "v${version}";
-    hash = "sha256-g38pJFP9uA2P5ktogAPXKgPtsEJn5vtnK5HClqqezmg=";
+    tag = "v${version}";
+    hash = "sha256-fIx8EXdhkIkWmb86HKlUPSgsKvbGcrKsuNMWo8kU+Aw=";
   };
-
-  patches = [ ./add-stdint.patch ];
 
   nativeBuildInputs = [ cmake ];
 
@@ -36,6 +35,8 @@ stdenv.mkDerivation {
     bash ./func_tests/runtests.sh
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Tool for flexible, efficient parsing, interpreting, and editing of technical sequences in sequencing reads";
     homepage = "https://github.com/pachterlab/splitcode";
@@ -43,5 +44,9 @@ stdenv.mkDerivation {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ zimward ];
     mainProgram = "splitcode";
+    badPlatforms = [
+      # Test hangs indefinitely. See https://github.com/pachterlab/splitcode/issues/31
+      "aarch64-linux"
+    ];
   };
 }

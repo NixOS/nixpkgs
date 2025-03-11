@@ -1,18 +1,19 @@
-{ lib
-, python3
-, fetchFromGitHub
+{
+  lib,
+  python3,
+  fetchFromGitHub,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "yaralyzer";
-  version = "0.9.4";
+  version = "0.9.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "michelcrypt4d4mus";
     repo = "yaralyzer";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-rDb09XJOGWNARR0hhQQ91KXWepsLyR2a6/o3jagh6nA=";
+    tag = "v${version}";
+    hash = "sha256-P2bpwdKbMEoa40RNu8TfbDlRsksEJlYfPiAo9jrXuoE=";
   };
 
   pythonRelaxDeps = [

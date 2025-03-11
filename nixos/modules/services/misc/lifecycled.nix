@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   cfg = config.services.lifecycled;
 
@@ -8,8 +13,12 @@ let
   # systemd.services.lifecycled.serviceConfig.Environment
   configFile = pkgs.writeText "lifecycled" ''
     LIFECYCLED_HANDLER=${cfg.handler}
-    ${lib.optionalString (cfg.cloudwatchGroup != null) "LIFECYCLED_CLOUDWATCH_GROUP=${cfg.cloudwatchGroup}"}
-    ${lib.optionalString (cfg.cloudwatchStream != null) "LIFECYCLED_CLOUDWATCH_STREAM=${cfg.cloudwatchStream}"}
+    ${lib.optionalString (
+      cfg.cloudwatchGroup != null
+    ) "LIFECYCLED_CLOUDWATCH_GROUP=${cfg.cloudwatchGroup}"}
+    ${lib.optionalString (
+      cfg.cloudwatchStream != null
+    ) "LIFECYCLED_CLOUDWATCH_STREAM=${cfg.cloudwatchStream}"}
     ${lib.optionalString cfg.debug "LIFECYCLED_DEBUG=${lib.boolToString cfg.debug}"}
     ${lib.optionalString (cfg.instanceId != null) "LIFECYCLED_INSTANCE_ID=${cfg.instanceId}"}
     ${lib.optionalString cfg.json "LIFECYCLED_JSON=${lib.boolToString cfg.json}"}
@@ -19,7 +28,10 @@ let
   '';
 in
 {
-  meta.maintainers = with lib.maintainers; [ cole-h grahamc ];
+  meta.maintainers = with lib.maintainers; [
+    cole-h
+    grahamc
+  ];
 
   options = {
     services.lifecycled = {

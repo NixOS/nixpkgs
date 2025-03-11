@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -22,23 +21,23 @@
   pysdl2,
   pyside2,
   pyqt5,
+  reportlab,
+  av,
 
   mesa,
 }:
 
 buildPythonPackage rec {
   pname = "moderngl-window";
-  version = "3.0.2";
+  version = "3.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "moderngl";
     repo = "moderngl_window";
-    rev = "refs/tags/${version}";
-    hash = "sha256-J7vcEuJC0fVYyalSm9jDT44mLThoMw78Xmj5Ap3Q9ME=";
+    tag = version;
+    hash = "sha256-pElSwzNbZlZT8imK1UsLy2TyvS8TEM7hsVqLxEK1tbg=";
   };
-
-  pythonRelaxDeps = [ "pillow" ];
 
   build-system = [
     setuptools
@@ -62,6 +61,8 @@ buildPythonPackage rec {
     PySDL2 = [ pysdl2 ];
     PySide2 = [ pyside2 ];
     pyqt5 = [ pyqt5 ];
+    pdf = [ reportlab ];
+    av = [ av ];
   };
 
   # Tests need a display to run.
@@ -76,6 +77,5 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ c0deaddict ];
     inherit (mesa.meta) platforms;
-    broken = stdenv.hostPlatform.isDarwin;
   };
 }

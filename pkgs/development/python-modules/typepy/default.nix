@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools-scm,
   mbstrdecoder,
   python-dateutil,
   pytz,
@@ -13,19 +14,21 @@
 
 buildPythonPackage rec {
   pname = "typepy";
-  version = "1.3.2";
-  format = "setuptools";
+  version = "1.3.4";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "thombashi";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-oIDVjJwapHun0Rk04zOZ4IjAh7qZ2k0BXK6zqFmtVds=";
+    repo = "typepy";
+    tag = "v${version}";
+    hash = "sha256-lgwXoEtv2nBRKiWQH5bDrAIfikKN3cOqcHLEdnSAMpc=";
   };
 
-  propagatedBuildInputs = [ mbstrdecoder ];
+  build-system = [ setuptools-scm ];
+
+  dependencies = [ mbstrdecoder ];
 
   optional-dependencies = {
     datetime = [
@@ -42,11 +45,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "typepy" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for variable type checker/validator/converter at a run time";
     homepage = "https://github.com/thombashi/typepy";
-    changelog = "https://github.com/thombashi/typepy/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ genericnerdyusername ];
+    changelog = "https://github.com/thombashi/typepy/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ genericnerdyusername ];
   };
 }

@@ -7,17 +7,17 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "rime-ls";
-  version = "0.4.0";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "wlh320";
     repo = "rime-ls";
     rev = "v${version}";
-    hash = "sha256-ZqoRFIF3ehfEeTN+ZU+/PAzA4JyS1403+sqZdzwJHA8=";
+    hash = "sha256-IhrfUPC+7Gsg2n6nsGiK/wRoFGKtLXsRLQBw6XIVu0U=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-mbkxOYlOCpNzxVWwG8n4vD8klHGVjvMA8XSsBbifjoM=";
+  cargoHash = "sha256-beppHZXtNni8tLgZaC6CyL2HMBK7xy5/kP1jFr6JW+M=";
 
   nativeBuildInputs = [ rustPlatform.bindgenHook ];
 

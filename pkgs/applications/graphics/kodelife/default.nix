@@ -1,25 +1,26 @@
-{ lib
-, stdenv
-, fetchurl
-, makeWrapper
-, autoPatchelfHook
-, dpkg
-, alsa-lib
-, curl
-, avahi
-, gstreamer
-, gst-plugins-base
-, libxcb
-, libX11
-, libXcursor
-, libXext
-, libXi
-, libXinerama
-, libXrandr
-, libXrender
-, libXxf86vm
-, libglvnd
-, zenity
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  autoPatchelfHook,
+  dpkg,
+  alsa-lib,
+  curl,
+  avahi,
+  gstreamer,
+  gst-plugins-base,
+  libxcb,
+  libX11,
+  libXcursor,
+  libXext,
+  libXi,
+  libXinerama,
+  libXrandr,
+  libXrender,
+  libXxf86vm,
+  libglvnd,
+  zenity,
 }:
 
 let
@@ -47,19 +48,23 @@ stdenv.mkDerivation rec {
   pname = "kodelife";
   version = "1.1.0.173";
 
-  suffix = {
-    aarch64-linux = "linux-arm64";
-    armv7l-linux  = "linux-armhf";
-    x86_64-linux  = "linux-x64";
-  }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+  suffix =
+    {
+      aarch64-linux = "linux-arm64";
+      armv7l-linux = "linux-armhf";
+      x86_64-linux = "linux-x64";
+    }
+    .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   src = fetchurl {
     url = "https://hexler.net/pub/${pname}/${pname}-${version}-${suffix}.deb";
-    hash = {
-      aarch64-linux = "sha256-WPUWvgVZR+2Dg4zpk+iUemMBGlGBDtaGkUGrWuF5LBs=";
-      armv7l-linux  = "sha256-tOPqP40e0JrXg92OluMZrurWHXZavGwTkJiNN1IFVEE=";
-      x86_64-linux  = "sha256-ZA8BlUtKaiSnXGncYwb2BbhBlULuGz7SWuXL0RAgQLI=";
-    }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+    hash =
+      {
+        aarch64-linux = "sha256-WPUWvgVZR+2Dg4zpk+iUemMBGlGBDtaGkUGrWuF5LBs=";
+        armv7l-linux = "sha256-tOPqP40e0JrXg92OluMZrurWHXZavGwTkJiNN1IFVEE=";
+        x86_64-linux = "sha256-ZA8BlUtKaiSnXGncYwb2BbhBlULuGz7SWuXL0RAgQLI=";
+      }
+      .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
 
   strictDeps = true;
@@ -101,7 +106,11 @@ stdenv.mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     maintainers = with maintainers; [ prusnak ];
-    platforms = [ "aarch64-linux" "armv7l-linux" "x86_64-linux" ];
+    platforms = [
+      "aarch64-linux"
+      "armv7l-linux"
+      "x86_64-linux"
+    ];
     mainProgram = "KodeLife";
   };
 }

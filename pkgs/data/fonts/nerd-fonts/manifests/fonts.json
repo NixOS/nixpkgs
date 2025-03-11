@@ -97,7 +97,7 @@
   },
   {
     "caskName": "comic-shanns-mono",
-    "description": "The very typeface you\u2019ve been trained to recognize since childhood",
+    "description": "The very typeface you’ve been trained to recognize since childhood",
     "folderName": "ComicShannsMono",
     "licenseId": "MIT",
     "patchedName": "ComicShannsMono",
@@ -217,7 +217,7 @@
   },
   {
     "caskName": "hack",
-    "description": "Dotted zero, short descenders, expands upon work done for Bitstream Vera &amp; DejaVu, legible at common sizes",
+    "description": "Dotted zero, short descenders, expands upon work done for Bitstream Vera & DejaVu, legible at common sizes",
     "folderName": "Hack",
     "licenseId": "Bitstream-Vera AND MIT",
     "patchedName": "Hack",
@@ -281,7 +281,7 @@
   },
   {
     "caskName": "intone-mono",
-    "description": "Expressive monospaced font family that\u2019s built with clarity, legibility, and the needs of developers in mind",
+    "description": "Expressive monospaced font family that’s built with clarity, legibility, and the needs of developers in mind",
     "folderName": "IntelOneMono",
     "licenseId": "OFL-1.1-RFN",
     "patchedName": "IntoneMono",
@@ -377,7 +377,7 @@
   },
   {
     "caskName": "monoid",
-    "description": "Ligatures, distinguishable glyphs with short ascenders &amp; descenders, large operators &amp; punctuation",
+    "description": "Ligatures, distinguishable glyphs with short ascenders & descenders, large operators & punctuation",
     "folderName": "Monoid",
     "licenseId": "MIT OR OFL-1.1-no-RFN",
     "patchedName": "Monoid",
@@ -513,7 +513,7 @@
   },
   {
     "caskName": "ubuntu-mono",
-    "description": "Dotted zeros, used the `n`, `o`, `H` &amp; `O` Latin characters as a base for design",
+    "description": "Dotted zeros, used the `n`, `o`, `H` & `O` Latin characters as a base for design",
     "folderName": "UbuntuMono",
     "licenseId": "LicenseRef-UbuntuFont",
     "patchedName": "UbuntuMono",

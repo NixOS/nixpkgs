@@ -1,5 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, libassuan
-, libgpg-error, popt, bemenu }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  libassuan,
+  libgpg-error,
+  popt,
+  bemenu,
+}:
 
 stdenv.mkDerivation rec {
   pname = "pinentry-bemenu";
@@ -12,8 +22,17 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-kiGUCcQIS58XjE4r0yiK4hJ85Sg5wrtBqeSYcgUKAmo=";
   };
 
-  nativeBuildInputs = [ meson ninja pkg-config ];
-  buildInputs = [ libassuan libgpg-error popt bemenu ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+  ];
+  buildInputs = [
+    libassuan
+    libgpg-error
+    popt
+    bemenu
+  ];
 
   meta = with lib; {
     description = "Pinentry implementation based on bemenu";

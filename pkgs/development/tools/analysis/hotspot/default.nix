@@ -13,6 +13,7 @@
 , kio
 , kitemmodels
 , kitemviews
+, konsole
 , kparts
 , kwindowsystem
 , libelf
@@ -32,7 +33,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "KDAB";
     repo = "hotspot";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-O2wp19scyHIwIY2AzKmPmorGXDH249/OhSg+KtzOYhI=";
     fetchSubmodules = true;
   };
@@ -53,6 +54,7 @@ stdenv.mkDerivation rec {
     kio
     kitemmodels
     kitemviews
+    konsole
     kparts
     kwindowsystem
     libelf

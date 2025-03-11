@@ -1,23 +1,25 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, nix-update-script
-, stdenv
-, darwin
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  nix-update-script,
+  stdenv,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "ghciwatch";
-  version = "1.0.1";
+  version = "1.1.3";
 
   src = fetchFromGitHub {
     owner = "MercuryTechnologies";
     repo = "ghciwatch";
     rev = "v${version}";
-    hash = "sha256-ywjbi+5xBrwgvgwAatNMs160ij52X8gbJ1PaLmZgTnY=";
+    hash = "sha256-LE2QiqPjn3tLnGUC0EjfrTPmYrPt8Mt9TgVOM+uX2xM=";
   };
 
-  cargoHash = "sha256-bE2cNgmq1TxtEDmLuyJVJpaj0Gbt73fnD1j/X42OL/w=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-P4zpGuKE6KDG3Zrgp0TStbQmW28bQZCyCmUsoJiKwiU=";
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.CoreFoundation
@@ -32,7 +34,10 @@ rustPlatform.buildRustPackage rec {
     description = "Ghci-based file watching recompiler for Haskell development";
     homepage = "https://github.com/MercuryTechnologies/ghciwatch";
     license = licenses.mit;
-    maintainers = with maintainers; [ mangoiv _9999years ];
+    maintainers = with maintainers; [
+      mangoiv
+      _9999years
+    ];
     mainProgram = "ghciwatch";
   };
 

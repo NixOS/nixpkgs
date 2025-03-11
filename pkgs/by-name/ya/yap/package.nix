@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, readline, gmp, zlib }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  readline,
+  gmp,
+  zlib,
+}:
 
 stdenv.mkDerivation rec {
   version = "6.3.3";
@@ -9,7 +16,11 @@ stdenv.mkDerivation rec {
     sha256 = "0y7sjwimadqsvgx9daz28c9mxcx9n1znxklih9xg16k6n54v9qxf";
   };
 
-  buildInputs = [ readline gmp zlib ];
+  buildInputs = [
+    readline
+    gmp
+    zlib
+  ];
 
   configureFlags = [ "--enable-tabling=yes" ];
 
@@ -21,7 +32,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     # the linux 32 bit build fails.
-    broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) || !stdenv.hostPlatform.is64bit;
+    broken =
+      (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) || !stdenv.hostPlatform.is64bit;
     homepage = "http://www.dcc.fc.up.pt/~vsc/Yap/";
     description = "ISO-compatible high-performance Prolog compiler";
     license = lib.licenses.artistic2;

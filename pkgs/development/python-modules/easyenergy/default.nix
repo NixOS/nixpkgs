@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "klaasnicolaas";
     repo = "python-easyenergy";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-tWKfcGznxck8VLK3YshOIbPet2CEbUZbT8JzgaAhAso=";
   };
 

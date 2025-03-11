@@ -1,8 +1,9 @@
-{ system ? builtins.currentSystem
-, config ? {}
-, pkgs ? import ../.. { inherit system config; }
-, lib ? pkgs.lib
-, testing ? import ../lib/testing-python.nix { inherit system pkgs; }
+{
+  system ? builtins.currentSystem,
+  config ? { },
+  pkgs ? import ../.. { inherit system config; },
+  lib ? pkgs.lib,
+  testing ? import ../lib/testing-python.nix { inherit system pkgs; },
 }:
 
 let
@@ -13,24 +14,26 @@ in
 testing.makeTest {
   name = "initrd-secrets-changing";
 
-  nodes.machine = { ... }: {
-    virtualisation.useBootLoader = true;
+  nodes.machine =
+    { ... }:
+    {
+      virtualisation.useBootLoader = true;
 
-    boot.loader.grub.device = "/dev/vda";
+      boot.loader.grub.device = "/dev/vda";
 
-    boot.initrd.secrets = {
-      "/test" = secret1InStore;
-      "/run/keys/test" = secret1InStore;
-    };
-    boot.initrd.postMountCommands = "cp /test /mnt-root/secret-from-initramfs";
+      boot.initrd.secrets = {
+        "/test" = secret1InStore;
+        "/run/keys/test" = secret1InStore;
+      };
+      boot.initrd.postMountCommands = "cp /test /mnt-root/secret-from-initramfs";
 
-    specialisation.secrets2System.configuration = {
-      boot.initrd.secrets = lib.mkForce {
-        "/test" = secret2InStore;
-        "/run/keys/test" = secret2InStore;
+      specialisation.secrets2System.configuration = {
+        boot.initrd.secrets = lib.mkForce {
+          "/test" = secret2InStore;
+          "/run/keys/test" = secret2InStore;
+        };
       };
     };
-  };
 
   testScript = ''
     start_all()

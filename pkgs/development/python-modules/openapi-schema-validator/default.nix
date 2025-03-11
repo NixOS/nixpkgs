@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "openapi-schema-validator";
-  version = "0.6.2";
+  version = "0.6.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -26,8 +26,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "p1c2u";
     repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-CfSlF6DWkYxxVNTNBkr0+KVeKpqxEEqkz4VBenqo+l0=";
+    tag = version;
+    hash = "sha256-1Y049W4TbqvKZRwnvPVwyLq6CH6NQDrEfJknuMn8dGo=";
   };
 
   postPatch = ''
@@ -54,7 +54,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "openapi_schema_validator" ];
 
   meta = with lib; {
-    changelog = "https://github.com/python-openapi/openapi-schema-validator/releases/tag/${version}";
+    changelog = "https://github.com/python-openapi/openapi-schema-validator/releases/tag/${src.tag}";
     description = "Validates OpenAPI schema against the OpenAPI Schema Specification v3.0";
     homepage = "https://github.com/python-openapi/openapi-schema-validator";
     license = licenses.bsd3;

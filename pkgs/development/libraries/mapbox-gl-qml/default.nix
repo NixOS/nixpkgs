@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "rinigus";
     repo = "mapbox-gl-qml";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-csk3Uo+AdP1R/T/9gWyWmYFIKuen2jy8wYN3GJznyRE=";
   };
 
@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
   dontWrapQtApps = true; # library only
 
   meta = {
-    changelog = "https://github.com/rinigus/mapbox-gl-qml/releases/tag/${lib.removePrefix "refs/tags/" finalAttrs.src.rev}";
+    changelog = "https://github.com/rinigus/mapbox-gl-qml/releases/tag/${finalAttrs.version}";
     description = "Unofficial Mapbox GL Native bindings for Qt QML";
     homepage = "https://github.com/rinigus/mapbox-gl-qml";
     license = lib.licenses.lgpl3Only;

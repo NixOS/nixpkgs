@@ -1,4 +1,11 @@
-{ lib, stdenv, buildDunePackage, fetchFromGitHub, ctypes, libcxx }:
+{
+  lib,
+  stdenv,
+  buildDunePackage,
+  fetchFromGitHub,
+  ctypes,
+  libcxx,
+}:
 
 buildDunePackage rec {
   pname = "eigen";
@@ -8,8 +15,8 @@ buildDunePackage rec {
 
   src = fetchFromGitHub {
     owner = "owlbarn";
-    repo   = pname;
-    rev    = version;
+    repo = pname;
+    rev = version;
     sha256 = "1zaw03as14hyvfpyj6bjrfbcxp2ljdbqcqqgm53kms244mig425f";
   };
 

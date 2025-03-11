@@ -1,19 +1,20 @@
-{ stdenv
-, fetchurl
-, lib
-, extra-cmake-modules
-, kdoctools
-, wrapQtAppsHook
-, baloo
-, karchive
-, kconfig
-, kcrash
-, kfilemetadata
-, kinit
-, kirigami2
-, knewstuff
-, okular
-, plasma-framework
+{
+  stdenv,
+  fetchurl,
+  lib,
+  extra-cmake-modules,
+  kdoctools,
+  wrapQtAppsHook,
+  baloo,
+  karchive,
+  kconfig,
+  kcrash,
+  kfilemetadata,
+  kinit,
+  kirigami2,
+  knewstuff,
+  okular,
+  plasma-framework,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

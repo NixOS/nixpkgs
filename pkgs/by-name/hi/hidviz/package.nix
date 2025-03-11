@@ -1,13 +1,14 @@
-{ lib
-, fetchFromGitHub
-, cmake
-, pkg-config
-, stdenv
-# Package dependencies
-, qt6
-, libusb1
-, protobuf
-, asio
+{
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  stdenv,
+  # Package dependencies
+  qt6,
+  libusb1,
+  protobuf,
+  asio,
 }:
 
 stdenv.mkDerivation rec {

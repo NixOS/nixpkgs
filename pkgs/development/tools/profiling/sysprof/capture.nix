@@ -1,11 +1,12 @@
-{ stdenv
-, lib
-, meson
-, ninja
-, sysprof
+{
+  stdenv,
+  lib,
+  meson,
+  ninja,
+  sysprof,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "libsysprof-capture";
 
   inherit (sysprof) src version;

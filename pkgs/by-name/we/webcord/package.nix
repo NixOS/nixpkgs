@@ -11,16 +11,18 @@
 
 buildNpmPackage rec {
   pname = "webcord";
-  version = "4.10.2";
+  version = "4.10.4";
 
   src = fetchFromGitHub {
     owner = "SpacingBat3";
     repo = "WebCord";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-vzTT8tHpbJSt1PosgKTg3pT4a9UfPabtJppLLD9znhU=";
+    tag = "v${version}";
+    hash = "sha256-rBOQutAPmNiw9bJ3nYSddbAwSqYHAlSNHpkMvxzmUnA=";
   };
 
-  npmDepsHash = "sha256-nVQv+GSnfQa8V/RitvV2juokbiRJ/vIMLWcg9QPDbP0=";
+  npmDepsHash = "sha256-CjXEwFRGVjJv+kuyq9IZHdiYKJ6lbSDZnIxBer3qnOI=";
+
+  makeCacheWritable = true;
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -55,7 +57,7 @@ buildNpmPackage rec {
       # Add xdg-utils to path via suffix, per PR #181171
       makeWrapper '${lib.getExe electron}' $out/bin/webcord \
         --suffix PATH : "${binPath}" \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime}}" \
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
         --add-flags $out/lib/node_modules/webcord/
 
       runHook postInstall
@@ -86,6 +88,7 @@ buildNpmPackage rec {
     mainProgram = "webcord";
     maintainers = with lib.maintainers; [
       huantian
+      NotAShelf
     ];
     platforms = lib.platforms.linux;
   };

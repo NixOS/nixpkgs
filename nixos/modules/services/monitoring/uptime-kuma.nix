@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   cfg = config.services.uptime-kuma;
 in
@@ -19,7 +24,7 @@ in
         default = { };
         example = {
           PORT = "4000";
-          NODE_EXTRA_CA_CERTS = "/etc/ssl/certs/ca-certificates.crt";
+          NODE_EXTRA_CA_CERTS = lib.literalExpression "config.security.pki.caBundle";
         };
         description = ''
           Additional configuration for Uptime Kuma, see
@@ -51,23 +56,36 @@ in
         DynamicUser = true;
         ExecStart = "${cfg.package}/bin/uptime-kuma-server";
         Restart = "on-failure";
-        ProtectHome = true;
-        ProtectSystem = "strict";
-        PrivateTmp = true;
-        PrivateDevices = true;
-        ProtectHostname = true;
-        ProtectClock = true;
-        ProtectKernelTunables = true;
-        ProtectKernelModules = true;
-        ProtectKernelLogs = true;
-        ProtectControlGroups = true;
+        AmbientCapabilities = "";
+        CapabilityBoundingSet = "";
+        LockPersonality = true;
+        MemoryDenyWriteExecute = false; # enabling it breaks execution
         NoNewPrivileges = true;
+        PrivateDevices = true;
+        PrivateMounts = true;
+        PrivateTmp = true;
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectProc = "noaccess";
+        ProtectSystem = "strict";
+        RemoveIPC = true;
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+          "AF_UNIX"
+          "AF_NETLINK"
+        ];
+        RestrictNamespaces = true;
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
-        RemoveIPC = true;
-        PrivateMounts = true;
+        SystemCallArchitectures = "native";
+        UMask = 27;
       };
     };
   };
 }
-

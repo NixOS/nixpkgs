@@ -8,19 +8,21 @@
 
 buildGoModule rec {
   pname = "ejsonkms";
-  version = "0.2.2";
+  version = "0.2.4";
 
   src = fetchFromGitHub {
     owner = "envato";
     repo = "ejsonkms";
     rev = "v${version}";
-    hash = "sha256-aHnxdEADrzaRld7G2owSHO/0xYXIa8EBBR+phdA4eRM=";
+    hash = "sha256-kk/+EOZ1g6SiIajcKXf6lVnll/NRWgwbFO2j07HERBI=";
   };
 
-  vendorHash = "sha256-aLcSCDgd3IGiUg/JAPNIV30tAh6tDYZnFnqzaLELXw0=";
+  vendorHash = "sha256-ZSoxG532eicpR1pS2oLYnJxtJrsHZZRbjncxU4uyT3c=";
 
   ldflags = [
-    "-X main.version=v${version}" "-s" "-w"
+    "-X main.version=v${version}"
+    "-s"
+    "-w"
   ];
 
   doCheck = false;

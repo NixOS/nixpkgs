@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fabiocaccamo";
     repo = "python-fsutil";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-Cs78zpf3W5UZJkkUBEP6l6fi2J4OtJXGvqqQ8PWKx+8=";
   };
 

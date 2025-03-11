@@ -1,4 +1,10 @@
-{ lib, buildGoModule, fetchFromSourcehut, scdoc, installShellFiles }:
+{
+  lib,
+  buildGoModule,
+  fetchFromSourcehut,
+  scdoc,
+  installShellFiles,
+}:
 
 buildGoModule rec {
   pname = "kiln";
@@ -11,7 +17,10 @@ buildGoModule rec {
     hash = "sha256-BbKd+0Dmo6RaoS0N7rQmSGJasuJb6dl43GZ7LdMBy/o=";
   };
 
-  nativeBuildInputs = [ scdoc installShellFiles ];
+  nativeBuildInputs = [
+    scdoc
+    installShellFiles
+  ];
 
   vendorHash = "sha256-3s1+/RxOTNVFX9FnS94jLVGSr5IjZC/XucmnkxHhk5Q=";
 

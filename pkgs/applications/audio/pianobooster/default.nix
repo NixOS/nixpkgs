@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, qttools
-, alsa-lib
-, ftgl
-, libGLU
-, qtbase
-, rtmidi
-, libjack2
-, fluidsynth
-, soundfont-fluid
-, unzip
-, wrapQtAppsHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  qttools,
+  alsa-lib,
+  ftgl,
+  libGLU,
+  qtbase,
+  rtmidi,
+  libjack2,
+  fluidsynth,
+  soundfont-fluid,
+  unzip,
+  wrapQtAppsHook,
 }:
 
 stdenv.mkDerivation rec {

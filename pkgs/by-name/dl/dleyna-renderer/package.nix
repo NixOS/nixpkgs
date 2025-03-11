@@ -1,20 +1,21 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, fetchpatch
-, meson
-, ninja
-, pkg-config
-, dleyna-connector-dbus
-, dleyna-core
-, gssdp
-, gupnp
-, gupnp-av
-, gupnp-dlna
-, libsoup
-, makeWrapper
-, docbook-xsl-nons
-, libxslt
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  meson,
+  ninja,
+  pkg-config,
+  dleyna-connector-dbus,
+  dleyna-core,
+  gssdp,
+  gupnp,
+  gupnp-av,
+  gupnp-dlna,
+  libsoup_2_4,
+  makeWrapper,
+  docbook-xsl-nons,
+  libxslt,
 }:
 
 stdenv.mkDerivation rec {
@@ -29,7 +30,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    # Fix build with meson 1.2. We use the gentoo patch intead of the
+    # Fix build with meson 1.2. We use the gentoo patch instead of the
     # usptream one because the latter only applies on the libsoup_3 based
     # merged dLeyna project.
     # https://gitlab.gnome.org/World/dLeyna/-/merge_requests/6
@@ -57,7 +58,7 @@ stdenv.mkDerivation rec {
     gupnp
     gupnp-av
     gupnp-dlna
-    libsoup
+    libsoup_2_4
   ];
 
   preFixup = ''

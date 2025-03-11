@@ -1,9 +1,10 @@
-{ lib
-, stdenvNoCC
-, fetchzip
-, runtimeShell
-, bashInteractive
-, glibcLocales
+{
+  lib,
+  stdenvNoCC,
+  fetchzip,
+  runtimeShell,
+  bashInteractive,
+  glibcLocales,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -18,7 +19,10 @@ stdenvNoCC.mkDerivation rec {
   dontBuild = true;
 
   doCheck = true;
-  nativeCheckInputs = [ bashInteractive glibcLocales ];
+  nativeCheckInputs = [
+    bashInteractive
+    glibcLocales
+  ];
   preCheck = "export LC_ALL=en_US.UTF-8";
 
   installPhase = ''
@@ -56,7 +60,10 @@ stdenvNoCC.mkDerivation rec {
     description = "Bash Line Editor -- a full-featured line editor written in pure Bash";
     mainProgram = "blesh-share";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ aiotter ];
+    maintainers = with maintainers; [
+      aiotter
+      matthiasbeyer
+    ];
     platforms = platforms.unix;
   };
 }

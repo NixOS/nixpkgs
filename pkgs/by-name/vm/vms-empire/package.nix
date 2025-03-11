@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, fetchurl
-, ncurses
-, xmlto
-, docbook_xml_dtd_44
-, docbook_xsl
-, installShellFiles
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ncurses,
+  xmlto,
+  docbook_xml_dtd_44,
+  docbook_xsl,
+  installShellFiles,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vms-empire";
   version = "1.18";
 
-  src = fetchurl{
+  src = fetchurl {
     url = "http://www.catb.org/~esr/vms-empire/vms-empire-${finalAttrs.version}.tar.gz";
     hash = "sha256-JWCmrGS4jClSi6MCcGNiq8zUH+92fiqMtk58B+wMKQk=";
   };
@@ -65,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.gpl2Only;
     mainProgram = "vms-empire";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.unix;
   };
 })

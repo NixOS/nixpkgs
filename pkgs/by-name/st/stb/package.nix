@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, copyPkgconfigItems, makePkgconfigItem }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  copyPkgconfigItems,
+  makePkgconfigItem,
+}:
 
 stdenv.mkDerivation rec {
   pname = "stb";

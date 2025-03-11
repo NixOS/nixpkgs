@@ -61,6 +61,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/sirfz/tesserocr";
     license = licenses.mit;
     maintainers = with maintainers; [ mtrsk ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

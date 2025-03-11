@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gerrit";
-  version = "3.10.3";
+  version = "3.11.1";
 
   src = fetchurl {
     url = "https://gerrit-releases.storage.googleapis.com/gerrit-${version}.war";
-    hash = "sha256-pVI5YZihvJNuaboh2dLe/Aw371rNPiGbaLUd0ALpANQ=";
+    hash = "sha256-7gJyvFOisukzd2Vmqci7CiJqegYQSYQZvnSvR+Y9HM4=";
   };
 
   buildCommand = ''
@@ -48,6 +48,7 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [
       flokli
       zimbatm
+      felixsinger
     ];
     platforms = platforms.unix;
   };

@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchurl
-, fltk13
-, libjpeg
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fltk13,
+  libjpeg,
+  pkg-config,
 }:
 
 stdenv.mkDerivation rec {
@@ -21,6 +22,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
+    fltk13 # fltk-config
     pkg-config
   ];
 

@@ -8,28 +8,21 @@
 , ffmpeg
 , gnutls
 , libjpeg_turbo
-, mesa
+, libgbm
 , pixman
 , zlib
 }:
 
 stdenv.mkDerivation rec {
   pname = "neatvnc";
-  version = "0.8.1";
+  version = "0.9.4";
 
   src = fetchFromGitHub {
     owner = "any1";
     repo = "neatvnc";
     rev = "v${version}";
-    hash = "sha256-2gPDcFcu1kGIDubguL38Z0K+k7WGFf7DX8yZteedcNg=";
+    hash = "sha256-D9dwD5i9mScc5vn0mUxe7+0cxMI65F7LyivXn9J0aic=";
   };
-
-  patches = [
-    # Fix build with latest ffmpeg
-    # Backport of https://github.com/any1/neatvnc/commit/7e008743bf872598b4fcdb2a821041064ce5dd01
-    # FIXME: remove in next update
-    ./fix-ffmpeg.patch
-  ];
 
   strictDeps = true;
 
@@ -44,7 +37,7 @@ stdenv.mkDerivation rec {
     ffmpeg
     gnutls
     libjpeg_turbo
-    mesa
+    libgbm
     pixman
     zlib
   ];

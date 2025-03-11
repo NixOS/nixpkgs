@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, kernel, kmod }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  kernel,
+  kmod,
+}:
 
 stdenv.mkDerivation rec {
   name = "ixgbevf-${version}-${kernel.version}";

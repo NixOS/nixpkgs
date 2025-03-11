@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, openssl
-, libusb1
-, libedit
-, curl
-, gengetopt
-, pkg-config
-, pcsclite
-, help2man
-, darwin
-, libiconv
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  openssl,
+  libusb1,
+  libedit,
+  curl,
+  gengetopt,
+  pkg-config,
+  pcsclite,
+  help2man,
+  darwin,
+  libiconv,
 }:
 
 stdenv.mkDerivation rec {
@@ -42,17 +43,20 @@ stdenv.mkDerivation rec {
     gengetopt
   ];
 
-  buildInputs = [
-    libusb1
-    libedit
-    curl
-    openssl
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    pcsclite.dev
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.PCSC
-    libiconv
-  ];
+  buildInputs =
+    [
+      libusb1
+      libedit
+      curl
+      openssl
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      pcsclite.dev
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.PCSC
+      libiconv
+    ];
 
   preBuild = lib.optionalString stdenv.hostPlatform.isLinux ''
     NIX_CFLAGS_COMPILE="$(pkg-config --cflags libpcsclite) $NIX_CFLAGS_COMPILE"

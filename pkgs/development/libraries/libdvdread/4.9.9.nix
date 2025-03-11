@@ -1,4 +1,9 @@
-{lib, stdenv, fetchurl, libdvdcss}:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libdvdcss,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libdvdread";
@@ -9,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "d91275471ef69d488b05cf15c60e1cd65e17648bfc692b405787419f47ca424a";
   };
 
-  buildInputs = [libdvdcss];
+  buildInputs = [ libdvdcss ];
 
   NIX_LDFLAGS = "-ldvdcss";
 

@@ -1,0 +1,34 @@
+diff --git a/sbin/fsck/fsck.c b/sbin/fsck/fsck.c
+index 19e730a484f..cb548971abd 100644
+--- a/sbin/fsck/fsck.c
++++ b/sbin/fsck/fsck.c
+@@ -115,6 +115,8 @@ main(int argc, char *argv[])
+ 		err(1, "unveil %s", _PATH_FSTAB);
+ 	if (unveil("/sbin", "x") == -1)
+ 		err(1, "unveil /sbin");
++	if (unveil("/nix/store", "rx") == -1)
++		err(1, "unveil /nix/store");
+ 	if (pledge("stdio rpath wpath disklabel proc exec", NULL) == -1)
+ 		err(1, "pledge");
+ 
+@@ -308,18 +310,8 @@ checkfs(const char *vfstype, const char *spec, const char *mntpt, void *auxarg,
+ 			_exit(0);
+ 
+ 		/* Go find an executable. */
+-		edir = edirs;
+-		do {
+-			(void)snprintf(execname,
+-			    sizeof(execname), "%s/fsck_%s", *edir, vfstype);
+-			execv(execname, (char * const *)argv);
+-			if (errno != ENOENT) {
+-				if (spec)
+-					warn("exec %s for %s", execname, spec);
+-				else
+-					warn("exec %s", execname);
+-			}
+-		} while (*++edir != NULL);
++		(void)snprintf(execname, sizeof(execname), "fsck_%s", vfstype);
++		execvp(execname, (char * const *)argv);
+ 
+ 		if (errno == ENOENT) {
+ 			if (spec)

@@ -14,7 +14,8 @@
 }:
 
 let
-  version = "1.1.0";
+  version = "1.2.0";
+  tag = "v.${version}";
 in
 buildNpmPackage {
   pname = "nextjs-ollama-llm-ui";
@@ -23,10 +24,10 @@ buildNpmPackage {
   src = fetchFromGitHub {
     owner = "jakobhoeg";
     repo = "nextjs-ollama-llm-ui";
-    rev = "v${version}";
-    hash = "sha256-IA7g96u5QY8cOuTbJEWw7+U+hSFBzIQVk4Kv3qHKAdM=";
+    inherit tag;
+    hash = "sha256-hgLeTWtnyxGMkMsAGBbaM2yeS/H8AStMPR2bjLdjwEc=";
   };
-  npmDepsHash = "sha256-3M0BZ9KZZ0ONwvTLycfMR8skMQf8mzjeqYCwJY4l040=";
+  npmDepsHash = "sha256-9+A+85IK4zmMGlBsVoLg7RnST72AhAM6xPGnBZLgLTk=";
 
   patches = [
     # nextjs tries to download google fonts from the internet during buildPhase and fails in Nix sandbox.
@@ -66,6 +67,9 @@ buildNpmPackage {
 
     # https://github.com/vercel/next.js/discussions/58864
     ln -s /var/cache/nextjs-ollama-llm-ui $out/share/homepage/.next/cache
+    # also provide a environment variable to override the cache directory
+    substituteInPlace $out/share/homepage/node_modules/next/dist/server/image-optimizer.js \
+        --replace '_path.join)(distDir,' '_path.join)(process.env["NEXT_CACHE_DIR"] || distDir,'
 
     chmod +x $out/share/homepage/server.js
 
@@ -88,7 +92,7 @@ buildNpmPackage {
 
   meta = {
     description = "Simple chat web interface for Ollama LLMs";
-    changelog = "https://github.com/jakobhoeg/nextjs-ollama-llm-ui/releases/tag/v${version}";
+    changelog = "https://github.com/jakobhoeg/nextjs-ollama-llm-ui/releases/tag/${tag}";
     mainProgram = "nextjs-ollama-llm-ui";
     homepage = "https://github.com/jakobhoeg/nextjs-ollama-llm-ui";
     license = lib.licenses.mit;

@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ChrisMandich";
     repo = "PyFlume";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-/8gLKe+6GaPQe0J3YBmOVcAcAcqfrWM7UQCoX+qOEmw=";
   };
 

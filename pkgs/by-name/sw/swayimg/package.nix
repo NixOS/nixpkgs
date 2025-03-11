@@ -21,20 +21,22 @@
   libjxl,
   libexif,
   libavif,
+  libsixel,
   openexr_3,
   bash-completion,
   testers,
   nix-update-script,
 }:
+
 stdenv.mkDerivation (finalAttrs: {
   pname = "swayimg";
-  version = "3.5";
+  version = "3.8";
 
   src = fetchFromGitHub {
     owner = "artemsen";
     repo = "swayimg";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-qI5M7ZC7GaVtVNh+MWPNdjXukk135IQ1gPHxdefBEyo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-nPmVUJy5hlWk6Q+s6rRBEzlJvpDKLStKTRjLwj7iA/c=";
   };
 
   strictDeps = true;
@@ -71,6 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
     libjxl
     libexif
     libavif
+    libsixel
     openexr_3
   ];
 
@@ -87,7 +90,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Image viewer for Sway/Wayland";
     changelog = "https://github.com/artemsen/swayimg/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ matthewcroughan ];
+    maintainers = with lib.maintainers; [
+      matthewcroughan
+      Gliczy
+    ];
     platforms = lib.platforms.linux;
     mainProgram = "swayimg";
   };

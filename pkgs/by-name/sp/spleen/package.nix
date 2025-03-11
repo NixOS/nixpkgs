@@ -1,4 +1,9 @@
-{ lib, stdenvNoCC, fetchurl, xorg }:
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  xorg,
+}:
 
 stdenvNoCC.mkDerivation rec {
   pname = "spleen";

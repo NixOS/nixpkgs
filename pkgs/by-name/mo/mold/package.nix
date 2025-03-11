@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mold";
-  version = "2.34.1";
+  version = "2.37.1";
 
   src = fetchFromGitHub {
     owner = "rui314";
     repo = "mold";
     rev = "v${version}";
-    hash = "sha256-x5fQ+dJFcxwENyTpZpQsMqTLtYQ8uuhUHV8jDpmltWg=";
+    hash = "sha256-ZGO3oT8NOOkAYTyoMUKxH3TFP4mw2z0BGdGSF2TbKaE=";
   };
 
   nativeBuildInputs = [
@@ -49,10 +49,6 @@ stdenv.mkDerivation rec {
     "-DMOLD_USE_SYSTEM_MIMALLOC:BOOL=ON"
     "-DMOLD_USE_SYSTEM_TBB:BOOL=ON"
   ];
-
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.hostPlatform.isDarwin [
-    "-faligned-allocation"
-  ]);
 
   passthru = {
     updateScript = nix-update-script { };

@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  substituteAll,
+  replaceVars,
   pkg-config,
   meson,
   ninja,
@@ -48,16 +48,15 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-software";
-  version = "47.1";
+  version = "47.4";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-software/${lib.versions.major finalAttrs.version}/gnome-software-${finalAttrs.version}.tar.xz";
-    hash = "sha256-k8pQA2YxZ0VZTvBfytHAXPQ/Au+PZggMF/fruMo/NL8=";
+    hash = "sha256-coHFS5t0jWai55LrjgMxyJec44+vrfct482ZnYDpe08=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       inherit isocodes;
     })
   ];

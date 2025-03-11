@@ -28,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "yezz123";
     repo = "pyngo";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-qAq5e/B/gOBt9Wj8Kfhg+uTe/Sa/Qslk2g/o0+ttIag=";
   };
 

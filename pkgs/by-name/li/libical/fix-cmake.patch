@@ -1,0 +1,30 @@
+diff --git a/src/test/libical-glib/CMakeLists.txt b/src/test/libical-glib/CMakeLists.txt
+index 01a0894a1..d7d2af5bb 100644
+--- a/src/test/libical-glib/CMakeLists.txt
++++ b/src/test/libical-glib/CMakeLists.txt
+@@ -36,19 +36,19 @@ list(
+ 
+ if(PYTHON3)
+   set(GI_TYPELIB_PATH_STR "${PROJECT_BINARY_DIR}/src/libical-glib")
+-  if(DEFINED GI_TYPELIB_PATH)
+-    if($ENV{GI_TYPELIB_PATH})
++  if(DEFINED ENV{GI_TYPELIB_PATH})
++    if(NOT ENV{GI_TYPELIB_PATH} STREQUAL "")
+       set(GI_TYPELIB_PATH_STR "${GI_TYPELIB_PATH_STR}:$ENV{GI_TYPELIB_PATH}")
+     endif()
+   endif()
+   set(LIBRARY_PATH_STR "${LIBRARY_OUTPUT_PATH}")
+-  if(DEFINED LD_LIBRARY_PATH)
+-    if($ENV{LD_LIBRARY_PATH})
++  if(DEFINED ENV{LD_LIBRARY_PATH})
++    if(NOT ENV{LD_LIBRARY_PATH} STREQUAL "")
+       set(LIBRARY_PATH_STR "${LIBRARY_PATH_STR}:$ENV{LD_LIBRARY_PATH}")
+     endif()
+   endif()
+-  if(DEFINED DYLD_LIBRARY_PATH)
+-    if($ENV{DYLD_LIBRARY_PATH})
++  if(DEFINED ENV{DYLD_LIBRARY_PATH})
++    if(NOT ENV{DYLD_LIBRARY_PATH} STREQUAL "")
+       set(LIBRARY_PATH_STR "${LIBRARY_PATH_STR}:$ENV{DYLD_LIBRARY_PATH}")
+     endif()
+   endif()

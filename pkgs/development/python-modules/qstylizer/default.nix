@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "blambright";
     repo = "qstylizer";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-eZVBUGQxa2cr0O48iKWNTqM9E5ZAsiT1WfXjdYdxIdg=";
   };
 

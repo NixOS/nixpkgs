@@ -31,13 +31,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "firewalld";
-  version = "2.2.3";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "firewalld";
     repo = "firewalld";
     rev = "v${version}";
-    sha256 = "sha256-ugDleco/Ep+10ku+5xcW4zq/RrhruZCRlX0zKeXzLhg=";
+    sha256 = "sha256-ubE1zMIOcdg2+mgXsk6brCZxS1XkvJYwVY3E+UXIIiU=";
   };
 
   patches = [
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     done
   '' + lib.optionalString withGui ''
     substituteInPlace src/firewall-applet.in \
-      --replace "/usr/bin/nm-connection-editor" "${networkmanagerapplet}/bin/nm-conenction-editor"
+      --replace "/usr/bin/nm-connection-editor" "${networkmanagerapplet}/bin/nm-connection-editor"
   '';
 
   nativeBuildInputs = [

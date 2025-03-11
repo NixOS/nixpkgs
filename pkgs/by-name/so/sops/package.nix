@@ -1,29 +1,37 @@
 {
   lib,
-  buildGoModule,
+  buildGo122Module,
   fetchFromGitHub,
   installShellFiles,
+  versionCheckHook,
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGo122Module rec {
   pname = "sops";
-  version = "3.9.1";
+  version = "3.9.4";
 
   src = fetchFromGitHub {
     owner = "getsops";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-j16hSTi7fwlMu8hwHqCR0lW22VSf0swIVTF81iUYl2k=";
+    tag = "v${version}";
+    hash = "sha256-w2RMK1Fl/k8QXV68j0Kc6shtx4vQa07RCnpgHLM8c8Q=";
   };
 
-  vendorHash = "sha256-40YESkLSKL/zFBI7ccz0ilrl9ATr74YpvRNrOpzJDew=";
+  vendorHash = "sha256-wxmSj3QaFChGE+/2my7Oe2mhprwi404izUxteecyggY=";
+
+  postPatch = ''
+    substituteInPlace go.mod \
+      --replace-fail "go 1.22" "go 1.22.7"
+  '';
 
   subPackages = [ "cmd/sops" ];
 
-  ldflags = [ "-s" "-w" "-X github.com/getsops/sops/v3/version.Version=${version}" ];
-
-  passthru.updateScript = nix-update-script { };
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/getsops/sops/v3/version.Version=${version}"
+  ];
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -32,12 +40,21 @@ buildGoModule rec {
     installShellCompletion --cmd sops --zsh ${./zsh_autocomplete}
   '';
 
-  meta = with lib; {
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     homepage = "https://getsops.io/";
     description = "Simple and flexible tool for managing secrets";
     changelog = "https://github.com/getsops/sops/blob/v${version}/CHANGELOG.rst";
     mainProgram = "sops";
-    maintainers = with maintainers; [ Scrumplex mic92 ];
-    license = licenses.mpl20;
+    maintainers = with lib.maintainers; [
+      Scrumplex
+      mic92
+    ];
+    license = lib.licenses.mpl20;
   };
 }

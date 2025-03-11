@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, substituteAll, swaybg
+{ lib, stdenv, fetchFromGitHub, replaceVars, swaybg
 , meson, ninja, pkg-config, wayland-scanner, scdoc
 , libGL, wayland, libxkbcommon, pcre2, json_c, libevdev
 , pango, cairo, libinput, gdk-pixbuf, librsvg
@@ -13,24 +13,22 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sway-unwrapped";
-  version = "1.10";
+  version = "1.10.1";
 
   inherit enableXWayland isNixOS systemdSupport trayEnabled;
   src = fetchFromGitHub {
     owner = "swaywm";
     repo = "sway";
     rev = finalAttrs.version;
-    hash = "sha256-PzeU/niUdqI6sf2TCG19G2vNgAZJE5JCyoTwtO9uFTk=";
+    hash = "sha256-uBtQk8uhW/i8lSbv6zwsRyiiImFBw1YCQHVWQ8jot5w=";
   };
 
   patches = [
     ./load-configuration-from-etc.patch
 
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       inherit swaybg;
     })
-
   ] ++ lib.optionals (!finalAttrs.isNixOS) [
     # References to /nix/store/... will get GC'ed which causes problems when
     # copying the default configuration:

@@ -5,23 +5,19 @@
   flit-core,
   packaging,
   pytestCheckHook,
-  pythonOlder,
-  pytz,
   simplejson,
 }:
 
 buildPythonPackage rec {
   pname = "marshmallow";
-  version = "3.21.1";
+  version = "3.26.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "marshmallow-code";
     repo = "marshmallow";
-    rev = "refs/tags/${version}";
-    hash = "sha256-KhXasYKooZRokRoFlWKOaQzSUe6tXDtUlrf65eGGUi8=";
+    tag = version;
+    hash = "sha256-l5pEhv8D6jRlU24SlsGQEkXda/b7KUdP9mAqrZCbl38=";
   };
 
   nativeBuildInputs = [ flit-core ];
@@ -30,7 +26,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    pytz
     simplejson
   ];
 

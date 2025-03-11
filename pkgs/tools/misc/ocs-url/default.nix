@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchgit, libsForQt5 }:
+{
+  lib,
+  stdenv,
+  fetchgit,
+  libsForQt5,
+}:
 
 let
   version = "3.1.0";
@@ -20,7 +25,10 @@ stdenv.mkDerivation rec {
   pname = "ocs-url";
   inherit version;
 
-  srcs = [ main_src qtil_src ];
+  srcs = [
+    main_src
+    qtil_src
+  ];
   sourceRoot = main_src.name;
 
   # We are NOT in $sourceRoot here

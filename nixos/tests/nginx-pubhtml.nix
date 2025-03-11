@@ -1,14 +1,16 @@
 import ./make-test-python.nix {
   name = "nginx-pubhtml";
 
-  nodes.machine = { pkgs, ... }: {
-    systemd.services.nginx.serviceConfig.ProtectHome = "read-only";
-    services.nginx.enable = true;
-    services.nginx.virtualHosts.localhost = {
-      locations."~ ^/\\~([a-z0-9_]+)(/.*)?$".alias = "/home/$1/public_html$2";
+  nodes.machine =
+    { pkgs, ... }:
+    {
+      systemd.services.nginx.serviceConfig.ProtectHome = "read-only";
+      services.nginx.enable = true;
+      services.nginx.virtualHosts.localhost = {
+        locations."~ ^/\\~([a-z0-9_]+)(/.*)?$".alias = "/home/$1/public_html$2";
+      };
+      users.users.foo.isNormalUser = true;
     };
-    users.users.foo.isNormalUser = true;
-  };
 
   testScript = ''
     machine.wait_for_unit("nginx")

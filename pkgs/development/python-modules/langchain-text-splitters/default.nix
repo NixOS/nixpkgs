@@ -4,7 +4,7 @@
   fetchFromGitHub,
 
   # build-system
-  poetry-core,
+  pdm-backend,
 
   # dependencies
   langchain-core,
@@ -17,19 +17,19 @@
 
 buildPythonPackage rec {
   pname = "langchain-text-splitters";
-  version = "0.3.2";
+  version = "0.3.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
-    rev = "refs/tags/langchain-text-splitters==${version}";
-    hash = "sha256-TaK8lnPxKUqwvKLtQIfzg2l8McQ1fd0g9vocHM0+kjY=";
+    tag = "langchain-text-splitters==${version}";
+    hash = "sha256-mYaIVE/v+t7TJw/l87IJcFh893OTIew6jl6OVj0gXCo=";
   };
 
   sourceRoot = "${src.name}/libs/text-splitters";
 
-  build-system = [ poetry-core ];
+  build-system = [ pdm-backend ];
 
   dependencies = [ langchain-core ];
 
@@ -45,6 +45,8 @@ buildPythonPackage rec {
 
   passthru = {
     inherit (langchain-core) updateScript;
+    # updates the wrong fetcher rev attribute
+    skipBulkUpdate = true;
   };
 
   meta = {

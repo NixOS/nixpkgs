@@ -3,7 +3,6 @@
   stdenv,
 
   fetchFromGitHub,
-  fetchpatch,
 
   cmake,
   ninja,
@@ -26,8 +25,6 @@
   fbthrift,
   fb303,
   cpptoml,
-  apple-sdk_11,
-  darwinMinVersionHook,
 
   gtest,
 
@@ -38,14 +35,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "watchman";
-  version = "2024.11.18.00";
+  version = "2025.02.10.00";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "watchman";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-deOSeExhwn8wrtP2Y0BDaHdmaeiUaDBok6W7N1rH/24=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-X9cUiMrUeuuJT+0gJa9cL2mpeSEWS/DkTx7eQu8u7oY=";
   };
+
+  patches = [
+    ./glog-0.7.patch
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -58,25 +59,20 @@ stdenv.mkDerivation (finalAttrs: {
     removeReferencesTo
   ];
 
-  buildInputs =
-    [
-      pcre2
-      openssl
-      gflags
-      glog
-      libevent
-      edencommon
-      folly
-      fizz
-      wangle
-      fbthrift
-      fb303
-      cpptoml
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_11
-      (darwinMinVersionHook "11.0")
-    ];
+  buildInputs = [
+    pcre2
+    openssl
+    gflags
+    glog
+    libevent
+    edencommon
+    folly
+    fizz
+    wangle
+    fbthrift
+    fb303
+    cpptoml
+  ];
 
   checkInputs = [
     gtest
@@ -107,7 +103,7 @@ stdenv.mkDerivation (finalAttrs: {
     remove-references-to -t ${folly.fmt.dev} $out/bin/*
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "Watches files and takes action when they change";
@@ -117,6 +113,7 @@ stdenv.mkDerivation (finalAttrs: {
       emily
       techknowlogick
     ];
+    mainProgram = "watchman";
     platforms = lib.platforms.unix;
     license = lib.licenses.mit;
   };

@@ -1,15 +1,16 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, autoreconfHook
-, flex
-, bison
-, xmlto
-, docbook_xsl
-, docbook_xml_dtd_44
-, swig
-, perl
-, python3
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  autoreconfHook,
+  flex,
+  bison,
+  xmlto,
+  docbook_xsl,
+  docbook_xml_dtd_44,
+  swig,
+  perl,
+  python3,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -44,7 +45,12 @@ stdenv.mkDerivation (finalAttrs: {
     "--sysconfdir=${placeholder "out"}/etc"
   ];
 
-  outputs = [ "out" "dev" "man" "doc" ];
+  outputs = [
+    "out"
+    "dev"
+    "man"
+    "doc"
+  ];
 
   meta = with lib; {
     description = "Linux Control and Measurement Device Interface Library";

@@ -1,9 +1,10 @@
 {
+  cctools,
   fetchFromGitHub,
   lib,
   makeWrapper,
-  nodejs,
   node-gyp,
+  nodejs,
   pnpm_9,
   python3,
   stdenv,
@@ -12,26 +13,31 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cdxgen";
-  version = "10.10.4";
+  version = "11.0.3";
 
   src = fetchFromGitHub {
     owner = "CycloneDX";
     repo = "cdxgen";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-5FxH9cAJ9FoSn1euimKOvxlAEny+LUqj/EH80+l1v04=";
+    hash = "sha256-H83HEiBdXBIhSR18EtYcQey6aXy8URSjpeNVEs3UBm8=";
   };
 
-  nativeBuildInputs = [
-    makeWrapper
-    nodejs
-    node-gyp # required for sqlite3 bindings
-    pnpm_9.configHook
-    python3 # required for sqlite3 bindings
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin [ xcbuild ];
+  nativeBuildInputs =
+    [
+      makeWrapper
+      nodejs
+      node-gyp # required for sqlite3 bindings
+      pnpm_9.configHook
+      python3 # required for sqlite3 bindings
+    ]
+    ++ lib.optional stdenv.hostPlatform.isDarwin [
+      xcbuild
+      cctools.libtool
+    ];
 
   pnpmDeps = pnpm_9.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-GdFU8mx9H3daxziprIOQWZWEBcz9y9Qk88sus838Xlk=";
+    hash = "sha256-7NrDYd4H0cPQs8w4lWlB0BhqcYZVo6/9zf0ujPjBzsE=";
   };
 
   buildPhase = ''

@@ -1,4 +1,11 @@
-{ lib, python3Packages, fetchFromGitHub, installShellFiles, nix-update-script }:
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+  addBinToPathHook,
+  installShellFiles,
+  nix-update-script,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "audible-cli";
@@ -8,15 +15,19 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "mkb79";
     repo = "audible-cli";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-AYL7lcYYY7gK12Id94aHRWRlCiznnF4r+lpI5VFpAWY=";
   };
 
-  nativeBuildInputs = with python3Packages; [
-    setuptools
-  ] ++ [
-    installShellFiles
-  ];
+  nativeBuildInputs =
+    with python3Packages;
+    [
+      setuptools
+    ]
+    ++ [
+      addBinToPathHook
+      installShellFiles
+    ];
 
   propagatedBuildInputs = with python3Packages; [
     aiofiles
@@ -37,7 +48,6 @@ python3Packages.buildPythonApplication rec {
   ];
 
   postInstall = ''
-    export PATH=$out/bin:$PATH
     installShellCompletion --cmd audible \
       --bash <(source utils/code_completion/audible-complete-bash.sh) \
       --fish <(source utils/code_completion/audible-complete-zsh-fish.sh) \
@@ -52,7 +62,10 @@ python3Packages.buildPythonApplication rec {
   ];
 
   passthru.updateScript = nix-update-script {
-    extraArgs = [ "--version-regex" "[0-9.]+" ];
+    extraArgs = [
+      "--version-regex"
+      "[0-9.]+"
+    ];
   };
 
   meta = with lib; {

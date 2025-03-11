@@ -1,6 +1,13 @@
-{ lib, stdenv, fetchFromGitHub
-, autoreconfHook, pkg-config
-, fuse, curl, expat }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  fuse,
+  curl,
+  expat,
+}:
 
 stdenv.mkDerivation rec {
   pname = "s3backer";
@@ -19,8 +26,15 @@ stdenv.mkDerivation rec {
     ./fix-darwin-builds.patch
   ];
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ fuse curl expat ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
+  buildInputs = [
+    fuse
+    curl
+    expat
+  ];
 
   # AC_CHECK_DECLS doesn't work with clang
   postPatch = lib.optionalString stdenv.cc.isClang ''

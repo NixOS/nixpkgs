@@ -1,24 +1,33 @@
-{ lib, fetchFromGitLab, buildGoModule, ruby, libkrb5 }:
+{
+  lib,
+  fetchFromGitLab,
+  buildGoModule,
+  ruby,
+  libkrb5,
+}:
 
 buildGoModule rec {
   pname = "gitlab-shell";
-  version = "14.39.0";
+  version = "14.40.0";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "gitlab-shell";
     rev = "v${version}";
-    hash = "sha256-HSieVAYuqv5zYN6CMAo86s/Df17PdIXzDIZ2pM4Sqlw=";
+    hash = "sha256-SVu+2OG5GBeD8nF9ws3M0bpm03HVxA4RTDWAT8NYjgQ=";
   };
 
-  buildInputs = [ ruby libkrb5 ];
+  buildInputs = [
+    ruby
+    libkrb5
+  ];
 
   patches = [
     ./remove-hardcoded-locations.patch
   ];
 
-  vendorHash = "sha256-wlxHaPstdXjMWV+qHxahAukk/Lc07kq37SlnCU3KO4o=";
+  vendorHash = "sha256-r+IKMaEy+5hRkjfYPfaHVNgsd8yT13v04oKJ16ZPhD0=";
 
   subPackages = [
     "cmd/gitlab-shell"

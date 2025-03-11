@@ -20,15 +20,18 @@ in
     package = mkPackageOption pkgs "homebox" { };
     settings = lib.mkOption {
       type = types.attrsOf types.str;
-      defaultText = ''
-        HBOX_STORAGE_DATA = "/var/lib/homebox/data";
-        HBOX_STORAGE_SQLITE_URL = "/var/lib/homebox/data/homebox.db?_pragma=busy_timeout=999&_pragma=journal_mode=WAL&_fk=1";
-        HBOX_OPTIONS_ALLOW_REGISTRATION = "false";
-        HBOX_MODE = "production";
+      defaultText = lib.literalExpression ''
+        {
+          HBOX_STORAGE_DATA = "/var/lib/homebox/data";
+          HBOX_STORAGE_SQLITE_URL = "/var/lib/homebox/data/homebox.db?_pragma=busy_timeout=999&_pragma=journal_mode=WAL&_fk=1";
+          HBOX_OPTIONS_ALLOW_REGISTRATION = "false";
+          HBOX_OPTIONS_CHECK_GITHUB_RELEASE = "false";
+          HBOX_MODE = "production";
+        }
       '';
       description = ''
         The homebox configuration as Environment variables. For definitions and available options see the upstream
-        [documentation](https://homebox.software/en/quick-start.html#env-variables-configuration).
+        [documentation](https://homebox.software/en/configure-homebox.html).
       '';
     };
   };
@@ -43,6 +46,7 @@ in
       HBOX_STORAGE_DATA = mkDefault "/var/lib/homebox/data";
       HBOX_STORAGE_SQLITE_URL = mkDefault "/var/lib/homebox/data/homebox.db?_pragma=busy_timeout=999&_pragma=journal_mode=WAL&_fk=1";
       HBOX_OPTIONS_ALLOW_REGISTRATION = mkDefault "false";
+      HBOX_OPTIONS_CHECK_GITHUB_RELEASE = mkDefault "false";
       HBOX_MODE = mkDefault "production";
     };
     systemd.services.homebox = {

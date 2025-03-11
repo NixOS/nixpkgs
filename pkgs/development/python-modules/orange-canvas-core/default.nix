@@ -16,6 +16,7 @@
   lockfile,
   numpy,
   pip,
+  trubar,
   qasync,
   requests-cache,
   typing-extensions,
@@ -26,18 +27,19 @@
   pytestCheckHook,
 
   stdenv,
+  gitUpdater,
 }:
 
 buildPythonPackage rec {
   pname = "orange-canvas-core";
-  version = "0.2.2";
+  version = "0.2.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "biolab";
     repo = "orange-canvas-core";
-    rev = "refs/tags/${version}";
-    hash = "sha256-Jp3vCQmRdkFADStVkbCFPiCBqpbI0a4JiJ8qs60rpqw=";
+    tag = version;
+    hash = "sha256-uh9wNqgLYRcnCSOdpeLx6ZTRC0cpq6lG/sqmrYLR+3g=";
   };
 
   build-system = [ setuptools ];
@@ -55,6 +57,7 @@ buildPythonPackage rec {
     qasync
     requests-cache
     typing-extensions
+    trubar
   ];
 
   pythonImportsCheck = [ "orangecanvas" ];
@@ -84,6 +87,8 @@ buildPythonPackage rec {
     "test_tooltree_registry"
     "test_widgettoolgrid"
   ];
+
+  passthru.updateScript = gitUpdater { };
 
   disabledTestPaths = [ "orangecanvas/canvas/items/tests/test_graphicstextitem.py" ];
 

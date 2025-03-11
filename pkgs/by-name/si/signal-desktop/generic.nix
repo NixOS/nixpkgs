@@ -41,7 +41,7 @@
   libuuid,
   at-spi2-core,
   libappindicator-gtk3,
-  mesa,
+  libgbm,
   # Runtime dependencies:
   systemd,
   libnotify,
@@ -164,7 +164,7 @@ stdenv.mkDerivation rec {
     libpulseaudio
     libnotify
     libuuid
-    mesa # for libgbm
+    libgbm
     nspr
     nss
     pango
@@ -234,7 +234,7 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     gappsWrapperArgs+=(
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime}}"
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
       --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
     )
 

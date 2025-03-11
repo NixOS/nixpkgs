@@ -52,7 +52,7 @@ in {
         Web interface credentials should also be set here in `SLSKD_USERNAME` and `SLSKD_PASSWORD`.
         Other, optional credentials like SOCKS5 with `SLSKD_SLSK_PROXY_USERNAME` and `SLSKD_SLSK_PROXY_PASSWORD`
         should all reside here instead of in the world-readable nix store.
-        Variables are documented at https://github.com/slskd/slskd/blob/master/docs/config.md
+        Variables are documented at <https://github.com/slskd/slskd/blob/master/docs/config.md>
       '';
     };
 

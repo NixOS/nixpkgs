@@ -1,19 +1,28 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+}:
 
 buildGoModule rec {
   pname = "ets";
-  version = "0.3.0";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "gdubicki";
     repo = "ets";
     rev = "v${version}";
-    hash = "sha256-PowJ3ig8TfGx9P/PJPVBL8GsMh+gGZVt9l4Rf7Mqk00=";
+    hash = "sha256-LnNd4rAMJliWKbL4uVl11BAa9FPUcLwVSWnFe1vEk7g=";
   };
 
-  vendorHash = "sha256-XHgdiXdp9aNEAc/Apvb64ExnpywjddWOw1scNKy+ico=";
+  vendorHash = "sha256-lzukgI/7gxlWHY81MkK1CzpUUaZ4B+4xZ0RSZUpL62c=";
 
-  ldflags = [ "-s" "-w" "-X main.version=v${version}-nixpkgs" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.version=v${version}-nixpkgs"
+  ];
 
   nativeBuildInputs = [ installShellFiles ];
 

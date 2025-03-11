@@ -1,14 +1,15 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, libX11
-, libXcursor
-, libXmu
-, libXpm
-, libheif
-, pkg-config
-, wayland
-, xbitmaps
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  libX11,
+  libXcursor,
+  libXmu,
+  libXpm,
+  libheif,
+  pkg-config,
+  wayland,
+  xbitmaps,
 }:
 
 buildGoModule rec {
@@ -46,7 +47,10 @@ buildGoModule rec {
     xbitmaps
   ];
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   preCheck = ''
     export XDG_RUNTIME_DIR=$(mktemp -d)
@@ -66,7 +70,7 @@ buildGoModule rec {
     description = "Utilities for handling monitors, resolutions, and (timed) wallpapers";
     inherit (src.meta) homepage;
     license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.AndersonTorres ];
+    maintainers = [ ];
     inherit (wayland.meta) platforms;
     badPlatforms = lib.platforms.darwin;
   };

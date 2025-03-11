@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, pkg-config, SDL, SDL2 }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  SDL,
+  SDL2,
+}:
 
 stdenv.mkDerivation rec {
   pname = "linuxconsoletools";
@@ -10,9 +17,12 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ SDL SDL2 ];
+  buildInputs = [
+    SDL
+    SDL2
+  ];
 
-  makeFlags = [ "DESTDIR=$(out)"];
+  makeFlags = [ "DESTDIR=$(out)" ];
 
   installFlags = [ "PREFIX=\"\"" ];
 
@@ -21,7 +31,10 @@ stdenv.mkDerivation rec {
     description = "Set of tools for joysticks and serial peripherals";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ pSub ebzzry ];
+    maintainers = with maintainers; [
+      pSub
+      ebzzry
+    ];
 
     longDescription = ''
       The included tools are:

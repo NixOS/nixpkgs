@@ -1,20 +1,28 @@
-{ lib, rustPlatform, fetchCrate }:
+{
+  lib,
+  rustPlatform,
+  fetchCrate,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "mandown";
-  version = "0.1.4";
+  version = "1.0.0";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-8SHZR8frDHLGj2WYlnFGBWY3B6xv4jByET7CODt2TGw=";
+    hash = "sha256-30AM/t1Qq4xydG12Nh+J1MBKNvxxD/LVTkmTchsZHLw=";
   };
 
-  cargoHash = "sha256-/IvPvJo5zwvLY+P5+hsdbR56/pfopfwncEz9UGUS1Oc=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-T3cUHyKQIYTL9jMoLsq6jEiIeFZcSZuyCna7TNEjGyU=";
 
   meta = with lib; {
     description = "Markdown to groff (man page) converter";
     homepage = "https://gitlab.com/kornelski/mandown";
-    license = with licenses; [ asl20 /* or */ mit ];
+    license = with licenses; [
+      asl20 # or
+      mit
+    ];
     maintainers = [ ];
     mainProgram = "mandown";
   };

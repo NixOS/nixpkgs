@@ -1,17 +1,22 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+}:
 
 buildGoModule rec {
   pname = "kube-bench";
-  version = "0.9.2";
+  version = "0.10.2";
 
   src = fetchFromGitHub {
     owner = "aquasecurity";
     repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-wRY40yNXTcixCUYWFMQsfkI7MPE4RuxCEHBoedDpW9Y=";
+    tag = "v${version}";
+    hash = "sha256-5vgAK99a0gCYAVd0f/dd6Z1qsGzAeHL+eTTb/hcFlp4=";
   };
 
-  vendorHash = "sha256-bTpE8zJ6dCMimTowexehxnWPq3tXd0H9ZduJvCVqAlI=";
+  vendorHash = "sha256-2HUvy9O7c1j4oXdIw7VZPtkEjQj2en8YPetiGwDaeYg=";
 
   nativeBuildInputs = [ installShellFiles ];
 

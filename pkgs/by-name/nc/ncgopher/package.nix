@@ -1,10 +1,11 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, pkg-config
-, ncurses6
-, openssl
-, sqlite
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  pkg-config,
+  ncurses6,
+  openssl,
+  sqlite,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -18,7 +19,8 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-KrvTwcIeINIBkia6PTnKXp4jFd6GEMBh/xbn0Ot/wmE=";
   };
 
-  cargoHash = "sha256-Zft/ip+/uJbUIqCDDEa4hchmZZiYWGdaVnzWC74FgU8=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-QhkYyvoWMGtLH5HhpOJ3JsBIWeZN/CllcXwNW+iM3WI=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [

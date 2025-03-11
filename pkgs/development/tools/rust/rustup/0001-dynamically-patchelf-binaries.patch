@@ -23,7 +23,7 @@ index dfccc661..85233f3b 100644
 +    let mut unwrapped_name = path.file_name().unwrap().to_string_lossy().to_string();
 +    unwrapped_name.push_str("-unwrapped");
 +    let unwrapped_dir = path.with_file_name(unwrapped_name);
-+    fs::create_dir(&unwrapped_dir).context("failed to create unwrapped directory")?;
++    fs::create_dir_all(&unwrapped_dir).context("failed to create unwrapped directory")?;
 +    let mut unwrapped_lld = unwrapped_dir;
 +    unwrapped_lld.push(dest_lld_path.file_name().unwrap());
 +    fs::rename(dest_lld_path, &unwrapped_lld).context("failed to move file")?;

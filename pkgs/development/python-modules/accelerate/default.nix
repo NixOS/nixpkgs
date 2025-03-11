@@ -21,24 +21,26 @@
   torch,
 
   # tests
+  addBinToPathHook,
   evaluate,
   parameterized,
-  pytest7CheckHook,
+  pytestCheckHook,
   transformers,
   config,
   cudatoolkit,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "accelerate";
-  version = "1.1.0";
+  version = "1.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "accelerate";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-GBNe4zomy8dmfvYrk/9Q77Z6r+JJA+2dgAhJx2opqAc=";
+    tag = "v${version}";
+    hash = "sha256-HcbvQL8nASsZcfjAoPbQKNoEkSLp5Vmus2MEa3Dv6Po=";
   };
 
   buildInputs = [ llvmPackages.openmp ];
@@ -56,19 +58,17 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    addBinToPathHook
     evaluate
     parameterized
-    pytest7CheckHook
+    pytestCheckHook
     transformers
+    writableTmpDirAsHomeHook
   ];
-  preCheck =
-    ''
-      export HOME=$(mktemp -d)
-      export PATH=$out/bin:$PATH
-    ''
-    + lib.optionalString config.cudaSupport ''
-      export TRITON_PTXAS_PATH="${cudatoolkit}/bin/ptxas"
-    '';
+
+  preCheck = lib.optionalString config.cudaSupport ''
+    export TRITON_PTXAS_PATH="${cudatoolkit}/bin/ptxas"
+  '';
   pytestFlagsArray = [ "tests" ];
   disabledTests =
     [
@@ -92,10 +92,11 @@ buildPythonPackage rec {
       # set the environment variable, CC, which conflicts with standard environment
       "test_patch_environment_key_exists"
     ]
-    ++ lib.optionals (pythonAtLeast "3.12") [
-      # RuntimeError: Dynamo is not supported on Python 3.12+
+    ++ lib.optionals (pythonAtLeast "3.13") [
+      # RuntimeError: Dynamo is not supported on Python 3.13+
+      "test_can_unwrap_distributed_compiled_model_keep_torch_compile"
+      "test_can_unwrap_distributed_compiled_model_remove_torch_compile"
       "test_convert_to_fp32"
-      "test_dynamo_extract_model"
       "test_send_to_device_compiles"
     ]
     ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
@@ -108,7 +109,7 @@ buildPythonPackage rec {
       # requires ptxas from cudatoolkit, which is unfree
       "test_dynamo_extract_model"
     ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # RuntimeError: 'accelerate-launch /nix/store/a7vhm7b74a7bmxc35j26s9iy1zfaqjs...
       "test_accelerate_test"
       "test_init_trackers"

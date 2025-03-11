@@ -1,22 +1,23 @@
-{ lib
-, fetchFromGitHub
-, buildGoModule
-, nixosTests
-, smartmontools
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  nixosTests,
+  smartmontools,
 }:
 
 buildGoModule rec {
   pname = "smartctl_exporter";
-  version = "0.12.0";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "prometheus-community";
     repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-QQoWAsnE/7ifvgEfQJ6cbzmwOrE7oe2zalTbu/P7r18=";
+    tag = "v${version}";
+    hash = "sha256-0WppsqDl4nKa6s/dyX9zsUzoqAgStDSBWMM0eolTPdk=";
   };
 
-  vendorHash = "sha256-WUB2FgBl4Tybz7T0yvcSYIlG75NEhXpn1F0yuB9F21g=";
+  vendorHash = "sha256-Sy/lm55NAhYDdVLli5yQpoRVieJU8RJDRFzd4Len6eg=";
 
   postPatch = ''
     substituteInPlace main.go README.md \
@@ -35,6 +36,9 @@ buildGoModule rec {
     homepage = "https://github.com/prometheus-community/smartctl_exporter";
     license = licenses.lgpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ hexa Frostman ];
+    maintainers = with maintainers; [
+      hexa
+      Frostman
+    ];
   };
 }

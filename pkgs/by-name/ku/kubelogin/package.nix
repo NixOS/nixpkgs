@@ -1,21 +1,28 @@
-{ stdenv, lib, fetchFromGitHub, buildGoModule, installShellFiles, go }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  installShellFiles,
+  testers,
+  kubelogin,
+}:
 
 buildGoModule rec {
   pname = "kubelogin";
-  version = "0.1.4";
+  version = "0.1.7";
 
   src = fetchFromGitHub {
     owner = "Azure";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-DRXvnIOETNlZ50oa8PbLSwmq6VJJcerUe1Ir7s4/7Kw=";
+    sha256 = "sha256-yU9RDzUjN8Ona5Xa7+90qDmc4HFbec3tEzumaPmG6es=";
   };
 
-  vendorHash = "sha256-K/GfRJ0KbizsVmKa6V3/ZLDKivJttEsqA3Q84S0S4KI=";
+  vendorHash = "sha256-pAhBUREzancX0cbLm5rgZwJn8N0fLX57wONNypADQLE=";
 
   ldflags = [
-    "-X main.version=${version}"
-    "-X main.goVersion=${lib.getVersion go}"
+    "-X main.gitTag=v${version}"
   ];
 
   nativeBuildInputs = [ installShellFiles ];
@@ -26,6 +33,11 @@ buildGoModule rec {
     $out/bin/kubelogin completion zsh >kubelogin.zsh
     installShellCompletion kubelogin.{bash,fish,zsh}
   '';
+
+  passthru.tests.version = testers.testVersion {
+    package = kubelogin;
+    version = "v${version}";
+  };
 
   __darwinAllowLocalNetworking = true;
 

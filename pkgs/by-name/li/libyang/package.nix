@@ -1,27 +1,28 @@
-{ stdenv
-, lib
-, fetchFromGitHub
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
 
-# build time
-, cmake
-, pkg-config
+  # build time
+  cmake,
+  pkg-config,
 
-# run time
-, pcre2
+  # run time
+  pcre2,
 
-# update script
-, gitUpdater
+  # update script
+  gitUpdater,
 }:
 
 stdenv.mkDerivation rec {
   pname = "libyang";
-  version = "2.1.148";
+  version = "3.7.8";
 
   src = fetchFromGitHub {
     owner = "CESNET";
     repo = "libyang";
     rev = "v${version}";
-    hash = "sha256-uYZJo8lUv6tq0MRRJvbTS/8t1eZNGqcMb5k5sVCwMJM=";
+    hash = "sha256-5oJV8gr2rwvSdpX5w3gmIw/LTrWtXVnl6oLr/soNTDk=";
   };
 
   nativeBuildInputs = [

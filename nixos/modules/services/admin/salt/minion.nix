@@ -1,7 +1,12 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
 
-  cfg  = config.services.salt.minion;
+  cfg = config.services.salt.minion;
 
   fullConfig = lib.recursiveUpdate {
     # Provide defaults for some directories to allow an immutable config dir
@@ -21,7 +26,7 @@ in
       enable = lib.mkEnableOption "Salt configuration management system minion service";
       configuration = lib.mkOption {
         type = lib.types.attrs;
-        default = {};
+        default = { };
         description = ''
           Salt minion configuration as Nix attribute set.
           See <https://docs.saltstack.com/en/latest/ref/configuration/minion.html>
@@ -37,9 +42,7 @@ in
       # The alternatives are
       # - passing --config-dir to all salt commands, not just the minion unit,
       # - setting aglobal environment variable.
-      etc."salt/minion".source = pkgs.writeText "minion" (
-        builtins.toJSON fullConfig
-      );
+      etc."salt/minion".source = pkgs.writeText "minion" (builtins.toJSON fullConfig);
       systemPackages = with pkgs; [ salt ];
     };
     systemd.services.salt-minion = {
@@ -61,4 +64,3 @@ in
     };
   };
 }
-

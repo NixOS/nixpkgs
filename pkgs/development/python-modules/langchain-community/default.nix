@@ -4,27 +4,25 @@
   fetchFromGitHub,
 
   # build-system
-  poetry-core,
+  pdm-backend,
 
   # dependencies
   aiohttp,
   dataclasses-json,
-  langchain-core,
+  httpx-sse,
   langchain,
+  langchain-core,
   langsmith,
+  numpy,
   pydantic-settings,
   pyyaml,
   requests,
   sqlalchemy,
   tenacity,
 
-  # optional-dependencies
-  typer,
-  numpy,
-
   # tests
   httpx,
-  langchain-standard-tests,
+  langchain-tests,
   lark,
   pandas,
   pytest-asyncio,
@@ -38,21 +36,22 @@
 
 buildPythonPackage rec {
   pname = "langchain-community";
-  version = "0.3.6";
+  version = "0.3.17";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
-    rev = "refs/tags/langchain-core==${version}";
-    hash = "sha256-ACR+JzKcnYXROGOQe6DlZeqcYd40KlesgXSUOybOT20=";
+    tag = "langchain-community==${version}";
+    hash = "sha256-+10Q8em74G5RU6VtDqhQJuDsjJ4/EjGM4a3xQzs3Qzo=";
   };
 
   sourceRoot = "${src.name}/libs/community";
 
-  build-system = [ poetry-core ];
+  build-system = [ pdm-backend ];
 
   pythonRelaxDeps = [
+    "numpy"
     "pydantic-settings"
     "tenacity"
   ];
@@ -60,9 +59,11 @@ buildPythonPackage rec {
   dependencies = [
     aiohttp
     dataclasses-json
-    langchain-core
+    httpx-sse
     langchain
+    langchain-core
     langsmith
+    numpy
     pydantic-settings
     pyyaml
     requests
@@ -70,16 +71,11 @@ buildPythonPackage rec {
     tenacity
   ];
 
-  optional-dependencies = {
-    cli = [ typer ];
-    numpy = [ numpy ];
-  };
-
   pythonImportsCheck = [ "langchain_community" ];
 
   nativeCheckInputs = [
     httpx
-    langchain-standard-tests
+    langchain-tests
     lark
     pandas
     pytest-asyncio
@@ -95,6 +91,8 @@ buildPythonPackage rec {
 
   passthru = {
     inherit (langchain-core) updateScript;
+    # updates the wrong fetcher rev attribute
+    skipBulkUpdate = true;
   };
 
   __darwinAllowLocalNetworking = true;
@@ -107,6 +105,12 @@ buildPythonPackage rec {
     # See https://github.com/NixOS/nixpkgs/pull/326337 and https://github.com/wasmerio/wasmer-python/issues/778
     "test_table_info"
     "test_sql_database_run"
+    # pydantic.errors.PydanticUserError: `SQLDatabaseToolkit` is not fully defined; you should define `BaseCache`, then call `SQLDatabaseToolkit.model_rebuild()`.
+    "test_create_sql_agent"
+    # pydantic.errors.PydanticUserError: `NatBotChain` is not fully defined; you should define `BaseCache`, then call `NatBotChain.model_rebuild()`.
+    "test_proper_inputs"
+    # pydantic.errors.PydanticUserError: `NatBotChain` is not fully defined; you should define `BaseCache`, then call `NatBotChain.model_rebuild()`.
+    "test_variable_key_naming"
   ];
 
   meta = {
@@ -114,6 +118,9 @@ buildPythonPackage rec {
     description = "Community contributed LangChain integrations";
     homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/community";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ natsukium ];
+    maintainers = with lib.maintainers; [
+      natsukium
+      sarahec
+    ];
   };
 }

@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, docutils
-, pkg-config
-, freetype
-, pango
-, testers
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  docutils,
+  pkg-config,
+  freetype,
+  pango,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -23,9 +24,15 @@ stdenv.mkDerivation (finalAttrs: {
     "--INSTALL=install"
   ];
 
-  nativeBuildInputs = [ docutils pkg-config ];
+  nativeBuildInputs = [
+    docutils
+    pkg-config
+  ];
 
-  buildInputs = [ freetype pango ];
+  buildInputs = [
+    freetype
+    pango
+  ];
 
   passthru.tests = {
     version = testers.testVersion {

@@ -1,12 +1,14 @@
-{ lib
-, python3
-, fetchPypi
+{
+  lib,
+  python3,
+  fetchPypi,
 }:
 
 let
   inherit (python3.pkgs)
     buildPythonApplication
-    pythonOlder;
+    pythonOlder
+    ;
 in
 buildPythonApplication rec {
   pname = "dfmt";

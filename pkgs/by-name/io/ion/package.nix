@@ -1,7 +1,7 @@
 {
   lib,
   rustPlatform,
-  fetchFromGitLab
+  fetchFromGitLab,
 }:
 
 rustPlatform.buildRustPackage {
@@ -16,16 +16,8 @@ rustPlatform.buildRustPackage {
     hash = "sha256-jiJ5XW7S6/pVEOPYJKurolLI3UrOyuaEP/cqm1a0rIU=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "calculate-0.7.0" = "sha256-3CI+7TZeW1sk6pBigxESK/E7G+G1/MniVIn4sqfk7+w=";
-      "nix-0.23.1" = "sha256-yWJYrQt9piJHhqBkH/hn9dsXR8oqzl0RKPrzx9fvqlw=";
-      "object-pool-0.5.3" = "sha256-LWP0b62sk2dcqnQEEvLmZVvWSVLJ722yH/zIIPL93W4=";
-      "redox_liner-0.5.2" = "sha256-ZjVLACkyOT6jVRWyMj0ixJwCv6IjllCLHNTERlncIpk=";
-      "small-0.1.0" = "sha256-QIzEfFc0EDEllf+YxVyV7j/PvC7nVWiK0YYBoZBQZ3Q=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-Gqa2aA8jr6SZexa6EejYHv/aEYcm51qvEJSUm4m1AVc=";
 
   patches = [
     # remove git revision from the build script to fix build
@@ -40,7 +32,10 @@ rustPlatform.buildRustPackage {
     description = "Modern system shell with simple (and powerful) syntax";
     homepage = "https://gitlab.redox-os.org/redox-os/ion";
     license = licenses.mit;
-    maintainers = with maintainers; [dywedir arthsmn];
+    maintainers = with maintainers; [
+      dywedir
+      arthsmn
+    ];
     mainProgram = "ion";
     platforms = platforms.unix;
   };

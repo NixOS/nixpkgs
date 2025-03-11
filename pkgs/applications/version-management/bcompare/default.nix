@@ -1,5 +1,20 @@
-{ lib, autoPatchelfHook, bzip2, cairo, fetchurl, gdk-pixbuf, glibc, pango, gtk2, kcoreaddons, ki18n, kio, kservice
-, stdenv, runtimeShell, unzip
+{
+  lib,
+  autoPatchelfHook,
+  bzip2,
+  cairo,
+  fetchurl,
+  gdk-pixbuf,
+  glibc,
+  pango,
+  gtk2,
+  kcoreaddons,
+  ki18n,
+  kio,
+  kservice,
+  stdenv,
+  runtimeShell,
+  unzip,
 }:
 
 let
@@ -25,7 +40,12 @@ let
   src = srcs.${stdenv.hostPlatform.system} or throwSystem;
 
   linux = stdenv.mkDerivation {
-    inherit pname version src meta;
+    inherit
+      pname
+      version
+      src
+      meta
+      ;
     unpackPhase = ''
       ar x $src
       tar xfz data.tar.gz
@@ -69,7 +89,12 @@ let
   };
 
   darwin = stdenv.mkDerivation {
-    inherit pname version src meta;
+    inherit
+      pname
+      version
+      src
+      meta
+      ;
     nativeBuildInputs = [ unzip ];
 
     installPhase = ''
@@ -88,11 +113,12 @@ let
     homepage = "https://www.scootersoftware.com";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    maintainers = with maintainers; [ ktor arkivm ];
+    maintainers = with maintainers; [
+      ktor
+      arkivm
+    ];
     platforms = builtins.attrNames srcs;
     mainProgram = "bcompare";
   };
 in
-if stdenv.hostPlatform.isDarwin
-then darwin
-else linux
+if stdenv.hostPlatform.isDarwin then darwin else linux

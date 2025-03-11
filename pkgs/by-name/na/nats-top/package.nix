@@ -1,22 +1,23 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, testers
-, nats-top
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  testers,
+  nats-top,
 }:
 
 buildGoModule rec {
   pname = "nats-top";
-  version = "0.6.2";
+  version = "0.6.3";
 
   src = fetchFromGitHub {
     owner = "nats-io";
     repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-zOo+f4NVFvx9deV1QY7mCi6Q0EJRMRwPu12maFDlnCU=";
+    tag = "v${version}";
+    hash = "sha256-NOU0U1hyP9FCSLK0ulf28cx1K0/KWKQd+t3KtaVqWWo=";
   };
 
-  vendorHash = "sha256-oPapBYm3gJtPpVP0lmsVijAdjK6M8/kOx/7QIeInOlM=";
+  vendorHash = "sha256-BQzOlX7Zrtlcd6+O92JoouzC1QCCbgRAeJoYn/runYA=";
 
   ldflags = [
     "-s"

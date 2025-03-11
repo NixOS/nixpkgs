@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "cmsdials";
-  version = "1.4.0";
+  version = "1.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cms-DQM";
     repo = "dials-py";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-/5XgNPtjJgJEOaqvq7Z7XCXh2n+DbZqFbqnZddxxFpc=";
+    tag = "v${version}";
+    hash = "sha256-bYFADE6Fi0hQ0IaaeN3RhtPPQwWqhhRbNyGOUPLksp4=";
   };
 
   build-system = [ poetry-core ];

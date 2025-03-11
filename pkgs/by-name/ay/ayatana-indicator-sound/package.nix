@@ -30,13 +30,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ayatana-indicator-sound";
-  version = "24.5.0";
+  version = "24.5.2";
 
   src = fetchFromGitHub {
     owner = "AyatanaIndicators";
     repo = "ayatana-indicator-sound";
-    rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-sFl1PM0vZIJVSDiq5z7w/CS3rFuq6Z09Uks4Ik239Cc=";
+    tag = finalAttrs.version;
+    hash = "sha256-qdvte+Mm64O/JhI0luJAGAWoCgukKCbPrp5k8SIDuwM=";
   };
 
   postPatch = ''
@@ -104,6 +104,9 @@ stdenv.mkDerivation (finalAttrs: {
   dontWrapQtApps = true;
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+
+  # Starts & talks to D-Bus, breaks under parallelism
+  enableParallelChecking = false;
 
   passthru = {
     ayatana-indicators = {

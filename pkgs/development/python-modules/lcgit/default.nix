@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "lcgit";
-  version = "1.0.0";
+  version = "2.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -17,8 +17,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cisagov";
     repo = "lcgit";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-aMwjgN9//jAnTYnbJJvQyfE/f+5QosKxF1l4vF+3myc=";
+    tag = "v${version}";
+    hash = "sha256-unw5xY5iZlVrV01hchHS3Ar+zpF7awTAutcqndKH0Ic=";
   };
 
   postPatch = ''
@@ -35,7 +35,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Pythonic Linear Congruential Generator iterator";
     homepage = "https://github.com/cisagov/lcgit";
-    changelog = "https://github.com/cisagov/lcgit/releases/tag/v${version}";
+    changelog = "https://github.com/cisagov/lcgit/releases/tag/${src.tag}";
     license = licenses.cc0;
     maintainers = with maintainers; [ fab ];
   };

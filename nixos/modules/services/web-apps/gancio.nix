@@ -148,7 +148,7 @@ in
       };
       description = ''
         Override default locales within gancio.
-        See [https://framagit.org/les/gancio/tree/master/locales](default languages and locales).
+        See [default languages and locales](https://framagit.org/les/gancio/tree/master/locales).
       '';
     };
 
@@ -282,6 +282,8 @@ in
       ];
     };
     # for nginx to access gancio socket
-    users.users."${config.services.nginx.user}".extraGroups = [ config.users.users.${cfg.user}.group ];
+    users.users."${config.services.nginx.user}" = lib.mkIf (config.services.nginx.enable) {
+      extraGroups = [ config.users.users.${cfg.user}.group ];
+    };
   };
 }

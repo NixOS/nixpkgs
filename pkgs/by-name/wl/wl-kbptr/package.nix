@@ -21,7 +21,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "moverest";
     repo = "wl-kbptr";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-4OWy5Q+NSKgzDn12aflZ+YAfacLeOTIhOojiJ2WiqQg=";
   };
 

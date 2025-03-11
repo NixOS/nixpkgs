@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, bison }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  bison,
+}:
 
 stdenv.mkDerivation rec {
   pname = "buddy";
@@ -11,7 +16,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ bison ];
   patches = [ ./gcc-4.3.3-fixes.patch ];
-  configureFlags = [ "CFLAGS=-O3" "CXXFLAGS=-O3" ];
+  configureFlags = [
+    "CFLAGS=-O3"
+    "CXXFLAGS=-O3"
+  ];
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=register";
   NIX_LDFLAGS = "-lm";
   doCheck = true;

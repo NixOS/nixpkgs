@@ -1,26 +1,26 @@
 {
-  lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonAtLeast
-, setuptools
-, requests
-, python-dateutil
-, pyjwt
-, pytestCheckHook
-, responses
-, nix-update-script
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonAtLeast,
+  setuptools,
+  requests,
+  python-dateutil,
+  pyjwt,
+  pytestCheckHook,
+  responses,
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
   pname = "dohq-artifactory";
-  version = "0.10.1";
+  version = "0.10.3";
 
   src = fetchFromGitHub {
     owner = "devopshq";
     repo = "artifactory";
-    rev = version;
-    hash = "sha256-lMT1b6JUDT01fJzQrVc0lMqeGrJnvk6ms4KIYtfTQps=";
+    tag = version;
+    hash = "sha256-AlC5WtYnMrrI8yR1io84QtblndlZLsGGiicc10tpnF8=";
   };
 
   # https://github.com/devopshq/artifactory/issues/430
@@ -50,7 +50,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python interface library for JFrog Artifactory";
     homepage = "https://devopshq.github.io/artifactory/";
-    changelog = "https://github.com/devopshq/artifactory/releases/tag/${version}";
+    changelog = "https://github.com/devopshq/artifactory/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ h7x4 ];
   };

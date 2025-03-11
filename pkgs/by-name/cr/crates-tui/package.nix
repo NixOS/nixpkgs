@@ -8,7 +8,7 @@
   nix-update-script,
 }:
 let
-  version = "0.1.20";
+  version = "0.1.25";
 in
 rustPlatform.buildRustPackage {
   pname = "crates-tui";
@@ -17,11 +17,12 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "ratatui";
     repo = "crates-tui";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-K3ttXoSS4GZyHnqS95op8kmbAi4/KjKa0P6Nzqqpjyw=";
+    tag = "v${version}";
+    hash = "sha256-XQ19hfaCm7Ib9gPqu9mlmf3b8HgoyxLuBApaPeW53pI=";
   };
 
-  cargoHash = "sha256-ztLBM6CR2WMKR9cfBY95BvSaD05C+AEa6C/nOdDxqf0=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-cGpmiUtMP/rM+712Un8GEQ51gb12maopKn0o0GTQf7M=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ];

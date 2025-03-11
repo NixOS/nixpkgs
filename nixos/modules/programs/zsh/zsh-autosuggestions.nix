@@ -1,11 +1,19 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   cfg = config.programs.zsh.autosuggestions;
 in
 {
   imports = [
-    (lib.mkRenamedOptionModule [ "programs" "zsh" "enableAutosuggestions" ] [ "programs" "zsh" "autosuggestions" "enable" ])
+    (lib.mkRenamedOptionModule
+      [ "programs" "zsh" "enableAutosuggestions" ]
+      [ "programs" "zsh" "autosuggestions" "enable" ]
+    )
   ];
 
   options.programs.zsh.autosuggestions = {
@@ -20,7 +28,13 @@ in
     };
 
     strategy = lib.mkOption {
-      type = lib.types.listOf (lib.types.enum [ "history" "completion" "match_prev_cmd" ]);
+      type = lib.types.listOf (
+        lib.types.enum [
+          "history"
+          "completion"
+          "match_prev_cmd"
+        ]
+      );
       default = [ "history" ];
       description = ''
         `ZSH_AUTOSUGGEST_STRATEGY` is an array that specifies how suggestions should be generated.
@@ -44,7 +58,7 @@ in
 
     extraConfig = lib.mkOption {
       type = lib.types.attrsOf lib.types.str;
-      default = {};
+      default = { };
       description = "Attribute set with additional configuration values";
       example = lib.literalExpression ''
         {
@@ -64,7 +78,9 @@ in
       export ZSH_AUTOSUGGEST_STRATEGY=(${builtins.concatStringsSep " " cfg.strategy})
       ${lib.optionalString (!cfg.async) "unset ZSH_AUTOSUGGEST_USE_ASYNC"}
 
-      ${builtins.concatStringsSep "\n" (lib.mapAttrsToList (key: value: ''export ${key}="${value}"'') cfg.extraConfig)}
+      ${builtins.concatStringsSep "\n" (
+        lib.mapAttrsToList (key: value: ''export ${key}="${value}"'') cfg.extraConfig
+      )}
     '';
 
   };

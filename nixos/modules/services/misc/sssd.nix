@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.sssd;
   nscd = config.services.nscd;
@@ -6,7 +11,8 @@ let
   dataDir = "/var/lib/sssd";
   settingsFile = "${dataDir}/sssd.conf";
   settingsFileUnsubstituted = pkgs.writeText "${dataDir}/sssd-unsubstituted.conf" cfg.config;
-in {
+in
+{
   options = {
     services.sssd = {
       enable = lib.mkEnableOption "the System Security Services Daemon";
@@ -82,10 +88,19 @@ in {
 
       systemd.services.sssd = {
         description = "System Security Services Daemon";
-        wantedBy    = [ "multi-user.target" ];
-        before = [ "systemd-user-sessions.service" "nss-user-lookup.target" ];
-        after = [ "network-online.target" "nscd.service" ];
-        requires = [ "network-online.target" "nscd.service" ];
+        wantedBy = [ "multi-user.target" ];
+        before = [
+          "systemd-user-sessions.service"
+          "nss-user-lookup.target"
+        ];
+        after = [
+          "network-online.target"
+          "nscd.service"
+        ];
+        requires = [
+          "network-online.target"
+          "nscd.service"
+        ];
         wants = [ "nss-user-lookup.target" ];
         restartTriggers = [
           config.environment.etc."nscd.conf".source
@@ -148,18 +163,19 @@ in {
     })
 
     (lib.mkIf cfg.sshAuthorizedKeysIntegration {
-    # Ugly: sshd refuses to start if a store path is given because /nix/store is group-writable.
-    # So indirect by a symlink.
-    environment.etc."ssh/authorized_keys_command" = {
-      mode = "0755";
-      text = ''
-        #!/bin/sh
-        exec ${pkgs.sssd}/bin/sss_ssh_authorizedkeys "$@"
-      '';
-    };
-    services.openssh.authorizedKeysCommand = "/etc/ssh/authorized_keys_command";
-    services.openssh.authorizedKeysCommandUser = "nobody";
-  })];
+      # Ugly: sshd refuses to start if a store path is given because /nix/store is group-writable.
+      # So indirect by a symlink.
+      environment.etc."ssh/authorized_keys_command" = {
+        mode = "0755";
+        text = ''
+          #!/bin/sh
+          exec ${pkgs.sssd}/bin/sss_ssh_authorizedkeys "$@"
+        '';
+      };
+      services.openssh.authorizedKeysCommand = "/etc/ssh/authorized_keys_command";
+      services.openssh.authorizedKeysCommandUser = "nobody";
+    })
+  ];
 
   meta.maintainers = with lib.maintainers; [ bbigras ];
 }

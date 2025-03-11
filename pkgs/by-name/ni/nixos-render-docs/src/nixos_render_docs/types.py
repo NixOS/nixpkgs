@@ -1,4 +1,5 @@
 from collections.abc import Sequence
+from enum import Enum
 from typing import Callable, Optional, NamedTuple
 
 from markdown_it.token import Token
@@ -12,3 +13,7 @@ class RenderedOption(NamedTuple):
     links: Optional[list[str]] = None
 
 RenderFn = Callable[[Token, Sequence[Token], int], str]
+
+class AnchorStyle(Enum):
+    NONE = "none"
+    LEGACY = "legacy"

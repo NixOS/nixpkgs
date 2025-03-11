@@ -1,4 +1,8 @@
-{ lib, fetchCrate, rustPlatform }:
+{
+  lib,
+  fetchCrate,
+  rustPlatform,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "license-generator";
@@ -9,7 +13,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-jp7NQfDh512oThZbLj0NbqcH7rxV2R0kDv1wsiTNf/M=";
   };
 
-  cargoHash = "sha256-pjH+i7uG3++NLIZ9y+wg4r+TutmZF2+uO501pdPApQs=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-GP1Xr+M7mDXFB1fVdTq3VPPQR9QU43iQlJNW9MqcLB0=";
 
   meta = with lib; {
     description = "Command-line tool for generating license files";

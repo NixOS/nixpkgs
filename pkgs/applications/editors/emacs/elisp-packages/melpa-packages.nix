@@ -153,8 +153,10 @@ let
         # https://github.com/Golevka/emacs-clang-complete-async/issues/90
         auto-complete-clang-async = (addPackageRequires super.auto-complete-clang-async [ self.auto-complete ]).overrideAttrs (old: {
           buildInputs = old.buildInputs ++ [ pkgs.llvmPackages.llvm ];
-          CFLAGS = "-I${lib.getLib pkgs.llvmPackages.libclang}/include";
-          LDFLAGS = "-L${lib.getLib pkgs.llvmPackages.libclang}/lib";
+          env = old.env or { } // {
+            CFLAGS = "-I${lib.getLib pkgs.llvmPackages.libclang}/include";
+            LDFLAGS = "-L${lib.getLib pkgs.llvmPackages.libclang}/lib";
+          };
         });
 
         # part of a larger package
@@ -214,8 +216,10 @@ let
         });
 
         erlang = super.erlang.overrideAttrs (attrs: {
-          buildInputs = attrs.buildInputs ++ [
+          nativeBuildInputs = attrs.nativeBuildInputs or [ ] ++ [
             pkgs.perl
+          ];
+          buildInputs = attrs.buildInputs or [ ] ++ [
             pkgs.ncurses
           ];
         });
@@ -240,7 +244,7 @@ let
           #   - https://github.com/vedang/pdf-tools/issues/102
           #   - https://github.com/vedang/pdf-tools/issues/103
           #   - https://github.com/vedang/pdf-tools/issues/109
-          CXXFLAGS = "-std=c++17";
+          env = old.env or { } // { CXXFLAGS = "-std=c++17"; };
 
           nativeBuildInputs = old.nativeBuildInputs ++ [
             pkgs.autoconf
@@ -292,7 +296,7 @@ let
 
         irony = super.irony.overrideAttrs (old: {
           cmakeFlags = old.cmakeFlags or [ ] ++ [ "-DCMAKE_INSTALL_BINDIR=bin" ];
-          env.NIX_CFLAGS_COMPILE = "-UCLANG_RESOURCE_DIR";
+          env = old.env or { } // { NIX_CFLAGS_COMPILE = "-UCLANG_RESOURCE_DIR"; };
           preConfigure = ''
             pushd server
           '';
@@ -316,9 +320,7 @@ let
         });
 
         # tries to write a log file to $HOME
-        insert-shebang = super.insert-shebang.overrideAttrs (attrs: {
-          HOME = "/tmp";
-        });
+        insert-shebang = mkHome super.insert-shebang;
 
         ivy-rtags = ignoreCompilationError (fix-rtags super.ivy-rtags); # elisp error
 
@@ -447,7 +449,8 @@ let
 
         magit-circleci = buildWithGit super.magit-circleci;
 
-        magit-delta = buildWithGit super.magit-delta;
+        # https://github.com/dandavison/magit-delta/issues/30
+        magit-delta = addPackageRequires (buildWithGit super.magit-delta) [ self.dash ];
 
         orgit = buildWithGit super.orgit;
 
@@ -550,6 +553,13 @@ let
           '';
         });
 
+        treemacs = super.treemacs.overrideAttrs (attrs: {
+          postPatch = (attrs.postPatch or "") + ''
+            substituteInPlace src/elisp/treemacs-customization.el \
+              --replace 'treemacs-python-executable (treemacs--find-python3)' 'treemacs-python-executable "${lib.getExe pkgs.python3}"'
+          '';
+        });
+
         treemacs-magit = super.treemacs-magit.overrideAttrs (attrs: {
           # searches for Git at build time
           nativeBuildInputs =
@@ -588,11 +598,13 @@ let
             export EZMQ_LIBDIR=$(mktemp -d)
             make
           '';
-          nativeBuildInputs = old.nativeBuildInputs ++ [
+          nativeBuildInputs = old.nativeBuildInputs or [ ] ++ [
             pkgs.autoconf
             pkgs.automake
             pkgs.pkg-config
             pkgs.libtool
+          ];
+          buildInputs = old.buildInputs or [ ] ++ [
             (pkgs.zeromq.override { enableDrafts = true; })
           ];
           postInstall = (old.postInstall or "") + "\n" + ''
@@ -658,9 +670,7 @@ let
         helm-rtags = ignoreCompilationError (fix-rtags super.helm-rtags); # elisp error
 
         # tries to write to $HOME
-        php-auto-yasnippets = super.php-auto-yasnippets.overrideAttrs (attrs: {
-          HOME = "/tmp";
-        });
+        php-auto-yasnippets = mkHome super.php-auto-yasnippets;
 
         racer = super.racer.overrideAttrs (attrs: {
           postPatch = attrs.postPatch or "" + ''
@@ -754,6 +764,9 @@ let
         # Optimizer error: too much on the stack
         ack-menu = ignoreCompilationError super.ack-menu;
 
+        # https://github.com/skeeto/emacs-aio/issues/31
+        aio = ignoreCompilationError super.aio;
+
         # https://github.com/gongo/airplay-el/issues/2
         airplay = addPackageRequires super.airplay [ self.request-deferred ];
 
@@ -792,6 +805,18 @@ let
 
         # depends on distel which is not on any ELPA https://github.com/massemanet/distel/issues/21
         auto-complete-distel = ignoreCompilationError super.auto-complete-distel;
+
+        auto-virtualenv = super.auto-virtualenv.overrideAttrs (
+          finalAttrs: previousAttrs: {
+            patches = previousAttrs.patches or [ ] ++ [
+              (pkgs.fetchpatch {
+                name = "do-not-error-if-the-optional-projectile-is-not-available.patch";
+                url = "https://github.com/marcwebbie/auto-virtualenv/pull/14/commits/9a068974a4e12958200c12c6a23372fa736523c1.patch";
+                hash = "sha256-bqrroFf5AD5SHx6uzBFdVwTv3SbFiO39T+0x03Ves/k=";
+              })
+            ];
+          }
+        );
 
         aws-ec2 = ignoreCompilationError super.aws-ec2; # elisp error
 
@@ -934,11 +959,18 @@ let
         # missing optional dependencies
         conda = addPackageRequires super.conda [ self.projectile ];
 
-        consult-gh = super.consult-gh.overrideAttrs (old: {
-          propagatedUserEnvPkgs = old.propagatedUserEnvPkgs or [ ] ++ [ pkgs.gh ];
-        });
+        # needs network during compilation, also native-ice
+        consult-gh = ignoreCompilationError (
+          super.consult-gh.overrideAttrs (old: {
+            propagatedUserEnvPkgs = old.propagatedUserEnvPkgs or [ ] ++ [ pkgs.gh ];
+          })
+        );
 
-        consult-gh-forge = buildWithGit super.consult-gh-forge;
+        # needs network during compilation
+        consult-gh-embark = ignoreCompilationError super.consult-gh-embark;
+
+        # needs network during compilation
+        consult-gh-forge = ignoreCompilationError (buildWithGit super.consult-gh-forge);
 
         counsel-gtags = ignoreCompilationError super.counsel-gtags; # elisp error
 
@@ -952,14 +984,19 @@ let
 
         cssh = ignoreCompilationError super.cssh; # elisp error
 
-        dap-mode = super.dap-mode.overrideAttrs (old: {
-          # empty file causing native-compiler-error-empty-byte
-          preBuild =
-            ''
-              rm --verbose dapui.el
-            ''
-            + old.preBuild or "";
-        });
+        dap-mode = super.dap-mode.overrideAttrs (
+          finalAttrs: previousAttrs: {
+            # empty file causing native-compiler-error-empty-byte
+            preBuild =
+              if lib.versionOlder finalAttrs.version "20250131.1624" then
+                ''
+                  rm --verbose dapui.el
+                ''
+                + previousAttrs.preBuild or ""
+              else
+                previousAttrs.preBuild or null;
+          }
+        );
 
         db-pg = ignoreCompilationError super.db-pg; # elisp error
 
@@ -1114,6 +1151,8 @@ let
         );
 
         fxrd-mode = ignoreCompilationError super.fxrd-mode; # elisp error
+
+        gams-ac = ignoreCompilationError super.gams-ac; # need gams in PATH during compilation
 
         # missing optional dependencies
         gap-mode = addPackageRequires super.gap-mode [
@@ -1290,7 +1329,7 @@ let
         mastodon = ignoreCompilationError super.mastodon; # elisp error
 
         # https://github.com/org2blog/org2blog/issues/339
-        metaweblog = addPackageRequires super.metaweblog [ self.xml-rpc ];
+        metaweblog = addPackageRequiresIfOlder super.metaweblog [ self.xml-rpc ] "20250204.1820";
 
         mu-cite = ignoreCompilationError super.mu-cite; # elisp error
 
@@ -1376,7 +1415,7 @@ let
         org-gtd = ignoreCompilationError super.org-gtd; # elisp error
 
         # needs newer org than the Eamcs 29.4 builtin one
-        org-link-beautify = addPackageRequires super.org-link-beautify [ self.org ];
+        org-link-beautify = addPackageRequires super.org-link-beautify [ self.org self.qrencode ];
 
         # TODO report to upstream
         org-kindle = addPackageRequires super.org-kindle [ self.dash ];
@@ -1457,6 +1496,8 @@ let
         # https://github.com/polymode/poly-R/issues/41
         poly-R = addPackageRequires super.poly-R [ self.ess ];
 
+        poly-gams = ignoreCompilationError super.poly-gams; # need gams in PATH during compilation
+
         # missing optional dependencies: direx e2wm yaol, yaol not on any ELPA
         pophint = ignoreCompilationError super.pophint;
 
@@ -1495,6 +1536,18 @@ let
         sakura-theme = addPackageRequiresIfOlder super.sakura-theme [ self.autothemer ] "20240921.1028";
 
         scad-preview = ignoreCompilationError super.scad-preview; # elisp error
+
+        sdml-mode = super.sdml-mode.overrideAttrs (
+          finalAttrs: previousAttrs: {
+            patches = previousAttrs.patches or [ ] ++ [
+              (pkgs.fetchpatch {
+                name = "make-pretty-hydra-optional.patch";
+                url = "https://github.com/sdm-lang/emacs-sdml-mode/pull/3/commits/2368afe31c72073488411540e212c70aae3dd468.patch";
+                hash = "sha256-Wc4pquKV9cTRey9SdjY++UgcP+pGI0hVOOn1Cci8dpk=";
+              })
+            ];
+          }
+        );
 
         # https://github.com/wanderlust/semi/pull/29
         # missing optional dependencies
@@ -1561,6 +1614,8 @@ let
         tommyh-theme = ignoreCompilationError super.tommyh-theme; # elisp error
 
         tramp-hdfs = ignoreCompilationError super.tramp-hdfs; # elisp error
+
+        twtxt = ignoreCompilationError super.twtxt; # needs to read ~/twtxt.txt
 
         universal-emotions-emoticons = ignoreCompilationError super.universal-emotions-emoticons; # elisp error
 

@@ -1,7 +1,8 @@
-{ lib
-, bundlerApp
-, makeWrapper
-, curl
+{
+  lib,
+  bundlerApp,
+  makeWrapper,
+  curl,
 }:
 
 bundlerApp {
@@ -23,7 +24,10 @@ bundlerApp {
     homepage = "https://wpscan.org/";
     changelog = "https://github.com/wpscanteam/wpscan/releases";
     license = licenses.unfreeRedistributable;
-    maintainers = with maintainers; [ nyanloutre manveru ];
+    maintainers = with maintainers; [
+      nyanloutre
+      manveru
+    ];
     platforms = platforms.unix;
   };
 }

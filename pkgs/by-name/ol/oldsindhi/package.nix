@@ -1,4 +1,8 @@
-{ lib, stdenvNoCC, fetchurl }:
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+}:
 
 stdenvNoCC.mkDerivation rec {
   pname = "oldsindhi";
@@ -22,7 +26,10 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://github.com/MihailJP/oldsindhi";
     description = "Free Sindhi Khudabadi font";
     maintainers = with maintainers; [ mathnerd314 ];
-    license = with licenses; [ mit ofl ];
+    license = with licenses; [
+      mit
+      ofl
+    ];
     platforms = platforms.all;
   };
 }

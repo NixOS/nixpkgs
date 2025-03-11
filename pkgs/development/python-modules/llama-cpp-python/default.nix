@@ -1,61 +1,93 @@
 {
   lib,
   stdenv,
+  gcc13Stdenv,
   buildPythonPackage,
-  cmake,
   fetchFromGitHub,
-  gitUpdater,
+  fetchpatch2,
+
+  # nativeBuildInputs
+  cmake,
   ninja,
+
+  # build-system
   pathspec,
   pyproject-metadata,
-  pytestCheckHook,
-  pythonOlder,
   scikit-build-core,
+
+  # dependencies
+  diskcache,
+  jinja2,
+  numpy,
+  typing-extensions,
+
+  # tests
+  scipy,
+  huggingface-hub,
+
+  # passthru
+  gitUpdater,
+  pytestCheckHook,
   llama-cpp-python,
 
   config,
   cudaSupport ? config.cudaSupport,
   cudaPackages ? { },
 
-  diskcache,
-  jinja2,
-  numpy,
-  typing-extensions,
-  scipy,
-  huggingface-hub,
 }:
 let
-  version = "0.3.1";
+  stdenvTarget = if cudaSupport then gcc13Stdenv else stdenv;
 in
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "llama-cpp-python";
-  inherit version;
+  version = "0.3.6";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
-
-  stdenv = if cudaSupport then cudaPackages.backendStdenv else stdenv;
 
   src = fetchFromGitHub {
     owner = "abetlen";
     repo = "llama-cpp-python";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-eO1zvNJZBE5BCnbgbh00tFIRWBCWor1lIsrLXs/HFds=";
+    tag = "v${version}";
+    hash = "sha256-d5nMgpS7m6WEILs222ztwphoqkAezJ+qt6sVKSlpIYI=";
     fetchSubmodules = true;
   };
+  # src = /home/gaetan/llama-cpp-python;
+
+  patches = [
+    # fix segfault when running tests due to missing default Metal devices
+    (fetchpatch2 {
+      url = "https://github.com/ggml-org/llama.cpp/commit/acd38efee316f3a5ed2e6afcbc5814807c347053.patch?full_index=1";
+      stripLen = 1;
+      extraPrefix = "vendor/llama.cpp/";
+      hash = "sha256-71+Lpg9z5KPlaQTX9D85KS2LXFWLQNJJ18TJyyq3/pU=";
+    })
+  ];
 
   dontUseCmakeConfigure = true;
   SKBUILD_CMAKE_ARGS = lib.strings.concatStringsSep ";" (
-    lib.optionals cudaSupport [
+    # Set GGML_NATIVE=off. Otherwise, cmake attempts to build with
+    # -march=native* which is either a no-op (if cc-wrapper is able to ignore
+    # it), or an attempt to build a non-reproducible binary.
+    #
+    # This issue was spotted when cmake rules appended feature modifiers to
+    # -mcpu, breaking linux build as follows:
+    #
+    # cc1: error: unknown value ‘native+nodotprod+noi8mm+nosve’ for ‘-mcpu’
+    [ "-DGGML_NATIVE=off" ]
+    ++ lib.optionals cudaSupport [
       "-DGGML_CUDA=on"
       "-DCUDAToolkit_ROOT=${lib.getDev cudaPackages.cuda_nvcc}"
       "-DCMAKE_CUDA_COMPILER=${lib.getExe cudaPackages.cuda_nvcc}"
     ]
   );
 
+  enableParallelBuilding = true;
+
   nativeBuildInputs = [
     cmake
     ninja
+  ];
+
+  build-system = [
     pathspec
     pyproject-metadata
     scikit-build-core
@@ -70,7 +102,9 @@ buildPythonPackage {
     ]
   );
 
-  propagatedBuildInputs = [
+  stdenv = stdenvTarget;
+
+  dependencies = [
     diskcache
     jinja2
     numpy
@@ -91,13 +125,23 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "llama_cpp" ];
 
-  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
-  passthru.tests.llama-cpp-python = llama-cpp-python.override { cudaSupport = true; };
+  passthru = {
+    updateScript = gitUpdater { rev-prefix = "v"; };
+    tests = lib.optionalAttrs stdenvTarget.hostPlatform.isLinux {
+      withCuda = llama-cpp-python.override {
+        cudaSupport = true;
+      };
+    };
+  };
 
   meta = {
     description = "Python bindings for llama.cpp";
     homepage = "https://github.com/abetlen/llama-cpp-python";
+    changelog = "https://github.com/abetlen/llama-cpp-python/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ kirillrdy ];
+    maintainers = with lib.maintainers; [
+      booxter
+      kirillrdy
+    ];
   };
 }

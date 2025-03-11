@@ -1,22 +1,23 @@
-{ alsa-lib
-, alsa-utils
-, autoPatchelfHook
-, cifs-utils
-, fetchurl
-, ffmpeg
-, freetype
-, icu66
-, krb5
-, lib
-, libtasn1
-, lttng-ust_2_12
-, makeWrapper
-, openssl
-, stdenv
+{
+  alsa-lib,
+  alsa-utils,
+  autoPatchelfHook,
+  cifs-utils,
+  fetchurl,
+  ffmpeg,
+  freetype,
+  icu66,
+  krb5,
+  lib,
+  libtasn1,
+  lttng-ust_2_12,
+  makeWrapper,
+  openssl,
+  stdenv,
 }:
 let
-  version = "2.0-1470";
-  urlVersion = builtins.replaceStrings [ "." "-" ] [ "00" "0" ] version;
+  version = "2.47.1510";
+  urlVersion = builtins.replaceStrings [ "." ] [ "0" ] version;
 in
 stdenv.mkDerivation {
   pname = "roon-server";
@@ -24,7 +25,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://download.roonlabs.com/updates/production/RoonServer_linuxx64_${urlVersion}.tar.bz2";
-    hash = "sha256-esaxrSdvl1qUNfotOSs8Tj/AUg6hFpl23DGbji/uFO8=";
+    hash = "sha256-xuXQLniV2PKIeupfCH00j0e9mRxLocEraENqIUkdWNo=";
   };
 
   dontConfigure = true;
@@ -39,7 +40,10 @@ stdenv.mkDerivation {
     (lib.getLib stdenv.cc.cc)
   ];
 
-  nativeBuildInputs = [ autoPatchelfHook makeWrapper ];
+  nativeBuildInputs = [
+    autoPatchelfHook
+    makeWrapper
+  ];
 
   installPhase =
     let
@@ -60,9 +64,22 @@ stdenv.mkDerivation {
           makeWrapper "$dotnetDir/$binName" "${binPath}" \
             --add-flags "$binDir/$binName.dll" \
             --argv0 "$binName" \
-            --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ alsa-lib icu66 ffmpeg openssl ]}" \
+            --prefix LD_LIBRARY_PATH : "${
+              lib.makeLibraryPath [
+                alsa-lib
+                icu66
+                ffmpeg
+                openssl
+              ]
+            }" \
             --prefix PATH : "$dotnetDir" \
-            --prefix PATH : "${lib.makeBinPath [ alsa-utils cifs-utils ffmpeg ]}" \
+            --prefix PATH : "${
+              lib.makeBinPath [
+                alsa-utils
+                cifs-utils
+                ffmpeg
+              ]
+            }" \
             --chdir "$binDir" \
             --set DOTNET_ROOT "$dotnetDir"
         )
@@ -93,7 +110,10 @@ stdenv.mkDerivation {
     homepage = "https://roonlabs.com";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    maintainers = with maintainers; [ lovesegfault steell ];
+    maintainers = with maintainers; [
+      lovesegfault
+      steell
+    ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "RoonServer";
   };

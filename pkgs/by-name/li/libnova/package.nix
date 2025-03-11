@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchgit, autoreconfHook }:
+{
+  lib,
+  stdenv,
+  fetchgit,
+  autoreconfHook,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libnova";

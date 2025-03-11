@@ -28,7 +28,10 @@ stdenv.mkDerivation (finalAttrs: {
     SDL_image
   ];
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   strictDeps = true;
 
@@ -40,9 +43,9 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://github.com/erikg/vp";
     description = "SDL based picture viewer/slideshow";
-    license  = lib.licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     mainProgram = "vp";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     inherit (SDL.meta) platforms;
     hydraPlatforms = lib.platforms.linux; # build hangs on both Darwin platforms, needs investigation
   };

@@ -1,35 +1,34 @@
-{ lib
-, stdenv
-, fetchurl
-, desktop-file-utils
-, gettext
-, glibcLocales
-, itstool
-, libxml2
-, meson
-, ninja
-, pkg-config
-, python3
-, wrapGAppsHook4
-, cpio
-, glib
-, gnome
-, gtk4
-, libadwaita
-, libhandy
-, json-glib
-, libarchive
-, libportal-gtk4
-, nautilus
+{
+  lib,
+  stdenv,
+  fetchurl,
+  desktop-file-utils,
+  gettext,
+  glibcLocales,
+  itstool,
+  libxml2,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  wrapGAppsHook4,
+  cpio,
+  glib,
+  gnome,
+  gtk4,
+  libadwaita,
+  json-glib,
+  libarchive,
+  nautilus,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "file-roller";
-  version = "44.3";
+  version = "44.5";
 
   src = fetchurl {
     url = "mirror://gnome/sources/file-roller/${lib.versions.major finalAttrs.version}/file-roller-${finalAttrs.version}.tar.xz";
-    hash = "sha256-BMinRiX+yEJn/exAMGr7QQS9My2FBh4NNtSrBTOt+ko=";
+    hash = "sha256-369LuYnAuJhr6L2un//quNDzBmmuOmJ+jD35TyOIgzk=";
   };
 
   nativeBuildInputs = [
@@ -50,10 +49,8 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     gtk4
     libadwaita
-    libhandy
     json-glib
     libarchive
-    libportal-gtk4
     nautilus
   ];
 

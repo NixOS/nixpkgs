@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, pidgin, json-glib, signald }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pidgin,
+  json-glib,
+  signald,
+}:
 
 stdenv.mkDerivation rec {
   pname = "purple-signald";

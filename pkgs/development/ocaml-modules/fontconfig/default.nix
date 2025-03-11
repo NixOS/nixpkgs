@@ -1,4 +1,11 @@
-{ stdenv, lib, fetchFromGitHub, pkg-config, fontconfig, ocaml }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  pkg-config,
+  fontconfig,
+  ocaml,
+}:
 
 stdenv.mkDerivation {
   pname = "ocaml${ocaml.version}-fontconfig";
@@ -17,7 +24,10 @@ stdenv.mkDerivation {
       --replace String.capitalize String.capitalize_ascii
   '';
 
-  nativeBuildInputs = [ pkg-config ocaml ];
+  nativeBuildInputs = [
+    pkg-config
+    ocaml
+  ];
   buildInputs = [ fontconfig ];
 
   strictDeps = true;

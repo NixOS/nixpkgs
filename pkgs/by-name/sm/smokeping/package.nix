@@ -1,11 +1,22 @@
-{ lib, stdenv, fetchurl, fetchpatch, fping, rrdtool, perlPackages, autoreconfHook, nixosTests }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  fping,
+  rrdtool,
+  perlPackages,
+  autoreconfHook,
+  nixosTests,
+}:
 
 stdenv.mkDerivation rec {
   pname = "smokeping";
-  version = "2.8.2";
+  version = "2.9.0";
+
   src = fetchurl {
     url = "https://oss.oetiker.ch/smokeping/pub/smokeping-${version}.tar.gz";
-    sha256 = "sha256-KeYRGLRV4juWmtpfjiq0MtPi74fUr+LIbeSgPXGItuo=";
+    hash = "sha256-8b41v8zCuhyfdfdtIisptXAk7+icW1ZLhsGjfOLR3bE=";
   };
 
   patches = [
@@ -15,9 +26,24 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  propagatedBuildInputs = [ rrdtool ] ++
-    (with perlPackages; [ perl FCGI CGI CGIFast ConfigGrammar DigestHMAC NetTelnet
-      NetOpenSSH NetSNMP LWP IOTty fping NetDNS perlldap ]);
+  propagatedBuildInputs =
+    [ rrdtool ]
+    ++ (with perlPackages; [
+      perl
+      FCGI
+      CGI
+      CGIFast
+      ConfigGrammar
+      DigestHMAC
+      NetTelnet
+      NetOpenSSH
+      NetSNMP
+      LWP
+      IOTty
+      fping
+      NetDNS
+      perlldap
+    ]);
 
   nativeBuildInputs = [ autoreconfHook ];
 

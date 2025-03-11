@@ -1,0 +1,57 @@
+From dbd44fbdc580a83ce7fb67fe8d2c87acee087cb0 Mon Sep 17 00:00:00 2001
+From: OPNA2608 <opna2608@protonmail.com>
+Date: Mon, 20 Jan 2025 19:25:00 +0100
+Subject: [PATCH] treewide: Switch to glog CMake module
+
+---
+ CMakeLists.txt     | 5 ++---
+ src/CMakeLists.txt | 2 +-
+ 2 files changed, 3 insertions(+), 4 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 6f03c1c..b58d8ab 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -38,8 +38,9 @@ IF(CMAKE_BUILD_TYPE MATCHES [cC][oO][vV][eE][rR][aA][gG][eE])
+   SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -ftest-coverage -fprofile-arcs" )
+ ENDIF(CMAKE_BUILD_TYPE MATCHES [cC][oO][vV][eE][rR][aA][gG][eE])
+ 
+-find_package(PkgConfig)
++find_package(PkgConfig REQUIRED)
+ find_package(Boost COMPONENTS filesystem program_options system REQUIRED)
++find_package(glog REQUIRED)
+ 
+ add_subdirectory(3rd_party/xdg)
+ 
+@@ -56,7 +57,6 @@ if (TRUST_STORE_MIR_AGENT_ENABLED)
+   )
+ endif()
+ 
+-pkg_check_modules(GLOG libglog REQUIRED)
+ pkg_check_modules(PROCESS_CPP process-cpp REQUIRED)
+ 
+ include(CTest)
+@@ -66,7 +66,6 @@ include_directories(
+   3rd_party/xdg
+ 
+   ${GFLAGS_INCLUDE_DIRS}
+-  ${GLOG_INCLUDE_DIRS}
+   ${PROCESS_CPP_INCLUDE_DIRS}
+ )
+ 
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index ac87e7f..416549c 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -211,7 +211,7 @@ target_link_libraries(
+   ${Boost_LIBRARIES}
+   ${DBUS_LIBRARIES}
+   ${GFLAGS_LDFLAGS}
+-  ${GLOG_LDFLAGS}
++  glog::glog
+   ${GLIB_LDFLAGS}
+   ${GOBJECT_LDFLAGS}
+   ${LIBAPPARMOR_LDFLAGS}
+-- 
+2.47.1
+

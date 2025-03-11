@@ -1,11 +1,13 @@
-{ stdenv, lib
-, fetchFromGitHub
-, gcc-arm-embedded
-, pkg-config
-, python3
-, hidapi
-, libftdi1
-, libusb1
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  gcc-arm-embedded,
+  pkg-config,
+  python3,
+  hidapi,
+  libftdi1,
+  libusb1,
 }:
 
 stdenv.mkDerivation rec {
@@ -73,7 +75,10 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/blacksphere/blackmagic";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ pjones sorki ];
+    maintainers = with maintainers; [
+      pjones
+      sorki
+    ];
     platforms = platforms.unix;
   };
 }

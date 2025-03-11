@@ -1,9 +1,7 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch2,
 
   # build-system
   setuptools,
@@ -18,7 +16,7 @@
   termcolor,
   yapf,
 
-  # checks
+  # tests
   bitsandbytes,
   coverage,
   dvclive,
@@ -28,34 +26,20 @@
   parameterized,
   pytestCheckHook,
   transformers,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "mmengine";
-  version = "0.10.5";
+  version = "0.10.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "open-mmlab";
     repo = "mmengine";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-bZ6O4UOYUCwq11YmgRWepOIngYxYD/fNfM/VmcyUv9k=";
+    tag = "v${version}";
+    hash = "sha256-hQnwenuxHQwl+DwQXbIfsKlJkmcRvcHV1roK7q2X1KA=";
   };
-
-  patches = [
-    (fetchpatch2 {
-      name = "mmengine-torch-2.5-compat.patch";
-      url = "https://github.com/open-mmlab/mmengine/commit/4c22f78cdea2981a2b48a167e9feffe4721f8901.patch";
-      hash = "sha256-k+IFLeqTEVUGGiqmZg56LK64H/UTvpGN20GJT59wf4A=";
-    })
-    (fetchpatch2 {
-      # Bug reported upstream in https://github.com/open-mmlab/mmengine/issues/1575
-      # PR: https://github.com/open-mmlab/mmengine/pull/1589
-      name = "adapt-to-pytest-breaking-change";
-      url = "https://patch-diff.githubusercontent.com/raw/open-mmlab/mmengine/pull/1589.patch";
-      hash = "sha256-lyKf1GCLOPMpDttJ4s9hbATIGCVkiQhtyLfH9WzMWrw=";
-    })
-  ];
 
   build-system = [ setuptools ];
 
@@ -70,6 +54,8 @@ buildPythonPackage rec {
     yapf
   ];
 
+  pythonImportsCheck = [ "mmengine" ];
+
   nativeCheckInputs = [
     bitsandbytes
     coverage
@@ -80,49 +66,43 @@ buildPythonPackage rec {
     parameterized
     pytestCheckHook
     transformers
+    writableTmpDirAsHomeHook
   ];
 
   preCheck =
-    ''
-      export HOME=$(mktemp -d)
-    ''
     # Otherwise, the backprop hangs forever. More precisely, this exact line:
     # https://github.com/open-mmlab/mmengine/blob/02f80e8bdd38f6713e04a872304861b02157905a/tests/test_runner/test_activation_checkpointing.py#L46
     # Solution suggested in https://github.com/pytorch/pytorch/issues/91547#issuecomment-1370011188
-    + ''
+    ''
       export MKL_NUM_THREADS=1
     '';
 
-  pythonImportsCheck = [ "mmengine" ];
+  pytestFlagsArray = [
+    # Require unpackaged aim
+    "--deselect tests/test_visualizer/test_vis_backend.py::TestAimVisBackend"
 
-  disabledTestPaths = [
-    # AttributeError
-    "tests/test_fileio/test_backends/test_petrel_backend.py"
-    # Freezes forever?
-    "tests/test_runner/test_activation_checkpointing.py"
-    # missing dependencies
-    "tests/test_visualizer/test_vis_backend.py"
+    # Cannot find SSL certificate
+    # _pygit2.GitError: OpenSSL error: failed to load certificates: error:00000000:lib(0)::reason(0)
+    "--deselect tests/test_visualizer/test_vis_backend.py::TestDVCLiveVisBackend"
+
+    # AttributeError: type object 'MagicMock' has no attribute ...
+    "--deselect tests/test_fileio/test_backends/test_petrel_backend.py::TestPetrelBackend"
   ];
 
   disabledTests = [
-    # Tests are disabled due to sandbox
+    # Require network access
     "test_fileclient"
     "test_http_backend"
     "test_misc"
+
     # RuntimeError
     "test_dump"
     "test_deepcopy"
     "test_copy"
     "test_lazy_import"
-    # AssertionError
+
+    # AssertionError: os is not <module 'os' (frozen)>
     "test_lazy_module"
-    # Require unpackaged aim
-    "test_experiment"
-    "test_add_config"
-    "test_add_image"
-    "test_add_scalar"
-    "test_add_scalars"
-    "test_close"
   ];
 
   meta = {
@@ -131,7 +111,5 @@ buildPythonPackage rec {
     changelog = "https://github.com/open-mmlab/mmengine/releases/tag/v${version}";
     license = with lib.licenses; [ asl20 ];
     maintainers = with lib.maintainers; [ rxiao ];
-    broken =
-      stdenv.hostPlatform.isDarwin || (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
   };
 }

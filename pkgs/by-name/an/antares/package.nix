@@ -16,7 +16,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "antares-sql";
     repo = "antares";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-3zgr3Eefx3WDUW9/1NOaneUbFy3GTnJ3tGgivtW1K/g=";
   };
 

@@ -124,11 +124,6 @@ buildPythonPackage rec {
     export OMP_NUM_THREADS=$((NIX_BUILD_CORES > 64 ? 64 : NIX_BUILD_CORES))
   '';
 
-  # HACK: copy mesonEmulatorHook's flags to the variable used by meson-python
-  postConfigure = ''
-    mesonFlags="$mesonFlags ''${mesonFlagsArray[@]}"
-  '';
-
   preBuild = ''
     ln -s ${cfg} site.cfg
   '';

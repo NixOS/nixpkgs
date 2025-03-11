@@ -6,15 +6,15 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "opshin";
-  version = "0.23.0";
+  version = "0.24.1";
 
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "OpShin";
     repo = "opshin";
-    rev = "refs/tags/${version}";
-    hash = "sha256-H6tuSJYV9bAwXu/5Y8g6aFbbQFCpq2aqcmRaDq2cAEg=";
+    tag = version;
+    hash = "sha256-+uuTEszA5p/qhvthM3Uje6yX3urbIUAKKfDZ4JXEYYQ=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [

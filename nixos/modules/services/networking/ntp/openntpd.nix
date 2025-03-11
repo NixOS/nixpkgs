@@ -1,4 +1,10 @@
-{ pkgs, lib, config, options, ... }:
+{
+  pkgs,
+  lib,
+  config,
+  options,
+  ...
+}:
 
 with lib;
 
@@ -67,14 +73,21 @@ in
       description = "OpenNTP daemon user";
       home = "/var/empty";
     };
-    users.groups.ntp = {};
+    users.groups.ntp = { };
 
     systemd.services.openntpd = {
       description = "OpenNTP Server";
       wantedBy = [ "multi-user.target" ];
-      wants = [ "network-online.target" "time-sync.target" ];
+      wants = [
+        "network-online.target"
+        "time-sync.target"
+      ];
       before = [ "time-sync.target" ];
-      after = [ "dnsmasq.service" "bind.service" "network-online.target" ];
+      after = [
+        "dnsmasq.service"
+        "bind.service"
+        "network-online.target"
+      ];
       serviceConfig = {
         ExecStart = "${package}/sbin/ntpd -p ${pidFile} ${cfg.extraOptions}";
         Type = "forking";

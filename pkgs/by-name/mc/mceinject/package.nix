@@ -1,17 +1,26 @@
-{ lib, stdenv, fetchFromGitHub, bison, flex }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  bison,
+  flex,
+}:
 
 stdenv.mkDerivation rec {
   pname = "mceinject";
   version = "unstable-2013-01-19";
 
   src = fetchFromGitHub {
-    owner  = "andikleen";
-    repo   = "mce-inject";
-    rev    = "4cbe46321b4a81365ff3aafafe63967264dbfec5";
+    owner = "andikleen";
+    repo = "mce-inject";
+    rev = "4cbe46321b4a81365ff3aafafe63967264dbfec5";
     sha256 = "0gjapg2hrlxp8ssrnhvc19i3r1xpcnql7xv0zjgbv09zyha08g6z";
   };
 
-  nativeBuildInputs = [ flex bison ];
+  nativeBuildInputs = [
+    flex
+    bison
+  ];
 
   env.NIX_CFLAGS_COMPILE = "-Os -g -Wall";
 
@@ -21,7 +30,10 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  installFlags = [ "destdir=$(out)" "manprefix=/share" ];
+  installFlags = [
+    "destdir=$(out)"
+    "manprefix=/share"
+  ];
 
   meta = with lib; {
     description = "Tool to inject machine checks into x86 kernel for testing";

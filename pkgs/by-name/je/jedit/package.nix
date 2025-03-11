@@ -12,13 +12,16 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "jedit";
-  version = "5.6.0-unstable-2023-11-19";
+  version = "5.7.0";
 
-  src = fetchsvn {
-    url = "https://svn.code.sf.net/p/jedit/svn/jEdit/trunk";
-    rev = "25703";
-    hash = "sha256-z1KTZqKl6Dlqayw/3h/JvHQK3kSfio02R8V6aCb4g4Q=";
-  };
+  src =
+    let
+      versionWithDashes = lib.replaceStrings [ "." ] [ "-" ] finalAttrs.version;
+    in
+    fetchsvn {
+      url = "https://svn.code.sf.net/p/jedit/svn/jEdit/tags/jedit-${versionWithDashes}";
+      hash = "sha256-XfYK2C0QZrg4b//1eQcUNViRthBbXV+cbcYetzw2RG8=";
+    };
 
   ivyDeps = stdenv.mkDerivation {
     name = "${finalAttrs.pname}-${finalAttrs.version}-ivy-deps";
@@ -58,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash = "sha256-J5i5IhXlXw84y/4K6Vt84au4eVXVLupmtfscO+y1Fi0=";
+    outputHash = "sha256-NGSBGB7q0HpOpajJV68K0rqCOqFYNrZHsnUHW+1GSLs=";
   };
 
   # ignore a test failing because of the build environment
@@ -104,8 +107,9 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
+    changelog = "${finalAttrs.src.url}/doc/CHANGES.txt";
     description = "Programmer's text editor written in Java";
-    homepage = "http://www.jedit.org";
+    homepage = "https://www.jedit.org";
     license = lib.licenses.gpl2Only;
     mainProgram = "jedit";
     maintainers = with lib.maintainers; [ tomasajt ];

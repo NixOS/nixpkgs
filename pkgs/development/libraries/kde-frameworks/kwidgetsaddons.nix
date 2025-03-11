@@ -1,7 +1,8 @@
 {
   mkDerivation,
   extra-cmake-modules,
-  qtbase, qttools
+  qtbase,
+  qttools,
 }:
 
 mkDerivation {
@@ -9,5 +10,8 @@ mkDerivation {
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [ qttools ];
   propagatedBuildInputs = [ qtbase ];
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 }

@@ -11,11 +11,11 @@ let
   platformInfos = {
     "x86_64-linux" = {
       platform = "manylinux1_x86_64";
-      hash = "sha256-aTANmCWyR8QVZVQGk1WbgjWjZeBSUN2ZVNg5ab9s6n0=";
+      hash = "sha256-DRxj6wRl7ZQFvqQirGIpqhEo54QWCkgTie1tvpAIBoI=";
     };
     "x86_64-darwin" = {
       platform = "macosx_10_9_universal2";
-      hash = "sha256-9ihkrgcREVbp7GDvl7w1MlpAWmpjHFusJYNqvBnQij4=";
+      hash = "sha256-GW4gvMGylbMmAF9yhjjwpLu5wf5zmdzk1ECez8ml5Ic=";
     };
   };
 
@@ -24,7 +24,7 @@ let
 in
 python3Packages.buildPythonApplication rec {
   pname = "sourcery";
-  version = "1.23.0";
+  version = "1.35.0";
   format = "wheel";
 
   src = fetchPypi {

@@ -1,30 +1,37 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, openssl
-, git
-, gitls
-, darwin
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  openssl,
+  git,
+  gitls,
+  darwin,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "licensure";
-  version = "0.5.1";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "chasinglogic";
     repo = "licensure";
     rev = version;
-    hash = "sha256-bo1bac/K8HMZaeLVYZRqYOS8p+62suGlgSyYz8Atj+0=";
+    hash = "sha256-ZizTcXmxAQsDXthNaXxrlsZr/tdAa8U3i70mwpvBmHw=";
   };
 
-  cargoHash = "sha256-Ywfn+6qdKD9CG2/xdHR2XDsj5LF5XPJ2+XR5H1o2iXk=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-tQZ9/Ki7uaWM/zCKfiM9nL4X65K2JRmQmEWY/bnQPPA=";
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openssl git gitls ]
+  buildInputs =
+    [
+      openssl
+      git
+      gitls
+    ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.SystemConfiguration
-  ];
+      darwin.apple_sdk.frameworks.SystemConfiguration
+    ];
 
   checkFlags = [
     # Checking for files in the git repo (git ls-files),
@@ -37,7 +44,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/chasinglogic/licensure";
     license = licenses.gpl3Plus;
     mainProgram = "licensure";
-    maintainers = [ maintainers.soispha ];
+    maintainers = [ maintainers.bpeetz ];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

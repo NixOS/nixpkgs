@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, autoreconfHook, pam }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  pam,
+}:
 
 stdenv.mkDerivation rec {
   pname = "pam_tmpdir";

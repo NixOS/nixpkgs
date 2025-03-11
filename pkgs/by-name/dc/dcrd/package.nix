@@ -1,4 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, fetchpatch }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  fetchpatch,
+}:
 
 buildGoModule rec {
   pname = "dcrd";
@@ -7,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "decred";
     repo = "dcrd";
-    rev = "refs/tags/release-v${version}";
+    tag = "release-v${version}";
     hash = "sha256-nSocqwXgJhvfbdElddbb1gGxoygmtVtK6DbiSuMxYew=";
   };
 
@@ -21,7 +26,10 @@ buildGoModule rec {
 
   vendorHash = "sha256-Napcfj1+KjQ21Jb/qpIzg2W/grzun2Pz5FV5yIBXoTo=";
 
-  subPackages = [ "." "cmd/promptsecret" ];
+  subPackages = [
+    "."
+    "cmd/promptsecret"
+  ];
 
   __darwinAllowLocalNetworking = true;
 

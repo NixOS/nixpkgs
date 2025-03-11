@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.hardware.keyboard.qmk;
@@ -12,6 +17,6 @@ in
 
   config = mkIf cfg.enable {
     services.udev.packages = [ pkgs.qmk-udev-rules ];
-    users.groups.plugdev = {};
+    users.groups.plugdev = { };
   };
 }

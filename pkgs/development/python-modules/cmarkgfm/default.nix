@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "cmarkgfm";
-  version = "2024.1.14";
+  version = "2024.11.20";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ogjBcm4SujhRJc7yxtN1xBxd6kzCZzp3r3ErHb8HTpA=";
+    hash = "sha256-XdAc9hl1qKVyE83vXthw6TYDLxP+k9YN32Wf+5z3PGo=";
   };
 
   propagatedNativeBuildInputs = [ cffi ];

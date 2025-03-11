@@ -1,4 +1,10 @@
-{ lib, stdenvNoCC, fetchFromGitHub, bash, scdoc }:
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  bash,
+  scdoc,
+}:
 
 stdenvNoCC.mkDerivation rec {
   pname = "fetchutils";
@@ -11,7 +17,13 @@ stdenvNoCC.mkDerivation rec {
     sha256 = "sha256-ONrVZC6GBV5v3TeBekW9ybZjDHF3FNyXw1rYknqKRbk=";
   };
 
-  buildInputs = [ bash scdoc ];
+  nativeBuildInputs = [
+    scdoc
+  ];
+
+  buildInputs = [
+    bash
+  ];
 
   installFlags = [ "PREFIX=$(out)/" ];
 

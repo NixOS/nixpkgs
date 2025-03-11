@@ -1,4 +1,8 @@
-{ lib, clangStdenv, fetchzip }:
+{
+  lib,
+  clangStdenv,
+  fetchzip,
+}:
 
 clangStdenv.mkDerivation rec {
   pname = "zchaff";
@@ -15,14 +19,14 @@ clangStdenv.mkDerivation rec {
   '';
 
   makeFlags = [ "CC=${clangStdenv.cc.targetPrefix}c++" ];
-  installPhase= ''
+  installPhase = ''
     runHook preInstall
     install -Dm755 -t $out/bin zchaff
     runHook postInstall
   '';
 
   meta = with lib; {
-    homepage = "https://www.princeton.edu/~chaff/zchaf";
+    homepage = "https://www.princeton.edu/~chaff/zchaff.html";
     description = "Accelerated SAT Solver from Princeton";
     mainProgram = "zchaff";
     license = licenses.mit;

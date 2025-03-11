@@ -4,7 +4,7 @@
   lib,
 }:
 
-php.buildComposerProject (finalAttrs: {
+php.buildComposerProject2 (finalAttrs: {
   pname = "hmr_enabler";
   # composer doesn't support our unstable version format
   # version = "0-unstable-2024-08-24";
@@ -19,7 +19,7 @@ php.buildComposerProject (finalAttrs: {
 
   composerNoDev = false;
 
-  vendorHash = "sha256-ZuEEcFT+q49CCooEwdiu2Co345s0ZCC7jeEksi6A99A=";
+  vendorHash = "sha256-H+yxviMYc6AuerhYtcHRluRWdS1mmqcSMlN2Q24G1m8=";
 
   postInstall = ''
     chmod -R u+w $out/share

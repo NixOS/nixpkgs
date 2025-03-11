@@ -4,10 +4,11 @@
   fetchFromGitHub,
   mkLibretroCore,
   python3,
+  rapidjson,
 }:
 mkLibretroCore {
   core = "mame2016";
-  version = "0-unstable-2024-04-06";
+  version = "0-unstable-2022-04-06";
 
   src = fetchFromGitHub {
     owner = "libretro";
@@ -16,14 +17,22 @@ mkLibretroCore {
     hash = "sha256-IsM7f/zlzvomVOYlinJVqZllUhDfy4NNTeTPtNmdVak=";
   };
 
+  postPatch = ''
+    rm -r 3rdparty/rapidjson
+    ln -s ${lib.getInclude rapidjson} 3rdparty/rapidjson
+  '';
+
   patches = [ ./patches/mame2016-python311.patch ];
   extraNativeBuildInputs = [ python3 ];
   extraBuildInputs = [ alsa-lib ];
   makeFlags = [ "PYTHON_EXECUTABLE=python3" ];
-  # Build failures when this is set to a bigger number
-  NIX_BUILD_CORES = 8;
-  # Fix build errors in GCC13
-  NIX_CFLAGS_COMPILE = "-Wno-error -fpermissive";
+
+  env = {
+    # Build failures when this is set to a bigger number
+    NIX_BUILD_CORES = 8;
+    # Fix build errors in GCC 13
+    NIX_CFLAGS_COMPILE = "-Wno-error -fpermissive";
+  };
 
   meta = {
     description = "Port of MAME ~2016 to libretro, compatible with MAME 0.174 sets";

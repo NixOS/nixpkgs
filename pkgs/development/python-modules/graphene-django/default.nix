@@ -30,7 +30,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "graphql-python";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-12ue7Pq7TFMSBAfaj8Si6KrpuKYp5T2EEesJpc8wRho=";
   };
 

@@ -23,6 +23,10 @@ buildPecl rec {
     php.extensions.pdo
   ];
 
+  # Fix GCC 14 build.
+  # from incompatible pointer type [-Wincompatible-pointer-types]
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ pcre2 ];
 

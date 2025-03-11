@@ -1,12 +1,13 @@
-{ lib
-, fetchpatch
-, fetchFromGitHub
-, buildNpmPackage
-, installShellFiles
-, makeWrapper
-, bash
-, nodejs
-, python3
+{
+  lib,
+  fetchpatch,
+  fetchFromGitHub,
+  buildNpmPackage,
+  installShellFiles,
+  makeWrapper,
+  bash,
+  nodejs,
+  python3,
 }:
 
 buildNpmPackage rec {
@@ -39,11 +40,20 @@ buildNpmPackage rec {
   npmRootPath = "/lib/node_modules/epgstation";
 
   buildInputs = [ bash ];
-  nativeBuildInputs = [ installShellFiles makeWrapper python3 ];
+  nativeBuildInputs = [
+    installShellFiles
+    makeWrapper
+    python3
+  ];
 
   clientDir = buildNpmPackage {
     pname = "${pname}-client";
-    inherit version src installPhase meta;
+    inherit
+      version
+      src
+      installPhase
+      meta
+      ;
 
     npmDepsHash = "sha256-a/cDPABWI4lPxvSOI4D90O71A9lm8icPMak/g6DPYQY=";
     npmRootPath = "";
@@ -75,7 +85,10 @@ buildNpmPackage rec {
 
   postInstall =
     let
-      runtimeDeps = [ nodejs bash ];
+      runtimeDeps = [
+        nodejs
+        bash
+      ];
     in
     ''
       mkdir -p $out/{bin,libexec,share/doc/epgstation}

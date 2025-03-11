@@ -5,16 +5,17 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "cargo-features-manager";
-  version = "0.9.0";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "ToBinio";
     repo = "cargo-features-manager";
     rev = "v${version}";
-    hash = "sha256-g4iJ9iZp7vmnSE/P76ocDu/XKeSbPjosB97ojLI30oE=";
+    hash = "sha256-NjXJCrLsX52M7CBg8wdgwlK3gaGiznfdRGz7BAbVVPk=";
   };
 
-  cargoHash = "sha256-O0MQAgOZdiVW6GU69BAn2beDDqNNwijLlmfC7I3Qd0A=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-1/bCyScvWQYeGZRitvksww4uvrzhifRBYcYPgGY2GRo=";
 
   meta = {
     description = "Command-line tool for managing Architectural Decision Records";

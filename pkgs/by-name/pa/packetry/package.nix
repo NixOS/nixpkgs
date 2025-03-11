@@ -1,13 +1,11 @@
 {
   fetchFromGitHub,
   lib,
-  stdenv,
   rustPlatform,
   gtk4,
   pkg-config,
   pango,
   wrapGAppsHook4,
-  apple-sdk_11,
   versionCheckHook,
 }:
 
@@ -18,25 +16,22 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "greatscottgadgets";
     repo = "packetry";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-eDVom0kAL1QwO8BtrJS76VTvxtKs7CP6Ob5BWlE6wOM=";
   };
 
-  cargoHash = "sha256-xz9PdVVB1u6s/anPBRonWS1kMN+4kfkK/gaOlF9Z3yk=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-he+Y2vBCw5lmYe5x6myIxMKRIohBCLDQ/B1EV+4pKGs=";
 
   nativeBuildInputs = [
     pkg-config
     wrapGAppsHook4
   ];
 
-  buildInputs =
-    [
-      gtk4
-      pango
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_11
-    ];
+  buildInputs = [
+    gtk4
+    pango
+  ];
 
   # Disable test_replay tests as they need a gui
   preCheck = ''

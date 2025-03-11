@@ -15,6 +15,7 @@
 , bzip2
 , expat
 , libffi
+, libuuid
 , libxcrypt
 , mpdecimal
 , ncurses
@@ -24,8 +25,7 @@
 , zlib
 
 # platform-specific dependencies
-, bash
-, apple-sdk_11
+, bashNonInteractive
 , darwin
 , windows
 
@@ -167,6 +167,7 @@ let
     bzip2
     expat
     libffi
+    libuuid
     libxcrypt
     mpdecimal
     ncurses
@@ -178,9 +179,6 @@ let
     bluez
   ] ++ optionals enableFramework [
     darwin.apple_sdk.frameworks.Cocoa
-  ] ++ optionals stdenv.hostPlatform.isDarwin [
-    # Work around for ld64 crashes on x86_64-darwin. Remove once 11.0 becomes the default.
-    apple-sdk_11
   ] ++ optionals stdenv.hostPlatform.isMinGW [
     windows.dlfcn
     windows.mingw_w64_pthreads
@@ -239,7 +237,7 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
 
   inherit nativeBuildInputs;
   buildInputs = lib.optionals (!stdenv.hostPlatform.isWindows) [
-    bash # only required for patchShebangs
+    bashNonInteractive # only required for patchShebangs
   ] ++ buildInputs;
 
   prePatch = optionalString stdenv.hostPlatform.isDarwin ''
@@ -256,6 +254,9 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
     # (since it will do a futile invocation of gcc (!) to find
     # libuuid, slowing down program startup a lot).
     noldconfigPatch
+  ] ++ optionals (pythonOlder "3.12") [
+    # https://www.cve.org/CVERecord?id=CVE-2025-0938
+    ./CVE-2025-0938.patch
   ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform && stdenv.hostPlatform.isFreeBSD) [
     # Cross compilation only supports a limited number of "known good"
     # configurations. If you're reading this and it's been a long time
@@ -298,6 +299,15 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
   ] ++ optionals (pythonOlder "3.12") [
     # https://github.com/python/cpython/issues/90656
     ./loongarch-support.patch
+    # fix failing tests with openssl >= 3.4
+    # https://github.com/python/cpython/pull/127361
+  ] ++ optionals (pythonAtLeast "3.10" && pythonOlder "3.11") [
+    ./3.10/raise-OSError-for-ERR_LIB_SYS.patch
+  ] ++ optionals (pythonAtLeast "3.11" && pythonOlder "3.12") [
+    (fetchpatch {
+      url = "https://github.com/python/cpython/commit/f4b31edf2d9d72878dab1f66a36913b5bcc848ec.patch";
+      sha256 = "sha256-w7zZMp0yqyi4h5oG8sK4z9BwNEkqg4Ar+en3nlWcxh0=";
+    })
   ] ++ optionals (pythonAtLeast "3.11" && pythonOlder "3.13") [
     # backport fix for https://github.com/python/cpython/issues/95855
     ./platform-triplet-detection.patch
@@ -306,16 +316,32 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
     mingw-patch = fetchgit {
       name = "mingw-python-patches";
       url = "https://src.fedoraproject.org/rpms/mingw-python3.git";
-      rev = "45c45833ab9e5480ad0ae00778a05ebf35812ed4"; # for python 3.11.5 at the time of writing.
-      sha256 = "sha256-KIyNvO6MlYTrmSy9V/DbzXm5OsIuyT/BEpuo7Umm9DI=";
+      rev = "3edecdbfb4bbf1276d09cd5e80e9fb3dd88c9511"; # for python 3.11.9 at the time of writing.
+      hash = "sha256-kpXoIHlz53+0FAm/fK99ZBdNUg0u13erOr1XP2FSkQY=";
     };
-  in [
-    "${mingw-patch}/*.patch"
-  ]);
+  in (
+    builtins.map (f: "${mingw-patch}/${f}")
+    [
+      # The other patches in that repo are already applied to 3.11.10
+      "mingw-python3_distutils.patch"
+      "mingw-python3_frozenmain.patch"
+      "mingw-python3_make-sysconfigdata.py-relocatable.patch"
+      "mingw-python3_mods-failed.patch"
+      "mingw-python3_module-select.patch"
+      "mingw-python3_module-socket.patch"
+      "mingw-python3_modules.patch"
+      "mingw-python3_platform-mingw.patch"
+      "mingw-python3_posix-layout.patch"
+      "mingw-python3_pthread_threadid.patch"
+      "mingw-python3_pythonw.patch"
+      "mingw-python3_setenv.patch"
+      "mingw-python3_win-modules.patch"
+    ])
+  );
 
   postPatch = optionalString (!stdenv.hostPlatform.isWindows) ''
     substituteInPlace Lib/subprocess.py \
-      --replace-fail "'/bin/sh'" "'${bash}/bin/sh'"
+      --replace-fail "'/bin/sh'" "'${bashNonInteractive}/bin/sh'"
   '' + optionalString mimetypesSupport ''
     substituteInPlace Lib/mimetypes.py \
       --replace-fail "@mime-types@" "${mailcap}"
@@ -420,6 +446,8 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
   '' + optionalString (stdenv.hostPlatform.isDarwin && x11Support && pythonAtLeast "3.11") ''
     export TCLTK_LIBS="-L${tcl}/lib -L${tk}/lib -l${tcl.libPrefix} -l${tk.libPrefix}"
     export TCLTK_CFLAGS="-I${tcl}/include -I${tk}/include"
+  '' + optionalString stdenv.hostPlatform.isWindows ''
+    export NIX_CFLAGS_COMPILE+=" -Wno-error=incompatible-pointer-types"
   '' + optionalString stdenv.hostPlatform.isMusl ''
     export NIX_CFLAGS_COMPILE+=" -DTHREAD_STACK_SIZE=0x100000"
   '' +
@@ -490,6 +518,13 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
     # This allows build Python to import host Python's sysconfigdata
     mkdir -p "$out/${sitePackages}"
     ln -s "$out/lib/${libPrefix}/"_sysconfigdata*.py "$out/${sitePackages}/"
+    '' + optionalString (pythonAtLeast "3.14") ''
+    # Get rid of retained dependencies on -dev packages, and remove from _sysconfig_vars*.json introduced with Python3.14
+    for i in $out/lib/${libPrefix}/_sysconfig_vars*.json; do
+       sed -i $i -e "s|$TMPDIR|/no-such-path|g"
+    done
+    find $out/lib -name '_sysconfig_vars*.json*' -print -exec nuke-refs ${keep-references} '{}' +
+    ln -s "$out/lib/${libPrefix}/"_sysconfig_vars*.json "$out/${sitePackages}/"
     '' + optionalString stripConfig ''
     rm -R $out/bin/python*-config $out/lib/python*/config-*
     '' + optionalString stripIdlelib ''
@@ -588,7 +623,7 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     # Ensure we don't have references to build-time packages.
     # These typically end up in shebangs.
-    pythonOnBuildForHost buildPackages.bash
+    pythonOnBuildForHost buildPackages.bashNonInteractive
   ];
 
   separateDebugInfo = true;
@@ -605,6 +640,11 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
           hash = "sha256-p41hJwAiyRgyVjCVQokMSpSFg/VDDrqkCSxsodVb6vY=";
         })
       ];
+
+      postPatch = lib.optionalString (pythonAtLeast "3.9" && pythonOlder "3.11") ''
+        substituteInPlace Doc/tools/extensions/pyspecific.py \
+          --replace-fail "from sphinx.util import status_iterator" "from sphinx.util.display import status_iterator"
+      '';
 
       dontConfigure = true;
 
@@ -651,5 +691,7 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
     platforms = platforms.linux ++ platforms.darwin ++ platforms.windows ++ platforms.freebsd;
     mainProgram = executable;
     maintainers = lib.teams.python.members;
+    # mingw patches only apply to Python 3.11 currently
+    broken = (lib.versions.minor version) != "11" && stdenv.hostPlatform.isWindows;
   };
 })

@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "assafmo";
     repo = "joincap";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-HvqtAno26ZSggiXbQpkw5ghxCrmmLb5uDdeSQ2QVeq0=";
   };
 

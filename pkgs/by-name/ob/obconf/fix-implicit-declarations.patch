@@ -1,0 +1,37 @@
+diff --git a/src/appearance.c b/src/appearance.c
+index 4fb3f0c..7ae9cab 100644
+--- a/src/appearance.c
++++ b/src/appearance.c
+@@ -20,6 +20,7 @@
+ #include "main.h"
+ #include "tree.h"
+ #include "preview_update.h"
++#include <ctype.h>
+ 
+ static gboolean mapping = FALSE;
+ 
+diff --git a/src/desktops.h b/src/desktops.h
+index 1ba3e36..968595e 100644
+--- a/src/desktops.h
++++ b/src/desktops.h
+@@ -22,6 +22,7 @@
+ 
+ #include <gtk/gtk.h>
+ 
++void desktops_setup_tab();
+ void desktops_setup_num(GtkWidget *w);
+ void desktops_setup_names(GtkWidget *w);
+ 
+diff --git a/src/main.c b/src/main.c
+index d7e3446..fdfae54 100644
+--- a/src/main.c
++++ b/src/main.c
+@@ -28,6 +28,8 @@
+ #include "dock.h"
+ #include "preview_update.h"
+ #include "gettext.h"
++#include "desktops.h"
++#include "moveresize.h"
+ 
+ #include <gdk/gdkx.h>
+ #define SN_API_NOT_YET_FROZEN

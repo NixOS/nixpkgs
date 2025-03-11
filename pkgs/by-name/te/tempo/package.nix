@@ -1,17 +1,20 @@
-{ lib, buildGo122Module, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nix-update-script,
+}:
 
-# Does not build with Go 1.23
-# FIXME: check again for next release
-buildGo122Module rec {
+buildGoModule rec {
   pname = "tempo";
-  version = "2.6.0";
+  version = "2.7.1";
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "tempo";
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-jWoGKY+kC9VAK7jPFaGMJQkC/JeAiUjzqKhE2XjuJio=";
+    hash = "sha256-U+cURfcLoZOB0lgZ/Ky1qcKR8aWbai84ZyHQYQeONVc=";
   };
 
   vendorHash = null;
@@ -34,6 +37,8 @@ buildGo122Module rec {
 
   # tests use docker
   doCheck = false;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "High volume, minimal dependency trace storage";

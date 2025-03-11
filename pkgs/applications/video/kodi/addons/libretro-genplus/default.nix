@@ -1,4 +1,10 @@
-{ lib, buildKodiBinaryAddon, fetchFromGitHub, libretro, genesis-plus-gx }:
+{
+  lib,
+  buildKodiBinaryAddon,
+  fetchFromGitHub,
+  libretro,
+  genesis-plus-gx,
+}:
 
 buildKodiBinaryAddon rec {
   pname = "kodi-libretro-genplus";

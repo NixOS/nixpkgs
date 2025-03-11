@@ -1,4 +1,15 @@
-{ lib, stdenv, fetchurl, pkg-config, popt, libuuid, liburcu, lttng-ust, kmod, libxml2 }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  popt,
+  libuuid,
+  liburcu,
+  lttng-ust,
+  kmod,
+  libxml2,
+}:
 
 stdenv.mkDerivation rec {
   pname = "lttng-tools";
@@ -10,7 +21,14 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ popt libuuid liburcu lttng-ust libxml2 kmod ];
+  buildInputs = [
+    popt
+    libuuid
+    liburcu
+    lttng-ust
+    libxml2
+    kmod
+  ];
 
   enableParallelBuilding = true;
 
@@ -18,7 +36,10 @@ stdenv.mkDerivation rec {
     description = "Tracing tools (kernel + user space) for Linux";
     mainProgram = "lttng";
     homepage = "https://lttng.org/";
-    license = with licenses; [ lgpl21Only gpl2Only ];
+    license = with licenses; [
+      lgpl21Only
+      gpl2Only
+    ];
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];
   };

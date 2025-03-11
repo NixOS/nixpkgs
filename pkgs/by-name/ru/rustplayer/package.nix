@@ -1,10 +1,11 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, pkg-config
-, openssl
-, alsa-lib
-, ffmpeg_6
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  pkg-config,
+  openssl,
+  alsa-lib,
+  ffmpeg_6,
 }:
 
 rustPlatform.buildRustPackage {
@@ -29,8 +30,15 @@ rustPlatform.buildRustPackage {
       "ffmpeg-sys-next-6.0.1" = "sha256-/CcyWDPeVLVSV8NfWFJhj1tGmuqLPnnyvVosIXM27NI=";
     };
   };
-  nativeBuildInputs = [ pkg-config rustPlatform.bindgenHook ];
-  buildInputs = [ alsa-lib openssl ffmpeg_6 ];
+  nativeBuildInputs = [
+    pkg-config
+    rustPlatform.bindgenHook
+  ];
+  buildInputs = [
+    alsa-lib
+    openssl
+    ffmpeg_6
+  ];
 
   checkFlags = [
     # network required

@@ -1,10 +1,11 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, openssl
-, pkg-config
-, stdenv
-, Security
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  openssl,
+  pkg-config,
+  stdenv,
+  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -18,7 +19,8 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-qGcEhoytkCkcaA5eHc8GVgWvbOIyrO6BCp+EHva6wTw=";
   };
 
-  cargoHash = "sha256-a7ADTJ0VmKiZBr951JIAOSPWucsBl5JnM8eQHWssRM4=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-nN2aNNBq2YDOY9H9682hvwrlI5WTg7s1EPi68UuBTBM=";
 
   checkFlags = [
     # Fails for 1.6.0, but binary works fine
@@ -27,8 +29,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
+  buildInputs = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 
   meta = with lib; {
     description = "Impossibly fast web search, made for static sites";

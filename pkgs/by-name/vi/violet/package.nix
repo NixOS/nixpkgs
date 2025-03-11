@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "violet";
-  version = "0.5.1";
+  version = "0.5.3";
 
   src = fetchFromGitHub {
     owner = "paullouisageneau";
     repo = "violet";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Xy6eo0BOKlUb6SN3mU8Nc85cW+I93pKl7N1bXoSOYUI=";
+    hash = "sha256-aoBTmhz/rwz2ucRrRti3K8SYt9D/EBPn6s5iTjQ9bpQ=";
     fetchSubmodules = true;
   };
 

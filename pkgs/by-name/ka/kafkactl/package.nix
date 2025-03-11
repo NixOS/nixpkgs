@@ -1,20 +1,21 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
   pname = "kafkactl";
-  version = "5.3.0";
+  version = "5.5.1";
 
   src = fetchFromGitHub {
     owner = "deviceinsight";
     repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-OPXSajfR/eHSL0nHOIYPYvML2PsxtflBt7aTLPT1i0M=";
+    tag = "v${version}";
+    hash = "sha256-lsYdq3+hf+8EPLmLbgnzuVHfeZXrUlqYmHY4kJ6HzC4=";
   };
 
-  vendorHash = "sha256-VY1pm1RSfNGswuVoD73Mrpq+yMtenbjfpV7q72x/z7o=";
+  vendorHash = "sha256-0Kc8Z32YdmwhKMTBMBAK0ZdnXnH8/Ze1HcMDafosLvw=";
 
   doCheck = false;
 

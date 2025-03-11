@@ -1,4 +1,10 @@
-{ lib, buildKodiAddon, fetchFromGitHub, six, requests }:
+{
+  lib,
+  buildKodiAddon,
+  fetchFromGitHub,
+  six,
+  requests,
+}:
 buildKodiAddon rec {
   pname = "sponsorblock";
   namespace = "script.service.sponsorblock";

@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "CharlesBlonde";
     repo = "libsoundtouch";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-am8nHPdtKMh8ZA/jKgz2jnltpvgEga8/BjvP5nrhgvI=";
   };
 

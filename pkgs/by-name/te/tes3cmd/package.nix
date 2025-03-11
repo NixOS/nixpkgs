@@ -1,4 +1,9 @@
-{ stdenv, lib, perlPackages, fetchFromGitHub }:
+{
+  stdenv,
+  lib,
+  perlPackages,
+  fetchFromGitHub,
+}:
 
 stdenv.mkDerivation rec {
   pname = "tes3cmd";

@@ -1,17 +1,18 @@
-{ lib
-, fetchFromGitHub
-, buildPythonApplication
-, setuptools
-, setuptools-scm
-, wheel
-, nss
-, nix-update-script
-, stdenv
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonApplication,
+  setuptools,
+  setuptools-scm,
+  wheel,
+  nss,
+  nix-update-script,
+  stdenv,
 }:
 
 buildPythonApplication rec {
   pname = "firefox_decrypt";
-  version = "1.1.0";
+  version = "1.1.1";
   format = "pyproject";
 
   src = fetchFromGitHub {

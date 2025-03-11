@@ -1,7 +1,8 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, nix-update-script
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -15,7 +16,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-wbFVuoarOoxV9FqmuHJ9eZlG4rRqy1rsnuqbGorC2Rk=";
   };
 
-  cargoHash = "sha256-r4GcJhQn9x5c2hbL+813mS3HbIg8OwNDsMg/fHQoL9Y=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-JSCdMGScpeA5q6++veuQ8li3qVTuB0XdJ1yacsqgBDg=";
 
   passthru.updateScript = nix-update-script { };
 

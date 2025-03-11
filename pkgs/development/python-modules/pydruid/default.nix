@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     repo = pname;
     owner = "druid-io";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-9+xomjSwWDVHkret/mqAZKWOPFRMvVB3CWtFPzrT81k=";
   };
 

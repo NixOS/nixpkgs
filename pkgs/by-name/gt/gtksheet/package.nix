@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, gobject-introspection
-, gtk-doc
-, pkg-config
-, atk
-, cairo
-, glade
-, gtk3
-, pango
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  gobject-introspection,
+  gtk-doc,
+  pkg-config,
+  atk,
+  cairo,
+  glade,
+  gtk3,
+  pango,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -39,6 +40,8 @@ stdenv.mkDerivation (finalAttrs: {
     gtk3
     pango
   ];
+
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
 
   meta = {
     description = "Spreadsheet widget for GTK+";

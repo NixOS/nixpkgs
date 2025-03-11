@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, gitUpdater
-, kwindowsystem
-, libXScrnSaver
-, libqtxdg
-, lxqt-build-tools
-, polkit-qt-1
-, qtsvg
-, qttools
-, wrapQtAppsHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  gitUpdater,
+  kwindowsystem,
+  libXScrnSaver,
+  libqtxdg,
+  lxqt-build-tools,
+  polkit-qt-1,
+  qtsvg,
+  qttools,
+  wrapQtAppsHook,
 }:
 
 stdenv.mkDerivation rec {

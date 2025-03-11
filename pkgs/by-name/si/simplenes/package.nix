@@ -1,7 +1,9 @@
-{ lib, stdenv
-, fetchFromGitHub
-, cmake
-, sfml
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  sfml,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, writeShellScript
-, texliveBasic
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  writeShellScript,
+  texliveBasic,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, curl, cmake, nlohmann_json }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  curl,
+  cmake,
+  nlohmann_json,
+}:
 
 stdenv.mkDerivation {
   pname = "cpp-ipfs-http-client";
@@ -32,6 +39,9 @@ stdenv.mkDerivation {
     description = "IPFS C++ API client library";
     homepage = "https://github.com/vasild/cpp-ipfs-http-client";
     license = licenses.mit;
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    platforms = [
+      "x86_64-linux"
+      "x86_64-darwin"
+    ];
   };
 }

@@ -1,11 +1,12 @@
-{ lib
-, stdenvNoLibc
-, buildPackages
-, fetchurl
-, gitUpdater
-, linuxHeaders
-, libiconvReal
-, extraConfig ? ""
+{
+  lib,
+  stdenvNoLibc,
+  buildPackages,
+  fetchurl,
+  gitUpdater,
+  linuxHeaders,
+  libiconvReal,
+  extraConfig ? "",
 }:
 
 let
@@ -35,36 +36,39 @@ let
   '';
 
   # UCLIBC_SUSV4_LEGACY defines 'tmpnam', needed for gcc libstdc++ builds.
-  nixConfig = ''
-    RUNTIME_PREFIX "/"
-    DEVEL_PREFIX "/"
-    UCLIBC_HAS_WCHAR y
-    UCLIBC_HAS_FTW y
-    UCLIBC_HAS_RPC y
-    DO_C99_MATH y
-    UCLIBC_HAS_PROGRAM_INVOCATION_NAME y
-    UCLIBC_HAS_RESOLVER_SUPPORT y
-    UCLIBC_SUSV4_LEGACY y
-    UCLIBC_HAS_THREADS_NATIVE y
-    KERNEL_HEADERS "${linuxHeaders}/include"
-  '' + lib.optionalString (stdenv.hostPlatform.gcc.float or "" == "soft") ''
-    UCLIBC_HAS_FPU n
-  '' + lib.optionalString (stdenv.hostPlatform.isAarch32 && isCross) ''
-    CONFIG_ARM_EABI y
-    ARCH_WANTS_BIG_ENDIAN n
-    ARCH_BIG_ENDIAN n
-    ARCH_WANTS_LITTLE_ENDIAN y
-    ARCH_LITTLE_ENDIAN y
-    UCLIBC_HAS_FPU n
-  '';
+  nixConfig =
+    ''
+      RUNTIME_PREFIX "/"
+      DEVEL_PREFIX "/"
+      UCLIBC_HAS_WCHAR y
+      UCLIBC_HAS_FTW y
+      UCLIBC_HAS_RPC y
+      DO_C99_MATH y
+      UCLIBC_HAS_PROGRAM_INVOCATION_NAME y
+      UCLIBC_HAS_RESOLVER_SUPPORT y
+      UCLIBC_SUSV4_LEGACY y
+      UCLIBC_HAS_THREADS_NATIVE y
+      KERNEL_HEADERS "${linuxHeaders}/include"
+    ''
+    + lib.optionalString (stdenv.hostPlatform.gcc.float or "" == "soft") ''
+      UCLIBC_HAS_FPU n
+    ''
+    + lib.optionalString (stdenv.hostPlatform.isAarch32 && isCross) ''
+      CONFIG_ARM_EABI y
+      ARCH_WANTS_BIG_ENDIAN n
+      ARCH_BIG_ENDIAN n
+      ARCH_WANTS_LITTLE_ENDIAN y
+      ARCH_LITTLE_ENDIAN y
+      UCLIBC_HAS_FPU n
+    '';
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "uclibc-ng";
-  version = "1.0.50";
+  version = "1.0.51";
 
   src = fetchurl {
     url = "https://downloads.uclibc-ng.org/releases/${finalAttrs.version}/uClibc-ng-${finalAttrs.version}.tar.xz";
-    hash = "sha256-rthnJR9II6dOpeOjmT06fBIygKvhXjjcIGdww5aPIc8=";
+    hash = "sha256-NITIx6BQPAj35fp0c8mHQUBQcm8x6Fk9AtmE9RLRoMs=";
   };
 
   # 'ftw' needed to build acl, a coreutils dependency
@@ -86,13 +90,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
-  makeFlags = [
-    "ARCH=${stdenv.hostPlatform.linuxArch}"
-    "TARGET_ARCH=${stdenv.hostPlatform.linuxArch}"
-    "VERBOSE=1"
-  ] ++ lib.optionals (isCross) [
-    "CROSS=${stdenv.cc.targetPrefix}"
-  ];
+  makeFlags =
+    [
+      "ARCH=${stdenv.hostPlatform.linuxArch}"
+      "TARGET_ARCH=${stdenv.hostPlatform.linuxArch}"
+      "VERBOSE=1"
+    ]
+    ++ lib.optionals (isCross) [
+      "CROSS=${stdenv.cc.targetPrefix}"
+    ];
 
   # `make libpthread/nptl/sysdeps/unix/sysv/linux/lowlevelrwlock.h`:
   # error: bits/sysnum.h: No such file or directory
@@ -111,7 +117,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    # Derivations may check for the existance of this attribute, to know what to
+    # Derivations may check for the existence of this attribute, to know what to
     # link to.
     libiconv = libiconvReal;
 
@@ -140,7 +146,9 @@ stdenv.mkDerivation (finalAttrs: {
       experimental and need more testing.
     '';
     license = lib.licenses.lgpl2Plus;
-    maintainers = with lib.maintainers; [ rasendubi AndersonTorres ];
+    maintainers = with lib.maintainers; [
+      rasendubi
+    ];
     platforms = lib.platforms.linux;
     badPlatforms = lib.platforms.aarch64;
   };

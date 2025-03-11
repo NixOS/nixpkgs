@@ -12,7 +12,7 @@
   libinput,
   fontconfig,
   freetype,
-  mesa,
+  libgbm,
   wayland,
   xorg,
   vulkan-loader,
@@ -20,28 +20,32 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cosmic-edit";
-  version = "1.0.0-alpha.3";
+  version = "1.0.0-alpha.6";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-edit";
     rev = "epoch-${version}";
-    hash = "sha256-GCy/JyicPeCA7y9bfbVlyYiofRp0c82INPZi0zbnnxE=";
+    hash = "sha256-mKVZI/x8+LrwFHGnJOzOq/vFkGev7sM9xJQOTA7uZGA=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-mQSCUnCJ52iSekljNAvf7G+WefmXhhmZTxumvXl9Jyc=";
+  cargoHash = "sha256-+b8pSSBUMs1EJDlldgR1UqLLH0sLU/djMOtE3JsDpkQ=";
 
   # COSMIC applications now uses vergen for the About page
   # Update the COMMIT_DATE to match when the commit was made
-  env.VERGEN_GIT_COMMIT_DATE = "2024-10-31";
+  env.VERGEN_GIT_COMMIT_DATE = "2025-02-20";
   env.VERGEN_GIT_SHA = src.rev;
 
   postPatch = ''
-    substituteInPlace justfile --replace '#!/usr/bin/env' "#!$(command -v env)"
+    substituteInPlace justfile --replace-fail '#!/usr/bin/env' "#!$(command -v env)"
   '';
 
-  nativeBuildInputs = [ just pkg-config makeBinaryWrapper ];
+  nativeBuildInputs = [
+    just
+    pkg-config
+    makeBinaryWrapper
+  ];
   buildInputs = [
     libxkbcommon
     xorg.libX11
@@ -49,7 +53,7 @@ rustPlatform.buildRustPackage rec {
     libglvnd
     fontconfig
     freetype
-    mesa
+    libgbm
     wayland
     vulkan-loader
   ];
@@ -75,13 +79,9 @@ rustPlatform.buildRustPackage rec {
     "-Wl,--pop-state"
   ];
 
-  # LD_LIBRARY_PATH can be removed once tiny-xlib is bumped above 0.2.2
   postInstall = ''
     wrapProgram "$out/bin/cosmic-edit" \
-      --suffix XDG_DATA_DIRS : "${cosmic-icons}/share" \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [
-        xorg.libX11 xorg.libXcursor xorg.libXi vulkan-loader libxkbcommon wayland
-      ]}
+      --suffix XDG_DATA_DIRS : "${cosmic-icons}/share"
   '';
 
   meta = with lib; {
@@ -89,7 +89,10 @@ rustPlatform.buildRustPackage rec {
     description = "Text Editor for the COSMIC Desktop Environment";
     mainProgram = "cosmic-edit";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ ahoneybun nyabinary ];
+    maintainers = with maintainers; [
+      ahoneybun
+      nyabinary
+    ];
     platforms = platforms.linux;
   };
 }

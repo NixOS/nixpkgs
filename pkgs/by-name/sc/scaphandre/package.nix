@@ -1,14 +1,15 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, openssl
-, nix-update-script
-, runCommand
-, dieHook
-, nixosTests
-, testers
-, scaphandre
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  openssl,
+  nix-update-script,
+  runCommand,
+  dieHook,
+  nixosTests,
+  testers,
+  scaphandre,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -22,7 +23,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-cXwgPYTgom4KrL/PH53Fk6ChtALuMYyJ/oTrUKHCrzE=";
   };
 
-  cargoHash = "sha256-Vdkq9ShbHWepvIgHPjhKY+LmhjS+Pl84QelgEpen7Qs=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-fJxd/rwQN4Vc6behosZXOhgYNqlZ6O5BnVhzuLz2ILU=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ];
@@ -42,15 +44,19 @@ rustPlatform.buildRustPackage rec {
   passthru = {
     updateScript = nix-update-script { };
     tests = {
-      stdout = self: runCommand "${pname}-test" {
-        buildInputs = [
-          self
-          dieHook
-        ];
-      } ''
-        ${self}/bin/scaphandre stdout -t 4 > $out  || die "Scaphandre failed to measure consumption"
-        [ -s $out ]
-      '';
+      stdout =
+        self:
+        runCommand "${pname}-test"
+          {
+            buildInputs = [
+              self
+              dieHook
+            ];
+          }
+          ''
+            ${self}/bin/scaphandre stdout -t 4 > $out  || die "Scaphandre failed to measure consumption"
+            [ -s $out ]
+          '';
       vm = nixosTests.scaphandre;
       version = testers.testVersion {
         inherit version;

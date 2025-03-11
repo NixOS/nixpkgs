@@ -1,26 +1,28 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, aws-c-cal
-, aws-c-common
-, aws-c-compression
-, aws-c-http
-, aws-c-io
-, aws-c-sdkutils
-, cmake
-, nix
-, s2n-tls
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  aws-c-cal,
+  aws-c-common,
+  aws-c-compression,
+  aws-c-http,
+  aws-c-io,
+  aws-c-sdkutils,
+  cmake,
+  nix,
+  s2n-tls,
 }:
 
 stdenv.mkDerivation rec {
   pname = "aws-c-auth";
-  version = "0.7.26";
+  # nixpkgs-update: no auto update
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "aws-c-auth";
     rev = "v${version}";
-    hash = "sha256-02dy2xgMGWkLf+HyBztbkCcazfZNAMwpJPU2gGBPokY=";
+    hash = "sha256-p8D79BRjaPlhzap/FWbqMlkrbVELSgeJW8CljxBAaCI=";
   };
 
   nativeBuildInputs = [

@@ -1,10 +1,11 @@
-{ fetchFromGitHub
-, lib
-, openssl
-, pkg-config
-, protobuf
-, rustPlatform
-, stdenv
+{
+  fetchFromGitHub,
+  lib,
+  openssl,
+  pkg-config,
+  protobuf,
+  rustPlatform,
+  stdenv,
 }:
 
 # Updating this package will force an update for prisma. The
@@ -12,36 +13,24 @@
 # function correctly.
 rustPlatform.buildRustPackage rec {
   pname = "prisma-engines";
-  version = "5.22.0";
+  version = "6.3.0";
 
   src = fetchFromGitHub {
     owner = "prisma";
     repo = "prisma-engines";
     rev = version;
-    hash = "sha256-aCzm7pEsgbZ4ZNir3DLNnUlmiydOpLNcW2FpIQ44B6E=";
+    hash = "sha256-gQLDskabTaNk19BJi9Kv4TiEfVck2QZ7xdhopt5KH6M=";
   };
+
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-GLOGivOH8psE5/M5kYakh9Cab4Xe5Q8isY1c6YDyAB8=";
 
   # Use system openssl.
   OPENSSL_NO_VENDOR = 1;
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "barrel-0.6.6-alpha.0" = "sha256-USh0lQ1z+3Spgc69bRFySUzhuY79qprLlEExTmYWFN8=";
-      "cuid-1.3.2" = "sha256-qBu1k/dJiA6rWBwk4nOOqouIneD9h2TTBT8tvs0TDfA=";
-      "graphql-parser-0.3.0" = "sha256-0ZAsj2mW6fCLhwTETucjbu4rPNzfbNiHu2wVTBlTNe4=";
-      "mysql_async-0.31.3" = "sha256-2wOupQ/LFV9pUifqBLwTvA0tySv+XWbxHiqs7iTzvvg=";
-      "postgres-native-tls-0.5.0" = "sha256-pzMPNZzlvMaQqBu/V3ExPYVnoIaALeUaYJ4oo/hY9lA=";
-      "mongodb-3.0.0" = "sha256-1WQgY0zSZhFjt1nrLYTUBrpqBxpCCgKRSeGJLtkE6pw=";
-    };
-  };
-
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [
-    openssl
-    protobuf
-  ];
+  buildInputs = [ openssl ];
 
   preBuild = ''
     export OPENSSL_DIR=${lib.getDev openssl}
@@ -57,10 +46,14 @@ rustPlatform.buildRustPackage rec {
   '';
 
   cargoBuildFlags = [
-    "-p" "query-engine"
-    "-p" "query-engine-node-api"
-    "-p" "schema-engine-cli"
-    "-p" "prisma-fmt"
+    "-p"
+    "query-engine"
+    "-p"
+    "query-engine-node-api"
+    "-p"
+    "schema-engine-cli"
+    "-p"
+    "prisma-fmt"
   ];
 
   postInstall = ''
@@ -76,7 +69,11 @@ rustPlatform.buildRustPackage rec {
     license = licenses.asl20;
     platforms = platforms.unix;
     mainProgram = "prisma";
-    maintainers = with maintainers; [ pimeys tomhoule aqrln ];
+    maintainers = with maintainers; [
+      pimeys
+      tomhoule
+      aqrln
+    ];
   };
 }
 

@@ -1,8 +1,9 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, systemd
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  systemd,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -16,7 +17,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-wJi7FQrvMbdTwvbbjBnzmxupMbEuM8TeZ0JIK5ulQKI=";
   };
 
-  cargoHash = "sha256-X8pBv4dFiiLDKDjyW3XpVOdzq5c5/4GcRL6jnJ8Rf1A=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-ytg4pgPzl9dKyCWgRRVRg1noNRvBhBnWNf9bmNcHnjY=";
 
   nativeBuildInputs = [
     pkg-config

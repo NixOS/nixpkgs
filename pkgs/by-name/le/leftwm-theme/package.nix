@@ -17,7 +17,8 @@ rustPlatform.buildRustPackage {
     hash = "sha256-cV4tY1qKNluSSGf+WwKFK3iVE7cMevafl6qQvhy1flE=";
   };
 
-  cargoHash = "sha256-VEQn1LFXiZCVR2WgOFoHo18d3cdIoq9/zNjg8GMs0j8=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-v3PHMaXJCEBiCd+78b/BXRooZC4Py82gDcvA/efNJ7w=";
 
   checkFlags = [
     # direct writing /tmp

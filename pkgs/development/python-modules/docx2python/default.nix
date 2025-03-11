@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ShayHill";
     repo = "docx2python";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-ucLDdfmLAWcGunOKvh8tBQknXTPI1qOqyXgVGjQOGoQ=";
   };
 

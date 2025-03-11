@@ -1,24 +1,37 @@
 diff --git a/moxvar/version.go b/moxvar/version.go
-index 8c6bac8..69b5f7c 100644
+index 0b69cd9..9a5a5da 100644
 --- a/moxvar/version.go
 +++ b/moxvar/version.go
-@@ -1,38 +1,5 @@
+@@ -1,51 +1,6 @@
  // Package moxvar provides the version number of a mox build.
  package moxvar
- 
+
 -import (
+-	"runtime"
 -	"runtime/debug"
 -)
 -
 -// Version is set at runtime based on the Go module used to build.
--var Version = "(devel)"
++// Version and VersionBare are set via a build flag.
+ var Version string
+-
+-// VersionBare does not add a "+modifications", goversion or other suffix to the version.
+-var VersionBare string
 -
 -func init() {
+-	Version = "(devel)"
+-	VersionBare = "(devel)"
+-
+-	defer func() {
+-		Version += "-" + runtime.Version()
+-	}()
+-
 -	buildInfo, ok := debug.ReadBuildInfo()
 -	if !ok {
 -		return
 -	}
 -	Version = buildInfo.Main.Version
+-	VersionBare = buildInfo.Main.Version
 -	if Version == "(devel)" {
 -		var vcsRev, vcsMod string
 -		for _, setting := range buildInfo.Settings {
@@ -32,6 +45,7 @@ index 8c6bac8..69b5f7c 100644
 -			return
 -		}
 -		Version = vcsRev
+-		VersionBare = vcsRev
 -		switch vcsMod {
 -		case "false":
 -		case "true":
@@ -41,5 +55,5 @@ index 8c6bac8..69b5f7c 100644
 -		}
 -	}
 -}
-+// Version is set via a build flag
-+var Version string;
++var VersionBare string
+\ No newline at end of file

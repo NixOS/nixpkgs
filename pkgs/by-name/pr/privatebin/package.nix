@@ -3,16 +3,18 @@
   stdenvNoCC,
   fetchFromGitHub,
   nixosTests,
+  nix-update-script,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "privatebin";
-  version = "1.7.5";
+  version = "1.7.6";
+
   src = fetchFromGitHub {
     owner = "PrivateBin";
     repo = "PrivateBin";
-    rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-LdTteUED/pq4Z4IOBttLPm3K9gx1xVqP24QQ48uvuyI=";
+    tag = finalAttrs.version;
+    hash = "sha256-tKzuPpll1GOMlaIDfs5udXrHcTko6jmWJq4dPuPYy6Y=";
   };
 
   installPhase = ''
@@ -22,13 +24,28 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.tests = nixosTests.privatebin;
+  passthru = {
+    tests = nixosTests.privatebin;
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     changelog = "https://github.com/PrivateBin/PrivateBin/releases/tag/${finalAttrs.version}";
-    description = "Minimalist, open source online pastebin where the server has zero knowledge of pasted data.";
+    description = "Minimalist, open source online pastebin where the server has zero knowledge of pasted data";
     homepage = "https://privatebin.info";
-    license = lib.licenses.gpl2;
-    maintainers = [ lib.maintainers.savyajha ];
+    license = with lib.licenses; [
+      # privatebin
+      zlib
+      # dependencies, see https://github.com/PrivateBin/PrivateBin/blob/master/LICENSE.md
+      gpl2Only
+      bsd3
+      mit
+      asl20
+      cc-by-40
+    ];
+    maintainers = with lib.maintainers; [
+      savyajha
+      defelo
+    ];
   };
 })

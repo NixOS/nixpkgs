@@ -270,6 +270,43 @@ rec {
     list: concatStringsSep sep (lib.imap1 f list);
 
   /**
+    Like [`concatMapStringsSep`](#function-library-lib.strings.concatMapStringsSep)
+    but takes an attribute set instead of a list.
+
+    # Inputs
+
+    `sep`
+    : Separator to add between item strings
+
+    `f`
+    : Function that takes each key and value and return a string
+
+    `attrs`
+    : Attribute set to map from
+
+    # Type
+
+    ```
+    concatMapAttrsStringSep :: String -> (String -> Any -> String) -> AttrSet -> String
+    ```
+
+    # Examples
+
+    :::{.example}
+    ## `lib.strings.concatMapAttrsStringSep` usage example
+
+    ```nix
+    concatMapAttrsStringSep "\n" (name: value: "${name}: foo-${value}") { a = "0.1.0"; b = "0.2.0"; }
+    => "a: foo-0.1.0\nb: foo-0.2.0"
+    ```
+
+    :::
+  */
+  concatMapAttrsStringSep =
+    sep: f: attrs:
+    concatStringsSep sep (lib.attrValues (lib.mapAttrs f attrs));
+
+  /**
     Concatenate a list of strings, adding a newline at the end of each one.
     Defined as `concatMapStrings (s: s + "\n")`.
 
@@ -1388,6 +1425,42 @@ rec {
   toUpper = replaceStrings lowerChars upperChars;
 
   /**
+    Converts the first character of a string `s` to upper-case.
+
+    # Inputs
+
+    `str`
+    : The string to convert to sentence case.
+
+    # Type
+
+    ```
+    toSentenceCase :: string -> string
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.strings.toSentenceCase` usage example
+
+    ```nix
+    toSentenceCase "home"
+    => "Home"
+    ```
+
+    :::
+  */
+  toSentenceCase = str:
+    lib.throwIfNot (isString str)
+      "toSentenceCase does only accepts string values, but got ${typeOf str}"
+      (
+        let
+          firstChar = substring 0 1 str;
+          rest = substring 1 (stringLength str) str;
+        in
+        addContextFrom str (toUpper firstChar + toLower rest)
+      );
+
+  /**
     Appends string context from string like object `src` to `target`.
 
     :::{.warning}
@@ -2361,7 +2434,13 @@ rec {
     if isStringLike x then
       let str = toString x; in
       substring 0 1 str == "/"
-      && dirOf str == storeDir
+      && (dirOf str == storeDir
+        # Match content‐addressed derivations, which _currently_ do not have a
+        # store directory prefix.
+        # This is a workaround for https://github.com/NixOS/nix/issues/12361
+        # which was needed during the experimental phase of ca-derivations and
+        # should be removed once the issue has been resolved.
+        || builtins.match "/[0-9a-z]{52}" str != null)
     else
       false;
 

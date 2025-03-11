@@ -1,13 +1,14 @@
-{ stdenv
-, fetchurl
-, lib
-, unzip
-, makeWrapper
-, openjdk11
-, makeDesktopItem
-, icoutils
-, config
-, acceptLicense ? config.xxe-pe.acceptLicense or false
+{
+  stdenv,
+  fetchurl,
+  lib,
+  unzip,
+  makeWrapper,
+  openjdk11,
+  makeDesktopItem,
+  icoutils,
+  config,
+  acceptLicense ? config.xxe-pe.acceptLicense or false,
 }:
 
 let
@@ -19,7 +20,12 @@ let
     icon = "xxe";
     desktopName = "xxe";
     genericName = "XML Editor";
-    categories = [ "Development" "IDE" "TextEditor" "Java" ];
+    categories = [
+      "Development"
+      "IDE"
+      "TextEditor"
+      "Java"
+    ];
   };
 in
 stdenv.mkDerivation rec {
@@ -27,16 +33,20 @@ stdenv.mkDerivation rec {
   version = "10.2.0";
 
   src =
-    assert !acceptLicense -> throw ''
-      You must accept the XMLmind XML Editor Personal Edition License at
-      https://www.xmlmind.com/xmleditor/license_xxe_perso.html
-      by setting nixpkgs config option `xxe-pe.acceptLicense = true;`
-      or by using `xxe-pe.override { acceptLicense = true; }` package.
-    '';
-      fetchurl {
-        url = "https://www.xmlmind.com/xmleditor/_download/xxe-perso-${builtins.replaceStrings [ "." ] [ "_" ] version}.zip";
-        sha256 = "sha256-JZ9nQwMrQL/1HKGwvXoWlnTx55ZK/UYjMJAddCtm0rw=";
-      };
+    assert
+      !acceptLicense
+      -> throw ''
+        You must accept the XMLmind XML Editor Personal Edition License at
+        https://www.xmlmind.com/xmleditor/license_xxe_perso.html
+        by setting nixpkgs config option `xxe-pe.acceptLicense = true;`
+        or by using `xxe-pe.override { acceptLicense = true; }` package.
+      '';
+    fetchurl {
+      url = "https://www.xmlmind.com/xmleditor/_download/xxe-perso-${
+        builtins.replaceStrings [ "." ] [ "_" ] version
+      }.zip";
+      sha256 = "sha256-JZ9nQwMrQL/1HKGwvXoWlnTx55ZK/UYjMJAddCtm0rw=";
+    };
 
   nativeBuildInputs = [
     unzip

@@ -1,14 +1,36 @@
-{ lib, stdenv, fetchgit, nix-update-script, pkg-config, meson, ninja, vala, python3, gtk-doc, docbook_xsl, docbook_xml_dtd_43, docbook_xml_dtd_412, glib, check, gobject-introspection }:
+{
+  lib,
+  stdenv,
+  fetchgit,
+  nix-update-script,
+  pkg-config,
+  meson,
+  ninja,
+  vala,
+  python3,
+  gtk-doc,
+  docbook_xsl,
+  docbook_xml_dtd_43,
+  docbook_xml_dtd_412,
+  glib,
+  check,
+  gobject-introspection,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libsignon-glib";
   version = "2.1";
 
-  outputs = [ "out" "dev" "devdoc" "py" ];
+  outputs = [
+    "out"
+    "dev"
+    "devdoc"
+    "py"
+  ];
 
   src = fetchgit {
     url = "https://gitlab.com/accounts-sso/${pname}";
-    rev = "refs/tags/${version}";
+    tag = version;
     sha256 = "0gnx9gqsh0hcfm1lk7w60g64mkn1iicga5f5xcy1j9a9byacsfd0";
     fetchSubmodules = true;
   };
@@ -54,4 +76,3 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
   };
 }
-

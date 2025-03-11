@@ -1,15 +1,16 @@
-{ lib
-, fetchurl
-, stdenvNoCC
+{
+  lib,
+  fetchurl,
+  stdenvNoCC,
 }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "lxgw-neoxihei";
-  version = "1.211";
+  version = "1.214";
 
   src = fetchurl {
     url = "https://github.com/lxgw/LxgwNeoXiHei/releases/download/v${version}/LXGWNeoXiHei.ttf";
-    hash = "sha256-w3Rk0NDYXPzzg1JGsC6zIvr0SiM3ZzHHW9NwHNAhnaM=";
+    hash = "sha256-hIor7mkGdAo+WBDhdnT3IZGP0o3/vYtgUS7AJ5Si1PQ=";
   };
 
   dontUnpack = true;

@@ -1,19 +1,20 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
   pname = "goa";
-  version = "3.19.1";
+  version = "3.20.0";
 
   src = fetchFromGitHub {
     owner = "goadesign";
     repo = "goa";
     rev = "v${version}";
-    hash = "sha256-UOw0bAUvaKpMmFmAAlheALhtgXU2+Df6b/nSRH7bWHc=";
+    hash = "sha256-nkL1os+evGy6L0Ura2PSDBhF25L6fLTnoYkT/5S9H9U=";
   };
-  vendorHash = "sha256-IqzW5fOLLBbpPFTE5PiOISdmp3Gq6b8SUbG4CbbU01s=";
+  vendorHash = "sha256-lO5cI7h0xtWFbHbAiRnG6kFx/74E47Mw79AFMuNz6XU=";
 
   subPackages = [ "cmd/goa" ];
 

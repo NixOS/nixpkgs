@@ -1,21 +1,22 @@
-{ stdenv
-, lib
-, fetchFromGitea
-, pkg-config
-, meson
-, ninja
-, pixman
-, tllist
-, wayland
-, wayland-scanner
-, wayland-protocols
-, enablePNG ? true
-, enableJPEG ? true
-, enableWebp ? true
-# Optional dependencies
-, libpng
-, libjpeg
-, libwebp
+{
+  stdenv,
+  lib,
+  fetchFromGitea,
+  pkg-config,
+  meson,
+  ninja,
+  pixman,
+  tllist,
+  wayland,
+  wayland-scanner,
+  wayland-protocols,
+  enablePNG ? true,
+  enableJPEG ? true,
+  enableWebp ? true,
+  # Optional dependencies
+  libpng,
+  libjpeg,
+  libwebp,
 }:
 
 stdenv.mkDerivation rec {
@@ -37,12 +38,14 @@ stdenv.mkDerivation rec {
     wayland-scanner
   ];
 
-  buildInputs = [
-    pixman
-    tllist
-    wayland
-    wayland-protocols
-  ] ++ lib.optional enablePNG libpng
+  buildInputs =
+    [
+      pixman
+      tllist
+      wayland
+      wayland-protocols
+    ]
+    ++ lib.optional enablePNG libpng
     ++ lib.optional enableJPEG libjpeg
     ++ lib.optional enableWebp libwebp;
 
@@ -52,6 +55,10 @@ stdenv.mkDerivation rec {
     (lib.mesonEnable "png" enablePNG)
     (lib.mesonEnable "jpeg" enableJPEG)
     (lib.mesonEnable "webp" enableWebp)
+  ];
+
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-Wno-error=maybe-uninitialized"
   ];
 
   meta = with lib; {

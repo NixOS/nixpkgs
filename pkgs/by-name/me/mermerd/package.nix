@@ -1,8 +1,9 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, testers
-, mermerd
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  testers,
+  mermerd,
 }:
 
 buildGoModule rec {
@@ -12,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "KarnerTh";
     repo = "mermerd";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-18GM/mb32MPI128ytM/Im+LO+N9cW1HoZ7M4tP2+i0o=";
   };
 

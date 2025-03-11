@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchurl
-, gitUpdater
-, jre
-, makeWrapper
-, mysqlSupport ? true
-, mysql_jdbc
-, postgresqlSupport ? true
-, postgresql_jdbc
-, redshiftSupport ? true
-, redshift_jdbc
-, liquibase_redshift_extension
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gitUpdater,
+  jre,
+  makeWrapper,
+  mysqlSupport ? true,
+  mysql_jdbc,
+  postgresqlSupport ? true,
+  postgresql_jdbc,
+  redshiftSupport ? true,
+  redshift_jdbc,
+  liquibase_redshift_extension,
 }:
 
 let
@@ -25,11 +26,11 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "liquibase";
-  version = "4.29.2";
+  version = "4.31.1";
 
   src = fetchurl {
     url = "https://github.com/liquibase/liquibase/releases/download/v${finalAttrs.version}/liquibase-${finalAttrs.version}.tar.gz";
-    hash = "sha256-HQF6IGqVqzB2pS9mBnnC2AufIXSULLBxXjXVOTHiDuk=";
+    hash = "sha256-BVWAi1mUHUl/DBEUw/IiVpiv3hHGDRkciORJUGpgo+o=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -38,11 +39,12 @@ stdenv.mkDerivation (finalAttrs: {
   sourceRoot = ".";
 
   installPhase =
-    let addJars = dir: ''
-      for jar in ${dir}/*.jar; do
-        CP="\$CP":"\$jar"
-      done
-    '';
+    let
+      addJars = dir: ''
+        for jar in ${dir}/*.jar; do
+          CP="\$CP":"\$jar"
+        done
+      '';
     in
     ''
       mkdir -p $out

@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "srstevenson";
     repo = "xdg-base-dirs";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-iXK9WURTfmpl5vd7RsT0ptwfrb5UQQFqMMCu3+vL+EY=";
   };
 

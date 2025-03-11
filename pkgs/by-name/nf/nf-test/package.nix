@@ -1,11 +1,12 @@
-{ lib
-, fetchurl
-, makeWrapper
-, nextflow
-, nf-test
-, openjdk11
-, stdenv
-, testers
+{
+  lib,
+  fetchurl,
+  makeWrapper,
+  nextflow,
+  nf-test,
+  openjdk11,
+  stdenv,
+  testers,
 }:
 stdenv.mkDerivation rec {
 

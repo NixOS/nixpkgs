@@ -1,28 +1,48 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+}:
 
-let bins = [ "crane" "gcrane" ]; in
+let
+  bins = [
+    "crane"
+    "gcrane"
+  ];
+in
 
 buildGoModule rec {
   pname = "go-containerregistry";
-  version = "0.20.2";
+  version = "0.20.3";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-5f5zheFPSKmpUaVmcAfeZgFSDu3rvdtQh8mau9jdqz4=";
+    sha256 = "sha256-HiksVzVuY4uub7Lwfyh3GN8wpH2MgIjKSO4mQJZeNvs=";
   };
   vendorHash = null;
 
   nativeBuildInputs = [ installShellFiles ];
 
-  subPackages = [ "cmd/crane" "cmd/gcrane" ];
+  subPackages = [
+    "cmd/crane"
+    "cmd/gcrane"
+  ];
 
   outputs = [ "out" ] ++ bins;
 
   ldflags =
-    let t = "github.com/google/go-containerregistry"; in
-    [ "-s" "-w" "-X ${t}/cmd/crane/cmd.Version=v${version}" "-X ${t}/pkg/v1/remote/transport.Version=${version}" ];
+    let
+      t = "github.com/google/go-containerregistry";
+    in
+    [
+      "-s"
+      "-w"
+      "-X ${t}/cmd/crane/cmd.Version=v${version}"
+      "-X ${t}/pkg/v1/remote/transport.Version=${version}"
+    ];
 
   postInstall =
     lib.concatStringsSep "\n" (
@@ -31,7 +51,8 @@ buildGoModule rec {
         mv $out/bin/${bin} ''$${bin}/bin/ &&
         ln -s ''$${bin}/bin/${bin} $out/bin/
       '') bins
-    ) + ''
+    )
+    + ''
       for cmd in crane gcrane; do
         installShellCompletion --cmd "$cmd" \
           --bash <($GOPATH/bin/$cmd completion bash) \

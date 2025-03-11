@@ -1,4 +1,11 @@
-{ stdenv, lib, fetchFromGitHub, autoPatchelfHook, popt, libxcrypt-legacy }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  autoPatchelfHook,
+  popt,
+  libxcrypt-legacy,
+}:
 
 stdenv.mkDerivation rec {
   pname = "wmic-bin";
@@ -11,7 +18,10 @@ stdenv.mkDerivation rec {
     sha256 = "1w1mdbiwz37wzry1q38h8dyjaa6iggmsb9wcyhhlawwm1vj50w48";
   };
 
-  buildInputs = [ popt libxcrypt-legacy ];
+  buildInputs = [
+    popt
+    libxcrypt-legacy
+  ];
 
   nativeBuildInputs = [ autoPatchelfHook ];
 
@@ -39,10 +49,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "WMI client for Linux (binary)";
     mainProgram = "wmic";
-    homepage    = "https://www.openvas.org";
+    homepage = "https://www.openvas.org";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license     = licenses.mit;
+    license = licenses.mit;
     maintainers = with maintainers; [ peterhoeg ];
-    platforms   = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" ];
   };
 }

@@ -1,4 +1,11 @@
-{ lib, buildGoModule, fetchFromGitHub, gnum4, pam, fscrypt-experimental }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  gnum4,
+  pam,
+  fscrypt-experimental,
+}:
 
 # Don't use this for anything important yet!
 
@@ -39,8 +46,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description =
-      "A high-level tool for the management of Linux filesystem encryption";
+    description = "A high-level tool for the management of Linux filesystem encryption";
     mainProgram = "fscrypt";
     longDescription = ''
       This tool manages metadata, key generation, key wrapping, PAM integration,

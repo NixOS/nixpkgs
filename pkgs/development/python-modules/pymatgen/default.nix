@@ -1,52 +1,66 @@
 {
   lib,
-  ase,
+  stdenv,
   buildPythonPackage,
-  cython,
+  pythonAtLeast,
   fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # nativeBuildInputs
+  cython,
   glibcLocales,
+
+  # dependencies
   joblib,
   matplotlib,
   monty,
   networkx,
-  oldest-supported-numpy,
+  numpy,
   palettable,
   pandas,
   plotly,
   pybtex,
-  pydispatcher,
-  pytest-xdist,
-  pytestCheckHook,
-  pythonOlder,
   requests,
   ruamel-yaml,
   scipy,
-  seekpath,
-  setuptools,
   spglib,
   sympy,
   tabulate,
+  tqdm,
   uncertainties,
+
+  # optional-dependencies
+  netcdf4,
+  ase,
+  pytest,
+  pytest-cov,
+  invoke,
+  sphinx,
+  sphinx-rtd-theme,
+  numba,
+  vtk,
+
+  # tests
+  addBinToPathHook,
+  pytest-xdist,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pymatgen";
-  version = "2024.9.17.1";
+  version = "2025.1.24";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonAtLeast "3.13";
 
   src = fetchFromGitHub {
     owner = "materialsproject";
     repo = "pymatgen";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-o76bGItldcLfgZ5KDw2uL0GJvyljQJEwISR0topVR44=";
+    tag = "v${version}";
+    hash = "sha256-0P3/M6VI2RKPArMwXD95sjW7dYOTXxUeu4tOliN0IGk=";
   };
-
-  prePatch = ''
-    # Upstream switched to building against numpy2 but should still be compatible with numpy1
-    substituteInPlace pyproject.toml --replace-fail "numpy>=2.1.0" "numpy>=1.26.0"
-  '';
 
   build-system = [ setuptools ];
 
@@ -56,49 +70,107 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
+    joblib
     matplotlib
     monty
     networkx
-    oldest-supported-numpy
+    numpy
     palettable
     pandas
     plotly
     pybtex
-    pydispatcher
     requests
     ruamel-yaml
     scipy
     spglib
     sympy
     tabulate
+    tqdm
     uncertainties
   ];
 
   optional-dependencies = {
+    abinit = [ netcdf4 ];
     ase = [ ase ];
-    joblib = [ joblib ];
-    seekpath = [ seekpath ];
+    ci = [
+      pytest
+      pytest-cov
+      # pytest-split
+    ];
+    docs = [
+      invoke
+      sphinx
+      # sphinx_markdown_builder
+      sphinx-rtd-theme
+    ];
+    electronic_structure = [
+      # fdint
+    ];
+    mlp = [
+      # chgnet
+      # matgl
+    ];
+    numba = [ numba ];
+    vis = [ vtk ];
   };
 
+  pythonImportsCheck = [ "pymatgen" ];
+
   nativeCheckInputs = [
+    addBinToPathHook
     pytestCheckHook
     pytest-xdist
   ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
-  preCheck = ''
+  preCheck =
     # ensure tests can find these
-    export PMG_TEST_FILES_DIR="$(realpath ./tests/files)"
-    # some tests cover the command-line scripts
-    export PATH=$out/bin:$PATH
-  '';
+    ''
+      export PMG_TEST_FILES_DIR="$(realpath ./tests/files)"
+    '';
 
-  pythonImportsCheck = [ "pymatgen" ];
+  disabledTests =
+    [
+      # Flaky
+      "test_numerical_eos_values"
+      "test_pca"
+      "test_static_si_no_kgrid"
+      "test_thermal_conductivity"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+      # AttributeError: 'NoneType' object has no attribute 'items'
+      "test_mean_field"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # Fatal Python error: Aborted
+      # matplotlib/backend_bases.py", line 2654 in create_with_canvas
+      "test_angle"
+      "test_as_dict_from_dict"
+      "test_attributes"
+      "test_basic"
+      "test_core_state_eigen"
+      "test_eos_func"
+      "test_get_info_cohps_to_neighbors"
+      "test_get_plot"
+      "test_get_point_group_operations"
+      "test_matplotlib_plots"
+      "test_ph_plot_w_gruneisen"
+      "test_plot"
+      "test_proj_bandstructure_plot"
+      "test_structure"
+      "test_structure_environments"
+    ];
 
-  meta = with lib; {
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+    # Crash when running the pmg command
+    # Critical error: required built-in appearance SystemAppearance not found
+    "tests/cli/test_pmg_plot.py"
+  ];
+
+  meta = {
     description = "Robust materials analysis code that defines core object representations for structures and molecules";
     homepage = "https://pymatgen.org/";
     changelog = "https://github.com/materialsproject/pymatgen/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ psyanticy ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ psyanticy ];
   };
 }

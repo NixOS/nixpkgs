@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "py-improv-ble-client";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-leYSDB5/jFqlvX78OYzlFkkVxIkJ7iOUoLHBuVj7tAo=";
   };
 

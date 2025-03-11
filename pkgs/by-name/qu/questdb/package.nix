@@ -3,16 +3,16 @@
   jdk17_headless,
   lib,
   makeBinaryWrapper,
-  stdenv
+  stdenv,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "questdb";
-  version = "8.1.2";
+  version = "8.2.2";
 
   src = fetchurl {
     url = "https://github.com/questdb/questdb/releases/download/${finalAttrs.version}/questdb-${finalAttrs.version}-no-jre-bin.tar.gz";
-    hash = "sha256-oFhr/lBsg3e7vUiNQXwjBTF6GAjBYym4+YBoA/2Lsag=";
+    hash = "sha256-Lz3AbOGwPqTV2gbacaphMB9YXIuuMNd82sb1dXR777A=";
   };
 
   nativeBuildInputs = [

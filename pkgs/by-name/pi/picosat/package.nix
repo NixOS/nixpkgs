@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchurl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "picosat";
@@ -19,26 +23,28 @@ stdenv.mkDerivation rec {
 
   configurePhase = "./configure.sh --shared --trace";
 
-  makeFlags = lib.optional stdenv.hostPlatform.isDarwin
-    "SONAME=-Wl,-install_name,$(out)/lib/libpicosat.so";
+  makeFlags = lib.optional stdenv.hostPlatform.isDarwin "SONAME=-Wl,-install_name,$(out)/lib/libpicosat.so";
 
   installPhase = ''
-   mkdir -p $out/bin $out/lib $out/share $out/include/picosat
-   cp picomus picomcs picosat picogcnf "$out"/bin
+    mkdir -p $out/bin $out/lib $out/share $out/include/picosat
+    cp picomus picomcs picosat picogcnf "$out"/bin
 
-   cp VERSION      "$out"/share/picosat.version
-   cp picosat.o    "$out"/lib
-   cp libpicosat.a "$out"/lib
-   cp libpicosat.so "$out"/lib
+    cp VERSION      "$out"/share/picosat.version
+    cp picosat.o    "$out"/lib
+    cp libpicosat.a "$out"/lib
+    cp libpicosat.so "$out"/lib
 
-   cp picosat.h "$out"/include/picosat
+    cp picosat.h "$out"/include/picosat
   '';
 
   meta = {
     description = "SAT solver with proof and core support";
-    homepage    = "https://fmv.jku.at/picosat/";
-    license     = lib.licenses.mit;
-    platforms   = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ roconnor thoughtpolice ];
+    homepage = "https://fmv.jku.at/picosat/";
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
+      roconnor
+      thoughtpolice
+    ];
   };
 }

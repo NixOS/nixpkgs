@@ -1,8 +1,15 @@
-{ config, lib, pkgs, ... }:
-let cfg = config.services.SystemdJournal2Gelf;
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+let
+  cfg = config.services.SystemdJournal2Gelf;
 in
 
-{ options = {
+{
+  options = {
     services.SystemdJournal2Gelf = {
       enable = lib.mkOption {
         type = lib.types.bool;

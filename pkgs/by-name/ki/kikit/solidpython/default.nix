@@ -1,13 +1,14 @@
 # SolidPython is an unmaintained library with old dependencies.
-{ buildPythonPackage
-, fetchFromGitHub
-, lib
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  lib,
 
-, poetry-core
-, prettytable
-, ply
-, setuptools
-, euclid3
+  poetry-core,
+  prettytable,
+  ply,
+  setuptools,
+  euclid3,
 }:
 buildPythonPackage rec {
   pname = "solidpython";

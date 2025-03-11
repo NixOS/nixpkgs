@@ -13,27 +13,27 @@
 
 buildPythonPackage rec {
   pname = "nitransforms";
-  version = "23.0.1";
-  format = "setuptools";
-  disabled = pythonOlder "3.7";
+  version = "24.1.1";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Lty4aPzSlwRJSqCXeIVICF+gudYqto1OS4cVZyrB2nY=";
+    hash = "sha256-U2lWxYDuA+PpMEMgjanq/JILWTTH5+DEx9dZ/KCWNjM=";
   };
 
-  buildInputs = [
+  build-system = [
     setuptools-scm
     toml
   ];
-  propagatedBuildInputs = [
+
+  dependencies = [
     h5py
     nibabel
     numpy
     scipy
   ];
-
-  pythonRelaxDeps = [ "scipy" ];
 
   doCheck = false;
   # relies on data repo (https://github.com/nipreps-data/nitransforms-tests);

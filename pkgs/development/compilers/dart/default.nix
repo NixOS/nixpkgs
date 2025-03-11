@@ -1,12 +1,13 @@
-{ stdenv
-, lib
-, fetchurl
-, unzip
-, runCommand
-, cctools
-, darwin
-, sources ? import ./sources.nix {inherit fetchurl;}
-, version ? sources.versionUsed
+{
+  stdenv,
+  lib,
+  fetchurl,
+  unzip,
+  runCommand,
+  cctools,
+  darwin,
+  sources ? import ./sources.nix { inherit fetchurl; },
+  version ? sources.versionUsed,
 }:
 
 assert sources != null && (builtins.isAttrs sources);
@@ -16,15 +17,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ unzip ];
 
-  src = sources."${version}-${stdenv.hostPlatform.system}" or (throw "unsupported version/system: ${version}/${stdenv.hostPlatform.system}");
+  src =
+    sources."${version}-${stdenv.hostPlatform.system}"
+      or (throw "unsupported version/system: ${version}/${stdenv.hostPlatform.system}");
 
-  installPhase = ''
-    mkdir -p $out
-    cp -R * $out/
-    echo $libPath
-  '' + lib.optionalString (stdenv.hostPlatform.isLinux) ''
-    find $out/bin -executable -type f -exec patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) {} \;
-  '';
+  installPhase =
+    ''
+      mkdir -p $out
+      cp -R * $out/
+      echo $libPath
+    ''
+    + lib.optionalString (stdenv.hostPlatform.isLinux) ''
+      find $out/bin -executable -type f -exec patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) {} \;
+    '';
 
   libPath = lib.makeLibraryPath [ stdenv.cc.cc ];
   dontStrip = true;
@@ -40,18 +45,25 @@ stdenv.mkDerivation (finalAttrs: {
         touch $out
       '';
 
-      testCompile = runCommand "dart-test-compile" {
-        nativeBuildInputs = [ finalAttrs.finalPackage ]
-          ++ lib.optionals stdenv.hostPlatform.isDarwin [ cctools darwin.sigtool ];
-      } ''
-        HELLO_MESSAGE="Hello, world!"
-        echo "void main() => print('$HELLO_MESSAGE');" > hello.dart
-        dart compile exe hello.dart
-        PROGRAM_OUT=$(./hello.exe)
+      testCompile =
+        runCommand "dart-test-compile"
+          {
+            nativeBuildInputs =
+              [ finalAttrs.finalPackage ]
+              ++ lib.optionals stdenv.hostPlatform.isDarwin [
+                cctools
+                darwin.sigtool
+              ];
+          }
+          ''
+            HELLO_MESSAGE="Hello, world!"
+            echo "void main() => print('$HELLO_MESSAGE');" > hello.dart
+            dart compile exe hello.dart
+            PROGRAM_OUT=$(./hello.exe)
 
-        [[ "$PROGRAM_OUT" == "$HELLO_MESSAGE" ]]
-        touch $out
-      '';
+            [[ "$PROGRAM_OUT" == "$HELLO_MESSAGE" ]]
+            touch $out
+          '';
     };
   };
 
@@ -65,7 +77,13 @@ stdenv.mkDerivation (finalAttrs: {
       mixins, abstract classes, reified generics, and optional typing.
     '';
     mainProgram = "dart";
-    platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
+    platforms = [
+      "x86_64-linux"
+      "i686-linux"
+      "aarch64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.bsd3;
   };

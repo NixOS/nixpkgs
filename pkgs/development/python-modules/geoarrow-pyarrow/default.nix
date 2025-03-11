@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     repo = "geoarrow-python";
     owner = "geoarrow";
-    rev = "refs/tags/geoarrow-pyarrow-${version}";
+    tag = "geoarrow-pyarrow-${version}";
     hash = "sha256-Ni+GKTRhRDRHip1us3OZPuUhHQCNU7Nap865T/+CU8Y=";
   };
 

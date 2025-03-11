@@ -1,33 +1,34 @@
 {
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  glslang,
-  pkg-config,
-  flac,
-  libopus,
-  opusfile,
-  makeWrapper,
   SDL2,
+  fetchFromGitHub,
+  flac,
+  glslang,
   gzip,
+  lib,
+  libmpg123,
+  libopus,
   libvorbis,
-  libmad,
+  makeWrapper,
+  meson,
+  moltenvk,
+  ninja,
+  opusfile,
+  pkg-config,
+  stdenv,
   vulkan-headers,
   vulkan-loader,
-  moltenvk,
+  copyDesktopItems,
+  makeDesktopItem,
 }:
-
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vkquake";
-  version = "1.31.2";
+  version = "1.32.1";
 
   src = fetchFromGitHub {
     owner = "Novum";
     repo = "vkQuake";
-    rev = version;
-    sha256 = "sha256-7JE1KBavZt8u55KpWMmQOJJuxlW99ICnaQI4MbTgGdw=";
+    tag = finalAttrs.version;
+    hash = "sha256-yqoP24SNjq7YZ9QfkZQte6tsSeR16ScknXgZ5nQJerI=";
   };
 
   nativeBuildInputs = [
@@ -36,21 +37,24 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
+    copyDesktopItems
   ];
 
-  buildInputs = [
-    SDL2
-    flac
-    gzip
-    libmad
-    libopus
-    libvorbis
-    opusfile
-    vulkan-loader
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    moltenvk
-    vulkan-headers
-  ];
+  buildInputs =
+    [
+      SDL2
+      flac
+      gzip
+      libmpg123
+      libopus
+      libvorbis
+      opusfile
+      vulkan-loader
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      moltenvk
+      vulkan-headers
+    ];
 
   buildFlags = [ "DO_USERDIRS=1" ];
 
@@ -62,18 +66,36 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/bin"
     cp vkquake "$out/bin"
+
+    install -D ../Misc/vkQuake_256.png "$out/share/icons/hicolor/256x256/apps/vkquake.png"
+
+    runHook postInstall
   '';
+
+  desktopItems = [
+    (makeDesktopItem {
+      exec = finalAttrs.meta.mainProgram;
+      name = "vkquake";
+      icon = "vkquake";
+      comment = finalAttrs.meta.description;
+      desktopName = "vkQuake";
+      categories = [ "Game" ];
+    })
+  ];
 
   postFixup = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     patchelf $out/bin/vkquake \
       --add-rpath ${lib.makeLibraryPath [ vulkan-loader ]}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Vulkan Quake port based on QuakeSpasm";
-    homepage = src.meta.homepage;
+    homepage = "https://github.com/Novum/vkQuake";
+    changelog = "https://github.com/Novum/vkQuake/releases";
     longDescription = ''
       vkQuake is a Quake 1 port using Vulkan instead of OpenGL for rendering.
       It is based on the popular QuakeSpasm port and runs all mods compatible with it
@@ -83,8 +105,11 @@ stdenv.mkDerivation rec {
       specialization constants, CPU/GPU parallelism and memory pooling.
     '';
 
-    platforms = with platforms; linux ++ darwin;
-    maintainers = with maintainers; [ PopeRigby ylh ];
+    platforms = with lib.platforms; linux ++ darwin;
+    maintainers = with lib.maintainers; [
+      PopeRigby
+      ylh
+    ];
     mainProgram = "vkquake";
   };
-}
+})

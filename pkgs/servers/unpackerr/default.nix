@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, buildGoModule, Cocoa, WebKit }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  buildGoModule,
+  Cocoa,
+  WebKit,
+}:
 
 buildGoModule rec {
   pname = "unpackerr";
@@ -13,9 +20,16 @@ buildGoModule rec {
 
   vendorHash = "sha256-wWIw0gNn5tqRq0udzPy/n2OkiIVESpSotOSn2YlBNS4=";
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ Cocoa WebKit ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    Cocoa
+    WebKit
+  ];
 
-  ldflags = [ "-s" "-w" "-X golift.io/version.Version=${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X golift.io/version.Version=${version}"
+  ];
 
   meta = with lib; {
     description = "Extracts downloads for Radarr, Sonarr, Lidarr - Deletes extracted files after import";

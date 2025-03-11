@@ -1,8 +1,14 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   cfg = config.programs.flexoptix-app;
-in {
+in
+{
   options = {
     programs.flexoptix-app = {
       enable = lib.mkEnableOption "FLEXOPTIX app + udev rules";

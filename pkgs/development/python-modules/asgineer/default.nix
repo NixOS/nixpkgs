@@ -4,30 +4,35 @@
   fetchFromGitHub,
   pytestCheckHook,
   requests,
+  flit-core,
 }:
 
 buildPythonPackage rec {
   pname = "asgineer";
-  version = "0.8.2";
-  format = "setuptools";
+  version = "0.9.3";
+  pyproject = true;
 
-  # PyPI tarball doesn't include tests directory
   src = fetchFromGitHub {
     owner = "almarklein";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-UYnVlsdEhEAJF21zVmjAXX01K6LQR2I+Dfw5tSsmf5E=";
+    repo = "asgineer";
+    tag = "v${version}";
+    hash = "sha256-Uk1kstEBt321BVeNcfdhZuonmm1i9IXSBnZLa4eDS2E=";
   };
+
+  build-system = [ flit-core ];
 
   nativeCheckInputs = [
     pytestCheckHook
     requests
   ];
 
+  pythonImportsCheck = [ "asgineer" ];
+
   meta = with lib; {
     description = "Really thin ASGI web framework";
-    license = licenses.bsd2;
     homepage = "https://asgineer.readthedocs.io";
-    maintainers = [ maintainers.matthiasbeyer ];
+    changelog = "https://github.com/almarklein/asgineer/releases/tag/v${src.tag}";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ matthiasbeyer ];
   };
 }

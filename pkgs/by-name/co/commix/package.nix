@@ -1,25 +1,25 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "commix";
-  version = "3.9";
+  version = "4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "commixproject";
     repo = "commix";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-HX+gEL9nmq9R1GFw8xQaa7kBmW7R0IepitM08bIf3vY=";
+    tag = "v${version}";
+    hash = "sha256-AikhXMacsJ7AZyKWcmu+ngs9KeiwQE60cpM2CV8ej1Y=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
       --replace-warn "-stable" ""
   '';
-
 
   nativeBuildInputs = with python3.pkgs; [
     setuptools

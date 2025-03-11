@@ -1,8 +1,9 @@
-{ lib
-, python3Packages
-, fetchFromGitHub
-, fetchpatch
-, tarsnap
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+  fetchpatch,
+  tarsnap,
 }:
 
 python3Packages.buildPythonApplication rec {

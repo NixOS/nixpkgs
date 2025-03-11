@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, kcoreaddons
-, kwindowsystem
-, plasma-framework
-, systemsettings
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  kcoreaddons,
+  kwindowsystem,
+  plasma-framework,
+  systemsettings,
 }:
 
-stdenv.mkDerivation(finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "kzones";
   version = "0.6";
 

@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jluttine";
     repo = "truncnorm";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-F+RBXN/pjxmHf26/Vxptz1NbF58eqU018l3zmepSoJk=";
   };
 

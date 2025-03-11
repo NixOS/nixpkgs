@@ -10,7 +10,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "etkecc";
     repo = "postmoogle";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-6KxPsg1zy8Dpo0UcgEWRmH6bI5oKJyzkZTelgk3SjoY=";
   };
 

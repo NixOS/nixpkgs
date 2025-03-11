@@ -7,18 +7,18 @@
 
 buildGoModule rec {
   pname = "containerlab";
-  version = "0.59.0";
+  version = "0.65.1";
 
   src = fetchFromGitHub {
     owner = "srl-labs";
     repo = "containerlab";
     rev = "v${version}";
-    hash = "sha256-4YSnAoQkjDpSRBMqYW8D3TzipE5Co892y5PXkcz+8xA=";
+    hash = "sha256-ivygQomXIgRpCBa3YZYKfk6Twml+TJOae7YGsTDqf+8=";
   };
 
-  nativeBuildInputs = [ installShellFiles ];
+  vendorHash = "sha256-Y7ckQeC94zqNmSu9Y5Cd/kM3aoRdjsmBK2uMZzoJNh4=";
 
-  vendorHash = "sha256-PJQrQn7QPtUSzdlf2BYY8ARcmH6pzZgpl1oQbc98M4Y=";
+  nativeBuildInputs = [ installShellFiles ];
 
   ldflags = [
     "-s"
@@ -41,13 +41,13 @@ buildGoModule rec {
       --zsh <($out/bin/containerlab completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Container-based networking lab";
     homepage = "https://containerlab.dev/";
     changelog = "https://github.com/srl-labs/containerlab/releases/tag/${src.rev}";
-    license = licenses.bsd3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ aaronjheng ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ aaronjheng ];
     mainProgram = "containerlab";
   };
 }

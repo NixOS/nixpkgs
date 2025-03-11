@@ -2,29 +2,27 @@
   lib,
   fetchFromGitHub,
   php,
-  testers,
-  roave-backward-compatibility-check,
+  versionCheckHook,
 }:
 
 php.buildComposerProject2 (finalAttrs: {
   pname = "roave-backward-compatibility-check";
-  version = "8.10.0";
+  version = "8.13.0";
 
   src = fetchFromGitHub {
     owner = "Roave";
     repo = "BackwardCompatibilityCheck";
-    rev = finalAttrs.version;
-    hash = "sha256-wOqF7FkwOnTxYe7OnAl8R7NyGkdJ37H0OIr5e/1Q03I=";
+    tag = finalAttrs.version;
+    hash = "sha256-bxjrk//n8HdHyYJpsW4qwgHptyeaNqCbiR3wWKJwPiM=";
   };
 
-  vendorHash = "sha256-Xd+SxqLbm5QCROwq4jDm4cWLxF2nraqA+xdrZxW3ILY=";
+  vendorHash = "sha256-fhSByQzSwFrNCKr7KwJ7CYFt4zqbk4iW5JXK3iSVTnM=";
 
-  passthru = {
-    tests.version = testers.testVersion {
-      package = roave-backward-compatibility-check;
-      version = finalAttrs.version;
-    };
-  };
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = [ "--version" ];
+  doInstallCheck = true;
 
   meta = {
     changelog = "https://github.com/Roave/BackwardCompatibilityCheck/releases/tag/${finalAttrs.version}";

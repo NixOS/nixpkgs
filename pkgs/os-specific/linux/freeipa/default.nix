@@ -1,43 +1,44 @@
-{ stdenv
-, lib
-, fetchurl
-, pkg-config
-, autoconf
-, automake
-, kerberos
-, openldap
-, popt
-, sasl
-, curl
-, xmlrpc_c
-, ding-libs
-, p11-kit
-, gettext
-, nspr
-, nss
-, _389-ds-base
-, svrcore
-, libuuid
-, talloc
-, tevent
-, samba
-, libunistring
-, libverto
-, libpwquality
-, systemd
-, python3
-, bind
-, sssd
-, jre
-, rhino
-, lesscpy
-, jansson
-, runtimeShell
+{
+  stdenv,
+  lib,
+  fetchurl,
+  fetchpatch,
+  pkg-config,
+  autoconf,
+  automake,
+  kerberos,
+  openldap,
+  popt,
+  sasl,
+  curl,
+  xmlrpc_c,
+  ding-libs,
+  p11-kit,
+  gettext,
+  nspr,
+  nss,
+  _389-ds-base,
+  svrcore,
+  libuuid,
+  talloc,
+  tevent,
+  samba,
+  libunistring,
+  libverto,
+  libpwquality,
+  systemd,
+  python3,
+  bind,
+  sssd,
+  jre,
+  rhino,
+  lesscpy,
+  jansson,
+  runtimeShell,
+  versionCheckHook,
 }:
 
 let
-  pathsPy = ./paths.py;
-
   pythonInputs = with python3.pkgs; [
     distutils
     six
@@ -61,16 +62,30 @@ let
     jinja2
     augeas
     samba
+    ifaddr
   ];
 in
 stdenv.mkDerivation rec {
   pname = "freeipa";
-  version = "4.12.1";
+  version = "4.12.3";
 
   src = fetchurl {
     url = "https://releases.pagure.org/freeipa/freeipa-${version}.tar.gz";
-    sha256 = "sha256-SPZ+QgssDKG1Hz1oqtVdg864qtcvncuOlzTWjN4+loM=";
+    sha256 = "sha256-bVttsyn99DX01CmthIxzxuJPGgqZB2+pgamviO4LBJI=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "support-pyca-44.0";
+      url = "https://github.com/freeipa/freeipa/pull/7619/commits/2dc4133920fe58ce414c545102c74173d40d1997.patch";
+      hash = "sha256-PROnPc/1qS3hcO8s5sel55tsyZ1VPjEKLcua8Pd4DP0=";
+    })
+    (fetchpatch {
+      name = "fix-tripledes-cipher-warnings";
+      url = "https://github.com/freeipa/freeipa/pull/7619/commits/e2bf6e4091c7b5320ec6387dab2d5cabe4a9a42d.patch";
+      hash = "sha256-AyMK0hjXMrFK4/qIcjPMFH9DKvnvYOK2QS83Otcc+l4=";
+    })
+  ];
 
   nativeBuildInputs = [
     python3.pkgs.wrapPython
@@ -112,17 +127,13 @@ stdenv.mkDerivation rec {
   postPatch = ''
     patchShebangs makeapi makeaci install/ui/util
 
-    substituteInPlace ipaplatform/setup.py \
-      --replace 'ipaplatform.debian' 'ipaplatform.nixos'
-
     substituteInPlace ipasetup.py.in \
       --replace 'int(v)' 'int(v.replace("post", ""))'
 
     substituteInPlace client/ipa-join.c \
       --replace /usr/sbin/ipa-getkeytab $out/bin/ipa-getkeytab
 
-    cp -r ipaplatform/{fedora,nixos}
-    substitute ${pathsPy} ipaplatform/nixos/paths.py \
+    substituteInPlace ipaplatform/nixos/paths.py \
       --subst-var out \
       --subst-var-by bind ${bind.dnsutils} \
       --subst-var-by curl ${curl} \
@@ -155,6 +166,13 @@ stdenv.mkDerivation rec {
     rm -rf $out/etc/ipa $out/var/lib/ipa-client/sysrestore
   '';
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgram = "${placeholder "out"}/bin/${meta.mainProgram}";
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+
   meta = with lib; {
     description = "Identity, Policy and Audit system";
     longDescription = ''
@@ -166,7 +184,10 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://www.freeipa.org/";
     license = licenses.gpl3Plus;
-    maintainers = [ maintainers.s1341 ];
+    maintainers = with maintainers; [
+      s1341
+      benley
+    ];
     platforms = platforms.linux;
     mainProgram = "ipa";
   };

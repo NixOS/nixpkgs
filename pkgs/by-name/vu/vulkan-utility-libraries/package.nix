@@ -1,17 +1,27 @@
-{ lib, stdenv, fetchFromGitHub, cmake, python3, vulkan-headers }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  python3,
+  vulkan-headers,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vulkan-utility-libraries";
-  version = "1.3.296.0";
+  version = "1.4.304.0";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "Vulkan-Utility-Libraries";
     rev = "vulkan-sdk-${finalAttrs.version}";
-    hash = "sha256-WDRDpUOZN/akUA6gsJMlC2GKolVt3g1NerKqe7aLhek=";
+    hash = "sha256-d20PRTCCNWezwhTD3axiQeWvY9lqD/8XLGBlOFgNzFE=";
   };
 
-  nativeBuildInputs = [ cmake python3 ];
+  nativeBuildInputs = [
+    cmake
+    python3
+  ];
   buildInputs = [ vulkan-headers ];
 
   meta = with lib; {

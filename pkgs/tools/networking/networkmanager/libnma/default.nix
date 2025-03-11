@@ -1,36 +1,41 @@
-{ stdenv
-, fetchurl
-, meson
-, mesonEmulatorHook
-, ninja
-, gettext
-, gtk-doc
-, pkg-config
-, vala
-, networkmanager
-, gnome
-, isocodes
-, libxml2
-, docbook_xsl
-, docbook_xml_dtd_43
-, mobile-broadband-provider-info
-, gobject-introspection
-, gtk3
-, withGtk4 ? false
-, gtk4
-, withGnome ? true
-, gcr_4
-, glib
-, lib
-, _experimental-update-script-combinators
-, makeHardcodeGsettingsPatch
+{
+  stdenv,
+  fetchurl,
+  meson,
+  mesonEmulatorHook,
+  ninja,
+  gettext,
+  gtk-doc,
+  pkg-config,
+  vala,
+  networkmanager,
+  gnome,
+  isocodes,
+  libxml2,
+  docbook_xsl,
+  docbook_xml_dtd_43,
+  mobile-broadband-provider-info,
+  gobject-introspection,
+  gtk3,
+  withGtk4 ? false,
+  gtk4,
+  withGnome ? true,
+  gcr_4,
+  glib,
+  lib,
+  _experimental-update-script-combinators,
+  makeHardcodeGsettingsPatch,
 }:
 
 stdenv.mkDerivation rec {
   pname = "libnma";
   version = "1.10.6";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [
+    "out"
+    "dev"
+    "devdoc"
+  ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
@@ -42,32 +47,37 @@ stdenv.mkDerivation rec {
     ./hardcode-gsettings.patch
   ];
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    gettext
-    pkg-config
-    gobject-introspection
-    gtk-doc
-    docbook_xsl
-    docbook_xml_dtd_43
-    libxml2
-    vala
-  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-    mesonEmulatorHook
-  ];
+  nativeBuildInputs =
+    [
+      meson
+      ninja
+      gettext
+      pkg-config
+      gobject-introspection
+      gtk-doc
+      docbook_xsl
+      docbook_xml_dtd_43
+      libxml2
+      vala
+    ]
+    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+      mesonEmulatorHook
+    ];
 
-  buildInputs = [
-    gtk3
-    networkmanager
-    isocodes
-    mobile-broadband-provider-info
-  ] ++ lib.optionals withGtk4 [
-    gtk4
-  ] ++ lib.optionals withGnome [
-    # advanced certificate chooser
-    gcr_4
-  ];
+  buildInputs =
+    [
+      gtk3
+      networkmanager
+      isocodes
+      mobile-broadband-provider-info
+    ]
+    ++ lib.optionals withGtk4 [
+      gtk4
+    ]
+    ++ lib.optionals withGnome [
+      # advanced certificate chooser
+      gcr_4
+    ];
 
   mesonFlags = [
     "-Dgcr=${lib.boolToString withGnome}"

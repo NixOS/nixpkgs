@@ -1,9 +1,10 @@
-{ stdenv
-, fetchFromGitHub
-, fetchzip
-, SDL2
-, SDL2_net
-, pkg-config
+{
+  stdenv,
+  fetchFromGitHub,
+  fetchzip,
+  SDL2,
+  SDL2_net,
+  pkg-config,
 }:
 
 stdenv.mkDerivation rec {
@@ -23,7 +24,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ SDL2 SDL2_net ];
+  buildInputs = [
+    SDL2
+    SDL2_net
+  ];
 
   enableParallelBuilding = true;
 

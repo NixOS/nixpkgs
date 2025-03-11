@@ -1,4 +1,9 @@
-{ lib, buildDunePackage, opam-core, opam-file-format }:
+{
+  lib,
+  buildDunePackage,
+  opam-core,
+  opam-file-format,
+}:
 
 buildDunePackage {
   pname = "opam-format";
@@ -9,7 +14,10 @@ buildDunePackage {
   # opam-format does not call curl at run time
   configureFlags = [ "--disable-checks" ];
 
-  propagatedBuildInputs = [ opam-core opam-file-format ];
+  propagatedBuildInputs = [
+    opam-core
+    opam-file-format
+  ];
 
   meta = opam-core.meta // {
     description = "Definition of opam datastructures and its file interface";

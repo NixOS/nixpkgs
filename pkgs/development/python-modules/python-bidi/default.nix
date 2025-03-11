@@ -15,14 +15,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "MeirKriheli";
     repo = "python-bidi";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-LrXt9qaXfy8Rn9HjU4YSTFT4WsqzwCgh0flcxXOTF6E=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-34R8T8cXiX1iRx/Zb51Eb/nf0wLpN38hz0VnsmzPzws=";
+    hash = "sha256-4uNdglNaOpIX55xWTr7GkzhjgcyqOTUz4KUGy1fJx4A=";
   };
 
   buildInputs = [ libiconv ];

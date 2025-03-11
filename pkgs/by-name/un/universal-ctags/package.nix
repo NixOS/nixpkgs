@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, autoreconfHook
-, buildPackages
-, coreutils
-, fetchFromGitHub
-, jansson
-, libiconv
-, perl
-, pkg-config
-, python3
-, libseccomp
-, libyaml
-, pcre2
-, libxml2
+{
+  lib,
+  stdenv,
+  autoreconfHook,
+  buildPackages,
+  coreutils,
+  fetchFromGitHub,
+  jansson,
+  libiconv,
+  perl,
+  pkg-config,
+  python3,
+  libseccomp,
+  libyaml,
+  pcre2,
+  libxml2,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -37,14 +38,15 @@ stdenv.mkDerivation (finalAttrs: {
     (python3.withPackages (p: [ p.docutils ]))
   ];
 
-  buildInputs = [
-    libyaml
-    pcre2
-    libxml2
-    jansson
-  ]
-  ++ lib.optional stdenv.hostPlatform.isDarwin libiconv
-  ++ lib.optional stdenv.hostPlatform.isLinux libseccomp;
+  buildInputs =
+    [
+      libyaml
+      pcre2
+      libxml2
+      jansson
+    ]
+    ++ lib.optional stdenv.hostPlatform.isDarwin libiconv
+    ++ lib.optional stdenv.hostPlatform.isLinux libseccomp;
 
   configureFlags = [ "--enable-tmpdir=/tmp" ];
 
@@ -68,7 +70,11 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
 
   checkFlags = [
-    "man-test" "tlib" "tmain" "tutil" "units"
+    "man-test"
+    "tlib"
+    "tmain"
+    "tutil"
+    "units"
   ];
 
   meta = with lib; {
@@ -81,7 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
       editors and other tools to locate the indexed items.
     '';
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.AndersonTorres ];
+    maintainers = [ ];
     platforms = platforms.all;
     mainProgram = "ctags";
     priority = 1; # over the emacs implementation

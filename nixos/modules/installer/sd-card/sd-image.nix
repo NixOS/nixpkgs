@@ -29,24 +29,33 @@ in
   imports = [
     (mkRemovedOptionModule [ "sdImage" "bootPartitionID" ] "The FAT partition for SD image now only holds the Raspberry Pi firmware files. Use firmwarePartitionID to configure that partition's ID.")
     (mkRemovedOptionModule [ "sdImage" "bootSize" ] "The boot files for SD image have been moved to the main ext4 partition. The FAT partition now only holds the Raspberry Pi firmware files. Changing its size may not be required.")
+    (lib.mkRenamedOptionModuleWith {
+      sinceRelease = 2505;
+      from = [
+        "sdImage"
+        "imageBaseName"
+      ];
+      to = [
+        "image"
+        "baseName"
+      ];
+    })
+    (lib.mkRenamedOptionModuleWith {
+      sinceRelease = 2505;
+      from = [
+        "sdImage"
+        "imageName"
+      ];
+      to = [
+        "image"
+        "fileName"
+      ];
+    })
     ../../profiles/all-hardware.nix
+    ../../image/file-options.nix
   ];
 
   options.sdImage = {
-    imageName = mkOption {
-      default = "${config.sdImage.imageBaseName}-${config.system.nixos.label}-${pkgs.stdenv.hostPlatform.system}.img";
-      description = ''
-        Name of the generated image file.
-      '';
-    };
-
-    imageBaseName = mkOption {
-      default = "nixos-sd-image";
-      description = ''
-        Prefix of the name of the generated image file.
-      '';
-    };
-
     storePaths = mkOption {
       type = with types; listOf package;
       example = literalExpression "[ pkgs.stdenv ]";
@@ -162,6 +171,8 @@ in
   };
 
   config = {
+    hardware.enableAllHardware = true;
+
     fileSystems = {
       "/boot/firmware" = {
         device = "/dev/disk/by-label/${config.sdImage.firmwarePartitionName}";
@@ -179,18 +190,22 @@ in
 
     sdImage.storePaths = [ config.system.build.toplevel ];
 
+    image.extension = if config.sdImage.compressImage then "img.zst" else "img";
+    image.filePath = "sd-card/${config.image.fileName}";
+    system.nixos.tags = [ "sd-card" ];
+    system.build.image = config.system.build.sdImage;
     system.build.sdImage = pkgs.callPackage ({ stdenv, dosfstools, e2fsprogs,
     mtools, libfaketime, util-linux, zstd }: stdenv.mkDerivation {
-      name = config.sdImage.imageName;
+      name = config.image.fileName;
 
       nativeBuildInputs = [ dosfstools e2fsprogs libfaketime mtools util-linux ]
       ++ lib.optional config.sdImage.compressImage zstd;
 
-      inherit (config.sdImage) imageName compressImage;
+      inherit (config.sdImage) compressImage;
 
       buildCommand = ''
         mkdir -p $out/nix-support $out/sd-image
-        export img=$out/sd-image/${config.sdImage.imageName}
+        export img=$out/sd-image/${config.image.baseName}.img
 
         echo "${pkgs.stdenv.buildPlatform.system}" > $out/nix-support/system
         if test -n "$compressImage"; then

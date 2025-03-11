@@ -1,7 +1,8 @@
-{ lib
-, fetchFromGitHub
-, stdenvNoCC
-, nix-update-script
+{
+  lib,
+  fetchFromGitHub,
+  stdenvNoCC,
+  nix-update-script,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -40,6 +41,9 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://materialdesignicons.com";
     license = licenses.asl20;
     platforms = platforms.all;
-    maintainers = with maintainers; [ vlaci dixslyf ];
+    maintainers = with maintainers; [
+      vlaci
+      dixslyf
+    ];
   };
 }

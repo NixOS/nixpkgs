@@ -1,28 +1,29 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nixosTests
-, cmake
-, meson
-, ninja
-, pkg-config
-, wf-config
-, cairo
-, doctest
-, libGL
-, libdrm
-, libexecinfo
-, libevdev
-, libinput
-, libjpeg
-, libxkbcommon
-, wayland
-, wayland-protocols
-, wayland-scanner
-, wlroots
-, pango
-, nlohmann_json
-, xorg
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nixosTests,
+  cmake,
+  meson,
+  ninja,
+  pkg-config,
+  wf-config,
+  cairo,
+  doctest,
+  libGL,
+  libdrm,
+  libexecinfo,
+  libevdev,
+  libinput,
+  libjpeg,
+  libxkbcommon,
+  wayland,
+  wayland-protocols,
+  wayland-scanner,
+  wlroots,
+  pango,
+  nlohmann_json,
+  xorg,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -90,7 +91,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://wayfire.org/";
     description = "3D Wayland compositor";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ wucke13 rewine ];
+    maintainers = with lib.maintainers; [
+      wucke13
+      rewine
+    ];
     platforms = lib.platforms.unix;
     mainProgram = "wayfire";
   };

@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "symengine";
     repo = "symengine.py";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-PJUzA86SGCnDpqU9j/dr3PlM9inyi8SQX0HGqPQ9wQw=";
   };
 

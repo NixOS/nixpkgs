@@ -1,20 +1,30 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles, stdenv, testers, ocm }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  testers,
+  ocm,
+}:
 
 buildGoModule rec {
   pname = "ocm";
-  version = "0.1.73";
+  version = "1.0.4";
 
   src = fetchFromGitHub {
     owner = "openshift-online";
     repo = "ocm-cli";
     rev = "v${version}";
-    sha256 = "sha256-hcbCUzC+E7VHmqATw/1LQxdMLiFibgYiWrQHpm3jZLA=";
+    sha256 = "sha256-K/hAxzstRY0Mh7qYMqwWfIbop+AhgzvPZsrZo8eTzsQ=";
   };
 
-  vendorHash = "sha256-NP5LLP27hn8p2gUVO/qpdu1Yp3t8iarUUKR/FjU0Qlc=";
+  vendorHash = "sha256-RQioZq/fdqr6baTTDeLUhFh/dlByNM5Ys0L4pAYXkHI=";
 
   # Strip the final binary.
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -23,8 +33,10 @@ buildGoModule rec {
     ln -s $GOPATH/bin/ocm ocm
   '';
 
-  # Tests fail in Darwin sandbox.
-  doCheck = !stdenv.hostPlatform.isDarwin;
+  checkFlags = [
+    # Disable integration tests which require networking and gnupg which has issues in the sandbox
+    "-skip=^TestCLI$"
+  ];
 
   postInstall = ''
     installShellCompletion --cmd ocm \
@@ -43,7 +55,9 @@ buildGoModule rec {
     mainProgram = "ocm";
     license = licenses.asl20;
     homepage = "https://github.com/openshift-online/ocm-cli";
-    maintainers = with maintainers; [ stehessel ];
-    platforms = platforms.all;
+    maintainers = with maintainers; [
+      stehessel
+      jfchevrette
+    ];
   };
 }

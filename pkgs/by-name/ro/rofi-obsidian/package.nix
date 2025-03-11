@@ -14,7 +14,8 @@ rustPlatform.buildRustPackage {
     hash = "sha256-EQ7OGW5FTgfuJ/xJzOhl1eb3XNORUfs0efP17A6yp7g=";
   };
 
-  cargoHash = "sha256-hAiBSAvnMRchH49bku2oPhoCK3+bcWiZW4YbcMuAiqU=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-+PJ8KpkdJmxJ0hhoecg9m5vqhgi73FmHfwZVBU4UF4w=";
 
   meta = {
     description = "Launch your Obsidian vaults from the comfort of rofi";

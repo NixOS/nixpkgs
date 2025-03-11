@@ -1,38 +1,39 @@
-{ lib
-, buildGoModule
-, rustPlatform
-, fetchFromGitHub
-, fetchYarnDeps
-, makeWrapper
-, CoreFoundation
-, AppKit
-, binaryen
-, cargo
-, libfido2
-, nodejs
-, openssl
-, pkg-config
-, pnpm_9
-, rustc
-, Security
-, stdenv
-, xdg-utils
-, yarn
-, wasm-bindgen-cli
-, wasm-pack
-, fixup-yarn-lock
-, nixosTests
+{
+  lib,
+  buildGoModule,
+  rustPlatform,
+  fetchFromGitHub,
+  fetchYarnDeps,
+  fetchpatch,
+  makeWrapper,
+  CoreFoundation,
+  AppKit,
+  binaryen,
+  cargo,
+  libfido2,
+  nodejs,
+  openssl,
+  pkg-config,
+  pnpm_9,
+  rustc,
+  Security,
+  stdenv,
+  xdg-utils,
+  yarn,
+  wasm-bindgen-cli,
+  wasm-pack,
+  fixup-yarn-lock,
+  nixosTests,
 
-, withRdpClient ? true
+  withRdpClient ? true,
 
-, version
-, hash
-, vendorHash
-, extPatches ? []
-, cargoHash ? null
-, cargoLock ? null
-, yarnHash ? null
-, pnpmHash ? null
+  version,
+  hash,
+  vendorHash,
+  extPatches ? [ ],
+  cargoHash ? null,
+  yarnHash ? null,
+  pnpmHash ? null,
 }:
 assert yarnHash != null || pnpmHash != null;
 let
@@ -48,13 +49,18 @@ let
 
   rdpClient = rustPlatform.buildRustPackage rec {
     pname = "teleport-rdpclient";
-    inherit cargoHash cargoLock;
+    useFetchCargoVendor = true;
+    inherit cargoHash;
     inherit version src;
 
     buildAndTestSubdir = "lib/srv/desktop/rdp/rdpclient";
 
-    buildInputs = [ openssl ]
-      ++ lib.optionals stdenv.hostPlatform.isDarwin [ CoreFoundation Security ];
+    buildInputs =
+      [ openssl ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        CoreFoundation
+        Security
+      ];
     nativeBuildInputs = [ pkg-config ];
 
     # https://github.com/NixOS/nixpkgs/issues/161570 ,
@@ -78,23 +84,49 @@ let
     pname = "teleport-webassets";
     inherit src version;
 
-    cargoDeps = rustPlatform.importCargoLock cargoLock;
+    cargoDeps = rustPlatform.fetchCargoVendor {
+      inherit src;
+      hash = cargoHash;
+    };
 
-    pnpmDeps = if pnpmHash != null then pnpm_9.fetchDeps {
-      inherit src pname version;
-      hash = pnpmHash;
-    } else null;
+    pnpmDeps =
+      if pnpmHash != null then
+        pnpm_9.fetchDeps {
+          inherit src pname version;
+          hash = pnpmHash;
+        }
+      else
+        null;
 
-    nativeBuildInputs = [ nodejs ] ++ lib.optional (lib.versionAtLeast version "15") [
-      binaryen
-      cargo
-      nodejs
-      rustc
-      rustc.llvmPackages.lld
-      rustPlatform.cargoSetupHook
-      wasm-bindgen-cli
-      wasm-pack
-    ] ++ (if lib.versionAtLeast version "16" then [ pnpm_9.configHook ] else [ yarn fixup-yarn-lock ]);
+    nativeBuildInputs =
+      [ nodejs ]
+      ++ lib.optional (lib.versionAtLeast version "15") [
+        binaryen
+        cargo
+        nodejs
+        rustc
+        rustc.llvmPackages.lld
+        rustPlatform.cargoSetupHook
+        wasm-bindgen-cli
+        wasm-pack
+      ]
+      ++ (
+        if lib.versionAtLeast version "16" then
+          [ pnpm_9.configHook ]
+        else
+          [
+            yarn
+            fixup-yarn-lock
+          ]
+      );
+
+    patches = lib.optional (lib.versionAtLeast version "16") [
+      (fetchpatch {
+        name = "disable-wasm-opt-for-ironrdp.patch";
+        url = "https://github.com/gravitational/teleport/commit/994890fb05360b166afd981312345a4cf01bc422.patch?full_index=1";
+        hash = "sha256-Y5SVIUQsfi5qI28x5ccoRkBjpdpeYn0mQk8sLO644xo=";
+      })
+    ];
 
     configurePhase = ''
       runHook preConfigure
@@ -117,15 +149,18 @@ let
 
       PATH=$PATH:$PWD/node_modules/.bin
 
-      ${if lib.versionAtLeast version "15"
-      then ''
-        pushd web/packages/teleport
-        # https://github.com/gravitational/teleport/blob/6b91fe5bbb9e87db4c63d19f94ed4f7d0f9eba43/web/packages/teleport/README.md?plain=1#L18-L20
-        RUST_MIN_STACK=16777216 wasm-pack build ./src/ironrdp --target web --mode no-install
-        vite build
-        popd
-      ''
-      else "yarn build-ui-oss"}
+      ${
+        if lib.versionAtLeast version "15" then
+          ''
+            pushd web/packages/teleport
+            # https://github.com/gravitational/teleport/blob/6b91fe5bbb9e87db4c63d19f94ed4f7d0f9eba43/web/packages/teleport/README.md?plain=1#L18-L20
+            RUST_MIN_STACK=16777216 wasm-pack build ./src/ironrdp --target web --mode no-install
+            vite build
+            popd
+          ''
+        else
+          "yarn build-ui-oss"
+      }
     '';
 
     installPhase = ''
@@ -139,13 +174,31 @@ buildGoModule rec {
   inherit vendorHash;
   proxyVendor = true;
 
-  subPackages = [ "tool/tbot" "tool/tctl" "tool/teleport" "tool/tsh" ];
-  tags = [ "libfido2" "webassets_embed" ]
-    ++ lib.optional withRdpClient "desktop_access_rdp";
+  subPackages = [
+    "tool/tbot"
+    "tool/tctl"
+    "tool/teleport"
+    "tool/tsh"
+  ];
+  tags = [
+    "libfido2"
+    "webassets_embed"
+  ] ++ lib.optional withRdpClient "desktop_access_rdp";
 
-  buildInputs = [ openssl libfido2 ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && withRdpClient) [ CoreFoundation Security AppKit ];
-  nativeBuildInputs = [ makeWrapper pkg-config ];
+  buildInputs =
+    [
+      openssl
+      libfido2
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin && withRdpClient) [
+      CoreFoundation
+      Security
+      AppKit
+    ];
+  nativeBuildInputs = [
+    makeWrapper
+    pkg-config
+  ];
 
   patches = extPatches ++ [
     ./0001-fix-add-nix-path-to-exec-env.patch
@@ -154,14 +207,19 @@ buildGoModule rec {
   ];
 
   # Reduce closure size for client machines
-  outputs = [ "out" "client" ];
+  outputs = [
+    "out"
+    "client"
+  ];
 
-  preBuild = ''
-    cp -r ${webassets} webassets
-  '' + lib.optionalString withRdpClient ''
-    ln -s ${rdpClient}/lib/* lib/
-    ln -s ${rdpClient}/include/* lib/srv/desktop/rdp/rdpclient/
-  '';
+  preBuild =
+    ''
+      cp -r ${webassets} webassets
+    ''
+    + lib.optionalString withRdpClient ''
+      ln -s ${rdpClient}/lib/* lib/
+      ln -s ${rdpClient}/include/* lib/srv/desktop/rdp/rdpclient/
+    '';
 
   # Multiple tests fail in the build sandbox
   # due to trying to spawn nixbld's shell (/noshell), etc.
@@ -191,7 +249,15 @@ buildGoModule rec {
     description = "Certificate authority and access plane for SSH, Kubernetes, web applications, and databases";
     homepage = "https://goteleport.com/";
     license = if lib.versionAtLeast version "15" then licenses.agpl3Plus else licenses.asl20;
-    maintainers = with maintainers; [ arianvp justinas sigma tomberek freezeboy techknowlogick ];
+    maintainers = with maintainers; [
+      arianvp
+      justinas
+      sigma
+      tomberek
+      freezeboy
+      techknowlogick
+      juliusfreudenberger
+    ];
     platforms = platforms.unix;
     # go-libfido2 is broken on platforms with less than 64-bit because it defines an array
     # which occupies more than 31 bits of address space.

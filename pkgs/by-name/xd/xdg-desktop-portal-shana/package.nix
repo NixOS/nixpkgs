@@ -1,20 +1,21 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, meson
-, ninja
-, xdg-desktop-portal
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  xdg-desktop-portal,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "xdg-desktop-portal-shana";
-  version = "0.3.12";
+  version = "0.3.13";
 
   src = fetchFromGitHub {
     owner = "Decodetalkers";
     repo = "xdg-desktop-portal-shana";
     rev = "v${version}";
-    hash = "sha256-bBKoAegT3wk2UD2fqSLaix2MuKtVAcHA6vcB9VAzLJw=";
+    hash = "sha256-myEqJnXHCByc9CMX8vMDaQQkL84pfW/7fKPZpiNQHJA=";
   };
 
   nativeBuildInputs = [
@@ -31,14 +32,15 @@ rustPlatform.buildRustPackage rec {
 
   mesonBuildType = "release";
 
-  cargoHash = "sha256-vufD/eYulblUKQVHsyvjl2AlRoRAGp2oeYol9kTt3lQ=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-E573A3njd+IMOEHnKwyKmA4I4bfCt4Kttj7MiFOUw/0=";
 
   meta = with lib; {
     description = "Filechooser portal backend for any desktop environment";
     homepage = "https://github.com/Decodetalkers/xdg-desktop-portal-shana";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = [  maintainers.samuelefacenda ];
+    maintainers = [ maintainers.samuelefacenda ];
   };
 
 }

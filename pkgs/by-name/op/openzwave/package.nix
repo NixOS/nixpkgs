@@ -1,6 +1,15 @@
-{ lib, stdenv, fetchFromGitHub
-, doxygen, fontconfig, graphviz-nox, libxml2, pkg-config, which
-, systemd }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  doxygen,
+  fontconfig,
+  graphviz-nox,
+  libxml2,
+  pkg-config,
+  which,
+  systemd,
+}:
 
 stdenv.mkDerivation rec {
   pname = "openzwave";
@@ -13,9 +22,19 @@ stdenv.mkDerivation rec {
     hash = "sha256-CLK2MeoTmZ8GMKb1OAZFNLyc4C+k+REK2w+WQxZv0/E=";
   };
 
-  outputs = [ "out" "doc" ];
+  outputs = [
+    "out"
+    "doc"
+  ];
 
-  nativeBuildInputs = [ doxygen fontconfig graphviz-nox libxml2 pkg-config which ];
+  nativeBuildInputs = [
+    doxygen
+    fontconfig
+    graphviz-nox
+    libxml2
+    pkg-config
+    which
+  ];
 
   buildInputs = [ systemd ];
 
@@ -27,8 +46,8 @@ stdenv.mkDerivation rec {
     "PREFIX=${placeholder "out"}"
   ];
 
-  FONTCONFIG_FILE="${fontconfig.out}/etc/fonts/fonts.conf";
-  FONTCONFIG_PATH="${fontconfig.out}/etc/fonts/";
+  FONTCONFIG_FILE = "${fontconfig.out}/etc/fonts/fonts.conf";
+  FONTCONFIG_PATH = "${fontconfig.out}/etc/fonts/";
 
   postPatch = ''
     substituteInPlace cpp/src/Options.cpp \

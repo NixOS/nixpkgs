@@ -1,4 +1,13 @@
-{ lib, mkDerivation, fetchFromGitHub, cmake, file, qtbase, qttools, solid }:
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  cmake,
+  file,
+  qtbase,
+  qttools,
+  solid,
+}:
 
 mkDerivation {
   pname = "dfilemanager";
@@ -12,7 +21,12 @@ mkDerivation {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ qtbase qttools file solid ];
+  buildInputs = [
+    qtbase
+    qttools
+    file
+    solid
+  ];
 
   cmakeFlags = [ "-DQT5BUILD=true" ];
 

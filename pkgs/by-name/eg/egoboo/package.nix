@@ -1,4 +1,14 @@
-{ lib, stdenv, fetchurl, libGLU, libGL, SDL, SDL_mixer, SDL_image, SDL_ttf }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libGLU,
+  libGL,
+  SDL,
+  SDL_mixer,
+  SDL_image,
+  SDL_ttf,
+}:
 
 stdenv.mkDerivation rec {
   # pf5234 (a developer?) at freenode #egoboo told me that I better use 2.7.3 until
@@ -29,7 +39,14 @@ stdenv.mkDerivation rec {
     cp -v -Rd controls.txt setup.txt players modules basicdat $out/share/egoboo-${version}
   '';
 
-  buildInputs = [ libGLU libGL SDL SDL_mixer SDL_image SDL_ttf ];
+  buildInputs = [
+    libGLU
+    libGL
+    SDL
+    SDL_mixer
+    SDL_image
+    SDL_ttf
+  ];
 
   /*
     This big commented thing may be needed for versions 2.8.0 or beyond

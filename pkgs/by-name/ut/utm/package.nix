@@ -1,20 +1,24 @@
-{ lib
-, undmg
-, makeWrapper
-, fetchurl
-, stdenvNoCC
+{
+  lib,
+  undmg,
+  makeWrapper,
+  fetchurl,
+  stdenvNoCC,
 }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "utm";
-  version = "4.5.4";
+  version = "4.6.4";
 
   src = fetchurl {
     url = "https://github.com/utmapp/UTM/releases/download/v${version}/UTM.dmg";
-    hash = "sha256-GzwokK/q8S38lbOVhGgNaqbDAAryHJ9eBAAWGpuOQOE=";
+    hash = "sha256-qthnJhUrFaPpY893igsN/Y6Bhzazga7SaZ2XShiEVCc=";
   };
 
-  nativeBuildInputs = [ undmg makeWrapper ];
+  nativeBuildInputs = [
+    undmg
+    makeWrapper
+  ];
 
   sourceRoot = ".";
   installPhase = ''
@@ -62,6 +66,9 @@ stdenvNoCC.mkDerivation rec {
     license = licenses.asl20;
     platforms = platforms.darwin; # 11.3 is the minimum supported version as of UTM 4.
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [ rrbutani wegank ];
+    maintainers = with maintainers; [
+      rrbutani
+      wegank
+    ];
   };
 }

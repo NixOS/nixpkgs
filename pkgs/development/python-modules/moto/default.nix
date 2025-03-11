@@ -37,14 +37,14 @@
 
 buildPythonPackage rec {
   pname = "moto";
-  version = "5.0.18";
+  version = "5.0.26";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-inrS9ToubMnbL/ZcDg1LXX54vAC4Jcnh/2zDlDceduk=";
+    hash = "sha256-aCn1imcKCH58W2P4GDxrctZKFETkIMISJQtzJraakYM=";
   };
 
   build-system = [ setuptools ];
@@ -227,7 +227,7 @@ buildPythonPackage rec {
     # AssertionError: assert ResourceWarning not in [<class 'ResourceWarning'>, <class 'ResourceWarning'>]
     "test_delete_object_with_version"
 
-    # KeyError beucase of ap-southeast-5-apse5-az
+    # KeyError because of ap-southeast-5-apse5-az
     "test_zoneId_in_availability_zones"
 
     # Parameter validation fails

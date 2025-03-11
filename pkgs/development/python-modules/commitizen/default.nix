@@ -3,7 +3,7 @@
   commitizen,
   fetchFromGitHub,
   buildPythonPackage,
-  git,
+  gitMinimal,
   pythonOlder,
   stdenv,
   installShellFiles,
@@ -31,7 +31,7 @@
 
 buildPythonPackage rec {
   pname = "commitizen";
-  version = "3.30.0";
+  version = "4.4.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -39,8 +39,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "commitizen-tools";
     repo = "commitizen";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-8ULIoFKrDAGHwz0EZzYJtl/4h6UVUECLUDbvTJbdD60=";
+    tag = "v${version}";
+    hash = "sha256-nKX5mMqcUcQfL0r0uVj2tFTW3qaSCx42roSV6qaf0yU=";
   };
 
   pythonRelaxDeps = [
@@ -69,7 +69,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     argcomplete
     deprecated
-    git
+    gitMinimal
     py
     pytest-freezer
     pytest-mock

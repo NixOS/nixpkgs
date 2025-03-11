@@ -1,13 +1,22 @@
-{ lib, stdenv, fetchurl, autoreconfHook, autoconf-archive, pkg-config
-, enable-tools ? true }:
+{
+  lib,
+  stdenv,
+  fetchgit,
+  gitUpdater,
+  autoreconfHook,
+  autoconf-archive,
+  pkg-config,
+  enable-tools ? true,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libgpiod";
-  version = "2.1.3";
+  version = "2.2.1";
 
-  src = fetchurl {
-    url = "https://git.kernel.org/pub/scm/libs/libgpiod/libgpiod.git/snapshot/libgpiod-${version}.tar.gz";
-    hash = "sha256-jYDqAirngSKqUlMI50I7gwZL/yePzZzQRblLT4H4BX0=";
+  src = fetchgit {
+    url = "https://git.kernel.org/pub/scm/libs/libgpiod/libgpiod.git";
+    tag = "v${version}";
+    hash = "sha256-BVVHyRmgLLUgc3qLHOXiLYaTjsPMntvIP1os9eL8v74=";
   };
 
   nativeBuildInputs = [
@@ -21,6 +30,11 @@ stdenv.mkDerivation rec {
     "--enable-bindings-cxx"
   ];
 
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
+    allowedVersions = "^[0-9\\.]+$";
+  };
+
   meta = with lib; {
     description = "C library and tools for interacting with the linux GPIO character device";
     longDescription = ''
@@ -29,11 +43,14 @@ stdenv.mkDerivation rec {
       data structures behind a straightforward API.
     '';
     homepage = "https://git.kernel.org/pub/scm/libs/libgpiod/libgpiod.git/about/";
-    license = with licenses; [
-      lgpl21Plus # libgpiod
-      lgpl3Plus # C++ bindings
-    ] ++ lib.optional enable-tools gpl2Plus;
-    maintainers = [];
+    license =
+      with licenses;
+      [
+        lgpl21Plus # libgpiod
+        lgpl3Plus # C++ bindings
+      ]
+      ++ lib.optional enable-tools gpl2Plus;
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

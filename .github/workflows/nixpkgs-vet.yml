@@ -2,10 +2,10 @@
 # Among other checks, it makes sure that `pkgs/by-name` (see `../../pkgs/by-name/README.md`) follows the validity rules outlined in [RFC 140](https://github.com/NixOS/rfcs/pull/140).
 # When you make changes to this workflow, please also update `ci/nixpkgs-vet.sh` to reflect the impact of your work to the CI.
 # See https://github.com/NixOS/nixpkgs-vet for details on the tool and its checks.
+
 name: Vet nixpkgs
 
 on:
-  # Using pull_request_target instead of pull_request avoids having to approve first time contributors.
   pull_request_target:
     # This workflow depends on the base branch of the PR, but changing the base branch is not included in the default trigger events, which would be `opened`, `synchronize` or `reopened`.
     # Instead it causes an `edited` event, so we need to add it explicitly here.
@@ -19,46 +19,33 @@ permissions: {}
 # There is a feature request for suppressing notifications on concurrency-canceled runs: https://github.com/orgs/community/discussions/13015
 
 jobs:
+  get-merge-commit:
+    uses: ./.github/workflows/get-merge-commit.yml
+
   check:
     name: nixpkgs-vet
     # This needs to be x86_64-linux, because we depend on the tooling being pre-built in the GitHub releases.
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     # This should take 1 minute at most, but let's be generous. The default of 6 hours is definitely too long.
     timeout-minutes: 10
+    needs: get-merge-commit
+    if: needs.get-merge-commit.outputs.mergedSha
     steps:
-      # This checks out the base branch because of pull_request_target
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
-          path: base
-          sparse-checkout: ci
-      - name: Resolving the merge commit
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          if mergedSha=$(base/ci/get-merge-commit.sh ${{ github.repository }} ${{ github.event.number }}); then
-            echo "Checking the merge commit $mergedSha"
-            echo "mergedSha=$mergedSha" >> "$GITHUB_ENV"
-          else
-            echo "Skipping the rest..."
-          fi
-          rm -rf base
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-        if: env.mergedSha
-        with:
-          # pull_request_target checks out the base branch by default
-          ref: ${{ env.mergedSha }}
+          ref: ${{ needs.get-merge-commit.outputs.mergedSha }}
           # Fetches the merge commit and its parents
           fetch-depth: 2
-      - name: Checking out base branch
-        if: env.mergedSha
+
+      - name: Checking out target branch
         run: |
-          base=$(mktemp -d)
-          git worktree add "$base" "$(git rev-parse HEAD^1)"
-          echo "base=$base" >> "$GITHUB_ENV"
+          target=$(mktemp -d)
+          git worktree add "$target" "$(git rev-parse HEAD^1)"
+          echo "target=$target" >> "$GITHUB_ENV"
+
       - uses: cachix/install-nix-action@08dcb3a5e62fa31e2da3d490afc4176ef55ecd72 # v30
-        if: env.mergedSha
+
       - name: Fetching the pinned tool
-        if: env.mergedSha
         # Update the pinned version using ci/nixpkgs-vet/update-pinned-tool.sh
         run: |
           # The pinned version of the tooling to use.
@@ -70,13 +57,13 @@ jobs:
 
           # Adds a result symlink as a GC root.
           nix-store --realise "$toolPath" --add-root result
+
       - name: Running nixpkgs-vet
-        if: env.mergedSha
         env:
           # Force terminal colors to be enabled. The library that `nixpkgs-vet` uses respects https://bixense.com/clicolors/
           CLICOLOR_FORCE: 1
         run: |
-          if result/bin/nixpkgs-vet --base "$base" .; then
+          if result/bin/nixpkgs-vet --base "$target" .; then
             exit 0
           else
             exitCode=$?

@@ -1,13 +1,17 @@
-{ lib, python3Packages, fetchPypi }:
+{
+  lib,
+  python3Packages,
+  fetchPypi,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "fanficfare";
-  version = "4.40.0";
+  version = "4.43.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-5WquEgSqPFMq+HU0K94QiC9WsP6Iv+CpE1ZsBgdYGFI=";
+    hash = "sha256-uaYMmb896gJ31nbcGJs42jlSpvHUTvpLlD00r1icXRY=";
   };
 
   nativeBuildInputs = with python3Packages; [

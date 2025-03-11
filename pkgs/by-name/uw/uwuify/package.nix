@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, libiconv }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  libiconv,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "uwuify";
@@ -11,7 +17,8 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-MzXObbxccwEG7egmQMCdhUukGqZS+NgbYwZjTaqME7I=";
   };
 
-  cargoHash = "sha256-1BoB7K/dWy3AbogvHIDLrdPD7K54EISvn4RVU5RLTi4=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-gR3FL1GeD9Dx5TKeThmPScMCRJQ2THlO4pBViXlI9XM=";
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   meta = with lib; {

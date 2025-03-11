@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
   meson,
   ninja,
   pkg-config,
@@ -36,8 +36,7 @@ stdenv.mkDerivation rec {
   patches = [
     # Our glib setup hooks moves GSettings schemas to a subdirectory to prevent conflicts.
     # We need to patch the build script so that the extension can find them.
-    (substituteAll {
-      src = ./fix-schema-path.patch;
+    (replaceVars ./fix-schema-path.patch {
       inherit pname version;
     })
   ];

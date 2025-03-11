@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, nettools, iproute2, judy }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  nettools,
+  iproute2,
+  judy,
+}:
 
 stdenv.mkDerivation rec {
   version = "1.2.6";

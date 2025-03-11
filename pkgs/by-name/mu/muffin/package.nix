@@ -1,67 +1,71 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, substituteAll
-, cairo
-, cinnamon-desktop
-, dbus
-, desktop-file-utils
-, egl-wayland
-, glib
-, gobject-introspection
-, graphene
-, gtk3
-, json-glib
-, libcanberra
-, libdrm
-, libgnomekbd
-, libgudev
-, libinput
-, libstartup_notification
-, libwacom
-, libxcvt
-, libXdamage
-, libxkbcommon
-, libXtst
-, mesa
-, meson
-, ninja
-, pipewire
-, pkg-config
-, python3
-, udev
-, wayland
-, wayland-protocols
-, wayland-scanner
-, wrapGAppsHook3
-, xorgserver
-, xwayland
-, zenity
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  replaceVars,
+  cairo,
+  cinnamon-desktop,
+  dbus,
+  desktop-file-utils,
+  egl-wayland,
+  glib,
+  gobject-introspection,
+  graphene,
+  gtk3,
+  json-glib,
+  libcanberra,
+  libdrm,
+  libgbm,
+  libgnomekbd,
+  libgudev,
+  libinput,
+  libstartup_notification,
+  libwacom,
+  libxcvt,
+  libXdamage,
+  libxkbcommon,
+  libXtst,
+  mesa-gl-headers,
+  meson,
+  ninja,
+  pipewire,
+  pkg-config,
+  python3,
+  udev,
+  wayland,
+  wayland-protocols,
+  wayland-scanner,
+  wrapGAppsHook3,
+  xorgserver,
+  xwayland,
+  zenity,
 }:
 
 stdenv.mkDerivation rec {
   pname = "muffin";
-  version = "6.2.0";
+  version = "6.4.1";
 
-  outputs = [ "out" "dev" "man" ];
+  outputs = [
+    "out"
+    "dev"
+    "man"
+  ];
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    hash = "sha256-k8hUYA4/OzL2TB8s5DJpa2nFXV2U9eY09TLkqBDq9WE=";
+    hash = "sha256-cGC1yGft3uEqefm2DvZrMaROoZKYd6LNY0IJ+58f6vs=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       inherit zenity;
     })
   ];
 
   nativeBuildInputs = [
     desktop-file-utils
-    mesa # needed for gbm
     meson
     ninja
     pkg-config
@@ -81,6 +85,7 @@ stdenv.mkDerivation rec {
     gtk3
     libcanberra
     libdrm
+    libgbm
     libgnomekbd
     libgudev
     libinput
@@ -101,6 +106,7 @@ stdenv.mkDerivation rec {
     json-glib
     libXtst
     graphene
+    mesa-gl-headers
   ];
 
   mesonFlags = [

@@ -1,19 +1,20 @@
-{ lib
-, fetchFromGitHub
-, buildGoModule
-, gh-markdown-preview
-, testers
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  gh-markdown-preview,
+  testers,
 }:
 
 buildGoModule rec {
   pname = "gh-markdown-preview";
-  version = "1.8.0";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "yusukebe";
     repo = "gh-markdown-preview";
     rev = "v${version}";
-    hash = "sha256-y9AiHmBfDSJ6oCevUAUkg18qHe/oP7A6PLiz3MZqU0s=";
+    hash = "sha256-5jxGFZqYkhFQ4Rx4jbI+fes9ezsuXa+VZowk5Jzhi3I=";
   };
 
   vendorHash = "sha256-O6Q9h5zcYAoKLjuzGu7f7UZY0Y5rL2INqFyJT2QZJ/E=";

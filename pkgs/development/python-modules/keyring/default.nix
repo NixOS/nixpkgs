@@ -19,15 +19,15 @@
 
 buildPythonPackage rec {
   pname = "keyring";
-  version = "25.4.1";
+  version = "25.6.0";
   pyproject = true;
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "jaraco";
     repo = "keyring";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-5MK7f6/e8ZJ7azm5WX8T2+/6R3P3Y8XaN7jze2MgiJA=";
+    tag = "v${version}";
+    hash = "sha256-qu9HAlZMLlIVs8c9ClzWUljezhrt88gu1kouklMNxMY=";
   };
 
   build-system = [ setuptools-scm ];
@@ -73,7 +73,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Store and access your passwords safely";
     homepage = "https://github.com/jaraco/keyring";
-    changelog = "https://github.com/jaraco/keyring/blob/v${version}/NEWS.rst";
+    changelog = "https://github.com/jaraco/keyring/blob/${src.tag}/NEWS.rst";
     license = licenses.mit;
     mainProgram = "keyring";
     maintainers = with maintainers; [

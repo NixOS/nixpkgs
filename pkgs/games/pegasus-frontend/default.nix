@@ -1,16 +1,17 @@
-{ lib
-, fetchFromGitHub
-, stdenv
-, cmake
-, qtbase
-, qtgraphicaleffects
-, qtmultimedia
-, qtsvg
-, qttools
-, qtx11extras
-, SDL2
-, sqlite
-, wrapQtAppsHook
+{
+  lib,
+  fetchFromGitHub,
+  stdenv,
+  cmake,
+  qtbase,
+  qtgraphicaleffects,
+  qtmultimedia,
+  qtsvg,
+  qttools,
+  qtx11extras,
+  SDL2,
+  sqlite,
+  wrapQtAppsHook,
 }:
 
 stdenv.mkDerivation rec {

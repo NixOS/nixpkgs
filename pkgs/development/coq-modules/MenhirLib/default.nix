@@ -2,6 +2,7 @@
   lib,
   mkCoqDerivation,
   coq,
+  stdlib,
   version ? null,
 }:
 let
@@ -14,8 +15,14 @@ let
     defaultVersion =
       with lib.versions;
       lib.switch coq.coq-version [
-        { case = range "8.12" "8.20"; out = "20240715"; }
-        { case = range "8.7" "8.11"; out = "20200624"; }
+        {
+          case = range "8.12" "9.0";
+          out = "20240715";
+        }
+        {
+          case = range "8.7" "8.11";
+          out = "20200624";
+        }
       ] null;
     release = {
       "20240715".sha256 = "sha256-9CSxAIm0aEXkwF+aj8u/bqLG30y5eDNz65EnohJPjzI="; # coq 8.9 - 8.20
@@ -26,12 +33,13 @@ let
       "20211230".sha256 = "sha256-+ntl4ykkqJWEeJJzt6fO5r0X1J+4in2LJIj1N8R175w="; # coq 8.7 - 8.18
       "20200624".sha256 = "sha256-8lMqwmOsqxU/45Xr+GeyU2aIjrClVdv3VamCCkF76jY="; # coq 8.7 - 8.13
     };
+    propagatedBuildInputs = [ stdlib ];
     preBuild = "cd coq-menhirlib/src";
-    meta = with lib; {
+    meta = {
       homepage = "https://gitlab.inria.fr/fpottier/menhir/-/tree/master/coq-menhirlib";
       description = "A support library for verified Coq parsers produced by Menhir";
-      license = licenses.lgpl3Plus;
-      maintainers = with maintainers; [ ];
+      license = lib.licenses.lgpl3Plus;
+      maintainers = with lib.maintainers; [ damhiya ];
     };
   };
 in

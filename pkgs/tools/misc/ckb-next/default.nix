@@ -1,6 +1,23 @@
-{ lib, wrapQtAppsHook, fetchFromGitHub, substituteAll, udev, stdenv
-, pkg-config, qtbase, cmake, zlib, kmod, libXdmcp, qttools, qtx11extras, libdbusmenu, gnused
-, withPulseaudio ? stdenv.hostPlatform.isLinux, libpulseaudio, quazip
+{
+  lib,
+  wrapQtAppsHook,
+  fetchFromGitHub,
+  replaceVars,
+  udev,
+  stdenv,
+  pkg-config,
+  qtbase,
+  cmake,
+  zlib,
+  kmod,
+  libXdmcp,
+  qttools,
+  qtx11extras,
+  libdbusmenu,
+  gnused,
+  withPulseaudio ? stdenv.hostPlatform.isLinux,
+  libpulseaudio,
+  quazip,
 }:
 
 stdenv.mkDerivation rec {
@@ -40,9 +57,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./install-dirs.patch
-    (substituteAll {
-      name = "ckb-next-modprobe.patch";
-      src = ./modprobe.patch;
+    (replaceVars ./modprobe.patch {
       inherit kmod;
     })
   ];

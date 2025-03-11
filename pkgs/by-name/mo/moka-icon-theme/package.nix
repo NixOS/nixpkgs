@@ -1,4 +1,15 @@
-{ lib, stdenvNoCC, fetchFromGitHub, meson, ninja, gtk3, python3, faba-icon-theme, hicolor-icon-theme, jdupes }:
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  gtk3,
+  python3,
+  faba-icon-theme,
+  hicolor-icon-theme,
+  jdupes,
+}:
 
 stdenvNoCC.mkDerivation rec {
   pname = "moka-icon-theme";
@@ -42,7 +53,10 @@ stdenvNoCC.mkDerivation rec {
   meta = with lib; {
     description = "Icon theme designed with a minimal flat style using simple geometry and bright colours";
     homepage = "https://snwh.org/moka";
-    license = with licenses; [ cc-by-sa-40 gpl3Only ];
+    license = with licenses; [
+      cc-by-sa-40
+      gpl3Only
+    ];
     # darwin cannot deal with file names differing only in case
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];

@@ -1,37 +1,47 @@
-{ lib, stdenv, fetchzip, nixosTests }:
+{
+  lib,
+  stdenv,
+  fetchzip,
+  nixosTests,
+  installShellFiles,
+}:
 
-let
-  arch = "amd64";
-in
 stdenv.mkDerivation rec {
   pname = "jotta-cli";
-  version = "0.15.107955";
+  version = "0.16.129390";
+
   src = fetchzip {
-      url = "https://repo.jotta.us/archives/linux/${arch}/jotta-cli-${version}_linux_${arch}.tar.gz";
-      sha256 = "sha256-qCG3yi0ACmqOnn+gaCN8GedciUobpOww50Kz5AdknqU=";
-      stripRoot = false;
-    };
+    url = "https://repo.jotta.us/archives/linux/amd64/jotta-cli-${version}_linux_amd64.tar.gz";
+    hash = "sha256-iw8OZ6clpK+CnBFNK5jOSGQ3ReU4pnOQSJFE2LTJNxE=";
+    stripRoot = false;
+  };
 
-  installPhase = ''
-    install -D usr/bin/jotta-cli usr/bin/jottad -t $out/bin/
-    mkdir -p $out/share/bash-completion/completions
-  '';
+  nativeBuildInputs = [ installShellFiles ];
 
-  postFixup = ''
-    patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) $out/bin/jotta-cli
-    patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) $out/bin/jottad
-    $out/bin/jotta-cli completion bash > $out/share/bash-completion/completions/jotta-cli.bash
-  '';
+  installPhase =
+    ''
+      runHook preInstall
+
+      install -Dm0755 usr/bin/jotta-cli usr/bin/jottad -t $out/bin/
+
+      runHook postInstall
+    ''
+    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      installShellCompletion --cmd jotta-cli \
+        --bash <($out/bin/jotta-cli completion bash) \
+        --fish <($out/bin/jotta-cli completion fish) \
+        --zsh <($out/bin/jotta-cli completion zsh)
+    '';
 
   passthru.tests = { inherit (nixosTests) jotta-cli; };
 
-  meta = with lib; {
-    description  = "Jottacloud CLI";
-    homepage     = "https://www.jottacloud.com/";
+  meta = {
+    description = "Jottacloud CLI";
+    homepage = "https://www.jottacloud.com/";
     downloadPage = "https://repo.jotta.us/archives/linux/";
-    maintainers  = with maintainers; [ evenbrenden ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license      = licenses.unfree;
-    platforms    = [ "x86_64-linux" ];
+    maintainers = with lib.maintainers; [ evenbrenden ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
+    platforms = [ "x86_64-linux" ];
   };
 }

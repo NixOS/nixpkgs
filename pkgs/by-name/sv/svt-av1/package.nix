@@ -1,23 +1,24 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, gitUpdater
-, cmake
-, nasm
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  gitUpdater,
+  cmake,
+  nasm,
 
-# for passthru.tests
-, ffmpeg
+  # for passthru.tests
+  ffmpeg,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "svt-av1";
-  version = "2.2.1";
+  version = "2.3.0";
 
   src = fetchFromGitLab {
     owner = "AOMediaCodec";
     repo = "SVT-AV1";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-/JWFO4eT8bNvhdqJ6S0mGRIP0+aUTbDrlzqzwRqJOog=";
+    hash = "sha256-JMOFWke/qO3cWHuhWJChzaH+sD5AVqYCTTz0Q0+r2AE=";
   };
 
   nativeBuildInputs = [
@@ -52,7 +53,10 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
     changelog = "https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/v${finalAttrs.version}/CHANGELOG.md";
-    license = with licenses; [ aom bsd3 ];
+    license = with licenses; [
+      aom
+      bsd3
+    ];
     maintainers = with maintainers; [ Madouura ];
     platforms = platforms.unix;
   };

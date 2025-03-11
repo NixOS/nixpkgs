@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
   pname = "MarkupSafe";
   version = "1.1.1";
 
- src = fetchPypi {
+  src = fetchPypi {
     inherit pname version;
     sha256 = "29872e92839765e546828bb7754a68c418d927cd064fd4708fab9fe9c8bb116b";
   };

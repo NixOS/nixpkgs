@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cargo
-, cmake
-, pkg-config
-, rustPlatform
-, rustc
-, wrapQtAppsHook
-, fcitx5
-, ibus
-, qtbase
-, zstd
-, fetchpatch
-, withFcitx5Support ? false
-, withIbusSupport ? false
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cargo,
+  cmake,
+  pkg-config,
+  rustPlatform,
+  rustc,
+  wrapQtAppsHook,
+  fcitx5,
+  ibus,
+  qtbase,
+  zstd,
+  fetchpatch,
+  withFcitx5Support ? false,
+  withIbusSupport ? false,
 }:
 
 stdenv.mkDerivation rec {
@@ -48,34 +49,39 @@ stdenv.mkDerivation rec {
     wrapQtAppsHook
   ];
 
-  buildInputs = lib.optionals withFcitx5Support [
-    fcitx5
-  ] ++ lib.optionals withIbusSupport [
-    ibus
-  ] ++ [
-    qtbase
-    zstd
-  ];
+  buildInputs =
+    lib.optionals withFcitx5Support [
+      fcitx5
+    ]
+    ++ lib.optionals withIbusSupport [
+      ibus
+    ]
+    ++ [
+      qtbase
+      zstd
+    ];
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
     postPatch = ''
       cp ${./Cargo.lock} Cargo.lock
     '';
     sourceRoot = "${src.name}/${cargoRoot}";
-    hash = "sha256-XMleyP2h1aBhtjXhuGHyU0BN+tuL12CGoj+kLY5uye0=";
+    hash = "sha256-qZMTZi7eqEp5kSmVx7qdS7eDKOzSv9fMjWT0h/MGyeY=";
   };
 
-  cmakeFlags = lib.optionals withFcitx5Support [
-    "-DENABLE_FCITX=YES"
-  ] ++ lib.optionals withIbusSupport [
-    "-DENABLE_IBUS=YES"
-  ];
+  cmakeFlags =
+    lib.optionals withFcitx5Support [
+      "-DENABLE_FCITX=YES"
+    ]
+    ++ lib.optionals withIbusSupport [
+      "-DENABLE_IBUS=YES"
+    ];
 
   cargoRoot = "src/engine/riti";
   postPatch = ''
     cp ${./Cargo.lock} ${cargoRoot}/Cargo.lock
- '';
+  '';
 
   meta = {
     isIbusEngine = withIbusSupport;

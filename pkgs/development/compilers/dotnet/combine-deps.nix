@@ -11,6 +11,7 @@ let
     concatMap
     concatMapStringsSep
     generators
+    importJSON
     optionals
     replaceStrings
     sortOn
@@ -18,9 +19,7 @@ let
     unique
     ;
 
-  fns = map (file: import file) list;
-
-  packages = unique (concatMap (fn: fn { fetchNuGet = package: package; }) fns);
+  packages = concatMap (file: importJSON file) list;
 
   changePackageRid =
     package: rid:
@@ -46,11 +45,5 @@ let
     package.version
   ]) (concatMap expandPackage packages);
 
-  fetchExpr = package: "  (fetchNuGet ${generators.toPretty { multiline = false; } package})";
-
 in
-writeText "deps.nix" ''
-  { fetchNuGet }: [
-  ${concatMapStringsSep "\n" fetchExpr allPackages}
-  ]
-''
+writeText "deps.json" (builtins.toJSON allPackages)

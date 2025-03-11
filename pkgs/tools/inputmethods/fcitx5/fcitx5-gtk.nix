@@ -1,27 +1,29 @@
-{ lib, stdenv
-, fetchFromGitHub
-, cmake
-, extra-cmake-modules
-, fcitx5
-, gobject-introspection
-, glib
-, gtk2
-, gtk3
-, gtk4
-, fmt
-, pcre
-, libuuid
-, libselinux
-, libsepol
-, libthai
-, libdatrie
-, libXdmcp
-, libxkbcommon
-, libepoxy
-, dbus
-, at-spi2-core
-, libXtst
-, withGTK2 ? false
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  extra-cmake-modules,
+  fcitx5,
+  gobject-introspection,
+  glib,
+  gtk2,
+  gtk3,
+  gtk4,
+  fmt,
+  pcre,
+  libuuid,
+  libselinux,
+  libsepol,
+  libthai,
+  libdatrie,
+  libXdmcp,
+  libxkbcommon,
+  libepoxy,
+  dbus,
+  at-spi2-core,
+  libXtst,
+  withGTK2 ? false,
 }:
 
 stdenv.mkDerivation rec {
@@ -35,12 +37,15 @@ stdenv.mkDerivation rec {
     hash = "sha256-qckaD2VDlXyaXe52PTjYfKIJbsIBRgD5s3b9Oc6l/64=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   cmakeFlags = [
     "-DGOBJECT_INTROSPECTION_GIRDIR=share/gir-1.0"
     "-DGOBJECT_INTROSPECTION_TYPELIBDIR=lib/girepository-1.0"
-  ] ++ lib.optional (! withGTK2) "-DENABLE_GTK2_IM_MODULE=off";
+  ] ++ lib.optional (!withGTK2) "-DENABLE_GTK2_IM_MODULE=off";
 
   buildInputs = [
     glib

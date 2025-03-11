@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  flit-core,
+  poetry-core,
   opentelemetry-api,
   opentelemetry-sdk,
   pytest-asyncio,
@@ -14,19 +14,21 @@
 
 buildPythonPackage rec {
   pname = "microsoft-kiota-abstractions";
-  version = "1.3.3";
+  version = "1.9.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "microsoft";
-    repo = "kiota-abstractions-python";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-TgHj5Ga6Aw/sN2Hobn0OocFB/iGRHTKEeOa2j2aqnRY=";
+    repo = "kiota-python";
+    tag = "microsoft-kiota-serialization-text-v${version}";
+    hash = "sha256-ribVfvKmDMxGmeqj30SDcnbNGdRBfs1DmqQGXP3EHCk=";
   };
 
-  build-system = [ flit-core ];
+  sourceRoot = "source/packages/abstractions/";
+
+  build-system = [ poetry-core ];
 
   dependencies = [
     opentelemetry-api
@@ -40,12 +42,20 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTests = [
+    # ValueError: Illegal class passed as substitution, found <class 'datetime.datetime'> at col: 39
+    "test_sets_datetime_values_in_path_parameters"
+  ];
+
   pythonImportsCheck = [ "kiota_abstractions" ];
+
+  # detects the wrong tag on the repo
+  passthru.skipBulkUpdate = true;
 
   meta = with lib; {
     description = "Abstractions library for Kiota generated Python clients";
-    homepage = "https://github.com/microsoft/kiota-abstractions-python";
-    changelog = "https://github.com/microsoft/kiota-abstractions-python/blob/${version}/CHANGELOG.md";
+    homepage = "https://github.com/microsoft/kiota-python/tree/main/packages/abstractions/";
+    changelog = "https://github.com/microsoft/kiota-python/releases/tag/microsoft-kiota-abstractions-${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

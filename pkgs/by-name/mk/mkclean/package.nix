@@ -1,4 +1,9 @@
-{ dos2unix, fetchurl, lib, stdenv }:
+{
+  dos2unix,
+  fetchurl,
+  lib,
+  stdenv,
+}:
 
 stdenv.mkDerivation rec {
   pname = "mkclean";
@@ -32,6 +37,9 @@ stdenv.mkDerivation rec {
     homepage = "https://www.matroska.org";
     license = licenses.bsdOriginal;
     maintainers = with maintainers; [ cawilliamson ];
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    platforms = [
+      "i686-linux"
+      "x86_64-linux"
+    ];
   };
 }

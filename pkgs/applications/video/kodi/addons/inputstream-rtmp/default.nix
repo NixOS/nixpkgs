@@ -1,4 +1,12 @@
-{ lib, rel, buildKodiBinaryAddon, fetchFromGitHub, openssl, rtmpdump, zlib }:
+{
+  lib,
+  rel,
+  buildKodiBinaryAddon,
+  fetchFromGitHub,
+  openssl,
+  rtmpdump,
+  zlib,
+}:
 
 buildKodiBinaryAddon rec {
   pname = "inputstream-rtmp";
@@ -12,7 +20,11 @@ buildKodiBinaryAddon rec {
     sha256 = "sha256-M6LFokWQRzBZ7inzRsMxyWzkV0XsGHh4d0CPhv1NCfI=";
   };
 
-  extraBuildInputs = [ openssl rtmpdump zlib ];
+  extraBuildInputs = [
+    openssl
+    rtmpdump
+    zlib
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/xbmc/inputstream.rtmp/";

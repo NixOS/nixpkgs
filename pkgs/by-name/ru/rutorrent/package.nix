@@ -1,25 +1,32 @@
-{stdenv, lib, fetchFromGitHub }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rutorrent";
-  version = "4.2.10";
+  version = "5.1.5";
 
   src = fetchFromGitHub {
     owner = "Novik";
     repo = "ruTorrent";
-    rev = "v${version}";
-    hash = "sha256-Hkh2fWaZpJLxUYaojR97XVQWXTRzmFkQe4xKsmY1E8M=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-si/6iZMipfm18lrwjJvuL+vQco0l+HresUEv2gj1uRw=";
   };
 
   installPhase = ''
-    mkdir -p $out/
-    cp -r . $out/
+    runHook preInstall
+    mkdir -p "$out"
+    cp -r . "$out"
+    runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/Novik/ruTorrent/releases/tag/v${finalAttrs.version}";
     description = "Yet another web front-end for rTorrent";
     homepage = "https://github.com/Novik/ruTorrent";
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
   };
-}
+})

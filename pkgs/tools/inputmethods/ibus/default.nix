@@ -1,43 +1,44 @@
-{ lib
-, stdenv
-, substituteAll
-, fetchFromGitHub
-, autoreconfHook
-, gettext
-, makeWrapper
-, pkg-config
-, vala
-, wrapGAppsHook3
-, dbus
-, systemd
-, dconf ? null
-, glib
-, gdk-pixbuf
-, gobject-introspection
-, gtk3
-, gtk4
-, gtk-doc
-, libdbusmenu-gtk3
-, runCommand
-, isocodes
-, cldr-annotations
-, unicode-character-database
-, unicode-emoji
-, python3
-, json-glib
-, libnotify ? null
-, enableUI ? true
-, withWayland ? true
-, libxkbcommon
-, wayland
-, buildPackages
-, runtimeShell
-, nixosTests
+{
+  lib,
+  stdenv,
+  replaceVars,
+  fetchFromGitHub,
+  autoreconfHook,
+  gettext,
+  makeWrapper,
+  pkg-config,
+  vala,
+  wrapGAppsHook3,
+  dbus,
+  systemd,
+  dconf ? null,
+  glib,
+  gdk-pixbuf,
+  gobject-introspection,
+  gtk3,
+  gtk4,
+  gtk-doc,
+  libdbusmenu-gtk3,
+  runCommand,
+  isocodes,
+  cldr-annotations,
+  unicode-character-database,
+  unicode-emoji,
+  python3,
+  json-glib,
+  libnotify ? null,
+  enableUI ? true,
+  withWayland ? true,
+  libxkbcommon,
+  wayland,
+  buildPackages,
+  runtimeShell,
+  nixosTests,
 }:
 
 let
   python3Runtime = python3.withPackages (ps: with ps; [ pygobject3 ]);
-  python3BuildEnv = python3.buildEnv.override {
+  python3BuildEnv = python3.pythonOnBuildForHost.buildEnv.override {
     # ImportError: No module named site
     postBuild = ''
       makeWrapper ${glib.dev}/bin/gdbus-codegen $out/bin/gdbus-codegen --unset PYTHONPATH
@@ -47,13 +48,15 @@ let
   };
   # make-dconf-override-db.sh needs to execute dbus-launch in the sandbox,
   # it will fail to read /etc/dbus-1/session.conf unless we add this flag
-  dbus-launch = runCommand "sandbox-dbus-launch"
-    {
-      nativeBuildInputs = [ makeWrapper ];
-    } ''
-    makeWrapper ${dbus}/bin/dbus-launch $out/bin/dbus-launch \
-      --add-flags --config-file=${dbus}/share/dbus-1/session.conf
-  '';
+  dbus-launch =
+    runCommand "sandbox-dbus-launch"
+      {
+        nativeBuildInputs = [ makeWrapper ];
+      }
+      ''
+        makeWrapper ${dbus}/bin/dbus-launch $out/bin/dbus-launch \
+          --add-flags --config-file=${dbus}/share/dbus-1/session.conf
+      '';
 in
 
 stdenv.mkDerivation rec {
@@ -68,15 +71,24 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       pythonInterpreter = python3Runtime.interpreter;
       pythonSitePackages = python3.sitePackages;
+      # patch context
+      prefix = null;
+      datarootdir = null;
+      localedir = null;
+      # removed line only
+      PYTHON = null;
     })
     ./build-without-dbus-launch.patch
   ];
 
-  outputs = [ "out" "dev" "installedTests" ];
+  outputs = [
+    "out"
+    "dev"
+    "installedTests"
+  ];
 
   postPatch = ''
     # Maintainer does not want to create separate tarballs for final release candidate and release versions,
@@ -97,8 +109,10 @@ stdenv.mkDerivation rec {
     # The `AX_PROG_{CC,CXX}_FOR_BUILD` autoconf macros can pick up unwrapped GCC binaries,
     # so we set `{CC,CXX}_FOR_BUILD` to override that behavior.
     # https://github.com/NixOS/nixpkgs/issues/21751
-    "CC_FOR_BUILD=${stdenv.cc}/bin/cc"
-    "CXX_FOR_BUILD=${stdenv.cc}/bin/c++"
+    "CC_FOR_BUILD=${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}cc"
+    "CXX_FOR_BUILD=${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}c++"
+    "GLIB_COMPILE_RESOURCES=${lib.getDev buildPackages.glib}/bin/glib-compile-resources"
+    "PKG_CONFIG_VAPIGEN_VAPIGEN=${lib.getBin buildPackages.vala}/bin/vapigen"
     "--disable-memconf"
     (lib.enableFeature (dconf != null) "dconf")
     (lib.enableFeature (libnotify != null) "libnotify")
@@ -109,12 +123,17 @@ stdenv.mkDerivation rec {
     "--enable-install-tests"
     "--with-unicode-emoji-dir=${unicode-emoji}/share/unicode/emoji"
     "--with-emoji-annotation-dir=${cldr-annotations}/share/unicode/cldr/common/annotations"
+    "--with-python=${python3BuildEnv.interpreter}"
     "--with-ucd-dir=${unicode-character-database}/share/unicode"
   ];
 
   makeFlags = [
     "test_execsdir=${placeholder "installedTests"}/libexec/installed-tests/ibus"
     "test_sourcesdir=${placeholder "installedTests"}/share/installed-tests/ibus"
+  ];
+
+  depsBuildBuild = [
+    pkg-config
   ];
 
   nativeBuildInputs = [
@@ -134,22 +153,25 @@ stdenv.mkDerivation rec {
     glib
   ];
 
-  buildInputs = [
-    dbus
-    systemd
-    dconf
-    gdk-pixbuf
-    python3.pkgs.pygobject3 # for pygobject overrides
-    gtk3
-    gtk4
-    isocodes
-    json-glib
-    libnotify
-    libdbusmenu-gtk3
-  ] ++ lib.optionals withWayland [
-    libxkbcommon
-    wayland
-  ];
+  buildInputs =
+    [
+      dbus
+      systemd
+      dconf
+      gdk-pixbuf
+      python3.pkgs.pygobject3 # for pygobject overrides
+      gtk3
+      gtk4
+      isocodes
+      json-glib
+      libnotify
+      libdbusmenu-gtk3
+      vala # for share/vala/Makefile.vapigen (PKG_CONFIG_VAPIGEN_VAPIGEN)
+    ]
+    ++ lib.optionals withWayland [
+      libxkbcommon
+      wayland
+    ];
 
   enableParallelBuilding = true;
 

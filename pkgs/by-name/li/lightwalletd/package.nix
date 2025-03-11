@@ -1,4 +1,10 @@
-{ buildGoModule, fetchFromGitHub, lib, lightwalletd, testers }:
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+  lightwalletd,
+  testers,
+}:
 
 buildGoModule rec {
   pname = "lightwalletd";
@@ -6,7 +12,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "zcash";
-    repo  = "lightwalletd";
+    repo = "lightwalletd";
     rev = "v${version}";
     hash = "sha256-M9xfV2T8L+nssrJj29QmPiErNMpfpT8BY/30Vj8wPjY=";
   };
@@ -14,7 +20,8 @@ buildGoModule rec {
   vendorHash = "sha256-z5Hs+CkPswWhz+Ya5MyHKA3MZzQkvS7WOxNckElkg6U=";
 
   ldflags = [
-    "-s" "-w"
+    "-s"
+    "-w"
     "-X github.com/zcash/lightwalletd/common.Version=v${version}"
     "-X github.com/zcash/lightwalletd/common.GitCommit=${src.rev}"
     "-X github.com/zcash/lightwalletd/common.BuildDate=1970-01-01"

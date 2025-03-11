@@ -1,19 +1,28 @@
 {
   python3Packages,
-  fetchPypi,
+  fetchFromGitHub,
   ffmpeg,
   lib,
+  versionCheckHook,
+  nix-update-script,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "ytdl-sub";
-  version = "2024.11.6";
+  version = "2025.02.21";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit version;
-    pname = "ytdl_sub";
-    hash = "sha256-YMki+1rC726RtbZceoVbcpk/Gi3F81xxERQjpqLjn+A=";
+  src = fetchFromGitHub {
+    owner = "jmbannon";
+    repo = "ytdl-sub";
+    tag = version;
+    hash = "sha256-TRq4sJowCi8CsZP859eJt2NWTDs2LN+2sG3y2s7UDA0=";
   };
+
+  postPatch = ''
+    echo '__pypi_version__ = "${version}"; __local_version__ = "${version}"' > src/ytdl_sub/__init__.py
+  '';
+
+  pythonRelaxDeps = [ "yt-dlp" ];
 
   build-system = with python3Packages; [
     setuptools
@@ -33,6 +42,11 @@ python3Packages.buildPythonApplication rec {
     "--set YTDL_SUB_FFPROBE_PATH ${lib.getExe' ffmpeg "ffprobe"}"
   ];
 
+  nativeCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     homepage = "https://github.com/jmbannon/ytdl-sub";
     description = "Lightweight tool to automate downloading and metadata generation with yt-dlp";
@@ -43,6 +57,7 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       loc
+      defelo
     ];
     mainProgram = "ytdl-sub";
   };

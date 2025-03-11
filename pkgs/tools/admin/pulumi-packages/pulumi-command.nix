@@ -1,5 +1,6 @@
-{ lib
-, mkPulumiPackage
+{
+  lib,
+  mkPulumiPackage,
 }:
 mkPulumiPackage rec {
   owner = "pulumi";
@@ -29,6 +30,9 @@ mkPulumiPackage rec {
     mainProgram = "pulumi-resource-command";
     homepage = "https://github.com/pulumi/pulumi-command";
     license = licenses.asl20;
-    maintainers = with maintainers; [ veehaitch trundle ];
+    maintainers = with maintainers; [
+      veehaitch
+      trundle
+    ];
   };
 }

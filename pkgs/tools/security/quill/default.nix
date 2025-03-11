@@ -14,13 +14,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "quill";
-  version = "0.5.1";
+  version = "0.5.3";
 
   src = fetchFromGitHub {
     owner = "dfinity";
     repo = "quill";
     rev = "v${version}";
-    hash = "sha256-9M3xywc1Vx5jBFlOcQuYbvtUu8tJwOIxzMoomwANkm8=";
+    hash = "sha256-lCDKM9zzGcey4oWp6imiHvGSNRor0xhlmlhRkSXFLlU=";
   };
 
   ic = fetchFromGitHub {
@@ -46,7 +46,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-bY5JiyaXnVF/a1fbTP2wcvt4g7QNjf91j9I2WzqUrc8=";
+  cargoHash = "sha256-rpsbQYA6RBYSo2g+YhYG02CYlboRQvIwMqPAybayCOs=";
 
   nativeBuildInputs = [
     pkg-config

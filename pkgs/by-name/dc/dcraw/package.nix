@@ -1,4 +1,12 @@
-{lib, stdenv, fetchurl, libjpeg, lcms2, gettext, libiconv }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libjpeg,
+  lcms2,
+  gettext,
+  libiconv,
+}:
 
 stdenv.mkDerivation rec {
   pname = "dcraw";
@@ -10,7 +18,11 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin libiconv;
-  buildInputs = [ libjpeg lcms2 gettext ];
+  buildInputs = [
+    libjpeg
+    lcms2
+    gettext
+  ];
 
   # Jasper is disabled because the library is abandoned and has many
   # CVEs.

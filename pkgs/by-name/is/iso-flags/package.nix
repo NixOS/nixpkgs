@@ -1,9 +1,11 @@
-{ lib, stdenvNoCC
-, fetchFromGitHub
-, perl
-, inkscape
-, librsvg
-, targets ? [ "all" ]
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  perl,
+  inkscape,
+  librsvg,
+  targets ? [ "all" ],
 }:
 
 stdenvNoCC.mkDerivation {
@@ -21,7 +23,12 @@ stdenvNoCC.mkDerivation {
     perl
     inkscape
     librsvg
-    (perl.withPackages(pp: with pp; [ JSON XMLLibXML ]))
+    (perl.withPackages (
+      pp: with pp; [
+        JSON
+        XMLLibXML
+      ]
+    ))
   ];
 
   postPatch = ''

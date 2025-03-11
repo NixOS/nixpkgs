@@ -28,15 +28,20 @@
   # Strip most of attributes when evaluating to spare memory usage
 , scrubJobs ? true
   # Attributes passed to nixpkgs. Don't build packages marked as unfree.
-, nixpkgsArgs ? { config = {
-    allowUnfree = false;
-    inHydra = true;
-    # Exceptional unsafe packages that we still build and distribute,
-    # so users choosing to allow don't have to rebuild them every time.
-    permittedInsecurePackages = [
-      "olm-3.2.16" # see PR #347899
-    ];
-  }; }
+, nixpkgsArgs ? {
+    config = {
+      allowUnfree = false;
+      inHydra = true;
+      # Exceptional unsafe packages that we still build and distribute,
+      # so users choosing to allow don't have to rebuild them every time.
+      permittedInsecurePackages = [
+        "olm-3.2.16" # see PR #347899
+        "kanidm_1_4-1.4.6"
+      ];
+    };
+
+    __allowFileset = false;
+  }
 
   # This flag, if set to true, will inhibit the use of `mapTestOn`
   # and `release-lib.packagePlatforms`.  Generally, it causes the
@@ -340,6 +345,7 @@ let
       agdaPackages = packagePlatforms pkgs.agdaPackages;
 
       pkgsLLVM.stdenv = [ "x86_64-linux" "aarch64-linux" ];
+      pkgsLLVMLibc.stdenv = [ "x86_64-linux" "aarch64-linux" ];
       pkgsArocc.stdenv = [ "x86_64-linux" "aarch64-linux" ];
       pkgsZig.stdenv = [ "x86_64-linux" "aarch64-linux" ];
       pkgsMusl.stdenv = [ "x86_64-linux" "aarch64-linux" ];

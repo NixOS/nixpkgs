@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromSourcehut
-, glfw
-, libGL
-, libGLU
-, libsndfile
-, openal
-, zig_0_11
+{
+  lib,
+  stdenv,
+  fetchFromSourcehut,
+  glfw,
+  libGL,
+  libGLU,
+  libsndfile,
+  openal,
+  zig_0_11,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

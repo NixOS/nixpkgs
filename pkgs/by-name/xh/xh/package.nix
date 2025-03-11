@@ -1,36 +1,41 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, installShellFiles
-, pkg-config
-, withNativeTls ? true
-, stdenv
-, darwin
-, openssl
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  installShellFiles,
+  pkg-config,
+  withNativeTls ? true,
+  stdenv,
+  openssl,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "xh";
-  version = "0.23.0";
+  version = "0.24.0";
 
   src = fetchFromGitHub {
     owner = "ducaale";
     repo = "xh";
     rev = "v${version}";
-    hash = "sha256-rHhL2IWir+DpbNFu2KddslmhhiSpkpU633JYFYCoWvY=";
+    hash = "sha256-5Eq/rJ917zjlTnuxdIWhBNr8LA/ag+fyECYYX5k2S7I=";
   };
 
-  cargoHash = "sha256-5V27ZV+5jWFoGMFe5EXmLdX2BjPuWDMdn4DK54ZIfUY=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-jeEhlpOl4ZiR1kQxCI3e6jacszVogzROpFC2w43BjZ0=";
 
   buildFeatures = lib.optional withNativeTls "native-tls";
 
-  nativeBuildInputs = [ installShellFiles pkg-config ];
+  nativeBuildInputs = [
+    installShellFiles
+    pkg-config
+  ];
 
-  buildInputs = lib.optionals withNativeTls
-    (if stdenv.hostPlatform.isDarwin then [ darwin.apple_sdk.frameworks.SystemConfiguration ] else [ openssl ]);
+  buildInputs = lib.optionals (withNativeTls && !stdenv.hostPlatform.isDarwin) [ openssl ];
 
-  # Get openssl-sys to use pkg-config
-  OPENSSL_NO_VENDOR = 1;
+  env = {
+    # Get openssl-sys to use pkg-config
+    OPENSSL_NO_VENDOR = 1;
+  };
 
   postInstall = ''
     installShellCompletion \
@@ -54,12 +59,15 @@ rustPlatform.buildRustPackage rec {
     $out/bin/xhs --help > /dev/null
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Friendly and fast tool for sending HTTP requests";
     homepage = "https://github.com/ducaale/xh";
     changelog = "https://github.com/ducaale/xh/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda aaronjheng ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      figsoda
+      aaronjheng
+    ];
     mainProgram = "xh";
   };
 }

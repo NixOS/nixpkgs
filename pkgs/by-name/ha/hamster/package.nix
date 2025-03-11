@@ -1,5 +1,18 @@
-{ lib, fetchFromGitHub, python3Packages, intltool, glib, itstool, gtk3
-, wrapGAppsHook3, gobject-introspection, pango, gdk-pixbuf, atk, wafHook }:
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+  intltool,
+  glib,
+  itstool,
+  gtk3,
+  wrapGAppsHook3,
+  gobject-introspection,
+  pango,
+  gdk-pixbuf,
+  atk,
+  wafHook,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "hamster";
@@ -10,7 +23,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "projecthamster";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     sha256 = "sha256-cUmUvJP9Y3de5OaNgIxvigDsX2ww7NNRY5son/gg+WI=";
   };
 

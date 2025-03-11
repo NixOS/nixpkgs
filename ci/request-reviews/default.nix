@@ -14,8 +14,9 @@ stdenvNoCC.mkDerivation {
   src = lib.fileset.toSource {
     root = ./.;
     fileset = lib.fileset.unions [
-      ./get-reviewers.sh
-      ./request-reviews.sh
+      ./get-code-owners.sh
+      ./request-reviewers.sh
+      ./request-code-owner-reviews.sh
       ./verify-base-branch.sh
       ./dev-branches.txt
     ];

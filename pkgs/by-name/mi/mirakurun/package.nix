@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, bash
-, buildNpmPackage
-, fetchFromGitHub
-, installShellFiles
-, makeWrapper
-, nodejs
-, substituteAll
-, v4l-utils
-, which
+{
+  lib,
+  stdenv,
+  bash,
+  buildNpmPackage,
+  fetchFromGitHub,
+  installShellFiles,
+  makeWrapper,
+  nodejs,
+  replaceVars,
+  v4l-utils,
+  which,
 }:
 
 buildNpmPackage rec {
@@ -30,7 +31,10 @@ buildNpmPackage rec {
 
   npmDepsHash = "sha256-e7m7xb7p1SBzLAyQ82TTR/qLXv4lRm37x0JJPWYYGvI=";
 
-  nativeBuildInputs = [ installShellFiles makeWrapper ];
+  nativeBuildInputs = [
+    installShellFiles
+    makeWrapper
+  ];
 
   # workaround for https://github.com/webpack/webpack/issues/14532
   NODE_OPTIONS = "--openssl-legacy-provider";
@@ -42,8 +46,7 @@ buildNpmPackage rec {
         nodejs
         which
       ] ++ lib.optionals stdenv.hostPlatform.isLinux [ v4l-utils ];
-      crc32Patch = substituteAll {
-        src = ./fix-musl-detection.patch;
+      crc32Patch = replaceVars ./fix-musl-detection.patch {
         isMusl = if stdenv.hostPlatform.isMusl then "true" else "false";
       };
     in

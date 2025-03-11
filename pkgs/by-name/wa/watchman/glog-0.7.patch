@@ -1,0 +1,21 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index dd6eec3320..ee74ab0008 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -333,7 +333,7 @@
+ find_package(Gflags REQUIRED)
+ include_directories(SYSTEM ${GFLAGS_INCLUDE_DIR})
+ 
+-find_package(Glog REQUIRED)
++find_package(Glog CONFIG REQUIRED)
+ add_compile_definitions(GLOG_NO_ABBREVIATED_SEVERITIES)
+ 
+ # We indirectly depend on boost.  This logic needs to match
+@@ -479,7 +479,6 @@
+ )
+ target_include_directories(third_party_deps INTERFACE
+   ${FOLLY_INCLUDE_DIR}
+-  ${GLOG_INCLUDE_DIR}
+   ${GFLAGS_INCLUDE_DIR}
+   ${Boost_INCLUDE_DIRS}
+ )

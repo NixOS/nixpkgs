@@ -9,7 +9,6 @@
   graphviz,
   python,
   isPy3k,
-  isPy310,
 }:
 
 buildPythonPackage {
@@ -29,6 +28,7 @@ buildPythonPackage {
 
   pythonRelaxDeps = [
     "graphviz"
+    "numpy"
   ];
 
   LD_LIBRARY_PATH = lib.makeLibraryPath [ pkgs.mxnet ];
@@ -50,7 +50,5 @@ buildPythonPackage {
     ln -s ${pkgs.mxnet}/lib/libmxnet.so $out/${python.sitePackages}/mxnet
   '';
 
-  meta = pkgs.mxnet.meta // {
-    broken = (pkgs.mxnet.broken or false) || (isPy310 && pkgs.mxnet.cudaSupport);
-  };
+  meta = pkgs.mxnet.meta;
 }

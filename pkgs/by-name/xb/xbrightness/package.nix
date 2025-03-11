@@ -1,5 +1,16 @@
-{ lib, stdenv, fetchurl, imake, gccmakedep
-, libX11, libXaw, libXext, libXmu, libXpm, libXxf86vm  }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  imake,
+  gccmakedep,
+  libX11,
+  libXaw,
+  libXext,
+  libXmu,
+  libXpm,
+  libXxf86vm,
+}:
 
 stdenv.mkDerivation rec {
   pname = "xbrightness";
@@ -10,11 +21,27 @@ stdenv.mkDerivation rec {
     sha256 = "2564dbd393544657cdabe4cbf535d9cfb9abe8edddb1b8cdb1ed4d12f358626e";
   };
 
-  nativeBuildInputs = [ imake gccmakedep ];
-  buildInputs = [ libX11 libXaw libXext libXmu libXpm libXxf86vm ];
+  nativeBuildInputs = [
+    imake
+    gccmakedep
+  ];
+  buildInputs = [
+    libX11
+    libXaw
+    libXext
+    libXmu
+    libXpm
+    libXxf86vm
+  ];
 
-  makeFlags = [ "BINDIR=$(out)/bin" "MANPATH=$(out)/share/man" ];
-  installTargets = [ "install" "install.man" ];
+  makeFlags = [
+    "BINDIR=$(out)/bin"
+    "MANPATH=$(out)/share/man"
+  ];
+  installTargets = [
+    "install"
+    "install.man"
+  ];
 
   meta = {
     description = "X11 brigthness and gamma software control";

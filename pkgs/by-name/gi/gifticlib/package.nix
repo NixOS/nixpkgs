@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, cmake, expat, nifticlib, zlib }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  expat,
+  nifticlib,
+  zlib,
+}:
 
 stdenv.mkDerivation rec {
   pname = "gifticlib";
@@ -11,10 +19,17 @@ stdenv.mkDerivation rec {
     sha256 = "0gcab06gm0irjnlrkpszzd4wr8z0fi7gx8f7966gywdp2jlxzw19";
   };
 
-  cmakeFlags = [ "-DUSE_SYSTEM_NIFTI=ON" "-DDOWNLOAD_TEST_DATA=OFF" ];
+  cmakeFlags = [
+    "-DUSE_SYSTEM_NIFTI=ON"
+    "-DDOWNLOAD_TEST_DATA=OFF"
+  ];
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ expat nifticlib zlib ];
+  buildInputs = [
+    expat
+    nifticlib
+    zlib
+  ];
 
   # without the test data, this is only a few basic tests
   doCheck = !stdenv.hostPlatform.isDarwin;

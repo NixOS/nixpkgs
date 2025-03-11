@@ -1,21 +1,22 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, readline
-, xorg
-, mpi
-, cmake
-, bison
-, flex
-, git
-, perl
-, gsl
-, xcbuild
-, python3
-, useMpi ? false
-, useIv ? true
-, useCore ? false
-, useRx3d ? false
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  readline,
+  xorg,
+  mpi,
+  cmake,
+  bison,
+  flex,
+  git,
+  perl,
+  gsl,
+  xcbuild,
+  python3,
+  useMpi ? false,
+  useIv ? true,
+  useCore ? false,
+  useRx3d ? false,
 }:
 let
   inherit (lib.lists) optionals;
@@ -28,13 +29,18 @@ stdenv.mkDerivation (finalAttrs: {
   # format is for pythonModule conversion
   format = "other";
 
-  nativeBuildInputs = [
-    cmake
-    bison
-    flex
-    git
-  ] ++ optionals useCore [ perl gsl ]
-  ++ optionals stdenv.hostPlatform.isDarwin [ xcbuild ];
+  nativeBuildInputs =
+    [
+      cmake
+      bison
+      flex
+      git
+    ]
+    ++ optionals useCore [
+      perl
+      gsl
+    ]
+    ++ optionals stdenv.hostPlatform.isDarwin [ xcbuild ];
 
   buildInputs = optionals useIv [
     xorg.libX11.dev
@@ -42,21 +48,25 @@ stdenv.mkDerivation (finalAttrs: {
     xorg.libXext.dev
   ];
 
-  propagatedBuildInputs = [
-    readline
-    python3
-    python3.pkgs.wheel
-    python3.pkgs.setuptools
-    python3.pkgs.scikit-build
-    python3.pkgs.matplotlib
-  ] ++ optionals useMpi [
-    mpi
-  ] ++ optionals useMpi [
-    python3.pkgs.mpi4py
-  ] ++ optionals useRx3d [
-    python3.pkgs.cython_0 # NOTE: cython<3 is required as of 8.2.6
-    python3.pkgs.numpy
-  ];
+  propagatedBuildInputs =
+    [
+      readline
+      python3
+      python3.pkgs.wheel
+      python3.pkgs.setuptools
+      python3.pkgs.scikit-build
+      python3.pkgs.matplotlib
+    ]
+    ++ optionals useMpi [
+      mpi
+    ]
+    ++ optionals useMpi [
+      python3.pkgs.mpi4py
+    ]
+    ++ optionals useRx3d [
+      python3.pkgs.cython_0 # NOTE: cython<3 is required as of 8.2.6
+      python3.pkgs.numpy
+    ];
 
   # Patch build shells for cmake (bin, src, cmake) and submodules (external)
   postPatch = ''
@@ -104,7 +114,10 @@ stdenv.mkDerivation (finalAttrs: {
     sourceProvenance = with sourceTypes; [ fromSource ];
     license = licenses.bsd3;
     homepage = "http://www.neuron.yale.edu/neuron";
-    maintainers = with maintainers; [ adev davidcromp ];
+    maintainers = with maintainers; [
+      adev
+      davidcromp
+    ];
     platforms = platforms.all;
   };
 })

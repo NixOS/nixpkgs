@@ -1,15 +1,17 @@
-{ stdenv
-, lib
-, libidn
-, lua
-, miniupnpc
-, expat
-, zlib
-, fetchurl
-, fetchpatch
-, openssl
-, boost
-, scons
+{
+  stdenv,
+  lib,
+  libidn,
+  lua,
+  miniupnpc,
+  expat,
+  zlib,
+  fetchurl,
+  fetchpatch,
+  openssl,
+  # pin Boost 1.86 due to use of boost/asio/io_service.hpp
+  boost186,
+  scons,
 }:
 
 stdenv.mkDerivation rec {
@@ -32,6 +34,8 @@ stdenv.mkDerivation rec {
       url = "https://swift.im/git/swift/patch/Swiften/Base/Platform.h?id=3666cbbe30e4d4e25401a5902ae359bc2c24248b";
       sha256 = "Wh8Nnfm0/EppSJ7aH2vTNObHtodE5tM19kV1oDfm70w=";
     })
+
+    ./gcc14-fix.patch
   ];
 
   nativeBuildInputs = [
@@ -48,13 +52,13 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [
     openssl
-    boost
+    boost186
   ];
 
   sconsFlags = [
     "openssl=${openssl.dev}"
-    "boost_includedir=${boost.dev}/include"
-    "boost_libdir=${boost.out}/lib"
+    "boost_includedir=${lib.getDev boost186}/include"
+    "boost_libdir=${boost186.out}/lib"
     "boost_bundled_enable=false"
     "max_jobs=1"
     "optimize=1"

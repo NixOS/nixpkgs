@@ -1,25 +1,40 @@
-{ stdenv, lib, fetchFromGitHub }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  perl, # for tests
+}:
 
 stdenv.mkDerivation rec {
   pname = "nq";
-  version = "0.5";
+
+  version = "1.0";
+
   src = fetchFromGitHub {
-    owner = "chneukirchen";
+    owner = "leahneukirchen";
     repo = "nq";
     rev = "v${version}";
-    sha256 = "sha256-g14t2Wy2GwiqnfEDiLAPGehzUgK6mLC+5PAZynez62s=";
+    hash = "sha256-gdVBSE2a4rq46o0uO9ICww6zicVgn6ykf4CeJ/MmiF4=";
   };
+
+  nativeCheckInputs = [ perl ];
+
   makeFlags = [ "PREFIX=$(out)" ];
+
   postPatch = ''
-    sed -i tq \
+    sed -i nqterm \
       -e 's|\bnq\b|'$out'/bin/nq|g' \
-      -e 's|\bfq\b|'$out'/bin/fq|g'
+      -e 's|\bnqtail\b|'$out'/bin/nqtail|g'
   '';
-  meta = with lib; {
+
+  doCheck = true;
+
+  meta = {
     description = "Unix command line queue utility";
-    homepage = "https://github.com/chneukirchen/nq";
-    license = licenses.publicDomain;
-    platforms = platforms.all;
+    homepage = "https://github.com/leahneukirchen/nq";
+    changelog = "https://github.com/leahneukirchen/nq/blob/v${version}/NEWS.md";
+    license = lib.licenses.publicDomain;
+    platforms = lib.platforms.all;
     maintainers = [ ];
   };
 }

@@ -1,22 +1,23 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, withFzf ? true
-, fzf
-, installShellFiles
-, libiconv
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  withFzf ? true,
+  fzf,
+  installShellFiles,
+  libiconv,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "zoxide";
-  version = "0.9.6";
+  version = "0.9.7";
 
   src = fetchFromGitHub {
     owner = "ajeetdsouza";
     repo = "zoxide";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-3XC5K4OlituoFMPN9yJkYi+tkH6M0KK5jVAGdr/GLd0=";
+    tag = "v${version}";
+    hash = "sha256-+QZpLMlHOZdbKLFYOUOIRZHvIsbMDdstj9oGzyEGVxk=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
@@ -28,7 +29,8 @@ rustPlatform.buildRustPackage rec {
       --replace '"fzf"' '"${fzf}/bin/fzf"'
   '';
 
-  cargoHash = "sha256-ZRsnoLysNzDIi9hDOqwAzbxcyFQgn2Wv3gRNAjV5HfE=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-uqIL8KTrgWzzzyoPR9gctyh0Rf7WQpTGqXow2/xFvCU=";
 
   postInstall = ''
     installManPage man/man*/*
@@ -43,7 +45,11 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/ajeetdsouza/zoxide";
     changelog = "https://github.com/ajeetdsouza/zoxide/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ ysndr cole-h SuperSandro2000 ];
+    maintainers = with maintainers; [
+      ysndr
+      cole-h
+      SuperSandro2000
+    ];
     mainProgram = "zoxide";
   };
 }

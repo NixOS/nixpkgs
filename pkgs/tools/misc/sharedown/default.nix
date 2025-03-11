@@ -1,30 +1,31 @@
-{ stdenvNoCC
-, lib
-, fetchFromGitHub
-, ffmpeg
-, yt-dlp
-, libsecret
-, python3
-, pkg-config
-, nodejs
-, electron
-, makeWrapper
-, makeDesktopItem
-, copyDesktopItems
-, yarn2nix-moretea
-, fetchYarnDeps
-, chromium
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  ffmpeg,
+  yt-dlp,
+  libsecret,
+  python3,
+  pkg-config,
+  nodejs,
+  electron,
+  makeWrapper,
+  makeDesktopItem,
+  copyDesktopItems,
+  yarn2nix-moretea,
+  fetchYarnDeps,
+  chromium,
 }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "Sharedown";
-  version = "5.3.1";
+  version = "5.3.6";
 
   src = fetchFromGitHub {
     owner = "kylon";
     repo = "Sharedown";
-    rev = version;
-    sha256 = "sha256-llQt3m/qu7v5uQIfA1yxl2JZiFafk6sPgcvrIpQy/DI=";
+    tag = version;
+    hash = "sha256-5t/71T/eBg4vkDZTj7mtCkXhS+AuiVhBmx0Zzrry5Lg=";
   };
 
   nativeBuildInputs = [
@@ -39,7 +40,10 @@ stdenvNoCC.mkDerivation rec {
       icon = "Sharedown";
       comment = "An Application to save your Sharepoint videos for offline usage.";
       desktopName = "Sharedown";
-      categories = [ "Network" "Archiving" ];
+      categories = [
+        "Network"
+        "Archiving"
+      ];
     })
   ];
 
@@ -84,12 +88,16 @@ stdenvNoCC.mkDerivation rec {
           export npm_config_nodedir=${nodejs}
         '';
 
+        postBuild = ''
+          rm $out/node_modules/sharedown
+        '';
+
         packageJSON = "${src}/package.json";
         yarnLock = ./yarn.lock;
 
         offlineCache = fetchYarnDeps {
           inherit yarnLock;
-          hash = "sha256-NzWzkZbf5R1R72K7KVJbZUCzso1UZ0p3+lRYZE2M/dI=";
+          hash = "sha256-9Mdn18jJTXyAVQMGl9ImIEbzlkK6walPrgkGzupLPFQ=";
         };
       };
     in
@@ -115,13 +123,12 @@ stdenvNoCC.mkDerivation rec {
 
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     description = "Application to save your Sharepoint videos for offline usage";
     homepage = "https://github.com/kylon/Sharedown";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
-    ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ ];
+    platforms = lib.platforms.unix;
     mainProgram = "Sharedown";
   };
 }

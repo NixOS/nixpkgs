@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "lxml";
     repo = "lxml-stubs";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-OwaPnCr0vylhdAvMMUfGV6DjZEh7Q71pgMOt66urg5I=";
   };
 

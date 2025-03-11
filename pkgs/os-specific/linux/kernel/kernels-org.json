@@ -1,34 +1,38 @@
 {
     "testing": {
-        "version": "6.12-rc7",
-        "hash": "sha256:1rsglb7zwbn4f6wv4g95jl8ra1wbs03k7xyfdlmwzl3vgzx3bnzv"
+        "version": "6.14-rc6",
+        "hash": "sha256:01fzqqb32aazyg4jayiphzqy0y3q7k8545i7p940gdah8ck017vc"
     },
     "6.1": {
-        "version": "6.1.119",
-        "hash": "sha256:0y1j8bz99d5vkxklzpwhns5r77lpz2prszf6whfahi58s0wszkdf"
+        "version": "6.1.130",
+        "hash": "sha256:1zb6mk5rb2bsrzcapwgdlkjdlcjcnczp3r8cpda7zv28sk1b45ll"
     },
     "5.15": {
-        "version": "5.15.173",
-        "hash": "sha256:1a3x3ld6g7ny0hdfqfvj5j2i5sx5l5p236pdnsr0icn9ri3jljwa"
+        "version": "5.15.178",
+        "hash": "sha256:0hkw2l4gr5m6jw2adxcgm2sb6kl0w51r6s4hcbn6rlm4bvmzgsgg"
     },
     "5.10": {
-        "version": "5.10.230",
-        "hash": "sha256:0isbb0ixqg4yzlh3lmdvnax4m1ikf2q4wk0b9vgqc63p7gpm066d"
+        "version": "5.10.234",
+        "hash": "sha256:1rgb4v6dvqlw1mgzsli0hxaj2d5d4m1nylgcrwm4bkpiwbzc95wm"
     },
     "5.4": {
-        "version": "5.4.286",
-        "hash": "sha256:0z48n7vahg318bgkccy8xqgl87vfb8zmn995cqh7z38fvzrm81qq"
+        "version": "5.4.290",
+        "hash": "sha256:0mm4q8f6kbqddy4zaxjf5xyqpnla5qprvsf7v3vq01gmlzr3rivc"
     },
     "6.6": {
-        "version": "6.6.63",
-        "hash": "sha256:0d8q0vwv3lcix3wiq2n53rir3h298flg2l0ghpify4rlh2s4l1fi"
+        "version": "6.6.82",
+        "hash": "sha256:0h8fhb23l1lsqnlb7gxv4mvnxjh1891kwjhhgxsbxji3ijdkihpk"
     },
     "6.11": {
-        "version": "6.11.10",
-        "hash": "sha256:0xzynjyyr16my0wrla4ggpjbh4g7nsqixaimz5hrsqlhaa8q9hab"
+        "version": "6.11.11",
+        "hash": "sha256:1z2913y38clnlmhvwj49h7p4pic24s4d8np7nmd4lk7m2xz8w532"
     },
     "6.12": {
-        "version": "6.12.1",
-        "hash": "sha256:06f6y37fi7galj001wwrq5pz3vhdl9nryydf3f4yqwnkdpcb34q1"
+        "version": "6.12.18",
+        "hash": "sha256:0kclzrvq0k18i7iqrsjn0p9xdnhih6rks80j05qmg7lxysjh5fdy"
+    },
+    "6.13": {
+        "version": "6.13.6",
+        "hash": "sha256:16fimhw0j29jj0fipb2x7r0a9f2ik4hqhmqxzlh8yh1x875m606y"
     }
 }

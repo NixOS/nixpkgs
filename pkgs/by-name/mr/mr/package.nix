@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchgit, perl }:
+{
+  lib,
+  stdenv,
+  fetchgit,
+  perl,
+}:
 
 stdenv.mkDerivation {
   pname = "mr";

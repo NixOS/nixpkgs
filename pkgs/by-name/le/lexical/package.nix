@@ -4,25 +4,24 @@
   fetchFromGitHub,
   elixir,
   nix-update-script,
-  testers,
-  lexical,
+  versionCheckHook,
 }:
 
 beamPackages.mixRelease rec {
   pname = "lexical";
-  version = "0.7.1";
+  version = "0.7.3";
 
   src = fetchFromGitHub {
     owner = "lexical-lsp";
     repo = "lexical";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-YKp1IOBIt6StYpVZyTj3BMZM/+6Bp+galbFpuBKYeOM=";
+    tag = "v${version}";
+    hash = "sha256-p8XSJBX1igwC+ssEJGD8wb/ZYaEgLGozlY8N6spo3cA=";
   };
 
   mixFodDeps = beamPackages.fetchMixDeps {
     inherit pname version src;
 
-    hash = "sha256-myxmQM46TELDu9wpr82qxqH4s/YR9t0gdAfGOm0Dw1k=";
+    hash = "sha256-g6BZGJ33oBDXmjbb/kBfPhart4En/iDlt4yQJYeuBzw=";
   };
 
   installPhase = ''
@@ -34,14 +33,24 @@ beamPackages.mixRelease rec {
   '';
 
   postInstall = ''
-    substituteInPlace "$out/bin/start_lexical.sh" --replace 'elixir_command=' 'elixir_command="${elixir}/bin/"'
+    substituteInPlace "$out/bin/start_lexical.sh" \
+      --replace-fail 'elixir_command=' 'elixir_command="${elixir}/bin/"'
+
     mv "$out/bin" "$out/libexec"
-    makeWrapper "$out/libexec/start_lexical.sh" "$out/bin/lexical" --set RELEASE_COOKIE lexical
+    makeWrapper "$out/libexec/start_lexical.sh" "$out/bin/lexical" \
+      --set RELEASE_COOKIE lexical
   '';
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = [ "--version" ];
+  doInstallCheck = true;
+
+  __darwinAllowLocalNetworking = true;
 
   passthru = {
     updateScript = nix-update-script { };
-    tests.version = testers.testVersion { package = lexical; };
   };
 
   meta = {

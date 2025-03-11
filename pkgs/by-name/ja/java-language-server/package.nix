@@ -1,14 +1,22 @@
-{ lib, stdenv, fetchFromGitHub
-, jdk_headless, maven
-, makeWrapper
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  jdk_headless,
+  maven,
+  makeWrapper,
 }:
 
 let
   platform =
-    if stdenv.hostPlatform.isLinux then "linux"
-    else if stdenv.hostPlatform.isDarwin then "mac"
-    else if stdenv.hostPlatform.isWindows then "windows"
-    else throw "unsupported platform";
+    if stdenv.hostPlatform.isLinux then
+      "linux"
+    else if stdenv.hostPlatform.isDarwin then
+      "mac"
+    else if stdenv.hostPlatform.isWindows then
+      "windows"
+    else
+      throw "unsupported platform";
 in
 maven.buildMavenPackage rec {
   pname = "java-language-server";
@@ -26,12 +34,17 @@ maven.buildMavenPackage rec {
   mvnJdk = jdk_headless;
   mvnHash = "sha256-2uthmSjFQ43N5lgV11DsxuGce+ZptZsmRLTgjDo0M2w=";
 
-  nativeBuildInputs = [ jdk_headless makeWrapper ];
+  nativeBuildInputs = [
+    jdk_headless
+    makeWrapper
+  ];
 
   dontConfigure = true;
   preBuild = ''
     jlink \
-      ${lib.optionalString (!stdenv.hostPlatform.isDarwin) "--module-path './jdks/${platform}/jdk-13/jmods'"} \
+      ${
+        lib.optionalString (!stdenv.hostPlatform.isDarwin) "--module-path './jdks/${platform}/jdk-13/jmods'"
+      } \
       --add-modules java.base,java.compiler,java.logging,java.sql,java.xml,jdk.compiler,jdk.jdi,jdk.unsupported,jdk.zipfs \
       --output dist/${platform} \
       --no-header-files \

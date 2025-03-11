@@ -29,12 +29,12 @@ buildGoModule rec {
     })
   ];
 
-  # replace version in file as it's defined using const, and thus cannot be overriden by ldflags
+  # replace version in file as it's defined using const, and thus cannot be overridden by ldflags
   postPatch = ''
     substituteInPlace containerd/driver.go --replace-warn 'PluginVersion = "v0.9.3"' 'PluginVersion = "v${version}"'
   '';
 
-  CGO_ENABLED = "1";
+  env.CGO_ENABLED = "1";
 
   vendorHash = "sha256-OO+a5AqhB0tf6lyodhYl9HUSaWvtXWwevRHYy1Q6VoU=";
   subPackages = [ "." ];

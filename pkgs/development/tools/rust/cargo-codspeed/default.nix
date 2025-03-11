@@ -1,13 +1,14 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, curl
-, pkg-config
-, libgit2
-, openssl
-, zlib
-, stdenv
-, darwin
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  curl,
+  pkg-config,
+  libgit2,
+  openssl,
+  zlib,
+  stdenv,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -21,21 +22,24 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-pi02Bn5m4JoTtCIZvxkiUVKkjmtCShKqZw+AyhaVdyY=";
   };
 
-  cargoHash = "sha256-5Ps31Hdis+N/MT/o0IDHSJgHBM3F/ve50ovfFSviMtA=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-xHA6fe1/0p/PHGV6JcyVir5uGAqJ7qkHObjVqDPGwSY=";
 
   nativeBuildInputs = [
     curl
     pkg-config
   ];
 
-  buildInputs = [
-    curl
-    libgit2
-    openssl
-    zlib
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-  ];
+  buildInputs =
+    [
+      curl
+      libgit2
+      openssl
+      zlib
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.Security
+    ];
 
   cargoBuildFlags = [ "-p=cargo-codspeed" ];
   cargoTestFlags = cargoBuildFlags;
@@ -48,7 +52,10 @@ rustPlatform.buildRustPackage rec {
     description = "Cargo extension to build & run your codspeed benchmarks";
     homepage = "https://github.com/CodSpeedHQ/codspeed-rust";
     changelog = "https://github.com/CodSpeedHQ/codspeed-rust/releases/tag/${src.rev}";
-    license = with licenses; [ mit asl20 ];
+    license = with licenses; [
+      mit
+      asl20
+    ];
     maintainers = with maintainers; [ figsoda ];
     mainProgram = "cargo-codspeed";
   };

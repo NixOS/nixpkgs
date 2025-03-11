@@ -1,25 +1,26 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, dbus
-, fpc
-, getopt
-, glib
-, lazarus
-, libX11
-, libqt5pas
-, wrapQtAppsHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  dbus,
+  fpc,
+  getopt,
+  glib,
+  lazarus,
+  libX11,
+  libqtpas,
+  wrapQtAppsHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "doublecmd";
-  version = "1.1.19";
+  version = "1.1.22";
 
   src = fetchFromGitHub {
     owner = "doublecmd";
     repo = "doublecmd";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-3OHlC6+oHB1xW2uYFeQn3paJDvo2PZytdzv98G/qqmg=";
+    hash = "sha256-PyAmGYWA7QZcD7SN2utHacwqm8PQy8VxuVxAXlR7tj4=";
   };
 
   nativeBuildInputs = [
@@ -33,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     dbus
     glib
     libX11
-    libqt5pas
+    libqtpas
   ];
 
   env.NIX_LDFLAGS = "--as-needed -rpath ${lib.makeLibraryPath finalAttrs.buildInputs}";
@@ -68,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Two-panel graphical file manager written in Pascal";
     license = lib.licenses.gpl2Plus;
     mainProgram = "doublecmd";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.linux;
   };
 })

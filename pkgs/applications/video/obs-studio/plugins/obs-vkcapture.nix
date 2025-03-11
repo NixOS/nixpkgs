@@ -1,21 +1,22 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, ninja
-, wayland
-, wayland-scanner
-, obs-studio
-, libffi
-, libX11
-, libXau
-, libXdmcp
-, libxcb
-, vulkan-headers
-, vulkan-loader
-, libGL
-, obs-vkcapture32
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  ninja,
+  wayland,
+  wayland-scanner,
+  obs-studio,
+  libffi,
+  libX11,
+  libXau,
+  libXdmcp,
+  libxcb,
+  vulkan-headers,
+  vulkan-loader,
+  libGL,
+  obs-vkcapture32,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -35,21 +36,27 @@ stdenv.mkDerivation (finalAttrs: {
     "-DBUILD_PLUGIN=OFF"
   ];
 
-  nativeBuildInputs = [ cmake ninja pkg-config wayland-scanner ];
-  buildInputs = [
-    libGL
-    libffi
-    libX11
-    libXau
-    libXdmcp
-    libxcb
-    vulkan-headers
-    vulkan-loader
-    wayland
-  ]
-  ++ lib.optionals (!stdenv.hostPlatform.isi686) [
-    obs-studio
+  nativeBuildInputs = [
+    cmake
+    ninja
+    pkg-config
+    wayland-scanner
   ];
+  buildInputs =
+    [
+      libGL
+      libffi
+      libX11
+      libXau
+      libXdmcp
+      libxcb
+      vulkan-headers
+      vulkan-loader
+      wayland
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isi686) [
+      obs-studio
+    ];
 
   postPatch = ''
     substituteInPlace src/glinject.c \
@@ -78,7 +85,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "OBS Linux Vulkan/OpenGL game capture";
     homepage = "https://github.com/nowrep/obs-vkcapture";
     changelog = "https://github.com/nowrep/obs-vkcapture/releases/tag/v${finalAttrs.version}";
-    maintainers = with maintainers; [ atila pedrohlc ];
+    maintainers = with maintainers; [
+      atila
+      pedrohlc
+    ];
     license = licenses.gpl2Only;
     platforms = platforms.linux;
   };

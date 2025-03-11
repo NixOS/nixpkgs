@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "open-cli-tools";
     repo = "concurrently";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-VoyVYBOBMguFKnG2VItk1L5BbF72nO7bYJpb7adqICs=";
   };
 

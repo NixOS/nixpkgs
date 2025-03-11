@@ -1,6 +1,7 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -14,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-sAMIteNkGRqmE7BQD/TNC01K3eQQTLKuc0jcxHxtKF8=";
   };
 
-  cargoHash = "sha256-/qBuIG5ETUWMv2iOGpW3/awuhZb35qsBAflNJv3xTUs=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-tUq+7vTVA27iQLGLXa+WJT3BARKc/Hl+D961IAvoGxw=";
 
   meta = {
     description = "Blazingly fast touch alternative written in Rust";

@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fredrike";
     repo = "pypoint";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-9z9VcY42uHIksIvDU1Vz+kvXNmrCu08fGB/waQahmyg=";
   };
 

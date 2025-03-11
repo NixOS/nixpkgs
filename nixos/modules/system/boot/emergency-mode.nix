@@ -24,10 +24,10 @@
 
   config = {
 
-    systemd.additionalUpstreamSystemUnits = lib.optionals
-      config.systemd.enableEmergencyMode [
-        "emergency.target" "emergency.service"
-      ];
+    systemd.additionalUpstreamSystemUnits = lib.optionals config.systemd.enableEmergencyMode [
+      "emergency.target"
+      "emergency.service"
+    ];
 
   };
 

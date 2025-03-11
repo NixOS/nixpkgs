@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "vgmtrans";
     repo = "vgmtrans";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-HVC45B1DFThZRkPVrroiay+9ufkOrTMUZoNIuC1CjjM=";
   };
 

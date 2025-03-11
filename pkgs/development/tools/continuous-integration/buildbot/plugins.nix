@@ -1,4 +1,14 @@
-{ lib, buildPythonPackage, fetchurl, callPackage, mock, cairosvg, klein, jinja2, buildbot-pkg }:
+{
+  lib,
+  buildPythonPackage,
+  fetchurl,
+  callPackage,
+  mock,
+  cairosvg,
+  klein,
+  jinja2,
+  buildbot-pkg,
+}:
 {
   # this is exposed for potential plugins to use and for nix-update
   inherit buildbot-pkg;
@@ -8,7 +18,7 @@
 
     src = fetchurl {
       url = "https://github.com/buildbot/buildbot/releases/download/v${version}/${pname}-${version}.tar.gz";
-      hash = "sha256-+ZiOkTZLdwqsZfApW6aQxoNkbcFCaB4BHEjMTZIl+Rg=";
+      hash = "sha256-xwu260fcRfnUarEW3dnMcl8YheR0YmYCgNQGy7LaDGw=";
     };
 
     # Remove unnecessary circular dependency on buildbot
@@ -16,7 +26,10 @@
       sed -i "s/'buildbot'//" setup.py
     '';
 
-    buildInputs = [ buildbot-pkg mock ];
+    buildInputs = [
+      buildbot-pkg
+      mock
+    ];
 
     # No tests
     doCheck = false;
@@ -35,7 +48,7 @@
 
     src = fetchurl {
       url = "https://github.com/buildbot/buildbot/releases/download/v${version}/${pname}-${version}.tar.gz";
-      hash = "sha256-IgG/afjU//zrcHuTXMBLlz1gCmB31fWaECIm+UqaMgA=";
+      hash = "sha256-VtrgDVB+U4uM1SQ1h5IMFwU+nRcleYolDjQYJZ7iHbA=";
     };
 
     buildInputs = [ buildbot-pkg ];
@@ -57,7 +70,7 @@
 
     src = fetchurl {
       url = "https://github.com/buildbot/buildbot/releases/download/v${version}/${pname}-${version}.tar.gz";
-      hash = "sha256-E0yFY3PtTZ8XtJGDMh0aRljhTNsWHqHQzcBORTgrCIA=";
+      hash = "sha256-q4RDjn9i4wHtCctqcNIfilS9SNfS+LHohE0dSMHMOt8=";
     };
 
     buildInputs = [ buildbot-pkg ];
@@ -79,7 +92,7 @@
 
     src = fetchurl {
       url = "https://github.com/buildbot/buildbot/releases/download/v${version}/${pname}-${version}.tar.gz";
-      hash = "sha256-KR4M7RSULCM1aS7vYjWuMXIHGpO+xFjfhC8+YncAmlE=";
+      hash = "sha256-HrVoSXXo8P05JbJebKQ/bSPTIxQc9gTDT2RJLhJVhO8=";
     };
 
     buildInputs = [ buildbot-pkg ];
@@ -101,7 +114,7 @@
 
     src = fetchurl {
       url = "https://github.com/buildbot/buildbot/releases/download/v${version}/${pname}-${version}.tar.gz";
-      hash = "sha256-L7DayDddqrwOyBwgy4w1waCL+49GMtdrCdZNpcLrFXk=";
+      hash = "sha256-x/a3iAb8vNkplAoS57IX+4BxIcH9roCixrBArUQN+04=";
     };
 
     buildInputs = [ buildbot-pkg ];
@@ -123,11 +136,15 @@
 
     src = fetchurl {
       url = "https://github.com/buildbot/buildbot/releases/download/v${version}/${pname}-${version}.tar.gz";
-      hash = "sha256-CnRTSnwhSj6cjrATUuVerGrqt7XxJZYgC5XjUC4+Xrs=";
+      hash = "sha256-kGH+Wuqn3vkATL8+aKjXbtuBEQro1tekut+7te8abQs=";
     };
 
     buildInputs = [ buildbot-pkg ];
-    propagatedBuildInputs = [ cairosvg klein jinja2 ];
+    propagatedBuildInputs = [
+      cairosvg
+      klein
+      jinja2
+    ];
 
     # No tests
     doCheck = false;

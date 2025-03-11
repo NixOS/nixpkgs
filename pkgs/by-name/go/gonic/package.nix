@@ -1,15 +1,22 @@
-{ lib, buildGoModule, fetchFromGitHub
-, nixosTests
-, pkg-config, taglib, zlib
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nixosTests,
+  pkg-config,
+  taglib,
+  zlib,
 
-# Disable on-the-fly transcoding,
-# removing the dependency on ffmpeg.
-# The server will (as of 0.11.0) gracefully fall back
-# to the original file, but if transcoding is configured
-# that takes a while. So best to disable all transcoding
-# in the configuration if you disable transcodingSupport.
-, transcodingSupport ? true, ffmpeg
-, mpv }:
+  # Disable on-the-fly transcoding,
+  # removing the dependency on ffmpeg.
+  # The server will (as of 0.11.0) gracefully fall back
+  # to the original file, but if transcoding is configured
+  # that takes a while. So best to disable all transcoding
+  # in the configuration if you disable transcodingSupport.
+  transcodingSupport ? true,
+  ffmpeg,
+  mpv,
+}:
 
 buildGoModule rec {
   pname = "gonic";
@@ -22,29 +29,35 @@ buildGoModule rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ taglib zlib ];
+  buildInputs = [
+    taglib
+    zlib
+  ];
   vendorHash = "sha256-6JkaiaAgtXYAZqVSRZJFObZvhEsHsbPaO9pwmKqIhYI=";
 
   # TODO(Profpatsch): write a test for transcoding support,
   # since it is prone to break
-  postPatch = lib.optionalString transcodingSupport ''
-    substituteInPlace \
-      transcode/transcode.go \
-      --replace-fail \
-        '`ffmpeg' \
-        '`${lib.getBin ffmpeg}/bin/ffmpeg'
-  '' + ''
-    substituteInPlace \
-      jukebox/jukebox.go \
-      --replace-fail \
-        '"mpv"' \
-        '"${lib.getBin mpv}/bin/mpv"'
-  '' + ''
-    substituteInPlace server/ctrlsubsonic/testdata/test* \
-      --replace-quiet \
-        '"audio/flac"' \
-        '"audio/x-flac"'
-  '';
+  postPatch =
+    lib.optionalString transcodingSupport ''
+      substituteInPlace \
+        transcode/transcode.go \
+        --replace-fail \
+          '`ffmpeg' \
+          '`${lib.getBin ffmpeg}/bin/ffmpeg'
+    ''
+    + ''
+      substituteInPlace \
+        jukebox/jukebox.go \
+        --replace-fail \
+          '"mpv"' \
+          '"${lib.getBin mpv}/bin/mpv"'
+    ''
+    + ''
+      substituteInPlace server/ctrlsubsonic/testdata/test* \
+        --replace-quiet \
+          '"audio/flac"' \
+          '"audio/x-flac"'
+    '';
 
   passthru = {
     tests.gonic = nixosTests.gonic;

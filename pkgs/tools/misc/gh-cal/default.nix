@@ -1,8 +1,9 @@
-{ lib
-, fetchCrate
-, rustPlatform
-, pkg-config
-, openssl
+{
+  lib,
+  fetchCrate,
+  rustPlatform,
+  pkg-config,
+  openssl,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "gh-cal";
@@ -13,7 +14,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-x9DekflZoXxH964isWCi6YuV3v/iIyYOuRYVgKaUBx0=";
   };
 
-  cargoHash = "sha256-73gqk0DjhaLGIEP5VQQlubPomxHQyg4RnY5XTgE7msQ=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-myfvPAeWuFHQcHXfkTYRfXVQ5ZBrdzQlaqHljbS0ppg=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ];

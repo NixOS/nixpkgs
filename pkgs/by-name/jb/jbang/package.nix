@@ -1,12 +1,20 @@
-{ stdenv, lib, fetchzip, jdk, makeWrapper, coreutils, curl }:
+{
+  stdenv,
+  lib,
+  fetchzip,
+  jdk,
+  makeWrapper,
+  coreutils,
+  curl,
+}:
 
 stdenv.mkDerivation rec {
-  version = "0.119.0";
+  version = "0.124.0";
   pname = "jbang";
 
   src = fetchzip {
     url = "https://github.com/jbangdev/jbang/releases/download/v${version}/${pname}-${version}.tar";
-    sha256 = "sha256-ebwBRzgpYEomboY+hMok8KmOaNR4hRaPy7SxjHbLeYU=";
+    sha256 = "sha256-mFAp7lfXAS4Y6GERRpmOvE3cjonOi52BS9G8Z5ixvpw=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -17,7 +25,14 @@ stdenv.mkDerivation rec {
     cp -r . $out
     wrapProgram $out/bin/jbang \
       --set JAVA_HOME ${jdk} \
-      --set PATH ${lib.makeBinPath [ (placeholder "out") coreutils jdk curl ]}
+      --set PATH ${
+        lib.makeBinPath [
+          (placeholder "out")
+          coreutils
+          jdk
+          curl
+        ]
+      }
     runHook postInstall
   '';
 

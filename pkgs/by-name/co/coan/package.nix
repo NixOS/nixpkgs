@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, autoreconfHook, perl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  perl,
+}:
 
 stdenv.mkDerivation rec {
   version = "6.0.1";
@@ -14,7 +20,10 @@ stdenv.mkDerivation rec {
     ./fix-big-endian-config-check.diff
   ];
 
-  nativeBuildInputs = [ autoreconfHook perl ];
+  nativeBuildInputs = [
+    autoreconfHook
+    perl
+  ];
 
   configureFlags = [ "CXXFLAGS=-std=c++11" ];
 

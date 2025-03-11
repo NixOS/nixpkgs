@@ -1,17 +1,21 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "phrase-cli";
-  version = "2.34.1";
+  version = "2.37.0";
 
   src = fetchFromGitHub {
     owner = "phrase";
     repo = "phrase-cli";
     rev = version;
-    sha256 = "sha256-N+1kh4p6gzBnWPSs7U4Ay1kUtJ04W3G0f+PzzwCylRQ=";
+    sha256 = "sha256-lPqxMnZV7yco29Cdn1abVN7pl9ll3yRj4+iVFYlcW9M=";
   };
 
-  vendorHash = "sha256-mfg10IwrPiLpI+9Y0QybKS8wOBnt3+tqsXgtGV1eHAs=";
+  vendorHash = "sha256-T2QbX/mZmaaGWcJyB/ArI2qSv1Kj3UgEQsm5Gv27Np0=";
 
   ldflags = [ "-X=github.com/phrase/phrase-cli/cmd.PHRASE_CLIENT_VERSION=${version}" ];
 

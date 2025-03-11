@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "beanhub-import";
-  version = "1.0.3";
+  version = "1.0.7";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -24,8 +24,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "LaunchPlatform";
     repo = "beanhub-import";
-    rev = "refs/tags/${version}";
-    hash = "sha256-6Y1gYAi8A6H0a0vj2avWxGS7hvjrvLBUS+LsgvY4sZo=";
+    tag = version;
+    hash = "sha256-lafSOk+MS9MqB9KSxVR7S1HJJ6R6RZeCrFK8JGCZAIg=";
   };
 
   build-system = [ poetry-core ];
@@ -47,7 +47,7 @@ buildPythonPackage rec {
   meta = {
     description = "Declarative idempotent rule-based Beancount transaction import engine in Python";
     homepage = "https://github.com/LaunchPlatform/beanhub-import/";
-    changelog = "https://github.com/LaunchPlatform/beanhub-import/releases/tag/${version}";
+    changelog = "https://github.com/LaunchPlatform/beanhub-import/releases/tag/${src.tag}";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fangpen ];
   };

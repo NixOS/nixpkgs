@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "edisionnano";
     repo = "QDiskInfo";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-0zF3Nc5K8+K68HOSy30ieYvYP9/oSkTe0+cp0hVo9Gs=";
   };
 

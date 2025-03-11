@@ -1,24 +1,26 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, docbook-xsl-nons
-, docutils
-, gi-docgen
-, gobject-introspection
-, gtk-doc
-, libxslt
-, meson
-, ninja
-, pkg-config
-, vala
-, wrapGAppsHook3
-, glib
-, gsound
-, json-glib
-, libgudev
-, dbus
-, gmobile
-, umockdev
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  docbook-xsl-nons,
+  docutils,
+  gi-docgen,
+  gobject-introspection,
+  gtk-doc,
+  libxslt,
+  meson,
+  ninja,
+  pkg-config,
+  vala,
+  wrapGAppsHook3,
+  glib,
+  gsound,
+  json-glib,
+  libgudev,
+  dbus,
+  gmobile,
+  umockdev,
+  nix-update-script,
 }:
 
 let
@@ -32,16 +34,20 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "feedbackd";
-  version = "0.4.1";
+  version = "0.7.0";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [
+    "out"
+    "dev"
+    "devdoc"
+  ];
 
   src = fetchFromGitLab {
     domain = "source.puri.sm";
     owner = "Librem5";
     repo = "feedbackd";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ta14DYqkid8Cp8fx9ZMGOOJroCBszN9/VrTN6mrpTZg=";
+    hash = "sha256-qwyq1v+20Gotpk0CbUe6MdDJ5bmKmTHOen+rxWljjeA=";
   };
 
   depsBuildBuild = [
@@ -101,11 +107,18 @@ stdenv.mkDerivation (finalAttrs: {
     fi
   '';
 
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
   meta = with lib; {
     description = "Daemon to provide haptic (and later more) feedback on events";
     homepage = "https://source.puri.sm/Librem5/feedbackd";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ pacman99 ];
+    maintainers = with maintainers; [
+      pacman99
+      Luflosi
+    ];
     platforms = platforms.linux;
   };
 })

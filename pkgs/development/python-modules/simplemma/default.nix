@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "simplemma";
-  version = "1.1.1";
+  version = "1.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "adbar";
     repo = "simplemma";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-X0mqFPdCo0/sTexv4bi4bND7LFHOJvlOPH6tB39ybZY=";
+    tag = "v${version}";
+    hash = "sha256-aFN/cOSqsrTJ5GMw0/SM7uoC+T1RhDTQFf8AF00Tz/o=";
   };
 
   build-system = [

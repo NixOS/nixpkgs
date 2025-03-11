@@ -15,7 +15,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "kdheepak";
     repo = "panvimdoc";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-HmEBPkNELHC7Xy0v730sQWZyPPwFdIBUcELzNtrWwzQ=";
   };
 

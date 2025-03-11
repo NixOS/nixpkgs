@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tadeck";
     repo = "onetimepass";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-cHJg3vdUpWp5+HACIeTGrqkHKUDS//aQICSjPKgwu3I=";
   };
 

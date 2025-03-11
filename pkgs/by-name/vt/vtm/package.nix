@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vtm";
-  version = "0.9.99.35";
+  version = "0.9.99.61";
 
   src = fetchFromGitHub {
     owner = "netxs-group";
     repo = "vtm";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-XPBInofzFNBMuJ0oP7ZooDuRukuXBWkEzdEq09MHykA=";
+    hash = "sha256-IlJbJw2c2Zgl+W5Jh01Iga8duiLgl/GurT620IhPh68=";
   };
 
   nativeBuildInputs = [
@@ -24,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://vtm.netxs.online/";
     license = lib.licenses.mit;
     mainProgram = "vtm";
-    maintainers = with lib.maintainers; [ ahuzik ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.all;
   };
 })

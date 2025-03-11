@@ -1,8 +1,23 @@
-{ fetchFromGitHub, fetchpatch, lib, stdenv, cmake, pkg-config, python3, alsa-lib
-, libX11, libGLU, SDL2, lua5_3, zlib, freetype, wavpack, icoutils
-, nixosTests
-, Cocoa
-, buildClient ? true
+{
+  fetchFromGitHub,
+  fetchpatch,
+  lib,
+  stdenv,
+  cmake,
+  pkg-config,
+  python3,
+  alsa-lib,
+  libX11,
+  libGLU,
+  SDL2,
+  lua5_3,
+  zlib,
+  freetype,
+  wavpack,
+  icoutils,
+  nixosTests,
+  Cocoa,
+  buildClient ? true,
 }:
 
 stdenv.mkDerivation rec {
@@ -48,48 +63,61 @@ stdenv.mkDerivation rec {
     # don't seem to be packaged in Nixpkgs, so don't unbundle them.
   '';
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-  ] ++ lib.optionals (buildClient && stdenv.hostPlatform.isLinux) [
-    icoutils
-  ];
+  nativeBuildInputs =
+    [
+      cmake
+      pkg-config
+    ]
+    ++ lib.optionals (buildClient && stdenv.hostPlatform.isLinux) [
+      icoutils
+    ];
 
-  buildInputs = [
-    python3 lua5_3 zlib
-    wavpack
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    Cocoa
-  ] ++ lib.optionals buildClient ([
-    SDL2
-    freetype
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    libGLU
-    alsa-lib
-    libX11
-  ]);
+  buildInputs =
+    [
+      python3
+      lua5_3
+      zlib
+      wavpack
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      Cocoa
+    ]
+    ++ lib.optionals buildClient (
+      [
+        SDL2
+        freetype
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isLinux [
+        libGLU
+        alsa-lib
+        libX11
+      ]
+    );
 
   cmakeFlags = [
     "-DCLIENT=${if buildClient then "ON" else "OFF"}"
   ];
 
-  postInstall = lib.optionalString buildClient (lib.optionalString stdenv.hostPlatform.isLinux ''
-    # Convert and install desktop icon
-    mkdir -p $out/share/pixmaps
-    icotool --extract --index 1 --output $out/share/pixmaps/teeworlds.png $src/other/icons/teeworlds.ico
+  postInstall = lib.optionalString buildClient (
+    lib.optionalString stdenv.hostPlatform.isLinux ''
+      # Convert and install desktop icon
+      mkdir -p $out/share/pixmaps
+      icotool --extract --index 1 --output $out/share/pixmaps/teeworlds.png $src/other/icons/teeworlds.ico
 
-    # Install menu item
-    install -D $src/other/teeworlds.desktop $out/share/applications/teeworlds.desktop
-  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    mkdir -p "$out/Applications/teeworlds.app/Contents/MacOS"
-    mkdir -p "$out/Applications/teeworlds.app/Contents/Resources"
+      # Install menu item
+      install -D $src/other/teeworlds.desktop $out/share/applications/teeworlds.desktop
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      mkdir -p "$out/Applications/teeworlds.app/Contents/MacOS"
+      mkdir -p "$out/Applications/teeworlds.app/Contents/Resources"
 
-    cp '../other/icons/teeworlds.icns' "$out/Applications/teeworlds.app/Contents/Resources/"
-    cp '../other/bundle/client/Info.plist.in' "$out/Applications/teeworlds.app/Contents/Info.plist"
-    cp '../other/bundle/client/PkgInfo' "$out/Applications/teeworlds.app/Contents/"
-    ln -s "$out/bin/teeworlds" "$out/Applications/teeworlds.app/Contents/MacOS/"
-    ln -s "$out/share/teeworlds/data" "$out/Applications/teeworlds.app/Contents/Resources/data"
-  '');
+      cp '../other/icons/teeworlds.icns' "$out/Applications/teeworlds.app/Contents/Resources/"
+      cp '../other/bundle/client/Info.plist.in' "$out/Applications/teeworlds.app/Contents/Info.plist"
+      cp '../other/bundle/client/PkgInfo' "$out/Applications/teeworlds.app/Contents/"
+      ln -s "$out/bin/teeworlds" "$out/Applications/teeworlds.app/Contents/MacOS/"
+      ln -s "$out/share/teeworlds/data" "$out/Applications/teeworlds.app/Contents/Resources/data"
+    ''
+  );
 
   passthru.tests.teeworlds = nixosTests.teeworlds;
 
@@ -109,7 +137,7 @@ stdenv.mkDerivation rec {
       # See https://github.com/teeworlds/teeworlds/blob/master/license.txt
       lib.licenses.zlib # Main license
       cc-by-sa-30 # All content under 'datasrc' except the fonts
-      ofl  # datasrc/fonts/SourceHanSans.ttc
+      ofl # datasrc/fonts/SourceHanSans.ttc
       free # datasrc/fonts/DejaVuSans.ttf
       bsd2 # src/engine/external/json-parser/
       bsd3 # src/engine/external/wavpack
@@ -117,7 +145,10 @@ stdenv.mkDerivation rec {
       # zlib src/engine/external/pnglite/
       # zlib src/engine/external/zlib/
     ];
-    maintainers = with lib.maintainers; [ astsmtl Luflosi ];
+    maintainers = with lib.maintainers; [
+      astsmtl
+      Luflosi
+    ];
     platforms = lib.platforms.unix;
   };
 }

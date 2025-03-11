@@ -24,7 +24,8 @@ let
         inherit (cfg) ghcArgs;
       } cfg.config;
     in
-      pkgs.runCommandLocal "xmonad" {
+      pkgs.runCommand "xmonad" {
+        preferLocalBuild = true;
         nativeBuildInputs = [ pkgs.makeWrapper ];
       } (''
         install -D ${xmonadEnv}/share/man/man1/xmonad.1.gz $out/share/man/man1/xmonad.1.gz

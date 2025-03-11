@@ -1,4 +1,10 @@
-{ lib, buildGoModule, fetchFromGitHub, lazydocker, testers }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  lazydocker,
+  testers,
+}:
 
 buildGoModule rec {
   pname = "lazydocker";
@@ -17,9 +23,16 @@ buildGoModule rec {
     rm -f pkg/config/app_config_test.go
   '';
 
-  excludedPackages = [ "scripts" "test/printrandom" ];
+  excludedPackages = [
+    "scripts"
+    "test/printrandom"
+  ];
 
-  ldflags = [ "-s" "-w" "-X main.version=${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.version=${version}"
+  ];
 
   passthru.tests.version = testers.testVersion {
     package = lazydocker;
@@ -29,7 +42,10 @@ buildGoModule rec {
     description = "Simple terminal UI for both docker and docker-compose";
     homepage = "https://github.com/jesseduffield/lazydocker";
     license = licenses.mit;
-    maintainers = with maintainers; [ das-g Br1ght0ne ];
+    maintainers = with maintainers; [
+      das-g
+      Br1ght0ne
+    ];
     mainProgram = "lazydocker";
   };
 }

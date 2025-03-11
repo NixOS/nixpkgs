@@ -1,4 +1,12 @@
-{ lib, buildDunePackage, fetchFromGitLab, iri, re, sedlex, uutf }:
+{
+  lib,
+  buildDunePackage,
+  fetchFromGitLab,
+  iri,
+  re,
+  sedlex,
+  uutf,
+}:
 
 buildDunePackage rec {
   pname = "xtmpl";
@@ -12,7 +20,12 @@ buildDunePackage rec {
     sha256 = "sha256:0vwj0aayg60wm98d91fg3hmj90730liljy4cn8771dpxvz8m07bw";
   };
 
-  propagatedBuildInputs = [ iri re sedlex uutf ];
+  propagatedBuildInputs = [
+    iri
+    re
+    sedlex
+    uutf
+  ];
 
   meta = with lib; {
     description = "XML templating library for OCaml";

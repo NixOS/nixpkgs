@@ -1,6 +1,6 @@
 { lib, stdenv
 , fetchurl
-, substituteAll
+, replaceVars
 , meson
 , nasm
 , ninja
@@ -58,21 +58,20 @@ assert raspiCameraSupport -> (stdenv.hostPlatform.isLinux && stdenv.hostPlatform
 
 stdenv.mkDerivation rec {
   pname = "gst-plugins-good";
-  version = "1.24.7";
+  version = "1.24.10";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-dZrLEebeg3P/jLteerjrmjhjG+gc8kIgJnsAHrVVk8E=";
+    hash = "sha256-/OdI+mbXqO4fsmFInlnQHj+nh2I9bVw1BoQW/nzQrLM=";
   };
 
   patches = [
     # Reenable dynamic loading of libsoup on Darwin and use a different approach to do it.
     ./souploader-darwin.diff
     # dlopen libsoup_3 with an absolute path
-    (substituteAll {
-      src = ./souploader.diff;
+    (replaceVars ./souploader.diff {
       nixLibSoup3Path = "${lib.getLib libsoup_3}/lib";
     })
   ];

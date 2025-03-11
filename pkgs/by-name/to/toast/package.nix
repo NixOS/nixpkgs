@@ -1,20 +1,22 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "toast";
-  version = "0.47.6";
+  version = "0.47.7";
 
   src = fetchFromGitHub {
     owner = "stepchowfun";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-+qntd687LF4tJwHZglZ6mppHq3dOZ+l431oKBBNDI0k=";
+    sha256 = "sha256-vp70jv4F0VKd/OZHVRDcIJlKLwK9w+cV28lh0C7ESqg=";
   };
 
-  cargoHash = "sha256-A2sJ0o0RDztk3NjxG0CD8wNA4tmOizY4Tvff6ADzYQ8=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-3sBb6etSicYvEOIuLARUxo21ulVQ5qVsz65lAtuG+B4=";
 
   checkFlags = [ "--skip=format::tests::code_str_display" ]; # fails
 

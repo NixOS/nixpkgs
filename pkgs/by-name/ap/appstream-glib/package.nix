@@ -1,38 +1,45 @@
-{ lib, stdenv
-, fetchFromGitHub
-, substituteAll
-, docbook_xml_dtd_42
-, docbook_xsl
-, fontconfig
-, freetype
-, gdk-pixbuf
-, gettext
-, glib
-, gobject-introspection
-, gperf
-, gtk-doc
-, gtk3
-, json-glib
-, libarchive
-, curl
-, libuuid
-, libxslt
-, meson
-, ninja
-, pkg-config
-, pngquant
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  replaceVars,
+  docbook_xml_dtd_42,
+  docbook_xsl,
+  fontconfig,
+  freetype,
+  gdk-pixbuf,
+  gettext,
+  glib,
+  gobject-introspection,
+  gperf,
+  gtk-doc,
+  gtk3,
+  json-glib,
+  libarchive,
+  curl,
+  libuuid,
+  libxslt,
+  meson,
+  ninja,
+  pkg-config,
+  pngquant,
 }:
 stdenv.mkDerivation rec {
   pname = "appstream-glib";
   version = "0.8.2";
 
-  outputs = [ "out" "dev" "man" "installedTests" ];
+  outputs = [
+    "out"
+    "dev"
+    "man"
+    "installedTests"
+  ];
   outputBin = "dev";
 
   src = fetchFromGitHub {
     owner = "hughsie";
     repo = "appstream-glib";
-    rev = "${lib.replaceStrings ["-"] ["_"] pname}_${lib.replaceStrings ["."] ["_"] version}";
+    rev = "${lib.replaceStrings [ "-" ] [ "_" ] pname}_${lib.replaceStrings [ "." ] [ "_" ] version}";
     sha256 = "sha256-3QFiOJ38talA0GGL++n+DaA/AN7l4LOZQ7BJV6o8ius=";
   };
 
@@ -67,8 +74,7 @@ stdenv.mkDerivation rec {
   ];
 
   patches = [
-    (substituteAll {
-      src = ./paths.patch;
+    (replaceVars ./paths.patch {
       pngquant = "${pngquant}/bin/pngquant";
     })
   ];

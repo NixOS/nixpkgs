@@ -1,6 +1,7 @@
-{ lib
-, python3
-, fetchPypi
+{
+  lib,
+  python3,
+  fetchPypi,
 }:
 
 let
@@ -9,7 +10,7 @@ let
   bepastyPython = python3.override {
     self = bepastyPython;
     packageOverrides = self: super: {
-      xstatic-font-awesome = super.xstatic-font-awesome.overridePythonAttrs(oldAttrs: rec {
+      xstatic-font-awesome = super.xstatic-font-awesome.overridePythonAttrs (oldAttrs: rec {
         version = "4.7.0.0";
         src = oldAttrs.src.override {
           inherit version;
@@ -76,6 +77,9 @@ bepastyPython.pkgs.buildPythonPackage rec {
     homepage = "https://github.com/bepasty/bepasty-server";
     description = "Binary pastebin server";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ aither64 makefu ];
+    maintainers = with maintainers; [
+      aither64
+      makefu
+    ];
   };
 }

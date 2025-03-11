@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "HuntDownProject";
     repo = "HEDnsExtractor";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Uj5TNQ+X0+ip1DcLanMmFzr5ROuXhuZJSPF9tile+ZQ=";
   };
 

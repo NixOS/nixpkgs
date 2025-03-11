@@ -2,7 +2,7 @@
   pkgs,
   lib,
   buildGoModule,
-  fetchFromGitHub
+  fetchFromGitHub,
 }:
 let
   pname = "vim-startuptime";

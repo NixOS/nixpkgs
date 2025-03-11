@@ -1,31 +1,39 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
   django,
-  six,
+  fetchPypi,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "django-environ";
-  version = "0.11.2";
-  format = "setuptools";
+  version = "0.12.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-8yqHqgiZiUwn1OF3b6a0d+gWTtf2s+QQpiptcsqvZL4=";
+    pname = "django_environ";
+    inherit version;
+    hash = "sha256-In3IkUU91b3nacNEnPSnS28u6PerI2HJOgcGj0F5BBo=";
   };
+
+  build-system = [ setuptools ];
+
+  buildInputs = [ django ];
 
   # The testsuite fails to modify the base environment
   doCheck = false;
-  propagatedBuildInputs = [
-    django
-    six
-  ];
+
+  pythonImportsCheck = [ "environ" ];
 
   meta = with lib; {
     description = "Utilize environment variables to configure your Django application";
     homepage = "https://github.com/joke2k/django-environ/";
+    changelog = "https://github.com/joke2k/django-environ/releases/tag/v${version}";
     license = licenses.mit;
+    maintainers = with maintainers; [ ];
   };
 }

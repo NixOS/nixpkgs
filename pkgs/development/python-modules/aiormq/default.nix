@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mosquito";
     repo = "aiormq";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-3+PoDB5Owy8BWBUisX0i1mV8rqs5K9pBFQwup8vKxlg=";
   };
 

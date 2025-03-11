@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, ninja
-, opencl-headers
-, ocl-icd
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  ninja,
+  opencl-headers,
+  ocl-icd,
 }:
 
 stdenv.mkDerivation rec {

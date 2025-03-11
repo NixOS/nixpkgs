@@ -1,11 +1,12 @@
 {
   lib,
   aiohttp,
+  aresponses,
   buildPythonPackage,
   fetchFromGitHub,
   freezegun,
   netifaces,
-  pytest-aiohttp,
+  pytest-asyncio,
   pytestCheckHook,
   pythonOlder,
   urllib3,
@@ -15,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "pydaikin";
-  version = "2.13.7";
+  version = "2.14.0";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -23,9 +24,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fredrike";
     repo = "pydaikin";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-pLr878LbflRlHzDjarwDLQFHbRZjRvlAZEqP1tfVBNA=";
+    tag = "v${version}";
+    hash = "sha256-5qkJjGfVoNVHHmr77aWajpYmyfmV/ZyO3tXY9/gj6eU=";
   };
+
+  __darwinAllowLocalNetworking = true;
 
   build-system = [ setuptools ];
 
@@ -36,11 +39,10 @@ buildPythonPackage rec {
     tenacity
   ];
 
-  doCheck = false; # tests fail and upstream does not seem to run them either
-
   nativeCheckInputs = [
+    aresponses
     freezegun
-    pytest-aiohttp
+    pytest-asyncio
     pytestCheckHook
   ];
 

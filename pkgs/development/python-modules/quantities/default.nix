@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch2,
   numpy,
   pytestCheckHook,
   pythonOlder,
@@ -12,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "quantities";
-  version = "0.15.0";
+  version = "0.16.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -20,17 +19,9 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-quantities";
     repo = "python-quantities";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-N20xfzGtM0VnfkJtzMytNLySTkgVz2xf1nEJxlwBSCI=";
+    tag = "v${version}";
+    hash = "sha256-gXxUmuhFAqHVj8jqWt8Ed2M6UvnPxku6hr/yJoa3nXE=";
   };
-
-  patches = [
-    (fetchpatch2 {
-      name = "prevent-arbitrary-code-eval.patch";
-      url = "https://github.com/python-quantities/python-quantities/pull/236.patch";
-      hash = "sha256-H1tOfXqNMIKY01m6o2PsfZG0CvnWNxW2qIWA5ce1lRk=";
-    })
-  ];
 
   build-system = [
     setuptools
@@ -40,11 +31,6 @@ buildPythonPackage rec {
   dependencies = [ numpy ];
 
   nativeCheckInputs = [ pytestCheckHook ];
-
-  disabledTests = [
-    # test fails with numpy 1.24
-    "test_mul"
-  ];
 
   pythonImportsCheck = [ "quantities" ];
 

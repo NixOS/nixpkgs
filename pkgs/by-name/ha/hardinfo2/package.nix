@@ -30,13 +30,13 @@
 
 stdenv.mkDerivation (finalAtrs: {
   pname = "hardinfo2";
-  version = "2.2.4";
+  version = "2.2.7";
 
   src = fetchFromGitHub {
     owner = "hardinfo2";
     repo = "hardinfo2";
-    rev = "refs/tags/release-${finalAtrs.version}";
-    hash = "sha256-UgVryuUkD9o2SvwA9VbX/kCaAo3+Osf6FxlYyaRX1Ag=";
+    tag = "release-${finalAtrs.version}";
+    hash = "sha256-IIH2SH4Ph25VFx652RQFZX8rL0ZlwjjfVrb+txLF3Ks=";
   };
 
   nativeBuildInputs = [
@@ -90,6 +90,6 @@ stdenv.mkDerivation (finalAtrs: {
     ];
     maintainers = with lib.maintainers; [ sigmanificient ];
     platforms = lib.platforms.linux;
-    mainProgram = "hardinfo";
+    mainProgram = "hardinfo2";
   };
 })

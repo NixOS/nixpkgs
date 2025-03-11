@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitLab,
+  fetchpatch,
   gitUpdater,
   testers,
   accountsservice,
@@ -17,7 +18,7 @@
   gnome-desktop,
   gsettings-qt,
   gtk3,
-  icu,
+  icu75,
   intltool,
   json-glib,
   libqofono,
@@ -29,6 +30,7 @@
   lomiri-settings-components,
   lomiri-ui-toolkit,
   maliit-keyboard,
+  mesa,
   pkg-config,
   polkit,
   python3,
@@ -47,13 +49,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-system-settings-unwrapped";
-  version = "1.2.0";
+  version = "1.3.0";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-system-settings";
     rev = finalAttrs.version;
-    hash = "sha256-dWaXPr9Z5jz5SbwLSd3jVqjK0E5BdcKVeF15p8j47uM=";
+    hash = "sha256-8X5a2zJ0y8bSSnbqDvRoYm/2VPAWcfZZuiH+5p8eXi4=";
   };
 
   outputs = [
@@ -61,7 +63,17 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ];
 
-  patches = [ ./2000-Support-wrapping-for-Nixpkgs.patch ];
+  patches = [
+    # Fixes compat with newer ICU
+    # Remove when version > 1.3.0
+    (fetchpatch {
+      name = "0001-lomiri-system-settings-unwrapped-Unpin-Cxx-standard.patch";
+      url = "https://gitlab.com/ubports/development/core/lomiri-system-settings/-/commit/c0b1c773237b28ea50850810b8844033b13fb666.patch";
+      hash = "sha256-M73gQxstKyuzzx1VxdOiNYyfQbSZPIy2gxiCtKcdS1M=";
+    })
+
+    ./2000-Support-wrapping-for-Nixpkgs.patch
+  ];
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
@@ -109,7 +121,7 @@ stdenv.mkDerivation (finalAttrs: {
     gnome-desktop
     gsettings-qt
     gtk3
-    icu
+    icu75
     json-glib
     polkit
     qtbase
@@ -136,6 +148,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeCheckInputs = [
     dbus
+    mesa.llvmpipeHook # ShapeMaterial needs an OpenGL context: https://gitlab.com/ubports/development/core/lomiri-ui-toolkit/-/issues/35
     (python3.withPackages (ps: with ps; [ python-dbusmock ]))
     xvfb-run
   ];
@@ -151,19 +164,6 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeBool "ENABLE_LIBDEVICEINFO" true)
     (lib.cmakeBool "ENABLE_TESTS" finalAttrs.finalPackage.doCheck)
-    (lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" (
-      lib.concatStringsSep ";" [
-        # Exclude tests
-        "-E"
-        (lib.strings.escapeShellArg "(${
-          lib.concatStringsSep "|" [
-            # Hits OpenGL context issue inside lomiri-ui-toolkit, see derivation of that on details
-            "^testmouse"
-            "^tst_notifications"
-          ]
-        })")
-      ]
-    ))
   ];
 
   # The linking for this normally ignores missing symbols, which is inconvenient for figuring out why subpages may be

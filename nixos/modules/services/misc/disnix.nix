@@ -1,5 +1,10 @@
 # Disnix server
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
 
   cfg = config.services.disnix;
@@ -24,7 +29,7 @@ in
 
       useWebServiceInterface = lib.mkEnableOption "the DisnixWebService interface running on Apache Tomcat";
 
-      package = lib.mkPackageOption pkgs "disnix" {};
+      package = lib.mkPackageOption pkgs "disnix" { };
 
       enableProfilePath = lib.mkEnableOption "exposing the Disnix profiles in the system's PATH";
 
@@ -42,8 +47,12 @@ in
   config = lib.mkIf cfg.enable {
     services.dysnomia.enable = true;
 
-    environment.systemPackages = [ pkgs.disnix ] ++ lib.optional cfg.useWebServiceInterface pkgs.DisnixWebService;
-    environment.variables.PATH = lib.optionals cfg.enableProfilePath (map (profileName: "/nix/var/nix/profiles/disnix/${profileName}/bin" ) cfg.profiles);
+    environment.systemPackages = [
+      pkgs.disnix
+    ] ++ lib.optional cfg.useWebServiceInterface pkgs.DisnixWebService;
+    environment.variables.PATH = lib.optionals cfg.enableProfilePath (
+      map (profileName: "/nix/var/nix/profiles/disnix/${profileName}/bin") cfg.profiles
+    );
     environment.variables.DISNIX_REMOTE_CLIENT = lib.optionalString (cfg.enableMultiUser) "disnix-client";
 
     services.dbus.enable = true;
@@ -52,7 +61,8 @@ in
     services.tomcat.enable = cfg.useWebServiceInterface;
     services.tomcat.extraGroups = [ "disnix" ];
     services.tomcat.javaOpts = "${lib.optionalString cfg.useWebServiceInterface "-Djava.library.path=${pkgs.libmatthew_java}/lib/jni"} ";
-    services.tomcat.sharedLibs = lib.optional cfg.useWebServiceInterface "${pkgs.DisnixWebService}/share/java/DisnixConnection.jar"
+    services.tomcat.sharedLibs =
+      lib.optional cfg.useWebServiceInterface "${pkgs.DisnixWebService}/share/java/DisnixConnection.jar"
       ++ lib.optional cfg.useWebServiceInterface "${pkgs.dbus_java}/share/java/dbus.jar";
     services.tomcat.webapps = lib.optional cfg.useWebServiceInterface pkgs.DisnixWebService;
 
@@ -63,7 +73,8 @@ in
         description = "Disnix server";
         wants = [ "dysnomia.target" ];
         wantedBy = [ "multi-user.target" ];
-        after = [ "dbus.service" ]
+        after =
+          [ "dbus.service" ]
           ++ lib.optional config.services.httpd.enable "httpd.service"
           ++ lib.optional config.services.mysql.enable "mysql.service"
           ++ lib.optional config.services.postgresql.enable "postgresql.service"
@@ -74,13 +85,23 @@ in
 
         restartIfChanged = false;
 
-        path = [ config.nix.package cfg.package config.services.dysnomia.package "/run/current-system/sw" ];
+        path = [
+          config.nix.package
+          cfg.package
+          config.services.dysnomia.package
+          "/run/current-system/sw"
+        ];
 
-        environment = {
-          HOME = "/root";
-        }
-        // (lib.optionalAttrs (config.environment.variables ? DYSNOMIA_CONTAINERS_PATH) { inherit (config.environment.variables) DYSNOMIA_CONTAINERS_PATH; })
-        // (lib.optionalAttrs (config.environment.variables ? DYSNOMIA_MODULES_PATH) { inherit (config.environment.variables) DYSNOMIA_MODULES_PATH; });
+        environment =
+          {
+            HOME = "/root";
+          }
+          // (lib.optionalAttrs (config.environment.variables ? DYSNOMIA_CONTAINERS_PATH) {
+            inherit (config.environment.variables) DYSNOMIA_CONTAINERS_PATH;
+          })
+          // (lib.optionalAttrs (config.environment.variables ? DYSNOMIA_MODULES_PATH) {
+            inherit (config.environment.variables) DYSNOMIA_MODULES_PATH;
+          });
 
         serviceConfig.ExecStart = "${cfg.package}/bin/disnix-service";
       };

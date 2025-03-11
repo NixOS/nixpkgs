@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 {
   ###### interface
 
@@ -21,7 +26,7 @@
   ###### implementation
 
   imports = [
-    (lib.mkRenamedOptionModule ["hardware" "usbWwan" ] ["hardware" "usb-modeswitch" ])
+    (lib.mkRenamedOptionModule [ "hardware" "usbWwan" ] [ "hardware" "usb-modeswitch" ])
   ];
 
   config = lib.mkIf config.hardware.usb-modeswitch.enable {

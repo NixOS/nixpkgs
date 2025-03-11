@@ -113,6 +113,16 @@ in
         }
       ];
 
+      warnings =
+          lib.mkIf
+            (
+              (lib.elem "nvidia" config.services.xserver.videoDrivers)
+              && (lib.versionOlder (lib.versions.major (lib.getVersion config.hardware.nvidia.package)) "551")
+            )
+            [
+              "Using Sway with Nvidia driver version <= 550 may result in a broken system. Configure hardware.nvidia.package to use a newer version."
+            ];
+
       environment = {
         systemPackages = lib.optional (cfg.package != null) cfg.package ++ cfg.extraPackages;
 
@@ -149,7 +159,7 @@ in
       # https://github.com/emersion/xdg-desktop-portal-wlr/pull/315
       xdg.portal.config.sway = {
         # Use xdg-desktop-portal-gtk for every portal interface...
-        default = "gtk";
+        default = [ "gtk" ];
         # ... except for the ScreenCast, Screenshot and Secret
         "org.freedesktop.impl.portal.ScreenCast" = "wlr";
         "org.freedesktop.impl.portal.Screenshot" = "wlr";

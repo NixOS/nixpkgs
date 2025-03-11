@@ -1,12 +1,14 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, enableAppletSymlinks ? true
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  enableAppletSymlinks ? true,
 }:
 
 let
   version = "1.4";
-in rustPlatform.buildRustPackage {
+in
+rustPlatform.buildRustPackage {
   pname = "rsbkb";
   inherit version;
 
@@ -20,7 +22,8 @@ in rustPlatform.buildRustPackage {
   cargoPatches = [
     ./time.patch
   ];
-  cargoHash = "sha256-jRkwfIEB9DEzoV5xogTDz1cHfdsvLM6E27E7hQBa9JY=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-fg8LQXqmw5GXiQe7ZVciORWI/yhKAhywolpapNpHXZY=";
 
   # Setup symlinks for all the utilities,
   # busybox style

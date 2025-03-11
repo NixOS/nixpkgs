@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "CMA-ES";
     repo = "pycma";
-    rev = "refs/tags/r${version}";
+    tag = "r${version}";
     hash = "sha256-W4KDtX/Ho/XUrZr2cmS66Q0q90FEHRJN0VF4sMgonRw=";
   };
 

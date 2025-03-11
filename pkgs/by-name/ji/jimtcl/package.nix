@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
 
-, asciidoc
-, pkg-config
-, inetutils
-, tcl
+  asciidoc,
+  pkg-config,
+  inetutils,
+  tcl,
 
-, sqlite
-, readline
-, SDL
-, SDL_gfx
-, openssl
+  sqlite,
+  readline,
+  SDL,
+  SDL_gfx,
+  openssl,
 
-, SDLSupport ? true
+  SDLSupport ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -33,14 +34,16 @@ stdenv.mkDerivation (finalAttrs: {
     tcl
   ];
 
-  buildInputs = [
-    sqlite
-    readline
-    openssl
-  ] ++ (lib.optionals SDLSupport [
-    SDL
-    SDL_gfx
-  ]);
+  buildInputs =
+    [
+      sqlite
+      readline
+      openssl
+    ]
+    ++ (lib.optionals SDLSupport [
+      SDL
+      SDL_gfx
+    ]);
 
   configureFlags = [
     "--shared"
@@ -75,6 +78,9 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://jim.tcl.tk/";
     license = lib.licenses.bsd2;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ dbohdan fgaz ];
+    maintainers = with lib.maintainers; [
+      dbohdan
+      fgaz
+    ];
   };
 })

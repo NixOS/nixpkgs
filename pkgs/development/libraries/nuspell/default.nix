@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pandoc, pkg-config, icu, catch2_3 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pandoc,
+  pkg-config,
+  icu,
+  catch2_3,
+}:
 
 stdenv.mkDerivation rec {
   pname = "nuspell";
@@ -11,14 +20,22 @@ stdenv.mkDerivation rec {
     hash = "sha256-U/lHSxpKsBnamf4ikE2aIjEPSU5fxjtuSmhZR0jxMAI=";
   };
 
-  nativeBuildInputs = [ cmake pandoc pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pandoc
+    pkg-config
+  ];
   buildInputs = [ catch2_3 ];
   propagatedBuildInputs = [ icu ];
 
   cmakeFlags = [ "-DBUILD_TESTING=YES" ];
   doCheck = true;
 
-  outputs = [ "out" "lib" "dev" ];
+  outputs = [
+    "out"
+    "lib"
+    "dev"
+  ];
 
   meta = with lib; {
     description = "Free and open source C++ spell checking library";

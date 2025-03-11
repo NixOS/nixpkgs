@@ -15,7 +15,6 @@
 , libportal-gtk3
 , granite
 , pango
-, bamf
 , sqlite
 , zeitgeist
 , libcloudproviders
@@ -47,7 +46,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    bamf
     glib
     granite
     gtk3

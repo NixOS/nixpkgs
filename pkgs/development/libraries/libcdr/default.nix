@@ -1,21 +1,19 @@
-{ lib, stdenv, fetchurl, libwpg, libwpd, lcms, pkg-config, librevenge, icu, boost, cppunit }:
+{ lib, stdenv, fetchurl, libwpg, libwpd, lcms, pkg-config, librevenge, icu, boost, cppunit, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "libcdr";
-  version = "0.1.7";
+  version = "0.1.8";
 
   src = fetchurl {
     url = "https://dev-www.libreoffice.org/src/${pname}-${version}.tar.xz";
-    hash = "sha256-VmYknWE0ZrmqHph+pBCcBDZYZuknfYD2zZZj6GuOzdQ=";
+    hash = "sha256-ztZ3yDALKckdMAS7Hd3wuZdhv1VEmRwmwu6PQn6HGTw=";
   };
 
   strictDeps = true;
 
-  buildInputs = [ libwpg libwpd lcms librevenge icu boost cppunit ];
+  buildInputs = [ libwpg libwpd lcms librevenge icu boost cppunit zlib ];
 
   nativeBuildInputs = [ pkg-config ];
-
-  CXXFLAGS="--std=gnu++0x"; # For c++11 constants in lcms2.h
 
   enableParallelBuilding = true;
 

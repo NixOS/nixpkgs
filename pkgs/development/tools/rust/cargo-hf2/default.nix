@@ -1,10 +1,11 @@
-{ lib
-, rustPlatform
-, fetchCrate
-, pkg-config
-, libusb1
-, stdenv
-, AppKit
+{
+  lib,
+  rustPlatform,
+  fetchCrate,
+  pkg-config,
+  libusb1,
+  stdenv,
+  AppKit,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -16,7 +17,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-0o3j7YfgNNnfbrv9Gppo24DqYlDCxhtsJHIhAV214DU=";
   };
 
-  cargoHash = "sha256-zBxvpQfB9xw8+Rc1H1EaK/gQZtQ+uSs4YJwhm2o0vhI=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-cRliZegzRKmoGIE96pyVuNySA2L6l+imcTHbZBXXiz4=";
 
   nativeBuildInputs = [ pkg-config ];
 

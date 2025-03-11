@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "FreeSpacenav";
     repo = "spnavcfg";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     fetchLFS = true;
     hash = "sha256-P3JYhZnaCxzJETwC4g5m4xAGBk28/Va7Z/ybqwacIaA=";
   };

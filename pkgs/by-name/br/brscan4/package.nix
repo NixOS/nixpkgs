@@ -1,4 +1,12 @@
-{ stdenv, lib, fetchurl, callPackage, patchelf, makeWrapper, libusb-compat-0_1 }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  callPackage,
+  patchelf,
+  makeWrapper,
+  libusb-compat-0_1,
+}:
 let
   myPatchElf = file: ''
     patchelf --set-interpreter \
@@ -12,23 +20,29 @@ in
 stdenv.mkDerivation rec {
   pname = "brscan4";
   version = "0.4.10-1";
-  src = {
-    "i686-linux" = fetchurl {
-      url = "http://download.brother.com/welcome/dlf006646/${pname}-${version}.i386.deb";
-      sha256 = "sha256-ymIAg+rfSYP5uzsAM1hUYZacJ0PXmKEoljNtb0pgGMw=";
-    };
-    "x86_64-linux" = fetchurl {
-      url = "https://download.brother.com/welcome/dlf006645/${pname}-${version}.amd64.deb";
-      sha256 = "sha256-Gpr5456MCNpyam3g2qPo7S3aEZFMaUGR8bu7YmRY8xk=";
-    };
-  }."${stdenv.hostPlatform.system}" or (throw "unsupported system ${stdenv.hostPlatform.system}");
+  src =
+    {
+      "i686-linux" = fetchurl {
+        url = "http://download.brother.com/welcome/dlf006646/${pname}-${version}.i386.deb";
+        sha256 = "sha256-ymIAg+rfSYP5uzsAM1hUYZacJ0PXmKEoljNtb0pgGMw=";
+      };
+      "x86_64-linux" = fetchurl {
+        url = "https://download.brother.com/welcome/dlf006645/${pname}-${version}.amd64.deb";
+        sha256 = "sha256-Gpr5456MCNpyam3g2qPo7S3aEZFMaUGR8bu7YmRY8xk=";
+      };
+    }
+    ."${stdenv.hostPlatform.system}" or (throw "unsupported system ${stdenv.hostPlatform.system}");
 
   unpackPhase = ''
     ar x $src
     tar xfvz data.tar.gz
   '';
 
-  nativeBuildInputs = [ makeWrapper patchelf udevRules ];
+  nativeBuildInputs = [
+    makeWrapper
+    patchelf
+    udevRules
+  ];
   buildInputs = [ libusb-compat-0_1 ];
   dontBuild = true;
 
@@ -88,7 +102,10 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Brother brscan4 sane backend driver";
     homepage = "http://www.brother.com";
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    platforms = [
+      "i686-linux"
+      "x86_64-linux"
+    ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ jraygauthier ];

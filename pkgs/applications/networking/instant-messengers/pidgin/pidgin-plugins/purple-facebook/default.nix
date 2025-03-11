@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, fetchhg, pidgin, glib, json-glib, autoreconfHook }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchhg,
+  pidgin,
+  glib,
+  json-glib,
+  autoreconfHook,
+}:
 
 let
   pidginHg = fetchhg {
@@ -9,7 +17,8 @@ let
     sha256 = "06imlhsps4wrjgjb92zpaxprxfxl2pjb2x9pl859c8cryssrz2jv";
   };
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "purple-facebook";
   version = "0.9.5";
 
@@ -54,7 +63,11 @@ in stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ pidgin glib json-glib ];
+  buildInputs = [
+    pidgin
+    glib
+    json-glib
+  ];
 
   meta = with lib; {
     inherit (src.meta) homepage;

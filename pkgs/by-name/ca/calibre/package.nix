@@ -16,10 +16,12 @@
   libstemmer,
   libuchardet,
   libusb1,
+  libwebp,
+  optipng,
   piper-tts,
   pkg-config,
   podofo,
-  poppler_utils,
+  poppler-utils,
   python3Packages,
   qt6,
   speechd-minimal,
@@ -33,11 +35,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "calibre";
-  version = "7.21.0";
+  version = "7.26.0";
 
   src = fetchurl {
     url = "https://download.calibre-ebook.com/${finalAttrs.version}/calibre-${finalAttrs.version}.tar.xz";
-    hash = "sha256-61Nbclkt59sh8VHh3uRw0GvlDjlyOz1jrsFMMIuzPLE=";
+    hash = "sha256-Cps2x3ZV68jaZ+cIJgQEeh++GG81Y9yX7mC7WKvFcCc=";
   };
 
   patches = [
@@ -50,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     (fetchpatch {
       name = "0007-Hardening-Qt-code.patch";
       url = "https://raw.githubusercontent.com/debian-calibre/calibre/debian/${finalAttrs.version}+ds-1/debian/patches/hardening/0007-Hardening-Qt-code.patch";
-      hash = "sha256-9hi4T9LB7aklWASMR8hIuKBgZm2arDvORfmk9S8wgCA=";
+      hash = "sha256-V/ZUTH0l4QSfM0dHrgLGdJjF/CCQ0S/fnCP/ZKD563U=";
     })
   ] ++ lib.optional (!unrarSupport) ./dont_build_unrar_plugin.patch;
 
@@ -88,7 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
     libusb1
     piper-tts
     podofo
-    poppler_utils
+    poppler-utils
     qt6.qtbase
     qt6.qtwayland
     sqlite
@@ -96,12 +98,13 @@ stdenv.mkDerivation (finalAttrs: {
       ps:
       with ps;
       [
-        (apsw.overrideAttrs (oldAttrs: {
+        (apsw.overrideAttrs (_oldAttrs: {
           setupPyBuildFlags = [ "--enable=load_extension" ];
         }))
         beautifulsoup4
         css-parser
         cssselect
+        fonttools
         python-dateutil
         dnspython
         faust-cchardet
@@ -115,6 +118,7 @@ stdenv.mkDerivation (finalAttrs: {
         netifaces
         pillow
         pychm
+        pykakasi
         pyqt-builder
         pyqt6
         python
@@ -136,17 +140,17 @@ stdenv.mkDerivation (finalAttrs: {
             # does not support by simply omitting qtwebengine.
             pyqt6-webengine
           ]
-      ++ lib.optional (unrarSupport) unrardll
+      ++ lib.optional unrarSupport unrardll
     ))
     xdg-utils
-  ] ++ lib.optional (speechSupport) speechd-minimal;
+  ] ++ lib.optional speechSupport speechd-minimal;
 
   installPhase = ''
     runHook preInstall
 
     export HOME=$TMPDIR/fakehome
-    export POPPLER_INC_DIR=${poppler_utils.dev}/include/poppler
-    export POPPLER_LIB_DIR=${poppler_utils.out}/lib
+    export POPPLER_INC_DIR=${poppler-utils.dev}/include/poppler
+    export POPPLER_LIB_DIR=${poppler-utils.out}/lib
     export MAGICK_INC=${imagemagick.dev}/include/ImageMagick
     export MAGICK_LIB=${imagemagick.out}/lib
     export FC_INC_DIR=${fontconfig.dev}/include/fontconfig
@@ -183,20 +187,26 @@ stdenv.mkDerivation (finalAttrs: {
 
   preFixup =
     let
-      popplerArgs = "--prefix PATH : ${poppler_utils.out}/bin";
+      popplerArgs = "--prefix PATH : ${poppler-utils.out}/bin";
     in
     ''
       for program in $out/bin/*; do
         wrapProgram $program \
           ''${qtWrapperArgs[@]} \
           ''${gappsWrapperArgs[@]} \
+          --prefix PATH : ${
+            lib.makeBinPath [
+              libjpeg
+              libwebp
+              optipng
+            ]
+          } \
           ${if popplerSupport then popplerArgs else ""}
       done
     '';
 
   doInstallCheck = true;
   installCheckInputs = with python3Packages; [
-    fonttools
     psutil
   ];
   installCheckPhase = ''

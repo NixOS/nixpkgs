@@ -1,10 +1,12 @@
-{ lib, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, libffi
-, llvm_13
-, perl
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  libffi,
+  llvm_13,
+  perl,
 }:
 
 stdenv.mkDerivation {
@@ -18,8 +20,15 @@ stdenv.mkDerivation {
     sha256 = "sha256-LNWqrFuEjtL7zuPTBfe4qQWr8IrT/ldQWSeDTK3Wqmo=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config llvm_13.dev ];
-  buildInputs = [ libffi llvm_13 ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    llvm_13.dev
+  ];
+  buildInputs = [
+    libffi
+    llvm_13
+  ];
 
   nativeCheckInputs = [ perl ];
 
@@ -34,7 +43,11 @@ stdenv.mkDerivation {
     homepage = "https://github.com/tomhrr/dale";
     license = licenses.bsd3;
     maintainers = with maintainers; [ amiloradovsky ];
-    platforms = [ "i686-linux" "x86_64-linux" "aarch64-linux" ];
+    platforms = [
+      "i686-linux"
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
     # failed on Darwin: linker couldn't find the FFI lib
   };
 }

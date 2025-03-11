@@ -1,20 +1,26 @@
-{ lib, stdenv, fetchFromGitHub, writeText, nixosTests }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  writeText,
+  nixosTests,
+}:
 
 stdenv.mkDerivation rec {
   pname = "limesurvey";
-  version = "6.6.5+240924";
+  version = "6.10.2+250127";
 
   src = fetchFromGitHub {
     owner = "LimeSurvey";
     repo = "LimeSurvey";
     rev = version;
-    hash = "sha256-CuuTFCDY7jnF2njZdyB6e8/nRf0n0ybKgZ0QscC2IAI=";
+    hash = "sha256-2ZRN2zbrrGWTXgsPeRWsQbg1qw2vVIAwzUI0LWgCL9g=";
   };
 
   phpConfig = writeText "config.php" ''
-  <?php
-    return require(getenv('LIMESURVEY_CONFIG'));
-  ?>
+    <?php
+      return require(getenv('LIMESURVEY_CONFIG'));
+    ?>
   '';
 
   installPhase = ''
@@ -35,7 +41,7 @@ stdenv.mkDerivation rec {
     description = "Open source survey application";
     license = licenses.gpl2Plus;
     homepage = "https://www.limesurvey.org";
-    maintainers = with maintainers; [offline];
+    maintainers = with maintainers; [ offline ];
     platforms = with platforms; unix;
   };
 }

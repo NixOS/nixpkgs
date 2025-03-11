@@ -1,6 +1,6 @@
 { stdenv
 , lib
-, pandoc
+, pandoc_3_6
 , typst
 , esbuild
 , deno
@@ -16,14 +16,13 @@
 , extraPythonPackages ? ps: []
 , sysctl
 }:
-
 stdenv.mkDerivation (final: {
   pname = "quarto";
-  version = "1.6.33";
+  version = "1.6.42";
 
   src = fetchurl {
     url = "https://github.com/quarto-dev/quarto-cli/releases/download/v${final.version}/quarto-${final.version}-linux-amd64.tar.gz";
-    hash = "sha256-0qCQswtBC8R1Q7pHLhJtqCncllqgXo1t9pG97VwCtAI=";
+    hash = "sha256-9mf1YfcfCWMZaYFlYyJN9WKlRHk8U2sq2ESb4mqz3sY=";
   };
 
   patches = [
@@ -39,7 +38,7 @@ stdenv.mkDerivation (final: {
   preFixup = ''
     wrapProgram $out/bin/quarto \
       --prefix QUARTO_DENO : ${lib.getExe deno} \
-      --prefix QUARTO_PANDOC : ${lib.getExe pandoc} \
+      --prefix QUARTO_PANDOC : ${lib.getExe pandoc_3_6} \
       --prefix QUARTO_ESBUILD : ${lib.getExe esbuild} \
       --prefix QUARTO_DART_SASS : ${lib.getExe dart-sass} \
       --prefix QUARTO_TYPST : ${lib.getExe typst} \

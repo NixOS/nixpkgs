@@ -1,14 +1,15 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, substituteAll
-, meson
-, pkg-config
-, qttools
-, ninja
-, qtbase
-, qtwayland
-, wayland
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  replaceVars,
+  meson,
+  pkg-config,
+  qttools,
+  ninja,
+  qtbase,
+  qtwayland,
+  wayland,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -24,8 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     # qmake get qtbase's path, but wayqt need qtwayland
-    (substituteAll {
-      src = ./fix-qtwayland-header-path.diff;
+    (replaceVars ./fix-qtwayland-header-path.diff {
       qtWaylandPath = "${qtwayland}/include";
     })
   ];
@@ -49,7 +49,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontWrapQtApps = true;
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   meta = {
     homepage = "https://gitlab.com/desktop-frameworks/wayqt";

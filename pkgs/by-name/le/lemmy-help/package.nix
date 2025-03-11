@@ -1,4 +1,8 @@
-{ lib, fetchFromGitHub, rustPlatform }:
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "lemmy-help";
@@ -13,7 +17,8 @@ rustPlatform.buildRustPackage rec {
 
   buildFeatures = [ "cli" ];
 
-  cargoHash = "sha256-BCwpiBPvnLgbpOaXgUK2EDXnT8d4jo7aqgM6uwl80eg=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-ZuLbdsZadEkY5M4LoHBn6gnKYklVbXpRa60EocYUH+A=";
 
   meta = with lib; {
     description = "CLI for generating vim help docs from emmylua comments";

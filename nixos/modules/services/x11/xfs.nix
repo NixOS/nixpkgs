@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -26,14 +31,13 @@ in
 
   };
 
-
   ###### implementation
 
   config = mkIf config.services.xfs.enable {
-    assertions = singleton
-      { assertion = config.fonts.enableFontDir;
-        message = "Please enable fonts.enableFontDir to use the X Font Server.";
-      };
+    assertions = singleton {
+      assertion = config.fonts.enableFontDir;
+      message = "Please enable fonts.enableFontDir to use the X Font Server.";
+    };
 
     systemd.services.xfs = {
       description = "X Font Server";

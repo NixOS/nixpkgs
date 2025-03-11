@@ -1,10 +1,16 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 with lib;
 
 let
   cfg = config.services.cage;
-in {
+in
+{
   options.services.cage.enable = mkEnableOption "cage kiosk service";
 
   options.services.cage.user = mkOption {
@@ -17,15 +23,15 @@ in {
 
   options.services.cage.extraArguments = mkOption {
     type = types.listOf types.str;
-    default = [];
+    default = [ ];
     defaultText = literalExpression "[]";
     description = "Additional command line arguments to pass to Cage.";
-    example = ["-d"];
+    example = [ "-d" ];
   };
 
   options.services.cage.environment = mkOption {
     type = types.attrsOf types.str;
-    default = {};
+    default = { };
     example = {
       WLR_LIBINPUT_NO_DEVICES = "1";
     };
@@ -40,6 +46,8 @@ in {
       Program to run in cage.
     '';
   };
+
+  options.services.cage.package = mkPackageOption pkgs "cage" { };
 
   config = mkIf cfg.enable {
 
@@ -56,7 +64,11 @@ in {
         "getty@tty1.service"
       ];
       before = [ "graphical.target" ];
-      wants = [ "dbus.socket" "systemd-logind.service" "plymouth-quit.service"];
+      wants = [
+        "dbus.socket"
+        "systemd-logind.service"
+        "plymouth-quit.service"
+      ];
       wantedBy = [ "graphical.target" ];
       conflicts = [ "getty@tty1.service" ];
 
@@ -64,7 +76,7 @@ in {
       unitConfig.ConditionPathExists = "/dev/tty1";
       serviceConfig = {
         ExecStart = ''
-          ${pkgs.cage}/bin/cage \
+          ${cfg.package}/bin/cage \
             ${escapeShellArgs cfg.extraArguments} \
             -- ${cfg.program}
         '';

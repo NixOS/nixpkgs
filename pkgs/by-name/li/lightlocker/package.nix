@@ -1,27 +1,32 @@
-{ lib, stdenv
-, fetchFromGitHub
-, nix-update-script
-, meson
-, ninja
-, pkg-config
-, gtk3
-, glib
-, intltool
-, dbus-glib
-, libX11
-, libXScrnSaver
-, libXxf86vm
-, libXext
-, systemd
-, pantheon
-, wrapGAppsHook3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  meson,
+  ninja,
+  pkg-config,
+  gtk3,
+  glib,
+  intltool,
+  dbus-glib,
+  libX11,
+  libXScrnSaver,
+  libXxf86vm,
+  libXext,
+  systemd,
+  pantheon,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation rec {
   pname = "light-locker";
   version = "1.9.0";
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   src = fetchFromGitHub {
     owner = "the-cavalry";

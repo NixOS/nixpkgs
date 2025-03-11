@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, python3
-, installShellFiles
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  python3,
+  installShellFiles,
+  nixosTests,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -18,11 +19,15 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-0xPNhbu6/p/cbHOr5Y+PXbMbt5q/S13S5100ZZSdylE=";
   };
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   nativeBuildInputs = [ installShellFiles ];
 
-  pythonPath = with python3.pkgs;
+  pythonPath =
+    with python3.pkgs;
     lib.optionals stdenv.hostPlatform.isLinux [
       systemd
       pyinotify
@@ -83,7 +88,8 @@ python3.pkgs.buildPythonApplication rec {
       rm $out/bin/fail2ban-python
       ln -s ${python3.interpreter} $out/bin/fail2ban-python
 
-    '' + lib.optionalString stdenv.hostPlatform.isLinux ''
+    ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
       # see https://github.com/NixOS/nixpkgs/issues/4968
       rm -r "${sitePackages}/usr"
     '';

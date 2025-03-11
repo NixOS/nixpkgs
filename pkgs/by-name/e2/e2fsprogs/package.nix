@@ -1,74 +1,86 @@
-{ lib, stdenv, buildPackages, fetchurl, fetchpatch, pkg-config, libuuid, gettext, texinfo
-, withFuse ? stdenv.hostPlatform.isLinux, fuse3
-, shared ? !stdenv.hostPlatform.isStatic
-, e2fsprogs, runCommand
+{
+  lib,
+  stdenv,
+  buildPackages,
+  fetchurl,
+  pkg-config,
+  libuuid,
+  gettext,
+  texinfo,
+  withFuse ? stdenv.hostPlatform.isLinux,
+  fuse3,
+  shared ? !stdenv.hostPlatform.isStatic,
+  e2fsprogs,
+  runCommand,
 }:
 
 stdenv.mkDerivation rec {
   pname = "e2fsprogs";
-  version = "1.47.1";
+  version = "1.47.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.gz";
-    hash = "sha256-mvzSAfOUKdLbJJKusT26XnXWzFBoK3MtyjVkO9XwkuM=";
+    url = "mirror://kernel/linux/kernel/people/tytso/e2fsprogs/v${version}/e2fsprogs-${version}.tar.xz";
+    hash = "sha256-CCQuZMoOgZTZwcqtSXYrGSCaBjGBmbY850rk7y105jw=";
   };
 
   # fuse2fs adds 14mb of dependencies
-  outputs = [ "bin" "dev" "out" "man" "info" ]
-    ++ lib.optionals withFuse [ "fuse2fs" ];
+  outputs = [
+    "bin"
+    "dev"
+    "out"
+    "man"
+    "info"
+  ] ++ lib.optionals withFuse [ "fuse2fs" ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ pkg-config texinfo ];
-  buildInputs = [ libuuid gettext ]
-    ++ lib.optionals withFuse [ fuse3 ];
-
-  patches = [
-    (fetchurl {
-      name = "SIZEOF_SIZE_T.patch";
-      url = "https://lore.kernel.org/linux-ext4/20240527074121.2767083-1-hi@alyssa.is/raw";
-      hash = "sha256-QdsvcvBi0mC/4YErqG0UKl94MH0OZpFVTGszNqBe/qw=";
-    })
-    (fetchurl {
-      name = "unused-parameters.patch";
-      url = "https://lore.kernel.org/linux-ext4/20240527091542.4121237-2-hi@alyssa.is/raw";
-      hash = "sha256-pMoqm2eo5zYaTdU+Ppa4+posCVFb2A9S4uo5oApaaqc=";
-    })
+  nativeBuildInputs = [
+    pkg-config
+    texinfo
   ];
+  buildInputs = [
+    libuuid
+    gettext
+  ] ++ lib.optionals withFuse [ fuse3 ];
 
   configureFlags =
-    if stdenv.hostPlatform.isLinux then [
-      # It seems that the e2fsprogs is one of the few packages that cannot be
-      # build with shared and static libs.
-      (if shared then "--enable-elf-shlibs" else "--disable-elf-shlibs")
-      "--enable-symlink-install"
-      "--enable-relative-symlinks"
-      "--with-crond-dir=no"
-      # fsck, libblkid, libuuid and uuidd are in util-linux-ng (the "libuuid" dependency)
-      "--disable-fsck"
-      "--disable-libblkid"
-      "--disable-libuuid"
-      "--disable-uuidd"
-    ] else [
-      "--enable-libuuid --disable-e2initrd-helper"
-    ];
+    if stdenv.hostPlatform.isLinux then
+      [
+        # It seems that the e2fsprogs is one of the few packages that cannot be
+        # build with shared and static libs.
+        (if shared then "--enable-elf-shlibs" else "--disable-elf-shlibs")
+        "--enable-symlink-install"
+        "--enable-relative-symlinks"
+        "--with-crond-dir=no"
+        # fsck, libblkid, libuuid and uuidd are in util-linux-ng (the "libuuid" dependency)
+        "--disable-fsck"
+        "--disable-libblkid"
+        "--disable-libuuid"
+        "--disable-uuidd"
+      ]
+    else
+      [
+        "--enable-libuuid --disable-e2initrd-helper"
+      ];
 
   nativeCheckInputs = [ buildPackages.perl ];
   doCheck = true;
 
-  postInstall = ''
-    # avoid cycle between outputs
-    if [ -f $out/lib/${pname}/e2scrub_all_cron ]; then
-      mv $out/lib/${pname}/e2scrub_all_cron $bin/bin/
-    fi
-  '' + lib.optionalString withFuse ''
-    mkdir -p $fuse2fs/bin
-    mv $bin/bin/fuse2fs $fuse2fs/bin/fuse2fs
-  '';
+  postInstall =
+    ''
+      # avoid cycle between outputs
+      if [ -f $out/lib/${pname}/e2scrub_all_cron ]; then
+        mv $out/lib/${pname}/e2scrub_all_cron $bin/bin/
+      fi
+    ''
+    + lib.optionalString withFuse ''
+      mkdir -p $fuse2fs/bin
+      mv $bin/bin/fuse2fs $fuse2fs/bin/fuse2fs
+    '';
 
   enableParallelBuilding = true;
 
   passthru.tests = {
-    simple-filesystem = runCommand "e2fsprogs-create-fs" {} ''
+    simple-filesystem = runCommand "e2fsprogs-create-fs" { } ''
       mkdir -p $out
       truncate -s10M $out/disc
       ${e2fsprogs}/bin/mkfs.ext4 $out/disc | tee $out/success
@@ -83,8 +95,8 @@ stdenv.mkDerivation rec {
     license = with licenses; [
       gpl2Plus
       lgpl2Plus # lib/ext2fs, lib/e2p
-      bsd3      # lib/uuid
-      mit       # lib/et, lib/ss
+      bsd3 # lib/uuid
+      mit # lib/et, lib/ss
     ];
     platforms = platforms.unix;
     maintainers = [ ];

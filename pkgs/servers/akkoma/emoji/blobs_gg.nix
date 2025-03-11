@@ -1,4 +1,9 @@
-{ lib, stdenvNoCC, fetchurl, unzip }:
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  unzip,
+}:
 
 let
   rev = "e764ba00b9c34524e3ff3ffd19a44fa2a5c296a5";

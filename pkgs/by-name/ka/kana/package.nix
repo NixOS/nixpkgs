@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, rustPlatform
-, meson
-, ninja
-, pkg-config
-, rustc
-, cargo
-, wrapGAppsHook4
-, desktop-file-utils
-, libadwaita
-, gst_all_1
-, darwin
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  rustPlatform,
+  meson,
+  ninja,
+  pkg-config,
+  rustc,
+  cargo,
+  wrapGAppsHook4,
+  desktop-file-utils,
+  libadwaita,
+  gst_all_1,
+  darwin,
 }:
 
 stdenv.mkDerivation rec {
@@ -26,10 +27,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-/Ri723ub8LMlhbPObC83bay63JuWIQpgxAT5UUYuwZI=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
     name = "kana-${version}";
-    hash = "sha256-Z7DpPe8/Tt8AcLjCwKbwzQTsLe6YvWBCG7DlDkkklew=";
+    hash = "sha256-3ODkAstBZQE3eqGmRUdm3xyCoBXV41hK4ndxeDK8+Yc=";
   };
 
   nativeBuildInputs = [
@@ -43,25 +44,25 @@ stdenv.mkDerivation rec {
     desktop-file-utils
   ];
 
-  buildInputs = [
-    libadwaita
-  ] ++ (with gst_all_1; [
-    gstreamer
-    gst-plugins-base
-    gst-plugins-bad
-    gst-plugins-good
-  ]) ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Foundation
-  ];
+  buildInputs =
+    [
+      libadwaita
+    ]
+    ++ (with gst_all_1; [
+      gstreamer
+      gst-plugins-base
+      gst-plugins-bad
+      gst-plugins-good
+    ])
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.Foundation
+    ];
 
   # Workaround for the gettext-sys issue
   # https://github.com/Koka/gettext-rs/issues/114
-  env.NIX_CFLAGS_COMPILE = lib.optionalString
-    (
-      stdenv.cc.isClang &&
-      lib.versionAtLeast stdenv.cc.version "16"
-    )
-    "-Wno-error=incompatible-function-pointer-types";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString (
+    stdenv.cc.isClang && lib.versionAtLeast stdenv.cc.version "16"
+  ) "-Wno-error=incompatible-function-pointer-types";
 
   meta = with lib; {
     description = "Learn Japanese hiragana and katakana characters";

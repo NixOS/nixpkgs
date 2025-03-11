@@ -1,10 +1,25 @@
-{stdenv, lib, vala, meson, ninja, pkg-config, fetchFromGitea, gobject-introspection, glib, gtk3}:
+{
+  stdenv,
+  lib,
+  vala,
+  meson,
+  ninja,
+  pkg-config,
+  fetchFromGitea,
+  gobject-introspection,
+  glib,
+  gtk3,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libgflow";
   version = "1.0.4";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [
+    "out"
+    "dev"
+    "devdoc"
+  ];
   outputBin = "devdoc"; # demo app
 
   src = fetchFromGitea {

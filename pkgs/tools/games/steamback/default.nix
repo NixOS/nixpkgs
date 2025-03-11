@@ -1,15 +1,16 @@
-{ lib
-, buildPythonApplication
-, fetchPypi
-, setuptools
-, setuptools-scm
-, wheel
-, pillow
-, psutil
-, async-tkinter-loop
-, timeago
-, platformdirs
-, sv-ttk
+{
+  lib,
+  buildPythonApplication,
+  fetchPypi,
+  setuptools,
+  setuptools-scm,
+  wheel,
+  pillow,
+  psutil,
+  async-tkinter-loop,
+  timeago,
+  platformdirs,
+  sv-ttk,
 }:
 
 buildPythonApplication rec {

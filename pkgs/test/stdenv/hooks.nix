@@ -1,4 +1,8 @@
-{ stdenv, pkgs, lib }:
+{
+  stdenv,
+  pkgs,
+  lib,
+}:
 
 # ordering should match defaultNativeBuildInputs
 
@@ -23,7 +27,10 @@
     };
   make-symlinks-relative = stdenv.mkDerivation {
     name = "test-make-symlinks-relative";
-    outputs = [ "out" "man" ];
+    outputs = [
+      "out"
+      "man"
+    ];
     buildCommand = ''
       mkdir -p $out/{bar,baz}
       mkdir -p $man/share/{x,y}
@@ -90,6 +97,7 @@
       [[ -e $out/bin/foo ]]
     '';
   };
+  no-broken-symlinks = import ./no-broken-symlinks.nix { inherit stdenv lib pkgs; };
   # TODO: add multiple-outputs
   patch-shebangs = import ./patch-shebangs.nix { inherit stdenv lib pkgs; };
   prune-libtool-files =

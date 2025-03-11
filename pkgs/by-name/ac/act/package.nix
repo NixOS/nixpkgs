@@ -3,11 +3,12 @@
   fetchFromGitHub,
   buildGoModule,
   testers,
+  nix-update-script,
   act,
 }:
 
 let
-  version = "0.2.68";
+  version = "0.2.74";
 in
 buildGoModule {
   pname = "act";
@@ -16,11 +17,11 @@ buildGoModule {
   src = fetchFromGitHub {
     owner = "nektos";
     repo = "act";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-BON29uUruBoeBLoBdOgnonrVIyLZlvBW5UyWfxFgjPs=";
+    tag = "v${version}";
+    hash = "sha256-UfETstrK8iAGbCn2BRjI8eRkFp/RGVYe0S1P8P8MUHg=";
   };
 
-  vendorHash = "sha256-yxuOORShJL9nFIS5srZFI31Nyz7xFxnJCmcN8UFhyr0=";
+  vendorHash = "sha256-NIXiXD1JCtvgTG7QPSMCjQfZSSEcdMUKdqureSWDB4k=";
 
   doCheck = false;
 
@@ -30,8 +31,12 @@ buildGoModule {
     "-X main.version=${version}"
   ];
 
-  passthru.tests.version = testers.testVersion {
-    package = act;
+  passthru = {
+    tests.version = testers.testVersion {
+      package = act;
+    };
+
+    updateScript = nix-update-script { };
   };
 
   meta = {

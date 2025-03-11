@@ -1,4 +1,8 @@
-{ lib, rustPlatform, fetchFromGitHub }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "jfmt";
@@ -11,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-X3wk669G07BTPAT5xGbAfIu2Qk90aaJIi1CLmOnSG80=";
   };
 
-  cargoHash = "sha256-u/v3P7iPdBJU/0wlSNBq/cjnM3XOnoVfUjrrmo4sTAA=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-skLK+jYeR0FPxD1fVswiOWyKpzu5/qL5mk69bLEmxic=";
 
   meta = with lib; {
     description = "CLI utility to format json files";

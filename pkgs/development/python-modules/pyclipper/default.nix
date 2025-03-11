@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fonttools";
     repo = "pyclipper";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-s2D0ipDatAaF7A1RYOKyI31nkfc/WL3vHWsAMbo+WcY=";
   };
 

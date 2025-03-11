@@ -1,21 +1,23 @@
-{ lib, stdenv
-, fetchurl
-, cmake
-, ninja
-, pkg-config
-, intltool
-, vala
-, wrapGAppsHook3
-, gcr
-, libpeas
-, gtk3
-, webkitgtk_4_0
-, sqlite
-, gsettings-desktop-schemas
-, libsoup
-, glib-networking
-, json-glib
-, libarchive
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  ninja,
+  pkg-config,
+  intltool,
+  vala,
+  wrapGAppsHook3,
+  gcr,
+  libpeas,
+  gtk3,
+  webkitgtk_4_0,
+  sqlite,
+  gsettings-desktop-schemas,
+  libsoup_2_4,
+  glib-networking,
+  json-glib,
+  libarchive,
 }:
 
 stdenv.mkDerivation rec {
@@ -37,7 +39,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    (libsoup.override { gnomeSupport = true; })
+    (libsoup_2_4.override { gnomeSupport = true; })
     gcr
     glib-networking
     gsettings-desktop-schemas
@@ -51,14 +53,20 @@ stdenv.mkDerivation rec {
 
   passthru = {
     inherit gtk3;
+    applicationName = "Midori";
   };
 
   meta = with lib; {
     description = "Lightweight WebKitGTK web browser";
     mainProgram = "midori";
-    homepage = "https://www.midori-browser.org/";
+    homepage = "https://github.com/midori-browser/core";
     license = with licenses; [ lgpl21Plus ];
     platforms = with platforms; linux;
-    maintainers = with maintainers; [ raskin ramkromberg ];
+    maintainers = with maintainers; [
+      raskin
+      ramkromberg
+    ];
+    # https://github.com/NixOS/nixpkgs/issues/374354
+    broken = true;
   };
 }

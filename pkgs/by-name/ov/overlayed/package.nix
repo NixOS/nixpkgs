@@ -4,7 +4,7 @@
   callPackage,
   pkg-config,
   openssl,
-  libsoup,
+  libsoup_3,
   webkitgtk_4_1,
   fetchFromGitHub,
   libayatana-appindicator,
@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "overlayeddev";
     repo = "overlayed";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-3GFg8czBf1csojXUNC51xFXJnGuXltP6D46fCt6q24I=";
   };
 
@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     openssl
     webkitgtk_4_1
-    libsoup
+    libsoup_3
   ];
 
   env = {

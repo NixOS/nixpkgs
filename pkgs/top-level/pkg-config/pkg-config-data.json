@@ -578,7 +578,7 @@
     },
     "libsoup-gnome-2.4": {
       "attrPath": [
-        "libsoup"
+        "libsoup_2_4"
       ]
     },
     "libssh2": {

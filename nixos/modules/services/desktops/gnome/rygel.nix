@@ -1,6 +1,12 @@
 # rygel service.
 { config, lib, pkgs, ... }:
 
+let
+
+  cfg = config.services.gnome.rygel;
+
+in
+
 {
   meta = {
     maintainers = lib.teams.gnome.members;
@@ -18,17 +24,19 @@
         '';
         type = lib.types.bool;
       };
+
+      package = lib.options.mkPackageOption pkgs "rygel" { };
     };
   };
 
   ###### implementation
-  config = lib.mkIf config.services.gnome.rygel.enable {
-    environment.systemPackages = [ pkgs.rygel ];
+  config = lib.mkIf cfg.enable {
+    environment.systemPackages = [ cfg.package ];
 
-    services.dbus.packages = [ pkgs.rygel ];
+    services.dbus.packages = [ cfg.package ];
 
-    systemd.packages = [ pkgs.rygel ];
+    systemd.packages = [ cfg.package ];
 
-    environment.etc."rygel.conf".source = "${pkgs.rygel}/etc/rygel.conf";
+    environment.etc."rygel.conf".source = "${cfg.package}/etc/rygel.conf";
   };
 }

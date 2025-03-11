@@ -1,17 +1,24 @@
-{ lib, fetchFromGitHub, rustPlatform, libxcb, python3 }:
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  libxcb,
+  python3,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "i3wsr";
-  version = "2.1.1";
+  version = "3.1.1";
 
   src = fetchFromGitHub {
     owner = "roosta";
-    repo = pname;
+    repo = "i3wsr";
     rev = "v${version}";
-    sha256 = "sha256-Mq4TpQDiIYePUS3EwBfOe2+QmvF6+WEDK12WahbuhSU=";
+    hash = "sha256-RTJ+up3mt6KuMkTBCXDUmztxwEQCeyAjuhhOUrdIfTo=";
   };
 
-  cargoHash = "sha256-hybvzHwHM0rQwgZfQpww/w9wQDW5h9P2KSjpAScVTBo=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-7WS+8EGGl8sJ3TeT7IM+u1AiD0teJ2AITb++zK/keXs=";
 
   nativeBuildInputs = [ python3 ];
   buildInputs = [ libxcb ];

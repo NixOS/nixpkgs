@@ -19,21 +19,20 @@
   libXtst,
   libXi,
   wayland,
-  apple-sdk_11,
 }:
 
 buildNpmPackage rec {
   pname = "kando";
-  version = "1.5.1";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "kando-menu";
     repo = "kando";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-0Y6JDTbzrtAU14soyQgnGTkdR/h52gX2ByNGIYCY38A=";
+    tag = "v${version}";
+    hash = "sha256-ihWHyafDU/B2Xb3ezNlC7hB8EhBCQOSuW+ki/V2SIPs=";
   };
 
-  npmDepsHash = "sha256-qmLaUd01Mk6yQYqd/rXy4aZoi6oYYY6eZ2kupGRb1z0=";
+  npmDepsHash = "sha256-PnKrTHAo3mKcVBhJQf/273k91UZxlDb3+2iXWGIfPs0=";
 
   npmFlags = [ "--ignore-scripts" ];
 
@@ -50,17 +49,13 @@ buildNpmPackage rec {
       copyDesktopItems
     ];
 
-  buildInputs =
-    lib.optionals stdenv.hostPlatform.isLinux [
-      libxkbcommon
-      libX11
-      libXtst
-      libXi
-      wayland
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_11
-    ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    libxkbcommon
+    libX11
+    libXtst
+    libXi
+    wayland
+  ];
 
   dontUseCmakeConfigure = true;
 
@@ -111,7 +106,7 @@ buildNpmPackage rec {
 
       makeWrapper ${lib.getExe electron} $out/bin/kando \
           --add-flags $out/share/kando/resources/app \
-          --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime}}" \
+          --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
           --inherit-argv0
     ''}
 

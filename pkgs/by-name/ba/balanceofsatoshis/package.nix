@@ -1,38 +1,28 @@
-{ lib
-, buildNpmPackage
-, fetchFromGitHub
-, installShellFiles
-, python3
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
+  python3,
 }:
 
 buildNpmPackage rec {
   pname = "balanceofsatoshis";
-  version = "15.8.15";
+  version = "19.4.10";
 
   src = fetchFromGitHub {
     owner = "alexbosworth";
     repo = "balanceofsatoshis";
-    rev = "v${version}";
-    hash = "sha256-8GWITeFn7ELUH7bxcNlmQvgperQutBwVUhp2yjeEWrM=";
+    tag = "v${version}";
+    hash = "sha256-WJuxe3k8ZLlkB5SpvE1DSyxQsc5bYEKVsM8tt5vdYOU=";
   };
 
-  npmDepsHash = "sha256-lTXv4pEjrzcOK68RO1K007r7dCbAyc45G8Oy8V3XLts=";
+  npmDepsHash = "sha256-dsWYUCPbiF/L3RcdcaWVn6TnU1/XMy9l7eQgHrBYW4o=";
 
-  nativeBuildInputs = [
-    installShellFiles
-    python3
-  ];
+  nativeBuildInputs = [ python3 ];
 
   dontNpmBuild = true;
 
   npmFlags = [ "--ignore-scripts" ];
-
-  postInstall = ''
-    installShellCompletion --cmd bos \
-        --bash <($out/bin/bos completion bash) \
-        --zsh <($out/bin/bos completion zsh) \
-        --fish <($out/bin/bos completion fish)
-  '';
 
   meta = {
     changelog = "https://github.com/alexbosworth/balanceofsatoshis/blob/${src.rev}/CHANGELOG.md";
@@ -40,6 +30,6 @@ buildNpmPackage rec {
     homepage = "https://github.com/alexbosworth/balanceofsatoshis";
     license = lib.licenses.mit;
     mainProgram = "bos";
-    maintainers = with lib.maintainers; [ mmilata ];
+    maintainers = with lib.maintainers; [ mariaa144 ];
   };
 }

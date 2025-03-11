@@ -1,4 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, bison, cmake, flex, pkg-config, readline, zlib }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  bison,
+  cmake,
+  flex,
+  pkg-config,
+  readline,
+  zlib,
+}:
 
 stdenv.mkDerivation rec {
   pname = "foma";
@@ -13,10 +23,21 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "${src.name}/foma";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
-  nativeBuildInputs = [ bison cmake flex pkg-config ];
-  buildInputs = [ readline zlib ];
+  nativeBuildInputs = [
+    bison
+    cmake
+    flex
+    pkg-config
+  ];
+  buildInputs = [
+    readline
+    zlib
+  ];
 
   cmakeFlags = [
     # the cmake package does not handle absolute CMAKE_INSTALL_XXXDIR

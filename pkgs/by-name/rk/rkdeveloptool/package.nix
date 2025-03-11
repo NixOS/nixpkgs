@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, libusb1 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  libusb1,
+}:
 
 stdenv.mkDerivation {
   pname = "rkdeveloptool";
@@ -11,7 +18,10 @@ stdenv.mkDerivation {
     sha256 = "eIFzyoY6l3pdfCN0uS16hbVp0qzdG3MtcS1jnDX1Yk0=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
 
   buildInputs = [ libusb1 ];
 

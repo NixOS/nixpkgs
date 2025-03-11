@@ -20,8 +20,20 @@
   "batterytime@typeof.pw" = "battery-time-2";
   "batime@martin.zurowietz.de" = "battery-time";
 
+  "nepali-date@biplab" = "nepali-calendar";
+  "nepali-calendar-gs-extension@subashghimire.info.np" = "nepali-calendar-2";
+
+  "mousefollowsfocus@matthes.biz" = "mouse-follows-focus";
+  "mouse-follows-focus@crisidev.org" = "mouse-follows-focus-2";
+
   "power-profile-indicator@laux.wtf" = "power-profile-indicator";
   "power-profile@fthx" = "power-profile-indicator-2";
+
+  "fullscreen-to-empty-workspace@aiono.dev" = "fullscreen-to-empty-workspace";
+  "fullscreen-to-empty-workspace2@corgijan.dev" = "fullscreen-to-empty-workspace-2";
+
+  "eur-usd-gshell@vezza.github.com" = "eur-usd";
+  "usd-mxn-gshell@kinduff.github.com" = "usd-mxn";
 
   # ############################################################################
   # These extensions no longer collide. We preserve the old attribute name for backwards compatibility.

@@ -1,31 +1,32 @@
-{ lib
-, stdenv
-, yarn
-, fetchYarnDeps
-, fixup-yarn-lock
-, nodejs
-, electron
-, fetchFromGitHub
-, nix-update-script
-, makeWrapper
-, makeDesktopItem
-, copyDesktopItems
+{
+  lib,
+  stdenv,
+  yarn,
+  fetchYarnDeps,
+  fixup-yarn-lock,
+  nodejs,
+  electron,
+  fetchFromGitHub,
+  nix-update-script,
+  makeWrapper,
+  makeDesktopItem,
+  copyDesktopItems,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "r2modman";
-  version = "3.1.54";
+  version = "3.1.56";
 
   src = fetchFromGitHub {
     owner = "ebkr";
     repo = "r2modmanPlus";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-hsaFtQW/awhnBFS6xqDtRvzkzr/afzojYecgglsc3K8=";
+    hash = "sha256-38PHTI/sAKLf70b/uBPYlJvbkogijiyuUvn7veGGZTY=";
   };
 
   offlineCache = fetchYarnDeps {
     yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-VXlFB7hT+aL3yufJ/Ar7FMdrk2Iptf5rdvagAop00lk=";
+    hash = "sha256-3SMvUx+TwUmOur/50HDLWt0EayY5tst4YANWIlXdiPQ=";
   };
 
   patches = [
@@ -86,7 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper '${lib.getExe electron}' "$out/bin/r2modman" \
       --inherit-argv0 \
       --add-flags "$out/share/r2modman" \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime}}"
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
 
     runHook postInstall
   '';
@@ -99,7 +100,11 @@ stdenv.mkDerivation (finalAttrs: {
       desktopName = "r2modman";
       comment = finalAttrs.meta.description;
       categories = [ "Game" ];
-      keywords = [ "launcher" "mod manager" "thunderstore" ];
+      keywords = [
+        "launcher"
+        "mod manager"
+        "thunderstore"
+      ];
     })
   ];
 
@@ -111,7 +116,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/ebkr/r2modmanPlus";
     license = lib.licenses.mit;
     mainProgram = "r2modman";
-    maintainers = with lib.maintainers; [ aidalgol huantian ];
+    maintainers = with lib.maintainers; [
+      aidalgol
+      huantian
+    ];
     inherit (electron.meta) platforms;
   };
 })

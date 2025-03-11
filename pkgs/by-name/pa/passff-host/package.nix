@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, python3, pass }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python3,
+  pass,
+}:
 
 stdenv.mkDerivation rec {
   pname = "passff-host";

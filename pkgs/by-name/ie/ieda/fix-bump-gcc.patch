@@ -1,0 +1,409 @@
+From bce09ab2a483a29479518e28511a99a56c0ac943 Mon Sep 17 00:00:00 2001
+From: xinyangli <lixinyang411@gmail.com>
+Date: Sun, 1 Sep 2024 16:39:29 +0800
+Subject: [PATCH 1/3] refactor:use gtest instead of libgtest.a, .so can be used
+ if provided
+
+---
+ .../iNO/external_libs/ino_test_external_libs.cmake    | 11 ++++++-----
+ .../iPL/external_libs/ipl_test_external_libs.cmake    |  7 ++++---
+ .../iTO/external_libs/ito_test_external_libs.cmake    | 11 ++++++-----
+ 3 files changed, 16 insertions(+), 13 deletions(-)
+
+diff --git a/src/operation/iNO/external_libs/ino_test_external_libs.cmake b/src/operation/iNO/external_libs/ino_test_external_libs.cmake
+index be5764cc..cc3460a6 100644
+--- a/src/operation/iNO/external_libs/ino_test_external_libs.cmake
++++ b/src/operation/iNO/external_libs/ino_test_external_libs.cmake
+@@ -1,8 +1,9 @@
+ add_library(ino_test_external_libs INTERFACE)
+ 
+-target_link_libraries(ino_test_external_libs 
++target_link_libraries(ino_test_external_libs
+     INTERFACE
+-        libgtest.a 
+-        libgtest_main.a 
+-        pthread 
+-)
+\ No newline at end of file
++        gtest
++        gtest_main
++        pthread
++)
++
+diff --git a/src/operation/iPL/external_libs/ipl_test_external_libs.cmake b/src/operation/iPL/external_libs/ipl_test_external_libs.cmake
+index 9accbee5..b763f91e 100644
+--- a/src/operation/iPL/external_libs/ipl_test_external_libs.cmake
++++ b/src/operation/iPL/external_libs/ipl_test_external_libs.cmake
+@@ -2,7 +2,8 @@ add_library(ipl-test_external_libs INTERFACE)
+ 
+ target_link_libraries(ipl-test_external_libs
+     INTERFACE
+-        libgtest.a
+-        libgtest_main.a
++        gtest
++        gtest_main
+         pthread
+-)
+\ No newline at end of file
++)
++
+diff --git a/src/operation/iTO/external_libs/ito_test_external_libs.cmake b/src/operation/iTO/external_libs/ito_test_external_libs.cmake
+index 9382d2e3..582e7abc 100644
+--- a/src/operation/iTO/external_libs/ito_test_external_libs.cmake
++++ b/src/operation/iTO/external_libs/ito_test_external_libs.cmake
+@@ -1,8 +1,9 @@
+ add_library(ito_test_external_libs INTERFACE)
+ 
+-target_link_libraries(ito_test_external_libs 
++target_link_libraries(ito_test_external_libs
+     INTERFACE
+-        libgtest.a 
+-        libgtest_main.a 
+-        pthread 
+-)
+\ No newline at end of file
++        gtest
++        gtest_main
++        pthread
++)
++
+-- 
+2.47.0
+
+
+From 56cd8a3c510b884cca7ef2bbc9e279feb57a3041 Mon Sep 17 00:00:00 2001
+From: xinyangli <lixinyang411@gmail.com>
+Date: Sun, 1 Sep 2024 16:44:07 +0800
+Subject: [PATCH 2/3] fix:missing headers in gcc 13
+
+---
+ src/database/basic/geometry/IdbGeometry.h                    | 1 +
+ src/database/basic/geometry/IdbLayerShape.h                  | 3 ++-
+ src/feature/database/feature_db.h                            | 1 +
+ .../iCTS/source/data_manager/database/CtsCellLib.hh          | 3 ++-
+ .../iCTS/source/data_manager/io/report/CtsReport.hh          | 3 ++-
+ src/operation/iCTS/source/solver/database/Net.hh             | 5 ++++-
+ src/operation/iFP/source/module/tap_cell/tapcell.h           | 4 +++-
+ src/operation/iPDN/source/module/pdn_plan/pdn_plan.h         | 4 ++--
+ src/operation/iPDN/source/module/pdn_via/pdn_via.h           | 3 ++-
+ .../iPL/source/module/detail_placer/database/DPNet.hh        | 3 ++-
+ .../iPL/source/module/detail_placer/database/DPPin.cc        | 4 +++-
+ src/operation/iRT/interface/RTInterface.hpp                  | 1 +
+ src/third_party/CMakeLists.txt                               | 2 +-
+ src/third_party/salt/refine/flip.cpp                         | 3 ++-
+ 14 files changed, 28 insertions(+), 12 deletions(-)
+
+diff --git a/src/database/basic/geometry/IdbGeometry.h b/src/database/basic/geometry/IdbGeometry.h
+index ec16907c..a8b8a360 100644
+--- a/src/database/basic/geometry/IdbGeometry.h
++++ b/src/database/basic/geometry/IdbGeometry.h
+@@ -34,6 +34,7 @@
+ ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ 
++#include <cstdint>
+ #include <iostream>
+ #include <string>
+ #include <vector>
+diff --git a/src/database/basic/geometry/IdbLayerShape.h b/src/database/basic/geometry/IdbLayerShape.h
+index 8c7ac435..35981708 100644
+--- a/src/database/basic/geometry/IdbLayerShape.h
++++ b/src/database/basic/geometry/IdbLayerShape.h
+@@ -31,6 +31,7 @@
+ ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ 
++#include <cstdint>
+ #include <iostream>
+ #include <string>
+ #include <vector>
+@@ -110,4 +111,4 @@ class IdbLayerShape
+   IdbLayer* _layer;
+   std::vector<IdbRect*> _rect_list;
+ };
+-}  // namespace idb
+\ No newline at end of file
++}  // namespace idb
+diff --git a/src/feature/database/feature_db.h b/src/feature/database/feature_db.h
+index 53ee71ca..71d8c3f3 100644
+--- a/src/feature/database/feature_db.h
++++ b/src/feature/database/feature_db.h
+@@ -31,6 +31,7 @@
+ ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ 
+ #include <cmath>
++#include <cstdint>
+ #include <iostream>
+ #include <string>
+ #include <vector>
+diff --git a/src/operation/iCTS/source/data_manager/database/CtsCellLib.hh b/src/operation/iCTS/source/data_manager/database/CtsCellLib.hh
+index 43699ff5..b103a702 100644
+--- a/src/operation/iCTS/source/data_manager/database/CtsCellLib.hh
++++ b/src/operation/iCTS/source/data_manager/database/CtsCellLib.hh
+@@ -26,6 +26,7 @@
+ #include <map>
+ #include <span>
+ #include <tuple>
++#include <unordered_map>
+ #include <vector>
+ 
+ #include "ModelFactory.hh"
+@@ -187,4 +188,4 @@ class CtsLibs
+   std::unordered_map<std::string, ModelBase*> _model_maps;
+ #endif
+ };
+-}  // namespace icts
+\ No newline at end of file
++}  // namespace icts
+diff --git a/src/operation/iCTS/source/data_manager/io/report/CtsReport.hh b/src/operation/iCTS/source/data_manager/io/report/CtsReport.hh
+index 8798e50e..b88df74c 100644
+--- a/src/operation/iCTS/source/data_manager/io/report/CtsReport.hh
++++ b/src/operation/iCTS/source/data_manager/io/report/CtsReport.hh
+@@ -23,6 +23,7 @@
+ #include <fstream>
+ #include <iostream>
+ #include <map>
++#include <memory>
+ #include <string>
+ #include <utility>
+ #include <vector>
+@@ -70,4 +71,4 @@ class CtsReportTable : public ieda::ReportTable
+   static std::unique_ptr<CtsReportTable> createReportTable(const std::string& tbl_name, const CtsReportType& type);
+ };
+ 
+-}  // namespace icts
+\ No newline at end of file
++}  // namespace icts
+diff --git a/src/operation/iCTS/source/solver/database/Net.hh b/src/operation/iCTS/source/solver/database/Net.hh
+index 85c1751b..5cbc0470 100644
+--- a/src/operation/iCTS/source/solver/database/Net.hh
++++ b/src/operation/iCTS/source/solver/database/Net.hh
+@@ -20,6 +20,9 @@
+  */
+ #pragma once
+ class Pin;
++#include <algorithm>
++#include <cstdint>
++
+ #include "CTSAPI.hh"
+ #include "Pin.hh"
+ 
+@@ -70,4 +73,4 @@ class Net
+   Pin* _driver_pin = nullptr;
+   std::vector<Pin*> _load_pins = {};
+ };
+-}  // namespace icts
+\ No newline at end of file
++}  // namespace icts
+diff --git a/src/operation/iFP/source/module/tap_cell/tapcell.h b/src/operation/iFP/source/module/tap_cell/tapcell.h
+index 4af86b51..e15ba4a3 100644
+--- a/src/operation/iFP/source/module/tap_cell/tapcell.h
++++ b/src/operation/iFP/source/module/tap_cell/tapcell.h
+@@ -16,6 +16,8 @@
+ // ***************************************************************************************
+ #pragma once
+ 
++#include <stdint.h>
++
+ #include <iostream>
+ #include <string>
+ #include <vector>
+@@ -58,4 +60,4 @@ class TapCellPlacer
+   int32_t getCellMasterWidthByOrient(idb::IdbCellMaster* cell_master, idb::IdbOrient orinet);
+ };
+ 
+-}  // namespace ifp
+\ No newline at end of file
++}  // namespace ifp
+diff --git a/src/operation/iPDN/source/module/pdn_plan/pdn_plan.h b/src/operation/iPDN/source/module/pdn_plan/pdn_plan.h
+index e46b5c34..82de562b 100644
+--- a/src/operation/iPDN/source/module/pdn_plan/pdn_plan.h
++++ b/src/operation/iPDN/source/module/pdn_plan/pdn_plan.h
+@@ -16,13 +16,13 @@
+ // ***************************************************************************************
+ #pragma once
+ 
++#include <cstdint>
+ #include <map>
+ #include <string>
+ #include <vector>
+ 
+ #include "ipdn_basic.h"
+ #include "pdn_cut_stripe.h"
+-
+ namespace idb {
+ class IdbLayer;
+ class IdbSpecialWireSegment;
+@@ -108,4 +108,4 @@ class PdnPlan
+                               std::vector<idb::IdbSpecialWireSegment*>& segment_list_bottom);
+ };
+ 
+-}  // namespace ipdn
+\ No newline at end of file
++}  // namespace ipdn
+diff --git a/src/operation/iPDN/source/module/pdn_via/pdn_via.h b/src/operation/iPDN/source/module/pdn_via/pdn_via.h
+index 837399ce..e0fe85bf 100644
+--- a/src/operation/iPDN/source/module/pdn_via/pdn_via.h
++++ b/src/operation/iPDN/source/module/pdn_via/pdn_via.h
+@@ -16,6 +16,7 @@
+ // ***************************************************************************************
+ #pragma once
+ 
++#include <cstdint>
+ #include <string>
+ #include <vector>
+ 
+@@ -64,4 +65,4 @@ class PdnVia
+   int32_t transUnitDB(double value);
+ };
+ 
+-}  // namespace ipdn
+\ No newline at end of file
++}  // namespace ipdn
+diff --git a/src/operation/iPL/source/module/detail_placer/database/DPNet.hh b/src/operation/iPL/source/module/detail_placer/database/DPNet.hh
+index f0013433..890111c5 100644
+--- a/src/operation/iPL/source/module/detail_placer/database/DPNet.hh
++++ b/src/operation/iPL/source/module/detail_placer/database/DPNet.hh
+@@ -27,6 +27,7 @@
+ #ifndef IPL_DPNET_H
+ #define IPL_DPNET_H
+ 
++#include <cstdint>
+ #include <string>
+ #include <vector>
+ 
+@@ -92,4 +93,4 @@ class DPNet
+   std::vector<DPPin*> _pins;
+ };
+ }  // namespace ipl
+-#endif
+\ No newline at end of file
++#endif
+diff --git a/src/operation/iPL/source/module/detail_placer/database/DPPin.cc b/src/operation/iPL/source/module/detail_placer/database/DPPin.cc
+index 93aea277..537b1282 100644
+--- a/src/operation/iPL/source/module/detail_placer/database/DPPin.cc
++++ b/src/operation/iPL/source/module/detail_placer/database/DPPin.cc
+@@ -16,6 +16,8 @@
+ // ***************************************************************************************
+ #include "DPPin.hh"
+ 
++#include <cstdint>
++
+ namespace ipl {
+ 
+ DPPin::DPPin(std::string name)
+@@ -35,4 +37,4 @@ DPPin::~DPPin()
+ {
+ }
+ 
+-}  // namespace ipl
+\ No newline at end of file
++}  // namespace ipl
+diff --git a/src/operation/iRT/interface/RTInterface.hpp b/src/operation/iRT/interface/RTInterface.hpp
+index 5a6c3c18..45a4952e 100644
+--- a/src/operation/iRT/interface/RTInterface.hpp
++++ b/src/operation/iRT/interface/RTInterface.hpp
+@@ -17,6 +17,7 @@
+ #pragma once
+ 
+ #include <any>
++#include <cstdint>
+ #include <map>
+ #include <set>
+ #include <string>
+diff --git a/src/third_party/CMakeLists.txt b/src/third_party/CMakeLists.txt
+index cb66c339..29f6b02d 100644
+--- a/src/third_party/CMakeLists.txt
++++ b/src/third_party/CMakeLists.txt
+@@ -12,4 +12,4 @@ add_subdirectory(yaml-cpp)
+ # add_subdirectory(mt-kahypar)
+ if(BUILD_GUI)
+ add_subdirectory(tcl_qt)
+-endif()
+\ No newline at end of file
++endif()
+diff --git a/src/third_party/salt/refine/flip.cpp b/src/third_party/salt/refine/flip.cpp
+index 5dad3766..73743f3c 100644
+--- a/src/third_party/salt/refine/flip.cpp
++++ b/src/third_party/salt/refine/flip.cpp
+@@ -3,6 +3,7 @@
+ #include "salt/base/eval.h"
+ 
+ #include <algorithm>
++#include <array>
+ 
+ namespace salt {
+ 
+@@ -197,4 +198,4 @@ void Refine::flip(Tree& tree) {
+     } while (cur.wireLength < pre.wireLength);
+ }
+ 
+-}  // namespace salt
+\ No newline at end of file
++}  // namespace salt
+-- 
+2.47.0
+
+
+From 55e689db3a9d2a51828806ab46ff655cc4c1193c Mon Sep 17 00:00:00 2001
+From: xinyangli <lixinyang411@gmail.com>
+Date: Sun, 1 Sep 2024 17:00:37 +0800
+Subject: [PATCH 3/3] fix:glog force size_t on sighandler from 0.6
+
+---
+ src/operation/iPL/source/module/logger/Log.cc | 5 +++--
+ src/utility/log/Log.cc                        | 3 ++-
+ 2 files changed, 5 insertions(+), 3 deletions(-)
+
+diff --git a/src/operation/iPL/source/module/logger/Log.cc b/src/operation/iPL/source/module/logger/Log.cc
+index c94d3907..2fc70b31 100644
+--- a/src/operation/iPL/source/module/logger/Log.cc
++++ b/src/operation/iPL/source/module/logger/Log.cc
+@@ -26,6 +26,7 @@
+ 
+ #include "Log.hh"
+ 
++#include <cstddef>
+ #include <filesystem>
+ #include <fstream>
+ #include <functional>
+@@ -40,7 +41,7 @@ namespace ipl {
+  * @param {int} size
+  * @return {*}
+  */
+-void SignalHandle(const char* data, int size)
++void SignalHandle(const char* data, std::size_t size)
+ {
+   std::ofstream fs("glog_dump.log", std::ios::app);
+   std::string str = std::string(data, size);
+@@ -101,4 +102,4 @@ void Log::makeSureDirectoryExist(std::string directory_path)
+   std::filesystem::create_directories(directory_path.c_str());
+ }
+ 
+-}  // namespace ipl
+\ No newline at end of file
++}  // namespace ipl
+diff --git a/src/utility/log/Log.cc b/src/utility/log/Log.cc
+index 42d43041..190566a3 100644
+--- a/src/utility/log/Log.cc
++++ b/src/utility/log/Log.cc
+@@ -24,6 +24,7 @@
+ 
+ #include "Log.hh"
+ 
++#include <cstddef>
+ #include <fstream>
+ #include <functional>
+ #include <iostream>
+@@ -39,7 +40,7 @@ namespace ieda {
+  * @param data
+  * @param size
+  */
+-void SignalHandle(const char* data, int size)
++void SignalHandle(const char* data, std::size_t size)
+ {
+   std::ofstream fs("glog_dump.log", std::ios::app);
+   std::string str = std::string(data, size);
+-- 
+2.47.0
+

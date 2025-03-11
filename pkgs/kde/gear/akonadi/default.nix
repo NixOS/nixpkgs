@@ -7,7 +7,17 @@
   shared-mime-info,
   xz,
   mariadb,
+  postgresql,
+  sqlite,
+  backend ? "mysql",
 }:
+
+assert lib.assertOneOf "backend" backend [
+  "mysql"
+  "postgres"
+  "sqlite"
+];
+
 mkKdeDerivation {
   pname = "akonadi";
 
@@ -16,24 +26,40 @@ mkKdeDerivation {
     ./ignore-mysql-config-timestamp.patch
   ];
 
-  extraCmakeFlags = [
-    "-DMYSQLD_SCRIPTS_PATH=${lib.getBin mariadb}/bin"
-  ];
+  extraCmakeFlags =
+    [ "-DDATABASE_BACKEND=${lib.toUpper backend}" ]
+    ++ lib.optionals (backend == "mysql") [
+      "-DMYSQLD_SCRIPTS_PATH=${lib.getBin mariadb}/bin"
+    ]
+    ++ lib.optionals (backend == "postgres") [
+      "-DPOSTGRES_PATH=${lib.getBin postgresql}/bin"
+    ];
 
   extraNativeBuildInputs = [
     qttools
     shared-mime-info
   ];
-  extraBuildInputs = [
-    kaccounts-integration
-    accounts-qt
-    xz
-    mariadb
-  ];
+
+  extraBuildInputs =
+    [
+      kaccounts-integration
+      accounts-qt
+      xz
+    ]
+    ++ lib.optionals (backend == "mysql") [ mariadb ]
+    ++ lib.optionals (backend == "postgres") [ postgresql ]
+    ++ lib.optionals (backend == "sqlite") [ sqlite ];
 
   # Hardcoded as a QString, which is UTF-16 so Nix can't pick it up automatically
-  postFixup = ''
-    mkdir -p $out/nix-support
-    echo "${mariadb}" > $out/nix-support/depends
-  '';
+
+  postFixup =
+    ''
+      mkdir -p $out/nix-support
+    ''
+    + lib.optionalString (backend == "mysql") ''
+      echo "${mariadb}" > $out/nix-support/depends
+    ''
+    + lib.optionalString (backend == "postgres") ''
+      echo "${postgresql}" > $out/nix-support/depends
+    '';
 }

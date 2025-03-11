@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fsspec";
     repo = pname;
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-N1NkpI8inGJCf0xuc+FFmVX85CS7vqzoNddxZ9kqEk0=";
   };
 

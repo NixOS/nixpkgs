@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "googlefonts";
     repo = "shaperglot";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-O6z7TJpC54QkqX5/G1HKSvaDYty7B9BnCQ4FpsLsEMs=";
   };
 

@@ -1,28 +1,29 @@
-{ lib
-, fetchFromGitHub
-, fetchYarnDeps
-, php
-, yarn
-, fixup-yarn-lock
-, nixosTests
+{
+  lib,
+  fetchFromGitHub,
+  fetchYarnDeps,
+  php,
+  yarn,
+  fixup-yarn-lock,
+  nixosTests,
 }:
 
-php.buildComposerProject (finalAttrs: {
+php.buildComposerProject2 (finalAttrs: {
   pname = "grocy";
-  version = "4.2.0";
+  version = "4.3.0";
 
   src = fetchFromGitHub {
     owner = "grocy";
     repo = "grocy";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-aX3DMy9Jv8rNp1/VIvUtNXYXGBrCgBMs5GsDf4XXSj0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-9Lc3NUZ7Huiyt887kCHL6lshow3+Pqrq8h1NV+CFHGs=";
   };
 
-  vendorHash = "sha256-KaYvA0Rd4pd1s/L8QbVUgkE+SjH+jv4+6RvIaGOpews=";
+  vendorHash = "sha256-0Hn9dp5ASF0R2L0HTeQ9nSSN7dZgk1a4mv+ZkNMm+k8=";
 
   offlineCache = fetchYarnDeps {
     yarnLock = finalAttrs.src + "/yarn.lock";
-    hash = "sha256-UvWY8+qSRvzJbm7z3CmLyeUHxemzNUB7dHYP95ZVtcI=";
+    hash = "sha256-l8uYMBMufbSHhxNxqqA0BqCLqUYubjIpgevaenzy5Ic=";
   };
 
   nativeBuildInputs = [
@@ -51,20 +52,17 @@ php.buildComposerProject (finalAttrs: {
     runHook postConfigure
   '';
 
-  installPhase = ''
-    runHook preInstall
-
+  postInstall = ''
+    chmod -R u+w $out/share
     mv $out/share/php/grocy/* $out
     rm -r $out/share
-
-    runHook postInstall
   '';
 
   passthru.tests = { inherit (nixosTests) grocy; };
 
   meta = with lib; {
     license = licenses.mit;
-    maintainers = with maintainers; [ n0emis ];
+    maintainers = with maintainers; [ ];
     description = "ERP beyond your fridge - grocy is a web-based self-hosted groceries & household management solution for your home";
     homepage = "https://grocy.info/";
   };

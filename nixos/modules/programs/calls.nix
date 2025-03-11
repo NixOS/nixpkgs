@@ -1,8 +1,14 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.programs.calls;
-in {
+in
+{
   options = {
     programs.calls = {
       enable = lib.mkEnableOption ''

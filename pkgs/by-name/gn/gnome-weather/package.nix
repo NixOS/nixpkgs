@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     # entry point to the wrapped binary we get back to a wrapped
     # binary.
     substituteInPlace "data/org.gnome.Weather.service.in" \
-        --replace-fail "Exec=@DATA_DIR@/@APP_ID@" "Exec=gnome-weather"
+        --replace-fail "Exec=@DATA_DIR@/@APP_ID@" "Exec=$out/bin/gnome-weather"
 
     chmod +x meson_post_install.py
     patchShebangs meson_post_install.py

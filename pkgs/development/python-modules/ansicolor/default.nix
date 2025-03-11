@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "numerodix";
     repo = "ansicolor";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-a/BAU42AfMR8C94GwmrLkvSvolFEjV0LbDypvS9UuOA=";
   };
 

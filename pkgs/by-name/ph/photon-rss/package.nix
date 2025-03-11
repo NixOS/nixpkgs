@@ -1,4 +1,9 @@
-{ buildGoModule, fetchFromSourcehut, lib, xorg }:
+{
+  buildGoModule,
+  fetchFromSourcehut,
+  lib,
+  xorg,
+}:
 
 buildGoModule rec {
   pname = "photon";

@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  apple-sdk_11,
   capnproto,
   extra-cmake-modules,
   fetchFromGitHub,
@@ -18,21 +17,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "turbo-unwrapped";
-  version = "2.3.0";
+  version = "2.4.2";
 
   src = fetchFromGitHub {
     owner = "vercel";
     repo = "turbo";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-R3fr52v5DAfl+Isk2AspDabQIx00IoIoFKbkTSSgvXA=";
+    tag = "v${version}";
+    hash = "sha256-wXQY9W15J7+Plv3IvB8XaZd+Hn0TP2qDOB36bPJwfpY=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "update-informer-1.1.0" = "sha256-pvt4f7tfefWin+DMql/zarN/q9gijpERF7l0CxcvX2s=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-L56ubw2tQ3y2KBbbnUdnS9xZzQNMDKdCzKC0n12yl6o=";
 
   nativeBuildInputs =
     [
@@ -49,7 +44,7 @@ rustPlatform.buildRustPackage rec {
     openssl
     rust-jemalloc-sys
     zlib
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin apple-sdk_11;
+  ];
 
   cargoBuildFlags = [
     "--package"
@@ -68,7 +63,7 @@ rustPlatform.buildRustPackage rec {
     updateScript = nix-update-script {
       extraArgs = [
         "--version-regex"
-        "'v(\d+\.\d+\.\d+)'"
+        "'v(\\d+\\.\\d+\\.\\d+)'"
       ];
     };
   };

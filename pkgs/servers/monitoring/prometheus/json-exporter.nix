@@ -1,17 +1,22 @@
-{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nixosTests,
+}:
 
 buildGoModule rec {
   pname = "prometheus-json-exporter";
-  version = "0.6.0";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "prometheus-community";
     repo = "json_exporter";
     rev = "v${version}";
-    sha256 = "sha256-5tFhk62ewRE87lxgVM2bytV9GbXT5iAwbJqklohYDvM=";
+    sha256 = "sha256-Zeq4gbwGd16MkGQRL8+bq0Ns06Yg+H9GAEo3qaMGDbc=";
   };
 
-  vendorHash = "sha256-Hij3lh92OCH+sTrzNl/KkjLAhPGffzzmxhPDO2wG0gA=";
+  vendorHash = "sha256-41JsxA3CfQjiwZw/2KP4Re4g3gmexadHuN0lUP5rjdo=";
 
   passthru.tests = { inherit (nixosTests.prometheus-exporters) json; };
 

@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, makeWrapper
-, gdk-pixbuf
-, libwebp
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  makeWrapper,
+  gdk-pixbuf,
+  libwebp,
 }:
 
 let
@@ -47,20 +48,22 @@ stdenv.mkDerivation rec {
       --replace "@bindir@/gdk-pixbuf-thumbnailer" "$out/libexec/gdk-pixbuf-thumbnailer-webp"
   '';
 
-  postInstall = ''
-    GDK_PIXBUF_MODULE_FILE="$out/${loadersPath}" \
-    GDK_PIXBUF_MODULEDIR="$out/${moduleDir}" \
-    gdk-pixbuf-query-loaders --update-cache
+  postInstall =
+    ''
+      GDK_PIXBUF_MODULE_FILE="$out/${loadersPath}" \
+      GDK_PIXBUF_MODULEDIR="$out/${moduleDir}" \
+      gdk-pixbuf-query-loaders --update-cache
 
-    # gdk-pixbuf disables the thumbnailer in cross-builds (https://gitlab.gnome.org/GNOME/gdk-pixbuf/-/commit/fc37708313a5fc52083cf10c9326f3509d67701f)
-    # and therefore makeWrapper will fail because 'gdk-pixbuf-thumbnailer' the executable does not exist.
-  '' + lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
-    # It assumes gdk-pixbuf-thumbnailer can find the webp loader in the loaders.cache referenced by environment variable, breaking containment.
-    # So we replace it with a wrapped executable.
-    mkdir -p "$out/bin"
-    makeWrapper "${gdk-pixbuf}/bin/gdk-pixbuf-thumbnailer" "$out/libexec/gdk-pixbuf-thumbnailer-webp" \
-      --set GDK_PIXBUF_MODULE_FILE "$out/${loadersPath}"
-  '';
+      # gdk-pixbuf disables the thumbnailer in cross-builds (https://gitlab.gnome.org/GNOME/gdk-pixbuf/-/commit/fc37708313a5fc52083cf10c9326f3509d67701f)
+      # and therefore makeWrapper will fail because 'gdk-pixbuf-thumbnailer' the executable does not exist.
+    ''
+    + lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
+      # It assumes gdk-pixbuf-thumbnailer can find the webp loader in the loaders.cache referenced by environment variable, breaking containment.
+      # So we replace it with a wrapped executable.
+      mkdir -p "$out/bin"
+      makeWrapper "${gdk-pixbuf}/bin/gdk-pixbuf-thumbnailer" "$out/libexec/gdk-pixbuf-thumbnailer-webp" \
+        --set GDK_PIXBUF_MODULE_FILE "$out/${loadersPath}"
+    '';
 
   meta = with lib; {
     description = "WebP GDK Pixbuf Loader library";

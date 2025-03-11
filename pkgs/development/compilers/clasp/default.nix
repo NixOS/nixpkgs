@@ -1,27 +1,28 @@
-{ lib
-, llvmPackages_15
-, fetchzip
-, sbcl
-, pkg-config
-, fmt_9
-, gmpxx
-, libelf
-, boost
-, libunwind
-, ninja
+{
+  lib,
+  llvmPackages_18,
+  fetchzip,
+  sbcl,
+  pkg-config,
+  fmt_9,
+  gmpxx,
+  libelf,
+  boost,
+  libunwind,
+  ninja,
 }:
 
 let
-  inherit (llvmPackages_15) stdenv llvm libclang;
+  inherit (llvmPackages_18) stdenv llvm libclang;
 in
 
 stdenv.mkDerivation rec {
   pname = "clasp";
-  version = "2.6.0";
+  version = "2.7.0";
 
   src = fetchzip {
     url = "https://github.com/clasp-developers/clasp/releases/download/${version}/clasp-${version}.tar.gz";
-    hash = "sha256-SiQ4RMha6dMV7V2fh+UxtAIgEEH/6/hF9fe+bPtoGIw=";
+    hash = "sha256-IoEwsMvY/bbb6K6git+7zRGP0DIJDROt69FBQuzApRk=";
   };
 
   patches = [
@@ -46,7 +47,10 @@ stdenv.mkDerivation rec {
     libclang
   ];
 
-  ninjaFlags = [ "-C" "build" ];
+  ninjaFlags = [
+    "-C"
+    "build"
+  ];
 
   configurePhase = ''
     export SOURCE_DATE_EPOCH=1
@@ -60,17 +64,24 @@ stdenv.mkDerivation rec {
       --package-path=/ \
       --bin-path=$out/bin \
       --lib-path=$out/lib \
-      --share-path=$out/share
+      --dylib-path=$out/lib \
+      --share-path=$out/share \
+      --pkgconfig-path=$out/lib/pkgconfig
+  '';
+
+  postInstall = ''
+    # --dylib-path not honored. Fix it in post.
+    mv $out/libclasp* $out/lib/
   '';
 
   meta = {
     description = "Common Lisp implementation based on LLVM with C++ integration";
-    license = lib.licenses.lgpl21Plus ;
+    license = lib.licenses.lgpl21Plus;
     maintainers = lib.teams.lisp.members;
-    platforms = ["x86_64-linux" "x86_64-darwin"];
-    # Upstream claims support, but breaks with:
-    # error: use of undeclared identifier 'aligned_alloc'
-    broken = stdenv.hostPlatform.isDarwin;
+    platforms = [
+      "x86_64-linux"
+      "x86_64-darwin"
+    ];
     homepage = "https://github.com/clasp-developers/clasp";
     mainProgram = "clasp";
   };

@@ -1,4 +1,8 @@
-{ lib, python3Packages, fetchPypi }:
+{
+  lib,
+  python3Packages,
+  fetchPypi,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "doitlive";
@@ -12,7 +16,11 @@ python3Packages.buildPythonApplication rec {
 
   nativeBuildInputs = with python3Packages; [ setuptools ];
 
-  propagatedBuildInputs = with python3Packages; [ click click-completion click-didyoumean ];
+  propagatedBuildInputs = with python3Packages; [
+    click
+    click-completion
+    click-didyoumean
+  ];
 
   # disable tests (too many failures)
   doCheck = false;

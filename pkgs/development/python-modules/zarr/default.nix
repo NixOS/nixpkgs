@@ -46,6 +46,9 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "zarr" ];
 
+  # FIXME remove once zarr's reverse dependencies support v3
+  passthru.skipBulkUpdate = true;
+
   meta = {
     description = "Implementation of chunked, compressed, N-dimensional arrays for Python";
     homepage = "https://github.com/zarr-developers/zarr";

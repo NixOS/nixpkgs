@@ -3,7 +3,6 @@
   fetchurl,
   lib,
   libbsd,
-  libelf,
   ncurses,
   postgresql,
   stdenv,
@@ -11,16 +10,15 @@
 
 stdenv.mkDerivation rec {
   pname = "pg_top";
-  version = "4.1.0";
+  version = "4.1.1";
 
   src = fetchurl {
     url = "https://pg_top.gitlab.io/source/pg_top-${version}.tar.xz";
-    sha256 = "sha256-WdSiQURJgtBCYoS/maImppcyM8wzUIJzLWmiSZPlx1Q=";
+    sha256 = "sha256-85LObBS9aAt7Ck5yiK0g2CAKxiYtnWp5XnTAUB5ui/k=";
   };
 
   buildInputs = [
     libbsd
-    libelf
     ncurses
     postgresql
   ];

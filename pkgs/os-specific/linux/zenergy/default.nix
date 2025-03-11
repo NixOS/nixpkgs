@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   kernel,
+  kernelModuleMakeFlags,
   kmod,
 }:
 
@@ -27,7 +28,7 @@ stdenv.mkDerivation {
     "pic"
   ];
 
-  makeFlags = kernel.makeFlags ++ [ "KDIR=${kernelDirectory}" ];
+  makeFlags = kernelModuleMakeFlags ++ [ "KDIR=${kernelDirectory}" ];
 
   installTargets = [ "modules_install" ];
 

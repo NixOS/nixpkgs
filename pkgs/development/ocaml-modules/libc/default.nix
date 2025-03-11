@@ -1,7 +1,8 @@
-{ lib
-, buildDunePackage
-, fetchurl
-, config
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  config,
 }:
 
 buildDunePackage rec {
@@ -23,4 +24,3 @@ buildDunePackage rec {
     license = lib.licenses.mit;
   };
 }
-

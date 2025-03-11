@@ -32,7 +32,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pgvector";
     repo = "pgvector-python";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-ho0UgamZxsN+pv7QkpsDnN7f+I+SrexA2gVtmJF8/3Q=";
   };
 

@@ -1,4 +1,9 @@
-{ lib, fetchFromGitHub, gerbilPackages, ... }:
+{
+  lib,
+  fetchFromGitHub,
+  gerbilPackages,
+  ...
+}:
 
 {
   pname = "gerbil-poo";
@@ -20,9 +25,9 @@
 
   meta = with lib; {
     description = "Gerbil POO: Prototype Object Orientation for Gerbil Scheme";
-    homepage    = "https://github.com/fare/gerbil-poo";
-    license     = licenses.asl20;
-    platforms   = platforms.unix;
+    homepage = "https://github.com/fare/gerbil-poo";
+    license = licenses.asl20;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ fare ];
   };
 }

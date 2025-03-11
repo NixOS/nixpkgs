@@ -1,6 +1,7 @@
-{ lib
-, stdenvNoCC
-, fetchzip
+{
+  lib,
+  stdenvNoCC,
+  fetchzip,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -30,7 +31,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     license = with lib.licenses; [
       unfreeRedistributable
     ];
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.all;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };

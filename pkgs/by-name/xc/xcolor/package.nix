@@ -1,5 +1,16 @@
-{ lib, rustPlatform, fetchFromGitHub, pkg-config, libX11, libXcursor
-, libxcb, python3, installShellFiles, makeDesktopItem, copyDesktopItems }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  libX11,
+  libXcursor,
+  libxcb,
+  python3,
+  installShellFiles,
+  makeDesktopItem,
+  copyDesktopItems,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "xcolor";
@@ -12,11 +23,21 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-NfmoBZek4hsga6RflE5EKkWarhCFIcTwEXhg2fpkxNE=";
   };
 
-  cargoHash = "sha256-Zh73+FJ63SkusSavCqSCLbHVnU++4ZFSMFUIM7TnOj0=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-8hx8c0LvzI2T/kONq29XzCbFGGMiO1J0XXxbzi+FSxM=";
 
-  nativeBuildInputs = [ pkg-config python3 installShellFiles copyDesktopItems ];
+  nativeBuildInputs = [
+    pkg-config
+    python3
+    installShellFiles
+    copyDesktopItems
+  ];
 
-  buildInputs = [ libX11 libXcursor libxcb ];
+  buildInputs = [
+    libX11
+    libXcursor
+    libxcb
+  ];
 
   desktopItems = [
     (makeDesktopItem {

@@ -9,6 +9,11 @@ stdenv.mkDerivation rec {
     sha256 = "129cs5bqw23i76h3nmc29c9mqkm9460iwc8vkl7hs4xr07h8mip9";
   };
 
+  patches = [
+    # add prototypes to fix gcc-14 implicit-function-declaration errors
+    ./missing-prototypes.diff
+  ];
+
   strictDeps = true;
   nativeBuildInputs = [ pkg-config intltool ];
   buildInputs = [ gtk2 ];

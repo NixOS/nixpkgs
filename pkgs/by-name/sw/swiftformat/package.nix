@@ -1,45 +1,52 @@
-{ stdenv, lib, fetchFromGitHub }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  swift,
+  swiftformat,
+  swiftpm,
+  testers,
+  versionCheckHook,
+  nix-update-script,
+}:
 
-# This derivation is impure: it relies on an Xcode toolchain being installed
-# and available in the expected place. The values of sandboxProfile and
-# hydraPlatforms are copied pretty directly from the MacVim derivation, which
-# is also impure.
-
-stdenv.mkDerivation rec {
+swift.stdenv.mkDerivation rec {
   pname = "swiftformat";
-  version = "0.47.10";
+  version = "0.55.5";
 
   src = fetchFromGitHub {
     owner = "nicklockwood";
     repo = "SwiftFormat";
     rev = version;
-    sha256 = "1gqxpymbhpmap0i2blg9akarlql4mkzv45l4i212gsxcs991b939";
+    sha256 = "sha256-AZAQSwmGNHN6ykh9ufeQLC1dEXvTt32X24MPTDh6bI8=";
   };
 
-  preConfigure = "LD=$CC";
-
-  buildPhase = ''
-    /usr/bin/xcodebuild -project SwiftFormat.xcodeproj \
-      -scheme "SwiftFormat (Command Line Tool)" \
-      CODE_SIGN_IDENTITY= SYMROOT=build OBJROOT=build
-  '';
+  nativeBuildInputs = [
+    swift
+    swiftpm
+  ];
 
   installPhase = ''
-    install -D -m 0555 build/Release/swiftformat $out/bin/swiftformat
+    install -D "$(swiftpmBinPath)/swiftformat" $out/bin/swiftformat
   '';
 
-  sandboxProfile = ''
-    (allow file-read* file-write* process-exec mach-lookup)
-    ; block homebrew dependencies
-    (deny file-read* file-write* process-exec mach-lookup (subpath "/usr/local") (with no-log))
-  '';
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
 
-  meta = with lib; {
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
+  meta = {
     description = "Code formatting and linting tool for Swift";
     homepage = "https://github.com/nicklockwood/SwiftFormat";
-    license = licenses.mit;
-    maintainers = [ maintainers.bdesham ];
-    platforms = platforms.darwin;
-    hydraPlatforms = [];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      bdesham
+      DimitarNestorov
+    ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

@@ -1,18 +1,29 @@
-{ lib, rel, buildKodiBinaryAddon, fetchFromGitHub, pkg-config, glm, libGL }:
+{
+  lib,
+  rel,
+  buildKodiBinaryAddon,
+  fetchFromGitHub,
+  pkg-config,
+  glm,
+  libGL,
+}:
 
 buildKodiBinaryAddon rec {
   pname = "visualization-waveform";
   namespace = "visualization.waveform";
-  version = "20.2.1";
+  version = "21.0.2";
 
   src = fetchFromGitHub {
     owner = "xbmc";
     repo = namespace;
     rev = "${version}-${rel}";
-    hash = "sha256-e1SIpMmfnS92X4f114MKch4o9Ke80aIzw6OQPrEb8d0=";
+    hash = "sha256-RiFPR0nlyrnHzHBosvU+obbdtHXjdgMtxscQTcQ7kLw=";
   };
 
-  extraBuildInputs = [ pkg-config libGL ];
+  extraBuildInputs = [
+    pkg-config
+    libGL
+  ];
 
   propagatedBuildInputs = [ glm ];
   meta = with lib; {

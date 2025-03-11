@@ -1,4 +1,5 @@
-import ./make-test-python.nix ({ lib, pkgs, ... }:
+import ./make-test-python.nix (
+  { lib, pkgs, ... }:
 
   let
     nodes = {
@@ -14,7 +15,10 @@ import ./make-test-python.nix ({ lib, pkgs, ... }:
     name = "alloy";
 
     meta = with lib.maintainers; {
-      maintainers = [ flokli hbjydev ];
+      maintainers = [
+        flokli
+        hbjydev
+      ];
     };
 
     inherit nodes;
@@ -29,4 +33,5 @@ import ./make-test-python.nix ({ lib, pkgs, ... }:
       )
       machine.shutdown()
     '';
-  })
+  }
+)

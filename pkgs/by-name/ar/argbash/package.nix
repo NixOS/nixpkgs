@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoconf
-, makeWrapper
-, python3Packages
-, runtimeShell
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoconf,
+  makeWrapper,
+  python3Packages,
+  runtimeShell,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -31,7 +32,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   makeFlags = [
-    "-C" "resources"
+    "-C"
+    "resources"
     "PREFIX=$(out)"
   ];
 
@@ -44,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://argbash.io/";
     description = "Bash argument parsing code generator";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.all;
   };
 })

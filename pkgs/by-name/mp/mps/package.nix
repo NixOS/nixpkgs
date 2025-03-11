@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, sqlite
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  sqlite,
 }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Ravenbrook";
     repo = "mps";
-    rev = "refs/tags/release-${version}";
+    tag = "release-${version}";
     hash = "sha256-3ql3jWLccgnQHKf23B1en+nJ9rxqmHcWd7aBr93YER0=";
   };
 
@@ -29,9 +30,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Flexible memory management and garbage collection library";
-    homepage    = "https://www.ravenbrook.com/project/mps";
-    license     = lib.licenses.sleepycat;
-    platforms   = lib.platforms.linux;
+    homepage = "https://www.ravenbrook.com/project/mps";
+    license = lib.licenses.sleepycat;
+    platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.thoughtpolice ];
   };
 }

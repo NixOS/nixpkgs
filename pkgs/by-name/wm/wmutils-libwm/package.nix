@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, libxcb }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libxcb,
+}:
 
 stdenv.mkDerivation rec {
   pname = "wmutils-libwm";

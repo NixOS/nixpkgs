@@ -1,4 +1,15 @@
-{ lib, stdenv, fetchurl, pidgin, telepathy-glib, python3, glib, dbus-glib, pkg-config, libxslt }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pidgin,
+  telepathy-glib,
+  python3,
+  glib,
+  dbus-glib,
+  pkg-config,
+  libxslt,
+}:
 
 stdenv.mkDerivation rec {
   pname = "telepathy-haze";
@@ -9,9 +20,18 @@ stdenv.mkDerivation rec {
     hash = "sha256-cEvvpC7sIXPspLrAH/0AQBRmXyutRtyJSOVCM2TN4wo=";
   };
 
-  buildInputs = [ glib telepathy-glib dbus-glib pidgin ];
+  buildInputs = [
+    glib
+    telepathy-glib
+    dbus-glib
+    pidgin
+  ];
 
-  nativeBuildInputs = [ pkg-config libxslt python3 ];
+  nativeBuildInputs = [
+    pkg-config
+    libxslt
+    python3
+  ];
 
   meta = {
     description = "Telepathy connection manager based on libpurple";

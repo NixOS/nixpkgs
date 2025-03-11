@@ -1,6 +1,7 @@
-{ octave
-, makeSetupHook
-, makeWrapper
+{
+  octave,
+  makeSetupHook,
+  makeWrapper,
 }:
 
 # Defined in trivial-builders

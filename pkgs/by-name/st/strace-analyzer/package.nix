@@ -1,8 +1,9 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, strace
-, stdenv
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  strace,
+  stdenv,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -16,7 +17,8 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-KbdQeZoWFz4D5txu/411J0HNnIAs3t5IvO30/34vBek=";
   };
 
-  cargoHash = "sha256-t1BFc5cNOQJIbufFH2hHI4f7SMrZ5mwVODXukdbHf3M=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-ZvbWJSe/jQEswcdFM/Akb6hW/0iqMNbtEyzcxsbemFQ=";
 
   nativeCheckInputs = [ strace ];
 

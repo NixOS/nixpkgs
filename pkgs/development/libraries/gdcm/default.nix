@@ -16,13 +16,13 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "gdcm";
+  pname = if enablePython then "python-gdcm" else "gdcm";
   version = "3.0.24";
 
   src = fetchFromGitHub {
     owner = "malaterre";
     repo = "GDCM";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Zlb6UCP4aFZOJJNhFQBBrwzst+f37gs1zaCBMTOUgZE=";
   };
 

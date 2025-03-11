@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, gettext
-, gtk3
-, gobject-introspection
-, libayatana-appindicator
-, polkit
-, mateUpdateScript
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gettext,
+  gtk3,
+  gobject-introspection,
+  libayatana-appindicator,
+  polkit,
+  mateUpdateScript,
 }:
 
 stdenv.mkDerivation rec {

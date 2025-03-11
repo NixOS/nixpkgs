@@ -1,11 +1,23 @@
-{ fetchurl, lib, stdenv, pkg-config, autoreconfHook, gettext, glib, buildPackages }:
-
+{
+  fetchurl,
+  lib,
+  stdenv,
+  pkg-config,
+  autoreconfHook,
+  gettext,
+  glib,
+  buildPackages,
+}:
 
 stdenv.mkDerivation rec {
   pname = "gts";
   version = "0.7.6";
 
-  outputs = [ "bin" "dev" "out" ];
+  outputs = [
+    "bin"
+    "dev"
+    "out"
+  ];
 
   src = fetchurl {
     url = "mirror://sourceforge/gts/${pname}-${version}.tar.gz";
@@ -15,7 +27,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkg-config
     autoreconfHook
-    glib  # required to satisfy AM_PATH_GLIB_2_0
+    glib # required to satisfy AM_PATH_GLIB_2_0
   ];
   buildInputs = [ gettext ];
   propagatedBuildInputs = [ glib ];

@@ -1,23 +1,27 @@
-{ lib, mkDerivation, fetchFromGitHub
-, libkiwix
-, pkg-config
-, qmake
-, qtbase
-, qtwebengine
-, qtsvg
-, qtimageformats
-, aria2
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  nix-update-script,
+  libkiwix,
+  pkg-config,
+  qmake,
+  qtbase,
+  qtwebengine,
+  qtsvg,
+  qtimageformats,
+  aria2,
 }:
 
-mkDerivation {
+mkDerivation rec {
   pname = "kiwix";
-  version = "2.3.1-unstable-2024-02-20";
+  version = "2.4.1";
 
   src = fetchFromGitHub {
     owner = "kiwix";
     repo = "kiwix-desktop";
-    rev = "17ac566b07814aefb1decf108e4ba6d7ad9ef7bc";
-    hash = "sha256-BZzFnQE8/dyZkpY0X3zZ6yC6yLZ002Q/RoDzEhSOa/g=";
+    rev = version;
+    hash = "sha256-B3RcYr/b8pZTJV35BWuqmWbq+C2WkkcwBR0oNaUXPRw=";
   };
 
   nativeBuildInputs = [
@@ -37,12 +41,14 @@ mkDerivation {
     "--prefix PATH : ${lib.makeBinPath [ aria2 ]}"
   ];
 
+  passthru.updateScript = nix-update-script { };
+
   meta = with lib; {
     description = "Offline reader for Web content";
     mainProgram = "kiwix-desktop";
     homepage = "https://kiwix.org";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = [ ];
+    maintainers = with maintainers; [ greg ];
   };
 }

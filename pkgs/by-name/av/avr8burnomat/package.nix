@@ -1,11 +1,19 @@
-{ lib, stdenv, fetchurl, unzip, runtimeShell }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
+  runtimeShell,
+}:
 
 stdenv.mkDerivation rec {
   pname = "avr8-burn-omat";
   version = "2.1.2";
 
   src = fetchurl {
-    url = "http://avr8-burn-o-mat.aaabbb.de/AVR8_Burn-O-Mat_${lib.replaceStrings ["."] ["_"] version}.zip";
+    url = "http://avr8-burn-o-mat.aaabbb.de/AVR8_Burn-O-Mat_${
+      lib.replaceStrings [ "." ] [ "_" ] version
+    }.zip";
     sha256 = "02k0fd0cd3y1yqip36wr3bkxbywp8913w4y7jdg6qwqxjnii58ln";
   };
 

@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
 
   cfgC = config.services.synergy.client;
@@ -92,27 +97,40 @@ in
 
   };
 
-
   ###### implementation
 
   config = lib.mkMerge [
     (lib.mkIf cfgC.enable {
       systemd.user.services.synergy-client = {
-        after = [ "network.target" "graphical-session.target" ];
+        after = [
+          "network.target"
+          "graphical-session.target"
+        ];
         description = "Synergy client";
         wantedBy = lib.optional cfgC.autoStart "graphical-session.target";
         path = [ pkgs.synergy ];
-        serviceConfig.ExecStart = ''${pkgs.synergy}/bin/synergyc -f ${lib.optionalString (cfgC.screenName != "") "-n ${cfgC.screenName}"} ${cfgC.serverAddress}'';
+        serviceConfig.ExecStart = ''${pkgs.synergy}/bin/synergyc -f ${
+          lib.optionalString (cfgC.screenName != "") "-n ${cfgC.screenName}"
+        } ${cfgC.serverAddress}'';
         serviceConfig.Restart = "on-failure";
       };
     })
     (lib.mkIf cfgS.enable {
       systemd.user.services.synergy-server = {
-        after = [ "network.target" "graphical-session.target" ];
+        after = [
+          "network.target"
+          "graphical-session.target"
+        ];
         description = "Synergy server";
         wantedBy = lib.optional cfgS.autoStart "graphical-session.target";
         path = [ pkgs.synergy ];
-        serviceConfig.ExecStart = ''${pkgs.synergy}/bin/synergys -c ${cfgS.configFile} -f${lib.optionalString (cfgS.address != "") " -a ${cfgS.address}"}${lib.optionalString (cfgS.screenName != "") " -n ${cfgS.screenName}"}${lib.optionalString cfgS.tls.enable " --enable-crypto"}${lib.optionalString (cfgS.tls.cert != null) (" --tls-cert ${cfgS.tls.cert}")}'';
+        serviceConfig.ExecStart = ''${pkgs.synergy}/bin/synergys -c ${cfgS.configFile} -f${
+          lib.optionalString (cfgS.address != "") " -a ${cfgS.address}"
+        }${
+          lib.optionalString (cfgS.screenName != "") " -n ${cfgS.screenName}"
+        }${lib.optionalString cfgS.tls.enable " --enable-crypto"}${
+          lib.optionalString (cfgS.tls.cert != null) (" --tls-cert ${cfgS.tls.cert}")
+        }'';
         serviceConfig.Restart = "on-failure";
       };
     })
@@ -120,27 +138,28 @@ in
 
 }
 
-/* SYNERGY SERVER example configuration file
-section: screens
-  laptop:
-  dm:
-  win:
-end
-section: aliases
+/*
+  SYNERGY SERVER example configuration file
+  section: screens
     laptop:
-      192.168.5.5
     dm:
-      192.168.5.78
     win:
-      192.168.5.54
-end
-section: links
-   laptop:
-       left = dm
-   dm:
-       right = laptop
-       left = win
-  win:
-      right = dm
-end
+  end
+  section: aliases
+      laptop:
+        192.168.5.5
+      dm:
+        192.168.5.78
+      win:
+        192.168.5.54
+  end
+  section: links
+     laptop:
+         left = dm
+     dm:
+         right = laptop
+         left = win
+    win:
+        right = dm
+  end
 */

@@ -1,4 +1,9 @@
-{ lib, stdenv, autoreconfHook, ghostscript }:
+{
+  lib,
+  stdenv,
+  autoreconfHook,
+  ghostscript,
+}:
 
 stdenv.mkDerivation {
   pname = "ijs";

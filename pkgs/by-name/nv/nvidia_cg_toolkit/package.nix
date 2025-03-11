@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchurl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 
 stdenv.mkDerivation rec {
   version = "3.1";
@@ -18,7 +22,8 @@ stdenv.mkDerivation rec {
         url = "http://developer.download.nvidia.com/cg/Cg_${version}/Cg-${version}_${date}_x86.tgz";
         sha256 = "cef3591e436f528852db0e8c145d3842f920e0c89bcfb219c466797cb7b18879";
       }
-    else throw "nvidia-cg-toolkit does not support platform ${stdenv.hostPlatform.system}";
+    else
+      throw "nvidia-cg-toolkit does not support platform ${stdenv.hostPlatform.system}";
 
   installPhase = ''
     for b in cgc cgfxcat cginfo

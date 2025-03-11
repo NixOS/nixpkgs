@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, rofi, gtk3 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  rofi,
+  gtk3,
+}:
 
 stdenv.mkDerivation rec {
   pname = "rofi-file-browser-extended";
@@ -12,14 +20,26 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
+  patches = [
+    ./fix_incompatible_pointer_type.patch
+    ./fix_build_on_i686.patch
+    ./fix_recent_glib_deprecation_warning.patch
+  ];
+
   prePatch = ''
     substituteInPlace ./CMakeLists.txt \
       --replace ' ''${ROFI_PLUGINS_DIR}' " $out/lib/rofi" \
       --replace "/usr/share/" "$out/share/"
   '';
 
-  nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ rofi gtk3 ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
+  buildInputs = [
+    rofi
+    gtk3
+  ];
 
   ROFI_PLUGINS_DIR = "$out/lib/rofi";
 
@@ -29,6 +49,9 @@ stdenv.mkDerivation rec {
     description = "Use rofi to quickly open files";
     homepage = "https://github.com/marvinkreis/rofi-file-browser-extended";
     license = licenses.mit;
-    maintainers = with maintainers; [ jluttine ];
+    maintainers = with maintainers; [
+      bew
+      jluttine
+    ];
   };
 }

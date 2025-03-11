@@ -1,0 +1,68 @@
+diff -Naur wol-0.7.1-orig/configure.ac wol-0.7.1/configure.ac
+--- wol-0.7.1-orig/configure.ac	2024-12-25 13:52:38.209314369 +0900
++++ wol-0.7.1/configure.ac	2024-12-25 14:49:28.351829162 +0900
+@@ -60,6 +60,14 @@
+ dnl check data types
+ AC_CHECK_SIZEOF(unsigned char, 1)
+ 
++
++dnl config.h.in defines defaults
++AC_DEFINE([HAVE_STRUCT_ETHER_ADDR], 0, [struct ether_addr])
++AC_DEFINE([HAVE_STRUCT_ETHER_ADDR_ETHER_ADDR_OCTET], 0, [struct ether_addr.ether_addr_octet])
++AC_DEFINE([HAVE_STRUCT_ETHER_ADDR_OCTET], 0, [struct ether_addr.octet])
++AC_DEFINE([HAVE_ETHER_HOSTTON], 0, [ether_hostton])
++
++
+ ether_includes=""
+ AC_CHECK_TYPE([struct ether_addr], , , [#include <netinet/ether.h>]) dnl Linux
+ if test "$ac_cv_type_struct_ether_addr" = "yes"; then
+@@ -241,13 +249,6 @@
+ dnl fi
+ 
+ 
+-dnl config.h.in defines
+-AC_DEFINE([HAVE_STRUCT_ETHER_ADDR], 0, [struct ether_addr])
+-AC_DEFINE([HAVE_STRUCT_ETHER_ADDR_ETHER_ADDR_OCTET], 0, [struct ether_addr.ether_addr_octet])
+-AC_DEFINE([HAVE_STRUCT_ETHER_ADDR_OCTET], 0, [struct ether_addr.octet])
+-AC_DEFINE([HAVE_ETHER_HOSTTON], 0, [ether_hostton])
+-
+-
+ dnl full featured warnings
+ CFLAGS="$CFLAGS -W -Wall -Wpointer-arith -Wimplicit-function-declaration"
+ 
+diff -Naur wol-0.7.1-orig/m4/getline.m4 wol-0.7.1/m4/getline.m4
+--- wol-0.7.1-orig/m4/getline.m4	2024-12-25 17:22:11.442627544 +0900
++++ wol-0.7.1/m4/getline.m4	2024-12-25 19:50:39.282552640 +0900
+@@ -27,7 +27,7 @@
+       if (!in)
+ 	return 1;
+       len = getline (&line, &siz, in);
+-      exit ((len == 4 && line && strcmp (line, "foo\n") == 0) ? 0 : 1);
++      return (len == 4 && line && strcmp (line, "foo\n") == 0) ? 0 : 1;
+     }
+     ], am_cv_func_working_getline=yes dnl The library version works.
+     , am_cv_func_working_getline=no dnl The library version does NOT work.
+diff -Naur wol-0.7.1-orig/m4/malloc.m4 wol-0.7.1/m4/malloc.m4
+--- wol-0.7.1-orig/m4/malloc.m4	2024-12-25 13:52:38.182314099 +0900
++++ wol-0.7.1/m4/malloc.m4	2024-12-25 14:31:34.627556193 +0900
+@@ -14,7 +14,7 @@
+ 
+  AC_CACHE_CHECK([for working malloc], jm_cv_func_working_malloc,
+   [AC_TRY_RUN([
+-    char *malloc ();
++    #include <stdlib.h>
+     int
+     main ()
+     {
+diff -Naur wol-0.7.1-orig/m4/realloc.m4 wol-0.7.1/m4/realloc.m4
+--- wol-0.7.1-orig/m4/realloc.m4	2024-12-25 13:52:38.185314129 +0900
++++ wol-0.7.1/m4/realloc.m4	2024-12-25 14:36:55.421560103 +0900
+@@ -14,7 +14,7 @@
+ 
+  AC_CACHE_CHECK([for working realloc], jm_cv_func_working_realloc,
+   [AC_TRY_RUN([
+-    char *realloc ();
++    #include <stdlib.h>
+     int
+     main ()
+     {

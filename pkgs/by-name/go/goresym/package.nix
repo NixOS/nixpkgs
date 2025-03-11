@@ -1,18 +1,19 @@
-{ lib
-, fetchFromGitHub
-, buildGoModule
-, unzip
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  unzip,
 }:
 
 buildGoModule rec {
   pname = "goresym";
-  version = "2.7.4";
+  version = "3.0.2";
 
   src = fetchFromGitHub {
     owner = "mandiant";
-    repo = pname;
+    repo = "goresym";
     rev = "v${version}";
-    sha256 = "sha256-qFDacInIiV1thuYMjyzTG7ru5bkd2Af1iao7Oes1mRg=";
+    hash = "sha256-tt13vHe6wE27kv+1HVXytY1hKmOt6rWJaMBgLRCvO2E=";
   };
 
   subPackages = [ "." ];

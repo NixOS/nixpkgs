@@ -21,8 +21,8 @@ vscode-utils.buildVscodeMarketplaceExtension rec {
   mktplcRef = {
     name = "python";
     publisher = "ms-python";
-    version = "2024.15.2024091301";
-    hash = "sha256-MB8Vq2rjO37yW3Zh+f8ek/yz0qT+ZYHn/JnF5ZA6CXQ=";
+    version = "2025.2.0";
+    hash = "sha256-f573A/7s8jVfH1f3ZYZSTftrfBs6iyMWewhorX4Z0Nc=";
   };
 
   buildInputs = [ icu ];
@@ -48,7 +48,7 @@ vscode-utils.buildVscodeMarketplaceExtension rec {
     + lib.optionalString pythonUseFixed ''
       # Patch `packages.json` so that nix's *python* is used as default value for `python.pythonPath`.
       substituteInPlace "./package.json" \
-        --replace "\"default\": \"python\"" "\"default\": \"${python3.interpreter}\""
+        --replace-fail "\"default\":\"python\"" "\"default\":\"${python3.interpreter}\""
     '';
 
   passthru.updateScript = writeScript "update" ''

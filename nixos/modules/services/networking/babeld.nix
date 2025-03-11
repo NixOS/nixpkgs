@@ -1,29 +1,41 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
 
   cfg = config.services.babeld;
 
-  conditionalBoolToString = value: if (lib.isBool value) then (lib.boolToString value) else (toString value);
+  conditionalBoolToString =
+    value: if (lib.isBool value) then (lib.boolToString value) else (toString value);
 
-  paramsString = params:
-    lib.concatMapStringsSep " " (name: "${name} ${conditionalBoolToString (lib.getAttr name params)}")
-                   (lib.attrNames params);
+  paramsString =
+    params:
+    lib.concatMapStringsSep " " (name: "${name} ${conditionalBoolToString (lib.getAttr name params)}") (
+      lib.attrNames params
+    );
 
-  interfaceConfig = name:
+  interfaceConfig =
+    name:
     let
       interface = lib.getAttr name cfg.interfaces;
     in
     "interface ${name} ${paramsString interface}\n";
 
-  configFile = with cfg; pkgs.writeText "babeld.conf" (
-    ''
-      skip-kernel-setup true
-    ''
-    + (lib.optionalString (cfg.interfaceDefaults != null) ''
-      default ${paramsString cfg.interfaceDefaults}
-    '')
-    + (lib.concatMapStrings interfaceConfig (lib.attrNames cfg.interfaces))
-    + extraConfig);
+  configFile =
+    with cfg;
+    pkgs.writeText "babeld.conf" (
+      ''
+        skip-kernel-setup true
+      ''
+      + (lib.optionalString (cfg.interfaceDefaults != null) ''
+        default ${paramsString cfg.interfaceDefaults}
+      '')
+      + (lib.concatMapStrings interfaceConfig (lib.attrNames cfg.interfaces))
+      + extraConfig
+    );
 
 in
 
@@ -46,27 +58,26 @@ in
           See {manpage}`babeld(8)` for options.
         '';
         type = lib.types.nullOr (lib.types.attrsOf lib.types.unspecified);
-        example =
-          {
-            type = "tunnel";
-            split-horizon = true;
-          };
+        example = {
+          type = "tunnel";
+          split-horizon = true;
+        };
       };
 
       interfaces = lib.mkOption {
-        default = {};
+        default = { };
         description = ''
           A set describing babeld interfaces.
           See {manpage}`babeld(8)` for options.
         '';
         type = lib.types.attrsOf (lib.types.attrsOf lib.types.unspecified);
-        example =
-          { enp0s2 =
-            { type = "wired";
-              hello-interval = 5;
-              split-horizon = "auto";
-            };
+        example = {
+          enp0s2 = {
+            type = "wired";
+            hello-interval = 5;
+            split-horizon = "auto";
           };
+        };
       };
 
       extraConfig = lib.mkOption {
@@ -81,17 +92,20 @@ in
 
   };
 
-
   ###### implementation
 
   config = lib.mkIf config.services.babeld.enable {
 
-    boot.kernel.sysctl = {
-      "net.ipv6.conf.all.forwarding" = 1;
-      "net.ipv6.conf.all.accept_redirects" = 0;
-      "net.ipv4.conf.all.forwarding" = 1;
-      "net.ipv4.conf.all.rp_filter" = 0;
-    } // lib.mapAttrs' (ifname: _: lib.nameValuePair "net.ipv4.conf.${ifname}.rp_filter" (lib.mkDefault 0)) config.services.babeld.interfaces;
+    boot.kernel.sysctl =
+      {
+        "net.ipv6.conf.all.forwarding" = 1;
+        "net.ipv6.conf.all.accept_redirects" = 0;
+        "net.ipv4.conf.all.forwarding" = 1;
+        "net.ipv4.conf.all.rp_filter" = 0;
+      }
+      // lib.mapAttrs' (
+        ifname: _: lib.nameValuePair "net.ipv4.conf.${ifname}.rp_filter" (lib.mkDefault 0)
+      ) config.services.babeld.interfaces;
 
     systemd.services.babeld = {
       description = "Babel routing daemon";
@@ -103,7 +117,12 @@ in
         CapabilityBoundingSet = [ "CAP_NET_ADMIN" ];
         DevicePolicy = "closed";
         DynamicUser = true;
-        IPAddressAllow = [ "fe80::/64" "ff00::/8" "::1/128" "127.0.0.0/8" ];
+        IPAddressAllow = [
+          "fe80::/64"
+          "ff00::/8"
+          "::1/128"
+          "127.0.0.0/8"
+        ];
         IPAddressDeny = "any";
         LockPersonality = true;
         NoNewPrivileges = true;
@@ -114,7 +133,11 @@ in
         ProtectKernelModules = true;
         ProtectKernelLogs = true;
         ProtectControlGroups = true;
-        RestrictAddressFamilies = [ "AF_NETLINK" "AF_INET6" "AF_INET" ];
+        RestrictAddressFamilies = [
+          "AF_NETLINK"
+          "AF_INET6"
+          "AF_INET"
+        ];
         RestrictNamespaces = true;
         RestrictRealtime = true;
         RestrictSUIDSGID = true;

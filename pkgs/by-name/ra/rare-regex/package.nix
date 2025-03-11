@@ -1,22 +1,23 @@
-{ lib
-, stdenv
-, buildGoModule
-, fetchFromGitHub
-, withPcre2 ? stdenv.hostPlatform.isLinux
-, pcre2
-, testers
-, rare-regex
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  withPcre2 ? stdenv.hostPlatform.isLinux,
+  pcre2,
+  testers,
+  rare-regex,
 }:
 
 buildGoModule rec {
   pname = "rare";
-  version = "0.3.4";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "zix99";
     repo = "rare";
     rev = version;
-    hash = "sha256-T27RBIrIXlhFBjzNgN6B49qgTHcek8MajXlbRC5DTMs=";
+    hash = "sha256-Sc8Ek1JfagqEDZ1Ci2UdqDkKZbQ6klH+uICML/ifO0Q=";
   };
 
   vendorHash = "sha256-wUOtxNjL/4MosACCzPTWKWrnMZhxINfN1ppkRsqDh9M=";

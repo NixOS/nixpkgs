@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, unzip
-, cmake
-, libtiff
-, expat
-, zlib
-, libpng
-, libjpeg
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  unzip,
+  cmake,
+  libtiff,
+  expat,
+  zlib,
+  libpng,
+  libjpeg,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -17,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "vxl";
     repo = "vxl";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-4kMpIrywEZzt0JH95LHeDLrDneii0R/Uw9GsWkvED+E=";
   };
 
@@ -34,7 +35,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # test failure on aarch64-linux; unknown reason:
-  cmakeFlags = lib.optionals stdenv.hostPlatform.isAarch64 [ "-DCMAKE_CTEST_ARGUMENTS='-E vgl_test_frustum_3d'" ];
+  cmakeFlags = lib.optionals stdenv.hostPlatform.isAarch64 [
+    "-DCMAKE_CTEST_ARGUMENTS='-E vgl_test_frustum_3d'"
+  ];
 
   doCheck = true;
 

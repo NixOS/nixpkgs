@@ -1,15 +1,16 @@
-{ lib
-, coreutils
-, stdenv
-, fetchFromGitLab
-, fetchpatch
-, getopt
-, libcap
-, gnused
-, nixosTests
-, testers
-, autoreconfHook
-, po4a
+{
+  lib,
+  coreutils,
+  stdenv,
+  fetchFromGitLab,
+  fetchpatch,
+  getopt,
+  libcap,
+  gnused,
+  nixosTests,
+  testers,
+  autoreconfHook,
+  po4a,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -36,7 +37,10 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  nativeBuildInputs = [ autoreconfHook po4a ];
+  nativeBuildInputs = [
+    autoreconfHook
+    po4a
+  ];
   buildInputs = lib.optional (!stdenv.hostPlatform.isDarwin) libcap;
 
   postUnpack = ''

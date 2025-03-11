@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pam, gnupg }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pam,
+  gnupg,
+}:
 
 stdenv.mkDerivation rec {
   pname = "pam_gnupg";
@@ -15,7 +22,10 @@ stdenv.mkDerivation rec {
     "--with-moduledir=${placeholder "out"}/lib/security"
   ];
 
-  buildInputs = [ pam gnupg ];
+  buildInputs = [
+    pam
+    gnupg
+  ];
 
   nativeBuildInputs = [ autoreconfHook ];
 

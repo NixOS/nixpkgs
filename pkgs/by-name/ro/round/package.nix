@@ -1,6 +1,7 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
@@ -20,9 +21,9 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Round image corners from CLI";
-    homepage    = "https://github.com/mingrammer/round";
-    license     = licenses.mit;
-    maintainers =  with maintainers; [ addict3d ];
+    homepage = "https://github.com/mingrammer/round";
+    license = licenses.mit;
+    maintainers = with maintainers; [ addict3d ];
     mainProgram = "round";
   };
 }

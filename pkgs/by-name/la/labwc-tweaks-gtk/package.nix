@@ -1,25 +1,26 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, gtk3
-, libxml2
-, xkeyboard_config
-, wrapGAppsHook3
-, unstableGitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  gtk3,
+  libxml2,
+  xkeyboard_config,
+  wrapGAppsHook3,
+  unstableGitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "labwc-tweaks-gtk";
-  version = "0-unstable-2024-11-25";
+  version = "0-unstable-2025-03-07";
 
   src = fetchFromGitHub {
     owner = "labwc";
     repo = "labwc-tweaks-gtk";
-    rev = "2613cd87e148b74d57dcda590b6de534fd86f4ac";
-    hash = "sha256-IBHQ47gCkX2pRfq39PmAas+JThdjU/WDqY3G69o7Tc4=";
+    rev = "24635c72d4da21df0b66fa23fb4a15686d257521";
+    hash = "sha256-rDmY4+xUBv6Vw150X/3rP5bhW8Dmd8zEAyt86/c1+ss=";
   };
 
   nativeBuildInputs = [

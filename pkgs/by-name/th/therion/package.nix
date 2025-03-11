@@ -1,29 +1,30 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, perl
-, tcl
-, tclPackages
-, tk
-, expat
-, python3
-, texliveTeTeX
-, survex
-, makeWrapper
-, fmt
-, proj
-, wxGTK32
-, vtk
-, freetype
-, libjpeg
-, gettext
-, libGL
-, libGLU
-, sqlite
-, libtiff
-, curl
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  perl,
+  tcl,
+  tclPackages,
+  tk,
+  expat,
+  python3,
+  texliveTeTeX,
+  survex,
+  makeWrapper,
+  fmt,
+  proj,
+  wxGTK32,
+  vtk,
+  freetype,
+  libjpeg,
+  gettext,
+  libGL,
+  libGLU,
+  sqlite,
+  libtiff,
+  curl,
 }:
 
 stdenv.mkDerivation rec {
@@ -79,7 +80,12 @@ stdenv.mkDerivation rec {
   fixupPhase = ''
     runHook preFixup
     wrapProgram $out/bin/therion \
-      --prefix PATH : ${lib.makeBinPath [ survex texliveTeTeX ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          survex
+          texliveTeTeX
+        ]
+      }
     wrapProgram $out/bin/xtherion \
       --prefix PATH : ${lib.makeBinPath [ tk ]}
     runHook postFixup

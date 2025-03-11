@@ -1,28 +1,30 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, meson
-, ninja
-, pkg-config
-, sassc
-, vala
-, wrapGAppsHook4
-, gtk4
-, libgee
-, pango
-, pantheon
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  meson,
+  ninja,
+  pkg-config,
+  sassc,
+  vala,
+  wrapGAppsHook4,
+  gnome-settings-daemon,
+  gtk4,
+  libgee,
+  pango,
+  pantheon,
 }:
 
 stdenv.mkDerivation rec {
   pname = "pantheon-tweaks";
-  version = "2.1.0";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "pantheon-tweaks";
     repo = pname;
     rev = version;
-    hash = "sha256-NrDBr7Wtfxf9UA/sbi9ilgrlxK6QGQAopuz3TV2ITjs=";
+    hash = "sha256-5RsNVUQ8FJmtdI7Z2le+qt9b13zHlQxiyTaUY15wSkw=";
   };
 
   nativeBuildInputs = [
@@ -34,21 +36,23 @@ stdenv.mkDerivation rec {
     wrapGAppsHook4
   ];
 
-  buildInputs = [
-    gtk4
-    libgee
-    pango
-  ] ++ (with pantheon; [
-    elementary-files # settings schemas
-    elementary-terminal # settings schemas
-    granite7
-    switchboard
-  ]);
+  buildInputs =
+    [
+      gnome-settings-daemon # org.gnome.settings-daemon.plugins.xsettings
+      gtk4
+      libgee
+      pango
+    ]
+    ++ (with pantheon; [
+      elementary-files # io.elementary.files.preferences
+      elementary-terminal # io.elementary.terminal.settings
+      granite7
+      switchboard
+    ]);
 
-  postPatch = ''
-    substituteInPlace src/Settings/ThemeSettings.vala \
-      --replace-fail "/usr/share/" "/run/current-system/sw/share/"
-  '';
+  mesonFlags = [
+    "-Dsystheme_rootdir=/run/current-system/sw/share"
+  ];
 
   passthru = {
     updateScript = nix-update-script { };

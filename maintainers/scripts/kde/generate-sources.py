@@ -1,16 +1,17 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i python3 -p "python3.withPackages(ps: [ ps.beautifulsoup4 ps.click ps.httpx ps.jinja2 ps.pyyaml ])"
+#!nix-shell -i python3 -p "python3.withPackages(ps: [ ps.beautifulsoup4 ps.click ps.httpx ps.jinja2 ps.packaging ps.pyyaml ])"
 import base64
 import binascii
 import json
 import pathlib
 from typing import Optional
-from urllib.parse import urlparse
+from urllib.parse import urljoin, urlparse
 
 import bs4
 import click
 import httpx
 import jinja2
+import packaging.version as v
 
 import utils
 
@@ -72,32 +73,48 @@ def main(set: str, version: str, nixpkgs: pathlib.Path, sources_url: Optional[st
 
     if sources_url is None:
         set_url = {
-            "frameworks": "kf",
-            "gear": "releases",
-            "plasma": "plasma",
+            "frameworks": f"frameworks/{version}/",
+            "gear": f"release-service/{version}/src/",
+            "plasma": f"plasma/{version}/",
         }[set]
-        sources_url = f"https://kde.org/info/sources/source-{set_url}-{version}/"
+        sources_url = f"https://download.kde.org/stable/{set_url}"
 
-    sources = httpx.get(sources_url)
+    client = httpx.Client()
+    sources = client.get(sources_url)
     sources.raise_for_status()
     bs = bs4.BeautifulSoup(sources.text, features="html.parser")
 
     results = {}
-    for item in bs.select("tr")[1:]:
-        link = item.select_one("td:nth-child(1) a")
-        assert link
+    for item in bs.select("tr")[3:]:
+        link = item.select_one("td:nth-child(2) a")
+        if not link:
+            continue
 
-        hash = item.select_one("td:nth-child(3) tt")
-        assert hash
+        project_name, version_and_ext = link.text.rsplit("-", maxsplit=1)
 
-        project_name, version = link.text.rsplit("-", maxsplit=1)
         if project_name not in metadata.projects_by_name:
             print(f"Warning: unknown tarball: {project_name}")
 
+        if version_and_ext.endswith(".sig"):
+            continue
+
+        version = version_and_ext.removesuffix(".tar.xz")
+
+        url = urljoin(sources_url, link.attrs["href"])
+
+        hash = client.get(url + ".sha256").text.split(" ", maxsplit=1)[0]
+        assert hash
+
+        if existing := results.get(project_name):
+            old_version = existing["version"]
+            if v.parse(old_version) > v.parse(version):
+                print(f"{project_name} {old_version} is newer than {version}, skipping...")
+                continue
+
         results[project_name] = {
             "version": version,
-            "url": "mirror://kde" + urlparse(link.attrs["href"]).path,
-            "hash": to_sri(hash.text)
+            "url": "mirror://kde" + urlparse(url).path,
+            "hash": to_sri(hash)
         }
 
         pkg_dir = set_dir / project_name

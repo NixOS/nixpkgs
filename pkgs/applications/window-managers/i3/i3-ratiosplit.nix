@@ -1,4 +1,8 @@
-{ lib, rustPlatform, fetchFromGitHub }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "i3-ratiosplit";
@@ -11,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     sha256 = "0yfmr5zk2c2il9d31yjjbr48sqgcq6hp4a99hl5mjm2ajyhy5bz3";
   };
 
-  cargoHash = "sha256-5rAg+vPlfx8eG1qkC6HQPIsgDI1PJ2on16dI0BJ7mow=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-no5fJ5nlwyS/PVi9J5Ek3c3Rp7A3MflpReo9kwJrj6U=";
 
   # Currently no tests are implemented, so we avoid building the package twice
   doCheck = false;

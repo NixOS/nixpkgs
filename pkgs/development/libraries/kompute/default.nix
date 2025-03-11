@@ -1,47 +1,54 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, vulkan-headers
-, vulkan-loader
-, fmt
-, glslang
-, ninja
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  vulkan-headers,
+  vulkan-loader,
+  fmt,
+  spdlog,
+  glslang,
+  ninja,
 }:
 
 stdenv.mkDerivation rec {
   pname = "kompute";
-  version = "0.8.1";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "KomputeProject";
     repo = "kompute";
     rev = "v${version}";
-    sha256 = "sha256-OkVGYh8QrD7JNqWFBLrDTYlk6IYHdvt4i7UtC4sQTzo=";
+    hash = "sha256-cf9Ef85R+VKao286+WHLgBWUqgwvuRocgeCzVJOGbdc=";
   };
 
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/KomputeProject/kompute/commit/9a791b161dd58ca927fe090f65fa2b0e5e85e7ca.diff";
-      sha256 = "OtFTN8sgPlyiMmVzUnqzCkVMKj6DWxbCXtYwkRdEprY=";
-    })
-    (fetchpatch {
-      name = "enum-class-fix-for-fmt-8-x.patch";
-      url = "https://github.com/KomputeProject/kompute/commit/f731f2e55c7aaaa804111106c3e469f9a642d4eb.patch";
-      sha256 = "sha256-scTCYqkgKQnH27xzuY4FVbiwRuwBvChmLPPU7ZUrrL0=";
-    })
-  ];
-
   cmakeFlags = [
+    "-DKOMPUTE_OPT_USE_SPDLOG=ON"
+    # Doesn’t work without the vendored `spdlog`, and is redundant.
+    "-DKOMPUTE_OPT_LOG_LEVEL_DISABLED=ON"
+    "-DKOMPUTE_OPT_USE_BUILT_IN_SPDLOG=OFF"
+    "-DKOMPUTE_OPT_USE_BUILT_IN_FMT=OFF"
+    "-DKOMPUTE_OPT_USE_BUILT_IN_GOOGLE_TEST=OFF"
+    "-DKOMPUTE_OPT_USE_BUILT_IN_PYBIND11=OFF"
+    "-DKOMPUTE_OPT_USE_BUILT_IN_VULKAN_HEADER=OFF"
+    "-DKOMPUTE_OPT_DISABLE_VULKAN_VERSION_CHECK=ON"
     "-DKOMPUTE_OPT_INSTALL=1"
-    "-DRELEASE=1"
-    "-DKOMPUTE_ENABLE_SPDLOG=1"
   ];
 
-  nativeBuildInputs = [ cmake ninja ];
-  buildInputs = [ fmt ];
-  propagatedBuildInputs = [ glslang vulkan-headers vulkan-loader ];
+  nativeBuildInputs = [
+    cmake
+    ninja
+  ];
+  buildInputs = [
+    fmt
+    spdlog
+  ];
+  propagatedBuildInputs = [
+    glslang
+    vulkan-headers
+    vulkan-loader
+  ];
 
   meta = with lib; {
     description = "General purpose GPU compute framework built on Vulkan";

@@ -1,22 +1,24 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, udev
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  udev,
 }:
 
-rustPlatform.buildRustPackage rec{
+rustPlatform.buildRustPackage rec {
   pname = "makima";
-  version = "0.9.4";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "cyber-sushi";
     repo = "makima";
     rev = "v${version}";
-    hash = "sha256-cmn86ocN8DwxS9WpcHxWMjuFPAMmM60Q6jmyeBmdrPg=";
+    hash = "sha256-kC0GJ1K7DMfkYxaYog5y1y0DMfFjZ7iD7pGQQE67N9o=";
   };
 
-  cargoHash = "sha256-/eM+clDZRlvfFa1eEwLo8CKEvnOq5CW19RNvbEbxVE8=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-d9MUH8cORFaxgAKV/Mgq3tiNuoAJ2YTcbgvwPTOIlkw=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ udev ];

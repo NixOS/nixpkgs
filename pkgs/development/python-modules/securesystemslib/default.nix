@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "securesystemslib";
-  version = "1.1.0";
+  version = "1.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -27,8 +27,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "secure-systems-lab";
     repo = "securesystemslib";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-PDivKunqQcGnER4eyWtGE5gvbqvhavXF7n/O2rTFTkI=";
+    tag = "v${version}";
+    hash = "sha256-HAYsmsW5GKLmfq9FVVsME+tE7Qg0jx9YIWw1UQWwV2c=";
   };
 
   build-system = [ hatchling ];

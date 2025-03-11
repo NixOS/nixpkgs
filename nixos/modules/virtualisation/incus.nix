@@ -9,6 +9,8 @@ let
   cfg = config.virtualisation.incus;
   preseedFormat = pkgs.formats.yaml { };
 
+  nvidiaEnabled = (lib.elem "nvidia" config.services.xserver.videoDrivers);
+
   serverBinPath = ''/run/wrappers/bin:${pkgs.qemu_kvm}/libexec:${
     lib.makeBinPath (
       with pkgs;
@@ -26,6 +28,7 @@ let
         e2fsprogs
         findutils
         getent
+        gawk
         gnugrep
         gnused
         gnutar
@@ -35,9 +38,9 @@ let
         iptables
         iw
         kmod
-        libnvidia-container
         libxfs
         lvm2
+        lxcfs
         minio
         minio-client
         nftables
@@ -72,6 +75,9 @@ let
         config.boot.zfs.package
         "${config.boot.zfs.package}/lib/udev"
       ]
+      ++ lib.optionals nvidiaEnabled [
+        libnvidia-container
+      ]
     )
   }'';
 
@@ -81,38 +87,47 @@ let
     fdSize2MB = true;
   };
   ovmf-prefix = if pkgs.stdenv.hostPlatform.isAarch64 then "AAVMF" else "OVMF";
-  ovmf = pkgs.linkFarm "incus-ovmf" [
-    # 2MB must remain the default or existing VMs will fail to boot. New VMs will prefer 4MB
-    {
-      name = "OVMF_CODE.fd";
-      path = "${OVMF2MB.fd}/FV/${ovmf-prefix}_CODE.fd";
-    }
-    {
-      name = "OVMF_VARS.fd";
-      path = "${OVMF2MB.fd}/FV/${ovmf-prefix}_VARS.fd";
-    }
-    {
-      name = "OVMF_VARS.ms.fd";
-      path = "${OVMF2MB.fd}/FV/${ovmf-prefix}_VARS.fd";
-    }
+  ovmf = pkgs.linkFarm "incus-ovmf" (
+    [
+      # 2MB must remain the default or existing VMs will fail to boot. New VMs will prefer 4MB
+      {
+        name = "OVMF_CODE.fd";
+        path = "${OVMF2MB.fd}/FV/${ovmf-prefix}_CODE.fd";
+      }
+      {
+        name = "OVMF_VARS.fd";
+        path = "${OVMF2MB.fd}/FV/${ovmf-prefix}_VARS.fd";
+      }
+      {
+        name = "OVMF_VARS.ms.fd";
+        path = "${OVMF2MB.fd}/FV/${ovmf-prefix}_VARS.fd";
+      }
 
-    {
-      name = "OVMF_CODE.4MB.fd";
-      path = "${pkgs.OVMFFull.fd}/FV/${ovmf-prefix}_CODE.fd";
-    }
-    {
-      name = "OVMF_VARS.4MB.fd";
-      path = "${pkgs.OVMFFull.fd}/FV/${ovmf-prefix}_VARS.fd";
-    }
-    {
-      name = "OVMF_VARS.4MB.ms.fd";
-      path = "${pkgs.OVMFFull.fd}/FV/${ovmf-prefix}_VARS.fd";
-    }
-  ];
+      {
+        name = "OVMF_CODE.4MB.fd";
+        path = "${pkgs.OVMFFull.fd}/FV/${ovmf-prefix}_CODE.fd";
+      }
+      {
+        name = "OVMF_VARS.4MB.fd";
+        path = "${pkgs.OVMFFull.fd}/FV/${ovmf-prefix}_VARS.fd";
+      }
+      {
+        name = "OVMF_VARS.4MB.ms.fd";
+        path = "${pkgs.OVMFFull.fd}/FV/${ovmf-prefix}_VARS.fd";
+      }
+    ]
+    ++ lib.optionals pkgs.stdenv.hostPlatform.isx86_64 [
+      {
+        name = "seabios.bin";
+        path = "${pkgs.seabios-qemu}/share/seabios/bios.bin";
+      }
+    ]
+  );
 
   environment = lib.mkMerge [
     {
       INCUS_EDK2_PATH = ovmf;
+      INCUS_LXC_HOOK = "${cfg.lxcPackage}/share/lxc/hooks";
       INCUS_LXC_TEMPLATE_CONFIG = "${pkgs.lxcfs}/share/lxc/config";
       INCUS_USBIDS_PATH = "${pkgs.hwdata}/share/hwdata/usb.ids";
       PATH = lib.mkForce serverBinPath;
@@ -255,12 +270,9 @@ in
       };
 
       ui = {
-        enable = lib.mkEnableOption "(experimental) Incus UI";
+        enable = lib.mkEnableOption "Incus Web UI";
 
-        package = lib.mkPackageOption pkgs [
-          "incus"
-          "ui"
-        ] { };
+        package = lib.mkPackageOption pkgs [ "incus-ui-canonical" ] { };
       };
     };
   };
@@ -299,7 +311,7 @@ in
       "xt_CHECKSUM"
       "xt_MASQUERADE"
       "vhost_vsock"
-    ] ++ lib.optionals (!config.networking.nftables.enable) [ "iptable_mangle" ];
+    ] ++ lib.optionals nvidiaEnabled [ "nvidia_uvm" ];
 
     environment.systemPackages = [
       cfg.clientPackage
@@ -393,6 +405,7 @@ in
         "incus.socket"
       ];
       requires = [ "incus.socket" ];
+      wantedBy = config.systemd.services.incus.wantedBy;
 
       serviceConfig = {
         ExecStart = "${incus-startup} start";

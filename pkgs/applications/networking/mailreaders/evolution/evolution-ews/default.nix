@@ -1,41 +1,41 @@
-{ stdenv
-, lib
-, fetchurl
-, gnome
-, cmake
-, gettext
-, intltool
-, pkg-config
-, evolution-data-server
-, evolution
-, gtk3
-, libsoup_3
-, libical
-, json-glib
-, libmspack
-, webkitgtk_4_1
-, substituteAll
-, _experimental-update-script-combinators
-, glib
-, makeHardcodeGsettingsPatch
+{
+  stdenv,
+  lib,
+  fetchurl,
+  gnome,
+  cmake,
+  gettext,
+  intltool,
+  pkg-config,
+  evolution-data-server,
+  evolution,
+  gtk3,
+  libsoup_3,
+  libical,
+  json-glib,
+  libmspack,
+  webkitgtk_4_1,
+  replaceVars,
+  _experimental-update-script-combinators,
+  glib,
+  makeHardcodeGsettingsPatch,
 }:
 
 stdenv.mkDerivation rec {
   pname = "evolution-ews";
-  version = "3.54.1";
+  version = "3.54.3.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    hash = "sha256-oeM9aED4GLdLv+iafb2jcpXdgUWn30JlrS2yQUU4kDo=";
+    hash = "sha256-GscHzyWRqERRJXViGkkwx2GyF028XsscihhSYpRqFPY=";
   };
 
   patches = [
-    # evolution-ews contains .so files loaded by evolution-data-server refering
+    # evolution-ews contains .so files loaded by evolution-data-server referring
     # schemas from evolution. evolution-data-server is not wrapped with
     # evolution's schemas because it would be a circular dependency with
     # evolution.
-    (substituteAll {
-      src = ./hardcode-gsettings.patch;
+    (replaceVars ./hardcode-gsettings.patch {
       evo = glib.makeSchemaPath evolution evolution.name;
     })
   ];

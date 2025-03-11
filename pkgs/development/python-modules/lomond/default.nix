@@ -12,7 +12,6 @@
   freezegun,
   pytest-mock,
   pytestCheckHook,
-  tornado_4,
 }:
 
 buildPythonPackage rec {
@@ -38,7 +37,7 @@ buildPythonPackage rec {
     freezegun
     pytest-mock
     pytestCheckHook
-  ] ++ lib.optionals (pythonOlder "3.10") [ tornado_4 ];
+  ];
 
   disabledTests =
     [
@@ -51,7 +50,7 @@ buildPythonPackage rec {
       "test_that_on_ping_responds_with_pong"
     ];
 
-  disabledTestPaths = lib.optionals (pythonAtLeast "3.10") [
+  disabledTestPaths = [
     # requires tornado_4, which is not compatible with python3.10
     "tests/test_integration.py"
   ];

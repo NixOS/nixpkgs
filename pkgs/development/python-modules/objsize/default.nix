@@ -10,16 +10,16 @@
 
 buildPythonPackage rec {
   pname = "objsize";
-  version = "0.7.0";
+  version = "0.7.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "liran-funaro";
     repo = "objsize";
-    rev = "refs/tags/${version}";
-    hash = "sha256-wy4Tj+Q+4zymRdoN8Z7wcazJTb2lQ+XHY1Kta02R3R0=";
+    tag = version;
+    hash = "sha256-l0l80dMVWZqWBK4z53NCU+rKOQl6jRZ1zb2SmMnhs1k=";
   };
 
   nativeBuildInputs = [

@@ -1,4 +1,8 @@
-{ lib, rustPlatform, fetchCrate }:
+{
+  lib,
+  rustPlatform,
+  fetchCrate,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-license";
@@ -9,13 +13,18 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-qwyWj0vPWQOZYib2ZZutX25a4wwnG1kFAiRCWqGyVms=";
   };
 
-  cargoHash = "sha256-ifw/n7eejUWUqhieDLojuO3xgosn28NnjAKkq/ZSLEI=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-6UMmYbLgMg+wLDsL63f5OvWbtHtDXo0mByz6OZp1lsw=";
 
   meta = with lib; {
     description = "Cargo subcommand to see license of dependencies";
     mainProgram = "cargo-license";
     homepage = "https://github.com/onur/cargo-license";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ basvandijk figsoda matthiasbeyer ];
+    maintainers = with maintainers; [
+      basvandijk
+      figsoda
+      matthiasbeyer
+    ];
   };
 }

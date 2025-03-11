@@ -1,11 +1,21 @@
 { lib }:
 let
 
-  evalTest = module: lib.evalModules {
-    modules = testModules ++ [ module ];
-    class = "nixosTest";
-  };
-  runTest = module: (evalTest ({ config, ... }: { imports = [ module ]; result = config.test; })).config.result;
+  evalTest =
+    module:
+    lib.evalModules {
+      modules = testModules ++ [ module ];
+      class = "nixosTest";
+    };
+  runTest =
+    module:
+    (evalTest (
+      { config, ... }:
+      {
+        imports = [ module ];
+        result = config.test;
+      }
+    )).config.result;
 
   testModules = [
     ./call-test.nix

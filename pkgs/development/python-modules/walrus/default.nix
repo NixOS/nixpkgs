@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "coleifer";
     repo = "walrus";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-cvoRiaGGTpZWfSE6DDT6GwDmc/TC/Z/E76Qy9Zzkpsw=";
   };
 

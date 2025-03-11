@@ -1,38 +1,39 @@
-{ alsa-lib
-, at-spi2-core
-, cmake
-, curl
-, dbus
-, libepoxy
-, fetchFromGitHub
-, libglut
-, freetype
-, gtk3
-, lib
-, libGL
-, libXcursor
-, libXdmcp
-, libXext
-, libXinerama
-, libXrandr
-, libXtst
-, libdatrie
-, libjack2
-, libpsl
-, libselinux
-, libsepol
-, libsysprof-capture
-, libthai
-, libuuid
-, libxkbcommon
-, lv2
-, pcre
-, pcre2
-, pkg-config
-, python3
-, sqlite
-, gcc11Stdenv
-, webkitgtk_4_0
+{
+  alsa-lib,
+  at-spi2-core,
+  cmake,
+  curl,
+  dbus,
+  libepoxy,
+  fetchFromGitHub,
+  libglut,
+  freetype,
+  gtk3,
+  lib,
+  libGL,
+  libXcursor,
+  libXdmcp,
+  libXext,
+  libXinerama,
+  libXrandr,
+  libXtst,
+  libdatrie,
+  libjack2,
+  libpsl,
+  libselinux,
+  libsepol,
+  libsysprof-capture,
+  libthai,
+  libuuid,
+  libxkbcommon,
+  lv2,
+  pcre,
+  pcre2,
+  pkg-config,
+  python3,
+  sqlite,
+  gcc11Stdenv,
+  webkitgtk_4_0,
 }:
 let
   # JUCE version in submodules is incompatible with GCC12
@@ -51,7 +52,10 @@ stdenv.mkDerivation (finalAttrs: {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ pkg-config cmake ];
+  nativeBuildInputs = [
+    pkg-config
+    cmake
+  ];
 
   buildInputs = [
     alsa-lib
@@ -109,18 +113,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   # JUCE dlopens these, make sure they are in rpath
   # Otherwise, segfault will happen
-  NIX_LDFLAGS = (toString [
-    "-lX11"
-    "-lXext"
-    "-lXcursor"
-    "-lXinerama"
-    "-lXrandr"
-  ]);
+  NIX_LDFLAGS = (
+    toString [
+      "-lX11"
+      "-lXext"
+      "-lXcursor"
+      "-lXinerama"
+      "-lXrandr"
+    ]
+  );
 
   meta = with lib; {
     homepage = "https://github.com/jatinchowdhury18/AnalogTapeModel";
-    description =
-      "Physical modelling signal processing for analog tape recording. LV2, VST3, CLAP, and standalone";
+    description = "Physical modelling signal processing for analog tape recording. LV2, VST3, CLAP, and standalone";
     license = with licenses; [ gpl3Only ];
     maintainers = with maintainers; [ magnetophon ];
     platforms = platforms.linux;

@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 
 stdenv.mkDerivation rec {
   pname = "pacparser";
@@ -11,22 +15,24 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-X842+xPjM404aQJTc2JwqU4vq8kgyKhpnqVu70pNLks=";
   };
 
-  makeFlags = [ "NO_INTERNET=1" ];
+  makeFlags = [
+    "NO_INTERNET=1"
+    "PREFIX=${placeholder "out"}"
+  ];
 
   preConfigure = ''
-    export makeFlags="$makeFlags PREFIX=$out"
     patchShebangs tests/runtests.sh
     cd src
   '';
 
   hardeningDisable = [ "format" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to parse proxy auto-config (PAC) files";
     homepage = "https://pacparser.manugarg.com/";
-    license = licenses.lgpl3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ abbradar ];
+    license = lib.licenses.lgpl3;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ abbradar ];
     mainProgram = "pactester";
   };
 }

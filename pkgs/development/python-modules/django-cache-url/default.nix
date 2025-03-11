@@ -1,32 +1,42 @@
 {
   lib,
   buildPythonPackage,
+  django,
   fetchFromGitHub,
+  pytest-cov-stub,
   pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
-  version = "3.2.2";
-  format = "setuptools";
   pname = "django-cache-url";
+  version = "3.4.5";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "epicserve";
     repo = "django-cache-url";
-    rev = "v${version}";
-    sha256 = "0fxma2w6zl3cfl6wnynmlmp8snks67ffz4jcq4qmdc65xv1l204l";
+    tag = "v${version}";
+    hash = "sha256-SjTcBYaFMD8XwIlqOgoJrc30FLrpX+M2ZcvZzA9ou6g=";
   };
 
-  postPatch = ''
-    # disable coverage tests
-    sed -i '/--cov/d' setup.cfg
-  '';
+  build-system = [ setuptools ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    django
+    pytest-cov-stub
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [ "django_cache_url" ];
 
   meta = with lib; {
-    homepage = "https://github.com/epicserve/django-cache-url";
     description = "Use Cache URLs in your Django application";
+    homepage = "https://github.com/epicserve/django-cache-url";
+    changelog = "https://github.com/epicserve/django-cache-url/blob/v${version}/CHANGELOG.rst";
     license = licenses.mit;
     maintainers = [ ];
   };

@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "yattag";
-  version = "1.16.0";
+  version = "1.16.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-CXgke5dU2fRONwPGQ3Srn6hy0Y3pWsV3L9/dPD8NBwY=";
+    hash = "sha256-uqjyVOfqXT4GGCga0v9WEODlNgs2COaVwpv7OynQUfQ=";
   };
 
   pythonImportsCheck = [ "yattag" ];

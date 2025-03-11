@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, rustPlatform
-, openssl
-, pkg-config
-, fetchFromGitHub
-, Security
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  openssl,
+  pkg-config,
+  fetchFromGitHub,
+  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -22,7 +23,8 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  cargoHash = "sha256-Z8ras6W4BnAWjHe6rPd1X1d3US5gq7CxnBAkW//OTsg=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-bJA+vqbhXeygIAg9HWom3xSuPpJgJY5FLb8UMBjrh7U=";
 
   meta = with lib; {
     description = "Simple command-line tool to send text and files to discord";

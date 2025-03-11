@@ -1,23 +1,25 @@
-{ lib
-, fetchFromGitHub
-, gitUpdater
-, icu
-, libkiwix
-, meson
-, ninja
-, pkg-config
-, stdenv
+{
+  lib,
+  docopt_cpp,
+  fetchFromGitHub,
+  gitUpdater,
+  icu,
+  libkiwix,
+  meson,
+  ninja,
+  pkg-config,
+  stdenv,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "kiwix-tools";
-  version = "3.7.0";
+  version = "3.7.0-unstable-2024-12-21";
 
   src = fetchFromGitHub {
     owner = "kiwix";
     repo = "kiwix-tools";
-    rev = finalAttrs.version;
-    hash = "sha256-JwF4EN5kyHEfNoMhHb9ywe+7pmgQtjEd2FeRUeTjvQw=";
+    rev = "43b00419dd3f33eb644e1d83c2e802fc200b2de7";
+    hash = "sha256-Rctb6ZPTXjgSrLRB5VK4CEqYHuEPB7a+SQaNi47cxv0=";
   };
 
   nativeBuildInputs = [
@@ -27,6 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    docopt_cpp
     icu
     libkiwix
   ];

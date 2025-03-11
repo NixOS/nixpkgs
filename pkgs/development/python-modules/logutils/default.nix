@@ -4,9 +4,10 @@
   buildPythonPackage,
   fetchPypi,
   pytestCheckHook,
+  pythonAtLeast,
   pythonOlder,
-  redis,
   redis-server,
+  redis,
   setuptools,
 }:
 
@@ -41,10 +42,14 @@ buildPythonPackage rec {
     "test_hashandlers"
   ];
 
-  disabledTestPaths = lib.optionals (stdenv.hostPlatform.isDarwin) [
-    # Exception: unable to connect to Redis server
-    "tests/test_redis.py"
-  ];
+  disabledTestPaths =
+    lib.optionals (stdenv.hostPlatform.isDarwin) [
+      # Exception: unable to connect to Redis server
+      "tests/test_redis.py"
+    ]
+    ++ lib.optionals (pythonAtLeast "3.13") [
+      "tests/test_dictconfig.py"
+    ];
 
   pythonImportsCheck = [ "logutils" ];
 

@@ -30,7 +30,22 @@ pythonPackages.buildPythonApplication rec {
     gst-plugins-base
     gst-plugins-good
     gst-plugins-ugly
-    gst-plugins-rs
+    # Required patches for the Spotify plugin (https://github.com/mopidy/mopidy-spotify/releases/tag/v5.0.0a3)
+    (gst-plugins-rs.overrideAttrs (
+      newAttrs: oldAttrs: {
+        cargoDeps = oldAttrs.cargoDeps.overrideAttrs (oldAttrs': {
+          vendorStaging = oldAttrs'.vendorStaging.overrideAttrs {
+            inherit (newAttrs) patches;
+            outputHash = "sha256-CegT8h+CJ6axipAD6E9drtrPJ9izRy/UCW14rbva5XA=";
+          };
+        });
+
+        # https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs/-/merge_requests/1801/
+        patches = oldAttrs.patches or [ ] ++ [
+          ./spotify-access-token-auth.patch
+        ];
+      }
+    ))
     pipewire
   ];
 

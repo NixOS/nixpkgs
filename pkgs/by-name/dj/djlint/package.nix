@@ -1,22 +1,23 @@
-{ lib
-, python3
-, fetchFromGitHub
+{
+  lib,
+  python3,
+  fetchFromGitHub,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "djlint";
-  version = "1.35.2";
+  version = "1.36.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Riverside-Healthcare";
     repo = "djlint";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-KdIK6SgOQiNc13Nzg6MI38BdkBdEClnMn1RcWvngP+A=";
+    tag = "v${version}";
+    hash = "sha256-1DXBDVe8Ae8joJOYwwlBZB8MVubDPVhh+TiJBpL2u2M=";
   };
 
   build-system = with python3.pkgs; [
-    poetry-core
+    hatchling
   ];
 
   pythonRelaxDeps = [
@@ -28,8 +29,6 @@ python3.pkgs.buildPythonApplication rec {
     click
     colorama
     cssbeautifier
-    html-tag-names
-    html-void-elements
     jsbeautifier
     json5
     pathspec
@@ -46,6 +45,7 @@ python3.pkgs.buildPythonApplication rec {
     mainProgram = "djlint";
     homepage = "https://github.com/Riverside-Healthcare/djlint";
     license = lib.licenses.gpl3Only;
+    changelog = "https://github.com/djlint/djLint/blob/v${version}/CHANGELOG.md";
     maintainers = with lib.maintainers; [ traxys ];
   };
 }

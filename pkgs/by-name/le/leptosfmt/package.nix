@@ -1,6 +1,7 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -15,14 +16,18 @@ rustPlatform.buildRustPackage rec {
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-zj81fXjDM648Y8mIb6QMmAh/ck9GGEypzuJIBWZ32r8=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-u0PtqWcQdt3vjoarqyiLZa8g5I+GWXPuHW6a/EtbB7o=";
 
   meta = with lib; {
     description = "Formatter for the leptos view! macro";
     mainProgram = "leptosfmt";
     homepage = "https://github.com/bram209/leptosfmt";
     changelog = "https://github.com/bram209/leptosfmt/blob/${src.rev}/CHANGELOG.md";
-    license = with licenses; [ asl20 mit ];
+    license = with licenses; [
+      asl20
+      mit
+    ];
     maintainers = with maintainers; [ figsoda ];
   };
 }

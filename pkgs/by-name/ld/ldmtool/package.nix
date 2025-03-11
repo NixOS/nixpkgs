@@ -1,6 +1,21 @@
-{ lib, stdenv, fetchFromGitHub, autoconf, automake, gtk-doc, pkg-config, libuuid,
-  libtool, readline, gobject-introspection, json-glib, lvm2, libxslt, docbook_xsl
-, fetchpatch }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoconf,
+  automake,
+  gtk-doc,
+  pkg-config,
+  libuuid,
+  libtool,
+  readline,
+  gobject-introspection,
+  json-glib,
+  lvm2,
+  libxslt,
+  docbook_xsl,
+  fetchpatch,
+}:
 
 stdenv.mkDerivation rec {
   pname = "ldmtool";
@@ -14,7 +29,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    # Remove useage of deprecrated G_PARAM_PRIVATE
+    # Remove usage of deprecrated G_PARAM_PRIVATE
     (fetchpatch {
       url = "https://github.com/mdbooth/libldm/commit/ee1b37a034038f09d61b121cc8b3651024acc46f.patch";
       sha256 = "02y34kbcpcpffvy1n9yqngvdldmxmvdkha1v2xjqvrnclanpigcp";
@@ -31,9 +46,20 @@ stdenv.mkDerivation rec {
 
   configureScript = "sh autogen.sh";
 
-  nativeBuildInputs = [ pkg-config autoconf automake gobject-introspection ];
-  buildInputs = [ gtk-doc lvm2 libxslt.bin
-    libtool readline json-glib libuuid
+  nativeBuildInputs = [
+    pkg-config
+    autoconf
+    automake
+    gobject-introspection
+  ];
+  buildInputs = [
+    gtk-doc
+    lvm2
+    libxslt.bin
+    libtool
+    readline
+    json-glib
+    libuuid
   ];
 
   meta = with lib; {

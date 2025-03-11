@@ -23,12 +23,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-PbEoM+AnZTuo9xtwcDcTH9FZAzPzfBhX41+zVVTdgRo=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "tun-0.6.1" = "sha256-tJx/qRwPcZOAfxyjZUHKLKsLu+loltVUOCP8IzWMryM=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-63AB63vmxXi6ugLCAOKI1eJcOB8XHWEiCc5yoIEqd+w=";
 
   nativeBuildInputs = [ versionCheckHook ];
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [

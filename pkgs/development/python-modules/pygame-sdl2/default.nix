@@ -1,68 +1,64 @@
 {
-  lib,
   buildPythonPackage,
-  fetchurl,
-  isPy27,
-  renpy,
   cython_0,
-  SDL2,
-  SDL2_image,
-  SDL2_ttf,
-  SDL2_mixer,
+  fetchFromGitHub,
+  lib,
   libjpeg,
   libpng,
+  nix-update-script,
+  SDL2,
+  SDL2_image,
+  SDL2_mixer,
+  SDL2_ttf,
   setuptools,
 }:
-let
-  pname = "pygame-sdl2";
-  version = "2.1.0";
-  renpy_version = renpy.base_version;
-in
 
-buildPythonPackage {
-  inherit pname version;
-  name = "${pname}-${version}-${renpy_version}";
+buildPythonPackage rec {
+  pname = "pygame-sdl2";
+  version = "8.3.1.24090601";
   pyproject = true;
 
-  src = fetchurl {
-    url = "https://www.renpy.org/dl/${renpy_version}/pygame_sdl2-${version}+renpy${renpy_version}.tar.gz";
-    hash = "sha256-bcTrdXWLTCnZQ/fP5crKIPoqJiyz+o6s0PzRChV7TQE=";
+  src = fetchFromGitHub {
+    owner = "renpy";
+    repo = "pygame_sdl2";
+    tag = "renpy-${version}";
+    hash = "sha256-0itOmDScM+4HmWTpjkln56pv+yXDPB1KIDbE6ub2Tls=";
   };
 
-  # force rebuild of headers needed for install
-  prePatch = ''
-    rm -rf gen gen3
-  '';
-
-  # Remove build tag which produces invaild version
-  postPatch = ''
-    sed -i '2d' setup.cfg
-  '';
-
-  nativeBuildInputs = [
-    SDL2.dev
+  build-system = [
     cython_0
+    SDL2
     setuptools
   ];
 
-  buildInputs = [
-    SDL2
-    SDL2_image
-    SDL2_ttf
-    SDL2_mixer
+  dependencies = [
     libjpeg
     libpng
+    SDL2
+    SDL2_image
+    SDL2_mixer
+    SDL2_ttf
   ];
 
-  doCheck = isPy27; # python3 tests are non-functional
+  doCheck = true;
+
+  preBuild = ''
+    substituteInPlace setup.py --replace-fail "2.1.0" "${version}"
+    substituteInPlace src/pygame_sdl2/version.py --replace-fail "2, 1, 0" "${
+      builtins.replaceStrings [ "." ] [ ", " ] version
+    }"
+  '';
+
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version-regex=renpy-(.*)" ]; };
 
   meta = {
-    description = "Reimplementation of parts of pygame API using SDL2";
+    description = "Reimplementation of the Pygame API using SDL2 and related libraries";
     homepage = "https://github.com/renpy/pygame_sdl2";
     license = with lib.licenses; [
       lgpl2
       zlib
     ];
+    platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ raskin ];
   };
 }

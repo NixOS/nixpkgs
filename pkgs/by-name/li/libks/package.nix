@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, pkg-config
-, libuuid
-, openssl
-, libossp_uuid
-, freeswitch
-, nix-update-script
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  pkg-config,
+  libuuid,
+  openssl,
+  libossp_uuid,
+  freeswitch,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
@@ -36,7 +37,8 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs = [ openssl ]
+  buildInputs =
+    [ openssl ]
     ++ lib.optional stdenv.hostPlatform.isLinux libuuid
     ++ lib.optional stdenv.hostPlatform.isDarwin libossp_uuid;
 

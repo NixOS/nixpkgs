@@ -1,4 +1,10 @@
-{ lib, stdenv, pkgs, fetchurl, wrapGAppsHook3 }:
+{
+  lib,
+  stdenv,
+  pkgs,
+  fetchurl,
+  wrapGAppsHook3,
+}:
 let
   libPathNative = { packages }: lib.makeLibraryPath packages;
 in
@@ -12,7 +18,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    wrapGAppsHook3 #to fully work with gnome also needs programs.dconf.enable = true in your configuration.nix
+    wrapGAppsHook3 # to fully work with gnome also needs programs.dconf.enable = true in your configuration.nix
   ];
 
   buildInputs = with pkgs; [
@@ -53,7 +59,7 @@ stdenv.mkDerivation rec {
     at-spi2-core
     libdbusmenu
     libdrm
-    mesa
+    libgbm
     xorg.libxshmfence
     libxkbcommon
   ];
@@ -92,7 +98,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/RocketChat/Rocket.Chat.Electron";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.mit;
-    maintainers = with maintainers; [ gbtb ];
+    maintainers = [ ];
     platforms = [ "x86_64-linux" ];
   };
 }

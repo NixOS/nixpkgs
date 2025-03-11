@@ -1,14 +1,20 @@
-{ lib, stdenv, fetchFromGitHub, zlib, util-linux }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  zlib,
+  util-linux,
+}:
 
 stdenv.mkDerivation rec {
   pname = "pigz";
   version = "2.8";
 
   src = fetchFromGitHub {
-      owner = "madler";
-      repo = pname;
-      rev = "refs/tags/v${version}";
-      sha256 = "sha256-PzdxyO4mCg2jE/oBk1MH+NUdWM95wIIIbncBg71BkmQ=";
+    owner = "madler";
+    repo = pname;
+    tag = "v${version}";
+    sha256 = "sha256-PzdxyO4mCg2jE/oBk1MH+NUdWM95wIIIbncBg71BkmQ=";
   };
 
   enableParallelBuilding = true;
@@ -34,6 +40,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.zlib.net/pigz/";
     description = "Parallel implementation of gzip for multi-core machines";
+    mainProgram = "pigz";
     maintainers = [ ];
     license = licenses.zlib;
     platforms = platforms.unix;

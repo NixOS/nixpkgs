@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   melpaBuild,
-  unstableGitUpdater,
 }:
 
 melpaBuild {
@@ -16,12 +15,10 @@ melpaBuild {
     hash = "sha256-pH4FQuAnYf8eNiwiLl+OOOxzdecrncay6TcHjNG16sk=";
   };
 
-  passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
-
   meta = {
     homepage = "https://emacswiki.org/emacs/Icicles";
     description = "Emacs library that enhances minibuffer completion";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

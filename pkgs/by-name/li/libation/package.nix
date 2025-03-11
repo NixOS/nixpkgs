@@ -12,13 +12,13 @@
 
 buildDotnetModule rec {
   pname = "libation";
-  version = "11.4.1";
+  version = "11.5.5";
 
   src = fetchFromGitHub {
     owner = "rmcrackan";
     repo = "Libation";
     rev = "v${version}";
-    hash = "sha256-0+SuJANPcF7TA5jVRb7MYG5u1mSw2Yk9bq4IWsGA6KU=";
+    hash = "sha256-FD3f2Cba1xN15BloyRQ/m/vDovhN8x0AlfeJk+LGVV4=";
   };
 
   sourceRoot = "${src.name}/Source";
@@ -26,7 +26,7 @@ buildDotnetModule rec {
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
   dotnet-runtime = dotnetCorePackages.runtime_8_0;
 
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
 
   dotnetFlags = [
     "-p:PublishReadyToRun=false"
@@ -56,7 +56,7 @@ buildDotnetModule rec {
         --replace-fail "/usr/bin/libation" "${meta.mainProgram}"
   '';
 
-  # wrap manually, because we need lower case excutables
+  # wrap manually, because we need lower case executables
   dontDotnetFixup = true;
 
   preFixup = ''

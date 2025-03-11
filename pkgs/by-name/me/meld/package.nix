@@ -1,33 +1,34 @@
-{ lib
-, stdenv
-, fetchurl
-, gettext
-, itstool
-, python3
-, meson
-, ninja
-, wrapGAppsHook3
-, libxml2
-, pkg-config
-, desktop-file-utils
-, gobject-introspection
-, gtk3
-, gtksourceview4
-, gnome
-, adwaita-icon-theme
-, gsettings-desktop-schemas
-, desktopToDarwinBundle
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gettext,
+  itstool,
+  python3,
+  meson,
+  ninja,
+  wrapGAppsHook3,
+  libxml2,
+  pkg-config,
+  desktop-file-utils,
+  gobject-introspection,
+  gtk3,
+  gtksourceview4,
+  gnome,
+  adwaita-icon-theme,
+  gsettings-desktop-schemas,
+  desktopToDarwinBundle,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "meld";
-  version = "3.22.2";
+  version = "3.22.3";
 
   format = "other";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-RqCnE/vNGxU7N3oeB1fIziVcmCJGdljqz72JsekjFu8=";
+    sha256 = "sha256-N/fynrH/D+xNiwiNVIPFVt4QifbQGP5tSBmTyvJJnYQ=";
   };
 
   nativeBuildInputs = [
@@ -71,7 +72,10 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://meld.app/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ jtojnar mimame ];
+    maintainers = with maintainers; [
+      jtojnar
+      mimame
+    ];
     mainProgram = "meld";
   };
 }

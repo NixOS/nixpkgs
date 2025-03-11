@@ -1,20 +1,47 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, libtool, curl
-, python3, munge, perl, pam, shadow, coreutils, dbus, libbpf
-, ncurses, libmysqlclient, lua, hwloc, numactl
-, readline, freeipmi, xorg, lz4, rdma-core, nixosTests
-, pmix
-, libjwt
-, libyaml
-, json_c
-, http-parser
-# enable internal X11 support via libssh2
-, enableX11 ? true
-, enableGtk2 ? false, gtk2
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  runCommand,
+  config,
+  pkg-config,
+  libtool,
+  curl,
+  python3,
+  munge,
+  perl,
+  pam,
+  shadow,
+  coreutils,
+  dbus,
+  libbpf,
+  ncurses,
+  libmysqlclient,
+  lua,
+  hwloc,
+  numactl,
+  readline,
+  freeipmi,
+  xorg,
+  lz4,
+  rdma-core,
+  nixosTests,
+  pmix,
+  libjwt,
+  libyaml,
+  json_c,
+  http-parser,
+  # enable internal X11 support via libssh2
+  enableX11 ? true,
+  enableGtk2 ? false,
+  gtk2,
+  enableNVML ? config.cudaSupport,
+  nvml,
 }:
 
 stdenv.mkDerivation rec {
   pname = "slurm";
-  version = "24.05.4.1";
+  version = "24.11.3.1";
 
   # N.B. We use github release tags instead of https://www.schedmd.com/downloads.php
   # because the latter does not keep older releases.
@@ -22,11 +49,14 @@ stdenv.mkDerivation rec {
     owner = "SchedMD";
     repo = "slurm";
     # The release tags use - instead of .
-    rev = "${pname}-${builtins.replaceStrings ["."] ["-"] version}";
-    hash = "sha256-sviXuRJOpuSoOMNjGPRe11qlphk0Y1/YV/Y5M+QkWys=";
+    rev = "${pname}-${builtins.replaceStrings [ "." ] [ "-" ] version}";
+    hash = "sha256-DdGCPNmLCp1SgsYPVr7Gr4yqBrV2Ot3nJsWpcuYty5U=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   patches = [
     # increase string length to allow for full
@@ -34,37 +64,70 @@ stdenv.mkDerivation rec {
     ./common-env-echo.patch
   ];
 
-  prePatch = ''
-    substituteInPlace src/common/env.c \
-        --replace "/bin/echo" "${coreutils}/bin/echo"
+  prePatch =
+    ''
+      substituteInPlace src/common/env.c \
+          --replace "/bin/echo" "${coreutils}/bin/echo"
 
-    # Autoconf does not support split packages for pmix (libs and headers).
-    # Fix the path to the pmix libraries, so dlopen can find it.
-    substituteInPlace src/plugins/mpi/pmix/mpi_pmix.c \
-        --replace 'xstrfmtcat(full_path, "%s/", PMIXP_LIBPATH)' \
-                  'xstrfmtcat(full_path, "${lib.getLib pmix}/lib/")'
+      # Autoconf does not support split packages for pmix (libs and headers).
+      # Fix the path to the pmix libraries, so dlopen can find it.
+      substituteInPlace src/plugins/mpi/pmix/mpi_pmix.c \
+          --replace 'xstrfmtcat(full_path, "%s/", PMIXP_LIBPATH)' \
+                    'xstrfmtcat(full_path, "${lib.getLib pmix}/lib/")'
 
-  '' + (lib.optionalString enableX11 ''
-    substituteInPlace src/common/x11_util.c \
-        --replace '"/usr/bin/xauth"' '"${xorg.xauth}/bin/xauth"'
-  '');
+    ''
+    + (lib.optionalString enableX11 ''
+      substituteInPlace src/common/x11_util.c \
+          --replace '"/usr/bin/xauth"' '"${xorg.xauth}/bin/xauth"'
+    '');
 
   # nixos test fails to start slurmd with 'undefined symbol: slurm_job_preempt_mode'
   # https://groups.google.com/forum/#!topic/slurm-devel/QHOajQ84_Es
   # this doesn't fix tests completely at least makes slurmd to launch
   hardeningDisable = [ "bindnow" ];
 
-  nativeBuildInputs = [ pkg-config libtool python3 perl ];
-  buildInputs = [
-    curl python3 munge pam
-    libmysqlclient ncurses lz4 rdma-core
-    lua hwloc numactl readline freeipmi shadow.su
-    pmix json_c libjwt libyaml dbus libbpf
-    http-parser
-  ] ++ lib.optionals enableX11 [ xorg.xauth ]
-  ++ lib.optionals enableGtk2 [ gtk2 ];
+  nativeBuildInputs = [
+    pkg-config
+    libtool
+    python3
+    perl
+  ];
+  buildInputs =
+    [
+      curl
+      python3
+      munge
+      pam
+      libmysqlclient
+      ncurses
+      lz4
+      rdma-core
+      lua
+      hwloc
+      numactl
+      readline
+      freeipmi
+      shadow.su
+      pmix
+      json_c
+      libjwt
+      libyaml
+      dbus
+      libbpf
+      http-parser
+    ]
+    ++ lib.optionals enableX11 [ xorg.xauth ]
+    ++ lib.optionals enableGtk2 [ gtk2 ]
+    ++ lib.optionals enableNVML [
+      (runCommand "collect-nvml" { } ''
+        mkdir $out
+        ln -s ${nvml.dev}/include $out/include
+        ln -s ${nvml.lib}/lib/stubs $out/lib
+      '')
+    ];
 
-  configureFlags = [
+  configureFlags =
+    [
       "--with-freeipmi=${freeipmi}"
       "--with-http-parser=${http-parser}"
       "--with-hwloc=${lib.getDev hwloc}"
@@ -78,9 +141,10 @@ stdenv.mkDerivation rec {
       "--with-pmix=${lib.getDev pmix}"
       "--with-bpf=${libbpf}"
       "--without-rpath" # Required for configure to pick up the right dlopen path
-    ] ++ (lib.optional enableGtk2  "--disable-gtktest")
-      ++ (lib.optional (!enableX11) "--disable-x11");
-
+    ]
+    ++ (lib.optional enableGtk2 "--disable-gtktest")
+    ++ (lib.optional (!enableX11) "--disable-x11")
+    ++ (lib.optional (enableNVML) "--with-nvml");
 
   preConfigure = ''
     patchShebangs ./doc/html/shtml2html.py
@@ -100,6 +164,9 @@ stdenv.mkDerivation rec {
     description = "Simple Linux Utility for Resource Management";
     platforms = platforms.linux;
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ jagajaga markuskowa ];
+    maintainers = with maintainers; [
+      jagajaga
+      markuskowa
+    ];
   };
 }

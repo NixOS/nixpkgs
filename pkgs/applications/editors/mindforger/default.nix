@@ -1,37 +1,68 @@
 { lib
 , stdenv
-, cmark-gfm
-, fetchurl
-, fetchpatch
+, cmake
+, curl
+, fetchFromGitHub
+, hunspell
+, pkg-config
 , qmake
 , qtbase
 , qtwebengine
 , wrapGAppsHook3
 , wrapQtAppsHook
 }:
-
-stdenv.mkDerivation rec {
-  pname = "mindforger";
-  version = "1.52.0";
-
-  src = fetchurl {
-    url = "https://github.com/dvorka/mindforger/releases/download/${version}/mindforger_${version}.tgz";
-    sha256 = "1pghsw8kwvjhg3jpmjs0n892h2l0pm0cs6ymi8b23fwk0kfj67rd";
+let
+  version = "2.0.0";
+  srcs = {
+    mindforger = fetchFromGitHub {
+      owner = "dvorka";
+      repo = "mindforger";
+      rev = version;
+      sha256 = "sha256-+8miV2xuQcaWGdWCEXPIg6EXjAHtgD9pX7Z8ZNhpMjA=";
+    };
+    cmark-gfm = fetchFromGitHub {
+      owner = "dvorka";
+      repo = "cmark";
+      rev = "4ca8688093228c599432a87d7bd945804c573d51";
+      sha256 = "sha256-0WiG8aot8mc0h1BKPgC924UKQrgunZvKKBy9bD7nhoQ=";
+    };
+    mindforger-repository = fetchFromGitHub {
+      owner = "dvorka";
+      repo = "mindforger-repository";
+      rev = "ec81a27e5de6408bbcd3f6d7733a7c6f3b52e433";
+      sha256 = "sha256-JGTP1He7G2Obmsav64Lf7BLHp8OTvPtg38VHsrEC36o=";
+    };
   };
+in stdenv.mkDerivation {
+  pname = "mindforger";
+  inherit version;
 
-  nativeBuildInputs = [ qmake wrapGAppsHook3 wrapQtAppsHook ];
-  buildInputs = [ qtbase qtwebengine cmark-gfm ];
+  src = srcs.mindforger;
+
+  nativeBuildInputs = [ cmake pkg-config qmake wrapGAppsHook3 wrapQtAppsHook ];
+  buildInputs = [ curl hunspell qtbase qtwebengine ];
+
+  # Disable the cmake hook (so we don't try to build MindForger with it), and
+  # build MindForger's internal fork of cmark-gfm ahead of MindForger itself.
+  #
+  # Moreover unpack the docs that are needed for the MacOS build.
+  postUnpack = ''
+    cp -TR ${srcs.cmark-gfm} $sourceRoot/deps/cmark-gfm
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    cp -TR ${srcs.mindforger-repository} $sourceRoot/doc
+  '';
+  dontUseCmakeConfigure = true;
+  preBuild = ''(
+      mkdir deps/cmark-gfm/build &&
+      cd deps/cmark-gfm/build &&
+      cmake -DCMARK_TESTS=OFF -DCMARK_SHARED=OFF .. &&
+      cmake --build . --parallel
+  )'';
 
   doCheck = true;
 
   patches = [
-    # this makes the package relocatable - removes hardcoded references to /usr
-    ./paths.patch
-    #  this fixes compilation with QtWebEngine - referencing a commit trying to upstream the change - see https://github.com/dvorka/mindforger/pull/1357
-    (fetchpatch {
-      url = "https://github.com/dvorka/mindforger/commit/d28e2bade0278af1b5249953202810540969026a.diff";
-      sha256 = "sha256-qHKQQNGSc3F9seaOHV0gzBQFFqcTXk91LpKrojjpAUw=";
-    })
+    ./hunspell_pkgconfig.patch
   ];
 
   postPatch = ''
@@ -62,7 +93,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://www.mindforger.com";
     license = licenses.gpl2Plus;
-    platforms = platforms.all;
+    platforms = [ "aarch64-linux" "x86_64-linux" ];
     maintainers = with maintainers; [ cyplo ];
     mainProgram = "mindforger";
   };

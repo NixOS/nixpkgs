@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "kontron";
     repo = "python-ipmi";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-vwjVUkTeVC1On1I1BtM0kBbne6CbX/6Os1+HA8WN9jU=";
   };
 

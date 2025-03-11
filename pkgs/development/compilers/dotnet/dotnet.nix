@@ -8,6 +8,7 @@
   bootstrapSdkFile,
   allowPrerelease ? false,
   depsFile,
+  fallbackTargetPackages,
   pkgsBuildHost,
   buildDotnetSdk,
 }:
@@ -25,6 +26,7 @@ let
       releaseManifestFile
       tarballHash
       depsFile
+      fallbackTargetPackages
       ;
     bootstrapSdk = (buildDotnetSdk bootstrapSdkFile).sdk.unwrapped.overrideAttrs (old: {
       passthru = old.passthru or { } // {

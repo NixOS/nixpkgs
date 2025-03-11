@@ -1,15 +1,25 @@
-{ lib, stdenv, fetchurl }:
+{
+  lib,
+  stdenv,
+  fetchzip,
+}:
 
 stdenv.mkDerivation rec {
   pname = "bdfresize";
   version = "1.5";
 
-  src = fetchurl {
+  src = fetchzip {
     url = "http://openlab.ring.gr.jp/efont/dist/tools/bdfresize/bdfresize-${version}.tar.gz";
-    hash = "sha256-RAz8BiCgI35GNSwUoHdMqj8wWXWbCiDe/vyU6EkIl6Y=";
+    hash = "sha256-C4ZLJIn6vVeVUCpNwMu0vdfQQ3qUz4EVIcPob9NejP0=";
   };
 
-  patches = [ ./remove-malloc-declaration.patch ];
+  patches = [
+    ./fix-configure.patch
+    ./remove-malloc-declaration.patch
+  ];
+
+  # Fix compilation of getopt; see getopt package for more details
+  env.NIX_CFLAGS_COMPILE = "-D__GNU_LIBRARY__";
 
   meta = with lib; {
     description = "Tool to resize BDF fonts";

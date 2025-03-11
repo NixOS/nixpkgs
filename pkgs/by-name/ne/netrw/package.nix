@@ -1,7 +1,10 @@
-{ lib, stdenv, fetchurl
-, checksumType ? "built-in"
-, libmhash ? null
-, openssl ? null
+{
+  lib,
+  stdenv,
+  fetchurl,
+  checksumType ? "built-in",
+  libmhash ? null,
+  openssl ? null,
 }:
 
 assert checksumType == "mhash" -> libmhash != null;
@@ -12,11 +15,15 @@ stdenv.mkDerivation rec {
   version = "1.3.2";
 
   configureFlags = [
+    # This is to add "#include" directives for stdlib.h, stdio.h and string.h.
+    "ac_cv_header_stdc=yes"
+
     "--with-checksum=${checksumType}"
   ];
 
-  buildInputs = lib.optional (checksumType == "mhash") libmhash
-             ++ lib.optional (checksumType == "openssl") openssl;
+  buildInputs =
+    lib.optional (checksumType == "mhash") libmhash
+    ++ lib.optional (checksumType == "openssl") openssl;
 
   src = fetchurl {
     urls = [

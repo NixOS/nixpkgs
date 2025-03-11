@@ -30,11 +30,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-maps";
-  version = "47.1";
+  version = "47.4";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-maps/${lib.versions.major finalAttrs.version}/gnome-maps-${finalAttrs.version}.tar.xz";
-    hash = "sha256-TwLtLo44GeWdptm0rIgA6GY1349GpHzyqv2ThsgwEwM=";
+    hash = "sha256-GMXicPtSLP08AD7AEJPgZesvK40bJ4Dfwnngv3dzXgs=";
   };
 
   doCheck = !stdenv.hostPlatform.isDarwin;
@@ -75,6 +75,16 @@ stdenv.mkDerivation (finalAttrs: {
       gjs = '${lib.getExe gjs}'
     ''}"
   ];
+
+  postPatch = ''
+    # The .service file isn't wrapped with the correct environment
+    # so misses GIR files when started. By re-pointing from the gjs
+    # entry point to the wrapped binary we get back to a wrapped
+    # binary.
+    substituteInPlace "data/org.gnome.Maps.service.in" \
+      --replace-fail "Exec=@pkgdatadir@/@app-id@" \
+                     "Exec=$out/bin/gnome-maps"
+  '';
 
   preCheck = ''
     # “time.js” included by “timeTest” and “translationsTest” depends on “org.gnome.desktop.interface” schema.

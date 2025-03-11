@@ -1,9 +1,10 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, makeWrapper
-, rpm
-, xz
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  makeWrapper,
+  rpm,
+  xz,
 }:
 
 buildGoModule rec {
@@ -36,7 +37,12 @@ buildGoModule rec {
 
   postInstall = ''
     wrapProgram $out/bin/clair \
-      --prefix PATH : "${lib.makeBinPath [ rpm xz ]}"
+      --prefix PATH : "${
+        lib.makeBinPath [
+          rpm
+          xz
+        ]
+      }"
   '';
 
   meta = with lib; {

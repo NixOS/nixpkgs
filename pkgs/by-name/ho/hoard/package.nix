@@ -1,10 +1,11 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, openssl
-, stdenv
-, darwin
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  openssl,
+  stdenv,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -18,22 +19,28 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-c9iSbxkHwLOeATkO7kzTyLD0VAwZUzCvw5c4FyuR5/E=";
   };
 
-  cargoHash = "sha256-4EeeD1ySR4M1i2aaKJP/BNSn+t1l8ingiv2ZImFFn1A=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-+XZL0a7/9Ic6cmym3ctwmGMu4xjGPCA2E7OrBj7Bfvw=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [
-    openssl
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-  ];
+  buildInputs =
+    [
+      openssl
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.Security
+    ];
 
   meta = with lib; {
     description = "CLI command organizer written in rust";
     homepage = "https://github.com/hyde46/hoard";
     changelog = "https://github.com/Hyde46/hoard/blob/${src.rev}/CHANGES.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ builditluc figsoda ];
+    maintainers = with maintainers; [
+      builditluc
+      figsoda
+    ];
     mainProgram = "hoard";
   };
 }

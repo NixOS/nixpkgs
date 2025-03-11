@@ -1,12 +1,21 @@
-{ lib, stdenv, fetchurl, nixosTests, jre_headless, makeWrapper }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  nixosTests,
+  jre_headless,
+  makeWrapper,
+}:
 
 stdenv.mkDerivation rec {
   pname = "purpur";
-  version = "1.19.2r1763";
+  version = "1.21.3r2358";
 
   src = fetchurl {
-    url = "https://api.purpurmc.org/v2/purpur/${builtins.replaceStrings [ "r" ] [ "/" ] version}/download";
-    sha256 = "sha256-6wcCwVIGV32YQlgB57qthy6uWtuXGN4G8S7uAAgVyDE=";
+    url = "https://api.purpurmc.org/v2/purpur/${
+      builtins.replaceStrings [ "r" ] [ "/" ] version
+    }/download";
+    sha256 = "sha256-RFrP7q1jgKUztF518HA6Jmj1qXa51l1HegMH1wMr5W4=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

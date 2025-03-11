@@ -1,4 +1,8 @@
-{lib, stdenv, fetchurl}:
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "gt5";
@@ -13,9 +17,9 @@ stdenv.mkDerivation rec {
     sed 's/-o root -g root//' -i Makefile
   '';
 
-  preConfigure = ''
-    makeFlags="$makeFlags PREFIX=$out"
-  '';
+  makeFlags = [
+    "PREFIX=${placeholder "out"}"
+  ];
 
   meta = {
     description = "Diff-capable 'du' browser";

@@ -62,29 +62,33 @@ self: super: {
   # already made the relevant changes.
   aeson = doDistribute self.aeson_2_2_3_0;
   attoparsec-aeson = doDistribute self.attoparsec-aeson_2_2_2_0;
-  auto-update = super.auto-update_0_2_1;
+  auto-update = doDistribute self.auto-update_0_2_6;
+  dependent-sum-template = doJailbreak self.dependent-sum-template_0_2_0_1; # template-haskell < 2.22
   extensions = doDistribute self.extensions_0_1_0_2;
   fourmolu = doDistribute self.fourmolu_0_16_2_0;
   hashable = doDistribute self.hashable_1_4_7_0;
   integer-conversion = doDistribute self.integer-conversion_0_1_1;
-  ghc-lib-parser = doDistribute self.ghc-lib-parser_9_10_1_20240511;
+  ghc-lib = doDistribute self.ghc-lib_9_10_1_20241103;
+  ghc-lib-parser = doDistribute self.ghc-lib-parser_9_10_1_20241103;
   ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_10_0_0;
-  http2 = self.http2_5_3_4;
+  http2 = doDistribute self.http2_5_3_9;
+  http-semantics = doDistribute self.http-semantics_0_3_0;
+  htree = doDistribute self.htree_0_2_0_0;
   lens = doDistribute self.lens_5_3_2;
   lukko = doDistribute self.lukko_0_1_2;
   network-control = super.network-control_0_1_3;
   network-run = super.network-run_0_4_0;
   ormolu = doDistribute self.ormolu_0_7_7_0;
-  primitive = doDistribute (dontCheck self.primitive_0_9_0_0); # tests introduce a recursive dependency via hspec
-  quickcheck-instances = doDistribute self.quickcheck-instances_0_3_31;
+  primitive = doDistribute self.primitive_0_9_0_0;
+  quickcheck-instances = doDistribute self.quickcheck-instances_0_3_32;
   rebase = doDistribute self.rebase_1_21_1;
   rerebase = doDistribute self.rerebase_1_21_1;
   scientific = doDistribute self.scientific_0_3_8_0;
   semirings = doDistribute self.semirings_0_7;
-  time-manager = super.time-manager_0_1_0;
-  th-abstraction = doDistribute self.th-abstraction_0_7_0_0;
+  time-manager = doDistribute self.time-manager_0_2_2;
+  th-abstraction = doDistribute self.th-abstraction_0_7_1_0;
   uuid-types = doDistribute self.uuid-types_1_0_6;
-  warp = pkgs.haskell.lib.dontCheck super.warp_3_4_3; # test suite assumes it can freely call curl
+  warp = pkgs.haskell.lib.dontCheck super.warp_3_4_7; # test suite assumes it can freely call curl
 
   # A given major version of ghc-exactprint only supports one version of GHC.
   ghc-exactprint = doDistribute self.ghc-exactprint_1_9_0_0;
@@ -120,7 +124,7 @@ self: super: {
   #
   # Test suite issues
   #
-  call-stack = dontCheck super.call-stack; # expects the package to be named "main", but we generate a name
+  call-stack = dontCheck super.call-stack; # https://github.com/sol/call-stack/issues/19
   lifted-base = dontCheck super.lifted-base; # doesn't compile with transformers ==0.6.*
   lukko_0_1_2 = dontCheck super.lukko_0_1_2; # doesn't compile with tasty ==1.4.*
   resolv = dontCheck super.resolv; # doesn't compile with filepath ==1.5.*

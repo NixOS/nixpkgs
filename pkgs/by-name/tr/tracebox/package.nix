@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, libpcap
-, lua5_1
-, json_c
-, testers
-, tracebox
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  libpcap,
+  lua5_1,
+  json_c,
+  testers,
+  tracebox,
 }:
 stdenv.mkDerivation rec {
   pname = "tracebox";

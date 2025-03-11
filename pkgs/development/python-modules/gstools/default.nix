@@ -2,37 +2,43 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
-  setuptools-scm,
-  numpy,
+
+  # build-system
   cython,
   extension-helpers,
+  numpy,
+  setuptools,
+  setuptools-scm,
+
+  # dependencies
   hankel,
   emcee,
   meshio,
   pyevtk,
   scipy,
+
+  # tests
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "gstools";
-  version = "1.6.0";
+  version = "1.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "GeoStat-Framework";
     repo = "GSTools";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-QpdOARzcSRVFl/DbnE2JLBFZmTSh/fBOmzweuf+zfEs=";
+    tag = "v${version}";
+    hash = "sha256-Aieuk0Xjlut8rTZoFHcBpPtyIj/fstMrHiiKyDOpQlg=";
   };
 
   build-system = [
-    setuptools
-    setuptools-scm
-    numpy
     cython
     extension-helpers
+    numpy
+    setuptools
+    setuptools-scm
   ];
 
   dependencies = [
@@ -44,20 +50,13 @@ buildPythonPackage rec {
     scipy
   ];
 
-  # scipy derivation dont support numpy_2 and is patched to use version 1
-  # Using numpy_2 in the derivation will cause a clojure duplicate error
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail 'numpy>=2.0.0rc1,' 'numpy' \
-  '';
-
   pythonImportsCheck = [ "gstools" ];
   nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
     description = "Geostatistical toolbox";
     homepage = "https://github.com/GeoStat-Framework/GSTools";
-    changelog = "https://github.com/GeoStat-Framework/GSTools/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/GeoStat-Framework/GSTools/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ sigmanificient ];
   };

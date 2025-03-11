@@ -1,36 +1,37 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, fetchurl
-, fetchpatch
-, meson
-, ninja
-, m4
-, gperf
-, getent
-, acl
-, audit
-, dbus
-, libcap
-, libselinux
-, pam
-, gettext
-, pkg-config
-, udev
-, eudev
-, util-linux
-, libxslt
-, python3Packages
-, docbook5
-, docbook_xsl
-, docbook_xsl_ns
-, docbook_xml_dtd_42
-, docbook_xml_dtd_45
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchurl,
+  fetchpatch,
+  meson,
+  ninja,
+  m4,
+  gperf,
+  getent,
+  acl,
+  audit,
+  dbus,
+  libcap,
+  libselinux,
+  pam,
+  gettext,
+  pkg-config,
+  udev,
+  eudev,
+  util-linux,
+  libxslt,
+  python3Packages,
+  docbook5,
+  docbook_xsl,
+  docbook_xsl_ns,
+  docbook_xml_dtd_42,
+  docbook_xml_dtd_45,
 
-# Defaulting to false because usually the rationale for using elogind is to
-# use it in situation where a systemd dependency does not work (especially
-# when building with musl, which elogind explicitly supports).
-, enableSystemd ? false
+  # Defaulting to false because usually the rationale for using elogind is to
+  # use it in situation where a systemd dependency does not work (especially
+  # when building with musl, which elogind explicitly supports).
+  enableSystemd ? false,
 }:
 
 stdenv.mkDerivation rec {
@@ -54,14 +55,25 @@ stdenv.mkDerivation rec {
     libcap
     gettext
     libxslt.bin # xsltproc
-    docbook5 docbook_xsl docbook_xsl_ns docbook_xml_dtd_42 docbook_xml_dtd_45 # needed for docbook without Internet
+    docbook5
+    docbook_xsl
+    docbook_xsl_ns
+    docbook_xml_dtd_42
+    docbook_xml_dtd_45 # needed for docbook without Internet
 
     python3Packages.python
     python3Packages.jinja2
   ];
 
-  buildInputs = [ acl audit dbus libcap libselinux pam util-linux ]
-    ++ (if enableSystemd then [ udev ] else [ eudev ]);
+  buildInputs = [
+    acl
+    audit
+    dbus
+    libcap
+    libselinux
+    pam
+    util-linux
+  ] ++ (if enableSystemd then [ udev ] else [ eudev ]);
 
   postPatch = ''
     substituteInPlace meson.build --replace-fail "install_emptydir(elogindstatedir)" ""

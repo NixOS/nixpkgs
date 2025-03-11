@@ -1,15 +1,29 @@
-{ stdenv, lib, fetchFromGitHub, cmake, gflags, gtest, perl }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  gflags,
+  gtest,
+  perl,
+  pkgsBuildHost,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: rec {
   pname = "glog";
-  version = "0.6.0";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "glog";
     rev = "v${version}";
-    sha256 = "sha256-xqRp9vaauBkKz2CXbh/Z4TWqhaUtqfbsSlbYZR/kW9s=";
+    sha256 = "sha256-+nwWP6VBmhgU7GCPSEGUzvUSCc48wXME181WpJ5ABP4=";
   };
+
+  postPatch = lib.optionalString finalAttrs.finalPackage.doCheck ''
+    substituteInPlace src/logging_unittest.cc \
+      --replace-warn "/usr/bin/true" "${pkgsBuildHost.coreutils}/bin/true"
+  '';
 
   nativeBuildInputs = [ cmake ];
 
@@ -34,29 +48,37 @@ stdenv.mkDerivation rec {
 
   env.GTEST_FILTER =
     let
-      filteredTests = lib.optionals stdenv.hostPlatform.isMusl [
-        "Symbolize.SymbolizeStackConsumption"
-        "Symbolize.SymbolizeWithDemanglingStackConsumption"
-      ] ++ lib.optionals stdenv.hostPlatform.isStatic [
-        "LogBacktraceAt.DoesBacktraceAtRightLineWhenEnabled"
-      ] ++ lib.optionals stdenv.cc.isClang [
-        # Clang optimizes an expected allocation away.
-        # See https://github.com/google/glog/issues/937
-        "DeathNoAllocNewHook.logging"
-      ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-        "LogBacktraceAt.DoesBacktraceAtRightLineWhenEnabled"
-      ];
+      filteredTests =
+        lib.optionals stdenv.hostPlatform.isMusl [
+          "Symbolize.SymbolizeStackConsumption"
+          "Symbolize.SymbolizeWithDemanglingStackConsumption"
+        ]
+        ++ lib.optionals stdenv.hostPlatform.isStatic [
+          "LogBacktraceAt.DoesBacktraceAtRightLineWhenEnabled"
+        ]
+        ++ lib.optionals stdenv.cc.isClang [
+          # Clang optimizes an expected allocation away.
+          # See https://github.com/google/glog/issues/937
+          "DeathNoAllocNewHook.logging"
+        ]
+        ++ lib.optionals stdenv.hostPlatform.isDarwin [
+          "LogBacktraceAt.DoesBacktraceAtRightLineWhenEnabled"
+        ];
     in
     "-${builtins.concatStringsSep ":" filteredTests}";
 
   checkPhase =
     let
-      excludedTests = lib.optionals stdenv.hostPlatform.isDarwin [
-        "mock-log"
-      ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
-        "logging"   # works around segfaults on aarch64-darwin for now
-      ];
-      excludedTestsRegex = lib.optionalString (excludedTests != [ ]) "(${lib.concatStringsSep "|" excludedTests})";
+      excludedTests =
+        lib.optionals stdenv.hostPlatform.isDarwin [
+          "mock-log"
+        ]
+        ++ [
+          "logging" # works around segfaults for now
+        ];
+      excludedTestsRegex = lib.optionalString (
+        excludedTests != [ ]
+      ) "(${lib.concatStringsSep "|" excludedTests})";
     in
     ''
       runHook preCheck
@@ -69,6 +91,9 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     description = "Library for application-level logging";
     platforms = platforms.unix;
-    maintainers = with maintainers; [ nh2 r-burns ];
+    maintainers = with maintainers; [
+      nh2
+      r-burns
+    ];
   };
-}
+})

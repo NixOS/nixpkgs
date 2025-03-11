@@ -1,4 +1,10 @@
-{ stdenv, lib, fetchurl, makeWrapper, coreutils }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  makeWrapper,
+  coreutils,
+}:
 
 stdenv.mkDerivation rec {
   pname = "taskspooler";

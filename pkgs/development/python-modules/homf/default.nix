@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "duckinator";
     repo = "homf";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-fDH6uJ2d/Jsnuudv+Qlv1tr3slxOJWh7b4smGS32n9A=";
   };
 

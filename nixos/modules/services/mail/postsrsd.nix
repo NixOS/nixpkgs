@@ -1,9 +1,15 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
 
   cfg = config.services.postsrsd;
 
-in {
+in
+{
 
   ###### interface
 
@@ -29,7 +35,11 @@ in {
       };
 
       separator = lib.mkOption {
-        type = lib.types.enum ["-" "=" "+"];
+        type = lib.types.enum [
+          "-"
+          "="
+          "+"
+        ];
         default = "=";
         description = "First separator character in generated addresses";
       };
@@ -60,7 +70,7 @@ in {
 
       excludeDomains = lib.mkOption {
         type = lib.types.listOf lib.types.str;
-        default = [];
+        default = [ ];
         description = "Origin domains to exclude from rewriting in addition to primary domain";
       };
 
@@ -79,7 +89,6 @@ in {
     };
 
   };
-
 
   ###### implementation
 

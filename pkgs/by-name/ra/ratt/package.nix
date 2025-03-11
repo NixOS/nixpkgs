@@ -1,4 +1,8 @@
-{ buildGoModule, fetchFromSourcehut, lib }:
+{
+  buildGoModule,
+  fetchFromSourcehut,
+  lib,
+}:
 buildGoModule rec {
   pname = "ratt";
   version = "unstable-2023-02-12";

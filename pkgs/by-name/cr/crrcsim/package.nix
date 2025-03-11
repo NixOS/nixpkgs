@@ -1,4 +1,14 @@
-{ lib, stdenv, fetchurl, libGLU, libGL, SDL, SDL_mixer, plib, libjpeg }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libGLU,
+  libGL,
+  SDL,
+  SDL_mixer,
+  plib,
+  libjpeg,
+}:
 let
   version = "0.9.13";
 in
@@ -12,7 +22,12 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    libGLU libGL SDL SDL_mixer plib libjpeg
+    libGLU
+    libGL
+    SDL
+    SDL_mixer
+    plib
+    libjpeg
   ];
 
   patches = [
@@ -23,7 +38,10 @@ stdenv.mkDerivation rec {
     description = "Model-airplane flight simulator";
     mainProgram = "crrcsim";
     maintainers = with lib.maintainers; [ raskin ];
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    platforms = [
+      "i686-linux"
+      "x86_64-linux"
+    ];
     license = lib.licenses.gpl2Only;
   };
 }

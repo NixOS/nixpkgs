@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.rethinkdb;
   rethinkdb = cfg.package;
@@ -90,15 +95,17 @@ in
       '';
     };
 
-    users.users.rethinkdb = lib.mkIf (cfg.user == "rethinkdb")
-      { name = "rethinkdb";
-        description = "RethinkDB server user";
-        isSystemUser = true;
-      };
+    users.users.rethinkdb = lib.mkIf (cfg.user == "rethinkdb") {
+      name = "rethinkdb";
+      description = "RethinkDB server user";
+      isSystemUser = true;
+    };
 
-    users.groups = lib.optionalAttrs (cfg.group == "rethinkdb") (lib.singleton
-      { name = "rethinkdb";
-      });
+    users.groups = lib.optionalAttrs (cfg.group == "rethinkdb") (
+      lib.singleton {
+        name = "rethinkdb";
+      }
+    );
 
   };
 

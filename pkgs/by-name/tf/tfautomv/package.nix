@@ -1,6 +1,7 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
@@ -19,7 +20,10 @@ buildGoModule rec {
 
   vendorHash = "sha256-BZ8IhVPxZTPQXBotFBrxV3dfwvst0te8R84I/urq3gY=";
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/busser/tfautomv";

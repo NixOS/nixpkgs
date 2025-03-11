@@ -1,10 +1,11 @@
-{ stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, wrapQtAppsHook
-, qtbase
-, lib
+{
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  wrapQtAppsHook,
+  qtbase,
+  lib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,4 +1,9 @@
-{ buildEnv, makeWrapper, zeroad-unwrapped, zeroad-data }:
+{
+  buildEnv,
+  makeWrapper,
+  zeroad-unwrapped,
+  zeroad-data,
+}:
 
 assert zeroad-unwrapped.version == zeroad-data.version;
 
@@ -7,9 +12,15 @@ buildEnv {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  paths = [ zeroad-unwrapped zeroad-data ];
+  paths = [
+    zeroad-unwrapped
+    zeroad-data
+  ];
 
-  pathsToLink = [ "/" "/bin" ];
+  pathsToLink = [
+    "/"
+    "/bin"
+  ];
 
   postBuild = ''
     for i in $out/bin/*; do
@@ -19,6 +30,6 @@ buildEnv {
   '';
 
   meta = zeroad-unwrapped.meta // {
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
   };
 }

@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, python3Packages
-, fetchPypi
-, nix-update-script
-, s-tui
-, testers
+{
+  lib,
+  stdenv,
+  python3Packages,
+  fetchPypi,
+  nix-update-script,
+  s-tui,
+  testers,
 }:
 
 python3Packages.buildPythonPackage rec {

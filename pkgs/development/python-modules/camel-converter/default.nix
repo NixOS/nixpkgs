@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sanders41";
     repo = "camel-converter";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-cHrMaf5PyFWacoi4t+Clow9qFAxbdn71p8ckuYMt27w=";
   };
 

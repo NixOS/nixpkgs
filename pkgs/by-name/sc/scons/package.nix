@@ -1,4 +1,9 @@
-{ lib, fetchFromGitHub, fetchpatch, python3Packages }:
+{
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  python3Packages,
+}:
 python3Packages.buildPythonApplication rec {
   pname = "scons";
   version = "4.7.0";
@@ -24,6 +29,10 @@ python3Packages.buildPythonApplication rec {
 
   build-system = [
     python3Packages.setuptools
+  ];
+
+  dependencies = [
+    python3Packages.distutils
   ];
 
   setupHook = ./setup-hook.sh;

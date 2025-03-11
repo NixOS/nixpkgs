@@ -1,8 +1,9 @@
-{ lib
-, rustPlatform
-, fetchCrate
-, installShellFiles
-, stdenv
+{
+  lib,
+  rustPlatform,
+  fetchCrate,
+  installShellFiles,
+  stdenv,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -15,7 +16,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-HbnuLu1yCpwouDVBH/vcFVLDMZWeqHH6qHFJoTbaS9Y=";
   };
 
-  cargoHash = "sha256-AJtQrImQlxnp1RbbOZHAJsvlhm39OlC5WyvD5jybMAY=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-0xKx3VO4bquC3syBhCf4h3CRWSmhhRk2kCEJeC1ZTTc=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -33,7 +35,10 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "planus";
     homepage = "https://github.com/planus-org/planus";
     changelog = "https://github.com/planus-org/planus/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [ asl20 mit ];
+    license = with licenses; [
+      asl20
+      mit
+    ];
     maintainers = with maintainers; [ figsoda ];
   };
 }

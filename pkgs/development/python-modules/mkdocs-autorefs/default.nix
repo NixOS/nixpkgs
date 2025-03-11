@@ -11,16 +11,16 @@
 
 buildPythonPackage rec {
   pname = "mkdocs-autorefs";
-  version = "1.2.0";
+  version = "1.3.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "mkdocstrings";
     repo = "autorefs";
-    rev = "refs/tags/${version}";
-    hash = "sha256-C1ca7tx9s88U7Xp/bd3KhlWeb32a612RyCVBQz0vJ1g=";
+    tag = version;
+    hash = "sha256-YVkj4D7JK0GOqnGlg5L3uqFsBB5C0OnlXX+wYW4GpkQ=";
   };
 
   postPatch = ''
@@ -48,7 +48,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Automatically link across pages in MkDocs";
     homepage = "https://github.com/mkdocstrings/autorefs/";
-    changelog = "https://github.com/mkdocstrings/autorefs/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/mkdocstrings/autorefs/blob/${src.tag}/CHANGELOG.md";
     license = licenses.isc;
     maintainers = with maintainers; [ fab ];
   };

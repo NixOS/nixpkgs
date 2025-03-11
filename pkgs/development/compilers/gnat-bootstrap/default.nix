@@ -1,4 +1,4 @@
-{ stdenv, lib, autoPatchelfHook, fetchzip, xz, ncurses5, readline, gmp, mpfr
+{ stdenv, lib, autoPatchelfHook, fetchzip, xz, ncurses5, ncurses, readline, gmp, mpfr
 , expat, libipt, zlib, dejagnu, sourceHighlight, python3, elfutils, guile, glibc
 , majorVersion
 }:
@@ -40,6 +40,36 @@ stdenv.mkDerivation(finalAttrs:
         upstreamTriplet = "x86_64-pc-linux-gnu";
       };
     }.${stdenv.hostPlatform.system} or throwUnsupportedSystem;
+    "13" = {
+      gccVersion = "13.2.0";
+      alireRevision = "2";
+    } // {
+      x86_64-darwin = {
+        inherit url;
+        hash = "sha256-DNHcHTIi7pw0rsVtpyGTyLVElq3IoO2YX/OkDbdeQyo=";
+        upstreamTriplet = "x86_64-apple-darwin21.6.0";
+      };
+      x86_64-linux = {
+        inherit url;
+        hash = "sha256-DC95udGSzRDE22ON4UpekxTYWOSBeUdJvILbSFj6MFQ=";
+        upstreamTriplet = "x86_64-pc-linux-gnu";
+      };
+    }.${stdenv.hostPlatform.system} or throwUnsupportedSystem;
+    "14" = {
+      gccVersion = "14.2.0";
+      alireRevision = "1";
+    } // {
+      x86_64-darwin = {
+        inherit url;
+        hash = "sha256-3YOnvuI6Qq7huQcqgFSz/o+ZgY2wNkKDqHIuzNz1MVY=";
+        upstreamTriplet = "x86_64-apple-darwin21.6.0";
+      };
+      x86_64-linux = {
+        inherit url;
+        hash = "sha256-pH3IuOpCM9sY/ppTYcxBmgpsUiMrisIjmAa/rmmZXb4=";
+        upstreamTriplet = "x86_64-pc-linux-gnu";
+      };
+    }.${stdenv.hostPlatform.system} or throwUnsupportedSystem;
   };
   inherit (versionMap.${majorVersion}) gccVersion alireRevision upstreamTriplet;
 in {
@@ -54,16 +84,13 @@ in {
 
   nativeBuildInputs = [
     dejagnu
-    expat
     gmp
     guile
     libipt
     mpfr
-    ncurses5
     python3
     readline
     sourceHighlight
-    xz
     zlib
   ] ++ lib.optionals stdenv.buildPlatform.isLinux [
     autoPatchelfHook
@@ -71,6 +98,22 @@ in {
   ] ++ lib.optionals (lib.meta.availableOn stdenv.buildPlatform elfutils) [
     elfutils
   ];
+
+  buildInputs = [
+    expat
+  ] ++ lib.optionals (lib.versionAtLeast majorVersion "13") [
+    ncurses
+  ] ++ lib.optionals (lib.versionOlder majorVersion "13") [
+    ncurses5
+  ] ++ [
+    xz
+  ];
+
+  strictDeps = true;
+
+  # https://github.com/alire-project/GNAT-FSF-builds/issues/51
+  autoPatchelfIgnoreMissingDeps =
+    if (stdenv.buildPlatform.isLinux && majorVersion == "13") then true else null;
 
   postPatch = lib.optionalString (stdenv.hostPlatform.isDarwin) ''
     substituteInPlace lib/gcc/${upstreamTriplet}/${gccVersion}/install-tools/mkheaders.conf \

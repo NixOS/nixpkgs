@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "wapiti";
-  version = "3.2.1";
+  version = "3.2.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "wapiti-scanner";
     repo = "wapiti";
-    rev = "refs/tags/${version}";
-    hash = "sha256-28PGdaOhFz9onw3yFHtCbAxLmh7q0VLGNuyI1wcKLRQ=";
+    tag = version;
+    hash = "sha256-sa4bXZiY5yd0wynUjdLnuuX7Ee0w4APd1G/oGy5AUDk=";
   };
 
   pythonRelaxDeps = true;

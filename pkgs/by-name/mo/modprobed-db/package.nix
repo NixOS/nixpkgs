@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, libevdev
-, kmod
-, bash
-, installShellFiles
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  libevdev,
+  kmod,
+  bash,
+  installShellFiles,
 }:
 let
   pname = "modprobed-db";
@@ -22,8 +23,15 @@ stdenv.mkDerivation {
   };
 
   strictDeps = true;
-  nativeBuildInputs = [ pkg-config installShellFiles ];
-  buildInputs = [ kmod libevdev bash ];
+  nativeBuildInputs = [
+    pkg-config
+    installShellFiles
+  ];
+  buildInputs = [
+    kmod
+    libevdev
+    bash
+  ];
 
   installFlags = [
     "PREFIX=$(out)"

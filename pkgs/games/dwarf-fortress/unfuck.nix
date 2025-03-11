@@ -1,23 +1,24 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, libGL
-, libSM
-, SDL
-, SDL_image
-, SDL_ttf
-, glew
-, openalSoft
-, ncurses
-, glib
-, gtk2
-, gtk3
-, libsndfile
-, zlib
-, dfVersion
-, pkg-config
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  libGL,
+  libSM,
+  SDL,
+  SDL_image,
+  SDL_ttf,
+  glew,
+  openalSoft,
+  ncurses,
+  glib,
+  gtk2,
+  gtk3,
+  libsndfile,
+  zlib,
+  dfVersion,
+  pkg-config,
 }:
 
 let
@@ -74,9 +75,10 @@ let
   };
 
   release =
-    if hasAttr dfVersion unfuck-releases
-    then getAttr dfVersion unfuck-releases
-    else throw "[unfuck] Unknown Dwarf Fortress version: ${dfVersion}";
+    if hasAttr dfVersion unfuck-releases then
+      getAttr dfVersion unfuck-releases
+    else
+      throw "[unfuck] Unknown Dwarf Fortress version: ${dfVersion}";
 in
 
 stdenv.mkDerivation {
@@ -90,13 +92,13 @@ stdenv.mkDerivation {
     inherit (release) hash;
   };
 
-  patches = lib.optionals (versionOlder release.unfuckRelease "0.47.05") [(
-    fetchpatch {
+  patches = lib.optionals (versionOlder release.unfuckRelease "0.47.05") [
+    (fetchpatch {
       name = "fix-noreturn-returning.patch";
       url = "https://github.com/svenstaro/dwarf_fortress_unfuck/commit/6dcfe5ae869fddd51940c6c37a95f7bc639f4389.patch";
       hash = "sha256-b9eI3iR7dmFqCrktPyn6QJ9U2A/7LvfYRS+vE3BOaqk=";
-    }
-  )];
+    })
+  ];
 
   postPatch = ''
     # https://github.com/svenstaro/dwarf_fortress_unfuck/pull/27
@@ -108,25 +110,34 @@ stdenv.mkDerivation {
     "-DGTK2_GDKCONFIG_INCLUDE_DIR=${gtk2.out}/lib/gtk-2.0/include"
   ];
 
-  nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [
-    libSM
-    SDL
-    SDL_image
-    SDL_ttf
-    glew
-    openalSoft
-    ncurses
-    libsndfile
-    zlib
-    libGL
-  ]
-  # switched to gtk3 in 0.47.05
-  ++ (if versionOlder release.unfuckRelease "0.47.05" then [
-    gtk2
-  ] else [
-    gtk3
-  ]);
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
+  buildInputs =
+    [
+      libSM
+      SDL
+      SDL_image
+      SDL_ttf
+      glew
+      openalSoft
+      ncurses
+      libsndfile
+      zlib
+      libGL
+    ]
+    # switched to gtk3 in 0.47.05
+    ++ (
+      if versionOlder release.unfuckRelease "0.47.05" then
+        [
+          gtk2
+        ]
+      else
+        [
+          gtk3
+        ]
+    );
 
   # Don't strip unused symbols; dfhack hooks into some of them.
   dontStrip = true;
@@ -145,6 +156,9 @@ stdenv.mkDerivation {
     homepage = "https://github.com/svenstaro/dwarf_fortress_unfuck";
     license = licenses.free;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ abbradar numinit ];
+    maintainers = with maintainers; [
+      abbradar
+      numinit
+    ];
   };
 }

@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, libX11, patches ? [ ], writeText, conf ? null }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libX11,
+  patches ? [ ],
+  writeText,
+  conf ? null,
+}:
 
 stdenv.mkDerivation {
   pname = "dwmblocks";
@@ -18,10 +26,9 @@ stdenv.mkDerivation {
   postPatch =
     let
       configFile =
-        if lib.isDerivation conf || builtins.isPath conf
-        then conf else writeText "blocks.def.h" conf;
+        if lib.isDerivation conf || builtins.isPath conf then conf else writeText "blocks.def.h" conf;
     in
-      lib.optionalString (conf != null) "cp ${configFile} blocks.def.h";
+    lib.optionalString (conf != null) "cp ${configFile} blocks.def.h";
 
   makeFlags = [ "PREFIX=$(out)" ];
 

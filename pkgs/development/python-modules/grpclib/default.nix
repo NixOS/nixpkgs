@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "vmagamedov";
     repo = "grpclib";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-5221hVjD0TynCsTdruiUZkTsb7uOi49tZ8M/YqdWreE=";
   };
 

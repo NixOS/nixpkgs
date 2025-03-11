@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchsvn }:
+{
+  lib,
+  stdenv,
+  fetchsvn,
+}:
 
 stdenv.mkDerivation rec {
   pname = "acme";

@@ -1,6 +1,7 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -14,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-U9i5L3s4oQOIqlECSaKkHxS2Vzr6SY4tIUpvl3+oSl0=";
   };
 
-  cargoHash = "sha256-BdxRvvU3AovlT7QloZ/LlkjRTVCWEsPUj4NkP4gBPsY=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-LiNnTNpluQkomQhIOsAnUbbBftTgqgNdpT8heCrBayg=";
 
   meta = with lib; {
     description = "Utility for decoding aarch64 ESR register values";

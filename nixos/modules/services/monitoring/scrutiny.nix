@@ -35,7 +35,7 @@ in
         description = ''
           Scrutiny settings to be rendered into the configuration file.
 
-          See https://github.com/AnalogJ/scrutiny/blob/master/example.scrutiny.yaml.
+          See <https://github.com/AnalogJ/scrutiny/blob/master/example.scrutiny.yaml>.
         '';
         default = { };
         type = submodule {
@@ -129,7 +129,7 @@ in
           description = ''
             Collector settings to be rendered into the collector configuration file.
 
-            See https://github.com/AnalogJ/scrutiny/blob/master/example.collector.yaml.
+            See <https://github.com/AnalogJ/scrutiny/blob/master/example.collector.yaml>.
           '';
           default = { };
           type = submodule {

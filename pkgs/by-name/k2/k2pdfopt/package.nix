@@ -61,7 +61,6 @@ let
       patchCommands,
     }:
     runCommand "${name}-k2pdfopt.patch" { inherit src; } ''
-      source $stdenv/setup
       unpackPhase
 
       orig=$sourceRoot

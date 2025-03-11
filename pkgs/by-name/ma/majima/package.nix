@@ -1,4 +1,8 @@
-{ lib, fetchFromSourcehut, rustPlatform }:
+{
+  lib,
+  fetchFromSourcehut,
+  rustPlatform,
+}:
 rustPlatform.buildRustPackage {
   pname = "majima";
   version = "0.5.0";
@@ -10,7 +14,8 @@ rustPlatform.buildRustPackage {
     hash = "sha256-P5E0Wiy3mNPRCQ/bsIW4fG7LnPSPRXmW7pnbgl0/lBQ=";
   };
 
-  cargoHash = "sha256-sblSlmXkiJkVGbrMU6HgtvYnAd48SlUOgDwB6ASMFsQ=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-bb3rg7vWRBSOPf0LM7avQQNlMjLiLFRtrGIfJbFWtHI=";
 
   meta = {
     description = "Generate random usernames quickly and in various formats";

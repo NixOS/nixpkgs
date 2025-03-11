@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitLab, pkg-config, libbsd, installShellFiles }:
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  pkg-config,
+  libbsd,
+  installShellFiles,
+}:
 
 stdenv.mkDerivation rec {
   pname = "netcat-openbsd";
@@ -13,7 +20,10 @@ stdenv.mkDerivation rec {
   };
 
   strictDeps = true;
-  nativeBuildInputs = [ pkg-config installShellFiles ];
+  nativeBuildInputs = [
+    pkg-config
+    installShellFiles
+  ];
   buildInputs = [ libbsd ];
 
   postPatch = ''

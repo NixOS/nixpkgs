@@ -6,33 +6,42 @@
   numpy,
   scipy,
   matplotlib,
-  pytest,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "nimfa";
   version = "1.4.0";
-  format = "setuptools";
+  setuptools = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "39cff2b86856d03ca8a3d9c38598034ecf1a768c325fd3a728bb9eadb8c6b919";
+    hash = "sha256-Oc/yuGhW0Dyoo9nDhZgDTs8adowyX9OnKLuerbjGuRk=";
   };
 
-  propagatedBuildInputs = [
+  dependencies = [
     numpy
     scipy
   ];
+
   nativeCheckInputs = [
     matplotlib
-    pytest
+    pytestCheckHook
   ];
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail "import imp" "" \
+      --replace-fail "os.path.exists('.git')" "True" \
+      --replace-fail "GIT_REVISION = git_version()" "GIT_REVISION = 'v${version}'"
+  '';
+
   doCheck = !isPy3k; # https://github.com/marinkaz/nimfa/issues/42
 
-  meta = with lib; {
+  meta = {
     description = "Nonnegative matrix factorization library";
     homepage = "http://nimfa.biolab.si";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ ashgillman ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ ashgillman ];
   };
 }

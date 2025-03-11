@@ -1,4 +1,10 @@
-{ config, lib, pkgs, options, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  options,
+  ...
+}:
 
 let
   cfg = config.services.prometheus.exporters.mikrotik;
@@ -53,19 +59,23 @@ in
       '';
     };
   };
-  serviceOpts = let
-    configFile = if cfg.configFile != null
-                 then cfg.configFile
-                 else "${pkgs.writeText "mikrotik-exporter.yml" (builtins.toJSON cfg.configuration)}";
-    in {
-    serviceConfig = {
-      # -port is misleading name, it actually accepts address too
-      ExecStart = ''
-        ${pkgs.prometheus-mikrotik-exporter}/bin/mikrotik-exporter \
-          -config-file=${escapeShellArg configFile} \
-          -port=${cfg.listenAddress}:${toString cfg.port} \
-          ${concatStringsSep " \\\n  " cfg.extraFlags}
-      '';
+  serviceOpts =
+    let
+      configFile =
+        if cfg.configFile != null then
+          cfg.configFile
+        else
+          "${pkgs.writeText "mikrotik-exporter.yml" (builtins.toJSON cfg.configuration)}";
+    in
+    {
+      serviceConfig = {
+        # -port is misleading name, it actually accepts address too
+        ExecStart = ''
+          ${pkgs.prometheus-mikrotik-exporter}/bin/mikrotik-exporter \
+            -config-file=${escapeShellArg configFile} \
+            -port=${cfg.listenAddress}:${toString cfg.port} \
+            ${concatStringsSep " \\\n  " cfg.extraFlags}
+        '';
+      };
     };
-  };
 }

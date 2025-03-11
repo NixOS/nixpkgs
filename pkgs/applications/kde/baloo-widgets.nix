@@ -1,7 +1,14 @@
 {
-  mkDerivation, lib,
-  extra-cmake-modules, kdoctools,
-  baloo, kconfig, kfilemetadata, ki18n, kio, kservice
+  mkDerivation,
+  lib,
+  extra-cmake-modules,
+  kdoctools,
+  baloo,
+  kconfig,
+  kfilemetadata,
+  ki18n,
+  kio,
+  kservice,
 }:
 
 mkDerivation {
@@ -10,9 +17,20 @@ mkDerivation {
     license = [ lib.licenses.lgpl21 ];
     maintainers = [ lib.maintainers.ttuegel ];
   };
-  nativeBuildInputs = [ extra-cmake-modules kdoctools ];
-  propagatedBuildInputs = [
-    baloo kconfig kfilemetadata ki18n kio kservice
+  nativeBuildInputs = [
+    extra-cmake-modules
+    kdoctools
   ];
-  outputs = [ "out" "dev" ];
+  propagatedBuildInputs = [
+    baloo
+    kconfig
+    kfilemetadata
+    ki18n
+    kio
+    kservice
+  ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 }

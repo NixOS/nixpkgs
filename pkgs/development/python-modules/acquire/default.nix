@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "acquire";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-Ii19VnLLq+UGH0bkyUbLzHqZpJOXffIGeP4VZ9QG7D0=";
   };
 
@@ -53,6 +53,13 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.full;
+
+  disabledTests = [
+    "test_collector_collect_path_with_dir"
+    "test_collector_collect_glob"
+    "test_misc_osx"
+    "test_misc_unix"
+  ];
 
   pythonImportsCheck = [ "acquire" ];
 

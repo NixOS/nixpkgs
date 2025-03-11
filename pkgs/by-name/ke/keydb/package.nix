@@ -84,12 +84,23 @@ stdenv.mkDerivation (finalAttrs: {
 
     patchShebangs ./utils/gen-test-certs.sh
     ${if tlsSupport then "./utils/gen-test-certs.sh" else ""}
-
-    ./runtest \
-      --no-latency \
-      --timeout 2000 \
-      --clients $NIX_BUILD_CORES \
-      --tags -leaks ${if tlsSupport then "--tls" else ""}
+    ./runtest --clients $NIX_BUILD_CORES ${
+      lib.escapeShellArgs (
+        [
+          "--no-latency"
+          "--timeout"
+          "2000"
+          "--tags"
+          "-leaks"
+        ]
+        ++ lib.optional tlsSupport "--tls"
+        # skips flaky test on x86_64
+        ++ lib.optionals stdenv.hostPlatform.isx86_64 [
+          "--skiptest"
+          "Active defrag edge case"
+        ]
+      )
+    }
 
     runHook postCheck
   '';

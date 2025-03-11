@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "coffeeispower";
     repo = "woomer";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-puALhN54ma2KToXUF8ipaYysyayjaSp+ISZ3AgQvniw=";
   };
 

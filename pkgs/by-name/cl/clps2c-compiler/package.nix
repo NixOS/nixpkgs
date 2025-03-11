@@ -57,7 +57,7 @@ buildDotnetModule rec {
     "-p:TargetFramework=net8.0"
   ];
 
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
 
   runtimeDeps = [
     keystone-override

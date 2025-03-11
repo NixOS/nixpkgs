@@ -1,37 +1,38 @@
-{ lib
-, stdenv
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, libpng
-, glib /*just passthru*/
+{
+  lib,
+  stdenv,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  libpng,
+  glib, # just passthru
 
-# for passthru.tests
-, cairo
-, qemu
-, scribus
-, tigervnc
-, wlroots_0_17
-, wlroots_0_18
-, xwayland
+  # for passthru.tests
+  cairo,
+  qemu,
+  scribus,
+  tigervnc,
+  wlroots_0_17,
+  wlroots_0_18,
+  xwayland,
 
-, gitUpdater
-, testers
+  gitUpdater,
+  testers,
 
-, __flattenIncludeHackHook
+  __flattenIncludeHackHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pixman";
-  version = "0.43.4";
+  version = "0.44.2";
 
   src = fetchurl {
     urls = with finalAttrs; [
       "mirror://xorg/individual/lib/${pname}-${version}.tar.gz"
       "https://cairographics.org/releases/${pname}-${version}.tar.gz"
     ];
-    hash = "sha256-oGJNuQGAx923n8epFRCT3DfGRtjDjT8jL3Z89kuFoiY=";
+    hash = "sha256-Y0kGHOGjOKtpUrkhlNGwN3RyJEII1H/yW++G/HGXNGY=";
   };
 
   # Raise test timeout, 120s can be slightly exceeded on slower hardware
@@ -42,7 +43,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   separateDebugInfo = !stdenv.hostPlatform.isStatic;
 
-  nativeBuildInputs = [ meson ninja pkg-config __flattenIncludeHackHook ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    __flattenIncludeHackHook
+  ];
 
   buildInputs = [ libpng ];
 
@@ -50,11 +56,11 @@ stdenv.mkDerivation (finalAttrs: {
   # architectures and requires used to disable them:
   #   https://gitlab.freedesktop.org/pixman/pixman/-/issues/88
   mesonAutoFeatures = "auto";
-  mesonFlags = [
-    "-Diwmmxt=disabled"
-  ]
-  # Disable until https://gitlab.freedesktop.org/pixman/pixman/-/issues/46 is resolved
-  ++ lib.optional (stdenv.hostPlatform.isAarch64 && !stdenv.cc.isGNU) "-Da64-neon=disabled";
+  # fix armv7 build
+  mesonFlags = lib.optionals stdenv.hostPlatform.isAarch32 [
+    "-Darm-simd=disabled"
+    "-Dneon=disabled"
+  ];
 
   preConfigure = ''
     # https://gitlab.freedesktop.org/pixman/pixman/-/issues/62
@@ -67,7 +73,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     tests = {
-      inherit cairo qemu scribus tigervnc wlroots_0_17 wlroots_0_18 xwayland;
+      inherit
+        cairo
+        qemu
+        scribus
+        tigervnc
+        wlroots_0_17
+        wlroots_0_18
+        xwayland
+        ;
       pkg-config = testers.hasPkgConfigModules {
         package = finalAttrs.finalPackage;
       };

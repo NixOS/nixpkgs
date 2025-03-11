@@ -11,8 +11,6 @@
   folly,
   gflags,
   glog,
-  apple-sdk_11,
-  darwinMinVersionHook,
 
   fizz,
 
@@ -23,7 +21,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mvfst";
-  version = "2024.11.18.00";
+  version = "2025.02.10.00";
 
   outputs = [
     "bin"
@@ -34,9 +32,13 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "mvfst";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-2Iqk6QshM8fVO65uIqrTbex7aj8ELNSzNseYEeNdzCY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-IsBydt1T33yedlaoyKl43fB7Dsuu4RPPiJuUtwZIUGg=";
   };
+
+  patches = [
+    ./glog-0.7.patch
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -44,16 +46,11 @@ stdenv.mkDerivation (finalAttrs: {
     removeReferencesTo
   ];
 
-  buildInputs =
-    [
-      folly
-      gflags
-      glog
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_11
-      (darwinMinVersionHook "11.0")
-    ];
+  buildInputs = [
+    folly
+    gflags
+    glog
+  ];
 
   propagatedBuildInputs = [
     fizz

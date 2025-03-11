@@ -1,15 +1,18 @@
-{ lib, stdenv
-, fetchurl
-, libX11
-, libXt
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libX11,
+  libXt,
+  autoreconfHook,
 
-, libjpeg ? null
-, libpng ? null
-, libtiff ? null
+  libjpeg ? null,
+  libpng ? null,
+  libtiff ? null,
 
-, withJpegSupport ? true
-, withPngSupport ? true
-, withTiffSupport ? true
+  withJpegSupport ? true,
+  withPngSupport ? true,
+  withTiffSupport ? true,
 }:
 
 assert withJpegSupport -> libjpeg != null;
@@ -33,30 +36,40 @@ stdenv.mkDerivation rec {
     sha256 = "17k518vrdrya5c9dqhpmm4g0h2vlkq1iy87sg2ngzygypbli1xvn";
   };
 
-  buildInputs = [
-    libX11 libXt
-  ] ++ lib.optionals withJpegSupport [
-    libjpeg
-  ] ++ lib.optionals withPngSupport [
-    libpng
-  ] ++ lib.optionals withTiffSupport [
-    libtiff
-  ];
+  nativeBuildInputs = [ autoreconfHook ];
+
+  buildInputs =
+    [
+      libX11
+      libXt
+    ]
+    ++ lib.optionals withJpegSupport [
+      libjpeg
+    ]
+    ++ lib.optionals withPngSupport [
+      libpng
+    ]
+    ++ lib.optionals withTiffSupport [
+      libtiff
+    ];
 
   # NOTE: we patch the build-info script so that it never detects the utilities
   # it's trying to find; one of the Debian patches adds support for
   # $SOURCE_DATE_EPOCH, but we want to make sure we don't even call these.
   preConfigure = ''
     substituteInPlace build-info \
-      --replace '[ -x /bin/date ]' 'false' \
-      --replace '[ -x /bin/id ]' 'false' \
-      --replace '[ -x /bin/uname ]' 'false' \
-      --replace '[ -x /usr/bin/id ]' 'false'
+      --replace-fail '[ -x /bin/date ]' 'false' \
+      --replace-fail '[ -x /bin/id ]' 'false' \
+      --replace-fail '[ -x /bin/uname ]' 'false' \
+      --replace-fail '[ -x /usr/bin/id ]' 'false'
 
     chmod +x build-info configure
   '';
 
   enableParallelBuilding = true;
+
+  # creating patch would add more complexity
+  env.CFLAGS = "-Wno-implicit-int";
 
   # NOTE: we're not installing the `uufilter` binary; if needed, the standard
   # `uudecode` tool should work just fine.
@@ -83,6 +96,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
 
     maintainers = [ ];
-    platforms = lib.platforms.linux;  # arbitrary choice
+    platforms = lib.platforms.linux; # arbitrary choice
   };
 }

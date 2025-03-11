@@ -1,6 +1,7 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -14,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-VlSLPcKw3LYGnmKk5YOkcGIizw1tqtKF2BykY+1MtvY=";
   };
 
-  cargoHash = "sha256-j+afSwDHau7H20siYtid7l8tq+iS24KJBsNZAEdNJlI=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-NAM/s3m+ZqgHoX6GESgJOxr88sy4+JieWB8u8aKbW7Y=";
 
   meta = with lib; {
     description = "Rust implementation of Tim Bray's topfew tool";

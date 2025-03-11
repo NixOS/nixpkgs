@@ -1,6 +1,9 @@
-{ lib, rustPlatform, fetchFromGitHub
-, fuse
-, pkg-config
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  fuse,
+  pkg-config,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -14,12 +17,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-hbv4SNe0yqjO6Oomev9uKqG29TiJeI8G7LH+Wxn7hnQ=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "fd-0.2.3" = "sha256-Xps5s30urCZ8FZYce41nOZGUAk7eRyvObUS/mMx6Tfg=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-7MrjyIwXiHy6+rrGGpnfKF1+h1dEgUmo+IlwJlDwWbQ=";
 
   nativeBuildInputs = [ pkg-config ];
 

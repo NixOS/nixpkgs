@@ -1,4 +1,9 @@
-{ stdenv, lib, fetchFromGitHub, cmake, fetchpatch
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  fetchpatch,
 }:
 
 stdenv.mkDerivation rec {
@@ -13,12 +18,12 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    (fetchpatch{
+    (fetchpatch {
       name = "reproc-gcc-13-2.patch";
       url = "https://github.com/DaanDeMeyer/reproc/commit/0b23d88894ccedde04537fa23ea55cb2f8365342.patch";
       sha256 = "sha256-QyC0UcKAWCKSvSvyZTLI2eF/TuuqbGGH6cOQrS2DiCE=";
     })
-    (fetchpatch{
+    (fetchpatch {
       name = "reproc-gcc-13-1.patch";
       url = "https://github.com/DaanDeMeyer/reproc/commit/9f399675b821e175f85ac3ee6e3fd2e6056573eb.patch";
       sha256 = "sha256-h/gnDFPWPpUFkys10YXjjEPibgRT1atHSVwbO0kId+U=";

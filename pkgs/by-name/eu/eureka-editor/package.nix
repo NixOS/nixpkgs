@@ -1,4 +1,14 @@
-{ lib, stdenv, fetchzip, fltk, zlib, xdg-utils, xorg, libjpeg, libGLU }:
+{
+  lib,
+  stdenv,
+  fetchzip,
+  fltk,
+  zlib,
+  xdg-utils,
+  xorg,
+  libjpeg,
+  libGLU,
+}:
 
 stdenv.mkDerivation rec {
   pname = "eureka-editor";
@@ -9,7 +19,14 @@ stdenv.mkDerivation rec {
     sha256 = "075w7xxsgbgh6dhndc1pfxb2h1s5fhsw28yl1c025gmx9bb4v3bf";
   };
 
-  buildInputs = [ fltk zlib xdg-utils libjpeg xorg.libXinerama libGLU ];
+  buildInputs = [
+    fltk
+    zlib
+    xdg-utils
+    libjpeg
+    xorg.libXinerama
+    libGLU
+  ];
 
   enableParallelBuilding = true;
 

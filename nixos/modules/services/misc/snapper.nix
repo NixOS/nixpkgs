@@ -36,7 +36,7 @@ let
   };
 
   intOrNumberOrRange = lib.types.either lib.types.ints.unsigned (
-    lib.types.strMatching "[[:digit:]]+(\-[[:digit:]]+)?"
+    lib.types.strMatching "[[:digit:]]+(-[[:digit:]]+)?"
     // {
       description = "string containing either a number or a range";
       descriptionClass = "conjunction";

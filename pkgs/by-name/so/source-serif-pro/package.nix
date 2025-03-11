@@ -1,4 +1,8 @@
-{ lib, stdenvNoCC, fetchzip }:
+{
+  lib,
+  stdenvNoCC,
+  fetchzip,
+}:
 
 # Source Serif Pro got renamed to Source Serif 4 (see
 # https://github.com/adobe-fonts/source-serif/issues/77). This is the

@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ...}:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.freeswitch;
   pkg = cfg.package;
@@ -6,15 +11,16 @@ let
     mkdir -p $out
     cp -rT ${cfg.configTemplate} $out
     chmod -R +w $out
-    ${lib.concatStringsSep "\n" (lib.mapAttrsToList (fileName: filePath: ''
-      mkdir -p $out/$(dirname ${fileName})
-      cp ${filePath} $out/${fileName}
-    '') cfg.configDir)}
+    ${lib.concatStringsSep "\n" (
+      lib.mapAttrsToList (fileName: filePath: ''
+        mkdir -p $out/$(dirname ${fileName})
+        cp ${filePath} $out/${fileName}
+      '') cfg.configDir
+    )}
   '';
-  configPath = if cfg.enableReload
-    then "/etc/freeswitch"
-    else configDirectory;
-in {
+  configPath = if cfg.enableReload then "/etc/freeswitch" else configDirectory;
+in
+{
   options = {
     services.freeswitch = {
       enable = lib.mkEnableOption "FreeSWITCH";

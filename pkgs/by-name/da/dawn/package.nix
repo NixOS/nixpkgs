@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchurl
-, tk
-, makeWrapper
+{
+  lib,
+  stdenv,
+  fetchurl,
+  tk,
+  makeWrapper,
 }:
 
 stdenv.mkDerivation rec {
@@ -10,7 +11,9 @@ stdenv.mkDerivation rec {
   version = "3.91a";
 
   src = fetchurl {
-    url = "https://geant4.kek.jp/~tanaka/src/dawn_${builtins.replaceStrings ["."] ["_"] version}.tgz";
+    url = "https://geant4.kek.jp/~tanaka/src/dawn_${
+      builtins.replaceStrings [ "." ] [ "_" ] version
+    }.tgz";
     hash = "sha256-gdhV6tERdoGxiCQt0L46JOAF2b1AY/0r2pp6eU689fQ=";
   };
 

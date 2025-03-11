@@ -1,12 +1,18 @@
-{ lib, stdenv, fetchurl, jre, makeWrapper }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  jre,
+  makeWrapper,
+}:
 
 stdenv.mkDerivation rec {
   pname = "workcraft";
-  version = "3.5.1";
+  version = "3.5.2";
 
   src = fetchurl {
     url = "https://github.com/workcraft/workcraft/releases/download/v${version}/workcraft-v${version}-linux.tar.gz";
-    sha256 = "sha256-326iDxQ1t9iih2JVRO07C41V5DtkUzwkcNHCz5kLHT8=";
+    sha256 = "sha256-/Qax8cSO9j77OXNTYoZoAk5H5teWuNuR+9ubQuFq6qc=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -14,12 +20,12 @@ stdenv.mkDerivation rec {
   dontConfigure = true;
 
   installPhase = ''
-  mkdir -p $out/share
-  cp -r * $out/share
-  mkdir $out/bin
-  makeWrapper $out/share/workcraft $out/bin/workcraft \
-    --set JAVA_HOME "${jre}" \
-    --set _JAVA_OPTIONS '-Dawt.useSystemAAFontSettings=gasp';
+    mkdir -p $out/share
+    cp -r * $out/share
+    mkdir $out/bin
+    makeWrapper $out/share/workcraft $out/bin/workcraft \
+      --set JAVA_HOME "${jre}" \
+      --set _JAVA_OPTIONS '-Dawt.useSystemAAFontSettings=gasp';
   '';
 
   meta = {

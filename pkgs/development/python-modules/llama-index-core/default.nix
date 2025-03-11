@@ -36,7 +36,7 @@
 
 buildPythonPackage rec {
   pname = "llama-index-core";
-  version = "0.11.23";
+  version = "0.12.23";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -44,8 +44,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "run-llama";
     repo = "llama_index";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-DMdU8LT1IGTHM8EsCX44MvGv+luOsKnPSI7yRR5ULPo=";
+    tag = "v${version}";
+    hash = "sha256-GFzaorzjeQGreyUjRXP7v7djbSq2boLWZjwO4R2W9E4=";
   };
 
   sourceRoot = "${src.name}/${pname}";
@@ -131,14 +131,20 @@ buildPythonPackage rec {
     # Tests require network access
     "test_from_namespaced_persist_dir"
     "test_from_persist_dir"
+    "test_context_extraction_basic"
+    "test_context_extraction_oversized_document"
+    "test_context_extraction_custom_prompt"
+    "test_multiple_documents_context"
+    "test_mimetype_raw_data"
     # asyncio.exceptions.InvalidStateError: invalid state
     "test_workflow_context_to_dict_mid_run"
+    "test_SimpleDirectoryReader"
   ];
 
   meta = with lib; {
     description = "Data framework for your LLM applications";
     homepage = "https://github.com/run-llama/llama_index/";
-    changelog = "https://github.com/run-llama/llama_index/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/run-llama/llama_index/blob/${src.tag}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

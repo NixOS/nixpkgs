@@ -1,8 +1,9 @@
-{ lib
-, asciidoctor
-, fetchFromGitLab
-, ncurses
-, stdenv
+{
+  lib,
+  asciidoctor,
+  fetchFromGitLab,
+  ncurses,
+  stdenv,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -16,7 +17,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-fSzifGoSdWyFGt99slzAsqCMDoeLbBqQGXujX8QAfGc=";
   };
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   nativeBuildInputs = [
     asciidoctor
@@ -65,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://catb.org/~esr/galaxis/";
     license = with lib.licenses; [ gpl2Plus ];
     mainProgram = "galaxis";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.linux;
   };
 })

@@ -13,7 +13,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "sapegin";
     repo = "textlint-rule-terminology";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-/NuKZSugizP4b2LFNqPrTvoXNE4D1sytU2B7T40ZASQ=";
   };
 
@@ -29,7 +29,7 @@ buildNpmPackage rec {
   meta = {
     description = "Textlint rule to check correct terms spelling";
     homepage = "https://github.com/sapegin/textlint-rule-terminology";
-    changelog = "https://github.com/sapegin/textlint-rule-terminology/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
+    changelog = "https://github.com/sapegin/textlint-rule-terminology/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ natsukium ];
   };

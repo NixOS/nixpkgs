@@ -19,7 +19,7 @@ let
     "opcache.memory_consumption" = "128";
     "opcache.revalidate_freq" = "1";
     "opcache.fast_shutdown" = "1";
-    "openssl.cafile" = "/etc/ssl/certs/ca-certificates.crt";
+    "openssl.cafile" = config.security.pki.caBundle;
     catch_workers_output = "yes";
   };
 
@@ -44,10 +44,9 @@ let
     };
   };
 
-  webroot = pkgs.runCommandLocal
-    "${cfg.package.name or "nextcloud"}-with-apps"
-    { }
-    ''
+  webroot = pkgs.runCommand "${cfg.package.name or "nextcloud"}-with-apps" {
+    preferLocalBuild = true;
+  } ''
       mkdir $out
       ln -sfv "${cfg.package}"/* "$out"
       ${concatStrings
@@ -86,18 +85,60 @@ let
     "-dmemory_limit=${cfg.cli.memoryLimit}"
   ]);
 
-  occ = pkgs.writeScriptBin "nextcloud-occ" ''
-    #! ${pkgs.runtimeShell}
-    cd ${webroot}
-    sudo=exec
-    if [[ "$USER" != nextcloud ]]; then
-      sudo='exec /run/wrappers/bin/sudo -u nextcloud'
-    fi
-    $sudo ${pkgs.coreutils}/bin/env \
-      NEXTCLOUD_CONFIG_DIR="${datadir}/config" \
-      ${phpCli} \
-      occ "$@"
-  '';
+  # NOTE: The credentials required by all services at runtime, not including things like the
+  #       admin password which is only needed by the setup service.
+  runtimeSystemdCredentials = []
+    ++ (lib.optional (cfg.config.dbpassFile != null) "dbpass:${cfg.config.dbpassFile}")
+    ++ (lib.optional (cfg.config.objectstore.s3.enable) "s3_secret:${cfg.config.objectstore.s3.secretFile}")
+    ++ (lib.optional (cfg.config.objectstore.s3.sseCKeyFile != null) "s3_sse_c_key:${cfg.config.objectstore.s3.sseCKeyFile}");
+
+  requiresRuntimeSystemdCredentials = (lib.length runtimeSystemdCredentials) != 0;
+
+  occ = pkgs.writeShellApplication {
+    name = "nextcloud-occ";
+
+    text = let
+      command = ''
+        ${lib.getExe' pkgs.coreutils "env"} \
+          NEXTCLOUD_CONFIG_DIR="${datadir}/config" \
+          ${phpCli} \
+          occ "$@"
+      '';
+    in ''
+      cd ${webroot}
+
+      # NOTE: This is templated at eval time
+      requiresRuntimeSystemdCredentials=${lib.boolToString requiresRuntimeSystemdCredentials}
+
+      # NOTE: This wrapper is both used in the internal nextcloud service units
+      #       and by users outside a service context for administration. As such,
+      #       when there's an existing CREDENTIALS_DIRECTORY, we inherit it for use
+      #       in the nix_read_secret() php function.
+      #       When there's no CREDENTIALS_DIRECTORY we try to use systemd-run to
+      #       load the credentials just as in a service unit.
+      # NOTE: If there are no credentials that are required at runtime then there's no need
+      #       to load any credentials.
+      if [[ $requiresRuntimeSystemdCredentials == true && -z "''${CREDENTIALS_DIRECTORY:-}" ]]; then
+        exec ${lib.getExe' config.systemd.package "systemd-run"} \
+          ${lib.escapeShellArgs (map (credential: "--property=LoadCredential=${credential}") runtimeSystemdCredentials)} \
+          --uid=nextcloud \
+          --same-dir \
+          --pty \
+          --wait \
+          --collect \
+          --service-type=exec \
+          --quiet \
+          ${command}
+      elif [[ "$USER" != nextcloud ]]; then
+        exec /run/wrappers/bin/sudo \
+          --preserve-env=CREDENTIALS_DIRECTORY \
+          --user=nextcloud \
+          ${command}
+      else
+        exec ${command}
+      fi
+    '';
+  };
 
   inherit (config.system) stateVersion;
 
@@ -121,13 +162,13 @@ let
           'bucket' => '${s3.bucket}',
           'autocreate' => ${boolToString s3.autocreate},
           'key' => '${s3.key}',
-          'secret' => nix_read_secret('${s3.secretFile}'),
+          'secret' => nix_read_secret('s3_secret'),
           ${optionalString (s3.hostname != null) "'hostname' => '${s3.hostname}',"}
           ${optionalString (s3.port != null) "'port' => ${toString s3.port},"}
           'use_ssl' => ${boolToString s3.useSsl},
           ${optionalString (s3.region != null) "'region' => '${s3.region}',"}
           'use_path_style' => ${boolToString s3.usePathStyle},
-          ${optionalString (s3.sseCKeyFile != null) "'sse_c_key' => nix_read_secret('${s3.sseCKeyFile}'),"}
+          ${optionalString (s3.sseCKeyFile != null) "'sse_c_key' => nix_read_secret('s3_sse_c_key'),"}
         ],
       ]
     '';
@@ -144,16 +185,26 @@ let
   in pkgs.writeText "nextcloud-config.php" ''
     <?php
     ${optionalString requiresReadSecretFunction ''
-      function nix_read_secret($file) {
-        if (!file_exists($file)) {
-          throw new \RuntimeException(sprintf(
-            "Cannot start Nextcloud, secret file %s set by NixOS doesn't seem to "
-            . "exist! Please make sure that the file exists and has appropriate "
-            . "permissions for user & group 'nextcloud'!",
-            $file
+      function nix_read_secret($credential_name) {
+        $credentials_directory = getenv("CREDENTIALS_DIRECTORY");
+        if (!$credentials_directory) {
+          error_log(sprintf(
+            "Cannot read credential '%s' passed by NixOS, \$CREDENTIALS_DIRECTORY is not set!",
+            $credential_name
           ));
+          exit(1);
         }
-        return trim(file_get_contents($file));
+
+        $credential_path = $credentials_directory . "/" . $credential_name;
+        if (!is_readable($credential_path)) {
+          error_log(sprintf(
+            "Cannot read credential '%s' passed by NixOS, it does not exist or is not readable!",
+            $credential_path,
+          ));
+          exit(1);
+        }
+
+        return trim(file_get_contents($credential_path));
       }''}
     function nix_decode_json_file($file, $error) {
       if (!file_exists($file)) {
@@ -177,12 +228,7 @@ let
       ${optionalString (c.dbhost != null) "'dbhost' => '${c.dbhost}',"}
       ${optionalString (c.dbuser != null) "'dbuser' => '${c.dbuser}',"}
       ${optionalString (c.dbtableprefix != null) "'dbtableprefix' => '${toString c.dbtableprefix}',"}
-      ${optionalString (c.dbpassFile != null) ''
-          'dbpassword' => nix_read_secret(
-            "${c.dbpassFile}"
-          ),
-        ''
-      }
+      ${optionalString (c.dbpassFile != null) "'dbpassword' => nix_read_secret('dbpass'),"}
       'dbtype' => '${c.dbtype}',
       ${objectstoreConfig}
     ];
@@ -263,7 +309,7 @@ in {
       '';
       example = literalExpression ''
         {
-          inherit (pkgs.nextcloud25Packages.apps) mail calendar contact;
+          inherit (pkgs.nextcloud31Packages.apps) mail calendar contact;
           phonetrack = pkgs.fetchNextcloudApp {
             name = "phonetrack";
             sha256 = "0qf366vbahyl27p9mshfma1as4nvql6w75zy2zk5xwwbp343vsbc";
@@ -295,15 +341,28 @@ in {
     https = mkOption {
       type = types.bool;
       default = false;
-      description = "Use HTTPS for generated links.";
+      description = ''
+        Use HTTPS for generated links.
+
+        Be aware that this also enables HTTP Strict Transport Security (HSTS) headers.
+      '';
     };
     package = mkOption {
       type = types.package;
       description = "Which package to use for the Nextcloud instance.";
-      relatedPackages = [ "nextcloud28" "nextcloud29" "nextcloud30" ];
+      relatedPackages = [ "nextcloud29" "nextcloud30" "nextcloud31" ];
     };
     phpPackage = mkPackageOption pkgs "php" {
       example = "php82";
+    };
+
+    finalPackage = mkOption {
+      type = types.package;
+      readOnly = true;
+      description = ''
+        Package to the finalized Nextcloud package, including all installed apps.
+        This is automatically set by the module.
+      '';
     };
 
     maxUploadSize = mkOption {
@@ -341,7 +400,7 @@ in {
 
     phpOptions = mkOption {
       type = with types; attrsOf (oneOf [ str int ]);
-      defaultText = literalExpression (generators.toPretty { } defaultPHPSettings);
+      defaultText = literalExpression (generators.toPretty { } (defaultPHPSettings // { "openssl.cafile" = literalExpression "config.security.pki.caBundle"; }));
       description = ''
         Options for PHP's php.ini file for nextcloud.
 
@@ -375,14 +434,18 @@ in {
       type = with types; attrsOf (oneOf [ str int bool ]);
       default = {
         "pm" = "dynamic";
-        "pm.max_children" = "32";
-        "pm.start_servers" = "2";
-        "pm.min_spare_servers" = "2";
-        "pm.max_spare_servers" = "4";
+        "pm.max_children" = "120";
+        "pm.start_servers" = "12";
+        "pm.min_spare_servers" = "6";
+        "pm.max_spare_servers" = "18";
         "pm.max_requests" = "500";
       };
       description = ''
-        Options for nextcloud's PHP pool. See the documentation on `php-fpm.conf` for details on configuration directives.
+        Options for nextcloud's PHP pool. See the documentation on `php-fpm.conf` for details on
+        configuration directives. The above are recommended for a server with 4GiB of RAM.
+
+        It's advisable to read the [section about PHPFPM tuning in the upstream manual](https://docs.nextcloud.com/server/30/admin_manual/installation/server_tuning.html#tune-php-fpm)
+        and consider customizing the values.
       '';
     };
 
@@ -417,7 +480,6 @@ in {
     config = {
       dbtype = mkOption {
         type = types.enum [ "sqlite" "pgsql" "mysql" ];
-        default = "sqlite";
         description = "Database type.";
       };
       dbname = mkOption {
@@ -475,9 +537,8 @@ in {
       adminpassFile = mkOption {
         type = types.str;
         description = ''
-          The full path to a file that contains the admin's password. Must be
-          readable by user `nextcloud`. The password is set only in the initial
-          setup of Nextcloud by the systemd service `nextcloud-setup.service`.
+          The full path to a file that contains the admin's password. The password is
+          set only in the initial setup of Nextcloud by the systemd service `nextcloud-setup.service`.
         '';
       };
       objectstore = {
@@ -515,8 +576,7 @@ in {
             type = types.str;
             example = "/var/nextcloud-objectstore-s3-secret";
             description = ''
-              The full path to a file that contains the access secret. Must be
-              readable by user `nextcloud`.
+              The full path to a file that contains the access secret.
             '';
           };
           hostname = mkOption {
@@ -577,8 +637,6 @@ in {
               openssl rand 32 | base64
               ```
 
-              Must be readable by user `nextcloud`.
-
               [1]: https://docs.aws.amazon.com/AmazonS3/latest/userguide/ServerSideEncryptionCustomerKeys.html
             '';
           };
@@ -623,7 +681,7 @@ in {
         description = ''
           Whether to load the Redis module into PHP.
           You still need to enable Redis in your config.php.
-          See https://docs.nextcloud.com/server/14/admin_manual/configuration_server/caching_configuration.html
+          See <https://docs.nextcloud.com/server/latest/admin_manual/configuration_server/caching_configuration.html>
         '';
       };
       memcached = mkOption {
@@ -632,7 +690,7 @@ in {
         description = ''
           Whether to load the Memcached module into PHP.
           You still need to enable Memcached in your config.php.
-          See https://docs.nextcloud.com/server/14/admin_manual/configuration_server/caching_configuration.html
+          See <https://docs.nextcloud.com/server/latest/admin_manual/configuration_server/caching_configuration.html>
         '';
       };
     };
@@ -768,15 +826,17 @@ in {
       description = ''
         Extra options which should be appended to Nextcloud's config.php file.
       '';
-      example = literalExpression '' {
-        redis = {
-          host = "/run/redis/redis.sock";
-          port = 0;
-          dbindex = 0;
-          password = "secret";
-          timeout = 1.5;
-        };
-      } '';
+      example = literalExpression ''
+        {
+          redis = {
+            host = "/run/redis/redis.sock";
+            port = 0;
+            dbindex = 0;
+            password = "secret";
+            timeout = 1.5;
+          };
+        }
+      '';
     };
 
     secretFile = mkOption {
@@ -821,7 +881,7 @@ in {
 
   config = mkIf cfg.enable (mkMerge [
     { warnings = let
-        latest = 30;
+        latest = 31;
         upgradeWarning = major: nixos:
           ''
             A legacy Nextcloud install (from before NixOS ${nixos}) may be installed.
@@ -851,7 +911,9 @@ in {
         ++ (optional (versionOlder cfg.package.version "27") (upgradeWarning 26 "23.11"))
         ++ (optional (versionOlder cfg.package.version "28") (upgradeWarning 27 "24.05"))
         ++ (optional (versionOlder cfg.package.version "29") (upgradeWarning 28 "24.11"))
-        ++ (optional (versionOlder cfg.package.version "30") (upgradeWarning 29 "24.11"));
+        ++ (optional (versionOlder cfg.package.version "30") (upgradeWarning 29 "24.11"))
+        ++ (optional (versionOlder cfg.package.version "31") (upgradeWarning 30 "25.05"))
+        ;
 
       services.nextcloud.package = with pkgs;
         mkDefault (
@@ -863,7 +925,8 @@ in {
             ''
           else if versionOlder stateVersion "24.05" then nextcloud27
           else if versionOlder stateVersion "24.11" then nextcloud29
-          else nextcloud30
+          else if versionOlder stateVersion "25.05" then nextcloud30
+          else nextcloud31
         );
 
       services.nextcloud.phpPackage =
@@ -921,12 +984,9 @@ in {
         "L+ ${datadir}/config/override.config.php - - - - ${overrideConfig}"
       ];
 
-      systemd.services = {
-        # When upgrading the Nextcloud package, Nextcloud can report errors such as
-        # "The files of the app [all apps in /var/lib/nextcloud/apps] were not replaced correctly"
-        # Restarting phpfpm on Nextcloud package update fixes these issues (but this is a workaround).
-        phpfpm-nextcloud.restartTriggers = [ webroot overrideConfig ];
+      services.nextcloud.finalPackage = webroot;
 
+      systemd.services = {
         nextcloud-setup = let
           c = cfg.config;
           occInstallCmd = let
@@ -937,12 +997,12 @@ in {
             dbpass = {
               arg = "DBPASS";
               value = if c.dbpassFile != null
-                then ''"$(<"${toString c.dbpassFile}")"''
+                then ''"$(<"$CREDENTIALS_DIRECTORY/dbpass")"''
                 else ''""'';
             };
             adminpass = {
               arg = "ADMINPASS";
-              value = ''"$(<"${toString c.adminpassFile}")"'';
+              value = ''"$(<"$CREDENTIALS_DIRECTORY/adminpass")"'';
             };
             installFlags = concatStringsSep " \\\n    "
               (mapAttrsToList (k: v: "${k} ${toString v}") {
@@ -961,12 +1021,12 @@ in {
           in ''
             ${mkExport dbpass}
             ${mkExport adminpass}
-            ${occ}/bin/nextcloud-occ maintenance:install \
+            ${lib.getExe occ} maintenance:install \
                 ${installFlags}
           '';
           occSetTrustedDomainsCmd = concatStringsSep "\n" (imap0
             (i: v: ''
-              ${occ}/bin/nextcloud-occ config:system:set trusted_domains \
+              ${lib.getExe occ} config:system:set trusted_domains \
                 ${toString i} --value="${toString v}"
             '') ([ cfg.hostName ] ++ cfg.settings.trusted_domains));
 
@@ -980,20 +1040,12 @@ in {
           restartTriggers = [ overrideConfig ];
           script = ''
             ${optionalString (c.dbpassFile != null) ''
-              if [ ! -r "${c.dbpassFile}" ]; then
-                echo "dbpassFile ${c.dbpassFile} is not readable by nextcloud:nextcloud! Aborting..."
-                exit 1
-              fi
-              if [ -z "$(<${c.dbpassFile})" ]; then
+              if [ -z "$(<"$CREDENTIALS_DIRECTORY/dbpass")" ]; then
                 echo "dbpassFile ${c.dbpassFile} is empty!"
                 exit 1
               fi
             ''}
-            if [ ! -r "${c.adminpassFile}" ]; then
-              echo "adminpassFile ${c.adminpassFile} is not readable by nextcloud:nextcloud! Aborting..."
-              exit 1
-            fi
-            if [ -z "$(<${c.adminpassFile})" ]; then
+            if [ -z "$(<"$CREDENTIALS_DIRECTORY/adminpass")" ]; then
               echo "adminpassFile ${c.adminpassFile} is empty!"
               exit 1
             fi
@@ -1010,56 +1062,101 @@ in {
               ${occInstallCmd}
             fi
 
-            ${occ}/bin/nextcloud-occ upgrade
+            ${lib.getExe occ} upgrade
 
-            ${occ}/bin/nextcloud-occ config:system:delete trusted_domains
+            ${lib.getExe occ} config:system:delete trusted_domains
 
             ${optionalString (cfg.extraAppsEnable && cfg.extraApps != { }) ''
                 # Try to enable apps
-                ${occ}/bin/nextcloud-occ app:enable ${concatStringsSep " " (attrNames cfg.extraApps)}
+                ${lib.getExe occ} app:enable ${concatStringsSep " " (attrNames cfg.extraApps)}
             ''}
 
             ${occSetTrustedDomainsCmd}
           '';
           serviceConfig.Type = "oneshot";
           serviceConfig.User = "nextcloud";
+          serviceConfig.LoadCredential = [ "adminpass:${cfg.config.adminpassFile}" ] ++ runtimeSystemdCredentials;
           # On Nextcloud ≥ 26, it is not necessary to patch the database files to prevent
           # an automatic creation of the database user.
           environment.NC_setup_create_db_user = lib.mkIf (nextcloudGreaterOrEqualThan "26") "false";
         };
         nextcloud-cron = {
           after = [ "nextcloud-setup.service" ];
+          # NOTE: In contrast to the occ wrapper script running phpCli directly will not
+          #       set NEXTCLOUD_CONFIG_DIR by itself currently.
           environment.NEXTCLOUD_CONFIG_DIR = "${datadir}/config";
+          script = ''
+            # NOTE: This early returns the script when nextcloud is in maintenance mode
+            #       or needs `occ upgrade`. Using ExecCondition= is not possible here
+            #       because it doesn't work with systemd credentials.
+            if [[ $(${lib.getExe occ} status --output=json | ${lib.getExe pkgs.jq} '. | if .maintenance or .needsDbUpgrade then "skip" else "" end' --raw-output) == "skip" ]]; then
+              echo "Nextcloud is in maintenance mode or needs DB upgrade, exiting."
+              exit 0
+            fi
+
+            ${phpCli} -f ${webroot}/cron.php
+          '';
           serviceConfig = {
             Type = "exec";
             User = "nextcloud";
-            ExecCondition = "${phpCli} -f ${webroot}/occ status -e";
-            ExecStart = "${phpCli} -f ${webroot}/cron.php";
             KillMode = "process";
+            LoadCredential = runtimeSystemdCredentials;
           };
         };
         nextcloud-update-plugins = mkIf cfg.autoUpdateApps.enable {
           after = [ "nextcloud-setup.service" ];
           serviceConfig = {
             Type = "oneshot";
-            ExecStart = "${occ}/bin/nextcloud-occ app:update --all";
+            ExecStart = "${lib.getExe occ} app:update --all";
             User = "nextcloud";
+            LoadCredential = runtimeSystemdCredentials;
           };
           startAt = cfg.autoUpdateApps.startAt;
         };
         nextcloud-update-db = {
           after = [ "nextcloud-setup.service" ];
-          environment.NEXTCLOUD_CONFIG_DIR = "${datadir}/config";
           script = ''
-            ${occ}/bin/nextcloud-occ db:add-missing-columns
-            ${occ}/bin/nextcloud-occ db:add-missing-indices
-            ${occ}/bin/nextcloud-occ db:add-missing-primary-keys
+            # NOTE: This early returns the script when nextcloud is in maintenance mode
+            #       or needs `occ upgrade`. Using ExecCondition= is not possible here
+            #       because it doesn't work with systemd credentials.
+            if [[ $(${lib.getExe occ} status --output=json | ${lib.getExe pkgs.jq} '. | if .maintenance or .needsDbUpgrade then "skip" else "" end' --raw-output) == "skip" ]]; then
+              echo "Nextcloud is in maintenance mode or needs DB upgrade, exiting."
+              exit 0
+            fi
+
+            ${lib.getExe occ} db:add-missing-columns
+            ${lib.getExe occ} db:add-missing-indices
+            ${lib.getExe occ} db:add-missing-primary-keys
           '';
           serviceConfig = {
             Type = "exec";
             User = "nextcloud";
-            ExecCondition = "${phpCli} -f ${webroot}/occ status -e";
+            LoadCredential = runtimeSystemdCredentials;
           };
+        };
+
+        phpfpm-nextcloud = {
+          # When upgrading the Nextcloud package, Nextcloud can report errors such as
+          # "The files of the app [all apps in /var/lib/nextcloud/apps] were not replaced correctly"
+          # Restarting phpfpm on Nextcloud package update fixes these issues (but this is a workaround).
+          restartTriggers = [ webroot overrideConfig ];
+        } // lib.optionalAttrs requiresRuntimeSystemdCredentials {
+          serviceConfig.LoadCredential = runtimeSystemdCredentials;
+
+          # FIXME: We use a hack to make the credential files readable by the nextcloud
+          #        user by copying them somewhere else and overriding CREDENTIALS_DIRECTORY
+          #        for php. This is currently necessary as the unit runs as root.
+          serviceConfig.RuntimeDirectory = lib.mkForce "phpfpm phpfpm-nextcloud";
+          preStart = ''
+            umask 0077
+
+            # NOTE: Runtime directories for this service are currently preserved
+            #       between restarts.
+            rm -rf /run/phpfpm-nextcloud/credentials/
+            mkdir -p /run/phpfpm-nextcloud/credentials/
+            cp "$CREDENTIALS_DIRECTORY"/* /run/phpfpm-nextcloud/credentials/
+            chown -R nextcloud:nextcloud /run/phpfpm-nextcloud/credentials/
+          '';
         };
       };
 
@@ -1069,6 +1166,7 @@ in {
           group = "nextcloud";
           phpPackage = phpPackage;
           phpEnv = {
+            CREDENTIALS_DIRECTORY = "/run/phpfpm-nextcloud/credentials/";
             NEXTCLOUD_CONFIG_DIR = "${datadir}/config";
             PATH = "/run/wrappers/bin:/nix/var/nix/profiles/default/bin:/run/current-system/sw/bin:/usr/bin:/bin";
           };

@@ -15,6 +15,7 @@
   libadwaita,
   gst_all_1,
   ffmpeg-headless,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -29,9 +30,9 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-4B3NNGww+UjI/VbsKL62vWlKye7NYXYPzlJ4TfywJDw=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-vtV5TrF81TK4PUwzOF/CuDsKH1vTLO+4PFufyIOp2zk=";
+    hash = "sha256-H7KB4O3Wyp2YdMLFwvQuYLhk7Ei7SecnMN9wg60FIm8=";
   };
 
   nativeBuildInputs = [
@@ -69,13 +70,19 @@ stdenv.mkDerivation (finalAttrs: {
     )
   '';
 
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
   meta = {
     homepage = "https://gitlab.gnome.org/YaLTeR/video-trimmer";
     description = "Trim videos quickly";
-    maintainers = with lib.maintainers; [
-      doronbehar
-      aleksana
-    ];
+    maintainers =
+      with lib.maintainers;
+      [
+        doronbehar
+      ]
+      ++ lib.teams.gnome-circle.members;
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     mainProgram = "video-trimmer";

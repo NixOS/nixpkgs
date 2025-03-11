@@ -1,40 +1,44 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, libgit2
-, openssl
-, zlib
-, stdenv
-, darwin
-, git
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  libgit2,
+  openssl,
+  zlib,
+  stdenv,
+  darwin,
+  git,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "gitu";
-  version = "0.26.0";
+  version = "0.28.2";
 
   src = fetchFromGitHub {
     owner = "altsem";
     repo = "gitu";
     rev = "v${version}";
-    hash = "sha256-rHlehYdyBYyhP/kFciFW0vmaewtXYuypaHMzqyMDXYA=";
+    hash = "sha256-zjA+jPkvR4lAZjVSBY/4V9w+0IQ17yUTSt/skW6owo0=";
   };
 
-  cargoHash = "sha256-b0Z1SOprsVe8Sg4X0ooOahE9yrP65CV1otZ3nXFvPHo=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-gg30wrHDyCqrUAUw0NGpEpGROOrigkC2KxA6Q8BcNqA=";
 
   nativeBuildInputs = [
     pkg-config
   ];
 
-  buildInputs = [
-    libgit2
-    openssl
-    zlib
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.AppKit
-    darwin.apple_sdk.frameworks.Security
-  ];
+  buildInputs =
+    [
+      libgit2
+      openssl
+      zlib
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.AppKit
+      darwin.apple_sdk.frameworks.Security
+    ];
 
   nativeCheckInputs = [
     git

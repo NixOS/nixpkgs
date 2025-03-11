@@ -1,17 +1,26 @@
 {
   lib,
+  mkDerivationWith,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+  setuptools-scm,
+
+  # nativeBuildInputs
+  wrapQtAppsHook,
+
+  # dependencies
   app-model,
   appdirs,
-  buildPythonPackage,
   cachey,
   certifi,
   dask,
   docstring-parser,
-  fetchFromGitHub,
   imageio,
   jsonschema,
   magicgui,
-  mkDerivationWith,
   napari-console,
   napari-npe2,
   napari-svg,
@@ -22,34 +31,28 @@
   psutil,
   pydantic,
   pyopengl,
-  pythonOlder,
   pyyaml,
   scikit-image,
   scipy,
-  setuptools,
-  setuptools-scm,
   superqt,
   tifffile,
   toolz,
   tqdm,
   typing-extensions,
   vispy,
-  wrapQtAppsHook,
   wrapt,
 }:
 
 mkDerivationWith buildPythonPackage rec {
   pname = "napari";
-  version = "0.5.4";
+  version = "0.5.6";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "napari";
     repo = "napari";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-wJifLRrHlDzPgBU7OOPqjdzYpr9M+Klc+yAc/IpyZN8=";
+    tag = "v${version}";
+    hash = "sha256-nMGqsgE3IXyC8lcM9+3U7ytEgDeYsFEbkgByHI4xI0E=";
   };
 
   postPatch = ''
@@ -64,7 +67,7 @@ mkDerivationWith buildPythonPackage rec {
 
   nativeBuildInputs = [ wrapQtAppsHook ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     app-model
     appdirs
     cachey
@@ -102,11 +105,11 @@ mkDerivationWith buildPythonPackage rec {
     wrapQtApp $out/bin/napari
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Fast, interactive, multi-dimensional image viewer";
     homepage = "https://github.com/napari/napari";
     changelog = "https://github.com/napari/napari/releases/tag/v${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ SomeoneSerge ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ SomeoneSerge ];
   };
 }

@@ -1,32 +1,37 @@
-{ lib
-, stdenv
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, gettext
-, alsa-lib
-, acpid
-, bc
-, ddcutil
-, efl
-, libexif
-, pam
-, xkeyboard_config
-, udisks2
-, waylandSupport ? false, wayland-protocols, xwayland
-, bluetoothSupport ? true, bluez5
-, pulseSupport ? !stdenv.hostPlatform.isDarwin, libpulseaudio
-, directoryListingUpdater
+{
+  lib,
+  stdenv,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  gettext,
+  alsa-lib,
+  acpid,
+  bc,
+  ddcutil,
+  efl,
+  libexif,
+  pam,
+  xkeyboard_config,
+  udisks2,
+  waylandSupport ? false,
+  wayland-protocols,
+  xwayland,
+  bluetoothSupport ? true,
+  bluez5,
+  pulseSupport ? !stdenv.hostPlatform.isDarwin,
+  libpulseaudio,
+  directoryListingUpdater,
 }:
 
 stdenv.mkDerivation rec {
   pname = "enlightenment";
-  version = "0.26.0";
+  version = "0.27.0";
 
   src = fetchurl {
     url = "https://download.enlightenment.org/rel/apps/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-EbbvBnG+X+rWiL9VTDCiocaDSTrRDF/jEV/7RlVCToQ=";
+    sha256 = "sha256-W2a5FMbZCpFrP+ZrX/cKn9kSCIqmOZvd4bOlBarlAzE=";
   };
 
   nativeBuildInputs = [
@@ -36,21 +41,24 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs = [
-    alsa-lib
-    acpid # for systems with ACPI for lid events, AC/Battery plug in/out etc
-    bc # for the Everything module calculator mode
-    ddcutil # specifically libddcutil.so.2 for backlight control
-    efl
-    libexif
-    pam
-    xkeyboard_config
-    udisks2 # for removable storage mounting/unmounting
-  ]
-  ++ lib.optional bluetoothSupport bluez5 # for bluetooth configuration and control
-  ++ lib.optional pulseSupport libpulseaudio # for proper audio device control and redirection
-  ++ lib.optionals waylandSupport [ wayland-protocols xwayland ]
-  ;
+  buildInputs =
+    [
+      alsa-lib
+      acpid # for systems with ACPI for lid events, AC/Battery plug in/out etc
+      bc # for the Everything module calculator mode
+      ddcutil # specifically libddcutil.so.2 for backlight control
+      efl
+      libexif
+      pam
+      xkeyboard_config
+      udisks2 # for removable storage mounting/unmounting
+    ]
+    ++ lib.optional bluetoothSupport bluez5 # for bluetooth configuration and control
+    ++ lib.optional pulseSupport libpulseaudio # for proper audio device control and redirection
+    ++ lib.optionals waylandSupport [
+      wayland-protocols
+      xwayland
+    ];
 
   patches = [
     # Executables cannot be made setuid in nix store. They should be
@@ -78,6 +86,12 @@ stdenv.mkDerivation rec {
     homepage = "https://www.enlightenment.org";
     license = licenses.bsd2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ matejc ftrvxmtrx ] ++ teams.enlightenment.members;
+    maintainers =
+      with maintainers;
+      [
+        matejc
+        ftrvxmtrx
+      ]
+      ++ teams.enlightenment.members;
   };
 }

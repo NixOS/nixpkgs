@@ -1,10 +1,11 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, nix-update-script
-, testers
-, qmake
-, qtmultimedia
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  nix-update-script,
+  testers,
+  qmake,
+  qtmultimedia,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

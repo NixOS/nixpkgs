@@ -3,45 +3,107 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # nativeBuildInputs
   ninja,
   which,
-  # build inputs
-  pillow,
-  matplotlib,
-  pycocotools,
-  termcolor,
-  yacs,
-  tabulate,
-  cloudpickle,
-  tqdm,
-  tensorboard,
-  fvcore,
-  iopath,
-  omegaconf,
-  hydra-core,
-  packaging,
-  torch,
-  pydot,
+
+  # buildInputs
+  pybind11,
+
+  # dependencies
   black,
-  # optional dependencies
+  cloudpickle,
+  fvcore,
+  hydra-core,
+  iopath,
+  matplotlib,
+  omegaconf,
+  packaging,
+  pillow,
+  pycocotools,
+  pydot,
+  tabulate,
+  tensorboard,
+  termcolor,
+  torch,
+  tqdm,
+  yacs,
+
+  # optional-dependencies
   fairscale,
-  timm,
+  psutil,
+  pygments,
   scipy,
   shapely,
-  pygments,
-  psutil,
-  # check inputs
-  pytestCheckHook,
-  torchvision,
+  timm,
+
+  # tests
   av,
   opencv4,
   pytest-mock,
-  pybind11,
+  pytestCheckHook,
+  torchvision,
 }:
 
 let
   pname = "detectron2";
   version = "0.6";
+in
+buildPythonPackage {
+  inherit pname version;
+  pyproject = true;
+
+  src = fetchFromGitHub {
+    owner = "facebookresearch";
+    repo = "detectron2";
+    tag = "v${version}";
+    hash = "sha256-TosuUZ1hJrXF3VGzsGO2hmQJitGUxe7FyZyKjNh+zPA=";
+  };
+
+  postPatch =
+    # https://github.com/facebookresearch/detectron2/issues/5010
+    ''
+      substituteInPlace detectron2/data/transforms/transform.py \
+        --replace-fail "interp=Image.LINEAR" "interp=Image.BILINEAR"
+    '';
+
+  nativeBuildInputs = [
+    ninja
+    which
+  ];
+
+  buildInputs = [ pybind11 ];
+
+  pythonRelaxDeps = [
+    "black"
+    "iopath"
+  ];
+
+  pythonRemoveDeps = [
+    "future"
+  ];
+
+  dependencies = [
+    black
+    cloudpickle
+    fvcore
+    hydra-core
+    iopath
+    matplotlib
+    omegaconf
+    packaging
+    pillow
+    pycocotools
+    pydot # no idea why this is not in their setup.py
+    tabulate
+    tensorboard
+    termcolor
+    torch # not explicitly declared in setup.py because they expect you to install it yourself
+    tqdm
+    yacs
+  ];
+
   optional-dependencies = {
     all = [
       fairscale
@@ -52,54 +114,6 @@ let
       psutil
     ];
   };
-in
-buildPythonPackage {
-  inherit pname version;
-  format = "setuptools";
-
-  src = fetchFromGitHub {
-    owner = "facebookresearch";
-    repo = "detectron2";
-    rev = "refs/tags/v${version}";
-    sha256 = "1w6cgvc8r2lwr72yxicls650jr46nriv1csivp2va9k1km8jx2sf";
-  };
-
-  postPatch = ''
-    # https://github.com/facebookresearch/detectron2/issues/5010
-    substituteInPlace detectron2/data/transforms/transform.py \
-      --replace "interp=Image.LINEAR" "interp=Image.BILINEAR"
-  '';
-
-  nativeBuildInputs = [
-    ninja
-    which
-  ];
-
-  buildInputs = [ pybind11 ];
-
-  pythonRelaxDeps = [ "black" ];
-
-  propagatedBuildInputs = [
-    pillow
-    matplotlib
-    pycocotools
-    termcolor
-    yacs
-    tabulate
-    cloudpickle
-    tqdm
-    tensorboard
-    fvcore
-    iopath
-    omegaconf
-    hydra-core
-    packaging
-    black
-    torch # not explicitly declared in setup.py because they expect you to install it yourself
-    pydot # no idea why this is not in their setup.py
-  ];
-
-  optional-dependencies = optional-dependencies;
 
   nativeCheckInputs = [
     av
@@ -109,10 +123,11 @@ buildPythonPackage {
     torchvision
   ];
 
-  preCheck = ''
+  preCheck =
     # prevent import errors for C extension modules
-    rm -r detectron2
-  '';
+    ''
+      rm -r detectron2
+    '';
 
   pytestFlagsArray = [
     # prevent include $sourceRoot/projects/*/tests
@@ -168,14 +183,20 @@ buildPythonPackage {
       "test_build_dataloader_inference"
       "test_build_iterable_dataloader_inference"
       "test_to_iterable"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # RuntimeError: required keyword attribute 'value' has the wrong type
+      "test_apply_deltas_tracing"
+      "test_imagelist_padding_tracing"
+      "test_roi_pooler_tracing"
     ];
 
   pythonImportsCheck = [ "detectron2" ];
 
-  meta = with lib; {
+  meta = {
     description = "Facebooks's next-generation platform for object detection, segmentation and other visual recognition tasks";
     homepage = "https://github.com/facebookresearch/detectron2";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ happysalada ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ happysalada ];
   };
 }

@@ -1,23 +1,24 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, nix-update-script
-, testers
-, ipatool
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nix-update-script,
+  testers,
+  ipatool,
 }:
 
 buildGoModule rec {
   pname = "ipatool";
-  version = "2.1.4";
+  version = "2.1.6";
 
   src = fetchFromGitHub {
     owner = "majd";
     repo = "ipatool";
     rev = "v${version}";
-    hash = "sha256-e+gkr8i6dVfxyBM5Vi2YpW4eQ4LE2vhgQadLAFeHK4Q=";
+    hash = "sha256-NdxYrTy8SzPmy3C9wOQYMdzKKumDMeYe+k8Nu2ku/RY=";
   };
 
-  vendorHash = "sha256-aVMWXlHMGdbApKLhuZZpaAYY5QpMMgXc/6f9r79/dTw=";
+  vendorHash = "sha256-/uB4mviMaPyYX59XrRqigOI0YK3necdRC2ZPErai1NU=";
 
   ldflags = [
     "-s"

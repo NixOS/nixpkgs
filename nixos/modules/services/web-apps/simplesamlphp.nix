@@ -97,7 +97,7 @@ in
       description = "Instances of SimpleSAMLphp. This module is designed to work with already existing PHP-FPM pool and NGINX virtualHost.";
     };
 
-  config = {
+  config = lib.mkIf (cfg != { }) {
     services.phpfpm.pools = lib.mapAttrs' (
       phpfpmName: opts:
       lib.nameValuePair opts.phpfpmPool { phpEnv.SIMPLESAMLPHP_CONFIG_DIR = "${generateConfig opts}"; }

@@ -4,7 +4,7 @@
   fetchpatch,
   fetchurl,
   fluidsynth,
-  libmikmod,
+  libopenmpt-modplug,
   libogg,
   libvorbis,
   pkg-config,
@@ -63,38 +63,49 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+  # Fix location of modplug header
+  postPatch = ''
+    substituteInPlace music_modplug.h \
+      --replace-fail '#include "modplug.h"' '#include <libmodplug/modplug.h>'
+  '';
+
   nativeBuildInputs = [
-    SDL
     pkg-config
-    smpeg
   ];
 
   buildInputs = [
     SDL
     fluidsynth
-    libmikmod
+    libopenmpt-modplug
     libogg
     libvorbis
     smpeg
   ];
 
+  # pass in correct *-config for cross builds
+  env.SDL_CONFIG = lib.getExe' (lib.getDev SDL) "sdl-config";
+  env.SMPEG_CONFIG = lib.getExe' smpeg.dev "smpeg-config";
+
   configureFlags = [
     (lib.enableFeature false "music-ogg-shared")
     (lib.enableFeature false "music-mod-shared")
+    (lib.enableFeature true "music-mod-modplug")
     (lib.enableFeature enableNativeMidi "music-native-midi-gpl")
     (lib.enableFeature enableSdltest "sdltest")
     (lib.enableFeature enableSmpegtest "smpegtest")
   ];
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   strictDeps = true;
 
   meta = {
     description = "SDL multi-channel audio mixer library";
     homepage = "http://www.libsdl.org/projects/SDL_mixer/";
-    maintainers = lib.teams.sdl.members
-                  ++ (with lib.maintainers; [ ]);
+    maintainers = lib.teams.sdl.members ++ (with lib.maintainers; [ ]);
     license = lib.licenses.zlib;
     inherit (SDL.meta) platforms;
   };

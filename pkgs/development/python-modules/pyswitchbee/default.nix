@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jafar-atili";
     repo = "pySwitchbee";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-at/HCY6htUz1ej09XPrb2QEyoiOWhIEpgSwJange1cU=";
   };
 

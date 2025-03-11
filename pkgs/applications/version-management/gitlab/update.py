@@ -174,9 +174,9 @@ def update_rubyenv():
         with open(rubyenv_dir / fn, "w") as f:
             f.write(repo.get_file(fn, rev))
 
-    # patch for openssl 3.x support
+    # update to 1.2.9 to include https://gitlab.com/gitlab-org/ruby/gems/prometheus-client-mmap/-/commit/5d77f3f3e048834250589b416c6b3d4bba65a570
     subprocess.check_output(
-        ["sed", "-i", "s:'openssl', '2.*':'openssl', '3.0.2':g", "Gemfile"],
+        ["sed", "-i", "s:'prometheus-client-mmap', '~> 1.2.8':'prometheus-client-mmap', '~> 1.2.9':g", "Gemfile"],
         cwd=rubyenv_dir,
     )
 

@@ -1,27 +1,32 @@
-{ lib
-, bash
-, fetchFromGitHub
-, installShellFiles
-, nix-update-script
-, nixosTests
-, pam
-, pandoc
-, rustPlatform
+{
+  lib,
+  bash,
+  fetchFromGitHub,
+  installShellFiles,
+  nix-update-script,
+  nixosTests,
+  pam,
+  pandoc,
+  rustPlatform,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "sudo-rs";
-  version = "0.2.3";
+  version = "0.2.4";
 
   src = fetchFromGitHub {
     owner = "trifectatechfoundation";
     repo = "sudo-rs";
     rev = "v${version}";
-    hash = "sha256-aXKkEdg44AJTcaGyllQmyUON3Z+irIatz06/l0cbi+E=";
+    hash = "sha256-jzK/AkBtS2XxxRaSYk5wsaj1IbLlcqyyMk3AqambkKs=";
   };
-  cargoHash = "sha256-laTcGi2pwc9uWjum03PviyakVMmjijKgxfIPjIpoRy8=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-0NzHmpf/0YwtgVPkhMpBqxuQQAmKghZ5cZbIr5taM4o=";
 
-  nativeBuildInputs = [ installShellFiles pandoc ];
+  nativeBuildInputs = [
+    installShellFiles
+    pandoc
+  ];
 
   buildInputs = [ pam ];
 
@@ -41,6 +46,7 @@ rustPlatform.buildRustPackage rec {
     # Those tests make path assumptions
     "common::command::test::test_build_command_and_args"
     "common::context::tests::test_build_context"
+    "common::context::tests::test_build_run_context"
     "common::resolve::test::canonicalization"
     "common::resolve::tests::test_resolve_path"
     "system::tests::kill_test"
@@ -73,7 +79,10 @@ rustPlatform.buildRustPackage rec {
     description = "Memory safe implementation of sudo and su";
     homepage = "https://github.com/trifectatechfoundation/sudo-rs";
     changelog = "${meta.homepage}/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [ asl20 mit ];
+    license = with licenses; [
+      asl20
+      mit
+    ];
     maintainers = with maintainers; [ nicoo ];
     platforms = platforms.linux;
   };

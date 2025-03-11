@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tolstislon";
     repo = "testrail-api";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-GR1yhky33XZZFcPEO2WRvVUkmekG9HoM00doVgTCD+0=";
   };
 

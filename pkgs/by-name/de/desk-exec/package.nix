@@ -13,11 +13,12 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "AxerTheAxe";
     repo = "desk-exec";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-bJLdd07IAf+ba++vtS0iSmeQSGygwSVNry2bHTDAgjE=";
   };
 
-  cargoHash = "sha256-pK1WDtGkpPZgFwEm59TqoH7EkKPQivNuvsiOG0dbum4=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-lwc+zth4qCynErG3ldUnu/lX4NfZfxn+XDzJA/kp7S4=";
 
   nativeBuildInputs = [ installShellFiles ];
 

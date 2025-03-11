@@ -1,22 +1,23 @@
-{ lib
-, stdenv
-, appstream
-, cargo
-, desktop-file-utils
-, fetchFromGitea
-, gitUpdater
-, gtk4
-, libadwaita
-, libepoxy
-, libglvnd
-, meson
-, mpv
-, ninja
-, openssl
-, pkg-config
-, rustPlatform
-, rustc
-, wrapGAppsHook4
+{
+  lib,
+  stdenv,
+  appstream,
+  cargo,
+  desktop-file-utils,
+  fetchFromGitea,
+  gitUpdater,
+  gtk4,
+  libadwaita,
+  libepoxy,
+  libglvnd,
+  meson,
+  mpv,
+  ninja,
+  openssl,
+  pkg-config,
+  rustPlatform,
+  rustc,
+  wrapGAppsHook4,
 }:
 
 stdenv.mkDerivation rec {
@@ -31,10 +32,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-2ussvPXMX4wGE9N+Zh8KYIjbbqEKkPaNymN1Oqj8w8U=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-JEHiLdEU9QkCxWPoTFVn2c6UDqnRbTG1WPetdsW/N8g=";
+    hash = "sha256-zZc2+0oskptpWZE4fyVcR4QHxqzpj71GXMXNXMK4an0=";
   };
 
   nativeBuildInputs = [
@@ -70,7 +71,10 @@ stdenv.mkDerivation rec {
     description = "Stream movies and TV shows from Jellyfin";
     homepage = "https://www.delfin.avery.cafe/";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ colinsane avery ];
+    maintainers = with maintainers; [
+      colinsane
+      avery
+    ];
     mainProgram = "delfin";
     platforms = platforms.linux;
   };

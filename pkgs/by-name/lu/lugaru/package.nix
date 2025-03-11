@@ -1,5 +1,18 @@
-{ lib, stdenv, fetchFromGitLab, cmake, openal, pkg-config, libogg,
-  libvorbis, SDL2, makeWrapper, libpng, libjpeg_turbo, libGLU }:
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  cmake,
+  openal,
+  pkg-config,
+  libogg,
+  libvorbis,
+  SDL2,
+  makeWrapper,
+  libpng,
+  libjpeg_turbo,
+  libGLU,
+}:
 
 let
   inherit (lib)
@@ -21,9 +34,21 @@ stdenv.mkDerivation rec {
     sha256 = "089rblf8xw3c6dq96vnfla6zl8gxcpcbc1bj5jysfpq63hhdpypz";
   };
 
-  nativeBuildInputs = [ makeWrapper cmake pkg-config ];
+  nativeBuildInputs = [
+    makeWrapper
+    cmake
+    pkg-config
+  ];
 
-  buildInputs = [ libGLU openal SDL2 libogg libvorbis libpng libjpeg_turbo ];
+  buildInputs = [
+    libGLU
+    openal
+    SDL2
+    libogg
+    libvorbis
+    libpng
+    libjpeg_turbo
+  ];
 
   cmakeFlags = [ "-DSYSTEM_INSTALL=ON" ];
 

@@ -18,12 +18,12 @@ buildHomeAssistantComponent rec {
     hash = "sha256-6bYKqU9yucISjTrmCUx1bNn9kqvT9jW1OBrqAa4ayEQ=";
   };
 
-  postPatch = ''
-    substituteInPlace custom_components/bodymiscale/manifest.json --replace-fail 'cachetools==5.3.0' 'cachetools>=5.3.0'
-  '';
-
-  propagatedBuildInputs = [
+  dependencies = [
     cachetools
+  ];
+
+  ignoreVersionRequirement = [
+    "cachetools"
   ];
 
   meta = {

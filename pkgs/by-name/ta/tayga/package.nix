@@ -1,13 +1,23 @@
-{ lib, stdenv, fetchurl, nixosTests }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  nixosTests,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "0.9.2";
   pname = "tayga";
 
   src = fetchurl {
-    url= "http://www.litech.org/${pname}/${pname}-${version}.tar.bz2";
+    url = "http://www.litech.org/tayga/tayga-${finalAttrs.version}.tar.bz2";
     hash = "sha256-Kx95J6nS3P+Qla/zwnGSSwUsz9L6ypWIsndDGkTwAJw=";
   };
+
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-Wno-address-of-packed-member"
+    "-Wno-implicit-function-declaration"
+  ];
 
   passthru.tests.tayga = nixosTests.tayga;
 
@@ -26,4 +36,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     mainProgram = "tayga";
   };
-}
+})

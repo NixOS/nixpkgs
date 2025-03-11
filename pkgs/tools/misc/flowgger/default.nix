@@ -1,11 +1,12 @@
-{ lib
-, rustPlatform
-, stdenv
-, fetchCrate
-, pkg-config
-, openssl
-, capnproto
-, CoreServices
+{
+  lib,
+  rustPlatform,
+  stdenv,
+  fetchCrate,
+  pkg-config,
+  openssl,
+  capnproto,
+  CoreServices,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -17,15 +18,15 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-eybahv1A/AIpAXGj6/md8k+b9fu9gSchU16fnAWZP2s=";
   };
 
-  cargoHash = "sha256-DZGyX3UDqCjB5NwCXcR8b9pXdq8qacd3nkqGp6vYb+U=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-50/rg1Bo8wEpD9UT1EWIKNLglZLS1FigoPtZudDaL4c=";
 
   nativeBuildInputs = [
     pkg-config
     capnproto
   ];
 
-  buildInputs = [ openssl ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin CoreServices;
+  buildInputs = [ openssl ] ++ lib.optional stdenv.hostPlatform.isDarwin CoreServices;
 
   checkFlags = [
     # test failed

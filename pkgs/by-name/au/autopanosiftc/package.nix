@@ -1,4 +1,14 @@
-{ lib, stdenv, fetchurl, cmake, libpng, libtiff, libjpeg, panotools, libxml2 }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  libpng,
+  libtiff,
+  libjpeg,
+  panotools,
+  libxml2,
+}:
 
 stdenv.mkDerivation rec {
   pname = "autopano-sift-C";
@@ -10,11 +20,17 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ libpng libtiff libjpeg panotools libxml2 ];
+  buildInputs = [
+    libpng
+    libtiff
+    libjpeg
+    panotools
+    libxml2
+  ];
 
   patches = [
     (fetchurl {
-      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/media-gfx/autopano-sift-C/files/autopano-sift-C-2.5.1-lm.patch";
+      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/media-gfx/autopano-sift-C/files/autopano-sift-C-2.5.1-lm.patch?id=dec60bb6900d6ebdaaa6aa1dcb845b30b739f9b5";
       sha256 = "1bfcr5sps0ip9gl4jprji5jgf9wkczz6d2clsjjlbsy8r3ixi3lv";
     })
   ];

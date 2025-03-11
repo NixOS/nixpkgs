@@ -1,12 +1,24 @@
-{ lib, pythonPackages, fetchFromGitHub, makeWrapper
-, sshfs-fuse, torsocks, sshuttle, conntrack-tools , openssh, coreutils
-, iptables, bash }:
+{
+  lib,
+  pythonPackages,
+  fetchFromGitHub,
+  makeWrapper,
+  sshfs-fuse,
+  torsocks,
+  sshuttle,
+  conntrack-tools,
+  openssh,
+  coreutils,
+  iptables,
+  bash,
+}:
 
 let
   sshuttle-telepresence = lib.overrideDerivation sshuttle (p: {
     postInstall = "mv $out/bin/sshuttle $out/bin/sshuttle-telepresence";
   });
-in pythonPackages.buildPythonPackage rec {
+in
+pythonPackages.buildPythonPackage rec {
   pname = "telepresence";
   version = "0.109";
 
@@ -17,20 +29,26 @@ in pythonPackages.buildPythonPackage rec {
     sha256 = "1ccc8bzcdxp6rh6llk7grcnmyc05fq7dz5w0mifdzjv3a473hsky";
   };
 
+  patches = [
+    ./fix-versioneer.patch
+  ];
+
   nativeBuildInputs = [ makeWrapper ];
 
   postInstall = ''
     wrapProgram $out/bin/telepresence \
-      --prefix PATH : ${lib.makeBinPath [
-        sshfs-fuse
-        torsocks
-        conntrack-tools
-        sshuttle-telepresence
-        openssh
-        coreutils
-        iptables
-        bash
-      ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          sshfs-fuse
+          torsocks
+          conntrack-tools
+          sshuttle-telepresence
+          openssh
+          coreutils
+          iptables
+          bash
+        ]
+      }
   '';
 
   doCheck = false;

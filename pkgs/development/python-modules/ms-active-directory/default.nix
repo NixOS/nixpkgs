@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "zorn96";
     repo = "ms_active_directory";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-ZFIeG95+G9ofk54bYZpqu8uVfzjqsOrwWlIZvQgIWRI=";
   };
 

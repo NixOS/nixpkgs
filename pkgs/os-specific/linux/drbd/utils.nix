@@ -1,25 +1,26 @@
-{ lib
-, stdenv
-, docbook_xml_dtd_44
-, docbook_xml_dtd_45
-, docbook_xsl
-, asciidoctor
-, fetchurl
-, flex
-, kmod
-, libxslt
-, nixosTests
-, perl
-, perlPackages
-, systemd
-, keyutils
+{
+  lib,
+  stdenv,
+  docbook_xml_dtd_44,
+  docbook_xml_dtd_45,
+  docbook_xsl,
+  asciidoctor,
+  fetchurl,
+  flex,
+  kmod,
+  libxslt,
+  nixosTests,
+  perl,
+  perlPackages,
+  systemd,
+  keyutils,
 
-# drbd-utils are compiled twice, once with forOCF = true to extract
-# its OCF definitions for use in the ocf-resource-agents derivation,
-# then again with forOCF = false, where the ocf-resource-agents is
-# provided as the OCF_ROOT.
-, forOCF ? false
-, ocf-resource-agents
+  # drbd-utils are compiled twice, once with forOCF = true to extract
+  # its OCF definitions for use in the ocf-resource-agents derivation,
+  # then again with forOCF = false, where the ocf-resource-agents is
+  # provided as the OCF_ROOT.
+  forOCF ? false,
+  ocf-resource-agents,
 }:
 
 stdenv.mkDerivation rec {
@@ -126,10 +127,14 @@ stdenv.mkDerivation rec {
     description = "Distributed Replicated Block Device, a distributed storage system for Linux (userspace utilities)";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ryantm astro birkb ];
+    maintainers = with maintainers; [
+      ryantm
+      astro
+      birkb
+    ];
     longDescription = ''
-       DRBD is a software-based, shared-nothing, replicated storage solution
-       mirroring the content of block devices (hard disks, partitions, logical volumes, and so on) between hosts.
+      DRBD is a software-based, shared-nothing, replicated storage solution
+      mirroring the content of block devices (hard disks, partitions, logical volumes, and so on) between hosts.
     '';
   };
 }

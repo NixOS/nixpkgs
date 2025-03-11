@@ -13,38 +13,41 @@
 # These tests are split out from the parent pkg since recompiling the parent
 # takes like 30 min : )
 
-{ lib
-, openssl
-, sgx-psw
-, sgx-sdk
-, sgx-ssl
-, stdenv
-, which
-, opensslVersion ? throw "required parameter"
-, sgxMode ? throw "required parameter" # "SIM" or "HW"
+{
+  lib,
+  openssl,
+  sgx-psw,
+  sgx-sdk,
+  sgx-ssl,
+  stdenv,
+  which,
+  opensslVersion ? throw "required parameter",
+  sgxMode ? throw "required parameter", # "SIM" or "HW"
 }:
 stdenv.mkDerivation {
   inherit (sgx-ssl) postPatch src version;
   pname = sgx-ssl.pname + "-tests-${sgxMode}";
 
-  postUnpack = sgx-ssl.postUnpack + ''
-    sourceRootAbs=$(readlink -e $sourceRoot)
-    packageDir=$sourceRootAbs/Linux/package
+  postUnpack =
+    sgx-ssl.postUnpack
+    + ''
+      sourceRootAbs=$(readlink -e $sourceRoot)
+      packageDir=$sourceRootAbs/Linux/package
 
-    # Do the inverse of 'make install' and symlink built artifacts back into
-    # '$src/Linux/package/' to avoid work.
-    mkdir $packageDir/lib $packageDir/lib64
-    ln -s ${lib.getLib sgx-ssl}/lib/* $packageDir/lib/
-    ln -s ${lib.getLib sgx-ssl}/lib64/* $packageDir/lib64/
-    ln -sf ${lib.getDev sgx-ssl}/include/* $packageDir/include/
+      # Do the inverse of 'make install' and symlink built artifacts back into
+      # '$src/Linux/package/' to avoid work.
+      mkdir $packageDir/lib $packageDir/lib64
+      ln -s ${lib.getLib sgx-ssl}/lib/* $packageDir/lib/
+      ln -s ${lib.getLib sgx-ssl}/lib64/* $packageDir/lib64/
+      ln -sf ${lib.getDev sgx-ssl}/include/* $packageDir/include/
 
-    # test_app needs some internal openssl headers.
-    # See: tail end of 'Linux/build_openssl.sh'
-    tar -C $sourceRootAbs/openssl_source -xf $sourceRootAbs/openssl_source/openssl-${opensslVersion}.tar.gz
-    echo '#define OPENSSL_VERSION_STR "${opensslVersion}"' > $sourceRootAbs/Linux/sgx/osslverstr.h
-    ln -s $sourceRootAbs/openssl_source/openssl-${opensslVersion}/include/crypto $sourceRootAbs/Linux/sgx/test_app/enclave/
-    ln -s $sourceRootAbs/openssl_source/openssl-${opensslVersion}/include/internal $sourceRootAbs/Linux/sgx/test_app/enclave/
-  '';
+      # test_app needs some internal openssl headers.
+      # See: tail end of 'Linux/build_openssl.sh'
+      tar -C $sourceRootAbs/openssl_source -xf $sourceRootAbs/openssl_source/openssl-${opensslVersion}.tar.gz
+      echo '#define OPENSSL_VERSION_STR "${opensslVersion}"' > $sourceRootAbs/Linux/sgx/osslverstr.h
+      ln -s $sourceRootAbs/openssl_source/openssl-${opensslVersion}/include/crypto $sourceRootAbs/Linux/sgx/test_app/enclave/
+      ln -s $sourceRootAbs/openssl_source/openssl-${opensslVersion}/include/internal $sourceRootAbs/Linux/sgx/test_app/enclave/
+    '';
 
   nativeBuildInputs = [
     openssl.bin

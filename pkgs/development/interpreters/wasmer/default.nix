@@ -11,16 +11,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wasmer";
-  version = "5.0.2";
+  version = "5.0.4";
 
   src = fetchFromGitHub {
     owner = "wasmerio";
     repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-u7O+EAhq1h96yWwQVY74vNKKaB+2r5nqhuD9Pktgqu0=";
+    tag = "v${version}";
+    hash = "sha256-rP0qvSb9PxsTMAq0hpB+zdSTHvridyCVdukLUYxdao8=";
   };
 
-  cargoHash = "sha256-FLMGDD/o+gSPqX2dlHQP7zDx89B/MpjdWVpke9EPsBI=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-Fympp2A04viibo4U79FiBSJIeGDUWS34OOwebCks6S0=";
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
@@ -33,13 +34,16 @@ rustPlatform.buildRustPackage rec {
   ];
 
   # check references to `compiler_features` in Makefile on update
-  buildFeatures = [
-    "cranelift"
-    "wasmer-artifact-create"
-    "static-artifact-create"
-    "wasmer-artifact-load"
-    "static-artifact-load"
-  ] ++ lib.optional withLLVM "llvm" ++ lib.optional withSinglepass "singlepass";
+  buildFeatures =
+    [
+      "cranelift"
+      "wasmer-artifact-create"
+      "static-artifact-create"
+      "wasmer-artifact-load"
+      "static-artifact-load"
+    ]
+    ++ lib.optional withLLVM "llvm"
+    ++ lib.optional withSinglepass "singlepass";
 
   cargoBuildFlags = [
     "--manifest-path"

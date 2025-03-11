@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "matthiask";
     repo = "html-sanitizer";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-6OWFLsuefeDzQ1uHnLmboKDgrbY/xJCwqsSQlDaJlRs=";
   };
 

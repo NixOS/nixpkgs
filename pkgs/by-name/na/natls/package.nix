@@ -1,6 +1,7 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -14,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-4x92r6V9AvEO88gFofPTUt+mS7ZhmptDn/8O4pizSRg=";
   };
 
-  cargoHash = "sha256-Am4HmfmhskKxcp1iWod5z3caHwsdo31qCaVi0UxTXAg=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-mfmG2VzBc9bRAjAF2a46JA6fzeXViVkTFUJYEIV44qo=";
 
   meta = with lib; {
     description = "'ls' replacement you never knew you needed";

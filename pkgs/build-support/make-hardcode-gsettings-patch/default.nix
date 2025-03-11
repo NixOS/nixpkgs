@@ -1,6 +1,6 @@
 {
   runCommand,
-  git,
+  gitMinimal,
   coccinelle,
   python3,
 }:
@@ -17,7 +17,6 @@
   a variable name such as `EVOLUTION` must be provided.
   It will end up in the generated patch as `@EVOLUTION@` placeholder, which should be replaced at build time
   with a path to the directory containing a `gschemas.compiled` file that includes the schema.
-
 
   Arguments:
   - `src`: source to generate the patch for.
@@ -57,12 +56,11 @@
   schemaIdToVariableMapping,
 }:
 
-runCommand
-  "hardcode-gsettings.patch"
+runCommand "hardcode-gsettings.patch"
   {
     inherit src patches;
     nativeBuildInputs = [
-      git
+      gitMinimal
       coccinelle
       python3 # For patch script
     ];

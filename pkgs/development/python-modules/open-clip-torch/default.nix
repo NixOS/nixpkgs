@@ -29,14 +29,14 @@
 }:
 buildPythonPackage rec {
   pname = "open-clip-torch";
-  version = "2.29.0";
+  version = "2.31.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mlfoundations";
     repo = "open_clip";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-X5nOWdGhIv+HiiauIezIkPh3G1Odtxr0HPygRp/D184=";
+    tag = "v${version}";
+    hash = "sha256-VOfjxQjIC6IL7WyhTc8JpIAa9eknmU4LpnA9DtQJ+oQ=";
   };
 
   build-system = [ pdm-backend ];
@@ -91,7 +91,7 @@ buildPythonPackage rec {
   meta = {
     description = "Open source implementation of CLIP";
     homepage = "https://github.com/mlfoundations/open_clip";
-    changelog = "https://github.com/mlfoundations/open_clip/releases/tag/v${version}";
+    changelog = "https://github.com/mlfoundations/open_clip/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ iynaix ];
     mainProgram = "open-clip";

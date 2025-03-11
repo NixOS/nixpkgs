@@ -1,4 +1,9 @@
-{ lib, fetchFromGitHub, gerbilPackages, ... }:
+{
+  lib,
+  fetchFromGitHub,
+  gerbilPackages,
+  ...
+}:
 {
   pname = "gerbil-persist";
   version = "unstable-2023-11-29";
@@ -7,7 +12,12 @@
   gerbil-package = "clan/persist";
   version-path = "version";
 
-  gerbilInputs = with gerbilPackages; [ gerbil-utils gerbil-crypto gerbil-poo gerbil-leveldb ];
+  gerbilInputs = with gerbilPackages; [
+    gerbil-utils
+    gerbil-crypto
+    gerbil-poo
+    gerbil-leveldb
+  ];
 
   pre-src = {
     fun = fetchFromGitHub;
@@ -19,9 +29,9 @@
 
   meta = with lib; {
     description = "Gerbil Persist: Persistent data and activities";
-    homepage    = "https://github.com/fare/gerbil-persist";
-    license     = licenses.asl20;
-    platforms   = platforms.unix;
+    homepage = "https://github.com/fare/gerbil-persist";
+    license = licenses.asl20;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ fare ];
   };
 }

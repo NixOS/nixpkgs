@@ -8,7 +8,7 @@
   fontconfig,
   libGL,
   libxkbcommon,
-  mesa,
+  libgbm,
   openxr-loader,
   pkg-config,
   xorg,
@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "stardustxr";
     repo = "server";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-sCatpWDdy7NFWOWUARjN3fZMDVviX2iV79G0HTxfYZU=";
   };
 
@@ -43,7 +43,7 @@ rustPlatform.buildRustPackage rec {
     fontconfig
     libGL
     libxkbcommon
-    mesa
+    libgbm
     openxr-loader
     xorg.libX11
     xorg.libXfixes

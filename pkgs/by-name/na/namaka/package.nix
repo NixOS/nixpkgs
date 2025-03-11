@@ -1,9 +1,10 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, installShellFiles
-, pkg-config
-, oniguruma
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  installShellFiles,
+  pkg-config,
+  oniguruma,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -17,7 +18,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-1ka+5B90UAt7D5kkT9dOExGLJjtLM8dqLeBdFRoeuWg=";
   };
 
-  cargoHash = "sha256-Wo87OjHVKS2w0LeBvYEoV9eoKm8giqV/P9/mh6DueJ0=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-0Hblz7Ri7QxWXDz9z235cNUYb0W/2IPA7E4AreisY9c=";
 
   nativeBuildInputs = [
     installShellFiles

@@ -1,8 +1,9 @@
-{ lib
-, fetchFromGitHub
-, gitUpdater
-, rustPlatform
-, sqlite
+{
+  lib,
+  fetchFromGitHub,
+  gitUpdater,
+  rustPlatform,
+  sqlite,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -16,7 +17,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-o2CSQiU9fEoS3eRmwphtYGZTwn3mstRm2Tlvval83+U=";
   };
 
-  cargoHash = "sha256-YHrSvfHfQ7kbVeCOgggYf3E7gHq+RhVKZrzP8LqX5I0=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-MHSvrZXh9RLuiLEc4IHPvtIKjdRjFhtmumPs4EuJtz0=";
 
   buildInputs = [ sqlite ];
 
@@ -30,6 +32,9 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/Robzz/cargo-docset";
     changelog = "https://github.com/Robzz/cargo-docset/blob/${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ colinsane matthiasbeyer ];
+    maintainers = with maintainers; [
+      colinsane
+      matthiasbeyer
+    ];
   };
 }

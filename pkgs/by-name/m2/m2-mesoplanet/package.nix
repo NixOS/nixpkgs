@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, m2libc
-, mescc-tools
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  m2libc,
+  mescc-tools,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

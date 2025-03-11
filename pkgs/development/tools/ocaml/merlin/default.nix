@@ -1,5 +1,16 @@
-{ lib, fetchurl, fetchpatch, buildDunePackage, substituteAll
-, dot-merlin-reader, dune_2, yojson, csexp, result, menhirSdk }:
+{
+  lib,
+  fetchurl,
+  fetchpatch,
+  buildDunePackage,
+  replaceVars,
+  dot-merlin-reader,
+  dune_2,
+  yojson,
+  csexp,
+  result,
+  menhirSdk,
+}:
 
 buildDunePackage rec {
   pname = "merlin";
@@ -13,9 +24,8 @@ buildDunePackage rec {
   minimalOCamlVersion = "4.02.3";
 
   patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
-      dot_merlin_reader = "${dot-merlin-reader}/bin/dot-merlin-reader";
+    (replaceVars ./fix-paths.patch {
+      dot-merlin-reader = "${dot-merlin-reader}/bin/dot-merlin-reader";
       dune = "${dune_2}/bin/dune";
     })
     # https://github.com/ocaml/merlin/pull/1798
@@ -28,7 +38,13 @@ buildDunePackage rec {
 
   strictDeps = true;
 
-  buildInputs = [ dot-merlin-reader yojson csexp result menhirSdk ];
+  buildInputs = [
+    dot-merlin-reader
+    yojson
+    csexp
+    result
+    menhirSdk
+  ];
 
   meta = with lib; {
     description = "Editor-independent tool to ease the development of programs in OCaml";

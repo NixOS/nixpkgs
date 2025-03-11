@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, gitUpdater
-, testers
-, cmake
-, pkg-config
-, gtest
-, doxygen
-, graphviz
-, lomiri
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  gitUpdater,
+  testers,
+  cmake,
+  pkg-config,
+  gtest,
+  doxygen,
+  graphviz,
+  lomiri,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

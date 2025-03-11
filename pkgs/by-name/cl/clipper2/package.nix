@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
 }:
 
 stdenv.mkDerivation rec {
   pname = "clipper2";
-  version = "1.4.0";
+  version = "1.5.2";
 
   src = fetchFromGitHub {
     owner = "AngusJohnson";
     repo = "Clipper2";
     rev = "Clipper2_${version}";
-    hash = "sha256-ASL9uKkXsWyIbD1qaKEL7gf/JuCqzZQZSKHwLT5dKJU=";
+    hash = "sha256-UsTOqejcN8our4UswFBvPC5fV52qJfjQYoVMEU6vDPE=";
   };
 
   sourceRoot = "${src.name}/CPP";
@@ -25,10 +26,6 @@ stdenv.mkDerivation rec {
     "-DCLIPPER2_EXAMPLES=OFF"
     "-DCLIPPER2_TESTS=OFF"
     "-DBUILD_SHARED_LIBS=ON"
-  ];
-
-  patches = [
-    ./0001-fix-pc-paths.patch
   ];
 
   meta = {

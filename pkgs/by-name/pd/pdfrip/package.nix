@@ -1,6 +1,7 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -10,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "mufeedvh";
     repo = "pdfrip";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-9KDWd71MJ2W9Xp3uqp0iZMmkBwIay+L4gnPUt7hylS0=";
   };
 

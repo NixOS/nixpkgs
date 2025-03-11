@@ -1,27 +1,44 @@
-{ lib
-, stdenv
-, fetchFrom9Front
-, unstableGitUpdater
-, byacc
-, installShellFiles
+{
+  lib,
+  stdenv,
+  fetchFrom9Front,
+  unstableGitUpdater,
+  byacc,
+  installShellFiles,
+  coreutils,
+  # for tests only
+  rc-9front,
+  runCommand,
+  nawk,
 }:
 
 stdenv.mkDerivation {
   pname = "rc-9front";
-  version = "0-unstable-2022-11-01";
+  version = "0-unstable-2025-01-19";
 
   src = fetchFrom9Front {
     domain = "shithub.us";
     owner = "cinap_lenrek";
     repo = "rc";
-    rev = "69041639483e16392e3013491fcb382efd2b9374";
-    hash = "sha256-xc+EfC4bc9ZA97jCQ6CGCzeLGf+Hx3/syl090/x4ew4=";
+    rev = "a827beee910cb143f916cf3657c45c29d904800c";
+    hash = "sha256-FPHKGuJn1xs6yex64knplr6hteFy2xVsUOAgMxQbGXs=";
   };
 
   strictDeps = true;
-  nativeBuildInputs = [ byacc installShellFiles ];
+  nativeBuildInputs = [
+    byacc
+    installShellFiles
+  ];
   enableParallelBuilding = true;
-  patches = [ ./path.patch ];
+  # Rc bootstraps the new $path by hardcoding a common list
+  # of binary locations common to most POSIX-y systems.
+  # On NixOS the average $PATH is a lot more involved and
+  # as such the resulting environment that rcmain.unix dumps you
+  # into is not particularly useful. This patch instead makes
+  # rc bootstrap the new $path using the existing $PATH.
+  postPatch = ''
+    substituteInPlace ./rcmain.unix --replace-fail 'path=(. /bin /usr/bin /usr/local/bin)' 'path=`:{${coreutils}/bin/env echo -n $PATH}'
+  '';
   makeFlags = [ "PREFIX=$(out)" ];
 
   installPhase = ''
@@ -38,15 +55,28 @@ stdenv.mkDerivation {
   passthru = {
     shellPath = "/bin/rc";
     updateScript = unstableGitUpdater { shallowClone = false; };
+    tests = {
+      simple = runCommand "rc-test" { } ''
+        ${lib.getExe rc-9front} -c 'nl=`{echo} && \
+          res=`$nl{for(i in `{seq 1 10}) echo $i} && \
+          echo -n $res' >$out
+        [ "$(wc -l $out | ${lib.getExe nawk} '{ print $1 }' )" = 10 ]
+        [ "$(${lib.getExe nawk} '{ a=a+$1 } END{ print a }' < $out)" = "$((10+9+8+7+6+5+4+3+2+1))" ]
+      '';
+      path = runCommand "rc-path" { } ''
+        PATH='${coreutils}/bin:/a:/b:/c' ${lib.getExe rc-9front} -c 'echo $path(2-)' >$out
+        [ '/a /b /c' = "$(cat $out)" ]
+      '';
+    };
   };
 
-  meta = with lib; {
+  meta = {
     description = "9front shell";
     longDescription = "unix port of 9front rc";
     homepage = "http://shithub.us/cinap_lenrek/rc/HEAD/info.html";
-    license = licenses.mit;
-    maintainers = with maintainers; [ moody ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ moody ];
     mainProgram = "rc";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

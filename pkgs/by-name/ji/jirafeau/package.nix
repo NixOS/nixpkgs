@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitLab, writeText, nixosTests }:
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  writeText,
+  nixosTests,
+}:
 let
   localConfig = writeText "config.local.php" ''
     <?php

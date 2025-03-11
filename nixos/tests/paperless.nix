@@ -8,21 +8,21 @@ import ./make-test-python.nix ({ lib, ... }: {
       services.paperless = {
         enable = true;
         passwordFile = builtins.toFile "password" "admin";
+
+        exporter = {
+          enable = true;
+
+          settings = {
+            "no-color" = lib.mkForce false; # override a default option
+            "no-thumbnail" = true; # add a new option
+          };
+        };
       };
     };
     postgres = { config, pkgs, ... }: {
       imports = [ self.simple ];
-      services.postgresql = {
-        enable = true;
-        ensureDatabases = [ "paperless" ];
-        ensureUsers = [
-          { name = config.services.paperless.user;
-            ensureDBOwnership = true;
-          }
-        ];
-      };
+      services.paperless.database.createLocally = true;
       services.paperless.settings = {
-        PAPERLESS_DBHOST = "/run/postgresql";
         PAPERLESS_OCR_LANGUAGE = "deu";
       };
     };
@@ -81,6 +81,25 @@ import ./make-test-python.nix ({ lib, ... }: {
 
         metadata = json.loads(node.succeed("curl -u admin:admin -fs localhost:28981/api/documents/3/metadata/"))
         assert "original_checksum" in metadata
+
+      with subtest("Exporter"):
+          node.succeed("systemctl start --wait paperless-exporter")
+          node.wait_for_unit("paperless-web.service")
+          node.wait_for_unit("paperless-consumer.service")
+          node.wait_for_unit("paperless-scheduler.service")
+          node.wait_for_unit("paperless-task-queue.service")
+
+          node.succeed("ls -lah /var/lib/paperless/export/manifest.json")
+
+          timers = node.succeed("systemctl list-timers paperless-exporter")
+          print(timers)
+          assert "paperless-exporter.timer paperless-exporter.service" in timers, "missing timer"
+          assert "1 timers listed." in timers, "incorrect number of timers"
+
+          # Double check that our attrset option override works as expected
+          cmdline = node.succeed("grep 'paperless-manage' $(systemctl cat paperless-exporter | grep ExecStart | cut -f 2 -d=)")
+          print(f"Exporter command line {cmdline!r}")
+          assert cmdline.strip() == "paperless-manage document_exporter /var/lib/paperless/export --compare-checksums --delete --no-progress-bar --no-thumbnail", "Unexpected exporter command line"
 
     test_paperless(simple)
     simple.send_monitor_command("quit")

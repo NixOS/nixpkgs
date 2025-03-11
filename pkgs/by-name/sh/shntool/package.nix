@@ -1,19 +1,31 @@
-{ lib, stdenv, fetchurl, flac }:
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  flac,
+}:
 
-stdenv.mkDerivation {
-  version = "3.0.10";
+stdenv.mkDerivation rec {
+  version = "3.0.10+git20130108.4ca41f4-1";
   pname = "shntool";
 
-  src = fetchurl {
-    url = "http://www.etree.org/shnutils/shntool/dist/src/shntool-3.0.10.tar.gz";
-    sha256 = "00i1rbjaaws3drkhiczaign3lnbhr161b7rbnjr8z83w8yn2wc3l";
+  src = fetchFromGitLab {
+    domain = "salsa.debian.org";
+    owner = "debian";
+    repo = "shntool";
+    rev = "debian/${version}";
+    sha256 = "sha256-Qn4LwVx34EhypiZDIxuveNhePigkuiICn1nBukoQf5Y=";
   };
 
   buildInputs = [ flac ];
 
+  prePatch = ''
+    patches=$(grep -v '#' ./debian/patches/series | while read patch; do echo "./debian/patches/$patch"; done | tr '\n' ' ')
+  '';
+
   meta = {
     description = "Multi-purpose WAVE data processing and reporting utility";
-    homepage = "http://www.etree.org/shnutils/shntool/";
+    homepage = "https://packages.qa.debian.org/s/shntool.html";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ jcumming ];

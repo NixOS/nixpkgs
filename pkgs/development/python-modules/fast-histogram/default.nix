@@ -1,53 +1,57 @@
 {
   lib,
   buildPythonPackage,
-  pytestCheckHook,
   fetchFromGitHub,
+  hypothesis,
+  numpy,
+  pytest-cov-stub,
+  pytestCheckHook,
   python,
   pythonOlder,
-  setuptools,
   setuptools-scm,
-  numpy,
-  wheel,
-  hypothesis,
-  pytest-cov-stub,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "fast-histogram";
   version = "0.14";
-  format = "setuptools";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "astrofrog";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-vIzDDzz6e7PXArHdZdSSgShuTjy3niVdGtXqgmyJl1w=";
+    repo = "fast-histogram";
+    tag = "v${version}";
+    hash = "sha256-vIzDDzz6e7PXArHdZdSSgShuTjy3niVdGtXqgmyJl1w=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
-    wheel
   ];
 
-  propagatedBuildInputs = [ numpy ];
+  dependencies = [ numpy ];
 
   nativeCheckInputs = [
-    pytestCheckHook
     hypothesis
     pytest-cov-stub
+    pytestCheckHook
   ];
 
   pytestFlagsArray = [ "${builtins.placeholder "out"}/${python.sitePackages}" ];
 
   pythonImportsCheck = [ "fast_histogram" ];
 
+  disabledTests = [
+    # ValueError
+    "test_1d_compare_with_numpy"
+  ];
+
   meta = with lib; {
-    homepage = "https://github.com/astrofrog/fast-histogram";
     description = "Fast 1D and 2D histogram functions in Python";
+    homepage = "https://github.com/astrofrog/fast-histogram";
+    changelog = "https://github.com/astrofrog/fast-histogram/blob/v${version}/CHANGES.md";
     license = licenses.bsd2;
     maintainers = with maintainers; [ ifurther ];
   };

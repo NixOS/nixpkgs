@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, jansson }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  jansson,
+}:
 
 let
   libsailing = fetchFromGitHub {
@@ -19,7 +25,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ jansson libsailing ];
+  buildInputs = [
+    jansson
+    libsailing
+  ];
 
   INSTALL_PATH = "$(out)";
 

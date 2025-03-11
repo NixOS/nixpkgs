@@ -49,8 +49,9 @@ let
     export OPENCV_TEST_DATA_PATH="$tmpPath/opencv_extra/testdata"
     export OPENCV_SAMPLES_DATA_PATH="${opencv4.package_tests}/samples/data"
 
-    #ignored tests because of gtest error - "Test code is not available due to compilation error with GCC 11"
-    export GTEST_FILTER="-AsyncAPICancelation/cancel*"
+    # ignored tests because of gtest error - "Test code is not available due to compilation error with GCC 11"
+    # ignore test due to numerical instability
+    export GTEST_FILTER="-AsyncAPICancelation/cancel*:Photo_CalibrateDebevec.regression"
   '';
   accuracyTests = lib.optionalString runAccuracyTests ''
     ${ builtins.concatStringsSep "\n"

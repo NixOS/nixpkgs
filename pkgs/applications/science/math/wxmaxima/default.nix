@@ -1,24 +1,25 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, wrapGAppsHook3
-, cmake
-, gettext
-, maxima
-, wxGTK
-, adwaita-icon-theme
-, glib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  wrapGAppsHook3,
+  cmake,
+  gettext,
+  maxima,
+  wxGTK,
+  adwaita-icon-theme,
+  glib,
 }:
 
-stdenv.mkDerivation (finalAttrs:{
+stdenv.mkDerivation (finalAttrs: {
   pname = "wxmaxima";
-  version = "24.08.0";
+  version = "25.01.0";
 
   src = fetchFromGitHub {
     owner = "wxMaxima-developers";
     repo = "wxmaxima";
     rev = "Version-${finalAttrs.version}";
-    hash = "sha256-W9sZlCPi+pz37OQoICnRGQR2hoe/UciMN6NIzDgHNPQ=";
+    hash = "sha256-XFlEBmKxpi7NnUxVXV2F+zQKrvR4r93aLtHOoVZ7SPw=";
   };
 
   buildInputs = [

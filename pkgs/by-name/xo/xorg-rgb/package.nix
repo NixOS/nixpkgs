@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, pkg-config, xorgproto }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  xorgproto,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rgb";

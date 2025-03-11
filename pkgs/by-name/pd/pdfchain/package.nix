@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchurl, fetchDebianPatch
-, autoconf, gtkmm3, glib, pdftk, pkg-config, wrapGAppsHook3
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchDebianPatch,
+  autoconf,
+  gtkmm3,
+  glib,
+  pdftk,
+  pkg-config,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation rec {
@@ -12,34 +21,44 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkg-config wrapGAppsHook3 autoconf
+    pkg-config
+    wrapGAppsHook3
+    autoconf
   ];
 
   buildInputs = [
-    gtkmm3 pdftk glib
+    gtkmm3
+    pdftk
+    glib
   ];
 
-  patches = let
-    fetchDebianPatch' = args: fetchDebianPatch ({
-      inherit pname;
-      version = "1:0.4.4.2";
-      debianRevision = "2";
-    } // args);
-  in
-  [
-    (fetchDebianPatch' {
-      patch = "fix_crash_on_startup";
-      hash = "sha256-1UyMHHGrmUIFhY53ILdMMsyocSIbcV6CKQ7sLVNhNQw=";
-    })
-    (fetchDebianPatch' {
-      patch = "fix_desktop_file";
-      hash = "sha256-L6lhUs7GqVN1XOQO6bbz6BT29n4upsJtlHCAIGzk1Bw=";
-    })
-    (fetchDebianPatch' {
-      patch = "fix_spelling";
-      hash = "sha256-sOUUslPfcOo2K3zuaLcux+CNdgfWM0phsfe6g4GUFes=";
-    })
-  ];
+  patches =
+    let
+      fetchDebianPatch' =
+        args:
+        fetchDebianPatch (
+          {
+            inherit pname;
+            version = "1:0.4.4.2";
+            debianRevision = "2";
+          }
+          // args
+        );
+    in
+    [
+      (fetchDebianPatch' {
+        patch = "fix_crash_on_startup";
+        hash = "sha256-1UyMHHGrmUIFhY53ILdMMsyocSIbcV6CKQ7sLVNhNQw=";
+      })
+      (fetchDebianPatch' {
+        patch = "fix_desktop_file";
+        hash = "sha256-L6lhUs7GqVN1XOQO6bbz6BT29n4upsJtlHCAIGzk1Bw=";
+      })
+      (fetchDebianPatch' {
+        patch = "fix_spelling";
+        hash = "sha256-sOUUslPfcOo2K3zuaLcux+CNdgfWM0phsfe6g4GUFes=";
+      })
+    ];
 
   postPatch = ''
     substituteInPlace src/constant.h \

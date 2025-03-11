@@ -2,20 +2,20 @@
 
 buildGoModule rec {
   pname = "globalping-cli";
-  version = "1.4.3";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "jsdelivr";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-txc0q/up4/KzVXOOzpBC8Onh7y2jg3hwqjHpUvt68TM=";
+    hash = "sha256-UB2vYdyJ2+H8rFyJn1KBNnWoGUlRjwYorWXqoB9WDu0=";
   };
 
-  vendorHash = "sha256-V6DwV2KukFfFK0PK9MacoHH0sB5qNV315jn0T+4rhfA=";
+  vendorHash = "sha256-dJAuN5srL5EvMaRg8rHaTsurjYrdH45p965DeubpB0E=";
 
   nativeBuildInputs = [ installShellFiles ];
 
-  CGO_ENABLED = 0;
+  env.CGO_ENABLED = 0;
   ldflags = [ "-s" "-w" "-X main.version=${version}" ];
 
   preCheck = ''

@@ -1,26 +1,32 @@
-{ stdenv
-, lib
-, fetchurl
-, meson
-, mesonEmulatorHook
-, ninja
-, pkg-config
-, gettext
-, gtk-doc
-, docbook-xsl-nons
-, gobject-introspection
-, gnome
-, libsoup
-, json-glib
-, glib
-, nixosTests
+{
+  stdenv,
+  lib,
+  fetchurl,
+  meson,
+  mesonEmulatorHook,
+  ninja,
+  pkg-config,
+  gettext,
+  gtk-doc,
+  docbook-xsl-nons,
+  gobject-introspection,
+  gnome,
+  libsoup_2_4,
+  json-glib,
+  glib,
+  nixosTests,
 }:
 
 stdenv.mkDerivation rec {
   pname = "geocode-glib";
   version = "3.26.4";
 
-  outputs = [ "out" "dev" "devdoc" "installedTests" ];
+  outputs = [
+    "out"
+    "dev"
+    "devdoc"
+    "installedTests"
+  ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/geocode-glib/${lib.versions.majorMinor version}/geocode-glib-${version}.tar.xz";
@@ -31,26 +37,28 @@ stdenv.mkDerivation rec {
     ./installed-tests-path.patch
   ];
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-    gettext
-    gtk-doc
-    docbook-xsl-nons
-    gobject-introspection
-  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-    mesonEmulatorHook
-  ];
+  nativeBuildInputs =
+    [
+      meson
+      ninja
+      pkg-config
+      gettext
+      gtk-doc
+      docbook-xsl-nons
+      gobject-introspection
+    ]
+    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+      mesonEmulatorHook
+    ];
 
   buildInputs = [
     glib
-    libsoup
+    libsoup_2_4
     json-glib
   ];
 
   mesonFlags = [
-    "-Dsoup2=${lib.boolToString (lib.versionOlder libsoup.version "2.99")}"
+    "-Dsoup2=${lib.boolToString (lib.versionOlder libsoup_2_4.version "2.99")}"
     "-Dinstalled_test_prefix=${placeholder "installedTests"}"
   ];
 

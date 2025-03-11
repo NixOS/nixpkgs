@@ -1,6 +1,6 @@
 {
   lib,
-  buildGoModule,
+  buildGo124Module,
   fetchFromGitHub,
   stdenv,
   copyDesktopItems,
@@ -13,20 +13,20 @@
   wrapGAppsHook3,
 }:
 
-buildGoModule rec {
+buildGo124Module rec {
   pname = "picocrypt";
-  version = "1.44";
+  version = "1.47";
 
   src = fetchFromGitHub {
     owner = "Picocrypt";
     repo = "Picocrypt";
-    rev = "refs/tags/${version}";
-    hash = "sha256-+0co9JwXGJVXStyQSggJACQlQYwQ3dQtLsTAeCavLa8=";
+    tag = version;
+    hash = "sha256-O/n9dJz8cdJwldOXnsG8W8OZU5WeSmNys746HxRHvdc=";
   };
 
   sourceRoot = "${src.name}/src";
 
-  vendorHash = "sha256-zJDPIRRckrlbmEpxXXMxeguxdcwVS9beHbM1dr5eMz8=";
+  vendorHash = "sha256-9xB0D5Og/eiWUZGMog6lBoze4GrdvBOtNAKcMc3AdIE=";
 
   ldflags = [
     "-s"
@@ -48,7 +48,7 @@ buildGoModule rec {
     wrapGAppsHook3
   ];
 
-  CGO_ENABLED = 1;
+  env.CGO_ENABLED = 1;
 
   postInstall = ''
     mv $out/bin/Picocrypt $out/bin/picocrypt-gui
@@ -69,7 +69,7 @@ buildGoModule rec {
   meta = {
     description = "Very small, very simple, yet very secure encryption tool, written in Go";
     homepage = "https://github.com/Picocrypt/Picocrypt";
-    changelog = "https://github.com/Picocrypt/Picocrypt/blob/main/Changelog.md";
+    changelog = "https://github.com/Picocrypt/Picocrypt/blob/${version}/Changelog.md";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ ryand56 ];
     mainProgram = "picocrypt-gui";

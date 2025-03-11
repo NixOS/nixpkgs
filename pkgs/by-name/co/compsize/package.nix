@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, fetchurl, btrfs-progs }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchurl,
+  btrfs-progs,
+}:
 
 let
   # https://github.com/kilobyte/compsize/issues/52

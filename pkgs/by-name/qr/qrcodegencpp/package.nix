@@ -1,6 +1,7 @@
-{ lib
-, stdenv
-, qrcodegen
+{
+  lib,
+  stdenv,
+  qrcodegen,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -27,6 +28,12 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    inherit (qrcodegen.meta) description homepage license maintainers platforms;
+    inherit (qrcodegen.meta)
+      description
+      homepage
+      license
+      maintainers
+      platforms
+      ;
   };
 })

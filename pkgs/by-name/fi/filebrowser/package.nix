@@ -59,4 +59,3 @@ buildGo123Module {
     mainProgram = "filebrowser";
   };
 }
-

@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, libnotify }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libnotify,
+}:
 
 stdenv.mkDerivation rec {
   pname = "weechat-notify-send";

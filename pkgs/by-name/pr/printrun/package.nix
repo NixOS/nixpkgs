@@ -1,4 +1,10 @@
-{ lib, python3Packages, fetchFromGitHub, glib, wrapGAppsHook3 }:
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+  glib,
+  wrapGAppsHook3,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "printrun";
@@ -7,27 +13,45 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "kliment";
     repo = "Printrun";
-    rev = "refs/tags/printrun-${version}";
+    tag = "printrun-${version}";
     hash = "sha256-INJNGAmghoPIiivQp6AV1XmhyIu8SjfKqL8PTpi/tkY=";
   };
 
   postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace "pyglet >= 1.1, < 2.0" "pyglet" \
-      --replace "cairosvg >= 1.0.9, < 2.6.0" "cairosvg"
     sed -i -r "s|/usr(/local)?/share/|$out/share/|g" printrun/utils.py
   '';
 
-  nativeBuildInputs = [ glib wrapGAppsHook3 ];
+  pythonRelaxDeps = [
+    "pyglet"
+    "cairosvg"
+  ];
+
+  nativeBuildInputs = [
+    glib
+    wrapGAppsHook3
+  ];
 
   propagatedBuildInputs = with python3Packages; [
-    appdirs cython dbus-python numpy six wxpython psutil pyglet pyopengl pyserial cffi cairosvg lxml puremagic
+    appdirs
+    cython
+    dbus-python
+    numpy
+    six
+    wxpython
+    psutil
+    pyglet
+    pyopengl
+    pyserial
+    cffi
+    cairosvg
+    lxml
+    puremagic
   ];
 
   # pyglet.canvas.xlib.NoSuchDisplayException: Cannot connect to "None"
   doCheck = false;
 
-  setupPyBuildFlags = ["-i"];
+  setupPyBuildFlags = [ "-i" ];
 
   postInstall = ''
     for f in $out/share/applications/*.desktop; do

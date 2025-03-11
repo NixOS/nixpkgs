@@ -1,17 +1,21 @@
-{ lib, buildNpmPackage, fetchFromGitHub }:
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
+}:
 
 buildNpmPackage rec {
   pname = "resumed";
-  version = "4.0.0";
+  version = "4.1.0";
 
   src = fetchFromGitHub {
     owner = "rbardini";
     repo = "resumed";
     rev = "v${version}";
-    hash = "sha256-XaEK41UBKUldjRlxTzc42K/RwZ9D8kueU/6dm8n1W1U=";
+    hash = "sha256-kDv6kOVY8IfztmLeby2NgB5q0DtP1ajMselvr1EDQJ8=";
   };
 
-  npmDepsHash = "sha256-r0wq1KGZA5b4eIQsp+dz8Inw8AQA62BK7vgfYlViIrY=";
+  npmDepsHash = "sha256-7Wdf8NaizgIExeX+Kc8wn5f20al0bnxRpFoPy6p40jw=";
 
   meta = with lib; {
     description = "Lightweight JSON Resume builder, no-frills alternative to resume-cli";

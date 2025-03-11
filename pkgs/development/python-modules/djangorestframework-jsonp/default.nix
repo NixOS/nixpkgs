@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jpadilla";
     repo = "django-rest-framework-jsonp";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-4mIO69GhtvbQBtztHVQYIDDDSZpKg0g7BFNHEupiYTs=";
   };
 

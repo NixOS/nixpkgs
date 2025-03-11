@@ -1,6 +1,13 @@
-{ qtModule, qtbase, qtdeclarative }:
+{
+  qtModule,
+  qtbase,
+  qtdeclarative,
+}:
 
 qtModule {
   pname = "qtscxml";
-  propagatedBuildInputs = [ qtbase qtdeclarative ];
+  propagatedBuildInputs = [
+    qtbase
+    qtdeclarative
+  ];
 }

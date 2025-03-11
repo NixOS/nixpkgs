@@ -1,4 +1,10 @@
-{lib, stdenv, fetchurl, jdk, unzip}:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  jdk,
+  unzip,
+}:
 
 stdenv.mkDerivation rec {
   pname = "GeoIPJava";
@@ -10,17 +16,15 @@ stdenv.mkDerivation rec {
   };
   nativeBuildInputs = [ unzip ];
   buildInputs = [ jdk ];
-  buildPhase =
-    ''
-      cd source
-      javac $(find . -name \*.java)
-      jar cfv maxmindgeoip.jar $(find . -name \*.class)
-    '';
-  installPhase =
-    ''
-      mkdir -p $out/share/java
-      cp maxmindgeoip.jar $out/share/java
-    '';
+  buildPhase = ''
+    cd source
+    javac $(find . -name \*.java)
+    jar cfv maxmindgeoip.jar $(find . -name \*.class)
+  '';
+  installPhase = ''
+    mkdir -p $out/share/java
+    cp maxmindgeoip.jar $out/share/java
+  '';
   meta = {
     description = "GeoIP Java API";
     license = lib.licenses.lgpl21Plus;

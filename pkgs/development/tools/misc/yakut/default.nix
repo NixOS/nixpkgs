@@ -1,16 +1,19 @@
-{ lib
-, buildPythonApplication
-, fetchPypi
-, stdenv
-, click
-, coloredlogs
-, psutil
-, pycyphal
-, pyserial
-, ruamel-yaml
-, requests
-, scipy
-, simplejson
+{
+  lib,
+  buildPythonApplication,
+  fetchPypi,
+  stdenv,
+  click,
+  coloredlogs,
+  mido,
+  psutil,
+  pycyphal,
+  pysdl2,
+  python-rtmidi,
+  ruamel-yaml,
+  requests,
+  scipy,
+  simplejson,
 }:
 
 buildPythonApplication rec {
@@ -25,18 +28,24 @@ buildPythonApplication rec {
 
   buildInputs = [
     (lib.getLib stdenv.cc.cc)
+  ];
+  dependencies = [
     click
     coloredlogs
     psutil
     pycyphal
-    pyserial
     ruamel-yaml
     requests
     scipy
     simplejson
   ];
+  optional-dependencies.joystick = [
+    pysdl2
+    mido
+    python-rtmidi
+  ];
 
-  # Can't seem to run the tests on nix
+  # All these require extra permissions and/or actual hardware connected
   doCheck = false;
 
   meta = with lib; {

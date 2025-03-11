@@ -1,8 +1,13 @@
-{ lib, stdenv, fetchurl, fetchpatch, nano }:
+{ lib, stdenv, fetchurl, fetchpatch, texinfo, nano, autoreconfHook }:
 
-stdenv.mkDerivation rec {
-  pname = "cvs";
+let
   version = "1.12.13";
+  debianRevision = "real-30";
+in
+
+stdenv.mkDerivation {
+  pname = "cvs";
+  version = "${version}+${debianRevision}";
 
   src = fetchurl {
     url = "mirror://savannah/cvs/source/feature/${version}/cvs-${version}.tar.bz2";
@@ -11,38 +16,39 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./getcwd-chroot.patch
-    ./CVE-2012-0804.patch
-    ./CVE-2017-12836.patch
     (fetchpatch {
       url = "https://raw.githubusercontent.com/Homebrew/formula-patches/24118ec737c7/cvs/vasnprintf-high-sierra-fix.diff";
       sha256 = "1ql6aaia7xkfq3vqhlw5bd2z2ywka82zk01njs1b2szn699liymg";
     })
+    # Debian Patchset,
+    # contains patches for CVE-2017-12836 and CVE-2012-0804 among other things
+    (fetchurl {
+        url = "http://deb.debian.org/debian/pool/main/c/cvs/cvs_1.12.13+${debianRevision}.diff.gz";
+        sha256 = "085124619dfdcd3e53c726e049235791b67dcb9f71619f1e27c5f1cbdef0063e";
+     })
   ];
 
   hardeningDisable = [ "fortify" "format" ];
 
-  preConfigure = ''
-    # Apply the Debian patches.
-    for p in "debian/patches/"*; do
-      echo "applying \`$p' ..."
-      patch --verbose -p1 < "$p"
-    done
-  '';
+  nativeBuildInputs = [ autoreconfHook texinfo ];
 
   configureFlags = [
     "--with-editor=${nano}/bin/nano"
 
     # Required for cross-compilation.
     "cvs_cv_func_printf_ptr=yes"
+  ] ++ lib.optionals (stdenv.hostPlatform.libc == "glibc") [
+    # So that fputs_unlocked is defined
+    "CFLAGS=-D_GNU_SOURCE"
   ];
 
   makeFlags = [
     "AR=${stdenv.cc.targetPrefix}ar"
+  ] ++ lib.optionals (!stdenv.cc.bintools.isGNU) [
+    # Don't pass --as-needed to linkers that don't support it
+    # (introduced in debian patchset)
+    "cvs_LDFLAGS="
   ];
-
-  env = lib.optionalAttrs (stdenv.hostPlatform.isDarwin && stdenv.cc.isClang) {
-    NIX_CFLAGS_COMPILE = "-Wno-implicit-function-declaration";
-  };
 
   doCheck = false; # fails 1 of 1 tests
 

@@ -1,85 +1,85 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, fetchpatch
-, mesa
-, libGLU
-, glfw
-, libX11
-, libXi
-, libXcursor
-, libXrandr
-, libXinerama
-, alsaSupport ? stdenv.hostPlatform.isLinux
-, alsa-lib
-, pulseSupport ? stdenv.hostPlatform.isLinux
-, libpulseaudio
-, sharedLib ? true
-, includeEverything ? true
-, raylib-games
-, darwin
-, autoPatchelfHook
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  autoPatchelfHook,
+  glfw,
+  SDL2,
+  alsa-lib,
+  libpulseaudio,
+  raylib-games,
+  libGLU,
+  libX11,
+  platform ? "Desktop", # Note that "Web", "Android" and "Raspberry Pi" do not currently work
+  pulseSupport ? stdenv.hostPlatform.isLinux,
+  alsaSupport ? false,
+  sharedLib ? true,
+  includeEverything ? true,
 }:
 let
-  inherit (darwin.apple_sdk.frameworks) Carbon Cocoa OpenGL;
-in
-stdenv.mkDerivation (finalAttrs: {
+  inherit (lib) optional;
+
   pname = "raylib";
-  version = "5.0";
+in
 
-  src = fetchFromGitHub {
-    owner = "raysan5";
-    repo = "raylib";
-    rev = finalAttrs.version;
-    hash = "sha256-gEstNs3huQ1uikVXOW4uoYnIDr5l8O9jgZRTX1mkRww=";
-  };
+lib.checkListOfEnum "${pname}: platform"
+  [
+    "Desktop"
+    "Web"
+    "Android"
+    "Raspberry Pi"
+    "SDL"
+  ]
+  [ platform ]
+  (
+    stdenv.mkDerivation (finalAttrs: {
+      __structuredAttrs = true;
 
-  nativeBuildInputs = [
-    cmake
-  ] ++ lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook;
+      inherit pname;
+      version = "5.5";
 
-  buildInputs = [ glfw ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ mesa libXi libXcursor libXrandr libXinerama ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Carbon Cocoa ]
-    ++ lib.optional alsaSupport alsa-lib
-    ++ lib.optional pulseSupport libpulseaudio;
+      src = fetchFromGitHub {
+        owner = "raysan5";
+        repo = "raylib";
+        rev = finalAttrs.version;
+        hash = "sha256-J99i4z4JF7d6mJNuJIB0rHNDhXJ5AEkG0eBvvuBLHrY=";
+      };
 
-  propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ libGLU libX11 ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ OpenGL ];
+      # autoPatchelfHook is needed for appendRunpaths
+      nativeBuildInputs = [
+        cmake
+      ] ++ optional (builtins.length finalAttrs.appendRunpaths > 0) autoPatchelfHook;
 
-  # https://github.com/raysan5/raylib/wiki/CMake-Build-Options
-  cmakeFlags = [
-    "-DUSE_EXTERNAL_GLFW=ON"
-    "-DBUILD_EXAMPLES=OFF"
-    "-DCUSTOMIZE_BUILD=1"
-  ] ++ lib.optional includeEverything "-DINCLUDE_EVERYTHING=ON"
-  ++ lib.optional sharedLib "-DBUILD_SHARED_LIBS=ON";
+      buildInputs = optional (platform == "Desktop") glfw ++ optional (platform == "SDL") SDL2;
 
-  passthru.tests = { inherit raylib-games; };
+      propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ libGLU libX11 ];
 
-  patches = [
-    # Patch version in CMakeLists.txt to 5.0.0
-    # The library author doesn't use cmake, so when updating this package please
-    # check that the resulting library extension matches the package version
-    # and remove/update this patch
-    (fetchpatch {
-      url = "https://github.com/raysan5/raylib/commit/032cc497ca5aaca862dc926a93c2a45ed8017737.patch";
-      hash = "sha256-qsX5AwyQaGoRsbdszOO7tUF9dR+AkEFi4ebNkBVHNEY=";
+      # https://github.com/raysan5/raylib/wiki/CMake-Build-Options
+      cmakeFlags =
+        [
+          "-DCUSTOMIZE_BUILD=ON"
+          "-DPLATFORM=${platform}"
+        ]
+        ++ optional (platform == "Desktop") "-DUSE_EXTERNAL_GLFW=ON"
+        ++ optional includeEverything "-DINCLUDE_EVERYTHING=ON"
+        ++ optional sharedLib "-DBUILD_SHARED_LIBS=ON";
+
+      appendRunpaths = optional stdenv.hostPlatform.isLinux (
+        lib.makeLibraryPath (optional alsaSupport alsa-lib ++ optional pulseSupport libpulseaudio)
+      );
+
+      passthru.tests = {
+        inherit raylib-games;
+      };
+
+      meta = {
+        description = "Simple and easy-to-use library to enjoy videogames programming";
+        homepage = "https://www.raylib.com/";
+        license = lib.licenses.zlib;
+        maintainers = [ lib.maintainers.diniamo ];
+        platforms = lib.platforms.all;
+        changelog = "https://github.com/raysan5/raylib/blob/${finalAttrs.version}/CHANGELOG";
+      };
     })
-  ];
-
-  # fix libasound.so/libpulse.so not being found
-  appendRunpaths = lib.optionals stdenv.hostPlatform.isLinux [
-    (lib.makeLibraryPath (lib.optional alsaSupport alsa-lib ++ lib.optional pulseSupport libpulseaudio))
-  ];
-
-  meta = with lib; {
-    description = "Simple and easy-to-use library to enjoy videogames programming";
-    homepage = "https://www.raylib.com/";
-    license = licenses.zlib;
-    maintainers = [ ];
-    platforms = platforms.all;
-    changelog = "https://github.com/raysan5/raylib/blob/${finalAttrs.version}/CHANGELOG";
-  };
-})
+  )

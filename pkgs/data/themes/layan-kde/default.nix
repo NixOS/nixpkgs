@@ -1,10 +1,11 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, kdeclarative
-, plasma-framework
-, plasma-workspace
-, gitUpdater
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  kdeclarative,
+  plasma-framework,
+  plasma-workspace,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation rec {

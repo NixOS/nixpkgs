@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, dtc, libusb1, zlib }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  dtc,
+  libusb1,
+  zlib,
+}:
 
 stdenv.mkDerivation rec {
   pname = "sunxi-tools";
@@ -12,13 +20,23 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ dtc libusb1 zlib ];
+  buildInputs = [
+    dtc
+    libusb1
+    zlib
+  ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  buildFlags = [ "tools" "misc" ];
+  buildFlags = [
+    "tools"
+    "misc"
+  ];
 
-  installTargets = [ "install-tools" "install-misc" ];
+  installTargets = [
+    "install-tools"
+    "install-misc"
+  ];
 
   meta = with lib; {
     description = "Tools for Allwinner SoC devices";

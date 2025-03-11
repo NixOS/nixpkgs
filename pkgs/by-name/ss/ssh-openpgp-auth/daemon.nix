@@ -8,7 +8,6 @@ callPackage ./generic.nix {
   pname = "sshd-openpgp-auth";
   version = "0.3.0";
   srcHash = "sha256-IV0Nhdqyn12HDOp1jaKz3sKTI3ktFd5b6qybCLWt27I=";
-  cargoHash = "sha256-/+lZkVMeFUMRD7NQ/MHDU5f3rkKDx1kDv5tjA41RExc=";
-  metaDescription =
-    "Command-line tool for creating and managing OpenPGP based trust anchors for SSH host keys";
+  cargoHash = "sha256-WyYzDzC83iL1c8gCj+mYDq3/gsFxmxEWKwLhWLEygkI=";
+  metaDescription = "Command-line tool for creating and managing OpenPGP based trust anchors for SSH host keys";
 }

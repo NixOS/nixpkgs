@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, nix-update-script, ocamlPackages, darwin }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  ocamlPackages,
+  darwin,
+}:
 
 let
   inherit (ocamlPackages) buildDunePackage camomile;

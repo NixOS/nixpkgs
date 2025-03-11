@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, python3 }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  python3,
+}:
 
 stdenv.mkDerivation rec {
   pname = "smem";
@@ -13,11 +18,10 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "smemcap" ];
 
-  installPhase =
-    ''
-      install -Dm555 -t $out/bin/ smem smemcap
-      install -Dm444 -t $out/share/man/man8/ smem.8
-    '';
+  installPhase = ''
+    install -Dm555 -t $out/bin/ smem smemcap
+    install -Dm444 -t $out/share/man/man8/ smem.8
+  '';
 
   meta = {
     homepage = "https://www.selenic.com/smem/";

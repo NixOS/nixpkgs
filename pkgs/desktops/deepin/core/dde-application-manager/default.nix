@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dde-application-manager";
-  version = "1.2.15";
+  version = "1.2.19";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-9WKKM3SAMgW+UL0DnzDFqA+HHi7euF/yyTyKSbrIgV4=";
+    hash = "sha256-KUwX7oilV562WDxkBhTQhwz2lgcQIYwkmRRglWj0zh8=";
   };
 
   nativeBuildInputs = [

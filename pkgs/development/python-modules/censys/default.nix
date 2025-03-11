@@ -8,6 +8,7 @@
   parameterized,
   poetry-core,
   pytest-mock,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
   requests,
@@ -26,18 +27,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "censys";
     repo = "censys-python";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-OP7+jSt4xS71Kcjy5hFzeZ5rlTPtDx22rPr3UwjI5dk=";
   };
 
-  postPatch = ''
-    substituteInPlace pytest.ini \
-      --replace-fail "--cov" ""
-  '';
-
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
   dependencies = [
     argcomplete
@@ -50,6 +44,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     parameterized
     pytest-mock
+    pytest-cov-stub
     pytestCheckHook
     requests-mock
     responses

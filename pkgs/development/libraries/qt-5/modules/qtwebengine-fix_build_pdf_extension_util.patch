@@ -1,0 +1,11 @@
+# From https://933368.bugs.gentoo.org/attachment.cgi?id=896907
+--- ./src/3rdparty/chromium/qtwebengine/browser/pdf/BUILD.gn.orig	2024-07-03 13:49:13.812285886 +0100
++++ ./src/3rdparty/chromium/qtwebengine/browser/pdf/BUILD.gn	2024-07-03 13:51:45.789966941 +0100
+@@ -6,6 +6,7 @@ source_set("pdf") {
+   ]
+ 
+   deps = [
++    "//chrome/app:generated_resources",
+     "//content/public/browser",
+   ]
+ }

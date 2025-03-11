@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 let
@@ -9,8 +14,7 @@ in
 {
   options = {
     services.xserver.displayManager.lightdm.greeters.mobile = {
-      enable = mkEnableOption
-        "lightdm-mobile-greeter as the lightdm greeter";
+      enable = mkEnableOption "lightdm-mobile-greeter as the lightdm greeter";
     };
   };
 

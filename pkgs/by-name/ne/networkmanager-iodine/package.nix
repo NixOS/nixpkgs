@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  substituteAll,
+  replaceVars,
   autoreconfHook,
   iodine,
   intltool,
@@ -29,8 +29,7 @@ stdenv.mkDerivation {
   };
 
   patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       inherit iodine;
     })
   ];
@@ -39,6 +38,7 @@ stdenv.mkDerivation {
     intltool
     autoreconfHook
     pkg-config
+    glib
   ];
 
   buildInputs =

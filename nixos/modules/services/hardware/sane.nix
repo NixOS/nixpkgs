@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
 
   pkg = config.hardware.sane.backends-package.override {
@@ -29,8 +34,17 @@ let
     LD_LIBRARY_PATH = [ "/etc/sane-libs" ];
   };
 
-  backends = [ pkg netConf ] ++ lib.optional config.services.saned.enable sanedConf ++ config.hardware.sane.extraBackends;
-  saneConfig = pkgs.mkSaneConfig { paths = backends; inherit (config.hardware.sane) disabledDefaultBackends; };
+  backends =
+    [
+      pkg
+      netConf
+    ]
+    ++ lib.optional config.services.saned.enable sanedConf
+    ++ config.hardware.sane.extraBackends;
+  saneConfig = pkgs.mkSaneConfig {
+    paths = backends;
+    inherit (config.hardware.sane) disabledDefaultBackends;
+  };
 
   enabled = config.hardware.sane.enable || config.services.saned.enable;
 
@@ -69,7 +83,7 @@ in
 
     hardware.sane.extraBackends = lib.mkOption {
       type = lib.types.listOf lib.types.path;
-      default = [];
+      default = [ ];
       description = ''
         Packages providing extra SANE backends to enable.
 
@@ -84,7 +98,7 @@ in
 
     hardware.sane.disabledDefaultBackends = lib.mkOption {
       type = lib.types.listOf lib.types.str;
-      default = [];
+      default = [ ];
       example = [ "v4l" ];
       description = ''
         Names of backends which are enabled by default but should be disabled.
@@ -159,7 +173,6 @@ in
 
   };
 
-
   ###### implementation
 
   config = lib.mkMerge [
@@ -171,6 +184,12 @@ in
       environment.etc."sane-config".source = config.hardware.sane.configDir;
       environment.etc."sane-libs".source = "${saneConfig}/lib/sane";
       services.udev.packages = backends;
+      # sane sets up udev rules that tag scanners with `uaccess`. This way, physically logged in users
+      # can access them without belonging to the `scanner` group. However, the `scanner` user used by saned
+      # does not have a real logind seat, so `uaccess` is not enough.
+      services.udev.extraRules = ''
+        ENV{DEVNAME}!="", ENV{libsane_matched}=="yes", RUN+="${pkgs.acl}/bin/setfacl -m g:scanner:rw $env{DEVNAME}"
+      '';
 
       users.groups.scanner.gid = config.ids.gids.scanner;
       networking.firewall.allowedUDPPorts = lib.mkIf config.hardware.sane.openFirewall [ 8612 ];
@@ -196,7 +215,10 @@ in
       systemd.sockets.saned = {
         description = "saned incoming socket";
         wantedBy = [ "sockets.target" ];
-        listenStreams = [ "0.0.0.0:6566" "[::]:6566" ];
+        listenStreams = [
+          "0.0.0.0:6566"
+          "[::]:6566"
+        ];
         socketConfig = {
           # saned needs to distinguish between IPv4 and IPv6 to open matching data sockets.
           BindIPv6Only = "ipv6-only";

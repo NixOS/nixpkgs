@@ -1,6 +1,7 @@
-{ lib
-, stdenv
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
 }:
 
 stdenv.mkDerivation rec {
@@ -13,6 +14,12 @@ stdenv.mkDerivation rec {
     rev = "783204ff6c92afec33d6d36f7e74f1fcf2b1b601";
     hash = "sha256-oT7+6kIeFDgU6GbcHYQ6k0jCU84p8fTEVgUozYMkeVI=";
   };
+
+  patches = [
+    # GCC 14 errors on missing function definitions
+    # https://github.com/zohead/fbvnc/pull/3
+    ./gcc14-fix.patch
+  ];
 
   makeFlags = [
     "CC:=$(CC)"

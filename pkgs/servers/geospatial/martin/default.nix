@@ -1,4 +1,13 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, pkg-config, openssl, Security, SystemConfiguration }:
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  openssl,
+  Security,
+  SystemConfiguration,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "martin";
@@ -11,11 +20,17 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-Jq72aEwM5bIaVywmS3HetR6nnBZnr3oa9a/4ZbgeL9E=";
   };
 
-  cargoHash = "sha256-RO9nUH2+0jOCbvGtZ5j802mL85tY+Jz7ygPrNuFeE98=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-595VKHLajoNinyv12J9qUi55hOcOFRgUeLlzvSdjESs=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security SystemConfiguration ];
+  buildInputs =
+    [ openssl ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      Security
+      SystemConfiguration
+    ];
 
   checkFlags = [
     "--skip function_source_schemas"
@@ -50,7 +65,10 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Blazing fast and lightweight PostGIS vector tiles server";
     homepage = "https://martin.maplibre.org/";
-    license = with licenses; [ mit /* or */ asl20 ];
+    license = with licenses; [
+      mit # or
+      asl20
+    ];
     maintainers = with maintainers; [ sikmir ];
   };
 }

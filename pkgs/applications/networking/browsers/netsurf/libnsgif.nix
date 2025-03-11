@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, buildPackages
-, buildsystem
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  buildPackages,
+  buildsystem,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

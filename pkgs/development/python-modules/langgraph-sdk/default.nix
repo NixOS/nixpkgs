@@ -10,6 +10,7 @@
   httpx,
   httpx-sse,
   orjson,
+  typing-extensions,
 
   # passthru
   writeScript,
@@ -17,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "langgraph-sdk";
-  version = "0.1.35";
+  version = "0.1.53";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
-    rev = "refs/tags/sdk==${version}";
-    hash = "sha256-HWUGRoe5S0HPfOEbqUnFYLVrHe3SJtk3U8cy1JON050=";
+    tag = "sdk==${version}";
+    hash = "sha256-Mx/36+FYZi/XNHJwlNRKE/lVo6nRTXUQwtYkq7HmBu0=";
   };
 
   sourceRoot = "${src.name}/libs/sdk-py";
@@ -35,7 +36,10 @@ buildPythonPackage rec {
     httpx
     httpx-sse
     orjson
+    typing-extensions
   ];
+
+  disabledTests = [ "test_aevaluate_results" ]; # Compares execution time to magic number
 
   pythonImportsCheck = [ "langgraph_sdk" ];
 
@@ -52,6 +56,7 @@ buildPythonPackage rec {
       nix-update --commit --version-regex 'checkpointpostgres==(.*)' python3Packages.langgraph-checkpoint-postgres
       nix-update --commit --version-regex 'checkpointsqlite==(.*)' python3Packages.langgraph-checkpoint-sqlite
     '';
+    skipBulkUpdate = true; # Broken, see https://github.com/NixOS/nixpkgs/issues/379898
   };
 
   meta = {

@@ -1,21 +1,22 @@
-{ stdenv
-, lib
-, fetchgit
-, pkg-config
-, meson
-, ninja
-, systemd
-, liburing
-, zstd
+{
+  stdenv,
+  lib,
+  fetchgit,
+  pkg-config,
+  meson,
+  ninja,
+  systemd,
+  liburing,
+  zstd,
 }:
 stdenv.mkDerivation rec {
   pname = "plocate";
-  version = "1.1.22";
+  version = "1.1.23";
 
   src = fetchgit {
     url = "https://git.sesse.net/plocate";
     rev = version;
-    sha256 = "sha256-ejv1IsjbImnvI1oorvMoIvTBu3HuVy7VtgHNTIkqqro=";
+    sha256 = "sha256-TWQ2mVzosB6sGNUXI2D9GGqgaRZcmiL9GSGrrusck5Q=";
   };
 
   postPatch = ''
@@ -23,9 +24,17 @@ stdenv.mkDerivation rec {
       -e '/mkdir\.sh/d'
   '';
 
-  nativeBuildInputs = [ meson ninja pkg-config ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+  ];
 
-  buildInputs = [ systemd liburing zstd ];
+  buildInputs = [
+    systemd
+    liburing
+    zstd
+  ];
 
   mesonFlags = [
     "-Dsystemunitdir=${placeholder "out"}/etc/systemd/system"
@@ -37,7 +46,10 @@ stdenv.mkDerivation rec {
     description = "Much faster locate";
     homepage = "https://plocate.sesse.net/";
     license = licenses.mit;
-    maintainers = with maintainers; [ peterhoeg SuperSandro2000 ];
+    maintainers = with maintainers; [
+      peterhoeg
+      SuperSandro2000
+    ];
     platforms = platforms.linux;
   };
 }

@@ -14,7 +14,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "openclarity";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-MC9GeJeVG7ROkpmOW2HD/fWMMnHo43q4Du9MzWTk2cg=";
   };
 
@@ -33,7 +33,7 @@ buildGoModule rec {
 
   sourceRoot = "${src.name}/cli";
 
-  CGO_ENABLED = "0";
+  env.CGO_ENABLED = "0";
 
   ldflags = [
     "-s"

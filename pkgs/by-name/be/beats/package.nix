@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 
 stdenv.mkDerivation rec {
   pname = "beats";
@@ -11,7 +15,10 @@ stdenv.mkDerivation rec {
     sha256 = "1rdvsqrjpily74y8vwch711401585xckb4p41cfwrmj6vf44jhif";
   };
 
-  makeFlags = [ "PREFIX=$(out)" "CC=cc" ];
+  makeFlags = [
+    "PREFIX=$(out)"
+    "CC=cc"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/j0hax/beats";

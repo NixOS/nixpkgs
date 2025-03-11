@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, pkg-config, libsndfile }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  libsndfile,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libbs2b";

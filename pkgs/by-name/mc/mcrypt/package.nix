@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, libmcrypt, libmhash }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libmcrypt,
+  libmhash,
+}:
 
 stdenv.mkDerivation rec {
   version = "2.6.8";
@@ -17,7 +23,10 @@ stdenv.mkDerivation rec {
     ./malloc_to_stdlib.patch
   ];
 
-  buildInputs = [ libmcrypt libmhash ];
+  buildInputs = [
+    libmcrypt
+    libmhash
+  ];
 
   env = lib.optionalAttrs stdenv.cc.isClang {
     NIX_CFLAGS_COMPILE = "-Wno-implicit-function-declaration";

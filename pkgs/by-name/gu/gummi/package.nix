@@ -1,6 +1,17 @@
-{ lib, stdenv, pkgs
-, glib, gtk3, gtksourceview3, gtkspell3, poppler, texlive
-, pkg-config, intltool, autoreconfHook, wrapGAppsHook3
+{
+  lib,
+  stdenv,
+  pkgs,
+  glib,
+  gtk3,
+  gtksourceview3,
+  gtkspell3,
+  poppler,
+  texlive,
+  pkg-config,
+  intltool,
+  autoreconfHook,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation rec {
@@ -15,10 +26,17 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkg-config intltool autoreconfHook wrapGAppsHook3
+    pkg-config
+    intltool
+    autoreconfHook
+    wrapGAppsHook3
   ];
   buildInputs = [
-    glib gtksourceview3 gtk3 gtkspell3 poppler
+    glib
+    gtksourceview3
+    gtk3
+    gtkspell3
+    poppler
     texlive.bin.core # needed for synctex
   ];
 

@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchurl, gtk2, libexif, pkg-config, texinfo }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gtk2,
+  libexif,
+  pkg-config,
+  texinfo,
+}:
 
 stdenv.mkDerivation rec {
   pname = "xzgv";
@@ -7,8 +15,14 @@ stdenv.mkDerivation rec {
     url = "mirror://sourceforge/xzgv/xzgv-${version}.tar.gz";
     sha256 = "17l1xr9v07ggwga3vn0z1i4lnwjrr20rr8z1kjbw71aaijxl18i5";
   };
-  nativeBuildInputs = [ pkg-config texinfo ];
-  buildInputs = [ gtk2 libexif ];
+  nativeBuildInputs = [
+    pkg-config
+    texinfo
+  ];
+  buildInputs = [
+    gtk2
+    libexif
+  ];
   postPatch = ''
     substituteInPlace config.mk \
       --replace /usr/local $out

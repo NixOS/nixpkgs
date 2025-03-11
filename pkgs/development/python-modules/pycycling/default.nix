@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "pycycling";
-  version = "0.4.0";
+  version = "0.4.1";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-yi3ZcyhhOtHp46MK0R15/dic+b1oYjy4tFVRH3ssbE8=";
+    hash = "sha256-7vOjkXZ/IrsJ9JyqkbaeNcB59ZyfHQJLit5yPHoBUH4=";
   };
 
   build-system = [ setuptools ];

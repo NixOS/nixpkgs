@@ -1,30 +1,31 @@
-{ lib
-, stdenv
-, fetchpatch
-, fetchFromGitHub
-, makeWrapper
-, testers
-, runCommand
+{
+  lib,
+  stdenv,
+  fetchpatch,
+  fetchFromGitHub,
+  makeWrapper,
+  testers,
+  runCommand,
 
   # dependencies
-, binutils
-, coreutils
-, curl
-, elfutils
-, file
-, findutils
-, gawk
-, glibc
-, gnugrep
-, gnused
-, openssl
-, procps
-, sysctl
-, wget
-, which
+  binutils,
+  coreutils,
+  curl,
+  elfutils,
+  file,
+  findutils,
+  gawk,
+  glibc,
+  gnugrep,
+  gnused,
+  openssl,
+  procps,
+  sysctl,
+  wget,
+  which,
 
   # tests
-, checksec
+  checksec,
 }:
 
 stdenv.mkDerivation rec {
@@ -101,6 +102,9 @@ stdenv.mkDerivation rec {
     homepage = "https://www.trapkit.de/tools/checksec/";
     license = licenses.bsd3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ thoughtpolice globin ];
+    maintainers = with maintainers; [
+      thoughtpolice
+      globin
+    ];
   };
 }

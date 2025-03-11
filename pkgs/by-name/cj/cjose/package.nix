@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, autoreconfHook
-, pkg-config
-, doxygen
-, check
-, jansson
-, openssl
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  autoreconfHook,
+  pkg-config,
+  doxygen,
+  check,
+  jansson,
+  openssl,
 }:
 
 stdenv.mkDerivation rec {
@@ -29,8 +30,15 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ autoreconfHook pkg-config doxygen ];
-  buildInputs = [ jansson openssl ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+    doxygen
+  ];
+  buildInputs = [
+    jansson
+    openssl
+  ];
   nativeCheckInputs = [ check ];
 
   configureFlags = [

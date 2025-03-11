@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "klen";
     repo = "pytest-aio";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-6RxYn8/HAvXv1AEgSIEOLiaBkGgTcqQhWK+xbtxgj/o=";
   };
 

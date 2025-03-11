@@ -72,7 +72,7 @@ qtEnvHostTargetHook() {
     qtEnvHostTargetSeen[$1]=1
     if providesQtRuntime "$1" && [ "z${!outputBin}" != "z${!outputDev}" ]
     then
-        propagatedBuildInputs+=" $1"
+        appendToVar propagatedBuildInputs "$1"
     fi
 }
 envHostTargetHooks+=(qtEnvHostTargetHook)

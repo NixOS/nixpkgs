@@ -19,7 +19,6 @@ buildPythonPackage rec {
     hash = "sha256-faVTq9KVihncJUfDiM3lM5izkZYXWpvlnqHK9asKGAc=";
   };
 
-
   pythonRemoveDeps = [ "contextlib2" ];
 
   nativeCheckInputs = [

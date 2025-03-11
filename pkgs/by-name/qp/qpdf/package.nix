@@ -1,29 +1,30 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, libjpeg
-, perl
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  libjpeg,
+  perl,
+  zlib,
 
-# for passthru.tests
-, cups-filters
-, pdfmixtool
-, pdfslicer
-, python3
-, testers
-, versionCheckHook
+  # for passthru.tests
+  cups-filters,
+  pdfmixtool,
+  pdfslicer,
+  python3,
+  testers,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qpdf";
-  version = "11.9.1";
+  version = "11.10.0";
 
   src = fetchFromGitHub {
     owner = "qpdf";
     repo = "qpdf";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-DhrOKjUPgNo61db8av0OTfM8mCNebQocQWtTWdt002s=";
+    hash = "sha256-X5VF7kwnpNNWuQ7iA12qh6JwGU/40EKnGxWst0U+T8k=";
   };
 
   outputs = [
@@ -34,9 +35,15 @@ stdenv.mkDerivation (finalAttrs: {
     "out"
   ];
 
-  nativeBuildInputs = [ cmake perl ];
+  nativeBuildInputs = [
+    cmake
+    perl
+  ];
 
-  buildInputs = [ zlib libjpeg ];
+  buildInputs = [
+    zlib
+    libjpeg
+  ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
@@ -57,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
       cups-filters
       pdfmixtool
       pdfslicer
-    ;
+      ;
   };
 
   meta = {

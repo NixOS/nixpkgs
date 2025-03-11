@@ -1,4 +1,8 @@
-{ lib, fetchurl, appimageTools }:
+{
+  lib,
+  fetchurl,
+  appimageTools,
+}:
 
 let
   pname = "badlion-client";
@@ -13,22 +17,22 @@ let
 
   appimageContents = appimageTools.extract { inherit pname version src; };
 in
-  appimageTools.wrapType2 rec {
-    inherit pname version src;
+appimageTools.wrapType2 rec {
+  inherit pname version src;
 
-    extraInstallCommands = ''
-      install -Dm444 ${appimageContents}/BadlionClient.desktop $out/share/applications/BadlionClient.desktop
-      install -Dm444 ${appimageContents}/BadlionClient.png $out/share/pixmaps/BadlionClient.png
-      substituteInPlace $out/share/applications/BadlionClient.desktop \
-        --replace 'Exec=AppRun --no-sandbox %U' 'Exec=badlion-client'
-    '';
+  extraInstallCommands = ''
+    install -Dm444 ${appimageContents}/BadlionClient.desktop $out/share/applications/BadlionClient.desktop
+    install -Dm444 ${appimageContents}/BadlionClient.png $out/share/pixmaps/BadlionClient.png
+    substituteInPlace $out/share/applications/BadlionClient.desktop \
+      --replace 'Exec=AppRun --no-sandbox %U' 'Exec=badlion-client'
+  '';
 
-    meta = with lib; {
-      description = "Most Complete All-In-One Mod Library for Minecraft with 100+ Mods, FPS Improvements, and more";
-      homepage = "https://client.badlion.net";
-      license = with licenses; [ unfree ];
-      maintainers = [ ];
-      mainProgram = "badlion-client";
-      platforms = [ "x86_64-linux" ];
-    };
-  }
+  meta = with lib; {
+    description = "Most Complete All-In-One Mod Library for Minecraft with 100+ Mods, FPS Improvements, and more";
+    homepage = "https://client.badlion.net";
+    license = with licenses; [ unfree ];
+    maintainers = [ ];
+    mainProgram = "badlion-client";
+    platforms = [ "x86_64-linux" ];
+  };
+}

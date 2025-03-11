@@ -1,21 +1,27 @@
-{ lib, stdenv, fetchFromGitHub, cmake, gtest, c-ares, curl, libev }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  gtest,
+  c-ares,
+  curlHTTP3,
+  libev,
+}:
 
 let
-  # https-dns-proxy supports HTTP3 if curl has support, but as of 2022-08 curl doesn't work with that enabled
-  # curl' = (curl.override { http3Support = true; });
-  curl' = curl;
-
+  curl' = curlHTTP3;
 in
 stdenv.mkDerivation rec {
   pname = "https-dns-proxy";
   # there are no stable releases (yet?)
-  version = "unstable-2022-05-05";
+  version = "0-unstable-2024-11-18";
 
   src = fetchFromGitHub {
     owner = "aarond10";
     repo = "https_dns_proxy";
-    rev = "d310a378795790350703673388821558163944de";
-    hash = "sha256-On4SKUeltPhzM/x+K9aKciKBw5lmVySxnmLi2tnKr3Y=";
+    rev = "484bd153bb85a51df1c5bede1b091be76537e0a7";
+    hash = "sha256-T4l3kQ2hPgmyKE7xzlkDDUD6AQi8dQPJQnw8NhUUhDY=";
   };
 
   postPatch = ''
@@ -25,9 +31,16 @@ stdenv.mkDerivation rec {
       --replace '--unit https_dns_proxy.service' '--unit https-dns-proxy.service'
   '';
 
-  nativeBuildInputs = [ cmake gtest ];
+  nativeBuildInputs = [
+    cmake
+    gtest
+  ];
 
-  buildInputs = [ c-ares curl' libev ];
+  buildInputs = [
+    c-ares
+    curl'
+    libev
+  ];
 
   postInstall = ''
     install -Dm444 -t $out/share/doc/${pname} ../{LICENSE,*.md}

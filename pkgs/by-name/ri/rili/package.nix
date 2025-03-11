@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchurl, fetchpatch, SDL_mixer, SDL, autoreconfHook }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  SDL_mixer,
+  SDL,
+  autoreconfHook,
+}:
 
 stdenv.mkDerivation rec {
   pname = "ri_li";
@@ -24,16 +32,19 @@ stdenv.mkDerivation rec {
   CPPFLAGS = "-I${lib.getDev SDL}/include -I${lib.getDev SDL}/include/SDL -I${SDL_mixer}/include";
 
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ SDL SDL_mixer ];
+  buildInputs = [
+    SDL
+    SDL_mixer
+  ];
 
   meta = {
     homepage = "https://ri-li.sourceforge.net";
     license = lib.licenses.gpl2Plus;
     description = "Children's train game";
     longDescription = ''
-     Ri-li is an arcade game licensed under the GPL (General Public License).
-You drive a toy wood engine in many levels and you must collect all the coaches
-to win.
+           Ri-li is an arcade game licensed under the GPL (General Public License).
+      You drive a toy wood engine in many levels and you must collect all the coaches
+      to win.
     '';
     maintainers = with lib.maintainers; [ jcumming ];
     platforms = with lib.platforms; linux;

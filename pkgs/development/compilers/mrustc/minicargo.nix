@@ -1,6 +1,8 @@
-{ lib, stdenv
-, makeWrapper
-, mrustc
+{
+  lib,
+  stdenv,
+  makeWrapper,
+  mrustc,
 }:
 
 stdenv.mkDerivation rec {
@@ -34,7 +36,10 @@ stdenv.mkDerivation rec {
     '';
     inherit (src.meta) homepage;
     license = licenses.mit;
-    maintainers = with maintainers; [ progval r-burns ];
+    maintainers = with maintainers; [
+      progval
+      r-burns
+    ];
     platforms = [ "x86_64-linux" ];
   };
 }

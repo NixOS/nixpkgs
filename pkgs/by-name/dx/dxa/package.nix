@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchurl
-, installShellFiles
+{
+  lib,
+  stdenv,
+  fetchurl,
+  installShellFiles,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -39,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Andre Fachat's open-source 6502 disassembler";
     mainProgram = "dxa";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     platforms = with lib.platforms; unix;
   };
 })

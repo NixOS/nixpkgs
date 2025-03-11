@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "webmproject";
     repo = "libwebm";
-    rev = "refs/tags/libwebm-${finalAttrs.version}";
+    tag = "libwebm-${finalAttrs.version}";
     hash = "sha256-+ayX33rcX/jkewsW8WrGalTe9X44qFBHOrIYTteOQzc=";
   };
 

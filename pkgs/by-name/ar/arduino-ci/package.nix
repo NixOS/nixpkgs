@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitHub,  makeWrapper, arduino-cli, ruby, python3 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  arduino-cli,
+  ruby,
+  python3,
+}:
 
 let
 
@@ -13,9 +21,9 @@ stdenv.mkDerivation rec {
   version = "0.2.0";
 
   src = fetchFromGitHub {
-    owner  = "pololu";
-    repo   = "arduino-ci";
-    rev    = "v${version}";
+    owner = "pololu";
+    repo = "arduino-ci";
+    rev = "v${version}";
     sha256 = "sha256-9RbBxgwsSQ7oGGKr1Vsn9Ug9AsacoRgvQgd9jbRQ034=";
   };
 

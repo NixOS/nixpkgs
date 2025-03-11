@@ -1,26 +1,31 @@
-{ lib
-, stdenv
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
 }:
 
 buildGoModule rec {
   pname = "qrcp";
-  version = "0.11.3";
+  version = "0.11.4";
 
   src = fetchFromGitHub {
     owner = "claudiodangelis";
     repo = "qrcp";
-    rev = version;
-    hash = "sha256-MmWBcDtZUDX5IV7XXifBp7KfeRh+0qU4vdfCoMv/UNk=";
+    tag = "v${version}";
+    hash = "sha256-Ueow5lFnLLeJxk1+hcH4bhwrNu17pgJ50CXd2Adswvg=";
   };
 
-  vendorHash = "sha256-lqGPPyoSO12MyeYIuYcqDVHukj7oR3zmHgsS6SxY3yo=";
+  vendorHash = "sha256-0x35Ds3v5youpSBapgkP8R7YW3FuninFM5pyd2PJRP4=";
 
   subPackages = [ "." ];
 
-  ldflags = [ "-s" "-w" "-X github.com/claudiodangelis/qrcp/version.version=${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/claudiodangelis/qrcp/version.version=${version}"
+  ];
 
   nativeBuildInputs = [
     installShellFiles

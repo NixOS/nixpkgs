@@ -3,7 +3,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  substituteAll,
+  replaceVars,
 
   # build-system
   setuptools,
@@ -28,19 +28,18 @@
 
 buildPythonPackage rec {
   pname = "mido";
-  version = "1.3.2";
+  version = "1.3.3";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Ouootu1zD3N9WxLaNXjevp3FAFj6Nw/pzt7ZGJtnw0g=";
+    hash = "sha256-GuyzC38oJATxfkN2jL90pqMb8is7eDvdEXoc6dIst0w=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./libportmidi-cdll.patch;
+    (replaceVars ./libportmidi-cdll.patch {
       libportmidi = "${portmidi.out}/lib/libportmidi${stdenv.hostPlatform.extensions.sharedLibrary}";
     })
   ];

@@ -30,14 +30,14 @@
 
 buildPythonPackage rec {
   pname = "libretranslate";
-  version = "1.6.2";
+  version = "1.6.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "LibreTranslate";
     repo = "LibreTranslate";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-u0m9dTxwSGU50YplV24daSO+WY/At648OpIEZYMmqqo=";
+    tag = "v${version}";
+    hash = "sha256-HEN+3hwfgPmXS5POK6jHGLWF5Tp4rCPKVbA9nWN3Q9I=";
   };
 
   build-system = [
@@ -88,7 +88,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Free and Open Source Machine Translation API. Self-hosted, no limits, no ties to proprietary services";
     homepage = "https://libretranslate.com";
-    changelog = "https://github.com/LibreTranslate/LibreTranslate/releases/tag/v${version}";
+    changelog = "https://github.com/LibreTranslate/LibreTranslate/releases/tag/${src.tag}";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ misuzu ];
   };

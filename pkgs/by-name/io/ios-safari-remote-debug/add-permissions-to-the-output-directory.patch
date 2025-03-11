@@ -1,0 +1,25 @@
+From 16ea1a197c4b154fcd481728fbea24a4722ba5d3 Mon Sep 17 00:00:00 2001
+From: Pavel Sobolev <contact@paveloom.dev>
+Date: Sat, 13 Jul 2024 18:44:36 +0300
+Subject: [PATCH] Add permissions to the output directory.
+
+---
+ build/build.go | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/build/build.go b/build/build.go
+index 3ee59ab..97932ed 100644
+--- a/build/build.go
++++ b/build/build.go
+@@ -67,7 +67,7 @@ func Build(cloneDir string, outputDir string) error {
+	log.Debug().TimeDiff("getRelevantFiles", time.Now(), getRelevantFilesTime).Send()
+	bundleTime := time.Now()
+
+-	cp.Copy("views", outputDir)
++	cp.Copy("views", outputDir, cp.Options{PermissionControl: cp.AddPermission(0200)})
+	os.Mkdir(fmt.Sprintf("%s/debug", outputDir), os.ModePerm)
+	os.Mkdir(fmt.Sprintf("%s/debug/Lib", outputDir), os.ModePerm)
+	os.Mkdir(fmt.Sprintf("%s/debug/Protocols", outputDir), os.ModePerm)
+--
+2.45.2
+

@@ -1,35 +1,38 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, meson
-, ninja
-, pkg-config
-, vala
-, libadwaita
-, libgee
-, gnome-settings-daemon
-, granite7
-, gtk4
-, glib
-, dbus
-, polkit
-, switchboard
-, wingpanel-indicator-power
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  meson,
+  ninja,
+  pkg-config,
+  vala,
+  libadwaita,
+  libgee,
+  gettext,
+  gnome-settings-daemon,
+  granite7,
+  gtk4,
+  glib,
+  dbus,
+  polkit,
+  switchboard,
+  wingpanel-indicator-power,
 }:
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-power";
-  version = "8.0.0";
+  version = "8.0.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-TNwq3APXXnKlYuJ8K/5KRREbGWTC25r1i+vqPJzf0v8=";
+    sha256 = "sha256-GKZouuWdWl1JDCmzPImeW/hStyFQA6NOAFFmAhiiFe8=";
   };
 
   nativeBuildInputs = [
+    gettext # msgfmt
     meson
     ninja
     pkg-config

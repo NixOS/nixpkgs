@@ -1,18 +1,18 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, makeWrapper
-, glib
-, openssl
-, zlib
-, ostree
-, stdenv
-, darwin
-, util-linux
-, skopeo
-, gnutar
-, ima-evm-utils
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  makeWrapper,
+  glib,
+  openssl,
+  zlib,
+  ostree,
+  stdenv,
+  util-linux,
+  skopeo,
+  gnutar,
+  ima-evm-utils,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -44,9 +44,6 @@ rustPlatform.buildRustPackage rec {
     openssl
     zlib
     ostree
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.CoreFoundation
-    darwin.apple_sdk.frameworks.Security
   ];
 
   checkFlags = [
@@ -68,13 +65,24 @@ rustPlatform.buildRustPackage rec {
   ];
 
   postInstall = ''
-    wrapProgram "$out/bin/${meta.mainProgram}" --prefix PATH : ${lib.makeBinPath [ util-linux skopeo gnutar ostree ima-evm-utils ]}
+    wrapProgram "$out/bin/${meta.mainProgram}" --prefix PATH : ${
+      lib.makeBinPath [
+        util-linux
+        skopeo
+        gnutar
+        ostree
+        ima-evm-utils
+      ]
+    }
   '';
 
   meta = with lib; {
     description = "Rust library with higher level APIs on top of the core ostree API";
     homepage = "https://github.com/ostreedev/ostree-rs-ext";
-    license = with licenses; [ asl20 mit ];
+    license = with licenses; [
+      asl20
+      mit
+    ];
     maintainers = with maintainers; [ nickcao ];
     mainProgram = "ostree-ext-cli";
   };

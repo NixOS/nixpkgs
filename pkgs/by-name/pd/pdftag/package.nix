@@ -1,5 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, meson, vala, ninja
-, gtk3, poppler, wrapGAppsHook3 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  meson,
+  vala,
+  ninja,
+  gtk3,
+  poppler,
+  wrapGAppsHook3,
+}:
 
 stdenv.mkDerivation rec {
   pname = "pdftag";
@@ -12,8 +22,17 @@ stdenv.mkDerivation rec {
     sha256 = "1paj8hs27akzsivn01a30fl3zx5gfn1h89wxg2m72fd806hk0hql";
   };
 
-  nativeBuildInputs = [ pkg-config meson ninja wrapGAppsHook3 vala ];
-  buildInputs = [ gtk3 poppler ];
+  nativeBuildInputs = [
+    pkg-config
+    meson
+    ninja
+    wrapGAppsHook3
+    vala
+  ];
+  buildInputs = [
+    gtk3
+    poppler
+  ];
 
   meta = with lib; {
     description = "Edit metadata found in PDFs";

@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "sqlmodel";
-  version = "0.0.22";
+  version = "0.0.24";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -25,12 +25,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tiangolo";
     repo = "sqlmodel";
-    rev = "refs/tags/${version}";
-    hash = "sha256-y6lY6DlfdCF5dliRkiU6r+ny/a9ssDtqRmF+/rcKFkg=";
+    tag = version;
+    hash = "sha256-RKihR3UJLuBYSHK79pcxIx/hT0nCkqQO8zBrq4AWaYM=";
   };
 
   patches = [
-    (fetchpatch { # https://github.com/tiangolo/sqlmodel/pull/969
+    (fetchpatch {
+      # https://github.com/tiangolo/sqlmodel/pull/969
       name = "passthru-environ-variables.patch";
       url = "https://github.com/tiangolo/sqlmodel/pull/969/commits/42d33049e9e4182b78914ad41d1e3d30125126ba.patch";
       hash = "sha256-dPuFCFUnmTpduxn45tE8XUP0Jlwjwmwe+zFaKSganOg=";

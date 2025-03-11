@@ -1,4 +1,9 @@
-{ lib, buildPythonPackage, fetchFromGitHub, python3Packages }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  python3Packages,
+}:
 
 buildPythonPackage rec {
   pname = "thinkpad-scripts";

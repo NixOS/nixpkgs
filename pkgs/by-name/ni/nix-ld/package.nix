@@ -17,7 +17,10 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-NRkLjdMtVfC6dD1gEbYZWFEtbmC2xfD6ft1IP7l76Vw=";
   };
 
-  cargoHash = "sha256-GOngDGRzWVuzGTX5xNb/nv5dJ6is6cH8K6kHTX3OoXE=";
+  patches = [ ./rust-1.83.patch ];
+
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-2CFdUZbKFl7cf6dik6XextuGG2vLM9oNS8rIyzLnfM4=";
 
   hardeningDisable = [ "stackprotector" ];
 

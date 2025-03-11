@@ -25,6 +25,11 @@ let
             + ''
               ln -s ${vmr.man} $man
             '';
+          propagatedSandboxProfile = lib.optionalString stdenvNoCC.hostPlatform.isDarwin ''
+            (allow file-read* (subpath "/private/var/db/mds/system"))
+            (allow mach-lookup (global-name "com.apple.SecurityServer")
+                              (global-name "com.apple.system.opendirectoryd.membership"))
+          '';
         }
       )
     );
@@ -66,8 +71,12 @@ let
           version=''${version,,}
           mkdir -p "$out"/share/nuget/packages/"$id"
           cp -r . "$out"/share/nuget/packages/"$id"/"$version"
-          chmod +w "$out"/share/nuget/packages/"$id"/"$version"
-          echo {} > "$out"/share/nuget/packages/"$id"/"$version"/.nupkg.metadata
+          cd "$out"/share/nuget/packages/"$id"/"$version"
+          chmod +w .
+          for dir in tools runtimes/*/native; do
+            [[ ! -d "$dir" ]] || chmod -R +x "$dir"
+          done
+          echo {} > .nupkg.metadata
         )
 
         popd
@@ -153,6 +162,11 @@ let
       runHook postInstall
     '';
 
+    ${if stdenvNoCC.isDarwin && lib.versionAtLeast version "10" then "postInstall" else null} = ''
+      mkdir -p "$out"/nix-support
+      cp "$src"/nix-support/manual-sdk-deps "$out"/nix-support/manual-sdk-deps
+    '';
+
     passthru = {
       inherit (vmr) icu targetRid hasILCompiler;
 
@@ -188,6 +202,10 @@ let
       runHook postInstall
     '';
 
+    passthru = {
+      inherit (vmr) icu;
+    };
+
     meta = vmr.meta // {
       mainProgram = "dotnet";
     };
@@ -214,6 +232,10 @@ let
 
       runHook postInstall
     '';
+
+    passthru = {
+      inherit (vmr) icu;
+    };
 
     meta = vmr.meta // {
       mainProgram = "dotnet";

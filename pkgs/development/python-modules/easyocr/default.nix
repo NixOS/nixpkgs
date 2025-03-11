@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "JaidedAI";
     repo = "EasyOCR";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-9mrAxt2lphYtLW81lGO5SYHsnMnSA/VpHiY2NffD/Js=";
   };
 

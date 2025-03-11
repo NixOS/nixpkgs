@@ -6,16 +6,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "jsonwatch";
-  version = "0.7.0";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "dbohdan";
     repo = "jsonwatch";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-WzQ793dLb8OujNpEq7UXIgJM+lz0WZEVlbKmwM58klU=";
+    tag = "v${version}";
+    hash = "sha256-/DYKjhHjfXPWpU1RFmRUbartSxIBgVP59nbgwKMd0jg=";
   };
 
-  cargoHash = "sha256-76Vvs3OaxYDZE39d9h3T8HhYQfHhY5D17PgQxcPrMyc=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-QVS+b/mH7hnzaZjnGg8rw6k11uOuKGFeiPoXyqwD8tk=";
 
   meta = with lib; {
     description = "Like watch -d but for JSON";

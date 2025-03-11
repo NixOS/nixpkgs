@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, makeBinaryWrapper
-, coreutils
-, binutils-unwrapped
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeBinaryWrapper,
+  coreutils,
+  binutils-unwrapped,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

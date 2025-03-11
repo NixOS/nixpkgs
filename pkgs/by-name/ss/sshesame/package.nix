@@ -1,8 +1,9 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, stdenv
-, nix-update-script
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  stdenv,
+  nix-update-script,
 }:
 
 buildGoModule rec {
@@ -18,7 +19,10 @@ buildGoModule rec {
 
   vendorHash = "sha256-1v+cNMr2jpLPfxusPsgnFN31DwuNntXuq3sDNpWL0Rg=";
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   hardeningEnable = lib.optionals (!stdenv.hostPlatform.isDarwin) [ "pie" ];
 

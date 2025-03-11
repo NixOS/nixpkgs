@@ -5,20 +5,22 @@
   versionCheckHook,
   installShellFiles,
   stdenv,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rip2";
-  version = "0.9.0";
+  version = "0.9.3";
 
   src = fetchFromGitHub {
     owner = "MilesCranmer";
     repo = "rip2";
     rev = "v${version}";
-    hash = "sha256-9leLWfPilDQHzQRzTUjAFt9olTPEL4GcQgYFWZu3dug=";
+    hash = "sha256-bwIvjpZgX95Vg14sU6JmYuWNHP38ZBM98ii/Rze+lqA=";
   };
 
-  cargoHash = "sha256-l6rbeiyIsr1csBcp+428TpQYSs9RvfJutGoL/wtSGR8=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-G4AlFICHkBzpVoXbKp8TIyUZ78bhwPxNNeQRMOxfq6o=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -36,11 +38,16 @@ rustPlatform.buildRustPackage rec {
       --zsh <($out/bin/rip completions zsh)
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Safe and ergonomic alternative to rm";
     homepage = "https://github.com/MilesCranmer/rip2";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ milescranmer ];
+    maintainers = with lib.maintainers; [
+      milescranmer
+      matthiasbeyer
+    ];
     mainProgram = "rip";
   };
 }

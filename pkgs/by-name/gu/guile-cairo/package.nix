@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchurl
-, cairo
-, expat
-, guile
-, guile-lib
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cairo,
+  expat,
+  guile,
+  guile-lib,
+  pkg-config,
 }:
 
 stdenv.mkDerivation rec {

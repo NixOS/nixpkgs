@@ -1,24 +1,30 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   rustPlatform,
+
+  # nativeBuildInputs
   pkg-config,
-  openssl,
   protobuf,
-  redis,
+
+  # buildInputs
   fontconfig,
+  openssl,
+
+  redis,
   versionCheckHook,
   nix-update-script,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "golem";
-  version = "1.0.26";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "golemcloud";
     repo = "golem";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-q2DZrJIegu6X89tVLJE+OY7XRpqY2nGmTE699UhMP2E=";
+    tag = "v${version}";
+    hash = "sha256-6AUUgXWlDaoI16p/Hrl115XMGYUIDD5YWHX6JfDk9SI=";
   };
 
   # Taker from https://github.com/golemcloud/golem/blob/v1.0.26/Makefile.toml#L399
@@ -39,17 +45,13 @@ rustPlatform.buildRustPackage rec {
 
   # Required for golem-wasm-rpc's build.rs to find the required protobuf files
   # https://github.com/golemcloud/wasm-rpc/blob/v1.0.6/wasm-rpc/build.rs#L7
-  GOLEM_WASM_AST_ROOT = "../golem-wasm-ast-1.0.1";
+  GOLEM_WASM_AST_ROOT = "../golem-wasm-ast-1.1.0";
   # Required for golem-examples's build.rs to find the required Wasm Interface Type (WIT) files
   # https://github.com/golemcloud/golem-examples/blob/v1.0.6/build.rs#L9
-  GOLEM_WIT_ROOT = "../golem-wit-1.0.3";
+  GOLEM_WIT_ROOT = "../golem-wit-1.1.0";
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "cranelift-bforest-0.108.1" = "sha256-WVRj6J7yXLFOsud9qKugmYja0Pe7AqZ0O2jgkOtHRg8=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-zf/L7aNsfQXCdGpzvBZxgoatAGB92bvIuj59jANrXIc=";
 
   # Tests are failing in the sandbox because of some redis integration tests
   doCheck = false;
@@ -68,9 +70,10 @@ rustPlatform.buildRustPackage rec {
 
   meta = {
     description = "Open source durable computing platform that makes it easy to build and deploy highly reliable distributed systems";
-    changelog = "https://github.com/golemcloud/golem/releases/tag/v${version}";
+    changelog = "https://github.com/golemcloud/golem/releases/tag/${src.tag}";
     homepage = "https://www.golem.cloud/";
     license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ kmatasfp ];
     mainProgram = "golem-cli";
   };
 }

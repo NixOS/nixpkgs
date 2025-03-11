@@ -23,43 +23,51 @@ import ../make-test-python.nix (
     };
 
     nodes = {
-      rootful = { pkgs, ... }: {
-        virtualisation.podman.enable = true;
+      rootful =
+        { pkgs, ... }:
+        {
+          virtualisation.podman.enable = true;
 
-        # hack to ensure that podman built with and without zfs in extraPackages is cached
-        boot.supportedFilesystems = [ "zfs" ];
-        networking.hostId = "00000000";
-      };
-      rootless = { pkgs, ... }: {
-        virtualisation.podman.enable = true;
-
-        users.users.alice = {
-          isNormalUser = true;
+          # hack to ensure that podman built with and without zfs in extraPackages is cached
+          boot.supportedFilesystems = [ "zfs" ];
+          networking.hostId = "00000000";
         };
-      };
-      dns = { pkgs, ... }: {
-        virtualisation.podman.enable = true;
+      rootless =
+        { pkgs, ... }:
+        {
+          virtualisation.podman.enable = true;
 
-        virtualisation.podman.defaultNetwork.settings.dns_enabled = true;
-      };
-      docker = { pkgs, ... }: {
-        virtualisation.podman.enable = true;
-
-        virtualisation.podman.dockerSocket.enable = true;
-
-        environment.systemPackages = [
-          pkgs.docker-client
-        ];
-
-        users.users.alice = {
-          isNormalUser = true;
-          extraGroups = [ "podman" ];
+          users.users.alice = {
+            isNormalUser = true;
+          };
         };
+      dns =
+        { pkgs, ... }:
+        {
+          virtualisation.podman.enable = true;
 
-        users.users.mallory = {
-          isNormalUser = true;
+          virtualisation.podman.defaultNetwork.settings.dns_enabled = true;
         };
-      };
+      docker =
+        { pkgs, ... }:
+        {
+          virtualisation.podman.enable = true;
+
+          virtualisation.podman.dockerSocket.enable = true;
+
+          environment.systemPackages = [
+            pkgs.docker-client
+          ];
+
+          users.users.alice = {
+            isNormalUser = true;
+            extraGroups = [ "podman" ];
+          };
+
+          users.users.mallory = {
+            isNormalUser = true;
+          };
+        };
     };
 
     testScript = ''

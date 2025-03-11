@@ -11,21 +11,22 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "swig";
-  version = "4.2.1";
+  version = "4.3.0";
 
   src = fetchFromGitHub {
     owner = "swig";
     repo = "swig";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-VlUsiRZLScmbC7hZDzKqUr9481YXVwo0eXT/jy6Fda8=";
+    hash = "sha256-hFHEE9wy8Lja9G396tI4fj4LhOkpPKJkDuy1L62AXr4=";
   };
 
-  PCRE_CONFIG = "${pcre2.dev}/bin/pcre-config";
+  strictDeps = true;
   nativeBuildInputs = [
     autoconf
     automake
     libtool
     bison
+    pcre2
   ];
   buildInputs = [ pcre2 ];
 

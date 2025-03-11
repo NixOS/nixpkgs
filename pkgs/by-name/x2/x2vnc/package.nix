@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, xorg }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  xorg,
+}:
 
 stdenv.mkDerivation rec {
   pname = "x2vnc";
@@ -12,7 +17,10 @@ stdenv.mkDerivation rec {
   env.NIX_CFLAGS_COMPILE = "-std=gnu89";
 
   buildInputs = with xorg; [
-    libX11 xorgproto libXext libXrandr
+    libX11
+    xorgproto
+    libXext
+    libXrandr
   ];
 
   hardeningDisable = [ "format" ];

@@ -1,14 +1,15 @@
-{ lib
-, fetchFromGitHub
-, crystal
-, shards
-, makeWrapper
-, pkg-config
-, which
-, openssl
-, readline
-, libyaml
-, zlib
+{
+  lib,
+  fetchFromGitHub,
+  crystal,
+  shards,
+  makeWrapper,
+  pkg-config,
+  which,
+  openssl,
+  readline,
+  libyaml,
+  zlib,
 }:
 
 crystal.buildCrystalPackage rec {
@@ -24,16 +25,31 @@ crystal.buildCrystalPackage rec {
 
   shardsFile = ./shards.nix;
 
-  buildInputs = [ libyaml openssl readline zlib ];
+  buildInputs = [
+    libyaml
+    openssl
+    readline
+    zlib
+  ];
 
-  nativeBuildInputs = [ makeWrapper pkg-config which ];
+  nativeBuildInputs = [
+    makeWrapper
+    pkg-config
+    which
+  ];
 
   # tests are failing due to our sandbox
   doCheck = false;
 
   postFixup = ''
     wrapProgram $out/bin/icr \
-      --prefix PATH : ${lib.makeBinPath [ crystal shards which ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          crystal
+          shards
+          which
+        ]
+      }
   '';
 
   meta = with lib; {

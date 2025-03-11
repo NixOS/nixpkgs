@@ -1,14 +1,17 @@
-{ buildDunePackage, lib, fetchurl, cppo }:
+{
+  buildDunePackage,
+  lib,
+  fetchurl,
+  cppo,
+}:
 
 buildDunePackage rec {
   pname = "extlib";
-  version = "1.7.9";
-
-  minimalOCamlVersion = "4.02";
+  version = "1.8.0";
 
   src = fetchurl {
-    url = "https://ygrek.org/p/release/ocaml-${pname}/${pname}-${version}.tar.gz";
-    hash = "sha512-I4asafA36lIINcBiTTmun7/+Q6ILGOJH3gMiMu1vQZ1me1PSMUxvVtxx02i/C2IBpWwvPypb39kzdmxabLmHaA==";
+    url = "https://github.com/ygrek/ocaml-extlib/releases/download/${version}/extlib-${version}.tar.gz";
+    hash = "sha256-lkJ38AEoCo7d/AjgcB1Zygxr3F0FIxOz5A5QiPbUXXA=";
   };
 
   nativeBuildInputs = [ cppo ];

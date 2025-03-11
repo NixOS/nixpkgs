@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, Foundation }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  Foundation,
+}:
 
 stdenv.mkDerivation rec {
   pname = "defaultbrowser";
@@ -11,7 +16,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-SelUQXoKtShcDjq8uKg3wM0kG2opREa2DGQCDd6IsOQ=";
   };
 
-  makeFlags = [ "CC=cc" "PREFIX=$(out)" ];
+  makeFlags = [
+    "CC=cc"
+    "PREFIX=$(out)"
+  ];
 
   buildInputs = [ Foundation ];
 

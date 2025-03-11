@@ -437,6 +437,7 @@ let
         (assertKeyIsSystemdCredential "PresharedKey")
         (assertOnlyFields [
           "PublicKey"
+          "PublicKeyFile"
           "PresharedKey"
           "PresharedKeyFile"
           "AllowedIPs"
@@ -759,6 +760,8 @@ let
           "ManageTemporaryAddress"
           "AddPrefixRoute"
           "AutoJoin"
+          "NetLabel"
+          "NFTSet"
         ])
         (assertHasField "Address")
         (assertValueOneOf "PreferredLifetime" ["forever" "infinity" "0" 0])
@@ -875,8 +878,10 @@ let
           "DUIDType"
           "DUIDRawData"
           "IAID"
+          "RequestAddress"
           "RequestBroadcast"
           "RouteMetric"
+          "RapidCommit"
           "RouteTable"
           "RouteMTUBytes"
           "ListenPort"
@@ -888,6 +893,8 @@ let
           "FallbackLeaseLifetimeSec"
           "Label"
           "Use6RD"
+          "NetLabel"
+          "NFTSet"
         ])
         (assertValueOneOf "UseDNS" boolValues)
         (assertValueOneOf "RoutesToDNS" boolValues)
@@ -906,6 +913,7 @@ let
         (assertInt "IAID")
         (assertValueOneOf "RequestBroadcast" boolValues)
         (assertInt "RouteMetric")
+        (assertValueOneOf "RapidCommit" boolValues)
         (assertInt "RouteTable")
         (assertRange "RouteTable" 0 4294967295)
         (assertByteFormat "RouteMTUBytes")
@@ -940,6 +948,8 @@ let
           "IAID"
           "UseDelegatedPrefix"
           "SendRelease"
+          "NetLabel"
+          "NFTSet"
         ])
         (assertValueOneOf "UseAddress" boolValues)
         (assertValueOneOf "UseDNS" boolValues)
@@ -965,6 +975,8 @@ let
           "Token"
           "ManageTemporaryAddress"
           "RouteMetric"
+          "NetLabel"
+          "NFTSet"
         ])
         (assertValueOneOf "Announce" boolValues)
         (assertValueOneOf "Assign" boolValues)
@@ -992,6 +1004,8 @@ let
           "UseRoutePrefix"
           "Token"
           "UsePREF64"
+          "NetLabel"
+          "NFTSet"
         ])
         (assertValueOneOf "UseDNS" boolValues)
         (assertValueOneOf "UseDomains" (boolValues ++ ["route"]))
@@ -2844,16 +2858,11 @@ let
         ];
       };
 
-      systemd.services."systemd-network-wait-online@" = {
-        description = "Wait for Network Interface %I to be Configured";
-        conflicts = [ "shutdown.target" ];
-        requisite = [ "systemd-networkd.service" ];
-        after = [ "systemd-networkd.service" ];
-        serviceConfig = {
-          Type = "oneshot";
-          RemainAfterExit = true;
-          ExecStart = "${config.systemd.package}/lib/systemd/systemd-networkd-wait-online -i %I ${utils.escapeSystemdExecArgs cfg.wait-online.extraArgs}";
-        };
+      systemd.services."systemd-networkd-wait-online@" = {
+        serviceConfig.ExecStart = [
+          ""
+          "${config.systemd.package}/lib/systemd/systemd-networkd-wait-online -i %i ${utils.escapeSystemdExecArgs cfg.wait-online.extraArgs}"
+        ];
       };
 
     })
@@ -2873,6 +2882,7 @@ let
 
       systemd.additionalUpstreamSystemUnits = [
         "systemd-networkd-wait-online.service"
+        "systemd-networkd-wait-online@.service"
         "systemd-networkd.service"
         "systemd-networkd.socket"
         "systemd-networkd-persistent-storage.service"
@@ -2892,6 +2902,8 @@ let
           config.environment.etc."systemd/networkd.conf".source
         ];
         aliases = [ "dbus-org.freedesktop.network1.service" ];
+        notSocketActivated = true;
+        stopIfChanged = false;
       };
 
       networking.iproute2 = mkIf (cfg.config.addRouteTablesToIPRoute2 && cfg.config.routeTables != { }) {

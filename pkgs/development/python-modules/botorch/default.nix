@@ -6,24 +6,26 @@
   gpytorch,
   linear-operator,
   multipledispatch,
+  pyre-extensions,
   pyro-ppl,
   setuptools,
   setuptools-scm,
   torch,
   scipy,
   pytestCheckHook,
+  pythonAtLeast,
 }:
 
 buildPythonPackage rec {
   pname = "botorch";
-  version = "0.12.0";
+  version = "0.13.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "botorch";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-CKlerCUadObpPq4jQAiFDBOZMHZ4QccAKQz30OFe64E=";
+    tag = "v${version}";
+    hash = "sha256-Hik0HPHFoN1+uIeVxG7UPKc1ADBoTTBkL2+LhHDrr+s=";
   };
 
   build-system = [
@@ -35,14 +37,10 @@ buildPythonPackage rec {
     gpytorch
     linear-operator
     multipledispatch
+    pyre-extensions
     pyro-ppl
     scipy
     torch
-  ];
-
-  pythonRelaxDeps = [
-    "gpytorch"
-    "linear-operator"
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
@@ -55,9 +53,17 @@ buildPythonPackage rec {
 
   disabledTests =
     [ "test_all_cases_covered" ]
+    ++ lib.optionals (pythonAtLeast "3.13") [
+      # RuntimeError: Boolean value of Tensor with more than one value is ambiguous
+      "test_optimize_acqf_mixed_binary_only"
+    ]
     ++ lib.optionals (stdenv.buildPlatform.system == "x86_64-linux") [
       # stuck tests on hydra
       "test_moo_predictive_entropy_search"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
+      # RuntimeError: required keyword attribute 'value' has the wrong type
+      "test_posterior_in_trace_mode"
     ]
     ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
       # Numerical error slightly above threshold

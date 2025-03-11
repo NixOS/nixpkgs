@@ -1,11 +1,12 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, llvmPackages_13
-, libxml2
-, ncurses
-, zlib
-, stdenv
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  llvmPackages_13,
+  libxml2,
+  ncurses,
+  zlib,
+  stdenv,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -19,7 +20,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-5pcvwCtXWEexvV3TS62dZ6Opg8ANP2L8B0Z8u/OQENU=";
   };
 
-  cargoHash = "sha256-1w/jPBO1TZpa0ju+O/NxQ/oMyzIvYVoXpj+ZLcIpQoU=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-S8Fy0PRSUftljcX34Sj8MmlPW7Oob2yayPUA1RRxf8E=";
 
   buildInputs = [
     libxml2

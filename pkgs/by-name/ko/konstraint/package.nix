@@ -1,23 +1,32 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+}:
 
 buildGoModule rec {
   pname = "konstraint";
-  version = "0.38.0";
+  version = "0.41.0";
 
   src = fetchFromGitHub {
     owner = "plexsystems";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-02vmIsYGX6HB7k1HArMpNY+UxVX24IyraNPu13ht2qQ=";
+    sha256 = "sha256-45zCzjzbKYLsLxmo7yGbbyeYP1WyULD9d+nnNLP9Zzo=";
   };
-  vendorHash = "sha256-eD0K2te9+9x0fUYMVZ6SreV2AhkYwBzQHUTyeNwuEHc=";
+  vendorHash = "sha256-ZPK3+x0GOMs2RXxIs90BvEg25lb/j11J9zECaMHg4zY=";
 
   # Exclude go within .github folder
   excludedPackages = ".github";
 
   nativeBuildInputs = [ installShellFiles ];
 
-  ldflags = [ "-s" "-w" "-X github.com/plexsystems/konstraint/internal/commands.version=${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/plexsystems/konstraint/internal/commands.version=${version}"
+  ];
 
   postInstall = ''
     installShellCompletion --cmd konstraint \

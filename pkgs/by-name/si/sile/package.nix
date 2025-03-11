@@ -24,29 +24,29 @@
 
   # passthru.tests
   runCommand,
-  poppler_utils,
+  poppler-utils,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sile";
-  version = "0.15.7";
+  version = "0.15.9";
 
   src = fetchurl {
     url = "https://github.com/sile-typesetter/sile/releases/download/v${finalAttrs.version}/sile-${finalAttrs.version}.tar.zst";
-    hash = "sha256-PjU6Qfn+FTL3vt66mkIAn/uXWMPPlH8iK6B264ekIis=";
+    hash = "sha256-+9pZUDszPYJmFgHbZH0aKtZ6qLcJjh73jG2CFoRKxWc=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    nativeBuildInputs = [ zstd ];
-    # so the cargo fetcher won't try to run the `./configure` script
     dontConfigure = true;
-    hash = "sha256-iPkXEUC4U1m/ComIDo/J5kwkmM1QdowioNtnSnmMhJ0=";
+    nativeBuildInputs = [ zstd ];
+    hash = "sha256-FdUrivumG5R69CwZedpkBzds5PcZr4zSsA6QW/+rDBM=";
   };
 
   nativeBuildInputs = [
     zstd
     pkg-config
+    fontconfig # fc-match
     jq
     cargo
     rustc
@@ -103,6 +103,8 @@ stdenv.mkDerivation (finalAttrs: {
       gentium
     ];
   };
+  strictDeps = true;
+  env.LUA = "${finalAttrs.finalPackage.passthru.luaEnv}/bin/lua";
 
   enableParallelBuilding = true;
 
@@ -155,7 +157,7 @@ stdenv.mkDerivation (finalAttrs: {
       runCommand "${finalAttrs.pname}-test"
         {
           nativeBuildInputs = [
-            poppler_utils
+            poppler-utils
             finalAttrs.finalPackage
           ];
           inherit (finalAttrs) FONTCONFIG_FILE;

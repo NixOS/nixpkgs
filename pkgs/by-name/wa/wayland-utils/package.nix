@@ -1,6 +1,14 @@
-{ lib, stdenv, fetchurl
-, meson, pkg-config, ninja, wayland-scanner
-, libdrm, wayland, wayland-protocols
+{
+  lib,
+  stdenv,
+  fetchurl,
+  meson,
+  pkg-config,
+  ninja,
+  wayland-scanner,
+  libdrm,
+  wayland,
+  wayland-protocols,
 }:
 
 stdenv.mkDerivation rec {
@@ -14,8 +22,17 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
   depsBuildBuild = [ pkg-config ];
-  nativeBuildInputs = [ meson pkg-config ninja wayland-scanner ];
-  buildInputs = [ libdrm wayland wayland-protocols ];
+  nativeBuildInputs = [
+    meson
+    pkg-config
+    ninja
+    wayland-scanner
+  ];
+  buildInputs = [
+    libdrm
+    wayland
+    wayland-protocols
+  ];
 
   meta = with lib; {
     description = "Wayland utilities (wayland-info)";

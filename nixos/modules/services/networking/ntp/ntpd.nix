@@ -142,6 +142,7 @@ in
       group = "ntp";
       description = "NTP daemon user";
       home = "/var/lib/ntp";
+      createHome = true;
     };
     users.groups.ntp = { };
 
@@ -155,7 +156,6 @@ in
       serviceConfig = {
         ExecStart = "@${ntp}/bin/ntpd ntpd -g ${builtins.toString ntpFlags}";
         Type = "forking";
-        StateDirectory = "ntp";
 
         # Hardening options
         PrivateDevices = true;

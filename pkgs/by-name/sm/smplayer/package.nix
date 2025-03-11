@@ -53,8 +53,8 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     changelog = "https://github.com/smplayer-dev/smplayer/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.linux;
   };
 })
-# TODO [ AndersonTorres ]: create a wrapper including mplayer/mpv
+# TODO [ ]: create a wrapper including mplayer/mpv

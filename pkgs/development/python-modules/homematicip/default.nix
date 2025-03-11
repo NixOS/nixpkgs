@@ -10,7 +10,7 @@
   pythonAtLeast,
   pythonOlder,
   pytest-aiohttp,
-  pytest-asyncio,
+  pytest-asyncio_0_21,
   requests,
   setuptools,
   setuptools-scm,
@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "homematicip";
-  version = "1.1.3";
+  version = "1.1.7";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -28,8 +28,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hahn-th";
     repo = "homematicip-rest-api";
-    rev = "refs/tags/${version}";
-    hash = "sha256-LRljuGOuGwAuZEVYFci5tAb8c15ePR6QYwlTM0hXMgU=";
+    tag = version;
+    hash = "sha256-zhpGsmzJrtWgHlVdzIrFGQAt4EBWSWCTLIKyuuhDlPA=";
   };
 
   build-system = [
@@ -48,8 +48,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     aiohttp-wsgi
-    pytest-aiohttp
-    pytest-asyncio
+    (pytest-aiohttp.override {
+      pytest-asyncio = pytest-asyncio_0_21;
+    })
+    pytest-asyncio_0_21
     pytest7CheckHook
   ];
 
@@ -94,7 +96,7 @@ buildPythonPackage rec {
     description = "Module for the homematicIP REST API";
     homepage = "https://github.com/hahn-th/homematicip-rest-api";
     changelog = "https://github.com/hahn-th/homematicip-rest-api/releases/tag/${version}";
-    license = with licenses; [ gpl3Only ];
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ fab ];
   };
 }

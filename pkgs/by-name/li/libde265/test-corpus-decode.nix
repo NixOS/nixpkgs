@@ -1,6 +1,7 @@
-{ stdenv
-, fetchFromGitHub
-, libde265
+{
+  stdenv,
+  fetchFromGitHub,
+  libde265,
 }:
 
 stdenv.mkDerivation {

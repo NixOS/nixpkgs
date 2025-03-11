@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "textlint-rule";
     repo = "textlint-rule-en-max-word-count";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ZZWN0PVHQBHcvJ53jDtD/6wLxBYmSHO7OXb5UQQAmyc=";
   };
 
@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Textlint rule that specify the maximum word count of a sentence";
     homepage = "https://github.com/textlint-rule/textlint-rule-en-max-word-count";
-    changelog = "https://github.com/textlint-rule/textlint-rule-en-max-word-count/releases/tag/${lib.removePrefix "refs/tags/" finalAttrs.src.rev}";
+    changelog = "https://github.com/textlint-rule/textlint-rule-en-max-word-count/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ natsukium ];
     platforms = textlint.meta.platforms;

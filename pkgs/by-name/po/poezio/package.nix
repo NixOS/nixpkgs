@@ -1,7 +1,8 @@
-{ lib
-, fetchFromGitea
-, pkg-config
-, python3
+{
+  lib,
+  fetchFromGitea,
+  pkg-config,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {

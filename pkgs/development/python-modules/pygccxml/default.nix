@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pygccxml";
-  version = "2.6.0";
+  version = "2.6.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -18,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "gccxml";
     repo = "pygccxml";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-HTDbkhSbjFl41+i91M9cBwNs8nbcz+0H439Li0WFemg=";
+    tag = "v${version}";
+    hash = "sha256-SVlzgIlaKVbnestxTJX2yjVaspZ6fq5bBokRy8jzD3Q=";
   };
 
   nativeBuildInputs = [ setuptools ];

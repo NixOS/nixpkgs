@@ -73,7 +73,7 @@ stdenv.mkDerivation  rec {
     homepage = "https://www.rockbox.org";
     description = "Open source firmware for digital music players";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [ ];
     mainProgram = "RockboxUtility";
     platforms = platforms.linux;
   };

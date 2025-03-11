@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "terrycain";
     repo = "aioboto3";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-g86RKQxTcfG1CIH3gfgn9Vl9JxUkeC1ztmLk4q/MVn0=";
   };
 

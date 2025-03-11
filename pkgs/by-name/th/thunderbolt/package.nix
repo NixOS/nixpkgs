@@ -1,9 +1,11 @@
-{ lib, stdenv
-, boost
-, cmake
-, fetchFromGitHub
-, pkg-config
-, txt2tags
+{
+  lib,
+  stdenv,
+  boost,
+  cmake,
+  fetchFromGitHub,
+  pkg-config,
+  txt2tags,
 }:
 
 stdenv.mkDerivation rec {
@@ -16,7 +18,11 @@ stdenv.mkDerivation rec {
     sha256 = "02w1bfm7xvq0dzkhwqiq0camkzz9kvciyhnsis61c8vzp39cwx0x";
   };
 
-  nativeBuildInputs = [ cmake pkg-config txt2tags ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    txt2tags
+  ];
   buildInputs = [ boost ];
 
   cmakeFlags = [

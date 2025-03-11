@@ -1,8 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, postgresql, postgresqlTestExtension, buildPostgresqlExtension, nix-update-script }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  postgresql,
+  postgresqlTestExtension,
+  buildPostgresqlExtension,
+  nix-update-script,
+}:
 
 buildPostgresqlExtension (finalAttrs: {
   pname = "pg_squeeze";
-  version = "${builtins.replaceStrings ["_"] ["."] (lib.strings.removePrefix "REL" finalAttrs.src.rev)}";
+  version = "${builtins.replaceStrings [ "_" ] [ "." ] (
+    lib.strings.removePrefix "REL" finalAttrs.src.rev
+  )}";
 
   src = fetchFromGitHub {
     owner = "cybertec-postgresql";

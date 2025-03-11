@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "timmo001";
     repo = "system-bridge-connector";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-AzAN7reBAI4atEFutgFrdQHFy/Qc90PQxwSaHaftn5Q=";
   };
 

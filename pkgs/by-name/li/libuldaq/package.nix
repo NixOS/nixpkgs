@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, libusb1, ...}:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  libusb1,
+  ...
+}:
 
 stdenv.mkDerivation rec {
   pname = "libuldaq";

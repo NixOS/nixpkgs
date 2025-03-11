@@ -1,35 +1,38 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.infnoise;
-in {
+in
+{
   options = {
     services.infnoise = {
-      enable = mkEnableOption "the Infinite Noise TRNG driver";
+      enable = lib.mkEnableOption "the Infinite Noise TRNG driver";
 
-      fillDevRandom = mkOption {
+      fillDevRandom = lib.mkOption {
         description = ''
           Whether to run the infnoise driver as a daemon to refill /dev/random.
 
           If disabled, you can use the `infnoise` command-line tool to
           manually obtain randomness.
         '';
-        type = types.bool;
+        type = lib.types.bool;
         default = true;
       };
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = [ pkgs.infnoise ];
 
     services.udev.extraRules = ''
       SUBSYSTEM=="usb", ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6015", SYMLINK+="infnoise", TAG+="systemd", GROUP="dialout", MODE="0664", ENV{SYSTEMD_WANTS}="infnoise.service"
     '';
 
-    systemd.services.infnoise = mkIf cfg.fillDevRandom {
+    systemd.services.infnoise = lib.mkIf cfg.fillDevRandom {
       description = "Infinite Noise TRNG driver";
 
       bindsTo = [ "dev-infnoise.device" ];

@@ -1,6 +1,5 @@
 {
   jax,
-  jaxlib,
   pkgs,
 }:
 
@@ -8,18 +7,22 @@ pkgs.writers.writePython3Bin "jax-test-cuda"
   {
     libraries = [
       jax
-      jaxlib
-    ];
+    ] ++ jax.optional-dependencies.cuda;
   }
   ''
     import jax
+    import jax.numpy as jnp
     from jax import random
+    from jax.experimental import sparse
 
-    assert jax.devices()[0].platform == "gpu"
+    assert jax.devices()[0].platform == "gpu"  # libcuda.so
 
-    rng = random.PRNGKey(0)
+    rng = random.key(0)  # libcudart.so, libcudnn.so
     x = random.normal(rng, (100, 100))
-    x @ x
+    x @ x  # libcublas.so
+    jnp.fft.fft(x)  # libcufft.so
+    jnp.linalg.inv(x)  # libcusolver.so
+    sparse.CSR.fromdense(x) @ x  # libcusparse.so
 
     print("success!")
   ''

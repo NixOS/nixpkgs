@@ -1,9 +1,10 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, wrapGAppsHook3
-, pkg-config
-, openssl
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  wrapGAppsHook3,
+  pkg-config,
+  openssl,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "mpv-subs-popout";
@@ -16,9 +17,13 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-Z8IWiYKitkbEFdjca5G6P0I6j4Fg2fIHco6fD90UoBw=";
   };
 
-  cargoHash = "sha256-vWDrbT1qZVU/N+V24Egq4cAoqysfX1hjQc+D9M5ViEE=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-n7e3VrnueU7Lsj/FwM0aC9ThTqUlq27SS3RKugduwEA=";
 
-  nativeBuildInputs = [ pkg-config wrapGAppsHook3 ];
+  nativeBuildInputs = [
+    pkg-config
+    wrapGAppsHook3
+  ];
   buildInputs = [ openssl ];
 
   meta = {

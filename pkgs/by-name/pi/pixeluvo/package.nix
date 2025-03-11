@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchurl, dpkg, autoPatchelfHook, makeWrapper
-, gtk3-x11 }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  dpkg,
+  autoPatchelfHook,
+  makeWrapper,
+  gtk3-x11,
+}:
 
 stdenv.mkDerivation rec {
   pname = "pixeluvo";

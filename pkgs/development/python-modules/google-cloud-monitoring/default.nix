@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-monitoring";
-  version = "2.23.1";
+  version = "2.27.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "google_cloud_monitoring";
     inherit version;
-    hash = "sha256-I5qrBa3ILAaKbMTlSGiK1e9I7q1jDJ/R1K/QkOCeJvA=";
+    hash = "sha256-9mVSUogS57ap8vt+C3w+eQTMDBNQT0/LQgNXIrXaK8Q=";
   };
 
   build-system = [ setuptools ];

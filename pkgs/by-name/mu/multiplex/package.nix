@@ -11,16 +11,16 @@
 
 buildGoModule rec {
   pname = "multiplex";
-  version = "0.1.5";
+  version = "0.1.6";
 
   src = fetchFromGitHub {
     owner = "pojntfx";
     repo = "multiplex";
     rev = "v${version}";
-    hash = "sha256-qc8RHvU7uGbqtMGy/mYXHCxqvE6gekgfFOWwej33+zQ=";
+    hash = "sha256-zU4Lnc66wY5lFxy82Mg52WSEGRyoEk9LY6E7LmeuKHs=";
   };
 
-  vendorHash = "sha256-VLlco6CeedoUM5gy8+5yLffAtMsjH/RQ+U4VYvY5mcg=";
+  vendorHash = "sha256-fS5wdBe1vuqaUBPcxLzhCMRztW8eq+MGojMVWlOZO+U=";
 
   nativeBuildInputs = [
     pkg-config

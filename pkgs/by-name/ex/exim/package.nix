@@ -1,37 +1,74 @@
-{ coreutils, db, fetchurl, openssl, pcre2, perl, pkg-config, lib, stdenv
-, libxcrypt
-, procps, killall
-, enableLDAP ? false, openldap
-, enableMySQL ? false, libmysqlclient, zlib
-, enablePgSQL ? false, postgresql
-, enableSqlite ? false, sqlite
-, enableAuthDovecot ? false, dovecot
-, enablePAM ? false, pam
-, enableSPF ? true, libspf2
-, enableDMARC ? true, opendmarc
-, enableRedis ? false, hiredis
-, enableJSON ? false, jansson
-, enableSRS ? false,
+{
+  coreutils,
+  db,
+  fetchurl,
+  openssl,
+  pcre2,
+  perl,
+  pkg-config,
+  lib,
+  stdenv,
+  libxcrypt,
+  procps,
+  killall,
+  enableLDAP ? false,
+  openldap,
+  enableMySQL ? false,
+  libmysqlclient,
+  zlib,
+  enablePgSQL ? false,
+  libpq,
+  enableSqlite ? false,
+  sqlite,
+  enableAuthDovecot ? false,
+  dovecot,
+  enablePAM ? false,
+  pam,
+  enableSPF ? true,
+  libspf2,
+  enableDMARC ? true,
+  opendmarc,
+  enableRedis ? false,
+  hiredis,
+  enableJSON ? false,
+  jansson,
+  enableSRS ? false,
 }:
 let
   perl' = perl.withPackages (p: with p; [ FileFcntlLock ]);
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "exim";
-  version = "4.98";
+  version = "4.98.1";
 
   src = fetchurl {
     url = "https://ftp.exim.org/pub/exim/exim4/${pname}-${version}.tar.xz";
-    hash = "sha256-DrwQinefkpO6S0I8IIGPmj23m2AobZarxrprhaFYUvc=";
+    hash = "sha256-2Fi3WtLMa/cckHG6JqVbPqmt0mYHvYMt88tU+CIhws4=";
   };
 
   enableParallelBuilding = true;
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ coreutils db openssl perl' pcre2 libxcrypt ]
+  buildInputs =
+    [
+      coreutils
+      db
+      openssl
+      perl'
+      pcre2
+      libxcrypt
+    ]
     ++ lib.optional enableLDAP openldap
-    ++ lib.optionals enableMySQL [ libmysqlclient zlib ]
-    ++ lib.optional enablePgSQL postgresql
-    ++ lib.optionals enableSqlite [ sqlite sqlite.dev zlib ]
+    ++ lib.optionals enableMySQL [
+      libmysqlclient
+      zlib
+    ]
+    ++ lib.optional enablePgSQL libpq
+    ++ lib.optionals enableSqlite [
+      sqlite
+      sqlite.dev
+      zlib
+    ]
     ++ lib.optional enableAuthDovecot dovecot
     ++ lib.optional enablePAM pam
     ++ lib.optional enableSPF libspf2
@@ -80,8 +117,8 @@ in stdenv.mkDerivation rec {
       ''}
       ${lib.optionalString enablePgSQL ''
         s:^# \(LOOKUP_PGSQL=yes\)$:\1:
-        s:^\(LOOKUP_LIBS\)=\(.*\):\1=\2 -lpq -L${postgresql.lib}/lib:
-        s:^# \(LOOKUP_LIBS\)=.*:\1=-lpq -L${postgresql.lib}/lib:
+        s:^\(LOOKUP_LIBS\)=\(.*\):\1=\2 -lpq -L${libpq}/lib:
+        s:^# \(LOOKUP_LIBS\)=.*:\1=-lpq -L${libpq}/lib:
       ''}
       ${lib.optionalString enableSqlite ''
         s:^# \(LOOKUP_SQLITE=yes\)$:\1:
@@ -158,7 +195,10 @@ in stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://exim.org/";
     description = "Mail transfer agent (MTA)";
-    license = with licenses; [ gpl2Plus bsd3 ];
+    license = with licenses; [
+      gpl2Plus
+      bsd3
+    ];
     mainProgram = "exim";
     platforms = platforms.linux;
     maintainers = with maintainers; [ tv ] ++ teams.helsinki-systems.members;

@@ -1,7 +1,8 @@
-{ stdenv
-, lib
-, fetchurl
-, cmake
+{
+  stdenv,
+  lib,
+  fetchurl,
+  cmake,
 }:
 
 let
@@ -21,7 +22,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  cmakeFlags = lib.optional isStatic "-DBUILD_SHARED_LIBS=OFF"
+  cmakeFlags =
+    lib.optional isStatic "-DBUILD_SHARED_LIBS=OFF"
     ++ lib.optional (isCross || isStatic) "-DTTY_GID_SUPPORT=OFF"
     # Musl lacks UTMP/WTMP built-in support
     ++ lib.optionals isMusl [

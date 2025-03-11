@@ -43,6 +43,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/ploomber/jupysql-plugin";
     changelog = "https://github.com/ploomber/jupysql-plugin/blob/${version}/CHANGELOG.md";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ pacien ];
+    maintainers = with maintainers; [ euxane ];
   };
 }

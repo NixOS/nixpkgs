@@ -10,7 +10,7 @@
 .Sh SYNOPSIS
 .Nm
 .Bro
-.Cm switch | boot | test | build | dry-build | dry-activate | edit | repl | build-vm | build-vm-with-bootloader | list-generations Op Fl -json
+.Cm switch | boot | test | build | dry-build | dry-activate | edit | repl | build-vm | build-vm-with-bootloader | build-image | list-generations Op Fl -json
 .Brc
 .br
 .Op Fl -upgrade | -upgrade-all
@@ -33,6 +33,8 @@
 .br
 .Op Fl -profile-name | p Ar name
 .Op Fl -specialisation | c Ar name
+.br
+.Op Fl -image-variant Ar variant
 .br
 .Op Fl -build-host Va host
 .Op Fl -target-host Va host
@@ -226,6 +228,16 @@ containing a
 .Pa /boot
 partition.
 .
+.It Cm build-image
+Build a disk-image variant, pre-configured for the given platform/provider.
+Select a variant with the
+.Fl --image-variant
+option or run without any options to get a list of available variants.
+
+.Bd -literal -offset indent
+$ nixos-rebuild build-image --image-variant proxmox
+.Ed
+.
 .It Cm list-generations Op Fl -json
 List the available generations in a similar manner to the boot loader
 menu. It shows the generation number, build date and time, NixOS version,
@@ -260,7 +272,7 @@ relevant configuration options.
 Normally,
 .Nm
 first builds the
-.Ql nixUnstable
+.Ql nix
 attribute in Nixpkgs, and uses the resulting instance of the Nix package manager
 to build the new system configuration. This is necessary if the NixOS modules
 use features not provided by the currently installed version of Nix. This option
@@ -322,6 +334,12 @@ The new configuration will appear in the GRUB 2 submenu
 .It Fl -specialisation Ar name , Fl c Ar name
 Activates given specialisation; when not specified, switching and testing
 will activate the base, unspecialised system.
+.
+.It Fl -image-variant Ar variant
+Selects an image variant to build from
+the
+.Va config.system.build.images
+attribute of the given configuration. A list of variants is printed if this option remains unset.
 .
 .It Fl -build-host Ar host
 Instead of building the new configuration locally, use the specified host
@@ -482,7 +500,7 @@ Builder options:
 .Fl K Ns ,
 .Fl -fallback Ns ,
 .Fl I Ns ,
-.Fl -option Ns
+.Fl -option Ns ,
 .Fl -repair Ns ,
 .Fl -builders Ns ,
 .Fl -accept-flake-config Ns ,

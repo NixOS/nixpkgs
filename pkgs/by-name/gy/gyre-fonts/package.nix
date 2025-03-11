@@ -1,4 +1,8 @@
-{ lib, stdenvNoCC, fetchzip }:
+{
+  lib,
+  stdenvNoCC,
+  fetchzip,
+}:
 
 stdenvNoCC.mkDerivation rec {
   pname = "gyre-fonts";
@@ -28,7 +32,7 @@ stdenvNoCC.mkDerivation rec {
       being converted to OpenType and extended with diacritical marks
       covering all modern European languages and then some
     '';
-    homepage = "http://www.gust.org.pl/projects/e-foundry/tex-gyre/index_html#Readings";
+    homepage = "https://www.gust.org.pl/projects/e-foundry/tex-gyre/index_html#Readings";
     license = lib.licenses.lppl13c;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ bergey ];

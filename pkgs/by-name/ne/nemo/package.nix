@@ -1,35 +1,47 @@
-{ fetchFromGitHub
-, glib
-, gobject-introspection
-, meson
-, ninja
-, pkg-config
-, lib
-, stdenv
-, wrapGAppsHook3
-, libxml2
-, gtk3
-, gvfs
-, cinnamon-desktop
-, xapp
-, libexif
-, json-glib
-, exempi
-, intltool
-, shared-mime-info
-, cinnamon-translations
-, libgsf
+{
+  fetchFromGitHub,
+  glib,
+  gobject-introspection,
+  meson,
+  ninja,
+  pkg-config,
+  lib,
+  stdenv,
+  wrapGAppsHook3,
+  libxmlb,
+  gtk3,
+  gvfs,
+  cinnamon-desktop,
+  xapp,
+  libexif,
+  json-glib,
+  exempi,
+  intltool,
+  shared-mime-info,
+  cinnamon-translations,
+  libgsf,
+  python3,
 }:
 
+let
+  # For action-layout-editor.
+  pythonEnv = python3.withPackages (
+    pp: with pp; [
+      pycairo
+      pygobject3
+      python-xapp
+    ]
+  );
+in
 stdenv.mkDerivation rec {
   pname = "nemo";
-  version = "6.2.8";
+  version = "6.4.5";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    hash = "sha256-1GJLsUlptwXcZUWIOztskV0nHA9BnPmnVeTgUwJ+QDQ=";
+    hash = "sha256-9JfCBC5YjfQadF7KzPgZ1yPkiSjmuEO1tfMU2BmJES8=";
   };
 
   patches = [
@@ -38,13 +50,17 @@ stdenv.mkDerivation rec {
     ./load-extensions-from-env.patch
   ];
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   buildInputs = [
     glib
     gtk3
     cinnamon-desktop
-    libxml2
+    libxmlb # action-layout-editor
+    pythonEnv
     xapp
     libexif
     exempi
@@ -88,10 +104,12 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/linuxmint/nemo";
     description = "File browser for Cinnamon";
-    license = [ licenses.gpl2 licenses.lgpl2 ];
+    license = [
+      licenses.gpl2
+      licenses.lgpl2
+    ];
     platforms = platforms.linux;
     maintainers = teams.cinnamon.members;
     mainProgram = "nemo";
   };
 }
-

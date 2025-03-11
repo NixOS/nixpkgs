@@ -1,4 +1,10 @@
-{ pkgs, lib, config, utils, ... }:
+{
+  pkgs,
+  lib,
+  config,
+  utils,
+  ...
+}:
 let
   cfg = config.services.gmediarender;
 in
@@ -74,13 +80,19 @@ in
           Group = "gmediarender";
           SupplementaryGroups = [ "audio" ];
           ExecStart =
-            "${cfg.package}/bin/gmediarender " +
-            lib.optionalString (cfg.audioDevice != null) ("--gstout-audiodevice=${utils.escapeSystemdExecArg cfg.audioDevice} ") +
-            lib.optionalString (cfg.audioSink != null) ("--gstout-audiosink=${utils.escapeSystemdExecArg cfg.audioSink} ") +
-            lib.optionalString (cfg.friendlyName != null) ("--friendly-name=${utils.escapeSystemdExecArg cfg.friendlyName} ") +
-            lib.optionalString (cfg.initialVolume != 0) ("--initial-volume=${toString cfg.initialVolume} ") +
-            lib.optionalString (cfg.port != null) ("--port=${toString cfg.port} ") +
-            lib.optionalString (cfg.uuid != null) ("--uuid=${utils.escapeSystemdExecArg cfg.uuid} ");
+            "${cfg.package}/bin/gmediarender "
+            + lib.optionalString (cfg.audioDevice != null) (
+              "--gstout-audiodevice=${utils.escapeSystemdExecArg cfg.audioDevice} "
+            )
+            + lib.optionalString (cfg.audioSink != null) (
+              "--gstout-audiosink=${utils.escapeSystemdExecArg cfg.audioSink} "
+            )
+            + lib.optionalString (cfg.friendlyName != null) (
+              "--friendly-name=${utils.escapeSystemdExecArg cfg.friendlyName} "
+            )
+            + lib.optionalString (cfg.initialVolume != 0) ("--initial-volume=${toString cfg.initialVolume} ")
+            + lib.optionalString (cfg.port != null) ("--port=${toString cfg.port} ")
+            + lib.optionalString (cfg.uuid != null) ("--uuid=${utils.escapeSystemdExecArg cfg.uuid} ");
           Restart = "always";
           RuntimeDirectory = "gmediarender";
 
@@ -105,8 +117,11 @@ in
           RestrictRealtime = true;
           RestrictSUIDSGID = true;
           SystemCallArchitectures = "native";
-          SystemCallFilter = [ "@system-service" "~@privileged" ];
-          UMask = 066;
+          SystemCallFilter = [
+            "@system-service"
+            "~@privileged"
+          ];
+          UMask = 66;
         };
       };
     };

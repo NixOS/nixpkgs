@@ -1,4 +1,11 @@
-{lib, stdenv, fetchurl, cmake, taglib, zlib}:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  taglib,
+  zlib,
+}:
 
 stdenv.mkDerivation rec {
   pname = "taglib-extras";
@@ -8,7 +15,10 @@ stdenv.mkDerivation rec {
     sha256 = "0cln49ws9svvvals5fzxjxlzqm0fzjfymn7yfp4jfcjz655nnm7y";
   };
   buildInputs = [ taglib ];
-  nativeBuildInputs = [ cmake zlib ];
+  nativeBuildInputs = [
+    cmake
+    zlib
+  ];
 
   # Workaround for upstream bug https://bugs.kde.org/show_bug.cgi?id=357181
   preConfigure = ''

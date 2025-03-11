@@ -7,16 +7,16 @@
 
 buildNpmPackage rec {
   pname = "twig-language-server";
-  version = "0.5.1";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "kaermorchen";
     repo = "twig-language-server";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-bW0siZudzqk/4XgVH6nNCOrpJ6WHTCZoHJC+aXnE5mM=";
+    tag = "v${version}";
+    hash = "sha256-Jwi1+s2+TC656rXOukjLS4w1Y9VxwEdAe0y5Q3Iz0LA=";
   };
 
-  npmDepsHash = "sha256-zbMjfdIXQf6oz6em0vkyvroijCb2MUioZjvZjkbuKc8=";
+  npmDepsHash = "sha256-8M0CouDu3rjD3xGx5bheTG9pyN7Qe+O9FeTFZPmr+Mo=";
 
   installPhase = ''
     runHook preInstall

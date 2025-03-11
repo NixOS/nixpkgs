@@ -1,38 +1,42 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, cmake
-, pkg-config
-, stdenv
-, apple-sdk_11
-, curl
-, openssl
-, buildPackages
-, installShellFiles
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  stdenv,
+  curl,
+  openssl,
+  buildPackages,
+  installShellFiles,
 }:
 
 let
   canRunCmd = stdenv.hostPlatform.emulatorAvailable buildPackages;
   gix = "${stdenv.hostPlatform.emulator buildPackages} $out/bin/gix";
   ein = "${stdenv.hostPlatform.emulator buildPackages} $out/bin/ein";
-in rustPlatform.buildRustPackage rec {
+in
+rustPlatform.buildRustPackage rec {
   pname = "gitoxide";
-  version = "0.38.0";
+  version = "0.39.0";
 
   src = fetchFromGitHub {
     owner = "Byron";
     repo = "gitoxide";
     rev = "v${version}";
-    hash = "sha256-JqWFdZXcmL97w5CochG9kXXH7cN2KMarkNUvfQXbYU0=";
+    hash = "sha256-xv4xGkrArJ/LTVLs2SYhvxhfNG6sjVm5nZWsi4s34iM=";
   };
 
-  cargoHash = "sha256-EGPx4NNvgGe+LJ8Gn0ne8O4lCA+9p+E9J7OOhLQDWX0=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-SRJkI61Z8revRWoschkUAJwcJfKB/U03+YfwEcnEIm8=";
 
-  nativeBuildInputs = [ cmake pkg-config installShellFiles ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    installShellFiles
+  ];
 
-  buildInputs = [ curl ] ++ (if stdenv.hostPlatform.isDarwin
-    then [ apple-sdk_11 ]
-    else [ openssl ]);
+  buildInputs = [ curl ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ openssl ];
 
   preFixup = lib.optionalString canRunCmd ''
     installShellCompletion --cmd gix \
@@ -53,7 +57,10 @@ in rustPlatform.buildRustPackage rec {
     description = "Command-line application for interacting with git repositories";
     homepage = "https://github.com/Byron/gitoxide";
     changelog = "https://github.com/Byron/gitoxide/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [ mit /* or */ asl20 ];
+    license = with licenses; [
+      mit # or
+      asl20
+    ];
     maintainers = with maintainers; [ syberant ];
   };
 }

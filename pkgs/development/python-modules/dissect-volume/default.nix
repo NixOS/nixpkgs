@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.volume";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-uTbXvJ8lP4ir9rTToDGYXD837Z1fzi+Eh6cASg+jxdc=";
   };
 
@@ -48,6 +48,7 @@ buildPythonPackage rec {
     "test_lvm"
     "test_md_raid0_zones"
     "test_md_read"
+    "test_vinum"
   ];
 
   meta = with lib; {

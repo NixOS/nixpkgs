@@ -25,7 +25,7 @@
 
 let
   # TODO: Reuse one defined in torch?
-  # Some of those dependencies are probbly not required,
+  # Some of those dependencies are probably not required,
   # but it breaks when the store path is different between torch and torchaudio
   rocmtoolkit_joined = symlinkJoin {
     name = "rocm-merged";
@@ -82,7 +82,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "audio";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-BRn4EZ7bIujGA6b/tdMu9yDqJNEaf/f1Kj45aLHC/JI=";
   };
 

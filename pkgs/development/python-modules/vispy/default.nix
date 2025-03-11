@@ -2,7 +2,7 @@
   lib,
   stdenv,
   buildPythonPackage,
-  substituteAll,
+  replaceVars,
   fetchPypi,
   cython,
   fontconfig,
@@ -31,16 +31,8 @@ buildPythonPackage rec {
     hash = "sha256-77u4R6kIuvfnFpq5vylhOKOTZPNn5ssKjsA61xaZ0x0=";
   };
 
-  postPatch = ''
-    # https://numpy.org/devdocs/dev/depending_on_numpy.html#numpy-2-0-specific-advice
-    # upstream enforce builds with numpy 2+, which is backward compat with 1.xx
-    substituteInPlace pyproject.toml \
-      --replace-fail "numpy>=2.0.0rc2" "numpy"
-  '';
-
   patches = lib.optionals (!stdenv.hostPlatform.isDarwin) [
-    (substituteAll {
-      src = ./library-paths.patch;
+    (replaceVars ./library-paths.patch {
       fontconfig = "${fontconfig.lib}/lib/libfontconfig${stdenv.hostPlatform.extensions.sharedLibrary}";
       gl = "${libGL.out}/lib/libGL${stdenv.hostPlatform.extensions.sharedLibrary}";
     })

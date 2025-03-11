@@ -1,34 +1,42 @@
-{ stdenv
-, lib
-, requireFile
-, runCommand
-, rcu
-, testers
-, copyDesktopItems
-, desktopToDarwinBundle
-, libsForQt5
-, makeDesktopItem
-, python3Packages
-, system-config-printer
+{
+  stdenv,
+  lib,
+  requireFile,
+  runCommand,
+  rcu,
+  testers,
+  copyDesktopItems,
+  coreutils,
+  desktopToDarwinBundle,
+  gnutar,
+  libsForQt5,
+  makeDesktopItem,
+  nettools,
+  protobuf,
+  python3Packages,
+  system-config-printer,
+  wget,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "rcu";
-  version = "2024.001q";
+  version = "2025.001s";
 
   format = "other";
 
-  src = let
-    src-tarball = requireFile {
-      name = "rcu-d${version}-source.tar.gz";
-      hash = "sha256-Ywk28gJBMSSQL6jEcHE8h253KOsXIGwVOag6PBWs8kg=";
-      url = "http://www.davisr.me/projects/rcu/";
-    };
-  in runCommand "${src-tarball.name}-unpacked" {} ''
-    gunzip -ck ${src-tarball} | tar -xvf-
-    mv rcu $out
-    ln -s ${src-tarball} $out/src
-  '';
+  src =
+    let
+      src-tarball = requireFile {
+        name = "rcu-d${version}-source.tar.gz";
+        hash = "sha256-QC9ieulYAmE9pwt1/eZmyI5MZfRV0f24Pe5oKtuXNok=";
+        url = "https://www.davisr.me/projects/rcu/";
+      };
+    in
+    runCommand "${src-tarball.name}-unpacked" { } ''
+      gunzip -ck ${src-tarball} | tar -xvf-
+      mv rcu $out
+      ln -s ${src-tarball} $out/src
+    '';
 
   patches = [
     ./Port-to-paramiko-3.x.patch
@@ -40,14 +48,25 @@ python3Packages.buildPythonApplication rec {
 
     substituteInPlace package_support/gnulinux/50-remarkable.rules \
       --replace-fail 'GROUP="yourgroup"' 'GROUP="users"'
+
+    # This must match the protobuf version imported at runtime, regenerate it
+    rm src/model/update_metadata_pb2.py
+    protoc --proto_path src/model src/model/update_metadata.proto --python_out=src/model
+
+    # We don't make it available at this location, wrapping adds it to PATH instead
+    substituteInPlace src/model/document.py \
+      --replace-fail '/sbin/ifconfig' 'ifconfig'
   '';
 
-  nativeBuildInputs = [
-    copyDesktopItems
-    libsForQt5.wrapQtAppsHook
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    desktopToDarwinBundle
-  ];
+  nativeBuildInputs =
+    [
+      copyDesktopItems
+      protobuf
+      libsForQt5.wrapQtAppsHook
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      desktopToDarwinBundle
+    ];
 
   buildInputs = [
     libsForQt5.qtbase
@@ -61,7 +80,7 @@ python3Packages.buildPythonApplication rec {
     pdfminer-six
     pikepdf
     pillow
-    protobuf
+    python3Packages.protobuf # otherwise it picks up protobuf from function args
     pyside2
   ];
 
@@ -81,73 +100,96 @@ python3Packages.buildPythonApplication rec {
   # No tests
   doCheck = false;
 
-  installPhase = ''
-    runHook preInstall
+  installPhase =
+    ''
+      runHook preInstall
 
-    mkdir -p $out/{bin,share}
-    cp -r src $out/share/rcu
+      mkdir -p $out/{bin,share}
+      cp -r src $out/share/rcu
 
-  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
-    install -Dm644 package_support/gnulinux/50-remarkable.rules $out/etc/udev/rules.d/50-remarkable.rules
-  '' + ''
+    ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
+      install -Dm644 package_support/gnulinux/50-remarkable.rules $out/etc/udev/rules.d/50-remarkable.rules
+    ''
+    + ''
 
-    # Keep source from being GC'd by linking into it
+      # Keep source from being GC'd by linking into it
 
-    for icondir in $(find icons -type d -name '[0-9]*x[0-9]*'); do
-      iconsize=$(basename $icondir)
-      mkdir -p $out/share/icons/hicolor/$iconsize/apps
-      ln -s ${src}/icons/$iconsize/rcu-icon-$iconsize.png $out/share/icons/hicolor/$iconsize/apps/rcu.png
-    done
+      for icondir in $(find icons -type d -name '[0-9]*x[0-9]*'); do
+        iconsize=$(basename $icondir)
+        mkdir -p $out/share/icons/hicolor/$iconsize/apps
+        ln -s ${src}/icons/$iconsize/rcu-icon-$iconsize.png $out/share/icons/hicolor/$iconsize/apps/rcu.png
+      done
 
-    mkdir -p $out/share/icons/hicolor/scalable/apps
-    ln -s ${src}/icons/64x64/rcu-icon-64x64.svg $out/share/icons/hicolor/scalable/apps/rcu.svg
+      mkdir -p $out/share/icons/hicolor/scalable/apps
+      ln -s ${src}/icons/64x64/rcu-icon-64x64.svg $out/share/icons/hicolor/scalable/apps/rcu.svg
 
-    mkdir -p $out/share/doc/rcu
-    for docfile in {COPYING,manual.pdf}; do
-      ln -s ${src}/manual/$docfile $out/share/doc/rcu/$docfile
-    done
+      mkdir -p $out/share/doc/rcu
+      for docfile in {COPYING,manual.pdf}; do
+        ln -s ${src}/manual/$docfile $out/share/doc/rcu/$docfile
+      done
 
-    mkdir -p $out/share/licenses/rcu
-    ln -s ${src}/COPYING $out/share/licenses/rcu/COPYING
+      mkdir -p $out/share/licenses/rcu
+      ln -s ${src}/COPYING $out/share/licenses/rcu/COPYING
 
-    runHook postInstall
-  '';
+      runHook postInstall
+    '';
 
   # Manually creating wrapper, hook struggles with lack of shebang & symlink
   dontWrapPythonPrograms = true;
 
-  preFixup = ''
-    makeWrapperArgs+=(
-      "''${qtWrapperArgs[@]}"
-  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
-      --prefix PATH : ${lib.makeBinPath [ system-config-printer ]}
-  '' + ''
-    )
-  '';
+  preFixup =
+    ''
+      makeWrapperArgs+=(
+        "''${qtWrapperArgs[@]}"
+        --prefix PATH : ${
+          lib.makeBinPath [
+            coreutils
+            gnutar
+            wget
+          ]
+        }
+    ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
+      --prefix PATH : ${
+        lib.makeBinPath [
+          nettools
+          system-config-printer
+        ]
+      }
+    ''
+    + ''
+      )
+    '';
 
   postFixup = ''
     makeWrapper ${lib.getExe python3Packages.python} $out/bin/rcu \
       ''${makeWrapperArgs[@]} \
-      --prefix PYTHONPATH : ${python3Packages.makePythonPath (propagatedBuildInputs ++ [(placeholder "out")])} \
+      --prefix PYTHONPATH : ${
+        python3Packages.makePythonPath (propagatedBuildInputs ++ [ (placeholder "out") ])
+      } \
       --add-flags $out/share/rcu/main.py
   '';
 
   passthru = {
     tests.version = testers.testVersion {
       package = rcu;
-      version = let
-        versionSuffixPos = (lib.strings.stringLength rcu.version) - 1;
-      in
-        "d${lib.strings.substring 0 versionSuffixPos rcu.version}(${lib.strings.substring versionSuffixPos 1 rcu.version})";
+      version =
+        let
+          versionSuffixPos = (lib.strings.stringLength rcu.version) - 1;
+        in
+        "d${lib.strings.substring 0 versionSuffixPos rcu.version}(${
+          lib.strings.substring versionSuffixPos 1 rcu.version
+        })";
     };
   };
 
-  meta = with lib; {
+  meta = {
     mainProgram = "rcu";
     description = "All-in-one offline/local management software for reMarkable e-paper tablets";
     homepage = "http://www.davisr.me/projects/rcu/";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ OPNA2608 ];
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [ OPNA2608 ];
     hydraPlatforms = [ ]; # requireFile used as src
   };
 }

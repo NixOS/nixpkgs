@@ -17,7 +17,7 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "dbeaver-bin";
-  version = "24.2.3";
+  version = "24.3.5";
 
   src =
     let
@@ -30,10 +30,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         aarch64-darwin = "macos-aarch64.dmg";
       };
       hash = selectSystem {
-        x86_64-linux = "sha256-TvDpoEcnZBS8ORggFwLM80FXsJ8EXKvRSPUn+VtNTk8=";
-        aarch64-linux = "sha256-59khU3VQzpNeZv69pbeeE4ZAFajyI5gUUw9baOWPIFM=";
-        x86_64-darwin = "sha256-/YyN5daeoxq0oii6qYRpZ8cb43u6n8HuVc2JqVOhrxs=";
-        aarch64-darwin = "sha256-Stb76QpLnpmpBYDm+6fgkcx+TlY8hVkNtvGgdMWbaHg=";
+        x86_64-linux = "sha256-Kt+CPPgeqKMxZZeWG3NjNKdlcQFyS9NvEaAQSI9c5CI=";
+        aarch64-linux = "sha256-9O0BhsrhVMpf3FMzqZeaNrCKdSscsOrLmo6Mq42aRLU=";
+        x86_64-darwin = "sha256-4uZrlgjHJz7zOgGn7mTRtz/qjlvzBglXAVcjf7SDmCs=";
+        aarch64-darwin = "sha256-Hm9215hcoNEc/amTQ9mBX2wl95aTCF1/T+5crctbaeA=";
       };
     in
     fetchurl {
@@ -60,6 +60,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       --replace-fail '-Xmx1024m' '-Xmx${override_xmx}'
   '';
 
+  preInstall = ''
+    # most directories are for different architectures, only keep what we need
+    shopt -s extglob
+    pushd ${lib.optionalString stdenvNoCC.hostPlatform.isDarwin "Contents/Eclipse/"}plugins/com.sun.jna_5.15.0.v20240915-2000/com/sun/jna/
+    rm -r !(ptr|internal|linux-x86-64|linux-aarch64|darwin-x86-64|darwin-aarch64)/
+    popd
+  '';
+
   installPhase =
     if !stdenvNoCC.hostPlatform.isDarwin then
       ''
@@ -81,7 +89,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
           }"
 
         mkdir -p $out/share/icons/hicolor/256x256/apps
-        ln -s $out/opt/dbeaver/dbeaver.png $out/share/icons/hicolor/256x256/apps/dbeaver.png
+        # for some reason it's missing from the aarch64 build
+        if [ -e $out/opt/dbeaver/dbeaver.png ]; then
+          ln -s $out/opt/dbeaver/dbeaver.png $out/share/icons/hicolor/256x256/apps/dbeaver.png
+        fi
 
         mkdir -p $out/share/applications
         ln -s $out/opt/dbeaver/dbeaver-ce.desktop $out/share/applications/dbeaver.desktop
@@ -109,8 +120,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://dbeaver.io/";
+    changelog = "https://github.com/dbeaver/dbeaver/releases/tag/${finalAttrs.version}";
     description = "Universal SQL Client for developers, DBA and analysts. Supports MySQL, PostgreSQL, MariaDB, SQLite, and more";
     longDescription = ''
       Free multi-platform database tool for developers, SQL programmers, database
@@ -118,10 +130,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       PostgreSQL, MariaDB, SQLite, Oracle, DB2, SQL Server, Sybase, MS Access,
       Teradata, Firebird, Derby, etc.
     '';
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.asl20;
-    platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.asl20;
+    platforms = with lib.platforms; linux ++ darwin;
+    maintainers = with lib.maintainers; [
       gepbird
       mkg20001
       yzx9

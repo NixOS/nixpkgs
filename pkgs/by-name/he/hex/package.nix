@@ -1,8 +1,9 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, testers
-, hex
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  testers,
+  hex,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -16,7 +17,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-YctXDhCMJvDQLPsuhzdyYDUIlFE2vKltNtrFFeE7YE8=";
   };
 
-  cargoHash = "sha256-Nlha9Zn0qaQhpN2ivbBvpIPxCN2I7BtJJULb6sYdpdo=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-3lrNZyQVP+gswbF+pqQmVIHg3bjiJ22y87PtTHDwIXs=";
 
   passthru.tests.version = testers.testVersion {
     package = hex;

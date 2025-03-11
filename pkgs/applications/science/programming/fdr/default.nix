@@ -1,4 +1,14 @@
-{ lib, stdenv, fetchurl, qtbase, qtx11extras, ncurses5, xorg, zlib, python27Packages }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  qtbase,
+  qtx11extras,
+  ncurses5,
+  xorg,
+  zlib,
+  python27Packages,
+}:
 stdenv.mkDerivation {
   pname = "fdr";
   version = "4.2.7";

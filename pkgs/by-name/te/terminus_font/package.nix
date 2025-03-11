@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, python3
-, bdftopcf, xorg
+{
+  lib,
+  stdenv,
+  fetchurl,
+  python3,
+  bdftopcf,
+  xorg,
 }:
 
 stdenv.mkDerivation rec {
@@ -13,8 +18,11 @@ stdenv.mkDerivation rec {
 
   patches = [ ./SOURCE_DATE_EPOCH-for-otb.patch ];
 
-  nativeBuildInputs =
-    [ python3 bdftopcf xorg.mkfontscale ];
+  nativeBuildInputs = [
+    python3
+    bdftopcf
+    xorg.mkfontscale
+  ];
 
   enableParallelBuilding = true;
 
@@ -23,7 +31,11 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile --replace 'gzip'     'gzip -n'
   '';
 
-  installTargets = [ "install" "install-otb" "fontdir" ];
+  installTargets = [
+    "install"
+    "install-otb"
+    "fontdir"
+  ];
   # fontdir depends on the previous two targets, but this is not known
   # to make, so we need to disable parallelism:
   enableParallelInstalling = false;

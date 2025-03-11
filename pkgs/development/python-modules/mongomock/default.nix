@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "mongomock";
-  version = "4.2.0.post1";
+  version = "4.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-kkHSzscnS5c22+jtrLGVKP9mrzs3ebMk157MQgEifzE=";
+    hash = "sha256-MmZ7eQZvq8EtTxfxao/XNhtfRDUgizujLCJuUiEqjDA=";
   };
 
   build-system = [

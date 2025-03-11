@@ -1,10 +1,40 @@
-{ mkDerivation, ansi-terminal, ansi-wl-pprint, base, binary
-, bytestring, containers, directory, edit-distance, fetchgit
-, file-embed, filelock, filepath, ghc-prim, haskeline, HTTP
-, http-client, http-client-tls, http-types, language-glsl, lib, mtl
-, network, parsec, process, raw-strings-qq, scientific, SHA
-, snap-core, snap-server, template-haskell, time
-, unordered-containers, utf8-string, vector, zip-archive
+{
+  mkDerivation,
+  ansi-terminal,
+  ansi-wl-pprint,
+  base,
+  binary,
+  bytestring,
+  containers,
+  directory,
+  edit-distance,
+  fetchgit,
+  file-embed,
+  filelock,
+  filepath,
+  ghc-prim,
+  haskeline,
+  HTTP,
+  http-client,
+  http-client-tls,
+  http-types,
+  language-glsl,
+  lib,
+  mtl,
+  network,
+  parsec,
+  process,
+  raw-strings-qq,
+  scientific,
+  SHA,
+  snap-core,
+  snap-server,
+  template-haskell,
+  time,
+  unordered-containers,
+  utf8-string,
+  vector,
+  zip-archive,
 }:
 mkDerivation {
   pname = "elm";
@@ -18,12 +48,39 @@ mkDerivation {
   isLibrary = false;
   isExecutable = true;
   executableHaskellDepends = [
-    ansi-terminal ansi-wl-pprint base binary bytestring containers
-    directory edit-distance file-embed filelock filepath ghc-prim
-    haskeline HTTP http-client http-client-tls http-types language-glsl
-    mtl network parsec process raw-strings-qq scientific SHA snap-core
-    snap-server template-haskell time unordered-containers utf8-string
-    vector zip-archive
+    ansi-terminal
+    ansi-wl-pprint
+    base
+    binary
+    bytestring
+    containers
+    directory
+    edit-distance
+    file-embed
+    filelock
+    filepath
+    ghc-prim
+    haskeline
+    HTTP
+    http-client
+    http-client-tls
+    http-types
+    language-glsl
+    mtl
+    network
+    parsec
+    process
+    raw-strings-qq
+    scientific
+    SHA
+    snap-core
+    snap-server
+    template-haskell
+    time
+    unordered-containers
+    utf8-string
+    vector
+    zip-archive
   ];
   homepage = "https://elm-lang.org";
   description = "`elm` command line interface";

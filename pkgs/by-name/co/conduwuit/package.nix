@@ -6,8 +6,6 @@
   bzip2,
   zstd,
   stdenv,
-  apple-sdk_15,
-  darwinMinVersionHook,
   rocksdb,
   nix-update-script,
   testers,
@@ -17,6 +15,7 @@
   rust-jemalloc-sys,
   enableLiburing ? stdenv.hostPlatform.isLinux,
   liburing,
+  nixosTests,
 }:
 let
   rust-jemalloc-sys' = rust-jemalloc-sys.override {
@@ -54,12 +53,7 @@ rustPlatform.buildRustPackage rec {
       zstd
     ]
     ++ lib.optional enableJemalloc rust-jemalloc-sys'
-    ++ lib.optional enableLiburing liburing
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_15
-      # aws-lc-sys requires CryptoKit's CommonCrypto, which is available on macOS 10.15+
-      (darwinMinVersionHook "10.15")
-    ];
+    ++ lib.optional enableLiburing liburing;
 
   env = {
     ZSTD_SYS_USE_PKG_CONFIG = true;
@@ -84,10 +78,16 @@ rustPlatform.buildRustPackage rec {
 
   passthru = {
     updateScript = nix-update-script { };
-    tests.version = testers.testVersion {
-      package = conduwuit;
-      version = "${version}";
-    };
+    tests =
+      {
+        version = testers.testVersion {
+          inherit version;
+          package = conduwuit;
+        };
+      }
+      // lib.optionalAttrs stdenv.hostPlatform.isLinux {
+        inherit (nixosTests) conduwuit;
+      };
   };
 
   meta = {

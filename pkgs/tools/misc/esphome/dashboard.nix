@@ -1,30 +1,31 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchNpmDeps
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchNpmDeps,
 
-# build-system
-, setuptools
-, nodejs
-, npmHooks
+  # build-system
+  setuptools,
+  nodejs,
+  npmHooks,
 
 }:
 
 buildPythonPackage rec {
   pname = "esphome-dashboard";
-  version = "20241120.0";
+  version = "20250212.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "esphome";
     repo = "dashboard";
     rev = "refs/tags/${version}";
-    hash = "sha256-insoDWHqMFAGgmsY2ZgNuo1cl0WGJXRy398bt3ADORs=";
+    hash = "sha256-9yXG9jwB284xTM6L3HWQCRD9Ki1F8yHaEl1vDNDxogw=";
   };
 
   npmDeps = fetchNpmDeps {
     inherit src;
-    hash = "sha256-UKrF7yzyj09WBrmrJ6uzcRjIYrKwCqLQ5paiqnt/Xuc=";
+    hash = "sha256-B0Lx4aH+7NVSMY9qUUOiVeLgIL5wI3JolC9eLzjbRRA=";
   };
 
   build-system = [ setuptools ];

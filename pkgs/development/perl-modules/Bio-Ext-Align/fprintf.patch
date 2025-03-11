@@ -7,7 +7,7 @@ index 0e07b67..0eab932 100644
  dpAlign_fatal(char * s)
  {
 -    fprintf(stderr, s);
-+    fputs(stderr, s);
++    fputs(s, stderr);
      exit(-1);
  }
  

@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, wayland-scanner
-, wayland
-, libinput
-, yaml-cpp
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  wayland-scanner,
+  wayland,
+  libinput,
+  yaml-cpp,
 }:
 
 stdenv.mkDerivation rec {

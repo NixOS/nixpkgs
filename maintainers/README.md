@@ -23,7 +23,7 @@ for the maintainers to provide feedback.
 
 For critical packages, this convention needs to be negotiated with the
 maintainer. A critical package is one that causes mass-rebuild, or where an
-author is listed in the [`CODEOWNERS`](../.github/CODEOWNERS) file.
+author is listed in the [`OWNERS`](../ci/OWNERS) file.
 
 In case of critical security updates, the [security team](https://nixos.org/community/teams/security) might override these
 heuristics in order to get the fixes in as fast as possible.

@@ -10,16 +10,16 @@
 
 buildGoModule rec {
   pname = "kubevela";
-  version = "1.9.13";
+  version = "1.10.2";
 
   src = fetchFromGitHub {
     owner = "kubevela";
     repo = "kubevela";
     rev = "v${version}";
-    hash = "sha256-b9N7vEY6AjJmOWySyssW7nrlZ+iFhOzVFmVQGfk/ilw=";
+    hash = "sha256-YfIYQSJynI4Ou4oiq7yxZlfdCnpuwsuUUPYKDmFdIKg=";
   };
 
-  vendorHash = "sha256-WE5jE58pCXUvIKo+NAQUNrNzxLkUDIuJp2yBqE+8Ors=";
+  vendorHash = "sha256-iBhRvlG4agErynZMEFu6XWYK3c657GiOwcn5bw4VtQA=";
 
   ldflags = [
     "-s" "-w"
@@ -28,7 +28,7 @@ buildGoModule rec {
 
   subPackages = [ "references/cmd/cli" ];
 
-  CGO_ENABLED = 0;
+  env.CGO_ENABLED = 0;
 
   # Workaround for permission issue in shell completion
   HOME = "$TMPDIR";

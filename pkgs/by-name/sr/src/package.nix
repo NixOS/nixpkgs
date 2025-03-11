@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, asciidoc
-, fetchFromGitLab
-, git
-, makeWrapper
-, python3
-, rcs
+{
+  lib,
+  stdenv,
+  asciidoc,
+  fetchFromGitLab,
+  git,
+  makeWrapper,
+  python3,
+  rcs,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -59,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://gitlab.com/esr/src/-/raw/${finalAttrs.version}/NEWS.adoc";
     license = licenses.bsd2;
     mainProgram = "src";
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [ ];
     inherit (python3.meta) platforms;
   };
 })

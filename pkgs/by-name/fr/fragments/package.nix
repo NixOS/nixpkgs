@@ -12,6 +12,7 @@
   libadwaita,
   meson,
   ninja,
+  nix-update-script,
   openssl,
   pkg-config,
   rustPlatform,
@@ -33,10 +34,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-lTOO6ZQWImaFqYZ3qerYYHWj/eOLYU/2k2Wh/ju9Njw=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-7TIjd1ewazJGY8uG6f1B97ol+7+uLjnZVGC2/2DlUdQ=";
+    hash = "sha256-i77LHbaAURxWrEpuR40jRkUGPk8wZR+q3DB+rzH3sEc=";
   };
 
   nativeBuildInputs = [
@@ -67,10 +68,19 @@ stdenv.mkDerivation rec {
     )
   '';
 
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/World/Fragments";
     description = "Easy to use BitTorrent client for the GNOME desktop environment";
-    maintainers = with maintainers; [ emilytrau ];
+    maintainers =
+      with maintainers;
+      [
+        emilytrau
+      ]
+      ++ lib.teams.gnome-circle.members;
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     mainProgram = "fragments";

@@ -1,4 +1,10 @@
-{ fetchurl, lib, stdenv, lzip, texinfo }:
+{
+  fetchurl,
+  lib,
+  stdenv,
+  lzip,
+  texinfo,
+}:
 
 stdenv.mkDerivation rec {
   pname = "ocrad";
@@ -9,7 +15,9 @@ stdenv.mkDerivation rec {
     sha256 = "0divffvcaim89g4pvqs8kslbcxi475bcl3b4ynphf284k9zfdgx9";
   };
 
-  nativeBuildInputs = [ lzip /* unpack */ ];
+  nativeBuildInputs = [
+    lzip # unpack
+  ];
   buildInputs = [ texinfo ];
 
   doCheck = true;

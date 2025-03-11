@@ -1,18 +1,21 @@
-{ lib
-, derivationWithMeta
-, hostPlatform
-, src
-, version
-, platforms
-, stage0Arch
+{
+  lib,
+  derivationWithMeta,
+  hostPlatform,
+  src,
+  version,
+  platforms,
+  stage0Arch,
 }:
 
 let
-  hash = {
-    "AArch64" = "sha256-XTPsoKeI6wTZAF0UwEJPzuHelWOJe//wXg4HYO0dEJo=";
-    "AMD64"   = "sha256-RCgK9oZRDQUiWLVkcIBSR2HeoB+Bh0czthrpjFEkCaY=";
-    "x86"     = "sha256-QU3RPGy51W7M2xnfFY1IqruKzusrSLU+L190ztN6JW8=";
-  }.${stage0Arch} or (throw "Unsupported system: ${hostPlatform.system}");
+  hash =
+    {
+      "AArch64" = "sha256-XTPsoKeI6wTZAF0UwEJPzuHelWOJe//wXg4HYO0dEJo=";
+      "AMD64" = "sha256-RCgK9oZRDQUiWLVkcIBSR2HeoB+Bh0czthrpjFEkCaY=";
+      "x86" = "sha256-QU3RPGy51W7M2xnfFY1IqruKzusrSLU+L190ztN6JW8=";
+    }
+    .${stage0Arch} or (throw "Unsupported system: ${hostPlatform.system}");
 
   # Pinned from https://github.com/oriansj/stage0-posix/commit/3189b5f325b7ef8b88e3edec7c1cde4fce73c76c
   # This 256 byte seed is the only pre-compiled binary in the bootstrap chain.

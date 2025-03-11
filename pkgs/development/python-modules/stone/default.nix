@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dropbox";
     repo = "stone";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-W+wRVWPaAzhdHMVE54GEJC/YJqYZVJhwFDWWSMKUPdw=";
   };
 

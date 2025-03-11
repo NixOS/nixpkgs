@@ -1,23 +1,24 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
-, kubeone
-, testers
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  kubeone,
+  testers,
 }:
 
 buildGoModule rec {
   pname = "kubeone";
-  version = "1.8.3";
+  version = "1.9.2";
 
   src = fetchFromGitHub {
     owner = "kubermatic";
     repo = "kubeone";
     rev = "v${version}";
-    hash = "sha256-+9Dw6W/Tbg7zRC/ARuuXqZGTcMeSrtdoTvHtsQevigg=";
+    hash = "sha256-pMY86Ucp5nuH63YgAh60l3WZYDPvM8LcTaV9QS2BzAA=";
   };
 
-  vendorHash = "sha256-z1BBE+PH2s7VxWNxneu5y2ZerfzCZNPJowZJVq821Kk=";
+  vendorHash = "sha256-dvsq2idsLmo1Tc8kfg3pJKNIMosrAMXN1fxvayS7glQ=";
 
   ldflags = [
     "-s"

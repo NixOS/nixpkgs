@@ -1,0 +1,10 @@
+--- a/src/core/CMakeLists.txt
++++ b/src/core/CMakeLists.txt
+@@ -366,6 +366,7 @@ foreach(arch ${archs})
+             content_enable_legacy_ipc=true
+             enable_extensions_legacy_ipc=true
+             enable_bound_session_credentials=false
++            link_pulseaudio=true
+         )
+         extend_gn_list(gnArgArg
+             ARGS use_v8_context_snapshot v8_use_external_startup_data

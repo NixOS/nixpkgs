@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchurl
-, cmake
-, pkg-config
-, makeWrapper
-, SDL
-, SDL_mixer
-, SDL_net
-, wxGTK32
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  pkg-config,
+  makeWrapper,
+  SDL,
+  SDL_mixer,
+  SDL_net,
+  wxGTK32,
 }:
 
 stdenv.mkDerivation rec {
@@ -32,17 +33,25 @@ stdenv.mkDerivation rec {
     wxGTK32
   ];
 
-  installPhase = ''
-    runHook preInstall
-  '' + (if stdenv.hostPlatform.isDarwin then ''
-    mkdir -p $out/{Applications,bin}
-    mv odalaunch/odalaunch.app $out/Applications
-    makeWrapper $out/{Applications/odalaunch.app/Contents/MacOS,bin}/odalaunch
-  '' else ''
-    make install
-  '') + ''
-    runHook postInstall
-  '';
+  installPhase =
+    ''
+      runHook preInstall
+    ''
+    + (
+      if stdenv.hostPlatform.isDarwin then
+        ''
+          mkdir -p $out/{Applications,bin}
+          mv odalaunch/odalaunch.app $out/Applications
+          makeWrapper $out/{Applications/odalaunch.app/Contents/MacOS,bin}/odalaunch
+        ''
+      else
+        ''
+          make install
+        ''
+    )
+    + ''
+      runHook postInstall
+    '';
 
   meta = {
     homepage = "http://odamex.net/";

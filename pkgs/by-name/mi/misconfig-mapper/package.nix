@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "misconfig-mapper";
-  version = "1.12.3";
+  version = "1.13.7";
 
   src = fetchFromGitHub {
     owner = "intigriti";
     repo = "misconfig-mapper";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-TA6vnK1UAT66uPJzM4QJxjcpVZKPyAe4ZayYcrggzpc=";
+    tag = "v${version}";
+    hash = "sha256-6WFtXIqnn2ayfXkGMIxGDlYpE3UbHRuAU8qHGk9SCU4=";
   };
 
-  vendorHash = "sha256-KN4jasuVP6WJjoqQNPhqvXcmgbj16sX//PxAloj1w20=";
+  vendorHash = "sha256-fEmf+d9oBXz7KymNVmC+CM7OyPD9QV1uN4ReTNhei7A=";
 
   ldflags = [
     "-s"

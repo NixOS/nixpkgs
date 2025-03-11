@@ -1,16 +1,19 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
 
   cfg = config.services.bloop;
 
-in {
+in
+{
 
   options.services.bloop = {
-    extraOptions = mkOption {
-      type = types.listOf types.str;
+    extraOptions = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       default = [ ];
       example = [
         "-J-Xmx2G"
@@ -23,8 +26,8 @@ in {
       '';
     };
 
-    install = mkOption {
-      type = types.bool;
+    install = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Whether to install a user service for the Bloop server.
@@ -35,18 +38,18 @@ in {
     };
   };
 
-  config = mkIf (cfg.install) {
+  config = lib.mkIf (cfg.install) {
     systemd.user.services.bloop = {
       description = "Bloop Scala build server";
 
       environment = {
-        PATH = mkForce "${makeBinPath [ config.programs.java.package ]}";
+        PATH = lib.mkForce "${lib.makeBinPath [ config.programs.java.package ]}";
       };
       serviceConfig = {
-        Type        = "forking";
-        ExecStart   = "${pkgs.bloop}/bin/bloop start";
-        ExecStop    = "${pkgs.bloop}/bin/bloop exit";
-        Restart     = "always";
+        Type = "forking";
+        ExecStart = "${pkgs.bloop}/bin/bloop start";
+        ExecStop = "${pkgs.bloop}/bin/bloop exit";
+        Restart = "always";
       };
     };
 

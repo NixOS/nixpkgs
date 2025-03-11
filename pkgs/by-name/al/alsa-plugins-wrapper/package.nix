@@ -1,6 +1,7 @@
-{ stdenv
-, alsa-plugins
-, writeShellScriptBin
+{
+  stdenv,
+  alsa-plugins,
+  writeShellScriptBin,
 }:
 let
   arch = if stdenv.hostPlatform.system == "i686-linux" then "32" else "64";

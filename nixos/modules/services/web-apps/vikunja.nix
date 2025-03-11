@@ -1,16 +1,24 @@
-{ pkgs, lib, config, ... }:
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}:
 
 with lib;
 
 let
   cfg = config.services.vikunja;
-  format = pkgs.formats.yaml {};
+  format = pkgs.formats.yaml { };
   configFile = format.generate "config.yaml" cfg.settings;
   useMysql = cfg.database.type == "mysql";
   usePostgresql = cfg.database.type == "postgres";
-in {
+in
+{
   imports = [
-    (mkRemovedOptionModule [ "services" "vikunja" "setupNginx" ] "services.vikunja no longer supports the automatic set up of a nginx virtual host. Set up your own webserver config with a proxy pass to the vikunja service.")
+    (mkRemovedOptionModule [ "services" "vikunja" "setupNginx" ]
+      "services.vikunja no longer supports the automatic set up of a nginx virtual host. Set up your own webserver config with a proxy pass to the vikunja service."
+    )
   ];
 
   options.services.vikunja = with lib; {
@@ -25,7 +33,10 @@ in {
       '';
     };
     frontendScheme = mkOption {
-      type = types.enum [ "http" "https" ];
+      type = types.enum [
+        "http"
+        "https"
+      ];
       description = ''
         Whether the site is available via http or https.
       '';
@@ -42,16 +53,20 @@ in {
 
     settings = mkOption {
       type = format.type;
-      default = {};
+      default = { };
       description = ''
         Vikunja configuration. Refer to
         <https://vikunja.io/docs/config-options/>
         for details on supported values.
-        '';
+      '';
     };
     database = {
       type = mkOption {
-        type = types.enum [ "sqlite" "mysql" "postgres" ];
+        type = types.enum [
+          "sqlite"
+          "mysql"
+          "postgres"
+        ];
         example = "postgres";
         default = "sqlite";
         description = "Database engine to use.";
@@ -81,7 +96,13 @@ in {
   config = lib.mkIf cfg.enable {
     services.vikunja.settings = {
       database = {
-        inherit (cfg.database) type host user database path;
+        inherit (cfg.database)
+          type
+          host
+          user
+          database
+          path
+          ;
       };
       service = {
         interface = ":${toString cfg.port}";
@@ -94,7 +115,10 @@ in {
 
     systemd.services.vikunja = {
       description = "vikunja";
-      after = [ "network.target" ] ++ lib.optional usePostgresql "postgresql.service" ++ lib.optional useMysql "mysql.service";
+      after =
+        [ "network.target" ]
+        ++ lib.optional usePostgresql "postgresql.service"
+        ++ lib.optional useMysql "mysql.service";
       wantedBy = [ "multi-user.target" ];
       path = [ cfg.package ];
       restartTriggers = [ configFile ];

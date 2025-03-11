@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "pyhepmc";
-  version = "2.13.4";
+  version = "2.14.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -23,8 +23,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "scikit-hep";
     repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-86LDk0G9ckbV+/pNtLJa9EsA6plxerKI3ygxq680IKo=";
+    tag = "v${version}";
+    hash = "sha256-yh02Z1nPGjghZYHkPBlClDEztq4VQsW3H+kuco/lBpk=";
     fetchSubmodules = true;
   };
 
@@ -42,10 +42,6 @@ buildPythonPackage rec {
   dontUseCmakeConfigure = true;
 
   CMAKE_ARGS = [ "-DEXTERNAL_PYBIND11=ON" ];
-
-  preBuild = ''
-    export CMAKE_BUILD_PARALLEL_LEVEL="$NIX_BUILD_CORES"
-  '';
 
   nativeCheckInputs = [
     graphviz

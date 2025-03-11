@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "python-qt";
-  version = "3.5.6";
+  version = "3.6.0";
 
   src = fetchFromGitHub {
     owner = "MeVisLab";
     repo = "pythonqt";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-+cmwTTNmy87yuHukesA+nukM2RjMTHsvIbeG7J7X8ig=";
+    hash = "sha256-TVtnxb8E18x025lZiZLdgCA7ltLtToI1tsmB6gBh2B4=";
   };
 
   nativeBuildInputs = [

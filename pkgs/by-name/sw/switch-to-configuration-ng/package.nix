@@ -1,5 +1,6 @@
 {
   buildPackages,
+  clippy,
   dbus,
   lib,
   pkg-config,
@@ -21,6 +22,15 @@ rustPlatform.buildRustPackage {
   buildInputs = [ dbus ];
 
   env.SYSTEMD_DBUS_INTERFACE_DIR = "${buildPackages.systemd}/share/dbus-1/interfaces";
+
+  nativeCheckInputs = [
+    clippy
+  ];
+
+  preCheck = ''
+    echo "Running clippy..."
+    cargo clippy -- -Dwarnings
+  '';
 
   meta = {
     description = "NixOS switch-to-configuration program";

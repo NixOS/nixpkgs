@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "kevinheavey";
     repo = "pyheck";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-mfXkrCbBaJ0da+taKJvfyU5NS43tYJWqtTUXiCLVoGQ=";
   };
 

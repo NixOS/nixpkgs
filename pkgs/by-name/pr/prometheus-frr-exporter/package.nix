@@ -1,17 +1,21 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 let
-  version = "1.3.1";
+  version = "1.4.0";
   src = fetchFromGitHub {
     owner = "tynany";
     repo = "frr_exporter";
     rev = "v${version}";
-    hash = "sha256-SDtI7CvCeuRL1cXNsWGCl/zupVbgMxv5bzYYqJWTrMw=";
+    hash = "sha256-J847Y2ZxD0JLEv7hYS5EsNBA6052PXO6VVoavFrWVUU=";
   };
 in
 buildGoModule {
   pname = "prometheus-frr-exporter";
-  vendorHash = "sha256-G+S4XORrg0AEKoAqYdmg+uW6x0Ub5diQTyQGY0iebHg=";
+  vendorHash = "sha256-A2lLW19+wtHcNC8Du8HRORVp/JHGjWbEgoadlNmgm80=";
   inherit src version;
 
   ldflags = [

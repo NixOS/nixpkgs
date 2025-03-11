@@ -32,7 +32,7 @@
 , readline
 , rpcsvc-proto
 , stdenv
-, substituteAll
+, replaceVars
 , xhtml1
 , json_c
 , writeScript
@@ -108,27 +108,23 @@ assert enableCeph -> isLinux;
 assert enableGlusterfs -> isLinux;
 assert enableZfs -> isLinux;
 
-# if you update, also bump <nixpkgs/pkgs/development/python-modules/libvirt/default.nix> and SysVirt in <nixpkgs/pkgs/top-level/perl-packages.nix>
 stdenv.mkDerivation rec {
   pname = "libvirt";
-  # NOTE: You must also bump:
-  # <nixpkgs/pkgs/development/python-modules/libvirt/default.nix>
-  # SysVirt in <nixpkgs/pkgs/top-level/perl-packages.nix>
-  version = "10.9.0";
+  # if you update, also bump <nixpkgs/pkgs/development/python-modules/libvirt/default.nix> and SysVirt in <nixpkgs/pkgs/top-level/perl-packages.nix>
+  version = "11.0.0";
 
   src = fetchFromGitLab {
-    owner = pname;
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-LYQYA5UIKYs+8rSNZDymmrxuTWsgmukP5Y17lGB5UQs=";
+    owner = "libvirt";
+    repo = "libvirt";
+    tag = "v${version}";
     fetchSubmodules = true;
+    hash = "sha256-QxyOc/RbWZnjA4XIDNK7xZqBcP2ciHsOlszaa5pl6XA=";
   };
 
   patches = [
     ./0001-meson-patch-in-an-install-prefix-for-building-on-nix.patch
   ] ++ lib.optionals enableZfs [
-    (substituteAll {
-      src = ./0002-substitute-zfs-and-zpool-commands.patch;
+    (replaceVars ./0002-substitute-zfs-and-zpool-commands.patch {
       zfs = "${zfs}/bin/zfs";
       zpool = "${zfs}/bin/zpool";
     })
@@ -352,10 +348,14 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/bin/virt-xml-validate \
       --replace xmllint ${libxml2}/bin/xmllint
 
+    # Enable to set some options from the corresponding NixOS module (or other
+    # places) via environment variables.
     substituteInPlace $out/libexec/libvirt-guests.sh \
       --replace 'ON_BOOT="start"'       'ON_BOOT=''${ON_BOOT:-start}' \
       --replace 'ON_SHUTDOWN="suspend"' 'ON_SHUTDOWN=''${ON_SHUTDOWN:-suspend}' \
       --replace 'PARALLEL_SHUTDOWN=0'   'PARALLEL_SHUTDOWN=''${PARALLEL_SHUTDOWN:-0}' \
+      --replace 'SHUTDOWN_TIMEOUT=300'  'SHUTDOWN_TIMEOUT=''${SHUTDOWN_TIMEOUT:-300}' \
+      --replace 'START_DELAY=0'         'START_DELAY=''${START_DELAY:-0}' \
       --replace "$out/bin"              '${gettext}/bin' \
       --replace 'lock/subsys'           'lock' \
       --replace 'gettext.sh'            'gettext.sh

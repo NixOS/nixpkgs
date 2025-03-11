@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "azure-uamqp-python";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-HTIOHheCrvyI7DwA/UcUXk/fbesd29lvUvJ9TAeG3CE=";
   };
 

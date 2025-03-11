@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "LlamaIndex Readers Integration for files";
-    homepage = "https://github.com/run-llama/llama_index/tree/main/llama-index-legacy";
+    homepage = "https://github.com/run-llama/llama_index/tree/v0.9.48";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

@@ -1,9 +1,10 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
-
   cfg = config.security.pki;
 
   cacertPackage = pkgs.cacert.override {
@@ -19,12 +20,12 @@ in
 {
 
   options = {
-    security.pki.installCACerts = mkEnableOption "installing CA certificates to the system" // {
+    security.pki.installCACerts = lib.mkEnableOption "installing CA certificates to the system" // {
       default = true;
       internal = true;
     };
 
-    security.pki.useCompatibleBundle = mkEnableOption ''
+    security.pki.useCompatibleBundle = lib.mkEnableOption ''
       usage of a compatibility bundle.
 
       Such a bundle consists exclusively of `BEGIN CERTIFICATE` and no `BEGIN TRUSTED CERTIFICATE`,
@@ -36,10 +37,10 @@ in
       certificates themselves. This can have security consequences depending on your usecases
     '';
 
-    security.pki.certificateFiles = mkOption {
-      type = types.listOf types.path;
-      default = [];
-      example = literalExpression ''[ "''${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt" ]'';
+    security.pki.certificateFiles = lib.mkOption {
+      type = lib.types.listOf lib.types.path;
+      default = [ ];
+      example = lib.literalExpression ''[ "''${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt" ]'';
       description = ''
         A list of files containing trusted root certificates in PEM
         format. These are concatenated to form
@@ -49,10 +50,10 @@ in
       '';
     };
 
-    security.pki.certificates = mkOption {
-      type = types.listOf types.str;
-      default = [];
-      example = literalExpression ''
+    security.pki.certificates = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
+      default = [ ];
+      example = lib.literalExpression ''
         [ '''
             NixOS.org
             =========
@@ -69,11 +70,12 @@ in
       '';
     };
 
-    security.pki.caCertificateBlacklist = mkOption {
-      type = types.listOf types.str;
-      default = [];
+    security.pki.caCertificateBlacklist = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
+      default = [ ];
       example = [
-        "WoSign" "WoSign China"
+        "WoSign"
+        "WoSign China"
         "CA WoSign ECC Root"
         "Certification Authority of WoSign G2"
       ];
@@ -85,22 +87,31 @@ in
       '';
     };
 
+    security.pki.caBundle = lib.mkOption {
+      type = lib.types.path;
+      readOnly = true;
+      description = ''
+        (Read-only) the path to the final bundle of certificate authorities as a single file.
+      '';
+    };
   };
 
-  config = mkIf cfg.installCACerts {
+  config = lib.mkMerge [
+    (lib.mkIf cfg.installCACerts {
 
-    # NixOS canonical location + Debian/Ubuntu/Arch/Gentoo compatibility.
-    environment.etc."ssl/certs/ca-certificates.crt".source = caBundle;
+      # NixOS canonical location + Debian/Ubuntu/Arch/Gentoo compatibility.
+      environment.etc."ssl/certs/ca-certificates.crt".source = caBundle;
 
-    # Old NixOS compatibility.
-    environment.etc."ssl/certs/ca-bundle.crt".source = caBundle;
+      # Old NixOS compatibility.
+      environment.etc."ssl/certs/ca-bundle.crt".source = caBundle;
 
-    # CentOS/Fedora compatibility.
-    environment.etc."pki/tls/certs/ca-bundle.crt".source = caBundle;
+      # CentOS/Fedora compatibility.
+      environment.etc."pki/tls/certs/ca-bundle.crt".source = caBundle;
 
-    # P11-Kit trust source.
-    environment.etc."ssl/trust-source".source = "${cacertPackage.p11kit}/etc/ssl/trust-source";
-
-  };
+      # P11-Kit trust source.
+      environment.etc."ssl/trust-source".source = "${cacertPackage.p11kit}/etc/ssl/trust-source";
+    })
+    { security.pki.caBundle = caBundle; }
+  ];
 
 }

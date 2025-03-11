@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "businho";
     repo = "pytest-ruff";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Ol+W5mDGMCwptuBa0b+Plkm64UUBf9bmr9YBo8g93Ok=";
   };
 

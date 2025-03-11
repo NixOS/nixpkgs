@@ -6,6 +6,7 @@
   gnome,
   glib,
   gtk3,
+  gobject-introspection,
   clutter,
   dbus,
   python3,
@@ -61,9 +62,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkg-config
+    gobject-introspection
     intltool
     libxslt
     libxml2
+    pythonEnv
     autoreconfHook
     wrapGAppsHook3
     vala
@@ -91,6 +94,13 @@ stdenv.mkDerivation rec {
     substituteInPlace libcaribou/Makefile.am --replace "--shared-library=libcaribou.so.0" "--shared-library=$out/lib/libcaribou.so.0"
   '';
 
+  env = lib.optionalAttrs stdenv.cc.isGNU {
+    # This really should be done by latest Vala, but we are using
+    # release tarball here, which dists generated C code.
+    # https://gitlab.gnome.org/GNOME/vala/-/merge_requests/369
+    NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+  };
+
   passthru = {
     updateScript = gnome.updateScript { packageName = "caribou"; };
   };
@@ -102,5 +112,8 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl21;
     maintainers = [ ];
     platforms = platforms.linux;
+    # checking for a Python interpreter with version >= 2.4... none
+    # configure: error: no suitable Python interpreter found
+    broken = stdenv.buildPlatform != stdenv.hostPlatform;
   };
 }

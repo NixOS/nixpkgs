@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "klaasnicolaas";
     repo = "python-autarco";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-zSqIEtQucrrAFEY7pBJ14Cevq8xbcGOheEmEE7Jd4qk=";
   };
 

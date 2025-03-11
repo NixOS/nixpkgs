@@ -1,19 +1,22 @@
-{ lib
-, stdenv
-, maven
-, fetchFromGitHub
-, makeWrapper
-, wrapGAppsHook3
-, jre
+{
+  lib,
+  stdenv,
+  maven,
+  fetchFromGitHub,
+  makeWrapper,
+  wrapGAppsHook3,
+  jre,
 }:
 
 let
-  platformName = {
-    "x86_64-linux" = "linux-x86-64";
-    "aarch64-linux" = "linux-aarch64";
-    "x86_64-darwin" = "darwin-x86-64";
-    "aarch64-darwin" = "darwin-aarch64";
-  }.${stdenv.system} or null;
+  platformName =
+    {
+      "x86_64-linux" = "linux-x86-64";
+      "aarch64-linux" = "linux-aarch64";
+      "x86_64-darwin" = "darwin-x86-64";
+      "aarch64-darwin" = "darwin-aarch64";
+    }
+    .${stdenv.system} or null;
 in
 maven.buildMavenPackage rec {
   pname = "jugglinglab";
@@ -67,7 +70,10 @@ maven.buildMavenPackage rec {
     homepage = "https://jugglinglab.org/";
     license = licenses.gpl2Only;
     mainProgram = "jugglinglab";
-    maintainers = with maintainers; [ wnklmnn tomasajt ];
+    maintainers = with maintainers; [
+      wnklmnn
+      tomasajt
+    ];
     platforms = platforms.all;
   };
 }

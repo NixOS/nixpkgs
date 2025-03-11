@@ -1,18 +1,19 @@
-{ stdenv
-, lib
-, bash
-, bat
-, coreutils
-, fetchFromGitHub
-, findutils
-, fzf
-, gawk
-, git
-, gnugrep
-, gnused
-, tmux
-, util-linux
-, xdg-utils
+{
+  stdenv,
+  lib,
+  bash,
+  bat,
+  coreutils,
+  fetchFromGitHub,
+  findutils,
+  fzf,
+  gawk,
+  git,
+  gnugrep,
+  gnused,
+  tmux,
+  util-linux,
+  xdg-utils,
 }:
 
 stdenv.mkDerivation rec {

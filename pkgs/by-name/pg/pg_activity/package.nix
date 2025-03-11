@@ -1,15 +1,19 @@
-{ python3Packages, fetchFromGitHub, lib }:
+{
+  python3Packages,
+  fetchFromGitHub,
+  lib,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "pg_activity";
-  version = "3.5.1";
+  version = "3.6.0";
   disabled = python3Packages.pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "dalibo";
     repo = pname;
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-fqRECReeXjdoCieCYIsIumIjcMGN7UUbWHxxAfzm9co=";
+    tag = "v${version}";
+    sha256 = "sha256-7nHtJl/b2pZqiJbpWArMS5jh7B8dv8V1esic6uFPV/0=";
   };
 
   propagatedBuildInputs = with python3Packages; [

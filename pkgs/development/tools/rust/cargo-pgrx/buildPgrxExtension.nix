@@ -27,13 +27,14 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-{ lib
-, cargo-pgrx
-, pkg-config
-, rustPlatform
-, stdenv
-, Security
-, writeShellScriptBin
+{
+  lib,
+  cargo-pgrx,
+  pkg-config,
+  rustPlatform,
+  stdenv,
+  Security,
+  writeShellScriptBin,
 }:
 
 # The idea behind: Use it mostly like rustPlatform.buildRustPackage and so
@@ -47,26 +48,31 @@
 #                      unnecessary and heavy dependency. If you set this to true, you also
 #                      have to add `rustfmt` to `nativeBuildInputs`.
 
-{ buildAndTestSubdir ? null
-, buildType ? "release"
-, buildFeatures ? [ ]
-, cargoBuildFlags ? [ ]
-, postgresql
-# cargo-pgrx calls rustfmt on generated bindings, this is not strictly necessary, so we avoid the
-# dependency here. Set to false and provide rustfmt in nativeBuildInputs, if you need it, e.g.
-# if you include the generated code in the output via postInstall.
-, useFakeRustfmt ? true
-, usePgTestCheckFeature ? true
-, ...
-} @ args:
+{
+  buildAndTestSubdir ? null,
+  buildType ? "release",
+  buildFeatures ? [ ],
+  cargoBuildFlags ? [ ],
+  postgresql,
+  # cargo-pgrx calls rustfmt on generated bindings, this is not strictly necessary, so we avoid the
+  # dependency here. Set to false and provide rustfmt in nativeBuildInputs, if you need it, e.g.
+  # if you include the generated code in the output via postInstall.
+  useFakeRustfmt ? true,
+  usePgTestCheckFeature ? true,
+  ...
+}@args:
 let
-  rustfmtInNativeBuildInputs = lib.lists.any (dep: lib.getName dep == "rustfmt") (args.nativeBuildInputs or []);
+  rustfmtInNativeBuildInputs = lib.lists.any (dep: lib.getName dep == "rustfmt") (
+    args.nativeBuildInputs or [ ]
+  );
 in
 
-assert lib.asserts.assertMsg ((args.installPhase or "") == "")
-  "buildPgrxExtensions overwrites the installPhase, so providing one does nothing";
-assert lib.asserts.assertMsg ((args.buildPhase or "") == "")
-  "buildPgrxExtensions overwrites the buildPhase, so providing one does nothing";
+assert lib.asserts.assertMsg (
+  (args.installPhase or "") == ""
+) "buildPgrxExtensions overwrites the installPhase, so providing one does nothing";
+assert lib.asserts.assertMsg (
+  (args.buildPhase or "") == ""
+) "buildPgrxExtensions overwrites the buildPhase, so providing one does nothing";
 assert lib.asserts.assertMsg (useFakeRustfmt -> !rustfmtInNativeBuildInputs)
   "The parameter useFakeRustfmt is set to true, but rustfmt is included in nativeBuildInputs. Either set useFakeRustfmt to false or remove rustfmt from nativeBuildInputs.";
 assert lib.asserts.assertMsg (!useFakeRustfmt -> rustfmtInNativeBuildInputs)
@@ -75,7 +81,7 @@ assert lib.asserts.assertMsg (!useFakeRustfmt -> rustfmtInNativeBuildInputs)
 let
   fakeRustfmt = writeShellScriptBin "rustfmt" ''
     exit 0
-    '';
+  '';
   maybeDebugFlag = lib.optionalString (buildType != "release") "--debug";
   maybeEnterBuildAndTestSubdir = lib.optionalString (buildAndTestSubdir != null) ''
     export CARGO_TARGET_DIR="$(pwd)/target"
@@ -103,19 +109,26 @@ let
     pg_ctl stop
   '';
 
-  argsForBuildRustPackage = builtins.removeAttrs args [ "postgresql" "useFakeRustfmt" "usePgTestCheckFeature" ];
+  argsForBuildRustPackage = builtins.removeAttrs args [
+    "postgresql"
+    "useFakeRustfmt"
+    "usePgTestCheckFeature"
+  ];
 
   # so we don't accidentally `(rustPlatform.buildRustPackage argsForBuildRustPackage) // { ... }` because
   # we forgot parentheses
   finalArgs = argsForBuildRustPackage // {
     buildInputs = (args.buildInputs or [ ]) ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 
-    nativeBuildInputs = (args.nativeBuildInputs or [ ]) ++ [
-      cargo-pgrx
-      postgresql
-      pkg-config
-      rustPlatform.bindgenHook
-    ] ++ lib.optionals useFakeRustfmt [ fakeRustfmt ];
+    nativeBuildInputs =
+      (args.nativeBuildInputs or [ ])
+      ++ [
+        cargo-pgrx
+        postgresql
+        pkg-config
+        rustPlatform.bindgenHook
+      ]
+      ++ lib.optionals useFakeRustfmt [ fakeRustfmt ];
 
     buildPhase = ''
       runHook preBuild
@@ -161,7 +174,10 @@ let
     RUST_BACKTRACE = "full";
 
     checkNoDefaultFeatures = true;
-    checkFeatures = (args.checkFeatures or [ ]) ++ (lib.optionals usePgTestCheckFeature [ "pg_test" ]) ++ [ "pg${pgrxPostgresMajor}" ];
+    checkFeatures =
+      (args.checkFeatures or [ ])
+      ++ (lib.optionals usePgTestCheckFeature [ "pg_test" ])
+      ++ [ "pg${pgrxPostgresMajor}" ];
   };
 in
 rustPlatform.buildRustPackage finalArgs

@@ -1,19 +1,20 @@
-{ python311Packages
-, fetchFromGitHub
-, nix-update-script
-, qt5
-, lib
+{
+  python311Packages,
+  fetchFromGitHub,
+  nix-update-script,
+  qt5,
+  lib,
 }:
 
 python311Packages.buildPythonApplication rec {
   pname = "opensnitch-ui";
-  version = "1.6.6";
+  version = "1.6.8";
 
   src = fetchFromGitHub {
     owner = "evilsocket";
     repo = "opensnitch";
     rev = "refs/tags/v${version}";
-    hash = "sha256-pJPpkXRp7cby6Mvc7IzxH9u6MY4PcrRPkimTw3je6iI=";
+    hash = "sha256-zn5kBnINLt/qqAbka9wShFLWJoMJ6SXu2OL6V6uQ2IM=";
   };
 
   postPatch = ''
@@ -33,6 +34,7 @@ python311Packages.buildPythonApplication rec {
   propagatedBuildInputs = with python311Packages; [
     grpcio-tools
     notify2
+    packaging
     pyasn
     pyinotify
     pyqt5

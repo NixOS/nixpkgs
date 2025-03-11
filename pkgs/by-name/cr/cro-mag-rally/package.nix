@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, SDL2
-, cmake
-, makeWrapper
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  SDL2,
+  cmake,
+  makeWrapper,
 }:
 
 stdenv.mkDerivation {

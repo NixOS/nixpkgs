@@ -1,50 +1,67 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   cfg = config.services.dgraph;
-  settingsFormat = pkgs.formats.json {};
+  settingsFormat = pkgs.formats.json { };
   configFile = settingsFormat.generate "config.json" cfg.settings;
-  dgraphWithNode = pkgs.runCommand "dgraph" {
-    nativeBuildInputs = [ pkgs.makeWrapper ];
-  }
-  ''
-    mkdir -p $out/bin
-    makeWrapper ${cfg.package}/bin/dgraph $out/bin/dgraph \
-      --prefix PATH : "${lib.makeBinPath [ pkgs.nodejs ]}" \
-  '';
+  dgraphWithNode =
+    pkgs.runCommand "dgraph"
+      {
+        nativeBuildInputs = [ pkgs.makeWrapper ];
+      }
+      ''
+        mkdir -p $out/bin
+        makeWrapper ${cfg.package}/bin/dgraph $out/bin/dgraph \
+          --prefix PATH : "${lib.makeBinPath [ pkgs.nodejs ]}" \
+      '';
   securityOptions = {
-      NoNewPrivileges = true;
+    NoNewPrivileges = true;
 
-      AmbientCapabilities = "";
-      CapabilityBoundingSet = "";
+    AmbientCapabilities = "";
+    CapabilityBoundingSet = "";
 
-      DeviceAllow = "";
+    DeviceAllow = "";
 
-      LockPersonality = true;
+    LockPersonality = true;
 
-      PrivateTmp = true;
-      PrivateDevices = true;
-      PrivateUsers = true;
+    PrivateTmp = true;
+    PrivateDevices = true;
+    PrivateUsers = true;
 
-      ProtectClock = true;
-      ProtectControlGroups = true;
-      ProtectHostname = true;
-      ProtectKernelLogs = true;
-      ProtectKernelModules = true;
-      ProtectKernelTunables = true;
+    ProtectClock = true;
+    ProtectControlGroups = true;
+    ProtectHostname = true;
+    ProtectKernelLogs = true;
+    ProtectKernelModules = true;
+    ProtectKernelTunables = true;
 
-      RemoveIPC = true;
+    RemoveIPC = true;
 
-      RestrictNamespaces = true;
-      RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_UNIX" ];
-      RestrictRealtime = true;
-      RestrictSUIDSGID = true;
+    RestrictNamespaces = true;
+    RestrictAddressFamilies = [
+      "AF_INET"
+      "AF_INET6"
+      "AF_UNIX"
+    ];
+    RestrictRealtime = true;
+    RestrictSUIDSGID = true;
 
-      SystemCallArchitectures = "native";
-      SystemCallErrorNumber = "EPERM";
-      SystemCallFilter = [
-        "@system-service"
-        "~@cpu-emulation" "~@debug" "~@keyring" "~@memlock" "~@obsolete" "~@privileged" "~@setuid"
-      ];
+    SystemCallArchitectures = "native";
+    SystemCallErrorNumber = "EPERM";
+    SystemCallFilter = [
+      "@system-service"
+      "~@cpu-emulation"
+      "~@debug"
+      "~@keyring"
+      "~@memlock"
+      "~@obsolete"
+      "~@privileged"
+      "~@setuid"
+    ];
   };
 in
 {
@@ -56,7 +73,7 @@ in
 
       settings = lib.mkOption {
         type = settingsFormat.type;
-        default = {};
+        default = { };
         description = ''
           Contents of the dgraph config. For more details see https://dgraph.io/docs/deploy/config
         '';
@@ -121,7 +138,10 @@ in
 
     systemd.services.dgraph-alpha = {
       description = "Dgraph native GraphQL database with a graph backend. Alpha serves data";
-      after = [ "network.target" "dgraph-zero.service" ];
+      after = [
+        "network.target"
+        "dgraph-zero.service"
+      ];
       requires = [ "dgraph-zero.service" ];
       wantedBy = [ "multi-user.target" ];
 

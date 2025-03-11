@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "django-compressor";
     repo = "django-appconf";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-H9MwX5LtHkYN6TshP7rRKlX/iOJZHbQVsZeki95yks4=";
   };
 

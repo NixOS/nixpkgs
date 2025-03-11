@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fedora-python";
     repo = "lxml_html_clean";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-tZDFpJg7YySJ6CrSesD9+WWZS/guQFNmpSVsMzfzbpU=";
   };
 

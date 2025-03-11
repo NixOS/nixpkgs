@@ -1,4 +1,8 @@
-{ writeTextFile, cctools, sigtool }:
+{
+  writeTextFile,
+  cctools,
+  sigtool,
+}:
 
 writeTextFile {
   name = "post-link-sign-hook";

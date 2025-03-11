@@ -1,10 +1,11 @@
-{ callPackage
-, cling
-, fetchurl
-, jq
-, makeWrapper
-, python3
-, stdenv
+{
+  callPackage,
+  cling,
+  fetchurl,
+  jq,
+  makeWrapper,
+  python3,
+  stdenv,
 }:
 
 # Jupyter console:
@@ -14,17 +15,20 @@
 # nix run --impure --expr 'with import <nixpkgs> {}; jupyter.override { definitions = { cpp17 = cpp17-kernel; }; }'
 
 let
-  xeus-cling-unwrapped = callPackage ./xeus-cling.nix {};
+  xeus-cling-unwrapped = callPackage ./xeus-cling.nix { };
 
   xeus-cling = xeus-cling-unwrapped.overrideAttrs (oldAttrs: {
-    nativeBuildInputs = oldAttrs.nativeBuildInputs ++ [makeWrapper];
+    nativeBuildInputs = oldAttrs.nativeBuildInputs ++ [ makeWrapper ];
 
     # xcpp needs a collection of flags to start up properly, so wrap it by default.
     # We'll provide the unwrapped version as a passthru
     flags = cling.flags ++ [
-      "-resource-dir" "${cling.unwrapped}"
-      "-L" "${cling.unwrapped}/lib"
-      "-l" "${cling.unwrapped}/lib/cling.so"
+      "-resource-dir"
+      "${cling.unwrapped}"
+      "-L"
+      "${cling.unwrapped}/lib"
+      "-l"
+      "${cling.unwrapped}/lib/cling.so"
     ];
 
     fixupPhase = ''
@@ -59,27 +63,22 @@ let
       runHook postCheck
     '';
 
-    passthru = (oldAttrs.passthru or {}) // {
+    passthru = (oldAttrs.passthru or { }) // {
       unwrapped = xeus-cling-unwrapped;
     };
   });
 
   mkKernelSpec = std: {
-    displayName = builtins.replaceStrings ["c++"] ["C++ "] std;
+    displayName = builtins.replaceStrings [ "c++" ] [ "C++ " ] std;
     argv = [
       "${xeus-cling}/bin/xcpp"
       "-std=${std}"
-      "-f" "{connection_file}"
+      "-f"
+      "{connection_file}"
     ];
     language = "cpp";
-    logo32 = fetchurl {
-      url = "https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/ISO_C%2B%2B_Logo.svg/32px-ISO_C%2B%2B_Logo.svg.png";
-      hash = "sha256-+TKtwXybKw4oAHfgOsDxvL4ucItPguF76HJHdFTd3s0=";
-    };
-    logo64 = fetchurl {
-      url = "https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/ISO_C%2B%2B_Logo.svg/64px-ISO_C%2B%2B_Logo.svg.png";
-      hash = "sha256-7SjOcSaSPUHIKnjBxMdn+KSjviL69IXhX7eJsacYeGE=";
-    };
+    logo32 = "${xeus-cling-unwrapped}/share/jupyter/kernels/xcpp17/logo-32x32.png";
+    logo64 = "${xeus-cling-unwrapped}/share/jupyter/kernels/xcpp17/logo-64x64.png";
   };
 
 in

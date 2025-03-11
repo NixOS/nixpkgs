@@ -1,12 +1,13 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, wrapGAppsHook4
-, libadwaita
-, libpanel
-, gtksourceview5
-, poppler
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  wrapGAppsHook4,
+  libadwaita,
+  libpanel,
+  gtksourceview5,
+  poppler,
 }:
 
 rustPlatform.buildRustPackage {
@@ -20,7 +21,8 @@ rustPlatform.buildRustPackage {
     hash = "sha256-fCufqCy5H5Up6V15sOz8SJrixth7OQ7tc4yIymmfq1M=";
   };
 
-  cargoHash = "sha256-E/mT+e17Qse4aPCY5Tuvih+ZMDnUqwvEBY0N70kciMs=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-5B5TIFsfg7fWF5OEq0xVfkIUm1nlkvGfupr5qUtaiwA=";
 
   nativeBuildInputs = [
     pkg-config

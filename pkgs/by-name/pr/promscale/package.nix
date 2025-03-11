@@ -1,8 +1,9 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, promscale
-, testers
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  promscale,
+  testers,
 }:
 
 buildGoModule rec {
@@ -51,6 +52,9 @@ buildGoModule rec {
     homepage = "https://github.com/timescale/promscale";
     changelog = "https://github.com/timescale/promscale/blob/${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ _0x4A6F anpin ];
+    maintainers = with maintainers; [
+      _0x4A6F
+      anpin
+    ];
   };
 }

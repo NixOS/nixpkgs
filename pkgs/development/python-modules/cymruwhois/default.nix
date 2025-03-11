@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "JustinAzoff";
     repo = "python-cymruwhois";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-d9m668JYI9mxUycoVWyaDCR7SOca+ebymZxWtgSPWNU=";
   };
 

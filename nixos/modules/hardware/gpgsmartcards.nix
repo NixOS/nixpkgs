@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   # gnupg's manual describes how to setup ccid udev rules:
   #   https://www.gnupg.org/howtos/card-howto/en/ch02s03.html
@@ -17,14 +22,15 @@ let
   # per debian's udev deb hook (https://man7.org/linux/man-pages/man1/dh_installudev.1.html)
   destination = "60-scdaemon.rules";
 
-  scdaemonUdevRulesPkg = pkgs.runCommand "scdaemon-udev-rules" {} ''
+  scdaemonUdevRulesPkg = pkgs.runCommand "scdaemon-udev-rules" { } ''
     loc="$out/lib/udev/rules.d/"
     mkdir -p "''${loc}"
     cp "${scdaemonRules}" "''${loc}/${destination}"
   '';
 
   cfg = config.hardware.gpgSmartcards;
-in {
+in
+{
   options.hardware.gpgSmartcards = {
     enable = lib.mkEnableOption "udev rules for gnupg smart cards";
   };

@@ -42,14 +42,14 @@ let
 in
 buildPythonPackage rec {
   pname = "parsedmarc";
-  version = "8.15.4";
+  version = "8.18.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-lxW92jlSWgGVxOO+CwIZi5sKHqoZuR5VQCnDVORXmXU=";
+    hash = "sha256-qE/WMovVlB9u0lyVl3HapHzvhG+fGTC+6DDBUKRU/2w=";
   };
 
   nativeBuildInputs = [

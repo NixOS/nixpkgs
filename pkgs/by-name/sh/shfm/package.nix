@@ -1,6 +1,7 @@
-{ lib
-, stdenv
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
 }:
 
 stdenv.mkDerivation rec {
@@ -32,7 +33,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/dylanaraps/shfm";
     description = "POSIX-shell based file manager";
     license = licenses.mit;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.all;
     mainProgram = "shfm";
   };

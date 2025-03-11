@@ -1,15 +1,16 @@
-{ lib
-, multiStdenv
-, fetchFromGitHub
-, substituteAll
-, pkgsi686Linux
-, dbus
-, meson
-, ninja
-, pkg-config
-, wine
-, libxcb
-, nix-update-script
+{
+  lib,
+  multiStdenv,
+  fetchFromGitHub,
+  replaceVars,
+  pkgsi686Linux,
+  dbus,
+  meson,
+  ninja,
+  pkg-config,
+  wine,
+  libxcb,
+  nix-update-script,
 }:
 
 let
@@ -98,8 +99,7 @@ multiStdenv.mkDerivation (finalAttrs: {
 
   patches = [
     # Hard code bitbridge & runtime dependencies
-    (substituteAll {
-      src = ./hardcode-dependencies.patch;
+    (replaceVars ./hardcode-dependencies.patch {
       libdbus = dbus.lib;
       libxcb32 = pkgsi686Linux.xorg.libxcb;
       inherit wine;
@@ -134,7 +134,8 @@ multiStdenv.mkDerivation (finalAttrs: {
   ];
 
   mesonFlags = [
-    "--cross-file" "cross-wine.conf"
+    "--cross-file"
+    "cross-wine.conf"
     "-Dbitbridge=true"
 
     # Requires CMake and is unnecessary

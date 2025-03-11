@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   cfg = config.xdg.portal.wlr;
   package = pkgs.xdg-desktop-portal-wlr;
@@ -23,7 +28,7 @@ in
       description = ''
         Configuration for `xdg-desktop-portal-wlr`.
 
-        See `xdg-desktop-portal-wlr(5)` for supported
+        See {manpage}`xdg-desktop-portal-wlr(5)` for supported
         values.
       '';
 

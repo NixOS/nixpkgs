@@ -1,18 +1,20 @@
-{ fetchCrate
-, lib
-, rustPlatform
+{
+  fetchCrate,
+  lib,
+  rustPlatform,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "wambo";
-  version = "0.3.1";
+  version = "0.4.0";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-WZQgQmoFmsWLgPYRWonJmyKq9IIJ+a6J+O19XPppJG4=";
+    hash = "sha256-3EwNC78DhSXbVFSg6q+66yge4S1m5icJ5nOhoy9qsRI=";
   };
 
-  cargoHash = "sha256-ghUdhWW5gURWxj/OhbcKPNeLzeJvndqAxEZmwKBATUk=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-rFUZGP9pH5J3iXGTyjdtDjS+wiWo5pD3X9eUtIivp2c=";
 
   meta = {
     description = "All-in-one tool to convert decimal/bin/oct/hex and interpret bits as integers";

@@ -77,6 +77,7 @@ let
              (hasAttr dev cfg.macvlans) ||
              (hasAttr dev cfg.sits) ||
              (hasAttr dev cfg.vlans) ||
+             (hasAttr dev cfg.greTunnels) ||
              (hasAttr dev cfg.vswitches)
           then [ "${dev}-netdev.service" ]
           else optional (!config.boot.isContainer) (subsystemDevice dev);
@@ -94,7 +95,7 @@ let
         networkSetup = lib.mkIf needNetworkSetup
           { description = "Networking Setup";
 
-            after = [ "network-pre.target" "systemd-udevd.service" "systemd-sysctl.service" ];
+            after = [ "network-pre.target" ];
             before = [ "network.target" "shutdown.target" ];
             wants = [ "network.target" ];
             # exclude bridges from the partOf relationship to fix container networking bug #47210
@@ -192,7 +193,7 @@ let
             script =
               ''
                 state="/run/nixos/network/addresses/${i.name}"
-                mkdir -p $(dirname "$state")
+                mkdir -p "$(dirname "$state")"
 
                 ip link set dev "${i.name}" up
 
@@ -206,14 +207,14 @@ let
                     if out=$(ip addr replace "${cidr}" dev "${i.name}" 2>&1); then
                       echo "done"
                     else
-                      echo "'ip addr replace "${cidr}" dev "${i.name}"' failed: $out"
+                      echo "'ip addr replace \"${cidr}\" dev \"${i.name}\"' failed: $out"
                       exit 1
                     fi
                   ''
                 )}
 
                 state="/run/nixos/network/routes/${i.name}"
-                mkdir -p $(dirname "$state")
+                mkdir -p "$(dirname "$state")"
 
                 ${flip concatMapStrings (i.ipv4.routes ++ i.ipv6.routes) (route:
                   let
@@ -228,7 +229,7 @@ let
                      if out=$(ip route add ${type} "${cidr}" ${options} ${via} dev "${i.name}" proto static 2>&1); then
                        echo "done"
                      elif ! echo "$out" | grep "File exists" >/dev/null 2>&1; then
-                       echo "'ip route add ${type} "${cidr}" ${options} ${via} dev "${i.name}"' failed: $out"
+                       echo "'ip route add ${type} \"${cidr}\" ${options} ${via} dev \"${i.name}\"' failed: $out"
                        exit 1
                      fi
                   ''
@@ -237,7 +238,7 @@ let
             preStop = ''
               state="/run/nixos/network/routes/${i.name}"
               if [ -e "$state" ]; then
-                while read cidr; do
+                while read -r cidr; do
                   echo -n "deleting route $cidr... "
                   ip route del "$cidr" dev "${i.name}" >/dev/null 2>&1 && echo "done" || echo "failed"
                 done < "$state"
@@ -246,7 +247,7 @@ let
 
               state="/run/nixos/network/addresses/${i.name}"
               if [ -e "$state" ]; then
-                while read cidr; do
+                while read -r cidr; do
                   echo -n "deleting address $cidr... "
                   ip addr del "$cidr" dev "${i.name}" >/dev/null 2>&1 && echo "done" || echo "failed"
                 done < "$state"

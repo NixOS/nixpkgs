@@ -42,7 +42,9 @@
     env = lib.mkOption {
       type = lib.types.attrsOf lib.types.str;
       default = { };
-      example = { OMP_NUM_THREADS = "1"; };
+      example = {
+        OMP_NUM_THREADS = "1";
+      };
       description = ''
         Environment variables to set for the kernel.
       '';

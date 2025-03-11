@@ -69,6 +69,13 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs src/ids/convert_hd
   '';
 
+  outputs = [
+    "bin"
+    "dev"
+    "lib"
+    "out"
+  ];
+
   # The pci/usb ids in hwinfo are ancient. We can get a more up-to-date list simply by copying from systemd
   preBuild = ''
     # since we don't have .git, we cannot run this.
@@ -93,6 +100,13 @@ stdenv.mkDerivation (finalAttrs: {
     "ARCH=${stdenv.hostPlatform.uname.processor}"
   ];
   installFlags = [ "DESTDIR=$(out)" ];
+
+  enableParallelBuilding = false; # broken parallel dependencies
+
+  postInstall = ''
+    moveToOutput bin "$bin"
+    moveToOutput lib "$lib"
+  '';
 
   passthru = {
     tests = {

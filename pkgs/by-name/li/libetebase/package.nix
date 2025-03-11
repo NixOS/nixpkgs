@@ -1,24 +1,26 @@
-{ rustPlatform
-, fetchFromGitHub
-, pkg-config
-, openssl
-, lib
-, stdenv
-, testers
-, libetebase
+{
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  openssl,
+  lib,
+  stdenv,
+  testers,
+  libetebase,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "libetebase";
-  version = "0.5.6";
+  version = "0.5.7";
 
   src = fetchFromGitHub {
     owner = "etesync";
     repo = "libetebase";
     rev = "v${version}";
-    hash = "sha256-cXuOKfyMdk+YzDi0G8i44dyBRf4Ez5+AlCKG43BTSSU=";
+    hash = "sha256-sqvfzXHqVeiw+VKWPtCYv0USNpbfBE7ILUiqXZtLmgI=";
   };
 
-  cargoHash = "sha256-GUNj5GrY04CXnej3WDKZmW4EeJhoCl2blHSDfEkQKtE=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-z3ho6hTWC6aaWTpG9huhymx2og6xQq+/r+kgiJygC9w=";
 
   nativeBuildInputs = [ pkg-config ];
 

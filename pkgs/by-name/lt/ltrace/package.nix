@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchurl, fetchgit, autoreconfHook, dejagnu, elfutils }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchgit,
+  autoreconfHook,
+  dejagnu,
+  elfutils,
+}:
 
 stdenv.mkDerivation rec {
   pname = "ltrace";
@@ -9,20 +17,22 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-HqellbKh2ZDHxslXl7SSIXtpjV1sodtgVwh8hgTC3Dc=";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];  # Some patches impact ./configure.
+  nativeBuildInputs = [ autoreconfHook ]; # Some patches impact ./configure.
   buildInputs = [ elfutils ];
   nativeCheckInputs = [ dejagnu ];
 
   # Import Fedora's (very) large patch series: bug fixes, architecture support,
   # etc. RH/Fedora are currently working with upstream to merge all these
   # patches for the next major branch.
-  prePatch = let
+  prePatch =
+    let
       fedora = fetchgit {
         url = "https://src.fedoraproject.org/rpms/ltrace.git";
         rev = "00f430ccbebdbd13bdd4d7ee6303b091cf005542";
         sha256 = "sha256-FBGEgmaslu7xrJtZ2WsYwu9Cw1ZQrWRV1+Eu9qLXO4s=";
       };
-    in ''
+    in
+    ''
       # Order matters, read the patch list from the RPM spec. Our own patches
       # are applied on top of the Fedora baseline.
       fedorapatches=""

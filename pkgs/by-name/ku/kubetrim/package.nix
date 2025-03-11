@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "alexellis";
     repo = "kubetrim";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-fX8CbId2ArJlnGkevCSB7eE6Ovs8vJR9+l//k4DgvK4=";
   };
 

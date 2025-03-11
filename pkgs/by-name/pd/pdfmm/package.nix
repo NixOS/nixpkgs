@@ -1,12 +1,13 @@
-{ bash
-, coreutils
-, fetchFromGitHub
-, ghostscript
-, locale
-, zenity
-, gnused
-, lib
-, resholve
+{
+  bash,
+  coreutils,
+  fetchFromGitHub,
+  ghostscript,
+  locale,
+  zenity,
+  gnused,
+  lib,
+  resholve,
 }:
 
 resholve.mkDerivation rec {

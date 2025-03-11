@@ -1,22 +1,23 @@
-{ callPackage
-, fetchurl
-, lib
-, stdenv
-, pkg-config
-, which
-, bison
-, flex
-, json_c
-, libevent
-, libxml2
-, mariadb-connector-c
-, pcre
-, gnugrep
-, gawk
-, coreutils
-, gdb
-, gnused
-, openssl
+{
+  callPackage,
+  fetchurl,
+  lib,
+  stdenv,
+  pkg-config,
+  which,
+  bison,
+  flex,
+  json_c,
+  libevent,
+  libxml2,
+  mariadb-connector-c,
+  pcre,
+  gnugrep,
+  gawk,
+  coreutils,
+  gdb,
+  gnused,
+  openssl,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

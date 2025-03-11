@@ -7,26 +7,30 @@
   cxxopts,
   poetry-core,
   pybind11,
-  tabulate,
   zlib,
   nlohmann_json,
   utf8cpp,
   libjpeg,
   qpdf,
   loguru-cpp,
+  # python dependencies
+  tabulate,
+  pillow,
+  pydantic,
+  docling-core,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "docling-parse";
-  version = "2.0.3";
+  version = "3.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "DS4SD";
     repo = "docling-parse";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-pZJ7lneg4ftAoWS5AOflkkKCwZGF4TJIuqDjq4W4VBw=";
+    tag = "v${version}";
+    hash = "sha256-q3433hz5T5hhhRd6OTADeuvyKbsuCAhuWT4jxrOD6Sw=";
   };
 
   dontUseCmakeConfigure = true;
@@ -61,6 +65,14 @@ buildPythonPackage rec {
 
   dependencies = [
     tabulate
+    pillow
+    pydantic
+    docling-core
+  ];
+
+  pythonRelaxDeps = [
+    "pydantic"
+    "pillow"
   ];
 
   pythonImportsCheck = [
@@ -72,7 +84,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/DS4SD/docling-parse/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/DS4SD/docling-parse/blob/${src.tag}/CHANGELOG.md";
     description = "Simple package to extract text with coordinates from programmatic PDFs";
     homepage = "https://github.com/DS4SD/docling-parse";
     license = lib.licenses.mit;

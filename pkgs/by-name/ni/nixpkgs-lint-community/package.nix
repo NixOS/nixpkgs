@@ -1,6 +1,7 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -14,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-o1VWM46lEJ9m49s/ekZWf8DkCeeWm4J3PQtt8tVXHbg=";
   };
 
-  cargoHash = "sha256-LWtBO0Ai5cOtnfZElBrHZ7sDdp3ddfcCRdTA/EEDPfE=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-wK2ZMqxgSLGhM7TsztFkZHB2+WnT+8Tjd3UrFdIvGpI=";
 
   meta = with lib; {
     description = "Fast semantic linter for Nix using tree-sitter";
@@ -22,6 +24,9 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/nix-community/nixpkgs-lint";
     changelog = "https://github.com/nix-community/nixpkgs-lint/releases/tag/${src.rev}";
     license = licenses.mit;
-    maintainers = with maintainers; [ artturin figsoda ];
+    maintainers = with maintainers; [
+      artturin
+      figsoda
+    ];
   };
 }

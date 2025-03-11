@@ -1,68 +1,70 @@
-{ lib
-, stdenv
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, SDL2
-, alsa-lib
-, bullet
-, check
-, curl
-, dbus
-, doxygen
-, expat
-, fontconfig
-, freetype
-, fribidi
-, ghostscript
-, giflib
-, glib
-, gst_all_1
-, gtk3
-, harfbuzz
-, hicolor-icon-theme
-, ibus
-, jbig2dec
-, libGL
-, libdrm
-, libinput
-, libjpeg
-, libpng
-, libpulseaudio
-, libraw
-, librsvg
-, libsndfile
-, libspectre
-, libtiff
-, libwebp
-, libxkbcommon
-, luajit
-, lz4
-, mesa
-, mint-x-icons
-, openjpeg
-, openssl
-, poppler
-, systemd
-, udev
-, util-linux
-, wayland
-, wayland-protocols
-, wayland-scanner
-, writeText
-, xorg
-, zlib
-, directoryListingUpdater
+{
+  lib,
+  stdenv,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  SDL2,
+  alsa-lib,
+  bullet,
+  check,
+  curl,
+  dbus,
+  doxygen,
+  expat,
+  fontconfig,
+  freetype,
+  fribidi,
+  ghostscript,
+  giflib,
+  glib,
+  gst_all_1,
+  gtk3,
+  harfbuzz,
+  hicolor-icon-theme,
+  ibus,
+  jbig2dec,
+  libGL,
+  libdrm,
+  libgbm,
+  libinput,
+  libjpeg,
+  libpng,
+  libpulseaudio,
+  libraw,
+  librsvg,
+  libsndfile,
+  libspectre,
+  libtiff,
+  libwebp,
+  libxkbcommon,
+  lua,
+  lz4,
+  mesa-gl-headers,
+  mint-x-icons,
+  openjpeg,
+  openssl,
+  poppler,
+  systemd,
+  udev,
+  util-linux,
+  wayland,
+  wayland-protocols,
+  wayland-scanner,
+  writeText,
+  xorg,
+  zlib,
+  directoryListingUpdater,
 }:
 
 stdenv.mkDerivation rec {
   pname = "efl";
-  version = "1.27.0";
+  version = "1.28.0";
 
   src = fetchurl {
     url = "http://download.enlightenment.org/rel/libs/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-PfuZ+8wmjAvHl+L4PoxQPvneZihPQLOBu1l6CBhcAPQ=";
+    sha256 = "sha256-8JpD1rSGG+BswOKEnFMpZBPU5SyOMfUvyV6epfHFmjY=";
   };
 
   nativeBuildInputs = [
@@ -90,7 +92,7 @@ stdenv.mkDerivation rec {
     libsndfile
     libtiff
     lz4
-    mesa
+    mesa-gl-headers
     openssl
     systemd
     udev
@@ -117,6 +119,7 @@ stdenv.mkDerivation rec {
     hicolor-icon-theme # for the icon theme
     jbig2dec
     libdrm
+    libgbm
     libinput
     libjpeg
     libraw
@@ -124,7 +127,7 @@ stdenv.mkDerivation rec {
     libspectre
     libwebp
     libxkbcommon
-    luajit
+    lua
     mint-x-icons # Mint-X is a parent icon theme of Enlightenment-X
     openjpeg
     poppler
@@ -211,8 +214,18 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Enlightenment foundation libraries";
     homepage = "https://enlightenment.org/";
-    license = with licenses; [ bsd2 lgpl2Only licenses.zlib ];
+    license = with licenses; [
+      bsd2
+      lgpl2Only
+      licenses.zlib
+    ];
     platforms = platforms.linux;
-    maintainers = with maintainers; [ matejc ftrvxmtrx ] ++ teams.enlightenment.members;
+    maintainers =
+      with maintainers;
+      [
+        matejc
+        ftrvxmtrx
+      ]
+      ++ teams.enlightenment.members;
   };
 }

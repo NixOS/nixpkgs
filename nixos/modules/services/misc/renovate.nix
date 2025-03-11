@@ -36,7 +36,10 @@ let
   generateConfig = if cfg.validateSettings then generateValidatedConfig else json.generate;
 in
 {
-  meta.maintainers = with lib.maintainers; [ marie natsukium ];
+  meta.maintainers = with lib.maintainers; [
+    marie
+    natsukium
+  ];
 
   options.services.renovate = {
     enable = mkEnableOption "renovate";
@@ -135,9 +138,10 @@ in
 
       script = ''
         ${lib.concatStringsSep "\n" (
-          builtins.map (name: "export ${name}=$(systemd-creds cat 'SECRET-${name}')") (
-            lib.attrNames cfg.credentials
-          )
+          builtins.map (name: ''
+            ${name}="$(systemd-creds cat 'SECRET-${name}')"
+            export ${name}
+          '') (lib.attrNames cfg.credentials)
         )}
         exec ${lib.escapeShellArg (lib.getExe cfg.package)}
       '';

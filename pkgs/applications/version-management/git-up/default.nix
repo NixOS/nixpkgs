@@ -1,7 +1,8 @@
-{ lib
-, pythonPackages
-, fetchPypi
-, git
+{
+  lib,
+  pythonPackages,
+  fetchPypi,
+  git,
 }:
 
 pythonPackages.buildPythonApplication rec {
@@ -20,13 +21,15 @@ pythonPackages.buildPythonApplication rec {
   ];
 
   # git should be on path for tool to work correctly
-  propagatedBuildInputs = [
-    git
-  ] ++ (with pythonPackages; [
-    colorama
-    gitpython
-    termcolor
-  ]);
+  propagatedBuildInputs =
+    [
+      git
+    ]
+    ++ (with pythonPackages; [
+      colorama
+      gitpython
+      termcolor
+    ]);
 
   nativeCheckInputs = [
     git

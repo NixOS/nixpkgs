@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cpolhout";
     repo = "loqedAPI";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-IYzrGqql6mmm+FmasxFJvKgHvg7n81WOu+GGAEQ1+Os=";
   };
 

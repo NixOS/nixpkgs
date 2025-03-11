@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, expat
-, gettext
-, gtk3
-, libconfuse
-, makeWrapper
-, pcre2
-, pkg-config
-, vte
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  expat,
+  gettext,
+  gtk3,
+  libconfuse,
+  makeWrapper,
+  pcre2,
+  pkg-config,
+  vte,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -57,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Gtk based drop down terminal for Linux and Unix";
     mainProgram = "tilda";
     license = lib.licenses.gpl3Plus;
-    maintainers = [ lib.maintainers.AndersonTorres ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

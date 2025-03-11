@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "viv-utils";
-  version = "0.7.11";
+  version = "0.8.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -24,8 +24,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "williballenthin";
     repo = "viv-utils";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-zYamhG5oeoYYVLEvv1EdZ1buFDByZatuCxbl0uRhk6Y=";
+    tag = "v${version}";
+    hash = "sha256-tstuRdQPcx2tPC2r+ngS99Yi3oP33p+Z1rh3N6BUBgo=";
   };
 
   build-system = [ setuptools-scm ];
@@ -54,7 +54,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Utilities for working with vivisect";
     homepage = "https://github.com/williballenthin/viv-utils";
-    changelog = "https://github.com/williballenthin/viv-utils/releases/tag/v${version}";
+    changelog = "https://github.com/williballenthin/viv-utils/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = [ ];
   };

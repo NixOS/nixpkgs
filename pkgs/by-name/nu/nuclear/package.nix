@@ -5,15 +5,15 @@
 }:
 let
   pname = "nuclear";
-  version = "0.6.39";
+  version = "0.6.42";
 
   src = fetchurl {
-    # Nuclear currenntly only publishes AppImage releases for x86_64, which is hardcoded in
+    # Nuclear currently only publishes AppImage releases for x86_64, which is hardcoded in
     # the package name. We also hardcode the host arch in the release name, but should upstream
     # provide more arches, we should use stdenv.hostPlatform to determine the arch and choose
     # source URL accordingly.
     url = "https://github.com/nukeop/nuclear/releases/download/v${version}/${pname}-v${version}-x86_64.AppImage";
-    hash = "sha256-X5IQ9NlFTFTEYDhuCyrzkPGmvNK66nCSdbmJZxObkBo=";
+    hash = "sha256-95Q8TEn2gvJu75vgDdzSYH/1ci3BlidQ5nKA53fas6U=";
   };
 
   appimageContents = appimageTools.extract { inherit pname version src; };

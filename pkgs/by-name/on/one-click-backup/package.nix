@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, cmake
-, ninja
-, qt6
-, extra-cmake-modules
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  cmake,
+  ninja,
+  qt6,
+  extra-cmake-modules,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

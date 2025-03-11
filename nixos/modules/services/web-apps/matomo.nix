@@ -119,7 +119,7 @@ in {
 
     assertions = [ {
         assertion = cfg.nginx != null || cfg.webServerUser != null;
-        message = "Either services.matomo.nginx or services.matomo.nginx.webServerUser is mandatory";
+        message = "Either services.matomo.nginx or services.matomo.webServerUser is mandatory";
     }];
 
     users.users.${user} = {
@@ -183,7 +183,10 @@ in {
             chmod -R u+rwX,g+rwX,o-rwx "${dataDir}"
 
             # check whether user setup has already been done
-            if test -f "${dataDir}/config/config.ini.php"; then
+            if test -f "${dataDir}/config/config.ini.php" &&
+              # since matomo-5.2.0, the config.ini.php is already created at first
+              # installer page access https://github.com/matomo-org/matomo/issues/22932
+              grep -q -F "[database]" "${dataDir}/config/config.ini.php"; then
               # then execute possibly pending database upgrade
               matomo-console core:update --yes
             fi

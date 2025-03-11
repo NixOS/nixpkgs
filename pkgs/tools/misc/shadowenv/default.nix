@@ -1,17 +1,25 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, installShellFiles, Security }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  installShellFiles,
+  Security,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "shadowenv";
-  version = "3.0.1";
+  version = "3.0.3";
 
   src = fetchFromGitHub {
     owner = "Shopify";
     repo = pname;
     rev = version;
-    hash = "sha256-9K04g2DCADkRwjo55rDwVwkvmypqujdN1fqOmHmC09E=";
+    hash = "sha256-ZipFcwTpKKFnQWOPxXg07V71jitG0NSLpGLEzUSsUFA=";
   };
 
-  cargoHash = "sha256-GBqxA49H3KG63hn8QfM4U8m9uZ1YAhJio6bGziyLvV0=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-KNCucBmYVmIQ/XY+UNV667iWLyiEJDnP/8gAmUHGY+0=";
 
   nativeBuildInputs = [ installShellFiles ];
 

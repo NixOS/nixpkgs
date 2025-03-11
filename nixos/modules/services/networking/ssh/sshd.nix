@@ -357,7 +357,7 @@ in
               type = lib.types.nullOr (lib.types.enum [ "QUIET" "FATAL" "ERROR" "INFO" "VERBOSE" "DEBUG" "DEBUG1" "DEBUG2" "DEBUG3" ]);
               default = "INFO"; # upstream default
               description = ''
-                Gives the verbosity level that is used when logging messages from sshd(8). Logging with a DEBUG level
+                Gives the verbosity level that is used when logging messages from {manpage}`sshd(8)`. Logging with a DEBUG level
                 violates the privacy of users and is not recommended.
               '';
             };
@@ -369,7 +369,7 @@ in
               # apply if cfg.useDns then "yes" else "no"
               default = false;
               description = ''
-                Specifies whether sshd(8) should look up the remote host name, and to check that the resolved host name for
+                Specifies whether {manpage}`sshd(8)` should look up the remote host name, and to check that the resolved host name for
                 the remote IP address maps back to the very same IP address.
                 If this option is set to no (the default) then only addresses and not host names may be used in
                 ~/.ssh/authorized_keys from and sshd_config Match Host directives.
@@ -415,6 +415,8 @@ in
             KexAlgorithms = lib.mkOption {
               type = lib.types.nullOr (lib.types.listOf lib.types.str);
               default = [
+                "mlkem768x25519-sha256"
+                "sntrup761x25519-sha512"
                 "sntrup761x25519-sha512@openssh.com"
                 "curve25519-sha256"
                 "curve25519-sha256@libssh.org"

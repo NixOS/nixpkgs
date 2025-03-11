@@ -1,25 +1,27 @@
-{ lib
-, fetchFromGitHub
-, gtk4
-, libadwaita
-, libportal
-, meson
-, ninja
-, pkg-config
-, stdenv
-, vala
-, wrapGAppsHook4
+{
+  lib,
+  fetchFromGitHub,
+  gtk4,
+  libadwaita,
+  libportal,
+  meson,
+  ninja,
+  pkg-config,
+  stdenv,
+  vala,
+  wrapGAppsHook4,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "clairvoyant";
-  version = "3.1.8";
+  version = "3.1.10";
 
   src = fetchFromGitHub {
     owner = "cassidyjames";
     repo = "clairvoyant";
     rev = finalAttrs.version;
-    hash = "sha256-SksJ0hOt2CJwrQj4dz63D53GM/PYx7Q/g+OgCo76dIE=";
+    hash = "sha256-CSORiNPqzliIpslV28NRPs/+bc9iblsLTPOm1WxxTjc=";
   };
 
   nativeBuildInputs = [
@@ -36,12 +38,16 @@ stdenv.mkDerivation (finalAttrs: {
     libportal
   ];
 
-  meta = with lib; {
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
+  meta = {
     changelog = "https://github.com/cassidyjames/clairvoyant/releases/tag/${finalAttrs.version}";
     description = "Ask questions, get psychic answers";
     homepage = "https://github.com/cassidyjames/clairvoyant";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     mainProgram = "com.github.cassidyjames.clairvoyant";
-    maintainers = with maintainers; [ michaelgrahamevans ];
+    maintainers = lib.teams.gnome-circle.members;
   };
 })

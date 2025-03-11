@@ -40,7 +40,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nautilus";
-  version = "47.0";
+  version = "47.2";
 
   outputs = [
     "out"
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/nautilus/${lib.versions.major finalAttrs.version}/nautilus-${finalAttrs.version}.tar.xz";
-    hash = "sha256-M0Jkzdntv9le57yq/kQuvtMazKPy2bkPPtow6s/QOHo=";
+    hash = "sha256-fzIDR08uY3ShHGdU7zPzNg6vf1tehfXkd+igrg+nZNk=";
   };
 
   patches = [
@@ -100,6 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonFlags = [
     "-Ddocs=true"
+    "-Dtests=${if finalAttrs.finalPackage.doCheck then "all" else "none"}"
   ];
 
   preFixup = ''

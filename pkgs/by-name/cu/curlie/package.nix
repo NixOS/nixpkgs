@@ -1,4 +1,10 @@
-{ buildGoModule, fetchFromGitHub, lib, curlie, testers }:
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+  curlie,
+  testers,
+}:
 
 buildGoModule rec {
   pname = "curlie";
@@ -17,7 +23,11 @@ buildGoModule rec {
 
   vendorHash = "sha256-VsPdMUfS4UVem6uJgFISfFHQEKtIumDQktHQFPC1muc=";
 
-  ldflags = [ "-s" "-w" "-X main.version=${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.version=${version}"
+  ];
 
   passthru.tests.version = testers.testVersion {
     package = curlie;

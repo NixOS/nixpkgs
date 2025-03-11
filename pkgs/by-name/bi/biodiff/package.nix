@@ -1,4 +1,9 @@
-{ lib, fetchFromGitHub, rustPlatform, wfa2-lib }:
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  wfa2-lib,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "biodiff";
@@ -12,7 +17,8 @@ rustPlatform.buildRustPackage rec {
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-LxkwhOxXkegdXLmtbNLIB6nOAeCbpvIwSXbTF6jBcHs=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-1/FNMXzEQB4LM57+SccUjJ31rYB46DO8AQYQBn6B7zg=";
 
   buildInputs = [ wfa2-lib ];
 

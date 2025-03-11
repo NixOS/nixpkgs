@@ -1,21 +1,38 @@
-{ lib, stdenv, fetchurl, cmake, llvmPackages, python3 }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  llvmPackages,
+  python3,
+}:
 
 stdenv.mkDerivation rec {
   pname = "include-what-you-use";
-  # Also bump llvmPackages in all-packages.nix to the supported version!
-  version = "0.22";
+  # Make sure to bump `llvmPackages` in "pkgs/top-level/all-packages.nix" to the supported version:
+  # https://github.com/include-what-you-use/include-what-you-use?tab=readme-ov-file#clang-compatibility
+  version = "0.23";
 
   src = fetchurl {
     url = "${meta.homepage}/downloads/${pname}-${version}.src.tar.gz";
-    hash = "sha256-hZB0tGHqS4MlpzQYwgfKM7XmVmsI5rWH65FkQWVppt0=";
+    hash = "sha256-AATVqRaXF6zy9IEkilv8FcfVXdwrnNx/RhsG6T1Jxz8=";
   };
 
   postPatch = ''
     patchShebangs .
   '';
 
-  nativeBuildInputs = with llvmPackages; [ cmake llvm.dev llvm python3 ];
-  buildInputs = with llvmPackages; [ libclang clang-unwrapped python3 ];
+  nativeBuildInputs = with llvmPackages; [
+    cmake
+    llvm.dev
+    llvm
+    python3
+  ];
+  buildInputs = with llvmPackages; [
+    libclang
+    clang-unwrapped
+    python3
+  ];
 
   clang = llvmPackages.clang;
 

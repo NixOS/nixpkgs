@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "danielperna84";
     repo = "ha-philipsjs";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-CQfT+jCICHjnldM7sjJN47dTD4WVkxfXmW5g80mnoTU=";
   };
 

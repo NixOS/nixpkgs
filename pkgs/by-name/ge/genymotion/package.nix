@@ -1,8 +1,29 @@
-{ stdenv, lib, fetchurl, makeWrapper, which, zlib, libGL, glib, xorg, libxkbcommon
-, xdg-utils, libXrender, fontconfig, freetype, systemd, libpulseaudio
-, cairo, gdk-pixbuf, gtk3, pixman
-# For glewinfo
-, libXmu, libXi, libXext }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  makeWrapper,
+  which,
+  zlib,
+  libGL,
+  glib,
+  xorg,
+  libxkbcommon,
+  xdg-utils,
+  libXrender,
+  fontconfig,
+  freetype,
+  systemd,
+  libpulseaudio,
+  cairo,
+  gdk-pixbuf,
+  gtk3,
+  pixman,
+  # For glewinfo
+  libXmu,
+  libXi,
+  libXext,
+}:
 
 let
   packages = [
@@ -29,14 +50,18 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "genymotion";
-  version = "3.7.1";
+  version = "3.8.0";
   src = fetchurl {
     url = "https://dl.genymotion.com/releases/genymotion-${version}/genymotion-${version}-linux_x64.bin";
     name = "genymotion-${version}-linux_x64.bin";
-    sha256 = "sha256-nWQZcYN2rxmN7J1OYkM+Oa2UIHztdAJ/eGY5MxNDX90=";
+    sha256 = "sha256-Tgp9ud/Tq0K9ADf/POr+luuFm+QBWMucjKTbELbIveo=";
   };
 
-  nativeBuildInputs = [ makeWrapper which xdg-utils ];
+  nativeBuildInputs = [
+    makeWrapper
+    which
+    xdg-utils
+  ];
 
   unpackPhase = ''
     mkdir -p phony-home $out/share/applications
@@ -94,11 +119,11 @@ stdenv.mkDerivation rec {
       Genymotion is a relatively fast Android emulator which comes with
       pre-configured Android (x86 with OpenGL hardware acceleration) images,
       suitable for application testing.
-     '';
+    '';
     homepage = "https://www.genymotion.com/";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    platforms = ["x86_64-linux"];
+    platforms = [ "x86_64-linux" ];
     maintainers = [ maintainers.puffnfresh ];
   };
 }

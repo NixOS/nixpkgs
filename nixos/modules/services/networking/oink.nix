@@ -1,8 +1,16 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.oink;
-  makeOinkConfig = attrs: (pkgs.formats.json { }).generate
-    "oink.json" (lib.mapAttrs' (k: v: lib.nameValuePair (lib.toLower k) v) attrs);
+  makeOinkConfig =
+    attrs:
+    (pkgs.formats.json { }).generate "oink.json" (
+      lib.mapAttrs' (k: v: lib.nameValuePair (lib.toLower k) v) attrs
+    );
   oinkConfig = makeOinkConfig {
     global = cfg.settings;
     domains = cfg.domains;
@@ -40,7 +48,7 @@ in
     };
     domains = lib.mkOption {
       type = with lib.types; listOf (attrsOf anything);
-      default = [];
+      default = [ ];
       example = [
         {
           domain = "nixos.org";

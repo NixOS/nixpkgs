@@ -1,8 +1,9 @@
-{ lib
-, installShellFiles
-, rustPlatform
-, fetchFromGitLab
-, stdenv
+{
+  lib,
+  installShellFiles,
+  rustPlatform,
+  fetchFromGitLab,
+  stdenv,
 }:
 
 let
@@ -20,7 +21,8 @@ rustPlatform.buildRustPackage {
     hash = "sha256-niXh63xTpXSp9Wqwfi8hUBKJSClOUSvB+TPCTaqHfZk=";
   };
 
-  cargoHash = "sha256-CKe0nb5JHi5+1UlVOl01Q3qSXQLlpEBdat/IzRKfaz0=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-0r5MIoitmFxUODxzi0FBLsUpdGrG1pY8Lo+gy7HeJU8=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -28,24 +30,24 @@ rustPlatform.buildRustPackage {
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) (
     "installShellCompletion --cmd engage "
-    + builtins.concatStringsSep
-      " "
-      (builtins.map
-        (shell: "--${shell} <($out/bin/engage completions ${shell})")
-        [
-          "bash"
-          "fish"
-          "zsh"
-        ]
-      )
-    );
+    + builtins.concatStringsSep " " (
+      builtins.map (shell: "--${shell} <($out/bin/engage completions ${shell})") [
+        "bash"
+        "fish"
+        "zsh"
+      ]
+    )
+  );
 
   meta = {
     description = "Task runner with DAG-based parallelism";
     mainProgram = "engage";
     homepage = "https://gitlab.computer.surgery/charles/engage";
     changelog = "https://gitlab.computer.surgery/charles/engage/-/blob/v${version}/CHANGELOG.md";
-    license = with lib.licenses; [ asl20 mit ];
+    license = with lib.licenses; [
+      asl20
+      mit
+    ];
     maintainers = with lib.maintainers; [ CobaltCause ];
   };
 }
