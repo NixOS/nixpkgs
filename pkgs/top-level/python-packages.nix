@@ -15106,6 +15106,8 @@ self: super: with self; {
 
   smp = callPackage ../development/python-modules/smp { };
 
+  smpclient = callPackage ../development/python-modules/smpclient { };
+
   smpplib = callPackage ../development/python-modules/smpplib { };
 
   smpp-pdu = callPackage ../development/python-modules/smpp-pdu { };
