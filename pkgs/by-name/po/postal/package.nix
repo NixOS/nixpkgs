@@ -8,8 +8,7 @@
   nodejs,
   makeWrapper,
   coreutils,
-  testers,
-  postal,
+  nixosTests,
 }:
 
 let
@@ -98,14 +97,7 @@ stdenv.mkDerivation rec {
       --chdir "$out/share/postal"
   '';
 
-  passthru = {
-    inherit rubyEnv;
-    ruby = rubyEnv.wrappedRuby;
-    tests.version = testers.testVersion {
-      package = postal;
-      command = "postal version";
-    };
-  };
+  passthru.tests.postal = nixosTests.postal;
 
   meta = {
     description = "Fully featured open source mail delivery platform for incoming & outgoing e-mail";
