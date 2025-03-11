@@ -5852,7 +5852,13 @@ with pkgs;
         isl = if !stdenv.hostPlatform.isDarwin then isl_0_20 else null;
 
         withoutTargetLibc = true;
-        langCC = false;
+        # Enable g++ for mlibc platforms, as mlibc is written in C++.
+        # FIXME: This would be enabled for all platforms but it seems to break
+        #        cross compiling for musl. It does work with mlibc.
+        #        Having no C++ support only when not using LLVM and cross
+        #        compiling is weird, especially because if either of those
+        #        are true, stdenvNoLibc will have C++ support.
+        langCC = stdenv.targetPlatform.isMlibc;
         libcCross = libcCross1;
         targetPackages.stdenv.cc.bintools = binutilsNoLibc;
         enableShared =
@@ -8915,6 +8921,7 @@ with pkgs;
     else if name == "newlib" && stdenv.targetPlatform.isOr1k then targetPackages.or1k-newlib or or1k-newlib
     else if name == "newlib" then targetPackages.newlib or newlib
     else if name == "newlib-nano" then targetPackages.newlib-nano or newlib-nano
+    else if name == "mlibc" then targetPackages.mlibc or mlibc
     else if name == "musl" then targetPackages.muslCross or muslCross
     else if name == "msvcrt" then targetPackages.windows.mingw_w64 or windows.mingw_w64
     else if name == "ucrt" then targetPackages.windows.mingw_w64 or windows.mingw_w64

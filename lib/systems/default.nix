@@ -99,6 +99,7 @@ let
         else if final.isWasi                  then "wasilibc"
         else if final.isWasm && !final.isWasi then null
         else if final.isRedox                 then "relibc"
+        else if final.isMlibc                 then "mlibc"
         else if final.isMusl                  then "musl"
         else if final.isUClibc                then "uclibc"
         else if final.isAndroid               then "bionic"
@@ -188,7 +189,7 @@ let
       # omit any `.so` build products such as libgcc_s.so.  When that happens,
       # it causes hard-to-troubleshoot build failures.
       hasSharedLibraries = with final;
-        (isAndroid || isGnu || isMusl                                  # Linux (allows multiple libcs)
+        (isAndroid || isGnu || isMusl || isMlibc                       # Linux (allows multiple libcs)
          || isDarwin || isSunOS || isOpenBSD || isFreeBSD || isNetBSD  # BSDs
          || isCygwin || isMinGW || isWindows                           # Windows
          || isWasm                                                     # WASM

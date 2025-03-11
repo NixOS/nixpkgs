@@ -329,7 +329,7 @@ let
       crossSystem = {
         isStatic = true;
         config = lib.systems.parse.tripleFromSystem (
-          if stdenv.hostPlatform.isLinux
+          if stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isMlibc
           then makeMuslParsedPlatform stdenv.hostPlatform.parsed
           else stdenv.hostPlatform.parsed
         );
