@@ -4,7 +4,7 @@
   installShellFiles,
   fetchFromGitHub,
   freetype,
-  nix-update-script,
+  unstableGitUpdater,
   gumbo,
   harfbuzz,
   jbig2dec,
@@ -74,11 +74,9 @@ stdenv.mkDerivation (finalAttrs: {
         installManPage resources/sioyek.1
       '';
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version"
-      "branch=development"
-    ];
+  passthru.updateScript = unstableGitUpdater {
+    branch = "development";
+    tagPrefix = "v";
   };
 
   meta = with lib; {
