@@ -1,5 +1,7 @@
 {
   lib,
+  jq,
+  moreutils,
   stdenv,
   makeSetupHook,
   cargo,
@@ -23,6 +25,9 @@ makeSetupHook {
   substitutions = {
     inherit targetSubdirectory;
     inherit (rust.envVars) rustHostPlatformSpec setEnv;
+
+    jq = lib.getExe jq;
+    sponge = lib.getExe' moreutils "sponge";
 
     # A map of the bundles used for Tauri's different supported platforms
     # https://github.com/tauri-apps/tauri/blob/23a912bb84d7c6088301e1ffc59adfa8a799beab/README.md#platforms
