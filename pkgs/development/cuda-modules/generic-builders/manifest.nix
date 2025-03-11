@@ -25,6 +25,8 @@
   # See ./modules/generic/manifests/feature/release.nix
   featureRelease,
   cudaMajorMinorVersion,
+  boost178,
+  e2fsprogs,
 }:
 let
   inherit (lib)
@@ -216,6 +218,8 @@ backendStdenv.mkDerivation (finalAttrs: {
     # nvcc forces us to use an older gcc
     # NB: We don't actually know if this is the right thing to do
     (lib.getLib stdenv.cc.cc)
+    boost178
+    e2fsprogs
   ];
 
   # Picked up by autoPatchelf
@@ -287,6 +291,7 @@ backendStdenv.mkDerivation (finalAttrs: {
   autoPatchelfIgnoreMissingDeps = [
     "libcuda.so"
     "libcuda.so.*"
+    "libQtPropertyBrowser.so"
   ];
 
   # _multioutPropagateDev() currently expects a space-separated string rather than an array
