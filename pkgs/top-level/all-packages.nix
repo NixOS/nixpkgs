@@ -9178,6 +9178,8 @@ with pkgs;
 
   eigen = callPackage ../development/libraries/eigen { };
 
+  eigen_3_4_0 = callPackage ../development/libraries/eigen/3.4.0.nix { };
+
   eigen2 = callPackage ../development/libraries/eigen/2.0.nix { };
 
   vapoursynth-editor = libsForQt5.callPackage ../by-name/va/vapoursynth/editor.nix { };
