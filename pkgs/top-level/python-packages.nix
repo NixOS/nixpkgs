@@ -10009,6 +10009,8 @@ self: super: with self; {
 
   opentelemetry-instrumentation-redis = callPackage ../development/python-modules/opentelemetry-instrumentation-redis { };
 
+  opentelemetry-instrumentation-threading = callPackage ../development/python-modules/opentelemetry-instrumentation-threading { };
+
   opentelemetry-instrumentation-wsgi = callPackage ../development/python-modules/opentelemetry-instrumentation-wsgi { };
 
   opentelemetry-propagator-aws-xray = callPackage ../development/python-modules/opentelemetry-propagator-aws-xray { };
