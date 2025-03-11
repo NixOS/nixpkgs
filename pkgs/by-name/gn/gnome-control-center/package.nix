@@ -65,6 +65,7 @@
   tzdata,
   udisks2,
   upower,
+  wayland-scanner,
   libepoxy,
   gnome-user-share,
   gnome-remote-desktop,
@@ -74,11 +75,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-control-center";
-  version = "48.beta";
+  version = "48.rc.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-control-center/${lib.versions.major finalAttrs.version}/gnome-control-center-${finalAttrs.version}.tar.xz";
-    hash = "sha256-Dvey0wBObrQY/OcIC7GNGyQm+ylhs5/tnCEYurAebCQ=";
+    hash = "sha256-IMroFNkpicoW5Owmixb5Dp8jrvncTFMYl64do1PayIU=";
   };
 
   patches = [
@@ -98,6 +99,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     python3
     shared-mime-info
+    wayland-scanner
     wrapGAppsHook4
   ];
 
