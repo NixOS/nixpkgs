@@ -2,39 +2,28 @@
   lib,
   python3Packages,
   fetchFromGitHub,
-  stdenv,
-  python3,
+  versionCheckHook,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "gpt-cli";
-  version = "0.3.2";
-  format = "pyproject";
-
-  SHELL = "${stdenv.shell}";
+  version = "0.4.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kharvd";
     repo = "gpt-cli";
     tag = "v${version}";
-    hash = "sha256-Zmqhdh+XMvJ3bhW+qkQOJT3nf+8luv7aJGW6xJSPuns=";
+    hash = "sha256-VUDkY0r1/2kSJ0afEIsuWg6JSZpKPVuRgUcmoucWBps=";
   };
 
-  pythonRelaxDeps = [
-    "anthropic"
-    "black"
-    "google-generativeai"
-    "openai"
-    "pydantic"
-    "attrs"
-  ];
-
-  build-system = with python3.pkgs; [
+  build-system = with python3Packages; [
     pip
     setuptools
-    wheel
   ];
 
-  dependencies = with python3.pkgs; [
+  pythonRelaxDeps = true;
+
+  dependencies = with python3Packages; [
     anthropic
     attrs
     black
@@ -42,18 +31,30 @@ python3Packages.buildPythonApplication rec {
     google-generativeai
     openai
     prompt-toolkit
+    pydantic
     pytest
     pyyaml
     rich
     typing-extensions
-    pydantic
   ];
+
+  nativeCheckInputs =
+    with python3Packages;
+    [
+      pytestCheckHook
+    ]
+    ++ [
+      versionCheckHook
+    ];
+  versionCheckProgram = "${placeholder "out"}/bin/gpt";
+  versionCheckProgramArg = "--version";
 
   meta = {
     description = "Command-line interface for ChatGPT, Claude and Bard";
     homepage = "https://github.com/kharvd/gpt-cli";
-    changelog = "https://github.com/kharvd/gpt-cli/releases/tag/v${src.tag}";
+    changelog = "https://github.com/kharvd/gpt-cli/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ _404wolf ];
+    mainProgram = "gpt";
   };
 }
