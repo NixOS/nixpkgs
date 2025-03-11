@@ -11,19 +11,18 @@
 
 buildDotnetModule rec {
   pname = "mesen";
-  version = "2.0.0-unstable-2024-12-25";
+  version = "2.0.0-unstable-2025-02-18";
 
   src = fetchFromGitHub {
     owner = "SourMesen";
     repo = "Mesen2";
-    rev = "6820db37933002089a04d356d8469481e915a359";
-    hash = "sha256-TzGMZr351XvVj/wARWJxRisRb5JlkyzdjCVYbwydBVE=";
+    rev = "1da719bb80534a1b32f18de1816ad569c9f75e60";
+    hash = "sha256-6+9iEqG+XoZdMePyYuj+NcMH0QQ9Mz94HuOgSnZxEOg=";
   };
 
   patches = [
-    # the nightly avalonia repository url is still queried, which errors out
-    # even if we don't actually need any nightly versions
-    ./dont-use-alternative-restore-sources.patch
+    # patch out the usage of nightly avalonia builds, since we can't use alternative restore sources
+    ./dont-use-nightly-avalonia.patch
     # upstream has a weird library loading mechanism, which we override with a more sane alternative
     ./dont-zip-libraries.patch
   ];
