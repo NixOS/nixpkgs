@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "rubymarshal";
-  version = "1.2.8";
+  version = "1.2.9";
   pyproject = true;
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-8+8KxCjsawlFXd1Bgq/8jY0TSB9l8UHaNMkcqfoz7hs=";
+    sha256 = "sha256-OqTbHV2duO4SmP6O9+tfaSD7fKOJ/PmzX5dUW9eoBBg=";
   };
 
   build-system = [ poetry-core ];
