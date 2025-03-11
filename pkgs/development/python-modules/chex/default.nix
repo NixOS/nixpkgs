@@ -55,7 +55,7 @@ buildPythonPackage rec {
   meta = {
     description = "Library of utilities for helping to write reliable JAX code";
     homepage = "https://github.com/deepmind/chex";
-    changelog = "https://github.com/google-deepmind/chex/releases/tag/v${version}";
+    changelog = "https://github.com/google-deepmind/chex/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ ndl ];
   };
