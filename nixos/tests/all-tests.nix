@@ -190,7 +190,7 @@ in {
   avahi = handleTest ./avahi.nix {};
   avahi-with-resolved = handleTest ./avahi.nix { networkd = true; };
   ayatana-indicators = runTest ./ayatana-indicators.nix;
-  babeld = handleTest ./babeld.nix {};
+  babeld = runTest ./babeld.nix;
   bazarr = handleTest ./bazarr.nix {};
   bcachefs = handleTestOn ["x86_64-linux" "aarch64-linux"] ./bcachefs.nix {};
   beanstalkd = handleTest ./beanstalkd.nix {};
@@ -212,7 +212,7 @@ in {
   boot-stage2 = handleTest ./boot-stage2.nix {};
   borgbackup = handleTest ./borgbackup.nix {};
   borgmatic = handleTest ./borgmatic.nix {};
-  botamusique = handleTest ./botamusique.nix {};
+  botamusique = runTest ./botamusique.nix;
   bpf = handleTestOn ["x86_64-linux" "aarch64-linux"] ./bpf.nix {};
   bpftune = handleTest ./bpftune.nix {};
   breitbandmessung = handleTest ./breitbandmessung.nix {};
@@ -387,11 +387,27 @@ in {
   filesystems-overlayfs = runTest ./filesystems-overlayfs.nix;
   firefly-iii = handleTest ./firefly-iii.nix {};
   firefly-iii-data-importer = handleTest ./firefly-iii-data-importer.nix {};
-  firefox = handleTest ./firefox.nix { firefoxPackage = pkgs.firefox; };
-  firefox-beta = handleTest ./firefox.nix { firefoxPackage = pkgs.firefox-beta; };
-  firefox-devedition = handleTest ./firefox.nix { firefoxPackage = pkgs.firefox-devedition; };
-  firefox-esr    = handleTest ./firefox.nix { firefoxPackage = pkgs.firefox-esr; }; # used in `tested` job
-  firefox-esr-128 = handleTest ./firefox.nix { firefoxPackage = pkgs.firefox-esr-128; };
+  firefox = runTest {
+    imports = [./firefox.nix ];
+    _module.args.firefoxPackage = pkgs.firefox;
+  };
+  firefox-beta = runTest {
+    imports = [ ./firefox.nix ] ;
+    _module.args.firefoxPackage = pkgs.firefox-beta;
+  };
+  firefox-devedition = runTest {
+    imports = [ ./firefox.nix ];
+    _module.args.firefoxPackage = pkgs.firefox-devedition;
+  };
+  firefox-esr = runTest {
+     # used in `tested` job
+    imports = [ ./firefox.nix ] ;
+    _module.args.firefoxPackage = pkgs.firefox-esr;
+  };
+  firefox-esr-128 = runTest {
+    imports = [ ./firefox.nix ] ;
+    _module.args.firefoxPackage = pkgs.firefox-esr-128;
+  };
   firefoxpwa = handleTest ./firefoxpwa.nix {};
   firejail = handleTest ./firejail.nix {};
   firewall = handleTest ./firewall.nix { nftables = false; };
@@ -444,7 +460,7 @@ in {
   gnupg = handleTest ./gnupg.nix {};
   goatcounter = handleTest ./goatcounter.nix {};
   go-camo = handleTest ./go-camo.nix { };
-  go-neb = handleTest ./go-neb.nix {};
+  go-neb = runTest ./go-neb.nix;
   gobgpd = handleTest ./gobgpd.nix {};
   gocd-agent = handleTest ./gocd-agent.nix {};
   gocd-server = handleTest ./gocd-server.nix {};
@@ -559,7 +575,7 @@ in {
   kavita = handleTest ./kavita.nix {};
   kbd-setfont-decompress = handleTest ./kbd-setfont-decompress.nix {};
   kbd-update-search-paths-patch = handleTest ./kbd-update-search-paths-patch.nix {};
-  kea = handleTest ./kea.nix {};
+  kea = runTest ./kea.nix;
   keepalived = handleTest ./keepalived.nix {};
   keepassxc = handleTest ./keepassxc.nix {};
   kerberos = handleTest ./kerberos/default.nix {};
@@ -573,7 +589,7 @@ in {
   keymap = handleTest ./keymap.nix {};
   kimai = handleTest ./kimai.nix {};
   kmonad = runTest ./kmonad.nix;
-  knot = handleTest ./knot.nix {};
+  knot = runTest ./knot.nix;
   komga = handleTest ./komga.nix {};
   krb5 = discoverTests (import ./krb5);
   ksm = handleTest ./ksm.nix {};
@@ -887,7 +903,7 @@ in {
   phylactery = handleTest ./web-apps/phylactery.nix {};
   pict-rs = handleTest ./pict-rs.nix {};
   pingvin-share = handleTest ./pingvin-share.nix {} ;
-  pinnwand = handleTest ./pinnwand.nix {};
+  pinnwand = runTest ./pinnwand.nix;
   plantuml-server = handleTest ./plantuml-server.nix {};
   plasma-bigscreen = handleTest ./plasma-bigscreen.nix {};
   plasma5 = handleTest ./plasma5.nix {};
@@ -1020,7 +1036,7 @@ in {
   slurm = handleTest ./slurm.nix {};
   snmpd = handleTest ./snmpd.nix {};
   smokeping = handleTest ./smokeping.nix {};
-  snapcast = handleTest ./snapcast.nix {};
+  snapcast = runTest ./snapcast.nix;
   snapper = handleTest ./snapper.nix {};
   snipe-it = runTest ./web-apps/snipe-it.nix;
   soapui = handleTest ./soapui.nix {};
@@ -1052,7 +1068,7 @@ in {
   stub-ld = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./stub-ld.nix {};
   stunnel = handleTest ./stunnel.nix {};
   sudo = handleTest ./sudo.nix {};
-  sudo-rs = handleTest ./sudo-rs.nix {};
+  sudo-rs = runTest ./sudo-rs.nix;
   sunshine = handleTest ./sunshine.nix {};
   suricata = handleTest ./suricata.nix {};
   suwayomi-server = handleTest ./suwayomi-server.nix {};

@@ -433,6 +433,25 @@ in
             done
           ''}
 
+          ${lib.optionalString isMariaDB ''
+            # If MariaDB is used in an Galera cluster, we have to check if the sync is done,
+            # or it will fail to init the database while joining, so we get in an broken non recoverable state
+            # so we wait until we have an synced state
+            if ${cfg.package}/bin/mysql -u ${superUser} -N -e "SHOW VARIABLES LIKE 'wsrep_on'" 2>/dev/null | ${lib.getExe' pkgs.gnugrep "grep"} -q 'ON'; then
+              echo "Galera cluster detected, waiting for node to be synced..."
+              while true; do
+                STATE=$(${cfg.package}/bin/mysql -u ${superUser} -N -e "SHOW STATUS LIKE 'wsrep_local_state_comment'" | ${lib.getExe' pkgs.gawk "awk"} '{print $2}')
+                if [ "$STATE" = "Synced" ]; then
+                  echo "Node is synced"
+                  break
+                else
+                  echo "Current state: $STATE - Waiting for 1 second..."
+                  sleep 1
+                fi
+              done
+            fi
+          ''}
+
           if [ -f ${cfg.dataDir}/mysql_init ]
           then
               # While MariaDB comes with a 'mysql' super user account since 10.4.x, MySQL does not
@@ -447,10 +466,10 @@ in
                 # Create initial databases
                 if ! test -e "${cfg.dataDir}/${database.name}"; then
                     echo "Creating initial database: ${database.name}"
-                    ( echo 'create database `${database.name}`;'
+                    ( echo 'CREATE DATABASE IF NOT EXISTS `${database.name}`;'
 
                       ${lib.optionalString (database.schema != null) ''
-                        echo 'use `${database.name}`;'
+                        echo 'USE `${database.name}`;'
 
                         # TODO: this silently falls through if database.schema does not exist,
                         # we should catch this somehow and exit, but can't do it here because we're in a subshell.
@@ -469,7 +488,7 @@ in
               ${lib.optionalString (cfg.replication.role == "master") ''
                 # Set up the replication master
 
-                ( echo "use mysql;"
+                ( echo "USE mysql;"
                   echo "CREATE USER '${cfg.replication.masterUser}'@'${cfg.replication.slaveHost}' IDENTIFIED WITH mysql_native_password;"
                   echo "SET PASSWORD FOR '${cfg.replication.masterUser}'@'${cfg.replication.slaveHost}' = PASSWORD('${cfg.replication.masterPassword}');"
                   echo "GRANT REPLICATION SLAVE ON *.* TO '${cfg.replication.masterUser}'@'${cfg.replication.slaveHost}';"
@@ -479,9 +498,9 @@ in
               ${lib.optionalString (cfg.replication.role == "slave") ''
                 # Set up the replication slave
 
-                ( echo "stop slave;"
-                  echo "change master to master_host='${cfg.replication.masterHost}', master_user='${cfg.replication.masterUser}', master_password='${cfg.replication.masterPassword}';"
-                  echo "start slave;"
+                ( echo "STOP SLAVE;"
+                  echo "CHANGE MASTER TO MASTER_HOST='${cfg.replication.masterHost}', MASTER_USER='${cfg.replication.masterUser}', MASTER_PASSWORD='${cfg.replication.masterPassword}';"
+                  echo "START SLAVE;"
                 ) | ${cfg.package}/bin/mysql -u ${superUser} -N
               ''}
 

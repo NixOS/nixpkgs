@@ -15,7 +15,7 @@
   pipewire,
   withICUCalendar ? false,
   withPipewire ? true,
-  withNotmuch ? true,
+  withNotmuch ? false,
 }:
 
 rustPlatform.buildRustPackage rec {

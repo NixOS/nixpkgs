@@ -497,6 +497,19 @@ final: prev:
     meta.hydraPlatforms = [ ];
   };
 
+  YankAssassin-vim = buildVimPlugin {
+    pname = "YankAssassin.vim";
+    version = "2022-03-11";
+    src = fetchFromGitHub {
+      owner = "svban";
+      repo = "YankAssassin.vim";
+      rev = "55ce478a08333c086bcccdf087453085f85854d4";
+      sha256 = "0w0g49knan6vmmpcdj8fvdn2bmyydpihf4jfyza6iy7gsk8kmr66";
+    };
+    meta.homepage = "https://github.com/svban/YankAssassin.vim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   YankRing-vim = buildVimPlugin {
     pname = "YankRing.vim";
     version = "2015-07-29";
@@ -1979,6 +1992,19 @@ final: prev:
       sha256 = "11vi9fwgbcvrb8jnicsnwmggayn0586glfdknlkg43smz2cay3f1";
     };
     meta.homepage = "https://github.com/winston0410/cmd-parser.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
+  cmdalias-vim = buildVimPlugin {
+    pname = "cmdalias.vim";
+    version = "2010-10-18";
+    src = fetchFromGitHub {
+      owner = "vim-scripts";
+      repo = "cmdalias.vim";
+      rev = "fd3aea59d57f5fed1b835a0e545540c9781c4bb3";
+      sha256 = "1y34bmbzdmc1d404m2xiy4n0bz25wfarm7ybql9hsq8jc5pkzjjc";
+    };
+    meta.homepage = "https://github.com/vim-scripts/cmdalias.vim/";
     meta.hydraPlatforms = [ ];
   };
 
@@ -3958,6 +3984,19 @@ final: prev:
       sha256 = "0zsbkl82kny1vmfv06iz576xsclbik0xr7ndzpb0ddhw5nfnicfx";
     };
     meta.homepage = "https://github.com/deoplete-plugins/deoplete-zsh/";
+    meta.hydraPlatforms = [ ];
+  };
+
+  devdocs-nvim = buildVimPlugin {
+    pname = "devdocs.nvim";
+    version = "2025-03-09";
+    src = fetchFromGitHub {
+      owner = "maskudo";
+      repo = "devdocs.nvim";
+      rev = "1f39d611427af27befbf0edb3284ef0def830dd7";
+      sha256 = "11adw0b3kg0324gvpk9kb0s9crkg1rp1pgqgr1v08sc5lix7wjc5";
+    };
+    meta.homepage = "https://github.com/maskudo/devdocs.nvim/";
     meta.hydraPlatforms = [ ];
   };
 
@@ -8911,6 +8950,19 @@ final: prev:
       sha256 = "1fxhvnffhci2cfnksf26k6lwnl346rp6pm4fpb30p4xzh4jpvan8";
     };
     meta.homepage = "https://github.com/zidhuss/neotest-minitest/";
+    meta.hydraPlatforms = [ ];
+  };
+
+  neotest-mocha = buildVimPlugin {
+    pname = "neotest-mocha";
+    version = "2024-07-30";
+    src = fetchFromGitHub {
+      owner = "adrigzr";
+      repo = "neotest-mocha";
+      rev = "8239023d299a692784176f202f6a4a5e0a698ad2";
+      sha256 = "sha256-Fbe7xuu5Qy6GXKsvQbVcE5oG7dgKjghuX470V7sjmqA=";
+    };
+    meta.homepage = "https://github.com/adrigzr/neotest-mocha";
     meta.hydraPlatforms = [ ];
   };
 
@@ -15115,6 +15167,19 @@ final: prev:
     meta.hydraPlatforms = [ ];
   };
 
+  vim-apathy = buildVimPlugin {
+    pname = "vim-apathy";
+    version = "2021-11-22";
+    src = fetchFromGitHub {
+      owner = "tpope";
+      repo = "vim-apathy";
+      rev = "27128a0f55189724c841843ba41cd33cf7186032";
+      sha256 = "166cvm3xr46n7bmzglkx0k4akdshhq3a1kw2011v39r64jh5p5hk";
+    };
+    meta.homepage = "https://github.com/tpope/vim-apathy/";
+    meta.hydraPlatforms = [ ];
+  };
+
   vim-apm = buildVimPlugin {
     pname = "vim-apm";
     version = "2024-02-03";
@@ -15479,6 +15544,19 @@ final: prev:
     meta.hydraPlatforms = [ ];
   };
 
+  vim-characterize = buildVimPlugin {
+    pname = "vim-characterize";
+    version = "2024-11-14";
+    src = fetchFromGitHub {
+      owner = "tpope";
+      repo = "vim-characterize";
+      rev = "a8bffac6cead6b2869d939ecad06312b187a4c79";
+      sha256 = "0v00jq0wx2zvcyh3k8rscvq1lgp4hyb1fkjwsygyynnbcaimms8z";
+    };
+    meta.homepage = "https://github.com/tpope/vim-characterize/";
+    meta.hydraPlatforms = [ ];
+  };
+
   vim-choosewin = buildVimPlugin {
     pname = "vim-choosewin";
     version = "2021-04-22";
@@ -15502,6 +15580,19 @@ final: prev:
       sha256 = "00l0flcgbl7dipzq6yxqwlqfi43jrdgbs4bi14lw2wzki5wy3wmr";
     };
     meta.homepage = "https://github.com/rhysd/vim-clang-format/";
+    meta.hydraPlatforms = [ ];
+  };
+
+  vim-classpath = buildVimPlugin {
+    pname = "vim-classpath";
+    version = "2020-04-07";
+    src = fetchFromGitHub {
+      owner = "tpope";
+      repo = "vim-classpath";
+      rev = "88a7e8a62d4603e79787cb381fc5cac562c29bb0";
+      sha256 = "0k67r76djvhqsc76af72s11hrxschsj1rx2rb3xsi3q5rm0ff5mg";
+    };
+    meta.homepage = "https://github.com/tpope/vim-classpath/";
     meta.hydraPlatforms = [ ];
   };
 
@@ -17154,6 +17245,19 @@ final: prev:
       sha256 = "1il68nf8zsz1hn5vqmsyjckmh9s8sw4z6lqqqrxwfjqkqm1ji5xq";
     };
     meta.homepage = "https://github.com/jelera/vim-javascript-syntax/";
+    meta.hydraPlatforms = [ ];
+  };
+
+  vim-jdaddy = buildVimPlugin {
+    pname = "vim-jdaddy";
+    version = "2022-03-26";
+    src = fetchFromGitHub {
+      owner = "tpope";
+      repo = "vim-jdaddy";
+      rev = "23b67752cb869dd9c8f3109173b69aa96a1f3acf";
+      sha256 = "1frkyq5zpwkwrrjcf0sscmr6q696vaaxnc0r93mk9psv5zbna4vl";
+    };
+    meta.homepage = "https://github.com/tpope/vim-jdaddy/";
     meta.hydraPlatforms = [ ];
   };
 
