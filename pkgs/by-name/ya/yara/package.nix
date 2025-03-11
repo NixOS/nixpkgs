@@ -3,7 +3,6 @@
   stdenv,
   fetchFromGitHub,
   autoreconfHook,
-  pcre,
   pkg-config,
   protobufc,
   withCrypto ? true,
@@ -36,7 +35,6 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [
-      pcre
       protobufc
     ]
     ++ lib.optionals withCrypto [ openssl ]
