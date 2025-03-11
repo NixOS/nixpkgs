@@ -5,12 +5,14 @@
   six,
   pyudev,
   pygobject3,
+  hatchling,
+  hatch-vcs,
 }:
 
 buildPythonPackage rec {
   pname = "rtslib";
   version = "2.2.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "open-iscsi";
@@ -18,6 +20,11 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-lBYckQlnvIQ6lSENctYsMhzULi1MJAVUyF06Ul56LzA=";
   };
+
+  build-system = [
+    hatchling
+    hatch-vcs
+  ];
 
   propagatedBuildInputs = [
     six
