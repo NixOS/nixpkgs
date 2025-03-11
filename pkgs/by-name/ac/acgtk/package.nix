@@ -2,21 +2,20 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  dune_3,
   ocamlPackages,
 }:
 
 stdenv.mkDerivation {
 
   pname = "acgtk";
-  version = "2.0.0";
+  version = "2.1.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.inria.fr";
     owner = "acg";
     repo = "dev/acgtk";
-    rev = "release-2.0.0-20231009";
-    hash = "sha256-ZymSQkBMBePPw7pJkfLkmqbIkQyIqB+7Pyrih2WAO50=";
+    tag = "release-2.1.0";
+    hash = "sha256-XuPcubt1lvnQio+km6MhmDu41NXNVXKKpzGd/Y1XzLo=";
   };
 
   strictDeps = true;
