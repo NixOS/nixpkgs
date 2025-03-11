@@ -4749,11 +4749,15 @@ self: super: with self; {
 
   falcon = callPackage ../development/python-modules/falcon { };
 
+  falcon-cors = callPackage ../development/python-modules/falcon-cors { };
+
   falconpy = callPackage ../development/python-modules/falconpy { };
 
   faraday-agent-parameters-types =
     callPackage ../development/python-modules/faraday-agent-parameters-types
       { };
+
+  falcon-cors = callPackage ../development/python-modules/falcon-cors { };
 
   faraday-plugins = callPackage ../development/python-modules/faraday-plugins { };
 
