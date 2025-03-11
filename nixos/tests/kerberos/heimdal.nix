@@ -254,6 +254,6 @@ import ../make-test-python.nix (
           server.send_chars("clear\n")
       '';
 
-    meta.maintainers = [ pkgs.lib.maintainers.dblsaiko ];
+    meta.maintainers = pkgs.heimdal.meta.maintainers;
   }
 )
