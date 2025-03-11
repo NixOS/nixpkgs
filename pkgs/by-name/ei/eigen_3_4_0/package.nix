@@ -43,6 +43,7 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [
       sander
       raskin
+      pbsds
     ];
     platforms = platforms.unix;
   };
