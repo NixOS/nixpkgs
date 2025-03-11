@@ -26363,6 +26363,12 @@
     github = "zfnmxt";
     githubId = 37446532;
   };
+  Zh40Le1ZOOB = {
+    name = "command_block";
+    email = "mtf@ik.me";
+    github = "Zh40Le1ZOOB";
+    githubId = 97139537;
+  };
   zhaofengli = {
     email = "hello@zhaofeng.li";
     matrix = "@zhaofeng:zhaofeng.li";
