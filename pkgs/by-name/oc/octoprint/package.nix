@@ -268,7 +268,6 @@ let
             license = licenses.agpl3Only;
             maintainers = with maintainers; [
               abbradar
-              gebner
               WhittlesJr
               gador
             ];
