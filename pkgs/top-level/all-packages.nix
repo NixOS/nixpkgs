@@ -5000,8 +5000,6 @@ with pkgs;
 
   stm32loader = with python3Packages; toPythonApplication stm32loader;
 
-  stremio = qt5.callPackage ../applications/video/stremio { };
-
   solanum = callPackage ../servers/irc/solanum {
     autoreconfHook = buildPackages.autoreconfHook269;
   };
@@ -7930,7 +7928,7 @@ with pkgs;
   };
 
   include-what-you-use = callPackage ../development/tools/analysis/include-what-you-use {
-    llvmPackages = llvmPackages_18;
+    llvmPackages = llvmPackages_19;
   };
 
   inherit (callPackage ../applications/misc/inochi2d { })
@@ -10446,9 +10444,6 @@ with pkgs;
 
   simpleitk = callPackage ../development/libraries/simpleitk { lua = lua5_4; };
 
-  sfml = callPackage ../development/libraries/sfml {
-    inherit (darwin.apple_sdk.frameworks) IOKit Foundation AppKit OpenAL;
-  };
   skawarePackages = recurseIntoAttrs (callPackage ../development/skaware-packages { });
 
   inherit (skawarePackages)

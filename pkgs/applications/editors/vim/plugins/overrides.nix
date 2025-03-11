@@ -83,6 +83,8 @@
   cmake,
   icu,
   ncurses,
+  # devdocs-nvim dependencies
+  pandoc,
   # Preview-nvim dependencies
   md-tui,
   # sved dependencies
@@ -1010,6 +1012,18 @@ in
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [ jorsn ];
     };
+  };
+
+  devdocs-nvim = super.devdocs-nvim.overrideAttrs {
+    nvimSkipModule = [
+      # Error initializing Devdocs state
+      "devdocs.state"
+    ];
+    runtimeDeps = [
+      curl
+      jq
+      pandoc
+    ];
   };
 
   diagram-nvim = super.diagram-nvim.overrideAttrs {
@@ -2054,6 +2068,15 @@ in
     ];
     # Unit test assert
     nvimSkipModule = "neotest-jest-assertions";
+  };
+
+  neotest-mocha = super.neotest-mocha.overrideAttrs {
+    dependencies = with self; [
+      neotest
+      nvim-nio
+      nvim-treesitter
+      plenary-nvim
+    ];
   };
 
   neotest-minitest = super.neotest-minitest.overrideAttrs {

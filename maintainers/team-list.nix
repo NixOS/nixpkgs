@@ -58,6 +58,15 @@ with lib.maintainers;
     enableFeatureFreezePing = true;
   };
 
+  apm = {
+    scope = "Team for packages maintained by employees of Akademie für Pflegeberufe und Management GmbH.";
+    shortName = "apm employees";
+    # Edits to this list should only be done by an already existing member.
+    members = [
+      wolfgangwalther
+    ];
+  };
+
   bazel = {
     members = [
       mboes

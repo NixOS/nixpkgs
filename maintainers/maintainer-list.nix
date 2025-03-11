@@ -5185,6 +5185,12 @@
     githubId = 245394;
     name = "Hannu Hartikainen";
   };
+  dandedotdev = {
+    email = "contact@dande.dev";
+    github = "dandedotdev";
+    githubId = 106054083;
+    name = "Dandelion Huang";
+  };
   dandellion = {
     email = "daniel@dodsorf.as";
     matrix = "@dandellion:dodsorf.as";
@@ -22068,6 +22074,12 @@
     github = "sergei-mironov";
     githubId = 4477729;
     name = "Sergey Mironov";
+  };
+  smissingham = {
+    email = "sean@missingham.com";
+    github = "smissingham";
+    githubId = 9065495;
+    name = "Sean Missingham";
   };
   smitop = {
     name = "Smitty van Bodegom";
