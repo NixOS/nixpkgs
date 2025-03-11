@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-audit-log";
-  version = "0.3.0";
+  version = "0.3.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "google_cloud_audit_log";
     inherit version;
-    hash = "sha256-kBQoslcCDYwdETPg+gBBZKVV5aOVx8o827hIZRPfOmU=";
+    hash = "sha256-jyaXW9jmkAjm0e29fBv+SST0sIukRkPufjfPbKRygpY=";
   };
 
   build-system = [ setuptools ];
