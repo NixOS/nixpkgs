@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "mistune";
-  version = "3.1.0";
+  version = "3.1.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "lepture";
     repo = "mistune";
     tag = "v${version}";
-    hash = "sha256-gXCFBe58Ij6CiwTddsI4tkPsGBR2z9D8dnxlvTXGSMw=";
+    hash = "sha256-XvDp+X/+s6TsUC889qjTGzrde6s/BYoXUw2AblaATnI=";
   };
 
   dependencies = lib.optionals (pythonOlder "3.11") [
