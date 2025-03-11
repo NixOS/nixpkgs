@@ -19070,6 +19070,11 @@
     githubId = 74465;
     name = "James Fargher";
   };
+  programmerlexi = {
+    name = "programmerlexi";
+    github = "programmerlexi";
+    githubId = 60185691;
+  };
   progrm_jarvis = {
     email = "mrjarviscraft+nix@gmail.com";
     github = "JarvisCraft";
