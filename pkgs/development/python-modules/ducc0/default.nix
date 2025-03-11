@@ -2,34 +2,51 @@
   lib,
   buildPythonPackage,
   fetchFromGitLab,
-  numpy,
-  pybind11,
-  pytestCheckHook,
-  pythonOlder,
+  cmake,
+  nanobind,
+  ninja,
+  scikit-build-core,
   setuptools,
+  numpy,
+  pytestCheckHook,
+  scipy,
+  pytest-xdist,
 }:
 
 buildPythonPackage rec {
   pname = "ducc0";
-  version = "0.36.0";
+  version = "0.37.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitLab {
     domain = "gitlab.mpcdf.mpg.de";
     owner = "mtr";
     repo = "ducc";
-    rev = "ducc0_${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-S/H3+EykNxqbs8Tca3T95SK3Hzst49hOPkO0ocs80t0=";
+    tag = "ducc0_${lib.replaceStrings [ "." ] [ "_" ] version}";
+    hash = "sha256-aBKbDDUUiHIpVX7NtNJOQAH/hov7Zj5O5bE6J25ck10=";
   };
 
-  buildInputs = [ pybind11 ];
-  propagatedBuildInputs = [ numpy ];
+  postPatch = ''
+    substituteInPlace pyproject.toml --replace-fail '"pybind11>=2.6.0", ' ""
+  '';
+
+  DUCC0_USE_NANOBIND = "";
+  DUCC0_OPTIMIZATION = "portable";
+
+  build-system = [
+    cmake
+    nanobind
+    ninja
+    scikit-build-core
+    setuptools
+  ];
+  dontUseCmakeConfigure = true;
+  dependencies = [ numpy ];
 
   nativeCheckInputs = [
     pytestCheckHook
-    setuptools
+    scipy
+    pytest-xdist
   ];
   pytestFlagsArray = [ "python/test" ];
   pythonImportsCheck = [ "ducc0" ];
@@ -39,12 +56,10 @@ buildPythonPackage rec {
     cp -r ${src}/src/ducc0 $out/include
   '';
 
-  DUCC0_OPTIMIZATION = "portable-strip";
-
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.mpcdf.mpg.de/mtr/ducc";
     description = "Efficient algorithms for Fast Fourier transforms and more";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ parras ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ parras ];
   };
 }
