@@ -13,13 +13,13 @@
 
 maven.buildMavenPackage rec {
   pname = "runelite";
-  version = "2.7.2";
+  version = "2.7.3";
 
   src = fetchFromGitHub {
     owner = "runelite";
     repo = "launcher";
     rev = version;
-    hash = "sha256-ckeZ/7rACyZ5j+zzC5hv1NaXTi9q/KvOzMPTDd1crHQ=";
+    hash = "sha256-Ft4vLbhPdfeTvUY+B1nMTSToEzCR/DQ42qunk57elCE=";
   };
 
   mvnJdk = jdk17;
