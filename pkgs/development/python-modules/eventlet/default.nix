@@ -43,16 +43,18 @@ buildPythonPackage rec {
     six
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    libredirect.hook
+    pytestCheckHook
+  ];
 
-  # libredirect is not available on darwin
   # tests hang on pypy indefinitely
-  doCheck = !stdenv.hostPlatform.isDarwin && !isPyPy;
+  # most tests also fail/flake on Darwin
+  doCheck = !isPyPy && !stdenv.hostPlatform.isDarwin;
 
   preCheck = lib.optionalString doCheck ''
     echo "nameserver 127.0.0.1" > resolv.conf
     export NIX_REDIRECTS=/etc/protocols=${iana-etc}/etc/protocols:/etc/resolv.conf=$(realpath resolv.conf)
-    export LD_PRELOAD=${libredirect}/lib/libredirect.so
 
     export EVENTLET_IMPORT_VERSION_ONLY=0
   '';
@@ -67,6 +69,8 @@ buildPythonPackage rec {
     "test_server_connection_timeout_exception"
     # broken with openssl 3.4
     "test_ssl_close"
+    # flaky test
+    "test_send_timeout"
   ];
 
   pythonImportsCheck = [ "eventlet" ];

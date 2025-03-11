@@ -8455,6 +8455,8 @@ self: super: with self; {
 
   mitmproxy = callPackage ../development/python-modules/mitmproxy { };
 
+  mitmproxy-linux = callPackage ../development/python-modules/mitmproxy-linux { };
+
   mitmproxy-macos = callPackage ../development/python-modules/mitmproxy-macos { };
 
   mitmproxy-rs = callPackage ../development/python-modules/mitmproxy-rs { };
