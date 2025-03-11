@@ -39,6 +39,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
+  # Don't attempt to sign the darwin app bundle.
+  # It's impure and may fail in some restricted environments.
+  CSC_IDENTITY_AUTO_DISCOVERY = lib.optionals stdenv.hostPlatform.isDarwin "false";
+
   nativeBuildInputs = [
     nodejs
     pnpm_9.configHook
