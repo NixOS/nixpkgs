@@ -2,7 +2,6 @@
   lib,
   aiohttp,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   setuptools,
   construct,
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   version = "5.4.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "yozik04";
     repo = "vallox_websocket_api";
@@ -25,13 +22,11 @@ buildPythonPackage rec {
     hash = "sha256-L9duL8XfDUxHgJxVbG7PPPRJRzVEckxqbB+1vX0GalU=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  pythonRelaxDeps = [ "websockets" ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     construct
     websockets
