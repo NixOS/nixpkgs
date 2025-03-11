@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "rust-secure-code";
-    repo = pname;
+    repo = "cargo-geiger";
     rev = "cargo-geiger@v${version}";
     hash = "sha256-/5yuayqneZV6aVQ6YFgqNS2XY3W6yETRQ0kE5ovc7p8=";
   };

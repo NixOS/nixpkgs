@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "ColinIanKing";
-    repo = pname;
+    repo = "stress-ng";
     rev = "V${version}";
     hash = "sha256-RZc3OJkonXOW8iqSsHd/EA4XVTSiRO0ZRdAam3JC0MA=";
   };

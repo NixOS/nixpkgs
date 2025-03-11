@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "linuxmint";
-    repo = pname;
+    repo = "cinnamon-screensaver";
     rev = version;
     hash = "sha256-XlEu/aBwNeu+CC6IRnFTF6LUnb7VY2+OOGsdCvQYweA=";
   };

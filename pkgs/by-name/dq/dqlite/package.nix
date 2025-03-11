@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "canonical";
-    repo = pname;
+    repo = "dqlite";
     tag = "v${version}";
     hash = "sha256-7ou077ozbpH21PcvEEcprr4UYJ/X398Ph9dh5C3YyBQ=";
   };
