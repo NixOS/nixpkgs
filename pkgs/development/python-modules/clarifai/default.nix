@@ -79,6 +79,8 @@ buildPythonPackage rec {
     # Tests require network access and API key
     "tests/cli/test_compute_orchestration.py"
     "tests/runners/test_anymodel.py"
+    "tests/runners/test_download_checkpoints.py"
+    "tests/runners/test_runners.py"
     "tests/runners/test_textmodel.py"
     "tests/runners/test_url_fetcher.py"
     "tests/test_app.py"
