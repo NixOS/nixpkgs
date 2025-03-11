@@ -45,6 +45,10 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     (lib.cmakeBool "EZTRACE_ENABLE_MEMORY" true)
+    # This test is somewhat flaky and fails once per several rebuilds.
+    # TODO: Switch to disabledTests if https://www.github.com/NixOS/nixpkgs/pull/379426
+    # is accepted.
+    (lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" "--exclude-regex;memory_tests")
   ];
 
   nativeBuildInputs = [
