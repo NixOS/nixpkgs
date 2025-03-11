@@ -59,6 +59,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "C bindings for trawl";
     homepage = "https://github.com/regolith-linux/libtrawldb";
+    changelog = "https://github.com/regolith-linux/libtrawldb/releases/tag/v${version}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ sandptel ];
     mainProgram = "libtrawldb";
