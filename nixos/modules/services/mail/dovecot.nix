@@ -274,6 +274,11 @@ in
 {
   imports = [
     (mkRemovedOptionModule [ "services" "dovecot2" "package" ] "")
+    (mkRemovedOptionModule [
+      "services"
+      "dovecot2"
+      "modules"
+    ] "Now need to use `environment.systemPackages` to load additional Dovecot modules")
     (mkRenamedOptionModule
       [ "services" "dovecot2" "sieveScripts" ]
       [ "services" "dovecot2" "sieve" "scripts" ]
@@ -402,15 +407,6 @@ in
       // {
         default = true;
       };
-
-    modules = mkOption {
-      type = types.listOf types.package;
-      default = [ ];
-      example = literalExpression "[ pkgs.dovecot_pigeonhole ]";
-      description = ''
-        Load extended modules.
-      '';
-    };
 
     sslCACert = mkOption {
       type = types.nullOr types.str;
@@ -758,7 +754,7 @@ in
         '';
     };
 
-    environment.systemPackages = [ dovecotPkg ] ++ cfg.modules;
+    environment.systemPackages = [ dovecotPkg ];
 
     warnings = warnAboutExtraConfigCollisions;
 
