@@ -102,6 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
         "test"
       ];
     };
+    tests.postal = nixosTests.postal;
   };
 
   meta = {
