@@ -2691,8 +2691,8 @@ let
         mktplcRef = {
           name = "gruvbox";
           publisher = "jdinhlife";
-          version = "1.24.5";
-          hash = "sha256-17Tzbed+AZ6G1Rmw/eClFtsATWtUk1+AAeCSpeSurXk=";
+          version = "1.24.6";
+          hash = "sha256-nnQxaHnlgBpZSMigr04yqqO+mmZ+HqYq3WQFIRi3pRg=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/jdinhlife.gruvbox/changelog";
