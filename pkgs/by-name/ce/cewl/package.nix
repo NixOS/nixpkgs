@@ -3,6 +3,7 @@
   lib,
   fetchFromGitHub,
   bundlerEnv,
+  bundlerUpdateScript,
 }:
 
 let
@@ -13,12 +14,12 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "cewl";
-  version = "5.5.2";
+  version = "6.2.1";
   src = fetchFromGitHub {
     owner = "digininja";
     repo = "CeWL";
     rev = version;
-    sha256 = "sha256-5LTZUr3OMeu1NODhIgBiVqtQnUWYfZTm73q61vT3rXc=";
+    sha256 = "sha256-wMTGAB4P925z2UYNvlN4kSu1SLzKyB4a/Cjq4BofJ9w=";
   };
 
   buildInputs = [ rubyEnv.wrappedRuby ];
@@ -28,6 +29,8 @@ stdenv.mkDerivation rec {
     cp *.rb $out/bin/
     mv $out/bin/cewl.rb $out/bin/cewl
   '';
+
+  passthru.updateScript = bundlerUpdateScript "cewl";
 
   meta = with lib; {
     description = "Custom wordlist generator";
