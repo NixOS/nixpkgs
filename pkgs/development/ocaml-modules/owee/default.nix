@@ -11,7 +11,7 @@ buildDunePackage rec {
 
   src = fetchurl {
     url = "https://github.com/let-def/owee/releases/download/v${version}/owee-${version}.tbz";
-    hash = "sha256-YsTRsm12iy52LfM3MF90mf9cy4JoGWelqxJlI/vPs9A=";
+    hash = "sha256-Bk9iRfWZXV0vTx+cbSmS4v2+Pd4ygha67Hz6vUhXlA0=";
   };
 
   meta = with lib; {
