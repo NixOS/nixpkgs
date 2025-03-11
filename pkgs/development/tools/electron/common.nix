@@ -190,7 +190,7 @@ in
     # build/args/all.gn
     is_electron_build = true;
     root_extra_deps = [ "//electron" ];
-    node_module_version = info.modules;
+    node_module_version = lib.toInt info.modules;
     v8_promise_internal_field_count = 1;
     v8_embedder_string = "-electron.0";
     v8_enable_snapshot_native_code_counters = false;
