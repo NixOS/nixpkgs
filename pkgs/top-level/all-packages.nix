@@ -11730,7 +11730,7 @@ with pkgs;
   sickgear = callPackage ../servers/sickbeard/sickgear.nix { };
 
   snipe-it = callPackage ../by-name/sn/snipe-it/package.nix {
-    php = php81;
+    php = php84;
   };
 
   spacecookie =
