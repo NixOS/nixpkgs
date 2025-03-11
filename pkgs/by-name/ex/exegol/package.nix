@@ -6,11 +6,20 @@
 }:
 python3.pkgs.buildPythonApplication rec {
   pname = "exegol";
-  version = "4.3.9";
-  format = "setuptools";
+  version = "4.3.10";
+  format = "pyproject";
 
   # Project has no unit tests
   doCheck = false;
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'rich~=13.7.1' 'rich>=13.7.1'
+  '';
+
+  nativeBuildInputs = with python3.pkgs; [
+    pdm-backend
+  ];
 
   propagatedBuildInputs =
     with python3.pkgs;
@@ -26,7 +35,7 @@ python3.pkgs.buildPythonApplication rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-CoPQMEk8eagYU/TfaPAM6ItfSCZbrvzUww8H9ND8VUk=";
+    hash = "sha256-BtOW7EBbFil7yyhL6uayTUUkDldI8+xxolfQZtX+00c=";
   };
 
   meta = with lib; {
@@ -46,6 +55,7 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = with maintainers; [
       _0b11stan
       charB66
+      0xthefr34k
     ];
   };
 }
