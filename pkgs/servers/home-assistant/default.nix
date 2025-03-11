@@ -107,6 +107,16 @@ let
         };
       });
 
+      brother = super.brother.overridePythonAttrs (rec {
+        version = "4.3.1";
+        src = fetchFromGitHub {
+          owner = "bieniu";
+          repo = "brother";
+          tag = version;
+          hash = "sha256-fWa5FNBGV8tnJ3CozMicXLGsDvnTjNzU8PdV266MeeQ=";
+        };
+      });
+
       eq3btsmart = super.eq3btsmart.overridePythonAttrs (oldAttrs: rec {
         version = "1.4.1";
         src = fetchFromGitHub {
