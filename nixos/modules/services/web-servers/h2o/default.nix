@@ -342,7 +342,7 @@ in
                 "hydra.example.com" = {
                   tls = {
                     policy = "force";
-                    indentity = [
+                    identity = [
                       {
                         key-file = "/path/to/key";
                         certificate-file = "/path/to/cert";
