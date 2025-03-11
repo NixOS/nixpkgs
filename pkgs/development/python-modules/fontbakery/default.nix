@@ -157,6 +157,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/googlefonts/fontbakery";
     changelog = "https://github.com/fonttools/fontbakery/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
+    mainProgram = "fontbakery";
     maintainers = with maintainers; [ danc86 ];
   };
 }
