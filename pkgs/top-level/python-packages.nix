@@ -2540,6 +2540,8 @@ self: super: with self; {
 
   cobble = callPackage ../development/python-modules/cobble { };
 
+  codefind = callPackage ../development/python-modules/codefind { };
+
   coconut = callPackage ../development/python-modules/coconut { };
 
   cocotb = callPackage ../development/python-modules/cocotb { };
@@ -5434,6 +5436,8 @@ self: super: with self; {
 
   glymur = callPackage ../development/python-modules/glymur { };
 
+  giving = callPackage ../development/python-modules/giving { };
+
   gmpy2 = callPackage ../development/python-modules/gmpy2 { };
 
   gmpy = callPackage ../development/python-modules/gmpy { };
@@ -7024,6 +7028,8 @@ self: super: with self; {
   jupyter-telemetry = callPackage ../development/python-modules/jupyter-telemetry { };
 
   jupytext = callPackage ../development/python-modules/jupytext { };
+
+  jurigged = callPackage ../development/python-modules/jurigged { };
 
   justbackoff = callPackage ../development/python-modules/justbackoff { };
 
@@ -10175,6 +10181,8 @@ self: super: with self; {
   ovmfvartool = callPackage ../development/python-modules/ovmfvartool { };
 
   ovoenergy = callPackage ../development/python-modules/ovoenergy { };
+
+  ovld = callPackage ../development/python-modules/ovld { };
 
   owslib = callPackage ../development/python-modules/owslib { };
 
@@ -18183,6 +18191,8 @@ self: super: with self; {
   varint = callPackage ../development/python-modules/varint { };
 
   vat-moss = callPackage ../development/python-modules/vat-moss { };
+
+  varname = callPackage ../development/python-modules/varname { };
 
   vbuild = callPackage ../development/python-modules/vbuild { };
 
