@@ -8474,12 +8474,6 @@
     githubId = 34658064;
     name = "Grace Dinh";
   };
-  gebner = {
-    email = "gebner@gebner.org";
-    github = "gebner";
-    githubId = 313929;
-    name = "Gabriel Ebner";
-  };
   geluk = {
     email = "johan+nix@geluk.io";
     github = "geluk";
