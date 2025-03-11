@@ -21,13 +21,14 @@ python3.pkgs.buildPythonApplication rec {
     python3.pkgs.wheel
   ];
 
-  dependencies = with python3.pkgs; [
-    i3ipc
+  dependencies = [
+    python3.pkgs.i3ipc
   ];
 
   meta = {
     description = "I3/sway script to toggle between last windows";
     homepage = "https://github.com/olivierlemoal/i3-swap-focus";
+    changelog = "https://github.com/olivierlemoal/i3-swap-focus/releases/tag/${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sandptel ];
     platforms = lib.platforms.linux;
