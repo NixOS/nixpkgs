@@ -50,6 +50,7 @@
   makeBinaryWrapper,
   autoSignDarwinBinariesHook,
   cairo,
+  fetchpatch,
 }:
 
 with python3Packages;
@@ -159,8 +160,17 @@ buildPythonApplication rec {
     # OSError: master_fd is in error condition
     ./disable-test_ssh_bootstrap_with_different_launchers.patch
 
-    # Temporary fix for setup.py until it's merged upstream
-    ./fix_setup.patch
+    # Remove after 0.40.1
+    (fetchpatch {
+      url = "https://github.com/kovidgoyal/kitty/commit/6171ca6.patch";
+      hash = "sha256-OBB0YcgEYgw3Jcg+Dgus6rwQ4gGL6GMr6pd7m9CGq9k=";
+    })
+
+    (fetchpatch {
+      url = "https://github.com/kovidgoyal/kitty/commit/8cbdd003e2.patch";
+      hash = "sha256-pKIJIqIdPfB4kQ6FtpYDumpgjJkMxoLT8fKzfgWYJnw=";
+    })
+
   ];
 
   hardeningDisable = [
