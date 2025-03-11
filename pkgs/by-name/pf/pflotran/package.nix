@@ -20,7 +20,7 @@ let
     We will keep using older version until pflotran supports the latest petsc.
     Pflotran also requires Parmetis support in Petsc to have actual parmetis support.
   */
-  petsc_ =
+  petsc' =
     (petsc.overrideAttrs rec {
       version = "3.21.4";
       src = fetchzip {
@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ gfortran ];
 
   buildInputs = [
-    petsc_
+    petsc'
     blas
     lapack
     hdf5-fortran-mpi
