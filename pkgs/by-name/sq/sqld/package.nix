@@ -11,17 +11,20 @@
   stdenv,
   darwin,
   cmake,
+
+  nix-update-script,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "sqld";
-  version = "0.24.18";
+  version = "0.24.32";
 
   src = fetchFromGitHub {
     owner = "tursodatabase";
     repo = "libsql";
-    rev = "libsql-server-v${version}";
-    hash = "sha256-/0Sk55GBjUk/FeIoq/hGVaNGB0EM8CxygAXZ+ufvWKg=";
+    tag = "libsql-server-v${version}";
+    hash = "sha256-CiTJ9jLANBrncz/O/0k2/UI/qGCTGWLZuLQdncunlX8";
   };
 
   patches = [
@@ -39,7 +42,7 @@ rustPlatform.buildRustPackage rec {
     "sqld"
   ];
 
-  cargoHash = "sha256-hjU1Sbs68qX+Vv01Lku063OT1Sp7EMVxLyUkzcriRc0=";
+  cargoHash = "sha256-4Ma/17t+EmmjiYICBLhJifQez0dnwtjhlkmoQrAIG+s";
   useFetchCargoVendor = true;
 
   nativeBuildInputs = [
@@ -57,13 +60,25 @@ rustPlatform.buildRustPackage rec {
 
   env.ZSTD_SYS_USE_PKG_CONFIG = true;
 
+  # error[E0425]: cannot find function `consume_budget` in module `tokio::task`
+  env.RUSTFLAGS = "--cfg tokio_unstable";
+
   # requires a complex setup with podman for the end-to-end tests
   doCheck = false;
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+  versionCheckProgramArg = "--version";
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "LibSQL with extended capabilities like HTTP protocol, replication, and more";
     homepage = "https://github.com/tursodatabase/libsql";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dit7ya ];
+    mainProgram = "sqld";
   };
 }
