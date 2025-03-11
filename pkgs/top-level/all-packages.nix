@@ -17793,8 +17793,9 @@ with pkgs;
   mfcl3770cdwlpr = (callPackage ../misc/cups/drivers/brother/mfcl3770cdw { }).driver;
   mfcl3770cdwcupswrapper = (callPackage ../misc/cups/drivers/brother/mfcl3770cdw { }).cupswrapper;
 
-  samsung-unified-linux-driver_1_00_37 = callPackage ../misc/cups/drivers/samsung/1.00.37.nix { };
+  samsung-unified-linux-driver_1_00_39 = callPackage ../misc/cups/drivers/samsung/1.00.39.nix { };
   samsung-unified-linux-driver_4_01_17 = callPackage ../misc/cups/drivers/samsung/4.01.17.nix { };
+  samsung-unified-linux-driver_1 = res.samsung-unified-linux-driver_1_00_39;
   samsung-unified-linux-driver = res.samsung-unified-linux-driver_4_01_17;
 
   sane-backends = callPackage ../applications/graphics/sane/backends (config.sane or {});
