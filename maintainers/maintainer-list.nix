@@ -4342,6 +4342,11 @@
     githubId = 3956062;
     name = "Simon Lackerbauer";
   };
+  cilki = {
+    github = "cilki";
+    githubId = 10459406;
+    name = "Tyler Cook";
+  };
   cimm = {
     email = "8k9ft8m5gv@astil.be";
     github = "cimm";
