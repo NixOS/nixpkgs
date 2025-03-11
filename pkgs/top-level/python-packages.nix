@@ -6917,6 +6917,8 @@ self: super: with self; {
 
   jsonschema-path = callPackage ../development/python-modules/jsonschema-path { };
 
+  jsonschema-rs = callPackage ../development/python-modules/jsonschema-rs { };
+
   jsonschema-spec = callPackage ../development/python-modules/jsonschema-spec { };
 
   jsonschema-specifications = callPackage ../development/python-modules/jsonschema-specifications { };
@@ -8412,6 +8414,8 @@ self: super: with self; {
   minidump = callPackage ../development/python-modules/minidump { };
 
   miniful = callPackage ../development/python-modules/miniful { };
+
+  minify-html = callPackage ../development/python-modules/minify-html { };
 
   minikanren = callPackage ../development/python-modules/minikanren { };
 
@@ -16655,6 +16659,8 @@ self: super: with self; {
   tinytag = callPackage ../development/python-modules/tinytag { };
 
   tinytuya = callPackage ../development/python-modules/tinytuya { };
+
+  tiptapy = callPackage ../development/python-modules/tiptapy { };
 
   titlecase = callPackage ../development/python-modules/titlecase { };
 
