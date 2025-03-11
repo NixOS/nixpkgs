@@ -83,12 +83,12 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "torzu";
-  version = "unstable-2024-12-15";
+  version = "unstable-2025-02-22";
 
   src = fetchgit {
-    url = "https://notabug.org/litucks/torzu";
-    rev = "02cfee3f184e6fdcc3b483ef399fb5d2bb1e8ec7";
-    hash = "sha256-hAWMFzTNJGFcrXov5LKMdW9YWhsu7wueATmiuS7EVkI=";
+    url = "https://git.ynh.ovh/liberodark/torzu.git";
+    rev = "eaa9c9e3a46eb5099193b11d620ddfe96b6aec83";
+    hash = "sha256-KxLRXM8Y+sIW5L9oYMSeK95HRb30zGRRSfil9DO+utU=";
     fetchSubmodules = true;
   };
 
