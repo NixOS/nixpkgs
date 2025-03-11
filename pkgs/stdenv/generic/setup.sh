@@ -1644,8 +1644,7 @@ fixupPhase() {
 
     if [ -n "${propagatedUserEnvPkgs:-}" ]; then
         mkdir -p "${!outputBin}/nix-support"
-        # shellcheck disable=SC2086
-        printWords $propagatedUserEnvPkgs > "${!outputBin}/nix-support/propagated-user-env-packages"
+        printWords "${propagatedUserEnvPkgs[@]}" > "${!outputBin}/nix-support/propagated-user-env-packages"
     fi
 
     runHook postFixup
