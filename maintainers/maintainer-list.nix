@@ -22209,7 +22209,7 @@
     name = "sodiboo";
     github = "sodiboo";
     githubId = 37938646;
-    matrix = "@sodiboo:arcticfoxes.net";
+    matrix = "@sodiboo:gaysex.cloud";
   };
   softinio = {
     email = "code@softinio.com";
