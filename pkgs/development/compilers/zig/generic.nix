@@ -75,7 +75,6 @@ stdenv.mkDerivation (finalAttrs: {
   # OSVersionDetectionFail when the sandbox is enabled.
   __impureHostDeps = lib.optionals stdenv.hostPlatform.isDarwin [
     "/System/Library/CoreServices/.SystemVersionPlatform.plist"
-    "/System/Library/CoreServices/SystemVersion.plist"
   ];
 
   preBuild = ''
