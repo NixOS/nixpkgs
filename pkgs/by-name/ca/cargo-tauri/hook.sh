@@ -4,6 +4,18 @@
 export dontCargoBuild=true
 export dontCargoInstall=true
 
+tauriDisableUpdaterHook() {
+    echo "tauriDisableUpdaterHook"
+
+    @jq@ '.plugins.updater = {pubkey": "", "endpoints": []} |
+        .bundle.createUpdaterArtifacts = false' \
+        "${cargoRoot}/tauri.conf.json" | @sponge@ "${cargoRoot}/tauri.conf.json"
+
+    echo "Finished tauriDisableUpdaterHook"
+}
+
+postPatchHooks+=(tauriDisableUpdaterHook)
+
 tauriBuildHook() {
     echo "Executing tauriBuildHook"
 
