@@ -73,6 +73,10 @@ in
       description = "Kerberos Administration Daemon";
       partOf = [ "kerberos-server.target" ];
       wantedBy = [ "kerberos-server.target" ];
+      documentation = [
+        "man:kadmind(8)"
+        "info:heimdal"
+      ];
       serviceConfig = {
         ExecStart = "${package}/libexec/kadmind --config-file=/etc/heimdal-kdc/kdc.conf";
         Slice = "system-kerberos-server.slice";
@@ -85,6 +89,10 @@ in
       description = "Key Distribution Center daemon";
       partOf = [ "kerberos-server.target" ];
       wantedBy = [ "kerberos-server.target" ];
+      documentation = [
+        "man:kdc(8)"
+        "info:heimdal"
+      ];
       serviceConfig = {
         ExecStart = "${package}/libexec/kdc --config-file=/etc/heimdal-kdc/kdc.conf";
         Slice = "system-kerberos-server.slice";
@@ -97,6 +105,10 @@ in
       description = "Kerberos Password Changing daemon";
       partOf = [ "kerberos-server.target" ];
       wantedBy = [ "kerberos-server.target" ];
+      documentation = [
+        "man:kpasswdd(8)"
+        "info:heimdal"
+      ];
       serviceConfig = {
         ExecStart = "${package}/libexec/kpasswdd";
         Slice = "system-kerberos-server.slice";
