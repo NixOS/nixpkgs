@@ -3570,6 +3570,12 @@
     githubId = 32319131;
     name = "Brett L";
   };
+  bubblepipe = {
+    email = "bubblepipe42@gmail.com";
+    github = "bubblepipe";
+    githubId = 30717258;
+    name = "bubblepipe";
+  };
   buckley310 = {
     email = "sean.bck@gmail.com";
     matrix = "@buckley310:matrix.org";
@@ -8486,12 +8492,6 @@
     github = "gdinh";
     githubId = 34658064;
     name = "Grace Dinh";
-  };
-  gebner = {
-    email = "gebner@gebner.org";
-    github = "gebner";
-    githubId = 313929;
-    name = "Gabriel Ebner";
   };
   geluk = {
     email = "johan+nix@geluk.io";
@@ -19069,6 +19069,11 @@
     github = "proglottis";
     githubId = 74465;
     name = "James Fargher";
+  };
+  programmerlexi = {
+    name = "programmerlexi";
+    github = "programmerlexi";
+    githubId = 60185691;
   };
   progrm_jarvis = {
     email = "mrjarviscraft+nix@gmail.com";
