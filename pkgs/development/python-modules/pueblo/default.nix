@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.11";
 
-  # This tarball doesn't include tests unfortuneatly, and the GitHub tarball
+  # This tarball doesn't include tests unfortunately, and the GitHub tarball
   # could have been an alternative, but versioningit fails to detect the
   # version of it correctly, even with setuptools-scm and
   # SETUPTOOLS_SCM_PRETEND_VERSION = version added. Since this is a pure Python

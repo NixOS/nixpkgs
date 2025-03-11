@@ -32,7 +32,7 @@
 , readline
 , rpcsvc-proto
 , stdenv
-, substituteAll
+, replaceVars
 , xhtml1
 , json_c
 , writeScript
@@ -108,27 +108,23 @@ assert enableCeph -> isLinux;
 assert enableGlusterfs -> isLinux;
 assert enableZfs -> isLinux;
 
-# if you update, also bump <nixpkgs/pkgs/development/python-modules/libvirt/default.nix> and SysVirt in <nixpkgs/pkgs/top-level/perl-packages.nix>
 stdenv.mkDerivation rec {
   pname = "libvirt";
-  # NOTE: You must also bump:
-  # <nixpkgs/pkgs/development/python-modules/libvirt/default.nix>
-  # SysVirt in <nixpkgs/pkgs/top-level/perl-packages.nix>
-  version = "10.10.0";
+  # if you update, also bump <nixpkgs/pkgs/development/python-modules/libvirt/default.nix> and SysVirt in <nixpkgs/pkgs/top-level/perl-packages.nix>
+  version = "11.0.0";
 
   src = fetchFromGitLab {
-    owner = pname;
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-czo5G+zL4NFkYehTfymgSwk3bGWcrnike2MYPzeQOPg=";
+    owner = "libvirt";
+    repo = "libvirt";
+    tag = "v${version}";
     fetchSubmodules = true;
+    hash = "sha256-QxyOc/RbWZnjA4XIDNK7xZqBcP2ciHsOlszaa5pl6XA=";
   };
 
   patches = [
     ./0001-meson-patch-in-an-install-prefix-for-building-on-nix.patch
   ] ++ lib.optionals enableZfs [
-    (substituteAll {
-      src = ./0002-substitute-zfs-and-zpool-commands.patch;
+    (replaceVars ./0002-substitute-zfs-and-zpool-commands.patch {
       zfs = "${zfs}/bin/zfs";
       zpool = "${zfs}/bin/zpool";
     })

@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = false;
 
-  # The binary ends in games directoy
+  # The binary ends in games directory
   postInstall = ''
     mv $out/games $out/bin
     for contents in ${colobot-data}/share/games/colobot/*; do

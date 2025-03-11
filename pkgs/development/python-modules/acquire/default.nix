@@ -54,6 +54,13 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.full;
 
+  disabledTests = [
+    "test_collector_collect_path_with_dir"
+    "test_collector_collect_glob"
+    "test_misc_osx"
+    "test_misc_unix"
+  ];
+
   pythonImportsCheck = [ "acquire" ];
 
   meta = with lib; {

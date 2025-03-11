@@ -189,9 +189,9 @@ in
         description = ''
           Image identifier.
 
-          This corresponds to the IMAGE_ID field in os-release. See the
+          This corresponds to the `IMAGE_ID` field in {manpage}`os-release(5)`. See the
           upstream docs for more details on valid characters for this field:
-          https://www.freedesktop.org/software/systemd/man/latest/os-release.html#IMAGE_ID=
+          <https://www.freedesktop.org/software/systemd/man/latest/os-release.html#IMAGE_ID=>
 
           You would only want to set this option if you're build NixOS appliance images.
         '';
@@ -203,9 +203,9 @@ in
         description = ''
           Image version.
 
-          This corresponds to the IMAGE_VERSION field in os-release. See the
+          This corresponds to the `IMAGE_VERSION` field in {manpage}`os-release(5)`. See the
           upstream docs for more details on valid characters for this field:
-          https://www.freedesktop.org/software/systemd/man/latest/os-release.html#IMAGE_VERSION=
+          <https://www.freedesktop.org/software/systemd/man/latest/os-release.html#IMAGE_VERSION=>
 
           You would only want to set this option if you're build NixOS appliance images.
         '';

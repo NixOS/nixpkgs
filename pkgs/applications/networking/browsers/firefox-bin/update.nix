@@ -60,14 +60,14 @@ writeScript "update-${pname}" ''
 
   # this is a list of sha256 and tarballs for both arches
   # Upstream files contains python repr strings like b'somehash', hence the sed dance
-  shasums=`cat $HOME/shasums | sed -E s/"b'([a-f0-9]{64})'?(.*)"/'\1\2'/ | grep tar.xz`
+  shasums=`cat $HOME/shasums | sed -E s/"b'([a-f0-9]{64})'?(.*)"/'\1\2'/ | grep '\.tar\.[a-z0-9]\+'`
 
   cat > $tmpfile <<EOF
   {
     version = "$version";
     sources = [
   EOF
-  for arch in linux-x86_64 linux-i686; do
+  for arch in linux-x86_64 linux-i686 linux-aarch64; do
     # retriving a list of all tarballs for each arch
     #  - only select tarballs for current arch
     #  - only select tarballs for current version
@@ -75,7 +75,7 @@ writeScript "update-${pname}" ''
     #  - inteprets sha and path as 2 lines
     for line in `echo "$shasums" | \
                  grep $arch | \
-                 grep "${baseName}-$version.tar.xz$" | \
+                 grep "${baseName}-$version"'\.tar\.[a-z0-9]\+$' | \
                  tr " " ":"`; do
       # create an entry for every locale
       cat >> $tmpfile <<EOF

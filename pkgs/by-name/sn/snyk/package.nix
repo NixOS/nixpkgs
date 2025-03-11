@@ -8,7 +8,7 @@
 }:
 
 let
-  version = "1.1295.2";
+  version = "1.1295.4";
 in
 buildNpmPackage {
   pname = "snyk";
@@ -18,7 +18,7 @@ buildNpmPackage {
     owner = "snyk";
     repo = "cli";
     tag = "v${version}";
-    hash = "sha256-cHOIToO9xr+CNS0llwffaTUdhUqFbFcZcrPnBeD+JxE=";
+    hash = "sha256-71wyFHiRRWPE3C+6o742rggb44EwXF0k+SmuS1NWuIE=";
   };
 
   npmDepsHash = "sha256-RuIavwtTbgo5Ni7oGH2i5VAcVxfS4wKKSX6qHD8CHIw=";
@@ -26,6 +26,11 @@ buildNpmPackage {
   postPatch = ''
     substituteInPlace package.json \
       --replace-fail '"version": "1.0.0-monorepo"' '"version": "${version}"'
+  '';
+
+  postInstall = ''
+    # Remove dangling symlinks created during installation (remove -delete to just see the files, or -print '%l\n' to see the target
+    find -L $out -type l -print -delete
   '';
 
   nodejs = nodejs_20;

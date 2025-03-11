@@ -32,12 +32,12 @@ let
 in
 buildPythonPackage rec {
   pname = "graph-tool";
-  version = "2.85";
+  version = "2.91";
   format = "other";
 
   src = fetchurl {
     url = "https://downloads.skewed.de/graph-tool/graph-tool-${version}.tar.bz2";
-    hash = "sha256-GX0JUz5G7gtLemwlY1prQvCxIxpuyclo+1LN68j2H9o=";
+    hash = "sha256-PIUOkrNe/dce8qvSbZ/lwCEuwqB5kPvnMjQI4Sej/QI=";
   };
 
   postPatch = ''

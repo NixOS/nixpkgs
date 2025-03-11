@@ -23,15 +23,15 @@
 
 stdenv.mkDerivation rec {
   pname = "evolution-ews";
-  version = "3.54.2";
+  version = "3.54.3.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    hash = "sha256-77UZ2inoIX58t3dNQ9BGJiSMO+WKGUbIpjwyDl2IPNQ=";
+    hash = "sha256-GscHzyWRqERRJXViGkkwx2GyF028XsscihhSYpRqFPY=";
   };
 
   patches = [
-    # evolution-ews contains .so files loaded by evolution-data-server refering
+    # evolution-ews contains .so files loaded by evolution-data-server referring
     # schemas from evolution. evolution-data-server is not wrapped with
     # evolution's schemas because it would be a circular dependency with
     # evolution.

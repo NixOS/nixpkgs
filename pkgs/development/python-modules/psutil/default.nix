@@ -49,7 +49,7 @@ buildPythonPackage rec {
   # In addition to the issues listed above there are some that occure due to
   # our sandboxing which we can work around by disabling some tests:
   # - cpu_times was flaky on darwin
-  # - the other disabled tests are likely due to sanboxing (missing specific errors)
+  # - the other disabled tests are likely due to sandboxing (missing specific errors)
   pytestFlagsArray = [
     # Note: $out must be referenced as test import paths are relative
     "${placeholder "out"}/${python.sitePackages}/psutil/tests/test_system.py"

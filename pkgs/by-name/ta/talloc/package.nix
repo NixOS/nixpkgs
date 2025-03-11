@@ -16,11 +16,11 @@
 
 stdenv.mkDerivation rec {
   pname = "talloc";
-  version = "2.4.2";
+  version = "2.4.3";
 
   src = fetchurl {
     url = "mirror://samba/talloc/${pname}-${version}.tar.gz";
-    sha256 = "sha256-hez55GXiD5j5lQpS6aQR4UMgvFVfolfYdpe356mx2KY=";
+    sha256 = "sha256-3EbEC59GuzTdl/5B9Uiw6LJHt3qRhXZzPFKOg6vYVN0=";
   };
 
   nativeBuildInputs =
@@ -66,6 +66,11 @@ stdenv.mkDerivation rec {
   # If python-config is not found, the build falls back to using the sysconfig
   # module, which works correctly in all cases.
   PYTHON_CONFIG = "/invalid";
+
+  # https://reviews.llvm.org/D135402
+  NIX_LDFLAGS = lib.optional (
+    stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17"
+  ) "--undefined-version";
 
   # this must not be exported before the ConfigurePhase otherwise waf whines
   preBuild = lib.optionalString stdenv.hostPlatform.isMusl ''

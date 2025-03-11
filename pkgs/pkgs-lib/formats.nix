@@ -620,7 +620,7 @@ rec {
                   import xmltodict
 
                   with open(os.environ["valuePath"], "r") as f:
-                      print(xmltodict.unparse(json.load(f), full_document=${toString withHeader}, pretty=True, indent=" " * 2))
+                      print(xmltodict.unparse(json.load(f), full_document=${if withHeader then "True" else "False"}, pretty=True, indent=" " * 2))
                 '';
                 passAsFile = [
                   "value"

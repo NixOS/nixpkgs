@@ -21,9 +21,12 @@
 , runCommand
 , src ? null
 , monorepoSrc ? null
-, patches ? [ ]
 , enableManpages ? false
 , devExtraCmakeFlags ? [ ]
+, getVersionFile
+, fetchpatch
+, fetchpatch2
+, replaceVars
 , ...
 }:
 
@@ -52,7 +55,6 @@ stdenv.mkDerivation (rec {
   inherit version;
 
   src = src';
-  inherit patches;
 
   # There is no `lib` output because some of the files in `$out/lib` depend on files in `$out/bin`.
   # For example, `$out/lib/python3.12/site-packages/lldb/lldb-argdumper` is a symlink to `$out/bin/lldb-argdumper`.
@@ -60,6 +62,62 @@ stdenv.mkDerivation (rec {
   outputs = [ "out" "dev" ];
 
   sourceRoot = lib.optional (lib.versionAtLeast release_version "13") "${src.name}/${pname}";
+
+  patches =
+    let
+      resourceDirPatch = (replaceVars (getVersionFile "lldb/resource-dir.patch") {
+        clangLibDir = "${lib.getLib libclang}/lib";
+      }).overrideAttrs
+        (_: _: { name = "resource-dir.patch"; });
+    in
+    lib.optionals (lib.versionOlder release_version "15") [
+      # Fixes for SWIG 4
+      (fetchpatch2 {
+        url = "https://github.com/llvm/llvm-project/commit/81fc5f7909a4ef5a8d4b5da2a10f77f7cb01ba63.patch?full_index=1";
+        stripLen = 1;
+        hash = "sha256-Znw+C0uEw7lGETQLKPBZV/Ymo2UigZS+Hv/j1mUo7p0=";
+      })
+      (fetchpatch2 {
+        url = "https://github.com/llvm/llvm-project/commit/f0a25fe0b746f56295d5c02116ba28d2f965c175.patch?full_index=1";
+        stripLen = 1;
+        hash = "sha256-QzVeZzmc99xIMiO7n//b+RNAvmxghISKQD93U2zOgFI=";
+      })
+    ]
+    ++ lib.optionals (lib.versionOlder release_version "16") [
+      # Fixes for SWIG 4
+      (fetchpatch2 {
+        url = "https://github.com/llvm/llvm-project/commit/ba35c27ec9aa9807f5b4be2a0c33ca9b045accc7.patch?full_index=1";
+        stripLen = 1;
+        hash = "sha256-LXl+WbpmWZww5xMDrle3BM2Tw56v8k9LO1f1Z1/wDTs=";
+      })
+      (fetchpatch2 {
+        url = "https://github.com/llvm/llvm-project/commit/9ec115978ea2bdfc60800cd3c21264341cdc8b0a.patch?full_index=1";
+        stripLen = 1;
+        hash = "sha256-u0zSejEjfrH3ZoMFm1j+NVv2t5AP9cE5yhsrdTS1dG4=";
+      })
+
+      # FIXME: do we need this after 15?
+      (getVersionFile "lldb/procfs.patch")
+    ]
+    ++ lib.optional (lib.versionOlder release_version "18") (fetchpatch {
+      name = "libcxx-19-char_traits.patch";
+      url = "https://github.com/llvm/llvm-project/commit/68744ffbdd7daac41da274eef9ac0d191e11c16d.patch";
+      stripLen = 1;
+      hash = "sha256-QCGhsL/mi7610ZNb5SqxjRGjwJeK2rwtsFVGeG3PUGc=";
+    })
+    ++ lib.optionals (lib.versionOlder release_version "17") [
+      resourceDirPatch
+      (fetchpatch {
+        name = "add-cstdio.patch";
+        url = "https://github.com/llvm/llvm-project/commit/73e15b5edb4fa4a77e68c299a6e3b21e610d351f.patch";
+        stripLen = 1;
+        hash = "sha256-eFcvxZaAuBsY/bda1h9212QevrXyvCHw8Cr9ngetDr0=";
+      })
+    ]
+    ++ lib.optional (lib.versionOlder release_version "14") (
+      getVersionFile "lldb/gnu-install-dirs.patch"
+    )
+    ++ lib.optional (lib.versionAtLeast release_version "14") ./lldb/gnu-install-dirs.patch;
 
   nativeBuildInputs = [
     cmake

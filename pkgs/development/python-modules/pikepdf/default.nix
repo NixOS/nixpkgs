@@ -20,15 +20,13 @@
   python-xmp-toolkit,
   qpdf,
   setuptools,
-  substituteAll,
+  replaceVars,
 }:
 
 buildPythonPackage rec {
   pname = "pikepdf";
-  version = "9.5.1";
+  version = "9.5.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "pikepdf";
@@ -40,12 +38,11 @@ buildPythonPackage rec {
     postFetch = ''
       rm "$out/.git_archival.txt"
     '';
-    hash = "sha256-Tzfzn0P9wGD1BbJ96F5CJXOk2CiLcd5qK+G8gVmkVtE=";
+    hash = "sha256-VYbfElC4YJFoO5VV4DVQ2Cu91RcFlsnZmRqJaNH8qRw=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./paths.patch;
+    (replaceVars ./paths.patch {
       jbig2dec = lib.getExe' jbig2dec "jbig2dec";
       mutool = lib.getExe' mupdf-headless "mutool";
     })

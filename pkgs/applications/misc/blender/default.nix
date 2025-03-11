@@ -181,6 +181,7 @@ stdenv'.mkDerivation (finalAttrs: {
       "-DPYTHON_NUMPY_PATH=${python3Packages.numpy_1}/${python3.sitePackages}"
       "-DPYTHON_VERSION=${python3.pythonVersion}"
       "-DWITH_ALEMBIC=ON"
+      "-DWITH_ASSERT_ABORT=OFF"
       "-DWITH_BUILDINFO=OFF"
       "-DWITH_CODEC_FFMPEG=ON"
       "-DWITH_CODEC_SNDFILE=ON"

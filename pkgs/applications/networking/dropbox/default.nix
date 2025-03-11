@@ -1,18 +1,36 @@
-{ stdenv, lib, buildFHSEnv, writeScript, makeDesktopItem }:
+{
+  stdenv,
+  lib,
+  buildFHSEnv,
+  writeScript,
+  makeDesktopItem,
+}:
 
-let platforms = [ "i686-linux" "x86_64-linux" ]; in
+let
+  platforms = [
+    "i686-linux"
+    "x86_64-linux"
+  ];
+in
 
 assert lib.elem stdenv.hostPlatform.system platforms;
 
 # Dropbox client to bootstrap installation.
 # The client is self-updating, so the actual version may be newer.
 let
-  version = "206.3.6386";
+  version =
+    {
+      x86_64-linux = "217.4.4417";
+      i686-linux = "206.3.6386";
+    }
+    .${stdenv.hostPlatform.system};
 
-  arch = {
-    x86_64-linux = "x86_64";
-    i686-linux   = "x86";
-  }.${stdenv.hostPlatform.system};
+  arch =
+    {
+      x86_64-linux = "x86_64";
+      i686-linux = "x86";
+    }
+    .${stdenv.hostPlatform.system};
 
   installer = "https://clientupdates.dropboxstatic.com/dbx-releng/client/dropbox-lnx.${arch}-${version}.tar.gz";
 
@@ -22,7 +40,10 @@ let
     comment = "Sync your files across computers and to the web";
     desktopName = "Dropbox";
     genericName = "File Synchronizer";
-    categories = [ "Network" "FileTransfer" ];
+    categories = [
+      "Network"
+      "FileTransfer"
+    ];
     startupNotify = false;
     icon = "dropbox";
   };
@@ -42,12 +63,41 @@ buildFHSEnv {
   # Dropbox's internal limit-to-one-instance check also relies on the PID.
   unsharePid = false;
 
-  targetPkgs = pkgs: with pkgs; with xorg; [
-    libICE libSM libX11 libXcomposite libXdamage libXext libXfixes libXrender libXmu
-    libXxf86vm libGL libxcb xkeyboardconfig
-    curl dbus firefox-bin fontconfig freetype gcc glib gnutar libxml2 libxslt
-    procps zlib libgbm libxshmfence libpthreadstubs libappindicator
-  ];
+  targetPkgs =
+    pkgs:
+    with pkgs;
+    with xorg;
+    [
+      libICE
+      libSM
+      libX11
+      libXcomposite
+      libXdamage
+      libXext
+      libXfixes
+      libXrender
+      libXmu
+      libXxf86vm
+      libGL
+      libxcb
+      xkeyboardconfig
+      curl
+      dbus
+      firefox-bin
+      fontconfig
+      freetype
+      gcc
+      glib
+      gnutar
+      libxml2
+      libxslt
+      procps
+      zlib
+      libgbm
+      libxshmfence
+      libpthreadstubs
+      libappindicator
+    ];
 
   extraInstallCommands = ''
     mkdir -p "$out/share/applications"
@@ -85,12 +135,15 @@ buildFHSEnv {
     exec "$HOME/.dropbox-dist/dropboxd" "$@"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Online stored folders (daemon version)";
-    homepage    = "https://www.dropbox.com/";
-    license     = licenses.unfree;
-    maintainers = with maintainers; [ ttuegel ];
-    platforms   = [ "i686-linux" "x86_64-linux" ];
+    homepage = "https://www.dropbox.com/";
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ ttuegel ];
+    platforms = [
+      "i686-linux"
+      "x86_64-linux"
+    ];
     mainProgram = "dropbox";
   };
 }

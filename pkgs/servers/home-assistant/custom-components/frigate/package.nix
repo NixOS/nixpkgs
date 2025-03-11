@@ -2,24 +2,54 @@
   lib,
   fetchFromGitHub,
   buildHomeAssistantComponent,
-  pytz,
+
+  # dependencies
+  hass-web-proxy-lib,
+
+  # tests
+  homeassistant,
+  pytest-aiohttp,
+  pytest-cov-stub,
+  pytest-homeassistant-custom-component,
+  pytest-timeout,
+  pytestCheckHook,
 }:
 
 buildHomeAssistantComponent rec {
   owner = "blakeblackshear";
   domain = "frigate";
-  version = "5.4.0";
+  version = "5.8.0";
 
   src = fetchFromGitHub {
     owner = "blakeblackshear";
     repo = "frigate-hass-integration";
-    rev = "v${version}";
-    hash = "sha256-V2Y+xUAA/Lu7u82WUlUI5CFi9SGWe6ocVQtlXeVg2ZA=";
+    tag = "v${version}";
+    hash = "sha256-sQgi3F44eT/iL3cE9YuKyjJmE4nZM+OcwirUyl3maGo=";
   };
 
-  dependencies = [ pytz ];
+  dependencies = [ hass-web-proxy-lib ];
 
   dontBuild = true;
+
+  nativeCheckInputs =
+    [
+      homeassistant
+      pytest-aiohttp
+      pytest-cov-stub
+      pytest-homeassistant-custom-component
+      pytest-timeout
+      pytestCheckHook
+    ]
+    ++ (homeassistant.getPackages "mqtt" homeassistant.python.pkgs)
+    ++ (homeassistant.getPackages "stream" homeassistant.python.pkgs);
+
+  disabledTests = [
+    # uses deprecated and removed constants
+    # https://github.com/blakeblackshear/frigate-hass-integration/issues/860
+    "test_duplicate"
+    "test_options_advanced"
+    "test_options"
+  ];
 
   meta = with lib; {
     description = "Provides Home Assistant integration to interface with a separately running Frigate service";

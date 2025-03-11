@@ -6,17 +6,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "present";
-  version = "0.2.2";
+  version = "0.2.3";
 
   src = fetchFromGitHub {
     owner = "terror";
     repo = pname;
-    rev = version;
-    sha256 = "+kCHe84ikdCLd7j5YwP2j3xz+XTzzo/kLy+b9YUFDnI=";
+    rev = "43c10253dc31038614eba5824588dbf2716212d6A";
+    sha256 = "aMy8Qn1kUM7jmvD9nGjBk1XXQF1rTLfnPDJOh9d4uIg=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-NZUxgS4iCmXsQa2bOdFiw7EqAAT22bgJjYaDZjJgL6I=";
+  cargoHash = "sha256-rLLhZL8WQs68+nwCrJ9Dej3T1JU9t+ZrBhSMxAdOfbw=";
 
   # required for tests
   postPatch = ''

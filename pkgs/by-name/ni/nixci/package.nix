@@ -63,7 +63,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/srid/nixci";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
-      srid
       shivaraj-bh
       rsrohitsingh682
     ];

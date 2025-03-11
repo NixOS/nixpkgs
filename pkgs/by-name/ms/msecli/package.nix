@@ -38,13 +38,13 @@ stdenv.mkDerivation {
   '';
 
   buildPhase = ''
-    runHook prebuild
+    runHook preBuild
 
     # ignore the exit code as the installer
     # fails at optional steps due to read only FHS
     ${buildEnv}/bin/${buildEnv.pname} -c "./${src.name} --mode unattended --prefix bin || true"
 
-    runHook postbuild
+    runHook postBuild
   '';
 
   installPhase = ''

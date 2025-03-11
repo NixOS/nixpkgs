@@ -684,6 +684,8 @@ let
 
     ### H ###
 
+    h1 = callPackage ../development/ocaml-modules/h1 { };
+
     h2 = callPackage ../development/ocaml-modules/h2 { };
 
     h2-eio = callPackage ../development/ocaml-modules/h2/eio.nix { };
@@ -984,9 +986,7 @@ let
     lambda-term = callPackage ../development/ocaml-modules/lambda-term { };
 
     lambdapi = callPackage ../development/ocaml-modules/lambdapi {
-      why3 = pkgs.why3.override { ocamlPackages = self;
-        version = "1.7.2"; coqPackages = pkgs.coqPackages_8_18;
-      };
+      why3 = pkgs.why3.override { ocamlPackages = self; };
     };
 
     lambdasoup = callPackage ../development/ocaml-modules/lambdasoup { };
@@ -1208,6 +1208,8 @@ let
 
     mirage-logs = callPackage ../development/ocaml-modules/mirage-logs { };
 
+    mirage-mtime = callPackage ../development/ocaml-modules/mirage-mtime { };
+
     mirage-nat = callPackage ../development/ocaml-modules/mirage-nat { };
 
     mirage-net = callPackage ../development/ocaml-modules/mirage-net { };
@@ -1218,11 +1220,15 @@ let
 
     mirage-protocols = callPackage ../development/ocaml-modules/mirage-protocols { };
 
+    mirage-ptime = callPackage ../development/ocaml-modules/mirage-ptime { };
+
     mirage-random = callPackage ../development/ocaml-modules/mirage-random { };
 
     mirage-random-test = callPackage ../development/ocaml-modules/mirage-random-test { };
 
     mirage-runtime = callPackage ../development/ocaml-modules/mirage/runtime.nix { };
+
+    mirage-sleep = callPackage ../development/ocaml-modules/mirage-sleep { };
 
     mirage-time = callPackage ../development/ocaml-modules/mirage-time { };
 
@@ -1570,6 +1576,8 @@ let
 
     posix-base = callPackage ../development/ocaml-modules/posix/base.nix { };
 
+    posix-math2 = callPackage ../development/ocaml-modules/posix/math2.nix { };
+
     posix-socket = callPackage ../development/ocaml-modules/posix/socket.nix { };
 
     posix-time2 = callPackage ../development/ocaml-modules/posix/time2.nix { };
@@ -1865,7 +1873,7 @@ let
     ### T ###
 
     taglib = callPackage ../development/ocaml-modules/taglib {
-      inherit (pkgs) taglib;
+      inherit (pkgs) taglib_1;
     };
 
     tar = callPackage ../development/ocaml-modules/tar { };
@@ -2013,6 +2021,8 @@ let
     ### W ###
 
     wasm = callPackage ../development/ocaml-modules/wasm { };
+
+    wasm_of_ocaml-compiler = callPackage ../development/tools/ocaml/js_of_ocaml/compiler-wasm.nix { };
 
     wayland = callPackage ../development/ocaml-modules/wayland { };
 

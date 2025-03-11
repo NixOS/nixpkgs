@@ -119,7 +119,10 @@ in
         if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
           ''
             echo SUPPORTED-LOCALES=C.UTF-8/UTF-8 > ../glibc-2*/localedata/SUPPORTED
-            make -j''${NIX_BUILD_CORES:-1} localedata/install-locales
+            # Don't install C.utf-8 into the archive, but into $out/lib/locale: on non-NixOS
+            # systems with an empty /usr/lib/locale/locale-archive, glibc would fall back to
+            # $libdir/locale/C.utf-8 instead of the locale archive of pkgs.glibc. See also #347965.
+            make -j''${NIX_BUILD_CORES:-1} localedata/install-locale-files
           ''
         else
           lib.optionalString stdenv.buildPlatform.isLinux

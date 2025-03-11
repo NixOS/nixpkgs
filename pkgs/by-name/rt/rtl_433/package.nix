@@ -10,14 +10,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "24.10";
+  version = "25.02";
   pname = "rtl_433";
 
   src = fetchFromGitHub {
     owner = "merbanan";
     repo = "rtl_433";
     rev = version;
-    hash = "sha256-o4eAG6iYK4JXbh9JRv5NLmSxg396ErH++H0J8tTXiUA=";
+    hash = "sha256-S0jtcgbpS2NOezZJ0uq1pVj0nsa82F0NRmQD9glILz4=";
   };
 
   nativeBuildInputs = [

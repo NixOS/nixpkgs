@@ -58,7 +58,7 @@ buildPythonPackage rec {
     pytest
   ];
 
-  # Intentionaly not using pytest directly as it leads to JAX out-of-memory'ing
+  # Intentionally not using pytest directly as it leads to JAX out-of-memory'ing
   # https://github.com/patrick-kidger/lineax/blob/1909d190c1963d5f2d991508c1b2714f2266048b/tests/README.md
   checkPhase = ''
     runHook preCheck

@@ -1,43 +1,50 @@
 {
   lib,
   aiohttp,
-  async-timeout,
   asyncio-dgram,
   buildPythonPackage,
   certifi,
-  docutils,
   fetchFromGitHub,
+  frozenlist,
   poetry-core,
   pytest-aiohttp,
   pytest-asyncio,
   pytestCheckHook,
   pythonOlder,
   voluptuous,
+  typing-extensions,
+  yarl,
 }:
 
 buildPythonPackage rec {
   pname = "aioguardian";
-  version = "2023.12.0";
+  version = "2025.02.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "bachya";
     repo = "aioguardian";
     tag = version;
-    hash = "sha256-7fY8+aAxlDtOBLu8SadY5qiH6+RvxnFpOw1RXTonP2o=";
+    hash = "sha256-RoVD2O/OAk4l96kYEq7ZM/2QuckcPxDluf1MT4HdKc4=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  pythonRelaxDeps = [
+    "asyncio_dgram"
+    "typing-extensions"
+  ];
 
-  propagatedBuildInputs = [
+  build-system = [ poetry-core ];
+
+  dependencies = [
     aiohttp
-    async-timeout
     asyncio-dgram
     certifi
-    docutils
+    frozenlist
     voluptuous
+    typing-extensions
+    yarl
   ];
 
   nativeCheckInputs = [

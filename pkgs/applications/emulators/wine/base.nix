@@ -98,7 +98,7 @@ lib.optionalAttrs (buildScript != null) { builder = buildScript; }
   ++ lib.optionals gtkSupport    [ pkgs.gtk3 pkgs.glib ]
   ++ lib.optionals openclSupport [ pkgs.opencl-headers pkgs.ocl-icd ]
   ++ lib.optionals tlsSupport    [ pkgs.openssl pkgs.gnutls ]
-  ++ lib.optionals (openglSupport && !stdenv.hostPlatform.isDarwin) [ pkgs.libGLU pkgs.libGL pkgs.mesa.osmesa pkgs.libdrm ]
+  ++ lib.optionals (openglSupport && !stdenv.hostPlatform.isDarwin) [ pkgs.libGLU pkgs.libGL pkgs.libdrm ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin darwinFrameworks
   ++ lib.optionals (x11Support) (with pkgs.xorg; [
     libX11 libXcomposite libXcursor libXext libXfixes libXi libXrandr libXrender libXxf86vm

@@ -393,6 +393,7 @@ in
       serviceConfig = {
         Type = "oneshot";
         User = config.services.postgresql.superUser;
+        Restart = "on-failure";
       };
     };
 

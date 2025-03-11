@@ -52,7 +52,7 @@ python3Packages.buildPythonApplication rec {
   pname = "portmod";
   format = "pyproject";
 
-  # build the rust library independantly
+  # build the rust library independently
   prePatch = ''
     substituteInPlace setup.py \
       --replace "from setuptools_rust import Binding, RustExtension, Strip" "" \

@@ -14,9 +14,10 @@
   libXt,
   libpcap,
   libusb1,
+  llvmPackages,
 
   # nativeBuildInputs
-  boost186,
+  boost,
   flann,
   libpng,
   libtiff,
@@ -31,13 +32,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pcl";
-  version = "1.15.0-rc1";
+  version = "1.15.0";
 
   src = fetchFromGitHub {
     owner = "PointCloudLibrary";
     repo = "pcl";
     tag = "pcl-${finalAttrs.version}";
-    hash = "sha256-T/zvev1x4w87j6Zn9dpqwIQfmfg2MsHt2Xto8Z1vhuQ=";
+    hash = "sha256-UCuQMWGwe+YxeGj0Y6m5IT58NW2lAWN5RqyZnvyFSr4=";
   };
 
   # remove attempt to prevent (x86/x87-specific) extended precision use
@@ -58,10 +59,11 @@ stdenv.mkDerivation (finalAttrs: {
     libpcap
     libsForQt5.qtbase
     libusb1
+    llvmPackages.openmp
   ];
 
   propagatedBuildInputs = [
-    boost186
+    boost
     flann
     libpng
     libtiff
@@ -82,11 +84,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Open project for 2D/3D image and point cloud processing";
     changelog = "https://github.com/PointCloudLibrary/pcl/blob/pcl-${finalAttrs.version}/CHANGES.md";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ GaetanLepage ];
-    platforms = with lib.platforms; linux ++ darwin;
-    badPlatforms = [
-      # fatal error: 'omp.h' file not found
-      lib.systems.inspect.patterns.isDarwin
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+      usertam
     ];
+    platforms = with lib.platforms; linux ++ darwin;
   };
 })

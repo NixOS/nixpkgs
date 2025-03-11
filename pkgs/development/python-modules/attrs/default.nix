@@ -4,7 +4,7 @@
   buildPythonPackage,
   fetchPypi,
   pythonOlder,
-  substituteAll,
+  replaceVars,
   hatchling,
 }:
 
@@ -20,9 +20,8 @@ buildPythonPackage rec {
   };
 
   patches = [
-    (substituteAll {
+    (replaceVars ./remove-hatch-plugins.patch {
       # hatch-vcs and hatch-fancy-pypi-readme depend on pytest, which depends on attrs
-      src = ./remove-hatch-plugins.patch;
       inherit version;
     })
   ];

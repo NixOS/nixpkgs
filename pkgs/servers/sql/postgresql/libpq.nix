@@ -1,7 +1,7 @@
 {
   # utils
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   lib,
 
   # runtime dependencies
@@ -12,6 +12,7 @@
   # build dependencies
   bison,
   flex,
+  makeWrapper,
   perl,
   pkg-config,
 
@@ -29,11 +30,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libpq";
-  version = "17.2";
+  version = "17.4";
 
-  src = fetchurl {
-    url = "mirror://postgresql/source/v${finalAttrs.version}/postgresql-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-gu8nwK83UWldf2Ti2WNYMAX7tqDD32PQ5LQiEdcCEWQ=";
+  src = fetchFromGitHub {
+    owner = "postgres";
+    repo = "postgres";
+    # rev, not tag, on purpose: see generic.nix.
+    rev = "refs/tags/REL_17_4";
+    hash = "sha256-TEpvX28chR3CXiOQsNY12t8WfM9ywoZVX1e/6mj9DqE=";
   };
 
   __structuredAttrs = true;
@@ -62,6 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     bison
     flex
+    makeWrapper
     perl
     pkg-config
   ];
@@ -111,7 +116,20 @@ stdenv.mkDerivation (finalAttrs: {
     make -C src/interfaces/libpq install
     make -C src/port install
 
+    # Pretend pg_config is located in $out/bin to return correct paths, but
+    # actually have it in -dev to avoid pulling in all other outputs.
     moveToOutput bin/pg_config "$dev"
+    wrapProgram "$dev/bin/pg_config" --argv0 "$out/bin/pg_config"
+
+    # To prevent a "pg_config: could not find own program executable" error, we fake
+    # pg_config in the default output.
+    mkdir -p "$out/bin"
+    cat << EOF > "$out/bin/pg_config" && chmod +x "$out/bin/pg_config"
+    #!${stdenv.shell}
+    echo The real pg_config can be found in the -dev output.
+    exit 1
+    EOF
+
     moveToOutput "lib/*.a" "$dev"
 
     rm -rfv $out/share

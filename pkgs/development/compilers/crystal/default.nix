@@ -3,26 +3,23 @@
 , fetchFromGitHub
 , fetchurl
 , lib
-, substituteAll
+, replaceVars
   # Dependencies
 , boehmgc
 , coreutils
 , git
 , gmp
 , hostname
-, libatomic_ops
 , libevent
 , libiconv
 , libxml2
 , libyaml
 , libffi
-, llvmPackages_13
 , llvmPackages_15
 , llvmPackages_18
 , makeWrapper
 , openssl
 , pcre2
-, pcre
 , pkg-config
 , installShellFiles
 , readline
@@ -92,8 +89,7 @@ let
       };
 
       patches = [
-          (substituteAll {
-            src = ./tzdata.patch;
+          (replaceVars ./tzdata.patch {
             inherit tzdata;
           })
         ];
@@ -154,7 +150,7 @@ let
       nativeBuildInputs = [ binary makeWrapper which pkg-config llvmPackages.llvm installShellFiles ];
       buildInputs = [
         boehmgc
-        (if lib.versionAtLeast version "1.8" then pcre2 else pcre)
+        pcre2
         libevent
         libyaml
         zlib
@@ -245,16 +241,6 @@ let
     });
 in
 rec {
-  binaryCrystal_1_2 = genericBinary {
-    version = "1.2.2";
-    sha256s = {
-      x86_64-linux = "sha256-sW5nhihW/6Dkq95i3vJNWs2D1CtQhujhxVbgQCAas6E=";
-      aarch64-darwin = "sha256-4VB4yYGl1/YeYSsHOZq7fdeQ8IQMfloAPhEU0iKrvxs=";
-      x86_64-darwin = "sha256-4VB4yYGl1/YeYSsHOZq7fdeQ8IQMfloAPhEU0iKrvxs=";
-      aarch64-linux = "sha256-QgPKUDFyodqY1+b85AybSpbbr0RmfISdNpB08Wf34jo=";
-    };
-  };
-
   binaryCrystal_1_10 = genericBinary {
     version = "1.10.1";
     sha256s = {
@@ -265,47 +251,11 @@ rec {
     };
   };
 
-  crystal_1_2 = generic {
-    version = "1.2.2";
-    sha256 = "sha256-nyOXhsutVBRdtJlJHe2dALl//BUXD1JeeQPgHU4SwiU=";
-    binary = binaryCrystal_1_2;
-    llvmPackages = llvmPackages_13;
-    extraBuildInputs = [ libatomic_ops ];
-  };
-
-  crystal_1_7 = generic {
-    version = "1.7.3";
-    sha256 = "sha256-ULhLGHRIZbsKhaMvNhc+W74BwNgfEjHcMnVNApWY+EE=";
-    binary = binaryCrystal_1_2;
-    llvmPackages = llvmPackages_13;
-  };
-
-  crystal_1_8 = generic {
-    version = "1.8.2";
-    sha256 = "sha256-YAORdipzpC9CrFgZUFlFfjzlJQ6ZeA2ekVu8IfPOxR8=";
-    binary = binaryCrystal_1_2;
-    llvmPackages = llvmPackages_15;
-  };
-
-  crystal_1_9 = generic {
-    version = "1.9.2";
-    sha256 = "sha256-M1oUFs7/8ljszga3StzLOLM1aA4fSfVPQlsbuDHGd84=";
-    binary = binaryCrystal_1_2;
-    llvmPackages = llvmPackages_15;
-  };
-
   crystal_1_11 = generic {
     version = "1.11.2";
     sha256 = "sha256-BBEDWqFtmFUNj0kuGBzv71YHO3KjxV4d2ySTCD4HhLc=";
     binary = binaryCrystal_1_10;
     llvmPackages = llvmPackages_15;
-  };
-
-  crystal_1_12 = generic {
-    version = "1.12.1";
-    sha256 = "sha256-Q6uI9zPZ3IOGyUuWdC179GPktPGFPRbRWKtOF4YWCBw=";
-    binary = binaryCrystal_1_10;
-    llvmPackages = llvmPackages_18;
   };
 
   crystal_1_14 = generic {

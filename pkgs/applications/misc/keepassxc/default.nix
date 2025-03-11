@@ -2,13 +2,14 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   qttools,
 
+  apple-sdk_15,
   asciidoctor,
   botan3,
   curl,
+  darwinMinVersionHook,
   kio,
   libXi,
   libXtst,
@@ -44,13 +45,13 @@
 
 stdenv.mkDerivation rec {
   pname = "keepassxc";
-  version = "2.7.9";
+  version = "2.7.10";
 
   src = fetchFromGitHub {
     owner = "keepassxreboot";
     repo = "keepassxc";
     rev = version;
-    hash = "sha256-rnietdc8eDNTag0GaZ8VJb28JsKKD/qrQ0Gg6FMWpr0=";
+    hash = "sha256-FBoqCYNM/leN+w4aV0AJMx/G0bjHbI9KVWrnmq3NfaI=";
   };
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang (toString [
@@ -61,15 +62,7 @@ stdenv.mkDerivation rec {
 
   NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-rpath ${libargon2}/lib";
 
-  patches = [
-    ./darwin.patch
-
-    # https://github.com/keepassxreboot/keepassxc/issues/10391
-    (fetchpatch {
-      url = "https://github.com/keepassxreboot/keepassxc/commit/6a9ed210792ac60d9ed35cc702500e5ebbb95622.patch";
-      hash = "sha256-CyaVMfJ0O+5vgvmwI6rYbf0G7ryKFcLv3p4b/D6Pzw8=";
-    })
-  ];
+  patches = [ ./darwin.patch ];
 
   cmakeFlags =
     [
@@ -140,7 +133,14 @@ stdenv.mkDerivation rec {
       zlib
     ]
     ++ lib.optional (stdenv.hostPlatform.isDarwin && withKeePassTouchID) LocalAuthentication
-    ++ lib.optional stdenv.hostPlatform.isDarwin qtmacextras
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      qtmacextras
+
+      apple-sdk_15
+      # ScreenCaptureKit, required by livekit, is only available on 12.3 and up:
+      # https://developer.apple.com/documentation/screencapturekit
+      (darwinMinVersionHook "12.3")
+    ]
     ++ lib.optional stdenv.hostPlatform.isLinux libusb1
     ++ lib.optional withKeePassX11 qtx11extras;
 

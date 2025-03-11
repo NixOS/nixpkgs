@@ -43,7 +43,7 @@ let
     ++ lib.optional withQt (if (supportWayland) then qt5.qtwayland else qt5.qtbase);
 in stdenv.mkDerivation rec {
   pname = "zxtune";
-  version = "5081";
+  version = "5090";
 
   outputs = [ "out" ];
 
@@ -51,7 +51,7 @@ in stdenv.mkDerivation rec {
     owner = "zxtune";
     repo = "zxtune";
     rev = "r${version}";
-    hash = "sha256-gim73TF+zBnyxq2qu4uJnr0bCBfWlyYT/75UaZnij8c=";
+    hash = "sha256-2k1I3wGnUSMgwzxXY3SKhS8nBtrFU8zH9VaFwdWYgOU=";
   };
 
   passthru.updateScript = nix-update-script {

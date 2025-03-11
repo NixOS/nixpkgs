@@ -28,7 +28,7 @@
   libtool,
   autoconf-archive,
 
-  # List of { src name backend } attibute sets - see installFirmware below:
+  # List of { src name backend } attribute sets - see installFirmware below:
   extraFirmware ? [ ],
 
   # For backwards compatibility with older setups; use extraFirmware instead:

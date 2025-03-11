@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   version = "5.4";
 
   src = fetchurl {
-    url = "https://download.gnome.org/sources/libxml++/${version}/libxml++-${lib.versions.pad 3 version}.tar.xz";
+    url = "mirror://gnome/sources/libxml++/${version}/libxml++-${lib.versions.pad 3 version}.tar.xz";
     hash = "sha256-6aI8Q2aGqUaY0hOOa8uvhJEh1jv6D1DcNP77/XlWaEg=";
   };
 

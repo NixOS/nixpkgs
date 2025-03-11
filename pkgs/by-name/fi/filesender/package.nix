@@ -6,13 +6,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "filesender";
-  version = "2.52";
+  version = "2.53";
 
   src = fetchFromGitHub {
     owner = "filesender";
     repo = "filesender";
     tag = "filesender-${finalAttrs.version}";
-    hash = "sha256-Nl/3Kpo67dr5t/9+EWTyPmzi+sqW8pg5lzLC/jVtCkg=";
+    hash = "sha256-a9hA1aHuuSbFHggeKlh374/rEVszDdRToKLSiuVb66Q=";
   };
 
   patches = [
