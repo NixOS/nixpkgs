@@ -39,6 +39,7 @@ buildPythonPackage rec {
   meta = {
     description = "Simple Management Protocol (SMP) for remotely managing MCU firmware";
     homepage = "https://github.com/JPHutchins/smp";
+    changelog = "https://github.com/JPHutchins/smp/releases/tag/${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ otavio ];
   };
