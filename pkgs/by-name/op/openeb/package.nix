@@ -15,7 +15,8 @@
 }:
 
 stdenv.mkDerivation {
-  name = "openeb";
+  pname = "openeb";
+  version = "5.1.0-unstable-2025-02-19";
 
   src = fetchFromGitHub {
     owner = "prophesee-ai";
