@@ -31,21 +31,21 @@
 assert withMPI -> trilinos.withMPI;
 
 let
-  version = "7.8.0";
+  version = "7.9.0";
 
   # using fetchurl or fetchFromGitHub doesn't include the manuals
   # due to .gitattributes files
   xyce_src = fetchgit {
     url = "https://github.com/Xyce/Xyce.git";
     rev = "Release-${version}";
-    sha256 = "sha256-+aNy2bGuFQ517FZUvU0YqN0gmChRpVuFEmFGTCx9AgY=";
+    sha256 = "sha256-m8tHQYBs0hjepTDswrDJFRCPY941Ew98gYRPuQMdKZA=";
   };
 
   regression_src = fetchFromGitHub {
     owner = "Xyce";
     repo = "Xyce_Regression";
     rev = "Release-${version}";
-    sha256 = "sha256-Fxi/NpXXIw/bseWaLi2iQ4sg4S9Z+othGgSvQoxyJ9c=";
+    sha256 = "sha256-7Jvt2LUw2C201pMp9CHnhOwMzxU7imfrRKCb3wu3Okk=";
   };
 in
 
@@ -152,18 +152,18 @@ stdenv.mkDerivation rec {
     # Honor the TMP variable
     sed -i -E 's|/tmp|\$TMP|' $TEST_ROOT/TestScripts/suggestXyceTagList.sh
 
-    EXLUDE_TESTS_FILE=$TMP/exclude_tests.$$
+    EXCLUDE_TESTS_FILE=$TMP/exclude_tests.$$
     # Gold standard has additional ":R" suffix in result column label
-    echo "Output/HB/hb-step-tecplot.cir" >> $EXLUDE_TESTS_FILE
+    echo "Output/HB/hb-step-tecplot.cir" >> $EXCLUDE_TESTS_FILE
     # This test makes Xyce access /sys/class/net when run with MPI
-    ${lib.optionalString withMPI "echo \"CommandLine/command_line.cir\" >> $EXLUDE_TESTS_FILE"}
+    ${lib.optionalString withMPI "echo \"CommandLine/command_line.cir\" >> $EXCLUDE_TESTS_FILE"}
 
     $TEST_ROOT/TestScripts/run_xyce_regression \
       --output="$(pwd)/Xyce_Test" \
       --xyce_test="''${TEST_ROOT}" \
       --taglist="$($TEST_ROOT/TestScripts/suggestXyceTagList.sh "$XYCE_BINARY" | sed -E -e 's/TAGLIST=([^ ]+).*/\1/' -e '2,$d')" \
       --resultfile="$(pwd)/test_results" \
-      --excludelist="$EXLUDE_TESTS_FILE" \
+      --excludelist="$EXCLUDE_TESTS_FILE" \
       "''${EXECSTRING}"
   '';
 
@@ -188,6 +188,7 @@ stdenv.mkDerivation rec {
       # Use a public document class
       sed -i -E 's/\\documentclass\[11pt,report\]\{SANDreport\}/\\documentclass\[11pt,letterpaper\]\{scrreprt\}/' $d.tex
       sed -i -E 's/\\usepackage\[sand\]\{optional\}/\\usepackage\[report\]\{optional\}/' $d.tex
+      sed -i -E 's/\\SANDauthor/\\author/' $d.tex
       pushd $(dirname $d)
       make
       install -t $doc/share/doc/${pname}-${version}/ $(basename $d.pdf)
@@ -207,6 +208,6 @@ stdenv.mkDerivation rec {
     homepage = "https://xyce.sandia.gov";
     license = licenses.gpl3;
     maintainers = with maintainers; [ fbeffa ];
-    platforms = platforms.all;
+    platforms = [ "x86_64-linux" ];
   };
 }
