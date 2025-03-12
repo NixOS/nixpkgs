@@ -41,5 +41,7 @@ buildRubyGem rec {
     maintainers = with maintainers; [ shamilton ];
     mainProgram = "anystyle";
     platforms = platforms.unix;
+    # error: passing argument 2 of 'rb_hash_foreach' from incompatible pointer type [-Wincompatible-pointer-types]
+    broken = true;
   };
 }
