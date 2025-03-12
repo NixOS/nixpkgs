@@ -66,6 +66,16 @@ in
 
   env =
     base.env
+    // {
+      # Hydra can fail to build electron due to clang spamming deprecation
+      # warnings mid-build, causing the build log to grow beyond the limit
+      # of 64mb and then getting killed by Hydra.
+      # For some reason, the log size limit appears to only be enforced on
+      # aarch64-linux. x86_64-linux happily succeeds to build with ~180mb. To
+      # unbreak the build on h.n.o, we simply disable those warnings for now.
+      # https://hydra.nixos.org/build/283952243
+      NIX_CFLAGS_COMPILE = base.env.NIX_CFLAGS_COMPILE + " -Wno-deprecated";
+    }
     // lib.optionalAttrs (lib.versionAtLeast info.version "35") {
       # Needed for header generation in electron 35 and above
       ELECTRON_OUT_DIR = "Release";
