@@ -11,14 +11,13 @@
 
 stdenv.mkDerivation {
   pname = "parmetis";
-  version = "4.0.3";
+  version = "4.0.3-unstable-2023-03-26";
 
   src = fetchFromGitHub {
     owner = "KarypisLab";
     repo = "ParMETIS";
-    # this commit decoupled the build of parmetis from metis/gklib
-    rev = "978c43a1e7351f937705de70dd14535487d006bc";
-    hash = "sha256-4A5TNBlAlmRKYcWZhWOynDxq//0KWl4rI1GeRYSaMjw=";
+    rev = "8ee6a372ca703836f593e3c450ca903f04be14df";
+    hash = "sha256-L9SLyr7XuBUniMH3JtaBrUHIGzVTF5pr014xovQf2cI=";
   };
 
   nativeBuildInputs = [ cmake ];
