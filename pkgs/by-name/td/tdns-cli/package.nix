@@ -10,7 +10,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "rotty";
-    repo = pname;
+    repo = "tdns-cli";
     rev = "9a5455fe8a52f3f14dc55ef81511b479c8cd70ea";
     hash = "sha256-BGxkqlKg81izq4eOBEZFJ/MPb3UCSOo8ZTYTjtjierk=";
   };

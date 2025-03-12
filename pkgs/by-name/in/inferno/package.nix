@@ -6,7 +6,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "jonhoo";
-    repo = pname;
+    repo = "inferno";
     rev = "v${version}";
     hash = "sha256-lnNS3+2VZ+DgbmaM8/9X79vhqoxw3G8M9macLILX//w=";
     fetchSubmodules = true;

@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "findomain";
-    repo = pname;
+    repo = "findomain";
     tag = version;
     hash = "sha256-M6i62JI4HjaM0C2rSK8P5O19JeugFP5xIy1E6vE8KP4=";
   };

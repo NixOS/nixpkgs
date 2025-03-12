@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "str4d";
-    repo = pname;
+    repo = "age-plugin-yubikey";
     rev = "36290c74ebd2723832aae684d43b927c9104f744";
     hash = "sha256-vfemYGQnn3IzG7Y6iVKHZlYN+55/+A+N/GMG3TLs1h0=";
   };

@@ -10,7 +10,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "drahnr";
-    repo = pname;
+    repo = "cargo-spellcheck";
     tag = "v${version}";
     hash = "sha256-KiulbQhSg5CCZlts8FLsfOrN7nz16u3gRnQrWTFAzdc=";
   };

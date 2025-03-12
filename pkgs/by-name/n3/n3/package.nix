@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "BIC-MNI";
-    repo = pname;
+    repo = "N3";
     rev = "010fc2ac58ce1d67b8e6a863fac0809d3203cb9b";
     sha256 = "06hci7gzhy8p34ggvx7gah2k9yxpwhgmq1cgw8pcd1r82g4rg6kd";
   };

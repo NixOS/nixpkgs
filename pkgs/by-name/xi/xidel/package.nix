@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "benibela";
-    repo = pname;
+    repo = "xidel";
     rev = "6d5655c1d73b88ddeb32d2450a35ee36e4762bb8";
     hash = "sha256-9x2d5AKRBjocRawRHdeI4heIM5nb00/F/EIj+/to7ac=";
   };
