@@ -4349,6 +4349,12 @@
     github = "ciferkey";
     githubId = 101422;
   };
+  ciflire = {
+    name = "Léo Vesse";
+    email = "leovesse@gmail.com";
+    github = "Ciflire";
+    githubId = 39668077;
+  };
   cig0 = {
     name = "Martín Cigorraga";
     email = "cig0.github@gmail.com";
