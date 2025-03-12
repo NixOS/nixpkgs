@@ -229,6 +229,7 @@ in
 
     systemd.services.privoxy = {
       description = "Filtering web proxy";
+      documentation = [ "man:privoxy(8)" ];
       after = [
         "network.target"
         "nss-lookup.target"

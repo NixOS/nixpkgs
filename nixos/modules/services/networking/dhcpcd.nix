@@ -209,6 +209,8 @@ in
     in
       { description = "DHCP Client";
 
+        documentation = [ "man:dhcpcd(8)" ];
+
         wantedBy = [ "multi-user.target" ] ++ lib.optional (!hasDefaultGatewaySet) "network-online.target";
         wants = [ "network.target"  "resolvconf.service" ];
         after = [ "resolvconf.service" ];
