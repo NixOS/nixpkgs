@@ -40,7 +40,6 @@ buildGoModule rec {
     fixup-yarn-lock
     nodejs
     yarn
-    pkgs.gcc
     makeWrapper
   ];
 
@@ -48,7 +47,7 @@ buildGoModule rec {
     ldkNodeGo
     glalbyGo
     breezSdkGo
-    stdenv.cc.cc.lib
+    (lib.getLib stdenv.cc.cc)
   ];
 
   frontendYarnOfflineCache = fetchYarnDeps {
@@ -95,14 +94,17 @@ buildGoModule rec {
         breezSdkGo
         ldkNode
         ldkNodeGo
-        stdenv.cc.cc.lib
+        (lib.getLib stdenv.cc.cc)
       ]
     }
   '';
 
   meta = {
     description = "Control lightning wallets over nostr";
-    platforms = lib.platforms.x86_64 ++ lib.platforms.aarch64;
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
     homepage = "https://github.com/getAlby/hub";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ bleetube ];
