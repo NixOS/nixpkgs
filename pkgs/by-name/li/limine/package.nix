@@ -17,7 +17,7 @@
 let
   stdenv = llvmPackages.stdenv;
 
-  version = "9.0.1";
+  version = "9.2.0";
 
   hasI686 =
     (if targets == [ ] then stdenv.hostPlatform.isx86_32 else (builtins.elem "i686" targets))
@@ -64,12 +64,13 @@ assert lib.assertMsg (!pxeSupport || hasI686) "PXE builds are possible only for 
 stdenv.mkDerivation {
   inherit version configureFlags;
   pname = "limine";
+
   # We don't use the Git source but the release tarball, as the source has a
   # `./bootstrap` script performing network access to download resources.
   # Packaging that in Nix is very cumbersome.
   src = fetchurl {
     url = "https://github.com/limine-bootloader/limine/releases/download/v${version}/limine-${version}.tar.gz";
-    hash = "sha256-c27Hn9evHt7AqzUWPFYoIHD8UQR1ToJgX+1DcVbaMBU=";
+    hash = "sha256-tR946s/b9RcGAFa+dJk/+Bfzf5FmE2UgdygjDVkrEgw=";
   };
 
   enableParallelBuilding = true;
@@ -92,26 +93,30 @@ stdenv.mkDerivation {
     "man"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://limine-bootloader.org/";
+    changelog = "https://raw.githubusercontent.com/limine-bootloader/limine/refs/tags/v${version}/ChangeLog";
     description = "Limine Bootloader";
     mainProgram = "limine";
     # The platforms on that the Limine binary and helper tools can run, not
     # necessarily the platforms for that bootable images can be created.
-    platforms = platforms.unix;
-    badPlatforms = platforms.darwin;
+    platforms = lib.platforms.unix;
+    badPlatforms = lib.platforms.darwin;
     # Caution. Some submodules have different licenses.
-    license = [
-      licenses.asl20 # cc-runtime
-      licenses.bsd0 # freestanding-toolchain, freestanding-headers
-      licenses.bsd2 # limine, flanterm
-      licenses.mit # limine-efi, stb
-      licenses.zlib # tinf
+    license = with lib.licenses; [
+      asl20 # cc-runtime
+      bsd0 # freestanding-headers, freestanding-toolchain
+      bsd2 # limine, flanterm, libfdt, nyu-efi
+      bsd2Patent # nyu-efi
+      bsd3 # nyu-efi
+      bsdAxisNoDisclaimerUnmodified # nyu-efi
+      mit # nyu-efi, stb_image
+      zlib # tinf
     ];
-    maintainers = [
-      maintainers.lzcunt
-      maintainers.phip1611
-      maintainers.surfaceflinger
+    maintainers = with lib.maintainers; [
+      lzcunt
+      phip1611
+      surfaceflinger
     ];
   };
 }
