@@ -7,7 +7,7 @@
   ncurses,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "ax25-apps";
   version = "0.0.8-rc5-unstable-2021-05-13";
 
@@ -32,11 +32,11 @@ stdenv.mkDerivation rec {
     "--program-transform-name=s@^call$@ax&@;s@^listen$@ax&@"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "AX.25 ham radio applications";
     homepage = "https://linux-ax25.in-berlin.de/wiki/Main_Page";
-    license = licenses.lgpl21Only;
-    maintainers = with maintainers; [ sarcasticadmin ];
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl21Only;
+    maintainers = with lib.maintainers; [ sarcasticadmin ];
+    platforms = lib.platforms.linux;
   };
 }
