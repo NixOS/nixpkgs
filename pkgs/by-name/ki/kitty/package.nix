@@ -49,26 +49,28 @@
   nix-update-script,
   makeBinaryWrapper,
   autoSignDarwinBinariesHook,
+  cairo,
+  fetchpatch,
 }:
 
 with python3Packages;
 buildPythonApplication rec {
   pname = "kitty";
-  version = "0.39.1";
+  version = "0.40.0";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "kovidgoyal";
     repo = "kitty";
     tag = "v${version}";
-    hash = "sha256-Cgbs9tdEGKhDShNh3M8N1UdRJu4aMylr9xLOGLpDAZE=";
+    hash = "sha256-c+u+lMuokDR8kWM0an3jFPC/qoK2RZTKqHZtfEnqtnM=";
   };
 
   goModules =
     (buildGo123Module {
       pname = "kitty-go-modules";
       inherit src version;
-      vendorHash = "sha256-j5ToLPQeaf4xIaziBAROYZNvoaOx2TkTcuY95X4Neqc=";
+      vendorHash = "sha256-gBEzW2k1HDDmg1P1t6u90Lf1lLe1IKGpF2T9iCA31qs=";
     }).goModules;
 
   buildInputs =
@@ -109,6 +111,7 @@ buildPythonApplication rec {
       wayland
       dbus
       libGL
+      cairo
     ];
 
   nativeBuildInputs =
@@ -156,6 +159,18 @@ buildPythonApplication rec {
     # Skip `test_ssh_bootstrap_with_different_launchers` when launcher is `zsh` since it causes:
     # OSError: master_fd is in error condition
     ./disable-test_ssh_bootstrap_with_different_launchers.patch
+
+    # Remove after 0.40.1
+    (fetchpatch {
+      url = "https://github.com/kovidgoyal/kitty/commit/6171ca6.patch";
+      hash = "sha256-OBB0YcgEYgw3Jcg+Dgus6rwQ4gGL6GMr6pd7m9CGq9k=";
+    })
+
+    (fetchpatch {
+      url = "https://github.com/kovidgoyal/kitty/commit/8cbdd003e2.patch";
+      hash = "sha256-pKIJIqIdPfB4kQ6FtpYDumpgjJkMxoLT8fKzfgWYJnw=";
+    })
+
   ];
 
   hardeningDisable = [
@@ -327,6 +342,7 @@ buildPythonApplication rec {
       rvolosatovs
       Luflosi
       kashw2
+      leiserfg
     ];
   };
 }
