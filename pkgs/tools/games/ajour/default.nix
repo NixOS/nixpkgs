@@ -48,12 +48,8 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-oVaNLclU0EVNtxAASE8plXcC+clkwhBeb9pz1vXufV0=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "iced-0.3.0" = "sha256-cPQ0qqcdCMx2agSpAKSvVDBEoF/vUffGg1UkX85KmfY=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-/bmPqKxhPt9AGHRPGPE8JzaZKcTAWIRzvR3FiTCVMho=";
 
   nativeBuildInputs = [
     autoPatchelfHook
