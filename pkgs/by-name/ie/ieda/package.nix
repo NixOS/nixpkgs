@@ -111,7 +111,10 @@ stdenv.mkDerivation {
     description = "Open-source EDA infracstructure and tools from Netlist to GDS for ASIC design";
     homepage = "https://gitee.com/oscc-project/iEDA";
     license = lib.licenses.mulan-psl2;
-    maintainers = with lib.maintainers; [ xinyangli ];
+    maintainers = with lib.maintainers; [
+      xinyangli
+      Emin017
+    ];
     mainProgram = "iEDA";
     platforms = lib.platforms.linux;
   };
