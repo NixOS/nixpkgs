@@ -12,15 +12,15 @@
   zeromq,
 }:
 
-clangStdenv.mkDerivation rec {
+clangStdenv.mkDerivation (finalAttrs: {
   pname = "xeus-zmq";
-  version = "1.3.0";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "jupyter-xeus";
-    repo = "xeus-zmq";
-    rev = "${version}";
-    hash = "sha256-CrFb0LDb6akCfFnwMSa4H3D3A8KJx9Kiejw6VeV3IDs=";
+    repo = finalAttrs.pname;
+    tag = finalAttrs.version;
+    hash = "sha256-ODjgOSQfHb9HWhdiWa0seDx0ElhrhhJRj2RfiMaUQGU=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -43,4 +43,4 @@ clangStdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ thomasjm ];
     platforms = lib.platforms.all;
   };
-}
+})
