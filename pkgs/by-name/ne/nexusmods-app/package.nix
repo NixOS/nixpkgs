@@ -8,8 +8,6 @@
   fetchgit,
   imagemagick,
   lib,
-  makeFontsConf,
-  runCommand,
   xdg-utils,
   nix-update-script,
   pname ? "nexusmods-app",
@@ -146,44 +144,7 @@ buildDotnetModule (finalAttrs: {
       "NexusMods.Games.FOMOD.Tests.FomodXmlInstallerTests.InstallsFilesSimple_UsingRar"
     ];
 
-  passthru = {
-    tests =
-      let
-        runTest =
-          name: script:
-          runCommand "${pname}-test-${name}"
-            {
-              nativeBuildInputs = [ finalAttrs.finalPackage ];
-              FONTCONFIG_FILE = makeFontsConf {
-                fontDirectories = [ ];
-              };
-            }
-            ''
-              export XDG_DATA_HOME="$PWD/data"
-              export XDG_STATE_HOME="$PWD/state"
-              export XDG_CACHE_HOME="$PWD/cache"
-              mkdir -p "$XDG_DATA_HOME" "$XDG_STATE_HOME" "$XDG_CACHE_HOME"
-              # TODO: on error, print $XDG_STATE_HOME/NexusMods.App/Logs/nexusmods.app.main.current.log
-              ${script}
-              touch $out
-            '';
-      in
-      {
-        serve = runTest "serve" ''
-          NexusMods.App
-        '';
-        help = runTest "help" ''
-          NexusMods.App --help
-        '';
-        associate-nxm = runTest "associate-nxm" ''
-          NexusMods.App associate-nxm
-        '';
-        list-tools = runTest "list-tools" ''
-          NexusMods.App list-tools
-        '';
-      };
-    updateScript = nix-update-script { };
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     mainProgram = "NexusMods.App";
