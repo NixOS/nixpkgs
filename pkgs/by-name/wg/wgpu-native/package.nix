@@ -11,13 +11,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wgpu-native";
-  version = "24.0.0.1";
+  version = "24.0.0.2";
 
   src = fetchFromGitHub {
     owner = "gfx-rs";
     repo = "wgpu-native";
     tag = "v${version}";
-    hash = "sha256-hCGLOMsX83VxgNIhkBouN551XgH9Vd/ndaIZP0SY+kc=";
+    hash = "sha256-3Z9LBmFBVZD8e65OwBuzg1S/q/5Qq9Zu0tjiWPm2inc=";
     fetchSubmodules = true;
   };
 
