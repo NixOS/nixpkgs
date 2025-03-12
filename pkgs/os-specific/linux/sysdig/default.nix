@@ -82,8 +82,6 @@ stdenv.mkDerivation {
     openssl
     curl
     jq
-    gcc
-    elfutils
     tbb
     re2
     protobuf
@@ -93,9 +91,12 @@ stdenv.mkDerivation {
     nlohmann_json
     zstd
     uthash
-    clang
-    libbpf
+  ] ++ lib.optionals stdenv.isLinux [
     bpftools
+    elfutils
+    libbpf
+    clang
+    gcc
   ] ++ lib.optionals (kernel != null) kernel.moduleBuildDependencies;
 
   hardeningDisable = [
@@ -157,31 +158,29 @@ stdenv.mkDerivation {
       export KERNELDIR="${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
     '';
 
-  postInstall =
-    ''
-      # Fix the bash completion location
-      installShellCompletion --bash $out/etc/bash_completion.d/sysdig
-      rm $out/etc/bash_completion.d/sysdig
-      rmdir $out/etc/bash_completion.d
-      rmdir $out/etc
-    ''
-    + lib.optionalString (kernel != null) ''
-      make install_driver
-      kernel_dev=${kernel.dev}
-      kernel_dev=''${kernel_dev#${builtins.storeDir}/}
-      kernel_dev=''${kernel_dev%%-linux*dev*}
-      if test -f "$out/lib/modules/${kernel.modDirVersion}/extra/scap.ko"; then
-          sed -i "s#$kernel_dev#................................#g" $out/lib/modules/${kernel.modDirVersion}/extra/scap.ko
-      else
-          for i in $out/lib/modules/${kernel.modDirVersion}/{extra,updates}/scap.ko.xz; do
-            if test -f "$i"; then
-              xz -d $i
-              sed -i "s#$kernel_dev#................................#g" ''${i%.xz}
-              xz -9 ''${i%.xz}
-            fi
-          done
-      fi
-    '';
+  postInstall = lib.optionalString stdenv.isLinux ''
+    # Fix the bash completion location
+    installShellCompletion --bash $out/etc/bash_completion.d/sysdig
+    rm $out/etc/bash_completion.d/sysdig
+    rmdir $out/etc/bash_completion.d
+    rmdir $out/etc
+  '' + lib.optionalString (kernel != null) ''
+    make install_driver
+    kernel_dev=${kernel.dev}
+    kernel_dev=''${kernel_dev#${builtins.storeDir}/}
+    kernel_dev=''${kernel_dev%%-linux*dev*}
+    if test -f "$out/lib/modules/${kernel.modDirVersion}/extra/scap.ko"; then
+        sed -i "s#$kernel_dev#................................#g" $out/lib/modules/${kernel.modDirVersion}/extra/scap.ko
+    else
+        for i in $out/lib/modules/${kernel.modDirVersion}/{extra,updates}/scap.ko.xz; do
+          if test -f "$i"; then
+            xz -d $i
+            sed -i "s#$kernel_dev#................................#g" ''${i%.xz}
+            xz -9 ''${i%.xz}
+          fi
+        done
+    fi
+  '';
 
   meta = {
     description = "A tracepoint-based system tracing tool for Linux (with clients for other OSes)";
