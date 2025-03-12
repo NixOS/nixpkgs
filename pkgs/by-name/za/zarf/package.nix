@@ -1,10 +1,17 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles, stdenv, }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  stdenv,
+}:
 
 let
   # Convert UNIX timestamp to ISO 8601 format (Go's expected format)
   buildDate = builtins.toString builtins.currentTime;
 
-in buildGoModule rec {
+in
+buildGoModule rec {
   pname = "zarf";
   version = "0.49.1";
 
@@ -64,21 +71,22 @@ in buildGoModule rec {
     "k8s.io/component-base/version.buildDate=${buildDate}"
   ];
 
-  postInstall =
-    lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      export K9S_LOGS_DIR=$(mktemp -d)
-      installShellCompletion --cmd zarf \
-        --bash <($out/bin/zarf completion --no-log-file bash) \
-        --fish <($out/bin/zarf completion --no-log-file fish) \
-        --zsh  <($out/bin/zarf completion --no-log-file zsh)
-    '';
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    export K9S_LOGS_DIR=$(mktemp -d)
+    installShellCompletion --cmd zarf \
+      --bash <($out/bin/zarf completion --no-log-file bash) \
+      --fish <($out/bin/zarf completion --no-log-file fish) \
+      --zsh  <($out/bin/zarf completion --no-log-file zsh)
+  '';
 
   meta = with lib; {
-    description =
-      "DevSecOps for Air Gap & Limited-Connection Systems. https://zarf.dev";
+    description = "DevSecOps for Air Gap & Limited-Connection Systems. https://zarf.dev";
     mainProgram = "zarf";
     homepage = "https://github.com/zarf-dev/zarf.git";
     license = licenses.asl20;
-    maintainers = with maintainers; [ brandtkeller ragingpastry ];
+    maintainers = with maintainers; [
+      brandtkeller
+      ragingpastry
+    ];
   };
 }
