@@ -16249,10 +16249,6 @@ with pkgs;
   liquidwar5 = callPackage ../games/liquidwar/5.nix {
   };
 
-  macopix = callPackage ../games/macopix {
-    gtk = gtk2;
-  };
-
   maptool = callPackage ../games/maptool {
     # MapTool is fussy about which JRE it uses; OpenJDK will leave it hanging
     # at launch in a class initialization deadlock. MapTool ships Temurin with
