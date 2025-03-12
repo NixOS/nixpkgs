@@ -26,7 +26,6 @@ let
     substring
     versionOlder
 
-    fileContents
     readFile
 
     literalExpression
@@ -129,17 +128,18 @@ let
     in replaceSec' { };
 
   # Erlang/Elixir uses a somewhat special format for IP addresses
-  erlAddr = addr: fileContents
-    (pkgs.runCommand addr {
-      nativeBuildInputs = [ cfg.package.elixirPackage ];
-      code = ''
-        case :inet.parse_address('${addr}') do
-          {:ok, addr} -> IO.inspect addr
-          {:error, _} -> System.halt(65)
-        end
-      '';
-      passAsFile = [ "code" ];
-    } ''elixir "$codePath" >"$out"'');
+  erlAddr = addr:
+    let
+      isIPv4 = (lib.match "^([0-9]+\\.){3}[0-9]+$" addr) != null;
+    in
+    if isIPv4 then
+      "{${lib.concatStringsSep "," (lib.splitString "." addr)}}"
+    else
+      let
+        inherit (lib.network.ipv6.fromString addr) address;
+        parsed = lib.map (x: "16#${x}") (lib.splitString ":" address);
+      in
+      "{${lib.concatStringsSep "," parsed}}";
 
   configFile = format.generate "config.exs"
     (replaceSec
@@ -327,11 +327,11 @@ let
         AKKOMA_CONFIG_PATH="''${RUNTIME_DIRECTORY%%:*}/config.exs" \
         ERL_EPMD_ADDRESS="${cfg.dist.address}" \
         ERL_EPMD_PORT="${toString cfg.dist.epmdPort}" \
-        ERL_FLAGS=${escapeShellArg (escapeShellArgs ([
+        ERL_FLAGS="${escapeShellArgs ([
           "-kernel" "inet_dist_use_interface" (erlAddr cfg.dist.address)
           "-kernel" "inet_dist_listen_min" (toString cfg.dist.portMin)
           "-kernel" "inet_dist_listen_max" (toString cfg.dist.portMax)
-        ] ++ cfg.dist.extraFlags))} \
+        ] ++ cfg.dist.extraFlags)}" \
         RELEASE_COOKIE="$(<"''${RUNTIME_DIRECTORY%%:*}/cookie")" \
         RELEASE_NAME="akkoma" \
           exec "${cfg.package}/bin/$(basename "$0")" "$@"
