@@ -30,6 +30,29 @@ in
     services.kerberos_server = {
       enable = lib.mkEnableOption "the kerberos authentication server";
 
+      roles = {
+        kdc = mkOption {
+          type = types.bool;
+          default = true;
+          description = "Enable the Key Distribution Center daemon.";
+        };
+        administrationServer = mkOption {
+          type = types.bool;
+          default = true;
+          description = "Enable the administration server daemon (kadmind).";
+        };
+        passwordChangeServer = mkOption {
+          type = types.bool;
+          default = true;
+          description = ''
+            Enable the password changing server daemon (kpasswdd).
+
+            This option is meaningful only for Heimdal-based servers, as
+            kpasswdd is built into the MIT Kerberos kadmind daemon.
+          '';
+        };
+      };
+
       settings = mkOption {
         type = format.type;
         description = ''
