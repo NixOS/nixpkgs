@@ -50,6 +50,12 @@ stdenv.mkDerivation rec {
     hicolor-icon-theme
   ];
 
+  # FIXME: ugly hack for https://github.com/NixOS/nixpkgs/pull/389009
+  postConfigure = ''
+    substituteInPlace libtool \
+      --replace-warn 'for search_ext in .la $std_shrext .so .a' 'for search_ext in $std_shrext .so .a'
+  '';
+
   enableParallelBuilding = true;
 
   passthru.updateScript = mateUpdateScript { inherit pname; };
