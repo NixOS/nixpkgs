@@ -2,13 +2,17 @@
   lib,
   stdenv,
   fetchurl,
+
+  # native
+  glibcLocales,
   pkg-config,
-  glib,
   ronn,
+
+  # host
   curl,
+  glib,
   id3lib,
   libxml2,
-  glibcLocales,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -29,16 +33,16 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   buildInputs = [
-    glib
     curl
+    glib
     id3lib
     libxml2
   ];
   nativeBuildInputs = [
-    ronn
     # See comment on locale above
     glibcLocales
     pkg-config
+    ronn
   ];
 
   meta = with lib; {
