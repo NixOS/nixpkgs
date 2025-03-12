@@ -33,7 +33,6 @@ stdenv.mkDerivation {
     (lib.cmakeBool "SHARED" (!stdenv.hostPlatform.isStatic))
     (lib.cmakeBool "CMAKE_SKIP_BUILD_RPATH" true)
     (lib.cmakeFeature "CMAKE_C_COMPILER" "mpicc")
-    (lib.cmakeFeature "CMAKE_CXX_COMPILER" "mpicxx")
   ];
 
   meta = with lib; {
