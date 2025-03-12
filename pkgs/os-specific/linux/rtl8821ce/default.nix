@@ -5,11 +5,12 @@
   kernel,
   kernelModuleMakeFlags,
   bc,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rtl8821ce";
-  version = "${kernel.version}-unstable-2025-02-08";
+  version = "0-unstable-2025-02-08";
 
   src = fetchFromGitHub {
     owner = "tomaspinho";
@@ -35,6 +36,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   enableParallelBuilding = true;
+
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch=master" ]; };
 
   meta = {
     description = "Realtek rtl8821ce driver";
