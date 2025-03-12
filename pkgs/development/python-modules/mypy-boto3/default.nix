@@ -866,8 +866,8 @@ rec {
       "sha256-xBMBhCrnTV7sILg2/dXUy2PeNeCuNHkb7plAumD5Pq8=";
 
   mypy-boto3-medialive =
-    buildMypyBoto3Package "medialive" "1.37.10"
-      "sha256-06jnbgYHSKckhe7jsK/IrnFDGm8qLWdqysXvlrIwiHM=";
+    buildMypyBoto3Package "medialive" "1.37.11"
+      "sha256-9OoL9nE7IBwaaacAfJDBKTxeZu2Q55XgH6TQ6+H+B0w=";
 
   mypy-boto3-mediapackage =
     buildMypyBoto3Package "mediapackage" "1.37.0"
