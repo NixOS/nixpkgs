@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     domain = "code.videolan.org";
     owner = "videolan";
-    repo = pname;
+    repo = "x264";
     rev = "373697b467f7cd0af88f1e9e32d4f10540df4687";
     hash = "sha256-WWtS/UfKA4i1yakHErUnyT/3/+Wy2H5F0U0CmxW4ick=";
   };

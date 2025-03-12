@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "Usbac";
-    repo = pname;
+    repo = "quich";
     rev = "v${version}";
     sha256 = "sha256-4gsSjLZ7Z4ErNqe86Fy5IrzLMfvDyY18sE0yBnj9bvM=";
   };

@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "sondr3";
-    repo = pname;
+    repo = "git-ignore";
     rev = "v${version}";
     hash = "sha256-KIdhsbD9v2kCM2C/kSJCleyniEz4Bw7UxBsF762fnJs=";
   };
