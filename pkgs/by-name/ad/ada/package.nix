@@ -25,8 +25,6 @@ stdenv.mkDerivation rec {
     (lib.cmakeBool "ADA_TESTING" false)
   ];
 
-  passthru.updateScript = nix-update-script { };
-
   meta = {
     description = "WHATWG-compliant and fast URL parser written in modern C";
     homepage = "https://github.com/ada-url/ada";
