@@ -1,27 +1,32 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
 
   # native
+  autoreconfHook,
   glibcLocales,
   pkg-config,
-  ronn,
 
   # host
   curl,
   glib,
   id3lib,
   libxml2,
+  taglib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "castget";
-  version = "2.0.1";
+  # Using unstable version since it doesn't require `ronn`, see:
+  # https://github.com/mlj/castget/commit/e97b179227b4fc7e2e2bc5a373933624c0467daa
+  version = "2.0.1-unstable-2025-01-25";
 
-  src = fetchurl {
-    url = "http://savannah.nongnu.org/download/castget/castget-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-Q4tffsfjGkXtN1ZjD+RH9CAVrNpT7AkgL0hihya16HU=";
+  src = fetchFromGitHub {
+    owner = "mlj";
+    repo = "castget";
+    rev = "e97b179227b4fc7e2e2bc5a373933624c0467daa";
+    hash = "sha256-3t/N8JO36wjHuzIdWNstRWphC/ZR6KkZX0l9yKarS7c=";
   };
 
   # without this, the build fails because of an encoding issue with the manual page.
@@ -37,12 +42,13 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     id3lib
     libxml2
+    taglib
   ];
   nativeBuildInputs = [
+    autoreconfHook
     # See comment on locale above
     glibcLocales
     pkg-config
-    ronn
   ];
 
   meta = {
