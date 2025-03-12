@@ -8800,6 +8800,7 @@ with pkgs;
 
   gegl = callPackage ../development/libraries/gegl {
     inherit (darwin.apple_sdk.frameworks) OpenCL;
+    openexr = openexr_2;
   };
 
   gensio = darwin.apple_sdk_11_0.callPackage ../development/libraries/gensio { };
