@@ -35,6 +35,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "Tool to dump a git repository from a website";
     homepage = "https://github.com/arthaud/git-dumper";
+    changelog = "https://github.com/arthaud/git-dumper/releases/tag/${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ yechielw ];
     mainProgram = "git-dumper";
