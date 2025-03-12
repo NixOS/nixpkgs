@@ -64,6 +64,6 @@ stdenv.mkDerivation (finalAttrs: {
       mit
     ];
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ lzcunt ];
   };
 })
