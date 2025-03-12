@@ -13050,6 +13050,8 @@ with pkgs;
     hamlib = hamlib_4;
   };
 
+  djv = callPackage ../by-name/dj/djv/package.nix { openexr = openexr_2; };
+
   djview = libsForQt5.callPackage ../applications/graphics/djview { };
   djview4 = djview;
 
