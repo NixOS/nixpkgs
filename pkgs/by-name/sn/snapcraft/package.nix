@@ -104,6 +104,7 @@ python3Packages.buildPythonApplication rec {
   build-system = with python3Packages; [ setuptools-scm ];
 
   pythonRelaxDeps = [
+    "click"
     "craft-parts"
     "cryptography"
     "docutils"
