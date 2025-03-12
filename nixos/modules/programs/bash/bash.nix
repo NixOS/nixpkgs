@@ -91,8 +91,9 @@ in
             ((UID)) && PROMPT_COLOR="1;32m"
 
             # Emacs term mode doesn't support xterm title escape sequence (\e]0;)
+            local TITLE=""
             if [ ! -n "$INSIDE_EMACS" ]; then
-              local TITLE="\[\e]0;\u@\h: \w\a\]"
+              TITLE="\[\e]0;\u@\h: \w\a\]"
             fi
 
             PS1="\n\[\033[$PROMPT_COLOR\][$TITLE\u@\h:\w]\\$\[\033[0m\] "
