@@ -17,6 +17,7 @@
       ];
 
       services.xserver.enable = true;
+      programs.dconf.enable = true;
 
       # for better OCR
       environment.etc."icewm/prefoverride".text = ''
