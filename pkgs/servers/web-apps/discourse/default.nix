@@ -438,14 +438,6 @@ let
       runHook postInstall
     '';
 
-    meta = with lib; {
-      homepage = "https://www.discourse.org/";
-      platforms = platforms.linux;
-      maintainers = with maintainers; [ talyz ];
-      license = licenses.gpl2Plus;
-      description = "Discourse is an open source discussion platform";
-    };
-
     passthru = {
       inherit
         rubyEnv
@@ -466,6 +458,14 @@ let
         inherit pkgs;
         package = pkgs.discourse.override args;
       };
+    };
+
+    meta = with lib; {
+      homepage = "https://www.discourse.org/";
+      platforms = platforms.linux;
+      maintainers = with maintainers; [ talyz ];
+      license = licenses.gpl2Plus;
+      description = "Discourse is an open source discussion platform";
     };
   };
 in
