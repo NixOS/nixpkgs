@@ -445,6 +445,9 @@ let
         ./patches/cross-compile.patch
         # Optional patch to use SOURCE_DATE_EPOCH in compute_build_timestamp.py (should be upstreamed):
         ./patches/no-build-timestamps.patch
+        # Fix build with Pipewire 1.4
+        # Submitted upstream: https://webrtc-review.googlesource.com/c/src/+/380500
+        ./patches/webrtc-pipewire-1.4.patch
       ]
       ++ lib.optionals (packageName == "chromium") [
         # This patch is limited to chromium and ungoogled-chromium because electron-source sets
