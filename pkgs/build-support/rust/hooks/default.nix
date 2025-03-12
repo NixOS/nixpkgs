@@ -27,8 +27,6 @@
       name = "cargo-build-hook.sh";
       substitutions = {
         inherit (stdenv.targetPlatform.rust) rustcTarget;
-        inherit (rust.envVars) setEnv;
-
       };
       passthru.tests =
         {
@@ -46,7 +44,6 @@
       name = "cargo-check-hook.sh";
       substitutions = {
         inherit (stdenv.targetPlatform.rust) rustcTarget;
-        inherit (rust.envVars) setEnv;
       };
       passthru.tests =
         {
@@ -139,8 +136,6 @@
       ];
       substitutions = {
         inherit (stdenv.targetPlatform.rust) rustcTarget;
-        inherit (rust.envVars) setEnv;
-
       };
     } ./maturin-build-hook.sh
   ) { };
