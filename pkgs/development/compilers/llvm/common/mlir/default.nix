@@ -61,6 +61,7 @@ stdenv.mkDerivation rec {
     "-DLLVM_ENABLE_DUMP=ON"
     "-DLLVM_TABLEGEN_EXE=${buildLlvmTools.tblgen}/bin/llvm-tblgen"
     "-DMLIR_TABLEGEN_EXE=${buildLlvmTools.tblgen}/bin/mlir-tblgen"
+    (lib.cmakeBool "LLVM_BUILD_LLVM_DYLIB" (!stdenv.hostPlatform.isStatic))
   ] ++ lib.optionals stdenv.hostPlatform.isStatic [
     # Disables building of shared libs, -fPIC is still injected by cc-wrapper
     "-DLLVM_ENABLE_PIC=OFF"
