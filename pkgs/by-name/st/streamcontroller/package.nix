@@ -13,20 +13,28 @@
   xdg-desktop-portal,
   xdg-desktop-portal-gtk,
 }:
-stdenv.mkDerivation rec {
+let
+  # We have to hardcode revision because upstream often create multiple releases for the same version number.
+  # This is the commit hash that maps to 1.5.0-beta.8 released on 2025-03-12
+  rev = "de11d84afac7873044568606a8468c78d57aceda";
+in
+stdenv.mkDerivation {
   pname = "streamcontroller";
 
-  version = "1.5.0-beta.7";
-  # We have to hardcode revision because upstream often create multiple releases for the same version number.
-  # This is the commit hash that maps to 1.5.0-beta.7 released on 2024-11-20
-  rev = "45b5bc72f617c5aea306450d6592da66ade53568";
+  version = "1.5.0-beta.8";
 
   src = fetchFromGitHub {
     repo = "StreamController";
     owner = "StreamController";
     inherit rev;
-    hash = "sha256-tgbqURtqp1KbzOfXo4b4Dp3N8Sg8xcUSTwdEFXq+f6w=";
+    hash = "sha256-pE92/oX9iZYCIhwDkPkjPq/cDUQLUGs+Ou5rjFEIBpo=";
   };
+
+  # Some plugins needs to load things dynamically and in that case we won't find python3 without this
+  postPatch = ''
+    substituteInPlace src/backend/PluginManager/PluginBase.py \
+      --replace "python3" "${python3Packages.python.interpreter}"
+  '';
 
   # The installation method documented upstream
   # (https://streamcontroller.github.io/docs/latest/installation/) is to clone the repo,
@@ -54,7 +62,7 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/etc/udev/rules.d"
     cp ./udev.rules $out/etc/udev/rules.d/70-streamcontroller.rules
 
-    install -D ./flatpak/icon_256.png $out/share/icons/hicolor/256x256/apps/streamcontroller.png
+    install -D ./flatpak/icon_256.png $out/share/icons/hicolor/256x256/apps/com.core447.StreamController.png
 
     runHook postInstall
   '';
@@ -64,7 +72,7 @@ stdenv.mkDerivation rec {
       name = "StreamController";
       desktopName = "StreamController";
       exec = "streamcontroller";
-      icon = "streamcontroller";
+      icon = "com.core447.StreamController";
       comment = "Control your Elgato Stream Decks";
       categories = [ "Utility" ];
     })
