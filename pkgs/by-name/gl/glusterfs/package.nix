@@ -109,7 +109,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "gluster";
-    repo = pname;
+    repo = "glusterfs";
     rev = "v${version}";
     sha256 = "sha256-ZClMfozeFO3266fkuCSV04QwpZaYa8B0uq2lTPEN2rQ=";
   };

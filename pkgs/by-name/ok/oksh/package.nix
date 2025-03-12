@@ -12,8 +12,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "ibara";
-    repo = pname;
-    rev = "${pname}-${version}";
+    repo = "oksh";
+    rev = "oksh-${version}";
     hash = "sha256-iEV0ibEXwJioBaKN2Tuy0+SaVs8q0Ac4bImP8zhI7oI=";
   };
 

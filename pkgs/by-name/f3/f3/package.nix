@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "AltraMayor";
-    repo = pname;
+    repo = "f3";
     rev = "v${version}";
     sha256 = "17l5vspfcgfbkqg7bakp3gql29yb05gzawm8n3im30ilzdr53678";
   };
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     install -Dm555 -t $out/bin f3write.h2w log-f3wr
-    install -Dm444 -t $out/share/doc/${pname} LICENSE README.rst
+    install -Dm444 -t $out/share/doc/f3 LICENSE README.rst
   '';
 
   meta = with lib; {

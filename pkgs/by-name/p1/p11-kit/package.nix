@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "p11-glue";
-    repo = pname;
+    repo = "p11-kit";
     rev = version;
     hash = "sha256-2xDUvXGsF8x42uezgnvOXLVUdNNHcaE042HDDEJeplc=";
     fetchSubmodules = true;
