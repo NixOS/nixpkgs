@@ -8408,6 +8408,11 @@
     githubId = 293586;
     name = "Adam Gamble";
   };
+  gamedungeon = {
+    github = "GameDungeon";
+    githubId = 60719255;
+    name = "gamedungeon";
+  };
   gangaram = {
     email = "Ganga.Ram@tii.ae";
     github = "gangaram-tii";
@@ -22970,6 +22975,12 @@
     github = "Szczyp";
     githubId = 203195;
     name = "Szczyp";
+  };
+  szkiba = {
+    email = "iszkiba@gmail.com";
+    github = "szkiba";
+    githubId = 16244553;
+    name = "Iván Szkiba";
   };
   szlend = {
     email = "pub.nix@zlender.si";
