@@ -3,12 +3,12 @@
   stdenv,
   fetchurl,
   makeWrapper,
-  jdk11_headless,
+  jre_headless,
   nixosTests,
 }:
 
 let
-  jdk11 = jdk11_headless;
+  jre = jre_headless;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "metabase";
@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   installPhase = ''
     runHook preInstall
-    makeWrapper ${lib.getExe jdk11} $out/bin/metabase --add-flags "-jar $src"
+    makeWrapper ${lib.getExe jre} $out/bin/metabase --add-flags "-jar $src"
     runHook postInstall
   '';
 
