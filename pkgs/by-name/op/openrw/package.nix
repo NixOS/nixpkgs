@@ -17,22 +17,16 @@
 }:
 
 stdenv.mkDerivation {
-  version = "0-unstable-2024-04-20";
+  version = "0-unstable-2025-01-09";
   pname = "openrw";
 
   src = fetchFromGitHub {
     owner = "rwengine";
     repo = "openrw";
-    rev = "f10a5a8f7abc79a0728847e9a10ee104a1216047";
-    hash = "sha256-4ydwPh/pCzuZNNOyZuEEeX4wzI+dqTtAxUyXOXz76zk=";
+    rev = "556cdfbbf1fb5b3ddef5e43f36e97976be0252fc";
+    hash = "sha256-NYn89KGMITccVdqGo7NUS45HxXGurR9QDbVKEagjFqk=";
     fetchSubmodules = true;
   };
-
-  patches = [
-    # SoundSource.cpp: return AVERROR_EOF when buffer is empty
-    # https://github.com/rwengine/openrw/pull/747
-    ./fix-ffmpeg-6.patch
-  ];
 
   postPatch = lib.optional (stdenv.cc.isClang && (lib.versionAtLeast stdenv.cc.version "9")) ''
     substituteInPlace cmake_configure.cmake \
