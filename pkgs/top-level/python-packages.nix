@@ -8108,6 +8108,8 @@ self: super: with self; {
 
   markups = callPackage ../development/python-modules/markups { };
 
+  marqo = callPackage ../development/python-modules/marqo { };
+
   marshmallow = callPackage ../development/python-modules/marshmallow { };
 
   marshmallow-dataclass = callPackage ../development/python-modules/marshmallow-dataclass { };
