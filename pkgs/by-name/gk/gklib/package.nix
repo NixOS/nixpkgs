@@ -25,6 +25,9 @@ stdenv.mkDerivation {
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
+    (lib.cmakeBool "NO_X86" (!stdenv.hostPlatform.isx86))
+    # force metis/parmetis to use a portable random number generator that will produce the same partitioning results on all systems
+    (lib.cmakeBool "GKRAND" true)
   ];
 
   meta = {
