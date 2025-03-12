@@ -956,10 +956,6 @@ with pkgs;
 
   aioblescan = with python3Packages; toPythonApplication aioblescan;
 
-  ajour = callPackage ../tools/games/ajour {
-    inherit (plasma5Packages) kdialog;
-  };
-
   inherit (recurseIntoAttrs (callPackage ../tools/package-management/akku { }))
     akku akkuPackages;
 
