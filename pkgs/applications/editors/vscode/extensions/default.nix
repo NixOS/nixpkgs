@@ -392,7 +392,7 @@ let
           name = "astro-vscode";
           publisher = "astro-build";
           version = "2.15.4";
-          hash = "sha256-gpDbEasdrpY9Djd6g9lUYXcMFZRBMn7P4wW0/iU+qz8=";
+          hash = "sha256-dyv7GTscj57Uc+HgImXETKW8olGcWpL+FyAHoS36rmk=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/astro-build.astro-vscode/changelog";
