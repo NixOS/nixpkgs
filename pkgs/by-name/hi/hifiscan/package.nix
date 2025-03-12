@@ -20,8 +20,6 @@ python3Packages.buildPythonApplication {
     pyqtgraph
   ];
 
-  dontUseSetuptoolsCheck = true;
-
   src = fetchPypi {
     inherit pname version hash;
   };
