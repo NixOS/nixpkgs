@@ -31,6 +31,7 @@
   pipewire,
   libsecret,
   libpulseaudio,
+  runCommand,
   speechd-minimal,
 }:
 
@@ -87,7 +88,17 @@ let
   common = platform: {
     inherit pname version meta;
     src = fetcher version (get tags platform) (get hashes platform);
-    passthru.headers = headersFetcher version hashes.headers;
+    passthru =
+      let
+        headers-packed = headersFetcher version hashes.headers;
+      in
+      {
+        inherit headers-packed;
+        headers-unpacked = runCommand "electron-headers-unpacked" { } ''
+          mkdir -p $out
+          tar -C $out --strip-components=1 -xvf ${headers-packed}
+        '';
+      };
   };
 
   electronLibPath = lib.makeLibraryPath [

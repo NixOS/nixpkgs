@@ -15,6 +15,7 @@
   pipewire,
   libsecret,
   libpulseaudio,
+  runCommand,
   speechd-minimal,
   info,
 }:
@@ -40,7 +41,7 @@ in
 
   outputs = [
     "out"
-    "headers"
+    "headers-packed"
   ];
 
   nativeBuildInputs = base.nativeBuildInputs ++ [
@@ -219,7 +220,7 @@ in
     tar --sort=name \
       --mtime="@$SOURCE_DATE_EPOCH" \
       --owner=0 --group=0 --numeric-owner \
-      -czf $headers -C out/Release/gen node_headers
+      -czf $headers-packed -C out/Release/gen node_headers
 
     runHook postInstall
   '';
@@ -273,6 +274,10 @@ in
       # this was the only way I could get the package to properly reference itself
       passthru = prevAttrs.passthru // {
         dist = finalAttrs.finalPackage + "/libexec/electron";
+        headers-unpacked = runCommand "electron-headers-unpacked" { } ''
+          mkdir -p $out
+          tar -C $out --strip-components=1 -xvf ${finalAttrs.finalPackage.headers-packed}
+        '';
       };
     }
   )
