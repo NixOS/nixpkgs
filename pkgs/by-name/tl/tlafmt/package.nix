@@ -18,12 +18,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-765tp4wUh7G92vaoViufo6Kk2c/w2d1XjZ3aN5UUAv0=";
 
-  meta = with lib; {
-    description = "A formatter for TLA+ specs";
+  meta = {
+    description = "Formatter for TLA+ specs";
     homepage = "https://github.com/domodwyer/tlafmt";
-    license = licenses.apsl20;
-    maintainers = with maintainers; [ ciflire ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ ciflire ];
     mainProgram = "tlafmt";
   };
 }
-
