@@ -2,18 +2,24 @@
   lib,
   stdenv,
   fetchFromGitHub,
+
+  # nativeBuildInputs
   cmake,
   ninja,
-  sfml,
-  libGLU,
-  libGL,
-  bullet,
-  glm,
-  libmad,
-  openal,
+
+  # buildInputs
   SDL2,
   boost,
+  bullet,
   ffmpeg_6,
+  glm,
+  libGL,
+  libGLU,
+  libmad,
+  openal,
+  sfml,
+
+  unstableGitUpdater,
 }:
 
 stdenv.mkDerivation {
@@ -24,13 +30,13 @@ stdenv.mkDerivation {
     owner = "rwengine";
     repo = "openrw";
     rev = "556cdfbbf1fb5b3ddef5e43f36e97976be0252fc";
-    hash = "sha256-NYn89KGMITccVdqGo7NUS45HxXGurR9QDbVKEagjFqk=";
     fetchSubmodules = true;
+    hash = "sha256-NYn89KGMITccVdqGo7NUS45HxXGurR9QDbVKEagjFqk=";
   };
 
   postPatch = lib.optional (stdenv.cc.isClang && (lib.versionAtLeast stdenv.cc.version "9")) ''
     substituteInPlace cmake_configure.cmake \
-      --replace 'target_link_libraries(rw_interface INTERFACE "stdc++fs")' ""
+      --replace-fail 'target_link_libraries(rw_interface INTERFACE "stdc++fs")' ""
   '';
 
   nativeBuildInputs = [
@@ -39,28 +45,32 @@ stdenv.mkDerivation {
   ];
 
   buildInputs = [
-    sfml
-    libGLU
-    libGL
-    bullet
-    glm
-    libmad
-    openal
     SDL2
     boost
+    bullet
     ffmpeg_6
+    glm
+    libGL
+    libGLU
+    libmad
+    openal
+    sfml
   ];
 
-  meta = with lib; {
+  passthru = {
+    updateScript = unstableGitUpdater { };
+  };
+
+  meta = {
     description = "Unofficial open source recreation of the classic Grand Theft Auto III game executable";
     homepage = "https://github.com/rwengine/openrw";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     longDescription = ''
       OpenRW is an open source re-implementation of Rockstar Games' Grand Theft
       Auto III, a classic 3D action game first published in 2001.
     '';
-    maintainers = with maintainers; [ kragniz ];
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ kragniz ];
+    platforms = lib.platforms.all;
     mainProgram = "rwgame";
   };
 }
