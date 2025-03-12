@@ -14,8 +14,6 @@
   SDL2,
   boost,
   ffmpeg_6,
-  Cocoa,
-  OpenAL,
 }:
 
 stdenv.mkDerivation {
@@ -46,23 +44,18 @@ stdenv.mkDerivation {
     ninja
   ];
 
-  buildInputs =
-    [
-      sfml
-      libGLU
-      libGL
-      bullet
-      glm
-      libmad
-      openal
-      SDL2
-      boost
-      ffmpeg_6
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      OpenAL
-      Cocoa
-    ];
+  buildInputs = [
+    sfml
+    libGLU
+    libGL
+    bullet
+    glm
+    libmad
+    openal
+    SDL2
+    boost
+    ffmpeg_6
+  ];
 
   meta = with lib; {
     description = "Unofficial open source recreation of the classic Grand Theft Auto III game executable";
