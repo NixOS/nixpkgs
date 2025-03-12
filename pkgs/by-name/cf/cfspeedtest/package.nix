@@ -7,17 +7,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cfspeedtest";
-  version = "1.3.0";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "code-inflation";
-    repo = pname;
+    repo = "cfspeedtest";
     tag = "v${version}";
-    hash = "sha256-7FKUP6ZCIGmP/WX6lUwrUT7QEVo/LGJz46ZmqPeRTW8=";
+    hash = "sha256-86PZlTwqplKCVZl6IG2Qch+IMdfiTfpBhdNf00XIXbU=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-vp6+rdF6YVzeuAkLFnnkQFlc3gxqZn9MDGLIbiMpIwE=";
+  cargoHash = "sha256-54gIhBuVl77NDGotbgcOJsPxZL3XdJBnDEDbNpbVSNk=";
 
   meta = with lib; {
     description = "Unofficial CLI for speed.cloudflare.com";

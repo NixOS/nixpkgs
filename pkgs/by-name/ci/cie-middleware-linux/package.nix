@@ -25,7 +25,7 @@ let
 
   src = fetchFromGitHub {
     owner = "M0rf30";
-    repo = pname;
+    repo = "cie-middleware-linux";
     rev = version;
     sha256 = "sha256-2P/1hQTmeQ6qE7RgAeLOZTszcLcIpa2XX1S2ahXRHcc=";
   };

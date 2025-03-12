@@ -18,7 +18,7 @@
 #
 # * overriding a specific version of a haskell library because some package fails
 #   to build with a newer version. Such overrides have nothing to do with Nix itself,
-#   and they would also be neccessary outside of Nix if you use the same set of
+#   and they would also be necessary outside of Nix if you use the same set of
 #   package versions.
 # * disabling tests that fail due to missing files in the tarball or compile errors
 # * disabling tests that require too much memory
@@ -624,7 +624,7 @@ self: super: builtins.intersectAttrs super {
   #
   # Note: Simply patching the dynamic library (.so) of the GLUT build will *not* work, since the
   # RPATH also needs to be propagated when using static linking. GHC automatically handles this for
-  # us when we patch the cabal file (Link options will be recored in the ghc package registry).
+  # us when we patch the cabal file (Link options will be recorded in the ghc package registry).
   #
   # Additional note: nixpkgs' freeglut and macOS's OpenGL implementation do not cooperate,
   # so disable this on Darwin only

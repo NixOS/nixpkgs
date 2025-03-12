@@ -89,6 +89,8 @@ stdenv.mkDerivation (finalAttrs: {
       libffi
     ];
 
+  dontWrapQtApps = true;
+
   cmakeFlags = [
     (lib.cmakeBool "HEADLESS" (!enableQt))
     (lib.cmakeBool "USE_SYSTEM_FFMPEG" useSystemFfmpeg)
@@ -147,9 +149,16 @@ stdenv.mkDerivation (finalAttrs: {
         lib.optionals enableVulkan [
           "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ vulkan-loader ]}"
         ]
-        ++ lib.optionals (!enableQt) [
-          "--set SDL_VIDEODRIVER ${if forceWayland then "wayland" else "x11"}"
-        ]
+        ++ (
+          if enableQt then
+            [
+              "\${qtWrapperArgs[@]}"
+            ]
+          else
+            [
+              "--set SDL_VIDEODRIVER ${if forceWayland then "wayland" else "x11"}"
+            ]
+        )
       );
       binToBeWrapped = if enableQt then "PPSSPPQt" else "PPSSPPSDL";
     in

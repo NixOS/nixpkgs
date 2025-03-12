@@ -20,7 +20,6 @@ in
       services.cross-seed = {
         enable = true;
         settings = {
-          outputDir = "/var/lib/cross-seed/output";
           torrentDir = "/var/lib/torrents";
           torznab = [ ];
           useClientTorrents = false;
@@ -38,6 +37,7 @@ in
       start_all()
       machine.wait_for_unit("cross-seed.service")
       machine.wait_for_open_port(2468)
-      machine.succeed("curl --fail -XPOST http://localhost:2468/api/search?apiKey=${apiKey}")
+      # Check that the API is running
+      machine.succeed("curl --fail http://localhost:2468/api/ping?apiKey=${apiKey}")
     '';
 }

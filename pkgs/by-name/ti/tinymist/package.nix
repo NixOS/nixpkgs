@@ -3,7 +3,6 @@
   stdenv,
   rustPlatform,
   fetchFromGitHub,
-  fetchpatch,
   installShellFiles,
   pkg-config,
   libgit2,
@@ -15,33 +14,21 @@
   vscode-extensions,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tinymist";
   # Please update the corresponding vscode extension when updating
   # this derivation.
-  version = "0.12.20";
+  version = "0.13.4";
 
   src = fetchFromGitHub {
     owner = "Myriad-Dreamin";
     repo = "tinymist";
-    tag = "v${version}";
-    hash = "sha256-MFAbG0K71LbMAZKZ0Bo9ms6UTPNetORmHlBwYAusUtE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-vNkHaEKKixTCOxwCtg1ZWAGLqEoGZ8o4ElX0YXdGfsQ=";
   };
 
-  patches = [
-    # Fixes:
-    # cargo metadata failure: error: Package `tinymist-std v0.12.20 (/build/source/crates/tinymist-std)` does not have feature `wasm-bindgen`.
-    # It has an optional dependency with that name, but that dependency uses the "dep:" syntax in the features table, so it does not have an implicit feature with that name.
-    # https://github.com/Myriad-Dreamin/tinymist/pull/1363
-    (fetchpatch {
-      name = "fix-cargo-features";
-      url = "https://github.com/Myriad-Dreamin/tinymist/pull/1363/commits/96e0a15fa20f09734f2b8152977a1137f5469761.patch";
-      hash = "sha256-W3HzV0GGhGuX/V4rox32LSw6YJ2BLTAG16bF2pZ+xYs=";
-    })
-  ];
-
   useFetchCargoVendor = true;
-  cargoHash = "sha256-mk6JQEDgY8ERKq7dy+HlU7go4ImeJpGONOBSjjHdD4g=";
+  cargoHash = "sha256-P237gym5SG5wWW1EqUzOvuS20A2Z31oA+kJ8pC3Tsk8=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -103,9 +90,9 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = {
-    changelog = "https://github.com/Myriad-Dreamin/tinymist/blob/v${version}/CHANGELOG.md";
     description = "Tinymist is an integrated language service for Typst";
     homepage = "https://github.com/Myriad-Dreamin/tinymist";
+    changelog = "https://github.com/Myriad-Dreamin/tinymist/blob/v${finalAttrs.version}/editors/vscode/CHANGELOG.md";
     license = lib.licenses.asl20;
     mainProgram = "tinymist";
     maintainers = with lib.maintainers; [
@@ -113,4 +100,4 @@ rustPlatform.buildRustPackage rec {
       lampros
     ];
   };
-}
+})

@@ -55,6 +55,17 @@ in
         assertion = lib.length (lib.attrNames cfg.settings.realms) <= 1;
         message = "Only one realm per server is currently supported.";
       }
+      {
+        assertion =
+          let
+            inherit (builtins) attrValues elem length;
+            realms = attrValues cfg.settings.realms;
+            accesses = lib.concatMap (r: map (a: a.access) r.acl) realms;
+            property = a: !elem "all" a || (length a <= 1) || (length a <= 2 && elem "get-keys" a);
+          in
+          builtins.all property accesses;
+        message = "Cannot specify \"all\" in a list with additional permissions other than \"get-keys\"";
+      }
     ];
 
     systemd.slices.system-kerberos-server = { };

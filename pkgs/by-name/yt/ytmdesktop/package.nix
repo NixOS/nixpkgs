@@ -94,7 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
     downloadPage = "https://github.com/ytmdesktop/ytmdesktop/releases";
     homepage = "https://ytmdesktop.app/";
     license = lib.licenses.gpl3Only;
-    mainProgram = finalAttrs.pname;
+    mainProgram = "ytmdesktop";
     maintainers = [ lib.maintainers.cjshearer ];
     inherit (electron_33.meta) platforms;
     # While the files we extract from the .deb are cross-platform (javascript), the installation

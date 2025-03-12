@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ++ [
     # Backport of https://gitlab.kitware.com/cmake/cmake/-/merge_requests/9900
-    # Needed to corretly link curl in pkgsStatic.
+    # Needed to correctly link curl in pkgsStatic.
     ./008-FindCURL-Add-more-target-properties-from-pkg-config.diff
   ];
 

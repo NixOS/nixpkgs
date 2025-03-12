@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
 
   qtWrapperArgs = [
     "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libsecret ]}"
-    # make xdg-open overrideable at runtime
+    # make xdg-open overridable at runtime
     "--suffix PATH : ${lib.makeBinPath [ xdg-utils ]}"
   ];
 

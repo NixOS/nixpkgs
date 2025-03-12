@@ -8,7 +8,10 @@ mkDerivation {
   path = "sys/arch/amd64/stand";
   extraPaths = [ "sys" ];
 
-  patches = [ ../sys/initpath.patch ];
+  patches = [
+    ../sys/initpath.patch
+    ./cmd-buff-size.patch
+  ];
 
   # gcc compat
   postPatch = ''

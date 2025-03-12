@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "ucscGenomeBrowser";
-    repo = pname;
+    repo = "kent";
     rev = "v${version}_base";
     hash = "sha256-OM/noraW2X8WV5wqWEFiI5/JPOBmsp0fTeDdcZoXxAA=";
   };

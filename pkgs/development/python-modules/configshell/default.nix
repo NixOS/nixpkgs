@@ -2,15 +2,18 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
+  pythonOlder,
+  hatchling,
+  hatch-vcs,
   pyparsing,
-  six,
-  urwid,
 }:
 
 buildPythonPackage rec {
   pname = "configshell";
   version = "2.0.0";
-  format = "setuptools";
+  pyproject = true;
+
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "open-iscsi";
@@ -19,10 +22,13 @@ buildPythonPackage rec {
     hash = "sha256-lP3WT9ASEj6WiCrurSU/e9FhIaeoQW/n9hi1XZMnV4Q=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    hatchling
+    hatch-vcs
+  ];
+
+  dependencies = [
     pyparsing
-    six
-    urwid
   ];
 
   # Module has no tests

@@ -32,6 +32,12 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
+  env = lib.optionalAttrs stdenv.hostPlatform.isFreeBSD {
+    # This can be removed when we switch to libcxx from llvm 20
+    # https://github.com/llvm/llvm-project/pull/122361
+    NIX_CFLAGS_COMPILE = "-D_XOPEN_SOURCE=700";
+  };
+
   buildInputs = [ gtest ];
 
   cmakeFlags = [

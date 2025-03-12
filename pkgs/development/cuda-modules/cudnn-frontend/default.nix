@@ -59,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   # TODO: As a header-only library, we should make sure we have an `include` directory or similar which is not a
-  # superset of the `out` (`bin`) or `dev` outputs (whih is what the multiple-outputs setup hook does by default).
+  # superset of the `out` (`bin`) or `dev` outputs (which is what the multiple-outputs setup hook does by default).
   outputs =
     [
       "out"

@@ -26,7 +26,7 @@ browser: args:
     buildCommand =
       old.buildCommand
       + ''
-        wrapProgram $out/bin/${browser.binaryName} \
+        wrapProgram "$executablePath" \
           --prefix LD_LIBRARY_PATH ':' "${lib.makeLibraryPath [ gpgme ]}" \
           --prefix PATH ':' "${lib.makeBinPath [ gnupg ]}"
       '';

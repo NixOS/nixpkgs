@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     # Allow building tools separately from the library.
-    # This is needed to break the depenency cycle.
+    # This is needed to break the dependency cycle.
     (replaceVars ./standalone-tools.patch {
       inherit version;
     })

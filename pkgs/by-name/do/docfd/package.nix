@@ -8,7 +8,7 @@
   dune_3,
   makeWrapper,
   pandoc,
-  poppler_utils,
+  poppler-utils,
   testers,
   docfd,
 }:
@@ -61,7 +61,7 @@ buildDunePackage' rec {
     wrapProgram $out/bin/docfd --prefix PATH : "${
       lib.makeBinPath [
         pandoc
-        poppler_utils
+        poppler-utils
       ]
     }"
   '';

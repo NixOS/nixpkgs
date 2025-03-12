@@ -47,17 +47,18 @@ python3Packages.buildPythonApplication rec {
   '';
 
   postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace-fail "pysdl2-dll # Don't rely on system SDL2 https://github.com/py-sdl/py-sdl2#requirements" "" \
-      --replace-fail "opencc;                      sys_platform != 'win32' # optional" "" \
-      --replace-fail 'tekore # optional' ""
-
     substituteInPlace src/tauon/__main__.py \
       --replace-fail 'install_mode = False' 'install_mode = True'
 
     substituteInPlace src/tauon/t_modules/t_phazor.py \
       --replace-fail 'base_path = Path(pctl.install_directory).parent.parent / "build"' 'base_path = Path("${placeholder "out"}/${python3Packages.python.sitePackages}")'
   '';
+
+  pythonRemoveDeps = [
+    "pysdl2-dll"
+    "opencc"
+    "tekore"
+  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -138,7 +139,7 @@ python3Packages.buildPythonApplication rec {
     description = "Linux desktop music player from the future";
     mainProgram = "tauon";
     homepage = "https://tauonmusicbox.rocks/";
-    changelog = "https://github.com/Taiko2k/TauonMusicBox/releases/tag/v${version}";
+    changelog = "https://github.com/Taiko2k/Tauon/releases/tag/v${version}";
     license = licenses.gpl3;
     maintainers = with maintainers; [ jansol ];
     platforms = platforms.linux ++ platforms.darwin;

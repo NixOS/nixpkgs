@@ -73,7 +73,7 @@ buildPythonPackage rec {
     fetchSubmodules = true;
   };
 
-  # See https://docs.cupy.dev/en/v10.2.0/reference/environment.html. Seting both
+  # See https://docs.cupy.dev/en/v10.2.0/reference/environment.html. Setting both
   # CUPY_NUM_BUILD_JOBS and CUPY_NUM_NVCC_THREADS to NIX_BUILD_CORES results in
   # a small amount of thrashing but it turns out there are a large number of
   # very short builds and a few extremely long ones, so setting both ends up

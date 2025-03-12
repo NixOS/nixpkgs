@@ -38,7 +38,7 @@ openvpn.overrideAttrs (
 
     configureFlags =
       [
-        # Assignement instead of appending to make sure to use exactly the flags required by mullvad
+        # Assignment instead of appending to make sure to use exactly the flags required by mullvad
 
         # Flags are based on https://github.com/mullvad/mullvadvpn-app-binaries/blob/main/Makefile#L17
         "--enable-static"

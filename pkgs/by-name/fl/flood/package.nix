@@ -12,7 +12,7 @@ buildNpmPackage rec {
 
   src = fetchFromGitHub {
     owner = "jesec";
-    repo = pname;
+    repo = "flood";
     rev = "v${version}";
     hash = "sha256-sIwXx9DA+vRW4pf6jyqcsla0khh8fdpvVTZ5pLrUhhc=";
   };

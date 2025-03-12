@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "sqltrie";
-  version = "0.11.1";
+  version = "0.11.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "iterative";
     repo = pname;
     tag = version;
-    hash = "sha256-elW1hCB0sXc+GyIO0358EwcIn8J1qJZE2pOLAxqxhwA=";
+    hash = "sha256-D1vYXyh/i0wy7sttW117vsMbUlQJ/mq7rlxLMJWoki0=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];

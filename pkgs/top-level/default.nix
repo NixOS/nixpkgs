@@ -148,7 +148,7 @@ in let
   # experience here.)
   nixpkgsFun = newArgs: import ./. (args // newArgs);
 
-  # Partially apply some arguments for building bootstraping stage pkgs
+  # Partially apply some arguments for building bootstrapping stage pkgs
   # sets. Only apply arguments which no stdenv would want to override.
   allPackages = newArgs: import ./stage.nix ({
     inherit lib nixpkgsFun;

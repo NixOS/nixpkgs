@@ -162,7 +162,7 @@ in
         };
         environment = {
           NODE_ENV = "production";
-          NODE_EXTRA_CA_CERTS = "/etc/ssl/certs/ca-certificates.crt";
+          NODE_EXTRA_CA_CERTS = config.security.pki.caBundle;
           HOSTNAME = cfg.host;
           PORT = toString cfg.port;
         };

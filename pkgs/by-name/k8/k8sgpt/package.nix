@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "k8sgpt";
-  version = "0.3.49";
+  version = "0.3.50";
 
   src = fetchFromGitHub {
     owner = "k8sgpt-ai";
     repo = "k8sgpt";
     rev = "v${version}";
-    hash = "sha256-Ytn/Ycb0k0odEjp5meTX4pls/vPM+eR7bMzuXHYyJwQ=";
+    hash = "sha256-KPS30xoOmGwfws5dlY/77FblVqKJWa4182YIsdiZxA8=";
   };
 
   vendorHash = "sha256-QwLIDUtNMJarwQYWSp739Nfgf7lGmohAXaMga4g93DI=";

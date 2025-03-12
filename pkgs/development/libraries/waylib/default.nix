@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "waylib";
-  version = "0.6.10-alpha";
+  version = "0.6.12";
 
   src = fetchFromGitHub {
     owner = "vioken";
     repo = "waylib";
     rev = finalAttrs.version;
-    hash = "sha256-cs4nPYMIOppVuna5qBbgGtPdmVhMrhKkVG7L09NmB/U=";
+    hash = "sha256-wZPya3F0CMXDb/b7d1A2cn55rzQTKwfPMTx+BTRniFQ=";
   };
 
   depsBuildBuild = [

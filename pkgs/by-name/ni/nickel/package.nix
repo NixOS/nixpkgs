@@ -3,17 +3,18 @@
   rustPlatform,
   fetchFromGitHub,
   python3,
+  versionCheckHook,
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nickel";
   version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "tweag";
     repo = "nickel";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-CnEGC4SnLRfAPl3WTv83xertH2ulG5onseZpq3vxfwc=";
   };
 
@@ -41,15 +42,9 @@ rustPlatform.buildRustPackage rec {
   # dependency with that name, but that dependency uses the "dep:" syntax in
   # the features table, so it does not have an implicit feature with that name.
   preBuild = ''
-    sed -i 's/dep:comrak/comrak/' core/Cargo.toml
+    substituteInPlace core/Cargo.toml \
+      --replace-fail "dep:comrak" "comrak"
   '';
-
-  postInstall = ''
-    mkdir -p $nls/bin
-    mv $out/bin/nls $nls/bin/nls
-  '';
-
-  passthru.updateScript = nix-update-script { };
 
   checkFlags = [
     # https://github.com/tweag/nickel/blob/1.10.0/git/tests/main.rs#L60
@@ -58,7 +53,20 @@ rustPlatform.buildRustPackage rec {
     "--skip=fetch_targets"
   ];
 
-  meta = with lib; {
+  postInstall = ''
+    mkdir -p $nls/bin
+    mv $out/bin/nls $nls/bin/nls
+  '';
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = [ "--version" ];
+  doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     homepage = "https://nickel-lang.org/";
     description = "Better configuration for less";
     longDescription = ''
@@ -69,12 +77,17 @@ rustPlatform.buildRustPackage rec {
       that are then fed to another system. It is designed to have a simple,
       well-understood core: it is in essence JSON with functions.
     '';
-    changelog = "https://github.com/tweag/nickel/blob/${version}/RELEASES.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/tweag/nickel/blob/${finalAttrs.version}/RELEASES.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       felschr
       matthiasbeyer
     ];
     mainProgram = "nickel";
+    badPlatforms = [
+      # collect2: error: ld returned 1 exit status
+      # undefined reference to `PyExc_TypeError'
+      "aarch64-linux"
+    ];
   };
-}
+})

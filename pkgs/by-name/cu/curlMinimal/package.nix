@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, darwin, pkg-config, perl, nixosTests
+{ lib, stdenv, fetchurl, darwin, pkg-config, perl, nixosTests, autoreconfHook
 , brotliSupport ? false, brotli
 , c-aresSupport ? false, c-aresMinimal
 , gnutlsSupport ? false, gnutls
@@ -53,14 +53,14 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "curl";
-  version = "8.12.0";
+  version = "8.12.1";
 
   src = fetchurl {
     urls = [
       "https://curl.haxx.se/download/curl-${finalAttrs.version}.tar.xz"
       "https://github.com/curl/curl/releases/download/curl-${builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version}/curl-${finalAttrs.version}.tar.xz"
     ];
-    hash = "sha256-mkYox2S+axqZCVZ8E+jncQQWCd9DshWPysTgXqcJfl0=";
+    hash = "sha256-A0Hx7ZeibIEauuvTfWK4M5VnkrdgfqPxXQAWE8dt4gI=";
   };
 
   # this could be accomplished by updateAutotoolsGnuConfigScriptsHook, but that causes infinite recursion
@@ -83,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
     NIX_LDFLAGS = "-liconv";
   };
 
-  nativeBuildInputs = [ pkg-config perl ];
+  nativeBuildInputs = [ pkg-config perl ] ++ lib.optionals stdenv.hostPlatform.isOpenBSD [ autoreconfHook ];
 
   # Zlib and OpenSSL must be propagated because `libcurl.la' contains
   # "-lz -lssl", which aren't necessary direct build inputs of

@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "ufolib2";
-  version = "0.17.0";
+  version = "0.17.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "fonttools";
     repo = "ufoLib2";
     tag = "v${version}";
-    hash = "sha256-WSy+5tH+/ThbmfOC5KiTzCagcLSiXZXPuiIEJZ07KK0=";
+    hash = "sha256-pVwQOVtUUDphBZIUoiIf19DdZ+t7uS32Ery8+e2ZLlE=";
   };
 
   build-system = [ setuptools-scm ];

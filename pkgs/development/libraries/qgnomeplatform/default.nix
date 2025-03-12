@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     })
 
     # Backport cursor fix for Qt6 apps
-    # Ajusted from https://github.com/FedoraQt/QGnomePlatform/pull/138
+    # Adjusted from https://github.com/FedoraQt/QGnomePlatform/pull/138
     ./qt6-cursor-fix.patch
   ];
 

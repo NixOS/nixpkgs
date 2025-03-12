@@ -32,11 +32,22 @@ let
     else toString s
   ) cfg.settings);
 
-  manage = pkgs.writeShellScript "manage" ''
+  manage = pkgs.writeShellScriptBin "paperless-manage" ''
     set -o allexport # Export the following env vars
     ${lib.toShellVars env}
     ${lib.optionalString (cfg.environmentFile != null) "source ${cfg.environmentFile}"}
-    exec ${cfg.package}/bin/paperless-ngx "$@"
+
+    cd '${cfg.dataDir}'
+    sudo=exec
+    if [[ "$USER" != ${cfg.user} ]]; then
+      ${
+        if config.security.sudo.enable then
+          "sudo='exec ${config.security.wrapperDir}/sudo -u ${cfg.user} -E'"
+        else
+          ">&2 echo 'Aborting, paperless-manage must be run as user `${cfg.user}`!'; exit 2"
+      }
+    fi
+    $sudo ${lib.getExe cfg.package} "$@"
   '';
 
   defaultServiceConfig = {
@@ -94,14 +105,13 @@ in
       type = lib.types.bool;
       default = false;
       description = ''
-        Enable Paperless.
+        Whether to enable Paperless-ngx.
 
-        When started, the Paperless database is automatically created if it doesn't
-        exist and updated if the Paperless package has changed.
+        When started, the Paperless database is automatically created if it doesn't exist
+        and updated if the Paperless package has changed.
         Both tasks are achieved by running a Django migration.
 
-        A script to manage the Paperless instance (by wrapping Django's manage.py) is linked to
-        `''${dataDir}/paperless-manage`.
+        A script to manage the Paperless-ngx instance (by wrapping Django's manage.py) is available as `paperless-manage`.
       '';
     };
 
@@ -139,8 +149,7 @@ in
         A file containing the superuser password.
 
         A superuser is required to access the web interface.
-        If unset, you can create a superuser manually by running
-        `''${dataDir}/paperless-manage createsuperuser`.
+        If unset, you can create a superuser manually by running `paperless-manage createsuperuser`.
 
         The default superuser name is `admin`. To change it, set
         option {option}`settings.PAPERLESS_ADMIN_USER`.
@@ -288,6 +297,8 @@ in
   };
 
   config = lib.mkIf cfg.enable (lib.mkMerge [ {
+    environment.systemPackages = [ manage ];
+
     services.redis.servers.paperless.enable = lib.mkIf enableRedis true;
 
     services.postgresql = lib.mkIf cfg.database.createLocally {
@@ -336,7 +347,9 @@ in
       environment = env;
 
       preStart = ''
-        ln -sf ${manage} ${cfg.dataDir}/paperless-manage
+        # remove old papaerless-manage symlink
+        # TODO: drop with NixOS 25.11
+        [[ -L '${cfg.dataDir}/paperless-manage' ]] && rm '${cfg.dataDir}/paperless-manage'
 
         # Auto-migrate on first run or if the package has changed
         versionFile="${cfg.dataDir}/src-version"
@@ -504,10 +517,10 @@ in
         OnSuccess = services;
       };
       enableStrictShellChecks = true;
+      path = [ manage ];
       script = ''
-        ./paperless-manage document_exporter ${cfg.exporter.directory} ${lib.cli.toGNUCommandLineShell {} cfg.exporter.settings}
+        paperless-manage document_exporter ${cfg.exporter.directory} ${lib.cli.toGNUCommandLineShell {} cfg.exporter.settings}
       '';
     };
-  })
-  ]);
+  })]);
 }

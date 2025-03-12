@@ -13,7 +13,7 @@
   openssl,
   libkcapi,
 
-  # A more detailed explaination of the following meson build options can be found
+  # A more detailed explanation of the following meson build options can be found
   # in the source code of esdm.
   # A brief explanation is given.
 

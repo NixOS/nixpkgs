@@ -83,6 +83,8 @@
   cmake,
   icu,
   ncurses,
+  # devdocs-nvim dependencies
+  pandoc,
   # Preview-nvim dependencies
   md-tui,
   # sved dependencies
@@ -1010,6 +1012,18 @@ in
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [ jorsn ];
     };
+  };
+
+  devdocs-nvim = super.devdocs-nvim.overrideAttrs {
+    nvimSkipModule = [
+      # Error initializing Devdocs state
+      "devdocs.state"
+    ];
+    runtimeDeps = [
+      curl
+      jq
+      pandoc
+    ];
   };
 
   diagram-nvim = super.diagram-nvim.overrideAttrs {
@@ -2056,6 +2070,15 @@ in
     nvimSkipModule = "neotest-jest-assertions";
   };
 
+  neotest-mocha = super.neotest-mocha.overrideAttrs {
+    dependencies = with self; [
+      neotest
+      nvim-nio
+      nvim-treesitter
+      plenary-nvim
+    ];
+  };
+
   neotest-minitest = super.neotest-minitest.overrideAttrs {
     dependencies = with self; [
       neotest
@@ -2266,6 +2289,8 @@ in
   nvim-dap-cortex-debug = super.nvim-dap-cortex-debug.overrideAttrs {
     dependencies = [ self.nvim-dap ];
   };
+
+  nvim-dbee = callPackage ./non-generated/nvim-dbee { };
 
   nvim-coverage = super.nvim-coverage.overrideAttrs {
     dependencies = with self; [
@@ -2629,10 +2654,6 @@ in
     ];
   };
 
-  orgmode = super.orgmode.overrideAttrs {
-    dependencies = with self; [ (nvim-treesitter.withPlugins (p: [ p.org ])) ];
-  };
-
   otter-nvim = super.otter-nvim.overrideAttrs {
     dependencies = [ self.nvim-lspconfig ];
   };
@@ -2880,10 +2901,12 @@ in
   snacks-nvim = super.snacks-nvim.overrideAttrs {
     nvimSkipModule = [
       # Requires setup call first
+      # attempt to index global 'Snacks' (a nil value)
       "snacks.dashboard"
       "snacks.debug"
       "snacks.dim"
       "snacks.git"
+      "snacks.image.convert"
       "snacks.image.image"
       "snacks.image.init"
       "snacks.image.placement"
@@ -4031,11 +4054,11 @@ in
       "lzextras"
       "lzn-auto-require"
       "middleclass"
+      "mini-test"
       "neorg"
       "neotest"
       "nui-nvim"
       "nvim-cmp"
-      "nvim-dbee"
       "nvim-nio"
       "nvim-web-devicons"
       "oil-nvim"

@@ -25,14 +25,14 @@ with py.pkgs;
 
 py.pkgs.buildPythonApplication rec {
   pname = "cwltool";
-  version = "3.1.20241217163858";
+  version = "3.1.20250110105449";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "common-workflow-language";
     repo = "cwltool";
     tag = version;
-    hash = "sha256-46x/7ewnt1eTu+1GdmPUExpiFfYE3mN8N8VFMM4r1Vk=";
+    hash = "sha256-V0CQiNkIw81s6e9224qcfbsOqBvMo34q+lRURpRetKs=";
   };
 
   postPatch = ''

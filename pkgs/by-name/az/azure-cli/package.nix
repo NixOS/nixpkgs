@@ -26,14 +26,14 @@
 }:
 
 let
-  version = "2.69.0";
+  version = "2.70.0";
 
   src = fetchFromGitHub {
     name = "azure-cli-${version}-src";
     owner = "Azure";
     repo = "azure-cli";
     rev = "azure-cli-${version}";
-    hash = "sha256-bn6x01fVfn/jNWAN3q2oI3CHt5h575lV9YZp0pgBUxg=";
+    hash = "sha256-vvX/LkG8qA53AxVlvq7FSTqbVblvE5xbDq4V0SINCAk=";
   };
 
   # put packages that needs to be overridden in the py package scope
@@ -50,30 +50,35 @@ let
       description,
       ...
     }@args:
-    python3.pkgs.buildPythonPackage (
-      {
-        format = "wheel";
-        src = fetchurl { inherit url hash; };
-        passthru = {
-          updateScript = extensionUpdateScript { inherit pname; };
-        } // args.passthru or { };
-        meta = {
-          inherit description;
-          inherit (azure-cli.meta) platforms maintainers;
-          homepage = "https://github.com/Azure/azure-cli-extensions";
-          changelog = "https://github.com/Azure/azure-cli-extensions/blob/main/src/${pname}/HISTORY.rst";
-          license = lib.licenses.mit;
-          sourceProvenance = [ lib.sourceTypes.fromSource ];
-        } // args.meta or { };
-      }
-      // (removeAttrs args [
-        "url"
-        "hash"
-        "description"
-        "passthru"
-        "meta"
-      ])
-    );
+    let
+      self = python3.pkgs.buildPythonPackage (
+        {
+          format = "wheel";
+          src = fetchurl { inherit url hash; };
+          passthru = {
+            updateScript = extensionUpdateScript { inherit pname; };
+            tests.azWithExtension = testAzWithExts [ self ];
+          } // args.passthru or { };
+          meta = {
+            inherit description;
+            inherit (azure-cli.meta) platforms maintainers;
+            homepage = "https://github.com/Azure/azure-cli-extensions";
+            changelog = "https://github.com/Azure/azure-cli-extensions/blob/main/src/${pname}/HISTORY.rst";
+            license = lib.licenses.mit;
+            sourceProvenance = [ lib.sourceTypes.fromSource ];
+          } // args.meta or { };
+        }
+        // (removeAttrs args [
+          "url"
+          "hash"
+          "description"
+          "passthru"
+          "meta"
+        ])
+      );
+    in
+    self;
+
   # Update script for azure cli extensions. Currently only works for manual extensions.
   extensionUpdateScript =
     { pname }:
@@ -84,6 +89,25 @@ let
       "--extension"
       "${pname}"
     ];
+
+  # Test that the Azure CLI can be built with the given extensions, and that
+  # the extensions are recognized by the CLI and listed in the output.
+  testAzWithExts =
+    extensions:
+    let
+      extensionNames = map (ext: ext.pname) extensions;
+      az = (azure-cli.withExtensions extensions);
+    in
+    runCommand "test-az-with-extensions" { } ''
+      export HOME=$TMPDIR
+      ${lib.getExe az} extension list > $out
+      for ext in ${lib.concatStringsSep " " extensionNames}; do
+        if ! grep -q $ext $out; then
+          echo "Extension $ext not found in list"
+          exit 1
+        fi
+      done
+    '';
 
   extensions-generated = lib.mapAttrs (
     name: ext: mkAzExtension (ext // { passthru.updateScript = [ ]; })
@@ -164,7 +188,6 @@ py.pkgs.toPythonApplication (
         azure-mgmt-databoxedge
         azure-mgmt-datalake-store
         azure-mgmt-datamigration
-        azure-mgmt-devtestlabs
         azure-mgmt-dns
         azure-mgmt-eventgrid
         azure-mgmt-eventhub
@@ -318,7 +341,6 @@ py.pkgs.toPythonApplication (
       "azure.mgmt.containerservice"
       "azure.mgmt.cosmosdb"
       "azure.mgmt.datamigration"
-      "azure.mgmt.devtestlabs"
       "azure.mgmt.dns"
       "azure.mgmt.eventgrid"
       "azure.mgmt.eventhub"
@@ -362,28 +384,14 @@ py.pkgs.toPythonApplication (
       inherit extensions;
       withExtensions = extensions: azure-cli.override { withExtensions = extensions; };
       tests = {
-        # Test the package builds with some extensions configured, and the
-        # wanted extensions are recognized by the CLI and listed in the output.
-        azWithExtensions =
-          let
-            extensions = with azure-cli.extensions; [
-              aks-preview
-              azure-devops
-              rdbms-connect
-            ];
-            extensionNames = map (ext: ext.pname) extensions;
-            az = (azure-cli.withExtensions extensions);
-          in
-          runCommand "test-az-with-extensions" { } ''
-            export HOME=$TMPDIR
-            ${lib.getExe az} extension list > $out
-            for ext in ${lib.concatStringsSep " " extensionNames}; do
-              if ! grep -q $ext $out; then
-                echo "Extension $ext not found in list"
-                exit 1
-              fi
-            done
-          '';
+        azWithExtensions = testAzWithExts (
+          with azure-cli.extensions;
+          [
+            aks-preview
+            azure-devops
+            rdbms-connect
+          ]
+        );
         # Test the package builds with mutable config.
         # TODO: Maybe we can install an extension from local python wheel to
         #       check mutable extension install still works.

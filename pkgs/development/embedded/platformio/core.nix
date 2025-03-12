@@ -12,7 +12,7 @@
 with python3Packages;
 buildPythonApplication rec {
   pname = "platformio";
-  version = "6.1.16";
+  version = "6.1.17";
   pyproject = true;
 
   # pypi tarballs don't contain tests - https://github.com/platformio/platformio-core/issues/1964
@@ -20,7 +20,7 @@ buildPythonApplication rec {
     owner = "platformio";
     repo = "platformio-core";
     tag = "v${version}";
-    hash = "sha256-hZgbLUk2Krynut5uD6GMxWA+95y8ONNUmv4kaAltumk=";
+    hash = "sha256-OQEbEAVLS4DdbdBf4S9KS1RVHCC91vFtX6lz2u6Xouc=";
   };
 
   outputs = [

@@ -23,7 +23,7 @@
 , cmake, libssh2, openssl, openssl_1_1, libmysqlclient, git, perl, pcre2, gecode_3, curl
 , libsodium, snappy, libossp_uuid, lxc, libpcap, xorg, gtk3, lerc, buildRubyGem
 , cairo, expat, re2, rake, gobject-introspection, gdk-pixbuf, zeromq, czmq, graphicsmagick, libcxx
-, file, libvirt, glib, vips, taglib, libopus, linux-pam, libidn, protobuf, fribidi, harfbuzz
+, file, libvirt, glib, vips, taglib_1, libopus, linux-pam, libidn, protobuf, fribidi, harfbuzz
 , bison, flex, pango, python3, patchelf, binutils, freetds, wrapGAppsHook3, atk
 , bundler, libsass, dart-sass, libexif, libselinux, libsepol, shared-mime-info, libthai, libdatrie
 , CoreServices, DarwinTools, cctools, libtool, discount, exiv2, libepoxy, libxkbcommon, libmaxminddb, libyaml
@@ -307,7 +307,6 @@ in
       substituteInPlace lib/prometheus/client/page_size.rb --replace "getconf" "${lib.getBin getconf}/bin/getconf"
     '';
   } // lib.optionalAttrs (lib.versionAtLeast attrs.version "1.0") {
-    cargoRoot = "ext/fast_mmaped_file_rs";
     cargoDeps = rustPlatform.fetchCargoVendor {
       src = stdenv.mkDerivation {
         inherit (buildRubyGem { inherit (attrs) gemName version source; })
@@ -319,28 +318,27 @@ in
         dontBuilt = true;
         installPhase = ''
           cp -R ext/fast_mmaped_file_rs $out
+          cp Cargo.lock $out
         '';
       };
-      hash = if lib.versionAtLeast attrs.version "1.1.2"
-        then "sha256-8EpYU6MSzMG3RzneDx0GwZ2N46Po8FdA/7Khy/7KHWo="
-        else
-          if lib.versionAtLeast attrs.version "1.1.1"
-          then "sha256-V4NlFgVJy+V9fdbZWObn52H91IFSIU1seErMcxh1x5w="
-          else "sha256-GFRIjvBPhqT4h6gE+GF32WW1wgZTaaHXRF7tIXnRM1Q=";
+      hash = "sha256-KVbmDAa9EFwTUTHPF/8ZzycbieMhAuiidiz5rqGIKOo=";
     };
+
     nativeBuildInputs = [
       cargo
       rustc
       rustPlatform.cargoSetupHook
       rustPlatform.bindgenHook
     ];
+
     disallowedReferences = [
       rustc.unwrapped
     ];
-    preBuild = ''
-      cat ../.cargo/config.toml > ext/fast_mmaped_file_rs/.cargo/config.toml
-      sed -i "s|cargo-vendor-dir|$PWD/../cargo-vendor-dir|" ext/fast_mmaped_file_rs/.cargo/config.toml
+
+    preInstall = ''
+      export CARGO_HOME="$PWD/../.cargo/"
     '';
+
     postInstall = ''
       find $out -type f -name .rustc_info.json -delete
     '';
@@ -554,6 +552,10 @@ in
       rpath="$(patchelf --print-rpath "$soPath")"
       patchelf --set-rpath "${lib.makeLibraryPath [ lasem glib cairo ]}:$rpath" "$soPath"
       patchelf --replace-needed liblasem.so liblasem-0.4.so "$soPath"
+    ''  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      soPath="$out/${ruby.gemPath}/gems/mathematical-${attrs.version}/lib/mathematical/mathematical.bundle"
+      install_name_tool -add_rpath "${lib.makeLibraryPath [ lasem glib cairo ]}/lib" "$soPath"
+      install_name_tool -change @rpath/liblasem.dylib "${lib.getLib lasem}/lib/liblasem-0.4.dylib" "$soPath"
     '';
   };
 
@@ -848,7 +850,7 @@ in
   };
 
   taglib-ruby = attrs: {
-    buildInputs = [ taglib ];
+    buildInputs = [ taglib_1 ];
   };
 
   timfel-krb5-auth = attrs: {

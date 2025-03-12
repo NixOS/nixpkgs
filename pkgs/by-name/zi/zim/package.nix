@@ -11,7 +11,7 @@
 
 # TODO: Declare configuration options for the following optional dependencies:
 #  -  File stores: hg, git, bzr
-#  -  Included plugins depenencies: dot, ditaa, dia, any other?
+#  -  Included plugins dependencies: dot, ditaa, dia, any other?
 #  -  pyxdg: Need to make it work first (see setupPyInstallFlags).
 
 python3Packages.buildPythonApplication rec {

@@ -24,16 +24,14 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "marhkb";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-S84Qb+hySjIxcznuA7Sh8n9XFvdZpf32Yznb1Sj+owY=";
+    repo = "pods";
+    tag = "v${version}";
+    hash = "sha256-S84Qb+hySjIxcznuA7Sh8n9XFvdZpf32Yznb1Sj+owY=";
   };
 
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "podman-api-0.10.0" = "sha256-nbxK/U5G+PlbytpHdr63x/C69hBgedPXBFfgdzT9fdc=";
-    };
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
+    hash = "sha256-UBInZdoluWXq1jm2rhS5wBwXQ/zYFPSEeWhpSmkc2aY=";
   };
 
   nativeBuildInputs = [
@@ -57,13 +55,13 @@ stdenv.mkDerivation rec {
     vte-gtk4
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Podman desktop application";
     homepage = "https://github.com/marhkb/pods";
     changelog = "https://github.com/marhkb/pods/releases/tag/v${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ figsoda ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ figsoda ];
+    platforms = lib.platforms.linux;
     mainProgram = "pods";
   };
 }

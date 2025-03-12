@@ -44,7 +44,7 @@ let
   #   on the compiler binary (`exePathForLibraryCheck`).
   # * To skip library checking for an architecture,
   #   set `exePathForLibraryCheck = null`.
-  # * To skip file checking for a specific arch specfic library,
+  # * To skip file checking for a specific arch specific library,
   #   set `fileToCheckFor = null`.
   ghcBinDists = {
     # Binary distributions for the default libc (e.g. glibc, or libSystem on Darwin)

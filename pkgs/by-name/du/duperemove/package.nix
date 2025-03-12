@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "duperemove";
-  version = "0.15";
+  version = "0.15.1";
 
   src = fetchFromGitHub {
     owner = "markfasheh";
     repo = "duperemove";
     rev = "v${version}";
-    hash = "sha256-m89e7ewda4+TNemoXG/9dG7HI9xHmsqVfMIFg5Ft2YM=";
+    hash = "sha256-T17XkR6AUvOerg9FN4SxTfoMavVXnxujtrA4p4GEnFE=";
   };
 
   postPatch = ''

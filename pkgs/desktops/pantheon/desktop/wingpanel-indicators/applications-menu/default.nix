@@ -13,7 +13,6 @@
 , gtk3
 , json-glib
 , switchboard-with-plugs
-, libsoup_2_4
 , wingpanel
 , zeitgeist
 , bc
@@ -22,13 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-applications-menu";
-  version = "8.0.0";
+  version = "8.0.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "applications-menu";
     rev = version;
-    sha256 = "sha256-HA82CcVC2+hJFksOuZ8pFmw7phpkCEjPCgE/5naaPcg=";
+    sha256 = "sha256-bwQI41Znm75GFoXxSbWkY9daAJTMvUo+UHyyPmvzOUA=";
   };
 
   patches = [
@@ -51,7 +50,6 @@ stdenv.mkDerivation rec {
     json-glib
     libgee
     libhandy
-    libsoup_2_4
     switchboard-with-plugs
     wingpanel
     zeitgeist

@@ -53,11 +53,11 @@ assert withMumps -> withScalapack;
 
 stdenv.mkDerivation rec {
   pname = "petsc";
-  version = "3.21.4";
+  version = "3.22.4";
 
   src = fetchzip {
     url = "https://web.cels.anl.gov/projects/petsc/download/release-snapshots/petsc-${version}.tar.gz";
-    hash = "sha256-l7v+ASBL9FLbBmBGTRWDwBihjwLe3uLz+GwXtn8u7e0=";
+    hash = "sha256-8WV1ylXytkhiNa7YpWSOIpSvzLCCjdVVe5SiGfhicas=";
   };
 
   strictDeps = true;
@@ -178,6 +178,8 @@ stdenv.mkDerivation rec {
   passthru = {
     inherit mpiSupport;
   };
+
+  setupHook = ./setup-hook.sh;
 
   meta = with lib; {
     description = "Portable Extensible Toolkit for Scientific computation";

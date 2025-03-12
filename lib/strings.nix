@@ -2434,7 +2434,13 @@ rec {
     if isStringLike x then
       let str = toString x; in
       substring 0 1 str == "/"
-      && dirOf str == storeDir
+      && (dirOf str == storeDir
+        # Match content‐addressed derivations, which _currently_ do not have a
+        # store directory prefix.
+        # This is a workaround for https://github.com/NixOS/nix/issues/12361
+        # which was needed during the experimental phase of ca-derivations and
+        # should be removed once the issue has been resolved.
+        || builtins.match "/[0-9a-z]{52}" str != null)
     else
       false;
 

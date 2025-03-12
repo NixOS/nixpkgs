@@ -14,7 +14,7 @@
   libiconv,
   xz,
 
-  # we are a dependency of gcc, this simplifies bootstraping
+  # we are a dependency of gcc, this simplifies bootstrapping
   interactive ? false,
   ncurses,
   procps,

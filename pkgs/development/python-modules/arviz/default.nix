@@ -39,14 +39,14 @@
 
 buildPythonPackage rec {
   pname = "arviz";
-  version = "0.20.0";
+  version = "0.21.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "arviz-devs";
     repo = "arviz";
     tag = "v${version}";
-    hash = "sha256-6toqOGwk8YbatfiDCTEG4r0z3zZAA8zcNVZJqqssYrY=";
+    hash = "sha256-rrOvdyZE0wo3iiiQ2hHklAtLU38mXs3hLsb+Fwy9eAk=";
   };
 
   build-system = [

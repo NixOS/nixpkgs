@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   pythonOlder,
   git,
@@ -23,10 +24,18 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.8";
 
-  nativeCheckInputs = [
-    git
-    gnupg
-    pytestCheckHook
+  nativeCheckInputs =
+    [
+      git
+      pytestCheckHook
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+      gnupg
+    ];
+
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    # `gpg: agent_genkey failed: No agent running`
+    "test_gpgsign"
   ];
 
   meta = with lib; {
@@ -35,6 +44,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/mystor/git-revise/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
     mainProgram = "git-revise";
-    maintainers = with maintainers; [ emily ];
+    maintainers = with maintainers; [ _9999years ];
   };
 }
