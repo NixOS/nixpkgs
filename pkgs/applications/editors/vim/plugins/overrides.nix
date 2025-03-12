@@ -300,6 +300,10 @@ in
     dependencies = [ self.blink-cmp ];
   };
 
+  blink-nerdfont-nvim = super.blink-nerdfont-nvim.overrideAttrs {
+    dependencies = [ self.blink-cmp ];
+  };
+
   blink-cmp-git = super.blink-cmp-git.overrideAttrs {
     dependencies = [ self.plenary-nvim ];
   };
