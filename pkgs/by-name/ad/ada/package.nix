@@ -3,7 +3,6 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
