@@ -70,7 +70,7 @@ buildPythonPackage rec {
   ];
 
   checkPhase = ''
-    pytest 
+    pytest
   '';
 
   doCheck = true;
