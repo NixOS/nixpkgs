@@ -405,6 +405,49 @@ rec {
   concatMap = builtins.concatMap;
 
   /**
+    Map, removing null values.
+
+    `filterMap` is a convenience function. Use it when `null` is never a
+    valid return item; otherwise, use the more flexible `concatMap`,
+    especially in generic code.
+
+    # Type
+
+    ```
+    filterMap :: (a -> (null | b)) -> [a] -> [b]
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.lists.filterMap` usage example
+
+    ```nix
+    let f = x:
+      if "udp" == x.proto
+      then x.port
+      else null;
+    in filterMap f [
+      {
+        dns.proto  = "udp";
+        dns.port  = 53;
+      }
+      {
+        http.proto = "tcp";
+        http.port = 80;
+      }
+    ]
+    => [ 53 ]
+    ```
+
+    :::
+  */
+  filterMap = f:
+    let g = acc: x:
+      let y = f x;
+      in if y == null then acc else [y] ++ acc;
+    in builtins.foldl' g [];
+
+  /**
     Flatten the argument into a single list; that is, nested lists are
     spliced into the top-level lists.
 
