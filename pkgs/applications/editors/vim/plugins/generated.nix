@@ -1423,6 +1423,19 @@ final: prev:
     meta.hydraPlatforms = [ ];
   };
 
+  blink-cmp-avante = buildVimPlugin {
+    pname = "blink-cmp-avante";
+    version = "2025-02-19";
+    src = fetchFromGitHub {
+      owner = "Kaiser-Yang";
+      repo = "blink-cmp-avante";
+      rev = "e5a1be4c818520385f95fe2663c04e48f5f0c36a";
+      sha256 = "13rkypddzpgz6a36s38a30qfx0n3jspd788yvgjdb7dkn0zrvqdg";
+    };
+    meta.homepage = "https://github.com/Kaiser-Yang/blink-cmp-avante/";
+    meta.hydraPlatforms = [ ];
+  };
+
   blink-cmp-conventional-commits = buildVimPlugin {
     pname = "blink-cmp-conventional-commits";
     version = "2025-02-18";
@@ -8988,7 +9001,7 @@ final: prev:
       rev = "8239023d299a692784176f202f6a4a5e0a698ad2";
       sha256 = "sha256-Fbe7xuu5Qy6GXKsvQbVcE5oG7dgKjghuX470V7sjmqA=";
     };
-    meta.homepage = "https://github.com/adrigzr/neotest-mocha";
+    meta.homepage = "https://github.com/adrigzr/neotest-mocha/";
     meta.hydraPlatforms = [ ];
   };
 
