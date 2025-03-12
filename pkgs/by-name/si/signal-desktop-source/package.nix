@@ -6,10 +6,10 @@
   electron_33,
   python3,
   makeWrapper,
+  callPackage,
   libpulseaudio,
   fetchFromGitHub,
   runCommand,
-  fetchurl,
   fetchzip,
   autoPatchelfHook,
   makeDesktopItem,
@@ -28,11 +28,7 @@ let
     tar -C $out --strip-components=1 -xvf ${electron.headers}
   '';
 
-  sqlcipher = fetchurl {
-    # https://github.com/signalapp/Signal-Sqlcipher-Extension
-    url = "https://build-artifacts.signal.org/desktop/sqlcipher-v2-4.6.1-signal-patch2--0.2.1-asm2-6253f886c40e49bf892d5cdc92b2eb200b12cd8d80c48ce5b05967cfd01ee8c7.tar.gz";
-    hash = "sha256-YlP4hsQOSb+JLVzckrLrIAsSzY2AxIzlsFlnz9Ae6Mc=";
-  };
+  sqlcipher-signal-extension = callPackage ./sqlcipher-signal-extension.nix { };
 
   ringrtc = stdenv.mkDerivation (finalAttrs: {
     pname = "ringrtc-bin";
@@ -123,8 +119,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   preBuild = ''
-    substituteInPlace node_modules/@signalapp/better-sqlite3/deps/download.js \
-      --replace-fail "path.join(__dirname, 'sqlcipher.tar.gz')" "'${sqlcipher}'"
+    cp ${sqlcipher-signal-extension}/share/sqlite3.gyp node_modules/@signalapp/better-sqlite3/deps/sqlite3.gyp
 
     cp -r ${ringrtc} node_modules/@signalapp/ringrtc/build
   '';
@@ -187,6 +182,10 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+  passthru = {
+    inherit sqlcipher-signal-extension;
+  };
+
   meta = {
     description = "Private, simple, and secure messenger (nixpkgs build)";
     longDescription = ''
@@ -215,7 +214,6 @@ stdenv.mkDerivation (finalAttrs: {
     sourceProvenance = with lib.sourceTypes; [
       fromSource
 
-      # sqlcipher
       # ringrtc
       # node_modules/@signalapp/libsignal-client/prebuilds/
       binaryNativeCode
