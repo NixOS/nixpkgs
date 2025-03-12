@@ -107,10 +107,12 @@ stdenv.mkDerivation rec {
     wrapPythonProgramsIn "$out/share/firewalld/testsuite/python" "$out ${pythonPath}"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Firewall daemon with D-Bus interface";
-    homepage = "https://github.com/firewalld/firewalld";
-    license = licenses.gpl2Plus;
-    maintainers = [ ];
+    homepage = "https://firewalld.org";
+    downloadPage = "https://github.com/firewalld/firewalld/releases";
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ prince213 ];
+    platforms = lib.platforms.linux;
   };
 }
