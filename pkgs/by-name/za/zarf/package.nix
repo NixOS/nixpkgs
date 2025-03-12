@@ -57,6 +57,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "DevSecOps for Air Gap & Limited-Connection Systems. https://zarf.dev";
+    mainProgram = "zarf";
     homepage = "https://github.com/zarf-dev/zarf";
     license = licenses.asl20;
     maintainers = with maintainers; [
