@@ -24,6 +24,7 @@ python3.pkgs.buildPythonApplication rec {
       requests
       rich
       argcomplete
+      tzlocal
     ]
     ++ [ xorg.xhost ];
 
