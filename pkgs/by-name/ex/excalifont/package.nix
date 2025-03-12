@@ -6,7 +6,7 @@
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
-  pname = "fg-virgil";
+  pname = "excalifont";
   version = "0.18.0";
 
   src = fetchFromGitHub {
@@ -23,7 +23,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   buildPhase = ''
     runHook preBuild
 
-    for file in packages/excalidraw/fonts/Virgil/*.woff2; do
+    for file in packages/excalidraw/fonts/Excalifont/*.woff2; do
       woff2_decompress $file
     done
 
@@ -33,15 +33,15 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    install -D -m 444 packages/excalidraw/fonts/Virgil/*.ttf -t $out/share/fonts/ttf
-    install -D -m 444 packages/excalidraw/fonts/Virgil/*.woff2 -t $out/share/fonts/woff2
+    install -D -m 444 packages/excalidraw/fonts/Excalifont/*.ttf -t $out/share/fonts/ttf
+    install -D -m 444 packages/excalidraw/fonts/Excalifont/*.woff2 -t $out/share/fonts/woff2
 
     runHook postInstall
   '';
 
   meta = {
-    homepage = "https://github.com/excalidraw/virgil";
-    description = "Font that powers Excalidraw";
+    homepage = "https://plus.excalidraw.com/excalifont";
+    description = "Excalifont is based on the original handwritten Virgil font carefully curated to improve legibility while preserving its hand-drawn nature";
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ drupol ];
     license = lib.licenses.ofl;
