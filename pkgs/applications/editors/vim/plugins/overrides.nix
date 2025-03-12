@@ -3861,10 +3861,6 @@ in
     dependencies = [ self.nui-nvim ];
   };
 
-  YankRing-vim = super.YankRing-vim.overrideAttrs {
-    sourceRoot = ".";
-  };
-
   yanky-nvim = super.yanky-nvim.overrideAttrs {
     nvimSkipModule = [
       # Optional telescope integration
