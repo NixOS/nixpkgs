@@ -1,24 +1,25 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-, # build-system
-  setuptools
-, setuptools-scm
-, torch
-, packaging
-, transformers
-, tyro
-, datasets
-, sentencepiece
-, tqdm
-, psutil
-, accelerate
-, trl
-, peft
-, huggingface-hub
-, hf-transfer
-, cut-cross-entropy
+  # build-system
+  setuptools,
+  setuptools-scm,
+  torch,
+  packaging,
+  transformers,
+  tyro,
+  datasets,
+  sentencepiece,
+  tqdm,
+  psutil,
+  accelerate,
+  trl,
+  peft,
+  huggingface-hub,
+  hf-transfer,
+  cut-cross-entropy,
 
 }:
 
@@ -67,4 +68,3 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ hoh ];
   };
 }
-

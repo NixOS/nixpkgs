@@ -1,19 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, stdenv
-, setuptools
-, setuptools-scm
-, torch
-, triton
-, transformers ? null
-, deepspeed ? null
-, accelerate ? null
-, datasets ? null
-, huggingface_hub ? null
-, pandas ? null
-, fire ? null
-, tqdm ? null
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  stdenv,
+  setuptools,
+  setuptools-scm,
+  torch,
+  triton,
+  transformers ? null,
+  deepspeed ? null,
+  accelerate ? null,
+  datasets ? null,
+  huggingface_hub ? null,
+  pandas ? null,
+  fire ? null,
+  tqdm ? null,
 }:
 
 buildPythonPackage rec {
@@ -31,20 +32,23 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
   nativeBuildInputs = [ setuptools-scm ];
 
-  dependencies = [
-    torch
-    triton
-  ] ++ lib.optionals (!stdenv.isDarwin) [
-    deepspeed
-  ] ++ lib.optionals (transformers != null) [
-    transformers
-    accelerate
-    datasets
-    huggingface_hub
-    pandas
-    fire
-    tqdm
-  ];
+  dependencies =
+    [
+      torch
+      triton
+    ]
+    ++ lib.optionals (!stdenv.isDarwin) [
+      deepspeed
+    ]
+    ++ lib.optionals (transformers != null) [
+      transformers
+      accelerate
+      datasets
+      huggingface_hub
+      pandas
+      fire
+      tqdm
+    ];
 
   doCheck = true;
 

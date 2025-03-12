@@ -1,31 +1,31 @@
-{ lib
-, buildPythonPackage
-, pkgs
-, fetchFromGitHub
-, python3Packages
-, hatch
-, typeguard
-, docstring-parser
-, typing-extensions
-, rich
-, shtab
-, # Test dependencies
-  pyyaml
-, pytest
-, pytest-cov
-, pytest-xdist
-, omegaconf
-, attrs
-, torch
-, pyright
-, ruff
-, mypy
-, numpy
-, flax
-, pydantic
-, coverage
-, eval-type-backport
-,
+{
+  lib,
+  buildPythonPackage,
+  pkgs,
+  fetchFromGitHub,
+  python3Packages,
+  hatch,
+  typeguard,
+  docstring-parser,
+  typing-extensions,
+  rich,
+  shtab,
+  # Test dependencies
+  pyyaml,
+  pytest,
+  pytest-cov,
+  pytest-xdist,
+  omegaconf,
+  attrs,
+  torch,
+  pyright,
+  ruff,
+  mypy,
+  numpy,
+  flax,
+  pydantic,
+  coverage,
+  eval-type-backport,
 }:
 
 buildPythonPackage rec {

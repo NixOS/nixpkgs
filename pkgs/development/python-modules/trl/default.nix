@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, pkgs
-, fetchFromGitHub
-, python3Packages
-, setuptools
-, setuptools-scm
-, accelerate
-, datasets
-, rich
-, transformers
+{
+  lib,
+  buildPythonPackage,
+  pkgs,
+  fetchFromGitHub,
+  python3Packages,
+  setuptools,
+  setuptools-scm,
+  accelerate,
+  datasets,
+  rich,
+  transformers,
 }:
 
 buildPythonPackage rec {

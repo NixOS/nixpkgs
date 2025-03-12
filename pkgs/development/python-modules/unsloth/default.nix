@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, setuptools-scm
-, packaging
-, numpy
-, torch
-, bitsandbytes
-,
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  setuptools-scm,
+  packaging,
+  numpy,
+  torch,
+  bitsandbytes,
 }:
 
 buildPythonPackage rec {
@@ -41,4 +41,3 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ hoh ];
   };
 }
-
