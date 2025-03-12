@@ -36,6 +36,12 @@ stdenv.mkDerivation rec {
     echo "" > ./deps/vera/deps/CMakeLists.txt
   '';
 
+  # These scripts are a bit hacky and depend on X11 tools
+  postInstall = ''
+    rm $out/bin/glslScreenSaver
+    rm $out/bin/glslThumbnailer
+  '';
+
   meta = with lib; {
     description = "Live GLSL coding renderer";
     homepage = "https://patriciogonzalezvivo.com/2015/glslViewer/";
