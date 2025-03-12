@@ -786,6 +786,15 @@ in
           );
       };
 
+      services.${phpExecutionUnit} = {
+        wantedBy = lib.optional (cfg.nginx != null) "nginx.service";
+        requiredBy = [ "movim.service" ];
+        before = [ "movim.service" ] ++ lib.optional (cfg.nginx != null) "nginx.service";
+        wants = [ "network.target" ];
+        requires = [ "movim-data-setup.service" ] ++ lib.optional cfg.database.createLocally dbService;
+        after = [ "movim-data-setup.service" ] ++ lib.optional cfg.database.createLocally dbService;
+      };
+
       services.movim = {
         description = "Movim daemon";
         wantedBy = [ "multi-user.target" ];
@@ -818,15 +827,6 @@ in
           WorkingDirectory = "${package}/share/php/movim";
           ExecStart = "${lib.getExe package} start";
         };
-      };
-
-      services.${phpExecutionUnit} = {
-        wantedBy = lib.optional (cfg.nginx != null) "nginx.service";
-        requiredBy = [ "movim.service" ];
-        before = [ "movim.service" ] ++ lib.optional (cfg.nginx != null) "nginx.service";
-        wants = [ "network.target" ];
-        requires = [ "movim-data-setup.service" ] ++ lib.optional cfg.database.createLocally dbService;
-        after = [ "movim-data-setup.service" ] ++ lib.optional cfg.database.createLocally dbService;
       };
 
       tmpfiles.settings."10-movim" = with cfg; {
