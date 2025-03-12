@@ -45,6 +45,7 @@ buildPythonPackage rec {
   meta = {
     description = "Simple Management Protocol (SMP) Client for remotely managing MCU firmware";
     homepage = "https://github.com/intercreate/smpclient";
+    changelog = "https://github.com/intercreate/smpclient/releases/tag/${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ otavio ];
   };
