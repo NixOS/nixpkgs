@@ -6,11 +6,11 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ldk-node";
-  version = "5103098fe571742e90287a3ed1fd51b241aa10d6";
+  version = "v0.0.0-20250212145657-5103098fe571";
 
   src = fetchFromGitHub {
     owner = "getAlby";
-    repo = pname;
+    repo = "ldk-node";
     rev = version;
     hash = "sha256-wwJnZVIARPKu39aUKMcOUWfPFQhnICsFnWorQJJ6aSQ=";
   };
@@ -20,6 +20,7 @@ rustPlatform.buildRustPackage rec {
   useFetchCargoVendor = true;
   cargoHash = "sha256-KiEY3GwRA4Av+6UUQ1diuTq6jh1tMyfI0cHri0lWNEc=";
 
+  # Skip tests because they download bitcoin-core and electrs zip files, and then fail
   doCheck = false;
 
   meta = {
@@ -30,7 +31,10 @@ rustPlatform.buildRustPackage rec {
       asl20
       mit
     ];
-    platforms = lib.platforms.x86_64 ++ lib.platforms.aarch64;
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
     maintainers = with lib.maintainers; [ bleetube ];
   };
 }
