@@ -82,8 +82,8 @@ in
     '';
 
     # Add a sane system-wide xinitrc script
-    environment.etc."X11/xinit/xinitrc".source = lib.mkIf cfg.generateScript (
-      pkgs.writeShellScript "xinitrc" ''
+    environment.etc."X11/xinit/xinitrc" = lib.mkIf cfg.generateScript {
+      source = pkgs.writeShellScript "xinitrc" ''
         ${cfg.extraCommands}
 
         # start user services
@@ -97,8 +97,8 @@ in
         # stop services and all subprocesses
         systemctl --user stop nixos-fake-graphical-session.target
         kill 0
-      ''
-    );
+      '';
+    };
 
     environment.systemPackages = with pkgs; [ xorg.xinit ];
 
