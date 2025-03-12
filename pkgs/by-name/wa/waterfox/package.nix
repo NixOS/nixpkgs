@@ -78,7 +78,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "waterfox";
-  version = version;
+  inherit version;
 
   src = fetchurl {
     url = "https://cdn1.waterfox.net/waterfox/releases/${finalAttrs.version}/Linux_x86_64/waterfox-${finalAttrs.version}.tar.bz2";
@@ -200,6 +200,8 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Privacy-focused, multi-platform web browser";
     homepage = "https://www.waterfox.net/";
+    downloadPage = "https://github.com/BrowserWorks/Waterfox";
+    changelog = "https://github.com/BrowserWorks/Waterfox/releases/tag/${version}";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.mpl20;
     platforms = [ "x86_64-linux" ];
