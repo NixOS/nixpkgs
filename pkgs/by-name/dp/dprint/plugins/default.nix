@@ -1,4 +1,8 @@
-{ lib, fetchurl }:
+{
+  lib,
+  fetchurl,
+  dprint,
+}:
 let
   mkDprintPlugin =
     {
@@ -26,6 +30,12 @@ let
         updateScript = ./update-plugins.py;
         inherit initConfig updateUrl;
       };
+      nativeBuildInputs = [ dprint ];
+      postFetch = ''
+        export DPRINT_CACHE_DIR="$(mktemp -d)"
+        cd "$(mktemp -d)"
+        dprint check --allow-no-files --plugins "$downloadedFile"
+      '';
     };
   inherit (lib)
     filterAttrs
