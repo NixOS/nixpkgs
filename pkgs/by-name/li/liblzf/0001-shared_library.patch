@@ -1,0 +1,38 @@
+diff --git a/configure.ac b/configure.ac
+index 58316a0..4db359a 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -1,4 +1,5 @@
+-AC_INIT
++# version from postPatch step
++AC_INIT([liblzf], m4_esyscmd_s([cat VERSION]))
+ AC_CONFIG_SRCDIR([lzfP.h])
+ 
+ AC_CONFIG_HEADER(config.h)
+@@ -6,10 +7,18 @@ AC_CONFIG_HEADER(config.h)
+ AC_GNU_SOURCE
+ AC_SYS_LARGEFILE
+ AC_PROG_CC
+-AC_PROG_RANLIB
+ AC_PROG_INSTALL
+ AC_HEADER_STDC
+ 
++AM_INIT_AUTOMAKE([-Wall -Werror foreign])
++AM_PROG_AR
++LT_INIT([])
++
++# Set libtool version from postPatch step
++m4_define([LZF_VERSION_INFO], m4_include([VERSION_INFO]))
++LZF_LT_VERSION_INFO="LZF_VERSION_INFO"
++AC_SUBST([LZF_LT_VERSION_INFO])
++
+ AC_C_CONST
+ AC_C_INLINE
+ AC_CHECK_HEADERS(getopt.h)
+@@ -21,5 +30,5 @@ else
+    AC_MSG_RESULT(no gcc)
+ fi
+ 
+-AC_CONFIG_FILES([Makefile])
++AC_CONFIG_FILES([Makefile liblzf.pc])
+ AC_OUTPUT
