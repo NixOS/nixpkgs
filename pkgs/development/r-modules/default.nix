@@ -1123,6 +1123,15 @@ let
         '';
     });
 
+    findpython = old.findpython.overrideAttrs (attrs: {
+      postPatch = ''
+        substituteInPlace "R/find_python_cmd.r" \
+          --replace-fail 'python_cmds[which(python_cmds != "")]' \
+          'python_cmds <- c(python_cmds, file.path("${lib.getBin pkgs.python3}", "bin", "python3"))
+           python_cmds[which(python_cmds != "")]'
+      '';
+    });
+
     alcyon = old.alcyon.overrideAttrs (attrs: {
       configureFlags = [
         "--enable-force-openmp"
