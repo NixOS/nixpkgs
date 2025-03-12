@@ -59,7 +59,12 @@ stdenv.mkDerivation (finalAttrs: {
     stdenv.cc.cc.lib # libgcc_s.so
   ];
 
-  unpackPhase = "dpkg-deb -x $src $out";
+  unpackPhase = "
+    dpkg-deb -x $src $out
+    mv $out/usr/share $out
+    mkdir -p $out/bin
+    ln -s $out/opt/Min/min $out/bin/min
+  ";
 
   passthru.updateScript = nix-update-script { };
 
