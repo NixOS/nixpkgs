@@ -9,13 +9,13 @@
 
 buildDotnetModule rec {
   pname = "vrcadvert";
-  version = "1.0.0";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "galister";
     repo = "VrcAdvert";
     tag = "v${version}";
-    hash = "sha256-noIu5LV0yva94Kmdr39zb0kKXDaIrQ8DIplCj3aTIbQ=";
+    hash = "sha256-lrRH+BBeVpYVAdFdlsYVxsBOENZseBVoAxb5v9+E7g8=";
   };
 
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
@@ -25,13 +25,6 @@ buildDotnetModule rec {
   nugetDeps = ./deps.json;
 
   executables = [ "VrcAdvert" ];
-
-  postPatch = ''
-    substituteInPlace VrcAdvert.csproj \
-      --replace-fail 'net6.0' 'net8.0'
-    substituteInPlace global.json \
-      --replace-fail '6.0.0' '8.0.0'
-  '';
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [
