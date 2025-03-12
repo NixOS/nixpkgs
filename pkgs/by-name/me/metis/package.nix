@@ -5,6 +5,7 @@
   fetchpatch2,
   cmake,
   gklib,
+  llvmPackages,
   isILP64 ? false,
   precision ? "single",
 }:
@@ -33,19 +34,16 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  nativeBuildInputs = [
-    cmake
-  ];
+  nativeBuildInputs = [ cmake ];
 
-  buildInputs = [
-    gklib
-  ];
+  buildInputs = [ gklib ] ++ lib.optional stdenv.hostPlatform.isDarwin llvmPackages.openmp;
 
   preConfigure = ''
     make ${configFlags} config
   '';
 
   cmakeFlags = [
+    (lib.cmakeBool "OPENMP" true)
     (lib.cmakeBool "SHARED" (!stdenv.hostPlatform.isStatic))
   ];
 

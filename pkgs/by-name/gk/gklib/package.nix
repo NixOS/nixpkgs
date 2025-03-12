@@ -3,14 +3,14 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  fetchpatch2,
+  llvmPackages,
 }:
 
 stdenv.mkDerivation {
   pname = "gklib";
   # there is no released tag compatible of downstream metis 5.2.1
   # see https://github.com/KarypisLab/GKlib/issues/23
-  version = "0-unstable-2023-03-27";
+  version = "5.1.1-unstable-2023-03-27";
 
   src = fetchFromGitHub {
     owner = "KarypisLab";
@@ -23,8 +23,12 @@ stdenv.mkDerivation {
     cmake
   ];
 
+  buildInputs = lib.optional stdenv.hostPlatform.isDarwin llvmPackages.openmp;
+
   cmakeFlags = [
+    (lib.cmakeBool "OPENMP" true)
     (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
+    # https://github.com/KarypisLab/GKlib/issues/11#issuecomment-1532597211
     (lib.cmakeBool "NO_X86" (!stdenv.hostPlatform.isx86))
     # force metis/parmetis to use a portable random number generator that will produce the same partitioning results on all systems
     (lib.cmakeBool "GKRAND" true)
@@ -35,5 +39,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/KarypisLab/GKlib";
     license = lib.licenses.asl20;
     platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ qbisi ];
   };
 }

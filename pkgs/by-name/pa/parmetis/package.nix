@@ -6,6 +6,7 @@
   gklib,
   metis,
   mpi,
+  llvmPackages,
 }:
 
 stdenv.mkDerivation {
@@ -26,9 +27,10 @@ stdenv.mkDerivation {
     mpi
     metis
     gklib
-  ];
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin llvmPackages.openmp;
 
   cmakeFlags = [
+    (lib.cmakeBool "OPENMP" true)
     (lib.cmakeBool "SHARED" (!stdenv.hostPlatform.isStatic))
     (lib.cmakeBool "CMAKE_SKIP_BUILD_RPATH" true)
     (lib.cmakeFeature "CMAKE_C_COMPILER" "mpicc")
