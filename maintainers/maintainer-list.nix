@@ -3570,6 +3570,12 @@
     githubId = 32319131;
     name = "Brett L";
   };
+  bubblepipe = {
+    email = "bubblepipe42@gmail.com";
+    github = "bubblepipe";
+    githubId = 30717258;
+    name = "bubblepipe";
+  };
   buckley310 = {
     email = "sean.bck@gmail.com";
     matrix = "@buckley310:matrix.org";
@@ -6472,6 +6478,13 @@
     name = "Duncan Dean";
     keys = [ { fingerprint = "9484 44FC E03B 05BA 5AB0  591E C37B 1C1D 44C7 86EE"; } ];
   };
+  DutchGerman = {
+    name = "Stefan Visser";
+    email = "stefan.visser@apm-ecampus.de";
+    github = "DutchGerman";
+    githubId = 60694691;
+    keys = [ { fingerprint = "A7C9 3DC7 E891 046A 980F  2063 F222 A13B 2053 27A5"; } ];
+  };
   dvaerum = {
     email = "nixpkgs-maintainer@varum.dk";
     github = "dvaerum";
@@ -6945,6 +6958,11 @@
     name = "Emanuel";
     github = "EmanuelM153";
     githubId = 134736553;
+  };
+  emaryn = {
+    name = "emaryn";
+    github = "emaryn";
+    githubId = 197520219;
   };
   emattiza = {
     email = "nix@mattiza.dev";
@@ -8479,12 +8497,6 @@
     github = "gdinh";
     githubId = 34658064;
     name = "Grace Dinh";
-  };
-  gebner = {
-    email = "gebner@gebner.org";
-    github = "gebner";
-    githubId = 313929;
-    name = "Gabriel Ebner";
   };
   geluk = {
     email = "johan+nix@geluk.io";
@@ -18700,6 +18712,12 @@
     github = "pladypus";
     githubId = 56337621;
   };
+  plamper = {
+    name = "Felix Plamper";
+    email = "felix.plamper@tuta.io";
+    github = "plamper";
+    githubId = 59016721;
+  };
   plchldr = {
     email = "mail@oddco.de";
     github = "plchldr";
@@ -18879,6 +18897,12 @@
     githubId = 4201956;
     name = "pongo1231";
   };
+  poopsicles = {
+    name = "Fumnanya";
+    email = "fmowete@outlook.com";
+    github = "poopsicles";
+    githubId = 87488715;
+  };
   PopeRigby = {
     name = "PopeRigby";
     github = "poperigby";
@@ -19050,6 +19074,11 @@
     github = "proglottis";
     githubId = 74465;
     name = "James Fargher";
+  };
+  programmerlexi = {
+    name = "programmerlexi";
+    github = "programmerlexi";
+    githubId = 60185691;
   };
   progrm_jarvis = {
     email = "mrjarviscraft+nix@gmail.com";
@@ -19943,12 +19972,6 @@
     github = "wineee";
     githubId = 22803888;
     name = "Lu Hongxu";
-  };
-  rexim = {
-    email = "reximkut@gmail.com";
-    github = "rexim";
-    githubId = 165283;
-    name = "Alexey Kutepov";
   };
   rexxDigital = {
     email = "joellarssonpriv@gmail.com";
@@ -22185,7 +22208,7 @@
     name = "sodiboo";
     github = "sodiboo";
     githubId = 37938646;
-    matrix = "@sodiboo:arcticfoxes.net";
+    matrix = "@sodiboo:gaysex.cloud";
   };
   softinio = {
     email = "code@softinio.com";

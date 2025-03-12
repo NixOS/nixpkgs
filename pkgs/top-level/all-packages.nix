@@ -6537,11 +6537,10 @@ with pkgs;
   wrapRustcWith = { rustc-unwrapped, ... } @ args: callPackage ../build-support/rust/rustc-wrapper args;
   wrapRustc = rustc-unwrapped: wrapRustcWith { inherit rustc-unwrapped; };
 
-  rust_1_84 = callPackage ../development/compilers/rust/1_84.nix {
-    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security SystemConfiguration;
+  rust_1_85 = callPackage ../development/compilers/rust/1_85.nix {
     llvm_19 = llvmPackages_19.libllvm;
   };
-  rust = rust_1_84;
+  rust = rust_1_85;
 
   mrustc = callPackage ../development/compilers/mrustc { };
   mrustc-minicargo = callPackage ../development/compilers/mrustc/minicargo.nix { };
@@ -6549,8 +6548,8 @@ with pkgs;
     openssl = openssl_1_1;
   };
 
-  rustPackages_1_84 = rust_1_84.packages.stable;
-  rustPackages = rustPackages_1_84;
+  rustPackages_1_85 = rust_1_85.packages.stable;
+  rustPackages = rustPackages_1_85;
 
   inherit (rustPackages) cargo cargo-auditable cargo-auditable-cargo-wrapper clippy rustc rustPlatform;
 
@@ -7243,7 +7242,9 @@ with pkgs;
   wireplumber = callPackage ../development/libraries/pipewire/wireplumber.nix { };
 
   racket = callPackage ../development/interpreters/racket { };
-  racket-minimal = callPackage ../development/interpreters/racket/minimal.nix { };
+  racket-minimal = callPackage ../development/interpreters/racket/minimal.nix {
+    stdenv = stdenvAdapters.makeStaticLibraries stdenv;
+  };
 
   rakudo = callPackage ../development/interpreters/rakudo { };
   moarvm = darwin.apple_sdk_11_0.callPackage ../development/interpreters/rakudo/moarvm.nix {
@@ -9211,12 +9212,7 @@ with pkgs;
     icu76
   ;
 
-  # Use Apple’s fork of ICU by default, which provides additional APIs that are not present in upstream ICU.
-  #
-  # `icuReal` is provided in case the upstream icu package is needed on Darwin instead of the fork.
-  # Note that the versioned icu packages always correspond to the upstream versions.
-  icuReal = icu76;
-  icu = if stdenv.hostPlatform.isDarwin then darwin.ICU else icuReal;
+  icu = icu76;
 
   idasen = with python3Packages; toPythonApplication idasen;
 
@@ -10862,8 +10858,8 @@ with pkgs;
   ### DEVELOPMENT / GO
 
   # the unversioned attributes should always point to the same go version
-  go = go_1_23;
-  buildGoModule = buildGo123Module;
+  go = go_1_24;
+  buildGoModule = buildGo124Module;
 
   go_1_22 = callPackage ../development/compilers/go/1.22.nix { };
   buildGo122Module = callPackage ../build-support/go/module.nix {
@@ -11282,15 +11278,10 @@ with pkgs;
 
   jitsi-videobridge = callPackage ../servers/jitsi-videobridge { };
 
-  kanidm_1_3 = callPackage ../by-name/ka/kanidm/1_3.nix { };
   kanidm_1_4 = callPackage ../by-name/ka/kanidm/1_4.nix { };
   kanidm_1_5 = callPackage ../by-name/ka/kanidm/1_5.nix { };
 
   kanidmWithSecretProvisioning = kanidmWithSecretProvisioning_1_5;
-
-  kanidmWithSecretProvisioning_1_3 = callPackage ../by-name/ka/kanidm/1_3.nix {
-    enableSecretProvisioning = true;
-  };
 
   kanidmWithSecretProvisioning_1_4 = callPackage ../by-name/ka/kanidm/1_4.nix {
     enableSecretProvisioning = true;
@@ -14209,6 +14200,7 @@ with pkgs;
   meshcentral = callPackage ../tools/admin/meshcentral { };
 
   meshlab = libsForQt5.callPackage ../applications/graphics/meshlab { };
+  meshlab-unstable = libsForQt5.callPackage ../applications/graphics/meshlab-unstable { };
 
   michabo = libsForQt5.callPackage ../applications/misc/michabo { };
 

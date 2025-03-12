@@ -109,7 +109,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "gluster";
-    repo = pname;
+    repo = "glusterfs";
     rev = "v${version}";
     sha256 = "sha256-ZClMfozeFO3266fkuCSV04QwpZaYa8B0uq2lTPEN2rQ=";
   };
@@ -158,6 +158,12 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--localstatedir=/var"
   ];
+
+  # FIXME: ugly hack for https://github.com/NixOS/nixpkgs/pull/389009
+  postConfigure = ''
+    substituteInPlace libtool \
+      --replace 'for search_ext in .la $std_shrext .so .a' 'for search_ext in $std_shrext .so .a'
+  '';
 
   nativeBuildInputs = [
     autoconf

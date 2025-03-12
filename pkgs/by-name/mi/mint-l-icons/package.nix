@@ -14,7 +14,7 @@ stdenvNoCC.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "linuxmint";
-    repo = pname;
+    repo = "mint-l-icons";
     # They don't really do tags, this is just a named commit.
     rev = "b442277c822c92f7bb68282cb82c7d1a98e3fd37";
     hash = "sha256-vPDEribE/CZwoAK1C9fjbWQEO/NWMWCKCUO/Xw/SxZ0=";

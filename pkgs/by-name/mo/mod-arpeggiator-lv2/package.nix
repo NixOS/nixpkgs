@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "moddevices";
-    repo = pname;
+    repo = "mod-arpeggiator-lv2";
     rev = "82f3d9f159ce216454656a8782362c3d5ed48bed";
     sha256 = "sha256-1KiWMTVTTf1/iR4AzJ1Oe0mOrWN5edsZN0tQMidgnRA=";
   };

@@ -6917,6 +6917,8 @@ self: super: with self; {
 
   jsonschema-path = callPackage ../development/python-modules/jsonschema-path { };
 
+  jsonschema-rs = callPackage ../development/python-modules/jsonschema-rs { };
+
   jsonschema-spec = callPackage ../development/python-modules/jsonschema-spec { };
 
   jsonschema-specifications = callPackage ../development/python-modules/jsonschema-specifications { };
@@ -8413,6 +8415,8 @@ self: super: with self; {
 
   miniful = callPackage ../development/python-modules/miniful { };
 
+  minify-html = callPackage ../development/python-modules/minify-html { };
+
   minikanren = callPackage ../development/python-modules/minikanren { };
 
   minikerberos = callPackage ../development/python-modules/minikerberos { };
@@ -8450,6 +8454,8 @@ self: super: with self; {
   mistune = callPackage ../development/python-modules/mistune { };
 
   mitmproxy = callPackage ../development/python-modules/mitmproxy { };
+
+  mitmproxy-linux = callPackage ../development/python-modules/mitmproxy-linux { };
 
   mitmproxy-macos = callPackage ../development/python-modules/mitmproxy-macos { };
 
@@ -16653,6 +16659,8 @@ self: super: with self; {
   tinytag = callPackage ../development/python-modules/tinytag { };
 
   tinytuya = callPackage ../development/python-modules/tinytuya { };
+
+  tiptapy = callPackage ../development/python-modules/tiptapy { };
 
   titlecase = callPackage ../development/python-modules/titlecase { };
 
