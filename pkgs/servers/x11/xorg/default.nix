@@ -4363,11 +4363,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xtrans = callPackage ({ stdenv, pkg-config, fetchurl, testers }: stdenv.mkDerivation (finalAttrs: {
     pname = "xtrans";
-    version = "1.5.2";
+    version = "1.6.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/lib/xtrans-1.5.2.tar.xz";
-      sha256 = "0v7qvys42md6nvm16xynhb3b8zz534fc60wg0hfi7ab48zivyp2w";
+      url = "mirror://xorg/individual/lib/xtrans-1.6.0.tar.xz";
+      sha256 = "14ly6m6ww8rl45fdmlf58m0l1ihfji936ncx7lbiligjdcbfmbzs";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
