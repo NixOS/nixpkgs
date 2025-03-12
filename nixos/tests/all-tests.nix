@@ -1163,7 +1163,7 @@ in {
   tayga = handleTest ./tayga.nix {};
   technitium-dns-server = handleTest ./technitium-dns-server.nix {};
   teeworlds = handleTest ./teeworlds.nix {};
-  telegraf = handleTest ./telegraf.nix {};
+  telegraf = runTest ./telegraf.nix;
   teleport = handleTest ./teleport.nix {};
   teleports = runTest ./teleports.nix;
   thelounge = handleTest ./thelounge.nix {};
