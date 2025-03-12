@@ -71,6 +71,7 @@ maven.buildMavenPackage rec {
       # or
       lib.licenses.mpl20
     ];
+    platforms = lib.platforms.unix;
     mainProgram = "verapdf-gui";
     maintainers = [
       lib.maintainers.mohe2015
