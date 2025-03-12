@@ -3,16 +3,19 @@
   stdenv,
   fetchurl,
   makeWrapper,
-  jdk11,
+  jdk11_headless,
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+let
+  jdk11 = jdk11_headless;
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "metabase";
   version = "0.52.8";
 
   src = fetchurl {
-    url = "https://downloads.metabase.com/v${version}/metabase.jar";
+    url = "https://downloads.metabase.com/v${finalAttrs.version}/metabase.jar";
     hash = "sha256-Z14BuKaSAMzlgdtqppc/3ItCxVZwE4E1EQUVMVR6JwQ=";
   };
 
@@ -22,12 +25,12 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     runHook preInstall
-    makeWrapper ${jdk11}/bin/java $out/bin/metabase --add-flags "-jar $src"
+    makeWrapper ${lib.getExe jdk11} $out/bin/metabase --add-flags "-jar $src"
     runHook postInstall
   '';
 
   meta = with lib; {
-    description = "Easy, open source way for everyone in your company to ask questions and learn from data";
+    description = "Business Intelligence and Embedded Analytics tool";
     homepage = "https://metabase.com";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.agpl3Only;
@@ -42,4 +45,4 @@ stdenv.mkDerivation rec {
   passthru.tests = {
     inherit (nixosTests) metabase;
   };
-}
+})
