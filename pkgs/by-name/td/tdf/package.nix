@@ -6,24 +6,31 @@
   cairo,
   glib,
   poppler,
+  llvmPackages,
+  clang,
 }:
 
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage rec {
   pname = "tdf";
-  version = "0.2.0";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "itsjunetime";
     repo = "tdf";
     fetchSubmodules = true;
-    rev = "a2b728fae3c5b0addfa64e8d3e44eac6fd50f1d9";
-    hash = "sha256-0as/tKw0nKkZn+5q5PlKwK+LZK0xWXDAdiD3valVjBs=";
+    tag = "v${version}";
+    hash = "sha256-YYsMLvhkLz1DNH4fhh1WZgEZr3eoy/7Oyz9hTw0jNaY=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-krIPfi4SM4uCw7NLauudwh1tgAaB8enDWnMC5X16n48=";
 
-  nativeBuildInputs = [ pkg-config ];
+  cargoHash = "sha256-/Mr19iXVjuzzC9rIRk8nQP5jkDSMAgspNwwketO5v24=";
+
+  nativeBuildInputs = [
+    pkg-config
+    clang
+  ];
+
   buildInputs = [
     cairo
     glib
@@ -35,13 +42,20 @@ rustPlatform.buildRustPackage {
   # No tests are currently present
   doCheck = false;
 
-  # requires nightly features (feature(portable_simd))
-  RUSTC_BOOTSTRAP = true;
+  env = {
+    CFLAGS = "-Dfdopen=__fdopen";
+    # requires nightly features (feature(portable_simd))
+    RUSTC_BOOTSTRAP = 1;
+    LIBCLANG_PATH = "${lib.getLib llvmPackages.libclang}/lib";
+  };
 
   meta = {
     description = "Tui-based PDF viewer";
     homepage = "https://github.com/itsjunetime/tdf";
-    license = lib.licenses.mpl20;
+    license = with lib.licenses; [
+      agpl3Only
+      mit
+    ];
     maintainers = with lib.maintainers; [
       luftmensch-luftmensch
       DieracDelta
