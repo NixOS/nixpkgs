@@ -87,7 +87,7 @@ in
               return
             fi
 
-            PROMPT_COLOR="1;31m"
+            local PROMPT_COLOR="1;31m"
             ((UID)) && PROMPT_COLOR="1;32m"
 
             # Emacs term mode doesn't support xterm title escape sequence (\e]0;)
