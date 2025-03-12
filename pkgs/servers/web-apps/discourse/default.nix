@@ -466,6 +466,9 @@ let
       maintainers = with maintainers; [ talyz ];
       license = licenses.gpl2Plus;
       description = "Discourse is an open source discussion platform";
+      # fails to compile mini_racer:
+      # mini_racer_v8.cc:316:45: error: no matching function for call to 'v8::ScriptOrigin::ScriptOrigin(v8::Local<v8::String>&)'
+      broken = true;
     };
   };
 in
