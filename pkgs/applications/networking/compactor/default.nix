@@ -73,6 +73,7 @@ stdenv.mkDerivation rec {
     "--with-boost=${boost186.dev}"
   ];
   enableParallelBuilding = true;
+  enableParallelInstalling = false; # race conditions when installing
 
   doCheck = !stdenv.hostPlatform.isDarwin; # check-dnstap.sh failing on Darwin
   nativeCheckInputs = [
