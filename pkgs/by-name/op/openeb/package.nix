@@ -49,11 +49,11 @@ stdenv.mkDerivation {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Open source SDK to create applications leveraging event-based vision hardware equipment";
-    maintainers = with maintainers; [ gebner ];
-    platforms = platforms.unix;
-    license = licenses.asl20;
+    maintainers = with lib.maintainers; [ gebner ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.asl20;
     homepage = "https://www.prophesee.ai/metavision-sdk-pro/";
   };
 }
