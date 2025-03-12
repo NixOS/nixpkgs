@@ -544,5 +544,6 @@ in
 
   meta = {
     inherit (pkgs.postal.meta) maintainers;
+    doc = ./postal.md;
   };
 }
