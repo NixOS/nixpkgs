@@ -5,6 +5,7 @@
   llvmPackages,
   mtools,
   nasm,
+  nixosTests,
   # The following options map to configure flags.
   enableAll ? false,
   buildCDs ? false,
@@ -88,6 +89,8 @@ stdenv.mkDerivation {
     "doc"
     "man"
   ];
+
+  passthru.tests = nixosTests.limine;
 
   meta = {
     homepage = "https://limine-bootloader.org/";
