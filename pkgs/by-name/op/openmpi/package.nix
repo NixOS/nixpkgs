@@ -250,19 +250,16 @@ stdenv.mkDerivation (finalAttrs: {
       done
     '';
 
-  postFixup =
-    lib.optionalString (lib.elem "man" finalAttrs.outputs) ''
-      remove-references-to -t "''${!outputMan}" $(readlink -f $out/lib/libopen-pal${stdenv.hostPlatform.extensions.library})
-    ''
-    + lib.optionalString (lib.elem "dev" finalAttrs.outputs) ''
-      remove-references-to -t "''${!outputDev}" $out/bin/mpirun
-      remove-references-to -t "''${!outputDev}" $(readlink -f $out/lib/libopen-pal${stdenv.hostPlatform.extensions.library})
+  postFixup = ''
+    remove-references-to -t "''${!outputMan}" $(readlink -f $out/lib/libopen-pal${stdenv.hostPlatform.extensions.library})
+    remove-references-to -t "''${!outputDev}" $out/bin/mpirun
+    remove-references-to -t "''${!outputDev}" $(readlink -f $out/lib/libopen-pal${stdenv.hostPlatform.extensions.library})
 
-      # The path to the wrapper is hard coded in libopen-pal.so, which we just cleared.
-      wrapProgram "''${!outputDev}/bin/opal_wrapper" \
-        --set OPAL_INCLUDEDIR "''${!outputDev}/include" \
-        --set OPAL_PKGDATADIR "''${!outputDev}/share/openmpi"
-    '';
+    # The path to the wrapper is hard coded in libopen-pal.so, which we just cleared.
+    wrapProgram "''${!outputDev}/bin/opal_wrapper" \
+      --set OPAL_INCLUDEDIR "''${!outputDev}/include" \
+      --set OPAL_PKGDATADIR "''${!outputDev}/share/openmpi"
+  '';
 
   doCheck = true;
 
