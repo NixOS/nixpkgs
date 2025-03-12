@@ -7,7 +7,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "exegol";
   version = "4.3.10";
-  format = "pyproject";
+  pyproject = true;
 
   pythonRelaxDeps = [
     "rich"
