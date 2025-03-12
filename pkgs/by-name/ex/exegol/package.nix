@@ -1,22 +1,27 @@
 {
   fetchPypi,
   lib,
-  python3,
+  python3Packages,
   xorg,
 }:
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "exegol";
   version = "4.3.10";
   pyproject = true;
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-BtOW7EBbFil7yyhL6uayTUUkDldI8+xxolfQZtX+00c=";
+  };
+
+  build-system = with python3Packages; [ pdm-backend ];
 
   pythonRelaxDeps = [
     "rich"
   ];
 
-  nativeBuildInputs = with python3.pkgs; [ pdm-backend ];
-
-  propagatedBuildInputs =
-    with python3.pkgs;
+  dependencies =
+    with python3Packages;
     [
       pyyaml
       gitpython
@@ -28,12 +33,9 @@ python3.pkgs.buildPythonApplication rec {
     ]
     ++ [ xorg.xhost ];
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-BtOW7EBbFil7yyhL6uayTUUkDldI8+xxolfQZtX+00c=";
-  };
-
   doCheck = true;
+
+  pythonImportsCheck = [ "exegol" ];
 
   meta = with lib; {
     description = "Fully featured and community-driven hacking environment";
@@ -47,9 +49,9 @@ python3.pkgs.buildPythonApplication rec {
     '';
     homepage = "https://github.com/ThePorgs/Exegol";
     changelog = "https://github.com/ThePorgs/Exegol/releases/tag/${version}";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     mainProgram = "exegol";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       _0b11stan
       charB66
     ];
