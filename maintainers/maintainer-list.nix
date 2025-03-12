@@ -24233,6 +24233,12 @@
     githubId = 504580;
     name = "Thibaut Robert";
   };
+  trollmii = {
+    email = "trollmii@outlook.de";
+    github = "TrollMii";
+    githubId = 140972023;
+    name = "Titus E.";
+  };
   tropf = {
     name = "tropf";
     matrix = "@tropf:matrix.org";
