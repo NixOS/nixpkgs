@@ -35,6 +35,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "Simple Management Protocol (SMP) Manager for remotely managing MCU firmware";
     homepage = "https://github.com/intercreate/smpmgr";
+    changelog = "https://github.com/intercreate/smpmgr/releases/tag/${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ otavio ];
     mainProgram = "smpmgr";
