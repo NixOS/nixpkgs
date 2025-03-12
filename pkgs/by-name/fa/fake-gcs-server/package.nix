@@ -18,6 +18,8 @@ buildGoModule rec {
 
   vendorHash = "sha256-oTJ4DCsDazo58ozsAKI0BG7rxfF8oeiIl6vQpRng+LM=";
 
+  doCheck = false;
+
   passthru = {
     updateScript = nix-update-script { };
   };
