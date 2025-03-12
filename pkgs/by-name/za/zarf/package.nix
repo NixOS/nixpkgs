@@ -1,69 +1,84 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  installShellFiles,
-}:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles, stdenv, }:
 
 let
+  # Convert UNIX timestamp to ISO 8601 format (Go's expected format)
+  buildDate = builtins.toString builtins.currentTime;
+
+in buildGoModule rec {
+  pname = "zarf";
   version = "0.49.1";
 
-  # Define the architecture-specific URLs
-  urls = {
-    "x86_64-linux" =
-      "https://github.com/zarf-dev/zarf/releases/download/v${version}/zarf_v${version}_Linux_amd64";
-    "aarch64-linux" =
-      "https://github.com/zarf-dev/zarf/releases/download/v${version}/zarf_v${version}_Linux_arm64";
-    "x86_64-darwin" =
-      "https://github.com/zarf-dev/zarf/releases/download/v${version}/zarf_v${version}_Darwin_amd64";
-    "aarch64-darwin" =
-      "https://github.com/zarf-dev/zarf/releases/download/v${version}/zarf_v${version}_Darwin_arm64";
+  src = fetchFromGitHub {
+    owner = "zarf-dev";
+    repo = "zarf";
+    rev = "v${version}";
+    hash = "sha256-cgg0tmjOlMELdtbPd/zKjOUsqbnpQ+aZx3rcS+7OKP0=";
   };
 
-  hashes = {
-    "x86_64-linux" = "1ss2kj07s3a6m3p6jisp19b75x40xwbnapvldx4q5z3k98cwhxwf";
-    "aarch64-linux" = "08i751ww98vq627gyski0frrg0jp9jl489s0kilpll3wrfz4av9v";
-    "x86_64-darwin" = "02ap5kh5slbvymd9a2rmg8iamih4vpkjbwjlcd0wwc101dnv5jwl";
-    "aarch64-darwin" = "0821z5vgi8ficf29dzgqw6jaxsjq5w7xdjh8adi306ikc406lgr0";
-  };
-
-  platform = stdenv.hostPlatform.system;
-  src = fetchurl {
-    url = urls.${platform} or (throw "Unsupported platform: ${platform}");
-    sha256 = hashes.${platform} or (throw "Missing hash for platform: ${platform}");
-  };
-
-in
-stdenv.mkDerivation {
-  pname = "zarf";
-  inherit version src;
+  vendorHash = "sha256-RfcOWLswzo0+/bCLO+QG75wn6mG/oW5PgP7IBpTIkH8=";
+  proxyVendor = true;
 
   nativeBuildInputs = [ installShellFiles ];
 
-  unpackPhase = "true";
-
-  installPhase = ''
-    mkdir -p $out/bin
-    install -m755 $src $out/bin/zarf
+  preBuild = ''
+    mkdir -p build/ui
+    touch build/ui/index.html
+    export BUILD_DATE=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+    rm -rf hack/schema
   '';
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    export K9S_LOGS_DIR=$(mktemp -d)
-    installShellCompletion --cmd zarf \
-      --bash <($out/bin/zarf completion --no-log-file bash) \
-      --fish <($out/bin/zarf completion --no-log-file fish) \
-      --zsh  <($out/bin/zarf completion --no-log-file zsh)
+  doCheck = false;
+
+  checkPhase = ''
+    go test -failfast $(go list ./... | grep -v '^github.com/zarf-dev/zarf/src/test')
   '';
+
+  ldflags = [
+    "-s"
+    "-w"
+    "-X"
+    "github.com/zarf-dev/zarf/src/config.CLIVersion=${src.rev}"
+    "-X"
+    "helm.sh/helm/v3/pkg/lint/rules.k8sVersionMajor=1"
+    "-X"
+    "helm.sh/helm/v3/pkg/lint/rules.k8sVersionMinor=32"
+    "-X"
+    "helm.sh/helm/v3/pkg/chartutil.k8sVersionMajor=1"
+    "-X"
+    "helm.sh/helm/v3/pkg/chartutil.k8sVersionMinor=32"
+    "-X"
+    "k8s.io/component-base/version.gitVersion=v1.32.2"
+    "-X"
+    "github.com/derailed/k9s/cmd.version=v0.40.5"
+    "-X"
+    "github.com/google/go-containerregistry/cmd/crane/cmd.Version=v0.20.3"
+    "-X"
+    "github.com/zarf-dev/zarf/src/cmd.syftVersion=v1.19.0"
+    "-X"
+    "github.com/zarf-dev/zarf/src/cmd.archiverVersion=v3.5.1"
+    "-X"
+    "github.com/zarf-dev/zarf/src/cmd.helmVersion=v3.17.1"
+    "-X"
+    "k8s.io/component-base/version.gitCommit=46cec01b77565e9dd354e5965a0aa63e26b7bafe"
+    "-X"
+    "k8s.io/component-base/version.buildDate=${buildDate}"
+  ];
+
+  postInstall =
+    lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      export K9S_LOGS_DIR=$(mktemp -d)
+      installShellCompletion --cmd zarf \
+        --bash <($out/bin/zarf completion --no-log-file bash) \
+        --fish <($out/bin/zarf completion --no-log-file fish) \
+        --zsh  <($out/bin/zarf completion --no-log-file zsh)
+    '';
 
   meta = with lib; {
-    description = "DevSecOps for Air Gap & Limited-Connection Systems. https://zarf.dev";
+    description =
+      "DevSecOps for Air Gap & Limited-Connection Systems. https://zarf.dev";
     mainProgram = "zarf";
-    homepage = "https://github.com/zarf-dev/zarf";
+    homepage = "https://github.com/zarf-dev/zarf.git";
     license = licenses.asl20;
-    maintainers = with maintainers; [
-      ragingpastry
-      brandtkeller
-    ];
-    platforms = builtins.attrNames urls;
+    maintainers = with maintainers; [ brandtkeller ragingpastry ];
   };
 }
