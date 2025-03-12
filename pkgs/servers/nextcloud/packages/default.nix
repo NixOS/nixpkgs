@@ -6,13 +6,13 @@
   lib,
   pkgs,
   newScope,
+  apps ? lib.importJSON (./. + "/${ncVersion}.json"), # Support out-of-tree overrides
   callPackage,
   ncVersion,
   nextcloud-notify_push,
 }:
 
 let
-  apps = lib.importJSON (./. + "/${ncVersion}.json");
   packages =
     self:
     let
