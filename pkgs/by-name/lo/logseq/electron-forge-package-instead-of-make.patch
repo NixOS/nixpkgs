@@ -1,0 +1,13 @@
+diff --git a/gulpfile.js b/gulpfile.js
+index 8e3bb0d..2f9e8a4 100644
+--- a/gulpfile.js
++++ b/gulpfile.js
+@@ -192,7 +192,7 @@ exports.electronMaker = async () => {
+     })
+   }
+ 
+-  cp.execSync('yarn electron:make', {
++  cp.execSync('yarn run electron-forge package', {
+     cwd: outputPath,
+     stdio: 'inherit'
+   })
