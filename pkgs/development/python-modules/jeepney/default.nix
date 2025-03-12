@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "jeepney";
-  version = "0.8.0";
+  version = "0.9.0";
 
   disabled = pythonOlder "3.7";
 
@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5efe48d255973902f6badc3ce55e2aa6c5c3b3bc642059ef3a91247bcfcc5806";
+    hash = "sha256-zw6ehFYiuB5KKN+UxANFQAJW7GCNDlW7ij/qqRY/VzI=";
   };
 
   nativeBuildInputs = [ flit-core ];
