@@ -117,7 +117,7 @@ using lightdm for a user `alice`:
 ## Running X without a display manager  {#sec-x11-startx}
 
 It is possible to avoid a display manager entirely and starting the X server
-manually from a virtual terminal. Add to your configuration
+manually from a virtual terminal. Add to your configuration:
 ```nix
 {
   services.xserver.displayManager.startx = {
@@ -130,7 +130,9 @@ then you can start the X server with the `startx` command.
 
 The second option will generate a base `xinitrc` script that will run your
 window manager and set up the systemd user session.
-You can extend the script using the [extraCommands](#opt-services.xserver.displayManager.startx.extraCommands) for example:
+You can extend the script using the
+[extraCommands](#opt-services.xserver.displayManager.startx.extraCommands)
+option, for example:
 ```nix
 {
   services.xserver.displayManager.startx = {
@@ -146,7 +148,7 @@ You can extend the script using the [extraCommands](#opt-services.xserver.displa
 or, alternatively, you can write your own from scratch in `~/.xinitrc`.
 
 In this case, remember you're responsible for starting the window manager, for
-example
+example:
 ```shell
 sxhkd &
 bspwm &

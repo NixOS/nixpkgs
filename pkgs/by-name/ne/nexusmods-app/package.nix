@@ -11,6 +11,7 @@
   makeFontsConf,
   runCommand,
   xdg-utils,
+  nix-update-script,
   pname ? "nexusmods-app",
 }:
 let
@@ -181,7 +182,7 @@ buildDotnetModule (finalAttrs: {
           NexusMods.App list-tools
         '';
       };
-    updateScript = ./update.bash;
+    updateScript = nix-update-script { };
   };
 
   meta = {

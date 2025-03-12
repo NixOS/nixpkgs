@@ -5,7 +5,7 @@
   lib,
   nix-update-script,
 }:
-buildLua (finalAttrs: {
+buildLua {
   pname = "twitch-chat";
   version = "0-unstable-2024-06-23";
 
@@ -13,21 +13,14 @@ buildLua (finalAttrs: {
     owner = "CrendKing";
     repo = "mpv-twitch-chat";
     rev = "bb0c2e84675f4f1e0c221c8e1d3516b60242b985";
-    hash = "sha256-WyNPUiAs5U/vrjNbAgyqkfoxh9rabLmuZ1zG5uZYxaw=";
+    hash = "sha256-lnWYcr49koI60Su85OWbcxrARWTfXW2zIvfCZ6c3GtI=";
+
+    postFetch = "rm $out/screenshot.webp";
   };
 
-  installPhase = ''
-    runHook preInstall
-    install -D main.lua $out/share/mpv/scripts/twitch-chat.lua
-    runHook postInstall
-  '';
+  scriptPath = ".";
 
-  passthru.extraWrapperArgs = [
-    "--prefix"
-    "PATH"
-    ":"
-    (lib.makeBinPath [ curl ])
-  ];
+  runtime-dependencies = [ curl ];
 
   passthru.updateScript = nix-update-script {
     extraArgs = [ "--version=branch" ];
@@ -39,4 +32,4 @@ buildLua (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.naho ];
   };
-})
+}
