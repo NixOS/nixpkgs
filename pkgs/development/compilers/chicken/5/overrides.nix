@@ -146,7 +146,7 @@ in
   );
   openssl = addToBuildInputs pkgs.openssl;
   plot = addToBuildInputs pkgs.plotutils;
-  postgresql = addToBuildInputsWithPkgConfig pkgs.postgresql;
+  postgresql = addToBuildInputsWithPkgConfig pkgs.libpq;
   rocksdb = addToBuildInputs pkgs.rocksdb_8_3;
   scheme2c-compatibility = addPkgConfig;
   sdl-base =

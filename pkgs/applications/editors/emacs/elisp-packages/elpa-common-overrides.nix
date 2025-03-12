@@ -210,7 +210,7 @@ in
   poke = addPackageRequires super.poke [ self.poke-mode ];
 
   pq = super.pq.overrideAttrs (old: {
-    buildInputs = old.buildInputs or [ ] ++ [ pkgs.postgresql ];
+    buildInputs = old.buildInputs or [ ] ++ [ pkgs.libpq ];
   });
 
   preview-auto = mkHome super.preview-auto;

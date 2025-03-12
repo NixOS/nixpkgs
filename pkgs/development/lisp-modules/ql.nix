@@ -59,7 +59,7 @@ let
       nativeLibs = [ pkgs.mariadb.client ];
     });
     clsql-postgresql = super.clsql-postgresql.overrideLispAttrs (o: {
-      nativeLibs = [ pkgs.postgresql.lib ];
+      nativeLibs = [ pkgs.libpq ];
     });
     clsql-sqlite3 = super.clsql-sqlite3.overrideLispAttrs (o: {
       nativeLibs = [ pkgs.sqlite ];
