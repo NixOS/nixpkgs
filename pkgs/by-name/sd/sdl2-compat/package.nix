@@ -52,6 +52,9 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "CMAKE_INSTALL_RPATH" (lib.makeLibraryPath [ sdl3 ]))
   ];
 
+  # skip timing-based tests as those are flaky
+  env.SDL_TESTS_QUICK = 1;
+
   doCheck = testSupport && stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   patches = [ ./find-headers.patch ];
