@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromGitHub,
+  nix-update-script,
   rustPlatform,
   testers,
   zizmor,
@@ -23,6 +24,8 @@ rustPlatform.buildRustPackage rec {
   passthru.tests.version = testers.testVersion {
     package = zizmor;
   };
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Tool for finding security issues in GitHub Actions setups";
