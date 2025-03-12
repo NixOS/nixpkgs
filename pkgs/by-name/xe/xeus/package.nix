@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "jupyter-xeus";
-    repo = pname;
+    repo = "xeus";
     tag = version;
     hash = "sha256-YtAkegwHo9XXIz0l5qXqnKn6kP1MWETXbVommX+Pws8=";
   };
