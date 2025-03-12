@@ -9,7 +9,8 @@ attr=$UPDATE_NIX_ATTR_PATH
 prev_version=$UPDATE_NIX_OLD_VERSION
 nix-update "$attr" \
     --version-regex "($versionPrefix\\b.*-stable)" \
-    --override-filename "$2"
+    --override-filename "$2" \
+    --src-only
 [[ $(nix eval --raw -f. "$attr".version) != "$prev_version" ]] || exit 0
 
 "$(nix build --impure --expr "((import ./. {}).$attr.override { withMono = true; }).fetch-deps" --print-out-paths --no-link)"
