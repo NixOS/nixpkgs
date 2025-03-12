@@ -51,18 +51,18 @@
     "idea-community": {
       "update-channel": "IntelliJ IDEA RELEASE",
       "url-template": "https://download.jetbrains.com/idea/ideaIC-{version}.tar.gz",
-      "version": "2024.3.4",
-      "sha256": "c6cf5f591854d29e4005549188b04a8174ce07a922b4d54150182f813bbaadf5",
-      "url": "https://download.jetbrains.com/idea/ideaIC-2024.3.4.tar.gz",
-      "build_number": "243.25659.39"
+      "version": "2024.3.4.1",
+      "sha256": "3eefea10391fdeaaf19ba6d00ee8c7f174a4feb5261394c4d3454d1cf0f5826b",
+      "url": "https://download.jetbrains.com/idea/ideaIC-2024.3.4.1.tar.gz",
+      "build_number": "243.25659.59"
     },
     "idea-ultimate": {
       "update-channel": "IntelliJ IDEA RELEASE",
       "url-template": "https://download.jetbrains.com/idea/ideaIU-{version}.tar.gz",
-      "version": "2024.3.4",
-      "sha256": "3765f4619f7ab8c28a6d523f741a4492d31d7d7d9ac8f5e7d8212dd2a71fdf9c",
-      "url": "https://download.jetbrains.com/idea/ideaIU-2024.3.4.tar.gz",
-      "build_number": "243.25659.39"
+      "version": "2024.3.4.1",
+      "sha256": "e9b5b868e425aa1255d75f85028e7ba6275bb8aab88781e960c2c7c34f2173e8",
+      "url": "https://download.jetbrains.com/idea/ideaIU-2024.3.4.1.tar.gz",
+      "build_number": "243.25659.59"
     },
     "mps": {
       "update-channel": "MPS RELEASE",
@@ -116,10 +116,10 @@
     "rust-rover": {
       "update-channel": "RustRover RELEASE",
       "url-template": "https://download.jetbrains.com/rustrover/RustRover-{version}.tar.gz",
-      "version": "2024.3.5",
-      "sha256": "2815a48b28387dea4e3a0eb48a4fd3d903c403e0e8c6e938dee75fccf686e59c",
-      "url": "https://download.jetbrains.com/rustrover/RustRover-2024.3.5.tar.gz",
-      "build_number": "243.24978.86"
+      "version": "2024.3.6",
+      "sha256": "c4373d591eabcfdca4e8e5f635d9007855ac8a32baf4aac26e189d6415f6df9f",
+      "url": "https://download.jetbrains.com/rustrover/RustRover-2024.3.6.tar.gz",
+      "build_number": "243.25659.54"
     },
     "webstorm": {
       "update-channel": "WebStorm RELEASE",
@@ -190,18 +190,18 @@
     "idea-community": {
       "update-channel": "IntelliJ IDEA RELEASE",
       "url-template": "https://download.jetbrains.com/idea/ideaIC-{version}-aarch64.tar.gz",
-      "version": "2024.3.4",
-      "sha256": "b5b7227d785832bff65243fe9e2517e3645e6d67c8e7640b6b012d05dafddbc9",
-      "url": "https://download.jetbrains.com/idea/ideaIC-2024.3.4-aarch64.tar.gz",
-      "build_number": "243.25659.39"
+      "version": "2024.3.4.1",
+      "sha256": "8b6a175a671295fe5095904e4aab5e9b91ff699cb691c5d6f3faadb8b9fd1037",
+      "url": "https://download.jetbrains.com/idea/ideaIC-2024.3.4.1-aarch64.tar.gz",
+      "build_number": "243.25659.59"
     },
     "idea-ultimate": {
       "update-channel": "IntelliJ IDEA RELEASE",
       "url-template": "https://download.jetbrains.com/idea/ideaIU-{version}-aarch64.tar.gz",
-      "version": "2024.3.4",
-      "sha256": "6928108d6481f1c827a6a5c994cd225229b9131b53f0c8dc03854aa585006648",
-      "url": "https://download.jetbrains.com/idea/ideaIU-2024.3.4-aarch64.tar.gz",
-      "build_number": "243.25659.39"
+      "version": "2024.3.4.1",
+      "sha256": "a6245e6e1bef3062be5b06cf61bd2eb489e64c6c26f86040cb9c28e4c65e780b",
+      "url": "https://download.jetbrains.com/idea/ideaIU-2024.3.4.1-aarch64.tar.gz",
+      "build_number": "243.25659.59"
     },
     "mps": {
       "update-channel": "MPS RELEASE",
@@ -255,10 +255,10 @@
     "rust-rover": {
       "update-channel": "RustRover RELEASE",
       "url-template": "https://download.jetbrains.com/rustrover/RustRover-{version}-aarch64.tar.gz",
-      "version": "2024.3.5",
-      "sha256": "00b097ca83268d06dbccffec7fdbaee788cdd683c65b4f0b5fd80aa01e22e92d",
-      "url": "https://download.jetbrains.com/rustrover/RustRover-2024.3.5-aarch64.tar.gz",
-      "build_number": "243.24978.86"
+      "version": "2024.3.6",
+      "sha256": "e6ad574015ffc7f6392434634a5f3172e1ce94d96f10e8e94e9012f2ee770933",
+      "url": "https://download.jetbrains.com/rustrover/RustRover-2024.3.6-aarch64.tar.gz",
+      "build_number": "243.25659.54"
     },
     "webstorm": {
       "update-channel": "WebStorm RELEASE",
@@ -329,18 +329,18 @@
     "idea-community": {
       "update-channel": "IntelliJ IDEA RELEASE",
       "url-template": "https://download.jetbrains.com/idea/ideaIC-{version}.dmg",
-      "version": "2024.3.4",
-      "sha256": "bc8944def81cc68b3920fbdfd8a880307c255fb0241b61c8816ec065f3657241",
-      "url": "https://download.jetbrains.com/idea/ideaIC-2024.3.4.dmg",
-      "build_number": "243.25659.39"
+      "version": "2024.3.4.1",
+      "sha256": "bf4d88befcd445db19732d9c02d2db864196bbd6554fe4b54f80f8e1936e3993",
+      "url": "https://download.jetbrains.com/idea/ideaIC-2024.3.4.1.dmg",
+      "build_number": "243.25659.59"
     },
     "idea-ultimate": {
       "update-channel": "IntelliJ IDEA RELEASE",
       "url-template": "https://download.jetbrains.com/idea/ideaIU-{version}.dmg",
-      "version": "2024.3.4",
-      "sha256": "2b4a62df4b4735c3a8d5ea0baba390f89d6a2342b561658d94310a767b17ba8b",
-      "url": "https://download.jetbrains.com/idea/ideaIU-2024.3.4.dmg",
-      "build_number": "243.25659.39"
+      "version": "2024.3.4.1",
+      "sha256": "f4bf75679314b88aa6fe1c892175178498e3bc13583cb1380fa2cc12fab8acf1",
+      "url": "https://download.jetbrains.com/idea/ideaIU-2024.3.4.1.dmg",
+      "build_number": "243.25659.59"
     },
     "mps": {
       "update-channel": "MPS RELEASE",
@@ -394,10 +394,10 @@
     "rust-rover": {
       "update-channel": "RustRover RELEASE",
       "url-template": "https://download.jetbrains.com/rustrover/RustRover-{version}.dmg",
-      "version": "2024.3.5",
-      "sha256": "eeaf1a2f88ffd5404d699dd0ea1dc9c6037649db797f0b333ea5f2b66875db5b",
-      "url": "https://download.jetbrains.com/rustrover/RustRover-2024.3.5.dmg",
-      "build_number": "243.24978.86"
+      "version": "2024.3.6",
+      "sha256": "ebcec89bbb05a3c6d2626bd5692bd1a45732f28108c9a0eaad0a19bbf463acc6",
+      "url": "https://download.jetbrains.com/rustrover/RustRover-2024.3.6.dmg",
+      "build_number": "243.25659.54"
     },
     "webstorm": {
       "update-channel": "WebStorm RELEASE",
@@ -468,18 +468,18 @@
     "idea-community": {
       "update-channel": "IntelliJ IDEA RELEASE",
       "url-template": "https://download.jetbrains.com/idea/ideaIC-{version}-aarch64.dmg",
-      "version": "2024.3.4",
-      "sha256": "bb5b4dc13f4a7ae5fc1416a54ad65ed7e682ea478aee68b1f7c3d3c70426e136",
-      "url": "https://download.jetbrains.com/idea/ideaIC-2024.3.4-aarch64.dmg",
-      "build_number": "243.25659.39"
+      "version": "2024.3.4.1",
+      "sha256": "5b8681be2c39c2bbbff143aea27161a5f69c72daf6e88d6f320867bbf7c51659",
+      "url": "https://download.jetbrains.com/idea/ideaIC-2024.3.4.1-aarch64.dmg",
+      "build_number": "243.25659.59"
     },
     "idea-ultimate": {
       "update-channel": "IntelliJ IDEA RELEASE",
       "url-template": "https://download.jetbrains.com/idea/ideaIU-{version}-aarch64.dmg",
-      "version": "2024.3.4",
-      "sha256": "2ce20f6414baf15283d745aea06bcd44213e5b3e0940f8485d1b92e446ca9262",
-      "url": "https://download.jetbrains.com/idea/ideaIU-2024.3.4-aarch64.dmg",
-      "build_number": "243.25659.39"
+      "version": "2024.3.4.1",
+      "sha256": "ac323f3d011e826cc37d88d99585d28092703abfc464cabc3c033bb85ae86c65",
+      "url": "https://download.jetbrains.com/idea/ideaIU-2024.3.4.1-aarch64.dmg",
+      "build_number": "243.25659.59"
     },
     "mps": {
       "update-channel": "MPS RELEASE",
@@ -533,10 +533,10 @@
     "rust-rover": {
       "update-channel": "RustRover RELEASE",
       "url-template": "https://download.jetbrains.com/rustrover/RustRover-{version}-aarch64.dmg",
-      "version": "2024.3.5",
-      "sha256": "0f1c0470eaf046daeb1f1a3a1fa23a90dad94b8b3479d377600e38e4bae14e10",
-      "url": "https://download.jetbrains.com/rustrover/RustRover-2024.3.5-aarch64.dmg",
-      "build_number": "243.24978.86"
+      "version": "2024.3.6",
+      "sha256": "f45da1a104b972697808d93508645269229c52fe7561ef79f2865459c259ebf8",
+      "url": "https://download.jetbrains.com/rustrover/RustRover-2024.3.6-aarch64.dmg",
+      "build_number": "243.25659.54"
     },
     "webstorm": {
       "update-channel": "WebStorm RELEASE",

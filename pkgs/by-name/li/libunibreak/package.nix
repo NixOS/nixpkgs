@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     in
     fetchFromGitHub {
       owner = "adah1972";
-      repo = pname;
+      repo = "libunibreak";
       rev = "libunibreak_${rev_version}";
       sha256 = "sha256-8yheb+XSvc1AqITjSutF+/4OWb4+7hweedKzhKJcE1Y=";
     };

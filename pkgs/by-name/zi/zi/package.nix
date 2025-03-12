@@ -10,7 +10,7 @@ stdenvNoCC.mkDerivation rec {
   version = "unstable-2022-04-09";
   src = fetchFromGitHub {
     owner = "z-shell";
-    repo = pname;
+    repo = "zi";
     rev = "4ca4d3276ca816c3d37a31e47d754f9a732c40b9";
     sha256 = "sha256-KcDFT0is5Ef/zRo6zVfxYfBMOb5oVaVFT4EsUrfiMko=";
   };
