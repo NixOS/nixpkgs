@@ -36,7 +36,7 @@ buildPythonPackage {
 
   disabledTests =
     [
-      # The following three tests fail for unclear reasons.
+      # The follwing three tests fail for unclear reasons.
       # pytest.PytestUnhandledThreadExceptionWarning: Exception in thread Thread-8
       "test_asyncio_interrupt"
 

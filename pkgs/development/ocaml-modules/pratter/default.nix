@@ -1,6 +1,6 @@
 {
   lib,
-  fetchFromGitLab,
+  fetchFromGitHub,
   buildDunePackage,
   camlp-streams,
   alcotest,
@@ -9,17 +9,17 @@
 }:
 
 buildDunePackage rec {
-  version = "3.0.0";
+  version = "2.0.0";
   pname = "pratter";
 
   minimalOCamlVersion = "4.08";
+  duneVersion = "3";
 
-  src = fetchFromGitLab {
-    domain = "forge.tedomum.net";
-    owner = "koizel";
+  src = fetchFromGitHub {
+    owner = "gabrielhdt";
     repo = "pratter";
-    tag = version;
-    hash = "sha256-O9loVYPJ9xoYf221vBbclqNNq2AA3ImUFGHxtfK3Jwc=";
+    rev = version;
+    hash = "sha256-QEq8Zt2pfsRT04Zd+ugGKcHdzkqYcDDUg/iAFMMDdEE=";
   };
 
   propagatedBuildInputs = [ camlp-streams ];

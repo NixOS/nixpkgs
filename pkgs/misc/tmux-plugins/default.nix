@@ -96,7 +96,7 @@ in rec {
       owner = "catppuccin";
       repo = "tmux";
       rev = "v${version}";
-      hash = "sha256-vBYBvZrMGLpMU059a+Z4SEekWdQD0GrDqBQyqfkEHPg=";
+      hash = "sha256-EHinWa6Zbpumu+ciwcMo6JIIvYFfWWEKH1lwfyZUNTo=";
     };
     postInstall = ''
       sed -i -e 's|''${PLUGIN_DIR}/catppuccin-selected-theme.tmuxtheme|''${TMUX_TMPDIR}/catppuccin-selected-theme.tmuxtheme|g' $target/catppuccin.tmux
@@ -201,17 +201,15 @@ in rec {
     src = fetchFromGitHub {
       owner = "dracula";
       repo = "tmux";
-      tag = "v${version}";
+      rev = "v${version}";
       hash = "sha256-WNgCa8F618JQiHDM1YxHj7oR7w+7U6SU89K90RYIUh8=";
     };
-    meta = {
+    meta = with lib; {
       homepage = "https://draculatheme.com/tmux";
-      downloadPage = "https://github.com/dracula/tmux";
       description = "Feature packed Dracula theme for tmux!";
-      changelog = "https://github.com/dracula/tmux/releases/tag/v${version}/CHANGELOG.md";
-      license = lib.licenses.mit;
-      platforms = lib.platforms.unix;
-      maintainers = with lib.maintainers; [ ethancedwards8 ];
+      license = licenses.mit;
+      platforms = platforms.unix;
+      maintainers = with maintainers; [ ethancedwards8 ];
     };
   };
 
@@ -462,13 +460,13 @@ in rec {
 
   pass = mkTmuxPlugin {
     pluginName = "pass";
-    version = "0-unstable-2025-02-20";
+    version = "0-unstable-2020-02-28";
     rtpFilePath = "plugin.tmux";
-    src = fetchFromGitHub {
+    src = pkgs.fetchFromGitHub {
       owner = "rafi";
       repo = "tmux-pass";
-      rev = "c853c8b5e31dea93d17551ef3e18be16c063e28e";
-      hash = "sha256-fDAqQcr0SC9WrKbGgt7z03ex2ORZ7ChOzDGl6HFXMaA";
+      rev = "76b1c98911d56928063a41bc93a2d9e81818ef4c";
+      hash = "sha256-bamz4IZrozo5R7jt+z7YKyrogawPqsZ9cTJi9osjVoA=";
     };
 
     nativeBuildInputs = [ pkgs.makeWrapper ];
@@ -482,11 +480,10 @@ in rec {
         ] )}
     '';
 
-    meta = {
+    meta = with lib; {
       description = "Password-store browser using fzf in tmux";
       homepage = "https://github.com/rafi/tmux-pass";
-      license = lib.licenses.gpl3Only;
-      maintainers = [ lib.maintainers.ethancedwards8 ];
+      license = licenses.unlicense;
     };
   };
 
@@ -792,44 +789,6 @@ in rec {
       license = lib.licenses.bsd3;
       platforms = lib.platforms.unix;
       maintainers = with lib.maintainers; [ thomasjm ];
-    };
-  };
-
-  tmux-sessionx = mkTmuxPlugin {
-    pluginName = "sessionx";
-    version = "0-unstable-2024-09-22";
-    src = fetchFromGitHub {
-      owner = "omerxx";
-      repo = "tmux-sessionx";
-      rev = "508359b8a6e2e242a9270292160624406be3bbca";
-      hash = "sha256-nbzn3qxMGRzxFnLBVrjqGl09++9YOK4QrLoYiHUS9jY=";
-    };
-    nativeBuildInputs = [ pkgs.makeWrapper ];
-    postPatch = ''
-      substituteInPlace sessionx.tmux \
-        --replace-fail "\$CURRENT_DIR/scripts/sessionx.sh" "$out/share/tmux-plugins/sessionx/scripts/sessionx.sh"
-      substituteInPlace scripts/sessionx.sh \
-        --replace-fail "/tmux-sessionx/scripts/preview.sh" "$out/share/tmux-plugins/sessionx/scripts/preview.sh"
-      substituteInPlace scripts/sessionx.sh \
-        --replace-fail "/tmux-sessionx/scripts/reload_sessions.sh" "$out/share/tmux-plugins/sessionx/scripts/reload_sessions.sh"
-    '';
-    postInstall = ''
-      chmod +x $target/scripts/sessionx.sh
-      wrapProgram $target/scripts/sessionx.sh \
-        --prefix PATH : ${with pkgs; lib.makeBinPath [ zoxide fzf gnugrep gnused coreutils ]}
-      chmod +x $target/scripts/preview.sh
-      wrapProgram $target/scripts/preview.sh \
-        --prefix PATH : ${with pkgs; lib.makeBinPath [ coreutils gnugrep gnused ]}
-      chmod +x $target/scripts/reload_sessions.sh
-      wrapProgram $target/scripts/reload_sessions.sh \
-        --prefix PATH : ${with pkgs; lib.makeBinPath [ coreutils gnugrep gnused ]}
-    '';
-    meta = {
-      description = "Tmux session manager, with preview, fuzzy finding, and MORE";
-      homepage = "https://github.com/omerxx/tmux-sessionx";
-      license = lib.licenses.gpl3Only;
-      maintainers = with lib.maintainers; [ okwilkins ];
-      platforms = lib.platforms.all;
     };
   };
 

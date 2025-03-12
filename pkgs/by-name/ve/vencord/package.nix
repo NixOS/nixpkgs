@@ -7,32 +7,32 @@
   lib,
   nix-update,
   nodejs,
-  pnpm_10,
+  pnpm_9,
   stdenv,
   writeShellScript,
   buildWebExtension ? false,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "vencord";
-  version = "1.11.6";
+  version = "1.11.5";
 
   src = fetchFromGitHub {
     owner = "Vendicated";
     repo = "Vencord";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-8KAt7yFGT/DBlg2VJ7ejsOJ67Sp5cuuaKEWK3+VpL4E=";
+    hash = "sha256-hdlFL95DFVeUs08/wg6EA5CfV6KeUGaS9kcLGRMyNgY=";
   };
 
-  pnpmDeps = pnpm_10.fetchDeps {
+  pnpmDeps = pnpm_9.fetchDeps {
     inherit (finalAttrs) pname src;
-    hash = "sha256-g9BSVUKpn74D9eIDj/lS1Y6w/+AnhCw++st4s4REn+A=";
+
+    hash = "sha256-0afgeJkK0OQWoqF0b8pHPMsiTKox84YmwBhtNWGyVAg=";
   };
 
   nativeBuildInputs = [
     git
     nodejs
-    pnpm_10.configHook
+    pnpm_9.configHook
   ];
 
   env = {
@@ -89,15 +89,15 @@ stdenv.mkDerivation (finalAttrs: {
     exec nix-update --version "$latestTag" "$@"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Vencord web extension";
     homepage = "https://github.com/Vendicated/Vencord";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [
-      donteatoreo
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [
       FlafyDev
       NotAShelf
       Scrumplex
+      donteatoreo
     ];
   };
 })

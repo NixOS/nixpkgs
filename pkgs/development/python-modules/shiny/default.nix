@@ -2,12 +2,9 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-
-  # build-system
   setuptools,
   setuptools-scm,
 
-  # dependencies
   appdirs,
   asgiref,
   click,
@@ -28,33 +25,32 @@
   watchfiles,
   websockets,
 
-  # tests
   anthropic,
   cacert,
   google-generativeai,
   langchain-core,
   ollama,
   openai,
-  pandas,
-  polars,
+  pytestCheckHook,
   pytest-asyncio,
   pytest-playwright,
-  pytest-rerunfailures,
-  pytest-timeout,
   pytest-xdist,
-  pytestCheckHook,
+  pytest-timeout,
+  pytest-rerunfailures,
+  pandas,
+  polars,
 }:
 
 buildPythonPackage rec {
   pname = "shiny";
-  version = "1.3.0";
+  version = "1.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "posit-dev";
     repo = "py-shiny";
     tag = "v${version}";
-    hash = "sha256-YCPHjelGPYYo23Vzxy5+8Kn9fVlSZy1Qva7zp93+nzg=";
+    hash = "sha256-8bo2RHuIP7X7EaOlHd+2m4XU287owchAwiqPnpjKFjI=";
   };
 
   build-system = [
@@ -99,32 +95,30 @@ buildPythonPackage rec {
     langchain-core
     ollama
     openai
-    pandas
-    polars
+    pytestCheckHook
     pytest-asyncio
     pytest-playwright
-    pytest-rerunfailures
-    pytest-timeout
     pytest-xdist
-    pytestCheckHook
+    pytest-timeout
+    pytest-rerunfailures
+    pandas
+    polars
   ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   env.SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
   disabledTests = [
-    # Requires unpackaged brand-yml
-    "test_theme_from_brand_base_case_compiles"
     # ValueError: A tokenizer is required to impose `token_limits` on messages
     "test_chat_message_trimming"
+    # https://github.com/posit-dev/py-shiny/pull/1791
+    "test_as_ollama_message"
   ];
 
-  __darwinAllowLocalNetworking = true;
-
   meta = {
+    changelog = "https://github.com/posit-dev/py-shiny/blob/${src.tag}/CHANGELOG.md";
     description = "Build fast, beautiful web applications in Python";
-    homepage = "https://shiny.posit.co/py";
-    changelog = "https://github.com/posit-dev/py-shiny/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
+    homepage = "https://shiny.posit.co/py";
     maintainers = with lib.maintainers; [ sigmanificient ];
   };
 }

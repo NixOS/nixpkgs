@@ -24,7 +24,7 @@
 
   # passthru.tests
   runCommand,
-  poppler-utils,
+  poppler_utils,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -157,7 +157,7 @@ stdenv.mkDerivation (finalAttrs: {
       runCommand "${finalAttrs.pname}-test"
         {
           nativeBuildInputs = [
-            poppler-utils
+            poppler_utils
             finalAttrs.finalPackage
           ];
           inherit (finalAttrs) FONTCONFIG_FILE;

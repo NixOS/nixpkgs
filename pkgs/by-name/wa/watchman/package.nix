@@ -35,13 +35,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "watchman";
-  version = "2025.02.10.00";
+  version = "2025.01.06.00";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "watchman";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-X9cUiMrUeuuJT+0gJa9cL2mpeSEWS/DkTx7eQu8u7oY=";
+    hash = "sha256-W37+xs+Fj2yL9KzR9CugfgbFl+g3f+2Dx+xL9MpQEQ4=";
   };
 
   patches = [
@@ -103,7 +103,7 @@ stdenv.mkDerivation (finalAttrs: {
     remove-references-to -t ${folly.fmt.dev} $out/bin/*
   '';
 
-  passthru.updateScript = ./update.sh;
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Watches files and takes action when they change";

@@ -5,8 +5,8 @@
   dash,
   php,
   phpCfg ? null,
-  withPostgreSQL ? true, # “strongly recommended” according to docs
-  withMySQL ? false,
+  withPgsql ? true, # “strongly recommended” according to docs
+  withMysql ? false,
   minifyStaticFiles ? false, # default files are often not minified
   esbuild,
   lightningcss,
@@ -67,14 +67,14 @@ php.buildComposerProject2 (finalAttrs: {
           pdo
           simplexml
         ])
-        ++ lib.optionals withPostgreSQL (
+        ++ lib.optionals withPgsql (
           with all;
           [
             pdo_pgsql
             pgsql
           ]
         )
-        ++ lib.optionals withMySQL (
+        ++ lib.optionals withMysql (
           with all;
           [
             mysqli

@@ -4,7 +4,7 @@
   buildPythonPackage,
   deltachat-rpc-server,
   setuptools-scm,
-  replaceVars,
+  substituteAll,
 }:
 
 buildPythonPackage rec {
@@ -20,7 +20,8 @@ buildPythonPackage rec {
   };
 
   patches = [
-    (replaceVars ./paths.patch {
+    (substituteAll {
+      src = ./paths.patch;
       deltachatrpcserver = lib.getExe deltachat-rpc-server;
     })
   ];

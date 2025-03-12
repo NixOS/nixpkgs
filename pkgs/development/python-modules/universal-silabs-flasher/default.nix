@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   setuptools,
@@ -28,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "universal-silabs-flasher";
-  version = "0.0.30";
+  version = "0.0.28";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "NabuCasa";
     repo = "universal-silabs-flasher";
     tag = "v${version}";
-    hash = "sha256-AAF3MswdhGgSVS6efUp+QylWykbNqHz2ThfBdD8E/ew=";
+    hash = "sha256-ZV2yldOzcH4Su31dmkE1f0JXDZI6SsSZGi4KyFvzRb4=";
   };
 
   postPatch = ''
@@ -46,18 +45,21 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  dependencies =
-    [
-      bellows
-      click
-      coloredlogs
-      crc
-      pyserial-asyncio-fast
-      typing-extensions
-      zigpy
-    ]
-    ++ lib.optionals (pythonOlder "3.11") [ async-timeout ]
-    ++ lib.optionals (stdenv.hostPlatform.isLinux) [ libgpiod ];
+  pythonRelaxDeps = [
+    # https://github.com/NabuCasa/universal-silabs-flasher/pull/50
+    "gpiod"
+  ];
+
+  propagatedBuildInputs = [
+    async-timeout
+    bellows
+    click
+    coloredlogs
+    crc
+    pyserial-asyncio-fast
+    typing-extensions
+    zigpy
+  ] ++ lib.optionals (stdenv.hostPlatform.isLinux) [ libgpiod ];
 
   nativeCheckInputs = [
     pytestCheckHook

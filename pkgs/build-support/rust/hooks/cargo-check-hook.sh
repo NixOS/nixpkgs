@@ -11,9 +11,10 @@ cargoCheckHook() {
 
     local flagsArray=("-j" "$NIX_BUILD_CORES")
 
-    export RUST_TEST_THREADS=$NIX_BUILD_CORES
-    if [[ ! -z ${dontUseCargoParallelTests-} ]]; then
-        RUST_TEST_THREADS=1
+    if [[ -z ${dontUseCargoParallelTests-} ]]; then
+        prependToVar checkFlags "--test-threads=$NIX_BUILD_CORES"
+    else
+        prependToVar checkFlags "--test-threads=1"
     fi
 
     if [ "${cargoCheckType}" != "debug" ]; then
@@ -29,7 +30,7 @@ cargoCheckHook() {
     fi
 
     flagsArray+=(
-        "--target" "@rustcTarget@"
+        "--target" "@rustHostPlatformSpec@"
         "--offline"
     )
 
@@ -37,7 +38,7 @@ cargoCheckHook() {
     concatTo flagsArray cargoTestFlags checkFlags checkFlagsArray
 
     echoCmd 'cargoCheckHook flags' "${flagsArray[@]}"
-    cargo test "${flagsArray[@]}"
+    @setEnv@ cargo test "${flagsArray[@]}"
 
     if [[ -n "${buildAndTestSubdir-}" ]]; then
         popd

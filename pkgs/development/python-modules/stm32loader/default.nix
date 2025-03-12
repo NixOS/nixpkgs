@@ -7,7 +7,7 @@
   # build-system
   flit-core,
 
-  # dependencies
+  # dependenices
   progress,
   pyserial,
 

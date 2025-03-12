@@ -9,21 +9,16 @@
 }:
 python3.pkgs.buildPythonApplication rec {
   pname = "benchexec";
-  version = "3.27";
+  version = "3.21";
 
   src = fetchFromGitHub {
     owner = "sosy-lab";
     repo = "benchexec";
     rev = version;
-    hash = "sha256-lokz7klAQAascij0T/T43/PrbMh6ZUAvFnIqg13pVUk=";
+    hash = "sha256-bE3brmmLHZQakDKvd47I1hm9Dcsu6DrSeJyjWWtEZWI=";
   };
 
   pyproject = true;
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail 'setuptools ==' 'setuptools >='
-  '';
 
   nativeBuildInputs = with python3.pkgs; [ setuptools ];
 

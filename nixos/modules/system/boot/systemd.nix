@@ -88,7 +88,6 @@ let
       "sys-fs-fuse-connections.mount"
       ] ++ (optional (!config.boot.isContainer) "sys-kernel-config.mount") ++ [
       "sys-kernel-debug.mount"
-      "sys-kernel-tracing.mount"
 
       # Maintaining state across reboots.
       "systemd-random-seed.service"

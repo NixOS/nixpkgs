@@ -2,36 +2,15 @@
   lib,
   buildPythonPackage,
   btrfs-progs,
-  autoreconfHook,
-  pkg-config,
-  e2fsprogs,
-  libuuid,
-  zlib,
 }:
 buildPythonPackage {
   pname = "btrfsutil";
   inherit (btrfs-progs) version src;
   format = "setuptools";
 
-  buildInputs = [
-    btrfs-progs
-    e2fsprogs
-    libuuid
-    zlib
-  ];
-  nativeBuildInputs = [
-    autoreconfHook
-    pkg-config
-  ];
+  buildInputs = [ btrfs-progs ];
 
-  configureFlags = [
-    "--disable-documentation"
-    "--disable-zstd"
-    "--disable-lzo"
-    "--disable-libudev"
-  ];
-
-  preBuild = ''
+  preConfigure = ''
     cd libbtrfsutil/python
   '';
 

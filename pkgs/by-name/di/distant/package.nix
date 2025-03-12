@@ -6,26 +6,20 @@
   pkg-config,
   openssl,
   zlib,
-  writableTmpDirAsHomeHook,
   versionCheckHook,
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage (finalAttrs: {
+rustPlatform.buildRustPackage rec {
   pname = "distant";
   version = "0.20.0";
 
   src = fetchFromGitHub {
     owner = "chipsenkbeil";
     repo = "distant";
-    tag = "v${finalAttrs.version}";
+    tag = "v${version}";
     hash = "sha256-DcnleJUAeYg3GSLZljC3gO9ihiFz04dzT/ddMnypr48=";
   };
-
-  # error: linker `aarch64-linux-gnu-gcc` not found
-  postPatch = ''
-    rm .cargo/config.toml
-  '';
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-HEyPfkusgk8JEYAzIS8Zj5EU0MK4wt4amlsJqBEG/Kc=";
@@ -43,9 +37,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     OPENSSL_NO_VENDOR = true;
   };
 
-  nativeCheckInputs = [
-    writableTmpDirAsHomeHook
-  ];
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
 
   checkFlags =
     [
@@ -78,11 +72,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Library and tooling that supports remote filesystem and process operations";
     homepage = "https://github.com/chipsenkbeil/distant";
-    changelog = "https://github.com/chipsenkbeil/distant/blob/${finalAttrs.version}/CHANGELOG.md";
+    changelog = "https://github.com/chipsenkbeil/distant/blob/${version}/CHANGELOG.md";
     # From the README:
     # "This project is licensed under either of Apache License, Version 2.0, MIT license at your option."
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
     mainProgram = "distant";
   };
-})
+}

@@ -1,7 +1,7 @@
 {
   lib,
   runtimeShell,
-  replaceVarsWith,
+  substituteAll,
   nix,
   coreutils,
   jq,
@@ -12,25 +12,23 @@
   cacert,
 }:
 
-replaceVarsWith {
+substituteAll {
   name = "nuget-to-json";
   dir = "bin";
 
   src = ./nuget-to-json.sh;
   isExecutable = true;
 
-  replacements = {
-    inherit runtimeShell cacert;
-    binPath = lib.makeBinPath [
-      nix
-      coreutils
-      jq
-      xmlstarlet
-      curl
-      gnugrep
-      gawk
-    ];
-  };
+  inherit runtimeShell cacert;
+  binPath = lib.makeBinPath [
+    nix
+    coreutils
+    jq
+    xmlstarlet
+    curl
+    gnugrep
+    gawk
+  ];
 
   meta = {
     description = "Convert a nuget packages directory to a lockfile for buildDotnetModule";

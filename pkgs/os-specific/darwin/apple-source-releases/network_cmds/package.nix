@@ -1,6 +1,7 @@
 {
   lib,
   apple-sdk,
+  developer_cmds,
   fetchurl,
   libpcap,
   libresolv,
@@ -404,7 +405,7 @@ mkAppleDerivation {
     "man"
   ];
 
-  xcodeHash = "sha256-HkcIvKB4ektuk+3J/Sque8Pr5dMeNFZRlENuiu3KdsA=";
+  xcodeHash = "sha256-L5upfoE6uHsdFOzylTTH+UPftA96qdpnvgFcK5dmhgY=";
 
   patches = [
     # Some private headers depend on corecrypto, which we can’t use.
@@ -443,6 +444,7 @@ mkAppleDerivation {
   env.NIX_CFLAGS_COMPILE = "-I${privateHeaders}/include";
 
   nativeBuildInputs = [
+    developer_cmds
     pkg-config
   ];
 

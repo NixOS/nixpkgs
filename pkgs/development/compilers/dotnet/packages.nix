@@ -162,11 +162,6 @@ let
       runHook postInstall
     '';
 
-    ${if stdenvNoCC.isDarwin && lib.versionAtLeast version "10" then "postInstall" else null} = ''
-      mkdir -p "$out"/nix-support
-      cp "$src"/nix-support/manual-sdk-deps "$out"/nix-support/manual-sdk-deps
-    '';
-
     passthru = {
       inherit (vmr) icu targetRid hasILCompiler;
 
@@ -202,10 +197,6 @@ let
       runHook postInstall
     '';
 
-    passthru = {
-      inherit (vmr) icu;
-    };
-
     meta = vmr.meta // {
       mainProgram = "dotnet";
     };
@@ -232,10 +223,6 @@ let
 
       runHook postInstall
     '';
-
-    passthru = {
-      inherit (vmr) icu;
-    };
 
     meta = vmr.meta // {
       mainProgram = "dotnet";

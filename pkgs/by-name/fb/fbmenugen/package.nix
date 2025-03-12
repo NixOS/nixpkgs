@@ -5,7 +5,7 @@
   gnused,
   makeWrapper,
   perlPackages,
-  replaceVars,
+  substituteAll,
   xorg,
   wrapGAppsHook3,
   gitUpdater,
@@ -23,11 +23,10 @@ perlPackages.buildPerlPackage rec {
   };
 
   patches = [
-    (replaceVars ./0001-Fix-paths.patch {
+    (substituteAll {
+      src = ./0001-Fix-paths.patch;
       xmessage = xorg.xmessage;
       inherit fluxbox gnused;
-      # replaced in postPatch
-      fbmenugen = null;
     })
   ];
 

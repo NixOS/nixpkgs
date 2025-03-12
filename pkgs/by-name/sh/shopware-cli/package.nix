@@ -10,12 +10,12 @@
 
 buildGoModule rec {
   pname = "shopware-cli";
-  version = "0.5.7";
+  version = "0.5.2";
   src = fetchFromGitHub {
     repo = "shopware-cli";
     owner = "FriendsOfShopware";
     tag = version;
-    hash = "sha256-2Ld1ANokNGvA4nen5dKdZvMHzU1VvWr/28Ech3vvqfk=";
+    hash = "sha256-JgoFYCcCNMPQ8+ZAq7WcLaXI4YGrscweOJ8Ju1kAHHw=";
   };
 
   nativeBuildInputs = [
@@ -27,7 +27,7 @@ buildGoModule rec {
     dart-sass
   ];
 
-  vendorHash = "sha256-Q2M0ia2OF5rDiqqpTaNm2NzcM7Ul8pHcKn2r00/k4jM=";
+  vendorHash = "sha256-PCyxnrVEXlJF69EEBBBq7kbJsnEl35PZxr5kgCovY7I=";
 
   postInstall = ''
     installShellCompletion --cmd shopware-cli \
@@ -47,12 +47,12 @@ buildGoModule rec {
     "-X 'github.com/FriendsOfShopware/shopware-cli/cmd.version=${version}'"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Command line tool for Shopware 6";
     mainProgram = "shopware-cli";
     homepage = "https://github.com/FriendsOfShopware/shopware-cli";
     changelog = "https://github.com/FriendsOfShopware/shopware-cli/releases/tag/${version}";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ shyim ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ shyim ];
   };
 }

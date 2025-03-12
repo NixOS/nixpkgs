@@ -89,7 +89,6 @@ let
 
     propagatedBuildInputs = with python3Packages; [
       python-debian
-      chardet
       pygobject3
       setuptools
     ];

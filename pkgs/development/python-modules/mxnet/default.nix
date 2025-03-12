@@ -9,6 +9,7 @@
   graphviz,
   python,
   isPy3k,
+  isPy310,
 }:
 
 buildPythonPackage {
@@ -50,5 +51,7 @@ buildPythonPackage {
     ln -s ${pkgs.mxnet}/lib/libmxnet.so $out/${python.sitePackages}/mxnet
   '';
 
-  meta = pkgs.mxnet.meta;
+  meta = pkgs.mxnet.meta // {
+    broken = (pkgs.mxnet.broken or false) || (isPy310 && pkgs.mxnet.cudaSupport);
+  };
 }

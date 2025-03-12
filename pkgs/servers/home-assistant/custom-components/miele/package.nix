@@ -9,13 +9,13 @@
 buildHomeAssistantComponent rec {
   owner = "astrandb";
   domain = "miele";
-  version = "2025.1.1";
+  version = "2024.11.1";
 
   src = fetchFromGitHub {
     inherit owner;
     repo = domain;
     tag = "v${version}";
-    hash = "sha256-TShy2q3gKqTgRU3u4Wp7zQjzhEogqUVip8EkH8XIYw8=";
+    hash = "sha256-fM/ARQ4wJt2/vIVsdWpAur/YWPvBH5fOPYqiaz4DxzU=";
   };
 
   dependencies = [

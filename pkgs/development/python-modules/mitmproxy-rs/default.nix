@@ -3,44 +3,46 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  mitmproxy,
-  mitmproxy-linux,
-  mitmproxy-macos,
   rustPlatform,
+  darwin,
+  libiconv,
+  mitmproxy,
+  mitmproxy-macos,
 }:
 
 buildPythonPackage rec {
   pname = "mitmproxy-rs";
-  version = "0.11.5";
+  version = "0.10.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mitmproxy";
     repo = "mitmproxy_rs";
     rev = "v${version}";
-    hash = "sha256-vC+Vsv7UWjkO+6lm7gAb91Ig04Y7r9gYQoz6R9xpxsA=";
+    hash = "sha256-YRiaslXdpRGJfuZAHQ4zX+6DgH+IPkeyD8RA7TYgmBY=";
+  };
+
+  cargoDeps = rustPlatform.importCargoLock {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "boringtun-0.6.0" = "sha256-fx2lY6q1ZdO5STvf7xnbVG64tn0BC4yWPFy4ICPJgEg=";
+      "smoltcp-0.11.0" = "sha256-KC9nTKd2gfZ1ICjrkLK//M2bbqYlfcCK18gBdN0RqWQ=";
+    };
   };
 
   buildAndTestSubdir = "mitmproxy-rs";
-
-  cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
-    hash = "sha256-CFsefq1zQLIYjZcfoy3afYfP/0MlBoi9kVx7FVGEKr0=";
-  };
 
   nativeBuildInputs = [
     rustPlatform.cargoSetupHook
     rustPlatform.maturinBuildHook
   ];
 
-  dependencies =
-    lib.optionals stdenv.hostPlatform.isLinux [ mitmproxy-linux ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ mitmproxy-macos ];
-  # not packaged yet
-  # ++ lib.optionals stdenv.hostPlatform.isWindows [ mitmproxy-windows ]
-
-  # repo has no python tests
-  doCheck = false;
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    darwin.apple_sdk.frameworks.Security
+    darwin.apple_sdk.frameworks.AppKit
+    libiconv
+    mitmproxy-macos
+  ];
 
   pythonImportsCheck = [ "mitmproxy_rs" ];
 

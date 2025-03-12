@@ -60,6 +60,5 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ fpletz ];
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2Plus;
-    mainProgram = "usbguard-notifier";
   };
 }

@@ -125,7 +125,7 @@ let
         Group = instance.group;
         RuntimeDirectory = flavour;
         ExecStart = "${lib.getExe instance.package} ${
-          lib.optionalString (flavour == "vault-agent") "agent"
+          lib.optionalString ((lib.getName instance.package) == "vault") "agent"
         } -config ${configFile}";
         ExecReload = "${pkgs.coreutils}/bin/kill -SIGHUP $MAINPID";
         KillSignal = "SIGINT";

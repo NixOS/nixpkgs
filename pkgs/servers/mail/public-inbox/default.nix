@@ -38,7 +38,7 @@
   Plack,
   PlackMiddlewareReverseProxy,
   PlackTestExternalServer,
-  Xapian,
+  SearchXapian,
   TestSimple13,
   TimeDate,
   URI,
@@ -128,7 +128,7 @@ buildPerlPackage rec {
     ParseRecDescent
     Plack
     PlackMiddlewareReverseProxy
-    Xapian
+    SearchXapian
     TimeDate
     URI
     libgit2 # For Gcf2

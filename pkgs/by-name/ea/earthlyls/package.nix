@@ -10,17 +10,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "earthlyls";
-  version = "0.5.5";
+  version = "0.5.3";
 
   src = fetchFromGitHub {
     owner = "glehmann";
     repo = "earthlyls";
     rev = version;
-    hash = "sha256-GnFzfCjT4kjb9WViKIFDkIU7zVpiI6HDuUeddgHGQuc=";
+    hash = "sha256-wn+6Aa4xTC5o4S+N7snB/vlyw0i23XkmaXUmrhfXuaA=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-sWbYN92Jfr/Pr3qoHWkew/ASIdq8DQg0WHpdyklGBLo=";
+  cargoHash = "sha256-Xc1m5WpZEKBP8fGtrQmwHFdqxdQ6wZzgSihSmXnLOhE=";
 
   passthru = {
     updateScript = nix-update-script { };

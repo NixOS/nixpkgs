@@ -52,12 +52,6 @@ let
             build-system = [ self.setuptools ];
             doCheck = false; # DeprecationWarnings
           });
-          pytest-httpbin = super.pytest-httpbin.overridePythonAttrs (oldAttrs: rec {
-            doCheck = false; # fails in current overlay
-          });
-          httpcore = super.httpcore.overridePythonAttrs (oldAttrs: rec {
-            doCheck = false; # fails in current overlay
-          });
 
           netaddr = super.netaddr.overridePythonAttrs (oldAttrs: rec {
             version = "0.9.0";
@@ -232,9 +226,9 @@ let
             in
             ''
               sed -r -i \
-                ${lib.concatStringsSep "\n" (
-                  map (e: ''-e 's@${e}[<>=]+.*@${e}",@g' \'') ignoreVersionConstraints
-                )}
+                ${
+                  lib.concatStringsSep "\n" (map (e: ''-e 's@${e}[<>=]+.*@${e}",@g' \'') ignoreVersionConstraints)
+                }
                 setup.py
             '';
 
@@ -268,6 +262,7 @@ let
             license = licenses.agpl3Only;
             maintainers = with maintainers; [
               abbradar
+              gebner
               WhittlesJr
               gador
             ];

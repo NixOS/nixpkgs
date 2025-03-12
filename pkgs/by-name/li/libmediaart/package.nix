@@ -8,7 +8,7 @@
   pkg-config,
   vala,
   gtk-doc,
-  docbook-xsl-nons,
+  docbook_xsl,
   docbook_xml_dtd_412,
   glib,
   gdk-pixbuf,
@@ -16,9 +16,9 @@
   gnome,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "libmediaart";
-  version = "1.9.7";
+  version = "1.9.6";
 
   outputs = [
     "out"
@@ -27,8 +27,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/libmediaart/${lib.versions.majorMinor finalAttrs.version}/libmediaart-${finalAttrs.version}.tar.xz";
-    sha256 = "K0Pdn1Tw2NC4nirduDNBqwbXuYyxsucEODWEr5xWD2s=";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "w7xQJdfbOAWH+cjrgAxhH2taFta0t4/P+T9ih2pnfxc=";
   };
 
   nativeBuildInputs =
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
       pkg-config
       vala
       gtk-doc
-      docbook-xsl-nons
+      docbook_xsl
       docbook_xml_dtd_412
       gobject-introspection
     ]
@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = "libmediaart";
+      packageName = pname;
       versionPolicy = "none";
     };
   };
@@ -68,4 +68,4 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl2;
     platforms = platforms.unix;
   };
-})
+}

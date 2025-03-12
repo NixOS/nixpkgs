@@ -1,23 +1,21 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchPypi,
   python3Packages,
   stress,
   versionCheckHook,
-  writableTmpDirAsHomeHook,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "snakemake";
-  version = "8.29.2";
+  version = "8.23.0";
+
   pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "snakemake";
-    repo = "snakemake";
-    tag = "v${version}";
-    hash = "sha256-69NsbfHF29l92gwO8If9vp8Cdjac3BnO+hbY3b2bZ8E=";
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-XENI9VJW62KyrxDGSwQiygggYZOu9yW2QSNyp4BO9Us=";
   };
 
   postPatch = ''
@@ -27,11 +25,11 @@ python3Packages.buildPythonApplication rec {
       --replace-fail 'del os.environ["PYTHONPATH"]' "pass"
     substituteInPlace snakemake/unit_tests/__init__.py \
       --replace-fail '"unit_tests/templates"' '"'"$PWD"'/snakemake/unit_tests/templates"'
-    substituteInPlace snakemake/assets/__init__.py \
-      --replace-fail "raise err" "return bytes('err','ascii')"
   '';
 
-  build-system = with python3Packages; [ setuptools ];
+  build-system = with python3Packages; [
+    setuptools
+  ];
 
   dependencies = with python3Packages; [
     appdirs
@@ -70,21 +68,17 @@ python3Packages.buildPythonApplication rec {
   # for the current basic test suite. Slurm, Tibanna and Tes require extra
   # setup.
 
-  nativeCheckInputs =
-    (with python3Packages; [
-      numpy
-      pandas
-      pytestCheckHook
-      pytest-mock
-      requests-mock
-      snakemake-executor-plugin-cluster-generic
-      snakemake-storage-plugin-fs
-      stress
-      versionCheckHook
-      polars
-    ])
-    ++ [ writableTmpDirAsHomeHook ];
-
+  nativeCheckInputs = with python3Packages; [
+    numpy
+    pandas
+    pytestCheckHook
+    pytest-mock
+    requests-mock
+    snakemake-executor-plugin-cluster-generic
+    snakemake-storage-plugin-fs
+    stress
+    versionCheckHook
+  ];
   versionCheckProgramArg = [ "--version" ];
 
   pytestFlagsArray = [
@@ -146,13 +140,19 @@ python3Packages.buildPythonApplication rec {
       "test_scopes_submitted_to_cluster"
     ];
 
-  pythonImportsCheck = [ "snakemake" ];
+  pythonImportsCheck = [
+    "snakemake"
+  ];
+
+  preCheck = ''
+    export HOME="$(mktemp -d)"
+  '';
 
   meta = {
     homepage = "https://snakemake.github.io";
     license = lib.licenses.mit;
     description = "Python-based execution environment for make-like workflows";
-    changelog = "https://github.com/snakemake/snakemake/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/snakemake/snakemake/blob/v${version}/CHANGELOG.md";
     mainProgram = "snakemake";
     longDescription = ''
       Snakemake is a workflow management system that aims to reduce the complexity of

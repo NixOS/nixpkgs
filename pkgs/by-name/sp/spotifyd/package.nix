@@ -2,74 +2,77 @@
   lib,
   stdenv,
   config,
-  alsa-lib,
-  cmake,
-  dbus,
   fetchFromGitHub,
-  libjack2,
-  libpulseaudio,
-  nix-update-script,
-  openssl,
+  rustPackages,
   pkg-config,
-  portaudio,
-  rustPlatform,
-  testers,
+  openssl,
   withALSA ? stdenv.hostPlatform.isLinux,
+  alsa-lib,
   withJack ? stdenv.hostPlatform.isLinux,
-  withMpris ? stdenv.hostPlatform.isLinux,
-  withPortAudio ? stdenv.hostPlatform.isDarwin,
+  libjack2,
   withPulseAudio ? config.pulseaudio or stdenv.hostPlatform.isLinux,
+  libpulseaudio,
+  withPortAudio ? stdenv.hostPlatform.isDarwin,
+  portaudio,
+  withMpris ? stdenv.hostPlatform.isLinux,
+  withKeyring ? true,
+  dbus,
+  withPipe ? true,
+  nix-update-script,
+  testers,
+  spotifyd,
 }:
 
-rustPlatform.buildRustPackage (finalAttrs: {
+rustPackages.rustPlatform.buildRustPackage rec {
   pname = "spotifyd";
-  version = "0.4.0";
+  version = "0.3.5-unstable-2024-12-27";
 
   src = fetchFromGitHub {
     owner = "Spotifyd";
     repo = "spotifyd";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-YBh5lcHXqYjyo/MjNNxnycY5AXjvlu+2gAzG6gM4Gjc=";
+    rev = "c6e6af449b75225224158aeeef64de485db1139e";
+    hash = "sha256-0HDrnEeqynb4vtJBnXyItprJkP+ZOAKIBP68Ht9xr2c=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-waZ9XNYZ/scyMsNT7bZYqN4Ch4GbuQtwxAYaWTjNZwg=";
+  cargoHash = "sha256-12yil8Xg3xHeOe/oq9O+Cvkgrx1KhmlQ11d9QHCxtsk=";
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-    rustPlatform.bindgenHook
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs =
     lib.optionals stdenv.hostPlatform.isLinux [ openssl ]
-    # The `dbus_mpris` feature works on other platforms, but only requires `dbus` on Linux
-    ++ lib.optional (withMpris && stdenv.hostPlatform.isLinux) dbus
     ++ lib.optional (withALSA || withJack) alsa-lib
     ++ lib.optional withJack libjack2
     ++ lib.optional withPulseAudio libpulseaudio
-    ++ lib.optional withPortAudio portaudio;
-
-  # `aws-lc-sys` fails with this enabled
-  hardeningDisable = [ "strictoverflow" ];
+    ++ lib.optional withPortAudio portaudio
+    # The `dbus_keying` feature works on other platforms, but only requires
+    # `dbus` on Linux
+    ++ lib.optional ((withMpris || withKeyring) && stdenv.hostPlatform.isLinux) dbus;
 
   buildNoDefaultFeatures = true;
   buildFeatures =
     lib.optional withALSA "alsa_backend"
     ++ lib.optional withJack "rodiojack_backend"
-    ++ lib.optional withMpris "dbus_mpris"
+    ++ lib.optional withPulseAudio "pulseaudio_backend"
     ++ lib.optional withPortAudio "portaudio_backend"
-    ++ lib.optional withPulseAudio "pulseaudio_backend";
+    ++ lib.optional withMpris "dbus_mpris"
+    ++ lib.optional withPipe "pipe_backend"
+    ++ lib.optional withKeyring "dbus_keyring";
+
+  doCheck = false;
 
   passthru = {
-    tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
-    updateScript = nix-update-script { };
+    tests.version = testers.testVersion {
+      package = spotifyd;
+      version = builtins.head (lib.splitString "-" version);
+    };
+    updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
   };
 
   meta = {
     description = "Open source Spotify client running as a UNIX daemon";
     homepage = "https://spotifyd.rs/";
-    changelog = "https://github.com/Spotifyd/spotifyd/releases/tag/${toString finalAttrs.src.tag}";
+    changelog = "https://github.com/Spotifyd/spotifyd/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       anderslundstedt
@@ -79,4 +82,4 @@ rustPlatform.buildRustPackage (finalAttrs: {
     platforms = lib.platforms.unix;
     mainProgram = "spotifyd";
   };
-})
+}

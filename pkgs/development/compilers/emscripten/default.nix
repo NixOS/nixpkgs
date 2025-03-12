@@ -10,7 +10,7 @@
   llvmPackages,
   symlinkJoin,
   makeWrapper,
-  replaceVars,
+  substituteAll,
   buildNpmPackage,
   emscripten,
 }:
@@ -57,7 +57,8 @@ stdenv.mkDerivation rec {
   ];
 
   patches = [
-    (replaceVars ./0001-emulate-clang-sysroot-include-logic.patch {
+    (substituteAll {
+      src = ./0001-emulate-clang-sysroot-include-logic.patch;
       resourceDir = "${llvmEnv}/lib/clang/${lib.versions.major llvmPackages.llvm.version}/";
     })
   ];

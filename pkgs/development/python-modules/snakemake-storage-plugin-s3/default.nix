@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "snakemake-storage-plugin-s3";
-  version = "0.2.13";
+  version = "0.2.12";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "snakemake";
     repo = pname;
     tag = "v${version}";
-    hash = "sha256-tH4KLswRPberlaBlRCEJSPmUfkcwVkB9YbD/3LYJx0s=";
+    hash = "sha256-TKv/7b3+uhY18v7p1ZSya5KJEMUv4M1NkObP9vPzMxU=";
   };
 
   build-system = [ poetry-core ];

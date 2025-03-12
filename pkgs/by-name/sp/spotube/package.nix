@@ -22,7 +22,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "spotube";
-  version = "4.0.0";
+  version = "3.9.0";
 
   src = finalAttrs.passthru.sources.${stdenv.hostPlatform.system};
 
@@ -93,19 +93,19 @@ stdenv.mkDerivation (finalAttrs: {
     {
       "aarch64-linux" = fetchArtifact {
         filename = "Spotube-linux-aarch64.deb";
-        hash = "sha256-q+0ah6C83zVdrWWMmaBvZebRQP0Ie83Ewp7hjnp2NPw=";
+        hash = "sha256-KBuUAgUU6c/rBkkbpYjSarzckIoi+gRtCkumvtaoras=";
       };
       "x86_64-linux" = fetchArtifact {
         filename = "Spotube-linux-x86_64.deb";
-        hash = "sha256-pk+xi7y0Qilmzk70T4u747zzFn4urZ6Kwuiqq+/q8uM=";
+        hash = "sha256-vzzK3csyKYP6fKKIoysziBsc2tqrg5LXS/6KoXBtNVI=";
       };
       "x86_64-darwin" = fetchArtifact {
         filename = "Spotube-macos-universal.dmg";
-        hash = "sha256-ielRdH+D1QdrKH4OxQFdw6rpzURBs/dRf/synS/Vrdk=";
+        hash = "sha256-wwIIKY+bmMJZigc2AK/QMg142uvZ+D6LOddzedJM5f8=";
       };
       "aarch64-darwin" = fetchArtifact {
         filename = "Spotube-macos-universal.dmg";
-        hash = "sha256-ielRdH+D1QdrKH4OxQFdw6rpzURBs/dRf/synS/Vrdk=";
+        hash = "sha256-wwIIKY+bmMJZigc2AK/QMg142uvZ+D6LOddzedJM5f8=";
       };
     };
 

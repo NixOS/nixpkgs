@@ -25,14 +25,10 @@
   qrcode,
 
   # tests
-  django-ninja,
-  djangorestframework,
   pillow,
-  psycopg2,
+  pytestCheckHook,
   pytest-asyncio,
   pytest-django,
-  pytestCheckHook,
-  pyyaml,
 
   # passthru tests
   dj-rest-auth,
@@ -40,7 +36,7 @@
 
 buildPythonPackage rec {
   pname = "django-allauth";
-  version = "65.4.1";
+  version = "65.3.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -49,12 +45,16 @@ buildPythonPackage rec {
     owner = "pennersr";
     repo = "django-allauth";
     tag = version;
-    hash = "sha256-z5vaNopIk1CAV+TpH/V3Y6lXf7ztU4QeHZ9OTSPCgc0=";
+    hash = "sha256-IgadrtOQt3oY2U/+JWBs5v97aaWz5oinz5QUdGXBqO4=";
   };
 
-  nativeBuildInputs = [ gettext ];
+  nativeBuildInputs = [
+    gettext
+  ];
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+  ];
 
   dependencies = [
     asgiref
@@ -83,14 +83,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "allauth" ];
 
   nativeCheckInputs = [
-    django-ninja
-    djangorestframework
     pillow
-    psycopg2
+    pytestCheckHook
     pytest-asyncio
     pytest-django
-    pytestCheckHook
-    pyyaml
   ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   disabledTests = [
@@ -98,14 +94,16 @@ buildPythonPackage rec {
     "test_login"
   ];
 
-  passthru.tests = { inherit dj-rest-auth; };
+  passthru.tests = {
+    inherit dj-rest-auth;
+  };
 
-  meta = {
+  meta = with lib; {
     changelog = "https://github.com/pennersr/django-allauth/blob/${version}/ChangeLog.rst";
     description = "Integrated set of Django applications addressing authentication, registration, account management as well as 3rd party (social) account authentication";
     downloadPage = "https://github.com/pennersr/django-allauth";
     homepage = "https://www.intenct.nl/projects/django-allauth";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ derdennisop ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ derdennisop ];
   };
 }

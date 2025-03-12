@@ -7,7 +7,10 @@
   pkg-config,
   flex,
   itstool,
-  wrapGAppsHook3,
+  rustPlatform,
+  rustc,
+  cargo,
+  wrapGAppsHook4,
   desktop-file-utils,
   exiv2,
   libgsf,
@@ -19,14 +22,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-commander";
-  version = "1.18.2";
+  version = "1.18.1-unstable-2024-10-18";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "gnome-commander";
-    tag = finalAttrs.version;
-    hash = "sha256-dNZDlpvpN5hh/3YccZPJDEFkBLv9I8YOdFT/COp7+Uw=";
+    rev = "28dadb1ef9342bb1a5f9a65b1a5bf3bd80e3d30a";
+    hash = "sha256-DxsZJht+PD3vY5vc1vzpRD8FHBPKcjK4qfke5nhvHS0=";
   };
 
   # hard-coded schema paths
@@ -37,13 +40,21 @@ stdenv.mkDerivation (finalAttrs: {
         '/share/gsettings-schemas/${finalAttrs.finalPackage.name}/glib-2.0/schemas'
   '';
 
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-dOd/4n8G/zEsF0ClqhI2QBLosEz3uyzC9q5sHDVWAx4=";
+  };
+
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
     flex
     itstool
-    wrapGAppsHook3
+    rustPlatform.cargoSetupHook
+    rustc
+    cargo
+    wrapGAppsHook4
     desktop-file-utils
   ];
 

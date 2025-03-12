@@ -12,19 +12,19 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage (finalAttrs: {
+rustPlatform.buildRustPackage rec {
   pname = "rattler-build";
-  version = "0.38.0";
+  version = "0.35.9";
 
   src = fetchFromGitHub {
     owner = "prefix-dev";
     repo = "rattler-build";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-l8pMUgSU0L1GhB3FiwDVcSEJCpnfE46bCsyNsZSG0mQ=";
+    tag = "v${version}";
+    hash = "sha256-gm/ajlSp7nhrYTslZ8SrcOjtnAWvDeLF/zmgPvwdJPE=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-TgUPeoOua9oqPPDb+SAlYztd1ZBEFvsSrCYCQGXKhgU=";
+  cargoHash = "sha256-hjPut3r3v/LwOUaJTAGdXQ3j4ojpFbDKjPFZJulEl3o=";
 
   doCheck = false; # test requires network access
 
@@ -62,7 +62,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Universal package builder for Windows, macOS and Linux";
     homepage = "https://rattler.build/";
-    changelog = "https://github.com/prefix-dev/rattler-build/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/prefix-dev/rattler-build/releases/tag/v${version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
       genga898
@@ -70,4 +70,4 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ];
     mainProgram = "rattler-build";
   };
-})
+}

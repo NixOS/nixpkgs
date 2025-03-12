@@ -4,24 +4,26 @@
   cryptography,
   fetchFromGitHub,
   poetry-core,
+  pyopenssl,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "josepy";
-  version = "2.0.0";
+  version = "1.15.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "certbot";
     repo = "josepy";
     tag = "v${version}";
-    hash = "sha256-9hY3A+XSoVrRLds4tNV+5HWkmMwcS9UtehrKoj0OIEw=";
+    hash = "sha256-fK4JHDP9eKZf2WO+CqRdEjGwJg/WNLvoxiVrb5xQxRc=";
   };
 
-  build-system = [ poetry-core ];
+  nativeBuildInputs = [ poetry-core ];
 
-  dependencies = [
+  propagatedBuildInputs = [
+    pyopenssl
     cryptography
   ];
 
@@ -29,12 +31,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "josepy" ];
 
-  meta = {
-    changelog = "https://github.com/certbot/josepy/blob/${src.tag}/CHANGELOG.rst";
+  meta = with lib; {
+    changelog = "https://github.com/certbot/josepy/blob/v${version}/CHANGELOG.rst";
     description = "JOSE protocol implementation in Python";
     mainProgram = "jws";
     homepage = "https://github.com/certbot/josepy";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ dotlambda ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

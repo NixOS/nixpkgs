@@ -5,7 +5,6 @@
   pythonOlder,
   fetchFromGitHub,
   fetchpatch2,
-  findpython,
   installShellFiles,
   build,
   cachecontrol,
@@ -15,7 +14,6 @@
   installer,
   keyring,
   packaging,
-  pbs-installer,
   pkginfo,
   platformdirs,
   poetry-core,
@@ -38,7 +36,7 @@
 
 buildPythonPackage rec {
   pname = "poetry";
-  version = "2.1.1";
+  version = "2.0.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -47,14 +45,14 @@ buildPythonPackage rec {
     owner = "python-poetry";
     repo = "poetry";
     tag = version;
-    hash = "sha256-2u0idmnXY0FNvc8peDMWIFAeGH/xdIfMrMErUdxc0UA=";
+    hash = "sha256-RpAoADxZmH9hQSEjufLBoKJsxIc74RnRxZB3RVNk/iE=";
   };
 
   patches = [
     # https://github.com/python-poetry/poetry/pull/9939
     (fetchpatch2 {
-      url = "https://github.com/python-poetry/poetry/commit/c2387ff3c878ab608d7616e4984fc01c4226416c.patch?full_index=1";
-      hash = "sha256-cxTDbFykRr+kGk4jYzKwhU8QEZvK5A/P8zxliXpE+Sg=";
+      url = "https://github.com/python-poetry/poetry/commit/89c0d02761229a8aa7ac5afcbc8935387bde4c5b.patch?full_index=1";
+      hash = "sha256-YuAevkmCSTGuFPfuKrJfcLUye1YGpnHSb9TFSW7F1SU=";
     })
   ];
 
@@ -79,11 +77,9 @@ buildPythonPackage rec {
       cleo
       dulwich
       fastjsonschema
-      findpython
       installer
       keyring
       packaging
-      pbs-installer
       pkginfo
       platformdirs
       poetry-core
@@ -104,9 +100,7 @@ buildPythonPackage rec {
     ++ lib.optionals (pythonOlder "3.10") [
       importlib-metadata
     ]
-    ++ cachecontrol.optional-dependencies.filecache
-    ++ pbs-installer.optional-dependencies.download
-    ++ pbs-installer.optional-dependencies.install;
+    ++ cachecontrol.optional-dependencies.filecache;
 
   postInstall = ''
     installShellCompletion --cmd poetry \

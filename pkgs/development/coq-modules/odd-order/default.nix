@@ -2,6 +2,7 @@
   lib,
   mkCoqDerivation,
   mathcomp,
+  stdlib,
   version ? null,
 }:
 
@@ -45,6 +46,7 @@ mkCoqDerivation {
     mathcomp.solvable
     mathcomp.field
     mathcomp.all
+    stdlib
   ];
 
   meta = with lib; {

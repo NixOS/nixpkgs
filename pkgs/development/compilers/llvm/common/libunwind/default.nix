@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , release_version
+, patches ? []
 , src ? null
 , llvm_meta
 , version
@@ -12,7 +13,6 @@
 , libcxx
 , enableShared ? !stdenv.hostPlatform.isStatic
 , devExtraCmakeFlags ? []
-, getVersionFile
 }:
 let
   pname = "libunwind";
@@ -32,10 +32,6 @@ let
       cp -r ${monorepoSrc}/llvm/utils "$out/llvm"
       cp -r ${monorepoSrc}/runtimes "$out"
     '') else src;
-
-  patches = lib.optional (lib.versionOlder release_version "17") (
-    getVersionFile "libunwind/gnu-install-dirs.patch"
-  );
 
   hasPatches = builtins.length patches > 0;
 

@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     autoreconfHook
-    (lib.getDev SDL)
+    SDL.dev
   ];
 
   buildInputs = [

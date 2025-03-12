@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "pyedflib";
-  version = "0.1.40";
+  version = "0.1.39";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "holgern";
     repo = "pyedflib";
     tag = "v${version}";
-    hash = "sha256-FWEd1Y883LPsPdzbjR6+emsYBMBrM33/jR8p1aIWmV4=";
+    hash = "sha256-NHjeaNLbOxTPzTbQ9owFkessQY/QnxBSC8G93JahMGg=";
   };
 
   build-system = [

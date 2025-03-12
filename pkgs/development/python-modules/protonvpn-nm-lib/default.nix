@@ -3,7 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
-  replaceVars,
+  substituteAll,
   dbus-python,
   distro,
   jinja2,
@@ -48,7 +48,8 @@ buildPythonPackage rec {
   ];
 
   patches = [
-    (replaceVars ./0001-Patching-GIRepository.patch {
+    (substituteAll {
+      src = ./0001-Patching-GIRepository.patch;
       networkmanager_path = "${networkmanager}/lib/girepository-1.0";
     })
   ];

@@ -1,5 +1,6 @@
 {
   mkKdeDerivation,
+  fetchpatch,
   pkg-config,
   qtquick3d,
   qtsensors,
@@ -33,9 +34,6 @@ mkKdeDerivation {
 
   postPatch = ''
     patchShebangs src/plugins/strip-effect-metadata.py
-
-    # FIXME: remove this when fixed upstream
-    substituteInPlace CMakeLists.txt --replace-fail 'set(PROJECT_VERSION "6.3.2")' 'set(PROJECT_VERSION "6.3.3")'
   '';
 
   # TZDIR may be unset when running through the kwin_wayland wrapper,

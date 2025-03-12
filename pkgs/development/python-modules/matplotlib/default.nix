@@ -21,7 +21,7 @@
   ffmpeg-headless,
   freetype,
   # By default, almost all tests fail due to the fact we use our version of
-  # freetype. We still use this argument to define the overridden
+  # freetype. We still define use this argument to define the overriden
   # derivation `matplotlib.passthru.tests.withoutOutdatedFreetype` - which
   # builds matplotlib with the freetype version they default to, with which all
   # tests should pass.

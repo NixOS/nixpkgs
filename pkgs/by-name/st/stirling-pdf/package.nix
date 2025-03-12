@@ -2,13 +2,13 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  gradle_8,
+  gradle_7,
   makeWrapper,
   jre,
 }:
 
 let
-  gradle = gradle_8;
+  gradle = gradle_7;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "stirling-pdf";

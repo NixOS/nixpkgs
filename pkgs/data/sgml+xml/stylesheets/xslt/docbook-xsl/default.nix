@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  replaceVars,
+  substituteAll,
   fetchurl,
   fetchpatch,
   findXMLCatalogs,
@@ -50,7 +50,8 @@ let
             })
 
             # Add legacy sourceforge.net URIs to the catalog
-            (replaceVars ./catalog-legacy-uris.patch {
+            (substituteAll {
+              src = ./catalog-legacy-uris.patch;
               inherit legacySuffix suffix version;
             })
           ]

@@ -13,7 +13,7 @@
   pythonOlder,
   scikit-image,
   setuptools,
-  replaceVars,
+  substituteAll,
 }:
 
 buildPythonPackage rec {
@@ -37,7 +37,8 @@ buildPythonPackage rec {
       url = "https://github.com/quintusdias/glymur/commit/89b159299035ebb05776c3b90278f410ca6dba64.patch";
       hash = "sha256-C/Q5WZmW5YtN3U8fxKljfqwKHtFLfR2LQ69Tj8SuIWg=";
     })
-    (replaceVars ./set-lib-paths.patch {
+    (substituteAll {
+      src = ./set-lib-paths.patch;
       openjp2_lib = "${lib.getLib openjpeg}/lib/libopenjp2${stdenv.hostPlatform.extensions.sharedLibrary}";
       tiff_lib = "${lib.getLib libtiff}/lib/libtiff${stdenv.hostPlatform.extensions.sharedLibrary}";
     })

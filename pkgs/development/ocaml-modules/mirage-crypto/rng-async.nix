@@ -5,13 +5,14 @@
   dune-configurator,
   async,
   logs,
-  ohex,
 }:
 
 buildDunePackage {
   pname = "mirage-crypto-rng-async";
 
   inherit (mirage-crypto) version src;
+
+  duneVersion = "3";
 
   buildInputs = [
     dune-configurator
@@ -24,8 +25,7 @@ buildDunePackage {
     mirage-crypto-rng
   ];
 
-  doCheck = true;
-  checkInputs = [ ohex ];
+  strictDeps = true;
 
   meta = mirage-crypto.meta // {
     description = "Feed the entropy source in an Async-friendly way";

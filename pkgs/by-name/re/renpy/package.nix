@@ -77,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
     libGLU
     libpng
     SDL2
-    (lib.getDev SDL2)
+    SDL2.dev
     zlib
   ];
 

@@ -509,8 +509,7 @@ in
       upstreams.dependency-track.servers."localhost:${toString cfg.port}" = { };
       virtualHosts.${cfg.nginx.domain} = {
         locations = {
-          "/".alias = "${cfg.package.frontend}/dist/";
-          "/api".proxyPass = "http://dependency-track";
+          "/".proxyPass = "http://dependency-track";
           "= /static/config.json".alias = frontendConfigFile;
         };
       };

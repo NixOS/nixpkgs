@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "lk-jwt-service";
-  version = "0.2.0";
+  version = "0.1.1";
 
   src = fetchFromGitHub {
     owner = "element-hq";
     repo = "lk-jwt-service";
     tag = "v${version}";
-    hash = "sha256-dnlcJaGJqhFLrVvyU9hVwrE/r+wxknbnINSIfUDKC7I=";
+    hash = "sha256-RbfJdAhLz2wfTC17i533U25TIUtJEkHTgqJC2R+j1uM=";
   };
 
-  vendorHash = "sha256-AGkwjzdTjfDA8K6ko24QSSxbTQeFGpu9sv5m8ZCmNJI=";
+  vendorHash = "sha256-7wruthAqC9jVpAhPiIDdqAB51l38fLHEhl2QOaBJiL0=";
 
   meta = with lib; {
     description = "Minimal service to issue LiveKit JWTs for MatrixRTC";

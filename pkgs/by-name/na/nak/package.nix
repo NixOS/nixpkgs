@@ -7,16 +7,16 @@
 }:
 buildGo123Module rec {
   pname = "nak";
-  version = "0.11.4";
+  version = "0.11.2";
 
   src = fetchFromGitHub {
     owner = "fiatjaf";
     repo = "nak";
     tag = "v${version}";
-    hash = "sha256-xFATXMK7wyEgnJXmTq9BdW27xqgXUP1Mo0m5QhFIv0I=";
+    hash = "sha256-DFkF5wPRAxbM3MoaNMXp0JdjeegaVQ7XQUjkMjbhgA8=";
   };
 
-  vendorHash = "sha256-VkeQLWtyDfZiR0nrhmd5KCi/BIuqrFem9WhcTd3VRcc=";
+  vendorHash = "sha256-80jO8u/BdR4JIAmTIoaT2C0ztOkJp/62TGHQtT2Jl3w=";
 
   ldflags = [
     "-s"

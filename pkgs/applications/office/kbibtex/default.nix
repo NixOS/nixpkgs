@@ -41,11 +41,6 @@ mkDerivation rec {
       hash = "sha256-sSeyQKfNd8U4YZ3IgqOZs8bM13oEQopJevkG8U0JuMQ=";
     };
 
-  patches = [
-    # TODO remove when kbibtex updates past 0.10.0
-    ./cpp-17-for-icu.patch
-  ];
-
   nativeBuildInputs = [
     extra-cmake-modules
     shared-mime-info

@@ -109,7 +109,8 @@ in
         description = ''
           Specify partitions as a set of the names of the definition files as the
           key and the partition configuration as its value. The partition
-          configuration can use all upstream options. See {manpage}`repart.d(5)`
+          configuration can use all upstream options. See <link
+          xlink:href="https://www.freedesktop.org/software/systemd/man/repart.d.html"/>
           for all available options.
         '';
       };

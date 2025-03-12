@@ -57,8 +57,7 @@ in
           };
           options.ca_file = lib.mkOption {
             type = lib.types.path;
-            default = config.security.pki.caBundle;
-            defaultText = lib.literalExpression "config.security.pki.caBundle";
+            default = "/etc/ssl/certs/ca-certificates.crt";
             description = ''
               Specifies which file should be used as the list of trusted CA
               when negotiating a TLS session.

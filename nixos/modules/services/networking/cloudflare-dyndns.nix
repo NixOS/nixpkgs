@@ -92,7 +92,6 @@ in
           DynamicUser = true;
           StateDirectory = "cloudflare-dyndns";
           EnvironmentFile = cfg.apiTokenFile;
-          Environment = [ "XDG_CACHE_HOME=%S/cloudflare-dyndns/.cache" ];
           ExecStart =
             let
               args =

@@ -355,7 +355,9 @@ in
       }
       {
         assertion = ! (any (fs: fs.formatOptions != null) fileSystems);
-        message = ''
+        message = let
+          fs = head (filter (fs: fs.formatOptions != null) fileSystems);
+        in ''
           'fileSystems.<name>.formatOptions' has been removed, since
           systemd-makefs does not support any way to provide formatting
           options.
@@ -400,7 +402,7 @@ in
         # Filesystems.
         ${makeFstabEntries fileSystems {}}
 
-        ${lib.optionalString (config.swapDevices != []) "# Swap devices."}
+        # Swap devices.
         ${flip concatMapStrings config.swapDevices (sw:
             "${sw.realDevice} none swap ${swapOptions sw}\n"
         )}

@@ -10,6 +10,8 @@
   digestif,
   logs,
   lwt,
+  mirage-clock,
+  mirage-clock-unix,
   astring,
   cmdliner,
   decompress,
@@ -18,6 +20,7 @@
   mtime,
   tcpip,
   mirage-flow,
+  mirage-unix,
   alcotest,
   alcotest-lwt,
   base64,
@@ -40,6 +43,7 @@ buildDunePackage {
 
   buildInputs = [
     cmdliner
+    mirage-clock
     tcpip
   ];
   propagatedBuildInputs = [
@@ -56,12 +60,14 @@ buildDunePackage {
     domain-name
     ipaddr
     mirage-flow
+    mirage-unix
     cstruct
     mimic
     tls
     git
     happy-eyeballs-lwt
     git-mirage
+    mirage-clock-unix
   ];
   checkInputs = [
     alcotest

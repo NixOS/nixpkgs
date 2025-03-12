@@ -1,7 +1,7 @@
 {
   lib,
   mkKdeDerivation,
-  replaceVars,
+  substituteAll,
   dbus,
   fontconfig,
   xorg,
@@ -22,15 +22,14 @@ mkKdeDerivation {
   pname = "plasma-workspace";
 
   patches = [
-    (replaceVars ./dependency-paths.patch {
+    (substituteAll {
+      src = ./dependency-paths.patch;
       dbusSend = lib.getExe' dbus "dbus-send";
       fcMatch = lib.getExe' fontconfig "fc-match";
       lsof = lib.getExe lsof;
       qdbus = lib.getExe' qttools "qdbus";
       xmessage = lib.getExe xorg.xmessage;
       xrdb = lib.getExe xorg.xrdb;
-      # @QtBinariesDir@ only appears in the *removed* lines of the diff
-      QtBinariesDir = null;
     })
   ];
 

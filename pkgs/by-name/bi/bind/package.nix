@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchurl,
-  removeReferencesTo,
   darwin,
   perl,
   pkg-config,
@@ -50,7 +49,6 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     perl
     pkg-config
-    removeReferencesTo
   ];
   buildInputs =
     [
@@ -129,10 +127,6 @@ stdenv.mkDerivation (finalAttrs: {
       # Test timeouts on Darwin
       sed -i '/^ISC_TEST_ENTRY(tcpdns_recv_one/d' tests/isc/netmgr_test.c
     '';
-
-  postFixup = ''
-    remove-references-to -t "$out" "$dnsutils/bin/delv"
-  '';
 
   passthru = {
     tests = {

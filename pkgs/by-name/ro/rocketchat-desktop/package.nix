@@ -98,7 +98,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/RocketChat/Rocket.Chat.Electron";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.mit;
-    maintainers = [ ];
+    maintainers = with maintainers; [ gbtb ];
     platforms = [ "x86_64-linux" ];
   };
 }

@@ -1216,7 +1216,6 @@ with self;
       sexp_select
     ];
     meta.description = "S-expression swiss knife";
-    meta.broken = true; # Does not build with GCC 14
   };
 
   sexp_diff = janePackage {

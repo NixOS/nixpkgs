@@ -8,7 +8,7 @@
   pkg-config,
   openssl,
   stdenv,
-  zig_0_13,
+  zig,
   nix-update-script,
 }:
 
@@ -48,7 +48,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   postInstall = ''
-    wrapProgram $out/bin/cargo-lambda --prefix PATH : ${lib.makeBinPath [ zig_0_13 ]}
+    wrapProgram $out/bin/cargo-lambda --prefix PATH : ${lib.makeBinPath [ zig ]}
   '';
 
   CARGO_LAMBDA_BUILD_INFO = "(nixpkgs)";

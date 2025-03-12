@@ -7,14 +7,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "vunnel";
-  version = "0.31.0";
+  version = "0.29.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "anchore";
     repo = "vunnel";
     tag = "v${version}";
-    hash = "sha256-3o4ap8BElDxxg3pohzXz38AQlQbzOPeSc5/OYZg8VFM=";
+    hash = "sha256-oHK855EQglFZrjW30n/z0vgf/NtaXVOcntEWQMcAbDw=";
   };
 
   pythonRelaxDeps = [
@@ -43,7 +43,6 @@ python3.pkgs.buildPythonApplication rec {
     mashumaro
     mergedeep
     orjson
-    packageurl-python
     pytest-snapshot
     python-dateutil
     pyyaml

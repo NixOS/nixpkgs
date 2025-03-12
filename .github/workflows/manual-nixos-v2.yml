@@ -5,11 +5,7 @@ on:
     branches:
       - master
     paths:
-      - "nixos/**"
-      # Also build when the nixpkgs doc changed, since we take things like
-      # the release notes and some css and js files from there.
-      # See nixos/doc/manual/default.nix
-      - "doc/**"
+      - 'nixos/**'
 
 permissions: {}
 

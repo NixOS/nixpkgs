@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Compact and readable SAT solver";
     maintainers = with maintainers; [
+      gebner
       raskin
     ];
     platforms = platforms.unix;

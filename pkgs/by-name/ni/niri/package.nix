@@ -8,7 +8,6 @@
   libinput,
   libxkbcommon,
   libgbm,
-  versionCheckHook,
   nix-update-script,
   pango,
   pipewire,
@@ -23,15 +22,15 @@
   withSystemd ? true,
 }:
 
-rustPlatform.buildRustPackage (finalAttrs: {
+rustPlatform.buildRustPackage rec {
   pname = "niri";
-  version = "25.02";
+  version = "25.01";
 
   src = fetchFromGitHub {
     owner = "YaLTeR";
     repo = "niri";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-mTTHA0RAaQcdYe+9A3Jx77cmmyLFHmRoZdd8RpWa+m8=";
+    tag = "v${version}";
+    hash = "sha256-AJ1rlgNOPb3/+DbS5hkhm21t6Oz8IgqLllwmZt0lyzk=";
   };
 
   postPatch = ''
@@ -41,7 +40,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-xUjBQ65INi5qD7s5SpPw9TISgY6I3bjjUBmpubvM43I=";
+  cargoHash = "sha256-eGI3i7FnjZGEfcGvEpNLOog8cgExBJuGoXM/oHsui0M=";
 
   strictDeps = true;
 
@@ -103,9 +102,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     );
   };
 
-  nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
-  doInstallCheck = true;
+  preCheck = ''
+    export XDG_RUNTIME_DIR=$(mktemp -d)
+    # See https://github.com/YaLTeR/niri/issues/953
+    export RAYON_NUM_THREADS=1
+  '';
 
   passthru = {
     providedSessions = [ "niri" ];
@@ -115,7 +116,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Scrollable-tiling Wayland compositor";
     homepage = "https://github.com/YaLTeR/niri";
-    changelog = "https://github.com/YaLTeR/niri/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/YaLTeR/niri/releases/tag/v${version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       iogamaster
@@ -126,4 +127,4 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "niri";
     platforms = lib.platforms.linux;
   };
-})
+}

@@ -6,7 +6,7 @@
   toolong,
 }:
 
-python311Packages.buildPythonApplication {
+python311Packages.buildPythonApplication rec {
   pname = "toolong";
   version = "1.4.0";
   pyproject = true;
@@ -14,8 +14,8 @@ python311Packages.buildPythonApplication {
   src = fetchFromGitHub {
     owner = "Textualize";
     repo = "toolong";
-    rev = "5aa22ee878026f46d4d265905c4e1df4d37842ae"; # no tag
-    hash = "sha256-HrmU7HxWKYrbV25Y5CHLw7/7tX8Y5mTsTL1aXGGTSIo=";
+    tag = "v${version}";
+    hash = "sha256-Zd6j1BIrsLJqptg7BXb67qY3DaeHRHieWJoYYCDHaoc=";
   };
 
   build-system = [ python311Packages.poetry-core ];
@@ -29,9 +29,6 @@ python311Packages.buildPythonApplication {
 
   pythonImportsCheck = [ "toolong" ];
   doCheck = false; # no tests
-
-  # From https://github.com/Textualize/toolong/pull/63, also fixes https://github.com/NixOS/nixpkgs/issues/360671
-  patches = [ ./0001-log-view.patch ];
 
   passthru.tests.version = testers.testVersion {
     package = toolong;

@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "osmo-sgsn";
-  version = "1.13.0";
+  version = "1.12.1";
 
   src = fetchFromGitHub {
     owner = "osmocom";
     repo = "osmo-sgsn";
     rev = version;
-    hash = "sha256-ht8ejeD2whV0Ww5G3coUntLrIp2S0gZBRS6kF7w9KZY=";
+    hash = "sha256-tcGnsLsVJohxaSfMbGfkHcBhLpbTZbXM+KWe2j34qeo=";
   };
 
   postPatch = ''

@@ -31,10 +31,6 @@ stdenv.mkDerivation rec {
     yarn
     nodejs
   ];
-
-  # NodeJS is also needed here so that script interpreter get patched
-  buildInputs = [ nodejs ];
-
   strictDeps = true;
 
   configurePhase = ''

@@ -4,7 +4,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch,
-  replaceVars,
+  substituteAll,
   file,
   pytestCheckHook,
 }:
@@ -22,7 +22,8 @@ buildPythonPackage rec {
   };
 
   patches = [
-    (replaceVars ./libmagic-path.patch {
+    (substituteAll {
+      src = ./libmagic-path.patch;
       libmagic = "${file}/lib/libmagic${stdenv.hostPlatform.extensions.sharedLibrary}";
     })
     (fetchpatch {

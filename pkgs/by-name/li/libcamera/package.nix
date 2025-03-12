@@ -132,7 +132,6 @@ stdenv.mkDerivation rec {
     changelog = "https://git.libcamera.org/libcamera/libcamera.git/tag/?h=${src.rev}";
     license = licenses.lgpl2Plus;
     maintainers = with maintainers; [ citadelcore ];
-    platforms = platforms.linux;
     badPlatforms = [
       # Mandatory shared libraries.
       lib.systems.inspect.platformPatterns.isStatic

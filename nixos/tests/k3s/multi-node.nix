@@ -60,7 +60,7 @@ import ../make-test-python.nix (
 
     nodes = {
       server =
-        { nodes, pkgs, ... }:
+        { pkgs, ... }:
         {
           environment.systemPackages = with pkgs; [
             gzip
@@ -83,12 +83,8 @@ import ../make-test-python.nix (
               "--disable metrics-server"
               "--disable servicelb"
               "--disable traefik"
+              "--node-ip 192.168.1.1"
               "--pause-image test.local/pause:local"
-              "--node-ip ${nodes.server.networking.primaryIPAddress}"
-              # The interface selection logic of flannel would normally use eth0, as the nixos
-              # testing driver sets a default route via dev eth0. However, in test setups we
-              # have to use eth1 for inter-node communication.
-              "--flannel-iface eth1"
             ];
           };
           networking.firewall.allowedTCPPorts = [
@@ -97,10 +93,19 @@ import ../make-test-python.nix (
             6443
           ];
           networking.firewall.allowedUDPPorts = [ 8472 ];
+          networking.firewall.trustedInterfaces = [ "flannel.1" ];
+          networking.useDHCP = false;
+          networking.defaultGateway = "192.168.1.1";
+          networking.interfaces.eth1.ipv4.addresses = pkgs.lib.mkForce [
+            {
+              address = "192.168.1.1";
+              prefixLength = 24;
+            }
+          ];
         };
 
       server2 =
-        { nodes, pkgs, ... }:
+        { pkgs, ... }:
         {
           environment.systemPackages = with pkgs; [
             gzip
@@ -114,7 +119,7 @@ import ../make-test-python.nix (
             enable = true;
             package = k3s;
             images = [ pauseImage ];
-            serverAddr = "https://${nodes.server.networking.primaryIPAddress}:6443";
+            serverAddr = "https://192.168.1.1:6443";
             clusterInit = false;
             extraFlags = [
               "--disable coredns"
@@ -122,9 +127,8 @@ import ../make-test-python.nix (
               "--disable metrics-server"
               "--disable servicelb"
               "--disable traefik"
+              "--node-ip 192.168.1.3"
               "--pause-image test.local/pause:local"
-              "--node-ip ${nodes.server2.networking.primaryIPAddress}"
-              "--flannel-iface eth1"
             ];
           };
           networking.firewall.allowedTCPPorts = [
@@ -133,10 +137,19 @@ import ../make-test-python.nix (
             6443
           ];
           networking.firewall.allowedUDPPorts = [ 8472 ];
+          networking.firewall.trustedInterfaces = [ "flannel.1" ];
+          networking.useDHCP = false;
+          networking.defaultGateway = "192.168.1.3";
+          networking.interfaces.eth1.ipv4.addresses = pkgs.lib.mkForce [
+            {
+              address = "192.168.1.3";
+              prefixLength = 24;
+            }
+          ];
         };
 
       agent =
-        { nodes, pkgs, ... }:
+        { pkgs, ... }:
         {
           virtualisation.memorySize = 1024;
           virtualisation.diskSize = 2048;
@@ -146,15 +159,23 @@ import ../make-test-python.nix (
             role = "agent";
             package = k3s;
             images = [ pauseImage ];
-            serverAddr = "https://${nodes.server2.networking.primaryIPAddress}:6443";
+            serverAddr = "https://192.168.1.3:6443";
             extraFlags = [
               "--pause-image test.local/pause:local"
-              "--node-ip ${nodes.agent.networking.primaryIPAddress}"
-              "--flannel-iface eth1"
+              "--node-ip 192.168.1.2"
             ];
           };
           networking.firewall.allowedTCPPorts = [ 6443 ];
           networking.firewall.allowedUDPPorts = [ 8472 ];
+          networking.firewall.trustedInterfaces = [ "flannel.1" ];
+          networking.useDHCP = false;
+          networking.defaultGateway = "192.168.1.2";
+          networking.interfaces.eth1.ipv4.addresses = pkgs.lib.mkForce [
+            {
+              address = "192.168.1.2";
+              prefixLength = 24;
+            }
+          ];
         };
     };
 

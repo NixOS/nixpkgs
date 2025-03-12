@@ -1,11 +1,11 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   gtk4,
   libadwaita,
   tdlib,
   rlottie,
+  stdenv,
   rustPlatform,
   meson,
   ninja,
@@ -28,7 +28,7 @@ let
   src = fetchFromGitHub {
     owner = "paper-plane-developers";
     repo = "paper-plane";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-qcAHxNnF980BHMqLF86M06YQnEN5L/8nkyrX6HQjpBA=";
   };
 
@@ -71,9 +71,12 @@ in
 stdenv.mkDerivation {
   inherit pname version src;
 
-  cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
-    hash = "sha256-QEX7w8eMV7DJFONjq23o8eCV+lliugS0pcdufFhcZrM=";
+  cargoDeps = rustPlatform.importCargoLock {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "gtk-rlottie-0.1.0" = "sha256-/F0VSXU0Z59QyFYXrB8NLe/Nw/uVjGY68BriOySSXyI=";
+      "origami-0.1.0" = "sha256-xh7eBjumqCOoAEvRkivs/fgvsKXt7UU67FCFt20oh5s=";
+    };
   };
 
   nativeBuildInputs = [
@@ -119,7 +122,7 @@ stdenv.mkDerivation {
     stdenv.cc.isClang && lib.versionAtLeast stdenv.cc.version "16"
   ) "-Wno-error=incompatible-function-pointer-types";
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/paper-plane-developers/paper-plane";
     description = "Chat over Telegram on a modern and elegant client";
     longDescription = ''
@@ -127,9 +130,9 @@ stdenv.mkDerivation {
       for its user interface and strives to meet the design principles
       of the GNOME desktop.
     '';
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ aleksana ];
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ aleksana ];
     mainProgram = "paper-plane";
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 }

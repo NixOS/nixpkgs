@@ -3,9 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch,
-  replaceVars,
-
-  # build
+  substituteAll,
   pkg-config,
   glibc,
   python,
@@ -33,7 +31,8 @@ buildPythonPackage rec {
       url = "https://github.com/oscaracena/pygattlib/commit/73a73b71cfc139e1e0a08816fb976ff330c77ea5.patch";
       hash = "sha256-/Y/CZNdN/jcxWroqRfdCH2rPUxZUbug668MIAow0scs=";
     })
-    (replaceVars ./setup.patch {
+    (substituteAll {
+      src = ./setup.patch;
       boost_version =
         let
           pythonVersion = with lib.versions; "${major python.version}${minor python.version}";

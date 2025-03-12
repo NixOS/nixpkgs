@@ -16,13 +16,13 @@
 
 mkDerivation rec {
   pname = "g2o";
-  version = "20241228";
+  version = "20230806";
 
   src = fetchFromGitHub {
     owner = "RainerKuemmerle";
     repo = pname;
     rev = "${version}_git";
-    hash = "sha256-MW1IO1P2e3KgurOW5ZfHlxK0m5sF0JhdLmvQNEHWEtI=";
+    hash = "sha256-9u1FFRWe7qvDhzSKdGTduuGBXmmgzcSriGFb/oCJjNA=";
   };
 
   # Removes a reference to gcc that is only used in a debug message

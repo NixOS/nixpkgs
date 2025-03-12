@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   buildPythonPackage,
 
@@ -12,7 +11,7 @@
   cachelib,
   msgspec,
 
-  # tests
+  # checks
   boto3,
   flask-sqlalchemy,
   pytestCheckHook,
@@ -54,8 +53,8 @@ buildPythonPackage rec {
   ];
 
   preCheck = ''
-    ${lib.getExe' pkgs.redis "redis-server"} &
-    ${lib.getExe pkgs.memcached} &
+    ${pkgs.redis}/bin/redis-server &
+    ${pkgs.memcached}/bin/memcached &
   '';
 
   postCheck = ''
@@ -63,25 +62,17 @@ buildPythonPackage rec {
     kill %%
   '';
 
-  disabledTests = [
-    # unfree
-    "test_mongo_default"
-  ];
+  disabledTests = [ "test_mongo_default" ]; # unfree
 
   disabledTestPaths = [ "tests/test_dynamodb.py" ];
 
   pythonImportsCheck = [ "flask_session" ];
 
-  __darwinAllowLocalNetworking = true;
-
-  # Hang indefinitely
-  doCheck = !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64);
-
-  meta = {
+  meta = with lib; {
     description = "Flask extension that adds support for server-side sessions";
     homepage = "https://github.com/pallets-eco/flask-session";
     changelog = "https://github.com/pallets-eco/flask-session/releases/tag/${version}";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ zhaofengli ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ zhaofengli ];
   };
 }

@@ -7,7 +7,7 @@
   pytestCheckHook,
   pytz,
   setuptools,
-  replaceVars,
+  substituteAll,
 }:
 
 buildPythonPackage rec {
@@ -25,7 +25,8 @@ buildPythonPackage rec {
   };
 
   patches = [
-    (replaceVars ./rapidjson-include-dir.patch {
+    (substituteAll {
+      src = ./rapidjson-include-dir.patch;
       rapidjson = lib.getDev rapidjson;
     })
   ];

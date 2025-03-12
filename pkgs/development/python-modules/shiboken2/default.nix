@@ -63,6 +63,6 @@ stdenv.mkDerivation {
       lgpl21
     ];
     homepage = "https://wiki.qt.io/Qt_for_Python";
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ gebner ];
   };
 }

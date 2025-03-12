@@ -5,10 +5,8 @@
   alsa-lib,
   libjack2,
   pkg-config,
-  libX11,
-  libXext,
-  xorgproto,
   libpulseaudio,
+  xorg,
   copyDesktopItems,
   makeDesktopItem,
 }:
@@ -19,38 +17,31 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/bristol/${pname}-${version}.tar.gz";
-    hash = "sha256-fR8LvQ19MD/HfGuVSbYXCNeoO03AB4GAEbH1XR+pIro=";
+    sha256 = "1fi2m4gmvxdi260821y09lxsimq82yv4k5bbgk3kyc3x1nyhn7vx";
   };
 
   nativeBuildInputs = [
     pkg-config
     copyDesktopItems
   ];
-
   buildInputs = [
     alsa-lib
     libjack2
     libpulseaudio
-    libX11
-    libXext
-    xorgproto
+    xorg.libX11
+    xorg.libXext
+    xorg.xorgproto
   ];
 
-  postPatch = ''
-    sed -i '41,43d' libbristolaudio/audioEngineJack.c  # disable alsa/iatomic
-    sed -i '35i void doPitchWheel(Baudio *baudio);' bristol/bristolmemorymoog.c
-  '';
+  patchPhase = "sed -i '41,43d' libbristolaudio/audioEngineJack.c"; # disable alsa/iatomic
 
-  configureFlags = [
-    "--enable-jack-default-audio"
-    "--enable-jack-default-midi"
-  ];
+  configurePhase = "./configure --prefix=$out --enable-jack-default-audio --enable-jack-default-midi";
 
   # Workaround build failure on -fno-common toolchains like upstream
   # gcc-10. Otherwise build fails as:
   #  ld: brightonCLI.o:/build/bristol-0.60.11/brighton/brightonCLI.c:139: multiple definition of
   #    `event'; brightonMixerMenu.o:/build/bristol-0.60.11/brighton/brightonMixerMenu.c:1182: first defined here
-  env.NIX_CFLAGS_COMPILE = "-fcommon -Wno-implicit-int";
+  env.NIX_CFLAGS_COMPILE = "-fcommon";
 
   preInstall = ''
     sed -e "s@\`which bristol\`@$out/bin/bristol@g" -i bin/startBristol
@@ -73,10 +64,10 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Range of synthesiser, electric piano and organ emulations";
     homepage = "https://bristol.sourceforge.net";
-    license = lib.licenses.gpl3;
+    license = licenses.gpl3;
     platforms = [
       "x86_64-linux"
       "i686-linux"

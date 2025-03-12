@@ -4,31 +4,31 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage rec {
   pname = "swayws";
-  version = "1.3.0";
+  version = "1.2.0";
 
   src = fetchFromGitLab {
     owner = "w0lff";
-    repo = "swayws";
+    repo = pname;
     # Specifying commit hash rather than tag because upstream has
     # rewritten a tag before:
     # https://gitlab.com/w0lff/swayws/-/issues/1#note_1342349382
-    rev = "0c125d65f9fe9269f78ddaf575cd39f00f749659";
-    hash = "sha256-ILS7r1gL6fXeX58CJ+gHvQ5Cst7PbK4yNw2Dh5l9IEc=";
+    rev = "98f0d5c1896b10e890e1727654f1cf3b34a2371e";
+    hash = "sha256-zeM6/x2vjZ2IL+nZz1WBf5yY4C6ovmxyvgVLD54BKVc=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-AS1vEnNLDLsNaIZ6pLrsQpQy9+bSoCn5oyj8SXjJ+OE=";
+  cargoHash = "sha256-/n41JGypLsFd02tW5WuxXsATn7/I09N+dOiq0H0QDug=";
 
   # swayws does not have any tests
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Sway workspace tool which allows easy moving of workspaces to and from outputs";
     mainProgram = "swayws";
     homepage = "https://gitlab.com/w0lff/swayws";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.atila ];
+    license = licenses.mit;
+    maintainers = [ maintainers.atila ];
   };
 }

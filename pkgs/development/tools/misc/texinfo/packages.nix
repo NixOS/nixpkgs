@@ -6,7 +6,7 @@
   fetchurl,
   perl,
   libintl,
-  bashNonInteractive,
+  bash,
   updateAutotoolsGnuConfigScriptsHook,
   gnulib,
   gawk,
@@ -14,7 +14,7 @@
   libiconv,
   xz,
 
-  # we are a dependency of gcc, this simplifies bootstrapping
+  # we are a dependency of gcc, this simplifies bootstraping
   interactive ? false,
   ncurses,
   procps,
@@ -57,7 +57,7 @@ let
       xz
       libintl
       libiconv
-      bashNonInteractive
+      bash
       gnulib
       gawk
       freebsd

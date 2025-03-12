@@ -36,13 +36,13 @@
   webkitgtk_4_0,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "gthumb";
-  version = "3.12.7";
+  version = "3.12.6";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gthumb/${lib.versions.majorMinor finalAttrs.version}/gthumb-${finalAttrs.version}.tar.xz";
-    sha256 = "sha256-7hLSTPIxAQJB91jWyVudU6c4Enj6dralGLPQmzce+uw=";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "sha256-YIdwxsjnMHOh1AS2W9G3YeGsXcJecBMP8HJIj6kvXDM=";
   };
 
   nativeBuildInputs = [
@@ -104,7 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = "gthumb";
+      packageName = pname;
       versionPolicy = "odd-unstable";
     };
   };
@@ -117,4 +117,4 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.mimame ];
   };
-})
+}

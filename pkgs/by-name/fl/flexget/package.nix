@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "flexget";
-  version = "3.15.19";
+  version = "3.15.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Flexget";
     repo = "Flexget";
     tag = "v${version}";
-    hash = "sha256-4YfBTlmwWFfSMjFA2FIRB6gNQ+BNKQNZIWmzageV1RM=";
+    hash = "sha256-vMg4HimS+/QSbuwwVfKAroux8VHrKsm1wPGZDWN33g8=";
   };
 
   pythonRelaxDeps = true;
@@ -49,7 +49,6 @@ python3Packages.buildPythonApplication rec {
     rpyc
     sqlalchemy
     zstandard
-    pillow
 
     # WebUI requirements
     cherrypy
@@ -101,7 +100,6 @@ python3Packages.buildPythonApplication rec {
   nativeCheckInputs = [
     python3Packages.pytestCheckHook
     python3Packages.pytest-vcr
-    python3Packages.pytest-xdist
     python3Packages.paramiko
   ];
 

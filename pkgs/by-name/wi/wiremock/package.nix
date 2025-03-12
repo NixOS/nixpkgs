@@ -10,11 +10,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "wiremock";
-  version = "3.12.1";
+  version = "3.12.0";
 
   src = fetchurl {
     url = "mirror://maven/org/wiremock/wiremock-standalone/${finalAttrs.version}/wiremock-standalone-${finalAttrs.version}.jar";
-    hash = "sha256-OoyH8wqvMQvLHPi4bTRodINMpqzZAdsvixm5qmqAZuI=";
+    hash = "sha256-xBylDIazUsvIVGitrdF/cdHiTm3N4yh032sPESmfe0E=";
   };
 
   dontUnpack = true;

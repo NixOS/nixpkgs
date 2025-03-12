@@ -14,7 +14,7 @@
   numpy,
   libusb-compat-0_1,
 
-  # optional-dependencies
+  # optional-dependenices
   pyusb,
 
   # tests

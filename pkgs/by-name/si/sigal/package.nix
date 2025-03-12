@@ -8,12 +8,12 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "sigal";
-  version = "2.5";
+  version = "2.4";
   pyproject = true;
 
   src = fetchPypi {
     inherit version pname;
-    hash = "sha256-IOAQ6lMudYH+Ukx27VKbPNKmQKBaX3j0p750nC5Y1Hg=";
+    hash = "sha256-pDTaqtqfuk7tACkyaKClTJotuVcTKli5yx1wbEM93TM=";
   };
 
   nativeBuildInputs = with python3.pkgs; [

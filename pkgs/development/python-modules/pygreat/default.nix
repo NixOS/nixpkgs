@@ -34,7 +34,7 @@ buildPythonPackage rec {
   ];
 
   pythonRemoveDeps = [
-    "backports.functools_lru_cache"
+    "backports.functools-lru-cache"
   ];
 
   dependencies = [

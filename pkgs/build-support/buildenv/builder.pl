@@ -1,3 +1,5 @@
+#! @perl@ -w
+
 use strict;
 use feature 'signatures';
 use Cwd 'abs_path';

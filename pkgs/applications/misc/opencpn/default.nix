@@ -12,7 +12,7 @@
   fetchFromGitHub,
   flac,
   gitMinimal,
-  wrapGAppsHook3,
+  gtk3,
   glew,
   gtest,
   jasper,
@@ -68,7 +68,6 @@ stdenv.mkDerivation (finalAttrs: {
       cmake
       pkg-config
       gtest
-      wrapGAppsHook3
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       lsb-release
@@ -90,6 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
       AppKit
     ]
     ++ [
+      gtk3
       glew
       jasper
       libGLU

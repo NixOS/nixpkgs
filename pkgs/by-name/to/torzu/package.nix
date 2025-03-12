@@ -2,6 +2,7 @@
   lib,
   stdenv,
   SDL2,
+  autoconf,
   boost,
   catch2_3,
   cmake,
@@ -17,18 +18,18 @@
   glslang,
   libopus,
   libusb1,
+  libva,
   lz4,
   python3,
   unzip,
   nix-update-script,
   nlohmann_json,
+  nv-codec-headers-12,
   pkg-config,
   qt6,
-  spirv-tools,
-  spirv-headers,
-  vulkan-utility-libraries,
   vulkan-headers,
   vulkan-loader,
+  yasm,
   simpleini,
   zlib,
   vulkan-memory-allocator,
@@ -82,12 +83,12 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "torzu";
-  version = "unstable-2025-02-22";
+  version = "unstable-2024-12-15";
 
   src = fetchgit {
-    url = "https://git.ynh.ovh/liberodark/torzu.git";
-    rev = "eaa9c9e3a46eb5099193b11d620ddfe96b6aec83";
-    hash = "sha256-KxLRXM8Y+sIW5L9oYMSeK95HRb30zGRRSfil9DO+utU=";
+    url = "https://notabug.org/litucks/torzu";
+    rev = "02cfee3f184e6fdcc3b483ef399fb5d2bb1e8ec7";
+    hash = "sha256-hAWMFzTNJGFcrXov5LKMdW9YWhsu7wueATmiuS7EVkI=";
     fetchSubmodules = true;
   };
 
@@ -98,8 +99,6 @@ stdenv.mkDerivation (finalAttrs: {
     ./fix-udp-protocol.patch
     # Use specific boost::asio includes and update to modern io_context
     ./fix-udp-client.patch
-    # Updates suppressed diagnostics
-    ./fix-aarch64-linux-build.patch
   ];
 
   nativeBuildInputs = [
@@ -124,7 +123,15 @@ stdenv.mkDerivation (finalAttrs: {
     # intentionally omitted: dynarmic - prefer vendored version for compatibility
     enet
 
+    # ffmpeg deps (also includes vendored)
+    # we do not use internal ffmpeg because cuda errors
+    autoconf
+    yasm
+    libva # for accelerated video decode on non-nvidia
+    nv-codec-headers-12 # for accelerated video decode on nvidia
     ffmpeg-headless
+    # end ffmpeg deps
+
     fmt
     # intentionally omitted: gamemode - loaded dynamically at runtime
     # intentionally omitted: httplib - upstream requires an older version than what we have
@@ -140,11 +147,7 @@ stdenv.mkDerivation (finalAttrs: {
     # intentionally omitted: renderdoc - heavy, developer only
     SDL2
     # intentionally omitted: stb - header only libraries, vendor uses git snapshot
-    simpleini
-    spirv-tools
-    spirv-headers
     vulkan-memory-allocator
-    vulkan-utility-libraries
     # intentionally omitted: xbyak - prefer vendored version for compatibility
     zlib
     zstd
@@ -154,7 +157,6 @@ stdenv.mkDerivation (finalAttrs: {
   # making the build fail, as that path does not exist
   dontFixCmake = true;
 
-  __structuredAttrs = true;
   cmakeFlags = [
     # actually has a noticeable performance impact
     (lib.cmakeBool "YUZU_ENABLE_LTO" true)
@@ -165,11 +167,13 @@ stdenv.mkDerivation (finalAttrs: {
 
     # use system libraries
     # NB: "external" here means "from the externals/ directory in the source",
-    # so "false" means "use system"
+    # so "off" means "use system"
     (lib.cmakeBool "YUZU_USE_EXTERNAL_SDL2" false)
-    (lib.cmakeBool "YUZU_USE_EXTERNAL_VULKAN_HEADERS" false)
-    (lib.cmakeBool "YUZU_USE_EXTERNAL_VULKAN_UTILITY_LIBRARIES" false)
-    (lib.cmakeBool "YUZU_USE_EXTERNAL_VULKAN_SPIRV_TOOLS" false)
+    (lib.cmakeBool "YUZU_USE_EXTERNAL_VULKAN_HEADERS" true)
+    "-DVulkan_INCLUDE_DIRS=${vulkan-headers}/include"
+
+    # # don't use system ffmpeg, suyu uses internal APIs
+    # (lib.cmakeBool "YUZU_USE_BUNDLED_FFMPEG" true)
 
     # don't check for missing submodules
     (lib.cmakeBool "YUZU_CHECK_SUBMODULES" false)
@@ -182,9 +186,6 @@ stdenv.mkDerivation (finalAttrs: {
     # We dont want to bother upstream with potentially outdated compat reports
     (lib.cmakeBool "YUZU_ENABLE_COMPATIBILITY_REPORTING" false)
     (lib.cmakeBool "ENABLE_COMPATIBILITY_LIST_DOWNLOAD" false) # We provide this deterministically
-
-    (lib.cmakeFeature "TITLE_BAR_FORMAT_IDLE" "${finalAttrs.pname} | ${finalAttrs.version} (nixpkgs) {}")
-    (lib.cmakeFeature "TITLE_BAR_FORMAT_RUNNING" "${finalAttrs.pname} | ${finalAttrs.version} (nixpkgs) | {}")
   ];
 
   env = {
@@ -198,11 +199,21 @@ stdenv.mkDerivation (finalAttrs: {
     "--prefix LD_LIBRARY_PATH : ${vulkan-loader}/lib"
   ];
 
-  preConfigure = ''
+  # Setting this through cmakeFlags does not work.
+  # https://github.com/NixOS/nixpkgs/issues/114044
+  preConfigure = lib.concatStringsSep "\n" [
+    ''
+      cmakeFlagsArray+=(
+        "-DTITLE_BAR_FORMAT_IDLE=${finalAttrs.pname} | ${finalAttrs.version} (nixpkgs) {}"
+        "-DTITLE_BAR_FORMAT_RUNNING=${finalAttrs.pname} | ${finalAttrs.version} (nixpkgs) | {}"
+      )
+    ''
     # provide pre-downloaded tz data
-    mkdir -p build/externals/nx_tzdb
-    ln -s ${nx_tzdb} build/externals/nx_tzdb/nx_tzdb
-  '';
+    ''
+      mkdir -p build/externals/nx_tzdb
+      ln -s ${nx_tzdb} build/externals/nx_tzdb/nx_tzdb
+    ''
+  ];
 
   postConfigure = ''
     ln -sf ${compat-list} ./dist/compatibility_list/compatibility_list.json
@@ -217,6 +228,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://notabug.org/litucks/torzu";
     mainProgram = "yuzu";
     platforms = lib.platforms.linux;
+    badPlatforms = [
+      # Several conversion errors, probably caused by the update to GCC 14
+      "aarch64-linux"
+    ];
     maintainers = with lib.maintainers; [ liberodark ];
     license = with lib.licenses; [
       gpl3Plus

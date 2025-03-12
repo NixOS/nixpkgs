@@ -18,19 +18,19 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage (finalAttrs: {
+rustPlatform.buildRustPackage rec {
   pname = "uv";
-  version = "0.6.5";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "uv";
-    tag = finalAttrs.version;
-    hash = "sha256-y4TUu7mQAfS6qO8lKOniCD5ShiKzhAuwD+8qK3qcMmw=";
+    tag = version;
+    hash = "sha256-1vWg+nDh87JSs5W+8RgvAlfmNSokAU6Or41OXMcFRC8=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-KCuGQ3OWpzXX5b1X9DuiTTqYNZSlCpi46J4bX7nQGVc=";
+  cargoHash = "sha256-Kuh3R8PRlH25wmErFVa055ggctJYFqq9fZTzyK3TAT0=";
 
   buildInputs = [
     rust-jemalloc-sys
@@ -67,7 +67,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
+  versionCheckProgramArg = [ "--version" ];
   doInstallCheck = true;
 
   passthru = {
@@ -78,7 +78,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Extremely fast Python package installer and resolver, written in Rust";
     homepage = "https://github.com/astral-sh/uv";
-    changelog = "https://github.com/astral-sh/uv/blob/${finalAttrs.version}/CHANGELOG.md";
+    changelog = "https://github.com/astral-sh/uv/blob/${version}/CHANGELOG.md";
     license = with lib.licenses; [
       asl20
       mit
@@ -86,4 +86,4 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [ GaetanLepage ];
     mainProgram = "uv";
   };
-})
+}

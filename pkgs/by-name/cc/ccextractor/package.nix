@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     ./remove-default-commit-hash.patch
     ./remove-vendored-libraries.patch
-  ] ++ finalAttrs.cargoDeps.vendorStaging.patches;
+  ] ++ finalAttrs.cargoDeps.patches;
 
   cmakeDir = "../src";
 

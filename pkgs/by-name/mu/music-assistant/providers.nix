@@ -1,20 +1,12 @@
 # Do not edit manually, run ./update-providers.py
 
 {
-  version = "2.4.2";
+  version = "2.3.6";
   providers = {
     airplay = ps: [
     ];
     apple_music = ps: [
     ]; # missing pywidevine
-    audible =
-      ps: with ps; [
-        audible
-      ];
-    audiobookshelf =
-      ps: with ps; [
-        aioaudiobookshelf
-      ];
     bluesound =
       ps: with ps; [
         pyblu
@@ -27,9 +19,8 @@
       ];
     deezer =
       ps: with ps; [
-        deezer-python-async
         pycryptodome
-      ];
+      ]; # missing deezer-python-async
     dlna =
       ps: with ps; [
         async-upnp-client
@@ -50,8 +41,6 @@
       ];
     hass_players = ps: [
     ];
-    ibroadcast = ps: [
-    ]; # missing ibroadcastaio
     jellyfin =
       ps: with ps; [
         aiojellyfin
@@ -67,10 +56,6 @@
     plex =
       ps: with ps; [
         plexapi
-      ];
-    podcastfeed =
-      ps: with ps; [
-        podcastparser
       ];
     qobuz = ps: [
     ];
@@ -102,8 +87,6 @@
       ps: with ps; [
         pkce
       ];
-    spotify_connect = ps: [
-    ];
     template_player_provider = ps: [
     ];
     test = ps: [
@@ -118,7 +101,6 @@
     ];
     ytmusic =
       ps: with ps; [
-        duration-parser
         yt-dlp
         ytmusicapi
       ];

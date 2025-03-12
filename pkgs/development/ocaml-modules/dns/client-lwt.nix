@@ -3,7 +3,7 @@
   dns,
   dns-client,
   lwt,
-  mirage-crypto-rng,
+  mirage-crypto-rng-lwt,
   mtime,
   ipaddr,
   alcotest,
@@ -27,7 +27,7 @@ buildDunePackage {
     happy-eyeballs-lwt
     tls-lwt
     mtime
-    mirage-crypto-rng
+    mirage-crypto-rng-lwt
   ];
   checkInputs = [ alcotest ];
   doCheck = true;

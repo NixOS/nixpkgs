@@ -6,14 +6,14 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage (finalAttrs: {
+rustPlatform.buildRustPackage rec {
   pname = "difftastic";
   version = "0.63.0";
 
   src = fetchFromGitHub {
     owner = "wilfred";
     repo = "difftastic";
-    tag = finalAttrs.version;
+    tag = version;
     hash = "sha256-BxWCSkSeDyiiGBY2u0ahPrIhYq2lbujoPPtZGq/OkI0=";
   };
 
@@ -21,7 +21,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-kIqaZ8truDivMV6uo1+j9bmXQReREZjHSr89ZvVDWCw=";
 
   # skip flaky tests
-  checkFlags = [ "--skip=options::tests::test_detect_display_width" ];
+  checkFlags = [
+    "--skip=options::tests::test_detect_display_width"
+  ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/difft";
@@ -33,7 +35,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Syntax-aware diff";
     homepage = "https://github.com/Wilfred/difftastic";
-    changelog = "https://github.com/Wilfred/difftastic/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/Wilfred/difftastic/blob/${version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       ethancedwards8
@@ -43,4 +45,4 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ];
     mainProgram = "difft";
   };
-})
+}

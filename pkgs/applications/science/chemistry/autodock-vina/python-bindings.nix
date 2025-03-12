@@ -53,7 +53,7 @@ buildPythonPackage {
     numpy
   ];
 
-  # upstream has no tests
+  # upstrem has no tests
   doCheck = false;
 
   pythonImportsCheck = [

@@ -5,11 +5,11 @@
   dns-mirage,
   randomconv,
   x509,
-  mirage-sleep,
-  mirage-ptime,
+  mirage-time,
+  mirage-clock,
   logs,
   mirage-crypto-pk,
-  mirage-crypto-rng,
+  mirage-crypto-rng-mirage,
   mirage-crypto-ec,
   lwt,
   tcpip,
@@ -26,11 +26,11 @@ buildDunePackage {
     dns-mirage
     randomconv
     x509
-    mirage-sleep
-    mirage-ptime
+    mirage-time
+    mirage-clock
     logs
     mirage-crypto-pk
-    mirage-crypto-rng
+    mirage-crypto-rng-mirage
     mirage-crypto-ec
     lwt
     tcpip

@@ -26,17 +26,21 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "goose-cli";
-  version = "1.0.10";
+  version = "1.0.7";
 
   src = fetchFromGitHub {
     owner = "block";
     repo = "goose";
     tag = "v${version}";
-    hash = "sha256-GPlxA6ZIy+kLFicuqGqtom9iavNV+geKJIwVBLDg4KE=";
+    hash = "sha256-/PCEszhRPxXSvvlNX8EVQTqLJwGF5N3ry+XuykiGV5U=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-Ty1ygZ4BB1eHkMffRWXhfvXK5QtZXejYy0kXRPYXdME=";
+  cargoLock.lockFile = ./Cargo.lock;
+
+  postPatch = ''
+    # no Cargo.lock in src
+    ln -s ${./Cargo.lock} Cargo.lock
+  '';
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -59,8 +63,6 @@ rustPlatform.buildRustPackage rec {
       # need dbus-daemon
       "--skip=config::base::tests::test_multiple_secrets"
       "--skip=config::base::tests::test_secret_management"
-      # Observer should be Some with both init project keys set
-      "--skip=tracing::langfuse_layer::tests::test_create_langfuse_observer"
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # Lazy instance has previously been poisoned
@@ -68,14 +70,14 @@ rustPlatform.buildRustPackage rec {
       "--skip=jetbrains::tests::test_router_creation"
     ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script { extraArgs = [ "--generate-lockfile" ]; };
 
   meta = {
     description = "Open-source, extensible AI agent that goes beyond code suggestions - install, execute, edit, and test with any LLM";
     homepage = "https://github.com/block/goose";
     mainProgram = "goose";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ cloudripper ];
+    maintainers = with lib.maintainers; [ nayeko ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

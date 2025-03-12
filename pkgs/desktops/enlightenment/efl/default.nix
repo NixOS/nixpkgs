@@ -27,7 +27,6 @@
   jbig2dec,
   libGL,
   libdrm,
-  libgbm,
   libinput,
   libjpeg,
   libpng,
@@ -41,7 +40,7 @@
   libxkbcommon,
   lua,
   lz4,
-  mesa-gl-headers,
+  mesa,
   mint-x-icons,
   openjpeg,
   openssl,
@@ -92,7 +91,7 @@ stdenv.mkDerivation rec {
     libsndfile
     libtiff
     lz4
-    mesa-gl-headers
+    mesa # actually uses eglmesaext
     openssl
     systemd
     udev
@@ -119,7 +118,6 @@ stdenv.mkDerivation rec {
     hicolor-icon-theme # for the icon theme
     jbig2dec
     libdrm
-    libgbm
     libinput
     libjpeg
     libraw

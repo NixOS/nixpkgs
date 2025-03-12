@@ -2,14 +2,14 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  poetry-core,
+  hypothesis,
   isPy3k,
 }:
 
 buildPythonPackage rec {
   pname = "rubymarshal";
   version = "1.2.8";
-  pyproject = true;
+  format = "setuptools";
   disabled = !isPy3k;
 
   src = fetchPypi {
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     sha256 = "sha256-8+8KxCjsawlFXd1Bgq/8jY0TSB9l8UHaNMkcqfoz7hs=";
   };
 
-  build-system = [ poetry-core ];
+  propagatedBuildInputs = [ hypothesis ];
 
   # pypi doesn't distribute tests
   doCheck = false;

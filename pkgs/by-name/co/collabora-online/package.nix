@@ -3,7 +3,6 @@
   cairo,
   cppunit,
   fetchFromGitHub,
-  fetchpatch,
   fetchNpmDeps,
   lib,
   libcap,
@@ -64,15 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-lokit-path=${libreoffice-collabora.src}/include"
   ];
 
-  patches = [
-    ./fix-file-server-regex.patch
-    # Remove after next release
-    (fetchpatch {
-      name = "add-missing-includes-for-poco-1.14.1";
-      url = "https://patch-diff.githubusercontent.com/raw/CollaboraOnline/online/pull/11196.patch";
-      hash = "sha256-ke4dOxITFHK3xMXIdp+zzUEGYMyDxMJrbbXTN+LaoVU=";
-    })
-  ];
+  patches = [ ./fix-file-server-regex.patch ];
 
   postPatch = ''
     cp ${./package-lock.json} ${finalAttrs.npmRoot}/package-lock.json

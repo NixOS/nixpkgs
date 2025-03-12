@@ -36,13 +36,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vengi-tools";
-  version = "0.0.35";
+  version = "0.0.34";
 
   src = fetchFromGitHub {
     owner = "vengi-voxel";
     repo = "vengi";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-8rGnW+VtqNJYqUqQDp0yOVIQd7w+cq7PIpqqIQPhkbE=";
+    hash = "sha256-a78Oiwln3vyzCyjNewbK1/05bnGcSixxzKIgz4oiDmA=";
   };
 
   nativeBuildInputs = [

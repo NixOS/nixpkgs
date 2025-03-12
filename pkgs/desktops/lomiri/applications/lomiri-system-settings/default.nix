@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitLab,
-  fetchpatch,
   gitUpdater,
   testers,
   accountsservice,
@@ -18,7 +17,7 @@
   gnome-desktop,
   gsettings-qt,
   gtk3,
-  icu75,
+  icu,
   intltool,
   json-glib,
   libqofono,
@@ -63,17 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ];
 
-  patches = [
-    # Fixes compat with newer ICU
-    # Remove when version > 1.3.0
-    (fetchpatch {
-      name = "0001-lomiri-system-settings-unwrapped-Unpin-Cxx-standard.patch";
-      url = "https://gitlab.com/ubports/development/core/lomiri-system-settings/-/commit/c0b1c773237b28ea50850810b8844033b13fb666.patch";
-      hash = "sha256-M73gQxstKyuzzx1VxdOiNYyfQbSZPIy2gxiCtKcdS1M=";
-    })
-
-    ./2000-Support-wrapping-for-Nixpkgs.patch
-  ];
+  patches = [ ./2000-Support-wrapping-for-Nixpkgs.patch ];
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
@@ -121,7 +110,7 @@ stdenv.mkDerivation (finalAttrs: {
     gnome-desktop
     gsettings-qt
     gtk3
-    icu75
+    icu
     json-glib
     polkit
     qtbase

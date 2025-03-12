@@ -14,7 +14,7 @@
 
   # sniprun
   vimUtils,
-  replaceVars,
+  substituteAll,
   nix-update-script,
 }:
 let
@@ -58,7 +58,8 @@ vimUtils.buildVimPlugin {
   inherit version src;
 
   patches = [
-    (replaceVars ./fix-paths.patch {
+    (substituteAll {
+      src = ./fix-paths.patch;
       sniprun = lib.getExe sniprun-bin;
     })
   ];

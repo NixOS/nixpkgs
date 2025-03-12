@@ -1,7 +1,7 @@
 {
   lib,
   buildDunePackage,
-  replaceVars,
+  substituteAll,
   base64,
   cmdliner,
   digestif,
@@ -24,7 +24,8 @@ buildDunePackage rec {
   minimalOCamlVersion = "4.09";
 
   patches = [
-    (replaceVars ./fix-paths.patch {
+    (substituteAll {
+      src = ./fix-paths.patch;
       inherit coreutils imagemagick;
     })
   ];

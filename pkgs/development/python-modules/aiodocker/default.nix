@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   aiohttp,
-  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -19,10 +18,7 @@ buildPythonPackage rec {
     sha256 = "RL5Ck4wsBZO88afmoojeFKbdIeCjDo/SwNqUcERH6Ls=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-    typing-extensions
-  ];
+  propagatedBuildInputs = [ aiohttp ];
 
   # tests require docker daemon
   doCheck = false;

@@ -144,7 +144,7 @@ rustPlatform.buildRustPackage rec {
       # avoid spurious releases and tags such as "debs"
       extraArgs = [
         "-vr"
-        "v([0-9\\.]*)"
+        "v(.*)"
         "--override-filename"
         "pkgs/by-name/ka/kanidm/${
           builtins.replaceStrings [ "." ] [ "_" ] (lib.versions.majorMinor kanidm.version)

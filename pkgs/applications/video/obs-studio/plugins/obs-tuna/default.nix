@@ -6,6 +6,7 @@
   cmake,
   zlib,
   curl,
+  taglib,
   dbus,
   pkg-config,
   qtbase,
@@ -26,6 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     qtbase
     zlib
     curl
+    taglib
     dbus
   ];
 

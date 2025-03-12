@@ -8,13 +8,13 @@
 
 buildGoModule rec {
   pname = "imposm";
-  version = "0.14.1";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "omniscale";
     repo = "imposm3";
-    tag = "v${version}";
-    hash = "sha256-PF7pi2UTZJe7WzfaJrQrOGusO/RRfh8KNz8YyrVcBvg=";
+    rev = "v${version}";
+    hash = "sha256-4PwJzR/xeVdqAiHXzMAqI2m8qeqFXLZxy9V3o59eKwA=";
   };
 
   vendorHash = null;
@@ -32,12 +32,12 @@ buildGoModule rec {
   # requires network access
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Imposm imports OpenStreetMap data into PostGIS";
     homepage = "https://imposm.org/";
     changelog = "https://github.com/omniscale/imposm3/releases/tag/${src.rev}";
-    license = lib.licenses.apsl20;
-    maintainers = with lib.maintainers; [ sikmir ];
+    license = licenses.apsl20;
+    maintainers = with maintainers; [ sikmir ];
     mainProgram = "imposm";
   };
 }

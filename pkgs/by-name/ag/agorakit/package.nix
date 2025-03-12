@@ -7,13 +7,13 @@
 
 php.buildComposerProject2 (finalAttrs: {
   pname = "agorakit";
-  version = "1.9.3";
+  version = "1.9.2";
 
   src = fetchFromGitHub {
-    owner = "agorakit";
-    repo = "agorakit";
+    owner = finalAttrs.pname;
+    repo = finalAttrs.pname;
     tag = finalAttrs.version;
-    sha256 = "sha256-mBBl/8nXG3FsMeecbERLyY2tGFhh+5nS8A4nd7HI+8c=";
+    sha256 = "sha256-6T7AksvBxUpv8TkPicnlCE5KZS/ydPB5Bq1MJcWoZds=";
   };
 
   installPhase = ''
@@ -26,7 +26,7 @@ php.buildComposerProject2 (finalAttrs: {
     runHook postInstall
   '';
 
-  vendorHash = "sha256-PBymOrvorGfByTBVu/r+kBxQya5qIlu07mfu4ttT7xs=";
+  vendorHash = "sha256-EepkEMqzRJUqw4PrPclY9BM4AGlQZJpYLWjIyaX15PA=";
   composerStrictValidation = false;
 
   meta = {

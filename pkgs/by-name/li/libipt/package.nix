@@ -8,21 +8,17 @@
 
 stdenv.mkDerivation rec {
   pname = "libipt";
-  version = "2.1.2";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "libipt";
     rev = "v${version}";
-    sha256 = "sha256-rO2Mf2/BfKlPh1wHe0qTuyQAyqpSB/j3Q+JWpNDyNm0=";
+    sha256 = "sha256-tyOheitSlccf/n3mklGL2oAKLBKYT60LSLre9/G/b9Q=";
   };
 
   nativeBuildInputs = [ cmake ];
   buildInputs = lib.optional stdenv.hostPlatform.isFreeBSD freebsd.libstdthreads;
-
-  env = lib.optionalAttrs stdenv.hostPlatform.isFreeBSD {
-    NIX_LDFLAGS = "-lstdthreads";
-  };
 
   meta = with lib; {
     description = "Intel Processor Trace decoder library";

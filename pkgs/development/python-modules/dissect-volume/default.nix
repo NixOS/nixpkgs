@@ -48,7 +48,6 @@ buildPythonPackage rec {
     "test_lvm"
     "test_md_raid0_zones"
     "test_md_read"
-    "test_vinum"
   ];
 
   meta = with lib; {

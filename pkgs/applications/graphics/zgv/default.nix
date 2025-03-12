@@ -35,7 +35,6 @@ stdenv.mkDerivation rec {
   ];
 
   patches = [
-    ./add-include.patch
     (fetchpatch {
       url = "https://foss.aueb.gr/mirrors/linux/gentoo/media-gfx/zgv/files/zgv-5.9-libpng15.patch";
       sha256 = "1blw9n04c28bnwcmcn64si4f5zpg42s8yn345js88fyzi9zm19xw";

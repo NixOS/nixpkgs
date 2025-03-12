@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "quickjs-ng";
-  version = "0.8.0";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "quickjs-ng";
     repo = "quickjs";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-o0Cpy+20EqNdNENaYlasJcKIGU7W4RYBcTMsQwFTUNc=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-7IAkmlzgiPVd8yRv7LU5a7HWCB+eQk1Ur1KwZupwty0=";
   };
 
   outputs = [
@@ -45,13 +45,13 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   postBuild = ''
-    pushd ../docs
+    pushd ../doc
     makeinfo *texi
     popd
   '';
 
   postInstall = ''
-    pushd ../docs
+    pushd ../doc
     install -Dm644 -t ''${!outputInfo}/share/info *info
     popd
   '';

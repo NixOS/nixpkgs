@@ -61,33 +61,16 @@ rec {
             description = "Which principal the rule applies to";
           };
           access = mkOption {
-            type = coercedTo str singleton (
-              listOf (enum [
-                "all"
-                "add"
-                "cpw"
-                "delete"
-                "get-keys"
-                "get"
-                "list"
-                "modify"
-              ])
-            );
+            type = either (listOf (enum [
+              "add"
+              "cpw"
+              "delete"
+              "get"
+              "list"
+              "modify"
+            ])) (enum [ "all" ]);
             default = "all";
-            description = ''
-              The changes the principal is allowed to make.
-
-              :::{.important}
-              The "all" permission does not imply the "get-keys" permission. This
-              is consistent with the behavior of both MIT Kerberos and Heimdal.
-              :::
-
-              :::{.warning}
-              Value "all" is allowed as a list member only if it appears alone
-              or accompanied by "get-keys". Any other combination involving
-              "all" will raise an exception.
-              :::
-            '';
+            description = "The changes the principal is allowed to make.";
           };
           target = mkOption {
             type = str;

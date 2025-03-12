@@ -1,10 +1,8 @@
-{ compression, ... }@args:
-
 import ./make-test-python.nix (
   { lib, pkgs, ... }:
 
   {
-    name = "binary-cache-" + compression;
+    name = "binary-cache";
     meta.maintainers = with lib.maintainers; [ thomasjm ];
 
     nodes.machine =
@@ -26,12 +24,7 @@ import ./make-test-python.nix (
               nativeBuildInputs = [ openssl ];
             }
             ''
-              tar -czf tmp.tar.gz -C "${
-                mkBinaryCache {
-                  rootPaths = [ hello ];
-                  inherit compression;
-                }
-              }" .
+              tar -czf tmp.tar.gz -C "${mkBinaryCache { rootPaths = [ hello ]; }}" .
               openssl enc -aes-256-cbc -salt -in tmp.tar.gz -out $out -k mysecretpassword
             '';
 
@@ -85,4 +78,4 @@ import ./make-test-python.nix (
       machine.succeed("[ -d %s ] || exit 1" % storePath)
     '';
   }
-) args
+)

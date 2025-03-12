@@ -28,25 +28,27 @@ let
       domain = "gitlab.freedesktop.org";
       owner = "pipewire";
       repo = "wireplumber";
-      tag = version;
+      rev = version;
       hash = "sha256-vhpQT67+849WV1SFthQdUeFnYe/okudTQJoL3y+wXwI=";
     };
   });
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "pwvucontrol";
-  version = "0.4.8";
+  version = "0.4.7";
 
   src = fetchFromGitHub {
     owner = "saivert";
     repo = "pwvucontrol";
     tag = finalAttrs.version;
-    hash = "sha256-E3UfZO0R6WGeUffgGQ2ceHiG4hwIuFntTdCpojaWL8E=";
+    hash = "sha256-v8xANTbaIPIAPoukP8rcVzM6NHNpS2Ej/nfdmg3Vgvg=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit (finalAttrs) pname version src;
-    hash = "sha256-uaRpaiVjxc0j4oDbmmwt8SPS7O7hWzoYO62jLYzHl1c=";
+  cargoDeps = rustPlatform.importCargoLock {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "wireplumber-0.1.0" = "sha256-ocagwmjyhfx6n/9xKxF2vhylqy2HunKQRx3eMo6m/l4=";
+    };
   };
 
   nativeBuildInputs = [

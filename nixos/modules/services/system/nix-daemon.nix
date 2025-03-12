@@ -16,9 +16,7 @@ let
 
   nixPackage = cfg.package.out;
 
-  # nixVersion is an attribute which defines the implementation version.
-  # This is useful for Nix implementations which don't follow Nix's versioning.
-  isNixAtLeast = lib.versionAtLeast (nixPackage.nixVersion or (lib.getVersion nixPackage));
+  isNixAtLeast = lib.versionAtLeast (lib.getVersion nixPackage);
 
   makeNixBuildUser = nr: {
     name = "nixbld${toString nr}";
@@ -218,7 +216,7 @@ in
       environment =
         cfg.envVars
         // {
-          CURL_CA_BUNDLE = config.security.pki.caBundle;
+          CURL_CA_BUNDLE = "/etc/ssl/certs/ca-certificates.crt";
         }
         // config.networking.proxy.envVars;
 

@@ -5,16 +5,10 @@
   libxml2,
   ncurses,
   zlib,
-  features ? [
-    "use_jemalloc"
-    "allow_avx2"
-    "unstable"
-  ],
+  features ? [ "default" ],
+  llvmPackages_12,
 }:
-# Don't allow LLVM support until https://github.com/ezrosent/frawk/issues/115 is resolved.
-assert lib.assertMsg (
-  !(lib.elem "default" features || lib.elem "llvm_backend" features)
-) "LLVM support has been dropped due to LLVM 12 EOL.";
+
 rustPlatform.buildRustPackage rec {
   pname = "frawk";
   version = "0.4.8";
@@ -36,9 +30,13 @@ rustPlatform.buildRustPackage rec {
   buildNoDefaultFeatures = true;
   buildFeatures = features;
 
-  preBuild = lib.optionalString (lib.elem "default" features || lib.elem "unstable" features) ''
-    export RUSTC_BOOTSTRAP=1
-  '';
+  preBuild =
+    lib.optionalString (lib.elem "default" features || lib.elem "llvm_backend" features) ''
+      export LLVM_SYS_120_PREFIX=${llvmPackages_12.llvm.dev}
+    ''
+    + lib.optionalString (lib.elem "default" features || lib.elem "unstable" features) ''
+      export RUSTC_BOOTSTRAP=1
+    '';
 
   # depends on cpu instructions that may not be available on builders
   doCheck = false;

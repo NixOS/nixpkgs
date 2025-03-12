@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   configureFlags = [
-    # Ensure we build the amdgpu target
+    # Ensure we build the amdgpu traget
     "--enable-targets=${stdenv.targetPlatform.config},amdgcn-amd-amdhsa"
     "--with-amd-dbgapi=yes"
 

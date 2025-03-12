@@ -68,7 +68,7 @@ stdenv.mkDerivation {
   ];
 
   env.NIX_CFLAGS_COMPILE = toString [
-    "-I${lib.getInclude SDL2}/include/SDL2"
+    "-I${SDL2.dev}/include/SDL2"
   ];
 
   enableParallelBuilding = true;

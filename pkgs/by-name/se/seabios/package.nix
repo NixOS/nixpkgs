@@ -42,10 +42,6 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-hWemj83cxdY8p+Jhkh5GcPvI0Sy5aKYZJCsKDjHTUUk=";
   };
 
-  postPatch = ''
-    echo ${finalAttrs.version} > .version
-  '';
-
   outputs = [
     "out"
     "doc"

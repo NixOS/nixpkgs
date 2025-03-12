@@ -42,7 +42,6 @@
   # tests
   azure-core,
   azure-storage-blob,
-  datafusion,
   fastavro,
   moto,
   pyspark,
@@ -55,14 +54,14 @@
 
 buildPythonPackage rec {
   pname = "iceberg-python";
-  version = "0.9.0";
+  version = "0.8.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "iceberg-python";
     tag = "pyiceberg-${version}";
-    hash = "sha256-PLxYe6MpKR6qILTNt0arujyx/nlVorwjhwokbXvdwb0=";
+    hash = "sha256-L3YlOtzJv9R4TLeJGzfMQ+0nYtQEsqmgNZpW9B6vVAI=";
   };
 
   patches = [
@@ -162,7 +161,6 @@ buildPythonPackage rec {
     azure-core
     azure-storage-blob
     boto3
-    datafusion
     fastavro
     moto
     mypy-boto3-glue
@@ -189,11 +187,6 @@ buildPythonPackage rec {
 
   disabledTests =
     [
-      # Require unpackaged pyiceberg_core
-      "test_bucket_pyarrow_transforms"
-      "test_transform_consistency_with_pyarrow_transform"
-      "test_truncate_pyarrow_transforms"
-
       # botocore.exceptions.EndpointConnectionError: Could not connect to the endpoint URL
       "test_checking_if_a_file_exists"
       "test_closing_a_file"
@@ -216,8 +209,6 @@ buildPythonPackage rec {
       "test_fsspec_new_abfss_output_file_adls"
       "test_fsspec_new_input_file_adls"
       "test_fsspec_pickle_round_trip_aldfs"
-      "test_partitioned_write"
-      "test_token_200_w_oauth2_server_uri"
 
       # TypeError: pyarrow.lib.large_list() takes no keyword argument
       # From tests/io/test_pyarrow_stats.py:

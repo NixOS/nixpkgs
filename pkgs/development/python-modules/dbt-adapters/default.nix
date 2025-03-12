@@ -3,38 +3,33 @@
   agate,
   buildPythonPackage,
   dbt-common,
-  fetchPypi,
+  fetchFromGitHub,
   hatchling,
   mashumaro,
   protobuf,
   pytestCheckHook,
+  pythonOlder,
   pytz,
   typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "dbt-adapters";
-  version = "1.14.0";
+  version = "1.11.0";
   pyproject = true;
 
-  # missing tags on GitHub
-  src = fetchPypi {
-    pname = "dbt_adapters";
-    inherit version;
-    hash = "sha256-byBmlP3Gf8/olHl34L2SyMb4ZnKK5Gi1fZ3li2Acd+g=";
-  };
+  disabled = pythonOlder "3.8";
 
-  postPatch = ''
-    mkdir src
-    mv dbt src
-  '';
+  src = fetchFromGitHub {
+    owner = "dbt-labs";
+    repo = "dbt-adapters";
+    tag = "v${version}";
+    hash = "sha256-l2OwGbYFqUF6NOpIxmgyd7B3sCsZTCgu4noaSfwRFps=";
+  };
 
   build-system = [ hatchling ];
 
-  pythonRelaxDeps = [
-    "mashumaro"
-    "protobuf"
-  ];
+  pythonRelaxDeps = [ "protobuf" ];
 
   dependencies = [
     agate
@@ -53,9 +48,9 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
-    description = "Set of adapter protocols and base functionality that supports integration with dbt-core";
+    description = "The set of adapter protocols and base functionality that supports integration with dbt-core";
     homepage = "https://github.com/dbt-labs/dbt-adapters";
-    changelog = "https://github.com/dbt-labs/dbt-adapters/blob/main/dbt-adapters/CHANGELOG.md";
+    changelog = "https://github.com/dbt-labs/dbt-adapters/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };

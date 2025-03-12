@@ -3,7 +3,6 @@
   cffi,
   fetchFromGitHub,
   lib,
-  libpq,
   postgresql,
   postgresqlTestHook,
   pytestCheckHook,
@@ -30,11 +29,8 @@ buildPythonPackage rec {
       --replace-fail "sysconfig.get_python_inc()" "sysconfig.get_path('include')"
   '';
 
-  buildInputs = [ libpq ];
-  # To find pg_config
-  nativeBuildInputs = [ libpq ];
-
   build-system = [
+    postgresql
     setuptools
   ];
 
@@ -47,7 +43,6 @@ buildPythonPackage rec {
   doCheck = !stdenv.hostPlatform.isDarwin;
 
   nativeCheckInputs = [
-    postgresql
     postgresqlTestHook
     pytestCheckHook
   ];

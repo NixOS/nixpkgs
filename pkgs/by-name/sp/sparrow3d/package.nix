@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   propagatedBuildInputs = [
-    (lib.getDev SDL)
+    SDL.dev
     SDL_image
     SDL_ttf
     SDL_mixer

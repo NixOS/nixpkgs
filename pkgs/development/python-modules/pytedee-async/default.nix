@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   dependencies = [ aiohttp ];
 
-  pythonImportsCheck = [ "aiotedee" ];
+  pythonImportsCheck = [ "pytedee_async" ];
 
   # Module has no tests
   doCheck = false;

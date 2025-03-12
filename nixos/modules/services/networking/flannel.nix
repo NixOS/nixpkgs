@@ -7,15 +7,13 @@
 let
   cfg = config.services.flannel;
 
-  networkConfig =
-    (lib.filterAttrs (n: v: v != null) {
-      Network = cfg.network;
-      SubnetLen = cfg.subnetLen;
-      SubnetMin = cfg.subnetMin;
-      SubnetMax = cfg.subnetMax;
-      Backend = cfg.backend;
-    })
-    // cfg.extraNetworkConfig;
+  networkConfig = lib.filterAttrs (n: v: v != null) {
+    Network = cfg.network;
+    SubnetLen = cfg.subnetLen;
+    SubnetMin = cfg.subnetMin;
+    SubnetMax = cfg.subnetMax;
+    Backend = cfg.backend;
+  };
 in
 {
   options.services.flannel = {
@@ -141,15 +139,6 @@ in
         Type = "vxlan";
       };
     };
-
-    extraNetworkConfig = lib.mkOption {
-      description = "Extra configuration to be added to the net-conf.json/etcd-backed network configuration.";
-      type = (pkgs.formats.json { }).type;
-      default = { };
-      example = {
-        EnableIPv6 = true;
-      };
-    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -194,8 +183,6 @@ in
         RuntimeDirectory = "flannel";
       };
     };
-
-    boot.kernelModules = [ "br_netfilter" ];
 
     services.etcd.enable = lib.mkDefault (
       cfg.storageBackend == "etcd" && cfg.etcd.endpoints == [ "http://127.0.0.1:2379" ]

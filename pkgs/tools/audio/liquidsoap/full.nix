@@ -48,9 +48,6 @@ stdenv.mkDerivation {
   postPatch = ''
     substituteInPlace src/lang/dune \
       --replace-warn "(run git rev-parse --short HEAD)" "(run echo -n nixpkgs)"
-    # Compatibility with camlimages 5.0.5
-    substituteInPlace src/core/dune \
-      --replace-warn camlimages.all_formats camlimages.core
   '';
 
   dontConfigure = true;

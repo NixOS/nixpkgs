@@ -3,6 +3,7 @@
   mkCoqDerivation,
   mathcomp,
   mathcomp-bigenough,
+  stdlib,
   lib,
   version ? null,
 }:
@@ -115,6 +116,7 @@ mkCoqDerivation {
     mathcomp.fingroup
     mathcomp.solvable
     mathcomp-bigenough
+    stdlib
   ];
 
   meta = {

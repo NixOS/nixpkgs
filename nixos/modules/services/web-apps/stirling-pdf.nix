@@ -57,7 +57,7 @@ in
           libreoffice
           qpdf
           ocrmypdf
-          poppler-utils
+          poppler_utils
           unoconv
           pngquant
           tesseract

@@ -21,15 +21,13 @@ let
     # note that the dot in front of `${path}` is the hostname, which is
     # required.
     then "--unix-socket ${cfg.guiAddress} http://.${path}"
-    # no adjustments are needed if cfg.guiAddress is a network address
+    # no adjustements are needed if cfg.guiAddress is a network address
     else "${cfg.guiAddress}${path}"
     ;
 
   devices = mapAttrsToList (_: device: device // {
     deviceID = device.id;
   }) cfg.settings.devices;
-
-  anyAutoAccept = builtins.any (dev: dev.autoAcceptFolders) devices;
 
   folders = mapAttrsToList (_: folder: folder //
     throwIf (folder?rescanInterval || folder?watch || folder?watchDelay) ''
@@ -70,7 +68,7 @@ let
 
   /* Syncthing's rest API for the folders and devices is almost identical.
   Hence we iterate them using lib.pipe and generate shell commands for both at
-  the same time. */
+  the sime time. */
   (lib.pipe {
     # The attributes below are the only ones that are different for devices /
     # folders.
@@ -182,12 +180,7 @@ in {
 
       overrideFolders = mkOption {
         type = types.bool;
-        default = !anyAutoAccept;
-        defaultText = literalMD ''
-          `true` unless any device has the
-          [autoAcceptFolders](#opt-services.syncthing.settings.devices._name_.autoAcceptFolders)
-          option set to `true`.
-        '';
+        default = true;
         description = ''
           Whether to delete the folders which are not configured via the
           [folders](#opt-services.syncthing.settings.folders) option.
@@ -627,15 +620,6 @@ in {
   ###### implementation
 
   config = mkIf cfg.enable {
-    assertions = [
-      {
-        assertion = !(cfg.overrideFolders && anyAutoAccept);
-        message = ''
-          services.syncthing.overrideFolders will delete auto-accepted folders
-          from the configuration, creating path conflicts.
-        '';
-      }
-    ];
 
     networking.firewall = mkIf cfg.openDefaultPorts {
       allowedTCPPorts = [ 22000 ];

@@ -13,6 +13,8 @@ let
 
   format = pkgs.formats.json { };
 
+  configFile = format.generate "nats.conf" cfg.settings;
+
   validateConfig =
     file:
     pkgs.callPackage (
@@ -26,11 +28,6 @@ let
           ln -s "${configFile}" "$out"
         ''
     ) { };
-
-  unvalidatedConfigFile = format.generate "nats.conf" cfg.settings;
-
-  configFile =
-    if cfg.validateConfig then validateConfig unvalidatedConfigFile else unvalidatedConfigFile;
 in
 {
 
@@ -102,16 +99,6 @@ in
           NATS documentation](https://docs.nats.io/nats-server/configuration) for a list of options.
         '';
       };
-
-      validateConfig = mkOption {
-        type = types.bool;
-        default = true;
-        description = ''
-          If true, validate nats config at build time. When the config can't
-          be checked during build time, for example when it includes other
-          files, disable this option.
-        '';
-      };
     };
   };
 
@@ -136,7 +123,7 @@ in
         })
         {
           Type = "simple";
-          ExecStart = "${pkgs.nats-server}/bin/nats-server -c ${configFile}";
+          ExecStart = "${pkgs.nats-server}/bin/nats-server -c ${validateConfig configFile}";
           ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
           ExecStop = "${pkgs.coreutils}/bin/kill -SIGINT $MAINPID";
           Restart = "on-failure";

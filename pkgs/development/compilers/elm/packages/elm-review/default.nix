@@ -8,16 +8,16 @@
 
 buildNpmPackage rec {
   pname = "elm-review";
-  version = "2.13.2";
+  version = "2.13.1";
 
   src = fetchFromGitHub {
     owner = "jfmengels";
     repo = "node-elm-review";
     rev = "v${version}";
-    hash = "sha256-HQ7ilGfw/sMXMQVoJQAj31LbyJfdCfbrZ22gTh1vbD8=";
+    hash = "sha256-f7VEYTvFbNbHnl/aGeQdDxCr/PtkaLBJw9FVpk2T9is=";
   };
 
-  npmDepsHash = "sha256-YuN04MAKSu4InfGIS0EIZiNpSbLHA7/WzJiMFWY0Tqk=";
+  npmDepsHash = "sha256-5tSe/nK3X1MgX7uwTrFApw60i8c14ZWbk+IrgXMxTVc";
 
   postPatch = ''
     sed -i "s/elm-tooling install/echo 'skipping elm-tooling install'/g" package.json

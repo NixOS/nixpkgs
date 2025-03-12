@@ -1,9 +1,7 @@
 {
   lib,
-  stdenv,
   fetchurl,
   appimageTools,
-  segger-jlink-headless,
 }:
 
 let
@@ -25,7 +23,7 @@ appimageTools.wrapType2 {
   inherit pname version src;
 
   extraPkgs = pkgs: [
-    segger-jlink-headless
+    pkgs.segger-jlink-headless
   ];
 
   extraInstallCommands = ''
@@ -33,7 +31,7 @@ appimageTools.wrapType2 {
     install -Dm444 ${appimageContents}/usr/share/icons/hicolor/512x512/apps/nrfconnect.png \
       -t $out/share/icons/hicolor/512x512/apps
     substituteInPlace $out/share/applications/nrfconnect.desktop \
-      --replace-fail 'Exec=AppRun' 'Exec=nrfconnect'
+      --replace 'Exec=AppRun' 'Exec=nrfconnect'
   '';
 
   meta = {

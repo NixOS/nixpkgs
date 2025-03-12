@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libelfin";
-  version = "0.3-unstable-2024-03-11";
+  version = "unstable-2018-08-25";
 
   src = fetchFromGitHub {
     owner = "aclements";
-    repo = "libelfin";
-    rev = "e0172767b79b76373044118ef0272b49b02a0894";
-    hash = "sha256-xb5/DM2XOFM/w71OwRC/sCRqOSQvxVL1SS2zj2+dD/U=";
+    repo = pname;
+    rev = "ac45a094fadba77ad840063fb7aab82571546be0";
+    sha256 = "143x680c6hsy51kngs04ypg4ql3lp498llcwj4lh1v0qp5qvjhyz";
   };
 
   patches = [
@@ -27,11 +27,11 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/aclements/libelfin/";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     description = "C++11 ELF/DWARF parser";
-    maintainers = with lib.maintainers; [ aleksana ];
-    platforms = lib.platforms.linux;
+    maintainers = [ ];
+    platforms = platforms.linux;
   };
 }

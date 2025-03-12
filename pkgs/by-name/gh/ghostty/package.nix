@@ -60,7 +60,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   deps = callPackage ./deps.nix {
     name = "${finalAttrs.pname}-cache-${finalAttrs.version}";
-    zig = zig_0_13;
   };
 
   strictDeps = true;

@@ -22,7 +22,7 @@
   pango,
   perl,
   pkg-config,
-  replaceVars,
+  substituteAll,
   testers,
   AppKit,
   Cocoa,
@@ -32,7 +32,8 @@
 }:
 
 let
-  gtkCleanImmodulesCache = replaceVars ./hooks/clean-immodules-cache.sh {
+  gtkCleanImmodulesCache = substituteAll {
+    src = ./hooks/clean-immodules-cache.sh;
     gtk_module_path = "gtk-2.0";
     gtk_binary_version = "2.10.0";
   };

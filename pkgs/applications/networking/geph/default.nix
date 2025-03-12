@@ -66,8 +66,13 @@ in
 
       sourceRoot = "${finalAttrs.src.name}/gephgui-wry";
 
-      useFetchCargoVendor = true;
-      cargoHash = "sha256-pCj4SulUVEC4QTPBrPQBn5xJ+sHPs6KfjsdVRcsRapY=";
+      cargoLock = {
+        lockFile = ./Cargo.lock;
+        outputHashes = {
+          "tao-0.5.2" = "sha256-HyQyPRoAHUcgtYgaAW7uqrwEMQ45V+xVSxmlAZJfhv0=";
+          "wry-0.12.2" = "sha256-kTMXvignEF3FlzL0iSlF6zn1YTOCpyRUDN8EHpUS+yI=";
+        };
+      };
 
       pnpmDeps = pnpm.fetchDeps {
         inherit (finalAttrs) pname version src;

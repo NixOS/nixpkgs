@@ -16,22 +16,17 @@
   gst_all_1,
   gtk2,
   lib,
-  libxcrypt-legacy,
   libxkbcommon,
   libkrb5,
   krb5,
   makeWrapper,
   markForCudatoolkitRootHook,
   ncurses5,
-  ncurses6,
   numactl,
   nss,
   patchelf,
   perl,
   python3, # FIXME: CUDAToolkit 10 may still need python27
-  python39,
-  python310,
-  python311,
   pulseaudio,
   setupCudaHook,
   stdenv,
@@ -150,15 +145,7 @@ backendStdenv.mkDerivation rec {
         qtwebchannel
         qtwebengine
       ])
-    ))
-    ++ lib.optionals (lib.versionAtLeast version "12.6") [
-      # libcrypt.so.1
-      libxcrypt-legacy
-      ncurses6
-      python39
-      python310
-      python311
-    ];
+    ));
 
   # Prepended to runpaths by autoPatchelf.
   # The order inherited from older rpath preFixup code
@@ -297,11 +284,6 @@ backendStdenv.mkDerivation rec {
     # 11.8 includes a broken symlink, include/include, pointing to targets/x86_64-linux/include
     + lib.optionalString (lib.versions.majorMinor version == "11.8") ''
       rm $out/include/include
-    ''
-    # Python 3.8 is not in nixpkgs anymore, delete Python 3.8 cuda-gdb support
-    # to avoid autopatchelf failing to find libpython3.8.so.
-    + lib.optionalString (lib.versionAtLeast version "12.6") ''
-      find $out -name '*python3.8*' -delete
     ''
     + ''
       runHook postInstall

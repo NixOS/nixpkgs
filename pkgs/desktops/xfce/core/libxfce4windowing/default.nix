@@ -1,6 +1,6 @@
-{ stdenv
-, lib
+{ lib
 , mkXfceDerivation
+, gobject-introspection
 , wayland-scanner
 , glib
 , gtk3
@@ -11,11 +11,6 @@
 , wayland
 , wayland-protocols
 , wlr-protocols
-, withIntrospection ?
-    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
-    && stdenv.hostPlatform.emulatorAvailable buildPackages
-, buildPackages
-, gobject-introspection
 }:
 
 mkXfceDerivation {
@@ -26,9 +21,8 @@ mkXfceDerivation {
   sha256 = "sha256-Xw1hs854K5dZCAYoBMoqJzdSxPRFUYqEpWxg4DLSK5Q=";
 
   nativeBuildInputs = [
-    wayland-scanner
-  ] ++ lib.optionals withIntrospection [
     gobject-introspection
+    wayland-scanner
   ];
 
   buildInputs = [

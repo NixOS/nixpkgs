@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  replaceVars,
+  substituteAll,
   git,
   eradicate,
   mccabe,
@@ -32,7 +32,8 @@ let
     };
 
     patches = [
-      (replaceVars ./paths.patch {
+      (substituteAll {
+        src = ./paths.patch;
         git = "${lib.getBin git}/bin/git";
       })
     ];

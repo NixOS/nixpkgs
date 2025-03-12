@@ -10,16 +10,16 @@
 
 buildGoModule rec {
   pname = "buf";
-  version = "1.50.1";
+  version = "1.50.0";
 
   src = fetchFromGitHub {
     owner = "bufbuild";
     repo = "buf";
     rev = "v${version}";
-    hash = "sha256-n4X8Wgi/5z6fteR+uxr68R3kD7eorMzlAW8jacTZGHg=";
+    hash = "sha256-XRz6hju80NWi87NgVM/JzRNDIJeJSpZPVVEOoxvQAwc=";
   };
 
-  vendorHash = "sha256-HU4Di8ri2d93EUscCx8/gRiEJdLTcnKUaQ4kesKfZ+w=";
+  vendorHash = "sha256-7+fHUpYTAy/wBZKq58riNsZ29KnHUG0fWRUYfFhCaOY=";
 
   patches = [
     # Skip a test that requires networking to be available to work.
@@ -40,10 +40,6 @@ buildGoModule rec {
   ];
 
   preCheck = ''
-    # Some tests take longer depending on builder load.
-    substituteInPlace private/bufpkg/bufcheck/lint_test.go \
-      --replace-fail 'context.WithTimeout(context.Background(), 60*time.Second)' \
-                     'context.WithTimeout(context.Background(), 600*time.Second)'
     # For WebAssembly runtime tests
     GOOS=wasip1 GOARCH=wasm go build -o $GOPATH/bin/buf-plugin-suffix.wasm \
       ./private/bufpkg/bufcheck/internal/cmd/buf-plugin-suffix

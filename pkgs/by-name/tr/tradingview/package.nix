@@ -23,12 +23,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tradingview";
-  version = "2.9.6";
-  revision = "63";
+  version = "2.9.3";
+  revision = "60";
 
   src = fetchurl {
     url = "https://api.snapcraft.io/api/v1/snaps/download/nJdITJ6ZJxdvfu8Ch7n5kH5P99ClzBYV_${finalAttrs.revision}.snap";
-    hash = "sha256-WmeGtR/rOzlgTpa1JZKskxre2ONtzppYsA/yhDhv5TI=";
+    hash = "sha256-Oa3YfmXDiqKxEMJloTu6ihJ6LKoz2XwQ0su1KrlSaYo=";
   };
 
   nativeBuildInputs = [
@@ -59,9 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   unpackPhase = ''
     runHook preUnpack
-
     unsquashfs $src
-
     runHook postUnpack
   '';
 
@@ -73,28 +71,24 @@ stdenv.mkDerivation (finalAttrs: {
     rm -rf $out/share/tradingview/meta
 
     install -Dm444 squashfs-root/meta/gui/tradingview.desktop -t $out/share/applications
-    substituteInPlace $out/share/applications/tradingview.desktop \
-      --replace-fail \$\{SNAP}/meta/gui/icon.png tradingview
+    substituteInPlace $out/share/applications/tradingview.desktop --replace \$\{SNAP}/meta/gui/icon.png tradingview
 
     mkdir $out/share/icons
     cp squashfs-root/meta/gui/icon.png $out/share/icons/tradingview.png
 
     mkdir $out/bin
-    makeBinaryWrapper $out/share/tradingview/tradingview $out/bin/tradingview \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath finalAttrs.buildInputs}
+    makeBinaryWrapper $out/share/tradingview/tradingview $out/bin/tradingview --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath finalAttrs.buildInputs}
 
     runHook postInstall
   '';
 
-  passthru.updateScript = ./update.sh;
-
-  meta = {
+  meta = with lib; {
     description = "Charting platform for traders and investors";
     homepage = "https://www.tradingview.com/desktop/";
     changelog = "https://www.tradingview.com/support/solutions/43000673888/";
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ prominentretail ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfree;
+    maintainers = with maintainers; [ prominentretail ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "tradingview";
   };

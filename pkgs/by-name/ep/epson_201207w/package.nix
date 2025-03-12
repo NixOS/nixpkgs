@@ -10,8 +10,7 @@
 }:
 
 let
-  version = "1.0.1";
-  filterVersion = "1.0.2";
+  version = "1.0.0";
 in
 stdenv.mkDerivation {
 
@@ -21,10 +20,10 @@ stdenv.mkDerivation {
   src = fetchurl {
     # NOTE: Don't forget to update the webarchive link too!
     urls = [
-      "https://download3.ebz.epson.net/dsc/f/03/00/15/64/87/25d34a13841e5e95d80266e6fd8dfcdf67c95634/epson-inkjet-printer-201207w-1.0.1-1.src.rpm"
-      "https://web.archive.org/web/https://download3.ebz.epson.net/dsc/f/03/00/15/64/87/25d34a13841e5e95d80266e6fd8dfcdf67c95634/epson-inkjet-printer-201207w-1.0.1-1.src.rpm"
+      "https://download.ebz.epson.net/dsc/op/stable/SRPMS/epson-inkjet-printer-201207w-${version}-1lsb3.2.src.rpm"
+      "https://web.archive.org/web/https://download.ebz.epson.net/dsc/op/stable/SRPMS/epson-inkjet-printer-201207w-${version}-1lsb3.2.src.rpm"
     ];
-    sha256 = "0icbsd3m8ij1zm55q8vms81dxd79nf5m33i2g4knddljsfv7nxdc";
+    sha256 = "1ixnhn2dk83nh9v8sdivzgc2bm9z2phvsbx8bc6ainbjq6vn7lns";
   };
 
   nativeBuildInputs = [
@@ -41,12 +40,12 @@ stdenv.mkDerivation {
   unpackPhase = ''
     rpmextract $src
     tar -zxf epson-inkjet-printer-201207w-${version}.tar.gz
-    tar -zxf epson-inkjet-printer-filter-${filterVersion}.tar.gz
+    tar -zxf epson-inkjet-printer-filter-${version}.tar.gz
     for ppd in epson-inkjet-printer-201207w-${version}/ppds/*; do
       substituteInPlace $ppd --replace "/opt/epson-inkjet-printer-201207w" "$out"
       substituteInPlace $ppd --replace "/cups/lib" "/lib/cups"
     done
-    cd epson-inkjet-printer-filter-${filterVersion}
+    cd epson-inkjet-printer-filter-${version}
   '';
 
   preConfigure = ''
@@ -87,7 +86,7 @@ stdenv.mkDerivation {
         };
     '';
     license = with licenses; [
-      lgpl21Plus
+      lgpl21
       epson
     ];
     maintainers = [ maintainers.romildo ];

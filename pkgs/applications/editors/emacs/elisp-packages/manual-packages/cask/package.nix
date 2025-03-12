@@ -45,6 +45,8 @@ melpaBuild (finalAttrs: {
     shut-up
   ];
 
+  strictDeps = true;
+
   # use melpaVersion so that it works for unstable releases too
   postPatch = ''
     lispdir=$out/share/emacs/site-lisp/elpa/cask-${finalAttrs.melpaVersion} \

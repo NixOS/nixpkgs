@@ -1,7 +1,5 @@
 {
   fetchgit,
-  fetchpatch,
-  gitUpdater,
   lib,
   libftdi1,
   libgpiod,
@@ -18,12 +16,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "flashprog";
-  version = "1.4";
+  version = "1.3";
 
   src = fetchgit {
     url = "https://review.sourcearcade.org/flashprog";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-mpSmPZ306DedRi3Dcck/cDqoumgwFYpljiJtma+LZz4=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-S+UKDtpKYenwm+zR+Bg8HHxb2Jr7mFHAVCZdZTqCyRQ=";
   };
 
   nativeBuildInputs = [
@@ -47,20 +45,10 @@ stdenv.mkDerivation (finalAttrs: {
       libgpiod
     ];
 
-  postInstall = ''
-    cd "$src"
-    install -Dm644 util/50-flashprog.rules "$out/lib/udev/rules.d/50-flashprog.rules"
-  '';
-
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "v";
-    allowedVersions = "^[0-9\\.]+$";
-  };
-
   meta = with lib; {
     homepage = "https://flashprog.org";
     description = "Utility for reading, writing, erasing and verifying flash ROM chips";
-    license = with licenses; [ gpl2 ];
+    license = with licenses; [ gpl2Plus ];
     maintainers = with maintainers; [
       felixsinger
       funkeleinhorn

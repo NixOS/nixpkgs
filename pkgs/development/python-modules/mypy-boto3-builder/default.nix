@@ -1,32 +1,30 @@
 {
   lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-
-  # dependencies
+  black,
   boto3,
-  botocore,
+  buildPythonPackage,
+  cryptography,
+  fetchFromGitHub,
+  isort,
   jinja2,
-  loguru,
+  md-toc,
   mdformat,
-  packaging,
-  prompt-toolkit,
-  questionary,
-  requests,
-  ruff,
-  setuptools,
-
-  # tests
+  newversion,
+  pip,
+  poetry-core,
+  pyparsing,
   pytest-mock,
   pytestCheckHook,
+  pythonOlder,
   requests-mock,
-  versionCheckHook,
+  ruff,
+  setuptools,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "mypy-boto3-builder";
-  version = "8.9.2";
+  version = "8.8.0";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -35,35 +33,32 @@ buildPythonPackage rec {
     owner = "youtype";
     repo = "mypy_boto3_builder";
     tag = version;
-    hash = "sha256-5BWwCEf1kz3l04b+nkPlX6fMUxTdBVyj7pYlAHqD02o=";
+    hash = "sha256-aDQ+zznHS0EyanmasT1wOtw0jgo6SYGlR6132XXmqTc=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail 'version = "8.9.1"' 'version = "${version}"'
-  '';
+  build-system = [ poetry-core ];
 
   dependencies = [
+    black
     boto3
-    botocore
+    cryptography
+    isort
     jinja2
-    loguru
+    md-toc
     mdformat
-    packaging
-    prompt-toolkit
-    questionary
-    requests
+    newversion
+    pip
+    pyparsing
     ruff
     setuptools
+    typing-extensions
   ];
 
   nativeCheckInputs = [
     pytest-mock
-    pytestCheckHook
     requests-mock
-    versionCheckHook
+    pytestCheckHook
   ];
-  versionCheckProgramArg = [ "--version" ];
 
   pythonImportsCheck = [ "mypy_boto3_builder" ];
 
@@ -72,12 +67,12 @@ buildPythonPackage rec {
     "TestBotocoreChangelogChangelog"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Type annotations builder for boto3";
     homepage = "https://github.com/youtype/mypy_boto3_builder";
-    changelog = "https://github.com/youtype/mypy_boto3_builder/releases/tag/${version}";
-    license = with lib.licenses; [ bsd3 ];
-    maintainers = with lib.maintainers; [ fab ];
+    changelog = "https://github.com/youtype/mypy_boto3_builder/releases/tag/${src.tag}";
+    license = with licenses; [ bsd3 ];
+    maintainers = with maintainers; [ fab ];
     mainProgram = "mypy_boto3_builder";
   };
 }

@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  replaceVars,
+  substituteAll,
   buildPythonPackage,
   fetchPypi,
   fetchpatch,
@@ -53,7 +53,8 @@ buildPythonPackage rec {
       # when cross-compiling is turned on.
       # This patch changes the call to pycparser.preprocess_file to provide the name
       # of the cross-compiling cpp
-      (replaceVars ./cross.patch {
+      (substituteAll {
+        src = ./cross.patch;
         crossPrefix = stdenv.hostPlatform.config;
       })
     ];

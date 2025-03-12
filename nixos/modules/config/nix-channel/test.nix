@@ -5,7 +5,6 @@ let
   inherit (lib) fileset;
 
   runShellcheck = testers.shellcheck {
-    name = "activation-check";
     src = fileset.toSource {
       root = ./.;
       fileset = fileset.unions [

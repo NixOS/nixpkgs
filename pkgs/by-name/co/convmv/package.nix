@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "convmv";
-  version = "2.06";
+  version = "2.05";
 
   outputs = [
     "out"
@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchzip {
     url = "https://www.j3e.de/linux/convmv/convmv-${finalAttrs.version}.tar.gz";
-    hash = "sha256-36UPh+eZBT/J2rkvOcHeqkVKSl4yO9GJp/BxWGDrgGU=";
+    hash = "sha256-ts9xAPRGUoS0XBRTmpb+BlGW1hmGyUs+rQLyUEgiZ54=";
   };
 
   strictDeps = true;
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = !stdenv.hostPlatform.isDarwin;
 
   prePatch =
-    lib.optionalString finalAttrs.finalPackage.doCheck ''
+    lib.optionalString finalAttrs.doCheck ''
       tar -xf testsuite.tar
     ''
     + ''

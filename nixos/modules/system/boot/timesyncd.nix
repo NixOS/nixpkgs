@@ -53,7 +53,8 @@ in
         '';
         description = ''
           Extra config options for systemd-timesyncd. See
-          {manpage}`timesyncd.conf(5)` for available options.
+          [
+          timesyncd.conf(5)](https://www.freedesktop.org/software/systemd/man/timesyncd.conf.html) for available options.
         '';
       };
     };

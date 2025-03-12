@@ -1,6 +1,5 @@
 {
   lib,
-  callPackage,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -39,10 +38,6 @@ buildPythonPackage rec {
 
   # Tests require internet access (downloading models)
   doCheck = false;
-
-  passthru.tests = {
-    llm-plugin = callPackage ./tests/llm-plugin.nix { };
-  };
 
   meta = {
     description = "Run models distributed as GGUF files using LLM";

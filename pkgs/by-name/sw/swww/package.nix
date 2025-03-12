@@ -9,19 +9,23 @@
   scdoc,
 }:
 
-rustPlatform.buildRustPackage (finalAttrs: {
+rustPlatform.buildRustPackage rec {
   pname = "swww";
   version = "0.9.5";
 
   src = fetchFromGitHub {
     owner = "LGFae";
     repo = "swww";
-    tag = "v${finalAttrs.version}";
+    tag = "v${version}";
     hash = "sha256-ldy9HhIsWdtTdvtRLV3qDT80oX646BI4Q+YX5wJXbsc=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-K1ww0bOD747EDtqYkA0Dlu7cwbjYcPwSXPSqQDbTwZo=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "bitcode-0.6.0" = "sha256-D1Jv9k9m6m7dXjU8s4YMEMC39FOUN7Ix9SvLKhM1yh0=";
+    };
+  };
 
   buildInputs = [
     lz4
@@ -60,4 +64,4 @@ rustPlatform.buildRustPackage (finalAttrs: {
     platforms = lib.platforms.linux;
     mainProgram = "swww";
   };
-})
+}

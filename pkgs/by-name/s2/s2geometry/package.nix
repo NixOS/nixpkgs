@@ -13,13 +13,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "s2geometry";
-  version = "0.12.0";
+  version = "0.11.1";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "s2geometry";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-stH1iO4AEL+VZizntUzhvADNOKX333o3QSOz+WOBZ5Q=";
+    sha256 = "sha256-VjgGcGgQlKmjUq+JU0JpyhOZ9pqwPcBUFEPGV9XoHc0=";
   };
 
   nativeBuildInputs = [

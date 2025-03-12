@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "protobuf-c";
-  version = "1.5.1";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "protobuf-c";
     repo = "protobuf-c";
     tag = "v${version}";
-    hash = "sha256-usfONVSq0/V9GRrBx9RwO/hCrVJ8d17mvAgTKpKUssQ=";
+    hash = "sha256-Dkpcc7ZfvAIVY91trRiHuiRFcUGUbQxbheYKTBcq80I=";
   };
 
   outputs = [

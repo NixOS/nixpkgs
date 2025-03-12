@@ -13,7 +13,7 @@
   pythonAtLeast,
   pythonOlder,
   pyyaml,
-  replaceVars,
+  substituteAll,
 }:
 
 buildPythonPackage rec {
@@ -31,7 +31,8 @@ buildPythonPackage rec {
   };
 
   patches = [
-    (replaceVars ./antlr4.patch {
+    (substituteAll {
+      src = ./antlr4.patch;
       antlr_jar = "${antlr4.out}/share/java/antlr-${antlr4.version}-complete.jar";
     })
 

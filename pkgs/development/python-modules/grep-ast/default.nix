@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "grep-ast";
-  version = "0.6.1";
+  version = "0.4.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit version;
     pname = "grep_ast";
-    hash = "sha256-uQRYCpkUl6/UE1xRohfQAbJwhjI7x1KWc6HdQAPuJNA=";
+    hash = "sha256-9wl+zyNDfAS8TtcISFsNQYlMGpxKmUEVlUK4xnxJpWM=";
   };
 
   build-system = [ setuptools ];

@@ -51,8 +51,6 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     # Move installed tests to a separate output
     ./installed-tests-path.patch
-
-    ./static-deps.patch
   ];
 
   # gdk-pixbuf-thumbnailer is not wrapped therefore strictDeps will work
@@ -90,16 +88,12 @@ stdenv.mkDerivation (finalAttrs: {
     libpng
   ];
 
-  mesonFlags =
-    [
-      "-Dgio_sniffing=false"
-      (lib.mesonBool "gtk_doc" withIntrospection)
-      (lib.mesonEnable "introspection" withIntrospection)
-      (lib.mesonEnable "others" true)
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isStatic [
-      "-Dbuiltin_loaders=all"
-    ];
+  mesonFlags = [
+    "-Dgio_sniffing=false"
+    (lib.mesonBool "gtk_doc" withIntrospection)
+    (lib.mesonEnable "introspection" withIntrospection)
+    (lib.mesonEnable "others" true)
+  ];
 
   postPatch = ''
     chmod +x build-aux/* # patchShebangs only applies to executables

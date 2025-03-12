@@ -72,7 +72,6 @@ buildPythonPackage rec {
     astunparse
     flatbuffers
     typing-extensions
-    distutils
     packaging
     protobuf
     numpy

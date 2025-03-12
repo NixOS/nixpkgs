@@ -5,7 +5,7 @@
   pythonOlder,
   pythonAtLeast,
   fetchFromGitHub,
-  replaceVars,
+  substituteAll,
   gdb,
   lldb,
   pytestCheckHook,
@@ -24,7 +24,7 @@
 
 buildPythonPackage rec {
   pname = "debugpy";
-  version = "1.8.13";
+  version = "1.8.12";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -33,13 +33,14 @@ buildPythonPackage rec {
     owner = "microsoft";
     repo = "debugpy";
     tag = "v${version}";
-    hash = "sha256-pQtslK+kiu1bw3RFKReFr+HeCiv7R/X07n0faEquJQE=";
+    hash = "sha256-9hkHvanetjZ3Rww3DdTEcij47DgzhTRTk2rrtrJiQBU=";
   };
 
   patches =
     [
       # Use nixpkgs version instead of versioneer
-      (replaceVars ./hardcode-version.patch {
+      (substituteAll {
+        src = ./hardcode-version.patch;
         inherit version;
       })
 
@@ -61,13 +62,15 @@ buildPythonPackage rec {
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       # Hard code GDB path (used to attach to process)
-      (replaceVars ./hardcode-gdb.patch {
+      (substituteAll {
+        src = ./hardcode-gdb.patch;
         inherit gdb;
       })
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # Hard code LLDB path (used to attach to process)
-      (replaceVars ./hardcode-lldb.patch {
+      (substituteAll {
+        src = ./hardcode-lldb.patch;
         inherit lldb;
       })
     ];
@@ -139,7 +142,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Implementation of the Debug Adapter Protocol for Python";
     homepage = "https://github.com/microsoft/debugpy";
-    changelog = "https://github.com/microsoft/debugpy/releases/tag/${src.tag}";
+    changelog = "https://github.com/microsoft/debugpy/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ kira-bruneau ];
     platforms = [

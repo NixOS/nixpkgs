@@ -33,9 +33,5 @@ let
   libpq = self.callPackage ./libpq.nix { };
 
 in
-{
-  # variations without and with JIT
-  postgresqlVersions = mkAttributes false // mkAttributes true;
-
-  inherit libpq;
-}
+# variations without and with JIT
+(mkAttributes false) // (mkAttributes true) // { inherit libpq; }

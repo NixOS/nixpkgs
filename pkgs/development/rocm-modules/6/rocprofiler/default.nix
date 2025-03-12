@@ -4,7 +4,7 @@
   fetchFromGitHub,
   rocmUpdateScript,
   symlinkJoin,
-  replaceVars,
+  substituteAll,
   cmake,
   clang,
   clr,
@@ -62,7 +62,8 @@ stdenv.mkDerivation (finalAttrs: {
     ./0000-dont-install-tests-hsaco.patch
 
     # Fix bad paths
-    (replaceVars ./0001-fix-shell-scripts.patch {
+    (substituteAll {
+      src = ./0001-fix-shell-scripts.patch;
       rocmtoolkit_merged = rocmtoolkit-merged;
     })
 

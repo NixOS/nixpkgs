@@ -25,8 +25,6 @@ in
     services.dbus.packages = [ cfg.package ];
     services.udev.packages = [ cfg.package ];
 
-    # TODO: also enable systemd unit fbd-alert-slider for OnePlus 6/6T devices, see release notes of feedbackd v0.5.0
-
     users.groups.feedbackd = { };
   };
 }

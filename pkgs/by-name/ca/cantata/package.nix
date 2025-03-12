@@ -19,7 +19,7 @@
   libmusicbrainz5,
 
   withTaglib ? true,
-  taglib_1,
+  taglib,
   taglib_extras,
   withHttpStream ? true,
   withReplaygain ? true,
@@ -139,7 +139,7 @@ let
       ];
       enable = withTaglib;
       pkgs = [
-        taglib_1
+        taglib
         taglib_extras
       ];
     }

@@ -6,7 +6,7 @@
   icontract,
   pytestCheckHook,
   pythonOlder,
-  replaceVars,
+  substituteAll,
   typing-extensions,
 }:
 
@@ -24,7 +24,8 @@ buildPythonPackage rec {
   };
 
   patches = [
-    (replaceVars ./replace_env_with_placeholder.patch {
+    (substituteAll {
+      src = ./replace_env_with_placeholder.patch;
       ldd_bin = "${stdenv.cc.bintools.libc_bin}/bin/ldd";
     })
   ];

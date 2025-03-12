@@ -26,12 +26,13 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
+    # Break circular dependency
+    substituteInPlace requirements.txt \
+      --replace-fail "intake" ""
+
     # Remove vendorized versioneer.py
     rm versioneer.py
   '';
-
-  # Break circular dependency
-  pythonRemoveDeps = [ "intake" ];
 
   build-system = [
     setuptools

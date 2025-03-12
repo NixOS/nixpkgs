@@ -1,11 +1,9 @@
 {
   lib,
-  attrs,
+  appdirs,
   buildPythonPackage,
-  celery,
   colorama,
   configobj,
-  dulwich,
   distro,
   dpath,
   dvc-azure,
@@ -14,18 +12,14 @@
   dvc-gs,
   dvc-hdfs,
   dvc-http,
-  dvc-oss,
   dvc-render,
   dvc-s3,
   dvc-ssh,
   dvc-studio-client,
   dvc-task,
-  dvc-webdav,
-  dvc-webhdfs,
   fetchFromGitHub,
   flatten-dict,
   flufl-lock,
-  fsspec,
   funcy,
   grandalf,
   gto,
@@ -33,9 +27,7 @@
   importlib-metadata,
   importlib-resources,
   iterative-telemetry,
-  kombu,
   networkx,
-  omegaconf,
   packaging,
   pathspec,
   platformdirs,
@@ -68,7 +60,7 @@ buildPythonPackage rec {
   version = "3.59.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "iterative";
@@ -93,13 +85,11 @@ buildPythonPackage rec {
 
   dependencies =
     [
-      attrs
-      celery
+      appdirs
       colorama
       configobj
       distro
       dpath
-      dulwich
       dvc-data
       dvc-http
       dvc-render
@@ -107,15 +97,12 @@ buildPythonPackage rec {
       dvc-task
       flatten-dict
       flufl-lock
-      fsspec
       funcy
       grandalf
       gto
       hydra-core
       iterative-telemetry
-      kombu
       networkx
-      omegaconf
       packaging
       pathspec
       platformdirs
@@ -139,20 +126,17 @@ buildPythonPackage rec {
     ++ lib.optionals enableGoogle optional-dependencies.gs
     ++ lib.optionals enableAWS optional-dependencies.s3
     ++ lib.optionals enableAzure optional-dependencies.azure
-    ++ lib.optionals enableSSH optional-dependencies.ssh;
+    ++ lib.optionals enableSSH optional-dependencies.ssh
+    ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ]
+    ++ lib.optionals (pythonOlder "3.9") [ importlib-resources ];
 
   optional-dependencies = {
     azure = [ dvc-azure ];
     gdrive = [ dvc-gdrive ];
     gs = [ dvc-gs ];
     hdfs = [ dvc-hdfs ];
-    oss = [ dvc-oss ];
     s3 = [ dvc-s3 ];
     ssh = [ dvc-ssh ];
-    ssh_gssapi = [ dvc-ssh ] ++ dvc-ssh.optional-dependencies.gssapi;
-    webdav = [ dvc-webdav ];
-    webhdfs = [ dvc-webhdfs ];
-    webhdfs_kerberos = [ dvc-webhdfs ] ++ dvc-webhdfs.optional-dependencies.kerberos;
   };
 
   # Tests require access to real cloud services

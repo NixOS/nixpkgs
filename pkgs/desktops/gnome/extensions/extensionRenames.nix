@@ -32,9 +32,6 @@
   "fullscreen-to-empty-workspace@aiono.dev" = "fullscreen-to-empty-workspace";
   "fullscreen-to-empty-workspace2@corgijan.dev" = "fullscreen-to-empty-workspace-2";
 
-  "eur-usd-gshell@vezza.github.com" = "eur-usd";
-  "usd-mxn-gshell@kinduff.github.com" = "usd-mxn";
-
   # ############################################################################
   # These extensions no longer collide. We preserve the old attribute name for backwards compatibility.
   "floatingDock@sun.wxg@gmail.com" = "floating-dock-2";

@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation rec {
   pname = "lzip";
-  version = "1.25";
+  version = "1.24.1";
   outputs = [
     "out"
     "man"
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://savannah/lzip/${pname}-${version}.tar.gz";
-    hash = "sha256-CUGKbY+4P1ET9b2FbglwPfXTe64DCMZo0PNG49PwpW8=";
+    hash = "sha256-MMnLagYF9HnElsN262KaSLChaW0WfjweCQxd76SBsWI=";
   };
 
   patches = lib.optionals stdenv.hostPlatform.isMinGW [

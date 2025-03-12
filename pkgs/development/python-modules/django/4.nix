@@ -3,10 +3,9 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
   pythonAtLeast,
   pythonOlder,
-  replaceVars,
+  substituteAll,
 
   # build
   setuptools,
@@ -45,7 +44,7 @@
 
 buildPythonPackage rec {
   pname = "django";
-  version = "4.2.19";
+  version = "4.2.18";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -54,27 +53,22 @@ buildPythonPackage rec {
     owner = "django";
     repo = "django";
     rev = "refs/tags/${version}";
-    hash = "sha256-aSTrtZs8WyZ/wr01N7Mi7M3A8MlZ6rB9fBuMdCkKkok=";
+    hash = "sha256-aOTfZDJsEfWHXxkvTgyc2E9ye3LpzHG1bJTo40Dke4I=";
   };
 
   patches =
     [
-      (replaceVars ./django_4_set_zoneinfo_dir.patch {
+      (substituteAll {
+        src = ./django_4_set_zoneinfo_dir.patch;
         zoneinfo = tzdata + "/share/zoneinfo";
       })
       # make sure the tests don't remove packages from our pythonpath
       # and disable failing tests
       ./django_4_tests.patch
-
-      # fix filename length limit tests on bcachefs
-      # FIXME: remove if ever backported
-      (fetchpatch {
-        url = "https://github.com/django/django/commit/12f4f95405c7857cbf2f4bf4d0261154aac31676.patch";
-        hash = "sha256-+K20/V8sh036Ox9U7CSPgfxue7f28Sdhr3MsB7erVOk=";
-      })
     ]
     ++ lib.optionals withGdal [
-      (replaceVars ./django_4_set_geos_gdal_lib.patch {
+      (substituteAll {
+        src = ./django_4_set_geos_gdal_lib.patch;
         geos = geos;
         gdal = gdal;
         extension = stdenv.hostPlatform.extensions.sharedLibrary;

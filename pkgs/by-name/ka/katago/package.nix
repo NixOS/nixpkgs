@@ -34,18 +34,8 @@ assert lib.assertOneOf "backend" backend [
 let
   githash = "cd0ed6c0712088ddb901be68189ba7fa1439a9e7";
   fakegit = writeShellScriptBin "git" "echo ${githash}";
-  stdenv' =
-    if
-      builtins.elem backend [
-        "cuda"
-        "tensorrt"
-      ]
-    then
-      cudaPackages.backendStdenv
-    else
-      stdenv;
 in
-stdenv'.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "katago";
   version = "1.15.3";
 
@@ -67,23 +57,14 @@ stdenv'.mkDerivation rec {
       boost
     ]
     ++ lib.optionals (backend == "eigen") [ eigen ]
-    ++ lib.optionals (backend == "cuda") (
-      with cudaPackages;
-      [
-        cuda_cccl
-        cuda_cudart
-        cuda_nvcc
-        cudnn
-        libcublas
-      ]
-    )
-    ++ lib.optionals (backend == "tensorrt") (
-      with cudaPackages;
-      [
-        cuda_cudart
-        tensorrt
-      ]
-    )
+    ++ lib.optionals (backend == "cuda") [
+      cudaPackages.cudnn
+      cudaPackages.cudatoolkit
+    ]
+    ++ lib.optionals (backend == "tensorrt") [
+      cudaPackages.cudatoolkit
+      cudaPackages.tensorrt
+    ]
     ++ lib.optionals (backend == "opencl") [
       opencl-headers
       ocl-icd
@@ -110,7 +91,7 @@ stdenv'.mkDerivation rec {
       cd cpp/
     ''
     + lib.optionalString (backend == "cuda" || backend == "tensorrt") ''
-      export CUDA_PATH="${cudaPackages.cuda_nvcc}"
+      export CUDA_PATH="${cudaPackages.cudatoolkit}"
       export EXTRA_LDFLAGS="-L/run/opengl-driver/lib"
     '';
 

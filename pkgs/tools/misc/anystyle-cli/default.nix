@@ -3,7 +3,7 @@
   buildRubyGem,
   bundlerEnv,
   ruby,
-  poppler-utils,
+  poppler_utils,
 }:
 let
   deps = bundlerEnv rec {
@@ -31,7 +31,7 @@ buildRubyGem rec {
   propagatedBuildInputs = [ deps ];
 
   preFixup = ''
-    wrapProgram $out/bin/anystyle --prefix PATH : ${poppler-utils}/bin
+    wrapProgram $out/bin/anystyle --prefix PATH : ${poppler_utils}/bin
   '';
 
   meta = with lib; {

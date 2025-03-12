@@ -42,7 +42,7 @@ mkDerivation rec {
     homepage = "https://github.com/KDE/heaptrack";
     license = licenses.lgpl21Plus;
     mainProgram = "heaptrack_gui";
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ gebner ];
     platforms = platforms.unix;
   };
 }

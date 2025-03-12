@@ -52,10 +52,7 @@ buildPythonPackage rec {
 
   pythonRemoveDeps = [ "sopel-help" ];
 
-  pythonRelaxDeps = [
-    "sqlalchemy"
-    "xmltodict"
-  ];
+  pythonRelaxDeps = [ "sqlalchemy" ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

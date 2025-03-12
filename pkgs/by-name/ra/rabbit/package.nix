@@ -18,10 +18,6 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonRelaxDeps = [
     "numpy"
-    "scikit-learn"
-    "scipy"
-    "tqdm"
-    "urllib3"
   ];
 
   build-system = with python3.pkgs; [

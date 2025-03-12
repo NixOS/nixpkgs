@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "pyytlounge";
-  version = "2.2.1";
+  version = "2.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "FabioGNR";
     repo = "pyytlounge";
-    tag = "v${version}";
-    hash = "sha256-ZK52xh6IGhINQMakfjG759earUgvNoTNeBcUlFBSALo=";
+    rev = "v${version}";
+    hash = "sha256-0QPa3EzOBv5fuw3FGgmoN4KiC4KHo1Z+Svjcneoe0pc=";
   };
 
   build-system = [ hatchling ];

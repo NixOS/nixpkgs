@@ -17,7 +17,7 @@
   libXfixes,
   libpulseaudio,
   libva,
-  ffmpeg_7,
+  ffmpeg_6,
   libpng,
   libjpeg8,
   curl,
@@ -27,11 +27,11 @@
 
 stdenvNoCC.mkDerivation {
   pname = "parsec-bin";
-  version = "150_97c";
+  version = "150_95";
 
   src = fetchurl {
-    url = "https://web.archive.org/web/20250226223019/https://builds.parsec.app/package/parsec-linux.deb";
-    sha256 = "sha256-8Wkbo6l1NGBPX2QMJszq+u9nLM96tu7WYRTQq6/CzM8=";
+    url = "https://web.archive.org/web/20240725203323/https://builds.parsec.app/package/parsec-linux.deb";
+    sha256 = "sha256-9F56u+jYj2CClhbnGlLi65FxS1Vq00coxwu7mjVTY1w=";
   };
 
   nativeBuildInputs = [
@@ -54,7 +54,7 @@ stdenvNoCC.mkDerivation {
     alsa-lib
     libpulseaudio
     libva
-    ffmpeg_7
+    ffmpeg_6
     libpng
     libjpeg8
     curl

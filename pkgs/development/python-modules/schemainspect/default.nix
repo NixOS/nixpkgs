@@ -108,6 +108,6 @@ buildPythonPackage rec {
     description = "Schema inspection for PostgreSQL, and potentially others";
     homepage = "https://github.com/djrobstep/schemainspect";
     license = with licenses; [ unlicense ];
-    maintainers = with maintainers; [ bpeetz ];
+    maintainers = with maintainers; [ soispha ];
   };
 }

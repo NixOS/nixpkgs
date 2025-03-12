@@ -7,28 +7,20 @@
 
 let
 
-  inherit (lib)
-    getExe'
-    literalExpression
-    mkDefault
-    mkEnableOption
-    mkIf
-    mkMerge
-    mkOption
-    mkPackageOption
-    ;
+  inherit (lib.options) literalExpression mkEnableOption mkOption;
   inherit (lib.types)
-    attrsOf
     bool
     enum
     ints
     lines
+    attrsOf
     nonEmptyStr
     nullOr
     path
     str
     submodule
     ;
+  inherit (lib.modules) mkDefault mkIf mkMerge;
 
   commonDescr = ''
     Values can be either strings or integers
@@ -112,11 +104,11 @@ let
       # Otherwise, we use `false` to provoke
       # an error if hylafax tries to use it.
       c.sendmailPath = mkMerge [
-        (mkIfDefault noWrapper (getExe' pkgs.coreutils "false"))
+        (mkIfDefault noWrapper "${pkgs.coreutils}/bin/false")
         (mkIfDefault (!noWrapper) "${wrapperDir}/${program}")
       ];
       importDefaultConfig =
-        file: lib.attrsets.mapAttrs (lib.trivial.const mkDefault) (import file { inherit lib pkgs; });
+        file: lib.attrsets.mapAttrs (lib.trivial.const mkDefault) (import file { inherit pkgs; });
       c.commonModemConfig = importDefaultConfig ./modem-default.nix;
       c.faxqConfig = importDefaultConfig ./faxq-default.nix;
       c.hfaxdConfig = importDefaultConfig ./hfaxd-default.nix;
@@ -143,8 +135,6 @@ in
   options.services.hylafax = {
 
     enable = mkEnableOption "HylaFAX server";
-
-    package = mkPackageOption pkgs "HylaFAX" { default = "hylafaxplus"; };
 
     autostart = mkOption {
       type = bool;

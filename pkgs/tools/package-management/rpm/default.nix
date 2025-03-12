@@ -37,23 +37,17 @@
 
 stdenv.mkDerivation rec {
   pname = "rpm";
-  version = "4.20.1";
+  version = "4.20.0";
 
   src = fetchurl {
     url = "https://ftp.osuosl.org/pub/rpm/releases/rpm-${lib.versions.majorMinor version}.x/rpm-${version}.tar.bz2";
-    hash = "sha256-UmR+EmODZFM6tnHLyOSFyW+fCIidk/4O0QSmYyZhEk8=";
+    hash = "sha256-Vv92OM/5i1bUp1A/9ZvHnygabd/82g0jjAgr7ftfvns=";
   };
 
-  postPatch =
-    ''
-      sed -i 's#''${Python3_SITEARCH}#${placeholder "out"}/${python3.sitePackages}#' python/CMakeLists.txt
-      sed -i 's#PATHS ENV MYPATH#PATHS ENV PATH#' CMakeLists.txt
-    ''
-    # clang: error: unknown argument: '-fhardened'
-    + lib.optionalString stdenv.cc.isClang ''
-      substituteInPlace CMakeLists.txt \
-        --replace-fail "-fhardened" ""
-    '';
+  postPatch = ''
+    sed -i 's#''${Python3_SITEARCH}#${placeholder "out"}/${python3.sitePackages}#' python/CMakeLists.txt
+    sed -i 's#PATHS ENV MYPATH#PATHS ENV PATH#' CMakeLists.txt
+  '';
 
   outputs =
     [

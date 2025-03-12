@@ -49,8 +49,13 @@ rustPlatform.buildRustPackage rec {
     "--skip=test_refactor_action_sequence"
   ];
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-KR6BmYj3q9w0yGHFq9+l1x989XjiG3mkaZiyDGCYWPA=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "hf-hub-0.3.2" = "sha256-1AcishEVkTzO3bU0/cVBI2hiCFoQrrPduQ1diMHuEwo=";
+      "tree-sitter-zig-0.0.1" = "sha256-UXJCh8GvXzn+sssTrIsLViXD3TiBZhLFABYCKM+fNMQ=";
+    };
+  };
 
   nativeBuildInputs = [
     pkg-config

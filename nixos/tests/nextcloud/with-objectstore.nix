@@ -20,7 +20,7 @@ runTest (
   in
   {
     inherit name;
-    meta = with lib.maintainers; {
+    meta = with pkgs.lib.maintainers; {
       maintainers = [
         onny
         ma27

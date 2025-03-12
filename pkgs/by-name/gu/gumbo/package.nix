@@ -5,19 +5,17 @@
 
 stdenv.mkDerivation rec {
   pname = "gumbo";
-  version = "0.13.0";
+  version = "0.12.3";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "gumbo-parser";
     repo = "gumbo-parser";
     rev = version;
-    hash = "sha256-QpGOBKNPBryCXZKKEQMv9TXJiNyXESBFiR4wM0lmjiI=";
+    hash = "sha256-C5+MCQ/hC+lfjxPykiAJspYQtI1G7/mFa4XlPrDJl/c=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
-
-  enableParallelBuilding = true;
 
   meta = with lib; {
     description = "C99 HTML parsing algorithm";

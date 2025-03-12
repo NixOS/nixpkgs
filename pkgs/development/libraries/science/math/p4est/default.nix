@@ -7,7 +7,6 @@
   p4est-withMetis ? true,
   metis,
   p4est-sc,
-  mpiCheckPhaseHook,
 }:
 
 let
@@ -56,10 +55,6 @@ stdenv.mkDerivation {
     enableParallelBuilding
     doCheck
     ;
-
-  nativeCheckInputs = lib.optionals mpiSupport [
-    mpiCheckPhaseHook
-  ];
 
   meta = {
     branch = "prev3-develop";

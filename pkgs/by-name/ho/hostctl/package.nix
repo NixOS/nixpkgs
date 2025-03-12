@@ -42,7 +42,7 @@ buildGoModule rec {
     '';
     homepage = "https://guumaster.github.io/hostctl/";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ blaggacao ];
     mainProgram = "hostctl";
   };
 }

@@ -32,6 +32,10 @@
 
 let
 
+  pname = "hylafaxplus";
+  version = "7.0.9";
+  hash = "sha512-3OJwM4vFC9pzPozPobFLiNNx/Qnkl8BpNNziRUpJNBDLBxjtg/eDm3GnprS2hpt7VUoV4PCsFvp1hxhNnhlUwQ==";
+
   configSite = replaceVars ./config.site {
     config_maxgid = lib.optionalString (maxgid != null) ''CONFIG_MAXGID=${builtins.toString maxgid}'';
     ghostscript_version = ghostscript.version;
@@ -62,12 +66,11 @@ let
 
 in
 
-stdenv.mkDerivation (finalAttrs: {
-  pname = "hylafaxplus";
-  version = "7.0.10";
+stdenv.mkDerivation {
+  inherit pname version;
   src = fetchurl {
-    url = "mirror://sourceforge/hylafax/hylafax-${finalAttrs.version}.tar.gz";
-    hash = "sha512-6HdYMHq4cLbS06UXs+FEg3XtsMRyXflrgn/NEsgyMFkTS/MoGW8RVXgbXxAhcArpFvMsY0NUPLE3jdbqqWWQCw==";
+    url = "mirror://sourceforge/hylafax/hylafax-${version}.tar.gz";
+    inherit hash;
   };
   patches = [
     # adjust configure check to work with libtiff > 4.1
@@ -91,13 +94,16 @@ stdenv.mkDerivation (finalAttrs: {
     openldap # optional
     pam # optional
   ];
+  # Disable parallel build, errors:
+  #  *** No rule to make target '../util/libfaxutil.so.7.0.4', needed by 'faxmsg'.  Stop.
+  enableParallelBuilding = false;
 
   postPatch = ". ${postPatch}";
   dontAddPrefix = true;
   postInstall = ". ${postInstall}";
   postInstallCheck = ". ${./post-install-check.sh}";
   meta = {
-    changelog = "https://hylafax.sourceforge.io/news/${finalAttrs.version}.php";
+    changelog = "https://hylafax.sourceforge.io/news/${version}.php";
     description = "enterprise-class system for sending and receiving facsimiles";
     downloadPage = "https://hylafax.sourceforge.io/download.php";
     homepage = "https://hylafax.sourceforge.io";
@@ -121,4 +127,4 @@ stdenv.mkDerivation (finalAttrs: {
       and the server parts of HylaFAX+.
     '';
   };
-})
+}

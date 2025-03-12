@@ -6,17 +6,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "swayr";
-  version = "0.28.0";
+  version = "0.27.4";
 
   src = fetchFromSourcehut {
     owner = "~tsdh";
     repo = "swayr";
     rev = "swayr-${version}";
-    hash = "sha256-2FCPQK+VH9dK1pwQ+YmOTa4ArQVuD0x+ftRmAPFsZXY=";
+    sha256 = "sha256-dliRPKtCJ6mbBl87QoDsHJ2+iaI9nVsWWWwWAkQ1RqE=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-LKfqIgmeTFedCqLGug6M088tdbsUmhT0okxCUyFNmyE=";
+  cargoHash = "sha256-n32mjAycWaNjYUU1gGUwZmH+3plsf+gXB9Tdt0I0D+c=";
 
   patches = [
     ./icon-paths.patch

@@ -7,12 +7,12 @@
 
 appimageTools.wrapType2 rec {
   pname = "cider-2";
-  version = "2.6.1";
+  version = "2.6.0";
 
   src = requireFile {
     name = "cider-linux-x64.AppImage";
     url = "https://cidercollective.itch.io/cider";
-    sha256 = "0qjhsssccxiq92zs04zhi53bkaf2qwfq7ryic1w9sha59ffyxqbf";
+    sha256 = "18by764idifnjs5h2cydv4qjm7w95lzdlxjkscp289w3jdpbmd05";
   };
 
   nativeBuildInputs = [ makeWrapper ];

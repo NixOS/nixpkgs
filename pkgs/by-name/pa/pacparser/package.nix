@@ -27,12 +27,12 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  meta = {
+  meta = with lib; {
     description = "Library to parse proxy auto-config (PAC) files";
     homepage = "https://pacparser.manugarg.com/";
-    license = lib.licenses.lgpl3;
-    platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ abbradar ];
+    license = licenses.lgpl3;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ abbradar ];
     mainProgram = "pactester";
   };
 }

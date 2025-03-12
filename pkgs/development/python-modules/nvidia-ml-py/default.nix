@@ -2,7 +2,7 @@
   lib,
   fetchPypi,
   buildPythonPackage,
-  replaceVars,
+  substituteAll,
   addDriverRunpath,
   setuptools,
   cudaPackages,
@@ -22,7 +22,8 @@ buildPythonPackage rec {
   };
 
   patches = [
-    (replaceVars ./0001-locate-libnvidia-ml.so.1-on-NixOS.patch {
+    (substituteAll {
+      src = ./0001-locate-libnvidia-ml.so.1-on-NixOS.patch;
       inherit (addDriverRunpath) driverLink;
     })
   ];

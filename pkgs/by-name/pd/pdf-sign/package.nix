@@ -6,7 +6,7 @@
   python3,
   ghostscript,
   qpdf,
-  poppler-utils,
+  poppler_utils,
   makeBinaryWrapper,
 }:
 
@@ -16,7 +16,7 @@ let
   binPath = lib.makeBinPath [
     ghostscript
     qpdf
-    poppler-utils
+    poppler_utils
   ];
 in
 stdenv.mkDerivation {

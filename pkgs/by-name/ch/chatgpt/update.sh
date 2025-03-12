@@ -10,14 +10,12 @@ DOWNLOAD_URL=$(echo "$XML_DATA" | xmllint --xpath 'string(//item[1]/enclosure/@u
 
 HASH=$(nix-prefetch-url $DOWNLOAD_URL | xargs nix hash convert --hash-algo sha256)
 
-SOURCE_NIX="$(dirname ${BASH_SOURCE[0]})/source.nix"
-
-cat > "${SOURCE_NIX}" << _EOF_
+cat > source.nix << _EOF_
 {
   version = "$LATEST_VERSION";
-  src = {
+  src = fetchurl {
     url = "$DOWNLOAD_URL";
-    hash = "$HASH";
+    sha256 = "$HASH";
   };
 }
 _EOF_

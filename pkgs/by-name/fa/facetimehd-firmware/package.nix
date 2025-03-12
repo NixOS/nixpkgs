@@ -51,7 +51,7 @@ stdenvNoCC.mkDerivation {
   dontUnpack = true;
   dontInstall = true;
 
-  nativeBuildInputs = [
+  buildInputs = [
     cpio
     xz
   ];

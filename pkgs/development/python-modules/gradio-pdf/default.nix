@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
+  fetchPypi,
   hatch-fancy-pypi-readme,
   hatch-requirements-txt,
   hatchling,
@@ -9,18 +9,15 @@
   gradio-client,
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "gradio-pdf";
-  version = "0.0.22";
+  version = "0.0.19";
   pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "freddyaboulton";
-    repo = "gradio-pdf";
-    # No source release on Pypi
-    # No tags on GitHub
-    rev = "8833e9cd419d2a5eeff98e3ae8cbe690913bcfce";
-    hash = "sha256-z9rfVnH2qANDp2ukUGSogADbwqQQzCkB7Cp/04UtEpM=";
+  src = fetchPypi {
+    pname = "gradio_pdf";
+    inherit version;
+    hash = "sha256-UVHNyKU2cl/0HZqntnyBOFmgeIJ6UjJejEqKqFIPdoo=";
   };
 
   build-system = [

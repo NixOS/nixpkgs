@@ -3,12 +3,13 @@
   paf,
   cohttp-lwt,
   domain-name,
-  h1,
+  httpaf,
   ipaddr,
   alcotest-lwt,
   fmt,
   logs,
   mirage-crypto-rng,
+  mirage-time-unix,
   tcpip,
   uri,
   lwt,
@@ -27,7 +28,7 @@ buildDunePackage {
     paf
     cohttp-lwt
     domain-name
-    h1
+    httpaf
     ipaddr
   ];
 
@@ -37,6 +38,7 @@ buildDunePackage {
     fmt
     logs
     mirage-crypto-rng
+    mirage-time-unix
     tcpip
     uri
     lwt

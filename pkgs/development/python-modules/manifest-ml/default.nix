@@ -107,7 +107,7 @@ buildPythonPackage rec {
     "test_run_chat"
     "test_run"
     "test_score_run"
-    # Test is time-sensitive
+    # Test is time-senstive
     "test_timing"
   ];
 

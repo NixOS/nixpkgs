@@ -27,6 +27,6 @@ stdenv.mkDerivation rec {
     description = "Library for reading DVDs";
     license = lib.licenses.gpl2;
     maintainers = [ lib.maintainers.wmertens ];
-    platforms = lib.platforms.unix;
+    platforms = with lib.platforms; linux ++ darwin;
   };
 }

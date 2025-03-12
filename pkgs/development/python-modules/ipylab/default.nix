@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   hatchling,
-  hatch-jupyter-builder,
   hatch-nodejs-version,
   ipywidgets,
   jupyterlab,
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   version = "1.0.0";
   pyproject = true;
 
-  # This needs to be fetched from Pypi, as we rely on the nodejs build to be skipped,
-  # which only happens if ipylab/labextension/style.js is present.
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-xPB0Sx+W1sRgW5hqpZ68zWRFG/cclIOgGat6UsVlYXA=";
@@ -23,10 +20,11 @@ buildPythonPackage rec {
 
   build-system = [
     hatchling
-    hatch-jupyter-builder
     hatch-nodejs-version
     jupyterlab
   ];
+
+  env.HATCH_BUILD_NO_HOOKS = true;
 
   dependencies = [
     ipywidgets
@@ -43,5 +41,10 @@ buildPythonPackage rec {
     changelog = "https://github.com/jtpio/ipylab/releases/tag/v${version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ flokli ];
+    badPlatforms = [
+      # Unclear why it breaks on darwin only
+      # ModuleNotFoundError: No module named 'ipylab._version'
+      lib.systems.inspect.patterns.isDarwin
+    ];
   };
 }

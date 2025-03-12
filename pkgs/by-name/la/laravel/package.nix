@@ -11,14 +11,14 @@ php.buildComposerProject2 (finalAttrs: {
   src = fetchFromGitHub {
     owner = "laravel";
     repo = "installer";
-    tag = "v${finalAttrs.version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-XE1KYOlWehj1peSNj3sKNr6CKchCxRNpIjXHq7slVME=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
 
   composerLock = ./composer.lock;
-  vendorHash = "sha256-Kid5Vp42Pme1AO9fI9e/f24Cdzi1uV8qEULFEvQDKnE=";
+  vendorHash = "sha256-jUg0hmkShzK1CAO3+Btqe3/5GFKVxRKDtIxmUuU3EdU=";
 
   postInstall = ''
     wrapProgram $out/bin/laravel \

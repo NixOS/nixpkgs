@@ -7,6 +7,8 @@
   git-paf,
   awa,
   awa-mirage,
+  dns,
+  dns-client,
   tls,
   tls-mirage,
   uri,
@@ -22,9 +24,9 @@
   fmt,
   ipaddr,
   lwt,
+  mirage-clock,
   mirage-flow,
-  mirage-ptime,
-  mirage-sleep,
+  mirage-time,
   alcotest,
   alcotest-lwt,
   bigstringaf,
@@ -40,6 +42,8 @@ buildDunePackage {
   minimalOCamlVersion = "4.08";
 
   buildInputs = [
+    dns
+    dns-client
     happy-eyeballs-mirage
     ipaddr
   ];
@@ -65,9 +69,9 @@ buildDunePackage {
     domain-name
     fmt
     lwt
-    mirage-ptime
+    mirage-clock
     mirage-flow
-    mirage-sleep
+    mirage-time
   ];
 
   checkInputs = [

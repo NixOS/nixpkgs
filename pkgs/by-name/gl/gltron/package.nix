@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "AR=${stdenv.cc.targetPrefix}ar" ];
 
-  env.SDL_CONFIG = lib.getExe' (lib.getDev SDL) "sdl-config";
+  env.SDL_CONFIG = lib.getExe' SDL.dev "sdl-config";
 
   buildInputs = [
     SDL

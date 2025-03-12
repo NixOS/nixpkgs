@@ -14,6 +14,7 @@
   os-service-types,
   pbr,
   psutil,
+  pythonOlder,
   pyyaml,
   requestsexceptions,
   setuptools,
@@ -22,8 +23,10 @@
 
 buildPythonPackage rec {
   pname = "openstacksdk";
-  version = "4.4.0";
+  version = "4.3.0";
   pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   outputs = [
     "out"
@@ -32,7 +35,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-FXQ3Vj1k8/b+7BeW+9hVLVYnczJGF3jE2+dtGCj9MeA=";
+    hash = "sha256-6NIRsSqBqedjca5O3cqXVh6h/bUEefB3QAz0Ry0q2Jw=";
   };
 
   postPatch = ''

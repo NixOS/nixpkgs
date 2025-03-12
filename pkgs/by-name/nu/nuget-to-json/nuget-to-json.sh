@@ -62,8 +62,7 @@ done
             fi
 
             # packages in the nix store should have an empty metadata file
-            # packages installed with 'dotnet tool' may be missing 'source'
-            used_source="$(jq -r 'if has("source") then .source elif has("contentHash") then "__unknown" else "" end' "$version"/.nupkg.metadata)"
+            used_source="$(jq -r 'if has("source") then .source else "" end' "$version"/.nupkg.metadata)"
             found=false
 
             if [[ -z "$used_source" || -d "$used_source" ]]; then

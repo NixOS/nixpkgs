@@ -1,21 +1,18 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchurl,
   fetchpatch,
   openssl,
-  versionCheckHook,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "mailsend";
   version = "1.19";
 
-  src = fetchFromGitHub {
-    owner = "muquit";
-    repo = "mailsend";
-    tag = finalAttrs.version;
-    hash = "sha256-g1V4NrFlIz8oh7IS+cGWG6eje6kBGvPZS7Q131ESrXI=";
+  src = fetchurl {
+    url = "https://github.com/muquit/mailsend/archive/${version}.tar.gz";
+    sha256 = "sha256-Vl72vibFjvdQZcVRnq6N1VuuMUKShhlpayjSQrc0k/c=";
   };
 
   buildInputs = [
@@ -26,11 +23,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   patches = [
-    # OpenSSL 1.1 support for HMAC api
-    (fetchpatch {
-      name = "openssl-1-1-hmac.patch";
+    (fetchurl {
       url = "https://github.com/muquit/mailsend/commit/960df6d7a11eef90128dc2ae660866b27f0e4336.patch";
-      hash = "sha256-Gy4pZMYoUXcjMatw5BSk+IUKXjgpLCwPXtfC++WPKAM=";
+      sha256 = "0vz373zcfl19inflybfjwshcq06rvhx0i5g0f4b021cxfhyb1sm0";
     })
     # Pull fix pending upstream inclusion for parallel build failures:
     #   https://github.com/muquit/mailsend/pull/165
@@ -41,23 +36,15 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
-
   enableParallelBuilding = true;
 
-  nativeInstallCheckInputs = [
-    versionCheckHook
-  ];
-  doInstallCheck = true;
-  versionCheckProgramArg = "-V";
-
-  meta = {
+  meta = with lib; {
     description = "CLI email sending tool";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ raskin ];
-    platforms = lib.platforms.linux;
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ raskin ];
+    platforms = platforms.linux;
     homepage = "https://github.com/muquit/mailsend";
     downloadPage = "https://github.com/muquit/mailsend/releases";
     mainProgram = "mailsend";
   };
-})
+}

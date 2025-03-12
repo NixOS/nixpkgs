@@ -142,7 +142,8 @@ let
       src = pkgs.runCommand "nixos-taskserver-src" { preferLocalBuild = true; } ''
         mkdir -p "$out"
         cat "${
-          pkgs.replaceVars ./helper-tool.py {
+          pkgs.substituteAll {
+            src = ./helper-tool.py;
             inherit taskd certtool;
             inherit (cfg)
               dataDir

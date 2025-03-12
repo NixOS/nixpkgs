@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "axisregistry";
-  version = "0.4.12";
+  version = "0.4.11";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-d60VbzlDiAL+J8sCE0sp2RgB02WGrigqcdzqW55ex1s=";
+    hash = "sha256-p1/ocmWqrCJ4CylRgen/DR0LeqcwIxB1jAauJbw8ygY=";
   };
 
   # Relax the dependency on protobuf 3. Other packages in the Google Fonts

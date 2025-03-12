@@ -7,7 +7,6 @@
   fetchFromGitHub,
   jinja2,
   pytestCheckHook,
-  pytest-rerunfailures,
   pythonOlder,
   pyzmq,
   redis,
@@ -53,7 +52,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    pytest-rerunfailures
   ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   # Some of the tests use localhost networking.

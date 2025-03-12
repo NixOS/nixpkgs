@@ -52,7 +52,7 @@
   soundtouch,
   sratom,
   suil,
-  taglib_1,
+  taglib,
   vamp-plugin-sdk,
   wafHook,
   xjadeo,
@@ -166,7 +166,7 @@ stdenv.mkDerivation rec {
       soundtouch
       sratom
       suil
-      taglib_1
+      taglib
       vamp-plugin-sdk
     ]
     ++ lib.optionals videoSupport [

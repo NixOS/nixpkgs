@@ -63,14 +63,13 @@ let
 in
 flutter.buildFlutterApplication rec {
   pname = "rustdesk";
-  version = "1.3.8";
-
+  version = "1.3.7";
   src = fetchFromGitHub {
     owner = "rustdesk";
     repo = "rustdesk";
     tag = version;
     fetchSubmodules = true;
-    hash = "sha256-m1bFljZL8vNaugepVs8u1EWNpDLtxgSSZqKGQmgrmsA=";
+    hash = "sha256-LDQRJRWqRSJmA3HqfTyFraDhBAvhlbed+Q6ejxwytgU=";
   };
 
   strictDeps = true;
@@ -78,7 +77,7 @@ flutter.buildFlutterApplication rec {
 
   # Configure the Flutter/Dart build
   sourceRoot = "${src.name}/flutter";
-  # curl https://raw.githubusercontent.com/rustdesk/rustdesk/1.3.8/flutter/pubspec.lock | yq > pubspec.lock.json
+  # curl https://raw.githubusercontent.com/rustdesk/rustdesk/1.3.6/flutter/pubspec.lock | yq > pubspec.lock.json
   pubspecLock = lib.importJSON ./pubspec.lock.json;
   gitHashes = {
     dash_chat_2 = "sha256-J5Bc6CeCoRGN870aNEVJ2dkQNb+LOIZetfG2Dsfz5Ow=";
@@ -100,7 +99,7 @@ flutter.buildFlutterApplication rec {
       src
       patches
       ;
-    hash = "sha256-uuoyEGmGkpPFeHDUX3dLT/VWhBRWum5CcQ7bGq+z/8w=";
+    hash = "sha256-1hipDx/xKOkqLj3JvguMZxseEBSSIwdJrT6LSOiEJp4=";
   };
 
   dontCargoBuild = true;

@@ -164,6 +164,7 @@ python3.pkgs.buildPythonApplication {
       rnhmjoj
       ebzzry
       dotlambda
+      nrdxp
     ];
   };
 }

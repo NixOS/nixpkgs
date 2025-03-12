@@ -20,13 +20,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "ibus-uniemoji";
-  version = "0.7.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "salty-horse";
     repo = "ibus-uniemoji";
-    tag = "v${version}";
-    hash = "sha256-iP72lExXnLFeWNJQfaDI/T4tRlXjHbRy+1X8+cAT+Zo=";
+    rev = "v${version}";
+    sha256 = "121zh3q0li1k537fcvbd4ns4jgl9bbb9gm9ihy8cfxgirv38lcfa";
   };
 
   patches = [
@@ -52,20 +52,18 @@ stdenv.mkDerivation rec {
   ];
 
   postFixup = ''
-    chmod +x      "$out/share/ibus-uniemoji/ibus.py"
-    patchShebangs "$out/share/ibus-uniemoji/ibus.py"
-    wrapGApp      "$out/share/ibus-uniemoji/ibus.py"
+    wrapGApp $out/share/ibus-uniemoji/uniemoji.py
   '';
 
-  meta = {
+  meta = with lib; {
     isIbusEngine = true;
     description = "Input method (ibus) for entering unicode symbols and emoji by name";
     homepage = "https://github.com/salty-horse/ibus-uniemoji";
-    license = with lib.licenses; [
+    license = with licenses; [
       gpl3
       mit
     ];
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ aske ];
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ aske ];
   };
 }

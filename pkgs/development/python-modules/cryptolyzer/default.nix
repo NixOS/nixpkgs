@@ -14,7 +14,6 @@
   pythonOlder,
   requests,
   setuptools,
-  setuptools-scm,
   urllib3,
 }:
 
@@ -23,21 +22,22 @@ buildPythonPackage rec {
   version = "1.0.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-rRiRaXONLMNirKsK+QZWMSvaGeSLrHN9BpM8dhxoaxY=";
   };
 
-  pythonRemoveDeps = [ "bs4" ];
+  postPatch = ''
+    substituteInPlace requirements.txt  \
+      --replace-warn "attrs>=20.3.0,<22.0.1" "attrs>=20.3.0" \
+      --replace-warn "bs4" "beautifulsoup4"
+  '';
 
-  build-system = [
-    setuptools
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  dependencies = [
+  propagatedBuildInputs = [
     attrs
     beautifulsoup4
     certvalidator

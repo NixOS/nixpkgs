@@ -96,6 +96,7 @@ buildPythonPackage rec {
     inherit (mesa.meta) platforms;
     maintainers = with lib.maintainers; [
       LunNova
+      nrdxp
     ];
   };
 }

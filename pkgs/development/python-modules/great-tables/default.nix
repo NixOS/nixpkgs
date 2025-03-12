@@ -10,8 +10,6 @@
   # dependencies
   babel,
   commonmark,
-  css-inline,
-  faicons,
   htmltools,
   importlib-metadata,
   importlib-resources,
@@ -27,21 +25,20 @@
   pytestCheckHook,
   pytest-cov-stub,
   requests,
-  selenium,
   shiny,
   syrupy,
 }:
 
 buildPythonPackage rec {
   pname = "great-tables";
-  version = "0.16.1";
+  version = "0.15.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "posit-dev";
     repo = "great-tables";
     tag = "v${version}";
-    hash = "sha256-Nx1q4UizewErEpMvJkGUcongu+HMkLLFmzdU6Lsm78A=";
+    hash = "sha256-68Fx1BNDl5/nATR7CnKgd46qWCW5Rbur8YRACzN5iUU=";
   };
 
   build-system = [
@@ -52,8 +49,6 @@ buildPythonPackage rec {
   dependencies = [
     babel
     commonmark
-    css-inline
-    faicons
     htmltools
     importlib-metadata
     importlib-resources
@@ -72,14 +67,12 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-cov-stub
     requests
-    selenium
     shiny
     syrupy
   ];
 
   disabledTests = [
     # require selenium with chrome driver:
-    "test_save_custom_webdriver"
     "test_save_image_file"
     "test_save_non_png"
   ];

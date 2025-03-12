@@ -24,19 +24,20 @@
   qtwayland,
   qt5compat,
   qtmultimedia,
+  qtspeech,
   wrapQtAppsHook,
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "goldendict-ng";
-  version = "25.02.0";
+  version = "24.09.1";
 
   src = fetchFromGitHub {
     owner = "xiaoyifang";
     repo = "goldendict-ng";
-    tag = "v25.02.0-Release.e895b18c";
-    hash = "sha256-k8pGzrSFbAUP7DG3lSAYBa5WeeSUbjZMvMqmxPqdT3E=";
+    rev = "v${finalAttrs.version}-Release.ca9dd133";
+    hash = "sha256-HvXC9fNLDZAEtXNjzFmaKz9Ih3n4Au69NPMuVeCiQPk=";
   };
 
   nativeBuildInputs = [
@@ -95,4 +96,4 @@ stdenv.mkDerivation {
     ];
     license = licenses.gpl3Plus;
   };
-}
+})

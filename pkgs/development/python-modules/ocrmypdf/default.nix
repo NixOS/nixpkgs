@@ -18,9 +18,10 @@
   pngquant,
   pytest-xdist,
   pytestCheckHook,
+  pythonOlder,
   rich,
   reportlab,
-  replaceVars,
+  substituteAll,
   tesseract,
   unpaper,
   installShellFiles,
@@ -28,7 +29,10 @@
 
 buildPythonPackage rec {
   pname = "ocrmypdf";
-  version = "16.10.0";
+  version = "16.7.0";
+
+  disabled = pythonOlder "3.10";
+
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -41,12 +45,13 @@ buildPythonPackage rec {
     postFetch = ''
       rm "$out/.git_archival.txt"
     '';
-    hash = "sha256-tRq3qskZK39xfSof4RUTWC2h9mi7eGDHR6nI7reltm4=";
+    hash = "sha256-81maXJjdGlzWy3TaQ8cabjJl6ZE5tbfc8m/+Px7ONhs=";
   };
 
   patches = [
     ./use-pillow-heif.patch
-    (replaceVars ./paths.patch {
+    (substituteAll {
+      src = ./paths.patch;
       gs = lib.getExe ghostscript_headless;
       jbig2 = lib.getExe jbig2enc;
       pngquant = lib.getExe pngquant;

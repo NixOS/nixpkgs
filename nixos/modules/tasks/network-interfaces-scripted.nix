@@ -77,7 +77,6 @@ let
              (hasAttr dev cfg.macvlans) ||
              (hasAttr dev cfg.sits) ||
              (hasAttr dev cfg.vlans) ||
-             (hasAttr dev cfg.greTunnels) ||
              (hasAttr dev cfg.vswitches)
           then [ "${dev}-netdev.service" ]
           else optional (!config.boot.isContainer) (subsystemDevice dev);
@@ -95,7 +94,7 @@ let
         networkSetup = lib.mkIf needNetworkSetup
           { description = "Networking Setup";
 
-            after = [ "network-pre.target" ];
+            after = [ "network-pre.target" "systemd-udevd.service" "systemd-sysctl.service" ];
             before = [ "network.target" "shutdown.target" ];
             wants = [ "network.target" ];
             # exclude bridges from the partOf relationship to fix container networking bug #47210

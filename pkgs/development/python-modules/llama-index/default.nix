@@ -26,7 +26,6 @@ buildPythonPackage {
 
   pythonRelaxDeps = [
     "llama-index-core"
-    "llama-index-multi-modal-llms-openai"
   ];
 
   dependencies = [

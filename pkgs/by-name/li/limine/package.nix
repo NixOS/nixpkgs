@@ -2,7 +2,7 @@
 {
   fetchurl,
   lib,
-  llvmPackages,
+  llvmPackages_18,
   mtools,
   nasm,
   # The following options map to configure flags.
@@ -15,9 +15,10 @@
 }:
 
 let
+  llvmPackages = llvmPackages_18;
   stdenv = llvmPackages.stdenv;
 
-  version = "9.0.1";
+  version = "8.7.0";
 
   hasI686 =
     (if targets == [ ] then stdenv.hostPlatform.isx86_32 else (builtins.elem "i686" targets))
@@ -46,18 +47,12 @@ let
     ++ lib.optionals pxeSupport [ "--enable-bios-pxe" ]
     ++ lib.concatMap uefiFlags (
       if targets == [ ] then [ stdenv.hostPlatform.parsed.cpu.name ] else targets
-    )
-    ++ [
-      "TOOLCHAIN_FOR_TARGET=llvm"
-      # `clang` on `PATH` has to be unwrapped, but *a* wrapped clang
-      # still needs to be available
-      "CC=${lib.getExe stdenv.cc}"
-    ];
+    );
 in
 
-assert lib.assertMsg (!biosSupport || hasI686) "BIOS builds are possible only for x86";
+assert lib.assertMsg (!(biosSupport && !hasI686)) "BIOS builds are possible only for x86";
 
-assert lib.assertMsg (!pxeSupport || hasI686) "PXE builds are possible only for x86";
+assert lib.assertMsg (!(pxeSupport && !hasI686)) "PXE builds are possible only for x86";
 
 # The output of the derivation is a tool to create bootable images using Limine
 # as bootloader for various platforms and corresponding binary and helper files.
@@ -69,14 +64,18 @@ stdenv.mkDerivation {
   # Packaging that in Nix is very cumbersome.
   src = fetchurl {
     url = "https://github.com/limine-bootloader/limine/releases/download/v${version}/limine-${version}.tar.gz";
-    hash = "sha256-c27Hn9evHt7AqzUWPFYoIHD8UQR1ToJgX+1DcVbaMBU=";
+    hash = "sha256-pwoR9ptMpdhdEe/Kbyc+smv9oNIqtJ9L0KFdf6/g0Ec=";
   };
+
+  hardeningDisable = [
+    # clang doesn't support this for RISC-V target
+    "zerocallusedregs"
+  ];
 
   enableParallelBuilding = true;
 
   nativeBuildInputs =
     [
-      llvmPackages.clang-unwrapped
       llvmPackages.libllvm
       llvmPackages.lld
     ]
@@ -109,8 +108,9 @@ stdenv.mkDerivation {
       licenses.zlib # tinf
     ];
     maintainers = [
-      maintainers.lzcunt
+      maintainers._48cf
       maintainers.phip1611
+      maintainers.sanana
       maintainers.surfaceflinger
     ];
   };

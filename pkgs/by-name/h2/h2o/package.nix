@@ -16,7 +16,6 @@
   withMruby ? true,
   bison,
   ruby,
-  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -71,10 +70,6 @@ stdenv.mkDerivation (finalAttrs: {
         --prefix "PATH" : "${lib.getBin openssl}/bin"
     done
   '';
-
-  passthru = {
-    tests = { inherit (nixosTests) h2o; };
-  };
 
   meta = with lib; {
     description = "Optimized HTTP/1.x, HTTP/2, HTTP/3 server";

@@ -2,81 +2,86 @@
   stdenvNoCC,
   lib,
   php,
-}@toplevel:
+}:
 
 let
   mkComposerVendorOverride =
-    finalAttrs:
-    {
-      php ? finalAttrs.php or toplevel.php,
-      composer ? finalAttrs.php.packages.composer or toplevel.php.packages.composer,
-      composerLock ? finalAttrs.composerLock or null,
-      vendorHash ? finalAttrs.vendorHash or "",
-      composerNoDev ? finalAttrs.composerNoDev or true,
-      composerNoPlugins ? finalAttrs.composerNoPlugins or true,
-      composerNoScripts ? finalAttrs.composerNoScripts or true,
-      composerStrictValidation ? finalAttrs.composerStrictValidation or true,
-      buildInputs ? [ ],
-      nativeBuildInputs ? [ ],
-      dontPatchShebangs ? true,
-      strictDeps ? true,
-      doCheck ? true,
-      doInstallCheck ? false,
-      dontCheckForBrokenSymlinks ? true,
+    /*
+      We cannot destruct finalAttrs since the attrset below is used to construct it
+      and Nix currently does not support lazy attribute names.
+      {
+      php ? null,
+      composer ? null,
+      composerLock ? "composer.lock",
+      src,
+      vendorHash,
       ...
-    }@args:
-    assert (lib.assertMsg (args ? pname) "mkComposerVendor expects pname argument.");
-    assert (lib.assertMsg (args ? version) "mkComposerVendor expects version argument.");
-    assert (lib.assertMsg (args ? src) "mkComposerVendor expects src argument.");
+      }@finalAttrs:
+    */
+    finalAttrs: previousAttrs:
+
+    let
+      phpDrv = finalAttrs.php or php;
+      composer = finalAttrs.composer or phpDrv.packages.composer;
+    in
+    assert (lib.assertMsg (previousAttrs ? src) "mkComposerVendor expects src argument.");
+    assert (lib.assertMsg (previousAttrs ? vendorHash) "mkComposerVendor expects vendorHash argument.");
+    assert (lib.assertMsg (previousAttrs ? version) "mkComposerVendor expects version argument.");
+    assert (lib.assertMsg (previousAttrs ? pname) "mkComposerVendor expects pname argument.");
     {
-      name = "${args.pname}-composer-vendor-${args.version}";
+      composerNoDev = previousAttrs.composerNoDev or true;
+      composerNoPlugins = previousAttrs.composerNoPlugins or true;
+      composerNoScripts = previousAttrs.composerNoScripts or true;
+      composerStrictValidation = previousAttrs.composerStrictValidation or true;
+
+      name = "${previousAttrs.pname}-composer-repository-${previousAttrs.version}";
 
       # See https://github.com/NixOS/nix/issues/6660
-      inherit dontPatchShebangs;
+      dontPatchShebangs = previousAttrs.dontPatchShebangs or true;
 
-      inherit
-        buildInputs
-        strictDeps
-        doCheck
-        ;
-
-      nativeBuildInputs = nativeBuildInputs ++ [
+      nativeBuildInputs = (previousAttrs.nativeBuildInputs or [ ]) ++ [
         composer
-        php
-        php.composerHooks2.composerVendorHook
+        phpDrv
+        phpDrv.composerHooks2.composerVendorHook
       ];
+
+      buildInputs = previousAttrs.buildInputs or [ ];
+
+      strictDeps = previousAttrs.strictDeps or true;
 
       # Should we keep these empty phases?
       configurePhase =
-        args.configurePhase or ''
+        previousAttrs.configurePhase or ''
           runHook preConfigure
 
           runHook postConfigure
         '';
 
       buildPhase =
-        args.buildPhase or ''
+        previousAttrs.buildPhase or ''
           runHook preBuild
 
           runHook postBuild
         '';
 
+      doCheck = previousAttrs.doCheck or true;
       checkPhase =
-        args.checkPhase or ''
+        previousAttrs.checkPhase or ''
           runHook preCheck
 
           runHook postCheck
         '';
 
       installPhase =
-        args.installPhase or ''
+        previousAttrs.installPhase or ''
           runHook preInstall
 
           runHook postInstall
         '';
 
+      doInstallCheck = previousAttrs.doInstallCheck or false;
       installCheckPhase =
-        args.installCheckPhase or ''
+        previousAttrs.installCheckPhase or ''
           runHook preInstallCheck
 
           runHook postInstallCheck
@@ -85,10 +90,7 @@ let
       outputHashMode = "recursive";
       outputHashAlgo =
         if (finalAttrs ? vendorHash && finalAttrs.vendorHash != "") then null else "sha256";
-      outputHash = vendorHash;
+      outputHash = finalAttrs.vendorHash or "";
     };
 in
-lib.extendMkDerivation {
-  constructDrv = stdenvNoCC.mkDerivation;
-  extendDrvArgs = mkComposerVendorOverride;
-}
+args: (stdenvNoCC.mkDerivation args).overrideAttrs mkComposerVendorOverride

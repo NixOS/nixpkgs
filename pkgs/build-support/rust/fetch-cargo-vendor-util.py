@@ -31,7 +31,7 @@ def get_lockfile_version(cargo_lock_toml: dict[str, Any]) -> int:
     return version
 
 
-def create_http_session() -> requests.Session:
+def download_file_with_checksum(url: str, destination_path: Path) -> str:
     retries = Retry(
         total=5,
         backoff_factor=0.5,
@@ -40,10 +40,7 @@ def create_http_session() -> requests.Session:
     session = requests.Session()
     session.mount('http://', HTTPAdapter(max_retries=retries))
     session.mount('https://', HTTPAdapter(max_retries=retries))
-    return session
 
-
-def download_file_with_checksum(session: requests.Session, url: str, destination_path: Path) -> str:
     sha256_hash = hashlib.sha256()
     with session.get(url, stream=True) as response:
         if not response.ok:
@@ -69,7 +66,7 @@ def get_download_url_for_tarball(pkg: dict[str, Any]) -> str:
     return f"https://crates.io/api/v1/crates/{pkg["name"]}/{pkg["version"]}/download"
 
 
-def download_tarball(session: requests.Session, pkg: dict[str, Any], out_dir: Path) -> None:
+def download_tarball(pkg: dict[str, Any], out_dir: Path) -> None:
 
     url = get_download_url_for_tarball(pkg)
     filename = f"{pkg["name"]}-{pkg["version"]}.tar.gz"
@@ -81,7 +78,7 @@ def download_tarball(session: requests.Session, pkg: dict[str, Any], out_dir: Pa
     tarball_out_dir = out_dir / "tarballs" / filename
     eprint(f"Fetching {url} -> tarballs/{filename}")
 
-    calculated_checksum = download_file_with_checksum(session, url, tarball_out_dir)
+    calculated_checksum = download_file_with_checksum(url, tarball_out_dir)
 
     if calculated_checksum != expected_checksum:
         raise Exception(f"Hash mismatch! File fetched from {url} had checksum {calculated_checksum}, expected {expected_checksum}.")
@@ -160,8 +157,7 @@ def create_vendor_staging(lockfile_path: Path, out_dir: Path) -> None:
     with mp.Pool(min(5, mp.cpu_count())) as pool:
         if len(registry_packages) != 0:
             (out_dir / "tarballs").mkdir()
-            session = create_http_session()
-            tarball_args_gen = ((session, pkg, out_dir) for pkg in registry_packages)
+            tarball_args_gen = ((pkg, out_dir) for pkg in registry_packages)
             pool.starmap(download_tarball, tarball_args_gen)
 
 
@@ -198,7 +194,7 @@ def copy_and_patch_git_crate_subtree(git_tree: Path, crate_name: str, crate_out_
     crate_tree = crate_manifest_path.parent
 
     eprint(f"Copying to {crate_out_dir}")
-    shutil.copytree(crate_tree, crate_out_dir, ignore_dangling_symlinks=True)
+    shutil.copytree(crate_tree, crate_out_dir)
     crate_out_dir.chmod(0o755)
 
     with open(crate_manifest_path, "r") as f:

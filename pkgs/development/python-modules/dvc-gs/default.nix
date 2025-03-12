@@ -20,9 +20,11 @@ buildPythonPackage rec {
   # Prevent circular dependency
   pythonRemoveDeps = [ "dvc" ];
 
-  build-system = [ setuptools-scm ];
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
 
-  dependencies = [
+  propagatedBuildInputs = [
     gcsfs
     dvc-objects
   ];

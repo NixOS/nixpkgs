@@ -5,7 +5,6 @@
   django,
   django-debug-toolbar,
   psycopg2,
-  jinja2,
   beautifulsoup4,
   python,
   pytz,
@@ -35,19 +34,10 @@ buildPythonPackage rec {
     beautifulsoup4
     django-debug-toolbar
     psycopg2
-    jinja2
     pytz
   ];
 
   pythonImportsCheck = [ "cachalot" ];
-
-  # disable broken pinning test
-  preCheck = ''
-    substituteInPlace cachalot/tests/read.py \
-      --replace-fail \
-        "def test_explain(" \
-        "def _test_explain("
-  '';
 
   checkPhase = ''
     runHook preCheck

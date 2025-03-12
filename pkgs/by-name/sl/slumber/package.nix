@@ -8,17 +8,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "slumber";
-  version = "3.0.1";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "LucasPickering";
     repo = "slumber";
     tag = "v${version}";
-    hash = "sha256-7MPNs2vAzCo5TPJZFhd3xaZW0YbF724gfKNLB08IU8A=";
+    hash = "sha256-ojHVH/GE2FonqqxpGK6t/AmCaeOS1TkWMt89iUt5i1s=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-eWox5NrvZr+mEGGwxYbAW5EgEOQ8WQUy2pughBlpXgM=";
+  cargoHash = "sha256-1xWSFM1LSFKTaGWgAK9M2TI5Gqes29A/L1WMDj+GSIA=";
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.AppKit ];
 

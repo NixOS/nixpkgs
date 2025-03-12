@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  fetchpatch,
   SDL,
   SDL_image,
   SDL_mixer,
@@ -20,20 +19,13 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-6KK2anjX+fPsYf4HSOHQ0EQBINqZiVbxo1RmBR6pslg=";
   };
 
-  patches = [
-    # Fix stack overflow on too long files:
-    #   https://gitlab.com/meritous/meritous/-/merge_requests/5
-    (fetchpatch {
-      name = "fix-overflow.patch";
-      url = "https://gitlab.com/meritous/meritous/-/commit/68029f02ccaea86fb96d6dd01edb269ac3e6eff0.patch";
-      hash = "sha256-YRV0cEcn6nEJUdHF/cheezNbsgZmjy0rSUw0tuhUYf0=";
-    })
-  ];
-
   prePatch = ''
     substituteInPlace Makefile \
       --replace "prefix=/usr/local" "prefix=$out" \
       --replace sdl-config ${lib.getDev SDL}/bin/sdl-config
+
+    substituteInPlace src/audio.c \
+      --replace "filename[64]" "filename[256]"
   '';
 
   buildInputs = [
@@ -44,14 +36,15 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   installPhase = ''
-    runHook preInstall
-
     install -m 555 -D meritous $out/bin/meritous
     mkdir -p $out/share/meritous
     cp -r dat/* $out/share/meritous/
-
-    runHook postInstall
   '';
+
+  hardeningDisable = [
+    "stackprotector"
+    "fortify"
+  ];
 
   meta = with lib; {
     description = "Action-adventure dungeon crawl game";

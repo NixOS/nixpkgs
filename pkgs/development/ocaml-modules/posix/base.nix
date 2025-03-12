@@ -8,15 +8,16 @@
 
 buildDunePackage rec {
   pname = "posix-base";
-  version = "2.2.0";
+  version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "savonet";
     repo = "ocaml-posix";
-    tag = "v${version}";
-    hash = "sha256-JKJIiuo4lW8DmcK1mJlT22784J1NS2ig860jDbRIjIo=";
+    rev = "v${version}";
+    hash = "sha256-xxNaPJZdcW+KnT7rYUuC7ZgmHtXTppZG2BOmpKweC/U=";
   };
 
+  duneVersion = "3";
   minimalOCamlVersion = "4.08";
 
   propagatedBuildInputs = [

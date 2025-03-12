@@ -4,7 +4,7 @@
   fetchPypi,
   libpulseaudio,
   glibc,
-  replaceVars,
+  substituteAll,
   stdenv,
   pulseaudio,
   unittestCheckHook,
@@ -22,7 +22,8 @@ buildPythonPackage rec {
 
   patches = [
     # substitute library paths for libpulse and librt
-    (replaceVars ./library-paths.patch {
+    (substituteAll {
+      src = ./library-paths.patch;
       libpulse = "${libpulseaudio.out}/lib/libpulse${stdenv.hostPlatform.extensions.sharedLibrary}";
       librt = "${glibc.out}/lib/librt${stdenv.hostPlatform.extensions.sharedLibrary}";
     })

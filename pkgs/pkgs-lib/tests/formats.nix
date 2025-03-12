@@ -96,7 +96,7 @@ in runBuildTests {
       str = "foo";
       attrs.foo = null;
       list = [ null null ];
-      path = ./testfile;
+      path = ./formats.nix;
     };
     expected = ''
       {
@@ -111,7 +111,7 @@ in runBuildTests {
           null
         ],
         "null": null,
-        "path": "${./testfile}",
+        "path": "${./formats.nix}",
         "str": "foo",
         "true": true
       }
@@ -128,7 +128,7 @@ in runBuildTests {
       str = "foo";
       attrs.foo = null;
       list = [ null null ];
-      path = ./testfile;
+      path = ./formats.nix;
       no = "no";
       time = "22:30:00";
     };
@@ -142,7 +142,7 @@ in runBuildTests {
       - null
       'no': 'no'
       'null': null
-      path: ${./testfile}
+      path: ${./formats.nix}
       str: foo
       time: '22:30:00'
       'true': true
@@ -547,7 +547,7 @@ in runBuildTests {
         1
         null
       ];
-      path = ./testfile;
+      path = ./formats.nix;
     };
     expected = ''
       attrs {
@@ -561,7 +561,7 @@ in runBuildTests {
         null
       ]
       "null": null
-      "path": "${./testfile}"
+      "path": "${./formats.nix}"
       "str": "foo"
       "true": true
     '';

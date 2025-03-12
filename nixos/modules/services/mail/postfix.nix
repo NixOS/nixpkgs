@@ -591,11 +591,10 @@ in
 
       tlsTrustedAuthorities = lib.mkOption {
         type = lib.types.str;
-        default = config.security.pki.caBundle;
-        defaultText = lib.literalExpression "config.security.pki.caBundle";
-        example = lib.literalExpression ''"''${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt"'';
+        default = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
+        defaultText = lib.literalExpression ''"''${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt"'';
         description = ''
-          File containing trusted certification authorities (CA) to verify certificates of mailservers contacted for mail delivery. This sets [smtp_tls_CAfile](https://www.postfix.org/postconf.5.html#smtp_tls_CAfile). Defaults to system trusted certificates (see `security.pki.*` options).
+          File containing trusted certification authorities (CA) to verify certificates of mailservers contacted for mail delivery. This basically sets smtp_tls_CAfile and enables opportunistic tls. Defaults to NixOS trusted certification authorities.
         '';
       };
 

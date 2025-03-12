@@ -327,7 +327,6 @@ in
           "@system-service"
           "~@privileged @obsolete"
           "@pkey"
-          "fchown" # needed for filesystem image backend
         ];
         UMask = "0007";
       };

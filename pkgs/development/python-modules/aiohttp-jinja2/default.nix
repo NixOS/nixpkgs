@@ -34,8 +34,6 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  __darwinAllowLocalNetworking = true;
-
   postPatch = ''
     substituteInPlace pytest.ini \
       --replace-fail "--cov=aiohttp_jinja2/ --cov=tests/ --cov-report term" ""

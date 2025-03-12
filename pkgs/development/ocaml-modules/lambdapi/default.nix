@@ -7,8 +7,6 @@
   bindlib,
   camlp-streams,
   cmdliner,
-  dream,
-  lwt_ppx,
   menhir,
   pratter,
   sedlex,
@@ -20,25 +18,20 @@
 
 buildDunePackage rec {
   pname = "lambdapi";
-  version = "2.6.0";
+  version = "2.3.1";
 
   minimalOCamlVersion = "4.12";
 
   src = fetchurl {
     url = "https://github.com/Deducteam/lambdapi/releases/download/${version}/lambdapi-${version}.tbz";
-    hash = "sha256-0B5fE9suq6bk/jMGZxSeAFnUiGxlH/nWtnLbLfyXZe0=";
+    hash = "sha256-7ww2TjVcbEQyfmLnnEhLGAjW4US9a4mdOfDJw6NR1fI=";
   };
 
-  nativeBuildInputs = [
-    dream
-    menhir
-  ];
-  buildInputs = [ lwt_ppx ];
+  nativeBuildInputs = [ menhir ];
   propagatedBuildInputs = [
     bindlib
     camlp-streams
     cmdliner
-    dream
     pratter
     sedlex
     stdlib-shims

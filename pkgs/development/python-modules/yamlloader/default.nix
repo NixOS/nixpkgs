@@ -2,9 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  hatch-vcs,
-  hatchling,
-  pytestCheckHook,
+  pytest,
   pyyaml,
   hypothesis,
   pythonOlder,
@@ -13,7 +11,7 @@
 buildPythonPackage rec {
   pname = "yamlloader";
   version = "1.5.1";
-  pyproject = true;
+  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
@@ -22,16 +20,11 @@ buildPythonPackage rec {
     hash = "sha256-jezhmwUKyxxqjKFKoweTOI+b4VT3NLgmVB+aGCjUHOw=";
   };
 
-  build-system = [
-    hatch-vcs
-    hatchling
-  ];
-
-  dependencies = [ pyyaml ];
+  propagatedBuildInputs = [ pyyaml ];
 
   nativeCheckInputs = [
     hypothesis
-    pytestCheckHook
+    pytest
   ];
 
   pythonImportsCheck = [

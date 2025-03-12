@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
+  typing-extensions,
   pytestCheckHook,
   pythonOlder,
 }:
@@ -22,6 +23,8 @@ buildPythonPackage rec {
   };
 
   build-system = [ setuptools ];
+
+  dependencies = [ typing-extensions ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

@@ -24,6 +24,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/slowsage/mdbook-pagetoc";
     license = licenses.mit;
     maintainers = with maintainers; [
+      blaggacao
       matthiasbeyer
     ];
   };

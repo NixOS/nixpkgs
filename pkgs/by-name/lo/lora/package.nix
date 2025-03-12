@@ -7,13 +7,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "lora";
-  version = "3.006";
+  version = "3.005";
 
   src = fetchFromGitHub {
     owner = "cyrealtype";
     repo = "lora";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-nNl2IC/KqYO6uS6ah0qWgesqm2cG8cIix/MhxbkOeAM=";
+    hash = "sha256-EHa8DUPFRvdYBdCY41gfjKGtTHwGIXCwD9Qc+Npmt1s=";
   };
 
   dontConfigure = true;

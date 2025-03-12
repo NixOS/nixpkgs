@@ -74,7 +74,7 @@ in
   argparse = prev.argparse.overrideAttrs (oa: {
 
     doCheck = true;
-    nativeCheckInputs = [ final.busted ];
+    checkInputs = [ final.busted ];
 
     checkPhase = ''
       runHook preCheck
@@ -500,7 +500,6 @@ in
     nativeCheckInputs = [
       final.nlua
       final.busted
-      final.nvim-web-devicons
       gitMinimal
       writableTmpDirAsHomeHook
     ];
@@ -1114,13 +1113,10 @@ in
   orgmode = prev.orgmode.overrideAttrs (oa: {
     # Patch in tree-sitter-orgmode dependency
     postPatch = ''
-      substituteInPlace lua/orgmode/utils/treesitter/install.lua lua/orgmode/health.lua \
+      substituteInPlace lua/orgmode/config/init.lua \
         --replace-fail \
           "pcall(vim.treesitter.language.add, 'org')" \
           "pcall(function() vim.treesitter.language.add('org', { path = '${final.tree-sitter-orgmode}/lib/lua/${final.tree-sitter-orgmode.lua.luaversion}/parser/org.so'}) end)"
-
-      substituteInPlace lua/orgmode/utils/treesitter/install.lua \
-        --replace-fail "if M.outdated() then" "if false then"
     '';
   });
 

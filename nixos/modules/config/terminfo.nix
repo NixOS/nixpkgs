@@ -76,18 +76,12 @@
       export TERM=$TERM
     '';
 
-    security =
-      let
-        extraConfig = ''
+    security.sudo.extraConfig = lib.mkIf config.security.sudo.keepTerminfo ''
 
-          # Keep terminfo database for root and %wheel.
-          Defaults:root,%wheel env_keep+=TERMINFO_DIRS
-          Defaults:root,%wheel env_keep+=TERMINFO
-        '';
-      in
-      lib.mkIf config.security.sudo.keepTerminfo {
-        sudo = { inherit extraConfig; };
-        sudo-rs = { inherit extraConfig; };
-      };
+      # Keep terminfo database for root and %wheel.
+      Defaults:root,%wheel env_keep+=TERMINFO_DIRS
+      Defaults:root,%wheel env_keep+=TERMINFO
+    '';
+
   };
 }

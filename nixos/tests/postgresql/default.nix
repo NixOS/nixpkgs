@@ -7,25 +7,7 @@
 with import ../../lib/testing-python.nix { inherit system pkgs; };
 
 let
-  inherit (pkgs.lib)
-    recurseIntoAttrs
-    filterAttrs
-    mapAttrs
-    const
-    ;
-  genTests =
-    {
-      makeTestFor,
-      filter ? (_: _: true),
-    }:
-    recurseIntoAttrs (
-      mapAttrs (const makeTestFor) (filterAttrs filter pkgs.postgresqlVersions)
-      // {
-        passthru.override = makeTestFor;
-      }
-    );
-
-  importWithArgs = path: import path { inherit pkgs makeTest genTests; };
+  importWithArgs = path: import path { inherit pkgs makeTest; };
 in
 {
   # postgresql
@@ -36,7 +18,6 @@ in
 
   # extensions
   anonymizer = importWithArgs ./anonymizer.nix;
-  citus = importWithArgs ./citus.nix;
   pgjwt = importWithArgs ./pgjwt.nix;
   pgvecto-rs = importWithArgs ./pgvecto-rs.nix;
   timescaledb = importWithArgs ./timescaledb.nix;

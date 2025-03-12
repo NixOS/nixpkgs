@@ -167,15 +167,10 @@ in
           group = config.users.users.${config.services.greetd.settings.default_session.user}.group;
           mode = "0755";
         };
-        dataDir =
-          if lib.versionAtLeast (cfg.package.version) "0.2.0" then
-            { "/var/lib/regreet".d = defaultConfig; }
-          else
-            { "/var/cache/regreet".d = defaultConfig; };
       in
       {
         "/var/log/regreet".d = defaultConfig;
-      }
-      // dataDir;
+        "/var/cache/regreet".d = defaultConfig;
+      };
   };
 }

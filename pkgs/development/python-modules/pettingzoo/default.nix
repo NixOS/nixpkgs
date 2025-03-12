@@ -1,28 +1,27 @@
 {
   lib,
   buildPythonPackage,
-  chess,
+  pythonOlder,
   fetchFromGitHub,
+  setuptools,
+  wheel,
   gymnasium,
   numpy,
+  chess,
   pillow,
-  pre-commit,
   pybox2d,
   pygame,
   pymunk,
+  rlcard,
+  scipy,
+  pre-commit,
   pynput,
   pytest,
   pytest-cov-stub,
   pytest-markdown-docs,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
-  rlcard,
-  scipy,
-  setuptools,
-  shimmy,
   stdenv,
-  wheel,
 }:
 
 buildPythonPackage rec {
@@ -50,7 +49,17 @@ buildPythonPackage rec {
   ];
 
   optional-dependencies = {
-    all = lib.flatten (lib.attrValues (lib.filterAttrs (n: v: n != "all") optional-dependencies));
+    all = [
+      chess
+      # multi-agent-ale-py
+      pillow
+      pybox2d
+      pygame
+      pymunk
+      rlcard
+      scipy
+      # shimmy
+    ];
     atari = [
       # multi-agent-ale-py
       pygame
@@ -63,7 +72,7 @@ buildPythonPackage rec {
       chess
       pygame
       rlcard
-      shimmy
+      # shimmy
     ];
     mpe = [ pygame ];
     other = [ pillow ];

@@ -4,7 +4,7 @@
   lib,
   qtbase,
   qtdeclarative,
-  replaceVars,
+  substituteAll,
   llvmPackages,
 }:
 
@@ -29,11 +29,13 @@ qtModule {
 
   patches = [
     # fixQtBuiltinPaths overwrites builtin paths we should keep
-    (replaceVars ./qttools-QT_HOST_DATA-refs.patch {
+    (substituteAll {
+      src = ./qttools-QT_HOST_DATA-refs.patch;
       qtbaseDev = lib.getDev qtbase;
     })
 
-    (replaceVars ./qttools-libclang-main-header.patch {
+    (substituteAll {
+      src = ./qttools-libclang-main-header.patch;
       libclangDev = lib.getDev llvmPackages.libclang;
     })
   ];

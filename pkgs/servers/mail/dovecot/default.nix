@@ -2,23 +2,19 @@
   stdenv,
   lib,
   fetchurl,
-  flex,
-  bison,
   perl,
   pkg-config,
   systemd,
   openssl,
   bzip2,
-  lz4,
   zlib,
-  zstd,
-  xz,
+  lz4,
   inotify-tools,
   pam,
   libcap,
   coreutils,
   clucene_core_2,
-  icu75,
+  icu,
   libexttextcat,
   openldap,
   libsodium,
@@ -26,12 +22,6 @@
   cyrus_sasl,
   nixosTests,
   fetchpatch,
-  rpcsvc-proto,
-  libtirpc,
-  withApparmor ? false,
-  libapparmor,
-  withUnwind ? false,
-  libunwind,
   # Auth modules
   withMySQL ? false,
   libmysqlclient,
@@ -48,22 +38,17 @@ stdenv.mkDerivation rec {
   version = "2.3.21.1";
 
   nativeBuildInputs = [
-    flex
-    bison
     perl
     pkg-config
-  ] ++ lib.optionals (stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isDarwin) [ rpcsvc-proto ];
-
+  ];
   buildInputs =
     [
       openssl
       bzip2
-      lz4
       zlib
-      zstd
-      xz
+      lz4
       clucene_core_2
-      icu75
+      icu
       libexttextcat
       openldap
       libsodium
@@ -76,9 +61,6 @@ stdenv.mkDerivation rec {
       libcap
       inotify-tools
     ]
-    ++ lib.optional (stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isDarwin) libtirpc
-    ++ lib.optional withApparmor libapparmor
-    ++ lib.optional withUnwind libunwind
     ++ lib.optional withMySQL libmysqlclient
     ++ lib.optional withPgSQL libpq
     ++ lib.optional withSQLite sqlite
@@ -121,8 +103,10 @@ stdenv.mkDerivation rec {
 
   patches =
     [
-      # Fix loading extended modules.
-      ./load-extended-modules.patch
+      # Make dovecot look for plugins in /etc/dovecot/modules
+      # so we can symlink plugins from several packages there.
+      # The symlinking needs to be done in NixOS.
+      ./2.3.x-module_dir.patch
       # fix openssl 3.0 compatibility
       (fetchpatch {
         url = "https://salsa.debian.org/debian/dovecot/-/raw/debian/1%252.3.19.1+dfsg1-2/debian/patches/Support-openssl-3.0.patch";
@@ -141,7 +125,6 @@ stdenv.mkDerivation rec {
       "--localstatedir=/var"
       # We need this so utilities default to reading /etc/dovecot/dovecot.conf file.
       "--sysconfdir=/etc"
-      "--with-moduledir=${placeholder "out"}/lib/dovecot/modules"
       "--with-ldap"
       "--with-ssl=openssl"
       "--with-zlib"

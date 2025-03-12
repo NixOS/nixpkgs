@@ -8,13 +8,13 @@
 
 let
   pname = "apt-offline";
-  version = "1.8.6";
+  version = "1.8.5";
 
   src = fetchFromGitHub {
     owner = "rickysarraf";
     repo = "apt-offline";
-    tag = "v${version}";
-    hash = "sha256-PnU8vbEY+EpEv8D6Ap/iJqfwOWxpNytT+XDFCFD8XqU=";
+    rev = "v${version}";
+    hash = "sha256-KkJwQ9EpOSJK9PaM747l6Gqp8Z8SWvuo3TJ+Ry6d0l4=";
   };
 in
 python3Packages.buildPythonApplication {

@@ -10,7 +10,6 @@
   nix-prefetch-git,
   moreutils,
   runtimeShell,
-  nix,
   ...
 }:
 
@@ -26,7 +25,6 @@ writeScript "update-librewolf" ''
       jq
       moreutils
       nix-prefetch-git
-      nix
     ]
   }
   set -euo pipefail
@@ -46,7 +44,7 @@ writeScript "update-librewolf" ''
   repoUrl=https://codeberg.org/librewolf/source.git
   nix-prefetch-git $repoUrl --quiet --rev $latestTag --fetch-submodules > $prefetchOut
   srcDir=$(jq -r .path < $prefetchOut)
-  srcHash=$(nix hash convert --to sri --hash-algo sha256 $(jq -r .sha256 < $prefetchOut))
+  srcHash=$(jq -r .sha256 < $prefetchOut)
 
   ffVersion=$(<$srcDir/version)
   lwRelease=$(<$srcDir/release)
@@ -68,12 +66,12 @@ writeScript "update-librewolf" ''
   curl --silent --show-error -o "$HOME"/shasums.asc "$mozillaUrl$ffVersion/SHA512SUMS.asc"
   gpgv --keyring="$GNUPGHOME"/pubring.kbx "$HOME"/shasums.asc "$HOME"/shasums
 
-  ffHash=$(nix hash convert --to sri --hash-algo sha512 $(grep '\.source\.tar\.xz$' "$HOME"/shasums | grep '^[^ ]*' -o))
+  ffHash=$(grep '\.source\.tar\.xz$' "$HOME"/shasums | grep '^[^ ]*' -o)
   echo "ffHash=$ffHash"
 
   jq ".source.rev = \"$latestTag\"" $srcJson | sponge $srcJson
-  jq ".source.hash = \"$srcHash\"" $srcJson | sponge $srcJson
+  jq ".source.sha256 = \"$srcHash\"" $srcJson | sponge $srcJson
   jq ".firefox.version = \"$ffVersion\"" $srcJson | sponge $srcJson
-  jq ".firefox.hash = \"$ffHash\"" $srcJson | sponge $srcJson
+  jq ".firefox.sha512 = \"$ffHash\"" $srcJson | sponge $srcJson
   jq ".packageVersion = \"$lwVersion\"" $srcJson | sponge $srcJson
 ''

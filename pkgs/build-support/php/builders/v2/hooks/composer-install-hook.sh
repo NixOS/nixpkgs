@@ -1,7 +1,8 @@
-declare -g version
-declare -g pname
-declare -g composerVendor
-declare -g -i composerStrictValidation="${composerStrictValidation:-0}"
+declare composerVendor
+declare version
+declare composerNoDev
+declare composerNoPlugins
+declare composerNoScripts
 
 preConfigureHooks+=(composerInstallConfigureHook)
 preBuildHooks+=(composerInstallBuildHook)
@@ -16,7 +17,7 @@ composerInstallConfigureHook() {
     setComposerRootVersion
 
     if [[ ! -e "${composerVendor}" ]]; then
-        echo "No local composer vendor found." >&2
+        echo "No local composer vendor found."
         exit 1
     fi
 
@@ -59,11 +60,10 @@ composerInstallInstallHook() {
     cp -r . "$out"/share/php/"${pname}"/
 
     # Create symlinks for the binaries.
-    mapfile -t BINS < <(jq -r -c 'try (.bin[] | select(test(".bat$")? | not) )' composer.json)
-    for bin in "${BINS[@]}"; do
+    jq -r -c 'try (.bin[] | select(test(".bat$")? | not) )' composer.json | while read -r bin; do
         echo -e "\e[32mCreating symlink ${bin}...\e[0m"
-        mkdir -p "$out/bin"
-        ln -s "$out/share/php/${pname}/${bin}" "$out/bin/$(basename "$bin")"
+        mkdir -p "$out"/bin
+        ln -s "$out"/share/php/"${pname}"/"$bin" "$out"/bin/"$(basename "$bin")"
     done
 
     echo "Finished composerInstallInstallHook"

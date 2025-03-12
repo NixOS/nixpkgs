@@ -38,7 +38,7 @@
   # Also, don't clean up environment variables (so that NIX_ environment variables are passed to compilers).
   enableNixHacks ? false,
   file,
-  replaceVars,
+  substituteAll,
   writeTextFile,
 }:
 
@@ -203,7 +203,8 @@ stdenv.mkDerivation rec {
     # This patch removes using the -fobjc-arc compiler option and makes the code
     # compile without automatic reference counting. Caveat: this leaks memory, but
     # we accept this fact because xcode_locator is only a short-lived process used during the build.
-    (replaceVars ./no-arc.patch {
+    (substituteAll {
+      src = ./no-arc.patch;
       multiBinPatch = if stdenv.hostPlatform.system == "aarch64-darwin" then "arm64" else "x86_64";
     })
 
@@ -213,17 +214,20 @@ stdenv.mkDerivation rec {
     # This is non hermetic on non-nixos systems. On NixOS, bazel cannot find the required binaries.
     # So we are replacing this bazel paths by defaultShellPath,
     # improving hermeticity and making it work in nixos.
-    (replaceVars ../strict_action_env.patch {
+    (substituteAll {
+      src = ../strict_action_env.patch;
       strictActionEnvPatch = defaultShellPath;
     })
 
-    (replaceVars ./actions_path.patch {
+    (substituteAll {
+      src = ./actions_path.patch;
       actionsPathPatch = defaultShellPath;
     })
 
     # bazel reads its system bazelrc in /etc
     # override this path to a builtin one
-    (replaceVars ../bazel_rc.patch {
+    (substituteAll {
+      src = ../bazel_rc.patch;
       bazelSystemBazelRCPath = bazelRC;
     })
 

@@ -96,9 +96,5 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl21Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.unix;
-    badPlatforms = [
-      # GIO shared modules are mandatory.
-      lib.systems.inspect.platformPatterns.isStatic
-    ];
   };
 }

@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchPypi,
   pytestCheckHook,
@@ -22,9 +21,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "para" ];
-
-  #  AttributeError: Can't get local object 'test_output_queue_size.<locals>.get_the_a'
-  doCheck = !stdenv.hostPlatform.isDarwin;
 
   meta = {
     description = "Set utilities that ake advantage of python's 'multiprocessing' module to distribute CPU-intensive tasks";

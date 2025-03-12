@@ -2,7 +2,6 @@
   lib,
   aioesphomeapi,
   bleak,
-  bleak-retry-connector,
   bluetooth-data-tools,
   buildPythonPackage,
   fetchFromGitHub,
@@ -13,18 +12,21 @@
   pytest-codspeed,
   pytest-cov-stub,
   pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "bleak-esphome";
-  version = "2.9.0";
+  version = "2.7.1";
   pyproject = true;
+
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "bluetooth-devices";
     repo = "bleak-esphome";
     tag = "v${version}";
-    hash = "sha256-KuaaZXABR/jbC9ZNbVOyrezUZzb6w7Tn7s3VuVuAtfI=";
+    hash = "sha256-AZkSWBMyTl2NgqmhVG4sE/N1AQGd6x4CZVYMgRKxlOQ=";
   };
 
   build-system = [ poetry-core ];
@@ -32,7 +34,6 @@ buildPythonPackage rec {
   dependencies = [
     aioesphomeapi
     bleak
-    bleak-retry-connector
     bluetooth-data-tools
     habluetooth
     lru-dict

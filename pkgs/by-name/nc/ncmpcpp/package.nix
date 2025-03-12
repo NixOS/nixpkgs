@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ncmpcpp";
-  version = "0.10.1";
+  version = "0.10";
 
   src = fetchFromGitHub {
     owner = "ncmpcpp";
     repo = "ncmpcpp";
     tag = version;
-    hash = "sha256-w3deSy71SWWD2kZKREowZh3KMNCBfBJbrjM0vW4/GrI=";
+    sha256 = "sha256-HRJQ+IOQ8xP1QkPlLI+VtDUWaI2m0Aw0fCDWHhgsOLY=";
   };
 
   enableParallelBuilding = true;
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
 
   preConfigure =
     ''
-      autoreconf -fiv
+      ./autogen.sh
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       # std::result_of was removed in c++20 and unusable for clang16

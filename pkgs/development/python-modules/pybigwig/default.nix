@@ -34,7 +34,7 @@ buildPythonPackage rec {
   pytestFlagsArray = [ "pyBigWigTest/test*.py" ];
 
   disabledTests = [
-    # Test file is downloaded from GitHub
+    # Test file is donwloaded from GitHub
     "testAll"
     "testBigBed"
     "testFoo"

@@ -12,7 +12,9 @@ buildPythonPackage {
   inherit (gpgme) version src;
   pyproject = true;
 
-  patches = gpgme.patches or [ ];
+  patches = gpgme.patches or [ ] ++ [
+    ./python313-support.patch
+  ];
 
   postPatch = ''
     substituteInPlace lang/python/setup.py.in \

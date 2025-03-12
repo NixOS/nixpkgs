@@ -18,6 +18,7 @@ let
     chardet
     cryptography
     feedparser
+    pillow
     readability-lxml
     requests
     setproctitle
@@ -32,7 +33,7 @@ let
 in
 python3Packages.buildPythonApplication rec {
   pname = "offpunk";
-  version = "2.6";
+  version = "2.4";
   pyproject = true;
 
   disabled = python3Packages.pythonOlder "3.7";
@@ -41,7 +42,7 @@ python3Packages.buildPythonApplication rec {
     owner = "~lioploum";
     repo = "offpunk";
     rev = "v${version}";
-    hash = "sha256-bVWPmCs8vspW0leaNajEYy+c3WRRMzIB8b9nXDDB8tw=";
+    hash = "sha256-ttR8S7FQQs8DkgAEvTIhuQ5zZrHtovy2W8TOw0xhSGk=";
   };
 
   nativeBuildInputs = [
@@ -62,5 +63,6 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.agpl3Plus;
     mainProgram = "offpunk";
     maintainers = with lib.maintainers; [ DamienCassou ];
+    platforms = lib.platforms.linux;
   };
 }

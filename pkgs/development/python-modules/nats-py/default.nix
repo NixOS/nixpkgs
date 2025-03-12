@@ -34,7 +34,9 @@ buildPythonPackage rec {
   optional-dependencies = {
     aiohttp = [ aiohttp ];
     nkeys = [ nkeys ];
-    # fast_parse = [ fast-mail-parser ];
+    # fast_parse = [
+    #   fast-mail-parser
+    # ];
   };
 
   nativeCheckInputs = [
@@ -45,8 +47,6 @@ buildPythonPackage rec {
 
   disabledTests =
     [
-      # Timeouts
-      "ClientTLS"
       # AssertionError
       "test_fetch_n"
       "test_kv_simple"

@@ -1,6 +1,6 @@
 {
   lib,
-  replaceVars,
+  substituteAll,
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
@@ -33,7 +33,8 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ numpy ];
 
   patches = [
-    (replaceVars ./gnuplot-subprocess.patch {
+    (substituteAll {
+      src = ./gnuplot-subprocess.patch;
       gnuplot = "${gnuplot.out}/bin/gnuplot";
     })
   ];

@@ -21,7 +21,6 @@
   pyarrow,
   pytest-xdist,
   pytestCheckHook,
-  pythonAtLeast,
 }:
 
 buildPythonPackage rec {
@@ -62,15 +61,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTests =
-    [
-      # pyarrow.lib.ArrowInvalid
-      "test_recordarray"
-    ]
-    ++ lib.optionals (pythonAtLeast "3.13") [
-      # AttributeError: 'FrameLocalsProxy' object has no attribute 'clear'
-      "test_numexpr"
-    ];
+  disabledTests = [
+    # pyarrow.lib.ArrowInvalid
+    "test_recordarray"
+  ];
 
   disabledTestPaths =
     [

@@ -38,8 +38,11 @@ buildPythonPackage rec {
     hash = "sha256-cXReOIfgC5Fx5gT0vF/pV7QwEuC2YfnW4OE+m7nqr20=";
   };
 
-  # somehow python-neutronclient cannot be found despite it being supplied
-  pythonRemoveDeps = [ "python-neutronclient" ];
+  postPatch = ''
+    # somehow python-neutronclient cannot be found despite it being supplied
+    substituteInPlace requirements.txt \
+      --replace-fail "python-neutronclient>=6.7.0" ""
+  '';
 
   build-system = [
     setuptools

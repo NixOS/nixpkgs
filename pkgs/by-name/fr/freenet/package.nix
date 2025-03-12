@@ -8,7 +8,7 @@
   gradle_8,
   bash,
   coreutils,
-  replaceVars,
+  substituteAll,
   nixosTests,
   writeText,
 }:
@@ -36,13 +36,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "freenet";
-  version = "01501";
+  version = "01499";
 
   src = fetchFromGitHub {
     owner = "freenet";
     repo = "fred";
     tag = "build${version}";
-    hash = "sha256-XtcTQlgUNv6IQD89oelCyjb9r6wIbT3hCH+QHkjtgP8=";
+    hash = "sha256-L9vae7wB6Ow2O4JA7CG/XV/zI8OS9/Rg7in/TSatXxY=";
   };
 
   nativeBuildInputs = [
@@ -50,15 +50,14 @@ stdenv.mkDerivation rec {
     jdk
   ];
 
-  wrapper = replaceVars ./freenetWrapper {
+  wrapper = substituteAll {
+    src = ./freenetWrapper;
     inherit
       bash
       coreutils
       jre
       seednodes
       ;
-    # replaced in installPhase
-    CLASSPATH = null;
   };
 
   mitmCache = gradle.fetchDeps {

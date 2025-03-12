@@ -1,68 +1,39 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fftwFloat,
-  chafa,
-  glib,
-  libopus,
-  opusfile,
-  libvorbis,
-  taglib,
-  faad2,
-  libogg,
-  pkg-config,
-  versionCheckHook,
-  gitUpdater,
+{ lib
+, stdenv
+, fetchFromGitHub
+, ffmpeg
+, fftwFloat
+, chafa
+, freeimage
+, glib
+, pkg-config
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "kew";
-  version = "3.0.3";
+  version = "1.5.2";
 
   src = fetchFromGitHub {
     owner = "ravachol";
     repo = "kew";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-DzJ+7PanA15A9nIbFPWZ/tdxq4aDyParJORcuqHV7jc=";
+    rev = "v${version}";
+    hash = "sha256-Om7v8eTlYxXQYf1MG+L0I5ICQ2LS7onouhPGosuK8NM=";
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [
-    fftwFloat.dev
-    chafa
-    glib.dev
-    libopus
-    opusfile
-    libvorbis
-    taglib
-    faad2
-    libogg
-  ];
+  buildInputs = [ ffmpeg freeimage fftwFloat chafa glib ];
 
   installFlags = [
     "MAN_DIR=${placeholder "out"}/share/man"
     "PREFIX=${placeholder "out"}"
   ];
 
-  nativeInstallCheckInputs = [ versionCheckHook ];
-
-  versionCheckProgramArg = [ "--version" ];
-  doInstallCheck = true;
-
-  passthru = {
-    updateScript = gitUpdater { };
-  };
-
-  meta = {
+  meta = with lib; {
     description = "Command-line music player for Linux";
     homepage = "https://github.com/ravachol/kew";
-    platforms = lib.platforms.unix;
-    license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [
-      demine
-      matteopacini
-    ];
+    platforms = platforms.linux;
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ demine ];
     mainProgram = "kew";
   };
-})
+}

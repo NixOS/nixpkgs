@@ -8,25 +8,22 @@
   matplotlib,
   numpy,
   pandas,
-  setuptools,
   requests,
 }:
 
 buildPythonPackage rec {
   pname = "prometheus-api-client";
-  version = "0.5.7";
-  pyproject = true;
+  version = "0.5.6";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "4n4nd";
     repo = "prometheus-api-client-python";
     tag = "v${version}";
-    hash = "sha256-XmsBEGerEA7kEigkVpDYpe1UfEKvEzV/0uY3sffRC7s=";
+    hash = "sha256-0vnG0m+RV2Z9GIMJ/R0edjcjyPH1OvB8zERCMeyRuRg=";
   };
 
-  build-system = [ setuptools ];
-
-  dependencies = [
+  propagatedBuildInputs = [
     dateparser
     matplotlib
     numpy

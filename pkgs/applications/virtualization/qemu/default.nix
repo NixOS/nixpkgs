@@ -70,11 +70,11 @@ stdenv.mkDerivation (finalAttrs: {
     + lib.optionalString nixosTestRunner "-for-vm-tests"
     + lib.optionalString toolsOnly "-utils"
     + lib.optionalString userOnly "-user";
-  version = "9.2.2";
+  version = "9.2.0";
 
   src = fetchurl {
     url = "https://download.qemu.org/qemu-${finalAttrs.version}.tar.xz";
-    hash = "sha256-dS6u63cpI6c9U2sjHgW8wJybH1FpCkGtmXPZAOTsn78=";
+    hash = "sha256-+FnwvGXh9TPQQLvoySvP7O5a8skhpmh8ZS+0TQib2JQ=";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ]
@@ -226,6 +226,9 @@ stdenv.mkDerivation (finalAttrs: {
     # injected by the pkgsStatic stdenv
     # <https://github.com/NixOS/nixpkgs/issues/83667>
     rm -f $out/nix-support/propagated-build-inputs
+  '' + lib.optionalString finalAttrs.separateDebugInfo ''
+    # HACK: remove broken symlink created by hook
+    rm -f $debug/lib/debug/s390-ccw.img
   '';
   preBuild = "cd build";
 
@@ -269,7 +272,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   # Add a ‘qemu-kvm’ wrapper for compatibility/convenience.
-  postInstall = lib.optionalString (!minimal && !xenSupport) ''
+  postInstall = lib.optionalString (!minimal) ''
     ln -s $out/bin/qemu-system-${stdenv.hostPlatform.qemuArch} $out/bin/qemu-kvm
   '';
 

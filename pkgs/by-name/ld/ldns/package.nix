@@ -6,7 +6,6 @@
   perl,
   which,
   dns-root-data,
-  autoreconfHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -29,11 +28,7 @@ stdenv.mkDerivation rec {
     "examples"
   ];
 
-  nativeBuildInputs = [
-    perl
-    autoreconfHook
-  ];
-
+  nativeBuildInputs = [ perl ];
   buildInputs = [ openssl ];
 
   configureFlags =

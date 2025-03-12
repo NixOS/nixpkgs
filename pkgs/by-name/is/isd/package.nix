@@ -7,19 +7,18 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "isd";
-  version = "0.5.1";
+  version = "0.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "isd-project";
     repo = "isd";
     tag = "v${version}";
-    hash = "sha256-z9lyPSiuUAwu5bmZlcHj5SV3mHtP+GXtuEeJzOr1c9A=";
+    hash = "sha256-YOQoI9PB096C/wNF9y5nrXkpJGbO6cXQ2U6I2Ece2PM=";
   };
 
   build-system = with python3Packages; [
     hatchling
-    setuptools
   ];
 
   dependencies = with python3Packages; [
@@ -39,7 +38,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   pythonImportsCheck = [
-    "isd_tui"
+    "isd"
   ];
 
   passthru.updateScript = nix-update-script { };

@@ -1,29 +1,27 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  pybind11,
-  setuptools,
-
-  # dependencies
-  numpy,
-
-  # tests
   cirq-core,
+  fetchFromGitHub,
   matplotlib,
   networkx,
+  numpy,
   pandas,
+  pybind11,
   pytest-xdist,
   pytestCheckHook,
+  pythonOlder,
   scipy,
+  setuptools,
+  wheel,
 }:
 
 buildPythonPackage rec {
   pname = "stim";
   version = "1.14.0";
   pyproject = true;
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "quantumlib";
@@ -52,6 +50,7 @@ buildPythonPackage rec {
   build-system = [
     pybind11
     setuptools
+    wheel
   ];
 
   dependencies = [ numpy ];
@@ -74,12 +73,6 @@ buildPythonPackage rec {
     # From .github/workflows
     "src/"
     "glue/cirq"
-  ];
-
-  disabledTests = [
-    # AssertionError: Sample rate 1.0 is over 5 standard deviations away from 1.0.
-    "test_frame_simulator_sampling_noisy_gates_agrees_with_cirq_data"
-    "test_tableau_simulator_sampling_noisy_gates_agrees_with_cirq_data"
   ];
 
   meta = {

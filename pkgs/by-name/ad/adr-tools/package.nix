@@ -72,6 +72,9 @@ stdenv.mkDerivation rec {
         gnused
       ]
     }
+    # avoid having two bash dependencies in output
+    substituteInPlace $out/bin/adr --replace-fail "${lib.getExe bash}" "${lib.getExe bashInteractive}"
+
     installShellCompletion --bash autocomplete/adr
   '';
 

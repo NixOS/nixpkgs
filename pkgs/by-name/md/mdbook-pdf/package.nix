@@ -8,15 +8,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mdbook-pdf";
-  version = "0.1.11";
+  version = "0.1.10";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-1VMVobiRCCUv8aWLxNbaDSvNs1Pt2jlsVPzfrieOudc=";
+    hash = "sha256-zRoO84ij7zF1I8ijXS/oApMKfS3e04+5/CgahAemqCA=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-t3dlmeJNaHySIhJdJmSaeS0mXM7TgAUa/0hcG06lHvo=";
+  cargoHash = "sha256-cZNTfhrpuEoAXviog/qq2PWii/wycxxq5l/vFHW1f6k=";
 
   nativeBuildInputs = [ pkg-config ];
 

@@ -4,7 +4,7 @@
   buildPackages,
   version,
   src,
-  replaceVars,
+  substituteAll,
   extraMeta ? { },
   self,
   packageOverrides ? (final: prev: { }),
@@ -102,7 +102,8 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     mkdir -p $out/nix-support
     cp ${
-      replaceVars ../lua-5/utils.sh {
+      substituteAll {
+        src = ../lua-5/utils.sh;
         luapathsearchpaths = lib.escapeShellArgs finalAttrs.LuaPathSearchPaths;
         luacpathsearchpaths = lib.escapeShellArgs finalAttrs.LuaCPathSearchPaths;
       }

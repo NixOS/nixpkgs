@@ -52,7 +52,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  # Want non existing test data
+  # Want non exsiting test data
   disabledTests = [
     "test_rename"
     "test_rename_nested"

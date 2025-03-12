@@ -12,7 +12,7 @@
   nixosTests,
 }:
 let
-  version = "4.12.6";
+  version = "4.12.5";
 
   frontend = buildNpmPackage {
     pname = "dependency-track-frontend";
@@ -25,15 +25,10 @@ let
       owner = "DependencyTrack";
       repo = "frontend";
       rev = version;
-      hash = "sha256-IcahhuWX1Ba7kmyJaNJlY1gcVHOR6uynyr7w5MMwRgo=";
+      hash = "sha256-BCnWDu9DbZgzMKONtY5ZRZepvBgbHKAeXD+7n7cop6Q=";
     };
 
-    installPhase = ''
-      mkdir $out
-      cp -R ./dist $out/
-    '';
-
-    npmDepsHash = "sha256-LeSKSZYtjrZ84RkhGbLEMHVi1fw7FK/137F0V4hjSCE=";
+    npmDepsHash = "sha256-RRx3oOAL178fXhEs2ihng3l/OuZnEqk1W7vhHCpWRZQ=";
     forceGitDeps = true;
     makeCacheWritable = true;
 
@@ -50,7 +45,7 @@ maven.buildMavenPackage rec {
     owner = "DependencyTrack";
     repo = "dependency-track";
     rev = version;
-    hash = "sha256-4k7O5ONUqKuJ5EKXnsS1moQ4B9FDMz4ZAwBknwrdjXo=";
+    hash = "sha256-nprAY8GinSkzgSIe3KKNQjv5hCXCHQrGcIZEaoWxw6I=";
   };
 
   patches = [
@@ -65,7 +60,7 @@ maven.buildMavenPackage rec {
   '';
 
   mvnJdk = jre_headless;
-  mvnHash = "sha256-4BqLasUTPa1cfLLNp7D2yGBbLe5K2EppxJoFJ+mx8cA=";
+  mvnHash = "sha256-5R+k+h6biY9xt8g6WdTtQ94sSywluQcrFTcYZbw4JgA=";
   manualMvnArtifacts = [ "com.coderplus.maven.plugins:copy-rename-maven-plugin:1.0.1" ];
   buildOffline = true;
 
@@ -79,10 +74,16 @@ maven.buildMavenPackage rec {
     "-Dmaven.test.skip=true"
     "-P enhance"
     "-P embedded-jetty"
+    "-P bundle-ui"
     "-Dservices.bom.merge.skip=false"
     "-Dlogback.configuration.file=${src}/src/main/docker/logback.xml"
     "-Dcyclonedx-cli.path=${lib.getExe cyclonedx-cli}"
   ];
+
+  preBuild = ''
+    mkdir -p frontend
+    cp -r ${frontend}/lib/node_modules/@dependencytrack/frontend/dist frontend/
+  '';
 
   afterDepsSetup = ''
     mvn cyclonedx:makeBom -Dmaven.repo.local=$mvnDeps/.m2 \
@@ -104,6 +105,7 @@ maven.buildMavenPackage rec {
   '';
 
   passthru = {
+    # passthru for nix-update
     inherit frontend;
     tests = {
       inherit (nixosTests) dependency-track;

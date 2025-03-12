@@ -13,7 +13,7 @@
 
   ## wandb
   buildPythonPackage,
-  replaceVars,
+  substituteAll,
 
   # build-system
   hatchling,
@@ -150,7 +150,8 @@ buildPythonPackage rec {
 
   patches = [
     # Replace git paths
-    (replaceVars ./hardcode-git-path.patch {
+    (substituteAll {
+      src = ./hardcode-git-path.patch;
       git = lib.getExe git;
     })
   ];

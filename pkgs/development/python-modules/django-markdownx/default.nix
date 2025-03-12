@@ -31,7 +31,7 @@ buildPythonPackage rec {
     pillow
   ];
 
-  # tests only executable in vagrant
+  # tests only executeable in vagrant
   doCheck = false;
 
   pythonImportsCheck = [ "markdownx" ];

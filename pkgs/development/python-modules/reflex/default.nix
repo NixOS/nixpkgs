@@ -47,7 +47,7 @@
 
 buildPythonPackage rec {
   pname = "reflex";
-  version = "0.7.1";
+  version = "0.6.8";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -56,7 +56,7 @@ buildPythonPackage rec {
     owner = "reflex-dev";
     repo = "reflex";
     tag = "v${version}";
-    hash = "sha256-KPReHngB2qop+rar2hHFVAwnB5W2/GQi3kAP2kQolL8=";
+    hash = "sha256-fpFjVX48+FOnC3x7LT5DSXiUHpFLkD4gm/HGHZpS2ZY=";
   };
 
   pythonRelaxDeps = [
@@ -133,12 +133,10 @@ buildPythonPackage rec {
     # flaky
     "test_preprocess" # KeyError: 'reflex___state____state'
     "test_send" # AssertionError: Expected 'post' to have been called once. Called 0 times.
-    # tries to pin the string of a traceback, doesn't account for ansi colors
-    "test_state_with_invalid_yield"
   ];
 
   disabledTestPaths = [
-    "tests/benchmarks/"
+    "benchmarks/"
     "tests/integration/"
   ];
 

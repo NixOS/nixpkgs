@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    # fix absolute paths
+    # fix absoulute paths
     ./install_prefix_path.patch
 
     # fix gcc 10 compiler warning, remove with next update

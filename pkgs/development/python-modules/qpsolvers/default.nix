@@ -18,7 +18,6 @@
   scs,
   highspy,
   piqp,
-  proxsuite,
 }:
 buildPythonPackage rec {
   pname = "qpsolvers";
@@ -52,7 +51,7 @@ buildPythonPackage rec {
     # mosek = [ cvxopt mosek ];
     osqp = [ osqp ];
     piqp = [ piqp ];
-    proxqp = [ proxsuite ];
+    # proxqp = [ proxsuite ];
     # qpalm = [ qpalm ];
     quadprog = [ quadprog ];
     scs = [ scs ];
@@ -65,9 +64,7 @@ buildPythonPackage rec {
         ecos
         highs
         osqp
-        piqp
-        proxqp
-        # qpalm
+        piqp # proxqp qpalm
         quadprog
         scs
       ];

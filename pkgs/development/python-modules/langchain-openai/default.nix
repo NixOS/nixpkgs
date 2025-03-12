@@ -4,7 +4,7 @@
   fetchFromGitHub,
 
   # build-system
-  pdm-backend,
+  poetry-core,
 
   # dependencies
   langchain-core,
@@ -28,14 +28,14 @@
 
 buildPythonPackage rec {
   pname = "langchain-openai";
-  version = "0.3.5";
+  version = "0.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-openai==${version}";
-    hash = "sha256-we9LPZeR/eIr+4uDXbBlTm43iapC+MCB0BrbH49Uknw=";
+    hash = "sha256-WvHSeWdBuxbfMNmfoNMzEbhJ5rirQ4JwlWUa0Tgrlrg=";
   };
 
   sourceRoot = "${src.name}/libs/partners/openai";
@@ -45,7 +45,7 @@ buildPythonPackage rec {
       --replace-fail "--cov=langchain_openai" ""
   '';
 
-  build-system = [ pdm-backend ];
+  build-system = [ poetry-core ];
 
   dependencies = [
     langchain-core

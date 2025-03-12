@@ -43,7 +43,7 @@ let
 
           Please see the upstream documentation for the available types and
           more details:
-          {manpage}`tmpfiles.d(5)`
+          <https://www.freedesktop.org/software/systemd/man/tmpfiles.d>
         '';
       };
       options.mode = mkOption {
@@ -102,7 +102,7 @@ let
 
           Please see the upstream documentation for the meaning of this
           parameter in different situations:
-          {manpage}`tmpfiles.d(5)`
+          <https://www.freedesktop.org/software/systemd/man/tmpfiles.d>
         '';
       };
     }))));

@@ -128,14 +128,6 @@ let
       DYNAMIC_ARCH = setDynamicArch true;
       USE_OPENMP = true;
     };
-
-    x86_64-freebsd = {
-      BINARY = 64;
-      TARGET = setTarget "ATHLON";
-      DYNAMIC_ARCH = setDynamicArch true;
-      NO_AVX512 = !enableAVX512;
-      USE_OPENMP = true;
-    };
   };
 in
 
@@ -166,7 +158,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "openblas";
-  version = "0.3.29";
+  version = "0.3.28";
 
   outputs = [
     "out"
@@ -177,7 +169,7 @@ stdenv.mkDerivation rec {
     owner = "OpenMathLib";
     repo = "OpenBLAS";
     rev = "v${version}";
-    hash = "sha256-n/3FGmZxnNiOEKYHSIuqX2LJS1BzYPCwLWT9DSwEoPI=";
+    hash = "sha256-430zG47FoBNojcPFsVC7FA43FhVPxrulxAW3Fs6CHo8=";
   };
 
   postPatch = ''

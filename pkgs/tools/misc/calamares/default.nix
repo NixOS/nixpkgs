@@ -3,8 +3,6 @@
 , qtbase, qtquickcontrols, qtsvg, qttools, qtwebengine, util-linux, tzdata
 , ckbcomp, xkeyboard_config, mkDerivation
 , nixos-extensions ? false
-# passthru.tests
-, calamares-nixos
 }:
 
 mkDerivation rec {
@@ -80,10 +78,6 @@ mkDerivation rec {
     sed "s,\''${POLKITQT-1_POLICY_FILES_INSTALL_DIR},''${out}/share/polkit-1/actions," \
         -i CMakeLists.txt
   '';
-
-  passthru.tests = {
-    inherit calamares-nixos;
-  };
 
   meta = with lib; {
     description = "Distribution-independent installer framework";

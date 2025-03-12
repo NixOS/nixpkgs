@@ -39,6 +39,5 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ hlad ];
-    broken = true;
   };
 })

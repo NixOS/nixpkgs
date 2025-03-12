@@ -5,6 +5,11 @@
   fetchFromGitHub,
   rustPlatform,
 
+  # nativeBuildInputs
+  cargo,
+  rustc,
+  setuptools-rust,
+
   # tests
   h5py,
   numpy,
@@ -24,16 +29,20 @@ buildPythonPackage rec {
     hash = "sha256-dtHHLiTgrg/a/SQ/Z1w0BsuFDClgrMsGiSTCpbJasUs=";
   };
 
-  sourceRoot = "${src.name}/bindings/python";
-
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname src sourceRoot;
+    inherit src;
+    sourceRoot = "${src.name}/bindings/python";
     hash = "sha256-hjV2cfS/0WFyAnATt+A8X8sQLzQViDzkNI7zN0ltgpU=";
   };
 
+  sourceRoot = "${src.name}/bindings/python";
+
   nativeBuildInputs = [
+    cargo
+    rustc
     rustPlatform.cargoSetupHook
     rustPlatform.maturinBuildHook
+    setuptools-rust
   ];
 
   nativeCheckInputs = [

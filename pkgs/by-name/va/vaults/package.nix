@@ -1,7 +1,7 @@
 {
+  fetchFromGitHub,
   lib,
   stdenv,
-  fetchFromGitHub,
   appstream-glib,
   desktop-file-utils,
   meson,
@@ -22,22 +22,20 @@
 
 stdenv.mkDerivation rec {
   pname = "vaults";
-  version = "0.9.0";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "mpobaschnig";
-    repo = "vaults";
-    tag = version;
-    hash = "sha256-PczDj6G05H6XbkMQBr4e1qgW5s8GswEA9f3BRxsAWv0=";
+    repo = "Vaults";
+    rev = "v${version}";
+    hash = "sha256-USVP/7TNdpUNx1kDsCReGYIP8gHUeij2dqy8TR4R+CE=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-j0A6HlApV0l7LuB7ISHp+k/bSH5Icdv+aNQ9juCCO9I=";
+    hash = "sha256-93X2BCn6Ih2DqYJNvYvUCYrC1E6wpCT5X8Hyux/8mno=";
   };
-
-  patches = [ ./not-found-flatpak-info.patch ];
 
   postPatch = ''
     patchShebangs build-aux

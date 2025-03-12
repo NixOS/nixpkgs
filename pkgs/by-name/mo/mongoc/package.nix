@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mongoc";
-  version = "1.30.1";
+  version = "1.29.2";
 
   src = fetchFromGitHub {
     owner = "mongodb";
     repo = "mongo-c-driver";
     tag = version;
-    hash = "sha256-jkMt6+nNV0fO8jp6L0ayed3MEWO56yQP7Rd1r7ccIrM=";
+    hash = "sha256-nhAbe85onBgWDu20yxR9xapOpca28ayP7peXf4H6i+Y=";
   };
 
   nativeBuildInputs = [

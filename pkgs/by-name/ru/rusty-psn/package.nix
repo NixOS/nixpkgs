@@ -18,17 +18,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rusty-psn";
-  version = "0.5.6";
+  version = "0.3.7";
 
   src = fetchFromGitHub {
     owner = "RainbowCookie32";
     repo = "rusty-psn";
-    tag = "v${version}";
-    hash = "sha256-Nx73PkHmhGQo6arr5a878htKd2DXuz2q95++ute0oPg=";
+    rev = "v${version}";
+    sha256 = "sha256-EGj9VVY+Zbmth7H1oTgq38KNLT/aWoTPn8k4sVkScgg=";
   };
 
+  cargoPatches = [ ./fix-cargo-lock.patch ];
+
   useFetchCargoVendor = true;
-  cargoHash = "sha256-cMrN7EkRPsb+NLUgXP9K9bw1kL1j/3Qpp9iwM4B+AWo=";
+  cargoHash = "sha256-FhY4Yf7e0Kk/a1ngPUQcd6R6MDpoyt/2WJhcCeTjKJE=";
 
   # Tests require network access
   doCheck = false;
@@ -90,12 +92,12 @@ rustPlatform.buildRustPackage rec {
   });
   desktopItems = lib.optionals withGui [ desktopItem ];
 
-  meta = {
+  meta = with lib; {
     description = "Simple tool to grab updates for PS3 games, directly from Sony's servers using their updates API";
     homepage = "https://github.com/RainbowCookie32/rusty-psn/";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     platforms = [ "x86_64-linux" ];
-    maintainers = with lib.maintainers; [ AngryAnt ];
+    maintainers = with maintainers; [ AngryAnt ];
     mainProgram = "rusty-psn";
   };
 }

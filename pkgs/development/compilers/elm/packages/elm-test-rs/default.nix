@@ -28,9 +28,12 @@ rustPlatform.buildRustPackage rec {
       ]
     );
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-F3/v4zYGZRv1PRVl/Tas+e0pc/dTM6ina+/c63KVuZY=";
-
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "pubgrub-dependency-provider-elm-0.1.0" = "sha256-00J5XZfmuB4/fgB06aaXrRjdmOpOsSwA3dC3Li1m2Cc=";
+    };
+  };
   # Tests perform networking and therefore can't work in sandbox
   doCheck = false;
 

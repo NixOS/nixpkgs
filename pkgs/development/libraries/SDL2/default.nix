@@ -3,7 +3,6 @@
   stdenv,
   config,
   fetchFromGitHub,
-  fetchpatch,
   nix-update-script,
   pkg-config,
   mesa,
@@ -71,13 +70,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "SDL2";
-  version = "2.32.0";
+  version = "2.30.11";
 
   src = fetchFromGitHub {
     owner = "libsdl-org";
     repo = "SDL";
     rev = "release-${finalAttrs.version}";
-    hash = "sha256-BdyMlttrDwQMoz+bO6bfU3bh0xKnT8yQF6nb6OGRbHw=";
+    hash = "sha256-2NVZNqYhnAsljuF0BhBSJ5HmE9cS41gJep4Q3VxUGkY=";
   };
   dontDisableStatic = if withStatic then 1 else 0;
   outputs = [
@@ -92,11 +91,6 @@ stdenv.mkDerivation (finalAttrs: {
     # but on NixOS they're spread across different paths.
     # This patch + the setup-hook will ensure that `sdl2-config --cflags` works correctly.
     ./find-headers.patch
-    # https://github.com/libsdl-org/SDL/issues/12224
-    (fetchpatch {
-      url = "https://github.com/libsdl-org/SDL/commit/9e079fe9c7931738ed63d257b1d7fb8a07b66824.diff";
-      hash = "sha256-G8gAivCtw5zuPVI9wvEq2oIo/NxFdnPqyLwrmHG1EJ4=";
-    })
   ];
 
   postPatch = ''

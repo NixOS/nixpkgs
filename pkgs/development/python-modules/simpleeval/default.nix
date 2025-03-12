@@ -2,23 +2,23 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  hatchling,
+  setuptools,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "simpleeval";
   version = "1.0.3";
-  pyproject = true;
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "danthedeckie";
-    repo = "simpleeval";
+    repo = pname;
     tag = version;
     hash = "sha256-CwCuQ/wd8nLKKXji2dzz9mvZrQEm2/kEm93Pan/8+90=";
   };
 
-  build-system = [ hatchling ];
+  nativeBuildInputs = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

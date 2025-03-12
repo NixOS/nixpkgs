@@ -42,7 +42,7 @@ let
     platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ];
   };
 
-  linux = appimageTools.wrapType2 {
+  linux = appimageTools.wrapType2 rec {
     inherit pname version src meta;
     nativeBuildInputs = [ makeWrapper ];
 
@@ -51,12 +51,13 @@ let
     '';
 
     extraInstallCommands = ''
-      wrapProgram $out/bin/joplin-desktop \
+      wrapProgram $out/bin/${pname} \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
-      install -Dm644 ${appimageContents}/@joplinapp-desktop.desktop $out/share/applications/joplin.desktop
-      install -Dm644 ${appimageContents}/@joplinapp-desktop.png $out/share/pixmaps/joplin.png
-      substituteInPlace $out/share/applications/joplin.desktop \
-        --replace-fail 'Exec=AppRun' 'Exec=joplin-desktop'
+      install -Dm444 ${appimageContents}/@joplinapp-desktop.desktop -t $out/share/applications
+      install -Dm444 ${appimageContents}/@joplinapp-desktop.png -t $out/share/pixmaps
+      substituteInPlace $out/share/applications/@joplinapp-desktop.desktop \
+        --replace 'Exec=AppRun' 'Exec=${pname}' \
+        --replace 'Icon=joplin' "Icon=@joplinapp-desktop"
     '';
   };
 

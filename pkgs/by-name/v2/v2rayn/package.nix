@@ -17,17 +17,15 @@
   xorg,
   xdg-utils,
 }:
-
 buildDotnetModule rec {
   pname = "v2rayn";
-  version = "7.10.0";
+  version = "7.8.3";
 
   src = fetchFromGitHub {
     owner = "2dust";
     repo = "v2rayN";
     tag = version;
-    hash = "sha256-j2s88MRyKcrNbUN+Ypewk+vRbhMtFwHpBy2xbabOe1w=";
-    fetchSubmodules = true;
+    hash = "sha256-m8N3yukv55OGFk2pmfz0irG+qxgf/jlfPGaWNAEMnlk=";
   };
 
   projectFile = "v2rayN/v2rayN.Desktop/v2rayN.Desktop.csproj";
@@ -35,10 +33,10 @@ buildDotnetModule rec {
   nugetDeps = ./deps.json;
 
   postPatch = ''
-    substituteInPlace v2rayN/ServiceLib/Global.cs \
+    substituteInPlace v2rayN/ServiceLib/Common/Utils.cs \
       --replace-fail "/bin/bash" "${bash}/bin/bash"
     substituteInPlace v2rayN/ServiceLib/Handler/AutoStartupHandler.cs \
-      --replace-fail "Utils.GetExePath())" '"v2rayN")'
+      --replace-fail "Utils.GetExePath())" '"${placeholder "out"}/bin/v2rayN")'
     substituteInPlace v2rayN/ServiceLib/ViewModels/MainWindowViewModel.cs \
       --replace-fail "nautilus" "${xdg-utils}/bin/xdg-open"
   '';
@@ -66,14 +64,14 @@ buildDotnetModule rec {
     (lib.getLib stdenv.cc.cc)
   ];
 
-  runtimeDeps = with xorg; [
-    libX11
-    libXrandr
-    libXi
-    libICE
-    libSM
-    libXcursor
-    libXext
+  runtimeDeps = [
+    xorg.libX11
+    xorg.libXrandr
+    xorg.libXi
+    xorg.libICE
+    xorg.libSM
+    xorg.libXcursor
+    xorg.libXext
   ];
 
   desktopItems = [

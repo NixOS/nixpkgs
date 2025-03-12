@@ -8,7 +8,7 @@
   pyasn1,
   pyasn1-modules,
   pytestCheckHook,
-  replaceVars,
+  substituteAll,
   pythonOlder,
 }:
 
@@ -34,7 +34,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   patches = [
-    (replaceVars ./hardcode-gnupg-path.patch {
+    (substituteAll {
+      src = ./hardcode-gnupg-path.patch;
       inherit gnupg;
     })
   ];

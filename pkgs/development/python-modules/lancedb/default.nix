@@ -66,11 +66,6 @@ buildPythonPackage rec {
     openssl
   ];
 
-  pythonRelaxDeps = [
-    # pylance is pinned to a specific release
-    "pylance"
-  ];
-
   dependencies = [
     attrs
     cachetools

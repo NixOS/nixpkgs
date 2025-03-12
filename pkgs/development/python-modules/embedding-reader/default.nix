@@ -7,7 +7,6 @@
   pandas,
   pyarrow,
   pytestCheckHook,
-  tqdm,
 }:
 
 buildPythonPackage rec {
@@ -24,12 +23,11 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [ "pyarrow" ];
 
-  dependencies = [
+  propagatedBuildInputs = [
     fsspec
     numpy
     pandas
     pyarrow
-    tqdm
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];

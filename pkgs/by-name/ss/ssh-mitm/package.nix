@@ -26,14 +26,14 @@ with py.pkgs;
 
 buildPythonApplication rec {
   pname = "ssh-mitm";
-  version = "5.0.1";
+  version = "5.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ssh-mitm";
     repo = "ssh-mitm";
     tag = version;
-    hash = "sha256-FmxVhYkPRZwS+zFwuId9nRGN832LRkgCNgDYb8Pg01U=";
+    hash = "sha256-jRheKLAXbbMyxdtDSJ4QSN4PoUM2YoK7nmU5xqPq7DY=";
   };
 
   build-system = [

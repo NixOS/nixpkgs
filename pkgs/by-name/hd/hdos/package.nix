@@ -3,7 +3,7 @@
   stdenvNoCC,
   fetchurl,
   makeWrapper,
-  # TODO: for jre 17+, we'll need a workaround:
+  # TODO: for jre 17+, we'll need a workaroud:
   # https://gitlab.com/hdos/issues/-/issues/2004
   openjdk11,
   makeDesktopItem,

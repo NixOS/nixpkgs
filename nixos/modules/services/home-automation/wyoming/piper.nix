@@ -70,7 +70,7 @@ in
               };
 
               noiseScale = mkOption {
-                type = float;
+                type = numbers.between 0.0 1.0;
                 default = 0.667;
                 description = ''
                   Generator noise value.
@@ -79,7 +79,7 @@ in
               };
 
               noiseWidth = mkOption {
-                type = float;
+                type = numbers.between 0.0 1.0;
                 default = 0.333;
                 description = ''
                   Phoneme width noise value.
@@ -88,7 +88,7 @@ in
               };
 
               lengthScale = mkOption {
-                type = float;
+                type = numbers.between 0.0 1.0;
                 default = 1.0;
                 description = ''
                   Phoneme length value.

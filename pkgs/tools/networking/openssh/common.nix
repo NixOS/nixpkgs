@@ -214,13 +214,16 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = {
-    description = "Implementation of the SSH protocol${extraDesc}";
-    homepage = "https://www.openssh.com/";
-    changelog = "https://www.openssh.com/releasenotes.html";
-    license = lib.licenses.bsd2;
-    platforms = lib.platforms.unix ++ lib.platforms.windows;
-    maintainers = extraMeta.maintainers or [ ];
-    mainProgram = "ssh";
-  } // extraMeta;
+  meta =
+    with lib;
+    {
+      description = "Implementation of the SSH protocol${extraDesc}";
+      homepage = "https://www.openssh.com/";
+      changelog = "https://www.openssh.com/releasenotes.html";
+      license = licenses.bsd2;
+      platforms = platforms.unix ++ platforms.windows;
+      maintainers = (extraMeta.maintainers or [ ]) ++ (with maintainers; [ aneeshusa ]);
+      mainProgram = "ssh";
+    }
+    // extraMeta;
 })

@@ -1,7 +1,8 @@
 {
   stdenv,
   lib,
-  fetchurl,
+  fetchFromGitLab,
+  gitUpdater,
   pkg-config,
   itstool,
   gtk3,
@@ -14,16 +15,18 @@
   libcanberra-gtk3,
   ninja,
   yelp-tools,
-  gnome,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "aisleriot";
-  version = "3.22.35";
+  version = "3.22.34";
 
-  src = fetchurl {
-    url = "mirror://gnome/sources/aisleriot/${lib.versions.majorMinor finalAttrs.version}/aisleriot-${finalAttrs.version}.tar.xz";
-    hash = "sha256-AeYEzXAJo2wMXxVCSpBORvg2LDBrpfa8cfrIpedGO/A=";
+  src = fetchFromGitLab {
+    domain = "gitlab.gnome.org";
+    owner = "GNOME";
+    repo = "aisleriot";
+    rev = finalAttrs.version;
+    hash = "sha256-XaEyh1ZXBvW/4tfuQyEFzvnE2Vv7+4lTUfeXoSCMnHM=";
   };
 
   nativeBuildInputs = [
@@ -54,9 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
   mesonFlags = [ "-Dtheme_kde=false" ];
 
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = "aisleriot";
-    };
+    updateScript = gitUpdater { };
   };
 
   meta = with lib; {

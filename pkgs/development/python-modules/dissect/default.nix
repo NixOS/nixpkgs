@@ -14,7 +14,6 @@
   dissect-extfs,
   dissect-fat,
   dissect-ffs,
-  dissect-fve,
   dissect-hypervisor,
   dissect-jffs,
   dissect-ntfs,
@@ -69,7 +68,6 @@ buildPythonPackage rec {
     dissect-extfs
     dissect-fat
     dissect-ffs
-    dissect-fve
     dissect-hypervisor
     dissect-jffs
     dissect-ntfs

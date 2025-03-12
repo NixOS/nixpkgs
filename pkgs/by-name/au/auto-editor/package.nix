@@ -3,23 +3,25 @@
   python3Packages,
   fetchFromGitHub,
   replaceVars,
+  ffmpeg,
   yt-dlp,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "auto-editor";
-  version = "26.2.0";
+  version = "24w29a";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "WyattBlue";
     repo = "auto-editor";
     tag = version;
-    hash = "sha256-BYpt/EelCChhphfuTcqI/VIVis6dnt0J4FcNhWeiiyY=";
+    hash = "sha256-2/6IqwMlaWobOlDr/h2WV2OqkxqVmUI65XsyBphTbpA=";
   };
 
   patches = [
     (replaceVars ./set-exe-paths.patch {
+      ffmpeg = lib.getExe ffmpeg;
       yt_dlp = lib.getExe yt-dlp;
     })
   ];
@@ -27,8 +29,11 @@ python3Packages.buildPythonApplication rec {
   postPatch = ''
     # pyav is a fork of av, but has since mostly been un-forked
     substituteInPlace pyproject.toml \
-        --replace-fail '"pyav==14.*"' '"av"'
+        --replace-fail '"pyav==12.2.*"' '"av"'
   '';
+
+  # our patch file also removes the dependency on ae-ffmpeg
+  pythonRemoveDeps = [ "ae-ffmpeg" ];
 
   build-system = with python3Packages; [
     setuptools

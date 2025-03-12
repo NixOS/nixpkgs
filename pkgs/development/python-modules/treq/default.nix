@@ -7,7 +7,7 @@
   incremental,
   setuptools,
 
-  # dependencies
+  # dependenices
   attrs,
   hyperlink,
   requests,

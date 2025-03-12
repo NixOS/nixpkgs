@@ -45,7 +45,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       emilytrau
       aduh95
     ];
-    mainProgram = "tart";
+    mainProgram = finalAttrs.pname;
     platforms = [
       "aarch64-darwin"
       "x86_64-darwin"

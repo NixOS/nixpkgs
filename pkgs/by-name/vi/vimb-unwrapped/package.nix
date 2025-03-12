@@ -36,7 +36,6 @@ stdenv.mkDerivation rec {
 
   passthru = {
     inherit gtk3;
-    applicationName = "Vimb";
   };
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];

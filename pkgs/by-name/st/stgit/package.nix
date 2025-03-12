@@ -19,16 +19,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "stgit";
-  version = "2.5.3";
+  version = "2.5.1";
 
   src = fetchFromGitHub {
     owner = "stacked-git";
     repo = "stgit";
     rev = "v${version}";
-    hash = "sha256-YrJf4uNICPmXpuJvf0QRDHpODw39Q+40SLZuoIwZ5qA=";
+    hash = "sha256-p6qEzkiRAuzvaPrUXtE+Ixdcu7W0aQFY2NQUyO+kESo=";
   };
   useFetchCargoVendor = true;
-  cargoHash = "sha256-Y3969dpfbKJR22yjw5MHsG3+EJyui0bQFQ585wLzXUk=";
+  cargoHash = "sha256-eleTawI5wJxzzuTS3npJTh3ZlhKYxLxHEJnK6K2DP20=";
 
   nativeBuildInputs = [
     pkg-config

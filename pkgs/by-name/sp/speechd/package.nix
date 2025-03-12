@@ -1,7 +1,7 @@
 {
   stdenv,
   lib,
-  replaceVars,
+  substituteAll,
   pkg-config,
   fetchurl,
   python3Packages,
@@ -47,16 +47,16 @@ stdenv.mkDerivation rec {
 
   patches =
     [
-      (replaceVars ./fix-paths.patch {
+      (substituteAll {
+        src = ./fix-paths.patch;
         utillinux = util-linux;
-        # patch context
-        bindir = null;
       })
     ]
     ++ lib.optionals (withEspeak && espeak.mbrolaSupport) [
       # Replace FHS paths.
-      (replaceVars ./fix-mbrola-paths.patch {
-        inherit mbrola;
+      (substituteAll {
+        src = ./fix-mbrola-paths.patch;
+        inherit espeak mbrola;
       })
     ];
 

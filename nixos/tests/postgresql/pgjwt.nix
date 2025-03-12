@@ -1,7 +1,6 @@
 {
   pkgs,
   makeTest,
-  genTests,
 }:
 
 let
@@ -49,7 +48,11 @@ let
         '';
     };
 in
-genTests {
-  inherit makeTestFor;
-  filter = _: p: !p.pkgs.pgjwt.meta.broken;
-}
+lib.recurseIntoAttrs (
+  lib.concatMapAttrs (n: p: { ${n} = makeTestFor p; }) (
+    lib.filterAttrs (_: p: p ? pkgs && !p.pkgs.pgjwt.meta.broken) pkgs.postgresqlVersions
+  )
+  // {
+    passthru.override = p: makeTestFor p;
+  }
+)

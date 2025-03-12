@@ -4,7 +4,7 @@
   fetchFromGitHub,
   pytestCheckHook,
   pythonOlder,
-  replaceVars,
+  substituteAll,
 
   certifi,
   cython,
@@ -31,7 +31,8 @@ buildPythonPackage rec {
 
   # force pyproj to use ${proj}
   patches = [
-    (replaceVars ./001.proj.patch {
+    (substituteAll {
+      src = ./001.proj.patch;
       proj = proj;
       projdev = proj.dev;
     })

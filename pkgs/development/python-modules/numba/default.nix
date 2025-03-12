@@ -11,7 +11,7 @@
   numpy_1,
   llvmlite,
   libcxx,
-  replaceVars,
+  substituteAll,
   writers,
   numba,
   pytestCheckHook,
@@ -96,7 +96,8 @@ buildPythonPackage rec {
   ];
 
   patches = lib.optionals cudaSupport [
-    (replaceVars ./cuda_path.patch {
+    (substituteAll {
+      src = ./cuda_path.patch;
       cuda_toolkit_path = cudatoolkit;
       cuda_toolkit_lib_path = lib.getLib cudatoolkit;
     })

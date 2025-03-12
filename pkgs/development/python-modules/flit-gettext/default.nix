@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  replaceVars,
+  substituteAll,
 
   # build-system
   flit-scm,
@@ -30,7 +30,8 @@ buildPythonPackage rec {
   };
 
   patches = [
-    (replaceVars ./msgfmt-path.patch {
+    (substituteAll {
+      src = ./msgfmt-path.patch;
       msgfmt = lib.getExe' gettext "msgfmt";
     })
   ];

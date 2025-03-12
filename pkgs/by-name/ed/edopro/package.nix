@@ -301,7 +301,7 @@ symlinkJoin {
       platforms
       maintainers
       ;
-    # To differentiate it from the original YGOPro
+    # To differenciate it from the original YGOPro
     mainProgram = "edopro";
   };
 }

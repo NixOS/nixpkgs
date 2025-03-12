@@ -1,5 +1,6 @@
 {
   buildPythonPackage,
+  docutils,
   sphinx,
   stestr,
   stevedore,
@@ -14,6 +15,7 @@ buildPythonPackage {
   dontInstall = true;
 
   nativeCheckInputs = [
+    docutils
     sphinx
     stestr
     stevedore

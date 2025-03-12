@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ requests ];
 
-  # Project thas no tests
+  # Projec thas no tests
   doCheck = false;
   pythonImportsCheck = [ "pymitv" ];
 

@@ -6,10 +6,10 @@
 
   # Native dependencies
   python3,
-  gtk4,
+  gtk3,
   gobject-introspection,
   adwaita-icon-theme,
-  gtksourceview5,
+  gtksourceview4,
   glib-networking,
 
   # Test dependencies
@@ -40,20 +40,20 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gajim";
-  version = "2.0.2";
+  version = "1.9.5";
 
   src = fetchurl {
     url = "https://gajim.org/downloads/${lib.versions.majorMinor version}/gajim-${version}.tar.gz";
-    hash = "sha256-Qml1ggqjsTXGnGHntApwoa0ySlxUIi2S0IOY+lfxHeU=";
+    hash = "sha256-f99NsOsWp+vGecI2DxRfZOCrz/DxaRPEX5LI642HVjw=";
   };
 
   format = "pyproject";
 
   buildInputs =
     [
-      gtk4
+      gtk3
       adwaita-icon-theme
-      gtksourceview5
+      gtksourceview4
       glib-networking
     ]
     ++ lib.optionals enableJingle [

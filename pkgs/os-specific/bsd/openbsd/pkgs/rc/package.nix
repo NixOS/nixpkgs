@@ -5,10 +5,7 @@ mkDerivation {
   pname = "rc";
   path = "etc";
 
-  patches = [
-    ./boot-phases.patch
-    ./binsh-is-bash.patch
-  ];
+  patches = [ ./boot-phases.patch ];
 
   buildPhase = ":";
 

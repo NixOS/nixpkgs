@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   qtbase,
   qmake,
   wrapQtAppsHook,
@@ -9,15 +10,27 @@
 }:
 
 stdenv.mkDerivation rec {
+  version = "0.8.1";
   pname = "tpmmanager";
-  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "Rohde-Schwarz";
     repo = "TPMManager";
-    tag = "v${version}";
-    hash = "sha256-FhdrUJQq4us6BT8CxgWqWiXnbl900204yjyS3nnQACU=";
+    rev = "v${version}";
+    sha256 = "sha256-UZYn4ssbvLpdB0DssT7MXqQZCu1KkLf/Bsb45Rvgm+E=";
   };
+
+  patches = [
+    # build with Qt5
+    (fetchpatch {
+      url = "https://github.com/Rohde-Schwarz/TPMManager/commit/f62c0f2de2097af9b504c80d6193818e6e4ca84f.patch";
+      sha256 = "sha256-gMhDNN2UkX2lJf/oJEzOkCvF6+EGdIj9xwtXb1rCeys=";
+    })
+    (fetchpatch {
+      url = "https://github.com/Rohde-Schwarz/TPMManager/commit/c287a841ac6b057ed35799949211866b9f533561.patch";
+      sha256 = "sha256-2ZyUml8Q9bKQLVZWr18AzLt8VYLICXH9VDeq6B5Xfto=";
+    })
+  ];
 
   nativeBuildInputs = [
     qmake
@@ -30,8 +43,6 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
-    runHook preInstall
-
     mkdir -p $out/bin
     install -Dpm755 -D bin/tpmmanager $out/bin/tpmmanager
 
@@ -45,8 +56,6 @@ stdenv.mkDerivation rec {
     Exec=$out/bin/tpmmanager
     Terminal=false
     EOF
-
-    runHook postInstall
   '';
 
   meta = {
@@ -55,6 +64,6 @@ stdenv.mkDerivation rec {
     mainProgram = "tpmmanager";
     license = lib.licenses.gpl2;
     maintainers = [ ];
-    platforms = lib.platforms.linux;
+    platforms = with lib.platforms; linux;
   };
 }

@@ -2,65 +2,50 @@
   lib,
   fetchFromGitHub,
   python3Packages,
-
-  # tests
-  gitMinimal,
   ripgrep,
-  writableTmpDirAsHomeHook,
+  gitMinimal,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "seagoat";
-  version = "0.54.3";
+  version = "0.50.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kantord";
     repo = "SeaGOAT";
     tag = "v${version}";
-    hash = "sha256-uSOFak5fQkj4noYRgzjOFV/wlRdsMLDbNpb4ud3+gE4=";
+    hash = "sha256-tf3elcKXUwBqtSStDksOaSN3Q66d72urrG/Vab2M4f0=";
   };
 
   build-system = [ python3Packages.poetry-core ];
-
-  pythonRelaxDeps = [
-    "chromadb"
-    "psutil"
-  ];
 
   dependencies = with python3Packages; [
     appdirs
     blessed
     chardet
-    chromadb
-    deepmerge
     flask
+    deepmerge
+    chromadb
     gitpython
-    halo
     jsonschema
-    nest-asyncio
-    ollama
-    psutil
     pygments
     requests
-    stop-words
+    nest-asyncio
     waitress
+    psutil
+    stop-words
   ];
 
-  nativeCheckInputs =
-    with python3Packages;
-    [
-      pytestCheckHook
-      freezegun
-      pytest-asyncio
-      pytest-mock
-      pytest-snapshot
-    ]
-    ++ [
-      gitMinimal
-      ripgrep
-      writableTmpDirAsHomeHook
-    ];
+  nativeCheckInputs = with python3Packages; [
+    pytestCheckHook
+    freezegun
+    pytest-asyncio
+    pytest-mock
+    pytest-snapshot
+    gitMinimal
+    ripgrep
+  ];
 
   disabledTests = import ./failing_tests.nix;
 
@@ -70,10 +55,9 @@ python3Packages.buildPythonApplication rec {
   ];
 
   preCheck = ''
+    export HOME=$(mktemp -d)
     git init
   '';
-
-  __darwinAllowLocalNetworking = true;
 
   postInstall = ''
     wrapProgram $out/bin/seagoat-server \
@@ -83,7 +67,6 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Local-first semantic code search engine";
     homepage = "https://kantord.github.io/SeaGOAT/";
-    changelog = "https://github.com/kantord/SeaGOAT/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ lavafroth ];
     mainProgram = "seagoat";

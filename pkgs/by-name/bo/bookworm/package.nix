@@ -18,7 +18,7 @@
   pantheon,
   pkg-config,
   poppler,
-  poppler-utils,
+  poppler_utils,
   python3,
   sqlite,
   unar,
@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
         lib.makeBinPath [
           unzip
           unar
-          poppler-utils
+          poppler_utils
           html2text
           coreutils
           curl

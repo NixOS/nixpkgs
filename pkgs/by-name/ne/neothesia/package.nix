@@ -37,8 +37,12 @@ rustPlatform.buildRustPackage {
     rustPlatform.bindgenHook
   ];
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-qIoH+YhyPXXIWFwgcJBly2KBSuVgaRg5kZtBazaTVJ0=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "mpeg_encoder-0.2.1" = "sha256-+BNZZ1FIr1374n8Zs1mww2w3eWHOH6ENOTYXz9RT2Ck=";
+    };
+  };
 
   cargoBuildFlags = [
     "-p neothesia -p neothesia-cli"

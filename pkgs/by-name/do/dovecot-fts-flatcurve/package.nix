@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-dovecot=${dovecot}/lib/dovecot"
-    "--with-moduledir=${placeholder "out"}/lib/dovecot/modules"
+    "--with-moduledir=$(out)/lib/dovecot"
   ];
 
   meta = with lib; {

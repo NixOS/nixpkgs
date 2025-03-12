@@ -36,7 +36,6 @@
   libXau,
   libinput,
   libdrm,
-  libgbm,
   libei,
   libdisplay-info,
   gsettings-desktop-schemas,
@@ -51,7 +50,7 @@
   libwacom,
   libSM,
   xwayland,
-  mesa-gl-headers,
+  mesa,
   meson,
   gnome-settings-daemon,
   xorgserver,
@@ -102,7 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
   propagatedBuildInputs = [
     # required for pkg-config to detect mutter-mtk
     graphene
-    mesa-gl-headers
+    mesa  # actually uses eglmesaext
   ];
 
   nativeBuildInputs = [
@@ -134,7 +133,6 @@ stdenv.mkDerivation (finalAttrs: {
     harfbuzz
     libcanberra
     libdrm
-    libgbm
     libei
     libdisplay-info
     libGL

@@ -42,6 +42,8 @@ melpaBuild {
      ${lib.optionalString withIvy ''"extras/notdeft-ivy.el"''})
   '';
 
+  strictDeps = true;
+
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [

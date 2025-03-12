@@ -15,7 +15,7 @@
   darwin,
   icu,
   lndir,
-  replaceVars,
+  substituteAll,
   nugetPackageHook,
   xmlstarlet,
 }:
@@ -42,11 +42,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     [
       ./dotnet-setup-hook.sh
     ]
-    ++ lib.optional (type == "sdk") (
-      replaceVars ./dotnet-sdk-setup-hook.sh {
-        inherit lndir xmlstarlet;
-      }
-    );
+    ++ lib.optional (type == "sdk") (substituteAll {
+      src = ./dotnet-sdk-setup-hook.sh;
+      inherit lndir xmlstarlet;
+    });
 
   propagatedSandboxProfile = toString unwrapped.__propagatedSandboxProfile;
 

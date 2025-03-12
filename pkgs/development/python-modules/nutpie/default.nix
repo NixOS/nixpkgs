@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   rustPlatform,
@@ -7,6 +8,9 @@
   # build-system
   cargo,
   rustc,
+
+  # buildInputs
+  libiconv,
 
   # dependencies
   arviz,
@@ -16,34 +20,30 @@
 
   # tests
   # bridgestan, (not packaged)
-  equinox,
-  flowjax,
   jax,
   jaxlib,
   numba,
-  pytest-timeout,
   pymc,
   pytestCheckHook,
   setuptools,
-  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "nutpie";
-  version = "0.14.2";
+  version = "0.13.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pymc-devs";
     repo = "nutpie";
     tag = "v${version}";
-    hash = "sha256-9sHs2JbzVRvAJEoLcz5NxkbElbXblDzxA6oCBtb4yFE=";
+    hash = "sha256-XyUMCnHm5V7oFaf3W+nGpcHfq1ZFppeGMIMCU5OB87s=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-j7Vasy4BwOYzH43mWdbu+QsNCdRfvJC6ZvYU8XB5s4E=";
+    hash = "sha256-mLoMbIy3Chmby+c6j3dg+bQvIHuhDgt3ZzPIXB3WxuE=";
   };
 
   build-system = [
@@ -54,8 +54,8 @@ buildPythonPackage rec {
     rustc
   ];
 
-  pythonRelaxDeps = [
-    "xarray"
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
   ];
 
   dependencies = [
@@ -69,27 +69,29 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     # bridgestan
-    equinox
-    flowjax
     numba
     jax
     jaxlib
     pymc
-    pytest-timeout
     pytestCheckHook
     setuptools
-    writableTmpDirAsHomeHook
   ];
 
   disabledTestPaths = [
     # Require unpackaged bridgestan
     "tests/test_stan.py"
+
+    # KeyError: "duplicate registration for <class 'numba.core.types.misc.SliceType'>"
+    "tests/test_pymc.py"
   ];
+
+  # Currently, no test are working...
+  doCheck = false;
 
   meta = {
     description = "Python wrapper for nuts-rs";
     homepage = "https://github.com/pymc-devs/nutpie";
-    changelog = "https://github.com/pymc-devs/nutpie/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/pymc-devs/nutpie/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };

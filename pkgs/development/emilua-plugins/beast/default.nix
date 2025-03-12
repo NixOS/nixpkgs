@@ -1,5 +1,4 @@
 {
-  lib,
   stdenv,
   emilua,
   meson,
@@ -13,13 +12,13 @@
 
 stdenv.mkDerivation (self: {
   pname = "emilua_beast";
-  version = "1.1.2";
+  version = "1.1.1";
 
   src = fetchFromGitLab {
     owner = "emilua";
     repo = "beast";
     rev = "v${self.version}";
-    hash = "sha256-MASaZvhIVKmeBUcn/NjlBZ+xh+2RgwHBH2o08lklGa0=";
+    hash = "sha256-8pHL0ut221LvFwb/o1GuLV3gIDw5LSeqxqIa9eaQjXY=";
   };
 
   buildInputs = [
@@ -35,15 +34,4 @@ stdenv.mkDerivation (self: {
   ];
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
-
-  meta = {
-    description = "Emilua bindings to Boost.Beast (a WebSocket library)";
-    homepage = "https://gitlab.com/emilua/beast";
-    license = lib.licenses.boost;
-    maintainers = with lib.maintainers; [
-      manipuladordedados
-      lucasew
-    ];
-    platforms = lib.platforms.linux;
-  };
 })

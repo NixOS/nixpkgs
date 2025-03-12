@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "pyphen";
-  version = "0.17.2";
+  version = "0.17.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-9gZHqcmzDsbFmRAJevgrxd0tNldrkY5EFI2LB+87SqM=";
+    hash = "sha256-HROs0c43o4TXYSlUrmx4AbtMUxbaDiuTeyEnunAqPaQ=";
   };
 
   build-system = [ flit-core ];

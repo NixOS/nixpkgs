@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "lightwave" ];
 
-  # Requires physical hardware
+  # Requires phyiscal hardware
   doCheck = false;
 
   meta = with lib; {

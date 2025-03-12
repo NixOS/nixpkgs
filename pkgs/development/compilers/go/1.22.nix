@@ -3,8 +3,9 @@
   stdenv,
   fetchurl,
   tzdata,
-  replaceVars,
+  substituteAll,
   iana-etc,
+  xcbuild,
   mailcap,
   buildPackages,
   pkgsBuildTarget,
@@ -61,6 +62,10 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals stdenv.hostPlatform.isLinux [ stdenv.cc.libc.out ]
     ++ lib.optionals (stdenv.hostPlatform.libc == "glibc") [ stdenv.cc.libc.static ];
 
+  depsTargetTargetPropagated = lib.optionals stdenv.targetPlatform.isDarwin [
+    xcbuild
+  ];
+
   depsBuildTarget = lib.optional isCross targetCC;
 
   depsTargetTarget = lib.optional stdenv.targetPlatform.isWindows threadsCross.package;
@@ -70,17 +75,20 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   patches = [
-    (replaceVars ./iana-etc-1.17.patch {
+    (substituteAll {
+      src = ./iana-etc-1.17.patch;
       iana = iana-etc;
     })
     # Patch the mimetype database location which is missing on NixOS.
     # but also allow static binaries built with NixOS to run outside nix
-    (replaceVars ./mailcap-1.17.patch {
+    (substituteAll {
+      src = ./mailcap-1.17.patch;
       inherit mailcap;
     })
     # prepend the nix path to the zoneinfo files but also leave the original value for static binaries
     # that run outside a nix server
-    (replaceVars ./tzdata-1.19.patch {
+    (substituteAll {
+      src = ./tzdata-1.19.patch;
       inherit tzdata;
     })
     ./remove-tools-1.11.patch
@@ -163,7 +171,7 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
     mkdir -p $GOROOT_FINAL
-    cp -a bin pkg src lib misc api doc go.env VERSION $GOROOT_FINAL
+    cp -a bin pkg src lib misc api doc go.env $GOROOT_FINAL
     mkdir -p $out/bin
     ln -s $GOROOT_FINAL/bin/* $out/bin
     runHook postInstall

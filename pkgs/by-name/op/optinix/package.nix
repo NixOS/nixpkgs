@@ -3,7 +3,6 @@
   fetchFromGitLab,
   buildGoModule,
   installShellFiles,
-  nix-update-script,
 }:
 buildGoModule rec {
   pname = "optinix";
@@ -12,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitLab {
     owner = "hmajid2301";
     repo = "optinix";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-OuzLTygfJj1ILT0lAcBC28vU5YLuq0ErZHsLHoQNWBA=";
   };
 
@@ -32,16 +31,11 @@ buildGoModule rec {
       --zsh <($out/bin/optinix completion zsh)
   '';
 
-  passthru.updateScript = nix-update-script { };
-
   meta = {
     description = "Tool for searching options in Nix";
     homepage = "https://gitlab.com/hmajid2301/optinix";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
-      hmajid2301
-      brianmcgillion
-    ];
+    maintainers = with lib.maintainers; [ hmajid2301 ];
     changelog = "https://gitlab.com/hmajid2301/optinix/-/releases/v${version}";
     mainProgram = "optinix";
   };

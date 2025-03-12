@@ -4,7 +4,7 @@
   fetchpatch,
   ghostscript,
   imagemagick,
-  poppler-utils,
+  poppler_utils,
   python3,
   tesseract5,
 }:
@@ -50,7 +50,7 @@ python3.pkgs.buildPythonApplication rec {
       ghostscript
       imagemagick
       tesseract5
-      poppler-utils
+      poppler_utils
     ])
   ];
 

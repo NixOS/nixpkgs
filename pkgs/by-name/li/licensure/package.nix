@@ -11,17 +11,17 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "licensure";
-  version = "0.7.2";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "chasinglogic";
     repo = "licensure";
     rev = version;
-    hash = "sha256-ZizTcXmxAQsDXthNaXxrlsZr/tdAa8U3i70mwpvBmHw=";
+    hash = "sha256-YPdVVHJ/ldILGbg95x7D06chG8Q6a+NnTAimuvBScpE=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-tQZ9/Ki7uaWM/zCKfiM9nL4X65K2JRmQmEWY/bnQPPA=";
+  cargoHash = "sha256-+lZ70D62je+vCExN77LQqNiIqJFUO8FUjyOZbdfbM/c=";
   nativeBuildInputs = [ pkg-config ];
   buildInputs =
     [
@@ -44,7 +44,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/chasinglogic/licensure";
     license = licenses.gpl3Plus;
     mainProgram = "licensure";
-    maintainers = [ maintainers.bpeetz ];
+    maintainers = [ maintainers.soispha ];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

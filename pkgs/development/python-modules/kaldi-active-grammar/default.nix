@@ -10,7 +10,7 @@
   numpy,
   cffi,
   openfst,
-  replaceVars,
+  substituteAll,
   callPackage,
 }:
 
@@ -43,7 +43,8 @@ buildPythonPackage rec {
     # Uses the dependencies' binaries from $PATH instead of a specific directory
     ./0002-exec-path.patch
     # Makes it dynamically link to the correct Kaldi library
-    (replaceVars ./0003-ffi-path.patch {
+    (substituteAll {
+      src = ./0003-ffi-path.patch;
       kaldiFork = "${kaldi}/lib";
     })
   ];

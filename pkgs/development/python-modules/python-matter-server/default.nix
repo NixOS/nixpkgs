@@ -4,7 +4,7 @@
   fetchFromGitHub,
   pythonOlder,
   stdenvNoCC,
-  replaceVars,
+  substituteAll,
 
   # build
   setuptools,
@@ -69,7 +69,8 @@ buildPythonPackage rec {
   };
 
   patches = [
-    (replaceVars ./link-paa-root-certs.patch {
+    (substituteAll {
+      src = ./link-paa-root-certs.patch;
       paacerts = paaCerts;
     })
   ];

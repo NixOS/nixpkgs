@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pulumi-aws";
-  # Version is independent of pulumi's.
+  # Version is independant of pulumi's.
   version = "6.66.3";
   pyproject = true;
 

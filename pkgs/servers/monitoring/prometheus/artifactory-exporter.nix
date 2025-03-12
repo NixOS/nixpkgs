@@ -7,14 +7,14 @@
 
 buildGoModule rec {
   pname = "artifactory_exporter";
-  version = "1.15.1";
+  version = "1.15.0";
   rev = "v${version}";
 
   src = fetchFromGitHub {
     owner = "peimanja";
     repo = pname;
     rev = rev;
-    hash = "sha256-9ghp7VQoZk8/WjWVs7T0TUOCj/HLTYQn27h2DrW+KjE=";
+    hash = "sha256-5aE+ga8tK7EpkcH1exmIdROCnZ49Fz/GGkk993uYcGY=";
   };
 
   vendorHash = "sha256-CQ7JvXcutj63UzaYk/jbmd9G2whN48Xv1PCllaI9Nuo=";

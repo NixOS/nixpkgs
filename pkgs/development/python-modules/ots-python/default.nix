@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  replaceVars,
+  substituteAll,
   opentype-sanitizer,
   setuptools-scm,
   pytestCheckHook,
@@ -23,7 +23,8 @@ buildPythonPackage rec {
     # Invoke ots-sanitize from the opentype-sanitizer package instead of
     # downloading precompiled binaries from the internet.
     # (nixpkgs-specific, not upstreamable)
-    (replaceVars ./0001-use-packaged-ots.patch {
+    (substituteAll {
+      src = ./0001-use-packaged-ots.patch;
       ots_sanitize = "${opentype-sanitizer}/bin/ots-sanitize";
     })
   ];

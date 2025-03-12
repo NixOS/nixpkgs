@@ -5,12 +5,12 @@
   eio_main,
   logs,
   mdx,
-  mirage-crypto-rng,
+  mirage-crypto-rng-eio,
   ptime,
   tls,
 }:
 
-buildDunePackage {
+buildDunePackage rec {
   pname = "tls-eio";
 
   inherit (tls) src meta version;
@@ -30,7 +30,7 @@ buildDunePackage {
   propagatedBuildInputs = [
     ptime
     eio
-    mirage-crypto-rng
+    mirage-crypto-rng-eio
     tls
   ];
 }

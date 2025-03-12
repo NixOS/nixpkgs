@@ -1,11 +1,11 @@
 {
   lib,
   stdenv,
-  buildGoModule,
+  buildGo123Module,
   tailscale,
 }:
 
-buildGoModule {
+buildGo123Module {
   pname = "tailscale-nginx-auth";
   inherit (tailscale) version src vendorHash;
 
@@ -27,11 +27,11 @@ buildGoModule {
     install -D -m0444 -t $out/lib/systemd/system ./cmd/nginx-auth/tailscale.nginx-auth.socket
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://tailscale.com";
     description = "Tool that allows users to use Tailscale Whois authentication with NGINX as a reverse proxy";
-    license = lib.licenses.bsd3;
+    license = licenses.bsd3;
     mainProgram = "tailscale.nginx-auth";
-    maintainers = with lib.maintainers; [ phaer ];
+    maintainers = with maintainers; [ phaer ];
   };
 }

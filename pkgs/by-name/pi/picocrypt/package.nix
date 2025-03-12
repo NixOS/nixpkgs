@@ -1,6 +1,6 @@
 {
   lib,
-  buildGo124Module,
+  buildGoModule,
   fetchFromGitHub,
   stdenv,
   copyDesktopItems,
@@ -13,20 +13,20 @@
   wrapGAppsHook3,
 }:
 
-buildGo124Module rec {
+buildGoModule rec {
   pname = "picocrypt";
-  version = "1.47";
+  version = "1.46";
 
   src = fetchFromGitHub {
     owner = "Picocrypt";
     repo = "Picocrypt";
     tag = version;
-    hash = "sha256-O/n9dJz8cdJwldOXnsG8W8OZU5WeSmNys746HxRHvdc=";
+    hash = "sha256-2kY/EK/tICA5vVT79Qy3oHKMWuoEPwXUI7FYnFuiLVQ=";
   };
 
   sourceRoot = "${src.name}/src";
 
-  vendorHash = "sha256-9xB0D5Og/eiWUZGMog6lBoze4GrdvBOtNAKcMc3AdIE=";
+  vendorHash = "sha256-fcDsPUDsZsgwI2MudvNaGKIIe55JsMCNgDs7Jz2HF9A=";
 
   ldflags = [
     "-s"

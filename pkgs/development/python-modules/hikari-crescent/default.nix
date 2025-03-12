@@ -31,6 +31,12 @@ buildPythonPackage rec {
     sigparse
   ];
 
+  postPatch = ''
+    # pythonRelaxDepsHook did not work
+    substituteInPlace pyproject.toml \
+      --replace-fail 'hikari = "==' 'hikari = ">='
+  '';
+
   pythonImportsCheck = [ "crescent" ];
 
   nativeCheckInputs = [

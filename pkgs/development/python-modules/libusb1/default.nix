@@ -3,7 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  replaceVars,
+  substituteAll,
   setuptools,
   libusb1,
   pytestCheckHook,
@@ -11,18 +11,19 @@
 
 buildPythonPackage rec {
   pname = "libusb1";
-  version = "3.3.0";
+  version = "3.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "vpelletier";
     repo = "python-libusb1";
     tag = version;
-    hash = "sha256-RPuSpkEsACbDkaG+nRuWAckvH/RStJgQWbfgTPY4OvQ=";
+    hash = "sha256-D2VMqrq1MQa6gp8vxDiLRAqTDyRGK3qVKo6YMmo5Zrg=";
   };
 
   patches = [
-    (replaceVars ./ctypes.patch {
+    (substituteAll {
+      src = ./ctypes.patch;
       libusb = "${lib.getLib libusb1}/lib/libusb-1.0${stdenv.hostPlatform.extensions.sharedLibrary}";
     })
   ];

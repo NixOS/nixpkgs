@@ -3,15 +3,10 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch2,
-
-  # build-system
   setuptools,
-
-  # dependencies
   beautifulsoup4,
+  enum-compat,
   pyserial,
-
-  # tests
   pytestCheckHook,
 }:
 
@@ -37,10 +32,9 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  pythonRemoveDeps = [ "enum-compat" ];
-
   dependencies = [
     beautifulsoup4
+    enum-compat
     pyserial
   ];
 

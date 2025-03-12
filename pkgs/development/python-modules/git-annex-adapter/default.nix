@@ -10,7 +10,7 @@
   pytestCheckHook,
   pythonOlder,
   setuptools,
-  replaceVars,
+  substituteAll,
   util-linux,
 }:
 
@@ -42,7 +42,8 @@ buildPythonPackage rec {
       url = "https://github.com/alpernebbi/git-annex-adapter/commit/d0d8905965a3659ce95cbd8f8b1e8598f0faf76b.patch";
       hash = "sha256-UcRTKzD3sbXGIuxj4JzZDnvjTYyWVkfeWgKiZ1rAlus=";
     })
-    (replaceVars ./git-annex-path.patch {
+    (substituteAll {
+      src = ./git-annex-path.patch;
       gitAnnex = "${git-annex}/bin/git-annex";
     })
   ];

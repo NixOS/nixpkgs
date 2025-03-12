@@ -19,17 +19,13 @@ buildNpmPackage rec {
 
   # `npm run build` tries installing clasp globally
   npmBuildScript = [ "compile" ];
-  # Remove dangling symlink of a dependency
-  postInstall = ''
-    rm $out/lib/node_modules/@google/clasp/node_modules/.bin/sshpk-{verify,sign,conv}
-  '';
 
-  meta = {
+  meta = with lib; {
     description = "Develop Apps Script Projects locally";
     mainProgram = "clasp";
     homepage = "https://github.com/google/clasp#readme";
     changelog = "https://github.com/google/clasp/releases/tag/v${version}";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ natsukium ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ natsukium ];
   };
 }

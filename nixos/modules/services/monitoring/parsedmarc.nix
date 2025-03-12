@@ -371,8 +371,7 @@ in
 
             cert_path = lib.mkOption {
               type = lib.types.path;
-              default = config.security.pki.caBundle;
-              defaultText = lib.literalExpression "config.security.pki.caBundle";
+              default = "/etc/ssl/certs/ca-certificates.crt";
               description = ''
                 The path to a TLS certificate bundle used to verify
                 the server's certificate.

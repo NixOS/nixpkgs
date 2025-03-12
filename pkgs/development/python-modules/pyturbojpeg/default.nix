@@ -7,7 +7,7 @@
   setuptools,
   numpy,
   python,
-  replaceVars,
+  substituteAll,
 }:
 
 buildPythonPackage rec {
@@ -23,7 +23,8 @@ buildPythonPackage rec {
   };
 
   patches = [
-    (replaceVars ./lib-path.patch {
+    (substituteAll {
+      src = ./lib-path.patch;
       libturbojpeg = "${lib.getLib libjpeg_turbo}/lib/libturbojpeg${stdenv.hostPlatform.extensions.sharedLibrary}";
     })
   ];

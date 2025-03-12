@@ -13,7 +13,7 @@
   python3,
   # Not really used for anything real, just at build time.
   git,
-  replaceVars,
+  substituteAll,
   which,
   z3,
   cctools,
@@ -67,7 +67,8 @@ stdenv.mkDerivation (rec {
       ./disable-networking-tests.patch
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      (replaceVars ./fix-darwin-build.patch {
+      (substituteAll {
+        src = ./fix-darwin-build.patch;
         libSystem = darwin.Libsystem;
       })
     ];

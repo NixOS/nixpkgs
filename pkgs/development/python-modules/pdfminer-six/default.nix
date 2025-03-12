@@ -8,7 +8,7 @@
   pythonOlder,
   pytestCheckHook,
   setuptools,
-  replaceVars,
+  substituteAll,
   ocrmypdf,
 }:
 
@@ -34,7 +34,8 @@ buildPythonPackage rec {
       excludes = [ "CHANGELOG.md" ];
       hash = "sha256-fsSXvN92MVtNFpAst0ctvGrbxVvoe4Nyz4wMZqJ1aw8=";
     })
-    (replaceVars ./disable-setuptools-git-versioning.patch {
+    (substituteAll {
+      src = ./disable-setuptools-git-versioning.patch;
       inherit version;
     })
   ];

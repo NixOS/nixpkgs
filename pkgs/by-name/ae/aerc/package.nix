@@ -3,7 +3,6 @@
   buildGoModule,
   fetchFromSourcehut,
   ncurses,
-  withNotmuch ? true,
   notmuch,
   scdoc,
   python3Packages,
@@ -51,13 +50,14 @@ buildGoModule rec {
 
   buildInputs = [
     python3Packages.python
+    notmuch
     gawk
-  ] ++ lib.optional withNotmuch notmuch;
+  ];
 
   installPhase = ''
     runHook preInstall
 
-    make $makeFlags GOFLAGS="$GOFLAGS${lib.optionalString withNotmuch " -tags=notmuch"}" install
+    make $makeFlags GOFLAGS="$GOFLAGS -tags=notmuch" install
 
     runHook postInstall
   '';

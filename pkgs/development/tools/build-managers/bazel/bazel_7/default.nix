@@ -5,7 +5,7 @@
   fetchurl,
   makeWrapper,
   writeTextFile,
-  replaceVars,
+  substituteAll,
   writeShellApplication,
   makeBinaryWrapper,
   autoPatchelfHook,
@@ -377,13 +377,15 @@ stdenv.mkDerivation rec {
       # This is non hermetic on non-nixos systems. On NixOS, bazel cannot find the required binaries.
       # So we are replacing this bazel paths by defaultShellPath,
       # improving hermeticity and making it work in nixos.
-      (replaceVars ../strict_action_env.patch {
+      (substituteAll {
+        src = ../strict_action_env.patch;
         strictActionEnvPatch = defaultShellPath;
       })
 
       # bazel reads its system bazelrc in /etc
       # override this path to a builtin one
-      (replaceVars ../bazel_rc.patch {
+      (substituteAll {
+        src = ../bazel_rc.patch;
         bazelSystemBazelRCPath = bazelRC;
       })
     ]

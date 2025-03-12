@@ -9,7 +9,7 @@
 let
   librewolf-src = callPackage ./librewolf.nix { };
 in
-(buildMozillaMach {
+(buildMozillaMach rec {
   pname = "librewolf";
   applicationName = "LibreWolf";
   binaryName = "librewolf";
@@ -31,7 +31,6 @@ in
     maintainers = with lib.maintainers; [
       squalus
       dwrege
-      fpletz
     ];
     platforms = lib.platforms.unix;
     broken = stdenv.buildPlatform.is32bit;

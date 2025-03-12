@@ -5,6 +5,7 @@
   fetchpatch,
   libX11,
   libGL,
+  mesa,
   nvidia_x11 ? null,
   libglvnd,
 }:
@@ -47,6 +48,7 @@ stdenv.mkDerivation {
     "LIBDIR=$(out)/lib"
     "PRIMUS_libGLa=${aPackage}/lib/libGL.so"
     "PRIMUS_libGLd=${libGL}/lib/libGL.so"
+    "PRIMUS_LOAD_GLOBAL=${mesa}/lib/libglapi.so"
   ];
 
   installPhase = ''

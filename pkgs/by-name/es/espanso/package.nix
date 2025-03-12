@@ -40,8 +40,12 @@ rustPlatform.buildRustPackage {
     hash = "sha256-4MArENBmX6tDVLZE1O8cuJe7A0R+sLZoxBkDvIwIVZ4=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-2Hf492/xZ/QGqDYbjiZep/FX8bPyEuoxkMJ4qnMqu+c=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "yaml-rust-0.4.6" = "sha256-wXFy0/s4y6wB3UO19jsLwBdzMy7CGX4JoUt5V6cU7LU=";
+    };
+  };
 
   nativeBuildInputs = [
     extra-cmake-modules

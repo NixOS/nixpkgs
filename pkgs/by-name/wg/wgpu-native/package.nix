@@ -11,13 +11,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wgpu-native";
-  version = "24.0.0.1";
+  version = "22.1.0.5";
 
   src = fetchFromGitHub {
     owner = "gfx-rs";
     repo = "wgpu-native";
     tag = "v${version}";
-    hash = "sha256-hCGLOMsX83VxgNIhkBouN551XgH9Vd/ndaIZP0SY+kc=";
+    hash = "sha256-lEUHRU7+sFWtEYTOB2F+SmMNG8nrjro3IL7BgYuIGgM=";
     fetchSubmodules = true;
   };
 
@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-F+EQVg2Ud/nzrWBbsLo9pCS2nfubaicyI/njDbcFtWo=";
+  cargoHash = "sha256-frlGlUqyKa3PTRbpLhcnUvu+SX64V/CnZGa6+ADxKCo=";
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook

@@ -2,7 +2,7 @@
   lib,
   wrapQtAppsHook,
   fetchFromGitHub,
-  replaceVars,
+  substituteAll,
   udev,
   stdenv,
   pkg-config,
@@ -57,7 +57,9 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./install-dirs.patch
-    (replaceVars ./modprobe.patch {
+    (substituteAll {
+      name = "ckb-next-modprobe.patch";
+      src = ./modprobe.patch;
       inherit kmod;
     })
   ];

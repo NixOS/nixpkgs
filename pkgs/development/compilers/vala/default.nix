@@ -15,7 +15,7 @@
   libintl,
   libtool,
   expat,
-  replaceVars,
+  substituteAll,
   vala,
   gobject-introspection,
 }:
@@ -45,7 +45,8 @@ let
       pname = "vala";
       inherit version;
 
-      setupHook = replaceVars ./setup-hook.sh {
+      setupHook = substituteAll {
+        src = ./setup-hook.sh;
         apiVersion = lib.versions.majorMinor version;
       };
 

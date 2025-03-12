@@ -84,7 +84,9 @@ stdenv.mkDerivation {
     homepage = "https://www.fstar-lang.org";
     changelog = "https://github.com/FStarLang/FStar/raw/v${version}/CHANGES.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [
+      gebner
+    ];
     mainProgram = "fstar.exe";
     platforms = with platforms; darwin ++ linux;
   };

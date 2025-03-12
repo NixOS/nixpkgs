@@ -24,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "cf-xarray";
-  version = "0.10.1";
+  version = "0.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "xarray-contrib";
     repo = "cf-xarray";
     tag = "v${version}";
-    hash = "sha256-rWTaVhRqmTwogqYQ+mesZY6ET9YnSiAqDItoZfVgpYg=";
+    hash = "sha256-lAVH2QGdMyU5A6QTLKujeAh8n1AkCsAtdyKQEqLahTk=";
   };
 
   build-system = [
@@ -64,7 +64,6 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # Tests require network access
     "cf_xarray/tests/test_accessor.py"
-    "cf_xarray/tests/test_groupers.py"
     "cf_xarray/tests/test_helpers.py"
   ];
 

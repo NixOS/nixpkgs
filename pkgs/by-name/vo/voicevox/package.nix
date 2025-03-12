@@ -1,10 +1,9 @@
 {
   lib,
   stdenv,
+  buildNpmPackage,
   fetchFromGitHub,
   replaceVars,
-  pnpm_9,
-  nodejs,
   makeDesktopItem,
   copyDesktopItems,
   makeWrapper,
@@ -14,19 +13,18 @@
   dart-sass,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+buildNpmPackage rec {
   pname = "voicevox";
-  version = "0.23.0";
+  version = "0.22.4";
 
   src = fetchFromGitHub {
     owner = "VOICEVOX";
     repo = "voicevox";
-    tag = finalAttrs.version;
-    hash = "sha256-wCC4wl5LPJVJQtV+X795rIXnURseQYiCZ9B6YujTFFw=";
+    tag = version;
+    hash = "sha256-IOs3wBcFYpO4AHiWFOQWd5hp6EmwyA7Rcc8wjHKvYNQ=";
   };
 
   patches = [
-    ./unlock-node-and-pnpm-versions.patch
     (replaceVars ./hardcode-paths.patch {
       sevenzip_path = lib.getExe _7zz;
       voicevox_engine_path = lib.getExe voicevox-engine;
@@ -35,25 +33,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace package.json \
-      --replace-fail "999.999.999" "$version" \
-      --replace-fail ' && electron-builder --config electron-builder.config.js --publish never' ""
+        --replace-fail "999.999.999" "${version}" \
+        --replace-fail "postinstall" "_postinstall"
   '';
 
-  pnpmDeps = pnpm_9.fetchDeps {
-    inherit (finalAttrs)
-      pname
-      version
-      src
-      patches
-      ;
-    hash = "sha256-IuyDHAomaGEvGbN4gLpyPfZGm/pF9XK+BkXSipaM7NQ=";
-  };
+  npmDepsHash = "sha256-NuKFhDb/J6G3pFYHZedKnY2hDC5GCp70DpqrST4bJMA=";
+
+  # unlock very specific node version bounds specified by upstream
+  npmInstallFlags = [ "--engine-strict=false" ];
 
   nativeBuildInputs =
     [
       makeWrapper
-      pnpm_9.configHook
-      nodejs
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       copyDesktopItems
@@ -71,17 +62,17 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace node_modules/sass-embedded/dist/lib/src/compiler-path.js \
         --replace-fail 'compilerCommand = (() => {' 'compilerCommand = (() => { return ["${lib.getExe dart-sass}"];'
 
+    # build command taken from the definition of the `electron:build` npm script
+    VITE_TARGET=electron npm exec vite build
+
     cp -r ${electron.dist} electron-dist
     chmod -R u+w electron-dist
 
-    # note: we patched out the call to electron-builder in postPatch
-    pnpm run electron:build
-
-    pnpm exec electron-builder \
-      --dir \
-      --config electron-builder.config.js \
-      -c.electronDist=electron-dist \
-      -c.electronVersion=${electron.version}
+    npm exec electron-builder -- \
+        --dir \
+        --config electron-builder.config.js \
+        -c.electronDist=electron-dist \
+        -c.electronVersion=${electron.version}
 
     runHook postBuild
   '';
@@ -122,7 +113,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    changelog = "https://github.com/VOICEVOX/voicevox/releases/tag/${finalAttrs.src.tag}";
+    changelog = "https://github.com/VOICEVOX/voicevox/releases/tag/${src.tag}";
     description = "Editor for the VOICEVOX speech synthesis software";
     homepage = "https://github.com/VOICEVOX/voicevox";
     license = lib.licenses.lgpl3Only;
@@ -133,4 +124,4 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     platforms = electron.meta.platforms;
   };
-})
+}

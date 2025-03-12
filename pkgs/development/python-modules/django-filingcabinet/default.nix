@@ -25,7 +25,7 @@
   camelot,
   pytesseract,
   pytest-factoryboy,
-  poppler-utils,
+  poppler_utils,
   pytest-playwright,
   playwright-driver,
   pnpm_9,
@@ -99,7 +99,7 @@ buildPythonPackage rec {
   '';
 
   nativeCheckInputs = [
-    poppler-utils
+    poppler_utils
     pytest-django
     pytest-factoryboy
     pytest-playwright
@@ -113,7 +113,7 @@ buildPythonPackage rec {
     # playwright._impl._errors.TimeoutError: Locator.click: Timeout 30000ms exceeded
     "test_sidebar_hide"
     "test_show_search_bar"
-    # Unable to launch browser
+    # Unable to lauch browser
     "test_document_viewer"
   ];
 

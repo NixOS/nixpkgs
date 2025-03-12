@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = with maintainers; [
       raskin
+      gebner
     ];
     platforms = platforms.all;
   };

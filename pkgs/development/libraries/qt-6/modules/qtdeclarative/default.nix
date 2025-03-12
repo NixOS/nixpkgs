@@ -3,7 +3,6 @@
   qtbase,
   qtlanguageserver,
   qtshadertools,
-  qtsvg,
   openssl,
   stdenv,
   lib,
@@ -18,7 +17,6 @@ qtModule {
     qtbase
     qtlanguageserver
     qtshadertools
-    qtsvg
     openssl
   ];
   strictDeps = true;

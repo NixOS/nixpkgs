@@ -1,9 +1,7 @@
 { lib
 , stdenv
-, buildPackages
-, replaceVars
+, substituteAll
 , fetchFromGitHub
-, fetchpatch
 , meson
 , mesonEmulatorHook
 , appstream
@@ -34,9 +32,6 @@
 , systemd
 , nixosTests
 , testers
-, withIntrospection ?
-    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
-    && stdenv.hostPlatform.emulatorAvailable buildPackages
 , withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
 }:
 
@@ -55,18 +50,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     # Fix hardcoded paths
-    (replaceVars ./fix-paths.patch {
+    (substituteAll {
+      src = ./fix-paths.patch;
       libstemmer_includedir = "${lib.getDev libstemmer}/include";
     })
 
     # Allow installing installed tests to a separate output.
     ./installed-tests-path.patch
-
-    (fetchpatch {
-      name = "static.patch";
-      url = "https://github.com/ximion/appstream/commit/90675d8853188f65897d2453346cb0acd531b58f.patch";
-      hash = "sha256-d3h5h7B/MP3Sun5YwYCqMHcw4PMMwg1YS/S9vsMzkQ4=";
-    })
   ];
 
   strictDeps = true;
@@ -85,16 +75,13 @@ stdenv.mkDerivation (finalAttrs: {
     xmlto
     docbook-xsl-nons
     docbook_xml_dtd_45
-    glib
+    gobject-introspection
     itstool
+    vala
     gperf
   ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
     mesonEmulatorHook
-  ] ++ lib.optionals (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) [
     appstream
-  ] ++ lib.optionals withIntrospection [
-    gobject-introspection
-    vala
   ];
 
   buildInputs = [
@@ -116,12 +103,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonFlags = [
     "-Dapidocs=false"
-    "-Dc_args=-Wno-error=missing-include-dirs"
     "-Ddocs=false"
     "-Dvapi=true"
     "-Dinstalled_test_prefix=${placeholder "installedTests"}"
     "-Dcompose=true"
-    (lib.mesonBool "gir" withIntrospection)
   ] ++ lib.optionals (!withSystemd) [
     "-Dsystemd=false"
   ];

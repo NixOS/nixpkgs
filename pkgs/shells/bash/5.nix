@@ -6,9 +6,11 @@
 , bison
 , util-linux
 
-, interactive ? true
+  # patch for cygwin requires readline support
+, interactive ? stdenv.hostPlatform.isCygwin
 , readline
-, withDocs ? null
+, withDocs ? false
+, texinfo
 , forFHSEnv ? false
 
 , pkgsStatic
@@ -20,9 +22,6 @@ let
     inherit sha256;
   });
 in
-lib.warnIf (withDocs != null) ''
-  bash: `.override { withDocs = true; }` is deprecated, the docs are always included.
-''
 stdenv.mkDerivation rec {
   pname = "bash${lib.optionalString interactive "-interactive"}";
   version = "5.2${patch_suffix}";
@@ -102,6 +101,7 @@ stdenv.mkDerivation rec {
   # Note: Bison is needed because the patches above modify parse.y.
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook bison ]
+    ++ lib.optional withDocs texinfo
     ++ lib.optional stdenv.hostPlatform.isDarwin stdenv.cc.bintools;
 
   buildInputs = lib.optional interactive readline;

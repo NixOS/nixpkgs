@@ -23,7 +23,7 @@
   trezorSupport ? true,
   hidapi,
   libusb1,
-  protobuf,
+  protobuf_21,
   udev,
 }:
 
@@ -96,7 +96,7 @@ stdenv.mkDerivation rec {
       python3
       hidapi
       libusb1
-      protobuf
+      protobuf_21
     ]
     ++ lib.optionals (trezorSupport && stdenv.hostPlatform.isLinux) [ udev ];
 
@@ -138,7 +138,5 @@ stdenv.mkDerivation rec {
       rnhmjoj
     ];
     mainProgram = "monero-wallet-cli";
-    # internal build tool generate_translations_header is tricky to compile for the build platform
-    broken = !stdenv.buildPlatform.canExecute stdenv.hostPlatform;
   };
 }

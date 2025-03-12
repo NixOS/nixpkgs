@@ -9,7 +9,6 @@
   sassc,
   vala,
   wrapGAppsHook4,
-  gnome-settings-daemon,
   gtk4,
   libgee,
   pango,
@@ -18,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pantheon-tweaks";
-  version = "2.2.0";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "pantheon-tweaks";
     repo = pname;
     rev = version;
-    hash = "sha256-5RsNVUQ8FJmtdI7Z2le+qt9b13zHlQxiyTaUY15wSkw=";
+    hash = "sha256-NrDBr7Wtfxf9UA/sbi9ilgrlxK6QGQAopuz3TV2ITjs=";
   };
 
   nativeBuildInputs = [
@@ -38,21 +37,21 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [
-      gnome-settings-daemon # org.gnome.settings-daemon.plugins.xsettings
       gtk4
       libgee
       pango
     ]
     ++ (with pantheon; [
-      elementary-files # io.elementary.files.preferences
-      elementary-terminal # io.elementary.terminal.settings
+      elementary-files # settings schemas
+      elementary-terminal # settings schemas
       granite7
       switchboard
     ]);
 
-  mesonFlags = [
-    "-Dsystheme_rootdir=/run/current-system/sw/share"
-  ];
+  postPatch = ''
+    substituteInPlace src/Settings/ThemeSettings.vala \
+      --replace-fail "/usr/share/" "/run/current-system/sw/share/"
+  '';
 
   passthru = {
     updateScript = nix-update-script { };

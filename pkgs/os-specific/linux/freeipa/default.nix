@@ -39,6 +39,8 @@
 }:
 
 let
+  pathsPy = ./paths.py;
+
   pythonInputs = with python3.pkgs; [
     distutils
     six
@@ -127,13 +129,17 @@ stdenv.mkDerivation rec {
   postPatch = ''
     patchShebangs makeapi makeaci install/ui/util
 
+    substituteInPlace ipaplatform/setup.py \
+      --replace 'ipaplatform.debian' 'ipaplatform.nixos'
+
     substituteInPlace ipasetup.py.in \
       --replace 'int(v)' 'int(v.replace("post", ""))'
 
     substituteInPlace client/ipa-join.c \
       --replace /usr/sbin/ipa-getkeytab $out/bin/ipa-getkeytab
 
-    substituteInPlace ipaplatform/nixos/paths.py \
+    cp -r ipaplatform/{fedora,nixos}
+    substitute ${pathsPy} ipaplatform/nixos/paths.py \
       --subst-var out \
       --subst-var-by bind ${bind.dnsutils} \
       --subst-var-by curl ${curl} \

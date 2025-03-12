@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  python,
   poetry-core,
   pytest,
   pytest-xdist,
@@ -10,14 +11,16 @@
 
 buildPythonPackage rec {
   pname = "syrupy";
-  version = "4.9.0";
+  version = "4.8.1";
   pyproject = true;
+
+  disabled = lib.versionOlder python.version "3.8.1";
 
   src = fetchFromGitHub {
     owner = "syrupy-project";
     repo = "syrupy";
     tag = "v${version}";
-    hash = "sha256-zG+dKCfJex4Njg0WludqQcgRU1BCf4HQhzd31/kCeCI=";
+    hash = "sha256-H/R2MKXdn/Oqow1Nt2tr45UQqJQs7O72hfA+lRU9V6w=";
   };
 
   build-system = [ poetry-core ];

@@ -140,7 +140,8 @@ class Flake:
                 default_path = Path("/etc/nixos/flake.nix")
                 if default_path.exists():
                     # It can be a symlink to the actual flake.
-                    default_path = default_path.resolve()
+                    if default_path.is_symlink():
+                        default_path = default_path.readlink()
                     return cls.parse(str(default_path.parent), get_hostname)
                 else:
                     return None

@@ -5,9 +5,8 @@
   randomconv,
   duration,
   lwt,
-  mirage-sleep,
-  mirage-mtime,
-  mirage-ptime,
+  mirage-time,
+  mirage-clock,
   metrics,
   alcotest,
   mirage-crypto-rng,
@@ -26,9 +25,8 @@ buildDunePackage {
     randomconv
     duration
     lwt
-    mirage-sleep
-    mirage-mtime
-    mirage-ptime
+    mirage-time
+    mirage-clock
     metrics
   ];
 

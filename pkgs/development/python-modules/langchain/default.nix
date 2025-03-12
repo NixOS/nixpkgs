@@ -2,26 +2,26 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
-  pdm-backend,
+  poetry-core,
 
   # buildInputs
   bash,
 
   # dependencies
   aiohttp,
-  async-timeout,
   langchain-core,
   langchain-text-splitters,
   langsmith,
-  numpy,
   pydantic,
   pyyaml,
   requests,
   sqlalchemy,
   tenacity,
+
+  # optional-dependencies
+  numpy,
 
   # tests
   freezegun,
@@ -40,19 +40,19 @@
 
 buildPythonPackage rec {
   pname = "langchain";
-  version = "0.3.18";
+  version = "0.3.15";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain==${version}";
-    hash = "sha256-oJ4lUbQqHNEqd9UdgLH0ZmTkdZpUbJ7UNsQyIrs8JvI=";
+    hash = "sha256-lANGoMABH1f9Tl/GgMMr7eTCji9q3uqD+Mwjr4nd2Dg=";
   };
 
   sourceRoot = "${src.name}/libs/langchain";
 
-  build-system = [ pdm-backend ];
+  build-system = [ poetry-core ];
 
   buildInputs = [ bash ];
 
@@ -66,13 +66,12 @@ buildPythonPackage rec {
     langchain-core
     langchain-text-splitters
     langsmith
-    numpy
     pydantic
     pyyaml
     requests
     sqlalchemy
     tenacity
-  ] ++ lib.optional (pythonOlder "3.11") async-timeout;
+  ];
 
   optional-dependencies = {
     numpy = [ numpy ];

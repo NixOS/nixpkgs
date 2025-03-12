@@ -4,7 +4,6 @@
   buildPythonPackage,
   orjson,
   fetchFromGitHub,
-  propcache,
   pytest-asyncio,
   pytestCheckHook,
   pythonOlder,
@@ -14,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "nexia";
-  version = "2.2.3";
+  version = "2.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -23,15 +22,19 @@ buildPythonPackage rec {
     owner = "bdraco";
     repo = "nexia";
     tag = version;
-    hash = "sha256-rh2ZLJIzLMxjGvs6cKT2m+1HGBhUSV8KParsC6/JSlY=";
+    hash = "sha256-bW3eFPs7sX3Z5ZH87orIg0HICXQiFtLqyLKFgpSCzJ0=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace '"setuptools>=75.8.0"' ""
+  '';
 
   build-system = [ setuptools ];
 
   dependencies = [
-    aiohttp
     orjson
-    propcache
+    aiohttp
   ];
 
   nativeCheckInputs = [

@@ -1,20 +1,19 @@
-{ lib, stdenv, fetchurl
+{ lib, stdenv, fetchsvn
 , autoreconfHook, pkg-config, txt2man, which
-, openssl, nss, p11-kit, libical, ldns, unbound, apr, aprutil
+, openssl, apr, aprutil
 }:
 
 stdenv.mkDerivation rec {
   pname = "redwax-tool";
-  version = "0.9.9";
+  version = "0.9.1";
 
-  src = fetchurl {
-    url = "https://archive.redwax.eu/dist/rt/redwax-tool-${version}/redwax-tool-${version}.tar.gz";
-    hash = "sha256-gA9YWR3v66lSn4KkwG49l7V4/HUTrBXXl1uDCLr1tu8=";
+  src = fetchsvn {
+    url = "https://source.redwax.eu/svn/redwax/rt/redwax-tool/tags/redwax-tool-${version}/";
+    sha256 = "sha256-MWSB1AkkRS18UUHGq8EWv3OIXPSVHpmrdD5Eq1VdbkA=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config txt2man which ];
-  buildInputs = [ openssl nss p11-kit libical ldns unbound apr aprutil ];
-  configureFlags = [ "--with-openssl" "--with-nss" "--with-p11-kit" "--with-libical" "--with-ldns" "--with-unbound" "--with-bash-completion-dir=yes" ];
+  buildInputs = [ openssl apr aprutil ];
 
   meta = with lib; {
     homepage = "https://redwax.eu/rt/";

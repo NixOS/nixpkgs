@@ -7,14 +7,12 @@
   duration,
   randomconv,
   lwt,
-  mirage-sleep,
-  mirage-mtime,
-  mirage-ptime,
-  mirage-crypto-rng,
+  mirage-time,
+  mirage-clock,
+  mirage-random,
   tcpip,
   tls,
   tls-mirage,
-  mirage-crypto-rng-mirage,
   dnssec,
   alcotest,
 }:
@@ -33,14 +31,12 @@ buildDunePackage {
     duration
     randomconv
     lwt
-    mirage-sleep
-    mirage-mtime
-    mirage-ptime
-    mirage-crypto-rng
+    mirage-time
+    mirage-clock
+    mirage-random
     tcpip
     tls
     tls-mirage
-    mirage-crypto-rng-mirage
   ];
 
   doCheck = true;

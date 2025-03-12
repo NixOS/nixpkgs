@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  replaceVars,
+  substituteAll,
   espeak-ng,
   pytestCheckHook,
 }:
@@ -20,7 +20,8 @@ buildPythonPackage rec {
   };
 
   patches = [
-    (replaceVars ./cdll.patch {
+    (substituteAll {
+      src = ./cdll.patch;
       libespeak_ng = "${lib.getLib espeak-ng}/lib/libespeak-ng.so";
     })
   ];

@@ -15,10 +15,6 @@
   # Taken from https://github.com/solana-labs/solana/blob/master/scripts/cargo-install-all.sh#L84
   solanaPkgs ?
     [
-      "cargo-build-bpf"
-      "cargo-test-bpf"
-      "cargo-build-sbf"
-      "cargo-test-sbf"
       "solana"
       "solana-bench-tps"
       "solana-faucet"
@@ -109,11 +105,6 @@ rustPlatform.buildRustPackage rec {
 
     mkdir -p $out/bin/sdk/bpf
     cp -a ./sdk/bpf/* $out/bin/sdk/bpf/
-    mkdir -p $out/bin/sdk/sbf
-    cp -a ./sdk/sbf/* $out/bin/sdk/sbf
-    mkdir -p $out/bin/deps
-    find . -name libsolana_program.dylib -exec cp {} $out/bin/deps \;
-    find . -name libsolana_program.rlib -exec cp {} $out/bin/deps \;
   '';
 
   # Used by build.rs in the rocksdb-sys crate. If we don't set these, it would

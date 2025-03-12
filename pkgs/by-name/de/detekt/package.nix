@@ -8,13 +8,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "detekt";
-  version = "1.23.8";
+  version = "1.23.7";
 
   jarfilename = "detekt-${finalAttrs.version}-executable.jar";
 
   src = fetchurl {
     url = "https://github.com/detekt/detekt/releases/download/v${finalAttrs.version}/detekt-cli-${finalAttrs.version}-all.jar";
-    sha256 = "sha256-LOL/lS4VC68oopzacKNjsDQLPoGlX0PlHsXt/8PQZsE=";
+    sha256 = "sha256-hL7e0oMBLLKzi8rvSZZFL81gadLpynS1Dqp54K0hiX4=";
   };
 
   dontUnpack = true;

@@ -83,7 +83,6 @@ stdenv.mkDerivation {
 
   hardeningDisable = [
     "pic"
-    "pie" # MBR gets too big with PIE
     "stackprotector"
     "fortify"
   ];

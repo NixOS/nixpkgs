@@ -31,6 +31,5 @@ buildNpmPackage rec {
     homepage = "https://apps.nextcloud.com/apps/whiteboard";
     license = lib.licenses.agpl3Plus;
     maintainers = [ lib.maintainers.onny ];
-    mainProgram = "nextcloud-whiteboard-server";
   };
 }

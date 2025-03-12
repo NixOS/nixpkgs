@@ -32,7 +32,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTestPaths = [
-    # Requires pipenv
+    # Requries pipenv
     "tests/test_parse.py"
   ];
 

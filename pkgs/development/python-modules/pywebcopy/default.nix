@@ -1,14 +1,12 @@
 {
   lib,
-  buildPythonPackage,
-  cachecontrol,
   fetchFromGitHub,
-  legacy-cgi,
-  lxml-html-clean,
+  buildPythonPackage,
   pytestCheckHook,
-  pythonAtLeast,
-  requests,
   setuptools,
+  cachecontrol,
+  lxml-html-clean,
+  requests,
   six,
 }:
 
@@ -24,6 +22,10 @@ buildPythonPackage rec {
     hash = "sha256-XTPk3doF9dqImsLtTB03YKMWLzQrJpJtjNXe+691rZo=";
   };
 
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "pywebcopy" ];
+
   build-system = [ setuptools ];
 
   dependencies = [
@@ -31,11 +33,7 @@ buildPythonPackage rec {
     lxml-html-clean
     requests
     six
-  ] ++ lib.optionals (pythonAtLeast "3.13") [ legacy-cgi ];
-
-  nativeCheckInputs = [ pytestCheckHook ];
-
-  pythonImportsCheck = [ "pywebcopy" ];
+  ];
 
   meta = {
     changelog = "https://github.com/rajatomar788/pywebcopy/blob/master/docs/changelog.md";

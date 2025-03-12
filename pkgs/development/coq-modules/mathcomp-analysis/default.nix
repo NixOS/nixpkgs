@@ -5,7 +5,6 @@
   mathcomp-finmap,
   mathcomp-bigenough,
   hierarchy-builder,
-  stdlib,
   single ? false,
   coqPackages,
   coq,
@@ -16,7 +15,6 @@ let
   repo = "analysis";
   owner = "math-comp";
 
-  release."1.9.0".sha256 = "sha256-zj7WSDUg8ISWxcipGpjEwvvnLp1g8nm23BZiib/15+g=";
   release."1.8.0".sha256 = "sha256-2ZafDmZAwGB7sxdUwNIE3xvwBRw1kFDk0m5Vz+onWZc=";
   release."1.7.0".sha256 = "sha256-GgsMIHqLkWsPm2VyOPeZdOulkN00IoBz++qA6yE9raQ=";
   release."1.5.0".sha256 = "sha256-EWogrkr5TC5F9HjQJwO3bl4P8mij8U7thUGJNNI+k88=";
@@ -54,7 +52,7 @@ let
             (range "8.19" "8.20")
             (range "2.1.0" "2.3.0")
           ];
-          out = "1.9.0";
+          out = "1.8.0";
         }
         {
           cases = [
@@ -177,11 +175,26 @@ let
       ];
       intra-deps = lib.optionals (package != "single") (map mathcomp_ packages.${package});
       pkgpath = lib.switch package [
-        { case = "single"; out = "."; }
-        { case = "analysis"; out = "theories"; }
-        { case = "experimental-reals"; out = "experimental_reals"; }
-        { case = "reals-stdlib"; out = "reals_stdlib"; }
-        { case = "analysis-stdlib"; out = "analysis_stdlib"; }
+        {
+          case = "single";
+          out = ".";
+        }
+        {
+          case = "analysis";
+          out = "theories";
+        }
+        {
+          case = "experimental-reals";
+          out = "experimental_reals";
+        }
+        {
+          case = "reals-stdlib";
+          out = "reals_stdlib";
+        }
+        {
+          case = "analysis-stdlib";
+          out = "analysis_stdlib";
+        }
       ] package;
       pname = if package == "single" then "mathcomp-analysis-single" else "mathcomp-${package}";
       derivation = mkCoqDerivation ({
@@ -212,12 +225,7 @@ let
           ++ lib.optionals (lib.elem package [
             "analysis"
             "single"
-          ]) analysis-deps
-          ++ lib.optional (lib.elem package [
-            "reals-stdlib"
-            "analysis-stdlib"
-            "single"
-          ]) stdlib;
+          ]) analysis-deps;
 
         preBuild = ''
           cd ${pkgpath}
@@ -231,7 +239,7 @@ let
 
         passthru = lib.mapAttrs (package: deps: mathcomp_ package) packages;
       });
-      # split packages didn't exist before 0.6, so building nothing in that case
+      # split packages didn't exist before 0.6, so bulding nothing in that case
       patched-derivation1 = derivation.overrideAttrs (
         o:
         lib.optionalAttrs
@@ -258,7 +266,7 @@ let
           && lib.versions.isLt "0.6" o.version
         ) { preBuild = ""; }
       );
-      # only packages classical and analysis existed before 1.7, so building nothing in that case
+      # only packages classical and analysis existed before 1.7, so bulding nothing in that case
       patched-derivation3 = patched-derivation2.overrideAttrs (
         o:
         lib.optionalAttrs

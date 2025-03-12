@@ -25,8 +25,13 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-qLqyv5XXG7cpW+/eNCWguqemT3G2BhnolntHi2zZJ0o=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-b8sqzv7Mg8w3eA381r9vkB7yh3G8fgTvQFqmkoX4JQk=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "druid-0.8.3" = "sha256-s9csjZ0ZimOrPnjJpPjrrMdNKAXFfroWHBPeR369Phk=";
+      "rolling-file-0.2.0" = "sha256-3xeOSXFVVgeKRE39gtzTURt0OkKScQ4uwtvLl4CE3R4=";
+    };
+  };
 
   nativeBuildInputs = [
     pkg-config

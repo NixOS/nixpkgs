@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   pkg-config,
   zlib,
   shadow,
@@ -14,7 +15,6 @@
   pam,
   systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
   systemd,
-  sqlite,
   nlsSupport ? true,
   translateManpages ? true,
   po4a,
@@ -27,17 +27,21 @@
 stdenv.mkDerivation rec {
   pname =
     "util-linux" + lib.optionalString (!nlsSupport && !ncursesSupport && !systemdSupport) "-minimal";
-  version = "2.40.4";
+  version = "2.39.4";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/util-linux/v${lib.versions.majorMinor version}/util-linux-${version}.tar.xz";
-    hash = "sha256-XB2vczsE6YWa/cO9h8xIEYDuD4i1wJRrFv3skxl1+3k=";
+    hash = "sha256-bE+HI9r9QcOdk+y/FlCfyIwzzVvTJ3iArlodl6AU/Q4=";
   };
 
   patches = [
     ./rtcwake-search-PATH-for-shutdown.patch
-    # https://github.com/util-linux/util-linux/pull/3013
-    ./fix-darwin-build.patch
+
+    (fetchpatch {
+      name = "basename.patch";
+      url = "https://git.kernel.org/pub/scm/utils/util-linux/util-linux.git/patch/?id=77454e58d58f904cfdc02d3ca5bb65f1bd8739fc";
+      hash = "sha256-ELWC4bYN3rvn9XIN0XgCo55pXNfS2VpbZWuwzRLfO/0=";
+    })
   ];
 
   # We separate some of the utilities into their own outputs. This
@@ -60,7 +64,7 @@ stdenv.mkDerivation rec {
 
   postPatch =
     ''
-      patchShebangs tests/run.sh tools/all_syscalls
+      patchShebangs tests/run.sh
 
       substituteInPlace sys-utils/eject.c \
         --replace "/bin/umount" "$bin/bin/umount"
@@ -91,7 +95,6 @@ stdenv.mkDerivation rec {
       (lib.withFeature ncursesSupport "ncursesw")
       (lib.withFeature systemdSupport "systemd")
       (lib.withFeatureAs systemdSupport "systemdsystemunitdir" "${placeholder "bin"}/lib/systemd/system/")
-      (lib.withFeatureAs systemdSupport "tmpfilesdir" "${placeholder "out"}/lib/tmpfiles.d")
       (lib.enableFeature translateManpages "poman")
       "SYSCONFSTATICDIR=${placeholder "lib"}/lib"
     ]
@@ -101,10 +104,6 @@ stdenv.mkDerivation rec {
       "--disable-nls"
       "--disable-ipcrm"
       "--disable-ipcs"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # Doesn't build on Darwin, also doesn't really make sense on Darwin
-      "--disable-liblastlog2"
     ];
 
   makeFlags = [
@@ -122,7 +121,6 @@ stdenv.mkDerivation rec {
     [
       zlib
       libxcrypt
-      sqlite
     ]
     ++ lib.optionals pamSupport [ pam ]
     ++ lib.optionals capabilitiesSupport [ libcap_ng ]
@@ -168,10 +166,6 @@ stdenv.mkDerivation rec {
       rev-prefix = "v";
       ignoredVersions = "(-rc).*";
     };
-
-    # encode upstream assumption to be used in man-db
-    # https://github.com/util-linux/util-linux/commit/8886d84e25a457702b45194d69a47313f76dc6bc
-    hasCol = stdenv.hostPlatform.libc == "glibc";
   };
 
   meta = with lib; {

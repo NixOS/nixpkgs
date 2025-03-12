@@ -23,7 +23,6 @@
   check,
   glib,
   buildPackages,
-  pandoc,
 }:
 
 stdenv.mkDerivation rec {
@@ -55,7 +54,6 @@ stdenv.mkDerivation rec {
     pkg-config
     flex
     bison
-    pandoc
   ];
   buildInputs = [
     libxkbcommon

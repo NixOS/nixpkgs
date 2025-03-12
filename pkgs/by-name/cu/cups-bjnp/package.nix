@@ -21,7 +21,6 @@ stdenv.mkDerivation rec {
     "-include stdio.h"
     "-Wno-error=stringop-truncation"
     "-Wno-error=deprecated-declarations"
-    "-Wno-unused-variable"
   ];
 
   meta = {

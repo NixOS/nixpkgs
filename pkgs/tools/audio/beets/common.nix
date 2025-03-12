@@ -1,16 +1,13 @@
 {
   lib,
-  stdenv,
   src,
   version,
-  fetchpatch,
   bashInteractive,
   diffPlugins,
   gobject-introspection,
   gst_all_1,
   python3Packages,
   sphinxHook,
-  writableTmpDirAsHomeHook,
   runtimeShell,
   writeScript,
 
@@ -81,19 +78,7 @@ python3Packages.buildPythonApplication {
   inherit src version;
   pyproject = true;
 
-  patches = [
-    (fetchpatch {
-      # Already on master. TODO: remove when updating to the next release
-      # Issue: https://github.com/beetbox/beets/issues/5527
-      # PR: https://github.com/beetbox/beets/pull/5650
-      name = "fix-im-backend";
-      url = "https://github.com/beetbox/beets/commit/1f938674015ee71431fe9bd97c2214f58473efd2.patch";
-      hash = "sha256-koCYeiUhk1ifo6CptOSu3p7Nz0FFUeiuArTknM/tpVQ=";
-      excludes = [
-        "docs/changelog.rst"
-      ];
-    })
-  ] ++ extraPatches;
+  patches = extraPatches;
 
   build-system = [
     python3Packages.poetry-core
@@ -160,26 +145,14 @@ python3Packages.buildPythonApplication {
       rarfile
       responses
     ]
-    ++ [
-      writableTmpDirAsHomeHook
-    ]
     ++ pluginWrapperBins;
 
   __darwinAllowLocalNetworking = true;
 
-  disabledTestPaths =
-    disabledTestPaths
-    ++ [
-      # touches network
-      "test/plugins/test_aura.py"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # Flaky: several tests fail randomly with:
-      # if not self._poll(timeout):
-      #   raise Empty
-      #   _queue.Empty
-      "test/plugins/test_player.py"
-    ];
+  disabledTestPaths = disabledTestPaths ++ [
+    # touches network
+    "test/plugins/test_aura.py"
+  ];
   disabledTests = disabledTests ++ [
     # beets.ui.UserError: unknown command 'autobpm'
     "test/plugins/test_autobpm.py::TestAutoBPMPlugin::test_import"
@@ -197,7 +170,8 @@ python3Packages.buildPythonApplication {
       | sort -u > plugins_available
     ${diffPlugins (attrNames builtinPlugins) "plugins_available"}
 
-    export BEETS_TEST_SHELL="${lib.getExe bashInteractive} --norc"
+    export BEETS_TEST_SHELL="${bashInteractive}/bin/bash --norc"
+    export HOME="$(mktemp -d)"
 
     env EDITOR="${writeScript "beetconfig.sh" ''
       #!${runtimeShell}

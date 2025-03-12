@@ -4,7 +4,6 @@
   coreutils,
   enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
   fetchPypi,
-  nix-update-script,
   installShellFiles,
   lib,
   python3Packages,
@@ -15,15 +14,13 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "borgmatic";
-  version = "1.9.13";
+  version = "1.9.5";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-owz6R9rhDNBFkvaNnX/UbRAjXmKutRlYd/sybg/Im/k=";
+    hash = "sha256-wVGM2BsgmZiKWttceIw5pbJGYY2V3+MY1Iv86PwIcU8=";
   };
-
-  passthru.updateScript = nix-update-script { };
 
   nativeCheckInputs =
     with python3Packages;
@@ -40,9 +37,10 @@ python3Packages.buildPythonApplication rec {
     "test_borgmatic_version_matches_news_version"
   ];
 
+  # by default only 70.02% coverage is reached
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace '--cov-fail-under=100' ""
+      --replace '--cov-fail-under=100' '--cov-fail-under=70'
   '';
 
   nativeBuildInputs = [ installShellFiles ];
@@ -90,7 +88,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://torsion.org/borgmatic/";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.all;
-    mainProgram = "borgmatic";
     maintainers = with lib.maintainers; [
       imlonghao
       x123

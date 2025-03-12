@@ -1,7 +1,8 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchurl,
+  fetchpatch,
   autoreconfHook,
   bash,
   buildPackages,
@@ -17,14 +18,20 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "audit";
-  version = "4.0.3";
+  version = "4.0.2";
 
-  src = fetchFromGitHub {
-    owner = "linux-audit";
-    repo = "audit-userspace";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-+M5Nai/ruK16udsHcMwv1YoVQbCLKNuz/4FCXaLbiCw=";
+  src = fetchurl {
+    url = "https://people.redhat.com/sgrubb/audit/audit-${finalAttrs.version}.tar.gz";
+    hash = "sha256-1dG11Q7kotDReHW8aua9an1bNNlVfqhHo5+uxTH6qgo=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "static.patch";
+      url = "https://github.com/linux-audit/audit-userspace/commit/a89664b45c30a853a6f80b19730984bd78432142.patch";
+      hash = "sha256-HsaL9Bfo1MQ1JBKIS9ckNTapGk5eshjWWKh4M+e+Y9c=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace bindings/swig/src/auditswig.i \

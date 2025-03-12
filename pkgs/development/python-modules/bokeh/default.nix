@@ -2,8 +2,9 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  fetchFromGitHub,
   pythonOlder,
-  replaceVars,
+  substituteAll,
   colorama,
   contourpy,
   jinja2,
@@ -45,18 +46,26 @@
 buildPythonPackage rec {
   pname = "bokeh";
   # update together with panel which is not straightforward
-  version = "3.6.3";
+  version = "3.6.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-m4HWqepi51oEoanZ+TGUIBaJC+7Jq10SmipEMs9ZXAo=";
+    hash = "sha256-LzBD2eyz1dwujA6/itVXJ2FxiNTlNPPnIIs2NX41I5Y=";
+  };
+
+  src_test = fetchFromGitHub {
+    owner = "bokeh";
+    repo = "bokeh";
+    rev = "refs/tags/${version}";
+    hash = "sha256-MAv+6bwc5f+jZasRDsYTJ/ir0i1pYCuwqPMumsYWvws=";
   };
 
   patches = [
-    (replaceVars ./hardcode-nodejs-npmjs-paths.patch {
+    (substituteAll {
+      src = ./hardcode-nodejs-npmjs-paths.patch;
       node_bin = "${nodejs}/bin/node";
       npm_bin = "${nodejs}/bin/npm";
     })
@@ -114,8 +123,11 @@ buildPythonPackage rec {
   ];
 
   doCheck = false; # need more work
-
+  pytestFlagsArray = "tests/test_defaults.py";
   pythonImportsCheck = [ "bokeh" ];
+  preCheck = ''
+    cp -rv ''${src_test}/tests/* ./tests/
+  '';
 
   meta = {
     description = "Statistical and novel interactive HTML plots for Python";

@@ -22,12 +22,9 @@ stdenv.mkDerivation rec {
     pkg-config
     which
   ];
-  buildInputs =
-    [
-      libjack2
-    ]
-    # Enabling alsa causes linux-only sources to be built
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib ];
+  buildInputs = [
+    libjack2
+  ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform alsa-lib) [ alsa-lib ];
 
   configureFlags = [
     "--disable-mac-universal"
@@ -53,7 +50,7 @@ stdenv.mkDerivation rec {
     ''
       make install
     ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
+    + lib.optionalString (lib.meta.availableOn stdenv.hostPlatform alsa-lib) ''
       # fixup .pc file to find alsa library
       sed -i "s|-lasound|-L${alsa-lib.out}/lib -lasound|" "$out/lib/pkgconfig/"*.pc
     ''

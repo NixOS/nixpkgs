@@ -7,24 +7,16 @@
 
 let
   cfg = config.services.hddfancontrol;
+  types = lib.types;
 in
 
 {
-  meta.maintainers = with lib.maintainers; [ philipwilk ];
-
-  imports = [
-    (lib.mkRemovedOptionModule [
-      "services"
-      "hddfancontrol"
-      "smartctl"
-    ] "Smartctl is now automatically used when necessary, which makes this option redundant")
-  ];
-
   options = {
+
     services.hddfancontrol.enable = lib.mkEnableOption "hddfancontrol daemon";
 
     services.hddfancontrol.disks = lib.mkOption {
-      type = lib.types.listOf lib.types.path;
+      type = with types; listOf path;
       default = [ ];
       description = ''
         Drive(s) to get temperature from
@@ -33,37 +25,32 @@ in
     };
 
     services.hddfancontrol.pwmPaths = lib.mkOption {
-      type = lib.types.listOf lib.types.path;
+      type = with types; listOf path;
       default = [ ];
       description = ''
-        PWM filepath(s) to control fan speed (under /sys), followed by initial and fan-stop PWM values
+        PWM filepath(s) to control fan speed (under /sys)
       '';
-      example = [ "/sys/class/hwmon/hwmon2/pwm1:30:10" ];
+      example = [ "/sys/class/hwmon/hwmon2/pwm1" ];
     };
 
-    services.hddfancontrol.logVerbosity = lib.mkOption {
-      type = lib.types.enum [
-        "TRACE"
-        "DEBUG"
-        "INFO"
-        "WARN"
-        "ERROR"
-      ];
-      default = "INFO";
+    services.hddfancontrol.smartctl = lib.mkOption {
+      type = types.bool;
+      default = false;
       description = ''
-        Verbosity of the log level
+        Probe temperature using smartctl instead of hddtemp or hdparm
       '';
     };
 
     services.hddfancontrol.extraArgs = lib.mkOption {
-      type = lib.types.listOf lib.types.str;
+      type = with types; listOf str;
       default = [ ];
       description = ''
         Extra commandline arguments for hddfancontrol
       '';
       example = [
-        "--min-fan-speed-prct=10"
-        "--interval=1min"
+        "--pwm-start-value=32"
+        "--pwm-stop-value=0"
+        "--spin-down-time=900"
       ];
     };
   };
@@ -75,22 +62,19 @@ in
         cfg.disks
         [ "-p" ]
         cfg.pwmPaths
+        (lib.optional cfg.smartctl "--smartctl")
         cfg.extraArgs
       ];
     in
     {
       systemd.packages = [ pkgs.hddfancontrol ];
 
-      hardware.sensor.hddtemp = {
-        enable = true;
-        drives = cfg.disks;
-      };
-
       systemd.services.hddfancontrol = {
         wantedBy = [ "multi-user.target" ];
-        environment = {
-          HDDFANCONTROL_LOG_LEVEL = cfg.logVerbosity;
-          HDDFANCONTROL_DAEMON_ARGS = lib.escapeShellArgs args;
+        environment.HDDFANCONTROL_ARGS = lib.escapeShellArgs args;
+        serviceConfig = {
+          # Hardening
+          PrivateNetwork = true;
         };
       };
     }

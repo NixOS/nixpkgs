@@ -6,23 +6,26 @@
 }:
 buildGoModule rec {
   pname = "jjui";
-  version = "0.5";
+  version = "0.4";
 
   src = fetchFromGitHub {
     owner = "idursun";
     repo = "jjui";
     tag = "v${version}";
-    hash = "sha256-+1KVKevY7aWkAbbHQi06whh3keibdSVEykYDItSMi4I=";
+    hash = "sha256-PAquHh3VVAhc4Tw1XkyKmwFbpLVkDRCMT+FGtqiydCA=";
   };
 
   vendorHash = "sha256-MxTwe0S2wvkIy8VJl1p8utTX98zfcwpNgCdnpFAMxO0=";
+
+  postFixup = ''
+    mv $out/bin/cmd $out/bin/jjui
+  '';
 
   passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "A TUI for Jujutsu VCS";
     homepage = "https://github.com/idursun/jjui";
-    changelog = "https://github.com/idursun/jjui/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       adda

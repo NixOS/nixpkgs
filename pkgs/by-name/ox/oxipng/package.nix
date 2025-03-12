@@ -1,7 +1,9 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   rustPlatform,
+  qemu,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -19,11 +21,8 @@ rustPlatform.buildRustPackage rec {
   useFetchCargoVendor = true;
   cargoHash = "sha256-Z0otTCFwtGuSC1XBM3jcgGDFPZuMzQikZaYCnR+S6Us=";
 
-  # don't require qemu for aarch64-linux tests
-  # error: linker `aarch64-linux-gnu-gcc` not found
-  postPatch = ''
-    rm .cargo/config.toml
-  '';
+  # See https://github.com/shssoichiro/oxipng/blob/14b8b0e93a/.cargo/config.toml#L5
+  nativeCheckInputs = [ qemu ];
 
   meta = {
     homepage = "https://github.com/shssoichiro/oxipng";

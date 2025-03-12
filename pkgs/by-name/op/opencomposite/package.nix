@@ -5,23 +5,23 @@
   jsoncpp,
   lib,
   libGL,
-  nix-update-script,
-  openxr-loader,
   python3,
   stdenv,
+  unstableGitUpdater,
   vulkan-headers,
   vulkan-loader,
   xorg,
+  openxr-loader,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation {
   pname = "opencomposite";
-  version = "1.0.1473";
+  version = "0-unstable-2025-02-08";
 
   src = fetchFromGitLab {
     owner = "znixian";
     repo = "OpenOVR";
-    tag = finalAttrs.version;
+    rev = "175e3b3a5408ff120bd21036faa703deb57159fc";
     fetchSubmodules = true;
     hash = "sha256-kwu8eM/rQBcZfs91loh7QAB46a01F9n5Xm1DmMd53MQ=";
   };
@@ -54,7 +54,10 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = unstableGitUpdater {
+    hardcodeZeroVersion = true;
+    branch = "openxr";
+  };
 
   meta = {
     description = "Reimplementation of OpenVR, translating calls to OpenXR";
@@ -64,4 +67,4 @@ stdenv.mkDerivation (finalAttrs: {
     # This can realistically only work on systems that support OpenXR Loader
     inherit (openxr-loader.meta) platforms;
   };
-})
+}

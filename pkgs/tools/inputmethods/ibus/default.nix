@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  replaceVars,
+  substituteAll,
   fetchFromGitHub,
   autoreconfHook,
   gettext,
@@ -71,15 +71,10 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    (replaceVars ./fix-paths.patch {
+    (substituteAll {
+      src = ./fix-paths.patch;
       pythonInterpreter = python3Runtime.interpreter;
       pythonSitePackages = python3.sitePackages;
-      # patch context
-      prefix = null;
-      datarootdir = null;
-      localedir = null;
-      # removed line only
-      PYTHON = null;
     })
     ./build-without-dbus-launch.patch
   ];

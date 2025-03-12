@@ -11,7 +11,7 @@
   nlohmann_json,
   qt5,
   spdlog,
-  replaceVars,
+  substituteAll,
   buildDayZLauncher ? false,
 }:
 stdenv.mkDerivation (finalAttrs: {
@@ -27,7 +27,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     # prevent CMake from trying to get libraries on the internet
-    (replaceVars ./dont_fetch_dependencies.patch {
+    (substituteAll {
+      src = ./dont_fetch_dependencies.patch;
       argparse_src = fetchFromGitHub {
         owner = "p-ranav";
         repo = "argparse";

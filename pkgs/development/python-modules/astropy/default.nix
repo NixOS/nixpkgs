@@ -19,7 +19,7 @@
   pyerfa,
   pyyaml,
 
-  # optional-dependencies
+  # optional-depedencies
   scipy,
   matplotlib,
   ipython,

@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "fastjet-contrib";
-  version = "1.101";
+  version = "1.100";
 
   src = fetchurl {
     url = "https://fastjet.hepforge.org/contrib/downloads/fjcontrib-${version}.tar.gz";
-    sha256 = "sha256-2+itIZn3LWTdKfYhj29T793I+z5d2cXRDy/R4j1uRPY=";
+    sha256 = "sha256-Uq2UXZGVxA80eVjcBAQeQccTDoRevfDBPxu91bbSQps=";
   };
 
   buildInputs = [ fastjet ];

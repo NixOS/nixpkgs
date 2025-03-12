@@ -17,9 +17,9 @@
   fetchpatch,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "libgit2-glib";
-  version = "1.2.1";
+  version = "1.2.0";
 
   outputs = [
     "out"
@@ -28,9 +28,16 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/libgit2-glib/${lib.versions.majorMinor finalAttrs.version}/libgit2-glib-${finalAttrs.version}.tar.xz";
-    sha256 = "l0I6d5ACs76HUcdfnXkEnfzMo2FqJhWfwWJIZ3K6eF8=";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "EzHa2oOPTh9ZGyZFnUQSajJd52LcPNJhU6Ma+9/hgZA=";
   };
+
+  patches = [
+    # See:
+    # * <https://gitlab.gnome.org/GNOME/libgit2-glib/-/merge_requests/40>
+    # * <https://gitlab.gnome.org/GNOME/libgit2-glib/-/merge_requests/46>
+    ./libgit2-1.9.0.patch
+  ];
 
   nativeBuildInputs = [
     meson
@@ -64,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = "libgit2-glib";
+      packageName = pname;
       versionPolicy = "none";
     };
   };
@@ -76,4 +83,4 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };
-})
+}

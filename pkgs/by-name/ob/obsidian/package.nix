@@ -7,12 +7,13 @@
   makeDesktopItem,
   imagemagick,
   writeScript,
-  _7zz,
+  undmg,
+  unzip,
   commandLineArgs ? "",
 }:
 let
   pname = "obsidian";
-  version = "1.8.9";
+  version = "1.8.4";
   appname = "Obsidian";
   meta = with lib; {
     description = "Powerful knowledge base that works on top of a local folder of plain text Markdown files";
@@ -36,9 +37,9 @@ let
     url = "https://github.com/obsidianmd/obsidian-releases/releases/download/v${version}/${filename}";
     hash =
       if stdenv.hostPlatform.isDarwin then
-        "sha256-OPK5GI0P52zk7EF8Gk5i15N/WddbNjS47YNy55o2A8k="
+        "sha256-kg0gH4LW78uKUxnvE1CG8B1BvJzyO8vlP6taLvmGw/s="
       else
-        "sha256-XVq0nQiyT2HvKQpzJIvhghsGgg4ye7uqZcyA1nH4O/o=";
+        "sha256-bvmvzVyHrjh1Yj3JxEfry521CMX3E2GENmXddEeLwiE=";
   };
 
   icon = fetchurl {
@@ -117,7 +118,8 @@ let
     sourceRoot = "${appname}.app";
     nativeBuildInputs = [
       makeWrapper
-      _7zz
+      undmg
+      unzip
     ];
     installPhase = ''
       runHook preInstall

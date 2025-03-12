@@ -77,7 +77,6 @@ buildGoModule {
         command = "${caddy}/bin/caddy version";
         package = caddy;
       };
-      acme-integration = nixosTests.acme.caddy;
     };
     withPlugins = callPackage ./plugins.nix { inherit caddy; };
   };

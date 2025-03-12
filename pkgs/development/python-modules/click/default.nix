@@ -12,13 +12,12 @@
   magic-wormhole,
   mitmproxy,
   typer,
-  flit-core,
 }:
 
 buildPythonPackage rec {
   pname = "click";
-  version = "8.1.8";
-  pyproject = true;
+  version = "8.1.7";
+  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
@@ -26,11 +25,10 @@ buildPythonPackage rec {
     owner = "pallets";
     repo = "click";
     tag = version;
-    hash = "sha256-pAAqf8jZbDfVZUoltwIFpov/1ys6HSYMyw3WV2qcE/M=";
+    hash = "sha256-8YqIKRyw5MegnRwAO7YTCZateEFQFTH2PHpE8gTPTow=";
   };
 
-  build-system = [ flit-core ];
-  dependencies = lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+  propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

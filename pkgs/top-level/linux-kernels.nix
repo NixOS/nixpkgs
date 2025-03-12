@@ -194,7 +194,6 @@ in {
       kernelPatches = [
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
-        kernelPatches.linux-612-rust-185
       ];
     };
 
@@ -286,7 +285,6 @@ in {
     linux_6_6_hardened = hardenedKernelFor kernels.linux_6_6 { };
     linux_6_11_hardened = hardenedKernelFor kernels.linux_6_11 { };
     linux_6_12_hardened = hardenedKernelFor kernels.linux_6_12 { };
-    linux_6_13_hardened = hardenedKernelFor kernels.linux_6_13 { };
 
   } // lib.optionalAttrs config.allowAliases {
     linux_4_14 = throw "linux 4.14 was removed because it will reach its end of life within 23.11";
@@ -338,8 +336,6 @@ in {
     ajantv2 = callPackage ../os-specific/linux/ajantv2 { };
 
     akvcam = callPackage ../os-specific/linux/akvcam { };
-
-    amdgpu-i2c = callPackage ../os-specific/linux/amdgpu-i2c { };
 
     amneziawg = callPackage ../os-specific/linux/amneziawg { };
 
@@ -706,7 +702,6 @@ in {
     linux_6_6_hardened = recurseIntoAttrs (packagesFor kernels.linux_6_6_hardened);
     linux_6_11_hardened = recurseIntoAttrs (packagesFor kernels.linux_6_11_hardened);
     linux_6_12_hardened = recurseIntoAttrs (packagesFor kernels.linux_6_12_hardened);
-    linux_6_13_hardened = recurseIntoAttrs (packagesFor kernels.linux_6_13_hardened);
 
     linux_zen = recurseIntoAttrs (packagesFor kernels.linux_zen);
     linux_lqx = recurseIntoAttrs (packagesFor kernels.linux_lqx);

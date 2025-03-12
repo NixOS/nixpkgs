@@ -45,19 +45,6 @@ let
 
   isNixAtLeast = versionAtLeast (getVersion nixPackage);
 
-  defaultSystemFeatures = [
-    "nixos-test"
-    "benchmark"
-    "big-parallel"
-    "kvm"
-  ] ++ optionals (pkgs.stdenv.hostPlatform ? gcc.arch) (
-      # a builder can run code for `gcc.arch` and inferior architectures
-      [ "gccarch-${pkgs.stdenv.hostPlatform.gcc.arch}" ]
-      ++ map (x: "gccarch-${x}") (
-        systems.architectures.inferiors.${pkgs.stdenv.hostPlatform.gcc.arch} or [ ]
-      )
-    );
-
   legacyConfMappings = {
     useSandbox = "sandbox";
     buildCores = "cores";
@@ -328,9 +315,20 @@ in
 
             system-features = mkOption {
               type = types.listOf types.str;
-              # We expose system-featuers here and in config below.
-              # This allows users to access the default value via `options.nix.settings.system-features`
-              default = defaultSystemFeatures;
+              default =
+                [
+                  "nixos-test"
+                  "benchmark"
+                  "big-parallel"
+                  "kvm"
+                ]
+                ++ optionals (pkgs.stdenv.hostPlatform ? gcc.arch) (
+                  # a builder can run code for `gcc.arch` and inferior architectures
+                  [ "gccarch-${pkgs.stdenv.hostPlatform.gcc.arch}" ]
+                  ++ map (x: "gccarch-${x}") (
+                    systems.architectures.inferiors.${pkgs.stdenv.hostPlatform.gcc.arch} or [ ]
+                  )
+                );
               defaultText = literalExpression ''[ "nixos-test" "benchmark" "big-parallel" "kvm" "gccarch-<arch>" ]'';
               description = ''
                 The set of features supported by the machine. Derivations
@@ -387,7 +385,6 @@ in
       trusted-public-keys = [ "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=" ];
       trusted-users = [ "root" ];
       substituters = mkAfter [ "https://cache.nixos.org/" ];
-      system-features = defaultSystemFeatures;
     };
   };
 }

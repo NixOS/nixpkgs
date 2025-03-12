@@ -1,11 +1,11 @@
 { lib
 , stdenv
 , fetchurl
-, replaceVars
+, substituteAll
 , gettext
 , pkg-config
 , dbus
-, gitUpdater
+, gnome
 , libuuid
 , polkit
 , gnutls
@@ -58,13 +58,13 @@
 let
   pythonForDocs = python3.pythonOnBuildForHost.withPackages (pkgs: with pkgs; [ pygobject3 ]);
 in
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "networkmanager";
-  version = "1.52.0";
+  version = "1.48.10";
 
   src = fetchurl {
-    url = "https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/releases/${finalAttrs.version}/downloads/NetworkManager-${finalAttrs.version}.tar.xz";
-    hash = "sha256-NW8hoV2lHkIY/U0P14zqYeBnsRFqJc3e5K+d8FBi6S0=";
+    url = "mirror://gnome/sources/NetworkManager/${lib.versions.majorMinor version}/NetworkManager-${version}.tar.xz";
+    hash = "sha256-XcGI/f/PLSPInTSx5jGaayAgPhLq7CSzADe36orIxhM=";
   };
 
   outputs = [ "out" "dev" "devdoc" "man" "doc" ];
@@ -105,7 +105,10 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dresolvconf=${openresolv}/bin/resolvconf"
 
     # DHCP clients
+    # ISC DHCP client has reached it's end of life, so stop using it
+    "-Ddhclient=no"
     "-Ddhcpcd=${dhcpcd}/bin/dhcpcd"
+    "-Ddhcpcanon=no"
 
     # Miscellaneous
     # almost cross-compiles, however fails with
@@ -119,16 +122,18 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   patches = [
-    (replaceVars ./fix-paths.patch {
-      inherit iputils openconnect ethtool gnused;
+    (substituteAll {
+      src = ./fix-paths.patch;
+      inherit iputils openconnect ethtool gnused systemd;
       inherit runtimeShell;
-      # patch context
-      OUTPUT = null;
     })
 
     # Meson does not support using different directories during build and
     # for installation like Autotools did with flags passed to make install.
     ./fix-install-paths.patch
+
+    # https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/merge_requests/1966
+    ./without-systemd.patch
   ];
 
   buildInputs = [
@@ -204,9 +209,10 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    updateScript = gitUpdater {
-      odd-unstable = true;
-      url = "https://gitlab.freedesktop.org/NetworkManager/NetworkManager.git";
+    updateScript = gnome.updateScript {
+      packageName = "NetworkManager";
+      attrPath = "networkmanager";
+      versionPolicy = "odd-unstable";
     };
     tests = {
       inherit (nixosTests.networking) networkmanager;
@@ -225,4 +231,4 @@ stdenv.mkDerivation (finalAttrs: {
       lib.systems.inspect.platformPatterns.isStatic
     ];
   };
-})
+}

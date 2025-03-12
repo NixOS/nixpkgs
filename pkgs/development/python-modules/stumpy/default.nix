@@ -2,27 +2,24 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-
-  # build-system
   setuptools,
   setuptools-scm,
-
-  # dependencies
-  numba,
   numpy,
   scipy,
-
-  # tests
+  numba,
+  pandas,
   dask,
   distributed,
-  pandas,
   pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "stumpy";
   version = "1.13.0";
   pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "TDAmeritrade";
@@ -37,15 +34,15 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
-    numba
     numpy
     scipy
+    numba
   ];
 
   nativeCheckInputs = [
+    pandas
     dask
     distributed
-    pandas
     pytestCheckHook
   ];
 
@@ -59,14 +56,9 @@ buildPythonPackage rec {
 
   meta = {
     description = "Library that can be used for a variety of time series data mining tasks";
-    changelog = "https://github.com/TDAmeritrade/stumpy/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/TDAmeritrade/stumpy/blob/${src.rev}/CHANGELOG.md";
     homepage = "https://github.com/TDAmeritrade/stumpy";
     license = lib.licenses.bsd3;
     maintainers = [ ];
-    badPlatforms = [
-      # Multiple tests fail with:
-      # Segmentation fault (core dumped)
-      "aarch64-linux"
-    ];
   };
 }

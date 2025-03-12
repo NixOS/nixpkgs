@@ -254,9 +254,6 @@ in
               proxy_set_header Cookie $http_cookie;
               proxy_set_header X-CSRF-TOKEN "1";
 
-              # Header used to validate reverse proxy trust
-              proxy_set_header X-Proxy-Secret $http_x_proxy_secret;
-
               # Pass headers for common auth proxies
               proxy_set_header Remote-User $http_remote_user;
               proxy_set_header Remote-Groups $http_remote_groups;
@@ -285,8 +282,6 @@ in
 
               add_header Cache-Control "no-store";
               expires off;
-
-              keepalive_disable safari;
             '';
           };
           "/stream/" = {
@@ -412,7 +407,7 @@ in
             proxyPass = "http://frigate-api";
             recommendedProxySettings = true;
             extraConfig = nginxAuthRequest + nginxProxySettings + ''
-              rewrite ^/api/(.*)$ /$1 break;
+              rewrite ^/api/(.*)$ $1 break;
             '';
           };
           "/api/" = {
@@ -448,7 +443,7 @@ in
               location /api/stats {
                   ${nginxAuthRequest}
                   access_log off;
-                  rewrite ^/api(/.*)$ $1 break;
+                  rewrite ^/api/(.*)$ $1 break;
                   add_header Cache-Control "no-store";
                   proxy_pass http://frigate-api;
                   ${nginxProxySettings}
@@ -457,7 +452,7 @@ in
               location /api/version {
                   ${nginxAuthRequest}
                   access_log off;
-                  rewrite ^/api(/.*)$ $1 break;
+                  rewrite ^/api/(.*)$ $1 break;
                   add_header Cache-Control "no-store";
                   proxy_pass http://frigate-api;
                   ${nginxProxySettings}
@@ -565,7 +560,7 @@ in
         "multi-user.target"
       ];
       environment = {
-        CONFIG_FILE = "/run/frigate/frigate.yml";
+        CONFIG_FILE = format.generate "frigate.yml" filteredConfig;
         HOME = "/var/lib/frigate";
         PYTHONPATH = cfg.package.pythonPath;
       } // optionalAttrs (cfg.vaapiDriver != null) {
@@ -583,17 +578,11 @@ in
       ] ++ optionals (!stdenv.hostPlatform.isAarch64) [
         # not available on aarch64-linux
         intel-gpu-tools
-        rocmPackages.rocminfo
       ];
       serviceConfig = {
-        ExecStartPre = [
-          (pkgs.writeShellScript "frigate-clear-cache" ''
-            rm --recursive --force /var/cache/frigate/*
-          '')
-          (pkgs.writeShellScript "frigate-create-writable-config" ''
-            cp --no-preserve=mode "${format.generate "frigate.yml" filteredConfig}" /run/frigate/frigate.yml
-          '')
-        ];
+        ExecStartPre = pkgs.writeShellScript "frigate-clear-cache" ''
+          rm --recursive --force /var/cache/frigate/*
+        '';
         ExecStart = "${cfg.package.python.interpreter} -m frigate";
         Restart = "on-failure";
         SyslogIdentifier = "frigate";

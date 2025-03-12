@@ -1,18 +1,16 @@
 {
-  stdenv,
+  mkDerivation,
   lib,
   fetchFromGitLab,
   cmake,
   extra-cmake-modules,
   pkg-config,
-  wrapQtAppsHook,
-  qtbase,
-  qttools,
+  qtquickcontrols2,
   qtmultimedia,
   qtlocation,
   qqc2-desktop-style,
   kirigami-addons,
-  kirigami,
+  kirigami2,
   kio,
   knotifications,
   kquickimageedit,
@@ -20,36 +18,33 @@
   qxmpp,
   sonnet,
   gst_all_1,
-  prison,
 }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "kaidan";
-  version = "0.11.0";
+  version = "0.10.1";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "network";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-8pC4vINeKSYY+LlVgCXUtBq9UjraPdTikBOwLBLeQ3Y=";
+    hash = "sha256-u+8uNBDfszH5YJokie4A2QhW04ANq/JTwkMeu5gY0to=";
   };
 
   nativeBuildInputs = [
     cmake
     extra-cmake-modules
     pkg-config
-    wrapQtAppsHook
   ];
 
   buildInputs = with gst_all_1; [
-    qtbase
-    qttools
+    qtquickcontrols2
     qtmultimedia
     qtlocation
     qqc2-desktop-style
     kirigami-addons
-    kirigami
+    kirigami2
     kio
     knotifications
     kquickimageedit
@@ -59,8 +54,7 @@ stdenv.mkDerivation rec {
     gstreamer
     gst-plugins-bad
     gst-plugins-base
-    (gst-plugins-good.override { qt6Support = true; })
-    prison
+    gst-plugins-good
   ];
   postInstall = ''
     qtWrapperArgs+=(--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0")

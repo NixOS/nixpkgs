@@ -4,7 +4,7 @@
   fetchPypi,
   pythonOlder,
   stdenv,
-  replaceVars,
+  substituteAll,
 
   # build-system
   hatchling,
@@ -34,7 +34,8 @@ buildPythonPackage rec {
   };
 
   patches = lib.optionals stdenv.hostPlatform.isLinux [
-    (replaceVars ./linux-paths.patch {
+    (substituteAll {
+      src = ./linux-paths.patch;
       x11 = "${xorg.libX11}/lib/libX11.so";
       xfixes = "${xorg.libXfixes}/lib/libXfixes.so";
       xrandr = "${xorg.libXrandr}/lib/libXrandr.so";

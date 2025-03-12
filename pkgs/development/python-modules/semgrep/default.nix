@@ -7,31 +7,6 @@
 
 , pytestCheckHook
 , git
-
-# python packages
-, attrs
-, boltons
-, colorama
-, click
-, click-option-group
-, glom
-, requests
-, rich
-, ruamel-yaml
-, tqdm
-, packaging
-, jsonschema
-, wcmatch
-, peewee
-, defusedxml
-, urllib3
-, typing-extensions
-, python-lsp-jsonrpc
-, tomli
-, opentelemetry-api
-, opentelemetry-sdk
-, opentelemetry-exporter-otlp-proto-http
-, opentelemetry-instrumentation-requests
 }:
 
 # testing locally post build:
@@ -77,7 +52,7 @@ buildPythonPackage rec {
     "glom"
   ];
 
-  dependencies =  [
+  propagatedBuildInputs = with pythonPackages; [
     attrs
     boltons
     colorama
@@ -97,10 +72,6 @@ buildPythonPackage rec {
     typing-extensions
     python-lsp-jsonrpc
     tomli
-    opentelemetry-api
-    opentelemetry-sdk
-    opentelemetry-exporter-otlp-proto-http
-    opentelemetry-instrumentation-requests
   ];
 
   doCheck = true;
@@ -115,8 +86,8 @@ buildPythonPackage rec {
 
   disabledTestPaths = [
     "tests/default/e2e"
+    "tests/default/e2e-pro"
     "tests/default/e2e-pysemgrep"
-    "tests/default/e2e-other"
   ];
 
   disabledTests = [
@@ -128,8 +99,6 @@ buildPythonPackage rec {
     "TestConfigLoaderForProducts"
     # doesn't start flaky plugin correctly
     "test_debug_performance"
-    # requires .git directory
-    "clean_project_url"
   ];
 
   preCheck = ''
@@ -139,6 +108,11 @@ buildPythonPackage rec {
     # tests need access to `semgrep-core`
     export OLD_PATH="$PATH"
     export PATH="$PATH:${semgrepBinPath}"
+
+    # we're in cli
+    # replace old semgrep with wrapped one
+    rm ./bin/semgrep
+    ln -s $out/bin/semgrep ./bin/semgrep
   '';
 
   postCheck = ''

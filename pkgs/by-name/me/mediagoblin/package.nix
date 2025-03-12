@@ -4,7 +4,7 @@
   fetchFromSourcehut,
   gobject-introspection,
   gst_all_1,
-  poppler-utils,
+  poppler_utils,
   python3,
   xorg,
 }:
@@ -137,7 +137,7 @@ python.pkgs.buildPythonApplication rec {
       pytestCheckHook
       webtest
 
-      poppler-utils
+      poppler_utils
     ]
     ++ lib.flatten (lib.attrValues optional-dependencies);
 

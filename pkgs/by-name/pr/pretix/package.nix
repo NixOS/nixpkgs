@@ -25,16 +25,6 @@ let
         };
       });
 
-      geoip2 = super.geoip2.overridePythonAttrs rec {
-        version = "5.0.1";
-
-        src = fetchPypi {
-          pname = "geoip2";
-          inherit version;
-          hash = "sha256-kK+LbTaH877yUfJwitAXsw1ifRFEwAQOq8TJAXqAfYY=";
-        };
-      };
-
       stripe = super.stripe.overridePythonAttrs rec {
         version = "7.9.0";
 
@@ -52,13 +42,13 @@ let
   };
 
   pname = "pretix";
-  version = "2025.2.0";
+  version = "2025.1.0";
 
   src = fetchFromGitHub {
     owner = "pretix";
     repo = "pretix";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ZVrdkIeVUAKb4617BCcfvs0HqFmctPb7zriDJplyUns=";
+    hash = "sha256-azJFXuoV+9qs5MJQTkc1+ZiJb6UKwEa0Ow0p31CkHqI=";
   };
 
   npmDeps = buildNpmPackage {
@@ -66,7 +56,7 @@ let
     inherit version src;
 
     sourceRoot = "${src.name}/src/pretix/static/npm_dir";
-    npmDepsHash = "sha256-MOxOzaP6p6Q61ZuDVzbYJvMXpCQ1pzQx86Yl24yt4SQ=";
+    npmDepsHash = "sha256-oo9fo3MjwKYA8gueJ5otIPawORaVNj/Js3y8ZuCZ4qQ=";
 
     dontBuild = true;
 
@@ -91,8 +81,6 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   pythonRelaxDeps = [
-    "beautifulsoup4"
-    "django-bootstrap3"
     "django-phonenumber-field"
     "dnspython"
     "drf_ujson2"
@@ -106,7 +94,6 @@ python.pkgs.buildPythonApplication rec {
     "python-bidi"
     "qrcode"
     "redis"
-    "reportlab"
     "requests"
     "sentry-sdk"
     "ua-parser"

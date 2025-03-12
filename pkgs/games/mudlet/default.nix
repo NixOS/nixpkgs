@@ -77,7 +77,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     git
-    luaEnv
     pkg-config
     qttools
     which

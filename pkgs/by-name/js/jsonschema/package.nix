@@ -7,22 +7,19 @@
 
 buildGoModule rec {
   pname = "jsonschema";
-  version = "0.7.0";
+  version = "5.3.1";
 
   src = fetchFromGitHub {
     owner = "santhosh-tekuri";
     repo = "jsonschema";
-    tag = "cmd/jv/v${version}";
-    hash = "sha256-bMDDji5daBmjSeGxeS4PZfmTg+b8OVHsP8+m3jtpQJc=";
+    tag = "v${version}";
+    hash = "sha256-ANo9OkdNVCjV5uEqr9lNNbStquNb/3oxuTfMqE2nUzo=";
   };
 
   sourceRoot = "${src.name}/cmd/jv";
-  env.GOWORK = "off";
-  passthru.updateScript = nix-update-script {
-    extraArgs = [ "--version-regex=cmd/jv/v([\\d\\.]+)" ];
-  };
+  passthru.updateScript = nix-update-script { };
 
-  vendorHash = "sha256-s7kEdA4yuExuzwN3hHgeZmtkES3Zw1SALoEHSNtdAww=";
+  vendorHash = "sha256-FuUkC7iwn/jO3fHjT9nGUXc2X1QuuxPc8DAzVpzhANk=";
 
   ldflags = [
     "-s"
@@ -32,7 +29,7 @@ buildGoModule rec {
   meta = {
     description = "JSON schema compilation and validation";
     homepage = "https://github.com/santhosh-tekuri/jsonschema";
-    changelog = "https://github.com/santhosh-tekuri/jsonschema/releases/tag/${src.tag}";
+    changelog = "https://github.com/santhosh-tekuri/jsonschema/releases/tag/v${version}";
     license = lib.licenses.asl20;
     mainProgram = "jv";
     maintainers = with lib.maintainers; [ ibizaman ];

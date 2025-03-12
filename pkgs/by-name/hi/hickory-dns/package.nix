@@ -7,19 +7,19 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage (finalAttrs: {
+rustPlatform.buildRustPackage rec {
   pname = "hickory-dns";
-  version = "0.25.0-alpha.5";
+  version = "0.25.0-alpha.4";
 
   src = fetchFromGitHub {
     owner = "hickory-dns";
     repo = "hickory-dns";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-dbtdTvwm1DiV/nQzTAZJ7CD5raId9+bGNLrS88OocxI=";
+    tag = "v${version}";
+    hash = "sha256-yLhTQIu9C1ikm0TtoEPLSt7ZWqJXn4YE2Lrx38sSJtE=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-lBxCGR4/PrUJ0JLqBn/VzJY47Yp8M4TRsYfCsZN17Ek=";
+  cargoHash = "sha256-HQit/1umI6+3O9m/Lrsykb72EtLbgM9HXbiMhXU/dr0=";
 
   buildInputs = [ openssl ];
   nativeBuildInputs = [ pkg-config ];
@@ -46,4 +46,4 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ];
     mainProgram = "hickory-dns";
   };
-})
+}

@@ -2,8 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  hatchling,
-  pytestCheckHook,
+  poetry-core,
 }:
 
 buildPythonPackage rec {
@@ -18,10 +17,8 @@ buildPythonPackage rec {
     hash = "sha256-489wI0SoC6EU9lC2ISYsLOJUC8g+kLA7UpOrDiBCBmo=";
   };
 
-  build-system = [ hatchling ];
+  build-system = [ poetry-core ];
   pythonImportsCheck = [ "dahlia" ];
-
-  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
     changelog = "https://github.com/dahlia-lib/dahlia/blob/${src.tag}/CHANGELOG.md";

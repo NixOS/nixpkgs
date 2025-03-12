@@ -18,14 +18,14 @@ let
     abseil-cpp = fetchFromGitHub {
       owner = "abseil";
       repo = "abseil-cpp";
-      rev = "9ac7062b1860d895fb5a8cbf58c3e9ef8f674b5f";
-      hash = "sha256-uOgUtF8gaEgcxFK9WAoAhv4GoS8P23IoUxHZZVZdpPk=";
+      rev = "4447c7562e3bc702ade25105912dce503f0c4010";
+      hash = "sha256-51jpDhdZ0n+KLmxh8KVaTz53pZAB0dHjmILFX+OLud4=";
     };
     benchmark = fetchFromGitHub {
       owner = "google";
       repo = "benchmark";
-      rev = "049f6e79cc3e8636cec21bbd94ed185b4a5f2653";
-      hash = "sha256-VmSKKCsBvmvXSnFbw6GJRgiGjlne8rw22+RCLBV/kD4=";
+      rev = "24e0bd827a8bec8121b128b0634cb34402fb3259";
+      hash = "sha256-h3QllJC/tiUzl5UlGCTIoDuDcKG6J538MCY2Pqe2IOE=";
     };
     ccd = fetchFromGitHub {
       owner = "danfis";
@@ -36,14 +36,14 @@ let
     eigen3 = fetchFromGitLab {
       owner = "libeigen";
       repo = "eigen";
-      rev = "66f7f51b7e069d0a03a21157fa60b24aece69aeb";
-      hash = "sha256-/xd0GnXoW8vclIk8aKAziQwDx6AdlBmZD48p8aCX6TQ=";
+      rev = "7f2377859377da6f22152015c28b12c04752af77";
+      hash = "sha256-SmyvY/WlU9jryD9ZpSw73dQEc9jI4ySQPRnplg/BC4w=";
     };
     googletest = fetchFromGitHub {
       owner = "google";
       repo = "googletest";
-      rev = "6910c9d9165801d8827d628cb72eb7ea9dd538c5";
-      hash = "sha256-01PK9LxqHno89gypd7ze5gDP4V3en2J5g6JZRqohDB0=";
+      rev = "b514bdc898e2951020cbdca1304b75f5950d1f59";
+      hash = "sha256-1OJ2SeSscRBNr7zZ/a8bJGIqAnhkg45re0j3DtPfcXM=";
     };
     lodepng = fetchFromGitHub {
       owner = "lvandeve";
@@ -76,28 +76,28 @@ let
       hash = "sha256-90ei0lpJA8XuVGI0rGb3md0Qtq8/bdkU7dUCHpp88Bw=";
     };
 
-    tmd = stdenv.mkDerivation {
+    tmd = stdenv.mkDerivation rec {
       name = "TriangleMeshDistance";
 
       src = fetchFromGitHub {
         owner = "InteractiveComputerGraphics";
-        repo = "TriangleMeshDistance";
+        repo = name;
         rev = "e55a15c20551f36242fd6368df099a99de71d43a";
         hash = "sha256-vj6TMMT8mp7ciLa5nzVAhMWPcAHXq+ZwHlWsRA3uCmg=";
       };
 
       installPhase = ''
         mkdir -p $out/include/tmd
-        cp TriangleMeshDistance/include/tmd/TriangleMeshDistance.h $out/include/tmd/
+        cp ${name}/include/tmd/${name}.h $out/include/tmd/
       '';
     };
 
-    sdflib = stdenv.mkDerivation {
+    sdflib = stdenv.mkDerivation rec {
       name = "SdfLib";
 
       src = fetchFromGitHub {
         owner = "UPC-ViRVIG";
-        repo = "SdfLib";
+        repo = name;
         rev = "1927bee6bb8225258a39c8cbf14e18a4d50409ae";
         hash = "sha256-+SFUOdZ6pGZvnQa0mT+yfbTMHWe2CTOlroXcuVBHdOE=";
       };
@@ -105,20 +105,20 @@ let
       patches = [ ./sdflib-system-deps.patch ];
 
       cmakeFlags = [
-        (lib.cmakeBool "SDFLIB_USE_ASSIMP" false)
-        (lib.cmakeBool "SDFLIB_USE_OPENMP" false)
-        (lib.cmakeBool "SDFLIB_USE_ENOKI" false)
-        (lib.cmakeBool "SDFLIB_USE_SYSTEM_GLM" true)
-        (lib.cmakeBool "SDFLIB_USE_SYSTEM_SPDLOG" true)
-        (lib.cmakeBool "SDFLIB_USE_SYSTEM_CEREAL" true)
-        (lib.cmakeBool "SDFLIB_USE_SYSTEM_TRIANGLEMESHDISTANCE" true)
+        "-DSDFLIB_USE_ASSIMP=OFF"
+        "-DSDFLIB_USE_OPENMP=OFF"
+        "-DSDFLIB_USE_ENOKI=OFF"
+        "-DSDFLIB_USE_SYSTEM_GLM=ON"
+        "-DSDFLIB_USE_SYSTEM_SPDLOG=ON"
+        "-DSDFLIB_USE_SYSTEM_CEREAL=ON"
+        "-DSDFLIB_USE_SYSTEM_TRIANGLEMESHDISTANCE=ON"
       ];
 
       nativeBuildInputs = [ cmake ];
       buildInputs = [
         pin.tmd
 
-        # Mainline. The otherwise pinned glm release from 2018 does
+        # Mainline. The otherwise pinned glm realease from 2018 does
         # not build due to test failures and missing files.
         glm
 
@@ -130,17 +130,17 @@ let
   };
 
 in
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "mujoco";
-  version = "3.3.0";
+  version = "3.2.7";
 
   # Bumping version? Make sure to look though the MuJoCo's commit
   # history for bumped dependency pins!
   src = fetchFromGitHub {
     owner = "google-deepmind";
     repo = "mujoco";
-    tag = finalAttrs.version;
-    hash = "sha256-6Mb50WD5ZQksKoG4FH3+iyy9qBqa1fKUPyt6McNDkGg=";
+    tag = version;
+    hash = "sha256-TAhgu3h7tCflIMscVS+jYuUfMmIYcCcI3JFxUlj8g9E=";
   };
 
   patches = [ ./mujoco-system-deps-dont-fetch.patch ];
@@ -158,9 +158,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    (lib.cmakeBool "MUJOCO_USE_SYSTEM_sdflib" true)
-    (lib.cmakeBool "MUJOCO_SIMULATE_USE_SYSTEM_GLFW" true)
-    (lib.cmakeBool "MUJOCO_SAMPLES_USE_SYSTEM_GLFW" true)
+    "-DMUJOCO_USE_SYSTEM_sdflib=ON"
+    "-DMUJOCO_SIMULATE_USE_SYSTEM_GLFW=ON"
+    "-DMUJOCO_SAMPLES_USE_SYSTEM_GLFW=ON"
   ];
 
   # Move things into place so that cmake doesn't try downloading dependencies.
@@ -190,7 +190,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Multi-Joint dynamics with Contact. A general purpose physics simulator";
     homepage = "https://mujoco.org/";
-    changelog = "https://mujoco.readthedocs.io/en/${finalAttrs.version}/changelog.html";
+    changelog = "https://github.com/google-deepmind/mujoco/releases/tag/${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       GaetanLepage
@@ -199,4 +199,4 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     broken = stdenv.hostPlatform.isDarwin;
   };
-})
+}

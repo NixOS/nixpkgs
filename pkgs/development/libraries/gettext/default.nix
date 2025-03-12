@@ -3,7 +3,7 @@
   lib,
   fetchurl,
   libiconv,
-  bashNonInteractive,
+  bash,
   updateAutotoolsGnuConfigScriptsHook,
 }:
 
@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs =
     lib.optionals (!stdenv.hostPlatform.isMinGW) [
-      bashNonInteractive
+      bash
     ]
     ++ lib.optionals (!stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isCygwin) [
       # HACK, see #10874 (and 14664)

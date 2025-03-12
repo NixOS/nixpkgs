@@ -1,15 +1,17 @@
 {
   buildDunePackage,
+  mirage-crypto,
   mirage-crypto-rng,
+  dune-configurator,
   eio,
   eio_main,
   ohex,
 }:
 
-buildDunePackage {
+buildDunePackage rec {
   pname = "mirage-crypto-rng-eio";
 
-  inherit (mirage-crypto-rng) version src;
+  inherit (mirage-crypto) version src;
 
   doCheck = true;
   checkInputs = [
@@ -17,7 +19,9 @@ buildDunePackage {
     ohex
   ];
 
+  buildInputs = [ dune-configurator ];
   propagatedBuildInputs = [
+    mirage-crypto
     mirage-crypto-rng
     eio
   ];

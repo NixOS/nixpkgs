@@ -3,7 +3,7 @@
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
-  replaceVars,
+  substituteAll,
   graphviz,
   coreutils,
   pkg-config,
@@ -27,7 +27,8 @@ buildPythonPackage rec {
 
   patches = [
     # pygraphviz depends on graphviz executables and wc being in PATH
-    (replaceVars ./path.patch {
+    (substituteAll {
+      src = ./path.patch;
       path = lib.makeBinPath [
         graphviz
         coreutils

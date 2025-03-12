@@ -52,7 +52,6 @@
   nix-update-script,
   nlohmann_json,
   onnxruntime,
-  opencomposite,
   opencv4,
   openhmd,
   openvr,
@@ -77,13 +76,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "wivrn";
-  version = "0.23.2";
+  version = "0.23";
 
   src = fetchFromGitHub {
     owner = "wivrn";
     repo = "wivrn";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-KpsS0XssSnE2Fj5rrXq1h+yNHhF7BzfPxwRUhZUZEaw=";
+    hash = "sha256-Ae25yLlkZ958gXr8nyWPv27leVLF5enljXAkCx+fDSk=";
   };
 
   monado = applyPatches {
@@ -214,7 +213,6 @@ stdenv.mkDerivation (finalAttrs: {
       (lib.cmakeBool "WIVRN_CHECK_CAPSYSNICE" false)
       (lib.cmakeBool "FETCHCONTENT_FULLY_DISCONNECTED" true)
       (lib.cmakeFeature "WIVRN_OPENXR_MANIFEST_TYPE" "absolute")
-      (lib.cmakeFeature "OPENCOMPOSITE_SEARCH_PATH" "${opencomposite}")
       (lib.cmakeFeature "GIT_DESC" "v${finalAttrs.version}")
       (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_MONADO" "${finalAttrs.monado}")
     ]

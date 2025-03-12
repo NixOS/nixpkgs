@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pytestCheckHook,
   # Python deps
   blockfrost-python,
   cachetools,
@@ -13,15 +12,12 @@
   frozendict,
   frozenlist,
   mnemonic,
-  ogmios,
   poetry-core,
   pprintpp,
   pynacl,
-  requests,
   setuptools,
   typeguard,
   websocket-client,
-  websockets,
 }:
 
 let
@@ -38,21 +34,18 @@ let
 in
 buildPythonPackage rec {
   pname = "pycardano";
-  version = "0.12.3";
-  pyproject = true;
+  version = "0.11.1";
+
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "Python-Cardano";
     repo = "pycardano";
-    tag = "v${version}";
-    hash = "sha256-jxgskdQ7Us+utndUgFYK7G2IW/e5QbeXytOsxQfFiJI=";
+    rev = "v${version}";
+    hash = "sha256-OWm6ztt3s3DUbxDZqpvwTO6XwdY/57AI6Bc6x6kxH7k=";
   };
 
-  build-system = [
-    setuptools
-  ];
-
-  dependencies = [
+  propagatedBuildInputs = [
     blockfrost-python
     cachetools
     cbor2
@@ -62,21 +55,15 @@ buildPythonPackage rec {
     frozendict
     frozenlist
     mnemonic
-    ogmios
     poetry-core
     pprintpp
     pynacl
-    requests
+    setuptools
     typeguard
     websocket-client
-    websockets
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
-
-  pythonRelaxDeps = [ "websockets" ];
+  pythonRelaxDeps = [ "typeguard" ];
 
   pythonImportsCheck = [ "pycardano" ];
 

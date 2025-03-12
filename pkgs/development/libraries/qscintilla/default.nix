@@ -7,18 +7,19 @@
   qtmacextras ? null,
   qmake,
   fixDarwinDylibNames,
+  darwin,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "qscintilla-qt5";
-  version = "2.14.1";
+  version = "2.13.2";
 
   src = fetchurl {
-    url = "https://www.riverbankcomputing.com/static/Downloads/QScintilla/${finalAttrs.version}/QScintilla_src-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-3+E8asydhd/Lp2zMgGHnGiI5V6bALzw0OzCp1DpM3U0=";
+    url = "https://www.riverbankcomputing.com/static/Downloads/QScintilla/${version}/QScintilla_src-${version}.tar.gz";
+    sha256 = "sha256-tsfl8ntR0l8J/mz4Sumn8Idq8NZdjMtVEQnm57JYhfQ=";
   };
 
-  sourceRoot = "QScintilla_src-${finalAttrs.version}/src";
+  sourceRoot = "QScintilla_src-${version}/src";
 
   buildInputs = [ qtbase ];
 
@@ -31,14 +32,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Make sure that libqscintilla2.so is available in $out/lib since it is expected
   # by some packages such as sqlitebrowser
-  postFixup =
-    let
-      libExt = stdenv.hostPlatform.extensions.sharedLibrary;
-      qtVersion = lib.versions.major qtbase.version;
-    in
-    ''
-      ln -s $out/lib/libqscintilla2_qt${qtVersion}${libExt} $out/lib/libqscintilla2${libExt}
-    '';
+  postFixup = ''
+    ln -s $out/lib/libqscintilla2_qt5.so $out/lib/libqscintilla2.so
+  '';
 
   dontWrapQtApps = true;
 
@@ -51,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
       --replace '$$[QT_INSTALL_DATA]'         $out/share
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Qt port of the Scintilla text editing library";
     longDescription = ''
       QScintilla is a port to Qt of Neil Hodgson's Scintilla C++ editor
@@ -68,10 +64,10 @@ stdenv.mkDerivation (finalAttrs: {
       background colours and multiple fonts.
     '';
     homepage = "https://www.riverbankcomputing.com/software/qscintilla/intro";
-    license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ peterhoeg ];
-    platforms = lib.platforms.unix;
+    license = with licenses; [ gpl3 ]; # and commercial
+    maintainers = with maintainers; [ peterhoeg ];
+    platforms = platforms.unix;
     # ld: library not found for -lcups
     broken = stdenv.hostPlatform.isDarwin && lib.versionAtLeast qtbase.version "6";
   };
-})
+}

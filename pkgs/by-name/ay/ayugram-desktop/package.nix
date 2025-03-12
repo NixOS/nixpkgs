@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  nix-update-script,
   telegram-desktop,
   withWebkit ? true,
 }:
@@ -13,17 +12,15 @@ telegram-desktop.override {
   unwrapped = telegram-desktop.unwrapped.overrideAttrs (
     finalAttrs: previousAttrs: {
       pname = "ayugram-desktop-unwrapped";
-      version = "5.11.1";
+      version = "5.10.3";
 
       src = fetchFromGitHub {
         owner = "AyuGram";
         repo = "AyuGramDesktop";
         tag = "v${finalAttrs.version}";
-        hash = "sha256-AiMPbcEvbyhGd1V9mg95Q+mLrBH0DqTEFpC3D9ziCy8=";
+        hash = "sha256-ieHIBBm97ZZ+5EK4k3QTkhrazHnhiLNXpQoQFtzn8KY=";
         fetchSubmodules = true;
       };
-
-      passthru.updateScript = nix-update-script { };
 
       meta = previousAttrs.meta // {
         mainProgram = if stdenv.hostPlatform.isLinux then "ayugram-desktop" else "AyuGram";
@@ -34,10 +31,7 @@ telegram-desktop.override {
         '';
         homepage = "https://github.com/AyuGram/AyuGramDesktop";
         changelog = "https://github.com/AyuGram/AyuGramDesktop/releases/tag/v${finalAttrs.version}";
-        maintainers = with lib.maintainers; [
-          kaeeraa
-          s0me1newithhand7s
-        ];
+        maintainers = with lib.maintainers; [ ];
       };
     }
   );

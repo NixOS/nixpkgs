@@ -7,10 +7,10 @@
   protobuf,
   rustPlatform,
   fetchYarnDeps,
-  yarnConfigHook,
-  yarnBuildHook,
+  fixup-yarn-lock,
   stdenv,
-  nodejs_20,
+  yarn,
+  nodejs,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -54,21 +54,39 @@ rustPlatform.buildRustPackage rec {
     inherit version src;
     sourceRoot = "${src.name}/ratman/dashboard";
 
-    yarnOfflineCache = fetchYarnDeps {
+    yarnDeps = fetchYarnDeps {
       yarnLock = src + "/ratman/dashboard/yarn.lock";
       sha256 = "sha256-pWjKL41r/bTvWv+5qCgCFVL9+o64BiV2/ISdLeKEOqE=";
     };
 
     nativeBuildInputs = [
-      nodejs_20
-      yarnConfigHook
-      yarnBuildHook
+      yarn
+      nodejs
+      fixup-yarn-lock
     ];
 
     outputs = [
       "out"
       "dist"
     ];
+
+    buildPhase = ''
+      # Yarn writes temporary files to $HOME. Copied from mkYarnModules.
+      export HOME=$NIX_BUILD_TOP/yarn_home
+
+      # Make yarn install packages from our offline cache, not the registry
+      yarn config --offline set yarn-offline-mirror ${yarnDeps}
+
+      # Fixup "resolved"-entries in yarn.lock to match our offline cache
+      fixup-yarn-lock yarn.lock
+
+      yarn install --offline --frozen-lockfile --ignore-scripts --no-progress --non-interactive
+
+      patchShebangs node_modules/
+
+      # Build into `./dist/`, suppress formatting.
+      yarn --offline build | cat
+    '';
 
     installPhase = ''
       cp -R . $out

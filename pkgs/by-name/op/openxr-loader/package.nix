@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "openxr-loader";
-  version = "1.1.46";
+  version = "1.1.43";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "OpenXR-SDK-Source";
-    tag = "release-${version}";
-    hash = "sha256-C2PGPIDA4C/d37jjXLO+2lqD5VSV3skSqraRiT8RT+c=";
+    rev = "release-${version}";
+    sha256 = "sha256-Ze7r3qcYomcAIAoAO6FZDraKfFr/Wwrnv0HxmY6uE6w=";
   };
 
   nativeBuildInputs = [ cmake python3 pkg-config ];

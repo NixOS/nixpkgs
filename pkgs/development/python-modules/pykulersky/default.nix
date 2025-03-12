@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "pykulersky";
-  version = "0.5.8";
+  version = "0.5.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "emlove";
     repo = pname;
     rev = version;
-    hash = "sha256-BaGcsHlQpuEnUn8OgSUsJi2q89vFl7vpkinviKnUZJk=";
+    hash = "sha256-coO+WBnv5HT14ym719qr3Plm1JuiaNdAvD1QVPj65oU=";
   };
 
   propagatedBuildInputs = [

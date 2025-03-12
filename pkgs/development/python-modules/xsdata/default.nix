@@ -3,7 +3,7 @@
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
-  replaceVars,
+  substituteAll,
   ruff,
   click,
   click-default-group,
@@ -32,7 +32,8 @@ buildPythonPackage rec {
   };
 
   patches = [
-    (replaceVars ./paths.patch {
+    (substituteAll {
+      src = ./paths.patch;
       ruff = lib.getExe ruff;
     })
   ];

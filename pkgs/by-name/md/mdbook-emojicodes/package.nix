@@ -31,6 +31,7 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/blyxyas/mdbook-emojicodes/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [
+      blaggacao
       matthiasbeyer
     ];
   };

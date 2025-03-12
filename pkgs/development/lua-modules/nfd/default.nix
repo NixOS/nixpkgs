@@ -5,7 +5,7 @@
   lua,
   pkg-config,
   lib,
-  replaceVars,
+  substituteAll,
   zenity,
   AppKit,
 }:
@@ -24,7 +24,8 @@ buildLuarocksPackage {
 
   # use zenity because default gtk impl just crashes
   patches = [
-    (replaceVars ./zenity.patch {
+    (substituteAll {
+      src = ./zenity.patch;
       inherit zenity;
     })
   ];

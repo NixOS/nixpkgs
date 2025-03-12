@@ -9,17 +9,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "hdr10plus_tool";
-  version = "1.7.0";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "quietvoid";
     repo = "hdr10plus_tool";
     tag = version;
-    hash = "sha256-eueB+ZrOrnySEwUpCTvC4qARCsDcHJhm088XepLTlOE=";
+    hash = "sha256-eP77LHADP9oenMACctPKU6xPzg4atC0dPOqyrFse/1s=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-3D0HjDtKwYoi9bpQnosC/TPNBjfiWi5m1CH1eGQpGg0=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+  };
 
   nativeBuildInputs = [ pkg-config ];
 

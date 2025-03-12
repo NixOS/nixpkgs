@@ -4,7 +4,7 @@
   fetchurl,
   ncurses,
   pkg-config,
-  zig_0_13,
+  zig,
   zstd,
   installShellFiles,
   testers,
@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
-    zig_0_13.hook
+    zig.hook
     installShellFiles
     pkg-config
   ];
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
       pSub
       rodrgz
     ];
-    inherit (zig_0_13.meta) platforms;
+    inherit (zig.meta) platforms;
     mainProgram = "ncdu";
   };
 })

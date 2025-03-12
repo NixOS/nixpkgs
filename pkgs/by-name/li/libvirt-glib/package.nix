@@ -81,7 +81,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "Wrapper library of libvirt for glib-based applications";
+    description = "Library for working with virtual machines";
     longDescription = ''
       libvirt-glib wraps libvirt to provide a high-level object-oriented API better
       suited for glib-based applications, via three libraries:

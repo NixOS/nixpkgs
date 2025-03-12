@@ -80,8 +80,6 @@ runCommand "${drv.name}-compressed"
   (
     (lib.optionalAttrs (drv ? pname) { inherit (drv) pname; })
     // (lib.optionalAttrs (drv ? version) { inherit (drv) version; })
-    // (lib.optionalAttrs (drv ? passthru) { inherit (drv) passthru; })
-    // (lib.optionalAttrs (drv ? meta) { inherit (drv) meta; })
   )
   ''
     mkdir $out

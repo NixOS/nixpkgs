@@ -13,19 +13,14 @@
 
 stdenv.mkDerivation rec {
   pname = "i2pd";
-  version = "2.56.0";
+  version = "2.55.0";
 
   src = fetchFromGitHub {
     owner = "PurpleI2P";
-    repo = "i2pd";
-    tag = version;
-    hash = "sha256-URFLVMd1j/br+/isQytVjSVosMHn1SEwqg2VNxStD0A=";
+    repo = pname;
+    rev = version;
+    sha256 = "sha256-mdjt2+h+IWjHBRDUpx85ku6s6gKHjxUBuhv+gJK7QhU=";
   };
-
-  postPatch = lib.optionalString (!stdenv.hostPlatform.isx86) ''
-    substituteInPlace Makefile.osx \
-      --replace-fail "-msse" ""
-  '';
 
   buildInputs = [
     boost
@@ -61,5 +56,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ edwtjo ];
     platforms = platforms.unix;
     mainProgram = "i2pd";
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

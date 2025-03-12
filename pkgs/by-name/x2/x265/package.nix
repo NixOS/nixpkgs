@@ -87,7 +87,7 @@ stdenv.mkDerivation rec {
     ]
     # Clang does not support the endfunc directive so use GCC.
     ++ lib.optional (
-      stdenv.cc.isClang && !stdenv.targetPlatform.isDarwin && !stdenv.targetPlatform.isFreeBSD
+      stdenv.cc.isClang && !stdenv.targetPlatform.isDarwin
     ) "-DCMAKE_ASM_COMPILER=${gccStdenv.cc}/bin/${gccStdenv.cc.targetPrefix}gcc";
 
   cmakeStaticLibFlags =

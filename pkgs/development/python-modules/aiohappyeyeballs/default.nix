@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "aiohappyeyeballs";
-  version = "2.4.6";
+  version = "2.4.4";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = "bdraco";
     repo = "aiohappyeyeballs";
     tag = "v${version}";
-    hash = "sha256-qTbneCb8XsZ+/Tg7JfFT/q67g7vzd11riZn5lI44Ei8=";
+    hash = "sha256-zf1EkS+cdCkttce2jCjRf1693AlBYkmAuLX5IysWeUs=";
   };
 
   outputs = [

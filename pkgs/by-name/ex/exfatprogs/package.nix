@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "exfatprogs";
-  version = "1.2.8";
+  version = "1.2.7";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "sha256-lPPUjSc6ti/CqSChWrsBLWCtASN95Cnj+O6FbVvFeDA=";
+    sha256 = "sha256-ZMtDQ+RCTV0gUAXhsgUfRQlqcseWhbWa1szWfmgpDFk=";
   };
 
   nativeBuildInputs = [

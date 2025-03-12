@@ -37,6 +37,10 @@ assert pythonBindings -> swig != null && python3 != null && py3c != null;
 assert javahlBindings -> jdk != null && perl != null;
 
 let
+  # Update libtool for macOS 11 support
+  needsAutogen =
+    stdenv.hostPlatform.isDarwin && lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11";
+
   common =
     {
       version,
@@ -60,7 +64,7 @@ let
           "man"
         ];
 
-        nativeBuildInputs = [
+        nativeBuildInputs = lib.optionals needsAutogen [
           autoconf
           libtool
           python3
@@ -82,7 +86,11 @@ let
             py3c
           ]
           ++ lib.optional perlBindings perl
-          ++ lib.optional saslSupport sasl;
+          ++ lib.optional saslSupport sasl
+          ++ lib.optionals stdenv.hostPlatform.isDarwin [
+            CoreServices
+            Security
+          ];
 
         patches = [ ./apr-1.patch ] ++ extraPatches;
 
@@ -97,7 +105,15 @@ let
         # "-P" CPPFLAG is needed to build Python bindings and subversionClient
         CPPFLAGS = [ "-P" ];
 
-        preConfigure = ''
+        env = lib.optionalAttrs stdenv.cc.isClang {
+          NIX_CFLAGS_COMPILE = lib.concatStringsSep " " [
+            "-Wno-error=implicit-function-declaration"
+            "-Wno-error=implicit-int"
+            "-Wno-int-conversion"
+          ];
+        };
+
+        preConfigure = lib.optionalString needsAutogen ''
           ./autogen.sh
         '';
 

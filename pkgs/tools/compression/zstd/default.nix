@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  bashNonInteractive,
+  bash,
   gnugrep,
   fixDarwinDylibNames,
   file,
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ] ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
-  buildInputs = lib.optional stdenv.hostPlatform.isUnix bashNonInteractive;
+  buildInputs = lib.optional stdenv.hostPlatform.isUnix bash;
 
   patches = [
     # This patches makes sure we do not attempt to use the MD5 implementation

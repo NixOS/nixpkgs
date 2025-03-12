@@ -35,7 +35,7 @@ buildPythonPackage rec {
     protobuf
   ];
 
-  # Project thas no tests
+  # Projec thas no tests
   doCheck = false;
 
   pythonImportsCheck = [ "grpc_status" ];

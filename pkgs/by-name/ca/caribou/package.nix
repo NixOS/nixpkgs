@@ -6,7 +6,6 @@
   gnome,
   glib,
   gtk3,
-  gobject-introspection,
   clutter,
   dbus,
   python3,
@@ -62,11 +61,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkg-config
-    gobject-introspection
     intltool
     libxslt
     libxml2
-    pythonEnv
     autoreconfHook
     wrapGAppsHook3
     vala
@@ -112,8 +109,5 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl21;
     maintainers = [ ];
     platforms = platforms.linux;
-    # checking for a Python interpreter with version >= 2.4... none
-    # configure: error: no suitable Python interpreter found
-    broken = stdenv.buildPlatform != stdenv.hostPlatform;
   };
 }

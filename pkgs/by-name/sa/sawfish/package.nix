@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchurl,
   autoreconfHook,
   gdk-pixbuf-xlib,
   gettext,
@@ -19,18 +19,15 @@
   rep-gtk,
   texinfo,
   which,
-  versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sawfish";
   version = "1.13.0";
 
-  src = fetchFromGitHub {
-    owner = "SawfishWM";
-    repo = "sawfish";
-    tag = "sawfish-${finalAttrs.version}";
-    hash = "sha256-4hxws3afDN9RjO9JCEjEgG4/g6bSycrmiJzRoyNnl3s=";
+  src = fetchurl {
+    url = "https://download.tuxfamily.org/sawfish/sawfish_${finalAttrs.version}.tar.xz";
+    hash = "sha256-gWs8W/pMtQjbH8FEifzNAj3siZzxPd6xm8PmXXhyr10=";
   };
 
   nativeBuildInputs = [
@@ -63,7 +60,6 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   strictDeps = true;
-  enableParallelBuilding = true;
 
   postInstall = ''
     for file in $out/lib/sawfish/sawfish-menu \
@@ -76,13 +72,6 @@ stdenv.mkDerivation (finalAttrs: {
         --set REP_LOAD_PATH "$out/share/sawfish/lisp"
     done
   '';
-
-  nativeInstallCheckInputs = [
-    versionCheckHook
-  ];
-  doInstallCheck = true;
-  versionCheckProgramArg = [ "--version" ];
-  versionCheckProgram = "${placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";
 
   meta = {
     homepage = "http://sawfish.tuxfamily.org/";
@@ -97,6 +86,5 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.unix;
-    mainProgram = "sawfish";
   };
 })

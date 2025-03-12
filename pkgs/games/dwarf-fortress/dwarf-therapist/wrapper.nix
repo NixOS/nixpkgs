@@ -1,4 +1,4 @@
-{ stdenv, dwarf-therapist, dwarf-fortress, replaceVars, coreutils, wrapQtAppsHook
+{ stdenv, dwarf-therapist, dwarf-fortress, substituteAll, coreutils, wrapQtAppsHook
 }:
 
 let
@@ -14,7 +14,8 @@ stdenv.mkDerivation {
   pname = "dwarf-therapist";
   inherit (dwarf-therapist) version meta;
 
-  wrapper = replaceVars ./dwarf-therapist.in {
+  wrapper = substituteAll {
+    src = ./dwarf-therapist.in;
     stdenv_shell = "${stdenv.shell}";
     rm = "${coreutils}/bin/rm";
     ln = "${coreutils}/bin/ln";
@@ -22,8 +23,6 @@ stdenv.mkDerivation {
     mkdir = "${coreutils}/bin/mkdir";
     dirname = "${coreutils}/bin/dirname";
     therapist = "${dwarf-therapist}";
-    # replaced in buildCommand
-    install = null;
   };
 
   paths = [ dwarf-therapist ];

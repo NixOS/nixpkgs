@@ -3,31 +3,37 @@
   fetchFromGitHub,
   stdenv,
   rustPlatform,
-  libcosmicAppHook,
   just,
-  nix-update-script,
+  pkg-config,
+  makeBinaryWrapper,
+  libxkbcommon,
+  wayland,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "cosmic-applibrary";
-  version = "1.0.0-alpha.6";
+  version = "0-unstable-2024-02-09";
 
   src = fetchFromGitHub {
     owner = "pop-os";
-    repo = "cosmic-applibrary";
-    tag = "epoch-${version}";
-    hash = "sha256-hJOM5dZdLq6uYfhfspZzpbHgUOK/FWuIXuFPoisS8DU=";
+    repo = pname;
+    rev = "e214e9867876c96b24568d8a45aaca2936269d9b";
+    hash = "sha256-fZxDRktiHHmj7X3e5VyJJMO081auOpSMSsBnJdhhtR8=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-95jTSn0yYj2PNVtfumfD1rPf1yLXHUi60FBqENK8CSw=";
+  cargoHash = "sha256-WCS1jCfnanILXGLq96+FI0gM1o4FIJQtSgZg86fe86E=";
 
   nativeBuildInputs = [
     just
-    libcosmicAppHook
+    pkg-config
+    makeBinaryWrapper
+  ];
+  buildInputs = [
+    libxkbcommon
+    wayland
   ];
 
   dontUseJustBuild = true;
-  dontUseJustCheck = true;
 
   justFlags = [
     "--set"
@@ -42,24 +48,17 @@ rustPlatform.buildRustPackage rec {
     substituteInPlace justfile --replace '#!/usr/bin/env' "#!$(command -v env)"
   '';
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version"
-      "unstable"
-      "--version-regex"
-      "epoch-(.*)"
-    ];
-  };
+  postInstall = ''
+    wrapProgram $out/bin/cosmic-app-library \
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ wayland ]}"
+  '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/pop-os/cosmic-applibrary";
     description = "Application Template for the COSMIC Desktop Environment";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [
-      nyabinary
-      HeitorAugustoLN
-    ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ nyabinary ];
+    platforms = platforms.linux;
     mainProgram = "cosmic-app-library";
   };
 }

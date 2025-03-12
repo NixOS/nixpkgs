@@ -19,14 +19,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "cartridges";
-  version = "2.11.1";
+  version = "2.11";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "kra-mo";
     repo = "cartridges";
     tag = "v${version}";
-    hash = "sha256-2w7qHTEaRnVDRa0e39Dg9H7pjhgM2UATe8pGYncYILE=";
+    hash = "sha256-6v/R83eYq993epcAkcf9jyNakKuGmSsGXrQYQMro6nI=";
   };
 
   strictDeps = true;

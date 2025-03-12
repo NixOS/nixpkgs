@@ -20,7 +20,6 @@
   dbus,
   gmobile,
   umockdev,
-  nix-update-script,
 }:
 
 let
@@ -34,7 +33,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "feedbackd";
-  version = "0.7.0";
+  version = "0.4.1";
 
   outputs = [
     "out"
@@ -47,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Librem5";
     repo = "feedbackd";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-qwyq1v+20Gotpk0CbUe6MdDJ5bmKmTHOen+rxWljjeA=";
+    hash = "sha256-ta14DYqkid8Cp8fx9ZMGOOJroCBszN9/VrTN6mrpTZg=";
   };
 
   depsBuildBuild = [
@@ -107,18 +106,11 @@ stdenv.mkDerivation (finalAttrs: {
     fi
   '';
 
-  passthru = {
-    updateScript = nix-update-script { };
-  };
-
   meta = with lib; {
     description = "Daemon to provide haptic (and later more) feedback on events";
     homepage = "https://source.puri.sm/Librem5/feedbackd";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
-      pacman99
-      Luflosi
-    ];
+    maintainers = with maintainers; [ pacman99 ];
     platforms = platforms.linux;
   };
 })

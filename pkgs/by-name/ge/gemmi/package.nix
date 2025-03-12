@@ -7,7 +7,7 @@
   enablePython ? true,
   addBinToPathHook,
   python3Packages,
-  versionCheckHook,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -54,18 +54,13 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ [
       addBinToPathHook
-      versionCheckHook
     ];
-  versionCheckProgramArg = [ "--version" ];
-
-  disabledTests = lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
-    # Numerical precision error
-    # self.assertTrue(numpy.allclose(data_f, abs(asu_val), atol=5e-5, rtol=0))
-    # AssertionError: False is not true
-    "test_reading"
-  ];
 
   pytestFlagsArray = [ "../tests" ];
+
+  passthru.tests = {
+    version = testers.testVersion { package = finalAttrs.finalPackage; };
+  };
 
   meta = {
     description = "Macromolecular crystallography library and utilities";

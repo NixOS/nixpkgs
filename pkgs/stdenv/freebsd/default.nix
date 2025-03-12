@@ -74,7 +74,7 @@ let
     expand-response-params = "";
     bsdcp = linkBootstrap { paths = [ "bin/bsdcp" ]; };
     patchelf = linkBootstrap { paths = [ "bin/patchelf" ]; };
-    bashNonInteractive = linkBootstrap {
+    bash = linkBootstrap {
       paths = [
         "bin/bash"
         "bin/sh"
@@ -376,13 +376,13 @@ let
         gawk
         diffutils
         patch
-        bashNonInteractive
+        bash
         xz
         gzip
         bzip2
         bsdcp
       ];
-      shell = "${prevStage.bashNonInteractive}/bin/bash";
+      shell = "${prevStage.bash}/bin/bash";
       stdenvNoCC = import ../generic {
         inherit
           config
@@ -471,7 +471,7 @@ in
         # we CAN'T import LLVM because the compiler built here is used to build the final compiler and the final compiler must not be built by the bootstrap compiler
         inherit (bootstrapTools)
           patchelf
-          bashNonInteractive
+          bash
           curl
           coreutils
           diffutils

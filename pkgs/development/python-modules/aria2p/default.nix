@@ -4,8 +4,8 @@
   fetchFromGitHub,
   pythonOlder,
   pdm-backend,
+  appdirs,
   loguru,
-  platformdirs,
   requests,
   setuptools,
   toml,
@@ -34,11 +34,11 @@ buildPythonPackage rec {
     hash = "sha256-JEXTCDfFjxI1hooiEQq0KIGGoS2F7fyzOM0GMl+Jr7w=";
   };
 
-  build-system = [ pdm-backend ];
+  nativeBuildInputs = [ pdm-backend ];
 
-  dependencies = [
+  propagatedBuildInputs = [
+    appdirs
     loguru
-    platformdirs
     requests
     setuptools # for pkg_resources
     toml

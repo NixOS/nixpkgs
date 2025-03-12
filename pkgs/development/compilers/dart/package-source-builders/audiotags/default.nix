@@ -12,15 +12,14 @@ let
     inherit version src;
 
     postPatch = ''
-      cp --no-preserve=mode ${cargoLock.lockFile} Cargo.lock
+      cp ${cargoLock.lockFile} Cargo.lock
     '';
 
     sourceRoot = "${src.name}/rust";
 
-    cargoLock.lockFile =
-      rec {
-        _1_4_2 = _1_4_1;
-        _1_4_1 = ./Cargo-1.4.1.lock;
+    cargoLock =
+      {
+        _1_4_1.lockFile = ./Cargo-1.4.1.lock;
       }
       .${"_" + (lib.replaceStrings [ "." ] [ "_" ] version)} or (throw ''
         Unsupported version of pub 'audiotags': '${version}'

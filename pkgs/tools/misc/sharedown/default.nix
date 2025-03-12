@@ -1,6 +1,6 @@
 {
-  lib,
   stdenvNoCC,
+  lib,
   fetchFromGitHub,
   ffmpeg,
   yt-dlp,
@@ -19,13 +19,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "Sharedown";
-  version = "5.3.6";
+  version = "5.3.1";
 
   src = fetchFromGitHub {
     owner = "kylon";
     repo = "Sharedown";
-    tag = version;
-    hash = "sha256-5t/71T/eBg4vkDZTj7mtCkXhS+AuiVhBmx0Zzrry5Lg=";
+    rev = version;
+    sha256 = "sha256-llQt3m/qu7v5uQIfA1yxl2JZiFafk6sPgcvrIpQy/DI=";
   };
 
   nativeBuildInputs = [
@@ -88,16 +88,12 @@ stdenvNoCC.mkDerivation rec {
           export npm_config_nodedir=${nodejs}
         '';
 
-        postBuild = ''
-          rm $out/node_modules/sharedown
-        '';
-
         packageJSON = "${src}/package.json";
         yarnLock = ./yarn.lock;
 
         offlineCache = fetchYarnDeps {
           inherit yarnLock;
-          hash = "sha256-9Mdn18jJTXyAVQMGl9ImIEbzlkK6walPrgkGzupLPFQ=";
+          hash = "sha256-NzWzkZbf5R1R72K7KVJbZUCzso1UZ0p3+lRYZE2M/dI=";
         };
       };
     in
@@ -123,12 +119,13 @@ stdenvNoCC.mkDerivation rec {
 
   passthru.updateScript = ./update.sh;
 
-  meta = {
+  meta = with lib; {
     description = "Application to save your Sharepoint videos for offline usage";
     homepage = "https://github.com/kylon/Sharedown";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ ];
-    platforms = lib.platforms.unix;
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [
+    ];
+    platforms = platforms.unix;
     mainProgram = "Sharedown";
   };
 }

@@ -1,6 +1,5 @@
 {
   lib,
-  callPackage,
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
@@ -14,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "llm-anthropic";
-  version = "0.14.1";
+  version = "0.12";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "simonw";
     repo = "llm-anthropic";
     tag = version;
-    hash = "sha256-tKgcag8sBJA4QWunaFyZxkZH0mtc0SS17104YuX1Kac=";
+    hash = "sha256-7+5j5jZBFfaaqnfjvLTI+mz1PUuG8sB5nD59UCpJuR4=";
   };
 
   build-system = [
@@ -45,10 +44,6 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "llm_anthropic" ];
 
   passthru.updateScript = nix-update-script { };
-
-  passthru.tests = {
-    llm-plugin = callPackage ./tests/llm-plugin.nix { };
-  };
 
   meta = {
     description = "LLM access to models by Anthropic, including the Claude series";

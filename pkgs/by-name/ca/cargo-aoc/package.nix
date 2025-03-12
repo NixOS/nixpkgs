@@ -5,12 +5,12 @@
   versionCheckHook,
   nix-update-script,
 }:
-rustPlatform.buildRustPackage (finalAttrs: {
+rustPlatform.buildRustPackage rec {
   pname = "cargo-aoc";
   version = "0.3.8";
 
   src = fetchCrate {
-    inherit (finalAttrs) pname version;
+    inherit pname version;
     hash = "sha256-5CjY91515GeLzmLJiGjfbBfIMPr32EA65X/rriKPWRY=";
   };
 
@@ -33,4 +33,4 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [ defelo ];
     mainProgram = "cargo-aoc";
   };
-})
+}

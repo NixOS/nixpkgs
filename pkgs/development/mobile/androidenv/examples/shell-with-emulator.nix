@@ -20,9 +20,6 @@
   },
 
   config ? pkgs.config,
-  # You probably need to set it to true to express consent.
-  licenseAccepted ?
-    config.android_sdk.accept_license or (builtins.getEnv "NIXPKGS_ACCEPT_ANDROID_SDK_LICENSE" == "1"),
 }:
 
 # Copy this file to your Android project.
@@ -51,7 +48,9 @@ let
 
   # Otherwise, just use the in-tree androidenv:
   androidEnv = pkgs.callPackage ./.. {
-    inherit config pkgs licenseAccepted;
+    inherit config pkgs;
+    # You probably need to uncomment below line to express consent.
+    # licenseAccepted = true;
   };
 
   sdkArgs = {
@@ -98,6 +97,7 @@ pkgs.mkShell rec {
     platformTools
     androidEmulator
     jdk
+    pkgs.android-studio
   ];
 
   LANG = "C.UTF-8";
@@ -196,9 +196,6 @@ pkgs.mkShell rec {
           ];
         }
         ''
-          export ANDROID_USER_HOME=$PWD/.android
-          mkdir -p $ANDROID_USER_HOME
-
           avdmanager delete avd -n testAVD || true
           echo "" | avdmanager create avd --force --name testAVD --package 'system-images;android-35;google_apis;x86_64'
           result=$(avdmanager list avd)

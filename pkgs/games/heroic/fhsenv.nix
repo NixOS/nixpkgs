@@ -31,11 +31,9 @@ buildFHSEnv {
       nettools
       opencl-headers
       p7zip
-      pciutils
       perl
       psmisc
       python3
-      umu-launcher
       unzip
       which
       xorg.xrandr

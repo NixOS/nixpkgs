@@ -13,19 +13,15 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "blueprint-compiler";
-  version = "0.16.0";
+  version = "0.14.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "jwestman";
     repo = "blueprint-compiler";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-FnMQtqy+uejWn3tDeaj92h2x9TzyiK5KdlRm55ObgPg=";
+    hash = "sha256-pkbTxCN7LagIbOtpiUCkh40aHw6uRtalQVFa47waXjU=";
   };
-
-  postPatch = ''
-    patchShebangs docs/collect-sections.py
-  '';
 
   nativeBuildInputs = [
     meson

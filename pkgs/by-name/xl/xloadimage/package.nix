@@ -4,7 +4,6 @@
   fetchurl,
   libX11,
   libXt,
-  autoreconfHook,
 
   libjpeg ? null,
   libpng ? null,
@@ -36,8 +35,6 @@ stdenv.mkDerivation rec {
     sha256 = "17k518vrdrya5c9dqhpmm4g0h2vlkq1iy87sg2ngzygypbli1xvn";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
-
   buildInputs =
     [
       libX11
@@ -58,18 +55,15 @@ stdenv.mkDerivation rec {
   # $SOURCE_DATE_EPOCH, but we want to make sure we don't even call these.
   preConfigure = ''
     substituteInPlace build-info \
-      --replace-fail '[ -x /bin/date ]' 'false' \
-      --replace-fail '[ -x /bin/id ]' 'false' \
-      --replace-fail '[ -x /bin/uname ]' 'false' \
-      --replace-fail '[ -x /usr/bin/id ]' 'false'
+      --replace '[ -x /bin/date ]' 'false' \
+      --replace '[ -x /bin/id ]' 'false' \
+      --replace '[ -x /bin/uname ]' 'false' \
+      --replace '[ -x /usr/bin/id ]' 'false'
 
     chmod +x build-info configure
   '';
 
   enableParallelBuilding = true;
-
-  # creating patch would add more complexity
-  env.CFLAGS = "-Wno-implicit-int";
 
   # NOTE: we're not installing the `uufilter` binary; if needed, the standard
   # `uudecode` tool should work just fine.

@@ -65,27 +65,13 @@ in
             database_path = lib.mkOption {
               default = "/var/lib/osquery/osquery.db";
               readOnly = true;
-              description = ''
-                Path used for the database file.
-
-                ::: {.note}
-                If left as the default value, this directory will be automatically created before the
-                service starts, otherwise you are responsible for ensuring the directory exists with
-                the appropriate ownership and permissions.
-              '';
+              description = "Path used for the database file.";
               type = path;
             };
             logger_path = lib.mkOption {
               default = "/var/log/osquery";
               readOnly = true;
-              description = ''
-                Base directory used for logging.
-
-                ::: {.note}
-                If left as the default value, this directory will be automatically created before the
-                service starts, otherwise you are responsible for ensuring the directory exists with
-                the appropriate ownership and permissions.
-              '';
+              description = "Base directory used for logging.";
               type = path;
             };
             pidfile = lib.mkOption {
@@ -110,8 +96,8 @@ in
       serviceConfig = {
         ExecStart = "${pkgs.osquery}/bin/osqueryd --flagfile ${flagfile}";
         PIDFile = cfg.flags.pidfile;
-        LogsDirectory = lib.mkIf (cfg.flags.logger_path == "/var/log/osquery") [ "osquery" ];
-        StateDirectory = lib.mkIf (cfg.flags.database_path == "/var/lib/osquery/osquery.db") [ "osquery" ];
+        LogsDirectory = cfg.flags.logger_path;
+        StateDirectory = dirname cfg.flags.database_path;
         Restart = "always";
       };
       wantedBy = [ "multi-user.target" ];

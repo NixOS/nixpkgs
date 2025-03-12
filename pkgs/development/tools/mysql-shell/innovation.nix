@@ -114,10 +114,6 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals stdenv.hostPlatform.isLinux [ libtirpc ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.libutil ];
 
-  env = {
-    ${if stdenv.cc.isGNU then "NIX_CFLAGS_COMPILE" else null} = "-Wno-error=maybe-uninitialized";
-  };
-
   preConfigure = ''
     # Build MySQL
     echo "Building mysqlclient mysqlxclient"
@@ -149,7 +145,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "New command line scriptable shell for MySQL";
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [ aaronjheng ];
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "mysqlsh";
   };
 })

@@ -3,6 +3,7 @@
   autoconf,
   automake,
   fetchFromGitHub,
+  fetchpatch,
   gettext,
   lib,
   libiconv,
@@ -14,14 +15,22 @@
 
 stdenv.mkDerivation rec {
   pname = "libmtp";
-  version = "1.1.22";
+  version = "1.1.21";
 
   src = fetchFromGitHub {
     owner = "libmtp";
     repo = "libmtp";
     rev = "libmtp-${builtins.replaceStrings [ "." ] [ "-" ] version}";
-    sha256 = "sha256-hIH6W8qQ6DB4ST7SlFz6CCnLsEGOWgmUb9HoHMNA3wY=";
+    sha256 = "sha256-m9QFVD8udQ3SdGwn276BnIKqGeATA5QuokOK29Ykc1k=";
   };
+
+  patches = [
+    # Backport cross fix.
+    (fetchpatch {
+      url = "https://github.com/libmtp/libmtp/commit/467fa26e6b14c0884b15cf6d191de97e5513fe05.patch";
+      sha256 = "2DrRrdcguJ9su4LxtT6YOjer8gUTxIoHVpk+6M9P4cg=";
+    })
+  ];
 
   outputs = [
     "bin"

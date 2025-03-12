@@ -19,7 +19,6 @@
   blackjax,
   numpyro,
   pytestCheckHook,
-  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -59,15 +58,14 @@ buildPythonPackage rec {
     blackjax
     numpyro
     pytestCheckHook
-    writableTmpDirAsHomeHook
   ];
+
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
 
   disabledTests =
     [
-      # AssertionError: assert (<xarray.DataArray 'yield' ()> Size: 1B\narray(False) & <xarray.DataArray 'yield' ()> Size: 1B\narray(False))
-      # https://github.com/bambinos/bambi/issues/888
-      "test_beta_regression"
-
       # Tests require network access
       "test_alias_equal_to_name"
       "test_average_by"

@@ -877,7 +877,7 @@ in
                                 wantedBy = [ "timers.target" ];
                                 timerConfig = {
                                   OnCalendar = timer snapName;
-                                  Persistent = lib.mkDefault "yes";
+                                  Persistent = "yes";
                                 };
                               };
                             }) snapshotNames);
@@ -907,7 +907,7 @@ in
         after = [ "multi-user.target" ]; # Apparently scrubbing before boot is complete hangs the system? #53583
         timerConfig = {
           OnCalendar = cfgScrub.interval;
-          Persistent = lib.mkDefault "yes";
+          Persistent = "yes";
           RandomizedDelaySec = cfgScrub.randomizedDelaySec;
         };
       };
@@ -927,7 +927,7 @@ in
       };
 
       systemd.timers.zpool-trim.timerConfig = {
-        Persistent = lib.mkDefault "yes";
+        Persistent = "yes";
         RandomizedDelaySec = cfgTrim.randomizedDelaySec;
       };
     })

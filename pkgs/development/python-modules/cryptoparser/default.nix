@@ -8,7 +8,6 @@
   python-dateutil,
   pythonOlder,
   setuptools,
-  setuptools-scm,
   urllib3,
 }:
 
@@ -17,17 +16,19 @@ buildPythonPackage rec {
   version = "1.0.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-bEvhMVcm9sXlfhxUD2K4N10nusgxpGYFJQLtJE1/qok=";
   };
 
-  build-system = [
-    setuptools
-    setuptools-scm
-  ];
+  postPatch = ''
+    substituteInPlace requirements.txt  \
+      --replace-fail "attrs>=20.3.0,<22.0.1" "attrs>=20.3.0"
+  '';
+
+  build-system = [ setuptools ];
 
   dependencies = [
     asn1crypto

@@ -1,10 +1,4 @@
-{ stdenv, lib, mkXfceDerivation, gtk3, libxfce4ui, libxfce4util,
-  withIntrospection ?
-    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
-    && stdenv.hostPlatform.emulatorAvailable buildPackages,
-  buildPackages,
-  gobject-introspection,
-}:
+{ lib, mkXfceDerivation, gobject-introspection, gtk3, libxfce4ui, libxfce4util }:
 
 mkXfceDerivation {
   category = "xfce";
@@ -13,9 +7,7 @@ mkXfceDerivation {
 
   sha256 = "sha256-MeZkDb2QgGMaloO6Nwlj9JmZByepd6ERqpAWqrVv1xw=";
 
-  nativeBuildInputs = lib.optionals withIntrospection [
-    gobject-introspection
-  ];
+  nativeBuildInputs = [ gobject-introspection ];
 
   buildInputs = [ gtk3 libxfce4ui libxfce4util ];
 

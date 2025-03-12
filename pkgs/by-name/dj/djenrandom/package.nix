@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
       with parameterized non uniformities and flexible output formats
     '';
     license = lib.licenses.gpl2Only;
-    # djenrandom uses x86 specific instructions, therefore we can only compile for the x86 architecture
+    # djenrandom uses x86 specific instructions, therefore we can only compile for the x86 architechture
     platforms = lib.platforms.x86;
     maintainers = with lib.maintainers; [
       orichter

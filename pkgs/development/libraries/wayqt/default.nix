@@ -2,7 +2,7 @@
   stdenv,
   lib,
   fetchFromGitLab,
-  replaceVars,
+  substituteAll,
   meson,
   pkg-config,
   qttools,
@@ -25,7 +25,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     # qmake get qtbase's path, but wayqt need qtwayland
-    (replaceVars ./fix-qtwayland-header-path.diff {
+    (substituteAll {
+      src = ./fix-qtwayland-header-path.diff;
       qtWaylandPath = "${qtwayland}/include";
     })
   ];

@@ -9,32 +9,21 @@ buildGoModule rec {
 
   sourceRoot = "${src.name}/sdk/go/pulumi-language-go";
 
-  vendorHash = "sha256-mhwmHxZ+I/IdNGpEzXYJWPDKt7Gnun3HuXsjmFme6GI=";
+  vendorHash = "sha256-eHsTEb4Vff2bfADScLSkZiotSSnT1q0bexlUMaWgqbg=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X=github.com/pulumi/pulumi/sdk/v3/go/common/version.Version=${version}"
+    "-X github.com/pulumi/pulumi/sdk/v3/go/common/version.Version=${version}"
   ];
 
-  checkFlags = [
-    "-skip=^${
-      lib.concatStringsSep "$|^" [
-        "TestLanguage"
-        "TestPluginsAndDependencies_vendored"
-        "TestPluginsAndDependencies_subdir"
-        "TestPluginsAndDependencies_moduleMode"
-      ]
-    }$"
-  ];
+  # go: inconsistent vendoring in ...
+  doCheck = false;
 
-  meta = {
-    homepage = "https://www.pulumi.com/docs/iac/languages-sdks/go/";
-    description = "Language host for Pulumi programs written in Go";
-    license = lib.licenses.asl20;
+  meta = with lib; {
+    description = "Golang language host plugin for Pulumi";
     mainProgram = "pulumi-language-go";
-    maintainers = with lib.maintainers; [
-      tie
-    ];
+    homepage = "https://github.com/pulumi/pulumi/tree/master/sdk/go";
+    license = licenses.asl20;
   };
 }

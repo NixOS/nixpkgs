@@ -26,8 +26,14 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-ggePJH2kKJ17aOWRKUnLyolIdSzlc6Axf5Iw74iFfek=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-hVEpTNTXwOQoxlhOewUvHyfBh+APnx8Fox90CmdMRQ4=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "bevy_egui-0.21.0" = "sha256-hu55tZQppw1NajwqIsYsw6de0IAwQwgra3D9OFzSSLc=";
+      "bones_asset-0.3.0" = "sha256-1UeOXW6O/gMQBBUnHxRreJgmiUTPC5SJB+uLn9V8aa4=";
+      "kira-0.8.5" = "sha256-z4R5aIaoRQQprL6JsVrFI69rwTOsW5OH01+jORS+hBQ=";
+    };
+  };
 
   nativeBuildInputs = [
     makeWrapper

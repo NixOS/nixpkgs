@@ -52,9 +52,6 @@ buildPythonPackage rec {
       asl20 # or
       upl
     ];
-    maintainers = with lib.maintainers; [
-      adamcstephens
-      ilian
-    ];
+    maintainers = with lib.maintainers; [ ilian ];
   };
 }

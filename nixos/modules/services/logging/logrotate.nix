@@ -294,7 +294,7 @@ in
         UMask = "0027";
       } // lib.optionalAttrs (!cfg.allowNetworking) {
         PrivateNetwork = true; # e.g. mail delivery
-        RestrictAddressFamilies = [ "AF_UNIX" ];
+        RestrictAddressFamilies = "none";
       };
     };
     systemd.services.logrotate-checkconf = {

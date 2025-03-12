@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, replaceVars
+, substituteAll
 , fetchurl
 , pkg-config
 , gettext
@@ -53,7 +53,8 @@
 
 let
 
-  gtkCleanImmodulesCache = replaceVars ./hooks/clean-immodules-cache.sh {
+  gtkCleanImmodulesCache = substituteAll {
+    src = ./hooks/clean-immodules-cache.sh;
     gtk_module_path = "gtk-3.0";
     gtk_binary_version = "3.0.0";
   };
@@ -62,7 +63,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gtk+3";
-  version = "3.24.48";
+  version = "3.24.43";
 
   outputs = [ "out" "dev" ] ++ lib.optional withIntrospection "devdoc";
   outputBin = "dev";
@@ -75,8 +76,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = let
     inherit (finalAttrs) version;
   in fetchurl {
-    url = "mirror://gnome/sources/gtk/${lib.versions.majorMinor version}/gtk-${version}.tar.xz";
-    hash = "sha256-0Qzp6p30TBAW2NFyHznlXT1gf8+4UzSuwNI2zcmnBVY=";
+    url = "mirror://gnome/sources/gtk+/${lib.versions.majorMinor version}/gtk+-${version}.tar.xz";
+    hash = "sha256-fgTwZIUVA0uAa3SuXXdNh8/7GiqWxGjLW+R21Rvy88c=";
   };
 
   patches = [
@@ -232,7 +233,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = "gtk";
+      packageName = "gtk+";
       attrPath = "gtk3";
       freeze = true;
     };

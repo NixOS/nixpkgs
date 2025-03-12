@@ -33,25 +33,20 @@ _separateDebugInfo() {
 
         # Extract the debug info.
         echo "separating debug info from $i (build ID $id)"
-
-        destDir=$dst/${id:0:2}
-        destFile=$dst/${id:0:2}/${id:2}.debug
-
-        mkdir -p "$destDir"
-
-        if [ -f "$destFile" ]; then
-            echo "separate-debug-info: warning: multiple files with build id $id found, overwriting"
-        fi
+        mkdir -p "$dst/${id:0:2}"
 
         # This may fail, e.g. if the binary is for a different
         # architecture than we're building for.  (This happens with
         # firmware blobs in QEMU.)
-        if $OBJCOPY --only-keep-debug "$i" "$destFile"; then
-            # If we succeeded, also a create a symlink <original-name>.debug.
+        (
+            if [ -f "$dst/${id:0:2}/${id:2}.debug" ]
+            then
+                echo "separate-debug-info: warning: multiple files with build id $id found, overwriting"
+            fi
+            $OBJCOPY --only-keep-debug "$i" "$dst/${id:0:2}/${id:2}.debug"
+
+            # Also a create a symlink <original-name>.debug.
             ln -sfn ".build-id/${id:0:2}/${id:2}.debug" "$dst/../$(basename "$i")"
-        else
-            # If we failed, try to clean up unnecessary directories
-            rmdir -p "$dst/${id:0:2}" --ignore-fail-on-non-empty
-        fi
+        ) || rmdir -p "$dst/${id:0:2}"
     done < <(find "$prefix" -type f -print0 | sort -z)
 }

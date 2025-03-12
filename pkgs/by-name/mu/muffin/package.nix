@@ -15,7 +15,6 @@
   json-glib,
   libcanberra,
   libdrm,
-  libgbm,
   libgnomekbd,
   libgudev,
   libinput,
@@ -25,7 +24,7 @@
   libXdamage,
   libxkbcommon,
   libXtst,
-  mesa-gl-headers,
+  mesa,
   meson,
   ninja,
   pipewire,
@@ -85,7 +84,6 @@ stdenv.mkDerivation rec {
     gtk3
     libcanberra
     libdrm
-    libgbm
     libgnomekbd
     libgudev
     libinput
@@ -106,7 +104,7 @@ stdenv.mkDerivation rec {
     json-glib
     libXtst
     graphene
-    mesa-gl-headers
+    mesa # actually uses eglmesaext
   ];
 
   mesonFlags = [

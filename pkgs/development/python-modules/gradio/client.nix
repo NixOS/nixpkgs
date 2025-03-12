@@ -4,13 +4,12 @@
   buildPythonPackage,
   fetchFromGitHub,
   nix-update-script,
-
-  # build-system
+  pythonOlder,
+  # pyproject
   hatchling,
   hatch-requirements-txt,
   hatch-fancy-pypi-readme,
-
-  # dependencies
+  # runtime
   setuptools,
   fsspec,
   httpx,
@@ -18,22 +17,22 @@
   packaging,
   typing-extensions,
   websockets,
-
-  # tests
-  gradio,
-  pydub,
-  pytest-asyncio,
+  # checkInputs
   pytestCheckHook,
+  pytest-asyncio,
+  pydub,
   rich,
-  safehttpx,
   tomlkit,
-  writableTmpDirAsHomeHook,
+  gradio,
+  safehttpx,
 }:
 
 buildPythonPackage rec {
   pname = "gradio-client";
-  version = "1.7.2";
+  version = "1.5.3";
   pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   # no tests on pypi
   src = fetchFromGitHub {
@@ -42,10 +41,11 @@ buildPythonPackage rec {
     # not to be confused with @gradio/client@${version}
     tag = "gradio_client@${version}";
     sparseCheckout = [ "client/python" ];
-    hash = "sha256-9hEls6f3aBNg7W2RGhu68mJSGlUScpNqMGsdHxTGyRY=";
+    hash = "sha256-u4GQYtCeAMDqRRbZGtjfqIHwuHyxUpw6kRE75SJMALg=";
   };
-
-  sourceRoot = "${src.name}/client/python";
+  prePatch = ''
+    cd client/python
+  '';
 
   # upstream adds upper constraints because they can, not because the need to
   # https://github.com/gradio-app/gradio/pull/4885
@@ -71,20 +71,20 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    gradio.sans-reverse-dependencies
-    pydub
-    pytest-asyncio
     pytestCheckHook
+    pytest-asyncio
+    pydub
     rich
-    safehttpx
     tomlkit
-    writableTmpDirAsHomeHook
+    safehttpx
+    gradio.sans-reverse-dependencies
   ];
   # ensuring we don't propagate this intermediate build
   disallowedReferences = [ gradio.sans-reverse-dependencies ];
 
   # Add a pytest hook skipping tests that access network, marking them as "Expected fail" (xfail).
   preCheck = ''
+    export HOME=$TMPDIR
     cat ${./conftest-skip-network-errors.py} >> test/conftest.py
   '';
 

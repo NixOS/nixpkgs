@@ -3,9 +3,8 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
   pythonOlder,
-  replaceVars,
+  substituteAll,
 
   # build-system
   setuptools,
@@ -44,7 +43,7 @@
 
 buildPythonPackage rec {
   pname = "django";
-  version = "5.1.7";
+  version = "5.1.6";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -53,34 +52,23 @@ buildPythonPackage rec {
     owner = "django";
     repo = "django";
     rev = "refs/tags/${version}";
-    hash = "sha256-BxhHqWpTZLcx46RofnXzZ5nj4xDPcj7hNng9ppUN5Hw=";
+    hash = "sha256-eqyRiMNMmhg08Pga+AGnhGXfUoTMOuIHEPOEEGboIPE=";
   };
 
   patches =
     [
-      (replaceVars ./django_5_set_zoneinfo_dir.patch {
+      (substituteAll {
+        src = ./django_5_set_zoneinfo_dir.patch;
         zoneinfo = tzdata + "/share/zoneinfo";
       })
       # prevent tests from messing with our pythonpath
       ./django_5_tests_pythonpath.patch
-      # disable test that expects timezone issues
+      # disable test that excpects timezone issues
       ./django_5_disable_failing_tests.patch
-
-      # fix filename length limit tests on bcachefs
-      # FIXME: remove in 5.2
-      (fetchpatch {
-        url = "https://github.com/django/django/commit/12f4f95405c7857cbf2f4bf4d0261154aac31676.patch";
-        hash = "sha256-+K20/V8sh036Ox9U7CSPgfxue7f28Sdhr3MsB7erVOk=";
-      })
-
-      # fix regression which breaks django-import-export
-      # https://github.com/django-import-export/django-import-export/pull/2045
-      # https://github.com/django/django/pull/19233
-      # manual backport because commit doesn't apply on stable cleanly
-      ./Restored-single_object-rgument-to-LogEntry-objects-log_actions.diff
     ]
     ++ lib.optionals withGdal [
-      (replaceVars ./django_5_set_geos_gdal_lib.patch {
+      (substituteAll {
+        src = ./django_5_set_geos_gdal_lib.patch;
         geos = geos;
         gdal = gdal;
         extension = stdenv.hostPlatform.extensions.sharedLibrary;

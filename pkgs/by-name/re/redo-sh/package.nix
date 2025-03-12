@@ -7,36 +7,31 @@
 }:
 
 stdenv.mkDerivation {
+  version = "4.0.4";
   pname = "redo-sh";
-  version = "4.0.6";
 
   src = fetchurl {
-    url = "https://web.archive.org/web/20250225235353/http://news.dieweltistgarnichtso.net/bin/archives/redo-sh.tar.gz";
-    hash = "sha256-pDhCnMelCXK/Pp3jPXZog7HLBTgrsCvX4LAVapYvxl8=";
+    url = "http://news.dieweltistgarnichtso.net/bin/archives/redo-sh.tar.gz";
+    sha256 = "0d3hz3vy5qmjr9r4f8a5cx9hikpzs8h8f0fsl3dpbialf4wck24g";
   };
 
   nativeBuildInputs = [ makeWrapper ];
 
   sourceRoot = ".";
-
   installPhase = ''
-    runHook preInstall
-
     mkdir -p "$out/share"
     mv man "$out/share"
     mv bin "$out"
     for p in $out/bin/*; do
       wrapProgram "$p" --prefix PATH : "$out/bin:${coreutils}/bin"
     done
-
-    runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Redo implementation in Bourne Shell";
     homepage = "http://news.dieweltistgarnichtso.net/bin/redo-sh.html";
-    license = lib.licenses.agpl3Plus;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ sternenseemann ];
+    license = licenses.agpl3Plus;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ sternenseemann ];
   };
 }

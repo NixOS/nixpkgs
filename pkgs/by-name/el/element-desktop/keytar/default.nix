@@ -10,17 +10,10 @@
   xcbuild,
   fetchNpmDeps,
   npmHooks,
-  electron,
-  runCommand,
 }:
 
 let
   pinData = lib.importJSON ./pin.json;
-
-  electron-headers = runCommand "electron-headers" { } ''
-    mkdir -p $out
-    tar -C $out --strip-components=1 -xvf ${electron.headers}
-  '';
 
 in
 stdenv.mkDerivation rec {
@@ -55,10 +48,8 @@ stdenv.mkDerivation rec {
     export -f pkg-config
   '';
 
+  # https://nodejs.org/api/os.html#osarch
   npmFlags = [
-    # Make sure the native modules are built against electron's ABI
-    "--nodedir=${electron-headers}"
-    # https://nodejs.org/api/os.html#osarch
     "--arch=${
       if stdenv.hostPlatform.parsed.cpu.name == "i686" then
         "ia32"

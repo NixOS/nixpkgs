@@ -41,7 +41,7 @@ rustPlatform.buildRustPackage rec {
   ];
   cargoTestFlags = cargoBuildFlags;
 
-  # Skip tests that cannot be executed in sandbox (operation not permitted)
+  # Skip tests that cannot be executed in sandbox (operation not permited)
   checkFlags = [
     "--skip=test_fmt_dir"
     "--skip=test_fmt_files"

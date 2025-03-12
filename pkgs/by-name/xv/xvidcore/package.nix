@@ -31,12 +31,7 @@ stdenv.mkDerivation rec {
     [ ]
     # Undocumented darwin hack (assembly is probably disabled due to an
     # issue with nasm, however yasm is now used)
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "--enable-macosx_module"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isFreeBSD) [
-      "--disable-assembly"
-    ];
+    ++ lib.optional stdenv.hostPlatform.isDarwin "--enable-macosx_module --disable-assembly";
 
   nativeBuildInputs = [ ] ++ lib.optional (!stdenv.hostPlatform.isDarwin) yasm;
 
@@ -55,7 +50,7 @@ stdenv.mkDerivation rec {
     rm $out/lib/*.a
   '';
 
-  # Dependants of xvidcore don't know to look in bin for dependencies. Link them
+  # Dependants of xvidcore don't know to look in bin for dependecies. Link them
   # in lib so other depedants of xvidcore can find the dlls.
   postFixup = lib.optionalString stdenv.hostPlatform.isMinGW ''
     ln -s $out/bin/*.dll $out/lib

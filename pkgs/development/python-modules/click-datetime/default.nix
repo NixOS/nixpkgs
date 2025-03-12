@@ -1,27 +1,23 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  poetry-core,
+  fetchFromGitHub,
   click,
 }:
 
 buildPythonPackage rec {
   pname = "click-datetime";
-  version = "0.4.0";
-  pyproject = true;
+  version = "0.2.0";
+  format = "setuptools";
 
-  src = fetchPypi {
-    pname = "click_datetime";
-    inherit version;
-    hash = "sha256-nzXtP6sT9VMiHOjFqJXlGF1zYJk8Ud1/hii5tPY2kws=";
+  src = fetchFromGitHub {
+    owner = "click-contrib";
+    repo = pname;
+    rev = version;
+    sha256 = "1yxagk4wd2h77nxml19bn2y26fv2xw2n9g981ls8mjy0g51ms3gh";
   };
 
-  build-system = [ poetry-core ];
-
-  pythonRemoveDeps = [ "wheel" ];
-
-  dependencies = [ click ];
+  propagatedBuildInputs = [ click ];
 
   # no tests
   doCheck = false;

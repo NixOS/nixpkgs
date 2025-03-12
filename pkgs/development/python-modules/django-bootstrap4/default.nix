@@ -4,7 +4,8 @@
   fetchFromGitHub,
 
   # build-system
-  hatchling,
+  setuptools,
+  setuptools-scm,
 
   # non-propagates
   django,
@@ -13,23 +14,27 @@
   beautifulsoup4,
 
   # tests
+  python,
   pytest-django,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "django-bootstrap4";
-  version = "25.1";
+  version = "24.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zostera";
     repo = "django-bootstrap4";
     tag = "v${version}";
-    hash = "sha256-WIz7T2f3xvsT2rSq1MUFwHpvzgHyLgTRpzb9z98sUmo=";
+    hash = "sha256-9URZ+10GVX171Zht49UQEDkVOZ7LfOtUvapLydzNAlk=";
   };
 
-  build-system = [ hatchling ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   dependencies = [ beautifulsoup4 ];
 

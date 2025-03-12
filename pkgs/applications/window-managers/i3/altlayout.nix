@@ -9,9 +9,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "1h0phf3s6ljffxw0bs73k041wildaz01h37iv5mxhami41wrh4qf";
   };
 
-  pythonRemoveDeps = [ "enum-compat" ];
-
-  pythonPath = with python3Packages; [ i3ipc docopt ];
+  pythonPath = with python3Packages; [ enum-compat i3ipc docopt ];
 
   doCheck = false;
 

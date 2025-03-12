@@ -13,7 +13,6 @@
   nodejs-slim,
   prefetch-yarn-deps,
   fixup-yarn-lock,
-  diffutils,
   yarn,
   makeSetupHook,
   cacert,
@@ -170,11 +169,6 @@ in
       yarn
       fixup-yarn-lock
     ];
-    substitutions = {
-      # Specify `diff` by abspath to ensure that the user's build
-      # inputs do not cause us to find the wrong binaries.
-      diff = "${diffutils}/bin/diff";
-    };
     meta = {
       description = "Install nodejs dependencies from an offline yarn cache produced by fetchYarnDeps";
     };

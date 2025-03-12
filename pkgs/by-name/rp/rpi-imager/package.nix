@@ -7,23 +7,22 @@
   libarchive,
   nix-update-script,
   pkg-config,
-  qt6,
+  qt5,
   testers,
   util-linux,
   xz,
-  gnutls,
   enableTelemetry ? false,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rpi-imager";
-  version = "1.9.0";
+  version = "1.8.5";
 
   src = fetchFromGitHub {
     owner = "raspberrypi";
     repo = "rpi-imager";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7rkoOKG0yMSIgQjqBBFUMgX/4szHn2NXoBR+5PnKlH4=";
+    hash = "sha256-JrotKMyAgQO3Y5RsFAar9N5/wDpWiBcy8RfvBWDiJMs=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/src";
@@ -33,16 +32,10 @@ stdenv.mkDerivation (finalAttrs: {
   # This patch removes the check.
   patches = [ ./lsblkCheckFix.patch ];
 
-  # avoid duplicate path prefixes
-  postPatch = ''
-    substituteInPlace dependencies/xz-5.6.2/CMakeLists.txt \
-      --replace-fail '\''${D}/' ""
-  '';
-
   nativeBuildInputs = [
     cmake
     pkg-config
-    qt6.wrapQtAppsHook
+    qt5.wrapQtAppsHook
     util-linux
   ];
 
@@ -50,15 +43,16 @@ stdenv.mkDerivation (finalAttrs: {
     [
       curl
       libarchive
-      qt6.qtbase
-      qt6.qtdeclarative
-      qt6.qtsvg
-      qt6.qttools
+      qt5.qtbase
+      qt5.qtdeclarative
+      qt5.qtgraphicaleffects
+      qt5.qtquickcontrols2
+      qt5.qtsvg
+      qt5.qttools
       xz
-      gnutls
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
-      qt6.qtwayland
+      qt5.qtwayland
     ];
 
   # Disable telemetry and update check.
@@ -75,17 +69,17 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Raspberry Pi Imaging Utility";
     homepage = "https://github.com/raspberrypi/rpi-imager/";
     changelog = "https://github.com/raspberrypi/rpi-imager/releases/tag/v${finalAttrs.version}";
-    license = lib.licenses.asl20;
+    license = licenses.asl20;
     mainProgram = "rpi-imager";
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       ymarkus
       anthonyroussel
     ];
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
     # does not build on darwin
     broken = stdenv.hostPlatform.isDarwin;
   };

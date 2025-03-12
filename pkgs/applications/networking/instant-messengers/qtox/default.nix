@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation rec {
   pname = "qtox";
-  version = "1.18.2";
+  version = "1.18.0";
 
   src = fetchFromGitHub {
     owner = "TokTok";
     repo = "qTox";
     tag = "v${version}";
-    hash = "sha256-NPJ1tBIcM4zR5izsoiydUO2+cEuWOdWAf2xte7bwOxg=";
+    hash = "sha256-UgUlWeFrNoNR1ZwobfNLmDBn9/Aw4LUMeSgIfrq/uqo=";
   };
 
   buildInputs = [

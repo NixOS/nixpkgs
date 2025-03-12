@@ -950,9 +950,7 @@ dependencies = [
  "comrak",
  "driver",
  "opener",
- "pretty",
  "printer",
- "url",
 ]
 
 [[package]]
@@ -2636,7 +2634,6 @@ version = "0.1.0"
 dependencies = [
  "askama_escape",
  "pretty",
- "url",
 ]
 
 [[package]]

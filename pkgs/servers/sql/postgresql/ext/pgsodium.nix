@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  bash,
   libsodium,
   postgresql,
   postgresqlTestExtension,
@@ -21,7 +20,6 @@ buildPostgresqlExtension (finalAttrs: {
   };
 
   buildInputs = [
-    bash # required for patchShebangs
     libsodium
   ];
 

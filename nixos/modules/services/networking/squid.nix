@@ -67,7 +67,7 @@ let
     http_access deny to_localhost
 
     # Application logs to syslog, access and store logs have specific files
-    cache_log       stdio:/var/log/squid/cache.log
+    cache_log       syslog
     access_log      stdio:/var/log/squid/access.log
     cache_store_log stdio:/var/log/squid/store.log
 

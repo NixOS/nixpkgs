@@ -14,11 +14,11 @@
 # or cddl/lib/Makefile
 let
   libs = [
-    # Not really "zfs" libraries, they're solaris compatibility libraries
+    # Not really "zfs" libraries, they're solaris compatiblity libraries
     "libspl"
     "libumem"
 
-    # Libraries with no dependencies here except libumem and libspl
+    # Libraires with no dependencies here execpt libumem and libspl
     "libavl"
     "libicp"
     "libnvpair"
@@ -61,7 +61,7 @@ mkDerivation {
   '';
 
   # If we don't specify an object directory then
-  # make will try to put openzfs objects in nonexistent directories.
+  # make will try to put openzfs objects in nonexistant directories.
   # This one seems to work
   preBuild =
     ''

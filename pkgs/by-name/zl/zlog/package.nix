@@ -2,28 +2,40 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  cmake,
+  fetchpatch,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
+  version = "1.2.17";
   pname = "zlog";
-  version = "1.2.18";
 
   src = fetchFromGitHub {
     owner = "HardySimpson";
-    repo = "zlog";
-    tag = finalAttrs.version;
-    hash = "sha256-79yyOGKgqUR1KI2+ngZd7jfVcz4Dw1IxaYfBJyjsxYc=";
+    repo = pname;
+    rev = version;
+    sha256 = "sha256-ckpDMRLxObpl8N539DC5u2bPpmD7jM+KugurUfta6tg=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  patches = [
+    (fetchpatch {
+      name = "CVE-2024-22857.patch";
+      url = "https://github.com/HardySimpson/zlog/commit/c47f781a9f1e9604f5201e27d046d925d0d48ac4.patch";
+      hash = "sha256-3FAAHJ2R/OpNpErWXptjEh0x370/jzvK2VhuUuyaOjE=";
+    })
+  ];
 
-  meta = {
+  makeFlags = [ "PREFIX=${placeholder "out"}" ];
+
+  preBuild = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    makeFlagsArray+=(CFLAGS="-Wno-pointer-to-int-cast -Wno-newline-eof")
+  '';
+
+  meta = with lib; {
     description = "Reliable, high-performance, thread safe, flexible, clear-model, pure C logging library";
     homepage = "https://hardysimpson.github.io/zlog/";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ matthiasbeyer ];
+    license = licenses.lgpl21;
+    maintainers = [ maintainers.matthiasbeyer ];
     mainProgram = "zlog-chk-conf";
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
-})
+}

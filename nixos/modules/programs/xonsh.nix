@@ -6,7 +6,6 @@ let
 
   cfg = config.programs.xonsh;
   package = cfg.package.override { inherit (cfg) extraPackages; };
-  bashCompletionPath = "${cfg.bashCompletion.package}/share/bash-completion/bash_completion";
 in
 
 {
@@ -24,38 +23,29 @@ in
       };
 
       package = lib.mkPackageOption pkgs "xonsh" {
-        extraDescription = ''
-          The argument `extraPackages` of this package will be overridden by
-          the option `programs.xonsh.extraPackages`.
-        '';
+        example = "pkgs.xonsh.override { extraPackages = ps: [ ps.requests ]; }";
       };
 
       config = lib.mkOption {
         default = "";
-        description = ''
-          Extra text added to the end of `/etc/xonsh/xonshrc`,
-          the system-wide control file for xonsh.
-        '';
+        description = "Control file to customize your shell behavior.";
         type = lib.types.lines;
       };
 
       extraPackages = lib.mkOption {
         default = (ps: [ ]);
-        defaultText = lib.literalExpression "ps: [ ]";
-        example = lib.literalExpression ''
-          ps: with ps; [ numpy xonsh.xontribs.xontrib-vox ]
-        '';
         type = with lib.types; coercedTo (listOf lib.types.package) (v: (_: v)) (functionTo (listOf lib.types.package));
         description = ''
-          Xontribs and extra Python packages to be available in xonsh.
-        '';
-      };
+          Add the specified extra packages to the xonsh package.
+          Preferred over using `programs.xonsh.package` as it composes with `programs.xonsh.xontribs`.
 
-      bashCompletion = {
-        enable = lib.mkEnableOption "bash completions for xonsh" // {
-          default = true;
-        };
-        package = lib.mkPackageOption pkgs "bash-completion" { };
+          Take care in using this option along with manually defining the package
+          option above, as the two can result in conflicting sets of build dependencies.
+          This option assumes that the package option has an overridable argument
+          called `extraPackages`, so if you override the package option but also
+          intend to use this option, be sure that your resulting package still honors
+          the necessary option.
+        '';
       };
     };
 
@@ -85,8 +75,6 @@ in
           if _ls_alias is not None:
               aliases['ls'] = _ls_alias
           del _ls_alias
-
-      ${lib.optionalString cfg.bashCompletion.enable "$BASH_COMPLETIONS = '${bashCompletionPath}'"}
 
       ${cfg.config}
     '';

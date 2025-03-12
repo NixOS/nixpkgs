@@ -6,9 +6,9 @@
   cstruct,
   cstruct-lwt,
   mirage-net,
-  mirage-mtime,
-  mirage-crypto-rng,
-  mirage-sleep,
+  mirage-clock,
+  mirage-crypto-rng-mirage,
+  mirage-time,
   macaddr,
   macaddr-cstruct,
   fmt,
@@ -22,8 +22,10 @@
   mirage-flow,
   mirage-vnetif,
   pcap-format,
+  mirage-clock-unix,
   arp,
   ipaddr-cstruct,
+  mirage-crypto-rng,
   lru,
   metrics,
   withFreestanding ? false,
@@ -32,11 +34,11 @@
 
 buildDunePackage rec {
   pname = "tcpip";
-  version = "9.0.0";
+  version = "8.2.0";
 
   src = fetchurl {
     url = "https://github.com/mirage/mirage-${pname}/releases/download/v${version}/${pname}-${version}.tbz";
-    hash = "sha256-WTd+01kIDY2pSuyRR0pTO62VXBK+eYJ77IU8y0ltZZo=";
+    hash = "sha256-kW5oirqJdnbERNuBKfSWOtc5+NG+Yx2eAJxiKLS31u0=";
   };
 
   nativeBuildInputs = [
@@ -48,9 +50,9 @@ buildDunePackage rec {
       cstruct
       cstruct-lwt
       mirage-net
-      mirage-mtime
-      mirage-crypto-rng
-      mirage-sleep
+      mirage-clock
+      mirage-crypto-rng-mirage
+      mirage-time
       ipaddr-cstruct
       macaddr
       macaddr-cstruct
@@ -73,8 +75,11 @@ buildDunePackage rec {
   doCheck = true;
   checkInputs = [
     alcotest
+    mirage-crypto-rng
+    mirage-flow
     mirage-vnetif
     pcap-format
+    mirage-clock-unix
   ];
   __darwinAllowLocalNetworking = true;
 

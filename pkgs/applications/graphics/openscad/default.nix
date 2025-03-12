@@ -178,6 +178,7 @@ mkDerivation rec {
     maintainers = with lib.maintainers; [
       bjornfor
       raskin
+      gebner
     ];
     mainProgram = "openscad";
   };

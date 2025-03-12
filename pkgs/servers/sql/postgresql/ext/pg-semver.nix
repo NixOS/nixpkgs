@@ -19,6 +19,7 @@ buildPostgresqlExtension (finalAttrs: {
   };
 
   passthru.tests = {
+    version = testers.testVersion { package = finalAttrs.finalPackage; };
     extension = postgresqlTestExtension {
       inherit (finalAttrs) finalPackage;
       sql = "CREATE EXTENSION semver;";

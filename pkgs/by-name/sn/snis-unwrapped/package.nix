@@ -8,8 +8,7 @@
   libbsd,
   libpng,
   libvorbis,
-  libX11,
-  sdl2-compat,
+  SDL2,
   makeWrapper,
   lua5_2,
   glew,
@@ -21,19 +20,17 @@
   libopus,
   openscad,
   libxcrypt-legacy,
-  curlMinimal,
-  nix-update-script,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
-  pname = "snis";
-  version = "1.0.2";
+stdenv.mkDerivation {
+  pname = "snis_launcher";
+  version = "2024-08-02";
 
   src = fetchFromGitHub {
     owner = "smcameron";
     repo = "space-nerds-in-space";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-K7sZUBsR+sd7fUzDnK7C/9Q8+A2XPqUg3llyxdOo/RQ=";
+    rev = "1dadfca31513561cf95f1229af34341bd1a1bb2a";
+    sha256 = "sha256-Qi4lbq1rsayMdRWMAF44K2DNtlZxNUyjnO6kXCW5QhA=";
   };
 
   enableParallelBuilding = true;
@@ -62,8 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
     libbsd
     libpng
     libvorbis
-    libX11
-    sdl2-compat
+    SDL2
     lua5_2
     glew
     openssl
@@ -72,7 +68,6 @@ stdenv.mkDerivation (finalAttrs: {
     alsa-utils
     libopus
     libxcrypt-legacy
-    curlMinimal
   ];
 
   makeFlags = [ "PREFIX=$(out)" ];
@@ -81,14 +76,11 @@ stdenv.mkDerivation (finalAttrs: {
     "models"
   ];
 
-  passthru.updateScript = nix-update-script { };
-
   meta = with lib; {
     description = "Space Nerds In Space, a multi-player spaceship bridge simulator";
     homepage = "https://smcameron.github.io/space-nerds-in-space/";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ alyaeanyx ];
     platforms = platforms.linux;
-    mainProgram = "snis_launcher";
   };
-})
+}

@@ -111,7 +111,6 @@ let
       base_dir = ${baseDir}
       protocols = ${concatStringsSep " " cfg.protocols}
       sendmail_path = /run/wrappers/bin/sendmail
-      mail_plugin_dir = /run/current-system/sw/lib/dovecot/modules
       # defining mail_plugins must be done before the first protocol {} filter because of https://doc.dovecot.org/configuration_manual/config_file/config_file_syntax/#variable-expansion
       mail_plugins = $mail_plugins ${concatStringsSep " " cfg.mailPlugins.globally.enable}
     ''
@@ -208,6 +207,13 @@ let
     cfg.extraConfig
   ];
 
+  modulesDir = pkgs.symlinkJoin {
+    name = "dovecot-modules";
+    paths = map (pkg: "${pkg}/lib/dovecot") (
+      [ dovecotPkg ] ++ map (module: module.override { dovecot = dovecotPkg; }) cfg.modules
+    );
+  };
+
   mailboxConfig =
     mailbox:
     ''
@@ -274,11 +280,6 @@ in
 {
   imports = [
     (mkRemovedOptionModule [ "services" "dovecot2" "package" ] "")
-    (mkRemovedOptionModule [
-      "services"
-      "dovecot2"
-      "modules"
-    ] "Now need to use `environment.systemPackages` to load additional Dovecot modules")
     (mkRenamedOptionModule
       [ "services" "dovecot2" "sieveScripts" ]
       [ "services" "dovecot2" "sieve" "scripts" ]
@@ -407,6 +408,17 @@ in
       // {
         default = true;
       };
+
+    modules = mkOption {
+      type = types.listOf types.package;
+      default = [ ];
+      example = literalExpression "[ pkgs.dovecot_pigeonhole ]";
+      description = ''
+        Symlinks the contents of lib/dovecot of every given package into
+        /etc/dovecot/modules. This will make the given modules available
+        if a dovecot package with the module_dir patch applied is being used.
+      '';
+    };
 
     sslCACert = mkOption {
       type = types.nullOr types.str;
@@ -690,6 +702,7 @@ in
         ${cfg.mailGroup} = { };
       };
 
+    environment.etc."dovecot/modules".source = modulesDir;
     environment.etc."dovecot/dovecot.conf".source = cfg.configFile;
 
     systemd.services.dovecot2 = {
@@ -699,6 +712,7 @@ in
       wantedBy = [ "multi-user.target" ];
       restartTriggers = [
         cfg.configFile
+        modulesDir
       ];
 
       startLimitIntervalSec = 60; # 1 min

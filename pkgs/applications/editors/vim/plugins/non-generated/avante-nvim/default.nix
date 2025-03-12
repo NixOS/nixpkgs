@@ -8,28 +8,24 @@
   stdenv,
   vimPlugins,
   vimUtils,
-  makeWrapper,
-  pkgs,
 }:
 let
-  version = "0.0.23";
+  version = "0.0.18";
   src = fetchFromGitHub {
     owner = "yetone";
     repo = "avante.nvim";
     tag = "v${version}";
-    hash = "sha256-Ud4NkJH7hze5796KjVe5Nj9DzxwQkDQErCJDDiBzAIY=";
+    hash = "sha256-HSXqD+bC0sdvNbmV8hIU99cLrVyIMAzbWf5cqUpIhZU=";
   };
   avante-nvim-lib = rustPlatform.buildRustPackage {
     pname = "avante-nvim-lib";
     inherit version src;
 
     useFetchCargoVendor = true;
-    cargoHash = "sha256-pmnMoNdaIR0i+4kwW3cf01vDQo39QakTCEG9AXA86ck=";
+    cargoHash = "sha256-XDxWeEbsDf4r346OkQkZPmYLANgtydspPk1uLrnvrnY=";
 
     nativeBuildInputs = [
       pkg-config
-      makeWrapper
-      pkgs.perl
     ];
 
     buildInputs = [
@@ -53,7 +49,6 @@ vimUtils.buildVimPlugin {
 
   dependencies = with vimPlugins; [
     dressing-nvim
-    img-clip-nvim
     nui-nvim
     nvim-treesitter
     plenary-nvim
@@ -68,7 +63,6 @@ vimUtils.buildVimPlugin {
       ln -s ${avante-nvim-lib}/lib/libavante_repo_map${ext} $out/build/avante_repo_map${ext}
       ln -s ${avante-nvim-lib}/lib/libavante_templates${ext} $out/build/avante_templates${ext}
       ln -s ${avante-nvim-lib}/lib/libavante_tokenizers${ext} $out/build/avante_tokenizers${ext}
-      ln -s ${avante-nvim-lib}/lib/libavante_html2md${ext} $out/build/avante_html2md${ext}
     '';
 
   passthru = {
@@ -93,7 +87,6 @@ vimUtils.buildVimPlugin {
     maintainers = with lib.maintainers; [
       ttrei
       aarnphm
-      jackcres
     ];
   };
 }

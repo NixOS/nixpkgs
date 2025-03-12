@@ -1,14 +1,9 @@
 {
-  stdenv,
   mkXfceDerivation,
   lib,
+  gobject-introspection,
   vala,
   glib,
-  withIntrospection ?
-    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
-    && stdenv.hostPlatform.emulatorAvailable buildPackages,
-  buildPackages,
-  gobject-introspection,
 }:
 
 mkXfceDerivation {
@@ -18,9 +13,9 @@ mkXfceDerivation {
 
   sha256 = "sha256-0qbJSCXHsVz3XILHICFhciyz92LgMZiR7XFLAESHRGQ=";
 
-  nativeBuildInputs = lib.optionals withIntrospection [
+  nativeBuildInputs = [
     gobject-introspection
-    vala # vala bindings require GObject introspection
+    vala
   ];
 
   propagatedBuildInputs = [

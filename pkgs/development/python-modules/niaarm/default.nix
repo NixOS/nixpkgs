@@ -1,36 +1,31 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-
-  # build-system
-  poetry-core,
-
-  # dependencies
   niapy,
   nltk,
   numpy,
   pandas,
   plotly,
-  scikit-learn,
-  pythonOlder,
-  tomli,
-
-  # tests
+  poetry-core,
   pytestCheckHook,
+  pythonOlder,
+  scikit-learn,
+  tomli,
 }:
 
 buildPythonPackage rec {
   pname = "niaarm";
-  version = "0.4.1";
-  pyproject = true;
+  version = "0.3.13";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "firefly-cpp";
     repo = "NiaARM";
     tag = version;
-    hash = "sha256-/lEW6SUV+CRovYmLVWiolYDHYmMJSJHnYNo9+lBc9nY=";
+    hash = "sha256-nDgGX5KbthOBXX5jg99fGT28ZuBx0Hxb+aHak3Uvjoc=";
   };
 
   pythonRelaxDeps = [
@@ -38,9 +33,9 @@ buildPythonPackage rec {
     "scikit-learn"
   ];
 
-  build-system = [ poetry-core ];
+  nativeBuildInputs = [ poetry-core ];
 
-  dependencies = [
+  propagatedBuildInputs = [
     niapy
     nltk
     numpy
@@ -49,28 +44,21 @@ buildPythonPackage rec {
     scikit-learn
   ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
-  disabledTests =
-    [
-      # Test requires extra nltk data dependency
-      "test_text_mining"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # Fatal Python error: Aborted
-      # matplotlib/backend_bases.py", line 2654 in create_with_canvas
-      "test_hill_slopes"
-      "test_two_key_plot"
-    ];
+  disabledTests = [
+    # Test requires extra nltk data dependency
+    "test_text_mining"
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "niaarm" ];
 
-  meta = {
+  meta = with lib; {
     description = "Minimalistic framework for Numerical Association Rule Mining";
     mainProgram = "niaarm";
     homepage = "https://github.com/firefly-cpp/NiaARM";
     changelog = "https://github.com/firefly-cpp/NiaARM/blob/${version}/CHANGELOG.md";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ firefly-cpp ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ firefly-cpp ];
   };
 }

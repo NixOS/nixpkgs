@@ -1,52 +1,63 @@
 {
   lib,
-  stdenv,
-  rustPlatform,
+  cosmic-icons,
   fetchFromGitHub,
-  pkg-config,
-  just,
-  libcosmicAppHook,
   fontconfig,
   freetype,
+  just,
+  libglvnd,
   libinput,
-  nix-update-script,
+  libxkbcommon,
+  makeBinaryWrapper,
+  pkg-config,
+  rustPlatform,
+  stdenv,
+  vulkan-loader,
+  wayland,
+  xorg,
 }:
 
-rustPlatform.buildRustPackage (finalAttrs: {
+rustPlatform.buildRustPackage rec {
   pname = "cosmic-term";
-  version = "1.0.0-alpha.6";
+  version = "1.0.0-alpha.5.1";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-term";
-    tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-sdeRkT6UcyBKIFnJZn3aGf8LZQimqVPqtXo7RtwUs5M=";
+    rev = "epoch-${version}";
+    hash = "sha256-uPKbh1PA8P51Gcet459ZBRKRe0JmxSWvIFn3AQIG6KY=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-Qznkqp+zWpP/ok2xG7U5lYBW0qo4+ARnm8hgxU20ha0=";
+  cargoHash = "sha256-clGzp7pH7YHePFzlq2eLYKKx9IiFQKB5FmqPeuSuIVc=";
 
   # COSMIC applications now uses vergen for the About page
   # Update the COMMIT_DATE to match when the commit was made
-  env = {
-    VERGEN_GIT_COMMIT_DATE = "2025-02-21";
-    VERGEN_GIT_SHA = finalAttrs.src.tag;
-  };
+  env.VERGEN_GIT_COMMIT_DATE = "2025-01-14";
+  env.VERGEN_GIT_SHA = src.rev;
+
+  postPatch = ''
+    substituteInPlace justfile --replace-fail '#!/usr/bin/env' "#!$(command -v env)"
+  '';
 
   nativeBuildInputs = [
     just
     pkg-config
-    libcosmicAppHook
+    makeBinaryWrapper
   ];
 
   buildInputs = [
     fontconfig
     freetype
+    libglvnd
     libinput
+    libxkbcommon
+    vulkan-loader
+    wayland
+    xorg.libX11
   ];
 
   dontUseJustBuild = true;
-  dontUseJustCheck = true;
 
   justFlags = [
     "--set"
@@ -57,25 +68,30 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-term"
   ];
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version"
-      "unstable"
-      "--version-regex"
-      "epoch-(.*)"
-    ];
-  };
+  # Force linking to libEGL, which is always dlopen()ed, and to
+  # libwayland-client, which is always dlopen()ed except by the
+  # obscure winit backend.
+  RUSTFLAGS = map (a: "-C link-arg=${a}") [
+    "-Wl,--push-state,--no-as-needed"
+    "-lEGL"
+    "-lwayland-client"
+    "-Wl,--pop-state"
+  ];
 
-  meta = {
+  postInstall = ''
+    wrapProgram "$out/bin/cosmic-term" \
+      --suffix XDG_DATA_DIRS : "${cosmic-icons}/share"
+  '';
+
+  meta = with lib; {
     homepage = "https://github.com/pop-os/cosmic-term";
     description = "Terminal for the COSMIC Desktop Environment";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [
       ahoneybun
       nyabinary
-      HeitorAugustoLN
     ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
     mainProgram = "cosmic-term";
   };
-})
+}

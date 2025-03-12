@@ -13,7 +13,7 @@
   pkg-config,
   sqlite,
   ncurses,
-  replaceVars,
+  substituteAll,
   runCommandLocal,
   makeWrapper,
   DarwinTools, # sw_vers
@@ -45,7 +45,8 @@ let
       ./patches/disable-xctest.patch
       ./patches/fix-clang-cxx.patch
       ./patches/nix-pkgconfig-vars.patch
-      (replaceVars ./patches/fix-stdlib-path.patch {
+      (substituteAll {
+        src = ./patches/fix-stdlib-path.patch;
         inherit (builtins) storeDir;
         swiftLib = swift.swift.lib;
       })
@@ -428,7 +429,8 @@ stdenv.mkDerivation (
         # Prevent a warning about SDK directories we don't have.
         swiftpmMakeMutable swift-driver
         patch -p1 -d .build/checkouts/swift-driver -i ${
-          replaceVars ../swift-driver/patches/prevent-sdk-dirs-warnings.patch {
+          substituteAll {
+            src = ../swift-driver/patches/prevent-sdk-dirs-warnings.patch;
             inherit (builtins) storeDir;
           }
         }
@@ -445,7 +447,7 @@ stdenv.mkDerivation (
     #  TERM=dumb swift-test -c release
     #'';
 
-    # The following is derived from Utilities/bootstrap, see install_swiftpm.
+    # The following is dervied from Utilities/bootstrap, see install_swiftpm.
     installPhase = ''
       binPath="$(swift-build --show-bin-path -c release)"
 

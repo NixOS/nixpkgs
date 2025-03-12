@@ -7,17 +7,17 @@
 
 rustPackages.rustPlatform.buildRustPackage rec {
   pname = "hawkeye";
-  version = "6.0.2";
+  version = "6.0.1";
 
   src = fetchFromGitHub {
     owner = "korandoru";
     repo = "hawkeye";
     tag = "v${version}";
-    hash = "sha256-wT6c2wA31+xFcgPUp4djuvsHxwWyEderQTPSzLLqeAg=";
+    hash = "sha256-vf4Y/OJ6owLC3AMm4LVUyc/kfUluxN5VxC07hDWuEQY=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-qWn9duoGmYVHGBnjT57/m2BT/yc9BNUGHSn748ZmAzg=";
+  cargoHash = "sha256-mGJuAuq2z7JXRgAIVrBaO75Je++lBHHTUowo7+LEuaE=";
 
   nativeBuildInputs = [
     pkg-config

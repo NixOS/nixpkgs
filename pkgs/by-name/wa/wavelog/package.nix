@@ -6,15 +6,15 @@
   php,
 }:
 
-stdenvNoCC.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation rec {
   pname = "wavelog";
-  version = "2.0.1";
+  version = "2.0";
 
   src = fetchFromGitHub {
     owner = "wavelog";
-    repo = "wavelog";
-    tag = finalAttrs.version;
-    hash = "sha256-ERyJQNfVdr7uocJtmiyFIax8RS/5mvWOP0GfIxTs7bs=";
+    repo = pname;
+    tag = version;
+    hash = "sha256-njolFPtcNzF/AGchJd8BwdJDFPe4+6xgRBi1JKo4r0k=";
   };
 
   installPhase = ''
@@ -23,15 +23,15 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Webbased Amateur Radio Logging Software";
-    homepage = "https://www.wavelog.org";
-    downloadPage = "https://github.com/wavelog/wavelog";
-    changelog = "https://github.com/wavelog/wavelog/releases/tag/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
+    homepage = "https://www.wavelog.org";
     platforms = php.meta.platforms;
     maintainers = with lib.maintainers; [ ethancedwards8 ];
   };
-})
+}

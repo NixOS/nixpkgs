@@ -8,7 +8,7 @@
   python,
   pexpect,
   bashInteractive,
-  replaceVars,
+  substituteAll,
 }:
 
 buildPythonPackage rec {
@@ -23,7 +23,8 @@ buildPythonPackage rec {
   };
 
   patches = [
-    (replaceVars ./bash-path.patch {
+    (substituteAll {
+      src = ./bash-path.patch;
       bash = lib.getExe bashInteractive;
     })
   ];

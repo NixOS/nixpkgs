@@ -26,13 +26,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "tlp";
-  version = "1.8.0";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "linrunner";
     repo = "TLP";
     rev = version;
-    hash = "sha256-Bqg0IwLh3XIVJd2VkPQFDCZ/hVrzRFrRLlSHJXlJGWU=";
+    hash = "sha256-kjtszDLlnIkBi3yU/AyGSV8q7QBuZbDhsqJ8AvULb0M=";
   };
 
   # XXX: See patch files for relevant explanations.

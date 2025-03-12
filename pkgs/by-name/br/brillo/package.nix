@@ -4,7 +4,7 @@
   fetchFromGitLab,
   go-md2man,
   coreutils,
-  replaceVars,
+  substituteAll,
 }:
 
 stdenv.mkDerivation rec {
@@ -19,10 +19,9 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    (replaceVars ./udev-rule.patch {
+    (substituteAll {
+      src = ./udev-rule.patch;
       inherit coreutils;
-      # patch context
-      group = null;
     })
   ];
 

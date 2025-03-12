@@ -33,21 +33,20 @@ let
   inherit (builtins) unsafeGetAttrPos;
   inherit (lib)
     elem
-    extendDerivation
-    fixedWidthString
-    flip
-    getName
-    hasSuffix
-    head
-    isBool
-    max
-    optional
-    optionalAttrs
-    optionals
     optionalString
-    removePrefix
-    splitString
+    max
     stringLength
+    fixedWidthString
+    getName
+    optional
+    optionals
+    optionalAttrs
+    hasSuffix
+    escapeShellArgs
+    extendDerivation
+    head
+    splitString
+    isBool
     ;
 
   leftPadName =
@@ -66,18 +65,18 @@ let
 
   isMismatchedPython = drv: drv.pythonModule != python;
 
-  withDistOutput' = flip elem [
+  withDistOutput' = lib.flip elem [
     "pyproject"
     "setuptools"
     "wheel"
   ];
 
-  isBootstrapInstallPackage' = flip elem [
+  isBootstrapInstallPackage' = lib.flip elem [
     "flit-core"
     "installer"
   ];
 
-  isBootstrapPackage' = flip elem (
+  isBootstrapPackage' = lib.flip elem (
     [
       "build"
       "packaging"
@@ -89,18 +88,20 @@ let
     ]
   );
 
-  isSetuptoolsDependency' = flip elem [
+  isSetuptoolsDependency' = lib.flip elem [
     "setuptools"
     "wheel"
   ];
 
-  cleanAttrs = flip removeAttrs [
+  cleanAttrs = lib.flip removeAttrs [
     "disabled"
     "checkPhase"
     "checkInputs"
     "nativeCheckInputs"
     "doCheck"
     "doInstallCheck"
+    "dontWrapPythonPrograms"
+    "catchConflicts"
     "pyproject"
     "format"
     "disabledTestPaths"
@@ -119,6 +120,8 @@ let
 in
 
 {
+  name ? "${attrs.pname}-${attrs.version}",
+
   # Build-time dependencies for the package
   nativeBuildInputs ? [ ],
 
@@ -225,7 +228,7 @@ let
           throwMismatch =
             attrName: drv:
             let
-              myName = "'${finalAttrs.name}'";
+              myName = "'${namePrefix}${name}'";
               theirName = "'${drv.name}'";
               optionalLocation =
                 let
@@ -277,9 +280,7 @@ let
     (cleanAttrs attrs)
     // {
 
-      name = namePrefix + attrs.name or "${finalAttrs.pname}-${finalAttrs.version}";
-
-      inherit catchConflicts;
+      name = namePrefix + name;
 
       nativeBuildInputs =
         [
@@ -288,7 +289,7 @@ let
           ensureNewerSourcesForZipFilesHook # move to wheel installer (pip) or builder (setuptools, flit, ...)?
           pythonRemoveTestsDirHook
         ]
-        ++ optionals (finalAttrs.catchConflicts && !isBootstrapPackage && !isSetuptoolsDependency) [
+        ++ optionals (catchConflicts && !isBootstrapPackage && !isSetuptoolsDependency) [
           #
           # 1. When building a package that is also part of the bootstrap chain, we
           #    must ignore conflicts after installation, because there will be one with
@@ -385,10 +386,8 @@ let
       nativeInstallCheckInputs = nativeCheckInputs;
       installCheckInputs = checkInputs;
 
-      inherit dontWrapPythonPrograms;
-
       postFixup =
-        optionalString (!finalAttrs.dontWrapPythonPrograms) ''
+        optionalString (!dontWrapPythonPrograms) ''
           wrapPythonPrograms
         ''
         + attrs.postFixup or "";
@@ -444,13 +443,13 @@ let
         disabledTests = attrs.disabledTests;
       }
       // optionalAttrs (attrs ? pytestFlags) {
-        pytestFlags = attrs.pytestFlags;
+          pytestFlags = attrs.pytestFlags;
       }
       // optionalAttrs (attrs ? pytestFlagsArray) {
         pytestFlagsArray = attrs.pytestFlagsArray;
       }
       // optionalAttrs (attrs ? unittestFlags) {
-        unittestFlags = attrs.unittestFlags;
+          unittestFlags = attrs.unittestFlags;
       }
       // optionalAttrs (attrs ? unittestFlagsArray) {
         unittestFlagsArray = attrs.unittestFlagsArray;
@@ -464,7 +463,7 @@ let
     drv:
     extendDerivation (
       drv.disabled
-      -> throw "${removePrefix namePrefix drv.name} not supported for interpreter ${python.executable}"
+      -> throw "${lib.removePrefix namePrefix drv.name} not supported for interpreter ${python.executable}"
     ) { } (toPythonModule drv);
 
 in

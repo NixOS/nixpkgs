@@ -11,17 +11,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "tickrs";
-  version = "0.14.11";
+  version = "0.14.10";
 
   src = fetchFromGitHub {
     owner = "tarkah";
     repo = pname;
     tag = "v${version}";
-    hash = "sha256-0jpElAj4TDC52BEjfnGHYiro6MT6Jzcb0evvmroxLn8=";
+    hash = "sha256-6iMThVLIkFoNa7Z0MuyhUNGCwFtCfmG7jHvDfrEZE2I=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-Ii9Fn6J5qpqigH7oWIfOX+JKkzQ2BNpeNg1sF+ONCrM=";
+  cargoHash = "sha256-ZlU+PVkias3VuP1Bss6TTR84pzh1weJfbwQpCZ1ZaNs=";
 
   nativeBuildInputs = [
     pkg-config

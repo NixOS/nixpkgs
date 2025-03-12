@@ -279,6 +279,8 @@ package-maintainers:
     - total
     - turtle
     - typed-spreadsheet
+  gebner:
+    - wstunnel
   gridaphobe:
     - located-base
   iblech:
@@ -443,6 +445,9 @@ package-maintainers:
     - ttn-client
     - update-nix-fetchgit
     - zre
+  srid:
+    - ema
+    - emanote
   sternenseemann:
     # also maintain upstream package
     - cabal2nix

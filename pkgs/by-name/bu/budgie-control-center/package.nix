@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  replaceVars,
+  substituteAll,
   accountsservice,
   adwaita-icon-theme,
   budgie-desktop,
@@ -81,11 +81,13 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
-    (replaceVars ./paths.patch {
+    (substituteAll {
+      src = ./paths.patch;
       budgie_desktop = budgie-desktop;
       gcm = gnome-color-manager;
       inherit
         cups
+        glibc
         libgnomekbd
         shadow
         ;

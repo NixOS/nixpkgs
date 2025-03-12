@@ -5,10 +5,10 @@
   mtime,
   lwt,
   mirage-flow,
-  mirage-sleep,
+  mirage-clock,
   logs,
   duration,
-  mirage-mtime,
+  mirage-time,
 }:
 
 buildDunePackage {
@@ -22,10 +22,10 @@ buildDunePackage {
     mtime
     lwt
     mirage-flow
-    mirage-sleep
+    mirage-clock
     logs
     duration
-    mirage-mtime
+    mirage-time
   ];
 
   inherit (awa) meta;

@@ -9,6 +9,8 @@
   libgit2,
   libssh2,
   openssl,
+  darwin,
+  libiconv,
   git,
   gnupg,
   openssh,
@@ -19,7 +21,7 @@
 }:
 
 let
-  version = "0.27.0";
+  version = "0.26.0";
 in
 
 rustPlatform.buildRustPackage {
@@ -30,7 +32,7 @@ rustPlatform.buildRustPackage {
     owner = "jj-vcs";
     repo = "jj";
     tag = "v${version}";
-    hash = "sha256-fBgJrSglH46+NHu3spk5mC51ASDHWnOoW6veKZ0R2YA=";
+    hash = "sha256-jGy+0VDxQrgNhj+eX06FRhPP31V8QZVAM4j4yBosAGE=";
   };
 
   useFetchCargoVendor = true;
@@ -40,18 +42,25 @@ rustPlatform.buildRustPackage {
     ./libgit2-1.9.0.patch
   ];
 
-  cargoHash = "sha256-35DJdAUXc2gb/EXECScwinSzzp7uaxFbUxedjqRGfj8=";
+  cargoHash = "sha256-CtyRekrbRwUvQq2HsFwNo46RCDEGwy9e4ZU8/TwGxSU=";
 
   nativeBuildInputs = [
     installShellFiles
     pkg-config
   ];
 
-  buildInputs = [
-    zstd
-    libgit2
-    libssh2
-  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ openssl ];
+  buildInputs =
+    [
+      zstd
+      libgit2
+      libssh2
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ openssl ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.Security
+      darwin.apple_sdk.frameworks.SystemConfiguration
+      libiconv
+    ];
 
   nativeCheckInputs = [
     git

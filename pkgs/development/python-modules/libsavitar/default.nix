@@ -38,6 +38,7 @@ buildPythonPackage rec {
     maintainers = with maintainers; [
       abbradar
       orivej
+      gebner
     ];
   };
 }

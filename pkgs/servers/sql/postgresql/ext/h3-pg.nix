@@ -11,13 +11,13 @@
 
 buildPostgresqlExtension (finalAttrs: {
   pname = "h3-pg";
-  version = "4.2.2";
+  version = "4.1.4";
 
   src = fetchFromGitHub {
     owner = "zachasme";
     repo = "h3-pg";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-2xp9gssPMTroLT/1Me0VWvtIPyouIk9MW0Rp13uYBEw=";
+    hash = "sha256-uZ4XI/VXRr636CI1r24D6ykPQqO5qZNxNQLUQKmoPtg=";
   };
 
   postPatch =
@@ -28,6 +28,9 @@ buildPostgresqlExtension (finalAttrs: {
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       substituteInPlace cmake/AddPostgreSQLExtension.cmake \
         --replace-fail "INTERPROCEDURAL_OPTIMIZATION TRUE" ""
+      # Commented upstream: https://github.com/zachasme/h3-pg/pull/141/files#r1844970927
+      substituteInPlace cmake/FindPostgreSQL.cmake \
+        --replace-fail 'list(APPEND PostgreSQL_INCLUDE_DIRS "/usr/local/include")' ""
     '';
 
   nativeBuildInputs = [

@@ -41,8 +41,6 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  __darwinAllowLocalNetworking = true;
-
   pythonImportsCheck = [ "aioweenect" ];
 
   meta = with lib; {

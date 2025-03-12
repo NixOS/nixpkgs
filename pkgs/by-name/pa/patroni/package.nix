@@ -9,13 +9,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "patroni";
-  version = "4.0.5";
+  version = "4.0.4";
 
   src = fetchFromGitHub {
     owner = "zalando";
     repo = "patroni";
     tag = "v${version}";
-    sha256 = "sha256-1Afwdv1kX8/zc9TB4kbA2NakXycJlf/wUcYAYKWwITM=";
+    sha256 = "sha256-if3azfBb6/OegahZYAM2RMxmWRDsCX5DNkUATTcAUrw=";
   };
 
   dependencies = with python3Packages; [

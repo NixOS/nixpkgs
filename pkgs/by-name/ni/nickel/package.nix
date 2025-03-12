@@ -3,23 +3,22 @@
   rustPlatform,
   fetchFromGitHub,
   python3,
-  versionCheckHook,
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage (finalAttrs: {
+rustPlatform.buildRustPackage rec {
   pname = "nickel";
-  version = "1.10.0";
+  version = "1.9.1";
 
   src = fetchFromGitHub {
     owner = "tweag";
     repo = "nickel";
-    tag = finalAttrs.version;
-    hash = "sha256-CnEGC4SnLRfAPl3WTv83xertH2ulG5onseZpq3vxfwc=";
+    tag = version;
+    hash = "sha256-oOcVbAWNj0iVC3128QF4lKYfZbasqegwIfzv7qD8fDs=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-CyO+W4332fJmeF2CL+9CCdPuion8MrxzkPotLA7my3U=";
+  cargoHash = "sha256-q0qcnpZkOr3AhdOO8p7einogeSDafh277eT7/yU2+YQ=";
 
   cargoBuildFlags = [
     "-p nickel-lang-cli"
@@ -42,31 +41,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # dependency with that name, but that dependency uses the "dep:" syntax in
   # the features table, so it does not have an implicit feature with that name.
   preBuild = ''
-    substituteInPlace core/Cargo.toml \
-      --replace-fail "dep:comrak" "comrak"
+    sed -i 's/dep:comrak/comrak/' core/Cargo.toml
   '';
-
-  checkFlags = [
-    # https://github.com/tweag/nickel/blob/1.10.0/git/tests/main.rs#L60
-    # fails because src is not a git repo
-    # `cmd.current_dir(repo.path()).output()` errors with `NotFound`
-    "--skip=fetch_targets"
-  ];
 
   postInstall = ''
     mkdir -p $nls/bin
     mv $out/bin/nls $nls/bin/nls
   '';
 
-  nativeInstallCheckInputs = [
-    versionCheckHook
-  ];
-  versionCheckProgramArg = [ "--version" ];
-  doInstallCheck = true;
-
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://nickel-lang.org/";
     description = "Better configuration for less";
     longDescription = ''
@@ -77,17 +62,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
       that are then fed to another system. It is designed to have a simple,
       well-understood core: it is in essence JSON with functions.
     '';
-    changelog = "https://github.com/tweag/nickel/blob/${finalAttrs.version}/RELEASES.md";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
+    changelog = "https://github.com/tweag/nickel/blob/${version}/RELEASES.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [
       felschr
       matthiasbeyer
     ];
     mainProgram = "nickel";
-    badPlatforms = [
-      # collect2: error: ld returned 1 exit status
-      # undefined reference to `PyExc_TypeError'
-      "aarch64-linux"
-    ];
   };
-})
+}

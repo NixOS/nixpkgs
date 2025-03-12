@@ -2,25 +2,21 @@
   lib,
   fetchFromGitHub,
   buildGoModule,
-  go_1_24,
   testers,
   openbao,
-  versionCheckHook,
-  nix-update-script,
 }:
-
-buildGoModule.override { go = go_1_24; } rec {
+buildGoModule rec {
   pname = "openbao";
-  version = "2.2.0";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "openbao";
     repo = "openbao";
-    tag = "v${version}";
-    hash = "sha256-dDMOeAceMaSrF7P4JZ2MKy6zDa10LxCQKkKwu/Q3kOU=";
+    rev = "v${version}";
+    hash = "sha256-viN1Yuqnyg/nrRzV2HkjVGZSWD9QIXLN6nG5N0QtwbU=";
   };
 
-  vendorHash = "sha256-zcMc63B/jTUykPfRKvea27xRxjOV+zytaxKOEQAUz1Q=";
+  vendorHash = "sha256-dSEFoD2UbY6OejSxPBDxCNKHBoHI8YNnixayIS7z3e8=";
 
   proxyVendor = true;
 
@@ -53,23 +49,12 @@ buildGoModule.override { go = go_1_24; } rec {
     version = "v${version}";
   };
 
-  nativeInstallCheckInputs = [
-    versionCheckHook
-  ];
-  versionCheckProgram = "${placeholder "out"}/bin/bao";
-  versionCheckProgramArg = [ "--version" ];
-  doInstallCheck = true;
-
-  passthru = {
-    updateScript = nix-update-script { };
-  };
-
-  meta = {
+  meta = with lib; {
     homepage = "https://www.openbao.org/";
     description = "Open source, community-driven fork of Vault managed by the Linux Foundation";
     changelog = "https://github.com/openbao/openbao/blob/v${version}/CHANGELOG.md";
-    license = lib.licenses.mpl20;
+    license = licenses.mpl20;
     mainProgram = "bao";
-    maintainers = with lib.maintainers; [ brianmay ];
+    maintainers = with maintainers; [ brianmay ];
   };
 }

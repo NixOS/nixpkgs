@@ -5,13 +5,12 @@
   pytestCheckHook,
   pythonOlder,
   regex,
-  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "rebulk";
   version = "3.2.0";
-  pyproject = true;
+  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
@@ -20,11 +19,9 @@ buildPythonPackage rec {
     hash = "sha256-DTC/gPygD6nGlxhaxHXarJveX2Rs4zOMn/XV3B69/rw=";
   };
 
-  build-system = [ setuptools ];
+  propagatedBuildInputs = [ regex ];
 
-  dependencies = [ regex ];
-
-  nativeCheckInputs = [ pytestCheckHook ];
+  buildInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "rebulk" ];
 

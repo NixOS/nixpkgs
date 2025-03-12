@@ -1,6 +1,7 @@
 {
   buildPythonPackage,
   horizon-eda,
+  mesa,
   pycairo,
   python,
   pythonOlder,
@@ -23,6 +24,8 @@ buildPythonPackage {
   disabled = pythonOlder "3.9";
 
   buildInputs = base.buildInputs ++ [
+    mesa
+    mesa.osmesa
     python
   ];
 

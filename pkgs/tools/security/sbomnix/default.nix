@@ -93,6 +93,5 @@ python.pkgs.buildPythonApplication rec {
       henrirosten
       jk
     ];
-    mainProgram = "sbomnix";
   };
 }

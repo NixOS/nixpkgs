@@ -18,8 +18,12 @@ rustPlatform.buildRustPackage {
     sha256 = "sha256-WpTyT62bykq/uwzBFQXeJ1HxR1a2vKmtid8YAzk7J+Q=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-bytICp0+1/suM+kf4VX9z/mpnsdXi3I3dPUlK3A9+V4=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "rustdoc-stripper-0.1.18" = "sha256-b+RRXJDGULEvkIZDBzU/ZchVF63pX0S9hBupeP12CkU=";
+    };
+  };
 
   postPatch = ''
     rm build.rs

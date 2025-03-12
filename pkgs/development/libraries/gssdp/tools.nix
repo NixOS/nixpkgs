@@ -1,7 +1,7 @@
 {
   stdenv,
   lib,
-  replaceVars,
+  substituteAll,
   meson,
   ninja,
   pkg-config,
@@ -17,8 +17,9 @@ stdenv.mkDerivation rec {
 
   patches = [
     # Allow building tools separately from the library.
-    # This is needed to break the dependency cycle.
-    (replaceVars ./standalone-tools.patch {
+    # This is needed to break the depenency cycle.
+    (substituteAll {
+      src = ./standalone-tools.patch;
       inherit version;
     })
   ];

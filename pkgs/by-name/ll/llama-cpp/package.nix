@@ -82,13 +82,13 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "llama-cpp";
-  version = "4798";
+  version = "4731";
 
   src = fetchFromGitHub {
-    owner = "ggml-org";
+    owner = "ggerganov";
     repo = "llama.cpp";
     tag = "b${finalAttrs.version}";
-    hash = "sha256-XGtCfwBDmW7hktz+VkYnSqrmUX/SIdeeFx5rHKN+5cU=";
+    hash = "sha256-XB7TI1/Ui9BGdsD5TVH5MMZalgEGquW9wYcAhxgAcP0=";
     leaveDotGit = true;
     postFetch = ''
       git -C "$out" rev-parse --short HEAD > $out/COMMIT
@@ -194,7 +194,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Inference of Meta's LLaMA model (and others) in pure C/C++";
-    homepage = "https://github.com/ggml-org/llama.cpp";
+    homepage = "https://github.com/ggerganov/llama.cpp/";
     license = licenses.mit;
     mainProgram = "llama";
     maintainers = with maintainers; [

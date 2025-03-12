@@ -58,13 +58,12 @@ in
                     "degraded"
                     "configuring"
                     "configured"
-                    "enslaved"
                   ]
                 );
                 default = null;
                 description = ''
                   List of names of the systemd-networkd operational states which
-                  should trigger the script. See {manpage}`networkctl(1)`
+                  should trigger the script. See <https://www.freedesktop.org/software/systemd/man/networkctl.html>
                   for a description of the specific state type.
                 '';
               };

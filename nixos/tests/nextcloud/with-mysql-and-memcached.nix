@@ -8,10 +8,10 @@
 
 with import ../../lib/testing-python.nix { inherit system pkgs; };
 runTest (
-  { config, lib, ... }:
+  { config, ... }:
   {
     inherit name;
-    meta = with lib.maintainers; {
+    meta = with pkgs.lib.maintainers; {
       maintainers = [ eqyiel ];
     };
 

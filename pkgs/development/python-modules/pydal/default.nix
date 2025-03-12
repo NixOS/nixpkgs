@@ -3,29 +3,25 @@
   buildPythonPackage,
   fetchPypi,
   pytestCheckHook,
-  pythonAtLeast,
   pythonOlder,
   setuptools,
-  legacy-cgi,
 }:
 
 buildPythonPackage rec {
   pname = "pydal";
-  version = "20250228.1";
-  pyproject = true;
+  version = "20241204.1";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-/1FeoGXGWqVL3T54w84JUys4e9heOyXWkPdWy3MSzcA=";
+    hash = "sha256-G6H55Si5heI09bOs/Z1UmZi0T37XrnR7no1K0wR79RE=";
   };
 
-  build-system = [ setuptools ];
+  nativeBuildInputs = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
-
-  checkInputs = lib.optionals (pythonAtLeast "3.13") [ legacy-cgi ];
 
   pytestFlagsArray = [
     "tests/*.py"
@@ -36,7 +32,6 @@ buildPythonPackage rec {
     "--deselect=tests/nosql.py::TestExpressions::testRun"
     "--deselect=tests/nosql.py::TestImportExportUuidFields::testRun"
     "--deselect=tests/nosql.py::TestConnection::testRun"
-    "--deselect=tests/restapi.py::TestRestAPI::test_search"
     "--deselect=tests/validation.py::TestValidateAndInsert::testRun"
     "--deselect=tests/validation.py::TestValidateUpdateInsert::testRun"
     "--deselect=tests/validators.py::TestValidators::test_IS_IN_DB"

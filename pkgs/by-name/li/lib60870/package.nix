@@ -20,10 +20,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   sourceRoot = "${finalAttrs.src.name}/lib60870-C";
 
-  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    substituteInPlace src/CMakeLists.txt --replace-warn "-lrt" ""
-  '';
-
   separateDebugInfo = true;
 
   nativeBuildInputs = [ cmake ];

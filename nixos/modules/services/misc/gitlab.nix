@@ -184,9 +184,6 @@ let
     prometheus_multiproc_dir = "/run/gitlab";
     RAILS_ENV = "production";
     MALLOC_ARENA_MAX = "2";
-    # allow to use bundler version from nixpkgs
-    # rather than version listed in Gemfile.lock
-    BUNDLER_VERSION = pkgs.bundler.version;
   } // cfg.extraEnv;
 
   runtimeDeps = [ git ] ++ (with pkgs; [
@@ -244,7 +241,7 @@ let
         ${optionalString (cfg.smtp.authentication != null) "authentication: :${cfg.smtp.authentication},"}
         enable_starttls_auto: ${boolToString cfg.smtp.enableStartTLSAuto},
         tls: ${boolToString cfg.smtp.tls},
-        ca_file: "${config.security.pki.caBundle}",
+        ca_file: "/etc/ssl/certs/ca-certificates.crt",
         openssl_verify_mode: '${cfg.smtp.opensslVerifyMode}'
       }
     end

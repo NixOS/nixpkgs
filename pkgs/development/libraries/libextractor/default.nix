@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   fetchpatch2,
-  replaceVars,
+  substituteAll,
   libtool,
   gettext,
   zlib,
@@ -60,7 +60,8 @@ stdenv.mkDerivation rec {
     ++ lib.optionals gstreamerSupport [
 
       # Libraries cannot be wrapped so we need to hardcode the plug-in paths.
-      (replaceVars ./gst-hardcode-plugins.patch {
+      (substituteAll {
+        src = ./gst-hardcode-plugins.patch;
         load_gst_plugins = lib.concatMapStrings (
           plugin: ''gst_registry_scan_path(gst_registry_get(), "${lib.getLib plugin}/lib/gstreamer-1.0");''
         ) (gstPlugins gst_all_1);

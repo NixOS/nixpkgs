@@ -372,7 +372,7 @@ let
     EMCluster = [ pkgs.lapack ];
     fangs = [ pkgs.cargo ];
     fastpng = [ pkgs.zlib.dev ];
-    fcl = with pkgs; [ cargo rustc ];
+    fcl = [ pkgs.cargo ];
     fftw = [ pkgs.fftw.dev ];
     fftwtools = with pkgs; [ fftw.dev pkg-config ];
     fingerPro = [ pkgs.gsl ];
@@ -700,7 +700,7 @@ let
     bbl = with pkgs; [ gsl ];
     diffHic = with pkgs; [ xz.dev bzip2.dev ];
     writexl = with pkgs; [ zlib.dev ];
-    xslt = with pkgs; [ libxslt libxml2 ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ xz ];
+    xslt = with pkgs; [ libxslt libxml2 ];
     qpdf = with pkgs; [ libjpeg.dev zlib.dev ];
     vcfR = with pkgs; [ zlib.dev ];
     bio3d = with pkgs; [ zlib.dev ];
@@ -986,6 +986,7 @@ let
     # Impure network access during build
     "waddR"
     "tiledb"
+    "x13binary"
     "switchr"
 
     # ExperimentHub dependents, require net access during build

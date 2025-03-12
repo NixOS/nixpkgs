@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  replaceVars,
+  substituteAll,
   ffmpeg,
 
   # build-system
@@ -27,7 +27,8 @@ buildPythonPackage rec {
   };
 
   patches = [
-    (replaceVars ./ffmpeg-path.patch {
+    (substituteAll {
+      src = ./ffmpeg-path.patch;
       ffmpeg = lib.getExe ffmpeg;
     })
   ];

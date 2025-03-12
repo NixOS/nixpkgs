@@ -61,6 +61,7 @@ buildPythonPackage rec {
     platforms = platforms.linux;
     maintainers = with maintainers; [
       abbradar
+      gebner
     ];
   };
 }

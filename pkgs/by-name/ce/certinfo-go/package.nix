@@ -2,28 +2,25 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  nix-update-script,
 }:
 
 buildGoModule rec {
   pname = "certinfo-go";
-  version = "0.1.42";
+  version = "0.1.36";
 
   src = fetchFromGitHub {
     owner = "paepckehh";
     repo = "certinfo";
     tag = "v${version}";
-    hash = "sha256-XnHQTMohpuMnV2trSqZ9PlKWmuOyHGDj+6ljKfUD40A=";
+    hash = "sha256-ySXp5dPdGhBEbo9uvCsINCufhm9j/dIX0Jn+Ou73NjM=";
   };
 
-  vendorHash = "sha256-Bbj+8TAJJWhkOxib9cz/Znj5bHAXcgrDONRpGDK+los=";
+  vendorHash = "sha256-wrz33FSBz4Kg9aYCj7/Pq07bP73MV9iSQKc3X39OkHc=";
 
   ldflags = [
     "-s"
     "-w"
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/paepckehh/certinfo/releases/tag/v${version}";

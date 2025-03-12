@@ -3,8 +3,7 @@
 , fetchFromGitHub
 , libGL
 , libinput
-, pkgconf
-, xkeyboard_config
+, libxkbcommon
 , libgbm
 , pango
 , udev
@@ -32,12 +31,11 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [
     autoPatchelfHook
-    pkgconf
   ];
 
   buildInputs = [
     libGL
-    xkeyboard_config
+    libxkbcommon
     libgbm
     pango
     udev

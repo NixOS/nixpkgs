@@ -4,7 +4,6 @@
   fetchFromGitHub,
   gitUpdater,
   makeWrapper,
-  ast-grep,
   ripgrep,
 }:
 let
@@ -20,8 +19,6 @@ rustPlatform.buildRustPackage {
     hash = "sha256-koD5aFqL+XVxc5Iq3reTYIHiPm0z7hAQ4K59IfbY4Hg=";
   };
 
-  buildFeatures = [ "ast_grep" ];
-
   nativeBuildInputs = [ makeWrapper ];
 
   useFetchCargoVendor = true;
@@ -30,12 +27,7 @@ rustPlatform.buildRustPackage {
   postFixup = ''
     # Serpl needs ripgrep to function properly.
     wrapProgram $out/bin/serpl \
-      --prefix PATH : "${
-        lib.strings.makeBinPath [
-          ripgrep
-          ast-grep
-        ]
-      }"
+      --prefix PATH : "${lib.strings.makeBinPath [ ripgrep ]}"
   '';
 
   passthru.updateScript = gitUpdater { };

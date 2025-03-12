@@ -1,7 +1,7 @@
 {
   lib,
-  python3Packages,
-  fetchFromGitHub,
+  python3,
+  fetchPypi,
   groff,
   less,
   nix-update-script,
@@ -10,38 +10,36 @@
 }:
 
 let
-  self = python3Packages.buildPythonApplication rec {
+  self = python3.pkgs.buildPythonApplication rec {
     pname = "awscli";
     # N.B: if you change this, change botocore and boto3 to a matching version too
     # check e.g. https://github.com/aws/aws-cli/blob/1.33.21/setup.py
-    version = "1.37.21";
+    version = "1.36.40";
     pyproject = true;
 
-    src = fetchFromGitHub {
-      owner = "aws";
-      repo = "aws-cli";
-      tag = version;
-      hash = "sha256-gKRWhOhZjGhPVIG6KgCyDqxuyBGbaS8bHD7vnJ4gA+o=";
+    src = fetchPypi {
+      inherit pname version;
+      hash = "sha256-4qiPiNwW1cDyY3mv1vJUCX5T6LNMghZOWfQWXbbubfo=";
     };
 
     pythonRelaxDeps = [
       # botocore must not be relaxed
+      "colorama"
       "docutils"
       "rsa"
     ];
 
-    build-system = with python3Packages; [
-      setuptools
+    build-system = [
+      python3.pkgs.setuptools
     ];
 
-    dependencies = with python3Packages; [
+    dependencies = with python3.pkgs; [
       botocore
-      docutils
       s3transfer
-      pyyaml
       colorama
+      docutils
       rsa
-
+      pyyaml
       groff
       less
     ];
@@ -61,14 +59,14 @@ let
     installCheckPhase = ''
       runHook preInstallCheck
 
-      $out/bin/aws --version | grep "${python3Packages.botocore.version}"
+      $out/bin/aws --version | grep "${python3.pkgs.botocore.version}"
       $out/bin/aws --version | grep "${version}"
 
       runHook postInstallCheck
     '';
 
     passthru = {
-      python = python3Packages.python; # for aws_shell
+      python = python3; # for aws_shell
       updateScript = nix-update-script {
         extraArgs = [ "--version=skip" ];
       };

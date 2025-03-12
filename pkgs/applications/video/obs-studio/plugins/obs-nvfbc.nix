@@ -38,6 +38,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ babbaj ];
     platforms = [ "x86_64-linux" ];
-    broken = true;
   };
 }

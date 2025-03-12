@@ -27,13 +27,19 @@
 
 buildPythonPackage rec {
   pname = "keystoneauth1";
-  version = "5.10.0";
+  version = "5.9.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-NLhw27z4Bs21rsmEg7YoIKZWjTZOynsRdMpqi1qcd+0=";
+    hash = "sha256-+wxm2ELVuWR1ImT/8gs7Src2ENZtm40g0Nz3lroJ3EM=";
   };
+
+  postPatch = ''
+    # only a small portion of the listed packages are actually needed for running the tests
+    # so instead of removing them one by one remove everything
+    rm test-requirements.txt
+  '';
 
   build-system = [ setuptools ];
 

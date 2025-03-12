@@ -4,7 +4,8 @@
   fetchFromGitHub,
   makeWrapper,
   makeDesktopItem,
-  yarnConfigHook,
+  fixup-yarn-lock,
+  yarn,
   nodejs,
   fetchYarnDeps,
   jq,
@@ -22,11 +23,9 @@ let
   pinData = import ./element-desktop-pin.nix;
   inherit (pinData.hashes) desktopSrcHash desktopYarnHash;
   executableName = "element-desktop";
-  electron = electron_33;
-  keytar = callPackage ./keytar {
-    inherit electron;
-  };
+  keytar = callPackage ./keytar { };
   seshat = callPackage ./seshat { };
+  electron = electron_33;
 in
 stdenv.mkDerivation (
   finalAttrs:
@@ -47,13 +46,26 @@ stdenv.mkDerivation (
     };
 
     nativeBuildInputs = [
-      yarnConfigHook
+      yarn
+      fixup-yarn-lock
       nodejs
       makeWrapper
       jq
     ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
 
     inherit seshat;
+
+    configurePhase = ''
+      runHook preConfigure
+
+      export HOME=$(mktemp -d)
+      yarn config --offline set yarn-offline-mirror $offlineCache
+      fixup-yarn-lock yarn.lock
+      yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
+      patchShebangs node_modules/
+
+      runHook postConfigure
+    '';
 
     # Only affects unused scripts in $out/share/element/electron/scripts. Also
     # breaks because there are some `node`-scripts with a `npx`-shebang and

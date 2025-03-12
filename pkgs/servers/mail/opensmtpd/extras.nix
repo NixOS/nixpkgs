@@ -107,6 +107,7 @@ stdenv.mkDerivation rec {
     license = licenses.isc;
     platforms = platforms.linux;
     maintainers = with maintainers; [
+      gebner
       ekleog
     ];
   };

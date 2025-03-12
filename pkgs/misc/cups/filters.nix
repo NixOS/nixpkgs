@@ -24,7 +24,7 @@
   perl,
   pkg-config,
   poppler,
-  poppler-utils,
+  poppler_utils,
   qpdf,
   stdenv,
   which,

@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  replaceVars,
+  substituteAll,
   cmdstan,
   setuptools,
   pandas,
@@ -27,7 +27,8 @@ buildPythonPackage rec {
   };
 
   patches = [
-    (replaceVars ./use-nix-cmdstan-path.patch {
+    (substituteAll {
+      src = ./use-nix-cmdstan-path.patch;
       cmdstan = "${cmdstan}/opt/cmdstan";
     })
   ];

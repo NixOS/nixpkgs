@@ -6,11 +6,11 @@
 
 buildOctavePackage rec {
   pname = "nurbs";
-  version = "1.4.4";
+  version = "1.4.3";
 
   src = fetchurl {
     url = "mirror://sourceforge/octave/${pname}-${version}.tar.gz";
-    sha256 = "sha256-QfF1tu9z/FQWNDirRs5OP3IRJOGkkR2lnHELn3ItknY=";
+    sha256 = "16r05av75nvmkz1knf0nv0gj4fcjjf3jnyf94bdgxf84wahncim7";
   };
 
   meta = with lib; {

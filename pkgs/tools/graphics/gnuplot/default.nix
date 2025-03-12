@@ -127,7 +127,7 @@ in
     description = "Portable command-line driven graphing utility for many platforms";
     platforms = platforms.linux ++ platforms.darwin;
     license = {
-      # Essentially a BSD license with one modification:
+      # Essentially a BSD license with one modifaction:
       # Permission to modify the software is granted, but not the right to
       # distribute the complete modified source code.  Modifications are to
       # be distributed as patches to the released version.  Permission to

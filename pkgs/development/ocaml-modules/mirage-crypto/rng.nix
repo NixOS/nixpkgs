@@ -10,10 +10,8 @@
   logs,
 }:
 
-buildDunePackage {
+buildDunePackage rec {
   pname = "mirage-crypto-rng";
-
-  minimalOCamlVersion = "4.14";
 
   inherit (mirage-crypto) version src;
 

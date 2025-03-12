@@ -2,7 +2,7 @@
 , stdenv
 , fetchurl
 , fetchpatch
-, replaceVars
+, substituteAll
 , meson
 , ninja
 , gettext
@@ -127,7 +127,8 @@ stdenv.mkDerivation rec {
 
   patches = [
     # Add fallback paths for nvidia userspace libraries
-    (replaceVars ./fix-paths.patch {
+    (substituteAll {
+      src = ./fix-paths.patch;
       inherit (addDriverRunpath) driverLink;
     })
     # Add support for newer AJA SDK from next GStreamer release

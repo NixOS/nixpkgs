@@ -53,8 +53,7 @@ in
 
             ca = lib.mkOption {
               type = lib.types.path;
-              default = config.security.pki.caBundle;
-              defaultText = lib.literalExpression "config.security.pki.caBundle";
+              default = "/etc/ssl/certs/ca-certificates.crt";
               description = ''
                 Path to CA certificates file in PEM format, for server
                 SSL certificate validation.
@@ -73,6 +72,7 @@ in
         };
         default = { };
         example = {
+          ca = "/etc/ssl/certs/ca-certificates.crt";
           debug = true;
           server = "https://ocsinventory.localhost:8080/ocsinventory";
           tag = "01234567890123";

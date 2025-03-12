@@ -3,40 +3,51 @@
   stdenv,
   fetchFromGitHub,
   rustPlatform,
+  makeBinaryWrapper,
+  cosmic-icons,
   just,
-  libcosmicAppHook,
+  pkg-config,
   glib,
-  nix-update-script,
+  libxkbcommon,
+  wayland,
+  xorg,
 }:
 
-rustPlatform.buildRustPackage (finalAttrs: {
+rustPlatform.buildRustPackage rec {
   pname = "cosmic-files";
-  version = "1.0.0-alpha.6";
+  version = "1.0.0-alpha.1";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-files";
-    tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-i1CVhfieexeiKPwp0y29QyrKspzEFkp1+zwIaM9D/Qc=";
+    rev = "epoch-${version}";
+    hash = "sha256-UwQwZRzOyMvLRRmU2noxGrqblezkR8J2PNMVoyG0M0w=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-I5WRuEogMwa0dB6wxhWDxivqhCdUugvsPrwUvjjDnt8=";
+  cargoHash = "sha256-me/U4LtnvYtf77qxF2Z1ncHRVOLp3inDVlwnCjwlj08=";
 
-  env = {
-    VERGEN_GIT_COMMIT_DATE = "2025-02-21";
-    VERGEN_GIT_SHA = finalAttrs.src.tag;
-  };
+  # COSMIC applications now uses vergen for the About page
+  # Update the COMMIT_DATE to match when the commit was made
+  env.VERGEN_GIT_COMMIT_DATE = "2024-08-05";
+  env.VERGEN_GIT_SHA = src.rev;
+
+  postPatch = ''
+    substituteInPlace justfile --replace '#!/usr/bin/env' "#!$(command -v env)"
+  '';
 
   nativeBuildInputs = [
     just
-    libcosmicAppHook
+    pkg-config
+    makeBinaryWrapper
+  ];
+  buildInputs = [
+    glib
+    libxkbcommon
+    wayland
   ];
 
-  buildInputs = [ glib ];
-
   dontUseJustBuild = true;
-  dontUseJustCheck = true;
 
   justFlags = [
     "--set"
@@ -45,60 +56,31 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--set"
     "bin-src"
     "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-files"
-    "--set"
-    "applet-src"
-    "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-files-applet"
   ];
 
-  # This is needed since by setting cargoBuildFlags, it would build both the applet and the main binary
-  # at the same time, which would cause problems with the desktop items applet
-  buildPhase = ''
-    runHook preBuild
-
-    defaultCargoBuildFlags="$cargoBuildFlags"
-
-    cargoBuildFlags="$defaultCargoBuildFlags --package cosmic-files"
-    runHook cargoBuildHook
-
-    cargoBuildFlags="$defaultCargoBuildFlags --package cosmic-files-applet"
-    runHook cargoBuildHook
-
-    runHook postBuild
+  # LD_LIBRARY_PATH can be removed once tiny-xlib is bumped above 0.2.2
+  postInstall = ''
+    wrapProgram "$out/bin/cosmic-files" \
+      --suffix XDG_DATA_DIRS : "${cosmic-icons}/share" \
+      --prefix LD_LIBRARY_PATH : ${
+        lib.makeLibraryPath [
+          xorg.libX11
+          xorg.libXcursor
+          xorg.libXrandr
+          xorg.libXi
+          wayland
+        ]
+      }
   '';
 
-  checkPhase = ''
-    runHook preCheck
-
-    defaultCargoTestFlags="$cargoTestFlags"
-
-    cargoTestFlags="$defaultCargoTestFlags --package cosmic-files"
-    runHook cargoCheckHook
-
-    cargoTestFlags="$defaultCargoTestFlags --package cosmic-files-applet"
-    runHook cargoCheckHook
-
-    runHook postCheck
-  '';
-
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version"
-      "unstable"
-      "--version-regex"
-      "epoch-(.*)"
-    ];
-  };
-
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/pop-os/cosmic-files";
     description = "File Manager for the COSMIC Desktop Environment";
-    license = lib.licenses.gpl3Only;
-    mainProgram = "cosmic-files";
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [
       ahoneybun
       nyabinary
-      HeitorAugustoLN
     ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
-})
+}

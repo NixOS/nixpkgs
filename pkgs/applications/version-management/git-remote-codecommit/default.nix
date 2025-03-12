@@ -5,10 +5,12 @@
   awscli,
 }:
 
-python3Packages.buildPythonApplication rec {
+with python3Packages;
+
+buildPythonApplication rec {
   pname = "git-remote-codecommit";
-  version = "1.17";
-  disabled = !python3Packages.isPy3k;
+  version = "1.15.1";
+  disabled = !isPy3k;
 
   # The check dependency awscli has some overrides
   # which yield a different botocore.
@@ -19,23 +21,24 @@ python3Packages.buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "aws";
-    repo = "git-remote-codecommit";
-    tag = version;
-    hash = "sha256-8heI0Oyfhuvshedw+Eqmwd+e9cOHdDt4O588dplqv/k=";
+    repo = pname;
+    rev = version;
+    sha256 = "1vvp7i8ghmq72v57f6smh441h35xnr5ar628q2mr40bzvcifwymw";
   };
 
-  dependencies = with python3Packages; [ botocore ];
+  propagatedBuildInputs = [ botocore ];
 
-  nativeCheckInputs =
-    [
-      awscli
-    ]
-    ++ (with python3Packages; [
-      pytestCheckHook
-      mock
-      flake8
-      tox
-    ]);
+  nativeCheckInputs = [
+    pytest
+    mock
+    flake8
+    tox
+    awscli
+  ];
+
+  checkPhase = ''
+    pytest
+  '';
 
   meta = {
     description = "Git remote prefix to simplify pushing to and pulling from CodeCommit";

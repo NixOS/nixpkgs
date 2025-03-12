@@ -1,23 +1,22 @@
 {
   lib,
-  buildGo124Module,
+  buildGoModule,
   fetchFromGitHub,
-  fetchpatch,
   buildEnv,
   linkFarm,
+  overrideCC,
   makeWrapper,
   stdenv,
   addDriverRunpath,
   nix-update-script,
 
   cmake,
+  gcc12,
   gitMinimal,
   clblast,
   libdrm,
   rocmPackages,
-  rocmGpuTargets ? rocmPackages.clr.gpuTargets or [ ],
   cudaPackages,
-  cudaArches ? cudaPackages.cudaFlags.realArches or [ ],
   darwin,
   autoAddDriverRunpath,
   versionCheckHook,
@@ -44,19 +43,17 @@ assert builtins.elem acceleration [
 let
   pname = "ollama";
   # don't forget to invalidate all hashes each update
-  version = "0.5.13";
-
-  buildGoModule = buildGo124Module;
+  version = "0.5.7";
 
   src = fetchFromGitHub {
     owner = "ollama";
     repo = "ollama";
     tag = "v${version}";
-    hash = "sha256-GRufz01lTSgBmDzRImY02xuAeuzjlIEFWv578fI8ciY=";
+    hash = "sha256-DW7gHNyW1ML8kqgMFsqTxS/30bjNlWmYmeov2/uZn00=";
     fetchSubmodules = true;
   };
 
-  vendorHash = "sha256-s/qvMISNpxeEAZx8Je2v4yb2aPWhSYcKhwHQcEXJ20Y=";
+  vendorHash = "sha256-1uk3Oi0n4Q39DVZe3PnZqqqmlwwoHmEolcRrib0uu4I=";
 
   validateFallback = lib.warnIf (config.rocmSupport && config.cudaSupport) (lib.concatStrings [
     "both `nixpkgs.config.rocmSupport` and `nixpkgs.config.cudaSupport` are enabled, "
@@ -190,35 +187,24 @@ goBuild {
 
   preBuild =
     let
-      removeSMPrefix =
-        str:
-        let
-          matched = builtins.match "sm_(.*)" str;
-        in
-        if matched == null then str else builtins.head matched;
-
-      cudaArchitectures = builtins.concatStringsSep ";" (builtins.map removeSMPrefix cudaArches);
-      rocmTargets = builtins.concatStringsSep ";" rocmGpuTargets;
-
-      cmakeFlagsCudaArchitectures = lib.optionalString enableCuda "-DCMAKE_CUDA_ARCHITECTURES='${cudaArchitectures}'";
-      cmakeFlagsRocmTargets = lib.optionalString enableRocm "-DAMDGPU_TARGETS='${rocmTargets}'";
-
+      dist_cmd =
+        if cudaRequested then
+          "dist_cuda_v${cudaMajorVersion}"
+        else if rocmRequested then
+          "dist_rocm"
+        else
+          "dist";
     in
+    # build llama.cpp libraries for ollama
     ''
-      cmake -B build \
-        -DCMAKE_SKIP_BUILD_RPATH=ON \
-        -DCMAKE_BUILD_WITH_INSTALL_RPATH=ON \
-        ${cmakeFlagsCudaArchitectures} \
-        ${cmakeFlagsRocmTargets} \
-
-      cmake --build build -j $NIX_BUILD_CORES
+      make ${dist_cmd} -j $NIX_BUILD_CORES
     '';
 
-  # ollama looks for acceleration libs in ../lib/ollama/ (now also for CPU-only with arch specific optimizations)
-  # https://github.com/ollama/ollama/blob/v0.5.11/docs/development.md#library-detection
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.hostPlatform.isx86 || enableRocm || enableCuda) ''
+    # copy libggml_*.so and runners into lib
+    # https://github.com/ollama/ollama/blob/v0.4.4/llama/make/gpu.make#L90
     mkdir -p $out/lib
-    cp -r build/lib/ollama $out/lib/
+    cp -r dist/*/lib/* $out/lib/
   '';
 
   postFixup =
@@ -275,7 +261,6 @@ goBuild {
       abysssol
       dit7ya
       elohmeier
-      prusnak
       roydubnium
     ];
   };

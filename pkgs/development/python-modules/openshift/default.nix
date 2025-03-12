@@ -8,7 +8,6 @@
   six,
   python-string-utils,
   pytest-bdd,
-  pytest-cov-stub,
   pytestCheckHook,
 }:
 
@@ -24,7 +23,12 @@ buildPythonPackage rec {
     hash = "sha256-uLfewj7M8KNs3oL1AM18sR/WhAR2mvBfqadyhR73FP0=";
   };
 
-  pythonRelaxDeps = [ "kubernetes" ];
+  postPatch = ''
+    substituteInPlace requirements.txt \
+      --replace "kubernetes ~= 12.0" "kubernetes"
+
+    sed -i '/--cov/d' setup.cfg
+  '';
 
   propagatedBuildInputs = [
     jinja2
@@ -38,7 +42,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-bdd
-    pytest-cov-stub
     pytestCheckHook
   ];
 

@@ -48,19 +48,18 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gamescope";
-  version = "3.16.2";
+  version = "3.16.1";
 
   src = fetchFromGitHub {
     owner = "ValveSoftware";
     repo = "gamescope";
     tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-vKl2wYAt051+1IaCGB1ylGa83WTS+neqZwtQ/4MyCck=";
+    hash = "sha256-+0QGt4UADJmZok2LzvL+GBad0t4vVL4HXq27399zH3Y=";
   };
 
   patches = [
-    # Make it look for data in the right place
-    ./scripts-path.patch
+    # Make it look for shaders in the right place
     ./shaders-path.patch
     # patch relative gamescopereaper path with absolute
     ./gamescopereaper.patch
@@ -70,11 +69,8 @@ stdenv.mkDerivation (finalAttrs: {
   # so `placeholder "out"` ends up pointing to the wrong place
   postPatch = ''
     substituteInPlace src/reshade_effect_manager.cpp --replace-fail "@out@" "$out"
-    substituteInPlace src/Script/Script.cpp --replace-fail "@out@" "$out"
-
     # Patching shebangs in the main `libdisplay-info` build
     patchShebangs subprojects/libdisplay-info/tool/gen-search-table.py
-
     # Replace gamescopereeaper with absolute path
     substituteInPlace src/Utils/Process.cpp --subst-var-by "gamescopereaper" "$out/bin/gamescopereaper"
     patchShebangs default_scripts_install.sh
@@ -185,6 +181,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/ValveSoftware/gamescope";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [
+      nrdxp
       pedrohlc
       Scrumplex
       zhaofengli

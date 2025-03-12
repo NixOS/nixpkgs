@@ -71,6 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/zlib-ng/minizip-ng";
     license = licenses.zlib;
     maintainers = with maintainers; [
+      gebner
       ris
     ];
     platforms = platforms.unix;

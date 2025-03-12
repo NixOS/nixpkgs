@@ -26,14 +26,14 @@
 
 buildPythonPackage rec {
   pname = "diffenator2";
-  version = "0.4.8";
+  version = "0.4.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googlefonts";
     repo = "diffenator2";
     tag = "v${version}";
-    hash = "sha256-DazI5YxNQIdkzCuC5T3JFwfYBDXbeWnyQgwWdndWMhA=";
+    hash = "sha256-Iu6ZA8s6XnOYSOwlt8WTmYW6oUTvcm4vLhYvVATOlBA=";
   };
 
   env.PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION = "python";
@@ -91,7 +91,7 @@ buildPythonPackage rec {
   meta = {
     description = "Font comparison tool that will not stop until your fonts are exhaustively compared";
     homepage = "https://github.com/googlefonts/diffenator2";
-    changelog = "https://github.com/googlefonts/diffenator2/releases/tag/${src.tag}";
+    changelog = "https://github.com/googlefonts/diffenator2/releases/tag/v${version}";
     license = lib.licenses.asl20;
     mainProgram = "diffenator2";
     maintainers = with lib.maintainers; [ jopejoe1 ];

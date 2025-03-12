@@ -1,6 +1,5 @@
 {
   lib,
-  callPackage,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -56,10 +55,6 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "llm_ollama"
   ];
-
-  passthru.tests = {
-    llm-plugin = callPackage ./tests/llm-plugin.nix { };
-  };
 
   meta = {
     description = "LLM plugin providing access to Ollama models using HTTP API";
