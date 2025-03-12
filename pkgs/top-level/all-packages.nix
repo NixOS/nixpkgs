@@ -2323,7 +2323,7 @@ with pkgs;
 
   ghidra-bin = callPackage ../tools/security/ghidra { };
 
-  glslviewer = callPackage ../development/tools/glslviewer {
+  glslviewer = callPackage ../by-name/gl/glslviewer/package.nix {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
 
