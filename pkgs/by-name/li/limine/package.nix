@@ -10,7 +10,7 @@
   buildCDs ? false,
   targets ? [ ],
   # x86 specific flags
-  biosSupport ? false,
+  biosSupport ? true,
   pxeSupport ? false,
 }:
 
@@ -19,13 +19,13 @@ let
 
   version = "9.2.0";
 
-  hasI686 =
+  hasX86 =
     (if targets == [ ] then stdenv.hostPlatform.isx86_32 else (builtins.elem "i686" targets))
+    || (if targets == [ ] then stdenv.hostPlatform.isx86_64 else (builtins.elem "x86_64" targets))
     || enableAll;
 
-  hasX86_64 =
-    (if targets == [ ] then stdenv.hostPlatform.isx86_64 else (builtins.elem "x86_64" targets))
-    || enableAll;
+  biosSupport' = biosSupport && hasX86;
+  pxeSupport' = pxeSupport && hasX86;
 
   uefiFlags =
     target:
@@ -40,10 +40,10 @@ let
 
   configureFlags =
     lib.optionals enableAll [ "--enable-all" ]
-    ++ lib.optionals biosSupport [ "--enable-bios" ]
-    ++ lib.optionals (buildCDs && biosSupport) [ "--enable-bios-cd" ]
+    ++ lib.optionals biosSupport' [ "--enable-bios" ]
+    ++ lib.optionals (buildCDs && biosSupport') [ "--enable-bios-cd" ]
     ++ lib.optionals buildCDs [ "--enable-uefi-cd" ]
-    ++ lib.optionals pxeSupport [ "--enable-bios-pxe" ]
+    ++ lib.optionals pxeSupport' [ "--enable-bios-pxe" ]
     ++ lib.concatMap uefiFlags (
       if targets == [ ] then [ stdenv.hostPlatform.parsed.cpu.name ] else targets
     )
@@ -54,10 +54,6 @@ let
       "CC=${lib.getExe stdenv.cc}"
     ];
 in
-
-assert lib.assertMsg (!biosSupport || hasI686) "BIOS builds are possible only for x86";
-
-assert lib.assertMsg (!pxeSupport || hasI686) "PXE builds are possible only for x86";
 
 # The output of the derivation is a tool to create bootable images using Limine
 # as bootloader for various platforms and corresponding binary and helper files.
@@ -84,7 +80,7 @@ stdenv.mkDerivation {
     ++ lib.optionals (enableAll || buildCDs) [
       mtools
     ]
-    ++ lib.optionals (hasI686 || hasX86_64) [ nasm ];
+    ++ lib.optionals hasX86 [ nasm ];
 
   outputs = [
     "out"
