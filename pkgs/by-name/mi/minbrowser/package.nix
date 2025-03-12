@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "A fast, minimal browser that protects your privacy";
+    description = "Fast, minimal browser that protects your privacy";
     homepage = "https://github.com/minbrowser/min";
     changelog = "https://github.com/minbrowser/min/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
