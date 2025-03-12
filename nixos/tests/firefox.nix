@@ -1,5 +1,4 @@
 {
-  lib,
   pkgs,
   firefoxPackage,
   ...
@@ -39,7 +38,7 @@
 
   testScript =
     let
-      exe = lib.getExe firefoxPackage;
+      exe = pkgs.lib.getExe firefoxPackage;
     in
     ''
       from contextlib import contextmanager
