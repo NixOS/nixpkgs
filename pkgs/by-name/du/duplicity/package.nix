@@ -22,13 +22,13 @@
 let
   self = python3.pkgs.buildPythonApplication rec {
     pname = "duplicity";
-    version = "3.0.3.2";
+    version = "3.0.4";
 
     src = fetchFromGitLab {
       owner = "duplicity";
       repo = "duplicity";
       rev = "rel.${version}";
-      hash = "sha256-aP2+MIV9EgwGb9detibHzW2AJdbnP+9ur9Y/Irw26qM=";
+      hash = "sha256-FoaKuB0mo2RFksMHnIUx984+h/U0tdvk+bvsuYt3r5g=";
     };
 
     patches = [
@@ -51,9 +51,11 @@ let
           --replace-fail /usr/bin /dev
       '';
 
-    disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
-      # uses /tmp/
-      "testing/unit/test_cli_main.py::CommandlineTest::test_intermixed_args"
+    disabledTests = [
+      # fails on some unsupported backends, e.g.
+      # ************* Module duplicity.backends.swiftbackend
+      # duplicity/backends/swiftbackend.py:176: [E0401(import-error), SwiftBackend._put] Unable to import 'swiftclient.service'
+      "test_pylint"
     ];
 
     nativeBuildInputs = [
@@ -62,6 +64,9 @@ let
       python3.pkgs.wrapPython
       wrapGAppsNoGuiHook
       python3.pkgs.setuptools-scm
+      python3.pkgs.pycodestyle
+      python3.pkgs.black
+      python3.pkgs.pylint
     ];
 
     buildInputs = [
