@@ -17,13 +17,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "libremidi";
-  version = "4.5.0";
+  version = "5.0.0";
 
   src = fetchFromGitHub {
     owner = "jcelerier";
     repo = "libremidi";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-JwXOIBq+pmPIR4y/Zv5whEyCfpLHmbllzdH2WLZmWLw=";
+    hash = "sha256-cdmXLbWnK5vGVUN1XK159+w+NBOc2VMAqMw4HIU52Zk=";
   };
 
   nativeBuildInputs = [
