@@ -31,7 +31,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/coral-xyz/anchor";
     changelog = "https://github.com/coral-xyz/anchor/blob/${src.rev}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = [ ];
+    maintainers = with maintainers; [ Denommus ];
     mainProgram = "anchor";
   };
 }
