@@ -628,7 +628,7 @@ in {
   locate = handleTest ./locate.nix {};
   login = handleTest ./login.nix {};
   logrotate = handleTest ./logrotate.nix {};
-  loki = handleTest ./loki.nix {};
+  loki = handleTest ./loki {};
   luks = handleTest ./luks.nix {};
   lvm2 = handleTest ./lvm2 {};
   lxc = handleTest ./lxc {};
