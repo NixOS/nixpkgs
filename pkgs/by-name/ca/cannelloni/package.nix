@@ -5,16 +5,18 @@
   cmake,
   lksctp-tools,
   sctpSupport ? true,
+  versionCheckHook,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cannelloni";
-  version = "1.1.0";
+  version = "1.2.0";
   src = fetchFromGitHub {
     owner = "mguentner";
     repo = "cannelloni";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-pAXHo9NCXMFKYcIJogytBiPkQE0nK6chU5TKiDNCKA8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Qvmb3w0yv5BQqS/taV7BbZxjvcmWlHsdnzk00a6G1ZU=";
   };
 
   nativeBuildInputs = [
@@ -26,6 +28,13 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     "-DSCTP_SUPPORT=${lib.boolToString sctpSupport}"
   ];
+
+  nativeInstallInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "SocketCAN over Ethernet tunnel";
