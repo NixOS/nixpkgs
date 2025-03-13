@@ -1,4 +1,4 @@
-{ lib, stdenv, targetPackages, fetchurl, fetchpatch, fetchFromGitHub, noSysDirs
+{ lib, stdenv, targetPackages, fetchurl, fetchpatch, noSysDirs
 , langC ? true, langCC ? true, langFortran ? false
 , langAda ? false
 , langObjC ? stdenv.targetPlatform.isDarwin
