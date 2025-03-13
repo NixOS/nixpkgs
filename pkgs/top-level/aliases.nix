@@ -999,7 +999,7 @@ mapAliases {
   mutter43 = throw "'mutter43' has been removed since it is no longer used by Pantheon."; # Added 2024-09-22
   mysql-client = hiPrio mariadb.client;
   mysql = throw "'mysql' has been renamed to/replaced by 'mariadb'"; # Converted to throw 2024-10-17
-  mesa_drivers = throw "'mesa_drivers' has been removed, use 'pkgs.mesa' or 'pkgs.mesa.drivers' depending on target use case."; # Converted to throw 2024-07-11
+  mesa_drivers = throw "'mesa_drivers' has been removed, use 'pkgs.mesa' instead."; # Converted to throw 2024-07-11
 
   ### N ###
 
