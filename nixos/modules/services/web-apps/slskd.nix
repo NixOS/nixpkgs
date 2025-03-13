@@ -282,6 +282,7 @@ in {
         Type = "simple";
         User = cfg.user;
         Group = cfg.group;
+        Environment = ["DOTNET_USE_POLLING_FILE_WATCHER=1"];
         EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
         StateDirectory = "slskd";  # Creates /var/lib/slskd and manages permissions
         ExecStart = "${cfg.package}/bin/slskd --app-dir /var/lib/slskd --config ${configurationYaml}";
