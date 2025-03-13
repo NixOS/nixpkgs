@@ -11,23 +11,23 @@
 
 buildGoModule rec {
   pname = "trezord-go";
-  version = "2.0.33";
-  commit = "2680d5e";
+  version = "2.0.33-unstable-2024-01-04";
+  commit = "db03d99";
 
   src = fetchFromGitHub {
     owner = "trezor";
     repo = "trezord-go";
-    rev = "v${version}";
+    rev = "db03d99230f5b609a354e3586f1dfc0ad6da16f7";
     fetchSubmodules = true;
-    hash = "sha256-3I6NOzDMhzRyVSOURl7TjJ1Z0P0RcKrSs5rNaZ0Ho9M=";
+    hash = "sha256-PomM8k4vAp+aCsJyPZhCZM9gPOJbTZ5kr7YPKzvqZ/w=";
   };
 
   vendorHash = "sha256-wXgAmZEXdM4FcMCQbAs+ydXshCAMu7nl/yVv/3sqaXE=";
 
   patches = [
     (fetchpatch {
-      url = "https://github.com/trezor/trezord-go/commit/616473d53a8ae49f1099e36ab05a2981a08fa606.patch";
-      hash = "sha256-yKTwgqWr4L6XEPV85A6D1wpRdpef8hkIbl4LrRmOyuo=";
+      url = "https://github.com/trezor/trezord-go/commit/b1161ab907a2416a58ac3a39fb525c12ac808a1f.patch";
+      hash = "sha256-jW+x/FBFEIlRGTDHWF2Oj+05KmFLtFDGJwfYFx7yTv4=";
     })
   ];
 
