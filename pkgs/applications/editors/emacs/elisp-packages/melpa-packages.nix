@@ -1535,6 +1535,10 @@ let
 
         rpm-spec-mode = ignoreCompilationError super.rpm-spec-mode; # elisp error
 
+        # missing optional dependencies
+        # https://github.com/emacs-rustic/rustic/pull/93
+        rustic = addPackageRequires super.rustic [ self.flycheck ];
+
         # https://github.com/emacsfodder/emacs-theme-sakura/issues/1
         sakura-theme = addPackageRequiresIfOlder super.sakura-theme [ self.autothemer ] "20240921.1028";
 
