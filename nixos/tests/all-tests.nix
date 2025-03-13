@@ -163,7 +163,7 @@ in {
   allTerminfo = runTest ./all-terminfo.nix;
   alps = runTest ./alps.nix;
   amazon-cloudwatch-agent = runTest ./amazon-cloudwatch-agent.nix;
-  amazon-init-shell = handleTest ./amazon-init-shell.nix {};
+  amazon-init-shell = runTest ./amazon-init-shell.nix;
   amazon-ssm-agent = handleTest ./amazon-ssm-agent.nix {};
   amd-sev = runTest ./amd-sev.nix;
   angie-api = handleTest ./angie-api.nix {};
