@@ -49,54 +49,56 @@ let
     };
   };
 
-  confFile = pkgs.writeText "named.conf"
-    ''
-      include "/etc/bind/rndc.key";
-      controls {
-        inet 127.0.0.1 allow {localhost;} keys {"rndc-key";};
-      };
+  confFile = pkgs.writeTextFile { 
+      name = "named.conf";
+      checkPhase = ''${bindPkg}/bin/named-checkconf -z $target'';
+      text = ''
+        include "/etc/bind/rndc.key";
+        controls {
+          inet 127.0.0.1 allow {localhost;} keys {"rndc-key";};
+        };
 
-      acl cachenetworks { ${lib.concatMapStrings (entry: " ${entry}; ") cfg.cacheNetworks} };
-      acl badnetworks { ${lib.concatMapStrings (entry: " ${entry}; ") cfg.blockedNetworks} };
-
-      options {
-        listen-on { ${lib.concatMapStrings (entry: " ${entry}; ") cfg.listenOn} };
-        listen-on-v6 { ${lib.concatMapStrings (entry: " ${entry}; ") cfg.listenOnIpv6} };
-        allow-query-cache { cachenetworks; };
-        blackhole { badnetworks; };
-        forward ${cfg.forward};
-        forwarders { ${lib.concatMapStrings (entry: " ${entry}; ") cfg.forwarders} };
-        directory "${cfg.directory}";
-        pid-file "/run/named/named.pid";
-        ${cfg.extraOptions}
-      };
-
-      ${cfg.extraConfig}
-
-      ${ lib.concatMapStrings
-          ({ name, file, master ? true, slaves ? [], masters ? [], allowQuery ? [], extraConfig ? "" }:
-            ''
-              zone "${name}" {
-                type ${if master then "master" else "slave"};
-                file "${file}";
-                ${ if master then
-                   ''
-                     allow-transfer {
-                       ${lib.concatMapStrings (ip: "${ip};\n") slaves}
-                     };
-                   ''
-                   else
-                   ''
-                     masters {
-                       ${lib.concatMapStrings (ip: "${ip};\n") masters}
-                     };
-                   ''
-                }
-                allow-query { ${lib.concatMapStrings (ip: "${ip}; ") allowQuery}};
-                ${extraConfig}
-              };
-            '')
-          (lib.attrValues cfg.zones) }
+        acl cachenetworks { ${lib.concatMapStrings (entry: " ${entry}; ") cfg.cacheNetworks} };
+        acl badnetworks { ${lib.concatMapStrings (entry: " ${entry}; ") cfg.blockedNetworks} };
+  
+        options {
+          listen-on { ${lib.concatMapStrings (entry: " ${entry}; ") cfg.listenOn} };
+          listen-on-v6 { ${lib.concatMapStrings (entry: " ${entry}; ") cfg.listenOnIpv6} };
+          allow-query-cache { cachenetworks; };
+          blackhole { badnetworks; };
+          forward ${cfg.forward};
+          forwarders { ${lib.concatMapStrings (entry: " ${entry}; ") cfg.forwarders} };
+          directory "${cfg.directory}";
+          pid-file "/run/named/named.pid";
+          ${cfg.extraOptions}
+        };
+  
+        ${cfg.extraConfig}
+  
+        ${ lib.concatMapStrings
+            ({ name, file, master ? true, slaves ? [], masters ? [], allowQuery ? [], extraConfig ? "" }:
+              ''
+                zone "${name}" {
+                  type ${if master then "master" else "slave"};
+                  file "${file}";
+                  ${ if master then
+                     ''
+                       allow-transfer {
+                         ${lib.concatMapStrings (ip: "${ip};\n") slaves}
+                       };
+                     ''
+                     else
+                     ''
+                       masters {
+                         ${lib.concatMapStrings (ip: "${ip};\n") masters}
+                       };
+                     ''
+                  }
+                  allow-query { ${lib.concatMapStrings (ip: "${ip}; ") allowQuery}};
+                  ${extraConfig}
+                };
+              '')
+            (lib.attrValues cfg.zones) }
     '';
 
 in
