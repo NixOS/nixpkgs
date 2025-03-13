@@ -1153,7 +1153,7 @@ in {
   systemd-userdbd = handleTest ./systemd-userdbd.nix {};
   systemd-homed = handleTest ./systemd-homed.nix {};
   systemtap = handleTest ./systemtap.nix {};
-  startx = runTest ./startx.nix;
+  startx = import ./startx.nix { inherit pkgs runTest; };
   taler = handleTest ./taler {};
   tandoor-recipes = handleTest ./tandoor-recipes.nix {};
   tandoor-recipes-script-name = handleTest ./tandoor-recipes-script-name.nix {};
@@ -1163,7 +1163,7 @@ in {
   tayga = handleTest ./tayga.nix {};
   technitium-dns-server = handleTest ./technitium-dns-server.nix {};
   teeworlds = handleTest ./teeworlds.nix {};
-  telegraf = handleTest ./telegraf.nix {};
+  telegraf = runTest ./telegraf.nix;
   teleport = handleTest ./teleport.nix {};
   teleports = runTest ./teleports.nix;
   thelounge = handleTest ./thelounge.nix {};
