@@ -5351,6 +5351,8 @@ self: super: with self; {
     }
   );
 
+  geeknote = callPackage ../development/python-modules/geeknote { };
+
   gehomesdk = callPackage ../development/python-modules/gehomesdk { };
 
   gekitchen = callPackage ../development/python-modules/gekitchen { };
@@ -8811,6 +8813,8 @@ self: super: with self; {
   mkdocs-redoc-tag = callPackage ../development/python-modules/mkdocs-redoc-tag { };
 
   mkdocs-rss-plugin = callPackage ../development/python-modules/mkdocs-rss-plugin { };
+
+  mkdocs-simple-blog = callPackage ../development/python-modules/mkdocs-simple-blog { };
 
   mkdocs-swagger-ui-tag = callPackage ../development/python-modules/mkdocs-swagger-ui-tag { };
 
