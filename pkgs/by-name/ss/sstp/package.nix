@@ -9,7 +9,7 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "sstp-client";
   version = "unstable-2023-03-25";
 

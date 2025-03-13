@@ -8,7 +8,7 @@
   gtk3,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation {
   pname = "mint-l-icons";
   version = "1.7.4";
 

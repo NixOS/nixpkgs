@@ -12,7 +12,7 @@ let
     hash = "sha256-fzkuuu6pmvqeJa7qlX8jhtCLC4oYRLUm1hqHTRiYEX8=";
   };
 in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "lovely-injector";
   inherit version;
   src = lovelyInjector;

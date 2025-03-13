@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "elfx86exts";
   version = "unstable-2023-04-20";
 

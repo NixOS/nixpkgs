@@ -6,7 +6,7 @@
   doxygen,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "ogdf";
   version = "2022.02";
 

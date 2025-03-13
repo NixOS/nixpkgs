@@ -8,7 +8,7 @@
   wayland,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "salut";
   version = "unstable-2022-12-17";
 

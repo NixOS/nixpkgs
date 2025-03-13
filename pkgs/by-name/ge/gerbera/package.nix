@@ -43,7 +43,7 @@
 }:
 
 let
-  libupnp' = libupnp.overrideAttrs (super: rec {
+  libupnp' = libupnp.overrideAttrs (super: {
     cmakeFlags = super.cmakeFlags or [ ] ++ [
       "-Dblocking_tcp_connections=OFF"
       "-Dreuseaddr=ON"

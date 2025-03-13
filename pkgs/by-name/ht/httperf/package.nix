@@ -6,7 +6,7 @@
   openssl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "httperf";
   version = "0.9.1";
 
