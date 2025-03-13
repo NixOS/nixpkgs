@@ -27,13 +27,14 @@
     "demo": {
       "experimental": {
         "candidateHashFilenames": [
-          "factorio_demo_x64_2.0.27.tar.xz"
+          "factorio-demo_linux_2.0.40.tar.xz"
         ],
-        "name": "factorio_demo_x64-2.0.27.tar.xz",
+        "name": "factorio_demo_x64-2.0.40.tar.xz",
         "needsAuth": false,
+        "sha256": "91ab921f8599c575f6090f5539090fb2eb42eb0d8bc83f366da078d995c639e6",
         "tarDirectory": "x64",
-        "url": "https://factorio.com/get-download/2.0.27/demo/linux64",
-        "version": "2.0.27"
+        "url": "https://factorio.com/get-download/2.0.40/demo/linux64",
+        "version": "2.0.40"
       },
       "stable": {
         "candidateHashFilenames": [
