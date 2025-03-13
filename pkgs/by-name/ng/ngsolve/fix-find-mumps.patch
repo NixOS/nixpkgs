@@ -1,0 +1,25 @@
+diff --git a/cmake/cmake_modules/FindMUMPS.cmake b/cmake/cmake_modules/FindMUMPS.cmake
+index b3f880b46..b70481cd0 100644
+--- a/cmake/cmake_modules/FindMUMPS.cmake
++++ b/cmake/cmake_modules/FindMUMPS.cmake
+@@ -8,14 +8,14 @@ if(EXISTS ${MUMPS_DIR}/include/zmumps_c.h)
+     find_library(LIB_MUMPS_D dmumps PATHS ${MUMPS_DIR}/lib)
+     find_library(LIB_MUMPS_Z zmumps PATHS ${MUMPS_DIR}/lib)
+     find_library(LIB_PORD pord PATHS ${MUMPS_DIR}/lib)
+-    find_library(LIB_PARMETIS parmetis HINTS ${PARMETIS_DIR}/lib REQUIRED)
+-    find_library(LIB_METIS metis HINTS ${PARMETIS_DIR}/lib REQUIRED)
++    # find_library(LIB_PARMETIS parmetis HINTS ${PARMETIS_DIR}/lib REQUIRED)
++    # find_library(LIB_METIS metis HINTS ${PARMETIS_DIR}/lib REQUIRED)
+     
+-    if (NOT USE_MKL)
+-        find_library(LIB_SCALAPACK scalapack HINTS ${SCALAPACK_DIR}/lib REQUIRED)
+-    endif()
++    # if (NOT USE_MKL)
++    #     find_library(LIB_SCALAPACK scalapack HINTS ${SCALAPACK_DIR}/lib REQUIRED)
++    # endif()
+     
+-    set(MUMPS_LIBRARIES ${LIB_MUMPS_D} ${LIB_MUMPS_Z} ${LIB_MUMPS_COMMON} ${LIB_PARMETIS} ${LIB_METIS} ${LIB_SCALAPACK})
++    set(MUMPS_LIBRARIES ${LIB_MUMPS_D} ${LIB_MUMPS_Z} ${LIB_MUMPS_COMMON})
+ 
+     if (LIB_PORD)
+        list(APPEND MUMPS_LIBRARIES ${LIB_PORD})
