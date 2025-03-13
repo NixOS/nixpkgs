@@ -4,7 +4,7 @@
   fetchFromGitHub,
   pythonOlder,
   mkdocs,
-  # Add any other dependencies listed in the project's requirements
+# Add any other dependencies listed in the project's requirements
 }:
 buildPythonPackage rec {
   pname = "mkdocs-simple-blog";
@@ -33,16 +33,14 @@ buildPythonPackage rec {
   # Disable tests if they're not included or need special setup
   doCheck = false;
 
-  pythonImportsCheck = ["mkdocs_simple_blog"];
+  pythonImportsCheck = [ "mkdocs_simple_blog" ];
 
   meta = with lib; {
     description = "A simple blog generator plugin for MkDocs";
     homepage = "https://github.com/FernandoCelmer/mkdocs-simple-blog";
     license = licenses.mit; # Verify the correct license from the project
     maintainers = with maintainers; [
-      /*
-      Add your name/identifier here
-      */
+      # Add your name/identifier here
     ];
   };
 }
