@@ -174,7 +174,7 @@ in {
   appliance-repart-image = runTest ./appliance-repart-image.nix;
   appliance-repart-image-verity-store = runTest ./appliance-repart-image-verity-store.nix;
   apparmor = runTest ./apparmor;
-  archi = handleTest ./archi.nix {};
+  archi = runTest ./archi.nix;
   aria2 = handleTest ./aria2.nix {};
   armagetronad = handleTest ./armagetronad.nix {};
   artalk = runTest ./artalk.nix;
