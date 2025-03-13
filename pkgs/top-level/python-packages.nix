@@ -2194,6 +2194,8 @@ self: super: with self; {
     inherit (pkgs) secp256k1;
   };
 
+  combinadics = callPackage ../development/python-modules/combinadics { };
+
   comicon = callPackage ../development/python-modules/comicon { };
 
   command-runner = callPackage ../development/python-modules/command-runner { };
