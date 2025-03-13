@@ -49,8 +49,10 @@ let
     };
   };
 
-  confFile = pkgs.writeText "named.conf"
-    ''
+  confFile = pkgs.writeTextFile { name = "named.conf"; 
+      checkPhase = ''${bindPkg}/bin/named-checkconf -z $target'';
+      text = 
+      ''
       include "/etc/bind/rndc.key";
       controls {
         inet 127.0.0.1 allow {localhost;} keys {"rndc-key";};
@@ -98,6 +100,7 @@ let
             '')
           (lib.attrValues cfg.zones) }
     '';
+  };
 
 in
 
