@@ -14310,6 +14310,12 @@
       }
     ];
   };
+  mahyarmirrashed = {
+    email = "mah.mirr@gmail.com";
+    github = "mahyarmirrashed";
+    githubId = 59240843;
+    name = "Mahyar Mirrashed";
+  };
   majesticmullet = {
     email = "hoccthomas@gmail.com.au";
     github = "MajesticMullet";
