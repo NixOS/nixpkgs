@@ -107,6 +107,10 @@ let
               stripLen = 1;
               hash = "sha256-Vs32kql7N6qtLqc12FtZHURcbenA7+N3E/nRRX3jdig=";
             })
+        # fix build with GCC 14 on aarch64-linux
+        # See https://github.com/llvm/llvm-project/issues/78691
+        ++ lib.optional (lib.versions.major release_version == "17")
+          (getVersionFile "clang/fix-build-with-gcc-14-on-arm.patch")
         ++ lib.optional (lib.versions.major release_version == "18") (fetchpatch {
           name = "tweak-tryCaptureVariable-for-unevaluated-lambdas.patch";
           url = "https://github.com/llvm/llvm-project/commit/3d361b225fe89ce1d8c93639f27d689082bd8dad.patch";

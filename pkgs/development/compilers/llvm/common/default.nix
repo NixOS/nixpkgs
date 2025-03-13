@@ -106,6 +106,13 @@ let
                   path = ../12;
                 }
               ];
+              "clang/fix-build-with-gcc-14-on-arm.patch" = [
+                {
+                  after = "17";
+                  before = "18";
+                  path = ../17;
+                }
+              ];
               "lld/add-table-base.patch" = [
                 {
                   after = "16";
@@ -373,12 +380,14 @@ let
             # Crude method to drop polly patches if present, they're not needed for tblgen.
             (p: (!lib.hasInfix "-polly" p))
             tools.libllvm.patches;
+        # Would take tools.libclang.patches, but this introduces a cycle due
+        # to replacements depending on the llvm outpath (e.g. the LLVMgold patch).
+        # So copy over only the patches known to be necessary.
         clangPatches = [
-          # Would take tools.libclang.patches, but this introduces a cycle due
-          # to replacements depending on the llvm outpath (e.g. the LLVMgold patch).
-          # So take the only patch known to be necessary.
           (metadata.getVersionFile "clang/gnu-install-dirs.patch")
-        ];
+        ]
+        ++ lib.optional (lib.versions.major metadata.release_version == "17")
+          (metadata.getVersionFile "clang/fix-build-with-gcc-14-on-arm.patch");
       };
 
       libclang = callPackage ./clang {
