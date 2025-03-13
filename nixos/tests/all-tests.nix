@@ -164,7 +164,7 @@ in {
   alps = runTest ./alps.nix;
   amazon-cloudwatch-agent = runTest ./amazon-cloudwatch-agent.nix;
   amazon-init-shell = runTest ./amazon-init-shell.nix;
-  amazon-ssm-agent = handleTest ./amazon-ssm-agent.nix {};
+  amazon-ssm-agent = runTest ./amazon-ssm-agent.nix;
   amd-sev = runTest ./amd-sev.nix;
   angie-api = handleTest ./angie-api.nix {};
   anki-sync-server = handleTest ./anki-sync-server.nix {};
