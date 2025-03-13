@@ -164,8 +164,6 @@ stdenv.mkDerivation rec {
     "fortify3"
   ];
 
-  configureScript = "python ./configure";
-
   installTargets = [ (if withExamples then "install" else "install-lib") ];
 
   enableParallelBuilding = true;
