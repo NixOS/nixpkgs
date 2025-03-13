@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "amneziawg";
-  version = "1.0.20240711";
+  version = "1.0.20241112";
 
   src = fetchFromGitHub {
     owner = "amnezia-vpn";
     repo = "amneziawg-linux-kernel-module";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WOcBTxetVz2Sr62c+2aGNyohG2ydi+R+az+4qHbKprI=";
+    hash = "sha256-Zi70d1l13kLLOSZj4fiq5urijFDPsFDbWT9tcFn34Cc=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/src";
