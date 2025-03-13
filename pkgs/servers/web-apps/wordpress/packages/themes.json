@@ -12,10 +12,10 @@
     "version": "2.8"
   },
   "twentytwentyfive": {
-    "path": "twentytwentyfive/1.0",
-    "rev": "248589",
-    "sha256": "00360gxmnzq4z5z2b7z1wpziwfb6x8nz74qv3c9fpri2d9k4356f",
-    "version": "1.0"
+    "path": "twentytwentyfive/1.1",
+    "rev": "259400",
+    "sha256": "07imhv3n5rdmzlld3rw0jwr32pldv8270fqbfi6vnhxc99mrk054",
+    "version": "1.1"
   },
   "twentytwentyfour": {
     "path": "twentytwentyfour/1.3",
