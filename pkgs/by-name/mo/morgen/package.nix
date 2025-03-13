@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "All-in-one Calendars, Tasks and Scheduler";
-    homepage = "https://morgen.so/download";
+    homepage = "https://morgen.so/";
     mainProgram = "morgen";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
