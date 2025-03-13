@@ -138,7 +138,7 @@ let
       makeLibraryPath makeIncludePath makeBinPath optionalString
       hasInfix hasPrefix hasSuffix stringToCharacters stringAsChars escape
       escapeShellArg escapeShellArgs
-      isStorePath isStringLike
+      isStorePath isStorePathPrefix isStringLike
       isValidPosixName toShellVar toShellVars trim trimWith
       escapeRegex escapeURL escapeXML replaceChars lowerChars
       upperChars toLower toUpper toSentenceCase addContextFrom splitString
