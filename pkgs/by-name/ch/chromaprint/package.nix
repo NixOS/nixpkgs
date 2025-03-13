@@ -4,6 +4,7 @@
   fetchFromGitHub,
   fetchpatch,
   fetchpatch2,
+  fetchurl,
   cmake,
   ninja,
   ffmpeg-headless,
@@ -76,8 +77,29 @@ stdenv.mkDerivation (finalAttrs: {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
+  doCheck = true;
+  checkPhase =
+    let
+      exampleAudio = fetchurl {
+        name = "Dvorak_Symphony_9_1.mp3";
+        url = "https://archive.org/download/Dvorak_Symphony_9/01.Adagio-Allegro_Molto.mp3";
+        hash = "sha256-I+Ve3/OpL+3Joc928F8M21LhCH2eQfRtaJVx9mNOLW0=";
+        meta.license = lib.licenses.publicDomain;
+      };
+
+      # sha256 because actual output of fpcalc is quite long
+      expectedHash = "c47ae40e02caf798ff5ab4d91ff00cfdca8f6786c581662436941d3e000c9aac";
+    in
+    ''
+      runHook preCheck
+      tests/all_tests
+      ${lib.optionalString withTools "diff -u <(src/cmd/fpcalc ${exampleAudio} | sha256sum | cut -c-64) <(echo '${expectedHash}')"}
+      runHook postCheck
+    '';
+
   meta =
     {
+      changelog = "https://github.com/acoustid/chromaprint/releases/tag/v${finalAttrs.version}";
       homepage = "https://acoustid.org/chromaprint";
       description = "AcoustID audio fingerprinting library";
       license = lib.licenses.lgpl21Plus;
