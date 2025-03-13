@@ -37,6 +37,10 @@ buildPythonPackage rec {
     ln -s ${src-data} worldengine-data
   '';
 
+  patches = [
+    ./numpy-sequence.patch
+  ];
+
   propagatedBuildInputs = [
     gdal
     h5py
