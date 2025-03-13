@@ -72,12 +72,11 @@ stdenv.mkDerivation rec {
     '';
 
   meta = with lib; {
-    description = "Interactive process viewer";
-    homepage = "https://htop.dev";
+    description = "Interactive process viewer, with vim-style keybindings";
+    homepage = "https://github.com/KoffeinFlummi/htop-vim";
     license = licenses.gpl2Only;
     platforms = platforms.all;
     maintainers = with maintainers; [ thiagokokada ];
-    changelog = "https://github.com/htop-dev/htop/blob/${version}/ChangeLog";
     mainProgram = "htop";
   };
 }
