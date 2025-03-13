@@ -6,7 +6,7 @@
   ninja,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "frozen";
   # pin to a newer release if frozen releases again, see cesanta/frozen#72
   version = "unstable-2021-02-23";

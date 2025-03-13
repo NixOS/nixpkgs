@@ -6,7 +6,7 @@
   libevent,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "libevhtp";
   version = "unstable-2021-04-28";
 

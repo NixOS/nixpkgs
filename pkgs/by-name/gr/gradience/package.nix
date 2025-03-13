@@ -21,7 +21,7 @@
   gobject-introspection,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication {
   pname = "gradience";
   version = "0.4.1";
 

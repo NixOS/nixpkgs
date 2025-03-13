@@ -5,7 +5,7 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule {
   pname = "pkgsite";
   version = "0-unstable-2025-02-18";
 
