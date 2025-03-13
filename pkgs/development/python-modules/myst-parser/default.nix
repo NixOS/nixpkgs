@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch2,
   flit-core,
   pythonOlder,
   defusedxml,
@@ -21,7 +20,7 @@
 }:
 buildPythonPackage rec {
   pname = "myst-parser";
-  version = "4.0.0";
+  version = "4.0.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.10";
@@ -30,16 +29,8 @@ buildPythonPackage rec {
     owner = "executablebooks";
     repo = pname;
     tag = "v${version}";
-    hash = "sha256-QbFENC/Msc4pkEOPdDztjyl+2TXtAbMTHPJNAsUB978=";
+    hash = "sha256-/Prauz4zuJY39EK2BmgBbH1uwjF4K38e5X5hPYwRBl0=";
   };
-
-  patches = [
-    (fetchpatch2 {
-      # Sphinx 8.1 compat
-      url = "https://github.com/executablebooks/MyST-Parser/commit/9fe724ebf1d02fd979632d82387f802c91e0d6f6.patch";
-      hash = "sha256-KkAV9tP+dFax9KuxqkhqNlGWx6wSO6M2dWpah+GYG0E=";
-    })
-  ];
 
   build-system = [ flit-core ];
 
