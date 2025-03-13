@@ -41,26 +41,31 @@ let
           unzip
           makeWrapper
         ];
-        dontUnpack = true;
+
+        sourceRoot = ".";
 
         installPhase =
           ''
-            unzip $src -d $out
-            mkdir -p $out/bin $out/share $out/share/java
-            cp -s "$out"/*.jar "$out/share/java/"  # */
-            rm -rf $out/notices
-            mv $out/doc $out/share
+            runHook preInstall
 
+            install -Dm444 -t $out/share/java/ *.jar
+            mv doc $out/share
+
+            mkdir -p $out/bin
             makeWrapper ${lib.getExe jre} $out/bin/${mainProgram} \
-              --add-flags "-jar $out/${jar'}.jar"
+              --add-flags "-jar $out/share/java/${jar'}.jar"
+          ''
+          + lib.optionalString (versionAtLeast finalAttrs.version "11") ''
+            mv lib $out/share/java
           ''
           + lib.optionalString (versionAtLeast finalAttrs.version "8") ''
             makeWrapper ${lib.getExe jre} $out/bin/transform \
-              --add-flags "-cp $out/${jar'}.jar net.sf.saxon.Transform"
+              --add-flags "-cp $out/share/java/${jar'}.jar net.sf.saxon.Transform"
 
             makeWrapper ${lib.getExe jre} $out/bin/query \
-              --add-flags "-cp $out/${jar'}.jar net.sf.saxon.Query"
-          '';
+              --add-flags "-cp $out/share/java/${jar'}.jar net.sf.saxon.Query"
+          ''
+          + "runHook postInstall";
 
         passthru = lib.optionalAttrs (updateScript != null) {
           inherit updateScript;
