@@ -49,8 +49,8 @@ let
   };
 
   expressvpndFHS = buildFHSEnv {
-    # Setting the name makes the wrapper executable available as $out/bin/expressvpnd
-    name = "expressvpnd";
+    inherit version;
+    pname = "expressvpnd";
 
     # When connected, it directly creates/deletes resolv.conf to change the DNS entries.
     # Since it's running in an FHS environment, it has no effect on actual resolv.conf.
