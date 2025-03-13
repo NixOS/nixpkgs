@@ -238,3 +238,6 @@ e0fe216f4912dd88a021d12a44155fd2cfeb31c8
 
 # nixos/movim: format with nixfmt-rfc-style
 43c1654cae47cbf987cb63758c06245fa95c1e3b
+
+# treewide: use hash instead of sha256 attrbute for sri hashes
+29d421a3c01ff60d9377e8d3395cdd338cd5c870
