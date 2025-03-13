@@ -12,7 +12,7 @@
   nixosTests,
 }:
 let
-  version = "4.12.6";
+  version = "4.12.7";
 
   frontend = buildNpmPackage {
     pname = "dependency-track-frontend";
@@ -25,7 +25,7 @@ let
       owner = "DependencyTrack";
       repo = "frontend";
       rev = version;
-      hash = "sha256-IcahhuWX1Ba7kmyJaNJlY1gcVHOR6uynyr7w5MMwRgo=";
+      hash = "sha256-JuZM/IJd+6xtiC2Tq4ecArmT24D1m8J719UZG+iP2s0=";
     };
 
     installPhase = ''
@@ -33,7 +33,7 @@ let
       cp -R ./dist $out/
     '';
 
-    npmDepsHash = "sha256-LeSKSZYtjrZ84RkhGbLEMHVi1fw7FK/137F0V4hjSCE=";
+    npmDepsHash = "sha256-5kLtdEM0tI02ufsmJNCfZkuEJdp6wBWlGiELJ87YOyQ=";
     forceGitDeps = true;
     makeCacheWritable = true;
 
@@ -50,7 +50,7 @@ maven.buildMavenPackage rec {
     owner = "DependencyTrack";
     repo = "dependency-track";
     rev = version;
-    hash = "sha256-4k7O5ONUqKuJ5EKXnsS1moQ4B9FDMz4ZAwBknwrdjXo=";
+    hash = "sha256-GcA6Vv3H0gujkRYxipLg9ydk/HorNzwWkEAjKnMrHro=";
   };
 
   patches = [
