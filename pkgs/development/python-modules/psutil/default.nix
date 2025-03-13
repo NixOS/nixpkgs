@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "psutil";
-  version = "6.1.1";
+  version = "7.0.0";
   pyproject = true;
 
   inherit stdenv;
@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-z4SWcowY8tC0UZjwaJW+UvNmEXEXRrfzDEZLQitQ4vU=";
+    hash = "sha256-e+nD66OL7Mtkleozr9mCpEB0t48oxDSh9RzAf9MVxFY=";
   };
 
   postPatch = ''

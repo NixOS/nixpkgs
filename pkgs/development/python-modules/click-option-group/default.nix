@@ -3,6 +3,7 @@
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
+  setuptools,
   click,
   pytestCheckHook,
 }:
@@ -10,19 +11,25 @@
 buildPythonPackage rec {
   pname = "click-option-group";
   version = "0.5.6";
-  format = "setuptools";
+  pyproject = true;
+
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "click-contrib";
-    repo = pname;
+    repo = "click-option-group";
     tag = "v${version}";
     hash = "sha256-uR5rIZPPT6pRk/jJEy2rZciOXrHWVWN6BfGroQ3znas=";
   };
 
-  propagatedBuildInputs = [ click ];
+  build-system = [ setuptools ];
+
+  dependencies = [ click ];
 
   nativeCheckInputs = [ pytestCheckHook ];
+
+  # https://github.com/click-contrib/click-option-group/issues/65
+  disabledTests = [ "test_missing_group_decl_first_api" ];
 
   pythonImportsCheck = [ "click_option_group" ];
 

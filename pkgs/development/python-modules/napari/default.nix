@@ -99,8 +99,6 @@ mkDerivationWith buildPythonPackage rec {
     wrapt
   ] ++ dask.optional-dependencies.array;
 
-  dontUseSetuptoolsCheck = true;
-
   postFixup = ''
     wrapQtApp $out/bin/napari
   '';

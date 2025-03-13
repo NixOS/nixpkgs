@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "cleo";
-  version = "2.1.0";
+  version = "2.2.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "python-poetry";
     repo = pname;
     tag = version;
-    hash = "sha256-reo/7aPFU5uvZ1YPRTJDRmcMSMFru8e5ss5YmjSe3QU=";
+    hash = "sha256-+OvE09hbF6McdXpXdv5UBdZ0LiSOTL8xyE/+bBNIFNk=";
   };
 
   nativeBuildInputs = [
