@@ -20495,6 +20495,12 @@
     githubId = 19699320;
     keys = [ { fingerprint = "FD5D F7A8 85BB 378A 0157  5356 B09C 4220 3566 9AF8"; } ];
   };
+  RossSmyth = {
+    name = "Ross Smyth";
+    matrix = "@rosssmyth:matrix.org";
+    github = "RossSmyth";
+    githubId = 18294397;
+  };
   rostan-t = {
     name = "Rostan Tabet";
     email = "rostan.tabet@gmail.com";
