@@ -58,6 +58,9 @@ in
         StateDirectory = "ethercalc";
         WorkingDirectory = "/var/lib/ethercalc";
       };
+      environment = {
+        OPENSHIFT_DATA_DIR = "/var/lib/ethercalc";
+      };
     };
   };
 }
