@@ -424,7 +424,7 @@ let
       };
 
       linger = mkOption {
-        type = types.bool;
+        type = types.nullOr types.bool;
         default = false;
         description = ''
           Whether to enable lingering for this user. If true, systemd user
@@ -434,6 +434,9 @@ let
 
           If false, user units will not be started until the user logs in, and
           may be stopped on logout depending on the settings in `logind.conf`.
+
+          If null, no change will be made to the user's current lingering
+          configuration.
         '';
       };
     };
@@ -566,7 +569,7 @@ let
           name uid group description home homeMode createHome isSystemUser
           password hashedPasswordFile hashedPassword
           autoSubUidGidRange subUidRanges subGidRanges
-          initialPassword initialHashedPassword expires;
+          initialPassword initialHashedPassword expires linger;
         shell = utils.toShellPath u.shell;
       }) (filterAttrs (_: u: u.enable) cfg.users);
     groups = attrValues cfg.groups;
@@ -769,12 +772,16 @@ in {
 
     system.activationScripts.users = if !config.systemd.sysusers.enable then {
       supportsDryActivation = true;
-      text = ''
+      text = let
+        updateUsersGroups = pkgs.runCommand "update-users-groups" {} ''
+          substitute ${./update-users-groups.pl} $out --subst-var-by systemd ${config.systemd.package}
+          chmod +x $out
+        '';
+      in ''
         install -m 0700 -d /root
         install -m 0755 -d /home
 
-        ${pkgs.perl.withPackages (p: [ p.FileSlurp p.JSON ])}/bin/perl \
-        -w ${./update-users-groups.pl} ${spec}
+        ${pkgs.perl.withPackages (p: [ p.FileSlurp p.JSON ])}/bin/perl -w ${updateUsersGroups} ${spec}
       '';
     } else ""; # keep around for backwards compatibility
 
