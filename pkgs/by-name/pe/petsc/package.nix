@@ -4,7 +4,6 @@
   fetchzip,
   cctools,
   gfortran,
-  replaceVars,
   python3,
   python3Packages,
   blas,
@@ -12,6 +11,7 @@
   zlib, # propagated by p4est but required by petsc
   mpi, # generic mpi dependency
   mpiCheckPhaseHook,
+  bash,
 
   # Build options
   petsc-optimized ? true,
@@ -92,20 +92,16 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = lib.optional pythonSupport python3Packages.numpy;
 
-  patches = [
-    (replaceVars ./fix-petsc4py-install-prefix.patch {
-      PYTHON_SITEPACKAGES = python3.sitePackages;
-    })
-  ];
+  postPatch = ''
+    # fix petsc4py install prefix
+    substituteInPlace config/BuildSystem/config/packages/petsc4py.py \
+      --replace-fail "'lib'" "'${python3.sitePackages}'"
 
-  postPatch =
-    ''
-      patchShebangs ./lib/petsc/bin
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      substituteInPlace config/install.py \
-        --replace /usr/bin/install_name_tool ${cctools}/bin/install_name_tool
-    '';
+    patchShebangs ./lib/petsc/bin
+
+    substituteInPlace config/example_template.py \
+      --replace-fail "/usr/bin/env bash" "${bash}/bin/bash"
+  '';
 
   configureFlags =
     [
