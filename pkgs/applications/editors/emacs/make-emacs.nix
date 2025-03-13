@@ -29,7 +29,6 @@
   gtk3-x11,
   harfbuzz,
   imagemagick,
-  jansson,
   libXaw,
   libXcursor,
   libXft,
@@ -83,8 +82,6 @@
   withGlibNetworking ? withPgtk || withGTK3 || (withX && withXwidgets),
   withGpm ? stdenv.hostPlatform.isLinux,
   withImageMagick ? lib.versionOlder version "27" && (withX || withNS),
-  # Emacs 30+ has native JSON support
-  withJansson ? lib.versionOlder version "30",
   withMailutils ? true,
   withMotif ? false,
   withNS ? stdenv.hostPlatform.isDarwin && !(variant == "macport" || noGui),
@@ -282,9 +279,6 @@ mkDerivation (finalAttrs: {
       gettext
       gnutls
       (lib.getDev harfbuzz)
-    ]
-    ++ lib.optionals withJansson [
-      jansson
     ]
     ++ [
       libxml2
