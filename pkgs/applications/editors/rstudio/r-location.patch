@@ -1,23 +1,23 @@
 diff --git a/src/cpp/core/r_util/REnvironmentPosix.cpp b/src/cpp/core/r_util/REnvironmentPosix.cpp
-index dbc9a9a1..9a526a86 100644
+index a4e964d49d..512707801b 100644
 --- a/src/cpp/core/r_util/REnvironmentPosix.cpp
 +++ b/src/cpp/core/r_util/REnvironmentPosix.cpp
-@@ -107,12 +107,9 @@ FilePath systemDefaultRScript(std::string* pErrMsg)
+@@ -108,13 +108,7 @@ FilePath systemDefaultRScript(std::string* pErrMsg)
  {
     // check fallback paths
     std::vector<std::string> rScriptPaths = {
 -      "/usr/bin/R",
 -      "/usr/local/bin/R",
 -      "/opt/local/bin/R",
-+      "@R@/bin/R"
-    #ifdef __APPLE__
+-   #ifdef __APPLE__
 -      "/opt/homebrew/bin/R",
 -      "/Library/Frameworks/R.framework/Resources/bin/R",
-+      "@R@/bin/R",
-    #endif
+-   #endif
++      "@R@/bin/R"
     };
  
-@@ -225,8 +222,7 @@ FilePath systemDefaultRScript(std::string* pErrMsg)
+    return scanForRScript(rScriptPaths, pErrMsg);
+@@ -226,8 +220,7 @@ FilePath systemDefaultRScript(std::string* pErrMsg)
        // scan in standard locations as a fallback
        std::string scanErrMsg;
        std::vector<std::string> rScriptPaths;
@@ -27,4 +27,15 @@ index dbc9a9a1..9a526a86 100644
        FilePath scriptPath = scanForRScript(rScriptPaths, &scanErrMsg);
        if (scriptPath.isEmpty())
        {
-
+diff --git a/src/node/desktop/src/main/detect-r.ts b/src/node/desktop/src/main/detect-r.ts
+index 5b768b7cbf..c0efeac0fe 100644
+--- a/src/node/desktop/src/main/detect-r.ts
++++ b/src/node/desktop/src/main/detect-r.ts
+@@ -305,6 +305,7 @@ writeLines(sep = "\x1F", c(
+ }
+ 
+ export function scanForR(): Expected<string> {
++  return ok('@R@/bin/R');
+   // if the RSTUDIO_WHICH_R environment variable is set, use that
+   // note that this does not pick up variables set in a user's bash profile, for example
+   const rstudioWhichR = getenv('RSTUDIO_WHICH_R');

@@ -56,7 +56,7 @@ let
         };
         description = ''
           Specify the repart options for a partiton as a structural setting.
-          See <https://www.freedesktop.org/software/systemd/man/repart.d.html>
+          See {manpage}`repart.d(5)`
           for all available options.
         '';
       };

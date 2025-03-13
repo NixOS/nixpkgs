@@ -20,6 +20,7 @@ buildNpmPackage rec {
   dontNpmBuild = true;
 
   meta = {
+    broken = true; # Cannot find package 'slash'
     description = "CLI tool for running Yeoman generators";
     homepage = "https://github.com/yeoman/yo";
     license = lib.licenses.bsd2;

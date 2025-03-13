@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitea,
   fetchYarnDeps,
+  writableTmpDirAsHomeHook,
   fixup-yarn-lock,
   yarn,
   nodejs,
@@ -10,6 +11,7 @@
   python3,
   pkg-config,
   libsass,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -31,6 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     fixup-yarn-lock
+    writableTmpDirAsHomeHook
     yarn
     nodejs
     pkg-config
@@ -41,8 +44,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   configurePhase = ''
     runHook preConfigure
-
-    export HOME="$(mktemp -d)"
 
     yarn config --offline set yarn-offline-mirror ${lib.escapeShellArg finalAttrs.offlineCache}
     fixup-yarn-lock yarn.lock
@@ -78,6 +79,10 @@ stdenv.mkDerivation (finalAttrs: {
     cp -R -v dist $out
     runHook postInstall
   '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version=branch=stable" ];
+  };
 
   meta = {
     description = "Admin interface for Akkoma";

@@ -80,7 +80,7 @@ let
         mlPlugin = lib.versions.isLe "8.6" coq.coq-version;
         nativeBuildInputs = lib.optionals withDoc [ graphviz lua ];
         buildInputs = [ ncurses ];
-        propagatedBuildInputs = [ stdlib ] ++ mathcomp-deps;
+        propagatedBuildInputs = mathcomp-deps;
 
         buildFlags = lib.optional withDoc "doc";
 
@@ -144,8 +144,7 @@ let
       }
     );
     patched-derivation4 = patched-derivation3.overrideAttrs (o:
-      lib.optionalAttrs (o.version != null
-        && lib.versions.isLe "2.3.0" o.version)
+      lib.optionalAttrs (o.version != null && o.version == "2.3.0")
       {
         propagatedBuildInputs = o.propagatedBuildInputs ++ [ stdlib ];
       }

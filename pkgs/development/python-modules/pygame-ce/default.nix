@@ -1,7 +1,7 @@
 {
   stdenv,
   lib,
-  substituteAll,
+  replaceVars,
   fetchFromGitHub,
   buildPythonPackage,
   pythonOlder,
@@ -45,8 +45,7 @@ buildPythonPackage rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./fix-dependency-finding.patch;
+    (replaceVars ./fix-dependency-finding.patch {
       buildinputs_include = builtins.toJSON (
         builtins.concatMap (dep: [
           "${lib.getDev dep}/"
@@ -118,7 +117,7 @@ buildPythonPackage rec {
 
   env =
     {
-      SDL_CONFIG = "${SDL2.dev}/bin/sdl2-config";
+      SDL_CONFIG = lib.getExe' (lib.getDev SDL2) "sdl2-config";
     }
     // lib.optionalAttrs stdenv.cc.isClang {
       NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-function-pointer-types";

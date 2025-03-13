@@ -219,6 +219,11 @@ let
     stripRoot = false;
   };
 
+  brokenPlugins = fetchurl {
+    url = "https://web.archive.org/web/20250224030717if_/https://downloads.marketplace.jetbrains.com/files/brokenPlugins.json";
+    hash = "sha256-wQO+qmFfBn32F//bs/a5Q/H4Kpc171jKA9EMmeatc6w=";
+  };
+
 in
 stdenvNoCC.mkDerivation rec {
   pname = "${buildType}-community";
@@ -248,7 +253,7 @@ stdenvNoCC.mkDerivation rec {
       --replace-fail 'JDK_PATH_HERE' '${jbr}/lib/openjdk'
     substituteInPlace \
       platform/build-scripts/src/org/jetbrains/intellij/build/impl/brokenPlugins.kt \
-      --replace-fail 'BROKEN_PLUGINS_HERE' '${./brokenPlugins.json}'
+      --replace-fail 'BROKEN_PLUGINS_HERE' '${brokenPlugins}'
     substituteInPlace \
       platform/build-scripts/src/org/jetbrains/intellij/build/impl/LinuxDistributionBuilder.kt \
       --replace-fail 'XPLAT_LAUNCHER_PREBUILT_PATH_HERE' '${xplat-launcher}'

@@ -11,8 +11,11 @@
   hypothesis,
   jinja2,
   pydantic,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
+  rich-click,
+  sybil,
   tomli,
   typing-extensions,
 }:
@@ -21,7 +24,7 @@ buildPythonPackage rec {
   version = "24.6.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     pname = "typed_settings";
@@ -55,17 +58,20 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ hatch-vcs ];
 
-  nativeCheckInputs = [
-    hypothesis
-    pytestCheckHook
-    typing-extensions
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  nativeCheckInputs =
+    [
+      hypothesis
+      pytest-cov-stub
+      pytestCheckHook
+      rich-click
+      sybil
+    ]
+    ++ (lib.optional (pythonOlder "3.11") typing-extensions)
+    ++ (lib.flatten (lib.attrValues optional-dependencies));
 
   pytestFlagsArray = [ "tests" ];
 
   disabledTests = [
-    # AssertionError: assert [OptionInfo(p...
-    "test_deep_options"
     # 1Password CLI is not available
     "TestOnePasswordLoader"
     "test_handle_op"

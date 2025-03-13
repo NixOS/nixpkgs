@@ -34,6 +34,10 @@
     ] ++ orig.args or ["-e" ../../stdenv/generic/source-stdenv.sh (orig.builder or ../../stdenv/generic/default-builder.sh)];
   });
 
+  # See https://nixos.org/manual/nixpkgs/unstable/#tester-testBuildFailurePrime
+  # or doc/build-helpers/testers.chapter.md
+  testBuildFailure' = callPackage ./testBuildFailurePrime { };
+
   # See https://nixos.org/manual/nixpkgs/unstable/#tester-testEqualDerivation
   # or doc/build-helpers/testers.chapter.md
   testEqualDerivation = callPackage ./test-equal-derivation.nix { };
@@ -64,6 +68,10 @@
       touch -- "$out"
     fi
   '';
+
+  # See https://nixos.org/manual/nixpkgs/unstable/#tester-testEqualArrayOrMap
+  # or doc/build-helpers/testers.chapter.md
+  testEqualArrayOrMap = callPackage ./testEqualArrayOrMap { };
 
   # See https://nixos.org/manual/nixpkgs/unstable/#tester-testVersion
   # or doc/build-helpers/testers.chapter.md
@@ -186,4 +194,6 @@
   testMetaPkgConfig = callPackage ./testMetaPkgConfig/tester.nix { };
 
   shellcheck = callPackage ./shellcheck/tester.nix { };
+
+  shfmt = callPackage ./shfmt { };
 }

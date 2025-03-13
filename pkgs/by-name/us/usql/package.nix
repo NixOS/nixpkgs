@@ -11,13 +11,13 @@
 
 buildGoModule rec {
   pname = "usql";
-  version = "0.19.16";
+  version = "0.19.19";
 
   src = fetchFromGitHub {
     owner = "xo";
     repo = "usql";
-    rev = "v${version}";
-    hash = "sha256-zV/6AIglY1tEeOe2bYZqpOOkuS8O+YklXkwsDidap0U=";
+    tag = "v${version}";
+    hash = "sha256-IDCF/etK9mNjdcgQWEDj9tXP12c2CcEA2RamKlCXgRE=";
   };
 
   buildInputs = [
@@ -25,7 +25,7 @@ buildGoModule rec {
     icu
   ];
 
-  vendorHash = "sha256-NTbsyoKL5lyY7sUjmKFGH1USCGa1EwtjWOhxQEohQr4=";
+  vendorHash = "sha256-Z1Mjc+sI+8VHO9TTXUzF4yRvCtDs4sr/dGtjacXWCfE=";
   proxyVendor = true;
 
   # Exclude drivers from the bad group
@@ -67,16 +67,16 @@ buildGoModule rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Universal command-line interface for SQL databases";
     homepage = "https://github.com/xo/usql";
     changelog = "https://github.com/xo/usql/releases/tag/v${version}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "usql";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       georgyo
       anthonyroussel
     ];
-    platforms = with platforms; linux ++ darwin;
+    platforms = with lib.platforms; linux ++ darwin;
   };
 }

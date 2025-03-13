@@ -16,14 +16,14 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "handheld-daemon";
-  version = "3.11.3";
+  version = "3.12.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hhd-dev";
     repo = "hhd";
     tag = "v${version}";
-    hash = "sha256-bnbXw1wmTFmPUTx7vq9hyk3GxW+eiKfSwnqNp6FazCk=";
+    hash = "sha256-NgCuH3Q/ek3FkIMRwrW5U8n4hd16SiYuIFv3v/WNmmI=";
   };
 
   # Handheld-daemon runs some selinux-related utils which are not in nixpkgs.
@@ -97,7 +97,7 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/hhd-dev/hhd/";
     description = "Linux support for handheld gaming devices like the Legion Go, ROG Ally, and GPD Win";
     platforms = lib.platforms.linux;
-    changelog = "https://github.com/hhd-dev/hhd/releases/tag/v${version}";
+    changelog = "https://github.com/hhd-dev/hhd/releases/tag/${src.tag}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       appsforartists

@@ -13,9 +13,10 @@
   libuv,
   wslay,
   zlib,
-  withMruby ? false,
+  withMruby ? true,
   bison,
   ruby,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -66,9 +67,14 @@ stdenv.mkDerivation (finalAttrs: {
     EXES="$(find "$out/share/h2o" -type f -executable)"
     for exe in $EXES; do
       wrapProgram "$exe" \
-        --set "H2O_PERL" "${lib.getExe perl}"
+        --set "H2O_PERL" "${lib.getExe perl}" \
+        --prefix "PATH" : "${lib.getBin openssl}/bin"
     done
   '';
+
+  passthru = {
+    tests = { inherit (nixosTests) h2o; };
+  };
 
   meta = with lib; {
     description = "Optimized HTTP/1.x, HTTP/2, HTTP/3 server";

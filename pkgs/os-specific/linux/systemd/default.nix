@@ -120,7 +120,12 @@
   withLibBPF ?
     lib.versionAtLeast buildPackages.llvmPackages.clang.version "10.0"
     # assumes hard floats
-    && (stdenv.hostPlatform.isAarch -> lib.versionAtLeast stdenv.hostPlatform.parsed.cpu.version "6")
+    && (
+      stdenv.hostPlatform.isAarch
+      ->
+        stdenv.hostPlatform.parsed.cpu ? version
+        && lib.versionAtLeast stdenv.hostPlatform.parsed.cpu.version "6"
+    )
     # see https://github.com/NixOS/nixpkgs/pull/194149#issuecomment-1266642211
     && !stdenv.hostPlatform.isMips64
     # can't find gnu/stubs-32.h
@@ -193,7 +198,7 @@ assert withBootloader -> withEfi;
 let
   wantCurl = withRemote || withImportd;
 
-  version = "257.2";
+  version = "257.3";
 
   # Use the command below to update `releaseTimestamp` on every (major) version
   # change. More details in the commentary at mesonFlags.
@@ -211,7 +216,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "systemd";
     repo = "systemd";
     rev = "v${version}";
-    hash = "sha256-A64RK+EIea98dpq8qzXld4kbDGvYsKf/vDnNtMmwSBM=";
+    hash = "sha256-GvRn55grHWR6M+tA86RMzqinuXNpPZzRB4ApuGN/ZvU=";
   };
 
   # On major changes, or when otherwise required, you *must* :

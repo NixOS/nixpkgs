@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "Laakeri";
-    repo = pname;
+    repo = "sharpsat-td";
     rev = "b9bb015305ea5d4e1ac7141691d0fe55ca983d31";
     sha256 = "sha256-FE+DUd58eRr5w9RFw0fMHfjIiNDWIcG7XbyWJ/pI28U=";
   };

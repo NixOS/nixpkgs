@@ -64,7 +64,7 @@ let
 
       buildTargets =
         [ "cli" ]
-        ++ lib.optionals finalAttrs.doCheck [ "tests" ]
+        ++ lib.optionals finalAttrs.finalPackage.doCheck [ "tests" ]
         ++ lib.optionals static [ "static" ]
         ++ lib.optionals (!static) [ "shared" ];
 

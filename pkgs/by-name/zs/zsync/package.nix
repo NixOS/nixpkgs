@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   # Suppress error "call to undeclared library function 'strcasecmp'" during compilation.
   # The function is found by the linker correctly, so this doesn't introduce any issues.
-  # Also supress errors that come from incompatible pointer types due to GCC 14 changes.
+  # Also suppress errors that come from incompatible pointer types due to GCC 14 changes.
   env.NIX_CFLAGS_COMPILE = toString (
     lib.optionals stdenv.cc.isClang [
       "-Wno-implicit-function-declaration"

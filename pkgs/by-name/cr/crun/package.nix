@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "containers";
-    repo = pname;
+    repo = "crun";
     rev = version;
     hash = "sha256-rSh0oPZxhFSvEqzZrgM5eFrv1lW8Xd3JN1JTCT7Mj0I=";
     fetchSubmodules = true;

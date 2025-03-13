@@ -35,6 +35,7 @@ my $outDir = "/etc/nixos";
 my $rootDir = ""; # = /
 my $force = 0;
 my $noFilesystems = 0;
+my $flake = 0;
 my $showHardwareConfig = 0;
 
 for (my $n = 0; $n < scalar @ARGV; $n++) {
@@ -63,6 +64,9 @@ for (my $n = 0; $n < scalar @ARGV; $n++) {
     }
     elsif ($arg eq "--show-hardware-config") {
         $showHardwareConfig = 1;
+    }
+    elsif ($arg eq "--flake") {
+        $flake = 1;
     }
     else {
         die "$0: unrecognized argument ‘$arg’\n";
@@ -660,6 +664,19 @@ if ($showHardwareConfig) {
     print STDERR "writing $fn...\n";
     mkpath($outDir, 0, 0755);
     write_file($fn, $hwConfig);
+
+    $fn = "$outDir/flake.nix";
+    if ($flake) {
+        if ($force || ! -e $fn) {
+            print STDERR "writing $fn...\n";
+            mkpath($outDir, 0, 0755);
+            write_file($fn, <<EOF);
+            @flake@
+EOF
+        } else {
+            print STDERR "warning: not overwriting existing $fn\n";
+        }
+    }
 
     # Generate a basic configuration.nix, unless one already exists.
     $fn = "$outDir/configuration.nix";

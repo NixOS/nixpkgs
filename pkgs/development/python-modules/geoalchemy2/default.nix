@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "geoalchemy2";
-  version = "0.17.0";
+  version = "0.17.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "geoalchemy";
     repo = "geoalchemy2";
     tag = version;
-    hash = "sha256-MxoX5WGJATIvzfeuHFqYGlnaxPNzvqD/v82Zm4Iav1g=";
+    hash = "sha256-ze0AWwlmBsMUhbmaCNUeEwhFcLxRDeal0IDO421++ck=";
   };
 
   build-system = [
@@ -66,7 +66,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Toolkit for working with spatial databases";
     homepage = "https://geoalchemy-2.readthedocs.io/";
-    changelog = "https://github.com/geoalchemy/geoalchemy2/releases/tag/${version}";
+    changelog = "https://github.com/geoalchemy/geoalchemy2/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ nickcao ];
   };

@@ -1,23 +1,8 @@
 [
   {
     "pname": "Avalonia",
-    "version": "11.0.0",
-    "hash": "sha256-7QE0MtD1QDiG3gRx5xW33E33BXyEtASQSw+Wi3Lmy3E="
-  },
-  {
-    "pname": "Avalonia",
-    "version": "11.0.10",
-    "hash": "sha256-FuGl5admJ9AeRNrg/faGfqx8pwxGxdkmbnth9Jxhelc="
-  },
-  {
-    "pname": "Avalonia",
     "version": "11.0.13",
     "hash": "sha256-D0KHUUC3FxhOxeVowzVHRtRYfoV1G8Xk55LMF4Rw8w4="
-  },
-  {
-    "pname": "Avalonia",
-    "version": "11.0.4",
-    "hash": "sha256-YEqAwBRAhvhN5eT8GqOA8XsSwEF4ccwTMBWxBlIHLUo="
   },
   {
     "pname": "Avalonia.Angle.Windows.Natives",
@@ -43,11 +28,6 @@
     "pname": "Avalonia.Controls.DataGrid",
     "version": "11.0.13",
     "hash": "sha256-Mi6Z55KbQuU7RSiWkMjFzktZxuyuQyXnDw5B1ZS0bHc="
-  },
-  {
-    "pname": "Avalonia.Controls.DataGrid",
-    "version": "11.0.4",
-    "hash": "sha256-wlig5frBAO1DPH9GX0h8MZQq3U4F4K16EliC6N0NbII="
   },
   {
     "pname": "Avalonia.Controls.ItemsRepeater",
@@ -171,8 +151,8 @@
   },
   {
     "pname": "Gommon",
-    "version": "2.7.0.2",
-    "hash": "sha256-gFDtIC6VJ8aaxolppXPG8pBTe9ApBCDy2DFm8Qrxa5w="
+    "version": "2.7.1",
+    "hash": "sha256-tD1gdk4umsl7r5jFd2Wyx3zeRE9BX1FQfZMYoCcpmwY="
   },
   {
     "pname": "HarfBuzzSharp",

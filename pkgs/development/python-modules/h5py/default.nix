@@ -22,7 +22,7 @@ let
   mpiSupport = hdf5.mpiSupport;
 in
 buildPythonPackage rec {
-  version = "3.12.1";
+  version = "3.13.0";
   pname = "h5py";
   pyproject = true;
 
@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Mm1wtT0xuqYfALiqX5XC/LliGj7oNl13DFUaE9u8v98=";
+    hash = "sha256-GHDkZRhyACPahdCJWhlg/yzjmMVnHqw7GkHsaWtxBcM=";
   };
 
   pythonRelaxDeps = [ "mpi4py" ];
@@ -41,6 +41,8 @@ buildPythonPackage rec {
     substituteInPlace pyproject.toml \
       --replace-fail "numpy >=2.0.0, <3" "numpy"
     substituteInPlace setup.py \
+      --replace-fail "mpi4py ==3.1.4" "mpi4py" \
+      --replace-fail "mpi4py ==4.0.1" "mpi4py" \
       --replace-fail "mpi4py ==3.1.6" "mpi4py"
   '';
 

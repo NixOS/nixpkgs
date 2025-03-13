@@ -2,7 +2,6 @@
   coq,
   mkCoqDerivation,
   mathcomp,
-  stdlib,
   lib,
   version ? null,
 }:
@@ -108,7 +107,7 @@ mkCoqDerivation {
     "1.0.0".sha256 = "0sah7k9qm8sw17cgd02f0x84hki8vj8kdz7h15i7rmz08rj0whpa";
   };
 
-  propagatedBuildInputs = [ mathcomp.ssreflect stdlib ];
+  propagatedBuildInputs = [ mathcomp.ssreflect ];
 
   meta = {
     description = "Finset and finmap library";

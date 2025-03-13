@@ -10,14 +10,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "memray";
-  version = "1.15.0";
+  version = "1.16.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bloomberg";
     repo = "memray";
     tag = "v${version}";
-    hash = "sha256-SgkJm+vtIid8RR1Qy98PkpvIQX4LxyAPlS+4UlYlZws=";
+    hash = "sha256-1Vwf4lCe/srIvR47mCIN2pXrRE3mZJpTGdbOwrW2BpU=";
   };
 
   build-system = with python3Packages; [
@@ -68,7 +68,7 @@ python3Packages.buildPythonApplication rec {
   meta = with lib; {
     description = "Memory profiler for Python";
     homepage = "https://bloomberg.github.io/memray/";
-    changelog = "https://github.com/bloomberg/memray/releases/tag/v${version}";
+    changelog = "https://github.com/bloomberg/memray/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
     platforms = platforms.linux;

@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "cktan";
-    repo = pname;
+    repo = "tomlcpp";
     rev = "4212f1fccf530e276a2e1b63d3f99fbfb84e86a4";
     hash = "sha256-PM3gURXhyTZr59BWuLHvltjKOlKUSBT9/rqTeX5V//k=";
   };

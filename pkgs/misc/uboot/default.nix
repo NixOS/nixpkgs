@@ -593,7 +593,7 @@ in {
 
   # A special build with much lower memory frequency (666 vs 1600 MT/s) which
   # makes ROCK64 V2 boards stable. This is necessary because the DDR3 routing
-  # on that revision is marginal and not uncoditionally stable at the specified
+  # on that revision is marginal and not unconditionally stable at the specified
   # frequency. If your ROCK64 is unstable you can try this u-boot variant to
   # see if it works better for you. The only disadvantage is lowered memory
   # bandwidth.

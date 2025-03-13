@@ -2,35 +2,40 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
   poetry-core,
+
   # dependencies
   jsonref,
   jsonschema,
+  latex2mathml,
   pandas,
   pillow,
   pydantic,
-  tabulate,
   pyyaml,
   semchunk,
-  typing-extensions,
+  tabulate,
   transformers,
   typer,
-  latex2mathml,
+  typing-extensions,
+
+  # tests
   jsondiff,
-  requests,
   pytestCheckHook,
+  requests,
 }:
 
 buildPythonPackage rec {
   pname = "docling-core";
-  version = "2.18.1";
+  version = "2.21.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "DS4SD";
     repo = "docling-core";
     tag = "v${version}";
-    hash = "sha256-ymFBR+nz/zq6EFgCbSQPfZDQ/Gk8QeJrkeVQ7KZ9bmo=";
+    hash = "sha256-I4aH1uASbi0GCQPFkrdrpLLVG/guT+vqXgJ2puzp9kU=";
   };
 
   build-system = [
@@ -38,18 +43,18 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
-    jsonschema
-    pydantic
     jsonref
-    tabulate
+    jsonschema
+    latex2mathml
     pandas
     pillow
+    pydantic
     pyyaml
-    typing-extensions
-    transformers
     semchunk
+    tabulate
+    transformers
     typer
-    latex2mathml
+    typing-extensions
   ];
 
   pythonRelaxDeps = [

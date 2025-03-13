@@ -64,16 +64,12 @@ rec {
   stable = if stdenv.hostPlatform.system == "i686-linux" then legacy_390 else production;
 
   production = generic {
-    version = "550.142";
-    sha256_64bit = "sha256-bdVJivBLQtlSU7Zre9oVCeAbAk0s10WYPU3Sn+sXkqE=";
-    sha256_aarch64 = "sha256-sBp5fcCPMrfrTZTF1FqKo9g0wOWP+5+wOwQ7PLWI6wA=";
-    openSha256 = "sha256-hjpwTR4I0MM5dEjQn7MKM3RY1a4Mt6a61Ii9KW2KbiY=";
-    settingsSha256 = "sha256-Wk6IlVvs23cB4s0aMeZzSvbOQqB1RnxGMv3HkKBoIgY=";
-    persistencedSha256 = "sha256-yQFrVk4i2dwReN0XoplkJ++iA1WFhnIkP7ns4ORmkFA=";
-    patchesOpen = [
-      ./nvidia-nv-Convert-symbol-namespace-to-string-literal.patch
-      ./crypto-Add-fix-for-6.13-Module-compilation.patch
-    ];
+    version = "570.124.04";
+    sha256_64bit = "sha256-G3hqS3Ei18QhbFiuQAdoik93jBlsFI2RkWOBXuENU8Q=";
+    sha256_aarch64 = "sha256-HN58N00SNEwMQKSKuOMAXVW6J2VI/2YyDulQNJHuVeM=";
+    openSha256 = "sha256-KCGUyu/XtmgcBqJ8NLw/iXlaqB9/exg51KFx0Ta5ip0=";
+    settingsSha256 = "sha256-LNL0J/sYHD8vagkV1w8tb52gMtzj/F0QmJTV1cMaso8=";
+    persistencedSha256 = "sha256-SHSdnGyAiRH6e0gYMYKvlpRSH5KYlJSA1AJXPm7MDRk=";
   };
 
   latest = selectHighestVersion production (generic {
@@ -106,16 +102,14 @@ rec {
   # Vulkan developer beta driver
   # See here for more information: https://developer.nvidia.com/vulkan-driver
   vulkan_beta = generic rec {
-    version = "550.40.85";
-    persistencedVersion = "550.54.14";
-    settingsVersion = "550.54.14";
-    sha256_64bit = "sha256-2LYrpW5/l5HnAWXehiu6fAM7fqr2kHsh55aAx99MWPU=";
-    openSha256 = "sha256-waGF6tH5f+0frcyqOJA0MHiB9BM0r5oF75rkLzxo3Js=";
-    settingsSha256 = "sha256-m2rNASJp0i0Ez2OuqL+JpgEF0Yd8sYVCyrOoo/ln2a4=";
-    persistencedSha256 = "sha256-XaPN8jVTjdag9frLPgBtqvO/goB5zxeGzaTU0CdL6C4=";
+    version = "570.123.01";
+    persistencedVersion = "550.142";
+    settingsVersion = "550.142";
+    sha256_64bit = "sha256-DDNqQJ0pgOa048frnfpt1WYZVnokUdPwc1hv0LIxHNQ=";
+    openSha256 = "sha256-MHmAv2nm6yGEgWgvvmB+Eq8506PX0HhHNVA9MUpsfZY=";
+    settingsSha256 = "sha256-Wk6IlVvs23cB4s0aMeZzSvbOQqB1RnxGMv3HkKBoIgY=";
+    persistencedSha256 = "sha256-yQFrVk4i2dwReN0XoplkJ++iA1WFhnIkP7ns4ORmkFA=";
     url = "https://developer.nvidia.com/downloads/vulkan-beta-${lib.concatStrings (lib.splitVersion version)}-linux";
-
-    broken = kernel.kernelAtLeast "6.12";
   };
 
   # data center driver compatible with current default cudaPackages

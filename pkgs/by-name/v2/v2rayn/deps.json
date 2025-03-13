@@ -11,8 +11,8 @@
   },
   {
     "pname": "Avalonia",
-    "version": "11.2.3",
-    "hash": "sha256-NUoyXJkIsgbkcKFVb10VRafM4ViHs801c/7vhu3ssUY="
+    "version": "11.2.4",
+    "hash": "sha256-CcdWUxqd43A4KeY1K4T5M6R1M0zuwdwyd5Qh/BAlNT4="
   },
   {
     "pname": "Avalonia.Angle.Windows.Natives",
@@ -25,39 +25,44 @@
     "hash": "sha256-WPHRMNowRnYSCh88DWNBCltWsLPyOfzXGzBqLYE7tRY="
   },
   {
+    "pname": "Avalonia.BuildServices",
+    "version": "0.0.31",
+    "hash": "sha256-wgtodGf644CsUZEBIpFKcUjYHTbnu7mZmlr8uHIxeKA="
+  },
+  {
     "pname": "Avalonia.Controls.ColorPicker",
-    "version": "11.2.3",
-    "hash": "sha256-z3ZHxVSOoOjqq+5G71jnGN1Y0i3YpAkox7cj3lNr6kg="
+    "version": "11.2.4",
+    "hash": "sha256-21Wfb4p0dCevw8Iu/Fchngt1teAnBaxEWgiUpFkerTo="
   },
   {
     "pname": "Avalonia.Controls.DataGrid",
-    "version": "11.2.3",
-    "hash": "sha256-jIJvuYN0iym/WeOC0C7z5xj5kCZSXGoeLQ/q5qQfewM="
+    "version": "11.2.4",
+    "hash": "sha256-fqQBKzHcL0CwuOQ90Gp+UUZZP9OQ9U6H41bvikxQJpo="
   },
   {
     "pname": "Avalonia.Desktop",
-    "version": "11.2.3",
-    "hash": "sha256-srtZi+kDbhRtMl33l91zssBWETU5oHodKbbWyfEsb/I="
+    "version": "11.2.4",
+    "hash": "sha256-WKTOx7RNSb0fOMg5Za4j+u9DwKXDqVzHwQCEXSm7TFo="
   },
   {
     "pname": "Avalonia.Diagnostics",
-    "version": "11.2.3",
-    "hash": "sha256-DIGkaBff+C3BLwedw5xteR5lfzb6ecxiLt12eJVgLQc="
+    "version": "11.2.4",
+    "hash": "sha256-MUSfRXeJ1bstO2rTqWWCQyVq2EpjM5b5bxe0KxVAEU4="
   },
   {
     "pname": "Avalonia.FreeDesktop",
-    "version": "11.2.3",
-    "hash": "sha256-3sNemBmZE06w2ul87T5HrEeHUxXMOa9MfQhpI4AoxDY="
+    "version": "11.2.4",
+    "hash": "sha256-lw8YFXR/pn0awFvFW+OhjZ2LbHonL6zwqLIz+pQp+Sk="
   },
   {
     "pname": "Avalonia.Native",
-    "version": "11.2.3",
-    "hash": "sha256-2Gp98NGWcrILqF+P5PDMPRdsMby/lZiT3eWAUskFim8="
+    "version": "11.2.4",
+    "hash": "sha256-MvxivGjYerXcr70JpWe9CCXO6MU9QQgCkmZfjZCFdJM="
   },
   {
     "pname": "Avalonia.ReactiveUI",
-    "version": "11.2.3",
-    "hash": "sha256-NqRetBiFg5gNCS8C0J1JJJsZ4sz+w+GoEegGFddBGDg="
+    "version": "11.2.4",
+    "hash": "sha256-LqwLUDCIbJowol6BNTTsK7a7KjcLLbCM3y3KKvuHRGw="
   },
   {
     "pname": "Avalonia.Remote.Protocol",
@@ -71,33 +76,33 @@
   },
   {
     "pname": "Avalonia.Remote.Protocol",
-    "version": "11.2.3",
-    "hash": "sha256-dSeu7rnTD9rIvlyro2iFS52oi0vvfeaGV3kDm90BkKw="
+    "version": "11.2.4",
+    "hash": "sha256-mKQVqtzxnZu6p64ZxIHXKSIw3AxAFjhmrxCc5/1VXfc="
   },
   {
     "pname": "Avalonia.Skia",
-    "version": "11.2.3",
-    "hash": "sha256-QBp8wTA92hGwbmNSVL4gsjrqA9CfwDPgdTiOEqcogGA="
+    "version": "11.2.4",
+    "hash": "sha256-82UQGuCl5hN5kdA3Uz7hptpNnG1EPlSB6k/a6XPSuXI="
   },
   {
     "pname": "Avalonia.Themes.Simple",
-    "version": "11.2.3",
-    "hash": "sha256-UF15yTDzHmqd33siH3TJxmxaonA51dzga+hmCUahn1k="
+    "version": "11.2.4",
+    "hash": "sha256-rnF2/bzN8AuOFlsuekOxlu+uLI7n1kIAmC36FFXMKak="
   },
   {
     "pname": "Avalonia.Win32",
-    "version": "11.2.3",
-    "hash": "sha256-xKFKObvqdJaQjphEktRJvzmAoDEsKg3WqlEG31V3qLE="
+    "version": "11.2.4",
+    "hash": "sha256-LJSKiLbdof8qouQhN7pY1RkMOb09IiAu/nrJFR2OybY="
   },
   {
     "pname": "Avalonia.X11",
-    "version": "11.2.3",
-    "hash": "sha256-SD4dmpKx4l8YOyUnrA0fnf2Bb+tHSNyARh7GAtHyg60="
+    "version": "11.2.4",
+    "hash": "sha256-qty8D2/HlZz/7MiEhuagjlKlooDoW3fow5yJY5oX4Uk="
   },
   {
     "pname": "CliWrap",
-    "version": "3.7.1",
-    "hash": "sha256-e0snh/9Ai6/Gw5ycQox2H5nGrPhKfT2sH9dQNjbrrCI="
+    "version": "3.8.1",
+    "hash": "sha256-9XmdodZ2Is+LkuMlc/BNFiBUNWA5tDwBl9kYnReJIhU="
   },
   {
     "pname": "DialogHost.Avalonia",
@@ -286,8 +291,8 @@
   },
   {
     "pname": "System.Diagnostics.EventLog",
-    "version": "8.0.0",
-    "hash": "sha256-rt8xc3kddpQY4HEdghlBeOK4gdw5yIj4mcZhAVtk2/Y="
+    "version": "6.0.0",
+    "hash": "sha256-zUXIQtAFKbiUMKCrXzO4mOTD5EUphZzghBYKXprowSM="
   },
   {
     "pname": "System.IO.Pipelines",
@@ -316,8 +321,8 @@
   },
   {
     "pname": "TaskScheduler",
-    "version": "2.11.0",
-    "hash": "sha256-tS+V78zIrBuFy4VWVx9+IpeWu03YZvjfPg9PRamCswg="
+    "version": "2.12.0",
+    "hash": "sha256-zkaWlCHzUrexHMtXVitbNsgZrbgoLrJ4BBrhujvZr+4="
   },
   {
     "pname": "Tmds.DBus.Protocol",

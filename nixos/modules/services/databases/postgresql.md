@@ -256,7 +256,7 @@ PostgreSQL's versioning policy is described [here](https://www.postgresql.org/su
 - After that a version is considered end-of-life (EOL).
 - Around February each year is the first time an EOL-release will not have received regular updates anymore.
 
-Technically, we'd not want to have EOL'ed packages in a stable NixOS release, which is to be supported until one month after the previous release. Thus, with NixOS' release schedule in May and November, the oldest PostgreSQL version in nixpkgs would have to be supported until December. It could be argued that a soon-to-be-EOL-ed version should thus be removed in May for the .05 release already. But since new security vulnerabilities are first disclosed in Februrary of the following year, we agreed on keeping the oldest PostgreSQL major version around one more cycle in [#310580](https://github.com/NixOS/nixpkgs/pull/310580#discussion_r1597284693).
+Technically, we'd not want to have EOL'ed packages in a stable NixOS release, which is to be supported until one month after the previous release. Thus, with NixOS' release schedule in May and November, the oldest PostgreSQL version in nixpkgs would have to be supported until December. It could be argued that a soon-to-be-EOL-ed version should thus be removed in May for the .05 release already. But since new security vulnerabilities are first disclosed in February of the following year, we agreed on keeping the oldest PostgreSQL major version around one more cycle in [#310580](https://github.com/NixOS/nixpkgs/pull/310580#discussion_r1597284693).
 
 Thus:
 - In September/October the new major version will be released and added to nixos-unstable.
@@ -374,7 +374,7 @@ several common hardening options from `systemd`, most notably:
 * A system call filter (see {manpage}`systemd.exec(5)` for details on `@system-service`).
 * A stricter default UMask (`0027`).
 * Only sockets of type `AF_INET`/`AF_INET6`/`AF_NETLINK`/`AF_UNIX` allowed.
-* Restricted filesystem access (private `/tmp`, most of the file-system hierachy is mounted read-only, only process directories in `/proc` that are owned by the same user).
+* Restricted filesystem access (private `/tmp`, most of the file-system hierarchy is mounted read-only, only process directories in `/proc` that are owned by the same user).
   * When using [`TABLESPACE`](https://www.postgresql.org/docs/current/manage-ag-tablespaces.html)s, make sure to add the filesystem paths to `ReadWritePaths` like this:
     ```nix
     {

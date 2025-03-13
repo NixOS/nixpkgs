@@ -16,14 +16,21 @@
 }:
 stdenv.mkDerivation rec {
   pname = "xdp-tools";
-  version = "1.5.1";
+  version = "1.5.2";
 
   src = fetchFromGitHub {
     owner = "xdp-project";
     repo = "xdp-tools";
     rev = "v${version}";
-    hash = "sha256-1MLF5nurs4Yz5jZKIA2wLLbLuYjS+gY1ZZEL4h1C3Xw=";
+    hash = "sha256-NJawacCrmTuRXsOiAOMD8RaljPnuPFISoWEgiDcInw8=";
   };
+
+  patches = [
+    # Allow building with emacs 30
+    # Submitted upstream: https://github.com/xdp-project/xdp-tools/pull/484
+    # FIXME: remove when merged
+    ./emacs-30.patch
+  ];
 
   outputs = [
     "out"

@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   pname = "di";
-  version = "4.54.0.1";
+  version = "5.0.11";
 
   src = fetchurl {
     url = "mirror://sourceforge/diskinfo-di/${pname}-${version}.tar.gz";
-    sha256 = "sha256-tAHmR+zDyKaXZRvSmtHMauMZ9poki03E068HQvZLT/s=";
+    sha256 = "sha256-SZR6+nFCGmm2TsHDgU4voYgeLbdnVa+236mof7b4sH4=";
   };
 
   makeFlags = [ "PREFIX=$(out)" ];

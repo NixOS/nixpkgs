@@ -7,7 +7,7 @@ import ./make-test-python.nix (
       { pkgs, ... }:
       {
         imports = [ ./common/user-account.nix ];
-        environment.systemPackages = [ pkgs.poppler_utils ];
+        environment.systemPackages = [ pkgs.poppler-utils ];
         fonts.packages = [ pkgs.dejavu_fonts ]; # yields more OCR-able pdf
         services.printing.cups-pdf.enable = true;
         services.printing.cups-pdf.instances = {

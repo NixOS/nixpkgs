@@ -12,7 +12,7 @@
   pciutils,
   pulseaudio,
   qttools,
-  substituteAll,
+  replaceVars,
   systemsettings,
   util-linux,
   vulkan-tools,
@@ -43,9 +43,10 @@ mkKdeDerivation {
 
   patches = [
     # fwupdmgr is provided through NixOS' module
-    (substituteAll (
+    (replaceVars ./0001-tool-paths.patch (
       {
-        src = ./0001-tool-paths.patch;
+        # @QtBinariesDir@ only appears in the *removed* lines of the diff
+        QtBinariesDir = null;
       }
       // tools
     ))

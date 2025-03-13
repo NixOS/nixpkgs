@@ -26,7 +26,7 @@ let
 in
 llvmPackages.stdenv.mkDerivation (finalAttrs: {
   pname = "scx_cscheds";
-  inherit (scx-common) version src;
+  inherit (scx-common) version src patches;
 
   # scx needs specific commits of bpftool and libbpf
   # can be found in meson.build of scx src
@@ -95,7 +95,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     (lib.mapAttrsToList lib.mesonBool {
       # needed libs are already fetched as FOD
       "offline" = true;
-      # rust based schedulers are built seperately
+      # rust based schedulers are built separately
       "enable_rust" = false;
     })
     # Clang to use when compiling .bpf.c

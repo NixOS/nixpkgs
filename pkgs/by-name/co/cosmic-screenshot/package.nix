@@ -9,11 +9,11 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cosmic-screenshot";
-  version = "1.0.0-alpha.5.1";
+  version = "1.0.0-alpha.6";
 
   src = fetchFromGitHub {
     owner = "pop-os";
-    repo = pname;
+    repo = "cosmic-screenshot";
     rev = "epoch-${version}";
     hash = "sha256-/sGYF+XWmPraNGlBVUcN/nokDB9JwWViEAL9gVH3ZaI=";
   };

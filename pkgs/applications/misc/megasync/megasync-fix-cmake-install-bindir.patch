@@ -1,7 +1,7 @@
-diff --git a/contrib/cmake/modules/desktopapp_configuration.cmake b/contrib/cmake/modules/desktopapp_configuration.cmake
-index 8e9f35cb2..b62f5a9b5 100644
---- a/contrib/cmake/modules/desktopapp_configuration.cmake
-+++ b/contrib/cmake/modules/desktopapp_configuration.cmake
+diff --git a/cmake/modules/desktopapp_configuration.cmake b/cmake/modules/desktopapp_configuration.cmake
+index a14ac8669..e80c5e9f6 100644
+--- a/cmake/modules/desktopapp_configuration.cmake
++++ b/cmake/modules/desktopapp_configuration.cmake
 @@ -30,7 +30,6 @@ if(UNIX AND NOT APPLE)
      #       Used for building packages: in which install dir is a path construction folder that will not be there in packages
  

@@ -115,6 +115,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/JACoders/OpenJK";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ tgunnoe ];
+    maintainers = with maintainers; [ ];
   };
 }

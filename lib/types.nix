@@ -86,7 +86,7 @@ let
         else
           { elemType = merged; };
     wrappedDeprecationMessage = { loc }: lib.warn ''
-      The deprecated `type.functor.wrapped` attribute of the option `${showOption loc}` is accessed, use `type.nestedTypes.elemType` instead.
+      The deprecated `${lib.optionalString (loc != null) "type."}functor.wrapped` attribute ${lib.optionalString (loc != null) "of the option `${showOption loc}` "}is accessed, use `${lib.optionalString (loc != null) "type."}nestedTypes.elemType` instead.
     '' payload.elemType;
   };
 
@@ -227,7 +227,16 @@ rec {
     { _type = "option-type";
       inherit
         name check merge emptyValue getSubOptions getSubModules substSubModules
-        typeMerge functor deprecationMessage nestedTypes descriptionClass;
+        typeMerge deprecationMessage nestedTypes descriptionClass;
+      functor =
+        if functor ? wrappedDeprecationMessage then
+          functor // {
+            wrapped = functor.wrappedDeprecationMessage {
+              loc = null;
+            };
+          }
+        else
+          functor;
       description = if description == null then name else description;
     };
 
@@ -579,7 +588,7 @@ rec {
       absolute ? null,
     }:
       throwIf (inStore != null && absolute != null && inStore && !absolute) "In pathWith, inStore means the path must be absolute" mkOptionType {
-        name = "pathWith";
+        name = "path";
         description = (
           (if absolute == null then "" else (if absolute then "absolute " else "relative ")) +
           "path" +
@@ -588,7 +597,7 @@ rec {
         descriptionClass = "noun";
 
         merge = mergeEqualOption;
-        functor = defaultFunctor "pathWith" // {
+        functor = defaultFunctor "path" // {
           type = pathWith;
           payload = {inherit inStore absolute; };
           binOp = lhs: rhs: if lhs == rhs then lhs else null;
@@ -864,8 +873,13 @@ rec {
       description = "function that evaluates to a(n) ${optionDescriptionPhrase (class: class == "noun" || class == "composite") elemType}";
       descriptionClass = "composite";
       check = isFunction;
-      merge = loc: defs:
-        fnArgs: (mergeDefinitions (loc ++ [ "<function body>" ]) elemType (map (fn: { inherit (fn) file; value = fn.value fnArgs; }) defs)).mergedValue;
+      merge = loc: defs: {
+        # An argument attribute has a default when it has a default in all definitions
+        __functionArgs = lib.zipAttrsWith (_: lib.all (x: x)) (
+          lib.map (fn: lib.functionArgs fn.value) defs
+        );
+        __functor = _: callerArgs: (mergeDefinitions (loc ++ [ "<function body>" ]) elemType (map (fn: { inherit (fn) file; value = fn.value callerArgs; }) defs)).mergedValue;
+      };
       getSubOptions = prefix: elemType.getSubOptions (prefix ++ [ "<function body>" ]);
       getSubModules = elemType.getSubModules;
       substSubModules = m: functionTo (elemType.substSubModules m);

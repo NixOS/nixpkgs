@@ -18,13 +18,13 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "snx-rs";
-  version = "3.0.3";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "ancwrd1";
     repo = "snx-rs";
     tag = "v${version}";
-    hash = "sha256-TrA0uwzBhITCQ0ql8z1og1iNbH4eJlmzXFPbOpnN5do=";
+    hash = "sha256-5kPXwnPjWoBHTzgSCkyaTvkKfPzaNkzjwnB/zSXnyiA=";
   };
 
   passthru.updateScript = nix-update-script { };
@@ -59,7 +59,7 @@ rustPlatform.buildRustPackage rec {
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "isakmp-0.1.0" = "sha256-S34NN57l5MzyGXso01GSMCGPiYYEJc1mDluXoWQ0Y1k=";
+      "isakmp-0.1.0" = "sha256-3ZiJS+JI8c3Segv3UmVY/f2Ms5/u6sH3iR9Y8L7fGj4=";
     };
   };
 

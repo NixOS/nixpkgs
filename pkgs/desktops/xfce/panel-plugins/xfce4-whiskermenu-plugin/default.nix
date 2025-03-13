@@ -1,7 +1,6 @@
 {
   mkXfceDerivation,
   lib,
-  fetchpatch,
   cmake,
   accountsservice,
   exo,
@@ -19,19 +18,10 @@
 mkXfceDerivation {
   category = "panel-plugins";
   pname = "xfce4-whiskermenu-plugin";
-  version = "2.9.1";
+  version = "2.9.2";
   rev-prefix = "v";
   odd-unstable = false;
-  sha256 = "sha256-CHxKCH8FcikNzhI3rUU2IH0bTbBGqEz85f/ST8PSnSo=";
-
-  patches = [
-    # Fix menu not shown on correct monitor
-    # https://gitlab.xfce.org/panel-plugins/xfce4-whiskermenu-plugin/-/issues/154
-    (fetchpatch {
-      url = "https://gitlab.xfce.org/panel-plugins/xfce4-whiskermenu-plugin/-/commit/e13216dcaa455e08368dcde256a6896d6e8918a1.patch";
-      hash = "sha256-sRy1EgG8SaLgjdMH7XNSg97kj+tq2TI+G1P1d9aUXPc=";
-    })
-  ];
+  sha256 = "sha256-M9eraJwArCrASrLz+URUOmYtulWPNxR39Sn+alfWoy4=";
 
   nativeBuildInputs = [
     cmake

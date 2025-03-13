@@ -20,10 +20,10 @@
       sourceVersion = {
         major = "3";
         minor = "12";
-        patch = "8";
+        patch = "9";
         suffix = "";
       };
-      hash = "sha256-yQkVe7JewRTlhpEkzCqcSk1MHpV8pP9VPx7caSEBFU4=";
+      hash = "sha256-ciCDXZ+Qs3wAbphCqN/0WAqspDGGdPlHMCuNKPP4ERI=";
     };
   };
 
@@ -87,10 +87,10 @@ in {
     sourceVersion = {
       major = "3";
       minor = "13";
-      patch = "1";
+      patch = "2";
       suffix = "";
     };
-    hash = "sha256-nPlCe+6eIkLjh33Q9rZBwYU8pGHznWUDziYKWcgL8Nk=";
+    hash = "sha256-2YS8xXzWfKqyb33vQuUjscAVu8XcB4Ns9PC2P6FZ61Y=";
     inherit passthruFun;
   };
 
@@ -100,9 +100,9 @@ in {
       major = "3";
       minor = "14";
       patch = "0";
-      suffix = "a4";
+      suffix = "a5";
     };
-    hash = "sha256-wk8HiBhzwdRgIoeVymyoyZEw4wx3PJFGPTDX6o/w5ws=";
+    hash = "sha256-dOg/Jt4eT7nu8bVkks/5JQiDS7cawT9cWAQ4zp8JNoI=";
     inherit passthruFun;
   };
   # Minimal versions of Python (built without optional dependencies)
@@ -117,6 +117,7 @@ in {
     gdbm = null;
     sqlite = null;
     tzdata = null;
+    libuuid = null;
     libffi = libffiBoot; # without test suite
     stripConfig = true;
     stripIdlelib = true;

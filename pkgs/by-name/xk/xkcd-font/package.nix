@@ -10,7 +10,7 @@ stdenvNoCC.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "ipython";
-    repo = pname;
+    repo = "xkcd-font";
     rev = "5632fde618845dba5c22f14adc7b52bf6c52d46d";
     hash = "sha256-1DgSx2L+OpXuPVSXbbl/hcZUyBK9ikPyGWuk6wNzlwc=";
   };

@@ -1,9 +1,8 @@
 {
   callPackages,
   lib,
-  wasm-bindgen-cli_0_2_92,
   wasm-bindgen-cli_0_2_95,
-  buildGo122Module,
+  wasm-bindgen-cli_0_2_100,
   buildGo123Module,
   ...
 }@args:
@@ -13,15 +12,15 @@ let
     teleport_15 = import ./15 (
       args
       // {
-        wasm-bindgen-cli = wasm-bindgen-cli_0_2_92;
-        buildGoModule = buildGo122Module;
+        wasm-bindgen-cli = wasm-bindgen-cli_0_2_100;
+        buildGoModule = buildGo123Module;
       }
     );
     teleport_16 = import ./16 (
       args
       // {
         wasm-bindgen-cli = wasm-bindgen-cli_0_2_95;
-        buildGoModule = buildGo122Module;
+        buildGoModule = buildGo123Module;
       }
     );
     teleport = teleport_16;
@@ -39,9 +38,8 @@ in
 callPackages f' (
   builtins.removeAttrs args [
     "callPackages"
-    "wasm-bindgen-cli_0_2_92"
     "wasm-bindgen-cli_0_2_95"
-    "buildGo122Module"
+    "wasm-bindgen-cli_0_2_100"
     "buildGo123Module"
   ]
 )

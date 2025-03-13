@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "habanero";
-  version = "2.0.0";
+  version = "2.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sckott";
     repo = pname;
     tag = "v${version}";
-    hash = "sha256-GvrHCTmNEgqCiNzXPg7/L9QPd5FhSZBq3FA3qMBT0l4=";
+    hash = "sha256-tEsuCOuRXJleiv02VGLVSg0ykh3Yu77uZzE6vhf5PaQ=";
   };
 
   build-system = [ hatchling ];

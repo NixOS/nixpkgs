@@ -46,14 +46,14 @@
 
 buildPythonPackage rec {
   pname = "lm-eval";
-  version = "0.4.7";
+  version = "0.4.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "EleutherAI";
     repo = "lm-evaluation-harness";
     tag = "v${version}";
-    hash = "sha256-UEY0KrsgWoyj0fnKBca2yYjVTBFje6DdLfvnNFVYFHU=";
+    hash = "sha256-F8oy6XTovqiU7FQyuubRsiblSdvfZg9RPIyzRw2GH18=";
   };
 
   build-system = [
@@ -147,7 +147,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/EleutherAI/lm-evaluation-harness/releases/tag/v${version}";
+    changelog = "https://github.com/EleutherAI/lm-evaluation-harness/releases/tag/${src.tag}";
     description = "A framework for few-shot evaluation of language models";
     homepage = "https://github.com/EleutherAI/lm-evaluation-harness";
     license = [ lib.licenses.mit ];

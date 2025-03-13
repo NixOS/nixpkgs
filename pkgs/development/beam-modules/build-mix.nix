@@ -57,7 +57,8 @@ let
           in
           "[${lib.concatStringsSep "," options}]";
 
-        LC_ALL = "C.UTF-8";
+        LANG = if stdenv.isLinux then "C.UTF-8" else "C";
+        LC_CTYPE = if stdenv.isLinux then "C.UTF-8" else "UTF-8";
 
         # add to ERL_LIBS so other modules can find at runtime.
         # http://erlang.org/doc/man/code.html#code-path

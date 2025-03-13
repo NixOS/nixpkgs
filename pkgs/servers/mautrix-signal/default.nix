@@ -14,15 +14,18 @@
   withGoolm ? false,
 }:
 
+let
+  cppStdLib = if stdenv.hostPlatform.isDarwin then "-lc++" else "-lstdc++";
+in
 buildGoModule rec {
   pname = "mautrix-signal";
-  version = "0.7.5";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "mautrix";
     repo = "signal";
-    rev = "v${version}";
-    hash = "sha256-iBZoVfHec9g+W7xaBAAew/aY9h/errwLdC05biFaZ78=";
+    tag = "v${version}";
+    hash = "sha256-/x71et9lqx8VTOz6G4R5Rz54vjZT7CzXy72m9Mc6pUI=";
   };
 
   buildInputs =
@@ -36,9 +39,9 @@ buildGoModule rec {
 
   tags = lib.optional withGoolm "goolm";
 
-  CGO_LDFLAGS = lib.optional withGoolm [ "-lstdc++" ];
+  CGO_LDFLAGS = lib.optional withGoolm [ cppStdLib ];
 
-  vendorHash = "sha256-RKBewWc98+WpdpXF4QA/ULyZXDR0CKym8KdyeSMd0KA=";
+  vendorHash = "sha256-nulCcnnQD3cgk4ntWeUwY/+izTxhJCLV0XJRx1h8emY=";
 
   doCheck = true;
   preCheck =
@@ -48,7 +51,7 @@ buildGoModule rec {
     ''
     + (lib.optionalString (!withGoolm) ''
       # When using libolm, the tests need explicit linking to libstdc++
-      export CGO_LDFLAGS="-lstdc++"
+      export CGO_LDFLAGS="${cppStdLib}"
     '');
 
   postCheck = ''

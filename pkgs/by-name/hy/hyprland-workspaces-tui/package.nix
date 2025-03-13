@@ -9,18 +9,18 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "hyprland-workspaces-tui";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "Levizor";
     repo = "hyprland-workspaces-tui";
     tag = version;
-    hash = "sha256-QMwiBQGAybdL8FaUil6tFzSFg4nN/9mGVoqiDFwGZec=";
+    hash = "sha256-DLu7njrD5i9FeNWVZGBTKki70FurIGxtwgS6HbA7YLE=";
   };
 
   useFetchCargoVendor = true;
 
-  cargoHash = "sha256-aT8LfBVOEVUvzgPlBIOXTgT+WXEt3vHMDyCcl9jT5/E=";
+  cargoHash = "sha256-1NZrpqbFiYSJtFNnlDwXX4J4rLwa9XlwUT+boMtr4tk=";
 
   nativeBuildInputs = [
     makeWrapper

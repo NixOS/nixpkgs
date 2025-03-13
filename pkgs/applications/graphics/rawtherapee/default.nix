@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     repo = "RawTherapee";
     rev = version;
     hash = "sha256-jIAbguwF2aqRTk72ro5oHNTawA7biPSFC41YHgRR730=";
-    # The developpers ask not to use the tarball from Github releases, see
+    # The developers ask not to use the tarball from Github releases, see
     # https://www.rawtherapee.com/downloads/5.10/#news-relevant-to-package-maintainers
     forceFetchGit = true;
   };

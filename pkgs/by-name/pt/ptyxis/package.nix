@@ -16,14 +16,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ptyxis";
-  version = "47.6";
+  version = "47.10";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "chergert";
     repo = "ptyxis";
     rev = finalAttrs.version;
-    hash = "sha256-q8JDQfTRKNnfSXtM26ezgjo6OHReOYrjf2aCMBTgbyc=";
+    hash = "sha256-ZZwrqX7GkqMVtLhyzJvThzqmxg/PRwBxSshSv/Z7uKo=";
   };
 
   nativeBuildInputs = [
