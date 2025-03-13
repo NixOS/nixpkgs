@@ -3886,6 +3886,8 @@ self: super: with self; {
 
   docrep = callPackage ../development/python-modules/docrep { };
 
+  docrepr = callPackage ../development/python-modules/docrepr { };
+
   docutils = callPackage ../development/python-modules/docutils { };
 
   docx2python = callPackage ../development/python-modules/docx2python { };
