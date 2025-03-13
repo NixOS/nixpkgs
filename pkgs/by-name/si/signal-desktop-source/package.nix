@@ -3,7 +3,7 @@
   lib,
   nodejs_20,
   pnpm_10,
-  electron_33,
+  electron_34,
   python3,
   makeWrapper,
   callPackage,
@@ -21,7 +21,7 @@
 let
   nodejs = nodejs_20;
   pnpm = pnpm_10;
-  electron = electron_33;
+  electron = electron_34;
 
   electron-headers = runCommand "electron-headers" { } ''
     mkdir -p $out
@@ -74,13 +74,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "signal-desktop-source";
-  version = "7.45.1";
+  version = "7.46.0";
 
   src = fetchFromGitHub {
     owner = "signalapp";
     repo = "Signal-Desktop";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VtnER2NsVh/YH4V9skq0QQ6daHAqne4mu+wUnGUgb4g=";
+    hash = "sha256-pV28jcIQcPjyZL8q+gisnlfAGf0SOKDQ7OxacTM3B0M=";
   };
 
   nativeBuildInputs = [
@@ -107,15 +107,15 @@ stdenv.mkDerivation (finalAttrs: {
       ;
     hash =
       if withAppleEmojis then
-        "sha256-5A2MP6HiRt6KhUvqChnzH903CU7xbnSMrX8ELQIrtoc="
+        "sha256-keG+ymMD4ma0dt6N4Fai9u0+rh9VzkQD6tClPKoQXkM="
       else
-        "sha256-z1HjmbaOYjNkA6ios2iSvFDjlPKh8/jLr8WiEMGnXok=";
+        "sha256-qImY0s8UQmuKGf8dvgO3YrJlrqqdoZtvbtLgvgMVnnE=";
   };
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
     SIGNAL_ENV = "production";
-    SOURCE_DATE_EPOCH = 1741560867;
+    SOURCE_DATE_EPOCH = 1741810629;
   };
 
   preBuild = ''
