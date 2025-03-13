@@ -1,28 +1,44 @@
 {
   lib,
+  pkgs,
   buildGoModule,
   fetchFromGitHub,
+  installShellFiles,
 }:
 
 buildGoModule rec {
   pname = "dstask";
-  version = "0.26";
+  version = "0.27";
+
+  nativeBuildInputs = [
+    installShellFiles
+    pkgs.git # system dependency, even for completion generation commands
+  ];
 
   src = fetchFromGitHub {
     owner = "naggie";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-xZFQQDK+yGAv4IbuNe2dvNa3GDASeJY2mOYw94goAIM=";
+    rev = version;
+    sha256 = "sha256-bepG8QuOJnV2j1AWNSmfExx+Kpg0TIIhhuS54kftbQc=";
   };
 
-  # Set vendorHash to null because dstask vendors its dependencies (meaning
-  # that third party dependencies are stored in the repository).
-  #
-  # Ref <https://github.com/NixOS/nixpkgs/pull/87383#issuecomment-633204382>
-  # and <https://github.com/NixOS/nixpkgs/blob/d4226e3a4b5fcf988027147164e86665d382bbfa/pkgs/development/go-modules/generic/default.nix#L18>
-  vendorHash = null;
-
+  vendorHash = "sha256-/0ZCqL2dXgeeYlcBmkIOGcB+XJ0J2mSV5xOQJT3Dy9k=";
   doCheck = false;
+
+  postInstall = ''
+    # dstask requires that data is initialized, so we create an empty database:
+    # https://github.com/naggie/dstask/issues/196
+    export DSTASK_GIT_REPO=/tmp/.dstask
+
+    # piping the output skips user validation (y/n) for the creation of the
+    # database.
+    $out/bin/dstask | cat
+
+    installShellCompletion --cmd dstask \
+      --bash <($out/bin/dstask bash-completion) \
+      --fish <($out/bin/dstask fish-completion) \
+      --zsh <($out/bin/dstask zsh-completion)
+  '';
 
   # The ldflags reduce the executable size by stripping some debug stuff.
   # The other variables are set so that the output of dstask version shows the
