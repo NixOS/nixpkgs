@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     let
       libnlPath = lib.getLib libnl;
     in
-    ''
+    lib.optionalString stdenv.hostPlatform.isLinux ''
       substituteInPlace configure.ac \
         --replace-fail /usr/include/libnl3 ${lib.getDev libnl}/include/libnl3
       substituteInPlace linux/LibNl.c \
