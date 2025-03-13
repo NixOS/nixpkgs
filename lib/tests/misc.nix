@@ -49,6 +49,7 @@ let
     extends
     filter
     filterAttrs
+    filterAttrsRecursive
     fix
     fold
     foldAttrs
@@ -68,6 +69,7 @@ let
     hasInfix
     id
     ifilter0
+    init
     isStorePath
     lazyDerivation
     length
@@ -77,6 +79,7 @@ let
     makeIncludePath
     makeOverridable
     mapAttrs
+    mapAttrsToList
     mapCartesianProduct
     matchAttrs
     mergeAttrs
@@ -1172,6 +1175,18 @@ runTests {
   };
 
   # code from example
+  testFilterAttrsRecursive = {
+    expr = filterAttrsRecursive (n: v: v != null) {
+      foo = {
+        bar = null;
+      };
+    };
+    expected = {
+      foo = { };
+    };
+  };
+
+  # code from example
   testFoldlAttrs = {
     expr = {
       example = foldlAttrs
@@ -1226,6 +1241,99 @@ runTests {
       expr = attrsets.mergeAttrsList list;
       expected = foldl' mergeAttrs { } list;
     };
+
+  ## code from the example
+  testRecurseExample =
+    let
+      attrs = {
+        a = 1;
+        b = attrs;
+      };
+    in
+    {
+      expr = attrsets.recurse mapAttrs (path: _: length path < 3) (path: value: {
+        inherit path value;
+      }) attrs;
+      expected = {
+        a = {
+          path = [ "a" ];
+          value = 1;
+        };
+        b = {
+          a = {
+            path = [
+              "b"
+              "a"
+            ];
+            value = 1;
+          };
+          b = {
+            a = {
+              path = [
+                "b"
+                "b"
+                "a"
+              ];
+              value = 1;
+            };
+            b = {
+              path = [
+                "b"
+                "b"
+                "b"
+              ];
+              value = attrs;
+            };
+          };
+        };
+      };
+    };
+
+  testRecurseWithId = {
+    expr =
+      attrsets.recurse (_: attrs: attrs) (_: _: throw "isBranch not needed") (_: _: throw "f not needed")
+        {
+          a.b.c = 1;
+        };
+    expected = {
+      a.b.c = 1;
+    };
+  };
+
+  testRecurseMapAttrs = {
+    expr = attrNames (
+      attrsets.recurse mapAttrs (_: v: true) (_: v: v) {
+        a = "ok";
+        b = throw "not lazy enough";
+      }
+    );
+    expected = [
+      "a"
+      "b"
+    ];
+  };
+
+  testRecurseMapAttrsToList = {
+    expr = init (
+      attrsets.recurse mapAttrsToList (_: v: true) (_: v: v) {
+        a = "a";
+        b.x = "b.x";
+        b.y = "b.y";
+        c.c.c = "c.c.c";
+        d = "d";
+        e = throw "not lazy enough";
+      }
+    );
+    expected = [
+      "a"
+      [
+        "b.x"
+        "b.y"
+      ]
+      [ [ "c.c.c" ] ]
+      "d"
+    ];
+  };
 
   # code from the example
   testRecursiveUpdateUntil = {
