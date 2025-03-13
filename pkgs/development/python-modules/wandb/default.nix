@@ -25,6 +25,7 @@
   platformdirs,
   protobuf,
   psutil,
+  pydantic,
   pyyaml,
   requests,
   sentry-sdk_2,
@@ -56,7 +57,6 @@
   parameterized,
   pillow,
   plotly,
-  pydantic,
   pyfakefs,
   pyte,
   pytest-asyncio,
@@ -184,6 +184,7 @@ buildPythonPackage rec {
       platformdirs
       protobuf
       psutil
+      pydantic
       pyyaml
       requests
       sentry-sdk_2
@@ -220,7 +221,6 @@ buildPythonPackage rec {
     parameterized
     pillow
     plotly
-    pydantic
     pyfakefs
     pyte
     pytest-asyncio
