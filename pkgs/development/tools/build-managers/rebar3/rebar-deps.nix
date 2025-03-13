@@ -18,7 +18,7 @@ let
       src = fetchHex {
         pkg = "meck";
         version = "0.8.13";
-        sha256 = "sha256-008BPBVttRrVfMVWiRuXIOahwd9f4uFa+ZnITWzr6xo=";
+        hash = "sha256-008BPBVttRrVfMVWiRuXIOahwd9f4uFa+ZnITWzr6xo=";
       };
       beamDeps = [ ];
     };

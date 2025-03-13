@@ -22,7 +22,7 @@ let
         src = fetchHex {
           pkg = "accept";
           version = "${version}";
-          sha256 = "11b18c220bcc2eab63b5470c038ef10eb6783bcb1fcdb11aa4137defa5ac1bb8";
+          hash = "sha256-EbGMIgvMLqtjtUcMA47xDrZ4O8sfzbEapBN976WsG7g=";
         };
 
         beamDeps = [ ];
@@ -35,7 +35,7 @@ let
         src = fetchHex {
           pkg = "argon2_elixir";
           version = "${version}";
-          sha256 = "f9da27cf060c9ea61b1bd47837a28d7e48a8f6fa13a745e252556c14f9132c7f";
+          hash = "sha256-+donzwYMnqYbG9R4N6KNfkio9voTp0XiUlVsFPkTLH8=";
         };
 
         beamDeps = [
@@ -51,7 +51,7 @@ let
         src = fetchHex {
           pkg = "bandit";
           version = "${version}";
-          sha256 = "f21579a29ea4bc08440343b2b5f16f7cddf2fea5725d31b72cf973ec729079e1";
+          hash = "sha256-8hV5op6kvAhEA0OytfFvfN3y/qVyXTG3LPlz7HKQeeE=";
         };
 
         beamDeps = [
@@ -70,7 +70,7 @@ let
         src = fetchHex {
           pkg = "base62";
           version = "${version}";
-          sha256 = "d41336bda8eaa5be197f1e4592400513ee60518e5b9f4dcf38f4b4dae6f377bb";
+          hash = "sha256-1BM2vajqpb4Zfx5FkkAFE+5gUY5bn03POPS02ubzd7s=";
         };
 
         beamDeps = [ custom_base ];
@@ -83,7 +83,7 @@ let
         src = fetchHex {
           pkg = "bbcode_pleroma";
           version = "${version}";
-          sha256 = "19851074419a5fedb4ef49e1f01b30df504bb5dbb6d6adfc135238063bebd1c3";
+          hash = "sha256-GYUQdEGaX+2070nh8Bsw31BLtdu21q38E1I4Bjvr0cM=";
         };
 
         beamDeps = [ nimble_parsec ];
@@ -96,7 +96,7 @@ let
         src = fetchHex {
           pkg = "bcrypt_elixir";
           version = "${version}";
-          sha256 = "42182d5f46764def15bf9af83739e3bf4ad22661b1c34fc3e88558efced07279";
+          hash = "sha256-QhgtX0Z2Te8Vv5r4Nznjv0rSJmGxw0/D6IVY787Qcnk=";
         };
 
         beamDeps = [
@@ -112,7 +112,7 @@ let
         src = fetchHex {
           pkg = "benchee";
           version = "${version}";
-          sha256 = "34f4294068c11b2bd2ebf2c59aac9c7da26ffa0068afdf3419f1b176e16c5f81";
+          hash = "sha256-NPQpQGjBGyvS6/LFmqycfaJv+gBor980GfGxduFsX4E=";
         };
 
         beamDeps = [
@@ -128,7 +128,7 @@ let
         src = fetchHex {
           pkg = "rinpatch_blurhash";
           version = "${version}";
-          sha256 = "19911a5dcbb0acb9710169a72f702bce6cb048822b12de566ccd82b2cc42b907";
+          hash = "sha256-GZEaXcuwrLlxAWmnL3ArzmywSIIrEt5WbM2CssxCuQc=";
         };
 
         beamDeps = [ mogrify ];
@@ -141,7 +141,7 @@ let
         src = fetchHex {
           pkg = "bunt";
           version = "${version}";
-          sha256 = "dc5f86aa08a5f6fa6b8096f0735c4e76d54ae5c9fa2c143e5a1fc7c1cd9bb6b5";
+          hash = "sha256-3F+Gqgil9vprgJbwc1xOdtVK5cn6LBQ+Wh/Hwc2btrU=";
         };
 
         beamDeps = [ ];
@@ -154,7 +154,7 @@ let
         src = fetchHex {
           pkg = "cachex";
           version = "${version}";
-          sha256 = "ebf24e373883bc8e0c8d894a63bbe102ae13d918f790121f5cfe6e485cc8e2e2";
+          hash = "sha256-6/JONziDvI4MjYlKY7vhAq4T2Rj3kBIfXP5uSFzI4uI=";
         };
 
         beamDeps = [
@@ -172,7 +172,7 @@ let
         src = fetchHex {
           pkg = "calendar";
           version = "${version}";
-          sha256 = "990e9581920c82912a5ee50e62ff5ef96da6b15949a2ee4734f935fdef0f0a6f";
+          hash = "sha256-mQ6VgZIMgpEqXuUOYv9e+W2msVlJou5HNPk1/e8PCm8=";
         };
 
         beamDeps = [ tzdata ];
@@ -185,7 +185,7 @@ let
         src = fetchHex {
           pkg = "castore";
           version = "${version}";
-          sha256 = "0b2b66d2ee742cb1d9cb8c8be3b43c3a70ee8651f37b75a8b982e036752983f1";
+          hash = "sha256-Cytm0u50LLHZy4yL47Q8OnDuhlHze3WouYLgNnUpg/E=";
         };
 
         beamDeps = [ ];
@@ -198,7 +198,7 @@ let
         src = fetchHex {
           pkg = "cc_precompiler";
           version = "${version}";
-          sha256 = "9dcab3d0f3038621f1601f13539e7a9ee99843862e66ad62827b0c42b2f58a54";
+          hash = "sha256-ncqz0PMDhiHxYB8TU556numYQ4YuZq1ignsMQrL1ilQ=";
         };
 
         beamDeps = [ elixir_make ];
@@ -211,7 +211,7 @@ let
         src = fetchHex {
           pkg = "certifi";
           version = "${version}";
-          sha256 = "ee68d85df22e554040cdb4be100f33873ac6051387baf6a8f6ce82272340ff1c";
+          hash = "sha256-7mjYXfIuVUBAzbS+EA8zhzrGBROHuvao9s6CJyNA/xw=";
         };
 
         beamDeps = [ ];
@@ -224,7 +224,7 @@ let
         src = fetchHex {
           pkg = "combine";
           version = "${version}";
-          sha256 = "1b1dbc1790073076580d0d1d64e42eae2366583e7aecd455d1215b0d16f2451b";
+          hash = "sha256-Gx28F5AHMHZYDQ0dZOQuriNmWD567NRV0SFbDRbyRRs=";
         };
 
         beamDeps = [ ];
@@ -237,7 +237,7 @@ let
         src = fetchHex {
           pkg = "comeonin";
           version = "${version}";
-          sha256 = "796393a9e50d01999d56b7b8420ab0481a7538d0caf80919da493b4a6e51faf1";
+          hash = "sha256-eWOTqeUNAZmdVre4QgqwSBp1ONDK+AkZ2kk7Sm5R+vE=";
         };
 
         beamDeps = [ ];
@@ -250,7 +250,7 @@ let
         src = fetchHex {
           pkg = "concurrent_limiter";
           version = "${version}";
-          sha256 = "53968ff238c0fbb4d7ed76ddb1af0be6f3b2f77909f6796e249e737c505a16eb";
+          hash = "sha256-U5aP8jjA+7TX7Xbdsa8L5vOy93kJ9nluJJ5zfFBaFus=";
         };
 
         beamDeps = [ telemetry ];
@@ -263,7 +263,7 @@ let
         src = fetchHex {
           pkg = "connection";
           version = "${version}";
-          sha256 = "722c1eb0a418fbe91ba7bd59a47e28008a189d47e37e0e7bb85585a016b2869c";
+          hash = "sha256-ciwesKQY++kbp71ZpH4oAIoYnUfjfg57uFWFoBayhpw=";
         };
 
         beamDeps = [ ];
@@ -276,7 +276,7 @@ let
         src = fetchHex {
           pkg = "cors_plug";
           version = "${version}";
-          sha256 = "ee4ae1418e6ce117fc42c2ba3e6cbdca4e95ecd2fe59a05ec6884ca16d469aea";
+          hash = "sha256-7krhQY5s4Rf8QsK6Pmy9yk6V7NL+WaBexohMoW1Gmuo=";
         };
 
         beamDeps = [ plug ];
@@ -289,7 +289,7 @@ let
         src = fetchHex {
           pkg = "covertool";
           version = "${version}";
-          sha256 = "5db3fcd82180d8ea4ad857d4d1ab21a8d31b5aee0d60d2f6c0f9e25a411d1e21";
+          hash = "sha256-XbP82CGA2OpK2FfU0ashqNMbWu4NYNL2wPniWkEdHiE=";
         };
 
         beamDeps = [ ];
@@ -302,7 +302,7 @@ let
         src = fetchHex {
           pkg = "cowboy";
           version = "${version}";
-          sha256 = "8a7abe6d183372ceb21caa2709bec928ab2b72e18a3911aa1771639bef82651e";
+          hash = "sha256-inq+bRgzcs6yHKonCb7JKKsrcuGKORGqF3Fjm++CZR4=";
         };
 
         beamDeps = [
@@ -318,7 +318,7 @@ let
         src = fetchHex {
           pkg = "cowboy_telemetry";
           version = "${version}";
-          sha256 = "7d98bac1ee4565d31b62d59f8823dfd8356a169e7fcbb83831b8a5397404c9de";
+          hash = "sha256-fZi6we5FZdMbYtWfiCPf2DVqFp5/y7g4MbilOXQEyd4=";
         };
 
         beamDeps = [
@@ -334,7 +334,7 @@ let
         src = fetchHex {
           pkg = "cowlib";
           version = "${version}";
-          sha256 = "e1e1284dc3fc030a64b1ad0d8382ae7e99da46c3246b815318a4b848873800a4";
+          hash = "sha256-4eEoTcP8Awpksa0Ng4KufpnaRsMka4FTGKS4SIc4AKQ=";
         };
 
         beamDeps = [ ];
@@ -347,7 +347,7 @@ let
         src = fetchHex {
           pkg = "credo";
           version = "${version}";
-          sha256 = "8bc87496c9aaacdc3f90f01b7b0582467b69b4bd2441fe8aae3109d843cc2f2e";
+          hash = "sha256-i8h0lsmqrNw/kPAbewWCRntptL0kQf6KrjEJ2EPMLy4=";
         };
 
         beamDeps = [
@@ -364,7 +364,7 @@ let
         src = fetchHex {
           pkg = "crontab";
           version = "${version}";
-          sha256 = "1gkb7ps38j789acj8dw2q7jnhhw43idyvh36fb3i52yjkhli7ra8";
+          hash = "sha256-SOUTKZzSixLHcmbA7VschENo5cGCNySZSuhINPQ9a74=";
         };
 
         beamDeps = [ ecto ];
@@ -377,7 +377,7 @@ let
         src = fetchHex {
           pkg = "custom_base";
           version = "${version}";
-          sha256 = "8df019facc5ec9603e94f7270f1ac73ddf339f56ade76a721eaa57c1493ba463";
+          hash = "sha256-jfAZ+sxeyWA+lPcnDxrHPd8zn1at52pyHqpXwUk7pGM=";
         };
 
         beamDeps = [ ];
@@ -390,7 +390,7 @@ let
         src = fetchHex {
           pkg = "db_connection";
           version = "${version}";
-          sha256 = "dcf08f31b2701f857dfc787fbad78223d61a32204f217f15e881dd93e4bdd3ff";
+          hash = "sha256-3PCPMbJwH4V9/Hh/uteCI9YaMiBPIX8V6IHdk+S90/8=";
         };
 
         beamDeps = [ telemetry ];
@@ -403,7 +403,7 @@ let
         src = fetchHex {
           pkg = "decimal";
           version = "${version}";
-          sha256 = "53cfe5f497ed0e7771ae1a475575603d77425099ba5faef9394932b35020ffcc";
+          hash = "sha256-U8/l9JftDndxrhpHVXVgPXdCUJm6X675OUkys1Ag/8w=";
         };
 
         beamDeps = [ ];
@@ -416,7 +416,7 @@ let
         src = fetchHex {
           pkg = "deep_merge";
           version = "${version}";
-          sha256 = "ce708e5f094b9cd4e8f2be4f00d2f4250c4095be93f8cd6d018c753894885430";
+          hash = "sha256-znCOXwlLnNTo8r5PANL0JQxAlb6T+M1tAYx1OJSIVDA=";
         };
 
         beamDeps = [ ];
@@ -429,7 +429,7 @@ let
         src = fetchHex {
           pkg = "dialyxir";
           version = "${version}";
-          sha256 = "bf2cfb75cd5c5006bec30141b131663299c661a864ec7fbbc72dfa557487a986";
+          hash = "sha256-vyz7dc1cUAa+wwFBsTFmMpnGYahk7H+7xy36VXSHqYY=";
         };
 
         beamDeps = [ erlex ];
@@ -442,7 +442,7 @@ let
         src = fetchHex {
           pkg = "earmark";
           version = "${version}";
-          sha256 = "798d86db3d79964e759ddc0c077d5eb254968ed426399fbf5a62de2b5ff8910a";
+          hash = "sha256-eY2G2z15lk51ndwMB31eslSWjtQmOZ+/WmLeK1/4kQo=";
         };
 
         beamDeps = [ ];
@@ -455,7 +455,7 @@ let
         src = fetchHex {
           pkg = "earmark_parser";
           version = "${version}";
-          sha256 = "06553a88d1f1846da9ef066b87b57c6f605552cfbe40d20bd8d59cc6bde41944";
+          hash = "sha256-BlU6iNHxhG2p7wZrh7V8b2BVUs++QNIL2NWcxr3kGUQ=";
         };
 
         beamDeps = [ ];
@@ -468,7 +468,7 @@ let
         src = fetchHex {
           pkg = "ecto";
           version = "${version}";
-          sha256 = "3c38bca2c6f8d8023f2145326cc8a80100c3ffe4dcbd9842ff867f7fc6156c65";
+          hash = "sha256-PDi8osb42AI/IUUybMioAQDD/+TcvZhC/4Z/f8YVbGU=";
         };
 
         beamDeps = [
@@ -485,7 +485,7 @@ let
         src = fetchHex {
           pkg = "ecto_enum";
           version = "${version}";
-          sha256 = "8fb55c087181c2b15eee406519dc22578fa60dd82c088be376d0010172764ee4";
+          hash = "sha256-j7VcCHGBwrFe7kBlGdwiV4+mDdgsCIvjdtABAXJ2TuQ=";
         };
 
         beamDeps = [
@@ -502,7 +502,7 @@ let
         src = fetchHex {
           pkg = "ecto_psql_extras";
           version = "${version}";
-          sha256 = "b6127f3a5c6fc3d84895e4768cc7c199f22b48b67d6c99b13fbf4a374e73f039";
+          hash = "sha256-thJ/Olxvw9hIleR2jMfBmfIrSLZ9bJmxP79KN05z8Dk=";
         };
 
         beamDeps = [
@@ -519,7 +519,7 @@ let
         src = fetchHex {
           pkg = "ecto_sql";
           version = "${version}";
-          sha256 = "e5f36e3d736b99c7fee3e631333b8394ade4bafe9d96d35669fca2d81c2be928";
+          hash = "sha256-5fNuPXNrmcf+4+YxMzuDlK3kuv6dltNWafyi2Bwr6Sg=";
         };
 
         beamDeps = [
@@ -537,7 +537,7 @@ let
         src = fetchHex {
           pkg = "eimp";
           version = "${version}";
-          sha256 = "501133f3112079b92d9e22da8b88bf4f0e13d4d67ae9c15c42c30bd25ceb83b6";
+          hash = "sha256-UBEz8xEgebktniLai4i/Tw4T1NZ66cFcQsML0lzrg7Y=";
         };
 
         beamDeps = [ p1_utils ];
@@ -550,7 +550,7 @@ let
         src = fetchHex {
           pkg = "elixir_make";
           version = "${version}";
-          sha256 = "7a71945b913d37ea89b06966e1342c85cfe549b15e6d6d081e8081c493062c07";
+          hash = "sha256-enGUW5E9N+qJsGlm4TQshc/lSbFebW0IHoCBxJMGLAc=";
         };
 
         beamDeps = [
@@ -566,7 +566,7 @@ let
         src = fetchHex {
           pkg = "erlex";
           version = "${version}";
-          sha256 = "2ed2e25711feb44d52b17d2780eabf998452f6efda104877a3881c2f8c0c0c75";
+          hash = "sha256-LtLiVxH+tE1SsX0ngOq/mYRS9u/aEEh3o4gcL4wMDHU=";
         };
 
         beamDeps = [ ];
@@ -579,7 +579,7 @@ let
         src = fetchHex {
           pkg = "esbuild";
           version = "${version}";
-          sha256 = "f183a0b332d963c4cfaf585477695ea59eef9a6f2204fdd0efa00e099694ffe5";
+          hash = "sha256-8YOgszLZY8TPr1hUd2lepZ7vmm8iBP3Q76AOCZaU/+U=";
         };
 
         beamDeps = [ castore ];
@@ -592,7 +592,7 @@ let
         src = fetchHex {
           pkg = "eternal";
           version = "${version}";
-          sha256 = "2c9fe32b9c3726703ba5e1d43a1d255a4f3f2d8f8f9bc19f094c7cb1a7a9e782";
+          hash = "sha256-LJ/jK5w3JnA7peHUOh0lWk8/LY+Pm8GfCUx8saep54I=";
         };
 
         beamDeps = [ ];
@@ -605,7 +605,7 @@ let
         src = fetchHex {
           pkg = "ex_aws";
           version = "${version}";
-          sha256 = "3e6c776703c9076001fbe1f7c049535f042cb2afa0d2cbd3b47cbc4e92ac0d10";
+          hash = "sha256-Pmx3ZwPJB2AB++H3wElTXwQssq+g0svTtHy8TpKsDRA=";
         };
 
         beamDeps = [
@@ -622,7 +622,7 @@ let
         src = fetchHex {
           pkg = "ex_aws_s3";
           version = "${version}";
-          sha256 = "4f09dd372cc386550e484808c5ac5027766c8d0cd8271ccc578b82ee6ef4f3b8";
+          hash = "sha256-TwndNyzDhlUOSEgIxaxQJ3ZsjQzYJxzMV4uC7m7087g=";
         };
 
         beamDeps = [
@@ -638,7 +638,7 @@ let
         src = fetchHex {
           pkg = "ex_const";
           version = "${version}";
-          sha256 = "96fd346610cc992b8f896ed26a98be82ac4efb065a0578f334a32d60a3ba9767";
+          hash = "sha256-lv00ZhDMmSuPiW7Sapi+gqxO+wZaBXjzNKMtYKO6l2c=";
         };
 
         beamDeps = [ ];
@@ -651,7 +651,7 @@ let
         src = fetchHex {
           pkg = "ex_doc";
           version = "${version}";
-          sha256 = "3178c3a407c557d8343479e1ff117a96fd31bafe52a039079593fb0524ef61b0";
+          hash = "sha256-MXjDpAfFV9g0NHnh/xF6lv0xuv5SoDkHlZP7BSTvYbA=";
         };
 
         beamDeps = [
@@ -668,7 +668,7 @@ let
         src = fetchHex {
           pkg = "ex_machina";
           version = "${version}";
-          sha256 = "419aa7a39bde11894c87a615c4ecaa52d8f107bbdd81d810465186f783245bf8";
+          hash = "sha256-QZqno5veEYlMh6YVxOyqUtjxB7vdgdgQRlGG94MkW/g=";
         };
 
         beamDeps = [
@@ -684,7 +684,7 @@ let
         src = fetchHex {
           pkg = "ex_syslogger";
           version = "${version}";
-          sha256 = "ab9fab4136dbc62651ec6f16fa4842f10cf02ab4433fa3d0976c01be99398399";
+          hash = "sha256-q5+rQTbbxiZR7G8W+khC8QzwKrRDP6PQl2wBvpk5g5k=";
         };
 
         beamDeps = [
@@ -700,7 +700,7 @@ let
         src = fetchHex {
           pkg = "exile";
           version = "${version}";
-          sha256 = "c62ee8fee565b5ac4a898d0dcd58d2b04fb5eec1655af1ddcc9eb582c6732c33";
+          hash = "sha256-xi7o/uVltaxKiY0NzVjSsE+17sFlWvHdzJ61gsZzLDM=";
         };
 
         beamDeps = [ elixir_make ];
@@ -713,7 +713,7 @@ let
         src = fetchHex {
           pkg = "expo";
           version = "${version}";
-          sha256 = "68a4233b0658a3d12ee00d27d37d856b1ba48607e7ce20fd376958d0ba6ce92b";
+          hash = "sha256-aKQjOwZYo9Eu4A0n032FaxukhgfnziD9N2lY0Lps6Ss=";
         };
 
         beamDeps = [ ];
@@ -726,7 +726,7 @@ let
         src = fetchHex {
           pkg = "fast_html";
           version = "${version}";
-          sha256 = "f18e3c7668f82d3ae0b15f48d48feeb257e28aa5ab1b0dbf781c7312e5da029d";
+          hash = "sha256-8Y48dmj4LTrgsV9I1I/uslfiiqWrGw2/eBxzEuXaAp0=";
         };
 
         beamDeps = [
@@ -742,7 +742,7 @@ let
         src = fetchHex {
           pkg = "fast_sanitize";
           version = "${version}";
-          sha256 = "e8ad286d10d0386e15d67d0ee125245ebcfbc7d7290b08712ba9013c8c5e56e2";
+          hash = "sha256-6K0obRDQOG4V1n0O4SUkXrz7x9cpCwhxK6kBPIxeVuI=";
         };
 
         beamDeps = [
@@ -758,7 +758,7 @@ let
         src = fetchHex {
           pkg = "file_system";
           version = "${version}";
-          sha256 = "41195edbfb562a593726eda3b3e8b103a309b733ad25f3d642ba49696bf715dc";
+          hash = "sha256-QRle2/tWKlk3Ju2js+ixA6MJtzOtJfPWQrpJaWv3Fdw=";
         };
 
         beamDeps = [ ];
@@ -771,7 +771,7 @@ let
         src = fetchHex {
           pkg = "finch";
           version = "${version}";
-          sha256 = "69f5045b042e531e53edc2574f15e25e735b522c37e2ddb766e15b979e03aa65";
+          hash = "sha256-afUEWwQuUx5T7cJXTxXiXnNbUiw34t23ZuFbl54DqmU=";
         };
 
         beamDeps = [
@@ -791,7 +791,7 @@ let
         src = fetchHex {
           pkg = "flake_id";
           version = "${version}";
-          sha256 = "31fc8090fde1acd267c07c36ea7365b8604055f897d3a53dd967658c691bd827";
+          hash = "sha256-MfyAkP3hrNJnwHw26nNluGBAVfiX06U92WdljGkb2Cc=";
         };
 
         beamDeps = [
@@ -807,7 +807,7 @@ let
         src = fetchHex {
           pkg = "floki";
           version = "${version}";
-          sha256 = "6b05289a8e9eac475f644f09c2e4ba7e19201fd002b89c28c1293e7bd16773d9";
+          hash = "sha256-awUomo6erEdfZE8JwuS6fhkgH9ACuJwowSk+e9Fnc9k=";
         };
 
         beamDeps = [ ];
@@ -820,7 +820,7 @@ let
         src = fetchHex {
           pkg = "gen_smtp";
           version = "${version}";
-          sha256 = "29bd14a88030980849c7ed2447b8db6d6c9278a28b11a44cafe41b791205440f";
+          hash = "sha256-Kb0UqIAwmAhJx+0kR7jbbWySeKKLEaRMr+QbeRIFRA8=";
         };
 
         beamDeps = [ ];
@@ -833,7 +833,7 @@ let
         src = fetchHex {
           pkg = "gettext";
           version = "${version}";
-          sha256 = "bdf75cdfcbe9e4622dd18e034b227d77dd17f0f133853a1c73b97b3d6c770e8b";
+          hash = "sha256-vfdc38vp5GIt0Y4DSyJ9d90X8PEzhTocc7l7PWx3Dos=";
         };
 
         beamDeps = [ expo ];
@@ -846,7 +846,7 @@ let
         src = fetchHex {
           pkg = "gun";
           version = "${version}";
-          sha256 = "a10bc8d6096b9502205022334f719cc9a08d9adcfbfc0dbee9ef31b56274a20b";
+          hash = "sha256-oQvI1glrlQIgUCIzT3GcyaCNmtz7/A2+6e8xtWJ0ogs=";
         };
 
         beamDeps = [ cowlib ];
@@ -859,7 +859,7 @@ let
         src = fetchHex {
           pkg = "hackney";
           version = "${version}";
-          sha256 = "af94d5c9f97857db257090a4a10e5426ecb6f4918aa5cc666798566ae14b65fd";
+          hash = "sha256-r5TVyfl4V9slcJCkoQ5UJuy29JGKpcxmZ5hWauFLZf0=";
         };
 
         beamDeps = [
@@ -880,7 +880,7 @@ let
         src = fetchHex {
           pkg = "hpax";
           version = "${version}";
-          sha256 = "bea06558cdae85bed075e6c036993d43cd54d447f76d8190a8db0dc5893fa2f1";
+          hash = "sha256-vqBlWM2uhb7QdebANpk9Q81U1Ef3bYGQqNsNxYk/ovE=";
         };
 
         beamDeps = [ ];
@@ -893,7 +893,7 @@ let
         src = fetchHex {
           pkg = "html_entities";
           version = "${version}";
-          sha256 = "c53ba390403485615623b9531e97696f076ed415e8d8058b1dbaa28181f4fdcc";
+          hash = "sha256-xTujkEA0hWFWI7lTHpdpbwdu1BXo2AWLHbqigYH0/cw=";
         };
 
         beamDeps = [ ];
@@ -906,7 +906,7 @@ let
         src = fetchHex {
           pkg = "http_signatures";
           version = "${version}";
-          sha256 = "f08aa9ac121829dae109d608d83c84b940ef2f183ae50f2dd1e9a8bc619d8be7";
+          hash = "sha256-8IqprBIYKdrhCdYI2DyEuUDvLxg65Q8t0emovGGdi+c=";
         };
 
         beamDeps = [ ];
@@ -919,7 +919,7 @@ let
         src = fetchHex {
           pkg = "httpoison";
           version = "${version}";
-          sha256 = "2bb350d26972e30c96e2ca74a1aaf8293d61d0742ff17f01e0279fef11599921";
+          hash = "sha256-K7NQ0mly4wyW4sp0oar4KT1h0HQv8X8B4Cef7xFZmSE=";
         };
 
         beamDeps = [ hackney ];
@@ -932,7 +932,7 @@ let
         src = fetchHex {
           pkg = "idna";
           version = "${version}";
-          sha256 = "92376eb7894412ed19ac475e4a86f7b413c1b9fbb5bd16dccd57934157944cea";
+          hash = "sha256-kjdut4lEEu0ZrEdeSob3tBPBufu1vRbczVeTQVeUTOo=";
         };
 
         beamDeps = [ unicode_util_compat ];
@@ -945,7 +945,7 @@ let
         src = fetchHex {
           pkg = "inet_cidr";
           version = "${version}";
-          sha256 = "d5b26da66603bb56c933c65214c72152f0de9a6ea53618b56d63302a68f6a90e";
+          hash = "sha256-1bJtpmYDu1bJM8ZSFMchUvDemm6lNhi1bWMwKmj2qQ4=";
         };
 
         beamDeps = [ ];
@@ -958,7 +958,7 @@ let
         src = fetchHex {
           pkg = "jason";
           version = "${version}";
-          sha256 = "c5eb0cab91f094599f94d55bc63409236a8ec69a21a67814529e8d5f6cc90b3b";
+          hash = "sha256-xesMq5HwlFmflNVbxjQJI2qOxpohpngUUp6NX2zJCzs=";
         };
 
         beamDeps = [ decimal ];
@@ -971,7 +971,7 @@ let
         src = fetchHex {
           pkg = "joken";
           version = "${version}";
-          sha256 = "5a95b05a71cd0b54abd35378aeb1d487a23a52c324fa7efdffc512b655b5aaa7";
+          hash = "sha256-WpWwWnHNC1Sr01N4rrHUh6I6UsMk+n79/8UStlW1qqc=";
         };
 
         beamDeps = [ jose ];
@@ -984,7 +984,7 @@ let
         src = fetchHex {
           pkg = "jose";
           version = "${version}";
-          sha256 = "6275cb75504f9c1e60eeacb771adfeee4905a9e182103aa59b53fed651ff9738";
+          hash = "sha256-YnXLdVBPnB5g7qy3ca3+7kkFqeGCEDqlm1P+1lH/lzg=";
         };
 
         beamDeps = [ ];
@@ -997,7 +997,7 @@ let
         src = fetchHex {
           pkg = "jumper";
           version = "${version}";
-          sha256 = "9b7782409021e01ab3c08270e26f36eb62976a38c1aa64b2eaf6348422f165e1";
+          hash = "sha256-m3eCQJAh4BqzwIJw4m8262KXajjBqmSy6vY0hCLxZeE=";
         };
 
         beamDeps = [ ];
@@ -1010,7 +1010,7 @@ let
         src = fetchHex {
           pkg = "linkify";
           version = "${version}";
-          sha256 = "3ef35a1377d47c25506e07c1c005ea9d38d700699d92ee92825f024434258177";
+          hash = "sha256-PvNaE3fUfCVQbgfBwAXqnTjXAGmdku6Sgl8CRDQlgXc=";
         };
 
         beamDeps = [ ];
@@ -1023,7 +1023,7 @@ let
         src = fetchHex {
           pkg = "logger_backends";
           version = "${version}";
-          sha256 = "1faceb3e7ec3ef66a8f5746c5afd020e63996df6fd4eb8cdb789e5665ae6c9ce";
+          hash = "sha256-H6zrPn7D72ao9XRsWv0CDmOZbfb9TrjNt4nlZlrmyc4=";
         };
 
         beamDeps = [ ];
@@ -1036,7 +1036,7 @@ let
         src = fetchHex {
           pkg = "mail";
           version = "${version}";
-          sha256 = "1db701e89865c1d5fa296b2b57b1cd587587cca8d8a1a22892b35ef5a8e352a6";
+          hash = "sha256-HbcB6JhlwdX6KWsrV7HNWHWHzKjYoaIokrNe9ajjUqY=";
         };
 
         beamDeps = [ ];
@@ -1049,7 +1049,7 @@ let
         src = fetchHex {
           pkg = "majic";
           version = "${version}";
-          sha256 = "7905858f76650d49695f14ea55cd9aaaee0c6654fa391671d4cf305c275a0a9e";
+          hash = "sha256-eQWFj3ZlDUlpXxTqVc2aqu4MZlT6ORZx1M8wXCdaCp4=";
         };
 
         beamDeps = [
@@ -1067,7 +1067,7 @@ let
         src = fetchHex {
           pkg = "makeup";
           version = "${version}";
-          sha256 = "cfa158c02d3f5c0c665d0af11512fed3fba0144cf1aadee0f2ce17747fba2ca9";
+          hash = "sha256-z6FYwC0/XAxmXQrxFRL+0/ugFEzxqt7g8s4XdH+6LKk=";
         };
 
         beamDeps = [ nimble_parsec ];
@@ -1080,7 +1080,7 @@ let
         src = fetchHex {
           pkg = "makeup_elixir";
           version = "${version}";
-          sha256 = "f2438b1a80eaec9ede832b5c41cd4f373b38fd7aa33e3b22d9db79e640cbde11";
+          hash = "sha256-8kOLGoDq7J7egytcQc1PNzs4/XqjPjsi2dt55kDL3hE=";
         };
 
         beamDeps = [ makeup ];
@@ -1093,7 +1093,7 @@ let
         src = fetchHex {
           pkg = "makeup_erlang";
           version = "${version}";
-          sha256 = "b78dc853d2e670ff6390b605d807263bf606da3c82be37f9d7f68635bd886fc9";
+          hash = "sha256-t43IU9LmcP9jkLYF2AcmO/YG2jyCvjf51/aGNb2Ib8k=";
         };
 
         beamDeps = [ makeup ];
@@ -1106,7 +1106,7 @@ let
         src = fetchHex {
           pkg = "meck";
           version = "${version}";
-          sha256 = "81344f561357dc40a8344afa53767c32669153355b626ea9fcbc8da6b3045826";
+          hash = "sha256-gTRPVhNX3ECoNEr6U3Z8MmaRUzVbYm6p/LyNprMEWCY=";
         };
 
         beamDeps = [ ];
@@ -1119,7 +1119,7 @@ let
         src = fetchHex {
           pkg = "metrics";
           version = "${version}";
-          sha256 = "69b09adddc4f74a40716ae54d140f93beb0fb8978d8636eaded0c31b6f099f16";
+          hash = "sha256-abCa3dxPdKQHFq5U0UD5O+sPuJeNhjbq3tDDG28JnxY=";
         };
 
         beamDeps = [ ];
@@ -1132,7 +1132,7 @@ let
         src = fetchHex {
           pkg = "mime";
           version = "${version}";
-          sha256 = "31a1a8613f8321143dde1dafc36006a17d28d02bdfecb9e95a880fa7aabd19a7";
+          hash = "sha256-MaGoYT+DIRQ93h2vw2AGoX0o0Cvf7LnpWogPp6q9Gac=";
         };
 
         beamDeps = [ ];
@@ -1145,7 +1145,7 @@ let
         src = fetchHex {
           pkg = "mimerl";
           version = "${version}";
-          sha256 = "a1e15a50d1887217de95f0b9b0793e32853f7c258a5cd227650889b38839fe9d";
+          hash = "sha256-oeFaUNGIchfelfC5sHk+MoU/fCWKXNInZQiJs4g5/p0=";
         };
 
         beamDeps = [ ];
@@ -1158,7 +1158,7 @@ let
         src = fetchHex {
           pkg = "mint";
           version = "${version}";
-          sha256 = "4fc518dcc191d02f433393a72a7ba3f6f94b101d094cb6bf532ea54c89423780";
+          hash = "sha256-T8UY3MGR0C9DM5OnKnuj9vlLEB0JTLa/Uy6lTIlCN4A=";
         };
 
         beamDeps = [
@@ -1174,7 +1174,7 @@ let
         src = fetchHex {
           pkg = "mochiweb";
           version = "${version}";
-          sha256 = "16j8cfn3hq0g474xc5xl8nk2v46hwvwpfwi9rkzavnsbaqg2ngmr";
+          hash = "sha256-uT4rHlZL263+zClyd/nm0JAtpkW0F9bJIQ9gOKxjSJo=";
         };
 
         beamDeps = [ ];
@@ -1187,7 +1187,7 @@ let
         src = fetchHex {
           pkg = "mock";
           version = "${version}";
-          sha256 = "7fa82364c97617d79bb7d15571193fc0c4fe5afd0c932cef09426b3ee6fe2022";
+          hash = "sha256-f6gjZMl2F9ebt9FVcRk/wMT+Wv0MkyzvCUJrPub+ICI=";
         };
 
         beamDeps = [ meck ];
@@ -1200,7 +1200,7 @@ let
         src = fetchHex {
           pkg = "mogrify";
           version = "${version}";
-          sha256 = "0189b1e1de27455f2b9ae8cf88239cefd23d38de9276eb5add7159aea51731e6";
+          hash = "sha256-AYmx4d4nRV8rmujPiCOc79I9ON6Sduta3XFZrqUXMeY=";
         };
 
         beamDeps = [ ];
@@ -1213,7 +1213,7 @@ let
         src = fetchHex {
           pkg = "mox";
           version = "${version}";
-          sha256 = "d44474c50be02d5b72131070281a5d3895c0e7a95c780e90bc0cfe712f633a13";
+          hash = "sha256-1ER0xQvgLVtyExBwKBpdOJXA56lceA6QvAz+cS9jOhM=";
         };
 
         beamDeps = [ ];
@@ -1226,7 +1226,7 @@ let
         src = fetchHex {
           pkg = "mua";
           version = "${version}";
-          sha256 = "7fe861a87fcc06a980d3941bbcb2634e5f0f30fd6ad15ef6c0423ff9dc7e46de";
+          hash = "sha256-f+hhqH/MBqmA05QbvLJjTl8PMP1q0V72wEI/+dx+Rt4=";
         };
 
         beamDeps = [ castore ];
@@ -1239,7 +1239,7 @@ let
         src = fetchHex {
           pkg = "multipart";
           version = "${version}";
-          sha256 = "3c5604bc2fb17b3137e5d2abdf5dacc2647e60c5cc6634b102cf1aef75a06f0a";
+          hash = "sha256-PFYEvC+xezE35dKr312swmR+YMXMZjSxAs8a73Wgbwo=";
         };
 
         beamDeps = [ mime ];
@@ -1252,7 +1252,7 @@ let
         src = fetchHex {
           pkg = "nimble_options";
           version = "${version}";
-          sha256 = "821b2470ca9442c4b6984882fe9bb0389371b8ddec4d45a9504f00a66f650b44";
+          hash = "sha256-ghskcMqUQsS2mEiC/puwOJNxuN3sTUWpUE8Apm9lC0Q=";
         };
 
         beamDeps = [ ];
@@ -1265,7 +1265,7 @@ let
         src = fetchHex {
           pkg = "nimble_parsec";
           version = "${version}";
-          sha256 = "27eac315a94909d4dc68bc07a4a83e06c8379237c5ea528a9acff4ca1c873c52";
+          hash = "sha256-J+rDFalJCdTcaLwHpKg+Bsg3kjfF6lKKms/0yhyHPFI=";
         };
 
         beamDeps = [ ];
@@ -1278,7 +1278,7 @@ let
         src = fetchHex {
           pkg = "nimble_pool";
           version = "${version}";
-          sha256 = "1c715055095d3f2705c4e236c18b618420a35490da94149ff8b580a2144f653f";
+          hash = "sha256-HHFQVQldPycFxOI2wYthhCCjVJDalBSf+LWAohRPZT8=";
         };
 
         beamDeps = [ ];
@@ -1291,7 +1291,7 @@ let
         src = fetchHex {
           pkg = "oban";
           version = "${version}";
-          sha256 = "36ca6ca84ef6518f9c2c759ea88efd438a3c81d667ba23b02b062a0aa785475e";
+          hash = "sha256-NspsqE72UY+cLHWeqI79Q4o8gdZnuiOwKwYqCqeFR14=";
         };
 
         beamDeps = [
@@ -1309,7 +1309,7 @@ let
         src = fetchHex {
           pkg = "oban_live_dashboard";
           version = "${version}";
-          sha256 = "16dc4ce9c9a95aa2e655e35ed4e675652994a8def61731a18af85e230e1caa63";
+          hash = "sha256-FtxM6cmpWqLmVeNe1OZ1ZSmUqN72FzGhivheIw4cqmM=";
         };
 
         beamDeps = [
@@ -1325,7 +1325,7 @@ let
         src = fetchHex {
           pkg = "octo_fetch";
           version = "${version}";
-          sha256 = "cf8be6f40cd519d7000bb4e84adcf661c32e59369ca2827c4e20042eda7a7fc6";
+          hash = "sha256-z4vm9AzVGdcAC7ToStz2YcMuWTacooJ8TiAELtp6f8Y=";
         };
 
         beamDeps = [
@@ -1341,7 +1341,7 @@ let
         src = fetchHex {
           pkg = "open_api_spex";
           version = "${version}";
-          sha256 = "aa3e6dcfc0ad6a02596b2172662da21c9dd848dac145ea9e603f54e3d81b8d2b";
+          hash = "sha256-qj5tz8CtagJZayFyZi2iHJ3YSNrBReqeYD9U49gbjSs=";
         };
 
         beamDeps = [
@@ -1358,7 +1358,7 @@ let
         src = fetchHex {
           pkg = "parse_trans";
           version = "${version}";
-          sha256 = "620a406ce75dada827b82e453c19cf06776be266f5a67cff34e1ef2cbb60e49a";
+          hash = "sha256-YgpAbOddragnuC5FPBnPBndr4mb1pnz/NOHvLLtg5Jo=";
         };
 
         beamDeps = [ ];
@@ -1371,7 +1371,7 @@ let
         src = fetchHex {
           pkg = "pbkdf2_elixir";
           version = "${version}";
-          sha256 = "d3b40a4a4630f0b442f19eca891fcfeeee4c40871936fed2f68e1c4faa30481f";
+          hash = "sha256-07QKSkYw8LRC8Z7KiR/P7u5MQIcZNv7S9o4cT6owSB8=";
         };
 
         beamDeps = [ comeonin ];
@@ -1384,7 +1384,7 @@ let
         src = fetchHex {
           pkg = "phoenix_ecto";
           version = "${version}";
-          sha256 = "d36c401206f3011fefd63d04e8ef626ec8791975d9d107f9a0817d426f61ac07";
+          hash = "sha256-02xAEgbzAR/v1j0E6O9ibsh5GXXZ0Qf5oIF9Qm9hrAc=";
         };
 
         beamDeps = [
@@ -1401,7 +1401,7 @@ let
         src = fetchHex {
           pkg = "phoenix_html";
           version = "${version}";
-          sha256 = "0249d3abec3714aff3415e7ee3d9786cb325be3151e6c4b3021502c585bf53fb";
+          hash = "sha256-AknTq+w3FK/zQV5+49l4bLMlvjFR5sSzAhUCxYW/U/s=";
         };
 
         beamDeps = [ plug ];
@@ -1414,7 +1414,7 @@ let
         src = fetchHex {
           pkg = "phoenix_live_dashboard";
           version = "${version}";
-          sha256 = "f9470a0a8bae4f56430a23d42f977b5a6205fdba6559d76f932b876bfaec652d";
+          hash = "sha256-+UcKCouuT1ZDCiPUL5d7WmIF/bplWddvkyuHa/rsZS0=";
         };
 
         beamDeps = [
@@ -1433,7 +1433,7 @@ let
         src = fetchHex {
           pkg = "phoenix_live_reload";
           version = "${version}";
-          sha256 = "766796676e5f558dbae5d1bdb066849673e956005e3730dfd5affd7a6da4abac";
+          hash = "sha256-dmeWZ25fVY265dG9sGaElnPpVgBeNzDf1a/9em2kq6w=";
         };
 
         beamDeps = [
@@ -1449,7 +1449,7 @@ let
         src = fetchHex {
           pkg = "phoenix_live_view";
           version = "${version}";
-          sha256 = "b2eaa0dd3cfb9bd7fb949b88217df9f25aed915e986a28ad5c8a0d054e7ca9d3";
+          hash = "sha256-suqg3Tz7m9f7lJuIIX358lrtkV6YaiitXIoNBU58qdM=";
         };
 
         beamDeps = [
@@ -1469,7 +1469,7 @@ let
         src = fetchHex {
           pkg = "phoenix_pubsub";
           version = "${version}";
-          sha256 = "bba06bc1dcfd8cb086759f0edc94a8ba2bc8896d5331a1e2c2902bf8e36ee502";
+          hash = "sha256-u6Brwdz9jLCGdZ8O3JSouivIiW1TMaHiwpAr+ONu5QI=";
         };
 
         beamDeps = [ ];
@@ -1482,7 +1482,7 @@ let
         src = fetchHex {
           pkg = "phoenix_swoosh";
           version = "${version}";
-          sha256 = "4000eeba3f9d7d1a6bf56d2bd56733d5cadf41a7f0d8ffe5bb67e7d667e204a2";
+          hash = "sha256-QADuuj+dfRpr9W0r1Wcz1crfQafw2P/lu2fn1mfiBKI=";
         };
 
         beamDeps = [
@@ -1502,7 +1502,7 @@ let
         src = fetchHex {
           pkg = "phoenix_template";
           version = "${version}";
-          sha256 = "2c0c81f0e5c6753faf5cca2f229c9709919aba34fab866d3bc05060c9c444206";
+          hash = "sha256-LAyB8OXGdT+vXMovIpyXCZGaujT6uGbTvAUGDJxEQgY=";
         };
 
         beamDeps = [ phoenix_html ];
@@ -1515,7 +1515,7 @@ let
         src = fetchHex {
           pkg = "phoenix_view";
           version = "${version}";
-          sha256 = "4e992022ce14f31fe57335db27a28154afcc94e9983266835bb3040243eb620b";
+          hash = "sha256-TpkgIs4U8x/lczXbJ6KBVK/MlOmYMmaDW7MEAkPrYgs=";
         };
 
         beamDeps = [
@@ -1531,7 +1531,7 @@ let
         src = fetchHex {
           pkg = "plug";
           version = "${version}";
-          sha256 = "a13ff6b9006b03d7e33874945b2755253841b238c34071ed85b0e86057f8cddc";
+          hash = "sha256-oT/2uQBrA9fjOHSUWydVJThBsjjDQHHthbDoYFf4zdw=";
         };
 
         beamDeps = [
@@ -1548,7 +1548,7 @@ let
         src = fetchHex {
           pkg = "plug_cowboy";
           version = "${version}";
-          sha256 = "02dbd5f9ab571b864ae39418db7811618506256f6d13b4a45037e5fe78dc5de3";
+          hash = "sha256-AtvV+atXG4ZK45QY23gRYYUGJW9tE7SkUDfl/njcXeM=";
         };
 
         beamDeps = [
@@ -1565,7 +1565,7 @@ let
         src = fetchHex {
           pkg = "plug_crypto";
           version = "${version}";
-          sha256 = "131216a4b030b8f8ce0f26038bc4421ae60e4bb95c5cf5395e1421437824c4fa";
+          hash = "sha256-ExIWpLAwuPjODyYDi8RCGuYOS7lcXPU5XhQhQ3gkxPo=";
         };
 
         beamDeps = [ ];
@@ -1578,7 +1578,7 @@ let
         src = fetchHex {
           pkg = "plug_static_index_html";
           version = "${version}";
-          sha256 = "79fd4fcf34d110605c26560cbae8f23c603ec4158c08298bd4360fdea90bb5cf";
+          hash = "sha256-ef1PzzTREGBcJlYMuujyPGA+xBWMCCmL1DYP3qkLtc8=";
         };
 
         beamDeps = [ plug ];
@@ -1591,7 +1591,7 @@ let
         src = fetchHex {
           pkg = "poison";
           version = "${version}";
-          sha256 = "fec8660eb7733ee4117b85f55799fd3833eb769a6df71ccf8903e8dc5447cfce";
+          hash = "sha256-/shmDrdzPuQRe4X1V5n9ODPrdppt9xzPiQPo3FRHz84=";
         };
 
         beamDeps = [ ];
@@ -1604,7 +1604,7 @@ let
         src = fetchHex {
           pkg = "poolboy";
           version = "${version}";
-          sha256 = "dad79704ce5440f3d5a3681c8590b9dc25d1a561e8f5a9c995281012860901e3";
+          hash = "sha256-2teXBM5UQPPVo2gchZC53CXRpWHo9anJlSgQEoYJAeM=";
         };
 
         beamDeps = [ ];
@@ -1617,7 +1617,7 @@ let
         src = fetchHex {
           pkg = "postgrex";
           version = "${version}";
-          sha256 = "50b8b11afbb2c4095a3ba675b4f055c416d0f3d7de6633a595fc131a828a67eb";
+          hash = "sha256-ULixGvuyxAlaO6Z1tPBVxBbQ89feZjOllfwTGoKKZ+s=";
         };
 
         beamDeps = [
@@ -1634,7 +1634,7 @@ let
         src = fetchHex {
           pkg = "pot";
           version = "${version}";
-          sha256 = "78fe127f5a4f5f919d6ea5a2a671827bd53eb9d37e5b4128c0ad3df99856c2e0";
+          hash = "sha256-eP4Sf1pPX5GdbqWipnGCe9U+udN+W0EowK09+ZhWwuA=";
         };
 
         beamDeps = [ ];
@@ -1647,7 +1647,7 @@ let
         src = fetchHex {
           pkg = "prom_ex";
           version = "${version}";
-          sha256 = "01f3d4f69ec93068219e686cc65e58a29c42bea5429a8ff4e2121f19db178ee6";
+          hash = "sha256-AfPU9p7JMGghnmhsxl5YopxCvqVCmo/04hIfGdsXjuY=";
         };
 
         beamDeps = [
@@ -1674,7 +1674,7 @@ let
         src = fetchHex {
           pkg = "prometheus";
           version = "${version}";
-          sha256 = "2a99bb6dce85e238c7236fde6b0064f9834dc420ddbd962aac4ea2a3c3d59384";
+          hash = "sha256-Kpm7bc6F4jjHI2/eawBk+YNNxCDdvZYqrE6io8PVk4Q=";
         };
 
         beamDeps = [ quantile_estimator ];
@@ -1687,7 +1687,7 @@ let
         src = fetchHex {
           pkg = "prometheus_ecto";
           version = "${version}";
-          sha256 = "8d66289f77f913b37eda81fd287340c17e61a447549deb28efc254532b2bed82";
+          hash = "sha256-jWYon3f5E7N+2oH9KHNAwX5hpEdUneso78JUUysr7YI=";
         };
 
         beamDeps = [
@@ -1703,7 +1703,7 @@ let
         src = fetchHex {
           pkg = "prometheus_plugs";
           version = "${version}";
-          sha256 = "0273a6483ccb936d79ca19b0ab629aef0dba958697c94782bb728b920dfc6a79";
+          hash = "sha256-AnOmSDzLk215yhmwq2Ka7w26lYaXyUeCu3KLkg38ank=";
         };
 
         beamDeps = [
@@ -1720,7 +1720,7 @@ let
         src = fetchHex {
           pkg = "quantile_estimator";
           version = "${version}";
-          sha256 = "282a8a323ca2a845c9e6f787d166348f776c1d4a41ede63046d72d422e3da946";
+          hash = "sha256-KCqKMjyiqEXJ5veH0WY0j3dsHUpB7eYwRtctQi49qUY=";
         };
 
         beamDeps = [ ];
@@ -1733,7 +1733,7 @@ let
         src = fetchHex {
           pkg = "ranch";
           version = "${version}";
-          sha256 = "49fbcfd3682fab1f5d109351b61257676da1a2fdbe295904176d5e521a2ddfe5";
+          hash = "sha256-SfvP02gvqx9dEJNRthJXZ22hov2+KVkEF21eUhot3+U=";
         };
 
         beamDeps = [ ];
@@ -1746,7 +1746,7 @@ let
         src = fetchHex {
           pkg = "recon";
           version = "${version}";
-          sha256 = "e9ab01ac7fc8572e41eb59385efeb3fb0ff5bf02103816535bacaedf327d0263";
+          hash = "sha256-6asBrH/IVy5B61k4Xv6z+w/1vwIQOBZTW6yu3zJ9AmM=";
         };
 
         beamDeps = [ ];
@@ -1759,7 +1759,7 @@ let
         src = fetchHex {
           pkg = "rustler";
           version = "${version}";
-          sha256 = "9ef1abb6a7dda35c47cfc649e6a5a61663af6cf842a55814a554a84607dee389";
+          hash = "sha256-nvGrtqfdo1xHz8ZJ5qWmFmOvbPhCpVgUpVSoRgfe44k=";
         };
 
         beamDeps = [
@@ -1775,7 +1775,7 @@ let
         src = fetchHex {
           pkg = "sleeplocks";
           version = "${version}";
-          sha256 = "9fe5d048c5b781d6305c1a3a0f40bb3dfc06f49bf40571f3d2d0c57eaa7f59a5";
+          hash = "sha256-n+XQSMW3gdYwXBo6D0C7PfwG9Jv0BXHz0tDFfqp/WaU=";
         };
 
         beamDeps = [ ];
@@ -1788,7 +1788,7 @@ let
         src = fetchHex {
           pkg = "ssl_verify_fun";
           version = "${version}";
-          sha256 = "fe4c190e8f37401d30167c8c405eda19469f34577987c76dde613e838bbc67f8";
+          hash = "sha256-/kwZDo83QB0wFnyMQF7aGUafNFd5h8dt3mE+g4u8Z/g=";
         };
 
         beamDeps = [ ];
@@ -1801,7 +1801,7 @@ let
         src = fetchHex {
           pkg = "statistex";
           version = "${version}";
-          sha256 = "ff9d8bee7035028ab4742ff52fc80a2aa35cece833cf5319009b52f1b5a86c27";
+          hash = "sha256-/52L7nA1Aoq0dC/1L8gKKqNc7Ogzz1MZAJtS8bWobCc=";
         };
 
         beamDeps = [ ];
@@ -1814,7 +1814,7 @@ let
         src = fetchHex {
           pkg = "sweet_xml";
           version = "${version}";
-          sha256 = "e7c4b0bdbf460c928234951def54fe87edf1a170f6896675443279e2dbeba167";
+          hash = "sha256-58Swvb9GDJKCNJUd71T+h+3xoXD2iWZ1RDJ54tvroWc=";
         };
 
         beamDeps = [ ];
@@ -1827,7 +1827,7 @@ let
         src = fetchHex {
           pkg = "swoosh";
           version = "${version}";
-          sha256 = "878b1a7a6c10ebbf725a3349363f48f79c5e3d792eb621643b0d276a38acc0a6";
+          hash = "sha256-h4saemwQ679yWjNJNj9I95xePXkutiFkOw0najiswKY=";
         };
 
         beamDeps = [
@@ -1855,7 +1855,7 @@ let
         src = fetchHex {
           pkg = "syslog";
           version = "${version}";
-          sha256 = "4c6a41373c7e20587be33ef841d3de6f3beba08519809329ecc4d27b15b659e1";
+          hash = "sha256-TGpBNzx+IFh74z74QdPebzvroIUZgJMp7MTSexW2WeE=";
         };
 
         beamDeps = [ ];
@@ -1868,7 +1868,7 @@ let
         src = fetchHex {
           pkg = "table_rex";
           version = "${version}";
-          sha256 = "c35c4d5612ca49ebb0344ea10387da4d2afe278387d4019e4d8111e815df8f55";
+          hash = "sha256-w1xNVhLKSeuwNE6hA4faTSr+J4OH1AGeTYER6BXfj1U=";
         };
 
         beamDeps = [ ];
@@ -1881,7 +1881,7 @@ let
         src = fetchHex {
           pkg = "telemetry";
           version = "${version}";
-          sha256 = "73bc09fa59b4a0284efb4624335583c528e07ec9ae76aca96ea0673850aec57a";
+          hash = "sha256-c7wJ+lm0oChO+0YkM1WDxSjgfsmudqypbqBnOFCuxXo=";
         };
 
         beamDeps = [ ];
@@ -1894,7 +1894,7 @@ let
         src = fetchHex {
           pkg = "telemetry_metrics";
           version = "${version}";
-          sha256 = "9b43db0dc33863930b9ef9d27137e78974756f5f198cae18409970ed6fa5b561";
+          hash = "sha256-m0PbDcM4Y5MLnvnScTfniXR1b18ZjK4YQJlw7W+ltWE=";
         };
 
         beamDeps = [ telemetry ];
@@ -1907,7 +1907,7 @@ let
         src = fetchHex {
           pkg = "telemetry_metrics_prometheus_core";
           version = "${version}";
-          sha256 = "9cba950e1c4733468efbe3f821841f34ac05d28e7af7798622f88ecdbbe63ea3";
+          hash = "sha256-nLqVDhxHM0aO++P4IYQfNKwF0o5693mGIviOzbvmPqM=";
         };
 
         beamDeps = [
@@ -1923,7 +1923,7 @@ let
         src = fetchHex {
           pkg = "telemetry_poller";
           version = "${version}";
-          sha256 = "b3a24eafd66c3f42da30fc3ca7dda1e9d546c12250a2d60d7b81d264fbec4f6e";
+          hash = "sha256-s6JOr9ZsP0LaMPw8p92h6dVGwSJQotYNe4HSZPvsT24=";
         };
 
         beamDeps = [ telemetry ];
@@ -1936,7 +1936,7 @@ let
         src = fetchHex {
           pkg = "tesla";
           version = "${version}";
-          sha256 = "b83ab5d4c2d202e1ea2b7e17a49f788d49a699513d7c4f08f2aef2c281be69db";
+          hash = "sha256-uDq11MLSAuHqK34XpJ94jUmmmVE9fE8I8q7ywoG+ads=";
         };
 
         beamDeps = [
@@ -1959,7 +1959,7 @@ let
         src = fetchHex {
           pkg = "thousand_island";
           version = "${version}";
-          sha256 = "2be6954916fdfe4756af3239fb6b6d75d0b8063b5df03ba76fd8a4c87849e180";
+          hash = "sha256-K+aVSRb9/kdWrzI5+2ttddC4Bjtd8Dunb9ikyHhJ4YA=";
         };
 
         beamDeps = [ telemetry ];
@@ -1972,7 +1972,7 @@ let
         src = fetchHex {
           pkg = "timex";
           version = "${version}";
-          sha256 = "0ec4b09f25fe311321f9fc04144a7e3affe48eb29481d7a5583849b6c4dfa0a7";
+          hash = "sha256-DsSwnyX+MRMh+fwEFEp+Ov/kjrKUgdelWDhJtsTfoKc=";
         };
 
         beamDeps = [
@@ -1989,7 +1989,7 @@ let
         src = fetchHex {
           pkg = "toml";
           version = "${version}";
-          sha256 = "0690246a2478c1defd100b0c9b89b4ea280a22be9a7b313a8a058a2408a2fa70";
+          hash = "sha256-BpAkaiR4wd79EAsMm4m06igKIr6aezE6igWKJAii+nA=";
         };
 
         beamDeps = [ ];
@@ -2002,7 +2002,7 @@ let
         src = fetchHex {
           pkg = "trailing_format_plug";
           version = "${version}";
-          sha256 = "bd4fde4c15f3e993a999e019d64347489b91b7a9096af68b2bdadd192afa693f";
+          hash = "sha256-vU/eTBXz6ZOpmeAZ1kNHSJuRt6kJavaLK9rdGSr6aT8=";
         };
 
         beamDeps = [ plug ];
@@ -2015,7 +2015,7 @@ let
         src = fetchHex {
           pkg = "tzdata";
           version = "${version}";
-          sha256 = "55519aa2a99e5d2095c1e61cc74c9be69688f8ab75c27da724eb8279ff402a5a";
+          hash = "sha256-VVGaoqmeXSCVweYcx0yb5paI+Kt1wn2nJOuCef9AKlo=";
         };
 
         beamDeps = [ hackney ];
@@ -2028,7 +2028,7 @@ let
         src = fetchHex {
           pkg = "ueberauth";
           version = "${version}";
-          sha256 = "0bccf73e2ffd6337971340832947ba232877aa8122dba4c95be9f729c8987377";
+          hash = "sha256-C8z3Pi/9YzeXE0CDKUe6Iyh3qoEi26TJW+n3KciYc3c=";
         };
 
         beamDeps = [ plug ];
@@ -2041,7 +2041,7 @@ let
         src = fetchHex {
           pkg = "unicode_util_compat";
           version = "${version}";
-          sha256 = "25eee6d67df61960cf6a794239566599b09e17e668d3700247bc498638152521";
+          hash = "sha256-Je7m1n32GWDPanlCOVZlmbCeF+Zo03ACR7xJhjgVJSE=";
         };
 
         beamDeps = [ ];
@@ -2054,7 +2054,7 @@ let
         src = fetchHex {
           pkg = "unsafe";
           version = "${version}";
-          sha256 = "b485231683c3ab01a9cd44cb4a79f152c6f3bb87358439c6f68791b85c2df675";
+          hash = "sha256-tIUjFoPDqwGpzUTLSnnxUsbzu4c1hDnG9oeRuFwt9nU=";
         };
 
         beamDeps = [ ];
@@ -2067,7 +2067,7 @@ let
         src = fetchHex {
           pkg = "vix";
           version = "${version}";
-          sha256 = "71b0a79ae7f199cacfc8e679b0e4ba25ee47dc02e182c5b9097efb29fbe14efd";
+          hash = "sha256-cbCnmufxmcrPyOZ5sOS6Je5H3ALhgsW5CX77KfvhTv0=";
         };
 
         beamDeps = [
@@ -2084,7 +2084,7 @@ let
         src = fetchHex {
           pkg = "web_push_encryption";
           version = "${version}";
-          sha256 = "4f82b2e57622fb9337559058e8797cb0df7e7c9790793bdc4e40bc895f70e2a2";
+          hash = "sha256-T4Ky5XYi+5M3VZBY6Hl8sN9+fJeQeTvcTkC8iV9w4qI=";
         };
 
         beamDeps = [
@@ -2100,7 +2100,7 @@ let
         src = fetchHex {
           pkg = "websock";
           version = "${version}";
-          sha256 = "6105453d7fac22c712ad66fab1d45abdf049868f253cf719b625151460b8b453";
+          hash = "sha256-YQVFPX+sIscSrWb6sdRavfBJho8lPPcZtiUVFGC4tFM=";
         };
 
         beamDeps = [ ];
@@ -2113,7 +2113,7 @@ let
         src = fetchHex {
           pkg = "websock_adapter";
           version = "${version}";
-          sha256 = "e04378d26b0af627817ae84c92083b7e97aca3121196679b73c73b99d0d133ea";
+          hash = "sha256-4EN40msK9ieBeuhMkgg7fpesoxIRlmebc8c7mdDRM+o=";
         };
 
         beamDeps = [
@@ -2131,7 +2131,7 @@ let
         src = fetchHex {
           pkg = "websockex";
           version = "${version}";
-          sha256 = "95f2e7072b85a3a4cc385602d42115b73ce0b74a9121d0d6dbbf557645ac53e4";
+          hash = "sha256-lfLnByuFo6TMOFYC1CEVtzzgt0qRIdDW279VdkWsU+Q=";
         };
 
         beamDeps = [ ];
