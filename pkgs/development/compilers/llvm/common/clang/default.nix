@@ -45,7 +45,12 @@ let
       ++ lib.optional enableManpages python3.pkgs.sphinx
       ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
-    buildInputs = [ libxml2 libllvm ];
+    buildInputs = [
+      (libxml2.override {
+        pythonSupport = stdenv.targetPlatform.libc != "llvm";
+      })
+      libllvm
+    ];
 
     cmakeFlags = (lib.optionals (lib.versionAtLeast release_version "15") [
       "-DCLANG_INSTALL_PACKAGE_DIR=${placeholder "dev"}/lib/cmake/clang"

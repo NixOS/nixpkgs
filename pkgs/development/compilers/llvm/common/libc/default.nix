@@ -8,10 +8,8 @@
   release_version,
   runCommand,
   python3,
-  python3Packages,
   patches ? [ ],
   cmake,
-  ninja,
   isFullBuild ? true,
   linuxHeaders,
 }:
@@ -33,13 +31,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   sourceRoot = "${finalAttrs.src.name}/runtimes";
 
-  nativeBuildInputs =
-    [
-      cmake
-      python3
-    ]
-    ++ (lib.optional (lib.versionAtLeast release_version "15") ninja)
-    ++ (lib.optional isFullBuild python3Packages.pyyaml);
+  nativeBuildInputs = [
+    cmake
+    (python3.withPackages (
+      pythonPackages: with pythonPackages; if isFullBuild then [ pyyaml ] else [ ninja ]
+    ))
+  ];
 
   buildInputs = lib.optional isFullBuild linuxHeaders;
 
