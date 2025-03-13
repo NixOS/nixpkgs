@@ -18,8 +18,6 @@
 let
   stdenv = llvmPackages.stdenv;
 
-  version = "9.2.0";
-
   hasX86 =
     (if targets == [ ] then stdenv.hostPlatform.isx86_32 else (builtins.elem "i686" targets))
     || (if targets == [ ] then stdenv.hostPlatform.isx86_64 else (builtins.elem "x86_64" targets))
@@ -38,35 +36,19 @@ let
       x86_64 = [ "--enable-uefi-x86-64" ];
     }
     .${target} or (throw "Unsupported target ${target}");
-
-  configureFlags =
-    lib.optionals enableAll [ "--enable-all" ]
-    ++ lib.optionals biosSupport' [ "--enable-bios" ]
-    ++ lib.optionals (buildCDs && biosSupport') [ "--enable-bios-cd" ]
-    ++ lib.optionals buildCDs [ "--enable-uefi-cd" ]
-    ++ lib.optionals pxeSupport' [ "--enable-bios-pxe" ]
-    ++ lib.concatMap uefiFlags (
-      if targets == [ ] then [ stdenv.hostPlatform.parsed.cpu.name ] else targets
-    )
-    ++ [
-      "TOOLCHAIN_FOR_TARGET=llvm"
-      # `clang` on `PATH` has to be unwrapped, but *a* wrapped clang
-      # still needs to be available
-      "CC=${lib.getExe stdenv.cc}"
-    ];
 in
 
 # The output of the derivation is a tool to create bootable images using Limine
 # as bootloader for various platforms and corresponding binary and helper files.
-stdenv.mkDerivation {
-  inherit version configureFlags;
+stdenv.mkDerivation (finalAttrs: {
   pname = "limine";
+  version = "9.2.0";
 
   # We don't use the Git source but the release tarball, as the source has a
   # `./bootstrap` script performing network access to download resources.
   # Packaging that in Nix is very cumbersome.
   src = fetchurl {
-    url = "https://github.com/limine-bootloader/limine/releases/download/v${version}/limine-${version}.tar.gz";
+    url = "https://github.com/limine-bootloader/limine/releases/download/v${finalAttrs.version}/limine-${finalAttrs.version}.tar.gz";
     hash = "sha256-tR946s/b9RcGAFa+dJk/+Bfzf5FmE2UgdygjDVkrEgw=";
   };
 
@@ -90,11 +72,27 @@ stdenv.mkDerivation {
     "man"
   ];
 
+  configureFlags =
+    lib.optionals enableAll [ "--enable-all" ]
+    ++ lib.optionals biosSupport' [ "--enable-bios" ]
+    ++ lib.optionals (buildCDs && biosSupport') [ "--enable-bios-cd" ]
+    ++ lib.optionals buildCDs [ "--enable-uefi-cd" ]
+    ++ lib.optionals pxeSupport' [ "--enable-bios-pxe" ]
+    ++ lib.concatMap uefiFlags (
+      if targets == [ ] then [ stdenv.hostPlatform.parsed.cpu.name ] else targets
+    )
+    ++ [
+      "TOOLCHAIN_FOR_TARGET=llvm"
+      # `clang` on `PATH` has to be unwrapped, but *a* wrapped clang
+      # still needs to be available
+      "CC=${lib.getExe stdenv.cc}"
+    ];
+
   passthru.tests = nixosTests.limine;
 
   meta = {
     homepage = "https://limine-bootloader.org/";
-    changelog = "https://raw.githubusercontent.com/limine-bootloader/limine/refs/tags/v${version}/ChangeLog";
+    changelog = "https://raw.githubusercontent.com/limine-bootloader/limine/refs/tags/v${finalAttrs.version}/ChangeLog";
     description = "Limine Bootloader";
     mainProgram = "limine";
     # The platforms on that the Limine binary and helper tools can run, not
@@ -118,4 +116,4 @@ stdenv.mkDerivation {
       surfaceflinger
     ];
   };
-}
+})
