@@ -22,6 +22,7 @@
   typing-extensions,
 
   # Optional dependencies
+  docrepr,
   ipykernel,
   ipyparallel,
   ipywidgets,
@@ -69,6 +70,7 @@ buildPythonPackage rec {
     ++ lib.optionals (pythonOlder "3.12") [ typing-extensions ];
 
   optional-dependencies = {
+    docrepr = [ docrepr ];
     kernel = [ ipykernel ];
     nbconvert = [ nbconvert ];
     nbformat = [ nbformat ];
