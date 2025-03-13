@@ -55,6 +55,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./respect-xml-catalog-files-var.patch
+    ./specify-localedir.patch
   ];
 
   postPatch =
