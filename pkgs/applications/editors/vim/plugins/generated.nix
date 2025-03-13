@@ -14217,6 +14217,19 @@ final: prev:
     meta.hydraPlatforms = [ ];
   };
 
+  treewalker-nvim = buildVimPlugin {
+    pname = "treewalker.nvim";
+    version = "2025-03-08";
+    src = fetchFromGitHub {
+      owner = "aaronik";
+      repo = "treewalker.nvim";
+      rev = "0bad88a449642fca1080930260482628b692841a";
+      sha256 = "088ksm6rvj4vabrisbpg2xngc11bbqihms57rz0dw22mbr7chy6q";
+    };
+    meta.homepage = "https://github.com/aaronik/treewalker.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   tremor-vim = buildVimPlugin {
     pname = "tremor-vim";
     version = "2021-09-07";
