@@ -38,11 +38,6 @@ in
         default = defaultConfig.strategyOnDischarging;
         description = "Default strategy on discharging";
       };
-      batteryChargingStatusPath = lib.mkOption {
-        type = lib.types.str;
-        default = "/sys/class/power_supply/BAT1/status";
-        description = "Path to battery status device";
-      };
       strategies = lib.mkOption {
         default = defaultConfig.strategies;
         type = lib.types.attrsOf (
