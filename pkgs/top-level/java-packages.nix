@@ -27,15 +27,6 @@ with pkgs;
       mkOpenjdk =
         featureVersion:
         let
-          # merge meta.platforms of both packages so that dependent packages and hydra build them
-          mergeMetaPlatforms =
-            jdk: other:
-            jdk
-            // {
-              meta = jdk.meta // {
-                platforms = lib.unique (jdk.meta.platforms ++ other.meta.platforms);
-              };
-            };
           openjdkLinux =
             (callPackage ../development/compilers/openjdk/generic.nix { inherit featureVersion; })
             // {
@@ -65,21 +56,19 @@ with pkgs;
       openjdk17-bootstrap = temurin-bin.jdk-17;
 
       temurin-bin = recurseIntoAttrs (
-        callPackage (
-          if stdenv.hostPlatform.isLinux then
-            ../development/compilers/temurin-bin/jdk-linux.nix
-          else
-            ../development/compilers/temurin-bin/jdk-darwin.nix
-        ) { }
+        let
+          temurinLinux = callPackage ../development/compilers/temurin-bin/jdk-linux.nix { };
+          temurinDarwin = callPackage ../development/compilers/temurin-bin/jdk-darwin.nix { };
+        in
+        lib.mapAttrs (name: drv: mkLinuxDarwin drv temurinDarwin.${name}) temurinLinux
       );
 
       semeru-bin = recurseIntoAttrs (
-        callPackage (
-          if stdenv.hostPlatform.isLinux then
-            ../development/compilers/semeru-bin/jdk-linux.nix
-          else
-            ../development/compilers/semeru-bin/jdk-darwin.nix
-        ) { }
+        let
+          semeruLinux = callPackage ../development/compilers/semeru-bin/jdk-linux.nix { };
+          semeruDarwin = callPackage ../development/compilers/semeru-bin/jdk-darwin.nix { };
+        in
+        lib.mapAttrs (name: drv: mkLinuxDarwin drv semeruDarwin.${name}) semeruLinux
       );
     };
 }
