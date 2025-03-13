@@ -135,6 +135,7 @@ stdenv.mkDerivation (
       license = lib.licenses.unlicense;
       maintainers = with lib.maintainers; [
         sigmanificient
+        marcin-serwin
         mvs
       ];
       platforms = lib.platforms.all;
