@@ -137,6 +137,16 @@ let
       expected = true;
     };
 
+    # Test paths for content‐addressed derivations
+    testHasStorePathPrefixExample7 = {
+      expr = hasStorePathPrefix (/. + "/1121rp0gvr1qya7hvy925g5kjwg66acz6sn1ra1hca09f1z5dsab");
+      expected = true;
+    };
+    testHasStorePathPrefixExample8 = {
+      expr = hasStorePathPrefix (/. + "/1121rp0gvr1qya7hvy925g5kjwg66acz6sn1ra1hca09f1z5dsab/foo/bar");
+      expected = true;
+    };
+
     # Test examples from the lib.path.subpath.isValid documentation
     testSubpathIsValidExample1 = {
       expr = subpath.isValid null;
