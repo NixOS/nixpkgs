@@ -2,6 +2,8 @@
   fetchFromGitHub,
   dotnetCorePackages,
   buildDotnetModule,
+  makeDesktopItem,
+  copyDesktopItems,
   lib,
 }:
 buildDotnetModule rec {
@@ -20,6 +22,26 @@ buildDotnetModule rec {
   dotnet-runtime = dotnetCorePackages.runtime_8_0;
   nugetDeps = ./deps.json;
   selfContainedBuild = true;
+
+  nativeBuildInputs = [ copyDesktopItems ];
+
+  postInstall = ''
+    install -Dm644 Resources/ML_Icon.png $out/share/icons/MelonLoader.Installer.Linux.png
+  '';
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = pname;
+      desktopName = "MelonLoader Installer";
+      exec = meta.mainProgram;
+      comment = meta.description;
+      categories = [
+        "Game"
+        "Utility"
+      ];
+      icon = meta.mainProgram;
+    })
+  ];
 
   passthru.updateScript = ./update.sh;
 
