@@ -5,18 +5,18 @@
   gtkmm3,
   autoreconfHook,
   pkg-config,
+  versionCheckHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "litemdview";
-  # litemdview -v
   version = "0.0.32";
 
   src = fetchFromGitea {
-    domain = "notabug.org";
+    domain = "codeberg.org";
     owner = "g0tsu";
     repo = "litemdview";
-    rev = "litemdview-0.0.32";
+    rev = "litemdview-${finalAttrs.version}";
     hash = "sha256-XGjP+7i3mYCEzPYwVY+75DARdXJFY4vUWHFpPeoNqAE=";
   };
 
@@ -29,7 +29,17 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  meta = with lib; {
+  # Required for build with gcc-14
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-int";
+
+  enableParallelBuilding = true;
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+
+  meta = {
     homepage = "https://notabug.org/g0tsu/litemdview";
     description = "Suckless markdown viewer";
     longDescription = ''
@@ -53,9 +63,9 @@ stdenv.mkDerivation rec {
         - Basic html support (very simple offline documents in html)
         - Syntax highlighting
     '';
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ WhiteBlackGoose ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ WhiteBlackGoose ];
+    platforms = lib.platforms.linux;
     mainProgram = "litemdview";
   };
-}
+})
