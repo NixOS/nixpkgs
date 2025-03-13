@@ -1,5 +1,4 @@
 {
-  stdenv,
   lib,
   fetchFromGitHub,
   nix-update-script,
@@ -14,7 +13,6 @@
   cmake,
   python3Packages,
   appstream,
-  fetchPypi,
   gobject-introspection,
   glib,
 }:

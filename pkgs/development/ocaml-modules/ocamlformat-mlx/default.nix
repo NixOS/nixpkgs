@@ -1,7 +1,5 @@
 {
-  lib,
   buildDunePackage,
-  fetchFromGitHub,
   cmdliner,
   odoc,
   ocamlformat-mlx-lib,

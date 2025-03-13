@@ -1,6 +1,5 @@
 { stdenv
 , buildFHSEnv
-, fetchurl
 , fetchzip
 , lib
 , zlib

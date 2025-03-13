@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   SDL,
   autoreconfHook,
   autoconf-archive,
