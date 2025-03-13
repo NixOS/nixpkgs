@@ -2935,15 +2935,14 @@ src:
     version = "1.0.0";
   };
   graphql = {
-    dependencies = ["base64" "fiber-storage"];
+    dependencies = ["base64" "fiber-storage" "logger"];
     groups = ["default" "development" "test"];
     platforms = [];
     source = {
-      remotes = ["https://rubygems.org"];
-      sha256 = "1dbg7xp1jgcfnmpvv8xcpzxandjkhqpsfybiwipz0sj7br685zzn";
-      type = "gem";
+      path = "${src}/vendor/gems/graphql";
+      type = "path";
     };
-    version = "2.4.8";
+    version = "2.4.11";
   };
   graphql-client = {
     dependencies = ["activesupport" "graphql"];
@@ -6096,11 +6095,10 @@ src:
     groups = ["default"];
     platforms = [];
     source = {
-      remotes = ["https://rubygems.org"];
-      sha256 = "1adq06m684gnpjp6qyb8shgj8jjy2npcfg7y6mg2ab9ilfdq6684";
-      type = "gem";
+      path = "${src}/vendor/gems/ruby-saml";
+      type = "path";
     };
-    version = "1.17.0";
+    version = "1.18.0";
   };
   ruby-statistics = {
     groups = ["default" "test"];
