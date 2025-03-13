@@ -34,7 +34,6 @@ stdenv.mkDerivation {
     git
     python311
   ];
-  
   cmakeFlags = [ "-DCMAKE_BUILD_TYPE=Release" ];
 
   postPatch = ''
