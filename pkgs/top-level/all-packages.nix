@@ -3149,9 +3149,7 @@ with pkgs;
 
   vorta = qt6Packages.callPackage ../applications/backup/vorta { };
 
-  worker-build = callPackage ../development/tools/worker-build {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
+  worker-build = callPackage ../development/tools/worker-build { };
 
   wrangler_1 = callPackage ../development/tools/wrangler_1 {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation CoreServices Security;

@@ -416,7 +416,10 @@ in {
   flannel = handleTestOn ["x86_64-linux"] ./flannel.nix {};
   flaresolverr = handleTest ./flaresolverr.nix {};
   flood = handleTest ./flood.nix {};
-  floorp = handleTest ./firefox.nix { firefoxPackage = pkgs.floorp; };
+  floorp = runTest {
+    imports = [ ./firefox.nix ] ;
+    _module.args.firefoxPackage = pkgs.floorp;
+  };
   fluentd = handleTest ./fluentd.nix {};
   fluidd = handleTest ./fluidd.nix {};
   fontconfig-default-fonts = handleTest ./fontconfig-default-fonts.nix {};
@@ -607,7 +610,10 @@ in {
   libresprite = handleTest ./libresprite.nix {};
   libreswan = runTest ./libreswan.nix;
   libreswan-nat = runTest ./libreswan-nat.nix;
-  librewolf = handleTest ./firefox.nix { firefoxPackage = pkgs.librewolf; };
+  librewolf = runTest {
+    imports = [ ./firefox.nix ];
+    _module.args.firefoxPackage = pkgs.librewolf;
+  };
   libuiohook = handleTest ./libuiohook.nix {};
   libvirtd = handleTest ./libvirtd.nix {};
   lidarr = handleTest ./lidarr.nix {};
