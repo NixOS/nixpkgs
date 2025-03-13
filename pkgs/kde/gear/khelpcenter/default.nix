@@ -4,6 +4,7 @@
   xapian,
   man-db,
   python3,
+  kio-extras,
 }:
 mkKdeDerivation {
   pname = "khelpcenter";
@@ -13,6 +14,7 @@ mkKdeDerivation {
     xapian
     man-db
     python3
+    kio-extras
   ];
   postPatch = ''
     substituteInPlace searchhandlers/khc_mansearch.py \
