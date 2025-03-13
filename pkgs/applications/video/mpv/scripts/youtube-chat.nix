@@ -16,20 +16,10 @@ buildLua {
     hash = "sha256-uZC7iDYqLUuXnqSLke4j6rLoufc/vFTE6Ehnpu//dxY=";
   };
 
-  scriptPath = "youtube-chat";
+  scriptPath = ".";
+  passthru.scriptName = "youtube-chat";
 
-  installPhase = ''
-    runHook preInstall
-    install -D -t $out/share/mpv/scripts/youtube-chat main.lua
-    runHook postInstall
-  '';
-
-  passthru.extraWrapperArgs = [
-    "--prefix"
-    "PATH"
-    ":"
-    (lib.makeBinPath [ yt-dlp ])
-  ];
+  runtime-dependencies = [ yt-dlp ];
 
   meta = {
     description = "MPV script to overlay youtube chat on top of a video using yt-dlp";
