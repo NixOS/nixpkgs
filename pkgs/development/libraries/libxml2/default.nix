@@ -22,6 +22,8 @@
     ),
   icuSupport ? false,
   icu,
+  zlibSupport ? false,
+  zlib,
   enableShared ? !stdenv.hostPlatform.isMinGW && !stdenv.hostPlatform.isStatic,
   enableStatic ? !enableShared,
   gnome,
@@ -68,6 +70,9 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals (stdenv.hostPlatform.isDarwin && pythonSupport && python ? isPy2 && python.isPy2) [
       libintl
+    ]
+    ++ lib.optionals zlibSupport [
+      zlib
     ];
 
   propagatedBuildInputs =
@@ -81,14 +86,18 @@ stdenv.mkDerivation (finalAttrs: {
       icu
     ];
 
-  configureFlags = [
-    "--exec-prefix=${placeholder "dev"}"
-    (lib.enableFeature enableStatic "static")
-    (lib.enableFeature enableShared "shared")
-    (lib.withFeature icuSupport "icu")
-    (lib.withFeature pythonSupport "python")
-    (lib.optionalString pythonSupport "PYTHON=${python.pythonOnBuildForHost.interpreter}")
-  ] ++ lib.optional enableHttp "--with-http";
+  configureFlags =
+    [
+      "--exec-prefix=${placeholder "dev"}"
+      (lib.enableFeature enableStatic "static")
+      (lib.enableFeature enableShared "shared")
+      (lib.withFeature icuSupport "icu")
+      (lib.withFeature pythonSupport "python")
+      (lib.optionalString pythonSupport "PYTHON=${python.pythonOnBuildForHost.interpreter}")
+    ]
+    # avoid rebuilds, can be merged into list in version bumps
+    ++ lib.optional enableHttp "--with-http"
+    ++ lib.optional zlibSupport "--with-zlib";
 
   installFlags = lib.optionals pythonSupport [
     "pythondir=\"${placeholder "py"}/${python.sitePackages}\""
