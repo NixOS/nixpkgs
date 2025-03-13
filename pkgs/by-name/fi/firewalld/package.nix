@@ -61,10 +61,10 @@ stdenv.mkDerivation rec {
       substituteInPlace src/firewall/config/__init__.py.in \
         --replace-fail /usr "$out"
 
-      # for file in config/firewall-{applet,config}.desktop.in; do
-      #   substituteInPlace $file \
-      #     --replace "/usr/bin/" "$out/bin/"
-      # done
+      for file in config/firewall-{applet,config}.desktop.in; do
+        substituteInPlace $file \
+          --replace-fail /usr "$out"
+      done
     ''
     + lib.optionalString withGui ''
       substituteInPlace src/firewall-applet.in \
