@@ -5962,6 +5962,8 @@ self: super: with self; {
 
   hcloud = callPackage ../development/python-modules/hcloud { };
 
+  hclust2 = callPackage ../development/python-modules/hclust2 { };
+
   hcs-utils = callPackage ../development/python-modules/hcs-utils { };
 
   hdbscan = callPackage ../development/python-modules/hdbscan { };
@@ -8323,6 +8325,12 @@ self: super: with self; {
 
   metakernel = callPackage ../development/python-modules/metakernel { };
 
+  metaphlan = callPackage ../development/python-modules/metaphlan { };
+
+  metaphlan-unwrapped = callPackage ../development/python-modules/metaphlan {
+    metaphlan-db = null;
+  };
+
   metar = callPackage ../development/python-modules/metar { };
 
   metawear = callPackage ../development/python-modules/metawear { };
@@ -10596,6 +10604,8 @@ self: super: with self; {
   pgmpy = callPackage ../development/python-modules/pgmpy { };
 
   phonopy = callPackage ../development/python-modules/phonopy { };
+
+  phylophlan = callPackage ../development/python-modules/phylophlan { };
 
   pixcat = callPackage ../development/python-modules/pixcat { };
 
