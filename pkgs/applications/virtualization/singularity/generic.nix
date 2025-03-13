@@ -46,6 +46,7 @@ in
   libseccomp,
   libuuid,
   mount,
+  versionCheckHook,
   # This is for nvidia-container-cli
   nvidia-docker,
   openssl,
@@ -217,11 +218,6 @@ in
           ]
         ) originalDefaultPaths}
     '') sourceFilesWithDefaultPaths}
-
-    substituteInPlace internal/pkg/util/gpu/nvidia.go \
-      --replace \
-        'return fmt.Errorf("/usr/bin not writable in the container")' \
-        ""
   '';
 
   postConfigure = ''
@@ -250,20 +246,22 @@ in
 
   postFixup = ''
     substituteInPlace "$out/bin/run-singularity" \
-      --replace "/usr/bin/env ${projectName}" "$out/bin/${projectName}"
+      --replace-fail "/usr/bin/env ${projectName}" "$out/bin/${projectName}"
+
     # Respect PATH from the environment/the user.
     # Fallback to bin paths provided by Nixpkgs packages.
     wrapProgram "$out/bin/${projectName}" \
       --suffix PATH : "$systemDefaultPath" \
       --suffix PATH : "$inputsDefaultPath"
+
     # Make changes in the config file
     ${lib.optionalString forceNvcCli ''
       substituteInPlace "$out/etc/${projectName}/${projectName}.conf" \
-        --replace "use nvidia-container-cli = no" "use nvidia-container-cli = yes"
+        --replace-fail "use nvidia-container-cli = no" "use nvidia-container-cli = yes"
     ''}
     ${lib.optionalString (enableNvidiaContainerCli && projectName == "singularity") ''
       substituteInPlace "$out/etc/${projectName}/${projectName}.conf" \
-        --replace "# nvidia-container-cli path =" "nvidia-container-cli path = ${nvidia-docker}/bin/nvidia-container-cli"
+        --replace-fail "# nvidia-container-cli path =" "nvidia-container-cli path = ${nvidia-docker}/bin/nvidia-container-cli"
     ''}
     ${lib.optionalString (removeCompat && (projectName != "singularity")) ''
       unlink "$out/bin/singularity"
@@ -289,6 +287,13 @@ in
       ln -s ${lib.escapeShellArg starterSuidPath} "$out/libexec/${projectName}/bin/starter-suid"
     ''}
   '';
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgram = "${placeholder "out"}/bin/${projectName}";
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
 
   meta = {
     description = "Application containers for linux" + extraDescription;
