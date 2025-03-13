@@ -10,6 +10,7 @@
   nezha-theme-admin,
   nezha-theme-user,
   withThemes ? [ ],
+  nixosTests,
 }:
 
 let
@@ -116,6 +117,7 @@ buildGo124Module {
 
   passthru = {
     updateScript = nix-update-script { };
+    tests = { inherit (nixosTests) nezha; };
   };
 
   meta = {

@@ -960,6 +960,7 @@
   ./services/monitoring/munin.nix
   ./services/monitoring/nagios.nix
   ./services/monitoring/netdata.nix
+  ./services/monitoring/nezha.nix
   ./services/monitoring/nezha-agent.nix
   ./services/monitoring/ocsinventory-agent.nix
   ./services/monitoring/opentelemetry-collector.nix
