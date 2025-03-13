@@ -148,7 +148,7 @@ in {
   aaaaxy = runTest ./aaaaxy.nix;
   acme = import ./acme/default.nix { inherit runTest; };
   acme-dns = runTest ./acme-dns.nix;
-  actual = handleTest ./actual.nix {};
+  actual = runTest ./actual.nix;
   adguardhome = runTest ./adguardhome.nix;
   aesmd = runTestOn ["x86_64-linux"] ./aesmd.nix;
   agate = runTest ./web-servers/agate.nix;
