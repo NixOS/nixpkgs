@@ -3,7 +3,6 @@
   stdenv,
   cmake,
   fetchFromGitHub,
-  fetchpatch,
   fixDarwinDylibNames,
 }:
 

@@ -2,7 +2,6 @@
   lib,
   buildGo124Module,
   fetchFromGitHub,
-  fetchpatch,
   buildEnv,
   linkFarm,
   makeWrapper,

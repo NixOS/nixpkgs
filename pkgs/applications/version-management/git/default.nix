@@ -1,4 +1,4 @@
-{ fetchurl, fetchpatch, lib, stdenv, buildPackages
+{ fetchurl, lib, stdenv, buildPackages
 , curl, openssl, zlib, expat, perlPackages, python3, gettext, cpio
 , gnugrep, gnused, gawk, coreutils # needed at runtime by git-filter-branch etc
 , openssh, pcre2, bash
