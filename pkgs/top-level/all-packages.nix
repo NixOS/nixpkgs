@@ -16140,6 +16140,8 @@ with pkgs;
 
   factorio-demo = factorio.override { releaseType = "demo"; };
 
+  factorio-demo-experimental = factorio.override { releaseType = "demo"; experimental = true; };
+
   factorio-space-age = factorio.override { releaseType = "expansion"; };
 
   factorio-space-age-experimental = factorio.override { releaseType = "expansion"; experimental = true; };
