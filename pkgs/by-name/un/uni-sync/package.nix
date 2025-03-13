@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "EightB1ts";
-    repo = pname;
+    repo = "uni-sync";
     rev = "ca349942c06fabcc028ce24e79fc6ce7c758452b";
     hash = "sha256-K2zX3rKtTaKO6q76xlxX+rDLL0gEsJ2l8x/s1vsp+ZQ=";
   };

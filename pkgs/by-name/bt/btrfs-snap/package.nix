@@ -14,7 +14,7 @@ stdenvNoCC.mkDerivation rec {
   version = "1.7.3";
   src = fetchFromGitHub {
     owner = "jf647";
-    repo = pname;
+    repo = "btrfs-snap";
     rev = version;
     sha256 = "sha256-SDzLjgNRuR9XpmcYCD9T10MLS+//+pWFGDiTAb8NiLQ=";
   };

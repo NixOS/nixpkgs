@@ -5207,6 +5207,8 @@ self: super: with self; {
 
   gdown = callPackage ../development/python-modules/gdown { };
 
+  gdsfactory = callPackage ../development/python-modules/gdsfactory { };
+
   ge25519 = callPackage ../development/python-modules/ge25519 { };
 
   geant4 = toPythonModule (pkgs.geant4.override {
@@ -6915,6 +6917,8 @@ self: super: with self; {
 
   jsonschema-path = callPackage ../development/python-modules/jsonschema-path { };
 
+  jsonschema-rs = callPackage ../development/python-modules/jsonschema-rs { };
+
   jsonschema-spec = callPackage ../development/python-modules/jsonschema-spec { };
 
   jsonschema-specifications = callPackage ../development/python-modules/jsonschema-specifications { };
@@ -7138,6 +7142,8 @@ self: super: with self; {
     inherit (pkgs) keyutils;
   };
 
+  kfactory = callPackage ../development/python-modules/kfactory { };
+
   khanaa = callPackage ../development/python-modules/khanaa {};
 
   kicad = toPythonModule (pkgs.kicad.override {
@@ -7161,6 +7167,8 @@ self: super: with self; {
   kiwisolver = callPackage ../development/python-modules/kiwisolver { };
 
   klaus = callPackage ../development/python-modules/klaus { };
+
+  klayout = callPackage ../development/python-modules/klayout { };
 
   klein = callPackage ../development/python-modules/klein { };
 
@@ -7286,6 +7294,8 @@ self: super: with self; {
   language-data = callPackage ../development/python-modules/language-data { };
 
   language-tags = callPackage ../development/python-modules/language-tags { };
+
+  language-tool-python = callPackage ../development/python-modules/language-tool-python { };
 
   lanms-neo = callPackage ../development/python-modules/lanms-neo { };
 
@@ -8405,6 +8415,8 @@ self: super: with self; {
 
   miniful = callPackage ../development/python-modules/miniful { };
 
+  minify-html = callPackage ../development/python-modules/minify-html { };
+
   minikanren = callPackage ../development/python-modules/minikanren { };
 
   minikerberos = callPackage ../development/python-modules/minikerberos { };
@@ -8442,6 +8454,8 @@ self: super: with self; {
   mistune = callPackage ../development/python-modules/mistune { };
 
   mitmproxy = callPackage ../development/python-modules/mitmproxy { };
+
+  mitmproxy-linux = callPackage ../development/python-modules/mitmproxy-linux { };
 
   mitmproxy-macos = callPackage ../development/python-modules/mitmproxy-macos { };
 
@@ -10502,6 +10516,8 @@ self: super: with self; {
   pgcli = callPackage ../development/python-modules/pgcli { };
 
   pglast = callPackage ../development/python-modules/pglast { };
+
+  pglive = callPackage ../development/python-modules/pglive { };
 
   pgpdump = callPackage ../development/python-modules/pgpdump { };
 
@@ -13617,7 +13633,6 @@ self: super: with self; {
     inherit (pkgs) fontconfig rapidjson;
     inherit (pkgs.xorg) libX11 libXi libXmu libXext;
     inherit (pkgs.darwin.apple_sdk.frameworks) Cocoa;
-    opencascade-occt = pkgs.opencascade-occt_7_6;
   });
 
   python-olm = callPackage ../development/python-modules/python-olm { };
@@ -14254,6 +14269,10 @@ self: super: with self; {
 
   recordlinkage = callPackage ../development/python-modules/recordlinkage { };
 
+  rectpack = callPackage ../development/python-modules/rectpack { };
+
+  rectangle-packer = callPackage ../development/python-modules/rectangle-packer { };
+
   recurring-ical-events = callPackage ../development/python-modules/recurring-ical-events { };
 
   recursive-pth-loader = toPythonModule (callPackage ../development/python-modules/recursive-pth-loader { });
@@ -14679,6 +14698,8 @@ self: super: with self; {
   ruamel-yaml = callPackage ../development/python-modules/ruamel-yaml { };
 
   ruamel-yaml-clib = callPackage ../development/python-modules/ruamel-yaml-clib { };
+
+  ruamel-yaml-string = callPackage ../development/python-modules/ruamel-yaml-string { };
 
   rubicon-objc = callPackage ../development/python-modules/rubicon-objc { };
 
@@ -15598,6 +15619,8 @@ self: super: with self; {
 
   sphinx-external-toc = callPackage ../development/python-modules/sphinx-external-toc { };
 
+  sphinx-favicon = callPackage ../development/python-modules/sphinx-favicon { };
+
   sphinx-fortran = callPackage ../development/python-modules/sphinx-fortran { };
 
   sphinx-hoverxref = callPackage ../development/python-modules/sphinx-hoverxref { };
@@ -15953,6 +15976,8 @@ self: super: with self; {
   standard-imghdr = if pythonAtLeast "3.13" then callPackage ../development/python-modules/standard-imghdr { } else null;
 
   standard-pipes = if pythonAtLeast "3.13" then callPackage ../development/python-modules/standard-pipes { } else null;
+
+  standard-sunau = if pythonAtLeast "3.13" then callPackage ../development/python-modules/standard-sunau { } else null;
 
   standard-telnetlib = if pythonAtLeast "3.13" then callPackage ../development/python-modules/standard-telnetlib { } else null;
 
@@ -16635,6 +16660,8 @@ self: super: with self; {
   tinytag = callPackage ../development/python-modules/tinytag { };
 
   tinytuya = callPackage ../development/python-modules/tinytuya { };
+
+  tiptapy = callPackage ../development/python-modules/tiptapy { };
 
   titlecase = callPackage ../development/python-modules/titlecase { };
 
@@ -17976,6 +18003,10 @@ self: super: with self; {
     inherit (pkgs) unicorn;
   };
 
+  unicorn-angr = callPackage ../development/python-modules/unicorn-angr {
+    inherit (pkgs) unicorn-angr;
+  };
+
   unicurses = callPackage ../development/python-modules/unicurses { };
 
   unicrypto = callPackage ../development/python-modules/unicrypto { };
@@ -18113,6 +18144,8 @@ self: super: with self; {
   uuid6 = callPackage ../development/python-modules/uuid6 { };
 
   uv = callPackage ../development/python-modules/uv { };
+
+  uv-build = callPackage ../development/python-modules/uv-build { };
 
   uv-dynamic-versioning = callPackage ../development/python-modules/uv-dynamic-versioning { };
 
@@ -18575,6 +18608,8 @@ self: super: with self; {
   world-bank-data = callPackage ../development/python-modules/world-bank-data { };
 
   worldengine = callPackage ../development/python-modules/worldengine { };
+
+  wrapcco = callPackage ../development/python-modules/wrapcco { };
 
   wrapio = callPackage ../development/python-modules/wrapio { };
 

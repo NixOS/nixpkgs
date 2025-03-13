@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "gpakosz";
-    repo = pname;
+    repo = "whereami";
     rev = "ba364cd54fd431c76c045393b6522b4bff547f50";
     sha256 = "XhRqW0wdXzlmyBf1cjqtQvztuyV4buxVl19Q0uyEOhk=";
   };

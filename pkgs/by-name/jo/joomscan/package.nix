@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "owasp";
-    repo = pname;
+    repo = "joomscan";
     rev = "79315393509caa39895e553c489667636ac31b85";
     sha256 = "Yg91iUhqbKZyPghiX0UZ7S1ql0DZLtPHOk9VEY1ZZOg=";
   };

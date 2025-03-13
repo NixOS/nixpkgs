@@ -11,6 +11,7 @@ let
     (builtins.toJSON cfg.settings);
 
   limiterSettingsFile = (pkgs.formats.toml { }).generate "limiter.toml" cfg.limiterSettings;
+  faviconsSettingsFile = (pkgs.formats.toml { }).generate "favicons.toml" cfg.faviconsSettings;
 
   generateConfig = ''
     cd ${runDir}
@@ -143,6 +144,35 @@ in
         '';
       };
 
+      faviconsSettings = mkOption {
+        type = types.attrsOf settingType;
+        default = { };
+        example = literalExpression ''
+          {
+            favicons = {
+              cfg_schema = 1;
+              cache = {
+                db_url = "/run/searx/faviconcache.db";
+                HOLD_TIME = 5184000;
+                LIMIT_TOTAL_BYTES = 2147483648;
+                BLOB_MAX_BYTES = 40960;
+                MAINTENANCE_MODE = "auto";
+                MAINTENANCE_PERIOD = 600;
+              };
+            };
+          }
+        '';
+        description = ''
+          Favicons settings for SearXNG.
+
+          ::: {.note}
+          For available settings, see the SearXNG
+          [schema file](https://github.com/searxng/searxng/blob/master/searx/favicons/favicons.toml).
+          :::
+        '';
+      };
+
+
       package = mkPackageOption pkgs "searxng" { };
 
       runInUwsgi = mkOption {
@@ -263,8 +293,13 @@ in
       port = 0;
     };
 
-    environment.etc."searxng/limiter.toml" = lib.mkIf (cfg.limiterSettings != { }) {
-      source = limiterSettingsFile;
+    environment.etc = {
+      "searxng/limiter.toml" = lib.mkIf (cfg.limiterSettings != { }) {
+        source = limiterSettingsFile;
+      };
+      "searxng/favicons.toml" = lib.mkIf (cfg.faviconsSettings != { }) {
+        source = faviconsSettingsFile;
+      };
     };
   };
 

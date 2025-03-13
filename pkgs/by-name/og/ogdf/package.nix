@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
   version = "2022.02";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "ogdf";
+    repo = "ogdf";
     rev = "dogwood-202202";
     sha256 = "sha256-zkQ6sS0EUmiigv3T7To+tG3XbFbR3XEbFo15oQ0bWf0=";
   };

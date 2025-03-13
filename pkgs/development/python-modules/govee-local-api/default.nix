@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "govee-local-api";
-  version = "2.0.1";
+  version = "2.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "Galorhallen";
     repo = "govee-local-api";
     tag = "v${version}";
-    hash = "sha256-Y5818sePEg6t5EQgmG97MCXXECvJniCpNYHGN8BLXS8=";
+    hash = "sha256-a5x4RbZ5+ryByr6/yGJw2/dNJBR7/JTYBcvA+Eqygqc=";
   };
 
   postPatch = ''

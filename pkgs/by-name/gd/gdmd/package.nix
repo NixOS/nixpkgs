@@ -2,7 +2,7 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
   gdc,
   perl,
 }:
@@ -18,8 +18,7 @@ stdenvNoCC.mkDerivation {
   };
 
   patches = [
-    (substituteAll {
-      src = ./0001-gdc-store-path.diff;
+    (replaceVars ./0001-gdc-store-path.diff {
       gdc_dir = "${gdc}/bin";
     })
   ];

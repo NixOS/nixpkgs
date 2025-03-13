@@ -4,6 +4,7 @@
 , fetchFromGitLab
 , fetchhg
 , runCommand
+, stdenv
 
 , arpa2common
 , brotli
@@ -432,10 +433,11 @@ let self = {
     name = "modsecurity";
     src = fetchFromGitHub {
       name = "modsecurity-nginx";
-      owner = "SpiderLabs";
+      owner = "owasp-modsecurity";
       repo = "ModSecurity-nginx";
-      rev = "v1.0.3";
-      sha256 = "sha256-xp0/eqi5PJlzb9NaUbNnzEqNcxDPyjyNwZOwmlv1+ag=";
+      # unstable 2025-02-17
+      rev = "0b4f0cf38502f34a30c8543039f345cfc075670d";
+      hash = "sha256-P3IwKFR4NbaMXYY+O9OHfZWzka4M/wr8sJpX94LzQTU=";
     };
 
     inputs = [ curl geoip libmodsecurity libxml2 lmdb yajl ];
@@ -1016,6 +1018,25 @@ let self = {
       homepage = "https://github.com/vozlt/nginx-module-vts";
       license = with licenses; [ bsd2 ];
       maintainers = with maintainers; [ SuperSandro2000 ];
+    };
+  };
+
+  zip = {
+    name = "zip";
+    src = fetchFromGitHub {
+      name = "zip";
+      owner = "evanmiller";
+      repo = "mod_zip";
+      rev = "8e65b82c82c7890f67a6107271c127e9881b6313";
+      hash = "sha256-2bUyGsLSaomzaijnAcHQV9TNSuV7Z3G9EUbrZzLG+mk=";
+    };
+
+    meta = with lib; {
+      description = "Streaming ZIP archiver for nginx";
+      homepage = "https://github.com/evanmiller/mod_zip";
+      license = with licenses; [ bsd3 ];
+      broken = stdenv.hostPlatform.isDarwin;
+      maintainers = teams.apm.members;
     };
   };
 

@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "Alecaddd";
-    repo = pname;
+    repo = "sequeler";
     rev = "v${version}";
     sha256 = "sha256-MsHHTYERe0v+u3KnVtx+jmJTKORJTJ7bNfJMZHV9Ly4=";
   };

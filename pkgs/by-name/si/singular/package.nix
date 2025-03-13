@@ -119,6 +119,12 @@ stdenv.mkDerivation rec {
       -i '{}' ';'
   '';
 
+  # FIXME: ugly hack for https://github.com/NixOS/nixpkgs/pull/389009
+  preConfigure = ''
+    substituteInPlace build-aux/ltmain.sh \
+      --replace 'for search_ext in .la $std_shrext .so .a' 'for search_ext in $std_shrext .so .a'
+  '';
+
   hardeningDisable = lib.optional stdenv.hostPlatform.isi686 "stackprotector";
 
   doCheck = true; # very basic checks, does not test any libraries

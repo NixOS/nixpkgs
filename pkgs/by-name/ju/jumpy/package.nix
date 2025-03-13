@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "fishfolk";
-    repo = pname;
+    repo = "jumpy";
     rev = "v${version}";
     sha256 = "sha256-ggePJH2kKJ17aOWRKUnLyolIdSzlc6Axf5Iw74iFfek=";
   };

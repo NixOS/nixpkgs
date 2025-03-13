@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "RickdeJager";
-    repo = pname;
+    repo = "stegseek";
     rev = "v${version}";
     sha256 = "sha256-B5oJffYOYfsH0YRq/Bq0ciIlCsCONyScFBjP7a1lIzo=";
   };

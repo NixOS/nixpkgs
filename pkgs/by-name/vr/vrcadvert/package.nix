@@ -4,6 +4,7 @@
   fetchFromGitHub,
   lib,
   versionCheckHook,
+  nix-update-script,
 }:
 
 buildDotnetModule rec {
@@ -38,7 +39,7 @@ buildDotnetModule rec {
   ];
   versionCheckProgram = "${placeholder "out"}/bin/VrcAdvert";
 
-  passthru.updateScript = ./update.sh;
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Advertise your OSC app through OSCQuery";

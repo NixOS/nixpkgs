@@ -5,14 +5,14 @@
   appimageTools,
 }:
 let
-  version = "5.5.224";
+  version = "5.5.225";
   pname = "gdevelop";
 
   src =
     if stdenv.hostPlatform.system == "x86_64-linux" then
       fetchurl {
         url = "https://github.com/4ian/GDevelop/releases/download/v${version}/GDevelop-5-${version}.AppImage";
-        sha256 = "sha256-/o7Yyu5BjRfpg4Tl0ZwN6/KD9Kg4LcEmUqlO7NE/dew=";
+        sha256 = "sha256-ACNmO5hYfLEaJV6wntH4PZoHcB2T/+WFe2E5Ir/5c4U=";
       }
     else
       throw "${pname}-${version} is not supported on ${stdenv.hostPlatform.system}";

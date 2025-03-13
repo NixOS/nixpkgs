@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "adrienverge";
-    repo = pname;
+    repo = "openfortivpn";
     tag = "v${version}";
     hash = "sha256-Pv9v7e5xPTIrgqldBDtTFxW+aIjbxSeu0sQ9n6HjO9w=";
   };

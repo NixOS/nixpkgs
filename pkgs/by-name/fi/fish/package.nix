@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch2,
   coreutils,
   darwin,
   glibcLocales,
@@ -27,9 +28,6 @@
   rustPlatform,
   versionCheckHook,
   writableTmpDirAsHomeHook,
-
-  fetchpatch2,
-  applyPatches,
 
   # used to generate autocompletions from manpages and for configuration editing in the browser
   usePython ? true,
@@ -157,23 +155,11 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "fish";
   version = "4.0.0";
 
-  src = applyPatches {
-    src = fetchFromGitHub {
-      owner = "fish-shell";
-      repo = "fish-shell";
-      tag = finalAttrs.version;
-      hash = "sha256-BLbL5Tj3FQQCOeX5TWXMaxCpvdzZtKe5dDQi66uU/BM=";
-    };
-    patches = [
-      # Fix for wrong version number in Cargo.toml
-      # We need to apply this here instead of in the patch phase since we need
-      # the patched lock file for the cargo deps fetching
-      (fetchpatch2 {
-        name = "cargo_version.diff";
-        url = "https://github.com/fish-shell/fish-shell/commit/1e069b0fff20b153bc7f824f9f9b820ca4117e1e.diff?full_index=1";
-        hash = "sha256-XFJ0fT2Zanvdqt/iwgyH2IA/kIOcOHMNdsmuzjTX5qs=";
-      })
-    ];
+  src = fetchFromGitHub {
+    owner = "fish-shell";
+    repo = "fish-shell";
+    tag = finalAttrs.version;
+    hash = "sha256-BLbL5Tj3FQQCOeX5TWXMaxCpvdzZtKe5dDQi66uU/BM=";
   };
 
   env = {
@@ -183,7 +169,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit (finalAttrs) src;
+    inherit (finalAttrs) src patches;
     hash = "sha256-4ol4LvabhtjiMMWwV1wrcywFePOmU0Jub1sy+Ay7mLA=";
   };
 
@@ -203,6 +189,12 @@ stdenv.mkDerivation (finalAttrs: {
     # * <https://github.com/LnL7/nix-darwin/issues/122>
     # * <https://github.com/fish-shell/fish-shell/issues/7142>
     ./nix-darwin-path.patch
+
+    (fetchpatch2 {
+      name = "cargo_version.diff";
+      url = "https://github.com/fish-shell/fish-shell/commit/1e069b0fff20b153bc7f824f9f9b820ca4117e1e.diff?full_index=1";
+      hash = "sha256-XFJ0fT2Zanvdqt/iwgyH2IA/kIOcOHMNdsmuzjTX5qs=";
+    })
 
     # Fixes a build issue in kitty, see https://github.com/fish-shell/fish-shell/commit/97f0809b62a1fa77df1b9fcbbfe623b6187b5013
     # The first patch is needed since it introduces the BufferedOutputter type that's

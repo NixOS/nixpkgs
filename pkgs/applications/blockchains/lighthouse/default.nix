@@ -38,18 +38,8 @@ rustPlatform.buildRustPackage rec {
     ./fix-dep-lazy_static.patch
   ];
 
-  postPatch = ''
-    cp ${./Cargo.lock} Cargo.lock
-  '';
-
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "libmdbx-0.1.4" = "sha256-ONp4uPkVCN84MObjXorCZuSjnM6uFSMXK1vdJiX074o=";
-      "lmdb-rkv-0.14.0" = "sha256-sxmguwqqcyOlfXOZogVz1OLxfJPo+Q0+UjkROkbbOCk=";
-      "quick-protobuf-0.8.1" = "sha256-dgePLYCeoEZz5DGaLifhf3gEIPaL7XB0QT9wRKY8LJg=";
-    };
-  };
+  cargoHash = "sha256-v/gOTbkzcwmqV8XCzkLzAl6LyshVBWxUclZxx1mr53o=";
+  useFetchCargoVendor = true;
 
   buildFeatures = [ "modern" "gnosis" ];
 

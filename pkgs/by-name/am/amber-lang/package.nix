@@ -4,7 +4,10 @@
   rustPlatform,
   bc,
   util-linux,
+  gnused,
   makeWrapper,
+  installShellFiles,
+  stdenv,
   runCommand,
   amber-lang,
   nix-update-script,
@@ -21,6 +24,11 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-N9G/2G8+vrpr1/K7XLwgW+X2oAyAaz4qvN+EbLOCU1Q=";
   };
 
+  patches = [
+    # https://github.com/amber-lang/amber/pull/686
+    ./fix_gnused_detection.patch
+  ];
+
   useFetchCargoVendor = true;
   cargoHash = "sha256-e5+L7Qgd6hyqT1Pb9X7bVtRr+xm428Z5J4hhsYNnGtU=";
 
@@ -29,7 +37,10 @@ rustPlatform.buildRustPackage rec {
       --replace-fail 'Command::new("/usr/bin/env")' 'Command::new("env")'
   '';
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    makeWrapper
+    installShellFiles
+  ];
 
   nativeCheckInputs = [
     bc
@@ -43,9 +54,14 @@ rustPlatform.buildRustPackage rec {
     "--skip=tests::formatter::all_exist"
   ];
 
-  postInstall = ''
-    wrapProgram "$out/bin/amber" --prefix PATH : "${lib.makeBinPath [ bc ]}"
-  '';
+  postInstall =
+    ''
+      wrapProgram "$out/bin/amber" --prefix PATH : "${lib.makeBinPath [ bc ]}"
+    ''
+    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      installShellCompletion --cmd amber \
+        --bash <($out/bin/amber completion)
+    '';
 
   passthru = {
     updateScript = nix-update-script { };

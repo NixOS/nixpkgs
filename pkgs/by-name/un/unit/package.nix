@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "nginx";
-    repo = pname;
+    repo = "unit";
     rev = version;
     sha256 = "sha256-tu1JqGWtfTznTDmZqEEVF3FmiDEXvaAdgQPsvLHCWy8=";
   };

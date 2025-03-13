@@ -2,10 +2,8 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  isPy3k,
   attrs,
   coverage,
-  enum34,
   pexpect,
   doCheck ? true,
   pytest,
@@ -38,7 +36,7 @@ buildPythonPackage rec {
     attrs
     coverage
     sortedcontainers
-  ] ++ lib.optional (!isPy3k) enum34;
+  ];
 
   nativeCheckInputs = [
     pytest

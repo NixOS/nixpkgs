@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "alols";
-    repo = pname;
+    repo = "xcape";
     rev = "a34d6bae27bbd55506852f5ed3c27045a3c0bd9e";
     sha256 = "04grs4w9kpfzz25mqw82zdiy51g0w355gpn5b170p7ha5972ykc8";
   };

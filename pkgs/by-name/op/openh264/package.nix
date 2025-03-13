@@ -12,23 +12,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "openh264";
-  version = "2.5.0";
+  version = "2.6.0";
 
   src = fetchFromGitHub {
     owner = "cisco";
     repo = "openh264";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-K8p94P4XO6bUWCJuT6jR5Kmz3lamNDyclGWgsV6Lf9I=";
+    hash = "sha256-tf0lnxATCkoq+xRti6gK6J47HwioAYWnpEsLGSA5Xdg=";
   };
 
   outputs = [
     "out"
     "dev"
   ];
-
-  postPatch = ''
-    substituteInPlace meson.build --replace-fail "'-Werror'," ""
-  '';
 
   nativeBuildInputs = [
     meson

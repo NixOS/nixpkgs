@@ -55,7 +55,10 @@ let
     .${stdenv.hostPlatform.system} or (throw "Unsupported platform: ${stdenv.hostPlatform.system}");
 in
 stdenv.mkDerivation (finalAttrs: {
-  pname = "ventoy";
+  pname =
+    "ventoy"
+    + optionalString (defaultGuiType == "gtk3") "-gtk3"
+    + optionalString (defaultGuiType == "qt5") "-qt5";
   version = "1.1.05";
 
   src = fetchurl {
@@ -194,7 +197,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://www.ventoy.net";
-    description = "New Bootable USB Solution";
+    description =
+      "New Bootable USB Solution" + optionalString (defaultGuiType != "") " with GUI support";
     longDescription = ''
       Ventoy is an open source tool to create bootable USB drive for
       ISO/WIM/IMG/VHD(x)/EFI files.  With ventoy, you don't need to format the
@@ -211,7 +215,9 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://www.ventoy.net/doc_news.html";
     license = lib.licenses.gpl3Plus;
     mainProgram = "ventoy";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [
+      johnrtitor
+    ];
     platforms = [
       "x86_64-linux"
       "i686-linux"

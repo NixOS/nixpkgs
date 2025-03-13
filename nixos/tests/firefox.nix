@@ -1,4 +1,9 @@
-import ./make-test-python.nix ({ lib, pkgs, firefoxPackage, ... }:
+{
+  lib,
+  pkgs,
+  firefoxPackage,
+  ...
+}:
 {
   name = firefoxPackage.pname;
 
@@ -9,7 +14,8 @@ import ./make-test-python.nix ({ lib, pkgs, firefoxPackage, ... }:
   nodes.machine =
     { pkgs, ... }:
 
-    { imports = [ ./common/x11.nix ];
+    {
+      imports = [ ./common/x11.nix ];
       environment.systemPackages = [ pkgs.xdotool ];
 
       programs.firefox = {
@@ -31,9 +37,11 @@ import ./make-test-python.nix ({ lib, pkgs, firefoxPackage, ... }:
 
     };
 
-  testScript = let
-    exe = lib.getExe firefoxPackage;
-  in ''
+  testScript =
+    let
+      exe = lib.getExe firefoxPackage;
+    in
+    ''
       from contextlib import contextmanager
 
 
@@ -97,4 +105,4 @@ import ./make-test-python.nix ({ lib, pkgs, firefoxPackage, ... }:
           machine.screenshot("screen")
     '';
 
-})
+}

@@ -30,6 +30,11 @@ buildPythonPackage rec {
     hash = "sha256-F1c2S0c/CWHeCd24Zc8ib3aPR7yj9gCPBJpmpgoddQY=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail poetry-core==2.0.1 poetry-core
+  '';
+
   build-system = [ poetry-core ];
 
   dependencies = [

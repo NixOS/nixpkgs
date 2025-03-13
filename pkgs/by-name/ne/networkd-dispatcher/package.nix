@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     domain = "gitlab.com";
     owner = "craftyguy";
-    repo = pname;
+    repo = "networkd-dispatcher";
     rev = version;
     hash = "sha256-yO9/HlUkaQmW/n9N3vboHw//YMzBjxIHA2zAxgZNEv0=";
   };

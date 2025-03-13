@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "nickmqb";
-    repo = pname;
+    repo = "muon";
     rev = "6d3a5054ae75b0e5a0ae633cf8cbc3e2a054f8b3";
     sha256 = "1sb1i08421jxlx791g8nh4l239syaj730hagkzc159g0z65614zz";
   };

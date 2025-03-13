@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "pedroscaff";
-    repo = pname;
+    repo = "swaywsr";
     rev = "521fbf92738f44be438d3be6bdd665f02ac9d35c";
     hash = "sha256-6hGEcJz+zGfwz1q+XKQYfyJJK7lr+kCgk2/uiq1xP0M=";
   };

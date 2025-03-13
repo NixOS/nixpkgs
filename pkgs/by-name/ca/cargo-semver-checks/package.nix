@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "obi1kenobi";
-    repo = pname;
+    repo = "cargo-semver-checks";
     tag = "v${version}";
     hash = "sha256-ZP0Zu9NLhJNsVwKiAj5RuGdZn5Q3meJW7/U+quAdoxw=";
   };

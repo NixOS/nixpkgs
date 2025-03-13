@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "tkashkin";
-    repo = pname;
+    repo = "GameHub";
     rev = "${version}-master";
     hash = "sha256-dBGzXwDO9BvnEIcdfqlGnMzUdBqaVA96Ds0fY6eukes=";
   };

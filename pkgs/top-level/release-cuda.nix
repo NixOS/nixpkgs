@@ -42,6 +42,9 @@ in
       inherit allowUnfreePredicate;
       "${variant}Support" = true;
       inHydra = true;
+
+      # Don't evaluate duplicate and/or deprecated attributes
+      allowAliases = false;
     };
 
     __allowFileset = false;
@@ -69,11 +72,16 @@ let
     ;
 
   # Package sets to evaluate whole
-  packageSets = builtins.filter (lib.strings.hasPrefix "cudaPackages") (builtins.attrNames pkgs);
-  evalPackageSet = pset: mapTestOn { ${pset} = packagePlatforms pkgs.${pset}; };
+  # Derivations from these package sets are selected based on the value
+  # of their meta.{hydraPlatforms,platforms,badPlatforms} attributes
+  autoPackageSets = builtins.filter (lib.strings.hasPrefix "cudaPackages") (builtins.attrNames pkgs);
+  autoPackagePlatforms = lib.genAttrs autoPackageSets (pset: packagePlatforms pkgs.${pset});
 
-  jobs =
-    mapTestOn {
+  # Explicitly select additional packages to also evaluate
+  # The desired platforms must be set explicitly here
+  explicitPackagePlatforms =
+    # This comment prevents nixfmt from changing the indentation level, lol
+    {
       blas = linux;
       blender = linux;
       faiss = linux;
@@ -126,7 +134,7 @@ let
         grad-cam = linux;
         jaxlib = linux;
         jax = linux;
-        Keras = linux;
+        keras = linux;
         kornia = linux;
         mmcv = linux;
         mxnet = linux;
@@ -140,15 +148,13 @@ let
         pymc = linux;
         pyrealsense2WithCuda = linux;
         pytorch-lightning = linux;
-        pytorch = linux;
-        scikitimage = linux;
+        scikit-image = linux;
         scikit-learn = linux; # Only affected by MKL?
         scipy = linux; # Only affected by MKL?
         spacy-transformers = linux;
         tensorflow = linux;
         tensorflow-probability = linux;
         tesserocr = linux;
-        Theano = linux;
         tiny-cuda-nn = linux;
         torchaudio = linux;
         torch = linux;
@@ -158,7 +164,11 @@ let
         vidstab = linux;
         vllm = linux;
       };
-    }
-    // (lib.genAttrs packageSets evalPackageSet);
+    };
+
+  # Explicitly specified platforms take precedence over the platforms
+  # automatically inferred in autoPackagePlatforms
+  allPackagePlatforms = lib.recursiveUpdate autoPackagePlatforms explicitPackagePlatforms;
+  jobs = mapTestOn allPackagePlatforms;
 in
 jobs

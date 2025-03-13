@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     domain = "code.videolan.org";
     owner = "videolan";
-    repo = pname;
+    repo = "libplacebo";
     rev = "v${version}";
     hash = "sha256-mIjQvc7SRjE1Orb2BkHK+K1TcRQvzj2oUOCUT4DzIuA=";
   };

@@ -79,7 +79,6 @@
 , "elm-oracle"
 , "emoj"
 , "emojione"
-, "escape-string-regexp"
 , "esy"
 , "fast-cli"
 , "fauna-shell"
@@ -209,7 +208,6 @@
 , "vscode-json-languageserver"
 , "wavedrom-cli"
 , "webpack"
-, "webtorrent-cli"
 , "wring"
 , "@yaegassy/coc-nginx"
 ]

@@ -16,6 +16,7 @@
   bash,
   xorg,
   xdg-utils,
+  nix-update-script,
 }:
 
 buildDotnetModule rec {
@@ -96,7 +97,7 @@ buildDotnetModule rec {
     install -Dm644 v2rayN/v2rayN.Desktop/v2rayN.png $out/share/pixmaps/v2rayn.png
   '';
 
-  passthru.updateScript = ./update.sh;
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "GUI client for Windows and Linux, support Xray core and sing-box-core and others";

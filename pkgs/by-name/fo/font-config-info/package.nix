@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "derat";
-    repo = pname;
+    repo = "font-config-info";
     rev = "v${version}";
     sha256 = "14z7hg9c7q8wliyqv68kp080mmk2rh6kpww6pn87hy7lwq20l2b7";
   };

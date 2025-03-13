@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "linuxmint";
-    repo = pname;
+    repo = "cinnamon-translations";
     rev = version;
     hash = "sha256-By09Y4iHZz3XR7tRd5MyXK5BKOr01yJzTTLQHEZ00q0=";
   };

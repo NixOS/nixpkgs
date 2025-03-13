@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "manugarg";
-    repo = pname;
+    repo = "pacparser";
     rev = "v${version}";
     sha256 = "sha256-X842+xPjM404aQJTc2JwqU4vq8kgyKhpnqVu70pNLks=";
   };

@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "3proxy";
-    repo = pname;
+    repo = "3proxy";
     rev = version;
     sha256 = "sha256-4bLlQ/ULvpjs6fr19yBBln5mRRc+yj+zVLiTs1e/Ypc=";
   };

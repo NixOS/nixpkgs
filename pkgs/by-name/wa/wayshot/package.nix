@@ -9,7 +9,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "waycrate";
-    repo = pname;
+    repo = "wayshot";
     rev = version;
     hash = "sha256-nUpIN4WTePtFZTmKAjv0tgj4VTdZeXjoQX6am9+M3ig=";
   };

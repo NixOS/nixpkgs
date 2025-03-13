@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "ralight";
-    repo = pname;
+    repo = "usb-reset";
     rev = "e9a9d6c4a533430e763e111a349efbba69e7a5bb";
     sha256 = "0k9qmhqi206gcnv3z4vwya82g5nm225972ylf67zjiikk8pn8m0s";
   };

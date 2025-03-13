@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitLab {
     owner = "sstp-project";
-    repo = pname;
+    repo = "sstp-client";
     rev = "3f7835df9ac5e84729903ca536cf65e4a7b04c6c";
     hash = "sha256-8VF5thSABqf5SXEDCa+0dyDt7kVrQcs6deWLlYWM8dg=";
   };

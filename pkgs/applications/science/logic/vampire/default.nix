@@ -64,6 +64,6 @@ stdenv.mkDerivation rec {
     mainProgram = "vampire";
     platforms = platforms.unix;
     license = licenses.bsd3;
-    maintainers = with maintainers; [ gebner ];
+    maintainers = with maintainers; [ ];
   };
 }

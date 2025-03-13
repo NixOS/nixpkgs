@@ -20,13 +20,13 @@ finalAttrs: prevAttrs: {
   src = fetchurl { inherit (package) url hash; };
 
   # Useful for inspecting why something went wrong.
-  brokenConditions =
+  badPlatformsConditions =
     let
       cudaTooOld = strings.versionOlder cudaVersion package.minCudaVersion;
       cudaTooNew =
         (package.maxCudaVersion != null) && strings.versionOlder package.maxCudaVersion cudaVersion;
     in
-    prevAttrs.brokenConditions
+    prevAttrs.badPlatformsConditions
     // {
       "CUDA version is too old" = cudaTooOld;
       "CUDA version is too new" = cudaTooNew;

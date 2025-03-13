@@ -80,6 +80,7 @@
   ./hardware/ksm.nix
   ./hardware/ledger.nix
   ./hardware/libftdi.nix
+  ./hardware/libjaylink.nix
   ./hardware/logitech.nix
   ./hardware/mcelog.nix
   ./hardware/network/ath-user-regd.nix
@@ -1384,7 +1385,6 @@
   ./services/security/esdm.nix
   ./services/security/fail2ban.nix
   ./services/security/fprintd.nix
-  ./services/security/haka.nix
   ./services/security/haveged.nix
   ./services/security/hockeypuck.nix
   ./services/security/hologram-agent.nix
@@ -1719,6 +1719,7 @@
   ./system/boot/loader/grub/memtest.nix
   ./system/boot/loader/external/external.nix
   ./system/boot/loader/init-script/init-script.nix
+  ./system/boot/loader/limine/limine.nix
   ./system/boot/loader/loader.nix
   ./system/boot/loader/systemd-boot/systemd-boot.nix
   ./system/boot/luksroot.nix

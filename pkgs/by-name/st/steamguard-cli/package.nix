@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "dyc3";
-    repo = pname;
+    repo = "steamguard-cli";
     rev = "v${version}";
     hash = "sha256-gPw0D5/XpT1bRYgG6GgDSP47Pa6MR3qzKhVwB4MrLKU=";
   };

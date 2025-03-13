@@ -11,13 +11,13 @@
 
 buildDunePackage rec {
   pname = "happy-eyeballs";
-  version = "1.2.2";
+  version = "2.0.0";
 
   minimalOCamlVersion = "4.08";
 
   src = fetchurl {
     url = "https://github.com/roburio/happy-eyeballs/releases/download/v${version}/happy-eyeballs-${version}.tbz";
-    hash = "sha256-Cl0CZwQMwrmwMaidfqp8PyG57rYV2VOUVVW9ECVlLq8=";
+    hash = "sha256-pNATXIfb6yFNZ1gx6cTZikcYu2HDuG6Uqm+IT4D9nQ8=";
   };
 
   propagatedBuildInputs = [

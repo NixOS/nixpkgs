@@ -50,7 +50,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "aome510";
-    repo = pname;
+    repo = "spotify-player";
     tag = "v${version}";
     hash = "sha256-5N/zTkNgcIk/Ml11Oo+jyoO0r2Hh9SxFL+tdhD/1X/4=";
   };

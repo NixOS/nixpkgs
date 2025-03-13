@@ -314,6 +314,7 @@ stdenv.mkDerivation {
         mainProgram = "nginx";
         homepage = "http://nginx.org";
         license = [ licenses.bsd2 ] ++ concatMap (m: m.meta.license) modules;
+        broken = lib.any (m: m.meta.broken or false) modules;
         platforms = platforms.all;
         maintainers =
           with maintainers;

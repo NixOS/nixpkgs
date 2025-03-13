@@ -18,12 +18,12 @@
 
 buildPythonPackage rec {
   pname = "cliff";
-  version = "4.8.0";
+  version = "4.9.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-I+/1AuYDzwqoQerqZmKkLNMGQWkWKz5ZayAiZADjTf0=";
+    hash = "sha256-WzkhmCk8C5Il1Fm+i6cQz4JI8e4zAGves9kvsAElkrQ=";
   };
 
   postPatch = ''

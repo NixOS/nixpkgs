@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "pymumu";
-    repo = pname;
+    repo = "smartdns";
     rev = "Release${version}";
     hash = "sha256-7JNP8vacYENBbbCxBtSpVu9j5vCBVBsQ/OeVPoRxlE4=";
   };

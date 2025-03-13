@@ -120,6 +120,6 @@ python.pkgs.buildPythonApplication rec {
     homepage = "https://lostpackets.de/khal/";
     changelog = "https://github.com/pimutils/khal/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ gebner ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

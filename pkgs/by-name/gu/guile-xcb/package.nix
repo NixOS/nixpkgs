@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "mwitmer";
-    repo = pname;
+    repo = "guile-xcb";
     rev = "db7d5a393cc37a56f66541b3f33938b40c6f35b3";
     hash = "sha256-zbIsEIPwNJ1YXMZTDw2DfzufC+IZWfcWgZHbuv7bhJs=";
   };

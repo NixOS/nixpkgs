@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "benjamimgois";
-    repo = pname;
+    repo = "goverlay";
     rev = version;
     sha256 = "sha256-tSpM+XLlFQLfL750LTNWbWFg1O+0fSfsPRXuRCm/KlY=";
   };

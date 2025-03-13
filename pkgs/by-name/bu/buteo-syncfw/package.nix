@@ -14,7 +14,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "buteo-syncfw";
-  version = "0.11.8";
+  version = "0.11.9";
 
   outputs = [
     "out"
@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "sailfishos";
     repo = "buteo-syncfw";
     tag = finalAttrs.version;
-    hash = "sha256-QQ2NG+zeKZbmZRdJgEQpx3Y/C+3j91ltC+5CRaf6qBY=";
+    hash = "sha256-4dQl+ghkedYOqFaaY2XYlA59lYtkHCgZXhmyo4dHMsI=";
   };
 
   postPatch = ''

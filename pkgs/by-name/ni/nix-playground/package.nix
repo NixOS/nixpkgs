@@ -7,14 +7,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "nix-playground";
-  version = "1.0.1";
+  version = "1.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "LaunchPlatform";
     repo = "nix-playground";
     tag = version;
-    hash = "sha256-uAQoJmhsTJZ4IW8Zzamq4zW+MT6k5ZrB7g+YsWFpKVs=";
+    hash = "sha256-+X21Fub8G7vx+HjuExUojYy7duY5enbakBCxXbOb3GM=";
   };
 
   build-system = with python3.pkgs; [

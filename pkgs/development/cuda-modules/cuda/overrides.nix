@@ -389,17 +389,19 @@ filterAndCreateOverrides {
       ];
 
       brokenConditions = prevAttrs.brokenConditions // {
-        # Older releases require boost 1.70, which is deprecated in Nixpkgs
-        "CUDA too old (<11.8)" = cudaOlder "11.8";
         "Qt 5 missing (<2022.4.2.1)" = !(versionOlder version "2022.4.2.1" -> qt5 != null);
         "Qt 6 missing (>=2022.4.2.1)" = !(versionAtLeast version "2022.4.2.1" -> qt6 != null);
+      };
+      badPlatformsConditions = prevAttrs.badPlatformsConditions // {
+        # Older releases require boost 1.70, which is deprecated in Nixpkgs
+        "CUDA too old (<11.8)" = cudaOlder "11.8";
       };
     };
 
   nvidia_driver =
     { }:
     prevAttrs: {
-      brokenConditions = prevAttrs.brokenConditions // {
+      badPlatformsConditions = prevAttrs.badPlatformsConditions // {
         "Package is not supported; use drivers from linuxPackages" = true;
       };
     };

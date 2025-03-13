@@ -2590,14 +2590,14 @@ buildLuarocksPackage {
 lze = callPackage({ buildLuarocksPackage, fetchurl, fetchzip, luaOlder }:
 buildLuarocksPackage {
   pname = "lze";
-  version = "0.8.0-1";
+  version = "0.8.1-1";
   knownRockspec = (fetchurl {
-    url    = "mirror://luarocks/lze-0.8.0-1.rockspec";
-    sha256 = "05fjfmvnfpfbd1vbjvdadp4vzkz005la9gvqcgm7k3q9nkbp1hvg";
+    url    = "mirror://luarocks/lze-0.8.1-1.rockspec";
+    sha256 = "01pxnkijnsj7n66pni850m4x7i1jblrp7w1lw243ikl1di3dgggs";
   }).outPath;
   src = fetchzip {
-    url    = "https://github.com/BirdeeHub/lze/archive/v0.8.0.zip";
-    sha256 = "1hwar3ag52w6mm7dv0s8ymr8kp3qw8kl05w1vz3jvivyxbxc77l3";
+    url    = "https://github.com/BirdeeHub/lze/archive/v0.8.1.zip";
+    sha256 = "179djx0d5l6390x7pdim5bs0qg4jdgjnc4bnsks3yyl3sdscwa2l";
   };
 
   disabled = luaOlder "5.1";
@@ -2613,14 +2613,14 @@ buildLuarocksPackage {
 lzextras = callPackage({ buildLuarocksPackage, fetchurl, fetchzip, luaOlder }:
 buildLuarocksPackage {
   pname = "lzextras";
-  version = "0.2.1-1";
+  version = "0.2.5-1";
   knownRockspec = (fetchurl {
-    url    = "mirror://luarocks/lzextras-0.2.1-1.rockspec";
-    sha256 = "0xlmi6rg7nac0z4xwdj6b4rvbd5x7cgfd1wviag11ksh6h26nibf";
+    url    = "mirror://luarocks/lzextras-0.2.5-1.rockspec";
+    sha256 = "0aqvly57k99fgcxhs1dfqyrf8bl7v6x75vdcjqpqsm3pkpvs1nl4";
   }).outPath;
   src = fetchzip {
-    url    = "https://github.com/BirdeeHub/lzextras/archive/v0.2.1.zip";
-    sha256 = "0b6qp70ypkjizknhpbrfs9qx8za77ygfnpmrm7zz2pl8rx500nar";
+    url    = "https://github.com/BirdeeHub/lzextras/archive/v0.2.5.zip";
+    sha256 = "1lk2k0iml8livwn1sjabn8d808alvd0axx6p9xcsb83x69g8a0dj";
   };
 
   disabled = luaOlder "5.1";

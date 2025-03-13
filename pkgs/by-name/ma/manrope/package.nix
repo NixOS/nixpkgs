@@ -10,7 +10,7 @@ stdenvNoCC.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "sharanda";
-    repo = pname;
+    repo = "manrope";
     rev = "d79b66b10608610692d59f4107791d249d244416"; # no tags in repo
     hash = "sha256-dxnCOkPUEG0knSekolx2+SGJR81vRK0wUrbzGH4KGD0=";
   };

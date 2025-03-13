@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitLab {
     owner = "hepcedar";
-    repo = pname;
+    repo = "yoda";
     rev = "yoda-${version}";
     hash = "sha256-No2Lr4nmYNfFnJVpg7xYjd35g12CbQtpW9QMjM3owko=";
   };

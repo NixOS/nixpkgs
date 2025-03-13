@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "jacobwilliams";
-    repo = pname;
+    repo = "json-fortran";
     rev = version;
     hash = "sha256-MMHMyEPZYz7dkYX1OA9D1kgRCTpzTVussJbh4rWHlyU=";
   };

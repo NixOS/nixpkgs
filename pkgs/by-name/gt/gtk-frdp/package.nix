@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
-    repo = pname;
+    repo = "gtk-frdp";
     rev = "46ca0beb9b5bf8c9b245a596231016bcca9baf6b";
     sha256 = "zRC3YVe2WwOmVzEDaJwsct3YQ4ZbvYTr2CTyRmfCXFY=";
   };

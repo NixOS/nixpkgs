@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "steveicarus";
-    repo = pname;
+    repo = "iverilog";
     rev = "v${lib.replaceStrings [ "." ] [ "_" ] version}";
     hash = "sha256-J9hedSmC6mFVcoDnXBtaTXigxrSCFa2AhhFd77ueo7I=";
   };

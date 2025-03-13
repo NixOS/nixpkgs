@@ -12,9 +12,9 @@ stdenv.mkDerivation rec {
   version = "0.13.0-final";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "${pname}-${version}";
+    owner = "cpp-netlib";
+    repo = "cpp-netlib";
+    rev = "cpp-netlib-${version}";
     sha256 = "18782sz7aggsl66b4mmi1i0ijwa76iww337fi9sygnplz2hs03a3";
     fetchSubmodules = true;
   };
