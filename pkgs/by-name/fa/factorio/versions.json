@@ -37,14 +37,14 @@
       },
       "stable": {
         "candidateHashFilenames": [
-          "factorio_demo_x64_1.1.110.tar.xz"
+          "factorio-demo_linux_2.0.27.tar.xz"
         ],
-        "name": "factorio_demo_x64-1.1.110.tar.xz",
+        "name": "factorio_demo_x64-2.0.27.tar.xz",
         "needsAuth": false,
-        "sha256": "bddb91dcba9f300c25d590f861772eaf41f0b6ce8ae6b754de00d0e5f3eb5a35",
+        "sha256": "75938e76d0e730273616e2441ae3c3bc238bb3cfa38d34a43e5fb25a3d1f2323",
         "tarDirectory": "x64",
-        "url": "https://factorio.com/get-download/1.1.110/demo/linux64",
-        "version": "1.1.110"
+        "url": "https://factorio.com/get-download/2.0.27/demo/linux64",
+        "version": "2.0.27"
       }
     },
     "expansion": {
