@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://www.ginac.de/ginac-${version}.tar.bz2";
-    sha256 = "sha256-Mw9X0O1529j5xGyktAhDm4sw4uoGHjZy2QTF2rlOytY=";
+    hash = "sha256-Mw9X0O1529j5xGyktAhDm4sw4uoGHjZy2QTF2rlOytY=";
   };
 
   propagatedBuildInputs = [ cln ];

@@ -6,7 +6,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url =
       "mirror://maven/org/flywaydb/flyway-commandline/${finalAttrs.version}/flyway-commandline-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-n3TjM/z9kkMMqFboWT6ISBtYN3cFyhmFRgyUSfWolZs=";
+    hash = "sha256-n3TjM/z9kkMMqFboWT6ISBtYN3cFyhmFRgyUSfWolZs=";
   };
   nativeBuildInputs = [ makeWrapper ];
   dontBuild = true;

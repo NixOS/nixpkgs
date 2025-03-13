@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://www.x.org/releases/individual/lib/libXaw3d-${version}.tar.xz";
-    sha256 = "sha256-pBw+NxNa1hax8ou95wACr788tZow3zQUH4KdMurchkY=";
+    hash = "sha256-pBw+NxNa1hax8ou95wACr788tZow3zQUH4KdMurchkY=";
   };
   dontUseImakeConfigure = true;
   nativeBuildInputs = [

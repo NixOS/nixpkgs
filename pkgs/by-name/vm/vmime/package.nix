@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     owner = "kisli";
     repo = "vmime";
     rev = "fc69321d5304c73be685c890f3b30528aadcfeaf";
-    sha256 = "sha256-DUcGQcT7hp5Rs2Z5C8wo+3BYwWqED0KrF3h3vgLiiow=";
+    hash = "sha256-DUcGQcT7hp5Rs2Z5C8wo+3BYwWqED0KrF3h3vgLiiow=";
   };
 
   buildInputs = [

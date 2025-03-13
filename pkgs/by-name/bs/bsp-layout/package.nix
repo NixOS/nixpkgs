@@ -16,7 +16,7 @@ stdenv.mkDerivation {
     owner = "phenax";
     repo = "bsp-layout";
     rev = "9d60fc271454ea1bfca598575207a06d8d172d3e";
-    sha256 = "sha256-7bBVWJdgAnXLWzjQGZxVqhku2rsxX2kMxU4xkI9/DHE=";
+    hash = "sha256-7bBVWJdgAnXLWzjQGZxVqhku2rsxX2kMxU4xkI9/DHE=";
   };
 
   nativeBuildInputs = [

@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://downloads.xiph.org/releases/liboggz/${pname}-${version}.tar.gz";
-    sha256 = "sha256-yX5PunlUqfr3ndz0Bpksb3uwIU6W1JV6B6L9oCZeWrI=";
+    hash = "sha256-yX5PunlUqfr3ndz0Bpksb3uwIU6W1JV6B6L9oCZeWrI=";
   };
 
   propagatedBuildInputs = [ libogg ];

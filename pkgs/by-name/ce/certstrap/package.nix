@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "square";
     repo = "certstrap";
     rev = "v${version}";
-    sha256 = "sha256-mbZtomR8nnawXr3nGVSEuVObe79M1CqTlYN/aEpKmcU=";
+    hash = "sha256-mbZtomR8nnawXr3nGVSEuVObe79M1CqTlYN/aEpKmcU=";
   };
 
   vendorHash = "sha256-r7iYhTmFKTjfv11fEerC72M7JBp64rWfbkoTKzObNqM=";

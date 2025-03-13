@@ -19,7 +19,7 @@ stdenv.mkDerivation {
     owner = "bcyran";
     repo = "fancy-motd";
     rev = "812c58f04f65053271f866f3797baa2eba7324f5";
-    sha256 = "sha256-O/euB63Dyj+NyfZK42egSEYwZhL8B0jCxSSDYoT4cpo=";
+    hash = "sha256-O/euB63Dyj+NyfZK42egSEYwZhL8B0jCxSSDYoT4cpo=";
   };
 
   buildInputs = [

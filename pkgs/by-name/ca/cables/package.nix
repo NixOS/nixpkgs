@@ -12,7 +12,7 @@ let
 
   src = fetchurl {
     url = "https://github.com/cables-gl/cables_electron/releases/download/v${version}/cables-${version}-linux-x64.AppImage";
-    sha256 = "sha256-WNWjD2z8u/dVAY21ver7hSmUgm9gTcN2kvOcwG1nX3I=";
+    hash = "sha256-WNWjD2z8u/dVAY21ver7hSmUgm9gTcN2kvOcwG1nX3I=";
   };
 
   appimageContents = appimageTools.extract {

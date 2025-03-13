@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "stamatak";
     repo = "standard-RAxML";
     rev = "v${version}";
-    sha256 = "sha256-w+Eqi0GhVira1H6ZnMNeZGBMzDjiGT7JSFpQEVXONyk=";
+    hash = "sha256-w+Eqi0GhVira1H6ZnMNeZGBMzDjiGT7JSFpQEVXONyk=";
   };
 
   buildInputs = lib.optionals useMpi [ mpi ];

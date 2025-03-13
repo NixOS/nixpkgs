@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "pellegre";
     repo = "libcrafter";
     rev = "version-${version}";
-    sha256 = "sha256-tCdN3+EzISVl+wp5umOFD+bgV+uUdabH+2LyxlV/W7Q=";
+    hash = "sha256-tCdN3+EzISVl+wp5umOFD+bgV+uUdabH+2LyxlV/W7Q=";
   };
 
   preConfigure = "cd libcrafter";

@@ -17,7 +17,7 @@ buildGoModule rec {
     owner = "remind101";
     repo = "assume-role";
     tag = version;
-    sha256 = "sha256-7+9qi9lYzv1YCFhUyla+5Gqs5nBUiiazhFwiqHzMFd4=";
+    hash = "sha256-7+9qi9lYzv1YCFhUyla+5Gqs5nBUiiazhFwiqHzMFd4=";
   };
 
   deleteVendor = true;

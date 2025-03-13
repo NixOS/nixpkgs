@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://www.chiark.greenend.org.uk/~sgtatham/xtruss/${pname}-${version}.tar.gz";
-    sha256 = "sha256-ikuKHtXEn2UVLE62l7qD9qc9ZUk6jiAqj5ru36vgdHk=";
+    hash = "sha256-ikuKHtXEn2UVLE62l7qD9qc9ZUk6jiAqj5ru36vgdHk=";
   };
 
   nativeBuildInputs = [

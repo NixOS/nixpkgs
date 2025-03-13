@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
       "https://invisible-mirror.net/archives/vttest/vttest-${version}.tgz"
       "ftp://ftp.invisible-island.net/vttest/vttest-${version}.tgz"
     ];
-    sha256 = "sha256-j+47rH6H1KpKIXvSs4q5kQw7jPmmBbRQx2zMCtKmUZ0=";
+    hash = "sha256-j+47rH6H1KpKIXvSs4q5kQw7jPmmBbRQx2zMCtKmUZ0=";
   };
 
   meta = with lib; {

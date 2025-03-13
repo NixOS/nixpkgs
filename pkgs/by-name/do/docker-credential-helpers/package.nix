@@ -17,7 +17,7 @@ buildGoModule rec {
     owner = "docker";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-B5w322Jh6HPaLOKTnGgWPVnkkLnIeyIR+lKDc+uCLHk=";
+    hash = "sha256-B5w322Jh6HPaLOKTnGgWPVnkkLnIeyIR+lKDc+uCLHk=";
   };
 
   vendorHash = null;

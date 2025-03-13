@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/project/${pname}/${pname}/${pname}-${version}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-lZGFsUV6LNjkBNUpV9UYedVt1yt1qTBJUorxGt4ApsI=";
+    hash = "sha256-lZGFsUV6LNjkBNUpV9UYedVt1yt1qTBJUorxGt4ApsI=";
   };
 
   # utmp has been replaced by utmpx since Mac OS X 10.6 (Snow Leopard):

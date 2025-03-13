@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "chan-sccp";
     repo = "chan-sccp";
     rev = "v${version}";
-    sha256 = "sha256-Lonsh7rx3C17LU5pZpZuFxlki0iotDt+FivggFJbldU=";
+    hash = "sha256-Lonsh7rx3C17LU5pZpZuFxlki0iotDt+FivggFJbldU=";
   };
 
   nativeBuildInputs = [ patchelf ];

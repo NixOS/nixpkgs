@@ -8,7 +8,7 @@ rustPlatform.buildRustPackage rec {
     owner = "blacknon";
     repo = "hwatch";
     tag = version;
-    sha256 = "sha256-E1IxeraZTHY+FDnOhyjygFyqOIwVEvnKuPuuNZvvL7o=";
+    hash = "sha256-E1IxeraZTHY+FDnOhyjygFyqOIwVEvnKuPuuNZvvL7o=";
   };
 
   useFetchCargoVendor = true;

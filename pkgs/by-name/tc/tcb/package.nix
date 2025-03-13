@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "openwall";
     repo = "tcb";
     rev = "070cf4aa784de13c52788ac22ff611d7cbca0854";
-    sha256 = "sha256-Sp5u7iTEZZnAqKQXoPO8eWpSkZeBzQqZI82wRQmgU9A=";
+    hash = "sha256-Sp5u7iTEZZnAqKQXoPO8eWpSkZeBzQqZI82wRQmgU9A=";
   };
 
   outputs = [

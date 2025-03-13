@@ -34,25 +34,25 @@ let
     owner = "capstone-engine";
     repo = "capstone";
     rev = "5.0-rc2";
-    sha256 = "sha256-nB7FcgisBa8rRDS3k31BbkYB+tdqA6Qyj9hqCnFW+ME=";
+    hash = "sha256-nB7FcgisBa8rRDS3k31BbkYB+tdqA6Qyj9hqCnFW+ME=";
   };
   llvm = fetchFromGitHub {
     owner = "avast-tl";
     repo = "llvm";
     rev = "2a1f3d8a97241c6e91710be8f84cf3cf80c03390";
-    sha256 = "sha256-+v1T0VI9R92ed9ViqsfYZMJtPCjPHCr4FenoYdLuFOU=";
+    hash = "sha256-+v1T0VI9R92ed9ViqsfYZMJtPCjPHCr4FenoYdLuFOU=";
   };
   yaracpp = fetchFromGitHub {
     owner = "VirusTotal";
     repo = "yara";
     rev = "v4.2.0-rc1";
-    sha256 = "sha256-WcN6ClYO2d+/MdG06RHx3kN0o0WVAY876dJiG7CwJ8w=";
+    hash = "sha256-WcN6ClYO2d+/MdG06RHx3kN0o0WVAY876dJiG7CwJ8w=";
   };
   yaramod = fetchFromGitHub {
     owner = "avast";
     repo = "yaramod";
     rev = "aa06dd408c492a8f4488774caf2ee105ccc23ab5";
-    sha256 = "sha256-NVDRf2U5H92EN/Ks//uxNEaeKU+sT4VL4QyyYMO+zKk=";
+    hash = "sha256-NVDRf2U5H92EN/Ks//uxNEaeKU+sT4VL4QyyYMO+zKk=";
   };
   keystone = fetchFromGitHub {
     # only for tests
@@ -130,7 +130,7 @@ stdenv.mkDerivation (self: {
     owner = "avast";
     repo = "retdec";
     tag = "v${self.version}";
-    sha256 = "sha256-H4e+aSgdBBbG6X6DzHGiDEIASPwBVNVsfHyeBTQLAKI=";
+    hash = "sha256-H4e+aSgdBBbG6X6DzHGiDEIASPwBVNVsfHyeBTQLAKI=";
   };
 
   patches = [

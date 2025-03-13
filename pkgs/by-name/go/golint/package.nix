@@ -15,7 +15,7 @@ buildGoModule rec {
   src = fetchgit {
     url = "https://go.googlesource.com/lint";
     rev = "83fdc39ff7b56453e3793356bcff3070b9b96445";
-    sha256 = "sha256-g4Z9PREOxGoN7n/XhutawsITBznJlbz6StXeDYvOQ1c=";
+    hash = "sha256-g4Z9PREOxGoN7n/XhutawsITBznJlbz6StXeDYvOQ1c=";
   };
 
   vendorHash = "sha256-dPadFoymYu2Uw2AXZfbaBfxsN8IWMuK1TrcknHco3Bo=";

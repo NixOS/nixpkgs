@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "trakBan";
     repo = "ipfetch";
     rev = "09b61e0d1d316dbcfab798dd00bc3f9ceb02431d";
-    sha256 = "sha256-RlbNIDRuf4sFS2zw4fIkTu0mB7xgJfPMDIk1I3UYXLk=";
+    hash = "sha256-RlbNIDRuf4sFS2zw4fIkTu0mB7xgJfPMDIk1I3UYXLk=";
   };
 
   strictDeps = true;

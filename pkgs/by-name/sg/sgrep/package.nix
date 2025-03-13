@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://www.cs.helsinki.fi/pub/Software/Local/Sgrep/sgrep-${version}.tar.gz";
-    sha256 = "sha256-1bFkeOOrRHNeJCg9LYldLJyAE5yVIo3zvbKsRGOV+vk=";
+    hash = "sha256-1bFkeOOrRHNeJCg9LYldLJyAE5yVIo3zvbKsRGOV+vk=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

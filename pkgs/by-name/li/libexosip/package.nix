@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://savannah/exosip/${pname}-${version}.tar.gz";
-    sha256 = "sha256-W3gjmGQx6lztyfCV1pZKzpZvCTsq59CwhAR4i/zrycI=";
+    hash = "sha256-W3gjmGQx6lztyfCV1pZKzpZvCTsq59CwhAR4i/zrycI=";
   };
 
   nativeBuildInputs = [ pkg-config ];

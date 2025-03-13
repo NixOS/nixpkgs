@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://media.avocode.com/download/avocode-app/${version}/avocode-${version}-linux.zip";
-    sha256 = "sha256-vNQT4jyMIIAk1pV3Hrp40nawFutWCv7xtwg2gU6ejy0=";
+    hash = "sha256-vNQT4jyMIIAk1pV3Hrp40nawFutWCv7xtwg2gU6ejy0=";
   };
 
   libPath = lib.makeLibraryPath (

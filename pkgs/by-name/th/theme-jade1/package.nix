@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/madmaxms/theme-jade-1/releases/download/v${version}/jade-1-theme.tar.xz";
-    sha256 = "sha256-VfV3dVpA3P0ChRjpxuh6C9loxr5t3s1xK0BP3DOCeQ4=";
+    hash = "sha256-VfV3dVpA3P0ChRjpxuh6C9loxr5t3s1xK0BP3DOCeQ4=";
   };
 
   sourceRoot = ".";

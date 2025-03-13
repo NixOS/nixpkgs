@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "stefanhaustein";
     repo = "TerminalImageViewer";
     rev = "v${version}";
-    sha256 = "sha256-mCgybL4af19zqECN1pBV+WnxMq2ZtlK5GDTQO3u9CK0=";
+    hash = "sha256-mCgybL4af19zqECN1pBV+WnxMq2ZtlK5GDTQO3u9CK0=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

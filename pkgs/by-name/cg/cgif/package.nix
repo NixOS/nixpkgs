@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "dloebl";
     repo = "cgif";
     rev = "V${finalAttrs.version}";
-    sha256 = "sha256-FvqpToIVYblpuRWeEaUA8MA2Bnp9dpqGquylnXevhX4=";
+    hash = "sha256-FvqpToIVYblpuRWeEaUA8MA2Bnp9dpqGquylnXevhX4=";
   };
 
   nativeBuildInputs = [

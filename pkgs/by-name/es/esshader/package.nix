@@ -16,7 +16,7 @@ stdenv.mkDerivation {
     owner = "cmcsun";
     repo = "esshader";
     rev = "506eb02f3de52d3d1f4d81ac9ee145655216dee5";
-    sha256 = "sha256-euxJw7CqOwi6Ndzalps37kDr5oOIL3tZICCfmxsujfk=";
+    hash = "sha256-euxJw7CqOwi6Ndzalps37kDr5oOIL3tZICCfmxsujfk=";
   };
 
   postPatch = ''

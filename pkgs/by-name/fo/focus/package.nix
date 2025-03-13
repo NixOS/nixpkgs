@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "phillbush";
     repo = "focus";
     rev = "fed2fdbd3f73b192882d97aeb5b1cea681bb7d85";
-    sha256 = "sha256-IDiUXindzv5Ng5oCTyUlj2il/2kLvXG4YhgiYp7ZebQ=";
+    hash = "sha256-IDiUXindzv5Ng5oCTyUlj2il/2kLvXG4YhgiYp7ZebQ=";
   };
 
   buildInputs = [

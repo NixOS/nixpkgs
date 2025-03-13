@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     owner = "fredrik-johansson";
     repo = "calcium";
     rev = version;
-    sha256 = "sha256-Ony2FGMnWyNqD7adGeiDtysHNZ4ClMvQ1ijVPSHJmyc=";
+    hash = "sha256-Ony2FGMnWyNqD7adGeiDtysHNZ4ClMvQ1ijVPSHJmyc=";
   };
 
   buildInputs = [

@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
     owner = "mihai-dinculescu";
     repo = "cargo-wipe";
     rev = "v${version}";
-    sha256 = "sha256-xMYpZ6a8HdULblkfEqnqLjX8OVFJWx8MHDGNhuFzdTc=";
+    hash = "sha256-xMYpZ6a8HdULblkfEqnqLjX8OVFJWx8MHDGNhuFzdTc=";
   };
 
   useFetchCargoVendor = true;

@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "xyproto";
     repo = "elfinfo";
     rev = version;
-    sha256 = "sha256-HnjHOjanStqmDXnc6Z9w0beCMJFf/ndWbYxoDEaOws4=";
+    hash = "sha256-HnjHOjanStqmDXnc6Z9w0beCMJFf/ndWbYxoDEaOws4=";
   };
 
   vendorHash = null;

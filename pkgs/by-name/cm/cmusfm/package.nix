@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     owner = "Arkq";
     repo = "cmusfm";
     rev = "v${version}";
-    sha256 = "sha256-CA585ZpkxMMLgzv81QB2kKMFg5R5CwKS9xAYrU+pAxs=";
+    hash = "sha256-CA585ZpkxMMLgzv81QB2kKMFg5R5CwKS9xAYrU+pAxs=";
   };
 
   configureFlags =

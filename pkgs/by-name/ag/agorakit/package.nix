@@ -13,7 +13,7 @@ php.buildComposerProject2 (finalAttrs: {
     owner = "agorakit";
     repo = "agorakit";
     tag = finalAttrs.version;
-    sha256 = "sha256-mBBl/8nXG3FsMeecbERLyY2tGFhh+5nS8A4nd7HI+8c=";
+    hash = "sha256-mBBl/8nXG3FsMeecbERLyY2tGFhh+5nS8A4nd7HI+8c=";
   };
 
   installPhase = ''

@@ -43,7 +43,7 @@ let
     owner = "paolo-projects";
     repo = "unlocker";
     rev = "${unlockerVersion}";
-    sha256 = "sha256-JSEW1gqQuLGRkathlwZU/TnG6dL/xWKW4//SfE+kO0A=";
+    hash = "sha256-JSEW1gqQuLGRkathlwZU/TnG6dL/xWKW4//SfE+kO0A=";
   };
 
   vmware-unpack-env = buildFHSEnv rec {
@@ -102,7 +102,7 @@ stdenv.mkDerivation rec {
 
   src = fetchzip {
     url = "${baseUrl}/core/VMware-Workstation-${version}-${build}.x86_64.bundle.tar";
-    sha256 = "sha256-VzfiIawBDz0f1w3eynivW41Pn4SqvYf/8o9q14hln4s=";
+    hash = "sha256-VzfiIawBDz0f1w3eynivW41Pn4SqvYf/8o9q14hln4s=";
     stripRoot = false;
   } + "/VMware-Workstation-${version}-${build}.x86_64.bundle";
 

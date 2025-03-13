@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "Sapd";
     repo = "HeadsetControl";
     rev = version;
-    sha256 = "sha256-N1c94iAJgCPhGNDCGjMINg0AL2wPX5gVIsJ+pzn/l9Y=";
+    hash = "sha256-N1c94iAJgCPhGNDCGjMINg0AL2wPX5gVIsJ+pzn/l9Y=";
   };
 
   patches = [

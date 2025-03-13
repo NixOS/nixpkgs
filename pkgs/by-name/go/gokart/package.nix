@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "praetorian-inc";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-G1IjlJ/rmviFWy6RFfLtP+bhfYcDuB97leimU39YCoQ=";
+    hash = "sha256-G1IjlJ/rmviFWy6RFfLtP+bhfYcDuB97leimU39YCoQ=";
   };
 
   vendorHash = "sha256-lgKYVgJlmUJ/msdIqG7EKAZuISie1lG7+VeCF/rcSlE=";

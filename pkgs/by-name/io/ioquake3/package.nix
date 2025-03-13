@@ -28,7 +28,7 @@ stdenv.mkDerivation {
     owner = "ioquake";
     repo = "ioq3";
     rev = "ee950eb7b0e41437cc23a9943254c958da8a61ab";
-    sha256 = "sha256-NfhInwrtw85i2mnv7EtBrrpNaslaQaVhLNlK0I9aYto=";
+    hash = "sha256-NfhInwrtw85i2mnv7EtBrrpNaslaQaVhLNlK0I9aYto=";
   };
 
   nativeBuildInputs = [

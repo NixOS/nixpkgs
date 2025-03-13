@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "martinpitt";
     repo = "fatrace";
     rev = version;
-    sha256 = "sha256-QkavhxORENQSLUg4tq+W1WB7zSYYinWOOYPqNbv+pEI=";
+    hash = "sha256-QkavhxORENQSLUg4tq+W1WB7zSYYinWOOYPqNbv+pEI=";
   };
 
   buildInputs = [

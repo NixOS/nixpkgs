@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     owner = "ofiwg";
     repo = "libfabric";
     rev = "v${version}";
-    sha256 = "sha256-W86hsxhbaUbB1sb0l1J0e/9IBnc5eZLQ1m4/SuyXZG0=";
+    hash = "sha256-W86hsxhbaUbB1sb0l1J0e/9IBnc5eZLQ1m4/SuyXZG0=";
   };
 
   outputs = [

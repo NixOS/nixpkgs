@@ -15,7 +15,7 @@ let
       src = fetchbzr {
         # the branch name does not mach the version for some reason
         url = "https://code.launchpad.net/~arcachofo/simulide/simulide_0.4.14";
-        sha256 = "sha256-BBoZr/S2pif0Jft5wrem8y00dXl08jq3kFiIUtOr3LM=";
+        hash = "sha256-BBoZr/S2pif0Jft5wrem8y00dXl08jq3kFiIUtOr3LM=";
         inherit rev;
       };
     };
@@ -24,7 +24,7 @@ let
       rev = "1449";
       src = fetchbzr {
         url = "https://code.launchpad.net/~arcachofo/simulide/1.0.0";
-        sha256 = "sha256-rJWZvnjVzaKXU2ktbde1w8LSNvu0jWkDIk4dq2l7t5g=";
+        hash = "sha256-rJWZvnjVzaKXU2ktbde1w8LSNvu0jWkDIk4dq2l7t5g=";
         inherit rev;
       };
     };
@@ -33,7 +33,7 @@ let
       rev = "2005";
       src = fetchbzr {
         url = "https://code.launchpad.net/~arcachofo/simulide/1.1.0";
-        sha256 = "sha256-YVQduUjPQF5KxMlm730FZTShHP/7JEcAMIFn+mQITrQ=";
+        hash = "sha256-YVQduUjPQF5KxMlm730FZTShHP/7JEcAMIFn+mQITrQ=";
         inherit rev;
       };
     };

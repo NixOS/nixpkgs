@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     owner = "bartobri";
     repo = "no-more-secrets";
     rev = "v${version}";
-    sha256 = "sha256-QVCEpplsZCSQ+Fq1LBtCuPBvnzgLsmLcSrxR+e4nA5I=";
+    hash = "sha256-QVCEpplsZCSQ+Fq1LBtCuPBvnzgLsmLcSrxR+e4nA5I=";
   };
 
   buildFlags = [

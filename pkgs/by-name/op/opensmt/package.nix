@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     owner = "usi-verification-and-security";
     repo = "opensmt";
     rev = "v${version}";
-    sha256 = "sha256-zhNNnwc41B4sNq50kPub29EYhqV+FoDKRD/CLHnVyZw=";
+    hash = "sha256-zhNNnwc41B4sNq50kPub29EYhqV+FoDKRD/CLHnVyZw=";
   };
 
   nativeBuildInputs = [

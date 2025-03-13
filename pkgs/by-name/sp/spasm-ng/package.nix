@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     owner = "alberthdev";
     repo = "spasm-ng";
     rev = "5f0786d38f064835be674d4b7df42969967bb73c";
-    sha256 = "sha256-j7Z3oI+J0wZF4EG5OMMjuDe2o69KKGuJvfyHNPTLrXM=";
+    hash = "sha256-j7Z3oI+J0wZF4EG5OMMjuDe2o69KKGuJvfyHNPTLrXM=";
   };
 
   # GCC is needed for Darwin

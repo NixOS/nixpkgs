@@ -28,7 +28,7 @@ let
     src = fetchgit {
       url = "https://gitee.com/oscc-project/iEDA";
       rev = "a68b691b9d25fafd8c10fae3df7ef3837a42e052";
-      sha256 = "sha256-0rSESfNqI3ALipNAInwcYSccq9C0WuXI9na44TyYAgY=";
+      hash = "sha256-0rSESfNqI3ALipNAInwcYSccq9C0WuXI9na44TyYAgY=";
     };
 
     patches = [

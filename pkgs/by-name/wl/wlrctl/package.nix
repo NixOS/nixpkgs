@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     owner = "~brocellous";
     repo = "wlrctl";
     rev = "v${version}";
-    sha256 = "sha256-5mDcCSHbZMbfXbksAO4YhELznKpanse7jtbtfr09HL0=";
+    hash = "sha256-5mDcCSHbZMbfXbksAO4YhELznKpanse7jtbtfr09HL0=";
   };
 
   strictDeps = true;

@@ -13,7 +13,7 @@ buildGoModule rec {
     owner = "ent";
     repo = "ent";
     rev = "v${version}";
-    sha256 = "sha256-rKGzYOdNaSbFyHIuytuppYjpiTz1/tcvXel1SjtwEhA=";
+    hash = "sha256-rKGzYOdNaSbFyHIuytuppYjpiTz1/tcvXel1SjtwEhA=";
   };
 
   vendorHash = "sha256-ec5tA9TsDKGnHVZWilLj7bdHrd46uQcNQ8YCK/s6UAY=";

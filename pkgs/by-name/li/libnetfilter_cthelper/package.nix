@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://netfilter.org/projects/libnetfilter_cthelper/files/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-FAc9VIcjOJc1XT/wTdwcjQPMW6jSNWI2qogWGp8tyRI=";
+    hash = "sha256-FAc9VIcjOJc1XT/wTdwcjQPMW6jSNWI2qogWGp8tyRI=";
   };
 
   outputs = [

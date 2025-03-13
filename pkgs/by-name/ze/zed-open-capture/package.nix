@@ -18,7 +18,7 @@ stdenv.mkDerivation {
     owner = "stereolabs";
     repo = "zed-open-capture";
     rev = "5cf66ff777175776451b9b59ecc6231d730fa202";
-    sha256 = "sha256-ZjgJkCRbvLT7jjOcA8REiEpTg0Jh57du2aMwRk/OKLI=";
+    hash = "sha256-ZjgJkCRbvLT7jjOcA8REiEpTg0Jh57du2aMwRk/OKLI=";
   };
 
   buildInputs = [

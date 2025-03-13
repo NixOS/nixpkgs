@@ -14,7 +14,7 @@ buildGoModule rec {
     rev = "v${version}";
     owner = "cpuguy83";
     repo = "go-md2man";
-    sha256 = "sha256-wJnHgp+NPchXkR71ARLMjo4VryzgGkz2tYWPsC+3eFo=";
+    hash = "sha256-wJnHgp+NPchXkR71ARLMjo4VryzgGkz2tYWPsC+3eFo=";
   };
 
   meta = with lib; {

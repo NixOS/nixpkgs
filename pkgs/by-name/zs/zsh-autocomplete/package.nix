@@ -12,7 +12,7 @@ stdenvNoCC.mkDerivation rec {
     owner = "marlonrichert";
     repo = "zsh-autocomplete";
     rev = version;
-    sha256 = "sha256-o8IQszQ4/PLX1FlUvJpowR2Tev59N8lI20VymZ+Hp4w=";
+    hash = "sha256-o8IQszQ4/PLX1FlUvJpowR2Tev59N8lI20VymZ+Hp4w=";
   };
 
   strictDeps = true;

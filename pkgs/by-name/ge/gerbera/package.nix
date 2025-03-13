@@ -127,7 +127,7 @@ stdenv.mkDerivation rec {
     repo = "gerbera";
     owner = "gerbera";
     rev = "v${version}";
-    sha256 = "sha256-bqqD6juae0+plX6kEtHhWYgMd0KDz/1N7jJf7F6dMgQ=";
+    hash = "sha256-bqqD6juae0+plX6kEtHhWYgMd0KDz/1N7jJf7F6dMgQ=";
   };
 
   postPatch =

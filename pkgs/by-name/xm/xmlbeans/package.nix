@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchzip {
     # old releases are deleted from the cdn
     url = "https://web.archive.org/web/20230313151507/https://dlcdn.apache.org/poi/xmlbeans/release/bin/xmlbeans-bin-${version}.zip";
-    sha256 = "sha256-TDnWo1uJWL6k6Z8/uaF2LBNzRVQMHYopYze/2Fb/0aI=";
+    hash = "sha256-TDnWo1uJWL6k6Z8/uaF2LBNzRVQMHYopYze/2Fb/0aI=";
   };
 
   postPatch = ''

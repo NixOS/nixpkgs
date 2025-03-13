@@ -12,7 +12,7 @@ buildGraalvmNativeImage rec {
 
   src = fetchurl {
     url = "https://github.com/kkinnear/${pname}/releases/download/${version}/${pname}-filter-${version}";
-    sha256 = "sha256-4gSGD7Jiu1mqyPMoQrrPT60EFXs7ySfjpT9wSyhp3ig=";
+    hash = "sha256-4gSGD7Jiu1mqyPMoQrrPT60EFXs7ySfjpT9wSyhp3ig=";
   };
 
   extraNativeImageBuildArgs = [

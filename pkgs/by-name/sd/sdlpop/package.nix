@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     owner = "NagyD";
     repo = "SDLPoP";
     rev = "v${version}";
-    sha256 = "sha256-UI7NfOC/+druRYL5g2AhIjTPEq4ta1qEThcxgyrFjHY=";
+    hash = "sha256-UI7NfOC/+druRYL5g2AhIjTPEq4ta1qEThcxgyrFjHY=";
   };
 
   nativeBuildInputs = [

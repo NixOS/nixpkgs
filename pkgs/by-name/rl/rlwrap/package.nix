@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "hanslub42";
     repo = "rlwrap";
     rev = version;
-    sha256 = "sha256-yKJXfdxfaCsmPtI0KmTzfFKY+evUuytomVrLsSCYDGo=";
+    hash = "sha256-yKJXfdxfaCsmPtI0KmTzfFKY+evUuytomVrLsSCYDGo=";
   };
 
   postPatch = ''

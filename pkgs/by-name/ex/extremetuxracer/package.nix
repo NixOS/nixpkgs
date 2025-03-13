@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/extremetuxracer/etr-${version}.tar.xz";
-    sha256 = "sha256-+jKFzAx1Wlr/Up8/LOo1FkgRFMa0uOHsB2n+7/BHc+U=";
+    hash = "sha256-+jKFzAx1Wlr/Up8/LOo1FkgRFMa0uOHsB2n+7/BHc+U=";
   };
 
   nativeBuildInputs = [

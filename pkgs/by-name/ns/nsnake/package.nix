@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "alexdantas";
     repo = "nSnake";
     rev = "v${version}";
-    sha256 = "sha256-MixwIhyymruruV8G8PjmR9EoZBpaDVBCKBccSFL0lS8=";
+    hash = "sha256-MixwIhyymruruV8G8PjmR9EoZBpaDVBCKBccSFL0lS8=";
   };
 
   buildInputs = [ ncurses ];

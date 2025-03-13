@@ -26,7 +26,7 @@ let
     owner = "kimlimjustin";
     repo = pname;
     rev = "8d69a281cbceda277958796cb6b77669fb062ee3";
-    sha256 = "sha256-VFRdkSfe2mERaYYtZlg9dvH1loGWVBGwiTRj4AoNEAo=";
+    hash = "sha256-VFRdkSfe2mERaYYtZlg9dvH1loGWVBGwiTRj4AoNEAo=";
   };
 
   frontend-build = stdenvNoCC.mkDerivation (finalAttrs: {
@@ -35,7 +35,7 @@ let
 
     offlineCache = fetchYarnDeps {
       yarnLock = src + "/yarn.lock";
-      sha256 = "sha256-H37vD0GTSsWV5UH7C6UANDWnExTGh8yqajLn3y7P2T8=";
+      hash = "sha256-H37vD0GTSsWV5UH7C6UANDWnExTGh8yqajLn3y7P2T8=";
     };
     nativeBuildInputs = [
       yarnConfigHook

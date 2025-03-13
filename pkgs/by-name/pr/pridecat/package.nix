@@ -12,7 +12,7 @@ stdenv.mkDerivation {
     owner = "lunasorcery";
     repo = "pridecat";
     rev = "92396b11459e7a4b5e8ff511e99d18d7a1589c96";
-    sha256 = "sha256-PyGLbbsh9lFXhzB1Xn8VQ9zilivycGFEIc7i8KXOxj8=";
+    hash = "sha256-PyGLbbsh9lFXhzB1Xn8VQ9zilivycGFEIc7i8KXOxj8=";
   };
 
   # fixes the install path in the Makefile

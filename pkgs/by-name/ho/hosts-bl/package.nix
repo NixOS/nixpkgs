@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "ScriptTiger";
     repo = "Hosts-BL";
     rev = "b3ac0a50fce8e714e754a17e6a11f8709386782c";
-    sha256 = "sha256-w+4dEWwFMjBbeJPOqMrzLBBzPYh/V5SfV2BMrI0p3nw=";
+    hash = "sha256-w+4dEWwFMjBbeJPOqMrzLBBzPYh/V5SfV2BMrI0p3nw=";
   };
 
   postPatch = ''

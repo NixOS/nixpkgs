@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://firmware.ardupilot.org/Tools/MissionPlanner/MissionPlanner-${version}.zip";
-    sha256 = "sha256-554fFDxHMo4jV3yrPdGgDYQ6XeW+TWdVIIkGQIBdrCQ=";
+    hash = "sha256-554fFDxHMo4jV3yrPdGgDYQ6XeW+TWdVIIkGQIBdrCQ=";
   };
 
   nativeBuildInputs = [

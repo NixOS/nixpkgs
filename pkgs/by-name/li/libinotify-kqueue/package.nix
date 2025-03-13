@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "libinotify-kqueue";
     repo = "libinotify-kqueue";
     rev = version;
-    sha256 = "sha256-m59GWrx5C+JXDbhVdKx+SNSn8wwIKyW+KlXabNi17A0=";
+    hash = "sha256-m59GWrx5C+JXDbhVdKx+SNSn8wwIKyW+KlXabNi17A0=";
   };
 
   patches = [

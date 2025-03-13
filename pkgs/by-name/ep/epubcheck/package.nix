@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchzip {
     url = "https://github.com/w3c/epubcheck/releases/download/v${version}/epubcheck-${version}.zip";
-    sha256 = "sha256-BL+DNd6QeAx4MATaXVX/4mtalY7jzAdYeUsPktPp4UA=";
+    hash = "sha256-BL+DNd6QeAx4MATaXVX/4mtalY7jzAdYeUsPktPp4UA=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

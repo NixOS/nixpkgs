@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/mstrobel/procyon/releases/download/v${version}/procyon-decompiler-${version}.jar";
-    sha256 = "sha256-gh2pYBL8aSRPoeopjJBFXuTgIUNLx5bTuVRqskYBt3k=";
+    hash = "sha256-gh2pYBL8aSRPoeopjJBFXuTgIUNLx5bTuVRqskYBt3k=";
   };
 
   dontUnpack = true;

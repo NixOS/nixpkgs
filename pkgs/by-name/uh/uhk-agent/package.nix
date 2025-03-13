@@ -17,7 +17,7 @@ let
   src = fetchurl {
     url = "https://github.com/UltimateHackingKeyboard/agent/releases/download/v${version}/UHK.Agent-${version}-linux-x86_64.AppImage";
     name = "${pname}-${version}.AppImage";
-    sha256 = "sha256-zBDk6eRLMsQVBNuCejstozaxxBboZBhu4X+Ms0buoLU=";
+    hash = "sha256-zBDk6eRLMsQVBNuCejstozaxxBboZBhu4X+Ms0buoLU=";
   };
 
   appimageContents = appimageTools.extract {

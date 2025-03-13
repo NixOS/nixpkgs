@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
     owner = "fornwall";
     repo = "rust-script";
     rev = version;
-    sha256 = "sha256-uKmQgrbsFIY0XwrO16Urz3L76Gm2SxHW/CpHeCIUinM=";
+    hash = "sha256-uKmQgrbsFIY0XwrO16Urz3L76Gm2SxHW/CpHeCIUinM=";
   };
 
   useFetchCargoVendor = true;

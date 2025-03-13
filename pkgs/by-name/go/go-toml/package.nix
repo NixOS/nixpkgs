@@ -14,7 +14,7 @@ buildGoModule {
     owner = "pelletier";
     repo = "go-toml";
     rev = "v${version}";
-    sha256 = "sha256-+l89SvJ/4SxVItys1ROLOv2hZ5euU1MF21Yn0siQHUM=";
+    hash = "sha256-+l89SvJ/4SxVItys1ROLOv2hZ5euU1MF21Yn0siQHUM=";
   };
 
   vendorHash = "sha256-YkOcpzn5AKFMDWUYbKY8DzGMiIMSyaDfexFmXv5HNQI=";

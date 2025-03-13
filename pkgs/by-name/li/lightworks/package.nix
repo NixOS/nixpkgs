@@ -64,7 +64,7 @@ let
       if stdenv.hostPlatform.system == "x86_64-linux" then
         fetchurl {
           url = "https://cdn.lwks.com/releases/${version}/lightworks_${version}_r${rev}.deb";
-          sha256 = "sha256-opYbWzZYim5wqSaxDeGmc10XxFkkE521PDB8OULh7Jc=";
+          hash = "sha256-opYbWzZYim5wqSaxDeGmc10XxFkkE521PDB8OULh7Jc=";
         }
       else
         throw "${pname}-${version} is not supported on ${stdenv.hostPlatform.system}";

@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "Aetf";
     repo = "libtsm";
     rev = "69922bde02c7af83b4d48a414cc6036af7388626";
-    sha256 = "sha256-Rug3OWSbbiIivItULPNNptClIZ/PrXdQeUypAAxrUY8=";
+    hash = "sha256-Rug3OWSbbiIivItULPNNptClIZ/PrXdQeUypAAxrUY8=";
   };
 
   buildInputs = [ libxkbcommon ];

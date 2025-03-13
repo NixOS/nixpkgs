@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "Rosettea";
     repo = "bunnyfetch";
     rev = "v${version}";
-    sha256 = "sha256-6MnjCXc9/8twdf8PHKsVJY1yWYwUf5R01vtQFJbyy7M=";
+    hash = "sha256-6MnjCXc9/8twdf8PHKsVJY1yWYwUf5R01vtQFJbyy7M=";
   };
 
   vendorHash = "sha256-w+O1dU8t7uNvdlFnYhCdJCDixpWWZAnj9GrtsCbu9SM=";

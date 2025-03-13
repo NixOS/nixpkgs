@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "nilfs-dev";
     repo = "nilfs-utils";
     rev = "v${version}";
-    sha256 = "sha256-qvs0PBkMYzGfIQ/Z2Wz0aHe2Y2Ia6fA4pMSk5Jhejf4=";
+    hash = "sha256-qvs0PBkMYzGfIQ/Z2Wz0aHe2Y2Ia6fA4pMSk5Jhejf4=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

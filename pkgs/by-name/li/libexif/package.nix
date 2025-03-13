@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = pname;
     repo = pname;
     rev = "${pname}-${builtins.replaceStrings [ "." ] [ "_" ] version}-release";
-    sha256 = "sha256-H8YzfNO2FCrYAwEA4bkOpRdxISK9RXaHVuK8zz70TlM=";
+    hash = "sha256-H8YzfNO2FCrYAwEA4bkOpRdxISK9RXaHVuK8zz70TlM=";
   };
 
   nativeBuildInputs = [

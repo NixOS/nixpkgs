@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "Workiva";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-giPlv3pf0hz2zlQ/9o12SGfwFLCtpN96tfQwP9AaPNo=";
+    hash = "sha256-giPlv3pf0hz2zlQ/9o12SGfwFLCtpN96tfQwP9AaPNo=";
   };
 
   subPackages = [ "." ];

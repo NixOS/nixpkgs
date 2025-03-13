@@ -11,7 +11,7 @@ buildGoModule rec {
     owner = "brevdev";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-kuzkaT8fbb8X9YwNQbTimMfUxM50wKRjwxnNXWPWGaU=";
+    hash = "sha256-kuzkaT8fbb8X9YwNQbTimMfUxM50wKRjwxnNXWPWGaU=";
   };
 
   vendorHash = "sha256-DMkBRya1Dxn8mcpuG/vtIt+v/9iVmb58iNe3fPY/xv4=";

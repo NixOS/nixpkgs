@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     owner = "harishkrupo";
     repo = "oauth2ms";
     rev = "a1ef0cabfdea57e9309095954b90134604e21c08"; # No tags or releases in the repo
-    sha256 = "sha256-xPSWlHJAXhhj5I6UMjUtH1EZqCZWHJMFWTu3a4k1ETc";
+    hash = "sha256-xPSWlHJAXhhj5I6UMjUtH1EZqCZWHJMFWTu3a4k1ETc";
   };
 
   buildInputs = [

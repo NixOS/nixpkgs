@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://download.samba.org/pub/linux-cifs/cifs-utils/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-ElZKM+1nwkHYyEeSTq8Epa4LrxkoiDcJTasVc51UAX4=";
+    hash = "sha256-ElZKM+1nwkHYyEeSTq8Epa4LrxkoiDcJTasVc51UAX4=";
   };
 
   nativeBuildInputs = [

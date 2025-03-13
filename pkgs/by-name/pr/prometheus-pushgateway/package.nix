@@ -15,7 +15,7 @@ buildGoModule rec {
     owner = "prometheus";
     repo = "pushgateway";
     rev = "v${version}";
-    sha256 = "sha256-VIqk5GxI5qFnsjeq6FL1UUd7lX3VLLhTcPlo4j8oL/c=";
+    hash = "sha256-VIqk5GxI5qFnsjeq6FL1UUd7lX3VLLhTcPlo4j8oL/c=";
   };
 
   vendorHash = "sha256-PXJkjRg699tu/WPrFkekmAbGwPPHoUXaiYfxuju9Dwk=";

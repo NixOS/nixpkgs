@@ -22,6 +22,6 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://subgit.com/download/subgit-${version}.zip";
-    sha256 = "sha256-u4lgbX62bhgv/419if+jykCVkuN5SJ4OBhqF2Nl9Qe4=";
+    hash = "sha256-u4lgbX62bhgv/419if+jykCVkuN5SJ4OBhqF2Nl9Qe4=";
   };
 }

@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   src = fetchzip {
     url = "mirror://gnome/sources/libgovirt/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-6RDuJTyaVYlO4Kq+niQyepom6xj1lqdBbyWL/VnZUdk=";
+    hash = "sha256-6RDuJTyaVYlO4Kq+niQyepom6xj1lqdBbyWL/VnZUdk=";
   };
 
   patches = [

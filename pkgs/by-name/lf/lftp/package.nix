@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
       "https://lftp.yar.ru/ftp/${pname}-${version}.tar.xz"
       "https://ftp.st.ryukoku.ac.jp/pub/network/ftp/lftp/${pname}-${version}.tar.xz"
     ];
-    sha256 = "sha256-lucZnXk1vjPPaxFh6VWyqrQKt37N8qGc6k/BGT9Fftw=";
+    hash = "sha256-lucZnXk1vjPPaxFh6VWyqrQKt37N8qGc6k/BGT9Fftw=";
   };
 
   nativeBuildInputs = [ pkg-config ];

@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     owner = "roelj";
     repo = "inklingreader";
     rev = "90f9d0d7f5353657f4d25fd75635e29c10c08d2e";
-    sha256 = "sha256-852m8g61r+NQhCYz9ghSbCG0sjao2E8B9GS06NG4GyY=";
+    hash = "sha256-852m8g61r+NQhCYz9ghSbCG0sjao2E8B9GS06NG4GyY=";
   };
 
   nativeBuildInputs = [

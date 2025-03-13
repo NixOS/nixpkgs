@@ -13,7 +13,7 @@ buildGoModule rec {
     owner = "uber-go";
     repo = "mock";
     rev = "v${version}";
-    sha256 = "sha256-1UlaM3IvKlplBW1pg5l+IXwirlierjDKqKsVwFt7EAw=";
+    hash = "sha256-1UlaM3IvKlplBW1pg5l+IXwirlierjDKqKsVwFt7EAw=";
   };
 
   vendorHash = "sha256-0OnK5/e0juEYrNJuVkr+tK66btRW/oaHpJSDakB32Bc=";

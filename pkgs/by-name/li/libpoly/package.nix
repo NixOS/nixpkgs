@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     repo = "libpoly";
     # they've pushed to the release branch, use explicit tag
     tag = "v${version}";
-    sha256 = "sha256-7aFz+6XJOVEA/Fmi0ywd6rZdTW8sHq8MoHqXR0Hc2o4=";
+    hash = "sha256-7aFz+6XJOVEA/Fmi0ywd6rZdTW8sHq8MoHqXR0Hc2o4=";
   };
 
   postPatch = ''

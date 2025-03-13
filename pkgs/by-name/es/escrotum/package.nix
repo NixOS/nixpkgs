@@ -18,7 +18,7 @@ buildPythonApplication {
     owner = "Roger";
     repo = "escrotum";
     rev = "a41d0f11bb6af4f08e724b8ccddf8513d905c0d1";
-    sha256 = "sha256-z0AyTbOEE60j/883X17mxgoaVlryNtn0dfEB0C18G2s=";
+    hash = "sha256-z0AyTbOEE60j/883X17mxgoaVlryNtn0dfEB0C18G2s=";
   };
 
   buildInputs = [

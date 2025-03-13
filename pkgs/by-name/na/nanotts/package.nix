@@ -19,7 +19,7 @@ stdenv.mkDerivation {
     repo = "nanotts";
     owner = "gmn";
     rev = "d8b91f3d9d524c30f6fe8098ea7a0a638c889cf9";
-    sha256 = "sha256-bFu3U50zc90iQeWkqOsCipkueJUZI3cW5342jjYSnGI=";
+    hash = "sha256-bFu3U50zc90iQeWkqOsCipkueJUZI3cW5342jjYSnGI=";
   };
 
   strictDeps = true;

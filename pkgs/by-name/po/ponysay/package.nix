@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "erkin";
     repo = "ponysay";
     rev = "8a2c71416e70e4e7b0931917ebfd6479f51ddf9a";
-    sha256 = "sha256-LNc83E+7NFYYILORElNlYC7arQKGUJHv6phu+vM5xpQ=";
+    hash = "sha256-LNc83E+7NFYYILORElNlYC7arQKGUJHv6phu+vM5xpQ=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

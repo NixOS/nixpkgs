@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     owner = "Keriew";
     repo = "augustus";
     rev = "v${version}";
-    sha256 = "sha256-UWJmxirRJJqvL4ZSjBvFepeKVvL77+WMp4YdZuFNEkg=";
+    hash = "sha256-UWJmxirRJJqvL4ZSjBvFepeKVvL77+WMp4YdZuFNEkg=";
   };
 
   patches = [ ./darwin-fixes.patch ];

@@ -29,14 +29,14 @@ stdenv.mkDerivation rec {
     owner = "essej";
     repo = "sooperlooper";
     rev = "v${version}";
-    sha256 = "sha256-Lrsz/UDCgoac63FJ3CaPVaYwvBtzkGQQRLhUi6lUusE=";
+    hash = "sha256-Lrsz/UDCgoac63FJ3CaPVaYwvBtzkGQQRLhUi6lUusE=";
   };
 
   patches = [
     (fetchpatch {
       name = "10-build_with_wx_32.patch";
       url = "https://sources.debian.org/data/main/s/sooperlooper/1.7.8~dfsg0-2/debian/patches/10-build_with_wx_32.patch";
-      sha256 = "sha256-NF/w+zgRBNkSTqUJhfH9kQogXSYEF70pCN+loR0hjpg=";
+      hash = "sha256-NF/w+zgRBNkSTqUJhfH9kQogXSYEF70pCN+loR0hjpg=";
     })
   ];
 

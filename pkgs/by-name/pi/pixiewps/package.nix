@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     owner = "wiire-a";
     repo = "pixiewps";
     rev = "v${version}";
-    sha256 = "sha256-cJ20Gp6YaSdgUXK/ckK5Yv0rGbGXuFMP5zKZG0c4oOY=";
+    hash = "sha256-cJ20Gp6YaSdgUXK/ckK5Yv0rGbGXuFMP5zKZG0c4oOY=";
   };
 
   preBuild = ''

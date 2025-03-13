@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchzip {
     url = "https://launchpad.net/ubuntu/+archive/primary/+files/notify-osd_${finalAttrs.version}.orig.tar.gz";
-    sha256 = "sha256-aSU83HoWhHZtob8NFHFYNUIIZAecvQ/p0z62KMlQNCU=";
+    hash = "sha256-aSU83HoWhHZtob8NFHFYNUIIZAecvQ/p0z62KMlQNCU=";
     stripRoot = false;
   };
 

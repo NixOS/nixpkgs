@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     owner = "pmem";
     repo = "ndctl";
     rev = "v${version}";
-    sha256 = "sha256-gG1Rz5AtDLzikGFr8A3l25ypd+VoLw2oWjszy9ogDLk=";
+    hash = "sha256-gG1Rz5AtDLzikGFr8A3l25ypd+VoLw2oWjszy9ogDLk=";
   };
 
   outputs = [

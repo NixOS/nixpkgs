@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchzip {
     url = "mirror://apache/directory/apacheds/dist/${version}/apacheds-${version}.zip";
-    sha256 = "sha256-36kDvfSy5rt/3+nivEFTepnIKf6sX0NTgPRm28M+1v4=";
+    hash = "sha256-36kDvfSy5rt/3+nivEFTepnIKf6sX0NTgPRm28M+1v4=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

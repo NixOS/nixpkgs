@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "drone-runners";
     repo = pname;
     tag = "v${version}";
-    sha256 = "sha256-xJbmxoyL4Sb6YkkwgysGte44ZBKYHjc5QdYa+b62C/M=";
+    hash = "sha256-xJbmxoyL4Sb6YkkwgysGte44ZBKYHjc5QdYa+b62C/M=";
   };
 
   vendorHash = "sha256-KcNp3VdJ201oxzF0bLXY4xWHqHNz54ZrVSI96cfhU+k=";

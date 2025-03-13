@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     owner = "graysky2";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-ZB1jrr31PF7+vNB+Xo5CATJmYbuDAPwewpDxCVnAowY=";
+    hash = "sha256-ZB1jrr31PF7+vNB+Xo5CATJmYbuDAPwewpDxCVnAowY=";
   };
 
   postPatch = ''

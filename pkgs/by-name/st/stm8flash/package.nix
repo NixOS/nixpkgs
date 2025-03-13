@@ -14,7 +14,7 @@ stdenv.mkDerivation {
     owner = "vdudouyt";
     repo = "stm8flash";
     rev = "23305ce5adbb509c5cb668df31b0fd6c8759639c";
-    sha256 = "sha256-fFoC2EKSmYyW2lqrdAh5A2WEtUMCenKse2ySJdNHu6w=";
+    hash = "sha256-fFoC2EKSmYyW2lqrdAh5A2WEtUMCenKse2ySJdNHu6w=";
   };
 
   strictDeps = true;

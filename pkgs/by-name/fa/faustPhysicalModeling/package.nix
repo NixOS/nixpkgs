@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "grame-cncm";
     repo = "faust";
     rev = version;
-    sha256 = "sha256-CADiJXyB4FivQjbh1nhpAVgCkTi1pW/vtXKXfL7o7xU=";
+    hash = "sha256-CADiJXyB4FivQjbh1nhpAVgCkTi1pW/vtXKXfL7o7xU=";
   };
 
   nativeBuildInputs = [

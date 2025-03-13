@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "ogdf";
     repo = "ogdf";
     rev = "dogwood-202202";
-    sha256 = "sha256-zkQ6sS0EUmiigv3T7To+tG3XbFbR3XEbFo15oQ0bWf0=";
+    hash = "sha256-zkQ6sS0EUmiigv3T7To+tG3XbFbR3XEbFo15oQ0bWf0=";
   };
 
   nativeBuildInputs = [

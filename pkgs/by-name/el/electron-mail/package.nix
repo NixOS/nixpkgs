@@ -11,7 +11,7 @@ let
 
   src = fetchurl {
     url = "https://github.com/vladimiry/ElectronMail/releases/download/v${version}/electron-mail-${version}-linux-x86_64.AppImage";
-    sha256 = "sha256-ajekPPRgprYNWE2osAXe46qVjnxXzkXa+MkWiNYJ5Fc=";
+    hash = "sha256-ajekPPRgprYNWE2osAXe46qVjnxXzkXa+MkWiNYJ5Fc=";
   };
 
   appimageContents = appimageTools.extract { inherit pname version src; };

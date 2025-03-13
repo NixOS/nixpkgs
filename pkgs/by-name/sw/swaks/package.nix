@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://www.jetmore.org/john/code/swaks/files/${pname}-${version}.tar.gz";
-    sha256 = "sha256-DlMbTRZAWIAucmaxT03BiXCZ0Jb5MIIN4vm16wjc2+g=";
+    hash = "sha256-DlMbTRZAWIAucmaxT03BiXCZ0Jb5MIIN4vm16wjc2+g=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

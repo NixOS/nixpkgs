@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "bcicen";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-tojSzgpoGQg6MwV/MVpQpCA5w6bZO+9IOvfkw0Ydr6c=";
+    hash = "sha256-tojSzgpoGQg6MwV/MVpQpCA5w6bZO+9IOvfkw0Ydr6c=";
   };
 
   vendorHash = "sha256-UAja7XuoLqJFNcK1PgHGcuf/HbvSrWyRvW2D3T7Hg0g=";

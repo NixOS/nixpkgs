@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "troydhanson";
     repo = "uthash";
     rev = "v${version}";
-    sha256 = "sha256-F0M5ENT3bMn3dD16Oaq9mBFYOWzVliVWupAIrLc2nkQ=";
+    hash = "sha256-F0M5ENT3bMn3dD16Oaq9mBFYOWzVliVWupAIrLc2nkQ=";
   };
 
   doCheck = true;

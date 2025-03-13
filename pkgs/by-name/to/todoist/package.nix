@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "sachaos";
     repo = "todoist";
     rev = "v${version}";
-    sha256 = "sha256-+UECYUozca7PKKiTrmPAobSF0y6xnWYCGaChk9bwANg=";
+    hash = "sha256-+UECYUozca7PKKiTrmPAobSF0y6xnWYCGaChk9bwANg=";
   };
 
   vendorHash = "sha256-fWFFWFVnLtZivlqMRIi6TjvticiKlyXF2Bx9Munos8M=";

@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     owner = "mfontanini";
     repo = "libtins";
     rev = "v${version}";
-    sha256 = "sha256-zL4C2Cgs9Y3NebL8MPQBO5j8Bm6xhl8ZggQBPJLRn0o=";
+    hash = "sha256-zL4C2Cgs9Y3NebL8MPQBO5j8Bm6xhl8ZggQBPJLRn0o=";
   };
 
   patches = [

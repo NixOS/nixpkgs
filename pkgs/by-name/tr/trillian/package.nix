@@ -13,7 +13,7 @@ buildGoModule rec {
     owner = "google";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-TOJqBfYVubwgDF/9i6lwmCLj6x0utzz0O7QJ5SqshCA=";
+    hash = "sha256-TOJqBfYVubwgDF/9i6lwmCLj6x0utzz0O7QJ5SqshCA=";
   };
 
   subPackages = [

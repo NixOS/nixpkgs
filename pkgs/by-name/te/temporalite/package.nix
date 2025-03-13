@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "temporalio";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-IEB9AFEt8U2zXYfbChfL/UH1rNSLPnfS396/cPE8UdE=";
+    hash = "sha256-IEB9AFEt8U2zXYfbChfL/UH1rNSLPnfS396/cPE8UdE=";
   };
 
   vendorHash = "sha256-w86/XCMRGBmXM+oQ5+0qiX0fdwiKXvsmEkApuRLUOiA=";

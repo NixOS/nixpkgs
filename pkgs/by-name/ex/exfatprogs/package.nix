@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "exfatprogs";
     repo = "exfatprogs";
     rev = version;
-    sha256 = "sha256-lPPUjSc6ti/CqSChWrsBLWCtASN95Cnj+O6FbVvFeDA=";
+    hash = "sha256-lPPUjSc6ti/CqSChWrsBLWCtASN95Cnj+O6FbVvFeDA=";
   };
 
   nativeBuildInputs = [

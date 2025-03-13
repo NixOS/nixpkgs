@@ -16,7 +16,7 @@ let
       owner = "intelxed";
       repo = "mbuild";
       rev = "v${version}";
-      sha256 = "sha256-nVHHiaPbf+b+RntjUGjLLGS53e6c+seXIBx7AcTtiWU=";
+      hash = "sha256-nVHHiaPbf+b+RntjUGjLLGS53e6c+seXIBx7AcTtiWU=";
     };
   };
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     owner = "intelxed";
     repo = "xed";
     rev = "v${version}";
-    sha256 = "sha256-LF4iJ1/Z3OifCiir/kU3ufZqtiRLeaJeAwuBqP2BCF4=";
+    hash = "sha256-LF4iJ1/Z3OifCiir/kU3ufZqtiRLeaJeAwuBqP2BCF4=";
   };
 
   nativeBuildInputs = [

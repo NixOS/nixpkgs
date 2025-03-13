@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "ldoolitt";
     repo = "vhd2vl";
     rev = "869d442987dff6b9730bc90563ede89c1abfd28f";
-    sha256 = "sha256-Hz2XkT5m4ri5wVR2ciL9Gx73zr+RdW5snjWnUg300c8=";
+    hash = "sha256-Hz2XkT5m4ri5wVR2ciL9Gx73zr+RdW5snjWnUg300c8=";
   };
 
   nativeBuildInputs = [

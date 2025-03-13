@@ -12,7 +12,7 @@ buildGoModule rec {
 
   src = fetchurl {
     url = "http://www.catb.org/~esr/reposurgeon/reposurgeon-${version}.tar.xz";
-    sha256 = "sha256-FuL5pvIM468hEm6rUBKGW6+WlYv4DPHNnpwpRGzMwlY=";
+    hash = "sha256-FuL5pvIM468hEm6rUBKGW6+WlYv4DPHNnpwpRGzMwlY=";
   };
 
   vendorHash = "sha256-QpgRCnsOOZujE405dCe+PYg/zNkqnrfZFfbBFo7adjY=";

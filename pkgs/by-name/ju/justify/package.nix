@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "jns";
     repo = "justify";
     rev = "0d397c20ed921c8e091bf18e548d174e15810e62";
-    sha256 = "sha256-406OhJt2Ila/LIhfqJXhbFqFxJJiRyMVI4/VK8Y43kc=";
+    hash = "sha256-406OhJt2Ila/LIhfqJXhbFqFxJJiRyMVI4/VK8Y43kc=";
   };
 
   postPatch = ''

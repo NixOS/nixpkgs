@@ -24,7 +24,7 @@ buildGoModule rec {
     owner = "openfaas";
     repo = "faas-cli";
     rev = version;
-    sha256 = "sha256-pCzYfsL4ZQOyxEpg//Edh+dengXkx6G+OWMNPfIPM+o=";
+    hash = "sha256-pCzYfsL4ZQOyxEpg//Edh+dengXkx6G+OWMNPfIPM+o=";
   };
 
   vendorHash = null;

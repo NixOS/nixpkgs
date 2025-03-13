@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
     owner = "reorx";
     repo = pname;
     rev = version;
-    sha256 = "sha256-zUdis41sQpJ1E3LdNwaCVj6gexi/Rk21IBUgoFISiDM=";
+    hash = "sha256-zUdis41sQpJ1E3LdNwaCVj6gexi/Rk21IBUgoFISiDM=";
   };
   doCheck = false; # No tests
   buildInputs = [ glibcLocales ];

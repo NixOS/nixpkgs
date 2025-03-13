@@ -12,7 +12,7 @@ stdenvNoCC.mkDerivation rec {
     owner = "agkozak";
     repo = "agkozak-zsh-prompt";
     rev = "v${version}";
-    sha256 = "sha256-FC9LIZaS6fV20qq6cJC/xQvfsM3DHXatVleH7yBgoNg=";
+    hash = "sha256-FC9LIZaS6fV20qq6cJC/xQvfsM3DHXatVleH7yBgoNg=";
   };
 
   strictDeps = true;

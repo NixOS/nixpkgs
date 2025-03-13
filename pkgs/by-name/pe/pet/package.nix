@@ -13,7 +13,7 @@ buildGoModule rec {
     owner = "knqyf263";
     repo = "pet";
     rev = "v${version}";
-    sha256 = "sha256-B0ilobUlp6UUXu6+lVqIHkbFnxVu33eXZFf+F7ODoQU=";
+    hash = "sha256-B0ilobUlp6UUXu6+lVqIHkbFnxVu33eXZFf+F7ODoQU=";
   };
 
   vendorHash = "sha256-+ieBk7uMzgeM45uvLfljenNvhGVv1mEazErf4YHPNWQ=";

@@ -14,7 +14,7 @@ buildGoModule rec {
     owner = "Roblox";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-11K1ACk2hhEi+sAlI932eKpyy82Md7j1edRWH2JJ8sI=";
+    hash = "sha256-11K1ACk2hhEi+sAlI932eKpyy82Md7j1edRWH2JJ8sI=";
   };
 
   # bump deps to fix CVE that isn't in a tagged release yet

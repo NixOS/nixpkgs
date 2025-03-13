@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     owner = "misterdanb";
     repo = "avizo";
     rev = version;
-    sha256 = "sha256-Vj8OrNlAstl0AXTeVAPdEf5JgnAmJwl9s3Jdc0ZiYQc=";
+    hash = "sha256-Vj8OrNlAstl0AXTeVAPdEf5JgnAmJwl9s3Jdc0ZiYQc=";
   };
 
   nativeBuildInputs = [

@@ -15,7 +15,7 @@ stdenvNoCC.mkDerivation rec {
 
   src = fetchzip {
     url = "https://www.giss.nasa.gov/tools/gprojector/download/G.ProjectorJ-${version}.tgz";
-    sha256 = "sha256-cMmjyitetXxQzfSBh5ry5tIsLWOnBaaYOD1eQg1IX+w=";
+    hash = "sha256-cMmjyitetXxQzfSBh5ry5tIsLWOnBaaYOD1eQg1IX+w=";
   };
 
   desktopItems = [

@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://sigrok.org/download/source/libserialport/${pname}-${version}.tar.gz";
-    sha256 = "sha256-XeuStcpywDR7B7eGhINQ3sotz9l1zmE7jg4dlHpLTKk=";
+    hash = "sha256-XeuStcpywDR7B7eGhINQ3sotz9l1zmE7jg4dlHpLTKk=";
   };
 
   nativeBuildInputs = [ pkg-config ];

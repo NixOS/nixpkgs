@@ -51,14 +51,14 @@ let
     owner = "google";
     repo = "googletest";
     rev = "43359642a1c16ad3f4fc575c7edd0cb935810815";
-    sha256 = "sha256-mKjXaawFHSRrbJBtADJ1Pdk6vtuD+ax0HFk6YaBSnXg=";
+    hash = "sha256-mKjXaawFHSRrbJBtADJ1Pdk6vtuD+ax0HFk6YaBSnXg=";
   };
 
   linenoise = fetchFromGitHub {
     owner = "antirez";
     repo = "linenoise";
     rev = "c894b9e59f02203dbe4e2be657572cf88c4230c3";
-    sha256 = "sha256-nKxwWuSqr89lvI9Y3QAW5Mo7/iFfMNj/OOQVeA/FWnE=";
+    hash = "sha256-nKxwWuSqr89lvI9Y3QAW5Mo7/iFfMNj/OOQVeA/FWnE=";
   };
 in
 stdenv.mkDerivation (finalAttrs: {

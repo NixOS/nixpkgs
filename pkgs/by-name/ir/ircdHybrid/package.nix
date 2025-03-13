@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/ircd-hybrid/ircd-hybrid-${version}.tgz";
-    sha256 = "sha256-pdXI8YiPqC+97XoxNFb1plm4cfLOB+b/getajXPzx0s=";
+    hash = "sha256-pdXI8YiPqC+97XoxNFb1plm4cfLOB+b/getajXPzx0s=";
   };
 
   buildInputs = [

@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   src = fetchzip {
     url = "https://indefero.soutade.fr/p/libgourou/source/download/v${version}/";
-    sha256 = "sha256-adkrvBCgN07Ir+J3JFCy+X9p9609lj1w8nElrlHXTxc";
+    hash = "sha256-adkrvBCgN07Ir+J3JFCy+X9p9609lj1w8nElrlHXTxc";
     extension = "zip";
   };
 

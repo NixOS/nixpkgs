@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://download.linuxsampler.org/packages/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-T7quk5N5JBiPqIziQd0vaCr8tLDbwS6otz6egY01OTE=";
+    hash = "sha256-T7quk5N5JBiPqIziQd0vaCr8tLDbwS6otz6egY01OTE=";
   };
 
   preConfigure = ''

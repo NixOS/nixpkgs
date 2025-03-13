@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "arminbiere";
     repo = "kissat";
     rev = "rel-${version}";
-    sha256 = "sha256-XVaWO1zHMXM83Qih3HnmIsOvM1zpefF6u9lBP420/mQ=";
+    hash = "sha256-XVaWO1zHMXM83Qih3HnmIsOvM1zpefF6u9lBP420/mQ=";
   };
 
   outputs = [

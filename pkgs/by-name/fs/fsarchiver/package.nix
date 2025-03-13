@@ -28,7 +28,7 @@ stdenv.mkDerivation {
     owner = "fdupoux";
     repo = "fsarchiver";
     rev = version;
-    sha256 = "sha256-bEwNqPQRpjfOVTUog9wsZfS5yQ7Z21pHolPRLlbzHAA=";
+    hash = "sha256-bEwNqPQRpjfOVTUog9wsZfS5yQ7Z21pHolPRLlbzHAA=";
   };
 
   nativeBuildInputs = [

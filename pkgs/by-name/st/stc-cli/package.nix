@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "tenox7";
     repo = pname;
     rev = version;
-    sha256 = "sha256-ftlq7vrnTb4N2bqwiF9gtRj7hZlo6PTUMb/bk2hn/cU=";
+    hash = "sha256-ftlq7vrnTb4N2bqwiF9gtRj7hZlo6PTUMb/bk2hn/cU=";
   };
 
   vendorHash = "sha256-qLpWXikTr+vB2bIw2EqnoJ0uOxUc/qc6SdGEJQXwmTQ=";

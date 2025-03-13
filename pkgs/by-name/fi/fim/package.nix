@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://savannah/fbi-improved/${pname}-${version}-trunk.tar.gz";
-    sha256 = "sha256-/p7bjeZM46DJOQ9sgtebhkNpBPj2RJYY3dMXhzHnNmg=";
+    hash = "sha256-/p7bjeZM46DJOQ9sgtebhkNpBPj2RJYY3dMXhzHnNmg=";
   };
 
   postPatch = ''

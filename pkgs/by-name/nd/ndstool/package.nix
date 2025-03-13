@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "devkitPro";
     repo = "ndstool";
     rev = "v${version}";
-    sha256 = "sha256-121xEmbt1WBR1wi4RLw9/iLHqkpyXImXKiCNnLCYnJs=";
+    hash = "sha256-121xEmbt1WBR1wi4RLw9/iLHqkpyXImXKiCNnLCYnJs=";
   };
 
   nativeBuildInputs = [

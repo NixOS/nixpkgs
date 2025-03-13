@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchzip {
     url = "https://git.causal.agency/pounce/snapshot/pounce-${version}.tar.gz";
-    sha256 = "sha256-6PGiaU5sOwqO4V2PKJgIi3kI2jXsBOldEH51D7Sx9tg=";
+    hash = "sha256-6PGiaU5sOwqO4V2PKJgIi3kI2jXsBOldEH51D7Sx9tg=";
   };
 
   buildInputs = [

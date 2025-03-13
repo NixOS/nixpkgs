@@ -16,7 +16,7 @@ buildGoModule rec {
     owner = "Shopify";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-9i84nHIuAR7PG6/v8O5GEi6xToJk0c+knpVPOPx+1b8=";
+    hash = "sha256-9i84nHIuAR7PG6/v8O5GEi6xToJk0c+knpVPOPx+1b8=";
   };
 
   vendorHash = "sha256-NirIAwmrUH7ny1H7d63bIrFQ8EWuxjh6Qp66Sw8eMO8=";

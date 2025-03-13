@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     # compile fixes from upstream, remove when they stop applying
     (fetchpatch {
       url = "https://github.com/ammen99/wf-recorder/commit/560bb92d3ddaeb31d7af77d22d01b0050b45bebe.diff";
-      sha256 = "sha256-7jbX5k8dh4dWfolMkZXiERuM72zVrkarsamXnd+1YoI=";
+      hash = "sha256-7jbX5k8dh4dWfolMkZXiERuM72zVrkarsamXnd+1YoI=";
     })
   ];
 

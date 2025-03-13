@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "tsduck";
     repo = "tsduck";
     rev = "v${version}";
-    sha256 = "sha256-268TKCh3naebbw+sOQ6d4N/zl7UEVtc3l3flFAYHDU4=";
+    hash = "sha256-268TKCh3naebbw+sOQ6d4N/zl7UEVtc3l3flFAYHDU4=";
   };
 
   buildInputs = [

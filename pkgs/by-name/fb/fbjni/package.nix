@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "facebookincubator";
     repo = "fbjni";
     rev = "v${version}";
-    sha256 = "sha256-97KqfFWtR3VJe2s0D60L3dsIDm4kMa0hpkKoZSAEoVY=";
+    hash = "sha256-97KqfFWtR3VJe2s0D60L3dsIDm4kMa0hpkKoZSAEoVY=";
   };
 
   patches = [
@@ -31,13 +31,13 @@ stdenv.mkDerivation rec {
     # fix cmake file installation directory
     (fetchpatch {
       url = "https://github.com/facebookincubator/fbjni/commit/ab02e60b5da28647bfcc864b0bb1b9a90504cdb1.patch";
-      sha256 = "sha256-/h6kosulRH/ZAU2u0zRSaNDK39jsnFt9TaSxyBllZqM=";
+      hash = "sha256-/h6kosulRH/ZAU2u0zRSaNDK39jsnFt9TaSxyBllZqM=";
     })
 
     # install headers
     (fetchpatch {
       url = "https://github.com/facebookincubator/fbjni/commit/74e125caa9a815244f1e6bd08eaba57d015378b4.patch";
-      sha256 = "sha256-hQS35D69GD3ewV4zzPG+LO7jk7ncCj2CYDbLJ6SnpqE=";
+      hash = "sha256-hQS35D69GD3ewV4zzPG+LO7jk7ncCj2CYDbLJ6SnpqE=";
     })
   ];
 

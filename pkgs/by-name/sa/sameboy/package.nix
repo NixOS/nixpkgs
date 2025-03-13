@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     owner = "LIJI32";
     repo = "SameBoy";
     rev = "v${version}";
-    sha256 = "sha256-KUvhmORI3hIJFMCW8U2BZYnIwzg7h+GZZA4+U0IPS9E=";
+    hash = "sha256-KUvhmORI3hIJFMCW8U2BZYnIwzg7h+GZZA4+U0IPS9E=";
   };
 
   enableParallelBuilding = true;

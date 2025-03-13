@@ -13,7 +13,7 @@ stdenvNoCC.mkDerivation rec {
     owner = "gurrgur";
     repo = "er-patcher";
     rev = "v${version}";
-    sha256 = "sha256-D+XYZI3kmK5sb+i8RxtODTvbTgzhpDzwB/JM61ddcTA=";
+    hash = "sha256-D+XYZI3kmK5sb+i8RxtODTvbTgzhpDzwB/JM61ddcTA=";
   };
 
   buildInputs = [

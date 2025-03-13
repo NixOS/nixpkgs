@@ -26,12 +26,12 @@ python3Packages.buildPythonApplication rec {
     # https://bugzilla.redhat.com/show_bug.cgi?id=438638
     (fetchpatch {
       url = "https://src.fedoraproject.org/rpms/gnome-doc-utils/raw/6b8908abe5af61a952db7174c5d1843708d61f1b/f/gnome-doc-utils-0.14.0-package.patch";
-      sha256 = "sha256-V2L2/30NoHY/wj3+dsombxveWRSUJb2YByOKtEgVx/0=";
+      hash = "sha256-V2L2/30NoHY/wj3+dsombxveWRSUJb2YByOKtEgVx/0=";
     })
     # python3 support
     (fetchpatch {
       url = "https://src.fedoraproject.org/rpms/gnome-doc-utils/raw/6b8908abe5af61a952db7174c5d1843708d61f1b/f/gnome-doc-utils-0.20.10-python3.patch";
-      sha256 = "sha256-niH/Yx5H44rsRgkCZS8LWLFB9ZvuInt75zugzoVUhH0=";
+      hash = "sha256-niH/Yx5H44rsRgkCZS8LWLFB9ZvuInt75zugzoVUhH0=";
     })
   ];
 

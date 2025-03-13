@@ -20,7 +20,7 @@ let
 
   src = fetchzip {
     url = "https://github.com/carrotIndustries/usbkvm/releases/download/v${version}/usbkvm-v${version}.tar.gz";
-    sha256 = "sha256-ng6YpaN7sKEBPJcJAm0kcYtT++orweWRx6uOZFnOGG8=";
+    hash = "sha256-ng6YpaN7sKEBPJcJAm0kcYtT++orweWRx6uOZFnOGG8=";
   };
 
   ms-tools-lib = buildGoModule {

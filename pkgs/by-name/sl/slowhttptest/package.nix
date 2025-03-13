@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "shekyan";
     repo = "slowhttptest";
     rev = "v${version}";
-    sha256 = "sha256-rIvd3LykVAbDXtFWZ1EQ+QKeALzqwK6pq7In0BsCOFo=";
+    hash = "sha256-rIvd3LykVAbDXtFWZ1EQ+QKeALzqwK6pq7In0BsCOFo=";
   };
 
   buildInputs = [ openssl ];

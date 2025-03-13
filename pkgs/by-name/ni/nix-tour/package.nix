@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "nixcloud";
     repo = "tour_of_nix";
     rev = "6a6784983e6dc121574b97eb9b1d03592c8cb9a7";
-    sha256 = "sha256-BhQz59wkwwY0ShXzqUD6MQl4NE/jUik5RbLzseEc5Bc=";
+    hash = "sha256-BhQz59wkwwY0ShXzqUD6MQl4NE/jUik5RbLzseEc5Bc=";
   };
 
   nativeBuildInputs = [

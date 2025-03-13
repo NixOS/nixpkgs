@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://savannah/sysvinit/sysvinit-${version}.tar.xz";
-    sha256 = "sha256-KmIf5uRSi8kTCLdIZ92q6733dT8COVwMW66Be9K346U=";
+    hash = "sha256-KmIf5uRSi8kTCLdIZ92q6733dT8COVwMW66Be9K346U=";
   };
 
   prePatch = ''

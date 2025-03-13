@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     owner = "manugarg";
     repo = "pacparser";
     rev = "v${version}";
-    sha256 = "sha256-X842+xPjM404aQJTc2JwqU4vq8kgyKhpnqVu70pNLks=";
+    hash = "sha256-X842+xPjM404aQJTc2JwqU4vq8kgyKhpnqVu70pNLks=";
   };
 
   makeFlags = [

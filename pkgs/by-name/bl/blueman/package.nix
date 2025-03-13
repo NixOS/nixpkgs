@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/blueman-project/blueman/releases/download/${version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-00+RVMjGiH0VZ50Sl0SSKscvanHLK8z7ZmL4ykRuhfA=";
+    hash = "sha256-00+RVMjGiH0VZ50Sl0SSKscvanHLK8z7ZmL4ykRuhfA=";
   };
 
   nativeBuildInputs = [

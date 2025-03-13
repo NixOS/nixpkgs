@@ -18,7 +18,7 @@ buildGoModule rec {
     owner = "foxcpp";
     repo = "maddy";
     rev = "v${version}";
-    sha256 = "sha256-cR5qRUYQnFfm+ZOwwwNNRo1odq/ntI2QlGmhJBTjaF4=";
+    hash = "sha256-cR5qRUYQnFfm+ZOwwwNNRo1odq/ntI2QlGmhJBTjaF4=";
   };
 
   vendorHash = "sha256-YbXhxcRDTkNDdlCAKtQS2G8fwRIrRGpouIYx+5RG2lY=";

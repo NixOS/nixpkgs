@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "mop-tracker";
     repo = "mop";
     rev = "v${version}";
-    sha256 = "sha256-oe8RG8E7xcp3ZqdDXYvpOVF3AfeSBFMherHD1YYFE/M=";
+    hash = "sha256-oe8RG8E7xcp3ZqdDXYvpOVF3AfeSBFMherHD1YYFE/M=";
   };
 
   vendorHash = "sha256-kLQH7mMmBSsS9av+KnnEuBwiH6hzBOSozrn+1X+8774=";

@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   src = fetchgit {
     url = "https://git.sr.ht/~rabbits/orca";
     rev = "5ba56ca67baae3db140f8b7a2b2fc46bbac5602f";
-    sha256 = "sha256-bbIH0kyHRTcMGXV3WdBQIH1br0FyIzKKL88wqpGZ0NY=";
+    hash = "sha256-bbIH0kyHRTcMGXV3WdBQIH1br0FyIzKKL88wqpGZ0NY=";
   };
 
   buildInputs = [

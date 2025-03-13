@@ -17,7 +17,7 @@ buildGoModule rec {
     owner = "DNSCrypt";
     repo = "dnscrypt-proxy";
     rev = version;
-    sha256 = "sha256-s0ooICual87+y/DMppuTQtNzZRRCg/42SQImDrPVRng=";
+    hash = "sha256-s0ooICual87+y/DMppuTQtNzZRRCg/42SQImDrPVRng=";
   };
 
   passthru.tests = { inherit (nixosTests) dnscrypt-proxy2; };

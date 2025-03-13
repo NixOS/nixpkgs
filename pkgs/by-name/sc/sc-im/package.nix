@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     owner = "andmarti1424";
     repo = "sc-im";
     rev = "v${version}";
-    sha256 = "sha256-nNOifSYbmJjuw6c8TerIQRlhCwbs7GnzD2J7O3vs0gI=";
+    hash = "sha256-nNOifSYbmJjuw6c8TerIQRlhCwbs7GnzD2J7O3vs0gI=";
   };
 
   sourceRoot = "${src.name}/src";

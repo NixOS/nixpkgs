@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "lucianodato";
     repo = "libspecbleach";
     rev = "v${version}";
-    sha256 = "sha256-Tw5nrGVAeoiMH00efJwcU+QLmKDZZTXHQPSV9x789TM=";
+    hash = "sha256-Tw5nrGVAeoiMH00efJwcU+QLmKDZZTXHQPSV9x789TM=";
   };
 
   nativeBuildInputs = [

@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "msteveb";
     repo = "jimtcl";
     rev = finalAttrs.version;
-    sha256 = "sha256-CDjjrxpoTbLESAbCiCjQ8+E/oJP87gDv9SedQOzH3QY=";
+    hash = "sha256-CDjjrxpoTbLESAbCiCjQ8+E/oJP87gDv9SedQOzH3QY=";
   };
 
   nativeBuildInputs = [

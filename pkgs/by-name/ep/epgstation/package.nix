@@ -27,11 +27,11 @@ buildNpmPackage rec {
     # upgrade dependencies to make it compatible with node 18
     (fetchpatch {
       url = "https://github.com/midchildan/EPGStation/commit/5d6cad746b7d9b6d246adcdecf9c991b77c9d89e.patch";
-      sha256 = "sha256-9a8VUjczlyQHVO7w9MYorPIZunAuBuif1HNmtp1yMk8=";
+      hash = "sha256-9a8VUjczlyQHVO7w9MYorPIZunAuBuif1HNmtp1yMk8=";
     })
     (fetchpatch {
       url = "https://github.com/midchildan/EPGStation/commit/c948e833e485c2b7cb7fb33b953cca1e20de3a70.patch";
-      sha256 = "sha256-nM6KkVRURuQFZLXZ2etLU1a1+BoaJnfjngo07TFbe58=";
+      hash = "sha256-nM6KkVRURuQFZLXZ2etLU1a1+BoaJnfjngo07TFbe58=";
     })
   ];
 

@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://www.cabextract.org.uk/cabextract-${version}.tar.gz";
-    sha256 = "sha256-tVRtsRVeTHGP89SyeFc2BPMN1kw8W/1GV80Im4I6OsY=";
+    hash = "sha256-tVRtsRVeTHGP89SyeFc2BPMN1kw8W/1GV80Im4I6OsY=";
   };
 
   # Let's assume that fnmatch works for cross-compilation, otherwise it gives an error:

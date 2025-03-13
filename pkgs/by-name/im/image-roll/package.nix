@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
     owner = "weclaw1";
     repo = pname;
     rev = version;
-    sha256 = "sha256-CC40TU38bJFnbJl2EHqeB9RBvbVUrBmRdZVS2GxqGu4=";
+    hash = "sha256-CC40TU38bJFnbJl2EHqeB9RBvbVUrBmRdZVS2GxqGu4=";
   };
 
   useFetchCargoVendor = true;

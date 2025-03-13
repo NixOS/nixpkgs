@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     owner = "ClusterLabs";
     repo = "pacemaker";
     rev = "Pacemaker-${version}";
-    sha256 = "sha256-L/LQS5XLps0pqTfMAh1ZiR00SVltrNxMl6DXQhXBw1Q=";
+    hash = "sha256-L/LQS5XLps0pqTfMAh1ZiR00SVltrNxMl6DXQhXBw1Q=";
   };
 
   nativeBuildInputs = [

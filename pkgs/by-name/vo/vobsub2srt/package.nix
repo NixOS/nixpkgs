@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "ruediger";
     repo = "VobSub2SRT";
     rev = "a6abbd61127a6392d420bbbebdf7612608c943c2";
-    sha256 = "sha256-i6V2Owb8GcTcWowgb/BmdupOSFsYiCF2SbC9hXa26uY=";
+    hash = "sha256-i6V2Owb8GcTcWowgb/BmdupOSFsYiCF2SbC9hXa26uY=";
   };
 
   env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.cc.isGNU [ "-std=c++11" ]);

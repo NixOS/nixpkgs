@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://ftp.musicbrainz.org/pub/musicbrainz/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-3V6PHJrq1ELiO3SanMkzY3LmLoitcHmitiiVsDkMsoI=";
+    hash = "sha256-3V6PHJrq1ELiO3SanMkzY3LmLoitcHmitiiVsDkMsoI=";
   };
 
   NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-framework CoreFoundation -framework IOKit";

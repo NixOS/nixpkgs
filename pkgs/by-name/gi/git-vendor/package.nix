@@ -8,7 +8,7 @@
 
 let
   version = "1.3.0";
-  sha256 = "sha256-CFv9gZQHeEiZctJFyB6PJ1dVNkrQ7PlVtgZuteQQTJ0=";
+  hash = "sha256-CFv9gZQHeEiZctJFyB6PJ1dVNkrQ7PlVtgZuteQQTJ0=";
 
 in
 stdenv.mkDerivation {
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
     owner = "brettlangdon";
     repo = "git-vendor";
     rev = "v${version}";
-    inherit sha256;
+    inherit hash;
   };
 
   outputs = [

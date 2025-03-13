@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "cortesi";
     repo = "modd";
     rev = "6083f9d1c171bd3292945672dab654a70d205945";
-    sha256 = "sha256-KDZyOnytDLyybHTgU1v/NpiomeHXMIUHiQ+Xpmwyo0w=";
+    hash = "sha256-KDZyOnytDLyybHTgU1v/NpiomeHXMIUHiQ+Xpmwyo0w=";
   };
 
   vendorHash = "sha256-O+hJRMSwV/9NHxbaLjloCWnfPugfRYaXNve098wjbqQ=";

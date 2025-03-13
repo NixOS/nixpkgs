@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   version = "4.6";
   src = fetchurl {
     url = "https://tibleiz.net/download/copper-${version}-src.tar.gz";
-    sha256 = "sha256-tyxAMJp4H50eBz8gjt2O3zj5fq6nOIXKX47wql8aUUg=";
+    hash = "sha256-tyxAMJp4H50eBz8gjt2O3zj5fq6nOIXKX47wql8aUUg=";
   };
   buildInputs = [
     libffi

@@ -18,7 +18,7 @@ perlPackages.buildPerlPackage rec {
     owner = "convos-chat";
     repo = "convos";
     rev = "v${version}";
-    sha256 = "sha256-dBvXo8y4OMKcb0imgnnzoklnPN3YePHDvy5rIBOkTfs=";
+    hash = "sha256-dBvXo8y4OMKcb0imgnnzoklnPN3YePHDvy5rIBOkTfs=";
   };
 
   nativeBuildInputs = [

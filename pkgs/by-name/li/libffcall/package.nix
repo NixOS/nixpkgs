@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnu/libffcall/libffcall-${version}.tar.gz";
-    sha256 = "sha256-f0IglrQEmLE4kJOVWCXxQbtn7WAUJJ2IQAlGPceEaHk=";
+    hash = "sha256-f0IglrQEmLE4kJOVWCXxQbtn7WAUJJ2IQAlGPceEaHk=";
   };
 
   enableParallelBuilding = false;

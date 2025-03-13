@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     owner = "axboe";
     repo = "fio";
     rev = "fio-${version}";
-    sha256 = "sha256-wM2MWsirhfpbqe9w21hbmXSWDKUfEM2B7K7QWHmMnmE=";
+    hash = "sha256-wM2MWsirhfpbqe9w21hbmXSWDKUfEM2B7K7QWHmMnmE=";
   };
 
   buildInputs = [

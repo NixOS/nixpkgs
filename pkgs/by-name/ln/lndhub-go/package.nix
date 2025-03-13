@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "getAlby";
     repo = "lndhub.go";
     rev = version;
-    sha256 = "sha256-17vvC6J0VdXouGfX4k1kCVRlkXbNSX3AT8QIY8uKDUE=";
+    hash = "sha256-17vvC6J0VdXouGfX4k1kCVRlkXbNSX3AT8QIY8uKDUE=";
   };
 
   vendorHash = "sha256-Vo29w04cRW0syD2tjieKVeZ3srFNuEC3T17birVWn6k=";

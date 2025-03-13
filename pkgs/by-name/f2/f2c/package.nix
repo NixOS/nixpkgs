@@ -10,7 +10,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://www.netlib.org/f2c/src.tgz";
-    sha256 = "sha256-TTPve2fe31/Ad+xFAWy6NUIes2QyUi6NjFucN0pdb5k=";
+    hash = "sha256-TTPve2fe31/Ad+xFAWy6NUIes2QyUi6NjFucN0pdb5k=";
   };
 
   makeFlags = [

@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "KhronosGroup";
     repo = "OpenCL-CLHPP";
     rev = "v${version}";
-    sha256 = "sha256-bIm4tGqwWX0IPKH3BwLgkf0T7YFrkN6vemYvdPrqUpw=";
+    hash = "sha256-bIm4tGqwWX0IPKH3BwLgkf0T7YFrkN6vemYvdPrqUpw=";
   };
 
   nativeBuildInputs = [ cmake python3 ];

@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     owner = "flame";
     repo = "blis";
     rev = version;
-    sha256 = "sha256-joOTyHT87PelKNhL9+1lLqMz22WsENa+Rom41grBb0Y=";
+    hash = "sha256-joOTyHT87PelKNhL9+1lLqMz22WsENa+Rom41grBb0Y=";
   };
 
   inherit blas64;

@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "potree";
     repo = "PotreeConverter";
     rev = "af4666fa1090983d8ce7c11dcf49ba19eda90995";
-    sha256 = "sha256-QYNY+/v6mBEJFiv3i2QS+zqkgWJqeqXSqNoh+ChAiQA=";
+    hash = "sha256-QYNY+/v6mBEJFiv3i2QS+zqkgWJqeqXSqNoh+ChAiQA=";
   };
 
   buildInputs = [

@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://waterlan.home.xs4all.nl/dos2unix/${pname}-${version}.tar.gz";
-    sha256 = "sha256-JkdCRGYIRC60j5bCCvbaMDyzqSs2TnLLfiT4gjnEvzo=";
+    hash = "sha256-JkdCRGYIRC60j5bCCvbaMDyzqSs2TnLLfiT4gjnEvzo=";
   };
 
   nativeBuildInputs = [

@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "GoogleCloudPlatform";
     repo = pname;
     rev = version;
-    sha256 = "sha256-paBj2vaBicXHMEei2HPW+d4fXWf8VnVhvcanXmo/5KI=";
+    hash = "sha256-paBj2vaBicXHMEei2HPW+d4fXWf8VnVhvcanXmo/5KI=";
   };
 
   vendorHash = "sha256-Rh2ZGSfa95Yw8GGjsZjwmj0o4qKpygbPsLCbzUTOBxQ=";

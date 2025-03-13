@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     owner = "open-source-parsers";
     repo = "jsoncpp";
     rev = version;
-    sha256 = "sha256-3msc3B8NyF8PUlNaAHdUDfCpcUmz8JVW2X58USJ5HRw=";
+    hash = "sha256-3msc3B8NyF8PUlNaAHdUDfCpcUmz8JVW2X58USJ5HRw=";
   };
 
   /*

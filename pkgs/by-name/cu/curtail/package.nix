@@ -29,7 +29,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "Huluti";
     repo = "Curtail";
     tag = version;
-    sha256 = "sha256-+TnGCLRJsdqdChqonHGuA4kUEiB9Mfc2aQttyt+uFnM=";
+    hash = "sha256-+TnGCLRJsdqdChqonHGuA4kUEiB9Mfc2aQttyt+uFnM=";
   };
 
   nativeBuildInputs = [

@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/courier/maildrop/${version}/maildrop-${version}.tar.bz2";
-    sha256 = "sha256-foJsAxkXRE8berccH82QODWVZEhG4rOyYONSsc4D6VA=";
+    hash = "sha256-foJsAxkXRE8berccH82QODWVZEhG4rOyYONSsc4D6VA=";
   };
 
   nativeBuildInputs = [ pkg-config ];

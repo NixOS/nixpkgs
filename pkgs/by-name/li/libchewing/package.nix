@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "chewing";
     repo = "libchewing";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-X+4Rr5Mfc4qeJxmHczu4MKgHBvQN1rhqUrJSx8SFnDk=";
+    hash = "sha256-X+4Rr5Mfc4qeJxmHczu4MKgHBvQN1rhqUrJSx8SFnDk=";
   };
 
   buildInputs = [ sqlite ];

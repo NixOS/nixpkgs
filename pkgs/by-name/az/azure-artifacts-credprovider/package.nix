@@ -12,7 +12,7 @@ buildDotnetModule rec {
     owner = "microsoft";
     repo = "artifacts-credprovider";
     rev = "v${version}";
-    sha256 = "sha256-JbcoDs4c/+uKIgVWZkuo4jqd1hlqe+H949jNfkDwZls=";
+    hash = "sha256-JbcoDs4c/+uKIgVWZkuo4jqd1hlqe+H949jNfkDwZls=";
   };
   pname = "azure-artifacts-credprovider";
   projectFile = "CredentialProvider.Microsoft/CredentialProvider.Microsoft.csproj";

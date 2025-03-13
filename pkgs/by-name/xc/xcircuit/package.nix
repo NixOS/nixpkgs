@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     owner = "RTimothyEdwards";
     repo = "XCircuit";
     rev = "0056213308c92bec909e8469a0fa1515b72fc3d2";
-    sha256 = "sha256-LXU5VEkLF1aKYz9ynI1qQjJUwt/zKFMPYj153OgJOOI=";
+    hash = "sha256-LXU5VEkLF1aKYz9ynI1qQjJUwt/zKFMPYj153OgJOOI=";
   };
 
   nativeBuildInputs = [

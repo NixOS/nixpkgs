@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     owner = "vasi";
     repo = "squashfuse";
     rev = version;
-    sha256 = "sha256-76PQB+6ls/RCjEP8Z4DEtX0xemN3srCsLM7DsDqiTVA=";
+    hash = "sha256-76PQB+6ls/RCjEP8Z4DEtX0xemN3srCsLM7DsDqiTVA=";
   };
 
   nativeBuildInputs = [

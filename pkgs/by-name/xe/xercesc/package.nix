@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://apache/xerces/c/3/sources/${pname}-${version}.tar.gz";
-    sha256 = "sha256-lVXx0G+CmH+7RliGJwVRV0BBT9NLTbatLtdqLcCNO94=";
+    hash = "sha256-lVXx0G+CmH+7RliGJwVRV0BBT9NLTbatLtdqLcCNO94=";
   };
 
   buildInputs = [

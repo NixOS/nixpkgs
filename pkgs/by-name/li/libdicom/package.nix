@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ImagingDataCommons";
     repo = "libdicom";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-9n0Gp9+fmTM/shgWC8zpwt1pic9BrvDubOt7f+ZDMeE=";
+    hash = "sha256-9n0Gp9+fmTM/shgWC8zpwt1pic9BrvDubOt7f+ZDMeE=";
   };
 
   patches = [

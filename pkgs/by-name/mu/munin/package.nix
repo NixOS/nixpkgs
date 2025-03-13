@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     owner = "munin-monitoring";
     repo = "munin";
     rev = version;
-    sha256 = "sha256-9PfIzUObm3Nu2k2TFjbQ3cqIDkPz07ZUczEcfm3bpDc=";
+    hash = "sha256-9PfIzUObm3Nu2k2TFjbQ3cqIDkPz07ZUczEcfm3bpDc=";
   };
 
   nativeBuildInputs = [

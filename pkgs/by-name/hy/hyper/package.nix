@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/vercel/hyper/releases/download/v${version}/hyper_${version}_amd64.deb";
-    sha256 = "sha256-jEzZ6MWFaNXBS8CAzfn/ufMPpWcua9HhBFzetWMlH1Y=";
+    hash = "sha256-jEzZ6MWFaNXBS8CAzfn/ufMPpWcua9HhBFzetWMlH1Y=";
   };
 
   nativeBuildInputs = [ dpkg ];

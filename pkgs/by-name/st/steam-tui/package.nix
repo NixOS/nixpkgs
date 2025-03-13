@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
     owner = "dmadisetti";
     repo = pname;
     rev = version;
-    sha256 = "sha256-3vBIpPIsh+7PjTuNNqp7e/pdciOYnzuGkjb/Eks6QJw=";
+    hash = "sha256-3vBIpPIsh+7PjTuNNqp7e/pdciOYnzuGkjb/Eks6QJw=";
   };
 
   useFetchCargoVendor = true;

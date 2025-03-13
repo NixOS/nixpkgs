@@ -15,7 +15,7 @@ buildGoModule rec {
     owner = "alexellis";
     repo = "k3sup";
     rev = version;
-    sha256 = "sha256-WmvCmG/wk63VnfJTFk3HhiaLzCe9O6kdUc7GpYNAwP4=";
+    hash = "sha256-WmvCmG/wk63VnfJTFk3HhiaLzCe9O6kdUc7GpYNAwP4=";
   };
 
   nativeBuildInputs = [ makeWrapper installShellFiles ];

@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "greatscottgadgets";
     repo = "hackrf";
     rev = "v${version}";
-    sha256 = "sha256-b3nGrk2P6ZLYBSCSD7c0aIApCh3ZoVDcFftybqm4vx0=";
+    hash = "sha256-b3nGrk2P6ZLYBSCSD7c0aIApCh3ZoVDcFftybqm4vx0=";
   };
 
   nativeBuildInputs = [

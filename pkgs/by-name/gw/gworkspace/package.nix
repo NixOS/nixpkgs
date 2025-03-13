@@ -13,7 +13,7 @@ clangStdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "ftp://ftp.gnustep.org/pub/gnustep/usr-apps/gworkspace-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-zjBOtVgQAILI5EozTzyO5pKglG2BBrwaZqVJCxT/Pzw=";
+    hash = "sha256-zjBOtVgQAILI5EozTzyO5pKglG2BBrwaZqVJCxT/Pzw=";
   };
 
   # additional dependencies:

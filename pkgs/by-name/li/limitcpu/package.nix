@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/limitcpu/cpulimit-${version}.tar.gz";
-    sha256 = "sha256-lGmU7GDznwMJW4m9dOZguJwUyCq6dUVmk5jjArx7I0w=";
+    hash = "sha256-lGmU7GDznwMJW4m9dOZguJwUyCq6dUVmk5jjArx7I0w=";
   };
 
   buildFlags = with stdenv; [

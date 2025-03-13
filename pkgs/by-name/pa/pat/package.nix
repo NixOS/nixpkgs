@@ -24,7 +24,7 @@ buildGoModule rec {
   patches = [
     (fetchpatch {
       url = "https://github.com/la5nta/pat/commit/5604eac8853216d96d49d7d9947bdc514e195538.patch";
-      sha256 = "sha256-Z9uoZLlhdCslULUxGkc4ao4ptC4ImWzSrfabSA5S/PE=";
+      hash = "sha256-Z9uoZLlhdCslULUxGkc4ao4ptC4ImWzSrfabSA5S/PE=";
     })
   ];
 

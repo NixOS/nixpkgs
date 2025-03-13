@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchgit {
     url = "https://git.launchpad.net/safe-rm";
     rev = "refs/tags/${pname}-${version}";
-    sha256 = "sha256-7+4XwsjzLBCQmHDYNwhlN4Yg3eL43GUEbq8ROtuP2Kw=";
+    hash = "sha256-7+4XwsjzLBCQmHDYNwhlN4Yg3eL43GUEbq8ROtuP2Kw=";
   };
 
   useFetchCargoVendor = true;

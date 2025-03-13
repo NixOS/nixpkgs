@@ -14,7 +14,7 @@ buildGoModule rec {
     owner = "tbvdm";
     repo = "sigtop";
     rev = "v${version}";
-    sha256 = "sha256-wZdQq5u44AcZs2CWRQ92wih5WBzZFywt78+slVBYseg=";
+    hash = "sha256-wZdQq5u44AcZs2CWRQ92wih5WBzZFywt78+slVBYseg=";
   };
 
   vendorHash = "sha256-EWppsnZ/Ch7JjltkejOYKepZUfKNZY9+F7VbzjNCYNU=";

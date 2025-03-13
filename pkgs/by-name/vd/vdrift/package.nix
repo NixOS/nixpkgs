@@ -18,7 +18,7 @@
   data ? fetchsvn {
     url = "svn://svn.code.sf.net/p/vdrift/code/vdrift-data";
     rev = "1446";
-    sha256 = "sha256-KEu49GAOfenPyuaUItt6W9pkuqUNpXgmTSFuc7ThljQ=";
+    hash = "sha256-KEu49GAOfenPyuaUItt6W9pkuqUNpXgmTSFuc7ThljQ=";
   },
 }:
 let
@@ -31,7 +31,7 @@ let
       owner = "vdrift";
       repo = "vdrift";
       rev = "7e9e00c8612b2014d491f026dd86b03f9fb04dcd";
-      sha256 = "sha256-DrzRF4WzwEXCNALq0jz8nHWZ1oYTEsdrvSYVYI1WkTI=";
+      hash = "sha256-DrzRF4WzwEXCNALq0jz8nHWZ1oYTEsdrvSYVYI1WkTI=";
     };
 
     postPatch = ''

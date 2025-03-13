@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     owner = "vkmark";
     repo = "vkmark";
     rev = "ab6e6f34077722d5ae33f6bd40b18ef9c0e99a15";
-    sha256 = "sha256-X1Y2U1aJymKrv3crJLN7tvXHG2W+w0W5gB2g00y4yvc=";
+    hash = "sha256-X1Y2U1aJymKrv3crJLN7tvXHG2W+w0W5gB2g00y4yvc=";
   };
 
   nativeBuildInputs = [

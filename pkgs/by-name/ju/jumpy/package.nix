@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage rec {
     owner = "fishfolk";
     repo = "jumpy";
     rev = "v${version}";
-    sha256 = "sha256-ggePJH2kKJ17aOWRKUnLyolIdSzlc6Axf5Iw74iFfek=";
+    hash = "sha256-ggePJH2kKJ17aOWRKUnLyolIdSzlc6Axf5Iw74iFfek=";
   };
 
   useFetchCargoVendor = true;

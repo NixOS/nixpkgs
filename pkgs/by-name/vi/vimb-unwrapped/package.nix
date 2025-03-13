@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     owner = "fanglingsu";
     repo = "vimb";
     rev = version;
-    sha256 = "sha256-Eq4riJSznKpkW9JJDnTCLxZ9oMJTmWkIoGphOiCcSAg=";
+    hash = "sha256-Eq4riJSznKpkW9JJDnTCLxZ9oMJTmWkIoGphOiCcSAg=";
   };
 
   nativeBuildInputs = [

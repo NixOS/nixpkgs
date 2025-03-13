@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://sg.danny.cz/sg/p/${pname}-${version}.tar.xz";
-    sha256 = "sha256-xMnvr9vrZi4vlxJwfsSQkyvU0BC7ESmueplSZUburb4=";
+    hash = "sha256-xMnvr9vrZi4vlxJwfsSQkyvU0BC7ESmueplSZUburb4=";
   };
 
   meta = with lib; {

@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "uncrustify";
     repo = "uncrustify";
     rev = "uncrustify-${version}";
-    sha256 = "sha256-SsPuqPyv3IFjYtAqANjzK8cdTGsyGBXVLzGWEUl28dg=";
+    hash = "sha256-SsPuqPyv3IFjYtAqANjzK8cdTGsyGBXVLzGWEUl28dg=";
   };
 
   nativeBuildInputs = [

@@ -25,7 +25,7 @@ buildGoModule rec {
     owner = "sentriz";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-+8rKODoADU2k1quKvbijjs/6S/hpkegHhG7Si0LSE0k=";
+    hash = "sha256-+8rKODoADU2k1quKvbijjs/6S/hpkegHhG7Si0LSE0k=";
   };
 
   nativeBuildInputs = [ pkg-config ];

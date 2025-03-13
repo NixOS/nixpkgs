@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     owner = "lainsce";
     repo = "khronos";
     rev = version;
-    sha256 = "sha256-2mO2ZMDxZ7sx2EVTN0tsAv8MisGxlK/1h61N+hOqyGI=";
+    hash = "sha256-2mO2ZMDxZ7sx2EVTN0tsAv8MisGxlK/1h61N+hOqyGI=";
   };
 
   nativeBuildInputs = [

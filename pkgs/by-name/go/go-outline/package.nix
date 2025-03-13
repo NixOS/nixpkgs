@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "ramya-rao-a";
     repo = "go-outline";
     rev = "9736a4bde949f321d201e5eaa5ae2bcde011bf00";
-    sha256 = "sha256-5ns6n1UO9kRSw8iio4dmJDncsyvFeN01bjxHxQ9Fae4=";
+    hash = "sha256-5ns6n1UO9kRSw8iio4dmJDncsyvFeN01bjxHxQ9Fae4=";
   };
 
   vendorHash = "sha256-jYYtSXdJd2eUc80UfwRRMPcX6tFiXE3LbxV3NAdKVKE=";

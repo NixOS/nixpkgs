@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     owner = "morgant";
     repo = "mlvwm";
     rev = version;
-    sha256 = "sha256-ElKmi+ANuB3LPwZTMcr5HEMESjDwENbYnNIGdRP24d0=";
+    hash = "sha256-ElKmi+ANuB3LPwZTMcr5HEMESjDwENbYnNIGdRP24d0=";
   };
 
   nativeBuildInputs = [ installShellFiles ];

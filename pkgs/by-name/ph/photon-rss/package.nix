@@ -13,7 +13,7 @@ buildGoModule rec {
     owner = "~ghost08";
     repo = "photon";
     rev = "5d1f7dd8d0d526096886b03c7bc0ef56cbdd6d79";
-    sha256 = "sha256-2RSGLWfthcChd5YhDSBfLSch6wuTUv1Sh1f7flgzQwc=";
+    hash = "sha256-2RSGLWfthcChd5YhDSBfLSch6wuTUv1Sh1f7flgzQwc=";
   };
 
   buildInputs = [ xorg.libX11 ];

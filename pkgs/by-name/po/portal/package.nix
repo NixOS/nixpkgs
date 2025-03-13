@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "SpatiumPortae";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-hGB82a2WirUL1Tph6EuoITOQGYA0Lo4zOeKPC46B5Qk=";
+    hash = "sha256-hGB82a2WirUL1Tph6EuoITOQGYA0Lo4zOeKPC46B5Qk=";
   };
 
   vendorHash = "sha256-SbNFi5DE3zhTUw0rsX6n+dpYcdDsaDh+zVUrfxgo/4g=";

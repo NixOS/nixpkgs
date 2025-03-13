@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://ampl.com/netlib/ampl/solvers.tgz";
-    sha256 = "sha256-LVmScuIvxmZzywPSBl9T9YcUBJP7UFAa3eWs9r4q3JM=";
+    hash = "sha256-LVmScuIvxmZzywPSBl9T9YcUBJP7UFAa3eWs9r4q3JM=";
   };
 
   patches = [

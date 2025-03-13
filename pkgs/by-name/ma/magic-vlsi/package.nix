@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url    = "http://opencircuitdesign.com/magic/archive/magic-${version}.tgz";
-    sha256 = "sha256-WXvEq3/Qw2UCTtph/r6dQ5xafqASHrAuLzfcXW3Sa7E=";
+    hash = "sha256-WXvEq3/Qw2UCTtph/r6dQ5xafqASHrAuLzfcXW3Sa7E=";
   };
 
   nativeBuildInputs = [ python3 ];

@@ -25,7 +25,7 @@ stdenv.mkDerivation {
     owner = "phulshof";
     repo = "RetroFE";
     rev = "2ddd65a76210d241031c4ac9268255f311df25d1";
-    sha256 = "sha256-uBfECbU2Df/pPpEXXq62S7Ec0YU4lPIsZ8k5UmKD7xQ=";
+    hash = "sha256-uBfECbU2Df/pPpEXXq62S7Ec0YU4lPIsZ8k5UmKD7xQ=";
   };
 
   nativeBuildInputs = [

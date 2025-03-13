@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
     owner = "TD-Sky";
     repo = "conceal";
     rev = "v${version}";
-    sha256 = "sha256-BYLDSRgBba6SoGsL/NTV/OTG1/V9RSr8lisj42JqBRM=";
+    hash = "sha256-BYLDSRgBba6SoGsL/NTV/OTG1/V9RSr8lisj42JqBRM=";
   };
 
   useFetchCargoVendor = true;

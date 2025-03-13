@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-desktop/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-rnylXcngiRSZl0FSOhfSnOIjkVYmvSRioSC/lvR6eas=";
+    hash = "sha256-rnylXcngiRSZl0FSOhfSnOIjkVYmvSRioSC/lvR6eas=";
   };
 
   patches = lib.optionals stdenv.hostPlatform.isLinux [

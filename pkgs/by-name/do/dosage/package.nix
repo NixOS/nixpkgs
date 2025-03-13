@@ -10,7 +10,7 @@ python3Packages.buildPythonApplication rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-mHV/U9Vqv7fSsLYNrCXckkJ1YpsccLd8HsJ78IwLX0Y=";
+    hash = "sha256-mHV/U9Vqv7fSsLYNrCXckkJ1YpsccLd8HsJ78IwLX0Y=";
   };
 
   pyproject = true;

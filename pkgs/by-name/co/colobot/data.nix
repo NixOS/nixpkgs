@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     owner = "colobot";
     repo = "colobot-data";
     rev = "colobot-gold-${version}";
-    sha256 = "sha256-yzIbAzrGsDe6hO0GHF9gjnj7IE8B7+5LDbvjZi4Wtms=";
+    hash = "sha256-yzIbAzrGsDe6hO0GHF9gjnj7IE8B7+5LDbvjZi4Wtms=";
   };
 
   nativeBuildInputs = [

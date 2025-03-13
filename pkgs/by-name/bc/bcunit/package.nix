@@ -16,7 +16,7 @@ stdenv.mkDerivation {
     group = "BC";
     repo = "bcunit";
     rev = "c5eebcc7f794e9567d3c72d15d3f28bffe6bfd0f";
-    sha256 = "sha256-8DSfqHerx/V00SJjTSQaG9Rjqx330iG6sGivBDUvQfA=";
+    hash = "sha256-8DSfqHerx/V00SJjTSQaG9Rjqx330iG6sGivBDUvQfA=";
   };
 
   meta = with lib; {

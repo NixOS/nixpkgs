@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
     owner = "jansc";
     repo = "ncgopher";
     rev = "v${version}";
-    sha256 = "sha256-KrvTwcIeINIBkia6PTnKXp4jFd6GEMBh/xbn0Ot/wmE=";
+    hash = "sha256-KrvTwcIeINIBkia6PTnKXp4jFd6GEMBh/xbn0Ot/wmE=";
   };
 
   useFetchCargoVendor = true;

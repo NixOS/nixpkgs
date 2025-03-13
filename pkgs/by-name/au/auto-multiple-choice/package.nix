@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: rec {
   src = fetchurl {
     url = "https://download.auto-multiple-choice.net/${pname}_${version}_dist.tar.gz";
     # before 1.6.0, the URL pattern used "precomp" instead of "dist".    ^^^^
-    sha256 = "sha256-I9Xw1BN8ZSQhi5F1R3axHBKE6tnaCNk8k5tts6LoMjY=";
+    hash = "sha256-I9Xw1BN8ZSQhi5F1R3axHBKE6tnaCNk8k5tts6LoMjY=";
   };
 
   # There's only the Makefile

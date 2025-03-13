@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/RichiH/vcsh/releases/download/v${version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-VgRA3v5PIKwizmXoc8f/YMoMCDGFJK/m2uhq3EsT1xQ=";
+    hash = "sha256-VgRA3v5PIKwizmXoc8f/YMoMCDGFJK/m2uhq3EsT1xQ=";
   };
 
   nativeBuildInputs = [

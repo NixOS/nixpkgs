@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "transifex";
     repo = "cli";
     rev = "v${version}";
-    sha256 = "sha256-jzAt/SalItGG0KI3GZb4/pT4T7oHwCji2bjNR1BTJXI=";
+    hash = "sha256-jzAt/SalItGG0KI3GZb4/pT4T7oHwCji2bjNR1BTJXI=";
   };
 
   vendorHash = "sha256-3gi2ysIb5256CdmtX38oIfeDwNCQojK+YB9aEm8H01Q=";

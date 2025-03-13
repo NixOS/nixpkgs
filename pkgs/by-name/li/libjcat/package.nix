@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     owner = "hughsie";
     repo = "libjcat";
     rev = version;
-    sha256 = "sha256-3Ttk5nwVLB/Ll4Xz25JODOKHsGrOxKeSF2f+6QhDI2Q=";
+    hash = "sha256-3Ttk5nwVLB/Ll4Xz25JODOKHsGrOxKeSF2f+6QhDI2Q=";
   };
 
   patches = [

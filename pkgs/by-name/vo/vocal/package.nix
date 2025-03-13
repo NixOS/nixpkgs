@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       name = "remove-about.patch";
       url = "https://raw.githubusercontent.com/archlinux/svntogit-community/03543ffdb6cd52ce1a8293f3303225b3afac2431/trunk/remove-about.patch";
-      sha256 = "sha256-yGD7BYOTmqs4h+Odh/mB3fI1HM7GDO6F+QaHpRUD5p4=";
+      hash = "sha256-yGD7BYOTmqs4h+Odh/mB3fI1HM7GDO6F+QaHpRUD5p4=";
     })
   ];
 

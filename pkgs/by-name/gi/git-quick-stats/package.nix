@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     repo = "git-quick-stats";
     owner = "arzzen";
     rev = version;
-    sha256 = "sha256-k8JydRHjEJ4z5uJXCijF7DB9hULbLQ6YfJgFJLX4Ug4=";
+    hash = "sha256-k8JydRHjEJ4z5uJXCijF7DB9hULbLQ6YfJgFJLX4Ug4=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

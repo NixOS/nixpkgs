@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "a";
     repo = "zenmonitor3";
     rev = "a09f0b25d33967fd32f3831304be049b008cdabf";
-    sha256 = "sha256-5N1Hhv2s0cv4Rujw4wFGHyIy7NyKAFThVvAo+xXqSyk=";
+    hash = "sha256-5N1Hhv2s0cv4Rujw4wFGHyIy7NyKAFThVvAo+xXqSyk=";
   };
 
   buildInputs = [ gtk3 ];

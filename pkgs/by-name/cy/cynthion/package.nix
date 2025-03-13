@@ -14,7 +14,7 @@ let
           owner = "amaranth-lang";
           repo = "amaranth";
           rev = "refs/tags/v${version}";
-          sha256 = "sha256-VMgycvxkphdpWIib7aZwh588En145RgYlG2Zfi6nnDo=";
+          hash = "sha256-VMgycvxkphdpWIib7aZwh588En145RgYlG2Zfi6nnDo=";
         };
 
         postPatch = null;

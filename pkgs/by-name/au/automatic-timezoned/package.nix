@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     owner = "maxbrunet";
     repo = "automatic-timezoned";
     rev = "v${version}";
-    sha256 = "sha256-S8VMvFP6MGhZ6zjAbgRGH7WfL5X4KELx60cOrey2/4Q=";
+    hash = "sha256-S8VMvFP6MGhZ6zjAbgRGH7WfL5X4KELx60cOrey2/4Q=";
   };
 
   useFetchCargoVendor = true;

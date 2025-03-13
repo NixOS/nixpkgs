@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     owner = "getomni";
     repo = "gtk";
     rev = "e81b3fbebebf53369cffe1fb662abc400edb04f7";
-    sha256 = "sha256-NSZjkG+rY6h8d7FYq5kipPAjMDAgyaYAgOOOJlfqBCI=";
+    hash = "sha256-NSZjkG+rY6h8d7FYq5kipPAjMDAgyaYAgOOOJlfqBCI=";
   };
 
   propagatedUserEnvPkgs = [

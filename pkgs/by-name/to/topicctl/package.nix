@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "segmentio";
     repo = "topicctl";
     rev = "v${version}";
-    sha256 = "sha256-sYt/t16OVJiWFVqSdLNog/mj1gj/TeY0r7z/gMZspls=";
+    hash = "sha256-sYt/t16OVJiWFVqSdLNog/mj1gj/TeY0r7z/gMZspls=";
   };
 
   vendorHash = "sha256-vPeqStOjoJPYKpdkHQNTBJFKc8NBjTH4A/W9B+HAy1I=";

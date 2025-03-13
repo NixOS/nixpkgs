@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     # https://github.com/HaxeFoundation/neko/pull/224
     (fetchpatch {
       url = "https://github.com/HaxeFoundation/neko/commit/ff5da9b0e96cc0eabc44ad2c10b7a92623ba49ee.patch";
-      sha256 = "sha256-isM7QGPiyXgT2zpIGd+r12vKg7I1rOWYTTWxuECafro=";
+      hash = "sha256-isM7QGPiyXgT2zpIGd+r12vKg7I1rOWYTTWxuECafro=";
     })
   ];
 

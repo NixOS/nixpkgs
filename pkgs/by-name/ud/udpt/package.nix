@@ -8,7 +8,7 @@ rustPlatform.buildRustPackage rec {
     owner = "naim94a";
     repo = "udpt";
     rev = "v${version}";
-    sha256 = "sha256-dWZRl5OiuEmCx7+Id0/feCohH5k/HA47nbPUEo8BBwQ=";
+    hash = "sha256-dWZRl5OiuEmCx7+Id0/feCohH5k/HA47nbPUEo8BBwQ=";
   };
 
   useFetchCargoVendor = true;

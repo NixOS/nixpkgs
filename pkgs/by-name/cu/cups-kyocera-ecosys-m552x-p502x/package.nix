@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchzip {
     url = "https://www.kyoceradocumentsolutions.de/content/download-center/de/drivers/all/Linux_8_1602_ECOSYS_M5521_5526_P5021_5026_zip.download.zip";
-    sha256 = "sha256-XDH5deZmWNghfoO7JaYYvnVq++mbQ8RwLY57L2CKYaY=";
+    hash = "sha256-XDH5deZmWNghfoO7JaYYvnVq++mbQ8RwLY57L2CKYaY=";
   };
 
   installPhase = ''

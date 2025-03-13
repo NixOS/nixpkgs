@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     owner = "gjedeer";
     repo = "tuntox";
     rev = version;
-    sha256 = "sha256-c/0OxUH8iw8nRuVg4Fszf6Z/JiEV+m0B2ofzy81uFu8=";
+    hash = "sha256-c/0OxUH8iw8nRuVg4Fszf6Z/JiEV+m0B2ofzy81uFu8=";
   };
 
   nativeBuildInputs = [
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     # https://github.com/gjedeer/tuntox/pull/67
     (fetchpatch {
       url = "https://github.com/gjedeer/tuntox/compare/a646402f42e120c7148d4de29dbdf5b09027a80a..365d2e5cbc0e3655fb64c204db0515f5f4cdf5a4.patch";
-      sha256 = "sha256-P3uIRnV+pBi3s3agGYUMt2PZU4CRxx/DUR8QPVQ+UN8=";
+      hash = "sha256-P3uIRnV+pBi3s3agGYUMt2PZU4CRxx/DUR8QPVQ+UN8=";
     })
   ];
 

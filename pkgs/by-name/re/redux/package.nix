@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
             lib.replaceStrings [ "." ] [ "_" ] version
           }_Demo_Linux_x86_64.tar.gz"
         ];
-        sha256 = "sha256-eznsdLzgdJ7MyWe5WAEg1MHId5VlfyanoZ6+I9nI/0I=";
+        hash = "sha256-eznsdLzgdJ7MyWe5WAEg1MHId5VlfyanoZ6+I9nI/0I=";
       };
 
   nativeBuildInputs = [

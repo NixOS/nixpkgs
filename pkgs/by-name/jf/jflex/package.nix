@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://jflex.de/release/jflex-${version}.tar.gz";
-    sha256 = "sha256-4MHp7vkf9t8E1z+l6v8T86ArZ5/uFHTlzK4AciTfbfY=";
+    hash = "sha256-4MHp7vkf9t8E1z+l6v8T86ArZ5/uFHTlzK4AciTfbfY=";
   };
 
   sourceRoot = "${pname}-${version}";

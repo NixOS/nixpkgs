@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/cutls/TheDesk/releases/download/v${version}/${pname}_${version}_amd64.deb";
-    sha256 = "sha256-AdjygNnQ3qQB03cGcQ5EB0cY3XXWLrzfCqw/U8tq1Yo=";
+    hash = "sha256-AdjygNnQ3qQB03cGcQ5EB0cY3XXWLrzfCqw/U8tq1Yo=";
   };
 
   nativeBuildInputs = [

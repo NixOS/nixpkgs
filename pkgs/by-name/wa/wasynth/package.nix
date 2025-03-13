@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
     owner = "Rerumu";
     repo = "Wasynth";
     rev = "v${version}";
-    sha256 = "sha256-hbY+epUtYSQrvnAbCELsVcqd3UoXGn24FkzWfrM0K14=";
+    hash = "sha256-hbY+epUtYSQrvnAbCELsVcqd3UoXGn24FkzWfrM0K14=";
   };
 
   # A lock file isn't provided, so it must be added manually.

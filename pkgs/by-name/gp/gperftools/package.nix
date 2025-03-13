@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "gperftools";
     repo = "gperftools";
     rev = "gperftools-${version}";
-    sha256 = "sha256-3ibr8AHzo7txX1U+9oOWA60qeeJs/OGeevv+sgBwQa0=";
+    hash = "sha256-3ibr8AHzo7txX1U+9oOWA60qeeJs/OGeevv+sgBwQa0=";
   };
 
   patches = [

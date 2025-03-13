@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "rhinstaller";
     repo = "isomd5sum";
     rev = version;
-    sha256 = "sha256-c/4CQtAzatfG1Z3SfyB2OZmfJRMnyrZZTqSApsK7R+Q=";
+    hash = "sha256-c/4CQtAzatfG1Z3SfyB2OZmfJRMnyrZZTqSApsK7R+Q=";
   };
 
   strictDeps = true;

@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     owner = "scsitape";
     repo = "stenc";
     tag = version;
-    sha256 = "sha256-L0g285H8bf3g+HDYUDRWBZMOBCnWz3Vm38Ijttu404U=";
+    hash = "sha256-L0g285H8bf3g+HDYUDRWBZMOBCnWz3Vm38Ijttu404U=";
   };
 
   nativeBuildInputs = [

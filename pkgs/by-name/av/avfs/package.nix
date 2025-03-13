@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   version = "1.1.5";
   src = fetchurl {
     url = "mirror://sourceforge/avf/${version}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-rZ87ZBBNYAmgWMcPZwiPeZMJv4UZsUsVSvrSJqRScs8=";
+    hash = "sha256-rZ87ZBBNYAmgWMcPZwiPeZMJv4UZsUsVSvrSJqRScs8=";
   };
 
   nativeBuildInputs = [ pkg-config ];

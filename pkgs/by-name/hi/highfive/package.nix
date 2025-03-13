@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     owner = "BlueBrain";
     repo = "HighFive";
     rev = "v${version}";
-    sha256 = "sha256-Nv+nbel/xGlGTB8sKF0EM1xwz/ZEri5uGB7ma6Ba6fo=";
+    hash = "sha256-Nv+nbel/xGlGTB8sKF0EM1xwz/ZEri5uGB7ma6Ba6fo=";
   };
 
   nativeBuildInputs = [ cmake ];

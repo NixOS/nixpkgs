@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     owner = "vanhauser-thc";
     repo = "thc-hydra";
     rev = "v${version}";
-    sha256 = "sha256-gdMxdFrBGVHA1ZBNFW89PBXwACnXTGJ/e/Z5+xVV5F0=";
+    hash = "sha256-gdMxdFrBGVHA1ZBNFW89PBXwACnXTGJ/e/Z5+xVV5F0=";
   };
 
   postPatch =

@@ -15,12 +15,12 @@ python3Packages.buildPythonApplication rec {
     owner = "garabik";
     repo = "unicode";
     rev = "v${version}";
-    sha256 = "sha256-FHAlZ5HID/FE9+YR7Dmc3Uh7E16QKORoD8g9jgTeQdY=";
+    hash = "sha256-FHAlZ5HID/FE9+YR7Dmc3Uh7E16QKORoD8g9jgTeQdY=";
   };
 
   ucdtxt = fetchurl {
     url = "https://www.unicode.org/Public/15.0.0/ucd/UnicodeData.txt";
-    sha256 = "sha256-gG6a7WUDcZfx7IXhK+bozYcPxWCLTeD//ZkPaJ83anM=";
+    hash = "sha256-gG6a7WUDcZfx7IXhK+bozYcPxWCLTeD//ZkPaJ83anM=";
   };
 
   nativeBuildInputs = [ installShellFiles ];

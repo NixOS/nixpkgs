@@ -22,7 +22,7 @@ python3Packages.buildPythonApplication rec {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    sha256 = "sha256-MyIjcTyKn1aC2th6fCOw4cIqrRKatk2s4QD5R9cm83A=";
+    hash = "sha256-MyIjcTyKn1aC2th6fCOw4cIqrRKatk2s4QD5R9cm83A=";
   };
 
   nativeBuildInputs = [

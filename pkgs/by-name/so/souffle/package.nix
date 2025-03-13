@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     owner = "souffle-lang";
     repo = "souffle";
     rev = version;
-    sha256 = "sha256-U3/1iNOLFzuXiBsVDAc5AXnK4F982Uifp18jjFNUv2o=";
+    hash = "sha256-U3/1iNOLFzuXiBsVDAc5AXnK4F982Uifp18jjFNUv2o=";
   };
 
   patches = [

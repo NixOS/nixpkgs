@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   version = "0.9.20";
   src = fetchurl {
     url = "mirror://sourceforge/etherape/etherape-${version}.tar.gz";
-    sha256 = "sha256-9UsQtWOXB1yYofGS4rMIF+ISWBsJKd0DBOFfqOr1n5Y=";
+    hash = "sha256-9UsQtWOXB1yYofGS4rMIF+ISWBsJKd0DBOFfqOr1n5Y=";
   };
 
   nativeBuildInputs = [

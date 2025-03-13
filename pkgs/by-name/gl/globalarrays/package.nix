@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     owner = "GlobalArrays";
     repo = "ga";
     rev = "v${version}";
-    sha256 = "sha256-p4BNwj269FdNXY2rHfJiv5AbB3YB4v+YHXQRXTNnFnE=";
+    hash = "sha256-p4BNwj269FdNXY2rHfJiv5AbB3YB4v+YHXQRXTNnFnE=";
   };
 
   nativeBuildInputs = [

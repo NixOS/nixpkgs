@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://sourceforge.net/projects/urlan/files/Boron/boron-${version}.tar.gz";
-    sha256 = "sha256-50HKcK2hQpe9k9RIoVa/N5krTRKlW9AsGYTmHITx7Nc=";
+    hash = "sha256-50HKcK2hQpe9k9RIoVa/N5krTRKlW9AsGYTmHITx7Nc=";
   };
 
   # this is not a standard Autotools-like `configure` script

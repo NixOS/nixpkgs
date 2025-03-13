@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/raid/mdadm/mdadm-${version}.tar.xz";
-    sha256 = "sha256-QWcnrh8QgOpuMJDOo23QdoJvw2kVHjarc2VXupIZb58=";
+    hash = "sha256-QWcnrh8QgOpuMJDOo23QdoJvw2kVHjarc2VXupIZb58=";
   };
 
   patches = [

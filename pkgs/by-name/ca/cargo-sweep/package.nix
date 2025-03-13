@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
     owner = "holmgr";
     repo = "cargo-sweep";
     rev = "v${version}";
-    sha256 = "sha256-L9tWTgW8PIjxeby+wa71NPp3kWMYH5D7PNtpk8Bmeyc=";
+    hash = "sha256-L9tWTgW8PIjxeby+wa71NPp3kWMYH5D7PNtpk8Bmeyc=";
   };
 
   useFetchCargoVendor = true;

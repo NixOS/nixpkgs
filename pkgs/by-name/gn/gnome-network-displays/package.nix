@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-network-displays/${lib.versions.majorMinor finalAttrs.version}/gnome-network-displays-${finalAttrs.version}.tar.xz";
-    sha256 = "sha256-FzNaA2Our7gb8FgEmYjRtphGVcQt3pw+wQNyLHtKI4M=";
+    hash = "sha256-FzNaA2Our7gb8FgEmYjRtphGVcQt3pw+wQNyLHtKI4M=";
   };
 
   nativeBuildInputs = [

@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
     owner = "miquels";
     repo = "webdav-server-rs";
     rev = "547602e78783935b4ddd038fb795366c9c476bcc";
-    sha256 = "sha256-nTygUEjAUXD0mRTmjt8/UPVfZA4rP6oop1s/fI5mYeg=";
+    hash = "sha256-nTygUEjAUXD0mRTmjt8/UPVfZA4rP6oop1s/fI5mYeg=";
   };
 
   useFetchCargoVendor = true;

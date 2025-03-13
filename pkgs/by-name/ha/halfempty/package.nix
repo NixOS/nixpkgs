@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     owner = "googleprojectzero";
     repo = "halfempty";
     rev = "v${version}";
-    sha256 = "sha256-YGq6fneAMo2jCpLPrjzRJ0eeOsStKaK5L+lwQfqcfpY=";
+    hash = "sha256-YGq6fneAMo2jCpLPrjzRJ0eeOsStKaK5L+lwQfqcfpY=";
   };
 
   nativeBuildInputs = [

@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "wdas";
     repo = "ptex";
     rev = "v${version}";
-    sha256 = "sha256-PR1ld9rXmL6BK4llznAsD5PNvi3anFMz2i9NDsG95DQ=";
+    hash = "sha256-PR1ld9rXmL6BK4llznAsD5PNvi3anFMz2i9NDsG95DQ=";
   };
 
   outputs = [

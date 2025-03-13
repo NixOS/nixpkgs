@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     owner = "recastnavigation";
     repo = "recastnavigation";
     rev = "405cc095ab3a2df976a298421974a2af83843baf";
-    sha256 = "sha256-WVzDI7+UuAl10Tm1Zjkea/FMk0cIe7pWg0iyFLbwAdI=";
+    hash = "sha256-WVzDI7+UuAl10Tm1Zjkea/FMk0cIe7pWg0iyFLbwAdI=";
   };
 
   postPatch =

@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     owner = "tsl0922";
     repo = "ttyd";
     tag = version;
-    sha256 = "sha256-7e08oBKU7BMZ8328qCfNynCSe7LVZ88+iQZRRKl2YkY=";
+    hash = "sha256-7e08oBKU7BMZ8328qCfNynCSe7LVZ88+iQZRRKl2YkY=";
   };
 
   nativeBuildInputs = [

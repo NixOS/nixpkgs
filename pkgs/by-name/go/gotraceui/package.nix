@@ -20,7 +20,7 @@ buildGoModule rec {
     owner = "dominikh";
     repo = "gotraceui";
     rev = "v${version}";
-    sha256 = "sha256-Rforuh9YlTv/mTpQm0+BaY+Ssc4DAiDCzVkIerP5Uz0=";
+    hash = "sha256-Rforuh9YlTv/mTpQm0+BaY+Ssc4DAiDCzVkIerP5Uz0=";
   };
 
   vendorHash = "sha256-dNV5u6BG+2Nzci6dX/4/4WAeM/zXE5+Ix0HqIsNnm0E=";

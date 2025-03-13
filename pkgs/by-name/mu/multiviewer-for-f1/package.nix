@@ -32,7 +32,7 @@ stdenvNoCC.mkDerivation rec {
 
   src = fetchurl {
     url = "https://releases.multiviewer.dev/download/${id}/multiviewer-for-f1_${version}_amd64.deb";
-    sha256 = "sha256-3UgpjQdZYr48MPoqgHci6Yvo+jxK7oa3THl/JuL8tRo=";
+    hash = "sha256-3UgpjQdZYr48MPoqgHci6Yvo+jxK7oa3THl/JuL8tRo=";
   };
 
   nativeBuildInputs = [

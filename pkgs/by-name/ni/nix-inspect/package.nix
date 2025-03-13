@@ -38,7 +38,7 @@ let
     patches = [
       (fetchpatch {
         url = "https://github.com/bluskript/nix-inspect/commit/e1e05883d42ce0c7029a3d69dce14ae9d057aae6.patch";
-        sha256 = "sha256-bHo+sRc9pICK0ccdiWLRNNvr8QjNCrlcwMvmUHznAtg=";
+        hash = "sha256-bHo+sRc9pICK0ccdiWLRNNvr8QjNCrlcwMvmUHznAtg=";
       })
     ];
 

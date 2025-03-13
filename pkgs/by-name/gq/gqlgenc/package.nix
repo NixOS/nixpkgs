@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "yamashou";
     repo = "gqlgenc";
     rev = "v${version}";
-    sha256 = "sha256-RGHfDrFr2HO4i+YQeNzYrEcU+Xe286f3f5g/yUmpxpA=";
+    hash = "sha256-RGHfDrFr2HO4i+YQeNzYrEcU+Xe286f3f5g/yUmpxpA=";
   };
 
   excludedPackages = [ "example" ];

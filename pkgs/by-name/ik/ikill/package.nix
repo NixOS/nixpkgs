@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
     owner = "pjmp";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-hOQBBwxkVnTkAZJi84qArwAo54fMC0zS+IeYMV04kUs=";
+    hash = "sha256-hOQBBwxkVnTkAZJi84qArwAo54fMC0zS+IeYMV04kUs=";
   };
 
   useFetchCargoVendor = true;

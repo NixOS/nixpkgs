@@ -18,7 +18,7 @@ stdenv.mkDerivation {
     owner = "google";
     repo = "liblc3";
     rev = "v${version}";
-    sha256 = "sha256-OWuj68+YztIh/dPvwqjW7ch7Ph3aiEIDvO9rMkVIrQ8=";
+    hash = "sha256-OWuj68+YztIh/dPvwqjW7ch7Ph3aiEIDvO9rMkVIrQ8=";
   };
 
   outputs = [

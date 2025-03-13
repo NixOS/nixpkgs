@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage rec {
     rev = "v${version}";
     owner = "lf-";
     repo = "nix-doc";
-    sha256 = "sha256-9cuNzq+CBA2jz0LkZb7lh/WISIlKklfovGBAbSo1Mgk=";
+    hash = "sha256-9cuNzq+CBA2jz0LkZb7lh/WISIlKklfovGBAbSo1Mgk=";
   };
 
   doCheck = true;

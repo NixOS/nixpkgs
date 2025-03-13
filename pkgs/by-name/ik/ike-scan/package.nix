@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "royhills";
     repo = "ike-scan";
     rev = version;
-    sha256 = "sha256-mbfg8p3y4aKoXpmLuF9GXAMPEqV5CsvetwGCRDJ9UNY=";
+    hash = "sha256-mbfg8p3y4aKoXpmLuF9GXAMPEqV5CsvetwGCRDJ9UNY=";
   };
 
   nativeBuildInputs = [

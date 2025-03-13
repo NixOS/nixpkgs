@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     owner = "luntergroup";
     repo = "octopus";
     rev = "v${version}";
-    sha256 = "sha256-FAogksVxUlzMlC0BqRu22Vchj6VX+8yNlHRLyb3g1sE=";
+    hash = "sha256-FAogksVxUlzMlC0BqRu22Vchj6VX+8yNlHRLyb3g1sE=";
   };
 
   nativeBuildInputs = [
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   patches = [
     (fetchurl {
       url = "https://github.com/luntergroup/octopus/commit/17a597d192bcd5192689bf38c5836a98b824867a.patch";
-      sha256 = "sha256-VaUr63v7mzhh4VBghH7a7qrqOYwl6vucmmKzTi9yAjY=";
+      hash = "sha256-VaUr63v7mzhh4VBghH7a7qrqOYwl6vucmmKzTi9yAjY=";
     })
   ];
 

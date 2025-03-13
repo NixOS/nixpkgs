@@ -17,7 +17,7 @@ python3Packages.buildPythonApplication rec {
     owner = "deviantfero";
     repo = "wpgtk";
     rev = version;
-    sha256 = "sha256-NlJG9d078TW1jcnVrpBORIIwDUGIAGWZoDbXp9/qRr4=";
+    hash = "sha256-NlJG9d078TW1jcnVrpBORIIwDUGIAGWZoDbXp9/qRr4=";
   };
 
   nativeBuildInputs = [

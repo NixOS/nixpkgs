@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "g-truc";
     repo = "glm";
     rev = version;
-    sha256 = "sha256-GnGyzNRpzuguc3yYbEFtYLvG+KiCtRAktiN+NvbOICE=";
+    hash = "sha256-GnGyzNRpzuguc3yYbEFtYLvG+KiCtRAktiN+NvbOICE=";
   };
 
   outputs = [

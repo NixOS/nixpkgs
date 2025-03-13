@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://apache/commons/daemon/binaries/commons-daemon-${version}-bin.tar.gz";
-    sha256 = "sha256-pfKrZ3duDz5wKTn3+SM+ye3UNN129VWCPOeI7JSuYts=";
+    hash = "sha256-pfKrZ3duDz5wKTn3+SM+ye3UNN129VWCPOeI7JSuYts=";
   };
 
   installPhase = ''

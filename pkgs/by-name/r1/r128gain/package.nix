@@ -16,7 +16,7 @@ python3Packages.buildPythonApplication rec {
     owner = "desbma";
     repo = "r128gain";
     rev = version;
-    sha256 = "sha256-JyKacDqjIKTNl2GjbJPkgbakF8HR4Jd4czAtOaemDH8=";
+    hash = "sha256-JyKacDqjIKTNl2GjbJPkgbakF8HR4Jd4czAtOaemDH8=";
   };
 
   patches = [

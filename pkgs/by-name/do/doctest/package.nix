@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "doctest";
     repo = "doctest";
     rev = "v${version}";
-    sha256 = "sha256-hotO6QVpPn8unYTaQHFgi40A3oLUd++I3aTe293e4Aw=";
+    hash = "sha256-hotO6QVpPn8unYTaQHFgi40A3oLUd++I3aTe293e4Aw=";
   };
 
   patches = [

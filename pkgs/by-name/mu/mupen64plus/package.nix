@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/mupen64plus/mupen64plus-core/releases/download/${version}/mupen64plus-bundle-src-${version}.tar.gz";
-    sha256 = "sha256-KX4XGAzXanuOqAnRob4smO1cc1LccWllqA3rWYsh4TE=";
+    hash = "sha256-KX4XGAzXanuOqAnRob4smO1cc1LccWllqA3rWYsh4TE=";
   };
 
   nativeBuildInputs = [

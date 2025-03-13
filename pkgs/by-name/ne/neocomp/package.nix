@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     owner = "DelusionalLogic";
     repo = "NeoComp";
     rev = "ccd340d7b2dcd3f828aff958a638cc23686aee6f";
-    sha256 = "sha256-tLLEwpAGNVTC+N41bM7pfskIli4Yvc95wH2/NT0OZ+8=";
+    hash = "sha256-tLLEwpAGNVTC+N41bM7pfskIli4Yvc95wH2/NT0OZ+8=";
   };
 
   nativeBuildInputs = [

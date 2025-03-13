@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "vinceliuice";
     repo = "layan-gtk-theme";
     rev = version;
-    sha256 = "sha256-R8QxDMOXzDIfioAvvescLAu6NjJQ9zhf/niQTXZr+yA=";
+    hash = "sha256-R8QxDMOXzDIfioAvvescLAu6NjJQ9zhf/niQTXZr+yA=";
   };
 
   propagatedUserEnvPkgs = [ gtk-engine-murrine ];

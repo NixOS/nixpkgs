@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "crowcpp";
     repo = "crow";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-fokj+KiS6frPVOoOvETxW3ue95kCcYhdhOlN3efzBd4=";
+    hash = "sha256-fokj+KiS6frPVOoOvETxW3ue95kCcYhdhOlN3efzBd4=";
   };
 
   propagatedBuildInputs = [ asio ];

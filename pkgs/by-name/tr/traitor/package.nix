@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "liamg";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-LQfKdjZaTm5z8DUt6He/RJHbOUCUwP3CV3Fyt5rJIfU=";
+    hash = "sha256-LQfKdjZaTm5z8DUt6He/RJHbOUCUwP3CV3Fyt5rJIfU=";
   };
 
   vendorHash = null;

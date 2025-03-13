@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "volatilityfoundation";
     repo = "dwarf2json";
     rev = "e8a1ce85dc33bf2039adc7f8a5f47f3016153720";
-    sha256 = "sha256-hnS00glAcj78mZp5as63CsEn+dcr+GNEkz8iC3KM0h0=";
+    hash = "sha256-hnS00glAcj78mZp5as63CsEn+dcr+GNEkz8iC3KM0h0=";
   };
 
   vendorHash = "sha256-tgs0l+sYdAxMHwVTew++keNpDyrHmevpmOBVIiuL+34=";

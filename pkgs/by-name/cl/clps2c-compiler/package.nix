@@ -33,7 +33,7 @@ buildDotnetModule rec {
       inherit owner;
       repo = pname;
       rev = "CLPS2C-Compiler-${version}";
-      sha256 = "sha256-4gLdrIxyw9BFSxF+EXZqTgUf9Kik6oK7eO9HBUzk4QM=";
+      hash = "sha256-4gLdrIxyw9BFSxF+EXZqTgUf9Kik6oK7eO9HBUzk4QM=";
     })
     keystone-src
   ];

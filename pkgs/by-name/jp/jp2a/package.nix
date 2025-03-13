@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     owner = "Talinx";
     repo = "jp2a";
     rev = "v${version}";
-    sha256 = "sha256-TyXEaHemKfCMyGwK6P2vVL9gPWRLbkaNP0g+/UYGSVc=";
+    hash = "sha256-TyXEaHemKfCMyGwK6P2vVL9gPWRLbkaNP0g+/UYGSVc=";
   };
 
   makeFlags = [ "PREFIX=$(out)" ];

@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnu/direvent/direvent-${version}.tar.gz";
-    sha256 = "sha256-HbvGGSqrZ+NFclFIYD1XDGooKDgMlkIVdir5FSTXlbo=";
+    hash = "sha256-HbvGGSqrZ+NFclFIYD1XDGooKDgMlkIVdir5FSTXlbo=";
   };
 
   meta = with lib; {

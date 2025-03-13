@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     owner = "trackballs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-JKSiNe5mu8rRztUhduGFY6IsSMx6VyBqKcGO5EssI+8=";
+    hash = "sha256-JKSiNe5mu8rRztUhduGFY6IsSMx6VyBqKcGO5EssI+8=";
   };
 
   nativeBuildInputs = [ cmake ];

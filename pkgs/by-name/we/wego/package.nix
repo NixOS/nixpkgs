@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "schachmat";
     repo = pname;
     rev = version;
-    sha256 = "sha256-YGUll0Wi/oulNMXSrSFeAVe+aGpyFeyXRZTW4ngC3Zk=";
+    hash = "sha256-YGUll0Wi/oulNMXSrSFeAVe+aGpyFeyXRZTW4ngC3Zk=";
   };
 
   vendorHash = "sha256-aXrXw/7ZtSZXIKDMZuWPV2zAf0e0lU0QCBhua7tHGEY=";

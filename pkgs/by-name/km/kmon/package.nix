@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
     owner = "orhun";
     repo = "kmon";
     rev = "v${version}";
-    sha256 = "sha256-DzbbeVZifuxgmIu3yNv6EI7Jyh8MA0/oSaR5IEPNUN8=";
+    hash = "sha256-DzbbeVZifuxgmIu3yNv6EI7Jyh8MA0/oSaR5IEPNUN8=";
   };
 
   useFetchCargoVendor = true;

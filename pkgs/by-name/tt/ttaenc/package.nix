@@ -9,7 +9,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://sourceforge/tta/ttaenc-${finalAttrs.version}-src.tgz";
-    sha256 = "sha256-ssnIsBWsxYZPCCoBV/LgnFEX0URTIctheOkltEi+PcY=";
+    hash = "sha256-ssnIsBWsxYZPCCoBV/LgnFEX0URTIctheOkltEi+PcY=";
   };
 
   patches = [

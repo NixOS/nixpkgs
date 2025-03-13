@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://downloads.xiph.org/releases/libshout/${pname}-${version}.tar.gz";
-    sha256 = "sha256-OcvU8O/f3cl1XYghfkf48tcQj6dn+dWKK6JqFtj3yRA=";
+    hash = "sha256-OcvU8O/f3cl1XYghfkf48tcQj6dn+dWKK6JqFtj3yRA=";
   };
 
   patches = [

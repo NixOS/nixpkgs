@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/google/google-java-format/releases/download/v${version}/google-java-format-${version}-all-deps.jar";
-    sha256 = "sha256-JRV3l6CpcsIpC1vHFTDE961kZFgCXjSEQSpuWpuMmqY=";
+    hash = "sha256-JRV3l6CpcsIpC1vHFTDE961kZFgCXjSEQSpuWpuMmqY=";
   };
 
   dontUnpack = true;

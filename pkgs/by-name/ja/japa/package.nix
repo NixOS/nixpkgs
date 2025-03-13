@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://kokkinizita.linuxaudio.org/linuxaudio/downloads/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-t9wlZr+pE5u6yTpATWDQseC/rf4TFbtG0X9tnTdkB8I=";
+    hash = "sha256-t9wlZr+pE5u6yTpATWDQseC/rf4TFbtG0X9tnTdkB8I=";
   };
 
   buildInputs = [

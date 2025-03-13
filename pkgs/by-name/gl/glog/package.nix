@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: rec {
     owner = "google";
     repo = "glog";
     rev = "v${version}";
-    sha256 = "sha256-+nwWP6VBmhgU7GCPSEGUzvUSCc48wXME181WpJ5ABP4=";
+    hash = "sha256-+nwWP6VBmhgU7GCPSEGUzvUSCc48wXME181WpJ5ABP4=";
   };
 
   postPatch = lib.optionalString finalAttrs.finalPackage.doCheck ''

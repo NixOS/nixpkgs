@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://linux.tlk.fr/games/TecnoballZ/download/tecnoballz-${finalAttrs.version}.tgz";
-    sha256 = "sha256-WRW76e+/eXE/KwuyOjzTPFQnKwNznbIrUrz14fnvgug=";
+    hash = "sha256-WRW76e+/eXE/KwuyOjzTPFQnKwNznbIrUrz14fnvgug=";
   };
 
   nativeBuildInputs = [

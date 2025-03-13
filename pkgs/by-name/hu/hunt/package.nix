@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
     owner = "LyonSyonII";
     repo = "hunt-rs";
     rev = "v${version}";
-    sha256 = "sha256-aNU4Ik033+kl9ZPHFzaAXZ6Hs+b7m5s0lpr1oovmWm0=";
+    hash = "sha256-aNU4Ik033+kl9ZPHFzaAXZ6Hs+b7m5s0lpr1oovmWm0=";
   };
 
   useFetchCargoVendor = true;

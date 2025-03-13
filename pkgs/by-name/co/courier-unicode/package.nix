@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/courier/courier-unicode/${version}/courier-unicode-${version}.tar.bz2";
-    sha256 = "sha256-uD7mRqR8Kp1pL7bvuThWRmjDLsF51PrAwH6s6KG4/JE=";
+    hash = "sha256-uD7mRqR8Kp1pL7bvuThWRmjDLsF51PrAwH6s6KG4/JE=";
   };
 
   nativeBuildInputs = [

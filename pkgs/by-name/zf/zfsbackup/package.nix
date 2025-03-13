@@ -13,7 +13,7 @@ buildGoModule rec {
     owner = "someone1";
     repo = "zfsbackup-go";
     inherit rev;
-    sha256 = "sha256-ZJ7gtT4AdMLEs2+hJa2Sia0hSoQd3CftdqRsH/oJxd8=";
+    hash = "sha256-ZJ7gtT4AdMLEs2+hJa2Sia0hSoQd3CftdqRsH/oJxd8=";
   };
 
   vendorHash = "sha256-aYAficUFYYhZygfQZyczP49CeouAKKZJW8IFlkFh9lI=";

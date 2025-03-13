@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnu/help2man/help2man-${version}.tar.xz";
-    sha256 = "sha256-TX5P3vLspq/geiaCFRzqeHgeCk6PliIULZ9wwIOi/U8=";
+    hash = "sha256-TX5P3vLspq/geiaCFRzqeHgeCk6PliIULZ9wwIOi/U8=";
   };
 
   strictDeps = true;

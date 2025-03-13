@@ -26,7 +26,7 @@ buildGoModule rec {
     owner = "DarthSim";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-wX29nFmzmbxbaXtwIWZNvueXFv9SKIOqexkc5pEITpw=";
+    hash = "sha256-wX29nFmzmbxbaXtwIWZNvueXFv9SKIOqexkc5pEITpw=";
   };
 
   vendorHash = "sha256-XhF4oizOZ6g0351Q71Wp9IA3aFpocC5xGovDefIoL78=";

@@ -17,7 +17,7 @@ buildGoModule rec {
     owner = "in-toto";
     repo = "witness";
     rev = "v${version}";
-    sha256 = "sha256-ylCUy44sX1KPfQqEldixmLcXkk+Uwca4q1gZRgxHdeg=";
+    hash = "sha256-ylCUy44sX1KPfQqEldixmLcXkk+Uwca4q1gZRgxHdeg=";
   };
   vendorHash = "sha256-CR95CsGthdjq/dtxmIjmZlQeyKimumCP9mWr6tNrBJI=";
 

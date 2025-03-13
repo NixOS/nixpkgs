@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://maven/io/swagger/${pname}-cli/${version}/${jarfilename}";
-    sha256 = "sha256-ECfOEr4JRCv/i/7YuQvj2s5sKBS1Ja0N8C7eTKoGUx4=";
+    hash = "sha256-ECfOEr4JRCv/i/7YuQvj2s5sKBS1Ja0N8C7eTKoGUx4=";
   };
 
   dontUnpack = true;

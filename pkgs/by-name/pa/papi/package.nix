@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     url = "https://bitbucket.org/icl/papi/get/papi-${
       lib.replaceStrings [ "." ] [ "-" ] version
     }-t.tar.gz";
-    sha256 = "sha256-VajhmPW8sEJksfhLjBVlpBH7+AZr4fwKZPAtZxRF1Bk=";
+    hash = "sha256-VajhmPW8sEJksfhLjBVlpBH7+AZr4fwKZPAtZxRF1Bk=";
   };
 
   setSourceRoot = ''

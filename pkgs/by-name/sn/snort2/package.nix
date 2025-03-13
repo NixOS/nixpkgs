@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl rec {
     name = "snort-${finalAttrs.version}.tar.gz";
     url = "https://snort.org/downloads/snort/${name}";
-    sha256 = "sha256-KUAOE/U7GDHguLEOwSJKHLqm3BUzpTIqIN2Au4S0mBw=";
+    hash = "sha256-KUAOE/U7GDHguLEOwSJKHLqm3BUzpTIqIN2Au4S0mBw=";
   };
 
   nativeBuildInputs = [

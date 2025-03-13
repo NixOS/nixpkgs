@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/net-snmp/${pname}-${version}.tar.gz";
-    sha256 = "sha256-i03gE5HnTjxwFL60OWGi1tb6A6zDQoC5WF9JMHRbBUQ=";
+    hash = "sha256-i03gE5HnTjxwFL60OWGi1tb6A6zDQoC5WF9JMHRbBUQ=";
   };
 
   patches =

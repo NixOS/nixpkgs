@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "SR-G";
     repo = pname;
     rev = "${version}-RELEASE";
-    sha256 = "sha256-WooFGIdXIIoJPMqmPpnT+bc+P+IARMSxa3CvXY9++mw=";
+    hash = "sha256-WooFGIdXIIoJPMqmPpnT+bc+P+IARMSxa3CvXY9++mw=";
   };
 
   sourceRoot = "${src.name}/src";

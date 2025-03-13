@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://linux.tlk.fr/games/Powermanga/download/powermanga-${finalAttrs.version}.tgz";
-    sha256 = "sha256-2nU/zoOQWm2z/Y6mXHDFfWYjYshsQp1saVRBcUT5Q+g=";
+    hash = "sha256-2nU/zoOQWm2z/Y6mXHDFfWYjYshsQp1saVRBcUT5Q+g=";
   };
 
   nativeBuildInputs = [

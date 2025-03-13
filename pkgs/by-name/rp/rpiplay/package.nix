@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     owner = "FD-";
     repo = "RPiPlay";
     rev = "35dd995fceed29183cbfad0d4110ae48e0635786";
-    sha256 = "sha256-qe7ZTT45NYvzgnhRmz15uGT/FnGi9uppbKVbmch5B9A=";
+    hash = "sha256-qe7ZTT45NYvzgnhRmz15uGT/FnGi9uppbKVbmch5B9A=";
   };
 
   patches = [

@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "bbonev";
     repo = "yascreen";
     rev = "v${version}";
-    sha256 = "sha256-z7j2yceiUyJNdyoVXAPiINln2/MUMqVJh+VwQnmzO2A=";
+    hash = "sha256-z7j2yceiUyJNdyoVXAPiINln2/MUMqVJh+VwQnmzO2A=";
   };
 
   nativeBuildInputs = [ go-md2man ];
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   patches = [
     (fetchpatch {
       url = "https://github.com/bbonev/yascreen/commit/a30b8fce66a3db9f1194fede30a48424ed3d696b.patch";
-      sha256 = "sha256-Bnaf3OVMlqyYMdGsJ6fF3oYsWT01FcjuRzxi6xfbnZg=";
+      hash = "sha256-Bnaf3OVMlqyYMdGsJ6fF3oYsWT01FcjuRzxi6xfbnZg=";
     })
   ];
 

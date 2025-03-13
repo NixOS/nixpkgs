@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "simple-evcorr";
     repo = "sec";
     rev = version;
-    sha256 = "sha256-iK2v/qCWw4jdSEpx6cwSB98n5iFmbCyJH0lIpUG8pAU=";
+    hash = "sha256-iK2v/qCWw4jdSEpx6cwSB98n5iFmbCyJH0lIpUG8pAU=";
   };
 
   buildInputs = [ perl ];

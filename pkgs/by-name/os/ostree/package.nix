@@ -57,7 +57,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/ostreedev/ostree/releases/download/v${version}/libostree-${version}.tar.xz";
-    sha256 = "sha256-VOM4fe4f8WAxoGeayitg2pCrf0omwhGCIzPH8jAAq+4=";
+    hash = "sha256-VOM4fe4f8WAxoGeayitg2pCrf0omwhGCIzPH8jAAq+4=";
   };
 
   patches = [

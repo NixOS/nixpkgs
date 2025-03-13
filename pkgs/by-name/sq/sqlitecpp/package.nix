@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "SRombauts";
     repo = "sqlitecpp";
     rev = finalAttrs.version;
-    sha256 = "sha256-rsVFk4FsonrwpBd3TonkxilwWeOBocH8AyeB+71OBdI=";
+    hash = "sha256-rsVFk4FsonrwpBd3TonkxilwWeOBocH8AyeB+71OBdI=";
   };
 
   nativeBuildInputs = [

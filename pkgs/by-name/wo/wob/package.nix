@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     owner = "francma";
     repo = "wob";
     rev = version;
-    sha256 = "sha256-9LFAEo17w861ldMJU+t1oLAKoM6gJc4Em4tSwQDXbKU=";
+    hash = "sha256-9LFAEo17w861ldMJU+t1oLAKoM6gJc4Em4tSwQDXbKU=";
   };
 
   strictDeps = true;

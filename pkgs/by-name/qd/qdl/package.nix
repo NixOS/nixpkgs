@@ -17,7 +17,7 @@ stdenv.mkDerivation {
     owner = "linux-msm";
     repo = "qdl";
     rev = "cbd46184d33af597664e08aff2b9181ae2f87aa6";
-    sha256 = "sha256-0PeOunYXY0nEEfGFGdguf5+GNN950GhPfMaD8h1ez/8=";
+    hash = "sha256-0PeOunYXY0nEEfGFGdguf5+GNN950GhPfMaD8h1ez/8=";
   };
 
   nativeBuildInputs = [ pkg-config ];

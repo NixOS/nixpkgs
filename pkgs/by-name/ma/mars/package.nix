@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     owner = "thelaui";
     repo = "M.A.R.S.";
     rev = "84664cda094efe6e49d9b1550e4f4f98c33eefa2";
-    sha256 = "sha256-SWLP926SyVTjn+UT1DCaJSo4Ue0RbyzImVnlNJQksS0=";
+    hash = "sha256-SWLP926SyVTjn+UT1DCaJSo4Ue0RbyzImVnlNJQksS0=";
   };
   nativeBuildInputs = [ cmake ];
   buildInputs = [

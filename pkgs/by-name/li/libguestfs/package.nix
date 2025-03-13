@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://libguestfs.org/download/${lib.versions.majorMinor finalAttrs.version}-stable/libguestfs-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-bj/GrBkmdfe8KEClYbs2o209Wo36f4jqL1P4z2AqF34=";
+    hash = "sha256-bj/GrBkmdfe8KEClYbs2o209Wo36f4jqL1P4z2AqF34=";
   };
 
   strictDeps = true;

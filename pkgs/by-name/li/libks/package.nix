@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     owner = "signalwire";
     repo = "libks";
     rev = "v${version}";
-    sha256 = "sha256-zKL+ukAdKiCC4wh55hnZpebFraIdKWDFsRfhVzhUNj0=";
+    hash = "sha256-zKL+ukAdKiCC4wh55hnZpebFraIdKWDFsRfhVzhUNj0=";
   };
 
   patches = [

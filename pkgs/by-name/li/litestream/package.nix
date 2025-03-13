@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "benbjohnson";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-p858gK+ICKDQ+/LUiBaxF/kfrZzQAXnYMZDFU8kNCJ4=";
+    hash = "sha256-p858gK+ICKDQ+/LUiBaxF/kfrZzQAXnYMZDFU8kNCJ4=";
   };
 
   ldflags = [

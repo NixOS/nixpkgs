@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     owner = "rockandska";
     repo = "fzf-obc";
     rev = version;
-    sha256 = "sha256-KIAlDpt1Udl+RLp3728utgQ9FCjZz/OyoG92MOJmgPI=";
+    hash = "sha256-KIAlDpt1Udl+RLp3728utgQ9FCjZz/OyoG92MOJmgPI=";
   };
 
   dontBuild = true;

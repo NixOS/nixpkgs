@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
     owner = "ammgws";
     repo = "autotiling-rs";
     rev = "v${version}";
-    sha256 = "sha256-LQbmF2M6pWa0QEbKF770x8TFLMGrJeq5HnXHvLrDDPA=";
+    hash = "sha256-LQbmF2M6pWa0QEbKF770x8TFLMGrJeq5HnXHvLrDDPA=";
   };
 
   useFetchCargoVendor = true;

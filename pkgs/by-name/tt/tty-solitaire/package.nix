@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "mpereira";
     repo = "tty-solitaire";
     rev = "v${version}";
-    sha256 = "sha256-zMLNWJieHxHALFQoSkdAxGbUBGuZnznLX86lI3P21F0=";
+    hash = "sha256-zMLNWJieHxHALFQoSkdAxGbUBGuZnznLX86lI3P21F0=";
   };
 
   patches = [
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       name = "ncurses-6.3.patch";
       url = "https://github.com/mpereira/tty-solitaire/commit/4d066c564d086ce272b78cb8f80717a7fb83c261.patch";
-      sha256 = "sha256-E1XVG0be6JH3K1y7UPap93s8xk8Nk0dKLdKHcJ7mA8E=";
+      hash = "sha256-E1XVG0be6JH3K1y7UPap93s8xk8Nk0dKLdKHcJ7mA8E=";
     })
   ];
 

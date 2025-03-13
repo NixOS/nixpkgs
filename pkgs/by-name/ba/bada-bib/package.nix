@@ -27,7 +27,7 @@ python3Packages.buildPythonApplication rec {
     owner = "RogerCrocker";
     repo = "BadaBib";
     tag = "v${version}";
-    sha256 = "sha256-8lpkmQCVh94+qhFJijAIVyYeJRFz2u/OYR1C5E+gtOE=";
+    hash = "sha256-8lpkmQCVh94+qhFJijAIVyYeJRFz2u/OYR1C5E+gtOE=";
   };
 
   nativeBuildInputs = [

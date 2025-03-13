@@ -43,7 +43,7 @@ buildGoModule rec {
     owner = "lxc";
     repo = "distrobuilder";
     rev = "refs/tags/distrobuilder-${version}";
-    sha256 = "sha256-cIzIoLQmg1kgI1QRAmFh/ca88PJBW2yIY92BKHKwTMk=";
+    hash = "sha256-cIzIoLQmg1kgI1QRAmFh/ca88PJBW2yIY92BKHKwTMk=";
     fetchSubmodules = false;
   };
 

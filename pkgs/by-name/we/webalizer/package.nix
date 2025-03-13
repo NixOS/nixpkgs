@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://debian/pool/main/w/webalizer/webalizer_${version}.orig.tar.gz";
-    sha256 = "sha256-7a3bWqQcxKCBoVAOP6lmFdS0G8Eghrzt+ZOAGM557Y0=";
+    hash = "sha256-7a3bWqQcxKCBoVAOP6lmFdS0G8Eghrzt+ZOAGM557Y0=";
   };
 
   # Workaround build failure on -fno-common toolchains:

@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
     owner = "eraserhd";
     repo = "parinfer-rust";
     rev = "d84828b453e158d06406f6b5e9056f6b54ff76c9";
-    sha256 = "sha256-Q2fYogfn5QcNDEie4sUaVydAmDmcFXnsvz35cxPCf+M=";
+    hash = "sha256-Q2fYogfn5QcNDEie4sUaVydAmDmcFXnsvz35cxPCf+M=";
   };
 
   useFetchCargoVendor = true;

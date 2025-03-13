@@ -15,7 +15,7 @@ buildGo123Module rec {
     owner = "pete911";
     repo = "certinfo";
     rev = "v${version}";
-    sha256 = "sha256-BI5gYWKGMU0wLvnArG41bLWj+9ipe/GARKRX0fwz4ag=";
+    hash = "sha256-BI5gYWKGMU0wLvnArG41bLWj+9ipe/GARKRX0fwz4ag=";
   };
 
   # clipboard functionality not working on Darwin

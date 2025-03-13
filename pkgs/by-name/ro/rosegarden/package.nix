@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/rosegarden/${pname}-${version}.tar.xz";
-    sha256 = "sha256-VmltXEu7Qn7lViT2ICn+6zJlzDSlFG6P69evRRX0iTI=";
+    hash = "sha256-VmltXEu7Qn7lViT2ICn+6zJlzDSlFG6P69evRRX0iTI=";
   };
 
   postPhase = ''

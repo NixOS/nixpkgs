@@ -15,7 +15,7 @@ buildGoModule rec {
     owner = "ivaaaan";
     repo = "smug";
     rev = "v${version}";
-    sha256 = "sha256-9So81tZwQa3rQYgVO+KjOlTVIzlm/e2K5C/qULZeA7U=";
+    hash = "sha256-9So81tZwQa3rQYgVO+KjOlTVIzlm/e2K5C/qULZeA7U=";
   };
 
   vendorHash = "sha256-vaDUzVRmpmNn8/vUPeR1U5N6T4llFRIk9A1lum8uauU=";

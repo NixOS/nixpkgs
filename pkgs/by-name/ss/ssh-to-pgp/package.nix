@@ -13,7 +13,7 @@ buildGoModule rec {
     owner = "Mic92";
     repo = "ssh-to-pgp";
     rev = version;
-    sha256 = "sha256-Pd/bbXwvWHjU2ETKlcODO1F6211JnlK7pU74Mu01UvU=";
+    hash = "sha256-Pd/bbXwvWHjU2ETKlcODO1F6211JnlK7pU74Mu01UvU=";
   };
 
   vendorHash = "sha256-69XsFBg7SdvSieQaKUDUESLtAh8cigyt47NQBO3mHpo=";

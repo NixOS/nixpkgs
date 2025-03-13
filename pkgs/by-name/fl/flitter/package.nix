@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
     owner = "alexozer";
     repo = "flitter";
     rev = "v${version}";
-    sha256 = "sha256-8e13kSQEjzzf+j4uTrocVioZjJ6lAz+80dLfWwjPb9o=";
+    hash = "sha256-8e13kSQEjzzf+j4uTrocVioZjJ6lAz+80dLfWwjPb9o=";
   };
 
   useFetchCargoVendor = true;

@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "arun11299";
     repo = "cpp-jwt";
     rev = "v${version}";
-    sha256 = "sha256-5hVsFanTCT/uLLXrnb2kMvmL6qs9RXVkvxdWaT6m4mk=";
+    hash = "sha256-5hVsFanTCT/uLLXrnb2kMvmL6qs9RXVkvxdWaT6m4mk=";
   };
 
   # fix reported version

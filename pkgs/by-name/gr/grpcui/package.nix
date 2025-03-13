@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "fullstorydev";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Tmema+cMPDGuX6Y8atow58GdGMj7croHyj8oiDXSEYk=";
+    hash = "sha256-Tmema+cMPDGuX6Y8atow58GdGMj7croHyj8oiDXSEYk=";
   };
 
   vendorHash = "sha256-a19m+HY6SQ+06LXUDba9KRHRKNxLjzKmldJQaaI6nro=";

@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     # https://gitlab.gnome.org/World/dLeyna/-/merge_requests/6
     (fetchpatch {
       url = "https://github.com/gentoo/gentoo/raw/4a0982b49a1d94aa785b05d9b7d256c26c499910/net-libs/dleyna-connector-dbus/files/meson-1.2.0.patch";
-      sha256 = "sha256-/p2OaPO5ghWtPotwIir2TtcFF5IDFN9FFuyqPHevuFI=";
+      hash = "sha256-/p2OaPO5ghWtPotwIir2TtcFF5IDFN9FFuyqPHevuFI=";
     })
   ];
 

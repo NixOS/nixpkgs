@@ -16,7 +16,7 @@ python3Packages.buildPythonApplication rec {
     owner = "noctuid";
     repo = "zscroll";
     rev = version;
-    sha256 = "sha256-gEluWzCbztO4N1wdFab+2xH7l9w5HqZVzp2LrdjHSRM=";
+    hash = "sha256-gEluWzCbztO4N1wdFab+2xH7l9w5HqZVzp2LrdjHSRM=";
   };
 
   doCheck = false;

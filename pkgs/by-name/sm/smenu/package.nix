@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "p-gen";
     repo = "smenu";
     rev = "v${version}";
-    sha256 = "sha256-pAbtTqDIdDWReeaRK7UHXh/PS5f44/PRWaICluH02ec=";
+    hash = "sha256-pAbtTqDIdDWReeaRK7UHXh/PS5f44/PRWaICluH02ec=";
   };
 
   buildInputs = [ ncurses ];

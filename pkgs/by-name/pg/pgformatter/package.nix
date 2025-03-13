@@ -29,7 +29,7 @@ perlPackages.buildPerlPackage rec {
     # Fix an uninitialized variable error. Remove with the next release.
     (fetchpatch {
       url = "https://github.com/darold/pgFormatter/commit/c2622c47d48cee47effecbf58a588c3cd3a7bf1a.patch";
-      sha256 = "sha256-WnQIOvfuzL2HrwtL0HaaYObrBxhXDu82jxGcqggQVhc=";
+      hash = "sha256-WnQIOvfuzL2HrwtL0HaaYObrBxhXDu82jxGcqggQVhc=";
     })
   ];
 

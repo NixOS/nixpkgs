@@ -151,7 +151,7 @@ stdenv.mkDerivation rec {
     owner = "inspircd";
     repo = "inspircd";
     rev = "v${version}";
-    sha256 = "sha256-Aulhg2CbtcpsxkH5kXkp4EoZF5/F9pOXJc1S08S5P08=";
+    hash = "sha256-Aulhg2CbtcpsxkH5kXkp4EoZF5/F9pOXJc1S08S5P08=";
   };
 
   outputs = [ "bin" "lib" "man" "doc" "out" ];

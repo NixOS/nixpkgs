@@ -12,12 +12,12 @@ let
   nnueBigFile = "nn-1111cefa1111.nnue";
   nnueBig = fetchurl {
     url = "https://tests.stockfishchess.org/api/nn/${nnueBigFile}";
-    sha256 = "sha256-ERHO+hERa3cWG9SxTatMUPJuWSDHVvSGFZK+Pc1t4XQ=";
+    hash = "sha256-ERHO+hERa3cWG9SxTatMUPJuWSDHVvSGFZK+Pc1t4XQ=";
   };
   nnueSmallFile = "nn-37f18f62d772.nnue";
   nnueSmall = fetchurl {
     url = "https://tests.stockfishchess.org/api/nn/${nnueSmallFile}";
-    sha256 = "sha256-N/GPYtdy8xB+HWqso4mMEww8hvKrY+ZVX7vKIGNaiZ0=";
+    hash = "sha256-N/GPYtdy8xB+HWqso4mMEww8hvKrY+ZVX7vKIGNaiZ0=";
   };
 in
 rustPlatform.buildRustPackage rec {

@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "Public";
     repo = "fileshare";
     rev = "v${version}";
-    sha256 = "sha256-00MxPivZngQ2I7Hopz2MipJFnbvSZU0HF2wZucmEWQ4=";
+    hash = "sha256-00MxPivZngQ2I7Hopz2MipJFnbvSZU0HF2wZucmEWQ4=";
   };
 
   postPatch = ''

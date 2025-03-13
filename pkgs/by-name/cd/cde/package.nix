@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "usnistgov";
     repo = "corr-CDE";
     rev = "v${version}";
-    sha256 = "sha256-s375gtqBWx0GGXALXR+fN4bb3tmpvPNu/3bNz+75UWU=";
+    hash = "sha256-s375gtqBWx0GGXALXR+fN4bb3tmpvPNu/3bNz+75UWU=";
   };
 
   # The build is small, so there should be no problem

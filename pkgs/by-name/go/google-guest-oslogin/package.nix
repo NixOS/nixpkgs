@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "GoogleCloudPlatform";
     repo = "guest-oslogin";
     rev = version;
-    sha256 = "sha256-9QCB94HVbeLjioJuSN1Aa+EqFncojPoWFxw5mS9bDGw=";
+    hash = "sha256-9QCB94HVbeLjioJuSN1Aa+EqFncojPoWFxw5mS9bDGw=";
   };
 
   postPatch = ''

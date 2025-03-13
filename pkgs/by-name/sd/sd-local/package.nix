@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "screwdriver-cd";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-CBEdE15lAMMawTsfc45ptHsC2AbqFP6v4/nnktytwvc=";
+    hash = "sha256-CBEdE15lAMMawTsfc45ptHsC2AbqFP6v4/nnktytwvc=";
   };
 
   vendorHash = "sha256-rAFfyMlnhDrb+f04S9+hNygXPaoG9mheQMxaJtXxBVw=";

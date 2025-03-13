@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   src = fetchzip {
     url = "https://github.com/vassalengine/vassal/releases/download/${version}/${pname}-${version}-linux.tar.bz2";
-    sha256 = "sha256-eFFzUssElsLkCLgbojF6VQ8hzn15NYljBH/I7k98LMk=";
+    hash = "sha256-eFFzUssElsLkCLgbojF6VQ8hzn15NYljBH/I7k98LMk=";
   };
 
   buildInputs = [

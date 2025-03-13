@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     owner = "emersion";
     repo = "libdisplay-info";
     rev = version;
-    sha256 = "sha256-6xmWBrPHghjok43eIDGeshpUEQTuwWLXNHg7CnBUt3Q=";
+    hash = "sha256-6xmWBrPHghjok43eIDGeshpUEQTuwWLXNHg7CnBUt3Q=";
   };
 
   depsBuildBuild = [ pkg-config ];

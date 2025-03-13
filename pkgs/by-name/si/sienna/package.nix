@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/SimonLarsen/${pname}/releases/download/v${version}/${pname}-${version}.love";
-    sha256 = "sha256-1bFjhN7jL/PMYMJH1ete6uyHTYsTGgoP60sf/sJTLlU=";
+    hash = "sha256-1bFjhN7jL/PMYMJH1ete6uyHTYsTGgoP60sf/sJTLlU=";
   };
 
   icon = fetchurl {

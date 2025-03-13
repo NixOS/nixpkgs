@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     owner = "n64dev";
     repo = "cen64";
     rev = "ee6db7d803a77b474e73992fdc25d76b9723d806";
-    sha256 = "sha256-/CraSu/leNA0dl8NVgFjvKdOWrC9/namAz5NSxtPr+I=";
+    hash = "sha256-/CraSu/leNA0dl8NVgFjvKdOWrC9/namAz5NSxtPr+I=";
   };
 
   nativeBuildInputs = [ cmake ];

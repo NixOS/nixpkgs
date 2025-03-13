@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "herrjulz";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Oa4z8n+q7LKWMnwk+xj9UunzOa3ChaPBCTo828yYJGQ=";
+    hash = "sha256-Oa4z8n+q7LKWMnwk+xj9UunzOa3ChaPBCTo828yYJGQ=";
   };
 
   patches = [

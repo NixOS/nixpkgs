@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "FNA-XNA";
     repo = "FAudio";
     rev = version;
-    sha256 = "sha256-nPU225LLQYN0D1LUsp9XGm2bCcB5WLpD3TcGDiWCe0c=";
+    hash = "sha256-nPU225LLQYN0D1LUsp9XGm2bCcB5WLpD3TcGDiWCe0c=";
   };
 
   nativeBuildInputs = [ cmake ];

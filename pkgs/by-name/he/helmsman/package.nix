@@ -13,7 +13,7 @@ buildGoModule rec {
     owner = "Praqma";
     repo = "helmsman";
     rev = "v${version}";
-    sha256 = "sha256-u/Fj3A81hH7i1yTg+kcqCPrwEkj0cyhZvNzRYURDoZU=";
+    hash = "sha256-u/Fj3A81hH7i1yTg+kcqCPrwEkj0cyhZvNzRYURDoZU=";
   };
 
   subPackages = [ "cmd/helmsman" ];

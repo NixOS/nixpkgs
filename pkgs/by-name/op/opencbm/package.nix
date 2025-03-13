@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "OpenCBM";
     repo = "OpenCBM";
     rev = "v${version}";
-    sha256 = "sha256-5lj5F79Gbhrvi9dxKGobdyDyBLGcptAtxx9SANhLrKw=";
+    hash = "sha256-5lj5F79Gbhrvi9dxKGobdyDyBLGcptAtxx9SANhLrKw=";
   };
 
   makefile = "LINUX/Makefile";

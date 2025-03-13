@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "bemasher";
     repo = "rtlamr";
     rev = "dcdddc5a6e7717a038e9346d0adcf9669e4f60b7";
-    sha256 = "sha256-r3dMCpNBCQsqSlFYYfOtVMMgPOagWks6PPWOn5PsLZs";
+    hash = "sha256-r3dMCpNBCQsqSlFYYfOtVMMgPOagWks6PPWOn5PsLZs";
   };
 
   vendorHash = "sha256-uT6zfsWgIot0EMNqwtwJNFXN/WaAyOGfcYJjuyOXT4g=";

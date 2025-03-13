@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   src = fetchgit {
     url = "https://erdgeist.org/gitweb/opentracker";
     rev = "110868ec4ebe60521d5a4ced63feca6a1cf0aa2a";
-    sha256 = "sha256-SuElfmk7zONolTiyg0pyvbfvyJRn3r9OrXwpTzLw8LI=";
+    hash = "sha256-SuElfmk7zONolTiyg0pyvbfvyJRn3r9OrXwpTzLw8LI=";
   };
 
   buildInputs = [

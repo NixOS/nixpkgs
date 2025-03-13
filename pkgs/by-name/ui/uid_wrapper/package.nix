@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://samba/cwrap/uid_wrapper-${version}.tar.gz";
-    sha256 = "sha256-9mB9hketooqW+rg8Sa1y/IPrbTiZHKJ7JJWzWP8Pbew=";
+    hash = "sha256-9mB9hketooqW+rg8Sa1y/IPrbTiZHKJ7JJWzWP8Pbew=";
   };
 
   nativeBuildInputs = [

@@ -57,7 +57,7 @@ let
 
     src = fetchurl {
       url = "${baseUrl}/${version}/Ubuntu/Installer/synology-drive-client-${buildNumber}.x86_64.deb";
-      sha256 = "sha256-VeS5bPcMM4JDCSH5GXkl4OgQjrPKaNDh5PfX28/zqaU=";
+      hash = "sha256-VeS5bPcMM4JDCSH5GXkl4OgQjrPKaNDh5PfX28/zqaU=";
     };
 
     nativeBuildInputs = [
@@ -101,7 +101,7 @@ let
 
     src = fetchurl {
       url = "${baseUrl}/${version}/Mac/Installer/synology-drive-client-${buildNumber}.dmg";
-      sha256 = "sha256-VyhROpQCeVHNxxYgPUZdAlng15aJ1/IYadz30FThlsw=";
+      hash = "sha256-VyhROpQCeVHNxxYgPUZdAlng15aJ1/IYadz30FThlsw=";
     };
 
     nativeBuildInputs = [

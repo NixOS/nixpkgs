@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     owner = "flightaware";
     repo = "dump1090";
     rev = "v${version}";
-    sha256 = "sha256-rc4mg+Px+0p2r38wxIah/rHqWjHSU0+KCPgqj/Gl3oo=";
+    hash = "sha256-rc4mg+Px+0p2r38wxIah/rHqWjHSU0+KCPgqj/Gl3oo=";
   };
 
   patches = [

@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
     owner = "vamolessa";
     repo = "verco";
     rev = "v${version}";
-    sha256 = "sha256-M3Utrt350I67kqzEH130tgBIiI7rY8ODCSxgMohWWWM=";
+    hash = "sha256-M3Utrt350I67kqzEH130tgBIiI7rY8ODCSxgMohWWWM=";
   };
 
   useFetchCargoVendor = true;

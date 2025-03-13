@@ -13,7 +13,7 @@ buildGoModule rec {
     owner = "akhilrex";
     repo = pname;
     rev = "3179a875b8b638fb86d0e829d12a9761c1cd7f90";
-    sha256 = "sha256-vhxIm20ZUi+RusrAsSY54tv/D570/oMO5qLz9dNqgqo=";
+    hash = "sha256-vhxIm20ZUi+RusrAsSY54tv/D570/oMO5qLz9dNqgqo=";
   };
 
   vendorHash = "sha256-xY9xNuJhkWPgtqA/FBVIp7GuWOv+3nrz6l3vaZVLlIE=";

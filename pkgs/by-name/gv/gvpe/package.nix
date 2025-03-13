@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://ftp.gnu.org/gnu/gvpe/gvpe-${version}.tar.gz";
-    sha256 = "sha256-8evVctclu5QOCAdxocEIZ8NQnc2DFvYRSBRQPcux6LM=";
+    hash = "sha256-8evVctclu5QOCAdxocEIZ8NQnc2DFvYRSBRQPcux6LM=";
   };
 
   nativeBuildInputs = [ pkg-config ];

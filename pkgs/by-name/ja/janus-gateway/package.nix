@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     owner = "meetecho";
     repo = "janus-gateway";
     rev = "v${version}";
-    sha256 = "sha256-Y4MdbB706aziKPxM9y/3uCKpc60dMDlV0xgugDjfa7A=";
+    hash = "sha256-Y4MdbB706aziKPxM9y/3uCKpc60dMDlV0xgugDjfa7A=";
   };
 
   nativeBuildInputs = [

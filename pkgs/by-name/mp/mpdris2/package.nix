@@ -19,7 +19,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "eonpatapon";
     repo = pname;
     rev = version;
-    sha256 = "sha256-1Y6K3z8afUXeKhZzeiaEF3yqU0Ef7qdAj9vAkRlD2p8=";
+    hash = "sha256-1Y6K3z8afUXeKhZzeiaEF3yqU0Ef7qdAj9vAkRlD2p8=";
   };
 
   preConfigure = ''

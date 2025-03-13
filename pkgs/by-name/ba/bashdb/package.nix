@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/bashdb/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-MBdtKtKMWwCy4tIcXqGu+PuvQKj52fcjxnxgUx87czA=";
+    hash = "sha256-MBdtKtKMWwCy4tIcXqGu+PuvQKj52fcjxnxgUx87czA=";
   };
 
   patches = [

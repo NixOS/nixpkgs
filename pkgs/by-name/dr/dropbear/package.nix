@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://matt.ucc.asn.au/dropbear/releases/dropbear-${version}.tar.bz2";
-    sha256 = "sha256-54k23/w5Xy4NsJkyHWvmWRkJZrmXErVcUw3QoYIuCl4=";
+    hash = "sha256-54k23/w5Xy4NsJkyHWvmWRkJZrmXErVcUw3QoYIuCl4=";
   };
 
   CFLAGS = lib.pipe (lib.attrNames dflags) [

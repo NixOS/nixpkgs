@@ -13,7 +13,7 @@ buildGoModule rec {
     owner = "cupcakearmy";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-rladzcW6l5eR6ICj4kKd4e2R9vRIV/1enCzHLFdQDlk=";
+    hash = "sha256-rladzcW6l5eR6ICj4kKd4e2R9vRIV/1enCzHLFdQDlk=";
   };
 
   vendorHash = "sha256-riAjjIrG00vJweaFHc3ArhaAQb08v6cYUJsNys4Hwio=";

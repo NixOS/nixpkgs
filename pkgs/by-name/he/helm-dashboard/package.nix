@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "komodorio";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-hjIo2AEXNcFK0z4op59NnC2R8GspF5t808DZ72AxgMw=";
+    hash = "sha256-hjIo2AEXNcFK0z4op59NnC2R8GspF5t808DZ72AxgMw=";
   };
 
   vendorHash = "sha256-ROffm1SGYnhUcp46nzQ951eaeQdO1pb+f8AInm0eSq0=";

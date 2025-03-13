@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://f00l.de/pcapfix/pcapfix-${version}.tar.gz";
-    sha256 = "sha256-bL6/b5npdrGrdok5JK65DNh8MWUILRUmTBkz8POz4Ow=";
+    hash = "sha256-bL6/b5npdrGrdok5JK65DNh8MWUILRUmTBkz8POz4Ow=";
   };
 
   postPatch = ''sed -i "s|/usr|$out|" Makefile'';

@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     url = "https://www.bluej.org/download/files/BlueJ-linux-${
       builtins.replaceStrings [ "." ] [ "" ] version
     }.deb";
-    sha256 = "sha256-sOT86opMa9ytxJlfURIsD06HiP+j+oz3lQ0DqmLV1wE=";
+    hash = "sha256-sOT86opMa9ytxJlfURIsD06HiP+j+oz3lQ0DqmLV1wE=";
   };
 
   nativeBuildInputs = [

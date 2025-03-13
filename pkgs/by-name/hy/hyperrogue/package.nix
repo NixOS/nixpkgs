@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "zenorogue";
     repo = "hyperrogue";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-/ERMR4JtlIsZ5mvPKTjcjiUfX5/7DTqT0Zc/LEFdZ+M=";
+    hash = "sha256-/ERMR4JtlIsZ5mvPKTjcjiUfX5/7DTqT0Zc/LEFdZ+M=";
   };
 
   env = {

@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "sekrit-twc";
     repo = "zimg";
     rev = "release-${version}";
-    sha256 = "sha256-DCSqHCnOyIvKtIAfprb8tgtzLn67Ix6BWyeIliu0HO4=";
+    hash = "sha256-DCSqHCnOyIvKtIAfprb8tgtzLn67Ix6BWyeIliu0HO4=";
   };
 
   outputs = [

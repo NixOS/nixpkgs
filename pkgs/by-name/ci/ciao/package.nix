@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     owner = "ciao-lang";
     repo = "ciao";
     rev = "v${version}";
-    sha256 = "sha256-vjDiYL6yVfLo7NrVKdYRxMUrg7aqQHTezqNoDJcsEuI=";
+    hash = "sha256-vjDiYL6yVfLo7NrVKdYRxMUrg7aqQHTezqNoDJcsEuI=";
   };
 
   configurePhase = ''

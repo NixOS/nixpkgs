@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "wjdp";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-8tkk476kGEfHo3XGu3/0r6fhX1c4vkYiUACpw0uEu2g=";
+    hash = "sha256-8tkk476kGEfHo3XGu3/0r6fhX1c4vkYiUACpw0uEu2g=";
   };
 
   vendorHash = "sha256-dTn5aYb5IHFbksmhkXSTJtI0Gnn8Uz0PMZPFzFKMo38=";

@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "google";
     repo = "double-conversion";
     rev = "v${version}";
-    sha256 = "sha256-M80H+azCzQYa4/gBLWv5GNNhEuHsH7LbJ/ajwmACnrM=";
+    hash = "sha256-M80H+azCzQYa4/gBLWv5GNNhEuHsH7LbJ/ajwmACnrM=";
   };
 
   nativeBuildInputs = [ cmake ];

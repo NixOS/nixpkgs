@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchMavenArtifact {
     artifactId = "redshift-jdbc42";
     groupId = "com.amazon.redshift";
-    sha256 = "sha256-TO/JXh/pZ7tUZGfHqkzgZx18gLnISvnPVyGavzFv6vo=";
+    hash = "sha256-TO/JXh/pZ7tUZGfHqkzgZx18gLnISvnPVyGavzFv6vo=";
     inherit version;
   };
 

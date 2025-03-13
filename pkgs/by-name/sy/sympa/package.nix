@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
     owner = "sympa-community";
     repo = "sympa";
     rev = version;
-    sha256 = "sha256-XvLTO2Wau34zMoi+5d16JnWd/K96w2py9xC5oLlRfRM=";
+    hash = "sha256-XvLTO2Wau34zMoi+5d16JnWd/K96w2py9xC5oLlRfRM=";
   };
 
   configureFlags = [

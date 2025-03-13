@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     owner = "en-wl";
     repo = "wordlist";
     rev = "rel-${version}";
-    sha256 = "sha256-J61jhpnZcXMnoGlSuSCrKDZnnyp3Snjr+fUpTVKX64g=";
+    hash = "sha256-J61jhpnZcXMnoGlSuSCrKDZnnyp3Snjr+fUpTVKX64g=";
   };
 
   postPatch = ''

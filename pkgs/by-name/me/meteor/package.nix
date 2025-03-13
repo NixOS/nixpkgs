@@ -8,7 +8,7 @@ let
   srcs = {
     x86_64-linux = fetchurl {
       url = "https://static-meteor.netdna-ssl.com/packages-bootstrap/${version}/meteor-bootstrap-os.linux.x86_64.tar.gz";
-      sha256 = "sha256-ovsE7jUJIKf96WEoITXECUlPo+o1tEKvHzCc7Xgj614=";
+      hash = "sha256-ovsE7jUJIKf96WEoITXECUlPo+o1tEKvHzCc7Xgj614=";
     };
     x86_64-darwin = fetchurl {
       url = "https://static-meteor.netdna-ssl.com/packages-bootstrap/${version}/meteor-bootstrap-os.osx.x86_64.tar.gz";

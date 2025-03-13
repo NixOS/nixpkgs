@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
     owner = "asonix";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-q0h+H3260CSpZemVuyaiwSHDi8yKXUX8Df9ih3IzAWo=";
+    hash = "sha256-q0h+H3260CSpZemVuyaiwSHDi8yKXUX8Df9ih3IzAWo=";
   };
 
   useFetchCargoVendor = true;

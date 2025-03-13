@@ -34,7 +34,7 @@ python3Packages.buildPythonApplication rec {
     owner = "perseas";
     repo = "Pyrseas";
     rev = version;
-    sha256 = "sha256-+MxnxvbLMxK1Ak+qKpKe3GHbzzC+XHO0eR7rl4ON9H4=";
+    hash = "sha256-+MxnxvbLMxK1Ak+qKpKe3GHbzzC+XHO0eR7rl4ON9H4=";
   };
 
   propagatedBuildInputs = with python3Packages; [

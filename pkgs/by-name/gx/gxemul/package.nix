@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://gavare.se/gxemul/src/${pname}-${version}.tar.gz";
-    sha256 = "sha256-ecRDfG+MqQT0bTOsNgYqZf3PSpKiSEeOQIqxEpXPjoM=";
+    hash = "sha256-ecRDfG+MqQT0bTOsNgYqZf3PSpKiSEeOQIqxEpXPjoM=";
   };
 
   buildInputs = [

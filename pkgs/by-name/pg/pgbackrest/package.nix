@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     owner = "pgbackrest";
     repo = "pgbackrest";
     rev = "release/${version}";
-    sha256 = "sha256-Q0WZLbtn+qJLs2jop5S92NFC6QBtCQnU3AEEcm6MSVI=";
+    hash = "sha256-Q0WZLbtn+qJLs2jop5S92NFC6QBtCQnU3AEEcm6MSVI=";
   };
 
   strictDeps = true;

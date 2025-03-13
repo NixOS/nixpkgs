@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     # Versioned archive of objconv sources maintained by orivej.
     url = "https://archive.org/download/objconv/${pname}-${version}.zip";
-    sha256 = "sha256-DFyo+8fvHEr+PMfMkBhxGliFr6y+i868SAKNHskMzHw=";
+    hash = "sha256-DFyo+8fvHEr+PMfMkBhxGliFr6y+i868SAKNHskMzHw=";
   };
 
   nativeBuildInputs = [ unzip ];

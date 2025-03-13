@@ -15,7 +15,7 @@ buildGoModule rec {
     owner = "alajmo";
     repo = "mani";
     rev = "v${version}";
-    sha256 = "sha256-LxW9LPK4cXIXhBWPhOYWLeV5PIf+o710SWX8JVpZhPI=";
+    hash = "sha256-LxW9LPK4cXIXhBWPhOYWLeV5PIf+o710SWX8JVpZhPI=";
   };
 
   vendorHash = "sha256-8ckflry+KsEu+QgqjocXg6yyfS9R7fCfCMXwUqUSlhE=";

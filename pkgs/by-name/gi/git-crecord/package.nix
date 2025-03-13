@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "andrewshadura";
     repo = "git-crecord";
     tag = version;
-    sha256 = "sha256-zsrMAD9EU+TvkWfWl9x6WbMXuw7YEz50LxQzSFVkKdQ=";
+    hash = "sha256-zsrMAD9EU+TvkWfWl9x6WbMXuw7YEz50LxQzSFVkKdQ=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [ docutils ];

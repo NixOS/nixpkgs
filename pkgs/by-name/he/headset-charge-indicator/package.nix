@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     owner = "centic9";
     repo = "headset-charge-indicator";
     rev = "6e20f81a4d6118c7385b831044c468af83103193";
-    sha256 = "sha256-eaAbqeFY+B3CcKJywC3vaRsWZNQENTbALc7L7uW0W6U=";
+    hash = "sha256-eaAbqeFY+B3CcKJywC3vaRsWZNQENTbALc7L7uW0W6U=";
   };
 
   nativeBuildInputs = [

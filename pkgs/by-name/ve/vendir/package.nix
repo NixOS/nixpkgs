@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "vmware-tanzu";
     repo = "carvel-vendir";
     rev = "v${version}";
-    sha256 = "sha256-QiuSFi/su4cQVee6mUI/EKCrybe6cviqQuGIugWTJOc=";
+    hash = "sha256-QiuSFi/su4cQVee6mUI/EKCrybe6cviqQuGIugWTJOc=";
   };
 
   vendorHash = null;

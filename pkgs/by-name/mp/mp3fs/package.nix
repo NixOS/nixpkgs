@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     owner = "khenriks";
     repo = "mp3fs";
     rev = "v${version}";
-    sha256 = "sha256-dF+DfkNKvYOucS6KjYR1MMGxayM+1HVS8mbmaavmgKM=";
+    hash = "sha256-dF+DfkNKvYOucS6KjYR1MMGxayM+1HVS8mbmaavmgKM=";
   };
 
   postPatch = ''

@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     owner = "NetworkConfiguration";
     repo = "dhcpcd";
     rev = "v${version}";
-    sha256 = "sha256-Qtg9jOFMR/9oWJDmoNNcEAMxG6G1F187HF4MMBJIoTw=";
+    hash = "sha256-Qtg9jOFMR/9oWJDmoNNcEAMxG6G1F187HF4MMBJIoTw=";
   };
 
   nativeBuildInputs = [ pkg-config ];

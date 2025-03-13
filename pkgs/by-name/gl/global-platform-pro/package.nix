@@ -32,7 +32,7 @@ maven.buildMavenPackage rec {
     owner = "martinpaljak";
     repo = "GlobalPlatformPro";
     rev = "v${version}";
-    sha256 = "sha256-yy2WOLDetBrbNRf6HvvPdNPD51ujXomI2a2Hj6eVx1Q=";
+    hash = "sha256-yy2WOLDetBrbNRf6HvvPdNPD51ujXomI2a2Hj6eVx1Q=";
   };
 
   mvnJdk = jdk11;

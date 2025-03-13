@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     owner = "openucx";
     repo = "ucx";
     rev = "v${version}";
-    sha256 = "sha256-ve9/h8DntyEClZA0P/iIg8WAuWOwYD7yzfKeN779eIo=";
+    hash = "sha256-ve9/h8DntyEClZA0P/iIg8WAuWOwYD7yzfKeN779eIo=";
   };
 
   outputs = [

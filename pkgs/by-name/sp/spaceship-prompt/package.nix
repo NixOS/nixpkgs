@@ -12,7 +12,7 @@ stdenvNoCC.mkDerivation rec {
     owner = "denysdovhan";
     repo = "spaceship-prompt";
     rev = "v${version}";
-    sha256 = "sha256-a7z/z++dmwMqIrutOc74ljz/Tu/wuEuQaN2XRBMtOvw=";
+    hash = "sha256-a7z/z++dmwMqIrutOc74ljz/Tu/wuEuQaN2XRBMtOvw=";
   };
 
   strictDeps = true;

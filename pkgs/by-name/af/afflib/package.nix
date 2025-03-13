@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     owner = "sshock";
     repo = "AFFLIBv3";
     rev = "v${version}";
-    sha256 = "sha256-xkqBfTftzn+rgeuoaKfHP7vQmy4VZuaCq8VFlfZTUE4=";
+    hash = "sha256-xkqBfTftzn+rgeuoaKfHP7vQmy4VZuaCq8VFlfZTUE4=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

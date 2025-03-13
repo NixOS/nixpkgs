@@ -25,7 +25,7 @@ stdenv.mkDerivation {
     owner = "anura-engine";
     repo = "anura";
     rev = "65d85b6646099db1d5cd25d31321bb434a3f94f1";
-    sha256 = "sha256-hb4Sn7uI+eXLaGb4zkEy4w+ByQJ6FqkoMUYFsyiFCeE=";
+    hash = "sha256-hb4Sn7uI+eXLaGb4zkEy4w+ByQJ6FqkoMUYFsyiFCeE=";
     fetchSubmodules = true;
   };
 

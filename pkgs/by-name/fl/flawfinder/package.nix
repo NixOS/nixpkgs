@@ -10,7 +10,7 @@ python3.pkgs.buildPythonApplication rec {
 
   src = fetchurl {
     url = "https://dwheeler.com/flawfinder/flawfinder-${version}.tar.gz";
-    sha256 = "sha256-/lUJgdNwq/oKKWcTRswLA4Ipqb2QsjnqsPAfEiEt9hg=";
+    hash = "sha256-/lUJgdNwq/oKKWcTRswLA4Ipqb2QsjnqsPAfEiEt9hg=";
   };
 
   # Project is using a combination of bash/Python for the tests

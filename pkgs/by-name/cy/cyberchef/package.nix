@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchzip {
     url = "https://github.com/gchq/CyberChef/releases/download/v${version}/CyberChef_v${version}.zip";
-    sha256 = "sha256-eOMo7kdxC5HfmMrKUhGZU3vnBXibO2Fz1ftIS9RAbjY=";
+    hash = "sha256-eOMo7kdxC5HfmMrKUhGZU3vnBXibO2Fz1ftIS9RAbjY=";
     stripRoot = false;
   };
 

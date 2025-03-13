@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "benmcollins";
     repo = "libjwt";
     rev = "v${version}";
-    sha256 = "sha256-0gFMeSW4gfbI6MUctcN8UuKhMDswaT8BzHTV2VuwZzc=";
+    hash = "sha256-0gFMeSW4gfbI6MUctcN8UuKhMDswaT8BzHTV2VuwZzc=";
   };
 
   buildInputs = [

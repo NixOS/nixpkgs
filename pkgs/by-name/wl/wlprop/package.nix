@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "https://gist.github.com/f313386043395ff06570e02af2d9a8e0";
     rev = "758c548bfb4be5b437c428c8062b3987f126f002";
-    sha256 = "sha256-ZJ9LYYrU2cNYikiVNTlEcI4QXcoqfl7iwk3Be+NhGG8=";
+    hash = "sha256-ZJ9LYYrU2cNYikiVNTlEcI4QXcoqfl7iwk3Be+NhGG8=";
   };
 
   strictDeps = true;

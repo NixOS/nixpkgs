@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
 
           "https://web.archive.org/web/20230106200319/https://sources.debian.org/data/main/u/unzip/6.0-27/debian/patches/28-cve-2022-0529-and-cve-2022-0530.patch"
         ];
-        sha256 = "sha256-on79jElQ+z2ULWAq14RpluAqr9d6itHiZwDkKubBzTc=";
+        hash = "sha256-on79jElQ+z2ULWAq14RpluAqr9d6itHiZwDkKubBzTc=";
       })
       # Clang 16 makes implicit declarations an error by default for C99 and newer, causing the
       # configure script to fail to detect errno and the directory libraries on Darwin.

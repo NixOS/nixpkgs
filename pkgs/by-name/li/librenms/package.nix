@@ -33,7 +33,7 @@ phpPackage.buildComposerProject2 rec {
     owner = "librenms";
     repo = pname;
     tag = version;
-    sha256 = "sha256-BzMtUYIKbfyap8TNmGy5RReKraOoafC0Jrnq8L5URtM=";
+    hash = "sha256-BzMtUYIKbfyap8TNmGy5RReKraOoafC0Jrnq8L5URtM=";
   };
 
   vendorHash = "sha256-Dkoq84E9zP7lrvZ9P5hSIeVJf1hjuhebGxEhBkYNWDM=";

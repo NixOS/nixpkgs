@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchzip {
     url = "https://github.com/micronaut-projects/micronaut-starter/releases/download/v${version}/micronaut-cli-${version}.zip";
-    sha256 = "sha256-PGdxwq20nSc7TPBlfo6HWxx6DmbZ1OFyeh4cZvsQ3Hg=";
+    hash = "sha256-PGdxwq20nSc7TPBlfo6HWxx6DmbZ1OFyeh4cZvsQ3Hg=";
   };
 
   nativeBuildInputs = [

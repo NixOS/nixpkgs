@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     owner = "intel";
     repo = "intel-hybrid-driver";
     rev = version;
-    sha256 = "sha256-uYX7RoU1XVzcC2ea3z/VBjmT47xmzK67Y4LaiFXyJZ8=";
+    hash = "sha256-uYX7RoU1XVzcC2ea3z/VBjmT47xmzK67Y4LaiFXyJZ8=";
   };
 
   patches = [
