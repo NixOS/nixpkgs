@@ -81,7 +81,6 @@ stdenv.mkDerivation (finalAttrs: {
   checkPhase =
     let
       exampleAudio = fetchurl {
-        # Sourced from https://archive.org/details/Dvorak_Symphony_9/01.Adagio-Allegro_Molto.mp3
         name = "Dvorak_Symphony_9_1.mp3";
         url = "https://archive.org/download/Dvorak_Symphony_9/01.Adagio-Allegro_Molto.mp3";
         hash = "sha256-I+Ve3/OpL+3Joc928F8M21LhCH2eQfRtaJVx9mNOLW0=";
