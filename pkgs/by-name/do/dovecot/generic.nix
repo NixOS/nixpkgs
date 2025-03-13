@@ -25,7 +25,6 @@
   libstemmer,
   cyrus_sasl,
   nixosTests,
-  fetchpatch,
   rpcsvc-proto,
   libtirpc,
   withApparmor ? false,
@@ -41,11 +40,22 @@
   sqlite,
   withLua ? false,
   lua5_3,
+  dovecot-fts-flatcurve,
+  ...
+}:
+{
+  version,
+  hash,
+  patches ? [ ],
+  # Re-exported plugins for this version
+  dovecot_pigeonhole,
+  dovecot_exporter,
+  dovecot_fts_xapian,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "dovecot";
-  version = "2.3.21.1";
+  inherit version;
 
   nativeBuildInputs = [
     flex
@@ -85,8 +95,8 @@ stdenv.mkDerivation rec {
     ++ lib.optional withLua lua5_3;
 
   src = fetchurl {
-    url = "https://dovecot.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.gz";
-    hash = "sha256-LZCheMQpdhEIi/farlSSo7w9WrYyjDoDLrQl0sJJCX4=";
+    url = "https://dovecot.org/releases/${lib.versions.majorMinor version}/dovecot-${version}.tar.gz";
+    inherit hash;
   };
 
   enableParallelBuilding = true;
@@ -103,9 +113,14 @@ stdenv.mkDerivation rec {
       sed -i -s -E 's!\bcat\b!${coreutils}/bin/cat!g' src/lib-smtp/test-bin/*.sh
 
       patchShebangs src/config/settings-get.pl
-
+    ''
+    + lib.optionalString (lib.versions.majorMinor version == "2.3") ''
       # DES-encrypted passwords are not supported by NixPkgs anymore
       sed '/test_password_scheme("CRYPT"/d' -i src/auth/test-libpassword.c
+    ''
+    + lib.optionalString (lib.versions.majorMinor version == "2.4") ''
+      # DES-encrypted passwords are not supported by NixPkgs anymore
+      sed '/test_password_scheme("CRYPT"/d' -i src/lib-auth/test-password-scheme.c
     ''
     + lib.optionalString stdenv.hostPlatform.isLinux ''
       export systemdsystemunitdir=$out/etc/systemd/system
@@ -120,19 +135,11 @@ stdenv.mkDerivation rec {
   '';
 
   patches =
-    [
-      # Fix loading extended modules.
-      ./load-extended-modules.patch
-      # fix openssl 3.0 compatibility
-      (fetchpatch {
-        url = "https://salsa.debian.org/debian/dovecot/-/raw/debian/1%252.3.19.1+dfsg1-2/debian/patches/Support-openssl-3.0.patch";
-        hash = "sha256-PbBB1jIY3jIC8Js1NY93zkV0gISGUq7Nc67Ul5tN7sw=";
-      })
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    lib.optionals stdenv.hostPlatform.isDarwin [
       # fix timespec calls
       ./timespec.patch
-    ];
+    ]
+    ++ patches;
 
   configureFlags =
     [
@@ -197,8 +204,15 @@ stdenv.mkDerivation rec {
       ++ teams.helsinki-systems.members;
     platforms = platforms.unix;
   };
-  passthru.tests = {
-    opensmtpd-interaction = nixosTests.opensmtpd;
-    inherit (nixosTests) dovecot;
+  passthru = {
+    tests = {
+      opensmtpd-interaction = nixosTests.opensmtpd;
+      inherit (nixosTests) dovecot;
+    };
+    inherit dovecot-fts-flatcurve;
+
+    pigeonhole = dovecot_pigeonhole;
+    exporter = dovecot_exporter;
+    fts_xapian = dovecot_fts_xapian;
   };
 }
