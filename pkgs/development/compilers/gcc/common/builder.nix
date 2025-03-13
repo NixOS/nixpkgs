@@ -278,7 +278,6 @@ originalAttrs:
       targetLibDir="''${targetConfig+$targetConfig/}lib"
 
       moveToOutput "$targetLibDir/lib*.so*" "''${!outputLib}"
-      moveToOutput "$targetLibDir/lib*.la"  "''${!outputLib}"
       moveToOutput "$targetLibDir/lib*.dylib" "''${!outputLib}"
       moveToOutput "$targetLibDir/lib*.dll.a" "''${!outputLib}"
       moveToOutput "$targetLibDir/lib*.dll" "''${!outputLib}"
@@ -288,19 +287,18 @@ originalAttrs:
           moveToOutput "$targetLibDir/lib*.a" "''${!outputLib}"
       fi
 
-      for i in "''${!outputLib}"/$targetLibDir/*.{la,py}; do
+      for i in "''${!outputLib}"/$targetLibDir/*.py; do
           substituteInPlace "$i" --replace "$out" "''${!outputLib}"
       done
 
       # Multilib and cross can't exist at the same time, so just use lib64 here
       if [ -n "$enableMultilib" ]; then
           moveToOutput "lib64/lib*.so*" "''${!outputLib}"
-          moveToOutput "lib64/lib*.la"  "''${!outputLib}"
           moveToOutput "lib64/lib*.dylib" "''${!outputLib}"
           moveToOutput "lib64/lib*.dll.a" "''${!outputLib}"
           moveToOutput "lib64/lib*.dll" "''${!outputLib}"
 
-          for i in "''${!outputLib}"/lib64/*.{la,py}; do
+          for i in "''${!outputLib}"/lib64/*.py; do
               substituteInPlace "$i" --replace "$out" "''${!outputLib}"
           done
       fi
@@ -312,6 +310,12 @@ originalAttrs:
 
       # More dependencies with the previous gcc or some libs (gccbug stores the build command line)
       rm -rf $out/bin/gccbug
+
+      # Remove .la files, they're not adjusted for the makeCompatibilitySymlink magic,
+      # which confuses libtool and leads to weird linking errors.
+      # Removing the files just makes libtool link .so files directly, which is usually
+      # what we want anyway.
+      find $out -name '*.la' -delete
 
       if type "install_name_tool"; then
           for i in "''${!outputLib}"/lib/*.*.dylib "''${!outputLib}"/lib/*.so.[0-9]; do

@@ -111,7 +111,7 @@
 , microdnsSupport ? false
 # Checks meson.is_cross_build(), so even canExecute isn't enough.
 , enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform, hotdoc
-, guiSupport ? true, directfb
+, guiSupport ? true
 }:
 
 stdenv.mkDerivation rec {
@@ -253,8 +253,6 @@ stdenv.mkDerivation rec {
     libGLU
   ] ++ lib.optionals guiSupport [
     gtk3
-  ] ++ lib.optionals (stdenv.hostPlatform.isLinux && guiSupport) [
-    directfb
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # For unknown reasons the order is important, e.g. if
     # VideoToolbox is last, we get:
@@ -313,14 +311,13 @@ stdenv.mkDerivation rec {
     "-Dbluez=${if bluezSupport then "enabled" else "disabled"}"
     (lib.mesonEnable "openh264" openh264Support)
     (lib.mesonEnable "doc" enableDocumentation)
+    (lib.mesonEnable "directfb" false)
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
     "-Ddoc=disabled" # needs gstcuda to be enabled which is Linux-only
     "-Dnvcodec=disabled" # Linux-only
   ] ++ lib.optionals (!stdenv.hostPlatform.isLinux || !gst-plugins-base.waylandEnabled) [
     "-Dva=disabled" # see comment on `libva` in `buildInputs`
-  ] ++ lib.optionals (!stdenv.hostPlatform.isLinux || !guiSupport) [
-    "-Ddirectfb=disabled"
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "-Daja=disabled"
     "-Dchromaprint=disabled"

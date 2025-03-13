@@ -72,8 +72,6 @@ buildPythonPackage rec {
     pytest
     factory-boy
   ];
-
-  dontUseSetuptoolsCheck = true;
   pythonImportsCheck = [ "todosrht" ];
 
   meta = with lib; {

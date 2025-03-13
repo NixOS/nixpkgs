@@ -28,8 +28,6 @@ buildPythonPackage rec {
     sphinx
   ];
 
-  dontUseSetuptoolsCheck = true;
-
   disabledTests = [
     # https://github.com/readthedocs/recommonmark/issues/164
     "test_lists"

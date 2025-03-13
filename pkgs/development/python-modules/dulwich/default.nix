@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "dulwich";
-  version = "0.22.7";
+  version = "0.22.8";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "jelmer";
     repo = "dulwich";
     tag = "dulwich-${version}";
-    hash = "sha256-BjDTqrApdinC9T62hhZIMS1udpaiAg1+7nvryF6d6pU=";
+    hash = "sha256-T0Tmu5sblTkqiak9U4ltkGbWw8ZE91pTlhPVMRi5Pxk=";
   };
 
   build-system = [

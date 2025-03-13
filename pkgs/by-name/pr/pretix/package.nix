@@ -103,6 +103,7 @@ python.pkgs.buildPythonApplication rec {
     "protobuf"
     "pycryptodome"
     "pyjwt"
+    "pypdf"
     "python-bidi"
     "qrcode"
     "redis"
