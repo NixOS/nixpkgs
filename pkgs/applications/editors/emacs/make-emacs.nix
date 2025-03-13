@@ -86,13 +86,13 @@
   withNS ? stdenv.hostPlatform.isDarwin && !(variant == "macport" || noGui),
   withPgtk ? false,
   withSelinux ? stdenv.hostPlatform.isLinux,
-  withSQLite3 ? lib.versionAtLeast version "29",
+  withSQLite3 ? lib.versionAtLeast version "30",
   withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
   withToolkitScrollBars ? true,
-  withTreeSitter ? lib.versionAtLeast version "29",
-  withWebP ? lib.versionAtLeast version "29",
+  withTreeSitter ? lib.versionAtLeast version "30",
+  withWebP ? lib.versionAtLeast version "30",
   withX ? !(stdenv.hostPlatform.isDarwin || noGui || withPgtk),
-  withXinput2 ? withX && lib.versionAtLeast version "29",
+  withXinput2 ? withX && lib.versionAtLeast version "30",
   withXwidgets ?
     !stdenv.hostPlatform.isDarwin
     && !noGui
