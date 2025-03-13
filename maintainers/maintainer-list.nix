@@ -1403,6 +1403,11 @@
     githubId = 157274630;
     name = "amuckstot30";
   };
+  amusingimpala75 = {
+    github = "amusingimpala75";
+    githubId = 69653100;
+    name = "amusingimpala75";
+  };
   amyipdev = {
     email = "amy@amyip.net";
     github = "amyipdev";
