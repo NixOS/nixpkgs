@@ -160,7 +160,7 @@ in {
   akkoma-confined = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./akkoma.nix { confined = true; };
   alice-lg = runTest ./alice-lg.nix;
   alloy = runTest ./alloy.nix;
-  allTerminfo = handleTest ./all-terminfo.nix {};
+  allTerminfo = runTest ./all-terminfo.nix;
   alps = handleTest ./alps.nix {};
   amazon-cloudwatch-agent = handleTest ./amazon-cloudwatch-agent.nix {};
   amazon-init-shell = handleTest ./amazon-init-shell.nix {};
