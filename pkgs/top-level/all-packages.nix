@@ -16861,6 +16861,10 @@ with pkgs;
     cudaSupport = true;
   };
 
+  math-preview = callPackage ../by-name/ma/math-preview/package.nix {
+    nodejs = nodejs_20;
+  };
+
   or-tools = callPackage ../development/libraries/science/math/or-tools {
     inherit (darwin) DarwinTools;
     stdenv = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
