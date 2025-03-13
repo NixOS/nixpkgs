@@ -209,7 +209,6 @@
 , "vscode-json-languageserver"
 , "wavedrom-cli"
 , "webpack"
-, "webtorrent-cli"
 , "wring"
 , "@yaegassy/coc-nginx"
 ]
