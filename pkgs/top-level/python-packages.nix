@@ -938,6 +938,8 @@ self: super: with self; {
 
   asyncarve = callPackage ../development/python-modules/asyncarve { };
 
+  asyncer = callPackage ../development/python-modules/asyncer { };
+
   async-cache = callPackage ../development/python-modules/async-cache { };
 
   async-dns = callPackage ../development/python-modules/async-dns { };
@@ -14318,6 +14320,8 @@ self: super: with self; {
   releases = callPackage ../development/python-modules/releases { };
 
   remarshal = callPackage ../development/python-modules/remarshal { };
+
+  rembg = callPackage ../development/python-modules/rembg { };
 
   remctl = callPackage ../development/python-modules/remctl {
     remctl-c = pkgs.remctl;
