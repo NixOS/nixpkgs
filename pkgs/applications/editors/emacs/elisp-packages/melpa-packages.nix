@@ -1425,6 +1425,9 @@ let
 
         org-special-block-extras = ignoreCompilationError super.org-special-block-extras; # elisp error
 
+        # https://github.com/ichernyshovvv/org-timeblock/issues/65
+        org-timeblock = markBroken super.org-timeblock;
+
         org-trello = ignoreCompilationError super.org-trello; # elisp error
 
         # Requires xwidgets compiled into emacs, so mark this package
