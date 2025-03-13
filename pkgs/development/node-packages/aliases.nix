@@ -227,6 +227,7 @@ mapAliases {
   inherit (pkgs) web-ext; # added 2023-08-20
   inherit (pkgs) webpack-cli; # added 2024-12-03
   webpack-dev-server = throw "webpack-dev-server has been removed. You should install it in your JS project instead."; # added 2024-12-05
+  webtorrent-cli = throw "webtorrent-cli has been removed because it was broken"; # added 2025-03-12
   inherit (pkgs) wrangler; # added 2024-07-01
   inherit (pkgs) write-good; # added 2023-08-20
   inherit (pkgs) yalc; # added 2024-06-29
