@@ -2,20 +2,25 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  # autoreconfHook,
+  autoconf,
+  automake,
   # bash,
-  # docbook_xml_dtd_42,
-  # docbook-xsl-nons,
-  # glib,
+  docbook_xml_dtd_42,
+  docbook-xsl-nons,
+  glib,
   # gobject-introspection,
   # gtk3,
-  # intltool,
+  intltool,
+  ipset,
+  iptables,
+  kmod,
   # libnotify,
-  # libxml2,
-  # libxslt,
+  libxml2,
+  libxslt,
   # networkmanagerapplet,
-  # pkg-config,
-  # python3,
+  pkg-config,
+  python3,
+  sysctl,
   # wrapGAppsNoGuiHook,
   withGui ? false,
 }:
@@ -46,9 +51,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-ubE1zMIOcdg2+mgXsk6brCZxS1XkvJYwVY3E+UXIIiU=";
   };
 
-  # patches = [
-  #   ./respect-xml-catalog-files-var.patch
-  # ];
+  patches = [
+    ./respect-xml-catalog-files-var.patch
+  ];
 
   # postPatch =
   #   ''
@@ -65,34 +70,47 @@ stdenv.mkDerivation rec {
   #       --replace "/usr/bin/nm-connection-editor" "${networkmanagerapplet}/bin/nm-connection-editor"
   #   '';
 
-  # nativeBuildInputs =
-  #   [
-  #     autoreconfHook
-  #     docbook_xml_dtd_42
-  #     docbook-xsl-nons
-  #     glib
-  #     intltool
-  #     libxml2
-  #     libxslt
-  #     pkg-config
-  #     python3
-  #     python3.pkgs.wrapPython
-  #   ]
-  #   ++ lib.optionals withGui [
-  #     gobject-introspection
-  #     wrapGAppsNoGuiHook
-  #   ];
+  nativeBuildInputs = [
+    autoconf
+    automake
+    docbook_xml_dtd_42
+    docbook-xsl-nons
+    glib
+    intltool
+    ipset
+    iptables
+    kmod
+    libxml2
+    libxslt
+    pkg-config
+    python3
+    # python3.pkgs.wrapPython
+    sysctl
+  ]
+  # ++ lib.optionals withGui [
+  #   gobject-introspection
+  #   wrapGAppsNoGuiHook
+  # ]
+  ;
 
-  # buildInputs =
-  #   [
-  #     bash
-  #     glib
-  #   ]
-  #   ++ lib.optionals withGui [
-  #     gtk3
-  #     libnotify
-  #     pythonPath
-  #   ];
+  buildInputs = [
+    # bash
+    # glib
+    ipset
+    iptables
+    kmod
+    sysctl
+  ]
+  # ++ lib.optionals withGui [
+  #   gtk3
+  #   libnotify
+  #   pythonPath
+  # ]
+  ;
+
+  preConfigure = ''
+    ./autogen.sh
+  '';
 
   # dontWrapGApps = true;
 
