@@ -9,15 +9,17 @@
   docbook-xsl-nons,
   glib,
   gobject-introspection,
-  # gtk3,
+  gtk3,
   intltool,
   ipset,
   iptables,
+  kdePackages,
   kmod,
-  # libnotify,
+  libnotify,
   libxml2,
   libxslt,
-  # networkmanagerapplet,
+  networkmanager,
+  networkmanagerapplet,
   pkg-config,
   python3,
   sysctl,
@@ -27,15 +29,16 @@
 
 let
   pythonPath = python3.withPackages (
-    ps: with ps; [
+    ps:
+    with ps;
+    [
       dbus-python
       nftables
       pygobject3
     ]
-    # ++ lib.optionals withGui [
-    #   pyqt5
-    #   pyqt5-sip
-    # ]
+    ++ lib.optionals withGui [
+      pyqt6
+    ]
   );
 in
 stdenv.mkDerivation rec {
@@ -53,20 +56,21 @@ stdenv.mkDerivation rec {
     ./respect-xml-catalog-files-var.patch
   ];
 
-  # postPatch =
-  #   ''
-  #     substituteInPlace src/firewall/config/__init__.py.in \
-  #       --replace "/usr/share" "$out/share"
+  postPatch =
+    ''
+      substituteInPlace src/firewall/config/__init__.py.in \
+        --replace-fail /usr "$out"
 
-  #     for file in config/firewall-{applet,config}.desktop.in; do
-  #       substituteInPlace $file \
-  #         --replace "/usr/bin/" "$out/bin/"
-  #     done
-  #   ''
-  #   + lib.optionalString withGui ''
-  #     substituteInPlace src/firewall-applet.in \
-  #       --replace "/usr/bin/nm-connection-editor" "${networkmanagerapplet}/bin/nm-connection-editor"
-  #   '';
+      # for file in config/firewall-{applet,config}.desktop.in; do
+      #   substituteInPlace $file \
+      #     --replace "/usr/bin/" "$out/bin/"
+      # done
+    ''
+    + lib.optionalString withGui ''
+      substituteInPlace src/firewall-applet.in \
+        --replace-fail "/usr/bin/systemsettings" "${kdePackages.systemsettings}/bin/systemsettings" \
+        --replace-fail "/usr/bin/nm-connection-editor" "${networkmanagerapplet}/bin/nm-connection-editor"
+    '';
 
   nativeBuildInputs = [
     autoconf
@@ -87,21 +91,22 @@ stdenv.mkDerivation rec {
     wrapGAppsNoGuiHook
   ];
 
-  buildInputs = [
-    # bash
-    # glib
-    gobject-introspection
-    ipset
-    iptables
-    kmod
-    pythonPath
-    sysctl
-  ]
-  # ++ lib.optionals withGui [
-  #   gtk3
-  #   libnotify
-  # ]
-  ;
+  buildInputs =
+    [
+      # bash
+      # glib
+      gobject-introspection
+      ipset
+      iptables
+      kmod
+      networkmanager
+      pythonPath
+      sysctl
+    ]
+    ++ lib.optionals withGui [
+      gtk3
+      libnotify
+    ];
 
   preConfigure = ''
     ./autogen.sh
