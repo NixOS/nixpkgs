@@ -2,37 +2,37 @@
   lib,
   fetchPypi,
   buildPythonPackage,
-  pythonOlder,
-  numpy,
-  wheel,
-  werkzeug,
-  protobuf,
-  grpcio,
-  markdown,
+
+  # dependencies
   absl-py,
   google-auth-oauthlib,
+  grpcio,
+  markdown,
+  numpy,
+  protobuf,
   setuptools,
   standard-imghdr,
   tensorboard-data-server,
-  tensorboard-plugin-wit,
   tensorboard-plugin-profile,
-}:
+  tensorboard-plugin-wit,
+  werkzeug,
+  wheel,
 
-# tensorflow/tensorboard is built from a downloaded wheel, because
-# https://github.com/tensorflow/tensorboard/issues/719 blocks
-# buildBazelPackage.
+  versionCheckHook,
+}:
 
 buildPythonPackage rec {
   pname = "tensorboard";
-  version = "2.18.0";
+  version = "2.19.0";
   format = "wheel";
-  disabled = pythonOlder "3.9";
 
+  # tensorflow/tensorboard is built from a downloaded wheel, because
+  # https://github.com/tensorflow/tensorboard/issues/719 blocks buildBazelPackage.
   src = fetchPypi {
     inherit pname version format;
     dist = "py3";
     python = "py3";
-    hash = "sha256-EHykghdF9z4q76AsUP9wqbaU8595CxHm9oL30yZ0Xqs=";
+    hash = "sha256-XnG5hmOmQafOim5wsL6OGkwMRdSHYLB2ODrEdVw1uaA=";
   };
 
   pythonRelaxDeps = [
@@ -40,10 +40,10 @@ buildPythonPackage rec {
     "protobuf"
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     absl-py
-    grpcio
     google-auth-oauthlib
+    grpcio
     markdown
     numpy
     protobuf
@@ -58,11 +58,6 @@ buildPythonPackage rec {
     wheel
   ];
 
-  # in the absence of a real test suite, run cli and imports
-  checkPhase = ''
-    $out/bin/tensorboard --help > /dev/null
-  '';
-
   pythonImportsCheck = [
     "tensorboard"
     "tensorboard.backend"
@@ -73,12 +68,17 @@ buildPythonPackage rec {
     "tensorboard.util"
   ];
 
-  meta = with lib; {
+  nativeCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "--version";
+
+  meta = {
     changelog = "https://github.com/tensorflow/tensorboard/blob/${version}/RELEASE.md";
     description = "TensorFlow's Visualization Toolkit";
     homepage = "https://www.tensorflow.org/";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "tensorboard";
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = with lib.maintainers; [ abbradar ];
   };
 }
