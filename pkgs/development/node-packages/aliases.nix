@@ -96,6 +96,7 @@ mapAliases {
   eask = pkgs.eask; # added 2023-08-17
   inherit (pkgs.elmPackages) elm-test;
   inherit (pkgs.elmPackages) elm-review;
+  escape-string-regexp = throw "escape-string-regexp was removed because it provides no executable"; # added 2025-03-12
   inherit (pkgs) eslint; # Added 2024-08-28
   inherit (pkgs) eslint_d; # Added 2023-05-26
   inherit (pkgs) eas-cli; # added 2025-01-08
