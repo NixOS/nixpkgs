@@ -87,14 +87,14 @@ in
 let
   bolt = stdenv.mkDerivation (finalAttrs: {
     pname = "bolt-launcher";
-    version = "0.9.0";
+    version = "0.14.0";
 
     src = fetchFromGitHub {
       owner = "AdamCake";
       repo = "bolt";
-      rev = finalAttrs.version;
+      tag = finalAttrs.version;
       fetchSubmodules = true;
-      hash = "sha256-LIlRDcUWbQwIhFjtqYF+oVpTOPZ7IT0vMgysEVyJ1k8=";
+      hash = "sha256-fNCi2Wu+oOL6p8IBm6bHZ/rcaFmqoKs2DnXQ+ZA9McE=";
     };
 
     nativeBuildInputs = [
@@ -154,8 +154,8 @@ let
         desktopName = "Bolt Launcher";
         genericName = finalAttrs.pname;
         comment = "An alternative launcher for RuneScape";
-        exec = "${finalAttrs.pname}-${finalAttrs.version}";
-        icon = finalAttrs.pname;
+        exec = "bolt-launcher";
+        icon = "bolt-launcher";
         categories = [ "Game" ];
       })
     ];
