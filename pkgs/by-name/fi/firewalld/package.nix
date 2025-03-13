@@ -8,7 +8,7 @@
   docbook_xml_dtd_42,
   docbook-xsl-nons,
   glib,
-  # gobject-introspection,
+  gobject-introspection,
   # gtk3,
   intltool,
   ipset,
@@ -21,24 +21,22 @@
   pkg-config,
   python3,
   sysctl,
-  # wrapGAppsNoGuiHook,
+  wrapGAppsNoGuiHook,
   withGui ? false,
 }:
 
 let
-  # pythonPath = python3.withPackages (
-  #   ps:
-  #   with ps;
-  #   [
-  #     dbus-python
-  #     nftables
-  #     pygobject3
-  #   ]
-  #   ++ lib.optionals withGui [
-  #     pyqt5
-  #     pyqt5-sip
-  #   ]
-  # );
+  pythonPath = python3.withPackages (
+    ps: with ps; [
+      dbus-python
+      nftables
+      pygobject3
+    ]
+    # ++ lib.optionals withGui [
+    #   pyqt5
+    #   pyqt5-sip
+    # ]
+  );
 in
 stdenv.mkDerivation rec {
   pname = "firewalld";
@@ -84,27 +82,24 @@ stdenv.mkDerivation rec {
     libxslt
     pkg-config
     python3
-    # python3.pkgs.wrapPython
+    python3.pkgs.wrapPython
     sysctl
-  ]
-  # ++ lib.optionals withGui [
-  #   gobject-introspection
-  #   wrapGAppsNoGuiHook
-  # ]
-  ;
+    wrapGAppsNoGuiHook
+  ];
 
   buildInputs = [
     # bash
     # glib
+    gobject-introspection
     ipset
     iptables
     kmod
+    pythonPath
     sysctl
   ]
   # ++ lib.optionals withGui [
   #   gtk3
   #   libnotify
-  #   pythonPath
   # ]
   ;
 
@@ -112,18 +107,22 @@ stdenv.mkDerivation rec {
     ./autogen.sh
   '';
 
-  # dontWrapGApps = true;
+  postInstall = lib.optionalString (!withGui) ''
+    rm $out/bin/firewall-{applet,config}
+  '';
 
-  # preFixup = lib.optionalString withGui ''
-  #   makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
-  # '';
+  dontWrapGApps = true;
 
-  # postFixup = ''
-  #   chmod +x $out/share/firewalld/*.py $out/share/firewalld/testsuite/python/*.py $out/share/firewalld/testsuite/{,integration/}testsuite
-  #   patchShebangs --host $out/share/firewalld/testsuite/{,integration/}testsuite $out/share/firewalld/*.py
-  #   wrapPythonProgramsIn "$out/bin" "$out ${pythonPath}"
-  #   wrapPythonProgramsIn "$out/share/firewalld/testsuite/python" "$out ${pythonPath}"
-  # '';
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
+  postFixup = ''
+    # chmod +x $out/share/firewalld/*.py $out/share/firewalld/testsuite/python/*.py $out/share/firewalld/testsuite/{,integration/}testsuite
+    # patchShebangs --host $out/share/firewalld/testsuite/{,integration/}testsuite $out/share/firewalld/*.py
+    wrapPythonProgramsIn "$out/bin" "$out ${pythonPath}"
+    # wrapPythonProgramsIn "$out/share/firewalld/testsuite/python" "$out ${pythonPath}"
+  '';
 
   meta = with lib; {
     description = "Firewall daemon with D-Bus interface";
