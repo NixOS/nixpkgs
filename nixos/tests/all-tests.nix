@@ -176,7 +176,7 @@ in {
   apparmor = runTest ./apparmor;
   archi = runTest ./archi.nix;
   aria2 = runTest ./aria2.nix;
-  armagetronad = handleTest ./armagetronad.nix {};
+  armagetronad = runTest ./armagetronad.nix;
   artalk = runTest ./artalk.nix;
   atd = handleTest ./atd.nix {};
   atop = handleTest ./atop.nix {};
