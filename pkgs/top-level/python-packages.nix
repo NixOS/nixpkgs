@@ -18471,6 +18471,8 @@ self: super: with self; {
 
   webexteamssdk = callPackage ../development/python-modules/webexteamssdk { };
 
+  webgui-jupyter-widgets = callPackage ../development/python-modules/webgui-jupyter-widgets { };
+
   webmin-xmlrpc = callPackage ../development/python-modules/webmin-xmlrpc { };
 
   weblate-language-data = callPackage ../development/python-modules/weblate-language-data { };
