@@ -1,13 +1,4 @@
-{
-    stdenv,
-    cmake,
-    lib,
-    ninja,
-    gcc,
-    git,
-    python311,
-    fetchFromGitHub
-}:
+{ stdenv, cmake, lib, ninja, gcc, git, python311, fetchFromGitHub }:
 
 stdenv.mkDerivation {
   pname = "Pyroveil";
@@ -27,13 +18,7 @@ stdenv.mkDerivation {
     };
   });
 
-  nativeBuildInputs = [
-    cmake
-    ninja
-    gcc
-    git
-    python311
-  ];
+  nativeBuildInputs = [ cmake ninja gcc git python311 ];
   cmakeFlags = [ "-DCMAKE_BUILD_TYPE=Release" ];
 
   postPatch = ''
