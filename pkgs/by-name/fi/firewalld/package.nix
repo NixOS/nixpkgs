@@ -22,6 +22,7 @@
   networkmanagerapplet,
   pkg-config,
   python3,
+  qt6,
   sysctl,
   wrapGAppsNoGuiHook,
   withGui ? false,
@@ -73,24 +74,28 @@ stdenv.mkDerivation rec {
         --replace-fail "/usr/bin/nm-connection-editor" "${networkmanagerapplet}/bin/nm-connection-editor"
     '';
 
-  nativeBuildInputs = [
-    autoconf
-    automake
-    docbook_xml_dtd_42
-    docbook-xsl-nons
-    glib
-    intltool
-    ipset
-    iptables
-    kmod
-    libxml2
-    libxslt
-    pkg-config
-    python3
-    python3.pkgs.wrapPython
-    sysctl
-    wrapGAppsNoGuiHook
-  ];
+  nativeBuildInputs =
+    [
+      autoconf
+      automake
+      docbook_xml_dtd_42
+      docbook-xsl-nons
+      glib
+      intltool
+      ipset
+      iptables
+      kmod
+      libxml2
+      libxslt
+      pkg-config
+      python3
+      python3.pkgs.wrapPython
+      sysctl
+      wrapGAppsNoGuiHook
+    ]
+    ++ lib.optionals withGui [
+      qt6.wrapQtAppsHook
+    ];
 
   buildInputs =
     [
@@ -107,6 +112,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals withGui [
       gtk3
       libnotify
+      qt6.qtbase
     ];
 
   preConfigure = ''
@@ -118,10 +124,15 @@ stdenv.mkDerivation rec {
   '';
 
   dontWrapGApps = true;
+  dontWrapQtApps = true;
 
-  preFixup = ''
-    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
-  '';
+  preFixup =
+    ''
+      makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+    ''
+    + lib.optionalString withGui ''
+      makeWrapperArgs+=("''${qtWrapperArgs[@]}")
+    '';
 
   postFixup = ''
     # chmod +x $out/share/firewalld/testsuite/python/*.py $out/share/firewalld/testsuite/{,integration/}testsuite
