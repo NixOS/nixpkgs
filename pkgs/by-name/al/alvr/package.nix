@@ -142,7 +142,10 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/alvr-org/ALVR/releases/tag/v${version}";
     license = licenses.mit;
     mainProgram = "alvr_dashboard";
-    maintainers = with maintainers; [ passivelemon ];
+    maintainers = with maintainers; [
+      luNeder
+      jopejoe1
+    ];
     platforms = platforms.linux;
   };
 }
