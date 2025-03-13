@@ -6,11 +6,12 @@
   pyvex,
   setuptools,
   typing-extensions,
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
   pname = "ailment";
-  version = "9.2.141";
+  version = "9.2.144";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -19,7 +20,7 @@ buildPythonPackage rec {
     owner = "angr";
     repo = "ailment";
     tag = "v${version}";
-    hash = "sha256-TNwqf5MMqIaugOEiB0CQKAPI7AvjKTp9zJocc4GUvpg=";
+    hash = "sha256-ZA/XSKp6Xn1mciVMJ/FVHdz0Orstx1ib2feBtIfGLa0=";
   };
 
   build-system = [ setuptools ];
@@ -33,6 +34,8 @@ buildPythonPackage rec {
   doCheck = false;
 
   pythonImportsCheck = [ "ailment" ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Angr Intermediate Language";
