@@ -7,8 +7,25 @@ with pkgs;
 
   compiler =
     let
+      # merge meta.platforms of both packages so that dependent packages and hydra build them
+      mergeMetaPlatforms =
+        jdk: other:
+        jdk
+        // {
+          meta = jdk.meta // {
+            platforms = lib.unique (jdk.meta.platforms ++ other.meta.platforms);
+          };
+        };
+
+      mkLinuxDarwin =
+        linux: darwin:
+        if stdenv.hostPlatform.isLinux then
+          mergeMetaPlatforms linux darwin
+        else
+          mergeMetaPlatforms darwin linux;
+
       mkOpenjdk =
-        featureVersion: path-darwin:
+        featureVersion:
         let
           # merge meta.platforms of both packages so that dependent packages and hydra build them
           mergeMetaPlatforms =
@@ -19,41 +36,28 @@ with pkgs;
                 platforms = lib.unique (jdk.meta.platforms ++ other.meta.platforms);
               };
             };
-          openjdkLinux = mkOpenjdkLinuxOnly featureVersion;
+          openjdkLinux =
+            (callPackage ../development/compilers/openjdk/generic.nix { inherit featureVersion; })
+            // {
+              headless = mergeMetaPlatforms openjdkLinuxHeadless openjdkDarwin;
+            };
           openjdkLinuxHeadless = openjdkLinux.override { headless = true; };
-          openjdkDarwin =
-            let
-              openjdk = callPackage path-darwin { };
-            in
-            openjdk // { headless = mergeMetaPlatforms openjdkDarwin openjdkLinuxHeadless; };
+          openjdkDarwin = (callPackage ../development/compilers/zulu/${featureVersion}.nix { }) // {
+            headless = mergeMetaPlatforms openjdkDarwin openjdkLinuxHeadless;
+          };
         in
-        if stdenv.hostPlatform.isLinux then
-          (mergeMetaPlatforms openjdkLinux openjdkDarwin)
-        else
-          (mergeMetaPlatforms openjdkDarwin openjdkLinux);
-
-      mkOpenjdkLinuxOnly =
-        featureVersion:
-        let
-          openjdk = callPackage ../development/compilers/openjdk/generic.nix { inherit featureVersion; };
-        in
-        assert stdenv.hostPlatform.isLinux;
-        openjdk
-        // {
-          headless = mergeMetaPlatforms openjdkLinuxHeadless openjdkDarwin;
-        };
-
+        mkLinuxDarwin openjdkLinux openjdkDarwin;
     in
     rec {
       corretto11 = callPackage ../development/compilers/corretto/11.nix { };
       corretto17 = callPackage ../development/compilers/corretto/17.nix { };
       corretto21 = callPackage ../development/compilers/corretto/21.nix { };
 
-      openjdk8 = mkOpenjdk "8" ../development/compilers/zulu/8.nix;
-      openjdk11 = mkOpenjdk "11" ../development/compilers/zulu/11.nix;
-      openjdk17 = mkOpenjdk "17" ../development/compilers/zulu/17.nix;
-      openjdk21 = mkOpenjdk "21" ../development/compilers/zulu/21.nix;
-      openjdk23 = mkOpenjdk "23" ../development/compilers/zulu/23.nix;
+      openjdk8 = mkOpenjdk "8";
+      openjdk11 = mkOpenjdk "11";
+      openjdk17 = mkOpenjdk "17";
+      openjdk21 = mkOpenjdk "21";
+      openjdk23 = mkOpenjdk "23";
 
       # Legacy aliases
       openjdk8-bootstrap = temurin-bin.jdk-8;
