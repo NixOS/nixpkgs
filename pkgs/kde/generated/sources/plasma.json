@@ -130,9 +130,9 @@
     "hash": "sha256-CWnPuFAIe5Y6+5WqDoqBzix6LgMl9AjFdydSWf6t5sw="
   },
   "kwin": {
-    "version": "6.3.3",
-    "url": "mirror://kde/stable/plasma/6.3.3/kwin-6.3.3.tar.xz",
-    "hash": "sha256-tyf7kWRrLrukNK+D0F4EESe4ruTeMerMHKz5BAXIti8="
+    "version": "6.3.3.1",
+    "url": "mirror://kde/stable/plasma/6.3.3/kwin-6.3.3.1.tar.xz",
+    "hash": "sha256-ExkWnEQp/4QzuqKJkaWG/Nqlf3h/kGrnqDSGKTMi17g="
   },
   "kwrited": {
     "version": "6.3.3",

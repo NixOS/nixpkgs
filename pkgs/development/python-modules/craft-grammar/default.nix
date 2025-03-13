@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "craft-grammar";
-  version = "2.0.1";
+  version = "2.0.2";
 
   pyproject = true;
 
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "canonical";
     repo = "craft-grammar";
     tag = version;
-    hash = "sha256-xex+7rCXqRegnws470VtVltM49fx7fSHzWDZawRmOdM=";
+    hash = "sha256-i6dy0YNCsYIW9Uw9RcnTrOXMY6Sgwftrg27WE3tskoA=";
   };
 
   build-system = [ setuptools-scm ];
