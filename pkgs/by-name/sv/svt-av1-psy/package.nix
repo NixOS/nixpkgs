@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "2.3.0";
 
   src = fetchFromGitHub {
-    owner = "gianni-rosato";
+    owner = "psy-ex";
     repo = "svt-av1-psy";
     tag = "v${finalAttrs.version}";
     hash = "sha256-qySrYZDwmoKf7oAQJlBSWInXeOceGSeL2Kc09SJ5Zs0=";
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    homepage = "https://github.com/gianni-rosato/svt-av1-psy";
+    homepage = "https://github.com/psy-ex/svt-av1-psy";
     description = "Scalable Video Technology AV1 Encoder and Decoder";
 
     longDescription = ''
