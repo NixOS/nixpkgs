@@ -47851,28 +47851,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  "@shopify/cli" = nodeEnv.buildNodePackage {
-    name = "_at_shopify_slash_cli";
-    packageName = "@shopify/cli";
-    version = "3.75.4";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/@shopify/cli/-/cli-3.75.4.tgz";
-      sha512 = "4+jcMOZiw6Nsm3007liTKA2inI9LwgM1HljCpLhT9aFMZZ+qqF1tbixBL08hbc1C44AuKsYuQtCrY531PBEIrA==";
-    };
-    dependencies = [
-      sources."@ast-grep/napi-0.33.0"
-      sources."esbuild-0.24.2"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "A CLI tool to build for the Shopify platform";
-      homepage = "https://github.com/shopify/cli#readme";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   "@tailwindcss/aspect-ratio" = nodeEnv.buildNodePackage {
     name = "_at_tailwindcss_slash_aspect-ratio";
     packageName = "@tailwindcss/aspect-ratio";

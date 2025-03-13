@@ -4,7 +4,6 @@
 , "@babel/cli"
 , "@commitlint/cli"
 , "@microsoft/rush"
-, "@shopify/cli"
 , "@tailwindcss/aspect-ratio"
 , "@tailwindcss/forms"
 , "@tailwindcss/line-clamp"
