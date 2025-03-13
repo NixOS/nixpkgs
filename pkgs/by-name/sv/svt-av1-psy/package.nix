@@ -5,6 +5,7 @@
   cmake,
   nasm,
   libdovi,
+  unstableGitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -34,6 +35,11 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libdovi
   ];
+
+  passthru.updateScript = unstableGitUpdater {
+    branch = "master";
+    tagPrefix = "v";
+  };
 
   meta = {
     homepage = "https://github.com/psy-ex/svt-av1-psy";
