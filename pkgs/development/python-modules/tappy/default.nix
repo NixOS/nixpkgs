@@ -43,6 +43,6 @@ buildPythonPackage rec {
     changelog = "https://tappy.readthedocs.io/en/latest/releases.html";
     mainProgram = "tappy";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ sfrijters ];
+    maintainers = with maintainers; [ ];
   };
 }
