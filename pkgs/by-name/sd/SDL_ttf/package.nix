@@ -48,7 +48,8 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = lib.teams.sdl.members ++ (with lib.maintainers; [ ]);
     inherit (SDL.meta) platforms;
     knownVulnerabilities = [
-      "CVE-2022-27470"
+      # CVE applies to SDL2 https://github.com/NixOS/nixpkgs/pull/274836#issuecomment-2708627901
+      # "CVE-2022-27470"
     ];
   };
 })
