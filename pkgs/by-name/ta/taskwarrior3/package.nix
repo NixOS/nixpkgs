@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "GothenburgBitFactory";
     repo = "taskwarrior";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-aKDwRCJ1yopRdsPxnHhgOpSho1i8/dcAurI+XhpSbn4=";
     fetchSubmodules = true;
   };
