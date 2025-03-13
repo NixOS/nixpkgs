@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "liquid-dsp";
-  version = "1.6.0";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "jgaeddert";
     repo = "liquid-dsp";
     rev = "v${version}";
-    sha256 = "sha256-3UKAwhYaYZ42+d+wiW/AB6x5TSOel8d++d3HeZqAg/8=";
+    sha256 = "sha256-OdtTxAWZckOd0iBHstmDJEuFtBh3PSdY1MqOepvnNTA=";
   };
 
   configureFlags =
