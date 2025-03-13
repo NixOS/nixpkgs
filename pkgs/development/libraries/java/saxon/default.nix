@@ -123,7 +123,7 @@ in
     version = "6.5.3";
     src = fetchurl {
       url = "mirror://sourceforge/saxon/saxon${dashify version}.zip";
-      sha256 = "0l5y3y2z4wqgh80f26dwwxwncs8v3nkz3nidv14z024lmk730vs3";
+      hash = "sha256-Q28wzqyUCPBJ2C3a8acdG2lmeee8GeEAgg9z8oUfvlA=";
     };
     description = "XSLT 1.0 processor";
     # https://saxon.sourceforge.net/saxon6.5.3/conditions.html
@@ -137,7 +137,7 @@ in
     jar = "saxon8";
     src = fetchurl {
       url = "mirror://sourceforge/saxon/saxonb${dashify version}j.zip";
-      sha256 = "15bzrfyd2f1045rsp9dp4znyhmizh1pm97q8ji2bc0b43q23xsb8";
+      hash = "sha256-aOk+BB5kAbZElAifVG+AP1bo7Se3patzISA40bzLf5U=";
     };
     description = "Complete and conformant processor of XSLT 2.0, XQuery 1.0, and XPath 2.0";
     java = jre8;
