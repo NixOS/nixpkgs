@@ -11,7 +11,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "openapi-python-client";
-  version = "0.23.1";
+  version = "0.24.0";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -19,7 +19,7 @@ python3Packages.buildPythonApplication rec {
     owner = "openapi-generators";
     repo = "openapi-python-client";
     tag = "v${version}";
-    hash = "sha256-40Cb+1QNpjOlJCYEHtVUfn3wbWEYIt1LkqAMIwA9sK0=";
+    hash = "sha256-T6jctXj/C5wogHUveY58YKR04utHNpRWimhq8b45Kuc=";
   };
 
   nativeBuildInputs =
@@ -72,7 +72,7 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Generate modern Python clients from OpenAPI";
     homepage = "https://github.com/openapi-generators/openapi-python-client";
-    changelog = "https://github.com/openapi-generators/openapi-python-client/releases/tag/v${version}";
+    changelog = "https://github.com/openapi-generators/openapi-python-client/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     mainProgram = "openapi-python-client";
     maintainers = with lib.maintainers; [ konradmalik ];
