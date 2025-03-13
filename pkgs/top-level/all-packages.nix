@@ -3036,10 +3036,6 @@ with pkgs;
 
   dnsviz = python3Packages.callPackage ../tools/networking/dnsviz { };
 
-  diffoscope = callPackage ../tools/misc/diffoscope {
-    jdk = jdk8;
-  };
-
   diffoscopeMinimal = diffoscope.override {
     enableBloat = false;
   };
