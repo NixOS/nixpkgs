@@ -918,16 +918,6 @@
       "source": "hosted",
       "version": "0.4.11"
     },
-    "just_audio_windows": {
-      "dependency": "direct main",
-      "description": {
-        "name": "just_audio_windows",
-        "sha256": "b1ba5305d841c0e3883644e20fc11aaa23f28cfdd43ec20236d1e119a402ef29",
-        "url": "https://pub.dev"
-      },
-      "source": "hosted",
-      "version": "0.2.2"
-    },
     "leak_tracker": {
       "dependency": "transitive",
       "description": {
@@ -1037,6 +1027,16 @@
       },
       "source": "hosted",
       "version": "1.1.3"
+    },
+    "media_kit_libs_windows_audio": {
+      "dependency": "direct main",
+      "description": {
+        "name": "media_kit_libs_windows_audio",
+        "sha256": "c2fd558cc87b9d89a801141fcdffe02e338a3b21a41a18fbd63d5b221a1b8e53",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "1.0.9"
     },
     "meta": {
       "dependency": "transitive",
@@ -1918,11 +1918,11 @@
       "dependency": "direct main",
       "description": {
         "name": "youtube_explode_dart",
-        "sha256": "51ca5b2c03bf56060143d4f87df90ec3227592d7ae8a8003532533ae019d4291",
+        "sha256": "9f044feb602659392a7c7a160e74d373671c959373a199658d687fe18ba1ab07",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "2.3.6"
+      "version": "2.3.9"
     }
   },
   "sdks": {
