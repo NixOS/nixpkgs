@@ -117,7 +117,11 @@ let
           ];
           stripLen = 1;
           hash = "sha256-1NKej08R9SPlbDY/5b0OKUsHjX07i9brR84yXiPwi7E=";
-        });
+        })
+        ++ lib.optional (stdenv.isAarch64 && lib.versions.major release_version == "17")
+          # Fixes llvm17 tblgen builds on aarch64.
+          # https://github.com/llvm/llvm-project/issues/106521#issuecomment-2337175680
+          (getVersionFile "clang/aarch64-tblgen.patch");
 
     nativeBuildInputs = [ cmake ]
       ++ (lib.optional (lib.versionAtLeast release_version "15") ninja)
