@@ -38,6 +38,7 @@ python3.pkgs.buildPythonApplication rec {
     slixmpp
     python-telegram-bot
     webtest
+    setuptools # for pkg_resources
   ];
 
   nativeCheckInputs = with python3.pkgs; [
