@@ -38,15 +38,13 @@ stdenv.mkDerivation rec {
     [
       cmake
       pkg-config
+      python3
     ]
     ++ lib.optional cudaSupport [
       cudaPackages.cuda_nvcc
     ];
   buildInputs =
-    [
-      python3
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isUnix [
+    lib.optionals stdenv.hostPlatform.isUnix [
       libGLU
       libGL
       # FIXME: these are not actually needed, but the configure script wants them.
