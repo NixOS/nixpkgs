@@ -1,7 +1,5 @@
 {
-  lib,
   stdenv,
-  fetchFromGitHub,
   kernel,
   libajantv2,
 }:

@@ -6,7 +6,6 @@
   cppunit,
   curl,
   fetchFromGitHub,
-  fetchpatch,
   installShellFiles,
   libtool,
   libtorrent,
