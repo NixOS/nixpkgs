@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "artizirk";
     repo = "wdisplays";
     rev = finalAttrs.version;
-    sha256 = "sha256-dtvP930ChiDRT60xq6xBDU6k+zHnkrAkxkKz2FxlzRs=";
+    hash = "sha256-dtvP930ChiDRT60xq6xBDU6k+zHnkrAkxkKz2FxlzRs=";
   };
 
   meta = with lib; {

@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     owner = "bbidulock";
     repo = "xdg-launch";
     rev = version;
-    sha256 = "sha256-S/0Wn1T5MSOPN6QXkzfmygHL6XTAnnMJr5Z3fBzsHEw=";
+    hash = "sha256-S/0Wn1T5MSOPN6QXkzfmygHL6XTAnnMJr5Z3fBzsHEw=";
   };
 
   preConfigure = "./autogen.sh";

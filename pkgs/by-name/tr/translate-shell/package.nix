@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     owner = "soimort";
     repo = "translate-shell";
     rev = "v${version}";
-    sha256 = "sha256-ILXE8cSrivYqMruE+xtNIInLdwdRfMX5dneY9Nn12Uk=";
+    hash = "sha256-ILXE8cSrivYqMruE+xtNIInLdwdRfMX5dneY9Nn12Uk=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

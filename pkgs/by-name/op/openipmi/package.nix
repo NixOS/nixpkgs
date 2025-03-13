@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/openipmi/OpenIPMI-${version}.tar.gz";
-    sha256 = "sha256-oEAxSPpfe+2TDJWKTRxVgEfic3Y6QIs6A2jtwTfMVdk=";
+    hash = "sha256-oEAxSPpfe+2TDJWKTRxVgEfic3Y6QIs6A2jtwTfMVdk=";
   };
 
   buildInputs = [

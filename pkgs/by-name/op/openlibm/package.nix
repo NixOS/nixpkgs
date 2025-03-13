@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     owner = "JuliaLang";
     repo = "openlibm";
     rev = "v${version}";
-    sha256 = "sha256-z2PMovHk9M4Wb5K4EWOrp0b+3RLRHDVUKDzIxHsKrXg=";
+    hash = "sha256-z2PMovHk9M4Wb5K4EWOrp0b+3RLRHDVUKDzIxHsKrXg=";
   };
 
   makeFlags = [

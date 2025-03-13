@@ -13,7 +13,7 @@ buildGo122Module rec {
     owner = "ljanyst";
     repo = "peroxide";
     rev = "v${version}";
-    sha256 = "sha256-6Jb1i4aNjeemiQp9FF/KGyZ+Evom9PPBvARbJWyrhok=";
+    hash = "sha256-6Jb1i4aNjeemiQp9FF/KGyZ+Evom9PPBvARbJWyrhok=";
   };
 
   vendorHash = "sha256-kuFlkkMkCKO5Rrh1EoyVdaykvxTfchK2l1/THqTBeAY=";

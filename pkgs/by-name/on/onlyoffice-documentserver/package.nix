@@ -22,11 +22,11 @@ let
       {
         "aarch64-linux" = {
           url = "https://github.com/ONLYOFFICE/DocumentServer/releases/download/v${version}/onlyoffice-documentserver_arm64.deb";
-          sha256 = "sha256-+7hHz1UcnlJNhBAVaYQwK0m2tkgsfbjqY3oa8XU0yxo=";
+          hash = "sha256-+7hHz1UcnlJNhBAVaYQwK0m2tkgsfbjqY3oa8XU0yxo=";
         };
         "x86_64-linux" = {
           url = "https://github.com/ONLYOFFICE/DocumentServer/releases/download/v${version}/onlyoffice-documentserver_amd64.deb";
-          sha256 = "sha256-jCwcXb97Z9/ZofKLYneJxKAnaZE/Hwvm34GLQu/BoUM=";
+          hash = "sha256-jCwcXb97Z9/ZofKLYneJxKAnaZE/Hwvm34GLQu/BoUM=";
         };
       }
       .${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}")

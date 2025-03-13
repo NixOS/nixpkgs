@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     owner = "graysky2";
     repo = "profile-cleaner";
     rev = "v${version}";
-    sha256 = "sha256-10e1S+li7SXKJX2lETSdx84GavWqQYQqyLoBIVToTBI=";
+    hash = "sha256-10e1S+li7SXKJX2lETSdx84GavWqQYQqyLoBIVToTBI=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

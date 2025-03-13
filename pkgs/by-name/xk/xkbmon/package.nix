@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "xkbmon";
     repo = "xkbmon";
     rev = version;
-    sha256 = "sha256-EWW6L6NojzXodDOET01LMcQT8/1JIMpOD++MCiM3j1Y=";
+    hash = "sha256-EWW6L6NojzXodDOET01LMcQT8/1JIMpOD++MCiM3j1Y=";
   };
 
   buildInputs = [ libX11 ];

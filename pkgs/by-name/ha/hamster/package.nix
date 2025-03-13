@@ -24,7 +24,7 @@ python3Packages.buildPythonApplication rec {
     owner = "projecthamster";
     repo = pname;
     tag = "v${version}";
-    sha256 = "sha256-cUmUvJP9Y3de5OaNgIxvigDsX2ww7NNRY5son/gg+WI=";
+    hash = "sha256-cUmUvJP9Y3de5OaNgIxvigDsX2ww7NNRY5son/gg+WI=";
   };
 
   nativeBuildInputs = [

@@ -12,7 +12,7 @@ clangStdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "ftp://ftp.gnustep.org/pub/gnustep/core/gnustep-make-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-k8oyC3BieevKU3YNqJ1MPyu8VH9HI5ZxQKNDRtnwTCQ=";
+    hash = "sha256-k8oyC3BieevKU3YNqJ1MPyu8VH9HI5ZxQKNDRtnwTCQ=";
   };
 
   configureFlags = [

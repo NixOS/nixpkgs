@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     owner = "moosefs";
     repo = "moosefs";
     rev = "v${version}";
-    sha256 = "sha256-5sVnr+bUbmIc4qYC/h+d/s1ow3cxeL2Yo/JitCs6cbE=";
+    hash = "sha256-5sVnr+bUbmIc4qYC/h+d/s1ow3cxeL2Yo/JitCs6cbE=";
   };
 
   nativeBuildInputs = [

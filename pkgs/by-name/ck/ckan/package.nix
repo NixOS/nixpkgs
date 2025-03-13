@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/KSP-CKAN/CKAN/releases/download/v${version}/ckan.exe";
-    sha256 = "sha256-SK2eKdH/bm+W+qU8XUHRD9uffmfp5bR4dBvBEUKCm8E=";
+    hash = "sha256-SK2eKdH/bm+W+qU8XUHRD9uffmfp5bR4dBvBEUKCm8E=";
   };
 
   icon = fetchurl {

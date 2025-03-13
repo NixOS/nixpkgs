@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     owner = "GoogleCloudPlatform";
     repo = "guest-configs";
     rev = version;
-    sha256 = "sha256-0SRu6p/DsHNNI20mkXJitt/Ee5S2ooiy5hNmD+ndecM=";
+    hash = "sha256-0SRu6p/DsHNNI20mkXJitt/Ee5S2ooiy5hNmD+ndecM=";
   };
 
   binDeps = lib.makeBinPath [

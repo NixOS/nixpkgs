@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
     owner = "badboy";
     repo = "mdbook-toc";
     tag = version;
-    sha256 = "sha256-OFNp+kFDafYbzqb7xfPTO885cAjgWfNeDvUPDKq5GJU=";
+    hash = "sha256-OFNp+kFDafYbzqb7xfPTO885cAjgWfNeDvUPDKq5GJU=";
   };
 
   useFetchCargoVendor = true;

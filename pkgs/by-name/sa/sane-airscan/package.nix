@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     owner = "alexpevzner";
     repo = pname;
     rev = version;
-    sha256 = "sha256-lfWdeXURWLwae9G11oIS25CsOkzTjigRDGFzdV33bTU=";
+    hash = "sha256-lfWdeXURWLwae9G11oIS25CsOkzTjigRDGFzdV33bTU=";
   };
 
   meta = with lib; {

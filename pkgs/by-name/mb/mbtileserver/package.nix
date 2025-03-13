@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "consbio";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-RLaAhc24zdCFvpSN2LZXNyS1ygg9zCi4jEj8owdreWU=";
+    hash = "sha256-RLaAhc24zdCFvpSN2LZXNyS1ygg9zCi4jEj8owdreWU=";
   };
 
   vendorHash = "sha256-yn7LcR/DvHDSRicUnWLrFZKqZti+YQoLSk3mZkDIj10=";

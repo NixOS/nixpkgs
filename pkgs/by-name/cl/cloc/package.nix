@@ -17,7 +17,7 @@ stdenv.mkDerivation {
     owner = "AlDanial";
     repo = "cloc";
     rev = "v${version}";
-    sha256 = "sha256-x02TEm+VYSqj0gSF/Eg+4LkSd2/LapHHSBlZziTKBDQ=";
+    hash = "sha256-x02TEm+VYSqj0gSF/Eg+4LkSd2/LapHHSBlZziTKBDQ=";
   };
 
   setSourceRoot = ''

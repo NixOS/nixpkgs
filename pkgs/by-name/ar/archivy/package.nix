@@ -14,7 +14,7 @@ let
         src = fetchPypi {
           pname = "WTForms";
           inherit version;
-          sha256 = "sha256-hhoTs65SHWcA2sOydxlwvTVKY7pwQ+zDqCtSiFlqGXI=";
+          hash = "sha256-hhoTs65SHWcA2sOydxlwvTVKY7pwQ+zDqCtSiFlqGXI=";
         };
 
         doCheck = false;

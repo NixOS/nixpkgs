@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://lttng.org/files/lttng-tools/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-U733xK0H2/5mDuTZr/xj/kSuWemnPG96luD8oUDlrcs=";
+    hash = "sha256-U733xK0H2/5mDuTZr/xj/kSuWemnPG96luD8oUDlrcs=";
   };
 
   nativeBuildInputs = [ pkg-config ];

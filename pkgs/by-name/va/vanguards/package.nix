@@ -15,7 +15,7 @@ python312Packages.buildPythonApplication rec {
     owner = "mikeperry-tor";
     repo = "vanguards";
     rev = "8132fa0e556fbcbb3538ff9b48a2180c0c5e8fbd";
-    sha256 = "sha256-XauSTgoH6zXv2DXyX2lQc6gy6Ysm41fKnyuWZ3hj7kI=";
+    hash = "sha256-XauSTgoH6zXv2DXyX2lQc6gy6Ysm41fKnyuWZ3hj7kI=";
   };
   patches = [ ./python-3.12.patch ];
   postPatch = ''

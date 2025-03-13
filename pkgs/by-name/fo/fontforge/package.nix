@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     owner = "fontforge";
     repo = "fontforge";
     rev = version;
-    sha256 = "sha256-/RYhvL+Z4n4hJ8dmm+jbA1Ful23ni2DbCRZC5A3+pP0=";
+    hash = "sha256-/RYhvL+Z4n4hJ8dmm+jbA1Ful23ni2DbCRZC5A3+pP0=";
   };
 
   patches = [

@@ -16,7 +16,7 @@ buildPythonApplication rec {
     owner = "dojeda";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-UqNoEGgStvqtxhYwExk7wO4SvATaM2kGaFbB5ViJa7U=";
+    hash = "sha256-UqNoEGgStvqtxhYwExk7wO4SvATaM2kGaFbB5ViJa7U=";
   };
 
   patches = [

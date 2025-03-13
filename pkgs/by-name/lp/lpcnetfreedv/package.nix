@@ -11,7 +11,7 @@ let
   dataVersion = "191005_v1.0";
   data = fetchurl {
     url = "http://rowetel.com/downloads/deep/lpcnet_${dataVersion}.tgz";
-    sha256 = "sha256-UJRAkkdR/dh/+qVoPuPd3ZN69cgzuRBMzOZdUWFJJsg=";
+    hash = "sha256-UJRAkkdR/dh/+qVoPuPd3ZN69cgzuRBMzOZdUWFJJsg=";
   };
 in
 stdenv.mkDerivation {
@@ -22,7 +22,7 @@ stdenv.mkDerivation {
     owner = "drowe67";
     repo = "LPCNet";
     rev = "c8e51ac5e2fe674849cb53e7da44689b572cc246";
-    sha256 = "sha256-0Knoym+deTuFAyJrrD55MijVh6DlhJp3lss66BJUHiA=";
+    hash = "sha256-0Knoym+deTuFAyJrrD55MijVh6DlhJp3lss66BJUHiA=";
   };
 
   nativeBuildInputs = [ cmake ];

@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://download.tuxfamily.org/ctpl/releases/ctpl-${version}.tar.gz";
-    sha256 = "sha256-IRCPx1Z+0hbe6kWRrb/s6OiLH0uxynfDdACSBkTXVr4=";
+    hash = "sha256-IRCPx1Z+0hbe6kWRrb/s6OiLH0uxynfDdACSBkTXVr4=";
   };
 
   nativeBuildInputs = [ pkg-config ];

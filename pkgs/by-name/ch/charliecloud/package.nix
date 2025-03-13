@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     owner = "hpc";
     repo = "charliecloud";
     rev = "v${version}";
-    sha256 = "sha256-kdaVlwE3vdCxsmJTOUwx8J+9UcBuXbKDwS2MHX2ZPPM=";
+    hash = "sha256-kdaVlwE3vdCxsmJTOUwx8J+9UcBuXbKDwS2MHX2ZPPM=";
   };
 
   nativeBuildInputs = [

@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     owner = "zrythm";
     repo = "libaudec";
     rev = "v${version}";
-    sha256 = "sha256-8morbrq8zG+2N3ruMeJa85ci9P0wPQOfZ5H56diFEAo=";
+    hash = "sha256-8morbrq8zG+2N3ruMeJa85ci9P0wPQOfZ5H56diFEAo=";
   };
 
   buildInputs = [

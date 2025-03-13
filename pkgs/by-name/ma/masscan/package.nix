@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "robertdavidgraham";
     repo = "masscan";
     rev = version;
-    sha256 = "sha256-mnGC/moQANloR5ODwRjzJzBa55OEZ9QU+9WpAHxQE/g=";
+    hash = "sha256-mnGC/moQANloR5ODwRjzJzBa55OEZ9QU+9WpAHxQE/g=";
   };
 
   patches = [
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       name = "resume.patch";
       url = "https://github.com/robertdavidgraham/masscan/commit/90791550bbdfac8905917a109ed74024161f14b3.patch";
-      sha256 = "sha256-A7Fk3MBNxaad69MrUYg7fdMG77wba5iESDTIRigYslw=";
+      hash = "sha256-A7Fk3MBNxaad69MrUYg7fdMG77wba5iESDTIRigYslw=";
     })
   ];
 

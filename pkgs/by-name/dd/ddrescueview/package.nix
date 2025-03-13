@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/ddrescueview/ddrescueview-source-${version}.tar.xz";
-    sha256 = "sha256-Vzg8OU5iYSzip5lDiwDG48Rlwx+bqUDgd/Yk4ucChGU=";
+    hash = "sha256-Vzg8OU5iYSzip5lDiwDG48Rlwx+bqUDgd/Yk4ucChGU=";
   };
   sourceRoot = "ddrescueview-source-${version}/source";
 

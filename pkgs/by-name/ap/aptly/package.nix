@@ -20,7 +20,7 @@ buildGoModule rec {
     owner = "aptly-dev";
     repo = "aptly";
     rev = "v${version}";
-    sha256 = "sha256-LqGOLXXaGfQfoj2r+aY9SdOKUDI9+22EsHKBhHMidyk=";
+    hash = "sha256-LqGOLXXaGfQfoj2r+aY9SdOKUDI9+22EsHKBhHMidyk=";
   };
 
   vendorHash = "sha256-6l3OFKFTtFWT68Ylav6woczBlMhD75C9ZoQ6OeLz0Cs=";

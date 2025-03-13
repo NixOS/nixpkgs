@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
     owner = "martinber";
     repo = "noaa-apt";
     rev = "v${version}";
-    sha256 = "sha256-wmjglF2+BFmlTfvqt90nbCxuldN8AEFXj7y9tgTvA2Y=";
+    hash = "sha256-wmjglF2+BFmlTfvqt90nbCxuldN8AEFXj7y9tgTvA2Y=";
   };
 
   nativeBuildInputs = [

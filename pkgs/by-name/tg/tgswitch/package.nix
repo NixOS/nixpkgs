@@ -11,7 +11,7 @@ buildGoModule rec {
     owner = "warrensbox";
     repo = "tgswitch";
     rev = version;
-    sha256 = "sha256-Q3Cef3B7hfVHLvW8Rx6IdH9g/3luDhpUMZ8TXVpb8gQ=";
+    hash = "sha256-Q3Cef3B7hfVHLvW8Rx6IdH9g/3luDhpUMZ8TXVpb8gQ=";
   };
 
   vendorHash = "sha256-PlTdbA8Z2I2SWoG7oYG87VQfczx9zP1SCJx70UWOEog=";

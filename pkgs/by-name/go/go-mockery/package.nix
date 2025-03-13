@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "vektra";
     repo = "mockery";
     rev = "v${version}";
-    sha256 = "sha256-algCErKmB43r/t7wo8BJSM0MHRxvxVWZ2u0n1xuLLdw=";
+    hash = "sha256-algCErKmB43r/t7wo8BJSM0MHRxvxVWZ2u0n1xuLLdw=";
   };
 
   preCheck = ''

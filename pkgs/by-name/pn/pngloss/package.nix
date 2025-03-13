@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "foobaz";
     repo = "pngloss";
     rev = "559f09437e1c797a1eaf08dfdcddd9b082f0e09c";
-    sha256 = "sha256-dqrrzbLu4znyWOlTDIf56O3efxszetiP+CdFiy2PBd4=";
+    hash = "sha256-dqrrzbLu4znyWOlTDIf56O3efxszetiP+CdFiy2PBd4=";
   };
 
   nativeBuildInputs = [ pkg-config ];

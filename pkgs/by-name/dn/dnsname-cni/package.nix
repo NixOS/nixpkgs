@@ -14,7 +14,7 @@ buildGoModule rec {
     owner = "containers";
     repo = "dnsname";
     rev = "v${version}";
-    sha256 = "sha256-kebN1OLMOrBKBz4aBV0VYm+LmLm6S0mKnVgG2u5I+d4=";
+    hash = "sha256-kebN1OLMOrBKBz4aBV0VYm+LmLm6S0mKnVgG2u5I+d4=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

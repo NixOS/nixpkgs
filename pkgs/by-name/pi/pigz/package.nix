@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "madler";
     repo = pname;
     tag = "v${version}";
-    sha256 = "sha256-PzdxyO4mCg2jE/oBk1MH+NUdWM95wIIIbncBg71BkmQ=";
+    hash = "sha256-PzdxyO4mCg2jE/oBk1MH+NUdWM95wIIIbncBg71BkmQ=";
   };
 
   enableParallelBuilding = true;

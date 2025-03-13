@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
     owner = "Soft";
     repo = "xcolor";
     rev = version;
-    sha256 = "sha256-NfmoBZek4hsga6RflE5EKkWarhCFIcTwEXhg2fpkxNE=";
+    hash = "sha256-NfmoBZek4hsga6RflE5EKkWarhCFIcTwEXhg2fpkxNE=";
   };
 
   useFetchCargoVendor = true;

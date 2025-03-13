@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     owner = "Benson-Genomics-Lab";
     repo = "trf";
     rev = "v${version}";
-    sha256 = "sha256-73LypVqBdlRdDCblf9JNZQmS5Za8xpId4ha5GjTJHDo=";
+    hash = "sha256-73LypVqBdlRdDCblf9JNZQmS5Za8xpId4ha5GjTJHDo=";
   };
 
   meta = with lib; {

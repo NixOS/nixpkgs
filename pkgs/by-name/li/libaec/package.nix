@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "k202009";
     repo = "libaec";
     rev = "v${version}";
-    sha256 = "sha256-4WS3l79v9CTFBLuJmNMMK7RRNPLSa5KYID3W4aGMTuE=";
+    hash = "sha256-4WS3l79v9CTFBLuJmNMMK7RRNPLSa5KYID3W4aGMTuE=";
   };
 
   nativeBuildInputs = [

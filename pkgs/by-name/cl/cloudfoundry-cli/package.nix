@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "cloudfoundry";
     repo = "cli";
     rev = "v${version}";
-    sha256 = "sha256-ZSYqTERS724L7Twv2rzpjl/ss719eEyP6KJlAjU4Lm4=";
+    hash = "sha256-ZSYqTERS724L7Twv2rzpjl/ss719eEyP6KJlAjU4Lm4=";
   };
   vendorHash = "sha256-IyPTsVQSHXiMsF3N0b6udnV4EY5nTIyBx4zGM/2SL/c=";
 

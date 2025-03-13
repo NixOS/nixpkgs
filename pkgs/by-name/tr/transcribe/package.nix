@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     if stdenv.hostPlatform.system == "x86_64-linux" then
       fetchzip {
         url = "https://www.seventhstring.com/xscribe/downlo/xscsetup-${version}.tar.gz";
-        sha256 = "sha256-VWfjtNbwK9ZiWgs161ubRy+IjSXXk3FEfMkmA6Jhz8A=";
+        hash = "sha256-VWfjtNbwK9ZiWgs161ubRy+IjSXXk3FEfMkmA6Jhz8A=";
       }
     else
       throw "Platform not supported";

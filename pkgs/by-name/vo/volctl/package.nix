@@ -19,7 +19,7 @@ python3Packages.buildPythonApplication rec {
     owner = "buzz";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-jzS97KV17wKeBI6deKE4rEj5lvqC38fq1JGundHn2So=";
+    hash = "sha256-jzS97KV17wKeBI6deKE4rEj5lvqC38fq1JGundHn2So=";
   };
 
   postPatch = ''

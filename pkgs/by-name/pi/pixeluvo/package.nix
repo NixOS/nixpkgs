@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://www.pixeluvo.com/downloads/${pname}_${version}_amd64.deb";
-    sha256 = "sha256-QYSuD6o3kHg0DrFihYEcf9e3b8U1bu4Zf78+Akmm8yo=";
+    hash = "sha256-QYSuD6o3kHg0DrFihYEcf9e3b8U1bu4Zf78+Akmm8yo=";
   };
 
   nativeBuildInputs = [

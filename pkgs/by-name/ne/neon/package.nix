@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://notroj.github.io/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-SHLhL4Alct7dSwL4cAZYFLLVFB99va9wju2rgmtRpYo=";
+    hash = "sha256-SHLhL4Alct7dSwL4cAZYFLLVFB99va9wju2rgmtRpYo=";
   };
 
   patches = optionals stdenv.hostPlatform.isDarwin [ ./darwin-fix-configure.patch ];

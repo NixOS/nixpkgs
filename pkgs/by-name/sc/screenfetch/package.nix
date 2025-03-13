@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     owner = "KittyKatt";
     repo = "screenFetch";
     rev = "v${version}";
-    sha256 = "sha256-UNZMCLXhH4wDV0/fGWsB+KAi6aJVuPs6zpWXIQAqnjo=";
+    hash = "sha256-UNZMCLXhH4wDV0/fGWsB+KAi6aJVuPs6zpWXIQAqnjo=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

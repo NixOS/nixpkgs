@@ -58,7 +58,7 @@ let
       owner = "glvnd";
       repo = "libglvnd";
       rev = "v1.4.0";
-      sha256 = "sha256-Y6JHRygXcZtnrdnqi1Lzyvh/635gwZWnMeW9aRCpxxs";
+      hash = "sha256-Y6JHRygXcZtnrdnqi1Lzyvh/635gwZWnMeW9aRCpxxs";
     };
   };
   plex-desktop = stdenv.mkDerivation {

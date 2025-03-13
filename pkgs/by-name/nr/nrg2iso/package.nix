@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://gregory.kokanosky.free.fr/v4/linux/${pname}-${version}.tar.gz";
-    sha256 = "sha256-O+NqQWdY/BkQRztJqNrfKiqj1R8ZdhlzNrwXS8HjBuU=";
+    hash = "sha256-O+NqQWdY/BkQRztJqNrfKiqj1R8ZdhlzNrwXS8HjBuU=";
   };
 
   patches = [ ./c-compiler.patch ];

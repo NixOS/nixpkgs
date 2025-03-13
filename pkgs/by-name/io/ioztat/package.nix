@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "jimsalterjrs";
     repo = "ioztat";
     rev = "v${version}";
-    sha256 = "sha256-8svMijgVxSuquPFO2Q2HeqGLdMkwhiujS1DSxC/LRRk=";
+    hash = "sha256-8svMijgVxSuquPFO2Q2HeqGLdMkwhiujS1DSxC/LRRk=";
   };
 
   nativeBuildInputs = [ installShellFiles ];

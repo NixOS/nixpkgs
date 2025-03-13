@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
     owner = "pest-parser";
     repo = "pest-ide-tools";
     rev = "v${version}";
-    sha256 = "sha256-12/FndzUbUlgcYcwMT1OfamSKgy2q+CvtGyx5YY4IFQ=";
+    hash = "sha256-12/FndzUbUlgcYcwMT1OfamSKgy2q+CvtGyx5YY4IFQ=";
   };
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Security

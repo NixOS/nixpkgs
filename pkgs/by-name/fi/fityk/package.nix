@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     owner = "wojdyr";
     repo = "fityk";
     rev = "v${version}";
-    sha256 = "sha256-m2RaZMYT6JGwa3sOUVsBIzCdZetTbiygaInQWoJ4m1o=";
+    hash = "sha256-m2RaZMYT6JGwa3sOUVsBIzCdZetTbiygaInQWoJ4m1o=";
   };
 
   nativeBuildInputs = [

@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://smarden.org/runit/${pname}-${version}.tar.gz";
-    sha256 = "sha256-le9NKGi5eMcXn+R5AeXFeOEc8nPSkr1iCL06fMsCkpA=";
+    hash = "sha256-le9NKGi5eMcXn+R5AeXFeOEc8nPSkr1iCL06fMsCkpA=";
   };
 
   patches = [

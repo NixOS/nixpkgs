@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://brouits.free.fr/csv2latex/csv2latex-${version}.tar.gz";
-    sha256 = "sha256-k1vQyrVJmfaJ7jVaoW2dkPD7GO8EoDqJY5m8O2U/kYw=";
+    hash = "sha256-k1vQyrVJmfaJ7jVaoW2dkPD7GO8EoDqJY5m8O2U/kYw=";
   };
 
   installPhase = ''

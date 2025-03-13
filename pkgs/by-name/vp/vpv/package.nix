@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "kidanger";
     repo = "vpv";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-mlBceYMfsAE7MI6J7xnkJHBJ8RInePooXH5YW9I47YM=";
+    hash = "sha256-mlBceYMfsAE7MI6J7xnkJHBJ8RInePooXH5YW9I47YM=";
   };
 
   cargoRoot = "src/fuzzy-finder";

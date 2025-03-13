@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     owner = "simgrid";
     repo = "simgrid";
     rev = "v${version}";
-    sha256 = "sha256-7w4ObbMem1Y8Lh9MOcdCSEktTDRkvVKmKlS9adm15oE=";
+    hash = "sha256-7w4ObbMem1Y8Lh9MOcdCSEktTDRkvVKmKlS9adm15oE=";
   };
 
   propagatedBuildInputs = [ boost ];

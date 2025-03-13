@@ -12,7 +12,7 @@ buildGoModule {
     owner = "cloverstd";
     repo = "tcping";
     rev = "83f644c761819f7c4386f0645cd0a337eccfc62e";
-    sha256 = "sha256-GSkNfaGMJbBqDg8DKhDtLAuUg1yF3FbBdxcf4oG50rI=";
+    hash = "sha256-GSkNfaGMJbBqDg8DKhDtLAuUg1yF3FbBdxcf4oG50rI=";
   };
 
   vendorHash = "sha256-Q+aFgi7GCAn3AxDuGtRG4DdPhI7gQKEo7A9iu1YcTsQ=";

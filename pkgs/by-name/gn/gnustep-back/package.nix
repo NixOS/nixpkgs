@@ -18,7 +18,7 @@ clangStdenv.mkDerivation (finalAttrs: {
 
   src = fetchzip {
     url = "ftp://ftp.gnustep.org/pub/gnustep/core/gnustep-back-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-E9rg3ySRUXSVgdPLeg1WrMO8u+SHHmM2Kb/XDAYqIOQ=";
+    hash = "sha256-E9rg3ySRUXSVgdPLeg1WrMO8u+SHHmM2Kb/XDAYqIOQ=";
   };
 
   nativeBuildInputs = [

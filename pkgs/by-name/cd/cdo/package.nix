@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://code.mpimet.mpg.de/attachments/download/29481/${pname}-${version}.tar.gz";
-    sha256 = "sha256-TfH+K4+S9Uwn6585nt+rQNkyIAWmcyyhUk71wWJ6xOc=";
+    hash = "sha256-TfH+K4+S9Uwn6585nt+rQNkyIAWmcyyhUk71wWJ6xOc=";
   };
 
   configureFlags =

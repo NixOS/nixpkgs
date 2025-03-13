@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "fullhunt";
     repo = pname;
     rev = "070fbd00f0945645bd5e0daa199a554ef3884b95";
-    sha256 = "sha256-ORSc4KHyAMjuA7QHReDh6SYY5yZRunBBN1+lkCayqL4=";
+    hash = "sha256-ORSc4KHyAMjuA7QHReDh6SYY5yZRunBBN1+lkCayqL4=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [

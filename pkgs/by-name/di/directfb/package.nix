@@ -41,11 +41,11 @@ stdenv.mkDerivation rec {
     # Fixes for build of `pkgsMusl.directfb`; applied everywhere to prevent patchrot
     (fetchpatch {
       url = "https://git.alpinelinux.org/aports/plain/community/directfb/0001-directfb-fix-musl-compile.patch?id=f8158258493fc0c3eb5de2302e40f4bc44ecfb09";
-      sha256 = "sha256-hmwzbaXu30ZkAqUn1NmvtlJkM6ctddKcO4hxh+1LSS4=";
+      hash = "sha256-hmwzbaXu30ZkAqUn1NmvtlJkM6ctddKcO4hxh+1LSS4=";
     })
     (fetchpatch {
       url = "https://git.alpinelinux.org/aports/plain/community/directfb/0002-Fix-musl-PTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP-comp.patch?id=f8158258493fc0c3eb5de2302e40f4bc44ecfb09";
-      sha256 = "sha256-j3+mcP6hV9LKuba1GOdcM1cZfmXuJtRgx4vE484jIns=";
+      hash = "sha256-j3+mcP6hV9LKuba1GOdcM1cZfmXuJtRgx4vE484jIns=";
     })
     # This uses POSIX basename() while directfb expects GNU
     # basename(), but the POSIX behaviour of modifying the input

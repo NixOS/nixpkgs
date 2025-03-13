@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     owner = "pgManage";
     repo = "pgManage";
     rev = "a028604416be382d6d310bc68b4e7c3cd16020fb";
-    sha256 = "sha256-ibCzZrqfbio1wBVFKB6S/wdRxnCc7s3IQdtI9txxhaM=";
+    hash = "sha256-ibCzZrqfbio1wBVFKB6S/wdRxnCc7s3IQdtI9txxhaM=";
   };
 
   patchPhase = ''

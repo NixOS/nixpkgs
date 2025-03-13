@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://gitlab.freedesktop.org/wayland/wayland-utils/-/releases/${version}/downloads/wayland-utils-${version}.tar.xz";
-    sha256 = "sha256-2SeMIlVFhogYAlQHUbzEJWkmK/gM2aybD9Ev9L0JqeQ=";
+    hash = "sha256-2SeMIlVFhogYAlQHUbzEJWkmK/gM2aybD9Ev9L0JqeQ=";
   };
 
   strictDeps = true;

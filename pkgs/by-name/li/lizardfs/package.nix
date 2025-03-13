@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     owner = "lizardfs";
     repo = "lizardfs";
     rev = version;
-    sha256 = "sha256-rgaFhJvmA1RVDL4+vQLMC0GrdlgUlvJeZ5/JJ67C20Q=";
+    hash = "sha256-rgaFhJvmA1RVDL4+vQLMC0GrdlgUlvJeZ5/JJ67C20Q=";
   };
 
   nativeBuildInputs = [

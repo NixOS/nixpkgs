@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     owner = "leahneukirchen";
     repo = "redo-c";
     rev = "v${version}";
-    sha256 = "sha256-oZcaBgESIaD7/SUBE7luh7axucKTEzXPVkQAQs2NCXE=";
+    hash = "sha256-oZcaBgESIaD7/SUBE7luh7axucKTEzXPVkQAQs2NCXE=";
   };
 
   postPatch = ''

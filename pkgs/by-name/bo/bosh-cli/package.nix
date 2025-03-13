@@ -15,7 +15,7 @@ buildGoModule rec {
     owner = "cloudfoundry";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-GTxl0lsM1BMWTUAQfNYkJupDUCnXWavTnRZrkaCRpPc=";
+    hash = "sha256-GTxl0lsM1BMWTUAQfNYkJupDUCnXWavTnRZrkaCRpPc=";
   };
   vendorHash = null;
 

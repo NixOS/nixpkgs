@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "bbuchfink";
     repo = "diamond";
     rev = "v${version}";
-    sha256 = "sha256-X/6sOClMFGBYksMrVfM1Y7MM3NmBEiRpmLg4Rbatc+w=";
+    hash = "sha256-X/6sOClMFGBYksMrVfM1Y7MM3NmBEiRpmLg4Rbatc+w=";
   };
 
   nativeBuildInputs = [ cmake ];

@@ -18,7 +18,7 @@ buildPythonApplication rec {
     owner = "keredson";
     repo = "gnomecast";
     rev = "d42d8915838b01c5cadacb322909e08ffa455d4f";
-    sha256 = "sha256-CJpbBuRzEjWb8hsh3HMW4bZA7nyDAwjrERCS5uGdwn8=";
+    hash = "sha256-CJpbBuRzEjWb8hsh3HMW4bZA7nyDAwjrERCS5uGdwn8=";
   };
 
   nativeBuildInputs = [ wrapGAppsHook3 ];

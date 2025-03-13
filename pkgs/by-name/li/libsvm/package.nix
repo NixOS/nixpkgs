@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://www.csie.ntu.edu.tw/~cjlin/libsvm/libsvm-${version}.tar.gz";
-    sha256 = "sha256-1doSzMPQ7thFP732+sfZ8AUvPopfB6IXTk7wqdg9zfg=";
+    hash = "sha256-1doSzMPQ7thFP732+sfZ8AUvPopfB6IXTk7wqdg9zfg=";
   };
 
   patches = lib.optionals withOpenMP [ ./openmp.patch ];

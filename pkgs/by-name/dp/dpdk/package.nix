@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://fast.dpdk.org/rel/dpdk-${version}.tar.xz";
-    sha256 = "sha256-mUT35fJo56ybQZPizVTvbZj24dfd3JZ8d65PZhbW+70=";
+    hash = "sha256-mUT35fJo56ybQZPizVTvbZj24dfd3JZ8d65PZhbW+70=";
   };
 
   nativeBuildInputs = [

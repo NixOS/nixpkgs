@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     owner = "jonas";
     repo = "tig";
     rev = "tig-${version}";
-    sha256 = "sha256-2kNogpzu8e/abjwo18s1G5ZcSZdG5c/Ydp6tfezumdk=";
+    hash = "sha256-2kNogpzu8e/abjwo18s1G5ZcSZdG5c/Ydp6tfezumdk=";
   };
 
   nativeBuildInputs = [

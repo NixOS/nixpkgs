@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "~sircmpwn";
     repo = "gmnisrv";
     rev = version;
-    sha256 = "sha256-V9HXXYQIo3zeqZjJEn+dhemNg6AU+ee3FRmBmXgLuYQ=";
+    hash = "sha256-V9HXXYQIo3zeqZjJEn+dhemNg6AU+ee3FRmBmXgLuYQ=";
   };
 
   env.NIX_CFLAGS_COMPILE = toString [

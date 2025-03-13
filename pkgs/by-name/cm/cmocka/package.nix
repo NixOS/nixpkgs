@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://cmocka.org/files/${majorVersion}/cmocka-${version}.tar.xz";
-    sha256 = "sha256-gQVw6wuNZIBDMfgrKf9Hx5DOnNaxY+mNR6SAcEfsrYI=";
+    hash = "sha256-gQVw6wuNZIBDMfgrKf9Hx5DOnNaxY+mNR6SAcEfsrYI=";
   };
 
   patches = [

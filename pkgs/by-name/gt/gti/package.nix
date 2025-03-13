@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "rwos";
     repo = "gti";
     rev = "v${version}";
-    sha256 = "sha256-DUDCFcaB38Xkp3lLfEhjGC0j430dphXFBVhGzm7/Bp0=";
+    hash = "sha256-DUDCFcaB38Xkp3lLfEhjGC0j430dphXFBVhGzm7/Bp0=";
   };
 
   postPatch = ''

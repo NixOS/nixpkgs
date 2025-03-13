@@ -39,7 +39,7 @@ let
     repo = "llvm-project";
     # cling-llvm13 branch
     rev = "3610201fbe0352a63efb5cb45f4ea4987702c735";
-    sha256 = "sha256-Cb7BvV7yobG+mkaYe7zD2KcnPvm8/vmVATNWssklXyk=";
+    hash = "sha256-Cb7BvV7yobG+mkaYe7zD2KcnPvm8/vmVATNWssklXyk=";
     sparseCheckout = [ "clang" ];
   };
 
@@ -55,7 +55,7 @@ let
       owner = "root-project";
       repo = "cling";
       rev = "v${version}";
-      sha256 = "sha256-Ye8EINzt+dyNvUIRydACXzb/xEPLm0YSkz08Xxw3xp4=";
+      hash = "sha256-Ye8EINzt+dyNvUIRydACXzb/xEPLm0YSkz08Xxw3xp4=";
     };
 
     prePatch = ''

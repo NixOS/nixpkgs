@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
     owner = "caverym";
     repo = "proton-caller";
     rev = version;
-    sha256 = "sha256-srzahBMihkEP9/+7oRij5POHkCcH6QBh4kGz42Pz0nM=";
+    hash = "sha256-srzahBMihkEP9/+7oRij5POHkCcH6QBh4kGz42Pz0nM=";
   };
 
   useFetchCargoVendor = true;

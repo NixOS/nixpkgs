@@ -12,7 +12,7 @@ stdenv.mkDerivation {
     owner = "cadsondemak";
     repo = "chonburi";
     rev = "daf26bf77d82fba50eaa3aa3fad905cb9f6b5e28";
-    sha256 = "sha256-oC7ZCfNOyvGtqT9+Ap/CfCHzdWNzeCuac2dJ9fctgB8=";
+    hash = "sha256-oC7ZCfNOyvGtqT9+Ap/CfCHzdWNzeCuac2dJ9fctgB8=";
   };
 
   installPhase = ''

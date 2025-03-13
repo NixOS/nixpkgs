@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
     owner = "Mange";
     repo = "tydra";
     rev = "v${version}";
-    sha256 = "sha256-bH/W54b7UHdkbgLXAd+l5I6UAKjWDMW+I5mfwT4yEEY=";
+    hash = "sha256-bH/W54b7UHdkbgLXAd+l5I6UAKjWDMW+I5mfwT4yEEY=";
   };
 
   useFetchCargoVendor = true;

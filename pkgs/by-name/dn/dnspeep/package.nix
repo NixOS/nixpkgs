@@ -8,7 +8,7 @@ rustPlatform.buildRustPackage rec {
     owner = "jvns";
     repo = "dnspeep";
     rev = "v${version}";
-    sha256 = "sha256-QpUbHiMDQFRCTVyjrO9lfQQ62Z3qanv0j+8eEXjE3n4=";
+    hash = "sha256-QpUbHiMDQFRCTVyjrO9lfQQ62Z3qanv0j+8eEXjE3n4=";
   };
 
   useFetchCargoVendor = true;

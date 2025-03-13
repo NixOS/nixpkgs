@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     owner = "jgmdev";
     repo = "wl-color-picker";
     rev = "v${version}";
-    sha256 = "sha256-lvhpXy4Sd1boYNGhbPoZTJlBhlW5obltDOrEzB1Gq0A=";
+    hash = "sha256-lvhpXy4Sd1boYNGhbPoZTJlBhlW5obltDOrEzB1Gq0A=";
   };
 
   strictDeps = true;

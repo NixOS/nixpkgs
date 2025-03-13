@@ -11,7 +11,7 @@ stdenvNoCC.mkDerivation rec {
 
   src = fetchzip {
     url = "https://github.com/Mic92/iana-etc/releases/download/${version}/iana-etc-${version}.tar.gz";
-    sha256 = "sha256-vQxZ8wqAQfBuyQ6QOQonmotBpl0JFJKqkw9NTma1G6k=";
+    hash = "sha256-vQxZ8wqAQfBuyQ6QOQonmotBpl0JFJKqkw9NTma1G6k=";
   };
 
   installPhase = ''

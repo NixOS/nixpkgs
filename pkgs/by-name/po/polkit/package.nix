@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
     # https://github.com/NixOS/nixpkgs/issues/18012
     (fetchpatch {
       url = "https://github.com/polkit-org/polkit/commit/f93c7466039ea3403e0576928aeb620b806d0cce.patch";
-      sha256 = "sha256-cF0nNovYmyr+XixpBgQFF0A+oJeSPGZgTkgDQkQuof8=";
+      hash = "sha256-cF0nNovYmyr+XixpBgQFF0A+oJeSPGZgTkgDQkQuof8=";
     })
   ];
 

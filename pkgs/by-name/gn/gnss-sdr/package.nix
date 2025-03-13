@@ -29,7 +29,7 @@ gnuradio.pkgs.mkDerivation rec {
     owner = "gnss-sdr";
     repo = "gnss-sdr";
     rev = "v${version}";
-    sha256 = "sha256-IbkYdw1pwI+FMnZMChsxMz241Kv4EzMcBb0mm6/jq1k=";
+    hash = "sha256-IbkYdw1pwI+FMnZMChsxMz241Kv4EzMcBb0mm6/jq1k=";
   };
 
   patches = [

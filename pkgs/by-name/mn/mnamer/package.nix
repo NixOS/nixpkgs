@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
     owner = "jkwill87";
     repo = "mnamer";
     tag = version;
-    sha256 = "sha256-qQu5V1GOsbrR00HOrot6TTAkc3KRasBPDEU7ZojUBio=";
+    hash = "sha256-qQu5V1GOsbrR00HOrot6TTAkc3KRasBPDEU7ZojUBio=";
   };
 
   build-system = with python3Packages; [

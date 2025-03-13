@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
     owner = "cloudhead";
     repo = "rx";
     rev = "v${version}";
-    sha256 = "sha256-LTpaV/fgYUgA2M6Wz5qLHnTNywh13900g+umhgLvciM=";
+    hash = "sha256-LTpaV/fgYUgA2M6Wz5qLHnTNywh13900g+umhgLvciM=";
   };
 
   useFetchCargoVendor = true;

@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
     owner = "phaazon";
     repo = "cargo-sync-readme";
     rev = version;
-    sha256 = "sha256-n9oIWblTTuXFFQFN6mpQiCH5N7yg5fAp8v9vpB5/DAo=";
+    hash = "sha256-n9oIWblTTuXFFQFN6mpQiCH5N7yg5fAp8v9vpB5/DAo=";
   };
 
   useFetchCargoVendor = true;

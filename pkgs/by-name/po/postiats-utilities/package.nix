@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "Hibou57";
     repo = "PostiATS-Utilities";
     rev = "v${version}";
-    sha256 = "sha256-QeBbv5lwqL2ARjB+RGyBHeuibaxugffBLhC9lYs+5tE=";
+    hash = "sha256-QeBbv5lwqL2ARjB+RGyBHeuibaxugffBLhC9lYs+5tE=";
   };
 
   meta = with lib; {

@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://xorg/individual/app/editres-${version}.tar.gz";
-    sha256 = "sha256-LVbWB3vHZ6+n4DD+ssNy/mvok/7EApoj9FodVZ/YRq4=";
+    hash = "sha256-LVbWB3vHZ6+n4DD+ssNy/mvok/7EApoj9FodVZ/YRq4=";
   };
 
   nativeBuildInputs = [ pkg-config ];

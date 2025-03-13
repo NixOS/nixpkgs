@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     owner = "HaxeFoundation";
     repo = "hashlink";
     rev = version;
-    sha256 = "sha256-rXw56zoFpLMzz8U3RHWGBF0dUFCUTjXShUEhzp2Qc5g=";
+    hash = "sha256-rXw56zoFpLMzz8U3RHWGBF0dUFCUTjXShUEhzp2Qc5g=";
   };
 
   # incompatible pointer type error: const char ** -> const void **

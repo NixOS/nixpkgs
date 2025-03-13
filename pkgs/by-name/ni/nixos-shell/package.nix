@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "Mic92";
     repo = "nixos-shell";
     rev = version;
-    sha256 = "sha256-plRKXQqww7easx0wgGKAkOJH1TW/PeeB20dq9XUN8J4=";
+    hash = "sha256-plRKXQqww7easx0wgGKAkOJH1TW/PeeB20dq9XUN8J4=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

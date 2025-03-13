@@ -17,7 +17,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "lxgr-linux";
     repo = "pokete";
     tag = version;
-    sha256 = "sha256-T18908Einsgful8hYMVHl0cL4sIYFvhpy0MbLIcVhxs=";
+    hash = "sha256-T18908Einsgful8hYMVHl0cL4sIYFvhpy0MbLIcVhxs=";
   };
 
   pythonPath = with python3.pkgs; [

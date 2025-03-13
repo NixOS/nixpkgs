@@ -12,7 +12,7 @@ python3Packages.buildPythonPackage rec {
     owner = "nengo";
     repo = "nengo-gui";
     tag = "v${version}";
-    sha256 = "sha256-aBi4roe9pqPmpbW5zrbDoIvyH5mTKgIzL2O5j1+VBMY=";
+    hash = "sha256-aBi4roe9pqPmpbW5zrbDoIvyH5mTKgIzL2O5j1+VBMY=";
   };
 
   propagatedBuildInputs = with python3Packages; [ nengo ];

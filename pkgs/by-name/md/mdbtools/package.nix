@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     owner = "mdbtools";
     repo = "mdbtools";
     rev = "v${version}";
-    sha256 = "sha256-XWkFgQZKx9/pjVNEqfp9BwgR7w3fVxQ/bkJEYUvCXPs=";
+    hash = "sha256-XWkFgQZKx9/pjVNEqfp9BwgR7w3fVxQ/bkJEYUvCXPs=";
   };
 
   configureFlags = [ "--disable-scrollkeeper" ];

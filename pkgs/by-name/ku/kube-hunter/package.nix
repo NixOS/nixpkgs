@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "aquasecurity";
     repo = pname;
     tag = "v${version}";
-    sha256 = "sha256-+M8P/VSF9SKPvq+yNPjokyhggY7hzQ9qLLhkiTNbJls=";
+    hash = "sha256-+M8P/VSF9SKPvq+yNPjokyhggY7hzQ9qLLhkiTNbJls=";
   };
 
   nativeBuildInputs = with python3.pkgs; [

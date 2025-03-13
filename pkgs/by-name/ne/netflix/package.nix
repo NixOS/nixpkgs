@@ -36,7 +36,7 @@ let
     icon = fetchurl {
       name = "netflix-icon-2016.png";
       url = "https://assets.nflxext.com/us/ffe/siteui/common/icons/nficon2016.png";
-      sha256 = "sha256-c0H3uLCuPA2krqVZ78MfC1PZ253SkWZP3PfWGP2V7Yo=";
+      hash = "sha256-c0H3uLCuPA2krqVZ78MfC1PZ253SkWZP3PfWGP2V7Yo=";
       meta.license = lib.licenses.unfree;
     };
     desktopName = "Netflix via Google Chrome";

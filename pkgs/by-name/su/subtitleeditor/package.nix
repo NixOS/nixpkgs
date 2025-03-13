@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     owner = "kitone";
     repo = "subtitleeditor";
     rev = "4c215f4cff4483c44361a2f1d45efc4c6670787f";
-    sha256 = "sha256-1Q1nd3GJ6iDGQv4SM2S1ehVW6kPdbqTn8KTtTb0obiQ=";
+    hash = "sha256-1Q1nd3GJ6iDGQv4SM2S1ehVW6kPdbqTn8KTtTb0obiQ=";
   };
 
   nativeBuildInputs = [

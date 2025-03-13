@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     owner = "zmartzone";
     repo = "cjose";
     rev = "v${version}";
-    sha256 = "sha256-vDvCxMpgCdteGvNxy2HCNRaxbhxOuTadL0nM2wkFHtk=";
+    hash = "sha256-vDvCxMpgCdteGvNxy2HCNRaxbhxOuTadL0nM2wkFHtk=";
   };
 
   patches = [

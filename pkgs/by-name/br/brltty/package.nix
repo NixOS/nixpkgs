@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://brltty.app/archive/brltty-${version}.tar.gz";
-    sha256 = "sha256-FsM9AeL1lnBziJlmB7EZAIgDKylT8D4Il81Fe1y9Yjg=";
+    hash = "sha256-FsM9AeL1lnBziJlmB7EZAIgDKylT8D4Il81Fe1y9Yjg=";
   };
 
   nativeBuildInputs = [

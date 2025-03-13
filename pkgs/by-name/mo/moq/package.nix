@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "matryer";
     repo = "moq";
     rev = "v${version}";
-    sha256 = "sha256-Y81EPb0h66lx3ISJsfb6iUqek/Ztni8ZITHtn5h34jU=";
+    hash = "sha256-Y81EPb0h66lx3ISJsfb6iUqek/Ztni8ZITHtn5h34jU=";
   };
 
   vendorHash = "sha256-Mwx2Z2oVFepNr911zERuoM79NlpXu13pVpXPJox86BA=";

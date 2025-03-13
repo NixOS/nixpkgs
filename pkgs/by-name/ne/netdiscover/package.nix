@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "netdiscover-scanner";
     repo = pname;
     rev = version;
-    sha256 = "sha256-Pd/Rf1G9z8sBZA5i+bzuzYUCiNI0Tv7Bz0lJDJCQU9I=";
+    hash = "sha256-Pd/Rf1G9z8sBZA5i+bzuzYUCiNI0Tv7Bz0lJDJCQU9I=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

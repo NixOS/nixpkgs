@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://maven/com/google/javascript/closure-compiler/v${version}/closure-compiler-v${version}.jar";
-    sha256 = "sha256-axJQrCHAW90gncUV2bYDezC1VVooTddB/wWRqChIt84=";
+    hash = "sha256-axJQrCHAW90gncUV2bYDezC1VVooTddB/wWRqChIt84=";
   };
 
   dontUnpack = true;

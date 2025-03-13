@@ -14,14 +14,14 @@ stdenv.mkDerivation rec {
     owner = "troglobit";
     repo = "editline";
     rev = version;
-    sha256 = "sha256-0FeDUVCUahbweH24nfaZwa7j7lSfZh1TnQK7KYqO+3g=";
+    hash = "sha256-0FeDUVCUahbweH24nfaZwa7j7lSfZh1TnQK7KYqO+3g=";
   };
 
   patches = [
     (fetchpatch {
       name = "fix-for-home-end-in-tmux.patch";
       url = "https://github.com/troglobit/editline/commit/265c1fb6a0b99bedb157dc7c320f2c9629136518.patch";
-      sha256 = "sha256-9fhQH0hT8BcykGzOUoT18HBtWjjoXnePSGDJQp8GH30=";
+      hash = "sha256-9fhQH0hT8BcykGzOUoT18HBtWjjoXnePSGDJQp8GH30=";
     })
 
     # Pending autoconf-2.72 upstream support:

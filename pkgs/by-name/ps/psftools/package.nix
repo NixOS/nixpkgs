@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   version = "1.1.2";
   src = fetchurl {
     url = "https://www.seasip.info/Unix/PSF/${pname}-${version}.tar.gz";
-    sha256 = "sha256-d/XlKPqYy9x8KNT+8G6zv9ST/uU53Tg4pYrlA17Jh94=";
+    hash = "sha256-d/XlKPqYy9x8KNT+8G6zv9ST/uU53Tg4pYrlA17Jh94=";
   };
   outputs = [
     "out"

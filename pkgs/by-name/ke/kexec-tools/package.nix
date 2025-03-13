@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
       "mirror://kernel/linux/utils/kernel/kexec/${pname}-${version}.tar.xz"
       "http://horms.net/projects/kexec/kexec-tools/${pname}-${version}.tar.xz"
     ];
-    sha256 = "sha256-Z7GsUDqt5FpU2wvHkiiogwo11dT4PO6TLP8+eoGkqew=";
+    hash = "sha256-Z7GsUDqt5FpU2wvHkiiogwo11dT4PO6TLP8+eoGkqew=";
   };
 
   patches = [

@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://download.pureftpd.org/pub/pure-ftpd/releases/pure-ftpd-${version}.tar.gz";
-    sha256 = "sha256-ESbzqVhW0IiJ/4lwPLGqnsmSTZOdFU6WkEySDwXcPHQ=";
+    hash = "sha256-ESbzqVhW0IiJ/4lwPLGqnsmSTZOdFU6WkEySDwXcPHQ=";
   };
 
   buildInputs = [

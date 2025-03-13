@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "erfanoabdi";
     repo = "imgpatchtools";
     rev = version;
-    sha256 = "sha256-7TOkqaXPui14VcSmMmYJ1Wg+s85wrgp+E0XcCB0Ml7M=";
+    hash = "sha256-7TOkqaXPui14VcSmMmYJ1Wg+s85wrgp+E0XcCB0Ml7M=";
   };
 
   buildInputs = [

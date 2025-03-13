@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "Shopify";
     repo = "themekit";
     rev = "v${version}";
-    sha256 = "sha256-A/t6yQW2xRFZYuYRyNN/0v4zdivch3tiv65a7TdHm2c=";
+    hash = "sha256-A/t6yQW2xRFZYuYRyNN/0v4zdivch3tiv65a7TdHm2c=";
   };
 
   vendorHash = "sha256-o928qjp7+/U1W03esYTwVEfQ4A3TmPnmgmh4oWpqJoo=";

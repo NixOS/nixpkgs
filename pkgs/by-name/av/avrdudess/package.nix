@@ -16,7 +16,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://github.com/ZakKemble/AVRDUDESS/releases/download/v2.18/AVRDUDESS-2.18-portable.zip";
-    sha256 = "sha256-N93FLiXp1WwhI5KwH6sho2wyFtkbODwCHOpEVbVnYdc=";
+    hash = "sha256-N93FLiXp1WwhI5KwH6sho2wyFtkbODwCHOpEVbVnYdc=";
   };
 
   nativeBuildInputs = [ unzip ];

@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     owner = "blogc";
     repo = "blogc";
     rev = "v${version}";
-    sha256 = "sha256-YAwGgV5Vllz8JlIASbGIkdRzpciQbgPiXl5DjiSEJyE=";
+    hash = "sha256-YAwGgV5Vllz8JlIASbGIkdRzpciQbgPiXl5DjiSEJyE=";
   };
 
   nativeBuildInputs = [

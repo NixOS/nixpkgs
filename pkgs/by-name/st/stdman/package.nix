@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "jeaye";
     repo = "stdman";
     rev = version;
-    sha256 = "sha256-/yJqKwJHonnBkP6/yQQJT3yPyYO6/nFAf4XFrgl3L0A=";
+    hash = "sha256-/yJqKwJHonnBkP6/yQQJT3yPyYO6/nFAf4XFrgl3L0A=";
   };
 
   outputDevdoc = "out";

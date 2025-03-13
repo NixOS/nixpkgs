@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "Sarcasm";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-nFAgTrup6V5oE+LP4UWDOCgTVCv2v9HbQbkGW+oDnTg=";
+    hash = "sha256-nFAgTrup6V5oE+LP4UWDOCgTVCv2v9HbQbkGW+oDnTg=";
   };
 
   meta = with lib; {

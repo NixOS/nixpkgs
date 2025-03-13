@@ -13,7 +13,7 @@ buildGoModule rec {
     owner = "splunk";
     repo = "qbec";
     rev = "v${version}";
-    sha256 = "sha256-zi8UPDJxa6SJslVTi6uOxph/au42LPRSCZ/oohXPYFs=";
+    hash = "sha256-zi8UPDJxa6SJslVTi6uOxph/au42LPRSCZ/oohXPYFs=";
   };
 
   vendorHash = "sha256-n0z4kErg0Y3uSwF8tCqM2AJs5rCuHOZONjhqMPSmeK4=";

@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchzip {
     # Linked on https://www.schristiancollins.com/generaluser.php:
     url = "https://www.dropbox.com/s/4x27l49kxcwamp5/GeneralUser_GS_${version}.zip";
-    sha256 = "sha256-lwUlWubXiVZ8fijKuNF54YQjT0uigjNAbjKaNjmC51s=";
+    hash = "sha256-lwUlWubXiVZ8fijKuNF54YQjT0uigjNAbjKaNjmC51s=";
   };
 
   installPhase = ''

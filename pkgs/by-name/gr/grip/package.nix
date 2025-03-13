@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/grip/grip-${version}.tar.gz";
-    sha256 = "sha256-lXu0mLLfcX8K1EmoFH0vp2cHluyRwhTL0/bW5Ax36mI=";
+    hash = "sha256-lXu0mLLfcX8K1EmoFH0vp2cHluyRwhTL0/bW5Ax36mI=";
   };
 
   nativeBuildInputs = [

@@ -26,7 +26,7 @@ maven.buildMavenPackage rec {
     owner = "developersu";
     repo = "ns-usbloader";
     rev = "v${version}";
-    sha256 = "sha256-gSf5SCIhcUEYGsYssXVGjUweVU+guxOI+lzD3ANr96w=";
+    hash = "sha256-gSf5SCIhcUEYGsYssXVGjUweVU+guxOI+lzD3ANr96w=";
   };
 
   patches = [ ./no-launch4j.patch ./make-deterministic.patch ];

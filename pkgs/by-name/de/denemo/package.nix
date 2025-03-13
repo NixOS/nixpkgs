@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://ftp.gnu.org/gnu/denemo/denemo-${version}.tar.gz";
-    sha256 = "sha256-S+WXDGmEf5fx+HYnXJdE5QNOfJg7EqEEX7IMI2SUtV0=";
+    hash = "sha256-S+WXDGmEf5fx+HYnXJdE5QNOfJg7EqEEX7IMI2SUtV0=";
   };
 
   patches = [

@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "hifi";
     repo = pname;
     tag = "v${version}";
-    sha256 = "sha256-4K6Sffu/yKHkcoNENbgpci2dbJVAH3vVkogcw/IYpnw=";
+    hash = "sha256-4K6Sffu/yKHkcoNENbgpci2dbJVAH3vVkogcw/IYpnw=";
   };
 
   postPatch = ''

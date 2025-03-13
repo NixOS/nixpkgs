@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "aibasel";
     repo = "downward";
     rev = "release-${version}";
-    sha256 = "sha256-JwBdV44h6LAJeIjKHPouvb3ZleydAc55QiuaFGrFx1Y=";
+    hash = "sha256-JwBdV44h6LAJeIjKHPouvb3ZleydAc55QiuaFGrFx1Y=";
   };
 
   nativeBuildInputs = [

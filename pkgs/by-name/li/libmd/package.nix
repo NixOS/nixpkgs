@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
       "https://archive.hadrons.org/software/libmd/libmd-${finalAttrs.version}.tar.xz"
       "https://libbsd.freedesktop.org/releases/libmd-${finalAttrs.version}.tar.xz"
     ];
-    sha256 = "sha256-G9aqQidTE68xQcfPLluWTosf1IgCXK8vlx9DsAd2szI=";
+    hash = "sha256-G9aqQidTE68xQcfPLluWTosf1IgCXK8vlx9DsAd2szI=";
   };
 
   enableParallelBuilding = true;

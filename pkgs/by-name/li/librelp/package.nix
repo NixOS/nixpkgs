@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     owner = "rsyslog";
     repo = "librelp";
     rev = "v${version}";
-    sha256 = "sha256-VJlvFiOsIyiu0kBU8NkObtt9j2ElrSzJtvE8wtSlOus=";
+    hash = "sha256-VJlvFiOsIyiu0kBU8NkObtt9j2ElrSzJtvE8wtSlOus=";
   };
 
   nativeBuildInputs = [

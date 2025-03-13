@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/vice-emu/vice-${version}.tar.gz";
-    sha256 = "sha256-HX3E0PK7zCqHG7lU/0pd9jBI3qnBb18em8gmD6QaEAQ=";
+    hash = "sha256-HX3E0PK7zCqHG7lU/0pd9jBI3qnBb18em8gmD6QaEAQ=";
   };
 
   nativeBuildInputs = [

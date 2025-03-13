@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     owner = "riquito";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-+QkkwQfp818bKVo1yUkWKLMqbdzRJ+oHpjxB+UFDRsU=";
+    hash = "sha256-+QkkwQfp818bKVo1yUkWKLMqbdzRJ+oHpjxB+UFDRsU=";
   };
 
   useFetchCargoVendor = true;

@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/sshguard/${pname}-${version}.tar.gz";
-    sha256 = "sha256-ZAKd7/bekP3u+x9JfUFPDkBFB2aTqR2hpw63WV6X7+s=";
+    hash = "sha256-ZAKd7/bekP3u+x9JfUFPDkBFB2aTqR2hpw63WV6X7+s=";
   };
 
   doCheck = true;

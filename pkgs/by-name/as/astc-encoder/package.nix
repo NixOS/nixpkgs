@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     owner = "ARM-software";
     repo = "astc-encoder";
     rev = version;
-    sha256 = "sha256-rCyi5Nla2IXsLD+rLMTN1h3B9umlNN0epZmPi/IFHPQ=";
+    hash = "sha256-rCyi5Nla2IXsLD+rLMTN1h3B9umlNN0epZmPi/IFHPQ=";
   };
 
   nativeBuildInputs = [ cmake ];

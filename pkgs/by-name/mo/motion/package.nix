@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     owner = "Motion-Project";
     repo = "motion";
     rev = "release-${version}";
-    sha256 = "sha256-bGjiO14a7xKRgoeo5JlexXlKggE+agRMmQViBXagmt8=";
+    hash = "sha256-bGjiO14a7xKRgoeo5JlexXlKggE+agRMmQViBXagmt8=";
   };
 
   nativeBuildInputs = [

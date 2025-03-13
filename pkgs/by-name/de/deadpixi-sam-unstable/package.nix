@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     owner = "deadpixi";
     repo = "sam";
     rev = "5d8acb35d78c327d76f00a54857cbd566ed9bc11";
-    sha256 = "sha256-+vRh6nDPc3UnmEdqROHRel5Te0h5m4eiaERs492xciQ=";
+    hash = "sha256-+vRh6nDPc3UnmEdqROHRel5Te0h5m4eiaERs492xciQ=";
   };
 
   postPatch = ''

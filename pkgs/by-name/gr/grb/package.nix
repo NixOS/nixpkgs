@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     owner = "LukeSmithxyz";
     repo = "grb";
     rev = "35a5353ab147b930c39e1ccd369791cc4c27f0df";
-    sha256 = "sha256-hQ21DXnkBJVCgGXQKDR+DjaDC3RXS2pNmSLDoHvHA4E=";
+    hash = "sha256-hQ21DXnkBJVCgGXQKDR+DjaDC3RXS2pNmSLDoHvHA4E=";
   };
 
   makeFlags = [

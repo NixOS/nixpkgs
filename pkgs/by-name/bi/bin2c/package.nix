@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     owner = "adobe";
     repo = "bin2c";
     rev = "4300880a350679a808dc05bdc2840368f5c24d9a";
-    sha256 = "sha256-PLo5kkN2k3KutVGumoXEB2x9MdxDUtpwAQZLwm4dDvw=";
+    hash = "sha256-PLo5kkN2k3KutVGumoXEB2x9MdxDUtpwAQZLwm4dDvw=";
   };
 
   makeFlags = [ "prefix=$(out)" ];

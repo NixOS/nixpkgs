@@ -28,13 +28,13 @@ let
   nnueBig = fetchurl {
     name = nnueBigFile;
     url = "https://tests.stockfishchess.org/api/nn/${nnueBigFile}";
-    sha256 = "sha256-ERHO+hERa3cWG9SxTatMUPJuWSDHVvSGFZK+Pc1t4XQ=";
+    hash = "sha256-ERHO+hERa3cWG9SxTatMUPJuWSDHVvSGFZK+Pc1t4XQ=";
   };
   nnueSmallFile = "nn-37f18f62d772.nnue";
   nnueSmall = fetchurl {
     name = nnueSmallFile;
     url = "https://tests.stockfishchess.org/api/nn/${nnueSmallFile}";
-    sha256 = "sha256-N/GPYtdy8xB+HWqso4mMEww8hvKrY+ZVX7vKIGNaiZ0=";
+    hash = "sha256-N/GPYtdy8xB+HWqso4mMEww8hvKrY+ZVX7vKIGNaiZ0=";
   };
 in
 
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     owner = "official-stockfish";
     repo = "Stockfish";
     rev = "sf_${version}";
-    sha256 = "sha256-oXvLaC5TEUPlHjhm7tOxpNPY88QxYHFw+Cev3Q8NEeQ=";
+    hash = "sha256-oXvLaC5TEUPlHjhm7tOxpNPY88QxYHFw+Cev3Q8NEeQ=";
   };
 
   postUnpack = ''

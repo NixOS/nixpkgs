@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "Foldex";
     repo = "r2mod_cli";
     rev = "v${version}";
-    sha256 = "sha256-Y9ZffztxfGYiUSphqwhe3rTbnJ/vmGGi1pLml+1tLP8=";
+    hash = "sha256-Y9ZffztxfGYiUSphqwhe3rTbnJ/vmGGi1pLml+1tLP8=";
   };
 
   buildInputs = [ bashInteractive ];

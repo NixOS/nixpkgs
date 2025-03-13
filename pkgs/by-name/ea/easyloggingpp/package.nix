@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "amrayn";
     repo = "easyloggingpp";
     rev = "v${version}";
-    sha256 = "sha256-R4NdwsUywgJoK5E/OdZXFds6iBKOsMa0E+2PDdQbV6E=";
+    hash = "sha256-R4NdwsUywgJoK5E/OdZXFds6iBKOsMa0E+2PDdQbV6E=";
   };
 
   nativeBuildInputs = [ cmake ];

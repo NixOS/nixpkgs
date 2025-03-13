@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     owner = "BatchDrake";
     repo = "sigutils";
     rev = "1d7559d427aadd253dd825eef26bf15e54860c5f";
-    sha256 = "sha256-wvd6sixwGmR9R4x+swLVqXre4Dqnj10jZIXUfaJcmBw=";
+    hash = "sha256-wvd6sixwGmR9R4x+swLVqXre4Dqnj10jZIXUfaJcmBw=";
   };
 
   nativeBuildInputs = [

@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "~bitfehler";
     repo = "wwcd";
     rev = "cdf70bb18dc60c66c074d4810cb37b9e697811e5";
-    sha256 = "sha256-laf1DEtdEs7q+rtp5Y5rb+7AGsKUv5T413CFWJiURWw=";
+    hash = "sha256-laf1DEtdEs7q+rtp5Y5rb+7AGsKUv5T413CFWJiURWw=";
   };
 
   nativeBuildInputs = [

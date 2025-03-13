@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     owner = "devkitPro";
     repo = "gamecube-tools";
     rev = "v${version}";
-    sha256 = "sha256-GsTmwyxBc36Qg+UGy+cRAjGW1eh1XxV0s94B14ZJAjU=";
+    hash = "sha256-GsTmwyxBc36Qg+UGy+cRAjGW1eh1XxV0s94B14ZJAjU=";
   };
 
   meta = with lib; {

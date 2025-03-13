@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "stefanberger";
     repo = "libtpms";
     rev = "v${version}";
-    sha256 = "sha256-YKs/XYJ8UItOtSinl28/G9XFVzobFd4ZDKtClQDLXFk=";
+    hash = "sha256-YKs/XYJ8UItOtSinl28/G9XFVzobFd4ZDKtClQDLXFk=";
   };
 
   nativeBuildInputs = [

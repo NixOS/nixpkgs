@@ -13,12 +13,12 @@ let
     {
       aarch64-darwin = {
         arch = "arm64";
-        sha256 = "sha256-tp8qKk06HvSVY1GggOv9VYH+1Ntlirf8Pf2FY0Qhksk=";
+        hash = "sha256-tp8qKk06HvSVY1GggOv9VYH+1Ntlirf8Pf2FY0Qhksk=";
       };
 
       x86_64-darwin = {
         arch = "64";
-        sha256 = "sha256-8hSxtLGoAcTLmUpr3Il/1wii2MgLqOJ3oAYSSPq7a1o=";
+        hash = "sha256-8hSxtLGoAcTLmUpr3Il/1wii2MgLqOJ3oAYSSPq7a1o=";
       };
     }
     .${stdenvNoCC.hostPlatform.system}
@@ -31,7 +31,7 @@ stdenvNoCC.mkDerivation {
 
   src = fetchurl {
     url = "https://dl.pstmn.io/download/version/${version}/osx_${dist.arch}";
-    inherit (dist) sha256;
+    inherit (dist) hash;
     name = "${pname}-${version}.zip";
   };
 

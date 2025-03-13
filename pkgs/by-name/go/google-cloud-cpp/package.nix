@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     owner = "googleapis";
     repo = "google-cloud-cpp";
     rev = "v${version}";
-    sha256 = "sha256-gCq8Uc+s/rnJWsGlI7f+tvAZHH8K69+H/leUOKE2GCY=";
+    hash = "sha256-gCq8Uc+s/rnJWsGlI7f+tvAZHH8K69+H/leUOKE2GCY=";
   };
 
   patches = [

@@ -10,7 +10,7 @@ let
     repo = "Libraries";
     # 2021-02-02
     rev = "c5cb3ed512c677db6f33e2d3539dfbb6e547030b";
-    sha256 = "sha256-GiplhZf640uScVdKL6E/fegOgtC9SE1xgBqcX86XADk=";
+    hash = "sha256-GiplhZf640uScVdKL6E/fegOgtC9SE1xgBqcX86XADk=";
   };
 in
 stdenv.mkDerivation rec {
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     owner = "megatokio";
     repo = "zasm";
     rev = version;
-    sha256 = "sha256-Zbno8kmzss1H2FjwzHB4U7UXxa6oDfsPV80MVVFfM68=";
+    hash = "sha256-Zbno8kmzss1H2FjwzHB4U7UXxa6oDfsPV80MVVFfM68=";
     postFetch = ''
       # remove folder containing files with weird names (causes the hash to turn out differently under macOS vs. Linux)
       rm -rv $out/Test

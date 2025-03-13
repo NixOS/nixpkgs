@@ -14,7 +14,7 @@ buildGoModule rec {
     owner = "brimdata";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-NCoeTeOkxkCsj/nRBhMJeEshFuwozOXNJvgp8vyCQDk=";
+    hash = "sha256-NCoeTeOkxkCsj/nRBhMJeEshFuwozOXNJvgp8vyCQDk=";
   };
 
   vendorHash = "sha256-E9CXS3BQAglJV36BPgwhkb9SswxAj/yBcGqJ+XXwTmE=";

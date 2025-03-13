@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
     owner = "herlon214";
     repo = "transmission-rss";
     rev = "5bbad7a81621a194b7a8b11a56051308a7ccbf06";
-    sha256 = "sha256-SkEgxinqPA9feOIF68oewVyRKv3SY6fWWZLGJeH+r4M=";
+    hash = "sha256-SkEgxinqPA9feOIF68oewVyRKv3SY6fWWZLGJeH+r4M=";
   };
 
   cargoPatches = [ ./update-cargo-lock-version.patch ];

@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     owner = "rofirrim";
     repo = "eiciel";
     rev = version;
-    sha256 = "sha256-gpuxx1Ts9HCO+3C+Z3k1tVA+1Mip8/Bd+FvWisVdsVY=";
+    hash = "sha256-gpuxx1Ts9HCO+3C+Z3k1tVA+1Mip8/Bd+FvWisVdsVY=";
   };
 
   nativeBuildInputs = [

@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "GAM-team";
     repo = "GAM";
     tag = "v${version}";
-    sha256 = "sha256-AIaPzYavbBlJyi9arZN8HTmUXM7Tef0SIfE07PmV9Oo=";
+    hash = "sha256-AIaPzYavbBlJyi9arZN8HTmUXM7Tef0SIfE07PmV9Oo=";
   };
 
   sourceRoot = "${src.name}/src";

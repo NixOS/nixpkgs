@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://www.lenzg.net/mylvmbackup/${pname}-${version}.tar.gz";
-    sha256 = "sha256-vb7M3EPIrxIz6jUwm241fzaEz2czqdCObrFgSOSgJRU=";
+    hash = "sha256-vb7M3EPIrxIz6jUwm241fzaEz2czqdCObrFgSOSgJRU=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

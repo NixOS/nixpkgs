@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     owner = "svenstaro";
     repo = "rofi-calc";
     rev = "v${version}";
-    sha256 = "sha256-YDij0j/AOl69FlsGfolzv8lI+iQfDmJrXo2duTIoMRA=";
+    hash = "sha256-YDij0j/AOl69FlsGfolzv8lI+iQfDmJrXo2duTIoMRA=";
   };
 
   nativeBuildInputs = [

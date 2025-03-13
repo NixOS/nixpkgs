@@ -13,7 +13,7 @@ buildGo122Module {
     owner = "amimof";
     repo = "node-cert-exporter";
     rev = "v1.1.7";
-    sha256 = "sha256-VYJPgNVsfEs/zh/SEdOrFn0FK6S+hNFGDhonj2syutQ=";
+    hash = "sha256-VYJPgNVsfEs/zh/SEdOrFn0FK6S+hNFGDhonj2syutQ=";
   };
 
   vendorHash = "sha256-31MHX3YntogvoJmbOytl0rXS6qtdBSBJe8ejKyu6gqM=";

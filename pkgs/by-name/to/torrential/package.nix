@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     owner = "davidmhewitt";
     repo = "torrential";
     rev = version;
-    sha256 = "sha256-uHc/VNtbhetmGyuhynZH1TvxJscVX17eWO6dzX6Ft3A=";
+    hash = "sha256-uHc/VNtbhetmGyuhynZH1TvxJscVX17eWO6dzX6Ft3A=";
   };
 
   nativeBuildInputs = [

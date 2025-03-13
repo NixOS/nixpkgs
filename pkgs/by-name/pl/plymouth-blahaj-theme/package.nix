@@ -10,7 +10,7 @@ stdenvNoCC.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/190n/plymouth-blahaj/releases/download/v${version}/blahaj.tar.gz";
-    sha256 = "sha256-JSCu/3SK1FlSiRwxnjQvHtPGGkPc6u/YjaoIvw0PU8A=";
+    hash = "sha256-JSCu/3SK1FlSiRwxnjQvHtPGGkPc6u/YjaoIvw0PU8A=";
   };
 
   patchPhase = ''

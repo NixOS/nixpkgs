@@ -12,7 +12,7 @@ stdenv.mkDerivation {
 
   src = fetchzip {
     url = "https://download.lenovo.com/pccbbs/mobiles/r1slg01w.zip";
-    sha256 = "sha256-6tp8Unu6rs27oB5VAqfRqHmv5D9N3njl5qv6We0b/Ec=";
+    hash = "sha256-6tp8Unu6rs27oB5VAqfRqHmv5D9N3njl5qv6We0b/Ec=";
   };
 
   nativeBuildInputs = [ unzip ];

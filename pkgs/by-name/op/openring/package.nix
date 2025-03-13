@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "~sircmpwn";
     repo = pname;
     rev = version;
-    sha256 = "sha256-BY2AtgZXzPLqHk3hd6D+XXbrwvWS9DNTKwLqsua/3uw=";
+    hash = "sha256-BY2AtgZXzPLqHk3hd6D+XXbrwvWS9DNTKwLqsua/3uw=";
   };
 
   vendorHash = "sha256-BbBTmkGyLrIWphXC+dBaHaVzHuXRZ+4N/Jt2k3nF7Z4=";

@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     owner= "manisandro";
     repo = "gImageReader";
     rev = "v${version}";
-    sha256 = "sha256-yBkVeufRRoSAc20/8mV39widBPloHFz12K7B4Y9xiWg=";
+    hash = "sha256-yBkVeufRRoSAc20/8mV39widBPloHFz12K7B4Y9xiWg=";
   };
 
   nativeBuildInputs = [

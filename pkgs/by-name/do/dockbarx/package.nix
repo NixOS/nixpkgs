@@ -18,7 +18,7 @@ python3Packages.buildPythonApplication rec {
     owner = "xuzhen";
     repo = "dockbarx";
     rev = version;
-    sha256 = "sha256-J/5KpHptGzgRF1qIGrgjkRR3in5pE0ffkiYVTR3iZKY=";
+    hash = "sha256-J/5KpHptGzgRF1qIGrgjkRR3in5pE0ffkiYVTR3iZKY=";
   };
 
   nativeBuildInputs = [

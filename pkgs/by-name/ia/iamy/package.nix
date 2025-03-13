@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "99designs";
     repo = "iamy";
     rev = "v${version}";
-    sha256 = "sha256-oH3ijZaWXI0TdVQN9gzp5ypWzY7OqSxDh7VBoZo42Cs=";
+    hash = "sha256-oH3ijZaWXI0TdVQN9gzp5ypWzY7OqSxDh7VBoZo42Cs=";
   };
 
   vendorHash = "sha256-/IUYM3pTvcHXw8t5MW6JUEWdxegFuQC8zkiySp8VEgE=";

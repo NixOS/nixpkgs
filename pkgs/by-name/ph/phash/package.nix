@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     owner = "clearscene";
     repo = "pHash";
     rev = version;
-    sha256 = "sha256-frISiZ89ei7XfI5F2nJJehfQZsk0Mlb4n91q/AiZ2vA=";
+    hash = "sha256-frISiZ89ei7XfI5F2nJJehfQZsk0Mlb4n91q/AiZ2vA=";
   };
 
   NIX_LDFLAGS = "-lfftw3_threads";

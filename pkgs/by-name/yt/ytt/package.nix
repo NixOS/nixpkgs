@@ -14,7 +14,7 @@ buildGoModule rec {
     owner = "carvel-dev";
     repo = "ytt";
     rev = "v${version}";
-    sha256 = "sha256-MVkgZDHFkjtOuBDm/VjUU2QXMR7HdcNJwqD4mMBHt48=";
+    hash = "sha256-MVkgZDHFkjtOuBDm/VjUU2QXMR7HdcNJwqD4mMBHt48=";
   };
 
   vendorHash = null;

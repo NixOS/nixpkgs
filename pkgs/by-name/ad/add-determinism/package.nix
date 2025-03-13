@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage rec {
     # https://github.com/keszybz/add-determinism/pull/48
     (fetchpatch {
       url = "https://github.com/Emin017/add-determinism/commit/0c6c4d1c78c845ab6b6b0666aee0e2dc85492205.patch";
-      sha256 = "sha256-y5blOfQuZ5GMug4cDkDDKc5jaGgQEYtLTuuLl041sZs=";
+      hash = "sha256-y5blOfQuZ5GMug4cDkDDKc5jaGgQEYtLTuuLl041sZs=";
     })
   ];
 

@@ -11,7 +11,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://github.com/matryer/xbar/releases/download/v${finalAttrs.version}/xbar.v${finalAttrs.version}.dmg";
-    sha256 = "sha256-Cn6nxA5NTi7M4NrjycN3PUWd31r4Z0T3DES5+ZAbxz8=";
+    hash = "sha256-Cn6nxA5NTi7M4NrjycN3PUWd31r4Z0T3DES5+ZAbxz8=";
   };
 
   sourceRoot = "xbar.app";

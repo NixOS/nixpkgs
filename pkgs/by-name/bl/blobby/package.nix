@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/blobby/Blobby%20Volley%202%20%28Linux%29/1.1.1/blobby2-linux-1.1.1.tar.gz";
-    sha256 = "sha256-NX7lE+adO1D2f8Bj1Ky3lZpf6Il3gX8KqxTMxw2yFLo=";
+    hash = "sha256-NX7lE+adO1D2f8Bj1Ky3lZpf6Il3gX8KqxTMxw2yFLo=";
   };
 
   nativeBuildInputs = [

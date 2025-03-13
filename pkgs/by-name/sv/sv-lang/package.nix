@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     owner = "MikePopoloski";
     repo = "slang";
     rev = "v${version}";
-    sha256 = "sha256-msSc6jw2xbEZfOwtqwFEDIKcwf5SDKp+j15lVbNO98g=";
+    hash = "sha256-msSc6jw2xbEZfOwtqwFEDIKcwf5SDKp+j15lVbNO98g=";
   };
 
   cmakeFlags = [

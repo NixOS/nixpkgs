@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
     owner = "YodaEmbedding";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-CAiIqT5KuzrqbV9FVK3nZUe8MDs2KDdsKplJMI7rN9w=";
+    hash = "sha256-CAiIqT5KuzrqbV9FVK3nZUe8MDs2KDdsKplJMI7rN9w=";
   };
 
   useFetchCargoVendor = true;

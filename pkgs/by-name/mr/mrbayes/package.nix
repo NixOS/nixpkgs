@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     owner = "NBISweden";
     repo = "MrBayes";
     rev = "v${version}";
-    sha256 = "sha256-pkkxZ6YHRn/I1SJpT9A+EK4S5hWGmFdcDBJS0zh5mLA=";
+    hash = "sha256-pkkxZ6YHRn/I1SJpT9A+EK4S5hWGmFdcDBJS0zh5mLA=";
   };
 
   meta = with lib; {

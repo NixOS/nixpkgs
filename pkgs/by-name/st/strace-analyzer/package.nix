@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
     owner = "wookietreiber";
     repo = "strace-analyzer";
     rev = "v${version}";
-    sha256 = "sha256-KbdQeZoWFz4D5txu/411J0HNnIAs3t5IvO30/34vBek=";
+    hash = "sha256-KbdQeZoWFz4D5txu/411J0HNnIAs3t5IvO30/34vBek=";
   };
 
   useFetchCargoVendor = true;

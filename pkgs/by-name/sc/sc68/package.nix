@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   src = fetchsvn {
     url = "svn://svn.code.sf.net/p/sc68/code/";
     rev = "695";
-    sha256 = "sha256-RO3Yhjalu49BUM0fYOZtI2l6KbuUuw03whRxlKneabo=";
+    hash = "sha256-RO3Yhjalu49BUM0fYOZtI2l6KbuUuw03whRxlKneabo=";
   };
 
   preConfigure = "tools/svn-bootstrap.sh";

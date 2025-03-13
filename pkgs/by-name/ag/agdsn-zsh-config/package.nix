@@ -12,7 +12,7 @@ stdenvNoCC.mkDerivation rec {
     owner = "agdsn";
     repo = "agdsn-zsh-config";
     rev = "v${version}";
-    sha256 = "sha256-8POQPk/hsJBMJ/ZJe9XzVj7Rd7C2+QnpzgYbUR0s3Fc=";
+    hash = "sha256-8POQPk/hsJBMJ/ZJe9XzVj7Rd7C2+QnpzgYbUR0s3Fc=";
   };
 
   dontBuild = true;

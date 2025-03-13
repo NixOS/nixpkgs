@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     url = "http://abagames.sakura.ne.jp/windows/ttn${
       lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version
     }.zip";
-    sha256 = "sha256-fR0cufi6dU898wP8KGl/vxbfQJzMmMxlYZ3QNGLajfM=";
+    hash = "sha256-fR0cufi6dU898wP8KGl/vxbfQJzMmMxlYZ3QNGLajfM=";
   };
 
   patches = [

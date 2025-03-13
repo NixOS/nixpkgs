@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
     owner = "Mic92";
     repo = "cntr";
     rev = version;
-    sha256 = "sha256-2tqPxbi8sKoEPq0/zQFsOrStEmQGlU8s81ohTfKeOmE=";
+    hash = "sha256-2tqPxbi8sKoEPq0/zQFsOrStEmQGlU8s81ohTfKeOmE=";
   };
 
   useFetchCargoVendor = true;

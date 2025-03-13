@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "Haivision";
     repo = "srt";
     rev = "v${version}";
-    sha256 = "sha256-NLy9GuP4OT/kKAIIDXSHtsmaBzXRuFohFM/aM+46cao=";
+    hash = "sha256-NLy9GuP4OT/kKAIIDXSHtsmaBzXRuFohFM/aM+46cao=";
   };
 
   nativeBuildInputs = [ cmake ];

@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sageupstream/rw/rw-${version}.tar.gz";
-    sha256 = "sha256-weA1Bv4lzfy0KMBR/Fay0q/7Wwb7o/LOdWYxRmvvtEE=";
+    hash = "sha256-weA1Bv4lzfy0KMBR/Fay0q/7Wwb7o/LOdWYxRmvvtEE=";
   };
 
   configureFlags = [

@@ -29,7 +29,7 @@ maven.buildMavenPackage rec {
     owner = "apache";
     repo = "maven-mvnd";
     rev = version;
-    sha256 = "sha256-c1jD7m4cOdPWQEoaUMcNap2zvvX7H9VaWQv8JSgAnRU=";
+    hash = "sha256-c1jD7m4cOdPWQEoaUMcNap2zvvX7H9VaWQv8JSgAnRU=";
   };
 
   # need graalvm at build-time for the `native-image` tool

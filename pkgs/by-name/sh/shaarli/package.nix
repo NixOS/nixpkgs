@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/shaarli/Shaarli/releases/download/v${version}/shaarli-v${version}-full.tar.gz";
-    sha256 = "sha256-vTSjYrde6ODQnIh77Um4McR9M8KKWnuIGRGE7SCMZC0=";
+    hash = "sha256-vTSjYrde6ODQnIh77Um4McR9M8KKWnuIGRGE7SCMZC0=";
   };
 
   outputs = [ "out" "doc" ];

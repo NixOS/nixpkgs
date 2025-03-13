@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "dmachard";
     repo = "go-dnscollector";
     rev = "v${version}";
-    sha256 = "sha256-rJHU/hDmnANziJj/K2FGccZjWFe8eyggtjIc2nt0pgo=";
+    hash = "sha256-rJHU/hDmnANziJj/K2FGccZjWFe8eyggtjIc2nt0pgo=";
   };
 
   vendorHash = "sha256-bAqr2ZVR6x1hJ80oZogA5ZXEuoz5A7yp5rxry1rIhSY=";

@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "maxscheurer";
     repo = "cppe";
     rev = "v${version}";
-    sha256 = "sha256-guM7+ZWDJLcAUJtPkKLvC4LYSA2eBvER7cgwPZ7FxHw=";
+    hash = "sha256-guM7+ZWDJLcAUJtPkKLvC4LYSA2eBvER7cgwPZ7FxHw=";
   };
 
   nativeBuildInputs = [ cmake ] ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];

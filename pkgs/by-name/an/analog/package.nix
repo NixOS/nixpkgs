@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     owner = "c-amie";
     repo = "analog-ce";
     rev = version;
-    sha256 = "sha256-NCturEibnpl6+paUZezksHzP33WtAzfIolvBLeEHXjY=";
+    hash = "sha256-NCturEibnpl6+paUZezksHzP33WtAzfIolvBLeEHXjY=";
   };
 
   postPatch = ''

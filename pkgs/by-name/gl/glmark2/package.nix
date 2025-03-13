@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     owner = "glmark2";
     repo = "glmark2";
     rev = version;
-    sha256 = "sha256-WCvc5GqrAdpIKQ4LVqwO6ZGbzBgLCl49NxiGJynIjSQ=";
+    hash = "sha256-WCvc5GqrAdpIKQ4LVqwO6ZGbzBgLCl49NxiGJynIjSQ=";
   };
 
   depsBuildBuild = [ pkg-config ];

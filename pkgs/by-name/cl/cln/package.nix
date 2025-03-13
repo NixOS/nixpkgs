@@ -11,7 +11,7 @@ gccStdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "${meta.homepage}${pname}-${version}.tar.bz2";
-    sha256 = "sha256-fH7YR0lYM35N9btX6lF2rQNlAEy7mLYhdlvEYGoQ2Gs=";
+    hash = "sha256-fH7YR0lYM35N9btX6lF2rQNlAEy7mLYhdlvEYGoQ2Gs=";
   };
 
   buildInputs = [ gmp ];

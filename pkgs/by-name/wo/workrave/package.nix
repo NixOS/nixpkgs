@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     repo = "workrave";
     owner = "rcaelers";
     rev = "v" + lib.concatStringsSep "_" (lib.splitVersion version);
-    sha256 = "sha256-U39zr8XGIDbyY480bla2yTaRQLP3wMrL8RLWjlTa5uY=";
+    hash = "sha256-U39zr8XGIDbyY480bla2yTaRQLP3wMrL8RLWjlTa5uY=";
   };
 
   nativeBuildInputs = [

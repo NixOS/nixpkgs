@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     owner = "visualboyadvance-m";
     repo = "visualboyadvance-m";
     rev = "v${version}";
-    sha256 = "sha256-OtJ632H449kPRY1i4Ydlcc1tgG00Mv622KrCyJ80OF4=";
+    hash = "sha256-OtJ632H449kPRY1i4Ydlcc1tgG00Mv622KrCyJ80OF4=";
   };
 
   nativeBuildInputs = [

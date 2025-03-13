@@ -19,7 +19,7 @@ let
     owner = "protesilaos";
     repo = pname;
     rev = version;
-    sha256 = "sha256-5lPViAo9SztOdds6HEmKJpT17tgcxmU/voXDffxTMDI=";
+    hash = "sha256-5lPViAo9SztOdds6HEmKJpT17tgcxmU/voXDffxTMDI=";
   };
   privateBuildPlan = src.outPath + "/private-build-plans.toml";
   makeIosevkaFont =

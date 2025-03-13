@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://www.nicemice.net/par/Par-${version}.tar.gz";
-    sha256 = "sha256-yAnGIOuCtYlVOsVLmJjI2lUZbSYjOdE8BG8r5ErEeAQ=";
+    hash = "sha256-yAnGIOuCtYlVOsVLmJjI2lUZbSYjOdE8BG8r5ErEeAQ=";
   };
 
   makefile = "protoMakefile";

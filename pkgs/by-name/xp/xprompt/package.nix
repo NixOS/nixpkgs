@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     owner = "phillbush";
     repo = "xprompt";
     rev = "v${version}";
-    sha256 = "sha256-pOayKngUlrMY3bFsP4Fi+VsOLKCUQU3tdkZ+0OY1SCo=";
+    hash = "sha256-pOayKngUlrMY3bFsP4Fi+VsOLKCUQU3tdkZ+0OY1SCo=";
   };
 
   buildInputs = [

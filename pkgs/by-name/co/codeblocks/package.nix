@@ -47,29 +47,29 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       name = "remove-int3.patch";
       url = "https://github.com/arnholm/codeblocks_sfmirror/commit/d76c015c456561d2c7987935a5f4dc6c0932b0c4.patch";
-      sha256 = "sha256-dpH33vGf2aNdYTeLwxglYDNbvwoY2bGSG6YFRyoGw+A=";
+      hash = "sha256-dpH33vGf2aNdYTeLwxglYDNbvwoY2bGSG6YFRyoGw+A=";
     })
     (fetchpatch {
       name = "remove-pragmas.patch";
       url = "https://github.com/arnholm/codeblocks_sfmirror/commit/966949d5ab7f3cb86e2a2c7ef4e853ee209b5a1a.patch";
-      sha256 = "sha256-XjejjGOvDk3gl1/n9R69XATGLj5n7tOZNyG8vIlwfyg=";
+      hash = "sha256-XjejjGOvDk3gl1/n9R69XATGLj5n7tOZNyG8vIlwfyg=";
     })
     # Fix build with GCC 11
     (fetchpatch {
       name = "use-gcc11-openfilelist.patch";
       url = "https://github.com/arnholm/codeblocks_sfmirror/commit/a5ea6ff7ff301d739d3dc8145db1578f504ee4ca.patch";
-      sha256 = "sha256-kATaLej8kJf4xm0VicHfRetOepX8O9gOhwdna0qylvQ=";
+      hash = "sha256-kATaLej8kJf4xm0VicHfRetOepX8O9gOhwdna0qylvQ=";
     })
     (fetchpatch {
       name = "use-gcc11-ccmanager.patch";
       url = "https://github.com/arnholm/codeblocks_sfmirror/commit/04b7c50fb8c6a29b2d84579ee448d2498414d855.patch";
-      sha256 = "sha256-VPy/M6IvNBxUE4hZRbLExFm0DJf4gmertrqrvsXQNz4=";
+      hash = "sha256-VPy/M6IvNBxUE4hZRbLExFm0DJf4gmertrqrvsXQNz4=";
     })
     # Fix build with wxGTK 3.1.5
     (fetchpatch {
       name = "use-wxgtk315.patch";
       url = "https://github.com/arnholm/codeblocks_sfmirror/commit/2345b020b862ec855038dd32a51ebb072647f28d.patch";
-      sha256 = "sha256-RRjwZA37RllnG8cJdBEnASpEd8z0+ru96fjntO42OvU=";
+      hash = "sha256-RRjwZA37RllnG8cJdBEnASpEd8z0+ru96fjntO42OvU=";
     })
     (fetchpatch {
       name = "fix-taskbar-icons.patch";
@@ -85,7 +85,7 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       name = "fix-getstring.patch";
       url = "https://github.com/arnholm/codeblocks_sfmirror/commit/dbdf5c5ea9e3161233f0588a7616b7e4fedc7870.patch";
-      sha256 = "sha256-DrEMFluN8vs0LERa7ULGshl7HdejpsuvXAMjIr/K1fQ=";
+      hash = "sha256-DrEMFluN8vs0LERa7ULGshl7HdejpsuvXAMjIr/K1fQ=";
     })
     # Fix build with wxGTK 3.1.6
     (fetchpatch {

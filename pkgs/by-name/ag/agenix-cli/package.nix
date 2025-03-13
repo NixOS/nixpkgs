@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
     owner = "cole-h";
     repo = "agenix-cli";
     rev = "v${version}";
-    sha256 = "sha256-0+QVY1sDhGF4hAN6m2FdKZgm9V1cuGGjY4aitRBnvKg=";
+    hash = "sha256-0+QVY1sDhGF4hAN6m2FdKZgm9V1cuGGjY4aitRBnvKg=";
   };
 
   useFetchCargoVendor = true;

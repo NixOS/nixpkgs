@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     owner = "13-CF";
     repo = "afetch";
     rev = "V${version}";
-    sha256 = "sha256-bHP3DJpgh89AaCX4c1tQGaZ/PiWjArED1rMdszFUq+U=";
+    hash = "sha256-bHP3DJpgh89AaCX4c1tQGaZ/PiWjArED1rMdszFUq+U=";
   };
 
   makeFlags = [

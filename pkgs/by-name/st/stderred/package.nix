@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "sickill";
     repo = "stderred";
     rev = "b2238f7c72afb89ca9aaa2944d7f4db8141057ea";
-    sha256 = "sha256-k/EA327AsRHgUYu7QqSF5yzOyO6h5XcE9Uv4l1VcIPI=";
+    hash = "sha256-k/EA327AsRHgUYu7QqSF5yzOyO6h5XcE9Uv4l1VcIPI=";
   };
 
   nativeBuildInputs = [

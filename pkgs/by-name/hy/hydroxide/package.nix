@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "emersion";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-VAbMcON75dTS+1lUqmveN2WruQCCmK3kB86e+vKM64U=";
+    hash = "sha256-VAbMcON75dTS+1lUqmveN2WruQCCmK3kB86e+vKM64U=";
   };
 
   vendorHash = "sha256-JaYJq8lnZHK75Rwif77A9y9jTUoJFyoSZQgaExnY+rM=";

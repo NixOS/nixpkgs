@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     url = "https://git.yoctoproject.org/git/prelink-cross";
     branchName = "cross_prelink";
     rev = "f9975537dbfd9ade0fc813bd5cf5fcbe41753a37";
-    sha256 = "sha256-O9/oZooLRyUBBZX3SFcB6LFMmi2vQqkUlqtZnrq5oZc=";
+    hash = "sha256-O9/oZooLRyUBBZX3SFcB6LFMmi2vQqkUlqtZnrq5oZc=";
   };
 
   strictDeps = true;

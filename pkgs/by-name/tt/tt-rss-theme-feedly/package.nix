@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     owner = "levito";
     repo = "tt-rss-feedly-theme";
     rev = "v${version}";
-    sha256 = "sha256-3mD1aY7gjdvucRzY7sLmZ1RsHtraAg1RGE/3uDp6/o4=";
+    hash = "sha256-3mD1aY7gjdvucRzY7sLmZ1RsHtraAg1RGE/3uDp6/o4=";
   };
 
   dontBuild = true;

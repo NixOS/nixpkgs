@@ -23,7 +23,7 @@ python3Packages.buildPythonApplication rec {
     owner = "tuhiproject";
     repo = "tuhi";
     rev = version;
-    sha256 = "sha256-NwyG2KhOrAKRewgmU23OMO0+A9SjkQZsDL4SGnLVCvo=";
+    hash = "sha256-NwyG2KhOrAKRewgmU23OMO0+A9SjkQZsDL4SGnLVCvo=";
   };
 
   dontWrapGApps = true;

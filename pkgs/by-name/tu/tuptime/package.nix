@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     owner = "rfmoz";
     repo = "tuptime";
     rev = version;
-    sha256 = "sha256-pYGtgv9hPBG/URD2nOWg6qJYYLtlqLW+t5mCLpzKlEc=";
+    hash = "sha256-pYGtgv9hPBG/URD2nOWg6qJYYLtlqLW+t5mCLpzKlEc=";
   };
 
   nativeBuildInputs = [

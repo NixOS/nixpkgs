@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "Orange-OpenSource";
     repo = "pn";
     rev = "v${version}";
-    sha256 = "sha256-vRF9MPcw/hCreHVLD6QB7g1r0wQiZv1xrfzIHj1Yf9M=";
+    hash = "sha256-vRF9MPcw/hCreHVLD6QB7g1r0wQiZv1xrfzIHj1Yf9M=";
   };
 
   nativeBuildInputs = [ cmake ];

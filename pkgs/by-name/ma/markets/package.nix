@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     owner = "bitstower";
     repo = "markets";
     rev = version;
-    sha256 = "sha256-/g/r/1i69PmPND40zIID3Nun0I4ZFT1EFoNf1qprBjI=";
+    hash = "sha256-/g/r/1i69PmPND40zIID3Nun0I4ZFT1EFoNf1qprBjI=";
   };
 
   nativeBuildInputs = [

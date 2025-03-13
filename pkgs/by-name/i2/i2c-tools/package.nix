@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchzip {
     url = "https://git.kernel.org/pub/scm/utils/i2c-tools/i2c-tools.git/snapshot/i2c-tools-v${version}.tar.gz";
-    sha256 = "sha256-Zm83gxdZH2XQCc/Dihp7vumF9WAvKgt6OORns5Mua7M=";
+    hash = "sha256-Zm83gxdZH2XQCc/Dihp7vumF9WAvKgt6OORns5Mua7M=";
   };
 
   buildInputs = [ perl ];

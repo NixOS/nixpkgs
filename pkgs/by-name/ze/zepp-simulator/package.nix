@@ -48,11 +48,11 @@ let
   srcs = {
     x86_64-linux = {
       url = "https://upload-cdn.zepp.com/zepp-applet-and-wechat-applet/20240927/3e688d423cd0cd31a8a589b8325a309e.deb";
-      sha256 = "sha256-ZHqaEL8FoSnRtuqGWpTyJka7D0dHtRADZthq8DG2k24=";
+      hash = "sha256-ZHqaEL8FoSnRtuqGWpTyJka7D0dHtRADZthq8DG2k24=";
     };
     aarch64-linux = {
       url = "https://upload-cdn.zepp.com/zepp-applet-and-wechat-applet/20240927/02ec69e6a2f3b744d964fd7ba4f40fc3.deb";
-      sha256 = "sha256-J5Y4wLiFOM9D2MIMiRyUtHIZ19rt65ktVCOMZQQwBCI=";
+      hash = "sha256-J5Y4wLiFOM9D2MIMiRyUtHIZ19rt65ktVCOMZQQwBCI=";
     };
   };
 

@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://www.mesa.nl/pub/mpage/mpage-${version}.tgz";
-    sha256 = "sha256-I1HpHSV5SzWN9mGPF6cBOijTUOwgQI/gb4Ej3EZz/pM=";
+    hash = "sha256-I1HpHSV5SzWN9mGPF6cBOijTUOwgQI/gb4Ej3EZz/pM=";
   };
 
   postPatch = ''

@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "sagemath";
     repo = "threejs-sage";
     rev = version;
-    sha256 = "sha256-xPAPt36Fon3hYQq6SOmGkIyUzAII2LMl10nqYG4UPI0=";
+    hash = "sha256-xPAPt36Fon3hYQq6SOmGkIyUzAII2LMl10nqYG4UPI0=";
   };
 
   installPhase = ''

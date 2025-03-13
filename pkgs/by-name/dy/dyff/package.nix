@@ -13,7 +13,7 @@ buildGoModule rec {
     owner = "homeport";
     repo = "dyff";
     rev = "v${version}";
-    sha256 = "sha256-MVqj/RgUwN7andCPMo7Tp4zBhEaSNM0loWnQ/E5U1S8=";
+    hash = "sha256-MVqj/RgUwN7andCPMo7Tp4zBhEaSNM0loWnQ/E5U1S8=";
   };
 
   vendorHash = "sha256-PH3huLNc0jFBvo3/Z/BNCeL0HxTUc5OaNysa54wKthY=";

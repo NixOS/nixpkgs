@@ -18,7 +18,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     owner = "AliveToolkit";
     repo = "alive2";
     rev = "05a964284056b38a6dc1f807e7acad64a0308328";
-    sha256 = "sha256-okKKUU7WLXLD9Hvsfoz+1HQWoyQ/bqRpBk5ogr7kSJA=";
+    hash = "sha256-okKKUU7WLXLD9Hvsfoz+1HQWoyQ/bqRpBk5ogr7kSJA=";
   };
 
   nativeBuildInputs = [

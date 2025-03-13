@@ -18,7 +18,7 @@ python3Packages.buildPythonApplication rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-UwUphuUeXFy71I+tmKnRH858dPrA2+xDxnG9h26a+kE=";
+    hash = "sha256-UwUphuUeXFy71I+tmKnRH858dPrA2+xDxnG9h26a+kE=";
   };
 
   nativeBuildInputs = [

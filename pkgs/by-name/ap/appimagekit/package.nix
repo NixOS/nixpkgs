@@ -45,7 +45,7 @@ let
       owner = "vasi";
       repo = pname;
       rev = "1f980303b89c779eabfd0a0fdd36d6a7a311bf92";
-      sha256 = "sha256-BZd1+7sRYZHthULKk3RlgMIy4uCUei45GbSEiZxLPFM=";
+      hash = "sha256-BZd1+7sRYZHthULKk3RlgMIy4uCUei45GbSEiZxLPFM=";
     };
 
     patches = [

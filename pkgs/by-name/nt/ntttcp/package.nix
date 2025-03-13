@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     owner = "microsoft";
     repo = "ntttcp-for-linux";
     rev = version;
-    sha256 = "sha256-6O7qSrR6EFr7k9lHQHGs/scZxJJ5DBNDxlSL5hzlRf4=";
+    hash = "sha256-6O7qSrR6EFr7k9lHQHGs/scZxJJ5DBNDxlSL5hzlRf4=";
   };
 
   preBuild = "cd src";

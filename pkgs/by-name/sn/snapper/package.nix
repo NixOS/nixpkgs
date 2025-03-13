@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     owner = "openSUSE";
     repo = "snapper";
     rev = "v${version}";
-    sha256 = "sha256-yVjsbWa7t+md0xdy5eFST+pkPbXhgfyJcTt+aNkQpsQ=";
+    hash = "sha256-yVjsbWa7t+md0xdy5eFST+pkPbXhgfyJcTt+aNkQpsQ=";
   };
 
   strictDeps = true;

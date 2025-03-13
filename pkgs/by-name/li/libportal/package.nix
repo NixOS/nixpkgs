@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     owner = "flatpak";
     repo = "libportal";
     rev = version;
-    sha256 = "sha256-CXI4rBr9wxLUX537d6SNNf8YFR/J6YdeROlFt3edeOU=";
+    hash = "sha256-CXI4rBr9wxLUX537d6SNNf8YFR/J6YdeROlFt3edeOU=";
   };
 
   depsBuildBuild = [

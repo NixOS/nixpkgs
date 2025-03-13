@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "~sircmpwn";
     repo = "gmni";
     rev = version;
-    sha256 = "sha256-3MFNAI/SfFigNfitfFs3o9kkz7JeEflMHiH7iJpLfi4=";
+    hash = "sha256-3MFNAI/SfFigNfitfFs3o9kkz7JeEflMHiH7iJpLfi4=";
   };
 
   nativeBuildInputs = [ scdoc ];

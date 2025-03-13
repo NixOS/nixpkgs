@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "bahamas10";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-gCf/ZIeIh84WQNs5wZO1/l3zpnl2sNxsFO7cOa92JUM=";
+    hash = "sha256-gCf/ZIeIh84WQNs5wZO1/l3zpnl2sNxsFO7cOa92JUM=";
   };
 
   nativeBuildInputs = [ go-md2man ];

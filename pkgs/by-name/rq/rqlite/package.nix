@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "rqlite";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-sEdU4BhRlkSCrUvrzcj+LNsSUO7mXCUHnIEqN8ydzc8=";
+    hash = "sha256-sEdU4BhRlkSCrUvrzcj+LNsSUO7mXCUHnIEqN8ydzc8=";
   };
 
   vendorHash = "sha256-kdBYU0+8G/XspBXWPXTUy3vwbM90irM8xIpQgTMtRrA=";

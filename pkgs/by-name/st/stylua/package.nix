@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
     owner = "johnnymorganz";
     repo = "stylua";
     rev = "v${version}";
-    sha256 = "sha256-sZrymo1RRfDLz8fPa7FnbutSpOCFoyQPoFVjA6BH5qQ=";
+    hash = "sha256-sZrymo1RRfDLz8fPa7FnbutSpOCFoyQPoFVjA6BH5qQ=";
   };
 
   useFetchCargoVendor = true;

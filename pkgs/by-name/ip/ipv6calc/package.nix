@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     owner = "pbiering";
     repo = pname;
     rev = version;
-    sha256 = "sha256-ObJn7T7dGp6HjICWHWAbJjgHM08FrJx31AxIMmIexuQ=";
+    hash = "sha256-ObJn7T7dGp6HjICWHWAbJjgHM08FrJx31AxIMmIexuQ=";
   };
 
   buildInputs = [

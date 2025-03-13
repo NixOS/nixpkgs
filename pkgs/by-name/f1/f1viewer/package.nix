@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "SoMuchForSubtlety";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-jXC2dENXuqicNQqTHyZKsjibDvjta/npQmf3+uivjX0=";
+    hash = "sha256-jXC2dENXuqicNQqTHyZKsjibDvjta/npQmf3+uivjX0=";
   };
 
   vendorHash = "sha256-UNeH3zxgssXxFpJws6nAL8EgXt0DRyAQfmlJWz/qyDg=";

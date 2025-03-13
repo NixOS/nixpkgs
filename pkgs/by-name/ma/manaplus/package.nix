@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "manaplus";
     repo = "manaplus";
     rev = "40ebe02e81b34f5b02ea682d2d470a20e7e63cfc";
-    sha256 = "sha256-OVmCqK8undrBKgY5bB2spezmYwWXnmrPlSpV5euortc=";
+    hash = "sha256-OVmCqK8undrBKgY5bB2spezmYwWXnmrPlSpV5euortc=";
   };
 
   # The unstable version has this commit that fixes missing <cstdint> include:

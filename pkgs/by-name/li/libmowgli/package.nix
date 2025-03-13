@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     owner = "atheme";
     repo = "libmowgli-2";
     rev = "v${version}";
-    sha256 = "sha256-jlw6ixMoIdIjmQ86N+KN+Gez218sw894POkcCYnT0s0=";
+    hash = "sha256-jlw6ixMoIdIjmQ86N+KN+Gez218sw894POkcCYnT0s0=";
   };
 
   meta = with lib; {

@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "SneWs";
     repo = "tail-tray";
     tag = "v${version}";
-    sha256 = "sha256-Mobbh1c7f3aTxn0BEIm2A+DgS2TBSZTYiDlHxyaQEjk=";
+    hash = "sha256-Mobbh1c7f3aTxn0BEIm2A+DgS2TBSZTYiDlHxyaQEjk=";
   };
 
   nativeBuildInputs = with kdePackages; [

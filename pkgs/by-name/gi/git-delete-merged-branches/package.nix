@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
     owner = "hartwork";
     repo = pname;
     tag = version;
-    sha256 = "sha256-l+R4gINZJ8bJdhcK+U9jOuIoAm2/bd5P+w9AbwPZMrk=";
+    hash = "sha256-l+R4gINZJ8bJdhcK+U9jOuIoAm2/bd5P+w9AbwPZMrk=";
   };
 
   propagatedBuildInputs = with python3Packages; [

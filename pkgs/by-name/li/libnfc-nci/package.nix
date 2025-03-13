@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "StarGate01";
     repo = "linux_libnfc-nci";
     rev = "7ce9c8aad0e37850a49b6d8dcc22ae5c783268e7";
-    sha256 = "sha256-iSvDiae+A2hUok426Lj5TMn3Q9G+vH1G0jajP48PehQ=";
+    hash = "sha256-iSvDiae+A2hUok426Lj5TMn3Q9G+vH1G0jajP48PehQ=";
   };
 
   buildInputs = [

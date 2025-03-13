@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "https://megous.com/git/megatools";
     rev = version;
-    sha256 = "sha256-AdvQqaRTsKTqdfNfFiWtA9mIPVGuui+Ru9TUARVG0+Q=";
+    hash = "sha256-AdvQqaRTsKTqdfNfFiWtA9mIPVGuui+Ru9TUARVG0+Q=";
   };
 
   nativeBuildInputs = [

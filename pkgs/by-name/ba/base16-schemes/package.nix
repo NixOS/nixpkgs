@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "tinted-theming";
     repo = "schemes";
     rev = "61058a8d2e2bd4482b53d57a68feb56cdb991f0b";
-    sha256 = "sha256-Tp1BpaF5qRav7O2TsSGjCfgRzhiasu4IuwROR66gz1o=";
+    hash = "sha256-Tp1BpaF5qRav7O2TsSGjCfgRzhiasu4IuwROR66gz1o=";
   };
 
   installPhase = ''

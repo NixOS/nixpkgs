@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     owner = "pali";
     repo = "libopenaptx";
     rev = version;
-    sha256 = "sha256-4FYKxw1U+efCfzKOPSDJH8a/dG0KV+anJDgxjqzD80k=";
+    hash = "sha256-4FYKxw1U+efCfzKOPSDJH8a/dG0KV+anJDgxjqzD80k=";
   };
 
   makeFlags = [

@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "jsha";
     repo = "minica";
     rev = "v${version}";
-    sha256 = "sha256-YUeP3xBoZzonJYfEAOWZYCTFwOxFWySW7ezvpMLNZ1I=";
+    hash = "sha256-YUeP3xBoZzonJYfEAOWZYCTFwOxFWySW7ezvpMLNZ1I=";
   };
 
   vendorHash = null;

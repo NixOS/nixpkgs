@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "Lekensteyn";
     repo = "ltunify";
     rev = "v${version}";
-    sha256 = "sha256-9avri/2H0zv65tkBsIi9yVxx3eVS9oCkVCCFdjXqSgI=";
+    hash = "sha256-9avri/2H0zv65tkBsIi9yVxx3eVS9oCkVCCFdjXqSgI=";
   };
 
   makeFlags = [

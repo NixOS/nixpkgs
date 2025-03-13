@@ -9,7 +9,7 @@ let
   version = "8.1.9";
   src = fetchurl {
     url = "https://s3.nosqlbooster.com/download/releasesv8/nosqlbooster4mongo-${version}.AppImage";
-    sha256 = "sha256-ZJdCHOodJel7Apb//s96vrf1Ruml/NLUMQ9eFFR9tfU=";
+    hash = "sha256-ZJdCHOodJel7Apb//s96vrf1Ruml/NLUMQ9eFFR9tfU=";
   };
   meta = {
     homepage = "https://nosqlbooster.com/";

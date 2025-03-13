@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   # special files.
   src = fetchurl {
     url = "https://github.com/shlomif/fortune-mod/releases/download/fortune-mod-${version}/fortune-mod-${version}.tar.xz";
-    sha256 = "sha256-Hzh4dyVOleq2H5NyV7QmCfKbmU7wVxUxZVu/w6KsdKw=";
+    hash = "sha256-Hzh4dyVOleq2H5NyV7QmCfKbmU7wVxUxZVu/w6KsdKw=";
   };
 
   nativeBuildInputs =

@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://src.fedoraproject.org/repo/pkgs/ltrace/ltrace-0.7.91.tar.bz2/9db3bdee7cf3e11c87d8cc7673d4d25b/ltrace-0.7.91.tar.bz2";
-    sha256 = "sha256-HqellbKh2ZDHxslXl7SSIXtpjV1sodtgVwh8hgTC3Dc=";
+    hash = "sha256-HqellbKh2ZDHxslXl7SSIXtpjV1sodtgVwh8hgTC3Dc=";
   };
 
   nativeBuildInputs = [ autoreconfHook ]; # Some patches impact ./configure.
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
       fedora = fetchgit {
         url = "https://src.fedoraproject.org/rpms/ltrace.git";
         rev = "00f430ccbebdbd13bdd4d7ee6303b091cf005542";
-        sha256 = "sha256-FBGEgmaslu7xrJtZ2WsYwu9Cw1ZQrWRV1+Eu9qLXO4s=";
+        hash = "sha256-FBGEgmaslu7xrJtZ2WsYwu9Cw1ZQrWRV1+Eu9qLXO4s=";
       };
     in
     ''

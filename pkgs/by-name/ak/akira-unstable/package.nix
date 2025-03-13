@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     owner = "akiraux";
     repo = "Akira";
     rev = "v${version}";
-    sha256 = "sha256-qrqmSCwA0kQVFD1gzutks9gMr7My7nw/KJs/VPisa0w=";
+    hash = "sha256-qrqmSCwA0kQVFD1gzutks9gMr7My7nw/KJs/VPisa0w=";
   };
 
   nativeBuildInputs = [

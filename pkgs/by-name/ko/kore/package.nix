@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     owner = "jorisvink";
     repo = "kore";
     rev = version;
-    sha256 = "sha256-p0M2P02xwww5EnT28VnEtj5b+/jkPW3YkJMuK79vp4k=";
+    hash = "sha256-p0M2P02xwww5EnT28VnEtj5b+/jkPW3YkJMuK79vp4k=";
   };
 
   buildInputs = [

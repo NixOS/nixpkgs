@@ -16,7 +16,7 @@ let
       owner = "justinethier";
       repo = "cyclone-bootstrap";
       rev = "v${version}";
-      sha256 = "sha256-kJBPb0Ej32HveY/vdGpH2gyxSwq8Xq7muneFIw3Y7hM=";
+      hash = "sha256-kJBPb0Ej32HveY/vdGpH2gyxSwq8Xq7muneFIw3Y7hM=";
     };
 
     enableParallelBuilding = true;
@@ -36,7 +36,7 @@ stdenv.mkDerivation {
     owner = "justinethier";
     repo = "cyclone";
     rev = "v${version}";
-    sha256 = "sha256-4U/uOTbFpPTC9BmO6Wkhy4PY8UCFVt5eHSGqrOlKT/U=";
+    hash = "sha256-4U/uOTbFpPTC9BmO6Wkhy4PY8UCFVt5eHSGqrOlKT/U=";
   };
 
   enableParallelBuilding = true;

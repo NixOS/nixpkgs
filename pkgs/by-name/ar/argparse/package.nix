@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "p-ranav";
     repo = "argparse";
     rev = "v${version}";
-    sha256 = "sha256-w4IU8Yr+zPFOo7xR4YMHlqNJcEov4KU/ppDYrgsGlxM=";
+    hash = "sha256-w4IU8Yr+zPFOo7xR4YMHlqNJcEov4KU/ppDYrgsGlxM=";
   };
 
   postPatch = ''

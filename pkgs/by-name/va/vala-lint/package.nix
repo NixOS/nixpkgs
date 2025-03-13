@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     owner = "vala-lang";
     repo = "vala-lint";
     rev = "4ed1443c35a8a84445fb59292d539358365d8263";
-    sha256 = "sha256-NPadBrL2g5w95slwDpp7kNXBgLJ9na8Yd/J7zm28SSo=";
+    hash = "sha256-NPadBrL2g5w95slwDpp7kNXBgLJ9na8Yd/J7zm28SSo=";
   };
 
   nativeBuildInputs = [

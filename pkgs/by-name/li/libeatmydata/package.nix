@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "stewartsmith";
     repo = pname;
     tag = "v${version}";
-    sha256 = "sha256-0lrYDW51/KSr809whGwg9FYhzcLRfmoxipIgrK1zFCc=";
+    hash = "sha256-0lrYDW51/KSr809whGwg9FYhzcLRfmoxipIgrK1zFCc=";
   };
 
   patches = [

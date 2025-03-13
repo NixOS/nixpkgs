@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     owner = "bstansell";
     repo = "conserver";
     rev = "v${version}";
-    sha256 = "sha256-LiCknqitBoa8E8rNMVgp1004CwkW8G4O5XGKe4NfZI8=";
+    hash = "sha256-LiCknqitBoa8E8rNMVgp1004CwkW8G4O5XGKe4NfZI8=";
   };
 
   # Remove upon next release since upstream is fixed

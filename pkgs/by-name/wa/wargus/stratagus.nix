@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     owner = "wargus";
     repo = "stratagus";
     rev = "v${version}";
-    sha256 = "sha256-q8AvIWr/bOzI0wV0D2emxIXYEKDYmFxbtwr2BS+xYfA=";
+    hash = "sha256-q8AvIWr/bOzI0wV0D2emxIXYEKDYmFxbtwr2BS+xYfA=";
   };
 
   nativeBuildInputs = [

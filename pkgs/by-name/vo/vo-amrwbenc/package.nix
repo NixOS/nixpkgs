@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "mstorsjo";
     repo = "vo-amrwbenc";
     rev = "v${version}";
-    sha256 = "sha256-oHhoJAI47VqBGk9cO3G5oqnHpWxA2jnJs103MwcYj+w=";
+    hash = "sha256-oHhoJAI47VqBGk9cO3G5oqnHpWxA2jnJs103MwcYj+w=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

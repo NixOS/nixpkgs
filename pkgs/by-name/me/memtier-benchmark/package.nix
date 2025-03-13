@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     owner = "redislabs";
     repo = "memtier_benchmark";
     tag = version;
-    sha256 = "sha256-dZUJjilfzl8u/KdBS1iKaAwOXWYAIMDi55ZAYtyuuOI=";
+    hash = "sha256-dZUJjilfzl8u/KdBS1iKaAwOXWYAIMDi55ZAYtyuuOI=";
   };
 
   patchPhase = ''

@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://s3.amazonaws.com/ec2-downloads/${pname}-${version}.zip";
-    sha256 = "sha256-hRq+MEA+4chqPr3d9bS//X70tYcRBTD+rfAJVNmuLzo=";
+    hash = "sha256-hRq+MEA+4chqPr3d9bS//X70tYcRBTD+rfAJVNmuLzo=";
   };
 
   nativeBuildInputs = [

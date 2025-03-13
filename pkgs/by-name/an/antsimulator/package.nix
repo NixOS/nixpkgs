@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "johnBuffer";
     repo = "AntSimulator";
     rev = "v${version}";
-    sha256 = "sha256-1KWoGbdjF8VI4th/ZjAzASgsLEuS3xiwObulzxQAppA=";
+    hash = "sha256-1KWoGbdjF8VI4th/ZjAzASgsLEuS3xiwObulzxQAppA=";
   };
 
   nativeBuildInputs = [ cmake ];

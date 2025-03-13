@@ -13,7 +13,7 @@ buildGoModule rec {
     owner = "FiloSottile";
     repo = "captive-browser";
     rev = "9c707dc32afc6e4146e19b43a3406329c64b6f3c";
-    sha256 = "sha256-65lPo5tpE0M/VyyvlzlcVSuHX4AhhVuqK0UF4BIAH/Y=";
+    hash = "sha256-65lPo5tpE0M/VyyvlzlcVSuHX4AhhVuqK0UF4BIAH/Y=";
   };
 
   vendorHash = "sha256-2MFdQ2GIDAdLPuwAiGPO9wU3mm2BDXdyTwoVA1xVlcQ=";

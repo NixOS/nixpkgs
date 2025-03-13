@@ -23,7 +23,7 @@ let
     owner = "miki151";
     repo = pname;
     rev = version;
-    sha256 = "sha256-0sww+ppctXvxMouclG3OdXpcNgrrOZJw9z8s2GhJ+IE=";
+    hash = "sha256-0sww+ppctXvxMouclG3OdXpcNgrrOZJw9z8s2GhJ+IE=";
   };
 
   assets = requireFile rec {

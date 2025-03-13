@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     owner = "arrayfire";
     repo = "forge";
     rev = "v1.0.8";
-    sha256 = "sha256-lSZAwcqAHiuZkpYcVfwvZCfNmEF3xGN9S/HuZQrGeKU=";
+    hash = "sha256-lSZAwcqAHiuZkpYcVfwvZCfNmEF3xGN9S/HuZQrGeKU=";
   };
   glad = fetchFromGitHub {
     owner = "arrayfire";

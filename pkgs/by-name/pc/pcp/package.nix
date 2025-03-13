@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "dennis-tra";
     repo = "pcp";
     rev = "v${version}";
-    sha256 = "sha256-aZO8VuOiYhOPctFKZ6a2psJB0lKHlPc+NLy2RWDU4JI=";
+    hash = "sha256-aZO8VuOiYhOPctFKZ6a2psJB0lKHlPc+NLy2RWDU4JI=";
   };
 
   vendorHash = "sha256-3bkzBQ950Phg4A9p+IjeUx7Xw7eVmUbeYnQViNjghFk=";

@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://www.spinnaker.de/lbdb/download/lbdb-${version}.tar.gz";
-    sha256 = "sha256-uqaiO2E5TXkreyIeGWHZulcQYUyTJOj1mzXBJsK0504=";
+    hash = "sha256-uqaiO2E5TXkreyIeGWHZulcQYUyTJOj1mzXBJsK0504=";
   };
 
   buildInputs =

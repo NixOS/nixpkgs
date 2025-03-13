@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   src = fetchzip {
     url = "http://www.avr-asm-tutorial.net/gavrasm/v${flatVersion}/gavrasm_sources_lin_${flatVersion}.zip";
-    sha256 = "sha256-uTalb8Wzn2RAoUKZx9RZFCX+V9HUEtUnJ4eSltFumh0=";
+    hash = "sha256-uTalb8Wzn2RAoUKZx9RZFCX+V9HUEtUnJ4eSltFumh0=";
     stripRoot = false;
   };
 

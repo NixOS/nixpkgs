@@ -19,7 +19,7 @@ let
       repo = "pyimgui";
       rev = "2.0.0";
       fetchSubmodules = true;
-      sha256 = "sha256-sw/bLTdrnPhBhrnk5yyXCbEK4kMo+PdEvoMJ9aaZbsE=";
+      hash = "sha256-sw/bLTdrnPhBhrnk5yyXCbEK4kMo+PdEvoMJ9aaZbsE=";
     };
 
     nativeBuildInputs = with python3.pkgs; [
@@ -64,7 +64,7 @@ python3.pkgs.buildPythonPackage rec {
     owner = "devkit";
     repo = "steamos-devkit";
     rev = "v${version}";
-    sha256 = "sha256-eOtESkGMIjcijAFITOcYKPsXH6xH/Xcj9D+OItMqebM=";
+    hash = "sha256-eOtESkGMIjcijAFITOcYKPsXH6xH/Xcj9D+OItMqebM=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [

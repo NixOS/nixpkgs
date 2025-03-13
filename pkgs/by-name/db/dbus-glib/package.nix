@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "${meta.homepage}/releases/dbus-glib/dbus-glib-${version}.tar.gz";
-    sha256 = "sha256-fVUNzN/NKG4ziVUBgp7Zce62XGFOc6rbSgiu73GbFDo=";
+    hash = "sha256-fVUNzN/NKG4ziVUBgp7Zce62XGFOc6rbSgiu73GbFDo=";
   };
 
   outputs = [

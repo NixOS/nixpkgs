@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     repo = "proot";
     owner = "proot-me";
     rev = "v${version}";
-    sha256 = "sha256-Z9Y7ccWp5KEVuo9xfHcgo58XqYVdFo7ck1jH7cnT2KA=";
+    hash = "sha256-Z9Y7ccWp5KEVuo9xfHcgo58XqYVdFo7ck1jH7cnT2KA=";
   };
 
   postPatch = ''

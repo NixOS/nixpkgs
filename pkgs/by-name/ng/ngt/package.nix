@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "yahoojapan";
     repo = "NGT";
     rev = "29c88ff6cd5824d3196986d1f50b834565b6c9dd";
-    sha256 = "sha256-nu0MJNpaenOB4+evoSVLKmPIuZXVj1Rm9x53+TfhezY=";
+    hash = "sha256-nu0MJNpaenOB4+evoSVLKmPIuZXVj1Rm9x53+TfhezY=";
   };
 
   nativeBuildInputs = [ cmake ];

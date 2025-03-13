@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     owner = "ArthurSonzogni";
     repo = "ftxui";
     rev = "v${version}";
-    sha256 = "sha256-IF6G4wwQDksjK8nJxxAnxuCw2z2qvggCmRJ2rbg00+E=";
+    hash = "sha256-IF6G4wwQDksjK8nJxxAnxuCw2z2qvggCmRJ2rbg00+E=";
   };
 
   strictDeps = true;

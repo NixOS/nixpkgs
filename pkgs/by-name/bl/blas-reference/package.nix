@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://www.netlib.org/blas/${pname}-${version}.tgz";
-    sha256 = "sha256-zMQbXQiOUNsAMDF66bDJrzdXEME5KsrR/iCWAtpaWq0=";
+    hash = "sha256-zMQbXQiOUNsAMDF66bDJrzdXEME5KsrR/iCWAtpaWq0=";
   };
 
   passthru = { inherit blas64; };

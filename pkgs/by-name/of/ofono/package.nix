@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchzip {
     url = "https://git.kernel.org/pub/scm/network/ofono/ofono.git/snapshot/ofono-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-7hYGSU8mEu9MfKAA0vR1tm/l46hHQmpZSYfMNkces5c=";
+    hash = "sha256-7hYGSU8mEu9MfKAA0vR1tm/l46hHQmpZSYfMNkces5c=";
   };
 
   patches = [

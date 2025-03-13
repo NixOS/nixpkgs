@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "opencollab";
     repo = "arpack-ng";
     tag = finalAttrs.version;
-    sha256 = "sha256-HCvapLba8oLqx9I5+KDAU0s/dTmdWOEilS75i4gyfC0=";
+    hash = "sha256-HCvapLba8oLqx9I5+KDAU0s/dTmdWOEilS75i4gyfC0=";
   };
 
   nativeBuildInputs = [ cmake gfortran ninja ];

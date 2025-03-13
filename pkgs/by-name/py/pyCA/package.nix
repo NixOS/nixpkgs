@@ -24,7 +24,7 @@ let
       owner = "opencast";
       repo = "pyCA";
       rev = "v${version}";
-      sha256 = "sha256-cTkWkOmgxJZlddqaSYKva2wih4Mvsdrd7LD4NggxKQk=";
+      hash = "sha256-cTkWkOmgxJZlddqaSYKva2wih4Mvsdrd7LD4NggxKQk=";
     };
 
     npmDepsHash = "sha256-0U+semrNWTkNu3uQQkiJKZT1hB0/IfkL84G7/oP8XYY=";
@@ -54,7 +54,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "opencast";
     repo = "pyCA";
     rev = "v${version}";
-    sha256 = "sha256-cTkWkOmgxJZlddqaSYKva2wih4Mvsdrd7LD4NggxKQk=";
+    hash = "sha256-cTkWkOmgxJZlddqaSYKva2wih4Mvsdrd7LD4NggxKQk=";
   };
 
   propagatedBuildInputs = with python.pkgs; [

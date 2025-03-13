@@ -15,7 +15,7 @@ stdenvNoCC.mkDerivation rec {
     owner = "alvatip";
     repo = "Nordzy-icon";
     rev = version;
-    sha256 = "sha256-r/WYGcHRAFX7TennestobjcJhwu3GE8aQXxnaeokQM0=";
+    hash = "sha256-r/WYGcHRAFX7TennestobjcJhwu3GE8aQXxnaeokQM0=";
   };
 
   # In the post patch phase we should first make sure to patch shebangs.

@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://samba/tevent/${pname}-${version}.tar.gz";
-    sha256 = "sha256-Nilx4PMtwZBfb+RzYxnEuDSMItyFqmw/aQoo7+VIAp4=";
+    hash = "sha256-Nilx4PMtwZBfb+RzYxnEuDSMItyFqmw/aQoo7+VIAp4=";
   };
 
   nativeBuildInputs = [

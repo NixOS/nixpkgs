@@ -12,7 +12,7 @@ stdenv.mkDerivation {
     owner = "strukturag";
     repo = "libde265-data";
     rev = "bdfdfdbe682f514c5185c270c74eac42731a7fa8";
-    sha256 = "sha256-fOgu7vMoyH30Zzbkfm4a6JVDZtYLO/0R2syC2Wux+Z8=";
+    hash = "sha256-fOgu7vMoyH30Zzbkfm4a6JVDZtYLO/0R2syC2Wux+Z8=";
   };
 
   dontConfigure = true;

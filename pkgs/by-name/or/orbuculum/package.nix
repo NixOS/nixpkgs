@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     owner = "orbcode";
     repo = pname;
     rev = "V${version}";
-    sha256 = "sha256-Ohcc8739W/EmDjOYhcMgzEPVhzbWrUYgsPLdy4qzxhY=";
+    hash = "sha256-Ohcc8739W/EmDjOYhcMgzEPVhzbWrUYgsPLdy4qzxhY=";
   };
 
   prePatch = ''

@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "abdfnx";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-qp4g1ZLRIIz0CZ/Zey354g0j9ePE4pGb82IivLezU7s=";
+    hash = "sha256-qp4g1ZLRIIz0CZ/Zey354g0j9ePE4pGb82IivLezU7s=";
   };
 
   vendorHash = "sha256-JmRTI5ZBSFULfI+ki3hI8TPaS6IVP9D14r4DwK/nx1Y=";

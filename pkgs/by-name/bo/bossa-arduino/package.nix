@@ -8,6 +8,6 @@ bossa.overrideAttrs (attrs: rec {
     owner = "arduino";
     repo = "BOSSA";
     rev = version;
-    sha256 = "sha256-sBJ6QMd7cTClDnGCeOU0FT6IczEjqqRxCD7kef5GuY8=";
+    hash = "sha256-sBJ6QMd7cTClDnGCeOU0FT6IczEjqqRxCD7kef5GuY8=";
   };
 })

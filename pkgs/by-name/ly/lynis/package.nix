@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "CISOfy";
     repo = pname;
     rev = version;
-    sha256 = "sha256-OnEEdJGU7ma6f7aA6ihgixHWZGZDmx7nzqmJH3p+ijk=";
+    hash = "sha256-OnEEdJGU7ma6f7aA6ihgixHWZGZDmx7nzqmJH3p+ijk=";
   };
 
   nativeBuildInputs = [

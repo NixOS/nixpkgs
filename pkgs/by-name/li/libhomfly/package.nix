@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "miguelmarco";
     repo = "libhomfly";
     rev = version;
-    sha256 = "sha256-s1Hgy6S9+uREKsgjOVQdQfnds6oSLo5UWTrt5DJnY2s=";
+    hash = "sha256-s1Hgy6S9+uREKsgjOVQdQfnds6oSLo5UWTrt5DJnY2s=";
   };
 
   buildInputs = [

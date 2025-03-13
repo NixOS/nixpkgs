@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage rec {
     owner = "SamHH";
     repo = "bukubrow-host";
     rev = "v${version}";
-    sha256 = "sha256-xz5Agsm+ATQXXgpPGN4EQ00i1t8qUlrviNHauVdCu4U=";
+    hash = "sha256-xz5Agsm+ATQXXgpPGN4EQ00i1t8qUlrviNHauVdCu4U=";
   };
 
   useFetchCargoVendor = true;

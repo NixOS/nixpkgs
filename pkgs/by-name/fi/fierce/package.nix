@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "mschwager";
     repo = "fierce";
     tag = version;
-    sha256 = "sha256-y5ZSDJCTqslU78kXGyk6DajBpX7xz1CVmbhYerHmyis=";
+    hash = "sha256-y5ZSDJCTqslU78kXGyk6DajBpX7xz1CVmbhYerHmyis=";
   };
 
   pythonRelaxDeps = [ "dnspython" ];

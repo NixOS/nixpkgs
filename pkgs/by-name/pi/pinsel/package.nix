@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "Nooo37";
     repo = pname;
     rev = "24b0205ca041511b3efb2a75ef296539442f9f54";
-    sha256 = "sha256-w+jiKypZODsmZq3uWGNd8PZhe1SowHj0thcQTX8WHfQ=";
+    hash = "sha256-w+jiKypZODsmZq3uWGNd8PZhe1SowHj0thcQTX8WHfQ=";
   };
 
   strictDeps = true;

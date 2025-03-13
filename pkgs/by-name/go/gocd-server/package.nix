@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://download.go.cd/binaries/${version}-${rev}/generic/go-server-${version}-${rev}.zip";
-    sha256 = "sha256-//d6izGm1odE25H/PI5pn51FfUL4/6GbLwKUKAqZ3Kw=";
+    hash = "sha256-//d6izGm1odE25H/PI5pn51FfUL4/6GbLwKUKAqZ3Kw=";
   };
 
   meta = with lib; {

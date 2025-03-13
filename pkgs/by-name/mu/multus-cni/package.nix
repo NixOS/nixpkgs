@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "k8snetworkplumbingwg";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Q6ACXOv1E3Ouki4ksdlUZFbWcDgo9xbCiTfEiVG5l18=";
+    hash = "sha256-Q6ACXOv1E3Ouki4ksdlUZFbWcDgo9xbCiTfEiVG5l18=";
   };
 
   ldflags = [

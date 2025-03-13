@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication rec {
     owner = "zalando";
     repo = "patroni";
     tag = "v${version}";
-    sha256 = "sha256-1Afwdv1kX8/zc9TB4kbA2NakXycJlf/wUcYAYKWwITM=";
+    hash = "sha256-1Afwdv1kX8/zc9TB4kbA2NakXycJlf/wUcYAYKWwITM=";
   };
 
   dependencies = with python3Packages; [

@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://download.linuxsampler.org/packages/${pname}-${version}.tar.gz";
-    sha256 = "sha256-ZaPfB3Veg1YCBHieoK9fFqL0tB4PiNsY81oJmn2rd/I=";
+    hash = "sha256-ZaPfB3Veg1YCBHieoK9fFqL0tB4PiNsY81oJmn2rd/I=";
   };
 
   postPatch = ''

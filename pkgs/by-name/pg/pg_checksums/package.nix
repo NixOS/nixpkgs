@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "credativ";
     repo = "pg_checksums";
     rev = version;
-    sha256 = "sha256-joGaCoRMGpEqq7pnT4Qd7XySjZ5wlZPW27WfOv1UFF4=";
+    hash = "sha256-joGaCoRMGpEqq7pnT4Qd7XySjZ5wlZPW27WfOv1UFF4=";
   };
 
   nativeBuildInputs = [ libxslt.bin ];

@@ -28,7 +28,7 @@ python3.pkgs.buildPythonApplication rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-N/fynrH/D+xNiwiNVIPFVt4QifbQGP5tSBmTyvJJnYQ=";
+    hash = "sha256-N/fynrH/D+xNiwiNVIPFVt4QifbQGP5tSBmTyvJJnYQ=";
   };
 
   nativeBuildInputs = [

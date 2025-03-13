@@ -16,7 +16,7 @@ let
     owner = "openbgpd-portable";
     repo = "openbgpd-openbsd";
     rev = openbsd_version;
-    sha256 = "sha256-vCVK5k4g6aW2z2fg7Kv0uvkX7f34aRc8K2myb3jjl6w=";
+    hash = "sha256-vCVK5k4g6aW2z2fg7Kv0uvkX7f34aRc8K2myb3jjl6w=";
   };
 in
 stdenv.mkDerivation rec {
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     owner = "openbgpd-portable";
     repo = "openbgpd-portable";
     rev = version;
-    sha256 = "sha256-TKs6tt/SCWes6kYAGIrSShZgOLf7xKh26xG3Zk7wCCw=";
+    hash = "sha256-TKs6tt/SCWes6kYAGIrSShZgOLf7xKh26xG3Zk7wCCw=";
   };
 
   nativeBuildInputs = [

@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
     owner = "acj";
     repo = "krapslog-rs";
     rev = version;
-    sha256 = "sha256-wRziLNMwLZBCn330FNC9x6loCCyuC+31Kh51ZI/j1Cc=";
+    hash = "sha256-wRziLNMwLZBCn330FNC9x6loCCyuC+31Kh51ZI/j1Cc=";
   };
 
   useFetchCargoVendor = true;

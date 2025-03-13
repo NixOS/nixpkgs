@@ -11,7 +11,7 @@ stdenvNoCC.mkDerivation rec {
     owner = "guillaumeboehm";
     repo = "Nordzy-cursors";
     rev = "v${version}";
-    sha256 = "sha256-3HUSl0CQcay4V9pO35cmOEZvrgNOJ3WNZahs+hJjUJU=";
+    hash = "sha256-3HUSl0CQcay4V9pO35cmOEZvrgNOJ3WNZahs+hJjUJU=";
   };
 
   installPhase = ''

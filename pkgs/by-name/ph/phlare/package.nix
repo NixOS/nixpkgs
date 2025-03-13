@@ -13,7 +13,7 @@ buildGo122Module rec {
     rev = "v${version}";
     owner = "grafana";
     repo = "phlare";
-    sha256 = "sha256-iaNwOV8XP6H8DDs2HcOIIl8sNM6Xi5VsRxSb80mvvLo=";
+    hash = "sha256-iaNwOV8XP6H8DDs2HcOIIl8sNM6Xi5VsRxSb80mvvLo=";
   };
 
   proxyVendor = true;

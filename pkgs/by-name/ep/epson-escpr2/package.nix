@@ -28,7 +28,7 @@ stdenv.mkDerivation {
     # source of patch: https://aur.archlinux.org/packages/epson-inkjet-printer-escpr2
     (fetchurl {
       url = "https://aur.archlinux.org/cgit/aur.git/plain/bug_x86_64.patch?h=epson-inkjet-printer-escpr2&id=575d1b959063044f233cca099caceec8e6d5c02f";
-      sha256 = "sha256-G6/3oj25FUT+xv9aJ7qP5PBZWLfy+V8MCHUYucDhtzM=";
+      hash = "sha256-G6/3oj25FUT+xv9aJ7qP5PBZWLfy+V8MCHUYucDhtzM=";
     })
   ];
 

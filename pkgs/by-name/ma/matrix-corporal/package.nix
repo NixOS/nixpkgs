@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "devture";
     repo = pname;
     rev = version;
-    sha256 = "sha256-KSKPTbF1hhzLyD+iL4+hW9EuV+xFYzSzHu1DSGXWm90=";
+    hash = "sha256-KSKPTbF1hhzLyD+iL4+hW9EuV+xFYzSzHu1DSGXWm90=";
   };
 
   ldflags = [

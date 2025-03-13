@@ -11,7 +11,7 @@ let
     owner = "na4zagin3";
     repo = "satyrographos";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-f9iJTr4nV7dFCMkI8+zv9qvYWRSw8H/xbbZm2LR9cB4=";
+    hash = "sha256-f9iJTr4nV7dFCMkI8+zv9qvYWRSw8H/xbbZm2LR9cB4=";
   };
 in
 ocamlPackages.buildDunePackage {

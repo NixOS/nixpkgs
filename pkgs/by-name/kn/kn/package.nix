@@ -13,7 +13,7 @@ buildGoModule rec {
     owner = "knative";
     repo = "client";
     rev = "knative-v${version}";
-    sha256 = "sha256-bXICU1UBNPVIumzRPSOWa1I5hUYWEvo6orBpUvbPEvg=";
+    hash = "sha256-bXICU1UBNPVIumzRPSOWa1I5hUYWEvo6orBpUvbPEvg=";
   };
 
   vendorHash = null;

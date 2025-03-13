@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "http://xmage.today/files/mage-full_${finalAttrs.version}.zip";
-    sha256 = "sha256-ogi0hd2FoulTnc3gg5cpLwr4Jln71YA0WBBZFOT6apg=";
+    hash = "sha256-ogi0hd2FoulTnc3gg5cpLwr4Jln71YA0WBBZFOT6apg=";
   };
 
   preferLocalBuild = true;

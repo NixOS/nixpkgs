@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     owner = "jupyter-xeus";
     repo = "xeus";
     rev = version;
-    sha256 = "sha256-D/dJ0SHxTHJw63gHD6FRZS7O2TVZ0voIv2mQASEjLA8=";
+    hash = "sha256-D/dJ0SHxTHJw63gHD6FRZS7O2TVZ0voIv2mQASEjLA8=";
   };
 
   nativeBuildInputs = [

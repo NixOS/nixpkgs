@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
     url =
       with finalAttrs;
       "https://github.com/fribidi/fribidi/releases/download/v${version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-GxzeWyNdQEeekb4vDoijCeMhTIq0cOyKJ0TYKlqeoFw=";
+    hash = "sha256-GxzeWyNdQEeekb4vDoijCeMhTIq0cOyKJ0TYKlqeoFw=";
   };
 
   postPatch = ''

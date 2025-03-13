@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     owner = "icculus";
     repo = "smpeg";
     rev = "c5793e5f3f2765fc09c24380d7e92136a0e33d3b";
-    sha256 = "sha256-Z0u83K1GIXd0jUYo5ZyWUH2Zt7Hn8z+yr06DAtAEukw=";
+    hash = "sha256-Z0u83K1GIXd0jUYo5ZyWUH2Zt7Hn8z+yr06DAtAEukw=";
   };
 
   nativeBuildInputs = [

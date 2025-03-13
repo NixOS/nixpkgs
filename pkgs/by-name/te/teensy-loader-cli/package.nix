@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "PaulStoffregen";
     repo = "teensy_loader_cli";
     rev = finalAttrs.version;
-    sha256 = "sha256-NYqCNWO/nHEuNc9eOzsUqJEHJtZ3XaNz1VYNbeuqEk8=";
+    hash = "sha256-NYqCNWO/nHEuNc9eOzsUqJEHJtZ3XaNz1VYNbeuqEk8=";
   };
 
   nativeBuildInputs = [

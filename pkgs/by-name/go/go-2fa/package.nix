@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "rsc";
     repo = "2fa";
     rev = "v${version}";
-    sha256 = "sha256-cB5iADZwvJQwwK1GockE2uicFlqFMEAY6xyeXF5lnUY=";
+    hash = "sha256-cB5iADZwvJQwwK1GockE2uicFlqFMEAY6xyeXF5lnUY=";
   };
 
   deleteVendor = true;

@@ -17,7 +17,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "tails";
     repo = "onioncircuits";
     rev = version;
-    sha256 = "sha256-5VGOuvngZvUFQ+bubdt4YV3/IflOhBB1i+oEQaV4kr0=";
+    hash = "sha256-5VGOuvngZvUFQ+bubdt4YV3/IflOhBB1i+oEQaV4kr0=";
   };
 
   nativeBuildInputs = [

@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
     owner = "biscuit-auth";
     repo = "biscuit-cli";
     rev = version;
-    sha256 = "sha256-BLDJ4Rzu48sAklbv021XSzmATRd+D01yGHqJt6kvjGw=";
+    hash = "sha256-BLDJ4Rzu48sAklbv021XSzmATRd+D01yGHqJt6kvjGw=";
   };
 
   useFetchCargoVendor = true;

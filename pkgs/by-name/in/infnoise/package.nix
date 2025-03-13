@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "leetronics";
     repo = "infnoise";
     rev = "e80ddd78085abf3d06df2e0d8c08fd33dade78eb";
-    sha256 = "sha256-9MKG1InkV+yrQPBTgi2gZJ3y9Fokb6WbxuAnM7n7FyA=";
+    hash = "sha256-9MKG1InkV+yrQPBTgi2gZJ3y9Fokb6WbxuAnM7n7FyA=";
   };
 
   patches = [
@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Fix getc return type
     (fetchpatch {
       url = "https://github.com/leetronics/infnoise/commit/7ed7014e14253311c07e530c8f89f1c8f4705c2b.patch";
-      sha256 = "sha256-seB/fJaxQ/rXJp5iPtnobXXOccQ2KUAk6HFx31dhOhs=";
+      hash = "sha256-seB/fJaxQ/rXJp5iPtnobXXOccQ2KUAk6HFx31dhOhs=";
     })
   ];
 

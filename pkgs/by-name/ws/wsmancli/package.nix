@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "Openwsman";
     repo = "wsmancli";
     rev = "v${version}";
-    sha256 = "sha256-A2PVhQuKVTZ/nDKyy+vZVBNLB/3xujBYBzUEWcTIYYg=";
+    hash = "sha256-A2PVhQuKVTZ/nDKyy+vZVBNLB/3xujBYBzUEWcTIYYg=";
   };
 
   nativeBuildInputs = [

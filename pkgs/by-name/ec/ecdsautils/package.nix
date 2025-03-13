@@ -15,7 +15,7 @@ stdenv.mkDerivation {
     owner = "freifunk-gluon";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-vGHLAX/XOtePvdT/rljCOdlILHVO20mCt6p+MUi13dg=";
+    hash = "sha256-vGHLAX/XOtePvdT/rljCOdlILHVO20mCt6p+MUi13dg=";
   };
 
   nativeBuildInputs = with pkgs; [

@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     owner = "Lafydev";
     repo = pname;
     rev = "d554663b4e199d44c1f1d53b5cc39b9a775b3f1c";
-    sha256 = "sha256-dEk0exLh+TGuQt7be2YRTS2EzPD55+edR8WibthXwhI=";
+    hash = "sha256-dEk0exLh+TGuQt7be2YRTS2EzPD55+edR8WibthXwhI=";
   };
 
   patches = [

@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/${pname}/${pname}/releases/download/v${version}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-OmcN83joUrhaIpXyXk9RzCj1bg/MSWQIuMN2QpBTevU=";
+    hash = "sha256-OmcN83joUrhaIpXyXk9RzCj1bg/MSWQIuMN2QpBTevU=";
   };
 
   outputs = [

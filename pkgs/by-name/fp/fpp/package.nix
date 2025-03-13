@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "facebook";
     repo = "PathPicker";
     rev = version;
-    sha256 = "sha256-4BkdGvG/RyF3JBnd/X5r5nboEHG4aqahcYHDunMv2zU=";
+    hash = "sha256-4BkdGvG/RyF3JBnd/X5r5nboEHG4aqahcYHDunMv2zU=";
   };
 
   nativeBuildInputs = [ installShellFiles ];

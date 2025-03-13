@@ -16,7 +16,7 @@ buildGoModule rec {
     owner = "unrud";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-C/qaLEYvIbl0XINsumAFLnsQgy+EDjoX446BJnuE6eQ=";
+    hash = "sha256-C/qaLEYvIbl0XINsumAFLnsQgy+EDjoX446BJnuE6eQ=";
   };
 
   buildInputs = [

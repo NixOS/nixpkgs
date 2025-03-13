@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     owner = "daveewart";
     repo = "colordiff";
     rev = "v${version}";
-    sha256 = "sha256-TNOw6dqsT0dOIddRoGwEF85CaQF8ICMFUi+GiG5WWpk=";
+    hash = "sha256-TNOw6dqsT0dOIddRoGwEF85CaQF8ICMFUi+GiG5WWpk=";
   };
 
   nativeBuildInputs = [

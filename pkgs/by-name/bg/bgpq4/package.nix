@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "bgp";
     repo = "bgpq4";
     rev = version;
-    sha256 = "sha256-3mfFj9KoQbDe0gH7Le03N1Yds/bTEmY+OiXNaOtHkpY=";
+    hash = "sha256-3mfFj9KoQbDe0gH7Le03N1Yds/bTEmY+OiXNaOtHkpY=";
   };
 
   nativeBuildInputs = [

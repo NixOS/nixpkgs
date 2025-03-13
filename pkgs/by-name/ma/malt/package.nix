@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "memtt";
     repo = "malt";
     rev = "v${version}";
-    sha256 = "sha256-eeiThHorLxL2qHIXd9vzc2jRYd7BN3/OHCqM9BmXi0U=";
+    hash = "sha256-eeiThHorLxL2qHIXd9vzc2jRYd7BN3/OHCqM9BmXi0U=";
   };
 
   postPatch = ''

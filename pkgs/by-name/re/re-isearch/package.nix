@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "re-Isearch";
     repo = "re-Isearch";
     rev = "e5953ea6c84285283be3689df7065908369cdbaf";
-    sha256 = "sha256-D0PDqlWzIOHqdS2MlNzR2T5cyhiLcFlf30v6eFokoRQ=";
+    hash = "sha256-D0PDqlWzIOHqdS2MlNzR2T5cyhiLcFlf30v6eFokoRQ=";
   };
 
   postPatch = ''

@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     owner = "hank";
     repo = "dsf2flac";
     rev = "6b109cd276ec7c7901f96455c77cf2d2ebfbb181";
-    sha256 = "sha256-VlXfywgYhI2QuGQvpD33BspTTgT0jOKUV3gENq4HiBU=";
+    hash = "sha256-VlXfywgYhI2QuGQvpD33BspTTgT0jOKUV3gENq4HiBU=";
   };
 
   buildInputs = [

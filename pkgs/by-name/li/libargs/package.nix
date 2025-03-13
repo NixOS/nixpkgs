@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "Taywee";
     repo = "args";
     rev = version;
-    sha256 = "sha256-2gH3h3QAl0+XVULt/fR2UUGKNIxTUmnRRdxPOFdpVy4=";
+    hash = "sha256-2gH3h3QAl0+XVULt/fR2UUGKNIxTUmnRRdxPOFdpVy4=";
   };
 
   nativeBuildInputs = [ cmake ];

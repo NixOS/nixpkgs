@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     owner = "mesa";
     repo = "adriconf";
     rev = "v${version}";
-    sha256 = "sha256-0XTsYeS4tNAnGhuJ81fmjHhFS6fVq1lirui5b+ojxTQ=";
+    hash = "sha256-0XTsYeS4tNAnGhuJ81fmjHhFS6fVq1lirui5b+ojxTQ=";
   };
 
   nativeBuildInputs = [

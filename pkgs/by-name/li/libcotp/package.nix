@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "paolostivanin";
     repo = "libcotp";
     rev = "v${version}";
-    sha256 = "sha256-Ol/vWaXcbDcy+d8V//fK4SYUpnYmwuYJxkO3/+kqgdM=";
+    hash = "sha256-Ol/vWaXcbDcy+d8V//fK4SYUpnYmwuYJxkO3/+kqgdM=";
   };
 
   postPatch = lib.optionalString stdenv.cc.isClang ''

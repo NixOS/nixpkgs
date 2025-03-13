@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     owner = "~emersion";
     repo = "kanshi";
     rev = "v${version}";
-    sha256 = "sha256-FDt+F5tWHLsMejlExb5yPh0SlWzuUlK9u54Uy+alrzw=";
+    hash = "sha256-FDt+F5tWHLsMejlExb5yPh0SlWzuUlK9u54Uy+alrzw=";
   };
 
   strictDeps = true;

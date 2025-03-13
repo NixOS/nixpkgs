@@ -41,7 +41,7 @@ buildGoModule rec {
     owner = "GoogleCloudPlatform";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-bW8D8g4FPx0i4iPP7Pvm0UpaJFNsECR3kuHEZn8NLx0=";
+    hash = "sha256-bW8D8g4FPx0i4iPP7Pvm0UpaJFNsECR3kuHEZn8NLx0=";
   };
 
   vendorHash = "sha256-+ncl/6BJ7J2cby29I1IvkUgbiyDP+co/+Cyyh/V8A1I=";

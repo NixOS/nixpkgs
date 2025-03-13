@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "Nordix";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Sfi58wcX61HNCmlDoparTqnfsuxu6barSnV0uYlC+ng=";
+    hash = "sha256-Sfi58wcX61HNCmlDoparTqnfsuxu6barSnV0uYlC+ng=";
   };
 
   vendorHash = "sha256-N78a0pjs2Bg2Bslk/I0ntL88ui4IkRGenL0Pn17Lt/w=";

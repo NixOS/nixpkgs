@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "josephburnett";
     repo = "jd";
     rev = "v${version}";
-    sha256 = "sha256-chCxbbRZEE29KVnTQWID889kJ2H4qJGVL+vsxzr6VtA=";
+    hash = "sha256-chCxbbRZEE29KVnTQWID889kJ2H4qJGVL+vsxzr6VtA=";
   };
 
   # not including web ui

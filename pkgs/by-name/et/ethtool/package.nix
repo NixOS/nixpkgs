@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://kernel/software/network/ethtool/ethtool-${version}.tar.xz";
-    sha256 = "sha256-jZH1xyrj8lt+iNR4EnncsyD3HjAFiRQ3CxxXTJazEgI=";
+    hash = "sha256-jZH1xyrj8lt+iNR4EnncsyD3HjAFiRQ3CxxXTJazEgI=";
   };
 
   nativeBuildInputs = [

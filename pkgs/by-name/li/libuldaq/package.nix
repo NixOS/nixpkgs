@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "mccdaq";
     repo = "uldaq";
     rev = "v${version}";
-    sha256 = "sha256-DA1mxu94z5xDpGK9OBwD02HXlOATv/slqZ4lz5GM7QM=";
+    hash = "sha256-DA1mxu94z5xDpGK9OBwD02HXlOATv/slqZ4lz5GM7QM=";
   };
 
   patches = [

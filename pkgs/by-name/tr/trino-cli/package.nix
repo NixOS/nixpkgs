@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://maven/io/trino/${pname}/${version}/${jarfilename}";
-    sha256 = "sha256-ANrv3+hpRn00zFAu6FHltk6seQ4lP2esDIhsJrctfY0=";
+    hash = "sha256-ANrv3+hpRn00zFAu6FHltk6seQ4lP2esDIhsJrctfY0=";
   };
 
   dontUnpack = true;

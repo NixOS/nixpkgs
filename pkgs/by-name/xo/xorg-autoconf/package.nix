@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "util";
     repo = "macros";
     rev = "util-macros-${version}";
-    sha256 = "sha256-+yEMCjLztdY5LKTNjfhudDS0fdaOj4LKZ3YL5witFR4=";
+    hash = "sha256-+yEMCjLztdY5LKTNjfhudDS0fdaOj4LKZ3YL5witFR4=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

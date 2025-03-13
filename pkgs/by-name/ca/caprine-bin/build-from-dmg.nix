@@ -5,7 +5,7 @@
   undmg,
   pname,
   version,
-  sha256,
+  hash,
   metaCommon ? { },
 }:
 
@@ -15,7 +15,7 @@ stdenvNoCC.mkDerivation {
   src = fetchurl {
     url = "https://github.com/sindresorhus/caprine/releases/download/v${version}/Caprine-${version}.dmg";
     name = "Caprine-${version}.dmg";
-    inherit sha256;
+    inherit hash;
   };
 
   sourceRoot = "Caprine.app";

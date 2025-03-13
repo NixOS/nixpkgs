@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     owner = "phako";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-jlF9Lr/NG+Fsy/bB7aLb7xOLqel8GueJK5luo9rsDME=";
+    hash = "sha256-jlF9Lr/NG+Fsy/bB7aLb7xOLqel8GueJK5luo9rsDME=";
   };
 
   patches = [
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     # https://gitlab.gnome.org/World/dLeyna/-/merge_requests/6
     (fetchpatch {
       url = "https://github.com/gentoo/gentoo/raw/2e3a1f4f7a1ef0c3e387389142785d98b5834e60/net-misc/dleyna-server/files/meson-1.2.0.patch";
-      sha256 = "sha256-/p2OaPO5ghWtPotwIir2TtcFF5IDFN9FFuyqPHevuFI=";
+      hash = "sha256-/p2OaPO5ghWtPotwIir2TtcFF5IDFN9FFuyqPHevuFI=";
     })
   ];
 

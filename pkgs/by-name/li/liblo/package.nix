@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/liblo/liblo/${version}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-XfBfKgOV/FrJD2tTi4yCuyGUFAb9GnCnZcczakfXAgg=";
+    hash = "sha256-XfBfKgOV/FrJD2tTi4yCuyGUFAb9GnCnZcczakfXAgg=";
   };
 
   doCheck = false; # fails 1 out of 3 tests

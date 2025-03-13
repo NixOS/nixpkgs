@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://www.aescrypt.com/download/v3/linux/aescrypt-${version}.tgz";
-    sha256 = "sha256-4uGS0LReq5dI7+Wel7ZWzFXx+utZWi93q4TUSw7AhNI=";
+    hash = "sha256-4uGS0LReq5dI7+Wel7ZWzFXx+utZWi93q4TUSw7AhNI=";
   };
 
   NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-liconv";

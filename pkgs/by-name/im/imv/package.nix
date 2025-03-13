@@ -85,7 +85,7 @@ stdenv.mkDerivation rec {
     owner = "~exec64";
     repo = "imv";
     rev = "v${version}";
-    sha256 = "sha256-aJ2EXgsS0WUTxMqC1Q+uOWLG8BeuwAyXPmJB/9/NCCU=";
+    hash = "sha256-aJ2EXgsS0WUTxMqC1Q+uOWLG8BeuwAyXPmJB/9/NCCU=";
   };
 
   mesonFlags = [

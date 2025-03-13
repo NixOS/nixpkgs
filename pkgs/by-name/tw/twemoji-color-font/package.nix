@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
   # Relevant issue: https://github.com/NixOS/nixpkgs/issues/97871
   src = fetchurl {
     url = "https://github.com/eosrei/twemoji-color-font/releases/download/v${finalAttrs.version}/TwitterColorEmoji-SVGinOT-Linux-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-yKUwLuTkwhiM54Xt2ExQxhagf26Z/huRrsuk4ds0EpU=";
+    hash = "sha256-yKUwLuTkwhiM54Xt2ExQxhagf26Z/huRrsuk4ds0EpU=";
   };
 
   dontBuild = true;

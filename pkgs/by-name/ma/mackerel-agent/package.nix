@@ -16,7 +16,7 @@ buildGoModule rec {
     owner = "mackerelio";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-kLrZ+oTb27g2Lzb65cVyxu1Ou5wGXXMSUvod+IBnoPA=";
+    hash = "sha256-kLrZ+oTb27g2Lzb65cVyxu1Ou5wGXXMSUvod+IBnoPA=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

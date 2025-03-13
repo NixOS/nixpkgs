@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/dolbybcsoftwaredecode/April-2018/SourceCode.zip";
-    sha256 = "sha256-uLcsRIpwmJlstlGV8I4+/30+D9GDpUt7DOIP/GkXWp4=";
+    hash = "sha256-uLcsRIpwmJlstlGV8I4+/30+D9GDpUt7DOIP/GkXWp4=";
   };
 
   nativeBuildInputs = [

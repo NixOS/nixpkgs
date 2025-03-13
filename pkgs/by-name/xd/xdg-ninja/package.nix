@@ -15,7 +15,7 @@ stdenvNoCC.mkDerivation rec {
     owner = "b3nj5m1n";
     repo = "xdg-ninja";
     rev = "v${version}";
-    sha256 = "sha256-ASJIFQ/BpZMQGRtw8kPhtMCbXC1eb/X8TWQz+CAnaSM=";
+    hash = "sha256-ASJIFQ/BpZMQGRtw8kPhtMCbXC1eb/X8TWQz+CAnaSM=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

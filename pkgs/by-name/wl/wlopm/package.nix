@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "~leon_plickat";
     repo = "wlopm";
     rev = "v${version}";
-    sha256 = "sha256-kcUJVB5jP2qZ1YgJDEBsyn5AgwhRxQmzOrk0gKj1MeM=";
+    hash = "sha256-kcUJVB5jP2qZ1YgJDEBsyn5AgwhRxQmzOrk0gKj1MeM=";
   };
 
   strictDeps = true;

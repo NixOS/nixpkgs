@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     # fix build with meson 0.60
     (fetchpatch {
       url = "https://gitlab.gnome.org/GNOME/libhttpseverywhere/-/commit/4c38b2ca25802c464f3204a62815201d8cf549fd.patch";
-      sha256 = "sha256-1+fmR0bpvJ9ISN2Hr+BTIQz+Bf6VfY1RdVZ/OohUlWU=";
+      hash = "sha256-1+fmR0bpvJ9ISN2Hr+BTIQz+Bf6VfY1RdVZ/OohUlWU=";
     })
   ];
 

@@ -25,7 +25,7 @@ python3Packages.buildPythonApplication {
     owner = "Cygn";
     repo = "pulseaudio-dlna";
     rev = "637a2e7bba2277137c5f12fb58e63100dab7cbe6";
-    sha256 = "sha256-Oda+zQQJE2D3fiNWTzxYvI8cZVHG5JAoV2Wf5Z6IU3M=";
+    hash = "sha256-Oda+zQQJE2D3fiNWTzxYvI8cZVHG5JAoV2Wf5Z6IU3M=";
   };
 
   patches = [

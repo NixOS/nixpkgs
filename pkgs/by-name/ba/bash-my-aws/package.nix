@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     owner = "bash-my-aws";
     repo = "bash-my-aws";
     rev = "d338b43cc215719c1853ec500c946db6b9caaa11";
-    sha256 = "sha256-PR52T6XCrakQsBOJXf0PaYpYE5oMcIz5UDA4I9B7C38=";
+    hash = "sha256-PR52T6XCrakQsBOJXf0PaYpYE5oMcIz5UDA4I9B7C38=";
   };
 
   dontConfigure = true;

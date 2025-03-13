@@ -13,7 +13,7 @@ buildGoModule rec {
     owner = "writefreely";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Qr31XSbAckLElD81yxD+K7tngWECQ+wyuESC+biAbyw=";
+    hash = "sha256-Qr31XSbAckLElD81yxD+K7tngWECQ+wyuESC+biAbyw=";
   };
 
   vendorHash = "sha256-HmEh8WmKbdAimvzsAiaXcqSXoU1DJx06+s1EH1JZmwo=";

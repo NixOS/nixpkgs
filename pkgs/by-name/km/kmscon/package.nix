@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     owner = "Aetf";
     repo = "kmscon";
     rev = "a81941f4464e6f9cee75bfb8a1db88c253ede33d";
-    sha256 = "sha256-l7Prt7CsYi4VCnp9xktvqqNT+4djSdO2GvP1JdxhNSI=";
+    hash = "sha256-l7Prt7CsYi4VCnp9xktvqqNT+4djSdO2GvP1JdxhNSI=";
   };
 
   strictDeps = true;

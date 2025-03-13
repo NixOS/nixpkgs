@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
     owner = "kampfkarren";
     repo = "selene";
     rev = version;
-    sha256 = "sha256-QE9kXGQWg0pHtSI1bTppn5IE+53KoxqFED1VvwkumEI=";
+    hash = "sha256-QE9kXGQWg0pHtSI1bTppn5IE+53KoxqFED1VvwkumEI=";
   };
 
   useFetchCargoVendor = true;

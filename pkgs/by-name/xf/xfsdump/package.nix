@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/fs/xfs/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-KRTbvh68iMfZOtiOIgqlfavEPSFuEfBiIcAe3zzBBzI=";
+    hash = "sha256-KRTbvh68iMfZOtiOIgqlfavEPSFuEfBiIcAe3zzBBzI=";
   };
 
   nativeBuildInputs = [

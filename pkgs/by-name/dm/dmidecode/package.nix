@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://savannah/dmidecode/dmidecode-${version}.tar.xz";
-    sha256 = "sha256-5Axl8+w9r+Ma2DSaTvGpcSLTj2UATtZldeGo1XXdi64=";
+    hash = "sha256-5Axl8+w9r+Ma2DSaTvGpcSLTj2UATtZldeGo1XXdi64=";
   };
 
   makeFlags = [

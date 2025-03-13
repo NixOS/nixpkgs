@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
     owner = "nix-community";
     repo = "nixdoc";
     rev = "v${version}";
-    sha256 = "sha256-7UOjmW8Ef4mEvj7SINaKWh2ZuyNMVEXB82mtuZTQiPA=";
+    hash = "sha256-7UOjmW8Ef4mEvj7SINaKWh2ZuyNMVEXB82mtuZTQiPA=";
   };
 
   useFetchCargoVendor = true;

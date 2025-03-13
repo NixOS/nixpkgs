@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     owner = "wangp";
     repo = "bower";
     rev = version;
-    sha256 = "sha256-CqA9JU/ujqIn/NvtbPtSWxKDYCv4oDdLCgbf2jj9Av4=";
+    hash = "sha256-CqA9JU/ujqIn/NvtbPtSWxKDYCv4oDdLCgbf2jj9Av4=";
   };
 
   nativeBuildInputs = [

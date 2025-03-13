@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "pgaskin";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-H6W+C5twXit7Z9hLIJKAftbnvYDA9HAb9tR6yeQGRKI=";
+    hash = "sha256-H6W+C5twXit7Z9hLIJKAftbnvYDA9HAb9tR6yeQGRKI=";
   };
 
   vendorHash = "sha256-QOMLwDDvrDQAaK4M4QhBFTGD1CzblkDoA3ZqtCoRHtQ=";

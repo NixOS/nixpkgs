@@ -13,7 +13,7 @@ buildGoModule rec {
     owner = "asciimoo";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-H0soiKOytchfcFx17az0pGoFbA+hhXLxGJVdaARvnDc=";
+    hash = "sha256-H0soiKOytchfcFx17az0pGoFbA+hhXLxGJVdaARvnDc=";
   };
 
   patches = [

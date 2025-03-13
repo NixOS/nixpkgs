@@ -12,7 +12,7 @@ stdenvNoCC.mkDerivation rec {
     repo = "dvb-firmware";
     owner = "LibreElec";
     rev = version;
-    sha256 = "sha256-uEobcv5kqGxIOfSVVKH+iT7DHPF13OFiRF7c1GIUqtU=";
+    hash = "sha256-uEobcv5kqGxIOfSVVKH+iT7DHPF13OFiRF7c1GIUqtU=";
   };
 
   installPhase = ''

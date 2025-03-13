@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     owner = "esa";
     repo = "pagmo2";
     rev = "v${version}";
-    sha256 = "sha256-ido3e0hQLDEPT0AmsfAVTPlGbWe5QBkxgRO6Fg1wp/c=";
+    hash = "sha256-ido3e0hQLDEPT0AmsfAVTPlGbWe5QBkxgRO6Fg1wp/c=";
   };
 
   nativeBuildInputs = [ cmake ];

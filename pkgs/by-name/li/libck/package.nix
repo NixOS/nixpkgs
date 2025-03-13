@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     owner = "concurrencykit";
     repo = "ck";
     rev = version;
-    sha256 = "sha256-lxJ8WsZ3pBGf4sFYj5+tR37EYDZqpksaoohiIKA4pRI=";
+    hash = "sha256-lxJ8WsZ3pBGf4sFYj5+tR37EYDZqpksaoohiIKA4pRI=";
   };
 
   postPatch = ''

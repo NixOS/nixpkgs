@@ -37,7 +37,7 @@ buildRustPackage rec {
     owner = "tectonic-typesetting";
     repo = "tectonic";
     rev = "tectonic@${version}";
-    sha256 = "sha256-dZnUu0g86WJIIvwMgdmwb6oYqItxoYrGQTFNX7I61Bs=";
+    hash = "sha256-dZnUu0g86WJIIvwMgdmwb6oYqItxoYrGQTFNX7I61Bs=";
   };
 
   patches = [

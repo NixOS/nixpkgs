@@ -12,7 +12,7 @@ buildGoModule {
     owner = "mvdan";
     repo = "xurls";
     rev = "7c973a26c7bd6ecd8d86bb435d93ff98df2710fa";
-    sha256 = "sha256-jZmlM9rs+N0ks7msmb3eJ96aTYp0qUo/1bgLAgHnvSo=";
+    hash = "sha256-jZmlM9rs+N0ks7msmb3eJ96aTYp0qUo/1bgLAgHnvSo=";
   };
 
   vendorHash = "sha256-W6Z1E6a+qBdOuyHoiT6YA+CAJHBJ0FTYH8AntiKvVBY=";

@@ -13,7 +13,7 @@ buildGoModule rec {
     owner = "githubnemo";
     repo = "CompileDaemon";
     rev = "v${version}";
-    sha256 = "sha256-gpyXy7FO7ZVXJrkzcKHFez4S/dGiijXfZ9eSJtNlm58=";
+    hash = "sha256-gpyXy7FO7ZVXJrkzcKHFez4S/dGiijXfZ9eSJtNlm58=";
   };
 
   vendorHash = "sha256-UpktrXY6OntOA1sxKq3qI59zrOwwCuM+gfGGxPmUJRo=";

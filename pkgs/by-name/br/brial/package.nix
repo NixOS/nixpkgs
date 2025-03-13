@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     owner = "BRiAl";
     repo = "BRiAl";
     rev = version;
-    sha256 = "sha256-y6nlqRBJRWohGDAKe/F37qBP1SgtFHR1HD+erFJReOM=";
+    hash = "sha256-y6nlqRBJRWohGDAKe/F37qBP1SgtFHR1HD+erFJReOM=";
   };
 
   # FIXME package boost-test and enable checks

@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://samba/cwrap/nss_wrapper-${version}.tar.gz";
-    sha256 = "sha256-3HmrByd5vkQDtFtgzQRN0TeA1LuWddJ6vxkyrafIqI0=";
+    hash = "sha256-3HmrByd5vkQDtFtgzQRN0TeA1LuWddJ6vxkyrafIqI0=";
   };
 
   nativeBuildInputs = [

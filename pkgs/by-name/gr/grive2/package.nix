@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     owner = "vitalif";
     repo = "grive2";
     rev = "v${version}";
-    sha256 = "sha256-P6gitA5cXfNbNDy4ohRLyXj/5dUXkCkOdE/9rJPzNCg=";
+    hash = "sha256-P6gitA5cXfNbNDy4ohRLyXj/5dUXkCkOdE/9rJPzNCg=";
   };
 
   patches = [

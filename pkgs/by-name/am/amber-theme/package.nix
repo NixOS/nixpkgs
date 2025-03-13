@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     owner = "lassekongo83";
     repo = "amber-theme";
     rev = "v${version}";
-    sha256 = "sha256-OrdBeAD+gdIu6u8ESE9PtqYadSuJ8nx1Z8fB4D9y4W4=";
+    hash = "sha256-OrdBeAD+gdIu6u8ESE9PtqYadSuJ8nx1Z8fB4D9y4W4=";
   };
 
   nativeBuildInputs = [

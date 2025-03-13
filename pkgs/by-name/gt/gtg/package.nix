@@ -25,7 +25,7 @@ python3Packages.buildPythonApplication rec {
     owner = "getting-things-gnome";
     repo = "gtg";
     rev = "v${version}";
-    sha256 = "sha256-O8qBD92P2g8QrBdMXa6j0Ozk+W80Ny5yk0KNTy7ekfE=";
+    hash = "sha256-O8qBD92P2g8QrBdMXa6j0Ozk+W80Ny5yk0KNTy7ekfE=";
   };
 
   nativeBuildInputs = [

@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "ftp://ftp-sop.inria.fr/indes/fp/Bigloo/bigloo-${version}.tar.gz";
-    sha256 = "sha256-hk1SXuan/zOf2ajJc8xGv5piOjgn2Ev7bgSikiNwfaU=";
+    hash = "sha256-hk1SXuan/zOf2ajJc8xGv5piOjgn2Ev7bgSikiNwfaU=";
   };
 
   nativeBuildInputs = [

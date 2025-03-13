@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "davidrjenni";
     repo = "reftools";
     rev = "40322ffdc2e46fd7920d1f8250051bbd2f3bd34d";
-    sha256 = "sha256-fHWtUoVK3G0Kn69O6/D0blM6Q/u4LuLinT6sxF18nFo=";
+    hash = "sha256-fHWtUoVK3G0Kn69O6/D0blM6Q/u4LuLinT6sxF18nFo=";
   };
 
   vendorHash = null;

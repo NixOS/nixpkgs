@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "artemsen";
     repo = "swaykbdd";
     rev = "v${version}";
-    sha256 = "sha256-FtXmn5Lf0PhL99xGl/SHWNaE6vAMOF2Ok4xVJT2Bf/s=";
+    hash = "sha256-FtXmn5Lf0PhL99xGl/SHWNaE6vAMOF2Ok4xVJT2Bf/s=";
   };
 
   strictDeps = true;

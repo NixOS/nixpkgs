@@ -19,7 +19,7 @@ buildGoModule rec {
     owner = "go-shiori";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-T4EFwvejLgNkcykPjSHU8WXJwqSqYPFaAD+9JX+uiJU=";
+    hash = "sha256-T4EFwvejLgNkcykPjSHU8WXJwqSqYPFaAD+9JX+uiJU=";
   };
 
   ldflags = [

@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://dist.scaleft.com/repos/rpm/stable/centos/9/x86_64/1.80.1/scaleft-client-tools-${version}-1.x86_64.rpm";
-    sha256 = "sha256-QrkqAgkplFF6Tp6FWKb2TJaqeOw8ec4zd9pymDP2IyY=";
+    hash = "sha256-QrkqAgkplFF6Tp6FWKb2TJaqeOw8ec4zd9pymDP2IyY=";
   };
 
   nativeBuildInputs = [

@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "sccn";
     repo = "liblsl";
     rev = "v${version}";
-    sha256 = "sha256-nmu7Kxk4U5sGO8Od9JR4id4V4mjeibj4AHjUYhpGPeo=";
+    hash = "sha256-nmu7Kxk4U5sGO8Od9JR4id4V4mjeibj4AHjUYhpGPeo=";
   };
 
   nativeBuildInputs = [ cmake ];

@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://download.libguestfs.org/virt-v2v/${lib.versions.majorMinor finalAttrs.version}-stable/virt-v2v-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-W7t/n1QO9UebyH85abtnSY5i7kH/6h8JIAlFQoD1vkU=";
+    hash = "sha256-W7t/n1QO9UebyH85abtnSY5i7kH/6h8JIAlFQoD1vkU=";
   };
 
   postPatch = ''

@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     url = "https://www.roomeqwizard.com/installers/REW_linux_no_jre_${
       lib.replaceStrings [ "." ] [ "_" ] version
     }.sh";
-    sha256 = "sha256-qaGkKVoiBJ2UWVKAMqbuqNFi6FGcblMxAbYwhf/71CY=";
+    hash = "sha256-qaGkKVoiBJ2UWVKAMqbuqNFi6FGcblMxAbYwhf/71CY=";
   };
 
   dontUnpack = true;

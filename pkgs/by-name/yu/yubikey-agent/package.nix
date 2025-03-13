@@ -17,7 +17,7 @@ buildGoModule rec {
     owner = "FiloSottile";
     repo = "yubikey-agent";
     rev = "v${version}";
-    sha256 = "sha256-Knk1ipBOzjmjrS2OFUMuxi1TkyDcSYlVKezDWT//ERY=";
+    hash = "sha256-Knk1ipBOzjmjrS2OFUMuxi1TkyDcSYlVKezDWT//ERY=";
   };
 
   buildInputs =

@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     owner = "jwilk";
     repo = "pdf2djvu";
     rev = version;
-    sha256 = "sha256-j4mYdmLZ56qTA1KbWBjBvyTyLaeuIITKYsALRIO7lj0=";
+    hash = "sha256-j4mYdmLZ56qTA1KbWBjBvyTyLaeuIITKYsALRIO7lj0=";
   };
 
   nativeBuildInputs = [

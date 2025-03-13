@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     owner = "lenemter";
     repo = pname;
     rev = "d9fc4e47d58c72e0cf08aa11246910ce84fcef50";
-    sha256 = "sha256-8jzhrCMkP5ui964JRZUs+tl2ShxeB8q60fBUI4okrpg=";
+    hash = "sha256-8jzhrCMkP5ui964JRZUs+tl2ShxeB8q60fBUI4okrpg=";
   };
 
   patches = [

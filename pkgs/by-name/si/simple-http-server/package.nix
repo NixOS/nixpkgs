@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
     owner = "TheWaWaR";
     repo = "simple-http-server";
     rev = "v${version}";
-    sha256 = "sha256-r8Ush6cdGNxcRB3RSRJLtjseII5SQt9+oMqOTBmVfaY=";
+    hash = "sha256-r8Ush6cdGNxcRB3RSRJLtjseII5SQt9+oMqOTBmVfaY=";
   };
 
   useFetchCargoVendor = true;

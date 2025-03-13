@@ -14,7 +14,7 @@ in stdenv.mkDerivation {
     owner  = "Davidebyzero";
     repo   = "Snipes";
     rev    = "caa2ce036a9f6461ccdb7ef8306edbd126dd4081";
-    sha256 = "sha256-iIoh5odCziX1cKs5qf4hJdXpUhy9kdht0YMLLfhvKZA=";
+    hash = "sha256-iIoh5odCziX1cKs5qf4hJdXpUhy9kdht0YMLLfhvKZA=";
   };
 
   postPatch = ''

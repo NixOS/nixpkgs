@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
     owner = "twitchax";
     repo = "kord";
     rev = "v${version}";
-    sha256 = "sha256-CeMh6yB4fGoxtGLbkQe4OMMvBM0jesyP+8JtU5kCP84=";
+    hash = "sha256-CeMh6yB4fGoxtGLbkQe4OMMvBM0jesyP+8JtU5kCP84=";
   };
 
   cargoLock = {

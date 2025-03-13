@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "shuffle2";
     repo = "nx2elf";
     rev = "735aaa0648a5a6c996b48add9465db86524999f6";
-    sha256 = "sha256-cS8FFIEgDWva0j9JXhS+s7Y4Oh+mNhFaKRI7BF2hqvs=";
+    hash = "sha256-cS8FFIEgDWva0j9JXhS+s7Y4Oh+mNhFaKRI7BF2hqvs=";
   };
 
   buildInputs = [ lz4 ];

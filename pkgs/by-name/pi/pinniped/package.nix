@@ -13,7 +13,7 @@ buildGoModule rec {
     owner = "vmware-tanzu";
     repo = "pinniped";
     rev = "v${version}";
-    sha256 = "sha256-8GMVJR3Rmn7z+EH6avbdSifcnEC6aH4eTEVacgyY1sE=";
+    hash = "sha256-8GMVJR3Rmn7z+EH6avbdSifcnEC6aH4eTEVacgyY1sE=";
   };
 
   subPackages = "cmd/pinniped";

@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "open-iscsi";
     repo = "open-isns";
     rev = "v${version}";
-    sha256 = "sha256-buqQMsoxRCbWiBDq0XAg93J7bjbdxeIernV8sDVxCAA=";
+    hash = "sha256-buqQMsoxRCbWiBDq0XAg93J7bjbdxeIernV8sDVxCAA=";
   };
 
   # The location of /var/lib is not made configurable in the meson.build file

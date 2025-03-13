@@ -12,7 +12,7 @@ buildNpmPackage rec {
     owner = "APIDevTools";
     repo = "swagger-cli";
     rev = "v${version}";
-    sha256 = "sha256-WgzfSd57vRwa1HrSgNxD0F5ckczBkOaVmrEZ9tMAcRA=";
+    hash = "sha256-WgzfSd57vRwa1HrSgNxD0F5ckczBkOaVmrEZ9tMAcRA=";
   };
 
   npmDepsHash = "sha256-go9eYGCZmbwRArHVTVa6mxL+kjvBcrLxKw2iVv0a5hY=";

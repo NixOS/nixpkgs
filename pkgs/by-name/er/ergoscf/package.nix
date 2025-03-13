@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://www.ergoscf.org/source/tarfiles/ergo-${version}.tar.gz";
-    sha256 = "sha256-U0NVREEZ8HI0Q0ZcbwvZsYA76PWMh7bqgDG1uaUc01c=";
+    hash = "sha256-U0NVREEZ8HI0Q0ZcbwvZsYA76PWMh7bqgDG1uaUc01c=";
   };
 
   buildInputs = [

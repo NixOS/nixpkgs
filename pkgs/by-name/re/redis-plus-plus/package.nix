@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     owner = "sewenew";
     repo = "redis-plus-plus";
     rev = version;
-    sha256 = "sha256-bZxs1qnVAkh0BO0CyP1zL/+K3NZYmFy9ryg1QcRLcmg=";
+    hash = "sha256-bZxs1qnVAkh0BO0CyP1zL/+K3NZYmFy9ryg1QcRLcmg=";
   };
 
   patches = [
