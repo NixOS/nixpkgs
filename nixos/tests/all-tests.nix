@@ -155,7 +155,7 @@ in {
   agda = runTest ./agda.nix;
   age-plugin-tpm-decrypt = runTest ./age-plugin-tpm-decrypt.nix;
   agorakit = runTest ./web-apps/agorakit.nix;
-  airsonic = handleTest ./airsonic.nix {};
+  airsonic = runTest ./airsonic.nix;
   akkoma = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./akkoma.nix {};
   akkoma-confined = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./akkoma.nix { confined = true; };
   alice-lg = handleTest ./alice-lg.nix {};
