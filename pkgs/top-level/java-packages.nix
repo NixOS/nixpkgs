@@ -9,13 +9,28 @@ with pkgs;
     let
       mkOpenjdk =
         featureVersion: path-darwin:
+        let
+          # merge meta.platforms of both packages so that dependent packages and hydra build them
+          mergeMetaPlatforms =
+            jdk: other:
+            jdk
+            // {
+              meta = jdk.meta // {
+                platforms = lib.unique (jdk.meta.platforms ++ other.meta.platforms);
+              };
+            };
+          openjdkLinux = mkOpenjdkLinuxOnly featureVersion;
+          openjdkLinuxHeadless = openjdkLinux.override { headless = true; };
+          openjdkDarwin =
+            let
+              openjdk = callPackage path-darwin { };
+            in
+            openjdk // { headless = mergeMetaPlatforms openjdkDarwin openjdkLinuxHeadless; };
+        in
         if stdenv.hostPlatform.isLinux then
-          mkOpenjdkLinuxOnly featureVersion
+          (mergeMetaPlatforms openjdkLinux openjdkDarwin)
         else
-          let
-            openjdk = callPackage path-darwin { };
-          in
-          openjdk // { headless = openjdk; };
+          (mergeMetaPlatforms openjdkDarwin openjdkLinux);
 
       mkOpenjdkLinuxOnly =
         featureVersion:
@@ -25,7 +40,7 @@ with pkgs;
         assert stdenv.hostPlatform.isLinux;
         openjdk
         // {
-          headless = openjdk.override { headless = true; };
+          headless = mergeMetaPlatforms openjdkLinuxHeadless openjdkDarwin;
         };
 
     in
