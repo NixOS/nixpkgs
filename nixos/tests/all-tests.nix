@@ -147,7 +147,7 @@ in {
   _3proxy = runTest ./3proxy.nix;
   aaaaxy = runTest ./aaaaxy.nix;
   acme = import ./acme/default.nix { inherit runTest; };
-  acme-dns = handleTest ./acme-dns.nix {};
+  acme-dns = runTest ./acme-dns.nix;
   actual = handleTest ./actual.nix {};
   adguardhome = runTest ./adguardhome.nix;
   aesmd = runTestOn ["x86_64-linux"] ./aesmd.nix;
