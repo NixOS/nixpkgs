@@ -154,7 +154,7 @@ let
         desktopName = "Bolt Launcher";
         genericName = finalAttrs.pname;
         comment = "An alternative launcher for RuneScape";
-        exec = "${finalAttrs.pname}-${finalAttrs.version}";
+        exec = "${finalAttrs.pname}";
         icon = finalAttrs.pname;
         categories = [ "Game" ];
       })
