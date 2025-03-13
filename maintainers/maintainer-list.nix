@@ -17711,7 +17711,7 @@
     github = "Oops418";
     name = "Oops418";
     githubId = 93655215;
-  }
+  };
   oosquare = {
     name = "Justin Chen";
     email = "oosquare@outlook.com";
