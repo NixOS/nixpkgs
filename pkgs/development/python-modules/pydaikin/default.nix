@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "pydaikin";
-  version = "2.14.0";
+  version = "2.14.1";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "fredrike";
     repo = "pydaikin";
     tag = "v${version}";
-    hash = "sha256-5qkJjGfVoNVHHmr77aWajpYmyfmV/ZyO3tXY9/gj6eU=";
+    hash = "sha256-AyW9hQC8fF5T+E1FXhLemVvWggeEpZok5OVhzcZh9G0=";
   };
 
   __darwinAllowLocalNetworking = true;
@@ -51,7 +51,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python Daikin HVAC appliances interface";
     homepage = "https://github.com/fredrike/pydaikin";
-    changelog = "https://github.com/fredrike/pydaikin/releases/tag/v${version}";
+    changelog = "https://github.com/fredrike/pydaikin/releases/tag/${src.tag}";
     license = with licenses; [ gpl3Only ];
     maintainers = with maintainers; [ fab ];
     mainProgram = "pydaikin";
