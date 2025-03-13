@@ -183,7 +183,7 @@ in {
   atticd = runTest ./atticd.nix;
   atuin = runTest ./atuin.nix;
   audiobookshelf = runTest ./audiobookshelf.nix;
-  auth-mysql = handleTest ./auth-mysql.nix {};
+  auth-mysql = runTest ./auth-mysql.nix;
   authelia = handleTest ./authelia.nix {};
   auto-cpufreq = handleTest ./auto-cpufreq.nix {};
   autobrr = handleTest ./autobrr.nix {};
