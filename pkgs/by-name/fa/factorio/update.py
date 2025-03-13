@@ -68,7 +68,7 @@ RELEASE_TYPES = [
         needs_auth=True,
         hash_filename_format=["factorio_linux_{version}.tar.xz"],
     ),
-    ReleaseType("demo", hash_filename_format=["factorio_demo_x64_{version}.tar.xz"]),
+    ReleaseType("demo", hash_filename_format=["factorio-demo_linux_{version}.tar.xz"]),
     ReleaseType(
         "headless",
         hash_filename_format=[
