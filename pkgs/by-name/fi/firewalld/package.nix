@@ -4,7 +4,6 @@
   fetchFromGitHub,
   autoconf,
   automake,
-  # bash,
   docbook_xml_dtd_42,
   docbook-xsl-nons,
   glib,
@@ -81,7 +80,6 @@ stdenv.mkDerivation rec {
       automake
       docbook_xml_dtd_42
       docbook-xsl-nons
-      glib
       intltool
       ipset
       iptables
@@ -100,8 +98,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [
-      # bash
-      # glib
+      glib
       gobject-introspection
       ipset
       iptables
