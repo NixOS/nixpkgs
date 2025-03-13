@@ -19,6 +19,7 @@
   petsc-precision ? "double",
   mpiSupport ? true,
   withPetsc4py ? false, # petsc python binding
+  withExamples ? false,
   withFullDeps ? false, # full External libraries support
 
   # External libraries options
@@ -164,6 +165,8 @@ stdenv.mkDerivation rec {
   ];
 
   configureScript = "python ./configure";
+
+  installTargets = [ (if withExamples then "install" else "install-lib") ];
 
   enableParallelBuilding = true;
 
