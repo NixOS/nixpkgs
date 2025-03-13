@@ -178,7 +178,7 @@ in {
   aria2 = runTest ./aria2.nix;
   armagetronad = runTest ./armagetronad.nix;
   artalk = runTest ./artalk.nix;
-  atd = handleTest ./atd.nix {};
+  atd = runTest ./atd.nix;
   atop = handleTest ./atop.nix {};
   atticd = runTest ./atticd.nix;
   atuin = runTest ./atuin.nix;
