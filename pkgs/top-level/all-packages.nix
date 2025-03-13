@@ -16323,10 +16323,6 @@ with pkgs;
 
   openra = openraPackages.engines.release;
 
-  openrw = callPackage ../games/openrw {
-    inherit (darwin.apple_sdk.frameworks) Cocoa OpenAL;
-  };
-
   openspades = callPackage ../games/openspades {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
