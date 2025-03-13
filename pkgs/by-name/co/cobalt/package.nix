@@ -3,7 +3,6 @@
   stdenv,
   fetchFromGitHub,
   rustPlatform,
-  CoreServices,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -19,8 +18,6 @@ rustPlatform.buildRustPackage rec {
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-j2xmEoMV7lVhqj4lKWA3QdEDEGUpRlZc4ikZoDQJlB8=";
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices ];
 
   meta = with lib; {
     description = "Static site generator written in Rust";
