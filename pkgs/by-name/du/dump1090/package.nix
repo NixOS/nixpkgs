@@ -50,6 +50,7 @@ stdenv.mkDerivation rec {
     "showconfig"
     "dump1090"
     "view1090"
+    "faup1090"
   ];
 
   doCheck = true;
@@ -58,7 +59,7 @@ stdenv.mkDerivation rec {
     runHook preInstall
 
     mkdir -p $out/bin $out/share
-    cp -v dump1090 view1090 $out/bin
+    cp -v dump1090 view1090 faup1090 $out/bin
     cp -vr public_html $out/share/dump1090
 
     runHook postInstall
