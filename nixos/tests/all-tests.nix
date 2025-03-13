@@ -187,8 +187,14 @@ in {
   authelia = runTest ./authelia.nix;
   auto-cpufreq = runTest ./auto-cpufreq.nix;
   autobrr = runTest ./autobrr.nix;
-  avahi = handleTest ./avahi.nix {};
-  avahi-with-resolved = handleTest ./avahi.nix { networkd = true; };
+  avahi = runTest {
+    imports = [ ./avahi.nix ];
+    _module.args.networkd = false;
+  };
+  avahi-with-resolved = runTest {
+    imports = [ ./avahi.nix ];
+    _module.args.networkd = true;
+  };
   ayatana-indicators = runTest ./ayatana-indicators.nix;
   babeld = runTest ./babeld.nix;
   bazarr = handleTest ./bazarr.nix {};
