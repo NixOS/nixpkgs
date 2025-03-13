@@ -2,7 +2,7 @@
   lib,
   stdenv,
   callPackage,
-  version ? "0.3.11",
+  version ? "0.3.13",
   rev ? "1",
   ...
 }@args:
@@ -36,7 +36,7 @@ if stdenv.hostPlatform.isDarwin then
     url =
       args.url
         or "https://installers.lmstudio.ai/darwin/arm64/${version}-${rev}/LM-Studio-${version}-${rev}-arm64.dmg";
-    hash = args.hash or "sha256-kXH3tAazEtl019IBxuavEI9QUamEH3b6UFYRYAO3Fxs=";
+    hash = args.hash or "sha256-fPrTbu/qN0SxLhX9ACd1/T3HLFxQDJ7czHg7QTATaLs=";
   }
 else
   callPackage ./linux.nix {
@@ -48,5 +48,5 @@ else
     url =
       args.url
         or "https://installers.lmstudio.ai/linux/x64/${version}-${rev}/LM-Studio-${version}-${rev}-x64.AppImage";
-    hash = args.hash or "sha256-T8j0l2ZP53Zc0hgb2EyFeR0mH5YrNlz4UfzN0rO7bKU=";
+    hash = args.hash or "sha256-OSNxe2KFj9stnM5x11exMlFDiy+gOa31HRyxzwHtwAk=";
   }
