@@ -22,6 +22,7 @@
   librsvg,
   libvpx,
   libwebp,
+  systemd,
   lz4,
   nv-codec-headers-10,
   nvidia_x11 ? null,
@@ -155,6 +156,7 @@ buildPythonApplication rec {
       x264
       x265
       xxHash
+      systemd
     ]
     ++ lib.optional withNvenc [
       nvencHeaders
