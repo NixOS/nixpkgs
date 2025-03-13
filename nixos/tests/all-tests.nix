@@ -169,7 +169,7 @@ in {
   angie-api = runTest ./angie-api.nix;
   anki-sync-server = runTest ./anki-sync-server.nix;
   anuko-time-tracker = runTest ./anuko-time-tracker.nix;
-  apcupsd = handleTest ./apcupsd.nix {};
+  apcupsd = runTest ./apcupsd.nix;
   apfs = runTest ./apfs.nix;
   appliance-repart-image = runTest ./appliance-repart-image.nix;
   appliance-repart-image-verity-store = runTest ./appliance-repart-image-verity-store.nix;
