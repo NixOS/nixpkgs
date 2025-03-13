@@ -161,7 +161,7 @@ in {
   alice-lg = runTest ./alice-lg.nix;
   alloy = runTest ./alloy.nix;
   allTerminfo = runTest ./all-terminfo.nix;
-  alps = handleTest ./alps.nix {};
+  alps = runTest ./alps.nix;
   amazon-cloudwatch-agent = handleTest ./amazon-cloudwatch-agent.nix {};
   amazon-init-shell = handleTest ./amazon-init-shell.nix {};
   amazon-ssm-agent = handleTest ./amazon-ssm-agent.nix {};
