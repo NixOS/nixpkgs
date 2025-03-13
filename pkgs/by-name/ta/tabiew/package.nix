@@ -6,17 +6,17 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "tabiew";
-  version = "0.8.4";
+  version = "0.8.5";
 
   src = fetchFromGitHub {
     owner = "shshemi";
     repo = "tabiew";
     rev = "v${version}";
-    hash = "sha256-0lg5HYHFjJktpPI4SWBPtHC2DOuLhOnnPr3aZ6OZsDU=";
+    hash = "sha256-mBGEw3WyjEmDPo9L+CPOtMiVA+2ndQ2pjo7bUBZZO8o=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-mVYC+L3iEzeNUl75SioWH82ayD4mzOf0Dr53MJhFQcQ=";
+  cargoHash = "sha256-tDXTiVuQMSPewD5MwDj3pSna22Jelbi3fINszMi9P20=";
 
   nativeBuildInputs = [ installShellFiles ];
 
