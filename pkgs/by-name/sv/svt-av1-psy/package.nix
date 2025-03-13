@@ -4,6 +4,7 @@
   fetchFromGitHub,
   cmake,
   nasm,
+  cpuinfo,
   libdovi,
   unstableGitUpdater,
 }:
@@ -21,11 +22,20 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeBuildType = "Release";
 
-  cmakeFlags = lib.mapAttrsToList lib.cmakeFeature {
-    LIBDOVI_FOUND = lib.boolToString true;
-    # enable when libhdr10plus is available
-    # LIBHDR10PLUS_RS_FOUND = lib.boolToString true;
-  };
+  cmakeFlags =
+    lib.mapAttrsToList
+      (
+        n: v:
+        lib.cmakeOptionType (builtins.typeOf v) n (
+          if builtins.isBool v then lib.boolToString v else toString v
+        )
+      )
+      {
+        USE_EXTERNAL_CPUINFO = true;
+        LIBDOVI_FOUND = true;
+        # enable when libhdr10plus is available
+        # LIBHDR10PLUS_RS_FOUND = true;
+      };
 
   nativeBuildInputs = [
     cmake
@@ -33,6 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    cpuinfo
     libdovi
   ];
 
