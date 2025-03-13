@@ -1,4 +1,4 @@
-{ 
+{
     stdenv,
     cmake,
     lib,
@@ -27,12 +27,12 @@ stdenv.mkDerivation {
     };
   });
 
-  nativeBuildInputs = [ 
-    cmake 
-    ninja 
-    gcc 
-    git 
-    python311  
+  nativeBuildInputs = [
+    cmake
+    ninja
+    gcc
+    git
+    python311
   ];
   
   cmakeFlags = [ "-DCMAKE_BUILD_TYPE=Release" ];
