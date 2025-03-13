@@ -1,0 +1,17 @@
+diff --git a/lua/sonarlint.lua b/lua/sonarlint.lua
+index d952020..91bc0dd 100644
+--- a/lua/sonarlint.lua
++++ b/lua/sonarlint.lua
+@@ -37,6 +37,12 @@ local function start_sonarlint_lsp(user_config)
+       architecture = vim.loop.os_uname().machine,
+    }
+ 
++   local pathToNodeExecutable = config.settings.sonarlint.pathToNodeExecutable
++
++   if type(pathToNodeExecutable) == "string" and pathToNodeExecutable ~= "" then
++      config.init_options.clientNodePath = pathToNodeExecutable
++   end
++
+    config.handlers = {}
+ 
+    config.handlers["sonarlint/isOpenInEditor"] = function(err, uri)
