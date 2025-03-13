@@ -55252,24 +55252,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  escape-string-regexp = nodeEnv.buildNodePackage {
-    name = "escape-string-regexp";
-    packageName = "escape-string-regexp";
-    version = "5.0.0";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/escape-string-regexp/-/escape-string-regexp-5.0.0.tgz";
-      sha512 = "/veY75JbMK4j1yjvuUxuVsiS/hr/4iHs9FTT6cgTexxdE0Ly/glccBAkloH/DofkjRbZU3bnoj38mOmhkZ0lHw==";
-    };
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Escape RegExp special characters";
-      homepage = "https://github.com/sindresorhus/escape-string-regexp#readme";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   esy = nodeEnv.buildNodePackage {
     name = "esy";
     packageName = "esy";
