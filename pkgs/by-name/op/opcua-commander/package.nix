@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildNpmPackage,
   fetchFromGitHub,
   typescript,
@@ -25,10 +26,18 @@ buildNpmPackage rec {
     makeWrapper
   ];
 
-  postPatch = ''
-    substituteInPlace package.json \
-      --replace-warn "npx -y esbuild" "esbuild"
-  '';
+  postPatch =
+    let
+      esbuildPrefix =
+        "esbuild"
+        # Workaround for 'No loader is configured for ".node" files: node_modules/fsevents/fsevents.node'
+        # esbuild issue is https://github.com/evanw/esbuild/issues/1051
+        + lib.optionalString stdenv.hostPlatform.isDarwin " --external:fsevents";
+    in
+    ''
+      substituteInPlace package.json \
+        --replace-fail 'npx -y esbuild' '${esbuildPrefix}'
+    '';
 
   # We need to add `nodejs` to PATH for `opcua-commander` to properly work
   # when connected to an OPC-UA server.

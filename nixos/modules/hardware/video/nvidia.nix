@@ -5,7 +5,7 @@
   ...
 }:
 let
-  nvidiaEnabled = (lib.elem "nvidia" config.services.xserver.videoDrivers);
+  nvidiaEnabled = lib.elem "nvidia" config.services.xserver.videoDrivers;
   nvidia_x11 = if nvidiaEnabled || cfg.datacenter.enable then cfg.package else null;
 
   cfg = config.hardware.nvidia;
@@ -24,6 +24,13 @@ in
 {
   options = {
     hardware.nvidia = {
+      enabled = lib.mkOption {
+        readOnly = true;
+        type = lib.types.bool;
+        default = nvidia_x11 != null;
+        defaultText = lib.literalMD "`true` if NVIDIA support is enabled";
+        description = "True if NVIDIA support is enabled";
+      };
       datacenter.enable = lib.mkEnableOption ''
         Data Center drivers for NVIDIA cards on a NVLink topology
       '';
@@ -294,7 +301,7 @@ in
       igpuDriver = if pCfg.intelBusId != "" then "modesetting" else "amdgpu";
       igpuBusId = if pCfg.intelBusId != "" then pCfg.intelBusId else pCfg.amdgpuBusId;
     in
-    lib.mkIf (nvidia_x11 != null) (
+    lib.mkIf cfg.enabled (
       lib.mkMerge [
         # Common
         ({

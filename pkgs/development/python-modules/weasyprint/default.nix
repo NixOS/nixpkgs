@@ -18,14 +18,14 @@
   pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
-  substituteAll,
+  replaceVars,
   tinycss2,
   tinyhtml5,
 }:
 
 buildPythonPackage rec {
   pname = "weasyprint";
-  version = "63.1";
+  version = "64.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -33,17 +33,15 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "weasyprint";
-    hash = "sha256-y0JOY+jdPxQZW/5fIDUnZGqkCi8ArIGfnTm4MEzsAEQ=";
+    hash = "sha256-KLAvLGQJuvzhsSINnXanNFh1vTvQjE9t+/UQu5KpR1c=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./library-paths.patch;
+    (replaceVars ./library-paths.patch {
       fontconfig = "${fontconfig.lib}/lib/libfontconfig${stdenv.hostPlatform.extensions.sharedLibrary}";
       pangoft2 = "${pango.out}/lib/libpangoft2-1.0${stdenv.hostPlatform.extensions.sharedLibrary}";
       gobject = "${glib.out}/lib/libgobject-2.0${stdenv.hostPlatform.extensions.sharedLibrary}";
       pango = "${pango.out}/lib/libpango-1.0${stdenv.hostPlatform.extensions.sharedLibrary}";
-      pangocairo = "${pango.out}/lib/libpangocairo-1.0${stdenv.hostPlatform.extensions.sharedLibrary}";
       harfbuzz = "${harfbuzz.out}/lib/libharfbuzz${stdenv.hostPlatform.extensions.sharedLibrary}";
       harfbuzz_subset = "${harfbuzz.out}/lib/libharfbuzz-subset${stdenv.hostPlatform.extensions.sharedLibrary}";
     })

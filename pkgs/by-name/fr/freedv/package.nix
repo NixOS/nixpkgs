@@ -18,16 +18,17 @@
   wxGTK32,
   sioclient,
   pulseSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "freedv";
   version = "1.9.9.2";
 
   src = fetchFromGitHub {
     owner = "drowe67";
     repo = "freedv-gui";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-oFuAH81mduiSQGIDgDDy1IPskqqCBmfWbpqQstUIw9g=";
   };
 
@@ -75,6 +76,14 @@ stdenv.mkDerivation rec {
     makeWrapper $out/Applications/FreeDV.app/Contents/MacOS/FreeDV $out/bin/freedv
   '';
 
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      # avoid pre‐releases
+      "--version-regex"
+      ''^v(\d\.\d\.\d(\.\d)?)$''
+    ];
+  };
+
   meta = {
     homepage = "https://freedv.org/";
     description = "Digital voice for HF radio";
@@ -86,4 +95,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "freedv";
   };
-}
+})

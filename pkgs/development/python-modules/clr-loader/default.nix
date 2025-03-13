@@ -20,6 +20,11 @@ let
     hash = "sha256-t6iz+PuxvLu2OC2IfiHRdC1PELXqIJ5K2VVo/pfhx8Y=";
   };
   patches = [ ./dotnet-8-upgrade.patch ];
+  # This stops msbuild from picking up $version from the environment
+  postPatch = ''
+    echo '<Project><PropertyGroup><Version/></PropertyGroup></Project>' > \
+      Directory.Build.props
+  '';
 
   # This buildDotnetModule is used only to get nuget sources, the actual
   # build is done in `buildPythonPackage` below.
@@ -29,6 +34,7 @@ let
       version
       src
       patches
+      postPatch
       ;
     projectFile = [
       "netfx_loader/ClrLoader.csproj"
@@ -44,6 +50,7 @@ buildPythonPackage {
     version
     src
     patches
+    postPatch
     ;
 
   format = "pyproject";

@@ -14,14 +14,14 @@
 
 stdenv.mkDerivation rec {
   pname = "qtscrcpy";
-  version = "3.1.0";
+  version = "3.1.3";
 
   src =
     (fetchFromGitHub {
       owner = "barry-ran";
       repo = "QtScrcpy";
       tag = "v${version}";
-      hash = "sha256-wnzJHSx+HcbtcXDDksog4SAXEf1spcuXQ6+vdysPYQY=";
+      hash = "sha256-deJachXKClyJymUSRgqlwZhwr4Hlo4GXynJRlyu6uBU=";
       fetchSubmodules = true;
     }).overrideAttrs
       (_: {

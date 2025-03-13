@@ -78,7 +78,7 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.agpl3Only;
     mainProgram = "redlib";
     maintainers = with lib.maintainers; [
-      soispha
+      bpeetz
       Guanran928
     ];
   };

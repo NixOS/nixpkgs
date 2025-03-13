@@ -5,7 +5,7 @@
 , updateScript ? null
 , binaryName ? "firefox"
 , application ? "browser"
-, applicationName ? "Mozilla Firefox"
+, applicationName ? "Firefox"
 , branding ? null
 , requireSigning ? true
 , allowAddonSideload ? false
@@ -68,7 +68,6 @@ in
 , gnum4
 , gtk3
 , icu73
-, icu74
 , libGL
 , libGLU
 , libevent
@@ -119,7 +118,7 @@ in
 , pipewireSupport ? waylandSupport && webrtcSupport
 , pulseaudioSupport ? stdenv.hostPlatform.isLinux, libpulseaudio
 , sndioSupport ? stdenv.hostPlatform.isLinux, sndio
-, waylandSupport ? true, libxkbcommon, libdrm
+, waylandSupport ? !stdenv.hostPlatform.isDarwin, libxkbcommon, libdrm
 
 ## privacy-related options
 
@@ -200,12 +199,15 @@ let
     done
   '';
 
-  distributionIni = pkgs.writeText "distribution.ini" (lib.generators.toINI {} {
+  distributionIni = let
+    platform = if stdenv.hostPlatform.isDarwin then "Nix on MacOS" else "NixOS";
+  in
+    pkgs.writeText "distribution.ini" (lib.generators.toINI {} {
     # Some light branding indicating this build uses our distro preferences
     Global = {
       id = "nixos";
       version = "1.0";
-      about = "${applicationName} for NixOS";
+      about = "${applicationName} for ${platform}";
     };
     Preferences = {
       # These values are exposed through telemetry
@@ -251,7 +253,8 @@ buildStdenv.mkDerivation {
   patches = lib.optionals (lib.versionAtLeast version "111" && lib.versionOlder version "133") [ ./env_var_for_system_dir-ff111.patch ]
   ++ lib.optionals (lib.versionAtLeast version "133") [ ./env_var_for_system_dir-ff133.patch ]
   ++ lib.optionals (lib.versionAtLeast version "96" && lib.versionOlder version "121") [ ./no-buildconfig-ffx96.patch ]
-  ++ lib.optionals (lib.versionAtLeast version "121") [ ./no-buildconfig-ffx121.patch ]
+  ++ lib.optionals (lib.versionAtLeast version "121" && lib.versionOlder version "136") [ ./no-buildconfig-ffx121.patch ]
+  ++ lib.optionals (lib.versionAtLeast version "136") [ ./no-buildconfig-ffx136.patch ]
   ++ lib.optionals (lib.versionOlder version "128.2" || (lib.versionAtLeast version "129" && lib.versionOlder version "130")) [
     (fetchpatch {
       # https://bugzilla.mozilla.org/show_bug.cgi?id=1912663
@@ -425,6 +428,7 @@ buildStdenv.mkDerivation {
     "--disable-updater"
     "--enable-application=${application}"
     "--enable-default-toolkit=${toolkit}"
+    "--with-app-name=${binaryName}"
     "--with-distribution-id=org.nixos"
     "--with-libclang-path=${lib.getLib llvmPackagesBuildBuild.libclang}/lib"
     "--with-wasi-sysroot=${wasiSysRoot}"
@@ -444,7 +448,8 @@ buildStdenv.mkDerivation {
     # MacOS builds use bundled versions of libraries: https://bugzilla.mozilla.org/show_bug.cgi?id=1776255
     "--enable-system-pixman"
     "--with-system-ffi"
-    "--with-system-icu"
+    # Firefox 136 fails to link with our icu76.1
+    (lib.optionalString (lib.versionOlder version "136") "--with-system-icu")
     "--with-system-jpeg"
     "--with-system-libevent"
     "--with-system-libvpx"
@@ -528,9 +533,7 @@ buildStdenv.mkDerivation {
     ++ lib.optional  sndioSupport sndio
     ++ lib.optionals waylandSupport [ libxkbcommon libdrm ]
   ))
-  # icu74 fails to build on 127 and older
-  # https://bugzilla.mozilla.org/show_bug.cgi?id=1862601
-  ++ [ (if (lib.versionAtLeast version "134") then icu74 else icu73) ]
+  ++ lib.optionals (lib.versionOlder version "136") [ icu73 ]
   ++ lib.optional  gssSupport libkrb5
   ++ lib.optional  jemallocSupport jemalloc
   ++ extraBuildInputs;
@@ -570,7 +573,7 @@ buildStdenv.mkDerivation {
   env = lib.optionalAttrs stdenv.hostPlatform.isMusl {
     # Firefox relies on nonstandard behavior of the glibc dynamic linker. It re-uses
     # previously loaded libraries even though they are not in the rpath of the newly loaded binary.
-    # On musl we have to explicity set the rpath to include these libraries.
+    # On musl we have to explicitly set the rpath to include these libraries.
     LDFLAGS = "-Wl,-rpath,${placeholder "out"}/lib/${binaryName}";
   };
 
@@ -592,11 +595,9 @@ buildStdenv.mkDerivation {
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/Applications
-    cp -r dist/${binaryName}/*.app $out/Applications
+    cp -r dist/${binaryName}/*.app "$out/Applications/${applicationName}.app"
 
-    appBundlePath=(dist/${binaryName}/*.app)
-    appBundle=''${appBundlePath[0]#dist/${binaryName}}
-    resourceDir=$out/Applications/$appBundle/Contents/Resources
+    resourceDir="$out/Applications/${applicationName}.app/Contents/Resources"
 
   '' + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     # Remove SDK cruft. FIXME: move to a separate output?
@@ -621,7 +622,7 @@ buildStdenv.mkDerivation {
   # Some basic testing
   doInstallCheck = true;
   installCheckPhase = lib.optionalString buildStdenv.hostPlatform.isDarwin ''
-    bindir=$out/Applications/$appBundle/Contents/MacOS
+    bindir="$out/Applications/${applicationName}.app/Contents/MacOS"
   '' + lib.optionalString (!buildStdenv.hostPlatform.isDarwin) ''
     bindir=$out/bin
   '' + ''
@@ -629,6 +630,7 @@ buildStdenv.mkDerivation {
   '';
 
   passthru = {
+    inherit applicationName;
     inherit application extraPatches;
     inherit updateScript;
     inherit alsaSupport;

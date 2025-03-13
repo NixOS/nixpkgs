@@ -28,6 +28,7 @@
   openssl,
   pango,
   systemd,
+  wrapGAppsHook3,
   xorg,
   zlib,
 }:
@@ -108,6 +109,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     makeWrapper
     copyDesktopItems
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -180,7 +182,7 @@ stdenv.mkDerivation rec {
     sqltoolsserviceRpath
   ];
 
-  fixupPhase = ''
+  preFixup = ''
     fix_sqltoolsservice()
     {
       mv ${sqltoolsservicePath}/$1 ${sqltoolsservicePath}/$1_old

@@ -13,6 +13,7 @@
   numpy,
   pandas,
   pillow,
+  puremagic,
   pydot,
   pygraphviz,
   shapely,
@@ -20,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "visions";
-  version = "0.7.6";
+  version = "0.8.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -28,19 +29,19 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dylan-profiler";
     repo = "visions";
-    rev = "5fe9dd0c2a5ada0162a005c880bac5296686a5aa"; # no 0.7.6 tag in github
-    hash = "sha256-SZzDXm+faAvrfSOT0fwwAf9IH7upNybwKxbjw1CrHj8=";
+    rev = "v${version}";
+    hash = "sha256-MHseb1XJ0t7jQ45VXKQclYPgddrzmJAC7cde8qqYhNQ=";
   };
 
   nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     attrs
-    imagehash
     multimethod
     networkx
     numpy
     pandas
+    puremagic
   ];
 
   optional-dependencies = {

@@ -8,6 +8,7 @@
   buildPythonPackage,
   click,
   cryptography,
+  email-validator,
   fastapi,
   fastapi-sso,
   fetchFromGitHub,
@@ -32,6 +33,7 @@
   rq,
   tiktoken,
   tokenizers,
+  uvloop,
   uvicorn,
 }:
 
@@ -56,6 +58,7 @@ buildPythonPackage rec {
   dependencies = [
     aiohttp
     click
+    email-validator
     importlib-metadata
     jinja2
     jsonschema
@@ -80,6 +83,7 @@ buildPythonPackage rec {
       python-multipart
       pyyaml
       rq
+      uvloop
       uvicorn
     ];
     extra_proxy = [

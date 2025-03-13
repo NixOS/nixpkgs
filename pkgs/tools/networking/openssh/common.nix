@@ -50,10 +50,6 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     ./locale_archive.patch
 
-    (fetchurl {
-      url = "https://git.alpinelinux.org/aports/plain/main/openssh/gss-serv.c.patch?id=a7509603971ce2f3282486a43bb773b1b522af83";
-      sha256 = "sha256-eFFOd4B2nccRZAQWwdBPBoKWjfEdKEVGJvKZAzLu3HU=";
-    })
     # See discussion in https://github.com/NixOS/nixpkgs/pull/16966
     ./dont_create_privsep_path.patch
   ] ++ extraPatches;
@@ -218,16 +214,13 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta =
-    with lib;
-    {
-      description = "Implementation of the SSH protocol${extraDesc}";
-      homepage = "https://www.openssh.com/";
-      changelog = "https://www.openssh.com/releasenotes.html";
-      license = licenses.bsd2;
-      platforms = platforms.unix ++ platforms.windows;
-      maintainers = (extraMeta.maintainers or [ ]) ++ (with maintainers; [ aneeshusa ]);
-      mainProgram = "ssh";
-    }
-    // extraMeta;
+  meta = {
+    description = "Implementation of the SSH protocol${extraDesc}";
+    homepage = "https://www.openssh.com/";
+    changelog = "https://www.openssh.com/releasenotes.html";
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.unix ++ lib.platforms.windows;
+    maintainers = extraMeta.maintainers or [ ];
+    mainProgram = "ssh";
+  } // extraMeta;
 })

@@ -4,12 +4,11 @@
   fetchFromGitHub,
   makeWrapper,
   makeDesktopItem,
-  fixup-yarn-lock,
-  yarn,
+  yarnConfigHook,
   nodejs,
   fetchYarnDeps,
   jq,
-  electron_33,
+  electron_34,
   element-web,
   sqlcipher,
   callPackage,
@@ -23,9 +22,11 @@ let
   pinData = import ./element-desktop-pin.nix;
   inherit (pinData.hashes) desktopSrcHash desktopYarnHash;
   executableName = "element-desktop";
-  keytar = callPackage ./keytar { };
+  electron = electron_34;
+  keytar = callPackage ./keytar {
+    inherit electron;
+  };
   seshat = callPackage ./seshat { };
-  electron = electron_33;
 in
 stdenv.mkDerivation (
   finalAttrs:
@@ -46,26 +47,13 @@ stdenv.mkDerivation (
     };
 
     nativeBuildInputs = [
-      yarn
-      fixup-yarn-lock
+      yarnConfigHook
       nodejs
       makeWrapper
       jq
     ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
 
     inherit seshat;
-
-    configurePhase = ''
-      runHook preConfigure
-
-      export HOME=$(mktemp -d)
-      yarn config --offline set yarn-offline-mirror $offlineCache
-      fixup-yarn-lock yarn.lock
-      yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
-      patchShebangs node_modules/
-
-      runHook postConfigure
-    '';
 
     # Only affects unused scripts in $out/share/element/electron/scripts. Also
     # breaks because there are some `node`-scripts with a `npx`-shebang and
@@ -79,8 +67,8 @@ stdenv.mkDerivation (
       yarn --offline run i18n
       yarn --offline run build:res
 
-      rm -rf node_modules/matrix-seshat node_modules/keytar
-      ${lib.optionalString useKeytar "ln -s ${keytar} node_modules/keytar"}
+      rm -rf node_modules/matrix-seshat node_modules/keytar-forked
+      ${lib.optionalString useKeytar "ln -s ${keytar} node_modules/keytar-forked"}
       ln -s $seshat node_modules/matrix-seshat
 
       runHook postBuild

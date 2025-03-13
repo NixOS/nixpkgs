@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   pythonOlder,
 
   # build-system
@@ -52,7 +53,6 @@
   # tests
   adv_cmds,
   glibc,
-  glibcLocales,
   hypothesis,
   pytestCheckHook,
   pytest-xdist,
@@ -75,6 +75,14 @@ let
       tag = "v${version}";
       hash = "sha256-6YUROcqOV2P1AbJF9IMBIqTt7/PSTeXDwGgE4uI9GME=";
     };
+
+    patches = [
+      (fetchpatch {
+        name = "musl.patch";
+        url = "https://github.com/pandas-dev/pandas/commit/1e487982ff7501f07e2bba7a7d924fb92b3d5c7f.patch";
+        hash = "sha256-F1pVce1W951Ea82Ux198e5fBFH6kDOG+EeslDTYbjio=";
+      })
+    ];
 
     postPatch = ''
       substituteInPlace pyproject.toml \
@@ -170,7 +178,6 @@ let
 
     nativeCheckInputs =
       [
-        glibcLocales
         hypothesis
         pytest-asyncio
         pytest-xdist
@@ -222,7 +229,6 @@ let
     preCheck =
       ''
         export HOME=$TMPDIR
-        export LC_ALL="en_US.UTF-8"
         cd $out/${python.sitePackages}/pandas
       ''
       # TODO: Get locale and clipboard support working on darwin.

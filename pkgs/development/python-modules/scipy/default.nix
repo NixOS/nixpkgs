@@ -48,8 +48,8 @@ let
   #     nix-shell maintainers/scripts/update.nix --argstr package python3.pkgs.scipy
   #
   # The update script uses sed regexes to replace them with the updated hashes.
-  version = "1.15.1";
-  srcHash = "sha256-pQfOiK/i/Nz1mCGdDA7ivnzHxqee1WVD62CxxgetGLg=";
+  version = "1.15.2";
+  srcHash = "sha256-JcCLMWjvlA4KYd42VcEJuXBpxuMKZ4BXC0q5Li/baOA=";
   datasetsHashes = {
     ascent = "1qjp35ncrniq9rhzb14icwwykqg2208hcssznn3hz27w39615kh3";
     ecg = "1bwbjp43b7znnwha5hv6wiz3g0bhwrpqpi75s12zidxrbwvd62pj";
@@ -128,17 +128,21 @@ buildPythonPackage {
     pytest-xdist
   ];
 
-  # The following tests are broken on aarch64-darwin with newer compilers and library versions.
-  # See https://github.com/scipy/scipy/issues/18308
-  disabledTests = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
-    "test_a_b_neg_int_after_euler_hypergeometric_transformation"
-    "test_dst4_definition_ortho"
-    "test_load_mat4_le"
-    "hyp2f1_test_case47"
-    "hyp2f1_test_case3"
-    "test_uint64_max"
-    "test_large_m4" # https://github.com/scipy/scipy/issues/22466
-  ];
+  disabledTests =
+    [
+      "test_cumulative_simpson_against_simpson_with_default_dx"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+      # The following tests are broken on aarch64-darwin with newer compilers and library versions.
+      # See https://github.com/scipy/scipy/issues/18308
+      "test_a_b_neg_int_after_euler_hypergeometric_transformation"
+      "test_dst4_definition_ortho"
+      "test_load_mat4_le"
+      "hyp2f1_test_case47"
+      "hyp2f1_test_case3"
+      "test_uint64_max"
+      "test_large_m4" # https://github.com/scipy/scipy/issues/22466
+    ];
 
   doCheck = !(stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.isDarwin);
 

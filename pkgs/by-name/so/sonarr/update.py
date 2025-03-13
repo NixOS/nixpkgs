@@ -116,7 +116,8 @@ with tempfile.TemporaryDirectory() as work_dir:
         old_source_hash: new_source_hash,
     })
 
-    # We need access to the patched and updated src to get the patched `yarn.lock`.
+    # We need access to the patched and updated src to get the patched
+    # `yarn.lock`.
     patched_src = os.path.join(work_dir, "patched-src")
     subprocess.run(
         [

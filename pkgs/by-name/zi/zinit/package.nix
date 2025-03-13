@@ -12,7 +12,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "zdharma-continuum";
-    repo = finalAttrs.pname;
+    repo = "zinit";
     tag = "v${finalAttrs.version}";
     hash = "sha256-fnBV0LmC/wJm0pOITJ1mhiBqsg2F8AQJWvn0p/Bgo5Q=";
   };

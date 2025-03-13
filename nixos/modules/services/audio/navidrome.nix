@@ -118,9 +118,7 @@ in
             BindReadOnlyPaths =
               [
                 # navidrome uses online services to download additional album metadata / covers
-                "${
-                  config.environment.etc."ssl/certs/ca-certificates.crt".source
-                }:/etc/ssl/certs/ca-certificates.crt"
+                "${config.security.pki.caBundle}:/etc/ssl/certs/ca-certificates.crt"
                 builtins.storeDir
                 "/etc"
               ]

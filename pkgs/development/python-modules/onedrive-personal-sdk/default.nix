@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "onedrive-personal-sdk";
-  version = "0.0.10";
+  version = "0.0.13";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zweckj";
     repo = "onedrive-personal-sdk";
     tag = "v${version}";
-    hash = "sha256-8enxmHc4s6bfxeIqOqc9DpT3pKIwocIsO3hYrK3G7CM=";
+    hash = "sha256-uR3uqMgRGY3KNWZtNO2OIM2/LcZKyeWvhnFuQvmgPrE=";
   };
 
   build-system = [ setuptools ];

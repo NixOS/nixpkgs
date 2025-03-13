@@ -184,4 +184,58 @@
     dontDefaultAfter = null;
     maxCudaVersion = null;
   }
+  {
+    # NVIDIA B100
+    archName = "Blackwell";
+    computeCapability = "10.0";
+    isJetson = false;
+    minCudaVersion = "12.8";
+    dontDefaultAfter = null;
+    maxCudaVersion = null;
+  }
+  {
+    # NVIDIA B100 Accelerated
+    archName = "Blackwell";
+    computeCapability = "10.0a";
+    isJetson = false;
+    minCudaVersion = "12.8";
+    dontDefaultAfter = null;
+    maxCudaVersion = null;
+  }
+  {
+    # NVIDIA Blackwell
+    archName = "Blackwell";
+    computeCapability = "10.1";
+    isJetson = false;
+    minCudaVersion = "12.8";
+    dontDefaultAfter = null;
+    maxCudaVersion = null;
+  }
+  {
+    # NVIDIA Blackwell Accelerated
+    archName = "Blackwell";
+    computeCapability = "10.1a";
+    isJetson = false;
+    minCudaVersion = "12.8";
+    dontDefaultAfter = null;
+    maxCudaVersion = null;
+  }
+  {
+    # NVIDIA GeForce RTX 5090 (GB202), RTX 5080 (GB203), RTX 5070 (GB205)
+    archName = "Blackwell";
+    computeCapability = "12.0";
+    isJetson = false;
+    minCudaVersion = "12.8";
+    dontDefaultAfter = null;
+    maxCudaVersion = null;
+  }
+  {
+    # NVIDIA Blackwell Accelerated
+    archName = "Blackwell";
+    computeCapability = "12.0a";
+    isJetson = false;
+    minCudaVersion = "12.8";
+    dontDefaultAfter = null;
+    maxCudaVersion = null;
+  }
 ]

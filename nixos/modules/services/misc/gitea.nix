@@ -163,6 +163,58 @@ in
         };
       };
 
+      captcha = {
+        enable = mkOption {
+          type = types.bool;
+          default = false;
+          description = ''
+            Enables Gitea to display a CAPTCHA challenge on registration.
+          '';
+        };
+
+        secretFile = mkOption {
+          type = types.nullOr types.str;
+          default = null;
+          example = "/var/lib/secrets/gitea/captcha_secret";
+          description = "Path to a file containing the CAPTCHA secret key.";
+        };
+
+        siteKey = mkOption {
+          type = types.nullOr types.str;
+          default = null;
+          example = "my_site_key";
+          description = "CAPTCHA site key to use for Gitea.";
+        };
+
+        url = mkOption {
+          type = types.nullOr types.str;
+          default = null;
+          example = "https://google.com/recaptcha";
+          description = "CAPTCHA url to use for Gitea. Only relevant for `recaptcha` and `mcaptcha`.";
+        };
+
+        type = mkOption {
+          type = types.enum [ "image" "recaptcha" "hcaptcha" "mcaptcha" "cfturnstile" ];
+          default = "image";
+          example = "recaptcha";
+          description = "The type of CAPTCHA to use for Gitea.";
+        };
+
+        requireForLogin = mkOption {
+          type = types.bool;
+          default = false;
+          example = true;
+          description = "Displays a CAPTCHA challenge whenever a user logs in.";
+        };
+
+        requireForExternalRegistration = mkOption {
+          type = types.bool;
+          default = false;
+          example = true;
+          description = "Displays a CAPTCHA challenge for users that register externally.";
+        };
+      };
+
       dump = {
         enable = mkOption {
           type = types.bool;
@@ -404,9 +456,30 @@ in
           and `ensureDatabases` doesn't have any effect.
         '';
       }
+      {
+        assertion = cfg.captcha.enable -> cfg.captcha.type != "image" -> (cfg.captcha.secretFile != null && cfg.captcha.siteKey != null);
+        message = ''
+          Using a CAPTCHA service that is not `image` requires providing a CAPTCHA secret through
+          the `captcha.secretFile` option and a CAPTCHA site key through the `captcha.siteKey` option.
+        '';
+      }
+      {
+        assertion = cfg.captcha.url != null -> (builtins.elem cfg.captcha.type ["mcaptcha" "recaptcha"]);
+        message = ''
+          `captcha.url` is only relevant when `captcha.type` is `mcaptcha` or `recaptcha`.
+        '';
+      }
     ];
 
-    services.gitea.settings = {
+    services.gitea.settings = let
+      captchaPrefix = optionalString cfg.captcha.enable ({
+        image = "IMAGE";
+        recaptcha = "RECAPTCHA";
+        hcaptcha = "HCAPTCHA";
+        mcaptcha = "MCAPTCHA";
+        cfturnstile = "CF_TURNSTILE";
+      }."${cfg.captcha.type}");
+    in {
       "cron.update_checker".ENABLED = lib.mkDefault false;
 
       database = mkMerge [
@@ -449,6 +522,24 @@ in
         INTERNAL_TOKEN = "#internaltoken#";
         INSTALL_LOCK = true;
       };
+
+      service = mkIf cfg.captcha.enable (mkMerge [
+        {
+          ENABLE_CAPTCHA = true;
+          CAPTCHA_TYPE = cfg.captcha.type;
+          REQUIRE_CAPTCHA_FOR_LOGIN = cfg.captcha.requireForLogin;
+          REQUIRE_EXTERNAL_REGISTRATION_CAPTCHA = cfg.captcha.requireForExternalRegistration;
+        }
+        (mkIf (cfg.captcha.secretFile != null) {
+          "${captchaPrefix}_SECRET" = "#captchasecret#";
+        })
+        (mkIf (cfg.captcha.siteKey != null) {
+          "${captchaPrefix}_SITEKEY" = cfg.captcha.siteKey;
+        })
+        (mkIf (cfg.captcha.url != null) {
+          "${captchaPrefix}_URL" = cfg.captcha.url;
+        })
+      ]);
 
       mailer = mkIf (cfg.mailerPasswordFile != null) {
         PASSWD = "#mailerpass#";
@@ -591,6 +682,10 @@ in
 
             ${lib.optionalString (cfg.metricsTokenFile != null) ''
               ${replaceSecretBin} '#metricstoken#' '${cfg.metricsTokenFile}' '${runConfig}'
+            ''}
+
+            ${lib.optionalString (cfg.captcha.secretFile != null) ''
+              ${replaceSecretBin} '#captchasecret#' '${cfg.captcha.secretFile}' '${runConfig}'
             ''}
             chmod u-w '${runConfig}'
           }

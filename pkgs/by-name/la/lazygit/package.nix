@@ -1,20 +1,19 @@
 {
   lib,
-  buildGo122Module,
+  buildGoModule,
   fetchFromGitHub,
   lazygit,
   testers,
 }:
-# Regression in go1.23 see https://github.com/jesseduffield/lazygit/issues/4002
-buildGo122Module rec {
+buildGoModule rec {
   pname = "lazygit";
-  version = "0.45.2";
+  version = "0.48.0";
 
   src = fetchFromGitHub {
     owner = "jesseduffield";
     repo = pname;
     tag = "v${version}";
-    hash = "sha256-B8z0NqCFdCAYVZnujfDJ9Y4qFXuhy5A/RG51Qb2J4ts=";
+    hash = "sha256-L3OcCkoSJZ6skzcjP2E3BrQ39cXyxcuHGthj8RHIGeQ=";
   };
 
   vendorHash = null;

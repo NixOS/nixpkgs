@@ -19,14 +19,15 @@
   pybars3,
   versioneer,
   shapely,
+  setuptools,
 }:
 let
   solidpython = callPackage ./solidpython { };
 in
 buildPythonApplication rec {
   pname = "kikit";
-  version = "1.6.0";
-  format = "setuptools";
+  version = "1.7.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -34,10 +35,14 @@ buildPythonApplication rec {
     owner = "yaqwsx";
     repo = "KiKit";
     tag = "v${version}";
-    hash = "sha256-r8LQcy3I6hmcrU/6HfPAYJd+cEZdhad6DUldC9HvXZU=";
+    hash = "sha256-GG0OXPoTy219QefQ7GwMen4u66lPob5DI8lU9sqwaRQ=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     kicad
     numpy
     click
@@ -82,7 +87,7 @@ buildPythonApplication rec {
   meta = with lib; {
     description = "Automation for KiCAD boards";
     homepage = "https://github.com/yaqwsx/KiKit/";
-    changelog = "https://github.com/yaqwsx/KiKit/releases/tag/v${version}";
+    changelog = "https://github.com/yaqwsx/KiKit/releases/tag/${src.tag}";
     maintainers = with maintainers; [
       jfly
       matusf

@@ -10,17 +10,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "Lighthouse";
-  version = "1.2.0";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "ShayBox";
     repo = pname;
     rev = version;
-    hash = "sha256-uJ8U4knNKAliHjxP0JnV1lSCEsB6OHyYSbb5aWboYV4=";
+    hash = "sha256-FiS+jB5l5xtFIVISA6+K/jbyJZFPwLvy7G+dA+78kZU=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-YJgtkrDs7cBpjux0SE6TTXcduZRC+8+4SMMiCXYeCYI=";
+  cargoHash = "sha256-5IrY1ohG5oJF+LvrcHrHYT2nslICQPZptJYrrwMEmwQ=";
 
   nativeBuildInputs = [ pkg-config ];
 

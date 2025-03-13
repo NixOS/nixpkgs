@@ -27,20 +27,20 @@
 /shell.nix @infinisil @NixOS/Security
 
 # Libraries
-/lib                        @infinisil
+/lib                        @infinisil @hsjobeki
 /lib/systems                @alyssais @ericson2314 @NixOS/stdenv
-/lib/generators.nix         @infinisil @Profpatsch
-/lib/cli.nix                @infinisil @Profpatsch
-/lib/debug.nix              @infinisil @Profpatsch
-/lib/asserts.nix            @infinisil @Profpatsch
-/lib/path/*                 @infinisil
-/lib/fileset                @infinisil
+/lib/generators.nix         @infinisil @hsjobeki @Profpatsch
+/lib/cli.nix                @infinisil @hsjobeki @Profpatsch
+/lib/debug.nix              @infinisil @hsjobeki @Profpatsch
+/lib/asserts.nix            @infinisil @hsjobeki @Profpatsch
+/lib/path/*                 @infinisil @hsjobeki
+/lib/fileset                @infinisil @hsjobeki
 ## Libraries / Module system
-/lib/modules.nix            @infinisil @roberth
-/lib/types.nix              @infinisil @roberth
-/lib/options.nix            @infinisil @roberth
-/lib/tests/modules.sh       @infinisil @roberth
-/lib/tests/modules          @infinisil @roberth
+/lib/modules.nix            @infinisil @roberth @hsjobeki
+/lib/types.nix              @infinisil @roberth @hsjobeki
+/lib/options.nix            @infinisil @roberth @hsjobeki
+/lib/tests/modules.sh       @infinisil @roberth @hsjobeki
+/lib/tests/modules          @infinisil @roberth @hsjobeki
 
 # Nixpkgs Internals
 /default.nix                                     @Ericson2314
@@ -128,6 +128,9 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @NixOS/nix-team @raitobeza
 
 # Systemd-boot
 /nixos/modules/system/boot/loader/systemd-boot      @JulienMalka
+
+# Limine
+/nixos/modules/system/boot/loader/limine        @lzcunt @phip1611 @programmerlexi
 
 # Images and installer media
 /nixos/modules/profiles/installation-device.nix @ElvishJerricco
@@ -253,6 +256,7 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /nixos/tests/postgresql @NixOS/postgres
 
 # MySQL/MariaDB and related stuff
+/nixos/modules/services/databases/mysql.nix     @6543
 /nixos/modules/services/backup/mysql-backup.nix @6543
 
 # Hardened profile & related modules
@@ -442,3 +446,9 @@ pkgs/by-name/lx/lxc*                    @adamcstephens
 /pkgs/by-name/ap/apple-sdk                     @NixOS/darwin-core
 /pkgs/os-specific/darwin/apple-source-releases @NixOS/darwin-core
 /pkgs/stdenv/darwin                            @NixOS/darwin-core
+
+# BEAM
+pkgs/development/beam-modules/          @NixOS/beam
+pkgs/development/interpreters/erlang/   @NixOS/beam
+pkgs/development/interpreters/elixir/   @NixOS/beam
+pkgs/development/interpreters/lfe/      @NixOS/beam

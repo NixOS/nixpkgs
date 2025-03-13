@@ -15,13 +15,13 @@
 }:
 stdenv.mkDerivation {
   pname = "lldap-cli";
-  version = "0-unstable-2024-11-11";
+  version = "0-unstable-2025-01-19";
 
   src = fetchFromGitHub {
     owner = "Zepmann";
     repo = "lldap-cli";
-    rev = "2a80dc47c334c88faf3000b45c631bc2cea09906";
-    hash = "sha256-uk7SOiQmUYtoJnihSnPsu/7Er4wXX4xvPboJaNSMjkM=";
+    rev = "e383494b4dd89ae4e028958b268e200fd85a7a64";
+    hash = "sha256-k6UDLOyP+EvKmC1TmbMObgAw2IIs7ekIZxJOWbwc+jg=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

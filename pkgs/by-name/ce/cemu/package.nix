@@ -34,24 +34,25 @@
   wrapGAppsHook3,
   wxGTK32,
   zarchive,
+  bluez,
 }:
 
 let
-  # cemu doesn't build with imgui 1.90.2 or newer:
-  # error: 'struct ImGuiIO' has no member named 'ImeWindowHandle'
+  # cemu doesn't build with imgui 1.91.4 or newer:
+  # before v1.91.4 (2024/10/08) the default type for ImTextureID was void*.
   imgui' = imgui.overrideAttrs rec {
-    version = "1.90.1";
+    version = "1.91.3";
     src = fetchFromGitHub {
       owner = "ocornut";
       repo = "imgui";
       rev = "v${version}";
-      hash = "sha256-gf47uLeNiXQic43buB5ZnMqiotlUfIyAsP+3H7yJuFg=";
+      hash = "sha256-J4gz4rnydu8JlzqNC/OIoVoRcgeFd6B1Qboxu5drOKY=";
     };
   };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "cemu";
-  version = "2.4";
+  version = "2.5";
 
   src = fetchFromGitHub {
     owner = "cemu-project";
@@ -71,6 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/cemu-project/Cemu/commit/2b0cbf7f6b6c34c748585d255ee7756ff592a502.patch";
       hash = "sha256-jHB/9MWZ/oNfUgZtxtgkSN/OnRARSuGVfXFFB9ldDpI=";
     })
+    ./0002-cemu-imgui.patch
   ];
 
   nativeBuildInputs = [
@@ -106,6 +108,7 @@ stdenv.mkDerivation (finalAttrs: {
     wayland
     wxGTK32
     zarchive
+    bluez
   ];
 
   cmakeFlags = [

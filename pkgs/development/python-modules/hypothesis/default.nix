@@ -13,6 +13,7 @@
   python,
   sortedcontainers,
   stdenv,
+  pythonAtLeast,
   pythonOlder,
   sphinxHook,
   sphinx-rtd-theme,
@@ -23,7 +24,7 @@
 
 buildPythonPackage rec {
   pname = "hypothesis";
-  version = "6.124.1";
+  version = "6.127.4";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -32,7 +33,7 @@ buildPythonPackage rec {
     owner = "HypothesisWorks";
     repo = "hypothesis";
     rev = "hypothesis-python-${version}";
-    hash = "sha256-d8uvkCiEASP5sF6kvuxqAss/KC0RNgG9n9ZdCcBTPCs=";
+    hash = "sha256-Ef0DbK2+HnU94F2TxcotJEt3rcIU/QOhStLOUTn7o2k=";
   };
 
   # I tried to package sphinx-selective-exclude, but it throws
@@ -50,9 +51,9 @@ buildPythonPackage rec {
 
   postUnpack = "sourceRoot=$sourceRoot/hypothesis-python";
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     attrs
     sortedcontainers
   ] ++ lib.optionals (pythonOlder "3.11") [ exceptiongroup ];
@@ -86,6 +87,9 @@ buildPythonPackage rec {
       "test_observability"
       "test_assume_has_status_reason"
       "test_observability_captures_stateful_reprs"
+    ]
+    ++ lib.optionals (pythonAtLeast "3.13") [
+      "test_clean_source"
     ];
 
   pythonImportsCheck = [ "hypothesis" ];

@@ -36,6 +36,8 @@ buildPythonPackage rec {
     rmdir lib/openjpeg
     cp -r ${openjpeg.src} lib/openjpeg
     chmod +rwX -R lib/openjpeg
+
+    substituteInPlace pyproject.toml --replace-fail "poetry-core >=1.8,<2" "poetry-core"
   '';
 
   dontUseCmakeConfigure = true;

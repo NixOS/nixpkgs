@@ -57,7 +57,7 @@
   pdftk,
   perl,
   pgpdump,
-  poppler_utils,
+  poppler-utils,
   procyon,
   python3,
   qemu,
@@ -84,7 +84,7 @@ let
   python = python3.override {
     self = python;
     packageOverrides = final: prev: {
-      # version 4 or newer would log the followng error but tests currently don't fail because radare2 is disabled
+      # version 4 or newer would log the following error but tests currently don't fail because radare2 is disabled
       # ValueError: argument TNULL is not a TLSH hex string
       tlsh = prev.tlsh.overridePythonAttrs (
         { src, ... }:
@@ -106,11 +106,11 @@ in
 # Note: when upgrading this package, please run the list-missing-tools.sh script as described below!
 python.pkgs.buildPythonApplication rec {
   pname = "diffoscope";
-  version = "288";
+  version = "289";
 
   src = fetchurl {
     url = "https://diffoscope.org/archive/diffoscope-${version}.tar.bz2";
-    hash = "sha256-HeJfqjmuduVc/C0kfaAsiQuoKrrwlW69lkfYDz1uFlg=";
+    hash = "sha256-EvIUBGXuZjzZHjNAwLWNhLrqAM73DDKr/py2mX6vt3M=";
   };
 
   outputs = [
@@ -232,7 +232,7 @@ python.pkgs.buildPythonApplication rec {
         openssh
         pdftk
         perl
-        poppler_utils
+        poppler-utils
         procyon
         qemu
         R

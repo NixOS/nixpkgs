@@ -6,23 +6,23 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "clorinde";
-  version = "0.11.4";
+  version = "0.13.2";
 
   src = fetchFromGitHub {
     owner = "halcyonnouveau";
     repo = "clorinde";
-    tag = "clorinde-v${version}";
-    hash = "sha256-p91LgbRj2+acOrmNuupIR92Z5aOJnTobVDd7A6ezrHk=";
+    tag = "clorinde-v${finalAttrs.version}";
+    hash = "sha256-rjpNeRrRiLIWcKvkmnyGF6hhm1CLBEKovvLaMKwtKmk=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-Vo7Ho+48QJEeAm+eLTCvB/4Q6/YoE0KbbfvdC2WictY=";
+  cargoHash = "sha256-kyRhBDG4QRC6UcDqn+yzCLGuZHbNpKhl9QegTma6qDI=";
 
   cargoBuildFlags = [ "--package=clorinde" ];
 
-  cargoTestFlags = cargoBuildFlags;
+  cargoTestFlags = finalAttrs.cargoBuildFlags;
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";
@@ -38,7 +38,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Generate type-checked Rust from your PostgreSQL";
     homepage = "https://github.com/halcyonnouveau/clorinde";
-    changelog = "https://github.com/halcyonnouveau/clorinde/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/halcyonnouveau/clorinde/blob/clorinde-v${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [
       mit
       asl20
@@ -46,4 +46,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ defelo ];
     mainProgram = "clorinde";
   };
-}
+})

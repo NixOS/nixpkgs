@@ -1951,6 +1951,15 @@ self: super: {
   };
   hspec-core_2_7_10 = doJailbreak (dontCheck super.hspec-core_2_7_10);
 
+  # Disable test cases that were broken by insignificant changes in icu 76
+  # https://github.com/haskell/text-icu/issues/108
+  text-icu = overrideCabal (drv: {
+    testFlags = drv.testFlags or [ ] ++ [
+      "-t"
+      "!Test cases"
+    ];
+  }) super.text-icu;
+
   # waiting for aeson bump
   servant-swagger-ui-core = doJailbreak super.servant-swagger-ui-core;
 

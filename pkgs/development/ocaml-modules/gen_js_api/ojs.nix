@@ -8,7 +8,6 @@ buildDunePackage rec {
   pname = "ojs";
 
   inherit (gen_js_api) version src;
-  duneVersion = "3";
 
   propagatedBuildInputs = [ js_of_ocaml-compiler ];
 

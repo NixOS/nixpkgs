@@ -10,7 +10,7 @@
 }:
 
 let
-  version = "0.1.3";
+  version = "0.2.0";
 in
 buildGoModule {
   pname = "owncast";
@@ -19,9 +19,9 @@ buildGoModule {
     owner = "owncast";
     repo = "owncast";
     rev = "v${version}";
-    hash = "sha256-VoItAV/8hzrqj4bIgMum9Drr/kAafH63vXw3GO6nSOc=";
+    hash = "sha256-MdquhDdbOdP1shnKHBlzQrSDe41fp0qnMzgaqL89jTk=";
   };
-  vendorHash = "sha256-JitvKfCLSravW5WRE0QllJTrRPLaaBg1GxJi3kmtiIU=";
+  vendorHash = "sha256-ERilQZ8vnhGW1IEcLA4CcmozDooHKbnmASMw87tjYD4=";
 
   propagatedBuildInputs = [ ffmpeg ];
 

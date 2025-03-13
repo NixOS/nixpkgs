@@ -1597,9 +1597,9 @@ in
   };
 
   meta = {
+    inherit (pkgs.matrix-synapse.meta) maintainers;
     buildDocsInSandbox = false;
     doc = ./synapse.md;
-    maintainers = teams.matrix.members;
   };
 
 }

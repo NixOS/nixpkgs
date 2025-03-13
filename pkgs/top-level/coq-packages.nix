@@ -44,6 +44,7 @@ let
       coq-elpi = callPackage ../development/coq-modules/coq-elpi {};
       coq-hammer = callPackage ../development/coq-modules/coq-hammer { };
       coq-hammer-tactics = callPackage ../development/coq-modules/coq-hammer/tactics.nix { };
+      CoqMatrix = callPackage ../development/coq-modules/coq-matrix { };
       coq-haskell = callPackage ../development/coq-modules/coq-haskell { };
       coq-lsp = callPackage ../development/coq-modules/coq-lsp {};
       coq-record-update = callPackage ../development/coq-modules/coq-record-update { };
@@ -87,6 +88,7 @@ let
       itauto = callPackage ../development/coq-modules/itauto { };
       ITree = callPackage ../development/coq-modules/ITree { };
       itree-io = callPackage ../development/coq-modules/itree-io { };
+      jasmin = callPackage ../development/coq-modules/jasmin {};
       json = callPackage ../development/coq-modules/json {};
       lemma-overloading = callPackage ../development/coq-modules/lemma-overloading {};
       LibHyps = callPackage ../development/coq-modules/LibHyps {};
@@ -211,7 +213,7 @@ in rec {
    * a set of libraries built with that specific Coq. More libraries are known to
    * this function than what is compatible with that version of Coq. Therefore,
    * libraries that are not known to be compatible are removed (filtered out) from
-   * the resulting set. For meta-programming purposes (inpecting the derivations
+   * the resulting set. For meta-programming purposes (inspecting the derivations
    * rather than building the libraries) this filtering can be disabled by setting
    * a `dontFilter` attribute into the Coq derivation.
    */

@@ -6,7 +6,7 @@
 
 let
   pname = "tg-archive";
-  version = "1.1.3";
+  version = "1.2.2";
 
 in
 python3.pkgs.buildPythonApplication {
@@ -16,7 +16,7 @@ python3.pkgs.buildPythonApplication {
     owner = "knadh";
     repo = "tg-archive";
     tag = "v${version}";
-    hash = "sha256-mcobB/z+e4LzEbqELWlUzhbdV5RIM2iImeg9JdVQQZc=";
+    hash = "sha256-baosQnA67+v0XxGrXEYjGGsKCBj1uRcYgfKkqO2GST4=";
   };
 
   pyproject = true;

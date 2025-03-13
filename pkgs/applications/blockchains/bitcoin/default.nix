@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  fetchpatch2,
   autoreconfHook,
   pkg-config,
   installShellFiles,
@@ -21,6 +20,7 @@
   qtbase ? null,
   qttools ? null,
   python3,
+  versionCheckHook,
   nixosTests,
   withGui,
   withWallet ? true,
@@ -33,13 +33,13 @@ let
     sha256 = "0cpna0nxcd1dw3nnzli36nf9zj28d2g9jf5y0zl9j18lvanvniha";
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = if withGui then "bitcoin" else "bitcoind";
   version = "28.1";
 
   src = fetchurl {
     urls = [
-      "https://bitcoincore.org/bin/bitcoin-core-${version}/bitcoin-${version}.tar.gz"
+      "https://bitcoincore.org/bin/bitcoin-core-${finalAttrs.version}/bitcoin-${finalAttrs.version}.tar.gz"
     ];
     # hash retrieved from signed SHA256SUMS
     sha256 = "c5ae2dd041c7f9d9b7c722490ba5a9d624f7e9a089c67090615e1ba4ad0883ba";
@@ -100,7 +100,7 @@ stdenv.mkDerivation rec {
       "--with-boost-libdir=${boost.out}/lib"
       "--disable-bench"
     ]
-    ++ lib.optionals (!doCheck) [
+    ++ lib.optionals (!finalAttrs.doCheck) [
       "--disable-tests"
       "--disable-gui-tests"
     ]
@@ -124,11 +124,20 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  __darwinAllowLocalNetworking = true;
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgram = "${placeholder "out"}/bin/bitcoin-cli";
+  versionCheckProgramArg = [ "--version" ];
+  doInstallCheck = true;
+
   passthru.tests = {
     smoke-test = nixosTests.bitcoind;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Peer-to-peer electronic cash system";
     longDescription = ''
       Bitcoin is a free open source peer-to-peer electronic cash system that is
@@ -137,13 +146,13 @@ stdenv.mkDerivation rec {
       with each other, with the help of a P2P network to check for double-spending.
     '';
     homepage = "https://bitcoin.org/en/";
-    downloadPage = "https://bitcoincore.org/bin/bitcoin-core-${version}/";
-    changelog = "https://bitcoincore.org/en/releases/${version}/";
-    maintainers = with maintainers; [
+    downloadPage = "https://bitcoincore.org/bin/bitcoin-core-${finalAttrs.version}/";
+    changelog = "https://bitcoincore.org/en/releases/${finalAttrs.version}/";
+    maintainers = with lib.maintainers; [
       prusnak
       roconnor
     ];
-    license = licenses.mit;
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
   };
-}
+})

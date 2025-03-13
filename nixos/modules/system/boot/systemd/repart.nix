@@ -56,6 +56,22 @@ in
         default = null;
         example = "/dev/vda";
       };
+
+      empty = lib.mkOption {
+        type = lib.types.enum [
+          "refuse"
+          "allow"
+          "require"
+          "force"
+          "create"
+        ];
+        description = ''
+          Controls how to operate on empty devices that contain no partition table yet.
+          See {manpage}`systemd-repart(8)` for details.
+        '';
+        example = "require";
+        default = "refuse";
+      };
     };
 
     systemd.repart = {
@@ -93,8 +109,7 @@ in
         description = ''
           Specify partitions as a set of the names of the definition files as the
           key and the partition configuration as its value. The partition
-          configuration can use all upstream options. See <link
-          xlink:href="https://www.freedesktop.org/software/systemd/man/repart.d.html"/>
+          configuration can use all upstream options. See {manpage}`repart.d(5)`
           for all available options.
         '';
       };
@@ -145,7 +160,9 @@ in
               ''
                 ${config.boot.initrd.systemd.package}/bin/systemd-repart \
                                   --definitions=/etc/repart.d \
-                                  --dry-run=no ${lib.optionalString (initrdCfg.device != null) initrdCfg.device}
+                                  --dry-run=no \
+                                  --empty=${initrdCfg.empty} \
+                                  ${lib.optionalString (initrdCfg.device != null) initrdCfg.device}
               ''
             ];
           };

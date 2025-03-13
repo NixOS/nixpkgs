@@ -33,7 +33,7 @@
 let
   selectSystem = attrs: attrs.${stdenv.hostPlatform.system};
   pname = "waveterm";
-  version = "0.11.0";
+  version = "0.11.1";
 
   passthru.updateScript = ./update.sh;
 
@@ -64,8 +64,8 @@ let
       fetchurl {
         url = "https://github.com/wavetermdev/waveterm/releases/download/v${version}/waveterm-linux-${arch}-${version}.deb";
         hash = selectSystem {
-          x86_64-linux = "sha256-4GKsO7gIQaIC7e7IH1QgIpXQqIX6NHyw8wXO0OWXRUI=";
-          aarch64-linux = "sha256-xbNBNwQNBwvAcx/sp8bchNtqUpXXILZADOr2wwQOrPk=";
+          x86_64-linux = "sha256-At6mNL1M0/zcDb+IbQi0+eUAGMcCmgLYk6XAlU1+8cw=";
+          aarch64-linux = "sha256-N6tTCfB9MqDX+OnFmuYbWs0XKEmQH7PSGuCadjM8Rmg=";
         };
       };
 
@@ -142,8 +142,8 @@ let
       fetchurl {
         url = "https://github.com/wavetermdev/waveterm/releases/download/v${version}/Wave-darwin-${arch}-${version}.zip";
         hash = selectSystem {
-          x86_64-darwin = "sha256-qmBNZ6ovvDd2Kv3l94kl/p05xnSN21mjPTwzDP21Knc=";
-          aarch64-darwin = "sha256-GyLXmoBVpVKdrZcJGtVNxBk8vqsssAhNF+YNgnL6oVY=";
+          x86_64-darwin = "sha256-QkSsoMW0Ry4aLF9XtRpC7pIY84WAhtCbZGBZ1RCeMN8=";
+          aarch64-darwin = "sha256-mVVThER1h0EB0ONNTxaBrSvAU9PP35MSPc0eW4mfJXo=";
         };
       };
 

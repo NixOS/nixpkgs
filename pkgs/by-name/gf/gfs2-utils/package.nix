@@ -15,11 +15,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gfs2-utils";
-  version = "3.5.1";
+  version = "3.6.1";
 
   src = fetchurl {
     url = "https://pagure.io/gfs2-utils/archive/${version}/gfs2-utils-${version}.tar.gz";
-    hash = "sha256-ZWzNfYuhIxGmSAe454vRjAKp9Lq7EBBSY36P7qVgZnw=";
+    hash = "sha256-VxvjRwPeWiImeJsSV7IJFrH0AvqD+IPgt22u9Gbqk4I=";
   };
 
   outputs = [

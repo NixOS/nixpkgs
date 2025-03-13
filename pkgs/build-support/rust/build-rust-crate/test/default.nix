@@ -589,7 +589,7 @@ rec {
             expectedTestOutputs = [ "test build_foo_check ... ok" ];
           };
         # Regression test for https://github.com/NixOS/nixpkgs/issues/74071
-        # Whenevever a build.rs file is generating files those should not be overlayed onto the actual source dir
+        # Whenevever a build.rs file is generating files those should not be overlaid onto the actual source dir
         buildRsOutDirOverlay = {
           src = symlinkJoin {
             name = "buildrs-out-dir-overlay";

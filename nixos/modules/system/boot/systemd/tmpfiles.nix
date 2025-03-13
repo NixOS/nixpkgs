@@ -29,10 +29,11 @@ let
       };
     };
     default = {};
-    type = attrsWith' "config-name" (attrsWith' "tmpfiles-type" (attrsWith' "path" (types.submodule ({ name, config, ... }: {
+    type = attrsWith' "config-name" (attrsWith' "path" (attrsWith' "tmpfiles-type" (types.submodule ({ name, config, ... }: {
       options.type = mkOption {
         type = types.str;
         default = name;
+        defaultText = "‹tmpfiles-type›";
         example = "d";
         description = ''
           The type of operation to perform on the file.
@@ -42,7 +43,7 @@ let
 
           Please see the upstream documentation for the available types and
           more details:
-          <https://www.freedesktop.org/software/systemd/man/tmpfiles.d>
+          {manpage}`tmpfiles.d(5)`
         '';
       };
       options.mode = mkOption {
@@ -101,7 +102,7 @@ let
 
           Please see the upstream documentation for the meaning of this
           parameter in different situations:
-          <https://www.freedesktop.org/software/systemd/man/tmpfiles.d>
+          {manpage}`tmpfiles.d(5)`
         '';
       };
     }))));

@@ -437,6 +437,7 @@ let
         (assertKeyIsSystemdCredential "PresharedKey")
         (assertOnlyFields [
           "PublicKey"
+          "PublicKeyFile"
           "PresharedKey"
           "PresharedKeyFile"
           "AllowedIPs"

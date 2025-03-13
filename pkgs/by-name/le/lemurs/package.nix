@@ -1,46 +1,46 @@
 {
   fetchFromGitHub,
   lib,
+  bash,
   linux-pam,
   rustPlatform,
-  testers,
-  lemurs,
+  systemdMinimal,
+  versionCheckHook,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "lemurs";
-  version = "0.3.2";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "coastalwhite";
     repo = "lemurs";
-    rev = "v${version}";
-    hash = "sha256-YDopY+wdWlVL2X+/wc1tLSSqFclAkt++JXMK3VodD4s=";
+    tag = "v${version}";
+    hash = "sha256-dtAmgzsUhn3AfafWbCaaog0S1teIy+8eYtaHBhvLfLI=";
   };
-
-  patches = [
-    # part of https://github.com/coastalwhite/lemurs/commit/09003a830400250ec7745939399fc942c505e6c6, but including the rest of the commit may be breaking
-    ./0001-fix-static-lifetime-string.patch
-  ];
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-FybaQ9xd5Unvo8gpSC8DzVKrXyVquHcJarzu0GaG8fw=";
+  cargoHash = "sha256-XoGtIHYCGXNuwnpDTU7NbZAs6rCO+69CAG89VCv9aAc=";
 
   buildInputs = [
+    bash
     linux-pam
+    systemdMinimal
   ];
 
-  passthru.tests.version = testers.testVersion {
-    package = lemurs;
-  };
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Customizable TUI display/login manager written in Rust";
     homepage = "https://github.com/coastalwhite/lemurs";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       mit
     ];
-    maintainers = with maintainers; [ jeremiahs ];
+    maintainers = with lib.maintainers; [
+      jeremiahs
+      nullcube
+    ];
     mainProgram = "lemurs";
   };
 }

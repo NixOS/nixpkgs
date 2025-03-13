@@ -364,7 +364,7 @@ sub restartContainer {
 sub runInContainer {
     my @args = @_;
     my $leader = getLeader;
-    exec($nsenter, "-t", $leader, "-m", "-u", "-i", "-n", "-p", "--", @args);
+    exec($nsenter, "--all", "-t", $leader, "--", @args);
     die "cannot run ‘nsenter’: $!\n";
 }
 

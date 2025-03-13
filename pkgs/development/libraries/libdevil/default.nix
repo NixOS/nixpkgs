@@ -8,7 +8,7 @@
   libmng,
   lcms1,
   libtiff,
-  openexr,
+  openexr_3,
   libGL,
   libX11,
   pkg-config,
@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
       libmng
       lcms1
       libtiff
-      openexr
+      openexr_3
     ]
     ++ lib.optionals withXorg [
       libX11

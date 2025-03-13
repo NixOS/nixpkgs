@@ -21,10 +21,11 @@ in
       '';
       default = { };
       example = {
+        DATABASE_URL = "postgres://postgres:postgres@postgres/postgres";
         CORE_SECRET = "changethis";
-        CORE_DATABASE_URL = "postgres://postgres:postgres@postgres/postgres";
-        CORE_HOST = "0.0.0.0";
+        CORE_HOSTNAME = "0.0.0.0";
         CORE_PORT = "3000";
+        DATASOURCE_TYPE = "local";
         DATASOURCE_LOCAL_DIRECTORY = "/var/lib/zipline/uploads";
       };
 
@@ -37,7 +38,7 @@ in
           ]);
 
         options = {
-          CORE_HOST = lib.mkOption {
+          CORE_HOSTNAME = lib.mkOption {
             type = lib.types.str;
             description = "The hostname to listen on.";
             default = "127.0.0.1";
@@ -74,7 +75,8 @@ in
 
   config = lib.mkIf cfg.enable {
     services.zipline.settings = {
-      CORE_DATABASE_URL = lib.mkIf cfg.database.createLocally "postgresql://zipline@localhost/zipline?host=/run/postgresql";
+      DATABASE_URL = lib.mkIf cfg.database.createLocally "postgresql://zipline@localhost/zipline?host=/run/postgresql";
+      DATASOURCE_TYPE = lib.mkDefault "local";
       DATASOURCE_LOCAL_DIRECTORY = lib.mkDefault "/var/lib/zipline/uploads"; # created automatically by zipline
     };
 

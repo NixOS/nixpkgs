@@ -12,17 +12,17 @@
 
 buildNpmPackage rec {
   pname = "lessc";
-  version = "4.2.0";
+  version = "4.2.2";
 
   src = fetchFromGitHub {
     owner = "less";
     repo = "less.js";
     rev = "v${version}";
-    hash = "sha256-pOTKw+orCl2Y8lhw5ZyAqjFJDoka7uG7V5ae6RS1yqw=";
+    hash = "sha256-vO/1laFb1yC+OESXTx9KuGdwSNC9Iv49F3V7kfXnyJU=";
   };
   sourceRoot = "${src.name}/packages/less";
 
-  npmDepsHash = "sha256-oPE2lo/lMiU8cnOciPW/gwzOtiehl9MGNncCrq1Hk+g=";
+  npmDepsHash = "sha256-3GlngmaxcUGXSv+ZwN2aovwEqcek6FJ1ZaL5KpjwNn4=";
 
   postPatch = ''
     sed -i ./package.json \

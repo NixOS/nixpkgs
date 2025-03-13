@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "thinqconnect";
-  version = "1.0.3";
+  version = "1.0.4";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "thinq-connect";
     repo = "pythinqconnect";
     tag = version;
-    hash = "sha256-p2EY1DeLxmXcfohN4e4I7I+SNkabEr37ZC2ka1CT7/s=";
+    hash = "sha256-LVmvJvGbiPPg+WlrTOYueNCNZNjldWJVC+OqFl9CcK0=";
   };
 
   build-system = [ setuptools ];
@@ -37,6 +37,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "thinqconnect" ];
 
   meta = {
+    changelog = "https://github.com/thinq-connect/pythinqconnect/blob/${src.tag}/RELEASE_NOTES.md";
     description = "Module to interacting with the LG ThinQ Connect Open API";
     homepage = "https://github.com/thinq-connect/pythinqconnect";
     license = lib.licenses.asl20;

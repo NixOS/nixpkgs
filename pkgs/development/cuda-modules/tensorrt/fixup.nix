@@ -75,6 +75,11 @@ finalAttrs: prevAttrs: {
         rm "$dir"
         mv "targets/${targetArch}/$dir" "$dir"
       done
+
+      # Remove broken symlinks
+      for dir in include samples; do
+        rm "targets/${targetArch}/$dir" || :
+      done
     '';
 
   # Tell autoPatchelf about runtime dependencies.
@@ -109,5 +114,10 @@ finalAttrs: prevAttrs: {
       ++ lib.optionals (targetArch == "unsupported") [ hostPlatform.system ];
     homepage = "https://developer.nvidia.com/tensorrt";
     maintainers = prevAttrs.meta.maintainers ++ [ maintainers.aidalgol ];
+
+    # Building TensorRT on Hydra is impossible because of the non-redistributable
+    # license and because the source needs to be manually downloaded from the
+    # NVIDIA Developer Program (see requireFile above).
+    hydraPlatforms = lib.platforms.none;
   };
 }

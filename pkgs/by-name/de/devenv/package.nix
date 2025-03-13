@@ -27,7 +27,7 @@ let
     doInstallCheck = false;
   });
 
-  version = "1.4";
+  version = "1.4.1";
 in
 rustPlatform.buildRustPackage {
   pname = "devenv";
@@ -37,11 +37,11 @@ rustPlatform.buildRustPackage {
     owner = "cachix";
     repo = "devenv";
     rev = "v${version}";
-    hash = "sha256-ax0264nOyPcTJvIJAnPKGfkfXQ8Oe8ZVFziKf3UV26o=";
+    hash = "sha256-OjdnHKQ+eWA8YvPUpl3xxyaNK91c9sMebqXgVdN8Lm4=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-K06D4tD3IOCA7/iqQ7fhybsgcSmMxPUcoUi+VNPtgAY=";
+  cargoHash = "sha256-Z7xf1fuXi2Lx005rQwWa7ZNw8nJGz1z33KPnX/pxO3E=";
 
   buildAndTestSubdir = "devenv";
 
@@ -74,7 +74,6 @@ rustPlatform.buildRustPackage {
       wrapProgram $out/bin/devenv \
         --prefix PATH ":" "$out/bin:${cachix}/bin" \
         --set DEVENV_NIX ${devenv_nix} \
-        --set-default DO_NOT_TRACK 1 \
         ${setDefaultLocaleArchive}
 
       # Generate manpages

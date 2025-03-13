@@ -4,7 +4,7 @@
   buildPythonPackage,
   setuptools,
   fetchPypi,
-  substituteAll,
+  replaceVars,
 
   # build
   autoPatchelfHook,
@@ -52,8 +52,7 @@ buildPythonPackage rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./4.2-ctypes.patch;
+    (replaceVars ./4.2-ctypes.patch {
       libgdk = "${gtk3.out}/lib/libgdk-3.so";
       libpangocairo = "${pango}/lib/libpangocairo-1.0.so";
       libcairo = "${cairo}/lib/libcairo.so";
@@ -109,7 +108,7 @@ buildPythonPackage rec {
 
     export DOXYGEN=${doxygen}/bin/doxygen
     export PATH="${wxGTK}/bin:$PATH"
-    export SDL_CONFIG="${SDL.dev}/bin/sdl-config"
+    export SDL_CONFIG="${lib.getExe' (lib.getDev SDL) "sdl-config"}"
     export WAF=$PWD/bin/waf
 
     ${python.pythonOnBuildForHost.interpreter} build.py -v --use_syswx dox etg sip --nodoc build_py

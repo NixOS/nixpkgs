@@ -4,7 +4,7 @@ import ./make-test-python.nix (
     # build a getent that itself doesn't see anything in /etc/hosts and
     # /etc/nsswitch.conf, by using libredirect to steer its own requests to
     # /dev/null.
-    # This means is /has/ to go via nscd to actuallly resolve any of the
+    # This means is /has/ to go via nscd to actually resolve any of the
     # additionally configured hosts.
     getent' = pkgs.writeScript "getent-without-etc-hosts" ''
       export NIX_REDIRECTS=/etc/hosts=/dev/null:/etc/nsswitch.conf=/dev/null

@@ -10,17 +10,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "live-server";
-  version = "0.9.1";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "lomirus";
     repo = "live-server";
     rev = "v${version}";
-    hash = "sha256-9NULpK48svCMTx1OeivS+LHVGUGFObg4pBr/V0yIuwM=";
+    hash = "sha256-8NM3XJ7RC7cUNKN1DPW2huvkx7tfA8zDrETkwDMbaT8=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-f+NePPvuXq20CcKK0pz2MbvWEYQbN29nFc+PmH1pWY4=";
+  cargoHash = "sha256-tUKhVDv+ZDGRpJC/sSYcQxYhGsAyOsflc+GeUyBaeEk=";
 
   nativeBuildInputs = [ pkg-config ];
 

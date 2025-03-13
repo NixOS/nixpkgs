@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # Remove CFLAGS from the binaries to avoid closure bloat.
-  # In the past we have had -dev packages in the closure of the binaries soley
+  # In the past we have had -dev packages in the closure of the binaries solely
   # due to the string references.
   postConfigure = ''
     nuke-refs -e $out ./magick/magick_config.h

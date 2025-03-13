@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "nix-search-tv";
-  version = "1.0.0";
+  version = "2.1.2";
 
   src = fetchFromGitHub {
     owner = "3timeslazy";
     repo = "nix-search-tv";
     tag = "v${version}";
-    hash = "sha256-SKLvN67GHLHGj0bUYdFutiLzRVCCtxNokWP0z3Za9UU=";
+    hash = "sha256-ZUc9aphl2+KRGwH7cn3dtcTcC3RxrR6qZC4RqwVddFw=";
   };
 
-  vendorHash = "sha256-uzNDhkovlXx0tIgSJ3E08d0TNmktSrlOOe8Iwi4ZfmU=";
+  vendorHash = "sha256-hgZWppiy+P3BfoKOMClzCot1shKcGTZnsMCJ/ItxckE=";
 
   subPackages = [ "cmd/nix-search-tv" ];
 

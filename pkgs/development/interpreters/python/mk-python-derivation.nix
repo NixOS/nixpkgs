@@ -33,21 +33,25 @@ let
   inherit (builtins) unsafeGetAttrPos;
   inherit (lib)
     elem
-    optionalString
-    max
-    stringLength
-    fixedWidthString
-    getName
-    optional
-    optionals
-    optionalAttrs
-    hasSuffix
-    escapeShellArgs
     extendDerivation
+    fixedWidthString
+    flip
+    getName
+    hasSuffix
     head
-    splitString
     isBool
+    max
+    optional
+    optionalAttrs
+    optionals
+    optionalString
+    removePrefix
+    splitString
+    stringLength
     ;
+
+  getOptionalAttrs =
+    names: attrs: lib.getAttrs (lib.intersectLists names (lib.attrNames attrs)) attrs;
 
   leftPadName =
     name: against:
@@ -65,18 +69,18 @@ let
 
   isMismatchedPython = drv: drv.pythonModule != python;
 
-  withDistOutput' = lib.flip elem [
+  withDistOutput' = flip elem [
     "pyproject"
     "setuptools"
     "wheel"
   ];
 
-  isBootstrapInstallPackage' = lib.flip elem [
+  isBootstrapInstallPackage' = flip elem [
     "flit-core"
     "installer"
   ];
 
-  isBootstrapPackage' = lib.flip elem (
+  isBootstrapPackage' = flip elem (
     [
       "build"
       "packaging"
@@ -88,20 +92,18 @@ let
     ]
   );
 
-  isSetuptoolsDependency' = lib.flip elem [
+  isSetuptoolsDependency' = flip elem [
     "setuptools"
     "wheel"
   ];
 
-  cleanAttrs = lib.flip removeAttrs [
+  cleanAttrs = flip removeAttrs [
     "disabled"
     "checkPhase"
     "checkInputs"
     "nativeCheckInputs"
     "doCheck"
     "doInstallCheck"
-    "dontWrapPythonPrograms"
-    "catchConflicts"
     "pyproject"
     "format"
     "disabledTestPaths"
@@ -120,8 +122,6 @@ let
 in
 
 {
-  name ? "${attrs.pname}-${attrs.version}",
-
   # Build-time dependencies for the package
   nativeBuildInputs ? [ ],
 
@@ -199,8 +199,6 @@ in
 
   doCheck ? true,
 
-  disabledTestPaths ? [ ],
-
   # Allow passing in a custom stdenv to buildPython*
   stdenv ? python.stdenv,
 
@@ -228,7 +226,7 @@ let
           throwMismatch =
             attrName: drv:
             let
-              myName = "'${namePrefix}${name}'";
+              myName = "'${finalAttrs.name}'";
               theirName = "'${drv.name}'";
               optionalLocation =
                 let
@@ -280,7 +278,9 @@ let
     (cleanAttrs attrs)
     // {
 
-      name = namePrefix + name;
+      name = namePrefix + attrs.name or "${finalAttrs.pname}-${finalAttrs.version}";
+
+      inherit catchConflicts;
 
       nativeBuildInputs =
         [
@@ -289,7 +289,7 @@ let
           ensureNewerSourcesForZipFilesHook # move to wheel installer (pip) or builder (setuptools, flit, ...)?
           pythonRemoveTestsDirHook
         ]
-        ++ optionals (catchConflicts && !isBootstrapPackage && !isSetuptoolsDependency) [
+        ++ optionals (finalAttrs.catchConflicts && !isBootstrapPackage && !isSetuptoolsDependency) [
           #
           # 1. When building a package that is also part of the bootstrap chain, we
           #    must ignore conflicts after installation, because there will be one with
@@ -386,8 +386,10 @@ let
       nativeInstallCheckInputs = nativeCheckInputs;
       installCheckInputs = checkInputs;
 
+      inherit dontWrapPythonPrograms;
+
       postFixup =
-        optionalString (!dontWrapPythonPrograms) ''
+        optionalString (!finalAttrs.dontWrapPythonPrograms) ''
           wrapPythonPrograms
         ''
         + attrs.postFixup or "";
@@ -436,24 +438,14 @@ let
       installCheckPhase = attrs.checkPhase;
     }
     // optionalAttrs (attrs.doCheck or true) (
-      optionalAttrs (disabledTestPaths != [ ]) {
-        disabledTestPaths = disabledTestPaths;
-      }
-      // optionalAttrs (attrs ? disabledTests) {
-        disabledTests = attrs.disabledTests;
-      }
-      // optionalAttrs (attrs ? pytestFlags) {
-          pytestFlags = attrs.pytestFlags;
-      }
-      // optionalAttrs (attrs ? pytestFlagsArray) {
-        pytestFlagsArray = attrs.pytestFlagsArray;
-      }
-      // optionalAttrs (attrs ? unittestFlags) {
-          unittestFlags = attrs.unittestFlags;
-      }
-      // optionalAttrs (attrs ? unittestFlagsArray) {
-        unittestFlagsArray = attrs.unittestFlagsArray;
-      }
+      getOptionalAttrs [
+        "disabledTestPaths"
+        "disabledTests"
+        "pytestFlags"
+        "pytestFlagsArray"
+        "unittestFlags"
+        "unittestFlagsArray"
+      ] attrs
     )
   );
 
@@ -463,7 +455,7 @@ let
     drv:
     extendDerivation (
       drv.disabled
-      -> throw "${lib.removePrefix namePrefix drv.name} not supported for interpreter ${python.executable}"
+      -> throw "${removePrefix namePrefix drv.name} not supported for interpreter ${python.executable}"
     ) { } (toPythonModule drv);
 
 in

@@ -53,6 +53,16 @@ with lib;
       '';
     };
 
+    uwsgiPass = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      example = "unix:/run/example/example.sock";
+      description = ''
+        Adds uwsgi_pass directive and sets recommended proxy headers if
+        recommendedUwsgiSettings is enabled.
+      '';
+    };
+
     index = mkOption {
       type = types.nullOr types.str;
       default = null;
@@ -132,6 +142,15 @@ with lib;
       defaultText = literalExpression "config.services.nginx.recommendedProxySettings";
       description = ''
         Enable recommended proxy settings.
+      '';
+    };
+
+    recommendedUwsgiSettings = mkOption {
+      type = types.bool;
+      default = config.services.nginx.recommendedUwsgiSettings;
+      defaultText = literalExpression "config.services.nginx.recommendedUwsgiSettings";
+      description = ''
+        Enable recommended uwsgi settings.
       '';
     };
   };

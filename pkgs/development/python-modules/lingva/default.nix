@@ -27,19 +27,22 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   dependencies = [
-    chameleon
     click
     polib
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  optional-dependencies = {
+    chameleon = [ chameleon ];
+  };
+
+  nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.chameleon;
 
   pythonImportsCheck = [ "lingva" ];
 
   meta = with lib; {
     description = "Module with tools to extract translatable texts from your code";
     homepage = "https://github.com/vacanza/lingva";
-    changelog = "https://github.com/vacanza/lingva/blob/${version}/changes.rst";
+    changelog = "https://github.com/vacanza/lingva/blob/${src.tag}/changes.rst";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fab ];
   };

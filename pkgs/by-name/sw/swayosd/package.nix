@@ -3,11 +3,12 @@
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
-  wrapGAppsHook3,
+  wrapGAppsHook4,
   brightnessctl,
   cargo,
   coreutils,
-  gtk-layer-shell,
+  dbus,
+  gtk4-layer-shell,
   libevdev,
   libinput,
   libpulseaudio,
@@ -20,22 +21,22 @@
 }:
 stdenv.mkDerivation rec {
   pname = "swayosd";
-  version = "0.1.0";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "ErikReider";
     repo = "SwayOSD";
     rev = "v${version}";
-    hash = "sha256-GyvRWEzTxQxTAk+xCLFsHdd1SttBliOgJ6eZqAxQMME=";
+    hash = "sha256-V3V18BoBRJU8mtvwWXvdYPbKBDIHdu5LzVSkDkGJjFU=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-oeLhJwlOITp8YHJdZQY7oo8Z31WUT4Y70dHd3tDDsk8=";
+    hash = "sha256-b5Ei6k9p/KiyiSSl5zxDXrTgGAq24O5ll0BvyJ/41F8=";
   };
 
   nativeBuildInputs = [
-    wrapGAppsHook3
+    wrapGAppsHook4
     pkg-config
     meson
     rustc
@@ -45,10 +46,11 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    gtk-layer-shell
+    gtk4-layer-shell
     libevdev
     libinput
     libpulseaudio
+    dbus
     udev
     sassc
   ];

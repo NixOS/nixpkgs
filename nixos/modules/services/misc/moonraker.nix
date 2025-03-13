@@ -110,6 +110,8 @@ in
           for details on what clients are able to do.
         '';
       };
+
+      analysis.enable = lib.mkEnableOption "Runtime analysis with klipper-estimator";
     };
   };
 
@@ -170,9 +172,15 @@ in
       in
       format.generate "moonraker.cfg" fullConfig;
 
-    systemd.tmpfiles.rules = [
-      "d '${cfg.stateDir}' - ${cfg.user} ${cfg.group} - -"
-    ] ++ lib.optional (cfg.configDir != null) "d '${cfg.configDir}' - ${cfg.user} ${cfg.group} - -";
+    systemd.tmpfiles.rules =
+      [
+        "d '${cfg.stateDir}' - ${cfg.user} ${cfg.group} - -"
+      ]
+      ++ lib.optional (cfg.configDir != null) "d '${cfg.configDir}' - ${cfg.user} ${cfg.group} - -"
+      ++ lib.optionals cfg.analysis.enable [
+        "d '${cfg.stateDir}/tools/klipper_estimator' - ${cfg.user} ${cfg.group} - -"
+        "L+ '${cfg.stateDir}/tools/klipper_estimator/klipper_estimator_linux' - - - - ${lib.getExe pkgs.klipper-estimator}"
+      ];
 
     systemd.services.moonraker = {
       description = "Moonraker, an API web server for Klipper";
@@ -206,10 +214,16 @@ in
       };
     };
 
-    # set this to false, otherwise we'll get a warning indicating that `/etc/klipper.cfg`
-    # is not located in the moonraker config directory.
-    services.moonraker.settings = lib.mkIf (!config.services.klipper.mutableConfig) {
-      file_manager.check_klipper_config_path = false;
+    services.moonraker.settings = {
+      # set this to false, otherwise we'll get a warning indicating that `/etc/klipper.cfg`
+      # is not located in the moonraker config directory.
+      file_manager.check_klipper_config_path = lib.mkIf (!config.services.klipper.mutableConfig) false;
+
+      # enable analysis with our own klipper-estimator, disable updating it
+      analysis = lib.mkIf (cfg.analysis.enable) {
+        platform = "linux";
+        enable_estimator_updates = false;
+      };
     };
 
     security.polkit.extraConfig = lib.optionalString cfg.allowSystemControl ''

@@ -56,7 +56,7 @@ buildDotnetModule rec {
         --replace-fail "/usr/bin/libation" "${meta.mainProgram}"
   '';
 
-  # wrap manually, because we need lower case excutables
+  # wrap manually, because we need lower case executables
   dontDotnetFixup = true;
 
   preFixup = ''

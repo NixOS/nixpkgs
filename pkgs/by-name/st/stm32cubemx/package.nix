@@ -71,6 +71,13 @@ let
       done;
 
       cp ${desktopItem}/share/applications/*.desktop $out/share/applications
+      if ! grep -q StartupWMClass= "$out"/share/applications/*.desktop; then
+          chmod +w "$out"/share/applications/*.desktop
+          echo "StartupWMClass=com-st-microxplorer-maingui-STM32CubeMX" >> "$out"/share/applications/*.desktop
+      else
+          echo "error: upstream already provides StartupWMClass= in desktop file -- please update package expr" >&2
+          exit 1
+      fi
     '';
 
     meta = with lib; {
@@ -96,6 +103,11 @@ in
 buildFHSEnv {
   inherit (package) pname version meta;
   runScript = "${package.outPath}/bin/stm32cubemx";
+  extraInstallCommands = ''
+    mkdir -p $out/share/{applications,icons}
+    ln -sf ${package.outPath}/share/applications/* $out/share/applications/
+    ln -sf ${package.outPath}/share/icons/* $out/share/icons/
+  '';
   targetPkgs =
     pkgs: with pkgs; [
       alsa-lib

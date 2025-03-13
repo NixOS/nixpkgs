@@ -9,13 +9,13 @@
 
 buildDunePackage rec {
   pname = "iter";
-  version = "1.8";
+  version = "1.9";
 
   minimalOCamlVersion = "4.08";
 
   src = fetchurl {
     url = "https://github.com/c-cube/iter/releases/download/v${version}/iter-${version}.tbz";
-    hash = "sha256-+HOcoFrpxLqKogwNQZfnRAnytlmhfxJzDUKvH9n0MCM=";
+    hash = "sha256-26nluxUuDQ2wBUw2sqlHZ0eihKdzjxXxGVo+IDXH6Wg=";
   };
 
   doCheck = true;

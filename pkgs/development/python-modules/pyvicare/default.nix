@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "pyvicare";
-  version = "2.41.0";
+  version = "2.43.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openviess";
     repo = "PyViCare";
     tag = version;
-    hash = "sha256-iNv70l8xHxiF+ifKf0gkJ5W/aOuek/9QYCF8pm6xBiw=";
+    hash = "sha256-dVUb3v8r+1Kkh6BCWtny1F2vzynSRijT62OnrQCTTao=";
   };
 
   postPatch = ''
@@ -43,7 +43,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "PyViCare" ];
 
   meta = with lib; {
-    changelog = "https://github.com/openviess/PyViCare/releases/tag/${version}";
+    changelog = "https://github.com/openviess/PyViCare/releases/tag/${src.tag}";
     description = "Python Library to access Viessmann ViCare API";
     homepage = "https://github.com/somm15/PyViCare";
     license = with licenses; [ asl20 ];

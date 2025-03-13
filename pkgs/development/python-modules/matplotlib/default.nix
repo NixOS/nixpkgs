@@ -21,7 +21,7 @@
   ffmpeg-headless,
   freetype,
   # By default, almost all tests fail due to the fact we use our version of
-  # freetype. We still define use this argument to define the overriden
+  # freetype. We still use this argument to define the overridden
   # derivation `matplotlib.passthru.tests.withoutOutdatedFreetype` - which
   # builds matplotlib with the freetype version they default to, with which all
   # tests should pass.
@@ -89,7 +89,7 @@ let
 in
 
 buildPythonPackage rec {
-  version = "3.10.0";
+  version = "3.10.1";
   pname = "matplotlib";
   pyproject = true;
 
@@ -97,7 +97,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-uIbQKlgblnBMnR/+VXCeSbTS1ScJzOvEvkLbhW5REng=";
+    hash = "sha256-6NLQ44gbEpJoWFv0dlrT7nOkWR13uaGMIUrH46efsro=";
   };
 
   env.XDG_RUNTIME_DIR = "/tmp";

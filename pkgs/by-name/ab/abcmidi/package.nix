@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "abcmidi";
-  version = "2025.01.30";
+  version = "2025.02.07";
 
   src = fetchFromGitHub {
     owner = "sshlien";
     repo = "abcmidi";
     tag = finalAttrs.version;
-    hash = "sha256-3l9sOPwoi5jHZraEldNiXXMC3Dz3km5z848IBP+8aPg=";
+    hash = "sha256-oX+k8eJH3E3AqPFbiWMYilIvhlPn6kxZbZfqxUksCxE=";
   };
 
   meta = {

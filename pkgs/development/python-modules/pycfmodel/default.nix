@@ -11,16 +11,16 @@
 
 buildPythonPackage rec {
   pname = "pycfmodel";
-  version = "1.0.0";
+  version = "1.1.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "Skyscanner";
     repo = "pycfmodel";
-    tag = version;
-    hash = "sha256-iCjOSwW6rdG3H4e/B/um+QioP45nOr9OcPAwXxZs3mU=";
+    tag = "v${version}";
+    hash = "sha256-mFO3T5FmVLAXPmLJsueCDdCLoFfBwQwryxfEtkLz1rM=";
   };
 
   pythonRelaxDeps = [ "pydantic" ];

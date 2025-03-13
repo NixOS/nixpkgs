@@ -27,10 +27,6 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "sympy" ];
 
-  preCheck = ''
-    export LANG="en_US.UTF-8"
-  '';
-
   passthru.tests = {
     inherit sage;
   };

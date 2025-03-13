@@ -50,7 +50,7 @@ python3Packages.buildPythonApplication rec {
     # would silently downgrade the whole system to be i686 NixOS on the
     # next reboot.
     # The binary will be included in the wrapper for Python.
-    nix
+    (lib.getBin nix)
   ];
 
   postPatch = ''
@@ -89,6 +89,9 @@ python3Packages.buildPythonApplication rec {
         ps: with ps; [
           mypy
           pytest
+          # this is to help development (e.g.: better diffs) inside devShell
+          # only, do not use its helpers like `mocker`
+          pytest-mock
           ruff
         ]
       );

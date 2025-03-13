@@ -13,7 +13,7 @@
   ohex,
 }:
 
-buildDunePackage rec {
+buildDunePackage {
   pname = "mirage-crypto-rng-mirage";
 
   inherit (mirage-crypto-rng) version src;

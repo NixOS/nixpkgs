@@ -64,14 +64,14 @@ let
 in
 py.pkgs.buildPythonApplication rec {
   pname = "awscli2";
-  version = "2.23.11"; # N.B: if you change this, check if overrides are still up-to-date
+  version = "2.24.16"; # N.B: if you change this, check if overrides are still up-to-date
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-cli";
     tag = version;
-    hash = "sha256-ID0hQiR0qOTJMOvRAgEJLheblkY77yIgu1Ofa/6r7nk=";
+    hash = "sha256-WbCJ3sBCI5wC6QbxY1KKNpJ8hkK6yhonq7F2Gzxw8DA=";
   };
 
   postPatch = ''
@@ -146,6 +146,9 @@ py.pkgs.buildPythonApplication rec {
   postFixup = ''
     rm $out/nix-support/propagated-build-inputs
   '';
+
+  # tests/unit/customizations/sso/test_utils.py uses sockets
+  __darwinAllowLocalNetworking = true;
 
   pytestFlagsArray = [
     "-Wignore::DeprecationWarning"

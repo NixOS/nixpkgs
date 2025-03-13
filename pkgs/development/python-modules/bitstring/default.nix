@@ -23,6 +23,8 @@ buildPythonPackage rec {
     hash = "sha256-0AaOVjroVb/maFBaB55ahwWyRHHnofja4pgSgjQMsT8=";
   };
 
+  pythonRelaxDeps = [ "bitarray" ];
+
   build-system = [ setuptools ];
 
   dependencies = [ bitarray ];
@@ -47,6 +49,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module for binary data manipulation";
     homepage = "https://github.com/scott-griffiths/bitstring";
+    changelog = "https://github.com/scott-griffiths/bitstring/releases/tag/${src.tag}";
     license = licenses.mit;
     platforms = platforms.unix;
     maintainers = with maintainers; [ bjornfor ];

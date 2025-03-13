@@ -239,7 +239,7 @@ in
             "-/etc/resolv.conf"
             "-/run/systemd"
             "/etc/hosts"
-            "/etc/ssl/certs/ca-certificates.crt"
+            "${config.security.pki.caBundle}:/etc/ssl/certs/ca-certificates.crt"
           ];
         };
       };

@@ -153,7 +153,7 @@ let
     lib.assertMsg (tlpdbVersion.year == version.texliveYear) "TeX Live year in texlive does not match tlpdb.nix, refusing to evaluate" &&
     lib.assertMsg (tlpdbVersion.frozen == version.final) "TeX Live final status in texlive does not match tlpdb.nix, refusing to evaluate";
 
-  # Pre-defined evironment packages for TeX Live schemes,
+  # Pre-defined environment packages for TeX Live schemes,
   # to make nix-env usage more comfortable and build selected on Hydra.
 
   # these license lists should be the sorted union of the licenses of the packages the schemes contain.

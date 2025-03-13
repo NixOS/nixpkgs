@@ -37,12 +37,12 @@ let
 
   maubot = python.pkgs.buildPythonPackage rec {
     pname = "maubot";
-    version = "0.5.0";
+    version = "0.5.1";
     disabled = python.pythonOlder "3.10";
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-PkeZ7C4Srs2I10g7X1XD/HclumUwWTYj2F3J2CxN4Hs=";
+      hash = "sha256-0UtelZ3w0QUw825AGhSc8wfhYaL9FSYJXCvYZEefWPQ=";
     };
 
     patches = [
@@ -92,9 +92,6 @@ let
     postInstall = ''
       rm $out/example-config.yaml
     '';
-
-    # Setuptools is trying to do python -m maubot test
-    dontUseSetuptoolsCheck = true;
 
     pythonImportsCheck = [
       "maubot"

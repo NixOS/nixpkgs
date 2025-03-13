@@ -1,9 +1,13 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
-  pytestCheckHook,
+
+  # build-system
+  setuptools,
+  setuptools-scm,
+
+  # dependencies
   aiohttp,
   dask,
   distributed,
@@ -11,17 +15,17 @@
   numpy,
   requests,
   scikit-image,
-  setuptools,
   toolz,
   zarr,
+
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "ome-zarr";
   version = "0.10.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "ome";
@@ -32,21 +36,24 @@ buildPythonPackage rec {
 
   build-system = [
     setuptools
+    setuptools-scm
   ];
 
   dependencies = [
-    numpy
+    aiohttp
     dask
     distributed
-    zarr
     fsspec
-    aiohttp
+    numpy
     requests
     scikit-image
     toolz
+    zarr
   ] ++ fsspec.optional-dependencies.s3;
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
   disabledTests = [
     # attempts to access network
@@ -90,7 +97,7 @@ buildPythonPackage rec {
   meta = {
     description = "Implementation of next-generation file format (NGFF) specifications for storing bioimaging data in the cloud";
     homepage = "https://pypi.org/project/ome-zarr";
-    changelog = "https://github.com/ome/ome-zarr-py/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/ome/ome-zarr-py/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.bsd2;
     maintainers = [ lib.maintainers.bcdarwin ];
     mainProgram = "ome_zarr";

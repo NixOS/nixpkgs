@@ -40,6 +40,10 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  postPatch = lib.optionalString stdenv.hostPlatform.isFreeBSD ''
+    substituteInPlace libraw*.pc.in --replace-fail -lstdc++ ""
+  '';
+
   passthru.tests = {
     inherit imagemagick hdrmerge freeimage;
     inherit (python3.pkgs) rawkit;

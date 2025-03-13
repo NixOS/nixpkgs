@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   autoreconfHook,
   gtk2-x11,
   librep,
@@ -12,9 +12,11 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "rep-gtk";
   version = "0.90.8.3";
 
-  src = fetchurl {
-    url = "https://download.tuxfamily.org/librep/rep-gtk/rep-gtk_${finalAttrs.version}.tar.xz";
-    hash = "sha256-qWV120V5Tu/QVkFylno47y1/7DriZExHjp99VLmf80E=";
+  src = fetchFromGitHub {
+    owner = "SawfishWM";
+    repo = "rep-gtk";
+    tag = "rep-gtk-${finalAttrs.version}";
+    hash = "sha256-vEhs7QsQUdeEiHZ6AOri6+SLz3Lq/s6j8rALhY0Xqsc=";
   };
 
   nativeBuildInputs = [
@@ -29,13 +31,13 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   strictDeps = true;
+  enableParallelBuilding = true;
 
-  env.NIX_CFLAGS_COMPILE = toString (
-    lib.optionals stdenv.cc.isClang [
-      "-Wno-error=implicit-function-declaration"
-      "-Wno-error=int-conversion"
-    ]
-  );
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-Wno-error=implicit-function-declaration"
+    "-Wno-error=int-conversion"
+    "-Wno-error=incompatible-pointer-types"
+  ];
 
   patchPhase = ''
     sed -e 's|installdir=$(repexecdir)|installdir=$(libdir)/rep|g' -i Makefile.in
@@ -49,4 +51,3 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.unix;
   };
 })
-# TODO: investigate fetchFromGithub

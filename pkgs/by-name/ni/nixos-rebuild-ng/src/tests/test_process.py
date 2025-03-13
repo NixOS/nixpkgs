@@ -1,4 +1,5 @@
-from unittest.mock import Mock, call, patch
+from typing import Any
+from unittest.mock import patch
 
 from pytest import MonkeyPatch
 
@@ -9,9 +10,9 @@ from .helpers import get_qualified_name
 
 
 @patch(get_qualified_name(p.subprocess.run), autospec=True)
-def test_run(mock_run: Mock) -> None:
+def test_run(mock_run: Any) -> None:
     p.run_wrapper(["test", "--with", "flags"], check=True)
-    assert mock_run.call_args == call(
+    mock_run.assert_called_with(
         ["test", "--with", "flags"],
         check=True,
         text=True,
@@ -27,7 +28,7 @@ def test_run(mock_run: Mock) -> None:
             sudo=True,
             extra_env={"FOO": "bar"},
         )
-    assert mock_run.call_args == call(
+    mock_run.assert_called_with(
         ["sudo", "test", "--with", "flags"],
         check=False,
         text=True,
@@ -44,7 +45,7 @@ def test_run(mock_run: Mock) -> None:
         check=True,
         remote=m.Remote("user@localhost", ["--ssh", "opt"], "password"),
     )
-    assert mock_run.call_args == call(
+    mock_run.assert_called_with(
         [
             "ssh",
             "--ssh",
@@ -70,7 +71,7 @@ def test_run(mock_run: Mock) -> None:
         extra_env={"FOO": "bar"},
         remote=m.Remote("user@localhost", ["--ssh", "opt"], "password"),
     )
-    assert mock_run.call_args == call(
+    mock_run.assert_called_with(
         [
             "ssh",
             "--ssh",

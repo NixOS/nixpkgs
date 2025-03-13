@@ -1,22 +1,30 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchpatch
-, fetchpatch2
-, cmake
-, ninja
-, ffmpeg
-, darwin
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  fetchpatch2,
+  cmake,
+  ninja,
+  ffmpeg-headless,
+  darwin,
+  zlib,
+  testers,
+  validatePkgConfig,
+  nix-update-script,
+  withExamples ? true,
+  withTools ? true,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "chromaprint";
   version = "1.5.1";
 
-  src = fetchurl {
-    url = "https://github.com/acoustid/chromaprint/releases/download/v${version}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-oarY+juLGLeNN1Wzdn+v+au2ckLgG0eOyaZOGQ8zXhw=";
+  src = fetchFromGitHub {
+    owner = "acoustid";
+    repo = "chromaprint";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-bFplHaqXYvGbl8E8b/HUNFO4X+B/HPZjGTmuVFPjS3g=";
   };
 
   patches = [
@@ -40,18 +48,43 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ cmake ninja ];
+  nativeBuildInputs = [
+    cmake
+    ninja
+    validatePkgConfig
+  ];
 
-  buildInputs = [ ffmpeg ] ++ lib.optionals stdenv.hostPlatform.isDarwin
-    (with darwin.apple_sdk.frameworks; [ Accelerate CoreGraphics CoreVideo zlib ]);
+  buildInputs =
+    [ ffmpeg-headless ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (
+      with darwin.apple_sdk.frameworks;
+      [
+        Accelerate
+        CoreGraphics
+        CoreVideo
+        zlib
+      ]
+    );
 
-  cmakeFlags = [ "-DBUILD_EXAMPLES=ON" "-DBUILD_TOOLS=ON" ];
+  cmakeFlags = [
+    (lib.cmakeBool "BUILD_EXAMPLES" withExamples)
+    (lib.cmakeBool "BUILD_TOOLS" withTools)
+  ];
 
-  meta = with lib; {
-    homepage = "https://acoustid.org/chromaprint";
-    description = "AcoustID audio fingerprinting library";
-    mainProgram = "fpcalc";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.unix;
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
-}
+
+  meta =
+    {
+      homepage = "https://acoustid.org/chromaprint";
+      description = "AcoustID audio fingerprinting library";
+      license = lib.licenses.lgpl21Plus;
+      platforms = lib.platforms.unix;
+      pkgConfigModules = [ "libchromaprint" ];
+    }
+    // lib.attrsets.optionalAttrs withTools {
+      mainProgram = "fpcalc";
+    };
+})

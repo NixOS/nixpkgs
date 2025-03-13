@@ -12,11 +12,14 @@
   makeWrapper,
   removeReferencesTo,
   replaceVars,
-  go,
+  go_1_23,
   applyPatches,
   nvidia-modprobe,
 }:
 let
+  # https://github.com/NVIDIA/libnvidia-container/pull/297
+  go = go_1_23;
+
   modprobeVersion = "550.54.14";
   patchedModprobe = applyPatches {
     src = nvidia-modprobe.src.override {

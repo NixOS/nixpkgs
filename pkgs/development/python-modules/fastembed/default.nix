@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
 
   # build-system
@@ -12,9 +11,9 @@
   loguru,
   mmh3,
   numpy,
-  onnx,
   onnxruntime,
   pillow,
+  py-rust-stemmers,
   pystemmer,
   requests,
   snowballstemmer,
@@ -24,16 +23,14 @@
 
 buildPythonPackage rec {
   pname = "fastembed";
-  version = "0.5.0";
+  version = "0.6.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "qdrant";
     repo = "fastembed";
     tag = "v${version}";
-    hash = "sha256-jroYfmcwiqrAQgQuNHMdOBWqivgSAR7yUvr2ogb3dy8=";
+    hash = "sha256-mZClZuSTTGQQSH6KYLcVx0YaNoAwRO25eRxGGjOz8B8=";
   };
 
   build-system = [ poetry-core ];
@@ -43,9 +40,9 @@ buildPythonPackage rec {
     loguru
     mmh3
     numpy
-    onnx
     onnxruntime
     pillow
+    py-rust-stemmers
     pystemmer
     requests
     snowballstemmer
@@ -56,6 +53,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "fastembed" ];
 
   pythonRelaxDeps = [
+    "mmh3"
     "onnxruntime"
     "pillow"
   ];

@@ -1,75 +1,84 @@
 {
-  alsa-lib,
-  buildPythonPackage,
-  cargo,
-  fetchFromGitHub,
-  glib,
   lib,
-  libpcap,
+  buildPythonPackage,
+  fetchFromGitHub,
+  rustPlatform,
+
+  # build-system
   meson,
+  setuptools,
+  setuptools-rust,
+
+  # buildInputs
+  SDL2,
+  alsa-lib,
+  glib,
+  libpcap,
+  soundtouch,
+  zlib,
+
+  # nativeBuildInputs
+  cargo,
   ninja,
   openal,
   pkg-config,
-  range-typed-integers,
   rustc,
-  rustPlatform,
-  SDL2,
-  setuptools,
-  setuptools-rust,
-  soundtouch,
-  zlib,
+
+  # dependencies
+  range-typed-integers,
 }:
 buildPythonPackage rec {
   pname = "skytemple-ssb-emulator";
-  version = "1.8.0";
+  version = "1.8.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SkyTemple";
-    repo = pname;
-    rev = version;
-    hash = "sha256-9xD9Q/oYsi9tuxTOJ6ItLbWkqAjG78uzXYZXOiITDEA=";
+    repo = "skytemple-ssb-emulator";
+    tag = version;
+    hash = "sha256-zmLEvE96gkElTggcRG9fZDrJPLOXeNuSk49zXQAB69Y=";
   };
 
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "skytemple_rust-1.8.1" = "sha256-KtMqgUOlyF02msQRouE4NpvCHqahY+aRiRV9P32ASqg=";
-    };
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit src pname;
+    hash = "sha256-MSPqQmC70pq+sEM8zJrrFiz32dorOJxr2G/y2H4EUQI=";
   };
+
+  build-system = [
+    meson
+    setuptools
+    setuptools-rust
+  ];
 
   buildInputs = [
+    SDL2
     alsa-lib
     glib
     libpcap
-    SDL2
     soundtouch
     zlib
   ];
 
   nativeBuildInputs = [
     cargo
-    meson
     ninja
     openal
     pkg-config
-    rustc
     rustPlatform.cargoSetupHook
-    setuptools
-    setuptools-rust
+    rustc
   ];
 
-  propagatedBuildInputs = [ range-typed-integers ];
+  dependencies = [ range-typed-integers ];
 
   hardeningDisable = [ "format" ];
 
   doCheck = false; # there are no tests
   pythonImportsCheck = [ "skytemple_ssb_emulator" ];
 
-  meta = with lib; {
+  meta = {
     description = "SkyTemple Script Engine Debugger Emulator Backend";
     homepage = "https://github.com/SkyTemple/skytemple-ssb-emulator";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ marius851000 ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ marius851000 ];
   };
 }
