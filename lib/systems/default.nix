@@ -3,9 +3,11 @@
 let
   inherit (lib)
     any
+    concatStringsSep
     filterAttrs
     foldl
     hasInfix
+    hasPrefix
     isAttrs
     isFunction
     isList
@@ -15,7 +17,10 @@ let
     optionalString
     removeSuffix
     replaceStrings
+    splitString
     toUpper
+    versionAtLeast
+    versionOlder
     ;
 
   inherit (lib.strings) toJSON;
@@ -420,6 +425,216 @@ let
           # https://github.com/rust-lang/rust/blob/2e44c17c12cec45b6a682b1e53a04ac5b5fcc9d2/src/bootstrap/config.rs#L415-L421
           isNoStdTarget =
             any (t: hasInfix t final.rust.rustcTarget) ["-none" "nvptx" "switch" "-uefi"];
+        };
+
+        go = args.go or { } // {
+          # https://pkg.go.dev/internal/platform#OSArch
+          osArch = final.go.env.GOOS + "/" + final.go.env.GOARCH;
+
+          # https://pkg.go.dev/internal/platform#CgoSupported
+          #
+          # List Go platforms that do not support Cgo:
+          #   go tool dist list -json | jq '[.[] | select(.CgoSupported | not) | .GOOS + "/" + .GOARCH | {(.): false}] | add' |
+          #     nix eval --arg-from-stdin json --expr '{ json }: { nix = builtins.fromJSON json; }' nix | nixfmt
+          #
+          # Note that Cgo uses {CC,CXX,AR,FC,PKG_CONFIG} environment variables
+          # set by cc-wrapper (a.k.a. stdenv.cc) and pkgconf setup hooks.
+          cgoSupported =
+            args.go.cgoSupported or (
+              {
+                "js/wasm" = false;
+                "linux/ppc64" = false;
+                "openbsd/ppc64" = false;
+                "plan9/386" = false;
+                "plan9/amd64" = false;
+                "plan9/arm" = false;
+                "wasip1/wasm" = false;
+              }
+              .${final.go.osArch} or true
+            );
+
+          # https://pkg.go.dev/internal/platform#RaceDetectorSupported
+          raceDetectorSupported =
+            args.go.raceDetectorSupported or (
+              {
+                "linux/amd64" = true;
+                "linux/ppc64le" = true;
+                "linux/arm64" = true;
+                "linux/s390x" = true;
+                "darwin/amd64" = true;
+                "darwin/arm64" = true;
+                "freebsd/amd64" = true;
+                "netbsd/amd64" = true;
+                "windows/amd64" = true;
+              }
+              .${final.go.osArch} or false
+            );
+
+          # Fill default values for Go build environment, unless already set in
+          # args.go.env. See `go help environment` for documentation.
+          # https://pkg.go.dev/cmd/go#hdr-Environment_variables
+          env =
+            let
+              softfloat = final.gcc.float or (final.parsed.abi.float or "hard") == "soft";
+              gccArch = final.gcc.arch or "";
+            in
+            {
+              GOOS =
+                if final.isAndroid then
+                  "android"
+                else if final.isiOS then
+                  "ios"
+                else if final.isWasi then
+                  "wasip1"
+                else if final.isWasm then
+                  "js"
+                else
+                  final.parsed.kernel.name;
+              GOARCH =
+                if final.isx86_32 then
+                  "386"
+                else if final.isx86_64 then
+                  "amd64"
+                else if final.isAarch32 then
+                  "arm"
+                else if final.isAarch64 then
+                  "arm64"
+                else if final.isLoongArch64 then
+                  "loong64"
+                else if final.isMips then
+                  "mips" + optionalString final.is64bit "64" + optionalString final.isLittleEndian "le"
+                else if final.isPower64 then
+                  "ppc64" + optionalString final.isLittleEndian "le"
+                # Go does not support 32-bit WASM. See https://go.dev/issue/63131
+                else if final.isWasm && final.is64bit then
+                  "wasm"
+                else
+                  final.parsed.cpu.name;
+              CGO_ENABLED = if final.go.cgoSupported then "1" else "0";
+            }
+            // optionalAttrs final.isAarch32 {
+              GOARM =
+                let
+                  cpuVersion = final.parsed.cpu.version or "";
+                  version =
+                    if
+                      builtins.elem cpuVersion [
+                        "5"
+                        "6"
+                        "7"
+                      ]
+                    then
+                      cpuVersion
+                    else
+                      "7";
+                  float = if softfloat then "softfloat" else "hardfloat";
+                in
+                version + "," + float;
+            }
+            // optionalAttrs final.isAarch64 {
+              GOARM64 =
+                # Convert gccArch to GOARM64 value.
+                # E.g. armv8.3-a+crypto+sha2+aes+crc+fp16+lse+simd+ras+rdm+rcpc
+                # => v8.3,crypto,lse
+                # https://gcc.gnu.org/onlinedocs/gcc/ARM-Options.html#index-march-2
+                let
+                  splitGccArch = splitString "+" gccArch;
+                  gccArchName = builtins.head splitGccArch;
+                  gccArchExtensions = builtins.tail splitGccArch;
+
+                  versionMatches = builtins.match "armv([0-9]+(\\.[0-9]+)?).*" gccArchName;
+                  matchedVersion = builtins.elemAt versionMatches 0;
+                  matchedMinor = builtins.elemAt versionMatches 1;
+                  paddedVersion = matchedVersion + optionalString (matchedMinor == null) ".0";
+                  version =
+                    if
+                      versionMatches != null
+                      && (
+                        versionAtLeast paddedVersion "8.0" && versionOlder paddedVersion "8.10"
+                        || versionAtLeast paddedVersion "9.0" && versionOlder paddedVersion "9.6"
+                      )
+                    then
+                      "v" + paddedVersion
+                    else
+                      "v8.0";
+
+                  # ‘+no…’ disables dependent extensions; assume that all
+                  # extensions are disabled in this case.
+                  extensions = builtins.attrNames (
+                    optionalAttrs (!any (hasPrefix "no") gccArchExtensions) (
+                      builtins.intersectAttrs
+                        (builtins.listToAttrs (
+                          map (name: {
+                            inherit name;
+                            value = true;
+                          }) gccArchExtensions
+                        ))
+                        {
+                          lse = true;
+                          crypto = true;
+                        }
+                    )
+                  );
+                in
+                concatStringsSep "," ([ version ] ++ extensions);
+            }
+            // optionalAttrs final.isx86_32 {
+              GO386 = if softfloat then "softfloat" else "sse2";
+            }
+            // optionalAttrs final.isx86_64 {
+              GOAMD64 =
+                # https://gcc.gnu.org/onlinedocs/gcc/x86-Options.html#index-march-15
+                {
+                  x86-64-v2 = "v2";
+                  x86-64-v3 = "v3";
+                  x86-64-v4 = "v4";
+                }
+                .${gccArch} or "v1";
+            }
+            // optionalAttrs final.isMips32 {
+              GOMIPS = if softfloat then "softfloat" else "hardfloat";
+            }
+            // optionalAttrs final.isMips64 {
+              GOMIPS64 = if softfloat then "softfloat" else "hardfloat";
+            }
+            // optionalAttrs final.isPower64 {
+              GOPPC64 =
+                # https://gcc.gnu.org/onlinedocs/gcc/RS_002f6000-and-PowerPC-Options.html#index-mcpu-10
+                let
+                  gccCpu = final.gcc.cpu or "";
+                in
+                if
+                  builtins.elem gccCpu [
+                    "power8"
+                    "power9"
+                    "power10"
+                  ]
+                then
+                  gccCpu
+                else
+                  "power8";
+            }
+            // optionalAttrs final.isRiscV64 {
+              # Note that currently GCC doesn’t support RISC-V profiles in -march.
+              # https://gcc.gnu.org/pipermail/gcc-patches/2024-December/670667.html
+              # https://github.com/riscv-non-isa/riscv-toolchain-conventions/pull/36
+              #
+              # LLVM does though: https://llvm.org/docs/RISCVUsage.html#profiles
+              GORISCV64 =
+                if
+                  builtins.elem gccArch [
+                    "rva20u64"
+                    "rva22u64"
+                  ]
+                then
+                  gccArch
+                else
+                  "rva20u64";
+            }
+            // optionalAttrs final.isWasm {
+              GOWASM = ""; # satconv, signext
+            }
+            // args.go.env or { };
         };
       };
   in assert final.useAndroidPrebuilt -> final.isAndroid;
