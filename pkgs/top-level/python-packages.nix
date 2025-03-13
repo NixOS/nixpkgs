@@ -14120,6 +14120,8 @@ self: super: with self; {
 
   quaternion = callPackage ../development/python-modules/quaternion { };
 
+  quaternions-for-python = callPackage ../development/python-modules/quaternions-for-python { };
+
   qudida = callPackage ../development/python-modules/qudida { };
 
   querystring-parser = callPackage ../development/python-modules/querystring-parser { };
