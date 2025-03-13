@@ -1385,7 +1385,6 @@
   ./services/security/esdm.nix
   ./services/security/fail2ban.nix
   ./services/security/fprintd.nix
-  ./services/security/haka.nix
   ./services/security/haveged.nix
   ./services/security/hockeypuck.nix
   ./services/security/hologram-agent.nix
