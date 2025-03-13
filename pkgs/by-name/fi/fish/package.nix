@@ -386,6 +386,7 @@ stdenv.mkDerivation (finalAttrs: {
       cole-h
       winter
       sigmasquadron
+      rvdp
     ];
     mainProgram = "fish";
   };
