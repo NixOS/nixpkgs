@@ -1,9 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, gradle, makeWrapper, jdk17, pakku, jre }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gradle,
+  makeWrapper,
+  jdk17,
+  pakku,
+  jre,
+}:
 let
   pname = "pakku";
   version = "0.26.0";
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   inherit pname version;
 
   src = fetchFromGitHub {
@@ -13,7 +23,10 @@ in stdenv.mkDerivation {
     hash = "sha256-TQDHf6Kr6SEPyxAhA5jK3rDIZJKg2qCK41a1NnU8PxA=";
   };
 
-  nativeBuildInputs = [ gradle makeWrapper ];
+  nativeBuildInputs = [
+    gradle
+    makeWrapper
+  ];
 
   mitmCache = gradle.fetchDeps {
     inherit pname;
@@ -37,11 +50,13 @@ in stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description =
-      "A multiplatform modpack manager for Minecraft: Java Edition.";
+    description = "A multiplatform modpack manager for Minecraft: Java Edition.";
     homepage = "https://github.com/juraj-hrivnak/Pakku";
 
-    sourceProvenance = with sourceTypes; [ fromSource binaryBytecode ];
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode
+    ];
     license = licenses.eupl12;
     mainProgram = "pakku";
     maintainers = [ maintainers.Squawkykaka ];
