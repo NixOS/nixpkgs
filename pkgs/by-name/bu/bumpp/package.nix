@@ -13,18 +13,18 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "bumpp";
-  version = "10.0.3";
+  version = "10.1.0";
 
   src = fetchFromGitHub {
     owner = "antfu-collective";
     repo = "bumpp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7e0p/mrGtyUO3za02d6fGS3ynF/txjieQ5w48UZooKQ=";
+    hash = "sha256-m4m4mZFge9S0zP0E6XWfeFitx0t+QOl+nXM0oFtlIgU=";
   };
 
   pnpmDeps = pnpm.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-NztqIE/0FSeFdteCPAPm/KgrD0Ax95HKe0FwWjj9unc=";
+    hash = "sha256-duxpym1DlJM4q5j0wmrubYiAHQ3cDEFfeD9Gyic6mbI=";
   };
 
   nativeBuildInputs = [
