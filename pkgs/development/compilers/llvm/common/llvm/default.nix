@@ -46,29 +46,28 @@ let
 
   # Used when creating a version-suffixed symlink of libLLVM.dylib
   shortVersion = lib.concatStringsSep "." (lib.take 1 (lib.splitString "." release_version));
-
-  pname = "llvm";
 in
 
 stdenv.mkDerivation (finalAttrs: {
-  inherit pname version;
+  pname = "llvm";
+  inherit version;
 
   # TODO: simplify versionAtLeast condition for cmake and third-party via rebuild
   src = if monorepoSrc != null then
-    runCommand "${pname}-src-${version}" { inherit (monorepoSrc) passthru; } (''
+    runCommand "${lib.removeSuffix "-manpages" finalAttrs.pname}-src-${version}" { inherit (monorepoSrc) passthru; } (''
       mkdir -p "$out"
     '' + lib.optionalString (lib.versionAtLeast release_version "14") ''
       cp -r ${monorepoSrc}/cmake "$out"
     '' + ''
-      cp -r ${monorepoSrc}/${pname} "$out"
+      cp -r ${monorepoSrc}/${lib.removeSuffix "-manpages" finalAttrs.pname} "$out"
     '' + lib.optionalString (lib.versionAtLeast release_version "14") ''
       cp -r ${monorepoSrc}/third-party "$out"
     '' + lib.optionalString enablePolly ''
-      chmod u+w "$out/${pname}/tools"
-      cp -r ${monorepoSrc}/polly "$out/${pname}/tools"
+      chmod u+w "$out/${lib.removeSuffix "-manpages" finalAttrs.pname}/tools"
+      cp -r ${monorepoSrc}/polly "$out/${finalAttrs.pname}/tools"
     '') else src;
 
-  sourceRoot = "${finalAttrs.src.name}/${pname}";
+  sourceRoot = "${finalAttrs.src.name}/${lib.removeSuffix "-manpages" finalAttrs.pname}";
 
   outputs = [ "out" "lib" "dev" "python" ];
 
