@@ -66,6 +66,7 @@ buildGoModule rec {
     license = licenses.databricks;
     maintainers = with maintainers; [
       kfollesdal
+      taranarmo
     ];
   };
 }
