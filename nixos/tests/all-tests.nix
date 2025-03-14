@@ -1321,5 +1321,5 @@ in {
   zrepl = handleTest ./zrepl.nix {};
   zsh-history = handleTest ./zsh-history.nix {};
   zwave-js = handleTest ./zwave-js.nix {};
-  zwave-js-ui = handleTest ./zwave-js-ui.nix {};
+  zwave-js-ui = runTest ./zwave-js-ui.nix;
 }
