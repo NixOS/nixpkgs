@@ -566,6 +566,7 @@ in {
   iscsi-multipath-root = handleTest ./iscsi-multipath-root.nix {};
   iscsi-root = handleTest ./iscsi-root.nix {};
   isso = handleTest ./isso.nix {};
+  it-tools = import ./it-tools { inherit recurseIntoAttrs runTest; };
   jackett = handleTest ./jackett.nix {};
   jellyfin = handleTest ./jellyfin.nix {};
   jenkins = handleTest ./jenkins.nix {};
