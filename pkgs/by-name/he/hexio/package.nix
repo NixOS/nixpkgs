@@ -1,32 +1,37 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchFromGitLab,
   pcsclite,
   pth,
-  python2,
+  python3,
 }:
-
+let
+  wrappedPython = python3.pkgs.wrapPython.override {
+    python = python3;
+  };
+in
 stdenv.mkDerivation rec {
   pname = "hexio";
-  version = "1.0-RC1";
+  version = "1.1";
 
-  src = fetchFromGitHub {
-    sha256 = "08jxkdi0gjsi8s793f9kdlad0a58a0xpsaayrsnpn9bpmm5cgihq";
-    rev = "version-${version}";
+  src = fetchFromGitLab {
     owner = "vanrein";
     repo = "hexio";
+    tag = "v${version}";
+    hash = "sha256-jp7VHT08Rhw5nUtNpqkRHDHT0R51PCBy0cKb1sI6zkg=";
   };
 
   strictDeps = true;
 
+  nativeBuildInputs = [ wrappedPython ];
+
   buildInputs = [
     pcsclite
     pth
-    python2
   ];
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace Makefile \
       --replace '-I/usr/local/include/PCSC/' '-I${lib.getDev pcsclite}/include/PCSC/' \
       --replace '-L/usr/local/lib/pth' '-I${pth}/lib/'
@@ -36,6 +41,10 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin $out/lib $out/sbin $out/man
     make DESTDIR=$out PREFIX=/ all
     make DESTDIR=$out PREFIX=/ install
+  '';
+
+  postFixup = ''
+    wrapPythonPrograms
   '';
 
   meta = with lib; {
