@@ -15,19 +15,16 @@
   pytestCheckHook,
 }:
 
-let
+buildPythonPackage rec {
   pname = "hassil";
-  version = "2.2.3";
-in
-buildPythonPackage {
-  inherit pname version;
+  version = "3.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "home-assistant";
     repo = "hassil";
     tag = "v${version}";
-    hash = "sha256-rP7F0BovD0Klf06lywo+1uFhPf+dS0qbNBZluun8+cE=";
+    hash = "sha256-A0cvWMzEgrfhVA34tCmlt/LBmJbJ7+uR+B1ump0XQFQ=";
   };
 
   build-system = [ setuptools ];
@@ -37,10 +34,12 @@ buildPythonPackage {
     unicode-rbnf
   ];
 
+  pythonImportsCheck = [ "hassil" ];
+
   nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
-    changelog = "https://github.com/home-assistant/hassil/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/home-assistant/hassil/blob/${src.tag}/CHANGELOG.md";
     description = "Intent parsing for Home Assistant";
     mainProgram = "hassil";
     homepage = "https://github.com/home-assistant/hassil";
