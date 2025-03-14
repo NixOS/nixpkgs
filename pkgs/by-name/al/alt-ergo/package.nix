@@ -17,7 +17,7 @@ let
 in
 
 let
-  alt-ergo-lib = ocamlPackages.buildDunePackage rec {
+  alt-ergo-lib = ocamlPackages.buildDunePackage {
     pname = "alt-ergo-lib";
     inherit version src;
     buildInputs = with ocamlPackages; [ ppx_blob ];

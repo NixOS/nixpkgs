@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
-  fetchpatch,
   dask,
   urllib3,
   geojson,

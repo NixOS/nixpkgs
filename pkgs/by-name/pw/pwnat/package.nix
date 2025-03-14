@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "pwnat";
   # Latest release has an annoying segmentation fault bug, see:
   # https://github.com/samyk/pwnat/pull/25 . Merging only #25 is impossible due

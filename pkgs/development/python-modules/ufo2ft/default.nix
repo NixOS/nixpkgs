@@ -7,7 +7,6 @@
   cu2qu,
   defcon,
   fetchPypi,
-  fetchpatch2,
   fontmath,
   fonttools,
   pytestCheckHook,

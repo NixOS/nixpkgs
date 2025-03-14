@@ -2,7 +2,6 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  fetchurl,
   pkg-config,
   bzip2,
   openssl,

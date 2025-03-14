@@ -766,6 +766,8 @@ self: super: with self; {
 
   apycula = callPackage ../development/python-modules/apycula { };
 
+  apykuma = callPackage ../development/python-modules/apykuma { };
+
   aqipy-atmotech = callPackage ../development/python-modules/aqipy-atmotech { };
 
   aqualogic = callPackage ../development/python-modules/aqualogic { };
@@ -11900,6 +11902,8 @@ self: super: with self; {
 
   pydenticon = callPackage ../development/python-modules/pydenticon { };
 
+  pydemumble = callPackage ../development/python-modules/pydemumble { };
+
   pydeps = callPackage ../development/python-modules/pydeps {
     inherit (pkgs) graphviz;
   };
@@ -12037,6 +12041,8 @@ self: super: with self; {
   pyexcel-xls = callPackage ../development/python-modules/pyexcel-xls { };
 
   pyexiftool = callPackage ../development/python-modules/pyexiftool { };
+
+  pyexpect = callPackage ../development/python-modules/pyexpect { };
 
   pyexploitdb = callPackage ../development/python-modules/pyexploitdb { };
 
@@ -15257,9 +15263,11 @@ self: super: with self; {
 
   sip = callPackage ../development/python-modules/sip { };
 
-  siphashc = callPackage ../development/python-modules/siphashc { };
-
   sip4 = callPackage ../development/python-modules/sip/4.x.nix { };
+
+  siphash24 = callPackage ../development/python-modules/siphash24 { };
+
+  siphashc = callPackage ../development/python-modules/siphashc { };
 
   sipyco = callPackage ../development/python-modules/sipyco { };
 

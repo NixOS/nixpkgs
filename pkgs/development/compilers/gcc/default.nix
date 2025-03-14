@@ -1,4 +1,4 @@
-{ lib, stdenv, targetPackages, fetchurl, fetchpatch, fetchFromGitHub, noSysDirs
+{ lib, stdenv, targetPackages, fetchurl, fetchpatch, noSysDirs
 , langC ? true, langCC ? true, langFortran ? false
 , langAda ? false
 , langObjC ? stdenv.targetPlatform.isDarwin
@@ -21,7 +21,7 @@
 , libucontext ? null
 , gnat-bootstrap ? null
 , enableMultilib ? false
-, enablePlugin ? stdenv.hostPlatform == stdenv.buildPlatform # Whether to support user-supplied plug-ins
+, enablePlugin ? (lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform) # Whether to support user-supplied plug-ins
 , name ? "gcc"
 , libcCross ? null
 , threadsCross ? null # for MinGW
@@ -77,14 +77,14 @@ let
     disableBootstrap = atLeast11 && !stdenv.hostPlatform.isDarwin && (atLeast12 -> !profiledCompiler);
 
     inherit (stdenv) buildPlatform hostPlatform targetPlatform;
-    targetConfig = if targetPlatform != hostPlatform then targetPlatform.config else null;
+    targetConfig = if (! lib.systems.equals targetPlatform hostPlatform) then targetPlatform.config else null;
 
     patches = callFile ./patches {};
 
     /* Cross-gcc settings (build == host != target) */
-    crossMingw = targetPlatform != hostPlatform && targetPlatform.isMinGW;
+    crossMingw = (! lib.systems.equals targetPlatform hostPlatform) && targetPlatform.isMinGW;
     stageNameAddon = optionalString withoutTargetLibc "-nolibc";
-    crossNameAddon = optionalString (targetPlatform != hostPlatform) "${targetPlatform.config}${stageNameAddon}-";
+    crossNameAddon = optionalString (! lib.systems.equals targetPlatform hostPlatform) "${targetPlatform.config}${stageNameAddon}-";
 
     callFile = callPackageWith {
       # lets
@@ -244,7 +244,7 @@ pipe ((callFile ./common/builder.nix {}) ({
       --replace "-install_name \\\$rpath/\\\$soname" "-install_name ''${!outputLib}/lib/\\\$soname"
   ''
   + (
-    optionalString (targetPlatform != hostPlatform || stdenv.cc.libc != null)
+    optionalString ((! lib.systems.equals targetPlatform hostPlatform) || stdenv.cc.libc != null)
       # On NixOS, use the right path to the dynamic linker instead of
       # `/lib/ld*.so'.
       (let
@@ -296,11 +296,11 @@ pipe ((callFile ./common/builder.nix {}) ({
     if atLeast11
     then let target =
                optionalString (profiledCompiler) "profiled" +
-               optionalString (targetPlatform == hostPlatform && hostPlatform == buildPlatform && !disableBootstrap) "bootstrap";
+               optionalString ((lib.systems.equals targetPlatform hostPlatform) && (lib.systems.equals hostPlatform buildPlatform) && !disableBootstrap) "bootstrap";
          in optional (target != "") target
     else
       optional
-        (targetPlatform == hostPlatform && hostPlatform == buildPlatform)
+        ((lib.systems.equals targetPlatform hostPlatform) && (lib.systems.equals hostPlatform buildPlatform))
         (if profiledCompiler then "profiledbootstrap" else "bootstrap");
 
   inherit (callFile ./common/strip-attributes.nix { })
@@ -328,11 +328,11 @@ pipe ((callFile ./common/builder.nix {}) ({
     # compiler (after the specs for the cross-gcc are created). Having
     # LIBRARY_PATH= makes gcc read the specs from ., and the build breaks.
 
-    CPATH = optionals (targetPlatform == hostPlatform) (makeSearchPathOutput "dev" "include" ([]
+    CPATH = optionals (lib.systems.equals targetPlatform hostPlatform) (makeSearchPathOutput "dev" "include" ([]
       ++ optional (zlib != null) zlib
     ));
 
-    LIBRARY_PATH = optionals (targetPlatform == hostPlatform) (makeLibraryPath (
+    LIBRARY_PATH = optionals (lib.systems.equals targetPlatform hostPlatform) (makeLibraryPath (
       optional (zlib != null) zlib
     ));
 
@@ -342,7 +342,7 @@ pipe ((callFile ./common/builder.nix {}) ({
       EXTRA_FLAGS_FOR_TARGET
       EXTRA_LDFLAGS_FOR_TARGET
       ;
-  } // optionalAttrs (!atLeast12 && stdenv.cc.isClang && targetPlatform != hostPlatform) {
+  } // optionalAttrs (!atLeast12 && stdenv.cc.isClang && (! lib.systems.equals targetPlatform hostPlatform)) {
     NIX_CFLAGS_COMPILE = "-Wno-register";
   });
 
@@ -376,7 +376,7 @@ pipe ((callFile ./common/builder.nix {}) ({
   } // optionalAttrs (!atLeast11) {
     badPlatforms = [ "aarch64-darwin" ];
   } // optionalAttrs is10 {
-    badPlatforms = if targetPlatform != hostPlatform then [ "aarch64-darwin" ] else [ ];
+    badPlatforms = if (! lib.systems.equals targetPlatform hostPlatform) then [ "aarch64-darwin" ] else [ ];
   };
 } // optionalAttrs (!atLeast10 && stdenv.targetPlatform.isDarwin) {
   # GCC <10 requires default cctools `strip` instead of `llvm-strip` used by Darwin bintools.

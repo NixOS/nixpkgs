@@ -10,7 +10,7 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "string-machine";
   version = "unstable-2020-01-20";
 

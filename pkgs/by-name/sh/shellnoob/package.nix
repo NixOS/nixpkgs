@@ -5,7 +5,7 @@
   python3,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation {
   pname = "shellnoob";
   version = "unstable-2022-03-16";
 

@@ -21,7 +21,6 @@
   rustc,
   jq,
   moreutils,
-  fetchpatch,
 }:
 
 stdenv.mkDerivation rec {

@@ -8,7 +8,7 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "sunxi-tools";
   version = "unstable-2021-08-29";
 

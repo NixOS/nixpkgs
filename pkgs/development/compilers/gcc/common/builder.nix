@@ -7,7 +7,7 @@
 
 let
   forceLibgccToBuildCrtStuff = import ./libgcc-buildstuff.nix { inherit lib stdenv; };
-  isCross = with stdenv; targetPlatform.config != hostPlatform.config;
+  isCross = ! lib.systems.equals stdenv.targetPlatform stdenv.hostPlatform;
 in
 
 # We don't support multilib and cross at the same time

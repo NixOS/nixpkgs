@@ -2,7 +2,6 @@
   clangStdenv,
   lib,
   fetchurl,
-  fetchpatch,
   dotnetCorePackages,
   jq,
   curl,

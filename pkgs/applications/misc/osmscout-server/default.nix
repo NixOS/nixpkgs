@@ -2,7 +2,6 @@
   lib,
   mkDerivation,
   fetchFromGitHub,
-  fetchpatch,
   pkg-config,
   qmake,
   qttools,

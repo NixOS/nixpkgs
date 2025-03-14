@@ -1,6 +1,5 @@
 {
   lib,
-  fetchFromGitHub,
   pythonPackages,
   buildPythonPackage,
   cmake,

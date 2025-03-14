@@ -10,7 +10,7 @@
   openssl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "scitokens-cpp";
   version = "1.1.2";
 
