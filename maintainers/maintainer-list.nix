@@ -9468,6 +9468,12 @@
     githubId = 49935860;
     name = "Henri Rosten";
   };
+  henrispriet = {
+    email = "henri.spriet@gmail.com";
+    github = "henrispriet";
+    githubId = 36509362;
+    name = "Henri Spriet";
+  };
   henrytill = {
     email = "henrytill@gmail.com";
     github = "henrytill";
