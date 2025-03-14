@@ -86,7 +86,7 @@ in
       hashedPassword = lib.mkOption {
         default = "";
         description = ''
-          Create the password with: `echo -n 'thisismypassword' | npx argon2-cli -e`.
+          Create the password with: {command}`echo -n 'thisismypassword' | nix run nixpkgs#libargon2 -- "$(pwgen 20 -n1)" -e`
         '';
         type = lib.types.str;
       };
