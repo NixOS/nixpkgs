@@ -1,0 +1,12 @@
+--- a/scripts/Makefile.in
++++ b/scripts/Makefile.in
+@@ -21,7 +21,8 @@
+     xdg-open \
+     xdg-email \
+     xdg-screensaver \
+-    xdg-settings
++    xdg-settings \
++    xdg-terminal
+ #    xdg-su
+ #    xdg-copy \
+ #    xdg-file-dialog

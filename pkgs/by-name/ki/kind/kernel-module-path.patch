@@ -1,0 +1,47 @@
+diff --git a/pkg/cluster/internal/providers/common/getmodules.go b/pkg/cluster/internal/providers/common/getmodules.go
+new file mode 100644
+index 00000000..1cce5675
+--- /dev/null
++++ b/pkg/cluster/internal/providers/common/getmodules.go
+@@ -0,0 +1,15 @@
++package common
++
++import "os"
++
++const (
++	fhsKernelModulePath = "/lib/modules"
++	nixKernelModulePath = "/run/booted-system/kernel-modules/lib/modules"
++)
++
++func GetKernelModulePath() string {
++	if _, err := os.Stat(nixKernelModulePath); !os.IsNotExist(err) {
++		return nixKernelModulePath
++	}
++	return fhsKernelModulePath
++}
+diff --git a/pkg/cluster/internal/providers/docker/provision.go b/pkg/cluster/internal/providers/docker/provision.go
+index 97b05594..3aaa9830 100644
+--- a/pkg/cluster/internal/providers/docker/provision.go
++++ b/pkg/cluster/internal/providers/docker/provision.go
+@@ -230,7 +230,7 @@ func runArgsForNode(node *config.Node, clusterIPFamily config.ClusterIPFamily, n
+ 		// (please don't depend on doing this though!)
+ 		"--volume", "/var",
+ 		// some k8s things want to read /lib/modules
+-		"--volume", "/lib/modules:/lib/modules:ro",
++		"--volume", fmt.Sprintf("%s:/lib/modules:ro", common.GetKernelModulePath()),
+ 		// propagate KIND_EXPERIMENTAL_CONTAINERD_SNAPSHOTTER to the entrypoint script
+ 		"-e", "KIND_EXPERIMENTAL_CONTAINERD_SNAPSHOTTER",
+ 	},
+diff --git a/pkg/cluster/internal/providers/podman/provision.go b/pkg/cluster/internal/providers/podman/provision.go
+index 50aa7018..7e25a4de 100644
+--- a/pkg/cluster/internal/providers/podman/provision.go
++++ b/pkg/cluster/internal/providers/podman/provision.go
+@@ -203,7 +203,7 @@ func runArgsForNode(node *config.Node, clusterIPFamily config.ClusterIPFamily, n
+ 		// dev: devices on the volume will be able to be used by processes within the container
+ 		"--volume", fmt.Sprintf("%s:/var:suid,exec,dev", varVolume),
+ 		// some k8s things want to read /lib/modules
+-		"--volume", "/lib/modules:/lib/modules:ro",
++		"--volume", fmt.Sprintf("%s:/lib/modules:ro", common.GetKernelModulePath()),
+ 		// propagate KIND_EXPERIMENTAL_CONTAINERD_SNAPSHOTTER to the entrypoint script
+ 		"-e", "KIND_EXPERIMENTAL_CONTAINERD_SNAPSHOTTER",
+ 	},

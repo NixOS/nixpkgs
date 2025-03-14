@@ -1,0 +1,13 @@
+--- a/src/tools/macdeployqt/shared/shared.cpp
++++ b/src/tools/macdeployqt/shared/shared.cpp
+@@ -1280,6 +1280,10 @@ bool deployQmlImports(const QString &appBundlePath, DeploymentInfo deploymentInf
+     if (!QFile::exists(qmlImportScannerPath))
+         qmlImportScannerPath = QCoreApplication::applicationDirPath() + "/qmlimportscanner";
+ 
++    // Fallback: Pass qml import scanner via environment variable
++    if (!QFile::exists(qmlImportScannerPath))
++        qmlImportScannerPath = ::qgetenv("NIX_QMLIMPORTSCANNER");
++
+     // Verify that we found a qmlimportscanner binary
+     if (!QFile::exists(qmlImportScannerPath)) {
+         LogError() << "qmlimportscanner not found at" << qmlImportScannerPath;

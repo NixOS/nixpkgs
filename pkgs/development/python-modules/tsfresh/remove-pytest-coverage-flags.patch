@@ -1,0 +1,15 @@
+diff --git a/setup.cfg b/setup.cfg
+index e29e54e..fe8892f 100644
+--- a/setup.cfg
++++ b/setup.cfg
+@@ -99,10 +99,6 @@ extras = True
+ # e.g. --cov-report html (or xml) for html/xml output or --junitxml junit.xml
+ # in order to write a coverage file that can be read by Jenkins.
+ junit_family = xunit2
+-addopts =
+-    --cov tsfresh --cov-report term-missing
+-    --verbose
+-    #-n auto
+ testpaths = tests
+ filterwarnings =
+ 

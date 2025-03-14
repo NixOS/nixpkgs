@@ -1,0 +1,172 @@
+--- a/build/deps/src/org/jetbrains/intellij/build/impl/BundledMavenDownloader.kt
++++ b/build/deps/src/org/jetbrains/intellij/build/impl/BundledMavenDownloader.kt
+@@ -89,7 +89,7 @@
+       }
+       val file = root.resolve("${split[1]}-${split[2]}.jar")
+       val uri = BuildDependenciesDownloader.getUriForMavenArtifact(
+-        mavenRepository = BuildDependenciesConstants.MAVEN_CENTRAL_URL,
++        mavenRepository = "MAVEN_REPO_HERE",
+         groupId = split[0],
+         artifactId = split[1],
+         version = split[2],
+@@ -145,22 +145,7 @@
+   }
+
+   suspend fun downloadMavenDistribution(communityRoot: BuildDependenciesCommunityRoot): Path {
+-    val extractDir = communityRoot.communityRoot.resolve("plugins/maven/maven36-server-impl/lib/maven3")
+-    val properties = BuildDependenciesDownloader.getDependencyProperties(communityRoot)
+-    val bundledMavenVersion = properties.property("bundledMavenVersion")
+-    mutex.withLock {
+-      val uri = BuildDependenciesDownloader.getUriForMavenArtifact(
+-        mavenRepository = BuildDependenciesConstants.MAVEN_CENTRAL_URL,
+-        groupId = "org.apache.maven",
+-        artifactId = "apache-maven",
+-        version = bundledMavenVersion,
+-        classifier = "bin",
+-        packaging = "zip"
+-      )
+-      val zipPath = downloadFileToCacheLocation(uri.toString(), communityRoot)
+-      BuildDependenciesDownloader.extractFile(zipPath, extractDir, communityRoot, BuildDependenciesExtractOptions.STRIP_ROOT)
+-    }
+-    return extractDir
++    return Path.of("MAVEN_PATH_HERE")
+   }
+
+   suspend fun downloadMavenTelemetryDependencies(communityRoot: BuildDependenciesCommunityRoot): Path =
+--- a/platform/build-scripts/downloader/src/org/jetbrains/intellij/build/dependencies/BuildDependenciesDownloader.kt
++++ b/platform/build-scripts/downloader/src/org/jetbrains/intellij/build/dependencies/BuildDependenciesDownloader.kt
+@@ -70,7 +70,7 @@
+                              version: String,
+                              classifier: String?,
+                              packaging: String): URI {
+-    val base = mavenRepository.trim('/')
++    val base = mavenRepository.trimEnd('/')
+     val groupStr = groupId.replace('.', '/')
+     val classifierStr = if (classifier != null) "-${classifier}" else ""
+     return URI.create("${base}/${groupStr}/${artifactId}/${version}/${artifactId}-${version}${classifierStr}.${packaging}")
+--- a/platform/build-scripts/downloader/src/org/jetbrains/intellij/build/dependencies/JdkDownloader.kt
++++ b/platform/build-scripts/downloader/src/org/jetbrains/intellij/build/dependencies/JdkDownloader.kt
+@@ -55,11 +55,7 @@
+     variation: String? = null,
+     infoLog: (String) -> Unit,
+   ): Path {
+-    val jdkUrl = getUrl(communityRoot = communityRoot, os = os, arch = arch, jdkBuildNumber = jdkBuildNumber, variation = variation)
+-    val jdkArchive = downloadFileToCacheLocation(url = jdkUrl.toString(), communityRoot = communityRoot)
+-    val jdkExtracted = BuildDependenciesDownloader.extractFileToCacheLocation(communityRoot = communityRoot,
+-                                                                              archiveFile = jdkArchive,
+-                                                                              BuildDependenciesExtractOptions.STRIP_ROOT)
++    val jdkExtracted = Path.of("JDK_PATH_HERE")
+     val jdkHome = if (os == OS.MACOSX) jdkExtracted.resolve("Contents").resolve("Home") else jdkExtracted
+     infoLog("JPS-bootstrap JDK (jdkHome=$jdkHome, executable=${getJavaExecutable(jdkHome)})")
+     return jdkHome
+--- a/platform/build-scripts/src/org/jetbrains/intellij/build/LinuxDistributionCustomizer.kt
++++ b/platform/build-scripts/src/org/jetbrains/intellij/build/LinuxDistributionCustomizer.kt
+@@ -46,7 +46,7 @@
+   /**
+    * If `true`, a separate *[org.jetbrains.intellij.build.impl.LinuxDistributionBuilder.NO_RUNTIME_SUFFIX].tar.gz artifact without a runtime will be produced.
+    */
+-  var buildArtifactWithoutRuntime = false
++  var buildArtifactWithoutRuntime = true
+ 
+   /**
+    * Set both properties if a .snap package should be produced.
+--- a/platform/build-scripts/src/org/jetbrains/intellij/build/impl/LinuxDistributionBuilder.kt
++++ b/platform/build-scripts/src/org/jetbrains/intellij/build/impl/LinuxDistributionBuilder.kt
+@@ -50,7 +50,7 @@
+         val distBinDir = targetPath.resolve("bin")
+         val sourceBinDir = context.paths.communityHomeDir.resolve("bin/linux")
+         addNativeLauncher(distBinDir, targetPath, arch)
+-        copyFileToDir(NativeBinaryDownloader.getRestarter(context, OsFamily.LINUX, arch), distBinDir)
++        copyFileToDir(sourceBinDir.resolve("${arch.dirName}/restarter"), distBinDir)
+         copyFileToDir(sourceBinDir.resolve("${arch.dirName}/fsnotifier"), distBinDir)
+         generateBuildTxt(context, targetPath)
+         copyDistFiles(context, targetPath, OsFamily.LINUX, arch)
+@@ -85,6 +85,8 @@
+         }
+       }
+ 
++      return@executeStep
++
+       val runtimeDir = context.bundledRuntime.extract(os = OsFamily.LINUX, arch = arch)
+       updateExecutablePermissions(runtimeDir, executableFileMatchers)
+       val tarGzPath = buildTarGz(arch = arch, runtimeDir = runtimeDir, unixDistPath = osAndArchSpecificDistPath, suffix = suffix(arch))
+@@ -383,7 +385,8 @@
+   }
+ 
+   private suspend fun addNativeLauncher(distBinDir: Path, targetPath: Path, arch: JvmArchitecture) {
+-    val (execPath, licensePath) = NativeBinaryDownloader.getLauncher(context, OsFamily.LINUX, arch)
++    val execPath = Path.of("XPLAT_LAUNCHER_PREBUILT_PATH_HERE/Linux-${arch.archName}/xplat-launcher")
++    val licensePath = Path.of("XPLAT_LAUNCHER_PREBUILT_PATH_HERE/license/xplat-launcher-third-party-licenses.html")
+     copyFile(execPath, distBinDir.resolve(context.productProperties.baseFileName))
+     copyFile(licensePath, targetPath.resolve("license/launcher-third-party-libraries.html"))
+   }
+--- a/platform/build-scripts/src/org/jetbrains/intellij/build/impl/brokenPlugins.kt
++++ b/platform/build-scripts/src/org/jetbrains/intellij/build/impl/brokenPlugins.kt
+@@ -9,6 +9,8 @@
+ import java.io.ByteArrayOutputStream
+ import java.io.DataOutputStream
+ import java.util.*
++import java.nio.file.Path
++import kotlin.io.path.readText
+
+ private const val MARKETPLACE_BROKEN_PLUGINS_URL = "https://plugins.jetbrains.com/files/brokenPlugins.json"
+
+@@ -19,7 +21,7 @@
+   val span = Span.current()
+
+   val allBrokenPlugins = try {
+-    val content = downloadAsText(MARKETPLACE_BROKEN_PLUGINS_URL)
++    val content = Path.of("BROKEN_PLUGINS_HERE").readText()
+     @Suppress("JSON_FORMAT_REDUNDANT")
+     Json { ignoreUnknownKeys = true }.decodeFromString(ListSerializer(MarketplaceBrokenPlugin.serializer()), content)
+   }
+--- a/platform/build-scripts/src/org/jetbrains/intellij/build/kotlin/KotlinCompilerDependencyDownloader.kt
++++ b/platform/build-scripts/src/org/jetbrains/intellij/build/kotlin/KotlinCompilerDependencyDownloader.kt
+@@ -23,31 +23,11 @@
+ 
+ object KotlinCompilerDependencyDownloader {
+   fun downloadAndExtractKotlinCompiler(communityRoot: BuildDependenciesCommunityRoot): Path {
+-    val kotlinJpsPluginVersion = getKotlinJpsPluginVersion(communityRoot)
+-    val kotlinDistUrl = getUriForMavenArtifact(MAVEN_REPOSITORY_URL, ARTIFACT_GROUP_ID, "kotlin-dist-for-ide", kotlinJpsPluginVersion, "jar")
+-    val kotlinDistJar = downloadFileToCacheLocation(communityRoot, kotlinDistUrl)
+-    return extractFileToCacheLocation(communityRoot, kotlinDistJar)
++    return Path.of("KOTLIN_PATH_HERE")
+   }
+ 
+   suspend fun downloadKotlinJpsPlugin(communityRoot: BuildDependenciesCommunityRoot): Path = withContext(Dispatchers.IO) {
+-    val kotlinJpsPluginVersion = getKotlinJpsPluginVersion(communityRoot)
+-    val kotlinJpsPluginUrl = getUriForMavenArtifact(MAVEN_REPOSITORY_URL, ARTIFACT_GROUP_ID, "kotlin-jps-plugin-classpath", kotlinJpsPluginVersion, "jar")
+-
+-    val cacheLocation = getTargetFile(communityRoot, kotlinJpsPluginUrl.toString())
+-    if (cacheLocation.exists()) {
+-      return@withContext cacheLocation
+-    }
+-
+-    // Download file by hand since calling entire ktor/cio/coroutines stuff *before* loading JPS plugin into classpath
+-    // leads to funny kotlin-reflect failures later in Kotlin JPS plugin
+-    // Ideal solution would be to move compilation to other process altogether and do not modify current process classpath
+-    println(" * Downloading $kotlinJpsPluginUrl")
+-    val tmpLocation = Files.createTempFile(cacheLocation.parent, cacheLocation.name, ".tmp")
+-    retryWithExponentialBackOff {
+-      FileUtils.copyURLToFile(kotlinJpsPluginUrl.toURL(), tmpLocation.toFile())
+-    }
+-    Files.move(tmpLocation, cacheLocation, StandardCopyOption.ATOMIC_MOVE)
+-    return@withContext cacheLocation
++    return@withContext Path.of("JPS_PLUGIN_CLASSPATH_HERE")
+   }
+ 
+   fun getKotlinJpsPluginVersion(communityRoot: BuildDependenciesCommunityRoot): String {
+--- a/platform/build-scripts/downloader/src/ktor.kt
++++ b/platform/build-scripts/downloader/src/ktor.kt
+@@ -221,6 +221,11 @@
+   val lock = fileLocks.getLock(targetPath.hashCode())
+   lock.lock()
+   try {
++    if (url.startsWith("/")) {
++      var sourceUrl = Path.of(url)
++      Files.copy(sourceUrl, target)
++    }
++
+     if (Files.exists(target)) {
+       Span.current().addEvent("use asset from cache", Attributes.of(
+         AttributeKey.stringKey("url"), url,

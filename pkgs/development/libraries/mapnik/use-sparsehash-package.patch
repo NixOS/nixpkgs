@@ -1,0 +1,19 @@
+commit c1cea9e10ffec54d0f675478e541ee4a6e87f653
+Author: Tom Hughes <tom@compton.nu>
+Date:   Wed Jun 5 18:45:57 2013 +0100
+
+    Use system sparsehash
+
+diff --git a/include/mapnik/palette.hpp b/include/mapnik/palette.hpp
+index 5f96272..44d06aa 100644
+--- a/include/mapnik/palette.hpp
++++ b/include/mapnik/palette.hpp
+@@ -33,7 +33,7 @@
+ #pragma GCC diagnostic push
+ #include <mapnik/warning_ignore.hpp>
+ #ifdef USE_DENSE_HASH_MAP
+-#include <mapnik/sparsehash/dense_hash_map>
++#include <google/dense_hash_map>
+ using rgba_hash_table = google::dense_hash_map<unsigned int, unsigned char>;
+ #else
+ #include <unordered_map>

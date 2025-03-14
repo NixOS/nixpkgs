@@ -1,0 +1,25 @@
+From fa705235cafbeb4a016bdcb0067218b29506eb84 Mon Sep 17 00:00:00 2001
+From: OPNA2608 <opna2608@protonmail.com>
+Date: Fri, 19 Jul 2024 16:22:07 +0200
+Subject: [PATCH] Unset QT_QPA_PLATFORMTHEME
+
+gtk3 value breaks Lomiri startup
+---
+ lomiri-session.in | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/lomiri-session.in b/lomiri-session.in
+index 50dd4cb..ffc20c4 100755
+--- a/lomiri-session.in
++++ b/lomiri-session.in
+@@ -55,6 +55,7 @@ dbus-update-activation-environment --systemd MALIIT_FORCE_DBUS_CONNECTION=1
+ dbus-update-activation-environment --systemd QT_IM_MODULE=maliit
+ dbus-update-activation-environment --systemd GTK_IM_MODULE=maliit
+ dbus-update-activation-environment --systemd QT_QPA_PLATFORM=wayland
++dbus-update-activation-environment --systemd QT_QPA_PLATFORMTHEME=
+ dbus-update-activation-environment --systemd SDL_VIDEODRIVER=wayland
+ dbus-update-activation-environment --systemd QT_WAYLAND_DISABLE_WINDOWDECORATION=1
+ dbus-update-activation-environment --systemd QT_ACCESSIBILITY=1
+-- 
+2.44.1
+

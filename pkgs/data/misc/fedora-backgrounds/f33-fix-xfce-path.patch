@@ -1,0 +1,15 @@
+diff --git a/default/Makefile b/default/Makefile
+index ec8095a..9391f8f 100644
+--- a/default/Makefile
++++ b/default/Makefile
+@@ -48,8 +48,8 @@ install:
+ 	
+ 	#~ XFCE background
+ 	$(MKDIR) $(XFCE_BG_DIR)
+-	$(LN_S) ../default/$(WP_NAME)-02-day.png \
++	$(LN_S) ../../backgrounds/$(WP_NAME)/default/$(WP_NAME)-02-day.png \
+ 			$(XFCE_BG_DIR)/$(WP_NAME).png
+ 	for tod in 01-dawn 03-dusk 04-night; do \
+-	   $(LN_S) ../default/$(WP_NAME)-$${tod}.png $(XFCE_BG_DIR)/$(WP_NAME)-$${tod}.png; \
++	   $(LN_S) ../../backgrounds/$(WP_NAME)/default/$(WP_NAME)-$${tod}.png $(XFCE_BG_DIR)/$(WP_NAME)-$${tod}.png; \
+ 	done;

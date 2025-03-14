@@ -1,0 +1,55 @@
+diff -ur a/dist/aclocal/mutex.m4 b/dist/aclocal/mutex.m4
+--- a/dist/aclocal/mutex.m4	1969-12-31 19:00:01.000000000 -0500
++++ b/dist/aclocal/mutex.m4	2023-06-05 19:14:47.214158196 -0400
+@@ -372,10 +376,11 @@
+ 
+ # _spin_lock_try/_spin_unlock: Apple/Darwin
+ if test "$db_cv_mutex" = no; then
+-AC_TRY_LINK(,[
+-	int x;
+-	_spin_lock_try(&x);
+-	_spin_unlock(&x);
++AC_TRY_LINK([
++#include <os/lock.h>],[
++	os_unfair_lock x = OS_UNFAIR_LOCK_INIT;
++	bool _ = os_unfair_lock_trylock(&x);
++	os_unfair_lock_unlock(&x);
+ ], [db_cv_mutex=Darwin/_spin_lock_try])
+ fi
+ 
+diff -ur a/dbinc/mutex_int.h b/dbinc/mutex_int.h
+--- a/dbinc/mutex_int.h	1969-12-31 19:00:01.000000000 -0500
++++ b/dbinc/mutex_int.h	2023-06-05 19:15:37.510514745 -0400
+@@ -154,14 +154,13 @@
+  * Apple/Darwin library functions.
+  *********************************************************************/
+ #ifdef HAVE_MUTEX_DARWIN_SPIN_LOCK_TRY
+-typedef u_int32_t tsl_t;
++#include <os/lock.h>
++typedef os_unfair_lock tsl_t;
+ 
+ #ifdef LOAD_ACTUAL_MUTEX_CODE
+-extern int _spin_lock_try(tsl_t *);
+-extern void _spin_unlock(tsl_t *);
+-#define	MUTEX_SET(tsl)          _spin_lock_try(tsl)
+-#define	MUTEX_UNSET(tsl)        _spin_unlock(tsl)
+-#define	MUTEX_INIT(tsl)         (MUTEX_UNSET(tsl), 0)
++#define	MUTEX_SET(tsl)          os_unfair_lock_trylock(tsl)
++#define	MUTEX_UNSET(tsl)        os_unfair_lock_unlock(tsl)
++#define	MUTEX_INIT(tsl)         ({ *(tsl) = OS_UNFAIR_LOCK_INIT; tsl; })
+ #endif
+ #endif
+ 
+diff -ur a/dbinc/mutex_int.h b/dbinc/mutex_int.h
+--- a/dbinc_auto/mutex_ext.h	1969-12-31 19:00:01.000000000 -0500
++++ b/dbinc_auto/mutex_ext.h	2023-07-01 22:38:20.749201366 -0400
+@@ -34,6 +34,9 @@
+ #if !defined(HAVE_ATOMIC_SUPPORT) && defined(HAVE_MUTEX_SUPPORT)
+ atomic_value_t __atomic_dec __P((ENV *, db_atomic_t *));
+ #endif
++#if !defined(HAVE_ATOMIC_SUPPORT) && defined(HAVE_MUTEX_SUPPORT)
++int atomic_compare_exchange __P((ENV *, db_atomic_t *, atomic_value_t, atomic_value_t));
++#endif
+ int __db_pthread_mutex_init __P((ENV *, db_mutex_t, u_int32_t));
+ int __db_pthread_mutex_lock __P((ENV *, db_mutex_t));
+ #if defined(HAVE_SHARED_LATCHES)

@@ -1,0 +1,29 @@
+From abd7dd05b440e3dc9621a1579e4afb0267897d9c Mon Sep 17 00:00:00 2001
+From: Finn Behrens <me@kloenk.de>
+Date: Fri, 5 Mar 2021 21:58:57 +0100
+Subject: [PATCH] use nix date path
+
+---
+ src/faketime.c | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
+
+diff --git a/src/faketime.c b/src/faketime.c
+index af618f2..48e47da 100644
+--- a/src/faketime.c
++++ b/src/faketime.c
+@@ -50,11 +50,7 @@
+ 
+ const char version[] = "0.9.10";
+ 
+-#if (defined __APPLE__) || (defined __sun)
+-static const char *date_cmd = "gdate";
+-#else
+-static const char *date_cmd = "date";
+-#endif
++static const char *date_cmd = "@DATE_CMD@";
+ 
+ #define PATH_BUFSIZE 4096
+ 
+-- 
+2.24.3 (Apple Git-128)
+

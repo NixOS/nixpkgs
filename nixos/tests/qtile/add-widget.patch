@@ -1,0 +1,19 @@
+--- a/config.py	2024-05-31 14:49:23.852287845 +0200
++++ b/config.py	2024-05-31 14:51:00.935182266 +0200
+@@ -29,6 +29,8 @@
+ from libqtile.lazy import lazy
+ from libqtile.utils import guess_terminal
+ 
++from qtile_extras import widget
++
+ mod = "mod4"
+ terminal = guess_terminal()
+ 
+@@ -162,6 +164,7 @@
+                 # NB Systray is incompatible with Wayland, consider using StatusNotifier instead
+                 # widget.StatusNotifier(),
+                 widget.Systray(),
++                widget.AnalogueClock(),
+                 widget.Clock(format="%Y-%m-%d %a %I:%M %p"),
+                 widget.QuickExit(),
+             ],

@@ -1,0 +1,29 @@
+From ca4c52a80532732243067eb00ec12b4ef84010a6 Mon Sep 17 00:00:00 2001
+From: OPNA2608 <opna2608@protonmail.com>
+Date: Tue, 30 Jan 2024 19:46:09 +0100
+Subject: [PATCH] Nixpkgs versioned QML path
+
+---
+ src/LomiriToolkit/uctheme.cpp | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/src/LomiriToolkit/uctheme.cpp b/src/LomiriToolkit/uctheme.cpp
+index a10c89344..4b0653589 100644
+--- a/src/LomiriToolkit/uctheme.cpp
++++ b/src/LomiriToolkit/uctheme.cpp
+@@ -180,6 +180,12 @@ QStringList themeSearchPath()
+         pathList << QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation);
+     }
+
++    // append versioned QML import path from Nixpkgs
++    const QString nixpkgsQmlImportPath = QString::fromLocal8Bit(getenv("NIXPKGS_QT@qtVersion@_QML_IMPORT_PATH"));
++    if (!nixpkgsQmlImportPath.isEmpty()) {
++        pathList << nixpkgsQmlImportPath.split(':', QString::SkipEmptyParts);
++    }
++
+     // append QML import path(s); we must explicitly support env override here
+     const QString qml2ImportPath = QString::fromLocal8Bit(getenv("QML2_IMPORT_PATH"));
+     if (!qml2ImportPath.isEmpty()) {
+--
+2.42.0
+

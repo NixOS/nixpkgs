@@ -1,0 +1,17 @@
+diff --git a/nmap/nmap.py b/nmap/nmap.py
+index 91c460d..8c5ff0a 100755
+--- a/nmap/nmap.py
++++ b/nmap/nmap.py
+@@ -77,11 +77,7 @@ class PortScanner(object):
+     def __init__(
+         self,
+         nmap_search_path=(
+-            "nmap",
+-            "/usr/bin/nmap",
+-            "/usr/local/bin/nmap",
+-            "/sw/bin/nmap",
+-            "/opt/local/bin/nmap",
++            "@nmap@",
+         ),
+     ):
+         """

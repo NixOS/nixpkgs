@@ -1,0 +1,39 @@
+diff --git a/IonKiwi.lz4/IonKiwi.lz4.csproj b/IonKiwi.lz4/IonKiwi.lz4.csproj
+index 312984f..804be5c 100644
+--- a/IonKiwi.lz4/IonKiwi.lz4.csproj
++++ b/IonKiwi.lz4/IonKiwi.lz4.csproj
+@@ -1,7 +1,7 @@
+ ﻿<Project Sdk="Microsoft.NET.Sdk">
+ 
+ 	<PropertyGroup>
+-		<TargetFrameworks>net60</TargetFrameworks>
++		<TargetFramework>net8.0</TargetFramework>
+ 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+ 		<PackageId>IonKiwi.lz4.managed</PackageId>
+ 		<Version>1.0.7</Version>
+diff --git a/Knossos.NET/Knossos.NET.csproj b/Knossos.NET/Knossos.NET.csproj
+index 501faaa..4b563f1 100644
+--- a/Knossos.NET/Knossos.NET.csproj
++++ b/Knossos.NET/Knossos.NET.csproj
+@@ -1,7 +1,7 @@
+ ﻿<Project Sdk="Microsoft.NET.Sdk">
+   <PropertyGroup>
+     <OutputType>WinExe</OutputType>
+-    <TargetFramework>net6.0</TargetFramework>
++    <TargetFramework>net8.0</TargetFramework>
+     <Nullable>enable</Nullable>
+     <!--Avalonia doesen't support TrimMode=link currently,but we are working on that https://github.com/AvaloniaUI/Avalonia/issues/6892 -->
+     <TrimMode>copyused</TrimMode>
+diff --git a/VP.NET/VP.NET.csproj b/VP.NET/VP.NET.csproj
+index 11fa155..2eef420 100644
+--- a/VP.NET/VP.NET.csproj
++++ b/VP.NET/VP.NET.csproj
+@@ -1,7 +1,7 @@
+ <Project Sdk="Microsoft.NET.Sdk">
+ 
+   <PropertyGroup>
+-    <TargetFramework>net6.0</TargetFramework>
++    <TargetFramework>net8.0</TargetFramework>
+     <ImplicitUsings>enable</ImplicitUsings>
+     <Nullable>enable</Nullable>
+   </PropertyGroup>

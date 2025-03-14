@@ -1,0 +1,14 @@
+diff -pNaru5 a/ax99100_sp.h b/ax99100_sp.h
+--- ax99100_sp.h	2022-06-07 16:55:26.621034945 -0400
++++ ax99100_sp.h	2022-06-07 16:58:32.488989767 -0400
+@@ -255,5 +255,10 @@ struct custom_eeprom {
+ #define _INLINE_
+ #endif
+ 
+ #define DEFAULT99100_BAUD 115200
+ #endif
++
++/* #if LINUX_VERSION_CODE >= KERNEL_VERSION(5,18,0) */
++#define pci_alloc_consistent(hwdev,size,dma_handle) dma_alloc_coherent(&hwdev->dev, size, dma_handle, GFP_ATOMIC)
++#define pci_free_consistent(hwdev,size,vaddr,dma_handle) dma_free_coherent(&hwdev->dev, size, vaddr, dma_handle)
++/* #endif */

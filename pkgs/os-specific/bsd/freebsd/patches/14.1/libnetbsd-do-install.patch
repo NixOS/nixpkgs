@@ -1,0 +1,32 @@
+diff --git a/Makefile b/Makefile
+index 22710f3d933..22effc848cf 100644
+--- a/lib/libnetbsd/Makefile
++++ b/lib/libnetbsd/Makefile
+@@ -9,6 +9,26 @@ CFLAGS+=	-I${.CURDIR}
+ 
+ SRCS+=	efun.c sockaddr_snprintf.c strsuftoll.c util.c util.h
+ 
+-INTERNALLIB=
++INCSGROUPS= INCS SYSINCS NETINETINCS
++
++INCS+= \
++	glob.h \
++	pthread.h \
++	rmd160.h \
++	sha1.h \
++	sha2.h \
++	stdlib.h \
++	util.h
++
++SYSINCSDIR= ${INCLUDEDIR}/sys
++SYSINCS+= \
++	sys/cdefs.h \
++	sys/event.h \
++	sys/types.h \
++	sys/wait.h
++
++NETINETINCSDIR= ${INCLUDEDIR}/netinet
++NETINETINCS+= \
++	netinet/in.h
+ 
+ .include <bsd.lib.mk>

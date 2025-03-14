@@ -1,0 +1,12 @@
+diff --git a/tool/fake.rb b/tool/fake.rb
+index 91dfb041c4..9c235f1e3a 100644
+--- a/tool/fake.rb
++++ b/tool/fake.rb
+@@ -48,7 +48,6 @@ class File
+   $builtruby ||= File.join(builddir, config['RUBY_INSTALL_NAME'] + config['EXEEXT'])
+   RbConfig.fire_update!("builddir", builddir)
+   RbConfig.fire_update!("buildlibdir", builddir)
+-  RbConfig.fire_update!("libdir", builddir)
+   RbConfig.fire_update!("prefix", $topdir)
+   RbConfig.fire_update!("top_srcdir", $top_srcdir ||= top_srcdir)
+   RbConfig.fire_update!("extout", $extout)

@@ -1,0 +1,137 @@
+diff '--color=auto' -ur a/subr_prf.c b/subr_prf.c
+--- a/subr_prf.c	2024-09-04 20:07:10.149623000 -0400
++++ b/subr_prf.c	2024-09-04 20:14:10.265336775 -0400
+@@ -64,8 +64,8 @@
+ #else /* !_KERNEL */
+ #include <errno.h>
+ #endif
+-#include <sys/ctype.h>
+-#include <sys/sbuf.h>
++#include <ctype.h>
++#include <usbuf.h>
+ 
+ #ifdef DDB
+ #include <ddb/ddb.h>
+diff '--color=auto' -ur a/subr_sbuf.c b/subr_sbuf.c
+--- a/subr_sbuf.c	2024-09-04 20:07:10.149810000 -0400
++++ b/subr_sbuf.c	2024-09-04 20:22:20.289037135 -0400
+@@ -50,7 +50,7 @@
+ #include <string.h>
+ #endif /* _KERNEL */
+ 
+-#include <sys/sbuf.h>
++#include <usbuf.h>
+ 
+ #ifdef _KERNEL
+ static MALLOC_DEFINE(M_SBUF, "sbuf", "string buffers");
+@@ -96,6 +96,18 @@
+ #define	SBUF_MAXEXTENDINCR	4096
+ #endif
+ 
++/* Per https://cgit.freebsd.org/src/commit/?id=8fa6abb6f4f64f4f23e2920e2aea7996566851a4 */
++#define roundup2 __builtin_align_up
++/* From https://cgit.freebsd.org/src/tree/sys/sys/cdefs.h?id=8fa6abb6f4f64f4f23e2920e2aea7996566851a4 */
++#define __predict_false(exp) __builtin_expect((exp),0)
++
++/* These symbols are exported even though the functions aren’t defined in the public header.
++   Redefine them for consistency. */
++#define sbuf_count_drain usbuf_count_drain
++#define sbuf_drain usbuf_drain
++#define sbuf_nl_terminate usbuf_nl_terminate
++#define sbuf_put_bytes usbuf_put_bytes
++
+ /*
+  * Debugging support
+  */
+diff '--color=auto' -ur a/usbuf.h b/usbuf.h
+--- a/usbuf.h	2024-09-04 20:07:10.150177000 -0400
++++ b/usbuf.h	2024-09-04 20:13:26.469610458 -0400
+@@ -33,6 +33,50 @@
+ 
+ #include <sys/_types.h>
+ 
++#include <stdarg.h>
++
++#define sbuf_new usbuf_new
++#define sbuf_clear usbuf_clear
++#define sbuf_setpos usbuf_setpos
++#define sbuf_bcat usbuf_bcat
++#define sbuf_bcpy usbuf_bcpy
++#define sbuf_cat usbuf_cat
++#define sbuf_cpy usbuf_cpy
++#define sbuf_printf usbuf_printf
++#define sbuf_vprintf usbuf_vprintf
++#define sbuf_putc usbuf_putc
++#define sbuf_set_drain usbuf_set_drain
++#define sbuf_trim usbuf_trim
++#define sbuf_error usbuf_error
++#define sbuf_finish usbuf_finish
++#define sbuf_data usbuf_data
++#define sbuf_len usbuf_len
++#define sbuf_done usbuf_done
++#define sbuf_delete usbuf_delete
++#define sbuf_clear_flags usbuf_clear_flags
++#define sbuf_get_flags usbuf_get_flags
++#define sbuf_set_flags usbuf_set_flags
++#define sbuf_start_section usbuf_start_section
++#define sbuf_end_section usbuf_end_section
++#define sbuf_hexdump usbuf_hexdump
++#define sbuf_putbuf usbuf_putbuf
++#define sbuf_printf_drain usbuf_printf_drain
++
++#define SBUF_FIXEDLEN USBUF_FIXEDLEN
++#define SBUF_AUTOEXTEND USBUF_AUTOEXTEND
++#define SBUF_INCLUDENUL USBUF_INCLUDENUL
++#define SBUF_DRAINTOEOR USBUF_DRAINTOEOR
++#define SBUF_NOWAIT USBUF_NOWAIT
++#define SBUF_USRFLAGMSK USBUF_USRFLAGMSK
++#define SBUF_DYNAMIC USBUF_DYNAMIC
++#define SBUF_FINISHED USBUF_FINISHED
++#define SBUF_DYNSTRUCT USBUF_DYNSTRUCT
++#define SBUF_INSECTION USBUF_INSECTION
++#define SBUF_DRAINATEOL USBUF_DRAINATEOL
++
++#define sbuf usbuf
++#define sbuf_drain_func usbuf_drain_func
++
+ struct sbuf;
+ typedef int (sbuf_drain_func)(void *, const char *, int);
+ 
+@@ -46,17 +90,17 @@
+ 	int		 s_error;	/* current error code */
+ 	ssize_t		 s_size;	/* size of storage buffer */
+ 	ssize_t		 s_len;		/* current length of string */
+-#define	SBUF_FIXEDLEN	0x00000000	/* fixed length buffer (default) */
+-#define	SBUF_AUTOEXTEND	0x00000001	/* automatically extend buffer */
+-#define	SBUF_INCLUDENUL	0x00000002	/* nulterm byte is counted in len */
+-#define	SBUF_DRAINTOEOR	0x00000004	/* use section 0 as drain EOR marker */
+-#define	SBUF_NOWAIT	0x00000008	/* Extend with non-blocking malloc */
+-#define	SBUF_USRFLAGMSK	0x0000ffff	/* mask of flags the user may specify */
+-#define	SBUF_DYNAMIC	0x00010000	/* s_buf must be freed */
+-#define	SBUF_FINISHED	0x00020000	/* set by sbuf_finish() */
+-#define	SBUF_DYNSTRUCT	0x00080000	/* sbuf must be freed */
+-#define	SBUF_INSECTION	0x00100000	/* set by sbuf_start_section() */
+-#define	SBUF_DRAINATEOL	0x00200000	/* drained contents ended in \n */
++#define	USBUF_FIXEDLEN	0x00000000	/* fixed length buffer (default) */
++#define	USBUF_AUTOEXTEND	0x00000001	/* automatically extend buffer */
++#define	USBUF_INCLUDENUL	0x00000002	/* nulterm byte is counted in len */
++#define	USBUF_DRAINTOEOR	0x00000004	/* use section 0 as drain EOR marker */
++#define	USBUF_NOWAIT	0x00000008	/* Extend with non-blocking malloc */
++#define	USBUF_USRFLAGMSK	0x0000ffff	/* mask of flags the user may specify */
++#define	USBUF_DYNAMIC	0x00010000	/* s_buf must be freed */
++#define	USBUF_FINISHED	0x00020000	/* set by sbuf_finish() */
++#define	USBUF_DYNSTRUCT	0x00080000	/* sbuf must be freed */
++#define	USBUF_INSECTION	0x00100000	/* set by sbuf_start_section() */
++#define	USBUF_DRAINATEOL	0x00200000	/* drained contents ended in \n */
+ 	int		 s_flags;	/* flags */
+ 	ssize_t		 s_sect_len;	/* current length of section */
+ 	ssize_t		 s_rec_off;	/* current record start offset */
+@@ -88,7 +132,7 @@
+ int		 sbuf_cpy(struct sbuf *, const char *);
+ int		 sbuf_printf(struct sbuf *, const char *, ...)
+ 	__printflike(2, 3);
+-int		 sbuf_vprintf(struct sbuf *, const char *, __va_list)
++int		 sbuf_vprintf(struct sbuf *, const char *, va_list)
+ 	__printflike(2, 0);
+ int		 sbuf_nl_terminate(struct sbuf *);
+ int		 sbuf_putc(struct sbuf *, int);

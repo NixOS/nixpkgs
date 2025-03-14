@@ -1,0 +1,58 @@
+diff --git a/src/dir.c b/src/dir.c
+index 3e94b98..cfaa6a2 100644
+--- a/src/dir.c
++++ b/src/dir.c
+@@ -1331,10 +1331,9 @@ local_stat (const char *path, struct stat *buf)
+ 
+ /* Similarly for lstat.  */
+ #if !defined(lstat) && !defined(WINDOWS32) || defined(VMS)
+-# ifndef VMS
+-#  ifndef HAVE_SYS_STAT_H
++// mes-libc implements but does not declare lstat
++# if (!defined(VMS) && !defined(HAVE_SYS_STAT_H)) || defined(__TINYC__)
+ int lstat (const char *path, struct stat *sbuf);
+-#  endif
+ # else
+     /* We are done with the fake lstat.  Go back to the real lstat */
+ #   ifdef lstat
+diff --git a/src/job.c b/src/job.c
+index ea88561..8388a82 100644
+--- a/src/job.c
++++ b/src/job.c
+@@ -2052,7 +2052,8 @@ job_next_command (struct child *child)
+ static int
+ load_too_high (void)
+ {
+-#if defined(__MSDOS__) || defined(VMS) || defined(_AMIGA) || defined(__riscos__)
++// mes-libc does not support getloadavg
++#if defined(__MSDOS__) || defined(VMS) || defined(_AMIGA) || defined(__riscos__) || defined (__TINYC__)
+   return 1;
+ #else
+   static double last_sec;
+diff --git a/src/main.c b/src/main.c
+index a9d3a64..664d40f 100644
+--- a/src/main.c
++++ b/src/main.c
+@@ -2770,7 +2770,7 @@ main (int argc, char **argv, char **envp)
+               char *b = alloca (40);
+               sprintf (b, "MAKE_RESTARTS=%s%u",
+                        OUTPUT_IS_TRACED () ? "-" : "", restarts);
+-              putenv (b);
++              // mes-libc does not support putenv
+             }
+ 
+           fflush (stdout);
+diff --git a/src/misc.c b/src/misc.c
+index eb14f40..bffca82 100644
+--- a/src/misc.c
++++ b/src/misc.c
+@@ -653,7 +653,8 @@ get_tmppath ()
+ 
+ # ifdef HAVE_MKTEMP
+   path = get_tmptemplate ();
+-  if (*mktemp (path) == '\0')
++  // tinycc: "src/misc.c:656: error: pointer expected"
++  if (!strcmp(mktemp (path), ""))
+     {
+       OSS (error, NILF,
+            _("cannot generate temp path from %s: %s"), path, strerror (errno));

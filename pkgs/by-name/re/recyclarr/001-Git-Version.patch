@@ -1,0 +1,14 @@
+diff --git a/Directory.Build.props b/Directory.Build.props
+index af8e3b12..07dd1898 100644
+--- a/Directory.Build.props
++++ b/Directory.Build.props
+@@ -9,7 +9,7 @@
+     <RepositoryRoot>$(MSBuildThisFileDirectory)</RepositoryRoot>
+     <TestDirectory>$(RepositoryRoot)tests\</TestDirectory>
+     <GitVersionBaseDirectory>$(RepositoryRoot)</GitVersionBaseDirectory>
+-    <!--<DisableGitVersionTask>true</DisableGitVersionTask>-->
++    <DisableGitVersionTask>true</DisableGitVersionTask>
+   </PropertyGroup>
+ 
+   <!--
+   

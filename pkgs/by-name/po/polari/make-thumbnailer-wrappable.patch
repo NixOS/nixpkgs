@@ -1,0 +1,25 @@
+diff --git a/src/thumbnailer.js b/src/thumbnailer.js
+old mode 100644
+new mode 100755
+index 4f7a2840..55c20199
+--- a/src/thumbnailer.js
++++ b/src/thumbnailer.js
+@@ -1,3 +1,5 @@
++#!/usr/bin/env gjs --module
++
+ // SPDX-FileCopyrightText: 2019 daronion <stefanosdimos.98@gmail.com>
+ // SPDX-FileCopyrightText: 2019 Florian Müllner <fmuellner@gnome.org>
+ //
+diff --git a/src/urlPreview.js b/src/urlPreview.js
+index 5f7931e4..d2282900 100644
+--- a/src/urlPreview.js
++++ b/src/urlPreview.js
+@@ -69,7 +69,7 @@ class Thumbnailer {
+     async _generateThumbnail(data) {
+         let { filename, uri } = data;
+         this._subProc = Gio.Subprocess.new(
+-            ['gjs', '--module', `${pkg.pkgdatadir}/thumbnailer.js`, uri, filename],
++            [`${pkg.pkgdatadir}/thumbnailer.js`, uri, filename],
+             Gio.SubprocessFlags.NONE);
+         try {
+             await this._subProc.wait_async(null);

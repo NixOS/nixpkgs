@@ -1,0 +1,18 @@
+diff --git a/service.py b/service.py
+index 024ad9a..6ef71dd 100644
+--- a/service.py
++++ b/service.py
+@@ -243,11 +243,8 @@ def playlistIndex(url, playlist):
+ 
+ 
+ # Use the chosen resolver while forcing to use youtube_dl on legacy python 2 systems (dlp is python 3.6+)
+-if xbmcplugin.getSetting(int(sys.argv[1]),"resolver") == "0" or sys.version_info[0] == 2:
+-    from lib.youtube_dl import YoutubeDL
+-else:
+-    from lib.yt_dlp import YoutubeDL
+-    
++from yt_dlp import YoutubeDL
++
+ # patch broken strptime (see above)
+ patch_strptime()
+ 

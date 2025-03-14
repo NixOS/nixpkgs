@@ -1,0 +1,38 @@
+# Build settings based on the upstream Xcode project.
+# See: https://github.com/apple-oss-distributions/copyfile/blob/main/copyfile.xcodeproj/project.pbxproj
+
+# Project settings
+project('copyfile', 'c', version : '@version@')
+
+
+# Dependencies
+cc = meson.get_compiler('c')
+
+
+# Libraries
+library(
+    'copyfile',
+    c_args : [
+        '-D__DARWIN_NOW_CANCELABLE=1',
+        # https://github.com/apple-oss-distributions/xnu/blob/94d3b452840153a99b38a3a9659680b2a006908e/bsd/sys/clonefile.h#L35
+        '-DCLONE_ACL=0x0004',
+        # https://github.com/apple-oss-distributions/xnu/blob/94d3b452840153a99b38a3a9659680b2a006908e/bsd/sys/kdebug.h#L691
+        '-DDBG_DECMP=0x12',
+        # https://github.com/apple-oss-distributions/xnu/blob/94d3b452840153a99b38a3a9659680b2a006908e/libkern/os/base.h#L129
+        '-DOS_FALLTHROUGH=__attribute__((__fallthrough__))',
+    ],
+    install : true,
+    sources : [
+        'copyfile.c',
+        'xattr_flags.c',
+    ],
+)
+install_headers(
+    'copyfile.h',
+    'xattr_flags.h',
+    'xattr_properties.h',
+)
+install_man(
+    'copyfile.3',
+    'xattr_name_with_flags.3',
+)

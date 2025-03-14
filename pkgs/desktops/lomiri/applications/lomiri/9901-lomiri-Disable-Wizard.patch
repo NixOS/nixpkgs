@@ -1,0 +1,30 @@
+From b7757a71bbce18b4718474cab6a7ff7b613f8c86 Mon Sep 17 00:00:00 2001
+From: OPNA2608 <opna2608@protonmail.com>
+Date: Sun, 19 Nov 2023 13:25:55 +0100
+Subject: [PATCH] lomiri: Disable Wizard
+
+NixOS does all of this configuration statically at generation build & setup time. For us this just ends up being series of screens
+re-confirming abunch of things set in your configuration, so pointless.
+---
+ plugins/Wizard/System.cpp | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
+
+diff --git a/plugins/Wizard/System.cpp b/plugins/Wizard/System.cpp
+index aee8184a8..06c867023 100644
+--- a/plugins/Wizard/System.cpp
++++ b/plugins/Wizard/System.cpp
+@@ -69,10 +69,7 @@ bool System::wizardPathExists() {
+ 
+ bool System::wizardEnabled() const
+ {
+-    if (!wizardPathExists()) {
+-        return true;
+-    }
+-    return isUpdate();
++    return false;
+ }
+ 
+ QString System::readCurrentFramework()
+-- 
+2.40.1
+

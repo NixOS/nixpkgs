@@ -1,0 +1,76 @@
+diff --git a/bottles/frontend/ui/preferences.blp b/bottles/frontend/ui/preferences.blp
+index 9dd12a16..c1fcf649 100644
+--- a/bottles/frontend/ui/preferences.blp
++++ b/bottles/frontend/ui/preferences.blp
+@@ -284,20 +284,6 @@ template $PreferencesWindow: Adw.PreferencesWindow {
+     }
+   }
+ 
+-  Adw.PreferencesPage pref_core {
+-    icon-name: "application-x-addon-symbolic";
+-    title: _("Core");
+-    visible: false;
+-
+-    Adw.PreferencesGroup list_runtimes {
+-      title: _("Runtime");
+-    }
+-
+-    Adw.PreferencesGroup list_winebridge {
+-      title: _("WineBridge");
+-    }
+-  }
+-
+   Adw.PreferencesPage {
+     icon-name: "applications-science-symbolic";
+     title: _("Experiments");
+diff --git a/bottles/frontend/views/preferences.py b/bottles/frontend/views/preferences.py
+index ce7ec958..f46c6e5b 100644
+--- a/bottles/frontend/views/preferences.py
++++ b/bottles/frontend/views/preferences.py
+@@ -53,8 +53,6 @@ class PreferencesWindow(Adw.PreferencesWindow):
+     switch_steam_programs = Gtk.Template.Child()
+     switch_epic_games = Gtk.Template.Child()
+     switch_ubisoft_connect = Gtk.Template.Child()
+-    list_winebridge = Gtk.Template.Child()
+-    list_runtimes = Gtk.Template.Child()
+     list_runners = Gtk.Template.Child()
+     list_dxvk = Gtk.Template.Child()
+     list_vkd3d = Gtk.Template.Child()
+@@ -66,7 +64,6 @@ class PreferencesWindow(Adw.PreferencesWindow):
+     btn_bottles_path_reset = Gtk.Template.Child()
+     label_bottles_path = Gtk.Template.Child()
+     btn_steam_proton_doc = Gtk.Template.Child()
+-    pref_core = Gtk.Template.Child()
+ 
+     # endregion
+ 
+@@ -170,10 +167,6 @@ class PreferencesWindow(Adw.PreferencesWindow):
+             self.installers_stack.set_visible_child_name("installers_offline")
+             self.dlls_stack.set_visible_child_name("dlls_offline")
+ 
+-        # populate components lists
+-        self.populate_runtimes_list()
+-        self.populate_winebridge_list()
+-
+         RunAsync(self.ui_update)
+ 
+         # connect signals
+@@ -319,18 +312,6 @@ class PreferencesWindow(Adw.PreferencesWindow):
+             list_component.add(_entry)
+             self.__registry.append(_entry)
+ 
+-    def populate_runtimes_list(self):
+-        for runtime in self.manager.supported_runtimes.items():
+-            self.list_runtimes.add(
+-                ComponentEntry(self.window, runtime, "runtime", is_upgradable=True)
+-            )
+-
+-    def populate_winebridge_list(self):
+-        for bridge in self.manager.supported_winebridge.items():
+-            self.list_winebridge.add(
+-                ComponentEntry(self.window, bridge, "winebridge", is_upgradable=True)
+-            )
+-
+     def populate_dxvk_list(self):
+         self.__populate_component_list(
+             "dxvk", self.manager.supported_dxvk, self.list_dxvk
