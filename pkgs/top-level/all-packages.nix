@@ -11937,8 +11937,6 @@ with pkgs;
     inherit (darwin) IOKit;
   };
 
-  htop-vim = callPackage ../tools/system/htop/htop-vim.nix { };
-
   humility = callPackage ../development/tools/rust/humility {
     inherit (darwin.apple_sdk.frameworks) AppKit;
   };
