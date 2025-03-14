@@ -23,7 +23,6 @@
 , sysctl
 , buildLlvmTools
 , updateAutotoolsGnuConfigScriptsHook
-, debugVersion ? false
 , enableManpages ? false
 , enableSharedLibraries ? !stdenv.hostPlatform.isStatic
 , enablePFM ? stdenv.hostPlatform.isLinux /* PFM only supports Linux */
@@ -488,7 +487,8 @@ stdenv.mkDerivation (finalAttrs: {
   # E.g. Mesa uses the build-id as a cache key (see #93946):
   LDFLAGS = optionalString (enableSharedLibraries && !stdenv.hostPlatform.isDarwin) "-Wl,--build-id=sha1";
 
-  cmakeBuildType = if debugVersion then "Debug" else "Release";
+  # Default to "Release"
+  cmakeBuildType = "Release";
 
   cmakeFlags = let
     # These flags influence llvm-config's BuildVariables.inc in addition to the
@@ -575,7 +575,7 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $python/share
     mv $out/share/opt-viewer $python/share/opt-viewer
     moveToOutput "bin/llvm-config*" "$dev"
-    substituteInPlace "$dev/lib/cmake/llvm/LLVMExports-${if debugVersion then "debug" else "release"}.cmake" \
+    substituteInPlace "$dev/lib/cmake/llvm/LLVMExports-${lib.toLower finalAttrs.finalPackage.cmakeBuildType}.cmake" \
       --replace-fail "$out/bin/llvm-config" "$dev/bin/llvm-config"
   '' + (if lib.versionOlder release_version "15" then ''
     substituteInPlace "$dev/lib/cmake/llvm/LLVMConfig.cmake" \
