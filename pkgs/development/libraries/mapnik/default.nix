@@ -27,14 +27,14 @@
   sparsehash,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mapnik";
   version = "4.0.6";
 
   src = fetchFromGitHub {
     owner = "mapnik";
     repo = "mapnik";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-VetVEX9B8Q9zTDfI3PksaybM4qnvdNVgVxH+Rahmc64=";
     fetchSubmodules = true;
   };
@@ -118,22 +118,20 @@ stdenv.mkDerivation rec {
   '';
 
   preInstall = ''
-    mkdir -p $out/bin
-    cp ../utils/mapnik-config/mapnik-config $out/bin/mapnik-config
+    install -Dm755 ../utils/mapnik-config/mapnik-config -t $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Open source toolkit for developing mapping applications";
     homepage = "https://mapnik.org";
     maintainers =
-      with maintainers;
-      teams.geospatial.members
-      ++ [
+      lib.teams.geospatial.members
+      ++ (with lib.maintainers; [
         hrdinka
         hummeltech
-      ];
-    license = licenses.lgpl21Plus;
-    platforms = platforms.all;
+      ]);
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.all;
 
     # 29-03-2025: On darwin, the libc++ standard library is used to compile C++ programs.
     # 29-03-2025: Since the base template for `std::char_traits` was removed in LLVM 19,
@@ -143,6 +141,6 @@ stdenv.mkDerivation rec {
     #
     # 29-03-2025: See https://github.com/mapnik/mapnik/issues/4499 for more information
     # 29-03-2025: and a Minimal Reproducible Example.
-    badPlatforms = platforms.darwin;
+    badPlatforms = lib.platforms.darwin;
   };
-}
+})
