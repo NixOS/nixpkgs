@@ -23,8 +23,12 @@ buildGoModule rec {
 
   doCheck = false;
 
-  # Only build gopls, and not the integration tests or documentation generator.
-  subPackages = [ "." ];
+  # Only build gopls, gofix, modernize, and not the integration tests or documentation generator.
+  subPackages = [
+    "."
+    "internal/analysis/gofix/cmd/gofix"
+    "internal/analysis/modernize/cmd/modernize"
+  ];
 
   meta = with lib; {
     description = "Official language server for the Go language";
