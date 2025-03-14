@@ -1285,7 +1285,7 @@ in {
   wrappers = handleTest ./wrappers.nix {};
   writefreely = handleTest ./web-apps/writefreely.nix {};
   wstunnel = runTest ./wstunnel.nix;
-  xandikos = handleTest ./xandikos.nix {};
+  xandikos = runTest ./xandikos.nix;
   xautolock = runTest ./xautolock.nix;
   xfce = runTest ./xfce.nix;
   xfce-wayland = runTest ./xfce-wayland.nix;
