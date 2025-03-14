@@ -158,7 +158,6 @@ python3.pkgs.buildPythonApplication rec {
       joachifm
       np
       prusnak
-      chewblacka
     ];
     mainProgram = "electrum";
   };
