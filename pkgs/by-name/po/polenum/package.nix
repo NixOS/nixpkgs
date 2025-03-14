@@ -4,7 +4,7 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication {
   pname = "polenum";
   version = "1.6.1-unstable-2024-07-30";
   format = "other";

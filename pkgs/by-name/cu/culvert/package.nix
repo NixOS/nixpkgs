@@ -8,7 +8,7 @@
   dtc,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "culvert";
   version = "0.4.0.unstable-2024-10-17";
 

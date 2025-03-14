@@ -13,7 +13,7 @@
   libsoup_2_4,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "timezonemap";
   version = "0.4.5.1";
 

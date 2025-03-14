@@ -12,7 +12,7 @@
   wayland-scanner,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "oguri";
   version = "unstable-2020-12-19";
 

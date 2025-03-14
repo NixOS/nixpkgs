@@ -8,7 +8,7 @@
   texinfo,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "guile-xcb";
   version = "unstable-2017-05-29";
 

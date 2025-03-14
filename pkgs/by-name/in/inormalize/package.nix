@@ -9,7 +9,7 @@
   ebtks,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "inormalize";
   version = "unstable-2014-10-21";
 

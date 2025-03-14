@@ -10,7 +10,7 @@
   libxkbcommon,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "wev";
   version = "1.0.0-unstable-2022-09-14";
 

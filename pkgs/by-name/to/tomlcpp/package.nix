@@ -5,7 +5,7 @@
   fetchpatch,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "tomlcpp";
   version = "0.pre+date=2022-06-25";
 

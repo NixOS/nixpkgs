@@ -6,7 +6,7 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "realTimeConfigQuickScan";
   version = "unstable-2020-07-23";
 

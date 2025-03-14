@@ -9,7 +9,7 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "metapixel";
   version = "1.0.2";
 

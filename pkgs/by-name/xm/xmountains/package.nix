@@ -5,7 +5,7 @@
   xorg,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "xmountains";
   version = "2.10";
 
