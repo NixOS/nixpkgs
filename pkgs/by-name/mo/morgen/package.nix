@@ -3,12 +3,12 @@
 
 stdenv.mkDerivation rec {
   pname = "morgen";
-  version = "3.6.6";
+  version = "3.6.9";
 
   src = fetchurl {
     name = "morgen-${version}.deb";
     url = "https://dl.todesktop.com/210203cqcj00tw1/versions/${version}/linux/deb";
-    hash = "sha256-QisOXMj6uUMluPruUjtOEK93l+aZe7qsJUAZ589RzvU=";
+    hash = "sha256-An3CfJQ89aqpxMOf20YG+cuEVDrhgMGAm/Scn4hMV8E=";
   };
 
   nativeBuildInputs = [
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "All-in-one Calendars, Tasks and Scheduler";
-    homepage = "https://morgen.so/download";
+    homepage = "https://morgen.so/";
     mainProgram = "morgen";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
