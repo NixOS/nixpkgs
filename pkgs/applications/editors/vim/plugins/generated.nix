@@ -11515,6 +11515,19 @@ final: prev:
     meta.hydraPlatforms = [ ];
   };
 
+  papercolor-theme-slim = buildVimPlugin {
+    pname = "papercolor-theme-slim";
+    version = "2025-03-09";
+    src = fetchFromGitHub {
+      owner = "pappasam";
+      repo = "papercolor-theme-slim";
+      rev = "ccfb47869077ef0a7880e6fe73f5dfae44298f68";
+      sha256 = "1yvhrfj2i8b3mrglcqhsk02x4p5bqaqynd84kr9dl0xrzl0bjzcz";
+    };
+    meta.homepage = "https://github.com/pappasam/papercolor-theme-slim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   parpar-nvim = buildVimPlugin {
     pname = "parpar.nvim";
     version = "2023-09-12";
