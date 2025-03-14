@@ -1,0 +1,31 @@
+diff --git a/recaf-ui/build.gradle b/recaf-ui/build.gradle
+index 04d19ecc8..6f2af575f 100644
+--- a/recaf-ui/build.gradle
++++ b/recaf-ui/build.gradle
+@@ -5,11 +5,15 @@
+ }
+ 
+ def javaFxVersion = '22.0.1'
+-def javaFxIncludeInDist = System.getProperty('skip_jfx_bundle') == null
++def javaFxPlatform = System.getenv('FX_PLATFORM')
+ 
+ javafx {
+     version = javaFxVersion
+     modules = ['javafx.controls', 'javafx.media']
++
++    if (javaFxPlatform != null) {
++        platform = javaFxPlatform
++    }
+ }
+ 
+ dependencies {
+@@ -39,6 +43,6 @@ implementation project(':recaf-core')
+     exclude "META-INF/*.properties"
+ 
+     dependencies {
+-        exclude(dependency(javaFxIncludeInDist ? 'invalid:invalid:invalid' : 'org.openjfx:.*:.*'))
++        exclude(dependency('org.openjfx:.*:.*'))
+     }
+-}
+\ No newline at end of file
++}
