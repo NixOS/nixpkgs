@@ -2,6 +2,7 @@
   lib,
   libfprint,
   fetchFromGitLab,
+  nss,
 }:
 
 # for the curious, "tod" means "Touch OEM Drivers" meaning it can load
@@ -10,6 +11,7 @@ libfprint.overrideAttrs (
   {
     postPatch ? "",
     mesonFlags ? [ ],
+    buildInputs ? [ ],
     ...
   }:
   let
@@ -26,6 +28,8 @@ libfprint.overrideAttrs (
       rev = "v${version}";
       sha256 = "0cj7iy5799pchyzqqncpkhibkq012g3bdpn18pfb19nm43svhn4j";
     };
+
+    buildInputs = buildInputs ++ [ nss ];
 
     mesonFlags = [
       # Include virtual drivers for fprintd tests
