@@ -3,7 +3,7 @@
   python3Packages,
   fetchFromGitHub,
   versionCheckHook,
-  gitUpdater,
+  nix-update-script,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -18,9 +18,7 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-5S+1YGoPMprWnlsTGGPHtlQT974TsFgct3jVPngTT1k=";
   };
 
-  build-system = [
-    python3Packages.poetry-core
-  ];
+  build-system = [ python3Packages.poetry-core ];
 
   dependencies = with python3Packages; [
     appdirs
@@ -48,16 +46,17 @@ python3Packages.buildPythonApplication rec {
   ];
 
   nativeCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = [ "--version" ];
   versionCheckProgram = "${placeholder "out"}/bin/piston";
+  doInstallCheck = true;
 
   pythonImportsCheck = [ "piston" ];
 
-  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Piston api tool";
     homepage = "https://github.com/Shivansh-007/piston-cli";
+    changelog = "https://github.com/Shivansh-007/piston-cli/releases/tag/v${version}";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ ethancedwards8 ];
