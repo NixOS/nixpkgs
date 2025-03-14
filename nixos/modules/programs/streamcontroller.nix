@@ -14,7 +14,10 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    environment.systemPackages = [ cfg.package ];
+    environment.systemPackages =
+      [ cfg.package ]
+      # Allows automatic detection of windows to switch pages
+      ++ lib.optional config.services.desktopManager.plasma6.enable pkgs.kdotool;
     services.udev.packages = [ cfg.package ];
   };
 
