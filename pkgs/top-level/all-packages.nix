@@ -930,13 +930,13 @@ with pkgs;
       };
     });
   };
-  akkoma-frontends = recurseIntoAttrs {
-    admin-fe = callPackage ../servers/akkoma/admin-fe {
-      nodejs = nodejs_18;
-      yarn = yarn.override { nodejs = nodejs_18; };
-      python3 = python311;
-    };
+
+  akkoma-admin-fe = callPackage ../by-name/ak/akkoma-admin-fe/package.nix {
+    nodejs = nodejs_18;
+    yarn = yarn.override { nodejs = nodejs_18; };
+    python3 = python311;
   };
+
   akkoma-emoji = recurseIntoAttrs {
     blobs_gg = callPackage ../servers/akkoma/emoji/blobs_gg.nix { };
   };
