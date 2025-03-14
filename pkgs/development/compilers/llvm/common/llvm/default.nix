@@ -43,14 +43,14 @@ let
   # LLVM rebuild, but overriding doesn’t work when building libc++, libc++abi,
   # and libunwind. It also wants to disable LTO in the first rebuild.
   isDarwinBootstrap = lib.getName stdenv == "bootstrap-stage-xclang-stdenv-darwin";
-
-  # Used when creating a version-suffixed symlink of libLLVM.dylib
-  shortVersion = lib.concatStringsSep "." (lib.take 1 (lib.splitString "." release_version));
 in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "llvm";
   inherit version;
+
+  # Used when creating a version-suffixed symlink of libLLVM.dylib
+  shortVersion = lib.concatStringsSep "." (lib.take 1 (lib.splitString "." release_version));
 
   # TODO: simplify versionAtLeast condition for cmake and third-party via rebuild
   src = if monorepoSrc != null then
@@ -582,7 +582,7 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail 'set(LLVM_BINARY_DIR "''${LLVM_INSTALL_PREFIX}")' 'set(LLVM_BINARY_DIR "'"$lib"'")'
   '')
   + optionalString (stdenv.hostPlatform.isDarwin && enableSharedLibraries && lib.versionOlder release_version "18") ''
-    ln -s $lib/lib/libLLVM.dylib $lib/lib/libLLVM-${shortVersion}.dylib
+    ln -s $lib/lib/libLLVM.dylib $lib/lib/libLLVM-$shortVersion.dylib
   ''
   + optionalString (stdenv.hostPlatform.isDarwin && enableSharedLibraries) ''
     ln -s $lib/lib/libLLVM.dylib $lib/lib/libLLVM-${release_version}.dylib
