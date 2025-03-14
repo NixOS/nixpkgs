@@ -1,0 +1,9 @@
+{
+  "stable": {
+    "version": "8.10.60"
+  },
+
+  "beta": {
+    "version": "8.10.68-12.BETA"
+  }
+}
