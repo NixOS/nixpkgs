@@ -1300,7 +1300,7 @@ in {
   xxh = handleTest ./xxh.nix {};
   yabar = handleTest ./yabar.nix {};
   ydotool = handleTest ./ydotool.nix {};
-  yggdrasil = handleTest ./yggdrasil.nix {};
+  yggdrasil = runTest ./yggdrasil.nix;
   your_spotify = runTest ./your_spotify.nix;
   zammad = runTest ./zammad.nix;
   zenohd = runTest ./zenohd.nix;
