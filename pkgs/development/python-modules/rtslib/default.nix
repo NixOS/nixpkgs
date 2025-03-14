@@ -2,23 +2,31 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
+
+  # build-system
   hatchling,
   hatch-vcs,
-  six,
+
+  # dependencies
   pyudev,
-  pygobject3,
 }:
 
 buildPythonPackage rec {
   pname = "rtslib";
-  version = "2.2.0";
+  version = "2.2.2";
   pyproject = true;
+
+  # TypeError: 'method' object does not support the context manager protocol
+  postPatch = ''
+    substituteInPlace rtslib/root.py \
+      --replace-fail "Path(restore_file).open" "Path(restore_file).open('r')"
+  '';
 
   src = fetchFromGitHub {
     owner = "open-iscsi";
     repo = "${pname}-fb";
     tag = "v${version}";
-    hash = "sha256-lBYckQlnvIQ6lSENctYsMhzULi1MJAVUyF06Ul56LzA=";
+    hash = "sha256-FuXO/yGZBR+QRvB5s1tE77hjnisSfjjHSCPLvGJOYdM=";
   };
 
   build-system = [
@@ -27,16 +35,23 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
-    six
     pyudev
-    pygobject3
   ];
 
-  meta = with lib; {
+  postInstall = ''
+    install -Dm555 scripts/targetctl -t $out/bin
+  '';
+
+  # No tests
+  doCheck = false;
+
+  meta = {
     description = "Python object API for managing the Linux LIO kernel target";
     mainProgram = "targetctl";
     homepage = "https://github.com/open-iscsi/rtslib-fb";
-    license = licenses.asl20;
-    platforms = platforms.linux;
+    changelog = "https://github.com/open-iscsi/rtslib-fb/releases/tag/v${version}";
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.linux;
+    mainProgram = "targetctl";
   };
 }
