@@ -4949,6 +4949,8 @@ let
         };
       };
 
+      tboby.cwtools-vscode = callPackage ./tboby.cwtools-vscode { };
+
       tomoki1207.pdf = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "pdf";
