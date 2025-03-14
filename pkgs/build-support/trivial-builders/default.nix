@@ -696,7 +696,13 @@ rec {
     {
       # Get the cleaner exportReferencesGraph interface
       __structuredAttrs = true;
-      exportReferencesGraph.graph = paths;
+      exportReferencesGraph.graph = lib.pipe paths [
+        # Reemove null
+        (lib.remove null)
+        # Sort paths to avoid unnecessary rebuild
+        (map (p: "${p}"))
+        (lib.sort lib.lessThan)
+      ];
       nativeBuildInputs = [ jq ];
     }
     ''
