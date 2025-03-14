@@ -96,10 +96,9 @@
 
   config = lib.mkIf config.hardware.nvidia-container-toolkit.enable {
     assertions = [
-      {
-        assertion =
-          config.hardware.nvidia.datacenter.enable || lib.elem "nvidia" config.services.xserver.videoDrivers;
-        message = ''`nvidia-container-toolkit` requires nvidia datacenter or desktop drivers: set `hardware.nvidia.datacenter.enable` or add "nvidia" to `services.xserver.videoDrivers`'';
+      { 
+        assertion = config.hardware.nvidia.enable;
+        message = ''`nvidia-container-toolkit` requires nvidia drivers to be present'';
       }
     ];
 
