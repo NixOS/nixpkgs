@@ -2964,6 +2964,13 @@
     github = "benwis";
     githubId = 6953353;
   };
+  berber = {
+    name = "Zeremonienmeister Berber Aab";
+    github = "zmberber";
+    githubId = 29400525;
+    email = "berber@zmberber.com";
+    matrix = "@zmberber:matrix.org";
+  };
   berberman = {
     email = "berberman@yandex.com";
     matrix = "@berberman:mozilla.org";
