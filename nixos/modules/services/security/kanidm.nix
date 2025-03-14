@@ -790,7 +790,7 @@ in
       ++ concatLists (
         flip mapAttrsToList (filterPresent cfg.provision.systems.oauth2) (
           oauth2: oauth2Cfg:
-          (optionals (cfg.provision.extraJsonFile == null) (
+          (optional (cfg.provision.extraJsonFile == null) (
             assertGroupsKnown "services.kanidm.provision.systems.oauth2.${oauth2}.scopeMaps" (
               attrNames oauth2Cfg.scopeMaps
             )
