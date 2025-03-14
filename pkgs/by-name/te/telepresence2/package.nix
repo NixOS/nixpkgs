@@ -31,13 +31,13 @@ let
 in
 buildGoModule rec {
   pname = "telepresence2";
-  version = "2.21.3";
+  version = "2.22.0";
 
   src = fetchFromGitHub {
     owner = "telepresenceio";
     repo = "telepresence";
     rev = "v${version}";
-    hash = "sha256-s0P8l8EokVGCUXo9Bm+uPtxS9uwIhBULtFeVR/Fl38M=";
+    hash = "sha256-SSzZ54grTt9VJL3avugb3FiKkaF6I+42DUorpmHkhlE=";
   };
 
   propagatedBuildInputs = [
@@ -51,7 +51,7 @@ buildGoModule rec {
     export CGO_ENABLED=0
   '';
 
-  vendorHash = "sha256-FvNC0E367p473yNfbMntSOxh6TYa7OoR6/YbZ7q4WRs=";
+  vendorHash = "sha256-THMWbN/wlBPphQeoZgeSlkI06dbA2/FmqxKn3LgtbPg=";
 
   ldflags = [
     "-s"
