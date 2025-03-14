@@ -26,11 +26,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-clocks";
-  version = "48.beta";
+  version = "48.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-clocks/${lib.versions.major finalAttrs.version}/gnome-clocks-${finalAttrs.version}.tar.xz";
-    hash = "sha256-D4+4bBDxcjdMVpqTrshlv2DO5R6f5HuLOzhVrODiIr4=";
+    hash = "sha256-YW7h+3UwCx8muXZiGelUdRNgyg+g9JExG8+DvzgIfGI=";
   };
 
   nativeBuildInputs = [
