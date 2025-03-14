@@ -138,7 +138,7 @@ stdenv.mkDerivation rec {
   pname = "np2kai";
   version = "0.86rev22"; # update src.rev to commit rev accordingly
 
-  src = fetchFromGitHub rec {
+  src = fetchFromGitHub {
     owner = "AZO234";
     repo = "NP2kai";
     rev = "4a317747724669343e4c33ebdd34783fb7043221";

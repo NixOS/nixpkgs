@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  fetchpatch2,
   coreutils,
   darwin,
   glibcLocales,
@@ -153,13 +152,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fish";
-  version = "4.0.0";
+  version = "4.0.1";
 
   src = fetchFromGitHub {
     owner = "fish-shell";
     repo = "fish-shell";
     tag = finalAttrs.version;
-    hash = "sha256-BLbL5Tj3FQQCOeX5TWXMaxCpvdzZtKe5dDQi66uU/BM=";
+    hash = "sha256-Mj4v2ubYr4ufs7aU/1AdY239byiCJHKXam64af/VO3U=";
   };
 
   env = {
@@ -170,7 +169,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src patches;
-    hash = "sha256-4ol4LvabhtjiMMWwV1wrcywFePOmU0Jub1sy+Ay7mLA=";
+    hash = "sha256-4kqBrpeneCpF0WohP1ZArKrV3duHAE01XA5+GT9f56w=";
   };
 
   patches = [
@@ -189,18 +188,6 @@ stdenv.mkDerivation (finalAttrs: {
     # * <https://github.com/LnL7/nix-darwin/issues/122>
     # * <https://github.com/fish-shell/fish-shell/issues/7142>
     ./nix-darwin-path.patch
-
-    (fetchpatch2 {
-      name = "cargo_version.diff";
-      url = "https://github.com/fish-shell/fish-shell/commit/1e069b0fff20b153bc7f824f9f9b820ca4117e1e.diff?full_index=1";
-      hash = "sha256-XFJ0fT2Zanvdqt/iwgyH2IA/kIOcOHMNdsmuzjTX5qs=";
-    })
-
-    # Fixes a build issue in kitty, see https://github.com/fish-shell/fish-shell/commit/97f0809b62a1fa77df1b9fcbbfe623b6187b5013
-    # The first patch is needed since it introduces the BufferedOutputter type that's
-    # used by the second one.
-    ./reduce_writes.patch
-    ./osc_133.patch
   ];
 
   # Fix FHS paths in tests
@@ -281,6 +268,7 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags =
     [
       "-DCMAKE_INSTALL_DOCDIR=${placeholder "doc"}/share/doc/fish"
+      "-DRust_CARGO_TARGET=${stdenv.hostPlatform.rust.rustcTarget}"
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       "-DMAC_CODESIGN_ID=OFF"
@@ -398,6 +386,7 @@ stdenv.mkDerivation (finalAttrs: {
       cole-h
       winter
       sigmasquadron
+      rvdp
     ];
     mainProgram = "fish";
   };

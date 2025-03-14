@@ -9,7 +9,7 @@
   libsigrokdecode,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "sigrok-cli";
   version = "0.7.2-unstable-2023-04-10";
 

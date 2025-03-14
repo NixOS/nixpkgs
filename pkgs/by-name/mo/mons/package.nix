@@ -11,7 +11,7 @@
   xrandr,
 }:
 
-resholve.mkDerivation rec {
+resholve.mkDerivation {
   pname = "mons";
   version = "unstable-2020-03-20";
 

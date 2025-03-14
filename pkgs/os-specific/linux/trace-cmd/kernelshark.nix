@@ -5,8 +5,6 @@
   qtbase,
   qtscxml,
   cmake,
-  asciidoc,
-  docbook_xsl,
   json_c,
   mesa_glu,
   libglut,
@@ -17,7 +15,6 @@
   freefont_ttf,
   wrapQtAppsHook,
   qtwayland,
-  fetchpatch,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

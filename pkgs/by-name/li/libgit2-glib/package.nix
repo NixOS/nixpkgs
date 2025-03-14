@@ -14,7 +14,6 @@
   libgit2,
   glib,
   python3,
-  fetchpatch,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

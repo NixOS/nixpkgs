@@ -9,7 +9,7 @@
   enablePAM ? stdenv.hostPlatform.isLinux,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "webdav-server-rs";
   # The v0.4.0 tag cannot build.  So we use the 547602e commit.
   version = "unstable-2021-08-16";

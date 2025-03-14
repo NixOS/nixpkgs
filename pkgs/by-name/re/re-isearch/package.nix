@@ -7,7 +7,7 @@
   libnsl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "re-Isearch";
   version = "unstable-2022-03-24";
 

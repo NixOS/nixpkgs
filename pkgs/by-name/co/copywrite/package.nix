@@ -4,8 +4,7 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
-  testers,
-  copywrite,
+  versionCheckHook,
 }:
 
 let
@@ -19,7 +18,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "copywrite";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-DmlPioaw/wMk8GoBYNG24P4J1C6h0bjVjjOuMYW6Tgo=";
   };
 
@@ -42,11 +41,8 @@ buildGoModule rec {
     installShellCompletion copywrite.{bash,zsh,fish}
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = copywrite;
-    command = "copywrite --version";
-    version = "${version}-${shortCommitHash}";
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     description = "Automate copyright headers and license files at scale";

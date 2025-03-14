@@ -16,7 +16,6 @@
   flex,
   bison,
   util-linux,
-  fetchpatch,
   nixosTests,
 }:
 

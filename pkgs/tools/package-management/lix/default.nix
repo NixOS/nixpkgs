@@ -4,7 +4,6 @@
   boehmgc,
   callPackage,
   fetchFromGitHub,
-  fetchpatch,
   rustPlatform,
   Security,
 

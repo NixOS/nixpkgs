@@ -7,7 +7,7 @@
   libusb1,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "libuvc";
   version = "unstable-2020-11-29";
 

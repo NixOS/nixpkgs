@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitea,
-  fetchpatch,
   pkg-config,
   meson,
   ninja,

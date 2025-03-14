@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "whoami";
-  version = "1.10.4";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "traefik";
     repo = "whoami";
     rev = "v${version}";
-    hash = "sha256-T5oUIJ6ELfPNd8JW5hUXV6bRUGVRD0IgHJ34ioR4sMs=";
+    hash = "sha256-3jzLdCmmts/7S1Oxig9Dg3kRGh/H5l5UD7ztev0yvXY=";
   };
 
   vendorHash = "sha256-0Qxw+MUYVgzgWB8vi3HBYtVXSq/btfh4ZfV/m1chNrA=";
