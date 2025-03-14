@@ -9284,6 +9284,8 @@ self: super: with self; {
 
   ndcurves = toPythonModule (pkgs.ndcurves.override { python3Packages = self; pythonSupport = true; });
 
+  nglview = callPackage ../development/python-modules/nglview { };
+
   nomadnet = callPackage ../development/python-modules/nomadnet { };
 
   nonbloat-db = callPackage ../development/python-modules/nonbloat-db { };
