@@ -56,11 +56,9 @@ stdenv.mkDerivation (finalAttrs: {
   src = if monorepoSrc != null then
     runCommand "${lib.removeSuffix "-manpages" finalAttrs.pname}-src-${version}" { inherit (monorepoSrc) passthru; } (''
       mkdir -p "$out"
-    '' + lib.optionalString (lib.versionAtLeast release_version "14") ''
-      cp -r ${monorepoSrc}/cmake "$out"
-    '' + ''
       cp -r ${monorepoSrc}/${lib.removeSuffix "-manpages" finalAttrs.pname} "$out"
     '' + lib.optionalString (lib.versionAtLeast release_version "14") ''
+      cp -r ${monorepoSrc}/cmake "$out"
       cp -r ${monorepoSrc}/third-party "$out"
     '' + lib.optionalString enablePolly ''
       chmod u+w "$out/${lib.removeSuffix "-manpages" finalAttrs.pname}/tools"
@@ -581,11 +579,8 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace "$dev/lib/cmake/llvm/LLVMConfig.cmake" \
       --replace-fail 'set(LLVM_BINARY_DIR "''${LLVM_INSTALL_PREFIX}")' 'set(LLVM_BINARY_DIR "'"$lib"'")'
   '')
-  + optionalString (stdenv.hostPlatform.isDarwin && enableSharedLibraries && lib.versionOlder release_version "18") ''
-    ln -s $lib/lib/libLLVM.dylib $lib/lib/libLLVM-$shortVersion.dylib
-  ''
   + optionalString (stdenv.hostPlatform.isDarwin && enableSharedLibraries) ''
-    ln -s $lib/lib/libLLVM.dylib $lib/lib/libLLVM-${release_version}.dylib
+    ln -s $lib/lib/libLLVM.dylib $lib/lib/libLLVM-${if lib.versionOlder release_version "18" then "$shortVersion" else release_version}.dylib
   ''
   + optionalString (stdenv.buildPlatform != stdenv.hostPlatform) (if stdenv.buildPlatform.canExecute stdenv.hostPlatform then ''
     ln -s $dev/bin/llvm-config $dev/bin/llvm-config-native
