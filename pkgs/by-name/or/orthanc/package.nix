@@ -22,6 +22,7 @@
   sqlite,
   unzip,
   versionCheckHook,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -103,6 +104,10 @@ stdenv.mkDerivation (finalAttrs: {
   versionCheckProgram = "${placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";
   versionCheckProgramArg = "--version";
   doInstallCheck = true;
+
+  passthru.tests = {
+    inherit (nixosTests) orthanc;
+  };
 
   meta = {
     description = "Orthanc is a lightweight, RESTful DICOM server for healthcare and medical research";
