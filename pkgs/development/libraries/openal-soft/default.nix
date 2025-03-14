@@ -16,17 +16,18 @@
   CoreServices,
   AudioUnit,
   AudioToolbox,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
   pname = "openal-soft";
-  version = "1.23.1";
+  version = "1.24.2";
 
   src = fetchFromGitHub {
     owner = "kcat";
     repo = "openal-soft";
-    rev = version;
-    sha256 = "sha256-jwY1NzNJdWIvVv7TvJyg4cIGFLWGZhL3BkMI1NbOEG0=";
+    tag = version;
+    sha256 = "sha256-ECrIkxMACPsWehtJWwTmoYj6hGcsdxwVuTiQywG36Y8=";
   };
 
   patches = [
@@ -72,6 +73,13 @@ stdenv.mkDerivation rec {
   postInstall = lib.optional pipewireSupport ''
     remove-references-to -t ${pipewire.dev} $(readlink -f $out/lib/*.so)
   '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^(\\d+\\.\\d+\\.\\d+)$"
+    ];
+  };
 
   meta = with lib; {
     description = "OpenAL alternative";
