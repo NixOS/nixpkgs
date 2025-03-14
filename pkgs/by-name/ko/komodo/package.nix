@@ -7,18 +7,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "komodo";
-  version = "1.16.12";
+  version = "1.17.0-dev-7";
 
   src = fetchFromGitHub {
     owner = "moghtech";
     repo = "komodo";
     tag = "v${version}";
-    hash = "sha256-9/rp0DG66YQR8QXQTkhgfLGzWr2sRPejaGcJZc2zdh8=";
+    hash = "sha256-OcxSXNPyHbE8aUqs0REQrt7bZXHuuoNmf+LnPCDwe7w=";
   };
 
   useFetchCargoVendor = true;
 
-  cargoHash = "sha256-Zy+NKrrPbLst3Ysz6ELgi4O8IQICJpXtgdqy4d7C2Lg=";
+  cargoHash = "sha256-j4C8fQ4+AhZS+lEHPx+X8dWyygFdnCPEAhuW/67hkSw=";
 
   # disable for check. document generation is fail
   # > error: doctest failed, to rerun pass `-p komodo_client --doc`
