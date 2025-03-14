@@ -4,6 +4,7 @@
   fetchFromGitHub,
   gradle,
   makeWrapper,
+  installShellFiles,
   jdk17,
   pakku,
   jre,
@@ -49,8 +50,15 @@ stdenv.mkDerivation {
       --add-flags "-jar $out/share/pakku/pakku.jar"
   '';
 
+  postInstall = ''
+    installShellCompletion --cmd pakku \
+      --bash <($out/bin/pakku --generate-completion=bash) \
+      --fish <($out/bin/pakku --generate-completion=fish) \
+      --zsh <($out/bin/pakku --generate-completion=zsh)
+  '';
+
   meta = with lib; {
-    description = "A multiplatform modpack manager for Minecraft: Java Edition.";
+    description = "A multiplatform modpack manager for Minecraft: Java Edition. Create modpacks for CurseForge, Modrinth or both simultaneously";
     homepage = "https://github.com/juraj-hrivnak/Pakku";
 
     sourceProvenance = with sourceTypes; [
@@ -58,8 +66,8 @@ stdenv.mkDerivation {
       binaryBytecode
     ];
     license = licenses.eupl12;
+    maintainers = with lib.maintainers; [ Squawkykaka ];
     mainProgram = "pakku";
-    maintainers = [ maintainers.Squawkykaka ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }
