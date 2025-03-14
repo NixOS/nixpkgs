@@ -862,6 +862,7 @@ in {
   opentelemetry-collector = handleTest ./opentelemetry-collector.nix {};
   open-web-calendar = handleTest ./web-apps/open-web-calendar.nix {};
   ocsinventory-agent = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./ocsinventory-agent.nix {};
+  orthanc = runTest ./orthanc.nix;
   owncast = handleTest ./owncast.nix {};
   outline = handleTest ./outline.nix {};
   image-contents = handleTest ./image-contents.nix {};
