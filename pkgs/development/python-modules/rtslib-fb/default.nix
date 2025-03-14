@@ -10,13 +10,13 @@
 }:
 
 buildPythonPackage rec {
-  pname = "rtslib";
+  pname = "rtslib-fb";
   version = "2.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "open-iscsi";
-    repo = "${pname}-fb";
+    repo = "rtslib-fb";
     tag = "v${version}";
     hash = "sha256-lBYckQlnvIQ6lSENctYsMhzULi1MJAVUyF06Ul56LzA=";
   };

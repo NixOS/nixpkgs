@@ -27,7 +27,7 @@ python3.pkgs.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3.pkgs; [
     configshell
-    rtslib
+    rtslib-fb
     pygobject3
   ];
 
