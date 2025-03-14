@@ -68,6 +68,7 @@ let
   androidComposition = androidEnv.composeAndroidPackages sdkArgs;
   androidSdk = androidComposition.androidsdk;
   platformTools = androidComposition.platform-tools;
+  latestSdk = pkgs.lib.foldl' pkgs.lib.max 0 androidComposition.platformVersions;
   jdk = pkgs.jdk;
 in
 pkgs.mkShell {
@@ -110,7 +111,7 @@ pkgs.mkShell {
 
           packages=(
             "build-tools" "cmdline-tools" \
-            "platform-tools" "platforms;android-35"
+            "platform-tools" "platforms;android-${toString latestSdk}"
           )
 
           for package in "''${packages[@]}"; do

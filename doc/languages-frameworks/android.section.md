@@ -88,6 +88,10 @@ The following parameters are supported:
   have an aarch64-linux compile).
 * `platformVersions` specifies which platform SDK versions should be included.
   It defaults to including only the latest API level, though you can add more.
+* `minPlatformVersion` and `maxPlatformVersion` take priority over `platformVersions`
+  if both are provided. Note that `maxPlatformVersion` always defaults to the latest
+  Android SDK platform version, allowing you to specify `minPlatformVersion` to describe
+  the minimum SDK version your Android composition supports.
 
 For each platform version that has been specified, we can apply the following
 options:

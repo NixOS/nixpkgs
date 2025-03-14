@@ -52,21 +52,7 @@ let
     includeNDK = "if-supported";
     useGoogleAPIs = true;
 
-    platformVersions = [
-      "23"
-      "24"
-      "25"
-      "26"
-      "27"
-      "28"
-      "29"
-      "30"
-      "31"
-      "32"
-      "33"
-      "34"
-      "35"
-    ];
+    minPlatformVersion = 23;
 
     # If you want to use a custom repo JSON:
     # repoJson = ../repo.json;
@@ -114,6 +100,7 @@ let
 
   androidSdk = androidComposition.androidsdk;
   platformTools = androidComposition.platform-tools;
+  latestSdk = pkgs.lib.foldl' pkgs.lib.max 0 androidComposition.platformVersions;
   jdk = pkgs.jdk;
 in
 pkgs.mkShell rec {
@@ -179,26 +166,26 @@ pkgs.mkShell rec {
           output="$(sdkmanager --list)"
           installed_packages_section=$(echo "''${output%%Available Packages*}" | awk 'NR>4 {print $1}')
 
-          # FIXME couldn't find platforms;android-34, even though it's in the correct directory!! sdkmanager's bug?!
           packages=(
             "build-tools" "platform-tools" \
-            "platforms;android-23" "platforms;android-24" "platforms;android-25" "platforms;android-26" \
-            "platforms;android-27" "platforms;android-28" "platforms;android-29" "platforms;android-30" \
-            "platforms;android-31" "platforms;android-32" "platforms;android-33" "platforms;android-35" \
-            "sources;android-23" "sources;android-24" "sources;android-25" "sources;android-26" \
-            "sources;android-27" "sources;android-28" "sources;android-29" "sources;android-30" \
-            "sources;android-31" "sources;android-32" "sources;android-33" "sources;android-34" \
-            "sources;android-35" \
-            "system-images;android-28;google_apis_playstore;x86_64" \
-            "system-images;android-29;google_apis_playstore;x86_64" \
-            "system-images;android-30;google_apis_playstore;x86_64" \
-            "system-images;android-31;google_apis_playstore;x86_64" \
-            "system-images;android-32;google_apis_playstore;x86_64" \
-            "system-images;android-33;google_apis_playstore;x86_64" \
-            "system-images;android-34;google_apis;x86_64" \
-            "system-images;android-35;google_apis;x86_64" \
             "extras;google;gcm"
           )
+
+          for x in $(seq 23 ${toString latestSdk}); do
+            if [ $x -ne 34 ]; then
+              # FIXME couldn't find platforms;android-34, even though it's in the correct directory!! sdkmanager's bug?!
+              packages+=("platforms;android-$x")
+            fi
+            packages+=("sources;android-$x")
+            if [ $x -ge 28 ]; then
+              if [ $x -lt 34 ]; then
+                packages+=("system-images;android-$x;google_apis_playstore;x86_64")
+              else
+                packages+=("system-images;android-$x;google_apis;x86_64")
+              fi
+            fi
+          done
+
           ${pkgs.lib.optionalString includeAuto ''packages+=("extras;google;auto")''}
 
           for package in "''${packages[@]}"; do
