@@ -1,0 +1,29 @@
+{
+  "version": "2.71.7",
+  "repoHash": "sha256-0ZOiwJ/ehDBkbd7iTTyVJzLj6Etph5/oxrDrck30ZL8=",
+  "yarnHash": "sha256-ekgLd5DTOBZWuT63QnTjx40ZYvLKZh+FXCn+h5vj9qQ=",
+  "goModulesHash": "sha256-iZCjHSpQ7Gy41Dd4svRLbyEh1N8VE8U0uCOlN9rfJQU=",
+  "protobufDeps": {
+    "protoc-gen-validate": {
+      "hash": "sha256-xil1euaa8TI7rlCdb5tnFVfKgorRMbtmvJSsE2hsmAs=",
+      "remote": "buf.build",
+      "owner": "envoyproxy",
+      "repository": "protoc-gen-validate",
+      "commit": "6607b10f00ed4a3d98f906807131c44a"
+    },
+    "googleapis": {
+      "hash": "sha256-Kb5BLmfInJe1Q5rollD0B8gPOVkeFtIeDhQ/WGpIKmY=",
+      "remote": "buf.build",
+      "owner": "googleapis",
+      "repository": "googleapis",
+      "commit": "75b4300737fb4efca0831636be94e517"
+    },
+    "grpc-gateway": {
+      "hash": "sha256-Kpu8XdLTU5Z6omb58Ogik/RjDHLH8e6SqPuwiRYY9nE=",
+      "remote": "buf.build",
+      "owner": "grpc-ecosystem",
+      "repository": "grpc-gateway",
+      "commit": "a1ecdc58eccd49aa8bea2a7a9022dc27"
+    }
+  }
+}
