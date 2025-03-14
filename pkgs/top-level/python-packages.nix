@@ -11019,8 +11019,6 @@ self: super: with self; {
 
   pysubs2 = callPackage ../development/python-modules/pysubs2 { };
 
-  pysuez = callPackage ../development/python-modules/pysuez { };
-
   pysuezv2 = callPackage ../development/python-modules/pysuezv2 { };
 
   pysqlitecipher = callPackage ../development/python-modules/pysqlitecipher { };
