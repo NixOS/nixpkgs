@@ -22476,6 +22476,12 @@
     githubId = 16364318;
     name = "Jeffrey Harmon";
   };
+  Squawkykaka = {
+    email = "squawkykaka@gmail.com";
+    github = "squawkykaka";
+    githubId = 100256401;
+    name = "Squawkykaka";
+  };
   srghma = {
     email = "srghma@gmail.com";
     github = "srghma";
@@ -22529,12 +22535,6 @@
     github = "haskelious";
     githubId = 8668915;
     name = "Stephane Schitter";
-  };
-  Squawkykaka = {
-    email = "squawkykaka@gmail.com";
-    github = "squawkykaka";
-    githubId = 100256401;
-    name = "Squawkykaka";
   };
   staccato = {
     name = "staccato";
