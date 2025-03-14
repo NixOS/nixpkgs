@@ -13,11 +13,19 @@ let
     concatStringsSep
     flatten
     imap1
+    isBool
+    isDerivation
+    isInt
+    isList
+    isPath
+    isString
     literalExpression
     mapAttrsToList
     mkEnableOption
     mkIf
+    mkMerge
     mkOption
+    mkChangedOptionModule
     mkRemovedOptionModule
     optional
     optionalAttrs
@@ -29,14 +37,100 @@ let
     mapAttrs'
     listToAttrs
     filter
+    filterAttrs
     ;
-  inherit (lib.strings) match;
+  inherit (lib.generators) toPretty;
+  inherit (lib.lists)
+    findFirstIndex
+    length
+    sublist
+    reverseList
+    ;
+  inherit (lib.strings) escape match splitString;
 
   cfg = config.services.dovecot2;
   dovecotPkg = pkgs.dovecot;
 
   baseDir = "/run/dovecot2";
   stateDir = "/var/lib/dovecot";
+
+  /*
+    Helper: Format string in way that may strech over multiple
+    lines in a Dovecot configuration file
+
+    This is a little complicated since Dovecot does not like when the last
+    line is empty, so we first have to truncate all trailing empty lines
+    before when can join them using the continuation line syntax.
+  */
+  formatDovecotMultiline =
+    string:
+    let
+      # Split input into line list
+      lines = splitString "\n" string;
+      # Find index of last non-empty line in line list
+      lastContentIndex =
+        length lines
+        - (findFirstIndex (
+          line: match "[[:space:]]*" line == null # <=> Line is not empty
+        ) (length lines - 1) (reverseList lines));
+      # Drop empty trailing lines from line list
+      trimmedLines = sublist 0 lastContentIndex lines;
+    in
+    # Reassemble content without trailing lines but with continuation markers
+    concatStringsSep " \\\n" trimmedLines;
+
+  /*
+    Helper: Apply string escaping and quotation to Dovecot string if needed
+
+    Dovecot is sometimes touchy about strings being quoted, so this only
+    quotes the string when it is actually needed.
+  */
+  escapeDovecotString =
+    string:
+    let
+      escapedString = escape [ "\\" "\"" ] string;
+    in
+    if match ''[[:space:]]*<.*|.*[[:space:]#"\\].*|^$'' string != null then
+      "\"${formatDovecotMultiline escapedString}\""
+    else
+      string;
+
+  /*
+    Helper: Convert a Dovecot value to a string
+
+    Strings are escaped except for config variable interpolation, as such
+    this function is unsuitable for performing in-Dovecot variable
+    substitutions, however these can also easily be done using Nix instead.
+
+    Reference: https://doc.dovecot.org/settings/types/
+  */
+  mkDovecotValue =
+    value:
+    (
+      if isString value || isPath value || isDerivation value then
+        escapeDovecotString (toString value)
+      else if isInt value then
+        toString value
+      else if isBool value then
+        if value then "yes" else "no"
+      else if isList value then
+        concatMapStringsSep " " mkDovecotValue value
+      else
+        throw "mkDovecotValue: value not supported: ${toPretty { } value}"
+    );
+
+  /*
+    Helper: Convert a complete Dovecot settings key list to a multiline string
+
+    Reference: https://doc.dovecot.org/configuration_manual/config_file/
+  */
+  toDovecotKeyValue =
+    indent: settings:
+    concatStringsSep "\n" (
+      mapAttrsToList (name: value: "${indent}${name} = ${mkDovecotValue value}") (
+        filterAttrs (n: v: v != null) settings
+      )
+    );
 
   sieveScriptSettings = mapAttrs' (
     to: _: nameValuePair "sieve_${to}" "${stateDir}/sieve/${to}"
@@ -201,7 +295,7 @@ let
     # the control flow.
     ''
       plugin {
-        ${concatStringsSep "\n" (mapAttrsToList (key: value: "  ${key} = ${value}") cfg.pluginSettings)}
+      ${toDovecotKeyValue "  " cfg.pluginSettings}
       }
     ''
 
@@ -282,6 +376,20 @@ in
     (mkRenamedOptionModule
       [ "services" "dovecot2" "sieveScripts" ]
       [ "services" "dovecot2" "sieve" "scripts" ]
+    )
+    (mkRenamedOptionModule
+      [ "services" "dovecot2" "sieve" "plugins" ]
+      [ "services" "dovecot2" "pluginSettings" "sieve_plugins" ]
+    )
+    (mkChangedOptionModule
+      [ "services" "dovecot2" "sieve" "extensions" ]
+      [ "services" "dovecot2" "pluginSettings" "sieve_extensions" ]
+      (config: map (el: "+${el}") config.services.dovecot2.sieve.extensions)
+    )
+    (mkChangedOptionModule
+      [ "services" "dovecot2" "sieve" "globalExtensions" ]
+      [ "services" "dovecot2" "pluginSettings" "sieve_global_extensions" ]
+      (config: map (el: "+${el}") config.services.dovecot2.sieve.globalExtensions)
     )
   ];
 
@@ -403,7 +511,7 @@ in
       mkEnableOption ''
         automatically creating the user
               given in {option}`services.dovecot.user` and the group
-              given in {option}`services.dovecot.group`''
+              given in {option}`services.dovecot.group`.''
       // {
         default = true;
       };
@@ -476,12 +584,58 @@ in
 
     pluginSettings = mkOption {
       # types.str does not coerce from packages, like `sievePipeBinScriptDirectory`.
-      type = types.attrsOf (
-        types.oneOf [
-          types.str
-          types.package
-        ]
-      );
+      type = types.submodule {
+        freeformType =
+          let
+            singleValueType = types.oneOf [
+              types.bool
+              types.int
+              types.str
+              types.package
+            ];
+          in
+          types.attrsOf (types.nullOr (types.either singleValueType (types.listOf singleValueType)));
+        options = {
+          sieve_plugins = mkOption {
+            default = null;
+            example = [ "sieve_extprograms" ];
+            description = "Sieve plugins to load";
+            type = types.nullOr (types.listOf types.str);
+          };
+
+          sieve_extensions = mkOption {
+            default = null;
+            description = "Sieve extensions to enable in user scripts";
+            example = [
+              "+notify"
+              "+imapflags"
+              "+vnd.dovecot.filter"
+            ];
+            type = types.nullOr (types.listOf types.str);
+          };
+
+          sieve_global_extensions = mkOption {
+            default = null;
+            example = [ "+vnd.dovecot.environment" ];
+            description = "Sieve extensions to enable in global scripts";
+            type = types.nullOr (types.listOf types.str);
+          };
+
+          sieve_pipe_bin_dir = mkOption {
+            default = null;
+            defaultText = "Directory containing the scripts defined in {option}`services.dovecot2.sieve.pipeBins`.";
+            example = "/etc/dovecot/sieve-pipe";
+            description = ''
+              Directory containing programs available for use by the vnd.dovecot.pipe extension
+
+              Unless you want to manage your own pipe-bins directory, it is
+              recommended to add items to the
+              {option}`services.dovecot2.sieve.pipeBins` list instead.
+            '';
+            type = types.nullOr (types.either types.path types.package);
+          };
+        };
+      };
       default = { };
       example = literalExpression ''
         {
@@ -491,10 +645,22 @@ in
       description = ''
         Plugin settings for dovecot in general, e.g. `sieve`, `sieve_default`, etc.
 
-        Some of the other knobs of this module will influence by default the plugin settings, but you
-        can still override any plugin settings.
+        Some of the other knobs of this module will influence by default the
+        plugin settings, but you can still override any plugin settings.
 
-        If you override a plugin setting, its value is cleared and you have to copy over the defaults.
+        If you override a plugin setting, its value is cleared and you generally
+        have to copy over the defaults set by Dovecot in addition to the values
+        you want to set. For some settings (like `sieve_extensions`) it is
+        possible to avoid copying over the default by specifying a relative
+        value (such as `[ "+notify" ]`) however.
+
+        Plugin settings containing `null` are omitted from the generated
+        configuration. This can be used to force a setting to the default value
+        set by Dovecot, even its value would otherwise be set to some other
+        value by a NixOS module.
+
+        See https://doc.dovecot.org/settings/plugin/ for an incomplete list of
+        all allowed settings.
       '';
     };
 
@@ -577,31 +743,6 @@ in
     };
 
     sieve = {
-      plugins = mkOption {
-        default = [ ];
-        example = [ "sieve_extprograms" ];
-        description = "Sieve plugins to load";
-        type = types.listOf types.str;
-      };
-
-      extensions = mkOption {
-        default = [ ];
-        description = "Sieve extensions for use in user scripts";
-        example = [
-          "notify"
-          "imapflags"
-          "vnd.dovecot.filter"
-        ];
-        type = types.listOf types.str;
-      };
-
-      globalExtensions = mkOption {
-        default = [ ];
-        example = [ "vnd.dovecot.environment" ];
-        description = "Sieve extensions for use in global scripts";
-        type = types.listOf types.str;
-      };
-
       scripts = mkOption {
         type = types.attrsOf types.path;
         default = { };
@@ -639,22 +780,18 @@ in
         perProtocol.imap.enable = [ "imap_quota" ];
       };
 
-      sieve.plugins =
-        optional (cfg.imapsieve.mailbox != [ ]) "sieve_imapsieve"
-        ++ optional (cfg.sieve.pipeBins != [ ]) "sieve_extprograms";
-
-      sieve.globalExtensions = optional (cfg.sieve.pipeBins != [ ]) "vnd.dovecot.pipe";
-
-      pluginSettings = lib.mapAttrs (n: lib.mkDefault) (
-        {
-          sieve_plugins = concatStringsSep " " cfg.sieve.plugins;
-          sieve_extensions = concatStringsSep " " (map (el: "+${el}") cfg.sieve.extensions);
-          sieve_global_extensions = concatStringsSep " " (map (el: "+${el}") cfg.sieve.globalExtensions);
+      pluginSettings = mkMerge [
+        sieveScriptSettings
+        imapSieveMailboxSettings
+        (mkIf (cfg.sieve.pipeBins != [ ]) {
+          sieve_plugins = [ "sieve_extprograms" ];
+          sieve_global_extensions = [ "+vnd.dovecot.pipe" ];
           sieve_pipe_bin_dir = sievePipeBinScriptDirectory;
-        }
-        // sieveScriptSettings
-        // imapSieveMailboxSettings
-      );
+        })
+        (mkIf (cfg.imapsieve.mailbox != [ ]) {
+          sieve_plugins = [ "sieve_imapsieve" ];
+        })
+      ];
     };
 
     users.users =
