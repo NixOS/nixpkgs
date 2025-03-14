@@ -4,6 +4,7 @@
 set -eu -o pipefail
 
 # pass <vscode exec or -> <format> to specify format as either json or nix (default nix)
+# note that json format is NOT a json array, but a sequence of json objects
 
 # can be added to your configuration with the following command and snippet:
 # $ ./pkgs/applications/editors/vscode/extensions/update_installed_exts.sh > extensions.nix
@@ -72,15 +73,7 @@ EOF
 EOF
             ;;
         json)
-            cat <<EOF
-$COMMA
-    {
-        "name": "$2",
-        "publisher": "$1",
-        "version": "$VER",
-        "hash": "$HASH"
-EOF
-            printf '    }'
+            printf '{"name": "%s", "publisher": "%s", "version": "%s", "hash": "%s"}\n' "$2" "$1" "$VER" "$HASH"
             ;;
     esac
 }
@@ -107,33 +100,21 @@ fi
 trap clean_up EXIT
 
 # Begin the printing of the nix expression that will house the list of extensions.
-case $FORMAT in
-    nix)
-        printf '{ extensions = [\n'
-        ;;
-    json)
-        # in json mode, the newline is printed by each entry, which makes printing correct commas easier
-        printf '['
-        ;;
-esac
+if [ "$FORMAT" = nix ]
+then
+    printf '{ extensions = [\n'
+fi
 
 # Note that we are only looking to update extensions that are already installed.
-# comma is for json output
-COMMA=
 for i in $($CODE --list-extensions)
 do
     OWNER=$(echo "$i" | cut -d. -f1)
     EXT=$(echo "$i" | cut -d. -f2)
 
     get_vsixpkg "$OWNER" "$EXT"
-    COMMA=,
 done
 # Close off the nix expression.
-case $FORMAT in
-    nix)
-        printf '];\n}'
-        ;;
-    json)
-        printf '\n]\n'
-        ;;
-esac
+if [ "$FORMAT" = nix ]
+then
+    printf '];\n}'
+fi
