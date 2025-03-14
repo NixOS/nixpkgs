@@ -529,12 +529,15 @@ cur_latest.each do |k, v|
   end
 end
 
+# Write the repository. Append a \n to keep nixpkgs Github Actions happy.
+File.write 'repo.json', (JSON.pretty_generate(sort_recursively(output)) + "\n")
+
 # Output metadata for the nixpkgs update script.
 changed_paths = []
 if changed
   if ENV['UPDATE_NIX_ATTR_PATH']
     # Instantiate it.
-    test_result = `nix-shell ../../../../default.nix -A #{Shellwords.join [ENV['UPDATE_NIX_ATTR_PATH']]} 2>&1`
+    test_result = `NIXPKGS_ALLOW_UNFREE=1 NIXPKGS_ACCEPT_ANDROID_SDK_LICENSE=1 nix-build ../../../../default.nix -A #{Shellwords.join [ENV['UPDATE_NIX_ATTR_PATH']]} 2>&1`
     test_status = $?.exitstatus
     tests_ran = true
   else
@@ -553,9 +556,10 @@ Performed the following automatic androidenv updates:
 <% if tests_ran %>
 Tests exited with status: <%= test_status -%>
 
-<% if test_status != 0 %>
+<% if !test_result.empty? %>
+Last 100 lines of output:
 ```
-<%= test_result -%>
+<%= test_result.lines.last(100).join -%>
 ```
 <% end %>
 <% end %>
@@ -573,7 +577,4 @@ EOF
 end
 
 # nix-update info is on stderr
-STDERR.puts JSON.pretty_generate(changed_paths)
-
-# repo is on stdout
-STDOUT.puts JSON.pretty_generate(sort_recursively(output))
+STDOUT.puts JSON.pretty_generate(changed_paths)
