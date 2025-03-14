@@ -156,8 +156,14 @@ in {
   age-plugin-tpm-decrypt = runTest ./age-plugin-tpm-decrypt.nix;
   agorakit = runTest ./web-apps/agorakit.nix;
   airsonic = runTest ./airsonic.nix;
-  akkoma = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./akkoma.nix {};
-  akkoma-confined = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./akkoma.nix { confined = true; };
+  akkoma = runTestOn [ "x86_64-linux" "aarch64-linux" ] {
+    imports = [ ./akkoma.nix ];
+    _module.args.confined = false;
+  };
+  akkoma-confined = runTestOn [ "x86_64-linux" "aarch64-linux" ] {
+    imports = [ ./akkoma.nix ];
+    _module.args.confined = true;
+  };
   alice-lg = runTest ./alice-lg.nix;
   alloy = runTest ./alloy.nix;
   allTerminfo = runTest ./all-terminfo.nix;
