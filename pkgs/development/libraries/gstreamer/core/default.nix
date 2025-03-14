@@ -1,5 +1,6 @@
 { stdenv
 , fetchurl
+, fetchpatch
 , meson
 , ninja
 , pkg-config
@@ -107,6 +108,15 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "libunwind" withLibunwind)
     (lib.mesonEnable "libdw" (withLibunwind && hasElfutils))
   ];
+
+  patches = [
+    (fetchpatch {
+      name = "c-args.patch";
+      url = "https://gitlab.freedesktop.org/gstreamer/gstreamer/-/commit/9c0fbfd2eb3ae7a88099db86b7e21c2e7e5c8909.patch";
+      hash = "sha256-miHJ1Iq1Q0xmClf5laTRNwBTqGq4bgT1YTZLdPejq4E=";
+    })
+  ];
+  patchFlags = "-p3";
 
   postPatch = ''
     patchShebangs \
