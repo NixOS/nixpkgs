@@ -1287,7 +1287,7 @@ in {
   wstunnel = runTest ./wstunnel.nix;
   xandikos = handleTest ./xandikos.nix {};
   xautolock = handleTest ./xautolock.nix {};
-  xfce = handleTest ./xfce.nix {};
+  xfce = runTest ./xfce.nix;
   xfce-wayland = runTest ./xfce-wayland.nix;
   xmonad = runTest ./xmonad.nix;
   xmonad-xdg-autostart = runTest ./xmonad-xdg-autostart.nix;
