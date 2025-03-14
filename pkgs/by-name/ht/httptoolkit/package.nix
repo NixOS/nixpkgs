@@ -62,6 +62,7 @@ buildNpmPackage rec {
 
       makeWrapper ${lib.getExe electron} $out/bin/httptoolkit \
           --add-flags $out/share/httptoolkit/resources/app.asar \
+          --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
           --inherit-argv0
     ''}
 

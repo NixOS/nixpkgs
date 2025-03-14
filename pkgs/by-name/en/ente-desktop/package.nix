@@ -109,7 +109,8 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper '${electron}/bin/electron' "$out/bin/ente-desktop" \
       --set ELECTRON_FORCE_IS_PACKAGED 1 \
       --set ELECTRON_IS_DEV 0 \
-      --add-flags "$out/share/ente-desktop/resources/app.asar"
+      --add-flags "$out/share/ente-desktop/resources/app.asar" \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
 
     runHook postInstall
   '';

@@ -110,6 +110,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     makeWrapper ${lib.getExe electron} $out/bin/${finalAttrs.meta.mainProgram} \
       --add-flags $out/opt/DeltaChat/resources/app.asar \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       --inherit-argv0
 
     runHook postInstall

@@ -149,7 +149,8 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r build/*-unpacked/{locales,resources{,.pak}} $out/opt/marktext
 
     makeWrapper ${lib.getExe electron} $out/bin/marktext \
-      --add-flags $out/opt/marktext/resources/app.asar
+      --add-flags $out/opt/marktext/resources/app.asar \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
 
     runHook postInstall
   '';
