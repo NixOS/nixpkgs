@@ -242,6 +242,8 @@ in
       extraDescription = "If not set will receive a specific version based on stateVersion. Set to `pkgs.kanidm` to always receive the latest version, with the understanding that this could introduce breaking changes.";
     };
 
+    generateSelfSigned = mkEnableOption "the generation of a self-signed certificate for kanidm. Useful if kanidm is behind a reverse proxy.";
+
     serverSettings = mkOption {
       type = types.submodule {
         freeformType = settingsFormat.type;
@@ -664,7 +666,12 @@ in
 
         # Accumulate entities by name. Track corresponding entity types for later duplicate check.
         entitiesByName = foldl' (
-          acc: { type, name }: acc // { ${name} = (acc.${name} or [ ]) ++ [ type ]; }
+          acc:
+          { type, name }:
+          acc
+          // {
+            ${name} = (acc.${name} or [ ]) ++ [ type ];
+          }
         ) { } entities;
 
         assertGroupsKnown =
@@ -851,6 +858,11 @@ in
       in
       lib.mkDefault pkg;
 
+    services.kanidm.serverSettings = mkIf cfg.generateSelfSigned {
+      tls_chain = lib.mkDefault "/var/lib/kanidm/self-signed/chain.pem";
+      tls_key = lib.mkDefault "/var/lib/kanidm/self-signed/key.pem";
+    };
+
     environment.systemPackages = mkIf cfg.enableClient [ cfg.package ];
 
     systemd.tmpfiles.settings."10-kanidm" = {
@@ -908,6 +920,41 @@ in
         }
       ];
       environment.RUST_LOG = "info";
+    };
+
+    systemd.services.kanidm-generate-self-signed = mkIf cfg.generateSelfSigned {
+      description = "small script to generate a self-signed certificate for kanidm";
+      requiredBy = [ "kanidm.service" ];
+      before = [ "kanidm.service" ];
+      enableStrictShellChecks = true;
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+      };
+      script =
+        let
+          certtool = "${pkgs.gnutls.bin}/bin/certtool";
+          template_file = pkgs.writeText "kanidm-selfsigned-certtool-template" ''
+            cn = "${cfg.serverSettings.domain}"
+            expiration_days = -1
+            signing_key
+            encryption_key
+            tls_www_server
+          '';
+          inherit (cfg.serverSettings) tls_chain tls_key;
+          esc = lib.escapeShellArg;
+        in
+        ''
+          if [[ ! -f ${esc tls_chain} ]]; then
+            directories=("$(dirname ${esc tls_chain})" "$(dirname ${esc tls_key})")
+            mkdir -p "''${directories[@]}"
+            ${certtool} --generate-privkey --outfile=${esc tls_key} --key-type=rsa --sec-param=high
+            ${certtool} --generate-self-signed --load-privkey=${esc tls_key} --outfile=${esc tls_chain} --template=${template_file}
+            chmod 0500 "''${directories[@]}"
+            chmod 0400 ${esc tls_key} ${esc tls_chain}
+            chown kanidm:kanidm ${esc tls_key} ${esc tls_chain} "''${directories[@]}"
+          fi
+        '';
     };
 
     systemd.services.kanidm-unixd = mkIf cfg.enablePam {
@@ -1004,7 +1051,9 @@ in
 
     # These paths are hardcoded
     environment.etc = mkMerge [
-      (mkIf cfg.enableServer { "kanidm/server.toml".source = serverConfigFile; })
+      (mkIf cfg.enableServer {
+        "kanidm/server.toml".source = serverConfigFile;
+      })
       (mkIf options.services.kanidm.clientSettings.isDefined {
         "kanidm/config".source = clientConfigFile;
       })

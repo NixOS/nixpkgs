@@ -137,7 +137,7 @@ rustPlatform.buildRustPackage rec {
 
   passthru = {
     tests = {
-      inherit (nixosTests) kanidm kanidm-provisioning;
+      inherit (nixosTests) kanidm kanidm-provisioning kanidm-generate-selfsigned;
     };
 
     updateScript = lib.optionals (!enableSecretProvisioning) (nix-update-script {

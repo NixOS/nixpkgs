@@ -579,6 +579,7 @@ in {
   kafka = handleTest ./kafka.nix {};
   kanboard = handleTest ./web-apps/kanboard.nix {};
   kanidm = handleTest ./kanidm.nix {};
+  kanidm-generate-selfsigned = handleTest ./kanidm-generate-selfsigned.nix {};
   kanidm-provisioning = handleTest ./kanidm-provisioning.nix {};
   karma = handleTest ./karma.nix {};
   kavita = handleTest ./kavita.nix {};
