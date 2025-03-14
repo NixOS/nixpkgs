@@ -287,9 +287,15 @@ in
               requireBuilds = pkgs: [ pkgs.matrix-synapse ];
             };
 
-            nixpkgs.overlays = [(self: super: {
-              matrix-synapse-unwrapped = system.autoUpgrade.desync.for-synapse.pkgs.matrix-synapse-unwrapped;
-            })];
+            containers.matrix-synapse = {
+              autoStart = true;
+              nixpkgs = system.autoUpgrade.desync.for-synapse.pkgs;
+              config = {
+                services.matrix-synapse = {
+                  # ...
+                };
+              };
+            };
           }
           ```
         '';
