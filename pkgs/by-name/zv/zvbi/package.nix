@@ -37,6 +37,8 @@ stdenv.mkDerivation (finalAttrs: {
     "man"
   ];
 
+  enableParallelBuilding = true;
+
   passthru = {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     updateScript = gitUpdater { rev-prefix = "v"; };
