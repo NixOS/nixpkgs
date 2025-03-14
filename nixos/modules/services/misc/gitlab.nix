@@ -1231,6 +1231,7 @@ in {
         ConditionPathExists = "!${cfg.registry.certFile}";
       };
       serviceConfig = {
+        Type = "oneshot";
         Slice = "system-gitlab.slice";
       };
     };
