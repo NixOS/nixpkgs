@@ -49,7 +49,7 @@ in rec {
     let self = lib.makeScope newScope (lib.flip mkRocqPackages' rocq-core); in
     self.filterPackages (! rocq-core.dontFilter or false);
 
-  rocq-core_9_0  = mkRocq "9.0+rc1";
+  rocq-core_9_0  = mkRocq "9.0";
 
   rocqPackages_9_0 = mkRocqPackages rocq-core_9_0;
 
