@@ -1,12 +1,13 @@
 {
   lib,
-  buildGoModule,
+  # broken with go 1.24 for some reason
+  buildGo123Module,
   fetchFromGitHub,
-  git,
+  gitMinimal,
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGo123Module rec {
   pname = "ko";
   version = "0.15.4";
 
@@ -35,7 +36,7 @@ buildGoModule rec {
     "-skip=TestNewPublisherCanPublish"
   ];
 
-  nativeCheckInputs = [ git ];
+  nativeCheckInputs = [ gitMinimal ];
   preCheck = ''
     # Feed in all the tests for testing
     # This is because subPackages above limits what is built to just what we

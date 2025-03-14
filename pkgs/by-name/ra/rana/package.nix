@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-gzyjOCGh45zEJvc0xFkp8gAH9Kxwfc2oPeMzbrTjnk8=";
   };
 
-  cargoHash = "sha256-+3QbqAGQzGT4yuGPHmT2BJkcnNmwhLTpQERTl4Ri2bk=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-YOit8z1GAUmPz56M5jXA2EdyN5Pbo7517W3PNXgQnDs=";
 
   meta = {
     description = "Nostr public key mining tool";

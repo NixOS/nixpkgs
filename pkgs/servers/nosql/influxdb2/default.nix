@@ -32,7 +32,7 @@ let
 
   flux = rustPlatform.buildRustPackage {
     pname = "libflux";
-    version = "v${libflux_version}";
+    version = libflux_version;
     src = fetchFromGitHub {
       owner = "influxdata";
       repo = "flux";

@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2025.1.4";
+  version = "2025.3.2";
   components = {
     "3_day_blinds" =
       ps: with ps; [
@@ -17,6 +17,7 @@
         aioesphomeapi
         aioruuvigateway
         aioshelly
+        aiousbwatcher
         bleak
         bleak-esphome
         bleak-retry-connector
@@ -34,7 +35,6 @@
         pymicro-vad
         pyserial
         pyspeex-noise
-        pyudev
         zeroconf
       ];
     "accuweather" =
@@ -118,6 +118,7 @@
         aioesphomeapi
         aioruuvigateway
         aioshelly
+        aiousbwatcher
         airthings-ble
         bleak
         bleak-esphome
@@ -136,7 +137,6 @@
         pymicro-vad
         pyserial
         pyspeex-noise
-        pyudev
         zeroconf
       ];
     "airtouch4" =
@@ -280,6 +280,9 @@
     "api" =
       ps: with ps; [
       ];
+    "apollo_automation" =
+      ps: with ps; [
+      ];
     "appalachianpower" =
       ps: with ps; [
       ];
@@ -330,6 +333,7 @@
         aioesphomeapi
         aioruuvigateway
         aioshelly
+        aiousbwatcher
         aranet4
         bleak
         bleak-esphome
@@ -348,7 +352,6 @@
         pymicro-vad
         pyserial
         pyspeex-noise
-        pyudev
         zeroconf
       ];
     "arcam_fmj" =
@@ -376,7 +379,7 @@
     "arwn" =
       ps: with ps; [
         aiohasupervisor
-        paho-mqtt_1
+        paho-mqtt
       ];
     "aseko_pool_live" =
       ps: with ps; [
@@ -471,7 +474,7 @@
       ps: with ps; [
         aiohasupervisor
         axis
-        paho-mqtt_1
+        paho-mqtt
       ];
     "azure_data_explorer" =
       ps:
@@ -492,6 +495,10 @@
     "azure_service_bus" =
       ps: with ps; [
         azure-servicebus
+      ];
+    "azure_storage" =
+      ps: with ps; [
+        azure-storage-blob
       ];
     "backup" =
       ps: with ps; [
@@ -567,6 +574,7 @@
         aioesphomeapi
         aioruuvigateway
         aioshelly
+        aiousbwatcher
         bleak
         bleak-esphome
         bleak-retry-connector
@@ -585,7 +593,6 @@
         pymicro-vad
         pyserial
         pyspeex-noise
-        pyudev
         zeroconf
       ];
     "blueprint" =
@@ -599,6 +606,7 @@
       ];
     "bluetooth" =
       ps: with ps; [
+        aiousbwatcher
         bleak
         bleak-retry-connector
         bluetooth-adapters
@@ -607,13 +615,13 @@
         dbus-fast
         habluetooth
         pyserial
-        pyudev
       ];
     "bluetooth_adapters" =
       ps: with ps; [
         aioesphomeapi
         aioruuvigateway
         aioshelly
+        aiousbwatcher
         bleak
         bleak-esphome
         bleak-retry-connector
@@ -631,7 +639,6 @@
         pymicro-vad
         pyserial
         pyspeex-noise
-        pyudev
         zeroconf
       ];
     "bluetooth_le_tracker" =
@@ -639,6 +646,7 @@
         aioesphomeapi
         aioruuvigateway
         aioshelly
+        aiousbwatcher
         bleak
         bleak-esphome
         bleak-retry-connector
@@ -656,7 +664,6 @@
         pymicro-vad
         pyserial
         pyspeex-noise
-        pyudev
         zeroconf
       ];
     "bluetooth_tracker" =
@@ -739,6 +746,7 @@
         aioesphomeapi
         aioruuvigateway
         aioshelly
+        aiousbwatcher
         bleak
         bleak-esphome
         bleak-retry-connector
@@ -757,7 +765,6 @@
         pymicro-vad
         pyserial
         pyspeex-noise
-        pyudev
         zeroconf
       ];
     "bticino" =
@@ -769,6 +776,9 @@
     "buienradar" =
       ps: with ps; [
         buienradar
+      ];
+    "burbank_water_and_power" =
+      ps: with ps; [
       ];
     "button" =
       ps: with ps; [
@@ -968,11 +978,11 @@
       ];
     "crownstone" =
       ps: with ps; [
+        aiousbwatcher
         crownstone-cloud
         crownstone-sse
         crownstone-uart
         pyserial
-        pyudev
       ];
     "cups" =
       ps: with ps; [
@@ -1026,11 +1036,15 @@
     "decora_wifi" =
       ps: with ps; [
       ]; # missing inputs: decora-wifi
+    "decorquip" =
+      ps: with ps; [
+      ];
     "default_config" =
       ps: with ps; [
         aiodhcpwatcher
         aiodiscover
         aiohasupervisor
+        aiousbwatcher
         async-upnp-client
         av
         bleak
@@ -1060,7 +1074,6 @@
         pyspeex-noise
         python-matter-server
         pyturbojpeg
-        pyudev
         securetar
         sqlalchemy
         zeroconf
@@ -1116,6 +1129,8 @@
     "devolo_home_network" =
       ps: with ps; [
         devolo-plc-api
+        ifaddr
+        zeroconf
       ];
     "dexcom" =
       ps: with ps; [
@@ -1205,6 +1220,7 @@
         aioesphomeapi
         aioruuvigateway
         aioshelly
+        aiousbwatcher
         bleak
         bleak-esphome
         bleak-retry-connector
@@ -1223,7 +1239,6 @@
         pymicro-vad
         pyserial
         pyspeex-noise
-        pyudev
         zeroconf
       ];
     "downloader" =
@@ -1237,7 +1252,7 @@
       ps: with ps; [
         aiohasupervisor
         dropmqttapi
-        paho-mqtt_1
+        paho-mqtt
       ];
     "dsmr" =
       ps: with ps; [
@@ -1246,7 +1261,7 @@
     "dsmr_reader" =
       ps: with ps; [
         aiohasupervisor
-        paho-mqtt_1
+        paho-mqtt
       ];
     "dublin_bus_transport" =
       ps: with ps; [
@@ -1281,13 +1296,10 @@
       ]; # missing inputs: dweepy
     "dynalite" =
       ps: with ps; [
-        aiohasupervisor
-        cronsim
         dynalite-devices
         dynalite-panel
         home-assistant-frontend
         pillow
-        securetar
       ];
     "eafm" =
       ps: with ps; [
@@ -1492,6 +1504,7 @@
         aioesphomeapi
         aioruuvigateway
         aioshelly
+        aiousbwatcher
         bleak
         bleak-esphome
         bleak-retry-connector
@@ -1510,7 +1523,6 @@
         pymicro-vad
         pyserial
         pyspeex-noise
-        pyudev
         zeroconf
       ];
     "escea" =
@@ -1523,6 +1535,7 @@
     "esphome" =
       ps: with ps; [
         aioesphomeapi
+        aiousbwatcher
         bleak
         bleak-esphome
         bleak-retry-connector
@@ -1540,7 +1553,6 @@
         pymicro-vad
         pyserial
         pyspeex-noise
-        pyudev
         zeroconf
       ];
     "etherscan" =
@@ -1555,6 +1567,7 @@
         aioesphomeapi
         aioruuvigateway
         aioshelly
+        aiousbwatcher
         bleak
         bleak-esphome
         bleak-retry-connector
@@ -1573,7 +1586,6 @@
         pymicro-vad
         pyserial
         pyspeex-noise
-        pyudev
         zeroconf
       ];
     "event" =
@@ -1691,6 +1703,7 @@
         aioesphomeapi
         aioruuvigateway
         aioshelly
+        aiousbwatcher
         bleak
         bleak-esphome
         bleak-retry-connector
@@ -1709,7 +1722,6 @@
         pymicro-vad
         pyserial
         pyspeex-noise
-        pyudev
         zeroconf
       ];
     "fleetgo" =
@@ -1775,8 +1787,9 @@
       ];
     "forked_daapd" =
       ps: with ps; [
+        pylibrespot-java
         spotifyaio
-      ]; # missing inputs: pyforked-daapd pylibrespot-java
+      ]; # missing inputs: pyforked-daapd
     "fortios" =
       ps: with ps; [
         fortiosapi
@@ -1829,11 +1842,8 @@
       ];
     "frontend" =
       ps: with ps; [
-        aiohasupervisor
-        cronsim
         home-assistant-frontend
         pillow
-        securetar
       ];
     "frontier_silicon" =
       ps: with ps; [
@@ -1849,7 +1859,7 @@
     "fully_kiosk" =
       ps: with ps; [
         aiohasupervisor
-        paho-mqtt_1
+        paho-mqtt
         python-fullykiosk
       ];
     "futurenow" =
@@ -1872,6 +1882,7 @@
         aioesphomeapi
         aioruuvigateway
         aioshelly
+        aiousbwatcher
         bleak
         bleak-esphome
         bleak-retry-connector
@@ -1890,7 +1901,6 @@
         pymicro-vad
         pyserial
         pyspeex-noise
-        pyudev
         zeroconf
       ];
     "gaviota" =
@@ -2006,9 +2016,16 @@
         google-cloud-speech
         google-cloud-texttospeech
       ];
+    "google_drive" =
+      ps: with ps; [
+        aiohasupervisor
+        cronsim
+        python-google-drive-api
+        securetar
+      ];
     "google_generative_ai_conversation" =
       ps: with ps; [
-        google-generativeai
+        google-genai
         ha-ffmpeg
         hassil
         home-assistant-intents
@@ -2056,6 +2073,7 @@
         aioesphomeapi
         aioruuvigateway
         aioshelly
+        aiousbwatcher
         bleak
         bleak-esphome
         bleak-retry-connector
@@ -2074,7 +2092,6 @@
         pymicro-vad
         pyserial
         pyspeex-noise
-        pyudev
         zeroconf
       ];
     "govee_light_local" =
@@ -2124,7 +2141,7 @@
       ];
     "habitica" =
       ps: with ps; [
-        habitipy
+        habiticalib
       ];
     "hardkernel" =
       ps: with ps; [
@@ -2166,6 +2183,9 @@
     "heatmiser" =
       ps: with ps; [
         heatmiserv3
+      ];
+    "heicko" =
+      ps: with ps; [
       ];
     "heiwa" =
       ps: with ps; [
@@ -2213,7 +2233,7 @@
       ];
     "hive" =
       ps: with ps; [
-        pyhiveapi
+        pyhive-integration
       ];
     "hko" =
       ps: with ps; [
@@ -2229,7 +2249,7 @@
       ];
     "home_connect" =
       ps: with ps; [
-        homeconnect
+        aiohomeconnect
       ];
     "home_plus_control" =
       ps: with ps; [
@@ -2244,41 +2264,31 @@
     "homeassistant_green" =
       ps: with ps; [
         aiohasupervisor
-        pillow
         psutil-home-assistant
-        pyserial
-        pyudev
         universal-silabs-flasher
-        zha
       ];
     "homeassistant_hardware" =
       ps: with ps; [
         aiohasupervisor
-        pillow
-        pyserial
-        pyudev
         universal-silabs-flasher
-        zha
       ];
     "homeassistant_sky_connect" =
       ps: with ps; [
         aiohasupervisor
-        pillow
+        aiousbwatcher
         psutil-home-assistant
         pyserial
-        pyudev
         universal-silabs-flasher
-        zha
       ];
     "homeassistant_yellow" =
       ps: with ps; [
         aiohasupervisor
-        pillow
         psutil-home-assistant
-        pyserial
-        pyudev
         universal-silabs-flasher
-        zha
+      ];
+    "homee" =
+      ps: with ps; [
+        pyhomee
       ];
     "homekit" =
       ps: with ps; [
@@ -2297,6 +2307,7 @@
         aiohomekit
         aioruuvigateway
         aioshelly
+        aiousbwatcher
         bleak
         bleak-esphome
         bleak-retry-connector
@@ -2316,7 +2327,6 @@
         pyserial
         pyspeex-noise
         python-otbr-api
-        pyudev
         zeroconf
       ];
     "homematic" =
@@ -2386,6 +2396,7 @@
         aioesphomeapi
         aioruuvigateway
         aioshelly
+        aiousbwatcher
         automower-ble
         bleak
         bleak-esphome
@@ -2404,7 +2415,6 @@
         pymicro-vad
         pyserial
         pyspeex-noise
-        pyudev
         zeroconf
       ];
     "huum" =
@@ -2441,6 +2451,7 @@
         aioesphomeapi
         aioruuvigateway
         aioshelly
+        aiousbwatcher
         bleak
         bleak-esphome
         bleak-retry-connector
@@ -2459,7 +2470,6 @@
         pymicro-vad
         pyserial
         pyspeex-noise
-        pyudev
         zeroconf
       ];
     "icloud" =
@@ -2471,6 +2481,7 @@
         aioesphomeapi
         aioruuvigateway
         aioshelly
+        aiousbwatcher
         bleak
         bleak-esphome
         bleak-retry-connector
@@ -2489,7 +2500,6 @@
         pymicro-vad
         pyserial
         pyspeex-noise
-        pyudev
         zeroconf
       ];
     "idteck_prox" =
@@ -2502,6 +2512,10 @@
     "iglo" =
       ps: with ps; [
       ]; # missing inputs: iglo
+    "igloohome" =
+      ps: with ps; [
+        igloohome-api
+      ];
     "ign_sismologia" =
       ps: with ps; [
         georss-ign-sismologia-client
@@ -2535,6 +2549,7 @@
         aioesphomeapi
         aioruuvigateway
         aioshelly
+        aiousbwatcher
         bleak
         bleak-esphome
         bleak-retry-connector
@@ -2553,7 +2568,6 @@
         pymicro-vad
         pyserial
         pyspeex-noise
-        pyudev
         zeroconf
       ];
     "incomfort" =
@@ -2573,6 +2587,7 @@
         aioesphomeapi
         aioruuvigateway
         aioshelly
+        aiousbwatcher
         bleak
         bleak-esphome
         bleak-retry-connector
@@ -2591,7 +2606,6 @@
         pymicro-vad
         pyserial
         pyspeex-noise
-        pyudev
         zeroconf
       ];
     "input_boolean" =
@@ -2617,15 +2631,12 @@
       ];
     "insteon" =
       ps: with ps; [
-        aiohasupervisor
-        cronsim
+        aiousbwatcher
         home-assistant-frontend
         insteon-frontend-home-assistant
         pillow
         pyinsteon
         pyserial
-        pyudev
-        securetar
       ];
     "integration" =
       ps: with ps; [
@@ -2643,6 +2654,10 @@
     "intesishome" =
       ps: with ps; [
         pyintesishome
+      ];
+    "iometer" =
+      ps: with ps; [
+        iometer
       ];
     "ios" =
       ps: with ps; [
@@ -2680,6 +2695,7 @@
         aioesphomeapi
         aioruuvigateway
         aioshelly
+        aiousbwatcher
         bleak
         bleak-esphome
         bleak-retry-connector
@@ -2698,7 +2714,6 @@
         pynecil
         pyserial
         pyspeex-noise
-        pyudev
         zeroconf
       ];
     "isal" =
@@ -2799,6 +2814,7 @@
         aioesphomeapi
         aioruuvigateway
         aioshelly
+        aiousbwatcher
         bleak
         bleak-esphome
         bleak-retry-connector
@@ -2817,7 +2833,6 @@
         pymicro-vad
         pyserial
         pyspeex-noise
-        pyudev
         zeroconf
       ];
     "kentuckypower" =
@@ -2836,6 +2851,7 @@
         aioesphomeapi
         aioruuvigateway
         aioshelly
+        aiousbwatcher
         bleak
         bleak-esphome
         bleak-retry-connector
@@ -2854,7 +2870,6 @@
         pymicrobot
         pyserial
         pyspeex-noise
-        pyudev
         zeroconf
       ];
     "kira" =
@@ -2881,12 +2896,9 @@
       ];
     "knx" =
       ps: with ps; [
-        aiohasupervisor
-        cronsim
         home-assistant-frontend
         knx-frontend
         pillow
-        securetar
         xknx
         xknxproject
       ];
@@ -2930,6 +2942,7 @@
         aioesphomeapi
         aioruuvigateway
         aioshelly
+        aiousbwatcher
         bleak
         bleak-esphome
         bleak-retry-connector
@@ -2948,7 +2961,6 @@
         pymicro-vad
         pyserial
         pyspeex-noise
-        pyudev
         zeroconf
       ];
     "lametric" =
@@ -2957,8 +2969,8 @@
       ];
     "landisgyr_heat_meter" =
       ps: with ps; [
+        aiousbwatcher
         pyserial
-        pyudev
         ultraheat-api
       ];
     "lannouncer" =
@@ -2981,19 +2993,17 @@
       ];
     "lcn" =
       ps: with ps; [
-        aiohasupervisor
-        cronsim
         home-assistant-frontend
         lcn-frontend
         pillow
         pypck
-        securetar
       ];
     "ld2410_ble" =
       ps: with ps; [
         aioesphomeapi
         aioruuvigateway
         aioshelly
+        aiousbwatcher
         bleak
         bleak-esphome
         bleak-retry-connector
@@ -3012,7 +3022,6 @@
         pymicro-vad
         pyserial
         pyspeex-noise
-        pyudev
         zeroconf
       ];
     "leaone" =
@@ -3020,6 +3029,7 @@
         aioesphomeapi
         aioruuvigateway
         aioshelly
+        aiousbwatcher
         bleak
         bleak-esphome
         bleak-retry-connector
@@ -3038,7 +3048,6 @@
         pymicro-vad
         pyserial
         pyspeex-noise
-        pyudev
         zeroconf
       ];
     "led_ble" =
@@ -3046,6 +3055,7 @@
         aioesphomeapi
         aioruuvigateway
         aioshelly
+        aiousbwatcher
         bleak
         bleak-esphome
         bleak-retry-connector
@@ -3064,7 +3074,6 @@
         pymicro-vad
         pyserial
         pyspeex-noise
-        pyudev
         zeroconf
       ];
     "legrand" =
@@ -3073,6 +3082,10 @@
     "lektrico" =
       ps: with ps; [
         lektricowifi
+      ];
+    "letpot" =
+      ps: with ps; [
+        letpot
       ];
     "lg_netcast" =
       ps: with ps; [
@@ -3115,6 +3128,9 @@
       ps: with ps; [
         limitlessled
       ];
+    "linak" =
+      ps: with ps; [
+      ];
     "linear_garage_door" =
       ps: with ps; [
         linear-garage-door
@@ -3133,6 +3149,9 @@
     "linux_battery" =
       ps: with ps; [
         batinfo
+      ];
+    "linx" =
+      ps: with ps; [
       ];
     "lirc" =
       ps: with ps; [
@@ -3175,13 +3194,10 @@
       ];
     "logbook" =
       ps: with ps; [
-        aiohasupervisor
-        cronsim
         fnv-hash-fast
         home-assistant-frontend
         pillow
         psutil-home-assistant
-        securetar
         sqlalchemy
       ];
     "logentries" =
@@ -3218,7 +3234,6 @@
       ];
     "lovelace" =
       ps: with ps; [
-        aiohasupervisor
         pillow
       ];
     "luci" =
@@ -3268,7 +3283,7 @@
     "manual_mqtt" =
       ps: with ps; [
         aiohasupervisor
-        paho-mqtt_1
+        paho-mqtt
       ];
     "marantz" =
       ps: with ps; [
@@ -3300,6 +3315,18 @@
     "mazda" =
       ps: with ps; [
       ];
+    "mcp" =
+      ps: with ps; [
+        mcp
+      ];
+    "mcp_server" =
+      ps: with ps; [
+        aiohttp-sse
+        anyio
+        hassil
+        home-assistant-intents
+        mcp
+      ];
     "mealie" =
       ps: with ps; [
         aiomealie
@@ -3313,6 +3340,7 @@
         aioesphomeapi
         aioruuvigateway
         aioshelly
+        aiousbwatcher
         bleak
         bleak-esphome
         bleak-retry-connector
@@ -3330,7 +3358,6 @@
         pymicro-vad
         pyserial
         pyspeex-noise
-        pyudev
         zeroconf
       ]; # missing inputs: medcom-ble
     "media_extractor" =
@@ -3362,6 +3389,7 @@
         aioesphomeapi
         aioruuvigateway
         aioshelly
+        aiousbwatcher
         bleak
         bleak-esphome
         bleak-retry-connector
@@ -3380,7 +3408,6 @@
         pymicro-vad
         pyserial
         pyspeex-noise
-        pyudev
         zeroconf
       ];
     "meraki" =
@@ -3473,6 +3500,7 @@
         aioesphomeapi
         aioruuvigateway
         aioshelly
+        aiousbwatcher
         bleak
         bleak-esphome
         bleak-retry-connector
@@ -3491,7 +3519,6 @@
         pymicro-vad
         pyserial
         pyspeex-noise
-        pyudev
         zeroconf
       ];
     "mobile_app" =
@@ -3520,9 +3547,9 @@
       ];
     "modem_callerid" =
       ps: with ps; [
+        aiousbwatcher
         phone-modem
         pyserial
-        pyudev
       ];
     "modern_forms" =
       ps: with ps; [
@@ -3555,6 +3582,7 @@
         aioesphomeapi
         aioruuvigateway
         aioshelly
+        aiousbwatcher
         bleak
         bleak-esphome
         bleak-retry-connector
@@ -3573,7 +3601,6 @@
         pymicro-vad
         pyserial
         pyspeex-noise
-        pyudev
         zeroconf
       ];
     "motion_blinds" =
@@ -3586,6 +3613,7 @@
         aioesphomeapi
         aioruuvigateway
         aioshelly
+        aiousbwatcher
         bleak
         bleak-esphome
         bleak-retry-connector
@@ -3604,7 +3632,6 @@
         pymicro-vad
         pyserial
         pyspeex-noise
-        pyudev
         zeroconf
       ];
     "motioneye" =
@@ -3622,27 +3649,27 @@
     "mqtt" =
       ps: with ps; [
         aiohasupervisor
-        paho-mqtt_1
+        paho-mqtt
       ];
     "mqtt_eventstream" =
       ps: with ps; [
         aiohasupervisor
-        paho-mqtt_1
+        paho-mqtt
       ];
     "mqtt_json" =
       ps: with ps; [
         aiohasupervisor
-        paho-mqtt_1
+        paho-mqtt
       ];
     "mqtt_room" =
       ps: with ps; [
         aiohasupervisor
-        paho-mqtt_1
+        paho-mqtt
       ];
     "mqtt_statestream" =
       ps: with ps; [
         aiohasupervisor
-        paho-mqtt_1
+        paho-mqtt
       ];
     "msteams" =
       ps: with ps; [
@@ -3662,11 +3689,8 @@
       ];
     "my" =
       ps: with ps; [
-        aiohasupervisor
-        cronsim
         home-assistant-frontend
         pillow
-        securetar
       ];
     "myq" =
       ps: with ps; [
@@ -3674,7 +3698,7 @@
     "mysensors" =
       ps: with ps; [
         aiohasupervisor
-        paho-mqtt_1
+        paho-mqtt
         pymysensors
       ];
     "mystrom" =
@@ -3823,7 +3847,8 @@
       ];
     "nmbs" =
       ps: with ps; [
-      ]; # missing inputs: pyrail
+        pyrail
+      ];
     "no_ip" =
       ps: with ps; [
       ];
@@ -3894,7 +3919,8 @@
       ];
     "nyt_games" =
       ps: with ps; [
-      ]; # missing inputs: nyt_games
+        nyt-games
+      ];
     "nzbget" =
       ps: with ps; [
       ]; # missing inputs: pynzbgetapi
@@ -3942,7 +3968,6 @@
       ];
     "onboarding" =
       ps: with ps; [
-        aiohasupervisor
         pillow
       ];
     "oncue" =
@@ -3952,6 +3977,10 @@
     "ondilo_ico" =
       ps: with ps; [
         ondilo
+      ];
+    "onedrive" =
+      ps: with ps; [
+        onedrive-personal-sdk
       ];
     "onewire" =
       ps: with ps; [
@@ -4046,6 +4075,7 @@
         aioesphomeapi
         aioruuvigateway
         aioshelly
+        aiousbwatcher
         bleak
         bleak-esphome
         bleak-retry-connector
@@ -4064,7 +4094,6 @@
         pymicro-vad
         pyserial
         pyspeex-noise
-        pyudev
         zeroconf
       ];
     "oru" =
@@ -4082,17 +4111,18 @@
       ]; # missing inputs: pyosoenergyapi
     "osramlightify" =
       ps: with ps; [
-      ]; # missing inputs: lightify
+        lightify
+      ];
     "otbr" =
       ps: with ps; [
         aiohasupervisor
+        aiousbwatcher
         ifaddr
         pillow
         psutil-home-assistant
         pyroute2
         pyserial
         python-otbr-api
-        pyudev
         universal-silabs-flasher
         zeroconf
         zha
@@ -4103,10 +4133,27 @@
       ];
     "ourgroceries" =
       ps: with ps; [
-      ]; # missing inputs: ourgroceries
+        ourgroceries
+      ];
     "overkiz" =
       ps: with ps; [
         pyoverkiz
+      ];
+    "overseerr" =
+      ps: with ps; [
+        aiohasupervisor
+        cronsim
+        ha-ffmpeg
+        hass-nabucasa
+        hassil
+        home-assistant-intents
+        mutagen
+        pymicro-vad
+        pyspeex-noise
+        python-matter-server
+        python-overseerr
+        pyturbojpeg
+        securetar
       ];
     "ovo_energy" =
       ps: with ps; [
@@ -4121,7 +4168,7 @@
         hassil
         home-assistant-intents
         mutagen
-        paho-mqtt_1
+        paho-mqtt
         pymicro-vad
         pynacl
         pyspeex-noise
@@ -4151,18 +4198,16 @@
       ];
     "panel_custom" =
       ps: with ps; [
-        aiohasupervisor
-        cronsim
         home-assistant-frontend
         pillow
-        securetar
       ];
     "pcs_lighting" =
       ps: with ps; [
       ];
     "peblar" =
       ps: with ps; [
-      ]; # missing inputs: peblar
+        peblar
+      ];
     "peco" =
       ps: with ps; [
         peco
@@ -4195,6 +4240,12 @@
     "pge" =
       ps: with ps; [
       ];
+    "pglab" =
+      ps: with ps; [
+        aiohasupervisor
+        paho-mqtt
+        pypglab
+      ];
     "philips_js" =
       ps: with ps; [
         ha-philipsjs
@@ -4205,7 +4256,7 @@
       ];
     "picnic" =
       ps: with ps; [
-        python-picnic-api
+        python-picnic-api2
       ];
     "picotts" =
       ps: with ps; [
@@ -4292,6 +4343,7 @@
         aioesphomeapi
         aioruuvigateway
         aioshelly
+        aiousbwatcher
         bleak
         bleak-esphome
         bleak-retry-connector
@@ -4309,7 +4361,6 @@
         pymicro-vad
         pyserial
         pyspeex-noise
-        pyudev
         zeroconf
       ];
     "profiler" =
@@ -4405,11 +4456,18 @@
       ps: with ps; [
         qbittorrent-api
       ];
+    "qbus" =
+      ps: with ps; [
+        aiohasupervisor
+        paho-mqtt
+        qbusmqttapi
+      ];
     "qingping" =
       ps: with ps; [
         aioesphomeapi
         aioruuvigateway
         aioshelly
+        aiousbwatcher
         bleak
         bleak-esphome
         bleak-retry-connector
@@ -4427,7 +4485,6 @@
         pymicro-vad
         pyserial
         pyspeex-noise
-        pyudev
         qingping-ble
         zeroconf
       ];
@@ -4514,8 +4571,8 @@
     "rainforest_raven" =
       ps: with ps; [
         aioraven
+        aiousbwatcher
         pyserial
-        pyudev
       ];
     "rainmachine" =
       ps: with ps; [
@@ -4529,6 +4586,7 @@
         aioesphomeapi
         aioruuvigateway
         aioshelly
+        aiousbwatcher
         bleak
         bleak-esphome
         bleak-retry-connector
@@ -4546,7 +4604,6 @@
         pymicro-vad
         pyserial
         pyspeex-noise
-        pyudev
         rapt-ble
         zeroconf
       ];
@@ -4747,6 +4804,7 @@
     "ruuvi_gateway" =
       ps: with ps; [
         aioruuvigateway
+        aiousbwatcher
         bleak
         bleak-retry-connector
         bluetooth-adapters
@@ -4755,13 +4813,13 @@
         dbus-fast
         habluetooth
         pyserial
-        pyudev
       ];
     "ruuvitag_ble" =
       ps: with ps; [
         aioesphomeapi
         aioruuvigateway
         aioshelly
+        aiousbwatcher
         bleak
         bleak-esphome
         bleak-retry-connector
@@ -4779,7 +4837,6 @@
         pymicro-vad
         pyserial
         pyspeex-noise
-        pyudev
         ruuvitag-ble
         zeroconf
       ];
@@ -4882,6 +4939,7 @@
         aioesphomeapi
         aioruuvigateway
         aioshelly
+        aiousbwatcher
         bleak
         bleak-esphome
         bleak-retry-connector
@@ -4899,7 +4957,6 @@
         pymicro-vad
         pyserial
         pyspeex-noise
-        pyudev
         sensirion-ble
         zeroconf
       ];
@@ -4917,6 +4974,7 @@
         aioesphomeapi
         aioruuvigateway
         aioshelly
+        aiousbwatcher
         bleak
         bleak-esphome
         bleak-retry-connector
@@ -4934,7 +4992,6 @@
         pymicro-vad
         pyserial
         pyspeex-noise
-        pyudev
         sensorpro-ble
         zeroconf
       ];
@@ -4943,6 +5000,7 @@
         aioesphomeapi
         aioruuvigateway
         aioshelly
+        aiousbwatcher
         bleak
         bleak-esphome
         bleak-retry-connector
@@ -4960,9 +5018,13 @@
         pymicro-vad
         pyserial
         pyspeex-noise
-        pyudev
         sensorpush-ble
         zeroconf
+      ];
+    "sensorpush_cloud" =
+      ps: with ps; [
+        sensorpush-api
+        sensorpush-ha
       ];
     "sensoterra" =
       ps: with ps; [
@@ -5009,6 +5071,7 @@
     "shelly" =
       ps: with ps; [
         aioshelly
+        aiousbwatcher
         bleak
         bleak-retry-connector
         bluetooth-adapters
@@ -5018,7 +5081,6 @@
         habluetooth
         ifaddr
         pyserial
-        pyudev
       ];
     "shodan" =
       ps: with ps; [
@@ -5129,25 +5191,15 @@
       ps: with ps; [
         smart-meter-texas
       ];
+    "smart_rollos" =
+      ps: with ps; [
+      ];
     "smarther" =
       ps: with ps; [
       ];
     "smartthings" =
       ps: with ps; [
-        aiohasupervisor
-        cronsim
-        ha-ffmpeg
-        hass-nabucasa
-        hassil
-        home-assistant-intents
-        mutagen
-        pymicro-vad
-        pysmartapp
         pysmartthings
-        pyspeex-noise
-        python-matter-server
-        pyturbojpeg
-        securetar
       ];
     "smarttub" =
       ps: with ps; [
@@ -5158,7 +5210,7 @@
       ]; # missing inputs: pysmarty2
     "smhi" =
       ps: with ps; [
-        smhi-pkg
+        pysmhi
       ];
     "smlight" =
       ps: with ps; [
@@ -5181,17 +5233,22 @@
     "snips" =
       ps: with ps; [
         aiohasupervisor
-        paho-mqtt_1
+        paho-mqtt
       ];
     "snmp" =
       ps: with ps; [
         pysnmp
+      ];
+    "snoo" =
+      ps: with ps; [
+        python-snoo
       ];
     "snooz" =
       ps: with ps; [
         aioesphomeapi
         aioruuvigateway
         aioshelly
+        aiousbwatcher
         bleak
         bleak-esphome
         bleak-retry-connector
@@ -5210,7 +5267,6 @@
         pyserial
         pysnooz
         pyspeex-noise
-        pyudev
         zeroconf
       ];
     "solaredge" =
@@ -5292,6 +5348,8 @@
       ];
     "sql" =
       ps: with ps; [
+        fnv-hash-fast
+        psutil-home-assistant
         sqlalchemy
         sqlparse
       ];
@@ -5417,6 +5475,7 @@
         aioesphomeapi
         aioruuvigateway
         aioshelly
+        aiousbwatcher
         bleak
         bleak-esphome
         bleak-retry-connector
@@ -5435,7 +5494,6 @@
         pyserial
         pyspeex-noise
         pyswitchbot
-        pyudev
         zeroconf
       ];
     "switchbot_cloud" =
@@ -5525,7 +5583,7 @@
       ps: with ps; [
         aiohasupervisor
         hatasmota
-        paho-mqtt_1
+        paho-mqtt
       ];
     "tautulli" =
       ps: with ps; [
@@ -5608,6 +5666,7 @@
         aioesphomeapi
         aioruuvigateway
         aioshelly
+        aiousbwatcher
         bleak
         bleak-esphome
         bleak-retry-connector
@@ -5625,7 +5684,6 @@
         pymicro-vad
         pyserial
         pyspeex-noise
-        pyudev
         thermobeacon-ble
         zeroconf
       ];
@@ -5637,6 +5695,7 @@
         aioesphomeapi
         aioruuvigateway
         aioshelly
+        aiousbwatcher
         bleak
         bleak-esphome
         bleak-retry-connector
@@ -5654,7 +5713,6 @@
         pymicro-vad
         pyserial
         pyspeex-noise
-        pyudev
         thermopro-ble
         zeroconf
       ];
@@ -5700,6 +5758,7 @@
         aioesphomeapi
         aioruuvigateway
         aioshelly
+        aiousbwatcher
         bleak
         bleak-esphome
         bleak-retry-connector
@@ -5717,7 +5776,6 @@
         pymicro-vad
         pyserial
         pyspeex-noise
-        pyudev
         tilt-ble
         zeroconf
       ];
@@ -5780,7 +5838,8 @@
       ];
     "touchline" =
       ps: with ps; [
-      ]; # missing inputs: pytouchline
+        pytouchline-extended
+      ];
     "touchline_sl" =
       ps: with ps; [
         pytouchlinesl
@@ -5905,6 +5964,9 @@
     "ubiwizz" =
       ps: with ps; [
       ];
+    "ublockout" =
+      ps: with ps; [
+      ];
     "ubus" =
       ps: with ps; [
         openwrt-ubus-rpc
@@ -5972,8 +6034,8 @@
       ];
     "usb" =
       ps: with ps; [
+        aiousbwatcher
         pyserial
-        pyudev
       ];
     "usgs_earthquakes_feed" =
       ps: with ps; [
@@ -6007,8 +6069,8 @@
       ];
     "velbus" =
       ps: with ps; [
+        aiousbwatcher
         pyserial
-        pyudev
         velbus-aio
       ];
     "velux" =
@@ -6081,6 +6143,7 @@
         ha-ffmpeg
         hassil
         home-assistant-intents
+        ifaddr
         mutagen
         pymicro-vad
         pyspeex-noise
@@ -6160,6 +6223,10 @@
     "weatherkit" =
       ps: with ps; [
         apple-weatherkit
+      ];
+    "webdav" =
+      ps: with ps; [
+        aiowebdav2
       ];
     "webhook" =
       ps: with ps; [
@@ -6291,6 +6358,7 @@
         aioesphomeapi
         aioruuvigateway
         aioshelly
+        aiousbwatcher
         bleak
         bleak-esphome
         bleak-retry-connector
@@ -6308,7 +6376,6 @@
         pymicro-vad
         pyserial
         pyspeex-noise
-        pyudev
         xiaomi-ble
         zeroconf
       ];
@@ -6359,6 +6426,7 @@
         aioesphomeapi
         aioruuvigateway
         aioshelly
+        aiousbwatcher
         bleak
         bleak-esphome
         bleak-retry-connector
@@ -6376,7 +6444,6 @@
         pymicro-vad
         pyserial
         pyspeex-noise
-        pyudev
         yalexs-ble
         zeroconf
       ];
@@ -6459,9 +6526,9 @@
     "zha" =
       ps: with ps; [
         aiohasupervisor
+        aiousbwatcher
         pillow
         pyserial
-        pyudev
         universal-silabs-flasher
         zha
       ];
@@ -6487,8 +6554,8 @@
     "zwave_js" =
       ps: with ps; [
         aiohasupervisor
+        aiousbwatcher
         pyserial
-        pyudev
         zwave-js-server-python
       ];
     "zwave_me" =
@@ -6572,6 +6639,7 @@
     "azure_data_explorer"
     "azure_devops"
     "azure_event_hub"
+    "azure_storage"
     "backup"
     "baf"
     "balboa"
@@ -6780,6 +6848,7 @@
     "google_assistant"
     "google_assistant_sdk"
     "google_cloud"
+    "google_drive"
     "google_generative_ai_conversation"
     "google_mail"
     "google_photos"
@@ -6821,6 +6890,7 @@
     "homeassistant_hardware"
     "homeassistant_sky_connect"
     "homeassistant_yellow"
+    "homee"
     "homekit"
     "homekit_controller"
     "homematic"
@@ -6847,6 +6917,7 @@
     "icloud"
     "idasen_desk"
     "ifttt"
+    "igloohome"
     "ign_sismologia"
     "image"
     "image_processing"
@@ -6868,6 +6939,7 @@
     "intellifire"
     "intent"
     "intent_script"
+    "iometer"
     "ios"
     "iotty"
     "ipma"
@@ -6913,6 +6985,7 @@
     "leaone"
     "led_ble"
     "lektrico"
+    "letpot"
     "lg_netcast"
     "lg_soundbar"
     "lg_thinq"
@@ -6952,6 +7025,8 @@
     "matter"
     "maxcube"
     "mazda"
+    "mcp"
+    "mcp_server"
     "mealie"
     "meater"
     "media_extractor"
@@ -7024,6 +7099,7 @@
     "niko_home_control"
     "nina"
     "nmap_tracker"
+    "nmbs"
     "no_ip"
     "nobo_hub"
     "nordpool"
@@ -7037,6 +7113,7 @@
     "nut"
     "nws"
     "nx584"
+    "nyt_games"
     "obihai"
     "octoprint"
     "ohme"
@@ -7045,6 +7122,7 @@
     "onboarding"
     "oncue"
     "ondilo_ico"
+    "onedrive"
     "onewire"
     "onkyo"
     "onvif"
@@ -7065,18 +7143,22 @@
     "oralb"
     "otbr"
     "otp"
+    "ourgroceries"
     "overkiz"
+    "overseerr"
     "ovo_energy"
     "owntracks"
     "p1_monitor"
     "palazzetti"
     "panasonic_viera"
     "panel_custom"
+    "peblar"
     "peco"
     "pegel_online"
     "permobil"
     "persistent_notification"
     "person"
+    "pglab"
     "philips_js"
     "pi_hole"
     "picnic"
@@ -7105,6 +7187,7 @@
     "pyload"
     "python_script"
     "qbittorrent"
+    "qbus"
     "qingping"
     "qld_bushfire"
     "qnap"
@@ -7175,6 +7258,7 @@
     "sensor"
     "sensorpro"
     "sensorpush"
+    "sensorpush_cloud"
     "sensoterra"
     "sentry"
     "senz"
@@ -7210,6 +7294,7 @@
     "snapcast"
     "snips"
     "snmp"
+    "snoo"
     "snooz"
     "solaredge"
     "solarlog"
@@ -7365,6 +7450,7 @@
     "weatherflow"
     "weatherflow_cloud"
     "weatherkit"
+    "webdav"
     "webhook"
     "webmin"
     "webostv"

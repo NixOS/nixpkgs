@@ -128,16 +128,6 @@ in
           '');
     }
 
-    (lib.mkIf (!cfg.enable) {
-      systemd.services = {
-        "serial-getty@ttyS0".enable = false;
-        "serial-getty@hvc0".enable = false;
-        "getty@tty1".enable = false;
-        "autovt@".enable = false;
-        systemd-vconsole-setup.enable = false;
-      };
-    })
-
     (lib.mkIf cfg.enable (lib.mkMerge [
       { environment.systemPackages = [ pkgs.kbd ];
 
@@ -176,6 +166,10 @@ in
           "${cfg.font}"
         ] ++ lib.optionals (lib.hasPrefix builtins.storeDir cfg.keyMap) [
           "${cfg.keyMap}"
+        ];
+
+        systemd.additionalUpstreamSystemUnits = [
+          "systemd-vconsole-setup.service"
         ];
 
         systemd.services.reload-systemd-vconsole-setup =

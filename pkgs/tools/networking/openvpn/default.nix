@@ -15,6 +15,7 @@
   pkcs11Support ? false,
   pkcs11helper,
   nixosTests,
+  unixtools,
 }:
 
 let
@@ -29,7 +30,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-GvELhpIr18mYJ8wPFR3+loQze45evbOXU5FyhBrCSmo=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs =
+    [ pkg-config ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      unixtools.route
+      unixtools.ifconfig
+    ];
 
   buildInputs =
     [

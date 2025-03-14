@@ -8,13 +8,13 @@
   runCommandLocal,
 }:
 let
-  version = "6.7";
+  version = "6.8.3";
 
   src = fetchFromGitHub {
     owner = "retrospy";
     repo = "RetroSpy";
     rev = "v${version}";
-    hash = "sha256-L16LezV9z7pCRcXKv+KfGTCbCQfBd3y3dUidNeJUznQ=";
+    hash = "sha256-NuLfFSRGOIB6h4b5XZ7Qs8y5L+fqozQfMr8q0xZAurQ=";
   };
 
   executables = [

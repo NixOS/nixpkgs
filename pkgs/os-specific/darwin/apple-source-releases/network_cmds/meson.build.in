@@ -4,7 +4,6 @@
 # Project settings
 project('network_cmds', 'c', version : '@version@')
 add_global_arguments(
-    '-DTARGET_OS_OSX=1', # Needed for static builds.
     # Many programs use old prototypes
     '-Wno-deprecated-non-prototype',
     # Suppresses suffixing symbols with '$UNIX2003', which causes link failures.
@@ -16,21 +15,6 @@ add_global_arguments(
     '-D__APPLE_USE_RFC_3542=1',
     '-D__APPLE_API_OBSOLETE=1',
     language : 'c',
-)
-
-
-# Generators
-rpcgen_bin = find_program('rpcgen')
-rpcgen = generator(
-    rpcgen_bin,
-    arguments : [ '-c', '-o', '@OUTPUT@', '@INPUT@' ],
-    output : '@BASENAME@_xdr.c',
-)
-
-rpcgen_header = generator(
-    rpcgen_bin,
-    arguments : [ '-h', '-o', '@OUTPUT@', '@INPUT@' ],
-    output : '@BASENAME@.h',
 )
 
 
@@ -131,7 +115,6 @@ executable(
     c_args : [
         '-DUSE_BONDS',
         '-DUSE_VLANS',
-        '-DTARGET_OS_IPHONE=0', # Silence error related to undefined target macro
     ],
     install : true,
     sources : [
@@ -340,8 +323,7 @@ executable(
     install : true,
     sources : [
         'spray.tproj/spray.c',
-        rpcgen_header.process('spray.tproj/spray.x'),
-        rpcgen.process('spray.tproj/spray.x'),
+        'spray.tproj/spray_xdr.c',
     ],
 )
 install_man('spray.tproj/spray.8')

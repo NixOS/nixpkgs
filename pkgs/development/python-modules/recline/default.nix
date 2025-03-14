@@ -1,5 +1,6 @@
 {
   lib,
+  argcomplete,
   buildPythonPackage,
   fetchFromGitHub,
   pudb,
@@ -10,7 +11,7 @@
 buildPythonPackage rec {
   pname = "recline";
   version = "2024.7.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "NetApp";
@@ -19,7 +20,18 @@ buildPythonPackage rec {
     sha256 = "sha256-Qc4oofuhSZ2S5zuCY9Ce9ISldYI3MDUJXFc8VcXdLIU=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  patches = [
+    # based on https://github.com/NetApp/recline/pull/21
+    ./devendor.patch
+  ];
+
+  postPatch = ''
+    rm -r recline/vendor/argcomplete
+  '';
+
+  build-system = [ setuptools ];
+
+  dependencies = [ argcomplete ];
 
   nativeCheckInputs = [
     pudb

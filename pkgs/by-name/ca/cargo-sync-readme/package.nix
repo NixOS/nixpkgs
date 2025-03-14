@@ -10,12 +10,13 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "phaazon";
-    repo = pname;
+    repo = "cargo-sync-readme";
     rev = version;
     sha256 = "sha256-n9oIWblTTuXFFQFN6mpQiCH5N7yg5fAp8v9vpB5/DAo=";
   };
 
-  cargoHash = "sha256-DsB2C2ELuvuVSvxG/xztmnY2qfX8+Y7udbXlpRQoL/c=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-A1LZKENNOcgUz6eacUo9WCKIZWA7dJa0zuZrgzRr/Js=";
 
   meta = with lib; {
     description = "Cargo plugin that generates a Markdown section in your README based on your Rust documentation";

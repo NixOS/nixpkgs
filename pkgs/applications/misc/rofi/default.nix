@@ -23,18 +23,19 @@
   check,
   glib,
   buildPackages,
+  pandoc,
 }:
 
 stdenv.mkDerivation rec {
   pname = "rofi-unwrapped";
-  version = "1.7.7";
+  version = "1.7.8";
 
   src = fetchFromGitHub {
     owner = "davatorium";
     repo = "rofi";
     rev = version;
     fetchSubmodules = true;
-    hash = "sha256-2rPEn+XotijqLYo2EcoiJbgdbRk4SCQ+D4jZ1gwpCQw=";
+    hash = "sha256-TEn3LoTUc5mxYcVkckIFTfkqQ9cUJxkXyg/5TFv5TZ0=";
   };
 
   preConfigure = ''
@@ -54,6 +55,7 @@ stdenv.mkDerivation rec {
     pkg-config
     flex
     bison
+    pandoc
   ];
   buildInputs = [
     libxkbcommon

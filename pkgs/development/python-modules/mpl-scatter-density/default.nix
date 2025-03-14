@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "mpl-scatter-density";
-  version = "0.7";
+  version = "0.8";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "astrofrog";
     repo = pname;
     tag = "v${version}";
-    sha256 = "sha256-MMxM+iv5p9ZLcBpqa3tBBPbsMM/PTg6BXaDpGgSw+DE=";
+    sha256 = "sha256-pDiKJAN/4WFf5icNU/ZGOvw0jqN3eGZHgilm2oolpbE=";
   };
 
   patches = [

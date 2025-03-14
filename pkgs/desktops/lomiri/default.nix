@@ -15,12 +15,14 @@ let
       #### Core Apps
       lomiri = callPackage ./applications/lomiri { };
       lomiri-calculator-app = callPackage ./applications/lomiri-calculator-app { };
+      lomiri-calendar-app = callPackage ./applications/lomiri-calendar-app { };
       lomiri-camera-app = callPackage ./applications/lomiri-camera-app { };
       lomiri-clock-app = callPackage ./applications/lomiri-clock-app { };
       lomiri-docviewer-app = callPackage ./applications/lomiri-docviewer-app { };
       lomiri-filemanager-app = callPackage ./applications/lomiri-filemanager-app { };
       lomiri-gallery-app = callPackage ./applications/lomiri-gallery-app { };
       lomiri-mediaplayer-app = callPackage ./applications/lomiri-mediaplayer-app { };
+      lomiri-music-app = callPackage ./applications/lomiri-music-app { };
       lomiri-system-settings-unwrapped = callPackage ./applications/lomiri-system-settings { };
       lomiri-system-settings = callPackage ./applications/lomiri-system-settings/wrapper.nix { };
       lomiri-terminal-app = callPackage ./applications/lomiri-terminal-app { };

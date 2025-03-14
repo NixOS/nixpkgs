@@ -61,11 +61,8 @@ stdenv.mkDerivation (finalAttrs: {
       unicode-dfs-2016
     ];
     maintainers = with lib.maintainers; [
-      AndersonTorres
       joachifm
     ];
     platforms = lib.platforms.unix;
   };
 })
-# TODO [ AndersonTorres ]: lksh
-# TODO [ AndersonTorres ]: a more accurate licensing info

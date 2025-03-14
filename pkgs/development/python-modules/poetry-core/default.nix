@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "poetry-core";
-  version = "2.0.0";
+  version = "2.1.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "python-poetry";
     repo = "poetry-core";
     tag = version;
-    hash = "sha256-3dmvFn2rxtR0SK8oiEHIVJhpJpX4Mm/6kZnIYNSDv90=";
+    hash = "sha256-DeDfDaP+jPrN6F/lv6shVOG6+4VdD1nL9mz1wJn55Sc=";
   };
 
   nativeCheckInputs = [
@@ -60,7 +60,7 @@ buildPythonPackage rec {
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-int-conversion";
 
   meta = with lib; {
-    changelog = "https://github.com/python-poetry/poetry-core/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/python-poetry/poetry-core/blob/${src.tag}/CHANGELOG.md";
     description = "Poetry PEP 517 Build Backend";
     homepage = "https://github.com/python-poetry/poetry-core/";
     license = licenses.mit;

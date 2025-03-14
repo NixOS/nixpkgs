@@ -16,7 +16,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-Nii+rdz51+Acd+lZVpBispeFfVE8buxEGHvK2zMKbOM=";
   };
 
-  cargoHash = "sha256-ua2YQdevf1MalqeNvAAgtlESwN5gA+N3FCQUiKd0wMM=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-Hnr003TbG0y/Ry4yOAs6t6rhc5yEJkc+TDAuxGePb0Y=";
 
   meta = with lib; {
     description = "CLI tool to check the integrity of a restic repository without unlocking it";

@@ -5,9 +5,41 @@
  */
 let
 
-  inherit (import ./fixed-points.nix { inherit lib; }) makeExtensible;
+  # A copy of `lib.makeExtensible'` in order to document `extend`.
+  # It has been leading to some trouble, so we have to document it specially.
+  makeExtensible' =
+    rattrs:
+    let self = rattrs self // {
+          /**
+            Patch the Nixpkgs library
 
-  lib = makeExtensible (self: let
+            A function that applies patches onto the nixpkgs library.
+            Usage is discouraged for most scenarios.
+
+            :::{.note}
+            The name `extends` is a bit misleading, as it doesn't actually extend the library, but rather patches it.
+            It is merely a consequence of being implemented by `makeExtensible`.
+            :::
+
+            # Inputs
+
+            - An "extension function" `f` that returns attributes that will be updated in the returned Nixpkgs library.
+
+            # Output
+
+            A patched Nixpkgs library.
+
+            :::{.warning}
+            This functionality is intended as an escape hatch for when the provided version of the Nixpkgs library has a flaw.
+
+            If you were to use it to add new functionality, you will run into compatibility and interoperability issues.
+            :::
+          */
+          extend = f: lib.makeExtensible (lib.extends f rattrs);
+        };
+    in self;
+
+  lib = makeExtensible' (self: let
     callLibs = file: import file { lib = self; };
   in {
 
@@ -109,7 +141,7 @@ let
       isStorePath isStringLike
       isValidPosixName toShellVar toShellVars trim trimWith
       escapeRegex escapeURL escapeXML replaceChars lowerChars
-      upperChars toLower toUpper addContextFrom splitString
+      upperChars toLower toUpper toSentenceCase addContextFrom splitString
       removePrefix removeSuffix versionOlder versionAtLeast
       getName getVersion match split
       cmakeOptionType cmakeBool cmakeFeature

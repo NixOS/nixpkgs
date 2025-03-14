@@ -68,7 +68,8 @@ rustPlatform.buildRustPackage rec {
     ./0003-ignore-warnings.patch
   ];
 
-  cargoHash = "sha256-QZ26GmsKyENkzdCGg2peie/aJhEt7KQAF/lwsibonDk=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-8LgAHznxU30bbK8ivNamVD3Yi2pljgpqJg2WC0nxftk=";
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-fdeclspec";
 

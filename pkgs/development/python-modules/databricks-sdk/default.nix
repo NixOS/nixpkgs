@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "databricks-sdk";
-  version = "0.41.0";
+  version = "0.45.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "databricks";
     repo = "databricks-sdk-py";
     tag = "v${version}";
-    hash = "sha256-mKytUMPipee/sg5VWBTfCg0sZwNg69pI+Uuqu1EhNIc=";
+    hash = "sha256-SoE8MgwOhm82ymjaZQZCzw7hd5DMWxSvgaAwIGlm9cQ=";
   };
 
   build-system = [
@@ -57,7 +57,7 @@ buildPythonPackage rec {
   disabledTests =
     [
       # Require internet access
-      # ValueError: default auth: cannot configure default credentials, please chec...
+      # ValueError: default auth: cannot configure default credentials, please check...
       "test_azure_cli_does_not_specify_tenant_id_with_msi"
       "test_azure_cli_fallback"
       "test_azure_cli_user_no_management_access"

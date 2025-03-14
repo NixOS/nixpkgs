@@ -11,13 +11,13 @@
 buildKodiBinaryAddon rec {
   pname = "visualization-waveform";
   namespace = "visualization.waveform";
-  version = "21.0.1";
+  version = "21.0.2";
 
   src = fetchFromGitHub {
     owner = "xbmc";
     repo = namespace;
     rev = "${version}-${rel}";
-    hash = "sha256-ocLiDt9Fvwb/KvCsULyWRCNK0vOGMh/r88PRn1WYyXs=";
+    hash = "sha256-RiFPR0nlyrnHzHBosvU+obbdtHXjdgMtxscQTcQ7kLw=";
   };
 
   extraBuildInputs = [

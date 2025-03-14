@@ -3,8 +3,9 @@
   python3,
   fetchFromGitHub,
   ffmpeg-headless,
+  librespot,
   nixosTests,
-  substituteAll,
+  replaceVars,
   providers ? [ ],
 }:
 
@@ -13,6 +14,22 @@ let
     self = python;
     packageOverrides = self: super: {
       music-assistant-frontend = self.callPackage ./frontend.nix { };
+
+      music-assistant-models = super.music-assistant-models.overridePythonAttrs (oldAttrs: rec {
+        version = "1.1.30";
+
+        src = fetchFromGitHub {
+          owner = "music-assistant";
+          repo = "models";
+          tag = version;
+          hash = "sha256-ZLTRHarjVFAk+tYPkgLm192rE+C82vNzqs8PmJhGSeg=";
+        };
+
+        postPatch = ''
+          substituteInPlace pyproject.toml \
+            --replace-fail "0.0.0" "${version}"
+        '';
+      });
     };
   };
 
@@ -27,21 +44,23 @@ in
 
 python.pkgs.buildPythonApplication rec {
   pname = "music-assistant";
-  version = "2.3.4";
+  version = "2.4.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "music-assistant";
     repo = "server";
     tag = version;
-    hash = "sha256-HV2R5zMTao8akUNZMGRKbU8BIxWmdjKFLsGMqA5cfBs=";
+    hash = "sha256-5FIIXIn4tEz6w/uAh6PGkU4tU+mz7Jpb3+bq1mRNr2Y=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./ffmpeg.patch;
+    (replaceVars ./ffmpeg.patch {
       ffmpeg = "${lib.getBin ffmpeg-headless}/bin/ffmpeg";
       ffprobe = "${lib.getBin ffmpeg-headless}/bin/ffprobe";
+    })
+    (replaceVars ./librespot.patch {
+      librespot = lib.getExe librespot;
     })
 
     # Disable interactive dependency resolution, which clashes with the immutable Python environment
@@ -51,6 +70,8 @@ python.pkgs.buildPythonApplication rec {
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail "0.0.0" "${version}"
+
+    rm -rv music_assistant/providers/spotify/bin
   '';
 
   build-system = with python.pkgs; [
@@ -59,6 +80,8 @@ python.pkgs.buildPythonApplication rec {
 
   pythonRelaxDeps = [
     "aiohttp"
+    "aiosqlite"
+    "certifi"
     "colorlog"
     "cryptography"
     "mashumaro"
@@ -96,8 +119,10 @@ python.pkgs.buildPythonApplication rec {
       memory-tempfile
       music-assistant-frontend
       music-assistant-models
+      mutagen
       orjson
       pillow
+      podcastparser
       python-slugify
       shortuuid
       unidecode
@@ -109,18 +134,22 @@ python.pkgs.buildPythonApplication rec {
   nativeCheckInputs =
     with python.pkgs;
     [
-      aiojellyfin
       pytest-aiohttp
       pytest-cov-stub
+      pytest-timeout
       pytestCheckHook
       syrupy
       pytest-timeout
     ]
-    ++ lib.flatten (lib.attrValues optional-dependencies);
+    ++ lib.flatten (lib.attrValues optional-dependencies)
+    ++ (providerPackages.jellyfin python.pkgs)
+    ++ (providerPackages.opensubsonic python.pkgs);
 
   pytestFlagsArray = [
-    # blocks in setup
-    "--deselect=tests/server/providers/jellyfin/test_init.py::test_initial_sync"
+    # blocks in poll()
+    "--deselect=tests/providers/jellyfin/test_init.py::test_initial_sync"
+    "--deselect=tests/core/test_server_base.py::test_start_and_stop_server"
+    "--deselect=tests/core/test_server_base.py::test_events"
   ];
 
   pythonImportsCheck = [ "music_assistant" ];

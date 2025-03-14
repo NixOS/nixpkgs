@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, tzdata, fetchpatch, substituteAll }:
+{ lib, stdenv, fetchFromGitHub, cmake, tzdata, fetchpatch, replaceVars }:
 
 stdenv.mkDerivation rec {
   pname = "howard-hinnant-date";
@@ -22,8 +22,7 @@ stdenv.mkDerivation rec {
     # Without this patch, this library will drop a `tzdata` directory into
     # `~/Downloads` if it cannot find `/usr/share/zoneinfo`. Make the path it
     # searches for `zoneinfo` be the one from the `tzdata` package.
-    (substituteAll {
-      src = ./make-zoneinfo-available.diff;
+    (replaceVars ./make-zoneinfo-available.diff {
       inherit tzdata;
     })
   ];

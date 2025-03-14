@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchurl,
+  removeReferencesTo,
   darwin,
   perl,
   pkg-config,
@@ -26,11 +27,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bind";
-  version = "9.18.28";
+  version = "9.18.33";
 
   src = fetchurl {
     url = "https://downloads.isc.org/isc/bind9/${finalAttrs.version}/${finalAttrs.pname}-${finalAttrs.version}.tar.xz";
-    hash = "sha256-58zpoWX3thnu/Egy8KjcFrAF0p44kK7WAIxQbqKGpec=";
+    hash = "sha256-+zc/rF67xBxkUWCv1an7RRkY9sDmmrHZR0FU4rUV3kA=";
   };
 
   outputs = [
@@ -49,6 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     perl
     pkg-config
+    removeReferencesTo
   ];
   buildInputs =
     [
@@ -128,6 +130,10 @@ stdenv.mkDerivation (finalAttrs: {
       sed -i '/^ISC_TEST_ENTRY(tcpdns_recv_one/d' tests/isc/netmgr_test.c
     '';
 
+  postFixup = ''
+    remove-references-to -t "$out" "$dnsutils/bin/delv"
+  '';
+
   passthru = {
     tests = {
       withCheck = finalAttrs.finalPackage.overrideAttrs { doCheck = true; };
@@ -150,7 +156,9 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.isc.org/bind/";
     description = "Domain name server";
     license = licenses.mpl20;
-    changelog = "https://downloads.isc.org/isc/bind9/cur/${lib.versions.majorMinor finalAttrs.version}/CHANGES";
+    changelog = "https://downloads.isc.org/isc/bind9/cur/${lib.versions.majorMinor finalAttrs.version}/doc/arm/html/notes.html#notes-for-bind-${
+      lib.replaceStrings [ "." ] [ "-" ] finalAttrs.version
+    }";
     maintainers = with maintainers; [ globin ];
     platforms = platforms.unix;
 

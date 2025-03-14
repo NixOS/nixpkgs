@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "deprecated";
-  version = "1.2.14";
+  version = "1.2.15";
   pyproject = true;
 
   outputs = [
@@ -23,8 +23,13 @@ buildPythonPackage rec {
     owner = "tantale";
     repo = "deprecated";
     tag = "v${version}";
-    hash = "sha256-H5Gp2F/ChMeEH4fSYXIB34syDIzDymfN949ksJnS0k4=";
+    hash = "sha256-slMPL2L0TZ7L19nfHMOM4jQlkJ7HIyyDPlfC9yhhd98=";
   };
+
+  patches = [
+    # https://github.com/laurent-laporte-pro/deprecated/pull/79
+    ./sphinx8-compat.patch
+  ];
 
   build-system = [ setuptools ];
 

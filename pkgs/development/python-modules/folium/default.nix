@@ -16,13 +16,12 @@
   selenium,
   setuptools,
   setuptools-scm,
-  wheel,
   xyzservices,
 }:
 
 buildPythonPackage rec {
   pname = "folium";
-  version = "0.19.4";
+  version = "0.19.5";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -31,16 +30,15 @@ buildPythonPackage rec {
     owner = "python-visualization";
     repo = "folium";
     tag = "v${version}";
-    hash = "sha256-qTTJK12nHIhcMkPu4rb2IYWm96EjRafftacrlfeGqZg=";
+    hash = "sha256-jZrGJWSmQXQNlZYldeNSh5AhlTHow5gxCEkksEoKZ7E=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
-    wheel
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     branca
     jinja2
     numpy
@@ -55,7 +53,6 @@ buildPythonPackage rec {
     pandas
     pillow
     pytestCheckHook
-    selenium
   ];
 
   disabledTests = [
@@ -69,6 +66,11 @@ buildPythonPackage rec {
     "test_valid_png"
     # pooch tries to write somewhere it can, and geodatasets does not give us an env var to customize this.
     "test_timedynamic_geo_json"
+  ];
+
+  disabledTestPaths = [
+    # Import issue with selenium.webdriver.common.fedcm
+    "tests/selenium"
   ];
 
   pythonImportsCheck = [ "folium" ];

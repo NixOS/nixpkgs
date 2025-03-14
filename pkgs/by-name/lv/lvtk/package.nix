@@ -37,11 +37,15 @@ stdenv.mkDerivation (finalAttrs: {
     pugl
   ];
 
+  postInstall = ''
+    mv $out/include/lvtk-3.0/lvtk $out/include/
+    rmdir $out/include/lvtk-3.0/
+  '';
+
   enableParallelBuilding = true;
 
   meta = {
     description = "Set C++ wrappers around the LV2 C API";
-    mainProgram = "ttl2c";
     homepage = "https://lvtk.org/";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ bot-wxt1221 ];

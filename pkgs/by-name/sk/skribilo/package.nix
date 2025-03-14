@@ -75,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
       conventions used in emails, Usenet and text.
     '';
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.unix;
   };
 })

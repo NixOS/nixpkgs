@@ -6,15 +6,16 @@
   libfido2,
   pam,
   openssl,
+  nixosTests,
 }:
 
 stdenv.mkDerivation rec {
   pname = "pam_u2f";
-  version = "1.3.1";
+  version = "1.3.2";
 
   src = fetchurl {
     url = "https://developers.yubico.com/pam-u2f/Releases/${pname}-${version}.tar.gz";
-    hash = "sha256-mhNUmUf4RPazq2kdca+09vAKRdFl/tJ7AcZsB3UKk4c=";
+    hash = "sha256-OL59GJcnHLP+45HSODs1r8EmrUMakanebpkQjBLMlJA=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -35,6 +36,10 @@ stdenv.mkDerivation rec {
     install:
     EOF
   '';
+
+  passthru.tests = {
+    pam_u2f = nixosTests.pam-u2f;
+  };
 
   meta = with lib; {
     homepage = "https://developers.yubico.com/pam-u2f/";

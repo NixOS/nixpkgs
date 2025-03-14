@@ -19,7 +19,7 @@
   yojson,
   astring,
   opam,
-  git,
+  gitMinimal,
   findlib,
   mercurial,
   bzip2,
@@ -34,7 +34,7 @@ let
   runtimeInputs = [
     opam
     findlib
-    git
+    gitMinimal
     mercurial
     bzip2
     gnutar
@@ -78,7 +78,10 @@ buildDunePackage rec {
     astring
     fpath
   ];
-  nativeCheckInputs = [ odoc ];
+  nativeCheckInputs = [
+    odoc
+    gitMinimal
+  ];
   checkInputs = [ alcotest ] ++ runtimeInputs;
   doCheck = true;
 

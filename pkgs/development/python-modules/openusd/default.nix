@@ -52,14 +52,14 @@ in
 
 buildPythonPackage rec {
   pname = "openusd";
-  version = "24.08";
+  version = "24.11";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "PixarAnimationStudios";
     repo = "OpenUSD";
     tag = "v${version}";
-    hash = "sha256-slBJleeDi0mCVThty4NUX4M9vaCLV+E8rnp1Ab77TmE=";
+    hash = "sha256-ugTb28DAn8D3URxCyGeptf7F3YpL7bX4++lyVN+apas=";
   };
 
   stdenv = python.stdenv;
@@ -70,8 +70,8 @@ buildPythonPackage rec {
     (fetchpatch {
       name = "port-to-embree-4.patch";
       # https://github.com/PixarAnimationStudios/OpenUSD/pull/2266
-      url = "https://github.com/PixarAnimationStudios/OpenUSD/commit/c8fec1342e05dca98a1afd4ea93c7a5f0b41e25b.patch?full_index=1";
-      hash = "sha256-pK1TUwmVv9zsZkOypq25pl+FJDxJJvozUtVP9ystGtI=";
+      url = "https://github.com/PixarAnimationStudios/OpenUSD/commit/a07a6b4d1da19bfc499db49641d74fb7c1a71e9b.patch?full_index=1";
+      hash = "sha256-Gww6Ll2nKwpcxMY9lnf5BZ3eqUWz1rik9P3mPKDOf+Y=";
     })
     # https://github.com/PixarAnimationStudios/OpenUSD/issues/3442
     # https://github.com/PixarAnimationStudios/OpenUSD/pull/3434 commit 1
@@ -126,7 +126,6 @@ buildPythonPackage rec {
     [
       alembic.dev
       bison
-      boost
       draco
       embree
       flex

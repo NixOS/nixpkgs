@@ -48,6 +48,8 @@ stdenv.mkDerivation (finalAttrs: {
       "-DMZ_LIBCOMP=OFF"
     ];
 
+  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-Wno-register";
+
   postInstall = ''
     # make lib findable as libminizip-ng even if compat is enabled
     for ext in so dylib a ; do
@@ -69,7 +71,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/zlib-ng/minizip-ng";
     license = licenses.zlib;
     maintainers = with maintainers; [
-      gebner
       ris
     ];
     platforms = platforms.unix;

@@ -96,7 +96,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Rate limiting for flask applications";
     homepage = "https://flask-limiter.readthedocs.org/";
-    changelog = "https://github.com/alisaifee/flask-limiter/blob/${version}/HISTORY.rst";
+    changelog = "https://github.com/alisaifee/flask-limiter/blob/${src.tag}/HISTORY.rst";
     license = licenses.mit;
     maintainers = [ ];
   };

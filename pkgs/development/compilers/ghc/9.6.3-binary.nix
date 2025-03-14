@@ -44,7 +44,7 @@ let
   #   on the compiler binary (`exePathForLibraryCheck`).
   # * To skip library checking for an architecture,
   #   set `exePathForLibraryCheck = null`.
-  # * To skip file checking for a specific arch specfic library,
+  # * To skip file checking for a specific arch specific library,
   #   set `fileToCheckFor = null`.
   ghcBinDists = {
     # Binary distributions for the default libc (e.g. glibc, or libSystem on Darwin)
@@ -192,12 +192,7 @@ let
       ) binDistUsed.archSpecificLibraries
     )).nixPackage;
 
-  # GHC has other native backends (like PowerPC), but here only the ones
-  # we ship bindists for matter.
-  useLLVM =
-    !(
-      stdenv.targetPlatform.isx86 || (stdenv.targetPlatform.isAarch64 && stdenv.targetPlatform.isDarwin)
-    );
+  useLLVM = !(import ./common-have-ncg.nix { inherit lib stdenv version; });
 
   libPath = lib.makeLibraryPath (
     # Add arch-specific libraries.

@@ -1,11 +1,13 @@
 {
   fetchgit,
-  installShellFiles,
+  gitUpdater,
   lib,
   libftdi1,
   libgpiod,
   libjaylink,
   libusb1,
+  meson,
+  ninja,
   pciutils,
   pkg-config,
   stdenv,
@@ -15,18 +17,20 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "flashprog";
-  version = "1.3";
+  version = "1.4";
 
   src = fetchgit {
     url = "https://review.sourcearcade.org/flashprog";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-S+UKDtpKYenwm+zR+Bg8HHxb2Jr7mFHAVCZdZTqCyRQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-mpSmPZ306DedRi3Dcck/cDqoumgwFYpljiJtma+LZz4=";
   };
 
   nativeBuildInputs = [
-    installShellFiles
+    meson
+    ninja
     pkg-config
   ];
+
   buildInputs =
     [
       libftdi1
@@ -42,25 +46,20 @@ stdenv.mkDerivation (finalAttrs: {
       libgpiod
     ];
 
-  makeFlags =
-    let
-      yesNo = flag: if flag then "yes" else "no";
-    in
-    [
-      "libinstall"
-      "PREFIX=$(out)"
-      "CONFIG_JLINK_SPI=${yesNo withJlink}"
-      "CONFIG_LINUX_GPIO_SPI=${yesNo withGpio}"
-      "CONFIG_ENABLE_LIBPCI_PROGRAMMERS=${yesNo (!stdenv.hostPlatform.isDarwin)}"
-      "CONFIG_INTERNAL_X86=${yesNo (!(stdenv.hostPlatform.isDarwin) && stdenv.hostPlatform.isx86_64)}"
-      "CONFIG_INTERNAL_DMI=${yesNo (!(stdenv.hostPlatform.isDarwin) && stdenv.hostPlatform.isx86_64)}"
-      "CONFIG_RAYER_SPI=${yesNo (!(stdenv.hostPlatform.isDarwin) && stdenv.hostPlatform.isx86_64)}"
-    ];
+  postInstall = ''
+    cd "$src"
+    install -Dm644 util/50-flashprog.rules "$out/lib/udev/rules.d/50-flashprog.rules"
+  '';
+
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
+    allowedVersions = "^[0-9\\.]+$";
+  };
 
   meta = with lib; {
     homepage = "https://flashprog.org";
     description = "Utility for reading, writing, erasing and verifying flash ROM chips";
-    license = with licenses; [ gpl2Plus ];
+    license = with licenses; [ gpl2 ];
     maintainers = with maintainers; [
       felixsinger
       funkeleinhorn

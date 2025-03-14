@@ -12,7 +12,7 @@
   dconf,
   librsvg,
   gdk-pixbuf,
-  # some scripts need these when used in conjuction with firejail
+  # some scripts need these when used in conjunction with firejail
   coreutils,
   gnugrep,
   # Configuration options for the wrapper

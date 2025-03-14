@@ -13,12 +13,13 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "PaddiM8";
-    repo = pname;
+    repo = "kalker";
     rev = "v${version}";
     hash = "sha256-fFeHL+Q1Y0J3rOgbFA952rjae/OQgHTznDI0Kya1KMQ=";
   };
 
-  cargoHash = "sha256-hgtSDPQRrqhQALqzVW8z9xXqIv+v5/Sbs6McrUCKiaU=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-IYxgh6ni3BFnocHGKwKUqgSC2xUjn0b/4pBqRC5iY8U=";
 
   buildInputs = [
     gmp

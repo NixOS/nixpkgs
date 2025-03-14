@@ -184,7 +184,7 @@ stdenv.mkDerivation (finalAttrs: {
       Challenge V2.
     '';
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;
   };

@@ -5,6 +5,7 @@
   nixosTests,
   nextcloud29Packages,
   nextcloud30Packages,
+  nextcloud31Packages,
 }:
 
 let
@@ -59,15 +60,21 @@ let
 in
 {
   nextcloud29 = generic {
-    version = "29.0.11";
-    hash = "sha256-UGf8F91zICzC39m5ccp7uUy5UEghRgJ9rGILEjweztE=";
+    version = "29.0.12";
+    hash = "sha256-wCA1T/Ph0ghzcPcOBY/hcXE2NroPBzpRlK29/zwcr8Y=";
     packages = nextcloud29Packages;
   };
 
   nextcloud30 = generic {
-    version = "30.0.5";
-    hash = "sha256-JIxubmEs7usXDE0luFebCvDmYTq9+gfy/mmTQmt4G+o=";
+    version = "30.0.6";
+    hash = "sha256-rA4JG+aSCWXcDILxSbYy1rWt563uhKezyM/YR0UKjdw=";
     packages = nextcloud30Packages;
+  };
+
+  nextcloud31 = generic {
+    version = "31.0.0";
+    hash = "sha256-b76weze7nPp8kb8bLfvPAxkFi25gSHweqht3frl2LZE=";
+    packages = nextcloud31Packages;
   };
 
   # tip: get the sha with:

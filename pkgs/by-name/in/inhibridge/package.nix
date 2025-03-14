@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-cKVw3Gd4Ml8BeXjZqTN6ToeRzO9PI+Sn45gpltlRuWM=";
   };
 
-  cargoHash = "sha256-uKSbxAsGUR2nYfdtiTR/bgPBQunqYLzx3+CmszNilPQ=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-bW0+oZJO4JFgDuLl5f7iVorSyN/ro+BRSTX0j15Oqb4=";
 
   meta = with lib; {
     homepage = "https://codeberg.org/Scrumplex/inhibridge";

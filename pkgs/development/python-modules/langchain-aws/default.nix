@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "langchain-aws";
-  version = "0.2.11";
+  version = "0.2.15";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -66,6 +66,8 @@ buildPythonPackage rec {
 
   passthru = {
     inherit (langchain-core) updateScript;
+    # updates the wrong fetcher rev attribute
+    skipBulkUpdate = true;
   };
 
   meta = {
@@ -76,6 +78,7 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [
       drupol
       natsukium
+      sarahec
     ];
   };
 }

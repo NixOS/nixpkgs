@@ -16,7 +16,7 @@ let
         src = fetchFromGitHub {
           owner = "collective";
           repo = "icalendar";
-          rev = "refs/tags/v${version}";
+          tag = "v${version}";
           hash = "sha256-2gpWfLXR4HThw23AWxY2rY9oiK6CF3Qiad8DWHCs4Qk=";
         };
         patches = [ ];
@@ -37,9 +37,13 @@ python.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "pimutils";
     repo = "khal";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-YP2kQ/qXPDwvFvlHf+A2Ymvk49dmt5tAnTaOhrOV92M=";
   };
+
+  postPatch = ''
+    sed -i /intersphinx/d doc/source/conf.py
+  '';
 
   build-system = with python.pkgs; [
     setuptools
@@ -111,11 +115,11 @@ python.pkgs.buildPythonApplication rec {
     "test_event_no_dst"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "CLI calendar application";
-    homepage = "http://lostpackets.de/khal/";
+    homepage = "https://lostpackets.de/khal/";
     changelog = "https://github.com/pimutils/khal/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ gebner ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ];
   };
 }

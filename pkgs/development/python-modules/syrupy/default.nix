@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  python,
   poetry-core,
   pytest,
   pytest-xdist,
@@ -11,16 +10,14 @@
 
 buildPythonPackage rec {
   pname = "syrupy";
-  version = "4.8.0";
+  version = "4.9.0";
   pyproject = true;
-
-  disabled = lib.versionOlder python.version "3.8.1";
 
   src = fetchFromGitHub {
     owner = "syrupy-project";
     repo = "syrupy";
     tag = "v${version}";
-    hash = "sha256-IifGufCUhjbl8Tqvcjm8XF4QPvOsRacPWxI1yT79eNs=";
+    hash = "sha256-zG+dKCfJex4Njg0WludqQcgRU1BCf4HQhzd31/kCeCI=";
   };
 
   build-system = [ poetry-core ];
@@ -43,7 +40,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "syrupy" ];
 
   meta = {
-    changelog = "https://github.com/syrupy-project/syrupy/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/syrupy-project/syrupy/blob/${src.tag}/CHANGELOG.md";
     description = "Pytest Snapshot Test Utility";
     homepage = "https://github.com/syrupy-project/syrupy";
     license = lib.licenses.asl20;

@@ -21,7 +21,8 @@ rustPlatform.buildRustPackage rec {
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-QZ1Cs3TZab9wf8l4Fe95LFZhHB6q1uq7JRzEVUMKQSI=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-4DoMRtyT2t4degi8oOyVTStb0AU0P/7XeYk15JLRrqg=";
 
   postPatch = ''
     substituteInPlace src/auth_keys.rs \

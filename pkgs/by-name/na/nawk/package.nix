@@ -56,7 +56,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     mainProgram = "nawk";
     maintainers = with lib.maintainers; [
-      AndersonTorres
       konimex
     ];
     platforms = lib.platforms.all;

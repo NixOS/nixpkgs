@@ -16,7 +16,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-FuZl2yNre5jNSfHqF3tjiGwg5mRKbYer2FOPpLy0OrA=";
   };
 
-  cargoHash = "sha256-fNC8Aff09nTSbtxZg5qEKtvFyKFLRVjaokWiZihZCgM=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-klgcHNZ0vwy2iOYpwbdR37++WLAPx1ARNadfYTTqePw=";
 
   buildFeatures = [ "nixos" ];
 

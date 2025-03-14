@@ -38,7 +38,8 @@ in
       hash = "sha256-6YWPsSRIZpvVCIGZ1z7srobDvVzLr0o2jBcB/7kbK7I=";
     };
 
-    cargoHash = "sha256-c9Sq3mdotvB/oNIiOLTrAAUnUdkaye7y1l+29Uwjfm8=";
+    useFetchCargoVendor = true;
+    cargoHash = "sha256-igIYTlI3hqvlOTgdwouA9YussP9h0pOHUUTCjA2LE5U=";
 
     nativeBuildInputs = [ perl ];
 
@@ -65,13 +66,8 @@ in
 
       sourceRoot = "${finalAttrs.src.name}/gephgui-wry";
 
-      cargoLock = {
-        lockFile = ./Cargo.lock;
-        outputHashes = {
-          "tao-0.5.2" = "sha256-HyQyPRoAHUcgtYgaAW7uqrwEMQ45V+xVSxmlAZJfhv0=";
-          "wry-0.12.2" = "sha256-kTMXvignEF3FlzL0iSlF6zn1YTOCpyRUDN8EHpUS+yI=";
-        };
-      };
+      useFetchCargoVendor = true;
+      cargoHash = "sha256-pCj4SulUVEC4QTPBrPQBn5xJ+sHPs6KfjsdVRcsRapY=";
 
       pnpmDeps = pnpm.fetchDeps {
         inherit (finalAttrs) pname version src;

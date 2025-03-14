@@ -7,7 +7,6 @@
   pkg-config,
   protobuf,
   cacert,
-  garage,
   nixosTests,
 }:
 let
@@ -38,6 +37,7 @@ let
         rm .cargo/config.toml || true
       '';
 
+      useFetchCargoVendor = true;
       inherit cargoHash cargoPatches;
 
       nativeBuildInputs = [
@@ -119,7 +119,7 @@ rec {
   garage_0_8_7 = generic {
     version = "0.8.7";
     hash = "sha256-2QGbR6YvMQeMxN3n1MMJ5qfBcEJ5hjXARUOfEn+m4Jc=";
-    cargoHash = "sha256-1cGlJP/RRgxt3GGMN1c+7Y5lLHJyvHEnpLsR35R5FfI=";
+    cargoHash = "sha256-NmeAkm35Su4o5JEn75pZmxhVHh+VMwKwULKY0eCVlYo=";
     cargoPatches = [ ./update-time-0.8.patch ];
     broken = stdenv.hostPlatform.isDarwin;
   };
@@ -127,23 +127,21 @@ rec {
   garage_0_9_4 = generic {
     version = "0.9.4";
     hash = "sha256-2ZaxenwaVGYYUjUJaGgnGpZNQprQV9+Jns2sXM6cowk=";
-    cargoHash = "sha256-1Hrip4R5dr31czOcFMGW4ZvVfVwvdd7LkwukwNpS3o4=";
+    cargoHash = "sha256-ittesFz1GUGipQecsmMA+GEaVoUY+C9DtEvsO0HFNCc=";
     cargoPatches = [ ./update-time.patch ];
-    broken = stdenv.hostPlatform.isDarwin;
   };
 
-  garage_1_0_1 = generic {
-    version = "1.0.1";
-    hash = "sha256-f6N2asycN04I6U5XQ5LEAqYu/v5jYZiFCxZ8YQ32XyM=";
-    cargoHash = "sha256-jpc/vaygC5WNSkVA3P01mCRk9Nx/CUumE893tHWoe34=";
-    broken = stdenv.hostPlatform.isDarwin;
+  garage_1_1_0 = generic {
+    version = "1.1.0";
+    hash = "sha256-ysf/GYR39trXTPRdw8uB6E4YDp4nAR8dbU9k9rQTxz0=";
+    cargoHash = "sha256-SkDr/e9YZ3raTGucaiv/RV2zF9tEDIeqZeri6Xk3xEU=";
   };
 
   garage_0_8 = garage_0_8_7;
 
   garage_0_9 = garage_0_9_4;
 
-  garage_1_x = garage_1_0_1;
+  garage_1_x = garage_1_1_0;
 
   garage = garage_1_x;
 }

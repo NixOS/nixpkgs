@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-cf78R9siH0RFbx+vXTs71VblpsQokL6Uo32N3X4lV2I=";
   };
 
-  cargoHash = "sha256-yzWa+/08tG8h+5V8XBc3k8GDivS6SHW6zVb+ug1sbE0=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-wpfv6mebFPvL+9UkggRRH3fPOeGslORzxtN0q/KKOsw=";
 
   meta = with lib; {
     description = "Command line tool for comparing benchmarks run by Criterion";

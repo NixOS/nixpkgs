@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "dulwich";
-  version = "0.22.6";
+  version = "0.22.7";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -28,8 +28,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jelmer";
     repo = "dulwich";
-    tag = "v${version}";
-    hash = "sha256-sE5du5Nv2AOyiBpQ2hDJss1dVSVBzWypnGWk3/hI8UI=";
+    tag = "dulwich-${version}";
+    hash = "sha256-BjDTqrApdinC9T62hhZIMS1udpaiAg1+7nvryF6d6pU=";
   };
 
   build-system = [
@@ -82,7 +82,7 @@ buildPythonPackage rec {
       does not depend on Git itself. All functionality is available in pure Python.
     '';
     homepage = "https://www.dulwich.io/";
-    changelog = "https://github.com/jelmer/dulwich/blob/dulwich-${version}/NEWS";
+    changelog = "https://github.com/jelmer/dulwich/blob/dulwich-${src.tag}/NEWS";
     license = with licenses; [
       asl20
       gpl2Plus

@@ -13,14 +13,14 @@
 
 stdenv.mkDerivation {
   pname = "karp";
-  version = "0-unstable-2025-01-24";
+  version = "0-unstable-2025-03-05";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "graphics";
     repo = "karp";
-    rev = "44b2e88b3c1ac5f1b37ec4080d068bf83c8328ca";
-    hash = "sha256-w9Mtw7T4LOYML0A64ctE4g6m9IaNRHidt23ZsqwUwac=";
+    rev = "de6d42447c3ed15a102ec81c56c55ec5a0111a59";
+    hash = "sha256-5mXD4qOL+gJn0kCHpnp4kp0E2SCCYfeI7A3oScX1uf8=";
   };
 
   nativeBuildInputs = [

@@ -87,6 +87,9 @@ stdenv.mkDerivation {
     substituteInPlace phoenix.pro \
       --replace-fail "6.5.10" "${qtbase.version}"
 
+    substituteInPlace src/simulation/ngspice_simulator.cpp \
+      --replace-fail 'path + "/" + libName' '"${libngspice}/lib/libngspice.so"'
+
     mkdir parts
     cp -a ${parts}/* parts/
   '';

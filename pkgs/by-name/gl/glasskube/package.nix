@@ -15,7 +15,7 @@ let
     tag = "v${version}";
     hash = "sha256-456kMO7KappYI2FuHA8g+uhkJNCGCxb/9zmleZqu6SQ=";
   };
-  web-bundle = buildNpmPackage rec {
+  web-bundle = buildNpmPackage {
     inherit version;
     pname = "glasskube-web-bundle";
 

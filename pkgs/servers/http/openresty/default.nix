@@ -4,7 +4,7 @@
   lib,
   fetchurl,
   perl,
-  postgresql,
+  libpq,
   nixosTests,
   withPostgres ? true,
   ...
@@ -36,7 +36,7 @@ callPackage ../nginx/generic.nix args rec {
 
   nativeBuildInputs = [ perl ];
 
-  buildInputs = [ postgresql ];
+  buildInputs = [ libpq ];
 
   postPatch = ''
     substituteInPlace bundle/nginx-${nginxVersion}/src/http/ngx_http_core_module.c \

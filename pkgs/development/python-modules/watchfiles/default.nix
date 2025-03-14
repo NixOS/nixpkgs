@@ -12,27 +12,27 @@
   pytest-mock,
   pytest-timeout,
   pytestCheckHook,
+  typing-extensions,
   CoreServices,
   libiconv,
 }:
 
 buildPythonPackage rec {
   pname = "watchfiles";
-  version = "0.24.0";
-  format = "pyproject";
+  version = "1.0.4";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "samuelcolvin";
     repo = pname;
     tag = "v${version}";
-    hash = "sha256-uc4CfczpNkS4NMevtRxhUOj9zTt59cxoC0BXnuHFzys=";
+    hash = "sha256-0JBnUi/aRM9UFTkb8OkP9UkJV+BF2EieZptymRvAXc0=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {
     lockFile = ./Cargo.lock;
-    outputHashes."notify-6.1.1" = "sha256-lT3R5ZQpjx52NVMEKTTQI90EWT16YnbqphqvZmNpw/I=";
   };
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
@@ -42,12 +42,13 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     rustPlatform.cargoSetupHook
-    rustPlatform.maturinBuildHook
     cargo
     rustc
   ];
 
-  propagatedBuildInputs = [ anyio ];
+  build-system = [ rustPlatform.maturinBuildHook ];
+
+  dependencies = [ anyio ];
 
   # Tests need these permissions in order to use the FSEvents API on macOS.
   sandboxProfile = ''

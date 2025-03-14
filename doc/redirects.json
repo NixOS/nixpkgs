@@ -8,6 +8,15 @@
   "ex-build-helpers-extendMkDerivation": [
     "index.html#ex-build-helpers-extendMkDerivation"
   ],
+  "ex-shfmt": [
+    "index.html#ex-shfmt"
+  ],
+  "ex-testBuildFailurePrime-doc-example": [
+    "index.html#ex-testBuildFailurePrime-doc-example"
+  ],
+  "ex-testEqualArrayOrMap-test-function-add-cowbell": [
+    "index.html#ex-testEqualArrayOrMap-test-function-add-cowbell"
+  ],
   "neovim": [
     "index.html#neovim"
   ],
@@ -19,6 +28,9 @@
   ],
   "nixpkgs-manual": [
     "index.html#nixpkgs-manual"
+  ],
+  "no-broken-symlinks.sh": [
+    "index.html#no-broken-symlinks.sh"
   ],
   "preface": [
     "index.html#preface"
@@ -82,6 +94,9 @@
     "index.html#titanium",
     "index.html#building-a-titanium-app",
     "index.html#emulating-or-simulating-the-app"
+  ],
+  "sec-nixpkgs-release-25.05-incompatibilities-nexusmods-app-upgraded": [
+    "release-notes.html#sec-nixpkgs-release-25.05-incompatibilities-nexusmods-app-upgraded"
   ],
   "sec-nixpkgs-release-25.05-lib": [
     "release-notes.html#sec-nixpkgs-release-25.05-lib"
@@ -325,6 +340,33 @@
   ],
   "footnote-stdenv-find-inputs-location.__back.0": [
     "index.html#footnote-stdenv-find-inputs-location.__back.0"
+  ],
+  "tester-shfmt": [
+    "index.html#tester-shfmt"
+  ],
+  "tester-shfmt-inputs": [
+    "index.html#tester-shfmt-inputs"
+  ],
+  "tester-shfmt-return": [
+    "index.html#tester-shfmt-return"
+  ],
+  "tester-testBuildFailurePrime": [
+    "index.html#tester-testBuildFailurePrime"
+  ],
+  "tester-testBuildFailurePrime-inputs": [
+    "index.html#tester-testBuildFailurePrime-inputs"
+  ],
+  "tester-testBuildFailurePrime-return": [
+    "index.html#tester-testBuildFailurePrime-return"
+  ],
+  "tester-testEqualArrayOrMap": [
+    "index.html#tester-testEqualArrayOrMap"
+  ],
+  "tester-testEqualArrayOrMap-inputs": [
+    "index.html#tester-testEqualArrayOrMap-inputs"
+  ],
+  "tester-testEqualArrayOrMap-return": [
+    "index.html#tester-testEqualArrayOrMap-return"
   ],
   "variables-specifying-dependencies": [
     "index.html#variables-specifying-dependencies"
@@ -826,6 +868,12 @@
   ],
   "set-source-date-epoch-to-latest.sh": [
     "index.html#set-source-date-epoch-to-latest.sh"
+  ],
+  "add-bin-to-path.sh": [
+    "index.html#add-bin-to-path.sh"
+  ],
+  "writable-tmpdir-as-home.sh": [
+    "index.html#writable-tmpdir-as-home.sh"
   ],
   "bintools-wrapper": [
     "index.html#bintools-wrapper"
@@ -1509,9 +1557,6 @@
   "tester-shellcheck-inputs": [
     "index.html#tester-shellcheck-inputs"
   ],
-  "tester-shellcheck-param-src": [
-    "index.html#tester-shellcheck-param-src"
-  ],
   "tester-shellcheck-return": [
     "index.html#tester-shellcheck-return"
   ],
@@ -1959,6 +2004,9 @@
   "sec-pkgs-binary-cache": [
     "index.html#sec-pkgs-binary-cache"
   ],
+  "sec-pkgs-binary-cache-arguments": [
+    "index.html#sec-pkgs-binary-cache-arguments"
+  ],
   "sec-pkgs-binary-cache-example": [
     "index.html#sec-pkgs-binary-cache-example"
   ],
@@ -2342,6 +2390,12 @@
   ],
   "using-predefined-android-package-compositions": [
     "index.html#using-predefined-android-package-compositions"
+  ],
+  "astal": [
+    "index.html#astal"
+  ],
+  "astal-bundling": [
+    "index.html#astal-bundling"
   ],
   "spawning-emulator-instances": [
     "index.html#spawning-emulator-instances"

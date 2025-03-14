@@ -13,11 +13,12 @@
   typeguard,
   types-beautifulsoup4,
   typing-extensions,
+  hypothesis,
 }:
 
 buildPythonPackage rec {
   pname = "types-lxml";
-  version = "2024.09.16";
+  version = "2024.12.13";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -26,7 +27,7 @@ buildPythonPackage rec {
     owner = "abelcheung";
     repo = "types-lxml";
     tag = version;
-    hash = "sha256-LQqs9wg6kgubY4SygTNQt5YTtF3LsFj7+RkAlcp4SSo=";
+    hash = "sha256-iqIOwQIg6EB/m8FIoUzkvh1W0w4bKmS9zi4Z+5qlC+0=";
   };
 
   build-system = [ pdm-backend ];
@@ -40,6 +41,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     beautifulsoup4
     html5lib
+    hypothesis
     lxml
     pyright
     pytestCheckHook
@@ -48,22 +50,25 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "lxml-stubs" ];
 
+  # there may only be one conftest.py
+  preCheck = ''
+    rm -r tests/static
+    mv tests/runtime/* tests/
+    rmdir tests/runtime
+    substituteInPlace tests/conftest.py \
+      --replace-fail '"pytest-revealtype-injector",' "" \
+      --replace-fail 'runtime.register_strategy' 'tests.register_strategy'
+  '';
+
   disabledTests = [
-    # AttributeError: 'bytes' object has no attribute 'find_class'
-    # https://github.com/abelcheung/types-lxml/issues/34
-    "test_bad_methodfunc"
-    "test_find_class"
-    "test_find_rel_links"
-    "test_iterlinks"
-    "test_make_links_absolute"
-    "test_resolve_base_href"
-    "test_rewrite_links"
+    "test_single_ns_all_tag_2"
+    "test_default_ns"
   ];
 
   meta = with lib; {
     description = "Complete lxml external type annotation";
     homepage = "https://github.com/abelcheung/types-lxml";
-    changelog = "https://github.com/abelcheung/types-lxml/releases/tag/${version}";
+    changelog = "https://github.com/abelcheung/types-lxml/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };

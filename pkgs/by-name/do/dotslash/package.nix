@@ -9,14 +9,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "dotslash";
-  version = "0.5.0";
+  version = "0.5.2";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-QrqcUc0RJXrahWHGgJbJwD3wufa2829NNHqiZx9V+sU=";
+    hash = "sha256-Djoi3x6FZZORnnE5Ly8VibfdzVNPef45JvL83fAJqAQ=";
   };
 
-  cargoHash = "sha256-he8W+gnajScRgWy7cveqZ9vod3n4zBFSDPw8pUUHObY=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-PLiVHq5GrCf/C8AxZyKmWPr47PvU6HxpBad8dxJXhHs=";
   doCheck = false; # http tests
 
   passthru = {

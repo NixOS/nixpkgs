@@ -248,7 +248,7 @@ let
                 ethtool -s enp1s0 speed 1000 duplex full
                 ethtool -s enp2s0 speed 1000 duplex full
               '';
-              wantedBy = [ "network.target" ];
+              wantedBy = [ "network-pre.target" ];
             };
           };
       in
@@ -264,11 +264,11 @@ let
               client2.wait_for_unit("network.target")
 
           with subtest("Test bonding"):
-              client1.wait_until_succeeds("ping -c 2 192.168.1.1")
-              client1.wait_until_succeeds("ping -c 2 192.168.1.2")
+              client1.wait_until_succeeds("ping -c2 -w2 192.168.1.1")
+              client1.wait_until_succeeds("ping -c2 -w2 192.168.1.2")
 
-              client2.wait_until_succeeds("ping -c 2 192.168.1.1")
-              client2.wait_until_succeeds("ping -c 2 192.168.1.2")
+              client2.wait_until_succeeds("ping -c2 -w2 192.168.1.1")
+              client2.wait_until_succeeds("ping -c2 -w2 192.168.1.2")
 
           with subtest("Verify bonding mode"):
               for client in client1, client2:

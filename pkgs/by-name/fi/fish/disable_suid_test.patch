@@ -1,0 +1,17 @@
+diff --git a/tests/checks/path.fish b/tests/checks/path.fish
+index 62812571a..b0eebcd91 100644
+--- a/tests/checks/path.fish
++++ b/tests/checks/path.fish
+@@ -117,12 +117,6 @@ path filter --type file,dir --perm exec,write bin/fish .
+ # So it passes.
+ # CHECK: .
+ 
+-mkdir -p sbin
+-touch sbin/setuid-exe sbin/setgid-exe
+-chmod u+s,a+x sbin/setuid-exe
+-path filter --perm suid sbin/*
+-# CHECK: sbin/setuid-exe
+-
+ # On at least FreeBSD on our CI this fails with "permission denied".
+ # So we can't test it, and we fake the output instead.
+ if chmod g+s,a+x sbin/setgid-exe 2>/dev/null

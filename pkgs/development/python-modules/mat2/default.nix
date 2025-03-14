@@ -3,12 +3,12 @@
   stdenv,
   buildPythonPackage,
   pytestCheckHook,
-  pythonOlder,
   fetchFromGitLab,
   replaceVars,
   bubblewrap,
   exiftool,
   ffmpeg,
+  setuptools,
   wrapGAppsHook3,
   gdk-pixbuf,
   gobject-introspection,
@@ -18,32 +18,29 @@
   pygobject3,
   pycairo,
   dolphinIntegration ? false,
-  plasma5Packages,
+  kdePackages,
 }:
 
 buildPythonPackage rec {
   pname = "mat2";
-  version = "0.13.4";
-
-  disabled = pythonOlder "3.5";
-
-  format = "setuptools";
+  version = "0.13.5";
+  pyproject = true;
 
   src = fetchFromGitLab {
     domain = "0xacab.org";
     owner = "jvoisin";
     repo = "mat2";
-    rev = version;
-    hash = "sha256-SuN62JjSb5O8gInvBH+elqv/Oe7j+xjCo+dmPBU7jEY=";
+    tag = version;
+    hash = "sha256-ivFgH/88DBucZRaO/OMsLlwJCjv/VQXb6AiKWhZ8XH0=";
   };
 
   patches =
     [
       # hardcode paths to some binaries
       (replaceVars ./paths.patch {
-        exiftool = "${exiftool}/bin/exiftool";
-        ffmpeg = "${ffmpeg}/bin/ffmpeg";
-        kdialog = if dolphinIntegration then "${plasma5Packages.kdialog}/bin/kdialog" else null;
+        exiftool = lib.getExe exiftool;
+        ffmpeg = lib.getExe ffmpeg;
+        kdialog = if dolphinIntegration then lib.getExe kdePackages.kdialog else null;
         # replaced in postPatch
         mat2 = null;
         mat2svg = null;
@@ -55,16 +52,17 @@ buildPythonPackage rec {
     ]
     ++ lib.optionals (stdenv.hostPlatform.isLinux) [
       (replaceVars ./bubblewrap-path.patch {
-        bwrap = "${bubblewrap}/bin/bwrap";
+        bwrap = lib.getExe bubblewrap;
       })
     ];
 
   postPatch = ''
-    rm pyproject.toml
     substituteInPlace dolphin/mat2.desktop \
       --replace "@mat2@" "$out/bin/mat2" \
       --replace "@mat2svg@" "$out/share/icons/hicolor/scalable/apps/mat2.svg"
   '';
+
+  build-system = [ setuptools ];
 
   nativeBuildInputs = [
     gobject-introspection
@@ -77,7 +75,7 @@ buildPythonPackage rec {
     poppler_gi
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     mutagen
     pygobject3
     pycairo
@@ -93,11 +91,6 @@ buildPythonPackage rec {
     '';
 
   nativeCheckInputs = [ pytestCheckHook ];
-
-  disabledTests = [
-    # libmat2.pdf.cairo.MemoryError: out of memory
-    "test_all"
-  ];
 
   meta = with lib; {
     description = "Handy tool to trash your metadata";

@@ -1,7 +1,6 @@
 {
   blas,
   fetchzip,
-  fetchpatch,
   gfortran,
   lapack,
   lib,
@@ -12,7 +11,6 @@
   withPtScotch ? mpiSupport,
   stdenv,
   fixDarwinDylibNames,
-  mpi,
   mpiSupport ? false,
   mpiCheckPhaseHook,
   scalapack,

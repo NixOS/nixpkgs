@@ -13,11 +13,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libtasn1";
-  version = "4.19.0";
+  version = "4.20.0";
 
   src = fetchurl {
     url = "mirror://gnu/libtasn1/libtasn1-${version}.tar.gz";
-    sha256 = "sha256-FhPwrBz0hNbsDOO4wG1WJjzHJC8cI7MNgtI940WmP3o=";
+    sha256 = "sha256-kuDjvUwC1K7udgNrLd2D8McyukzaXLcdWDJysjWHp2w=";
   };
 
   outputs = [
@@ -50,5 +50,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.lgpl2Plus;
     platforms = platforms.all;
+    changelog = "https://gitlab.com/gnutls/libtasn1/-/blob/v${version}/NEWS";
   };
 }

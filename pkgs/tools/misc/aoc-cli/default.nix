@@ -23,7 +23,8 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [ openssl ] ++ lib.optional stdenv.hostPlatform.isDarwin Security;
 
-  cargoHash = "sha256-EluP4N3UBQeEKVdHTs4O0THXji+nAyE52nGKsxA3AA4=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-cm8yt7PRjar21EVFIjXYgDkO7+VpHGIB3tJ8hkK+Phw=";
 
   meta = with lib; {
     description = "Advent of code command line tool";

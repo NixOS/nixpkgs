@@ -9,16 +9,18 @@
 
 stdenv.mkDerivation {
   pname = "ols";
-  version = "0-unstable-2025-01-04";
+  version = "0-unstable-2025-02-11";
 
   src = fetchFromGitHub {
     owner = "DanielGavin";
     repo = "ols";
-    rev = "3589fe03d7124c9058dc69bcc21aa85910367cfe";
-    hash = "sha256-eF66PXABJaOsBPqHKyRkbif4fbaPbiOPyIVXPfwj/o4=";
+    rev = "1177a100fdee44dcbb025982e84e33adb34e9d8f";
+    hash = "sha256-usemJB7A6esYU6Ci/n8tF25TuFe+puFQL6EEOmeMldk=";
   };
 
   postPatch = ''
+    substituteInPlace build.sh \
+      --replace-fail "-microarch:native" ""
     patchShebangs build.sh odinfmt.sh
   '';
 

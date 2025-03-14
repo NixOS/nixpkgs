@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-pYfyqsS+bGwSP6YZAtI+8iMXdID/hrCiX+cuYoYiZmc=";
   };
 
-  cargoHash = "sha256-C+bnoYMO0Pjdgn4Q2Qb2COllMK0hnRNBwGd828o3AKE=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-hb3x2LKtDNAhMbRCB3kAwHloFTojGzQdXsMjxeJYB6k=";
 
   meta = with lib; {
     description = "Tool to execute Rust code carefully, with extra checking along the way";

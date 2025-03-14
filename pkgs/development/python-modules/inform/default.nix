@@ -9,6 +9,7 @@
   num2words,
   pytestCheckHook,
   pythonOlder,
+  pythonAtLeast,
 }:
 
 buildPythonPackage rec {
@@ -38,7 +39,12 @@ buildPythonPackage rec {
     hypothesis
   ];
 
-  disabledTests = [ "test_prostrate" ];
+  disabledTests =
+    [ "test_prostrate" ]
+    ++ lib.optionals (pythonAtLeast "3.13") [
+      # doctest runs one more test than expected
+      "test_inform"
+    ];
 
   meta = with lib; {
     description = "Print and logging utilities";

@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "langchain-ollama";
-  version = "0.2.2";
+  version = "0.2.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-ollama==${version}";
-    hash = "sha256-Ex8GndMHPHwSSMKu1JxnfGpRj55fh3TR19b3E+KrLUs=";
+    hash = "sha256-G7faykRlpfmafSnSe/CdPW87uCtofBp7mLzbxZgBBhM=";
   };
 
   sourceRoot = "${src.name}/libs/partners/ollama";
@@ -57,6 +57,8 @@ buildPythonPackage rec {
       "langchain-ollama==(.*)"
     ];
   };
+  # updates the wrong fetcher rev attribute
+  passthru.skipBulkUpdate = true;
 
   meta = {
     changelog = "https://github.com/langchain-ai/langchain/releases/tag/langchain-ollama==${version}";

@@ -992,11 +992,11 @@ with self; {
   };
 
   AppSqitch = buildPerlModule {
-    version = "1.4.1";
+    version = "1.5.0";
     pname = "App-Sqitch";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DW/DWHEELER/App-Sqitch-v1.4.1.tar.gz";
-      hash = "sha256-yvMcyPdy46TJ1LP/Oo9oSm61sbPCYfTdwPkKiMNgB8Y=";
+      url = "mirror://cpan/authors/id/D/DW/DWHEELER/App-Sqitch-v1.5.0.tar.gz";
+      hash = "sha256-oViHFpPt8en/460D55i1ZQBze4AcCiiMY/gR75oUAYQ=";
     };
     buildInputs = [ CaptureTiny TestExit TestDeep TestDir TestException TestFile TestFileContents TestMockModule TestMockObject TestNoWarnings TestWarn ];
     propagatedBuildInputs = [ Clone ConfigGitLike DBI DateTime EncodeLocale HashMerge IOPager IPCRun3 IPCSystemSimple ListMoreUtils PathClass PerlIOutf8_strict PodParser StringFormatter StringShellQuote TemplateTiny Throwable TypeTiny URIdb libintl-perl AlgorithmBackoff ];
@@ -1334,7 +1334,6 @@ with self; {
       url = "mirror://cpan/authors/id/Z/ZE/ZEFRAM/Authen-DecHpwd-2.007.tar.gz";
       hash = "sha256-9DqTuwK0H3Mn2S+eljtpUF9nNQpS6PUHlvmK/E+z8Xc=";
     };
-    perlPreHook = lib.optionalString stdenv.hostPlatform.isi686 "export LD=$CC"; # fix undefined reference to `__stack_chk_fail_local'
     propagatedBuildInputs = [ DataInteger DigestCRC ScalarString ];
     meta = {
       description = "DEC VMS password hashing";
@@ -1367,7 +1366,6 @@ with self; {
       url = "mirror://cpan/authors/id/I/IO/IOANR/Authen-Krb5-1.905.tar.gz";
       hash = "sha256-13sAuxUBpW9xGOkarAx+Qi2888QY+c6YuAF3HDqg900=";
     };
-    perlPreHook = "export LD=$CC";
     propagatedBuildInputs = [ pkgs.libkrb5 ];
     buildInputs = [ DevelChecklib FileWhich PkgConfig ];
     meta = {
@@ -1648,7 +1646,6 @@ with self; {
     '';
     buildInputs =[ ExtUtilsMakeMaker ];
     propagatedBuildInputs = [ pkgs.zbar PerlMagick ];
-    perlPreHook = lib.optionalString stdenv.hostPlatform.isDarwin "export LD=$CC";
     meta = {
       description = "Perl interface to the ZBar Barcode Reader";
       homepage = "https://metacpan.org/pod/Barcode::ZBar";
@@ -1896,7 +1893,6 @@ with self; {
       # Fix out of memory error on Perl 5.19.4 and later.
       ../development/perl-modules/boost-geometry-utils-fix-oom.patch
     ];
-    perlPreHook = "export LD=$CC";
     buildInputs = [ ExtUtilsCppGuess ExtUtilsTypemapsDefault ExtUtilsXSpp ModuleBuildWithXSpp ];
     meta = {
       description = "Bindings for the Boost Geometry library";
@@ -4115,6 +4111,10 @@ with self; {
     };
     nativeBuildInputs = [ pkgs.ld-is-cc-hook ];
     buildInputs = [ ModuleBuildXSUtil ];
+    #  src/compiler/util/Compiler_double_charactor_operator.cpp:9:54: error: ISO C++17 does not allow 'register' storage class specifier [-Wregister]
+    env = lib.optionalAttrs stdenv.cc.isClang {
+      NIX_CFLAGS_COMPILE = "-Wno-error=register";
+    };
     meta = {
       homepage = "https://github.com/goccy/p5-Compiler-Lexer";
       description = "Lexical Analyzer for Perl5";
@@ -5116,7 +5116,6 @@ with self; {
       hash = "sha256-PMcSbVhBEHI3qb4txcf7wWfPPEtM40Z4qESLhQdXAUw=";
     };
     propagatedBuildInputs = [ ClassMix ];
-    perlPreHook = lib.optionalString (stdenv.hostPlatform.isi686 || stdenv.hostPlatform.isDarwin) "export LD=$CC";
     meta = {
       description = "Eksblowfish block cipher";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
@@ -5372,7 +5371,6 @@ with self; {
       hash = "sha256-k+vfqu/P6atoPwEhyF8kR12Bl/C87EYBghnkERQ03eM=";
     };
     propagatedBuildInputs = [ DigestSHA1 ];
-    perlPreHook = lib.optionalString (stdenv.hostPlatform.isi686 || stdenv.hostPlatform.isDarwin) "export LD=$CC";
     meta = {
       description = "Emulate MySQL PASSWORD() function";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
@@ -5427,7 +5425,6 @@ with self; {
       hash = "sha256-fRbulczj61TBdGc6cpn0wIb7o6yF+EfQ4TT+7V93YBc=";
     };
     propagatedBuildInputs = [ CryptOpenSSLRandom ];
-    perlPreHook = "export LD=$CC";
     meta = {
       description = "Scrypt password based key derivation function";
       homepage = "https://github.com/DCIT/perl-Crypt-ScryptKDF";
@@ -5719,7 +5716,6 @@ with self; {
       url = "mirror://cpan/authors/id/G/GT/GTERMARS/CSS-Minifier-XS-0.13.tar.gz";
       hash = "sha256-xBnjCM3IKvHCXWuNB7L/JjR6Yit6Y+wghWq+jbQFH4I=";
     };
-    perlPreHook = lib.optionalString (stdenv.hostPlatform.isi686 || stdenv.hostPlatform.isDarwin) "export LD=$CC";
     buildInputs = [ TestDiagINC ];
     meta = {
       description = "XS based CSS minifier";
@@ -6348,7 +6344,6 @@ with self; {
       hash = "sha256-tVypHHafgTN8xrCrIMMmg4eOWyZj8cwljFEamZpd/dM=";
     };
     buildInputs = [ HashUtilFieldHashCompat ModuleBuildXSUtil ScopeGuard TestException ];
-    perlPreHook = lib.optionalString stdenv.hostPlatform.isi686 "export LD=$CC"; # fix undefined reference to `__stack_chk_fail_local'
     meta = {
       description = "Selection of utilities for data and data types";
       homepage = "https://github.com/gfx/Perl-Data-Util";
@@ -7674,7 +7669,6 @@ with self; {
       hash = "sha256-z/jSTllF45RN6/ITmVprFVuR5YE0aRVrE9Ws819qXZ8=";
     };
     propagatedBuildInputs = [ HashStoredIterator JSONXS PadWalker ];
-    perlPreHook = lib.optionalString stdenv.hostPlatform.isDarwin "export LD=$CC";
     meta = {
       description = "Perl side of the Perl debugger for IntelliJ IDEA and other JetBrains IDEs";
       license = with lib.licenses; [ mit ];
@@ -9305,7 +9299,6 @@ with self; {
       url = "mirror://cpan/authors/id/A/AM/AMBS/ExtUtils-LibBuilder-0.08.tar.gz";
       hash = "sha256-xRFx4G3lMDnwvKHZemRx7DeUH/Weij0csXDr3SVztdI=";
     };
-    perlPreHook = "export LD=$CC";
     meta = {
       description = "Tool to build C libraries";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
@@ -9999,7 +9992,6 @@ with self; {
       hash = "sha256-oC+/KFQGqKTZOZKE8DLy1VxWl1FUwuFnS9EJg3uAluw=";
     };
     buildInputs = [ ExtUtilsCChecker ];
-    perlPreHook = lib.optionalString (stdenv.hostPlatform.isi686 || stdenv.hostPlatform.isDarwin) "export LD=$CC"; # fix undefined reference to `__stack_chk_fail_local'
     meta = {
       description = "Modify attributes of symlinks without dereferencing them";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
@@ -10090,7 +10082,6 @@ with self; {
       url = "mirror://cpan/authors/id/L/LE/LEONT/File-Map-0.71.tar.gz";
       hash = "sha256-yOJpM4BOhw1KupJiO3iGrIs8dgyY+/zTvcSyMFxGR1k=";
     };
-    perlPreHook = "export LD=$CC";
     propagatedBuildInputs = [ PerlIOLayers SubExporterProgressive ];
     buildInputs = [ TestFatal TestWarnings ];
     meta = {
@@ -10656,7 +10647,6 @@ with self; {
     };
     buildInputs = [ Test2Suite ];
     propagatedBuildInputs = [ Future XSParseKeyword XSParseSublike ];
-    perlPreHook = lib.optionalString stdenv.hostPlatform.isDarwin "export LD=$CC";
     meta = {
       description = "Deferred subroutine syntax for futures";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
@@ -11156,6 +11146,7 @@ with self; {
       url = "mirror://cpan/authors/id/R/RA/RATCLIFFE/Graphics-TIFF-20.tar.gz";
       hash = "sha256-PlXMIJRl4GQBmiFaUvBf9RBAKX0CA5P+n7PeJ60CDjU=";
     };
+    nativeBuildInputs = [ pkgs.pkg-config ];
     buildInputs = [ pkgs.libtiff ExtUtilsDepends ExtUtilsPkgConfig ];
     propagatedBuildInputs = [ Readonly ];
     nativeCheckInputs = [ TestRequires TestDeep pkgs.hexdump ];
@@ -11615,7 +11606,6 @@ with self; {
       hash = "sha256-ucvE3NgjPo0dfxSB3beaSl+dtxgMs+8CtLy+4F5l6gw=";
     };
     buildInputs = [ Test2Suite ];
-    perlPreHook = lib.optionalString stdenv.hostPlatform.isDarwin "export LD=$CC";
     meta = {
       description = "Functions for accessing a hashes internal iterator";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
@@ -11699,7 +11689,6 @@ with self; {
       hash = "sha256-Wl7viWUA0epsJKkIXs++mkOr7mjPxmwD+InSostoml0=";
     };
     buildInputs = [ ModuleBuildPluggablePPPort TestRequires ];
-    perlPreHook = lib.optionalString stdenv.hostPlatform.isi686 "export LD=$CC"; # fix undefined reference to `__stack_chk_fail_local'
     meta = {
       description = "Extremely fast HTML escaping";
       homepage = "https://github.com/tokuhirom/HTML-Escape";
@@ -13392,7 +13381,6 @@ with self; {
       hash = "sha256-XZsDT1jwtv9bZGR708WpzgWypw7e4zn7wxc67nR8wFA=";
     };
     buildInputs = [ TestDiagINC ];
-    perlPreHook = lib.optionalString (stdenv.hostPlatform.isi686 || stdenv.hostPlatform.isDarwin) "export LD=$CC";
     meta = {
       description = "XS based JavaScript minifier";
       homepage = "https://metacpan.org/release/JavaScript-Minifier-XS";
@@ -14095,7 +14083,6 @@ with self; {
     };
     buildInputs = [ TestException ];
     propagatedBuildInputs = [ SubExporter ];
-    perlPreHook = lib.optionalString stdenv.hostPlatform.isi686 "export LD=$CC"; # fix undefined reference to `__stack_chk_fail_local'
     meta = {
       description = "Linux specific special filehandles";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
@@ -14198,9 +14185,6 @@ with self; {
       url = "mirror://cpan/authors/id/R/RE/REHSACK/List-MoreUtils-XS-0.430.tar.gz";
       hash = "sha256-6M5G1XwXnuzYdYKT6UAP8wCq8g/v4KnRW5/iMCucskI=";
     };
-    preConfigure = ''
-      export LD=$CC
-    '';
     meta = {
       description = "Provide the stuff missing in List::Util in XS";
       homepage = "https://metacpan.org/release/List-MoreUtils-XS";
@@ -16267,7 +16251,6 @@ with self; {
     };
     buildInputs = [ CaptureTiny CwdGuard FileCopyRecursiveReduced ];
     propagatedBuildInputs = [ DevelCheckCompiler ];
-    perlPreHook = "export LD=$CC";
     meta = {
       description = "Module::Build class for building XS modules";
       homepage = "https://github.com/hideo55/Module-Build-XSUtil";
@@ -17147,9 +17130,6 @@ with self; {
     };
     buildInputs = [ DistCheckConflicts CPANMetaCheck TestCleanNamespaces TestFatal TestNeeds TestRequires ];
     propagatedBuildInputs = [ ClassLoadXS DataOptList DevelGlobalDestruction DevelOverloadInfo DevelStackTrace EvalClosure MROCompat ModuleRuntimeConflicts PackageDeprecationManager PackageStashXS ParamsUtil SubExporter TryTiny ];
-    preConfigure = ''
-      export LD=$CC
-    '';
     meta = {
       description = "Postmodern object system for Perl 5";
       homepage = "http://moose.perl.org";
@@ -18227,7 +18207,6 @@ with self; {
       hash = "sha256-zo3COUYVOkZ/8JdlFn7iWQ9cUCEg9IotlEFzPzmqMu4=";
     };
     buildInputs = [ ModuleBuildXSUtil TestException TestFatal TestLeakTrace TestOutput TestRequires TryTiny ];
-    perlPreHook = "export LD=$CC";
     env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isi686 "-fno-stack-protector";
     hardeningDisable = lib.optional stdenv.hostPlatform.isi686 "stackprotector";
     meta = {
@@ -18898,7 +18877,6 @@ with self; {
       })
     ];
     buildInputs = [ TestNoWarnings ];
-    perlPreHook = "export LD=$CC";
     meta = {
       description = "Internationalizing Domain Names in Applications (UTS #46)";
       homepage = "https://metacpan.org/release/Net-IDN-Encode";
@@ -19336,10 +19314,10 @@ with self; {
       ../development/perl-modules/net-snmp-add-sha-algorithms.patch
     ];
     preCheck =
-      (lib.optionalString stdenv.hostPlatform.isLinux ''
+      lib.optionalString stdenv.hostPlatform.isLinux ''
         export NIX_REDIRECTS=/etc/protocols=${pkgs.iana-etc}/etc/protocols
-        export LD_PRELOAD=${pkgs.libredirect}/lib/libredirect.so
-      '');
+      '';
+    nativeCheckInputs = lib.optionals stdenv.hostPlatform.isLinux [ pkgs.libredirect.hook ];
     propagatedBuildInputs = [
       CryptDES
       CryptRijndael
@@ -19667,7 +19645,6 @@ with self; {
       hash = "sha256-EpUKZkwGB+o/ynSA82XfVNF0YpH0XrsO2AkXt0+xXvU=";
     };
     buildInputs = [ Test2Suite TestFatal TestRefcount ];
-    perlPreHook = lib.optionalString stdenv.hostPlatform.isDarwin "export LD=$CC";
     propagatedBuildInputs = [ XSParseKeyword XSParseSublike ];
     meta = {
       description = "Simple syntax for lexical field-based objects";
@@ -19940,6 +19917,29 @@ with self; {
     };
   };
 
+  pacup = buildPerlPackage rec {
+    version = "3.3.11";
+    pname = "pacup";
+    src = fetchFromGitHub {
+      owner = "pacstall";
+      repo = pname;
+      tag = version;
+      hash = "sha256-gTL6t//xO6TeRG1Vt4Ld7hVChSTyprUtXQTSwTKzwz4=";
+    };
+    preBuild = ''
+      patchShebangs ./pacup
+    '';
+    buildInputs = [ pkgs.dpkg ];
+    propagatedBuildInputs = [ DataCompare Filechdir IPCSystemSimple ListMoreUtils JSON LWP TermProgressBar ];
+    outputs = [ "out" ];
+
+    meta = {
+      description = "maintainer helper tool to help maintainers update their pacscripts.";
+      homepage = "https://github.com/pacstall/pacup";
+      license = lib.licenses.gpl3Only;
+    };
+  };
+
   Pango = buildPerlPackage {
     pname = "Pango";
     version = "1.227";
@@ -20026,7 +20026,6 @@ with self; {
       url = "mirror://cpan/authors/id/Z/ZE/ZEFRAM/Params-Classify-0.015.tar.gz";
       hash = "sha256-OY7BXNiZ/Ni+89ueoXSL9jHxX2wyviA+R1tn31EKWRQ=";
     };
-    perlPreHook = lib.optionalString stdenv.hostPlatform.isi686 "export LD=$CC"; # fix undefined reference to `__stack_chk_fail_local'
     meta = {
       description = "Argument type classification";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
@@ -20056,7 +20055,6 @@ with self; {
     };
     buildInputs = [ TestFatal TestRequires ];
     propagatedBuildInputs = [ ModuleImplementation ];
-    perlPreHook = "export LD=$CC";
     meta = {
       description = "Validate method/function parameters";
       homepage = "https://metacpan.org/release/Params-Validate";
@@ -20636,7 +20634,6 @@ with self; {
       url = "mirror://cpan/authors/id/L/LE/LEONT/PerlIO-Layers-0.012.tar.gz";
       hash = "sha256-VC2lQvo2uz/de4d24jDTzMAqpnRM6bd7Tu9MyufASt8=";
     };
-    perlPreHook = "export LD=$CC";
     meta = {
       description = "Querying your filehandle's capabilities";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
@@ -22503,29 +22500,17 @@ with self; {
     patches = [
       # https://github.com/PerlGameDev/SDL/pull/304
       ../development/perl-modules/sdl-modern-perl.patch
+      (fetchpatch {
+        url = "https://aur.archlinux.org/cgit/aur.git/plain/surface-xs-declare-calc-offset-earlier.diff?h=perl-sdl&id=d4b6da86d33046cde0e84fa2cd6eaccff1667cab";
+        hash = "sha256-dQ2O4dO18diSAilSZrZj6II+mBuKKI3cx9fR1SJqUvo=";
+      })
     ];
-    perlPreHook = "export LD=$CC";
     preCheck = "rm t/core_audiospec.t";
     buildInputs = [ pkgs.SDL pkgs.SDL_gfx pkgs.SDL_mixer pkgs.SDL_image pkgs.SDL_ttf pkgs.SDL_Pango pkgs.SDL_net AlienSDL CaptureTiny TestDeep TestDifferences TestException TestMost TestWarn ];
     propagatedBuildInputs = [ FileShareDir TieSimple ];
     meta = {
       description = "SDL bindings to Perl";
       license = with lib.licenses; [ lgpl21Plus ];
-    };
-  };
-
-  SearchXapian = buildPerlPackage {
-    pname = "Search-Xapian";
-    version = "1.2.25.5";
-    src = fetchurl {
-      url = "mirror://cpan/authors/id/O/OL/OLLY/Search-Xapian-1.2.25.5.tar.gz";
-      hash = "sha256-IE+9xxLWcR/6tmjB9M/AB7Y5qftkrX4ZyyD8EKkQuos=";
-    };
-    buildInputs = [ pkgs.xapian DevelLeak ];
-    meta = {
-      description = "Perl XS frontend to the Xapian C++ search library";
-      homepage = "https://xapian.org";
-      license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
@@ -23826,7 +23811,6 @@ with self; {
       hash = "sha256-oSfa52RcGpVwzZopcMbcST1SL/BzGKNKOeQJCY9pESU=";
     };
     propagatedBuildInputs = [ LexicalSealRequireHints ];
-    perlPreHook = lib.optionalString stdenv.hostPlatform.isDarwin "export LD=$CC";
     meta = {
       description = "Detect undeclared subroutines in compilation";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
@@ -23868,7 +23852,6 @@ with self; {
       url = "mirror://cpan/authors/id/T/TO/TODDR/Safe-Hole-0.14.tar.gz";
       hash = "sha256-9PVui70GxP5K4G2xIYbeyt+6wep3XqGMbAKJSB0V7AU=";
     };
-    perlPreHook = lib.optionalString stdenv.hostPlatform.isDarwin "export LD=$CC";
     meta = {
       description = "Lib/Safe/Hole.pm";
       homepage = "https://github.com/toddr/Safe-Hole";
@@ -23988,7 +23971,6 @@ with self; {
     };
     buildInputs = [ Test2Suite ];
     propagatedBuildInputs = [ XSParseKeyword ];
-    perlPreHook = lib.optionalString (stdenv.hostPlatform.isi686 || stdenv.hostPlatform.isDarwin) "export LD=$CC";
     meta = {
       description = "Try/catch/finally syntax for perl";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
@@ -24124,16 +24106,15 @@ with self; {
 
   SysVirt = buildPerlModule rec {
     pname = "Sys-Virt";
-    version = "10.9.0";
+    version = "11.0.0";
     src = fetchFromGitLab {
       owner = "libvirt";
       repo = "libvirt-perl";
-      rev = "v${version}";
-      hash = "sha256-g2HH9Ep5cAa4qXo9/MKJmxeive6oqHQEX9C8qY+u2g4=";
+      tag = "v${version}";
+      hash = "sha256-k1fpVLWbFgZOUvCPLN6EpYgSfpwig5mHiWMRo8iRvZc=";
     };
     nativeBuildInputs = [ pkgs.pkg-config ];
     buildInputs = [ pkgs.libvirt CPANChanges TestPod TestPodCoverage XMLXPath ];
-    perlPreHook = lib.optionalString stdenv.hostPlatform.isi686 "export LD=$CC"; # fix undefined reference to `__stack_chk_fail_local'
     meta = {
       description = "Libvirt Perl API";
       homepage = "https://libvirt.org";
@@ -26594,7 +26575,6 @@ with self; {
     };
     # libbtparse.so: cannot open shared object file
     patches = [ ../development/perl-modules/TextBibTeX-use-lib.patch ];
-    perlPreHook = "export LD=$CC";
     perlPostHook = lib.optionalString stdenv.hostPlatform.isDarwin ''
       oldPath="$(pwd)/btparse/src/libbtparse.dylib"
       newPath="$out/lib/libbtparse.dylib"
@@ -26903,7 +26883,6 @@ with self; {
       hash = "sha256-U6cw/29IgrmavYVW8mqRH1gvZ1tZ8OFnJe0ey8CE7lA=";
     };
     buildInputs = [ Filepushd ];
-    perlPreHook = lib.optionalString stdenv.hostPlatform.isDarwin "export LD=$CC";
     meta = {
       description = "Hoedown for Perl5";
       homepage = "https://github.com/tokuhirom/Text-Markdown-Hoedown";
@@ -27944,7 +27923,6 @@ with self; {
       url = "mirror://cpan/authors/id/A/AR/ARODLAND/Unicode-CaseFold-1.01.tar.gz";
       hash = "sha256-QYohKAj50Li7MwrJBQltLdNkl2dT1McVNNq5g2pjGU0=";
     };
-    perlPreHook = lib.optionalString stdenv.hostPlatform.isi686 "export LD=$CC"; # fix undefined reference to `__stack_chk_fail_local'
     meta = {
       description = "Unicode case-folding for case-insensitive lookups";
       homepage = "https://metacpan.org/release/Unicode-CaseFold";
@@ -28647,6 +28625,35 @@ with self; {
     };
   };
 
+  Xapian = buildPerlModule rec {
+    pname = "Xapian";
+    version = "1.4.27";
+    src = fetchurl {
+      url = "https://oligarchy.co.uk/xapian/${version}/xapian-bindings-${version}.tar.xz";
+      sha256 = "1fhq6rydjymmyn79cdza0j4rmlizrrwmf5mx276rlmwyh085wfxs";
+    };
+    buildInputs = [ pkgs.xapian ];
+    preConfigure = ''
+      # FIXME: doesn't work for cross
+      export PERL_LIB="$out/lib/perl5/site_perl/${perl.version}"
+      export PERL_ARCH="$PERL_LIB/$(perl -MConfig -e 'print $Config{archname}')"
+    '';
+    configureFlags = [
+      "--with-perl"
+    ];
+    outputs = [ "out" ]; # no "devdoc"
+    # Use default phases
+    buildPhase = null;
+    checkPhase = null;
+    checkTarget = "check";
+    installPhase = null;
+    meta = {
+      description = "Bindings allowing Xapian to be used from Perl";
+      homepage = "https://xapian.org";
+      license = [ lib.licenses.gpl2Plus ];
+    };
+  };
+
   XMLDescent = buildPerlModule {
     pname = "XML-Descent";
     version = "1.04";
@@ -29194,7 +29201,6 @@ with self; {
     };
     buildInputs = [ ExtUtilsCChecker Test2Suite ];
     propagatedBuildInputs = [ FileShareDir ];
-    perlPreHook = lib.optionalString (stdenv.hostPlatform.isi686 || stdenv.hostPlatform.isDarwin) "export LD=$CC";
     meta = {
       description = "XS functions to assist in parsing keyword syntax";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
@@ -29211,7 +29217,6 @@ with self; {
     };
     buildInputs = [ Test2Suite ];
     propagatedBuildInputs = [ FileShareDir ];
-    perlPreHook = lib.optionalString stdenv.hostPlatform.isDarwin "export LD=$CC";
     meta = {
       description = "XS functions to assist in parsing sub-like syntax";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
@@ -29273,7 +29278,6 @@ with self; {
       url = "mirror://cpan/authors/id/T/TO/TODDR/YAML-Syck-1.34.tar.gz";
       hash = "sha256-zJFWzK69p5jr/i8xthnoBld/hg7RcEJi8X/608bjQVk=";
     };
-    perlPreHook = lib.optionalString stdenv.hostPlatform.isDarwin "export LD=$CC";
     meta = {
       description = "Fast, lightweight YAML loader and dumper";
       homepage = "https://github.com/toddr/YAML-Syck";

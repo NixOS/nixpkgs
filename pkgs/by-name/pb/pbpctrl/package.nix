@@ -13,12 +13,13 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "qzed";
-    repo = "${pname}";
+    repo = "pbpctrl";
     rev = "v${version}";
     hash = "sha256-u5I3Hs00JDPRBwThYTEmNiZj/zPVfHyyrt4E68d13do=";
   };
 
-  cargoHash = "sha256-W59TRrFSm/IrStH9YitoG6nLs9pesDmL9+/DHnty3nw=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-0kh9bwiTVWuDviDw6IY5EGj+2k2WsyCCeo+r7CdBftE=";
 
   nativeBuildInputs = [
     pkg-config

@@ -7,7 +7,7 @@
   makeWrapper,
   self,
   packageOverrides ? (final: prev: { }),
-  substituteAll,
+  replaceVars,
   pkgsBuildBuild,
   pkgsBuildHost,
   pkgsBuildTarget,
@@ -109,7 +109,7 @@ stdenv.mkDerivation (
       "PLAT=${plat}"
       "CC=${stdenv.cc.targetPrefix}cc"
       "RANLIB=${stdenv.cc.targetPrefix}ranlib"
-      # Lua links with readline wich depends on ncurses. For some reason when
+      # Lua links with readline which depends on ncurses. For some reason when
       # building pkgsStatic.lua it fails because symbols from ncurses are not
       # found. Adding ncurses here fixes the problem.
       "MYLIBS=-lncurses"
@@ -149,8 +149,7 @@ stdenv.mkDerivation (
     postInstall = ''
       mkdir -p "$out/nix-support" "$out/share/doc/lua" "$out/lib/pkgconfig"
       cp ${
-        substituteAll {
-          src = ./utils.sh;
+        replaceVars ./utils.sh {
           luapathsearchpaths = lib.escapeShellArgs finalAttrs.LuaPathSearchPaths;
           luacpathsearchpaths = lib.escapeShellArgs finalAttrs.LuaCPathSearchPaths;
         }

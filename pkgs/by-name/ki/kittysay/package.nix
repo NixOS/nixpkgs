@@ -17,7 +17,8 @@ rustPlatform.buildRustPackage {
     hash = "sha256-ZYHrDBJ8cTqJAh2KUGSCsS1bY/emHRodPxZX2vxAhDs=";
   };
 
-  cargoHash = "sha256-F0WAtpAjBwL5YfzGtPgn7WTL6lgx3bjZFBQdDpjCr3I=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-LIAXlOArm5V7Kbm82GDRs3XvMTgKjuOL2C+fQfEDwb4=";
 
   meta = {
     description = "Cowsay, but with a cute kitty :3";

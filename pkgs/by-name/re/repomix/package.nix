@@ -8,16 +8,16 @@
 
 buildNpmPackage rec {
   pname = "repomix";
-  version = "0.2.15";
+  version = "0.2.36";
 
   src = fetchFromGitHub {
     owner = "yamadashy";
     repo = "repomix";
     tag = "v${version}";
-    hash = "sha256-mtZkp5GZSI/3N0xe3SLaYyHDM+ncnKDjShUqAoUa13s=";
+    hash = "sha256-utuCtkDp+3411FTqKxpXdE0XAMsVT0dwpcMAdJ2pAB0=";
   };
 
-  npmDepsHash = "sha256-F6XbNIzuRyLMQzlOoaRW/x1N4y5WbXS57zzYfhdK/jU=";
+  npmDepsHash = "sha256-jKAHFxxRheMw8pcYfOurL7L5TFaNIQjoxpJsPysuKYI=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;

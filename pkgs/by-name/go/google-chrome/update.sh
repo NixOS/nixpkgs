@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -I nixpkgs=./. -i bash -p curl jq gawk libossp_uuid libxml2 nix
+#!nix-shell -I nixpkgs=./. -i bash -p curl jq gawk libossp_uuid libuuid libxml2 nix
 # shellcheck shell=bash
 
 set -euo pipefail

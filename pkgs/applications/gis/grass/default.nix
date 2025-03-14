@@ -27,7 +27,7 @@
 , netcdf
 , pdal
 , pkg-config
-, postgresql
+, libpq
 , proj
 , python3Packages
 , readline
@@ -39,13 +39,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "grass";
-  version = "8.4.0";
+  version = "8.4.1";
 
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "grass";
     rev = finalAttrs.version;
-    hash = "sha256-NKMshd6pr2O62ZjmQ/oPttmeVBYVD0Nqhh3SwQrhZf8=";
+    hash = "sha256-q1jOimQi+24I1ZBf6Z0cvAyXcBFBpT5aWSNeG6n6y0k=";
   };
 
   nativeBuildInputs = [
@@ -75,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxml2
     netcdf
     pdal
-    postgresql
+    libpq
     proj
     readline
     sqlite
@@ -102,7 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-openmp"
     "--with-pdal"
     "--with-postgres"
-    "--with-postgres-libs=${postgresql.lib}/lib/"
+    "--with-postgres-libs=${libpq}/lib/"
     "--with-proj-includes=${proj.dev}/include"
     "--with-proj-libs=${proj}/lib"
     "--with-proj-share=${proj}/share/proj"

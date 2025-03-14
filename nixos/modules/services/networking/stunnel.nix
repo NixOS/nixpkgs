@@ -123,7 +123,7 @@ in
         description = ''
           Define the client configurations.
 
-          By default, verifyChain and OCSPaia are enabled and a CAFile is provided from pkgs.cacert.
+          By default, verifyChain and OCSPaia are enabled and CAFile is set to `security.pki.caBundle`.
 
           See "SERVICE-LEVEL OPTIONS" in {manpage}`stunnel(8)`.
         '';
@@ -144,7 +144,7 @@ in
             applyDefaults =
               c:
               {
-                CAFile = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
+                CAFile = config.security.pki.caBundle;
                 OCSPaia = true;
                 verifyChain = true;
               }

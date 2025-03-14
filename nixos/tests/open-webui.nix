@@ -15,6 +15,7 @@ in
       {
         services.open-webui = {
           enable = true;
+          host = "";
           environment = {
             # Requires network connection
             RAG_EMBEDDING_MODEL = "";

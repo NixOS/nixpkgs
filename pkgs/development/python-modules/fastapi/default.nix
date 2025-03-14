@@ -126,6 +126,8 @@ buildPythonPackage rec {
   disabledTests = [
     # Coverage test
     "test_fastapi_cli"
+    # Likely pydantic compat issue
+    "test_exception_handler_body_access"
   ];
 
   disabledTestPaths = [

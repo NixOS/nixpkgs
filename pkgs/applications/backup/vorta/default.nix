@@ -9,6 +9,7 @@
   versionCheckHook,
   makeFontsConf,
   qtbase,
+  qtsvg,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -27,9 +28,13 @@ python3Packages.buildPythonApplication rec {
     wrapQtAppsHook
   ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
-    qtwayland
-  ];
+  buildInputs =
+    [
+      qtsvg
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      qtwayland
+    ];
 
   build-system = with python3Packages; [
     setuptools

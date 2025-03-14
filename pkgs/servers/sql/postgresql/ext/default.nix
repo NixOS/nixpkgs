@@ -24,6 +24,8 @@ in {
 
     pg_auto_failover = super.callPackage ./pg_auto_failover.nix { };
 
+    pg_byteamagic = super.callPackage ./pg_byteamagic.nix { };
+
     pg_bigm = super.callPackage ./pg_bigm.nix { };
 
     pg_ed25519 = super.callPackage ./pg_ed25519.nix { };
@@ -67,6 +69,8 @@ in {
     pg_hll = super.callPackage ./pg_hll.nix { };
 
     pg_cron = super.callPackage ./pg_cron.nix { };
+
+    pg_tle = super.callPackage ./pg_tle.nix { };
 
     pg_topn = super.callPackage ./pg_topn.nix { };
 
@@ -116,6 +120,8 @@ in {
     tsja = super.callPackage ./tsja.nix { };
 
     wal2json = super.callPackage ./wal2json.nix { };
+
+    pgddl = super.callPackage ./pgddl.nix {};
 } // lib.optionalAttrs config.allowAliases {
   pg_embedding = throw "PostgreSQL extension `pg_embedding` has been removed since the project has been abandoned. Upstream's recommendation is to use pgvector instead (https://neon.tech/docs/extensions/pg_embedding#migrate-from-pg_embedding-to-pgvector)";
 }

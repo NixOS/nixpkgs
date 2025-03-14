@@ -9,11 +9,11 @@
 
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "gworkspace";
-  version = "1.0.0";
+  version = "1.1.0";
 
   src = fetchurl {
     url = "ftp://ftp.gnustep.org/pub/gnustep/usr-apps/gworkspace-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-M7dV7RVatw8gdYHQlRi5wNBd6MGT9GqW04R/DoKNu6I=";
+    sha256 = "sha256-zjBOtVgQAILI5EozTzyO5pKglG2BBrwaZqVJCxT/Pzw=";
   };
 
   # additional dependencies:

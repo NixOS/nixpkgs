@@ -3,7 +3,7 @@
   lib,
   fetchFromGitHub,
   fetchFromGitLab,
-  fetchFromGitea,
+  git-unroll,
   buildPythonPackage,
   python,
   runCommand,
@@ -150,6 +150,8 @@ let
   supportedCudaCapabilities = lists.intersectLists cudaFlags.cudaCapabilities supportedTorchCudaCapabilities;
   unsupportedCudaCapabilities = lists.subtractLists supportedCudaCapabilities cudaFlags.cudaCapabilities;
 
+  isCudaJetson = cudaSupport && cudaPackages.cudaFlags.isJetsonBuild;
+
   # Use trivial.warnIf to print a warning if any unsupported GPU targets are specified.
   gpuArchWarner =
     supported: unsupported:
@@ -228,14 +230,6 @@ let
       rocmSupport;
   };
 
-  git-unroll = fetchFromGitea {
-    domain = "codeberg.org";
-    owner = "gm6k";
-    repo = "git-unroll";
-    rev = "96bf24f2af153310ec59979c123a8cefda8636db";
-    hash = "sha256-BTlq2Pm4l/oypBzKKpxExVPyQ0CcAP8llUnl/fd3DUU=";
-  };
-
   unroll-src = writeShellScript "unroll-src" ''
     echo "{
       version,
@@ -244,7 +238,7 @@ let
       runCommand,
     }:
     assert version == "'"'$1'"'";"
-    ${git-unroll}/unroll https://github.com/pytorch/pytorch v$1
+    ${lib.getExe git-unroll} https://github.com/pytorch/pytorch v$1
     echo
     echo "# Update using: unroll-src [version]"
   '';
@@ -464,6 +458,7 @@ buildPythonPackage rec {
         cuda_nvcc
       ]
     )
+    ++ lib.optionals isCudaJetson [ cudaPackages.autoAddCudaCompatRunpath ]
     ++ lib.optionals rocmSupport [ rocmtoolkit_joined ];
 
   buildInputs =

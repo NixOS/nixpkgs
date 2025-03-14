@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitLab,
-  fetchpatch,
   gitUpdater,
   nixosTests,
   testers,
@@ -47,6 +46,10 @@ stdenv.mkDerivation (finalAttrs: {
     "out"
     "dev"
     "doc"
+  ];
+
+  patches = [
+    ./1001-test-secret-agent-Make-GetServerInformation-not-leak-into-tests.patch
   ];
 
   postPatch = ''

@@ -14,7 +14,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-g8xjz8qCTiulTwcEbLTHYldw4PI+4ZfCOMJs+J6L1C4=";
   };
 
-  cargoHash = "sha256-/cepTVJoBM1LYZkFpH9UCvE74cSszHDaeThsZksQ1P8=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-/n1+8n0zGs9qS5QQcAfXJ1kmRkcfsCTxQonEaFsNdHo=";
 
   meta = {
     description = "Tool for getting data from TOML files on the command line";

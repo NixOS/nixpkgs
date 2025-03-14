@@ -6,16 +6,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-sort";
-  version = "1.1.0";
+  version = "1.0.9";
 
   src = fetchFromGitHub {
     owner = "devinr528";
-    repo = pname;
+    repo = "cargo-sort";
     rev = "v${version}";
-    sha256 = "sha256-AUtue1xkhrhlF7PtqsCQ9rdhV0/0i85DWrp7YL9SAYk=";
+    sha256 = "sha256-fqmyL4ZSz+nKfUIrcrfLRT9paEas5d00Y/kvEqyz2vw=";
   };
 
-  cargoHash = "sha256-y6lLwk40hmFQKDU7sYz3+QQzdn5eGoEX7izmloK22dg=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-z5YT+6fU12WrByu3NZwodU9Y5489eCRrHUY+H/Hka+c=";
 
   meta = with lib; {
     description = "Tool to check that your Cargo.toml dependencies are sorted alphabetically";

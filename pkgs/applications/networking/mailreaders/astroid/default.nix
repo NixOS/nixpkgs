@@ -45,6 +45,11 @@ stdenv.mkDerivation rec {
       url = "https://github.com/astroidmail/astroid/commit/7c2022f06a4146ad62e858bcaacdb4ee817851b9.patch";
       hash = "sha256-hZHOg1wUR8Kpd6017fWzhMmG+/WQxSOCnsiyIvUcpbU=";
     })
+    (fetchpatch {
+      name = "boost_is_regular.patch";
+      url = "https://github.com/astroidmail/astroid/commit/abd84171dc6c4e639f3e86649ddc7ff211077244.patch";
+      hash = "sha256-IY60AnWm18ZwrCFsOvBg76UginpMo7gXBf8GT87FqW4=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -96,5 +101,7 @@ stdenv.mkDerivation rec {
     ];
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
+    # error: 'is_regular' was not declared in this scope
+    broken = true;
   };
 }

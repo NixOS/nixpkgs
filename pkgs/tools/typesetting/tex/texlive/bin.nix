@@ -222,6 +222,10 @@ let
           else
             mkdir -p "''${!package}"/bin
             mv "$out/bin/$bin" "''${!package}"/bin/
+            if [[ -e "$out/share/texmf-dist/scripts/$bin" ]] ; then
+              mkdir -p "''${!package}"/share/texmf-dist/scripts
+              mv "$out/share/texmf-dist/scripts/$bin" "''${!package}"/share/texmf-dist/scripts/
+            fi
           fi
         else
           echo "WARNING: no output known for binary '$bin', leaving in 'out'"
@@ -332,16 +336,24 @@ rec {
 
     # TODO: perhaps improve texmf.cnf search locations
     postInstall =
-      # remove redundant texmf-dist (content provided by TeX Live packages)
-      ''
-        rm -fr "$out"/share/texmf-dist
-      ''
       # install himktables in separate output for use in cross compilation
-      + ''
+      ''
         mkdir -p $dev/bin
         cp texk/web2c/.libs/himktables $dev/bin/himktables
       ''
-      + common.moveBins;
+      + common.moveBins
+      # remove redundant texmf-dist (content provided by TeX Live packages)
+      + ''
+        rm -frv "$out"/share/texmf-dist
+
+        mkdir -p "${placeholder "psutils"}"/share/texmf-dist/scripts/psutils
+        cp texk/psutils/{extractres.pl,includeres.pl,psjoin.pl} "${placeholder "psutils"}"/share/texmf-dist/scripts/psutils
+      ''
+      # remove broken symlinks
+      + ''
+        rm "$out"/bin/{eptex,ptex,uptex}
+        rm "${placeholder "ptex"}"/bin/{pbibtex,pdvitype,ppltotf,ptftopl}
+      '';
 
     passthru = { inherit version buildInputs; };
 
@@ -501,7 +513,11 @@ rec {
         "tie"
         "web"
       ];
-    postInstall = common.moveBins;
+    postInstall =
+      common.moveBins
+      + ''
+        rm "${placeholder "ptex"}"/bin/{pbibtex,pdvitype,ppltotf,ptftopl}
+      '';
   };
 
   chktex = stdenv.mkDerivation {

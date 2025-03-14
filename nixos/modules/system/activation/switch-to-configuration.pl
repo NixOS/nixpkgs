@@ -95,7 +95,7 @@ if (!-f "/etc/NIXOS" && (read_file("/etc/os-release", err_mode => "quiet") // ""
 
 make_path("/run/nixos", { mode => oct(755) });
 open(my $stc_lock, '>>', '/run/nixos/switch-to-configuration.lock') or die "Could not open lock - $!";
-flock($stc_lock, LOCK_EX) or die "Could not acquire lock - $!";
+flock($stc_lock, LOCK_EX|LOCK_NB) or die "Could not acquire lock - $!";
 openlog("nixos", "", LOG_USER);
 
 # run pre-switch checks
@@ -103,7 +103,7 @@ if (($ENV{"NIXOS_NO_CHECK"} // "") ne "1") {
     chomp(my $pre_switch_checks = <<'EOFCHECKS');
 @preSwitchCheck@
 EOFCHECKS
-    system("$pre_switch_checks $out") == 0 or exit 1;
+    system("$pre_switch_checks $out $action") == 0 or exit 1;
     if ($action eq "check") {
         exit 0;
     }

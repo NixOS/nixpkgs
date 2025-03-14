@@ -16,15 +16,15 @@
   sc2-headless,
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "pysc2";
-  version = "1.2";
+  version = "4.0";
 
   src = fetchFromGitHub {
     owner = "deepmind";
     repo = "pysc2";
-    rev = "39f84b01d662eb58b3d95791f59208c210afd4e7";
-    sha256 = "0dfbc2krd2rys1ji75ng2nl0ki8nhnylxljcp287bfb8qyz2m25p";
+    tag = "v${version}";
+    sha256 = "sha256-70Uqs30Dyq1u+e1CTR8mO/rzZangBvgY0ah2l7VJLhQ=";
   };
 
   patches = [
@@ -53,6 +53,7 @@ buildPythonPackage {
   ];
 
   meta = {
+    changelog = "https://github.com/google-deepmind/pysc2/releases/tag/${src.tag}";
     description = "Starcraft II environment and library for training agents";
     homepage = "https://github.com/deepmind/pysc2";
     license = lib.licenses.asl20;

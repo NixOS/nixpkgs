@@ -2,24 +2,24 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  poetry-core,
+  hatchling,
   textx,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "strpdatetime";
-  version = "0.3.0";
+  version = "0.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "RhetTbull";
     repo = "strpdatetime";
-    rev = "v${version}";
-    hash = "sha256-eb3KJCFRkEt9KEP1gMQYuP50qXqItrexJhKvtJDHl9o=";
+    tag = "v${version}";
+    hash = "sha256-a+KUM9gQAcNg3ju+YyQXafDlADYCV6B+Wy7EBtcO3S4=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [ textx ];
   pythonRelaxDeps = [ "textx" ];
@@ -32,7 +32,7 @@ buildPythonPackage rec {
   meta = {
     description = "Parse strings into Python datetime objects";
     license = lib.licenses.psfl;
-    changelog = "https://github.com/RhetTbull/strpdatetime/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/RhetTbull/strpdatetime/blob/${src.tag}/CHANGELOG.md";
     homepage = "https://github.com/RhetTbull/strpdatetime";
     maintainers = with lib.maintainers; [ sigmanificient ];
   };

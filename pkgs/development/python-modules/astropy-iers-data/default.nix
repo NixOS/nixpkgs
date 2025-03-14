@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "astropy-iers-data";
-  version = "0.2024.12.9.0.36.21";
+  version = "0.2025.1.13.0.34.51";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "astropy";
     repo = "astropy-iers-data";
     tag = "v${version}";
-    hash = "sha256-SN4qDBY3hi0Gj+AH3SSDi5+hKrHMNgPR/Y6HR2Vid0A=";
+    hash = "sha256-UyDhxr5lCieQsTW+vP5Zshu97Rq5jeVyEAYza2xCtoU=";
   };
 
   build-system = [

@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-WNMsPwBfd5EjeRbRtc06lCEVI2FVoLfrqL82OR0G7/c=";
   };
 
-  bloop-binary = fetchurl rec {
+  bloop-binary = fetchurl {
     url = "https://github.com/scalacenter/bloop/releases/download/v${version}/bloop-${platform}";
     sha256 =
       if stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64 then

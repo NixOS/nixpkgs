@@ -48,7 +48,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python interface for the SEGGER J-Link";
     homepage = "https://github.com/square/pylink";
-    changelog = "https://github.com/square/pylink/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/square/pylink/blob/${src.tag}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ dump_stack ];
   };

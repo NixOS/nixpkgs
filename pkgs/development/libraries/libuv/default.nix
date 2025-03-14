@@ -24,14 +24,14 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "1.49.2";
+  version = "1.50.0";
   pname = "libuv";
 
   src = fetchFromGitHub {
     owner = "libuv";
     repo = "libuv";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-hNXW3cQVW8VGMQrHFkezRI2OqYF7Qf1riD8sHy66qxg=";
+    hash = "sha256-1Z/zf4qZYDM5upHdRtc1HGpHaGTRHm147azJZ0pT5pU=";
   };
 
   outputs = [
@@ -52,6 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
           "getaddrinfo_fail"
           "getaddrinfo_fail_sync"
           "tcp_connect6_link_local"
+          "thread_affinity" # else "test must be run with cpu 0 affinity" when affinity is set
           "threadpool_multiple_event_loops" # times out on slow machines
           "get_passwd" # passed on NixOS but failed on other Linuxes
           "tcp_writealot"

@@ -17,7 +17,7 @@ let
         fontFile = "JoyPixels-SBIX.ttf";
       };
     }
-    .${kernel.name} or rec {
+    .${kernel.name} or {
       systemTag = "nixos";
       capitalized = "NixOS";
       fontFile = "joypixels-android.ttf";

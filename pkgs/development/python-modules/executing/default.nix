@@ -58,6 +58,9 @@ buildPythonPackage rec {
     # if the test runs fast enough. That makes the test flaky when
     # running on slow systems or cross- / emulated building
     "test_many_source_for_filename_calls"
+
+    # https://github.com/alexmojaki/executing/issues/91
+    "test_exception_catching"
   ];
 
   pythonImportsCheck = [ "executing" ];

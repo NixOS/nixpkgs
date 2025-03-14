@@ -143,7 +143,6 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     mainProgram = "duckstation-qt";
     maintainers = with lib.maintainers; [
       guibou
-      AndersonTorres
     ];
     platforms = lib.platforms.linux;
   };

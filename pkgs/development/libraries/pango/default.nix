@@ -17,6 +17,7 @@
   ninja,
   glib,
   python3,
+  docutils,
   x11Support ? !stdenv.hostPlatform.isDarwin,
   libXft,
   withIntrospection ?
@@ -29,7 +30,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pango";
-  version = "1.55.5";
+  version = "1.56.1";
 
   outputs = [
     "bin"
@@ -39,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/pango/${lib.versions.majorMinor finalAttrs.version}/pango-${finalAttrs.version}.tar.xz";
-    hash = "sha256-45YSbqCCA8vY7xJjjmIi4uH9iqnKxnQwcv7cXy2CDdg=";
+    hash = "sha256-QmvmZGDJi4N4Vz5/awsqtFD2u20ux87MM66BF48kZIA=";
   };
 
   depsBuildBuild = [
@@ -53,6 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
       glib # for glib-mkenum
       pkg-config
       python3
+      docutils # for rst2man, rst2html5
     ]
     ++ lib.optionals withIntrospection [
       gi-docgen
@@ -87,6 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonFlags = [
     (lib.mesonBool "documentation" withIntrospection)
+    (lib.mesonBool "man-pages" true)
     (lib.mesonEnable "introspection" withIntrospection)
     (lib.mesonEnable "xft" x11Support)
   ];

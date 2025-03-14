@@ -6,7 +6,7 @@
 }:
 vimUtils.buildVimPlugin {
   pname = "vim-ic10";
-  version = "unstable-2025-01-08";
+  version = "0-unstable-2025-01-08";
 
   src = fetchFromGitLab {
     owner = "LittleMorph";
@@ -15,7 +15,9 @@ vimUtils.buildVimPlugin {
     hash = "sha256-4Q1JiDA7PBUWNBNfCIZC6nImhe2FJzOqrslHazAOs18=";
   };
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version=branch" ];
+  };
 
   meta = {
     description = "Stationeers IC10 syntax highlighting for Vim";

@@ -13,7 +13,7 @@
   SystemConfiguration,
   dbBackend ? "sqlite",
   libmysqlclient,
-  postgresql,
+  libpq,
 }:
 
 let
@@ -22,17 +22,17 @@ in
 
 rustPlatform.buildRustPackage rec {
   pname = "vaultwarden";
-  version = "1.33.0";
+  version = "1.33.2";
 
   src = fetchFromGitHub {
     owner = "dani-garcia";
     repo = "vaultwarden";
     rev = version;
-    hash = "sha256-2lZfPPHHAoY12cXpkeJnvMab+C3T5O7KdmVpKqRQkgQ=";
+    hash = "sha256-Lu3/qVTi5Eedcm+3XlHAAJ1nPHm9hW4HZncQKmzDdoo=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-f+884HV9oopvr/2UfWk0sw2DW2cU3c16F+5vGc6+IL0=";
+  cargoHash = "sha256-T/ehLSPJmEuQYhotK12iqXQSe5Ke8+dkr9PVDe4Kmis=";
 
   # used for "Server Installed" version in admin panel
   env.VW_VERSION = version;
@@ -47,7 +47,7 @@ rustPlatform.buildRustPackage rec {
       SystemConfiguration
     ]
     ++ lib.optional (dbBackend == "mysql") libmysqlclient
-    ++ lib.optional (dbBackend == "postgresql") postgresql;
+    ++ lib.optional (dbBackend == "postgresql") libpq;
 
   buildFeatures = dbBackend;
 

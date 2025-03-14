@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "kubectl-gadget";
-  version = "0.34.0";
+  version = "0.38.0";
 
   src = fetchFromGitHub {
     owner = "inspektor-gadget";
     repo = "inspektor-gadget";
     rev = "v${version}";
-    hash = "sha256-qOenoC1NycRVFMXETJ1WpAhjeUAnminhkhJ39skvt4k=";
+    hash = "sha256-cNLnmJEVYkj4TJNr/oJ5kXeI11f0VtJb/nPojOG4ye8=";
   };
 
-  vendorHash = "sha256-V2bgMFJGo1t1MiJyACdB9mjM2xtHwgH6bNEbEeZC2XM=";
+  vendorHash = "sha256-EFVHWJUk5wiuM6Nn7wsVgXLDHWYvwb53BqXpqV41Jpg=";
 
   env.CGO_ENABLED = 0;
 
@@ -30,7 +30,7 @@ buildGoModule rec {
 
   passthru.tests.version = testers.testVersion {
     package = kubectl-gadget;
-    command = "kubectl-gadget version || true"; # mask non-zero return code if no kubeconfig present
+    command = "kubectl-gadget version";
     version = "v${version}";
   };
 

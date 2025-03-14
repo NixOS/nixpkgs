@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "websockets";
-  version = "13.1";
+  version = "14.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "aaugustin";
     repo = "websockets";
     tag = version;
-    hash = "sha256-Y0HDZw+H7l8+ywLLzFk66GNDCI0uWOZYypG86ozLo7c=";
+    hash = "sha256-lH4BPP8AjR13rnl4m7IP52iSGHjKE4q1AmHv4t+PRXw=";
   };
 
   build-system = [ setuptools ];
@@ -65,7 +65,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "WebSocket implementation in Python";
     homepage = "https://websockets.readthedocs.io/";
-    changelog = "https://github.com/aaugustin/websockets/blob/${version}/docs/project/changelog.rst";
+    changelog = "https://github.com/aaugustin/websockets/blob/${src.tag}/docs/project/changelog.rst";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fab ];
   };

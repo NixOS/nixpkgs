@@ -2,16 +2,16 @@
   lib,
   stdenv,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   gevent,
   pytest-asyncio,
+  pytest-cov-stub,
   pytest-tornado,
   pytestCheckHook,
   pythonOlder,
   pytz,
   setuptools,
   setuptools-scm,
-  six,
   tornado,
   twisted,
   tzlocal,
@@ -19,15 +19,16 @@
 
 buildPythonPackage rec {
   pname = "apscheduler";
-  version = "3.10.4";
+  version = "3.11.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    pname = "APScheduler";
-    inherit version;
-    hash = "sha256-5t8HGyfZvomOSGvHlAp75QtK8unafAjwdEqW1L1M70o=";
+  src = fetchFromGitHub {
+    owner = "agronholm";
+    repo = "apscheduler";
+    tag = version;
+    hash = "sha256-tFEm9yXf8CqcipSYtM7JM6WQ5Qm0YtgWhZvZOBAzy+w=";
   };
 
   build-system = [
@@ -36,25 +37,19 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
-    pytz
-    setuptools
-    six
     tzlocal
   ];
 
   nativeCheckInputs = [
     gevent
     pytest-asyncio
+    pytest-cov-stub
     pytest-tornado
     pytestCheckHook
+    pytz
     tornado
     twisted
   ];
-
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace-fail " --cov --tb=short" ""
-  '';
 
   disabledTests =
     [

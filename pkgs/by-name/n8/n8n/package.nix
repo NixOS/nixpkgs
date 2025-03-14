@@ -11,7 +11,7 @@
   xcbuild,
   libkrb5,
   libmongocrypt,
-  postgresql,
+  libpq,
   makeWrapper,
 }:
 
@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     nodejs
     libkrb5
     libmongocrypt
-    postgresql
+    libpq
   ];
 
   buildPhase = ''
@@ -73,6 +73,9 @@ stdenv.mkDerivation (finalAttrs: {
     pnpm --ignore-scripts prune --prod
     find -type f \( -name "*.ts" -o -name "*.map" \) -exec rm -rf {} +
     rm -rf node_modules/.pnpm/{typescript*,prettier*}
+    shopt -s globstar
+    # https://github.com/pnpm/pnpm/issues/3645
+    find node_modules packages/**/node_modules -xtype l -delete
 
     echo "Removed non-deterministic and unnecessary files"
   '';

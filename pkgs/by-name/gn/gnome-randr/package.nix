@@ -19,7 +19,8 @@ rustPlatform.buildRustPackage {
     sha256 = "sha256-mciHgBEOCFjRA4MSoEdP7bIag0KE+zRbk4wOkB2PAn0=";
   };
 
-  cargoHash = "sha256-rk8/sg5rSNS741QOWoAGIloqph+ZdBjl/xUaFl0A3Bs=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-FnJU/KtZrSXBEf7gjvlME52by3Fj7DwxmxUL4xXNBmk=";
 
   buildInputs = [ dbus ];
 

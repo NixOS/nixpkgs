@@ -15,14 +15,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "pmbootstrap";
-  version = "3.1.0";
+  version = "3.3.1";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "postmarketOS";
     repo = pname;
     tag = version;
-    hash = "sha256-ijXyX+VJqiS0z5IOXGjeL2SGZ/4ledhnq/Zr1ZLW/Io=";
+    hash = "sha256-2xeUuaxHS2mHuBN3EWGNZwn4S6aRmF6cUQI4LWeXLkE=";
     domain = "gitlab.postmarketos.org";
   };
 
@@ -54,6 +54,7 @@ python3Packages.buildPythonApplication rec {
   # skip impure tests
   disabledTests = [
     "test_pkgrepo_pmaports"
+    "test_random_valid_deviceinfos"
   ];
 
   versionCheckProgramArg = "--version";

@@ -6,13 +6,14 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "jonhoo";
-    repo = pname;
+    repo = "inferno";
     rev = "v${version}";
     hash = "sha256-lnNS3+2VZ+DgbmaM8/9X79vhqoxw3G8M9macLILX//w=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-L2Mq8y5v0n4OP8nZLeB0A8+UBr0snEDjTDZAGZQTxuo=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-hm10LAyvlrME2lYSRs/ji2Tt+Z5f8MTFSL3h7Aulaas=";
 
   # skip flaky tests
   checkFlags = [

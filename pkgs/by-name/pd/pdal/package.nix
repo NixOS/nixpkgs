@@ -2,7 +2,6 @@
 , stdenv
 , callPackage
 , fetchFromGitHub
-, fetchurl
 , testers
 
 , enableE57 ? lib.meta.availableOn stdenv.hostPlatform libe57format
@@ -18,7 +17,7 @@
 , libxml2
 , openscenegraph
 , pkg-config
-, postgresql
+, libpq
 , proj
 , sqlite
 , tiledb
@@ -29,13 +28,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pdal";
-  version = "2.8.3";
+  version = "2.8.4";
 
   src = fetchFromGitHub {
     owner = "PDAL";
     repo = "PDAL";
     rev = finalAttrs.version;
-    hash = "sha256-i4Kk9T9MwMGshyGtHrSDhnzqeeThRCKXsjpW3rIDVVc=";
+    hash = "sha256-52v7oDmvq820mJ91XAZI1rQEwssWcHagcd2QNVV6zPA=";
   };
 
   nativeBuildInputs = [
@@ -52,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     libtiff
     libxml2
     openscenegraph
-    postgresql
+    libpq
     proj
     sqlite
     tiledb

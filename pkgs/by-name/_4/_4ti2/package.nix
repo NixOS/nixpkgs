@@ -12,8 +12,8 @@ stdenv.mkDerivation rec {
   version = "1.6.10";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "4ti2";
+    repo = "4ti2";
     rev = "Release_${builtins.replaceStrings [ "." ] [ "_" ] version}";
     hash = "sha256-Rz8O1Tf81kzpTGPq7dkZJvv444F1/VqKu7VuRvH59kQ=";
   };
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     homepage = "https://4ti2.github.io/";
     description = "Software package for algebraic, geometric and combinatorial problems on linear spaces";
     license = with licenses; [ gpl2Plus ];
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.all;
   };
 }

@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     mainProgram = "nuweb";
     homepage = "https://nuweb.sourceforge.net";
     license = licenses.free;
-    maintainers = [ maintainers.AndersonTorres ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

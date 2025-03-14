@@ -18,7 +18,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices ];
-  cargoHash = "sha256-XT4FQVE+buORuZAFZK5Qnf/Fl3QSvw4SHUuCzWhxUdk=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-+2j6xH1Ww1WOLfbjknUPvCmYLAl4W3Zp/mQTaL0qnv0=";
 
   # fac includes a unit test called ls_files_works which assumes it's
   # running in a git repo. Nix's sandbox runs cargo build outside git,

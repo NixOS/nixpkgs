@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.gpl2Plus;
     maintainers = builtins.attrValues {
-      inherit (lib.maintainers) AndersonTorres;
+      inherit (lib.maintainers) ;
     };
     platforms = lib.platforms.linux;
   };

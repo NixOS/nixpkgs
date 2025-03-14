@@ -24,13 +24,13 @@ let
 
   archive_fmt = if stdenv.hostPlatform.isDarwin then "zip" else "tar.gz";
 
-  sha256 =
+  hash =
     {
-      x86_64-linux = "1l8w890xb3hszz1xf17xh1h8w0n2vcxc2jg3w1yzlx06rdb8bdy5";
-      x86_64-darwin = "1pb8i73bnpgcxzjdbcnb0cgjzr07a8pkb204m1w0zgl4ffjfhak0";
-      aarch64-linux = "0qkjrnhafbdam068gz8fzwpjb6cc3r70m9n11rkcw50i3m4gljrh";
-      aarch64-darwin = "0y3wwzpqwx6hk3rpnjjj8w3la6hw0g1y1fxw73paj9zcsmmz9l0a";
-      armv7l-linux = "053zkdjdvgmibqdd8jwr7msf9awdblqcxkim0wq1zxjxq5xnzz8j";
+      x86_64-linux = "sha256-+RHzGJ5Y6j93ojnqg9hSe+Zs0sewcSSfWu8qlxJEoWQ=";
+      x86_64-darwin = "sha256-Yaxb7cB/JADJ4i2PScYb9ovTKiClwd7TdQXbzg9ViSs=";
+      aarch64-linux = "sha256-CK4geEBeLc1M5z4wuRS3rrqsL9nG1ra5+e3PGEOrYHA=";
+      aarch64-darwin = "sha256-S1XYikl1FzHvGBcudSD2xyuOH4gfsrYyEfwzL/csfSE=";
+      armv7l-linux = "sha256-aAgCL6clX/lXWdBmCSin/60krW5Sbn2KZZovmS16CfI=";
     }
     .${system} or throwSystem;
 
@@ -41,7 +41,7 @@ callPackage ./generic.nix rec {
 
   # Please backport all compatible updates to the stable release.
   # This is important for the extension ecosystem.
-  version = "1.96.4.25017";
+  version = "1.98.1.25070";
   pname = "vscodium";
 
   executableName = "codium";
@@ -50,7 +50,7 @@ callPackage ./generic.nix rec {
 
   src = fetchurl {
     url = "https://github.com/VSCodium/vscodium/releases/download/${version}/VSCodium-${plat}-${version}.${archive_fmt}";
-    inherit sha256;
+    inherit hash;
   };
 
   tests = nixosTests.vscodium;
@@ -62,7 +62,7 @@ callPackage ./generic.nix rec {
   # See https://eclecticlight.co/2022/06/17/app-security-changes-coming-in-ventura/ for more information.
   dontFixup = stdenv.hostPlatform.isDarwin;
 
-  meta = with lib; {
+  meta = {
     description = ''
       Open source source code editor developed by Microsoft for Windows,
       Linux and macOS (VS Code without MS branding/telemetry/licensing)
@@ -76,9 +76,9 @@ callPackage ./generic.nix rec {
     '';
     homepage = "https://github.com/VSCodium/vscodium";
     downloadPage = "https://github.com/VSCodium/vscodium/releases";
-    license = licenses.mit;
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    maintainers = with lib.maintainers; [
       synthetica
       bobby285271
       ludovicopiero

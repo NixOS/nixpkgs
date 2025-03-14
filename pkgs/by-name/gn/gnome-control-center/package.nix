@@ -2,7 +2,7 @@
   fetchurl,
   lib,
   stdenv,
-  substituteAll,
+  replaceVars,
   accountsservice,
   adwaita-icon-theme,
   colord,
@@ -74,16 +74,15 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-control-center";
-  version = "47.3";
+  version = "47.4";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-control-center/${lib.versions.major finalAttrs.version}/gnome-control-center-${finalAttrs.version}.tar.xz";
-    hash = "sha256-eDgdWn8dWyl8mhlhEUXuXgWE8GrFde0IrQcKDAe76qI=";
+    hash = "sha256-KMfbdNcg/MnyE8EtNy5+rMF2ekm8TKZrK9ILD9ECJmg=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./paths.patch;
+    (replaceVars ./paths.patch {
       gcm = gnome-color-manager;
       inherit glibc tzdata shadow;
       inherit cups networkmanagerapplet;

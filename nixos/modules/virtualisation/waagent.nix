@@ -31,7 +31,7 @@ let
       attrsOf (
         either atom (attrsOf atom)
         // {
-          description = atom.description + "or an attribute set of them";
+          description = atom.description + " or an attribute set of them";
         }
       );
     generate =
@@ -110,14 +110,18 @@ let
       };
 
       ResourceDisk = {
-        Format = mkEnableOption ''
-          If set to `true`, waagent formats and mounts the resource disk that the platform provides,
-          unless the file system type in `ResourceDisk.FileSystem` is set to `ntfs`.
-          The agent makes a single Linux partition (ID 83) available on the disk.
-          This partition isn't formatted if it can be successfully mounted.
+        Format = mkOption {
+          type = types.bool;
+          default = false;
+          description = ''
+            If set to `true`, waagent formats and mounts the resource disk that the platform provides,
+            unless the file system type in `ResourceDisk.FileSystem` is set to `ntfs`.
+            The agent makes a single Linux partition (ID 83) available on the disk.
+            This partition isn't formatted if it can be successfully mounted.
 
-          This configuration has no effect if resource disk is managed by cloud-init.
-        '';
+            This configuration has no effect if resource disk is managed by cloud-init.
+          '';
+        };
 
         FileSystem = mkOption {
           type = types.str;
@@ -155,12 +159,16 @@ let
           '';
         };
 
-        EnableSwap = mkEnableOption ''
-          If enabled, the agent creates a swap file (`/swapfile`) on the resource disk
-          and adds it to the system swap space.
+        EnableSwap = mkOption {
+          type = types.bool;
+          default = false;
+          description = ''
+            If enabled, the agent creates a swap file (`/swapfile`) on the resource disk
+            and adds it to the system swap space.
 
-          This configuration has no effect if resource disk is managed by cloud-init.
-        '';
+            This configuration has no effect if resource disk is managed by cloud-init.
+          '';
+        };
 
         SwapSizeMB = mkOption {
           type = types.int;
@@ -173,16 +181,24 @@ let
         };
       };
 
-      Logs.Verbose = lib.mkEnableOption ''
-        If you set this option, log verbosity is boosted.
-        Waagent logs to `/var/log/waagent.log` and uses the system logrotate functionality to rotate logs.
-      '';
+      Logs.Verbose = lib.mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          If you set this option, log verbosity is boosted.
+          Waagent logs to `/var/log/waagent.log` and uses the system logrotate functionality to rotate logs.
+        '';
+      };
 
       OS = {
-        EnableRDMA = lib.mkEnableOption ''
-          If enabled, the agent attempts to install and then load an RDMA kernel driver
-          that matches the version of the firmware on the underlying hardware.
-        '';
+        EnableRDMA = lib.mkOption {
+          type = types.bool;
+          default = false;
+          description = ''
+            If enabled, the agent attempts to install and then load an RDMA kernel driver
+            that matches the version of the firmware on the underlying hardware.
+          '';
+        };
 
         RootDeviceScsiTimeout = lib.mkOption {
           type = types.nullOr types.int;
@@ -212,17 +228,19 @@ let
         };
       };
 
-      AutoUpdate.Enable = lib.mkEnableOption ''
-        Enable or disable autoupdate for goal state processing.
-      '';
+      AutoUpdate.Enable = lib.mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether or not to enable autoupdate for goal state processing.
+        '';
+      };
     };
   };
 in
 {
   options.services.waagent = {
-    enable = lib.mkEnableOption ''
-      Whether to enable the Windows Azure Linux Agent.
-    '';
+    enable = lib.mkEnableOption "Windows Azure Linux Agent";
 
     package = lib.mkPackageOption pkgs "waagent" { };
 

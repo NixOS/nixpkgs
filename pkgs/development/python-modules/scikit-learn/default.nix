@@ -24,7 +24,7 @@
 
 buildPythonPackage rec {
   pname = "scikit-learn";
-  version = "1.5.2";
+  version = "1.6.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -32,7 +32,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "scikit_learn";
     inherit version;
-    hash = "sha256-tCN+17P90KSIJ5LmjvJUXVuqUKyju0WqffRoE4rY+U0=";
+    hash = "sha256-tPwlJeyixppZJg9YPFanVXxszfjer9um4GD5TBxZc44=";
   };
 
   postPatch = ''

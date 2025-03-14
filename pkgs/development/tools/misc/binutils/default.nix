@@ -9,7 +9,6 @@ in
   libtool,
   bison,
   buildPackages,
-  fetchFromGitHub,
   fetchurl,
   gettext,
   lib,

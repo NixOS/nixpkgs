@@ -1,5 +1,5 @@
 {
-  git,
+  gitMinimal,
   pre-commit,
   runCommand,
   testers,
@@ -9,7 +9,7 @@
     runCommand "check-meta-hooks"
       {
         nativeBuildInputs = [
-          git
+          gitMinimal
           pre-commit
         ];
       }

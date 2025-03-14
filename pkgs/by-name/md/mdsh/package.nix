@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-vN8nFhbZgJIhFuFET9IOmdxT7uBKq/9X+TO9lZsDw6g=";
   };
 
-  cargoHash = "sha256-0D1RSUJw7fszc9d4nrp+zCzr9l0xF4Ed8DbK5/O5bEY=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-kNe0WzW/9kcocRHR1FMKKIMnyZceqzShWQ9Cf7mAx0c=";
 
   meta = with lib; {
     description = "Markdown shell pre-processor";

@@ -12,11 +12,14 @@
   makeWrapper,
   removeReferencesTo,
   replaceVars,
-  go,
+  go_1_23,
   applyPatches,
   nvidia-modprobe,
 }:
 let
+  # https://github.com/NVIDIA/libnvidia-container/pull/297
+  go = go_1_23;
+
   modprobeVersion = "550.54.14";
   patchedModprobe = applyPatches {
     src = nvidia-modprobe.src.override {
@@ -99,6 +102,15 @@ stdenv.mkDerivation rec {
     substituteInPlace mk/common.mk \
       --replace-fail objcopy '$(OBJCOPY)' \
       --replace-fail ldconfig true
+  '';
+
+  # Recreate library symlinks which ldconfig would have created
+  postFixup = ''
+    for lib in libnvidia-container libnvidia-container-go; do
+      rm -f "$out/lib/$lib.so"
+      ln -s "$out/lib/$lib.so.${version}" "$out/lib/$lib.so.1"
+      ln -s "$out/lib/$lib.so.1" "$out/lib/$lib.so"
+    done
   '';
 
   enableParallelBuilding = true;

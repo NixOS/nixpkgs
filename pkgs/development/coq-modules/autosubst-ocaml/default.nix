@@ -9,12 +9,17 @@ mkCoqDerivation {
   pname = "autosubst-ocaml";
   owner = "uds-psl";
 
+  release."1.1+8.20".sha256 = "sha256-S3uKkwbGFsvauP9lKc3UsdszHahbZQhlOOK3fCBXlSE=";
   release."1.1+8.19".sha256 = "sha256-AGbhw/6lg4GpDE6hZBhau9DLW7HVXa0UzGvJfSV8oHE=";
 
   inherit version;
   defaultVersion =
     with lib.versions;
     lib.switch coq.coq-version [
+      {
+        case = isEq "8.20";
+        out = "1.1+8.20";
+      }
       {
         case = isEq "8.19";
         out = "1.1+8.19";

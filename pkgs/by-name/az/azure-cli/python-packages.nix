@@ -62,6 +62,7 @@ let
             paramiko
             pkginfo
             psutil
+            py-deviceid
             pyjwt
             pyopenssl
             requests
@@ -117,10 +118,15 @@ let
         meta.downloadPage = "https://github.com/Azure/azure-cli/blob/azure-cli-${version}/src/azure-cli-telemetry/";
       };
 
-      # AttributeError: type object 'WorkspacesOperations' has no attribute 'begin_delete'
-      azure-mgmt-batchai =
-        overrideAzureMgmtPackage super.azure-mgmt-batchai "7.0.0b1" "zip"
-          "sha256-mT6vvjWbq0RWQidugR229E8JeVEiobPD3XA/nDM3I6Y=";
+      # Error loading command module 'batch': No module named 'azure.batch._model_base'
+      azure-batch = super.azure-batch.overridePythonAttrs (attrs: rec {
+        version = "15.0.0b1";
+        src = fetchPypi {
+          pname = "azure_batch"; # Different from src.pname in the original package.
+          inherit version;
+          hash = "sha256-373dFY/63lIZPj5NhsmW6nI2/9JpWkNzT65eBal04u0=";
+        };
+      });
 
       azure-mgmt-billing =
         (overrideAzureMgmtPackage super.azure-mgmt-billing "6.0.0" "zip"
@@ -148,21 +154,6 @@ let
         };
       });
 
-      # ModuleNotFoundError: No module named 'azure.mgmt.containerservice.v2024_09_01'
-      azure-mgmt-containerservice = super.azure-mgmt-containerservice.overridePythonAttrs (attrs: rec {
-        version = "33.0.0";
-        src = fetchPypi {
-          pname = "azure_mgmt_containerservice"; # Different from src.pname in the original package.
-          inherit version;
-          hash = "sha256-hoWD3NuKSQXeA6hKm3kD12octZrNnDc28CvHQ7UEfJ4=";
-        };
-      });
-
-      # ValueError: The operation 'azure.mgmt.devtestlabs.operations#VirtualMachinesOperations.delete' is invalid.
-      azure-mgmt-devtestlabs =
-        overrideAzureMgmtPackage super.azure-mgmt-devtestlabs "4.0.0" "zip"
-          "sha256-WVScTEBo8mRmsQl7V0qOUJn7LNbIvgoAOVsG07KeJ40=";
-
       # ImportError: cannot import name 'ResourceSku' from 'azure.mgmt.eventgrid.models'
       azure-mgmt-eventgrid =
         overrideAzureMgmtPackage super.azure-mgmt-eventgrid "10.2.0b2" "zip"
@@ -173,18 +164,6 @@ let
         overrideAzureMgmtPackage super.azure-mgmt-hdinsight "9.0.0b3" "tar.gz"
           "sha256-clSeCP8+7T1uI4Nec+zhzDK980C9+JGeeJFsNSwgD2Q=";
 
-      # ValueError: The operation 'azure.mgmt.kusto.operations#ClustersOperations.delete' is invalid.
-      azure-mgmt-kusto =
-        (overrideAzureMgmtPackage super.azure-mgmt-kusto "0.3.0" "zip"
-          "sha256-nri3eB/UQQ7p4gfNDDmDuvnlhBS1tKGISdCYVuNrrN4="
-        ).overridePythonAttrs
-          (attrs: {
-            propagatedBuildInputs = attrs.propagatedBuildInputs or [ ] ++ [
-              self.msrest
-              self.msrestazure
-            ];
-          });
-
       # ValueError: The operation 'azure.mgmt.media.operations#MediaservicesOperations.create_or_update' is invalid.
       azure-mgmt-media =
         overrideAzureMgmtPackage super.azure-mgmt-media "9.0.0" "zip"
@@ -194,6 +173,11 @@ let
       azure-mgmt-rdbms =
         overrideAzureMgmtPackage super.azure-mgmt-rdbms "10.2.0b17" "tar.gz"
           "sha256-1nnRkyr4Im79B7DDqGz/FOrPAToFaGhE+a7r5bZMuOQ=";
+
+      # ModuleNotFoundError: No module named 'azure.mgmt.redhatopenshift.v2023_11_22'
+      azure-mgmt-redhatopenshift =
+        overrideAzureMgmtPackage super.azure-mgmt-redhatopenshift "1.5.0" "tar.gz"
+          "sha256-Uft0KcOciKzJ+ic9n4nxkwNSBmKZam19jhEiqY9fJSc=";
 
       # ImportError: cannot import name 'IPRule' from 'azure.mgmt.signalr.models'
       azure-mgmt-signalr =

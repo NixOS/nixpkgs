@@ -4,6 +4,7 @@
   rustPlatform,
   fetchFromGitHub,
   fetchYarnDeps,
+  fetchpatch,
   makeWrapper,
   CoreFoundation,
   AppKit,
@@ -31,7 +32,6 @@
   vendorHash,
   extPatches ? [ ],
   cargoHash ? null,
-  cargoLock ? null,
   yarnHash ? null,
   pnpmHash ? null,
 }:
@@ -49,7 +49,8 @@ let
 
   rdpClient = rustPlatform.buildRustPackage rec {
     pname = "teleport-rdpclient";
-    inherit cargoHash cargoLock;
+    useFetchCargoVendor = true;
+    inherit cargoHash;
     inherit version src;
 
     buildAndTestSubdir = "lib/srv/desktop/rdp/rdpclient";
@@ -83,7 +84,10 @@ let
     pname = "teleport-webassets";
     inherit src version;
 
-    cargoDeps = rustPlatform.importCargoLock cargoLock;
+    cargoDeps = rustPlatform.fetchCargoVendor {
+      inherit src;
+      hash = cargoHash;
+    };
 
     pnpmDeps =
       if pnpmHash != null then
@@ -115,6 +119,14 @@ let
             fixup-yarn-lock
           ]
       );
+
+    patches = lib.optional (lib.versionAtLeast version "16") [
+      (fetchpatch {
+        name = "disable-wasm-opt-for-ironrdp.patch";
+        url = "https://github.com/gravitational/teleport/commit/994890fb05360b166afd981312345a4cf01bc422.patch?full_index=1";
+        hash = "sha256-Y5SVIUQsfi5qI28x5ccoRkBjpdpeYn0mQk8sLO644xo=";
+      })
+    ];
 
     configurePhase = ''
       runHook preConfigure
@@ -244,6 +256,7 @@ buildGoModule rec {
       tomberek
       freezeboy
       techknowlogick
+      juliusfreudenberger
     ];
     platforms = platforms.unix;
     # go-libfido2 is broken on platforms with less than 64-bit because it defines an array

@@ -57,24 +57,24 @@
 
 let
   pname = "gitkraken";
-  version = "10.6.2";
+  version = "10.8.0";
 
   throwSystem = throw "Unsupported system: ${stdenv.hostPlatform.system}";
 
   srcs = {
     x86_64-linux = fetchzip {
       url = "https://release.axocdn.com/linux/GitKraken-v${version}.tar.gz";
-      hash = "sha256-E/9BR4PE5QF075+NgJZTtgDoShHEqeRcoICnMLt3RuY=";
+      hash = "sha256-BsNrCnRqgUPSEgYTCLj4Rz8tG/iehgmDhfllG7UEBW8=";
     };
 
     x86_64-darwin = fetchzip {
       url = "https://release.axocdn.com/darwin/GitKraken-v${version}.zip";
-      hash = "sha256-gCiZN+ivXEF5KLas7eZn9iWfXcDGwf1gXK1ejY2C4xs=";
+      hash = "sha256-YuRj9uR3BnFJHtZ4Y/RcQbI+4e5YPpadhnlNnoHC5oA=";
     };
 
     aarch64-darwin = fetchzip {
       url = "https://release.axocdn.com/darwin-arm64/GitKraken-v${version}.zip";
-      hash = "sha256-1zd57Kqi5iKHw/dNqLQ7jVAkNFvkFeqQbZPN32kF9IU=";
+      hash = "sha256-Xn+RLGafIVDRLtT7gHUlREax5CxPHWIpZOLFPNnm5cg=";
     };
   };
 
@@ -87,9 +87,6 @@ let
     license = licenses.unfree;
     platforms = builtins.attrNames srcs;
     maintainers = with maintainers; [
-      xnwdd
-      evanjs
-      arkivm
       nicolas-goudry
       Rishik-Y
     ];

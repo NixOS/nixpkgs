@@ -50,11 +50,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "tor";
-  version = "0.4.8.13";
+  version = "0.4.8.14";
 
   src = fetchurl {
     url = "https://dist.torproject.org/${pname}-${version}.tar.gz";
-    sha256 = "sha256-m68mw4eiggs5QtpXIUbm63fCvGaGKvYpfNAqB05vuig=";
+    sha256 = "sha256-UEfh3tEtmqxOuFj3Y0pidxTdWM6ZBT1RdpGkswSmbRA=";
   };
 
   outputs = [

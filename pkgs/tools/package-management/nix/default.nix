@@ -8,8 +8,11 @@
 , fetchFromGitHub
 , fetchpatch2
 , runCommand
-, buildPackages
 , Security
+, pkgs
+, pkgsi686Linux
+, pkgsStatic
+, nixosTests
 
 , storeDir ? "/nix/store"
 , stateDir ? "/nix/var"
@@ -85,28 +88,6 @@ let
     requiredSystemFeatures = [ ];
   };
 
-  libgit2-thin-packfile = libgit2.overrideAttrs (args: {
-    nativeBuildInputs = args.nativeBuildInputs or []
-      # gitMinimal does not build on Windows. See packbuilder patch.
-      ++ lib.optionals (!stdenv.hostPlatform.isWindows) [
-        # Needed for `git apply`; see `prePatch`
-        buildPackages.gitMinimal
-      ];
-    # Only `git apply` can handle git binary patches
-    prePatch = args.prePatch or ""
-      + lib.optionalString (!stdenv.hostPlatform.isWindows) ''
-        patch() {
-          git apply
-        }
-      '';
-    # taken from https://github.com/NixOS/nix/tree/master/packaging/patches
-    patches = (args.patches or []) ++ [
-      ./patches/libgit2-mempack-thin-packfile.patch
-    ] ++ lib.optionals (!stdenv.hostPlatform.isWindows) [
-      ./patches/libgit2-packbuilder-callback-interruptible.patch
-    ];
-  });
-
   common = args:
     callPackage
       (import ./common.nix ({ inherit lib fetchFromGitHub; } // args))
@@ -114,7 +95,6 @@ let
         inherit Security storeDir stateDir confDir;
         boehmgc = boehmgc-nix;
         aws-sdk-cpp = if lib.versionAtLeast args.version "2.12pre" then aws-sdk-cpp-nix else aws-sdk-cpp-old-nix;
-        libgit2 = if lib.versionAtLeast args.version "2.25.0" then libgit2-thin-packfile else libgit2;
       };
 
   # https://github.com/NixOS/nix/pull/7585
@@ -157,6 +137,29 @@ let
     }
     pkg;
 
+  # (meson based packaging)
+  # Add passthru tests to the package, and re-expose package set overriding
+  # functions. This will not incorporate the tests into the package set.
+  # TODO (roberth): add package-set level overriding to the "everything" package.
+  addTests = selfAttributeName: pkg:
+    let
+      tests =
+        pkg.tests or {}
+        // import ./tests.nix {
+          inherit runCommand lib stdenv pkgs pkgsi686Linux pkgsStatic nixosTests;
+          inherit (pkg) version src;
+          nix = pkg;
+          self_attribute_name = selfAttributeName;
+        };
+    in
+    # preserve old pkg, including overrideSource, etc
+    pkg // {
+      tests = pkg.tests or {} // tests;
+      passthru = pkg.passthru or {} // {
+        tests = lib.warn "nix.passthru.tests is deprecated. Use nix.tests instead." pkg.passthru.tests or {} // tests;
+      };
+    };
+
 in lib.makeExtensible (self: ({
   nix_2_3 = ((common {
     version = "2.3.18";
@@ -183,6 +186,8 @@ in lib.makeExtensible (self: ({
     hash = "sha256-9xrQhrqHCSqWsQveykZvG/ZMu0se66fUQw3xVSg6BpQ=";
     self_attribute_name = "nix_2_25";
   };
+
+  nix_2_26 = addTests "nix_2_26" (callPackage ./vendor/2_26/componentized.nix { inherit (self.nix_2_24.meta) maintainers; });
 
   git = common rec {
     version = "2.25.0";

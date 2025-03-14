@@ -44,12 +44,6 @@ stdenv.mkDerivation rec {
     "SHAREWARE=${if buildShareware then "1" else "0"}"
   ];
 
-  # when using SDL_compat instead of SDL1, SDL_mixer isn't correctly detected,
-  # but there is no harm just specifying it
-  env.NIX_CFLAGS_COMPILE = toString [
-    "-I${lib.getDev SDL_mixer}/include/SDL"
-  ];
-
   installPhase = ''
     runHook preInstall
 

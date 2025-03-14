@@ -8,6 +8,7 @@
   zlib,
   libpng,
   libjpeg,
+  libwebp,
   dav1d,
   libyuv,
   gdk-pixbuf,
@@ -25,7 +26,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "AOMediaCodec";
-    repo = pname;
+    repo = "libavif";
     rev = "v${version}";
     hash = "sha256-kop1S4A/+hP2YdgoMXP7OMVPc2eoRnHpoBrPnW6KWyM=";
   };
@@ -39,6 +40,7 @@ stdenv.mkDerivation rec {
     "-DAVIF_CODEC_AOM_DECODE=OFF"
     "-DAVIF_BUILD_APPS=ON"
     "-DAVIF_BUILD_GDK_PIXBUF=ON"
+    "-DAVIF_LIBSHARPYUV=SYSTEM"
   ];
 
   nativeBuildInputs = [
@@ -53,6 +55,7 @@ stdenv.mkDerivation rec {
     zlib
     libpng
     libjpeg
+    libwebp
   ];
 
   propagatedBuildInputs = [

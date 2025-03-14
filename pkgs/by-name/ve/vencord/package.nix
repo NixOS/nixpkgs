@@ -7,44 +7,44 @@
   lib,
   nix-update,
   nodejs,
-  pnpm_9,
+  pnpm_10,
   stdenv,
   writeShellScript,
   buildWebExtension ? false,
 }:
+
 stdenv.mkDerivation (finalAttrs: {
   pname = "vencord";
-  version = "1.11.2";
+  version = "1.11.6";
 
   src = fetchFromGitHub {
     owner = "Vendicated";
     repo = "Vencord";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-18CzWAcBotIdzXFPIptBo20KZxXDVhM7AwwlCnPz+Wk=";
+    hash = "sha256-8KAt7yFGT/DBlg2VJ7ejsOJ67Sp5cuuaKEWK3+VpL4E=";
   };
 
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = pnpm_10.fetchDeps {
     inherit (finalAttrs) pname src;
-
-    hash = "sha256-ZUwtNtOmxjhOBpYB7vuytunGBRSuVxdlQsceRmeyhhI=";
+    hash = "sha256-g9BSVUKpn74D9eIDj/lS1Y6w/+AnhCw++st4s4REn+A=";
   };
 
   nativeBuildInputs = [
     git
     nodejs
-    pnpm_9.configHook
+    pnpm_10.configHook
   ];
 
   env = {
     ESBUILD_BINARY_PATH = lib.getExe (
       esbuild.overrideAttrs (
         final: _: {
-          version = "0.15.18";
+          version = "0.25.0";
           src = fetchFromGitHub {
             owner = "evanw";
             repo = "esbuild";
             rev = "v${final.version}";
-            hash = "sha256-b9R1ML+pgRg9j2yrkQmBulPuLHYLUQvW+WTyR/Cq6zE=";
+            hash = "sha256-L9jm94Epb22hYsU3hoq1lZXb5aFVD4FC4x2qNt0DljA=";
           };
           vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
         }
@@ -89,15 +89,15 @@ stdenv.mkDerivation (finalAttrs: {
     exec nix-update --version "$latestTag" "$@"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Vencord web extension";
     homepage = "https://github.com/Vendicated/Vencord";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
+      donteatoreo
       FlafyDev
       NotAShelf
       Scrumplex
-      donteatoreo
     ];
   };
 })

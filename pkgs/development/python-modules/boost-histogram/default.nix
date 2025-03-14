@@ -27,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "boost-histogram";
-  version = "1.5.0";
+  version = "1.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scikit-hep";
     repo = "boost-histogram";
     tag = "v${version}";
-    hash = "sha256-GsgzJqZTrtc4KRkGn468m0e+sgX9rzJdwA9JMPSSPWk=";
+    hash = "sha256-7E4y3P3RzVmIHb5mEoEYWZSwWnmL3LbGqYjGbnszM98=";
   };
 
   nativeBuildInputs = [ cmake ];

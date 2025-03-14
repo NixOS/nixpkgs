@@ -74,6 +74,10 @@ stdenv.mkDerivation rec {
       yarn cache clean --all
       rm -rf ~/node_modules/.cache
 
+      # Remove workspace "package" as it contains broken symlinks
+      # See https://github.com/NixOS/nixpkgs/issues/380366
+      rm -rf ~/node_modules/@mastodon
+
       # Remove execute permissions
       find ~/public/assets -type f ! -perm 0555 \
         -exec chmod 0444 {} ';'

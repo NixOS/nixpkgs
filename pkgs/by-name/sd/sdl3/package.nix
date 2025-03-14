@@ -51,9 +51,13 @@
   x11Support ? !stdenv.hostPlatform.isAndroid && !stdenv.hostPlatform.isWindows,
 }:
 
+assert lib.assertMsg (
+  waylandSupport -> openglSupport
+) "SDL3 requires OpenGL support to enable Wayland";
+
 stdenv.mkDerivation (finalAttrs: {
   pname = "sdl3";
-  version = "3.2.0";
+  version = "3.2.6";
 
   outputs = [
     "lib"
@@ -65,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "libsdl-org";
     repo = "SDL";
     tag = "release-${finalAttrs.version}";
-    hash = "sha256-gVLZPuXtMdFhylxh3+LC/SJCaQiOwZpbVcBGctyGGYY=";
+    hash = "sha256-SEL/JIenmueYayxZlWlMO3lTUOcqiaZZC6RJbbH4DmE=";
   };
 
   postPatch =
@@ -173,7 +177,8 @@ stdenv.mkDerivation (finalAttrs: {
     # Many dependencies are not directly linked to, but dlopen()'d at runtime. Adding them to the RPATH
     # helps them be found
     NIX_LDFLAGS =
-      lib.optionalString (stdenv.hostPlatform.extensions.sharedLibrary == ".so")
+      lib.optionalString
+        (stdenv.hostPlatform.hasSharedLibraries && stdenv.hostPlatform.extensions.sharedLibrary == ".so")
         "-rpath ${
           lib.makeLibraryPath (finalAttrs.dlopenBuildInputs ++ finalAttrs.dlopenPropagatedBuildInputs)
         }";
@@ -219,7 +224,7 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script {
       extraArgs = [
         "--version-regex"
-        "'release-(.*)'"
+        "release-(3\\..*)"
       ];
     };
   };
@@ -230,7 +235,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/libsdl-org/SDL/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.zlib;
     maintainers = with lib.maintainers; [ getchoo ];
-    platforms = lib.platforms.unix;
+    platforms = lib.platforms.unix ++ lib.platforms.windows;
     pkgConfigModules = [ "sdl3" ];
   };
 })

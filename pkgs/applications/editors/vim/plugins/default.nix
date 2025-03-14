@@ -6,7 +6,6 @@
   vimUtils,
   vim,
   llvmPackages,
-  neovim-unwrapped,
   neovimUtils,
 }:
 

@@ -1,5 +1,6 @@
 {
   coq,
+  rocqPackages,
   mkCoqDerivation,
   lib,
   version ? null,
@@ -25,22 +26,12 @@
 
   useDune = true;
 
-  configurePhase = ''
-    patchShebangs dev/with-rocq-wrap.sh
-  '';
-
-  buildPhase = ''
-    dev/with-rocq-wrap.sh dune build -p rocq-stdlib,coq-stdlib @install ''${enableParallelBuilding:+-j $NIX_BUILD_CORES}
-  '';
-
   installPhase = ''
-    dev/with-rocq-wrap.sh dune install --root . rocq-stdlib coq-stdlib --prefix=$out --libdir $OCAMLFIND_DESTDIR
-    mkdir $out/lib/coq/
-    mv $OCAMLFIND_DESTDIR/coq $out/lib/coq/${coq.coq-version}
+    echo installing nothing
   '';
 
   meta = {
-    description = "Coq Standard Library";
+    description = "Compatibility metapackage for Coq Stdlib library after the Rocq renaming";
     license = lib.licenses.lgpl21Only;
   };
 
@@ -48,14 +39,15 @@
   (
     o:
     # stdlib is already included in Coq <= 8.20
-    lib.optionalAttrs
-      (coq.version != null && coq.version != "dev" && lib.versions.isLt "8.21" coq.version)
-      {
-        buildPhase = ''
-          echo building nothing
-        '';
-        installPhase = ''
-          touch $out
-        '';
-      }
+    if coq.version != null && coq.version != "dev" && lib.versions.isLt "8.21" coq.version then {
+      configurePhase = ''
+        echo no configuration
+      '';
+      buildPhase = ''
+        echo building nothing
+      '';
+      installPhase = ''
+        touch $out
+      '';
+    } else { propagatedBuildInputs = [ rocqPackages.stdlib ]; }
   )

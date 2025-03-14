@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage {
     sha256 = "sha256-DhfNfV9bd0p5dLXKgrVLyugQHK+RHsepeg0tGq5J6cI=";
   };
 
-  cargoHash = "sha256-JUyIbg1SxQ7pdqypGv7Kz2MM0ZwL3M9YJekO9oSftLM=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-H+SZ+aUQReFJiN2MQHxaI0/bM1sXaSFVlIhedCKBQ0M=";
 
   meta = with lib; {
     description = "Reimplementation of mkrom in Rust";

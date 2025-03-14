@@ -166,12 +166,14 @@ let
         alderlake      = versionAtLeast ccVersion "12.0";
         sapphirerapids = versionAtLeast ccVersion "11.0";
         emeraldrapids  = versionAtLeast ccVersion "13.0";
+        sierraforest   = versionAtLeast ccVersion "13.0";
 
         # AMD
         znver1         = true;
         znver2         = versionAtLeast ccVersion "9.0";
         znver3         = versionAtLeast ccVersion "11.0";
         znver4         = versionAtLeast ccVersion "13.0";
+        znver5         = versionAtLeast ccVersion "14.0";
       }.${arch} or true
     else if isClang then
       { #Generic
@@ -193,6 +195,7 @@ let
         znver2         = versionAtLeast ccVersion "9.0";
         znver3         = versionAtLeast ccVersion "12.0";
         znver4         = versionAtLeast ccVersion "16.0";
+        znver5         = versionAtLeast ccVersion "19.1";
       }.${arch} or true
     else
       false;
@@ -255,7 +258,7 @@ let
 
   machineFlags =
     # Always add -march based on cpu in triple. Sometimes there is a
-    # discrepency (x86_64 vs. x86-64), so we provide an "arch" arg in
+    # discrepancy (x86_64 vs. x86-64), so we provide an "arch" arg in
     # that case.
     optional (targetPlatform ? gcc.arch && !(targetPlatform.isDarwin && targetPlatform.isAarch64) && isGccArchSupported targetPlatform.gcc.arch) "-march=${targetPlatform.gcc.arch}" ++
     # TODO: aarch64-darwin has mcpu incompatible with gcc
@@ -339,6 +342,10 @@ stdenvNoCC.mkDerivation {
   dontBuild = true;
   dontConfigure = true;
   enableParallelBuilding = true;
+
+  # TODO(@connorbaker):
+  # This is a quick fix unblock builds broken by https://github.com/NixOS/nixpkgs/pull/370750.
+  dontCheckForBrokenSymlinks = true;
 
   unpackPhase = ''
     src=$PWD

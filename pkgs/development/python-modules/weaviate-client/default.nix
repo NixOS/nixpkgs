@@ -26,7 +26,7 @@
 
 buildPythonPackage rec {
   pname = "weaviate-client";
-  version = "4.10.4";
+  version = "4.11.1";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -35,7 +35,7 @@ buildPythonPackage rec {
     owner = "weaviate";
     repo = "weaviate-python-client";
     tag = "v${version}";
-    hash = "sha256-I5+xQkGoIFKEniwvK3l3WXB079IzPzwdKVt0JAXK3kU=";
+    hash = "sha256-N+2G/+vtigSO7vyKMXVv6/8WD3s/eZprfYIUVLbtee0=";
   };
 
   pythonRelaxDeps = [
@@ -92,13 +92,19 @@ buildPythonPackage rec {
     "mock_tests"
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   pythonImportsCheck = [ "weaviate" ];
 
   meta = {
     description = "Python native client for easy interaction with a Weaviate instance";
     homepage = "https://github.com/weaviate/weaviate-python-client";
-    changelog = "https://github.com/weaviate/weaviate-python-client/releases/tag/v${version}";
+    changelog = "https://github.com/weaviate/weaviate-python-client/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ happysalada ];
+    badPlatforms = [
+      # weaviate.exceptions.WeaviateGRPCUnavailableError
+      lib.systems.inspect.patterns.isDarwin
+    ];
   };
 }

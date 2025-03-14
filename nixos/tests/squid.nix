@@ -56,6 +56,24 @@ import ./make-test-python.nix (
           {
             virtualisation.vlans = [ 1 ];
             networking.firewall.enable = true;
+
+            # NOTE: the client doesn't need a HTTP server, this is here to allow a validation of the proxy acl
+            networking.firewall.allowedTCPPorts = [ 80 ];
+
+            services.nginx = {
+              enable = true;
+
+              virtualHosts."server" = {
+                root = "/etc";
+                locations."/".index = "hostname";
+                listen = [
+                  {
+                    addr = "0.0.0.0";
+                    port = 80;
+                  }
+                ];
+              };
+            };
           }
         ];
 
@@ -68,16 +86,14 @@ import ./make-test-python.nix (
         lib.mkMerge [
           commonConfig
           {
+            nixpkgs.config.permittedInsecurePackages = [ "squid-7.0.1" ];
+
             virtualisation.vlans = [
               1
               2
             ];
             networking.firewall.enable = true;
             networking.firewall.allowedTCPPorts = [ config.services.squid.proxyPort ];
-
-            nixpkgs.config.permittedInsecurePackages = [
-              "squid-6.12"
-            ];
 
             services.squid = {
               enable = true;
@@ -86,6 +102,7 @@ import ./make-test-python.nix (
                 acl client src ${clientIp}
                 acl server dst ${serverIp}
                 http_access allow client server
+                http_access deny all
               '';
             };
           }
@@ -157,9 +174,15 @@ import ./make-test-python.nix (
 
         with subtest("HTTP"):
             # the client cannot reach the server directly over HTTP
-            client.fail('[[ `timeout 3 curl http://${serverIp}` ]]')
+            client.fail('[[ `timeout 3 curl --fail-with-body http://${serverIp}` ]]')
             # ... but can with the proxy
-            client.succeed('[[ `timeout 3 curl --proxy http://${proxyInternalIp}:3128 http://${serverIp}` == "server" ]]')
+            client.succeed('[[ `timeout 3 curl --fail-with-body --proxy http://${proxyInternalIp}:3128 http://${serverIp}` == "server" ]]')
+            # and cannot from the server (with a 4xx error code) and ...
+            server.fail('[[ `timeout 3 curl --fail-with-body --proxy http://${proxyExternalIp}:3128 http://${clientIp}` == "client" ]]')
+            # .. not the client hostname
+            server.fail('[[ `timeout 3 curl --proxy http://${proxyExternalIp}:3128 http://${clientIp}` == "client" ]]')
+            # with an explicit deny message (no --fail because we want to parse the returned message)
+            server.succeed('[[ `timeout 3 curl --proxy http://${proxyExternalIp}:3128 http://${clientIp}` == *"ERR_ACCESS_DENIED"* ]]')
       '';
   }
 )

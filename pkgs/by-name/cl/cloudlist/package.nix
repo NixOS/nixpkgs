@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "cloudlist";
-  version = "1.1.0";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = "cloudlist";
     tag = "v${version}";
-    hash = "sha256-HV4qhQgeLKwkyrRFzRQibqjWRyjLBtoWVdliJ+iyyBc=";
+    hash = "sha256-HYCD7mCfIJOijKTPvL5OixZ6zmI/P/+0Agx9bBhxy0Y=";
   };
 
-  vendorHash = "sha256-6J9AWONLP/FvR0dXt5Zx4n+kTpmnxF79HcWVFp9OZ0g=";
+  vendorHash = "sha256-fZ7l4+No/a8EYqC1nacSyh5fD2QAdzANjTTmbY0d/L4=";
 
   subPackages = [ "cmd/cloudlist/" ];
 

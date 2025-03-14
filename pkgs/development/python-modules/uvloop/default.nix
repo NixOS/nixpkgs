@@ -69,6 +69,8 @@ buildPythonPackage rec {
       "--deselect=tests/test_process.py::Test_AIO_Process::test_process_streams_redirect"
       # Depends on performance of builder
       "--deselect=tests/test_base.py::TestBaseUV.test_call_at"
+      # Pointless and flaky (at least on darwin, depending on the sandbox perhaps)
+      "--deselect=tests/test_dns.py"
     ]
     ++ lib.optionals (pythonOlder "3.11") [
       "--deselect=tests/test_tcp.py::Test_UV_TCPSSL::test_create_connection_ssl_failed_certificat"

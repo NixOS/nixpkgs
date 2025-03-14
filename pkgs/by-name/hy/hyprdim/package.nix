@@ -8,16 +8,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "hyprdim";
-  version = "3.0.0";
+  version = "3.0.1";
 
   src = fetchFromGitHub {
     owner = "donovanglover";
     repo = "hyprdim";
     rev = version;
-    hash = "sha256-+nzIDtRLVA6CgCtbyeR+TU5euSZQb7wi2187IxLrAmQ=";
+    hash = "sha256-o06HnN/E8QWRFOqd9Sxolm4g/fI5+6hYITptnRNAFag=";
   };
 
-  cargoHash = "sha256-UhlwVZ70t6CSQ4ZoXk0OdUqEVeOVMp+TmOSX5iyNNVI=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-8xbmVQHMXs9rq4iP5Svx2Zdg/B9WuZuq+hKsokk2m78=";
 
   nativeBuildInputs = [ installShellFiles ];
 

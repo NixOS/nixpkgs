@@ -2,23 +2,57 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  hatchling,
-  pythonOlder,
+  fetchurl,
+  setuptools,
 }:
+let
+  # 4 binaries which require vendoring, as otherwise
+  # the build system behind pex will attempt to fetch
+  # them during at build time
+  uv-trampoline = {
+    # Taken from https://github.com/pex-tool/pex/blob/2c66932d6645e8e542e5386eae08b9cc2dbb2a21/pex/windows/__init__.py#L45
+    version = "0.5.29";
 
+    aarch64-gui = fetchurl {
+      url = "https://raw.githubusercontent.com/astral-sh/uv/refs/tags/${uv-trampoline.version}/crates/uv-trampoline/trampolines/uv-trampoline-aarch64-gui.exe";
+      hash = "sha256-mb8x1FpyH+wy11X5YgWfqh/VUwBb62M4Zf9aFr5V4EE=";
+    };
+
+    aarch64-console = fetchurl {
+      url = "https://raw.githubusercontent.com/astral-sh/uv/refs/tags/${uv-trampoline.version}/crates/uv-trampoline/trampolines/uv-trampoline-aarch64-console.exe";
+      hash = "sha256-1S2aM+6CV7rKz+3ncM5X7kk7uDQeuha1+8lUEMYC75k=";
+    };
+
+    x86_64-gui = fetchurl {
+      url = "https://raw.githubusercontent.com/astral-sh/uv/refs/tags/${uv-trampoline.version}/crates/uv-trampoline/trampolines/uv-trampoline-x86_64-gui.exe";
+      hash = "sha256-icnp1oXrOZpc+dHTGvDbTHjr+D8M0eamvRrC9bPI/KI=";
+    };
+
+    x86_64-console = fetchurl {
+      url = "https://raw.githubusercontent.com/astral-sh/uv/refs/tags/${uv-trampoline.version}/crates/uv-trampoline/trampolines/uv-trampoline-x86_64-console.exe";
+      hash = "sha256-nLopBrlCMMFjkKVRlY7Ke2zFGpQOyF5mSlLs0d7+HRQ=";
+    };
+  };
+in
 buildPythonPackage rec {
   pname = "pex";
-  version = "2.20.1";
+  version = "2.33.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-JvZiVb/qzkILBaALrCU2rldUgSgSD1eo4AqMPgEdJ50=";
+    hash = "sha256-kHTvgXe51TencKDkFQAAdyPXuJLBNpJ0NIy1KB8p5JQ=";
   };
 
-  build-system = [ hatchling ];
+  preBuild = ''
+    mkdir -p pex/windows/stubs
+    cp ${uv-trampoline.aarch64-gui} pex/windows/stubs/uv-trampoline-aarch64-gui.exe
+    cp ${uv-trampoline.aarch64-console} pex/windows/stubs/uv-trampoline-aarch64-console.exe
+    cp ${uv-trampoline.x86_64-gui} pex/windows/stubs/uv-trampoline-x86_64-gui.exe
+    cp ${uv-trampoline.x86_64-console} pex/windows/stubs/uv-trampoline-x86_64-console.exe
+  '';
+
+  build-system = [ setuptools ];
 
   # A few more dependencies I don't want to handle right now...
   doCheck = false;
@@ -32,7 +66,6 @@ buildPythonPackage rec {
     license = licenses.asl20;
     maintainers = with maintainers; [
       copumpkin
-      phaer
     ];
   };
 }

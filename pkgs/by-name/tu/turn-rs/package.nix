@@ -1,23 +1,36 @@
 {
-  rustPlatform,
   lib,
+  rustPlatform,
   fetchFromGitHub,
+  versionCheckHook,
   nix-update-script,
   nixosTests,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "turn-rs";
-  version = "3.3.2";
+  version = "3.3.3";
 
   src = fetchFromGitHub {
     owner = "mycrl";
     repo = "turn-rs";
     tag = "v${version}";
-    hash = "sha256-ITs6kNI1g7k8bcSSG6GwPGY5U+mFGqCTU6JIEj9mH/Q=";
+    hash = "sha256-kNE6FbHAFVWH04uTJBCRkrB0yzIjuXX3rxi2h5WmKWo=";
   };
 
-  cargoHash = "sha256-bmeTDMa/khX7fTDCGpf3U2LZPnkXL+bi69sv6NPnANI=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-VHfWVEYla7iHOATC4Rv7k560O2VUqAe4ZMo/hLiSOi4=";
+
+  # By default, no features are enabled
+  # https://github.com/mycrl/turn-rs?tab=readme-ov-file#features-1
+  cargoBuildFlags = [ "--all-features" ];
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgram = "${placeholder "out"}/bin/turn-server";
+  versionCheckProgramArg = [ "--version" ];
+  doInstallCheck = true;
 
   passthru = {
     updateScript = nix-update-script { };

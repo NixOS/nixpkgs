@@ -19,6 +19,10 @@ buildPythonPackage rec {
     hash = "sha256-L0wT9DFUDRcmmN7OpmIDNvtQWQrM7iFnZt6R2xrJ+3A=";
   };
 
+  patches = [
+    ./numpy2-repr.patch
+  ];
+
   # The VERSION.txt file is required for setup.py
   # See: https://github.com/KieranWynn/pyquaternion/blob/master/setup.py#L14-L15
   postPatch = ''

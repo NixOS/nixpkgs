@@ -13,19 +13,19 @@
 
   # tests
   pytest-timeout,
-  pytest7CheckHook,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "lightning-utilities";
-  version = "0.11.9";
+  version = "0.14.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Lightning-AI";
     repo = "utilities";
     tag = "v${version}";
-    hash = "sha256-7fRn7KvB7CEq8keVR8nrf6IY2G8omAQqNX+DPEf+7nc=";
+    hash = "sha256-lRH1ZQQHnn18NxmLDHy/uSgzgXpLuDD5/08OIErEs7g=";
   };
 
   postPatch = ''
@@ -45,7 +45,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-timeout
-    pytest7CheckHook
+    pytestCheckHook
   ];
 
   disabledTests = [
@@ -53,12 +53,10 @@ buildPythonPackage rec {
     "lightning_utilities.core.imports.RequirementCache"
     "lightning_utilities.core.imports.compare_version"
     "lightning_utilities.core.imports.get_dependency_min_version_spec"
+
     # weird doctests fail on imports, but providing the dependency
     # fails another test
     "lightning_utilities.core.imports.ModuleAvailableCache"
-    "lightning_utilities.core.imports.requires"
-    # Failed: DID NOT RAISE <class 'AssertionError'>
-    "test_no_warning_call"
   ];
 
   disabledTestPaths = [

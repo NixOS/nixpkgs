@@ -38,7 +38,8 @@ rustPlatform.buildRustPackage rec {
       ]
     );
 
-  cargoHash = "sha256-mhXi4YgYT2NfIjtESjvSP5TMOl3UH3CJFwKlJriZ0/4=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-nJ+nof2YhyLrNuLVy69kYj5tw+aG4IJm6nVxHkczbko=";
 
   meta = {
     homepage = "https://kty.dev/";

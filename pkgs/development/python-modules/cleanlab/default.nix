@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
 
   # build-system
   setuptools,
@@ -33,25 +32,15 @@
 
 buildPythonPackage rec {
   pname = "cleanlab";
-  version = "2.7.0";
+  version = "2.7.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cleanlab";
     repo = "cleanlab";
     tag = "v${version}";
-    hash = "sha256-0kCEIHNOXIkdwDH5zCVWnR/W79ppc/1PFsJ/a4goGzk=";
+    hash = "sha256-KzVqBOLTxxkgvoGPYMeYb7zMuG8VwQwX6SYR/FUhfBw=";
   };
-
-  patches = [
-    # https://github.com/cleanlab/cleanlab/pull/1224 (merged)
-    # TODO: remove this patch when updating to the next release (2.8.0)
-    (fetchpatch {
-      name = "numpy2-compatibility";
-      url = "https://github.com/cleanlab/cleanlab/commit/bed10f5bdf538358e760ad98a0965f9b447b45ad.patch";
-      hash = "sha256-czSK05wrLfSpJF2j+YwcDeDIKspkcCEB2hKlX5H3Gns=";
-    })
-  ];
 
   build-system = [ setuptools ];
 

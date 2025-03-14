@@ -3,7 +3,6 @@
   buildNpmPackage,
   fetchFromGitHub,
   fetchPypi,
-  fetchpatch2,
   nodejs,
   python3,
   gettext,
@@ -26,6 +25,16 @@ let
         };
       });
 
+      geoip2 = super.geoip2.overridePythonAttrs rec {
+        version = "5.0.1";
+
+        src = fetchPypi {
+          pname = "geoip2";
+          inherit version;
+          hash = "sha256-kK+LbTaH877yUfJwitAXsw1ifRFEwAQOq8TJAXqAfYY=";
+        };
+      };
+
       stripe = super.stripe.overridePythonAttrs rec {
         version = "7.9.0";
 
@@ -43,13 +52,13 @@ let
   };
 
   pname = "pretix";
-  version = "2024.11.0";
+  version = "2025.2.0";
 
   src = fetchFromGitHub {
     owner = "pretix";
     repo = "pretix";
     rev = "refs/tags/v${version}";
-    hash = "sha256-vmk7oW9foXkZdt3XOLJDbPldX2TruJOgd8mmi5tGqNw=";
+    hash = "sha256-ZVrdkIeVUAKb4617BCcfvs0HqFmctPb7zriDJplyUns=";
   };
 
   npmDeps = buildNpmPackage {
@@ -57,7 +66,7 @@ let
     inherit version src;
 
     sourceRoot = "${src.name}/src/pretix/static/npm_dir";
-    npmDepsHash = "sha256-4PrOrI2cykkuzob+DMeAu/GF5OMCho40G3BjCwVW/tE=";
+    npmDepsHash = "sha256-MOxOzaP6p6Q61ZuDVzbYJvMXpCQ1pzQx86Yl24yt4SQ=";
 
     dontBuild = true;
 
@@ -79,17 +88,14 @@ python.pkgs.buildPythonApplication rec {
     # Discover pretix.plugin entrypoints during build and add them into
     # INSTALLED_APPS, so that their static files are collected.
     ./plugin-build.patch
-
-    (fetchpatch2 {
-      # fix tests after 2025-01-01
-      url = "https://github.com/pretix/pretix/commit/5a5a551c21461d9ef36337480c9874d65a9fdba9.patch";
-      hash = "sha256-ZtSVI6nVlJtNrnBZ9ktIqFGtNf+oWtvNsgCWwOUwVug=";
-    })
   ];
 
   pythonRelaxDeps = [
+    "beautifulsoup4"
+    "django-bootstrap3"
     "django-phonenumber-field"
     "dnspython"
+    "drf_ujson2"
     "importlib-metadata"
     "kombu"
     "markdown"
@@ -100,6 +106,7 @@ python.pkgs.buildPythonApplication rec {
     "python-bidi"
     "qrcode"
     "redis"
+    "reportlab"
     "requests"
     "sentry-sdk"
     "ua-parser"
@@ -107,7 +114,7 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   pythonRemoveDeps = [
-    "vat-moss-forked" # we provide a patched vat-moss package
+    "vat_moss_forked" # we provide a patched vat-moss package
   ];
 
   postPatch = ''
@@ -273,8 +280,9 @@ python.pkgs.buildPythonApplication rec {
       python
       ;
     plugins = lib.recurseIntoAttrs (
-      python.pkgs.callPackage ./plugins {
+      lib.packagesFromDirectoryRecursive {
         inherit (python.pkgs) callPackage;
+        directory = ./plugins;
       }
     );
     tests = {

@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "rqlite";
-  version = "8.36.8";
+  version = "8.36.12";
 
   src = fetchFromGitHub {
     owner = "rqlite";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-fyhBKSPE9vAMe1g7IOjrk8u3+KhMgtVrwKRZA+DsGik=";
+    sha256 = "sha256-sEdU4BhRlkSCrUvrzcj+LNsSUO7mXCUHnIEqN8ydzc8=";
   };
 
-  vendorHash = "sha256-+otWcVUAqO2e9v+4T5QTw2DOVfDUGu6hP/1/6LO21nY=";
+  vendorHash = "sha256-kdBYU0+8G/XspBXWPXTUy3vwbM90irM8xIpQgTMtRrA=";
 
   subPackages = [
     "cmd/rqlite"
@@ -24,7 +24,7 @@ buildGoModule rec {
   ];
 
   # Leaving other flags from https://github.com/rqlite/rqlite/blob/master/package.sh
-  # since automatically retriving those is nontrivial and inessential
+  # since automatically retrieving those is nontrivial and inessential
   ldflags = [
     "-s"
     "-w"

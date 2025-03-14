@@ -41,10 +41,10 @@ buildPythonPackage {
     setuptools-rust
   ];
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src postPatch;
     name = "${pname}-${version}";
-    hash = "sha256-XzUEqiUdi70bgQwARGHsgti36cFOh7QDiEkccjxlwls=";
+    hash = "sha256-/JwhH0Is2yNwJ0CAY3SKoH1JWhmY3JtGusQkj3k5bQY=";
   };
 
   nativeBuildInputs = [

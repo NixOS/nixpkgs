@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     SDL2
     glibc
   ];
-  env.NIX_CFLAGS_COMPILE = "-I${SDL2.dev}/include/SDL2";
+  env.NIX_CFLAGS_COMPILE = "-I${lib.getInclude SDL2}/include/SDL2";
   enableParallelBuilding = true;
 
   postPatch = ''

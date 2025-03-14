@@ -2,12 +2,10 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  fetchpatch,
   pkg-config,
   installShellFiles,
   libxml2,
   openssl,
-  stdenv,
   curl,
   versionCheckHook,
 }:
@@ -23,21 +21,19 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-zrZWYnXUuzf2cS3n56/hWDvyXVM4Y/34SOlMPrtAhJo=";
   };
 
-  cargoHash = "sha256-IuxTuIU9/6BpAXXunJ1Jjz3FPYRVPFNQhBqVAzMjNro=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-sq0m6wkryfmthkPHMY0ZOXNhdNKnnsPLa/6tTsuWCS0=";
 
   nativeBuildInputs = [
     pkg-config
     installShellFiles
   ];
 
-  buildInputs =
-    [
-      libxml2
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      curl
-    ];
+  buildInputs = [
+    libxml2
+    openssl
+    curl
+  ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 

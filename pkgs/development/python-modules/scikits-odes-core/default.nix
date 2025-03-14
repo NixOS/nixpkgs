@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "scikits-odes-core";
-  version = "3.1.0";
+  version = "3.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bmcage";
     repo = "odes";
     tag = "v${version}";
-    hash = "sha256-wOdqRzj45piT9P+qA0xXBCnOZ9Xh+Waej2t51mDcilc=";
+    hash = "sha256-lqkPCVMQIVpZrkNUhYhAlFU71eUAaWwN8v66L7Rz91U=";
   };
 
   sourceRoot = "${src.name}/packages/scikits-odes-core";

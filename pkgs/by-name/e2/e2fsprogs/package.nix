@@ -3,7 +3,6 @@
   stdenv,
   buildPackages,
   fetchurl,
-  fetchpatch,
   pkg-config,
   libuuid,
   gettext,
@@ -17,11 +16,11 @@
 
 stdenv.mkDerivation rec {
   pname = "e2fsprogs";
-  version = "1.47.1";
+  version = "1.47.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.gz";
-    hash = "sha256-mvzSAfOUKdLbJJKusT26XnXWzFBoK3MtyjVkO9XwkuM=";
+    url = "mirror://kernel/linux/kernel/people/tytso/e2fsprogs/v${version}/e2fsprogs-${version}.tar.xz";
+    hash = "sha256-CCQuZMoOgZTZwcqtSXYrGSCaBjGBmbY850rk7y105jw=";
   };
 
   # fuse2fs adds 14mb of dependencies
@@ -42,19 +41,6 @@ stdenv.mkDerivation rec {
     libuuid
     gettext
   ] ++ lib.optionals withFuse [ fuse3 ];
-
-  patches = [
-    (fetchurl {
-      name = "SIZEOF_SIZE_T.patch";
-      url = "https://lore.kernel.org/linux-ext4/20240527074121.2767083-1-hi@alyssa.is/raw";
-      hash = "sha256-QdsvcvBi0mC/4YErqG0UKl94MH0OZpFVTGszNqBe/qw=";
-    })
-    (fetchurl {
-      name = "unused-parameters.patch";
-      url = "https://lore.kernel.org/linux-ext4/20240527091542.4121237-2-hi@alyssa.is/raw";
-      hash = "sha256-pMoqm2eo5zYaTdU+Ppa4+posCVFb2A9S4uo5oApaaqc=";
-    })
-  ];
 
   configureFlags =
     if stdenv.hostPlatform.isLinux then

@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "devnev";
-    repo = pname;
+    repo = "libxdg-basedir";
     tag = "libxdg-basedir-${version}";
     hash = "sha256-ewtUKDdE6k9Q9hglWwhbTU3DTxvIN41t+zf2Gch9Dkk=";
   };

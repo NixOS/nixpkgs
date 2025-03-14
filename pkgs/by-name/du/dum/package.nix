@@ -10,12 +10,13 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "egoist";
-    repo = pname;
+    repo = "dum";
     rev = "v${version}";
     sha256 = "sha256-rkdQb4TI7lfWE4REJYsIJwMcmM/78jjgQrd0ZvKJxk8=";
   };
 
-  cargoHash = "sha256-rcb2Z+wl9neAGyH1DFrjboSCkD9JIKGwjJqAvU9Fitw=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-CpVci0nw/6Y6uyQX6iRV9E7uXzdZ2fzYIelYxsc+tI0=";
 
   meta = with lib; {
     description = "Npm scripts runner written in Rust";

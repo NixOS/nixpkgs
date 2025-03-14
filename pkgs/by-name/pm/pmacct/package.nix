@@ -15,7 +15,7 @@
   withSQLite ? true,
   sqlite,
   withPgSQL ? true,
-  postgresql,
+  libpq,
   withMysql ? true,
   libmysqlclient,
   zlib,
@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional withJansson jansson
     ++ lib.optional withNflog libnetfilter_log
     ++ lib.optional withSQLite sqlite
-    ++ lib.optional withPgSQL postgresql
+    ++ lib.optional withPgSQL libpq
     ++ lib.optionals withMysql [
       libmysqlclient
       zlib

@@ -24,10 +24,11 @@ let
 
 in
 lib.mapAttrs mkLicense ({
-  /* License identifiers from spdx.org where possible.
-   * If you cannot find your license here, then look for a similar license or
-   * add it to this list. The URL mentioned above is a good source for inspiration.
-   */
+  /**
+    License identifiers from spdx.org where possible.
+    If you cannot find your license here, then look for a similar license or
+    add it to this list. The URL mentioned above is a good source for inspiration.
+  */
 
   abstyles = {
     spdxId = "Abstyles";
@@ -37,7 +38,9 @@ lib.mapAttrs mkLicense ({
   acsl14 = {
     fullName = "Anti-Capitalist Software License v1.4";
     url = "https://anticapitalist.software/";
-    /* restrictions on corporations apply for both use and redistribution */
+    /**
+      restrictions on corporations apply for both use and redistribution
+    */
     free = false;
     redistributable = false;
   };
@@ -1195,6 +1198,45 @@ lib.mapAttrs mkLicense ({
     url = "https://github.com/n8n-io/n8n/blob/master/LICENSE.md";
     free = false;
     redistributable = false; # only free to redistribute "for non-commercial purposes"
+  };
+
+  teamspeak = {
+    fullName = "Teamspeak client license";
+    url = "https://www.teamspeak.com/en/privacy-and-terms/";
+    free = false;
+    redistributable = true; # we got a permit to redistribute it:
+    # License issues:
+    # Date: Mon, 10 Dec 2007 19:55:16 -0500
+    # From: TeamSpeak Sales <sales@tritoncia.com>
+    # To: 'Marc Weber' <marco-oweber@gmx.de>
+    # Subject: RE: teamspeak on nix?
+    #
+    # Yes, that would be fine.  As long as you are not renting servers or selling
+    # TeamSpeak then you are more than welcome to distribute it.
+    #
+    # Thank you,
+    #
+    # TeamSpeak Sales Team
+    # ________________________________
+    # e-Mail: sales@tritoncia.com
+    # TeamSpeak: http://www.TeamSpeak.com
+    # Account Login: https://sales.TritonCIA.com/users
+    #
+    #
+    #
+    # -----Original Message-----
+    # From: Marc Weber [mailto:marco-oweber@gmx.de]
+    # Sent: Monday, December 10, 2007 5:03 PM
+    # To: sales@tritoncia.com
+    # Subject: teamspeak on nix?
+    #
+    # Hello,
+    #
+    # nix is very young software distribution system (http://nix.cs.uu.nl/)
+    # I'd like to ask wether you permit us to add teamspeak (server/ client?)
+    #
+    # Sincerly
+    # Marc Weber (small nix contributor)
   };
 
   tsl = {

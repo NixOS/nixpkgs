@@ -34,6 +34,9 @@ in
     enableFishIntegration = enabledOption ''
       Fish integration
     '';
+    enableXonshIntegration = enabledOption ''
+      Xonsh integration
+    '';
 
     direnvrcExtra = lib.mkOption {
       type = lib.types.lines;
@@ -94,6 +97,19 @@ in
          ${lib.getExe cfg.package} hook fish | source
         end
       '';
+
+      xonsh = lib.mkIf cfg.enableXonshIntegration {
+        extraPackages = ps: [ ps.xonsh.xontribs.xonsh-direnv ];
+        config = ''
+          if ${
+            if cfg.loadInNixShell then
+              "True"
+            else
+              "not any(map(lambda s: s.startswith('/nix/store'), __xonsh__.env.get('PATH')))"
+          }:
+              xontrib load direnv
+        '';
+      };
     };
 
     environment = {

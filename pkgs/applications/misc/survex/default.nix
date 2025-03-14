@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  fetchpatch,
   Carbon,
   Cocoa,
   ffmpeg,

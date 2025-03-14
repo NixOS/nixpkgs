@@ -5340,7 +5340,6 @@ broken-packages:
   - semilattices # failure in job https://hydra.nixos.org/build/233223765 at 2023-09-02
   - sendgrid-haskell # failure in job https://hydra.nixos.org/build/233228693 at 2023-09-02
   - sendgrid-v3 # failure in job https://hydra.nixos.org/build/233224134 at 2023-09-02
-  - sensei # failure in job https://hydra.nixos.org/build/241518007 at 2023-12-03
   - sensu-run # failure in job https://hydra.nixos.org/build/233251719 at 2023-09-02
   - sentry # failure in job https://hydra.nixos.org/build/233246813 at 2023-09-02
   - seonbi # failure in job https://hydra.nixos.org/build/233196115 at 2023-09-02

@@ -4,7 +4,7 @@
   fetchFromGitHub,
 
   # build-system
-  poetry-core,
+  pdm-backend,
 
   # dependencies
   aiohttp,
@@ -13,15 +13,12 @@
   langchain,
   langchain-core,
   langsmith,
+  numpy,
   pydantic-settings,
   pyyaml,
   requests,
   sqlalchemy,
   tenacity,
-
-  # optional-dependencies
-  typer,
-  numpy,
 
   # tests
   httpx,
@@ -39,24 +36,34 @@
 
 buildPythonPackage rec {
   pname = "langchain-community";
-  version = "0.3.15";
+  version = "0.3.19";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-community==${version}";
-    hash = "sha256-2/Zrl/wED/zm1m+NqgAD4AdrEh/LjFOeQoOSSM05e+s=";
+    hash = "sha256-U7L60GyxRQL9ze22Wy7g6ZdI/IFyAtUe1bRCconv6pg=";
   };
 
   sourceRoot = "${src.name}/libs/community";
 
-  build-system = [ poetry-core ];
+  build-system = [ pdm-backend ];
+
+  patches = [
+    # Remove dependency on blockbuster (not available in nixpkgs due to dependency on forbiddenfruit)
+    ./rm-blockbuster.patch
+  ];
 
   pythonRelaxDeps = [
+    "langchain" # Can fail during updates where building sees the old langchain
     "numpy"
     "pydantic-settings"
     "tenacity"
+  ];
+
+  pythonRemoveDeps = [
+    "blockbuster"
   ];
 
   dependencies = [
@@ -66,18 +73,13 @@ buildPythonPackage rec {
     langchain
     langchain-core
     langsmith
+    numpy
     pydantic-settings
     pyyaml
     requests
     sqlalchemy
     tenacity
   ];
-
-  optional-dependencies = {
-    cli = [ typer ];
-    numpy = [ numpy ];
-  };
-
   pythonImportsCheck = [ "langchain_community" ];
 
   nativeCheckInputs = [
@@ -98,6 +100,8 @@ buildPythonPackage rec {
 
   passthru = {
     inherit (langchain-core) updateScript;
+    # updates the wrong fetcher rev attribute
+    skipBulkUpdate = true;
   };
 
   __darwinAllowLocalNetworking = true;
@@ -116,6 +120,8 @@ buildPythonPackage rec {
     "test_proper_inputs"
     # pydantic.errors.PydanticUserError: `NatBotChain` is not fully defined; you should define `BaseCache`, then call `NatBotChain.model_rebuild()`.
     "test_variable_key_naming"
+    # Fails due to the lack of blockbuster
+    "test_group_dependencies"
   ];
 
   meta = {
@@ -123,6 +129,9 @@ buildPythonPackage rec {
     description = "Community contributed LangChain integrations";
     homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/community";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ natsukium ];
+    maintainers = with lib.maintainers; [
+      natsukium
+      sarahec
+    ];
   };
 }

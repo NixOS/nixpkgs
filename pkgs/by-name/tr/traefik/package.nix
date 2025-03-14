@@ -7,12 +7,12 @@
 
 buildGo123Module rec {
   pname = "traefik";
-  version = "3.3.2";
+  version = "3.3.3";
 
   # Archive with static assets for webui
   src = fetchzip {
     url = "https://github.com/traefik/traefik/releases/download/v${version}/traefik-v${version}.src.tar.gz";
-    hash = "sha256-7qS+rOBYDyYI8t0rVNmM0sJjGSdtIVelaIJuW1jaL+g=";
+    hash = "sha256-R9fiCLqzrd9SS6LoQt3jOoEchRnPuhmJqIob8JhzqEU=";
     stripRoot = false;
   };
 
@@ -44,7 +44,10 @@ buildGo123Module rec {
     description = "Modern reverse proxy";
     changelog = "https://github.com/traefik/traefik/raw/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ vdemeester ];
+    maintainers = with maintainers; [
+      djds
+      vdemeester
+    ];
     mainProgram = "traefik";
   };
 }

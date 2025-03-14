@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   pythonOlder,
 
   # build-system
@@ -75,6 +76,14 @@ let
       tag = "v${version}";
       hash = "sha256-6YUROcqOV2P1AbJF9IMBIqTt7/PSTeXDwGgE4uI9GME=";
     };
+
+    patches = [
+      (fetchpatch {
+        name = "musl.patch";
+        url = "https://github.com/pandas-dev/pandas/commit/1e487982ff7501f07e2bba7a7d924fb92b3d5c7f.patch";
+        hash = "sha256-F1pVce1W951Ea82Ux198e5fBFH6kDOG+EeslDTYbjio=";
+      })
+    ];
 
     postPatch = ''
       substituteInPlace pyproject.toml \

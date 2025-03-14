@@ -80,7 +80,8 @@ rustPlatform.buildRustPackage rec {
 
   env = {
     GEN_ARTIFACTS = "artifacts";
-    LIBGIT2_NO_VENDOR = 1;
+    # FIXME: our libgit2 is currently too new
+    # LIBGIT2_NO_VENDOR = 1;
     NIX = lib.getExe nix;
     NURL = lib.getExe nurl;
     ZSTD_SYS_USE_PKG_CONFIG = true;

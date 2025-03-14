@@ -7,13 +7,13 @@
   libnsl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "re-Isearch";
   version = "unstable-2022-03-24";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "re-Isearch";
+    repo = "re-Isearch";
     rev = "e5953ea6c84285283be3689df7065908369cdbaf";
     sha256 = "sha256-D0PDqlWzIOHqdS2MlNzR2T5cyhiLcFlf30v6eFokoRQ=";
   };

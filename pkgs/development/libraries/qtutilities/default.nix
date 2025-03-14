@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qtutilities";
-  version = "6.14.5";
+  version = "6.14.6";
 
   src = fetchFromGitHub {
     owner = "Martchus";
     repo = "qtutilities";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-jjrmagznL0N9vCtLN6tMeierIjI9Q5JGJLYIimQO3ts=";
+    hash = "sha256-A61X6WKrP7CVgcRyB6phrVQo/B9VESRo0xTZV49KA3M=";
   };
 
   nativeBuildInputs = [

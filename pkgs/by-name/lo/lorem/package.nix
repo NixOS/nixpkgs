@@ -28,10 +28,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-6+kDKKK1bkIOZlqzKWpzpjAS5o7bkbVFITMZVmJijuU=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     src = finalAttrs.src;
     name = "${finalAttrs.pname}-${finalAttrs.version}";
-    hash = "sha256-nzP2Jp9l1QgL7Wk9SWlsSVNaeVe3t48MmeX7Xuz+PKM=";
+    hash = "sha256-l6vd521DmV019Yu5O1Kf5RKan2ROCBHlPiEDhf34Grc=";
   };
 
   nativeBuildInputs = [

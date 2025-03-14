@@ -8,21 +8,18 @@
   pytestCheckHook,
   langgraph-sdk,
   poetry-core,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "langgraph-checkpoint-sqlite";
-  version = "2.0.1";
+  version = "2.0.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
     tag = "checkpointsqlite==${version}";
-    hash = "sha256-dh+cjcOp6rGFntz82VNfVyetcrQBdBFdXk5xFb0aR5c=";
+    hash = "sha256-8JNPKaaKDM7VROd1n9TDALN6yxKRz1CuAultBcqBMG0=";
   };
 
   sourceRoot = "${src.name}/libs/checkpoint-sqlite";
@@ -45,7 +42,8 @@ buildPythonPackage rec {
   ];
 
   passthru = {
-    updateScript = langgraph-sdk.updateScript;
+    inherit (langgraph-sdk) updateScript;
+    skipBulkUpdate = true; # Broken, see https://github.com/NixOS/nixpkgs/issues/379898
   };
 
   meta = {

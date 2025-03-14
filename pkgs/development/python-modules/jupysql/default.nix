@@ -37,7 +37,7 @@
 
 buildPythonPackage rec {
   pname = "jupysql";
-  version = "0.10.16";
+  version = "0.10.17";
 
   pyproject = true;
 
@@ -45,7 +45,7 @@ buildPythonPackage rec {
     owner = "ploomber";
     repo = "jupysql";
     tag = version;
-    hash = "sha256-TIISiGvspRG0d/4nEyi8Tiu0y80D1Rf8puDEkGIeA08=";
+    hash = "sha256-0lrcNKDKmM3Peodc9ZzgqkzwPHPLMxxXHAj4OOKWZxA=";
   };
 
   pythonRelaxDeps = [ "sqlalchemy" ];

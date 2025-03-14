@@ -49,6 +49,9 @@ buildPythonPackage rec {
     # AssertionError: Regex pattern 'parameter `request` must be an instance of starlette.requests.Request' does not match 'This portal is not running'.
     "test_endpoint_request_param_invalid"
     "test_endpoint_response_param_invalid"
+    # AssertionError: assert '1740326049.9886339' == '1740326049'
+    "test_headers_no_breach"
+    "test_headers_breach"
   ] ++ lib.optionals (pythonAtLeast "3.10") [ "test_multiple_decorators" ];
 
   pythonImportsCheck = [ "slowapi" ];

@@ -95,8 +95,11 @@ mapAliases {
   inherit (pkgs) dotenv-cli; # added 2024-06-26
   eask = pkgs.eask; # added 2023-08-17
   inherit (pkgs.elmPackages) elm-test;
+  inherit (pkgs.elmPackages) elm-review;
+  escape-string-regexp = throw "escape-string-regexp was removed because it provides no executable"; # added 2025-03-12
   inherit (pkgs) eslint; # Added 2024-08-28
   inherit (pkgs) eslint_d; # Added 2023-05-26
+  inherit (pkgs) eas-cli; # added 2025-01-08
   expo-cli = throw "expo-cli was removed because it was deprecated upstream. Use `npx expo` or eas-cli instead."; # added 2024-12-02
   inherit (pkgs) firebase-tools; # added 2023-08-18
   inherit (pkgs) fixjson; # added 2024-06-26
@@ -133,6 +136,9 @@ mapAliases {
   inherit (pkgs) kaput-cli; # added 2024-12-03
   karma = pkgs.karma-runner; # added 2023-07-29
   leetcode-cli = self.vsc-leetcode-cli; # added 2023-08-31
+  inherit (pkgs) lerna; # added 2025-02-12
+  less = pkgs.lessc; # added 2024-06-15
+  less-plugin-clean-css = pkgs.lessc.plugins.clean-css; # added 2024-06-15
   inherit (pkgs) lv_font_conv; # added 2024-06-28
   manta = pkgs.node-manta; # Added 2023-05-06
   inherit (pkgs) markdown-link-check; # added 2024-06-28
@@ -183,6 +189,7 @@ mapAliases {
   surge = pkgs.surge-cli; # Added 2023-09-08
   inherit (pkgs) svelte-language-server; # Added 2024-05-12
   swagger = throw "swagger was removed because it was broken and abandoned upstream"; # added 2023-09-09
+  inherit (pkgs) tailwindcss; # added 2024-12-04
   teck-programmer = throw "teck-programmer was removed because it was broken and unmaintained"; # added 2024-08-23
   tedicross = throw "tedicross was removed because it was broken"; # added 2023-09-09
   inherit (pkgs) terser; # Added 2023-08-31
@@ -220,6 +227,7 @@ mapAliases {
   inherit (pkgs) web-ext; # added 2023-08-20
   inherit (pkgs) webpack-cli; # added 2024-12-03
   webpack-dev-server = throw "webpack-dev-server has been removed. You should install it in your JS project instead."; # added 2024-12-05
+  webtorrent-cli = throw "webtorrent-cli has been removed because it was broken"; # added 2025-03-12
   inherit (pkgs) wrangler; # added 2024-07-01
   inherit (pkgs) write-good; # added 2023-08-20
   inherit (pkgs) yalc; # added 2024-06-29

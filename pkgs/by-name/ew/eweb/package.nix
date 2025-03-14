@@ -32,6 +32,6 @@ stdenv.mkDerivation rec {
     mainProgram = "etangle.py";
     platforms = platforms.linux;
     license = licenses.gpl3Plus;
-    maintainers = [ maintainers.AndersonTorres ];
+    maintainers = [ ];
   };
 }

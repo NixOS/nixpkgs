@@ -20,9 +20,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   configureFlags =
     lib.optional (stdenv.hostPlatform.isWindows || stdenv.hostPlatform.isStatic) "--disable-examples"
-    ++ lib.optional (!finalAttrs.doCheck) "--disable-tests";
+    ++ lib.optional (!finalAttrs.finalPackage.doCheck) "--disable-tests";
 
-  cmakeFlags = lib.optionals (!finalAttrs.doCheck) [ "-DBUILD_TESTS:BOOL=OFF" ];
+  cmakeFlags = lib.optionals (!finalAttrs.finalPackage.doCheck) [ "-DBUILD_TESTS:BOOL=OFF" ];
 
   meta = {
     homepage = "https://hyperrealm.github.io/libconfig/";

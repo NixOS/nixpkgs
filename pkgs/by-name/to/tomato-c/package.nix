@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   libnotify,
   makeWrapper,
   mpv,
@@ -70,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/gabrielzschmitz/Tomato.C";
     description = " A pomodoro timer written in pure C";
     license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     mainProgram = "tomato";
     platforms = lib.platforms.unix;
   };

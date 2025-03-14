@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-0oSSoGZga0OGAKUNsLmKkUl8N1l0pVi4KIqrKJbeVVU=";
   };
 
-  cargoHash = "sha256-w0WD+EtVGFMGpS4a2DJrLdbunwF2yiONKQwdcQG2EB0=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-P3yTmECj0K0mjWUiWlQCwuQVbnbVR1xFV5cE8Uo3U90=";
 
   meta = with lib; {
     description = "CLI tool to inspect Parquet files";

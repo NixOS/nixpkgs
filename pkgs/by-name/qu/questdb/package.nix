@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "questdb";
-  version = "8.2.1";
+  version = "8.2.2";
 
   src = fetchurl {
     url = "https://github.com/questdb/questdb/releases/download/${finalAttrs.version}/questdb-${finalAttrs.version}-no-jre-bin.tar.gz";
-    hash = "sha256-1Bm002Da4id9nn09VTrtsM8rtrH/fRoJxPoej1W3Fug=";
+    hash = "sha256-Lz3AbOGwPqTV2gbacaphMB9YXIuuMNd82sb1dXR777A=";
   };
 
   nativeBuildInputs = [

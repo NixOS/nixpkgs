@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "ariadne";
-  version = "0.24";
+  version = "0.26.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "mirumee";
     repo = "ariadne";
     tag = version;
-    hash = "sha256-QLMPmep/mtw/ZDto3kK1y/9N+7aZwAke8ZHC6dzwUuM=";
+    hash = "sha256-37SMBW49sSyaO2JrMtSZzS9wDUWo+otkPYCVrT9+4rY=";
   };
 
   patches = [ ./remove-opentracing.patch ];
@@ -78,7 +78,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library for implementing GraphQL servers using schema-first approach";
     homepage = "https://ariadnegraphql.org";
-    changelog = "https://github.com/mirumee/ariadne/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/mirumee/ariadne/blob/${src.tag}/CHANGELOG.md";
     license = licenses.bsd3;
     maintainers = with maintainers; [ samuela ];
   };

@@ -22,7 +22,8 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ makeBinaryWrapper ];
 
-  cargoHash = "sha256-3leKejQ8kxamjwQPH1vg2I1CYc3r8k3pYfTWpOkqq8I=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-GwWDH3np/YKUx7BLmKxUui2CXLYbHjivWC1av9jaccA=";
 
   # requires access to /root
   checkFlags = [

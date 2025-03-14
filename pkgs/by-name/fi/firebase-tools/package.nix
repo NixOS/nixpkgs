@@ -5,33 +5,19 @@
   fetchFromGitHub,
   python3,
   xcbuild,
-  fetchpatch,
 }:
-let
-  version = "13.29.1";
+buildNpmPackage rec {
+  pname = "firebase-tools";
+  version = "13.32.0";
+
   src = fetchFromGitHub {
     owner = "firebase";
     repo = "firebase-tools";
     tag = "v${version}";
-    hash = "sha256-j6luT+L/vN9qaGjjeMW+8QGuzjJxzbn0sMGDjhqoeZA=";
+    hash = "sha256-KImt8se4pf/W1XAV8PprYmJRWQqMIAH9FVCEFSV/3Ys=";
   };
-in
-buildNpmPackage {
-  pname = "firebase-tools";
-  inherit version src;
 
-  npmDepsHash = "sha256-lQmoemIxzy2biu80UTR2eA+KJBeXWPh0xZRs/1of0eo=";
-
-  patches = [
-    # Use modern version of `ajv` instead of the four year old default in 13.29.1
-    (fetchpatch {
-      name = "bump-ajv.patch";
-      url = "https://github.com/firebase/firebase-tools/commit/b684155d827e7d1e8390e22511c0e1b5c46812ef.patch";
-      hash = "sha256-yv2AknT85Eyurc1ZFbbF5S9Sj/VEaVnHXBcXI10OWpw=";
-    })
-    # Fix embedded nan version to support node 22
-    ./001-override-nan.patch
-  ];
+  npmDepsHash = "sha256-/EWfXiITSV1r4zVvnHk+9U7MpcUlp7/MNUBJWRw3wRk=";
 
   postPatch = ''
     ln -s npm-shrinkwrap.json package-lock.json
@@ -50,11 +36,14 @@ buildNpmPackage {
   };
 
   meta = {
-    changelog = "https://github.com/firebase/firebase-tools/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/firebase/firebase-tools/blob/v${version}/CHANGELOG.md";
     description = "Manage, and deploy your Firebase project from the command line";
     homepage = "https://github.com/firebase/firebase-tools";
     license = lib.licenses.mit;
     mainProgram = "firebase";
-    maintainers = with lib.maintainers; [ momeemt ];
+    maintainers = with lib.maintainers; [
+      momeemt
+      sarahec
+    ];
   };
 }

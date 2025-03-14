@@ -19,7 +19,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-NyO0HkldXh94Y16E+SX1VE/OOx0zgO6VYoRLJrEQUm0=";
   };
 
-  cargoHash = "sha256-loWN0Pc46sr2/ZZCz2Uqf2AeGUP67EzGFQsPVLAKsfo=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-KJsTOviCFZ/1eNJLM4+QmK8h6laxN1POl7YMJyu9/g8=";
 
   cargoBuildFlags = [
     # Only build the binary we want

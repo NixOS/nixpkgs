@@ -7,7 +7,7 @@
   ninja,
   pkg-config,
   wrapGAppsHook3,
-  boost,
+  boost186,
   cereal,
   cgal,
   curl,
@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     binutils
-    boost
+    boost186
     cereal
     cgal
     curl

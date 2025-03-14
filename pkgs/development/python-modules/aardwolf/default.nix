@@ -36,11 +36,11 @@ buildPythonPackage rec {
     hash = "sha256-daDxkQ7N0+yS2JOLfXJq4jv+5VQNnwtqIMy2p8j+Sag=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
     sourceRoot = "${src.name}/aardwolf/utils/rlers";
     name = "${pname}-${version}";
-    hash = "sha256-dGWPgyg8Ibyz3KcrMUI7xL7gTJ7iZ4sN0zOxFxcIrhM=";
+    hash = "sha256-doBraJQtekrO/ZZV9KFz7BdIgBVVWtQztUS2Gz8dDdA=";
   };
 
   cargoRoot = "aardwolf/utils/rlers";

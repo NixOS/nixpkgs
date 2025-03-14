@@ -61,6 +61,6 @@ stdenv.mkDerivation rec {
     '';
     license = with licenses; [ mit ];
     platforms = platforms.all;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [ ];
   };
 }

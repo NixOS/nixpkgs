@@ -60,15 +60,6 @@ let
       # hwdb.bin is managed by NixOS
       # "systemd-hwdb-update.service"
 
-      # Consoles.
-      "getty.target"
-      "getty-pre.target"
-      "getty@.service"
-      "serial-getty@.service"
-      "console-getty.service"
-      "container-getty@.service"
-      "systemd-vconsole-setup.service"
-
       # Hardware (started by udev when a relevant device is plugged in).
       "sound.target"
       "bluetooth.target"
@@ -97,6 +88,7 @@ let
       "sys-fs-fuse-connections.mount"
       ] ++ (optional (!config.boot.isContainer) "sys-kernel-config.mount") ++ [
       "sys-kernel-debug.mount"
+      "sys-kernel-tracing.mount"
 
       # Maintaining state across reboots.
       "systemd-random-seed.service"
@@ -716,7 +708,7 @@ in
       (mkRemovedOptionModule [ "systemd" "generator-packages" ] "Use systemd.packages instead.")
       (mkRemovedOptionModule ["systemd" "enableUnifiedCgroupHierarchy"] ''
           In 256 support for cgroup v1 ('legacy' and 'hybrid' hierarchies) is now considered obsolete and systemd by default will refuse to boot under it.
-          To forcibly reenable cgroup v1 support, you can set boot.kernelParams = [ "systemd.unified_cgroup_hierachy=0" "SYSTEMD_CGROUP_ENABLE_LEGACY_FORCE=1" ].
+          To forcibly reenable cgroup v1 support, you can set boot.kernelParams = [ "systemd.unified_cgroup_hierarchy=0" "SYSTEMD_CGROUP_ENABLE_LEGACY_FORCE=1" ].
           NixOS does not officially support this configuration and might cause your system to be unbootable in future versions. You are on your own.
       '')
     ];

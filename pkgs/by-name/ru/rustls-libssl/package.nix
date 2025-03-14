@@ -28,7 +28,8 @@ rustPlatform.buildRustPackage {
   # NOTE: No longer necessary in the next release.
   sourceRoot = "source/rustls-libssl";
 
-  cargoHash = "sha256-Yyrs2eN4QTGGD7A+VM1YkdsIRUh3laZac3rsJThjTXM=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-eVdcYJnJVduRk3zK9VQ1rE6AwjaXAG1h1g/fVHr4mqQ=";
 
   nativeBuildInputs = [
     pkg-config # for openssl-sys

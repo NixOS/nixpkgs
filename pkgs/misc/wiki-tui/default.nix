@@ -27,7 +27,8 @@ rustPlatform.buildRustPackage rec {
     openssl
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 
-  cargoHash = "sha256-fLA7dF91mEgjTnbhujTKaHX+qmpzYaqzL8cc/x+mrUk=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-Pe6mNbn4GFjhpFZeWMlaRt7Bj5BLiIy789hXWkII2ps=";
 
   meta = with lib; {
     description = "Simple and easy to use Wikipedia Text User Interface";

@@ -1,12 +1,13 @@
-{ replaceVarsWith
-, perl
-, shadow
-, util-linux
-, configurationDirectory ? "/etc/nixos-containers"
-, stateDirectory ? "/var/lib/nixos-containers"
-, nixosTests
+{
+  replaceVarsWith,
+  perl,
+  shadow,
+  util-linux,
+  installShellFiles,
+  configurationDirectory ? "/etc/nixos-containers",
+  stateDirectory ? "/var/lib/nixos-containers",
+  nixosTests,
 }:
-
 replaceVarsWith {
   name = "nixos-container";
   dir = "bin";
@@ -32,10 +33,13 @@ replaceVarsWith {
     };
   };
 
+  nativeBuildInputs = [ installShellFiles ];
+
   postInstall = ''
-    t=$out/share/bash-completion/completions
-    mkdir -p $t
-    cp ${./nixos-container-completion.sh} $t/nixos-container
+    installShellCompletion --cmd nixos-container \
+      --bash ${./nixos-container-completion.sh} \
+      --fish ${./nixos-container-completion.fish}
   '';
+
   meta.mainProgram = "nixos-container";
 }

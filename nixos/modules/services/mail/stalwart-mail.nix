@@ -53,6 +53,21 @@ in
         Data directory for stalwart
       '';
     };
+
+    credentials = lib.mkOption {
+      description = ''
+        Credentials envs used to configure Stalwart-Mail secrets.
+        These secrets can be accessed in configuration values with
+        the macros such as
+        `%{file:/run/credentials/stalwart-mail.service/VAR_NAME}%`.
+      '';
+      type = lib.types.attrsOf lib.types.str;
+      default = { };
+      example = {
+        user_admin_password = "/run/keys/stalwart_admin_password";
+      };
+    };
+
   };
 
   config = lib.mkIf cfg.enable {
@@ -92,19 +107,21 @@ in
       resolver.public-suffix = lib.mkDefault [
         "file://${pkgs.publicsuffix-list}/share/publicsuffix/public_suffix_list.dat"
       ];
-      config.resource =
-        let
-          hasHttpListener = builtins.any (listener: listener.protocol == "http") (
-            lib.attrValues cfg.settings.server.listener
-          );
-        in
-        {
-          spam-filter = lib.mkDefault "file://${cfg.package}/etc/stalwart/spamfilter.toml";
-        }
-        // lib.optionalAttrs ((builtins.hasAttr "listener" cfg.settings.server) && hasHttpListener) {
-          webadmin = lib.mkDefault "file://${cfg.package.webadmin}/webadmin.zip";
-        };
-      webadmin.path = "/var/cache/stalwart-mail";
+      config = {
+        spam-filter.resource = lib.mkDefault "file://${cfg.package}/etc/stalwart/spamfilter.toml";
+        webadmin =
+          let
+            hasHttpListener = builtins.any (listener: listener.protocol == "http") (
+              lib.attrValues cfg.settings.server.listener
+            );
+          in
+          {
+            path = "/var/cache/stalwart-mail";
+          }
+          // lib.optionalAttrs ((builtins.hasAttr "listener" cfg.settings.server) && hasHttpListener) {
+            resource = lib.mkDefault "file://${cfg.package.webadmin}/webadmin.zip";
+          };
+      };
     };
 
     # This service stores a potentially large amount of data.
@@ -147,6 +164,7 @@ in
             ""
             "${cfg.package}/bin/stalwart-mail --config=${configFile}"
           ];
+          LoadCredential = lib.mapAttrsToList (key: value: "${key}:${value}") cfg.credentials;
 
           StandardOutput = "journal";
           StandardError = "journal";

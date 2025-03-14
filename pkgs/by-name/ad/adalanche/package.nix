@@ -28,10 +28,6 @@ buildGoModule rec {
     "-X=github.com/lkarlslund/adalanche/modules/version.Version=${version}"
   ];
 
-  env = {
-    CGO_CFLAGS = "-Wno-undef-prefix";
-  };
-
   meta = with lib; {
     description = "Active Directory ACL Visualizer and Explorer";
     homepage = "https://github.com/lkarlslund/adalanche";

@@ -11,6 +11,8 @@
     inherit (callPackage ./fetchers.nix { }) fetchLibrustyV8;
   },
   libffi,
+  sqlite,
+  lld,
 }:
 
 let
@@ -18,42 +20,48 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "deno";
-  version = "2.1.7";
+  version = "2.2.3";
 
   src = fetchFromGitHub {
     owner = "denoland";
     repo = "deno";
     tag = "v${version}";
-    hash = "sha256-FSip1EY6DCgmIgpkhzEF6h3yV8tJqZKnBpqgBDg1TKQ=";
+    hash = "sha256-eYzDCQVjilm6Olc9Ko+EYlSCNN7UVl/YXuK55xeoOOg=";
   };
 
-  cargoHash = "sha256-35XKqVBXlK6iPHec1ALhymYCD1GG1ZnCU2ET3PRGidk=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-Hmxz4bryk6wMbccaXcKg8XuD9H9BF+nuvMkiCNeYMXY=";
 
   postPatch = ''
-    # upstream uses lld on aarch64-darwin for faster builds
-    # within nix lld looks for CoreFoundation rather than CoreFoundation.tbd and fails
-    substituteInPlace .cargo/config.toml --replace-fail "-fuse-ld=lld " ""
-
     # Use patched nixpkgs libffi in order to fix https://github.com/libffi/libffi/pull/857
-    substituteInPlace ext/ffi/Cargo.toml --replace-fail "libffi = \"=3.2.0\"" "libffi = { version = \"3.2.0\", features = [\"system\"] }"
+    substituteInPlace Cargo.toml --replace-fail "libffi = \"=3.2.0\"" "libffi = { version = \"3.2.0\", features = [\"system\"] }"
   '';
 
   # uses zlib-ng but can't dynamically link yet
   # https://github.com/rust-lang/libz-sys/issues/158
-  nativeBuildInputs = [
-    # required by libz-ng-sys crate
-    cmake
-    # required by deno_kv crate
-    protobuf
-    installShellFiles
-  ];
+  nativeBuildInputs =
+    [
+      rustPlatform.bindgenHook
+      # required by libz-ng-sys crate
+      cmake
+      # required by deno_kv crate
+      protobuf
+      installShellFiles
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      lld
+    ];
 
   configureFlags = lib.optionals stdenv.cc.isClang [
     # This never worked with clang, but became a hard error recently: https://github.com/llvm/llvm-project/commit/3d5b610c864c8f5980eaa16c22b71ff1cf462fae
     "--disable-multi-os-directory"
   ];
 
-  buildInputs = [ libffi ];
+  buildInputs = [
+    libffi
+    # required by libsqlite3-sys
+    sqlite.dev
+  ];
   buildAndTestSubdir = "cli";
 
   # work around "error: unknown warning group '-Wunused-but-set-parameter'"

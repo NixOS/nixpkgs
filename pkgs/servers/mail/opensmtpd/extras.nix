@@ -10,7 +10,7 @@
   lua5,
   perl,
   libmysqlclient,
-  postgresql,
+  libpq,
   sqlite,
   hiredis,
   enableLua ? true,
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     lua5
     perl
     libmysqlclient
-    postgresql
+    libpq
     sqlite
     hiredis
   ];
@@ -107,7 +107,6 @@ stdenv.mkDerivation rec {
     license = licenses.isc;
     platforms = platforms.linux;
     maintainers = with maintainers; [
-      gebner
       ekleog
     ];
   };

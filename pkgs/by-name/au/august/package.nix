@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage {
     hash = "sha256-58DZMoRH9PBbM4sok/XbUcwSXBeqUAmFZpffdMKQ+dE=";
   };
 
-  cargoHash = "sha256-/GvBbsSL0dZ0xTystIpb8sk1nNg5hmP4yceCHlh7EQE=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-E1M/Soaz4+Gyxizc4VReZlfJB5gxrSz2ue3WI9fcNJA=";
 
   postInstall = ''
     mv $out/bin/{august-cli,ag}

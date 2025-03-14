@@ -9,17 +9,18 @@
   libcap,
   libnl,
   nixosTests,
+  unstableGitUpdater,
 }:
 
 stdenv.mkDerivation rec {
   pname = "bpftune";
-  version = "0-unstable-2024-10-25";
+  version = "0-unstable-2025-03-07";
 
   src = fetchFromGitHub {
     owner = "oracle";
     repo = "bpftune";
-    rev = "6a50f5ff619caeea6f04d889e3a60de6c12feb76";
-    hash = "sha256-yol6VFelqQiPKLg1UUeP+r/+XO4fjYeDbIeI29gZ7j4=";
+    rev = "744bd48eccb536d6e9c782f635130dbf322e8a32";
+    hash = "sha256-pjFqq5KeG1ptTEo8ENiqC/QkDPqQG4VPR2GDvcBPwH8=";
   };
 
   postPatch = ''
@@ -59,8 +60,11 @@ stdenv.mkDerivation rec {
     "zerocallusedregs"
   ];
 
-  passthru.tests = {
-    inherit (nixosTests) bpftune;
+  passthru = {
+    tests = {
+      inherit (nixosTests) bpftune;
+    };
+    updateScript = unstableGitUpdater { };
   };
 
   enableParallelBuilding = true;

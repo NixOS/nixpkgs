@@ -27,25 +27,30 @@
   google-cloud-logging,
   mock,
   optax,
+  portpicker,
   pytest-xdist,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "orbax-checkpoint";
-  version = "0.11.0";
+  version = "0.11.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "orbax";
     tag = "v${version}";
-    hash = "sha256-pVRXWJfiiqV2ZFM0CgXdwD6/lnRa1HFFPrfS5975mVA=";
+    hash = "sha256-h7SXuOhytM9ev0Q53z0UoT9/ShPVlqgFofn7j8gnehM=";
   };
 
   sourceRoot = "${src.name}/checkpoint";
 
   build-system = [ flit-core ];
+
+  pythonRelaxDeps = [
+    "jax"
+  ];
 
   dependencies = [
     absl-py
@@ -68,6 +73,7 @@ buildPythonPackage rec {
     google-cloud-logging
     mock
     optax
+    portpicker
     pytest-xdist
     pytestCheckHook
   ];
@@ -85,6 +91,12 @@ buildPythonPackage rec {
   ];
 
   disabledTestPaths = [
+    # E   absl.flags._exceptions.DuplicateFlagError: The flag 'num_processes' is defined twice.
+    # First from multiprocess_test, Second from orbax.checkpoint._src.testing.multiprocess_test.
+    # Description from first occurrence: Number of processes to use.
+    # https://github.com/google/orbax/issues/1580
+    "orbax/checkpoint/experimental/emergency/"
+
     # Circular dependency flax
     "orbax/checkpoint/_src/metadata/empty_values_test.py"
     "orbax/checkpoint/_src/metadata/tree_rich_types_test.py"

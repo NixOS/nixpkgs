@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "gdraheim";
-    repo = pname;
+    repo = "zziplib";
     rev = "v${version}";
     hash = "sha256-8QxQrxqYO4LtB8prMqgz5a0QqvSKL7KzTkgi+VdHp6A=";
   };
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
       lgpl2Plus
       mpl11
     ];
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
   };
 }

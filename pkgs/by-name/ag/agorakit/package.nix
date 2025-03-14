@@ -5,15 +5,15 @@
   dataDir ? "/var/lib/agorakit",
 }:
 
-php.buildComposerProject (finalAttrs: {
+php.buildComposerProject2 (finalAttrs: {
   pname = "agorakit";
-  version = "1.9.2";
+  version = "1.9.3";
 
   src = fetchFromGitHub {
-    owner = finalAttrs.pname;
-    repo = finalAttrs.pname;
-    rev = finalAttrs.version;
-    sha256 = "sha256-6T7AksvBxUpv8TkPicnlCE5KZS/ydPB5Bq1MJcWoZds=";
+    owner = "agorakit";
+    repo = "agorakit";
+    tag = finalAttrs.version;
+    sha256 = "sha256-mBBl/8nXG3FsMeecbERLyY2tGFhh+5nS8A4nd7HI+8c=";
   };
 
   installPhase = ''
@@ -26,7 +26,7 @@ php.buildComposerProject (finalAttrs: {
     runHook postInstall
   '';
 
-  vendorHash = "sha256-5ypBA9Qb8jHzAtvNBHkJfsLIf3Pfw1LvYmHP/hED2ig=";
+  vendorHash = "sha256-PBymOrvorGfByTBVu/r+kBxQya5qIlu07mfu4ttT7xs=";
   composerStrictValidation = false;
 
   meta = {

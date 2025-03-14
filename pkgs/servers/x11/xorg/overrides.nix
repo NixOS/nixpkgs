@@ -7,7 +7,7 @@
   mesa, udev, bootstrap_cmds, bison, flex, clangStdenv, autoreconfHook,
   mcpp, libepoxy, openssl, pkg-config, llvm, libxslt, libxcrypt, hwdata,
   ApplicationServices, Carbon, Cocoa, Xplugin,
-  xorg, windows
+  xorg, windows, libgbm, mesa-gl-headers, dri-pkgconfig-stub
 }:
 
 let
@@ -149,14 +149,6 @@ self: super:
 
   libX11 = super.libX11.overrideAttrs (attrs: {
     outputs = [ "out" "dev" "man" ];
-    patches = [
-      # Fix spurious Xerror when running synchronized
-      # https://gitlab.freedesktop.org/xorg/lib/libx11/-/merge_requests/264
-      (fetchpatch {
-        url = "https://gitlab.freedesktop.org/xorg/lib/libx11/-/commit/f3d6ebac35301d4ad068e307f0fbe6aa12ccbccb.patch";
-        hash = "sha256-wQNMsbQ+h9VlNiWr+r34AxvViC8fq02ZhcARRnw7O9k=";
-      })
-    ];
     configureFlags = attrs.configureFlags or []
       ++ malloc0ReturnsNullCrossFlag
       ++ lib.optional (stdenv.targetPlatform.useLLVM or false) "ac_cv_path_RAWCPP=cpp";
@@ -459,7 +451,7 @@ self: super:
   transset = addMainProgram super.transset { };
 
   utilmacros = super.utilmacros.overrideAttrs (attrs: { # not needed for releases, we propagate the needed tools
-    propagatedBuildInputs = attrs.propagatedBuildInputs or [] ++ [ automake autoconf libtool ];
+    propagatedNativeBuildInputs = attrs.propagatedNativeBuildInputs or [] ++ [ automake autoconf libtool ];
   });
 
   viewres = addMainProgram super.viewres { };
@@ -612,7 +604,6 @@ self: super:
   });
 
   xf86videovmware = super.xf86videovmware.overrideAttrs (attrs: {
-    buildInputs =  attrs.buildInputs ++ [ mesa mesa.driversdev llvm ]; # for libxatracker
     env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error=address" ]; # gcc12
     meta = attrs.meta // {
       platforms = ["i686-linux" "x86_64-linux"];
@@ -721,7 +712,7 @@ self: super:
     '';
   in
     xorg.xkeyboardconfig.overrideAttrs (old: {
-      buildInputs = old.buildInputs ++ [ automake ];
+      nativeBuildInputs = old.nativeBuildInputs ++ [ automake ];
       postPatch   = lib.concatStrings (lib.mapAttrsToList patchIn layouts);
     });
 
@@ -800,7 +791,7 @@ self: super:
           # We set it to /var/log which can't be touched from inside the sandbox causing the build to hard-fail
           ./dont-create-logdir-during-build.patch
         ];
-        buildInputs = commonBuildInputs ++ [ libdrm mesa ];
+        buildInputs = commonBuildInputs ++ [ libdrm libgbm mesa-gl-headers dri-pkgconfig-stub ];
         propagatedBuildInputs = attrs.propagatedBuildInputs or [] ++ [ xorg.libpciaccess ] ++ commonPropagatedBuildInputs ++ lib.optionals stdenv.hostPlatform.isLinux [
           udev
         ];
@@ -1017,10 +1008,26 @@ self: super:
     meta = attrs.meta // { mainProgram = "xinit"; };
   });
 
-  xf86videointel = throw ''
-    xf86videointel has been removed as the package is unmaintained and the driver is no longer functional.
-    Please remove "intel" from `services.xserver.videoDrivers` and switch to the "modesetting" driver.
-  ''; # Added 2024-12-16;
+  xf86videointel = super.xf86videointel.overrideAttrs (attrs: {
+    # the update script only works with released tarballs :-/
+    name = "xf86-video-intel-2024-05-06";
+    src = fetchFromGitLab {
+      domain = "gitlab.freedesktop.org";
+      group = "xorg";
+      owner = "driver";
+      repo = "xf86-video-intel";
+      rev = "ce811e78882d9f31636351dfe65351f4ded52c74";
+      sha256 = "sha256-PKCxFHMwxgbew0gkxNBKiezWuqlFG6bWLkmtUNyoF8Q=";
+    };
+    buildInputs = attrs.buildInputs ++ [ xorg.libXScrnSaver xorg.libXv xorg.pixman ];
+    nativeBuildInputs = attrs.nativeBuildInputs ++ [ autoreconfHook xorg.utilmacros xorg.xorgserver ];
+    configureFlags = [ "--with-default-dri=3" "--enable-tools" ];
+    patches = [ ./use_crocus_and_iris.patch ];
+
+    meta = attrs.meta // {
+      platforms = ["i686-linux" "x86_64-linux"];
+    };
+  });
 
   xf86videoopenchrome = super.xf86videoopenchrome.overrideAttrs (attrs: {
     buildInputs = attrs.buildInputs ++ [ xorg.libXv ];

@@ -1,5 +1,7 @@
 { lib
+, fetchFromGitLab
 , fetchzip
+, cpio
 , ddcutil
 , easyeffects
 , gjs
@@ -18,6 +20,7 @@
 , procps
 , smartmontools
 , replaceVars
+, stdenvNoCC
 , touchegg
 , util-linux
 , vte
@@ -110,10 +113,38 @@ super: lib.trivial.pipe super [
     ];
   }))
 
+  (patchExtension "lunarcal@ailin.nemui" (old: let
+    chinese-calendar = stdenvNoCC.mkDerivation (finalAttrs: {
+      pname = "chinese-calendar";
+      version = "20240107";
+      nativeBuildInputs = [
+        cpio # used in install.sh
+      ];
+      src = fetchFromGitLab {
+        domain = "gitlab.gnome.org";
+        owner = "Nei";
+        repo = "ChineseCalendar";
+        tag = finalAttrs.version;
+        hash = "sha256-z8Af9e70bn3ztUZteIEt/b3nJIFosbnoy8mwKMM6Dmc=";
+      };
+      installPhase = ''
+        runHook preInstall
+        HOME=$out ./install.sh
+        runHook postInstall
+      '';
+    });
+  in {
+    patches = [
+      (replaceVars ./extensionOverridesPatches/lunarcal_at_ailin.nemui.patch {
+        chinese_calendar_path = chinese-calendar;
+      })
+    ];
+  }))
+
   (patchExtension "pano@elhan.io" (final: prev: {
-    version = "v23-alpha3";
+    version = "23-alpha3";
     src = fetchzip {
-      url = "https://github.com/oae/gnome-shell-pano/releases/download/${final.version}/pano@elhan.io.zip";
+      url = "https://github.com/oae/gnome-shell-pano/releases/download/v${final.version}/pano@elhan.io.zip";
       hash = "sha256-LYpxsl/PC8hwz0ZdH5cDdSZPRmkniBPUCqHQxB4KNhc=";
       stripRoot = false;
     };

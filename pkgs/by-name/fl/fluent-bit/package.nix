@@ -6,7 +6,7 @@
   flex,
   bison,
   systemd,
-  postgresql,
+  libpq,
   openssl,
   libyaml,
   darwin,
@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fluent-bit";
-  version = "3.2.5";
+  version = "3.2.8";
 
   src = fetchFromGitHub {
     owner = "fluent";
     repo = "fluent-bit";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-H3wcKeHfAJNJAEtRcTU8rz93wug39TUqV3XN4wkTqMg=";
+    hash = "sha256-E+y8lZ5fgJORFkig6aSVMYGk0US1b4xwjO9qnGu4R/Y=";
   };
 
   # optional only to avoid linux rebuild
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     [
       openssl
       libyaml
-      postgresql
+      libpq
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [ systemd ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [

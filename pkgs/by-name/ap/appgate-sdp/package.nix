@@ -87,11 +87,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "appgate-sdp";
-  version = "6.4.1";
+  version = "6.4.2";
 
   src = fetchurl {
     url = "https://bin.appgate-sdp.com/${lib.versions.majorMinor version}/client/appgate-sdp_${version}_amd64.deb";
-    sha256 = "sha256-wnao0W03vpV9HMnUXEY3pf63jN3gB2jExfuA1hsG00I=";
+    sha256 = "sha256-xFpBC6X95C01wUfzJ3a0kMz898k6BItkpJLcUmfd7oY=";
   };
 
   # just patch interpreter

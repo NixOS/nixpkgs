@@ -7,20 +7,21 @@
 , runtimeDir ? "/run/pixelfed"
 }:
 
-php.buildComposerProject (finalAttrs: {
+php.buildComposerProject2 (finalAttrs: {
   pname = "pixelfed";
   version = "0.12.4";
 
   src = fetchFromGitHub {
     owner = "pixelfed";
     repo = "pixelfed";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-HEo0BOC/AEWhCApibxo2TBQF4kbLrbPEXqDygVQlVic=";
   };
 
-  vendorHash = "sha256-QkkSnQb9haH8SiXyLSS58VXSD4op7Hr4Z6vUAAYLIic=";
+  vendorHash = "sha256-aMKuuBTavNTIfYkuAn2vBFeh5xJd3BY8C+IVfglnS+g=";
 
   postInstall = ''
+    chmod -R u+w $out/share
     mv "$out/share/php/${finalAttrs.pname}"/* $out
     rm -R $out/bootstrap/cache
     # Move static contents for the NixOS module to pick it up, if needed.

@@ -21,6 +21,8 @@ lib.makeScope newScope (self: with self; {
 
   done = callPackage ./done.nix { };
 
+  exercism-cli-fish-wrapper = callPackage ./exercism-cli-fish-wrapper.nix { };
+
   fifc = callPackage ./fifc.nix { };
 
   fish-bd = callPackage ./fish-bd.nix { };
@@ -51,6 +53,8 @@ lib.makeScope newScope (self: with self; {
   humantime-fish = callPackage ./humantime-fish.nix { };
 
   hydro = callPackage ./hydro.nix { };
+
+  nvm = callPackage ./nvm.nix { };
 
   pisces = callPackage ./pisces.nix { };
 

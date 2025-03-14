@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , ninja
 , pkg-config
@@ -29,32 +28,24 @@ let
     rev = "30ecb0b3fe694a582edfacc2a7425b6f01f9fec6";
     hash = "sha256-1FF658OhKg8a5kKX/7TVmsxZ9amimn4lB6bX9i7pnI4=";
   };
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation (finalAttrs: {
   pname = "organicmaps";
-  version = "2024.11.27-12";
+  version = "2025.03.02-7";
 
   src = fetchFromGitHub {
     owner = "organicmaps";
     repo = "organicmaps";
-    rev = "${version}-android";
-    hash = "sha256-lBEDPqxdnaajMHlf7G/d1TYYL9yPZo8AGekoKmF1ObM=";
+    tag = "${finalAttrs.version}-android";
+    hash = "sha256-5WX+YDgu8Ll5+rZWWxfbNW0pBFz+2XWkw/ahM14Ml08=";
     fetchSubmodules = true;
   };
-
-  patches = [
-    # Fix for https://github.com/organicmaps/organicmaps/issues/7838
-    (fetchpatch {
-      url = "https://github.com/organicmaps/organicmaps/commit/1caf64e315c988cd8d5196c80be96efec6c74ccc.patch";
-      hash = "sha256-k3VVRgHCFDhviHxduQMVRUUvQDgMwFHIiDZKa4BNTyk=";
-    })
-  ];
 
   postPatch = ''
     # Disable certificate check. It's dependent on time
     echo "exit 0" > tools/unix/check_cert.sh
 
     # crude fix for https://github.com/organicmaps/organicmaps/issues/1862
-    echo "echo ${lib.replaceStrings ["." "-"] ["" ""] version}" > tools/unix/version.sh
+    echo "echo ${lib.replaceStrings ["." "-"] ["" ""] finalAttrs.version}" > tools/unix/version.sh
 
     # TODO use system boost instead, see https://github.com/organicmaps/organicmaps/issues/5345
     patchShebangs 3party/boost/tools/build/src/engine/build.sh
@@ -108,4 +99,4 @@ in stdenv.mkDerivation rec {
     platforms = platforms.all;
     mainProgram = "OMaps";
   };
-}
+})

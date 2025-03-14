@@ -9,8 +9,6 @@
   libgit2,
   libssh2,
   openssl,
-  darwin,
-  libiconv,
   git,
   gnupg,
   openssh,
@@ -21,7 +19,7 @@
 }:
 
 let
-  version = "0.25.0";
+  version = "0.27.0";
 in
 
 rustPlatform.buildRustPackage {
@@ -32,28 +30,28 @@ rustPlatform.buildRustPackage {
     owner = "jj-vcs";
     repo = "jj";
     tag = "v${version}";
-    hash = "sha256-5J1ZfPNyniUK5D3Pt1aKuJ+/8vad3JPxCztBRY591N8=";
+    hash = "sha256-fBgJrSglH46+NHu3spk5mC51ASDHWnOoW6veKZ0R2YA=";
   };
 
-  cargoHash = "sha256-kuZ1zvb6H5QWjJSUYMq5tEywsQMC6187YJPUT1r4S5o=";
+  useFetchCargoVendor = true;
+
+  cargoPatches = [
+    # <https://github.com/jj-vcs/jj/pull/5315>
+    ./libgit2-1.9.0.patch
+  ];
+
+  cargoHash = "sha256-35DJdAUXc2gb/EXECScwinSzzp7uaxFbUxedjqRGfj8=";
 
   nativeBuildInputs = [
     installShellFiles
     pkg-config
   ];
 
-  buildInputs =
-    [
-      zstd
-      libgit2
-      libssh2
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Security
-      darwin.apple_sdk.frameworks.SystemConfiguration
-      libiconv
-    ];
+  buildInputs = [
+    zstd
+    libgit2
+    libssh2
+  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ openssl ];
 
   nativeCheckInputs = [
     git
@@ -89,8 +87,8 @@ rustPlatform.buildRustPackage {
       jj = "${stdenv.hostPlatform.emulator buildPackages} $out/bin/jj";
     in
     lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) ''
-      ${jj} util mangen > ./jj.1
-      installManPage ./jj.1
+      mkdir -p $out/share/man
+      ${jj} util install-man-pages $out/share/man/
 
       installShellCompletion --cmd jj \
         --bash <(COMPLETE=bash ${jj}) \

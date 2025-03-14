@@ -139,7 +139,7 @@ fn parse_os_release() -> Result<HashMap<String, String>> {
         }))
 }
 
-fn do_pre_switch_check(command: &str, toplevel: &Path) -> Result<()> {
+fn do_pre_switch_check(command: &str, toplevel: &Path, action: &Action) -> Result<()> {
     let mut cmd_split = command.split_whitespace();
     let Some(argv0) = cmd_split.next() else {
         bail!("missing first argument in install bootloader commands");
@@ -148,6 +148,7 @@ fn do_pre_switch_check(command: &str, toplevel: &Path) -> Result<()> {
     match std::process::Command::new(argv0)
         .args(cmd_split.collect::<Vec<&str>>())
         .arg(toplevel)
+        .arg::<&str>(action.into())
         .spawn()
         .map(|mut child| child.wait())
     {
@@ -886,20 +887,17 @@ impl std::fmt::Display for Job {
 
 fn new_dbus_proxies(
     conn: &LocalConnection,
-) -> (
-    Proxy<'_, &LocalConnection>,
-    Proxy<'_, &LocalConnection>,
-) {
+) -> (Proxy<'_, &LocalConnection>, Proxy<'_, &LocalConnection>) {
     (
         conn.with_proxy(
             "org.freedesktop.systemd1",
             "/org/freedesktop/systemd1",
-            Duration::from_millis(5000),
+            Duration::from_millis(10000),
         ),
         conn.with_proxy(
             "org.freedesktop.login1",
             "/org/freedesktop/login1",
-            Duration::from_millis(5000),
+            Duration::from_millis(10000),
         ),
     )
 }
@@ -1039,7 +1037,7 @@ fn do_system_switch(action: Action) -> anyhow::Result<()> {
         die();
     };
 
-    let Ok(_lock) = Flock::lock(lock, FlockArg::LockExclusive) else {
+    let Ok(_lock) = Flock::lock(lock, FlockArg::LockExclusiveNonblock) else {
         eprintln!("Could not acquire lock");
         die();
     };
@@ -1053,7 +1051,7 @@ fn do_system_switch(action: Action) -> anyhow::Result<()> {
         .unwrap_or_default()
         != "1"
     {
-        do_pre_switch_check(&pre_switch_check, &toplevel)?;
+        do_pre_switch_check(&pre_switch_check, &toplevel, action)?;
     }
 
     if *action == Action::Check {
@@ -1220,16 +1218,16 @@ won't take effect until you reboot the system.
                     unit.as_str(),
                     "suspend.target" | "hibernate.target" | "hybrid-sleep.target"
                 ) || parse_systemd_bool(
-                        Some(&new_unit_info),
-                        "Unit",
-                        "RefuseManualStart",
-                        false,
-                    ) || parse_systemd_bool(
-                        Some(&new_unit_info),
-                        "Unit",
-                        "X-OnlyManualStart",
-                        false,
-                    )) {
+                    Some(&new_unit_info),
+                    "Unit",
+                    "RefuseManualStart",
+                    false,
+                ) || parse_systemd_bool(
+                    Some(&new_unit_info),
+                    "Unit",
+                    "X-OnlyManualStart",
+                    false,
+                )) {
                     units_to_start.insert(unit.to_string(), ());
                     record_unit(START_LIST_FILE, unit);
                     // Don't spam the user with target units that always get started.

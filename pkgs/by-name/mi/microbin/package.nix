@@ -21,7 +21,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-fsRpqSYDsuV0M6Xar2GVoyTgCPT39dcKJ6eW4YXCkQ0=";
   };
 
-  cargoHash = "sha256-7GSgyh2aJ2f8pozoh/0Yxzbk8Wg3JYuqSy/34ywAc2s=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-cQyb9KpmdJ2DB395Ce24JX8YcMLQn3fmeYZUo72L38s=";
 
   patches = [
     # Prefix some URLs with args.public_path_as_str() by PeterUpfold

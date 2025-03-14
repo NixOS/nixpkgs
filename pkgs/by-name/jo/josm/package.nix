@@ -3,21 +3,21 @@
 }:
 let
   pname = "josm";
-  version = "19277";
+  version = "19307";
   srcs = {
     jar = fetchurl {
       url = "https://josm.openstreetmap.de/download/josm-snapshot-${version}.jar";
-      hash = "sha256-NXf95ANB5Ezgf1CKEbefrIxoyqHgYC/WKNf7+p3D/pY=";
+      hash = "sha256-08dacfJrRbdk8Bj+lDW2s8YuGVvnKdvMQN825lusohk=";
     };
     macosx = fetchurl {
       url = "https://josm.openstreetmap.de/download/macosx/josm-macos-${version}-java21.zip";
-      hash = "sha256-vP7s6kneOOpLUYZ1Un7Zdo8wMZ/fErLaJFxtR/vCvD8=";
+      hash = "sha256-wFLQXGOaRnFDZEDlZwmv8wb3pNJbVxocYVjc8wy1Q10=";
     };
     pkg = fetchFromGitHub {
       owner = "JOSM";
       repo = "josm";
       tag = "${version}-tested";
-      hash = "sha256-3aVMZFYz7J8fkCR4TVmkvsAu2cX7swxiNt12is42nKE=";
+      hash = "sha256-TwheY/9gXbKH36jZLMoV9xIBeq59FpHUUoselaiYGzA=";
     };
   };
 
@@ -28,7 +28,7 @@ let
     "--add-exports=java.desktop/com.sun.imageio.spi=ALL-UNNAMED"
   ];
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   inherit pname version;
 
   dontUnpack = true;
@@ -47,7 +47,9 @@ stdenv.mkDerivation rec {
       # Add libXxf86vm to path because it is needed by at least Kendzi3D plugin
       makeWrapper ${jre}/bin/java $out/bin/josm \
         --add-flags "${baseJavaOpts} ${extraJavaOpts} -jar $out/share/josm/josm.jar" \
-        --prefix LD_LIBRARY_PATH ":" '${libXxf86vm}/lib'
+        --prefix LD_LIBRARY_PATH ":" '${libXxf86vm}/lib' \
+        --prefix _JAVA_AWT_WM_NONREPARENTING : 1 \
+        --prefix _JAVA_OPTIONS : "-Dawt.useSystemAAFontSettings=on"
     '';
 
   meta = {

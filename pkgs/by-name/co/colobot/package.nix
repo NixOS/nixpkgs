@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "colobot";
-    repo = pname;
+    repo = "colobot";
     rev = "colobot-gold-${version}";
     hash = "sha256-3iea2+5xCT0//NAjMHrynZKSoiOSgLTNMUQkRhXuXg8=";
   };
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = false;
 
-  # The binary ends in games directoy
+  # The binary ends in games directory
   postInstall = ''
     mv $out/games $out/bin
     for contents in ${colobot-data}/share/games/colobot/*; do

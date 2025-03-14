@@ -19,7 +19,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-hm0Xfd/iW+431HflvZErjzeZtSdXVb/ReoNIeETJ5Ik=";
   };
 
-  cargoHash = "sha256-FQbJx6ijX8kE4qxT7OQ7FwxLKJB5/moTKhBK0bfvBas=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-feMgkCP6e3HsOppTYLtVrRn/vbSLLRKV0hp85gqr4qM=";
 
   nativeBuildInputs = [
     autoAddDriverRunpath

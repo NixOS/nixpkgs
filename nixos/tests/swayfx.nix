@@ -190,15 +190,15 @@ import ./make-test-python.nix (
         machine.screenshot("sway_exit")
 
         swaymsg("exec swaylock")
-        machine.wait_until_succeeds("pgrep -x swaylock")
+        machine.wait_until_succeeds("pgrep -xf swaylock")
         machine.sleep(3)
         machine.send_chars("${nodes.machine.users.users.alice.password}")
         machine.send_key("ret")
-        machine.wait_until_fails("pgrep -x swaylock")
+        machine.wait_until_fails("pgrep -xf swaylock")
 
         # Exit Sway and verify process exit status 0:
         swaymsg("exit", succeed=False)
-        machine.wait_until_fails("pgrep -x sway")
+        machine.wait_until_fails("pgrep -xf sway")
         machine.wait_for_file("/tmp/sway-exit-ok")
       '';
   }

@@ -13,7 +13,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-bJeM1HTzmC8QZ488PpqQ0qqdFg1/rjPWuTtqo1GXyHM=";
   };
 
-  cargoHash = "sha256-xqNFJFNV9mIVxzyQvhv5QwHVcXLuH76VYFAsgp5hW+w=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-dCZcxtaqcRHhAmgGigBjN0jDfh1VjoosqTDTkqwlXp0=";
 
   meta = with lib; {
     description = "Command-line tool to sign files and verify signatures";

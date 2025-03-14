@@ -106,6 +106,12 @@ stdenv.mkDerivation rec {
     substituteInPlace src/global.cc --replace 'browser="mozilla"' 'browser="xdg-open"'
   '';
 
+  # FIXME: ugly hack for https://github.com/NixOS/nixpkgs/pull/389009
+  postConfigure = ''
+    substituteInPlace libtool \
+      --replace 'for search_ext in .la $std_shrext .so .a' 'for search_ext in $std_shrext .so .a'
+  '';
+
   nativeBuildInputs = [
     autoreconfHook
     texliveSmall
@@ -209,7 +215,9 @@ stdenv.mkDerivation rec {
 
       if [ -n "$doc" ]; then
         mkdir -p "$doc/share/giac"
+        # $out/share/giac/doc/aide_cas is a symlink to ../aide_cas
         mv "$out/share/giac/doc" "$doc/share/giac"
+        ln -sf "$out/share/giac/aide_cas" "$doc/share/giac/doc/aide_cas"
         mv "$out/share/giac/examples" "$doc/share/giac"
       fi
     ''

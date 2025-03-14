@@ -14,7 +14,8 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-+QkkwQfp818bKVo1yUkWKLMqbdzRJ+oHpjxB+UFDRsU=";
   };
 
-  cargoHash = "sha256-NbqmXptLmqLd6QizRB1bIM53Rdj010Hy3JqSuLQ4H24=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-Ry7S/Pqo3AoUKCyGFfV9RNWOguBwajJ8rOqRg+LFReY=";
 
   meta = with lib; {
     description = "When cut doesn't cut it";

@@ -23,10 +23,10 @@ buildPythonPackage rec {
     rustPlatform.maturinBuildHook
   ];
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-W0BebCXC1wqwtQP+zHjISxSJjXHD9U6p9eNS12Nfb2Y=";
+    hash = "sha256-EPSaMIZqXrFzXAwNr1AtvmntkCLePXwAVzGMj8dWbTQ=";
   };
 
   nativeCheckInputs = [ pytestCheckHook ];

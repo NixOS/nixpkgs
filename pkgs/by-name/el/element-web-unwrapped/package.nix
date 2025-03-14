@@ -4,8 +4,7 @@
   fetchFromGitHub,
   fetchYarnDeps,
   jq,
-  yarn,
-  fixup-yarn-lock,
+  yarnConfigHook,
   nodejs,
   jitsi-meet,
 }:
@@ -36,8 +35,7 @@ stdenv.mkDerivation (
     };
 
     nativeBuildInputs = [
-      yarn
-      fixup-yarn-lock
+      yarnConfigHook
       jq
       nodejs
     ];
@@ -51,25 +49,6 @@ stdenv.mkDerivation (
       yarn --offline build:bundle
 
       runHook postBuild
-    '';
-
-    configurePhase = ''
-      runHook preConfigure
-
-      export HOME=$PWD/tmp
-      # with the update of openssl3, some key ciphers are not supported anymore
-      # this flag will allow those codecs again as a workaround
-      # see https://medium.com/the-node-js-collection/node-js-17-is-here-8dba1e14e382#5f07
-      # and https://github.com/element-hq/element-web/issues/21043
-      export NODE_OPTIONS=--openssl-legacy-provider
-      mkdir -p $HOME
-
-      fixup-yarn-lock yarn.lock
-      yarn config --offline set yarn-offline-mirror $offlineCache
-      yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
-      patchShebangs node_modules
-
-      runHook postConfigure
     '';
 
     installPhase = ''

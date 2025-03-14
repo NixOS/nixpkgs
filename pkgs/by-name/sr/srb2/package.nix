@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-DGME_INCLUDE_DIR=${game-music-emu}/include"
     "-DOPENMPT_INCLUDE_DIR=${libopenmpt.dev}/include"
     "-DSDL2_MIXER_INCLUDE_DIR=${lib.getDev SDL2_mixer}/include/SDL2"
-    "-DSDL2_INCLUDE_DIR=${lib.getDev SDL2.dev}/include/SDL2"
+    "-DSDL2_INCLUDE_DIR=${lib.getInclude SDL2}/include/SDL2"
   ];
 
   patches = [

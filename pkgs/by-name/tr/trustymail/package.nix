@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "trustymail";
-  version = "1.0.0";
+  version = "1.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cisagov";
     repo = "trustymail";
     tag = "v${version}";
-    hash = "sha256-Zkw+NfeVtIArrBxR1qR9bAQe5yd7mAtNiT0x5Mqr3Ic=";
+    hash = "sha256-t8Z/jMCqxqCpurQWejT7tnW9l0xMkgsD6Dfe5PZ9OqA=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];
@@ -40,7 +40,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "Tool to scan domains and return data based on trustworthy email best practices";
     homepage = "https://github.com/cisagov/trustymail";
-    changelog = "https://github.com/cisagov/trustymail/releases/tag/v${version}";
+    changelog = "https://github.com/cisagov/trustymail/releases/tag/${src.tag}";
     license = with licenses; [ cc0 ];
     maintainers = with maintainers; [ fab ];
     mainProgram = "trustymail";
