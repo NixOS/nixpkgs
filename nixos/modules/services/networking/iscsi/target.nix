@@ -34,7 +34,7 @@ in
       mode = "0600";
     };
 
-    environment.systemPackages = with pkgs; [ targetcli ];
+    environment.systemPackages = with pkgs; [ targetcli-fb ];
 
     boot.kernelModules = [
       "configfs"

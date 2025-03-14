@@ -9,7 +9,7 @@
 }:
 
 python3Packages.buildPythonApplication rec {
-  pname = "targetcli";
+  pname = "targetcli-fb";
   version = "3.0.1";
   pyproject = true;
 
