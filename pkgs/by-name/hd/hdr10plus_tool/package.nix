@@ -8,14 +8,14 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hdr10plus_tool";
   version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "quietvoid";
     repo = "hdr10plus_tool";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-eueB+ZrOrnySEwUpCTvC4qARCsDcHJhm088XepLTlOE=";
   };
 
@@ -43,4 +43,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with maintainers; [ johnrtitor ];
     mainProgram = "hdr10plus_tool";
   };
-}
+})
