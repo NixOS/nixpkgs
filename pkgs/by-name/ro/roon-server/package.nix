@@ -104,6 +104,7 @@ stdenv.mkDerivation {
       runHook postInstall
     '';
 
+  passthru.updateScript = ./update.py;
   meta = with lib; {
     description = "Music player for music lovers";
     changelog = "https://community.roonlabs.com/c/roon/software-release-notes/18";
@@ -113,6 +114,7 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [
       lovesegfault
       steell
+      ramblurr
     ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "RoonServer";
