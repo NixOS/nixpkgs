@@ -8,14 +8,14 @@
 
 stdenv.mkDerivation {
   pname = "epson-inkjet-printer-escpr2";
-  version = "1.2.27";
+  version = "1.2.28";
 
   src = fetchurl {
     # To find the most recent version go to
     # https://support.epson.net/linux/Printer/LSB_distribution_pages/en/escpr2.php
     # and retrieve the download link for source package for arm CPU for the tar.gz (the x86 link targets to rpm source files)
-    url = "https://download3.ebz.epson.net/dsc/f/03/00/16/77/53/1540531c6f47c62d3846d9a8943b1ecec7f825a1/epson-inkjet-printer-escpr2-1.2.27-1.tar.gz";
-    hash = "sha256-h1RaqkN+hdVGVy0ancqfYoeNp/TTfJYy5oRxhPizO2Q=";
+    url = "https://download3.ebz.epson.net/dsc/f/03/00/16/80/15/8bd63ccd14a1966e9c3658d374686c5bb104bb04/epson-inkjet-printer-escpr2-1.2.28-1.tar.gz";
+    hash = "sha256-lv8Hgo7JzT4igY8ek7EXdyFO34l735dpMC+gWkO5rvY=";
   };
 
   buildInputs = [ cups ];
