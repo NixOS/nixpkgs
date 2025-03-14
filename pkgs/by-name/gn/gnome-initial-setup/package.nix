@@ -37,11 +37,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-initial-setup";
-  version = "48.rc";
+  version = "48.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-initial-setup/${lib.versions.major finalAttrs.version}/gnome-initial-setup-${finalAttrs.version}.tar.xz";
-    hash = "sha256-DtQisaDPdijVBwNkst0UtJ16oOBY6D1Hysl2pkTbsuY=";
+    hash = "sha256-erMN3erL44WWj/DYW0Cfkob7dFGTMJ/Ks2vlJ5gUFYk=";
   };
 
   patches = [
