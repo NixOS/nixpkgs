@@ -38,7 +38,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = with lib; {
     description = "CLI utility to work with HDR10+ in HEVC files.";
     homepage = "https://github.com/quietvoid/hdr10plus_tool";
-    changelog = "https://github.com/quietvoid/hdr10plus_tool/releases";
+    changelog = "https://github.com/quietvoid/hdr10plus_tool/releases/tag/${finalAttrs.version}";
     license = licenses.mit;
     maintainers = with maintainers; [ johnrtitor ];
     mainProgram = "hdr10plus_tool";
