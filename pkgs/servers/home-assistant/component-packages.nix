@@ -5427,7 +5427,7 @@
       ];
     "suez_water" =
       ps: with ps; [
-        pysuez
+        pysuezv2
       ];
     "sun" =
       ps: with ps; [
