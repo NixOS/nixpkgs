@@ -14,6 +14,7 @@
   pythonOlder,
   mesa,
   withMultimedia ? true,
+  withWebChannel ? true,
   withWebSockets ? true,
   withLocation ? true,
   # Not currently part of PyQt6
@@ -117,6 +118,7 @@ buildPythonPackage rec {
     ]
     # ++ lib.optional withConnectivity qtconnectivity
     ++ lib.optional withWebSockets qtwebsockets
+    ++ lib.optional withWebChannel qtwebchannel
     ++ lib.optional withLocation qtlocation;
 
   propagatedBuildInputs =
@@ -144,6 +146,8 @@ buildPythonPackage rec {
     ]
     ++ lib.optional withWebSockets "PyQt6.QtWebSockets"
     ++ lib.optional withMultimedia "PyQt6.QtMultimedia"
+    ++ lib.optional withWebChannel "PyQt6.QtWebChannel"
+
     # ++ lib.optional withConnectivity "PyQt6.QtConnectivity"
     ++ lib.optional withLocation "PyQt6.QtPositioning";
 
