@@ -14,26 +14,30 @@
 
   mkDefaults = lib.mapAttrsRecursive (n: v: lib.mkDefault v);
   defaultConfig = {
+    database = {
+      type = "sqlite3-fk-wal";
+      uri = "file:${dataDir}/mautrix-whatsapp.db?_txlock=immediate";
+    };
     homeserver.address = "http://localhost:8448";
     appservice = {
       hostname = "[::]";
       port = appservicePort;
-      database.type = "sqlite3";
-      database.uri = "${dataDir}/mautrix-whatsapp.db";
       id = "whatsapp";
       bot.username = "whatsappbot";
       bot.displayname = "WhatsApp Bridge Bot";
       as_token = "";
       hs_token = "";
-    };
-    bridge = {
       username_template = "whatsapp_{{.}}";
-      displayname_template = "{{if .BusinessName}}{{.BusinessName}}{{else if .PushName}}{{.PushName}}{{else}}{{.JID}}{{end}} (WA)";
-      double_puppet_server_map = {};
-      login_shared_secret_map = {};
+    };
+    network.displayname_template = "{{if .BusinessName}}{{.BusinessName}}{{else if .PushName}}{{.PushName}}{{else}}{{.JID}}{{end}} (WA)";
+    bridge = {
       command_prefix = "!wa";
       permissions."*" = "relay";
       relay.enabled = true;
+    };
+    double_puppet = {
+      servers = {};
+      secrets = {};
     };
     logging = {
       min_level = "info";
@@ -60,31 +64,32 @@ in {
         instead of this world-readable attribute set.
       '';
       example = {
+        database = {
+          type = "postgres";
+          uri = "postgresql:///mautrix_whatsapp?host=/run/postgresql";
+        };
         appservice = {
-          database = {
-            type = "postgres";
-            uri = "postgresql:///mautrix_whatsapp?host=/run/postgresql";
-          };
           id = "whatsapp";
           ephemeral_events = false;
         };
-        bridge = {
+        network = {
           history_sync = {
             request_full_sync = true;
           };
+        };
+        bridge = {
           private_chat_portal_meta = true;
-          mute_bridging = true;
-          encryption = {
-            allow = true;
-            default = true;
-            require = true;
-          };
-          provisioning = {
-            shared_secret = "disable";
-          };
           permissions = {
             "example.com" = "user";
           };
+        };
+        provisioning = {
+          shared_secret = "disable";
+        };
+        encryption = {
+          allow = true;
+          default = true;
+          require = true;
         };
       };
     };
