@@ -3,7 +3,9 @@
   liblsl,
   fetchFromGitHub,
   buildPythonPackage,
+  numpy,
   setuptools,
+  setuptools-scm,
   wheel,
 }:
 
@@ -20,16 +22,20 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
-    substituteInPlace pylsl/pylsl.py \
+    substituteInPlace src/pylsl/lib/__init__.py \
       --replace "def find_liblsl_libraries(verbose=False):" "$(echo -e "def find_liblsl_libraries(verbose=False):\n    yield '${liblsl}/lib/liblsl.so'")"
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
+    setuptools-scm
     wheel
   ];
 
-  buildImputs = [ liblsl ];
+  dependencies = [
+    liblsl
+    numpy
+  ];
 
   pythonImportsCheck = [ "pylsl" ];
 
