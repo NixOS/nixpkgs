@@ -110,7 +110,8 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper ${electron}/bin/electron $out/bin/equibop \
       --add-flags $out/opt/Equibop/resources/app.asar \
       ${lib.optionalString withTTS "--add-flags \"--enable-speech-dispatcher\""} \
-      ${lib.optionalString withMiddleClickScroll "--add-flags \"--enable-blink-features=MiddleClickAutoscroll\""}
+      ${lib.optionalString withMiddleClickScroll "--add-flags \"--enable-blink-features=MiddleClickAutoscroll\""} \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
   '';
 
   desktopItems = makeDesktopItem {

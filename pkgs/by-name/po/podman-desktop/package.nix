@@ -83,6 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     makeWrapper '${electron}/bin/electron' "$out/bin/podman-desktop" \
       --add-flags "$out/share/lib/podman-desktop/resources/app.asar" \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       --inherit-argv0
   '' + ''
 

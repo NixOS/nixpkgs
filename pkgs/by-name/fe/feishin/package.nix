@@ -115,6 +115,7 @@ buildNpmPackage {
       # https://github.com/electron/electron/issues/35153#issuecomment-1202718531
       makeWrapper ${lib.getExe electron} $out/bin/feishin \
         --add-flags $out/share/feishin/resources/app.asar \
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
         --set ELECTRON_FORCE_IS_PACKAGED=1 \
         --inherit-argv0
 
