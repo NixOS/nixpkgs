@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  fetchFromGitHub,
   fetchpatch,
   rustPlatform,
   meson,

@@ -7,7 +7,7 @@
   udev,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "leddy";
   version = "0.1.0-unstable-2024-10-15";
   src = fetchFromGitHub {

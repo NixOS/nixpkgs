@@ -43,7 +43,7 @@ let
       autoPatchelfHook,
       dpkg,
     }:
-    stdenv.mkDerivation rec {
+    stdenv.mkDerivation {
       pname = "libpicoipp";
       inherit (sources.libpicoipp) version;
       src = fetchurl { inherit (sources.libpicoipp) url sha256; };

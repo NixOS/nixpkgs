@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  fetchpatch2,
   appstream-glib,
   cargo,
   desktop-file-utils,

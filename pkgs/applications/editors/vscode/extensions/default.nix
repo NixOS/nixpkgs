@@ -3902,6 +3902,8 @@ let
         };
       };
 
+      oops418.nix-env-picker = callPackage ./oops418.nix-env-picker { };
+
       phind.phind = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "phind";

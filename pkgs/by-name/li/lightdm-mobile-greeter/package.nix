@@ -10,7 +10,7 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "lightdm-mobile-greeter";
   version = "2022-10-30";
 

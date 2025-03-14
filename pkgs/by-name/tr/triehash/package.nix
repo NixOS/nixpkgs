@@ -5,7 +5,7 @@
   perlPackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "triehash";
   version = "0.3";
 

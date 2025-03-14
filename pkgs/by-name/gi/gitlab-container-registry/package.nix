@@ -2,7 +2,6 @@
   lib,
   buildGoModule,
   fetchFromGitLab,
-  fetchpatch,
 }:
 
 buildGoModule rec {

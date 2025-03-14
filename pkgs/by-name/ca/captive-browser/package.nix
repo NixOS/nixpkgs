@@ -5,7 +5,7 @@
   fetchpatch,
 }:
 
-buildGoModule rec {
+buildGoModule {
   pname = "captive-browser";
   version = "unstable-2021-08-01";
 
