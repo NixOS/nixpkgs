@@ -1315,7 +1315,7 @@ in {
     _module.args.package = pkgs.zigbee2mqtt_2;
   };
   zipline = handleTest ./zipline.nix {};
-  zoneminder = handleTest ./zoneminder.nix {};
+  zoneminder = runTest ./zoneminder.nix;
   zookeeper = runTest ./zookeeper.nix;
   zram-generator = runTest ./zram-generator.nix;
   zrepl = runTest ./zrepl.nix;
