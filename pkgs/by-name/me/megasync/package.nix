@@ -16,17 +16,9 @@
   libuv,
   libxcb,
   libzen,
-  mkDerivation,
   openssl,
   pkg-config,
-  qtbase,
-  qtdeclarative,
-  qtgraphicaleffects,
-  qttools,
-  qtquickcontrols,
-  qtquickcontrols2,
-  qtsvg,
-  qtx11extras,
+  libsForQt5,
   readline,
   sqlite,
   unzip,
@@ -35,7 +27,7 @@
   zlib,
   qt5,
 }:
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "megasync";
   version = "5.7.1.0";
 
@@ -63,8 +55,9 @@ mkDerivation rec {
     cmake
     libtool
     pkg-config
-    qttools
+    libsForQt5.qttools
     unzip
+    libsForQt5.wrapQtAppsHook
   ];
   buildInputs = [
     c-ares
@@ -79,13 +72,13 @@ mkDerivation rec {
     libxcb
     libzen
     openssl
-    qtbase
-    qtdeclarative
-    qtgraphicaleffects
-    qtquickcontrols
-    qtquickcontrols2
-    qtsvg
-    qtx11extras
+    libsForQt5.qtbase
+    libsForQt5.qtdeclarative
+    libsForQt5.qtgraphicaleffects
+    libsForQt5.qtquickcontrols
+    libsForQt5.qtquickcontrols2
+    libsForQt5.qtsvg
+    libsForQt5.qtx11extras
     readline
     sqlite
     wget
