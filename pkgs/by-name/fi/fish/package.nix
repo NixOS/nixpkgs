@@ -321,6 +321,12 @@ stdenv.mkDerivation (finalAttrs: {
   preCheck = ''
     export TERMINFO="${ncurses}/share/terminfo"
   '';
+  checkFlags = lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    # thread 'tests::string_escape::test_escape_random_url' panicked at src/tests/string_escape.rs:122:9:
+    # assertion `left == right` failed: Escaped and then unescaped string ... but got back a different string ...
+    # https://github.com/fish-shell/fish-shell/issues/11254
+    "--skip=tests::string_escape::test_escape_random_url"
+  ];
 
   nativeInstallCheckInputs = [
     versionCheckHook
