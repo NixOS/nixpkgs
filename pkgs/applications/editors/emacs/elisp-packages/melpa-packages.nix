@@ -1270,6 +1270,11 @@ let
         # https://github.com/duelinmarkers/insfactor.el/issues/7
         insfactor = addPackageRequires super.insfactor [ self.cider ];
 
+        iregister = super.iregister.overrideAttrs (old: {
+          recipe = "";
+          files = ''(:defaults (:exclude ".bump-version.el"))'';
+        });
+
         # https://github.com/wandersoncferreira/ivy-clojuredocs/issues/5
         ivy-clojuredocs = addPackageRequires super.ivy-clojuredocs [ self.parseedn ];
 
