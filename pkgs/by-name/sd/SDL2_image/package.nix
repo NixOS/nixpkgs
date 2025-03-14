@@ -23,11 +23,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "SDL2_image";
-  version = "2.8.4";
+  version = "2.8.5";
 
   src = fetchurl {
     url = "https://www.libsdl.org/projects/SDL_image/release/SDL2_image-${finalAttrs.version}.tar.gz";
-    hash = "sha256-WomgFCChkridvMX1JnRIGB1dzIHS9aFojLHqxvVX2mc=";
+    hash = "sha256-i8TFf0HiwNt/m3SbJT72zs3G8LaJ7L427pe1ARX/9kU=";
   };
 
   nativeBuildInputs = [
