@@ -481,7 +481,9 @@ buildStdenv.mkDerivation {
     (enableFeature enableDebugSymbols "debug-symbols")
   ]
   ++ lib.optionals enableDebugSymbols [ "--disable-strip" "--disable-install-strip" ]
-  ++ lib.optional enableOfficialBranding "--enable-official-branding"
+  # As of Firefox 137 (https://bugzilla.mozilla.org/show_bug.cgi?id=1943009),
+  # the --enable-official-branding flag overrides the --with-branding flag.
+  ++ lib.optional (enableOfficialBranding && branding == null) "--enable-official-branding"
   ++ lib.optional (branding != null) "--with-branding=${branding}"
   ++ extraConfigureFlags;
 
