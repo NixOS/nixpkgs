@@ -10,7 +10,7 @@ buildPythonPackage rec {
   pname = "mkdocs-simple-blog";
   version = "0.1.0"; # Update this with the correct version from the project
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "FernandoCelmer";
@@ -31,7 +31,7 @@ buildPythonPackage rec {
   ];
 
   # Disable tests if they're not included or need special setup
-  doCheck = false;
+  doCheck = true;
 
   pythonImportsCheck = [ "mkdocs_simple_blog" ];
 
