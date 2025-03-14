@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "rtslib-fb";
-  version = "2.2.0";
+  version = "2.2.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "open-iscsi";
     repo = "rtslib-fb";
     tag = "v${version}";
-    hash = "sha256-lBYckQlnvIQ6lSENctYsMhzULi1MJAVUyF06Ul56LzA=";
+    hash = "sha256-FuXO/yGZBR+QRvB5s1tE77hjnisSfjjHSCPLvGJOYdM=";
   };
 
   build-system = [
