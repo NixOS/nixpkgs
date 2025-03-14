@@ -702,7 +702,7 @@ rec {
     in (concatStringsSep ".") (map escapeOptionPart parts);
   showFiles = files: concatStringsSep " and " (map (f: "`${f}'") files);
 
-  showDefs = defs: concatMapStrings (def:
+  showDefsWith = {defs, getMsg ? _: "" }: concatMapStrings (def:
     let
       # Pretty print the value for display, if successful
       prettyEval = builtins.tryEval
@@ -712,14 +712,17 @@ rec {
       lines = filter (v: ! isList v) (builtins.split "\n" prettyEval.value);
       # Only display the first 5 lines, and indent them for better visibility
       value = concatStringsSep "\n    " (take 5 lines ++ optional (length lines > 5) "...");
+      msg = getMsg def;
       result =
         # Don't print any value if evaluating the value strictly fails
         if ! prettyEval.success then ""
         # Put it on a new line if it consists of multiple
         else if length lines > 1 then ":\n    " + value
         else ": " + value;
-    in "\n- In `${def.file}'${result}"
+    in "\n- In `${def.file}'${result} - ${msg}"
   ) defs;
+
+  showDefs = defs: showDefsWith { inherit defs; };
 
   /**
     Pretty prints all option definition locations
