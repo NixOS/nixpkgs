@@ -4,6 +4,7 @@
   pkgs,
   lib,
   stdenv,
+  buildPackages,
   preLibcCrossHeaders,
   libxcrypt,
   substitute,
@@ -432,6 +433,7 @@ let
         libcxx = null;
         extraPackages = [ targetLlvmLibraries.compiler-rt ];
         extraBuildCommands = mkExtraBuildCommands cc;
+        isClang = true;
       };
 
       libcxxClang = wrapCCWith rec {
@@ -439,6 +441,7 @@ let
         libcxx = targetLlvmLibraries.libcxx;
         extraPackages = [ targetLlvmLibraries.compiler-rt ];
         extraBuildCommands = mkExtraBuildCommands cc;
+        isClang = true;
       };
 
       lld = callPackage ./lld {
@@ -511,6 +514,7 @@ let
               ''
             )
             + mkExtraBuildCommands cc;
+          isClang = true;
         }
         // lib.optionalAttrs (lib.versionAtLeast metadata.release_version "14") {
           nixSupport.cc-cflags =
@@ -566,6 +570,7 @@ let
               ''
             )
             + mkExtraBuildCommandsBasicRt cc;
+          isClang = true;
         }
         // lib.optionalAttrs (lib.versionAtLeast metadata.release_version "14") {
           nixSupport.cc-cflags =
@@ -602,6 +607,7 @@ let
               echo "-nostdlib++" >> $out/nix-support/cc-cflags
             ''
             + mkExtraBuildCommandsBasicRt cc;
+          isClang = true;
         }
         // lib.optionalAttrs (lib.versionAtLeast metadata.release_version "14") {
           nixSupport.cc-cflags =
@@ -628,6 +634,7 @@ let
               echo "-B${targetLlvmLibraries.compiler-rt-no-libc}/lib" >> $out/nix-support/cc-cflags
             ''
             + mkExtraBuildCommandsBasicRt cc;
+          isClang = true;
         }
         // lib.optionalAttrs (lib.versionAtLeast metadata.release_version "14") {
           nixSupport.cc-cflags =
@@ -652,6 +659,7 @@ let
               echo "-nostartfiles" >> $out/nix-support/cc-cflags
             ''
             + mkExtraBuildCommands0 cc;
+          isClang = true;
         }
         // lib.optionalAttrs (lib.versionAtLeast metadata.release_version "14") {
           nixSupport.cc-cflags =
@@ -671,6 +679,7 @@ let
           bintools = bintools';
           extraPackages = [ ];
           extraBuildCommands = mkExtraBuildCommands0 cc;
+          isClang = true;
         }
         // lib.optionalAttrs (
           lib.versionAtLeast metadata.release_version "15" && stdenv.targetPlatform.isWasm
@@ -799,7 +808,20 @@ let
           isFullBuild = true;
           # Use clang due to "gnu::naked" not working on aarch64.
           # Issue: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=77882
-          stdenv = overrideCC stdenv buildLlvmTools.clangNoLibcNoRt;
+          stdenv = overrideCC stdenv (
+            buildLlvmTools.clangNoLibcNoRt.override {
+              nixSupport.cc-cflags = lib.optional (
+                lib.versionAtLeast metadata.release_version "15" && stdenv.targetPlatform.isWasm
+              ) "-fno-exceptions";
+            }
+          );
+          cmake =
+            if stdenv.targetPlatform.libc == "llvm" then buildPackages.cmakeMinimal else buildPackages.cmake;
+          python3 =
+            if stdenv.targetPlatform.libc == "llvm" then
+              buildPackages.python3Minimal
+            else
+              buildPackages.python3;
         };
 
         libc = if stdenv.targetPlatform.libc == "llvm" then libraries.libc-full else libraries.libc-overlay;

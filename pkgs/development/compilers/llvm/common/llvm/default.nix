@@ -292,7 +292,12 @@ stdenv.mkDerivation (finalAttrs: {
     python3Packages.myst-parser
   ];
 
-  buildInputs = [ libxml2 libffi ]
+  buildInputs = [
+    (libxml2.override {
+      pythonSupport = stdenv.targetPlatform.libc != "llvm";
+    })
+    libffi
+  ]
     ++ optional enablePFM libpfm; # exegesis
 
   propagatedBuildInputs = (lib.optional (lib.versionAtLeast release_version "14" || stdenv.buildPlatform == stdenv.hostPlatform) ncurses)
