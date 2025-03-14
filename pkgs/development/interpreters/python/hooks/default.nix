@@ -3,7 +3,7 @@ with self;
 
 let
   inherit (python) pythonOnBuildForHost;
-  inherit (pkgs) runCommand;
+  inherit (pkgs) runCommand writeTextFile;
   pythonInterpreter = pythonOnBuildForHost.interpreter;
   pythonSitePackages = python.sitePackages;
   pythonCheckInterpreter = python.interpreter;
@@ -228,6 +228,29 @@ in
         bytecodeName = if isPy3k then "__pycache__" else "*.pyc";
       };
     } ./python-recompile-bytecode-hook.sh
+  ) { };
+
+  pythonRelaxBuildDepsHook = callPackage (
+    {
+      makePythonHook,
+      packaging,
+      tomlkit,
+    }:
+    makePythonHook
+      {
+        name = "python-relax-build-deps-hook";
+      }
+      (writeTextFile {
+        name = "python-relax-build-deps-hook.sh";
+        text = ''
+          _pythonRelaxBuildDepsHook() {
+            PYTHONPATH="${packaging}/${pythonSitePackages}:${tomlkit}/${pythonSitePackages}:$PYTHONPATH" \
+              ${pythonInterpreter} ${./python-relax-build-deps-hook.py}
+          }
+
+          preConfigureHooks+=(_pythonRelaxBuildDepsHook)
+        '';
+      })
   ) { };
 
   pythonRelaxDepsHook = callPackage (
