@@ -1290,7 +1290,7 @@ in {
   xfce = handleTest ./xfce.nix {};
   xfce-wayland = handleTest ./xfce-wayland.nix {};
   xmonad = handleTest ./xmonad.nix {};
-  xmonad-xdg-autostart = handleTest ./xmonad-xdg-autostart.nix {};
+  xmonad-xdg-autostart = runTest ./xmonad-xdg-autostart.nix;
   xpadneo = runTest ./xpadneo.nix;
   xrdp = runTest ./xrdp.nix;
   xrdp-with-audio-pulseaudio = runTest ./xrdp-with-audio-pulseaudio.nix;
