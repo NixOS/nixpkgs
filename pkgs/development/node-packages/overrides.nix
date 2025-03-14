@@ -249,30 +249,6 @@ final: prev: {
     name = "rush";
   };
 
-  thelounge-plugin-closepms = prev.thelounge-plugin-closepms.override {
-    nativeBuildInputs = [ pkgs.node-pre-gyp ];
-  };
-
-  thelounge-plugin-giphy = prev.thelounge-plugin-giphy.override {
-    nativeBuildInputs = [ pkgs.node-pre-gyp ];
-  };
-
-  thelounge-theme-flat-blue = prev.thelounge-theme-flat-blue.override {
-    nativeBuildInputs = [ pkgs.node-pre-gyp ];
-    # TODO: needed until upstream pins thelounge version 4.3.1+ (which fixes dependency on old sqlite3 and transitively very old node-gyp 3.x)
-    preRebuild = ''
-      rm -r node_modules/node-gyp
-    '';
-  };
-
-  thelounge-theme-flat-dark = prev.thelounge-theme-flat-dark.override {
-    nativeBuildInputs = [ pkgs.node-pre-gyp ];
-    # TODO: needed until upstream pins thelounge version 4.3.1+ (which fixes dependency on old sqlite3 and transitively very old node-gyp 3.x)
-    preRebuild = ''
-      rm -r node_modules/node-gyp
-    '';
-  };
-
   ts-node = prev.ts-node.override {
     nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
     postInstall = ''
