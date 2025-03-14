@@ -1292,7 +1292,7 @@ in {
   xmonad = handleTest ./xmonad.nix {};
   xmonad-xdg-autostart = handleTest ./xmonad-xdg-autostart.nix {};
   xpadneo = handleTest ./xpadneo.nix {};
-  xrdp = handleTest ./xrdp.nix {};
+  xrdp = runTest ./xrdp.nix;
   xrdp-with-audio-pulseaudio = runTest ./xrdp-with-audio-pulseaudio.nix;
   xscreensaver = handleTest ./xscreensaver.nix {};
   xss-lock = runTest ./xss-lock.nix;
