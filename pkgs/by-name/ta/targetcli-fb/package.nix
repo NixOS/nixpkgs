@@ -32,7 +32,7 @@ python3Packages.buildPythonApplication rec {
   buildInputs = [ glib ];
 
   dependencies = with python3Packages; [
-    configshell
+    configshell-fb
     rtslib-fb
     pygobject3
   ];

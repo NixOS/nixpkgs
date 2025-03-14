@@ -2650,7 +2650,7 @@ self: super: with self; {
 
   configparser = callPackage ../development/python-modules/configparser { };
 
-  configshell = callPackage ../development/python-modules/configshell { };
+  configshell-fb = callPackage ../development/python-modules/configshell-fb { };
 
   configupdater = callPackage ../development/python-modules/configupdater { };
 

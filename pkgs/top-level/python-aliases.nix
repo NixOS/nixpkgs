@@ -135,6 +135,7 @@ mapAliases ({
   command_runner = command-runner; # added 2024-03-06
   CommonMark = commonmark; # added 2023-02-1
   ConfigArgParse = configargparse; # added 2021-03-18
+  configshell = configshell-fb; # added 2025-03-14
   coronavirus = throw "coronavirus was removed, because the source is not providing the data anymore."; # added 2023-05-04
   covCore = throw "covCore was renamed to cov-core and subsequently removed since it has ben unmaintained since 2014"; # added 2024-05-20
   cov-core = throw "cov-core has been removed, it was archived and unmaintained since 2014"; # added 2024-05-21
