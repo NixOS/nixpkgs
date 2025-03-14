@@ -52,8 +52,8 @@ in
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         Type = "oneshot";
-        ExecStart = "${pkgs.python3.pkgs.rtslib}/bin/targetctl restore";
-        ExecStop = "${pkgs.python3.pkgs.rtslib}/bin/targetctl clear";
+        ExecStart = "${lib.getExe pkgs.python3Packages.rtslib-fb} restore";
+        ExecStop = "${lib.getExe pkgs.python3Packages.rtslib-fb} clear";
         RemainAfterExit = "yes";
       };
     };
