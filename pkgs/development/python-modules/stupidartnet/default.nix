@@ -12,7 +12,7 @@ buildPythonPackage rec {
   version = "1.6.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "cpvalente";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     hash = "sha256-prLIQn1vFp0Q8FR2WBaU1tr6eKJpEY1ul4ldd4c35ls=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
