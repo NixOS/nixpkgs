@@ -1301,7 +1301,7 @@ in {
   yabar = handleTest ./yabar.nix {};
   ydotool = handleTest ./ydotool.nix {};
   yggdrasil = handleTest ./yggdrasil.nix {};
-  your_spotify = handleTest ./your_spotify.nix {};
+  your_spotify = runTest ./your_spotify.nix;
   zammad = runTest ./zammad.nix;
   zenohd = runTest ./zenohd.nix;
   zeronet-conservancy = runTest ./zeronet-conservancy.nix;
