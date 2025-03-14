@@ -22517,6 +22517,12 @@
     githubId = 8668915;
     name = "Stephane Schitter";
   };
+  Squawkykaka = {
+    email = "squawkykaka@gmail.com";
+    github = "squawkykaka";
+    githubId = 100256401;
+    name = "Squawkykaka";
+  };
   staccato = {
     name = "staccato";
     email = "moveq@riseup.net";
