@@ -53,7 +53,6 @@ buildNpmPackage {
 
     makeWrapper '${electron}/bin/electron' "$out/bin/appium-inspector" \
       --add-flags "$out/share/appium-inspector/resources/app.asar" \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       --set NODE_ENV production
 
     install -m 444 -D 'app/common/renderer/assets/images/icon.png' \

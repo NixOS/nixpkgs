@@ -43,7 +43,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       ln -s $out/share/ddm/icon.png $out/share/icons/hicolor/512x512/apps/ddm.png
 
       makeWrapper ${lib.getExe electron} $out/bin/ddm \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
         --add-flags "$out/share/ddm"
 
       # Install externally-downloaded campaign packs & cube lists
