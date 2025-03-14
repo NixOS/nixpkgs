@@ -525,7 +525,7 @@ in {
             ref = "stable";
           };
           admin = {
-            package = pkgs.akkoma-frontends.admin-fe;
+            package = pkgs.akkoma-admin-fe;
             name = "admin-fe";
             ref = "stable";
           };
@@ -538,7 +538,7 @@ in {
               ref = "stable";
             };
             admin = {
-              package = pkgs.akkoma-frontends.admin-fe;
+              package = pkgs.akkoma-admin-fe;
               name = "admin-fe";
               ref = "stable";
             };
