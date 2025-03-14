@@ -3,6 +3,7 @@
   fetchFromGitHub,
   lib,
   makeWrapper,
+  installShellFiles,
   openssh,
 }:
 
@@ -19,7 +20,7 @@ buildGoModule rec {
 
   vendorHash = "sha256-zQlMtbXgrH83zrcIoOuFhb2tYCeQ1pz4UQUvRIsLMCE=";
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper installShellFiles ];
 
   ldflags = [
     "-X main.version=${version}"
@@ -30,6 +31,9 @@ buildGoModule rec {
     mkdir -p $lib
     cp -v ./data/*.nix $lib
     wrapProgram $out/bin/morph --prefix PATH : ${lib.makeBinPath [ openssh ]};
+    installShellCompletion --cmd morph \
+      --bash <($out/bin/morph --completion-script-bash) \
+      --zsh <($out/bin/morph --completion-script-zsh)
   '';
 
   outputs = [
