@@ -28,7 +28,8 @@ stdenv.mkDerivation rec {
     makeWrapper ${jdk}/bin/java $out/bin/maelstrom \
       --add-flags -Djava.awt.headless=true \
       --add-flags "-jar $out/lib/maelstrom.jar" \
-      --set PATH ${lib.makeBinPath runtimeDependencies}
+      --set PATH ${lib.makeBinPath runtimeDependencies} \
+      --suffix PATH : $PATH
 
     runHook postInstall
   '';
