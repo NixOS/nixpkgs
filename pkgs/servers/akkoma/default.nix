@@ -77,6 +77,7 @@ beamPackages.mixRelease rec {
   meta = {
     description = "ActivityPub microblogging server";
     homepage = "https://akkoma.social";
+    changelog = "https://akkoma.dev/AkkomaGang/akkoma/releases/tag/v${version}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ mvs ];
     platforms = lib.platforms.unix;
