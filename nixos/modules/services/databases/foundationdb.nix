@@ -333,12 +333,6 @@ in
       '';
     };
 
-    pidfile = lib.mkOption {
-      type = lib.types.path;
-      default = "/run/foundationdb.pid";
-      description = "Path to pidfile for fdbmonitor.";
-    };
-
     traceFormat = lib.mkOption {
       type = lib.types.enum [
         "xml"
@@ -389,7 +383,7 @@ in
       "d /etc/foundationdb 0755 ${cfg.user} ${cfg.group} - -"
       "d '${cfg.dataDir}' 0770 ${cfg.user} ${cfg.group} - -"
       "d '${cfg.logDir}' 0770 ${cfg.user} ${cfg.group} - -"
-      "F '${cfg.pidfile}' - ${cfg.user} ${cfg.group} - -"
+      "d /run/foundationdb 0770 ${cfg.user} ${cfg.group} - -"
     ];
 
     systemd.services.foundationdb = {
@@ -406,7 +400,7 @@ in
           rwpaths = [
             cfg.dataDir
             cfg.logDir
-            cfg.pidfile
+            "/run/foundationdb"
             "/etc/foundationdb"
           ] ++ cfg.extraReadWritePaths;
         in
@@ -416,9 +410,7 @@ in
           RestartSec = 5;
           User = cfg.user;
           Group = cfg.group;
-          PIDFile = "${cfg.pidfile}";
 
-          PermissionsStartOnly = true; # setup needs root perms
           TimeoutSec = 120; # give reasonable time to shut down
 
           # Security options
@@ -448,7 +440,7 @@ in
         fi
       '';
 
-      script = "exec fdbmonitor --lockfile ${cfg.pidfile} --conffile ${configFile}";
+      script = "exec fdbmonitor --lockfile /run/foundationdb/fdbmonitor.pid --conffile ${configFile}";
 
       postStart = ''
         if [ -e "${cfg.dataDir}/.first_startup" ]; then
