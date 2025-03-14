@@ -5,7 +5,7 @@
   ...
 }:
 let
-  nvidiaEnabled = lib.elem "nvidia" config.services.xserver.videoDrivers;
+  hasNvidiaVideoDriver = lib.elem "nvidia" config.services.xserver.videoDrivers;
   nvidia_x11 = cfg.package;
 
   cfg = config.hardware.nvidia;
@@ -325,7 +325,7 @@ in
       (lib.mkIf cfg.enabled {
         assertions = [
           {
-            assertion = !(nvidiaEnabled && cfg.datacenter.enable);
+            assertion = !(hasNvidiaVideoDriver && cfg.datacenter.enable);
             message = "You cannot configure both X11 and Data Center drivers at the same time.";
           }
           {
@@ -371,7 +371,7 @@ in
       })
 
       # X11
-      (lib.mkIf nvidiaEnabled {
+      (lib.mkIf hasNvidiaVideoDriver {
         assertions = [
           {
             assertion = primeEnabled -> pCfg.intelBusId == "" || pCfg.amdgpuBusId == "";
