@@ -19,7 +19,7 @@
   check,
   buildPackages,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "kmscon";
   version = "9.0.0-unstable-2025-01-09";
 

@@ -11,7 +11,7 @@
   gettext,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "gdmap";
   version = "1.2.0";
 

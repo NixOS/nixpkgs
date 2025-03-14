@@ -11,7 +11,7 @@
   jdupes,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation {
   pname = "moka-icon-theme";
   version = "unstable-2019-05-29";
 

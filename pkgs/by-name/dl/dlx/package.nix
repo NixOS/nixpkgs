@@ -4,7 +4,7 @@
   fetchzip,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "dlx";
   version = "2012-07-08";
 
