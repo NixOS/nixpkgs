@@ -9468,6 +9468,12 @@
     githubId = 49935860;
     name = "Henri Rosten";
   };
+  henrispriet = {
+    email = "henri.spriet@gmail.com";
+    github = "henrispriet";
+    githubId = 36509362;
+    name = "Henri Spriet";
+  };
   henrytill = {
     email = "henrytill@gmail.com";
     github = "henrytill";
@@ -16515,6 +16521,13 @@
     github = "natto1784";
     githubId = 56316606;
     name = "Amneesh Singh";
+  };
+  naufik = {
+    email = "naufal@naufik.net";
+    github = "naufik";
+    githubId = 8577904;
+    name = "Naufal Fikri";
+    keys = [ { fingerprint = "1575 D651 E31EC 6117A CF0AA C1A3B 8BBC A515 8835"; } ];
   };
   naxdy = {
     name = "Naxdy";
