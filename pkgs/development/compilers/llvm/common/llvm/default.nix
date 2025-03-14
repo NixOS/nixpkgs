@@ -48,9 +48,13 @@ let
   shortVersion = lib.concatStringsSep "." (lib.take 1 (lib.splitString "." release_version));
 
   pname = "llvm";
+in
+
+stdenv.mkDerivation (finalAttrs: {
+  inherit pname version;
 
   # TODO: simplify versionAtLeast condition for cmake and third-party via rebuild
-  src' = if monorepoSrc != null then
+  src = if monorepoSrc != null then
     runCommand "${pname}-src-${version}" { inherit (monorepoSrc) passthru; } (''
       mkdir -p "$out"
     '' + lib.optionalString (lib.versionAtLeast release_version "14") ''
@@ -63,12 +67,6 @@ let
       chmod u+w "$out/${pname}/tools"
       cp -r ${monorepoSrc}/polly "$out/${pname}/tools"
     '') else src;
-in
-
-stdenv.mkDerivation (finalAttrs: {
-  inherit pname version;
-
-  src = src';
 
   sourceRoot = "${finalAttrs.src.name}/${pname}";
 
