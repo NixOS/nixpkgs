@@ -9,7 +9,6 @@
 
   # dependencies
   httpx,
-  langchain-core,
   orjson,
   pydantic,
   requests,
