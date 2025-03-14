@@ -22,12 +22,12 @@ stdenv.mkDerivation rec {
   # To obtain the version you will need to run the following command:
   #
   # dpkg-deb -I ${odafileconverter.src} | grep Version
-  version = "25.11.0.0";
+  version = "25.12.0.0";
 
   src = fetchurl {
     # NB: this URL is not stable (i.e. the underlying file and the corresponding version will change over time)
-    url = "https://web.archive.org/web/20241212154957/https://www.opendesign.com/guestfiles/get?filename=ODAFileConverter_QT6_lnxX64_8.3dll_25.11.deb";
-    hash = "sha256-lykCOT9gmXZ3vGmak8mvrIMBEmGMJ/plmE3vkk9EjYo=";
+    url = "https://www.opendesign.com/guestfiles/get?filename=ODAFileConverter_QT6_lnxX64_8.3dll_25.12.deb";
+    hash = "sha256-bc5gFg7101GKqiKAx1w7DpoO24d3JpFccPKUUAfOrdw=";
   };
 
   buildInputs = [
