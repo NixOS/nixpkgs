@@ -6,6 +6,7 @@
   fetchFromGitHub,
   fetchpatch,
   python,
+  toPythonModule,
 
   # build-system
   libclang,
@@ -87,7 +88,7 @@ buildPythonPackage rec {
     gumbo
   ];
 
-  propagatedBuildInputs = [ mupdf-cxx ];
+  propagatedBuildInputs = [ (toPythonModule mupdf-cxx) ];
 
   env = {
     # force using system MuPDF (must be defined in environment and empty)
