@@ -1116,13 +1116,13 @@ in
   orgmode = prev.orgmode.overrideAttrs (oa: {
     # Patch in tree-sitter-orgmode dependency
     postPatch = ''
-      substituteInPlace lua/orgmode/utils/treesitter/install.lua \
+      substituteInPlace lua/orgmode/config/init.lua \
         --replace-fail \
-          "vim.treesitter.language.add('org')" \
-          "pcall(function() vim.treesitter.language.add('org', { path = '${final.tree-sitter-orgmode}/lib/lua/${final.tree-sitter-orgmode.lua.luaversion}/parser/org.so'}) end)"
-
-      substituteInPlace lua/orgmode/utils/treesitter/install.lua \
-        --replace-fail "if version_info.outdated then" "if false then"
+        "require('orgmode.utils.treesitter.install').install()" \
+        "pcall(function() vim.treesitter.language.add('org', { path = '${final.tree-sitter-orgmode}/lib/lua/${final.tree-sitter-orgmode.lua.luaversion}/parser/org.so'}) end)" \
+        --replace-fail \
+        "require('orgmode.utils.treesitter.install').reinstall()" \
+        "pcall(function() vim.treesitter.language.add('org', { path = '${final.tree-sitter-orgmode}/lib/lua/${final.tree-sitter-orgmode.lua.luaversion}/parser/org.so'}) end)"
     '';
   });
 
