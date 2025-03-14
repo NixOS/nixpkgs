@@ -89,7 +89,8 @@ stdenv.mkDerivation (finalAttrs: {
       --inherit-argv0 \
       --set ELECTRON_FORCE_IS_PACKAGED 1 \
       --add-flags --disable-gpu-compositing \
-      --add-flags $out/opt/heroic/resources/app.asar
+      --add-flags $out/opt/heroic/resources/app.asar \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
 
     install -D "flatpak/com.heroicgameslauncher.hgl.desktop" "$out/share/applications/com.heroicgameslauncher.hgl.desktop"
     install -D "src/frontend/assets/heroic-icon.svg" "$out/share/icons/hicolor/scalable/apps/com.heroicgameslauncher.hgl.svg"

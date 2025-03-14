@@ -97,6 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
 
       makeWrapper ${lib.getExe electron} $out/bin/voicevox \
         --add-flags $out/share/voicevox/resources/app.asar \
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
         --inherit-argv0
     ''}
 

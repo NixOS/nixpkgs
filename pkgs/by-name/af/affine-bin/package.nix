@@ -115,6 +115,7 @@ stdenvNoCC.mkDerivation (
             makeWrapper "${electron}/bin/electron" $out/bin/${binName} \
               --inherit-argv0 \
               --add-flags $out/lib/${binName}/resources/app.asar \
+              --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
               --add-flags ${lib.escapeShellArg commandLineArgs}
 
             runHook postInstall

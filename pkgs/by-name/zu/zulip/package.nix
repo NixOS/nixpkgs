@@ -50,6 +50,7 @@ buildNpmPackage rec {
 
     makeShellWrapper '${lib.getExe electron_32}' "$out/bin/zulip" \
       --add-flags "$out/share/lib/zulip/app.asar" \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-wayland-ime=true}}" \
       --inherit-argv0
 
     runHook postInstall
