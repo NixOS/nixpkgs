@@ -2443,8 +2443,6 @@ with pkgs;
 
   materialx = with python3Packages; toPythonApplication materialx;
 
-  megasync = libsForQt5.callPackage ../applications/misc/megasync { };
-
   # while building documentation meson may want to run binaries for host
   # which needs an emulator
   # example of an error which this fixes
@@ -5031,6 +5029,7 @@ with pkgs;
   stutter = haskell.lib.compose.justStaticExecutables haskellPackages.stutter;
 
   strongswanTNC = strongswan.override { enableTNC = true; };
+  strongswanTPM = strongswan.override { enableTPM2 = true; };
   strongswanNM  = strongswan.override { enableNetworkManager = true; };
 
   stylish-haskell = haskell.lib.compose.justStaticExecutables haskellPackages.stylish-haskell;
@@ -11934,8 +11933,6 @@ with pkgs;
   htop = callPackage ../tools/system/htop {
     inherit (darwin) IOKit;
   };
-
-  htop-vim = callPackage ../tools/system/htop/htop-vim.nix { };
 
   humility = callPackage ../development/tools/rust/humility {
     inherit (darwin.apple_sdk.frameworks) AppKit;
