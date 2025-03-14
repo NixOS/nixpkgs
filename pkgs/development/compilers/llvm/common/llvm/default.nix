@@ -505,15 +505,13 @@ stdenv.mkDerivation (finalAttrs: {
     # Some flags don't need to be repassed because LLVM already does so (like
     # CMAKE_BUILD_TYPE), others are irrelevant to the result.
     flagsForLlvmConfig = (if lib.versionOlder release_version "15" then [
-      "-DLLVM_INSTALL_CMAKE_DIR=${placeholder "dev"}/lib/cmake/llvm/"
+      (lib.cmakeFeature "LLVM_INSTALL_CMAKE_DIR" "${placeholder "dev"}/lib/cmake/llvm/")
     ] else [
-      "-DLLVM_INSTALL_PACKAGE_DIR=${placeholder "dev"}/lib/cmake/llvm"
+      (lib.cmakeFeature "LLVM_INSTALL_PACKAGE_DIR" "${placeholder "dev"}/lib/cmake/llvm")
     ]) ++ [
-      "-DLLVM_ENABLE_RTTI=ON"
-    ] ++ optionals enableSharedLibraries [
-      "-DLLVM_LINK_LLVM_DYLIB=ON"
-    ] ++ [
-      "-DLLVM_TABLEGEN=${buildLlvmTools.tblgen}/bin/llvm-tblgen"
+      (lib.cmakeBool "LLVM_ENABLE_RTTI" true)
+      (lib.cmakeBool "LLVM_LINK_LLVM_DYLIB" enableSharedLibraries)
+      (lib.cmakeFeature "LLVM_TABLEGEN" "${buildLlvmTools.tblgen}/bin/llvm-tblgen")
     ];
 
     triple =
@@ -523,68 +521,66 @@ stdenv.mkDerivation (finalAttrs: {
       else
         stdenv.hostPlatform.config;
   in flagsForLlvmConfig ++ [
-    "-DLLVM_INSTALL_UTILS=ON"  # Needed by rustc
-    "-DLLVM_BUILD_TESTS=${if finalAttrs.finalPackage.doCheck then "ON" else "OFF"}"
-    "-DLLVM_ENABLE_FFI=ON"
-    "-DLLVM_HOST_TRIPLE=${triple}"
-    "-DLLVM_DEFAULT_TARGET_TRIPLE=${triple}"
-    "-DLLVM_ENABLE_DUMP=ON"
+    (lib.cmakeBool "LLVM_INSTALL_UTILS" true) # Needed by rustc
+    (lib.cmakeBool "LLVM_BUILD_TESTS" finalAttrs.finalPackage.doCheck)
+    (lib.cmakeBool "LLVM_ENABLE_FFI" true)
+    (lib.cmakeFeature "LLVM_HOST_TRIPLE" triple)
+    (lib.cmakeFeature "LLVM_DEFAULT_TARGET_TRIPLE" triple)
+    (lib.cmakeBool "LLVM_ENABLE_DUMP" true)
     (lib.cmakeBool "LLVM_ENABLE_TERMINFO" enableTerminfo)
-  ] ++ optionals (!finalAttrs.finalPackage.doCheck) [
-    "-DLLVM_INCLUDE_TESTS=OFF"
+    (lib.cmakeBool "LLVM_INCLUDE_TESTS" finalAttrs.finalPackage.doCheck)
   ] ++ optionals stdenv.hostPlatform.isStatic [
     # Disables building of shared libs, -fPIC is still injected by cc-wrapper
-    "-DLLVM_ENABLE_PIC=OFF"
-    "-DCMAKE_SKIP_INSTALL_RPATH=ON"
-    "-DLLVM_BUILD_STATIC=ON"
+    (lib.cmakeBool "LLVM_ENABLE_PIC" false)
+    (lib.cmakeBool "CMAKE_SKIP_INSTALL_RPATH" true)
+    (lib.cmakeBool "LLVM_BUILD_STATIC" true)
     # libxml2 needs to be disabled because the LLVM build system ignores its .la
     # file and doesn't link zlib as well.
     # https://github.com/ClangBuiltLinux/tc-build/issues/150#issuecomment-845418812
-    "-DLLVM_ENABLE_LIBXML2=OFF"
+    (lib.cmakeBool "LLVM_ENABLE_LIBXML2" false)
   ] ++ optionals enableManpages [
-    "-DLLVM_BUILD_DOCS=ON"
-    "-DLLVM_ENABLE_SPHINX=ON"
-    "-DSPHINX_OUTPUT_MAN=ON"
-    "-DSPHINX_OUTPUT_HTML=OFF"
-    "-DSPHINX_WARNINGS_AS_ERRORS=OFF"
+    (lib.cmakeBool "LLVM_BUILD_DOCS" true)
+    (lib.cmakeBool "LLVM_ENABLE_SPHINX" true)
+    (lib.cmakeBool "SPHINX_OUTPUT_MAN" true)
+    (lib.cmakeBool "SPHINX_OUTPUT_HTML" false)
+    (lib.cmakeBool "SPHINX_WARNINGS_AS_ERRORS" false)
   ] ++ optionals (libbfd != null) [
     # LLVM depends on binutils only through libbfd/include/plugin-api.h, which
     # is meant to be a stable interface. Depend on that file directly rather
     # than through a build of BFD to break the dependency of clang on the target
     # triple. The result of this is that a single clang build can be used for
     # multiple targets.
-    "-DLLVM_BINUTILS_INCDIR=${libbfd.plugin-api-header}/include"
+    (lib.cmakeFeature "LLVM_BINUTILS_INCDIR" "${libbfd.plugin-api-header}/include")
   ] ++ optionals stdenv.hostPlatform.isDarwin [
-    "-DLLVM_ENABLE_LIBCXX=ON"
-    "-DCAN_TARGET_i386=false"
+    (lib.cmakeBool "LLVM_ENABLE_LIBCXX" true)
+    (lib.cmakeBool "CAN_TARGET_i386" false)
   ] ++ optionals ((stdenv.hostPlatform != stdenv.buildPlatform) && !(stdenv.buildPlatform.canExecute stdenv.hostPlatform)) [
-    "-DCMAKE_CROSSCOMPILING=True"
+    (lib.cmakeBool "CMAKE_CROSSCOMPILING" true)
     (
       let
         nativeCC = pkgsBuildBuild.targetPackages.stdenv.cc;
         nativeBintools = nativeCC.bintools.bintools;
         nativeToolchainFlags = [
-          "-DCMAKE_C_COMPILER=${nativeCC}/bin/${nativeCC.targetPrefix}cc"
-          "-DCMAKE_CXX_COMPILER=${nativeCC}/bin/${nativeCC.targetPrefix}c++"
-          "-DCMAKE_AR=${nativeBintools}/bin/${nativeBintools.targetPrefix}ar"
-          "-DCMAKE_STRIP=${nativeBintools}/bin/${nativeBintools.targetPrefix}strip"
-          "-DCMAKE_RANLIB=${nativeBintools}/bin/${nativeBintools.targetPrefix}ranlib"
+          (lib.cmakeFeature "CMAKE_C_COMPILER" "${nativeCC}/bin/${nativeCC.targetPrefix}cc")
+          (lib.cmakeFeature "CMAKE_CXX_COMPILER" "${nativeCC}/bin/${nativeCC.targetPrefix}c++")
+          (lib.cmakeFeature "CMAKE_AR" "${nativeBintools}/bin/${nativeBintools.targetPrefix}ar")
+          (lib.cmakeFeature "CMAKE_STRIP" "${nativeBintools}/bin/${nativeBintools.targetPrefix}strip")
+          (lib.cmakeFeature "CMAKE_RANLIB" "${nativeBintools}/bin/${nativeBintools.targetPrefix}ranlib")
         ];
         # We need to repass the custom GNUInstallDirs values, otherwise CMake
         # will choose them for us, leading to wrong results in llvm-config-native
         nativeInstallFlags = [
-          "-DCMAKE_INSTALL_PREFIX=${placeholder "out"}"
-          "-DCMAKE_INSTALL_BINDIR=${placeholder "out"}/bin"
-          "-DCMAKE_INSTALL_INCLUDEDIR=${placeholder "dev"}/include"
-          "-DCMAKE_INSTALL_LIBDIR=${placeholder "lib"}/lib"
-          "-DCMAKE_INSTALL_LIBEXECDIR=${placeholder "lib"}/libexec"
+          (lib.cmakeFeature "CMAKE_INSTALL_PREFIX" (placeholder "out"))
+          (lib.cmakeFeature "CMAKE_INSTALL_BINDIR" "${placeholder "out"}/bin")
+          (lib.cmakeFeature "CMAKE_INSTALL_INCLUDEDIR" "${placeholder "dev"}/include")
+          (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "${placeholder "lib"}/lib")
+          (lib.cmakeFeature "CMAKE_INSTALL_LIBEXECDIR" "${placeholder "lib"}/libexec")
         ];
-      in "-DCROSS_TOOLCHAIN_FLAGS_NATIVE:list="
-      + lib.concatStringsSep ";" (lib.concatLists [
+      in lib.cmakeOptionType "list" "CROSS_TOOLCHAIN_FLAGS_NATIVE" (lib.concatStringsSep ";" (lib.concatLists [
         flagsForLlvmConfig
         nativeToolchainFlags
         nativeInstallFlags
-      ])
+      ]))
     )
   ] ++ devExtraCmakeFlags;
 
