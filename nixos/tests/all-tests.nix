@@ -1296,7 +1296,7 @@ in {
   xrdp-with-audio-pulseaudio = handleTest ./xrdp-with-audio-pulseaudio.nix {};
   xscreensaver = handleTest ./xscreensaver.nix {};
   xss-lock = handleTest ./xss-lock.nix {};
-  xterm = handleTest ./xterm.nix {};
+  xterm = runTest ./xterm.nix;
   xxh = runTest ./xxh.nix;
   yabar = runTest ./yabar.nix;
   ydotool = handleTest ./ydotool.nix {};
