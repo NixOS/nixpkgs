@@ -9,6 +9,7 @@
 , makeDesktopItem
 , darwin
 , nix-update-script
+, podman
 }:
 
 let
@@ -51,6 +52,10 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.autoSignDarwinBinariesHook
+  ];
+
+  buildInputs = [
+    podman
   ];
 
   buildPhase = ''
