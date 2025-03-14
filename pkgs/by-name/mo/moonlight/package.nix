@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "moonlight";
-  version = "1.3.9";
+  version = "1.3.10";
 
   src = fetchFromGitHub {
     owner = "moonlight-mod";
     repo = "moonlight";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WhPQ7JYfE8RBhDknBunKdW1VBxrklb3UGnMgk5LFVFA=";
+    hash = "sha256-wgjn0YLCPC60loqRjB3mLSAVfj5LUfN1n9Hyu4npPH0=";
   };
 
   nativeBuildInputs = [
@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
   pnpmDeps = pnpm_9.fetchDeps {
     inherit (finalAttrs) pname version src;
 
-    hash = "sha256-KZFHcW/OVjTDXZltxPYGuO+NWjuD5o6HE/E9JQZmrG8=";
+    hash = "sha256-jPNzkC89M6ILZllTJTWQIegRht1zCRZt9YVwy3eQ7Es=";
   };
 
   buildPhase = ''
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
   meta = with lib; {
     description = "Discord client modification, focused on enhancing user and developer experience";
