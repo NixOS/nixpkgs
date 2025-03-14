@@ -19,24 +19,35 @@ assert systemdSupport -> stdenv.hostPlatform.isLinux;
 
 stdenv.mkDerivation rec {
   pname = "htop-vim";
-  version = "unstable-2023-02-16";
+  version = "3.4.0";
 
   src = fetchFromGitHub {
-    owner = "KoffeinFlummi";
+    owner = "htop-dev";
     repo = pname;
-    rev = "b2b58f8f152343b70c33b79ba51a298024278621";
-    hash = "sha256-ZfdBAlnjoy8g6xwrR/i2+dGldMOfLlX6DRlNqB8pkGM=";
+    rev = version;
+    hash = "sha256-4M2Kzy/tTpIZzpyubnXWywQh7Np5InT4sYkVG2v6wWs";
   };
 
   patches = [
-    # See https://github.com/htop-dev/htop/pull/1412
-    # Remove when updating to 3.4.0
     (fetchpatch2 {
-      name = "htop-resolve-configuration-path.patch";
-      url = "https://github.com/htop-dev/htop/commit/0dac8e7d38ec3aeae901a987717b5177986197e4.patch";
-      hash = "sha256-Er1d/yV1fioYfEmXNlLO5ayAyXkyy+IaGSx1KWXvlv0=";
+      name = "vim-keybindings.patch";
+      url = "https://aur.archlinux.org/cgit/aur.git/plain/vim-keybindings.patch?h=htop-vim&id=d10f022b3ca1207200187a55f5b116a5bd8224f7";
+      hash = "sha256-fZDTA2dCOmXxUYD6Wm41q7TxL7fgQOj8a/8yJC7Zags=";
     })
   ];
+
+  # upstream removed pkg-config support and uses dlopen now
+  postPatch =
+    let
+      libnlPath = lib.getLib libnl;
+    in
+    lib.optionalString stdenv.hostPlatform.isLinux ''
+      substituteInPlace configure.ac \
+        --replace-fail /usr/include/libnl3 ${lib.getDev libnl}/include/libnl3
+      substituteInPlace linux/LibNl.c \
+        --replace-fail libnl-3.so ${libnlPath}/lib/libnl-3.so \
+        --replace-fail libnl-genl-3.so ${libnlPath}/lib/libnl-genl-3.so
+    '';
 
   nativeBuildInputs = [ autoreconfHook ] ++ lib.optional stdenv.hostPlatform.isLinux pkg-config;
 
@@ -73,7 +84,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Interactive process viewer, with vim-style keybindings";
-    homepage = "https://github.com/KoffeinFlummi/htop-vim";
+    homepage = "https://aur.archlinux.org/packages/htop-vim";
     license = licenses.gpl2Only;
     platforms = platforms.all;
     maintainers = with maintainers; [ thiagokokada ];
