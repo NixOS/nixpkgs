@@ -11281,6 +11281,12 @@
       { fingerprint = "816D 23F5 E672 EC58 7674  4A73 197F 9A63 2D13 9E30"; }
     ];
   };
+  j-mendez = {
+    email = "jeff@a11ywatch.com";
+    github = "j-mendez";
+    githubId = 8095978;
+    name = "j-mendez";
+  };
   jmendyk = {
     email = "jakub@ndyk.me";
     github = "JMendyk";
