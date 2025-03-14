@@ -155,8 +155,7 @@ let
 
     preFixup = ''
       makeWrapper "$out/libexec/electron/electron" $out/bin/electron \
-        "''${gappsWrapperArgs[@]}" \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
+        "''${gappsWrapperArgs[@]}"
     '';
 
     postFixup = ''
