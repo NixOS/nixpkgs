@@ -383,6 +383,14 @@ let
 
   intermediatesDir = "share/haskell/${ghc.version}/${pname}-${version}/dist";
 
+  # On old ghcjs, the jsexe directories are the output but on the js backend they seem to be treated as intermediates
+  jsexe = rec {
+    shouldCompile = isGhcjs;
+    shouldAdd = stdenv.hostPlatform.isGhcjs && isExecutable;
+    shouldCopy = shouldAdd && !doInstallIntermediates;
+    shouldSymlink = shouldAdd && doInstallIntermediates;
+  };
+
   # This is a script suitable for --test-wrapper of Setup.hs' test command
   # (https://cabal.readthedocs.io/en/3.12/setup-commands.html#cmdoption-runhaskell-Setup.hs-test-test-wrapper).
   # We use it to set some environment variables that the test suite may need,
@@ -665,7 +673,8 @@ stdenv.mkDerivation ({
       # delete confdir if there are no libraries
       find $packageConfDir -maxdepth 0 -empty -delete;
     ''}
-    ${optionalString isGhcjs ''
+
+    ${optionalString jsexe.shouldCompile ''
       for exeDir in "${binDir}/"*.jsexe; do
         exe="''${exeDir%.jsexe}"
         printWords '#!${nodejs}/bin/node' > "$exe"
@@ -674,7 +683,17 @@ stdenv.mkDerivation ({
         chmod +x "$exe"
       done
     ''}
+
     ${optionalString doCoverage "mkdir -p $out/share && cp -r dist/hpc $out/share"}
+
+    ${optionalString jsexe.shouldCopy ''
+      if [ -d ${binDir} ]; then
+        for exeDir in dist/build/*; do
+          exe=$(basename $exeDir)
+          cp -r $exeDir/$exe.jsexe ${binDir}
+        done
+      fi
+    ''}
 
     ${optionalString enableSeparateDocOutput ''
     for x in ${docdir "$doc"}"/html/src/"*.html; do
@@ -694,6 +713,15 @@ stdenv.mkDerivation ({
     mkdir -p "$installIntermediatesDir"
     cp -r dist/build "$installIntermediatesDir"
     runHook postInstallIntermediates
+
+    ${optionalString jsexe.shouldSymlink ''
+      if [ -d ${binDir} ]; then
+        for exeDir in $installIntermediatesDir/build/*; do
+          exe=$(basename $exeDir)
+          (cd ${binDir} && ln -s $exeDir/$exe.jsexe)
+        done
+      fi
+    ''}
   '';
 
   passthru = passthru // rec {
