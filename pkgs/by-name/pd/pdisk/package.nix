@@ -5,18 +5,16 @@
   fetchpatch,
   installShellFiles,
   libbsd,
-  CoreFoundation,
-  IOKit,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pdisk";
-  version = "0.9";
+  version = "0.10";
 
   src = fetchFromGitHub {
     owner = "apple-oss-distributions";
-    repo = pname;
-    rev = "${pname}-${lib.versions.minor version}";
+    repo = "pdisk";
+    tag = "pdisk-${lib.versions.minor finalAttrs.version}";
     hash = "sha256-+gBgnk/1juEHE0nXaz7laUaH7sxrX5SzsLGr0PHsdHs=";
   };
 
@@ -41,30 +39,30 @@ stdenv.mkDerivation rec {
       url = "https://aur.archlinux.org/cgit/aur.git/plain/linux_strerror.patch?h=pdisk&id=d0c930ea8bcac008bbd0ade1811133a625caea54";
       sha256 = "sha256-HGJIS+vTn6456KtaETutIgTPPBm2C9OHf1anG8yaJPo=";
     })
+
+    # Fix missing includes on Linux
+    ./cmdline.patch
   ];
 
   postPatch =
     ''
       substituteInPlace makefile \
-        --replace 'cc' '${stdenv.cc.targetPrefix}cc'
+        --replace-fail 'cc' '${stdenv.cc.targetPrefix}cc'
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       substituteInPlace makefile \
-        --replace '-lbsd' '-framework CoreFoundation -framework IOKit'
+        --replace-fail '-lbsd' '-framework CoreFoundation -framework IOKit'
     '';
+
+  strictDeps = true;
 
   nativeBuildInputs = [
     installShellFiles
   ];
 
-  buildInputs =
-    lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      libbsd
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
-      CoreFoundation
-      IOKit
-    ];
+  buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    libbsd
+  ];
 
   env.NIX_CFLAGS_COMPILE = "-D_GNU_SOURCE";
 
@@ -73,8 +71,9 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    install -Dm755 cvt_pt $out/bin/cvt_pt
-    install -Dm755 pdisk $out/bin/pdisk
+    for exe in pdisk cvt_pt; do
+      install -Dm755 -t $out/bin $exe
+    done
 
     installManPage pdisk.8
     install -Dm644 pdisk.html $out/share/doc/pdisk/pdisk.html
@@ -82,14 +81,15 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Low-level Apple partition table editor for Linux, OSS Apple version";
     homepage = "https://github.com/apple-oss-distributions/pdisk";
-    license = with licenses; [
+    license = with lib.licenses; [
       hpnd # original license statements seems to match this (in files that are shared with mac-fdisk)
       apple-psl10 # new files
     ];
-    maintainers = with maintainers; [ OPNA2608 ];
-    platforms = platforms.unix;
+    mainProgram = "pdisk";
+    maintainers = with lib.maintainers; [ OPNA2608 ];
+    platforms = lib.platforms.unix;
   };
-}
+})
