@@ -7,11 +7,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "anakron";
-  version = "0.3.0";
+  version = "0.3.1";
 
   src = fetchzip {
     url = "https://github.com/molarmanful/ANAKRON/releases/download/v${version}/ANAKRON-release_v${version}.zip";
-    hash = "sha256-46sIPB0ox6atw+eic8JhssS3Y6qa+WbJQ3RX95BdYb4=";
+    hash = "sha256-YggeGSFc+NoDUZjV/cEhQGUR278f97X+WpcDLY66iqg";
   };
 
   nativeBuildInputs = [ xorg.mkfontscale ];
@@ -20,9 +20,9 @@ stdenvNoCC.mkDerivation rec {
     runHook preInstall
 
     d="$out/share/fonts/misc"
-    find .  \( -name '*.bdf' -o -name '*.otb' -o -name '*.pcf' \) -exec install -m 644 -Dt $d {} \;
-    find . -name '*.psfu' -exec install -m 644 -Dt $out/share/consolefonts {} \;
-    find . -name '*.ttf' -exec install -m 644 -Dt $out/share/fonts/truetype {} \;
+    install -D -m 644 *.{bdf,otb,pcf} -t "$d"
+    install -D -m 644 *.psfu -t "$out/share/consolefonts"
+    install -Dm644 *.ttf -t $out/share/fonts/truetype
 
     # create fonts.dir so NixOS xorg module adds to fp
     mkfontdir "$d"
