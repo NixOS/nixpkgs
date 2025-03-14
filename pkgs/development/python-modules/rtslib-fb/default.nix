@@ -32,11 +32,12 @@ buildPythonPackage rec {
     pygobject3
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python object API for managing the Linux LIO kernel target";
     mainProgram = "targetctl";
     homepage = "https://github.com/open-iscsi/rtslib-fb";
-    license = licenses.asl20;
-    platforms = platforms.linux;
+    changelog = "https://github.com/open-iscsi/rtslib-fb/releases/tag/v${version}";
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.linux;
   };
 }
