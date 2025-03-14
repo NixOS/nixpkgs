@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
 
   # Help vulkan-loader find the validation layers
   setupHook = writeText "setup-hook" ''
-    addToSearchPath XDG_DATA_DIRS @out@/share
+    appendToSearchPath XDG_DATA_DIRS @out@/share
   '';
 
   # Tests are not for gpu-less and headless environments

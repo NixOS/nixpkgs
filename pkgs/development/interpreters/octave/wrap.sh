@@ -101,8 +101,8 @@ buildOctavePath() {
     program_PATH=
     octavePathsSeen["$out"]=1
     octavePathsSeen["@octave@"]=1
-    addToSearchPath program_PATH "$out/bin"
-    addToSearchPath program_PATH "@octave@/bin"
+    appendToSearchPath program_PATH "$out/bin"
+    appendToSearchPath program_PATH "@octave@/bin"
     echo "program_PATH to change to is: $program_PATH"
     for path in $pathsToSearch; do
     echo "Recurse to propagated-build-input: $path"
@@ -118,9 +118,9 @@ _addToOctavePath() {
     # Stop if we've already visited this path.
     if [ -n "${octavePathsSeen[$dir]}" ]; then return; fi
     octavePathsSeen[$dir]=1
-    # addToSearchPath is defined in stdenv/generic/setup.sh. It has the effect
+    # appendToSearchPath is defined in stdenv/generic/setup.sh. It has the effect
     # of calling `export X=$dir/...:$X`.
-    addToSearchPath program_PATH $dir/bin
+    appendToSearchPath program_PATH $dir/bin
 
     # Inspect the propagated inputs (if they exist) and recur on them.
     local prop="$dir/nix-support/propagated-build-inputs"

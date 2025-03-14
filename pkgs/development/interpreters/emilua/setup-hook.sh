@@ -1,5 +1,5 @@
 addEmiluaPath() {
-  addToSearchPathWithCustomDelimiter : EMILUA_PATH $1/@sitePackages@
+  appendToSearchPathWithCustomDelimiter : EMILUA_PATH $1/@sitePackages@
 }
 
 toEmiluaPath() {

@@ -89,7 +89,7 @@ else # Only set up Qt once.
     appendToVar prePhases qtPreHook
 
     addQtModulePrefix() {
-        addToSearchPath QT_ADDITIONAL_PACKAGES_PREFIX_PATH $1
+        appendToSearchPath QT_ADDITIONAL_PACKAGES_PREFIX_PATH $1
     }
     addEnvHooks "$hostOffset" addQtModulePrefix
 

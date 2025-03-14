@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
   # Help vulkan-loader find the layer
   setupHook = writeText "setup-hook" ''
-    addToSearchPath XDG_DATA_DIRS @out@/share
+    appendToSearchPath XDG_DATA_DIRS @out@/share
   '';
 
   # Include absolute paths to layer libraries in their associated

@@ -8,12 +8,6 @@ fi
 
 path_backup="$PATH"
 
-# phase separation makes this look useless
-# shellcheck disable=SC2157
-if [ -n "@coreutils_bin@" ]; then
-    PATH="@coreutils_bin@/bin"
-fi
-
 source @out@/nix-support/utils.bash
 
 source @out@/nix-support/darwin-sdk-setup.bash

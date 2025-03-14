@@ -1,7 +1,7 @@
 addCMakeParams() {
     # NIXPKGS_CMAKE_PREFIX_PATH is like CMAKE_PREFIX_PATH except cmake
     # will not search it for programs
-    addToSearchPath NIXPKGS_CMAKE_PREFIX_PATH $1
+    appendToSearchPath NIXPKGS_CMAKE_PREFIX_PATH $1
 }
 
 fixCmakeFiles() {
@@ -155,22 +155,22 @@ makeCmakeFindLibs() {
     for flag in ${NIX_CFLAGS_COMPILE-} ${NIX_LDFLAGS-}; do
         if test -n "$isystem_seen" && test -d "$flag"; then
             isystem_seen=
-            addToSearchPath CMAKE_INCLUDE_PATH "${flag}"
+            appendToSearchPath CMAKE_INCLUDE_PATH "${flag}"
         elif test -n "$iframework_seen" && test -d "$flag"; then
             iframework_seen=
-            addToSearchPath CMAKE_FRAMEWORK_PATH "${flag}"
+            appendToSearchPath CMAKE_FRAMEWORK_PATH "${flag}"
         else
             isystem_seen=
             iframework_seen=
             case $flag in
             -I*)
-                addToSearchPath CMAKE_INCLUDE_PATH "${flag:2}"
+                appendToSearchPath CMAKE_INCLUDE_PATH "${flag:2}"
                 ;;
             -L*)
-                addToSearchPath CMAKE_LIBRARY_PATH "${flag:2}"
+                appendToSearchPath CMAKE_LIBRARY_PATH "${flag:2}"
                 ;;
             -F*)
-                addToSearchPath CMAKE_FRAMEWORK_PATH "${flag:2}"
+                appendToSearchPath CMAKE_FRAMEWORK_PATH "${flag:2}"
                 ;;
             -isystem)
                 isystem_seen=1

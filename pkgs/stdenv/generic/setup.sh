@@ -340,18 +340,40 @@ trap "exitHandler" EXIT
 # Helper functions.
 
 
-addToSearchPathWithCustomDelimiter() {
-    local delimiter="$1"
-    local varName="$2"
-    local dir="$3"
-    if [[ -d "$dir" && "${!varName:+${delimiter}${!varName}${delimiter}}" \
+prependToSearchPathWithCustomDelimiter() {
+    if (($# != 3)); then
+        nixErrorLog "wrong number of arguments (expected 3 but got $#)"
+        exit 1
+    fi
+    local -r delimiter="$1"
+    local -nr varName="$2"
+    local -r dir="$3"
+    if [[ -d "$dir" && "${varName:+${delimiter}${varName}${delimiter}}" \
           != *"${delimiter}${dir}${delimiter}"* ]]; then
-        export "${varName}=${!varName:+${!varName}${delimiter}}${dir}"
+        export "${!varName}=${dir}${varName:+${delimiter}${varName}}"
     fi
 }
 
-addToSearchPath() {
-    addToSearchPathWithCustomDelimiter ":" "$@"
+prependToSearchPath() {
+    prependToSearchPathWithCustomDelimiter ":" "$@"
+}
+
+appendToSearchPathWithCustomDelimiter() {
+    if (($# != 3)); then
+        nixErrorLog "wrong number of arguments (expected 3 but got $#)"
+        exit 1
+    fi
+    local -r delimiter="$1"
+    local -nr varName="$2"
+    local -r dir="$3"
+    if [[ -d "$dir" && "${varName:+${delimiter}${varName}${delimiter}}" \
+          != *"${delimiter}${dir}${delimiter}"* ]]; then
+        export "${!varName}=${varName:+${varName}${delimiter}}${dir}"
+    fi
+}
+
+appendToSearchPath() {
+    appendToSearchPathWithCustomDelimiter ":" "$@"
 }
 
 # Prepend elements to variable "$1", which may come from an attr.
@@ -607,13 +629,13 @@ PATH=
 HOST_PATH=
 for i in $initialPath; do
     if [ "$i" = / ]; then i=; fi
-    addToSearchPath PATH "$i/bin"
+    appendToSearchPath PATH "$i/bin"
 
     # For backward compatibility, we add initial path to HOST_PATH so
     # it can be used in auto patch-shebangs. Unfortunately this will
     # not work with cross compilation.
     if [ -z "${strictDeps-}" ]; then
-        addToSearchPath HOST_PATH "$i/bin"
+        appendToSearchPath HOST_PATH "$i/bin"
     fi
 done
 
@@ -732,8 +754,6 @@ findInputs() {
     esac
     unset -v varSlice
 
-    eval "$var"'+=("$pkg")'
-
     if ! [ -e "$pkg" ]; then
         echo "build input $pkg does not exist" >&2
         exit 1
@@ -796,6 +816,8 @@ findInputs() {
             done
         done
     done
+
+    eval "$var"'+=("$pkg")'
 }
 
 # The way we handle deps* and *Inputs works with structured attrs
@@ -804,16 +826,19 @@ findInputs() {
 
 # Make sure all are at least defined as empty
 : "${depsBuildBuild=}" "${depsBuildBuildPropagated=}"
-: "${nativeBuildInputs=}" "${propagatedNativeBuildInputs=}" "${defaultNativeBuildInputs=}"
+: "${defaultNativeBuildInputs=}" "${nativeBuildInputs=}" "${propagatedNativeBuildInputs=}"
 : "${depsBuildTarget=}" "${depsBuildTargetPropagated=}"
 : "${depsHostHost=}" "${depsHostHostPropagated=}"
-: "${buildInputs=}" "${propagatedBuildInputs=}" "${defaultBuildInputs=}"
+: "${defaultBuildInputs=}" "${buildInputs=}" "${propagatedBuildInputs=}"
 : "${depsTargetTarget=}" "${depsTargetTargetPropagated=}"
+
+# N.B. In both cases, default dependencies must be processed first, so
+# they are overriden by explicit ones.
 
 for pkg in ${depsBuildBuild[@]} ${depsBuildBuildPropagated[@]}; do
     findInputs "$pkg" -1 -1
 done
-for pkg in ${nativeBuildInputs[@]} ${propagatedNativeBuildInputs[@]}; do
+for pkg in ${defaultNativeBuildInputs[@]} ${nativeBuildInputs[@]} ${propagatedNativeBuildInputs[@]}; do
     findInputs "$pkg" -1  0
 done
 for pkg in ${depsBuildTarget[@]} ${depsBuildTargetPropagated[@]}; do
@@ -822,18 +847,11 @@ done
 for pkg in ${depsHostHost[@]} ${depsHostHostPropagated[@]}; do
     findInputs "$pkg"  0  0
 done
-for pkg in ${buildInputs[@]} ${propagatedBuildInputs[@]} ; do
+for pkg in ${defaultBuildInputs[@]} ${buildInputs[@]} ${propagatedBuildInputs[@]} ; do
     findInputs "$pkg"  0  1
 done
 for pkg in ${depsTargetTarget[@]} ${depsTargetTargetPropagated[@]}; do
     findInputs "$pkg"  1  1
-done
-# Default inputs must be processed last
-for pkg in ${defaultNativeBuildInputs[@]}; do
-    findInputs "$pkg" -1  0
-done
-for pkg in ${defaultBuildInputs[@]}; do
-    findInputs "$pkg"  0  1
 done
 
 # Add package to the future PATH and run setup hooks
@@ -858,15 +876,15 @@ activatePackage() {
     #
     # TODO(@Ericson2314): Don't special-case native compilation
     if [[ -z "${strictDeps-}" || "$hostOffset" -le -1 ]]; then
-        addToSearchPath _PATH "$pkg/bin"
+        prependToSearchPath _PATH "$pkg/bin"
     fi
 
     if (( hostOffset <= -1 )); then
-        addToSearchPath _XDG_DATA_DIRS "$pkg/share"
+        prependToSearchPath _XDG_DATA_DIRS "$pkg/share"
     fi
 
     if [[ "$hostOffset" -eq 0 && -d "$pkg/bin" ]]; then
-        addToSearchPath _HOST_PATH "$pkg/bin"
+        prependToSearchPath _HOST_PATH "$pkg/bin"
     fi
 
     if [[ -f "$pkg/nix-support/setup-hook" ]]; then

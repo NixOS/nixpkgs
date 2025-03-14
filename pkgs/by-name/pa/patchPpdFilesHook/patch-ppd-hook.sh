@@ -71,15 +71,15 @@ patchPpdFileCommands () {
     # * `/lib/cups/filter' before `/bin`
     # * add HOST_PATH at end, so we don't miss anything
     for path in $(getAllOutputNames); do
-        addToSearchPath cupspath "${!path}/lib/cups/filter"
-        addToSearchPath cupspath "${!path}/bin"
+        appendToSearchPath cupspath "${!path}/lib/cups/filter"
+        appendToSearchPath cupspath "${!path}/bin"
     done
     for path in ${pkgsHostTarget+"${pkgsHostTarget[@]}"}; do
-        addToSearchPath cupspath "$path/lib/cups/filter"
-        addToSearchPath cupspath "$path/bin"
+        appendToSearchPath cupspath "$path/lib/cups/filter"
+        appendToSearchPath cupspath "$path/bin"
     done
     while read -r -d : path; do
-        addToSearchPath cupspath "$path"
+        appendToSearchPath cupspath "$path"
     done  <<< "${HOST_PATH:+"${HOST_PATH}:"}"
 
     # create list of compressed ppd files

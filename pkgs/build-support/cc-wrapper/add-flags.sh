@@ -29,8 +29,8 @@ done
 
 # Arocc does not support "-B"
 if [[ -z "@isArocc@" ]]; then
-    # `-B@bintools@/bin' forces cc to use ld-wrapper.sh when calling ld.
-    NIX_CFLAGS_COMPILE_@suffixSalt@="-B@bintools@/bin/ $NIX_CFLAGS_COMPILE_@suffixSalt@"
+    # `-B@bintools_bin@/bin' forces cc to use ld-wrapper.sh when calling ld.
+    NIX_CFLAGS_COMPILE_@suffixSalt@="-B@bintools_bin@/bin/ $NIX_CFLAGS_COMPILE_@suffixSalt@"
 fi
 
 # Export and assign separately in order that a failing $(..) will fail
