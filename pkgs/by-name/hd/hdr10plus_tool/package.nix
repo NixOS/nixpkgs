@@ -4,6 +4,7 @@
   rustPlatform,
   pkg-config,
   fontconfig,
+  writableTmpDirAsHomeHook,
   nix-update-script,
 }:
 
@@ -25,11 +26,14 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [ fontconfig ];
 
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
+  preCheck = ''
+    export FONTCONFIG_FILE="${fontconfig.out}/etc/fonts/fonts.conf";
+  '';
+
   passthru = {
     updateScript = nix-update-script { };
   };
-
-  doCheck = false;
 
   meta = with lib; {
     description = "CLI utility to work with HDR10+ in HEVC files.";
