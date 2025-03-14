@@ -77,6 +77,7 @@ let
   };
   androidSdk = androidComposition.androidsdk;
   platformTools = androidComposition.platform-tools;
+  latestSdk = pkgs.lib.foldl' pkgs.lib.max 0 androidComposition.platformVersions;
   jdk = pkgs.jdk;
 in
 pkgs.mkShell rec {
@@ -122,8 +123,8 @@ pkgs.mkShell rec {
 
           packages=(
             "build-tools" "cmdline-tools" \
-            "platform-tools" "platforms;android-35" \
-            "system-images;android-35;google_apis;x86_64"
+            "platform-tools" "platforms;android-${toString latestSdk}" \
+            "system-images;android-${toString latestSdk};google_apis;x86_64"
           )
           ${pkgs.lib.optionalString emulatorSupported ''packages+=("emulator")''}
 
@@ -149,24 +150,17 @@ pkgs.mkShell rec {
           output="$(sdkmanager --list)"
           installed_packages_section=$(echo "''${output%%Available Packages*}" | awk 'NR>4 {print $1}')
 
-          excluded_packages=(
-            "platforms;android-23" "platforms;android-24" "platforms;android-25" "platforms;android-26" \
-            "platforms;android-27" "platforms;android-28" "platforms;android-29" "platforms;android-30" \
-            "platforms;android-31" "platforms;android-32" "platforms;android-33" "platforms;android-34" \
-            "sources;android-23" "sources;android-24" "sources;android-25" "sources;android-26" \
-            "sources;android-27" "sources;android-28" "sources;android-29" "sources;android-30" \
-            "sources;android-31" "sources;android-32" "sources;android-33" "sources;android-34" \
-            "system-images;android-28" \
-            "system-images;android-29" \
-            "system-images;android-30" \
-            "system-images;android-31" \
-            "system-images;android-32" \
-            "system-images;android-33" \
-            "ndk"
-          )
+          excluded_packages=(ndk)
+          for x in $(seq 1 ${toString latestSdk}); do
+            excluded_packages+=(
+              "platforms;android-$x"
+              "sources;android-$x"
+              "system-images;android-$x"
+            )
+          done
 
           for package in "''${excluded_packages[@]}"; do
-            if [[ $installed_packages_section =~ "$package" ]]; then
+            if [[ $installed_packages_section =~ ^"$package"$ ]]; then
               echo "$package package was installed, while it was excluded!"
               exit 1
             fi
@@ -190,7 +184,7 @@ pkgs.mkShell rec {
             mkdir -p $ANDROID_USER_HOME
 
             avdmanager delete avd -n testAVD || true
-            echo "" | avdmanager create avd --force --name testAVD --package 'system-images;android-35;google_apis;x86_64'
+            echo "" | avdmanager create avd --force --name testAVD --package 'system-images;android-${toString latestSdk};google_apis;x86_64'
             result=$(avdmanager list avd)
 
             if [[ ! $result =~ "Name: testAVD" ]]; then

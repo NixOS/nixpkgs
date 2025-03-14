@@ -10,6 +10,10 @@
   meta,
 }:
 
+let
+  # Coerces a string to an int.
+  coerceInt = val: if lib.isInt val then val else lib.toIntBase10 val;
+in
 {
   repoJson ? ./repo.json,
   repoXmls ? null,
@@ -76,7 +80,19 @@
   buildToolsVersions ? [ repo.latest.build-tools ],
   includeEmulator ? false,
   emulatorVersion ? repo.latest.emulator,
-  platformVersions ? [ repo.latest.platforms ],
+  minPlatformVersion ? null,
+  maxPlatformVersion ? coerceInt repo.latest.platforms,
+  platformVersions ?
+    if minPlatformVersion != null && maxPlatformVersion != null then
+      let
+        minPlatformVersionInt = coerceInt minPlatformVersion;
+        maxPlatformVersionInt = coerceInt maxPlatformVersion;
+      in
+      lib.range (lib.min minPlatformVersionInt maxPlatformVersionInt) (
+        lib.max minPlatformVersionInt maxPlatformVersionInt
+      )
+    else
+      map coerceInt [ repo.latest.platforms ],
   includeSources ? false,
   includeSystemImages ? false,
   systemImageTypes ? [
@@ -444,17 +460,19 @@ lib.recurseIntoAttrs rec {
     '';
   };
 
+  inherit platformVersions;
+
   platforms = map (
     version:
     deployAndroidPackage {
-      package = check-version allArchives.packages "platforms" version;
+      package = check-version allArchives.packages "platforms" (toString version);
     }
   ) platformVersions;
 
   sources = map (
     version:
     deployAndroidPackage {
-      package = check-version allArchives.packages "sources" version;
+      package = check-version allArchives.packages "sources" (toString version);
     }
   ) platformVersions;
 
@@ -473,10 +491,10 @@ lib.recurseIntoAttrs rec {
         # ```
         let
           availablePackages =
-            map (abiVersion: allArchives.system-images.${apiVersion}.${type}.${abiVersion})
+            map (abiVersion: allArchives.system-images.${toString apiVersion}.${type}.${abiVersion})
               (
                 builtins.filter (
-                  abiVersion: lib.hasAttrByPath [ apiVersion type abiVersion ] allArchives.system-images
+                  abiVersion: lib.hasAttrByPath [ (toString apiVersion) type abiVersion ] allArchives.system-images
                 ) abiVersions
               );
 
@@ -546,17 +564,22 @@ lib.recurseIntoAttrs rec {
   ndk-bundle = if ndk-bundles == [ ] then null else lib.head ndk-bundles;
 
   # Makes a Google API bundle.
-  google-apis = map (
-    version:
-    deployAndroidPackage {
-      package = (check-version allArchives "addons" version).google_apis;
-    }
-  ) (builtins.filter (platformVersion: lib.versionOlder platformVersion "26") platformVersions); # API level 26 and higher include Google APIs by default
+  google-apis =
+    map
+      (
+        version:
+        deployAndroidPackage {
+          package = (check-version allArchives "addons" (toString version)).google_apis;
+        }
+      )
+      (
+        builtins.filter (platformVersion: lib.versionOlder (toString platformVersion) "26") platformVersions
+      ); # API level 26 and higher include Google APIs by default
 
   google-tv-addons = map (
     version:
     deployAndroidPackage {
-      package = (check-version allArchives "addons" version).google_tv_addon;
+      package = (check-version allArchives "addons" (toString version)).google_tv_addon;
     }
   ) platformVersions;
 
