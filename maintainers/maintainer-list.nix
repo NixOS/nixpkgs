@@ -21417,6 +21417,12 @@
     githubId = 33031;
     name = "Greg Pfeil";
   };
+  semtexerror = {
+    email = "github@spampert.com";
+    github = "SemtexError";
+    githubId = 8776314;
+    name = "Robin";
+  };
   sengaya = {
     email = "tlo@sengaya.de";
     github = "sengaya";
