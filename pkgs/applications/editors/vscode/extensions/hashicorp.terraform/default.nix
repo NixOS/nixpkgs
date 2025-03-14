@@ -3,7 +3,7 @@
   vscode-utils,
   terraform-ls,
 }:
-vscode-utils.buildVscodeMarketplaceExtension rec {
+vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "terraform";
     publisher = "hashicorp";

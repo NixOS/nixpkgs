@@ -4,7 +4,7 @@
   fetchurl,
 }:
 
-buildDunePackage rec {
+buildDunePackage {
   pname = "unisim_archisec";
   version = "0.0.10";
 

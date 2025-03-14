@@ -33,7 +33,7 @@ let
     '';
   };
 in
-buildGoModule rec {
+buildGoModule {
   pname = "memos";
   inherit version src;
 

@@ -7,7 +7,7 @@
   gnugrep,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "vmware-modules";
   version = "workstation-17.6.1-unstable-2024-10-12-${kernel.version}";
 
