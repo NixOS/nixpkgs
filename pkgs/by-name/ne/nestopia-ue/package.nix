@@ -13,6 +13,7 @@
   libepoxy,
   makeWrapper,
   pkg-config,
+  libsamplerate,
   stdenv,
   unzip,
   wrapGAppsHook3,
@@ -21,13 +22,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nestopia";
-  version = "1.52.1";
+  version = "1.53.0";
 
   src = fetchFromGitHub {
     owner = "0ldsk00l";
     repo = "nestopia";
     rev = finalAttrs.version;
-    hash = "sha256-r8Z0Ejf5vWcdvxkUkUKJtipQIRoiwoRj0Bx06Gnxd08=";
+    hash = "sha256-C2uiC8zlleXQlThrRETJa9vu++mJy1ySJKAkgu5zuxc=";
   };
 
   buildInputs = [
@@ -41,6 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     libarchive
     libao
     xdg-utils
+    libsamplerate
   ];
 
   nativeBuildInputs = [
