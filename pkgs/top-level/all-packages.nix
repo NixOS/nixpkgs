@@ -932,8 +932,6 @@ with pkgs;
   };
 
   akkoma-admin-fe = callPackage ../by-name/ak/akkoma-admin-fe/package.nix {
-    nodejs = nodejs_18;
-    yarn = yarn.override { nodejs = nodejs_18; };
     python3 = python311;
   };
 
