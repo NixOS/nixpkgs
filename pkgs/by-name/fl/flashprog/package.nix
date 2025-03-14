@@ -1,6 +1,5 @@
 {
   fetchgit,
-  fetchpatch,
   gitUpdater,
   lib,
   libftdi1,

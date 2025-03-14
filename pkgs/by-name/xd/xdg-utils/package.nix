@@ -3,7 +3,6 @@
   stdenv,
   fetchurl,
   fetchFromGitLab,
-  fetchFromGitHub,
   runCommand,
   writeText,
   # docs deps

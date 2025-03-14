@@ -6,7 +6,7 @@
   libjpeg,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "libyuv";
   version = "1787"; # Defined in: include/libyuv/version.h
 

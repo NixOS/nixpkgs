@@ -1,6 +1,6 @@
 { lib, fetchFromGitLab, unstableGitUpdater, rustPlatform }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "kile-wl";
   version = "2.1-unstable-2023-07-23";
 

@@ -2,7 +2,6 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
-  fetchpatch,
   imagemagick,
   nix-update-script,
 }:

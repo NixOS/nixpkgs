@@ -7,7 +7,7 @@
   check,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "wwcd";
   version = "unstable-2022-02-05";
 

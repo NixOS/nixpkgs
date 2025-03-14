@@ -15,13 +15,13 @@ assert (!blas.isILP64) && (!lapack.isILP64);
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "R";
-  version = "4.4.2";
+  version = "4.4.3";
 
   src = let
     inherit (finalAttrs) pname version;
   in fetchurl {
     url = "https://cran.r-project.org/src/base/R-${lib.versions.major version}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-FXjNYD6NhmtYdD5J2L+ZxWnoEHm2pgzzPN973/64F+w=";
+    sha256 = "sha256-DZPSJEQt6iU8KwhvCI220NPP2bWSzVSW6MshQ+kPyeg=";
   };
 
   outputs = [ "out" "tex" ];

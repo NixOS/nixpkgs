@@ -1,7 +1,5 @@
 {
-  lib,
   buildPythonPackage,
-  fetchFromGitHub,
   hatchling,
   opentelemetry-api,
   opentelemetry-instrumentation,

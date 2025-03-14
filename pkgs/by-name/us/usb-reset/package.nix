@@ -5,7 +5,7 @@
   libusb1,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "usb-reset";
   # not tagged, but changelog has this with the date of the e9a9d6c commit
   # and no significant change occured between bumping the version in the Makefile and that

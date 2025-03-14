@@ -8,7 +8,7 @@
   libjpeg_original,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "jpegrescan";
   version = "unstable-2019-03-27";
 

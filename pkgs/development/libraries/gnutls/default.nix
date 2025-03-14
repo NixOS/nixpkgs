@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchurl
-, fetchpatch2
 , zlib
 , lzo
 , libtasn1

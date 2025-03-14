@@ -2451,6 +2451,12 @@
     githubId = 206242;
     name = "Andreas Wiese";
   };
+  awwpotato = {
+    email = "awwpotato@voidq.com";
+    github = "awwpotato";
+    githubId = 153149335;
+    name = "awwpotato";
+  };
   axertheaxe = {
     email = "axertheaxe@proton.me";
     github = "AxerTheAxe";
@@ -14310,6 +14316,12 @@
       }
     ];
   };
+  mahyarmirrashed = {
+    email = "mah.mirr@gmail.com";
+    github = "mahyarmirrashed";
+    githubId = 59240843;
+    name = "Mahyar Mirrashed";
+  };
   majesticmullet = {
     email = "hoccthomas@gmail.com.au";
     github = "MajesticMullet";
@@ -17706,6 +17718,12 @@
     githubId = 34910574;
     keys = [ { fingerprint = "D055 8A23 3947 B7A0 F966  B07F 0B41 0348 9833 7273"; } ];
   };
+  Oops418 = {
+    email = "oooopsxxx@gmail.com";
+    github = "Oops418";
+    name = "Oops418";
+    githubId = 93655215;
+  };
   oosquare = {
     name = "Justin Chen";
     email = "oosquare@outlook.com";
@@ -20488,6 +20506,12 @@
     github = "RossComputerGuy";
     githubId = 19699320;
     keys = [ { fingerprint = "FD5D F7A8 85BB 378A 0157  5356 B09C 4220 3566 9AF8"; } ];
+  };
+  RossSmyth = {
+    name = "Ross Smyth";
+    matrix = "@rosssmyth:matrix.org";
+    github = "RossSmyth";
+    githubId = 18294397;
   };
   rostan-t = {
     name = "Rostan Tabet";

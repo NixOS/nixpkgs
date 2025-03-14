@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "sarabun";
   version = "unstable-2018-08-24";
 

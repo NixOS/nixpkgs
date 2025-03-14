@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation {
   pname = "xkcd-font";
   version = "unstable-2017-08-24";
 

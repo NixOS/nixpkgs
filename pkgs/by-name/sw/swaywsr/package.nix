@@ -6,7 +6,7 @@
   python3,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "swaywsr";
   version = "1.3.0";
 
