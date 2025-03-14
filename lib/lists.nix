@@ -1820,6 +1820,9 @@ rec {
   /**
     Remove duplicate elements from the `list`. O(n^2) complexity.
 
+    :::{.note}
+    If the list contains only strings complexity can be reduced to O(n) by using [`lib.lists.uniqueStrings`](#function-library-lib.lists.uniqueStrings) instead.
+    :::
 
     # Inputs
 
@@ -1845,6 +1848,41 @@ rec {
     :::
   */
   unique = foldl' (acc: e: if elem e acc then acc else acc ++ [ e ]) [];
+
+
+  /**
+    Removes duplicate strings from the `list`. O(n) complexity.
+
+    :::{.note}
+    If the list not contains only strings it will fail.
+
+    In case of mixed types use [`lib.lists.unique`](#function-library-lib.lists.unique) instead.
+    :::
+
+    # Inputs
+
+    `list`
+
+    : List of strings
+
+    # Type
+
+    ```
+    uniqueStrings :: [ String ] -> [ String ]
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.lists.uniqueStrings` usage example
+
+    ```nix
+    uniqueStrings [ "foo" "bar" "foo" ]
+    => [ "foo" "bar" ]
+    ```
+
+    :::
+  */
+  uniqueStrings = list: builtins.attrNames (builtins.groupBy lib.id list);
 
   /**
     Check if list contains only unique elements. O(n^2) complexity.
