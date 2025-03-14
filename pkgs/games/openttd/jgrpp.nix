@@ -4,7 +4,7 @@ openttd.overrideAttrs (oldAttrs: rec {
   pname = "openttd-jgrpp";
   version = "0.64.1";
 
-  src = fetchFromGitHub rec {
+  src = fetchFromGitHub {
     owner = "JGRennison";
     repo = "OpenTTD-patches";
     rev = "jgrpp-${version}";

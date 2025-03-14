@@ -6,7 +6,7 @@ pkgs.haskell.packages.ghc92.override {
     self: super:
     let
       inherit (pkgs.haskell.lib.compose) justStaticExecutables overrideCabal doJailbreak;
-      elmPkgs = rec {
+      elmPkgs = {
         /*
           The elm-format expression is updated via a script in the https://github.com/avh4/elm-format repo:
           `package/nix/build.sh`

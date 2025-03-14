@@ -41,7 +41,7 @@
 , opencascade-override ? null
 }:
 let
-  wxGTK-prusa = wxGTK32.overrideAttrs (old: rec {
+  wxGTK-prusa = wxGTK32.overrideAttrs (old: {
     pname = "wxwidgets-prusa3d-patched";
     version = "3.2.0";
     configureFlags = old.configureFlags ++ [ "--disable-glcanvasegl" ];

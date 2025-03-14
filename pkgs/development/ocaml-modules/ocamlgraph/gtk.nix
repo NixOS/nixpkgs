@@ -6,7 +6,7 @@
   ...
 }:
 
-buildDunePackage rec {
+buildDunePackage {
   pname = "ocamlgraph_gtk";
   inherit (ocamlgraph) version src meta;
 
