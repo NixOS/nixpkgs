@@ -16258,6 +16258,7 @@ with pkgs;
   };
 
   minecraft = callPackage ../games/minecraft { };
+  minecraft-autoupdate = callPackage ../games/minecraft-autoupdate { };
 
   minecraftServers = import ../games/minecraft-servers { inherit callPackage lib javaPackages; };
   minecraft-server = minecraftServers.vanilla; # backwards compatibility
