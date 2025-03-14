@@ -298,6 +298,12 @@ in
             };
           }
           ```
+
+          Note that you should be careful about where you use the desync: by using it you no
+          longer have a single nixpkgs evaluation, and mix-and-matching packages could lead
+          to unexpected results.
+          Most of the time, you should likely use one full container for each desync, this
+          way each nixos evaluation will be with a consistent set of packages.
         '';
 
         type = lib.types.attrsOf (
