@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     repo = pname;
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "0drf8wwx0gcmi22jq2yyjy7ppxynfq172wqakchscm313j248fjr";
+    hash = "sha256-WTpEhBxhVKYhmwpzcQJ21vd7j5feCyyFiJU90DlHLjc=";
   };
 
   nativeBuildInputs = [
@@ -38,6 +38,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./install_path_fix.patch
+    ./0001-treewide-add-missing-includes.patch
   ];
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error=format-security";
@@ -47,6 +48,5 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/dfranx/SHADERed";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ Scriptkiddi ];
-    broken = true;
   };
 }
