@@ -922,7 +922,7 @@ with pkgs;
     type = "OPN";
   };
 
-  akkoma = callPackage ../servers/akkoma {
+  akkoma = callPackage ../by-name/ak/akkoma/package.nix {
     beamPackages = beam_nox.packages.erlang_26.extend (self: super: {
       elixir = self.elixir_1_16;
       rebar3 = self.rebar3WithPlugins {
