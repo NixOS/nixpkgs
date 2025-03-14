@@ -1289,7 +1289,7 @@ in {
   xautolock = handleTest ./xautolock.nix {};
   xfce = handleTest ./xfce.nix {};
   xfce-wayland = handleTest ./xfce-wayland.nix {};
-  xmonad = handleTest ./xmonad.nix {};
+  xmonad = runTest ./xmonad.nix;
   xmonad-xdg-autostart = runTest ./xmonad-xdg-autostart.nix;
   xpadneo = runTest ./xpadneo.nix;
   xrdp = runTest ./xrdp.nix;
