@@ -1,18 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, gradle
-, makeWrapper
-, jdk17
-, pakku
-, jre
-}:
-let 
+{ lib, stdenv, fetchFromGitHub, gradle, makeWrapper, jdk17, pakku, jre }:
+let
   pname = "pakku";
   version = "0.26.0";
-in 
 
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   inherit pname version;
 
   src = fetchFromGitHub {
@@ -30,7 +21,7 @@ stdenv.mkDerivation {
   };
 
   __darwinAllowLocalNetworking = true;
-  
+
   gradleFlags = [ "-Dfile.encoding=utf-8" ];
   gradleBuildTask = "jvmJar";
 
@@ -46,14 +37,13 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "A multiplatform modpack manager for Minecraft: Java Edition.";
+    description =
+      "A multiplatform modpack manager for Minecraft: Java Edition.";
     homepage = "https://github.com/juraj-hrivnak/Pakku";
-    
-    sourceProvenance = with sourceTypes; [
-      fromSource
-      binaryBytecode
-    ];
+
+    sourceProvenance = with sourceTypes; [ fromSource binaryBytecode ];
     license = licenses.eupl12;
+    mainProgram = "pakku";
     maintainers = [ maintainers.Squawkykaka ];
     platforms = platforms.all;
   };
