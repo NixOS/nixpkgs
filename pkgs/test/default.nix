@@ -201,6 +201,10 @@ with pkgs;
 
   auto-patchelf-hook = callPackage ./auto-patchelf-hook { };
 
+  makeSetupHook' = callPackages (../pkgs/by-name/ma + "/makeSetupHook'/tests.nix") { };
+
+  sourceGuard = pkgs.sourceGuard.passthru.tests;
+
   srcOnly = callPackage ../build-support/src-only/tests.nix { };
 
   systemd = callPackage ./systemd { };
