@@ -14741,7 +14741,7 @@ self: super: with self; {
     inherit (pkgs) libspatialindex;
   };
 
-  rtslib = callPackage ../development/python-modules/rtslib { };
+  rtslib-fb = callPackage ../development/python-modules/rtslib-fb { };
 
   rtsp-to-webrtc = callPackage ../development/python-modules/rtsp-to-webrtc { };
 
