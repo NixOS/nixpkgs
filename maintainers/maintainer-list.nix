@@ -11455,6 +11455,12 @@
     githubId = 3208498;
     name = "John Johnstone";
   };
+  johnletey = {
+    email = "j@letey.de";
+    github = "johnletey";
+    githubId = 62398724;
+    name = "John Letey";
+  };
   johnmh = {
     email = "johnmh@openblox.org";
     github = "JohnMH";
