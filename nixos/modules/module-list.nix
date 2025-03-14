@@ -1488,6 +1488,7 @@
   ./services/web-apps/dex.nix
   ./services/web-apps/discourse.nix
   ./services/web-apps/documize.nix
+  ./services/web-apps/docuseal.nix
   ./services/web-apps/dokuwiki.nix
   ./services/web-apps/dolibarr.nix
   ./services/web-apps/echoip.nix
