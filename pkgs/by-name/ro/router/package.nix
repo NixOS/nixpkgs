@@ -6,6 +6,9 @@
 , pkg-config
 , protobuf
 , elfutils
+, gitUpdater
+, testers
+, router
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -39,6 +42,14 @@ rustPlatform.buildRustPackage rec {
   cargoTestFlags = [
     "-- --skip=query_planner::tests::missing_typename_and_fragments_in_requires"
   ];
+
+  passthru = {
+    updateScript = gitUpdater {
+      ignoredVersions = "(alpha|beta|rc)";
+      rev-prefix = "v";
+    };
+    tests.version = testers.testVersion { package = router; };
+  };
 
   meta = with lib; {
     description = "Configurable, high-performance routing runtime for Apollo Federation";
