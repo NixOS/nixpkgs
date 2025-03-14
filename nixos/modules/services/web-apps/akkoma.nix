@@ -557,7 +557,7 @@ in {
         default = null;
         example = literalExpression ''
           {
-            "emoji/blobs.gg" = pkgs.akkoma-emoji.blobs_gg;
+            "emoji/blobs.gg" = pkgs.blobs_gg;
             "static/terms-of-service.html" = pkgs.writeText "terms-of-service.html" '''
               …
             ''';

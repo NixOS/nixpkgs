@@ -935,10 +935,6 @@ with pkgs;
     python3 = python311;
   };
 
-  akkoma-emoji = recurseIntoAttrs {
-    blobs_gg = callPackage ../servers/akkoma/emoji/blobs_gg.nix { };
-  };
-
   aegisub = callPackage ../by-name/ae/aegisub/package.nix ({
     luajit = luajit.override { enable52Compat = true; };
   } // (config.aegisub or {}));
