@@ -1298,7 +1298,7 @@ in {
   xss-lock = handleTest ./xss-lock.nix {};
   xterm = handleTest ./xterm.nix {};
   xxh = handleTest ./xxh.nix {};
-  yabar = handleTest ./yabar.nix {};
+  yabar = runTest ./yabar.nix;
   ydotool = handleTest ./ydotool.nix {};
   yggdrasil = runTest ./yggdrasil.nix;
   your_spotify = runTest ./your_spotify.nix;
