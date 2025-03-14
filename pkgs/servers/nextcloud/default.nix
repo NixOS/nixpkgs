@@ -60,8 +60,8 @@ let
 in
 {
   nextcloud29 = generic {
-    version = "29.0.12";
-    hash = "sha256-wCA1T/Ph0ghzcPcOBY/hcXE2NroPBzpRlK29/zwcr8Y=";
+    version = "29.0.13";
+    hash = "sha256-B3hipF/CzO/mSJA3MIYh8H3Gw2bK20/Wo1JbiRGaXb8=";
     packages = nextcloud29Packages;
   };
 
