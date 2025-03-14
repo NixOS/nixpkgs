@@ -1316,7 +1316,7 @@ in {
   };
   zipline = handleTest ./zipline.nix {};
   zoneminder = handleTest ./zoneminder.nix {};
-  zookeeper = handleTest ./zookeeper.nix {};
+  zookeeper = runTest ./zookeeper.nix;
   zram-generator = runTest ./zram-generator.nix;
   zrepl = runTest ./zrepl.nix;
   zsh-history = runTest ./zsh-history.nix;
