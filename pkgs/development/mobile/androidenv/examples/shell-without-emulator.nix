@@ -5,12 +5,12 @@
   # This example pins nixpkgs: https://nix.dev/tutorials/first-steps/towards-reproducibility-pinning-nixpkgs.html
   /*
     nixpkgsSource ? (builtins.fetchTarball {
-    name = "nixpkgs-20.09";
-    url = "https://github.com/NixOS/nixpkgs/archive/20.09.tar.gz";
-    sha256 = "1wg61h4gndm3vcprdcg7rc4s1v3jkm5xd7lw8r2f67w502y94gcy";
+      name = "nixpkgs-20.09";
+      url = "https://github.com/NixOS/nixpkgs/archive/20.09.tar.gz";
+      sha256 = "1wg61h4gndm3vcprdcg7rc4s1v3jkm5xd7lw8r2f67w502y94gcy";
     }),
     pkgs ? import nixpkgsSource {
-    config.allowUnfree = true;
+      config.allowUnfree = true;
     },
   */
 
@@ -18,10 +18,8 @@
   pkgs ? import ../../../../.. {
     config.allowUnfree = true;
   },
-  config ? pkgs.config,
-  # You probably need to set it to true to express consent.
-  licenseAccepted ?
-    config.android_sdk.accept_license or (builtins.getEnv "NIXPKGS_ACCEPT_ANDROID_SDK_LICENSE" == "1"),
+
+  licenseAccepted ? pkgs.callPackage ../license.nix { },
 }:
 
 # Copy this file to your Android project.
@@ -29,20 +27,20 @@ let
   # If you copy this example out of nixpkgs, something like this will work:
   /*
     androidEnvNixpkgs = fetchTarball {
-    name = "androidenv";
-    url = "https://github.com/NixOS/nixpkgs/archive/<fill me in from Git>.tar.gz";
-    sha256 = "<fill me in with nix-prefetch-url --unpack>";
+      name = "androidenv";
+      url = "https://github.com/NixOS/nixpkgs/archive/<fill me in from Git>.tar.gz";
+      sha256 = "<fill me in with nix-prefetch-url --unpack>";
     };
 
     androidEnv = pkgs.callPackage "${androidEnvNixpkgs}/pkgs/development/mobile/androidenv" {
-    inherit config pkgs;
-    licenseAccepted = true;
+      inherit pkgs;
+      licenseAccepted = true;
     };
   */
 
   # Otherwise, just use the in-tree androidenv:
   androidEnv = pkgs.callPackage ./.. {
-    inherit config pkgs licenseAccepted;
+    inherit pkgs licenseAccepted;
   };
 
   sdkArgs = {
