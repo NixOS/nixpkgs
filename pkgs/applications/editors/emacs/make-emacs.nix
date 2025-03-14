@@ -81,7 +81,8 @@
   withGTK3 ? withPgtk && !noGui,
   withGlibNetworking ? withPgtk || withGTK3 || (withX && withXwidgets),
   withGpm ? stdenv.hostPlatform.isLinux,
-  withImageMagick ? lib.versionOlder version "27" && (withX || withNS),
+  # https://github.com/emacs-mirror/emacs/blob/master/etc/NEWS.27#L140-L142
+  withImageMagick ? false,
   withMailutils ? true,
   withMotif ? false,
   withNS ? stdenv.hostPlatform.isDarwin && !(variant == "macport" || noGui),
@@ -140,6 +141,7 @@ assert noGui -> !(withX || withGTK3 || withNS || variant == "macport");
 assert withAcl -> stdenv.hostPlatform.isLinux;
 assert withAlsaLib -> stdenv.hostPlatform.isLinux;
 assert withGpm -> stdenv.hostPlatform.isLinux;
+assert withImageMagick -> (withX || withNS);
 assert withNS -> stdenv.hostPlatform.isDarwin && !(withX || variant == "macport");
 assert withPgtk -> withGTK3 && !withX;
 assert withXwidgets -> !noGui && (withGTK3 || withPgtk);
