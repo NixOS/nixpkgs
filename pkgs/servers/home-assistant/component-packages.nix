@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2025.3.2";
+  version = "2025.3.3";
   components = {
     "3_day_blinds" =
       ps: with ps; [
@@ -5427,7 +5427,7 @@
       ];
     "suez_water" =
       ps: with ps; [
-        pysuez
+        pysuezv2
       ];
     "sun" =
       ps: with ps; [
