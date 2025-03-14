@@ -922,7 +922,7 @@ with pkgs;
     type = "OPN";
   };
 
-  akkoma = callPackage ../servers/akkoma {
+  akkoma = callPackage ../by-name/ak/akkoma/package.nix {
     beamPackages = beam_nox.packages.erlang_26.extend (self: super: {
       elixir = self.elixir_1_16;
       rebar3 = self.rebar3WithPlugins {
@@ -930,16 +930,9 @@ with pkgs;
       };
     });
   };
-  akkoma-frontends = recurseIntoAttrs {
-    akkoma-fe = callPackage ../servers/akkoma/akkoma-fe { };
-    admin-fe = callPackage ../servers/akkoma/admin-fe {
-      nodejs = nodejs_18;
-      yarn = yarn.override { nodejs = nodejs_18; };
-      python3 = python311;
-    };
-  };
-  akkoma-emoji = recurseIntoAttrs {
-    blobs_gg = callPackage ../servers/akkoma/emoji/blobs_gg.nix { };
+
+  akkoma-admin-fe = callPackage ../by-name/ak/akkoma-admin-fe/package.nix {
+    python3 = python311;
   };
 
   aegisub = callPackage ../by-name/ae/aegisub/package.nix ({

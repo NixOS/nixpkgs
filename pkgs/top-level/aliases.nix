@@ -148,6 +148,13 @@ mapAliases {
   afl = throw "afl has been removed as the upstream project was archived. Consider using 'aflplusplus'"; # Added 2024-04-21
   agda-pkg = throw "agda-pkg has been removed due to being unmaintained"; # Added 2024-09-10"
   ajour = throw "ajour has been removed, the project was archived upstream on 2024-09-17."; # Added 2025-03-12
+  akkoma-emoji = recurseIntoAttrs {
+    blobs_gg = lib.warnOnInstantiate "'akkoma-emoji.blobs_gg' has been renamed to 'blobs_gg'" blobs_gg; # Added 2025-03-14
+  };
+  akkoma-frontends = recurseIntoAttrs {
+    admin-fe = lib.warnOnInstantiate "'akkoma-frontends.admin-fe' has been renamed to 'akkoma-admin-fe'" akkoma-admin-fe; # Added 2025-03-14
+    akkoma-fe = lib.warnOnInstantiate "'akkoma-frontends.akkoma-fe' has been renamed to 'akkoma-fe'" akkoma-fe; # Added 2025-03-14
+  };
   alass = throw "'alass' has been removed due to being unmaintained upstream"; # Added 2025-01-25
   alsaLib = throw "'alsaLib' has been renamed to/replaced by 'alsa-lib'"; # Converted to throw 2024-10-17
   alsaOss = throw "'alsaOss' has been renamed to/replaced by 'alsa-oss'"; # Converted to throw 2024-10-17
