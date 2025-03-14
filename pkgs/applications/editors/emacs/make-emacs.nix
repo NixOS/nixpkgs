@@ -128,6 +128,9 @@
   QuartzCore,
   UniformTypeIdentifiers,
   WebKit,
+
+  # test
+  callPackage,
 }:
 
 assert (withGTK3 && !withNS && variant != "macport") -> withX || withPgtk;
@@ -524,7 +527,12 @@ mkDerivation (finalAttrs: {
     inherit withTreeSitter;
     inherit withXwidgets;
     pkgs = recurseIntoAttrs (emacsPackagesFor finalAttrs.finalPackage);
-    tests = { inherit (nixosTests) emacs-daemon; };
+    tests = {
+      inherit (nixosTests) emacs-daemon;
+      withPackages = callPackage ./build-support/wrapper-test.nix {
+        emacs = finalAttrs.finalPackage;
+      };
+    };
   };
 
   meta = meta // {
