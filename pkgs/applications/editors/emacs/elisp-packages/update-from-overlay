@@ -19,41 +19,36 @@ JSON_ARCHIVE_TABLE="${SCRIPT_DIR}/elisp-archives-table.json"
 OVERLAY_URL_HEAD="https://raw.githubusercontent.com/nix-community/emacs-overlay"
 DEFAULT_COMMIT_ID="master"
 
-function download_packagesets {
-    # Silent early-return when no argument is passed
+function download_package_set {
     if [[ "$#" == "0" ]]; then
-        return 0
+        echo "${FUNCNAME[0]}: you must pass one or two arguments."
+        return 1
+    elif [[ "$#" == "1" ]]; then
+        # second argument does not exist; use default commit id
+        ARCHIVE_NAME="$1"
+        COMMIT_ID="${DEFAULT_COMMIT_ID}"
+    else
+        ARCHIVE_NAME="$1"
+        COMMIT_ID="$2"
     fi
 
-    declare -a ARCHIVE_LIST
+    if [[ "$(jq "has(\"${ARCHIVE_NAME}\")" ${JSON_ARCHIVE_TABLE})" == "false" ]]; then
+        echo "${FUNCNAME[0]}: unknown package archive: ${ARCHIVE_NAME}"
+        return 1
+    fi
 
-    COMMIT_ID="${DEFAULT_COMMIT_ID}"
-
-    # collect the command line arguments, bailing out when any of them is not recognized
-    while (( "$#" )); do
-        ARCHIVE_NAME="$1"
-        if [[ "$(jq "has(\"${ARCHIVE_NAME}\")" ${JSON_ARCHIVE_TABLE})" == "false" ]]; then
-            echo "${FUNCNAME[0]}: unknown package archive: ${ARCHIVE_NAME}"
-            return 1
-        else
-            ARCHIVE_LIST+=( "${ARCHIVE_NAME}" )
-        fi
-        shift
-    done
+    LOCATION=$(jq --raw-output ".\"${ARCHIVE_NAME}\".location" "${JSON_ARCHIVE_TABLE}")
+    BASENAME=$(jq --raw-output ".\"${ARCHIVE_NAME}\".basename" "${JSON_ARCHIVE_TABLE}")
+    URL="${OVERLAY_URL_HEAD}/${COMMIT_ID}/${LOCATION}/${BASENAME}"
 
     pushd "${SCRIPT_DIR}" > /dev/null
-    for ARCHIVE_NAME in "${ARCHIVE_LIST[@]}"; do
-        LOCATION=$(jq --raw-output ".\"${ARCHIVE_NAME}\".location" "${JSON_ARCHIVE_TABLE}")
-        BASENAME=$(jq --raw-output ".\"${ARCHIVE_NAME}\".basename" "${JSON_ARCHIVE_TABLE}")
-        URL="${OVERLAY_URL_HEAD}/${COMMIT_ID}/${LOCATION}/${BASENAME}"
-        echo "${FUNCNAME[0]}: ${ARCHIVE_NAME}..."
-        curl --silent --remote-name "${URL}"
-        echo "${FUNCNAME[0]}: ${ARCHIVE_NAME}: done!"
-    done
+    echo "${FUNCNAME[0]}: ${ARCHIVE_NAME}..."
+    curl --silent --remote-name "${URL}"
+    echo "${FUNCNAME[0]}: ${ARCHIVE_NAME}: done!"
     popd > /dev/null
 }
 
-function test_packagesets {
+function test_package_sets {
     # Silent early-return when no argument is passed
     if [[ "$#" == "0" ]]; then
         return 0
@@ -83,48 +78,52 @@ function test_packagesets {
     popd > /dev/null
 }
 
-function commit_packagesets {
-    # Silent early-return when no argument is passed
+function commit_package_set {
     if [[ "$#" == "0" ]]; then
-        return 0
+        echo "${FUNCNAME[0]}: you must pass one or two arguments."
+        return 1
+    elif [[ "$#" == "1" ]]; then
+        # second argument does not exist; use default commit id
+        ARCHIVE_NAME="$1"
+        COMMIT_ID="${DEFAULT_COMMIT_ID}"
+    else
+        ARCHIVE_NAME="$1"
+        COMMIT_ID="$2"
     fi
 
-    declare -a ARCHIVE_LIST
+    if [[ "$(jq "has(\"${ARCHIVE_NAME}\")" ${JSON_ARCHIVE_TABLE})" == "false" ]]; then
+        echo "${FUNCNAME[0]}: unknown package archive: ${ARCHIVE_NAME}"
+        return 1
+    fi
 
-    COMMIT_ID="${DEFAULT_COMMIT_ID}"
-
-    while (( "$#" )); do
-        ARCHIVE_NAME="$1"
-        if [[ "$(jq "has(\"${ARCHIVE_NAME}\")" ${JSON_ARCHIVE_TABLE})" == "false" ]]; then
-            echo "${FUNCNAME[0]}: unknown package archive: ${ARCHIVE_NAME}"
-            return 1
-        else
-            ARCHIVE_LIST+=( "${ARCHIVE_NAME}" )
-        fi
-        shift
-    done
+    ATTRIBUTE=$(jq --raw-output ".\"${ARCHIVE_NAME}\".nix_attribute" "${JSON_ARCHIVE_TABLE}")
+    FILE=$(jq --raw-output ".\"${ARCHIVE_NAME}\".basename" "${JSON_ARCHIVE_TABLE}")
 
     pushd "${SCRIPT_DIR}" > /dev/null
-    for ARCHIVE_NAME in "${ARCHIVE_LIST[@]}"; do
-        ATTRIBUTE=$(jq --raw-output ".\"${ARCHIVE_NAME}\".nix_attribute" "${JSON_ARCHIVE_TABLE}")
-        FILE=$(jq --raw-output ".\"${ARCHIVE_NAME}\".generated_file" "${JSON_ARCHIVE_TABLE}")
-        if [[ "$(git diff --exit-code "${FILE}" > /dev/null)" == "0" ]]; then
-            echo "${FUNCNAME[0]}: ${FILE}..."
-            git commit -m "${ATTRIBUTE}: updated at $(date --iso) (from emacs-overlay at ${COMMIT_ID})" -- "${FILE}"
-            echo "${FUNCNAME[0]}: ${FILE}: done!"
-        else
-            echo "${FUNCNAME[0]}: ${FILE} was not modified"
-        fi
-    done
+    if [[ "$(git diff --exit-code "${FILE}" > /dev/null)" == "0" ]]; then
+        echo "${FUNCNAME[0]}: ${FILE}..."
+        git commit -m "${ATTRIBUTE}: updated at $(date --iso) (from emacs-overlay at ${COMMIT_ID})" -- "${FILE}"
+        echo "${FUNCNAME[0]}: ${FILE}: done!"
+    else
+        echo "${FUNCNAME[0]}: ${FILE} was not modified; doing nothing"
+    fi
     popd > /dev/null
 }
 
-# The loops are unrolled as follows because either all packagesets should be
+# The loops are unrolled as follows because either all package_sets should be
 # updated, or none of them should. Therefore, if any of them fails, all the
 # process should be aborted as soon as possible.
 
-download_packagesets "elpa" "elpa-devel" "melpa" "nongnu" "nongnu-devel"
+download_package_set "elpa"
+download_package_set "elpa-devel"
+download_package_set "melpa"
+download_package_set "nongnu"
+download_package_set "nongnu-devel"
 
-test_packagesets "elpa" "elpa-devel" "melpa" "melpa-stable" "nongnu" "nongnu-devel"
+test_package_sets "elpa" "elpa-devel" "melpa" "melpa-stable" "nongnu" "nongnu-devel"
 
-commit_packagesets "elpa" "elpa-devel" "melpa" "nongnu" "nongnu-devel"
+commit_package_set "elpa"
+commit_package_set "elpa-devel"
+commit_package_set "melpa"
+commit_package_set "nongnu"
+commit_package_set "nongnu-devel"
