@@ -24,7 +24,7 @@ in
 {
   options = {
     hardware.nvidia = {
-      enabled = lib.mkOption {
+      enable = lib.mkOption {
         type = lib.types.bool;
         default = false;
         defaultText = lib.literalMD "`true` if NVIDIA support is enabled";
@@ -322,7 +322,7 @@ in
     in
     lib.mkMerge [
       # Common
-      (lib.mkIf cfg.enabled {
+      (lib.mkIf cfg.enable {
         assertions = [
           {
             assertion = !(hasNvidiaVideoDriver && cfg.datacenter.enable);
@@ -690,7 +690,7 @@ in
 
       # Data Center
       (lib.mkIf (cfg.datacenter.enable) {
-        hardware.nvidia.enabled = true;
+        hardware.nvidia.enable = true;
 
         boot.extraModulePackages = [ nvidia_x11.bin ];
 
