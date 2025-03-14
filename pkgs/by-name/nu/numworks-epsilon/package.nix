@@ -53,10 +53,20 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     cp -r ./output/release/simulator/linux/* $out/bin/
 
-    # To build this svg:
-    # copy white path from ion/src/simulator/assets/icon_mask.svg
-    # paste into ion/src/simulator/assets/logo.svg and change fill to #edb14b
-    install -Dm644 ${./numworks.svg} $out/share/icons/hicolor/scalable/apps/numworks.svg
+    # Build the logo
+    assets="$src/ion/src/simulator/assets"
+    logo_dir="$out/share/icons/hicolor/scalable/apps"
+    logo="$logo_dir/numworks.svg"
+    mkdir -p "$logo_dir"
+
+    # Take opening svg tag
+    grep '<svg' "$assets/logo.svg" > "$logo"
+
+    # Insert path from logo mask and change color
+    grep path "$assets/icon_mask.svg" | sed 's/fill="[^"]*"/fill="#edb14b"/' >> "$logo"
+
+    # Add remainder of logo
+    grep -v '<svg' "$assets/logo.svg" >> "$logo"
 
     runHook postInstall
   '';
