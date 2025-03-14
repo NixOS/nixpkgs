@@ -132,7 +132,7 @@ foreach my $pkgName (@toplevelPkgs) {
 print "# This is a generated file.  Do not modify!\n";
 print "# Following are the Debian packages constituting the closure of: @toplevelPkgs\n\n";
 print "{fetchurl}:\n\n";
-print "[\n\n";
+print "[\n";
 
 # Output the packages in strongly connected components.
 my %done;
@@ -148,7 +148,7 @@ foreach my $pkgName (@order) {
     }
     delete $forward{$pkgName};
 
-    print "  [\n\n" if $newComponent;
+    print "  [\n" if $newComponent;
     $newComponent = 0;
 
     my $origName = basename $cdata->{Filename};
@@ -160,10 +160,9 @@ foreach my $pkgName (@order) {
     print "      sha256 = \"$cdata->{SHA256}\";\n";
     print "      name = \"$cleanedName\";\n" if $cleanedName ne $origName;
     print "    })\n";
-    print "\n";
 
     if (keys %forward == 0) {
-        print "  ]\n\n";
+        print "  ]\n";
         $newComponent = 1;
     }
 }
