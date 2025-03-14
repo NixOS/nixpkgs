@@ -637,6 +637,8 @@ in {
 
     tsme-test = callPackage ../os-specific/linux/tsme-test { };
 
+    xpad-noone = callPackage ../os-specific/linux/xpad-noone { };
+
   } // lib.optionalAttrs config.allowAliases {
     zfs = throw "linuxPackages.zfs has been removed, use zfs_* instead, or linuxPackages.\${pkgs.zfs.kernelModuleAttribute}"; # added 2025-01-23
     zfs_2_1 = throw "zfs_2_1 has been removed"; # added 2024-12-25;
