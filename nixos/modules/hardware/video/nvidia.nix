@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   hasNvidiaVideoDriver = lib.elem "nvidia" config.services.xserver.videoDrivers;
@@ -335,8 +334,29 @@ in
               It is suggested to use the open source kernel modules on Turing or later GPUs (RTX series, GTX 16xx), and the closed source modules otherwise.
             '';
           }
+          {
+            assertion = cfg.gsp.enable -> (cfg.package ? firmware);
+            message = "This version of NVIDIA driver does not provide a GSP firmware.";
+          }
+
+          {
+            assertion = useOpenModules -> (cfg.package ? open);
+            message = "This version of NVIDIA driver does not provide a corresponding opensource kernel driver.";
+          }
+
+          {
+            assertion = useOpenModules -> cfg.gsp.enable;
+            message = "The GSP cannot be disabled when using the opensource kernel driver.";
+          }
+
+          {
+            assertion = cfg.dynamicBoost.enable -> lib.versionAtLeast nvidia_x11.version "510.39.01";
+            message = "NVIDIA's Dynamic Boost feature only exists on versions >= 510.39.01";
+          }
         ];
         boot = {
+          extraModulePackages = if useOpenModules then [ nvidia_x11.open ] else [ nvidia_x11.bin ];
+
           blacklistedKernelModules = [
             "nouveau"
             "nvidiafb"
@@ -351,10 +371,24 @@ in
           extraModprobeConfig = ''
             softdep nvidia post: nvidia-uvm
           '';
+
+          kernelParams = lib.optional useOpenModules "nvidia.NVreg_OpenRmEnableUnsupportedGpus=1"
+            ++ lib.optional (config.boot.kernelPackages.kernel.kernelAtLeast "6.2" && !ibtSupport) "ibt=off";
+
+          # With the open driver, nvidia-uvm does not automatically load as
+          # a softdep of the nvidia module, so we explicitly load it for now.
+          # See https://github.com/NixOS/nixpkgs/issues/334180
+          kernelModules = lib.optionals useOpenModules [ "nvidia_uvm" ];
         };
-        systemd.tmpfiles.rules = lib.mkIf config.virtualisation.docker.enableNvidia [
+        environment.etc = {
+          # 'nvidia_x11' installs it's files to /run/opengl-driver/...
+          "egl/egl_external_platform.d".source = "/run/opengl-driver/share/egl/egl_external_platform.d/";
+        };
+        systemd.tmpfiles.rules = lib.optional config.virtualisation.docker.enableNvidia [
           "L+ /run/nvidia-docker/bin - - - - ${nvidia_x11.bin}/origBin"
-        ];
+        ]
+        ++ lib.optional (nvidia_x11.persistenced != null && config.virtualisation.docker.enableNvidia)
+          "L+ /run/nvidia-docker/extras/bin/nvidia-persistenced - - - - ${nvidia_x11.persistenced}/origBin/nvidia-persistenced";
         services.udev.extraRules = ''
           # Create /dev/nvidia-uvm when the nvidia-uvm module is loaded.
           KERNEL=="nvidia", RUN+="${pkgs.runtimeShell} -c 'mknod -m 666 /dev/nvidiactl c 195 255'"
@@ -364,14 +398,55 @@ in
           KERNEL=="nvidia_uvm", RUN+="${pkgs.runtimeShell} -c 'mknod -m 666 /dev/nvidia-uvm-tools c $$(grep nvidia-uvm /proc/devices | cut -d \  -f 1) 1'"
         '';
         hardware.graphics = {
-          extraPackages = [ nvidia_x11.out ];
+          extraPackages = [ nvidia_x11.out ]
+            ++ lib.optional cfg.videoAcceleration pkgs.nvidia-vaapi-driver;
           extraPackages32 = [ nvidia_x11.lib32 ];
         };
-        environment.systemPackages = [ nvidia_x11.bin ];
+        environment.systemPackages = [ nvidia_x11.bin ]
+          ++ lib.optional cfg.nvidiaPersistenced nvidia_x11.persistenced;
+
+        systemd.services =
+          lib.mkMerge [
+            (lib.mkIf cfg.nvidiaPersistenced {
+              "nvidia-persistenced" = {
+                description = "NVIDIA Persistence Daemon";
+                wantedBy = [ "multi-user.target" ];
+                serviceConfig = {
+                  Type = "forking";
+                  Restart = "always";
+                  PIDFile = "/var/run/nvidia-persistenced/nvidia-persistenced.pid";
+                  ExecStart = "${lib.getExe nvidia_x11.persistenced} --verbose";
+                  ExecStopPost = "${pkgs.coreutils}/bin/rm -rf /var/run/nvidia-persistenced";
+                };
+              };
+            })
+            (lib.mkIf cfg.dynamicBoost.enable {
+              "nvidia-powerd" = {
+                description = "nvidia-powerd service";
+                path = [
+                  pkgs.util-linux # nvidia-powerd wants lscpu
+                ];
+                wantedBy = [ "multi-user.target" ];
+                serviceConfig = {
+                  Type = "dbus";
+                  BusName = "nvidia.powerd.server";
+                  ExecStart = "${nvidia_x11.bin}/bin/nvidia-powerd";
+                };
+              };
+            })
+          ];
+
+        services.acpid.enable = true;
+
+        services.dbus.packages = lib.optional cfg.dynamicBoost.enable nvidia_x11.bin;
+
+        hardware.firmware = lib.optional cfg.gsp.enable nvidia_x11.firmware;
       })
 
       # X11
       (lib.mkIf hasNvidiaVideoDriver {
+        hardware.nvidia.enable = true;
+
         assertions = [
           {
             assertion = primeEnabled -> pCfg.intelBusId == "" || pCfg.amdgpuBusId == "";
@@ -424,26 +499,6 @@ in
             assertion = cfg.powerManagement.enable -> lib.versionAtLeast nvidia_x11.version "430.09";
             message = "Required files for driver based power management only exist on versions >= 430.09.";
           }
-
-          {
-            assertion = cfg.gsp.enable -> (cfg.package ? firmware);
-            message = "This version of NVIDIA driver does not provide a GSP firmware.";
-          }
-
-          {
-            assertion = useOpenModules -> (cfg.package ? open);
-            message = "This version of NVIDIA driver does not provide a corresponding opensource kernel driver.";
-          }
-
-          {
-            assertion = useOpenModules -> cfg.gsp.enable;
-            message = "The GSP cannot be disabled when using the opensource kernel driver.";
-          }
-
-          {
-            assertion = cfg.dynamicBoost.enable -> lib.versionAtLeast nvidia_x11.version "510.39.01";
-            message = "NVIDIA's Dynamic Boost feature only exists on versions >= 510.39.01";
-          }
         ];
 
         # If Optimus/PRIME is enabled, we:
@@ -464,18 +519,19 @@ in
         hardware.nvidia.prime.offload.enable = lib.mkDefault reverseSyncCfg.enable;
 
         services.xserver.drivers =
-          lib.optional primeEnabled {
-            name = igpuDriver;
-            display = offloadCfg.enable;
-            modules = lib.optional (igpuDriver == "amdgpu") pkgs.xorg.xf86videoamdgpu;
-            deviceSection =
-              ''
-                BusID "${igpuBusId}"
-              ''
-              + lib.optionalString (syncCfg.enable && igpuDriver != "amdgpu") ''
-                Option "AccelMethod" "none"
-              '';
-          }
+          lib.optional primeEnabled
+            {
+              name = igpuDriver;
+              display = offloadCfg.enable;
+              modules = lib.optional (igpuDriver == "amdgpu") pkgs.xorg.xf86videoamdgpu;
+              deviceSection =
+                ''
+                  BusID "${igpuBusId}"
+                ''
+                + lib.optionalString (syncCfg.enable && igpuDriver != "amdgpu") ''
+                  Option "AccelMethod" "none"
+                '';
+            }
           ++ lib.singleton {
             name = "nvidia";
             modules = [ nvidia_x11.bin ];
@@ -519,7 +575,7 @@ in
           let
             gpuProviderName =
               if igpuDriver == "amdgpu" then
-                # find the name of the provider if amdgpu
+              # find the name of the provider if amdgpu
                 "`${lib.getExe pkgs.xorg.xrandr} --listproviders | ${lib.getExe pkgs.gnugrep} -i AMD | ${lib.getExe pkgs.gnused} -n 's/^.*name://p'`"
               else
                 igpuDriver;
@@ -538,16 +594,10 @@ in
           "nvidia/nvidia-application-profiles-rc" = lib.mkIf nvidia_x11.useProfiles {
             source = "${nvidia_x11.bin}/share/nvidia/nvidia-application-profiles-rc";
           };
-
-          # 'nvidia_x11' installs it's files to /run/opengl-driver/...
-          "egl/egl_external_platform.d".source = "/run/opengl-driver/share/egl/egl_external_platform.d/";
         };
-
-        hardware.graphics.extraPackages = lib.optional cfg.videoAcceleration pkgs.nvidia-vaapi-driver;
 
         environment.systemPackages =
           lib.optional cfg.nvidiaSettings nvidia_x11.settings
-          ++ lib.optional cfg.nvidiaPersistenced nvidia_x11.persistenced
           ++ lib.optional offloadCfg.enableOffloadCmd (
             pkgs.writeShellScriptBin "nvidia-offload" ''
               export __NV_PRIME_RENDER_OFFLOAD=1
@@ -573,56 +623,21 @@ in
               requiredBy = [ "systemd-${state}.service" ];
             };
           in
-          lib.mkMerge [
-            (lib.mkIf cfg.powerManagement.enable {
-              nvidia-suspend = nvidiaService "suspend";
-              nvidia-hibernate = nvidiaService "hibernate";
-              nvidia-resume = (nvidiaService "resume") // {
-                before = [ ];
-                after = [
-                  "systemd-suspend.service"
-                  "systemd-hibernate.service"
-                ];
-                requiredBy = [
-                  "systemd-suspend.service"
-                  "systemd-hibernate.service"
-                ];
-              };
-            })
-            (lib.mkIf cfg.nvidiaPersistenced {
-              "nvidia-persistenced" = {
-                description = "NVIDIA Persistence Daemon";
-                wantedBy = [ "multi-user.target" ];
-                serviceConfig = {
-                  Type = "forking";
-                  Restart = "always";
-                  PIDFile = "/var/run/nvidia-persistenced/nvidia-persistenced.pid";
-                  ExecStart = "${lib.getExe nvidia_x11.persistenced} --verbose";
-                  ExecStopPost = "${pkgs.coreutils}/bin/rm -rf /var/run/nvidia-persistenced";
-                };
-              };
-            })
-            (lib.mkIf cfg.dynamicBoost.enable {
-              "nvidia-powerd" = {
-                description = "nvidia-powerd service";
-                path = [
-                  pkgs.util-linux # nvidia-powerd wants lscpu
-                ];
-                wantedBy = [ "multi-user.target" ];
-                serviceConfig = {
-                  Type = "dbus";
-                  BusName = "nvidia.powerd.server";
-                  ExecStart = "${nvidia_x11.bin}/bin/nvidia-powerd";
-                };
-              };
-            })
-          ];
-
-        services.acpid.enable = true;
-
-        services.dbus.packages = lib.optional cfg.dynamicBoost.enable nvidia_x11.bin;
-
-        hardware.firmware = lib.optional cfg.gsp.enable nvidia_x11.firmware;
+          (lib.mkIf cfg.powerManagement.enable {
+            nvidia-suspend = nvidiaService "suspend";
+            nvidia-hibernate = nvidiaService "hibernate";
+            nvidia-resume = (nvidiaService "resume") // {
+              before = [ ];
+              after = [
+                "systemd-suspend.service"
+                "systemd-hibernate.service"
+              ];
+              requiredBy = [
+                "systemd-suspend.service"
+                "systemd-hibernate.service"
+              ];
+            };
+          });
 
         systemd.tmpfiles.rules =
           [
@@ -632,33 +647,25 @@ in
             #
             # https://bbs.archlinux.org/viewtopic.php?pid=1909115#p1909115
             "d /run/nvidia-xdriver 0770 root users"
-          ]
-          ++ lib.optional (nvidia_x11.persistenced != null && config.virtualisation.docker.enableNvidia)
-            "L+ /run/nvidia-docker/extras/bin/nvidia-persistenced - - - - ${nvidia_x11.persistenced}/origBin/nvidia-persistenced";
+          ];
 
         boot = {
-          extraModulePackages = if useOpenModules then [ nvidia_x11.open ] else [ nvidia_x11.bin ];
           # nvidia-uvm is required by CUDA applications.
           kernelModules =
             lib.optionals config.services.xserver.enable [
               "nvidia"
               "nvidia_modeset"
               "nvidia_drm"
-            ]
-            # With the open driver, nvidia-uvm does not automatically load as
-            # a softdep of the nvidia module, so we explicitly load it for now.
-            # See https://github.com/NixOS/nixpkgs/issues/334180
-            ++ lib.optionals (config.services.xserver.enable && useOpenModules) [ "nvidia_uvm" ];
+            ];
 
           # If requested enable modesetting via kernel parameters.
           kernelParams =
             lib.optional (offloadCfg.enable || cfg.modesetting.enable) "nvidia-drm.modeset=1"
-            ++ lib.optional (
-              (offloadCfg.enable || cfg.modesetting.enable) && lib.versionAtLeast nvidia_x11.version "545"
-            ) "nvidia-drm.fbdev=1"
-            ++ lib.optional cfg.powerManagement.enable "nvidia.NVreg_PreserveVideoMemoryAllocations=1"
-            ++ lib.optional useOpenModules "nvidia.NVreg_OpenRmEnableUnsupportedGpus=1"
-            ++ lib.optional (config.boot.kernelPackages.kernel.kernelAtLeast "6.2" && !ibtSupport) "ibt=off";
+            ++ lib.optional
+              (
+                (offloadCfg.enable || cfg.modesetting.enable) && lib.versionAtLeast nvidia_x11.version "545"
+              ) "nvidia-drm.fbdev=1"
+            ++ lib.optional cfg.powerManagement.enable "nvidia.NVreg_PreserveVideoMemoryAllocations=1";
 
           # enable finegrained power management
           extraModprobeConfig = lib.optionalString cfg.powerManagement.finegrained ''
@@ -691,62 +698,38 @@ in
       # Data Center
       (lib.mkIf (cfg.datacenter.enable) {
         hardware.nvidia.enable = true;
-
-        boot.extraModulePackages = [ nvidia_x11.bin ];
-
-        systemd = {
-          tmpfiles.rules =
-            lib.optional (nvidia_x11.persistenced != null && config.virtualisation.docker.enableNvidia)
-              "L+ /run/nvidia-docker/extras/bin/nvidia-persistenced - - - - ${nvidia_x11.persistenced}/origBin/nvidia-persistenced";
-
-          services = lib.mkMerge [
-            ({
-              nvidia-fabricmanager = {
-                enable = true;
-                description = "Start NVIDIA NVLink Management";
-                wantedBy = [ "multi-user.target" ];
-                unitConfig.After = [ "network-online.target" ];
-                unitConfig.Requires = [ "network-online.target" ];
-                serviceConfig = {
-                  Type = "forking";
-                  TimeoutStartSec = 240;
-                  ExecStart =
-                    let
-                      # Since these rely on the `nvidia_x11.fabricmanager` derivation, they're
-                      # unsuitable to be mentioned in the configuration defaults, but they _can_
-                      # be overridden in `cfg.datacenter.settings` if needed.
-                      fabricManagerConfDefaults = {
-                        TOPOLOGY_FILE_PATH = "${nvidia_x11.fabricmanager}/share/nvidia-fabricmanager/nvidia/nvswitch";
-                        DATABASE_PATH = "${nvidia_x11.fabricmanager}/share/nvidia-fabricmanager/nvidia/nvswitch";
-                      };
-                      nv-fab-conf = settingsFormat.generate "fabricmanager.conf" (
-                        fabricManagerConfDefaults // cfg.datacenter.settings
-                      );
-                    in
-                    "${lib.getExe nvidia_x11.fabricmanager} -c ${nv-fab-conf}";
-                  LimitCORE = "infinity";
-                };
+        systemd.services = lib.mkMerge [
+          ({
+            nvidia-fabricmanager = {
+              enable = true;
+              description = "Start NVIDIA NVLink Management";
+              wantedBy = [ "multi-user.target" ];
+              unitConfig.After = [ "network-online.target" ];
+              unitConfig.Requires = [ "network-online.target" ];
+              serviceConfig = {
+                Type = "forking";
+                TimeoutStartSec = 240;
+                ExecStart =
+                  let
+                    # Since these rely on the `nvidia_x11.fabricmanager` derivation, they're
+                    # unsuitable to be mentioned in the configuration defaults, but they _can_
+                    # be overridden in `cfg.datacenter.settings` if needed.
+                    fabricManagerConfDefaults = {
+                      TOPOLOGY_FILE_PATH = "${nvidia_x11.fabricmanager}/share/nvidia-fabricmanager/nvidia/nvswitch";
+                      DATABASE_PATH = "${nvidia_x11.fabricmanager}/share/nvidia-fabricmanager/nvidia/nvswitch";
+                    };
+                    nv-fab-conf = settingsFormat.generate "fabricmanager.conf" (
+                      fabricManagerConfDefaults // cfg.datacenter.settings
+                    );
+                  in
+                  "${lib.getExe nvidia_x11.fabricmanager} -c ${nv-fab-conf}";
+                LimitCORE = "infinity";
               };
-            })
-            (lib.mkIf cfg.nvidiaPersistenced {
-              "nvidia-persistenced" = {
-                description = "NVIDIA Persistence Daemon";
-                wantedBy = [ "multi-user.target" ];
-                serviceConfig = {
-                  Type = "forking";
-                  Restart = "always";
-                  PIDFile = "/var/run/nvidia-persistenced/nvidia-persistenced.pid";
-                  ExecStart = "${lib.getExe nvidia_x11.persistenced} --verbose";
-                  ExecStopPost = "${pkgs.coreutils}/bin/rm -rf /var/run/nvidia-persistenced";
-                };
-              };
-            })
-          ];
-        };
+            };
+          })
+        ];
 
-        environment.systemPackages =
-          lib.optional cfg.datacenter.enable nvidia_x11.fabricmanager
-          ++ lib.optional cfg.nvidiaPersistenced nvidia_x11.persistenced;
+        environment.systemPackages = lib.optional cfg.datacenter.enable nvidia_x11.fabricmanager;
       })
     ];
 }
