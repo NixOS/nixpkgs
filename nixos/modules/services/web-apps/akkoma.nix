@@ -95,7 +95,7 @@ let
       package = mkOption {
         type = types.package;
         description = "Akkoma frontend package.";
-        example = literalExpression "pkgs.akkoma-frontends.akkoma-fe";
+        example = literalExpression "pkgs.akkoma-fe";
       };
 
       name = mkOption {
@@ -520,7 +520,7 @@ in {
         type = with types; attrsOf (submodule frontend);
         default = {
           primary = {
-            package = pkgs.akkoma-frontends.akkoma-fe;
+            package = pkgs.akkoma-fe;
             name = "akkoma-fe";
             ref = "stable";
           };
@@ -533,7 +533,7 @@ in {
         defaultText = literalExpression ''
           {
             primary = {
-              package = pkgs.akkoma-frontends.akkoma-fe;
+              package = pkgs.akkoma-fe;
               name = "akkoma-fe";
               ref = "stable";
             };
