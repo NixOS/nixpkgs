@@ -189,7 +189,7 @@ def find_mounted_device(path: str) -> str:
     while not os.path.ismount(path):
         path = os.path.dirname(path)
 
-    devices = [x for x in psutil.disk_partitions(all=True) if x.mountpoint == path]
+    devices = [x for x in psutil.disk_partitions() if x.mountpoint == path]
 
     assert len(devices) == 1
     return devices[0].device
