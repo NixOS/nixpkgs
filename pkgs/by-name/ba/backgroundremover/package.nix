@@ -8,6 +8,21 @@
 }:
 
 let
+  moviepy = python3.pkgs.moviepy.overridePythonAttrs (old: rec {
+    version = "1.0.3";
+    src = fetchFromGitHub {
+      owner = "Zulko";
+      repo = "moviepy";
+      tag = "v${version}";
+      hash = "sha256-l7AwzAKSaEV+pPbltKgwllK6X54oruU2w0AvoCsrESE=";
+    };
+    postPatch = ''
+      substituteInPlace setup.py \
+        --replace-fail "decorator>=4.0.2,<5.0" "decorator>=4.0.2,<6.0"
+    '';
+    doCheck = false;
+  });
+
   p = python3.pkgs;
   self = p.buildPythonApplication rec {
     pname = "backgroundremover";
@@ -52,7 +67,7 @@ let
       p.hsh
       p.idna
       p.more-itertools
-      p.moviepy
+      moviepy
       p.numpy
       p.pillow
       p.pymatting
