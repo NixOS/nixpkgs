@@ -1297,7 +1297,7 @@ in {
   xscreensaver = handleTest ./xscreensaver.nix {};
   xss-lock = handleTest ./xss-lock.nix {};
   xterm = handleTest ./xterm.nix {};
-  xxh = handleTest ./xxh.nix {};
+  xxh = runTest ./xxh.nix;
   yabar = runTest ./yabar.nix;
   ydotool = handleTest ./ydotool.nix {};
   yggdrasil = runTest ./yggdrasil.nix;
