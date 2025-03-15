@@ -44,14 +44,6 @@ makeScopeWithSplicing' {
     };
   in (lib.makeOverridable mkPlasma5 attrs);
 
-  kdeGear = let
-    mkGear = import ../applications/kde;
-    attrs = {
-      inherit libsForQt5;
-      inherit (pkgs) lib fetchurl;
-    };
-  in (lib.makeOverridable mkGear attrs);
-
   plasmaMobileGear = let
     mkPlamoGear = import ../applications/plasma-mobile;
     attrs = {
@@ -70,12 +62,9 @@ makeScopeWithSplicing' {
 
   noExtraAttrs = set: lib.attrsets.removeAttrs set [ "extend" "override" "overrideScope" "overrideDerivation" ];
 
-in (noExtraAttrs (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdParty // kdeGear // mauiPackages // qt5 // {
+in (noExtraAttrs (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdParty // mauiPackages // qt5 // {
 
-  inherit kdeFrameworks plasmaMobileGear plasma5 kdeGear mauiPackages qt5;
-
-  # Alias for backwards compatibility. Added 2021-05-07.
-  kdeApplications = kdeGear;
+  inherit kdeFrameworks plasmaMobileGear plasma5 mauiPackages qt5;
 
   ### LIBRARIES
 

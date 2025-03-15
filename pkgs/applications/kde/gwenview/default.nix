@@ -9,11 +9,9 @@
   baloo,
   kactivities,
   kio,
-  kipi-plugins,
   kitemmodels,
   kparts,
   libkdcraw,
-  libkipi,
   phonon,
   qtimageformats,
   qtsvg,
@@ -55,7 +53,6 @@ mkDerivation {
     kitemmodels
     kparts
     libkdcraw
-    libkipi
     phonon
     exiv2
     lcms2
@@ -70,8 +67,6 @@ mkDerivation {
     wayland-protocols
   ];
   propagatedUserEnvPkgs = [
-    kipi-plugins
-    libkipi
     (lib.getBin kinit)
   ];
 }

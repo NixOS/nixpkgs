@@ -7,7 +7,6 @@
   akonadi,
   akonadi-calendar,
   akonadi-mime,
-  akonadi-notes,
   kcalutils,
   kholidays,
   kidentitymanagement,
@@ -33,7 +32,6 @@ mkDerivation {
   buildInputs = [
     akonadi
     akonadi-mime
-    akonadi-notes
     kcalutils
     kholidays
     pimcommon

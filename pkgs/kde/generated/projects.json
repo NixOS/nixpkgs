@@ -125,12 +125,6 @@
     "project_path": "kde/pim/akonadi-mime",
     "repo_path": "pim/akonadi-mime"
   },
-  "akonadi-notes": {
-    "description": "Libraries and daemons to implement note management in Akonadi",
-    "name": "akonadi-notes",
-    "project_path": "kde/pim/akonadi-notes",
-    "repo_path": "pim/akonadi-notes"
-  },
   "akonadi-phabricator-resource": {
     "description": "Synchronize your Phabricator tasks with KOrganizer",
     "name": "akonadi-phabricator-resource",
@@ -2771,12 +2765,6 @@
     "project_path": "kde/kdenetwork/kio-zeroconf",
     "repo_path": "network/kio-zeroconf"
   },
-  "kipi-plugins": {
-    "description": "Plugins extending KDE graphics apps, e.g. with import/export capabilities",
-    "name": "kipi-plugins",
-    "project_path": "kde/kdegraphics/kipi-plugins",
-    "repo_path": "graphics/kipi-plugins"
-  },
   "kirigami": {
     "description": "A QtQuick based components set",
     "name": "kirigami",
@@ -3082,12 +3070,6 @@
     "name": "knipptasch",
     "project_path": "playground/office/knipptasch",
     "repo_path": "office/knipptasch"
-  },
-  "knotes": {
-    "description": "Note-taking application",
-    "name": "knotes",
-    "project_path": "kde/pim/knotes",
-    "repo_path": "pim/knotes"
   },
   "knotifications": {
     "description": "KNotifications",
@@ -4438,12 +4420,6 @@
     "name": "libkimageannotator",
     "project_path": "playground/libs/libkimageannotator",
     "repo_path": "libraries/libkimageannotator"
-  },
-  "libkipi": {
-    "description": "Qt/C++ interface to use kipi-plugins from KDE image management programs",
-    "name": "libkipi",
-    "project_path": "kde/kdegraphics/libs/libkipi",
-    "repo_path": "graphics/libkipi"
   },
   "libkleo": {
     "description": "Library that provides cryptography support for mails",
