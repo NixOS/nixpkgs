@@ -98,7 +98,6 @@ stdenv.mkDerivation (finalAttrs: {
         --set LD_LIBRARY_PATH ${addDriverRunpath.driverLink}/lib:${libPath} \
         --suffix PATH : "${binPath}" \
         --set ELECTRON_FORCE_IS_PACKAGED 1 \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
         --add-flags $out/share/gdlauncher-carbon/resources/app.asar
     '';
 

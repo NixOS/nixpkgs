@@ -74,7 +74,6 @@ stdenv.mkDerivation {
     makeWrapper ${electron_32}/bin/electron $out/bin/lx-music-desktop \
         --add-flags $out/opt/lx-music-desktop/resources/app.asar \
         --prefix LD_LIBRARY_PATH : "${runtimeLibs}" \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
         --add-flags ${lib.escapeShellArg commandLineArgs} \
   '';
 
