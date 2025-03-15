@@ -1,30 +1,34 @@
 {
-  lib,
-  fetchFromGitHub,
   autoPatchelfHook,
+  fetchFromGitHub,
   fuse3,
-  maven,
-  jdk,
-  makeShellWrapper,
   glib,
-  wrapGAppsHook3,
+  jdk23,
+  lib,
   libayatana-appindicator,
+  makeShellWrapper,
+  maven,
+  wrapGAppsHook3,
+  nix-update-script,
 }:
 
+let
+  jdk = jdk23.override { enableJavaFX = true; };
+in
 maven.buildMavenPackage rec {
   pname = "cryptomator";
-  version = "1.14.1";
+  version = "1.15.1";
 
   src = fetchFromGitHub {
     owner = "cryptomator";
     repo = "cryptomator";
-    rev = version;
-    hash = "sha256-so8RINjFLF9H4K9f/60Ym/v/VpcVfxJ/c+JDOAPFgZU=";
+    tag = version;
+    hash = "sha256-yNCVSaA2GtTFUYoN7IZxEYMxkkQwMiNnfnmSXaruFjM=";
   };
 
   mvnJdk = jdk;
   mvnParameters = "-Dmaven.test.skip=true -Plinux";
-  mvnHash = "sha256-aB7wgnJAYvCizC0/gG/amcId/WVVWmZndItm398nDfQ=";
+  mvnHash = "sha256-w0mIeSFRSGl3EorrGcxqnXF6C0SowjWUMYT/NN1erwM=";
 
   preBuild = ''
     VERSION=${version}
@@ -95,29 +99,33 @@ maven.buildMavenPackage rec {
 
   nativeBuildInputs = [
     autoPatchelfHook
+    jdk
     makeShellWrapper
     wrapGAppsHook3
-    jdk
   ];
   buildInputs = [
     fuse3
-    jdk
     glib
+    jdk
     libayatana-appindicator
   ];
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Free client-side encryption for your cloud files";
-    mainProgram = "cryptomator";
     homepage = "https://cryptomator.org";
-    sourceProvenance = with sourceTypes; [
+    changelog = "https://github.com/cryptomator/cryptomator/releases/tag/${version}";
+    license = lib.licenses.gpl3Plus;
+    mainProgram = "cryptomator";
+    maintainers = with lib.maintainers; [
+      bachp
+      gepbird
+    ];
+    platforms = [ "x86_64-linux" ];
+    sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryBytecode # deps
     ];
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ bachp ];
-    platforms = [ "x86_64-linux" ];
-    # Uses abandoned JEP 430 string template preview, removed in JDK 23
-    broken = true;
   };
 }
