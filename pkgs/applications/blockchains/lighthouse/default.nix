@@ -7,7 +7,6 @@
 , nix-update-script
 , openssl
 , pkg-config
-, libpq
 , protobuf
 , rustPlatform
 , rust-jemalloc-sys
@@ -117,10 +116,6 @@ rustPlatform.buildRustPackage rec {
     "--skip subnet_service::tests::attestation_service::test_subscribe_same_subnet_several_slots_apart"
     "--skip subnet_service::tests::sync_committee_service::same_subscription_with_lower_until_epoch"
     "--skip subnet_service::tests::sync_committee_service::subscribe_and_unsubscribe"
-  ];
-
-  nativeCheckInputs = [
-    libpq
   ];
 
   passthru = {
