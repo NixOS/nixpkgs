@@ -1,65 +1,57 @@
-{ lib
-, stdenv
-, dpkg
-, autoPatchelfHook
-, alsa-lib
-, at-spi2-core
-, libtool
-, libxkbcommon
-, nspr
-, libgbm
-, libtiff
-, udev
-, gtk3
-, qtbase
-, xorg
-, cups
-, pango
-, runCommandLocal
-, curl
-, coreutils
-, cacert
-, libjpeg
-, useChineseVersion ? false
+{
+  lib,
+  stdenv,
+  dpkg,
+  autoPatchelfHook,
+  alsa-lib,
+  at-spi2-core,
+  libtool,
+  libxkbcommon,
+  nspr,
+  libgbm,
+  libtiff,
+  udev,
+  gtk3,
+  xorg,
+  cups,
+  pango,
+  runCommandLocal,
+  curl,
+  libsForQt5,
+  coreutils,
+  cacert,
+  libjpeg,
 }:
 let
   pkgVersion = "11.1.0.11723";
-  url =
-    if useChineseVersion then
-      "https://wps-linux-personal.wpscdn.cn/wps/download/ep/Linux2019/${lib.last (lib.splitVersion pkgVersion)}/wps-office_${pkgVersion}_amd64.deb"
-    else
-      "https://wdl1.pcfg.cache.wpscdn.com/wpsdl/wpsoffice/download/linux/${lib.last (lib.splitVersion pkgVersion)}/wps-office_${pkgVersion}.XA_amd64.deb";
-  hash =
-    if useChineseVersion then
-      "sha256-vpXK8YyjqhFdmtajO6ZotYACpe5thMct9hwUT3advUM="
-    else
-      "sha256-o8njvwE/UsQpPuLyChxGAZ4euvwfuaHxs5pfUvcM7kI=";
-  uri = builtins.replaceStrings [ "https://wps-linux-personal.wpscdn.cn" ] [ "" ] url;
-  securityKey = "7f8faaaa468174dc1c9cd62e5f218a5b";
+  url = "https://wdl1.pcfg.cache.wpscdn.com/wpsdl/wpsoffice/download/linux/${lib.last (lib.splitVersion pkgVersion)}/wps-office_${pkgVersion}.XA_amd64.deb";
+  hash = "sha256-o8njvwE/UsQpPuLyChxGAZ4euvwfuaHxs5pfUvcM7kI=";
 in
 stdenv.mkDerivation rec {
   pname = "wpsoffice";
   version = pkgVersion;
 
-  src = runCommandLocal (if useChineseVersion then "wps-office_${version}_amd64.deb" else "wps-office_${version}.XA_amd64.deb")
-    {
-      outputHashMode = "recursive";
-      outputHashAlgo = "sha256";
-      outputHash = hash;
+  src =
+    runCommandLocal "wps-office_${version}.XA_amd64.deb"
+      {
+        outputHashMode = "recursive";
+        outputHashAlgo = "sha256";
+        outputHash = hash;
 
-      nativeBuildInputs = [ curl coreutils ];
+        nativeBuildInputs = [
+          curl
+          coreutils
+        ];
 
-      impureEnvVars = lib.fetchers.proxyImpureEnvVars;
-      SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
-    } ''
-    timestamp10=$(date '+%s')
-    md5hash=($(echo -n "${securityKey}${uri}$timestamp10" | md5sum))
-
-    curl \
-    --retry 3 --retry-delay 3 \
-    "${url}?t=$timestamp10&k=$md5hash" \
-    > $out
-  '';
+        impureEnvVars = lib.fetchers.proxyImpureEnvVars;
+        SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+      }
+      ''
+        curl \
+        --retry 3 --retry-delay 3 \
+        "${url}" \
+        > $out
+      '';
 
   unpackCmd = "dpkg -x $src .";
   sourceRoot = ".";
@@ -80,7 +72,7 @@ stdenv.mkDerivation rec {
     libtiff
     udev
     gtk3
-    qtbase
+    libsForQt5.qt5.qtbase
     xorg.libXdamage
     xorg.libXtst
     xorg.libXv
@@ -136,6 +128,11 @@ stdenv.mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     hydraPlatforms = [ ];
     license = licenses.unfreeRedistributable;
-    maintainers = with maintainers; [ mlatus th0rgal rewine pokon548 ];
+    maintainers = with maintainers; [
+      mlatus
+      th0rgal
+      rewine
+      pokon548
+    ];
   };
 }
