@@ -1433,14 +1433,6 @@ with pkgs;
   zsnes = pkgsi686Linux.callPackage ../applications/emulators/zsnes { };
   zsnes2 = pkgsi686Linux.callPackage ../applications/emulators/zsnes/2.x.nix { };
 
-  ### APPLICATIONS/EMULATORS/BSNES
-
-  ### APPLICATIONS/EMULATORS/DOLPHIN-EMU
-
-  dolphin-emu-primehack = qt6.callPackage ../applications/emulators/dolphin-emu/primehack.nix {
-    inherit (darwin.apple_sdk.frameworks) CoreBluetooth ForceFeedback IOKit OpenGL;
-  };
-
   ### APPLICATIONS/EMULATORS/RETROARCH
 
   libretro = recurseIntoAttrs (callPackage ../applications/emulators/libretro { });
