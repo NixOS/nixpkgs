@@ -605,7 +605,10 @@ rec {
 
         check = x:
           let
-            isInStore = builtins.match "${builtins.storeDir}/[^.].*" (toString x) != null;
+            isInStore = lib.path.hasStorePathPrefix (if builtins.isPath x then x
+              # Discarding string context is necessary to convert the value to
+              # a path and safe as the result is never used in any derivation.
+              else /. + builtins.unsafeDiscardStringContext x);
             isAbsolute = builtins.substring 0 1 (toString x) == "/";
             isExpectedType = (
               if inStore == null || inStore then
