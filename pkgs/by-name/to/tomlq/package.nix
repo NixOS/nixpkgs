@@ -23,6 +23,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Tool for getting data from TOML files on the command line";
     homepage = "https://github.com/cryptaliagy/tomlq";
+    changelog = "https://github.com/cryptaliagy/tomlq/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kinzoku ];
     mainProgram = "tq";
