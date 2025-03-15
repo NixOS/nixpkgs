@@ -3016,6 +3016,14 @@
     githubId = 727571;
     keys = [ { fingerprint = "AAD4 3B70 A504 9675 CFC8  B101 BAFD 205D 5FA2 B329"; } ];
   };
+  berrij = {
+    email = "jonathan@berrisch.biz";
+    matrix = "@berrij:fairydust.space";
+    name = "Jonathan Berrisch";
+    github = "BerriJ";
+    githubId = 37799358;
+    keys = [ { fingerprint = "42 B6 CC90 6 A91 EA4F 8 A7E 315 B 30 DC 5398 152 C 5310"; } ];
+  };
   berryp = {
     email = "berryphillips@gmail.com";
     github = "berryp";
