@@ -5,17 +5,18 @@
   kernel,
   kernelModuleMakeFlags,
   bc,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rtl8821ce";
-  version = "${kernel.version}-unstable-2025-02-08";
+  version = "0-unstable-2025-03-12";
 
   src = fetchFromGitHub {
     owner = "tomaspinho";
     repo = "rtl8821ce";
-    rev = "46d1a59e37364ed4aedcb09746f0ae412e6b2066";
-    hash = "sha256-vQM7e8tuy4Lf2HvGtHUvOxulF4DIhX33vFel9u9i178=";
+    rev = "1bbfc35ece57cbdfb8473c49d3c6464eede54191";
+    hash = "sha256-n9g98qORHdFVTU6jlMnCFvqW/xz6SDKqIBjT+IFEiHU=";
   };
 
   hardeningDisable = [ "pic" ];
@@ -35,6 +36,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   enableParallelBuilding = true;
+
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch=master" ]; };
 
   meta = {
     description = "Realtek rtl8821ce driver";
