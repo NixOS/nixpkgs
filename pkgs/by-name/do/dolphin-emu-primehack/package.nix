@@ -4,9 +4,7 @@
   fetchFromGitHub,
   pkg-config,
   cmake,
-  wrapQtAppsHook,
-  qtbase,
-  qtsvg,
+  qt6,
   bluez,
   ffmpeg,
   libao,
@@ -40,10 +38,6 @@
   libpulseaudio,
 
   # - Inputs used for Darwin
-  CoreBluetooth,
-  ForceFeedback,
-  IOKit,
-  OpenGL,
   libpng,
   hidapi,
 }:
@@ -63,7 +57,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkg-config
     cmake
-  ] ++ lib.optional stdenv.hostPlatform.isLinux wrapQtAppsHook;
+  ] ++ lib.optional stdenv.hostPlatform.isLinux qt6.wrapQtAppsHook;
 
   buildInputs =
     [
@@ -95,8 +89,8 @@ stdenv.mkDerivation rec {
       sfml
       fmt
       xz
-      qtbase
-      qtsvg
+      qt6.qtbase
+      qt6.qtsvg
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       bluez
@@ -104,12 +98,6 @@ stdenv.mkDerivation rec {
       libevdev
       alsa-lib
       vulkan-loader
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      CoreBluetooth
-      OpenGL
-      ForceFeedback
-      IOKit
     ];
 
   cmakeFlags =
