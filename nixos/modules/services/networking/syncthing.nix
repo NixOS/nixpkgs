@@ -127,7 +127,7 @@ let
     (lib.concatStringsSep "\n")
   ]) +
   /* Now we update the other settings defined in cleanedConfig which are not
-  "folders" or "devices". */
+  "folders", "devices", or the "guiPasswordFile". */
   (lib.pipe cleanedConfig [
     builtins.attrNames
     (lib.subtractLists ["folders" "devices" "guiPasswordFile"])
