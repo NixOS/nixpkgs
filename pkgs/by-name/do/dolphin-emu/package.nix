@@ -2,10 +2,15 @@
   lib,
   stdenv,
   fetchFromGitHub,
+
+  # nativeBuildInputs
   cmake,
   pkg-config,
-  alsa-lib,
-  bluez,
+  qt6,
+  # darwin-only
+  xcbuild,
+
+  # buildInputs
   bzip2,
   cubeb,
   curl,
@@ -14,15 +19,10 @@
   fmt_10,
   gtest,
   hidapi,
-  libevdev,
-  libGL,
-  libiconv,
+  libXdmcp,
   libpulseaudio,
   libspng,
   libusb1,
-  libXdmcp,
-  libXext,
-  libXrandr,
   lz4,
   lzo,
   mbedtls_2,
@@ -30,20 +30,25 @@
   minizip-ng,
   openal,
   pugixml,
-  qt6,
   SDL2,
   sfml,
-  udev,
-  vulkan-loader,
   xxHash,
   xz,
-
-  # Used in passthru
-  testers,
-
-  # Darwin-only dependencies
+  # linux-only
+  alsa-lib,
+  bluez,
+  libGL,
+  libXext,
+  libXrandr,
+  libevdev,
+  udev,
+  vulkan-loader,
+  # darwin-only
   moltenvk,
-  xcbuild,
+
+  # passthru
+  testers,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -54,8 +59,8 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "dolphin-emu";
     repo = "dolphin";
     tag = finalAttrs.version;
-    hash = "sha256-oqJKXFcsFgoYjUqdk3Z/CIFhOa8w0drcF4JwtHRI1Hs=";
     fetchSubmodules = true;
+    hash = "sha256-oqJKXFcsFgoYjUqdk3Z/CIFhOa8w0drcF4JwtHRI1Hs=";
   };
 
   strictDeps = true;
@@ -80,11 +85,10 @@ stdenv.mkDerivation (finalAttrs: {
       fmt_10
       gtest
       hidapi
-      libiconv
+      libXdmcp
       libpulseaudio
       libspng
       libusb1
-      libXdmcp
       lz4
       lzo
       mbedtls_2
@@ -104,10 +108,10 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       alsa-lib
       bluez
-      libevdev
       libGL
       libXext
       libXrandr
+      libevdev
       # FIXME: Vendored version is newer than mgba's stable release, remove the comment on next mgba's version
       #mgba # Derivation doesn't support Darwin
       udev
@@ -119,20 +123,20 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags =
     [
-      "-DDISTRIBUTOR=NixOS"
-      "-DDOLPHIN_WC_REVISION=${finalAttrs.src.rev}"
-      "-DDOLPHIN_WC_DESCRIBE=${finalAttrs.version}"
-      "-DDOLPHIN_WC_BRANCH=master"
+      (lib.cmakeFeature "DISTRIBUTOR" "NixOS")
+      (lib.cmakeFeature "DOLPHIN_WC_REVISION" finalAttrs.src.rev)
+      (lib.cmakeFeature "DOLPHIN_WC_DESCRIBE" finalAttrs.version)
+      (lib.cmakeFeature "DOLPHIN_WC_BRANCH" "master")
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "-DOSX_USE_DEFAULT_SEARCH_PATH=True"
-      "-DUSE_BUNDLED_MOLTENVK=OFF"
-      "-DMACOS_CODE_SIGNING=OFF"
+      (lib.cmakeBool "OSX_USE_DEFAULT_SEARCH_PATH" true)
+      (lib.cmakeBool "USE_BUNDLED_MOLTENVK" false)
+      (lib.cmakeBool "MACOS_CODE_SIGNING" false)
       # Bundles the application folder into a standalone executable, so we cannot devendor libraries
-      "-DSKIP_POSTPROCESS_BUNDLE=ON"
+      (lib.cmakeBool "SKIP_POSTPROCESS_BUNDLE" true)
       # Needs xcode so compilation fails with it enabled. We would want the version to be fixed anyways.
       # Note: The updater isn't available on linux, so we don't need to disable it there.
-      "-DENABLE_AUTOUPDATE=OFF"
+      (lib.cmakeBool "ENABLE_AUTOUPDATE" false)
     ];
 
   qtWrapperArgs = lib.optionals stdenv.hostPlatform.isLinux [
@@ -154,20 +158,28 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
   passthru = {
-    tests.version = testers.testVersion {
-      package = finalAttrs.finalPackage;
-      command = "dolphin-emu-nogui --version";
-      inherit (finalAttrs) version;
+    tests = {
+      version = testers.testVersion {
+        package = finalAttrs.finalPackage;
+        command = "dolphin-emu-nogui --version";
+        inherit (finalAttrs) version;
+      };
+    };
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "([0-9]+)"
+      ];
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://dolphin-emu.org";
     description = "Gamecube/Wii/Triforce emulator for x86_64 and ARMv8";
     mainProgram = if stdenv.hostPlatform.isDarwin then "Dolphin" else "dolphin-emu";
     branch = "master";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ pbsds ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ pbsds ];
   };
 })
