@@ -18,13 +18,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "osmo-iuh";
-  version = "1.6.0";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "osmocom";
     repo = "osmo-iuh";
     rev = version;
-    hash = "sha256-3ADn0GSoXPXL1gD79JjD2hXNBN/v8aaEKgf5qFNGEJs=";
+    hash = "sha256-V1lk8NLOHe9GmnF/VR/k5Y1eFRS3gvH+sEDPPW+omfY=";
   };
 
   prePatch = ''
