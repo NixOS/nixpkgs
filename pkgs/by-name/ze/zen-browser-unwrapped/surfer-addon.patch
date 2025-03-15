@@ -1,0 +1,26 @@
+diff --git a/src/commands/download/addon.ts b/src/commands/download/addon.ts
+index 8610fbe..511fedf 100644
+--- a/src/commands/download/addon.ts
++++ b/src/commands/download/addon.ts
+@@ -215,19 +215,10 @@ ${runTree(files, '')}`
+   )
+ }
+ 
+-export async function initializeAddon(addon: AddonInfo & { name: string }) {
+-  const outPath = join(ENGINE_DIR, 'browser', 'extensions', addon.name)
++export function initializeAddon(addon: AddonInfo & { name: string }) {
++  join(process.env.firefoxSource, 'browser', 'extensions', addon.name)
+ 
+   log.info(`Initializing addon...`)
+-
+-  await configDispatch('git', {
+-    args: ['add', '-f', '.'],
+-    cwd: outPath,
+-  })
+-  await configDispatch('git', {
+-    args: ['commit', '-m', addon.name],
+-    cwd: ENGINE_DIR,
+-  })
+ }
+ 
+ export async function addAddonsToMozBuild(
