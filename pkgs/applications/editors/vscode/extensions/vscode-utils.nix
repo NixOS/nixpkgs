@@ -75,30 +75,32 @@ let
   fetchVsixFromVscodeMarketplace =
     mktplcExtRef: fetchurl (import ./mktplcExtRefToFetchArgs.nix mktplcExtRef);
 
-  buildVscodeMarketplaceExtension =
-    a@{
-      name ? "",
-      src ? null,
-      vsix ? null,
-      mktplcRef,
-      ...
-    }:
-    assert "" == name;
-    assert null == src;
-    buildVscodeExtension (
-      (removeAttrs a [
-        "mktplcRef"
-        "vsix"
-      ])
-      // {
+  buildVscodeMarketplaceExtension = lib.extendMkDerivation {
+    constructDrv = buildVscodeExtension;
+    excludeDrvArgNames = [
+      "mktplcRef"
+      "vsix"
+    ];
+    extendDrvArgs =
+      finalAttrs:
+      {
+        name ? "",
+        src ? null,
+        vsix ? null,
+        mktplcRef,
+        ...
+      }:
+      assert "" == name;
+      assert null == src;
+      {
+        inherit (mktplcRef) version;
         pname = "${mktplcRef.publisher}-${mktplcRef.name}";
-        version = mktplcRef.version;
         src = if (vsix != null) then vsix else fetchVsixFromVscodeMarketplace mktplcRef;
         vscodeExtPublisher = mktplcRef.publisher;
         vscodeExtName = mktplcRef.name;
         vscodeExtUniqueId = "${mktplcRef.publisher}.${mktplcRef.name}";
-      }
-    );
+      };
+  };
 
   mktplcRefAttrList = [
     "name"
