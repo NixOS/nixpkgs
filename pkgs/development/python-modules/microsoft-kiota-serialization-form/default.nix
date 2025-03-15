@@ -25,7 +25,7 @@ buildPythonPackage rec {
     hash = "sha256-ribVfvKmDMxGmeqj30SDcnbNGdRBfs1DmqQGXP3EHCk=";
   };
 
-  sourceRoot = "source/packages/serialization/form/";
+  sourceRoot = "${src.name}/packages/serialization/form/";
 
   build-system = [ poetry-core ];
 
