@@ -2,7 +2,7 @@
 , gfortran, blas, lapack, eigen
 , useMpi ? false
 , mpi
-, openssh
+, mpiCheckPhaseHook
 , igraph
 , useAccel ? false #use Accelerate framework on darwin
 }:
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     blas lapack
   ]) ++ lib.optional useMpi mpi;
 
-  nativeCheckInputs = lib.optional useMpi openssh;
+  nativeCheckInputs = lib.optional useMpi mpiCheckPhaseHook;
   checkInputs =
     # work around for `ld: file not found: @rpath/libquadmath.0.dylib`
     # which occurs due to an mpi test linking with `-flat_namespace`
