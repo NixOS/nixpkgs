@@ -19,6 +19,9 @@
 mkKdeDerivation {
   pname = "kio-extras";
 
+  patches = [
+    ./add-nixos-man-db-config-path.patch
+  ];
   extraNativeBuildInputs = [
     pkg-config
     gperf
