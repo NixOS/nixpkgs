@@ -1,13 +1,20 @@
 {
   lib,
-  rustPlatform,
-  fetchCrate,
-  cargo-c,
-  rust,
   stdenv,
+  rust,
+  rustPlatform,
+  dovi-tool,
+  cargo-c,
+  tomlq,
 }:
 
+let
+  inherit (rust.envVars) setEnv;
+  inherit (lib) optionals concatStringsSep;
+in
 rustPlatform.buildRustPackage (finalAttrs: {
+  __structuredAttrs = true;
+
   pname = "libdovi";
   version = "3.3.1";
 
@@ -16,42 +23,92 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "dev"
   ];
 
-  src = fetchCrate {
-    pname = "dolby_vision";
-    inherit (finalAttrs) version;
-    hash = "sha256-ecd+r0JWZtP/rxt4Y3Cj2TkygXIMy5KZhZpXBwJNPx4=";
-  };
+  inherit (dovi-tool)
+    src
+    useFetchCargoVendor
+    cargoDeps
+    cargoHash
+    ;
 
-  cargoLock.lockFile = ./Cargo.lock;
+  nativeBuildInputs = [
+    cargo-c
+    tomlq
+  ];
 
-  postPatch = ''
-    ln -s ${./Cargo.lock} Cargo.lock
+  cargoCFlags = [
+    "--frozen"
+    "--prefix=${placeholder "out"}"
+    "--includedir=${placeholder "dev"}/include"
+    "--pkgconfigdir=${placeholder "dev"}/lib/pkgconfig"
+    "--target=${stdenv.hostPlatform.rust.rustcTarget}"
+  ];
+
+  # mirror Cargo flags
+  cargoCBuildFlags =
+    optionals (finalAttrs.cargoBuildType != "debug") [
+      "--profile=${finalAttrs.cargoBuildType}"
+    ]
+    ++ optionals (finalAttrs.cargoBuildNoDefaultFeatures) [
+      "--no-default-features"
+    ]
+    ++ optionals (finalAttrs.cargoBuildFeatures != [ ]) [
+      "--features=${concatStringsSep "," finalAttrs.cargoBuildFeatures}"
+    ];
+
+  cargoCTestFlags =
+    optionals (finalAttrs.cargoCheckType != "debug") [
+      "--profile=${finalAttrs.cargoCheckType}"
+    ]
+    ++ optionals (finalAttrs.cargoCheckNoDefaultFeatures) [
+      "--no-default-features"
+    ]
+    ++ optionals (finalAttrs.cargoCheckFeatures != [ ]) [
+      "--features=${concatStringsSep "," finalAttrs.cargoCheckFeatures}"
+    ];
+
+  postUnpack = ''
+    # use workspace manifest if available
+    if tq -f Cargo.toml workspace.members | grep -F -q dolby_vision; then
+      prependToVar cargoCBuildFlags --package=dolby_vision
+    else
+      prependToVar cargoCBuildFlags --manifest-path=dolby_vision/Cargo.toml
+    fi
   '';
 
-  nativeBuildInputs = [ cargo-c ];
+  configurePhase = ''
+    # let stdenv handle stripping
+    export "CARGO_PROFILE_''${cargoBuildType@U}_STRIP"=false
+    prependToVar cargoCFlags -j "$NIX_BUILD_CORES"
+  '';
 
   buildPhase = ''
     runHook preBuild
-    ${rust.envVars.setEnv} cargo cbuild -j $NIX_BUILD_CORES --release --frozen --prefix=${placeholder "out"} --target ${stdenv.hostPlatform.rust.rustcTarget}
+    ${setEnv} cargo cbuild "''${cargoCFlags[@]}" "''${cargoCBuildFlags[@]}"
     runHook postBuild
   '';
 
   installPhase = ''
     runHook preInstall
-    ${rust.envVars.setEnv} cargo cinstall -j $NIX_BUILD_CORES --release --frozen --prefix=${placeholder "out"} --target ${stdenv.hostPlatform.rust.rustcTarget}
+    ${setEnv} cargo ctest "''${cargoCFlags[@]}" "''${cargoCTestFlags[@]}"
     runHook postInstall
   '';
 
   checkPhase = ''
     runHook preCheck
-    ${rust.envVars.setEnv} cargo ctest -j $NIX_BUILD_CORES --release --frozen --prefix=${placeholder "out"} --target ${stdenv.hostPlatform.rust.rustcTarget}
+    ${setEnv} cargo cinstall "''${cargoCFlags[@]}" "''${cargoCBuildFlags[@]}"
     runHook postCheck
   '';
+
+  passthru.tests = {
+    inherit dovi-tool;
+  };
 
   meta = {
     description = "C library for Dolby Vision metadata parsing and writing";
     homepage = "https://crates.io/crates/dolby_vision";
+    changelog = "https://github.com/quietvoid/hdr10plus_tool/releases/tag/${dovi-tool.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kranzes ];
+    pkgConfigModules = [ "dovi" ];
   };
 })
