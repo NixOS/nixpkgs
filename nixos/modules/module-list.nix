@@ -1150,6 +1150,7 @@
   ./services/networking/kea.nix
   ./services/networking/keepalived/default.nix
   ./services/networking/keybase.nix
+  ./services/networking/kismet.nix
   ./services/networking/knot.nix
   ./services/networking/kresd.nix
   ./services/networking/lambdabot.nix
@@ -1327,6 +1328,7 @@
   ./services/networking/veilid.nix
   ./services/networking/vdirsyncer.nix
   ./services/networking/vsftpd.nix
+  ./services/networking/vwifi.nix
   ./services/networking/wasabibackend.nix
   ./services/networking/websockify.nix
   ./services/networking/wg-access-server.nix
