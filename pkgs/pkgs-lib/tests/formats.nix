@@ -601,6 +601,82 @@ in runBuildTests {
     '';
   };
 
+  luaTable = shouldPass {
+    format = formats.lua { };
+    input = {
+      null = null;
+      false = false;
+      true = true;
+      int = 10;
+      float = 3.141;
+      str = "foo";
+      attrs.foo = null;
+      list = [
+        null
+        null
+      ];
+      path = ./testfile;
+      inline = lib.mkLuaInline "hello('world')";
+    };
+    expected = ''
+      return {
+        ["attrs"] = {
+          ["foo"] = nil,
+        },
+        ["false"] = false,
+        ["float"] = 3.141,
+        ["inline"] = (hello("world")),
+        ["int"] = 10,
+        ["list"] = {
+          nil,
+          nil,
+        },
+        ["null"] = nil,
+        ["path"] = "${./testfile}",
+        ["str"] = "foo",
+        ["true"] = true,
+      }
+    '';
+  };
+
+  luaBindings = shouldPass {
+    format = formats.lua {
+      asBindings = true;
+    };
+    input = {
+      null = null;
+      _false = false;
+      _true = true;
+      int = 10;
+      float = 3.141;
+      str = "foo";
+      attrs.foo = null;
+      list = [
+        null
+        null
+      ];
+      path = ./testfile;
+      inline = lib.mkLuaInline "hello('world')";
+    };
+    expected = ''
+      _false = false
+      _true = true
+      attrs = {
+        ["foo"] = nil,
+      }
+      float = 3.141
+      inline = (hello("world"))
+      int = 10
+      list = {
+        nil,
+        nil,
+      }
+      null = nil
+      path = "${./testfile}"
+      str = "foo"
+    '';
+  };
+
   phpAtoms = shouldPass rec {
     format = formats.php { finalVariable = "config"; };
     input = {
