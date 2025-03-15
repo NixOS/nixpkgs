@@ -1,0 +1,42 @@
+From a97d5f501ff3125d96e6c64dfa498ca1a598a4bd Mon Sep 17 00:00:00 2001
+From: happysalada <raphael@megzari.com>
+Date: Sun, 2 Mar 2025 08:30:36 -0500
+Subject: [PATCH] feat: ensure ui files are writeable On startup prefect copies
+ over files from the ui into the ui directory. If for any reason the ui files
+ were not writeable, the whole setup will fail. This PR ensures that the
+ copied files are writeable. To give a bit more context, I am currently
+ packaging Prefect for nixos. Nix having a little bit of a strict build
+ system, makes sure that the built package has only read-only files. this is
+ to ensure the build is deterministic. I understand that this might appear as
+ a detail related to nix build system only. I can patch the source when
+ building the nix package, but I thought I would try to contribute the patch.
+ No hard feelings if you are not interested in this patch. Thank you for
+ developping prefect!
+
+fix formatting
+---
+ src/prefect/server/api/server.py | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/src/prefect/server/api/server.py b/src/prefect/server/api/server.py
+index e5b64d527..ac64616ef 100644
+--- a/src/prefect/server/api/server.py
++++ b/src/prefect/server/api/server.py
+@@ -250,8 +250,14 @@ def copy_directory(directory: str, path: str) -> None:
+             if os.path.exists(destination):
+                 shutil.rmtree(destination)
+             shutil.copytree(source, destination, symlinks=True)
++            # ensure copied files are writeable
++            for root, dirs, files in os.walk(destination):
++                for f in files:
++                    os.chmod(os.path.join(root, f), 0o600)
+         else:
+             shutil.copy2(source, destination)
++            # Ensure copied file is writeable
++            os.chmod(destination, 0o600)
+ 
+ 
+ async def custom_internal_exception_handler(
+-- 
+2.48.1
+

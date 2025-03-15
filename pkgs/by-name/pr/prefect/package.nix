@@ -18,6 +18,10 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-4kwGrKvDihBi6Gcvcf6ophNI6GGd+M4qR0nnu/AUK1Q=";
   };
 
+  patches = [
+    ./make_ui_files_writeable_on_startup.patch
+  ];
+
   pythonRelaxDeps = [
     "websockets"
   ];
@@ -146,6 +150,12 @@ python3Packages.buildPythonApplication rec {
       # prefect-sqlalchemy
     ];
   };
+
+  makeWrapperArgs = [
+    # Add the installed directories to the python path so the worker can find them
+    "--prefix PYTHONPATH : ${python3Packages.makePythonPath dependencies}"
+    "--prefix PYTHONPATH : $out/${python3Packages.python.sitePackages}"
+  ];
 
   # Tests are not included in the pypi source
   doCheck = false;
