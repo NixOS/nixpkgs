@@ -1659,6 +1659,8 @@ let
 
         weibo = ignoreCompilationError super.weibo; # elisp error
 
+        workgroups2 = ignoreCompilationError super.workgroups2; # elisp error
+
         xenops = mkHome super.xenops;
 
         # missing optional dependencies
