@@ -95,8 +95,8 @@ rustPlatform.buildRustPackage rec {
 
   # Disable flaky tests, see: https://github.com/NixOS/nixpkgs/pull/382395#issuecomment-2726541403
   checkFlags = [
-    "--skip replicated_loglet"
-    "--skip fast_forward_over_trim_gap"
+    "--skip=replicated_loglet"
+    "--skip=fast_forward_over_trim_gap"
   ];
 
   passthru = {
