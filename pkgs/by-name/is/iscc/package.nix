@@ -59,6 +59,7 @@ stdenvNoCC.mkDerivation rec {
     changelog = "https://jrsoftware.org/files/is6-whatsnew.htm";
     license = licenses.unfreeRedistributable;
     maintainers = [ ];
+    mainProgram = "iscc";
     platforms = wineWow64Packages.stable.meta.platforms;
   };
 }
