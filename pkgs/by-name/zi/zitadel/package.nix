@@ -13,17 +13,19 @@
   protoc-gen-validate,
   sass,
   statik,
+  yq-go,
+  emptyDirectory,
 }:
 
 let
-  version = "2.71.1";
+  generatedSrc = builtins.fromJSON (builtins.readFile ./source.json);
+  inherit (generatedSrc) version goModulesHash;
   zitadelRepo = fetchFromGitHub {
     owner = "zitadel";
     repo = "zitadel";
     rev = "v${version}";
-    hash = "sha256-izYsf2Cc0jG8Wf82K6HsTVP+kAhmoEJVU7OJXhSzXLo=";
+    hash = generatedSrc.repoHash;
   };
-  goModulesHash = "sha256-mE0vhW1nW16SzqIu0C3q8qCXabJO7fZgkp7GeLWCwog=";
 
   buildZitadelProtocGen =
     name:
@@ -48,6 +50,34 @@ let
   protoc-gen-authoption = buildZitadelProtocGen "authoption";
   protoc-gen-zitadel = buildZitadelProtocGen "zitadel";
 
+  fetchProtobufDep =
+    {
+      remote,
+      owner,
+      repository,
+      commit,
+      hash,
+    }:
+    stdenv.mkDerivation {
+      pname = "${repository}-buf-dep";
+      version = commit;
+
+      src = emptyDirectory;
+
+      nativeBuildInputs = [
+        buf
+        cacert
+      ];
+
+      buildPhase = ''
+        env HOME=$TMPDIR buf export --output=$out ${lib.escapeShellArg "${remote}/${owner}/${repository}:${commit}"}
+      '';
+
+      outputHashMode = "recursive";
+      outputHashAlgo = "sha256";
+      outputHash = hash;
+    };
+
   # Buf downloads dependencies from an external repo - there doesn't seem to
   # really be any good way around it. We'll use a fixed-output derivation so it
   # can download what it needs, and output the relevant generated code for use
@@ -60,7 +90,6 @@ let
       bufArgs ? "",
       workDir ? ".",
       outputPath,
-      hash,
     }:
     stdenv.mkDerivation {
       pname = "${pname}-buf-generated";
@@ -72,20 +101,31 @@ let
       nativeBuildInputs = nativeBuildInputs ++ [
         buf
         cacert
+        yq-go
       ];
 
       buildPhase = ''
+        runHook preBuild
+
+        yq --inplace '.deps = []' proto/buf.yaml
+        yq --inplace '.deps = []' proto/buf.lock
+        yq eval-all --inplace '[ select(fileIndex == 0),select(fileIndex == 1) ] | .[0].directories += .[1] | .[0]' buf.work.yaml - <<"END"
+        ${builtins.toJSON (builtins.attrNames generatedSrc.protobufDeps)}
+        END
+        ${lib.concatLines (
+          lib.flip lib.mapAttrsToList generatedSrc.protobufDeps (
+            name: dep: "cp -r ${fetchProtobufDep dep} ${name}"
+          )
+        )}
         cd ${workDir}
-        HOME=$TMPDIR buf generate ${bufArgs}
+        env HOME=$TMPDIR buf generate --debug ${bufArgs}
+
+        runHook postBuild
       '';
 
       installPhase = ''
         cp -r ${outputPath} $out
       '';
-
-      outputHashMode = "recursive";
-      outputHashAlgo = "sha256";
-      outputHash = hash;
     };
 
   protobufGenerated = generateProtobufCode {
@@ -100,7 +140,6 @@ let
       protoc-gen-zitadel
     ];
     outputPath = ".artifacts";
-    hash = "sha256-QUUe3jK9rOWzI1jzevgZ/UB6SqB6GXtd9CVtAqiStdo=";
   };
 in
 buildGoModule rec {
@@ -145,9 +184,11 @@ buildGoModule rec {
   '';
 
   passthru = {
+    inherit fetchProtobufDep;
     console = callPackage (import ./console.nix {
       inherit generateProtobufCode version zitadelRepo;
     }) { };
+    updateScript = ./update.py;
   };
 
   meta = with lib; {
