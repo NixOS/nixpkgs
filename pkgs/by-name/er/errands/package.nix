@@ -17,7 +17,7 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "errands";
-  version = "46.2.7";
+  version = "46.2.8";
 
   pyproject = false;
 
@@ -25,7 +25,7 @@ python3Packages.buildPythonApplication rec {
     owner = "mrvladus";
     repo = "Errands";
     tag = version;
-    hash = "sha256-kPF6BS7qDFstCGadSB8MSvBy+T4PkG/wRisYAaIU6rY=";
+    hash = "sha256-zFI3+U40zzQL3lPPYwL/ekWA1ugOkORlJui4QT6pgQI=";
   };
 
   nativeBuildInputs = [
