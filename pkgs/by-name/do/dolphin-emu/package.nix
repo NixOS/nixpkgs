@@ -4,7 +4,6 @@
   fetchFromGitHub,
   cmake,
   pkg-config,
-  wrapQtAppsHook,
   alsa-lib,
   bluez,
   bzip2,
@@ -31,8 +30,7 @@
   minizip-ng,
   openal,
   pugixml,
-  qtbase,
-  qtsvg,
+  qt6,
   SDL2,
   sfml,
   udev,
@@ -44,13 +42,7 @@
   testers,
 
   # Darwin-only dependencies
-  CoreBluetooth,
-  ForceFeedback,
-  IOBluetooth,
-  IOKit,
   moltenvk,
-  OpenGL,
-  VideoToolbox,
   xcbuild,
 }:
 
@@ -72,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     [
       cmake
       pkg-config
-      wrapQtAppsHook
+      qt6.wrapQtAppsHook
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       xcbuild # for plutil
@@ -100,8 +92,8 @@ stdenv.mkDerivation (finalAttrs: {
       minizip-ng
       openal
       pugixml
-      qtbase
-      qtsvg
+      qt6.qtbase
+      qt6.qtsvg
       SDL2
       sfml
       xxHash
@@ -122,13 +114,7 @@ stdenv.mkDerivation (finalAttrs: {
       vulkan-loader
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      CoreBluetooth
-      ForceFeedback
-      IOBluetooth
-      IOKit
       moltenvk
-      OpenGL
-      VideoToolbox
     ];
 
   cmakeFlags =
