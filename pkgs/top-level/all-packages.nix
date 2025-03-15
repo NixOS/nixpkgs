@@ -8074,6 +8074,10 @@ with pkgs;
     baseBinName = "pkgconf";
   };
 
+  u-config = callPackage ../by-name/u-/u-config/package.nix {
+    pkg-config-wrapper = callPackage ../build-support/pkg-config-wrapper;
+  };
+
   pkg-config = callPackage ../build-support/pkg-config-wrapper {
     pkg-config = pkg-config-unwrapped;
   };
