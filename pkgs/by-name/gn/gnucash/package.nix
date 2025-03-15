@@ -26,7 +26,11 @@
   swig,
   webkitgtk_4_0,
   wrapGAppsHook3,
+  python ? null,
+  enablePython ? false,
 }:
+
+assert enablePython -> (python != null);
 
 stdenv.mkDerivation rec {
   pname = "gnucash";
@@ -44,6 +48,11 @@ stdenv.mkDerivation rec {
     makeWrapper
     wrapGAppsHook3
     pkg-config
+  ];
+
+  cmakeFlags = lib.optional enablePython [
+    "-DWITH_PYTHON=\"ON\""
+    "-DPYTHON_SYSCONFIG_BUILD=\"$out\""
   ];
 
   buildInputs =
@@ -69,7 +78,8 @@ stdenv.mkDerivation rec {
       JSONParse
       FinanceQuote
       perl
-    ]);
+    ])
+    ++ lib.optional enablePython python;
 
   patches = [
     # this patch disables test-gnc-timezone and test-gnc-datetime which fail due to nix datetime challenges
@@ -80,6 +90,8 @@ stdenv.mkDerivation rec {
     ./0003-remove-valgrind.patch
     # this patch makes gnucash exec the Finance::Quote wrapper directly
     ./0004-exec-fq-wrapper.patch
+    # SWIG adds a new function arg that is not present in the source. Idk, might be due to SWIG 3 vs 4 differences
+    ./0005-fix-swig-invocation.patch
     # this patch fixes the build against icu 76
     (fetchpatch {
       name = "icu-76.patch";
@@ -107,6 +119,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
   enableParallelChecking = true;
+  enableParallelBuilding = true;
   checkTarget = "check";
 
   passthru.docs = stdenv.mkDerivation {

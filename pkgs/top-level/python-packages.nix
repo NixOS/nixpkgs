@@ -5449,6 +5449,11 @@ self: super: with self; {
 
   gntp = callPackage ../development/python-modules/gntp { };
 
+  gnucash = toPythonModule (pkgs.gnucash.override {
+    inherit (self) python;
+    enablePython = true;
+  });
+
   gnureadline = callPackage ../development/python-modules/gnureadline { };
 
   go2rtc-client = callPackage ../development/python-modules/go2rtc-client { };
