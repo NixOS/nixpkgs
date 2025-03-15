@@ -68,9 +68,9 @@ let
 
     # FIXME: use multiple outputs or return actual JRE package
     passthru = {
-      jre = result;
-      home = result;
-      bundle = "${result}/Library/Java/JavaVirtualMachines/${name-prefix}-${lib.versions.major finalAttrs.version}.jdk";
+      jre = finalAttrs.finalPackage;
+      home = finalAttrs.finalPackage;
+      bundle = "${finalAttrs.finalPackage}/Library/Java/JavaVirtualMachines/${name-prefix}-${lib.versions.major finalAttrs.version}.jdk";
     };
 
     meta = with lib; {
