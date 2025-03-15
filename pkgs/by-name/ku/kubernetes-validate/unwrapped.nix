@@ -38,7 +38,9 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    versionCheckHook
   ];
+  versionCheckProgramArg = [ "--version" ];
 
   pythonImportsCheck = [ "kubernetes_validate" ];
 
