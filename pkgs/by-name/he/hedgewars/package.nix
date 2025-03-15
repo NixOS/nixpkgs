@@ -53,9 +53,12 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    # Add support for ffmpeg 6.0
-    # https://github.com/hedgewars/hw/pull/74
-    ./support-ffmpeg-6.patch
+    (fetchpatch {
+      # https://github.com/hedgewars/hw/pull/74
+      name = "Add support for ffmpeg 6.0";
+      url = "https://github.com/hedgewars/hw/pull/74/commits/71691fad8654031328f4af077fc32aaf29cdb7d0.patch";
+      hash = "sha256-nPfSQCc4eGCa4lCGl3gDx8fJp47N0lgVeDU5A5qb1yo=";
+    })
   ];
 
   nativeBuildInputs = [
