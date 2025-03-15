@@ -82,6 +82,16 @@ stdenv.mkDerivation (
   // {
     inherit npmDeps npmBuildScript;
 
+    env = {
+      npm_config_arch =
+        {
+          "x86_64" = "x64";
+          "aarch64" = "arm64";
+        }
+        .${stdenv.hostPlatform.parsed.cpu.name} or stdenv.hostPlatform.parsed.cpu.name;
+      npm_config_platform = stdenv.hostPlatform.parsed.kernel.name;
+    } // (args.env or { });
+
     nativeBuildInputs =
       nativeBuildInputs
       ++ [
