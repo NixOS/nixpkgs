@@ -241,3 +241,6 @@ e0fe216f4912dd88a021d12a44155fd2cfeb31c8
 
 # nixos/iso-image.nix: nixfmt
 da9a092c34cef6947d7aee2b134f61df45171631
+
+# treewide: add use hash instead of sha256 attribute for fetchHex and buildHex
+64e07521ccd99b88b7e879635fd47b5c0f612b54
