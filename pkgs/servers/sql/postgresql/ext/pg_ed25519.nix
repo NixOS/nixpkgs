@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   fetchFromGitLab,
   postgresql,
   buildPostgresqlExtension,

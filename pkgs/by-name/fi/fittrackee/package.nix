@@ -2,7 +2,6 @@
   fetchFromGitHub,
   lib,
   stdenv,
-  postgresql,
   postgresqlTestHook,
   python3Packages,
 }:
@@ -68,7 +67,6 @@ python3Packages.buildPythonApplication rec {
     pytestCheckHook
     freezegun
     postgresqlTestHook
-    postgresql
     time-machine
   ];
 

@@ -10,7 +10,6 @@
   poetry-core,
   pythonOlder,
   pgvector,
-  postgresql,
   postgresqlTestHook,
   pytestCheckHook,
   pytest-asyncio,
@@ -58,8 +57,9 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
-    (postgresql.withPackages (p: with p; [ pgvector ]))
-    postgresqlTestHook
+    (postgresqlTestHook.override (old: {
+      postgresql = old.postgresql.withPackages (p: with p; [ pgvector ]);
+    }))
   ];
 
   preCheck = ''

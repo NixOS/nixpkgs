@@ -1394,24 +1394,21 @@ self: super: {
         PGDATABASE=test
       '';
       testToolDepends = drv.testToolDepends or [] ++ [
-        pkgs.postgresql
         pkgs.postgresqlTestHook
       ];
     }) (doJailbreak super.postgresql-simple-migration);
 
   postgresql-simple = addTestToolDepends [
-    pkgs.postgresql
     pkgs.postgresqlTestHook
   ] super.postgresql-simple;
 
   beam-postgres = lib.pipe super.beam-postgres [
     # Requires pg_ctl command during tests
-    (addTestToolDepends [pkgs.postgresql])
-    (dontCheckIf (!pkgs.postgresql.doCheck || !self.testcontainers.doCheck))
+    (addTestToolDepends [pkgs.postgresqlForTests])
+    (dontCheckIf (!pkgs.postgresqlForTests.doCheck || !self.testcontainers.doCheck))
   ];
 
   users-postgresql-simple = addTestToolDepends [
-    pkgs.postgresql
     pkgs.postgresqlTestHook
   ] super.users-postgresql-simple;
 
@@ -1463,7 +1460,6 @@ self: super: {
           "--skip=/Esqueleto/MySQL"
         ];
         testToolDepends = drv.testToolDepends or [] ++ [
-          pkgs.postgresql
           pkgs.postgresqlTestHook
         ];
       })
@@ -1579,7 +1575,6 @@ self: super: {
           PGUSER=test
         '';
         testToolDepends = drv.testToolDepends or [] ++ [
-          pkgs.postgresql
           pkgs.postgresqlTestHook
         ];
       })
@@ -1830,7 +1825,7 @@ self: super: {
       (overrideCabal (drv: {
         librarySystemDepends = with pkgs; [ postgresql krb5.dev openssl.dev ];
         testToolDepends = drv.testToolDepends or [] ++ [
-          pkgs.postgresql pkgs.postgresqlTestHook
+          pkgs.postgresqlTestHook
         ];
         preCheck = drv.preCheck or "" + ''
           # empty string means use default connection

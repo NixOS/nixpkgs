@@ -1,8 +1,9 @@
-preCheckHooks+=('postgresqlStart')
-postCheckHooks+=('postgresqlStop')
+preCheckHooks+=(postgresqlStart)
+postCheckHooks+=(postgresqlStop)
 
 
 postgresqlStart() {
+  PATH="@postgresqlDev@/bin:@postgresql@/bin:$PATH"
 
   # Add default environment variable values
   #
@@ -69,6 +70,7 @@ EOF
 
   echo 'starting postgresql'
   eval "${postgresqlStartCommands:-pg_ctl start}"
+  failureHooks+=(postgresqlStop)
 
   echo 'setting up postgresql'
   eval "$postgresqlTestSetupCommands"
@@ -80,4 +82,5 @@ EOF
 postgresqlStop() {
   echo 'stopping postgresql'
   pg_ctl stop
+  failureHooks=("${failureHooks[@]/postgresqlStop}")
 }

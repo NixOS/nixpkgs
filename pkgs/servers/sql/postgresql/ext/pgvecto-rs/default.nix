@@ -10,7 +10,6 @@
   pkg-config,
   postgresql,
   rustPlatform,
-  stdenv,
   replaceVars,
 }:
 

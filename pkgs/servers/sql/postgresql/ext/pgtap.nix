@@ -32,8 +32,9 @@ buildPostgresqlExtension (finalAttrs: {
     dontUnpack = true;
     doCheck = true;
     nativeCheckInputs = [
-      postgresqlTestHook
-      (postgresql.withPackages (_: [ finalAttrs.finalPackage ]))
+      (postgresqlTestHook.override {
+        postgresql = postgresql.withPackages (_: [ finalAttrs.finalPackage ]);
+      })
     ];
     passAsFile = [ "sql" ];
     sql = ''
@@ -45,7 +46,6 @@ buildPostgresqlExtension (finalAttrs: {
       SELECT * FROM finish();
       ROLLBACK;
     '';
-    failureHook = "postgresqlStop";
     checkPhase = ''
       runHook preCheck
       psql -a -v ON_ERROR_STOP=1 -f $sqlPath

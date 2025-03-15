@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   cmake,
   fetchFromGitHub,
   openssl,

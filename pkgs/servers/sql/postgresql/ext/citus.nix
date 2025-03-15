@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   curl,
   fetchFromGitHub,
   lz4,

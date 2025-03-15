@@ -5,7 +5,6 @@ let
     {
       stdenv,
       fetchFromGitHub,
-      fetchpatch,
       fetchurl,
       lib,
       replaceVars,
@@ -425,6 +424,7 @@ let
                 inherit (llvmPackages) llvm;
                 postgresql = this;
                 stdenv = stdenv';
+                postgresqlTestHook = postgresqlTestHook.override { postgresql = this; };
                 postgresqlTestExtension =
                   {
                     finalPackage,
@@ -437,10 +437,10 @@ let
                       dontUnpack = true;
                       doCheck = true;
                       nativeCheckInputs = [
-                        postgresqlTestHook
-                        (this.withPackages (ps: [ finalPackage ] ++ (map (p: ps."${p}") withPackages)))
+                        (postgresqlTestHook.override {
+                          postgresql = this.withPackages (ps: [ finalPackage ] ++ (map (p: ps."${p}") withPackages));
+                        })
                       ];
-                      failureHook = "postgresqlStop";
                       postgresqlTestUserOptions = "LOGIN SUPERUSER";
                       passAsFile = [ "sql" ];
                       checkPhase = ''

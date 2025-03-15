@@ -32,10 +32,15 @@ let
 
   libpq = self.callPackage ./libpq.nix { };
 
+  postgresqlForTests = import ./17_test.nix {
+    inherit self;
+    jitSupport = false;
+  };
+
 in
 {
   # variations without and with JIT
   postgresqlVersions = mkAttributes false // mkAttributes true;
 
-  inherit libpq;
+  inherit libpq postgresqlForTests;
 }
