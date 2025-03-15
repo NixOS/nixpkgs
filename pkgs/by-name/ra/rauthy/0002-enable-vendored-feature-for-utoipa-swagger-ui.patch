@@ -1,0 +1,47 @@
+From dd8986466a0820f6b2989369fc2a260c765605b3 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Gutyina=20Gerg=C5=91?= <gutyina.gergo.2@gmail.com>
+Date: Fri, 3 Jan 2025 16:25:17 +0100
+Subject: [PATCH 2/2] enable vendored feature for utoipa-swagger-ui
+
+---
+ Cargo.lock | 7 +++++++
+ Cargo.toml | 2 +-
+ 2 files changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/Cargo.lock b/Cargo.lock
+index b68ac7b7..262aec28 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -6682,9 +6682,16 @@ dependencies = [
+  "serde_json",
+  "url",
+  "utoipa",
++ "utoipa-swagger-ui-vendored",
+  "zip",
+ ]
+ 
++[[package]]
++name = "utoipa-swagger-ui-vendored"
++version = "0.1.2"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "e2eebbbfe4093922c2b6734d7c679ebfebd704a0d7e56dfcb0d05818ce28977d"
++
+ [[package]]
+ name = "uuid"
+ version = "1.11.0"
+diff --git a/Cargo.toml b/Cargo.toml
+index 20a700da..12ce534b 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -101,7 +101,7 @@ tracing = { version = "0.1", features = ["attributes"] }
+ tracing-subscriber = { version = "0.3", features = ["env-filter", "json", "tracing"] }
+ tokio = { version = "1", features = ["full"] }
+ utoipa = { version = "5", features = ["actix_extras", "chrono", "openapi_extensions"] }
+-utoipa-swagger-ui = { version = "8.0.3", features = ["actix-web"] }
++utoipa-swagger-ui = { version = "8.0.3", features = ["actix-web", "vendored"] }
+ uuid = { version = "1", features = ["serde", "v4"] }
+ # update to 0.19 blocked by `actix-web-validator`
+ validator = { version = "0.18", features = ["derive"] }
+-- 
+2.47.0
+
