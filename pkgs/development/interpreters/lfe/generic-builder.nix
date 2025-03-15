@@ -41,7 +41,7 @@ let
     name = "proper";
     version = "1.4.0";
 
-    sha256 = "sha256-GChYQhhb0z772pfRNKXLWgiEOE2zYRn+4OPPpIhWjLs=";
+    hash = "sha256-GChYQhhb0z772pfRNKXLWgiEOE2zYRn+4OPPpIhWjLs=";
   };
 
 in
