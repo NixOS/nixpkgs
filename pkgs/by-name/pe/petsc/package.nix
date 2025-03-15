@@ -21,13 +21,14 @@
   pythonSupport ? false, # petsc python binding
   withExamples ? false,
   withFullDeps ? false, # full External libraries support
+  withCommonDeps ? true, # common External libraries support
 
   # External libraries options
-  withHdf5 ? true,
-  withMetis ? withFullDeps,
-  withParmetis ? false, # parmetis is unfree and should be enabled manualy
-  withPtscotch ? withFullDeps,
+  withHdf5 ? withCommonDeps,
+  withMetis ? withCommonDeps,
   withScalapack ? withFullDeps,
+  withParmetis ? withFullDeps, # parmetis is unfree
+  withPtscotch ? withFullDeps,
   withMumps ? withFullDeps,
   withP4est ? withFullDeps,
 
@@ -41,6 +42,7 @@
   pkg-config,
   p4est,
 }:
+assert withFullDeps -> withCommonDeps;
 
 # This version of PETSc does not support a non-MPI p4est build
 assert withP4est -> (p4est.mpiSupport && mpiSupport);
