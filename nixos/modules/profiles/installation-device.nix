@@ -66,6 +66,14 @@ with lib;
 
       Type `sudo systemctl start display-manager' to
       start the graphical user interface.
+    '' +
+    # Upstream bug?
+    # https://github.com/koverstreet/bcachefs-tools/issues/276
+    optionalString (config.boot.supportedFilesystems.bcachefs or false) ''
+
+      If you use encrypted Bcachefs volume, you may need to run
+      `keyctl link @u @s` or use `bcachefs unlock -k session`
+      to have it unlocking successfully.
     '';
 
     # We run sshd by default. Login is only possible after adding a
