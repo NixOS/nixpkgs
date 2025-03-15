@@ -1317,6 +1317,8 @@ let
           }
         );
 
+        keystore-mode = ignoreCompilationError super.keystore-mode; # elisp error
+
         kite = ignoreCompilationError super.kite; # elisp error
 
         # missing optional dependencies
