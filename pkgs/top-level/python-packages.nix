@@ -10505,7 +10505,6 @@ self: super: with self; {
     python3 = python;
     python3Packages = self;
     pythonSupport = true;
-    withFullDeps = true;
   });
 
   pex = callPackage ../development/python-modules/pex { };
