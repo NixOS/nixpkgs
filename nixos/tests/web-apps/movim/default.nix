@@ -7,8 +7,10 @@ let
   supportedSystems = [
     "x86_64-linux"
     "i686-linux"
+    "aarch64-linux"
   ];
 in
 {
-  standard = handleTestOn supportedSystems ./standard.nix { inherit system; };
+  ejabberd-h2o = handleTestOn supportedSystems ./ejabberd-h2o.nix { inherit system; };
+  prosody-nginx = handleTestOn supportedSystems ./prosody-nginx.nix { inherit system; };
 }
