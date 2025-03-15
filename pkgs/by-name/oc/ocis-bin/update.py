@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-##!nix-shell -I nixpkgs=./. -i python3 -p common-updater-scripts gnused nix coreutils python312
+#!nix-shell -I nixpkgs=./. -i python3 -p common-updater-scripts gnused nix coreutils python312
 """
 Updater script for the ocis-bin package.
 
@@ -63,44 +63,72 @@ def get_release_type(content, version):
 
 
 def get_latest_version():
+    """Get the latest version from GitHub releases."""
     url = "https://api.github.com/repos/owncloud/ocis/releases?per_page=1"
     req = urllib.request.Request(url)
 
     if GITHUB_TOKEN:
         req.add_header("Authorization", f"Bearer {GITHUB_TOKEN}")
 
+    req.add_header("Accept", "application/vnd.github.v3+json")
+    req.add_header("User-Agent", "ocis-bin-updater-script")
+
     with urllib.request.urlopen(req) as response:
         if response.status != 200:
             raise Exception(f"HTTP request failed with status {response.status}")
 
         data = response.read()
         releases = json.loads(data)
+
+        if not releases:
+            raise Exception("No releases found in GitHub API response")
+
         latest_version = releases[0]["tag_name"].lstrip("v")
 
     return latest_version
 
 
 def get_all_versions():
-    url = "https://api.github.com/repos/owncloud/ocis/releases"
-    req = urllib.request.Request(url)
+    """Get versions from GitHub releases with pagination (up to 10 pages)."""
+    versions = []
+    page = 1
+    max_pages = 10
+    per_page = 30
 
-    if GITHUB_TOKEN:
-        req.add_header("Authorization", f"Bearer {GITHUB_TOKEN}")
+    while page <= max_pages:
+        url = f"https://api.github.com/repos/owncloud/ocis/releases?page={page}&per_page={per_page}"
+        req = urllib.request.Request(url)
 
-    with urllib.request.urlopen(req) as response:
-        if response.status != 200:
-            raise Exception(f"HTTP request failed with status {response.status}")
+        if GITHUB_TOKEN:
+            req.add_header("Authorization", f"Bearer {GITHUB_TOKEN}")
 
-        data = response.read()
-        releases = json.loads(data)
+        req.add_header("Accept", "application/vnd.github.v3+json")
+        req.add_header("User-Agent", "ocis-bin-updater-script")
 
-        versions = []
-        for release in releases:
-            version = release["tag_name"].lstrip("v")
-            published_date = datetime.strptime(
-                release["published_at"], "%Y-%m-%dT%H:%M:%SZ"
-            )
-            versions.append({"version": version, "published_date": published_date})
+        with urllib.request.urlopen(req) as response:
+            if response.status != 200:
+                raise Exception(f"HTTP request failed with status {response.status}")
+
+            data = response.read()
+            releases = json.loads(data)
+
+            if not releases:
+                break
+
+            for release in releases:
+                version = release["tag_name"].lstrip("v")
+                published_date = datetime.strptime(
+                    release["published_at"], "%Y-%m-%dT%H:%M:%SZ"
+                )
+                versions.append({"version": version, "published_date": published_date})
+
+            page += 1
+
+            if len(releases) < per_page:
+                break
+
+    if not versions:
+        raise Exception("No releases found in GitHub API response")
 
     return versions
 
@@ -149,9 +177,19 @@ def update_source_version(pkg_name, version, hash_value, system):
 
 
 def main():
+    print("Fetching all versions from GitHub API (with pagination)...")
     all_versions = get_all_versions()
+    print(f"Found {len(all_versions)} versions across multiple pages")
+
+    if not all_versions:
+        print("Error: No versions fetched from GitHub API")
+        sys.exit(1)
+
     latest_version = all_versions[0]
+    print(f"Latest version from GitHub: {latest_version['version']}")
+
     nix_current_version = get_current_version()
+    print(f"Current nix version: {nix_current_version}")
 
     current_version = None
     for version in all_versions:
@@ -160,42 +198,76 @@ def main():
             break
 
     if not current_version:
+        available_versions = [v["version"] for v in all_versions]
         print(
-            f"error: cannot find github release for current nix version of ocis-bin {nix_current_version}"
+            f"Error: Cannot find GitHub release for current nix version {nix_current_version}"
+        )
+        print(
+            f"Available versions (searched {len(available_versions)} across multiple pages): {', '.join(available_versions[:10])}..."
         )
         sys.exit(1)
 
+    print(f"Found current version {current_version['version']} in GitHub releases")
+
     if current_version == latest_version:
-        print(f"ocis-bin is up-to-date: {current_version}")
+        print(f"ocis-bin is already up-to-date: {current_version['version']}")
         return
 
+    print("Fetching release roadmap information...")
     roadmap_url = "https://owncloud.dev/ocis/release_roadmap/"
-    response = urllib.request.urlopen(roadmap_url)
-    content = response.read().decode("utf-8")
-    latest_version_channel = get_release_type(content, latest_version["version"])
-    current_version_channel = get_release_type(content, current_version["version"])
+    try:
+        response = urllib.request.urlopen(roadmap_url)
+        content = response.read().decode("utf-8")
+
+        latest_version_channel = get_release_type(content, latest_version["version"])
+        current_version_channel = get_release_type(content, current_version["version"])
+
+        print(
+            f"Latest version {latest_version['version']} is in channel: {latest_version_channel}"
+        )
+        print(
+            f"Current version {current_version['version']} is in channel: {current_version_channel}"
+        )
+    except Exception as e:
+        print(f"Warning: Failed to fetch release roadmap information: {e}")
+        print("Proceeding with update using latest version")
+        latest_version_channel = TRACKING_CHANNEL
+        current_version_channel = TRACKING_CHANNEL
 
     target_version = None
     if latest_version_channel == TRACKING_CHANNEL:
         target_version = latest_version
+        print(
+            f"Using latest version {latest_version['version']} as it is in the {TRACKING_CHANNEL} channel"
+        )
     elif latest_version_channel != TRACKING_CHANNEL:
+        print(f"Looking for a newer version in the {TRACKING_CHANNEL} channel...")
         for version in all_versions:
-            channel = get_release_type(content, version["version"])
-            if (
-                channel == TRACKING_CHANNEL
-                and version["published_date"] > current_version["published_date"]
-            ):
-                target_version = version
+            try:
+                channel = get_release_type(content, version["version"])
+                if (
+                    channel == TRACKING_CHANNEL
+                    and version["published_date"] > current_version["published_date"]
+                ):
+                    target_version = version
+                    print(
+                        f"ocis-bin found newer version {version['version']} in channel {TRACKING_CHANNEL}"
+                    )
+                    break
+            except Exception as e:
                 print(
-                    f"ocis-bin found newer version {version['version']} in channel {TRACKING_CHANNEL}"
+                    f"Warning: Failed to determine channel for version {version['version']}: {e}"
                 )
-                break
 
     if not target_version:
         print(
             f"ocis-bin could not find newer version in {TRACKING_CHANNEL} than the current {current_version['version']}"
         )
         return
+
+    print(
+        f"Updating ocis-bin from {current_version['version']} to {target_version['version']}"
+    )
 
     systems = [
         ("darwin", "arm64", "aarch64-darwin"),
@@ -207,8 +279,12 @@ def main():
     ]
 
     for os_name, arch, system in systems:
+        print(f"Calculating hash for {os_name}-{arch}...")
         hash_value = get_hash(os_name, arch, target_version["version"])
+        print(f"Updating package for {system}...")
         update_source_version("ocis-bin", target_version["version"], hash_value, system)
+
+    print(f"Successfully updated ocis-bin to version {target_version['version']}")
 
 
 if __name__ == "__main__":
