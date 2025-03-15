@@ -20,13 +20,13 @@
 buildPythonPackage rec {
   pname = "surepy";
   version = "0.9.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "benleb";
-    repo = pname;
+    repo = "surepy";
     tag = "v${version}";
     hash = "sha256-ETgpXSUUsV1xoZjdnL2bzn4HwDjKC2t13yXwf28OBqI=";
   };
@@ -37,9 +37,9 @@ buildPythonPackage rec {
     "rich"
   ];
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiodns
     aiohttp
     async-timeout
@@ -60,9 +60,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python library to interact with the Sure Petcare API";
-    mainProgram = "surepy";
     homepage = "https://github.com/benleb/surepy";
-    license = with licenses; [ mit ];
+    changelog = "https://github.com/benleb/surepy/releases/tag/v${src.tag}";
+    license = licenses.mit;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "surepy";
   };
 }
