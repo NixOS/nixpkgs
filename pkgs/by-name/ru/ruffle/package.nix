@@ -21,11 +21,13 @@
   libxkbcommon,
   openh264,
   darwin,
+  versionCheckHook,
+  nix-update-script,
 }:
 let
   pname = "ruffle";
-  version = "nightly-2025-01-25";
-  # TODO: Remove overridden derivation once ruffle accepts upstream openh264-2.5.0
+  version = "nightly-2025-03-10";
+  versionDate = lib.removePrefix "nightly-" version;
   openh264-241 =
     if stdenvNoCC.hostPlatform.isLinux then
       openh264.overrideAttrs (_: rec {
@@ -41,20 +43,23 @@ let
     else
       null;
 in
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage (finalAttrs: {
   inherit pname version;
 
   src = fetchFromGitHub {
     owner = "ruffle-rs";
-    repo = pname;
-    tag = version;
-    hash = "sha256-JLh0tatP70rYo2QXLKu6M9jJ1gFpY76sYaUJqW9U4E0=";
+    repo = "ruffle";
+    tag = "${finalAttrs.version}";
+    hash = "sha256-VwDnl2KNFt5Dq7/CxF0APtc8LqF91JTttXH5gpQDHxU=";
   };
 
-  patches = [ ./remove-deterministic-feature.patch ];
-
   useFetchCargoVendor = true;
-  cargoHash = "sha256-PbNp/V+xmU6Lo24a6pd9XoT/LQmINztjOHKoikG9N4Y=";
+  cargoHash = "sha256-ccAp8BIZ9Xax6jNTr3SZVh4U9ZMyQds6iDL5XRcJsVU=";
+
+  env.VERGEN_IDEMPOTENT = "1";
+  env.VERGEN_GIT_SHA = version;
+  env.VERGEN_GIT_COMMIT_DATE = versionDate;
+  env.VERGEN_GIT_COMMIT_TIMESTAMP = "${versionDate}T00:00:00Z";
 
   nativeBuildInputs =
     [ jre_minimal ]
@@ -85,16 +90,8 @@ rustPlatform.buildRustPackage {
     ]
     ++ lib.optionals stdenvNoCC.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.AppKit ];
 
-  cargoBuildFlags = [ "--workspace" ];
-
   postInstall =
     ''
-      # Namespace binaries with "ruffle_"
-      mv $out/bin/exporter $out/bin/ruffle_exporter
-      mv $out/bin/mocket $out/bin/ruffle_mocket
-      mv $out/bin/stub-report $out/bin/ruffle_stub-report
-      mv $out/bin/build_playerglobal $out/bin/ruffle_build_playerglobal
-
       # This name is too specific
       mv $out/bin/ruffle_desktop $out/bin/ruffle
     ''
@@ -107,32 +104,28 @@ rustPlatform.buildRustPackage {
 
       install -Dm644 desktop/packages/linux/rs.ruffle.Ruffle.metainfo.xml \
                      -t $out/share/metainfo/
-
-      rm $out/bin/ruffle_web_safari
     '';
 
   preFixup = lib.optionalString stdenvNoCC.hostPlatform.isLinux ''
-    patchelf $out/bin/ruffle \
-      --add-needed libxkbcommon-x11.so \
-      --add-needed libwayland-client.so \
-      --add-needed libopenh264.so \
-      --add-rpath ${libxkbcommon}/lib:${wayland}/lib:${openh264-241}/lib
+    gappsWrapperArgs+=(--prefix LD_LIBRARY_PATH : ${
+      lib.makeLibraryPath [
+        libxkbcommon
+        openh264-241
+        vulkan-loader
+        wayland
+      ]
+    })
   '';
 
-  dontWrapGApps = true;
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = [ "--version" ];
+  doInstallCheck = true;
 
-  postFixup = lib.optionalString stdenvNoCC.hostPlatform.isLinux ''
-    vulkanWrapperArgs+=(
-      --prefix LD_LIBRARY_PATH ':' ${vulkan-loader}/lib
-    )
-
-    wrapProgram $out/bin/ruffle_exporter \
-      "''${vulkanWrapperArgs[@]}"
-
-    wrapProgram $out/bin/ruffle \
-      "''${vulkanWrapperArgs[@]}" \
-      "''${gappsWrapperArgs[@]}"
-  '';
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Cross platform Adobe Flash Player emulator";
@@ -141,14 +134,10 @@ rustPlatform.buildRustPackage {
       Adobe Flash content. It is capable of running ActionScript 1, 2
       and 3 programs with machine-native performance thanks to being
       written in the Rust programming language.
-
-      This package for ruffle also includes the `exporter` and
-      `scanner` utilities which allow for generating screenshots as
-      PNGs and parsing `.swf` files in bulk respectively.
     '';
     homepage = "https://ruffle.rs/";
     downloadPage = "https://ruffle.rs/downloads";
-    changelog = "https://github.com/ruffle-rs/ruffle/releases/tag/${version}";
+    changelog = "https://github.com/ruffle-rs/ruffle/releases/tag/${finalAttrs.version}";
     license = [
       lib.licenses.mit
       lib.licenses.asl20
@@ -160,4 +149,4 @@ rustPlatform.buildRustPackage {
     mainProgram = "ruffle";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})
