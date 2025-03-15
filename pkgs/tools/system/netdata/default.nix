@@ -34,8 +34,6 @@
   protobuf,
   snappy,
   systemd,
-  withCloud ? false,
-  withCloudUi ? false,
   withConnPrometheus ? false,
   withConnPubSub ? false,
   withCups ? false,
@@ -54,27 +52,15 @@ let
   stdenv' = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
 in
 stdenv'.mkDerivation (finalAttrs: {
-  version = "1.47.5";
+  version = "2.0.0";
   pname = "netdata";
 
   src = fetchFromGitHub {
     owner = "netdata";
     repo = "netdata";
     rev = "v${finalAttrs.version}";
-    hash =
-      if withCloudUi then
-        "sha256-+cPYwjxg/+A5bNa517zg9xKEjUa8uPM9WD67tToPH5o="
-      # we delete the v2 GUI after fetching
-      else
-        "sha256-0aiBUkDymmdIT/u1y2PG30QYAvb8Zc4i8ZgjOtlzt+A=";
+    hash = "sha256-pEgvu/RYah5G2I0kmYQSA9lQcmmxgIYr4/LIRgwKPsE=";
     fetchSubmodules = true;
-
-    # Remove v2 dashboard distributed under NCUL1. Make sure an empty
-    # Makefile.am exists, as autoreconf will get confused otherwise.
-    postFetch = lib.optionalString (!withCloudUi) ''
-      rm -rf $out/src/web/gui/v2/*
-      touch $out/src/web/gui/v2/Makefile.am
-    '';
   };
 
   strictDeps = true;
@@ -94,8 +80,9 @@ stdenv'.mkDerivation (finalAttrs: {
       jemalloc
       json_c
       libuv
-      zlib
       libyaml
+      protobuf
+      zlib
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin (
       with darwin.apple_sdk.frameworks;
@@ -126,7 +113,6 @@ stdenv'.mkDerivation (finalAttrs: {
       libelf
       libbpf
     ]
-    ++ lib.optionals (withCloud || withConnPrometheus) [ protobuf ]
     ++ lib.optionals withSystemdJournal [ systemd ]
     ++ lib.optionals withSsl [ openssl ];
 
@@ -135,8 +121,6 @@ stdenv'.mkDerivation (finalAttrs: {
     # See https://github.com/netdata/netdata/pull/17377#issuecomment-2183017868
     #     https://github.com/netdata/netdata/security/advisories/GHSA-pmhq-4cxq-wj93
     ./ndsudo-fix-path.patch
-    # Allow building without non-free v2 dashboard.
-    ./dashboard-v2-removal.patch
   ];
 
   # Guard against unused build-time development inputs in closure. Without
@@ -178,10 +162,6 @@ stdenv'.mkDerivation (finalAttrs: {
         mv $out/libexec/netdata/plugins.d/network-viewer.plugin \
            $out/libexec/netdata/plugins.d/network-viewer.plugin.org
       ''}
-      ${lib.optionalString (!withCloudUi) ''
-        rm -rf $out/share/netdata/web/index.html
-        cp $out/share/netdata/web/v1/index.html $out/share/netdata/web/index.html
-      ''}
       ${lib.optionalString withNdsudo ''
         mv $out/libexec/netdata/plugins.d/ndsudo \
           $out/libexec/netdata/plugins.d/ndsudo.org
@@ -220,10 +200,8 @@ stdenv'.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     "-DWEB_DIR=share/netdata/web"
-    (lib.cmakeBool "ENABLE_CLOUD" withCloud)
+    (lib.cmakeBool "ENABLE_DASHBOARD" false)
     # ACLK is agent cloud link.
-    (lib.cmakeBool "ENABLE_ACLK" withCloud)
-    (lib.cmakeBool "ENABLE_DASHBOARD_V2" withCloudUi)
     (lib.cmakeBool "ENABLE_DBENGINE" withDBengine)
     (lib.cmakeBool "ENABLE_PLUGIN_FREEIPMI" withIpmi)
     (lib.cmakeBool "ENABLE_PLUGIN_SYSTEMD_JOURNAL" withSystemdJournal)
@@ -260,7 +238,7 @@ stdenv'.mkDerivation (finalAttrs: {
 
         sourceRoot = "${finalAttrs.src.name}/src/go/plugin/go.d";
 
-        vendorHash = "sha256-NZ1tg+lvXNgypqmjjb5f7dHH6DIA9VOa4PMM4eq11n0=";
+        vendorHash = "sha256-kJLOkn/M4C4ILHL83/JZqwgsnohsekH4J/Vi+ccw6IM=";
         doCheck = false;
         proxyVendor = true;
 
@@ -286,10 +264,11 @@ stdenv'.mkDerivation (finalAttrs: {
     description = "Real-time performance monitoring tool";
     homepage = "https://www.netdata.cloud/";
     changelog = "https://github.com/netdata/netdata/releases/tag/v${version}";
-    license = [ licenses.gpl3Plus ] ++ lib.optionals (withCloudUi) [ licenses.ncul1 ];
+    license = [ licenses.gpl3Plus ];
     platforms = platforms.unix;
     maintainers = with maintainers; [
       mkg20001
+      rhoriguchi
     ];
   };
 })

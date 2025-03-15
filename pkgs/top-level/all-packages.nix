@@ -4002,10 +4002,6 @@ with pkgs;
   netdata = callPackage ../tools/system/netdata {
     protobuf = protobuf_21;
   };
-  netdataCloud = netdata.override {
-    withCloud = true;
-    withCloudUi = true;
-  };
 
   netsurf = recurseIntoAttrs (callPackage ../applications/networking/browsers/netsurf { });
   netsurf-browser = netsurf.browser;
