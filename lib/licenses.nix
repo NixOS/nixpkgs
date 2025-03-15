@@ -972,13 +972,6 @@ lib.mapAttrs mkLicense ({
     fullName = "University of Illinois/NCSA Open Source License";
   };
 
-  ncul1 = {
-    spdxId = "NCUL1";
-    fullName = "Netdata Cloud UI License v1.0";
-    free = false;
-    redistributable = true; # Only if used in Netdata products.
-  };
-
   nistSoftware = {
     spdxId = "NIST-Software";
     fullName = "NIST Software License";
