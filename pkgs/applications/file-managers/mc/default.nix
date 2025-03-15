@@ -102,7 +102,7 @@ stdenv.mkDerivation rec {
     description = "File Manager and User Shell for the GNU Project, known as Midnight Commander";
     downloadPage = "https://ftp.osuosl.org/pub/midnightcommander/";
     homepage = "https://midnight-commander.org";
-    license = licenses.gpl2Plus;
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ sander ];
     platforms = with platforms; linux ++ darwin;
     mainProgram = "mc";
