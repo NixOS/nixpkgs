@@ -39,10 +39,6 @@
 
   # tests
   ffmpeg,
-  pytest-cov-stub,
-  pytest-xdist,
-  pytestCheckHook,
-  versionCheckHook,
 }:
 
 let
@@ -229,15 +225,6 @@ buildPythonPackage {
 
   doCheck = false;
 
-  nativeCheckInputs = [
-    ffmpeg
-    manim-tinytex
-    pytest-cov-stub
-    pytest-xdist
-    pytestCheckHook
-    versionCheckHook
-  ];
-
   versionCheckProgramArg = [ "-v" ];
 
   meta = {
@@ -251,7 +238,7 @@ buildPythonPackage {
     changelog = "https://3b1b.github.io/manim/development/changelog.html";
     homepage = "https://github.com/3b1b/manim";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ L0L1P0P ];
+    maintainers = with lib.maintainers; [ L0L1P0P osbm ];
     mainProgram = "manimgl";
   };
 }
