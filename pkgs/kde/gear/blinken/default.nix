@@ -1,10 +1,14 @@
 {
   mkKdeDerivation,
   qtsvg,
+  phonon,
 }:
 mkKdeDerivation {
   pname = "blinken";
 
-  extraBuildInputs = [ qtsvg ];
+  extraBuildInputs = [
+    qtsvg
+    phonon
+  ];
   meta.mainProgram = "blinken";
 }

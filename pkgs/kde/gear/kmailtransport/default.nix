@@ -1,9 +1,4 @@
-{
-  mkKdeDerivation,
-  kconfigwidgets,
-}:
+{ mkKdeDerivation }:
 mkKdeDerivation {
   pname = "kmailtransport";
-
-  extraBuildInputs = [ kconfigwidgets ];
 }

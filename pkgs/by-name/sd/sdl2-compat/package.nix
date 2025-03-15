@@ -14,6 +14,8 @@
   sdl3,
   stdenv,
   testers,
+  libX11,
+  libGL,
   testSupport ? true,
 }:
 
@@ -35,6 +37,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     sdl3
+    libX11
+  ];
+
+  checkInputs = [
+    libGL
   ];
 
   outputs = [
