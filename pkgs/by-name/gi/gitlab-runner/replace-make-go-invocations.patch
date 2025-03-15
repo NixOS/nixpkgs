@@ -1,0 +1,29 @@
+diff --git a/Makefile b/Makefile
+index e948db0d6d..cd0957251e 100644
+--- a/Makefile
++++ b/Makefile
+@@ -3,14 +3,10 @@
+ export PACKAGE_NAME ?= $(NAME)
+ export VERSION := $(shell ./ci/version)
+ REVISION := $(shell git rev-parse --short=8 HEAD || echo unknown)
+-BRANCH := $(shell git show-ref | grep "$(REVISION)" | grep -v HEAD | awk '{print $$2}' | sed 's|refs/remotes/origin/||' | sed 's|refs/heads/||' | sort | head -n 1)
++BRANCH :=
+ export TESTFLAGS ?= -cover
+
+-LATEST_STABLE_TAG := $(shell git -c versionsort.prereleaseSuffix="-rc" -c versionsort.prereleaseSuffix="-RC" tag -l "v*.*.*" | sort -rV | awk '!/rc/' | head -n 1)
+ export IS_LATEST :=
+-ifeq ($(shell git describe --exact-match --match $(LATEST_STABLE_TAG) >/dev/null 2>&1; echo $$?), 0)
+-export IS_LATEST := true
+-endif
+
+ PACKAGE_CLOUD ?= runner/gitlab-runner
+ PACKAGE_CLOUD_URL ?= https://packages.gitlab.com
+@@ -32,7 +28,7 @@
+ export MAIN_PACKAGE ?= gitlab.com/gitlab-org/gitlab-runner
+
+ GO_LDFLAGS ?= -X $(COMMON_PACKAGE_NAMESPACE).NAME=$(APP_NAME) -X $(COMMON_PACKAGE_NAMESPACE).VERSION=$(VERSION) \
+-              -X $(COMMON_PACKAGE_NAMESPACE).BRANCH=$(BRANCH) \
++              -X $(COMMON_PACKAGE_NAMESPACE).REVISION=$(REVISION) -X $(COMMON_PACKAGE_NAMESPACE).BRANCH=$(BRANCH) \
+               -w
+
+ GO_TEST_LDFLAGS ?= -X $(COMMON_PACKAGE_NAMESPACE).NAME=$(APP_NAME)

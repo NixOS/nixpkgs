@@ -1,34 +1,39 @@
-{ lib, buildGoModule, fetchFromGitLab, bash }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitLab,
+  bash,
+}:
 
 let
-  version = "17.2.0";
+  version = "17.9.2";
 in
 buildGoModule rec {
   inherit version;
   pname = "gitlab-runner";
 
-  commonPackagePath = "gitlab.com/gitlab-org/gitlab-runner/common";
-  ldflags = [
-    "-X ${commonPackagePath}.NAME=gitlab-runner"
-    "-X ${commonPackagePath}.VERSION=${version}"
-    "-X ${commonPackagePath}.REVISION=v${version}"
-  ];
-
   # For patchShebangs
   buildInputs = [ bash ];
 
-  vendorHash = "sha256-1MwHss76apA9KoFhEU6lYiUACrPMGYzjhds6nTyNuJI=";
+  vendorHash = "sha256-t/FVaDga2ogyqgVdJuBMSyls3rricfqIy5bFSH4snk4=";
 
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "gitlab-runner";
     rev = "v${version}";
-    hash = "sha256-a2Igy4DS3fYTvPW1vvDrH/DjMQ4lG9cm/P3mFr+y9s4=";
+    hash = "sha256-kcDsjmx/900p2ux7dyGHSOVqXxxVhg2/o0a3NYcqIrA=";
   };
 
   patches = [
-    ./fix-shell-path.patch
     ./remove-bash-test.patch
+    # Asserts for x86_64 architecture
+    # https://gitlab.com/gitlab-org/gitlab-runner/-/issues/38697
+    ./disable-kubernetes-test-on-aarch64.patch
+    # Fails in nix sandbox
+    ./disable-unix-socket-tests-on-darwin.patch
+    # Fails in nix sandbox
+    # Returns OSStatus -26276
+    ./disable-x509-certificate-check-on-darwin.patch
   ];
 
   prePatch = ''
@@ -50,19 +55,38 @@ buildGoModule rec {
     rm executors/docker/services_test.go
   '';
 
+  postPatch = ''
+    substituteInPlace Makefile --replace-fail "export VERSION := \$(shell ./ci/version)" "export VERSION := ${version}"
+    substituteInPlace Makefile --replace-fail "REVISION := \$(shell git rev-parse --short=8 HEAD || echo unknown)" "REVISION := v${version}"
+  '';
+
   excludedPackages = [
     # CI helper script for pushing images to Docker and ECR registries
     # https://gitlab.com/gitlab-org/gitlab-runner/-/merge_requests/4139
     "./scripts/sync-docker-images"
   ];
 
+  buildPhase = ''
+    runHook preBuild
+    make -j $NIX_BUILD_CORES runner-and-helper-bin-host
+    runHook postBuild
+  '';
+
   postInstall = ''
+    mkdir $out/bin
+    cp out/binaries/gitlab-runner-$GOOS-$GOARCH  $out/bin/gitlab-runner
     install packaging/root/usr/share/gitlab-runner/clear-docker-cache $out/bin
   '';
 
   preCheck = ''
     # Make the tests pass outside of GitLab CI
     export CI=0
+  '';
+
+  checkPhase = ''
+    runHook preCheck
+    make simple-test
+    runHook postCheck
   '';
 
   meta = with lib; {

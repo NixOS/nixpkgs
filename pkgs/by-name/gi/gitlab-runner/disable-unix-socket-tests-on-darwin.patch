@@ -1,0 +1,42 @@
+diff --git a/commands/wrapper_test.go b/commands/wrapper_test.go
+index c897c8170..b5ad47acf 100644
+--- a/commands/wrapper_test.go
++++ b/commands/wrapper_test.go
+@@ -16,10 +16,13 @@ import (
+ func TestRunnerWrapperCommand_createListener(t *testing.T) {
+ 	testSocketPath := filepath.Join(t.TempDir(), "test.sock")
+ 
+-	skipOnWindows := func(t *testing.T) {
++	skipCondition := func(t *testing.T) {
+ 		if runtime.GOOS == "windows" {
+ 			t.Skip("Test doesn't work reliably on Windows (unix socket usage)")
+ 		}
++		if runtime.GOOS == "darwin" {
++			t.Skip("Test doesn't work reliably on Darwin with enabled sandbox")
++		}
+ 	}
+ 
+ 	tests := map[string]struct {
+@@ -36,19 +39,19 @@ func TestRunnerWrapperCommand_createListener(t *testing.T) {
+ 			},
+ 		},
+ 		"proper unix socket - unix://": {
+-			skip:            skipOnWindows,
++			skip:            skipCondition,
+ 			grpcAddress:     fmt.Sprintf("unix://%s", testSocketPath),
+ 			expectedNetwork: "unix",
+ 			expectedAddress: testSocketPath,
+ 		},
+ 		"proper unix socket - unix:": {
+-			skip:            skipOnWindows,
++			skip:            skipCondition,
+ 			grpcAddress:     fmt.Sprintf("unix://%s", testSocketPath),
+ 			expectedNetwork: "unix",
+ 			expectedAddress: testSocketPath,
+ 		},
+ 		"invalid unix socket": {
+-			skip:        skipOnWindows,
++			skip:        skipCondition,
+ 			grpcAddress: fmt.Sprintf("unix:/%s", testSocketPath),
+ 			assertError: func(t *testing.T, err error) {
+ 				var eerr *net.OpError
