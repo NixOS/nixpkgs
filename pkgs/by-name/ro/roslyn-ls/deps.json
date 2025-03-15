@@ -13,9 +13,9 @@
   },
   {
     "pname": "ICSharpCode.Decompiler",
-    "version": "8.1.1.7464",
-    "hash": "sha256-71/e9zuQIfqRXOiWxZkUFW/tMAj63nE8tg/sR7bGzuM=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/icsharpcode.decompiler/8.1.1.7464/icsharpcode.decompiler.8.1.1.7464.nupkg"
+    "version": "8.2.0.7535",
+    "hash": "sha256-4BWs04Va9pc/SLeMA/vKoBydhw+Bu6s9MDtoo/Ucft8=",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/icsharpcode.decompiler/8.2.0.7535/icsharpcode.decompiler.8.2.0.7535.nupkg"
   },
   {
     "pname": "MessagePack",
@@ -193,15 +193,15 @@
   },
   {
     "pname": "Microsoft.DotNet.Arcade.Sdk",
-    "version": "9.0.0-beta.25065.2",
-    "hash": "sha256-8LCKwRGoa0plL1IzZzPR8prayboN7gulS4EC6HWL+5E=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/1a5f89f6-d8da-4080-b15f-242650c914a8/nuget/v3/flat2/microsoft.dotnet.arcade.sdk/9.0.0-beta.25065.2/microsoft.dotnet.arcade.sdk.9.0.0-beta.25065.2.nupkg"
+    "version": "9.0.0-beta.25111.5",
+    "hash": "sha256-gwzSdsu6YfLYxjltDOUouvajClMQ/BW8aiJQlYyxtlk=",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/1a5f89f6-d8da-4080-b15f-242650c914a8/nuget/v3/flat2/microsoft.dotnet.arcade.sdk/9.0.0-beta.25111.5/microsoft.dotnet.arcade.sdk.9.0.0-beta.25111.5.nupkg"
   },
   {
     "pname": "Microsoft.DotNet.XliffTasks",
-    "version": "9.0.0-beta.24076.5",
-    "hash": "sha256-5cREL85PwcDwo4yyc2Eh908HQ/Cm36w9uZSIvVELZH0=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/1a5f89f6-d8da-4080-b15f-242650c914a8/nuget/v3/flat2/microsoft.dotnet.xlifftasks/9.0.0-beta.24076.5/microsoft.dotnet.xlifftasks.9.0.0-beta.24076.5.nupkg"
+    "version": "9.0.0-beta.25111.5",
+    "hash": "sha256-ZOwHiBzSiJ9PJwLP1iw18sZoxW+78ej+gGg4yt9dei4=",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/1a5f89f6-d8da-4080-b15f-242650c914a8/nuget/v3/flat2/microsoft.dotnet.xlifftasks/9.0.0-beta.25111.5/microsoft.dotnet.xlifftasks.9.0.0-beta.25111.5.nupkg"
   },
   {
     "pname": "Microsoft.Extensions.Configuration",
@@ -403,9 +403,9 @@
   },
   {
     "pname": "Microsoft.VisualStudio.Telemetry",
-    "version": "17.13.28",
-    "hash": "sha256-DAmV0dT0Bw+BITSQbL/26055k2tAXtIfhnBmv1DwrA8=",
-    "url": "https://pkgs.dev.azure.com/azure-public/3ccf6661-f8ce-4e8a-bb2e-eff943ddd3c7/_packaging/491596af-6d2d-439e-80bb-1ebb3b54f9a8/nuget/v3/flat2/microsoft.visualstudio.telemetry/17.13.28/microsoft.visualstudio.telemetry.17.13.28.nupkg"
+    "version": "17.14.2",
+    "hash": "sha256-MqIrtr0I5uC64ww7v7xD2nTOqsdAqX7C1nPNzfhTkWA=",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/microsoft.visualstudio.telemetry/17.14.2/microsoft.visualstudio.telemetry.17.14.2.nupkg"
   },
   {
     "pname": "Microsoft.VisualStudio.Threading",
