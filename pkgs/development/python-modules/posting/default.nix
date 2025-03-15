@@ -126,7 +126,7 @@ in
     meta = {
       description = "Command-line HTTP client";
       homepage = "https://github.com/darrenburns/posting";
-      license = licenses.mit;
-      maintainers = [maintainers.blackzeshi];
+      license = lib.licenses.mit;
+      maintainers = [ lib.maintainers.blackzeshi ];
     };
   }
