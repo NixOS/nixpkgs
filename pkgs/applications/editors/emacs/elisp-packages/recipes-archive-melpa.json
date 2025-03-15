@@ -90984,15 +90984,15 @@
   "url": "https://repo.or.cz/org-link-beautify.git",
   "unstable": {
    "version": [
-    20250313,
-    929
+    20250314,
+    2312
    ],
    "deps": [
     "nerd-icons",
     "qrencode"
    ],
-   "commit": "a1eedcee788e0484df13dd54940f47b4c98c1761",
-   "sha256": "124bliixzcwlv2pn822amhrhlmij4g858fzazi01sq33dx09ln34"
+   "commit": "a8e4c53b5890780b1ce5ddd2b009c80d94c4378a",
+   "sha256": "1ipv16hcm52ba81rnl9wzvkfsamc1bcv6z0g6x2y9gyl47llvrnr"
   },
   "stable": {
    "version": [
