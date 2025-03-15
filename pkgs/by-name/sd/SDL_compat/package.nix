@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
       autoSignDarwinBinariesHook
     ];
 
-  propagatedBuildInputs =
+  buildInputs =
     [
       libX11
       sdl2-compat
@@ -71,14 +71,12 @@ stdenv.mkDerivation (finalAttrs: {
           if stdenv.hostPlatform.isDarwin then
             ''
               install_name_tool ${
-                lib.strings.concatMapStrings (
-                  x: " -add_rpath ${lib.makeLibraryPath [ x ]} "
-                ) finalAttrs.propagatedBuildInputs
+                lib.strings.concatMapStrings (x: " -add_rpath ${lib.makeLibraryPath [ x ]} ") finalAttrs.buildInputs
               } "$lib"
             ''
           else
             ''
-              patchelf --set-rpath "$(patchelf --print-rpath $lib):${lib.makeLibraryPath finalAttrs.propagatedBuildInputs}" "$lib"
+              patchelf --set-rpath "$(patchelf --print-rpath $lib):${lib.makeLibraryPath finalAttrs.buildInputs}" "$lib"
             ''
         }
       fi
