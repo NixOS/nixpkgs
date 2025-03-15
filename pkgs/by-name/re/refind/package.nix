@@ -51,6 +51,8 @@ stdenv.mkDerivation rec {
     # Avoid leaking the build timestamp
     # https://sourceforge.net/p/refind/code/merge-requests/53/
     ./0002-preserve-dates.patch
+    # Various fixes to allow building with GNU-EFI 4
+    ./0003-support-gnuefi-4.patch
   ];
 
   nativeBuildInputs = [ makeWrapper ];
