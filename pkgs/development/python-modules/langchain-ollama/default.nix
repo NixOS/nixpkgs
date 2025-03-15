@@ -51,15 +51,6 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "langchain_ollama" ];
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "langchain-ollama==(.*)"
-    ];
-  };
-  # updates the wrong fetcher rev attribute
-  passthru.skipBulkUpdate = true;
-
   meta = {
     changelog = "https://github.com/langchain-ai/langchain/releases/tag/langchain-ollama==${version}";
     description = "Integration package connecting Ollama and LangChain";
