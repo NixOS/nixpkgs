@@ -143,6 +143,7 @@ let
     fi
   ''
   +
+  /* Now we hash the contents of guiPasswordFile and use the result to update the gui password */
   (lib.optionalString (cfg.guiPasswordFile != null) ''
      ${pkgs.mkpasswd}/bin/mkpasswd -m bcrypt --stdin <"${cfg.guiPasswordFile}" | tr -d "\n" >$RUNTIME_DIRECTORY/password_bcrypt
      curl -X PATCH --variable "pw_bcrypt@$RUNTIME_DIRECTORY/password_bcrypt" --expand-json '{ "password": "{{pw_bcrypt}}" }' ${curlAddressArgs "/rest/config/gui"}
