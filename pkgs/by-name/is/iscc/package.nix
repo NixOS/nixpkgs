@@ -1,5 +1,5 @@
 {
-  stdenv,
+  stdenvNoCC,
   fetchurl,
   innoextract,
   runtimeShell,
@@ -11,7 +11,7 @@ let
   version = "6.2.2";
   majorVersion = builtins.substring 0 1 version;
 in
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "iscc";
   inherit version;
   src = fetchurl {
