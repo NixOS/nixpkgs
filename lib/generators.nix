@@ -743,6 +743,8 @@ in rec {
       "nil"
     else if isInt v || isFloat v || isString v || isBool v then
       toJSON v
+    else if isPath v || isDerivation v then
+      toJSON "${v}"
     else if isList v then
       (if v == [ ] then "{}" else
       "{${introSpace}${concatItems (map (value: "${toLua innerArgs value}") v)}${outroSpace}}")
@@ -752,8 +754,6 @@ in rec {
           "(${v.expr})"
         else if v == { } then
           "{}"
-        else if isDerivation v then
-          ''"${toString v}"''
         else
           "{${introSpace}${concatItems (
             mapAttrsToList (key: value: "[${toJSON key}] = ${toLua innerArgs value}") v
