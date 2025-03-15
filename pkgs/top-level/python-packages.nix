@@ -9371,6 +9371,8 @@ self: super: with self; {
 
   netbox-bgp = callPackage ../development/python-modules/netbox-bgp { };
 
+  netbox-contract = callPackage ../development/python-modules/netbox-contract { };
+
   netbox-dns = callPackage ../development/python-modules/netbox-dns { };
 
   netbox-documents = callPackage ../development/python-modules/netbox-documents { };
