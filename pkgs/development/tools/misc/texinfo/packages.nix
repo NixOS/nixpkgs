@@ -102,7 +102,7 @@ in
     patches = [ ./fix-glibc-2.34.patch ];
   };
   texinfo7 = buildTexinfo {
-    version = "7.1.1";
-    hash = "sha256-Ma435GKDUpQythvuHOAe0AkNWZ5gb8aincofd8dqbII=";
+    version = "7.2";
+    hash = "sha256-AynXeI++8RP6gsuAiJyhl6NEzg33ZG/gAJdMXXFDY6Y=";
   };
 }
