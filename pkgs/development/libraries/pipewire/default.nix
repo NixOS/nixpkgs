@@ -1,6 +1,7 @@
 {
   stdenv,
   lib,
+  buildPackages,
   fetchFromGitLab,
   python3,
   meson,
@@ -96,6 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   strictDeps = true;
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [
     docutils
     doxygen

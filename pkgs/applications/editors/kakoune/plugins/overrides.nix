@@ -32,7 +32,7 @@ self: super: {
     meta.homepage = "https://gitlab.com/FlyingWombat/case.kak";
   };
 
-  fzf-kak = super.fzf-kak.overrideAttrs (oldAttrs: rec {
+  fzf-kak = super.fzf-kak.overrideAttrs (oldAttrs: {
     preFixup = ''
       if [[ -x "${fzf}/bin/fzf" ]]; then
         fzfImpl='${fzf}/bin/fzf'

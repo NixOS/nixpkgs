@@ -79,7 +79,7 @@ let
       version,
       sha256,
     }:
-    stdenv.mkDerivation rec {
+    stdenv.mkDerivation {
       pname = "lib${name}";
       inherit version;
       src = fetchurl { inherit url sha256; };

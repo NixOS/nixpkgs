@@ -12,7 +12,7 @@
   pytest-benchmark,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   inherit (opentelemetry-instrumentation) version src;
   pname = "opentelemetry-propagator-aws-xray";
   pyproject = true;

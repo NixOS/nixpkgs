@@ -25,7 +25,7 @@
   sha256,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "crossfire-client";
   version = rev;
 

@@ -8,7 +8,7 @@
   websocket-client,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "pyflipper";
   version = "0.18-unstable-2024-04-15";
   pyproject = true;
