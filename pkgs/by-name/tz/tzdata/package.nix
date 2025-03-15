@@ -57,6 +57,13 @@ stdenv.mkDerivation (finalAttrs: {
       "CFLAGS+=-DHAVE_SETENV=0"
       "CFLAGS+=-DHAVE_SYMLINK=0"
       "CFLAGS+=-DRESERVE_STD_EXT_IDS"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
+      "CFLAGS+=-DNETBSD_INSPIRED=0"
+      "CFLAGS+=-DSTD_INSPIRED=0"
+      "CFLAGS+=-DUSE_TIMEX_T=1"
+      "CFLAGS+=-DMKTIME_FITS_IN\\(min,max\\)=0"
+      "CFLAGS+=-DEXTERN_TIMEOFF=1"
     ];
 
   enableParallelBuilding = true;
