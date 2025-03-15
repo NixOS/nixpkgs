@@ -18,6 +18,8 @@ buildPythonPackage rec {
   pname = "sudachipy";
   inherit (sudachi-rs) src version;
 
+  patches = sudachi-rs.cargoPatches;
+
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
     name = "${pname}-${version}";
