@@ -9,14 +9,14 @@ buildGoModule rec {
   pname = "redis-dump-go";
   version = "0.8.2";
 
-  vendorHash = null;
-
   src = fetchFromGitHub {
     owner = "yannh";
     repo = "redis-dump-go";
     tag = "v${version}";
     hash = "sha256-+5iYigtMQvd6D90mpKyMa7ZKm2UDtCG91uFZ7dURBT4=";
   };
+
+  vendorHash = null;
 
   passthru.updateScript = nix-update-script { };
 
