@@ -1,7 +1,8 @@
-{ config
-, lib
-, pkgs
-, ...
+{
+  config,
+  lib,
+  pkgs,
+  ...
 }:
 let
   hasNvidiaVideoDriver = lib.elem "nvidia" config.services.xserver.videoDrivers;
@@ -372,7 +373,8 @@ in
             softdep nvidia post: nvidia-uvm
           '';
 
-          kernelParams = lib.optional useOpenModules "nvidia.NVreg_OpenRmEnableUnsupportedGpus=1"
+          kernelParams =
+            lib.optional useOpenModules "nvidia.NVreg_OpenRmEnableUnsupportedGpus=1"
             ++ lib.optional (config.boot.kernelPackages.kernel.kernelAtLeast "6.2" && !ibtSupport) "ibt=off";
 
           # With the open driver, nvidia-uvm does not automatically load as
@@ -384,11 +386,12 @@ in
           # 'nvidia_x11' installs it's files to /run/opengl-driver/...
           "egl/egl_external_platform.d".source = "/run/opengl-driver/share/egl/egl_external_platform.d/";
         };
-        systemd.tmpfiles.rules = lib.optional config.virtualisation.docker.enableNvidia [
-          "L+ /run/nvidia-docker/bin - - - - ${nvidia_x11.bin}/origBin"
-        ]
-        ++ lib.optional (nvidia_x11.persistenced != null && config.virtualisation.docker.enableNvidia)
-          "L+ /run/nvidia-docker/extras/bin/nvidia-persistenced - - - - ${nvidia_x11.persistenced}/origBin/nvidia-persistenced";
+        systemd.tmpfiles.rules =
+          lib.optional config.virtualisation.docker.enableNvidia [
+            "L+ /run/nvidia-docker/bin - - - - ${nvidia_x11.bin}/origBin"
+          ]
+          ++ lib.optional (nvidia_x11.persistenced != null && config.virtualisation.docker.enableNvidia)
+            "L+ /run/nvidia-docker/extras/bin/nvidia-persistenced - - - - ${nvidia_x11.persistenced}/origBin/nvidia-persistenced";
         services.udev.extraRules = ''
           # Create /dev/nvidia-uvm when the nvidia-uvm module is loaded.
           KERNEL=="nvidia", RUN+="${pkgs.runtimeShell} -c 'mknod -m 666 /dev/nvidiactl c 195 255'"
@@ -398,43 +401,42 @@ in
           KERNEL=="nvidia_uvm", RUN+="${pkgs.runtimeShell} -c 'mknod -m 666 /dev/nvidia-uvm-tools c $$(grep nvidia-uvm /proc/devices | cut -d \  -f 1) 1'"
         '';
         hardware.graphics = {
-          extraPackages = [ nvidia_x11.out ]
-            ++ lib.optional cfg.videoAcceleration pkgs.nvidia-vaapi-driver;
+          extraPackages = [ nvidia_x11.out ] ++ lib.optional cfg.videoAcceleration pkgs.nvidia-vaapi-driver;
           extraPackages32 = [ nvidia_x11.lib32 ];
         };
-        environment.systemPackages = [ nvidia_x11.bin ]
-          ++ lib.optional cfg.nvidiaPersistenced nvidia_x11.persistenced;
+        environment.systemPackages = [
+          nvidia_x11.bin
+        ] ++ lib.optional cfg.nvidiaPersistenced nvidia_x11.persistenced;
 
-        systemd.services =
-          lib.mkMerge [
-            (lib.mkIf cfg.nvidiaPersistenced {
-              "nvidia-persistenced" = {
-                description = "NVIDIA Persistence Daemon";
-                wantedBy = [ "multi-user.target" ];
-                serviceConfig = {
-                  Type = "forking";
-                  Restart = "always";
-                  PIDFile = "/var/run/nvidia-persistenced/nvidia-persistenced.pid";
-                  ExecStart = "${lib.getExe nvidia_x11.persistenced} --verbose";
-                  ExecStopPost = "${pkgs.coreutils}/bin/rm -rf /var/run/nvidia-persistenced";
-                };
+        systemd.services = lib.mkMerge [
+          (lib.mkIf cfg.nvidiaPersistenced {
+            "nvidia-persistenced" = {
+              description = "NVIDIA Persistence Daemon";
+              wantedBy = [ "multi-user.target" ];
+              serviceConfig = {
+                Type = "forking";
+                Restart = "always";
+                PIDFile = "/var/run/nvidia-persistenced/nvidia-persistenced.pid";
+                ExecStart = "${lib.getExe nvidia_x11.persistenced} --verbose";
+                ExecStopPost = "${pkgs.coreutils}/bin/rm -rf /var/run/nvidia-persistenced";
               };
-            })
-            (lib.mkIf cfg.dynamicBoost.enable {
-              "nvidia-powerd" = {
-                description = "nvidia-powerd service";
-                path = [
-                  pkgs.util-linux # nvidia-powerd wants lscpu
-                ];
-                wantedBy = [ "multi-user.target" ];
-                serviceConfig = {
-                  Type = "dbus";
-                  BusName = "nvidia.powerd.server";
-                  ExecStart = "${nvidia_x11.bin}/bin/nvidia-powerd";
-                };
+            };
+          })
+          (lib.mkIf cfg.dynamicBoost.enable {
+            "nvidia-powerd" = {
+              description = "nvidia-powerd service";
+              path = [
+                pkgs.util-linux # nvidia-powerd wants lscpu
+              ];
+              wantedBy = [ "multi-user.target" ];
+              serviceConfig = {
+                Type = "dbus";
+                BusName = "nvidia.powerd.server";
+                ExecStart = "${nvidia_x11.bin}/bin/nvidia-powerd";
               };
-            })
-          ];
+            };
+          })
+        ];
 
         services.acpid.enable = true;
 
@@ -519,19 +521,18 @@ in
         hardware.nvidia.prime.offload.enable = lib.mkDefault reverseSyncCfg.enable;
 
         services.xserver.drivers =
-          lib.optional primeEnabled
-            {
-              name = igpuDriver;
-              display = offloadCfg.enable;
-              modules = lib.optional (igpuDriver == "amdgpu") pkgs.xorg.xf86videoamdgpu;
-              deviceSection =
-                ''
-                  BusID "${igpuBusId}"
-                ''
-                + lib.optionalString (syncCfg.enable && igpuDriver != "amdgpu") ''
-                  Option "AccelMethod" "none"
-                '';
-            }
+          lib.optional primeEnabled {
+            name = igpuDriver;
+            display = offloadCfg.enable;
+            modules = lib.optional (igpuDriver == "amdgpu") pkgs.xorg.xf86videoamdgpu;
+            deviceSection =
+              ''
+                BusID "${igpuBusId}"
+              ''
+              + lib.optionalString (syncCfg.enable && igpuDriver != "amdgpu") ''
+                Option "AccelMethod" "none"
+              '';
+          }
           ++ lib.singleton {
             name = "nvidia";
             modules = [ nvidia_x11.bin ];
@@ -575,7 +576,7 @@ in
           let
             gpuProviderName =
               if igpuDriver == "amdgpu" then
-              # find the name of the provider if amdgpu
+                # find the name of the provider if amdgpu
                 "`${lib.getExe pkgs.xorg.xrandr} --listproviders | ${lib.getExe pkgs.gnugrep} -i AMD | ${lib.getExe pkgs.gnused} -n 's/^.*name://p'`"
               else
                 igpuDriver;
@@ -639,32 +640,29 @@ in
             };
           });
 
-        systemd.tmpfiles.rules =
-          [
-            # Remove the following log message:
-            #    (WW) NVIDIA: Failed to bind sideband socket to
-            #    (WW) NVIDIA:     '/var/run/nvidia-xdriver-b4f69129' Permission denied
-            #
-            # https://bbs.archlinux.org/viewtopic.php?pid=1909115#p1909115
-            "d /run/nvidia-xdriver 0770 root users"
-          ];
+        systemd.tmpfiles.rules = [
+          # Remove the following log message:
+          #    (WW) NVIDIA: Failed to bind sideband socket to
+          #    (WW) NVIDIA:     '/var/run/nvidia-xdriver-b4f69129' Permission denied
+          #
+          # https://bbs.archlinux.org/viewtopic.php?pid=1909115#p1909115
+          "d /run/nvidia-xdriver 0770 root users"
+        ];
 
         boot = {
           # nvidia-uvm is required by CUDA applications.
-          kernelModules =
-            lib.optionals config.services.xserver.enable [
-              "nvidia"
-              "nvidia_modeset"
-              "nvidia_drm"
-            ];
+          kernelModules = lib.optionals config.services.xserver.enable [
+            "nvidia"
+            "nvidia_modeset"
+            "nvidia_drm"
+          ];
 
           # If requested enable modesetting via kernel parameters.
           kernelParams =
             lib.optional (offloadCfg.enable || cfg.modesetting.enable) "nvidia-drm.modeset=1"
-            ++ lib.optional
-              (
-                (offloadCfg.enable || cfg.modesetting.enable) && lib.versionAtLeast nvidia_x11.version "545"
-              ) "nvidia-drm.fbdev=1"
+            ++ lib.optional (
+              (offloadCfg.enable || cfg.modesetting.enable) && lib.versionAtLeast nvidia_x11.version "545"
+            ) "nvidia-drm.fbdev=1"
             ++ lib.optional cfg.powerManagement.enable "nvidia.NVreg_PreserveVideoMemoryAllocations=1";
 
           # enable finegrained power management
