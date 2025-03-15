@@ -2,111 +2,124 @@
   lib,
   stdenv,
   fetchFromGitHub,
+
+  # nativeBuildInputs
   pkg-config,
   cmake,
   qt6,
-  bluez,
+
+  # buildInputs
+  curl,
+  enet,
   ffmpeg,
-  libao,
-  libGLU,
-  libGL,
-  pcre,
+  fmt,
   gettext,
-  libXrandr,
-  libusb1,
-  libpthreadstubs,
-  libXext,
-  libXxf86vm,
-  libXinerama,
+  libGL,
+  libGLU,
   libSM,
   libXdmcp,
-  readline,
-  openal,
-  udev,
-  libevdev,
-  portaudio,
-  curl,
-  alsa-lib,
-  miniupnpc,
-  enet,
-  mbedtls_2,
-  soundtouch,
-  sfml,
-  fmt,
-  xz,
-  vulkan-loader,
+  libXext,
+  libXinerama,
+  libXrandr,
+  libXxf86vm,
+  libao,
+  libpthreadstubs,
   libpulseaudio,
+  libusb1,
+  mbedtls_2,
+  miniupnpc,
+  openal,
+  pcre,
+  portaudio,
+  readline,
+  sfml,
+  soundtouch,
+  xz,
+  # linux-only
+  alsa-lib,
+  bluez,
+  libevdev,
+  udev,
+  vulkan-loader,
 
   # - Inputs used for Darwin
   libpng,
   hidapi,
+
+  # passthru
+  testers,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dolphin-emu-primehack";
   version = "1.0.7a";
 
   src = fetchFromGitHub {
     owner = "shiiion";
     repo = "dolphin";
-    rev = version;
-    hash = "sha256-vuTSXQHnR4HxAGGiPg5tUzfiXROU3+E9kyjH+T6zVmc=";
+    tag = finalAttrs.version;
     fetchSubmodules = true;
+    hash = "sha256-vuTSXQHnR4HxAGGiPg5tUzfiXROU3+E9kyjH+T6zVmc=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-    cmake
-  ] ++ lib.optional stdenv.hostPlatform.isLinux qt6.wrapQtAppsHook;
+  nativeBuildInputs =
+    [
+      pkg-config
+      cmake
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      qt6.wrapQtAppsHook
+    ];
 
   buildInputs =
     [
       curl
+      enet
       ffmpeg
-      libao
-      libGLU
-      libGL
-      pcre
+      fmt
       gettext
+      hidapi
+      libGL
+      libGLU
+      libSM
+      libXdmcp
+      libXext
+      libXinerama
+      libXrandr
+      libXxf86vm
+      libao
+      libpng
       libpthreadstubs
       libpulseaudio
-      libXrandr
-      libXext
-      libXxf86vm
-      libXinerama
-      libSM
-      readline
-      openal
-      libXdmcp
-      portaudio
       libusb1
-      libpng
-      hidapi
-      miniupnpc
-      enet
       mbedtls_2
-      soundtouch
-      sfml
-      fmt
-      xz
+      miniupnpc
+      openal
+      pcre
+      portaudio
       qt6.qtbase
       qt6.qtsvg
+      readline
+      sfml
+      soundtouch
+      xz
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
-      bluez
-      udev
-      libevdev
       alsa-lib
+      bluez
+      libevdev
+      udev
       vulkan-loader
     ];
 
   cmakeFlags =
     [
-      "-DUSE_SHARED_ENET=ON"
-      "-DENABLE_LTO=ON"
+      (lib.cmakeBool "USE_SHARED_ENET" true)
+      (lib.cmakeBool "ENABLE_LTO" true)
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "-DOSX_USE_DEFAULT_SEARCH_PATH=True"
+      (lib.cmakeBool "OSX_USE_DEFAULT_SEARCH_PATH" true)
     ];
 
   qtWrapperArgs = lib.optionals stdenv.hostPlatform.isLinux [
@@ -119,11 +132,13 @@ stdenv.mkDerivation rec {
   # - Allow Dolphin to use nix-provided libraries instead of building them
   postPatch =
     ''
-      substituteInPlace CMakeLists.txt --replace 'DISTRIBUTOR "None"' 'DISTRIBUTOR "NixOS"'
+      substituteInPlace CMakeLists.txt \
+        --replace-fail 'DISTRIBUTOR "None"' 'DISTRIBUTOR "NixOS"'
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      substituteInPlace CMakeLists.txt --replace 'if(NOT APPLE)' 'if(true)'
-      substituteInPlace CMakeLists.txt --replace 'if(LIBUSB_FOUND AND NOT APPLE)' 'if(LIBUSB_FOUND)'
+      substituteInPlace CMakeLists.txt \
+        --replace-fail 'if(NOT APPLE)' 'if(true)' \
+        --replace-fail 'if(LIBUSB_FOUND AND NOT APPLE)' 'if(LIBUSB_FOUND)'
     '';
 
   postInstall =
@@ -132,19 +147,31 @@ stdenv.mkDerivation rec {
       mv $out/bin/dolphin-emu-nogui $out/bin/dolphin-emu-primehack-nogui
       mv $out/share/applications/dolphin-emu.desktop $out/share/applications/dolphin-emu-primehack.desktop
       mv $out/share/icons/hicolor/256x256/apps/dolphin-emu.png $out/share/icons/hicolor/256x256/apps/dolphin-emu-primehack.png
-      substituteInPlace $out/share/applications/dolphin-emu-primehack.desktop --replace 'dolphin-emu' 'dolphin-emu-primehack'
-      substituteInPlace $out/share/applications/dolphin-emu-primehack.desktop --replace 'Dolphin Emulator' 'PrimeHack'
+      substituteInPlace $out/share/applications/dolphin-emu-primehack.desktop \
+        --replace-fail 'dolphin-emu' 'dolphin-emu-primehack' \
+        --replace-fail 'Dolphin Emulator' 'PrimeHack'
     ''
     + lib.optionalString stdenv.hostPlatform.isLinux ''
       install -D $src/Data/51-usb-device.rules $out/etc/udev/rules.d/51-usb-device.rules
     '';
 
-  meta = with lib; {
+  passthru = {
+    tests = {
+      version = testers.testVersion {
+        package = finalAttrs.finalPackage;
+        command = "dolphin-emu-primehack-nogui --version";
+        version = "v${finalAttrs.version}";
+      };
+    };
+    updateScript = nix-update-script { };
+  };
+
+  meta = {
     homepage = "https://github.com/shiiion/dolphin";
     description = "Gamecube/Wii/Triforce emulator for x86_64 and ARMv8";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ Madouura ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ Madouura ];
     broken = stdenv.hostPlatform.isDarwin;
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
-}
+})
