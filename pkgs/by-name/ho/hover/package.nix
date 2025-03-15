@@ -87,7 +87,7 @@ let
   };
 
 in
-buildFHSEnv rec {
+buildFHSEnv {
   inherit pname version;
   targetPkgs =
     pkgs:

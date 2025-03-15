@@ -23,7 +23,7 @@
 , uhd
 }:
 
-gnuradio.pkgs.mkDerivation rec {
+gnuradio.pkgs.mkDerivation {
   pname = "qradiolink";
   # https://github.com/qradiolink/qradiolink/tree/gr_3.10
   version = "0.9.0-1-unstable-2024-08-29";

@@ -20135,6 +20135,12 @@
     githubId = 10631029;
     name = "Richard Ipsum";
   };
+  richiejp = {
+    email = "io@richiejp.com";
+    github = "richiejp";
+    githubId = 988098;
+    name = "Richard Palethorpe";
+  };
   rick68 = {
     email = "rick68@gmail.com";
     github = "rick68";

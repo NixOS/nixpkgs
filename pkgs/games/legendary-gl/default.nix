@@ -8,7 +8,7 @@
   filelock,
 }:
 
-buildPythonApplication rec {
+buildPythonApplication {
   pname = "legendary-gl"; # Name in pypi
   version = "0.20.34";
 

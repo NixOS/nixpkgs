@@ -4,7 +4,7 @@
   dune_3,
 }:
 
-buildDunePackage rec {
+buildDunePackage {
   pname = "xdg";
   inherit (dune_3) src version;
 
