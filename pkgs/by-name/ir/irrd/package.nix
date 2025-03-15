@@ -138,6 +138,9 @@ py.pkgs.buildPythonPackage rec {
     jinja2
   ] ++ py.pkgs.uvicorn.optional-dependencies.standard;
 
+  # Needed by redis in the darwin sandbox
+  __darwinAllowLocalNetworking = true;
+
   preCheck = ''
     redis-server &
     REDIS_PID=$!
