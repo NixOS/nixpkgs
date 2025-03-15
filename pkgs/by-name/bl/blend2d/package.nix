@@ -11,13 +11,13 @@ stdenv.mkDerivation {
   # Note: this is an outdated version for pdf4qt, but vcpkg also uses it
   # See 'Commit Hashes' in https://blend2d.com/download.html for newest
   # If the newest version is needed, we can rename this package.
-  version = "0.10";
+  version = "0.11.5";
 
   src = fetchFromGitHub {
     owner = "blend2d";
     repo = "blend2d";
-    rev = "452d549751188b04367b5af46c040cb737f5f76c";
-    hash = "sha256-LDhnXsp/V1A3YqVyjBVaL7/V6Nhts/1E9hRhl2P293o=";
+    rev = "7eb92c2946fb35c23c09dbdc6e98d835679d7f82";
+    hash = "sha256-PvuRP0BP/Ri1JokWBhw7S1Q0P38+rdyUp+p8MdFVLvI=";
   };
 
   outputs = [
