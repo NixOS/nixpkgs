@@ -29,7 +29,6 @@
   gtk3-x11,
   harfbuzz,
   imagemagick,
-  jansson,
   libXaw,
   libXcursor,
   libXft,
@@ -78,21 +77,20 @@
   withGTK3 ? withPgtk && !noGui,
   withGlibNetworking ? withPgtk || withGTK3 || (withX && withXwidgets),
   withGpm ? stdenv.hostPlatform.isLinux,
-  withImageMagick ? lib.versionOlder version "27" && (withX || withNS),
-  # Emacs 30+ has native JSON support
-  withJansson ? lib.versionOlder version "30",
+  # https://github.com/emacs-mirror/emacs/blob/master/etc/NEWS.27#L140-L142
+  withImageMagick ? false,
   withMailutils ? true,
   withMotif ? false,
   withNS ? stdenv.hostPlatform.isDarwin && !(variant == "macport" || noGui),
   withPgtk ? false,
   withSelinux ? stdenv.hostPlatform.isLinux,
-  withSQLite3 ? lib.versionAtLeast version "29",
+  withSQLite3 ? lib.versionAtLeast version "30",
   withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
   withToolkitScrollBars ? true,
-  withTreeSitter ? lib.versionAtLeast version "29",
-  withWebP ? lib.versionAtLeast version "29",
+  withTreeSitter ? lib.versionAtLeast version "30",
+  withWebP ? lib.versionAtLeast version "30",
   withX ? !(stdenv.hostPlatform.isDarwin || noGui || withPgtk),
-  withXinput2 ? withX && lib.versionAtLeast version "29",
+  withXinput2 ? withX && lib.versionAtLeast version "30",
   withXwidgets ?
     !stdenv.hostPlatform.isDarwin
     && !noGui
@@ -139,6 +137,7 @@ assert noGui -> !(withX || withGTK3 || withNS || variant == "macport");
 assert withAcl -> stdenv.hostPlatform.isLinux;
 assert withAlsaLib -> stdenv.hostPlatform.isLinux;
 assert withGpm -> stdenv.hostPlatform.isLinux;
+assert withImageMagick -> (withX || withNS);
 assert withNS -> stdenv.hostPlatform.isDarwin && !(withX || variant == "macport");
 assert withPgtk -> withGTK3 && !withX;
 assert withXwidgets -> !noGui && (withGTK3 || withPgtk);
@@ -179,15 +178,7 @@ mkDerivation (finalAttrs: {
   patches =
     patches fetchpatch
     ++ lib.optionals withNativeCompilation [
-      (replaceVars
-        (
-          if lib.versionOlder finalAttrs.version "29" then
-            ./native-comp-driver-options-28.patch
-          else if lib.versionOlder finalAttrs.version "30" then
-            ./native-comp-driver-options.patch
-          else
-            ./native-comp-driver-options-30.patch
-        )
+      (replaceVars ./native-comp-driver-options-30.patch
         {
           backendPath = (
             lib.concatStringsSep " " (
@@ -278,9 +269,6 @@ mkDerivation (finalAttrs: {
       gettext
       gnutls
       (lib.getDev harfbuzz)
-    ]
-    ++ lib.optionals withJansson [
-      jansson
     ]
     ++ [
       libxml2
