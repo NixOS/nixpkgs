@@ -24547,6 +24547,12 @@
     github = "uku3lig";
     githubId = 61147779;
   };
+  ulic-youthlic = {
+    name = "youthlic";
+    email = "ulic.youthlic+nixpkgs@gmail.com";
+    github = "ulic-youthlic";
+    githubId = 121918198;
+  };
   ulinja = {
     email = "julian@lobbes.dev";
     github = "ulinja";
