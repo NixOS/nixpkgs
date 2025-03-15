@@ -33,62 +33,70 @@ git -C "$gitRepo" show "$baseRef":"$ownersFile" > "$tmp"/codeowners
 # Make sure to always lowercase keys to avoid duplicates with different casings
 declare -A users=()
 
-for file in "${touchedFiles[@]}"; do
-    result=$(codeowners --file "$tmp"/codeowners "$file")
+for path in "${touchedFiles[@]}"; do
+    while true; do
+        result="$(grep -oP "(?<=^|/)\Q$path\E\s.*$" "$tmp"/codeowners || echo "$path (unowned)")"
 
-    # Remove the file prefix and trim the surrounding spaces
-    read -r owners <<< "${result#"$file"}"
-    if [[ "$owners" == "(unowned)" ]]; then
-        log "File $file is unowned"
-        continue
-    fi
-    log "File $file is owned by $owners"
-
-    # Split up multiple owners, separated by arbitrary amounts of spaces
-    IFS=" " read -r -a entries <<< "$owners"
-
-    for entry in "${entries[@]}"; do
-        # GitHub technically also supports Emails as code owners,
-        # but we can't easily support that, so let's not
-        if [[ ! "$entry" =~ @(.*) ]]; then
-            warn -e "\e[33mCodeowner \"$entry\" for file $file is not valid: Must start with \"@\"\e[0m" >&2
-            # Don't fail, because the PR for which this script runs can't fix it,
-            # it has to be fixed in the base branch
-            continue
-        fi
-        # The first regex match is everything after the @
-        entry=${BASH_REMATCH[1]}
-
-        if [[ "$entry" =~ (.*)/(.*) ]]; then
-            # Teams look like $org/$team
-            org=${BASH_REMATCH[1]}
-            team=${BASH_REMATCH[2]}
-
-            # Instead of requesting a review from the team itself,
-            # we request reviews from the individual users.
-            # This is because once somebody from a team reviewed the PR,
-            # the API doesn't expose that the team was already requested for a review,
-            # so we wouldn't be able to avoid rerequesting reviews
-            # without saving some some extra state somewhere
-
-            # We could also consider implementing a more advanced heuristic
-            # in the future that e.g. only pings one team member,
-            # but escalates to somebody else if that member doesn't respond in time.
-            gh api \
-                --cache=1h \
-                -H "Accept: application/vnd.github+json" \
-                -H "X-GitHub-Api-Version: 2022-11-28" \
-                "/orgs/$org/teams/$team/members" \
-                --jq '.[].login' > "$tmp/team-members"
-            readarray -t members < "$tmp/team-members"
-            log "Team $entry has these members: ${members[*]}"
-
-            for user in "${members[@]}"; do
-                users[${user,,}]=
-            done
+        # Remove the path prefix and trim the surrounding spaces
+        read -r owners <<< "${result#"$path"}"
+        if [[ "$owners" == "(unowned)" ]]; then
+            log "Path $path is unowned"
         else
-            # Everything else is a user
-            users[${entry,,}]=
+            log "Path $path is owned by $owners"
+
+            # Split up multiple owners, separated by arbitrary amounts of spaces
+            IFS=" " read -r -a entries <<< "$owners"
+
+            for entry in "${entries[@]}"; do
+                # GitHub technically also supports Emails as code owners,
+                # but we can't easily support that, so let's not
+                if [[ ! "$entry" =~ @(.*) ]]; then
+                    echo -e "\e[33mCodeowner \"$entry\" for path $path is not valid: Must start with \"@\"\e[0m" >&2
+                    # Don't fail, because the PR for which this script runs can't fix it,
+                    # it has to be fixed in the base branch
+                    continue
+                fi
+                # The first regex match is everything after the @
+                entry=${BASH_REMATCH[1]}
+
+                if [[ "$entry" =~ (.*)/(.*) ]]; then
+                    # Teams look like $org/$team
+                    org=${BASH_REMATCH[1]}
+                    team=${BASH_REMATCH[2]}
+
+                    # Instead of requesting a review from the team itself,
+                    # we request reviews from the individual users.
+                    # This is because once somebody from a team reviewed the PR,
+                    # the API doesn't expose that the team was already requested for a review,
+                    # so we wouldn't be able to avoid rerequesting reviews
+                    # without saving some some extra state somewhere
+
+                    # We could also consider implementing a more advanced heuristic
+                    # in the future that e.g. only pings one team member,
+                    # but escalates to somebody else if that member doesn't respond in time.
+                    gh api \
+                        --cache=1h \
+                        -H "Accept: application/vnd.github+json" \
+                        -H "X-GitHub-Api-Version: 2022-11-28" \
+                        "/orgs/$org/teams/$team/members" \
+                        --jq '.[].login' > "$tmp/team-members"
+                    readarray -t members < "$tmp/team-members"
+                    log "Team $entry has these members: ${members[*]}"
+
+                    for user in "${members[@]}"; do
+                        users[${user,,}]=
+                    done
+                else
+                    # Everything else is a user
+                    users[${entry,,}]=
+                fi
+            done
+        fi
+
+        # Check all parent paths, too.
+        path="$(dirname "$path")"
+        if [[ "$path" == "." ]]; then
+            break
         fi
     done
 
