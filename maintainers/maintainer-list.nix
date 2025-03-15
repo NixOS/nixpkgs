@@ -2235,6 +2235,13 @@
     name = "tali auster";
     matrix = "@atalii:matrix.org";
   };
+  atar13 = {
+    name = "Anthony Tarbinian";
+    email = "atar137h@gmail.com";
+    github = "atar13";
+    githubId = 42757207;
+    matrix = "@atar13:matrix.org";
+  };
   ataraxiasjel = {
     email = "nix@ataraxiadev.com";
     github = "AtaraxiaSjel";
