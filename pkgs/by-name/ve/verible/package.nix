@@ -8,6 +8,7 @@
   bison,
   flex,
   python3,
+  cctools,
 }:
 
 let
@@ -52,6 +53,7 @@ buildBazelPackage rec {
       {
         aarch64-linux = "sha256-HPpRxYhS6CIhinhHNvnPij4+cJxqf073nGpNG1ItPmo=";
         x86_64-linux = "sha256-gM4hsuHMF4V1PgykjQ0yO652luoRJvNdB2xF6P8uxRc=";
+        aarch64-darwin = "sha256-OwkPUK8cEpBKB0uZOVExz6T14Pzol4aG8/MmGPV5X1o=";
       }
       .${system} or (throw "No hash for system: ${system}");
   };
@@ -62,6 +64,7 @@ buildBazelPackage rec {
     flex # .. to compile with newer glibc
     python3
   ];
+  LIBTOOL = lib.optionalString stdenv.hostPlatform.isDarwin "${cctools}/bin/libtool";
 
   postPatch = ''
     patchShebangs \
@@ -99,7 +102,5 @@ buildBazelPackage rec {
       hzeller
       newam
     ];
-    # Platforms linux only currently; some LIBTOOL issue on Darwin w/ bazel
-    platforms = platforms.linux;
   };
 }
