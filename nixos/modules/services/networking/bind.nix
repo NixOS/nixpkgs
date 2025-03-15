@@ -9,6 +9,14 @@ let
 
   bindZoneCoerce = list: builtins.listToAttrs (lib.forEach list (zone: { name = zone.name; value = zone; }));
 
+  bindRndcMacType = "hmac-sha256";
+
+  bindRndcKeyFile = "/etc/bind/rndc.key";
+
+  bindNamedExe = lib.getExe' bindPkg "named";
+
+  bindRndcExe = lib.getExe' bindPkg "rndc";
+
   bindZoneOptions = { name, config, ... }: {
     options = {
       name = lib.mkOption {
@@ -49,56 +57,81 @@ let
     };
   };
 
-  confFile = pkgs.writeText "named.conf"
-    ''
-      include "/etc/bind/rndc.key";
-      controls {
-        inet 127.0.0.1 allow {localhost;} keys {"rndc-key";};
+  testRndcKey = pkgs.writeTextFile {
+    name = "testrndc.key";
+    text = ''
+      key "rndc-key" {
+        algorithm ${bindRndcMacType};
+        secret "0123456789abcdefghijklmnopqrstuvw=";
+      };
+      '';
+  };
+
+  confFile = pkgs.writeTextFile {
+      name = "named.conf";
+      checkPhase = ''
+        runHook preCheck
+        echo "Checking named configuration file...";
+        ${lib.getExe' bindPkg "named-checkconf"} -z $target -t ${cfg.directory}
+        runHook postCheck
+      '';
+      derivationArgs = {
+        doCheck = true;
+        postCheck = ''
+          substituteInPlace $target --replace-fail ${testRndcKey} ${bindRndcKeyFile}
+        '';
       };
 
-      acl cachenetworks { ${lib.concatMapStrings (entry: " ${entry}; ") cfg.cacheNetworks} };
-      acl badnetworks { ${lib.concatMapStrings (entry: " ${entry}; ") cfg.blockedNetworks} };
+      # The include path in the first line will be replaced in the postCheck hook.
+      text = ''
+        include "${testRndcKey}";
+        controls {
+          inet 127.0.0.1 allow {localhost;} keys {"rndc-key";};
+        };
 
-      options {
-        listen-on { ${lib.concatMapStrings (entry: " ${entry}; ") cfg.listenOn} };
-        listen-on-v6 { ${lib.concatMapStrings (entry: " ${entry}; ") cfg.listenOnIpv6} };
-        allow-query-cache { cachenetworks; };
-        blackhole { badnetworks; };
-        forward ${cfg.forward};
-        forwarders { ${lib.concatMapStrings (entry: " ${entry}; ") cfg.forwarders} };
-        directory "${cfg.directory}";
-        pid-file "/run/named/named.pid";
-        ${cfg.extraOptions}
-      };
+        acl cachenetworks { ${lib.concatMapStrings (entry: " ${entry}; ") cfg.cacheNetworks} };
+        acl badnetworks { ${lib.concatMapStrings (entry: " ${entry}; ") cfg.blockedNetworks} };
 
-      ${cfg.extraConfig}
+        options {
+          listen-on { ${lib.concatMapStrings (entry: " ${entry}; ") cfg.listenOn} };
+          listen-on-v6 { ${lib.concatMapStrings (entry: " ${entry}; ") cfg.listenOnIpv6} };
+          allow-query-cache { cachenetworks; };
+          blackhole { badnetworks; };
+          forward ${cfg.forward};
+          forwarders { ${lib.concatMapStrings (entry: " ${entry}; ") cfg.forwarders} };
+          directory "${cfg.directory}";
+          pid-file "/run/named/named.pid";
+          ${cfg.extraOptions}
+        };
 
-      ${ lib.concatMapStrings
-          ({ name, file, master ? true, slaves ? [], masters ? [], allowQuery ? [], extraConfig ? "" }:
-            ''
-              zone "${name}" {
-                type ${if master then "master" else "slave"};
-                file "${file}";
-                ${ if master then
-                   ''
-                     allow-transfer {
-                       ${lib.concatMapStrings (ip: "${ip};\n") slaves}
-                     };
-                   ''
-                   else
-                   ''
-                     masters {
-                       ${lib.concatMapStrings (ip: "${ip};\n") masters}
-                     };
-                   ''
-                }
-                allow-query { ${lib.concatMapStrings (ip: "${ip}; ") allowQuery}};
-                ${extraConfig}
-              };
-            '')
-          (lib.attrValues cfg.zones) }
+        ${cfg.extraConfig}
+
+        ${ lib.concatMapStrings
+            ({ name, file, master ? true, slaves ? [], masters ? [], allowQuery ? [], extraConfig ? "" }:
+              ''
+                zone "${name}" {
+                  type ${if master then "master" else "slave"};
+                  file "${file}";
+                  ${ if master then
+                     ''
+                       allow-transfer {
+                         ${lib.concatMapStrings (ip: "${ip};\n") slaves}
+                       };
+                     ''
+                     else
+                     ''
+                       masters {
+                         ${lib.concatMapStrings (ip: "${ip};\n") masters}
+                       };
+                     ''
+                  }
+                  allow-query { ${lib.concatMapStrings (ip: "${ip}; ") allowQuery}};
+                  ${extraConfig}
+                };
+              '')
+            (lib.attrValues cfg.zones) }
     '';
-
+  };
 in
 
 {
@@ -223,7 +256,8 @@ in
         defaultText = lib.literalExpression "confFile";
         description = ''
           Overridable config file to use for named. By default, that
-          generated by nixos.
+          generated by nixos. If overriden, it will not be checked by
+          named-checkconf.
         '';
       };
 
@@ -261,16 +295,16 @@ in
       wantedBy = [ "multi-user.target" ];
 
       preStart = ''
-        if ! [ -f "/etc/bind/rndc.key" ]; then
-          ${bindPkg.out}/sbin/rndc-confgen -c /etc/bind/rndc.key -a -A hmac-sha256 2>/dev/null
+        if ! [ -f ${bindRndcKeyFile} ]; then
+          ${lib.getExe' bindPkg "rndc-confgen"} -c ${bindRndcKeyFile} -a -A ${bindRndcMacType} 2>/dev/null
         fi
       '';
 
       serviceConfig = {
         Type = "forking"; # Set type to forking, see https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=900788
-        ExecStart = "${bindPkg.out}/sbin/named ${lib.optionalString cfg.ipv4Only "-4"} -c ${cfg.configFile}";
-        ExecReload = "${bindPkg.out}/sbin/rndc -k '/etc/bind/rndc.key' reload";
-        ExecStop = "${bindPkg.out}/sbin/rndc -k '/etc/bind/rndc.key' stop";
+        ExecStart = "${bindNamedExe} ${lib.optionalString cfg.ipv4Only "-4"} -c ${cfg.configFile}";
+        ExecReload = "${bindRndcExe} -k '${bindRndcKeyFile}' reload";
+        ExecStop = "${bindRndcExe} -k '${bindRndcKeyFile}' stop";
         User = bindUser;
         RuntimeDirectory = "named";
         RuntimeDirectoryPreserve = "yes";
