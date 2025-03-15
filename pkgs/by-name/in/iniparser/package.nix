@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "iniparser";
-  version = "4.2.5";
+  version = "4.2.6";
 
   src = fetchFromGitLab {
     owner = "iniparser";
     repo = "iniparser";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-YyIuvkM58WilqggzFcG7BNWSG5t2vHMOUu78PKvdItQ=";
+    hash = "sha256-z10S9ODLprd7CbL5Ecgh7H4eOwTetYwFXiWBUm6fIr4=";
   };
 
   patches = lib.optionals finalAttrs.finalPackage.doCheck [
