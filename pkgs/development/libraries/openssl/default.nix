@@ -97,8 +97,7 @@ let
         # output minimal.
         ++ lib.optional static "etc";
       setOutputFlags = false;
-      separateDebugInfo =
-        !stdenv.hostPlatform.isDarwin && !(stdenv.hostPlatform.useLLVM or false) && stdenv.cc.isGNU;
+      separateDebugInfo = !stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.cc == "gcc";
 
       nativeBuildInputs =
         lib.optional (!stdenv.hostPlatform.isWindows) makeBinaryWrapper

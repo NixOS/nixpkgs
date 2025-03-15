@@ -61,15 +61,15 @@ with pkgs;
       # thing to to create an earlier thing (leading to infinite recursion) and
       # we also would still respect the stage arguments choices for these
       # things.
-      (if stdenvNoCC.hostPlatform.isDarwin || stdenvNoCC.hostPlatform.useLLVM or false
-       then overrideCC stdenvNoCC buildPackages.llvmPackages.clangNoCompilerRt
+      (if stdenvNoCC.hostPlatform.cc == "clang"
+       then assert stdenvNoCC.hostPlatform.rtlib == "compiler-rt"; overrideCC stdenvNoCC buildPackages.llvmPackages.clangNoCompilerRt
        else gccCrossLibcStdenv)
     else mkStdenvNoLibs stdenv;
 
   stdenvNoLibc =
     if stdenvNoCC.hostPlatform != stdenvNoCC.buildPlatform
     then
-      (if stdenvNoCC.hostPlatform.isDarwin || stdenvNoCC.hostPlatform.useLLVM or false
+      (if stdenvNoCC.hostPlatform.cc == "clang"
        then overrideCC stdenvNoCC buildPackages.llvmPackages.clangNoLibc
        else gccCrossLibcStdenv)
     else mkStdenvNoLibs stdenv;
@@ -5847,7 +5847,7 @@ with pkgs;
           # temporarily disabled due to breakage;
           # see https://github.com/NixOS/nixpkgs/pull/243249
           && !stdenv.targetPlatform.isWindows
-          && !(stdenv.targetPlatform.useLLVM or false)
+          && !(stdenv.targetPlatform.cc == "clang" && stdenv.targetPlatform.cxxlib == "libcxx")
         ;
       };
       bintools = binutilsNoLibc;
@@ -8925,7 +8925,13 @@ with pkgs;
     else libcCrossChooser stdenv.targetPlatform.libc;
 
   threadsCross =
-    lib.optionalAttrs (stdenv.targetPlatform.isMinGW && !(stdenv.targetPlatform.useLLVM or false)) {
+    lib.optionalAttrs (
+      stdenv.targetPlatform.isMinGW
+      && !(stdenv.targetPlatform.cc == "clang"
+        && stdenv.targetPlatform.cxxlib == "libcxx"
+        && stdenv.targetPlatform.rtlib == "compiler-rt"
+        && stdenv.targetPlatform.unwinderlib == "libunwind")
+    ) {
       # other possible values: win32 or posix
       model = "mcf";
       # For win32 or posix set this to null
@@ -9386,7 +9392,7 @@ with pkgs;
   libcomps = callPackage ../tools/package-management/libcomps { python = python3; };
 
   libcxxrt = callPackage ../development/libraries/libcxxrt {
-    stdenv = if stdenv.hostPlatform.useLLVM or false
+    stdenv = if stdenv.hostPlatform.cxxlib == "libcxx" && stdenv.hostPlatform.cxxlib != "libcxx"
              then overrideCC stdenv buildPackages.llvmPackages.tools.clangNoLibcxx
              else stdenv;
   };
@@ -11853,7 +11859,7 @@ with pkgs;
 
   busybox = callPackage ../os-specific/linux/busybox {
     # Fixes libunwind from being dynamically linked to a static binary.
-    stdenv = if (stdenv.targetPlatform.useLLVM or false) then
+    stdenv = if stdenv.cc.isClang && stdenv.hostPlatform.unwinderlib == "libunwind" then
       overrideCC stdenv buildPackages.llvmPackages.clangNoLibcxx
     else stdenv;
   };

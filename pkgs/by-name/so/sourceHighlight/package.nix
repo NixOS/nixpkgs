@@ -62,11 +62,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ];
   buildInputs =
     [ boost ]
-    ++ lib.optional (stdenv.targetPlatform.useLLVM or false) (
-      llvmPackages.compiler-rt.override {
-        doFakeLibgcc = true;
-      }
-    );
+    ++ lib.optional (
+      stdenv.hostPlatform.rtlib == "compiler-rt" && !stdenv.hostPlatform.isDarwin
+    ) llvmPackages.compiler-rt;
 
   configureFlags = [
     "--with-boost=${boost.out}"
@@ -92,7 +90,9 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }
-// lib.optionalAttrs (stdenv.targetPlatform.useLLVM or false) {
-  # Force linking to "libgcc" so tests pass
-  NIX_CFLAGS_COMPILE = "-lgcc";
-}
+//
+  lib.optionalAttrs (stdenv.targetPlatform.rtlib == "compiler-rt" && !stdenv.hostPlatform.isDarwin)
+    {
+      # Force linking to "libgcc" so tests pass
+      NIX_CFLAGS_COMPILE = "-lgcc";
+    }

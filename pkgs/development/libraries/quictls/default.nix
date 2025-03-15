@@ -64,8 +64,7 @@ stdenv.mkDerivation rec {
 
   separateDebugInfo =
     !stdenv.hostPlatform.isDarwin &&
-    !(stdenv.hostPlatform.useLLVM or false) &&
-    stdenv.cc.isGNU;
+    stdenv.hostPlatform.cc == "gcc";
 
   # TODO(@Ericson2314): Improve with mass rebuild
   configurePlatforms = [ ];

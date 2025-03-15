@@ -27,7 +27,7 @@
 
   # Build with libc++ (LLVM) rather than stdlibc++ (GCC).
   # This is experimental and not all features work.
-  useLLVMLibcxx ? clangStdenv.hostPlatform.isDarwin,
+  useLLVMLibcxx ? clangStdenv.hostPlatform.cxxlib == "libcxx",
 }:
 
 let

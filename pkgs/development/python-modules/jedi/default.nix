@@ -49,7 +49,7 @@ buildPythonPackage rec {
       # sensitive to platform, causes false negatives on darwin
       "test_import"
     ]
-    ++ lib.optionals (stdenv.targetPlatform.useLLVM or false) [
+    ++ lib.optionals (stdenv.hostPlatform.cc == "clang" && stdenv.hostPlatform.libc == "glibc") [
       # InvalidPythonEnvironment: The python binary is potentially unsafe.
       "test_create_environment_executable"
       # AssertionError: assert ['', '.1000000000000001'] == ['', '.1']

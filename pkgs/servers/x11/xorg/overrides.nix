@@ -151,7 +151,7 @@ self: super:
     outputs = [ "out" "dev" "man" ];
     configureFlags = attrs.configureFlags or []
       ++ malloc0ReturnsNullCrossFlag
-      ++ lib.optional (stdenv.targetPlatform.useLLVM or false) "ac_cv_path_RAWCPP=cpp";
+      ++ lib.optional (stdenv.targetPlatform.cc == "clang" && !stdenv.hostPlatform.isDarwin) "ac_cv_path_RAWCPP=cpp";
     depsBuildBuild = [
       buildPackages.stdenv.cc
     ] ++ lib.optionals stdenv.hostPlatform.isStatic [
@@ -261,7 +261,7 @@ self: super:
     '';
     configureFlags = attrs.configureFlags or []
       ++ malloc0ReturnsNullCrossFlag
-      ++ lib.optional (stdenv.targetPlatform.useLLVM or false) "ac_cv_path_RAWCPP=cpp";
+      ++ lib.optional (stdenv.targetPlatform.cc == "clang" && !stdenv.hostPlatform.isDarwin) "ac_cv_path_RAWCPP=cpp";
     propagatedBuildInputs = attrs.propagatedBuildInputs or [] ++ [ xorg.libSM ];
     depsBuildBuild = [ buildPackages.stdenv.cc ];
     CPP = if stdenv.hostPlatform.isDarwin then "clang -E -" else "${stdenv.cc.targetPrefix}cc -E -";
