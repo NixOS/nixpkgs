@@ -918,6 +918,8 @@ let
           }
         );
 
+        clojure-quick-repls = ignoreCompilationError super.clojure-quick-repls; # elisp error
+
         # https://github.com/atilaneves/cmake-ide/issues/176
         cmake-ide = addPackageRequires super.cmake-ide [ self.dash ];
 
