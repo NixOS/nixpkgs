@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  nix-update-script,
 
   # build-system
   pdm-backend,
@@ -47,10 +48,14 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "langchain_groq" ];
 
-  passthru = {
-    inherit (langchain-core) updateScript;
-    skipBulkUpdate = true; # Broken, see https://github.com/NixOS/nixpkgs/issues/379898
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^langchain-groq==([0-9.]+)$"
+    ];
   };
+  # updates the wrong fetcher rev attribute
+  passthru.skipBulkUpdate = true;
 
   meta = {
     changelog = "https://github.com/langchain-ai/langchain/releases/tag/langchain-groq==${version}";

@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  nix-update-script,
 
   # build-system
   poetry-core,
@@ -64,11 +65,14 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "langchain_aws" ];
 
-  passthru = {
-    inherit (langchain-core) updateScript;
-    # updates the wrong fetcher rev attribute
-    skipBulkUpdate = true;
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^langchain-aws==([0-9.]+)$"
+    ];
   };
+  # updates the wrong fetcher rev attribute
+  passthru.skipBulkUpdate = true;
 
   meta = {
     changelog = "https://github.com/langchain-ai/langchain-aws/releases/tag/v${version}";

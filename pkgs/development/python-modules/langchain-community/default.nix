@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  nix-update-script,
 
   # build-system
   pdm-backend,
@@ -98,12 +99,6 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [ "tests/unit_tests" ];
 
-  passthru = {
-    inherit (langchain-core) updateScript;
-    # updates the wrong fetcher rev attribute
-    skipBulkUpdate = true;
-  };
-
   __darwinAllowLocalNetworking = true;
 
   disabledTests = [
@@ -123,6 +118,15 @@ buildPythonPackage rec {
     # Fails due to the lack of blockbuster
     "test_group_dependencies"
   ];
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^langchain-community==([0-9.]+)$"
+    ];
+  };
+  # updates the wrong fetcher rev attribute
+  passthru.skipBulkUpdate = true;
 
   meta = {
     changelog = "https://github.com/langchain-ai/langchain/releases/tag/langchain-community==${version}";

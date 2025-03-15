@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
+  nix-update-script,
 
   # build-system
   pdm-backend,
@@ -144,11 +145,14 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "langchain" ];
 
-  passthru = {
-    updateScript = langchain-core.updateScript;
-    # updates the wrong fetcher rev attribute
-    skipBulkUpdate = true;
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^langchain==([0-9.]+)$"
+    ];
   };
+  # updates the wrong fetcher rev attribute
+  passthru.skipBulkUpdate = true;
 
   meta = {
     description = "Building applications with LLMs through composability";
