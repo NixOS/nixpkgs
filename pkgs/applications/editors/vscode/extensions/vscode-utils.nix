@@ -9,38 +9,37 @@
   jq,
 }:
 let
-  buildVscodeExtension =
-    a@{
-      pname ? null, # Only optional for backward compatibility.
-      src,
-      # Same as "Unique Identifier" on the extension's web page.
-      # For the moment, only serve as unique extension dir.
-      vscodeExtPublisher,
-      vscodeExtName,
-      vscodeExtUniqueId,
-      configurePhase ? ''
-        runHook preConfigure
-        runHook postConfigure
-      '',
-      buildPhase ? ''
-        runHook preBuild
-        runHook postBuild
-      '',
-      dontPatchELF ? true,
-      dontStrip ? true,
-      nativeBuildInputs ? [ ],
-      passthru ? { },
-      ...
-    }:
-    stdenv.mkDerivation (
-      (removeAttrs a [
-        "vscodeExtUniqueId"
-        "pname"
-      ])
-      // (lib.optionalAttrs (pname != null) {
+  buildVscodeExtension = lib.extendMkDerivation {
+    constructDrv = stdenv.mkDerivation;
+    excludeDrvArgNames = [
+      "vscodeExtUniqueId"
+    ];
+    extendDrvArgs =
+      finalAttrs:
+      {
+        pname ? null, # Only optional for backward compatibility.
+        src,
+        # Same as "Unique Identifier" on the extension's web page.
+        # For the moment, only serve as unique extension dir.
+        vscodeExtPublisher,
+        vscodeExtName,
+        vscodeExtUniqueId,
+        configurePhase ? ''
+          runHook preConfigure
+          runHook postConfigure
+        '',
+        buildPhase ? ''
+          runHook preBuild
+          runHook postBuild
+        '',
+        dontPatchELF ? true,
+        dontStrip ? true,
+        nativeBuildInputs ? [ ],
+        passthru ? { },
+        ...
+      }:
+      {
         pname = "vscode-extension-${pname}";
-      })
-      // {
 
         passthru = passthru // {
           inherit vscodeExtPublisher vscodeExtName vscodeExtUniqueId;
@@ -57,12 +56,12 @@ let
         # If other directories are present but `sourceRoot` is unset, the unpacker phase fails.
         sourceRoot = "extension";
 
+        # This cannot be removed, it is used by some extensions.
         installPrefix = "share/vscode/extensions/${vscodeExtUniqueId}";
 
         nativeBuildInputs = [ unzip ] ++ nativeBuildInputs;
 
         installPhase = ''
-
           runHook preInstall
 
           mkdir -p "$out/$installPrefix"
@@ -70,8 +69,8 @@ let
 
           runHook postInstall
         '';
-      }
-    );
+      };
+  };
 
   fetchVsixFromVscodeMarketplace =
     mktplcExtRef: fetchurl (import ./mktplcExtRefToFetchArgs.nix mktplcExtRef);
