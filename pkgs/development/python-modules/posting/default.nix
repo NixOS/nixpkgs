@@ -1,30 +1,7 @@
-{
-  buildPythonPackage,
-  hatchling,
-  pkgs,
-  fetchFromGitHub,
-  python3Packages,
-}: let
-  openapi-pydantic = buildPythonPackage rec {
-    pname = "openapi_pydantic";
-    version = "0.5.0";
+{ pkgs ? import <nixpkgs> {} }: let
+  python3Packages = pkgs.python3Packages;
 
-    src = python3Packages.fetchPypi {
-      inherit pname version;
-      sha256 = "sha256-pI+I4pBKBW4e9tRyjPsvNqoyE84ZT7CfwEJZuQBxZfA=";
-    };
-
-    propagatedBuildInputs = with python3Packages; [
-      pydantic
-    ];
-
-    pyproject = true;
-    nativeBuildInputs = with python3Packages; [
-      poetry-core
-    ];
-  };
-
-  textual-2_1_2 = buildPythonPackage rec {
+  textual-0_86_2 = python3Packages.buildPythonPackage rec {
     pname = "textual";
     version = "2.1.2";
 
@@ -64,17 +41,17 @@
       hatchling
     ];
   };
-in
-  buildPythonPackage rec {
-    pname = "posting";
-    version = "2.5.4";
 
-    src = fetchFromGitHub {
-      owner = "darrenburns";
-      repo = "posting";
-      rev = version;
-      sha256 = "sha256-6nFQSGCdmR4qZuleiY0xh76WgBIjs9OZtfpc16b4iws=";
-    };
+in python3Packages.buildPythonPackage rec {
+  pname = "posting";
+  version = "2.3.0";
+
+  src = python3Packages.fetchFromGitHub {
+    owner = "darrenburns";
+    repo = "posting";
+    rev = version;
+    sha256 = "sha256-lL85gJxFw8/e8Js+UCE9VxBMcmWRUkHh8Cq5wTC93KA=";
+  };
 
     nativeBuildInputs = [
       hatchling
@@ -99,9 +76,9 @@ in
       typer
     ];
 
-    pyproject = true;
-    doCheck = true;
-    pythonImportsCheck = ["posting"];
+  format = "pyproject";
+  doCheck = false;
+  pythonImportsCheck = ["posting"];
 
     meta = with pkgs.lib; {
       description = "Command-line HTTP client";
