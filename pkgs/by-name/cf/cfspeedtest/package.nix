@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "code-inflation";
-    repo = pname;
+    repo = "cfspeedtest";
     tag = "v${version}";
     hash = "sha256-86PZlTwqplKCVZl6IG2Qch+IMdfiTfpBhdNf00XIXbU=";
   };

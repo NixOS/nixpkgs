@@ -11,7 +11,7 @@ buildNpmPackage rec {
 
   src = fetchFromGitHub {
     owner = "ansible";
-    repo = pname;
+    repo = "ansible-language-server";
     tag = "v${version}";
     hash = "sha256-e6cOWoryOxWnl8q62rlGmSgwLVnoxLMwNFoGlUZw2bQ=";
   };

@@ -7,6 +7,9 @@
   pkg-config,
   openssl,
   erlang,
+  nodejs,
+  bun,
+  deno,
   Security,
   nix-update-script,
   SystemConfiguration,
@@ -14,24 +17,27 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "gleam";
-  version = "1.8.1";
+  version = "1.9.1";
 
   src = fetchFromGitHub {
     owner = "gleam-lang";
     repo = pname;
     tag = "v${version}";
-    hash = "sha256-Qt2VQhbiNNORrGUR5LHeBb0q/EIqPNPz/adljj6xpS4=";
+    hash = "sha256-6vYVUdQST49TNctO9Y/XrRFyJ6hXng85SsO+4JBn1GA=";
   };
 
   nativeBuildInputs = [
     git
     pkg-config
+    erlang
+    nodejs
+    bun
+    deno
   ];
 
   buildInputs =
     [
       openssl
-      erlang
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       Security
@@ -39,7 +45,12 @@ rustPlatform.buildRustPackage rec {
     ];
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-7oawxv1s8BJsOxGuADKjf4XqJ/UT+zYOrPQCbQljArM=";
+  cargoHash = "sha256-arVtNxcYDVKRTGe9won6zb30wCxMD6MtsGs25UmOPjM=";
+
+  checkFlags = [
+    # Makes a network request
+    "--skip=tests::echo::echo_dict"
+  ];
 
   passthru.updateScript = nix-update-script { };
 

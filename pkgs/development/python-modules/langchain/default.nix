@@ -40,17 +40,22 @@
 
 buildPythonPackage rec {
   pname = "langchain";
-  version = "0.3.18";
+  version = "0.3.20";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain==${version}";
-    hash = "sha256-oJ4lUbQqHNEqd9UdgLH0ZmTkdZpUbJ7UNsQyIrs8JvI=";
+    hash = "sha256-N209wUGdlHkOZynhSSE+ZHylL7cK+8H3PfZIG/wvMd0=";
   };
 
   sourceRoot = "${src.name}/libs/langchain";
+
+  patches = [
+    # blockbuster isn't supported in nixpkgs
+    ./rm-blockbuster.patch
+  ];
 
   build-system = [ pdm-backend ];
 
@@ -59,6 +64,10 @@ buildPythonPackage rec {
   pythonRelaxDeps = [
     "numpy"
     "tenacity"
+  ];
+
+  pythonRemoveDeps = [
+    "blockbuster"
   ];
 
   dependencies = [

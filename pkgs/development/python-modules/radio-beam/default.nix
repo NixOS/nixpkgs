@@ -1,7 +1,6 @@
 {
   lib,
   fetchPypi,
-  fetchpatch2,
   buildPythonPackage,
   setuptools-scm,
   astropy,

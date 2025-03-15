@@ -23,11 +23,11 @@
 , cmake, libssh2, openssl, openssl_1_1, libmysqlclient, git, perl, pcre2, gecode_3, curl
 , libsodium, snappy, libossp_uuid, lxc, libpcap, xorg, gtk3, lerc, buildRubyGem
 , cairo, expat, re2, rake, gobject-introspection, gdk-pixbuf, zeromq, czmq, graphicsmagick, libcxx
-, file, libvirt, glib, vips, taglib, libopus, linux-pam, libidn, protobuf, fribidi, harfbuzz
+, file, libvirt, glib, vips, taglib_1, libopus, linux-pam, libidn, protobuf, fribidi, harfbuzz
 , bison, flex, pango, python3, patchelf, binutils, freetds, wrapGAppsHook3, atk
 , bundler, libsass, dart-sass, libexif, libselinux, libsepol, shared-mime-info, libthai, libdatrie
 , CoreServices, DarwinTools, cctools, libtool, discount, exiv2, libepoxy, libxkbcommon, libmaxminddb, libyaml
-, cargo, rustc, rustPlatform, libsysprof-capture
+, cargo, rustc, rustPlatform, libsysprof-capture, imlib2
 , autoSignDarwinBinariesHook
 }@args:
 
@@ -206,6 +206,17 @@ in
     postInstall = ''
       installPath=$(cat $out/nix-support/gem-meta/install-path)
       echo -e "\nENV['PATH'] += ':${graphicsmagick}/bin'\n" >> $installPath/lib/mini_magick/configuration.rb
+    '';
+  };
+
+  mini_racer = attrs: {
+    buildFlags = [
+      "--with-v8-dir=\"${nodejs.libv8}\""
+    ];
+    dontBuild = false;
+    postPatch = ''
+      substituteInPlace ext/mini_racer_extension/extconf.rb \
+        --replace Libv8.configure_makefile '$CPPFLAGS += " -x c++"; Libv8.configure_makefile'
     '';
   };
 
@@ -552,6 +563,10 @@ in
       rpath="$(patchelf --print-rpath "$soPath")"
       patchelf --set-rpath "${lib.makeLibraryPath [ lasem glib cairo ]}:$rpath" "$soPath"
       patchelf --replace-needed liblasem.so liblasem-0.4.so "$soPath"
+    ''  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      soPath="$out/${ruby.gemPath}/gems/mathematical-${attrs.version}/lib/mathematical/mathematical.bundle"
+      install_name_tool -add_rpath "${lib.makeLibraryPath [ lasem glib cairo ]}/lib" "$soPath"
+      install_name_tool -change @rpath/liblasem.dylib "${lib.getLib lasem}/lib/liblasem-0.4.dylib" "$soPath"
     '';
   };
 
@@ -659,6 +674,14 @@ in
     buildFlags = [ "--with-pg-config=ignore" ];
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ libpq ];
+  };
+
+  rszr = attrs: {
+    buildInputs = [
+      imlib2
+      imlib2.dev
+    ];
+    buildFlags = [ "--without-imlib2-config" ];
   };
 
   psych = attrs: {
@@ -846,7 +869,7 @@ in
   };
 
   taglib-ruby = attrs: {
-    buildInputs = [ taglib ];
+    buildInputs = [ taglib_1 ];
   };
 
   timfel-krb5-auth = attrs: {

@@ -18,7 +18,7 @@ let
 
   src = fetchFromGitHub {
     owner = "matrix-org";
-    repo = pname;
+    repo = "matrix-appservice-irc";
     tag = version;
     hash = "sha256-R/Up4SNWl2AAaeyPJe6OOKFrwIOIvDw/guJxgBuZNC4=";
   };

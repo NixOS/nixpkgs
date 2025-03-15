@@ -52,10 +52,10 @@ let
             build-system = [ self.setuptools ];
             doCheck = false; # DeprecationWarnings
           });
-          pytest-httpbin = super.pytest-httpbin.overridePythonAttrs (oldAttrs: rec {
+          pytest-httpbin = super.pytest-httpbin.overridePythonAttrs (oldAttrs: {
             doCheck = false; # fails in current overlay
           });
-          httpcore = super.httpcore.overridePythonAttrs (oldAttrs: rec {
+          httpcore = super.httpcore.overridePythonAttrs (oldAttrs: {
             doCheck = false; # fails in current overlay
           });
 
@@ -268,7 +268,6 @@ let
             license = licenses.agpl3Only;
             maintainers = with maintainers; [
               abbradar
-              gebner
               WhittlesJr
               gador
             ];

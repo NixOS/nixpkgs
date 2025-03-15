@@ -18,11 +18,11 @@
 }:
 stdenv.mkDerivation (final: {
   pname = "quarto";
-  version = "1.6.41";
+  version = "1.6.42";
 
   src = fetchurl {
     url = "https://github.com/quarto-dev/quarto-cli/releases/download/v${final.version}/quarto-${final.version}-linux-amd64.tar.gz";
-    hash = "sha256-+OsTnNxb/67sy3SOV0wHmR7Nm+hpgy5k2Jn28J6RNmw=";
+    hash = "sha256-9mf1YfcfCWMZaYFlYyJN9WKlRHk8U2sq2ESb4mqz3sY=";
   };
 
   patches = [

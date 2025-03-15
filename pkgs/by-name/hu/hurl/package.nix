@@ -2,12 +2,10 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  fetchpatch,
   pkg-config,
   installShellFiles,
   libxml2,
   openssl,
-  stdenv,
   curl,
   versionCheckHook,
 }:
@@ -31,14 +29,11 @@ rustPlatform.buildRustPackage rec {
     installShellFiles
   ];
 
-  buildInputs =
-    [
-      libxml2
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      curl
-    ];
+  buildInputs = [
+    libxml2
+    openssl
+    curl
+  ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 

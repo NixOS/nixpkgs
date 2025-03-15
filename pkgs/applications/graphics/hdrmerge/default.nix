@@ -1,7 +1,6 @@
 {
   lib,
   mkDerivation,
-  fetchpatch,
   fetchFromGitHub,
   cmake,
   qtbase,

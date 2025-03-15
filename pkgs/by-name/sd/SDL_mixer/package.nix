@@ -83,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # pass in correct *-config for cross builds
-  env.SDL_CONFIG = lib.getExe' SDL.dev "sdl-config";
+  env.SDL_CONFIG = lib.getExe' (lib.getDev SDL) "sdl-config";
   env.SMPEG_CONFIG = lib.getExe' smpeg.dev "smpeg-config";
 
   configureFlags = [

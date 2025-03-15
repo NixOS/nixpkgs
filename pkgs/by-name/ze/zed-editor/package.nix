@@ -24,7 +24,7 @@
   makeFontsConf,
   vulkan-loader,
   envsubst,
-  gitUpdater,
+  nix-update-script,
   cargo-about,
   versionCheckHook,
   buildFHSEnv,
@@ -98,7 +98,7 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zed-editor";
-  version = "0.176.3";
+  version = "0.177.7";
 
   outputs =
     [ "out" ]
@@ -110,7 +110,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "zed-industries";
     repo = "zed";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5bn70R5phHZmAf/71IK8o2laHcCo92cCiaKQ7xo0Uag=";
+    hash = "sha256-STMDbUMsQAPJCDJMFFpb18fBtzOjxvhvsqx94MpCTac=";
   };
 
   patches = [
@@ -136,7 +136,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-IaAY1u5xLomvUtb4FjE4uE0w01rMmyR/DH0QD9cOK5Y=";
+  cargoHash = "sha256-NbjoaHZpqjWz6AnuE9EXAMuyeXldlm4QB765fp6QVlI=";
 
   nativeBuildInputs =
     [
@@ -301,13 +301,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
     versionCheckHook
   ];
   versionCheckProgram = "${placeholder "out"}/bin/zeditor";
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {
-    updateScript = gitUpdater {
-      rev-prefix = "v";
-      ignoredVersions = "(*-pre|0.999999.0|0.9999-temporary)";
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "^v(?!.*(?:-pre|0\.999999\.0|0\.9999-temporary)$)(.+)$"
+      ];
     };
     fhs = fhs { zed-editor = finalAttrs.finalPackage; };
     fhsWithPackages =

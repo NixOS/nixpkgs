@@ -42,7 +42,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Ultimate desktop calculator";
     homepage = "http://qalculate.github.io";
     maintainers = with maintainers; [
-      gebner
       doronbehar
       alyaeanyx
       aleksana

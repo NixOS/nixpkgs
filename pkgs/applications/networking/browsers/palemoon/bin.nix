@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     ];
 
   desktopItems = [
-    (makeDesktopItem rec {
+    (makeDesktopItem {
       name = "palemoon-bin";
       desktopName = "Pale Moon Web Browser";
       comment = "Browse the World Wide Web";

@@ -18,7 +18,6 @@
   pngquant,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   rich,
   reportlab,
   replaceVars,
@@ -29,10 +28,7 @@
 
 buildPythonPackage rec {
   pname = "ocrmypdf";
-  version = "16.7.0";
-
-  disabled = pythonOlder "3.10";
-
+  version = "16.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -45,7 +41,7 @@ buildPythonPackage rec {
     postFetch = ''
       rm "$out/.git_archival.txt"
     '';
-    hash = "sha256-81maXJjdGlzWy3TaQ8cabjJl6ZE5tbfc8m/+Px7ONhs=";
+    hash = "sha256-tRq3qskZK39xfSof4RUTWC2h9mi7eGDHR6nI7reltm4=";
   };
 
   patches = [

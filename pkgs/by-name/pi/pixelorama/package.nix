@@ -4,8 +4,7 @@
   alsa-lib,
   autoPatchelfHook,
   fetchFromGitHub,
-  godot_4,
-  godot_4-export-templates,
+  godot_4_3,
   libGL,
   libpulseaudio,
   libX11,
@@ -28,7 +27,8 @@ let
     presets.${stdenv.hostPlatform.system}
       or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
-  godot_version_folder = lib.replaceStrings [ "-" ] [ "." ] godot_4.version;
+  godot = godot_4_3;
+  godot_version_folder = lib.replaceStrings [ "-" ] [ "." ] godot.version;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "pixelorama";
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     autoPatchelfHook
-    godot_4
+    godot
   ];
 
   runtimeDependencies = map lib.getLib [
@@ -66,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     export HOME=$(mktemp -d)
     mkdir -p $HOME/.local/share/godot/export_templates
-    ln -s "${godot_4-export-templates}" "$HOME/.local/share/godot/export_templates/${godot_version_folder}"
+    ln -s "${godot.export-templates-bin}" "$HOME/.local/share/godot/export_templates/${godot_version_folder}"
     mkdir -p build
     godot4 --headless --export-release "${preset}" ./build/pixelorama
 

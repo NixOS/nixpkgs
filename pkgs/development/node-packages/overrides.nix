@@ -335,8 +335,4 @@ final: prev: {
       darwin.apple_sdk.frameworks.CoreText
     ];
   };
-
-  webtorrent-cli = prev.webtorrent-cli.override {
-    buildInputs = [ final.node-gyp-build ];
-  };
 }

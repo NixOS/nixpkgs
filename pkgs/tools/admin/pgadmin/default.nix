@@ -28,7 +28,7 @@ let
 
   # keep the scope, as it is used throughout the derivation and tests
   # this also makes potential future overrides easier
-  pythonPackages = python3.pkgs.overrideScope (final: prev: rec { });
+  pythonPackages = python3.pkgs.overrideScope (final: prev: { });
 
   offlineCache = fetchYarnDeps {
     yarnLock = ./yarn.lock;

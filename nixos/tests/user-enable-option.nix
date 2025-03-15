@@ -57,7 +57,7 @@ in
     machine.wait_for_unit("getty@tty1.service")
 
     with subtest("${normal-enabled} exists"):
-        check_fn = f"id ${normal-enabled}"
+        check_fn = "id ${normal-enabled}"
         machine.succeed(check_fn)
         machine.wait_until_tty_matches("1", "login: ")
         machine.send_chars("${normal-enabled}\n")
@@ -66,17 +66,17 @@ in
 
     with subtest("${normal-disabled} does not exist"):
         switch_to_tty(2)
-        check_fn = f"id ${normal-disabled}"
+        check_fn = "id ${normal-disabled}"
         machine.fail(check_fn)
 
     with subtest("${system-enabled} exists"):
         switch_to_tty(3)
-        check_fn = f"id ${system-enabled}"
+        check_fn = "id ${system-enabled}"
         machine.succeed(check_fn)
 
     with subtest("${system-disabled} does not exist"):
         switch_to_tty(4)
-        check_fn = f"id ${system-disabled}"
+        check_fn = "id ${system-disabled}"
         machine.fail(check_fn)
   '';
 }

@@ -10,7 +10,7 @@
   libxcrypt,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "pam_pgsql";
   version = "unstable-2020-05-05";
 

@@ -14,7 +14,7 @@
   wayland,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "vulkan-hdr-layer-kwin6";
   version = "0-unstable-2025-02-13";
 

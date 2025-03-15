@@ -49,6 +49,7 @@ mapAliases {
   "@mermaid-js/mermaid-cli" = pkgs.mermaid-cli; # added 2023-10-01
   "@nerdwallet/shepherd" = pkgs.shepherd; # added 2023-09-30
   "@nestjs/cli" = pkgs.nest-cli; # Added 2023-05-06
+  "@shopify/cli" = throw "@shopify/cli has been removed because it was broken"; # added 2025-03-12
   "@tailwindcss/language-server" = pkgs.tailwindcss-language-server; # added 2024-01-22
   "@volar/vue-language-server" = pkgs.vue-language-server; # added 2024-06-15
   "@vue/language-server" = pkgs.vue-language-server; # added 2024-06-15
@@ -96,6 +97,7 @@ mapAliases {
   eask = pkgs.eask; # added 2023-08-17
   inherit (pkgs.elmPackages) elm-test;
   inherit (pkgs.elmPackages) elm-review;
+  escape-string-regexp = throw "escape-string-regexp was removed because it provides no executable"; # added 2025-03-12
   inherit (pkgs) eslint; # Added 2024-08-28
   inherit (pkgs) eslint_d; # Added 2023-05-26
   inherit (pkgs) eas-cli; # added 2025-01-08
@@ -158,6 +160,7 @@ mapAliases {
   npm = pkgs.nodejs.overrideAttrs (old: { meta = old.meta // { mainProgram = "npm"; }; }); # added 2024-10-04
   inherit (pkgs) npm-check-updates; # added 2023-08-22
   ocaml-language-server = throw "ocaml-language-server was removed because it was abandoned upstream"; # added 2023-09-04
+  parcel = throw "parcel has been removed because it was broken"; # added 2025-03-12
   parcel-bundler = self.parcel; # added 2023-09-04
   inherit (pkgs) patch-package; # added 2024-06-29
   pkg = pkgs.vercel-pkg; # added 2023-10-04
@@ -226,6 +229,7 @@ mapAliases {
   inherit (pkgs) web-ext; # added 2023-08-20
   inherit (pkgs) webpack-cli; # added 2024-12-03
   webpack-dev-server = throw "webpack-dev-server has been removed. You should install it in your JS project instead."; # added 2024-12-05
+  webtorrent-cli = throw "webtorrent-cli has been removed because it was broken"; # added 2025-03-12
   inherit (pkgs) wrangler; # added 2024-07-01
   inherit (pkgs) write-good; # added 2023-08-20
   inherit (pkgs) yalc; # added 2024-06-29

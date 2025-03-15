@@ -50,6 +50,8 @@ stdenv.mkDerivation rec {
     "-DNIFTI_INCLUDE_DIR=${nifticlib}/include/nifti"
   ];
 
+  env.NIX_CFLAGS_COMPILE = "-D_FillValue=NC_FillValue";
+
   postFixup = ''
     for prog in minccomplete minchistory mincpik; do
       wrapProgram $out/bin/$prog --prefix PERL5LIB : $PERL5LIB
@@ -62,5 +64,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ bcdarwin ];
     platforms = platforms.unix;
     license = licenses.free;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

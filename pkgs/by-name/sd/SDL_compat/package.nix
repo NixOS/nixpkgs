@@ -48,6 +48,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
+  postInstall = ''
+    # allow as a drop in replacement for SDL
+    # Can be removed after treewide switch from pkg-config to pkgconf
+    ln -s $out/lib/pkgconfig/sdl12_compat.pc $out/lib/pkgconfig/sdl.pc
+  '';
+
+  # The setup hook scans paths of buildInputs to find SDL related packages and
+  # adds their include and library paths to environment variables. The sdl-config
+  # is patched to use these variables to produce correct flags for compiler.
+  patches = [ ./find-headers.patch ];
   setupHook = ./setup-hook.sh;
 
   postFixup = ''

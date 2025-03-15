@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
   # SDL_gfx.pc refers to sdl.pc and some SDL_gfx headers import SDL.h
   propagatedBuildInputs = [ SDL ];
 
-  env.SDL_CONFIG = lib.getExe' SDL.dev "sdl-config";
+  env.SDL_CONFIG = lib.getExe' (lib.getDev SDL) "sdl-config";
 
   configureFlags = [
     (lib.enableFeature false "mmx")

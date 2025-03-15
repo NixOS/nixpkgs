@@ -44,7 +44,7 @@ let
     mainProgram = "scilab";
   };
 
-  darwin = stdenv.mkDerivation rec {
+  darwin = stdenv.mkDerivation {
     inherit
       pname
       version
@@ -70,7 +70,7 @@ let
     '';
   };
 
-  linux = stdenv.mkDerivation rec {
+  linux = stdenv.mkDerivation {
     inherit
       pname
       version

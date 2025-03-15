@@ -1,4 +1,4 @@
-{ lib, callPackage, fetchFromGitHub, fetchpatch, pkgs, wrapCDDA, attachPkgs
+{ lib, callPackage, fetchFromGitHub, pkgs, attachPkgs
 , tiles ? true
 , debug ? false
 , useXdgDir ? false

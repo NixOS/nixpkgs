@@ -197,7 +197,7 @@ let
     };
   };
 
-  clfswm = super.clfswm.overrideAttrs (o: rec {
+  clfswm = super.clfswm.overrideAttrs (o: {
     buildScript = pkgs.writeText "build-clfswm.lisp" ''
       (load "${o.asdfFasl}/asdf.${o.faslExt}")
       (asdf:load-system 'clfswm)
@@ -324,7 +324,7 @@ let
     lispLibs = with self; [ clim mcclim mcclim-layouts ];
   };
 
-  kons-9 = build-asdf-system rec {
+  kons-9 = build-asdf-system {
     pname = "kons-9";
     version = "trunk";
     src = pkgs.fetchFromGitHub {
