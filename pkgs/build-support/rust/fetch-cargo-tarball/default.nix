@@ -69,12 +69,6 @@ let
     else
       throw "fetchCargoTarball requires a hash for ${name}";
 in
-lib.warn
-  ''
-    rustPlatform.fetchCargoTarball is deprecated in favor of rustPlatform.fetchCargoVendor.
-    If you are using buildRustPackage, try setting useFetchCargoVendor = true and regenerating cargoHash.
-    See the 25.05 release notes for more information.
-  ''
   (
     stdenv.mkDerivation (
       {

@@ -221,10 +221,9 @@ let
 
           cargoDeps =
             if yjitSupport then
-              rustPlatform.fetchCargoVendor {
+              rustPlatform.fetchCargoTarball {
                 inherit (finalAttrs) src;
                 sourceRoot = "${finalAttrs.pname}-${version}/${finalAttrs.cargoRoot}";
-                allowGitDependencies = false;
                 hash =
                   assert cargoHash != null;
                   cargoHash;
@@ -438,7 +437,7 @@ in
   ruby_3_3 = generic {
     version = rubyVersion "3" "3" "6" "";
     hash = "sha256-jcSP/68nD4bxAZBT8o5R5NpMzjKjZ2CgYDqa7mfX/Y0=";
-    cargoHash = "sha256-xE7Cv+NVmOHOlXa/Mg72CTSaZRb72lOja98JBvxPvSs=";
+    cargoHash = "sha256-GeelTMRFIyvz1QS2L+Q3KAnyQy7jc0ejhx3TdEFVEbk=";
   };
 
   ruby_3_4 = generic {
