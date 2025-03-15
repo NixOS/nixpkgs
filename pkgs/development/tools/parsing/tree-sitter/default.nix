@@ -5,9 +5,11 @@
   fetchFromGitHub,
   nix-update-script,
   runCommand,
+  symlinkJoin,
   which,
   rustPlatform,
   emscripten,
+  openssl,
   callPackage,
   linkFarm,
   substitute,
@@ -164,7 +166,13 @@ let
     );
 
   allGrammars = builtins.attrValues builtGrammars;
-
+  opensslAll = symlinkJoin {
+    name = "tree-sitter-openssl";
+    paths = [
+      openssl.dev
+      openssl.out
+    ];
+  };
 in
 rustPlatform.buildRustPackage {
   pname = "tree-sitter";
@@ -182,6 +190,8 @@ rustPlatform.buildRustPackage {
     })
   ];
 
+  env.OPENSSL_DIR = lib.optionalString webUISupport (builtins.toString opensslAll);
+
   postPatch = lib.optionalString webUISupport ''
     substituteInPlace cli/loader/src/lib.rs \
         --replace-fail 'let emcc_name = if cfg!(windows) { "emcc.bat" } else { "emcc" };' 'let emcc_name = "${lib.getExe' emscripten "emcc"}";'
@@ -193,7 +203,7 @@ rustPlatform.buildRustPackage {
   preBuild = lib.optionalString webUISupport ''
     mkdir -p .emscriptencache
     export EM_CACHE=$(pwd)/.emscriptencache
-    bash ./script/build-wasm --debug
+    cargo run --package xtask -- build-wasm --debug
   '';
 
   postInstall =
