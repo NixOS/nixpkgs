@@ -8,6 +8,9 @@
   makeWrapper,
   copyDesktopItems,
   makeDesktopItem,
+  autoPatchelfHook,
+  pipewire,
+  libpulseaudio,
   nix-update-script,
 }:
 stdenv.mkDerivation rec {
@@ -26,6 +29,15 @@ stdenv.mkDerivation rec {
     nodejs
     makeWrapper
     copyDesktopItems
+    # legcord uses venmic, which is a shipped as a prebuilt node module
+    # and needs to be patched
+    autoPatchelfHook
+  ];
+
+  buildInputs = [
+    libpulseaudio
+    pipewire
+    (lib.getLib stdenv.cc.cc)
   ];
 
   pnpmDeps = pnpm_9.fetchDeps {
