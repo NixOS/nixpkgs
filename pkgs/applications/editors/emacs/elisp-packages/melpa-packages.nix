@@ -852,6 +852,8 @@ let
           }
         );
 
+        brainfuck-mode = ignoreCompilationError super.brainfuck-mode; # elisp error
+
         bts = ignoreCompilationError super.bts; # elisp error
 
         bts-github = ignoreCompilationError super.bts-github; # elisp error
