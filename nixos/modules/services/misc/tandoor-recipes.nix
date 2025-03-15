@@ -7,6 +7,16 @@
 let
   cfg = config.services.tandoor-recipes;
   pkg = cfg.package;
+  stateDir = "/var/lib/tandoor-recipes";
+  mediaRoot =
+    if lib.versionAtLeast config.system.stateVersion "25.05" then
+      "${stateDir}/media"
+    else
+      lib.warn ''
+        Starting at NixOS 25.05 the default MEDIA_ROOT will be set to
+        /var/lib/tandoor-recipes/media instead of /var/lib/tandoor-recipes. For
+        more info see #386167.
+      '' stateDir;
 
   # SECRET_KEY through an env file
   env =
@@ -14,7 +24,7 @@ let
       GUNICORN_CMD_ARGS = "--bind=${cfg.address}:${toString cfg.port}";
       DEBUG = "0";
       DEBUG_TOOLBAR = "0";
-      MEDIA_ROOT = "/var/lib/tandoor-recipes";
+      MEDIA_ROOT = mediaRoot;
     }
     // lib.optionalAttrs (config.time.timeZone != null) {
       TZ = config.time.timeZone;
@@ -26,7 +36,7 @@ let
     ${lib.toShellVars env}
     eval "$(${config.systemd.package}/bin/systemctl show -pUID,GID,MainPID tandoor-recipes.service)"
     exec ${pkgs.util-linux}/bin/nsenter \
-      -t $MainPID -m -S $UID -G $GID --wdns=${env.MEDIA_ROOT} \
+      -t $MainPID -m -S $UID -G $GID --wdns=${stateDir} \
       ${pkg}/bin/tandoor-recipes "$@"
   '';
 in
@@ -113,8 +123,10 @@ in
 
         User = cfg.user;
         Group = cfg.group;
-        StateDirectory = "tandoor-recipes";
-        WorkingDirectory = env.MEDIA_ROOT;
+        StateDirectory = [
+          "tandoor-recipes"
+        ] ++ lib.optional (env.MEDIA_ROOT == "/var/lib/tandoor-recipes/media") "tandoor-recipes/media";
+        WorkingDirectory = stateDir;
         RuntimeDirectory = "tandoor-recipes";
 
         BindReadOnlyPaths = [
