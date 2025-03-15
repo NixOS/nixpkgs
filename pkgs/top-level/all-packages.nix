@@ -16173,8 +16173,6 @@ with pkgs;
 
   qtads = qt5.callPackage ../games/qtads { };
 
-  hedgewars = libsForQt5.callPackage ../games/hedgewars { };
-
   ibmcloud-cli = callPackage ../tools/admin/ibmcloud-cli { stdenv = stdenvNoCC; };
 
   instaloader = python3Packages.callPackage ../tools/misc/instaloader { };
