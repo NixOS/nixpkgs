@@ -20,13 +20,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   inherit unwrapped;
 
-  nativeBuildInputs =
-    [
-      wrapQtAppsHook
-    ]
-    ++ lib.optionals withWebkit [
-      wrapGAppsHook3
-    ];
+  nativeBuildInputs = [
+    wrapQtAppsHook
+    wrapGAppsHook3
+  ];
 
   buildInputs =
     [
@@ -58,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  preFixup = lib.optionalString (stdenv.hostPlatform.isLinux && withWebkit) ''
+  preFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
