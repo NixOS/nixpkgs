@@ -337,7 +337,9 @@ $conf .= "
     # Setup the graphics stack for bios and efi systems
     if [ \"\${grub_platform}\" = \"efi\" ]; then
       insmod efi_gop
-      insmod efi_uga
+      if [ \"\${grub_cpu}\" = \"i386\" -o \"\${grub_cpu}\" = \"x86_64\"]; then
+        insmod efi_uga
+      fi
     else
       insmod vbe
     fi
@@ -465,6 +467,7 @@ sub addEntry {
 
     my $kernel = copyToKernelsDir(Cwd::abs_path("$path/kernel"));
     my $initrd = copyToKernelsDir(Cwd::abs_path("$path/initrd"));
+    my $fdtfile = -e "$path/fdtfile" ? copyToKernelsDir(Cwd::abs_path("$path/fdtfile")) : undef;
 
     # Include second initrd with secrets
     if (-e -x "$path/append-initrd-secrets") {
@@ -516,6 +519,7 @@ sub addEntry {
     }
     $conf .= "  $extraPerEntryConfig\n" if $extraPerEntryConfig;
     $conf .= "  multiboot $xen $xenParams\n" if $xen;
+    $conf .= "  devicetree $fdtfile\n" if $fdtfile;
     $conf .= "  " . ($xen ? "module" : "linux") . " $kernel $kernelParams\n";
     $conf .= "  " . ($xen ? "module" : "initrd") . " $initrd\n";
     $conf .= "}\n\n";

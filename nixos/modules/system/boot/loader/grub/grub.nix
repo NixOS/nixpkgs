@@ -694,6 +694,18 @@ in
         '';
       };
 
+      installDeviceTree = mkOption {
+        default = with config.hardware.deviceTree; enable && name != null;
+        type = types.bool;
+        defaultText = ''with config.hardware.deviceTree; enable && name != null'';
+        description = ''
+          Symlink the devicetree blob specified by config.hardware.deviceTree.name to
+          /nix/var/nix/profiles/system-{index}-link/fdtfile and instruct grub to pass this DTB to linux.
+          Grub Will copy the real fdtfile (i.e. `readlink fdtfile`) to the ESP if boot.loader.grub.copyKernels
+          is set to true.
+        '';
+      };
+
     };
 
   };
@@ -723,6 +735,8 @@ in
       system.systemBuilderArgs.configurationName = cfg.configurationName;
       system.systemBuilderCommands = ''
         echo -n "$configurationName" > $out/configuration-name
+      '' + optionalString cfg.installDeviceTree ''
+          ln -s "${config.hardware.deviceTree.package}/${config.hardware.deviceTree.name}" $out/fdtfile
       '';
 
       system.build.installBootLoader =
@@ -782,6 +796,13 @@ in
         {
           assertion = !(options.boot.loader.grub.version.isDefined && cfg.version == 1);
           message = "Support for version 0.9x of GRUB was removed after being unsupported upstream for around a decade";
+        }
+        {
+          assertion =
+            cfg.installDeviceTree
+            -> config.hardware.deviceTree.enable
+            -> config.hardware.deviceTree.name != null;
+          message = "Cannot install devicetree without 'config.hardware.deviceTree.enable' enabled and 'config.hardware.deviceTree.name' set";
         }
       ] ++ flip concatMap cfg.mirroredBoots (args: [
         {
