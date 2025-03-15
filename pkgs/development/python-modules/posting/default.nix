@@ -22,7 +22,6 @@
   pydantic-settings,
   python-dotenv,
   watchfiles,
-  rich,
   toml,
   typer,
 }: let
