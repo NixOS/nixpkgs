@@ -320,7 +320,6 @@ let
         prefix ? [],
         }:
           evalModules (evalModulesArgs // {
-            inherit class;
             modules = regularModules ++ modules;
             specialArgs = evalModulesArgs.specialArgs or {} // specialArgs;
             prefix = extendArgs.prefix or evalModulesArgs.prefix or [];
@@ -335,8 +334,7 @@ let
         options = checked options;
         config = checked (removeAttrs config [ "_module" ]);
         _module = checked (config._module);
-        inherit extendModules type;
-        class = class;
+        inherit extendModules type class;
       };
     in result;
 
@@ -602,7 +600,7 @@ let
       # an attrset 'name' => list of submodules that declare ‘name’.
       declsByName =
         zipAttrsWith
-          (n: concatLists)
+          (n: v: v)
           (map
             (module: let subtree = module.options; in
               if !(isAttrs subtree) then
@@ -614,7 +612,7 @@ let
               else
                 mapAttrs
                   (n: option:
-                    [{ inherit (module) _file; pos = unsafeGetAttrPos n subtree; options = option; }]
+                    { inherit (module) _file; pos = unsafeGetAttrPos n subtree; options = option; }
                   )
                   subtree
               )
@@ -657,12 +655,12 @@ let
       # extract the definitions for each loc
       rawDefinitionsByName =
         zipAttrsWith
-          (n: concatLists)
+          (n: v: v)
           (map
             (module:
               mapAttrs
                 (n: value:
-                  [{ inherit (module) file; inherit value; }]
+                  { inherit (module) file; inherit value; }
                 )
                 module.config
             )
