@@ -393,7 +393,7 @@ in
         buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_19;
         llvmPackages = pkgs.llvmPackages_19;
       };
-      ghc912 = compiler.ghc9121;
+      ghc912 = compiler.ghc9122;
       ghcHEAD = callPackage ../development/compilers/ghc/head.nix {
         bootPkgs =
           # No suitable bindist packaged yet
@@ -565,7 +565,7 @@ in
         ghc = bh.compiler.ghc9122;
         compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.12.x.nix { };
       };
-      ghc912 = packages.ghc9121;
+      ghc912 = packages.ghc9122;
       ghcHEAD = callPackage ../development/haskell-modules {
         buildHaskellPackages = bh.packages.ghcHEAD;
         ghc = bh.compiler.ghcHEAD;
