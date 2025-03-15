@@ -15482,7 +15482,7 @@ with pkgs;
   };
 
   openvscode-server = callPackage ../servers/openvscode-server {
-    nodejs = nodejs_18;
+    nodejs = nodejs_22;
     inherit (darwin.apple_sdk.frameworks) AppKit Cocoa Security;
   };
 
