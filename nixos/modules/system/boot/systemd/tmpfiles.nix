@@ -269,6 +269,7 @@ in
         ln -s "${systemd}/example/tmpfiles.d/tmp.conf"
         ln -s "${systemd}/example/tmpfiles.d/var.conf"
         ln -s "${systemd}/example/tmpfiles.d/x11.conf"
+        ln -s "${systemd}/example/tmpfiles.d/provision.conf"
       '')
       # User-specified tmpfiles rules
       (pkgs.writeTextFile {
