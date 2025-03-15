@@ -11,10 +11,12 @@ python3Packages.buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "thegeeklab";
-    repo = pname;
+    repo = "ansible-later";
     tag = "v${version}";
     hash = "sha256-4ZHCnLeG5gr0UtKQLU+6xnTxUbxnLcmDd51Psnaa42I=";
   };
+
+  pythonRelaxDeps = [ "python-json-logger" ];
 
   build-system = with python3Packages; [
     poetry-core
@@ -43,9 +45,7 @@ python3Packages.buildPythonApplication rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "ansiblelater"
-  ];
+  pythonImportsCheck = [ "ansiblelater" ];
 
   preCheck = ''
     export HOME="$TMPDIR"
@@ -53,10 +53,10 @@ python3Packages.buildPythonApplication rec {
 
   meta = {
     description = "Best practice scanner for Ansible roles and playbooks";
-    mainProgram = "ansible-later";
     homepage = "https://github.com/thegeeklab/ansible-later";
     changelog = "https://github.com/thegeeklab/ansible-later/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ tboerger ];
+    mainProgram = "ansible-later";
   };
 }
