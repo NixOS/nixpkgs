@@ -47,7 +47,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "CLI tool combining multiple utilities for working with Dolby Vision";
     homepage = "https://github.com/quietvoid/dovi_tool";
-    changelog = "https://github.com/quietvoid/dovi_tool/releases";
+    changelog = "https://github.com/quietvoid/dovi_tool/releases/tag/${finalAttrs.version}";
     mainProgram = "dovi_tool";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ plamper ];
