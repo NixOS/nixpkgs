@@ -335,7 +335,6 @@ let
   };
 
   packagesWithNativeBuildInputs = {
-    adbcpostgresql = [ pkgs.postgresql ];
     adimpro = [ pkgs.imagemagick ];
     animation = [ pkgs.which ];
     Apollonius = with pkgs; [ pkg-config gmp.dev mpfr.dev ];
@@ -484,8 +483,7 @@ let
     RODBC = [ pkgs.libiodbc ];
     rpanel = [ pkgs.tclPackages.bwidget ];
     Rpoppler = [ pkgs.poppler ];
-    RPostgres = with pkgs; [ postgresql ];
-    RPostgreSQL = with pkgs; [ postgresql postgresql ];
+    RPostgreSQL = with pkgs; [ libpq ];
     RProtoBuf = [ pkgs.protobuf ];
     RSclient = [ pkgs.openssl.dev ];
     Rserve = [ pkgs.openssl ];
@@ -614,7 +612,7 @@ let
 
   packagesWithBuildInputs = {
     # sort -t '=' -k 2
-    adbcpostgresql = with pkgs; [ readline.dev zlib.dev openssl.dev libkrb5.dev openpam ];
+    adbcpostgresql = with pkgs; [ readline.dev zlib.dev openssl.dev libkrb5.dev openpam libpq ];
     asciicast = with pkgs; [ xz.dev bzip2.dev zlib.dev icu.dev libdeflate ];
     island = [ pkgs.gsl.dev ];
     svKomodo = [ pkgs.which ];
@@ -646,6 +644,7 @@ let
     RGtk2 = [ pkgs.pkg-config ];
     RProtoBuf = [ pkgs.pkg-config ];
     Rpoppler = [ pkgs.pkg-config ];
+    RPostgres = with pkgs; [ libpq ];
     XML = [ pkgs.pkg-config ];
     apsimx = [ pkgs.which ];
     cairoDevice = [ pkgs.pkg-config ];
@@ -1623,14 +1622,6 @@ let
 
       # consumes a lot of resources in parallel
       enableParallelBuilding = false;
-    });
-
-    RPostgres = old.RPostgres.overrideAttrs (attrs: {
-      preConfigure = ''
-        export INCLUDE_DIR=${pkgs.postgresql}/include
-        export LIB_DIR=${pkgs.postgresql.lib}/lib
-        patchShebangs configure
-        '';
     });
 
     OpenMx = old.OpenMx.overrideAttrs (attrs: {
