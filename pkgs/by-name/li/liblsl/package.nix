@@ -3,6 +3,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
@@ -15,6 +16,7 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "sha256-nmu7Kxk4U5sGO8Od9JR4id4V4mjeibj4AHjUYhpGPeo=";
   };
+  passthru.updateScript = nix-update-script { };
 
   nativeBuildInputs = [ cmake ];
 
