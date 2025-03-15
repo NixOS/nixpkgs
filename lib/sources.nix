@@ -358,7 +358,7 @@ let
     in
     readCommitFromFile "HEAD";
 
-  pathHasContext = builtins.hasContext or (lib.hasPrefix storeDir);
+  pathHasContext = builtins.hasContext or lib.isStorePathPrefix;
 
   canCleanSource = src: src ? _isLibCleanSourceWith || !(pathHasContext (toString src));
 

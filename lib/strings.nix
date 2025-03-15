@@ -2445,6 +2445,51 @@ rec {
       false;
 
   /**
+    Check whether a value `x` is a store path prefix.
+
+
+    # Inputs
+
+    `x`
+    : 1\. Function argument
+
+    # Type
+
+    ```
+    isStorePath :: a -> bool
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.strings.isStorePathPrefix` usage example
+
+    ```nix
+    isStorePath "/nix/store/d945ibfx9x185xf04b890y4f9g3cbb63-python-2.7.11/bin/python"
+    => true
+    isStorePath "/nix/store/d945ibfx9x185xf04b890y4f9g3cbb63-python-2.7.11"
+    => true
+    isStorePath pkgs.python
+    => true
+    isStorePath [] || isStorePath 42 || isStorePath {} || …
+    => false
+    ```
+
+    :::
+  */
+  isStorePathPrefix = x:
+    if isStringLike x then
+      let str = toString x; in
+        # The second branch of this regular expression matches content‐
+        # addressed derivations, which _currently_ do not have a store
+        # directory prefix.
+        # This is a workaround for https://github.com/NixOS/nix/issues/12361
+        # which was needed during the experimental phase of ca-derivations and
+        # should be removed once the issue has been resolved.
+        builtins.match "(${escapeRegex storeDir}|/[0-9a-z]{52})/[^.].*" str != null
+    else
+      false;
+
+  /**
     Parse a string as an int. Does not support parsing of integers with preceding zero due to
     ambiguity between zero-padded and octal numbers. See toIntBase10.
 

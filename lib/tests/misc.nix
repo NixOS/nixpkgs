@@ -69,6 +69,7 @@ let
     id
     ifilter0
     isStorePath
+    isStorePathPrefix
     lazyDerivation
     length
     lists
@@ -566,6 +567,49 @@ runTests {
       asPath = true;
       caPath = true;
       caPathAppendix = false;
+      caAsPath = true;
+      otherPath = false;
+      otherVals = {
+        attrset = false;
+        list = false;
+        int = false;
+      };
+    };
+  };
+
+  testIsStorePathPrefix = {
+    expr =
+      let goodPath =
+            "${builtins.storeDir}/d945ibfx9x185xf04b890y4f9g3cbb63-python-2.7.11";
+          goodCAPath = "/1121rp0gvr1qya7hvy925g5kjwg66acz6sn1ra1hca09f1z5dsab";
+      in {
+        storePath = isStorePathPrefix goodPath;
+        storePathDerivation = isStorePathPrefix (import ../.. { system = "x86_64-linux"; }).hello;
+        storePathAppendix = isStorePathPrefix
+          "${goodPath}/bin/python";
+        nonAbsolute = isStorePathPrefix (concatStrings (tail (stringToCharacters goodPath)));
+        asPath = isStorePathPrefix (/. + goodPath);
+        otherPath = isStorePathPrefix "/something/else";
+
+        caPath = isStorePathPrefix goodCAPath;
+        caPathAppendix = isStorePathPrefix
+          "${goodCAPath}/bin/python";
+        caAsPath = isStorePathPrefix (/. + goodCAPath);
+
+        otherVals = {
+          attrset = isStorePathPrefix {};
+          list = isStorePathPrefix [];
+          int = isStorePathPrefix 42;
+        };
+      };
+    expected = {
+      storePath = true;
+      storePathDerivation = true;
+      storePathAppendix = true;
+      nonAbsolute = false;
+      asPath = true;
+      caPath = true;
+      caPathAppendix = true;
       caAsPath = true;
       otherPath = false;
       otherVals = {
