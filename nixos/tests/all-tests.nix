@@ -619,6 +619,7 @@ in {
   lemmy = handleTest ./lemmy.nix {};
   libinput = handleTest ./libinput.nix {};
   librenms = handleTest ./librenms.nix {};
+  librenms-agent = handleTest ./librenms-agent.nix {};
   libresprite = handleTest ./libresprite.nix {};
   libreswan = runTest ./libreswan.nix;
   libreswan-nat = runTest ./libreswan-nat.nix;
