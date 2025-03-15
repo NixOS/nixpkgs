@@ -2,31 +2,58 @@
   fetchFromGitHub,
   lib,
   llvmPackages,
+  stdenv,
   cmake,
   ninja,
   pkg-config,
-  gitMinimal,
   qt5,
   python3,
+  xxHash,
+  fmt,
+  nasm,
 }:
 
-llvmPackages.stdenv.mkDerivation (finalAttrs: rec {
+llvmPackages.stdenv.mkDerivation (finalAttrs: {
   pname = "fex";
   version = "2503";
 
   src = fetchFromGitHub {
     owner = "FEX-Emu";
     repo = "FEX";
-    tag = "FEX-${version}";
-    hash = "sha256-NnYod6DeRv3/6h8SGkGYtgC+RRuIafxoQm3j1Sqk0mU=";
-    fetchSubmodules = true;
+    tag = "FEX-${finalAttrs.version}";
+
+    hash = "sha256-yjxwwqnI0jartl97zGfqP9GJSQ6HRwZ6ZJUWPsFsvUw=";
+
+    leaveDotGit = true;
+    postFetch = ''
+      cd $out
+      git reset
+
+      # Only fetch required submodules
+      git submodule update --init --depth 1 \
+        External/Vulkan-Headers \
+        External/drm-headers \
+        External/jemalloc \
+        External/jemalloc_glibc \
+        External/robin-map \
+        External/vixl \
+        Source/Common/cpp-optparse \
+        External/Catch2 \
+        External/xbyak
+
+      find . -name .git -print0 | xargs -0 rm -rf
+
+      # Remove some more unnecessary directories
+      rm -r \
+        External/vixl/src/aarch32 \
+        External/vixl/test
+    '';
   };
 
   nativeBuildInputs = [
     cmake
     ninja
     pkg-config
-    gitMinimal
     qt5.wrapQtAppsHook
     llvmPackages.bintools
 
@@ -38,23 +65,42 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: rec {
     ))
   ];
 
-  buildInputs = with qt5; [
-    qtbase
-    qtdeclarative
-    qtquickcontrols
-    qtquickcontrols2
-  ];
+  nativeCheckInputs = [ nasm ];
+
+  buildInputs =
+    [
+      xxHash
+      fmt
+    ]
+    ++ (with qt5; [
+      qtbase
+      qtdeclarative
+      qtquickcontrols
+      qtquickcontrols2
+    ]);
 
   cmakeFlags = [
     "-DCMAKE_BUILD_TYPE=Release"
     "-DUSE_LINKER=lld"
     "-DENABLE_LTO=True"
     "-DENABLE_ASSERTIONS=False"
+    (lib.cmakeFeature "OVERRIDE_VERSION" finalAttrs.version)
     (lib.cmakeBool "BUILD_TESTS" finalAttrs.finalPackage.doCheck)
   ];
 
   strictDeps = true;
-  doCheck = false; # broken on Apple silicon computers
+
+  # Unsupported on non-4K page size kernels (e.g. Apple Silicon)
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+
+  # List not exhaustive, e.g. because they depend on an x86 compiler or some
+  # other difficult-to-build test binaries.
+  checkTarget = lib.concatStringsSep " " [
+    "asm_tests"
+    "api_tests"
+    "fexcore_apitests"
+    "emitter_tests"
+  ];
 
   # Avoid wrapping anything other than FEXConfig, since the wrapped executables
   # don't seem to work when registered as binfmts.
