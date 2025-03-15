@@ -1574,6 +1574,8 @@ let
 
         shadchen = ignoreCompilationError super.shadchen; # elisp error
 
+        shampoo = ignoreCompilationError super.shampoo; # elisp error
+
         # missing optional dependencies and one of them (mew) is not on any ELPA
         shimbun = ignoreCompilationError (
           addPackageRequires super.shimbun [
