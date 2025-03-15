@@ -2,6 +2,8 @@
   lib,
   stdenv,
   fetchgit,
+  fetchFromGitHub,
+  fetchpatch,
   callPackages,
   cmake,
   ninja,
@@ -22,27 +24,33 @@
   onnxruntime,
 }:
 let
+  glog-lock = glog.overrideAttrs (oldAttrs: rec {
+    version = "0.6.0";
+    src = fetchFromGitHub {
+      owner = "google";
+      repo = "glog";
+      rev = "v${version}";
+      sha256 = "sha256-xqRp9vaauBkKz2CXbh/Z4TWqhaUtqfbsSlbYZR/kW9s=";
+    };
+  });
   rootSrc = stdenv.mkDerivation {
     pname = "iEDA-src";
-    version = "2024-09-10";
+    version = "2025-03-12";
     src = fetchgit {
       url = "https://gitee.com/oscc-project/iEDA";
-      rev = "a68b691b9d25fafd8c10fae3df7ef3837a42e052";
-      sha256 = "sha256-0rSESfNqI3ALipNAInwcYSccq9C0WuXI9na44TyYAgY=";
+      rev = "3a066726aa9521991a46d603f041831361d3ba51";
+      sha256 = "sha256-iPdp1xEje8bBumI/eqhvw0llg3NAzRb8pzc3fmWMwtU=";
     };
 
     patches = [
-      ./fix-bump-gcc.patch
-
-      # We need to build rust projects with rustPlatform
-      # and remove hard coded linking to libonnxruntime
-      ./remove-subprojects-from-cmake.patch
+      # This patch is to fix the build error caused by the missing of the header file,
+      # and remove some libs or path that they hard-coded in the source code.
+      # Should be removed after we upstream these changes.
+      (fetchpatch {
+        url = "https://github.com/Emin017/iEDA/commit/0eb86754063df6e21b35fd1396363ebc75b760c5.patch";
+        hash = "sha256-hdH6+g3eZUxDudWqTwbaWNKS0fwfUWJPp//dqGNJQfM=";
+      })
     ];
-
-    postPatch = ''
-      substituteInPlace CMakeLists.txt \
-        --replace-fail 'set(CMAKE_CXX_FLAGS_RELEASE "$ENV{CXXFLAGS} -O3 -Wall")' 'set(CMAKE_CXX_FLAGS_RELEASE "$ENV{CXXFLAGS} -O2")'
-    '';
 
     dontBuild = true;
     dontFixup = true;
@@ -56,7 +64,7 @@ let
 in
 stdenv.mkDerivation {
   pname = "iEDA";
-  version = "0-unstable-2024-10-11";
+  version = "0-unstable-2025-03-12";
 
   src = rootSrc;
 
@@ -87,7 +95,7 @@ stdenv.mkDerivation {
     rustpkgs.verilog-parser
     rustpkgs.liberty-parser
     gtest
-    glog
+    glog-lock
     gflags
     boost
     onnxruntime
@@ -111,7 +119,10 @@ stdenv.mkDerivation {
     description = "Open-source EDA infracstructure and tools from Netlist to GDS for ASIC design";
     homepage = "https://gitee.com/oscc-project/iEDA";
     license = lib.licenses.mulan-psl2;
-    maintainers = with lib.maintainers; [ xinyangli ];
+    maintainers = with lib.maintainers; [
+      xinyangli
+      Emin017
+    ];
     mainProgram = "iEDA";
     platforms = lib.platforms.linux;
   };

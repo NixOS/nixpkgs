@@ -9,7 +9,7 @@ in
     src = rootSrc;
     sourceRoot = "${src.name}/src/operation/iIR/source/iir-rust/iir";
     useFetchCargoVendor = true;
-    cargoHash = "sha256-xyNaUTPvU21yOdkQq8vdnHCyLzcpDAFAje0R/gDqliU=";
+    cargoHash = "sha256-CV1e/f3oCKW5mTbQnFBnp7E2d9nFyDwY3qclP2HwdPM=";
 
     doCheck = false;
 
