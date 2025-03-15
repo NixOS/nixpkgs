@@ -7268,7 +7268,7 @@ with self; {
     buildInputs = [ pkgs.postgresql ];
     propagatedBuildInputs = [ DBI ];
 
-    makeMakerFlags = [ "POSTGRES_HOME=${pkgs.postgresql}" ];
+    nativeBuildInputs = [ pkgs.postgresql.pg_config ];
 
     # tests freeze in a sandbox
     doCheck = false;
