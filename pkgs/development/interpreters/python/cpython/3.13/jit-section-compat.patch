@@ -1,0 +1,25 @@
+From 9184dbfcdb965a081f0654daf64cadf272b00522 Mon Sep 17 00:00:00 2001
+From: Bojun Ren <bj.ren.coding@outlook.com>
+Date: Thu, 6 Mar 2025 12:16:35 +0800
+Subject: [PATCH 1/3] gh-130673: Gracefully handle section in jit build
+
+---
+ Tools/jit/_targets.py | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/Tools/jit/_targets.py b/Tools/jit/_targets.py
+index aa2b56abf446b1..75795cd0ac5f74 100644
+--- a/Tools/jit/_targets.py
++++ b/Tools/jit/_targets.py
+@@ -312,7 +312,10 @@ def _handle_section(
+         if section_type == "SHT_RELA":
+             assert "SHF_INFO_LINK" in flags, flags
+             assert not section["Symbols"]
+-            value, base = group.symbols[section["Info"]]
++            maybe_symbol = group.symbols.get(section["Info"])
++            if maybe_symbol is None:
++                return
++            value, base = maybe_symbol
+             if value is _stencils.HoleValue.CODE:
+                 stencil = group.code
+             else:
