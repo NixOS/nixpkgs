@@ -133,7 +133,6 @@ stdenv.mkDerivation {
     makeWrapper ${lib.getExe electron} $out/bin/simulator \
       --add-flags "--no-sandbox" \
       --add-flags $out/opt/simulator/resources/app.asar \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
       --set-default NODE_ENV production \
       --set-default ELECTRON_FORCE_IS_PACKAGED 1 \
       --set-default ELECTRON_IS_DEV 0 \
