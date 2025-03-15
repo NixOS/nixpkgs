@@ -3,14 +3,14 @@
   rustPlatform,
   fetchFromGitHub,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tomlq";
   version = "0.1.6";
 
   src = fetchFromGitHub {
     owner = "cryptaliagy";
     repo = "tomlq";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-g8xjz8qCTiulTwcEbLTHYldw4PI+4ZfCOMJs+J6L1C4=";
   };
 
@@ -24,4 +24,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ kinzoku ];
     mainProgram = "tq";
   };
-}
+})
