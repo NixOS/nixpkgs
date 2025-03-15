@@ -284,7 +284,7 @@ in
         # Figure out device names for the boot device and root filesystem.
         rootPart=$(${pkgs.util-linux}/bin/findmnt -n -o SOURCE /)
         bootDevice=$(lsblk -npo PKNAME $rootPart)
-        partNum=$(lsblk -npo MAJ:MIN $rootPart | ${pkgs.gawk}/bin/awk -F: '{print $2}')
+        partNum=$(lsblk -no NAME $rootPart | ${pkgs.gawk}/bin/awk '{sub(/.*[^0-9]/, ""); print}')
 
         # Resize the root partition and the filesystem to fit the disk
         echo ",+," | sfdisk -N$partNum --no-reread $bootDevice
