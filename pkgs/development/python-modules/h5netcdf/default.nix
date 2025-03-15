@@ -34,8 +34,6 @@ buildPythonPackage rec {
     netcdf4
   ];
 
-  dontUseSetuptoolsCheck = true;
-
   pythonImportsCheck = [ "h5netcdf" ];
 
   meta = with lib; {

@@ -108,8 +108,7 @@
   withDocumentation ? true,
   withEfi ? stdenv.hostPlatform.isEfi,
   withFido2 ? true,
-  # conflicts with the NixOS /etc management
-  withFirstboot ? false,
+  withFirstboot ? true,
   withGcrypt ? true,
   withHomed ? !stdenv.hostPlatform.isMusl,
   withHostnamed ? true,

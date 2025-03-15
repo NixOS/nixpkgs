@@ -106,12 +106,6 @@ stdenv.mkDerivation rec {
     substituteInPlace src/global.cc --replace 'browser="mozilla"' 'browser="xdg-open"'
   '';
 
-  # FIXME: ugly hack for https://github.com/NixOS/nixpkgs/pull/389009
-  postConfigure = ''
-    substituteInPlace libtool \
-      --replace 'for search_ext in .la $std_shrext .so .a' 'for search_ext in $std_shrext .so .a'
-  '';
-
   nativeBuildInputs = [
     autoreconfHook
     texliveSmall

@@ -102,10 +102,10 @@ with lib;
         stdenv
         stdenvNoCC # for runCommand
         busybox
-        jq # for closureInfo
         # For boot.initrd.systemd
         makeInitrdNGTool
-      ];
+      ]
+      ++ jq.all; # for closureInfo
 
     boot.swraid.enable = true;
     # remove warning about unset mail

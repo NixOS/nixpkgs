@@ -22,12 +22,6 @@ stdenv.mkDerivation rec {
     sha256 = "18n3l9zcldyvn4lwi8izd62307mkhz873039nl6awrv285qzah34";
   };
 
-  # FIXME: ugly hack for https://github.com/NixOS/nixpkgs/pull/389009
-  postConfigure = ''
-    substituteInPlace libtool \
-      --replace 'for search_ext in .la $std_shrext .so .a' 'for search_ext in $std_shrext .so .a'
-  '';
-
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     mono

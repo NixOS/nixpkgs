@@ -29,7 +29,7 @@
 
 buildPythonPackage rec {
   pname = "deepdiff";
-  version = "8.1.1";
+  version = "8.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     owner = "seperman";
     repo = "deepdiff";
     tag = version;
-    hash = "sha256-b1L+8xOqxY2nI8UxZHxs3x28mVAzaRuPjYlPSqSapwk=";
+    hash = "sha256-5RiYVNdKfTRNeqtbKwFdbB5Z12eAMNdaOFCNevR6H6w=";
   };
 
   build-system = [

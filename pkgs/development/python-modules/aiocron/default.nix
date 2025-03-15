@@ -7,6 +7,7 @@
   croniter,
   tzlocal,
   pytestCheckHook,
+  pytest-cov-stub,
 }:
 
 buildPythonPackage rec {
@@ -28,11 +29,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    pytest-cov-stub
     tzlocal
   ];
 
   postPatch = ''
-    sed -i "/--cov/d" setup.cfg
     sed -i "/--ignore/d" setup.cfg
   '';
 

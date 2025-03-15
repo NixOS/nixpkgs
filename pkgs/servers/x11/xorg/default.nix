@@ -1123,11 +1123,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libX11 = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libpthreadstubs, libxcb, xtrans, testers }: stdenv.mkDerivation (finalAttrs: {
     pname = "libX11";
-    version = "1.8.11";
+    version = "1.8.12";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/lib/libX11-1.8.11.tar.xz";
-      sha256 = "120f716wl7ay33yshicl1l0w62b9jx16ik3qnyh4ajwj8clyhx1v";
+      url = "mirror://xorg/individual/lib/libX11-1.8.12.tar.xz";
+      sha256 = "16lspc3bw2pg3jal7zyq6mxmxmmaax0fz6lgh1n4skqjn2dny0ps";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -2143,11 +2143,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xauth = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXau, libXext, libXmu, xorgproto, testers }: stdenv.mkDerivation (finalAttrs: {
     pname = "xauth";
-    version = "1.1.3";
+    version = "1.1.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/app/xauth-1.1.3.tar.xz";
-      sha256 = "0cwxzq7lv932rcfad3baanr541qcjjdhyrhxy0bzjcp3pac581z7";
+      url = "mirror://xorg/individual/app/xauth-1.1.4.tar.xz";
+      sha256 = "1466a5hj0rm7sm0cr253hmy9f3yjy20aar451zfb9msa8r0q2cg9";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -4363,11 +4363,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xtrans = callPackage ({ stdenv, pkg-config, fetchurl, testers }: stdenv.mkDerivation (finalAttrs: {
     pname = "xtrans";
-    version = "1.5.2";
+    version = "1.6.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/lib/xtrans-1.5.2.tar.xz";
-      sha256 = "0v7qvys42md6nvm16xynhb3b8zz534fc60wg0hfi7ab48zivyp2w";
+      url = "mirror://xorg/individual/lib/xtrans-1.6.0.tar.xz";
+      sha256 = "14ly6m6ww8rl45fdmlf58m0l1ihfji936ncx7lbiligjdcbfmbzs";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;

@@ -19,13 +19,13 @@
 
 buildPythonPackage rec {
   pname = "setuptools-scm";
-  version = "8.1.0";
+  version = "8.2.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "setuptools_scm";
     inherit version;
-    hash = "sha256-Qt6htldxy6k7elFdZaZdgkblYHaKZrkQalksjn8myKc=";
+    hash = "sha256-oYOWobwCGcl00adGErEfnc4NW9ix3FXGX2rH/WCejCg=";
   };
 
   build-system = [ setuptools ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];

@@ -107,7 +107,7 @@ let
       darwin = pkgs.darwin.diskdev_cmds;
     };
     hexdump = {
-      linux = pkgs.util-linux;
+      linux = pkgs.util-linuxMinimal;
       darwin = pkgs.darwin.shell_cmds;
     };
     hostname = {

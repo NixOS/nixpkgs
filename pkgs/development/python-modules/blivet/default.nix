@@ -92,10 +92,6 @@ buildPythonPackage rec {
   # TODO: Write a NixOS VM test?
   doCheck = false;
 
-  # Fails with: TypeError: don't know how to make test from:
-  # <blivet.static_data.luks_data.LUKS_Data object at 0x7ffff4a34b90>
-  dontUseSetuptoolsCheck = true;
-
   meta = {
     description = "Python module for system storage configuration";
     homepage = "https://github.com/storaged-project/blivet";
