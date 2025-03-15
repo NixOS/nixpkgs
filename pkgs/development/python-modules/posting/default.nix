@@ -46,7 +46,7 @@ in python3Packages.buildPythonPackage rec {
   pname = "posting";
   version = "2.3.0";
 
-  src = python3Packages.fetchFromGitHub {
+  src = fetchFromGitHub {
     owner = "darrenburns";
     repo = "posting";
     rev = version;
