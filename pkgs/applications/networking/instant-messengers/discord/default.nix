@@ -19,7 +19,7 @@ let
         stable = "0.0.341";
         ptb = "0.0.165";
         canary = "0.0.717";
-        development = "0.0.79";
+        development = "0.0.82";
       };
   version = versions.${branch};
   srcs = rec {
@@ -56,7 +56,7 @@ let
       };
       development = fetchurl {
         url = "https://development.dl2.discordapp.net/apps/osx/${version}/DiscordDevelopment.dmg";
-        hash = "sha256-xBsI5rWsRBxkWEkcAOKz4NEeIRb2SJ/KDp6acpSvBSU=";
+        hash = "sha256-3fPaqm9Tfr3t/96T9EX1oKCfVOw18DIiLWqBIiuSNIg=";
       };
     };
     aarch64-darwin = x86_64-darwin;
