@@ -41,10 +41,9 @@
   libevdev,
   udev,
   vulkan-loader,
-
-  # - Inputs used for Darwin
-  libpng,
+  # darwin-only
   hidapi,
+  libpng,
 
   # passthru
   testers,
@@ -79,7 +78,6 @@ stdenv.mkDerivation (finalAttrs: {
       ffmpeg
       fmt
       gettext
-      hidapi
       libGL
       libGLU
       libSM
@@ -89,7 +87,6 @@ stdenv.mkDerivation (finalAttrs: {
       libXrandr
       libXxf86vm
       libao
-      libpng
       libpthreadstubs
       libpulseaudio
       libusb1
@@ -111,6 +108,10 @@ stdenv.mkDerivation (finalAttrs: {
       libevdev
       udev
       vulkan-loader
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      hidapi
+      libpng
     ];
 
   cmakeFlags =
