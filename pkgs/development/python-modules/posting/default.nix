@@ -59,7 +59,7 @@
       textual-2_1_2
     ];
 
-    format = "pyproject";
+    pyproject = true;
     nativeBuildInputs = [
       hatchling
     ];
