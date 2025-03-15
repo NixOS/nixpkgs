@@ -5188,8 +5188,6 @@ self: super: with self; {
 
   gcodepy = callPackage ../development/python-modules/gcodepy { };
 
-  gcovr = callPackage ../development/python-modules/gcovr { };
-
   gcp-storage-emulator = callPackage ../development/python-modules/gcp-storage-emulator { };
 
   gcsa = callPackage ../development/python-modules/gcsa { };
