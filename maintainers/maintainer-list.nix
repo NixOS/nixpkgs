@@ -23204,6 +23204,11 @@
     githubId = 506181;
     name = "Peter Marheine";
   };
+  tarinaky = {
+    github = "Tarinaky";
+    githubId = 186027;
+    name = "Tarinaky";
+  };
   tasmo = {
     email = "tasmo@tasmo.de";
     github = "tasmo";
