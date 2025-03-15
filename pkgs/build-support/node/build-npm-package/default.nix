@@ -7,6 +7,11 @@
   cctools,
 }@topLevelArgs:
 
+lib.extendMkDerivation {
+  constructDrv = stdenv.mkDerivation;
+
+  extendDrvArgs =
+    finalAttrs:
 {
   name ? "${args.pname}-${args.version}",
   src ? null,
@@ -77,9 +82,7 @@ let
     inherit nodejs;
   };
 in
-stdenv.mkDerivation (
-  args
-  // {
+{
     inherit npmDeps npmBuildScript;
 
     nativeBuildInputs =
@@ -103,5 +106,5 @@ stdenv.mkDerivation (
     meta = (args.meta or { }) // {
       platforms = args.meta.platforms or nodejs.meta.platforms;
     };
-  }
-)
+  };
+}
