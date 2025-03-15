@@ -31,12 +31,11 @@ buildPythonPackage rec {
     hash = "sha256-ETgpXSUUsV1xoZjdnL2bzn4HwDjKC2t13yXwf28OBqI=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'aiohttp = {extras = ["speedups"], version = "^3.7.4"}' 'aiohttp = {extras = ["speedups"], version = ">=3.7.4"}' \
-      --replace 'async-timeout = "^3.0.1"' 'async-timeout = ">=3.0.1"' \
-      --replace 'rich = "^10.1.0"' 'rich = ">=10.1.0"'
-  '';
+  pythonRelaxDeps = [
+    "aiohttp"
+    "async-timeout"
+    "rich"
+  ];
 
   nativeBuildInputs = [ poetry-core ];
 
