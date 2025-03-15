@@ -238,7 +238,10 @@ buildPythonPackage {
     changelog = "https://3b1b.github.io/manim/development/changelog.html";
     homepage = "https://github.com/3b1b/manim";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ L0L1P0P osbm ];
+    maintainers = with lib.maintainers; [
+      L0L1P0P
+      osbm
+    ];
     mainProgram = "manimgl";
   };
 }
