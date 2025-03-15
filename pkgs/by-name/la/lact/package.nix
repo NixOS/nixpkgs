@@ -11,26 +11,29 @@
   libdrm,
   vulkan-loader,
   coreutils,
+  nix-update-script,
+  hwdata,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "lact";
-  version = "0.6.0";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "ilya-zlobintsev";
     repo = "LACT";
     rev = "v${version}";
-    hash = "sha256-goNwLtVjNY3O/BhFrCcM3X11dtM34XgfHL6bh+YFoIY=";
+    hash = "sha256-zaN6CQSeeoYFxLO6E1AMKAjeNOcPi2OsGfYkvZLPKcw=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-rgpBmoGCNMU5nFVxzNtqsPaOn93mHW5P2isKgbP9UN4=";
+  cargoHash = "sha256-Ipvu/eu0uI/WKYyVjjHLlg0O0EgzfuTvMmr4gTzDRxw=";
 
   nativeBuildInputs = [
     blueprint-compiler
     pkg-config
     wrapGAppsHook4
+    rustPlatform.bindgenHook
   ];
 
   buildInputs = [
@@ -38,7 +41,22 @@ rustPlatform.buildRustPackage rec {
     gtk4
     libdrm
     vulkan-loader
+    hwdata
   ];
+
+  # we do this here so that the binary is usable during integration tests
+  RUSTFLAGS = lib.optionalString stdenv.targetPlatform.isElf (
+    lib.concatStringsSep " " [
+      "-C link-arg=-Wl,-rpath,${
+        lib.makeLibraryPath [
+          vulkan-loader
+          libdrm
+        ]
+      }"
+      "-C link-arg=-Wl,--add-needed,${vulkan-loader}/lib/libvulkan.so"
+      "-C link-arg=-Wl,--add-needed,${libdrm}/lib/libdrm.so"
+    ]
+  );
 
   checkFlags = [
     # tries and fails to initialize gtk
@@ -54,6 +72,10 @@ rustPlatform.buildRustPackage rec {
 
     substituteInPlace res/io.github.lact-linux.desktop \
       --replace-fail Exec={lact,$out/bin/lact}
+
+    # read() looks for the database in /usr/share so we use read_from_file() instead
+    substituteInPlace lact-daemon/src/server/handler.rs \
+      --replace-fail 'Database::read()' 'Database::read_from_file("${hwdata}/share/hwdata/pci.ids")'
   '';
 
   postInstall = ''
@@ -63,10 +85,18 @@ rustPlatform.buildRustPackage rec {
   '';
 
   postFixup = lib.optionalString stdenv.targetPlatform.isElf ''
-    patchelf $out/bin/.lact-wrapped --add-needed libvulkan.so --add-rpath ${
-      lib.makeLibraryPath [ vulkan-loader ]
+    patchelf $out/bin/.lact-wrapped \
+    --add-needed libvulkan.so \
+    --add-needed libdrm.so \
+    --add-rpath ${
+      lib.makeLibraryPath [
+        vulkan-loader
+        libdrm
+      ]
     }
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Linux GPU Configuration Tool for AMD and NVIDIA";
