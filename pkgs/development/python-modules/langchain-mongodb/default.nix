@@ -60,12 +60,6 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "langchain_mongodb" ];
 
-  passthru = {
-    inherit (langchain-core) updateScript;
-    # updates the wrong fetcher rev attribute
-    skipBulkUpdate = true;
-  };
-
   meta = {
     changelog = "https://github.com/langchain-ai/langchain/releases/tag/langchain-mongodb==${version}";
     description = "Integration package connecting MongoDB and LangChain";

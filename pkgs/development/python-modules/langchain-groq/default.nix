@@ -47,11 +47,6 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "langchain_groq" ];
 
-  passthru = {
-    inherit (langchain-core) updateScript;
-    skipBulkUpdate = true; # Broken, see https://github.com/NixOS/nixpkgs/issues/379898
-  };
-
   meta = {
     changelog = "https://github.com/langchain-ai/langchain/releases/tag/langchain-groq==${version}";
     description = "Integration package connecting Groq and LangChain";
