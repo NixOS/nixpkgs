@@ -923,21 +923,24 @@ let
 
         code-review = ignoreCompilationError super.code-review; # elisp error
 
-        codesearch = super.codesearch.overrideAttrs (
-          finalAttrs: previousAttrs: {
-            patches =
-              if lib.versionOlder finalAttrs.version "20240827.805" then
-                previousAttrs.patches or [ ]
-                ++ [
-                  (pkgs.fetchpatch {
-                    name = "remove-unused-dash.patch";
-                    url = "https://github.com/abingham/emacs-codesearch/commit/bd24a152ab6ea9f69443ae8e5b7351bb2f990fb6.patch";
-                    hash = "sha256-cCHY8Ak2fHuuhymjSF7w2MLPDJa84mBUdKg27mB9yto=";
-                  })
-                ]
-              else
-                previousAttrs.patches or null;
-          }
+        # elisp error
+        codesearch = ignoreCompilationError (
+          super.codesearch.overrideAttrs (
+            finalAttrs: previousAttrs: {
+              patches =
+                if lib.versionOlder finalAttrs.version "20240827.805" then
+                  previousAttrs.patches or [ ]
+                  ++ [
+                    (pkgs.fetchpatch {
+                      name = "remove-unused-dash.patch";
+                      url = "https://github.com/abingham/emacs-codesearch/commit/bd24a152ab6ea9f69443ae8e5b7351bb2f990fb6.patch";
+                      hash = "sha256-cCHY8Ak2fHuuhymjSF7w2MLPDJa84mBUdKg27mB9yto=";
+                    })
+                  ]
+                else
+                  previousAttrs.patches or null;
+            }
+          )
         );
 
         # https://github.com/hying-caritas/comint-intercept/issues/2
