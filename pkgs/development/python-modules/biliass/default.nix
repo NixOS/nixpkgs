@@ -28,8 +28,9 @@ buildPythonPackage rec {
       pname
       version
       src
+      sourceRoot
+      cargoRoot
       ;
-    sourceRoot = "${sourceRoot}/${cargoRoot}";
     hash = "sha256-yR2eVsomepIh9ILon7PrAj2EBgI/vwN3JgRSR/3R1Mk=";
   };
 
