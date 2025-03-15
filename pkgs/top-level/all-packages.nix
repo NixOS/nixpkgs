@@ -8778,8 +8778,6 @@ with pkgs;
     protobuf = protobuf_21;
   };
 
-  gcovr = with python3Packages; toPythonApplication gcovr;
-
   gcr = callPackage ../development/libraries/gcr { };
 
   gcr_4 = callPackage ../development/libraries/gcr/4.nix { };
