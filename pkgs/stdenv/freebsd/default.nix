@@ -442,18 +442,22 @@ let
             inherit (prevStage.freebsd) libc;
             inherit (prevStage) gnugrep coreutils expand-response-params;
             runtimeShell = shell;
-            bintools = prevStage.binutils-unwrapped;
+            bintools = (prevStage.llvmPackages or { }).bintools-unwrapped or prevStage.binutils-unwrapped;
             propagateDoc = false;
             nativeTools = false;
             nativeLibc = false;
           };
         };
         overrides = overrides prevStage;
-        preHook = ''
-          export NIX_ENFORCE_PURITY="''${NIX_ENFORCE_PURITY-1}"
-          export NIX_ENFORCE_NO_NATIVE="''${NIX_ENFORCE_NO_NATIVE-1}"
-          export PATH_LOCALE=${prevStage.freebsd.localesReal or prevStage.freebsd.locales}/share/locale
-        '';
+        preHook =
+          ''
+            export NIX_ENFORCE_PURITY="''${NIX_ENFORCE_PURITY-1}"
+            export NIX_ENFORCE_NO_NATIVE="''${NIX_ENFORCE_NO_NATIVE-1}"
+            export PATH_LOCALE=${prevStage.freebsd.localesReal or prevStage.freebsd.locales}/share/locale
+          ''
+          + lib.optionalString (prevStage.freebsd ? libiconvModules) ''
+            export PATH_I18NMODULE=${prevStage.freebsd.libiconvModules}/lib/i18n
+          '';
       };
     in
     {
