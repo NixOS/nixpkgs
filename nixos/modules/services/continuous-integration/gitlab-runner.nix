@@ -188,6 +188,7 @@ let
                         [ "--docker-image ${service.dockerImage}" ]
                         ++ optional service.dockerDisableCache "--docker-disable-cache"
                         ++ optional service.dockerPrivileged "--docker-privileged"
+                        ++ optional (service.dockerNetworkMode != null) "--docker-network-mode ${service.dockerNetworkMode}"
                         ++ map (v: "--docker-volumes ${escapeShellArg v}") service.dockerVolumes
                         ++ map (v: "--docker-extra-hosts ${escapeShellArg v}") service.dockerExtraHosts
                         ++ map (v: "--docker-allowed-images ${escapeShellArg v}") service.dockerAllowedImages
@@ -480,6 +481,14 @@ in
               default = null;
               description = ''
                 Docker image to be used.
+              '';
+            };
+            dockerNetworkMode = mkOption {
+              type = types.nullOr types.str;
+              default = null;
+              example = "host";
+              description = ''
+                Docker network mode to use.
               '';
             };
             dockerVolumes = mkOption {
