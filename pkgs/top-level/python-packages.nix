@@ -724,6 +724,8 @@ self: super: with self; {
 
   apkit = callPackage ../development/python-modules/apkit { };
 
+  apksigtool = callPackage ../development/python-modules/apksigtool { };
+
   aplpy = callPackage ../development/python-modules/aplpy { };
 
   apollo-fpga = callPackage ../development/python-modules/apollo-fpga { };
@@ -5605,6 +5607,8 @@ self: super: with self; {
 
   google-photos-library-api = callPackage ../development/python-modules/google-photos-library-api { };
 
+  google-play-scraper = callPackage ../development/python-modules/google-play-scraper { };
+
   googlemaps = callPackage ../development/python-modules/googlemaps { };
 
   google-pasta = callPackage ../development/python-modules/google-pasta { };
@@ -6194,6 +6198,8 @@ self: super: with self; {
 
   httpsig = callPackage ../development/python-modules/httpsig { };
 
+  http-tools = callPackage ../development/python-modules/http-tools { };
+
   httptools = callPackage ../development/python-modules/httptools { };
 
   httpx = callPackage ../development/python-modules/httpx { };
@@ -6563,6 +6569,8 @@ self: super: with self; {
   iottycloud = callPackage ../development/python-modules/iottycloud { };
 
   iowait = callPackage ../development/python-modules/iowait { };
+
+  ip2location = callPackage ../development/python-modules/ip2location { };
 
   ipadic = callPackage ../development/python-modules/ipadic { };
 
@@ -7562,6 +7570,8 @@ self: super: with self; {
   libsass = callPackage ../development/python-modules/libsass {
     inherit (pkgs) libsass;
   };
+
+  libsast = callPackage ../development/python-modules/libsast { };
 
   libsavitar = callPackage ../development/python-modules/libsavitar { };
 
@@ -15135,6 +15145,8 @@ self: super: with self; {
   shellescape = callPackage ../development/python-modules/shellescape { };
 
   shellingham = callPackage ../development/python-modules/shellingham { };
+
+  shelljob = callPackage ../development/python-modules/shelljob { };
 
   shiboken2 = toPythonModule (callPackage ../development/python-modules/shiboken2 {
     inherit (pkgs) cmake llvmPackages_15 qt5;
