@@ -19,10 +19,9 @@ let
       sha256 = "sha256-zjv2/qZM0vRyz45DeKRtPHaamv2iLtjpSedVTEXeDr8=";
     };
 
-    cargoDeps = rustPlatform.fetchCargoVendor {
+    cargoDeps = rustPlatform.fetchCargoTarball {
       inherit pname version src;
-      allowGitDependencies = false;
-      hash = "sha256-oTPGmoGlNfPVZ6qha/oXyPJp94fT2cNlVggbIGHf2bc=";
+      hash = "sha256-uNoqWT3gVslGEPcyrfFeOquvSlLzZbPO4yM1YJeD8N4=";
     };
 
     checkFlags = [

@@ -22,10 +22,9 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-LgjJUz1apE1MejVjl4/5O6ISpnGkBXY33g6xfoukZxA=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoVendor {
+  cargoDeps = rustPlatform.fetchCargoTarball {
     inherit pname version src;
-    allowGitDependencies = false;
-    hash = "sha256-+7fC6cq6NQIUPtmNc5S5y4lRIS47v0tg1ru/AAYA6TM=";
+    hash = "sha256-Q2ouznWm2pTDa7kKT0S2iAo6qA8jXU8hyoSHLQ8RtQ4=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
