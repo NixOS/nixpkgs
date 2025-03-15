@@ -914,11 +914,26 @@ in {
   phosh = handleTest ./phosh.nix {};
   photonvision = handleTest ./photonvision.nix {};
   photoprism = handleTest ./photoprism.nix {};
-  php = handleTest ./php {};
-  php81 = handleTest ./php { php = pkgs.php81; };
-  php82 = handleTest ./php { php = pkgs.php82; };
-  php83 = handleTest ./php { php = pkgs.php83; };
-  php84 = handleTest ./php { php = pkgs.php84; };
+  php = import ./php/default.nix {
+    inherit runTest;
+    php = pkgs.php;
+  };
+  php81 = import ./php/default.nix {
+    inherit runTest;
+    php = pkgs.php81;
+  };
+  php82 = import ./php/default.nix {
+    inherit runTest;
+    php = pkgs.php82;
+  };
+  php83 = import ./php/default.nix {
+    inherit runTest;
+    php = pkgs.php83;
+  };
+  php84 = import ./php/default.nix {
+    inherit runTest;
+    php = pkgs.php84;
+  };
   phylactery = handleTest ./web-apps/phylactery.nix {};
   pict-rs = handleTest ./pict-rs.nix {};
   pingvin-share = handleTest ./pingvin-share.nix {} ;

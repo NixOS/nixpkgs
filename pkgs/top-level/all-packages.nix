@@ -1187,7 +1187,9 @@ with pkgs;
 
   datalad-gooey = with python3Packages; toPythonApplication datalad-gooey;
 
-  forgejo-lts = callPackage ../by-name/fo/forgejo/lts.nix { };
+  forgejo-lts = callPackage ../by-name/fo/forgejo/lts.nix {
+    buildGoModule = buildGo123Module;
+  };
 
   gfold = callPackage ../applications/version-management/gfold { };
 
@@ -8775,8 +8777,6 @@ with pkgs;
   gamenetworkingsockets = callPackage ../development/libraries/gamenetworkingsockets {
     protobuf = protobuf_21;
   };
-
-  gcovr = with python3Packages; toPythonApplication gcovr;
 
   gcr = callPackage ../development/libraries/gcr { };
 
