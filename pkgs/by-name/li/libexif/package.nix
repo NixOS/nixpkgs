@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libexif";
-  version = "0.6.24";
+  version = "0.6.25";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "${pname}-${builtins.replaceStrings [ "." ] [ "_" ] version}-release";
-    sha256 = "sha256-Eqgnm31s8iPJdhTpk5HM89HSZTXTK+e7YZ/CCdbeJX4=";
+    sha256 = "sha256-H8YzfNO2FCrYAwEA4bkOpRdxISK9RXaHVuK8zz70TlM=";
   };
 
   nativeBuildInputs = [

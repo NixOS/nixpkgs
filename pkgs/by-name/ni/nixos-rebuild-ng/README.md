@@ -5,7 +5,7 @@ Work-in-Progress rewrite of
 
 ## Why the rewrite?
 
-The current state of `nixos-rebuild` is dare: it is one of the most critical
+The current state of `nixos-rebuild` is dire: it is one of the most critical
 piece of code we have in NixOS, but it has tons of issues:
 - The code is written in Bash, and while this by itself is not necessary bad,
   it means that it is difficult to do refactorings due to the lack of tooling

@@ -7,7 +7,7 @@
 , platformToolsVersion ? "35.0.2"
 , buildToolsVersions ? [ "35.0.0" ]
 , includeEmulator ? false
-, emulatorVersion ? "35.3.10"
+, emulatorVersion ? "35.5.2"
 , platformVersions ? []
 , includeSources ? false
 , includeSystemImages ? false
@@ -27,9 +27,20 @@
 
 let
   # Determine the Android os identifier from Nix's system identifier
-  os = if stdenv.hostPlatform.isLinux then "linux"
-    else if stdenv.hostPlatform.isDarwin then "macosx"
-    else throw "No Android SDK tarballs are available for system architecture: ${stdenv.system}";
+  os = {
+      x86_64-linux = "linux";
+      x86_64-darwin = "macosx";
+      aarch64-linux = "linux";
+      aarch64-darwin = "macosx";
+  }.${stdenv.hostPlatform.system} or "all";
+
+  # Determine the Android arch identifier from Nix's system identifier
+  arch = {
+      x86_64-linux = "x64";
+      x86_64-darwin = "x64";
+      aarch64-linux = "aarch64";
+      aarch64-darwin = "aarch64";
+  }.${stdenv.hostPlatform.system} or "all";
 
   # Uses mkrepo.rb to create a repo spec.
   mkRepoJson = { packages ? [], images ? [], addons ? [] }: let
@@ -71,9 +82,23 @@ let
     lib.attrsets.mapAttrsRecursive
       (path: value:
         if (builtins.elemAt path ((builtins.length path) - 1)) == "archives" then
-          (builtins.listToAttrs
-            (builtins.map
-              (archive: lib.attrsets.nameValuePair archive.os (fetchurl { inherit (archive) url sha1; })) value))
+          let
+            validArchives = builtins.filter (archive:
+              let
+                isTargetOs = if builtins.hasAttr "os" archive then
+                  archive.os == os || archive.os == "all" else true;
+                isTargetArc = if builtins.hasAttr "arch" archive then
+                  archive.arch == arch || archive.arch == "all" else true;
+              in
+                isTargetOs && isTargetArc
+            ) value;
+          in
+          lib.warnIf (builtins.length validArchives == 0)
+            "No valid archives for ${lib.concatMapStringsSep "." (x: ''"${x}"'') path} for os=${os}, arch=${arch}"
+            (lib.optionals (builtins.length validArchives > 0)
+              (lib.last (map (archive:
+                (fetchurl { inherit (archive) url sha1; })
+              ) validArchives)))
         else value
       )
       attrSet;
@@ -117,12 +142,12 @@ rec {
     inherit stdenv lib mkLicenses;
   };
 
-  deployAndroidPackage = ({package, os ? null, buildInputs ? [], patchInstructions ? "", meta ? {}, ...}@args:
+  deployAndroidPackage = ({package, buildInputs ? [], patchInstructions ? "", meta ? {}, ...}@args:
     let
       extraParams = removeAttrs args [ "package" "os" "buildInputs" "patchInstructions" ];
     in
     deployAndroidPackages ({
-      inherit os buildInputs meta;
+      inherit buildInputs;
       packages = [ package ];
       patchesInstructions = { "${package.name}" = patchInstructions; };
     } // extraParams
@@ -139,8 +164,7 @@ rec {
       '';
 
   platform-tools = callPackage ./platform-tools.nix {
-    inherit deployAndroidPackage;
-    os = if stdenv.system == "aarch64-darwin" then "macosx" else os; # "macosx" is a universal binary here
+    inherit deployAndroidPackage os;
     package = check-version packages "platform-tools" platformToolsVersion;
   };
 
@@ -176,14 +200,12 @@ rec {
 
   platforms = map (version:
     deployAndroidPackage {
-      inherit os;
       package = check-version packages "platforms" version;
     }
   ) platformVersions;
 
   sources = map (version:
     deployAndroidPackage {
-      inherit os;
       package = check-version packages "sources" version;
     }
   ) platformVersions;
@@ -218,7 +240,6 @@ rec {
       in
       lib.optionals (availablePackages != [])
         (deployAndroidPackages {
-          inherit os;
           packages = availablePackages;
           patchesInstructions = instructions;
         })
@@ -247,14 +268,12 @@ rec {
 
   google-apis = map (version:
     deployAndroidPackage {
-      inherit os;
       package = (check-version addons "addons" version).google_apis;
     }
   ) (builtins.filter (platformVersion: platformVersion < "26") platformVersions); # API level 26 and higher include Google APIs by default
 
   google-tv-addons = map (version:
     deployAndroidPackage {
-      inherit os;
       package = (check-version addons "addons" version).google_tv_addon;
     }
   ) platformVersions;

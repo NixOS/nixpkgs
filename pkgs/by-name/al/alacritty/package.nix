@@ -44,17 +44,17 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "alacritty";
-  version = "0.15.0";
+  version = "0.15.1";
 
   src = fetchFromGitHub {
     owner = "alacritty";
     repo = "alacritty";
     tag = "v${version}";
-    hash = "sha256-CAxf0ltvYXYTdjQmLQnRwRRJUBgABbHSB8DxfAbgBdo=";
+    hash = "sha256-/yERMNfCFLPb1S17Y9OacVH8UobDIIZDhM2qPzf5Vds=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-5AIl/z9OHSBs0DRk4UD03Yrvb6Ib5FGJk9XCRCKsjTs=";
+  cargoHash = "sha256-uXwefUV1NAKqwwPIWj4Slkx0c5b+RfLR3caTb42fc4M=";
 
   nativeBuildInputs = [
     cmake

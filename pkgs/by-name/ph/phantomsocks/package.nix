@@ -4,7 +4,7 @@
   fetchFromGitHub,
   stdenv,
   libpcap,
-  # Cann't be build with both pcap and rawsocket tags
+  # Can't be build with both pcap and rawsocket tags
   withPcap ? (!stdenv.hostPlatform.isLinux && !withRawsocket),
   withRawsocket ? (stdenv.hostPlatform.isLinux && !withPcap),
 }:

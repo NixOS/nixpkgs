@@ -153,13 +153,10 @@ in
     # be set.
     virtualisation = lib.optionalAttrs (options ? virtualisation.qemu) {
       qemu = {
-        # Only use a serial console, no TTY.
         # NOTE: optionalAttrs
         #       test-instrumentation.nix appears to be used without qemu-vm.nix, so
-        #       we avoid defining consoles if not possible.
+        #       we avoid defining attributes if not possible.
         # TODO: refactor such that test-instrumentation can import qemu-vm
-        #       or declare virtualisation.qemu.console option in a module that's always imported
-        consoles = [ qemu-common.qemuSerialDevice ];
         package  = lib.mkDefault pkgs.qemu_test;
       };
     };
@@ -239,7 +236,7 @@ in
     services.qemuGuest.package = pkgs.qemu_test.ga;
 
     # Squelch warning about unset system.stateVersion
-    system.stateVersion = lib.mkDefault lib.trivial.release;
+    system.stateVersion = (lib.mkOverride 1200) lib.trivial.release;
   };
 
 }

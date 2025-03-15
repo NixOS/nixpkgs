@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "flexget";
-  version = "3.13.25";
+  version = "3.15.25";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Flexget";
     repo = "Flexget";
     tag = "v${version}";
-    hash = "sha256-4VDMVJPzp6mCiO092iRn9e/3Jed3g29tLZa+TNYkYoI=";
+    hash = "sha256-7+QSt+W6M3AjF3eLq1aqZPyQs2LrZD0RlVTBTUJngAc=";
   };
 
   pythonRelaxDeps = true;
@@ -49,6 +49,7 @@ python3Packages.buildPythonApplication rec {
     rpyc
     sqlalchemy
     zstandard
+    pillow
 
     # WebUI requirements
     cherrypy
@@ -100,6 +101,7 @@ python3Packages.buildPythonApplication rec {
   nativeCheckInputs = [
     python3Packages.pytestCheckHook
     python3Packages.pytest-vcr
+    python3Packages.pytest-xdist
     python3Packages.paramiko
   ];
 
@@ -157,7 +159,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = {
     homepage = "https://flexget.com/";
-    changelog = "https://github.com/Flexget/Flexget/releases/tag/v${version}";
+    changelog = "https://github.com/Flexget/Flexget/releases/tag/${src.tag}";
     description = "Multipurpose automation tool for all of your media";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pbsds ];

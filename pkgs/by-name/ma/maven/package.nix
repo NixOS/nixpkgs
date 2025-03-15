@@ -68,6 +68,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       manage a project's build, reporting and documentation from a central piece
       of information.
     '';
+    sourceProvenance = with lib.sourceTypes; [
+      binaryBytecode
+      binaryNativeCode
+    ];
     license = lib.licenses.asl20;
     mainProgram = "mvn";
     maintainers = with lib.maintainers; [ tricktron ] ++ lib.teams.java.members;

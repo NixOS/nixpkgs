@@ -245,5 +245,6 @@ stdenv.mkDerivation rec {
       chessai
       twesterhout
     ];
+    broken = true;
   };
 }

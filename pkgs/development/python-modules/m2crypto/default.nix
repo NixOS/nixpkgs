@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchPypi,
+  fetchurl,
   openssl,
   pytestCheckHook,
   pythonOlder,
@@ -12,15 +13,21 @@
 
 buildPythonPackage rec {
   pname = "m2crypto";
-  version = "0.43.0";
+  version = "0.44.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-bCwce7DoqnaPfKgD2n28JmbUADsmvXrfcCM6/FnYzzM=";
+    hash = "sha256-OEu0y9F47g50AVMRt7H58sN342huA/oHCz7C9JRnHA8=";
   };
+  patches = [
+    (fetchurl {
+      url = "https://sources.debian.org/data/main/m/m2crypto/0.42.0-2.1/debian/patches/0004-swig-Workaround-for-reading-sys-select.h-ending-with.patch";
+      hash = "sha256-/Bkuqu/Od+S56AUWo0ZzpZF7FGMxP766K2GJnfKXrOI=";
+    })
+  ];
 
   build-system = [ setuptools ];
 

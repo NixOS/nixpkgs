@@ -95,6 +95,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/jeertmans/manim-slides";
     license = lib.licenses.mit;
     mainProgram = "manim-slides";
-    maintainers = with lib.maintainers; [ soispha ];
+    maintainers = with lib.maintainers; [ bpeetz ];
   };
 }

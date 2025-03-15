@@ -17,7 +17,7 @@
   unstableGitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "vkmark";
   version = "2017.08-unstable-2023-04-12";
 

@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "cmd2";
-  version = "2.5.9";
+  version = "2.5.11";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-CbsTY3gyvIGKrVV3zN9dvrDJ++W5QS/3jVCE94Rvg6s=";
+    hash = "sha256-MKDThQIfvkpBFmcoReVpW75W62gvkJYGZ3Y5T5VKdCk=";
   };
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''

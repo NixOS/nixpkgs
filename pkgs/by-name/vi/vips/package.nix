@@ -10,6 +10,7 @@
   meson,
   ninja,
   pkg-config,
+  buildPackages,
 
   # Build inputs
   ApplicationServices,
@@ -42,6 +43,9 @@
   openslide,
   pango,
   poppler,
+  withIntrospection ?
+    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
+    && stdenv.hostPlatform.emulatorAvailable buildPackages,
 
   # passthru
   testers,
@@ -57,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     "out"
     "man"
     "dev"
-  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ "devdoc" ];
+  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isFreeBSD) [ "devdoc" ];
 
   src = fetchFromGitHub {
     owner = "libvips";
@@ -79,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
       ninja
       pkg-config
     ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isFreeBSD) [
       gtk-doc
     ];
 
@@ -128,8 +132,11 @@ stdenv.mkDerivation (finalAttrs: {
     [
       (lib.mesonEnable "pdfium" false)
       (lib.mesonEnable "nifti" false)
+      (lib.mesonEnable "introspection" withIntrospection)
     ]
-    ++ lib.optional (!stdenv.hostPlatform.isDarwin) (lib.mesonBool "gtk_doc" true)
+    ++ lib.optional (!stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isFreeBSD) (
+      lib.mesonBool "gtk_doc" true
+    )
     ++ lib.optional (imagemagick == null) (lib.mesonEnable "magick" false);
 
   passthru = {

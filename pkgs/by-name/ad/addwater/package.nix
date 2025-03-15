@@ -15,7 +15,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "addwater";
-  version = "1.2.5";
+  version = "1.2.6";
   # built with meson, not a python format
   pyproject = false;
 
@@ -23,7 +23,7 @@ python3Packages.buildPythonApplication rec {
     owner = "largestgithubuseronearth";
     repo = "addwater";
     tag = "v${version}";
-    hash = "sha256-Klz7FYlvkiokoISXsVvyWGKWR/MVhpj4OjQQhvPzju4=";
+    hash = "sha256-J1bWJUtQ8V1UuH+hfU0jIy/LQRFjzzV1YvI/VIaCjJE=";
   };
 
   buildInputs = [

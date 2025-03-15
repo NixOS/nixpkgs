@@ -246,22 +246,8 @@ in
         RestrictRealtime = true;
         SystemCallArchitectures = "native";
         SystemCallFilter = [
-          "@system-service"
-          "@resources"
-          "~@clock"
-          "@debug"
-          "@module"
-          "@mount"
-          "@reboot"
-          "@swap"
-          "@cpu-emulation"
-          "@obsolete"
-          "@timer"
-          "@chown"
-          "@setuid"
-          "@privileged"
-          "@keyring"
-          "@ipc"
+          "@system-service @resources"
+          "~@clock @debug @module @mount @reboot @swap @cpu-emulation @obsolete @timer @chown @setuid @privileged @keyring @ipc"
         ];
         SystemCallErrorNumber = "EPERM";
 

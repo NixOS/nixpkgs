@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i python3 -p "python3.withPackages(ps: [ ps.beautifulsoup4 ps.click ps.httpx ps.jinja2 ps.pyyaml ])"
+#!nix-shell -i python3 -p "python3.withPackages(ps: [ ps.beautifulsoup4 ps.click ps.httpx ps.jinja2 ps.packaging ps.pyyaml ])"
 import base64
 import binascii
 import json
@@ -11,6 +11,7 @@ import bs4
 import click
 import httpx
 import jinja2
+import packaging.version as v
 
 import utils
 
@@ -103,6 +104,12 @@ def main(set: str, version: str, nixpkgs: pathlib.Path, sources_url: Optional[st
 
         hash = client.get(url + ".sha256").text.split(" ", maxsplit=1)[0]
         assert hash
+
+        if existing := results.get(project_name):
+            old_version = existing["version"]
+            if v.parse(old_version) > v.parse(version):
+                print(f"{project_name} {old_version} is newer than {version}, skipping...")
+                continue
 
         results[project_name] = {
             "version": version,

@@ -5,10 +5,11 @@
   mathcomp-algebra,
   mathcomp-ssreflect,
   mathcomp-fingroup,
+  stdlib,
   version ? null,
 }:
 
-mkCoqDerivation rec {
+mkCoqDerivation {
   namePrefix = [
     "coq"
     "mathcomp"
@@ -56,6 +57,7 @@ mkCoqDerivation rec {
     mathcomp-algebra
     mathcomp-ssreflect
     mathcomp-fingroup
+    stdlib
   ];
 
   meta = {

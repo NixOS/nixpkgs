@@ -4,7 +4,6 @@
 , release_version
 , monorepoSrc ? null
 , src ? null
-, patches ? []
 , runCommand
 , cmake
 , lndir
@@ -17,6 +16,8 @@
 , libunwind
 , enableShared ? stdenv.hostPlatform.hasSharedLibraries
 , devExtraCmakeFlags ? []
+, substitute
+, fetchpatch
 }:
 
 # external cxxabi is not supported on Darwin as the build will not link libcxx
@@ -120,7 +121,7 @@ let
 in
 
 stdenv.mkDerivation (rec {
-  inherit pname version cmakeFlags patches;
+  inherit pname version cmakeFlags;
 
   src = src';
 
@@ -129,6 +130,38 @@ stdenv.mkDerivation (rec {
   preConfigure = lib.optionalString stdenv.hostPlatform.isMusl ''
     patchShebangs utils/cat_files.py
   '';
+
+  patches = lib.optionals (lib.versionOlder release_version "16") (
+    lib.optional (lib.versions.major release_version == "15")
+      # See:
+      #   - https://reviews.llvm.org/D133566
+      #   - https://github.com/NixOS/nixpkgs/issues/214524#issuecomment-1429146432
+      # !!! Drop in LLVM 16+
+      (
+        fetchpatch {
+          url = "https://github.com/llvm/llvm-project/commit/57c7bb3ec89565c68f858d316504668f9d214d59.patch";
+          hash = "sha256-B07vHmSjy5BhhkGSj3e1E0XmMv5/9+mvC/k70Z29VwY=";
+        }
+      )
+    ++ [
+      (substitute {
+        src = ../libcxxabi/wasm.patch;
+        substitutions = [
+          "--replace-fail"
+          "/cmake/"
+          "/llvm/cmake/"
+        ];
+      })
+    ]
+    ++ lib.optional stdenv.hostPlatform.isMusl (substitute {
+      src = ./libcxx-0001-musl-hacks.patch;
+      substitutions = [
+        "--replace-fail"
+        "/include/"
+        "/libcxx/include/"
+      ];
+    })
+  );
 
   nativeBuildInputs = [ cmake ninja python3 ]
     ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames

@@ -1,40 +1,23 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   flax,
   tomlq,
   python,
 
   # build-system
-  meson-python,
   nanobind,
   ninja,
+  scikit-build-core,
 
   # nativeBuildInputs
   cmake,
   pkg-config,
 }:
 
-let
-  nanobind-wrapper = stdenv.mkDerivation {
-    pname = "nanobind-wrapper";
-    inherit (nanobind) version;
-
-    src = ./nanobind-wrapper;
-
-    nativeBuildInputs = [
-      cmake
-    ];
-
-    buildFlags = [ "nanobind-static" ];
-
-    env.CMAKE_PREFIX_PATH = "${nanobind}/${python.sitePackages}/nanobind";
-  };
-in
 buildPythonPackage rec {
   pname = "flaxlib";
-  version = "0.0.1-a1";
+  version = "0.0.1";
   pyproject = true;
 
   inherit (flax) src;
@@ -43,11 +26,11 @@ buildPythonPackage rec {
 
   postPatch = ''
     expected_version="$version"
-    actual_version=$(${lib.getExe tomlq} --file Cargo.toml "package.version")
+    actual_version=$(${lib.getExe tomlq} --file pyproject.toml "project.version")
 
     if [ "$actual_version" != "$expected_version" ]; then
       echo -e "\n\tERROR:"
-      echo -e "\tThe version of the flaxlib python package ($expected_version) does not match the one in its Cargo.toml file ($actual_version)"
+      echo -e "\tThe version of the flaxlib python package ($expected_version) does not match the one in its pyproject.toml file ($actual_version)"
       echo -e "\tPlease update the version attribute of the nix python3Packages.flaxlib package."
       exit 1
     fi
@@ -56,15 +39,16 @@ buildPythonPackage rec {
   dontUseCmakeConfigure = true;
 
   build-system = [
-    meson-python
     nanobind
     ninja
+    scikit-build-core
   ];
   nativeBuildInputs = [
     cmake
     pkg-config
   ];
-  buildInputs = [ nanobind-wrapper ];
+
+  env.CMAKE_PREFIX_PATH = "${nanobind}/${python.sitePackages}/nanobind";
 
   pythonImportsCheck = [ "flaxlib" ];
 

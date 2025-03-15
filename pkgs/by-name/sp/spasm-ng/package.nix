@@ -9,7 +9,7 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "spasm-ng";
 
   version = "unstable-2022-07-05";

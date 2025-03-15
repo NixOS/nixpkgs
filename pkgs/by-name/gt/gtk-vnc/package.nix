@@ -24,9 +24,9 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gtk-vnc";
-  version = "1.4.0";
+  version = "1.5.0";
 
   outputs = [
     "out"
@@ -37,8 +37,8 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gtk-vnc/${lib.versions.majorMinor version}/gtk-vnc-${version}.tar.xz";
-    sha256 = "G+ZMTkdgxSs+wzBnKQ0e+kCtTOyrbGc4E4BOPFWdloM=";
+    url = "mirror://gnome/sources/gtk-vnc/${lib.versions.majorMinor finalAttrs.version}/gtk-vnc-${finalAttrs.version}.tar.xz";
+    sha256 = "wL60dHUorZMdpDrMVnxqAZD3/GJEZVce2czs4Cw03SM=";
   };
 
   nativeBuildInputs = [
@@ -95,4 +95,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     mainProgram = "gvnccapture";
   };
-}
+})

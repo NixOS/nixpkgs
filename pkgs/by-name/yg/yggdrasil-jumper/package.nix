@@ -10,7 +10,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "one-d-wide";
-    repo = pname;
+    repo = "yggdrasil-jumper";
     rev = "refs/tags/v${version}";
     hash = "sha256-Op3KBJ911AjB7BIJuV4xR8KHMxBtQj7hf++tC1g7SlM=";
   };

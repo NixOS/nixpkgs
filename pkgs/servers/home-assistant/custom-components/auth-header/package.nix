@@ -7,13 +7,13 @@
 buildHomeAssistantComponent rec {
   owner = "BeryJu";
   domain = "auth_header";
-  version = "1.11";
+  version = "1.12";
 
   src = fetchFromGitHub {
     inherit owner;
     repo = "hass-auth-header";
     tag = "v${version}";
-    hash = "sha256-N2jEFyb/OWsO48rAuQBDHtQ5yKfIrGTcwlEb2P3LyVc=";
+    hash = "sha256-BPG/G6IM95g9ip2OsPmcAebi2ZvKHUpFzV4oquOFLPM=";
   };
 
   meta = with lib; {

@@ -161,7 +161,7 @@ stdenv.mkDerivation {
 
   # For now, the check phase runs, but should always return 0. This way the logs
   # contain the test failures until all unit tests are fixed. Then, it should
-  # return 1 if any test failures have occured.
+  # return 1 if any test failures have occurred.
   doCheck = false;
   checkPhase = ''
     runHook preCheck

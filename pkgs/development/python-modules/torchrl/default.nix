@@ -38,7 +38,7 @@
   tensorboard,
   wandb,
 
-  # checks
+  # tests
   imageio,
   pytest-rerunfailures,
   pytestCheckHook,
@@ -48,14 +48,14 @@
 
 buildPythonPackage rec {
   pname = "torchrl";
-  version = "0.6.0";
+  version = "0.7.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "rl";
     tag = "v${version}";
-    hash = "sha256-2jxvxhhKZQVy1aU0G9PE8nPlg8yp+/+EUACkLNLRpMQ=";
+    hash = "sha256-hcCZSASAp9jbOhbFLJndridYn76R99K+LxRxQl3uaxM=";
   };
 
   build-system = [
@@ -183,8 +183,11 @@ buildPythonPackage rec {
   meta = {
     description = "Modular, primitive-first, python-first PyTorch library for Reinforcement Learning";
     homepage = "https://github.com/pytorch/rl";
-    changelog = "https://github.com/pytorch/rl/releases/tag/${src.tag}";
+    changelog = "https://github.com/pytorch/rl/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
+    # torhcrl is not compatible with our current version of gymnasium (>=1.0)
+    # https://github.com/pytorch/rl/pull/2473
+    broken = true;
   };
 }

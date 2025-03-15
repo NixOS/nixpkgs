@@ -18,17 +18,17 @@ let
 in
 buildGoModule rec {
   pname = "go-ethereum";
-  version = "1.14.13";
+  version = "1.15.5";
 
   src = fetchFromGitHub {
     owner = "ethereum";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-oJe+V11WArXVmoIC7nYN6oKc0VoHtRtelidyb3v6skI=";
+    hash = "sha256-kOgsjvkEi5acv53qnbyxMrPIXkz08SqjIO0A/mj/y90=";
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-IEwy3XRyj+5GjAWRjPsd5qzwEMpI/pZIwPjKdeATgkE=";
+  vendorHash = "sha256-byp1FzB4cSk9TayjaamsVfgzX0H531kzSXVHxDgWTes=";
 
   doCheck = false;
 
@@ -46,7 +46,6 @@ buildGoModule rec {
     "cmd/abidump"
     "cmd/abigen"
     "cmd/blsync"
-    "cmd/bootnode"
     "cmd/clef"
     "cmd/devp2p"
     "cmd/era"
@@ -75,7 +74,10 @@ buildGoModule rec {
       lgpl3Only
       gpl3Only
     ];
-    maintainers = with maintainers; [ RaghavSood ];
+    maintainers = with maintainers; [
+      asymmetric
+      RaghavSood
+    ];
     mainProgram = "geth";
   };
 }

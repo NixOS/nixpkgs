@@ -3,7 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
   isPy310,
   isPyPy,
 
@@ -45,19 +45,18 @@
 
 buildPythonPackage rec {
   pname = "aiohttp";
-  version = "3.11.11";
+  version = "3.11.13";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = "aiohttp";
     tag = "v${version}";
-    hash = "sha256-a4h8oFJxo1TSuhIjdUC0wqJSsepmzq6vjn5mwjw4bIw=";
+    hash = "sha256-VY7Q8m1mOppI/sUgL0Zy/jisR/Vy3zZQBMhgrBYophs=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./unvendor-llhttp.patch;
+    (replaceVars ./unvendor-llhttp.patch {
       llhttpDev = lib.getDev llhttp;
       llhttpLib = lib.getLib llhttp;
     })

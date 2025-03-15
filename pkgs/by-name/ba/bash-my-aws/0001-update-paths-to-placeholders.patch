@@ -1,0 +1,39 @@
+diff --git a/bin/bma b/bin/bma
+index 6144842..26965ce 100755
+--- a/bin/bma
++++ b/bin/bma
+@@ -13,7 +13,7 @@
+ #
+ # Assumes you have installed bash-my-aws to standard location
+ 
+-for f in "${BMA_HOME:-$HOME/.bash-my-aws}"/lib/*-functions; do source $f; done
++for f in @out@/lib/*-functions; do source $f; done
+ 
+ # Disable awcli client side pager
+ #
+diff --git a/scripts/build b/scripts/build
+index 54a786b..37a05df 100755
+--- a/scripts/build
++++ b/scripts/build
+@@ -41,7 +41,7 @@ funcs_after_bma=$(compgen -A function)
+ exclusions=('region')
+ 
+ for fnc in $(echo "${funcs_before_bma}" "${funcs_after_bma}" "${exclusions}" | tr ' ' '\n' | LC_ALL=C sort | uniq -u); do
+-  echo "alias $fnc='\${BMA_HOME:-\$HOME/.bash-my-aws}/bin/bma $fnc'" >> "$aliases_destination"
++  echo "alias $fnc='@out@/bin/bma $fnc'" >> "$aliases_destination"
+ done;
+ 
+ 
+diff --git a/scripts/build-completions b/scripts/build-completions
+index 2b5d49b..bf86af6 100755
+--- a/scripts/build-completions
++++ b/scripts/build-completions
+@@ -6,7 +6,7 @@ cat <<EOF
+ # DO NOT MANUALLY MODIFY THIS FILE.
+ # Use 'scripts/build' to regenerate if required.
+ 
+-bma_path="\${BMA_HOME:-\$HOME/.bash-my-aws}"
++bma_path="@out@"
+ EOF
+ 
+ # load in all the completions from scripts/completions

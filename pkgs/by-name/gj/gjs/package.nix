@@ -166,6 +166,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.lgpl2Plus;
     mainProgram = "gjs";
     maintainers = teams.gnome.members;
-    platforms = platforms.unix;
+    inherit (gobject-introspection.meta) platforms badPlatforms;
   };
 })

@@ -175,7 +175,7 @@ mkDerivation {
   # Compat is for making other platforms look like FreeBSD (e.g. to
   # build build-time dependencies for building FreeBSD packages). It is
   # not needed when building for FreeBSD.
-  meta.broken = stdenv.hostPlatform.isFreeBSD;
+  meta.platforms = lib.platforms.linux;
 
   alwaysKeepStatic = true;
 }

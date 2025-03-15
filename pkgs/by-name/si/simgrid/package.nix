@@ -35,8 +35,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitLab {
     domain = "framagit.org";
-    owner = pname;
-    repo = pname;
+    owner = "simgrid";
+    repo = "simgrid";
     rev = "v${version}";
     sha256 = "sha256-7w4ObbMem1Y8Lh9MOcdCSEktTDRkvVKmKlS9adm15oE=";
   };

@@ -25,7 +25,7 @@ Here is a basic configuration:
 
 ## Reverse proxy configuration {#module-services-pingvin-share-reverse-proxy-configuration}
 
-The prefered method to run this service is behind a reverse proxy not to expose an open port. This, you can configure Nginx such like this:
+The preferred method to run this service is behind a reverse proxy not to expose an open port. This, you can configure Nginx such like this:
 
 ```nix
 {

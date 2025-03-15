@@ -10,7 +10,7 @@
   dyn,
 }:
 
-buildDunePackage rec {
+buildDunePackage {
   pname = "dune-rpc";
   inherit (dune_3) src version;
 

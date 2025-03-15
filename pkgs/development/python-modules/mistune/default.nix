@@ -5,6 +5,7 @@
   pytestCheckHook,
   pythonOlder,
   setuptools,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -20,6 +21,10 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-gXCFBe58Ij6CiwTddsI4tkPsGBR2z9D8dnxlvTXGSMw=";
   };
+
+  dependencies = lib.optionals (pythonOlder "3.11") [
+    typing-extensions
+  ];
 
   build-system = [ setuptools ];
 

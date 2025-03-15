@@ -15,24 +15,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "veilid";
-  version = "0.4.1";
+  version = "0.4.3";
 
   src = fetchFromGitLab {
     owner = "veilid";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-/RdPq2rHs+lfB3odwO7yRGFi3j0INdJvbWccTsGO54g=";
+    hash = "sha256-D6mfYiUj9W+2l/is/KkzwIQ1Erbapf5dl4uWGKd42r4=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "ansi-parser-0.9.1" = "sha256-Vdjt8QDstrfxYfklZ5vYPGhVNG1BVh4cpKGwvvsHlS4=";
-      "cursive-0.20.0" = "sha256-EGKO7JVN9hIqADKKC3mUHHOCSxMjPoXzYBZujzdgk3E=";
-      "cursive_buffered_backend-0.6.1" = "sha256-+sTJnp570HupwaJxV2x+oKyLwNmqQ4HqOH2P1s9Hhw8=";
-      "cursive_table_view-0.14.0" = "sha256-haos82qtobMsFCP3sNRu5u1mki4bsjrV+eqFxUGIHqk=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-jjcx78iSIwMxbkJP5K0Xh9aIL1sDsX8cvjc5br8JjLM=";
 
   nativeBuildInputs = [
     capnproto

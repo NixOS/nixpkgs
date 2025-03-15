@@ -28,6 +28,7 @@ stdenv.mkDerivation {
         setuptools
       ]
     ))
+    qt5.qmake
   ];
 
   buildInputs =
@@ -62,6 +63,6 @@ stdenv.mkDerivation {
       lgpl21
     ];
     homepage = "https://wiki.qt.io/Qt_for_Python";
-    maintainers = with maintainers; [ gebner ];
+    maintainers = with maintainers; [ ];
   };
 }

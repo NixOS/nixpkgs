@@ -129,6 +129,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   RUST_BACKTRACE = 1;
+  # https://github.com/Riey/kime/issues/688
+  RUSTFLAGS = "-Clink-args=-L./target/release";
 
   meta = {
     homepage = "https://github.com/Riey/kime";

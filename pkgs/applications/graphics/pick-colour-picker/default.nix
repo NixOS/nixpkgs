@@ -10,7 +10,7 @@
   wrapGAppsHook3,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "pick-colour-picker";
   version = "unstable-2022-05-08";
 

@@ -4,13 +4,14 @@
   buildPythonPackage,
   envisage,
   fetchPypi,
-  numpy,
+  numpy_1,
   packaging,
   pyface,
   pygments,
   pyqt5,
   pythonOlder,
   pythonAtLeast,
+  stdenv,
   traitsui,
   vtk,
   wrapQtAppsHook,
@@ -33,7 +34,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     apptools
     envisage
-    numpy
+    numpy_1
     packaging
     pyface
     pygments
@@ -59,5 +60,8 @@ buildPythonPackage rec {
     license = licenses.bsdOriginal;
     maintainers = with maintainers; [ ];
     mainProgram = "mayavi2";
+    # Fails during stripping with:
+    # The file was not recognized as a valid object file
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

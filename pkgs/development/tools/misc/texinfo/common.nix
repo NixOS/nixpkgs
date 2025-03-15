@@ -5,7 +5,7 @@
   fetchurl,
   perl,
   libintl,
-  bash,
+  bashNonInteractive,
   updateAutotoolsGnuConfigScriptsHook,
   gnulib,
   gawk,
@@ -13,7 +13,7 @@
   libiconv,
   xz,
 
-  # we are a dependency of gcc, this simplifies bootstraping
+  # we are a dependency of gcc, this simplifies bootstrapping
   interactive ? false,
   ncurses,
   procps,
@@ -83,7 +83,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ];
   buildInputs =
     [
-      bash
+      bashNonInteractive
       libintl
     ]
     ++ optionals stdenv.hostPlatform.isSunOS [

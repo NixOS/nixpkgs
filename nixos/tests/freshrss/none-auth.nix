@@ -18,7 +18,7 @@ import ../make-test-python.nix (
       machine.wait_for_unit("multi-user.target")
       machine.wait_for_open_port(80)
       response = machine.succeed("curl -vvv -s http://localhost:80/i/")
-      assert '<title>Main stream · FreshRSS</title>' in response, "FreshRSS stream page didn't load successfully"
+      assert '<title> · FreshRSS</title>' in response, "FreshRSS stream page didn't load successfully"
     '';
   }
 )

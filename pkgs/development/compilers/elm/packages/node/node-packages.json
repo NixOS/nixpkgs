@@ -3,7 +3,6 @@
   "elm-coverage",
   "elm-doc-preview",
   "@elm-tooling/elm-language-server",
-  "elm-land",
   "elm-live",
   "elm-spa",
   "elm-test",
@@ -13,7 +12,6 @@
   "create-elm-app",
   "elm-optimize-level-2",
   "elm-pages",
-  "elm-review",
   "elm-git-install",
   "@dillonkearns/elm-graphql"
 ]

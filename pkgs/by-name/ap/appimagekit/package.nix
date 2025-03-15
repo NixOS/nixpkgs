@@ -36,7 +36,7 @@ let
     fetchSubmodules = true;
   };
 
-  # squashfuse adapted to nix from cmake experession in "${appimagekit_src}/lib/libappimage/cmake/dependencies.cmake"
+  # squashfuse adapted to nix from cmake expression in "${appimagekit_src}/lib/libappimage/cmake/dependencies.cmake"
   appimagekit_squashfuse = squashfuse.overrideAttrs rec {
     pname = "squashfuse";
     version = "unstable-2016-10-09";

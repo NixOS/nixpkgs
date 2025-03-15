@@ -5,13 +5,10 @@
   fetchFromGitHub,
   applyPatches,
   bundlerEnv,
-  defaultGemConfig,
   callPackage,
   procps,
   ruby,
   postgresql,
-  libpq,
-  imlib2,
   jq,
   moreutils,
   nodejs,
@@ -58,28 +55,6 @@ let
       "development"
       "postgres" # database
     ];
-    gemConfig = defaultGemConfig // {
-      pg = attrs: {
-        buildInputs = [ libpq ];
-      };
-      rszr = attrs: {
-        buildInputs = [
-          imlib2
-          imlib2.dev
-        ];
-        buildFlags = [ "--without-imlib2-config" ];
-      };
-      mini_racer = attrs: {
-        buildFlags = [
-          "--with-v8-dir=\"${nodejs.libv8}\""
-        ];
-        dontBuild = false;
-        postPatch = ''
-          substituteInPlace ext/mini_racer_extension/extconf.rb \
-            --replace Libv8.configure_makefile '$CPPFLAGS += " -x c++"; Libv8.configure_makefile'
-        '';
-      };
-    };
   };
 
 in

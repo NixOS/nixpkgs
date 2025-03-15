@@ -4,7 +4,7 @@
   lib,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "clog-cli";
   version = "0.10.0";
 

@@ -9,7 +9,6 @@
 
   # dependencies
   httpx,
-  langchain-core,
   orjson,
   pydantic,
   requests,
@@ -30,14 +29,14 @@
 
 buildPythonPackage rec {
   pname = "langsmith";
-  version = "0.3.4";
+  version = "0.3.10";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langsmith-sdk";
     tag = "v${version}";
-    hash = "sha256-mJS9Sdt4ESh9YRyjiUdVHC6R400SKhTeSdTjnbtY61I=";
+    hash = "sha256-kiKauRYqKEJZaKjL2YgOCgMmuw3UgSQx9+xHOdylCAQ=";
   };
 
   sourceRoot = "${src.name}/python";

@@ -8,14 +8,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "github-backup";
-  version = "0.49.0";
+  version = "0.50.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "josegonzalez";
     repo = "python-github-backup";
     tag = version;
-    hash = "sha256-RoRRuFXgykifdpcq3uBAARc54YTfzn0NiGcGkwcmcbc=";
+    hash = "sha256-c/e3PTQWq43ztsvTDExXAtwe1F+qcgwVTVl+hQz0mSY=";
   };
 
   build-system = with python3Packages; [
@@ -38,7 +38,7 @@ python3Packages.buildPythonApplication rec {
   meta = with lib; {
     description = "Backup a github user or organization";
     homepage = "https://github.com/josegonzalez/python-github-backup";
-    changelog = "https://github.com/josegonzalez/python-github-backup/blob/${version}/CHANGES.rst";
+    changelog = "https://github.com/josegonzalez/python-github-backup/blob/${src.tag}/CHANGES.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];
     mainProgram = "github-backup";

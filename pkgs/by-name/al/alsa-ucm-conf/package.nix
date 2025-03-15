@@ -18,31 +18,36 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontBuild = true;
 
-  installPhase = ''
-    runHook preInstall
+  installPhase =
+    ''
+      runHook preInstall
 
-    substituteInPlace ucm2/lib/card-init.conf \
-      --replace-fail "/bin/rm" "${coreutils}/bin/rm" \
-      --replace-fail "/bin/mkdir" "${coreutils}/bin/mkdir"
+      substituteInPlace ucm2/lib/card-init.conf \
+        --replace-fail "/bin/rm" "${coreutils}/bin/rm" \
+        --replace-fail "/bin/mkdir" "${coreutils}/bin/mkdir"
 
-    files=(
-        "ucm2/HDA/HDA.conf"
-        "ucm2/codecs/rt715/init.conf"
-        "ucm2/codecs/rt715-sdca/init.conf"
-        "ucm2/Intel/cht-bsw-rt5672/cht-bsw-rt5672.conf"
-        "ucm2/Intel/bytcr-rt5640/bytcr-rt5640.conf"
-    )
+      files=(
+          "ucm2/HDA/HDA.conf"
+          "ucm2/codecs/rt715/init.conf"
+          "ucm2/codecs/rt715-sdca/init.conf"
+          "ucm2/Intel/cht-bsw-rt5672/cht-bsw-rt5672.conf"
+          "ucm2/Intel/bytcr-rt5640/bytcr-rt5640.conf"
+      )
 
-    for file in "''${files[@]}"; do
-        substituteInPlace "$file" \
-            --replace-fail '/sbin/modprobe' '${kmod}/bin/modprobe'
-    done
+    ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
+      for file in "''${files[@]}"; do
+          substituteInPlace "$file" \
+              --replace-fail '/sbin/modprobe' '${kmod}/bin/modprobe'
+      done
+    ''
+    + ''
 
-    mkdir -p $out/share/alsa
-    cp -r ucm ucm2 $out/share/alsa
+      mkdir -p $out/share/alsa
+      cp -r ucm ucm2 $out/share/alsa
 
-    runHook postInstall
-  '';
+      runHook postInstall
+    '';
 
   passthru.updateScript = directoryListingUpdater {
     url = "https://www.alsa-project.org/files/pub/lib/";
@@ -59,6 +64,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.roastiek ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.freebsd;
   };
 })

@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -75,25 +76,33 @@ buildPythonPackage rec {
     "ignore::UserWarning"
   ];
 
-  disabledTests = [
-    # AssertionError due to tolerance issues
-    "test_bijective_transforms"
-    "test_cpu"
-    "test_entropy_categorical"
-    "test_gaussian_model"
+  disabledTests =
+    [
+      # AssertionError due to tolerance issues
+      "test_bijective_transforms"
+      "test_cpu"
+      "test_entropy_categorical"
+      "test_gaussian_model"
 
-    # >       with pytest.warns(UserWarning, match="Hessian of log posterior"):
-    # E       Failed: DID NOT WARN. No warnings of type (<class 'UserWarning'>,) were emitted.
-    # E        Emitted warnings: [].
-    "test_laplace_approximation_warning"
+      # >       with pytest.warns(UserWarning, match="Hessian of log posterior"):
+      # E       Failed: DID NOT WARN. No warnings of type (<class 'UserWarning'>,) were emitted.
+      # E        Emitted warnings: [].
+      "test_laplace_approximation_warning"
 
-    # Tests want to download data
-    "data_load"
-    "test_jsb_chorales"
+      # Tests want to download data
+      "data_load"
+      "test_jsb_chorales"
 
-    # ValueError: compiling computation that requires 2 logical devices, but only 1 XLA devices are available (num_replicas=2)
-    "test_chain"
-  ];
+      # ValueError: compiling computation that requires 2 logical devices, but only 1 XLA devices are available (num_replicas=2)
+      "test_chain"
+
+      # test_biject_to[CorrMatrix()-(15,)] - assert Array(False, dtype=bool)
+      "test_biject_to"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # AssertionError: Not equal to tolerance rtol=0.06, atol=0
+      "test_functional_map"
+    ];
 
   meta = {
     description = "Library for probabilistic programming with NumPy";

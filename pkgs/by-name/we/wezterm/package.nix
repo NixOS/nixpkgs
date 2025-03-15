@@ -29,31 +29,33 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wezterm";
-  version = "0-unstable-2025-02-10";
+  version = "0-unstable-2025-02-23";
 
   src = fetchFromGitHub {
     owner = "wez";
     repo = "wezterm";
-    rev = "52c1ca749552af4d8a2f18ec10fe8f14b6622519";
+    rev = "4ff581a8aa3460d04f859fdadb50f29b3c507763";
     fetchSubmodules = true;
-    hash = "sha256-4dIu0WczmjfCfYe2/fZybMWfgYd4XezIHUUPVb3ou28=";
+    hash = "sha256-KKfGB1vM8ytpNieWD6CHD5zVyUe17tFAegZFzLx7QfE=";
   };
 
-  postPatch = ''
-    echo ${version} > .tag
+  postPatch =
+    ''
+      echo ${version} > .tag
 
-    # tests are failing with: Unable to exchange encryption keys
-    rm -r wezterm-ssh/tests
+      # hash does not work well with NixOS
+      substituteInPlace assets/shell-integration/wezterm.sh \
+        --replace-fail 'hash wezterm 2>/dev/null' 'command type -P wezterm &>/dev/null' \
+        --replace-fail 'hash base64 2>/dev/null' 'command type -P base64 &>/dev/null' \
+        --replace-fail 'hash hostname 2>/dev/null' 'command type -P hostname &>/dev/null' \
+        --replace-fail 'hash hostnamectl 2>/dev/null' 'command type -P hostnamectl &>/dev/null'
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      # many tests fail with: No such file or directory
+      rm -r wezterm-ssh/tests
+    '';
 
-    # hash does not work well with NixOS
-    substituteInPlace assets/shell-integration/wezterm.sh \
-      --replace-fail 'hash wezterm 2>/dev/null' 'command type -P wezterm &>/dev/null' \
-      --replace-fail 'hash base64 2>/dev/null' 'command type -P base64 &>/dev/null' \
-      --replace-fail 'hash hostname 2>/dev/null' 'command type -P hostname &>/dev/null' \
-      --replace-fail 'hash hostnamectl 2>/dev/null' 'command type -P hostnamectl &>/dev/null'
-  '';
-
-  cargoHash = "sha256-2PJBd3nouxK0iIDOKIS9rrXbbts6zTYdrzxxokSiNwo=";
+  cargoHash = "sha256-WyQYmRNlabJaCTJm7Cn9nkXfOGAcOHwhoD9vmEggrDw=";
   useFetchCargoVendor = true;
 
   nativeBuildInputs = [
@@ -66,13 +68,13 @@ rustPlatform.buildRustPackage rec {
   buildInputs =
     [
       fontconfig
+      openssl
       zlib
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       libX11
       libxcb
       libxkbcommon
-      openssl
       wayland
       xcbutil
       xcbutilimage

@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch2,
 
   # build-system
   setuptools,
@@ -22,6 +21,8 @@
   scipy,
   soundfile,
   soxr,
+  standard-aifc,
+  standard-sunau,
   typing-extensions,
 
   # tests
@@ -32,36 +33,21 @@
   pytestCheckHook,
   resampy,
   samplerate,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "librosa";
-  version = "0.10.2.post1";
-  format = "pyproject";
+  version = "0.11.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "librosa";
     repo = "librosa";
     tag = version;
     fetchSubmodules = true; # for test data
-    hash = "sha256-0FbKVAFWmcFTW2dR27nif6hPZeIxFWYF1gTm4BEJZ/Q=";
+    hash = "sha256-T58J/Gi3tHzelr4enbYJi1KmO46QxE5Zlhkc0+EgvRg=";
   };
-
-  patches = [
-    (fetchpatch2 {
-      # https://github.com/librosa/librosa/issues/1849
-      name = "librosa-scipy-1.14-compat.patch";
-      url = "https://github.com/librosa/librosa/commit/d0a12c87cdff715ffb8ac1c7383bba1031aa71e4.patch";
-      hash = "sha256-NHuGo4U1FRikb5OIkycQBvuZ+0OdG/VykTcuhXkLUug=";
-    })
-    # Fix numpy2 test incompatibilities
-    # TODO: remove when updating to the next release
-    (fetchpatch2 {
-      name = "numpy2-support-tests";
-      url = "https://github.com/librosa/librosa/commit/7eb0a09e703a72a5979049ec546a522c70285aff.patch";
-      hash = "sha256-m9UpSDKOAr7qzTtahVQktu259cp8QDYjDChpQV0xuY0=";
-    })
-  ];
 
   build-system = [ setuptools ];
 
@@ -74,10 +60,12 @@ buildPythonPackage rec {
     numba
     numpy
     pooch
-    scipy
     scikit-learn
+    scipy
     soundfile
     soxr
+    standard-aifc
+    standard-sunau
     typing-extensions
   ];
 
@@ -94,11 +82,8 @@ buildPythonPackage rec {
     pytestCheckHook
     resampy
     samplerate
+    writableTmpDirAsHomeHook
   ] ++ optional-dependencies.matplotlib;
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   disabledTests =
     [
@@ -109,8 +94,6 @@ buildPythonPackage rec {
       "test_cite_released"
       "test_cite_badversion"
       "test_cite_unreleased"
-      # assert 22050 == np.int64(30720)
-      "test_stream"
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # crashing the python interpreter

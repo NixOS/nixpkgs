@@ -15,11 +15,12 @@
   buildLlvmTools,
   patches ? [ ],
   devExtraCmakeFlags ? [ ],
+  fetchpatch,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bolt";
-  inherit version patches;
+  inherit version;
 
   # Blank llvm dir just so relative path works
   src = runCommand "bolt-src-${finalAttrs.version}" { inherit (monorepoSrc) passthru; } (
@@ -40,6 +41,17 @@ stdenv.mkDerivation (finalAttrs: {
   );
 
   sourceRoot = "${finalAttrs.src.name}/bolt";
+
+  patches = lib.optionals (lib.versions.major release_version == "19") [
+    (fetchpatch {
+      url = "https://github.com/llvm/llvm-project/commit/abc2eae68290c453e1899a94eccc4ed5ea3b69c1.patch";
+      hash = "sha256-oxCxOjhi5BhNBEraWalEwa1rS3Mx9CuQgRVZ2hrbd7M=";
+    })
+    (fetchpatch {
+      url = "https://github.com/llvm/llvm-project/commit/5909979869edca359bcbca74042c2939d900680e.patch";
+      hash = "sha256-l4rQHYbblEADBXaZIdqTG0sZzH4fEQvYiqhLYNZDMa8=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake

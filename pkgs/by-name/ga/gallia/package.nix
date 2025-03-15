@@ -18,7 +18,11 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-izMTTZrp4aizq5jS51BNtq3lv9Kr+xI7scZfYKXA/oY=";
   };
 
-  pythonRelaxDeps = [ "aiofiles" ];
+  pythonRelaxDeps = [
+    "aiofiles"
+    "httpx"
+    "msgspec"
+  ];
 
   build-system = with python3.pkgs; [ poetry-core ];
 
