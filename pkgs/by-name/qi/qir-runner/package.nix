@@ -20,6 +20,11 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-65ioZ+7Xo4ocpFFVvwtY6Hn1FKuI48hcAfbAjPnSYEs=";
   };
 
+  # error: linker `aarch64-linux-gnu-gcc` not found
+  postPatch = ''
+    rm .cargo/config.toml
+  '';
+
   nativeBuildInputs = [ llvmPackages_19.llvm ];
   buildInputs = [
     libffi

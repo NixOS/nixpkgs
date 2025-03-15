@@ -24,6 +24,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-U2ZK9GlfTjXsA7Fjd288YDlqSZNl3vHryLG1FE/GH5c=";
 
+  # error: linker `aarch64-linux-gnu-gcc` not found
+  postPatch = ''
+    rm .cargo/config.toml
+  '';
+
   nativeBuildInputs = [
     protobuf
     rustPlatform.bindgenHook
