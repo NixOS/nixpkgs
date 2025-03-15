@@ -9,7 +9,7 @@
   fetchFromGitLab,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "hcs-utils";
   version = "2.1.0";
   pyproject = true;
