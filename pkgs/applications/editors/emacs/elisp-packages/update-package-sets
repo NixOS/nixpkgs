@@ -1,0 +1,54 @@
+#! /usr/bin/env nix-shell
+#! nix-shell --show-trace ./emacs2nix.nix -i bash
+
+usage(){
+    cat<<-EOF
+Usage: update-package-sets args
+args can be at least one from: elpa-devel, elpa, nongnu-devel, nongnu.
+EOF
+}
+
+update_set(){
+    local PKGSET="$1"
+
+    local output="${PKGSET}-generated.nix"
+    local script="${PKGSET}-packages.sh"
+
+    eval "${script} --names ${EMACS2NIX}/names.nix -o ${output}"
+    nixfmt "${output}"
+}
+
+main(){
+    local SETS=( )
+
+    while (( $# )); do
+        case $1 in
+            "elpa-devel" | "elpa" | "nongnu-devel" | "nongnu")
+                # Do not include duplicates
+                if [[ ! ${SETS[@]} =~ $1 ]]; then
+                    SETS+=( "$1" )
+                fi
+                shift
+                ;;
+            "melpa" | "melpa-stable")
+                # Let's warn the user of the correct script and go on
+                echo "This script does not generate the MELPA package set."
+                echo "Use update-melpa script instead."
+                shift
+                ;;
+            *)
+                echo "Unknown package set: $1"
+                usage
+                exit 1
+                ;;
+        esac
+    done
+
+    for SET in "${SETS[@]}"; do
+        echo "${SET}: updating..."
+        update_set "${SET}"
+        echo "${SET}: updated"
+    done
+}
+
+main "$@"

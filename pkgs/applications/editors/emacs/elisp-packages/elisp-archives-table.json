@@ -1,0 +1,32 @@
+{
+    "elpa": {
+        "location": "repos/elpa",
+        "basename": "elpa-generated.nix",
+        "nix_attribute": "emacs.pkgs.elpaPackages"
+    },
+    "elpa-devel": {
+        "location": "repos/elpa",
+        "basename": "elpa-devel-generated.nix",
+        "nix_attribute": "emacs.pkgs.elpaDevelPackages"
+    },
+    "melpa": {
+        "location": "repos/melpa",
+        "basename": "recipes-archive-melpa.json",
+        "nix_attribute": "emacs.pkgs.melpaPackages"
+    },
+    "melpa-stable": {
+        "location": "repos/melpa",
+        "basename": "recipes-archive-melpa.json",
+        "nix_attribute": "emacs.pkgs.melpaStablePackages"
+    },
+    "nongnu": {
+        "location": "repos/nongnu",
+        "basename": "nongnu-generated.nix",
+        "nix_attribute": "emacs.pkgs.nongnuPackages"
+    },
+    "nongnu-devel": {
+        "location": "repos/nongnu",
+        "basename": "nongnu-devel-generated.nix",
+        "nix_attribute": "emacs.pkgs.nongnuDevelPackages"
+    }
+}
