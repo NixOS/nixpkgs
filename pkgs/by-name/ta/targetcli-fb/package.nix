@@ -1,6 +1,6 @@
 {
   lib,
-  python3,
+  python3Packages,
   fetchFromGitHub,
   nixosTests,
   wrapGAppsNoGuiHook,
@@ -8,16 +8,22 @@
   glib,
 }:
 
-python3.pkgs.buildPythonApplication rec {
-  pname = "targetcli";
-  version = "2.1.58";
+python3Packages.buildPythonApplication rec {
+  pname = "targetcli-fb";
+  version = "3.0.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "open-iscsi";
-    repo = "${pname}-fb";
-    rev = "v${version}";
-    hash = "sha256-9QYo7jGk9iWr26j0qPQCqYsJ+vLXAsO4Xs7+7VT9/yc=";
+    repo = "targetcli-fb";
+    tag = "v${version}";
+    hash = "sha256-jRujBgUdeJY8ekVBDscitajDhYohlx/BS4wn+jFkZSg=";
   };
+
+  build-system = with python3Packages; [
+    hatch-vcs
+    hatchling
+  ];
 
   nativeBuildInputs = [
     wrapGAppsNoGuiHook
@@ -25,9 +31,9 @@ python3.pkgs.buildPythonApplication rec {
   ];
   buildInputs = [ glib ];
 
-  propagatedBuildInputs = with python3.pkgs; [
-    configshell
-    rtslib
+  dependencies = with python3Packages; [
+    configshell-fb
+    rtslib-fb
     pygobject3
   ];
 
@@ -40,11 +46,13 @@ python3.pkgs.buildPythonApplication rec {
     inherit (nixosTests) iscsi-root;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Command shell for managing the Linux LIO kernel target";
     homepage = "https://github.com/open-iscsi/targetcli-fb";
-    license = licenses.asl20;
+    changelog = "https://github.com/open-iscsi/targetcli-fb/releases/tag/v${version}";
+    license = lib.licenses.asl20;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
+    mainProgram = "targetcli";
   };
 }
