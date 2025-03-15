@@ -9941,6 +9941,18 @@ final: prev:
     meta.hydraPlatforms = [ ];
   };
 
+  nvim-dap-view = buildVimPlugin {
+    pname = "nvim-dap-view";
+    version = "2025-01-19";
+    src = fetchFromGitHub {
+      owner = "igorlfs";
+      repo = "nvim-dap-view";
+      rev = "b807d96c3c5ceaeacde7bb482135365827341201";
+      sha256 = "08m5mr9zs4drkilqc7albl8fvmknx84j8gzgbyml25ghqhffwddl";
+    };
+    meta.homepage = "https://github.com/igorlfs/nvim-dap-view/";
+  };
+
   nvim-dap-virtual-text = buildVimPlugin {
     pname = "nvim-dap-virtual-text";
     version = "2024-12-25";
