@@ -6,7 +6,7 @@
   fribidi,
   libGL,
   libGLU,
-  sfml,
+  sfml_2,
   taglib,
 }:
 stdenv.mkDerivation {
@@ -26,7 +26,7 @@ stdenv.mkDerivation {
     fribidi
     libGL
     libGLU
-    sfml
+    sfml_2
     taglib
   ];
 

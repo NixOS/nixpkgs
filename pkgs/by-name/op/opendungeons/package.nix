@@ -13,7 +13,7 @@
   boost183,
   ois,
   openal,
-  sfml,
+  sfml_2,
 
   # passthru
   unstableGitUpdater,
@@ -63,7 +63,7 @@ stdenv.mkDerivation {
     ogre'
     ois
     openal
-    sfml
+    sfml_2
   ];
 
   cmakeFlags = [

@@ -1,77 +1,36 @@
 {
   lib,
   stdenv,
+  sfml_2,
   fetchFromGitHub,
-
-  # nativeBuildInputs
-  cmake,
-
-  # buildInputs
-  flac,
-  freetype,
-  glew,
-  libjpeg,
-  libvorbis,
-  openal,
-  udev,
-  libX11,
-  libXcursor,
-  libXrandr,
-  libXrender,
-  xcbutilimage,
+  libXi,
 }:
+
 stdenv.mkDerivation (finalAttrs: {
-  pname = "sfml";
-  version = "2.6.2";
+  inherit (sfml_2) pname;
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "SFML";
     repo = "SFML";
     tag = finalAttrs.version;
-    hash = "sha256-m8FVXM56qjuRKRmkcEcRI8v6IpaJxskoUQ+sNsR1EhM=";
+    hash = "sha256-e6x/L2D3eT6F/DBLQDZ+j0XD5NL9RalWZA8kcm9lZ3g=";
   };
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs =
-    [
-      flac
-      freetype
-      glew
-      libjpeg
-      libvorbis
-      openal
-    ]
-    ++ lib.optional stdenv.hostPlatform.isLinux udev
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      libX11
-      libXcursor
-      libXrandr
-      libXrender
-      xcbutilimage
-    ];
-
-  cmakeFlags = [
-    (lib.cmakeBool "SFML_INSTALL_PKGCONFIG_FILES" true)
-    (lib.cmakeFeature "SFML_MISC_INSTALL_PREFIX" "share/SFML")
-    (lib.cmakeBool "SFML_BUILD_FRAMEWORKS" false)
-    (lib.cmakeBool "SFML_USE_SYSTEM_DEPS" true)
-  ];
+  inherit (sfml_2) nativeBuildInputs cmakeFlags;
+  buildInputs = [
+    libXi
+  ] ++ sfml_2.buildInputs;
 
   meta = {
-    description = "Simple and fast multimedia library";
-    homepage = "https://www.sfml-dev.org/";
+    inherit (sfml_2.meta)
+      description
+      homepage
+      longDescription
+      license
+      platforms
+      ;
     changelog = "https://github.com/SFML/SFML/blob/${finalAttrs.version}/changelog.md";
-    longDescription = ''
-      SFML is a simple, fast, cross-platform and object-oriented multimedia API.
-      It provides access to windowing, graphics, audio and network.
-      It is written in C++, and has bindings for various languages such as C, .Net, Ruby, Python.
-    '';
-    license = lib.licenses.zlib;
-    maintainers = [ lib.maintainers.astsmtl ];
-    platforms = lib.platforms.unix;
-    badPlatforms = [
-      # error: implicit instantiation of undefined template 'std::char_traits<unsigned int>'
-      lib.systems.inspect.patterns.isDarwin
-    ];
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 })
