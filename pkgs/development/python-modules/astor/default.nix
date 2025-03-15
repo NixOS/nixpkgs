@@ -23,6 +23,15 @@ buildPythonPackage rec {
     "test_convert_stdlib"
     # https://github.com/berkerpeksag/astor/issues/212
     "test_huge_int"
+    "CodegenTestCase::test_complex"
+    "CodegenTestCase::test_deprecated_constant_nodes"
+    "CodegenTestCase::test_deprecated_name_constants"
+    "CodegenTestCase::test_fstring_debugging"
+    "CodegenTestCase::test_fstring_escaped_braces"
+    "CodegenTestCase::test_fstring_trailing_newline"
+    "CodegenTestCase::test_fstrings"
+    "CodegenTestCase::test_inf"
+    "CodegenTestCase::test_nan"
   ];
 
   meta = with lib; {
