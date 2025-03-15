@@ -4,25 +4,8 @@ let
   cfg  = cfgs.ncdns;
 
   dataDir  = "/var/lib/ncdns";
-  username = "ncdns";
 
-  valueType = with lib.types; oneOf [ int str bool path ]
-    // { description = "setting type (integer, string, bool or path)"; };
-
-  configType = with lib.types; attrsOf (nullOr (either valueType configType))
-    // { description = ''
-          ncdns.conf configuration type. The format consists of an
-          attribute set of settings. Each setting can be either `null`,
-          a value or an attribute set. The allowed values are integers,
-          strings, booleans or paths.
-         '';
-       };
-
-  configFile = pkgs.runCommand "ncdns.conf"
-    { json = builtins.toJSON cfg.settings;
-      passAsFile = [ "json" ];
-    }
-    "${pkgs.remarshal}/bin/json2toml < $jsonPath > $out";
+  format = pkgs.formats.toml {};
 
   defaultFiles = {
     public  = "${dataDir}/bit.key";
@@ -35,7 +18,7 @@ let
   needsKeygen = lib.all lib.id (lib.flip lib.mapAttrsToList cfg.dnssec.keys
     (n: v: v == lib.getAttr n defaultFiles));
 
-  mkDefaultAttrs = lib.mapAttrs (n: v: lib.mkDefault v);
+  mkDefaultAttrs = lib.mapAttrs (_n: v: lib.mkDefault v);
 
 in
 
@@ -160,7 +143,7 @@ in
       };
 
       settings = lib.mkOption {
-        type = configType;
+        type = format.type;
         default = { };
         example = lib.literalExpression ''
           { # enable webserver
@@ -257,7 +240,7 @@ in
         User = "ncdns";
         StateDirectory = "ncdns";
         Restart = "on-failure";
-        ExecStart = "${pkgs.ncdns}/bin/ncdns -conf=${configFile}";
+        ExecStart = "${pkgs.ncdns}/bin/ncdns -conf=${format.generate "ncdns.conf" cfg.settings}";
       };
 
       preStart = lib.optionalString (cfg.dnssec.enable && needsKeygen) ''

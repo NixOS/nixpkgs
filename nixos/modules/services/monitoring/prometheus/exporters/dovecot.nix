@@ -89,7 +89,7 @@ in
     serviceConfig = {
       DynamicUser = false;
       ExecStart = ''
-        ${pkgs.prometheus-dovecot-exporter}/bin/dovecot_exporter \
+        ${lib.getExe pkgs.dovecot_exporter} \
           --web.listen-address ${cfg.listenAddress}:${toString cfg.port} \
           --web.telemetry-path ${cfg.telemetryPath} \
           --dovecot.socket-path ${escapeShellArg cfg.socketPath} \

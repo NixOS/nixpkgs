@@ -9,6 +9,16 @@
   krb5,
 }:
 
+let
+  js_of_ocaml-compiler = self.js_of_ocaml-compiler.override { version = "5.9.1"; };
+  js_of_ocaml = self.js_of_ocaml.override { inherit js_of_ocaml-compiler; };
+  gen_js_api = self.gen_js_api.override {
+    inherit js_of_ocaml-compiler;
+    ojs = self.ojs.override { inherit js_of_ocaml-compiler; };
+  };
+  js_of_ocaml-ppx = self.js_of_ocaml-ppx.override { inherit js_of_ocaml; };
+in
+
 with self;
 
 {

@@ -9,17 +9,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "erg";
-  version = "0.6.50";
+  version = "0.6.52";
 
   src = fetchFromGitHub {
     owner = "erg-lang";
     repo = "erg";
     rev = "v${version}";
-    hash = "sha256-w41HLMWbWYsK+gCFhCCzu5QfHHU5jqNVcKBUvHnvpX4=";
+    hash = "sha256-P59PUdwSGZHiQltyMhL683pt8mM96cDko9zfaep9lYU=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-xwJDnV2O1xpOsCZA2yb4coc/gtV5cBZh3R7lk1b1DDg=";
+  cargoHash = "sha256-krO4jqkLFFeiqC2Y+RKZs0poQpsHcpMsNlYG6q8IXxo=";
 
   nativeBuildInputs = [
     makeWrapper

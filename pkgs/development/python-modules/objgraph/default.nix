@@ -7,7 +7,7 @@
   isPyPy,
   python,
   pythonOlder,
-  substituteAll,
+  replaceVars,
   setuptools,
 }:
 
@@ -24,8 +24,7 @@ buildPythonPackage rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./hardcode-graphviz-path.patch;
+    (replaceVars ./hardcode-graphviz-path.patch {
       graphviz = graphvizPkgs;
     })
   ];

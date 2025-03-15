@@ -87,7 +87,7 @@ Now that this is out of the way. To add a package to Nixpkgs:
 
    - XML::Simple, a Perl module: [`pkgs/top-level/perl-packages.nix`](top-level/perl-packages.nix) (search for the `XMLSimple` attribute). Most Perl modules are so simple to build that they are defined directly in `perl-packages.nix`; no need to make a separate file for them.
 
-   - Adobe Reader: [`pkgs/applications/misc/adobe-reader/default.nix`](applications/misc/adobe-reader/default.nix). Shows how binary-only packages can be supported. In particular the [builder](applications/misc/adobe-reader/builder.sh) uses `patchelf` to set the RUNPATH and ELF interpreter of the executables so that the right libraries are found at runtime.
+   - Adobe Reader: [`pkgs/applications/misc/adobe-reader/default.nix`](applications/misc/adobe-reader/default.nix). Shows how binary-only packages can be supported. In particular the `postFixup` phase uses `patchelf` to set the RUNPATH and ELF interpreter of the executables so that the right libraries are found at runtime.
 
    Some notes:
 
@@ -337,7 +337,7 @@ In Nixpkgs, there are generally three different names associated with a package:
 
 - The `pname` attribute of the derivation. This is what most users see, in particular when using `nix-env`.
 
-- The attribute name used for the package in the [`pkgs/by-name` structure](./pkgs/by-name/README.md) or in [`all-packages.nix`](./pkgs/top-level/all-packages.nix), and when passing it as a dependency in recipes.
+- The attribute name used for the package in the [`pkgs/by-name` structure](./by-name/README.md) or in [`all-packages.nix`](./top-level/all-packages.nix), and when passing it as a dependency in recipes.
 
 - The filename for (the directory containing) the Nix expression.
 
@@ -399,6 +399,8 @@ Because every version of a package in Nixpkgs creates a potential maintenance bu
 If there is only one version of a package, its Nix expression should be named (e.g) `pkgs/by-name/xy/xyz/package.nix`. If there are multiple versions, this should be reflected in the attribute name. If you wish to share code between the Nix expressions of each version, you cannot rely upon `pkgs/by-name`'s automatic attribute creation, and must create the attributes yourself in `all-packages.nix`. See also [`pkgs/by-name/README.md`'s section on this topic](https://github.com/NixOS/nixpkgs/blob/master/pkgs/by-name/README.md#recommendation-for-new-packages-with-multiple-versions).
 
 ## Meta attributes
+
+The `meta` attribute set should always be placed last in the derivativion and any other "meta"-like attribute sets like `passthru` should be written before it.
 
 * `meta.description` must:
   * Be short, just one sentence.
@@ -729,7 +731,7 @@ $ nix-build -A phoronix-test-suite.tests
 
 Here are examples of package tests:
 
-- [Jasmin compile test](development/compilers/jasmin/test-assemble-hello-world/default.nix)
+- [Jasmin compile test](by-name/ja/jasmin/test-assemble-hello-world/default.nix)
 - [Lobster compile test](development/compilers/lobster/test-can-run-hello-world.nix)
 - [Spacy annotation test](development/python-modules/spacy/annotation-test/default.nix)
 - [Libtorch test](development/libraries/science/math/libtorch/test/default.nix)

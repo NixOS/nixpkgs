@@ -153,8 +153,10 @@ let
         # https://github.com/Golevka/emacs-clang-complete-async/issues/90
         auto-complete-clang-async = (addPackageRequires super.auto-complete-clang-async [ self.auto-complete ]).overrideAttrs (old: {
           buildInputs = old.buildInputs ++ [ pkgs.llvmPackages.llvm ];
-          CFLAGS = "-I${lib.getLib pkgs.llvmPackages.libclang}/include";
-          LDFLAGS = "-L${lib.getLib pkgs.llvmPackages.libclang}/lib";
+          env = old.env or { } // {
+            CFLAGS = "-I${lib.getLib pkgs.llvmPackages.libclang}/include";
+            LDFLAGS = "-L${lib.getLib pkgs.llvmPackages.libclang}/lib";
+          };
         });
 
         # part of a larger package
@@ -214,8 +216,10 @@ let
         });
 
         erlang = super.erlang.overrideAttrs (attrs: {
-          buildInputs = attrs.buildInputs ++ [
+          nativeBuildInputs = attrs.nativeBuildInputs or [ ] ++ [
             pkgs.perl
+          ];
+          buildInputs = attrs.buildInputs or [ ] ++ [
             pkgs.ncurses
           ];
         });
@@ -240,7 +244,7 @@ let
           #   - https://github.com/vedang/pdf-tools/issues/102
           #   - https://github.com/vedang/pdf-tools/issues/103
           #   - https://github.com/vedang/pdf-tools/issues/109
-          CXXFLAGS = "-std=c++17";
+          env = old.env or { } // { CXXFLAGS = "-std=c++17"; };
 
           nativeBuildInputs = old.nativeBuildInputs ++ [
             pkgs.autoconf
@@ -292,7 +296,7 @@ let
 
         irony = super.irony.overrideAttrs (old: {
           cmakeFlags = old.cmakeFlags or [ ] ++ [ "-DCMAKE_INSTALL_BINDIR=bin" ];
-          env.NIX_CFLAGS_COMPILE = "-UCLANG_RESOURCE_DIR";
+          env = old.env or { } // { NIX_CFLAGS_COMPILE = "-UCLANG_RESOURCE_DIR"; };
           preConfigure = ''
             pushd server
           '';
@@ -445,7 +449,8 @@ let
 
         magit-circleci = buildWithGit super.magit-circleci;
 
-        magit-delta = buildWithGit super.magit-delta;
+        # https://github.com/dandavison/magit-delta/issues/30
+        magit-delta = addPackageRequires (buildWithGit super.magit-delta) [ self.dash ];
 
         orgit = buildWithGit super.orgit;
 
@@ -593,11 +598,13 @@ let
             export EZMQ_LIBDIR=$(mktemp -d)
             make
           '';
-          nativeBuildInputs = old.nativeBuildInputs ++ [
+          nativeBuildInputs = old.nativeBuildInputs or [ ] ++ [
             pkgs.autoconf
             pkgs.automake
             pkgs.pkg-config
             pkgs.libtool
+          ];
+          buildInputs = old.buildInputs or [ ] ++ [
             (pkgs.zeromq.override { enableDrafts = true; })
           ];
           postInstall = (old.postInstall or "") + "\n" + ''
@@ -1145,6 +1152,8 @@ let
 
         fxrd-mode = ignoreCompilationError super.fxrd-mode; # elisp error
 
+        gams-ac = ignoreCompilationError super.gams-ac; # need gams in PATH during compilation
+
         # missing optional dependencies
         gap-mode = addPackageRequires super.gap-mode [
           self.company
@@ -1486,6 +1495,8 @@ let
 
         # https://github.com/polymode/poly-R/issues/41
         poly-R = addPackageRequires super.poly-R [ self.ess ];
+
+        poly-gams = ignoreCompilationError super.poly-gams; # need gams in PATH during compilation
 
         # missing optional dependencies: direx e2wm yaol, yaol not on any ELPA
         pophint = ignoreCompilationError super.pophint;

@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "osmo-mgw";
-  version = "1.13.1";
+  version = "1.14.0";
 
   src = fetchFromGitHub {
     owner = "osmocom";
     repo = "osmo-mgw";
     rev = version;
-    hash = "sha256-krVXADmSjPnkGiIOijaUMilSyK6uHGlyuvI9WwTnLrk=";
+    hash = "sha256-Y/98K81US6McNu+JEJtMluJTvsv0DHJiyjMPJz8/35o=";
   };
 
   postPatch = ''

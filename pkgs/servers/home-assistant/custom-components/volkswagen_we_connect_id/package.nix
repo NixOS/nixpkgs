@@ -9,13 +9,13 @@
 buildHomeAssistantComponent rec {
   owner = "mitch-dc";
   domain = "volkswagen_we-connect_id";
-  version = "0.2.3";
+  version = "0.2.6";
 
   src = fetchFromGitHub {
     inherit owner;
     repo = "volkswagen_we_connect_id";
     tag = "v${version}";
-    hash = "sha256-hok1ICAHMfvfMucBYkgWD68Tsn9E33Z/ouoRwFqHHF4=";
+    hash = "sha256-f5guxLE93QtTPV1zw1313bzF521pVr0vsUa3hzcRmJo=";
   };
 
   dependencies = [

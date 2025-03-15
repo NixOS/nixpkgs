@@ -18,7 +18,7 @@ buildPythonPackage rec {
     sha256 = "sha256-K1trMBZfc1aHSNSddq0v//Gv8ySgT/ONQYgrKWzw2qs=";
   };
 
-  # Projec thas no tests
+  # Project thas no tests
   doCheck = false;
 
   pythonImportsCheck = [ "pyflic" ];

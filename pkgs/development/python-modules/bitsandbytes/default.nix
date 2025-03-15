@@ -61,7 +61,7 @@ buildPythonPackage {
   };
 
   # By default, which library is loaded depends on the result of `torch.cuda.is_available()`.
-  # When `cudaSupport` is enabled, bypass this check and load the cuda library unconditionnally.
+  # When `cudaSupport` is enabled, bypass this check and load the cuda library unconditionally.
   # Indeed, in this case, only `libbitsandbytes_cuda124.so` is built. `libbitsandbytes_cpu.so` is not.
   # Also, hardcode the path to the previously built library instead of relying on
   # `get_cuda_bnb_library_path(cuda_specs)` which relies on `torch.cuda` too.

@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "linux-surface";
-    repo = pname;
+    repo = "surface-control";
     rev = "v${version}";
     sha256 = "sha256-QgkUxT5Ae0agvalZl1ie+1LwxgaTzMrKpQY3KkpWwG4=";
   };

@@ -9,13 +9,13 @@
 
 buildDunePackage rec {
   pname = "sqlite3";
-  version = "5.2.0";
+  version = "5.3.0";
   duneVersion = "3";
   minimalOCamlVersion = "4.12";
 
   src = fetchurl {
     url = "https://github.com/mmottl/sqlite3-ocaml/releases/download/${version}/sqlite3-${version}.tbz";
-    hash = "sha256-lCKDpFT0sh91F/Lovj06MFlHeceKawR49LcLjKfJjLs=";
+    hash = "sha256-+XuR3ovI5soNXMNgTxYcEbx26lV+3i7q8XaKCI6ueAo=";
   };
 
   nativeBuildInputs = [ pkg-config ];

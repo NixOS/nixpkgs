@@ -1,12 +1,11 @@
 {
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   kernel,
   lib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "vendor-reset";
   version = "unstable-2024-04-16-${kernel.version}";
 

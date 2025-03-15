@@ -13,7 +13,7 @@
   extraNativeBuildInputs ? [ ],
   ## Location of resulting RetroArch core on $out
   libretroCore ? "/lib/retroarch/cores",
-  ## The core filename is derivated from the core name
+  ## The core filename is derived from the core name
   ## Setting `normalizeCore` to `true` will convert `-` to `_` on the core filename
   normalizeCore ? true,
   ...

@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "gqlgenc";
-  version = "0.30.3";
+  version = "0.31.0";
 
   src = fetchFromGitHub {
     owner = "yamashou";
     repo = "gqlgenc";
     rev = "v${version}";
-    sha256 = "sha256-NYH05VppoIjxOzMP6aBBtZLxf8cj1kdzS+5NKtIDcik=";
+    sha256 = "sha256-RGHfDrFr2HO4i+YQeNzYrEcU+Xe286f3f5g/yUmpxpA=";
   };
 
   excludedPackages = [ "example" ];

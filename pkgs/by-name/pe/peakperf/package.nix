@@ -9,7 +9,6 @@
   versionCheckHook,
   installShellFiles,
   unstableGitUpdater,
-  fetchpatch,
   autoAddDriverRunpath,
 }:
 

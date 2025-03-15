@@ -29,11 +29,11 @@ sed -i "s|$current_hash|$new_hash|g" $positron_nix
 
 # Update Linux hash.
 current_hash=$(nix store prefetch-file --json --hash-type sha256 \
-    "https://github.com/posit-dev/positron/releases/download/${current_version}/Positron-${current_version}.deb" \
+    "https://github.com/posit-dev/positron/releases/download/${current_version}/Positron-${current_version}-x64.deb" \
     | jq -r .hash)
 
 new_hash=$(nix store prefetch-file --json --hash-type sha256 \
-    "https://github.com/posit-dev/positron/releases/download/${new_version}/Positron-${new_version}.deb" \
+    "https://github.com/posit-dev/positron/releases/download/${new_version}/Positron-${new_version}-x64.deb" \
     | jq -r .hash)
 
 sed -i "s|$current_hash|$new_hash|g" $positron_nix

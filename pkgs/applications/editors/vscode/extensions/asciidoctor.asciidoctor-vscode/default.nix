@@ -8,17 +8,18 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "asciidoctor-vscode";
     publisher = "asciidoctor";
-    version = "2.8.9";
-    sha256 = "1xkxx5i3nhd0dzqhhdmx0li5jifsgfhv0p5h7xwsscz3gzgsdcyb";
+    version = "3.4.2";
+    hash = "sha256-HG3y7999xeE1erQZCnBgUPj/aC0Kwyn20PEZR9gKrxY=";
   };
 
+  patches = [
+    ./commands-abspath.patch
+  ];
+
   postPatch = ''
-    substituteInPlace dist/src/text-parser.js \
-      --replace "get('asciidoctor_command', 'asciidoctor')" \
-                "get('asciidoctor_command', '${asciidoctor}/bin/asciidoctor')"
-    substituteInPlace dist/src/commands/exportAsPDF.js \
-      --replace "get('asciidoctorpdf_command', 'asciidoctor-pdf')" \
-                "get('asciidoctorpdf_command', '${asciidoctor}/bin/asciidoctor-pdf')"
+    substituteInPlace package.json \
+        --replace-fail "@ASCIIDOCTOR_PDF_BIN@" \
+                       "${asciidoctor}/bin/asciidoctor-pdf"
   '';
 
   meta = {

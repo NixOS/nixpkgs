@@ -16,16 +16,19 @@
   bash,
   xorg,
   xdg-utils,
+  nix-update-script,
 }:
+
 buildDotnetModule rec {
   pname = "v2rayn";
-  version = "7.7.1";
+  version = "7.10.0";
 
   src = fetchFromGitHub {
     owner = "2dust";
     repo = "v2rayN";
     tag = version;
-    hash = "sha256-u73LzCaGc3vdRs9sG9fdv1jrDubgZGkkxCnP55Bqdx8=";
+    hash = "sha256-j2s88MRyKcrNbUN+Ypewk+vRbhMtFwHpBy2xbabOe1w=";
+    fetchSubmodules = true;
   };
 
   projectFile = "v2rayN/v2rayN.Desktop/v2rayN.Desktop.csproj";
@@ -33,10 +36,10 @@ buildDotnetModule rec {
   nugetDeps = ./deps.json;
 
   postPatch = ''
-    substituteInPlace v2rayN/ServiceLib/Common/Utils.cs \
+    substituteInPlace v2rayN/ServiceLib/Global.cs \
       --replace-fail "/bin/bash" "${bash}/bin/bash"
     substituteInPlace v2rayN/ServiceLib/Handler/AutoStartupHandler.cs \
-      --replace-fail "Utils.GetExePath())" '"${placeholder "out"}/bin/v2rayN")'
+      --replace-fail "Utils.GetExePath())" '"v2rayN")'
     substituteInPlace v2rayN/ServiceLib/ViewModels/MainWindowViewModel.cs \
       --replace-fail "nautilus" "${xdg-utils}/bin/xdg-open"
   '';
@@ -64,14 +67,14 @@ buildDotnetModule rec {
     (lib.getLib stdenv.cc.cc)
   ];
 
-  runtimeDeps = [
-    xorg.libX11
-    xorg.libXrandr
-    xorg.libXi
-    xorg.libICE
-    xorg.libSM
-    xorg.libXcursor
-    xorg.libXext
+  runtimeDeps = with xorg; [
+    libX11
+    libXrandr
+    libXi
+    libICE
+    libSM
+    libXcursor
+    libXext
   ];
 
   desktopItems = [
@@ -94,7 +97,7 @@ buildDotnetModule rec {
     install -Dm644 v2rayN/v2rayN.Desktop/v2rayN.png $out/share/pixmaps/v2rayn.png
   '';
 
-  passthru.updateScript = ./update.sh;
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "GUI client for Windows and Linux, support Xray core and sing-box-core and others";

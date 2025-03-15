@@ -1,6 +1,6 @@
 { grafanaPlugin, lib }:
 
-grafanaPlugin rec {
+grafanaPlugin {
   pname = "volkovlabs-echarts-panel";
   version = "6.4.1";
   zipHash = "sha256-RHOfFKplZs0gbD/esvrpXkkPKPfo5R4zjCUJWPpkDNU=";

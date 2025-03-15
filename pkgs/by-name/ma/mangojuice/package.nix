@@ -7,29 +7,38 @@
   vala,
   pkg-config,
   makeBinaryWrapper,
+  replaceVars,
 
   gtk4,
   libadwaita,
   glib,
   libgee,
+  pciutils,
   wrapGAppsHook4,
 
   mangohud,
   mesa-demos,
   vulkan-tools,
+  vkbasalt,
 
   nix-update-script,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "mangojuice";
-  version = "0.8.1";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "radiolamp";
     repo = "mangojuice";
     tag = finalAttrs.version;
-    hash = "sha256-nMLymCOkml5LIvZgvp1NNHyG06KVlmQBMU+N4A4/Xus=";
+    hash = "sha256-NpNsYwktcce9R1LpoIL2vh5UzsgDqdPyS0D3mhM3F0w=";
   };
+
+  patches = [
+    (replaceVars ./fix-vkbasalt-path.patch {
+      vkbasalt = lib.getLib vkbasalt + "/lib/vkbasalt/libvkbasalt.so";
+    })
+  ];
 
   nativeBuildInputs = [
     meson
@@ -55,8 +64,9 @@ stdenv.mkDerivation (finalAttrs: {
     let
       path = lib.makeBinPath [
         mangohud
-        mesa-demos
-        vulkan-tools
+        mesa-demos # glxgears
+        pciutils # lspci
+        vulkan-tools # vkcube
       ];
     in
     ''

@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libpqxx";
-  version = "7.9.2";
+  version = "7.10.0";
 
   src = fetchFromGitHub {
     owner = "jtv";
     repo = "libpqxx";
     rev = finalAttrs.version;
-    hash = "sha256-I5e0iqXlZqDOMa1PlnrxpcKt1c2mbnSbVQrpi1Gh25o=";
+    hash = "sha256-llsnd1bxAyiEgo9PfWYdQp1RPPk1oF/02IgMvPhodZ0=";
   };
 
   outputs = [

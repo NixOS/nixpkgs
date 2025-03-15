@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  fetchzip,
   libX11,
   vst2-sdk,
 }:
@@ -12,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "oxesoft";
-    repo = pname;
+    repo = "oxefmsynth";
     rev = "v${version}";
     sha256 = "1rk71ls33a38wx8i22plsi7d89cqqxrfxknq5i4f9igsw1ipm4gn";
   };

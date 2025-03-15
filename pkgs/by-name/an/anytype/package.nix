@@ -1,6 +1,7 @@
 {
   lib,
   callPackage,
+  runCommand,
   fetchFromGitHub,
   buildNpmPackage,
   pkg-config,
@@ -15,27 +16,33 @@
 let
   anytype-heart = callPackage ./anytype-heart { };
   pname = "anytype";
-  version = "0.44.0";
+  version = "0.45.3";
 
   src = fetchFromGitHub {
     owner = "anyproto";
     repo = "anytype-ts";
     tag = "v${version}";
-    hash = "sha256-a2ZnTEAFzzTb+lxtQkC6QLG5SP1+gDSjI9dqUNZWfCg=";
+    hash = "sha256-fwfxmNca75xAAHKeT2nddz+XZexDomzHbw188LXxZqA=";
   };
   description = "P2P note-taking tool";
 
   locales = fetchFromGitHub {
     owner = "anyproto";
     repo = "l10n-anytype-ts";
-    rev = "a5c81ad55383c4e6e9bb7893ecfcb879bac87bea";
-    hash = "sha256-evSB0ohHm++tZiazXRMR4vj34IfW3HIkfZ2gwsi/2dk=";
+    rev = "687106c4e37297f86fab79f77ef83599b61ab65c";
+    hash = "sha256-Y0irD0jzqYobnjtD2M1+hTDRUUYnuygUx9+tE1gUoTw=";
   };
+
+  electron-headers = runCommand "electron-headers" { } ''
+    mkdir -p $out
+    tar -C $out --strip-components=1 -xvf ${electron.headers}
+  '';
+
 in
 buildNpmPackage {
   inherit pname version src;
 
-  npmDepsHash = "sha256-DDVsrXgijYYOeCc1gIe2nVb+oL8v4Hqq80d7l5b6MR0=";
+  npmDepsHash = "sha256-9BI+rXzTYonlMhcH8uiWyyF18JGv8GL1U9hZ9Z6X3As=";
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
@@ -46,6 +53,11 @@ buildNpmPackage {
     copyDesktopItems
   ];
   buildInputs = [ libsecret ];
+
+  npmFlags = [
+    # keytar needs to be built against electron's ABI
+    "--nodedir=${electron-headers}"
+  ];
 
   buildPhase = ''
     runHook preBuild

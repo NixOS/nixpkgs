@@ -55,6 +55,12 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = lib.optional enableVmaf libvmaf;
 
+  env = lib.optionalAttrs stdenv.hostPlatform.isFreeBSD {
+    # This can be removed when we switch to libcxx from llvm 20
+    # https://github.com/llvm/llvm-project/pull/122361
+    NIX_CFLAGS_COMPILE = "-D_XOPEN_SOURCE=700";
+  };
+
   preConfigure = ''
     # build uses `git describe` to set the build version
     cat > $NIX_BUILD_TOP/git << "EOF"
@@ -77,7 +83,7 @@ stdenv.mkDerivation rec {
       "-DCONFIG_TUNE_VMAF=1"
     ]
     ++ lib.optionals (isCross && !stdenv.hostPlatform.isx86) [
-      "-DCMAKE_ASM_COMPILER=${stdenv.cc.targetPrefix}as"
+      "-DCMAKE_ASM_COMPILER=${lib.getBin stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc"
     ]
     ++ lib.optionals stdenv.hostPlatform.isAarch32 [
       # armv7l-hf-multiplatform does not support NEON

@@ -14,9 +14,9 @@
   wayland,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "vulkan-hdr-layer-kwin6";
-  version = "0-unstable-2024-12-27";
+  version = "0-unstable-2025-03-07";
 
   depsBuildBuild = [ pkg-config ];
 
@@ -40,8 +40,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Zamundaaa";
     repo = "VK_hdr_layer";
-    rev = "1534ef826bfecf525a6c3154f2e3b52d640a79cf";
-    hash = "sha256-LaI7axY+O6MQ/7xdGlTO3ljydFAvqqdZpUI7A+B2Ilo=";
+    rev = "7c0553d88b38e62eb7fd83f3d25f50733309c866";
+    hash = "sha256-arJJWel6WooZ4SHwl0NXK44xOMgHMo1n++eJSVrone4=";
     fetchSubmodules = true;
   };
 

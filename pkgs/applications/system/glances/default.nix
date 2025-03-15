@@ -27,7 +27,7 @@
 
 buildPythonApplication rec {
   pname = "glances";
-  version = "4.3.0.6";
+  version = "4.3.0.8";
   pyproject = true;
 
   disabled = isPyPy || pythonOlder "3.9";
@@ -36,7 +36,7 @@ buildPythonApplication rec {
     owner = "nicolargo";
     repo = "glances";
     tag = "v${version}";
-    hash = "sha256-r4wDuV7WS3BQ5hidp2x6JqvHQLf6FchoHisMMEye1PM=";
+    hash = "sha256-BLOGsqeVrMZf2fLRqu1BIopWxgQF/z9KgsQopFfvdvo=";
   };
 
   build-system = [ setuptools ];
@@ -88,7 +88,7 @@ buildPythonApplication rec {
     homepage = "https://nicolargo.github.io/glances/";
     description = "Cross-platform curses-based monitoring tool";
     mainProgram = "glances";
-    changelog = "https://github.com/nicolargo/glances/blob/v${version}/NEWS.rst";
+    changelog = "https://github.com/nicolargo/glances/blob/${src.tag}/NEWS.rst";
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [
       primeos

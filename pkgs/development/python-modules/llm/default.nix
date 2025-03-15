@@ -22,7 +22,7 @@
 let
   llm = buildPythonPackage rec {
     pname = "llm";
-    version = "0.21";
+    version = "0.22";
     pyproject = true;
 
     build-system = [ setuptools ];
@@ -33,7 +33,7 @@ let
       owner = "simonw";
       repo = "llm";
       tag = version;
-      hash = "sha256-gxmhdczgbcvbWJQTy+gek499C/3jm9WL5vKZmaGVWgU=";
+      hash = "sha256-l4tFBCIey5cOUvJ8IXLOjslc1zy9MnuiwFFP275S/Bg=";
     };
 
     patches = [ ./001-disable-install-uninstall-commands.patch ];
@@ -76,7 +76,7 @@ let
     meta = with lib; {
       homepage = "https://github.com/simonw/llm";
       description = "Access large language models from the command-line";
-      changelog = "https://github.com/simonw/llm/releases/tag/${version}";
+      changelog = "https://github.com/simonw/llm/releases/tag/${src.tag}";
       license = licenses.asl20;
       mainProgram = "llm";
       maintainers = with maintainers; [

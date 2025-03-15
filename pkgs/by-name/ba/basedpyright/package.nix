@@ -16,13 +16,13 @@
 
 buildNpmPackage rec {
   pname = "basedpyright";
-  version = "1.27.0";
+  version = "1.28.1";
 
   src = fetchFromGitHub {
     owner = "detachhead";
     repo = "basedpyright";
     tag = "v${version}";
-    hash = "sha256-2lQ/uOojY/u43Yf/rqLdzTn4fs8/HHxztH5ua7fOXsk=";
+    hash = "sha256-fP8c6AntD2rW8nr8OlSag89NOvOo32YRDDFQh65/nho=";
   };
 
   npmDepsHash = "sha256-4EFl0hOI6DcpzcSedanQBOrNbHTxR0G7C8L4+7EnESE=";

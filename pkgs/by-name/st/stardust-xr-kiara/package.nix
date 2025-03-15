@@ -20,13 +20,9 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-e89/x66S+MpJFtqat1hYEyRVUYFjef62LDN2hQPjNVw=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "stardust-xr-0.14.1" = "sha256-fmRb46s0Ec8wnoerBh4JCv1WKz2of1YW+YGwy0Gr/yQ=";
-      "stardust-xr-molecules-0.29.0" = "sha256-sXwzrh052DCo7Jj1waebqKVmX8J9VRj5DpeUcGq3W2k=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-C1eD974cEGbo0vHJqdnCPUopDPDDa6hAFJdzSm8t618=";
+
   nativeBuildInputs = [ makeBinaryWrapper ];
 
   passthru = {

@@ -3,25 +3,39 @@
   stdenv,
   fetchFromGitHub,
   installShellFiles,
-  python3Packages,
+  python312,
+
+  # Override Python packages using
+  # self: super: { pkg = super.pkg.overridePythonAttrs (oldAttrs: { ... }); }
+  # Applied after defaultOverrides
+  packageOverrides ? self: super: { },
 }:
 let
-  inherit (python3Packages)
-    buildPythonApplication
-    setuptools
-    gitpython
-    manim
-    opencv4
-    typer
-    pydantic
-    fonttools
-    git-dummy
-    pytestCheckHook
-    ;
+  defaultOverrides = [
+    (self: super: {
+      av = (
+        super.av.overridePythonAttrs rec {
+          version = "13.1.0";
+          src = fetchFromGitHub {
+            owner = "PyAV-Org";
+            repo = "PyAV";
+            tag = "v${version}";
+            hash = "sha256-x2a9SC4uRplC6p0cD7fZcepFpRidbr6JJEEOaGSWl60=";
+          };
+        }
+      );
+    })
+  ];
+
+  python = python312.override {
+    self = python;
+    packageOverrides = lib.composeManyExtensions (defaultOverrides ++ [ packageOverrides ]);
+  };
 
   version = "0.3.5";
 in
 
+with python.pkgs;
 buildPythonApplication {
   pname = "git-sim";
   inherit version;

@@ -67,6 +67,10 @@ let
       # tries to retrieve file from github
       "test_non_text_stdout_capture"
     ];
+    stream = [
+      # crashes with x265>=4.0
+      "test_h265_video_is_hvc1"
+    ];
     websocket_api = [
       # AssertionError: assert 'unknown_error' == 'template_error'
       "test_render_template_with_timeout"

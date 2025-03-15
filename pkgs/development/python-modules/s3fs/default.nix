@@ -1,40 +1,49 @@
 {
   lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # dependencies
   aiobotocore,
   aiohttp,
-  buildPythonPackage,
-  docutils,
-  fetchPypi,
+  fsspec,
+
+  # tests
   flask,
   flask-cors,
-  fsspec,
   moto,
   pytestCheckHook,
-  pythonOlder,
-  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "s3fs";
-  version = "2024.12.0";
+  version = "2025.2.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-Gw86j1lGzKW6KYcdZ5KrHkUo7XYjJ9iu+vyBtzuZ/VY=";
+  src = fetchFromGitHub {
+    owner = "fsspec";
+    repo = "s3fs";
+    tag = version;
+    hash = "sha256-nnfvccORDspj54sRxL3d0hn4MpzKYGKE2Kl0v/wLaNw=";
   };
 
-  buildInputs = [ docutils ];
-
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+  ];
 
   dependencies = [
     aiobotocore
-    aiohttp
     fsspec
+    aiohttp
   ];
+
+  optional-dependencies = {
+    awscli = aiobotocore.optional-dependencies.awscli;
+    boto3 = aiobotocore.optional-dependencies.boto3;
+  };
 
   pythonImportsCheck = [ "s3fs" ];
 
@@ -50,10 +59,12 @@ buildPythonPackage rec {
     "test_async_close"
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = {
     description = "Pythonic file interface for S3";
     homepage = "https://github.com/fsspec/s3fs";
-    changelog = "https://github.com/fsspec/s3fs/raw/${version}/docs/source/changelog.rst";
+    changelog = "https://github.com/fsspec/s3fs/blob/${version}/docs/source/changelog.rst";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ teh ];
   };

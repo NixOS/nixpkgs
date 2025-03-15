@@ -613,11 +613,11 @@ in
         };
         options."meta.sr.ht::billing" = {
           enabled = mkEnableOption "the billing system";
-          stripe-public-key = mkOptionNullOrStr "Public key for Stripe. Get your keys at https://dashboard.stripe.com/account/apikeys";
+          stripe-public-key = mkOptionNullOrStr "Public key for Stripe. Get your keys at <https://dashboard.stripe.com/account/apikeys>";
           stripe-secret-key =
             mkOptionNullOrStr ''
               An absolute file path (which should be outside the Nix-store)
-              to a secret key for Stripe. Get your keys at https://dashboard.stripe.com/account/apikeys
+              to a secret key for Stripe. Get your keys at <https://dashboard.stripe.com/account/apikeys>
             ''
             // {
               apply = mapNullable (s: "<" + toString s);

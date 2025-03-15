@@ -19,6 +19,11 @@ buildPythonPackage {
     versionCheckProgramArg
     ;
 
+  postPatch = ''
+    substituteInPlace python/uv/_find_uv.py \
+      --replace-fail '"""Return the uv binary path."""' "return '$out/bin/uv'"
+  '';
+
   nativeBuildInputs = [
     pkgs.cmake
     installShellFiles

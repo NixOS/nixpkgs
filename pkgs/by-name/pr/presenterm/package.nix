@@ -9,13 +9,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "presenterm";
-  version = "0.10.0";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "mfontanini";
     repo = "presenterm";
     tag = "v${version}";
-    hash = "sha256-giTEDk5bj1x0cE53zEkQ0SU3SQJZabhr1X3keV07rN4=";
+    hash = "sha256-R2ATN495/sk+EMYs5BBxWk8nLO1ublWKfznn075/V5c=";
   };
 
   buildInputs = [
@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-N3g7QHgsfr8QH6HWA3/Ar7ZZYN8JPE7D7+/2JVJzW9o=";
+  cargoHash = "sha256-XXJGduSiPxlmcUyYp8QbTrPYI6NkoYxFA9cfsWgy1Es=";
 
   checkFlags = [
     # failed to load .tmpEeeeaQ: No such file or directory (os error 2)

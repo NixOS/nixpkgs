@@ -17,7 +17,6 @@
   mkYarnModules,
   python3,
   # Misc dependencies
-  arrow-cpp,
   coc-clangd,
   coc-css,
   coc-diagnostic,
@@ -27,7 +26,6 @@
   dasht,
   deno,
   direnv,
-  duckdb,
   fzf,
   gawk,
   himalaya,
@@ -85,6 +83,8 @@
   cmake,
   icu,
   ncurses,
+  # devdocs-nvim dependencies
+  pandoc,
   # Preview-nvim dependencies
   md-tui,
   # sved dependencies
@@ -297,6 +297,10 @@ in
   };
 
   blink-emoji-nvim = super.blink-emoji-nvim.overrideAttrs {
+    dependencies = [ self.blink-cmp ];
+  };
+
+  blink-nerdfont-nvim = super.blink-nerdfont-nvim.overrideAttrs {
     dependencies = [ self.blink-cmp ];
   };
 
@@ -741,6 +745,14 @@ in
     dependencies = [ self.nvim-treesitter ];
   };
 
+  colorful-menu-nvim = super.colorful-menu-nvim.overrideAttrs {
+    # Local bug reproduction modules
+    nvimSkipModule = [
+      "repro_blink"
+      "repro_cmp"
+    ];
+  };
+
   command-t = super.command-t.overrideAttrs {
     nativeBuildInputs = [
       getconf
@@ -1006,6 +1018,18 @@ in
     };
   };
 
+  devdocs-nvim = super.devdocs-nvim.overrideAttrs {
+    nvimSkipModule = [
+      # Error initializing Devdocs state
+      "devdocs.state"
+    ];
+    runtimeDeps = [
+      curl
+      jq
+      pandoc
+    ];
+  };
+
   diagram-nvim = super.diagram-nvim.overrideAttrs {
     dependencies = [ self.image-nvim ];
   };
@@ -1093,16 +1117,23 @@ in
     dependencies = [ self.nui-nvim ];
   };
 
+  faust-nvim = super.faust-nvim.overrideAttrs {
+    dependencies = with self; [
+      luasnip
+      nvim-fzf
+    ];
+    nvimSkipModule = [
+      # E5108: Error executing lua vim/_init_packages.lua:0: ...in-faust-nvim-2022-06-01/lua/faust-nvim/autosnippets.lua:3: '=' expected near 'wd'
+      "faust-nvim.autosnippets"
+    ];
+  };
+
   fcitx-vim = super.fcitx-vim.overrideAttrs {
     passthru.python3Dependencies = ps: with ps; [ dbus-python ];
     meta = {
       description = "Keep and restore fcitx state when leaving/re-entering insert mode or search mode";
       license = lib.licenses.mit;
     };
-  };
-
-  feline-nvim = super.feline-nvim.overrideAttrs {
-    nvimSkipModule = "minimal_init";
   };
 
   flash-nvim = super.flash-nvim.overrideAttrs {
@@ -1345,20 +1376,21 @@ in
     ];
   };
 
+  helpview-nvim = super.helpview-nvim.overrideAttrs {
+    nvimSkipModule = "definitions.__vimdoc";
+  };
+
   hex-nvim = super.hex-nvim.overrideAttrs {
     runtimeDeps = [ xxd ];
   };
 
   himalaya-vim = super.himalaya-vim.overrideAttrs {
     buildInputs = [ himalaya ];
-    src = fetchFromSourcehut {
-      owner = "~soywod";
-      repo = "himalaya-vim";
-      rev = "v${himalaya.version}";
-      sha256 = "W+91hnNeS6WkDiR9r1s7xPTK9JlCWiVkI/nXVYbepY0=";
-    };
     # vim plugin with optional telescope lua module
-    nvimSkipModule = "himalaya.folder.pickers.telescope";
+    nvimSkipModule = [
+      "himalaya.folder.pickers.fzflua"
+      "himalaya.folder.pickers.telescope"
+    ];
   };
 
   hover-nvim = super.hover-nvim.overrideAttrs {
@@ -1464,6 +1496,7 @@ in
       "lazyvim.plugins.extras.ai.tabnine"
       "lazyvim.plugins.extras.coding.blink"
       "lazyvim.plugins.extras.coding.luasnip"
+      "lazyvim.plugins.extras.coding.neogen"
       "lazyvim.plugins.extras.editor.fzf"
       "lazyvim.plugins.extras.editor.snacks_picker"
       "lazyvim.plugins.extras.editor.telescope"
@@ -2041,6 +2074,15 @@ in
     nvimSkipModule = "neotest-jest-assertions";
   };
 
+  neotest-mocha = super.neotest-mocha.overrideAttrs {
+    dependencies = with self; [
+      neotest
+      nvim-nio
+      nvim-treesitter
+      plenary-nvim
+    ];
+  };
+
   neotest-minitest = super.neotest-minitest.overrideAttrs {
     dependencies = with self; [
       neotest
@@ -2251,6 +2293,8 @@ in
   nvim-dap-cortex-debug = super.nvim-dap-cortex-debug.overrideAttrs {
     dependencies = [ self.nvim-dap ];
   };
+
+  nvim-dbee = callPackage ./non-generated/nvim-dbee { };
 
   nvim-coverage = super.nvim-coverage.overrideAttrs {
     dependencies = with self; [
@@ -2614,8 +2658,8 @@ in
     ];
   };
 
-  orgmode = super.orgmode.overrideAttrs {
-    dependencies = with self; [ (nvim-treesitter.withPlugins (p: [ p.org ])) ];
+  org-roam-nvim = super.org-roam-nvim.overrideAttrs {
+    dependencies = [ self.orgmode ];
   };
 
   otter-nvim = super.otter-nvim.overrideAttrs {
@@ -2865,22 +2909,28 @@ in
   snacks-nvim = super.snacks-nvim.overrideAttrs {
     nvimSkipModule = [
       # Requires setup call first
+      # attempt to index global 'Snacks' (a nil value)
       "snacks.dashboard"
       "snacks.debug"
       "snacks.dim"
       "snacks.git"
+      "snacks.image.convert"
+      "snacks.image.image"
+      "snacks.image.init"
+      "snacks.image.placement"
       "snacks.indent"
       "snacks.input"
       "snacks.lazygit"
       "snacks.notifier"
+      "snacks.picker.actions"
+      "snacks.picker.config.highlights"
+      "snacks.picker.core.list"
       "snacks.scratch"
       "snacks.scroll"
       "snacks.terminal"
       "snacks.win"
       "snacks.words"
       "snacks.zen"
-      "snacks.picker.config.highlights"
-      "snacks.picker.actions"
       # Optional trouble integration
       "trouble.sources.profiler"
       # TODO: Plugin requires libsqlite available, create a test for it
@@ -3819,10 +3869,6 @@ in
     dependencies = [ self.nui-nvim ];
   };
 
-  YankRing-vim = super.YankRing-vim.overrideAttrs {
-    sourceRoot = ".";
-  };
-
   yanky-nvim = super.yanky-nvim.overrideAttrs {
     nvimSkipModule = [
       # Optional telescope integration
@@ -3913,6 +3959,7 @@ in
     nvimSkipModule = [
       "zk.pickers.fzf_lua"
       "zk.pickers.minipick"
+      "zk.pickers.snacks_picker"
       "zk.pickers.telescope"
     ];
   };
@@ -4003,18 +4050,22 @@ in
       "gitsigns-nvim"
       "image-nvim"
       "lsp-progress-nvim"
+      "lualine-nvim"
       "luasnip"
       "lush-nvim"
       "lz-n"
       "lze"
+      "lzextras"
       "lzn-auto-require"
       "middleclass"
+      "mini-test"
       "neorg"
       "neotest"
       "nui-nvim"
       "nvim-cmp"
-      "nvim-dbee"
       "nvim-nio"
+      "nvim-web-devicons"
+      "oil-nvim"
       "orgmode"
       "papis-nvim"
       "rest-nvim"

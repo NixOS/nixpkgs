@@ -10,6 +10,7 @@
   # dependencies
   boost-histogram,
   dask,
+  dask-awkward,
 
   # tests
   pytestCheckHook,
@@ -17,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "dask-histogram";
-  version = "2024.12.1";
+  version = "2025.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dask-contrib";
     repo = "dask-histogram";
     tag = version;
-    hash = "sha256-chznfEsMFuIioIlTz6uNpVAkjMMoMXjS62R4luKxVZQ=";
+    hash = "sha256-5Ec/qzVc/7LDG6SJym1e76BbxmbVjKKQHckwtTs1+6M=";
   };
 
   build-system = [
@@ -35,6 +36,7 @@ buildPythonPackage rec {
   dependencies = [
     boost-histogram
     dask
+    dask-awkward
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
@@ -44,7 +46,7 @@ buildPythonPackage rec {
   meta = {
     description = "Histograms with task scheduling";
     homepage = "https://dask-histogram.readthedocs.io/";
-    changelog = "https://github.com/dask-contrib/dask-histogram/releases/tag/${src.tag}";
+    changelog = "https://github.com/dask-contrib/dask-histogram/releases/tag/${version}";
     license = with lib.licenses; [ bsd3 ];
     maintainers = with lib.maintainers; [ veprbl ];
   };

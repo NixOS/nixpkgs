@@ -24,6 +24,8 @@ in {
 
     pg_auto_failover = super.callPackage ./pg_auto_failover.nix { };
 
+    pg_byteamagic = super.callPackage ./pg_byteamagic.nix { };
+
     pg_bigm = super.callPackage ./pg_bigm.nix { };
 
     pg_ed25519 = super.callPackage ./pg_ed25519.nix { };
@@ -67,6 +69,8 @@ in {
     pg_hll = super.callPackage ./pg_hll.nix { };
 
     pg_cron = super.callPackage ./pg_cron.nix { };
+
+    pg_tle = super.callPackage ./pg_tle.nix { };
 
     pg_topn = super.callPackage ./pg_topn.nix { };
 

@@ -1,34 +1,36 @@
 {
   lib,
   buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  hatchling,
+
+  # optional-dependencies
   # cudf,
   dask,
-  dask-expr,
-  duckdb,
-  fetchFromGitHub,
-  hatchling,
-  hypothesis,
   # modin,
   pandas,
   polars,
   pyarrow,
+
+  # tests
+  duckdb,
+  hypothesis,
   pytest-env,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "narwhals";
-  version = "1.22.0";
+  version = "1.30.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "narwhals-dev";
     repo = "narwhals";
     tag = "v${version}";
-    hash = "sha256-I6nJJiiW1v04YH70OPxXKeO80N52nnCPKRzJLILEWmw=";
+    hash = "sha256-jqrrQRviWllzZQEnlOTZ6oJM3WYQ3YlDvareTTBcNl4=";
   };
 
   build-system = [
@@ -39,8 +41,7 @@ buildPythonPackage rec {
     # cudf = [ cudf ];
     dask = [
       dask
-      dask-expr
-    ];
+    ] ++ dask.optional-dependencies.dataframe;
     # modin = [ modin ];
     pandas = [ pandas ];
     polars = [ polars ];

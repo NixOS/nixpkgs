@@ -8,7 +8,7 @@
   version ? null,
 }:
 
-(mkCoqDerivation rec {
+(mkCoqDerivation {
   pname = "corn";
   inherit version;
   defaultVersion =

@@ -41,7 +41,6 @@
         license = lib.licenses.mit;
         platforms = lib.platforms.unix;
         maintainers = with lib.maintainers; [
-          rexim
           supa
           marie
         ];

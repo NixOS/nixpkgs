@@ -48,7 +48,7 @@ in
     meta = with lib; {
       homepage = "http://abcde.einval.com/wiki/";
       license = licenses.gpl2Plus;
-      maintainers = with maintainers; [ gebner ];
+      maintainers = with maintainers; [ ];
       description = "Command-line audio CD ripper";
       longDescription = ''
         abcde is a front-end command-line utility (actually, a shell

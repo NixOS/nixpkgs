@@ -1,12 +1,12 @@
 diff --git a/vllm/model_executor/models/registry.py b/vllm/model_executor/models/registry.py
-index f5a02a5b..e830f987 100644
+index 81623def..2a6e2c92 100644
 --- a/vllm/model_executor/models/registry.py
 +++ b/vllm/model_executor/models/registry.py
-@@ -482,6 +482,7 @@ def _run_in_subprocess(fn: Callable[[], _T]) -> _T:
-         returned = subprocess.run(
-             [sys.executable, "-m", "vllm.model_executor.models.registry"],
-             input=input_bytes,
-+            env={'PYTHONPATH': ':'.join(sys.path)},
-             capture_output=True)
+@@ -521,6 +521,7 @@ def _run_in_subprocess(fn: Callable[[], _T]) -> _T:
+         # contains relative imports
+         returned = subprocess.run(_SUBPROCESS_COMMAND,
+                                   input=input_bytes,
++                                  env={'PYTHONPATH': ':'.join(sys.path)},
+                                   capture_output=True)
  
          # check if the subprocess is successful

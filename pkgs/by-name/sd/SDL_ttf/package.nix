@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # pass in correct *-config for cross builds
-  env.SDL_CONFIG = lib.getExe' SDL.dev "sdl-config";
+  env.SDL_CONFIG = lib.getExe' (lib.getDev SDL) "sdl-config";
   env.FREETYPE_CONFIG = lib.getExe' freetype.dev "freetype-config";
 
   configureFlags = [

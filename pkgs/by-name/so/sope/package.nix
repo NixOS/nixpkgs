@@ -1,4 +1,4 @@
-{ lib, clangStdenv, fetchFromGitHub, fetchpatch, libxml2, openssl
+{ lib, clangStdenv, fetchFromGitHub, libxml2, openssl
 , openldap, mariadb, libmysqlclient, libpq
 , gnustep-make
 , gnustep-base
@@ -10,7 +10,7 @@ clangStdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "Alinto";
-    repo = pname;
+    repo = "sope";
     rev = "SOPE-${version}";
     hash = "sha256-6vec2ZgpK5jcKr3c2SLn6fLAun56MDjupWtR6dMdjag=";
   };

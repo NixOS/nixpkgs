@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "dftlibs";
-    repo = pname;
+    repo = "xcfun";
     rev = "v${version}";
     sha256 = "1bj70cnhbh6ziy02x988wwl7cbwaq17ld7qwhswqkgnnx8rpgxid";
   };

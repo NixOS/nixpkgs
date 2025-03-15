@@ -124,6 +124,16 @@ let
 
     options = {
 
+      enable = mkOption {
+        type = types.bool;
+        default = true;
+        example = false;
+        description = ''
+          If set to false, the user account will not be created. This is useful for when you wish to conditionally
+          disable user accounts.
+        '';
+      };
+
       name = mkOption {
         type = types.passwdEntry types.str;
         apply = x: assert (stringLength x < 32 || abort "Username '${x}' is longer than 31 characters which is not allowed!"); x;
@@ -547,6 +557,7 @@ let
   sdInitrdGidsAreUnique = idsAreUnique (filterAttrs (n: g: g.gid != null) config.boot.initrd.systemd.groups) "gid";
   groupNames = lib.mapAttrsToList (n: g: g.name) cfg.groups;
   usersWithoutExistingGroup = lib.filterAttrs (n: u: u.group != "" && !lib.elem u.group groupNames) cfg.users;
+  usersWithNullShells = attrNames (filterAttrs (name: cfg: cfg.shell == null) cfg.users);
 
   spec = pkgs.writeText "users-groups.json" (builtins.toJSON {
     inherit (cfg) mutableUsers;
@@ -557,7 +568,7 @@ let
           autoSubUidGidRange subUidRanges subGidRanges
           initialPassword initialHashedPassword expires;
         shell = utils.toShellPath u.shell;
-      }) cfg.users;
+      }) (filterAttrs (_: u: u.enable) cfg.users);
     groups = attrValues cfg.groups;
   });
 
@@ -900,12 +911,21 @@ in {
               ${lib.concatStringsSep "\n  " (map mkConfigHint missingGroups)}
           '';
       }
+      {
+        assertion = !cfg.mutableUsers -> length usersWithNullShells == 0;
+        message = ''
+          users.mutableUsers = false has been set,
+          but found users that have their shell set to null.
+          If you wish to disable login, set their shell to pkgs.shadow (the default).
+          Misconfigured users: ${lib.concatStringsSep " " usersWithNullShells}
+        '';
+      }
       { # If mutableUsers is false, to prevent users creating a
         # configuration that locks them out of the system, ensure that
         # there is at least one "privileged" account that has a
         # password or an SSH authorized key. Privileged accounts are
         # root and users in the wheel group.
-        # The check does not apply when users.disableLoginPossibilityAssertion
+        # The check does not apply when users.allowNoPasswordLogin
         # The check does not apply when users.mutableUsers
         assertion = !cfg.mutableUsers -> !cfg.allowNoPasswordLogin ->
           any id (mapAttrsToList (name: cfg:
@@ -941,8 +961,17 @@ in {
             Please check the value of option `users.users."${user.name}".hashedPassword`.'';
           }
           {
+            assertion = user.isNormalUser && user.uid != null -> user.uid >= 1000;
+            message = ''
+              A user cannot have a users.users.${user.name}.uid set below 1000 and set users.users.${user.name}.isNormalUser.
+              Either users.users.${user.name}.isSystemUser must be set to true instead of users.users.${user.name}.isNormalUser
+              or users.users.${user.name}.uid must be changed to 1000 or above.
+            '';
+          }
+          {
             assertion = let
-              isEffectivelySystemUser = user.isSystemUser || (user.uid != null && user.uid < 1000);
+              # we do an extra check on isNormalUser here, to not trigger this assertion when isNormalUser is set and uid to < 1000
+              isEffectivelySystemUser = user.isSystemUser || (user.uid != null && user.uid < 1000 && !user.isNormalUser);
             in xor isEffectivelySystemUser user.isNormalUser;
             message = ''
               Exactly one of users.users.${user.name}.isSystemUser and users.users.${user.name}.isNormalUser must be set.

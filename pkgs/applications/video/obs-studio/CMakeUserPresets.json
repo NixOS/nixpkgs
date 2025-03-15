@@ -1,0 +1,17 @@
+{
+  "version": 3,
+  "configurePresets": [
+    {
+      "name": "nixpkgs-linux",
+      "displayName": "Nixpkgs (Linux)",
+      "inherits": ["ubuntu"],
+      "binaryDir": "${sourceDir}/build"
+    },
+    {
+      "name": "nixpkgs-darwin",
+      "displayName": "Nixpkgs (Darwin)",
+      "inherits": ["macos"],
+      "binaryDir": "${sourceDir}/build"
+    }
+  ]
+}

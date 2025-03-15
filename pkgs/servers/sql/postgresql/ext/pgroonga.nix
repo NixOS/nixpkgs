@@ -12,13 +12,13 @@
 
 buildPostgresqlExtension rec {
   pname = "pgroonga";
-  version = "3.2.5";
+  version = "4.0.1";
 
   src = fetchFromGitHub {
     owner = "pgroonga";
     repo = "pgroonga";
     rev = "${version}";
-    hash = "sha256-mWpgBoKj7wm7Tb+raL+sjAQqTdzF23SH/wQRYn5bLhw=";
+    hash = "sha256-a5nNtlUiFBuuqWAjIN0gU/FaoV3VpJh+/fab8R/77dw=";
   };
 
   nativeBuildInputs = [ pkg-config ];

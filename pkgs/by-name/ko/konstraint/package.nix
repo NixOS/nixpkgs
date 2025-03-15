@@ -7,15 +7,15 @@
 
 buildGoModule rec {
   pname = "konstraint";
-  version = "0.39.0";
+  version = "0.41.0";
 
   src = fetchFromGitHub {
     owner = "plexsystems";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-pn5uL3ibDb3vXaBhf34LmFNGpR8SYJkg5IcnN+eVfWk=";
+    sha256 = "sha256-45zCzjzbKYLsLxmo7yGbbyeYP1WyULD9d+nnNLP9Zzo=";
   };
-  vendorHash = "sha256-ZpNLxoUHwNMzMiKSm8rY27dH9AukXZEitrFb7TlSyQ0=";
+  vendorHash = "sha256-ZPK3+x0GOMs2RXxIs90BvEg25lb/j11J9zECaMHg4zY=";
 
   # Exclude go within .github folder
   excludedPackages = ".github";

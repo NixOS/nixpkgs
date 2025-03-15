@@ -1,6 +1,5 @@
 {
   lib,
-  fetchgit,
   fetchzip,
   python312,
   rtlcss,
@@ -10,7 +9,7 @@
 
 let
   odoo_version = "18.0";
-  odoo_release = "20241010";
+  odoo_release = "20250213";
   python = python312.override {
     self = python;
   };
@@ -25,7 +24,7 @@ python.pkgs.buildPythonApplication rec {
     # find latest version on https://nightly.odoo.com/${odoo_version}/nightly/src
     url = "https://nightly.odoo.com/${odoo_version}/nightly/src/odoo_${version}.zip";
     name = "odoo-${version}";
-    hash = "sha256-TUfLyB0m8XyEiS493Q/ECgSJutAd1rtWX93f3mwfOK0="; # odoo
+    hash = "sha256-iohlJ5OQ10iUaWjC4AFYmBwXuf9OOXAdCgdhdJAchYQ="; # odoo
   };
 
   makeWrapperArgs = [

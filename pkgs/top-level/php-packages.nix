@@ -342,22 +342,26 @@ lib.makeScope pkgs.newScope (
 
         pcov = callPackage ../development/php-packages/pcov { };
 
-        pdo_oci = buildPecl rec {
-          inherit (php.unwrapped) src version;
+        pdo_oci =
+          if (lib.versionAtLeast php.version "8.4") then
+            callPackage ../development/php-packages/pdo_oci { }
+          else
+            buildPecl rec {
+              inherit (php.unwrapped) src version;
 
-          pname = "pdo_oci";
-          sourceRoot = "php-${version}/ext/pdo_oci";
+              pname = "pdo_oci";
+              sourceRoot = "php-${version}/ext/pdo_oci";
 
-          buildInputs = [ pkgs.oracle-instantclient ];
-          configureFlags = [ "--with-pdo-oci=instantclient,${pkgs.oracle-instantclient.lib}/lib" ];
+              buildInputs = [ pkgs.oracle-instantclient ];
+              configureFlags = [ "--with-pdo-oci=instantclient,${pkgs.oracle-instantclient.lib}/lib" ];
 
-          internalDeps = [ php.extensions.pdo ];
-          postPatch = ''
-            sed -i -e 's|OCISDKMANINC=`.*$|OCISDKMANINC="${pkgs.oracle-instantclient.dev}/include"|' config.m4
-          '';
+              internalDeps = [ php.extensions.pdo ];
+              postPatch = ''
+                sed -i -e 's|OCISDKMANINC=`.*$|OCISDKMANINC="${pkgs.oracle-instantclient.dev}/include"|' config.m4
+              '';
 
-          meta.maintainers = lib.teams.php.members;
-        };
+              meta.maintainers = lib.teams.php.members;
+            };
 
         pdo_sqlsrv = callPackage ../development/php-packages/pdo_sqlsrv { };
 
@@ -636,7 +640,6 @@ lib.makeScope pkgs.newScope (
               {
                 name = "pdo_pgsql";
                 internalDeps = [ php.extensions.pdo ];
-                buildInputs = [ libpq ];
                 configureFlags = [ "--with-pdo-pgsql=${lib.getDev libpq}" ];
                 doCheck = false;
               }
@@ -651,7 +654,6 @@ lib.makeScope pkgs.newScope (
                 name = "pgsql";
                 buildInputs = [
                   pcre2
-                  libpq
                 ];
                 configureFlags = [ "--with-pgsql=${lib.getDev libpq}" ];
                 doCheck = false;

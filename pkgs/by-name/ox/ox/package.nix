@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "curlpipe";
-    repo = pname;
+    repo = "ox";
     tag = version;
     hash = "sha256-kTCdq3C0OUQS3tQRwEJ0+MTHZ8j2nnUARjdbmfH6ed4=";
   };

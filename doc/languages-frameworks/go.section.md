@@ -304,4 +304,4 @@ In case a project doesn't have external dependencies or dependencies are vendore
 - Run `go mod init <module name>` in `postPatch`
 
 In case the package has external dependencies that aren't vendored or the build setup is more complex the upstream source might need to be patched.
-Examples for the migration can be found in the [issue tracking migration withing nixpkgs](https://github.com/NixOS/nixpkgs/issues/318069).
+Examples for the migration can be found in the [issue tracking migration within nixpkgs](https://github.com/NixOS/nixpkgs/issues/318069).

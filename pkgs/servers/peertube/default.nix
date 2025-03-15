@@ -77,9 +77,6 @@ stdenv.mkDerivation rec {
     hash = "sha256-x5qFCprn8q0xC88HudLV7W53X1Nkbz3F52RMp2PxIu8=";
   };
 
-  # There are broken symlinks in the node_modules
-  dontCheckForBrokenSymlinks = true;
-
   outputs = [
     "out"
     "cli"
@@ -170,6 +167,14 @@ stdenv.mkDerivation rec {
     mv ~/packages/transcription/{dist,package.json} $out/packages/transcription
     mv ~/packages/typescript-utils/{dist,package.json} $out/packages/typescript-utils
     mv ~/{config,support,CREDITS.md,FAQ.md,LICENSE,README.md,package.json,yarn.lock} $out
+
+    # Remove broken symlinks in node_modules from workspace packages that aren't needed
+    # by the built artifact. If any new packages break the check for broken symlinks,
+    # they should be checked before adding them here to make sure they aren't likely to
+    # be needed, either now or in the future. If they might be, then we probably want
+    # to move the package to $out above instead of removing the broken symlink.
+    rm $out/node_modules/@peertube/{peertube-server,peertube-transcription-devtools,peertube-types-generator,tests}
+    rm $out/client/node_modules/@peertube/{peertube-transcription-devtools,peertube-types-generator,tests}
 
     mkdir -p $cli/bin
     mv ~/apps/peertube-cli/{dist,node_modules,package.json,yarn.lock} $cli

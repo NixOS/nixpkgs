@@ -4,7 +4,7 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "funnelweb";
   version = "3.20";
 

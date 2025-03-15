@@ -72,10 +72,14 @@ let
         pkg-config
         wayland-scanner
         glslang
+        hwdata
       ] ++ extraNativeBuildInputs;
 
       buildInputs =
         [
+          ffmpeg
+          libliftoff
+          libdisplay-info
           libGL
           libcap
           libinput
@@ -149,26 +153,12 @@ rec {
   wlroots_0_17 = generic {
     version = "0.17.4";
     hash = "sha256-AzmXf+HMX/6VAr0LpfHwfmDB9dRrrLQHt7l35K98MVo=";
-    extraNativeBuildInputs = [
-      hwdata
-    ];
-    extraBuildInputs = [
-      ffmpeg
-      libliftoff
-      libdisplay-info
-    ];
   };
 
   wlroots_0_18 = generic {
     version = "0.18.2";
     hash = "sha256-vKvMWRPPJ4PRKWVjmKKCdNSiqsQm+uQBoBnBUFElLNA=";
-    extraNativeBuildInputs = [
-      hwdata
-    ];
     extraBuildInputs = [
-      ffmpeg
-      libliftoff
-      libdisplay-info
       lcms2
     ];
   };

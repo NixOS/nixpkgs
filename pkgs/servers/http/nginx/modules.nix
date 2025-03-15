@@ -4,6 +4,7 @@
 , fetchFromGitLab
 , fetchhg
 , runCommand
+, stdenv
 
 , arpa2common
 , brotli
@@ -432,10 +433,11 @@ let self = {
     name = "modsecurity";
     src = fetchFromGitHub {
       name = "modsecurity-nginx";
-      owner = "SpiderLabs";
+      owner = "owasp-modsecurity";
       repo = "ModSecurity-nginx";
-      rev = "v1.0.3";
-      sha256 = "sha256-xp0/eqi5PJlzb9NaUbNnzEqNcxDPyjyNwZOwmlv1+ag=";
+      # unstable 2025-02-17
+      rev = "0b4f0cf38502f34a30c8543039f345cfc075670d";
+      hash = "sha256-P3IwKFR4NbaMXYY+O9OHfZWzka4M/wr8sJpX94LzQTU=";
     };
 
     inputs = [ curl geoip libmodsecurity libxml2 lmdb yajl ];
@@ -1019,14 +1021,33 @@ let self = {
     };
   };
 
+  zip = {
+    name = "zip";
+    src = fetchFromGitHub {
+      name = "zip";
+      owner = "evanmiller";
+      repo = "mod_zip";
+      rev = "8e65b82c82c7890f67a6107271c127e9881b6313";
+      hash = "sha256-2bUyGsLSaomzaijnAcHQV9TNSuV7Z3G9EUbrZzLG+mk=";
+    };
+
+    meta = with lib; {
+      description = "Streaming ZIP archiver for nginx";
+      homepage = "https://github.com/evanmiller/mod_zip";
+      license = with licenses; [ bsd3 ];
+      broken = stdenv.hostPlatform.isDarwin;
+      maintainers = teams.apm.members;
+    };
+  };
+
   zstd = {
     name = "zstd";
     src = fetchFromGitHub {
       name = "zstd";
       owner = "tokers";
       repo = "zstd-nginx-module";
-      rev = "0.1.1";
-      hash = "sha256-1gCV7uUsuYnZfb9e8VfjWkUloVINOUH5qzeJ03kIHgs=";
+      rev = "f4ba115e0b0eaecde545e5f37db6aa18917d8f4b";
+      hash = "sha256-N8D3KRpd79O8sdlPngtK9Ii7XT2imS4F+nkqsHMHw/w=";
     };
 
     inputs = [ zstd ];

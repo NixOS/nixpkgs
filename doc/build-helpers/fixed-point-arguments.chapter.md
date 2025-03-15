@@ -9,7 +9,7 @@ Build helpers don't always support fixed-point arguments yet, as support in [`st
 
 Developers can use the Nixpkgs library function [`lib.customisation.extendMkDerivation`](#function-library-lib.customisation.extendMkDerivation) to define a build helper supporting fixed-point arguments from an existing one with such support, with an attribute overlay similar to the one taken by [`<pkg>.overrideAttrs`](#sec-pkg-overrideAttrs).
 
-Beside overriding, `lib.extendMkDerivation` also supports `excludeDrvArgNames` to optionally exclude some arguments in the input fixed-point argumnts from passing down the base build helper (specified as `constructDrv`).
+Beside overriding, `lib.extendMkDerivation` also supports `excludeDrvArgNames` to optionally exclude some arguments in the input fixed-point arguments from passing down the base build helper (specified as `constructDrv`).
 
 :::{.example #ex-build-helpers-extendMkDerivation}
 

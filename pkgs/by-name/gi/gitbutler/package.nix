@@ -35,37 +35,36 @@ in
 
 rustPlatform.buildRustPackage rec {
   pname = "gitbutler";
-  version = "0.14.4";
+  version = "0.14.7";
 
   src = fetchFromGitHub {
     owner = "gitbutlerapp";
     repo = "gitbutler";
     tag = "release/${version}";
-    hash = "sha256-JeiiV7OXRI4xTTQp1dXqT1ozTrIc7cltvZ6yVOhcjGU=";
+    hash = "sha256-4RWZ1eRUvHj+PU9iNnDsq8k5qHpkAn6g4Zn0cXyUEzM=";
   };
 
-  # Deactivate the upstream updater, set the version, and merge Tauri's
-  # configuration files
+  # Let Tauri know what version we're building
   #
   # Remove references to non-existent workspaces in `gix` crates
+  #
+  # Deactivate the built-in updater
   postPatch = ''
-    jq --slurp \
-      '.[0] * .[1]
-      | .version = "${version}"
-      | .bundle.createUpdaterArtifacts = false
-      | .plugins.updater.endpoints = [ ]' \
-      crates/gitbutler-tauri/tauri.conf{,.release}.json \
-      | sponge crates/gitbutler-tauri/tauri.conf.json
+    tauriConfRelease="crates/gitbutler-tauri/tauri.conf.release.json"
+    jq '.version = "${version}" | .bundle.createUpdaterArtifacts = false' "$tauriConfRelease" | sponge "$tauriConfRelease"
 
     tomlq -ti 'del(.lints) | del(.workspace.lints)' "$cargoDepsCopy"/gix*/Cargo.toml
+
+    substituteInPlace apps/desktop/src/lib/backend/tauri.ts \
+      --replace-fail 'checkUpdate = check;' 'checkUpdate = () => null;'
   '';
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-ooe9in3JfEPMbZSMjobVJpWZdqBTf2AsfEkcsQc0Fts=";
+  cargoHash = "sha256-f7FMJ4h+gFwHnKwisbn1c7Si2/aPJqxhqQ7ablNu3yo=";
 
   pnpmDeps = pnpm_9.fetchDeps {
     inherit pname version src;
-    hash = "sha256-bLuKG+7QncLwiwKDrlcHKaSrUmDaJUxdvpdv0Jc6UPo=";
+    hash = "sha256-w7DGB9OlzXMsgikCbhBcsVQzKx2atSqIOAKF+kfNoTM=";
   };
 
   nativeBuildInputs = [
@@ -96,7 +95,7 @@ rustPlatform.buildRustPackage rec {
 
   tauriBuildFlags = [
     "--config"
-    "crates/gitbutler-tauri/tauri.conf.json"
+    "crates/gitbutler-tauri/tauri.conf.release.json"
   ];
 
   nativeCheckInputs = [ git ];
@@ -107,9 +106,18 @@ rustPlatform.buildRustPackage rec {
     [
       "--workspace"
     ]
-    # Errors with "Lazy instance has previously been poisoned"
-    ++ excludeSpec "gitbutler-branch-actions"
-    ++ excludeSpec "gitbutler-stack";
+    ++ lib.concatMap excludeSpec [
+      # Requires Git directories
+      "but-core"
+      # Fails due to the issues above and below
+      "but-hunk-dependency"
+      # Errors with "Lazy instance has previously been poisoned"
+      "gitbutler-branch-actions"
+      "gitbutler-stack"
+      # `Expecting driver to be located at "../../target/debug/gitbutler-cli" - we also assume a certain crate location`
+      # We're not (usually) building in debug mode and always have a different target directory, so...
+      "gitbutler-edit-mode"
+    ];
 
   env = {
     # Make sure `crates/gitbutler-tauri/inject-git-binaries.sh` can find our

@@ -14,12 +14,11 @@
   setuptools-scm,
   python,
   scipy,
-  fetchpatch,
 }:
 
 buildPythonPackage rec {
   pname = "brian2";
-  version = "2.8.0";
+  version = "2.8.0.4";
   pyproject = true;
 
   # https://github.com/python/cpython/issues/117692
@@ -27,7 +26,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-1JSE58y1T0YLuFMgVv2qf7bZoLddeyoyxF2dzgsbuUg=";
+    hash = "sha256-DoJouwQoQ0GNObjm2xCqLOQG8BZb7xKQ9aIMmmXbjAg=";
   };
 
   patches = [
