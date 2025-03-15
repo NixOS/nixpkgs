@@ -1505,6 +1505,8 @@ let
         # https://github.com/colonelpanic8/org-project-capture/issues/66
         org-projectile-helm = addPackageRequires super.org-projectile-helm [ self.helm-org ];
 
+        origami-predef = ignoreCompilationError super.origami-predef; # elisp error
+
         # https://github.com/DarwinAwardWinner/mac-pseudo-daemon/issues/9
         osx-pseudo-daemon = addPackageRequiresIfOlder super.osx-pseudo-daemon [ self.mac-pseudo-daemon ] "20240922.2024";
 
