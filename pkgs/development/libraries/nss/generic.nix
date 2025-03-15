@@ -103,6 +103,13 @@ stdenv.mkDerivation rec {
       # yes, this is correct. nixpkgs uses "host" for the platform the binary will run on whereas nss uses "host" for the platform that the build is running on
       target = getArch stdenv.hostPlatform;
       host = getArch stdenv.buildPlatform;
+      host_system =
+        if stdenv.hostPlatform.isFreeBSD then
+          "FreeBSD"
+        else if stdenv.hostPlatform.isLinux then
+          "Linux"
+        else
+          stdenv.hostPlatform.parsed.kernel.name;
     in
     ''
       runHook preBuild
@@ -114,6 +121,11 @@ stdenv.mkDerivation rec {
         --enable-legacy-db \
         --target ${target} \
         -Dhost_arch=${host} \
+    ''
+    + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+      -DOS=${host_system} \
+    ''
+    + ''
         -Duse_system_zlib=1 \
         --enable-libpkix \
         -j $NIX_BUILD_CORES \
@@ -134,6 +146,14 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optionals stdenv.hostPlatform.isILP32 [
       "-DNS_PTR_LE_32=1" # See RNG_RandomUpdate() in drdbg.c
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
+      "-D_XOPEN_SOURCE=700"
+      "-D__BSD_VISIBLE"
+      # uses compiler intrinsics
+      "-mavx2"
+      "-maes"
+      "-mpclmul"
     ]
   );
 
