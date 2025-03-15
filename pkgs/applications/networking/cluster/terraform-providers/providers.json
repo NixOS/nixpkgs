@@ -90,13 +90,13 @@
     "vendorHash": "sha256-YIn8akPW+DCVF0eYZxsmJxmrJuYhK4QLG/uhmmrXd4c="
   },
   "auth0": {
-    "hash": "sha256-s+Aa4XWY0fubJy5iPgCs8bZX0UZbyOUEus0HRz2j4do=",
+    "hash": "sha256-5HiSoU3wxUtu2nsrq7h5cbqIenRMH2MpRfGJNqk8guI=",
     "homepage": "https://registry.terraform.io/providers/auth0/auth0",
     "owner": "auth0",
     "repo": "terraform-provider-auth0",
-    "rev": "v1.13.1",
+    "rev": "v1.14.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-KfoyGSA9viZRxOG9KVd+U0up66u6ivdG/iVIWh1RCLk="
+    "vendorHash": "sha256-gD5HWmmy5P5yQH7UfzehDpxjB47aPfiUFDlQSY4BsVM="
   },
   "avi": {
     "hash": "sha256-e8yzc3nRP0ktcuuKyBXydS9NhoceYZKzJcqCWOfaPL0=",
@@ -543,11 +543,11 @@
     "vendorHash": "sha256-GFH2w4bdqYWl0eFBo1r6YL1pA0l5QMwrXQ9BvK3DmEI="
   },
   "gridscale": {
-    "hash": "sha256-YE7o8HwHUo6zI2umRv2lXY7voyg1fX5h1UitH89fBXc=",
+    "hash": "sha256-Ygt3L/dzwycccQZmuwbcaLHp9FBGNHgU19wSNmY8PzQ=",
     "homepage": "https://registry.terraform.io/providers/gridscale/gridscale",
     "owner": "gridscale",
     "repo": "terraform-provider-gridscale",
-    "rev": "v2.1.0",
+    "rev": "v2.1.1",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -777,13 +777,13 @@
     "vendorHash": "sha256-t5kQxSjd90mglgMvlMnhWBQlz1r+ZI5BKBD3dqty5lk="
   },
   "lxd": {
-    "hash": "sha256-PTpvB+FO94k/wnYQuex+zlpqcwwJSYl3OYRSA1gI7VM=",
+    "hash": "sha256-ToK0Zua7e4CPm+8ZLIVw+dpt4bbahqWvvCKhjrAeW7s=",
     "homepage": "https://registry.terraform.io/providers/terraform-lxd/lxd",
     "owner": "terraform-lxd",
     "repo": "terraform-provider-lxd",
-    "rev": "v2.4.0",
+    "rev": "v2.5.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-JIFYDh3EzsCNwY8Hg8aVnUIuhP+MJpygbmwTyRryM0w="
+    "vendorHash": "sha256-zGHbDQhr1UjF6jcK4NHw90eTVrC+R76G8Fg7vJht20c="
   },
   "mailgun": {
     "hash": "sha256-fuJnzloJa0S1r3/22Wecbq1oF8oRQP2nrrmwCONHITA=",
@@ -985,11 +985,11 @@
     "vendorHash": null
   },
   "ovh": {
-    "hash": "sha256-haKmmNAHBmB5bpzlqkhvntUlZmyvz5brBgD3bxT40kI=",
+    "hash": "sha256-wcLzFLoMpmYJDjgkxJeZkAsdxri3s3Sg/JsP7hI0giI=",
     "homepage": "https://registry.terraform.io/providers/ovh/ovh",
     "owner": "ovh",
     "repo": "terraform-provider-ovh",
-    "rev": "v1.6.0",
+    "rev": "v2.0.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },

@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "calcmysky";
-  version = "0.3.3";
+  version = "0.3.4";
 
   src = fetchFromGitHub {
     owner = "10110111";
     repo = "CalcMySky";
     tag = "v${version}";
-    hash = "sha256-18ZNnLK2zMT7P0MDXS6Z38LffE8EqXKBH89TPPxVWlo=";
+    hash = "sha256-r0F70ouRvUGRo7Zc7BOTe9ujRA5FN+1BdFPDtwIPly4=";
   };
 
   nativeBuildInputs = [
