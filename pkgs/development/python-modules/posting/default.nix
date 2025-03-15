@@ -1,25 +1,46 @@
 {
   buildPythonPackage,
   hatchling,
-  pkgs,
+  lib,
   fetchFromGitHub,
-  python3Packages,
+  fetchPypi,
+  pydantic,
+  poetry-core,
+  rich,
+  platformdirs,
+  typing-extensions,
+  linkify-it-py,
+  httpx,
+  textual-2_1_2,
+  textual-autocomplete,
+  openapi-pydantic,
+  click,
+  xdg-base-dirs,
+  click-default-group,
+  pyperclip,
+  pyyaml,
+  pydantic-settings,
+  python-dotenv,
+  watchfiles,
+  rich,
+  toml,
+  typer,
 }: let
   openapi-pydantic = buildPythonPackage rec {
     pname = "openapi_pydantic";
     version = "0.5.0";
 
-    src = python3Packages.fetchPypi {
+    src = fetchPypi {
       inherit pname version;
       sha256 = "sha256-pI+I4pBKBW4e9tRyjPsvNqoyE84ZT7CfwEJZuQBxZfA=";
     };
 
-    propagatedBuildInputs = with python3Packages; [
+    propagatedBuildInputs = [
       pydantic
     ];
 
     pyproject = true;
-    nativeBuildInputs = with python3Packages; [
+    nativeBuildInputs = [
       poetry-core
     ];
   };
@@ -28,12 +49,12 @@
     pname = "textual";
     version = "2.1.2";
 
-    src = python3Packages.fetchPypi {
+    src = fetchPypi {
       inherit pname version;
       sha256 = "sha256-quP5/eAMdEC+AOPDrBieAtAU9SmK/cMhMvk0gPngkUY=";
     };
 
-    propagatedBuildInputs = with python3Packages; [
+    propagatedBuildInputs = [
       rich
       platformdirs
       typing-extensions
@@ -41,16 +62,16 @@
     ];
 
     pyproject = true;
-    nativeBuildInputs = with python3Packages; [
+    nativeBuildInputs = [
       poetry-core
     ];
   };
 
-  textual-autocomplete = python3Packages.buildPythonPackage rec {
+  textual-autocomplete = buildPythonPackage rec {
     pname = "textual_autocomplete";
     version = "4.0.0a0";
 
-    src = python3Packages.fetchPypi {
+    src = fetchPypi {
       inherit pname version;
       sha256 = "sha256-wsjmgODvFgfbyqxW3jsH88JC8z0TZQOChLgics7wAHY=";
     };
@@ -80,7 +101,7 @@ in
       hatchling
     ];
 
-    propagatedBuildInputs = with python3Packages; [
+    propagatedBuildInputs = [
       httpx
       textual-2_1_2
       textual-autocomplete
@@ -103,7 +124,7 @@ in
     doCheck = true;
     pythonImportsCheck = ["posting"];
 
-    meta = with pkgs.lib; {
+    meta = {
       description = "Command-line HTTP client";
       homepage = "https://github.com/darrenburns/posting";
       license = licenses.mit;
