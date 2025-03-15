@@ -52,6 +52,7 @@ makeBinaryWrapper() {
         -Wno-overlength-strings \
         -Os \
         -x c \
+        @static@ \
         -o "$wrapper" -
 }
 
