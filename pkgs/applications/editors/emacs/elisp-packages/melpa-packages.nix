@@ -1633,6 +1633,8 @@ let
         # missing optional dependencies
         suggest = addPackageRequires super.suggest [ self.shut-up ];
 
+        sx = ignoreCompilationError super.sx; # elisp error
+
         symex = ignoreCompilationError super.symex; # elisp error
 
         term-alert = mkHome super.term-alert;
