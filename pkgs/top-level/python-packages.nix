@@ -10420,6 +10420,8 @@ self: super: with self; {
     callPackage ../development/python-modules/netbox-interface-synchronization
       { };
 
+  netbox-kea = callPackage ../development/python-modules/netbox-kea { };
+
   netbox-napalm-plugin = callPackage ../development/python-modules/netbox-napalm-plugin { };
 
   netbox-plugin-prometheus-sd =
