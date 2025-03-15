@@ -1,4 +1,4 @@
-{ pkgs ? import <nixpkgs> {} }: let
+{ buildPythonPackage, hatchling }: let
   python3Packages = pkgs.python3Packages;
 
   textual-0_86_2 = python3Packages.buildPythonPackage rec {
