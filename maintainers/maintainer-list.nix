@@ -3119,6 +3119,12 @@
     github = "blakesmith";
     githubId = 44368;
   };
+  blackzeshi = {
+    name = "Blackzeshi";
+    email = "student7488@gmail.com";
+    gihub = "zeshi09"
+    githubId = 105582686;
+  };
   blankparticle = {
     name = "BlankParticle";
     email = "blankparticle@gmail.com";
