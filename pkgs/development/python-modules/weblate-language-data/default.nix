@@ -29,6 +29,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Language definitions used by Weblate";
     homepage = "https://github.com/WeblateOrg/language-data";
+    changelog = "https://github.com/WeblateOrg/language-data/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ erictapen ];
   };
