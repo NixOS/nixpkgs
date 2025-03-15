@@ -1,0 +1,79 @@
+From c71d844f5639ea447b9f795a4db5b5d43f0de814 Mon Sep 17 00:00:00 2001
+From: Khem Raj <raj.khem@gmail.com>
+Date: Tue, 2 Jul 2024 21:41:24 -0700
+Subject: [PATCH] Remove defining 'const' as nothing
+
+This is a hack to override constness of struct members
+however, with modern compiler like clang with fortified
+glibc ( 2.40+ ) headers this runs into compiler errors
+
+| /mnt/b/yoe/master/build/tmp/work/riscv64-yoe-linux/flite/2.2/recipe-sysroot/usr/include/bits/stdlib.h:38:54: error: pass_object_size attribute only applies to constant pointer arguments
+|    38 |                  __fortify_clang_overload_arg (char *, __restrict, __resolved)))
+|       |                                                                    ^
+| /mnt/b/yoe/master/build/tmp/work/riscv64-yoe-linux/flite/2.2/recipe-sysroot/usr/include/bits/stdlib.h:73:43: error: pass_object_size attribute only applies to constant pointer arguments
+|    73 |                  __fortify_clang_overload_arg (char *, ,__buf),
+|       |                                                         ^
+| /mnt/b/yoe/master/build/tmp/work/riscv64-yoe-linux/flite/2.2/recipe-sysroot/usr/include/bits/stdlib.h:91:55: error: pass_object_size attribute only applies to constant pointer arguments
+|    91 | __NTH (wctomb (__fortify_clang_overload_arg (char *, ,__s), wchar_t __wchar))
+|       |                                                       ^
+| /mnt/b/yoe/master/build/tmp/work/riscv64-yoe-linux/flite/2.2/recipe-sysroot/usr/include/bits/stdlib.h:129:71: error: pass_object_size attribute only applies to constant pointer arguments
+|   129 | __NTH (mbstowcs (__fortify_clang_overload_arg (wchar_t *, __restrict, __dst),
+|       |                                                                       ^
+| /mnt/b/yoe/master/build/tmp/work/riscv64-yoe-linux/flite/2.2/recipe-sysroot/usr/include/bits/stdlib.h:159:68: error: pass_object_size attribute only applies to constant pointer arguments
+|   159 | __NTH (wcstombs (__fortify_clang_overload_arg (char *, __restrict, __dst),
+|       |                                                                    ^
+| 5 errors generated.
+|
+
+Therefore take this out, instead cast away the 'const' qualifier where needed ( equilly dangerous )
+however limited to just this file instead of apply to all headers including system headers
+
+Upstream-Status: Submitted [https://github.com/festvox/flite/pull/112]
+Signed-off-by: Khem Raj <raj.khem@gmail.com>
+---
+ tools/find_sts_main.c | 11 ++++-------
+ 1 file changed, 4 insertions(+), 7 deletions(-)
+
+diff --git a/tools/find_sts_main.c b/tools/find_sts_main.c
+index 3c94449..a5bf8ef 100644
+--- a/tools/find_sts_main.c
++++ b/tools/find_sts_main.c
+@@ -41,9 +41,6 @@
+ #include <math.h>
+ #include <string.h>
+ 
+-/* To allow some normally const fields to manipulated during building */
+-#define const
+-
+ #include "cst_args.h"
+ #include "cst_wave.h"
+ #include "cst_track.h"
+@@ -132,16 +129,16 @@ cst_sts *find_sts(cst_wave *sig, cst_track *lpc)
+ 			lpc->frames[i],lpc->num_channels,
+ 			resd,
+ 			size);
+-	sts[i].size = size;
++	*(int *)(&sts[i].size) = size;
+ 	sts[i].frame = cst_alloc(unsigned short,lpc->num_channels-1);
+ 	for (j=1; j < lpc->num_channels; j++)
+-	    sts[i].frame[j-1] = (unsigned short)
++	    *(unsigned short *)(&sts[i].frame[j-1]) = (unsigned short)
+ 		(((lpc->frames[i][j]-lpc_min)/lpc_range)*65535);
+         if (cst_streq(residual_codec,"ulaw"))
+         {
+             sts[i].residual = cst_alloc(unsigned char,size);
+             for (j=0; j < size; j++)
+-                sts[i].residual[j] = cst_short_to_ulaw((short)resd[j]);
++                *(unsigned char *)(&sts[i].residual[j]) = cst_short_to_ulaw((short)resd[j]);
+         }
+         else if (cst_streq(residual_codec,"g721"))
+         {
+@@ -189,7 +186,7 @@ cst_sts *find_sts(cst_wave *sig, cst_track *lpc)
+             {
+                 sts[i].residual = cst_alloc(unsigned char,size);
+                 for (j=0; j < size; j++)
+-                    sts[i].residual[j] = cst_short_to_ulaw((short)resd[j]);
++                    *(unsigned char *)(&sts[i].residual[j]) = cst_short_to_ulaw((short)resd[j]);
+             } 
+             else /* Unvoiced frame */
+             {
