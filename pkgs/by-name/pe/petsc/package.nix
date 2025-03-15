@@ -174,7 +174,28 @@ stdenv.mkDerivation rec {
   # the library is installed and available.
   doInstallCheck = true;
   installCheckTarget = "check_install";
-  nativeInstallCheckInputs = [ mpiCheckPhaseHook ];
+
+  # The PETSC4PY=no flag disables the ex100 test,
+  # which compiles C code to load Python modules for solving a math problem.
+  # This test fails on the Darwin platform but is rarely a common use case for petsc4py.
+  installCheckFlags = lib.optional stdenv.hostPlatform.isDarwin "PETSC4PY=no";
+
+  nativeInstallCheckInputs =
+    [
+      mpiCheckPhaseHook
+    ]
+    ++ lib.optionals pythonSupport [
+      python3Packages.pythonImportsCheckHook
+      python3Packages.unittestCheckHook
+    ];
+
+  unittestFlagsArray = [
+    "-s"
+    "src/binding/petsc4py/test"
+    "-v"
+  ];
+
+  pythonImportsCheck = [ "petsc4py" ];
 
   passthru = {
     inherit mpiSupport pythonSupport;
