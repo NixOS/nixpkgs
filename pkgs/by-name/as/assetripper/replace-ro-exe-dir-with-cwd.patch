@@ -1,0 +1,117 @@
+diff --git a/Source/AssetRipper.IO.Files/Utils/TemporaryFileStorage.cs b/Source/AssetRipper.IO.Files/Utils/TemporaryFileStorage.cs
+index e5b8a41..ef8cdc5 100644
+--- a/Source/AssetRipper.IO.Files/Utils/TemporaryFileStorage.cs
++++ b/Source/AssetRipper.IO.Files/Utils/TemporaryFileStorage.cs
+@@ -2,7 +2,7 @@
+ 
+ public static class TemporaryFileStorage
+ {
+-	private static string ExecutingDirectory => AppContext.BaseDirectory;
++	private static string ExecutingDirectory => System.Environment.CurrentDirectory;
+ 
+ 	public static string LocalTemporaryDirectory { get; } = Path.Combine(ExecutingDirectory, "temp", GetRandomString()[0..4]);
+ 
+diff --git a/Source/AssetRipper.Import/Utils/ExecutingDirectory.cs b/Source/AssetRipper.Import/Utils/ExecutingDirectory.cs
+index 9a510a0..ecd281f 100644
+--- a/Source/AssetRipper.Import/Utils/ExecutingDirectory.cs
++++ b/Source/AssetRipper.Import/Utils/ExecutingDirectory.cs
+@@ -4,7 +4,7 @@
+ 	{
+ 		static ExecutingDirectory()
+ 		{
+-			Info = new DirectoryInfo(AppContext.BaseDirectory);
++			Info = new DirectoryInfo(System.Environment.CurrentDirectory);
+ 		}
+ 
+ 		public static DirectoryInfo Info { get; }
+diff --git a/Source/AssetRipper.Tools.CabMapGenerator/Program.cs b/Source/AssetRipper.Tools.CabMapGenerator/Program.cs
+index 244eb02..a5f9e7a 100644
+--- a/Source/AssetRipper.Tools.CabMapGenerator/Program.cs
++++ b/Source/AssetRipper.Tools.CabMapGenerator/Program.cs
+@@ -30,7 +30,7 @@ namespace AssetRipper.Tools.CabMapGenerator
+ 
+ 				if (string.IsNullOrEmpty(outputFile))
+ 				{
+-					outputFile = Path.Combine(AppContext.BaseDirectory, "cabmap.json");
++					outputFile = Path.Combine(System.Environment.CurrentDirectory, "cabmap.json");
+ 				}
+ 				using FileStream stream = File.Create(outputFile);
+ 				Dictionary<string, string> map = new();
+diff --git a/Source/AssetRipper.Tools.DependenceGrapher/Program.cs b/Source/AssetRipper.Tools.DependenceGrapher/Program.cs
+index 5b0ba5f..6d66d63 100644
+--- a/Source/AssetRipper.Tools.DependenceGrapher/Program.cs
++++ b/Source/AssetRipper.Tools.DependenceGrapher/Program.cs
+@@ -96,7 +96,7 @@ namespace AssetRipper.Tools.DependenceGrapher
+ 				List<IAssetFilter> filters = CreateFilterList(name, className, classID, pathID);
+ 				if (string.IsNullOrEmpty(outputFile))
+ 				{
+-					outputFile = Path.Combine(AppContext.BaseDirectory, "output.txt");
++					outputFile = Path.Combine(System.Environment.CurrentDirectory, "output.txt");
+ 				}
+ 				using FileStream stream = File.Create(outputFile);
+ 				using TextWriter writer = new StreamWriter(stream);
+diff --git a/Source/AssetRipper.Tools.FileExtractor/Program.cs b/Source/AssetRipper.Tools.FileExtractor/Program.cs
+index 3e9869a..5685909 100644
+--- a/Source/AssetRipper.Tools.FileExtractor/Program.cs
++++ b/Source/AssetRipper.Tools.FileExtractor/Program.cs
+@@ -7,7 +7,7 @@ namespace AssetRipper.Tools.FileExtractor
+ {
+ 	internal class Program
+ 	{
+-		private static readonly string outputDirectory = Path.Combine(AppContext.BaseDirectory, "Output");
++		private static readonly string outputDirectory = Path.Combine(System.Environment.CurrentDirectory, "Output");
+ 
+ 		static void Main(string[] args)
+ 		{
+diff --git a/Source/AssetRipper.Tools.JsonSerializer/Program.cs b/Source/AssetRipper.Tools.JsonSerializer/Program.cs
+index d75b815..410bdd3 100644
+--- a/Source/AssetRipper.Tools.JsonSerializer/Program.cs
++++ b/Source/AssetRipper.Tools.JsonSerializer/Program.cs
+@@ -10,7 +10,7 @@ namespace AssetRipper.Tools.JsonSerializer;
+ 
+ internal static class Program
+ {
+-	private static readonly string outputDirectory = Path.Combine(AppContext.BaseDirectory, "Output");
++	private static readonly string outputDirectory = Path.Combine(System.Environment.CurrentDirectory, "Output");
+ 
+ 	static void Main(string[] args)
+ 	{
+diff --git a/Source/AssetRipper.Tools.RawTextureExtractor/Program.cs b/Source/AssetRipper.Tools.RawTextureExtractor/Program.cs
+index 2357237..cfee7a1 100644
+--- a/Source/AssetRipper.Tools.RawTextureExtractor/Program.cs
++++ b/Source/AssetRipper.Tools.RawTextureExtractor/Program.cs
+@@ -19,7 +19,7 @@ namespace AssetRipper.Tools.RawTextureExtractor
+ {
+ 	internal static class Program
+ 	{
+-		private static readonly string outputDirectory = Path.Combine(AppContext.BaseDirectory, "Output");
++		private static readonly string outputDirectory = Path.Combine(System.Environment.CurrentDirectory, "Output");
+ 
+ 		static void Main(string[] args)
+ 		{
+diff --git a/Source/AssetRipper.Tools.SystemTester/Program.cs b/Source/AssetRipper.Tools.SystemTester/Program.cs
+index 0f5b46a..0e2866c 100644
+--- a/Source/AssetRipper.Tools.SystemTester/Program.cs
++++ b/Source/AssetRipper.Tools.SystemTester/Program.cs
+@@ -23,7 +23,7 @@ namespace AssetRipper.Tools.SystemTester
+ 			}
+ 			else
+ 			{
+-				Rip(args, Path.Combine(AppContext.BaseDirectory, "Ripped"));
++				Rip(args, Path.Combine(System.Environment.CurrentDirectory, "Ripped"));
+ 			}
+ 		}
+ 
+diff --git a/Source/AssetRipper.Tools.TypeTreeExtractor/Program.cs b/Source/AssetRipper.Tools.TypeTreeExtractor/Program.cs
+index 66f27e9..083c09f 100644
+--- a/Source/AssetRipper.Tools.TypeTreeExtractor/Program.cs
++++ b/Source/AssetRipper.Tools.TypeTreeExtractor/Program.cs
+@@ -7,7 +7,7 @@ namespace AssetRipper.Tools.TypeTreeExtractor
+ {
+ 	internal static class Program
+ 	{
+-		private static readonly string outputDirectory = System.IO.Path.Combine(AppContext.BaseDirectory, "Output");
++		private static readonly string outputDirectory = System.IO.Path.Combine(System.Environment.CurrentDirectory, "Output");
+ 
+ 		static void Main(string[] args)
+ 		{
