@@ -2921,10 +2921,6 @@ with pkgs;
 
   cmdpack = callPackages ../tools/misc/cmdpack { };
 
-  cobalt = callPackage ../applications/misc/cobalt {
-    inherit (darwin.apple_sdk.frameworks) CoreServices;
-  };
-
   cocoapods = callPackage ../development/tools/cocoapods { };
 
   cocoapods-beta = lowPrio (callPackage ../development/tools/cocoapods { beta = true; });
