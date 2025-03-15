@@ -29,7 +29,13 @@ buildGoModule rec {
   meta = with lib; {
     description = "GitLab Docker toolset to pack, ship, store, and deliver content";
     license = licenses.asl20;
-    maintainers = with maintainers; [ yayayayaka ] ++ teams.cyberus.members;
+    maintainers =
+      with maintainers;
+      [
+        leona
+        yayayayaka
+      ]
+      ++ teams.cyberus.members;
     platforms = platforms.unix;
   };
 }
