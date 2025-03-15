@@ -11,6 +11,7 @@
   common-updater-scripts,
   jq,
   unzip,
+  typescript,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -31,17 +32,17 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   installPhase = ''
     runHook preInstall
-    install -Dm755 server/bin/ngserver $out/lib/bin/ngserver
-    install -Dm755 server/index.js $out/lib/index.js
-    cp -r node_modules $out/lib/node_modules
+    install -Dm555 server/bin/ngserver $out/bin/ngserver
+    install -Dm444 server/index.js $out/index.js
+    mkdir -p $out/lib/node_modules
+    cp -r node_modules/@angular $out/lib/node_modules
     runHook postInstall
   '';
 
   postFixup = ''
-    patchShebangs $out/lib/bin/ngserver $out/lib/index.js $out/lib/node_modules
-    makeWrapper $out/lib/bin/ngserver $out/bin/ngserver \
+    wrapProgram $out/bin/ngserver \
       --prefix PATH : ${lib.makeBinPath [ nodejs ]} \
-      --add-flags "--tsProbeLocations $out/lib/node_modules --ngProbeLocations $out/lib/node_modules"
+      --add-flags "--tsProbeLocations ${typescript}/lib/node_modules/typescript --ngProbeLocations $out/lib/node_modules/@angular"
   '';
 
   passthru = {
