@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pyomo";
-  version = "6.8.2";
+  version = "6.9.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     repo = "pyomo";
     owner = "pyomo";
     tag = version;
-    hash = "sha256-n/Nt9omZfYSK/dvfp82aGfWIAAxF2mXYCJ1QcR6j8Ic=";
+    hash = "sha256-sEbvQ6U8eSzDPE3kVCektt92dpVV9JhZ4tKDtlHX42s=";
   };
 
   build-system = [ setuptools ];
@@ -54,7 +54,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python Optimization Modeling Objects";
     homepage = "http://www.pyomo.org/";
-    changelog = "https://github.com/Pyomo/pyomo/releases/tag/${version}";
+    changelog = "https://github.com/Pyomo/pyomo/releases/tag/${src.tag}";
     license = licenses.bsd3;
     maintainers = [ ];
     mainProgram = "pyomo";
