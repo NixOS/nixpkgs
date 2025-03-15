@@ -57,6 +57,7 @@
   version,
   hash,
   url,
+  withUnfree ? false,
 }:
 
 let
@@ -116,13 +117,16 @@ stdenv.mkDerivation rec {
     # during `fetchurl` to ensure that the build doesn’t cache the
     # unlicensed emoji files, but the rest of the work is done in the
     # main derivation.
-    postFetch = ''
-      dpkg-deb -x $downloadedFile $out
-      asar extract "$out/opt/${dir}/resources/app.asar" $out/asar-contents
-      rm -r \
-        "$out/opt/${dir}/resources/app.asar"{,.unpacked} \
-        $out/asar-contents/node_modules/emoji-datasource-apple
-    '';
+    postFetch =
+      ''
+        dpkg-deb -x $downloadedFile $out
+      ''
+      + lib.optionalString (!withUnfree) ''
+        asar extract "$out/opt/${dir}/resources/app.asar" $out/asar-contents
+        rm -r \
+          "$out/opt/${dir}/resources/app.asar"{,.unpacked} \
+          $out/asar-contents/node_modules/emoji-datasource-apple
+      '';
   };
 
   nativeBuildInputs = [
@@ -190,47 +194,52 @@ stdenv.mkDerivation rec {
     rsync -a --chmod=+w $src/ .
   '';
 
-  installPhase = ''
-    runHook preInstall
+  installPhase =
+    ''
+      runHook preInstall
 
-    mkdir -p $out/lib
+      mkdir -p $out/lib
 
-    mv usr/share $out/share
-    mv "opt/${dir}" "$out/lib/${dir}"
+      mv usr/share $out/share
+      mv "opt/${dir}" "$out/lib/${dir}"
 
-    # Symlink to bin
-    mkdir -p $out/bin
-    ln -s "$out/lib/${dir}/${pname}" $out/bin/${pname}
+      # Symlink to bin
+      mkdir -p $out/bin
+      ln -s "$out/lib/${dir}/${pname}" $out/bin/${pname}
 
-    # Create required symlinks:
-    ln -s libGLESv2.so "$out/lib/${dir}/libGLESv2.so.2"
+      # Create required symlinks:
+      ln -s libGLESv2.so "$out/lib/${dir}/libGLESv2.so.2"
+    ''
+    + lib.optionalString (!withUnfree) ''
 
-    # Copy the Noto Color Emoji PNGs into the ASAR contents. See `src`
-    # for the motivation, and the script for the technical details.
-    emojiPrefix=$(
-      python3 ${./copy-noto-emoji.py} \
-      ${noto-fonts-color-emoji-png}/share/noto-fonts-color-emoji-png \
-      asar-contents
-    )
+      # Copy the Noto Color Emoji PNGs into the ASAR contents. See `src`
+      # for the motivation, and the script for the technical details.
+      emojiPrefix=$(
+        python3 ${./copy-noto-emoji.py} \
+        ${noto-fonts-color-emoji-png}/share/noto-fonts-color-emoji-png \
+        asar-contents
+      )
 
-    # Replace the URL used for fetching large versions of emoji with
-    # the local path to our copied PNGs.
-    substituteInPlace asar-contents/preload.bundle.js \
-      --replace-fail \
-        'emoji://jumbo?emoji=' \
-        "file://$out/lib/${lib.escapeURL dir}/resources/app.asar/$emojiPrefix/"
+      # Replace the URL used for fetching large versions of emoji with
+      # the local path to our copied PNGs.
+      substituteInPlace asar-contents/preload.bundle.js \
+        --replace-fail \
+          'emoji://jumbo?emoji=' \
+          "file://$out/lib/${lib.escapeURL dir}/resources/app.asar/$emojiPrefix/"
 
-    # `asar(1)` copies files from the corresponding `.unpacked`
-    # directory when extracting, and will put them back in the modified
-    # archive if you don’t specify them again when repacking. Signal
-    # leaves their native `.node` libraries unpacked, so we match that.
-    asar pack \
-      --unpack '*.node' \
-      asar-contents \
-      "$out/lib/${dir}/resources/app.asar"
+      # `asar(1)` copies files from the corresponding `.unpacked`
+      # directory when extracting, and will put them back in the modified
+      # archive if you don’t specify them again when repacking. Signal
+      # leaves their native `.node` libraries unpacked, so we match that.
+      asar pack \
+        --unpack '*.node' \
+        asar-contents \
+        "$out/lib/${dir}/resources/app.asar"
+    ''
+    + ''
 
-    runHook postInstall
-  '';
+      runHook postInstall
+    '';
 
   preFixup = ''
     gappsWrapperArgs+=(
@@ -267,7 +276,7 @@ stdenv.mkDerivation rec {
 
       # Various npm packages
       lib.licenses.free
-    ];
+    ] ++ lib.optional withUnfree lib.licenses.unfree;
     maintainers = with lib.maintainers; [
       mic92
       equirosa
