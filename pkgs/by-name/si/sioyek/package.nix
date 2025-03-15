@@ -4,7 +4,7 @@
   installShellFiles,
   fetchFromGitHub,
   freetype,
-  nix-update-script,
+  unstableGitUpdater,
   gumbo,
   harfbuzz,
   jbig2dec,
@@ -15,13 +15,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "sioyek";
-  version = "2.0.0-unstable-2025-02-20";
+  version = "2.0.0-unstable-2025-03-11";
 
   src = fetchFromGitHub {
     owner = "ahrm";
     repo = "sioyek";
-    rev = "a64ad82b2c14e1ef821c13ddf1291ebb6aaafca6";
-    hash = "sha256-aI8GqXAgyh5VkayEQbaXOK+JQKzqVqQs8RO3CdOsgX8=";
+    rev = "b3575d9634d6c305cdf555a383e019a1e9013f2a";
+    hash = "sha256-a6zIgFe8bHrqXAtCC4/LC5jl3hy2Cs1xZBI91sKQgqw=";
   };
 
   buildInputs =
@@ -74,11 +74,9 @@ stdenv.mkDerivation (finalAttrs: {
         installManPage resources/sioyek.1
       '';
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version"
-      "branch=development"
-    ];
+  passthru.updateScript = unstableGitUpdater {
+    branch = "development";
+    tagPrefix = "v";
   };
 
   meta = with lib; {
