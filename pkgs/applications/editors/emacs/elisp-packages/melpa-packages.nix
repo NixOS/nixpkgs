@@ -1334,6 +1334,8 @@ let
         # missing optional dependencies
         lispy = addPackageRequires (mkHome super.lispy) [ self.indium ];
 
+        lsp-origami = ignoreCompilationError super.lsp-origami; # elisp error
+
         # missing optional dependencies
         magik-mode = addPackageRequires super.magik-mode [
           self.auto-complete
