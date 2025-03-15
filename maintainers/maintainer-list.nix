@@ -4884,6 +4884,12 @@
     githubId = 6470493;
     name = "Craige McWhirter";
   };
+  craigf = {
+    email = "craig@craigfurman.dev";
+    github = "craigfurman";
+    githubId = 4772216;
+    name = "Craig Furman";
+  };
   cransom = {
     email = "cransom@hubns.net";
     github = "cransom";
