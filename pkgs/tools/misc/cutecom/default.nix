@@ -7,7 +7,7 @@
   wrapQtAppsHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "cutecom";
   version = "0.51.0+patch";
 

@@ -46,7 +46,7 @@ let
   ];
 
 in
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication {
   inherit src version;
 
   pname = "portmod";

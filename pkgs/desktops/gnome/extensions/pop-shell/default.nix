@@ -8,7 +8,7 @@
   unstableGitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "gnome-shell-extension-pop-shell";
   version = "1.2.0-unstable-2025-02-20";
 

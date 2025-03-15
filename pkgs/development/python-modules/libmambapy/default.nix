@@ -21,7 +21,7 @@
   wheel,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "libmambapy";
   pyproject = true;
 
