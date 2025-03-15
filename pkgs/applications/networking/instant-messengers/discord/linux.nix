@@ -65,12 +65,11 @@
   withMoonlight ? false,
   moonlight,
   withTTS ? true,
+  enableAutoscroll ? false,
 }:
-
 assert lib.assertMsg (
   !(withMoonlight && withVencord)
 ) "discord: Moonlight and Vencord can not be enabled at the same time";
-
 let
   disableBreakingUpdates =
     runCommand "disable-breaking-updates.py"
@@ -86,7 +85,6 @@ let
         chmod +x $out/bin/disable-breaking-updates.py
       '';
 in
-
 stdenv.mkDerivation rec {
   inherit
     pname
@@ -211,7 +209,9 @@ stdenv.mkDerivation rec {
 
   desktopItem = makeDesktopItem {
     name = pname;
-    exec = binaryName;
+    exec =
+      binaryName
+      + lib.strings.optionalString enableAutoscroll " --enable-blink-features=MiddleClickAutoscroll";
     icon = pname;
     inherit desktopName;
     genericName = meta.description;
