@@ -68,6 +68,11 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonBool "nvidia_suspend_fix" false)
   ];
 
+  postPatch = ''
+    substituteInPlace extra/gpu-screen-recorder.service \
+      --replace-fail "ExecStart=gpu-screen-recorder" "ExecStart=$out/bin/gpu-screen-recorder"
+  '';
+
   postInstall = ''
     mkdir $out/bin/.wrapped
     mv $out/bin/gpu-screen-recorder $out/bin/.wrapped/
