@@ -21,6 +21,9 @@ melpaBuild {
 
   files = ''(:defaults "msg")'';
 
+  # https://debbugs.gnu.org/cgi/bugreport.cgi?bug=76573
+  ignoreCompilationError = true;
+
   passthru.updateScript = unstableGitUpdater { tagPrefix = "v"; };
 
   meta = {
