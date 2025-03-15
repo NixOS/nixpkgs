@@ -22,7 +22,7 @@
   libexif,
   libavif,
   libsixel,
-  openexr_3,
+  openexr,
   bash-completion,
   testers,
   nix-update-script,
@@ -74,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
     libexif
     libavif
     libsixel
-    openexr_3
+    openexr
   ];
 
   passthru = {

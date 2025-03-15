@@ -25,7 +25,7 @@
   jpegSupport ? true,
   libjpeg,
   exrSupport ? false,
-  openexr_3,
+  openexr,
   gifSupport ? true,
   giflib,
   pngSupport ? true,
@@ -97,7 +97,7 @@ stdenv.mkDerivation rec {
       zlib
     ]
     ++ lib.optional jpegSupport libjpeg
-    ++ lib.optional exrSupport openexr_3
+    ++ lib.optional exrSupport openexr
     ++ lib.optional gifSupport giflib
     ++ lib.optional pngSupport libpng
     ++ lib.optional tiffSupport libtiff

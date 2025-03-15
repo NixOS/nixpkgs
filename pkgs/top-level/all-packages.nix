@@ -300,10 +300,6 @@ with pkgs;
 
   coolercontrol = recurseIntoAttrs (callPackage ../applications/system/coolercontrol { });
 
-  curv = callPackage ../by-name/cu/curv/package.nix {
-    openexr = openexr_3;
-  };
-
   databricks-sql-cli = python3Packages.callPackage ../applications/misc/databricks-sql-cli { };
 
   deck = callPackage ../by-name/de/deck/package.nix {
@@ -4500,7 +4496,6 @@ with pkgs;
     libclang = llvmPackages_15.libclang;
     clang = clang_15;
     llvm = llvm_15;
-    openexr = openexr_3;
   };
 
   ossec-agent = callPackage ../tools/security/ossec/agent.nix { };
@@ -8746,6 +8741,7 @@ with pkgs;
 
   freeimage = callPackage ../development/libraries/freeimage {
     inherit (darwin) autoSignDarwinBinariesHook;
+    openexr = openexr_2;
   };
 
   freeipa = callPackage ../os-specific/linux/freeipa {
@@ -8792,6 +8788,7 @@ with pkgs;
 
   gegl = callPackage ../development/libraries/gegl {
     inherit (darwin.apple_sdk.frameworks) OpenCL;
+    openexr = openexr_2;
   };
 
   gensio = darwin.apple_sdk_11_0.callPackage ../development/libraries/gensio { };
@@ -10066,6 +10063,7 @@ with pkgs;
     # TODO: LTO does not work.
     # https://github.com/NixOS/nixpkgs/issues/343123
     enableLto = false;
+    openexr = openexr_2;
   };
 
   opencv4WithoutCuda = opencv4.override {
@@ -10074,9 +10072,8 @@ with pkgs;
 
   opencv = opencv4;
 
-  openexr = openexr_2;
-  openexr_2 = callPackage ../development/libraries/openexr { };
-  openexr_3 = callPackage ../development/libraries/openexr/3.nix { };
+  openexr = callPackage ../development/libraries/openexr/default.nix { };
+  openexr_2 = callPackage ../development/libraries/openexr/2.nix { };
 
   opencolorio = darwin.apple_sdk_11_0.callPackage ../development/libraries/opencolorio {
     inherit (darwin.apple_sdk_11_0.frameworks) Carbon GLUT Cocoa;
@@ -10643,7 +10640,6 @@ with pkgs;
 
   vigra = callPackage ../development/libraries/vigra {
     hdf5 = hdf5.override { usev110Api = true; };
-    openexr = openexr_3;
   };
 
   vllm = with python3Packages; toPythonApplication vllm;
@@ -12787,9 +12783,7 @@ with pkgs;
 
   airwave = libsForQt5.callPackage ../applications/audio/airwave { };
 
-  alembic = callPackage ../development/libraries/alembic {
-    openexr = openexr_3;
-  };
+  alembic = callPackage ../development/libraries/alembic { };
 
   amarok = libsForQt5.callPackage ../applications/audio/amarok { };
   amarok-kf5 = amarok; # for compatibility
@@ -12887,7 +12881,6 @@ with pkgs;
   };
 
   blender = callPackage  ../applications/misc/blender {
-    openexr = openexr_3;
     python3Packages = python311Packages;
     inherit (darwin.apple_sdk.frameworks) Cocoa CoreGraphics ForceFeedback OpenAL OpenGL;
   };
@@ -13047,6 +13040,8 @@ with pkgs;
   direwolf = callPackage ../applications/radio/direwolf {
     hamlib = hamlib_4;
   };
+
+  djv = callPackage ../by-name/dj/djv/package.nix { openexr = openexr_2; };
 
   djview = libsForQt5.callPackage ../applications/graphics/djview { };
   djview4 = djview;
@@ -13622,7 +13617,6 @@ with pkgs;
 
   hugin = callPackage ../applications/graphics/hugin {
     wxGTK = wxGTK32;
-    openexr = openexr_3;
   };
 
   huggle = libsForQt5.callPackage ../applications/misc/huggle { };
@@ -13818,7 +13812,6 @@ with pkgs;
 
   imagemagick = lowPrio (callPackage ../applications/graphics/ImageMagick {
     inherit (darwin.apple_sdk.frameworks) ApplicationServices Foundation;
-    openexr = openexr_3;
   });
 
   imagemagickBig = lowPrio (imagemagick.override {
@@ -14105,7 +14098,9 @@ with pkgs;
     portaudio = null;
   };
 
-  luminanceHDR = libsForQt5.callPackage ../applications/graphics/luminance-hdr { };
+  luminanceHDR = libsForQt5.callPackage ../applications/graphics/luminance-hdr {
+    openexr = openexr_2;
+  };
 
   luddite = with python3Packages; toPythonApplication luddite;
 
@@ -14533,7 +14528,6 @@ with pkgs;
   };
 
   openimageio = darwin.apple_sdk_11_0.callPackage ../development/libraries/openimageio {
-    openexr = openexr_3;
   };
 
   open-music-kontrollers = lib.recurseIntoAttrs {
