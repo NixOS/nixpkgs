@@ -29,6 +29,7 @@
   libepoxy,
   bash,
   gnome-session-ctl,
+  x11Support ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -68,18 +69,25 @@ stdenv.mkDerivation (finalAttrs: {
     dbus # for DTD
   ];
 
-  buildInputs = [
-    glib
-    gtk3
-    libICE
-    gnome-desktop
-    json-glib
-    xorg.xtrans
-    adwaita-icon-theme
-    gnome-settings-daemon
-    gsettings-desktop-schemas
-    systemd
-    libepoxy
+  buildInputs =
+    [
+      glib
+      gtk3
+      gnome-desktop
+      json-glib
+      adwaita-icon-theme
+      gnome-settings-daemon
+      gsettings-desktop-schemas
+      systemd
+    ]
+    ++ lib.optionals x11Support [
+      libICE
+      libepoxy
+      xorg.xtrans
+    ];
+
+  mesonFlags = [
+    (lib.mesonBool "x11" x11Support)
   ];
 
   postPatch = ''
@@ -98,14 +106,17 @@ stdenv.mkDerivation (finalAttrs: {
   # We move the GNOME sessions to another output since gnome-session is a dependency of
   # GDM itself. If we do not hide them, it will show broken GNOME sessions when GDM is
   # enabled without proper GNOME installation.
-  postInstall = ''
-    mkdir $sessions
-    moveToOutput share/wayland-sessions "$sessions"
-    moveToOutput share/xsessions "$sessions"
+  postInstall =
+    ''
+      mkdir $sessions
+      moveToOutput share/wayland-sessions "$sessions"
 
-    # Our provided one is being used
-    rm -rf $out/libexec/gnome-session-ctl
-  '';
+      # Our provided one is being used
+      rm -rf $out/libexec/gnome-session-ctl
+    ''
+    + lib.optionalString x11Support ''
+      moveToOutput share/xsessions "$sessions"
+    '';
 
   # `bin/gnome-session` will reset the environment when run in wayland, we
   # therefor wrap `libexec/gnome-session-binary` instead which is the actual
@@ -121,13 +132,17 @@ stdenv.mkDerivation (finalAttrs: {
   separateDebugInfo = true;
 
   passthru = {
+    tests = {
+      noX11Support = finalAttrs.finalPackage.override { x11Support = false; };
+    };
+
     updateScript = gnome.updateScript {
       packageName = "gnome-session";
     };
+
     providedSessions = [
       "gnome"
-      "gnome-xorg"
-    ];
+    ] ++ lib.optional x11Support "gnome-xorg";
   };
 
   meta = with lib; {
