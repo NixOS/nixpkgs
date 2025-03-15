@@ -22,7 +22,7 @@ tags
 .version-suffix
 .direnv
 .envrc
-
+/pkgs/development/python-modules/nglview/flake.*
 .DS_Store
 .mypy_cache
 __pycache__
