@@ -42,16 +42,26 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  postPatch = ''
-    substituteInPlace cmake/tools/version_files.py \
-      --replace-fail "args.git_version" '"${finalAttrs.version}"' \
-      --replace-fail "args.git_hash" '"${finalAttrs.src.rev}"' \
-      --replace-fail "args.git_date" '"1970-01-01"'
-  '';
+  postPatch =
+    ''
+      substituteInPlace cmake/tools/version_files.py \
+        --replace-fail "args.git_version" '"${finalAttrs.version}"' \
+        --replace-fail "args.git_hash" '"${finalAttrs.src.rev}"' \
+        --replace-fail "args.git_date" '"1970-01-01"'
+
+    ''
+    + lib.optionalString (!stdenv.hostPlatform.avxSupport) ''
+      substituteInPlace cmake/modules/Compiler/GNU.cmake \
+        --replace-fail "-mavx" ""
+
+       substituteInPlace src/core/decoder/src/common/simd.c \
+        --replace-fail "((_xgetbv(kControlRegister) & kOSXSaveMask) == kOSXSaveMask)" "false"
+    '';
 
   env = {
     includedir = "${placeholder "dev"}/include";
     libdir = "${placeholder "out"}/lib";
+    NIX_CFLAGS_COMPILE = "-Wno-error=unused-variable";
   };
 
   pkgconfigItems = [
@@ -95,6 +105,9 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "VN_SDK_FFMPEG_LIBS_PACKAGE" "")
     (lib.cmakeBool "VN_SDK_UNIT_TESTS" false)
     (lib.cmakeBool "VN_SDK_SAMPLE_SOURCE" false)
+    (lib.cmakeBool "VN_CORE_AVX2" stdenv.hostPlatform.avx2Support)
+    # Requires avx for checking on runtime
+    (lib.cmakeBool "VN_CORE_SSE" stdenv.hostPlatform.avxSupport)
   ];
 
   passthru = {
