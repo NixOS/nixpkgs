@@ -41,6 +41,15 @@
   "module-services-crab-hole-upstream-options": [
     "index.html#module-services-crab-hole-upstream-options"
   ],
+  "module-services-postal": [
+    "index.html#module-services-postal"
+  ],
+  "module-services-postal-basic-usage": [
+    "index.html#module-services-postal-basic-usage"
+  ],
+  "module-services-postal-emails-deliverability": [
+    "index.html#module-services-postal-emails-deliverability"
+  ],
   "preface": [
     "index.html#preface"
   ],
