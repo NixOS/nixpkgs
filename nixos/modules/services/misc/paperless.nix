@@ -262,6 +262,19 @@ in
       };
     };
 
+    configureNginx = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      example = true;
+      description = "Whether to configure nginx as a reverse proxy.";
+    };
+
+    domain = lib.mkOption {
+      type = lib.types.str;
+      example = "paperless.example.com";
+      description = "Domain under which paperless will be available.";
+    };
+
     exporter = {
       enable = lib.mkEnableOption "regular automatic document exports";
 
@@ -299,6 +312,27 @@ in
   config = lib.mkIf cfg.enable (lib.mkMerge [ {
     environment.systemPackages = [ manage ];
 
+    services.nginx = lib.mkIf cfg.configureNginx {
+      enable = true;
+      upstreams.paperless.servers."unix:/run/paperless/paperless.sock" = { };
+      virtualHosts.${cfg.domain} = {
+        forceSSL = lib.mkDefault true;
+        locations = {
+          "/".proxyPass = "http://paperless";
+          "/static/" = {
+            root = config.services.paperless.package;
+            extraConfig = ''
+              rewrite ^/(.*)$ /lib/paperless-ngx/$1 break;
+            '';
+          };
+          "/ws/status" = {
+            proxyPass = "http://paperless";
+            proxyWebsockets = true;
+          };
+        };
+      };
+    };
+
     services.redis.servers.paperless.enable = lib.mkIf enableRedis true;
 
     services.postgresql = lib.mkIf cfg.database.createLocally {
@@ -310,16 +344,30 @@ in
       }];
     };
 
-    services.paperless.settings = lib.mkIf cfg.database.createLocally {
-      PAPERLESS_DBENGINE = "postgresql";
-      PAPERLESS_DBHOST = "/run/postgresql";
-      PAPERLESS_DBNAME = "paperless";
-      PAPERLESS_DBUSER = "paperless";
-    };
+    services.paperless.settings = lib.mkMerge [
+      (lib.mkIf cfg.configureNginx {
+        GUNICORN_CMD_ARGS = "--bind /run/paperless/paperless.sock --keep-alive 65";
+        PAPERLESS_URL = "https://${cfg.domain}";
+      })
+      (lib.mkIf cfg.database.createLocally {
+        PAPERLESS_DBENGINE = "postgresql";
+        PAPERLESS_DBHOST = "/run/postgresql";
+        PAPERLESS_DBNAME = "paperless";
+        PAPERLESS_DBUSER = "paperless";
+      })
+    ];
 
-    systemd.slices.system-paperless = {
-      description = "Paperless Document Management System Slice";
-      documentation = [ "https://docs.paperless-ngx.com" ];
+    systemd = {
+      slices.system-paperless = {
+        description = "Paperless Document Management System Slice";
+        documentation = [ "https://docs.paperless-ngx.com" ];
+      };
+      sockets = lib.mkIf cfg.configureNginx {
+        paperless-web.socketConfig = {
+          ListenStream = "/run/paperless/paperless.sock";
+          SocketUser = "nginx";
+        };
+      };
     };
 
     systemd.tmpfiles.settings."10-paperless" = let
@@ -434,7 +482,8 @@ in
       # Bind to `paperless-scheduler` so that the web server never runs
       # during migrations
       bindsTo = [ "paperless-scheduler.service" ];
-      requires = lib.optional cfg.database.createLocally "postgresql.service";
+      requires = lib.optional cfg.configureNginx "paperless-web.socket"
+        ++ lib.optional cfg.database.createLocally "postgresql.service";
       after = [ "paperless-scheduler.service" ]
         ++ lib.optional cfg.database.createLocally "postgresql.service";
       # Setup PAPERLESS_SECRET_KEY.
@@ -467,6 +516,7 @@ in
         SystemCallFilter = defaultServiceConfig.SystemCallFilter ++ [ "@setuid mbind" ];
         # Needs to serve web page
         PrivateNetwork = false;
+        RuntimeDirectory = lib.mkIf cfg.configureNginx "paperless";
       };
       environment = env // {
         PYTHONPATH = "${cfg.package.python.pkgs.makePythonPath cfg.package.propagatedBuildInputs}:${cfg.package}/lib/paperless-ngx/src";
