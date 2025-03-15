@@ -1284,6 +1284,8 @@ let
         # TODO report to upstream
         jack-connect = addPackageRequires super.jack-connect [ self.dash ];
 
+        javap-mode = ignoreCompilationError super.javap-mode; # elisp error
+
         jdee = ignoreCompilationError super.jdee; # elisp error
 
         # https://github.com/fred-o/jekyll-modes/issues/6
