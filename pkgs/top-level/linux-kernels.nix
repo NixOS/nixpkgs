@@ -488,6 +488,8 @@ in {
 
     rtl8188eus-aircrack = callPackage ../os-specific/linux/rtl8188eus-aircrack { };
 
+    rtl8188fu = callPackage ../os-specific/linux/rtl8188fu { };
+
     rtl8192eu = callPackage ../os-specific/linux/rtl8192eu { };
 
     rtl8189es = callPackage ../os-specific/linux/rtl8189es { };
