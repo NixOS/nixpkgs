@@ -11,7 +11,7 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "lukesmithxyz-st";
   version = "0.pre+unstable=2021-08-10";
 

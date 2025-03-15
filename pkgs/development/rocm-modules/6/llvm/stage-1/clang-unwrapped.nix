@@ -5,7 +5,7 @@
   llvm,
 }:
 
-callPackage ../base.nix rec {
+callPackage ../base.nix {
   inherit stdenv rocmUpdateScript;
   targetName = "clang-unwrapped";
   targetDir = "clang";

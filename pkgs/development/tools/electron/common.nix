@@ -66,11 +66,7 @@ in
 
   src = null;
 
-  patches =
-    base.patches
-    ++ lib.optionals (lib.versions.major info.version == "32") [
-      ./fix-electron-32-patch-apply-without-git-3way.patch
-    ];
+  patches = base.patches;
 
   unpackPhase =
     ''
@@ -260,6 +256,7 @@ in
     maintainers = with maintainers; [
       yayayayaka
       teutat3s
+      tomasajt
     ];
     mainProgram = "electron";
     hydraPlatforms =

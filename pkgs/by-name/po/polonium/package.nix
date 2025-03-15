@@ -16,7 +16,7 @@ buildNpmPackage rec {
 
   src = fetchFromGitHub {
     owner = "zeroxoneafour";
-    repo = pname;
+    repo = "polonium";
     rev = "v" + version;
     hash = "sha256-AdMeIUI7ZdctpG/kblGdk1DBy31nDyolPVcTvLEHnNs=";
   };

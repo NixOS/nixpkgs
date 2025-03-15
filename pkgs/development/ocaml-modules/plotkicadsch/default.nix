@@ -15,7 +15,7 @@
   imagemagick,
 }:
 
-buildDunePackage rec {
+buildDunePackage {
   pname = "plotkicadsch";
   duneVersion = "3";
 

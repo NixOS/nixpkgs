@@ -53,18 +53,14 @@ let
       p = cfg.package.override (
         {
           inherit phpCfg;
-          withPgsql = cfg.database.type == "pgsql";
-          withMysql = cfg.database.type == "mysql";
           inherit (cfg) minifyStaticFiles;
         }
-        // lib.optionalAttrs (lib.isAttrs cfg.minifyStaticFiles) (
-          with cfg.minifyStaticFiles;
-          {
-            esbuild = esbuild.package;
-            lightningcss = lightningcss.package;
-            scour = scour.package;
-          }
-        )
+        // lib.optionalAttrs (cfg.database.type == "postgresql") {
+          withPostgreSQL = true;
+        }
+        // lib.optionalAttrs (cfg.database.type == "mysql") {
+          withMySQL = true;
+        }
       );
     in
     p.overrideAttrs (
@@ -254,18 +250,21 @@ in
       };
 
       minifyStaticFiles = mkOption {
-        type =
-          with types;
-          either bool (submodule {
+        type = types.either types.bool (
+          types.submodule {
             options = {
               script = mkOption {
                 type = types.submodule {
                   options = {
-                    enable = mkEnableOption "Script minification";
-                    package = mkPackageOption pkgs "esbuild" { };
+                    enable = mkEnableOption "Script minification via esbuild";
                     target = mkOption {
-                      type = with types; nullOr nonEmptyStr;
+                      type = types.nullOr types.nonEmptyStr;
                       default = null;
+                      description = ''
+                        esbuild target environment string. If not set, a sane
+                        default will be provided. See:
+                        <https://esbuild.github.io/api/#target>.
+                      '';
                     };
                   };
                 };
@@ -273,11 +272,15 @@ in
               style = mkOption {
                 type = types.submodule {
                   options = {
-                    enable = mkEnableOption "Script minification";
-                    package = mkPackageOption pkgs "lightningcss" { };
+                    enable = mkEnableOption "Script minification via Lightning CSS";
                     target = mkOption {
-                      type = with types; nullOr nonEmptyStr;
+                      type = types.nullOr types.nonEmptyStr;
                       default = null;
+                      description = ''
+                        Browserslists string target for browser compatibility.
+                        If not set, a sane default will be provided. See:
+                        <https://browsersl.ist>.
+                      '';
                     };
                   };
                 };
@@ -285,15 +288,34 @@ in
               svg = mkOption {
                 type = types.submodule {
                   options = {
-                    enable = mkEnableOption "SVG minification";
-                    package = mkPackageOption pkgs "scour" { };
+                    enable = mkEnableOption "SVG minification via Scour";
                   };
                 };
               };
             };
-          });
+          }
+        );
         default = true;
-        description = "Do minification on public static files";
+        description = ''
+          Do minification on public static files which reduces the size of
+          assets — saving data for the server & users as well as offering a
+          performance improvement. This adds typing for the `minifyStaticFiles`
+          attribute for the Movim package which *will* override any existing
+          override value. The default `true` will enable minification for all
+          supported asset types with sane defaults.
+        '';
+        example =
+          lib.literalExpression # nix
+            ''
+              {
+                script.enable = false;
+                style = {
+                  enable = true;
+                  target = "> 0.5%, last 2 versions, Firefox ESR, not dead";
+                };
+                svg.enable = true;
+              }
+            '';
       };
 
       precompressStaticFiles = mkOption {
@@ -500,7 +522,7 @@ in
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [ cfg.package ];
+    environment.systemPackages = [ package ];
 
     users = {
       users =
@@ -814,4 +836,16 @@ in
       };
     };
   };
+
+  imports = [
+    (lib.mkRemovedOptionModule [ "minifyStaticFiles" "script" "package" ] ''
+      Override services.movim.package instead.
+    '')
+    (lib.mkRemovedOptionModule [ "minifyStaticFiles" "style" "package" ] ''
+      Override services.movim.package instead.
+    '')
+    (lib.mkRemovedOptionModule [ "minifyStaticFiles" "svg" "package" ] ''
+      Override services.movim.package instead.
+    '')
+  ];
 }

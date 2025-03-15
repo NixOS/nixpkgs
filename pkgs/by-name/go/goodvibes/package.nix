@@ -21,8 +21,8 @@ stdenv.mkDerivation rec {
   version = "0.8.1";
 
   src = fetchFromGitLab {
-    owner = pname;
-    repo = pname;
+    owner = "goodvibes";
+    repo = "goodvibes";
     rev = "v${version}";
     hash = "sha256-zqJbtCqdwKXy13WWoAwSRYVhAOJsHqOF0DriSDEigbI=";
   };

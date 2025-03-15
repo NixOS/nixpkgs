@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "syrupy";
-  version = "4.8.2";
+  version = "4.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "syrupy-project";
     repo = "syrupy";
     tag = "v${version}";
-    hash = "sha256-3WC17rtk8FBNEECImIeiLnIFp/qsTGZSHxhh3F5K3G0=";
+    hash = "sha256-zG+dKCfJex4Njg0WludqQcgRU1BCf4HQhzd31/kCeCI=";
   };
 
   build-system = [ poetry-core ];

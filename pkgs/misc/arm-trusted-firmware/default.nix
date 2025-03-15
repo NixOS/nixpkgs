@@ -115,7 +115,7 @@ in
 {
   inherit buildArmTrustedFirmware;
 
-  armTrustedFirmwareTools = buildArmTrustedFirmware rec {
+  armTrustedFirmwareTools = buildArmTrustedFirmware {
     # Normally, arm-trusted-firmware builds the build tools for buildPlatform
     # using CC_FOR_BUILD (or as it calls it HOSTCC). Since want to build them
     # for the hostPlatform here, we trick it by overriding the HOSTCC setting

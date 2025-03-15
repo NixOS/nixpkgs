@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "dethrace-labs";
-    repo = pname;
+    repo = "dethrace";
     tag = "v${version}";
     hash = "sha256-Bt2wwF5cquXZwFpFyJ0TDmbFdTHbboQ93W/DvP9bsMo=";
     fetchSubmodules = true;

@@ -38,6 +38,7 @@
   webkitgtk_4_0,
   wxGTK31,
   xorg,
+  libnoise,
   withSystemd ? stdenv.hostPlatform.isLinux,
 }:
 let
@@ -54,15 +55,15 @@ let
         ];
       });
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "orca-slicer";
-  version = "v2.2.0-unstable-2025-01-23";
+  version = "v2.3.0-rc";
 
   src = fetchFromGitHub {
     owner = "SoftFever";
     repo = "OrcaSlicer";
-    rev = "1b1288c4353afca44edee323061bdd5c87fcafb9";
-    hash = "sha256-IPdKusP2cB5jgr6JjQVu8ZjJ2kiG6mfmfZtDVSlAFNg=";
+    tag = finalAttrs.version;
+    hash = "sha256-obQUn5vG+6g8PYK9Xatt3QiBPNWskoTs2Byi+1xabBk=";
   };
 
   nativeBuildInputs = [
@@ -116,9 +117,10 @@ stdenv.mkDerivation rec {
       wxGTK'
       xorg.libX11
       opencv
+      libnoise
     ]
     ++ lib.optionals withSystemd [ systemd ]
-    ++ checkInputs;
+    ++ finalAttrs.checkInputs;
 
   patches = [
     # Fix for webkitgtk linking
@@ -174,23 +176,22 @@ stdenv.mkDerivation rec {
 
   prePatch = ''
     sed -i 's|nlopt_cxx|nlopt|g' cmake/modules/FindNLopt.cmake
+    sed -i 's|"libnoise/noise.h"|"noise/noise.h"|' src/libslic3r/PerimeterGenerator.cpp
   '';
 
   cmakeFlags = [
-    "-DSLIC3R_STATIC=0"
-    "-DSLIC3R_FHS=1"
-    "-DSLIC3R_GTK=3"
-    "-DBBL_RELEASE_TO_PUBLIC=1"
-    "-DBBL_INTERNAL_TESTING=0"
-    "-DDEP_WX_GTK3=ON"
-    "-DSLIC3R_BUILD_TESTS=0"
-    "-DCMAKE_CXX_FLAGS=-DBOOST_LOG_DYN_LINK"
-    "-DBOOST_LOG_DYN_LINK=1"
-    "-DBOOST_ALL_DYN_LINK=1"
-    "-DBOOST_LOG_NO_LIB=OFF"
-    "-DCMAKE_CXX_FLAGS=-DGL_SILENCE_DEPRECATION"
-    "-DCMAKE_EXE_LINKER_FLAGS=-Wl,--no-as-needed"
-    "-DORCA_VERSION_CHECK_DEFAULT=OFF"
+    (lib.cmakeBool "SLIC3R_STATIC" false)
+    (lib.cmakeBool "SLIC3R_FHS" true)
+    (lib.cmakeFeature "SLIC3R_GTK" "3")
+    (lib.cmakeBool "BBL_RELEASE_TO_PUBLIC" true)
+    (lib.cmakeBool "BBL_INTERNAL_TESTING" false)
+    (lib.cmakeBool "SLIC3R_BUILD_TESTS" false)
+    (lib.cmakeFeature "CMAKE_CXX_FLAGS" "-DGL_SILENCE_DEPRECATION")
+    (lib.cmakeFeature "CMAKE_EXE_LINKER_FLAGS" "-Wl,--no-as-needed")
+    (lib.cmakeBool "ORCA_VERSION_CHECK_DEFAULT" false)
+    (lib.cmakeFeature "LIBNOISE_INCLUDE_DIR" "${libnoise}/include/noise")
+    (lib.cmakeFeature "LIBNOISE_LIBRARY" "${libnoise}/lib/libnoise-static.a")
+    "-Wno-dev"
   ];
 
   preFixup = ''
@@ -207,7 +208,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "G-code generator for 3D printers (Bambu, Prusa, Voron, VzBot, RatRig, Creality, etc.)";
     homepage = "https://github.com/SoftFever/OrcaSlicer";
-    changelog = "https://github.com/SoftFever/OrcaSlicer/releases/tag/v${version}";
+    changelog = "https://github.com/SoftFever/OrcaSlicer/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
       zhaofengli
@@ -218,4 +219,4 @@ stdenv.mkDerivation rec {
     mainProgram = "orca-slicer";
     platforms = lib.platforms.linux;
   };
-}
+})

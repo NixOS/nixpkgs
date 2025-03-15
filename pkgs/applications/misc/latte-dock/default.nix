@@ -19,7 +19,7 @@
   xorg,
 }:
 
-mkDerivation rec {
+mkDerivation {
   pname = "latte-dock";
   version = "unstable-2024-01-31";
 

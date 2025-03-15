@@ -118,9 +118,7 @@ in
         RuntimeDirectory = "tandoor-recipes";
 
         BindReadOnlyPaths = [
-          "${
-            config.environment.etc."ssl/certs/ca-certificates.crt".source
-          }:/etc/ssl/certs/ca-certificates.crt"
+          "${config.security.pki.caBundle}:/etc/ssl/certs/ca-certificates.crt"
           builtins.storeDir
           "-/etc/resolv.conf"
           "-/etc/nsswitch.conf"

@@ -83,6 +83,8 @@
   cmake,
   icu,
   ncurses,
+  # devdocs-nvim dependencies
+  pandoc,
   # Preview-nvim dependencies
   md-tui,
   # sved dependencies
@@ -295,6 +297,10 @@ in
   };
 
   blink-emoji-nvim = super.blink-emoji-nvim.overrideAttrs {
+    dependencies = [ self.blink-cmp ];
+  };
+
+  blink-nerdfont-nvim = super.blink-nerdfont-nvim.overrideAttrs {
     dependencies = [ self.blink-cmp ];
   };
 
@@ -1010,6 +1016,18 @@ in
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [ jorsn ];
     };
+  };
+
+  devdocs-nvim = super.devdocs-nvim.overrideAttrs {
+    nvimSkipModule = [
+      # Error initializing Devdocs state
+      "devdocs.state"
+    ];
+    runtimeDeps = [
+      curl
+      jq
+      pandoc
+    ];
   };
 
   diagram-nvim = super.diagram-nvim.overrideAttrs {
@@ -2056,6 +2074,15 @@ in
     nvimSkipModule = "neotest-jest-assertions";
   };
 
+  neotest-mocha = super.neotest-mocha.overrideAttrs {
+    dependencies = with self; [
+      neotest
+      nvim-nio
+      nvim-treesitter
+      plenary-nvim
+    ];
+  };
+
   neotest-minitest = super.neotest-minitest.overrideAttrs {
     dependencies = with self; [
       neotest
@@ -2629,6 +2656,10 @@ in
         zathura = lib.getExe zathura;
       })
     ];
+  };
+
+  org-roam-nvim = super.org-roam-nvim.overrideAttrs {
+    dependencies = [ self.orgmode ];
   };
 
   otter-nvim = super.otter-nvim.overrideAttrs {
@@ -3836,10 +3867,6 @@ in
 
   wtf-nvim = super.wtf-nvim.overrideAttrs {
     dependencies = [ self.nui-nvim ];
-  };
-
-  YankRing-vim = super.YankRing-vim.overrideAttrs {
-    sourceRoot = ".";
   };
 
   yanky-nvim = super.yanky-nvim.overrideAttrs {

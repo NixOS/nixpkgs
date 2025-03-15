@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "jimsalterjrs";
-    repo = pname;
+    repo = "sanoid";
     rev = "v${version}";
     sha256 = "sha256-qfRGZ10fhLL4tJL97VHrdOkO/4OVpa087AsL9t8LMmk=";
   };

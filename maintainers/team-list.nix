@@ -58,6 +58,16 @@ with lib.maintainers;
     enableFeatureFreezePing = true;
   };
 
+  apm = {
+    scope = "Team for packages maintained by employees of Akademie für Pflegeberufe und Management GmbH.";
+    shortName = "apm employees";
+    # Edits to this list should only be done by an already existing member.
+    members = [
+      wolfgangwalther
+      DutchGerman
+    ];
+  };
+
   bazel = {
     members = [
       mboes
@@ -515,6 +525,7 @@ with lib.maintainers;
 
   home-assistant = {
     members = [
+      dotlambda
       fab
       hexa
     ];
@@ -537,7 +548,10 @@ with lib.maintainers;
   };
 
   infisical = {
-    members = [ akhilmhdh ];
+    members = [
+      akhilmhdh
+      mahyarmirrashed
+    ];
     scope = "Maintain Infisical";
     shortName = "Infisical";
   };

@@ -19,8 +19,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "Cropi";
-    repo = pname;
-    rev = "${pname}-${version}";
+    repo = "usbguard-notifier";
+    rev = "usbguard-notifier-${version}";
     hash = "sha256-gWvCGSbOuey2ELAPD2WCG4q77IClL0S7rE2RaUJDc1I=";
   };
 

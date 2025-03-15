@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-version="2.18.0"
+version="2.19.0"
 version_jetson="2.16.1+nv24.08"
 
 bucket="https://storage.googleapis.com/tensorflow/versions/${version}"

@@ -38,8 +38,7 @@ buildPythonPackage rec {
   patches = [
     # Fix some wrong assumptions by ./project.py
     # TODO: figure out how to send this upstream
-    # FIXME: make a version for PyQt6?
-    # ./pyqt5-fix-dbus-mainloop-support.patch
+    ./pyqt6-fix-dbus-mainloop-support.patch
     # confirm license when installing via pyqt6_sip
     ./pyqt5-confirm-license.patch
     # Fix build with Qt 6.8.2

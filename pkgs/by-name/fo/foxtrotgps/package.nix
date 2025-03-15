@@ -32,7 +32,7 @@ let
     };
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "foxtrotgps";
   version = "1.2.2+331";
 

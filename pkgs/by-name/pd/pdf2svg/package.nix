@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pdf2svg";
-  version = "0.2.3";
+  version = "0.2.4";
 
   src = fetchFromGitHub {
     owner = "db9052";
     repo = "pdf2svg";
     rev = "v${version}";
-    sha256 = "14ffdm4y26imq99wjhkrhy9lp33165xci1l5ndwfia8hz53bl02k";
+    sha256 = "sha256-zME0U+PyENnoLyjo9W2i2MRM00wNmHkYcR2LMEtTbBY=";
   };
 
   nativeBuildInputs = [

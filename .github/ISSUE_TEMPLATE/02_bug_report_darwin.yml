@@ -116,6 +116,7 @@ body:
         If this issue is related to the Darwin packaging architecture as a whole, or is related to the core Darwin frameworks, consider mentioning the `@NixOS/darwin-core` team.
       value: |
 
+
         ---
 
         **Note for maintainers:** Please tag this issue in your pull request description. (i.e. `Resolves #ISSUE`.)

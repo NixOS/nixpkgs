@@ -4,7 +4,7 @@
   fetchFromGitHub,
 
   # build-system
-  poetry-core,
+  pdm-backend,
 
   # dependencies
   langchain-core,
@@ -17,19 +17,19 @@
 
 buildPythonPackage rec {
   pname = "langchain-groq";
-  version = "0.2.4";
+  version = "0.2.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-groq==${version}";
-    hash = "sha256-hXY0xmt0rvV/AhMZTR+UxMz0ba7pJjRzBRVn6XvX6cA=";
+    hash = "sha256-TXmAaEOK2qNglNAa02M027NXmocsxFaQi3tUFdmFQUQ=";
   };
 
   sourceRoot = "${src.name}/libs/partners/groq";
 
-  build-system = [ poetry-core ];
+  build-system = [ pdm-backend ];
 
   pythonRelaxDeps = [ "langchain-core" ];
 

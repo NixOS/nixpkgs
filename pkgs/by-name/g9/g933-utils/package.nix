@@ -6,7 +6,7 @@
   pkg-config,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "g933-utils";
   version = "unstable-2021-11-19";
 

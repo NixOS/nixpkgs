@@ -684,6 +684,8 @@ let
 
     ### H ###
 
+    h1 = callPackage ../development/ocaml-modules/h1 { };
+
     h2 = callPackage ../development/ocaml-modules/h2 { };
 
     h2-eio = callPackage ../development/ocaml-modules/h2/eio.nix { };
@@ -1871,7 +1873,7 @@ let
     ### T ###
 
     taglib = callPackage ../development/ocaml-modules/taglib {
-      inherit (pkgs) taglib;
+      inherit (pkgs) taglib_1;
     };
 
     tar = callPackage ../development/ocaml-modules/tar { };

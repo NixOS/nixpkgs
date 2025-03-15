@@ -6,24 +6,53 @@
 }:
 
 let
+  inherit (lib)
+    concatLines
+    concatStringsSep
+    mapAttrsToList
+    optional
+    optionals
+
+    mkIf
+    mkOption
+    types
+    ;
+
   cfg = config.hardware.block;
   escape = lib.strings.escape [ ''"'' ];
+
   udevValue = types.addCheck types.nonEmptyStr (x: builtins.match "[^\n\r]*" x != null) // {
     name = "udevValue";
     description = "udev rule value";
     descriptionClass = "noun";
   };
 
-  inherit (lib)
-    mkIf
-    mkOption
-    types
-
-    concatLines
-    concatStringsSep
-    mapAttrsToList
-    optional
-    ;
+  udevRule =
+    {
+      rotational ? null,
+      include ? null,
+      exclude ? null,
+      scheduler,
+    }:
+    concatStringsSep ", " (
+      [
+        ''SUBSYSTEM=="block"''
+        ''ACTION=="add|change"''
+        ''TEST=="queue/scheduler"''
+      ]
+      ++ optionals (rotational != null) [
+        ''ATTR{queue/rotational}=="${if rotational then "1" else "0"}"''
+      ]
+      ++ optionals (include != null) [
+        ''KERNEL=="${escape include}"''
+      ]
+      ++ optionals (exclude != null) [
+        ''KERNEL!="${escape exclude}"''
+      ]
+      ++ [
+        ''ATTR{queue/scheduler}="${escape scheduler}"''
+      ]
+    );
 in
 {
   options.hardware.block = {
@@ -52,6 +81,22 @@ in
         {option}`config.hardware.block.defaultScheduler`.
       '';
       example = "bfq";
+    };
+
+    defaultSchedulerExclude = mkOption {
+      type = types.nullOr udevValue;
+      default = "loop[0-9]*";
+      description = ''
+        Device name pattern to exclude from default scheduler assignment
+        through {option}`config.hardware.block.defaultScheduler` and
+        {option}`config.hardware.block.defaultSchedulerRotational`.
+
+        By default this excludes loop devices which generally do not benefit
+        from extra I/O scheduling in addition to the scheduling already
+        performed for their backing devices.
+
+        This setting does not affect {option}`config.hardware.block.scheduler`.
+      '';
     };
 
     scheduler = mkOption {
@@ -120,27 +165,21 @@ in
         services.udev.packages = [
           (pkgs.writeTextDir "etc/udev/rules.d/98-block-io-scheduler.rules" (
             concatLines (
-              map (concatStringsSep ", ") (
-                optional (cfg.defaultScheduler != null) [
-                  ''SUBSYSTEM=="block"''
-                  ''ACTION=="add|change"''
-                  ''TEST=="queue/scheduler"''
-                  ''ATTR{queue/scheduler}="${escape cfg.defaultScheduler}"''
-                ]
-                ++ optional (cfg.defaultSchedulerRotational != null) [
-                  ''SUBSYSTEM=="block"''
-                  ''ACTION=="add|change"''
-                  ''ATTR{queue/rotational}=="1"''
-                  ''TEST=="queue/scheduler"''
-                  ''ATTR{queue/scheduler}="${escape cfg.defaultSchedulerRotational}"''
-                ]
-                ++ mapAttrsToList (name: sched: [
-                  ''SUBSYSTEM=="block"''
-                  ''ACTION=="add|change"''
-                  ''KERNEL=="${escape name}"''
-                  ''ATTR{queue/scheduler}="${escape sched}"''
-                ]) cfg.scheduler
-              )
+              optional (cfg.defaultScheduler != null) (udevRule {
+                exclude = cfg.defaultSchedulerExclude;
+                scheduler = cfg.defaultScheduler;
+              })
+              ++ optional (cfg.defaultSchedulerRotational != null) (udevRule {
+                rotational = true;
+                exclude = cfg.defaultSchedulerExclude;
+                scheduler = cfg.defaultSchedulerRotational;
+              })
+              ++ mapAttrsToList (
+                include: scheduler:
+                udevRule {
+                  inherit include scheduler;
+                }
+              ) cfg.scheduler
             )
           ))
         ];

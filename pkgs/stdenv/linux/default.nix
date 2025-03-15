@@ -593,7 +593,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
 
       overrides =
         self: super:
-        rec {
+        {
           inherit (prevStage)
             ccWrapperStdenv
             binutils

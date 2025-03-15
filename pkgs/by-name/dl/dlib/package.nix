@@ -20,13 +20,13 @@
 }@inputs:
 (if cudaSupport then cudaPackages.backendStdenv else inputs.stdenv).mkDerivation rec {
   pname = "dlib";
-  version = "19.24.6";
+  version = "19.24.8";
 
   src = fetchFromGitHub {
     owner = "davisking";
     repo = "dlib";
     tag = "v${version}";
-    sha256 = "sha256-BpE7ZrtiiaDqwy1G4IHOQBJMr6sAadFbRxsdObs1SIY=";
+    sha256 = "sha256-b8DFlfBnF4Fk7beJPxQJDVHaCR7s5/4uAPi3RV9cBZ4=";
   };
 
   postPatch = ''

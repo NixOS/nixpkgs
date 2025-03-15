@@ -129,6 +129,9 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @NixOS/nix-team @raitobeza
 # Systemd-boot
 /nixos/modules/system/boot/loader/systemd-boot      @JulienMalka
 
+# Limine
+/nixos/modules/system/boot/loader/limine        @lzcunt @phip1611 @programmerlexi
+
 # Images and installer media
 /nixos/modules/profiles/installation-device.nix @ElvishJerricco
 /nixos/modules/installer/cd-dvd/                @ElvishJerricco

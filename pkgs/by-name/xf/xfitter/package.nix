@@ -21,7 +21,7 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "xfitter";
   version = "2.2.0";
 
