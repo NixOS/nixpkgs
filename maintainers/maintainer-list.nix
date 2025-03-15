@@ -9071,6 +9071,12 @@
     githubId = 39066502;
     name = "Guekka";
   };
+  guelakais = {
+    email = "koroyeldiores@gmail.com";
+    github = "Guelakais";
+    githubId = 76840985;
+    name = "GueLaKais";
+  };
   guibert = {
     email = "david.guibert@gmail.com";
     github = "dguibert";
