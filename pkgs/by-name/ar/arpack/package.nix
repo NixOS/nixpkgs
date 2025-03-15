@@ -41,7 +41,6 @@ stdenv.mkDerivation (finalAttrs: {
   # a couple tests fail when run in parallel
   doCheck = true;
   enableParallelChecking = false;
-  __darwinAllowLocalNetworking = true;
 
   env = lib.optionalAttrs useAccel {
     # Without these flags some tests will fail / segfault when using Accelerate
