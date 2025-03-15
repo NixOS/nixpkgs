@@ -7,6 +7,13 @@
 
 let
   inherit (lib)
+    isFloat
+    isInt
+    isBool
+    isString
+    isAttrs
+    optionals
+    traceSeq
     attrValues
     concatMapStringsSep
     concatStrings
@@ -16,10 +23,13 @@ let
     literalExpression
     mapAttrsToList
     mkEnableOption
+    mkPackageOption
     mkIf
     mkOption
     mkRemovedOptionModule
     optional
+    versionAtLeast
+    warn
     optionalAttrs
     optionalString
     singleton
@@ -34,6 +44,65 @@ let
 
   cfg = config.services.dovecot2;
   dovecotPkg = pkgs.dovecot;
+
+  ### >=2.4 config
+
+  yesOrNo = v: if v then "yes" else "no";
+
+  toOption =
+    i: n: v:
+    "${i}${toString n} = ${v}";
+
+  # this entire thing works on the fact that we can only have 2 strings (parent+this) before having to start an attrs
+  # e.g. 'foo bar { [...] }'
+  # except when the name is part of the below list
+  # I think the technical term is the keys in that list cannot have a 'section name'
+  # and everywhere else we need 'section_name foobar {}', e.g. 'service submission { [...] }'
+  startAttrSet =
+    p: n:
+    builtins.any (s: s == n) [
+      "import_environment"
+      "mail_attribute"
+      "mail_plugins"
+      "ssl_server"
+    ]
+    || !(builtins.isNull p);
+
+  toConf =
+    parent: indent: n: v:
+    if builtins.isFloat v then
+      (toOption indent n (builtins.toJSON v))
+    else if isInt v then
+      (toOption indent n (toString v))
+    else if isBool v then
+      (toOption indent n (yesOrNo v))
+    else if isString v then
+      (toOption indent n v)
+    else if isAttrs v then
+      (concatStringsSep (if (startAttrSet parent n) then "\n" else "") (
+        (
+          if (startAttrSet parent n) then # start attrs by printing '$parent $name {'
+            [
+              "${if (builtins.isNull parent) then "${indent}${n} {" else "${indent}${parent} ${n} {"}"
+            ]
+          else
+            # not starting an attrs -> don't print anything
+            # parent will be printed when we actually startAttrSet
+            [ ]
+        )
+        ++ (mapAttrsToList
+          # call toConf for child attrs, pass parent if we don't have to startAttrSet -> child will have to
+          (toConf (if !(startAttrSet parent n) then n else null) (
+            if (startAttrSet parent n) then "${indent}  " else indent
+          ))
+          v
+        )
+        ++ (optionals (startAttrSet parent n) [ "${indent}}\n" ])
+      ))
+    else
+      throw (traceSeq v "services.dovecot.settings: unexpected type");
+
+  ### <=2.3 config
 
   baseDir = "/run/dovecot2";
   stateDir = "/var/lib/dovecot";
@@ -287,6 +356,62 @@ in
 
   options.services.dovecot2 = {
     enable = mkEnableOption "the dovecot 2.x POP3/IMAP server";
+
+    package = mkPackageOption pkgs "dovecot" { example = "dovecot_2_4"; };
+
+    settings = mkOption {
+      default = { };
+      type = lib.types.attrs;
+      description = ''
+        Dovecot configuration, see <https://doc.dovecot.org/2.4.0/core/summaries/settings.html#all-dovecot-settings>
+        for all available options.
+      '';
+      example = literalExpression ''
+        {
+          base_dir = "/run/dovecot";
+          state_dir = "/run/dovecot";
+          protocols = "imap submission lmtp";
+          mail_driver = "maildir";
+          mail_path = "~/mail";
+          mail_uid = "vmail";
+          mail_gid = "vmail";
+          mail_log_events = "delete undelete expunge save copy mailbox_create mailbox_delete mailbox_rename flag_change";
+
+          namespace.inbox = {
+            inbox = "yes";
+            separator = "/";
+          };
+
+          ssl_server = {
+            cert_file = "/etc/dovecot/ssl/tls.crt";
+            key_file = "/etc/dovecot/ssl/tls.key";
+          };
+
+          mail_attribute.dict.file = {
+            path = "%{home}/dovecot-attributes";
+          };
+
+          mail_plugins = {
+            fts = "yes";
+            fts_flatcurve = "yes";
+            mail_log = "yes";
+            notify = "yes";
+          };
+
+          protocol.imap.mail_plugins = {
+            imap_sieve = "yes";
+            imap_filter_sieve = "yes";
+          };
+
+          service.imap-login = {
+            process_min_avail = 1;
+            client_limit = 100;
+            inet_listener.imap.port = 31143;
+            inet_listener.imaps.port = 31993;
+          };
+        }
+      '';
+    };
 
     enablePop3 = mkEnableOption "starting the POP3 listener (when Dovecot is enabled)";
 
@@ -623,6 +748,17 @@ in
   };
 
   config = mkIf cfg.enable {
+    services.dovecot2.package = lib.mkDefault (
+      if versionAtLeast config.system.stateVersion "25.05" then # TODO adjust this if we don't get in in time for 25.05
+        pkgs.dovecot_2_4
+      else
+        warn ''
+          While Dovecot 2.3 is not yet deprecated or EOL,
+          there is a newer version available in Nixpkgs (Dovecot 2.4).
+          Do note that this version has breaking changes to the
+          config format, both in the Nixpkgs module and Dovecot itself.'' pkgs.dovecot_2_3
+    );
+
     security.pam.services.dovecot2 = mkIf cfg.enablePAM { };
 
     security.dhparams = mkIf (cfg.sslServerCert != null && cfg.enableDHE) {
