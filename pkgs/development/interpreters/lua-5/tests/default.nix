@@ -60,7 +60,7 @@ let
 in
 pkgs.recurseIntoAttrs {
 
-  checkInterpreterPatch =
+  checkInterpreterPath =
     let
       golden_LUA_PATH = golden_LUA_PATHS.${lib.versions.majorMinor lua.version};
     in
