@@ -1,6 +1,6 @@
 {
   stdenv,
-  SDL2_image_2_6,
+  SDL2_image,
   SDL2_ttf,
   SDL2_net,
   fpc,
@@ -8,7 +8,8 @@
   ffmpeg,
   libglut,
   lib,
-  fetchurl,
+  fetchhg,
+  fetchpatch,
   cmake,
   pkg-config,
   lua5_1,
@@ -20,7 +21,6 @@
   libGLU,
   physfs,
   qt5,
-  llvm,
   withServer ? true,
 }:
 
@@ -43,13 +43,14 @@ let
     ]
   );
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "hedgewars";
-  version = "1.0.2";
+  version = "1.0.2-unstable-2024-03-24";
 
-  src = fetchurl {
-    url = "https://www.hedgewars.org/download/releases/hedgewars-src-${version}.tar.bz2";
-    sha256 = "sha256-IB/l5FvYyls9gbGOwGvWu8n6fCxjvwGQBeL4C+W88hI=";
+  src = fetchhg {
+    url = "https://hg.hedgewars.org/hedgewars/";
+    rev = "fcc98c953b5e";
+    hash = "sha256-bUmyYXmhOYjvbd0elyNnaUx3X1QJl3w2/hpxFK9KQCE=";
   };
 
   patches = [
@@ -73,10 +74,9 @@ stdenv.mkDerivation rec {
     SDL2_net
     SDL2
     SDL2_mixer
-    SDL2_image_2_6
+    SDL2_image
     fpc
     lua5_1
-    llvm # hard-requirement on aarch64, for some reason not strictly necessary on x86-64
     ffmpeg
     libglut
     physfs
@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
 
   NIX_LDFLAGS = lib.concatMapStringsSep " " (e: "-rpath ${e}/lib") [
     SDL2.out
-    SDL2_image_2_6
+    SDL2_image
     SDL2_mixer
     SDL2_net
     SDL2_ttf
