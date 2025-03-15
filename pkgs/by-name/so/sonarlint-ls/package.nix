@@ -6,34 +6,28 @@
   jdk17,
   makeWrapper,
   writeShellApplication,
-  runCommand,
   sonarlint-ls,
   curl,
   pcre,
   common-updater-scripts,
   jq,
   gnused,
+  testers,
 }:
 
 maven.buildMavenPackage rec {
   pname = "sonarlint-ls";
-  version = "3.14.1.75775";
+  version = "3.17.0.75948";
 
   src = fetchFromGitHub {
     owner = "SonarSource";
     repo = "sonarlint-language-server";
     rev = version;
-    hash = "sha256-QXBSdXpkhqcvfjihcWwy4oCjTMmbAJRZG1T66sa8T4U=";
+    hash = "sha256-9ZZPAkfYnHYaPFGo/WfOhUIZ+Aq7SNsVmyXgDwe68gk=";
   };
 
-  # Replaces unavailable versions with available ones in maven central. Can be
-  # removed again if
-  # https://github.com/SonarSource/sonarlint-language-server/pull/427 is
-  # merged.
-  patches = [ ./sonar-analyzers-versions.patch ];
-
   mvnJdk = jdk17;
-  mvnHash = "sha256-SKkOf3f9Ze3Rm6i2uYbFkvSnnEySARvaoiAS1e2kFi0=";
+  mvnHash = "sha256-tsYkp6Zr9gCgb0l6vQViSB7zcbf6JX+JwO4ZYqeG52c=";
 
   # Disables failing tests which either need network access or are flaky.
   mvnParameters = lib.escapeShellArgs [
@@ -65,11 +59,11 @@ maven.buildMavenPackage rec {
   nativeBuildInputs = [ makeWrapper ];
 
   passthru = {
-    tests = {
-      sonarlint-ls-starts-successfully = runCommand "${pname}-test" { } ''
-        ${sonarlint-ls}/bin/sonarlint-ls > $out
-        cat $out | grep "SonarLint backend started"
-      '';
+
+    tests.version = testers.testVersion {
+      package = sonarlint-ls;
+      command = "sonarlint-ls -V";
+      version = builtins.substring 0 4 version;
     };
 
     updateScript =
