@@ -4,6 +4,7 @@
   ed25519,
   fetchFromGitHub,
   hatchling,
+  pytest-freezegun,
   pytestCheckHook,
   pythonOlder,
   requests,
@@ -12,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "tuf";
-  version = "5.1.0";
+  version = "6.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -21,7 +22,7 @@ buildPythonPackage rec {
     owner = "theupdateframework";
     repo = "python-tuf";
     tag = "v${version}";
-    hash = "sha256-Qv9SH4ObC7bgPLd2Wu5XynBddlW6pycwLwaKhZ+l61k=";
+    hash = "sha256-CPbZOpUYi7MWKLMj7kwTsmEkxLCf4wU7IOCcbzMkPlU=";
   };
 
   build-system = [ hatchling ];
@@ -36,6 +37,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     ed25519
+    pytest-freezegun
     pytestCheckHook
   ];
 
