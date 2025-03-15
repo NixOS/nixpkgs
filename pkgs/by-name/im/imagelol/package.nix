@@ -46,11 +46,10 @@ stdenv.mkDerivation rec {
     cp ./ImageLOL $out/bin
   '';
 
-  cmakeFlags =
-    [ (lib.cmakeFeature "CMAKE_C_FLAGS" "-std=gnu90") ]
-    ++ lib.optional (
-      stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64
-    ) "-DPNG_ARM_NEON=off";
+  cmakeFlags = [
+    (lib.cmakeFeature "CMAKE_C_FLAGS" "-std=gnu90")
+    (lib.cmakeBool "PNG_ARM_NEON" (!(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)))
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/MCredstoner2004/ImageLOL";

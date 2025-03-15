@@ -66,16 +66,16 @@ stdenv.mkDerivation rec {
     ++ lib.optional client libX11;
 
   cmakeFlags = [
-    "-DBUILD_MONOLITHIC=${if monolithic then "ON" else "OFF"}"
-    "-DBUILD_DAEMON=${if enableDaemon then "ON" else "OFF"}"
-    "-DBUILD_REMOTEGUI=${if client then "ON" else "OFF"}"
-    "-DBUILD_WEBSERVER=${if httpServer then "ON" else "OFF"}"
+    (lib.cmakeBool "BUILD_MONOLITHIC" monolithic)
+    (lib.cmakeBool "BUILD_DAEMON" enableDaemon)
+    (lib.cmakeBool "BUILD_REMOTEGUI" client)
+    (lib.cmakeBool "BUILD_WEBSERVER" httpServer)
     # building only the daemon fails when these are not set... this is
     # due to mistakes in the Amule cmake code, but it does not cause
     # extra code to be built...
-    "-Dwx_NEED_GUI=ON"
-    "-Dwx_NEED_ADV=ON"
-    "-Dwx_NEED_NET=ON"
+    (lib.cmakeBool "wx_NEED_GUI" true)
+    (lib.cmakeBool "wx_NEED_ADV" true)
+    (lib.cmakeBool "wx_NEED_NET" true)
   ];
 
   postPatch = ''

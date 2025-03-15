@@ -29,8 +29,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    "-DPHMAP_BUILD_TESTS=${if finalAttrs.finalPackage.doCheck then "ON" else "OFF"}"
-    "-DPHMAP_BUILD_EXAMPLES=OFF"
+    (lib.cmakeBool "PHMAP_BUILD_TESTS" finalAttrs.finalPackage.doCheck)
+    (lib.cmakeBool "PHMAP_BUILD_EXAMPLES" false)
   ];
 
   nativeCheckInputs = [

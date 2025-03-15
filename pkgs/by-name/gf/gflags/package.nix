@@ -23,8 +23,8 @@ stdenv.mkDerivation rec {
   preConfigure = "rm BUILD";
 
   cmakeFlags = [
-    "-DGFLAGS_BUILD_SHARED_LIBS=${if enableShared then "ON" else "OFF"}"
-    "-DGFLAGS_BUILD_STATIC_LIBS=ON"
+    (lib.cmakeBool "GFLAGS_BUILD_SHARED_LIBS" enableShared)
+    (lib.cmakeBool "GFLAGS_BUILD_STATIC_LIBS" true)
   ];
 
   doCheck = false;

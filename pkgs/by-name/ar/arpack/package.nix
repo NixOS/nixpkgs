@@ -59,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "MPI" useMpi)
     (lib.cmakeBool "TESTS" finalAttrs.finalPackage.doCheck)
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    "-DBLA_VENDOR=${if useAccel then "Apple" else "Generic"}"
+    (lib.cmakeFeature "BLA_VENDOR" (if useAccel then "Apple" else "Generic"))
   ];
 
   passthru = {
