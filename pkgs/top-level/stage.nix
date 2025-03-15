@@ -211,6 +211,20 @@ let
       };
     };
 
+    pkgsBolt = nixpkgsFun {
+      overlays = [
+        (self': super': {
+          pkgsBolt = super';
+        })
+      ] ++ overlays;
+      # Bootstrap a cross stdenv and apply the Bolt post-link optimizer.
+      # This is currently not possible when compiling natively,
+      # so we don't need to check hostPlatform != buildPlatform.
+      crossSystem = stdenv.hostPlatform // {
+        useBolt = true;
+      };
+    };
+
     pkgsLLVMLibc = nixpkgsFun {
       overlays = [ (self': super': {
         pkgsLLVMLibc = super';
