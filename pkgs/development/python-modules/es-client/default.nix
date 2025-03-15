@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "es-client";
-  version = "8.17.1";
+  version = "8.17.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = "untergeek";
     repo = "es_client";
     tag = "v${version}";
-    hash = "sha256-j7yaN7FOrGlRjZSBugRCtecfUw/3dNuI252VO/eYnzk=";
+    hash = "sha256-LDMUL1RHkSMQK2gBgCHFax9Rf+5i1FB6ru03ttM6IkE=";
   };
 
   pythonRelaxDeps = true;
@@ -73,7 +73,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module for building Elasticsearch client objects";
     homepage = "https://github.com/untergeek/es_client";
-    changelog = "https://github.com/untergeek/es_client/releases/tag/v${version}";
+    changelog = "https://github.com/untergeek/es_client/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };
