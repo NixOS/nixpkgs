@@ -3108,7 +3108,7 @@
     name = "Bastian Köcher";
   };
   blackzeshi = {
-    name = "blackzeshi";
+    name = "Blackzeshi";
     email = "student7488@gmail.com";
     gihub = "zeshi09";
     githubId = 105582686;
