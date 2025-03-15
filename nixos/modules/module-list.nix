@@ -1231,6 +1231,7 @@
   ./services/networking/pdnsd.nix
   ./services/networking/peroxide.nix
   ./services/networking/picosnitch.nix
+  ./services/networking/pihole-ftl.nix
   ./services/networking/pixiecore.nix
   ./services/networking/pleroma.nix
   ./services/networking/polipo.nix
@@ -1579,6 +1580,7 @@
   ./services/web-apps/photoprism.nix
   ./services/web-apps/pict-rs.nix
   ./services/web-apps/pingvin-share.nix
+  ./services/web-apps/pihole-web.nix
   ./services/web-apps/plantuml-server.nix
   ./services/web-apps/plausible.nix
   ./services/web-apps/porn-vault/default.nix

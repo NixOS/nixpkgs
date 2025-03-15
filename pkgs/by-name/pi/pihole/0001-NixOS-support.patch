@@ -1,0 +1,98 @@
+From 3065a942c166717468dfe2b2f13237794d6b97b3 Mon Sep 17 00:00:00 2001
+From: williamvds <william@williamvds.me>
+Date: Sat, 1 Apr 2023 19:14:23 +0100
+Subject: [PATCH 1/4] NixOS support
+
+Workarounds required:
+- Don't use sudo to elevate to root. Rely on polkit and sensible permissions
+- Use systemctl for getting pihole-FTL's PID and restarting it
+---
+ advanced/Scripts/utils.sh | 18 ++++--------------
+ gravity.sh                |  4 ++--
+ pihole                    | 13 +------------
+ 3 files changed, 7 insertions(+), 28 deletions(-)
+
+diff --git a/advanced/Scripts/utils.sh b/advanced/Scripts/utils.sh
+index f655e56..75ffcba 100755
+--- a/advanced/Scripts/utils.sh
++++ b/advanced/Scripts/utils.sh
+@@ -129,19 +129,9 @@ getFTLPIDFile() {
+ # Example getFTLPID "/run/pihole-FTL.pid"
+ #######################
+ getFTLPID() {
+-    local FTL_PID_FILE="${1}"
+-    local FTL_PID
+-
+-    if [ -s "${FTL_PID_FILE}" ]; then
+-        # -s: FILE exists and has a size greater than zero
+-        FTL_PID="$(cat "${FTL_PID_FILE}")"
+-        # Exploit prevention: unset the variable if there is malicious content
+-        # Verify that the value read from the file is numeric
+-        expr "${FTL_PID}" : "[^[:digit:]]" > /dev/null && unset FTL_PID
++    pid=$(systemctl show --property MainPID --value pihole-ftl.service)
++    if [ "$pid" -eq 0 ]; then
++      pid=-1
+     fi
+-
+-    # If FTL is not running, or the PID file contains malicious stuff, substitute
+-    # negative PID to signal this
+-    FTL_PID=${FTL_PID:=-1}
+-    echo  "${FTL_PID}"
++    echo "$pid"
+ }
+diff --git a/gravity.sh b/gravity.sh
+index a415aa0..6f54f29 100755
+--- a/gravity.sh
++++ b/gravity.sh
+@@ -367,7 +367,7 @@ gravity_CheckDNSResolutionAvailable() {
+   fi
+ 
+   # Determine error output message
+-  if pgrep pihole-FTL &> /dev/null; then
++  if systemctl is-active --quiet pihole-ftl; then
+     echo -e "  ${CROSS} DNS resolution is currently unavailable"
+   else
+     echo -e "  ${CROSS} DNS service is not running"
+@@ -858,7 +858,7 @@ gravity_Cleanup() {
+   echo -e "${OVER}  ${TICK} ${str}"
+ 
+   # Only restart DNS service if offline
+-  if ! pgrep pihole-FTL &> /dev/null; then
++  if ! systemctl is-active --quiet pihole-ftl; then
+     "${PIHOLE_COMMAND}" restartdns
+     dnsWasOffline=true
+   fi
+diff --git a/pihole b/pihole
+index 1d9ad82..ae2d589 100755
+--- a/pihole
++++ b/pihole
+@@ -159,7 +159,7 @@ restartDNS() {
+     fi
+   else
+     # A full restart has been requested
+-    svc="service pihole-FTL restart"
++    svc="systemctl restart pihole-ftl.service"
+     str="Restarting DNS server"
+     icon="${TICK}"
+   fi
+@@ -547,17 +547,6 @@ case "${1}" in
+   *                             ) helpFunc;;
+ esac
+ 
+-# Must be root to use this tool
+-if [[ ! $EUID -eq 0 ]];then
+-  if [[ -x "$(command -v sudo)" ]]; then
+-    exec sudo bash "$0" "$@"
+-    exit $?
+-  else
+-    echo -e "  ${CROSS} sudo is needed to run pihole commands.  Please run this script as root or install sudo."
+-    exit 1
+-  fi
+-fi
+-
+ # Handle redirecting to specific functions based on arguments
+ case "${1}" in
+   "-w" | "whitelist"            ) listFunc "$@";;
+-- 
+2.40.1
+
