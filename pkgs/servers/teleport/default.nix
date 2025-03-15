@@ -1,7 +1,6 @@
 {
   callPackages,
   lib,
-  buildGo122Module,
   buildGo123Module,
   ...
 }@args:
@@ -11,13 +10,13 @@ let
     teleport_15 = import ./15 (
       args
       // {
-        buildGoModule = buildGo122Module;
+        buildGoModule = buildGo123Module;
       }
     );
     teleport_16 = import ./16 (
       args
       // {
-        buildGoModule = buildGo122Module;
+        buildGoModule = buildGo123Module;
       }
     );
     teleport = teleport_16;
@@ -34,7 +33,6 @@ in
 callPackages f' (
   builtins.removeAttrs args [
     "callPackages"
-    "buildGo122Module"
     "buildGo123Module"
   ]
 )
