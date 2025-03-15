@@ -42,7 +42,7 @@
     ];
   };
 
-in python3Packages.buildPythonPackage rec {
+in buildPythonPackage rec {
   pname = "posting";
   version = "2.3.0";
 
