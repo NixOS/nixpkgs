@@ -19,7 +19,7 @@ let
   appimageContents = appimageTools.extractType2 {
     inherit pname version src;
     postExtract = ''
-      substituteInPlace $out/gdevelop.desktop --replace-fail 'Exec=AppRun --no-sandbox %U' 'Exec=${pname}'
+      substituteInPlace $out/gdevelop.desktop --replace-fail 'Exec=AppRun --no-sandbox %U' 'Exec=gdevelop'
     '';
   };
   dontPatchELF = true;
@@ -41,7 +41,7 @@ appimageTools.wrapType2 {
     license = lib.licenses.mit;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     maintainers = with lib.maintainers; [ tombert ];
-    mainProgram = pname;
+    mainProgram = "gdevelop";
     platforms = [ "x86_64-linux" ];
   };
 }
