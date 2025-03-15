@@ -77,7 +77,8 @@ let
     ghc983
     ghc984
     ghc9101
-    ghc9121
+    # exclude ghc9121 due to severe miscompilation bug
+    ghc9122
   ];
 
   # packagePlatforms applied to `haskell.packages.*`
@@ -582,7 +583,7 @@ let
       hlint = lib.subtractLists [
         compilerNames.ghc902
         compilerNames.ghc9101
-        compilerNames.ghc9121
+        compilerNames.ghc9122
       ] released;
       hpack = released;
       hsdns = released;
@@ -601,10 +602,10 @@ let
       ghc-lib-parser = released;
       ghc-lib-parser-ex = released;
       ghc-source-gen = lib.subtractLists [
-        compilerNames.ghc9121
+        compilerNames.ghc9122
       ] released;
       ghc-tags = lib.subtractLists [
-        compilerNames.ghc9121
+        compilerNames.ghc9122
       ] released;
       hashable = released;
       primitive = released;
@@ -615,7 +616,7 @@ let
       ];
       weeder = lib.subtractLists [
         compilerNames.ghc9101
-        compilerNames.ghc9121
+        compilerNames.ghc9122
       ] released;
     })
     {
