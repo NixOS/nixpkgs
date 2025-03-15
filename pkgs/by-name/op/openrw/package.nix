@@ -17,7 +17,6 @@
   libGLU,
   libmad,
   openal,
-  sfml,
 
   unstableGitUpdater,
 }:
@@ -54,7 +53,6 @@ stdenv.mkDerivation {
     libGLU
     libmad
     openal
-    sfml
   ];
 
   passthru = {
