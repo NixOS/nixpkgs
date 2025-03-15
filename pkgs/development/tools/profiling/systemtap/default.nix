@@ -55,7 +55,8 @@ let
 in
 runCommand "systemtap-${version}"
   {
-    inherit stapBuild;
+    pname = "systemtap";
+    inherit stapBuild version;
     nativeBuildInputs = [ makeWrapper ];
     passthru.tests = { inherit (nixosTests.systemtap) linux_default linux_latest; };
     meta = {

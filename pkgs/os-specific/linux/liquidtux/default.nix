@@ -6,7 +6,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "liquidtux-${version}-${kernel.version}";
+  pname = "liquidtux";
   version = "0.1.0-unstable-2025-01-16";
 
   src = fetchFromGitHub {

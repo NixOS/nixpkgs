@@ -56,7 +56,8 @@ let
   ];
 in
 stdenv.mkDerivation {
-  name = "broadcom-sta-${version}-${kernel.version}";
+  pname = "broadcom-sta";
+  inherit version;
 
   src = fetchurl {
     url = "https://docs.broadcom.com/docs-and-downloads/docs/linux_sta/${tarball}";
