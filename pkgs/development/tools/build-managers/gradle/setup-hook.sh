@@ -54,7 +54,15 @@ gradleUpdateScript() {
     runHook preBuild
     runHook preGradleUpdate
 
-    gradle ${enableParallelUpdating:+--parallel} ${gradleUpdateTask:-nixDownloadDeps}
+    # Use Gradle dependency verification feature to force downloading all dependencies.
+    # For projects that have dependency verification turned on run with the `pgp` flag, so that Gradle will
+    # also download asc files for all dependencies. Otherwise signatures would be missing when the project is
+    # build later causing dependency verification to fail.
+    local verificationFlags=sha256
+    if [ -f gradle/verification-metadata.xml ]; then
+        verificationFlags="pgp,sha256"
+    fi
+    gradle ${enableParallelUpdating:+--parallel} ${gradleUpdateTask:-help --write-verification-metadata $verificationFlags}
 
     runHook postGradleUpdate
 }
