@@ -36,7 +36,7 @@ let
 in
 
 let
-  alt-ergo-parsers = ocamlPackages.buildDunePackage rec {
+  alt-ergo-parsers = ocamlPackages.buildDunePackage {
     pname = "alt-ergo-parsers";
     inherit version src;
     nativeBuildInputs = [ ocamlPackages.menhir ];
