@@ -32,11 +32,11 @@ buildPythonPackage rec {
     hash = "sha256-6oqCUya0ObY51zPtJl8BFK7UeX5X2SUx6p3bGQSN/gQ=";
   };
 
-  nativeBuildInputs = [ flit-core ];
+  build-system = [ flit-core ];
 
   pythonImportsCheck = [ "qpsolvers" ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     numpy
     scipy
   ];
