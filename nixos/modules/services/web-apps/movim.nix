@@ -734,8 +734,9 @@ in
         wantedBy = [ "multi-user.target" ];
         requiredBy = [ "${phpExecutionUnit}.service" ];
         before = [ "${phpExecutionUnit}.service" ];
-        after = lib.optional cfg.database.createLocally dbService;
+        wants = [ "local-fs.target" ];
         requires = lib.optional cfg.database.createLocally dbService;
+        after = lib.optional cfg.database.createLocally dbService;
 
         serviceConfig =
           {
@@ -785,11 +786,36 @@ in
           );
       };
 
+      services.${phpExecutionUnit} = {
+        wantedBy = lib.optional (cfg.nginx != null) "nginx.service";
+        requiredBy = [ "movim.service" ];
+        before = [ "movim.service" ] ++ lib.optional (cfg.nginx != null) "nginx.service";
+        wants = [ "network.target" ];
+        requires = [ "movim-data-setup.service" ] ++ lib.optional cfg.database.createLocally dbService;
+        after = [ "movim-data-setup.service" ] ++ lib.optional cfg.database.createLocally dbService;
+      };
+
       services.movim = {
         description = "Movim daemon";
         wantedBy = [ "multi-user.target" ];
-        after = [ "movim-data-setup.service" ];
-        requires = [ "movim-data-setup.service" ] ++ lib.optional cfg.database.createLocally dbService;
+        wants = [
+          "network.target"
+          "local-fs.target"
+        ];
+        requires =
+          [
+            "movim-data-setup.service"
+            "${phpExecutionUnit}.service"
+          ]
+          ++ lib.optional cfg.database.createLocally dbService
+          ++ lib.optional (cfg.nginx != null) "nginx.service";
+        after =
+          [
+            "movim-data-setup.service"
+            "${phpExecutionUnit}.service"
+          ]
+          ++ lib.optional cfg.database.createLocally dbService
+          ++ lib.optional (cfg.nginx != null) "nginx.service";
         environment = {
           PUBLIC_URL = "//${cfg.domain}";
           WS_PORT = builtins.toString cfg.port;
@@ -801,11 +827,6 @@ in
           WorkingDirectory = "${package}/share/php/movim";
           ExecStart = "${lib.getExe package} start";
         };
-      };
-
-      services.${phpExecutionUnit} = {
-        after = [ "movim-data-setup.service" ];
-        requires = [ "movim-data-setup.service" ] ++ lib.optional cfg.database.createLocally dbService;
       };
 
       tmpfiles.settings."10-movim" = with cfg; {
