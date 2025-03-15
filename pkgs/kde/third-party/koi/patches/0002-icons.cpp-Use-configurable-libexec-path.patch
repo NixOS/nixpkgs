@@ -1,0 +1,34 @@
+From 06fe9627757b94693bf9446124ba4b81a279d1d5 Mon Sep 17 00:00:00 2001
+From: alexyao2015 <33379584+alexyao2015@users.noreply.github.com>
+Date: Wed, 25 Sep 2024 23:18:21 -0500
+Subject: [PATCH 2/2] icons.cpp: Use configurable libexec path
+
+---
+ src/icons.cpp | 11 +----------
+ 1 file changed, 1 insertion(+), 10 deletions(-)
+
+diff --git a/src/icons.cpp b/src/icons.cpp
+index aa6aae9..a2564c4 100644
+--- a/src/icons.cpp
++++ b/src/icons.cpp
+@@ -9,16 +9,7 @@ void Icons::setIcons(QString iconTheme)
+ {
+     iconProcess = new QProcess;
+ 
+-    // locate plasma-changeicons program
+-    QString locateProgram = "whereis";
+-    QStringList programToLocate = {"plasma-changeicons"};
+-
+-    iconProcess->start(locateProgram, programToLocate);
+-    iconProcess->waitForFinished();
+-
+-    QString program(iconProcess->readAllStandardOutput());
+-    program.replace("plasma-changeicons: ", "");
+-    program.replace("\n", "");
++    QString program = "@plasma-changeicons@";
+ 
+     // apply the icon theme
+     QStringList arguments{iconTheme};
+-- 
+2.44.1
+
