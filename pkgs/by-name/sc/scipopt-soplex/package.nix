@@ -2,11 +2,15 @@
   lib,
   stdenv,
   cmake,
+  gmp,
+  mpfr,
+  zlib,
+  boost,
   fetchFromGitHub,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "soplex";
+  pname = "scipopt-soplex";
   version = "713";
 
   src = fetchFromGitHub {
@@ -18,12 +22,20 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
+  buildInputs = [
+    gmp
+    mpfr
+    zlib
+    boost
+    mpfr
+  ];
+
   strictDeps = true;
 
   doCheck = true;
 
   meta = {
-    homepage = "https://scipopt.org";
+    homepage = "https://soplex.zib.de/";
     description = "Sequential object-oriented simPlex";
     license = with lib.licenses; [ asl20 ];
     mainProgram = "soplex";
