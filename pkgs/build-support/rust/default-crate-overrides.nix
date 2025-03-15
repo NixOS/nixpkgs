@@ -346,14 +346,14 @@
   };
 
   # Assumes it can run Command::new(env::var("CARGO")).arg("locate-project")
-  # https://github.com/bkchr/proc-macro-crate/blame/master/src/lib.rs#L244
+  # https://github.com/bkchr/proc-macro-crate/blame/master/src/lib.rs#L242
   proc-macro-crate = attrs: lib.optionalAttrs (lib.versionAtLeast attrs.version "2.0") {
-    prePatch = (attrs.prePatch or "") + ''
+    postPatch = (attrs.postPatch or "") + ''
       substituteInPlace \
         src/lib.rs \
         --replace-fail \
-        'env::var("CARGO").map_err(|_| Error::CargoEnvVariableNotSet)?' \
-        '"${lib.getBin buildPackages.cargo}/bin/cargo"'
+        'env::var("CARGO")' \
+        'Ok::<_, core::convert::Infallible>("${lib.getBin buildPackages.cargo}/bin/cargo")'
     '';
   };
 }
