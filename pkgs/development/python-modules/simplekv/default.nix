@@ -26,8 +26,9 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  dependencies = [
-    dulwich
+  dependencies = [ dulwich ];
+
+  nativeCheckInputs = [
     mock
     pytestCheckHook
     six
