@@ -16,14 +16,23 @@ let
       }
     else
       throw "${pname}-${version} is not supported on ${stdenv.hostPlatform.system}";
-
-  appimageContents = appimageTools.extractType2 { inherit pname src; };
-
+  appimageContents = appimageTools.extractType2 {
+    inherit pname version src;
+    postExtract = ''
+      substituteInPlace $out/gdevelop.desktop --replace-fail 'Exec=AppRun --no-sandbox %U' 'Exec=gdevelop'
+    '';
+  };
   dontPatchELF = true;
-
 in
 appimageTools.wrapType2 {
   inherit pname version src;
+
+  extraInstallCommands = ''
+    mkdir -p $out/share/applications
+    cp ${appimageContents}/gdevelop.desktop $out/share/applications
+    mkdir -p $out/share/icons
+    cp -r ${appimageContents}/usr/share/icons/hicolor $out/share/icons
+  '';
 
   meta = {
     description = "Graphical Game Development Studio";
@@ -32,7 +41,7 @@ appimageTools.wrapType2 {
     license = lib.licenses.mit;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     maintainers = with lib.maintainers; [ tombert ];
+    mainProgram = "gdevelop";
     platforms = [ "x86_64-linux" ];
   };
-
 }
