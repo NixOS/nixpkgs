@@ -142,6 +142,7 @@ in
       wantedBy = [ "multi-user.target" ];
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
+      documentation = [ "man:soju(1)" ];
       serviceConfig = {
         DynamicUser = true;
         Restart = "always";
