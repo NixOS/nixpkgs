@@ -8,7 +8,7 @@
 }:
 
 let
-  version = "6.2.2";
+  version = "6.4.1";
   majorVersion = builtins.substring 0 1 version;
 in
 stdenvNoCC.mkDerivation rec {
@@ -16,7 +16,7 @@ stdenvNoCC.mkDerivation rec {
   inherit version;
   src = fetchurl {
     url = "https://files.jrsoftware.org/is/${majorVersion}/innosetup-${version}.exe";
-    hash = "sha256-gRfRDQCirTOhOQl46jhyhhwzDgh5FEEKY3eyLExbhWM=";
+    hash = "sha256-9Bdg4fGuFdIIm7arFi4hcguSrnUG7XBmezkgAGPWjjQ=";
   };
   nativeBuildInputs = [
     innoextract
