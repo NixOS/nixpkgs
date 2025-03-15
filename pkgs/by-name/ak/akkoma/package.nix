@@ -10,14 +10,14 @@
 
 beamPackages.mixRelease rec {
   pname = "akkoma";
-  version = "3.15.1";
+  version = "3.15.2";
 
   src = fetchFromGitea {
     domain = "akkoma.dev";
     owner = "AkkomaGang";
     repo = "akkoma";
     tag = "v${version}";
-    hash = "sha256-6qsqTguEVu9t6dW8c+VAE5Z7D3FbQ0S2ZfAN5qy7Xak=";
+    hash = "sha256-GW86OyO/XPIrCS+cPKQ8LG8PdhhfA2rNH1FXFiuL6vM=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -26,7 +26,7 @@ beamPackages.mixRelease rec {
   mixFodDeps = beamPackages.fetchMixDeps {
     pname = "mix-deps-${pname}";
     inherit src version;
-    hash = "sha256-nWtY5eohP9pv/vS9FuCh2nlPxLJ2Y4IRmve5in328DU=";
+    hash = "sha256-ygRj0s9J2/nBXR5s9CE7eMRBxsRhKlV/IZrkwPpco14=";
 
     postInstall = ''
       substituteInPlace "$out/http_signatures/mix.exs" \
@@ -77,6 +77,7 @@ beamPackages.mixRelease rec {
   meta = {
     description = "ActivityPub microblogging server";
     homepage = "https://akkoma.social";
+    changelog = "https://akkoma.dev/AkkomaGang/akkoma/releases/tag/v${version}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ mvs ];
     platforms = lib.platforms.unix;

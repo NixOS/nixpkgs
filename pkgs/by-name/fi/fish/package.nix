@@ -267,11 +267,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags =
     [
-      "-DCMAKE_INSTALL_DOCDIR=${placeholder "doc"}/share/doc/fish"
-      "-DRust_CARGO_TARGET=${stdenv.hostPlatform.rust.rustcTarget}"
+      (lib.cmakeFeature "CMAKE_INSTALL_DOCDIR" "${placeholder "doc"}/share/doc/fish")
+      (lib.cmakeFeature "Rust_CARGO_TARGET" stdenv.hostPlatform.rust.rustcTarget)
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "-DMAC_CODESIGN_ID=OFF"
+      (lib.cmakeBool "MAC_CODESIGN_ID" false)
     ];
 
   # Fish’s test suite needs to be able to look up process information and send signals.
@@ -321,6 +321,12 @@ stdenv.mkDerivation (finalAttrs: {
   preCheck = ''
     export TERMINFO="${ncurses}/share/terminfo"
   '';
+  checkFlags = lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    # thread 'tests::string_escape::test_escape_random_url' panicked at src/tests/string_escape.rs:122:9:
+    # assertion `left == right` failed: Escaped and then unescaped string ... but got back a different string ...
+    # https://github.com/fish-shell/fish-shell/issues/11254
+    "--skip=tests::string_escape::test_escape_random_url"
+  ];
 
   nativeInstallCheckInputs = [
     versionCheckHook
@@ -375,13 +381,13 @@ stdenv.mkDerivation (finalAttrs: {
       tee -a $out/share/fish/__fish_build_paths.fish < ${fishPreInitHooks}
     '';
 
-  meta = with lib; {
+  meta = {
     description = "Smart and user-friendly command line shell";
     homepage = "https://fishshell.com/";
-    changelog = "https://github.com/fish-shell/fish-shell/releases/tag/${version}";
-    license = licenses.gpl2Only;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/fish-shell/fish-shell/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       adamcstephens
       cole-h
       winter
