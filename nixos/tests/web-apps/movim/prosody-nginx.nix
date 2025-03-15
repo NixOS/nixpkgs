@@ -4,6 +4,7 @@ import ../../make-test-python.nix (
   let
     movim = {
       domain = "movim.local";
+      port = 8080;
       info = "No ToS in tests";
       description = "NixOS testing server";
     };
@@ -27,8 +28,13 @@ import ../../make-test-python.nix (
       server =
         { pkgs, ... }:
         {
+          environment.systemPackages = [
+            # For testing
+            pkgs.websocat
+          ];
+
           services.movim = {
-            inherit (movim) domain;
+            inherit (movim) domain port;
             enable = true;
             verbose = true;
             podConfig = {
@@ -82,6 +88,7 @@ import ../../make-test-python.nix (
       ''
         server.wait_for_unit("phpfpm-movim.service")
         server.wait_for_unit("nginx.service")
+        server.wait_for_open_port(${builtins.toString movim.port})
         server.wait_for_open_port(80)
 
         server.wait_for_unit("prosody.service")
@@ -94,7 +101,7 @@ import ../../make-test-python.nix (
         server.fail("curl -L --fail-with-body --max-redirs 0 http://${movim.domain}/chat")
 
         # Test basic Websocket
-        server.succeed("echo \"\" | ${lib.getExe pkgs.websocat} 'ws://${movim.domain}/ws/?path=login&offset=0' --origin 'http://${movim.domain}'")
+        server.succeed("echo | websocat --origin 'http://${movim.domain}' 'ws://${movim.domain}/ws/?path=login&offset=0'")
 
         # Test login + create cookiejar
         login_html = server.succeed("curl --fail-with-body -c /tmp/cookies http://${movim.domain}/login")

@@ -11,5 +11,6 @@ let
   ];
 in
 {
+  ejabberd-h2o = handleTestOn supportedSystems ./ejabberd-h2o.nix { inherit system; };
   prosody-nginx = handleTestOn supportedSystems ./prosody-nginx.nix { inherit system; };
 }
