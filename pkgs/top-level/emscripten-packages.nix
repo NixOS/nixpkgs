@@ -6,6 +6,51 @@ with pkgs;
 # https://github.com/NixOS/nixpkgs/pull/16208
 
 rec {
+  gmp = (pkgs.gmp.override {
+    stdenv = emscriptenStdenv;
+  }).overrideAttrs
+    (old: {
+      outputs = [ "out" ];
+      configureFlags = [
+        "--build=${stdenv.buildPlatform.config}"
+        "--disable-assembly"
+        "--enable-cxx"
+        "--prefix=${placeholder "out"}"
+      ];
+      configurePhase = ''
+        mkdir -p .emscriptencache
+        export EM_CACHE=$(pwd)/.emscriptencache
+        export HOME=$TMPDIR
+        emconfigure ./configure $configureFlags
+      '';
+      buildPhase = ''
+        emmake make
+      '';
+      installPhase = ''
+        emmake make install
+      '';
+      checkPhase = ''
+        echo "================= testing gmp using node ================="
+
+        echo "Compiling a custom test"
+        set -x
+        emcc -O2 -o example.js demos/isprime.c -I. -L.libs -lgmp
+
+        echo "Using node to execute the test and grep for expected output"
+        ${lib.getExe nodejs} ./example.js 23 42 | grep -E '^(23 is a prime|42 is composite)$'
+
+        set +x
+        if [ $? -ne 0 ]; then
+          echo "test failed for some reason"
+          exit 1;
+        else
+          echo "it seems to work! very good."
+        fi
+
+        echo "================= /testing gmp using node ================="
+      '';
+    });
+
   json_c = (pkgs.json_c.override {
     stdenv = pkgs.emscriptenStdenv;
   }).overrideAttrs
@@ -84,6 +129,51 @@ rec {
         echo "================= /testing libxml2 using node ================="
       '';
     });
+
+  mpfr = (pkgs.mpfr.override {
+    stdenv = emscriptenStdenv;
+  }).overrideAttrs
+    (old: {
+      outputs = [ "out" ];
+      dontUpdateAutotoolsGnuConfigScripts = "true";
+      preConfigurePhases = [ "unpackPhase" "patchPhase" "configurePhase" ];
+      configureFlags = (old.configureFlags or []) ++ [
+        "--with-gmp=${gmp}"
+        "--prefix=${placeholder "out"}"
+      ];
+      configurePhase = ''
+        mkdir -p .emscriptencache
+        export EM_CACHE=$(pwd)/.emscriptencache
+        emconfigure ./configure $configureFlags
+      '';
+      buildPhase = ''
+        emmake make
+      '';
+      installPhase = ''
+        emmake make install
+      '';
+      checkPhase = ''
+        echo "================= testing mpfr using node ================="
+
+        echo "Compiling a custom test"
+        pwd
+        set -x
+        emcc -O2 -o example.js examples/sample.c -I${lib.getDev gmp}/include -Isrc -L${lib.getDev gmp}/lib -Lsrc/.libs -lgmp -lmpfr
+
+        echo "Using node to execute the test and grep for expected output"
+        ${lib.getExe nodejs} ./example.js | grep -E '^Sum is 2.7182818284590452353602874713526624977572470936999595749669131e0$'
+
+        set +x
+        if [ $? -ne 0 ]; then
+          echo "test failed for some reason"
+          exit 1;
+        else
+          echo "it seems to work! very good."
+        fi
+
+        echo "================= /testing mpfr using node ================="
+      '';
+  });
 
   xmlmirror = pkgs.buildEmscriptenPackage rec {
     pname = "xmlmirror";
