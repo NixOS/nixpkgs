@@ -22,7 +22,7 @@ let
   };
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "dxx-rebirth";
   version = "0.60.0-beta2-unstable-2025-01-12";
 

@@ -399,7 +399,7 @@ stdenv.mkDerivation rec {
       };
     };
 
-  src_for_updater = stdenv.mkDerivation rec {
+  src_for_updater = stdenv.mkDerivation {
     name = "updater-sources";
     inherit src;
     nativeBuildInputs = [ unzip ];

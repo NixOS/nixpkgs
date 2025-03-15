@@ -361,7 +361,7 @@ stdenv.mkDerivation rec {
       pythonBinPathWithNixHacks = callPackage ../python-bin-path-test.nix { inherit runLocal bazelTest distDir; bazel = bazelWithNixHacks; };
     };
 
-  src_for_updater = stdenv.mkDerivation rec {
+  src_for_updater = stdenv.mkDerivation {
     name = "updater-sources";
     inherit src;
     nativeBuildInputs = [ unzip ];

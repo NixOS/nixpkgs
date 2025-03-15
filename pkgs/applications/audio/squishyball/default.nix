@@ -12,7 +12,7 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "squishyball";
   version = "unstable-2020-11-23";
 

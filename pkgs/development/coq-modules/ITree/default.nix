@@ -7,7 +7,7 @@
   ExtLib,
 }:
 
-mkCoqDerivation rec {
+mkCoqDerivation {
   pname = "InteractionTrees";
   owner = "DeepSpec";
   inherit version;
