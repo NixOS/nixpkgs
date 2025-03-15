@@ -4,6 +4,7 @@
   fetchurl,
   autoconf,
   automake,
+  pkg-config,
   SDL,
   SDL_mixer,
   SDL_image,
@@ -23,6 +24,9 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     autoconf
     automake
+    # needed as of https://github.com/libsdl-org/SDL-1.2/commit/fa041e14b5f69a820b0250ae7f450111af2fdbba
+    # which emits a PKG_CHECK_MODULES(SDL, ...) statement which sh cannot parse
+    pkg-config
   ];
 
   buildInputs = [

@@ -3,6 +3,7 @@
   SDL,
   SDL_image,
   autoreconfHook,
+  pkg-config,
   fetchFromGitHub,
   stdenv,
 }:
@@ -21,6 +22,9 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     autoreconfHook
     SDL
+    # needed as of https://github.com/libsdl-org/SDL-1.2/commit/fa041e14b5f69a820b0250ae7f450111af2fdbba
+    # which emits a PKG_CHECK_MODULES(SDL, ...) statement which sh cannot parse
+    pkg-config
   ];
 
   buildInputs = [
