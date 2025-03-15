@@ -13615,6 +13615,13 @@
     githubId = 61109829;
     name = "Litchi Pi";
   };
+  litelotus = {
+    email = "lite5h4dow+maintenance@gmail.com";
+    github = "lite5h4dow";
+    githubId = 18059545;
+    matrix = "@litelotus:matrix.org";
+    name = "Lamar Daughma";
+  };
   livnev = {
     email = "lev@liv.nev.org.uk";
     github = "livnev";
