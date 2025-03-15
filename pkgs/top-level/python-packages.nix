@@ -10622,6 +10622,8 @@ self: super: with self; {
 
   pybars3 = callPackage ../development/python-modules/pybars3 { };
 
+  pybgcode = callPackage ../development/python-modules/pybgcode { };
+
   pyembroidery = callPackage ../development/python-modules/pyembroidery { };
 
   pymeta3 = callPackage ../development/python-modules/pymeta3 { };
