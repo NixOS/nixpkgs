@@ -107,6 +107,6 @@ in
       description = "Command-line HTTP client";
       homepage = "https://github.com/darrenburns/posting";
       license = licenses.mit;
-      maintainers = [lib.maintainers.blackzeshi];
+      maintainers = [maintainers.blackzeshi];
     };
   }
