@@ -1,5 +1,6 @@
 from argparse import ArgumentParser
 from dataclasses import dataclass
+from fnmatch import fnmatch
 from functools import cached_property
 import json
 from pathlib import Path
@@ -85,7 +86,7 @@ def main():
             dt = Fdt(fd.read())
 
         for overlay in overlays_data:
-            if overlay.filter and overlay.filter not in str(rel_path):
+            if overlay.filter and not fnmatch(rel_path, overlay.filter):
                 print(f"  Skipping overlay {overlay.name}: filter does not match")
                 continue
 
