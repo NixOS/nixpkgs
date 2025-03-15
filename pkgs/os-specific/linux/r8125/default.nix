@@ -5,7 +5,7 @@
   kernel,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "r8125";
   version = "9.015.00";
 
@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
     domain = "salsa.debian.org";
     owner = "debian";
     repo = "r8125";
-    rev = "upstream/${version}";
-    sha256 = "sha256-RA7rvvF2Ngeu+hSACBbKfAJgLbPqhaXG14DH2NmztTE=";
+    tag = "upstream/${finalAttrs.version}";
+    hash = "sha256-RA7rvvF2Ngeu+hSACBbKfAJgLbPqhaXG14DH2NmztTE=";
   };
 
   hardeningDisable = [ "pic" ];
@@ -22,8 +22,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
   preBuild = ''
-    substituteInPlace src/Makefile --replace "BASEDIR :=" "BASEDIR ?="
-    substituteInPlace src/Makefile --replace "modules_install" "INSTALL_MOD_PATH=$out modules_install"
+    substituteInPlace src/Makefile --replace-fail "BASEDIR :=" "BASEDIR ?="
+    substituteInPlace src/Makefile --replace-fail "modules_install" "INSTALL_MOD_PATH=$out modules_install"
   '';
 
   makeFlags = [
@@ -44,4 +44,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.peelz ];
   };
-}
+})
