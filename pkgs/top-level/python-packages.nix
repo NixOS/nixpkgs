@@ -15338,6 +15338,13 @@ self: super: with self; {
 
   sleepyq = callPackage ../development/python-modules/sleepyq { };
 
+  slepc4py = toPythonModule (pkgs.slepc.override {
+    pythonSupport = true;
+    python3 = self.python;
+    python3Packages = self;
+    petsc = petsc4py;
+  });
+
   sleqp = toPythonModule (pkgs.sleqp.override { pythonSupport = true; python3Packages = self; });
 
   slicedimage = callPackage ../development/python-modules/slicedimage { };
