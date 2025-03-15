@@ -16,7 +16,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "admin-fe";
-  version = "unstable-2024-04-27";
+  version = "2.3.0-2-unstable-2024-04-27";
 
   src = fetchFromGitea {
     domain = "akkoma.dev";

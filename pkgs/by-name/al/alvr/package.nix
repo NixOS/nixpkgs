@@ -40,18 +40,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "alvr";
-  version = "20.12.1";
+  version = "20.13.0";
 
   src = fetchFromGitHub {
     owner = "alvr-org";
     repo = "ALVR";
     tag = "v${version}";
     fetchSubmodules = true; #TODO devendor openvr
-    hash = "sha256-T7KyGZwnJ9t4Bh8KFy190IV3igWCG+yn+OW9a6mgmYI=";
+    hash = "sha256-h7/fuuolxbNkjUbqXZ7NTb1AEaDMFaGv/S05faO2HIc=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-DE88nMC6qpbPJsBpdyITv6igMgwy4g40VCgFQQuRRTA=";
+  cargoHash = "sha256-A0ADPMhsREH1C/xpSxW4W2u4ziDrKRrQyY5kBDn//gQ=";
 
   patches = [
     (replaceVars ./fix-finding-libs.patch {
@@ -142,7 +142,10 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/alvr-org/ALVR/releases/tag/v${version}";
     license = licenses.mit;
     mainProgram = "alvr_dashboard";
-    maintainers = with maintainers; [ passivelemon ];
+    maintainers = with maintainers; [
+      luNeder
+      jopejoe1
+    ];
     platforms = platforms.linux;
   };
 }
