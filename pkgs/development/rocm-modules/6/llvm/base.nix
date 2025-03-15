@@ -66,7 +66,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocm-llvm-${targetName}";
-  version = "6.0.2";
+  version = "6.1.5";
 
   outputs =
     [
@@ -86,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ROCm";
     repo = "llvm-project";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-uGxalrwMNCOSqSFVrYUBi3ijkMEFFTrzFImmvZKQf6I=";
+    hash = "sha256-+pe3e65Ri5zOOYvoSUiN0Rto/Ss8OyRfqxRifToAO7g=";
   };
 
   nativeBuildInputs =
