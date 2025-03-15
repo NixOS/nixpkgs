@@ -38,6 +38,24 @@ in
           '';
         };
       };
+
+      lid = {
+        authSkipLidClose = lib.mkOption {
+          type = lib.types.bool;
+          default = false;
+          description = ''
+            Disable fprint auth when laptop with built-in fingerprint reader has lid closed. Useful for docked laptops.
+          '';
+        };
+        path = lib.mkOption {
+          type = lib.types.str;
+          default = "/proc/acpi/button/lid/LID/state";
+          example = "/proc/acpi/button/lid/LID/state";
+          description = ''
+            Path to lid state file.
+          '';
+        };
+      };
     };
   };
 

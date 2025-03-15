@@ -267,6 +267,15 @@ let
         '';
       };
 
+      fprintAuthSkipLidClose = lib.mkOption {
+        default = config.services.fprintd.lid.authSkipLidClose;
+        defaultText = lib.literalExpression "config.services.fprintd.authSkipLidClose";
+        type = lib.types.bool;
+        description = ''
+          If set, fprint will not be used if laptop lid closed.
+        '';
+      };
+
       oathAuth = lib.mkOption {
         default = config.security.pam.oath.enable;
         defaultText = lib.literalExpression "config.security.pam.oath.enable";
@@ -708,6 +717,7 @@ let
           (let dp9ik = config.security.pam.dp9ik; in { name = "p9"; enable = dp9ik.enable; control = dp9ik.control; modulePath = "${pkgs.pam_dp9ik}/lib/security/pam_p9.so"; args = [
             dp9ik.authserver
           ]; })
+          (let lid = pkgs.writeShellScript "lid.sh" "${pkgs.gnugrep}/bin/grep -q closed ${config.services.fprintd.lid.path} && exit 1; true"; in { name = "fprintd-lid"; enable = cfg.fprintAuthSkipLidClose; control = "[success=ignore default=1]"; modulePath = "${pkgs.linux-pam}/lib/security/pam_exec.so"; args = ["quiet" "${lid}"]; })
           { name = "fprintd"; enable = cfg.fprintAuth; control = "sufficient"; modulePath = "${config.services.fprintd.package}/lib/security/pam_fprintd.so"; }
         ] ++
           # Modules in this block require having the password set in PAM_AUTHTOK.
