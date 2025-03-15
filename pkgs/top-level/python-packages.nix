@@ -9369,6 +9369,8 @@ self: super: with self; {
 
   netapp-ontap = callPackage ../development/python-modules/netapp-ontap { };
 
+  netbox-attachments = callPackage ../development/python-modules/netbox-attachments { };
+
   netbox-bgp = callPackage ../development/python-modules/netbox-bgp { };
 
   netbox-dns = callPackage ../development/python-modules/netbox-dns { };
