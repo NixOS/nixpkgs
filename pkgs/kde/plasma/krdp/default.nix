@@ -4,7 +4,6 @@
   replaceVars,
   openssl,
   pkg-config,
-  qtkeychain,
   qtwayland,
   freerdp,
   wayland,
@@ -21,7 +20,6 @@ mkKdeDerivation {
 
   extraNativeBuildInputs = [ pkg-config ];
   extraBuildInputs = [
-    qtkeychain
     qtwayland
     freerdp
     wayland
