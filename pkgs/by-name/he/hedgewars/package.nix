@@ -19,14 +19,14 @@
   libGL,
   libGLU,
   physfs,
-  qtbase,
-  qttools,
-  wrapQtAppsHook,
+  qt5,
   llvm,
   withServer ? true,
 }:
 
 let
+  inherit (qt5) qtbase qttools wrapQtAppsHook;
+
   ghc = haskell.packages.ghc94.ghcWithPackages (
     pkgs: with pkgs; [
       SHA
