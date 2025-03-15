@@ -2,7 +2,9 @@
   lib,
   stdenv,
   autoreconfHook,
+  callPackage,
   fetchFromGitHub,
+  hunspellDicts,
   ncurses,
   nix-update-script,
   readline,
@@ -59,6 +61,10 @@ stdenv.mkDerivation (finalAttrs: {
     tests = {
       pkg-config = testers.hasPkgConfigModules { package = finalAttrs.finalPackage; };
       version = testers.testVersion { package = finalAttrs.finalPackage; };
+      wrapper = callPackage ./wrapper.nix {
+        hunspell = finalAttrs.finalPackage;
+        dicts = [ hunspellDicts.en_US ];
+      };
     };
 
     updateScript = nix-update-script { };
