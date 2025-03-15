@@ -1872,7 +1872,7 @@ rec {
     :::
   */
   cmakeOptionType = let
-    types = [ "BOOL" "FILEPATH" "PATH" "STRING" "INTERNAL" ];
+    types = [ "BOOL" "FILEPATH" "PATH" "STRING" "INTERNAL" "LIST" ];
   in type: feature: value:
     assert (elem (toUpper type) types);
     assert (isString feature);
