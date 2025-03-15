@@ -1,0 +1,95 @@
+diff --git a/applets/meson.build b/applets/meson.build
+index fd29a9f..56f89dd 100644
+--- a/applets/meson.build
++++ b/applets/meson.build
+@@ -4,7 +4,6 @@ if vala_panel_found
+     vpp = shared_module('appmenu', vp_sources, libres,
+                     dependencies: [appmenu_dep, vp],
+                     install: true,
+-                    install_dir: vp_applets_libdir
+                   )
+ endif
+ 
+@@ -14,7 +13,6 @@ if mate_found
+     mpp = shared_module('appmenu-mate', mp_sources, libres,
+                     dependencies: [appmenu_dep, mp],
+                     install: true,
+-                    install_dir: mate_applet_libdir
+                   )
+ endif
+ 
+@@ -24,7 +22,6 @@ if xfce_found
+     xpp = shared_module('appmenu-xfce', xp_sources, libres,
+                     dependencies: [appmenu_dep, xc,xp],
+                     install: true,
+-                    install_dir: xfce_applet_libdir
+                   )
+ endif
+ 
+@@ -34,6 +31,5 @@ if budgie_found
+     bpp = shared_module('appmenu-budgie', bp_sources, libres,
+                     dependencies: [appmenu_dep, bp],
+                     install: true,
+-                    install_dir: budgie_applet_libdir
+                   )
+ endif
+diff --git a/data/meson.build b/data/meson.build
+index fa3df0c..56b327e 100644
+--- a/data/meson.build
++++ b/data/meson.build
+@@ -3,7 +3,7 @@ cdata.set('CMAKE_INSTALL_FULL_LIBDIR', join_paths(prefix,get_option('libdir')))
+ cdata.set('CMAKE_INSTALL_FULL_DATAROOTDIR', join_paths(prefix,datadir))
+ 
+ if vala_panel_found
+-    vp_applets_datadir = vp.get_variable(pkgconfig:'applets_data')
++    vp_applets_datadir = get_option('datadir') / 'applications'
+     desktop = vcs_tag(
+ 	    command : ['git','describe','--tags'],
+ 	    input: 'appmenu.plugin.desktop.in',
+@@ -19,7 +19,7 @@ if vala_panel_found
+ endif
+ 
+ if mate_found
+-    mate_applet_datadir = join_paths(mp.get_variable(pkgconfig:'prefix'),datadir,'mate-panel','applets')
++    mate_applet_datadir = get_option('datadir') / 'applications'
+     mate_desktop = configure_file(input : 'appmenu-mate.plugin.desktop.in',
+                output : 'appmenu-mate.desktop.in',
+ 			   configuration : cdata)
+@@ -32,7 +32,7 @@ if mate_found
+ endif
+ 
+ if xfce_found
+-    xfce_applet_datadir = join_paths(xp.get_variable(pkgconfig:'prefix'),datadir,'xfce4','panel','plugins')
++    xfce_applet_datadir = get_option('datadir') / 'applications'
+     i18n.merge_file(
+       input: 'appmenu.desktop.in',
+       output: 'appmenu.desktop',
+@@ -46,7 +46,7 @@ if budgie_found
+       input: 'appmenu-budgie.desktop.in',
+       output: 'appmenu-budgie.plugin',
+       kwargs: desktop_kwargs,
+-      install_dir: budgie_applet_libdir
++      install_dir: get_option('datadir') / 'applications'
+     )
+ endif
+ 
+diff --git a/subprojects/appmenu-gtk-module/src/gtk-2.0/meson.build b/subprojects/appmenu-gtk-module/src/gtk-2.0/meson.build
+index 505d547..43e1714 100644
+--- a/subprojects/appmenu-gtk-module/src/gtk-2.0/meson.build
++++ b/subprojects/appmenu-gtk-module/src/gtk-2.0/meson.build
+@@ -3,5 +3,4 @@ gtk2_module = shared_module(
+     dependencies: gtk2_parser_dep,
+     c_args: '-Wno-deprecated-declarations',
+     install: true,
+-    install_dir: join_paths(gtk2.get_variable(pkgconfig:'libdir'),'gtk-2.0','modules')
+ )
+diff --git a/subprojects/appmenu-gtk-module/src/gtk-3.0/meson.build b/subprojects/appmenu-gtk-module/src/gtk-3.0/meson.build
+index dff3bf3..cb90daf 100644
+--- a/subprojects/appmenu-gtk-module/src/gtk-3.0/meson.build
++++ b/subprojects/appmenu-gtk-module/src/gtk-3.0/meson.build
+@@ -2,5 +2,4 @@ gtk3_module = shared_module(
+     'appmenu-gtk-module', module_sources,
+     dependencies: gtk3_parser_dep,
+     install: true,
+-    install_dir: join_paths(gtk3.get_variable(pkgconfig:'libdir'),'gtk-3.0','modules')
+ )
