@@ -38,8 +38,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   useFetchCargoVendor = true;
   cargoHash = "sha256-yuKaf05bQFah3MTC0eF82pMmTJrllWfUKX3SdIWbPjM=";
 
-  patches = [ ./remove_updater.patch ];
-
   nativeBuildInputs = [
     nodejs
     pnpm.configHook
