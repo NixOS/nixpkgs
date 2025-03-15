@@ -54,10 +54,23 @@ stdenv.mkDerivation rec {
   MYSQL_DIR = libmysqlclient;
   MYSQL_INCLUDE_DIR = "${MYSQL_DIR}/include/mysql";
 
-  cmakeFlags = [
-    # use nix provided versions of sqlite, zlib, pcre, expat, ... instead of bundled versions
-    (lib.cmakeBool "POCO_UNBUNDLED" true)
-  ];
+  cmakeFlags =
+    let
+      # These tests require running services, which the checkPhase is ill equipeed to provide
+      # TODO get them running in a nixosTest
+      excludeTestsRegex = lib.concatStringsSep "|" [
+        "Redis"
+        "DataODBC"
+        "MongoDB"
+        "DataMySQL"
+      ];
+    in
+    [
+      # use nix provided versions of sqlite, zlib, pcre, expat, ... instead of bundled versions
+      (lib.cmakeBool "POCO_UNBUNDLED" true)
+      (lib.cmakeBool "ENABLE_TESTS" true)
+      (lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" "--exclude-regex;'${excludeTestsRegex}'")
+    ];
 
   patches = [
     # Remove on next release
@@ -67,7 +80,15 @@ stdenv.mkDerivation rec {
       url = "https://patch-diff.githubusercontent.com/raw/pocoproject/poco/pull/4879.patch";
       hash = "sha256-VFWuRuf0GPYFp43WKI8utl+agP+7a5biLg7m64EMnVo=";
     })
+    # failing on darwin, could perhaps be patched / a fix upstreamed later
+    ./disable-broken-tests.patch
   ];
+
+  doCheck = true;
+  preCheck = ''
+    # workaround for some tests trying to write to /homeless-shelter
+    export HOME=$(mktemp -d)
+  '';
 
   postFixup = ''
     grep -rlF INTERFACE_INCLUDE_DIRECTORIES "$dev/lib/cmake/Poco" | while read -r f; do
