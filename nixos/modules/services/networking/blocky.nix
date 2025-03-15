@@ -30,7 +30,7 @@ in
   config = lib.mkIf cfg.enable {
     systemd.services.blocky = {
       description = "A DNS proxy and ad-blocker for the local network";
-      wantedBy = [ "multi-user.target" ];
+      wantedBy = [ "network.target" ];
 
       serviceConfig = {
         DynamicUser = true;
