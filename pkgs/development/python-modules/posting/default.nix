@@ -75,7 +75,7 @@ in buildPythonPackage rec {
     typer
   ];
 
-  format = "pyproject";
+  pyproject = true;
   doCheck = false;
   pythonImportsCheck = ["posting"];
 
