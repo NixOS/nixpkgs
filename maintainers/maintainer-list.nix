@@ -3201,6 +3201,12 @@
     githubId = 77934086;
     keys = [ { fingerprint = "4CA3 48F6 8FE1 1777 8EDA 3860 B9A2 C1B0 25EC 2C55"; } ];
   };
+  blenderfreaky = {
+    name = "blenderfreaky";
+    email = "nix@blenderfreaky.de";
+    github = "blenderfreaky";
+    githubId = 14351657;
+  };
   blinry = {
     name = "blinry";
     email = "mail@blinry.org";
