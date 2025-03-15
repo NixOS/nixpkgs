@@ -28,7 +28,7 @@ for a more complete example.
   options.settings = lib.mkOption {
     type = lib.types.submodule {
 
-      freeformType = with lib.types; attrsOf str;
+      _module.freeformType = with lib.types; attrsOf str;
 
       # We want this attribute to be checked for the correct type
       options.port = lib.mkOption {
