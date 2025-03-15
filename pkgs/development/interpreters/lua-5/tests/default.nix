@@ -123,12 +123,14 @@ pkgs.recurseIntoAttrs ({
   checkPropagatedBuildInputs =
     pkgs.runCommandLocal "test-${lua.name}-setup-hook"
       ({
-        # lua-curl is a propagatedBuildInput of rest-nvim has
         buildInputs = [ lua.pkgs.rest-nvim ];
       })
-      (''
-        ${lua}/bin/lua -e "require'cURL'"
-        touch $out
-      '');
+      # `xml2lua` is a propagatedBuildInput of rest-nvim
+      (
+        ''
+          ${lua}/bin/lua -e "require'xml2lua'"
+          touch $out
+        ''
+      );
 
 })
