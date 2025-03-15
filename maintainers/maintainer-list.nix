@@ -3107,6 +3107,12 @@
     githubId = 5718007;
     name = "Bastian Köcher";
   };
+    blackzeshi = {
+    name = "Blackzeshi";
+    email = "student7488@gmail.com";
+    gihub = "zeshi09";
+    githubId = 105582686;
+  };
   blaggacao = {
     name = "David Arnold";
     email = "dar@xoe.solutions";
@@ -3118,12 +3124,6 @@
     email = "blakesmith0@gmail.com";
     github = "blakesmith";
     githubId = 44368;
-  };
-  blackzeshi = {
-    name = "Blackzeshi";
-    email = "student7488@gmail.com";
-    gihub = "zeshi09";
-    githubId = 105582686;
   };
   blankparticle = {
     name = "BlankParticle";
