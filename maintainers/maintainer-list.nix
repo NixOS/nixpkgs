@@ -23968,6 +23968,12 @@
     matrix = "@titaniumtown:envs.net";
     keys = [ { fingerprint = "D15E 4754 FE1A EDA1 5A6D  4702 9AB2 8AC1 0ECE 533D"; } ];
   };
+  tjkeller = {
+    email = "tjk@tjkeller.xyz";
+    github = "tjkeller-xyz";
+    githubId = 36288711;
+    name = "Tim Keller";
+  };
   tjni = {
     email = "43ngvg@masqt.com";
     matrix = "@tni:matrix.org";
