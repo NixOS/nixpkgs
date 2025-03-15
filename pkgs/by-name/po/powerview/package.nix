@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
     owner = "aniqfakhrul";
     repo = "powerview.py";
     rev = "main";
-    hash = "sha256-855smi1qmEgeso30fXj2ivnvVYtAUrs3ps0EclDbZz0=";
+    hash = "sha256-8ZTbPtmdyvDTJ1Um0tFUJ8rMsOp+lQhgnAj42LJbUwk=";
   };
 
   build-system = with python3Packages; [
