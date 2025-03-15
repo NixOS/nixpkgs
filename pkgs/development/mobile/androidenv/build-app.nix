@@ -6,6 +6,7 @@
   jdk,
   gnumake,
   gawk,
+  meta,
 }:
 
 {
@@ -64,6 +65,8 @@ stdenv.mkDerivation (
       mkdir -p $out/nix-support
       echo "file binary-dist \"$(echo $out/*.apk)\"" > $out/nix-support/hydra-build-products
     '';
+
+    inherit meta;
   }
   // extraArgs
 )
