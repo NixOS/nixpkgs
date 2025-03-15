@@ -10,6 +10,7 @@ lib.makeOverridable (
 , fetchLFS ? false
 , sparseCheckout ? []
 , githubBase ? "github.com", varPrefix ? null
+, passthru ? { }
 , meta ? { }
 , ... # For hash agility
 }@args:
@@ -26,6 +27,9 @@ let
       builtins.unsafeGetAttrPos "rev" args
   );
   baseUrl = "https://${githubBase}/${owner}/${repo}";
+  newPassthru = {
+    inherit owner repo;
+  } // passthru;
   newMeta = meta // {
     homepage = meta.homepage or baseUrl;
   } // lib.optionalAttrs (position != null) {
@@ -68,7 +72,9 @@ let
 
   fetcherArgs = (if useFetchGit
     then {
-      inherit tag rev deepClone fetchSubmodules sparseCheckout fetchLFS; url = gitRepoUrl;
+      inherit tag rev deepClone fetchSubmodules sparseCheckout fetchLFS;
+      url = gitRepoUrl;
+      passthru = newPassthru;
     } // lib.optionalAttrs (leaveDotGit != null) { inherit leaveDotGit; }
     else {
       # Use the API endpoint for private repos, as the archive URI doesn't
@@ -90,11 +96,17 @@ let
       extension = "tar.gz";
 
       passthru = {
-        inherit gitRepoUrl;
-      };
+        inherit
+          gitRepoUrl
+          tag
+          ;
+        rev = revWithTag;
+      } // newPassthru;
     }
-  ) // privateAttrs // passthruAttrs // { inherit name; };
+  ) // privateAttrs // passthruAttrs // {
+    inherit name;
+    meta = newMeta;
+  };
 in
 
-fetcher fetcherArgs // { meta = newMeta; inherit owner repo tag; rev = revWithTag; }
-)
+fetcher fetcherArgs)
