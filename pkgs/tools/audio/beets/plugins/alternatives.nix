@@ -3,38 +3,51 @@
   fetchFromGitHub,
   beets,
   python3Packages,
+  writableTmpDirAsHomeHook,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "beets-alternatives";
-  version = "0.13.0";
+  version = "0.13.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     repo = "beets-alternatives";
     owner = "geigerzaehler";
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-i67Bzdh84TuVwcgwo5SgHFp1W04KF3VA6cbrFz82je0=";
+    tag = "v${version}";
+    hash = "sha256-+LvQC7hYtbJeWJiDEKtSFZaEtnuXZ+4mI75rrX9Sd64=";
   };
 
   nativeBuildInputs = [
     beets
+  ];
+
+  dependencies = [
     python3Packages.poetry-core
   ];
 
-  nativeCheckInputs = with python3Packages; [
-    pytestCheckHook
-    pytest-cov
-    mock
-    typeguard
+  nativeCheckInputs =
+    with python3Packages;
+    [
+      pytestCheckHook
+      pytest-cov-stub
+      mock
+      typeguard
+    ]
+    ++ [
+      writableTmpDirAsHomeHook
+    ];
+
+  disabledTests = [
+    # ValueError: too many values to unpack (expected 2)
+    # https://github.com/geigerzaehler/beets-alternatives/issues/122
+    "test_embed_art"
   ];
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   meta = {
     description = "Beets plugin to manage external files";
     homepage = "https://github.com/geigerzaehler/beets-alternatives";
+    changelog = "https://github.com/geigerzaehler/beets-alternatives/blob/v${version}/CHANGELOG.md";
     maintainers = with lib.maintainers; [
       aszlig
       lovesegfault
