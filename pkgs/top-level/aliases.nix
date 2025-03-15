@@ -55,7 +55,7 @@ let
       konversation korganizer kpkpass krdc kreversi krfb kscreen kscreenlocker
       kshisen ksquares ksshaskpass ksystemlog kteatime ktimer ktorrent ktouch
       kturtle kwallet-pam kwalletmanager kwave kwayland-integration kwin kwrited
-      marble merkuro milou minuet okular oxygen oxygen-icons5 picmi
+      marble merkuro milou minuet okular oxygen picmi
       plasma-browser-integration plasma-desktop plasma-integration plasma-nano
       plasma-nm plasma-pa plasma-mobile plasma-systemmonitor plasma-thunderbolt
       plasma-vault plasma-workspace plasma-workspace-wallpapers
@@ -148,6 +148,13 @@ mapAliases {
   afl = throw "afl has been removed as the upstream project was archived. Consider using 'aflplusplus'"; # Added 2024-04-21
   agda-pkg = throw "agda-pkg has been removed due to being unmaintained"; # Added 2024-09-10"
   ajour = throw "ajour has been removed, the project was archived upstream on 2024-09-17."; # Added 2025-03-12
+  akkoma-emoji = recurseIntoAttrs {
+    blobs_gg = lib.warnOnInstantiate "'akkoma-emoji.blobs_gg' has been renamed to 'blobs_gg'" blobs_gg; # Added 2025-03-14
+  };
+  akkoma-frontends = recurseIntoAttrs {
+    admin-fe = lib.warnOnInstantiate "'akkoma-frontends.admin-fe' has been renamed to 'akkoma-admin-fe'" akkoma-admin-fe; # Added 2025-03-14
+    akkoma-fe = lib.warnOnInstantiate "'akkoma-frontends.akkoma-fe' has been renamed to 'akkoma-fe'" akkoma-fe; # Added 2025-03-14
+  };
   alass = throw "'alass' has been removed due to being unmaintained upstream"; # Added 2025-01-25
   alsaLib = throw "'alsaLib' has been renamed to/replaced by 'alsa-lib'"; # Converted to throw 2024-10-17
   alsaOss = throw "'alsaOss' has been renamed to/replaced by 'alsa-oss'"; # Converted to throw 2024-10-17
@@ -483,6 +490,7 @@ mapAliases {
   flashrom-stable = flashprog;   # Added 2024-03-01
   flatbuffers_2_0 = flatbuffers; # Added 2022-05-12
   flatcam = throw "flatcam has been removed because it is unmaintained since 2022 and doesn't support Python > 3.10"; # Added 2025-01-25
+  flow-editor = flow-control; # Added 2025-03-05
   flutter313 = throw "flutter313 has been removed because it isn't updated anymore, and no packages in nixpkgs use it. If you still need it, use flutter.mkFlutter to get a custom version"; # Added 2024-10-05
   flutter316 = throw "flutter316 has been removed because it isn't updated anymore, and no packages in nixpkgs use it. If you still need it, use flutter.mkFlutter to get a custom version"; # Added 2024-10-05
   flutter319 = throw "flutter319 has been removed because it isn't updated anymore, and no packages in nixpkgs use it. If you still need it, use flutter.mkFlutter to get a custom version"; # Added 2024-12-03
@@ -1149,6 +1157,14 @@ mapAliases {
   OSCAR = oscar; # Added 2024-06-12
   osxfuse = throw "'osxfuse' has been renamed to/replaced by 'macfuse-stubs'"; # Converted to throw 2024-10-17
   ovn-lts = throw "ovn-lts has been removed. Please use the latest version available under ovn"; # Added 2024-08-24
+  oxygen-icons5 = throw ''
+    The top-level oxygen-icons5 alias has been removed.
+
+    Please explicitly use kdePackages.oxygen-icons for the latest Qt 6-based version,
+    or libsForQt5.oxygen-icons5 for the deprecated Qt 5 version.
+
+    Note that Qt 5 versions of most KDE software will be removed in NixOS 25.11.
+  ''; # Added 2025-03-15;
   oysttyer = throw "oysttyer has been removed; it is no longer maintained because of Twitter disabling free API access"; # Added 2024-09-23
 
   ### P ###
@@ -1347,6 +1363,7 @@ mapAliases {
   ### S ###
 
   SDL_classic = SDL1; # Added 2024-09-03
+  SDL_gpu = throw "'SDL_gpu' has been removed due to lack of upstream maintenance and known users"; # Added 2025-03-15
   s2n = throw "'s2n' has been renamed to/replaced by 's2n-tls'"; # Converted to throw 2024-10-17
   sandboxfs = throw "'sandboxfs' has been removed due to being unmaintained, consider using linux namespaces for sandboxing instead"; # Added 2024-06-06
   sane-backends-git = throw "'sane-backends-git' has been renamed to/replaced by 'sane-backends'"; # Converted to throw 2024-10-17

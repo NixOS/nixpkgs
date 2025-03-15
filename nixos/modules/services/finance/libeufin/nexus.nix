@@ -127,5 +127,7 @@
       services.libeufin.nexus.settings.libeufin-nexusdb-postgres.CONFIG = lib.mkIf (
         cfgMain.bank.enable && cfgMain.bank.createLocalDatabase
       ) "postgresql:///libeufin-bank";
+
+      systemd.services.libeufin-nexus.documentation = [ "man:libeufin-nexus(1)" ];
     };
 }

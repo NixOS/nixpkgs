@@ -24,7 +24,7 @@ let
   };
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "sharpsat-td";
   version = "unstable-2021-09-05";
 

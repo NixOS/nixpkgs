@@ -15,7 +15,7 @@
   libmysqlclient,
   log4cplus,
   openssl,
-  postgresql,
+  libpq,
   python3,
 
   # tests
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
       "--localstatedir=/var"
       "--with-openssl=${lib.getDev openssl}"
     ]
-    ++ lib.optional withPostgres "--with-pgsql=${lib.getDev postgresql}/bin/pg_config"
+    ++ lib.optional withPostgres "--with-pgsql=${lib.getDev libpq}/bin/pg_config"
     ++ lib.optional withMysql "--with-mysql=${lib.getDev libmysqlclient}/bin/mysql_config";
 
   postConfigure = ''

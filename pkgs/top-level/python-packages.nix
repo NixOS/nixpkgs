@@ -5188,8 +5188,6 @@ self: super: with self; {
 
   gcodepy = callPackage ../development/python-modules/gcodepy { };
 
-  gcovr = callPackage ../development/python-modules/gcovr { };
-
   gcp-storage-emulator = callPackage ../development/python-modules/gcp-storage-emulator { };
 
   gcsa = callPackage ../development/python-modules/gcsa { };
@@ -6662,6 +6660,7 @@ self: super: with self; {
     inherit python numpy;
     enablePython = true;
     enableRtk = false;
+    stdenv = if stdenv.cc.isGNU then pkgs.stdenvAdapters.useLibsFrom stdenv pkgs.gcc12Stdenv else stdenv;
   });
 
 
@@ -8111,6 +8110,8 @@ self: super: with self; {
   markuppy = callPackage ../development/python-modules/markuppy { };
 
   markups = callPackage ../development/python-modules/markups { };
+
+  marqo = callPackage ../development/python-modules/marqo { };
 
   marshmallow = callPackage ../development/python-modules/marshmallow { };
 
@@ -11020,8 +11021,6 @@ self: super: with self; {
 
   pysubs2 = callPackage ../development/python-modules/pysubs2 { };
 
-  pysuez = callPackage ../development/python-modules/pysuez { };
-
   pysuezv2 = callPackage ../development/python-modules/pysuezv2 { };
 
   pysqlitecipher = callPackage ../development/python-modules/pysqlitecipher { };
@@ -11904,6 +11903,8 @@ self: super: with self; {
 
   pydenticon = callPackage ../development/python-modules/pydenticon { };
 
+  pydemumble = callPackage ../development/python-modules/pydemumble { };
+
   pydeps = callPackage ../development/python-modules/pydeps {
     inherit (pkgs) graphviz;
   };
@@ -12041,6 +12042,8 @@ self: super: with self; {
   pyexcel-xls = callPackage ../development/python-modules/pyexcel-xls { };
 
   pyexiftool = callPackage ../development/python-modules/pyexiftool { };
+
+  pyexpect = callPackage ../development/python-modules/pyexpect { };
 
   pyexploitdb = callPackage ../development/python-modules/pyexploitdb { };
 
@@ -15261,9 +15264,11 @@ self: super: with self; {
 
   sip = callPackage ../development/python-modules/sip { };
 
-  siphashc = callPackage ../development/python-modules/siphashc { };
-
   sip4 = callPackage ../development/python-modules/sip/4.x.nix { };
+
+  siphash24 = callPackage ../development/python-modules/siphash24 { };
+
+  siphashc = callPackage ../development/python-modules/siphashc { };
 
   sipyco = callPackage ../development/python-modules/sipyco { };
 
@@ -15720,6 +15725,8 @@ self: super: with self; {
   sphinxcontrib-seqdiag = callPackage ../development/python-modules/sphinxcontrib-seqdiag { };
 
   sphinxcontrib-spelling = callPackage ../development/python-modules/sphinxcontrib-spelling { };
+
+  sphinxcontrib-svg2pdfconverter = callPackage ../development/python-modules/sphinxcontrib-svg2pdfconverter { };
 
   sphinxcontrib-tikz = callPackage ../development/python-modules/sphinxcontrib-tikz { };
 

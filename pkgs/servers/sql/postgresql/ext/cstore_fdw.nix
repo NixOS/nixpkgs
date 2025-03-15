@@ -7,7 +7,7 @@
   buildPostgresqlExtension,
 }:
 
-buildPostgresqlExtension rec {
+buildPostgresqlExtension {
   pname = "cstore_fdw";
   version = "1.7.0-unstable-2021-03-08";
 

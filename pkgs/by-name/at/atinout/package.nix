@@ -6,7 +6,7 @@
   mount,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "atinout";
   version = "0.9.2-alpha";
 

@@ -9,7 +9,7 @@
   xorg,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "jstest-gtk";
   version = "2018-07-10";
 

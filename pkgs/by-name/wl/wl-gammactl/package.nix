@@ -12,7 +12,7 @@
   glib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "wl-gammactl";
   version = "unstable-2021-09-13";
 

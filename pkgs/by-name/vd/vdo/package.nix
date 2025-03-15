@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "vdo";
-  version = "8.3.0.73";
+  version = "8.3.1.1";
 
   src = fetchFromGitHub {
     owner = "dm-vdo";
     repo = "vdo";
     rev = version;
-    hash = "sha256-JowaGWh9LXEixxeVn3RmXTfKjVBOZLYQpF7pum79kUE=";
+    hash = "sha256-6oX3ngsBPhE6XsMfliWw5Qzu3UosnsIFIAFRCqckU7U=";
   };
 
   nativeBuildInputs = [

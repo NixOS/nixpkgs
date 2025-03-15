@@ -7,7 +7,7 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "stardust-xr-atmosphere";
   version = "0-unstable-2024-08-22";
 

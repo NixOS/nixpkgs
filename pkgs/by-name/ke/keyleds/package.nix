@@ -13,7 +13,7 @@
   udev,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "keyleds";
   version = "unstable-2021-04-08";
 

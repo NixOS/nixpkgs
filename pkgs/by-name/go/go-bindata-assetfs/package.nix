@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule {
   pname = "go-bindata-assetfs";
   version = "unstable-2022-04-12";
 

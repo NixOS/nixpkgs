@@ -12,7 +12,7 @@
   doctest,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "sycl-info";
   version = "unstable-2019-11-19";
 

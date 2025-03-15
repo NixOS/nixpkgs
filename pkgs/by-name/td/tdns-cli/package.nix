@@ -4,7 +4,7 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "tdns-cli";
   version = "unstable-2021-02-19";
 

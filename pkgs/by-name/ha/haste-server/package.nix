@@ -5,7 +5,7 @@
   fetchFromGitHub,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage {
   pname = "haste-server";
   version = "unstable-2023-03-06";
 

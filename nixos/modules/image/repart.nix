@@ -48,7 +48,7 @@ let
       };
 
       repartConfig = lib.mkOption {
-        type = with lib.types; attrsOf (oneOf [ str int bool ]);
+        type = with lib.types; attrsOf (oneOf [ str int bool (listOf str) ]);
         example = {
           Type = "home";
           SizeMinBytes = "512M";
@@ -311,7 +311,7 @@ in
           (lib.mapAttrsToList (_n: v: v.repartConfig.Format or null) cfg.partitions);
 
 
-        format = pkgs.formats.ini { };
+        format = pkgs.formats.ini { listsAsDuplicateKeys = true; };
 
         definitionsDirectory = utils.systemdUtils.lib.definitions
           "repart.d"

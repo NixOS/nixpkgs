@@ -6,7 +6,7 @@
   fixDarwinDylibNames,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "btor2tools";
   version = "unstable-2024-08-07";
 

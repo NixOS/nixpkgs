@@ -8,7 +8,7 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "flam3";
   version = "3.1.1+date=2018-04-12";
 
