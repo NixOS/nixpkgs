@@ -147,34 +147,34 @@ let
     else
       throw "Invalid database driver: ${cfg.database.driver}";
 
-  mattermostPluginDerivations =
-    with pkgs;
-    map (
-      plugin:
-      stdenv.mkDerivation {
-        name = "mattermost-plugin";
-        installPhase = ''
-          mkdir -p $out/share
-          cp ${plugin} $out/share/plugin.tar.gz
-        '';
-        dontUnpack = true;
-        dontPatch = true;
-        dontConfigure = true;
-        dontBuild = true;
-        preferLocalBuild = true;
-      }
-    ) cfg.plugins;
+  mattermostPluginDerivations = map (
+    plugin:
+    pkgs.stdenvNoCC.mkDerivation {
+      name = "${cfg.package.name}-plugin";
+      installPhase = ''
+        runHook preInstall
+        mkdir -p $out/share
+        ln -sf ${plugin} $out/share/plugin.tar.gz
+        runHook postInstall
+      '';
+      dontUnpack = true;
+      dontPatch = true;
+      dontConfigure = true;
+      dontBuild = true;
+      preferLocalBuild = true;
+    }
+  ) cfg.plugins;
 
   mattermostPlugins =
-    with pkgs;
     if mattermostPluginDerivations == [ ] then
       null
     else
-      stdenv.mkDerivation {
+      pkgs.stdenvNoCC.mkDerivation {
         name = "${cfg.package.name}-plugins";
-        nativeBuildInputs = [ autoPatchelfHook ] ++ mattermostPluginDerivations;
+        nativeBuildInputs = [ pkgs.autoPatchelfHook ] ++ mattermostPluginDerivations;
         buildInputs = [ cfg.package ];
         installPhase = ''
+          runHook preInstall
           mkdir -p $out
           plugins=(${
             escapeShellArgs (map (plugin: "${plugin}/share/plugin.tar.gz") mattermostPluginDerivations)
@@ -187,6 +187,7 @@ let
             GZIP_OPT=-9 tar -C "$hash" -cvzf "$out/$hash.tar.gz" .
             rm -rf "$hash"
           done
+          runHook postInstall
         '';
 
         dontUnpack = true;
@@ -254,8 +255,8 @@ let
       }
   );
 
-  mattermostConfJSON = pkgs.writeText "mattermost-config.json" (builtins.toJSON mattermostConf);
-
+  format = pkgs.formats.json { };
+  finalConfig = format.generate "mattermost-config.json" mattermostConf;
 in
 {
   imports = [
@@ -454,9 +455,9 @@ in
           the options specified in services.mattermost will be generated
           but won't be overwritten on changes or rebuilds.
 
-          If this option is disabled, changes in the system console won't
-          be possible (default). If an config.json is present, it will be
-          overwritten!
+          If this option is disabled, persistent changes in the system
+          console won't be possible (the default). If a config.json is
+          present, it will be overwritten at service start!
         '';
       };
 
@@ -480,7 +481,20 @@ in
         description = ''
           Plugins to add to the configuration. Overrides any installed if non-null.
           This is a list of paths to .tar.gz files or derivations evaluating to
-          .tar.gz files.
+          .tar.gz files. You can use `mattermost.buildPlugin` to build plugins;
+          see the NixOS documentation for more details.
+        '';
+      };
+
+      pluginsBundle = mkOption {
+        type = with types; nullOr package;
+        default = mattermostPlugins;
+        defaultText = ''
+          All entries in {config}`services.mattermost.plugins`, repacked
+        '';
+        description = ''
+          Derivation building to a directory of plugin tarballs.
+          This overrides {option}`services.mattermost.plugins` if provided.
         '';
       };
 
@@ -508,7 +522,8 @@ in
         type = with types; attrsOf (either int str);
         default = { };
         description = ''
-          Extra environment variables to export to the Mattermost process, in the systemd unit.
+          Extra environment variables to export to the Mattermost process
+          from the systemd unit configuration.
         '';
         example = {
           MM_SERVICESETTINGS_SITEURL = "http://example.com";
@@ -524,11 +539,11 @@ in
           for mattermost (see [the Mattermost documentation](https://docs.mattermost.com/configure/configuration-settings.html#environment-variables)).
 
           Settings defined in the environment file will overwrite settings
-          set via nix or via the {option}`services.mattermost.extraConfig`
+          set via Nix or via the {option}`services.mattermost.extraConfig`
           option.
 
           Useful for setting config options without their value ending up in the
-          (world-readable) nix store, e.g. for a database password.
+          (world-readable) Nix store, e.g. for a database password.
         '';
       };
 
@@ -687,7 +702,7 @@ in
       };
 
       settings = mkOption {
-        type = types.attrs;
+        inherit (format) type;
         default = { };
         description = ''
           Additional configuration options as Nix attribute set in config.json schema.
@@ -786,7 +801,7 @@ in
           "d= ${tempDir} 0750 ${cfg.user} ${cfg.group} - -"
 
           # Ensure that pluginDir is a directory, as it could be a symlink on prior versions.
-          "r- ${pluginDir} - - - - -"
+          # Don't remove or clean it out since it should be persistent, as this is where plugins are unpacked.
           "d= ${pluginDir} 0750 ${cfg.user} ${cfg.group} - -"
 
           # Ensure that the plugin directories exist.
@@ -801,15 +816,14 @@ in
           "L+ ${cfg.dataDir}/client - - - - ${cfg.package}/client"
         ]
         ++ (
-          if mattermostPlugins == null then
-            # Create the plugin tarball directory if it's a symlink.
+          if cfg.pluginsBundle == null then
+            # Create the plugin tarball directory to allow plugin uploads.
             [
-              "r- ${cfg.dataDir}/plugins - - - - -"
               "d= ${cfg.dataDir}/plugins 0750 ${cfg.user} ${cfg.group} - -"
             ]
           else
-            # Symlink the plugin tarball directory, removing anything existing.
-            [ "L+ ${cfg.dataDir}/plugins - - - - ${mattermostPlugins}" ]
+            # Symlink the plugin tarball directory, removing anything existing, since it's managed by Nix.
+            [ "L+ ${cfg.dataDir}/plugins - - - - ${cfg.pluginsBundle}" ]
         );
 
       systemd.services.mattermost = rec {
@@ -836,7 +850,7 @@ in
             configDir=${escapeShellArg cfg.configDir}
             logDir=${escapeShellArg cfg.logDir}
             package=${escapeShellArg cfg.package}
-            nixConfig=${escapeShellArg mattermostConfJSON}
+            nixConfig=${escapeShellArg finalConfig}
           ''
           + optionalString (versionAtLeast config.system.stateVersion "25.05") ''
             # Migrate configs in the pre-25.05 directory structure.
