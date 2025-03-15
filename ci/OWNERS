@@ -220,7 +220,7 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @NixOS/nix-team @raitobeza
 /nixos/tests/chromium.nix @emilylange @networkException
 
 # Certificate Authorities
-pkgs/data/misc/cacert/ @ajs124 @lukegb @mweinelt
+pkgs/by-name/ca/cacert @ajs124 @lukegb @mweinelt
 pkgs/development/libraries/nss/ @ajs124 @lukegb @mweinelt
 pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 
@@ -275,7 +275,7 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /nixos/tests/home-assistant.nix @mweinelt
 /nixos/tests/zigbee2mqtt.nix @mweinelt
 /pkgs/servers/home-assistant @mweinelt
-/pkgs/tools/misc/esphome @mweinelt
+/pkgs/by-name/es/esphome @mweinelt
 
 # Network Time Daemons
 /pkgs/by-name/ch/chrony @thoughtpolice
