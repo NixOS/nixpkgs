@@ -10,7 +10,6 @@
   git,
   glib-networking,
   jq,
-  libgit2,
   makeBinaryWrapper,
   moreutils,
   nix-update-script,
@@ -84,7 +83,6 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs =
     [
-      libgit2
       openssl
     ]
     ++ lib.optional stdenv.hostPlatform.isDarwin curl
@@ -137,7 +135,6 @@ rustPlatform.buildRustPackage rec {
     TUBRO_BINARY_PATH = lib.getExe turbo;
 
     OPENSSL_NO_VENDOR = true;
-    LIBGIT2_NO_VENDOR = 1;
   };
 
   postInstall =
