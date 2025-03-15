@@ -17,23 +17,23 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "restate";
-  version = "1.1.6";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "restatedev";
     repo = "restate";
     tag = "v${version}";
-    hash = "sha256-uDNPIL9Ox5rwWVzqWe74elHPGy6lSvWR1S7HsY6ATjc=";
+    hash = "sha256-igvwwVOtlCREWr8WIjF0jVY0NCQDFc8/CRc3kRSPtAM=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-z7VAKU4bi6pX2z4jCKWDfQt8FFLN7ugnW2LOy6IHz/w=";
+  cargoHash = "sha256-tduXsd4nXud296i6LDkNRjiFnzPb9OQElLxYvNk37Qw=";
 
   env = {
     PROTOC = lib.getExe protobuf;
     PROTOC_INCLUDE = "${protobuf}/include";
 
-    VERGEN_GIT_COMMIT_DATE = "2024-12-23";
+    VERGEN_GIT_COMMIT_DATE = "2025-03-12";
     VERGEN_GIT_SHA = "v${version}";
 
     # rustflags as defined in the upstream's .cargo/config.toml
@@ -43,7 +43,6 @@ rustPlatform.buildRustPackage rec {
         targetFlags = rec {
           build = [
             "-C force-unwind-tables"
-            "-C debug-assertions"
             "--cfg uuid_unstable"
             "--cfg tokio_unstable"
           ];
@@ -93,6 +92,12 @@ rustPlatform.buildRustPackage rec {
   ];
   versionCheckProgramArg = [ "--version" ];
   doInstallCheck = true;
+
+  # Disable flaky tests, see: https://github.com/NixOS/nixpkgs/pull/382395#issuecomment-2726541403
+  checkFlags = [
+    "--skip=replicated_loglet"
+    "--skip=fast_forward_over_trim_gap"
+  ];
 
   passthru = {
     tests.restateCliVersion = testers.testVersion {
