@@ -3122,7 +3122,7 @@
   blackzeshi = {
     name = "Blackzeshi";
     email = "student7488@gmail.com";
-    gihub = "zeshi09"
+    gihub = "zeshi09";
     githubId = 105582686;
   };
   blankparticle = {
