@@ -515,6 +515,20 @@ in
         )
       );
     };
+
+    rememberLastChoice = mkOption {
+      default = false;
+
+      type = types.bool;
+
+      description = ''
+        Remembers the last chosen systemd-boot entry. For example, given entries A and B. If B is
+        is selected, next boot B will automatically be highlighted instead of the latest generation.
+        This is done by setting `default @saved` within the systemd-boot config.
+
+        This option will not work properly unless `boot.loader.canTouchEfiVariables = true`
+      '';
+    };
   };
 
   config = mkIf cfg.enable {
@@ -552,6 +566,11 @@ in
         {
           assertion = hasSuffix ".conf" filename;
           message = "boot.loader.systemd-boot.extraEntries.${lib.strings.escapeNixIdentifier filename} is invalid: entries must have a .conf file extension";
+        }
+        {
+          assertion =
+            config.boot.loader.systemd-boot.rememberlastchoice -> config.boot.loader.efi.cantouchefivariables;
+          message = "systemd-boot rememberlastchoice requires mutable efi variables.";
         }
       ]) (builtins.attrNames cfg.extraEntries)
       ++ concatMap (filename: [
