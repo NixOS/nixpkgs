@@ -355,7 +355,7 @@ let
 
       # Language packages disabled in https://github.com/NixOS/nixpkgs/commit/ccd1029f58a3bb9eca32d81bf3f33cb4be25cc66
 
-      #emacsPackages = packagePlatforms pkgs.emacsPackages;
+      emacsPackages = packagePlatforms pkgs.emacs.pkgs;
       #rPackages = packagePlatforms pkgs.rPackages;
       ocamlPackages = { };
       perlPackages = { };
