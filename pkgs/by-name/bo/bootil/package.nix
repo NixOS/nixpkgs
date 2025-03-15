@@ -19,9 +19,14 @@ stdenv.mkDerivation {
   # Avoid guessing where files end up. Just use current directory.
   postPatch = ''
     substituteInPlace projects/premake4.lua \
-      --replace 'location ( os.get() .. "/" .. _ACTION )' 'location ( ".." )'
+      --replace-fail 'location ( os.get() .. "/" .. _ACTION )' 'location ( ".." )'
     substituteInPlace projects/bootil.lua \
-      --replace 'targetdir ( "../lib/" .. os.get() .. "/" .. _ACTION )' 'targetdir ( ".." )'
+      --replace-fail 'targetdir ( "../lib/" .. os.get() .. "/" .. _ACTION )' 'targetdir ( ".." )'
+
+    # fix compilation wtih gcc 14 by inserting missing headers
+    sed -i "1i #include <stddef.h>" src/3rdParty/zlib/gzguts.h
+    sed -i "1i #include <string.h>" src/3rdParty/zlib/gzguts.h
+    sed -i "1i #include <unistd.h>" src/3rdParty/zlib/gzguts.h
   '';
 
   nativeBuildInputs = [ premake4 ];
