@@ -1,10 +1,10 @@
 {
-  stdenv,
-  lib,
+  buildPostgresqlExtension,
   fetchFromGitHub,
   fetchpatch,
+  lib,
   postgresql,
-  buildPostgresqlExtension,
+  stdenv,
 }:
 
 buildPostgresqlExtension {
@@ -15,7 +15,7 @@ buildPostgresqlExtension {
     owner = "eulerto";
     repo = "pg_similarity";
     rev = "b9cb0a2d501b91e33cd1ef550b05483ca3563f71";
-    sha256 = "sha256-L04ANvyfzHgW7fINeJEY6T77Vojq3SI8P1TWiCRSPs0=";
+    hash = "sha256-L04ANvyfzHgW7fINeJEY6T77Vojq3SI8P1TWiCRSPs0=";
   };
 
   patches = [
