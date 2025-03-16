@@ -9001,10 +9001,6 @@ with pkgs;
 
   qxmpp = qt6Packages.callPackage ../development/libraries/qxmpp { };
 
-  gnu-efi = if stdenv.hostPlatform.isEfi
-              then callPackage ../development/libraries/gnu-efi { }
-            else null;
-
   gnutls = callPackage ../development/libraries/gnutls {
     inherit (darwin.apple_sdk.frameworks) Security;
     util-linux = util-linuxMinimal; # break the cyclic dependency
