@@ -15066,6 +15066,12 @@
     githubId = 158568;
     name = "Matthias C. M. Troffaes";
   };
+  mcoll = {
+    email = "marce@dziban.net";
+    github = "marcecoll";
+    githubId = 1399250;
+    name = "Marce Coll";
+  };
   McSinyx = {
     email = "cnx@loang.net";
     github = "McSinyx";
