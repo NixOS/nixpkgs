@@ -57,8 +57,6 @@ let
   makeIso =
     { module, type, system, ... }:
 
-    with import ./.. { inherit system; };
-
     hydraJob ((import lib/eval-config.nix {
       inherit system;
       modules = makeModules module { };
@@ -78,8 +76,6 @@ let
 
   makeSystemTarball =
     { module, maintainers ? ["viric"], system }:
-
-    with import ./.. { inherit system; };
 
     let
 
