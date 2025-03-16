@@ -3,34 +3,34 @@
   rustPlatform,
   stdenv,
   fetchFromGitHub,
-  blueprint-compiler,
   pkg-config,
   wrapGAppsHook4,
   gdk-pixbuf,
   gtk4,
   libdrm,
   vulkan-loader,
+  vulkan-tools,
   coreutils,
   nix-update-script,
   hwdata,
+  fuse3,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "lact";
-  version = "0.7.1";
+  version = "0.7.3";
 
   src = fetchFromGitHub {
     owner = "ilya-zlobintsev";
     repo = "LACT";
-    rev = "v${version}";
-    hash = "sha256-zaN6CQSeeoYFxLO6E1AMKAjeNOcPi2OsGfYkvZLPKcw=";
+    tag = "v${version}";
+    hash = "sha256-R8VEAk+CzJCxPzJohsbL/XXH1GMzGI2W92sVJ2evqXs=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-Ipvu/eu0uI/WKYyVjjHLlg0O0EgzfuTvMmr4gTzDRxw=";
+  cargoHash = "sha256-SH7jmXDvGYO9S5ogYEYB8dYCF3iz9GWDYGcZUaKpWDQ=";
 
   nativeBuildInputs = [
-    blueprint-compiler
     pkg-config
     wrapGAppsHook4
     rustPlatform.bindgenHook
@@ -41,7 +41,9 @@ rustPlatform.buildRustPackage rec {
     gtk4
     libdrm
     vulkan-loader
+    vulkan-tools
     hwdata
+    fuse3
   ];
 
   # we do this here so that the binary is usable during integration tests
@@ -70,18 +72,26 @@ rustPlatform.buildRustPackage rec {
     substituteInPlace res/lactd.service \
       --replace-fail ExecStart={lact,$out/bin/lact}
 
-    substituteInPlace res/io.github.lact-linux.desktop \
+    substituteInPlace res/io.github.ilya_zlobintsev.LACT.desktop \
       --replace-fail Exec={lact,$out/bin/lact}
 
     # read() looks for the database in /usr/share so we use read_from_file() instead
-    substituteInPlace lact-daemon/src/server/handler.rs \
+    substituteInPlace \
+      lact-daemon/src/server/handler.rs \
+      lact-daemon/src/tests/mod.rs \
       --replace-fail 'Database::read()' 'Database::read_from_file("${hwdata}/share/hwdata/pci.ids")'
   '';
 
   postInstall = ''
     install -Dm444 res/lactd.service -t $out/lib/systemd/system
-    install -Dm444 res/io.github.lact-linux.desktop -t $out/share/applications
-    install -Dm444 res/io.github.lact-linux.png -t $out/share/pixmaps
+    install -Dm444 res/io.github.ilya_zlobintsev.LACT.desktop -t $out/share/applications
+    install -Dm444 res/io.github.ilya_zlobintsev.LACT.svg -t $out/share/pixmaps
+  '';
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --prefix PATH : "${lib.makeBinPath [ vulkan-tools ]}"
+    )
   '';
 
   postFixup = lib.optionalString stdenv.targetPlatform.isElf ''
