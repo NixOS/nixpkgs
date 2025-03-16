@@ -149,6 +149,7 @@ in
 
     systemd.services.gnunet = {
       description = "GNUnet";
+      documentation = [ "info:gnunet" ];
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       restartTriggers = [ config.environment.etc."gnunet.conf".source ];
