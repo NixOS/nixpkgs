@@ -18226,6 +18226,8 @@ self: super: with self; {
 
   vehicle = callPackage ../development/python-modules/vehicle { };
 
+  altair-transform = callPackage ../development/python-modules/altair-transform { };
+
   vega = callPackage ../development/python-modules/vega { };
 
   vega-datasets = callPackage ../development/python-modules/vega-datasets { };
