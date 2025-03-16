@@ -14,16 +14,16 @@
 
 buildGoModule rec {
   pname = "rlama";
-  version = "0.1.29";
+  version = "0.1.30";
 
   src = fetchFromGitHub {
     owner = "dontizi";
     repo = "rlama";
     tag = "v${version}";
-    hash = "sha256-Zaw2itvfUC+5fVHGfPQ+qWfjLzPqowAFt8kvBYHR9B0=";
+    hash = "sha256-J4FTRWQfdmWXMhlwINQgqj7sCvF3+0YZwcZFW8y1CgY=";
   };
 
-  vendorHash = "sha256-oJulwIMb9DpgRZFxw4/WMejrFONbCC8ni0YclS1WwT0=";
+  vendorHash = "sha256-XZVMnkv+WqUqM6jbgrO3P5CSDACH3vLFJ4Y79EOnD08=";
 
   env.CGO_ENABLED = "0";
 
