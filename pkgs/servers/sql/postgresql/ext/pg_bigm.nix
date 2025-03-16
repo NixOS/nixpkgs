@@ -1,8 +1,8 @@
 {
-  lib,
-  fetchFromGitHub,
-  postgresql,
   buildPostgresqlExtension,
+  fetchFromGitHub,
+  lib,
+  postgresql,
 }:
 
 buildPostgresqlExtension rec {
@@ -12,17 +12,17 @@ buildPostgresqlExtension rec {
   src = fetchFromGitHub {
     owner = "pgbigm";
     repo = "pg_bigm";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-5Uy1DmGZR4WdtRUvNdZ5b9zBHJUb9idcEzW20rkreBs=";
   };
 
   makeFlags = [ "USE_PGXS=1" ];
 
-  meta = with lib; {
+  meta = {
     description = "Text similarity measurement and index searching based on bigrams";
     homepage = "https://pgbigm.osdn.jp/";
     maintainers = [ ];
     platforms = postgresql.meta.platforms;
-    license = licenses.postgresql;
+    license = lib.licenses.postgresql;
   };
 }
