@@ -2418,13 +2418,6 @@ with pkgs;
 
   maliit-keyboard = libsForQt5.callPackage ../applications/misc/maliit-keyboard { };
 
-  maple-mono = (callPackage ../data/fonts/maple-font { }).Mono;
-  maple-mono-NF = (callPackage ../data/fonts/maple-font { }).NF;
-  maple-mono-SC-NF = (callPackage ../data/fonts/maple-font { }).SC-NF;
-  maple-mono-otf = (callPackage ../data/fonts/maple-font { }).opentype;
-  maple-mono-woff2 = (callPackage ../data/fonts/maple-font { }).woff2;
-  maple-mono-autohint = (callPackage ../data/fonts/maple-font { }).autohint;
-
   mat2 = with python3.pkgs; toPythonApplication mat2;
 
   materialx = with python3Packages; toPythonApplication materialx;
@@ -4214,6 +4207,8 @@ with pkgs;
   mytetra = libsForQt5.callPackage ../applications/office/mytetra { };
 
   nerd-fonts = recurseIntoAttrs (callPackage ../data/fonts/nerd-fonts { });
+
+  maple-mono = recurseIntoAttrs (callPackage ../data/fonts/maple-font { });
 
   netcdf-mpi = netcdf.override {
     hdf5 = hdf5-mpi.override { usev110Api = true; };
