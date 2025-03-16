@@ -10,7 +10,7 @@
   mpiCheckPhaseHook,
   metis,
   parmetis,
-
+  withExamples ? false,
   # Todo: ask for permission of unfree parmetis
   withParmetis ? false,
 }:
@@ -60,6 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags =
     [
+      (lib.cmakeBool "enable_examples" withExamples)
       (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
       (lib.cmakeBool "enable_fortran" true)
       (lib.cmakeBool "enable_complex16" true)
