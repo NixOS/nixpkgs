@@ -314,8 +314,8 @@ rec {
       "sha256-6w2v795pNhcKZlWayROdYe5bzQvSmkITxErl2M0F5o4=";
 
   mypy-boto3-cognito-idp =
-    buildMypyBoto3Package "cognito-idp" "1.37.5"
-      "sha256-FAMF7HEM+StH7vkhPomIxh2GRSIhNxQaCZx0o6/EoYc=";
+    buildMypyBoto3Package "cognito-idp" "1.37.13"
+      "sha256-L9F74KW7z+Q+7hUoGIQR67TQyNiJF8nW4XHWBppFO4Q=";
 
   mypy-boto3-cognito-sync =
     buildMypyBoto3Package "cognito-sync" "1.37.0"
