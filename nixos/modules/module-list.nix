@@ -111,6 +111,7 @@
   ./hardware/usb-storage.nix
   ./hardware/video/bumblebee.nix
   ./hardware/video/capture/mwprocapture.nix
+  ./hardware/video/capture/mwecocapture.nix
   ./hardware/video/displaylink.nix
   ./hardware/video/intel-gpu-tools.nix
   ./hardware/video/nvidia.nix

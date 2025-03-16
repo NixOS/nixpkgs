@@ -538,6 +538,8 @@ in {
 
     mwprocapture = callPackage ../os-specific/linux/mwprocapture { };
 
+    mwecocapture = callPackage ../os-specific/linux/mwecocapture { };
+
     mxu11x0 = callPackage ../os-specific/linux/mxu11x0 { };
 
     # compiles but has to be integrated into the kernel somehow

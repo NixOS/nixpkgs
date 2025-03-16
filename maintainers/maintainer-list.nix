@@ -9656,6 +9656,12 @@
     githubId = 998807;
     keys = [ { fingerprint = "A236 785D 59F1 9076 1E9C E8EC 7828 3DB3 D233 E1F9"; } ];
   };
+  hmelder = {
+    email = "contact@hugomelder.com";
+    github = "hmelder";
+    githubId = 45601940;
+    name = "Hugo Melder";
+  };
   hmenke = {
     name = "Henri Menke";
     email = "henri@henrimenke.de";
