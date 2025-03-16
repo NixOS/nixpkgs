@@ -12,7 +12,7 @@ stdenvNoCC.mkDerivation rec {
 
   src = fetchzip {
     url = "https://necessegame.com/content/server/${urlVersion}/necesse-server-linux64-${urlVersion}.zip";
-    sha256 = "sha256-H7/fc3zkuEMuv9Uq00TLSLF4rT8+UWsofnuCFrmUtjU=";
+    hash = "sha256-H7/fc3zkuEMuv9Uq00TLSLF4rT8+UWsofnuCFrmUtjU=";
   };
 
   inherit jre;
@@ -32,13 +32,13 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://necessegame.com/server/";
     description = "Dedicated server for Necesse";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    platforms = platforms.linux;
-    license = licenses.unfreeRedistributable;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.unfreeRedistributable;
     mainProgram = "necesse-server";
-    maintainers = with maintainers; [ cr0n ];
+    maintainers = with lib.maintainers; [ cr0n ];
   };
 }
