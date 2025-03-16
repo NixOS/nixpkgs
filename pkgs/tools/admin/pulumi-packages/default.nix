@@ -13,4 +13,5 @@ in
   pulumi-language-python = callPackage ./pulumi-language-python.nix { };
   pulumi-random = callPackage' ./pulumi-random.nix { };
   pulumi-yandex-unofficial = callPackage' ./pulumi-yandex-unofficial.nix { };
+  pulumi-language-scala = callPackage ./pulumi-language-scala.nix { };
 }
