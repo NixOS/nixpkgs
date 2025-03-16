@@ -18,7 +18,7 @@
   petsc-scalar-type ? "real",
   petsc-precision ? "double",
   mpiSupport ? true,
-  withPetsc4py ? false, # petsc python binding
+  pythonSupport ? false, # petsc python binding
   withExamples ? false,
   withFullDeps ? false, # full External libraries support
 
@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
       pkg-config
     ]
     ++ lib.optional mpiSupport mpi
-    ++ lib.optionals withPetsc4py [
+    ++ lib.optionals pythonSupport [
       python3Packages.setuptools
       python3Packages.cython
     ];
@@ -88,7 +88,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional withScalapack scalapack
     ++ lib.optional withMumps mumps_par;
 
-  propagatedBuildInputs = lib.optional withPetsc4py python3Packages.numpy;
+  propagatedBuildInputs = lib.optional pythonSupport python3Packages.numpy;
 
   patches = [
     (replaceVars ./fix-petsc4py-install-prefix.patch {
@@ -113,7 +113,7 @@ stdenv.mkDerivation rec {
       "--with-precision=${petsc-precision}"
       "--with-mpi=${if mpiSupport then "1" else "0"}"
     ]
-    ++ lib.optional withPetsc4py "--with-petsc4py=1"
+    ++ lib.optional pythonSupport "--with-petsc4py=1"
     ++ lib.optionals mpiSupport [
       "--CC=mpicc"
       "--with-cxx=mpicxx"

@@ -10504,7 +10504,7 @@ self: super: with self; {
   petsc4py = toPythonModule (pkgs.petsc.override {
     python3 = python;
     python3Packages = self;
-    withPetsc4py = true;
+    pythonSupport = true;
     withFullDeps = true;
   });
 
