@@ -38,6 +38,7 @@ stdenv.mkDerivation rec {
       asl20
       lgpl2Plus
     ];
+    platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ qbisi ];
   };
 }
