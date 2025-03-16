@@ -26,7 +26,7 @@ rec {
   };
   ppc64-musl = {
     config = "powerpc64-unknown-linux-musl";
-    gcc = { abi = "elfv2"; };
+    abi = "elfv2";
   };
 
   sheevaplug = {
@@ -198,7 +198,7 @@ rec {
     libc = "newlib";
     # GCC8+ does not build without this
     # (https://www.mail-archive.com/gcc-bugs@gcc.gnu.org/msg552339.html):
-    gcc = {
+    cpu = {
       arch = "armv5t";
       fpu = "vfp";
     };

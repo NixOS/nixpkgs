@@ -66,7 +66,9 @@ let
   # `parsed` is inferred from args, both because there are two options with one
   # clearly preferred, and to prevent cycles. A simpler fixed point where the RHS
   # always just used `final.*` would fail on both counts.
-  elaborate = systemOrArgs: let
+  elaborate = systemOrArgs:
+    assert lib.assertMsg (!(lib.oldestSupportedReleaseIsAtLeast 2511 && systemOrArgs ? gcc)) "The gcc attribute has been deprecated in favor of the cpu attributes.";
+    let
     allArgs = systemToAttrs systemOrArgs;
 
     # Those two will always be derived from "config", if given, so they should NOT
@@ -319,6 +321,30 @@ let
     }) // mapAttrs (n: v: v final.parsed) inspect.predicates
       // mapAttrs (n: v: v final.gcc.arch or "default") architectures.predicates
       // args // {
+        cpu = parse.mkCpu final.parsed
+          (if args ? gcc then
+            let
+              # For gcc attribute compatibility until 25.11 is released
+              cpuModels = parse.cpuModels final.parsed;
+              gccModels = lib.listToAttrs (lib.attrValues (lib.mapAttrs (name: value: lib.nameValuePair value.gnu name) cpuModels));
+
+              gccModel = args.gcc.model or args.gcc.arch or "generic";
+            in {
+              model = gccModels.${gccModel}
+                or (throw "${gccModel} is not supported in ${final.parsed.cpu.name} with gcc.model compatibility");
+            }
+          else (args.cpu or {}));
+
+        gcc = lib.warnIf
+          (lib.oldestSupportedReleaseIsAtLeast 2511)
+          "The gcc attribute in platform was deprecated in 25.11"
+          (lib.optionalAttrs (final.cpu.model.gnu != "generic") {
+            cpu = final.cpu.model.gnu;
+          } // lib.optionalAttrs (final.isAarch64 && final.cpu.model.gnu == "generic") {
+            # TODO: find when to use this.
+            arch = "armv8-a";
+          });
+
         rust = rust // {
           # Once args.rustc.platform.target-family is deprecated and
           # removed, there will no longer be any need to modify any
