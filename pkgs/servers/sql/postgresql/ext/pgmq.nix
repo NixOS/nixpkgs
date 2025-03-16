@@ -1,9 +1,9 @@
 {
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  postgresql,
   buildPostgresqlExtension,
+  fetchFromGitHub,
+  lib,
+  postgresql,
+  stdenv,
 }:
 
 buildPostgresqlExtension rec {
@@ -13,7 +13,7 @@ buildPostgresqlExtension rec {
   src = fetchFromGitHub {
     owner = "tembo-io";
     repo = "pgmq";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-iFIHkqL9w7Bw1dxmmL1i0D5Xxq+ljFLf24M9vHArwvE=";
   };
 
