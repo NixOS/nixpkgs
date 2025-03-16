@@ -11581,6 +11581,11 @@ self: super: with self; {
     debugger = pkgs.gdb;
   };
 
+  pwntools-full = callPackage ../development/python-modules/pwntools {
+    debugger = pkgs.gdb;
+    withAllFeatures = true;
+  };
+
   py-air-control = callPackage ../development/python-modules/py-air-control { };
 
   py-air-control-exporter = callPackage ../development/python-modules/py-air-control-exporter { };
