@@ -78,6 +78,10 @@ buildPythonPackage rec {
     "tests/test_fsevents.py::test_converting_cfstring_to_pyunicode"
   ];
 
+  sandboxProfile = ''
+    (allow mach-lookup (global-name "com.apple.FSEvents"))
+  '';
+
   pythonImportsCheck = [ "watchdog" ];
 
   meta = with lib; {
