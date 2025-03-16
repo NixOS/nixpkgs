@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "uniex";
-  version = "0.1.6";
+  version = "0.1.7";
 
   src = fetchFromGitHub {
     owner = "paepckehh";
     repo = "uniex";
     tag = "v${version}";
-    hash = "sha256-LakiFi+4uYaDsLWAq4VXDoZMQU5MRLdFmsdBOglubzQ=";
+    hash = "sha256-PoGDvnF+P8iUYdW98BT3Gcayf0JSgK257W377yFz5j4=";
   };
 
   vendorHash = "sha256-QLjeMSdvFSxnmnsKwTg4SDkc7xqx4csxTWJKOsRzcBI=";
