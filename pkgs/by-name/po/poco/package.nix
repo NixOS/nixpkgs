@@ -56,13 +56,16 @@ stdenv.mkDerivation rec {
 
   cmakeFlags =
     let
-      # These tests require running services, which the checkPhase is ill equipeed to provide
-      # TODO get them running in a nixosTest
       excludeTestsRegex = lib.concatStringsSep "|" [
+        # These tests require running services, which the checkPhase is ill equipeed to provide
+        # TODO get them running in a nixosTest
         "Redis"
         "DataODBC"
         "MongoDB"
         "DataMySQL"
+        # network not accessible from nix sandbox
+        "NetSSL" # around 25 test failures
+        "Net" # could be made to work when public network access is patched out
       ];
     in
     [
@@ -72,17 +75,22 @@ stdenv.mkDerivation rec {
       (lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" "--exclude-regex;'${excludeTestsRegex}'")
     ];
 
-  patches = [
-    # Remove on next release
-    (fetchpatch {
-      name = "disable-included-pcre-if-pcre-is-linked-staticly";
-      # this happens when building pkgsStatic.poco
-      url = "https://patch-diff.githubusercontent.com/raw/pocoproject/poco/pull/4879.patch";
-      hash = "sha256-VFWuRuf0GPYFp43WKI8utl+agP+7a5biLg7m64EMnVo=";
-    })
-    # failing on darwin, could perhaps be patched / a fix upstreamed later
-    ./disable-broken-tests.patch
-  ];
+  patches =
+    [
+      # Remove on next release
+      (fetchpatch {
+        name = "disable-included-pcre-if-pcre-is-linked-staticly";
+        # this happens when building pkgsStatic.poco
+        url = "https://patch-diff.githubusercontent.com/raw/pocoproject/poco/pull/4879.patch";
+        hash = "sha256-VFWuRuf0GPYFp43WKI8utl+agP+7a5biLg7m64EMnVo=";
+      })
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      ./disable-broken-tests-darwin.patch
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      ./disable-broken-tests-linux.patch
+    ];
 
   doCheck = true;
   preCheck = ''
