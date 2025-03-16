@@ -6,23 +6,27 @@
   # for passthru.tests
   intel-compute-runtime,
   intel-media-driver,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
   pname = "intel-gmmlib";
-  version = "22.6.0";
+  version = "22.7.1";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "gmmlib";
     rev = "intel-gmmlib-${version}";
-    hash = "sha256-3A5bTrRIm7ZOz2Si8u2GSDr5vIOr9NOaMRu0PbqZAIs=";
+    hash = "sha256-Wm9bHe65ak7ERSEgrSO9x9hUV6ypRbODoY4eodebOVE=";
   };
 
   nativeBuildInputs = [ cmake ];
 
-  passthru.tests = {
-    inherit intel-compute-runtime intel-media-driver;
+  passthru = {
+    tests = {
+      inherit intel-compute-runtime intel-media-driver;
+    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {
@@ -38,6 +42,9 @@ stdenv.mkDerivation rec {
       "x86_64-linux"
       "i686-linux"
     ];
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [
+      SuperSandro2000
+      ners
+    ];
   };
 }
