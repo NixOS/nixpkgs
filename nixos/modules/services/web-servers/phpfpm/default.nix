@@ -254,6 +254,7 @@ in {
         after = [ "network.target" ];
         wantedBy = [ "phpfpm.target" ];
         partOf = [ "phpfpm.target" ];
+        documentation = [ "man:php-fpm(8)" ];
         serviceConfig = let
           cfgFile = fpmCfgFile pool poolOpts;
           iniFile = phpIni poolOpts;
