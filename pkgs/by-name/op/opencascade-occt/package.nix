@@ -13,6 +13,8 @@
   libXmu,
   libXi,
   darwin,
+  rapidjson,
+  withRapidJSON ? false,
 }:
 
 stdenv.mkDerivation rec {
@@ -40,15 +42,22 @@ stdenv.mkDerivation rec {
     ninja
   ];
 
-  buildInputs = [
-    tcl
-    tk
-    libGL
-    libGLU
-    libXext
-    libXmu
-    libXi
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.Cocoa;
+  buildInputs =
+    [
+      tcl
+      tk
+      libGL
+      libGLU
+      libXext
+      libXmu
+      libXi
+    ]
+    ++ lib.optional withRapidJSON rapidjson
+    ++ lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.Cocoa;
+
+  cmakeFlags = lib.optional withRapidJSON [
+    "-D USE_RAPIDJSON=ON"
+  ];
 
   NIX_CFLAGS_COMPILE = [ "-fpermissive" ];
 
