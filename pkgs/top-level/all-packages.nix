@@ -10239,7 +10239,7 @@ with pkgs;
 
   quarto = callPackage ../development/libraries/quarto { };
 
-  quartoMinimal = callPackage ../development/libraries/quarto { rWrapper = null; python3 = null; };
+  quartoMinimal = callPackage ../development/libraries/quarto { rWrapper = null; python3 = null; julia = null; };
 
   qt5 = recurseIntoAttrs (makeOverridable
     (import ../development/libraries/qt-5/5.15) {
