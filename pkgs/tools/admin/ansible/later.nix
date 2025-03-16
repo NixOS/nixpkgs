@@ -2,6 +2,7 @@
   lib,
   fetchFromGitHub,
   python3Packages,
+  writableTmpDirAsHomeHook,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -43,13 +44,10 @@ python3Packages.buildPythonApplication rec {
     pytest-cov-stub
     pytest-mock
     pytestCheckHook
+    writableTmpDirAsHomeHook
   ];
 
   pythonImportsCheck = [ "ansiblelater" ];
-
-  preCheck = ''
-    export HOME="$TMPDIR"
-  '';
 
   meta = {
     description = "Best practice scanner for Ansible roles and playbooks";
