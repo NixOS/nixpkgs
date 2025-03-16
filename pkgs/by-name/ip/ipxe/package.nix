@@ -4,7 +4,6 @@
   fetchFromGitHub,
   unstableGitUpdater,
   buildPackages,
-  gnu-efi,
   mtools,
   openssl,
   perl,
@@ -52,7 +51,6 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.21.1-unstable-2025-01-10";
 
   nativeBuildInputs = [
-    gnu-efi
     mtools
     openssl
     perl
