@@ -17,7 +17,6 @@ let
     "15" = "sha256-webZWgWZGnSoXwTpk816tjbtHV1UIlXkogpBDAEL4gM=";
     "14" = "sha256-jZXhcYBubpjIJ8M5JHXKV5f6VK/2BkypH3P7nLxZz3E=";
     "13" = "sha256-HR6nnWt/V2a0rD5eHHUsFIZ1y7lmvLz36URt9pPJnCw=";
-    "12" = "sha256-JFNk17ESsIt20dwXrfBkQ5E6DbZzN/Q9eS6+WjCXGd4=";
   };
 in
 buildPostgresqlExtension rec {
