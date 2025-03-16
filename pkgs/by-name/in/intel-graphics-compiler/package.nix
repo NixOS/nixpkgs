@@ -22,24 +22,34 @@ let
   vc_intrinsics_src = fetchFromGitHub {
     owner = "intel";
     repo = "vc-intrinsics";
-    rev = "v0.19.0";
-    hash = "sha256-vOK7xfOR+aDpdGd8oOFLJc1Ct1S5BCJmLN6Ubn5wlkQ=";
+    rev = "v0.22.1";
+    hash = "sha256-dSK+kNEZoF4bBx24S0No9aZLZiHK0U9TR1jRyEBL+2U=";
   };
 
   inherit (llvmPackages_14) lld llvm;
   inherit (if buildWithPatches then opencl-clang else llvmPackages_14) clang libclang;
   spirv-llvm-translator' = spirv-llvm-translator.override { inherit llvm; };
+
+  # Handholding the braindead build script
+  # cmake requires an absolute path
+  prebuilds = runCommandLocal "igc-cclang-prebuilds" { } ''
+    mkdir $out
+    ln -s ${clang}/bin/clang $out/
+    ln -s ${opencl-clang}/lib/* $out/
+    ln -s ${lib.getLib libclang}/lib/clang/${lib.getVersion clang}/include/opencl-c.h $out/
+    ln -s ${lib.getLib libclang}/lib/clang/${lib.getVersion clang}/include/opencl-c-base.h $out/
+  '';
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "intel-graphics-compiler";
-  version = "1.0.17384.11";
+  version = "2.8.3";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "intel-graphics-compiler";
-    rev = "igc-${version}";
-    hash = "sha256-O4uMaPauRv2aMgM2B7XdzCcjI5JghsjX5XbkeloLyck=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-1YzvzVmMW5s4keQfa7r6xfyVg7RWSdKNgBtdTN6SADg=";
   };
 
   postPatch = ''
@@ -77,16 +87,6 @@ stdenv.mkDerivation rec {
   # testing is done via intel-compute-runtime
   doCheck = false;
 
-  # Handholding the braindead build script
-  # cmake requires an absolute path
-  prebuilds = runCommandLocal "igc-cclang-prebuilds" { } ''
-    mkdir $out
-    ln -s ${clang}/bin/clang $out/
-    ln -s ${opencl-clang}/lib/* $out/
-    ln -s ${lib.getLib libclang}/lib/clang/${lib.getVersion clang}/include/opencl-c.h $out/
-    ln -s ${lib.getLib libclang}/lib/clang/${lib.getVersion clang}/include/opencl-c-base.h $out/
-  '';
-
   cmakeFlags = [
     "-DVC_INTRINSICS_SRC=${vc_intrinsics_src}"
     "-DCCLANG_BUILD_PREBUILDS=ON"
@@ -103,9 +103,12 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "LLVM-based compiler for OpenCL targeting Intel Gen graphics hardware";
     homepage = "https://github.com/intel/intel-graphics-compiler";
-    changelog = "https://github.com/intel/intel-graphics-compiler/releases/tag/${src.rev}";
+    changelog = "https://github.com/intel/intel-graphics-compiler/releases/tag/${finalAttrs.src.rev}";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [
+      SuperSandro2000
+      ners
+    ];
   };
-}
+})
