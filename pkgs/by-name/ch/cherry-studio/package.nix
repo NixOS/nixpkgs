@@ -9,7 +9,6 @@
   writableTmpDirAsHomeHook,
   makeDesktopItem,
   copyDesktopItems,
-  nix-update-script,
   commandLineArgs ? "",
 }:
 
@@ -112,7 +111,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "Desktop client that supports for multiple LLM providers";
