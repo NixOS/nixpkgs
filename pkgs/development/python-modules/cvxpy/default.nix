@@ -25,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "cvxpy";
-  version = "1.6.3";
+  version = "1.6.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cvxpy";
     repo = "cvxpy";
     tag = "v${version}";
-    hash = "sha256-fQz9tPxSNKRSJdtyeEAE1qwK//x1U3kKozclav1G+nc=";
+    hash = "sha256-PV6fROIt8NsCTm2MbKr+ejgE3QC3IIU607q9MYRGnxc=";
   };
 
   # we need to patch out numpy version caps from upstream
