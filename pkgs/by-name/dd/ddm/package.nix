@@ -2,6 +2,7 @@
   stdenvNoCC,
   lib,
   requireFile,
+  asar,
   copyDesktopItems,
   electron,
   makeDesktopItem,
@@ -10,21 +11,23 @@
 
   campaigns ? [ ],
   cubes ? [ ],
+  constructed ? [ ],
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "ddm";
-  version = "3.0.2";
+  version = "4.0.0";
 
   src = requireFile {
     name = "DungeonDuelMonsters-linux-x64.zip";
-    hash = "sha256-APIFQC5k6J0K5Q/e5poW8wKGL67NUbqKTJL4Ohd1K18=";
+    hash = "sha256-Ycy5Cbd4NR/TptVnl5wV154uA0JU0UzIRHTAi/xm0cs=";
     url = "https://mikaygo.itch.io/ddm";
   };
 
   strictDeps = true;
 
   nativeBuildInputs = [
+    asar
     copyDesktopItems
     makeWrapper
     unzip
@@ -39,14 +42,18 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
       mkdir -p $out/{bin,share/icons/hicolor/512x512/apps,share/ddm}
 
-      mv -t $out/share/ddm/ ./resources/app/*
+      asar extract ./resources/app.asar $out/share/ddm/
+
+      patch -d $out/share/ddm/ -p1 < ${./0001-Make-findPath-its-calls-behave-well-with-store.patch}
+
       ln -s $out/share/ddm/icon.png $out/share/icons/hicolor/512x512/apps/ddm.png
 
       makeWrapper ${lib.getExe electron} $out/bin/ddm \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
         --add-flags "$out/share/ddm"
 
-      # Install externally-downloaded campaign packs & cube lists
+      # Install externally-downloaded campaign packs and cube & constructed lists
+      mkdir $out/share/ddm/{campaigns,cubes,constructed}
     ''
     + lib.concatMapStringsSep "\n" (campaignZip: ''
       unzip "${campaignZip}" -d $out/share/ddm/campaigns/
@@ -54,6 +61,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     + lib.concatMapStringsSep "\n" (cubeFile: ''
       cp "${cubeFile}" $out/share/ddm/cubes/
     '') cubes
+    + lib.concatMapStringsSep "\n" (constructedFile: ''
+      cp "${constructedFile}" $out/share/ddm/constructed/
+    '') constructed
     + ''
 
       runHook postInstall
