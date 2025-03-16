@@ -107,6 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
     # For vulkan-validation-layers
     "-DGLSLANG_INSTALL_DIR=${glslang}"
     "-DSPIRV_HEADERS_INSTALL_DIR=${spirv-headers}"
+    "-DSELECTED_BUILD_TARGETS=deqp-vk"
   ];
 
   postInstall = ''
@@ -114,7 +115,7 @@ stdenv.mkDerivation (finalAttrs: {
     ! test -e $out
 
     mkdir -p $out/bin $out/archive-dir
-    cp -a external/vulkancts/modules/vulkan/deqp-vk external/vulkancts/modules/vulkan/deqp-vksc $out/bin/
+    cp -a external/vulkancts/modules/vulkan/deqp-vk $out/bin/
     cp -a external/vulkancts/modules/vulkan/vulkan $out/archive-dir/
     cp -a external/vulkancts/modules/vulkan/vk-default $out/
 
