@@ -7,10 +7,6 @@
 }:
 
 with {
-  "12" = {
-    version = "1.4";
-    sha256 = "sha256-1cyvVEC9MQGMr7Tg6EUbsVBrMc8ahdFS3+CmDkmAq4Y=";
-  };
   "13" = {
     version = "1.4";
     hash = "sha256-1cyvVEC9MQGMr7Tg6EUbsVBrMc8ahdFS3+CmDkmAq4Y=";
