@@ -4,7 +4,7 @@
   fetchFromGitHub,
   autoreconfHook,
   pkg-config,
-  dovecot,
+  dovecot_2_3, # this plugin is part of dovecot from 2.4 onwards
   xapian,
 }:
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   ];
 
   configureFlags = [
-    "--with-dovecot=${dovecot}/lib/dovecot"
+    "--with-dovecot=${dovecot_2_3}/lib/dovecot"
     "--with-moduledir=${placeholder "out"}/lib/dovecot/modules"
   ];
 
