@@ -41,7 +41,13 @@ stdenv.mkDerivation rec {
   # Fortify causes build failures: 'str*' defined both normally and as 'alias' attribute
   hardeningDisable = [ "fortify" ];
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = [
+    "PREFIX=$(out)"
+    # hfuzz-cc can only find 'includes' folder (instead of 'include')
+    # Defined here: https://github.com/google/honggfuzz/blob/defed1013fdacd7090617ecc1ced8bdcc3c617d6/hfuzz_cc/hfuzz-cc.c#L273
+    "INC_PATH=$(PREFIX)/includes"
+    "HFUZZ_INC=$(out)"
+  ];
 
   postInstall = ''
     mkdir -p $out/lib
