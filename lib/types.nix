@@ -899,7 +899,7 @@ rec {
     # A module to be imported in some other part of the configuration.
     # `staticModules`' options will be added to the documentation, unlike
     # options declared via `config`.
-    deferredModuleWith = attrs@{ staticModules ? [] }: mkOptionType {
+    deferredModuleWith = attrs@{ staticModules ? [], specialArgs ? {} }: mkOptionType {
       name = "deferredModule";
       description = "module";
       descriptionClass = "noun";
@@ -907,7 +907,7 @@ rec {
       merge = loc: defs: {
         imports = staticModules ++ map (def: lib.setDefaultModuleLocation "${def.file}, via option ${showOption loc}" def.value) defs;
       };
-      inherit (submoduleWith { modules = staticModules; })
+      inherit (submoduleWith { modules = staticModules; inherit specialArgs; })
         getSubOptions
         getSubModules;
       substSubModules = m: deferredModuleWith (attrs // {
