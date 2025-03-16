@@ -175,7 +175,7 @@ let
           in
           nameValuePair "network-addresses-${i.name}"
           { description = "Address configuration of ${i.name}";
-            wantedBy = [
+            wantedBy = mkIf i.neededForBoot [
               "network-setup.service"
               "network.target"
             ];
