@@ -9,12 +9,12 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "c-intro-and-ref";
-  version = "0.0-unstable-2024-08-31";
+  version = "0-unstable-2025-03-09";
 
   src = fetchFromSavannah {
     repo = "c-intro-and-ref";
-    rev = "62962013107481127176ef04d69826e41f51313c";
-    hash = "sha256-Fmli3x8zvPntvCvV/wbEkxWzW9uDMZgCElPkKo9TS6Y=";
+    rev = "11723f5d07331708985dfd3eb9b05163dde990e5";
+    hash = "sha256-quTeOQKTX/Aq78vMJPsjVQyisADzWm9mtLE1HoJByl4=";
   };
 
   nativeBuildInputs = [
