@@ -24,7 +24,12 @@ let
     path = [ pkgs.getopt ];
 
     # Don't start services that are not yet initialized
-    unitConfig.ConditionPathExists = "/var/lib/${stateDirectory}/keyring";
+    unitConfig.ConditionPathExists = {
+      # keep the default keyring location for exporters as they are
+      # "client."-type keyring users, and these live in /etc/ceph.
+      "exporter" = "/etc/ceph/${clusterName}.client.${daemonId}.keyring";
+    }.${daemonType} or "/var/lib/${stateDirectory}/keyring";
+
     startLimitBurst =
       if daemonType == "osd" then 30 else if lib.elem daemonType ["mgr" "mds"] then 3 else 5;
     startLimitIntervalSec = 60 * 30;  # 30 mins
@@ -322,6 +327,20 @@ in
         '';
       };
     };
+
+    exporter = {
+      enable = lib.mkEnableOption "Ceph metrics exporter daemon";
+      package = lib.mkPackageOption pkgs "ceph" { };
+      daemons = lib.mkOption {
+        type = with lib.types; listOf str;
+        default = [];
+        example = [ "name1" "name2" ];
+        description = ''
+          A list of ceph exporter daemons that should have a service created. The names correspond
+          to the id part in ceph i.e. [ "name1" ] would result in client.name1.
+        '';
+      };
+    };
   };
 
   config = lib.mkIf config.services.ceph.enable {
@@ -340,6 +359,9 @@ in
       }
       { assertion = cfg.mgr.enable -> cfg.mgr.daemons != [];
         message = "have to set id of atleast one MGR if you're going to enable MGR";
+      }
+      { assertion = cfg.exporter.enable -> cfg.exporter.daemons != [];
+        message = "have to set id of atleast one exporter if you're going to enable exporter";
       }
     ];
 
@@ -377,7 +399,8 @@ in
         ++ lib.optional cfg.mds.enable (makeServices "mds" cfg.mds.daemons)
         ++ lib.optional cfg.osd.enable (makeServices "osd" cfg.osd.daemons)
         ++ lib.optional cfg.rgw.enable (makeServices "rgw" cfg.rgw.daemons)
-        ++ lib.optional cfg.mgr.enable (makeServices "mgr" cfg.mgr.daemons);
+        ++ lib.optional cfg.mgr.enable (makeServices "mgr" cfg.mgr.daemons)
+        ++ lib.optional cfg.exporter.enable (makeServices "exporter" cfg.exporter.daemons);
       in
         lib.mkMerge services;
 
@@ -392,7 +415,8 @@ in
         ++ lib.optional cfg.mds.enable (makeTarget "mds")
         ++ lib.optional cfg.osd.enable (makeTarget "osd")
         ++ lib.optional cfg.rgw.enable (makeTarget "rgw")
-        ++ lib.optional cfg.mgr.enable (makeTarget "mgr");
+        ++ lib.optional cfg.mgr.enable (makeTarget "mgr")
+        ++ lib.optional cfg.exporter.enable (makeTarget "exporter");
       in
         lib.mkMerge targets;
 
