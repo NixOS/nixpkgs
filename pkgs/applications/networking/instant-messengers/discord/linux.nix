@@ -174,6 +174,7 @@ stdenv.mkDerivation rec {
         "''${gappsWrapperArgs[@]}" \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
         ${lib.strings.optionalString withTTS "--add-flags \"--enable-speech-dispatcher\""} \
+        ${lib.strings.optionalString enableAutoscroll "--add-flags \"--enable-blink-features=MiddleClickAutoscroll\""} \
         --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}/" \
         --prefix LD_LIBRARY_PATH : ${libPath}:$out/opt/${binaryName} \
         --run "${lib.getExe disableBreakingUpdates}"
@@ -209,9 +210,7 @@ stdenv.mkDerivation rec {
 
   desktopItem = makeDesktopItem {
     name = pname;
-    exec =
-      binaryName
-      + lib.strings.optionalString enableAutoscroll " --enable-blink-features=MiddleClickAutoscroll";
+    exec = binaryName;
     icon = pname;
     inherit desktopName;
     genericName = meta.description;
