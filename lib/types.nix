@@ -301,7 +301,7 @@ rec {
             # Recursively merge attribute sets
             set = (attrsOf anything).merge;
             # This is the type of packages, only accept a single definition
-            stringCoercibleSet = mergeOneOption;
+            stringCoercibleSet = mergeEqualOption;
             lambda = loc: defs: arg: anything.merge
               (loc ++ [ "<function body>" ])
               (map (def: {
