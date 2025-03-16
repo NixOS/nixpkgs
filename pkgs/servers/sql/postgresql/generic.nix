@@ -39,7 +39,6 @@ let
       makeWrapper,
       pkg-config,
       removeReferencesTo,
-      buildPackages,
 
       # passthru
       buildEnv,
