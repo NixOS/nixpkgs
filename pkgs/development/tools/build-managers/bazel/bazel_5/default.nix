@@ -184,6 +184,7 @@ stdenv.mkDerivation rec {
     ];
     license = licenses.asl20;
     maintainers = lib.teams.bazel.members;
+    mainProgram = "bazel";
     inherit platforms;
   };
 

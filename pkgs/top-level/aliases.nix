@@ -643,6 +643,7 @@ mapAliases {
   graylog-4_3 = throw "graylog 4.x is EOL. Please consider downgrading nixpkgs if you need an upgrade from 4.x to latest series."; # Added 2023-10-09
   graylog-5_0 = throw "graylog 5.0.x is EOL. Please consider downgrading nixpkgs if you need an upgrade from 5.0.x to latest series."; # Added 2024-02-15
   green-pdfviewer = throw "'green-pdfviewer' has been removed due to lack of maintenance upstream."; # Added 2024-12-04
+  graylog-5_1 = throw "graylog 5.1.x is EOL. Please consider downgrading nixpkgs if you need an upgrade from 5.1.x to latest series."; # Added 2024-10-16
   gringo = clingo; # added 2022-11-27
   grub2_full = grub2; # Added 2022-11-18
   gtetrinet = throw "'gtetrinet' has been removed because it depends on GNOME 2 libraries"; # Added 2024-06-27
