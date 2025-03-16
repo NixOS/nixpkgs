@@ -5605,10 +5605,11 @@ self: super: with self; {
 
   gntp = callPackage ../development/python-modules/gntp { };
 
-  gnucash = toPythonModule (pkgs.gnucash.override {
-    inherit (self) python;
-    enablePython = true;
-  });
+  gnucash = toPythonModule (
+    pkgs.gnucash.override {
+      python3 = python;
+    }
+  );
 
   gnureadline = callPackage ../development/python-modules/gnureadline { };
 
