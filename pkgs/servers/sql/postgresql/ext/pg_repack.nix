@@ -1,12 +1,12 @@
 {
-  lib,
-  stdenv,
+  buildPostgresqlExtension,
   fetchFromGitHub,
+  gitUpdater,
+  lib,
   postgresql,
   postgresqlTestExtension,
+  stdenv,
   testers,
-  buildPostgresqlExtension,
-  gitUpdater,
 }:
 
 buildPostgresqlExtension (finalAttrs: {
@@ -18,8 +18,8 @@ buildPostgresqlExtension (finalAttrs: {
   src = fetchFromGitHub {
     owner = "reorg";
     repo = "pg_repack";
-    rev = "ver_${finalAttrs.version}";
-    sha256 = "sha256-wfjiLkx+S3zVrAynisX1GdazueVJ3EOwQEPcgUQt7eA=";
+    tag = "ver_${finalAttrs.version}";
+    hash = "sha256-wfjiLkx+S3zVrAynisX1GdazueVJ3EOwQEPcgUQt7eA=";
   };
 
   passthru.updateScript = gitUpdater {
@@ -36,7 +36,7 @@ buildPostgresqlExtension (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Reorganize tables in PostgreSQL databases with minimal locks";
     longDescription = ''
       pg_repack is a PostgreSQL extension which lets you remove bloat from tables and indexes, and optionally restore
@@ -45,8 +45,8 @@ buildPostgresqlExtension (finalAttrs: {
       with performance comparable to using CLUSTER directly.
     '';
     homepage = "https://github.com/reorg/pg_repack";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ danbst ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ danbst ];
     inherit (postgresql.meta) platforms;
     mainProgram = "pg_repack";
   };
