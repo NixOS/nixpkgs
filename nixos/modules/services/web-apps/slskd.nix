@@ -21,27 +21,39 @@ in {
       description = "Group under which slskd runs.";
     };
 
-    domain = mkOption {
-      type = types.nullOr types.str;
-      description = ''
-        If non-null, enables an nginx reverse proxy virtual host at this FQDN,
-        at the path configurated with `services.slskd.web.url_base`.
-      '';
-      example = "slskd.example.com";
-    };
-
     nginx = mkOption {
-      type = types.submodule (import ../web-servers/nginx/vhost-options.nix { inherit config lib; });
-      default = {};
-      example = lib.literalExpression ''
-        {
-          enableACME = true;
-          forceHttps = true;
-        }
-      '';
-      description = ''
-        This option customizes the nginx virtual host set up for slskd.
-      '';
+      description = "options for nginx";
+      example = {
+        enable = true;
+        domain = "example.com";
+        contextPath = "/slskd";
+      };
+      type = submodule {
+        options = {
+          enable = mkEnableOption "nginx as a reverse proxy";
+
+          domainName = mkOption {
+            type = str;
+            description = "The domain to use";
+          };
+          contextPath = mkOption {
+            type = path;
+            default = "/";
+            description = ''
+              The context path, i.e., the last part of the slskd
+              URL. Typically '/' or '/slskd'. Default '/'
+            '';
+          };
+          bindAddress = mkOption {
+            type = str;
+            default = "localhost";
+            example = "10.0.0.1";
+            description = ''
+              The address at which slskd serves its web interface.
+            '';
+          };
+        };
+      };
     };
 
     environmentFile = mkOption {
@@ -254,9 +266,14 @@ in {
   config = let
     cfg = config.services.slskd;
 
-    confWithoutNullValues = (lib.filterAttrsRecursive (key: value: (builtins.tryEval value).success && value != null) cfg.settings);
+    filteredSettings = lib.filterAttrsRecursive (_: value: (builtins.tryEval value).success && value != null) cfg.settings;
+    settingsFile = settingsFormat.generate "slskd.yml" filteredSettings;
 
-    configurationYaml = settingsFormat.generate "slskd.yml" confWithoutNullValues;
+    # Install configuration file (to make it editable at runtime)
+    slskd-prestart = pkgs.writeShellScript "slskd-prestart" ''
+      set -eu
+      install -D -m 600 -o ${cfg.user} -g ${cfg.group} ${settingsFile} /var/lib/slskd/slsksd.yml
+    '';
 
   in lib.mkIf cfg.enable {
 
@@ -274,6 +291,16 @@ in {
       "${defaultUser}" = {};
     };
 
+    # Reverse proxy configuration
+    services.nginx = lib.mkIf cfg.nginx.enable {
+      enable = true;
+      virtualHosts.${cfg.nginx.domainName}.locations.${cfg.nginx.contextPath} = {
+        proxyPass =
+          "http://${toString cfg.nginx.bindAddress}:${toString cfg.settings.web.port}";
+        proxyWebsockets = true;
+      };
+    };
+
     systemd.services.slskd = {
       description = "A modern client-server application for the Soulseek file sharing network";
       after = [ "network.target" ];
@@ -285,7 +312,8 @@ in {
         Environment = ["DOTNET_USE_POLLING_FILE_WATCHER=1"];
         EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
         StateDirectory = "slskd";  # Creates /var/lib/slskd and manages permissions
-        ExecStart = "${cfg.package}/bin/slskd --app-dir /var/lib/slskd --config ${configurationYaml}";
+        ExecStartPre = "+" + slskd-prestart;
+        ExecStart = "${cfg.package}/bin/slskd --app-dir /var/lib/slskd --config /var/lib/slskd/slskd.yml";
         Restart = "on-failure";
         ReadOnlyPaths = map (d: builtins.elemAt (builtins.split "[^/]*(/.+)" d) 1) cfg.settings.shares.directories;
         ReadWritePaths =
@@ -313,19 +341,6 @@ in {
     };
 
     networking.firewall.allowedTCPPorts = lib.optional cfg.openFirewall cfg.settings.soulseek.listen_port;
-
-    services.nginx = lib.mkIf (cfg.domain != null) {
-      enable = lib.mkDefault true;
-      virtualHosts."${cfg.domain}" = lib.mkMerge [
-        cfg.nginx
-        {
-          locations."${cfg.settings.web.url_base}" = {
-            proxyPass = "http://127.0.0.1:${toString cfg.settings.web.port}";
-            proxyWebsockets = true;
-          };
-        }
-      ];
-    };
   };
 
   meta = {
