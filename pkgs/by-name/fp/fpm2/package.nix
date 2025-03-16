@@ -12,11 +12,11 @@
 
 stdenv.mkDerivation rec {
   pname = "fpm2";
-  version = "0.90";
+  version = "0.90.1";
 
   src = fetchurl {
     url = "https://als.regnet.cz/fpm2/download/fpm2-${version}.tar.xz";
-    sha256 = "1lfzja3vzd6l6hfvw8gvg4qkl5iy6gra5pa8gjlps9l63k2bjfhz";
+    sha256 = "sha256-G6PF5wlEc19jtqOxBTp/10dQiFYPDO/W6v9Oyzz1lZA=";
   };
 
   nativeBuildInputs = [
