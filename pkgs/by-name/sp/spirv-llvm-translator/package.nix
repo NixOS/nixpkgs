@@ -48,10 +48,10 @@ let
         hash = "sha256-OsDohXRxovtEXaWiRGp8gJ0dXmoALyO+ZimeSO8aPVI=";
       }
     else if llvmMajor == "14" then
-      {
-        version = "14.0.0+unstable-2024-07-15";
-        rev = "2823e7052b7999c10fff63bc8089e5aa205716f4";
-        hash = "sha256-8/4B74hYge6WiH7PzRGEgE3W7f9IkQ4VMmfkWKYA/l4=";
+      rec {
+        version = "14.0.10";
+        rev = "v${version}";
+        hash = "sha256-OYbopU9iuwuppqmwdO5um7c7m0/fbYn2G4lkHvTxDvY=";
       }
     else if llvmMajor == "11" then
       {
