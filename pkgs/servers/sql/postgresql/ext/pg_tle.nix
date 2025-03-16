@@ -1,8 +1,8 @@
 {
-  lib,
-  fetchFromGitHub,
-  postgresql,
   buildPostgresqlExtension,
+  fetchFromGitHub,
+  lib,
+  postgresql,
 }:
 
 buildPostgresqlExtension rec {
