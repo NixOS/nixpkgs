@@ -1,10 +1,10 @@
 {
-  lib,
-  stdenv,
+  buildPostgresqlExtension,
   fetchFromGitHub,
+  lib,
   postgresql,
   postgresqlTestHook,
-  buildPostgresqlExtension,
+  stdenv,
 }:
 
 buildPostgresqlExtension (finalAttrs: {
@@ -14,7 +14,7 @@ buildPostgresqlExtension (finalAttrs: {
   src = fetchFromGitHub {
     owner = "postgrespro";
     repo = "rum";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-VsfpxQqRBu9bIAP+TfMRXd+B3hSjuhU2NsutocNiCt8=";
   };
 
@@ -48,11 +48,11 @@ buildPostgresqlExtension (finalAttrs: {
     installPhase = "touch $out";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Full text search index method for PostgreSQL";
     homepage = "https://github.com/postgrespro/rum";
-    license = licenses.postgresql;
+    license = lib.licenses.postgresql;
     platforms = postgresql.meta.platforms;
-    maintainers = with maintainers; [ DeeUnderscore ];
+    maintainers = with lib.maintainers; [ DeeUnderscore ];
   };
 })
