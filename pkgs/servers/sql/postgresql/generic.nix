@@ -459,7 +459,7 @@ let
                 callPackage = newScope (scope // this.pkgs);
               };
             in
-            import ./ext newSelf newSuper;
+            import ./ext.nix newSelf newSuper;
 
           withPackages = postgresqlWithPackages {
             inherit buildEnv;
