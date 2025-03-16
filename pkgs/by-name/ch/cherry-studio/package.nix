@@ -1,11 +1,9 @@
 {
   lib,
-  stdenv,
   stdenvNoCC,
   fetchFromGitHub,
   cacert,
   yarn-berry,
-  nodejs,
   electron,
   makeWrapper,
   writableTmpDirAsHomeHook,
@@ -15,7 +13,7 @@
   commandLineArgs ? "",
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "cherry-studio";
   version = "1.0.1";
 
@@ -36,30 +34,13 @@ stdenv.mkDerivation (finalAttrs: {
       writableTmpDirAsHomeHook
     ];
 
-    postConfigure =
-      let
-        supportedArchitectures = builtins.toJSON {
-          os = [
-            "darwin"
-            "linux"
-          ];
-          cpu = [
-            "x64"
-            "ia32"
-            "arm64"
-          ];
-          libc = [
-            "glibc"
-            "musl"
-          ];
-        };
-      in
-      ''
-        yarn config set enableTelemetry false
-        yarn config set enableGlobalCache false
-        yarn config set supportedArchitectures --json '${supportedArchitectures}'
-        yarn config set cacheFolder $out
-      '';
+    postConfigure = ''
+      yarn config set enableTelemetry false
+      yarn config set enableGlobalCache false
+      yarn config set --json supportedArchitectures.os '[ "linux", "darwin" ]'
+      yarn config set --json supportedArchitectures.cpu '["arm", "arm64", "ia32", "x64"]'
+      yarn config set cacheFolder $out
+    '';
 
     buildPhase = ''
       runHook preBuild
@@ -80,11 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     copyDesktopItems
   ];
 
-  env = {
-    ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
-    npm_config_build_from_source = "true";
-    npm_config_nodedir = nodejs;
-  };
+  env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
   postConfigure = ''
     yarn config set enableTelemetry false
@@ -126,7 +103,7 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/lib/cherry-studio
     cp -r dist/linux-unpacked/{resources,LICENSE*} $out/lib/cherry-studio
     install -Dm644 build/icon.png $out/share/pixmaps/cherry-studio.png
-    makeWrapper "${lib.getExe electron}" $out/bin/cherry-studio \
+    makeWrapper ${lib.getExe electron} $out/bin/cherry-studio \
       --inherit-argv0 \
       --add-flags $out/lib/cherry-studio/resources/app.asar \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
