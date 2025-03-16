@@ -199,9 +199,11 @@
       # `{ "registry.example.com": "example-registry-bearer-token", ... }`
       impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [ "NIX_NPM_TOKENS" ];
 
-      SSL_CERT_FILE = if (hash_.outputHash == "" || hash_.outputHash == lib.fakeSha256 || hash_.outputHash == lib.fakeSha512 || hash_.outputHash == lib.fakeHash)
-        then "${cacert}/etc/ssl/certs/ca-bundle.crt"
-        else "/no-cert-file.crt";
+      SSL_CERT_FILE = let
+        nixSSLCertFile = builtins.getEnv "NIX_SSL_CERT_FILE";
+      in if nixSSLCertFile != ""
+      then nixSSLCertFile
+      else "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
       outputHashMode = "recursive";
     } // hash_ // forceGitDeps_ // forceEmptyCache_);
