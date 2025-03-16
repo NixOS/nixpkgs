@@ -11,7 +11,17 @@ let
 
 in
 
-{ # We put legacy `system` into `localSystem`, if `localSystem` was not passed.
+{
+  # Where the packages will run
+  hostPlatform ?
+    # unreachable
+    abort "argument `hostPlatform` is optional in top-level/impure.nix, but has no default, because it and related arguments are processed in top-level/default.nix instead",
+  # Where the derivations are built
+  buildPlatform ?
+    # unreachable
+    abort "argument `buildPlatform` is optional in top-level/impure.nix, but has no default, because it and related arguments are processed in top-level/default.nix instead",
+
+  # We put legacy `system` into `localSystem`, if `localSystem` was not passed.
   # If neither is passed, assume we are building packages on the current
   # (build, in GNU Autotools parlance) platform.
   localSystem ? { system = args.system or builtins.currentSystem; }
@@ -84,6 +94,28 @@ in
 assert args ? localSystem -> !(args ? system);
 assert args ? system -> !(args ? localSystem);
 
+# # Similarly for more recently soft-deprecated parameters, in which case we
+# # don't want to mix and match:
+# # Either use the pre 24.11 legacy attrs, or {host,build}Platform.
+# assert (args ? localSystem || args ? system || args ? crossSystem) != (args ? hostPlatform || args ? buildPlatform);
+let
+  # If legacy args are passed, we need to perform the localSystem default logic here.
+  # If they are not passed,
+  hasLegacyArgs = args ? system || args ? localSystem || args ? crossSystem;
+  impureArgs = !args ? system && !args ? localSystem && !args ? crossSystem && !args ? hostPlatform && !args ? buildPlatform;
+in
+
 import ./. (builtins.removeAttrs args [ "system" ] // {
-  inherit config overlays localSystem;
-})
+    inherit config overlays;
+  }
+  // (if hasLegacyArgs || impureArgs
+    then {
+      # default.nix is a bit simpler than impure.nix (here), as we only perform the
+      # defaulting behavior here...
+      inherit localSystem;
+    } else {
+      # ... however, for the new {host,build}Platform, we
+      # don't want to trigger the checks in default.nix or weaken those checks.
+    }
+  )
+)
