@@ -14,9 +14,10 @@
   boot.consoleLogLevel = lib.mkDefault 7;
 
   # The serial ports listed here are:
-  # - ttyS0: for Tegra (Jetson TX1)
+  # - ttyS0: many boards
   # - ttyAMA0: for QEMU's -machine virt
-  boot.kernelParams = ["console=ttyS0,115200n8" "console=ttyAMA0,115200n8" "console=tty0"];
+  # - ttyAML0: older Amlogic boards
+  boot.kernelParams = ["console=ttyS0,115200n8" "console=ttyAMA0,115200n8" "console=ttyAML0,115200n8" "console=tty0"];
 
   sdImage = {
     populateFirmwareCommands = let
