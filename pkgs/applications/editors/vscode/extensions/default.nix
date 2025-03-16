@@ -718,8 +718,8 @@ let
 
       bmalehorn.vscode-fish = buildVscodeMarketplaceExtension {
         mktplcRef = {
-          name = "vscode-fish";
           publisher = "bmalehorn";
+          name = "vscode-fish";
           version = "1.0.38";
           hash = "sha256-QEifCTlzYMX+5H6+k2o1lsQrhW3vxVpn+KFg/3WVVFo=";
         };
@@ -1085,26 +1085,26 @@ let
             sources = {
               "x86_64-linux" = {
                 arch = "linux-x64";
-                hash = "sha256-0NSmyu+whQOSqaYQIt2C651k5CW1D9zmdn+0aLJF+CQ=";
+                hash = "sha256-1swpgwNLCMWjzDYziXuvvPv8cox2+8ZaYR4fUDoHRkY=";
               };
               "x86_64-darwin" = {
                 arch = "darwin-x64";
-                hash = "sha256-Ek5WswTcrHHC3E3zABYz1afC3oic7msq5ddSBLT2+dY=";
+                hash = "sha256-uBSd/6Z2689n0vExoeaEwodLjjeBULo/RaGu8cGgvsQ=";
               };
               "aarch64-linux" = {
                 arch = "linux-arm64";
-                hash = "sha256-e/vVKvOdt+mHp9gs+Kse13aFWX6DELeUtPdYLeuh9hE=";
+                hash = "sha256-WdSKNC2DjR3n9VVJh5OBasmVq/sIXiWFajhniSwxPuw=";
               };
               "aarch64-darwin" = {
                 arch = "darwin-arm64";
-                hash = "sha256-1oJ41WBlVUm7AUIwsIOyoucx9EtkReG8pxpYqgdZx5w=";
+                hash = "sha256-cwTUoVai9N2v5VmfYIKC+w8jYLcQhHGK5TLqxOBr05Q=";
               };
             };
           in
           {
             name = "continue";
             publisher = "Continue";
-            version = "0.8.68";
+            version = "1.1.11";
           }
           // sources.${stdenv.system};
         nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
@@ -1332,10 +1332,10 @@ let
 
       denoland.vscode-deno = buildVscodeMarketplaceExtension {
         mktplcRef = {
-          name = "vscode-deno";
           publisher = "denoland";
-          version = "3.43.5";
-          hash = "sha256-GDVOth8IGbRwT47cIpmzYQjhR3ITt57j+ieuK+wn9jg=";
+          name = "vscode-deno";
+          version = "3.43.6";
+          hash = "sha256-bZsPyffCQ++gvlK7MT1Dsrd7HQWACcViwwcEhu9HQfM=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/denoland.vscode-deno/changelog";
@@ -1649,10 +1649,10 @@ let
 
       editorconfig.editorconfig = buildVscodeMarketplaceExtension {
         mktplcRef = {
-          name = "EditorConfig";
-          publisher = "EditorConfig";
-          version = "0.17.0";
-          hash = "sha256-/NW/0KYVF0sCgat21aR/5nbVyoTHpDoqCPz+6zc0HHs=";
+          publisher = "editorconfig";
+          name = "editorconfig";
+          version = "0.17.2";
+          hash = "sha256-Xi2+mN6zjIKm0HWxfRAFs2vYkZ10Gv6poR2b2d8XCug=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/EditorConfig.EditorConfig/changelog";
@@ -1879,8 +1879,8 @@ let
 
       firefox-devtools.vscode-firefox-debug = buildVscodeMarketplaceExtension {
         mktplcRef = {
-          name = "vscode-firefox-debug";
           publisher = "firefox-devtools";
+          name = "vscode-firefox-debug";
           version = "2.15.0";
           hash = "sha256-hBj0V42k32dj2gvsNStUBNZEG7iRYxeDMbuA15AYQqk=";
         };
@@ -2169,15 +2169,10 @@ let
 
       github.vscode-pull-request-github = buildVscodeMarketplaceExtension {
         mktplcRef = {
-          name = "vscode-pull-request-github";
           publisher = "github";
-          # Stable versions are listed on the GitHub releases page and use a
-          # semver scheme, contrary to preview versions which are listed on
-          # the VSCode Marketplace and use a calver scheme. We should avoid
-          # using preview versions, because they can require insider versions
-          # of VS Code
-          version = "0.78.1";
-          hash = "sha256-T9oW6o4ItZfR8E1qrcH3nhMvVB6ihi4kpiDz7YGHOcI=";
+          name = "vscode-pull-request-github";
+          version = "0.107.2025031304";
+          hash = "sha256-BWmcAocEWBE7eeiyMBUcTBmozPWgLkdiDOskhf7drD8=";
         };
         meta = {
           license = lib.licenses.mit;
@@ -2344,8 +2339,8 @@ let
 
       haskell.haskell = buildVscodeMarketplaceExtension {
         mktplcRef = {
-          name = "haskell";
           publisher = "haskell";
+          name = "haskell";
           version = "2.5.3";
           hash = "sha256-3HbUH5+YCPqypGlsaSDwwyN/PoG9KO0YnZ1Ps7ZLQ48=";
         };
@@ -2771,8 +2766,8 @@ let
 
       jnoortheen.nix-ide = buildVscodeMarketplaceExtension {
         mktplcRef = {
-          name = "nix-ide";
           publisher = "jnoortheen";
+          name = "nix-ide";
           version = "0.4.12";
           hash = "sha256-3pXypgAwg/iEBUqPeNsyoX2oYqlKMVdemEhmhy1PuGU=";
         };
@@ -2863,8 +2858,8 @@ let
 
       justusadam.language-haskell = buildVscodeMarketplaceExtension {
         mktplcRef = {
-          name = "language-haskell";
           publisher = "justusadam";
+          name = "language-haskell";
           version = "3.6.0";
           hash = "sha256-rZXRzPmu7IYmyRWANtpJp3wp0r/RwB7eGHEJa7hBvoQ=";
         };
@@ -3048,8 +3043,8 @@ let
 
       llvm-vs-code-extensions.vscode-clangd = buildVscodeMarketplaceExtension {
         mktplcRef = {
-          name = "vscode-clangd";
           publisher = "llvm-vs-code-extensions";
+          name = "vscode-clangd";
           version = "0.1.33";
           hash = "sha256-NAQ7qT99vudcb/R55pKY3M5H6sV32aB4P8IWZKVQJas=";
         };
@@ -3136,8 +3131,8 @@ let
 
       matangover.mypy = buildVscodeMarketplaceExtension {
         mktplcRef = {
-          name = "mypy";
           publisher = "matangover";
+          name = "mypy";
           version = "0.4.1";
           hash = "sha256-hCgOclEnjhWTLMZPXJkoxgFN4pqZ1MKTzmRtjeHbLeU=";
         };
@@ -3298,8 +3293,8 @@ let
 
       mkhl.direnv = buildVscodeMarketplaceExtension {
         mktplcRef = {
-          name = "direnv";
           publisher = "mkhl";
+          name = "direnv";
           version = "0.17.0";
           hash = "sha256-9sFcfTMeLBGw2ET1snqQ6Uk//D/vcD9AVsZfnUNrWNg=";
         };
@@ -3332,10 +3327,10 @@ let
 
       ms-azuretools.vscode-docker = buildVscodeMarketplaceExtension {
         mktplcRef = {
-          name = "vscode-docker";
           publisher = "ms-azuretools";
-          version = "1.29.0";
-          hash = "sha256-mVRsVsolXj31WhbWnt3Xml+NnIq7Q2uHhUUd1zgW42c=";
+          name = "vscode-docker";
+          version = "1.29.4";
+          hash = "sha256-j2ACz2Ww5hddoDLHGdxnuQIqerP5ogZ80/wS+Aa5Gdo=";
         };
         meta = {
           description = "Docker Extension for Visual Studio Code";
@@ -3479,8 +3474,8 @@ let
 
       ms-toolsai.jupyter-renderers = buildVscodeMarketplaceExtension {
         mktplcRef = {
-          name = "jupyter-renderers";
           publisher = "ms-toolsai";
+          name = "jupyter-renderers";
           version = "1.1.2025012901";
           hash = "sha256-LWKSt0D3iFPKaYphN+8/1KJl1CIS2a3fMqrvoItjsvI=";
         };
@@ -3491,8 +3486,8 @@ let
 
       ms-toolsai.vscode-jupyter-cell-tags = buildVscodeMarketplaceExtension {
         mktplcRef = {
-          name = "vscode-jupyter-cell-tags";
           publisher = "ms-toolsai";
+          name = "vscode-jupyter-cell-tags";
           version = "0.1.9";
           hash = "sha256-XODbFbOr2kBTzFc0JtjiDUcCDBX1Hd4uajlil7mhqPY=";
         };
@@ -3503,10 +3498,10 @@ let
 
       ms-toolsai.vscode-jupyter-slideshow = buildVscodeMarketplaceExtension {
         mktplcRef = {
-          name = "vscode-jupyter-slideshow";
           publisher = "ms-toolsai";
-          version = "0.1.5";
-          sha256 = "1p6r5vkzvwvxif3wxqi9599vplabzig27fzzz0bx9z0awfglzyi7";
+          name = "vscode-jupyter-slideshow";
+          version = "0.1.6";
+          hash = "sha256-fnsMrrcYdz6BzUWMd9pAOQGTjmtEbQeoVYG20VWxCsM=";
         };
         meta = {
           license = lib.licenses.mit;
@@ -3527,10 +3522,10 @@ let
 
       ms-vscode.cmake-tools = buildVscodeMarketplaceExtension {
         mktplcRef = {
-          name = "cmake-tools";
           publisher = "ms-vscode";
-          version = "1.21.4";
-          hash = "sha256-T2AcKgedZ/b9VQ1FjGP5/hKme2STFrnF0rS5PxQuH9w=";
+          name = "cmake-tools";
+          version = "1.21.6";
+          hash = "sha256-Y+W5lknMiUTeKLnAIP/wAY9zn3QY+XvdPrl2GsdIb5o=";
         };
         meta.license = lib.licenses.mit;
       };
@@ -3555,8 +3550,8 @@ let
 
       ms-vscode.hexeditor = buildVscodeMarketplaceExtension {
         mktplcRef = {
-          name = "hexeditor";
           publisher = "ms-vscode";
+          name = "hexeditor";
           version = "1.11.1";
           hash = "sha256-RB5YOp30tfMEzGyXpOwPIHzXqZlRGc+pXiJ3foego7Y=";
         };
@@ -3582,10 +3577,10 @@ let
 
       ms-vscode.makefile-tools = buildVscodeMarketplaceExtension {
         mktplcRef = {
-          name = "makefile-tools";
           publisher = "ms-vscode";
-          version = "0.6.0";
-          sha256 = "07zagq5ib9hd3w67yk2g728vypr4qazw0g9dyd5bax21shnmppa9";
+          name = "makefile-tools";
+          version = "0.12.17";
+          hash = "sha256-chHyYzKNEpyYMQX14pbQ/d9WKC+1QWtm8iKe6M8ZWWI=";
         };
         meta = {
           license = lib.licenses.mit;
@@ -4074,10 +4069,10 @@ let
 
       redhat.java = buildVscodeMarketplaceExtension {
         mktplcRef = {
-          name = "java";
           publisher = "redhat";
-          version = "1.41.2025031108";
-          hash = "sha256-wUkZV2ox8zwU+mgagKQPDq/ZZfmlO4RtcWducNaS8+4=";
+          name = "java";
+          version = "1.41.2025031208";
+          hash = "sha256-0VWLkztB7anIs19QN1yPQvVjNim+DICv43IOMwEaM+E=";
         };
         buildInputs = [ jdk ];
         meta = {
@@ -4093,18 +4088,18 @@ let
 
       redhat.vscode-xml = buildVscodeMarketplaceExtension {
         mktplcRef = {
-          name = "vscode-xml";
           publisher = "redhat";
+          name = "vscode-xml";
           version = "0.28.2025031108";
-          sha256 = "sha256-SO/Q27v5rzoA5NBp5WJ8S7KcwbGLUmkK2FoaaSb6nYI=";
+          hash = "sha256-SO/Q27v5rzoA5NBp5WJ8S7KcwbGLUmkK2FoaaSb6nYI=";
         };
         meta.license = lib.licenses.epl20;
       };
 
       redhat.vscode-yaml = buildVscodeMarketplaceExtension {
         mktplcRef = {
-          name = "vscode-yaml";
           publisher = "redhat";
+          name = "vscode-yaml";
           version = "1.17.0";
           hash = "sha256-u3smLk5yCT9DMtFnrxh5tKbfDQ2XbL6bl2bXGOD38X0=";
         };
@@ -4549,10 +4544,10 @@ let
 
       sonarsource.sonarlint-vscode = buildVscodeMarketplaceExtension {
         mktplcRef = {
-          name = "sonarlint-vscode";
           publisher = "sonarsource";
-          version = "3.16.0";
-          hash = "sha256-zWgITdvUS9fq1uT6A4Gs3fSTBwCXoEIQ/tVcC7Eigfs=";
+          name = "sonarlint-vscode";
+          version = "4.17.0";
+          hash = "sha256-PPMjOxPKUB5+HrpWZYc1gBaF8z4UQBFdeSbd8dlw7GI=";
         };
         meta.license = lib.licenses.lgpl3Only;
       };
@@ -4573,8 +4568,8 @@ let
 
       sswg.swift-lang = buildVscodeMarketplaceExtension {
         mktplcRef = {
-          name = "swift-lang";
           publisher = "sswg";
+          name = "swift-lang";
           version = "1.12.0";
           hash = "sha256-Dzf8mJCDWT2pHPJcTywEqnki8aVsMO92+wLQ4fjHzb8=";
         };
@@ -4640,8 +4635,8 @@ let
 
       streetsidesoftware.code-spell-checker = buildVscodeMarketplaceExtension {
         mktplcRef = {
-          name = "code-spell-checker";
           publisher = "streetsidesoftware";
+          name = "code-spell-checker";
           version = "4.0.41";
           hash = "sha256-M/uqzU64nqSdRtxxQ1H+pg0YdkqYXEHlxmXrVcn/UqA=";
         };
@@ -4807,8 +4802,8 @@ let
 
       tamasfe.even-better-toml = buildVscodeMarketplaceExtension {
         mktplcRef = {
-          name = "even-better-toml";
           publisher = "tamasfe";
+          name = "even-better-toml";
           version = "0.21.2";
           hash = "sha256-IbjWavQoXu4x4hpEkvkhqzbf/NhZpn8RFdKTAnRlCAg=";
         };
@@ -4883,10 +4878,10 @@ let
 
       thenuprojectcontributors.vscode-nushell-lang = buildVscodeMarketplaceExtension {
         mktplcRef = {
-          name = "vscode-nushell-lang";
           publisher = "thenuprojectcontributors";
-          version = "1.9.0";
-          hash = "sha256-E9CK/GChd/yZT+P3ttROjL2jHtKPJ0KZzc32/nbuE4w=";
+          name = "vscode-nushell-lang";
+          version = "1.10.0";
+          hash = "sha256-AfClskNZwQIC67VrM8XKxF6nIbXPp576CRmls0WCKwU=";
         };
         meta.license = lib.licenses.mit;
       };
@@ -5013,10 +5008,10 @@ let
 
       twxs.cmake = buildVscodeMarketplaceExtension {
         mktplcRef = {
-          name = "cmake";
           publisher = "twxs";
+          name = "cmake";
           version = "0.0.17";
-          sha256 = "11hzjd0gxkq37689rrr2aszxng5l9fwpgs9nnglq3zhfa1msyn08";
+          hash = "sha256-CFiva1AO/oHpszbpd7lLtDzbv1Yi55yQOQPP/kCTH4Y=";
         };
         meta = {
           license = lib.licenses.mit;
@@ -5267,8 +5262,8 @@ let
 
       vscjava.vscode-java-debug = buildVscodeMarketplaceExtension {
         mktplcRef = {
-          name = "vscode-java-debug";
           publisher = "vscjava";
+          name = "vscode-java-debug";
           version = "0.58.2025022807";
           hash = "sha256-8bzDbCF03U5P15tkVkieOGuuLetUFXjZNrQKZTcKNFA=";
         };
@@ -5279,8 +5274,8 @@ let
 
       vscjava.vscode-java-dependency = buildVscodeMarketplaceExtension {
         mktplcRef = {
-          name = "vscode-java-dependency";
           publisher = "vscjava";
+          name = "vscode-java-dependency";
           version = "0.24.1";
           hash = "sha256-M0y6/9EPkcXTMxArqLpfSeVKpVF2SvjLtTWvLMIvauY=";
         };
@@ -5291,8 +5286,8 @@ let
 
       vscjava.vscode-java-test = buildVscodeMarketplaceExtension {
         mktplcRef = {
-          name = "vscode-java-test";
           publisher = "vscjava";
+          name = "vscode-java-test";
           version = "0.43.0";
           hash = "sha256-EM0S1Y4cRMBCRbAZgl9m6fIhANPrvdGVZXOLlDLnVWo=";
         };
@@ -5319,8 +5314,8 @@ let
 
       vscjava.vscode-maven = buildVscodeMarketplaceExtension {
         mktplcRef = {
-          name = "vscode-maven";
           publisher = "vscjava";
+          name = "vscode-maven";
           version = "0.44.2024072906";
           hash = "sha256-9S8Zzefg9i3nZiPZAtW5aT07dpZnhV0w9DP5vdnEtFc=";
         };
