@@ -1,13 +1,13 @@
 {
-  buildPostgresqlExtension,
   fetchFromGitHub,
   gitUpdater,
   lib,
   postgresql,
+  postgresqlBuildExtension,
   stdenv,
 }:
 
-buildPostgresqlExtension rec {
+postgresqlBuildExtension rec {
   pname = "hypopg";
   version = "1.4.1";
 

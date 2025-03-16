@@ -1,12 +1,12 @@
 {
-  buildPostgresqlExtension,
   fetchFromGitHub,
   lib,
   postgresql,
+  postgresqlBuildExtension,
   stdenv,
 }:
 
-buildPostgresqlExtension rec {
+postgresqlBuildExtension rec {
   pname = "pg_uuidv7";
   version = "1.6.0";
 

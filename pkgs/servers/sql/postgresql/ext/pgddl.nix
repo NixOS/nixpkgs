@@ -1,12 +1,12 @@
 {
-  buildPostgresqlExtension,
   fetchFromGitHub,
   lib,
   perl,
   postgresql,
+  postgresqlBuildExtension,
   postgresqlTestExtension,
 }:
-buildPostgresqlExtension (finalAttrs: {
+postgresqlBuildExtension (finalAttrs: {
   pname = "pgddl";
   version = "0.29";
 

@@ -1,12 +1,12 @@
 {
-  buildPostgresqlExtension,
   fetchFromGitHub,
   lib,
   postgresql,
+  postgresqlBuildExtension,
   stdenv,
 }:
 
-buildPostgresqlExtension rec {
+postgresqlBuildExtension rec {
   pname = "temporal_tables";
   version = "1.2.2";
 

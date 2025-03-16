@@ -1,12 +1,12 @@
 {
-  buildPostgresqlExtension,
   fetchFromGitHub,
   lib,
   nixosTests,
   postgresql,
+  postgresqlBuildExtension,
 }:
 
-buildPostgresqlExtension rec {
+postgresqlBuildExtension rec {
   pname = "wal2json";
   version = "${builtins.replaceStrings [ "_" ] [ "." ] (
     lib.strings.removePrefix "wal2json_" src.rev

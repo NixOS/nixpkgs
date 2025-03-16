@@ -1,11 +1,11 @@
 {
-  buildPostgresqlExtension,
   fetchFromGitHub,
   lib,
   postgresql,
+  postgresqlBuildExtension,
   stdenv,
 }:
-buildPostgresqlExtension rec {
+postgresqlBuildExtension rec {
   pname = "system_stats";
   version = "3.2";
 

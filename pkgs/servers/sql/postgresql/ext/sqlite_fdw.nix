@@ -1,12 +1,12 @@
 {
-  buildPostgresqlExtension,
   fetchFromGitHub,
   lib,
   postgresql,
+  postgresqlBuildExtension,
   sqlite,
 }:
 
-buildPostgresqlExtension rec {
+postgresqlBuildExtension rec {
   pname = "sqlite_fdw";
   version = "2.5.0";
 

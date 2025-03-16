@@ -1,16 +1,16 @@
 {
-  buildPostgresqlExtension,
   fetchFromGitHub,
   lib,
   perl,
   perlPackages,
   postgresql,
+  postgresqlBuildExtension,
   postgresqlTestHook,
   stdenv,
   which,
 }:
 
-buildPostgresqlExtension (finalAttrs: {
+postgresqlBuildExtension (finalAttrs: {
   pname = "pgtap";
   version = "1.3.3";
 

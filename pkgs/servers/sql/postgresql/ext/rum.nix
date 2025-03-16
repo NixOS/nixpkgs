@@ -1,13 +1,13 @@
 {
-  buildPostgresqlExtension,
   fetchFromGitHub,
   lib,
   postgresql,
+  postgresqlBuildExtension,
   postgresqlTestHook,
   stdenv,
 }:
 
-buildPostgresqlExtension (finalAttrs: {
+postgresqlBuildExtension (finalAttrs: {
   pname = "rum";
   version = "1.3.14";
 

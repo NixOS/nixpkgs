@@ -1,5 +1,4 @@
 {
-  buildPostgresqlExtension,
   cmake,
   fetchFromGitHub,
   lib,
@@ -7,12 +6,13 @@
   nixosTests,
   openssl,
   postgresql,
+  postgresqlBuildExtension,
   stdenv,
 
   enableUnfree ? true,
 }:
 
-buildPostgresqlExtension rec {
+postgresqlBuildExtension rec {
   pname = "timescaledb${lib.optionalString (!enableUnfree) "-apache"}";
   version = "2.18.2";
 

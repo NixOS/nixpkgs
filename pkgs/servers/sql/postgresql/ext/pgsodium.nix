@@ -1,15 +1,15 @@
 {
   bash,
-  buildPostgresqlExtension,
   fetchFromGitHub,
   lib,
   libsodium,
   postgresql,
+  postgresqlBuildExtension,
   postgresqlTestExtension,
   stdenv,
 }:
 
-buildPostgresqlExtension (finalAttrs: {
+postgresqlBuildExtension (finalAttrs: {
   pname = "pgsodium";
   version = "3.1.9";
 

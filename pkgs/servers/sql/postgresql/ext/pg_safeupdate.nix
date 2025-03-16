@@ -1,8 +1,8 @@
 {
-  buildPostgresqlExtension,
   fetchFromGitHub,
   lib,
   postgresql,
+  postgresqlBuildExtension,
   stdenv,
 }:
 
@@ -31,7 +31,7 @@ with {
 ."${lib.versions.major postgresql.version}"
   or (throw "pg_safeupdate: version specification for pg ${postgresql.version} missing.");
 
-buildPostgresqlExtension rec {
+postgresqlBuildExtension rec {
   pname = "pg-safeupdate";
   inherit version;
 

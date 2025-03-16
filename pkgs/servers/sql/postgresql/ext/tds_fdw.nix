@@ -1,14 +1,14 @@
 {
-  buildPostgresqlExtension,
   fetchFromGitHub,
   freetds,
   lib,
   postgresql,
+  postgresqlBuildExtension,
   stdenv,
   unstableGitUpdater,
 }:
 
-buildPostgresqlExtension rec {
+postgresqlBuildExtension rec {
   pname = "tds_fdw";
   version = "2.0.4";
 

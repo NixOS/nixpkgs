@@ -1,16 +1,16 @@
 {
-  buildPostgresqlExtension,
   fetchFromGitHub,
   groonga,
   lib,
   msgpack-c,
   pkg-config,
   postgresql,
+  postgresqlBuildExtension,
   stdenv,
   xxHash,
 }:
 
-buildPostgresqlExtension rec {
+postgresqlBuildExtension rec {
   pname = "pgroonga";
   version = "4.0.1";
 

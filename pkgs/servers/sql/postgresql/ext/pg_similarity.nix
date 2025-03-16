@@ -1,13 +1,13 @@
 {
-  buildPostgresqlExtension,
   fetchFromGitHub,
   fetchpatch,
   lib,
   postgresql,
+  postgresqlBuildExtension,
   stdenv,
 }:
 
-buildPostgresqlExtension {
+postgresqlBuildExtension {
   pname = "pg_similarity";
   version = "pg_similarity_1_0-unstable-2021-01-12";
 

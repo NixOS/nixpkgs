@@ -1,5 +1,4 @@
 {
-  buildPostgresqlExtension,
   cmake,
   fetchFromGitHub,
   glib,
@@ -10,9 +9,10 @@
   pcre2,
   pkg-config,
   postgresql,
+  postgresqlBuildExtension,
 }:
 
-buildPostgresqlExtension (finalAttrs: {
+postgresqlBuildExtension (finalAttrs: {
   pname = "pg-gvm";
   version = "22.6.8";
 

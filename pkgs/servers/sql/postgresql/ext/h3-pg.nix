@@ -1,15 +1,15 @@
 {
-  buildPostgresqlExtension,
   cmake,
   fetchFromGitHub,
   h3_4,
   lib,
   postgresql,
+  postgresqlBuildExtension,
   postgresqlTestExtension,
   stdenv,
 }:
 
-buildPostgresqlExtension (finalAttrs: {
+postgresqlBuildExtension (finalAttrs: {
   pname = "h3-pg";
   version = "4.2.2";
 

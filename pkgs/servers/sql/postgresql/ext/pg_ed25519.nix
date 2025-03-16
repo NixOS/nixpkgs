@@ -1,12 +1,12 @@
 {
-  buildPostgresqlExtension,
   fetchFromGitLab,
   lib,
   postgresql,
+  postgresqlBuildExtension,
   stdenv,
 }:
 
-buildPostgresqlExtension rec {
+postgresqlBuildExtension rec {
   pname = "pg_ed25519";
   version = "0.2";
 

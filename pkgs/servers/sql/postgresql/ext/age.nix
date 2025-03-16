@@ -1,11 +1,11 @@
 {
   bison,
-  buildPostgresqlExtension,
   fetchFromGitHub,
   flex,
   lib,
   perl,
   postgresql,
+  postgresqlBuildExtension,
   stdenv,
 }:
 
@@ -19,7 +19,7 @@ let
     "13" = "sha256-HR6nnWt/V2a0rD5eHHUsFIZ1y7lmvLz36URt9pPJnCw=";
   };
 in
-buildPostgresqlExtension rec {
+postgresqlBuildExtension rec {
   pname = "age";
   version = "1.5.0-rc0";
 

@@ -1,14 +1,14 @@
 {
-  buildPostgresqlExtension,
   fetchFromGitHub,
   lib,
   nix-update-script,
   postgresql,
+  postgresqlBuildExtension,
   postgresqlTestExtension,
   stdenv,
 }:
 
-buildPostgresqlExtension (finalAttrs: {
+postgresqlBuildExtension (finalAttrs: {
   pname = "pg_squeeze";
   version = "${builtins.replaceStrings [ "_" ] [ "." ] (
     lib.strings.removePrefix "REL" finalAttrs.src.rev

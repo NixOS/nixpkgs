@@ -1,12 +1,12 @@
 {
-  buildPostgresqlExtension,
   fetchFromGitHub,
   lib,
   postgresql,
+  postgresqlBuildExtension,
   stdenv,
 }:
 
-buildPostgresqlExtension {
+postgresqlBuildExtension {
   pname = "jsonb_deep_sum";
   version = "0-unstable-2021-12-24";
 
