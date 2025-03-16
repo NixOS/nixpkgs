@@ -3,25 +3,31 @@
   stdenv,
   fetchFromGitHub,
   cmake,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "spirv-headers";
-  version = "1.4.304.0";
+  version = "1.4.309.0";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "SPIRV-Headers";
-    rev = "vulkan-sdk-${version}";
-    hash = "sha256-MCQ+i9ymjnxRZP/Agk7rOGdHcB4p67jT4J4athWUlcI=";
+    rev = "vulkan-sdk-${finalAttrs.version}";
+    hash = "sha256-Q1i6i5XimULuGufP6mimwDW674anAETUiIEvDQwvg5Y=";
   };
 
   nativeBuildInputs = [ cmake ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Machine-readable components of the Khronos SPIR-V Registry";
     homepage = "https://github.com/KhronosGroup/SPIRV-Headers";
     license = licenses.mit;
-    maintainers = [ maintainers.ralith ];
+    maintainers = with maintainers; [
+      ralith
+      ners
+    ];
   };
-}
+})
