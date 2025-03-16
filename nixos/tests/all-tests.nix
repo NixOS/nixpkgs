@@ -1100,7 +1100,7 @@ in {
   static-web-server = handleTest ./web-servers/static-web-server.nix {};
   step-ca = handleTestOn ["x86_64-linux"] ./step-ca.nix {};
   stratis = handleTest ./stratis {};
-  strongswan-swanctl = handleTest ./strongswan-swanctl.nix {};
+  strongswan = discoverTests (import ./strongswan {});
   stub-ld = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./stub-ld.nix {};
   stunnel = handleTest ./stunnel.nix {};
   sudo = handleTest ./sudo.nix {};
