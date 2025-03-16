@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchzip,
-  cctools,
   gfortran,
   replaceVars,
   python3,
@@ -98,14 +97,9 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  postPatch =
-    ''
-      patchShebangs ./lib/petsc/bin
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      substituteInPlace config/install.py \
-        --replace /usr/bin/install_name_tool ${cctools}/bin/install_name_tool
-    '';
+  postPatch = ''
+    patchShebangs ./lib/petsc/bin
+  '';
 
   configureFlags =
     [
