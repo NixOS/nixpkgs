@@ -581,6 +581,7 @@ in {
   jitsi-meet = handleTest ./jitsi-meet.nix {};
   jool = import ./jool.nix { inherit pkgs runTest; };
   jotta-cli = handleTest ./jotta-cli.nix {};
+  juicity = handleTest ./juicity.nix {};
   k3s = handleTest ./k3s {};
   kafka = handleTest ./kafka.nix {};
   kanboard = handleTest ./web-apps/kanboard.nix {};
