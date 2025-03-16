@@ -73,14 +73,10 @@ pkgs.recurseIntoAttrs {
       '';
     };
 
-  checkWrapping =
-    pkgs.runCommandLocal "test-${lua.name}-wrapping"
-      {
-      }
-      ''
-        grep -- 'LUA_PATH=' ${wrappedHello}/bin/hello
-        touch $out
-      '';
+  checkWrapping = pkgs.runCommandLocal "test-${lua.name}-wrapping" { } ''
+    grep -- 'LUA_PATH=' ${wrappedHello}/bin/hello
+    touch $out
+  '';
 
   # checks that lua's setup-hook adds dependencies to LUA_PATH
   # Prevents the following regressions
@@ -100,24 +96,20 @@ pkgs.recurseIntoAttrs {
         touch $out
       '';
 
-  checkRelativeImports =
-    pkgs.runCommandLocal "test-${lua.name}-relative-imports"
-      {
-      }
-      ''
-        source ${./assert.sh}
+  checkRelativeImports = pkgs.runCommandLocal "test-${lua.name}-relative-imports" { } ''
+    source ${./assert.sh}
 
-        lua_vanilla_package_path="$(${lua}/bin/lua -e "print(package.path)")"
-        lua_with_module_package_path="$(${luaWithModule}/bin/lua -e "print(package.path)")"
+    lua_vanilla_package_path="$(${lua}/bin/lua -e "print(package.path)")"
+    lua_with_module_package_path="$(${luaWithModule}/bin/lua -e "print(package.path)")"
 
-        assertStringContains "$lua_vanilla_package_path" "./?.lua"
-        assertStringContains "$lua_vanilla_package_path" "./?/init.lua"
+    assertStringContains "$lua_vanilla_package_path" "./?.lua"
+    assertStringContains "$lua_vanilla_package_path" "./?/init.lua"
 
-        assertStringContains "$lua_with_module_package_path" "./?.lua"
-        assertStringContains "$lua_with_module_package_path" "./?/init.lua"
+    assertStringContains "$lua_with_module_package_path" "./?.lua"
+    assertStringContains "$lua_with_module_package_path" "./?/init.lua"
 
-        touch $out
-      '';
+    touch $out
+  '';
 
   # Check that a lua package's propagatedBuildInputs end up in LUA_PATH
   checkPropagatedBuildInputs =
