@@ -62,6 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     [
       (lib.cmakeBool "enable_examples" withExamples)
       (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
+      (lib.cmakeBool "BUILD_STATIC_LIBS" stdenv.hostPlatform.isStatic)
       (lib.cmakeBool "enable_fortran" true)
       (lib.cmakeBool "enable_complex16" true)
       (lib.cmakeBool "TPL_ENABLE_INTERNAL_BLASLIB" false)
