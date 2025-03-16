@@ -1,17 +1,17 @@
 {
-  lib,
   buildPgrxExtension,
   cargo-pgrx_0_12_0_alpha_1,
   clang_16,
   fetchFromGitHub,
+  lib,
   nix-update-script,
   nixosTests,
   openssl,
   pkg-config,
   postgresql,
+  replaceVars,
   rustPlatform,
   stdenv,
-  replaceVars,
 }:
 
 let
@@ -50,7 +50,7 @@ in
     src = fetchFromGitHub {
       owner = "tensorchord";
       repo = "pgvecto.rs";
-      rev = "v${version}";
+      tag = "v${version}";
       hash = "sha256-X7BY2Exv0xQNhsS/GA7GNvj9OeVDqVCd/k3lUkXtfgE=";
     };
 
@@ -90,18 +90,18 @@ in
       tests = nixosTests.postgresql.pgvecto-rs.passthru.override postgresql;
     };
 
-    meta = with lib; {
+    meta = {
       # Upstream removed support for PostgreSQL 13 on 0.3.0: https://github.com/tensorchord/pgvecto.rs/issues/343
       broken =
-        (versionOlder postgresql.version "14")
+        (lib.versionOlder postgresql.version "14")
         ||
           # PostgreSQL 17 support issue upstream: https://github.com/tensorchord/pgvecto.rs/issues/607
           # Check after next package update.
-          versionAtLeast postgresql.version "17" && version == "0.3.0";
+          lib.versionAtLeast postgresql.version "17" && version == "0.3.0";
       description = "Scalable, Low-latency and Hybrid-enabled Vector Search in Postgres";
       homepage = "https://github.com/tensorchord/pgvecto.rs";
-      license = licenses.asl20;
-      maintainers = with maintainers; [
+      license = lib.licenses.asl20;
+      maintainers = with lib.maintainers; [
         diogotcorreia
         esclear
       ];
