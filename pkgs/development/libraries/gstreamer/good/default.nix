@@ -50,26 +50,28 @@
 , openssl
 # Checks meson.is_cross_build(), so even canExecute isn't enough.
 , enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform, hotdoc
+, directoryListingUpdater
 }:
 
 # MMAL is not supported on aarch64, see:
 # https://github.com/raspberrypi/userland/issues/688
 assert raspiCameraSupport -> (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch32);
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gst-plugins-good";
-  version = "1.24.10";
+  version = "1.26.0";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchurl {
-    url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-/OdI+mbXqO4fsmFInlnQHj+nh2I9bVw1BoQW/nzQrLM=";
+    url = "https://gstreamer.freedesktop.org/src/gst-plugins-good/gst-plugins-good-${finalAttrs.version}.tar.xz";
+    hash = "sha256-nhjxOe9prQhnwt+7j+HRc2123xGqyD9g6NOtseLq8Ds=";
   };
 
   patches = [
-    # Reenable dynamic loading of libsoup on Darwin and use a different approach to do it.
-    ./souploader-darwin.diff
     # dlopen libsoup_3 with an absolute path
     (replaceVars ./souploader.diff {
       nixLibSoup3Path = "${lib.getLib libsoup_3}/lib";
@@ -164,7 +166,7 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
-    "-Dglib-asserts=disabled" # asserts should be disabled on stable releases
+    "-Dglib_assert=false" # asserts should be disabled on stable releases
     (lib.mesonEnable "doc" enableDocumentation)
   ] ++ lib.optionals (!qt5Support) [
     "-Dqt5=disabled"
@@ -194,17 +196,22 @@ stdenv.mkDerivation rec {
       scripts/extract-release-date-from-doap-file.py
   '';
 
-  NIX_LDFLAGS = [
-    # linking error on Darwin
-    # https://github.com/NixOS/nixpkgs/pull/70690#issuecomment-553694896
-    "-lncurses"
-  ];
+  env = {
+    NIX_LDFLAGS =
+      # linking error on Darwin
+      # https://github.com/NixOS/nixpkgs/pull/70690#issuecomment-553694896
+      "-lncurses";
+  };
 
   # fails 1 tests with "Unexpected critical/warning: g_object_set_is_valid_property: object class 'GstRtpStorage' has no property named ''"
   doCheck = false;
 
   # must be explicitly set since 5590e365
   dontWrapQtApps = true;
+
+  passthru = {
+    updateScript = directoryListingUpdater { };
+  };
 
   meta = with lib; {
     description = "GStreamer Good Plugins";
@@ -218,4 +225,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ matthewbauer ];
   };
-}
+})
