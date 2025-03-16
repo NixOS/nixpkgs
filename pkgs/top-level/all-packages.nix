@@ -3495,14 +3495,12 @@ with pkgs;
 
   grails = callPackage ../development/web/grails { jdk = null; };
 
-  graylog-5_1 = callPackage ../tools/misc/graylog/5.1.nix { };
-
   graylog-5_2 = callPackage ../tools/misc/graylog/5.2.nix { };
 
   graylog-6_0 = callPackage ../tools/misc/graylog/6.0.nix { };
 
   graylogPlugins = recurseIntoAttrs (
-    callPackage ../tools/misc/graylog/plugins.nix { }
+    callPackage ../tools/misc/graylog/plugins.nix { graylogPackage = graylog-6_0; }
   );
 
   graphviz = callPackage ../tools/graphics/graphviz {
