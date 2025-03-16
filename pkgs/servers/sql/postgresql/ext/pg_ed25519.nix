@@ -1,9 +1,9 @@
 {
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  postgresql,
   buildPostgresqlExtension,
+  fetchFromGitLab,
+  lib,
+  postgresql,
+  stdenv,
 }:
 
 buildPostgresqlExtension rec {
@@ -13,16 +13,16 @@ buildPostgresqlExtension rec {
   src = fetchFromGitLab {
     owner = "dwagin";
     repo = "pg_ed25519";
-    rev = version;
-    sha256 = "16w3qx3wj81bzfhydl2pjhn8b1jak6h7ja9wq1kc626g0siggqi0";
+    tag = version;
+    hash = "sha256-IOL3ogbPCMNmwDwpeaCZSoaFLJRX0Oah+ysgyUfHg5s=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "PostgreSQL extension for signing and verifying ed25519 signatures";
     homepage = "https://gitlab.com/dwagin/pg_ed25519";
-    maintainers = [ maintainers.renzo ];
+    maintainers = with lib.maintainers; [ renzo ];
     platforms = postgresql.meta.platforms;
-    license = licenses.mit;
+    license = lib.licenses.mit;
     # Broken with no upstream fix available.
     broken = lib.versionAtLeast postgresql.version "16";
   };
