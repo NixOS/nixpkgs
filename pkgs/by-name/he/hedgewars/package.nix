@@ -1,6 +1,6 @@
 {
   stdenv,
-  SDL2_image_2_6,
+  SDL2_image,
   SDL2_ttf,
   SDL2_net,
   fpc,
@@ -8,7 +8,8 @@
   ffmpeg,
   libglut,
   lib,
-  fetchurl,
+  fetchhg,
+  fetchpatch,
   cmake,
   pkg-config,
   lua5_1,
@@ -19,14 +20,13 @@
   libGL,
   libGLU,
   physfs,
-  qtbase,
-  qttools,
-  wrapQtAppsHook,
-  llvm,
+  qt5,
   withServer ? true,
 }:
 
 let
+  inherit (qt5) qtbase qttools wrapQtAppsHook;
+
   ghc = haskell.packages.ghc94.ghcWithPackages (
     pkgs: with pkgs; [
       SHA
@@ -43,19 +43,23 @@ let
     ]
   );
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "hedgewars";
-  version = "1.0.2";
+  version = "1.0.2-unstable-2024-03-24";
 
-  src = fetchurl {
-    url = "https://www.hedgewars.org/download/releases/hedgewars-src-${version}.tar.bz2";
-    sha256 = "sha256-IB/l5FvYyls9gbGOwGvWu8n6fCxjvwGQBeL4C+W88hI=";
+  src = fetchhg {
+    url = "https://hg.hedgewars.org/hedgewars/";
+    rev = "fcc98c953b5e";
+    hash = "sha256-bUmyYXmhOYjvbd0elyNnaUx3X1QJl3w2/hpxFK9KQCE=";
   };
 
   patches = [
-    # Add support for ffmpeg 6.0
-    # https://github.com/hedgewars/hw/pull/74
-    ./support-ffmpeg-6.patch
+    (fetchpatch {
+      # https://github.com/hedgewars/hw/pull/74
+      name = "Add support for ffmpeg 6.0";
+      url = "https://github.com/hedgewars/hw/pull/74/commits/71691fad8654031328f4af077fc32aaf29cdb7d0.patch";
+      hash = "sha256-nPfSQCc4eGCa4lCGl3gDx8fJp47N0lgVeDU5A5qb1yo=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -70,10 +74,9 @@ stdenv.mkDerivation rec {
     SDL2_net
     SDL2
     SDL2_mixer
-    SDL2_image_2_6
+    SDL2_image
     fpc
     lua5_1
-    llvm # hard-requirement on aarch64, for some reason not strictly necessary on x86-64
     ffmpeg
     libglut
     physfs
@@ -87,7 +90,7 @@ stdenv.mkDerivation rec {
 
   NIX_LDFLAGS = lib.concatMapStringsSep " " (e: "-rpath ${e}/lib") [
     SDL2.out
-    SDL2_image_2_6
+    SDL2_image
     SDL2_mixer
     SDL2_net
     SDL2_ttf
@@ -110,10 +113,19 @@ stdenv.mkDerivation rec {
     }"
   ];
 
-  meta = with lib; {
-    description = "Turn-based strategy artillery game similar to Worms";
+  meta = {
+    description = "Funny turn-based artillery game, featuring fighting hedgehogs!";
     homepage = "https://hedgewars.org/";
-    license = licenses.gpl2Plus;
+    license = with lib.licenses; [
+      gpl2Only
+
+      # Assets
+      fdl12Only
+
+      # Fonts
+      bitstreamVera
+      asl20
+    ];
     longDescription = ''
       Each player controls a team of several hedgehogs. During the course of
       the game, players take turns with one of their hedgehogs. They then use
@@ -137,11 +149,10 @@ stdenv.mkDerivation rec {
       contact with explosions, to zero (the damage dealt to the attacked
       hedgehog or hedgehogs after a player's or CPU turn is shown only when
       all movement on the battlefield has ceased).'';
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       kragniz
       fpletz
     ];
-    broken = stdenv.hostPlatform.isDarwin;
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }
