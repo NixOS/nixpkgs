@@ -1,4 +1,5 @@
 { buildDunePackage, ocsipersist-lib
+, ocsipersist
 , lwt_log
 , ocaml_sqlite3
 , ocsigen_server
@@ -16,6 +17,7 @@ buildDunePackage {
     ocsigen_server
     ocsipersist-lib
     xml-light
+    ocsipersist
   ];
 
   meta = ocsipersist-lib.meta // {
