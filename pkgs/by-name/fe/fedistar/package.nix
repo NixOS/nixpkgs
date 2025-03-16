@@ -18,19 +18,19 @@
 let
   pnpm = pnpm_10;
   pname = "fedistar";
-  version = "1.11.0";
+  version = "1.11.1";
   src = fetchFromGitHub {
     owner = "h3poteto";
     repo = "fedistar";
     tag = "v${version}";
-    hash = "sha256-x7PljFqxC3Zht3ZEAZTA6/BClZ0g7VH2HpQLGKqQ8qo=";
+    hash = "sha256-uAZUfYHFAfCToljXDq+yZhZp1P7vzmVUJ6rezbO1ykQ=";
   };
   fedistar-frontend = stdenvNoCC.mkDerivation (finalAttrs: {
     pname = "fedistar-frontend";
     inherit version src;
     pnpmDeps = pnpm.fetchDeps {
       inherit pname version src;
-      hash = "sha256-LurQqfd2r3ggqfBttZTOz2bhQ/r7pqEINkY16ZaIr8I=";
+      hash = "sha256-URMji1WTXVvX3gEYEG47IJGGTeh0wTJShy/eTZI5Xsw=";
     };
     nativeBuildInputs = [
       pnpm.configHook
@@ -63,7 +63,7 @@ rustPlatform.buildRustPackage {
   sourceRoot = "${src.name}/src-tauri";
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-u7AHf7TJzWsnynfcvtKaxSZJKeFFmQ1nJZNWUQ8wnWc=";
+  cargoHash = "sha256-Njan03/3D5KdN8IcGsfHBevXqy3b44SgfYj2exhAaVM=";
 
   postPatch = ''
     substituteInPlace ./tauri.conf.json \
