@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  stdenvNoCC,
   fetchFromGitHub,
   fetchurl,
   fetchYarnDeps,
@@ -20,7 +20,7 @@
 let
   sources = lib.importJSON ./sources.json;
 
-  geocities = stdenv.mkDerivation {
+  geocities = stdenvNoCC.mkDerivation {
     pname = "umami-geocities";
     version = sources.geocities.date;
     src = fetchurl {
@@ -57,7 +57,7 @@ let
     };
   });
 in
-stdenv.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "umami";
   inherit (sources) version;
 
