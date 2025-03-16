@@ -12,8 +12,9 @@ stdenv.mkDerivation (finalAttrs: {
   version = "2.06";
 
   outputs = [
-    "out"
+    "bin"
     "man"
+    "out"
   ];
 
   src = fetchzip {
@@ -36,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   makeFlags = [
-    "PREFIX=${placeholder "out"}"
+    "PREFIX=${placeholder "bin"}"
     "MANDIR=${placeholder "man"}/share/man"
   ];
 
@@ -57,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
   dontPatchShebangs = true;
 
   postFixup = ''
-    wrapProgram "$out/bin/convmv" --prefix PERL5LIB : "$PERL5LIB"
+    wrapProgram "$bin/bin/convmv" --prefix PERL5LIB : "$PERL5LIB"
   '';
 
   meta = with lib; {
