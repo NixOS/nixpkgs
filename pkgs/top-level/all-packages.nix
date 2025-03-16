@@ -6061,9 +6061,21 @@ with pkgs;
   haskell = callPackage ./haskell-packages.nix { };
 
   haskellPackages = dontRecurseIntoAttrs
-    # Prefer native-bignum to avoid linking issues with gmp
-    # GHC 9.6 rts can't be built statically with hadrian, so we need to use 9.4
-    # until 9.8 is ready
+    # Prefer `native-bignum` to avoid license issues with `gmp` (which is LGPL).
+    # Technically we could use gmp because I think Nix fulfills the requirements
+    # that it needs to be possible to relink the resulting binary with a changed `gmp`.
+    # However, `native-bignum` is the better default for static builds
+    # since it allows for the static binaries to be distributed independently of Nix
+    # (so the relinking requirement wouldn't be fulfilled necessarily).
+    #
+    # Static builds use older `ghc94` because:
+    # * Originally because GHC 9.6 rts could not be built statically with hadrian.
+    #   That was fixed in https://github.com/NixOS/nixpkgs/pull/317175
+    # * It now needs to be checked whether `ghc96` can be used.
+    #
+    # For the ugprade to `ghc98`, consider:
+    # * "GHC 9.8 TemplateHaskell doesn't work in pkgsStatic"
+    #   https://github.com/NixOS/nixpkgs/issues/275304
     (if stdenv.hostPlatform.isStatic then haskell.packages.native-bignum.ghc94
     # JS backend can't use gmp
     else if stdenv.hostPlatform.isGhcjs then haskell.packages.native-bignum.ghc96
