@@ -79,6 +79,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
+  # Testing deletes all files on each test, causes test failures.
+  enableParallelChecking = false;
+
   meta = {
     broken = stdenv.hostPlatform.isDarwin;
     description = "Software implementation of the JBIG1 data compression standard";
