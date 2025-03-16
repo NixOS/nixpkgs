@@ -1,0 +1,21 @@
+{
+  "version": "1.22.15",
+  "assets": {
+    "x86_64-linux": {
+      "url": "https://trunk.io/releases/1.22.15/trunk-1.22.15-linux-x86_64.tar.gz",
+      "hash": "sha256-OBNYvdUyqSck9/jU/tp75WbzKsneiVNkiy+PnVxCqUE="
+    },
+    "aarch64-linux": {
+      "url": "https://trunk.io/releases/1.22.15/trunk-1.22.15-linux-arm64.tar.gz",
+      "hash": "sha256-0whz+1QWrUJC6j8aWj+sGIOjjJ3de4xK42qhMkNxgXs="
+    },
+    "x86_64-darwin": {
+      "url": "https://trunk.io/releases/1.22.15/trunk-1.22.15-darwin-x86_64.tar.gz",
+      "hash": "sha256-OP3kfmgzH9SPA+LgOW81tO5249nhr/mV5vrUZ5O5HHU="
+    },
+    "aarch64-darwin": {
+      "url": "https://trunk.io/releases/1.22.15/trunk-1.22.15-darwin-arm64.tar.gz",
+      "hash": "sha256-86vME0ZEU0L6Dh4S+Q0T47ZyC9+nHlHjWDKn93GgaYw="
+    }
+  }
+}
