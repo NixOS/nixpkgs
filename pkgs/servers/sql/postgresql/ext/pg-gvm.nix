@@ -19,7 +19,7 @@ buildPostgresqlExtension (finalAttrs: {
   src = fetchFromGitHub {
     owner = "greenbone";
     repo = "pg-gvm";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-D8KpOTF+vcBNIn//8Y0Hwk4B+OBF2Hh3dkWyO2KYeqw=";
   };
 
