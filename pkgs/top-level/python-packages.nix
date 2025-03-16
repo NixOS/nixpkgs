@@ -11725,6 +11725,8 @@ self: super: with self; {
 
   pybindgen = callPackage ../development/python-modules/pybindgen { };
 
+  pybktree = callPackage ../development/python-modules/pybktree { };
+
   pyblackbird = callPackage ../development/python-modules/pyblackbird { };
 
   pybloom-live = callPackage ../development/python-modules/pybloom-live { };
@@ -17991,6 +17993,10 @@ self: super: with self; {
   umap-learn = callPackage ../development/python-modules/umap-learn { };
 
   umodbus = callPackage ../development/python-modules/umodbus { };
+
+  umi_tools = callPackage ../development/python-modules/umi_tools {
+    inherit (self) numpy pandas pysam future six regex scipy matplotlib pybktree;
+  };
 
   u-msgpack-python = callPackage ../development/python-modules/u-msgpack-python { };
 
