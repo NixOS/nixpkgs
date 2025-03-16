@@ -15393,6 +15393,8 @@ self: super: with self; {
 
   smoke-zephyr = callPackage ../development/python-modules/smoke-zephyr { };
 
+  smolagents = callPackage ../development/python-modules/smolagents { };
+
   smpplib = callPackage ../development/python-modules/smpplib { };
 
   smpp-pdu = callPackage ../development/python-modules/smpp-pdu { };
