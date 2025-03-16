@@ -22,14 +22,14 @@ let
     '';
   };
 in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dash-mpd-cli";
   version = "0.2.25";
 
   src = fetchFromGitHub {
     owner = "emarsden";
     repo = "dash-mpd-cli";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-xC/U48QyVn9K8Do1909XS7j9aY+ia0gd5cMdfipIds4=";
   };
 
@@ -73,4 +73,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ al3xtjames ];
     mainProgram = "dash-mpd-cli";
   };
-}
+})
