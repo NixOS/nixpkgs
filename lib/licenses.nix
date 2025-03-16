@@ -2,25 +2,41 @@
 let
   inherit (lib) optionalAttrs;
 
-  mkLicense = lname: {
-    shortName ? lname,
-    # Most of our licenses are Free, explicitly declare unfree additions as such!
-    free ? true,
-    deprecated ? false,
-    spdxId ? null,
-    url ? null,
-    fullName ? null,
-    redistributable ? free
-  }@attrs: {
-    inherit shortName free deprecated redistributable;
-  } // optionalAttrs (attrs ? spdxId) {
-    inherit spdxId;
-    url = "https://spdx.org/licenses/${spdxId}.html";
-  } // optionalAttrs (attrs ? url) {
-    inherit url;
-  } // optionalAttrs (attrs ? fullName) {
-    inherit fullName;
-  };
+  mkLicense =
+    lname:
+    {
+      shortName ? lname,
+      # Most of our licenses are Free, explicitly declare unfree additions as such!
+      free ? true,
+      deprecated ? false,
+      spdxId ? null,
+      url ? null,
+      fullName ? null,
+      redistributable ? free,
+      faircode ? false,
+    }@attrs:
+    lib.throwIf (free && !redistributable) "License ${lname} is marked as free but not redistributable" (
+      lib.throwIf (free && faircode) "License ${lname} is marked as free but also Faircode" (
+        {
+          inherit
+            shortName
+            free
+            deprecated
+            redistributable
+            ;
+        }
+        // optionalAttrs (attrs ? spdxId) {
+          inherit spdxId;
+          url = "https://spdx.org/licenses/${spdxId}.html";
+        }
+        // optionalAttrs (attrs ? url) {
+          inherit url;
+        }
+        // optionalAttrs (attrs ? fullName) {
+          inherit fullName;
+        }
+      )
+    );
 
 in
 lib.mapAttrs mkLicense ({
@@ -250,6 +266,7 @@ lib.mapAttrs mkLicense ({
     fullName = "Business Source License 1.1";
     free = false;
     redistributable = true;
+    faircode = true;
   };
 
   caossl = {
@@ -433,6 +450,14 @@ lib.mapAttrs mkLicense ({
     fullName = "Commons Clause License";
     url = "https://commonsclause.com/";
     free = false;
+    faircode = true;
+  };
+
+  confluent-community = {
+    fullName = "Confluent Community License";
+    url = "https://www.confluent.io/confluent-community-license";
+    free = false;
+    faircode = true;
   };
 
   cpl10 = {
@@ -486,6 +511,7 @@ lib.mapAttrs mkLicense ({
     spdxId = "Elastic-2.0";
     fullName = "Elastic License 2.0";
     free = false;
+    faircode = true;
   };
 
   epl10 = {
@@ -1179,6 +1205,7 @@ lib.mapAttrs mkLicense ({
     fullName = "Server Side Public License";
     url = "https://www.mongodb.com/licensing/server-side-public-license";
     free = false;
+    faircode = true;
     # NOTE Debatable.
     # The license a slightly modified AGPL but still considered unfree by the
     # OSI for what seem like political reasons
@@ -1202,6 +1229,7 @@ lib.mapAttrs mkLicense ({
     fullName = "Sustainable Use License";
     url = "https://github.com/n8n-io/n8n/blob/master/LICENSE.md";
     free = false;
+    faircode = true;
     redistributable = false; # only free to redistribute "for non-commercial purposes"
   };
 
