@@ -1,4 +1,4 @@
-{ lib, pkgs }:
+{ lib, pkgs, config }:
 
 lib.makeScope pkgs.newScope (self: {
   buildGraalvm = self.callPackage ./community-edition/buildGraalvm.nix;
@@ -20,4 +20,6 @@ lib.makeScope pkgs.newScope (self: {
   graalvm-oracle_23 = self.callPackage ./graalvm-oracle { version = "23"; };
   graalvm-oracle_17 = self.callPackage ./graalvm-oracle { version = "17"; };
   graalvm-oracle = self.graalvm-oracle_23;
+} // lib.optionalAttrs config.allowAliases {
+  graalvm-oracle_22 = throw "GraalVM 22 is EOL, use a newer version instead";
 })
