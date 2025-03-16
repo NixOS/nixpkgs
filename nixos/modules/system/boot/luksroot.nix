@@ -474,7 +474,7 @@ let
           echo "Please move your mouse to create needed randomness."
         ''}
           echo "Waiting for your FIDO2 device..."
-          fido2luks open${optionalString dev.allowDiscards " --allow-discards"} ${dev.device} ${dev.name} "${builtins.concatStringsSep "," fido2luksCredentials}" --await-dev ${toString dev.fido2.gracePeriod} --salt string:$passphrase
+          fido2luks open${optionalString dev.allowDiscards " --allow-discards"} ${optionalString luks.fido2NeedsPIN "--pin"} ${dev.device} ${dev.name} "${builtins.concatStringsSep "," fido2luksCredentials}" --await-dev ${toString dev.fido2.gracePeriod} --salt string:$passphrase
         if [ $? -ne 0 ]; then
           echo "No FIDO2 key found, falling back to normal open procedure"
           open_normally
@@ -946,6 +946,13 @@ in
       '';
     };
 
+    boot.initrd.luks.fido2NeedsPIN = mkOption {
+      default = false;
+      type = types.bool;
+      description = lib.mdDoc ''
+        Whether the FIDO2 key requires a PIN to be unlocked.
+      '';
+    };
   };
 
   config = mkIf (luks.devices != {} || luks.forceLuksSupportInInitrd) {
