@@ -868,6 +868,7 @@ in {
   opensmtpd-rspamd = handleTest ./opensmtpd-rspamd.nix {};
   opensnitch = handleTest ./opensnitch.nix {};
   openssh = handleTest ./openssh.nix {};
+  openssh-password = handleTest ./openssh-password.nix {};
   octoprint = handleTest ./octoprint.nix {};
   openstack-image-metadata = (handleTestOn ["x86_64-linux"] ./openstack-image.nix {}).metadata or {};
   openstack-image-userdata = (handleTestOn ["x86_64-linux"] ./openstack-image.nix {}).userdata or {};
