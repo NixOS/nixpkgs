@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , rustPlatform
 , fetchFromGitHub
 , makeWrapper
@@ -6,6 +7,7 @@
 , nix
 , nix-prefetch-git
 , installShellFiles
+, libsecret
 ,
 }:
 
@@ -34,6 +36,9 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   postInstall = ''
+    ${lib.optionalString stdenv.isLinux ''
+      patchelf --add-needed ${libsecret}/lib/libsecret-1.so.0 $out/bin/crate2nix
+    ''}
     wrapProgram $out/bin/crate2nix \
       --suffix PATH ":" ${
         lib.makeBinPath [
