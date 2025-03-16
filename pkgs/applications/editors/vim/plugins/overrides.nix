@@ -3809,6 +3809,26 @@ in
     };
   };
 
+  vimspector = super.vimspector.overrideAttrs (old:
+  let vimspector_process_list = buildGoModule
+    {
+      pname = "vimspector_process_list";
+      version = old.version;
+      vendorHash = "sha256-uBxWR8gAJHsRYniDC/e013LJlA2RSaWYkVw/7reWrZs=";
+      preBuild = ''
+        ln -s $(pwd)/vendor $(pwd)/support/vimspector_process_list/
+        cd support/vimspector_process_list
+      '';
+      src = old.src;
+    };
+  in
+  {
+    postInstall = ''
+      # adding simple process picker - https://github.com/puremourning/vimspector/blob/ee3bd0120525978521168eda1c3a64ef24e3cb86/support/vimspector_process_list/README.md
+      ln -s ${vimspector_process_list}/bin/vimspector_process_list $out/support/vimspector_process_list/
+    '';
+  });
+
   vimproc-vim = super.vimproc-vim.overrideAttrs {
     buildInputs = [ which ];
 
