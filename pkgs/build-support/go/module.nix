@@ -10,11 +10,7 @@ lib.extendMkDerivation {
   ];
   extendDrvArgs =
     finalAttrs:
-{ name ? "${args.pname}-${args.version}"
-  # The source used to build the derivation.
-, src
-  # Native build inputs used for the derivation.
-, nativeBuildInputs ? [ ]
+{ nativeBuildInputs ? [ ] # Native build inputs used for the derivation.
 , passthru ? { }
 , patches ? [ ]
 
