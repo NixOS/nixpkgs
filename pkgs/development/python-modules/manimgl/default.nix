@@ -175,7 +175,7 @@ buildPythonPackage {
     owner = "3b1b";
     repo = "manim";
     rev = "0c69ab6a32d4193f03ba9a604278eb3ce9699518";
-    hash = "sha256-NPfChSYXD25yd0lgBLOQSyy+ONuNSAVB+hPAdn8G7Ss=";
+    hash = "sha256-mh55R0uTuPz86+dJNlHcgJP1KWXoBYi2p8NUCnu4gEo=";
   };
 
   build-system = [
