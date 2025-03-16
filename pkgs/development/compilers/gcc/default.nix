@@ -350,7 +350,9 @@ pipe ((callFile ./common/builder.nix {}) ({
     inherit langC langCC langObjC langObjCpp langAda langFortran langGo langD version;
     isGNU = true;
     hardeningUnsupportedFlags =
-      optional (!atLeast11) "zerocallusedregs"
+      optional (
+        !(atLeast11 && (targetPlatform.isx86_64 || targetPlatform.isAarch64 || targetPlatform.isSparc))
+      ) "zerocallusedregs"
       ++ optionals (!atLeast12) [ "fortify3" "trivialautovarinit" ]
       ++ optional (!(
         targetPlatform.isLinux
