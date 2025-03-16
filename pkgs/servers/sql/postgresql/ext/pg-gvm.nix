@@ -42,7 +42,6 @@ buildPostgresqlExtension (finalAttrs: {
     changelog = "https://github.com/greenbone/pg-gvm/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ tochiaha ];
-    mainProgram = "pg-gvm";
     platforms = postgresql.meta.platforms;
   };
 })
