@@ -79,6 +79,13 @@ stdenv.mkDerivation rec {
       url = "https://salsa.debian.org/debian/ghostscript/-/raw/01e895fea033cc35054d1b68010de9818fa4a8fc/debian/patches/2010_add_build_timestamp_setting.patch";
       hash = "sha256-XTKkFKzMR2QpcS1YqoxzJnyuGk/l/Y2jdevsmbMtCXA=";
     })
+    # Revert the removal of pdf2dsc. This utility is used by auctex.
+    # TODO: Needs to be removed with the next version bump.
+    (fetchpatch2 {
+      name = "ghostscript-reinstate-pdf2dsc.patch";
+      url = "https://cgit.ghostscript.com/cgi-bin/cgit.cgi/ghostpdl.git/patch/?id=528d324a7968ad89401ebb60dfdb22f9fdfeeb6b";
+      hash = "sha256-PzM6REmA4Rk4FCLHr2FTnghQVlzUwWbcyvFrQ000j04=";
+    })
   ];
 
   outputs = [ "out" "man" "doc" "fonts" ];
