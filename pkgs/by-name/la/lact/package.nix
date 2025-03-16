@@ -3,34 +3,34 @@
   rustPlatform,
   stdenv,
   fetchFromGitHub,
-  blueprint-compiler,
   pkg-config,
   wrapGAppsHook4,
   gdk-pixbuf,
   gtk4,
   libdrm,
   vulkan-loader,
+  vulkan-tools,
   coreutils,
   nix-update-script,
   hwdata,
+  fuse3,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "lact";
-  version = "0.7.1";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "ilya-zlobintsev";
     repo = "LACT";
-    rev = "v${version}";
-    hash = "sha256-zaN6CQSeeoYFxLO6E1AMKAjeNOcPi2OsGfYkvZLPKcw=";
+    tag = "v${version}";
+    hash = "sha256-6nNt/EnJKHdldjpCW2pLPBkU5TLGEaqtnUUBraeRa3I=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-Ipvu/eu0uI/WKYyVjjHLlg0O0EgzfuTvMmr4gTzDRxw=";
+  cargoHash = "sha256-NoWngD0LJ+cteoQIJ0iye0MZgmLuuxN2YHHyMqeEABc=";
 
   nativeBuildInputs = [
-    blueprint-compiler
     pkg-config
     wrapGAppsHook4
     rustPlatform.bindgenHook
@@ -41,7 +41,9 @@ rustPlatform.buildRustPackage rec {
     gtk4
     libdrm
     vulkan-loader
+    vulkan-tools
     hwdata
+    fuse3
   ];
 
   # we do this here so that the binary is usable during integration tests
@@ -74,7 +76,9 @@ rustPlatform.buildRustPackage rec {
       --replace-fail Exec={lact,$out/bin/lact}
 
     # read() looks for the database in /usr/share so we use read_from_file() instead
-    substituteInPlace lact-daemon/src/server/handler.rs \
+    substituteInPlace \
+      lact-daemon/src/server/handler.rs \
+      lact-daemon/src/tests/mod.rs \
       --replace-fail 'Database::read()' 'Database::read_from_file("${hwdata}/share/hwdata/pci.ids")'
   '';
 
@@ -82,6 +86,12 @@ rustPlatform.buildRustPackage rec {
     install -Dm444 res/lactd.service -t $out/lib/systemd/system
     install -Dm444 res/io.github.lact-linux.desktop -t $out/share/applications
     install -Dm444 res/io.github.lact-linux.png -t $out/share/pixmaps
+  '';
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --prefix PATH : "${lib.makeBinPath [ vulkan-tools ]}"
+    )
   '';
 
   postFixup = lib.optionalString stdenv.targetPlatform.isElf ''
