@@ -8,18 +8,22 @@
 
 buildGoModule rec {
   pname = "databricks-cli";
-  version = "0.237.0";
+  version = "0.243.0";
 
   src = fetchFromGitHub {
     owner = "databricks";
     repo = "cli";
     rev = "v${version}";
-    hash = "sha256-dGhEOghGs0Fif1/6Yfyy+aMzY+/ougl7GiPh3AikE1c=";
+    hash = "sha256-U1ZQFRPL9iYtCHJXBdgCgaE1LZgKOWdYJ1gFAsgWPI8=";
   };
 
-  vendorHash = "sha256-GYgbZ8JdQXEOYCAxrloHccA0eS02hs9NTMRfD+hakks=";
+  vendorHash = "sha256-InVmtV3PH75exsftC3sxz9/xt9drJPlXgRYqvqnp+yM=";
 
-  excludedPackages = [ "bundle/internal" ];
+  excludedPackages = [
+    "bundle/internal"
+    "acceptance"
+    "integration"
+  ];
 
   postBuild = ''
     mv "$GOPATH/bin/cli" "$GOPATH/bin/databricks"
@@ -34,6 +38,8 @@ buildGoModule rec {
       "TestExpandPipelineGlobPaths"
       "TestRelativePathTranslationDefault"
       "TestRelativePathTranslationOverride"
+      # Use venv
+      "TestVenvSuccess"
     ]);
 
   nativeCheckInputs = [
@@ -58,6 +64,9 @@ buildGoModule rec {
     homepage = "https://github.com/databricks/cli";
     changelog = "https://github.com/databricks/cli/releases/tag/v${version}";
     license = licenses.databricks;
-    maintainers = with maintainers; [ kfollesdal ];
+    maintainers = with maintainers; [
+      kfollesdal
+      taranarmo
+    ];
   };
 }

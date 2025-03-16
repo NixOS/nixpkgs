@@ -23,4 +23,4 @@ echo "Latest version of Morgen is $latestVersion"
 update-source-version morgen "$latestVersion"
 
 # Fetch and update the hash
-nix-prefetch-url --unpack "https://dl.todesktop.com/210203cqcj00tw1/versions/${latestVersion}/linux/deb"
+nix-prefetch-url "https://dl.todesktop.com/210203cqcj00tw1/versions/${latestVersion}/linux/deb"
