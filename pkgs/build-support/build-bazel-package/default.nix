@@ -66,12 +66,16 @@ let
   };
   fBuildAttrs = fArgs // buildAttrs;
   fFetchAttrs = fArgs // removeAttrs fetchAttrs [ "hash" "sha256" ];
+  # Only reference bazel' from this point forward so that we only depend on a 
+  # single bazel derivation.
+  bazel' = bazel.override { enableNixHacks = true; };
+  bazelName = bazel'.name;
   bazelCmd = { cmd, additionalFlags, targets, targetRunFlags ? [ ] }:
     lib.optionalString (targets != [ ]) ''
       # See footnote called [USER and BAZEL_USE_CPP_ONLY_TOOLCHAIN variables]
       BAZEL_USE_CPP_ONLY_TOOLCHAIN=1 \
       USER=homeless-shelter \
-      bazel \
+      ${lib.getExe bazel'} \
         --batch \
         --output_base="$bazelOut" \
         --output_user_root="$bazelUserRoot" \
@@ -116,7 +120,7 @@ stdenv.mkDerivation (fBuildAttrs // {
 
     impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ fFetchAttrs.impureEnvVars or [];
 
-    nativeBuildInputs = fFetchAttrs.nativeBuildInputs or [] ++ [ bazel ];
+    nativeBuildInputs = fFetchAttrs.nativeBuildInputs or [];
 
     preHook = fFetchAttrs.preHook or "" + ''
       export bazelOut="$(echo ''${NIX_BUILD_TOP}/output | sed -e 's,//,/,g')"
@@ -194,7 +198,7 @@ stdenv.mkDerivation (fBuildAttrs // {
     '' + ''
       done
 
-      echo '${bazel.name}' > $bazelOut/external/.nix-bazel-version
+      echo '${bazelName}' > $bazelOut/external/.nix-bazel-version
 
       (cd $bazelOut/ && tar czf $out --sort=name --mtime='@1' --owner=0 --group=0 --numeric-owner external/)
 
@@ -210,7 +214,7 @@ stdenv.mkDerivation (fBuildAttrs // {
     ;
   });
 
-  nativeBuildInputs = fBuildAttrs.nativeBuildInputs or [] ++ [ (bazel.override { enableNixHacks = true; }) ];
+  nativeBuildInputs = fBuildAttrs.nativeBuildInputs or [];
 
   preHook = fBuildAttrs.preHook or "" + ''
     export bazelOut="$NIX_BUILD_TOP/output"
@@ -223,10 +227,10 @@ stdenv.mkDerivation (fBuildAttrs // {
 
     (cd $bazelOut && tar xfz $deps)
 
-    test "${bazel.name}" = "$(<$bazelOut/external/.nix-bazel-version)" || {
+    test "${bazelName}" = "$(<$bazelOut/external/.nix-bazel-version)" || {
       echo "fixed output derivation was built for a different bazel version" >&2
       echo "     got: $(<$bazelOut/external/.nix-bazel-version)" >&2
-      echo "expected: ${bazel.name}" >&2
+      echo "expected: ${bazelName}" >&2
       exit 1
     }
 
