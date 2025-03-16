@@ -15,9 +15,9 @@
   pkgsi686Linux,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "intel-media-driver";
-  version = "24.3.4";
+  version = "24.4.4";
 
   outputs = [
     "out"
@@ -27,8 +27,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "intel";
     repo = "media-driver";
-    rev = "intel-media-${version}";
-    hash = "sha256-vgbWwL4mu8YZzfvBvxna8Ioz6ig29iA2RZHKuHdh5Ic=";
+    rev = "intel-media-${finalAttrs.version}";
+    hash = "sha256-vZIWH/YBrUMmXu/JBBeGPOsn7pZUDaU8O6vgoekGhVU=";
   };
 
   patches = [
@@ -86,6 +86,9 @@ stdenv.mkDerivation rec {
       mit
     ];
     platforms = platforms.linux;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [
+      SuperSandro2000
+      ners
+    ];
   };
-}
+})
