@@ -29,7 +29,9 @@ in
 
 rec {
   # these patterns are to be matched against {host,build,target}Platform.parsed
-  patterns = rec {
+  patterns = mapAttrs (_: pattern:
+    if isList pattern then map (pattern: pattern // { _type = "system"; }) pattern
+    else pattern // { _type = "system"; }) (rec {
     # The patterns below are lists in sum-of-products form.
     #
     # Each attribute is list of product conditions; non-list values are treated
@@ -125,7 +127,7 @@ rec {
 
     isElf          = { kernel.execFormat = execFormats.elf; };
     isMacho        = { kernel.execFormat = execFormats.macho; };
-  };
+  });
 
   # given two patterns, return a pattern which is their logical AND.
   # Since a pattern is a list-of-disjuncts, this needs to
@@ -140,7 +142,8 @@ rec {
         map (attr2:
           recursiveUpdateUntil
             (path: subattr1: subattr2:
-              if (builtins.intersectAttrs subattr1 subattr2) == {} || subattr1 == subattr2
+              if (builtins.isString subattr2) then true
+              else if (builtins.intersectAttrs subattr1 subattr2) == {} || subattr1 == subattr2
               then true
               else throw ''
                 pattern conflict at path ${toString path}:
@@ -164,7 +167,7 @@ rec {
   # that `lib.meta.availableOn` can distinguish them from the patterns which
   # apply only to the `parsed` field.
 
-  platformPatterns = mapAttrs (_: p: { parsed = {}; } // p) {
+  platformPatterns = {
     isStatic = { isStatic = true; };
   };
 }
