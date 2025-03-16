@@ -8,6 +8,8 @@
   which,
   rustPlatform,
   emscripten,
+  openssl,
+  pkg-config,
   callPackage,
   linkFarm,
   substitute,
@@ -173,8 +175,17 @@ rustPlatform.buildRustPackage {
   useFetchCargoVendor = true;
   cargoHash = "sha256-YaXeApg0U97Bm+kBdFdmfnkgg9GBxxYdaDzgCVN2sbY=";
 
-  buildInputs = [ installShellFiles ];
-  nativeBuildInputs = [ which ] ++ lib.optionals webUISupport [ emscripten ];
+  buildInputs =
+    [ installShellFiles ]
+    ++ lib.optionals webUISupport [
+      openssl
+    ];
+  nativeBuildInputs =
+    [ which ]
+    ++ lib.optionals webUISupport [
+      emscripten
+      pkg-config
+    ];
 
   patches = lib.optionals (!webUISupport) [
     (substitute {
@@ -193,7 +204,7 @@ rustPlatform.buildRustPackage {
   preBuild = lib.optionalString webUISupport ''
     mkdir -p .emscriptencache
     export EM_CACHE=$(pwd)/.emscriptencache
-    bash ./script/build-wasm --debug
+    cargo run --package xtask -- build-wasm --debug
   '';
 
   postInstall =
