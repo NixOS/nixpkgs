@@ -824,6 +824,8 @@ self: super: with self; {
 
   ariadne = callPackage ../development/python-modules/ariadne { };
 
+  arm-mango = callPackage ../development/python-modules/arm-mango { };
+
   arpy = callPackage ../development/python-modules/arpy { };
 
   array-api-compat = callPackage ../development/python-modules/array-api-compat { };
