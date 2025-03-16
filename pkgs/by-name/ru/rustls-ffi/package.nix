@@ -2,19 +2,13 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  cargo,
   rustPlatform,
-  cargo-c,
-  validatePkgConfig,
-  rust,
   libiconv,
   darwin,
   curl,
-  apacheHttpd,
-  testers,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rustls-ffi";
   version = "0.14.1";
 
@@ -25,41 +19,16 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-ZKAyKcKwhnPE6PrfBFjLJKkTlGbdLcmW1EP/xSv2cpM=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoVendor {
-    src = finalAttrs.src;
-    name = "${finalAttrs.pname}-${finalAttrs.version}";
-    hash = "sha256-cZ92wSKoygt9x6O/ginOEiCiarlR5qGVFOHrIFdWOWE=";
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-cZ92wSKoygt9x6O/ginOEiCiarlR5qGVFOHrIFdWOWE=";
+
+  buildCAPIOnly = true;
+  doCheck = false;
 
   propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
     darwin.apple_sdk.frameworks.Security
   ];
-
-  nativeBuildInputs = [
-    cargo
-    rustPlatform.cargoSetupHook
-    cargo-c
-    validatePkgConfig
-  ];
-
-  buildPhase = ''
-    runHook preBuild
-    ${rust.envVars.setEnv} cargo cbuild -j $NIX_BUILD_CORES --release --frozen --prefix=${placeholder "out"} --target ${stdenv.hostPlatform.rust.rustcTarget}
-    runHook postBuild
-  '';
-
-  installPhase = ''
-    runHook preInstall
-    ${rust.envVars.setEnv} cargo cinstall -j $NIX_BUILD_CORES --release --frozen --prefix=${placeholder "out"} --target ${stdenv.hostPlatform.rust.rustcTarget}
-    runHook postInstall
-  '';
-
-  checkPhase = ''
-    runHook preCheck
-    ${rust.envVars.setEnv} cargo ctest -j $NIX_BUILD_CORES --release --frozen --prefix=${placeholder "out"} --target ${stdenv.hostPlatform.rust.rustcTarget}
-    runHook postCheck
-  '';
 
   passthru.tests = {
     curl = curl.override {
@@ -67,7 +36,6 @@ stdenv.mkDerivation (finalAttrs: {
       rustlsSupport = true;
       rustls-ffi = finalAttrs.finalPackage;
     };
-    pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
   meta = with lib; {
