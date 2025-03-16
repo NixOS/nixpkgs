@@ -47,6 +47,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/labstreaminglayer/pylsl";
     license = licenses.mit;
     maintainers = with maintainers; [ abcsds ];
-    mainProgram = "pylsl";
   };
 }
