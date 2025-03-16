@@ -16,6 +16,7 @@ import ./make-test-python.nix (
 
           users.users.alice = {
             uid = 1000;
+            linger = true;
             isNormalUser = true;
           };
         };
@@ -25,20 +26,22 @@ import ./make-test-python.nix (
       { nodes, ... }:
       let
         user = nodes.machine.config.users.users.alice;
+        runtimeUID = "$(id -u ${user.name})";
+        runtimeDir = "/run/user/${runtimeUID}";
         sudo = lib.concatStringsSep " " [
-          "XDG_RUNTIME_DIR=/run/user/${toString user.uid}"
-          "DOCKER_HOST=unix:///run/user/${toString user.uid}/docker.sock"
+          "XDG_RUNTIME_DIR=${runtimeDir}"
+          "DOCKER_HOST=unix://${runtimeDir}/docker.sock"
           "sudo"
           "--preserve-env=XDG_RUNTIME_DIR,DOCKER_HOST"
           "-u"
-          "alice"
+          user.name
         ];
       in
       ''
         machine.wait_for_unit("multi-user.target")
 
-        machine.succeed("loginctl enable-linger alice")
-        machine.wait_until_succeeds("${sudo} systemctl --user is-active docker.service")
+        machine.wait_for_unit("user@${runtimeUID}")
+        machine.wait_for_unit("docker.service", "${user.name}")
 
         machine.succeed("tar cv --files-from /dev/null | ${sudo} docker import - scratchimg")
         machine.succeed(
