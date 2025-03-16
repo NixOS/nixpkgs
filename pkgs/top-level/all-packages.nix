@@ -12365,6 +12365,7 @@ with pkgs;
     ubootSopine
     ubootTuringRK1
     ubootUtilite
+    ubootVisionfive2
     ubootWandboard
     ;
 
