@@ -52,8 +52,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     wrapProgram $out/bin/dash-mpd-cli \
       --prefix PATH : ${
         lib.makeBinPath [
-          ffmpeg.bin
-          libxslt.bin
+          (lib.getBin ffmpeg)
+          (lib.getBin libxslt)
           shaka-packager-wrapped
         ]
       }
