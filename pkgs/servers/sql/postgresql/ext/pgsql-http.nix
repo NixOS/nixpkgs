@@ -1,13 +1,13 @@
 {
-  buildPostgresqlExtension,
   curl,
   fetchFromGitHub,
   lib,
   postgresql,
+  postgresqlBuildExtension,
   stdenv,
 }:
 
-buildPostgresqlExtension rec {
+postgresqlBuildExtension rec {
   pname = "pgsql-http";
   version = "1.6.3";
 

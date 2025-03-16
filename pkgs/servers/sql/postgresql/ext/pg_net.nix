@@ -1,13 +1,13 @@
 {
-  buildPostgresqlExtension,
   curl,
   fetchFromGitHub,
   lib,
   postgresql,
+  postgresqlBuildExtension,
   stdenv,
 }:
 
-buildPostgresqlExtension rec {
+postgresqlBuildExtension rec {
   pname = "pg_net";
   version = "0.14.0";
 

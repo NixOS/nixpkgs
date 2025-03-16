@@ -1,15 +1,15 @@
 {
-  buildPostgresqlExtension,
   cmake,
   fetchFromGitHub,
   lib,
   openssl,
   postgresql,
+  postgresqlBuildExtension,
   postgresqlTestExtension,
   stdenv,
 }:
 
-buildPostgresqlExtension (finalAttrs: {
+postgresqlBuildExtension (finalAttrs: {
   pname = "postgresql-lantern";
   version = "0.5.0";
 

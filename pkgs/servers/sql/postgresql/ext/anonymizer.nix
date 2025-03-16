@@ -1,16 +1,16 @@
 {
-  buildPostgresqlExtension,
   jitSupport,
   lib,
   llvm,
   nixosTests,
   pg-dump-anon,
   postgresql,
+  postgresqlBuildExtension,
   runtimeShell,
   stdenv,
 }:
 
-buildPostgresqlExtension (finalAttrs: {
+postgresqlBuildExtension (finalAttrs: {
   pname = "postgresql_anonymizer";
 
   inherit (pg-dump-anon) version src;

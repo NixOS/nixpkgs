@@ -452,7 +452,7 @@ let
                     }
                     // extraArgs
                   );
-                buildPostgresqlExtension = newSuper.callPackage ./buildPostgresqlExtension.nix { };
+                postgresqlBuildExtension = newSuper.callPackage ./postgresqlBuildExtension.nix { };
               };
               newSelf = self // scope;
               newSuper = {

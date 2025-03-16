@@ -1,15 +1,15 @@
 {
-  buildPostgresqlExtension,
   curl,
   fetchFromGitHub,
   flex,
   json_c,
   lib,
   postgresql,
+  postgresqlBuildExtension,
   stdenv,
 }:
 
-buildPostgresqlExtension rec {
+postgresqlBuildExtension rec {
   pname = "repmgr";
   version = "5.5.0";
 

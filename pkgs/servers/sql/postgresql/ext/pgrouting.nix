@@ -1,15 +1,15 @@
 {
   boost,
-  buildPostgresqlExtension,
   cmake,
   fetchFromGitHub,
   lib,
   perl,
   postgresql,
+  postgresqlBuildExtension,
   stdenv,
 }:
 
-buildPostgresqlExtension rec {
+postgresqlBuildExtension rec {
   pname = "pgrouting";
   version = "3.7.3";
 

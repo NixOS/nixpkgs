@@ -1,10 +1,10 @@
 {
-  buildPostgresqlExtension,
   fetchFromGitHub,
   lib,
   libkrb5,
   openssl,
   postgresql,
+  postgresqlBuildExtension,
   stdenv,
 }:
 
@@ -35,7 +35,7 @@ let
     .${lib.versions.major postgresql.version}
     or (throw "Source for pgaudit is not available for ${postgresql.version}");
 in
-buildPostgresqlExtension {
+postgresqlBuildExtension {
   pname = "pgaudit";
   inherit (source) version;
 

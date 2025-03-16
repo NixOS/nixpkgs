@@ -1,14 +1,14 @@
 {
-  buildPostgresqlExtension,
   curl,
   fetchFromGitHub,
   lib,
   lz4,
   postgresql,
+  postgresqlBuildExtension,
   stdenv,
 }:
 
-buildPostgresqlExtension rec {
+postgresqlBuildExtension rec {
   pname = "citus";
   version = "13.0.2";
 

@@ -1,12 +1,12 @@
 {
-  buildPostgresqlExtension,
   fetchgit,
   lib,
   postgresql,
+  postgresqlBuildExtension,
   stdenv,
 }:
 
-buildPostgresqlExtension {
+postgresqlBuildExtension {
   pname = "smlar-unstable";
   version = "2021-11-08";
 

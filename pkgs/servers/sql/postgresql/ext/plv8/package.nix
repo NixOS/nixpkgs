@@ -1,11 +1,11 @@
 {
-  buildPostgresqlExtension,
   fetchFromGitHub,
   jitSupport,
   lib,
   nodejs_20,
   perl,
   postgresql,
+  postgresqlBuildExtension,
   stdenv,
   # For test
   coreutils,
@@ -16,7 +16,7 @@
 let
   libv8 = nodejs_20.libv8;
 in
-buildPostgresqlExtension (finalAttrs: {
+postgresqlBuildExtension (finalAttrs: {
   pname = "plv8";
   version = "3.2.3";
 

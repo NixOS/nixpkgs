@@ -1,13 +1,13 @@
 {
-  buildPostgresqlExtension,
   fetchFromGitHub,
   lib,
   postgresql,
+  postgresqlBuildExtension,
   protobufc,
   stdenv,
 }:
 
-buildPostgresqlExtension {
+postgresqlBuildExtension {
   pname = "cstore_fdw";
   version = "1.7.0-unstable-2021-03-08";
 

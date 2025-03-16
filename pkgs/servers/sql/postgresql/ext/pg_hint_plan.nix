@@ -1,8 +1,8 @@
 {
-  buildPostgresqlExtension,
   fetchFromGitHub,
   lib,
   postgresql,
+  postgresqlBuildExtension,
   stdenv,
 }:
 
@@ -33,7 +33,7 @@ let
     .${lib.versions.major postgresql.version}
     or (throw "Source for pg_hint_plan is not available for ${postgresql.version}");
 in
-buildPostgresqlExtension {
+postgresqlBuildExtension {
   pname = "pg_hint_plan";
   inherit (source) version;
 

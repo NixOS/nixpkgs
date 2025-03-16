@@ -1,7 +1,6 @@
 {
   autoconf,
   automake,
-  buildPostgresqlExtension,
   cunit,
   docbook5,
   fetchFromGitHub,
@@ -20,6 +19,7 @@
   perl,
   pkg-config,
   postgresql,
+  postgresqlBuildExtension,
   postgresqlTestExtension,
   postgresqlTestHook,
   proj,
@@ -34,7 +34,7 @@
 let
   gdal = gdalMinimal;
 in
-buildPostgresqlExtension (finalAttrs: {
+postgresqlBuildExtension (finalAttrs: {
   pname = "postgis";
   version = "3.5.2";
 

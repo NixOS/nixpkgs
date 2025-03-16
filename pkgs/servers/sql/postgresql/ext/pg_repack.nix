@@ -1,15 +1,15 @@
 {
-  buildPostgresqlExtension,
   fetchFromGitHub,
   gitUpdater,
   lib,
   postgresql,
+  postgresqlBuildExtension,
   postgresqlTestExtension,
   stdenv,
   testers,
 }:
 
-buildPostgresqlExtension (finalAttrs: {
+postgresqlBuildExtension (finalAttrs: {
   pname = "pg_repack";
   version = "1.5.2";
 

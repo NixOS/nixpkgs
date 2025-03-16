@@ -1,15 +1,15 @@
 {
-  buildPostgresqlExtension,
   fetchFromGitHub,
   gitUpdater,
   lib,
   libversion,
   pkg-config,
   postgresql,
+  postgresqlBuildExtension,
   stdenv,
 }:
 
-buildPostgresqlExtension (finalAttrs: {
+postgresqlBuildExtension (finalAttrs: {
   pname = "pg_libversion";
   version = "2.0.1";
 

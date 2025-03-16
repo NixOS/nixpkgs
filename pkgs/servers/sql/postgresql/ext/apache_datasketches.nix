@@ -1,9 +1,9 @@
 {
   boost186,
-  buildPostgresqlExtension,
   fetchFromGitHub,
   lib,
   postgresql,
+  postgresqlBuildExtension,
   postgresqlTestExtension,
   stdenv,
 }:
@@ -28,7 +28,7 @@ let
   };
 in
 
-buildPostgresqlExtension (finalAttrs: {
+postgresqlBuildExtension (finalAttrs: {
   pname = "apache_datasketches";
   inherit version;
 

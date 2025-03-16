@@ -1,14 +1,14 @@
 {
   R,
-  buildPostgresqlExtension,
   fetchFromGitHub,
   lib,
   pkg-config,
   postgresql,
+  postgresqlBuildExtension,
   stdenv,
 }:
 
-buildPostgresqlExtension rec {
+postgresqlBuildExtension rec {
   pname = "plr";
   version = "${builtins.replaceStrings [ "_" ] [ "." ] (lib.strings.removePrefix "REL" src.rev)}";
 
