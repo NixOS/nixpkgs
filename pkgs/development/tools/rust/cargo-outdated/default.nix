@@ -1,40 +1,27 @@
 {
   lib,
   rustPlatform,
-  fetchCrate,
+  fetchFromGitHub,
   pkg-config,
   openssl,
-  stdenv,
-  curl,
-  CoreFoundation,
-  CoreServices,
-  Security,
-  SystemConfiguration,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "cargo-outdated";
-  version = "0.16.0";
+  version = "0.17.0";
 
-  src = fetchCrate {
-    inherit pname version;
-    hash = "sha256-bAo3098QxepKbvBb9uF6iGNW0+RAKCCMyWfuG5WyREo=";
+  src = fetchFromGitHub {
+    owner = "kbknapp";
+    repo = "cargo-outdated";
+    rev = "v${version}";
+    hash = "sha256-ey11ANSflWGnCsn6M9GupgC4DE5mWww6vw5pK0CFdLo=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-h+sxnTAJ1uhPUk5dRiYPgPoxvbpVggnCn0TQ6kRCzO4=";
+  cargoHash = "sha256-PYlVXGfitsjEGiw07L5b+L8pfxvtkHshIjTXeuPUTdk=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      curl
-      CoreFoundation
-      CoreServices
-      Security
-      SystemConfiguration
-    ];
+  buildInputs = [ openssl ];
 
   meta = with lib; {
     description = "Cargo subcommand for displaying when Rust dependencies are out of date";
