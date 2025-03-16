@@ -4205,10 +4205,6 @@ with pkgs;
     docbook-xsl = docbook_xsl;
   };
 
-  morgen = callPackage ../applications/office/morgen {
-    electron = electron_32;
-  };
-
   metasploit = callPackage ../tools/security/metasploit { };
 
   mhost = callPackage ../applications/networking/mhost {
