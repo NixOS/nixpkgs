@@ -431,6 +431,7 @@ in {
       "${cfg.dataDir}/storage/framework/views".d = defaultConfig;
       "${cfg.dataDir}/storage/logs".d = defaultConfig;
       "${cfg.dataDir}/storage/uploads".d = defaultConfig;
+      "${cfg.dataDir}/themes".d = defaultConfig // { mode = "0750"; };
     };
 
     users = {
