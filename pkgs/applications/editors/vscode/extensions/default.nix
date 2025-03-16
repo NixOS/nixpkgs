@@ -5677,8 +5677,8 @@ let
         mktplcRef = {
           name = "vscode-zig";
           publisher = "ziglang";
-          version = "0.5.1";
-          hash = "sha256-ygxvkewK5Tf1zNIXxzu6D/tKYNVcNsU9cKij7d5aRdQ=";
+          version = "0.6.6";
+          hash = "sha256-UxbCRsTp7Fz6iAeC3lwojWrLPMJx5b7cNXxOFY7k0pk=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/ziglang.vscode-zig/changelog";
