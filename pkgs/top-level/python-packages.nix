@@ -3934,6 +3934,8 @@ self: super: with self; {
 
   dotmap = callPackage ../development/python-modules/dotmap { };
 
+  doubles = callPackage ../development/python-modules/doubles { };
+
   downloader-cli = callPackage ../development/python-modules/downloader-cli { };
 
   dparse = callPackage ../development/python-modules/dparse { };
