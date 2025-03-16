@@ -69,6 +69,7 @@
   ./hardware/gpgsmartcards.nix
   ./hardware/graphics.nix
   ./hardware/hackrf.nix
+  ./hardware/hid-fanatecff.nix
   ./hardware/i2c.nix
   ./hardware/infiniband.nix
   ./hardware/inputmodule.nix
