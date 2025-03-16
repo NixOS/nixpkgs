@@ -24,6 +24,7 @@
   lz4,
   nv-codec-headers-10,
   nvidia_x11 ? null,
+  cudaPackages,
   pam,
   pandoc,
   pango,
@@ -40,7 +41,7 @@
   xorgserver,
   xxHash,
   clang,
-}:
+}@args:
 
 let
   inherit (python3.pkgs) cython buildPythonApplication;
@@ -76,13 +77,15 @@ let
 in
 buildPythonApplication rec {
   pname = "xpra";
-  version = "6.1.3";
+  version = "6.2.5";
+
+  stdenv = if withNvenc then cudaPackages.backendStdenv else args.stdenv;
 
   src = fetchFromGitHub {
     owner = "Xpra-org";
     repo = "xpra";
     rev = "v${version}";
-    hash = "sha256-b21kSHaveRzJhFvdNaFdoQpC9B3Hu0X79EOIjkbvxWk=";
+    hash = "sha256-XY8NZhWCRLjpgq0dOClzftvMR7g/X64b+OYyjOGC/lM=";
   };
 
   patches = [
