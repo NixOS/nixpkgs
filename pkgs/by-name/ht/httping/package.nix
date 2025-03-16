@@ -45,6 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     tests.version = testers.testVersion {
       command = "${lib.getExe finalAttrs.finalPackage} --version";
       package = finalAttrs.finalPackage;
+      version = "v${finalAttrs.version}";
     };
     updateScript = nix-update-script { };
   };
