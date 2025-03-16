@@ -1,4 +1,4 @@
-{ go, cacert, git, lib, stdenv }:
+{ go, cacert, gitMinimal, lib, stdenv }:
 
 lib.extendMkDerivation {
   constructDrv = stdenv.mkDerivation;
@@ -66,7 +66,7 @@ lib.extendMkDerivation {
   (stdenv.mkDerivation {
     name = "${finalAttrs.name or "${finalAttrs.pname}-${finalAttrs.version}"}-go-modules";
 
-    nativeBuildInputs = (finalAttrs.nativeBuildInputs or [ ]) ++ [ go git cacert ];
+    nativeBuildInputs = (finalAttrs.nativeBuildInputs or [ ]) ++ [ go gitMinimal cacert ];
 
     inherit (finalAttrs) src modRoot;
 
