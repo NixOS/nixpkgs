@@ -126,6 +126,7 @@
 , libertine
 , libertine-g
 , noto-fonts
+, noto-fonts-lgc-plus
 , noto-fonts-cjk-sans
 , rhino
 , lp_solve
@@ -172,6 +173,9 @@ let
       liberation_ttf_v2
       libertine
       libertine-g
+      # Try to give priority to the main version of Noto fonts
+      # But also include other language variations afterwards
+      noto-fonts-lgc-plus
       noto-fonts
       noto-fonts-cjk-sans
     ];
@@ -538,7 +542,7 @@ in stdenv.mkDerivation (finalAttrs: {
   env = {
     # FIXME: this is a hack, because the right cflags are not being picked up
     # from rasqal's .pc file. Needs more investigation.
-    NIX_CFLAGS_COMPILE = "-I${librdf_rasqal}/include/rasqal";
+    NIX_CFLAGS_COMPILE = "-I${librdf_rasqal}/include/rasqal -DSAL_LOG_WARN=1";
 
     # Provide all the fonts used in tests.
     FONTCONFIG_FILE = fontsConf;
