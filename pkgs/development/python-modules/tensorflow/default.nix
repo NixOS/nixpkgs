@@ -518,16 +518,17 @@ let
         {
           x86_64-linux =
             if cudaSupport then
-              "sha256-5VFMNHeLrUxW5RTr6EhT3pay9nWJ5JkZTGirDds5QkU="
+              lib.fakeHash # TODO
             else
-              "sha256-KzgWV69Btr84FdwQ5JI2nQEsqiPg1/+TWdbw5bmxXOE=";
+              lib.fakeHash; # TODO
           aarch64-linux =
             if cudaSupport then
-              "sha256-ty5+51BwHWE1xR4/0WcWTp608NzSAS/iiyN+9zx7/wI="
+              lib.fakeHash # TODO
             else
-              "sha256-9btXrNHqd720oXTPDhSmFidv5iaZRLjCVX8opmrMjXk=";
-          x86_64-darwin = "sha256-gqb03kB0z2pZQ6m1fyRp1/Nbt8AVVHWpOJSeZNCLc4w=";
-          aarch64-darwin = "sha256-WdgAaFZU+ePwWkVBhLzjlNT7ELfGHOTaMdafcAMD5yo=";
+              lib.fakeHash; # TODO
+          # Darwin build is broken currently
+          x86_64-darwin = lib.fakeHash;
+          aarch64-darwin = lib.fakeHash;
         }
         .${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
     };
