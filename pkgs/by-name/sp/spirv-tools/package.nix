@@ -5,17 +5,18 @@
   cmake,
   python3,
   spirv-headers,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "spirv-tools";
-  version = "1.4.304.0";
+  version = "1.4.309.0";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "SPIRV-Tools";
-    rev = "vulkan-sdk-${version}";
-    hash = "sha256-alJ4X7qbTzsRTqRFdpjdsj0wERVb17czui2muEaKNyI=";
+    rev = "vulkan-sdk-${finalAttrs.version}";
+    hash = "sha256-2Wv0dxVQ8NvuDRTcsXkH1GKmuA6lsIuwTl0j6kbTefo=";
   };
 
   # The cmake options are sufficient for turning on static building, but not
@@ -50,11 +51,16 @@ stdenv.mkDerivation rec {
       --replace '$'{prefix}/@CMAKE_INSTALL_INCLUDEDIR@ @CMAKE_INSTALL_FULL_INCLUDEDIR@
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = with lib; {
     description = "SPIR-V Tools project provides an API and commands for processing SPIR-V modules";
     homepage = "https://github.com/KhronosGroup/SPIRV-Tools";
     license = licenses.asl20;
     platforms = with platforms; unix ++ windows;
-    maintainers = [ maintainers.ralith ];
+    maintainers = with maintainers; [
+      ralith
+      ners
+    ];
   };
-}
+})
