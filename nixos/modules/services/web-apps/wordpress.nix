@@ -341,6 +341,12 @@ let
           '';
         };
 
+        https = mkOption {
+          type = types.bool;
+          default = false;
+          description = lib.mdDoc "Enable ACME and HTTPS for webserver Caddy.";
+        };
+
       };
 
       config.virtualHost.hostName = mkDefault name;
@@ -545,7 +551,7 @@ in
     services.caddy = {
       enable = true;
       virtualHosts = mapAttrs' (hostName: cfg: (
-        nameValuePair "http://${hostName}" {
+        nameValuePair "${if cfg.https then "https" else "http"}://${hostName}" {
           extraConfig = ''
             root    * /${pkg hostName cfg}/share/wordpress
             file_server
