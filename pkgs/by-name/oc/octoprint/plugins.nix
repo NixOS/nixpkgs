@@ -665,6 +665,26 @@ in
       maintainers = with maintainers; [ j0hax ];
     };
   };
+
+  bgcode = buildPlugin rec {
+    pname = "OctoPrint-BGCode";
+    version = "0.2.0";
+    src = fetchFromGitHub {
+      owner = "jneilliii";
+      repo = pname;
+      rev = "refs/tags/${version}";
+      hash = "sha256-LHK1LfYXAQV2GvWfG6AFf9haU9zcCP/fZB2UwKbm1i4=";
+    };
+
+    propagatedBuildInputs = with super; [ pybgcode ];
+
+    meta = with lib; {
+      description = "Binary Gcode support for Octoprint";
+      homepage = "https://github.com/jneilliii/OctoPrint-BGCode";
+      license = licenses.agpl3Plus;
+      maintainers = with maintainers; [ lach ];
+    };
+  };
 } // lib.optionalAttrs config.allowAliases {
   octoprint-dashboard = super.dashboard;
 }
