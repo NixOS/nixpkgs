@@ -1,10 +1,10 @@
 {
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  postgresql,
-  gitUpdater,
   buildPostgresqlExtension,
+  fetchFromGitHub,
+  gitUpdater,
+  lib,
+  postgresql,
+  stdenv,
 }:
 
 buildPostgresqlExtension rec {
@@ -14,7 +14,7 @@ buildPostgresqlExtension rec {
   src = fetchFromGitHub {
     owner = "HypoPG";
     repo = "hypopg";
-    rev = version;
+    tag = version;
     hash = "sha256-88uKPSnITRZ2VkelI56jZ9GWazG/Rn39QlyHKJKSKMM=";
   };
 
@@ -24,11 +24,11 @@ buildPostgresqlExtension rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Hypothetical Indexes for PostgreSQL";
     homepage = "https://hypopg.readthedocs.io";
-    license = licenses.postgresql;
+    license = lib.licenses.postgresql;
     platforms = postgresql.meta.platforms;
-    maintainers = with maintainers; [ bbigras ];
+    maintainers = with lib.maintainers; [ bbigras ];
   };
 }
