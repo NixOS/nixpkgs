@@ -9,18 +9,18 @@
 }:
 
 let
-  commitHash = "87b93e541e2552e683f4ac2c656eb9e0301f414a"; # matches tag release
+  commitHash = "9d021bf61a094a5eac6ae3084ceed2dda4700a73"; # matches tag release
   shortCommitHash = builtins.substring 0 7 commitHash;
 in
 buildGoModule rec {
   pname = "copywrite";
-  version = "0.20.0";
+  version = "0.21.0";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "copywrite";
     tag = "v${version}";
-    hash = "sha256-7+XBymJuFIWfpeBNfe1hXkZDQkhG+u+H+FzmNvs/Ca4=";
+    hash = "sha256-TGis7rreRen+vk3tUDehRkyas4xrBBxKlA70+VqoGWY=";
   };
 
   vendorHash = "sha256-Qxp6BwN/Y6Xb1BwFGT/T8WYsXGPgN27mzoTE0i6cS1Q=";
