@@ -28,12 +28,7 @@ buildPostgresqlExtension rec {
     # "Our soft policy for Postgres version compatibility is to support Citus'
     # latest release with Postgres' 3 latest releases."
     # https://www.citusdata.com/updates/v12-0/#deprecated_features
-    broken =
-      lib.versionOlder postgresql.version "15"
-      ||
-        # PostgreSQL 17 support issue upstream: https://github.com/citusdata/citus/issues/7708
-        # Check after next package update.
-        (lib.versionAtLeast postgresql.version "17" && version == "12.1.6");
+    broken = lib.versionOlder postgresql.version "15";
     description = "Distributed PostgreSQL as an extension";
     homepage = "https://www.citusdata.com/";
     changelog = "https://github.com/citusdata/citus/blob/${src.rev}/CHANGELOG.md";
