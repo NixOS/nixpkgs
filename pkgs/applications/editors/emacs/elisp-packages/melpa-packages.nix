@@ -1061,6 +1061,13 @@ let
         # missing optional dependencies
         ekg = addPackageRequires super.ekg [ self.denote ];
 
+        elfeed = super.elfeed.overrideAttrs (attrs: {
+          postPatch = attrs.postPatch or "" + ''
+            substituteInPlace elfeed-curl.el \
+              --replace-fail 'elfeed-curl-program-name "curl"' 'elfeed-curl-program-name "${lib.getExe pkgs.curl}"'
+          '';
+        });
+
         elisp-sandbox = ignoreCompilationError super.elisp-sandbox; # elisp error
 
         elnode = ignoreCompilationError super.elnode; # elisp error
