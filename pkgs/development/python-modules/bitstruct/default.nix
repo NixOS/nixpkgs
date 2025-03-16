@@ -2,15 +2,20 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "bitstruct";
   version = "8.20.0";
-  format = "setuptools";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  build-system = [
+    setuptools
+  ];
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
