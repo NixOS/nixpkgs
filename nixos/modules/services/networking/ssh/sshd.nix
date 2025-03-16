@@ -562,67 +562,16 @@ in
         "ssh/sshd_config".source = sshconf;
       };
 
+    systemd.tmpfiles.settings."ssh-root-provision" = {
+      "/root"."d-" = { user = "root"; group = ":root"; mode = ":700"; };
+      "/root/.ssh"."d-" = { user = "root"; group = ":root"; mode = ":700"; };
+      "/root/.ssh/authorized_keys"."f^" = { user = "root"; group = ":root"; mode = ":600"; argument = "ssh.authorized_keys.root"; };
+    };
+
     systemd =
-      let
-        service =
-          { description = "SSH Daemon";
-            wantedBy = lib.optional (!cfg.startWhenNeeded) "multi-user.target";
-            after = [ "network.target" ];
-            stopIfChanged = false;
-            path = [ cfg.package pkgs.gawk ];
-            environment.LD_LIBRARY_PATH = nssModulesPath;
-
-            restartTriggers = lib.optionals (!cfg.startWhenNeeded) [
-              config.environment.etc."ssh/sshd_config".source
-            ];
-
-            preStart =
-              ''
-                # Make sure we don't write to stdout, since in case of
-                # socket activation, it goes to the remote side (#19589).
-                exec >&2
-
-                ${lib.flip lib.concatMapStrings cfg.hostKeys (k: ''
-                  if ! [ -s "${k.path}" ]; then
-                      if ! [ -h "${k.path}" ]; then
-                          rm -f "${k.path}"
-                      fi
-                      mkdir -p "$(dirname '${k.path}')"
-                      chmod 0755 "$(dirname '${k.path}')"
-                      ssh-keygen \
-                        -t "${k.type}" \
-                        ${lib.optionalString (k ? bits) "-b ${toString k.bits}"} \
-                        ${lib.optionalString (k ? rounds) "-a ${toString k.rounds}"} \
-                        ${lib.optionalString (k ? comment) "-C '${k.comment}'"} \
-                        ${lib.optionalString (k ? openSSHFormat && k.openSSHFormat) "-o"} \
-                        -f "${k.path}" \
-                        -N ""
-                  fi
-                '')}
-              '';
-
-            serviceConfig =
-              { ExecStart =
-                  (lib.optionalString cfg.startWhenNeeded "-") +
-                  "${cfg.package}/bin/sshd " + (lib.optionalString cfg.startWhenNeeded "-i ") +
-                  "-D " +  # don't detach into a daemon process
-                  "-f /etc/ssh/sshd_config";
-                KillMode = "process";
-              } // (if cfg.startWhenNeeded then {
-                StandardInput = "socket";
-                StandardError = "journal";
-              } else {
-                Restart = "always";
-                Type = "simple";
-              });
-
-          };
-      in
-
-      if cfg.startWhenNeeded then {
-
-        sockets.sshd =
-          { description = "SSH Socket";
+      {
+        sockets.sshd = lib.mkIf cfg.startWhenNeeded {
+          description = "SSH Socket";
             wantedBy = [ "sockets.target" ];
             socketConfig.ListenStream = if cfg.listenAddresses != [] then
               lib.concatMap
@@ -635,14 +584,81 @@ in
             socketConfig.Accept = true;
             # Prevent brute-force attacks from shutting down socket
             socketConfig.TriggerLimitIntervalSec = 0;
+        };
+
+        services."sshd@" = {
+          description = "SSH per-connection Daemon";
+          after = [ "network.target" "sshd-keygen.service" ];
+          wants = [ "sshd-keygen.service" ];
+          stopIfChanged = false;
+          path = [ cfg.package ];
+          environment.LD_LIBRARY_PATH = nssModulesPath;
+
+          serviceConfig = {
+            Type = "notify";
+            ExecStart = lib.concatStringsSep " " [
+              "-${lib.getExe' cfg.package "sshd"}"
+              "-i"
+              "-D"
+              "-f /etc/ssh/sshd_config"
+            ];
+            KillMode = "process";
+            StandardInput = "socket";
+            StandardError = "journal";
           };
+        };
 
-        services."sshd@" = service;
+        services.sshd = lib.mkIf (! cfg.startWhenNeeded) {
+          description = "SSH Daemon";
+          wantedBy = [ "multi-user.target" ];
+          after = [ "network.target" "sshd-keygen.service" ];
+          wants = [ "sshd-keygen.service" ];
+          stopIfChanged = false;
+          path = [ cfg.package ];
+          environment.LD_LIBRARY_PATH = nssModulesPath;
 
-      } else {
+          restartTriggers = [ config.environment.etc."ssh/sshd_config".source ];
 
-        services.sshd = service;
+          serviceConfig = {
+            Type = "notify";
+            Restart = "always";
+            ExecStart = lib.concatStringsSep " " [
+              (lib.getExe' cfg.package "sshd")
+              "-D"
+              "-f" "/etc/ssh/sshd_config"
+            ];
+            KillMode = "process";
+          };
+        };
 
+        services.sshd-keygen = {
+          description = "SSH Host Keys Generation";
+          unitConfig = {
+            ConditionFileNotEmpty = map (k: "|!${k.path}") cfg.hostKeys;
+          };
+          serviceConfig = {
+            Type = "oneshot";
+          };
+          path = [ cfg.package ];
+          script =
+            lib.flip lib.concatMapStrings cfg.hostKeys (k: ''
+              if ! [ -s "${k.path}" ]; then
+                  if ! [ -h "${k.path}" ]; then
+                      rm -f "${k.path}"
+                  fi
+                  mkdir -p "$(dirname '${k.path}')"
+                  chmod 0755 "$(dirname '${k.path}')"
+                  ssh-keygen \
+                    -t "${k.type}" \
+                    ${lib.optionalString (k ? bits) "-b ${toString k.bits}"} \
+                    ${lib.optionalString (k ? rounds) "-a ${toString k.rounds}"} \
+                    ${lib.optionalString (k ? comment) "-C '${k.comment}'"} \
+                    ${lib.optionalString (k ? openSSHFormat && k.openSSHFormat) "-o"} \
+                    -f "${k.path}" \
+                    -N ""
+              fi
+            '');
+        };
       };
 
     networking.firewall.allowedTCPPorts = lib.optionals cfg.openFirewall cfg.ports;

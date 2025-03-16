@@ -1173,6 +1173,7 @@ in {
   systemd-portabled = handleTest ./systemd-portabled.nix {};
   systemd-repart = handleTest ./systemd-repart.nix {};
   systemd-resolved = handleTest ./systemd-resolved.nix {};
+  systemd-ssh-proxy = runTest ./systemd-ssh-proxy.nix;
   systemd-shutdown = handleTest ./systemd-shutdown.nix {};
   systemd-sysupdate = runTest ./systemd-sysupdate.nix;
   systemd-sysusers-mutable = runTest ./systemd-sysusers-mutable.nix;
