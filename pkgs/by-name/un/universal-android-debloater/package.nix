@@ -18,17 +18,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "universal-android-debloater";
-  version = "1.1.0";
+  version = "1.1.2";
 
   src = fetchFromGitHub {
     owner = "Universal-Debloater-Alliance";
     repo = "universal-android-debloater-next-generation";
     rev = "v${version}";
-    hash = "sha256-o54gwFl2x0/nE1hiE5F8D18vQSNCKU9Oxiq8RA+yOoE=";
+    hash = "sha256-DapPUvkI4y159gYbSGJQbbDfW+C0Ggvaxo45Qj3mLrQ=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-eiaDqhWuoYybtlhFuM8/Cic4jUEnqOsfNZ+p7tBVL2c=";
+  cargoHash = "sha256-eXbReRi/0h4UyJwIMI3GfHcQzX1E5Spoa4moMXtrBng=";
 
   buildInputs = [
     expat
