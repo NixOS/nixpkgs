@@ -10,13 +10,13 @@
 
 buildPostgresqlExtension rec {
   pname = "citus";
-  version = "13.0.0";
+  version = "13.0.2";
 
   src = fetchFromGitHub {
     owner = "citusdata";
     repo = "citus";
     rev = "v${version}";
-    hash = "sha256-1if/rYMQV1RG4ZkjqTFuFYu5f1JhJiMF4rCVo8gp7+8=";
+    hash = "sha256-SuJs6OCHKO7efQagsATgn/V9rgMyuXQIHGCEP9ME7tQ=";
   };
 
   buildInputs = [
@@ -29,7 +29,7 @@ buildPostgresqlExtension rec {
     # latest release with Postgres' 3 latest releases."
     # https://www.citusdata.com/updates/v12-0/#deprecated_features
     broken =
-      versionOlder postgresql.version "14"
+      versionOlder postgresql.version "15"
       ||
         # PostgreSQL 17 support issue upstream: https://github.com/citusdata/citus/issues/7708
         # Check after next package update.
