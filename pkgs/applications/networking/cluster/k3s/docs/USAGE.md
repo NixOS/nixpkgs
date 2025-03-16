@@ -21,7 +21,6 @@
 ```
 
 Once the above changes are active, you can access your cluster through `sudo k3s kubectl` (e.g. `sudo k3s kubectl cluster-info`) or by using the generated kubeconfig file in `/etc/rancher/k3s/k3s.yaml`.
-Multi-node setup
 
 ## Multi-Node
 
@@ -45,7 +44,7 @@ Any other subsequent nodes can be added with a slightly different config:
 {
   services.k3s = {
     enable = true;
-    role = "server"; # Or "agent" for worker only nodes
+    role = "agent";
     token = "<randomized common secret>";
     serverAddr = "https://<ip of first node>:6443";
   };
