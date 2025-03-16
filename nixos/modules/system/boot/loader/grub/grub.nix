@@ -84,7 +84,7 @@ let
       inherit (cfg)
         extraConfig extraPerEntryConfig extraEntries forceInstall useOSProber
         extraGrubInstallArgs
-        extraEntriesBeforeNixOS extraPrepareConfig configurationLimit copyKernels
+        extraEntriesBeforeNixOS extraEntriesAtEnd extraPrepareConfig configurationLimit copyKernels
         default fsIdentifier efiSupport efiInstallAsRemovable gfxmodeEfi gfxmodeBios gfxpayloadEfi gfxpayloadBios
         users
         timeoutStyle
@@ -401,6 +401,26 @@ in
         type = types.bool;
         description = ''
           Whether extraEntries are included before the default option.
+        '';
+      };
+
+      extraEntriesAtEnd = mkOption {
+        default = "";
+        type = types.lines;
+        example = ''
+          # GRUB 2 example
+          menuentry "Windows 7" {
+            chainloader (hd0,4)+1
+          }
+
+          # GRUB 2 with UEFI example, chainloading another distro
+          menuentry "Fedora" {
+            set root=(hd1,1)
+            chainloader /efi/fedora/grubx64.efi
+          }
+        '';
+        description = ''
+          Any additional entries you want added to the GRUB boot menu at the end after NixOS and NixOS All Generations.
         '';
       };
 
