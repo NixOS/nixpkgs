@@ -25,11 +25,8 @@
   swig,
   webkitgtk_4_0,
   wrapGAppsHook3,
-  python ? null,
-  enablePython ? false,
+  python3,
 }:
-
-assert enablePython -> (python != null);
 
 stdenv.mkDerivation rec {
   pname = "gnucash";
@@ -49,7 +46,7 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  cmakeFlags = lib.optional enablePython [
+  cmakeFlags = [
     "-DWITH_PYTHON=\"ON\""
     "-DPYTHON_SYSCONFIG_BUILD=\"$out\""
   ];
@@ -72,13 +69,13 @@ stdenv.mkDerivation rec {
       libxslt
       swig
       webkitgtk_4_0
+      python3
     ]
     ++ (with perlPackages; [
       JSONParse
       FinanceQuote
       perl
-    ])
-    ++ lib.optional enablePython python;
+    ]);
 
   patches = [
     # this patch disables test-gnc-timezone and test-gnc-datetime which fail due to nix datetime challenges
