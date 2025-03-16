@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   fetchurl,
+  llvmPackages,
   cmake,
   gfortran,
   blas,
@@ -13,6 +14,7 @@
   parmetis,
   withExamples ? false,
   fortranSupport ? stdenv.hostPlatform.isLinux,
+  enableOpenMP ? true,
   # Todo: ask for permission of unfree parmetis
   withParmetis ? false,
 }:
@@ -56,7 +58,11 @@ stdenv.mkDerivation (finalAttrs: {
     ];
 
   buildInputs =
-    [
+    lib.optionals (enableOpenMP && stdenv.cc.isClang) [
+      # cmake can not find mpi if openmp is placed after mpi
+      llvmPackages.openmp
+    ]
+    ++ [
       mpi
       lapack
     ]
@@ -70,6 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags =
     [
       (lib.cmakeBool "enable_examples" withExamples)
+      (lib.cmakeBool "enable_openmp" enableOpenMP)
       (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
       (lib.cmakeBool "BUILD_STATIC_LIBS" stdenv.hostPlatform.isStatic)
       (lib.cmakeBool "XSDK_ENABLE_Fortran" fortranSupport)
