@@ -1,6 +1,16 @@
 { go, cacert, git, lib, stdenv }:
 
-{ name ? "${args'.pname}-${args'.version}"
+lib.extendMkDerivation {
+  constructDrv = stdenv.mkDerivation;
+  excludeDrvArgNames = [
+    "overrideModAttrs"
+    # Compatibility layer to the directly-specified CGO_ENABLED.
+    # TODO(@ShamrockLee): Remove after Nixpkgs 25.05 branch-off
+    "CGO_ENABLED"
+  ];
+  extendDrvArgs =
+    finalAttrs:
+{ name ? "${args.pname}-${args.version}"
   # The source used to build the derivation.
 , src
   # Native build inputs used for the derivation.
@@ -18,7 +28,7 @@
   # If `vendorHash` is `null`, no dependencies are fetched and
   # the build relies on the vendor folder within the source.
 , vendorHash ? throw (
-    if args'?vendorSha256 then
+    if args?vendorSha256 then
       "buildGoModule: Expect vendorHash instead of vendorSha256"
     else
       "buildGoModule: vendorHash is missing"
@@ -49,20 +59,8 @@
 , GOFLAGS ? [ ]
 
 , ...
-}@args':
-
-let
-  args = removeAttrs args' [
-    "overrideModAttrs"
-    # Compatibility layer to the directly-specified CGO_ENABLED.
-    # TODO(@ShamrockLee): Remove after Nixpkgs 25.05 branch-off
-    "CGO_ENABLED"
-  ];
-in
-(stdenv.mkDerivation (finalAttrs:
-  args
-  // {
-
+}@args:
+{
   inherit modRoot vendorHash deleteVendor proxyVendor;
   goModules = if (finalAttrs.vendorHash == null) then "" else
   (stdenv.mkDerivation {
@@ -168,14 +166,14 @@ in
     GOTOOLCHAIN = "local";
 
     CGO_ENABLED = args.env.CGO_ENABLED or (
-      if args'?CGO_ENABLED then
+      if args?CGO_ENABLED then
         # Compatibility layer to the CGO_ENABLED attribute not specified as env.CGO_ENABLED
         # TODO(@ShamrockLee): Remove and convert to
         # CGO_ENABLED = args.env.CGO_ENABLED or go.CGO_ENABLED
         # after the Nixpkgs 25.05 branch-off.
         lib.warn
           "${finalAttrs.finalPackage.meta.position}: buildGoModule: specify CGO_ENABLED with env.CGO_ENABLED instead."
-          args'.CGO_ENABLED
+          args.CGO_ENABLED
       else
         go.CGO_ENABLED
     );
@@ -333,5 +331,5 @@ in
       # Add default meta information.
       platforms = go.meta.platforms or lib.platforms.all;
     } // meta;
-  }
-))
+  };
+}
