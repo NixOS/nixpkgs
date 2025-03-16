@@ -12,6 +12,7 @@
   rustc,
   stdenv,
   pkgsTargetTarget,
+  removeReferencesTo,
 
   # This confusingly-named parameter indicates the *subdirectory of
   # `target/` from which to copy the build artifacts.  It is derived
@@ -154,5 +155,74 @@
         inherit clang;
       };
     } ./rust-bindgen-hook.sh
+  ) { };
+
+  cargoCSetupHook = callPackage (
+    { }:
+    makeSetupHook {
+      name = "cargo-c-setup-hook.sh";
+      substitutions = {
+        inherit (stdenv.targetPlatform.rust) rustcTarget;
+      };
+    } ./cargo-c-setup-hook.sh
+  ) { };
+
+  cargoCBuildHook = callPackage (
+    { pkgsHostTarget }:
+    makeSetupHook {
+      name = "cargo-c-build-hook.sh";
+      propagatedBuildInputs = [
+        pkgsHostTarget.cargo-c
+        pkgsHostTarget.cargo
+        pkgsHostTarget.rustc
+      ];
+      substitutions = {
+        inherit (stdenv.targetPlatform.rust) rustcTarget;
+        inherit (rust.envVars) setEnv;
+      };
+    } ./cargo-c-build-hook.sh
+  ) { };
+
+  cargoCCheckHook = callPackage (
+    { pkgsHostTarget }:
+    makeSetupHook {
+      name = "cargo-c-check-hook.sh";
+      propagatedBuildInputs = [
+        pkgsHostTarget.cargo-c
+        pkgsHostTarget.cargo
+        pkgsHostTarget.rustc
+      ];
+      substitutions = {
+        inherit (stdenv.targetPlatform.rust) rustcTarget;
+        inherit (rust.envVars) setEnv;
+      };
+    } ./cargo-c-check-hook.sh
+  ) { };
+
+  cargoCInstallHook = callPackage (
+    { pkgsHostTarget }:
+    makeSetupHook {
+      name = "cargo-c-install-hook.sh";
+      propagatedBuildInputs = [
+        pkgsHostTarget.cargo-c
+        pkgsHostTarget.cargo
+        pkgsHostTarget.rustc
+        pkgsHostTarget.validatePkgConfig
+      ];
+      substitutions = {
+        inherit (stdenv.targetPlatform.rust) rustcTarget;
+        inherit (rust.envVars) setEnv;
+      };
+    } ./cargo-c-install-hook.sh
+  ) { };
+
+  cargoCFixupHook = callPackage (
+    { }:
+    makeSetupHook {
+      name = "cargo-c-fixup-hook.sh";
+      substitutions = {
+        inherit (stdenv.targetPlatform.extensions) staticLibrary;
+      };
+    } ./cargo-c-fixup-hook.sh
   ) { };
 }
