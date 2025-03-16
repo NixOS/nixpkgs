@@ -73,7 +73,8 @@
                 # See: failed attempt to make pkgs.path not copy when using flakes:
                 # https://github.com/NixOS/nixpkgs/pull/153594#issuecomment-1023287913
                 ({ config, pkgs, lib, ... }: {
-                  config.nixpkgs.flake.source = self.outPath;
+                  config.nixpkgs.source = self.outPath;
+                  config.system.build.usingFlakes = true;
                 })
               ];
             } // builtins.removeAttrs args [ "modules" ]
