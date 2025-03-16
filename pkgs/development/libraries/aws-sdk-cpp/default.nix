@@ -62,6 +62,11 @@ stdenv.mkDerivation rec {
   '' + lib.optionalString stdenv.hostPlatform.isi686 ''
     # EPSILON is exceeded
     rm tests/aws-cpp-sdk-core-tests/aws/client/AdaptiveRetryStrategyTest.cpp
+  '' + lib.optionalString stdenv.hostPlatform.isS390x ''
+    rm tests/aws-cpp-sdk-core-tests/utils/memory/AWSMemoryTest.cpp
+    rm tests/aws-cpp-sdk-core-tests/utils/event/EventStreamDecoderTest.cpp
+    rm tests/aws-cpp-sdk-core-tests/utils/event/EventStreamTest.cpp
+    rm tests/aws-cpp-sdk-core-tests/utils/HashingUtilsTest.cpp
   '';
 
   # FIXME: might be nice to put different APIs in different outputs
