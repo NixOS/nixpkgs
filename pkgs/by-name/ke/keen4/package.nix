@@ -51,6 +51,6 @@ stdenv.mkDerivation {
   meta = {
     description = "Commander Keen Episode 4: Secret of the Oracle";
     license = lib.licenses.unfree;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ wolfgangwalther ];
   };
 }
