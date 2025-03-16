@@ -35,6 +35,10 @@
   which,
   x264,
   x265,
+  libavif,
+  libspng,
+  openh264,
+  libyuv,
   xauth,
   xdg-utils,
   xorg,
@@ -132,6 +136,8 @@ buildPythonApplication rec {
     ]
     ++ (with gst_all_1; [
       gst-libav
+      gst-vaapi
+      gst-plugins-ugly
       gst-plugins-bad
       gst-plugins-base
       gst-plugins-good
@@ -154,6 +160,10 @@ buildPythonApplication rec {
       pango
       x264
       x265
+      libavif
+      libspng
+      openh264
+      libyuv
       xxHash
     ]
     ++ lib.optional withNvenc [
@@ -182,10 +192,14 @@ buildPythonApplication rec {
         pygobject3
         pyinotify
         pyopengl
+        pyopengl-accelerate
         python-uinput
         pyxdg
         rencode
         invoke
+        aioquic
+        uvloop
+        pyopenssl
       ]
       ++ lib.optionals withNvenc [
         pycuda
