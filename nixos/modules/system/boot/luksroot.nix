@@ -148,7 +148,8 @@ let
     csopen = "cryptsetup luksOpen ${dev.device} ${dev.name}"
            + optionalString dev.allowDiscards " --allow-discards"
            + optionalString dev.bypassWorkqueues " --perf-no_read_workqueue --perf-no_write_workqueue"
-           + optionalString (dev.header != null) " --header=${dev.header}";
+           + optionalString (dev.header != null) " --header=${dev.header}"
+           + optionalString (dev.cryptsetupOpenExtraArgs != []) " ${builtins.concatStringsSep " " dev.cryptsetupOpenExtraArgs}";
     cschange = "cryptsetup luksChangeKey ${dev.device} ${optionalString (dev.header != null) "--header=${dev.header}"}";
     fido2luksCredentials = dev.fido2.credentials ++ optional (dev.fido2.credential != null) dev.fido2.credential;
   in ''
@@ -713,6 +714,14 @@ in
               Enabling this should improve performance on SSDs; see
               [here](https://wiki.archlinux.org/index.php/Dm-crypt/Specialties#Disable_workqueue_for_increased_solid_state_drive_(SSD)_performance)
               for more information. Needs Linux 5.9 or later.
+            '';
+          };
+
+          cryptsetupOpenExtraArgs = mkOption {
+            default = [];
+            type = types.listOf types.str;
+            description = lib.mdDoc ''
+              Generic passthrough for the cryptsetup luksOpen command options.
             '';
           };
 
