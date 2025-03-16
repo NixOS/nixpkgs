@@ -47,10 +47,10 @@
             },
             "src/electron": {
                 "fetcher": "fetchFromGitHub",
-                "hash": "sha256-kxRsRaLOJhKUcLNsyQ+9sC6oxGO/aDIYJnH5DUx61TM=",
+                "hash": "sha256-/tGxWvyqwb0TWli2JkFDiyrqAm6DF5JHD7NfC1XTa8I=",
                 "owner": "electron",
                 "repo": "electron",
-                "rev": "v33.4.2"
+                "rev": "v33.4.3"
             },
             "src/media/cdm/api": {
                 "fetcher": "fetchFromGitiles",
