@@ -44,37 +44,21 @@ buildPythonPackage rec {
     # assert cap.out.splitlines(keepends=False).count('+++++ 0') == 2 != 3
     "tests/test_0_watchmedo.py::test_auto_restart_on_file_change_debounce"
   ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
-    # segfaults the testsuite
-    "tests/test_emitter.py"
-    # unsupported on x86_64-darwin
-    "tests/test_fsevents.py"
-    # fails to stop process in teardown
-    "tests/test_0_watchmedo.py::test_auto_restart_subprocess_termination"
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-    # FileCreationEvent != FileDeletionEvent
-    "tests/test_emitter.py::test_separate_consecutive_moves"
-    "tests/test_observers_polling.py::test___init__"
-    # segfaults
-    "tests/test_delayed_queue.py::test_delayed_get"
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "tests/test_emitter.py::test_case_change"
+    "tests/test_emitter.py::test_chmod"
+    "tests/test_emitter.py::test_create"
     "tests/test_emitter.py::test_delete"
-    # AttributeError: '_thread.RLock' object has no attribute 'key'"
-    "tests/test_skip_repeats_queue.py::test_eventlet_monkey_patching"
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
-    # segfaults
-    "tests/test_delayed_queue.py::test_delayed_get"
-    "tests/test_0_watchmedo.py::test_tricks_from_file"
-    "tests/test_fsevents.py::test_watcher_deletion_while_receiving_events_1"
-    "tests/test_fsevents.py::test_watcher_deletion_while_receiving_events_2"
-    "tests/test_skip_repeats_queue.py::test_eventlet_monkey_patching"
-    "tests/test_fsevents.py::test_recursive_check_accepts_relative_paths"
-    # fsevents:fsevents.py:318 Unhandled exception in FSEventsEmitter
-    "tests/test_fsevents.py::test_watchdog_recursive"
-    # SystemError: Cannot start fsevents stream. Use a kqueue or polling observer...
-    "tests/test_fsevents.py::test_add_watch_twice"
-    # gets stuck
+    "tests/test_emitter.py::test_fast_subdirectory_creation_deletion"
+    "tests/test_emitter.py::test_file_lifecyle"
+    "tests/test_emitter.py::test_modify"
+    "tests/test_emitter.py::test_move_from"
+    "tests/test_emitter.py::test_move_nested_subdirectories"
+    "tests/test_emitter.py::test_move"
+    "tests/test_emitter.py::test_recursive_off"
+    "tests/test_emitter.py::test_recursive_on"
+    "tests/test_emitter.py::test_renaming_top_level_directory"
+    "tests/test_emitter.py::test_separate_consecutive_moves"
     "tests/test_fsevents.py::test_converting_cfstring_to_pyunicode"
   ];
 
