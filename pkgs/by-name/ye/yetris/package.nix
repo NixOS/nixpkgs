@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "yetris";
-  version = "2.1.0";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "alexdantas";
     repo = "yetris";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jhVircWMn+ZXoaX925O41ylpxmZxV9XAmIaANMWD6H4=";
+    hash = "sha256-k9CXXIaDk1eAtRBEj0VCfE+D1FtmIDX3niubAdrfjqw=";
   };
 
   buildInputs = [
