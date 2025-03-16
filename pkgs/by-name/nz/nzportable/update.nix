@@ -18,8 +18,9 @@ lib.getExe (writeShellApplication {
   text = ''
     youngest=0
     update() {
-      repo=$1
-      tag=$2
+      attr=$1; shift
+      repo=$1; shift
+      tag=$1; shift
 
       prefetch=$(nix-prefetch-git "https://github.com/nzp-team/$repo" --rev "$tag")
 
@@ -31,11 +32,11 @@ lib.getExe (writeShellApplication {
         youngest=$timestamp
       fi
 
-      update-source-version "$UPDATE_NIX_ATTR_PATH.$repo" "0-unstable-$timestamp" "$hash" --rev="$rev"
+      update-source-version "$attr" "0-unstable-$timestamp" "$hash" --rev="$rev" "$@"
     }
 
-    update fteqw bleeding-edge
-    update assets newest
-    update quakec bleeding-edge
+    update nzportable fteqw bleeding-edge --version-key=fteqwVersion
+    update nzportable-assets assets newest
+    update nzportable-quakec quakec bleeding-edge
   '';
 })
