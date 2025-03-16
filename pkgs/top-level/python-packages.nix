@@ -10865,6 +10865,8 @@ self: super: with self; {
 
   pycycling = callPackage ../development/python-modules/pycycling { };
 
+  pyfdt = callPackage ../development/python-modules/pyfdt { };
+
   pyfibaro = callPackage ../development/python-modules/pyfibaro { };
 
   pyfireservicerota = callPackage ../development/python-modules/pyfireservicerota { };
