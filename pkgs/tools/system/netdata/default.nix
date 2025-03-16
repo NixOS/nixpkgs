@@ -1,19 +1,21 @@
 {
-  lib,
-  stdenv,
-  fetchFromGitHub,
   bash,
+  bison,
   buildGoModule,
   cmake,
   cups,
   curl,
   darwin,
+  fetchFromGitHub,
+  fetchurl,
+  flex,
   freeipmi,
   go,
   google-cloud-cpp,
   grpc,
   jemalloc,
   json_c,
+  lib,
   libbpf,
   libcap,
   libelf,
@@ -32,9 +34,12 @@
   overrideSDK,
   pkg-config,
   protobuf,
+  replaceVars,
   snappy,
+  stdenv,
   systemd,
-  withCloud ? false,
+  zlib,
+
   withCloudUi ? false,
   withConnPrometheus ? false,
   withConnPubSub ? false,
@@ -43,49 +48,39 @@
   withDebug ? false,
   withEbpf ? false,
   withIpmi ? (stdenv.hostPlatform.isLinux),
+  withNdsudo ? false,
   withNetfilter ? (stdenv.hostPlatform.isLinux),
   withNetworkViewer ? (stdenv.hostPlatform.isLinux),
   withSsl ? true,
   withSystemdJournal ? (stdenv.hostPlatform.isLinux),
-  zlib,
-  withNdsudo ? false,
 }:
 let
   stdenv' = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
 in
 stdenv'.mkDerivation (finalAttrs: {
-  version = "1.47.5";
+  version = "2.2.6";
   pname = "netdata";
 
   src = fetchFromGitHub {
     owner = "netdata";
     repo = "netdata";
     rev = "v${finalAttrs.version}";
-    hash =
-      if withCloudUi then
-        "sha256-+cPYwjxg/+A5bNa517zg9xKEjUa8uPM9WD67tToPH5o="
-      # we delete the v2 GUI after fetching
-      else
-        "sha256-0aiBUkDymmdIT/u1y2PG30QYAvb8Zc4i8ZgjOtlzt+A=";
+    hash = "sha256-S6Op1bnThBa0XlUls5JWqmYCX+f9IOK5tcp+7TOsuzA=";
     fetchSubmodules = true;
-
-    # Remove v2 dashboard distributed under NCUL1. Make sure an empty
-    # Makefile.am exists, as autoreconf will get confused otherwise.
-    postFetch = lib.optionalString (!withCloudUi) ''
-      rm -rf $out/src/web/gui/v2/*
-      touch $out/src/web/gui/v2/Makefile.am
-    '';
   };
 
   strictDeps = true;
 
   nativeBuildInputs = [
+    bison
     cmake
-    pkg-config
-    makeWrapper
+    flex
     go
+    makeWrapper
     ninja
+    pkg-config
   ] ++ lib.optionals withCups [ cups.dev ];
+
   # bash is only used to rewrite shebangs
   buildInputs =
     [
@@ -94,8 +89,10 @@ stdenv'.mkDerivation (finalAttrs: {
       jemalloc
       json_c
       libuv
-      zlib
       libyaml
+      lz4
+      protobuf
+      zlib
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin (
       with darwin.apple_sdk.frameworks;
@@ -110,34 +107,41 @@ stdenv'.mkDerivation (finalAttrs: {
       libuuid
       lm_sensors
     ]
+    ++ lib.optionals withConnPrometheus [ snappy ]
+    ++ lib.optionals withConnPubSub [
+      google-cloud-cpp
+      grpc
+    ]
     ++ lib.optionals withCups [ cups ]
-    ++ lib.optionals withDBengine [ lz4 ]
+    ++ lib.optionals withEbpf [
+      libbpf
+      libelf
+    ]
     ++ lib.optionals withIpmi [ freeipmi ]
     ++ lib.optionals withNetfilter [
       libmnl
       libnetfilter_acct
     ]
-    ++ lib.optionals withConnPubSub [
-      google-cloud-cpp
-      grpc
-    ]
-    ++ lib.optionals withConnPrometheus [ snappy ]
-    ++ lib.optionals withEbpf [
-      libelf
-      libbpf
-    ]
-    ++ lib.optionals (withCloud || withConnPrometheus) [ protobuf ]
-    ++ lib.optionals withSystemdJournal [ systemd ]
-    ++ lib.optionals withSsl [ openssl ];
+    ++ lib.optionals withSsl [ openssl ]
+    ++ lib.optionals withSystemdJournal [ systemd ];
 
-  patches = [
-    # Allow ndsudo to use non-hardcoded `PATH`
-    # See https://github.com/netdata/netdata/pull/17377#issuecomment-2183017868
-    #     https://github.com/netdata/netdata/security/advisories/GHSA-pmhq-4cxq-wj93
-    ./ndsudo-fix-path.patch
-    # Allow building without non-free v2 dashboard.
-    ./dashboard-v2-removal.patch
-  ];
+  patches =
+    [
+      # Allow ndsudo to use non-hardcoded `PATH`
+      # See https://github.com/netdata/netdata/pull/17377#issuecomment-2183017868
+      #     https://github.com/netdata/netdata/security/advisories/GHSA-pmhq-4cxq-wj93
+      ./ndsudo-fix-path.patch
+    ]
+    ++ lib.optional withCloudUi (
+      replaceVars ./dashboard-v3-add.patch {
+        # FIXME web.archive.org link can be replace once https://github.com/netdata/netdata-cloud/issues/1081 resolved
+        # last update 03/16/2025 23:56:24
+        dashboardTarball = fetchurl {
+          url = "https://web.archive.org/web/20250316235624/https://app.netdata.cloud/agent.tar.gz";
+          hash = "sha256-Vtw+CbBgqGRenkis0ZR2/TLsoM83NjNA6mbndb95EK8=";
+        };
+      }
+    );
 
   # Guard against unused build-time development inputs in closure. Without
   # the ./skip-CONFIGURE_COMMAND.patch patch the closure retains inputs up
@@ -178,10 +182,6 @@ stdenv'.mkDerivation (finalAttrs: {
         mv $out/libexec/netdata/plugins.d/network-viewer.plugin \
            $out/libexec/netdata/plugins.d/network-viewer.plugin.org
       ''}
-      ${lib.optionalString (!withCloudUi) ''
-        rm -rf $out/share/netdata/web/index.html
-        cp $out/share/netdata/web/v1/index.html $out/share/netdata/web/index.html
-      ''}
       ${lib.optionalString withNdsudo ''
         mv $out/libexec/netdata/plugins.d/ndsudo \
           $out/libexec/netdata/plugins.d/ndsudo.org
@@ -220,19 +220,18 @@ stdenv'.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     "-DWEB_DIR=share/netdata/web"
-    (lib.cmakeBool "ENABLE_CLOUD" withCloud)
-    # ACLK is agent cloud link.
-    (lib.cmakeBool "ENABLE_ACLK" withCloud)
-    (lib.cmakeBool "ENABLE_DASHBOARD_V2" withCloudUi)
-    (lib.cmakeBool "ENABLE_DBENGINE" withDBengine)
-    (lib.cmakeBool "ENABLE_PLUGIN_FREEIPMI" withIpmi)
-    (lib.cmakeBool "ENABLE_PLUGIN_SYSTEMD_JOURNAL" withSystemdJournal)
-    (lib.cmakeBool "ENABLE_PLUGIN_NETWORK_VIEWER" withNetworkViewer)
-    (lib.cmakeBool "ENABLE_PLUGIN_EBPF" withEbpf)
-    (lib.cmakeBool "ENABLE_PLUGIN_XENSTAT" false)
-    (lib.cmakeBool "ENABLE_PLUGIN_CUPS" withCups)
+    (lib.cmakeBool "ENABLE_DASHBOARD" withCloudUi)
+    # FIXME can be switched back when https://github.com/netdata/netdata/issues/19901 resolved
+    # (lib.cmakeBool "ENABLE_DBENGINE" withDBengine)
+    (lib.cmakeBool "ENABLE_DBENGINE" true)
     (lib.cmakeBool "ENABLE_EXPORTER_PROMETHEUS_REMOTE_WRITE" withConnPrometheus)
     (lib.cmakeBool "ENABLE_JEMALLOC" true)
+    (lib.cmakeBool "ENABLE_PLUGIN_CUPS" withCups)
+    (lib.cmakeBool "ENABLE_PLUGIN_EBPF" withEbpf)
+    (lib.cmakeBool "ENABLE_PLUGIN_FREEIPMI" withIpmi)
+    (lib.cmakeBool "ENABLE_PLUGIN_NETWORK_VIEWER" withNetworkViewer)
+    (lib.cmakeBool "ENABLE_PLUGIN_SYSTEMD_JOURNAL" withSystemdJournal)
+    (lib.cmakeBool "ENABLE_PLUGIN_XENSTAT" false)
     # Suggested by upstream.
     "-G Ninja"
   ];
@@ -260,7 +259,7 @@ stdenv'.mkDerivation (finalAttrs: {
 
         sourceRoot = "${finalAttrs.src.name}/src/go/plugin/go.d";
 
-        vendorHash = "sha256-NZ1tg+lvXNgypqmjjb5f7dHH6DIA9VOa4PMM4eq11n0=";
+        vendorHash = "sha256-pnv2i48asVWaZRBQ3+l2thc5+FwDXR5zQkJnLNTYbqQ=";
         doCheck = false;
         proxyVendor = true;
 
@@ -290,6 +289,7 @@ stdenv'.mkDerivation (finalAttrs: {
     platforms = platforms.unix;
     maintainers = with maintainers; [
       mkg20001
+      rhoriguchi
     ];
   };
 })
