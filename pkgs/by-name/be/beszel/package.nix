@@ -1,20 +1,20 @@
 {
-  buildGo124Module,
+  buildGoModule,
   lib,
   fetchFromGitHub,
   nix-update-script,
   buildNpmPackage,
 }:
 
-buildGo124Module rec {
+buildGoModule rec {
   pname = "beszel";
-  version = "0.10.1";
+  version = "0.10.2";
 
   src = fetchFromGitHub {
     owner = "henrygd";
     repo = "beszel";
     tag = "v${version}";
-    hash = "sha256-4RuYZcBR7X9Ug6l91N/FtyfT38HlW2guputzo4kF8YU=";
+    hash = "sha256-yYSX58qA4vE7Bp3ADc6rIMf9yaeU7Zw7D5rmES6x6oA=";
   };
 
   webui = buildNpmPackage {
@@ -48,7 +48,7 @@ buildGo124Module rec {
 
     sourceRoot = "${src.name}/beszel/site";
 
-    npmDepsHash = "sha256-UKOS7QyGsdKosjhxVhZErFkXhnfrFxdX0ozBUJGsNII=";
+    npmDepsHash = "sha256-27NUV23dNHFSwOHiB/wGSAWkp6eZMnw/6Pd3Fwn98+s=";
   };
 
   sourceRoot = "${src.name}/beszel";
