@@ -634,6 +634,7 @@ in {
   limesurvey = handleTest ./limesurvey.nix {};
   limine = import ./limine { inherit runTest; };
   listmonk = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./listmonk.nix {};
+  litellm = runTest ./litellm.nix;
   litestream = handleTest ./litestream.nix {};
   lldap = handleTest ./lldap.nix {};
   localsend = handleTest ./localsend.nix {};
