@@ -1,13 +1,13 @@
 {
+  buildPostgresqlExtension,
+  jitSupport,
   lib,
-  stdenv,
+  llvm,
+  nixosTests,
   pg-dump-anon,
   postgresql,
   runtimeShell,
-  jitSupport,
-  llvm,
-  buildPostgresqlExtension,
-  nixosTests,
+  stdenv,
 }:
 
 buildPostgresqlExtension (finalAttrs: {
