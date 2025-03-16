@@ -33,7 +33,7 @@
     name = "leave-git-nix-source";
     url = "https://github.com/NixOS/nix";
     rev = "9d9dbe6ed05854e03811c361a3380e09183f4f4a";
-    sha256 = "sha256-3YYVIeaeu6zO7bBkZxF+1d5VS0K2GHYEZwChB3tPJ4s=";
+    sha256 = "sha256-VmQ38+lr+rNPaTnjjV41uC2XSN4fkfZAfytE2uKyLfo=";
     leaveDotGit = true;
   };
 
@@ -49,7 +49,7 @@
     name = "submodule-leave-git-source";
     url = "https://github.com/pineapplehunter/nix-test-repo-with-submodule";
     rev = "26473335b84ead88ee0a3b649b1c7fa4a91cfd4a";
-    sha256 = "sha256-0pwleO/m4Iws3BF9ewyWbYMcGfEJLS3BYzWfDSYtXs8=";
+    sha256 = "sha256-EC2PMEEtA7f5OFdsluHn7pi4QXhCZuFML8tib4pV7Ek=";
     leaveDotGit = true;
     fetchSubmodules = true;
   };
@@ -70,7 +70,7 @@
     name = "submodule-leave-git-deep-source";
     url = "https://github.com/pineapplehunter/nix-test-repo-with-submodule";
     rev = "26473335b84ead88ee0a3b649b1c7fa4a91cfd4a";
-    sha256 = "sha256-eRHOwolRZDJS/5zk88e7SdoO7nKKtjDXMLVsyFPFgk8=";
+    sha256 = "sha256-ieYn9I/0RgeSwQkSqwKaU3RgjKFlRqMg7zw0Nvu3azA=";
     deepClone = true;
     leaveDotGit = true;
     fetchSubmodules = true;
