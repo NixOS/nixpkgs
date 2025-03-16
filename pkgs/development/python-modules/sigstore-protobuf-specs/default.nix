@@ -5,6 +5,7 @@
   fetchPypi,
   buildPythonPackage,
   betterproto,
+  pydantic,
 }:
 
 buildPythonPackage rec {
@@ -20,9 +21,14 @@ buildPythonPackage rec {
     hash = "sha256-yl0XAXrefexbuaABweDkXa5G+L2lk+j6sG6mjurBzpw=";
   };
 
-  nativeBuildInputs = [ flit-core ];
+  pythonRelaxDeps = [ "betterproto" ];
 
-  propagatedBuildInputs = [ betterproto ];
+  build-system = [ flit-core ];
+
+  dependencies = [
+    betterproto
+    pydantic
+  ];
 
   # Module has no tests
   doCheck = false;
