@@ -1295,6 +1295,7 @@ in {
   wireguard = handleTest ./wireguard {};
   wg-access-server = handleTest ./wg-access-server.nix {};
   without-nix = handleTest ./without-nix.nix {};
+  wizarr = handleTest ./web-apps/wizarr.nix {};
   wmderland = handleTest ./wmderland.nix {};
   workout-tracker = handleTest ./workout-tracker.nix {};
   wpa_supplicant = import ./wpa_supplicant.nix { inherit pkgs runTest; };
