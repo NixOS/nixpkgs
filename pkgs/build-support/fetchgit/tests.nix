@@ -58,9 +58,12 @@
     name = "submodule-deep-source";
     url = "https://github.com/pineapplehunter/nix-test-repo-with-submodule";
     rev = "26473335b84ead88ee0a3b649b1c7fa4a91cfd4a";
-    sha256 = "sha256-eRHOwolRZDJS/5zk88e7SdoO7nKKtjDXMLVsyFPFgk8=";
+    sha256 = "sha256-3zWogs6EZBnzUfz6gBnigETTKGYl9KFKFgsy6Bl4DME=";
     deepClone = true;
     fetchSubmodules = true;
+    # deepClone implies leaveDotGit, so delete the .git directory after
+    # fetching to distinguish from the submodule-leave-git-deep test.
+    postFetch = "rm -r $out/.git";
   };
 
   submodule-leave-git-deep = testers.invalidateFetcherByDrvHash fetchgit {
