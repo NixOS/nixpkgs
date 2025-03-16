@@ -6,6 +6,7 @@
   postgresqlTestExtension,
   testers,
   buildPostgresqlExtension,
+  gitUpdater,
 }:
 
 buildPostgresqlExtension (finalAttrs: {
@@ -19,6 +20,10 @@ buildPostgresqlExtension (finalAttrs: {
     repo = "pg_repack";
     rev = "ver_${finalAttrs.version}";
     sha256 = "sha256-wfjiLkx+S3zVrAynisX1GdazueVJ3EOwQEPcgUQt7eA=";
+  };
+
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "ver_";
   };
 
   passthru.tests = {
