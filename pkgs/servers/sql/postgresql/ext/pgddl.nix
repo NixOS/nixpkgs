@@ -1,10 +1,10 @@
 {
-  lib,
-  fetchFromGitHub,
-  postgresql,
   buildPostgresqlExtension,
-  postgresqlTestExtension,
+  fetchFromGitHub,
+  lib,
   perl,
+  postgresql,
+  postgresqlTestExtension,
 }:
 buildPostgresqlExtension (finalAttrs: {
   pname = "pgddl";
