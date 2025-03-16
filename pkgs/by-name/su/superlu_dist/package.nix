@@ -64,7 +64,6 @@ stdenv.mkDerivation (finalAttrs: {
       (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
       (lib.cmakeBool "BUILD_STATIC_LIBS" stdenv.hostPlatform.isStatic)
       (lib.cmakeBool "enable_fortran" true)
-      (lib.cmakeBool "enable_complex16" true)
       (lib.cmakeBool "TPL_ENABLE_INTERNAL_BLASLIB" false)
       (lib.cmakeBool "TPL_ENABLE_LAPACKLIB" true)
       (lib.cmakeBool "TPL_ENABLE_PARMETISLIB" withParmetis)
