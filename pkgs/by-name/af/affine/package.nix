@@ -41,12 +41,12 @@ in
 stdenv.mkDerivation (finalAttrs: {
   pname = binName;
 
-  version = "0.20.4";
+  version = "0.20.5";
   src = fetchFromGitHub {
     owner = "toeverything";
     repo = "AFFiNE";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NbxV6b84aWoSloSX5FSOlLVpXJB2FPBR//YH5MFM6v4=";
+    hash = "sha256-eMVHwjJe6u3A3Dxo6SurusRuMksp/moPmXAUv0FXBwc=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {

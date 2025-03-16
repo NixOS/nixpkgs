@@ -10,7 +10,7 @@
 
 buildDunePackage rec {
   pname = "srt";
-  version = "0.3.1";
+  version = "0.3.3";
 
   minimalOCamlVersion = "4.12";
 
@@ -18,7 +18,7 @@ buildDunePackage rec {
     owner = "savonet";
     repo = "ocaml-srt";
     rev = "v${version}";
-    hash = "sha256-5KBiHNnZ+ukaXLC90ku9PqGUUK6csDY9VqVKeeX6BQ8=";
+    hash = "sha256-FVgOEBPYZz7SQ5c6mLAssDwY1NuXsV3ghP7OyLRd9Kw=";
   };
 
   buildInputs = [ dune-configurator ];

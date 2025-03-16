@@ -137,6 +137,7 @@ let
       changelog = "https://github.com/rancher/rke2/releases/tag/v${version}";
       license = licenses.asl20;
       maintainers = with maintainers; [
+        rorosen
         zimbatm
         zygot
       ];
