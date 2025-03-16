@@ -521,6 +521,14 @@ rec {
     commas = separatedString ",";
     envVar = separatedString ":";
 
+    stringLike = mkOptionType {
+      name = "stringLike";
+      description = "string-like";
+      descriptionClass = "noun";
+      check = isStringLike;
+      merge = mergeEqualOption;
+    };
+
     # Deprecated; should not be used because it quietly concatenates
     # strings, which is usually not what you want.
     # We use a lib.warn because `deprecationMessage` doesn't trigger in nested types such as `attrsOf string`
