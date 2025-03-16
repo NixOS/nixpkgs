@@ -1,12 +1,12 @@
 {
-  lib,
-  stdenv,
+  buildPostgresqlExtension,
   cmake,
   fetchFromGitHub,
   h3_4,
+  lib,
   postgresql,
   postgresqlTestExtension,
-  buildPostgresqlExtension,
+  stdenv,
 }:
 
 buildPostgresqlExtension (finalAttrs: {
@@ -16,7 +16,7 @@ buildPostgresqlExtension (finalAttrs: {
   src = fetchFromGitHub {
     owner = "zachasme";
     repo = "h3-pg";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-2xp9gssPMTroLT/1Me0VWvtIPyouIk9MW0Rp13uYBEw=";
   };
 
@@ -50,10 +50,10 @@ buildPostgresqlExtension (finalAttrs: {
     '';
   };
 
-  meta = with lib; {
+  meta = {
     description = "PostgreSQL bindings for H3, a hierarchical hexagonal geospatial indexing system";
     homepage = "https://github.com/zachasme/h3-pg";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
     inherit (postgresql.meta) platforms;
   };
