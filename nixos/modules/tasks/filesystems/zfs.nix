@@ -892,13 +892,24 @@ in
           IOSchedulingClass = "idle";
         };
         script = ''
-          # shellcheck disable=SC2046
-          ${cfgZfs.package}/bin/zpool scrub -w ${
+          PATH="$PATH:${cfgZfs.package}/bin"
+          export PATH
+
+          zpoolsToScrub=${
             if cfgScrub.pools != [] then
-              (lib.concatStringsSep " " cfgScrub.pools)
+              "( " + (lib.strings.concatStringsSep " " cfgScrub.pools) + " )"
             else
-              "$(${cfgZfs.package}/bin/zpool list -H -o name)"
-            }
+              "( $(zpool list -H -o name) )"
+          }
+
+          for zpoolToScrub in "''${zpoolsToScrub[@]}"; do
+              if zpool status "''${zpoolToScrub}" | grep -q 'scrub in progress'; then
+                  echo "The zpool ''${zpoolToScrub} is already being scrubbed at the moment."
+                  continue
+              else
+                  zpool scrub -w "''${zpoolToScrub}"
+              fi
+          done
         '';
       };
 
