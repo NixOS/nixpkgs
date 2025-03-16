@@ -5,23 +5,26 @@
   fetchFromGitHub,
   pkg-config,
   btrfs-progs,
+  go_1_24,
   gpgme,
   nix-update-script,
 }:
 
-buildGoModule rec {
+# Current default is version 1.23.6. Requirement is >= 1.24.
+buildGoModule.override { go = go_1_24; } rec {
   pname = "kraftkit";
-  version = "0.9.4";
+  version = "0.11.3";
 
   src = fetchFromGitHub {
     owner = "unikraft";
     repo = "kraftkit";
     rev = "v${version}";
-    hash = "sha256-4+3yMx/Vf4aZKC5GRhnAeH4oaJ0Rbz8oXptMtPV+5tA=";
+    hash = "sha256-ANqcE//21zbs2hNS/b7et1TfJB6DxBC9jXQXsmD70Zw=";
   };
 
   nativeBuildInputs = [
     pkg-config
+    go_1_24
   ];
 
   buildInputs =
@@ -32,7 +35,7 @@ buildGoModule rec {
       btrfs-progs
     ];
 
-  vendorHash = "sha256-uyoIlNhgL684f+3+I4CFc+iuMRdI5WAUr7dWr0Bt6bA=";
+  vendorHash = "sha256-1nlMiMDBCIFmF58ttFm3I3M5eSTP0qrYyZNmfewXaZk=";
 
   ldflags = [
     "-s"
