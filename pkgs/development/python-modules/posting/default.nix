@@ -11,9 +11,6 @@
   typing-extensions,
   linkify-it-py,
   httpx,
-  textual-2_1_2,
-  textual-autocomplete,
-  openapi-pydantic,
   click,
   xdg-base-dirs,
   click-default-group,
@@ -24,7 +21,8 @@
   watchfiles,
   toml,
   typer,
-}: let
+}:
+let
   openapi-pydantic = buildPythonPackage rec {
     pname = "openapi_pydantic";
     version = "0.5.0";
@@ -85,48 +83,48 @@
     ];
   };
 in
-  buildPythonPackage rec {
-    pname = "posting";
-    version = "2.5.4";
+buildPythonPackage rec {
+  pname = "posting";
+  version = "2.5.4";
 
-    src = fetchFromGitHub {
-      owner = "darrenburns";
-      repo = "posting";
-      rev = version;
-      sha256 = "sha256-6nFQSGCdmR4qZuleiY0xh76WgBIjs9OZtfpc16b4iws=";
-    };
+  src = fetchFromGitHub {
+    owner = "darrenburns";
+    repo = "posting";
+    rev = version;
+    sha256 = "sha256-6nFQSGCdmR4qZuleiY0xh76WgBIjs9OZtfpc16b4iws=";
+  };
 
-    nativeBuildInputs = [
-      hatchling
-    ];
+  nativeBuildInputs = [
+    hatchling
+  ];
 
-    propagatedBuildInputs = [
-      httpx
-      textual-2_1_2
-      textual-autocomplete
-      openapi-pydantic
-      click
-      xdg-base-dirs
-      click-default-group
-      pyperclip
-      pyyaml
-      pydantic-settings
-      python-dotenv
-      watchfiles
-      rich
-      toml
-      pydantic
-      typer
-    ];
+  propagatedBuildInputs = [
+    httpx
+    textual-2_1_2
+    textual-autocomplete
+    openapi-pydantic
+    click
+    xdg-base-dirs
+    click-default-group
+    pyperclip
+    pyyaml
+    pydantic-settings
+    python-dotenv
+    watchfiles
+    rich
+    toml
+    pydantic
+    typer
+  ];
 
-    pyproject = true;
-    doCheck = true;
-    pythonImportsCheck = ["posting"];
+  pyproject = true;
+  doCheck = true;
+  pythonImportsCheck = [ "posting" ];
 
-    meta = {
-      description = "Command-line HTTP client";
-      homepage = "https://github.com/darrenburns/posting";
-      license = lib.licenses.mit;
-      maintainers = [ lib.maintainers.blackzeshi ];
-    };
-  }
+  meta = {
+    description = "Command-line HTTP client";
+    homepage = "https://github.com/darrenburns/posting";
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.blackzeshi ];
+  };
+}
