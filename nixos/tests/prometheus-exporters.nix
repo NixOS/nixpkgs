@@ -59,6 +59,37 @@ let
   */
 
   exporterTests = {
+    adguard =
+    let
+      testUsername = "test";
+      testPassword = "testpass";
+      exporterPort = 9899;
+    in
+    {
+      exporterConfig = {
+        enable = true;
+        port = exporterPort;
+        extraOpts.username = testUsername;
+      };
+      metricProvider = {
+        services.adguardhome = {
+          enable = true;
+          settings.bind_port = 3000;
+          settings.bind_host = "0.0.0.0";
+          settings.users = [
+            { name = testUsername; password = testPassword; }
+          ];
+        };
+      };
+      exporterTest = ''
+        wait_for_unit("adguardhome.service")
+        wait_for_open_port(3000)
+        wait_for_unit("prometheus-adguard-exporter.service")
+        wait_for_open_port(${toString exporterPort})
+        succeed("curl -sSf http://localhost:${toString exporterPort}/metrics | grep 'adguardhome_info'")
+      '';
+    };
+
     apcupsd = {
       exporterConfig = {
         enable = true;
