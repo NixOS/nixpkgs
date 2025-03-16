@@ -29,10 +29,6 @@ let
         version = "1.3.9";
         hash = "sha256-KGcHDwk8CgNHPZARfLBfS8r7TRCP9LPjT+m4fNSnnW0=";
       };
-      "12" = {
-        version = "1.3.9";
-        hash = "sha256-64/dlm6e4flCxMQ8efsxfKSlja+Tko0zsghTgLatN+Y=";
-      };
     }
     .${lib.versions.major postgresql.version}
     or (throw "Source for pg_hint_plan is not available for ${postgresql.version}");
