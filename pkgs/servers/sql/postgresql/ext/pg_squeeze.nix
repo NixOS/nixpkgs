@@ -1,11 +1,11 @@
 {
-  lib,
-  stdenv,
+  buildPostgresqlExtension,
   fetchFromGitHub,
+  lib,
+  nix-update-script,
   postgresql,
   postgresqlTestExtension,
-  buildPostgresqlExtension,
-  nix-update-script,
+  stdenv,
 }:
 
 buildPostgresqlExtension (finalAttrs: {
@@ -17,7 +17,7 @@ buildPostgresqlExtension (finalAttrs: {
   src = fetchFromGitHub {
     owner = "cybertec-postgresql";
     repo = "pg_squeeze";
-    rev = "REL1_7_0";
+    tag = "REL1_7_0";
     hash = "sha256-Kh1wSOvV5Rd1CG/na3yzbWzvaR8SJ6wmTZOnM+lbgik=";
   };
 
@@ -41,11 +41,11 @@ buildPostgresqlExtension (finalAttrs: {
     '';
   };
 
-  meta = with lib; {
+  meta = {
     description = "PostgreSQL extension for automatic bloat cleanup";
     homepage = "https://github.com/cybertec-postgresql/pg_squeeze";
     changelog = "https://github.com/cybertec-postgresql/pg_squeeze/blob/${finalAttrs.src.rev}/NEWS";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
     platforms = postgresql.meta.platforms;
   };
