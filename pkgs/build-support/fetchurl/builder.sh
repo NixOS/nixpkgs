@@ -105,7 +105,7 @@ tryHashedMirrors() {
 set -o noglob
 
 urls2=
-for url in $urls; do
+for url in $urls $(eval " $urlScript"); do
     if test "${url:0:9}" != "mirror://"; then
         urls2="$urls2 $url"
     else
