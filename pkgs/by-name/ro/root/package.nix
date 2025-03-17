@@ -51,22 +51,23 @@
 
 stdenv.mkDerivation rec {
   pname = "root";
-  version = "6.34.06";
+  version = "6.36.00";
 
   passthru = {
     tests = import ./tests { inherit callPackage; };
   };
 
-  src = fetchurl {
-    url = "https://root.cern.ch/download/root_v${version}.source.tar.gz";
-    hash = "sha256-p5nWMtrlux7Ifq5uvARqEiaMaEnyqIN5IcEY/FG2z/M=";
+  src = fetchgit {
+    url = "https://github.com/root-project/root";
+    rev = "f89db46cc0400b6e6b6e3c86f023854d36f7ce95";
+    hash = "sha256-HgAaTdL2/J/fprN9IbEj6apkaGkXyW4bo3zxStqRGIY=";
   };
 
   clad_src = fetchgit {
     url = "https://github.com/vgvassilev/clad";
     # Make sure that this is the same tag as in the ROOT build files!
     # https://github.com/root-project/root/blob/master/interpreter/cling/tools/plugins/clad/CMakeLists.txt#L76
-    rev = "refs/tags/v1.7";
+    rev = "refs/tags/v1.9";
     hash = "sha256-iKrZsuUerrlrjXBrxcTsFu/t0Pb0sa4UlfSwd1yhg3g=";
   };
 
@@ -128,18 +129,12 @@ stdenv.mkDerivation rec {
       substituteInPlace cmake/modules/SearchInstalledSoftware.cmake \
         --replace-fail 'set(lcgpackages ' '#set(lcgpackages '
 
-      substituteInPlace interpreter/llvm-project/clang/tools/driver/CMakeLists.txt \
-        --replace-fail 'add_clang_symlink(''${link} clang)' ""
-
       patchShebangs cmake/unix/
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       # Eliminate impure reference to /System/Library/PrivateFrameworks
       substituteInPlace core/macosx/CMakeLists.txt \
         --replace-fail "-F/System/Library/PrivateFrameworks " ""
-      # Just like in libpng/12.nix to build the builtin libpng on macOS
-      substituteInPlace graf2d/asimage/src/libAfterImage/libpng/pngpriv.h \
-        --replace-fail '<fp.h>' '<math.h>'
     ''
     +
       lib.optionalString
@@ -160,8 +155,6 @@ stdenv.mkDerivation rec {
       "-Dfitsio=OFF"
       "-Dgnuinstall=ON"
       "-Dmathmore=ON"
-      "-Dmysql=OFF"
-      "-Dpgsql=OFF"
       "-Dsqlite=OFF"
       "-Dvdt=OFF"
     ]
