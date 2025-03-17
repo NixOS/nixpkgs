@@ -28043,6 +28043,12 @@
     githubId = 47603387;
     name = "Mihók Martin";
   };
+  xsteadfastx = {
+    email = "marvin@xsteadfastx.org";
+    github = "xsteadfastx";
+    githubId = 168397;
+    name = "Marvin Preuss";
+  };
   xtrayambak = {
     github = "xTrayambak";
     githubId = 59499552;
