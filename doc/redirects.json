@@ -104,6 +104,12 @@
   "sec-nixpkgs-release-25.05": [
     "release-notes.html#sec-nixpkgs-release-25.05"
   ],
+  "sec-nixpkgs-release-25.05-deprecations": [
+    "release-notes.html#sec-nixpkgs-release-25.05-deprecations"
+  ],
+  "sec-nixpkgs-release-25.05-highlights": [
+    "release-notes.html#sec-nixpkgs-release-25.05-highlights"
+  ],
   "sec-nixpkgs-release-25.05-incompatibilities": [
     "release-notes.html#sec-nixpkgs-release-25.05-incompatibilities"
   ],
@@ -262,9 +268,6 @@
   ],
   "sec-debug": [
     "index.html#sec-debug"
-  ],
-  "sec-pkgs-ociTools": [
-    "index.html#sec-pkgs-ociTools"
   ],
   "sec-prefer-remote-fetch": [
     "index.html#sec-prefer-remote-fetch"
@@ -2018,6 +2021,21 @@
   ],
   "ex-dockerTools-streamNixShellImage-addingShellHook": [
     "index.html#ex-dockerTools-streamNixShellImage-addingShellHook"
+  ],
+  "sec-pkgs-ociTools": [
+    "index.html#sec-pkgs-ociTools"
+  ],
+  "ssec-pkgs-ociTools-buildContainer": [
+    "index.html#ssec-pkgs-ociTools-buildContainer"
+  ],
+  "ssec-pkgs-ociTools-buildContainer-inputs": [
+    "index.html#ssec-pkgs-ociTools-buildContainer-inputs"
+  ],
+  "ssec-pkgs-ociTools-buildContainer-examples": [
+    "index.html#ssec-pkgs-ociTools-buildContainer-examples"
+  ],
+  "ex-ociTools-buildContainer-bash": [
+    "index.html#ex-ociTools-buildContainer-bash"
   ],
   "sec-pkgs-portableService": [
     "index.html#sec-pkgs-portableService"
