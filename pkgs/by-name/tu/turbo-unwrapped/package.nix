@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "vercel";
-    repo = "turbo";
+    repo = "turborepo";
     tag = "v${finalAttrs.version}";
     hash = "sha256-tQ/Xocpk48eRhCyfRZx2rkAVqNn115rO3MRYF5fC2nI=";
   };
@@ -71,7 +71,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "High-performance build system for JavaScript and TypeScript codebases";
     homepage = "https://turbo.build/";
-    changelog = "https://github.com/vercel/turbo/releases/tag/${toString finalAttrs.src.tag}";
+    changelog = "https://github.com/vercel/turborepo/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       dlip
