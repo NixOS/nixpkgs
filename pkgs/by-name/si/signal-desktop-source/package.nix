@@ -16,6 +16,7 @@
   copyDesktopItems,
   replaceVars,
   noto-fonts-color-emoji,
+  nixosTests,
   withAppleEmojis ? false,
 }:
 let
@@ -189,6 +190,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     inherit sqlcipher-signal-extension libsignal-node;
+    tests.application-launch = nixosTests.signal-desktop;
   };
 
   meta = {
