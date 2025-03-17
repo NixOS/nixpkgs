@@ -1295,7 +1295,7 @@ in {
   vscodium = discoverTests (import ./vscodium.nix);
   vsftpd = handleTest ./vsftpd.nix {};
   waagent = handleTest ./waagent.nix {};
-  wakapi = handleTest ./wakapi.nix {};
+  wakapi = runTest ./wakapi.nix;
   warzone2100 = handleTest ./warzone2100.nix {};
   wasabibackend = handleTest ./wasabibackend.nix {};
   wastebin = handleTest ./wastebin.nix {};
