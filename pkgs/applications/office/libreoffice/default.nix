@@ -1,5 +1,6 @@
 {
   stdenv,
+  runCommand,
   fetchurl,
   fetchgit,
   fetchpatch2,
@@ -141,6 +142,7 @@
   kio ? null,
   kwindowsystem ? null,
   variant ? "fresh",
+  debugLogging ? variant == "still",
   symlinkJoin,
   libpq,
   makeFontsConf,
@@ -155,6 +157,7 @@
   libertine,
   libertine-g,
   noto-fonts,
+  noto-fonts-lgc-plus,
   noto-fonts-cjk-sans,
   rhino,
   lp_solve,
@@ -198,6 +201,13 @@ let
     optionalString
     ;
 
+  notoSubset = suffixes: runCommand "noto-fonts-subset" {} ''
+    mkdir -p "$out/share/fonts/noto/"
+    ${concatMapStrings (x: ''
+      cp "${noto-fonts}/share/fonts/noto/NotoSans${x}["*.[ot]tf "$out/share/fonts/noto/"
+    '') suffixes}
+  '';
+
   fontsConf = makeFontsConf {
     fontDirectories = [
       amiri
@@ -210,7 +220,9 @@ let
       liberation_ttf_v2
       libertine
       libertine-g
-      noto-fonts
+      # Font priority issues in some tests in Still
+      noto-fonts-lgc-plus
+      (if variant == "fresh" then noto-fonts else (notoSubset ["Arabic"]))
       noto-fonts-cjk-sans
     ];
   };
@@ -615,7 +627,9 @@ stdenv.mkDerivation (finalAttrs: {
   env = {
     # FIXME: this is a hack, because the right cflags are not being picked up
     # from rasqal's .pc file. Needs more investigation.
-    NIX_CFLAGS_COMPILE = "-I${librdf_rasqal}/include/rasqal";
+    NIX_CFLAGS_COMPILE =
+      "-I${librdf_rasqal}/include/rasqal"
+      + (lib.optionalString debugLogging " -DSAL_LOG_WARN=1 -DSAL_LOG_INFO=1 ");
 
     # Provide all the fonts used in tests.
     FONTCONFIG_FILE = fontsConf;
