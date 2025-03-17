@@ -865,6 +865,7 @@ in {
   nzbget = handleTest ./nzbget.nix {};
   nzbhydra2 = handleTest ./nzbhydra2.nix {};
   ocis = handleTest ./ocis.nix {};
+  oci-tools = handleTest ./oci-tools.nix {};
   oddjobd = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./oddjobd.nix {};
   obs-studio = handleTest ./obs-studio.nix {};
   oh-my-zsh = handleTest ./oh-my-zsh.nix {};
