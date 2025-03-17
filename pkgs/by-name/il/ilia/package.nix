@@ -58,7 +58,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    description = "A GTK-based Desktop Executor";
+    description = "GTK-based Desktop Executor";
     homepage = "https://github.com/regolith-linux/ilia";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ sandptel ];
