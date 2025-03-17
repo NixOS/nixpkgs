@@ -24,6 +24,7 @@
   unbound,
   ldns,
   gmp,
+  apple-sdk_13,
   nixosTests,
   enableNetworkManager ? false,
   enableTNC ? false,
@@ -163,6 +164,9 @@ stdenv.mkDerivation rec {
     ++ lib.optionals (features.nm or false) [
       networkmanager
       glib
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      apple-sdk_13
     ];
 
   configureFlags = (lib.mapAttrsToList (lib.flip lib.enableFeature)) features ++ [
