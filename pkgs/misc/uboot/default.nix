@@ -26,7 +26,7 @@
 , armTrustedFirmwareRK3588
 , armTrustedFirmwareS905
 , buildPackages
-}:
+}@pkgs:
 
 let
   defaultVersion = "2025.01";
@@ -56,6 +56,7 @@ let
   , extraMakeFlags ? []
   , extraMeta ? {}
   , crossTools ? false
+  , stdenv ? pkgs.stdenv
   , ... } @ args: stdenv.mkDerivation ({
     pname = "uboot-${defconfig}";
 
