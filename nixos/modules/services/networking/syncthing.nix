@@ -121,6 +121,7 @@ let
           '[.[].${s.GET_IdAttrName}] - $new_ids | .[]'
         )"
         for id in ''${stale_${conf_type}_ids}; do
+          >&2 echo "Deleting stale device: $id"
           curl -X DELETE ${s.baseAddress}/$id
         done
       ''
