@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fixDarwinDylibNames,
 }:
 
 stdenv.mkDerivation rec {
@@ -14,6 +15,10 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "sha256-HFSRrTdIhbbSyeU/FSo5e2ZI5tff2ZDEFgYcI412ATU=";
   };
+
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    fixDarwinDylibNames
+  ];
 
   makeFlags = [
     "prefix=$(out)"
