@@ -446,6 +446,7 @@ let
         fixupOptionType
         mkIf
         mkAssert
+        mkDefinition
         mkMerge
         mkOverride
         mkOptionDefault
