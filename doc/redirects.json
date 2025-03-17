@@ -104,6 +104,9 @@
   "ex-pkgs-replace-vars-with": [
     "index.html#ex-pkgs-replace-vars-with"
   ],
+  "ex-ociTools-buildContainer-bash": [
+    "index.html#ex-ociTools-buildContainer-bash"
+  ],
   "ex-ociTools-buildImage": [
     "index.html#ex-ociTools-buildImage"
   ],
@@ -628,6 +631,15 @@
   ],
   "ssec-cosmic-settings-fallback": [
     "index.html#ssec-cosmic-settings-fallback"
+  ],
+  "ssec-pkgs-ociTools-buildContainer": [
+    "index.html#ssec-pkgs-ociTools-buildContainer"
+  ],
+  "ssec-pkgs-ociTools-buildContainer-examples": [
+    "index.html#ssec-pkgs-ociTools-buildContainer-examples"
+  ],
+  "ssec-pkgs-ociTools-buildContainer-inputs": [
+    "index.html#ssec-pkgs-ociTools-buildContainer-inputs"
   ],
   "ssec-pkgs-ociTools-buildImage": [
     "index.html#ssec-pkgs-ociTools-buildImage"
