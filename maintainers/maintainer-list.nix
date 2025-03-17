@@ -9061,6 +9061,12 @@
     githubId = 11212268;
     name = "gruve-p";
   };
+  gs-101 = {
+    email = "gabrielsantosdesouza@disroot.org";
+    github = "gs-101";
+    githubId = 172639817;
+    name = "Gabriel Santos";
+  };
   gschwartz = {
     email = "gsch@pennmedicine.upenn.edu";
     github = "GregorySchwartz";
