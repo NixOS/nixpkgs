@@ -1,7 +1,7 @@
 diff --git a/Documentation/git-send-email.txt b/Documentation/git-send-email.txt
 index 3db4eab4ba..39bc0e77c9 100644
---- a/Documentation/git-send-email.txt
-+++ b/Documentation/git-send-email.txt
+--- a/Documentation/git-send-email.adoc
++++ b/Documentation/git-send-email.adoc
 @@ -220,9 +220,9 @@ a password is obtained using 'git-credential'.
  --smtp-server=<host>::
  	If set, specifies the outgoing SMTP server to use (e.g.
