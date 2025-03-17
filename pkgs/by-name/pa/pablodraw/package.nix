@@ -22,11 +22,6 @@ buildDotnetModule rec {
     hash = "sha256-p2YeWC3ZZOI5zDpgDmEX3C5ByAAjLxJ0CqFAqKeoJ0Q=";
   };
 
-  postPatch = ''
-    substituteInPlace ${projectFile} \
-      --replace-warn '<EnableCompressionInSingleFile>True</EnableCompressionInSingleFile>' ""
-  '';
-
   projectFile = "Source/PabloDraw/PabloDraw.csproj";
 
   executables = [ "PabloDraw" ];
@@ -35,6 +30,10 @@ buildDotnetModule rec {
   dotnet-runtime = dotnetCorePackages.runtime_9_0;
 
   nugetDeps = ./deps.json;
+
+  dotnetFlags = [
+    "-p:EnableCompressionInSingleFile=false"
+  ];
 
   nativeBuildInputs = [
     wrapGAppsHook3
