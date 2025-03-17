@@ -6,14 +6,14 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sus-compiler";
   version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "pc2";
     repo = "sus-compiler";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-0OZPBdilNknGCjWzXjyUAW57cpyyyV80EEo6pDlpG3g=";
     fetchSubmodules = true;
   };
@@ -42,4 +42,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ pbsds ];
     mainProgram = "sus_compiler";
   };
-}
+})
