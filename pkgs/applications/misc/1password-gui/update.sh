@@ -42,12 +42,11 @@ cleanup() {
 trap cleanup EXIT
 
 # Get channel versions from versions.json
-declare -A version=(
-  ["stable"]=$(jq -r '.stable.version' versions.json)
-  ["beta"]=$(jq -r '.beta.version' versions.json)
-)
+declare -A versions
+while IFS='=' read -r key value; do
+  versions["${key}"]="${value}"
+done < <(jq -r 'to_entries[] | "\(.key)=\(.value)"' versions.json)
 
-#
 GPG_KEYRING=$(mktemp -t 1password.kbx.XXXXXX)
 gpg --no-default-keyring --keyring "${GPG_KEYRING}" \
   --keyserver keyserver.ubuntu.com \
@@ -57,7 +56,8 @@ JSON_HEAP=$(mktemp -t 1password-gui.jsonheap.XXXXXX)
 for channel in stable beta; do
   for os in linux darwin; do
     for arch in x86_64 aarch64; do
-      url=$(mk_url ${os} ${channel} ${arch} "${version[${channel}]}")
+      version="${versions[${channel}-${os}]}"
+      url=$(mk_url ${os} ${channel} ${arch} ${version})
       nix store prefetch-file --json "${url}" | jq "
         {
           \"${channel}\": {
