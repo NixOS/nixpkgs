@@ -16,6 +16,7 @@
   dbus,
   systemd,
   bash,
+  gobject-introspection,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -53,6 +54,7 @@ python3Packages.buildPythonApplication rec {
     pkg-config
     wrapGAppsHook4
     desktop-file-utils
+    gobject-introspection
   ];
 
   buildInputs = [
