@@ -13,13 +13,13 @@
 
 buildDotnetModule rec {
   pname = "pablodraw";
-  version = "3.3.13-beta";
+  version = "3.1.14-beta";
 
   src = fetchFromGitHub {
     owner = "cwensley";
     repo = "pablodraw";
-    rev = version;
-    hash = "sha256-PsCFiNcWYh6Bsf5Ihi3IoYyv66xUT1cRBKkx+K5gB/M=";
+    tag = version;
+    hash = "sha256-p2YeWC3ZZOI5zDpgDmEX3C5ByAAjLxJ0CqFAqKeoJ0Q=";
   };
 
   postPatch = ''
@@ -31,8 +31,8 @@ buildDotnetModule rec {
 
   executables = [ "PabloDraw" ];
 
-  dotnet-sdk = dotnetCorePackages.sdk_7_0-bin;
-  dotnet-runtime = dotnetCorePackages.runtime_7_0-bin;
+  dotnet-sdk = dotnetCorePackages.sdk_9_0;
+  dotnet-runtime = dotnetCorePackages.runtime_9_0;
 
   nugetDeps = ./deps.json;
 
