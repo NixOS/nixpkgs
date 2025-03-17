@@ -9353,6 +9353,12 @@
     githubId = 1379411;
     name = "Georg Haas";
   };
+  haylin = {
+    email = "me@haylinmoore.com";
+    github = "haylinmoore";
+    githubId = 8162992;
+    name = "Haylin Moore";
+  };
   hbjydev = {
     email = "hayden@kuraudo.io";
     github = "hbjydev";
