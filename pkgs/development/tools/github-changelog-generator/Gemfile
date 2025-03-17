@@ -2,3 +2,5 @@
 source "https://rubygems.org"
 
 gem "github_changelog_generator", "1.16.4"
+
+gem "faraday-retry", "~> 2.2"

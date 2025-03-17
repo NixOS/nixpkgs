@@ -1,7 +1,7 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    activesupport (8.0.1)
+    activesupport (8.0.2)
       base64
       benchmark (>= 0.3)
       bigdecimal
@@ -22,7 +22,7 @@ GEM
       io-event (~> 1.9)
       metrics (~> 0.12)
       traces (~> 0.15)
-    async-http (0.87.0)
+    async-http (0.88.0)
       async (>= 2.10.2)
       async-pool (~> 0.9)
       io-endpoint (~> 0.14)
@@ -55,6 +55,8 @@ GEM
       faraday (>= 0.8)
     faraday-net_http (3.4.0)
       net-http (>= 0.5.0)
+    faraday-retry (2.2.1)
+      faraday (~> 2.0)
     fiber-annotation (0.2.0)
     fiber-local (1.1.0)
       fiber-storage
@@ -71,12 +73,12 @@ GEM
     i18n (1.14.7)
       concurrent-ruby (~> 1.0)
     io-endpoint (0.15.2)
-    io-event (1.9.0)
+    io-event (1.10.0)
     io-stream (0.6.1)
-    json (2.10.1)
+    json (2.10.2)
     logger (1.6.6)
     metrics (0.12.2)
-    minitest (5.25.4)
+    minitest (5.25.5)
     multi_json (1.15.0)
     net-http (0.6.0)
       uri
@@ -85,7 +87,7 @@ GEM
       sawyer (~> 0.9)
     protocol-hpack (1.5.1)
     protocol-http (0.49.0)
-    protocol-http1 (0.30.0)
+    protocol-http1 (0.31.0)
       protocol-http (~> 0.22)
     protocol-http2 (0.22.1)
       protocol-hpack (~> 1.4)
@@ -106,6 +108,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  faraday-retry (~> 2.2)
   github_changelog_generator (= 1.16.4)
 
 BUNDLED WITH
