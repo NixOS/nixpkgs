@@ -595,7 +595,6 @@ in
           environment.LD_LIBRARY_PATH = nssModulesPath;
 
           serviceConfig = {
-            Type = "notify";
             ExecStart = lib.concatStringsSep " " [
               "-${lib.getExe' cfg.package "sshd"}"
               "-i"
@@ -620,7 +619,6 @@ in
           restartTriggers = [ config.environment.etc."ssh/sshd_config".source ];
 
           serviceConfig = {
-            Type = "notify";
             Restart = "always";
             ExecStart = lib.concatStringsSep " " [
               (lib.getExe' cfg.package "sshd")
