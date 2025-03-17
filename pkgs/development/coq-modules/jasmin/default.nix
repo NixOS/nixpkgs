@@ -16,11 +16,12 @@ mkCoqDerivation {
   defaultVersion =
     with lib.versions;
     lib.switch [ coq.version mathcomp.version ] [
-      { cases = [ (range "8.18" "8.20") (range "2.2" "2.3") ];
-        out = "2024.07.2"; }
+      { cases = [ (range "8.19" "8.20") (range "2.2" "2.3") ]; out = "2024.07.3"; }
+      { cases = [ (isEq "8.18") (isEq "2.2") ]; out = "2024.07.2"; }
     ] null;
   releaseRev = v: "v${v}";
 
+  release."2024.07.3".sha256 = "sha256-n/X8d7ILuZ07l24Ij8TxbQzAG7E8kldWFcUI65W4r+c=";
   release."2024.07.2".sha256 = "sha256-aF8SYY5jRxQ6iEr7t6mRN3BEmIDhJ53PGhuZiJGB+i8=";
 
   propagatedBuildInputs = [
