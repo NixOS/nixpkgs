@@ -619,6 +619,12 @@ environment. This means you can reuse Nix expressions of packages included in
 nixpkgs, but also use local Nix expressions like this: `hpkgs: [
 (hpkgs.callPackage ./my-project.nix { }) ]`.
 
+`extraDependencies`
+: Extra dependencies, in the form of cabal2nix build attributes. An example use
+case is when you have Haskell scripts that use libraries that don't occur in
+your packages' dependencies. Example: `hpkgs: {libraryHaskellDepends =
+[ hpkgs.releaser ]}`. Defaults to `hpkgs: { }`.
+
 `nativeBuildInputs`
 : Expects a list of derivations to add as build tools to the build environment.
 This is the place to add packages like `cabal-install`, `doctest` or `hlint`.
