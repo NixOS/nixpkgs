@@ -122,7 +122,9 @@ stdenv.mkDerivation (finalAttrs: {
       # some files substituteInPlace report as missing and it's safe to ignore them
       substituteInPlace "$(realpath "$f")" \
         --replace-quiet '"/usr/bin/' '"' \
-        --replace-quiet '"/bin/' '"' || true
+        --replace-quiet '"/bin/' '"' \
+        --replace-quiet ' /bin/' ' ' \
+        || true
     done
 
     substituteInPlace src/common/Makefile-common.am \

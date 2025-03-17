@@ -5,13 +5,13 @@
 
 callPackage ../generic.nix rec {
   pname = "rkpd2";
-  version = "2.0.7";
+  version = "2.0.8";
 
   src = fetchFromGitHub {
     owner = "Zrp200";
     repo = "rkpd2";
     rev = "v${version}";
-    hash = "sha256-JtfnIT8NJUHTCt1zGHqMwq9nlZNls+PrtTpOhuV1BJ4=";
+    hash = "sha256-jM4CtC3AVXXBjHAfeDp4dFomDpRl76DhD+q9vIAeEhA=";
   };
 
   desktopName = "Rat King Pixel Dungeon 2";

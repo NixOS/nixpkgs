@@ -26,11 +26,12 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace "pkg-config" "$PKG_CONFIG"
+      --replace-fail "pkg-config" "$PKG_CONFIG"
   '';
 
   nativeBuildInputs = [
     pkg-config
+    scdoc
     wayland-scanner
   ];
   buildInputs = [
@@ -40,9 +41,10 @@ stdenv.mkDerivation rec {
     libxkbcommon
     pango
     wayland
-    scdoc
   ];
   installFlags = [ "PREFIX=$(out)" ];
+
+  strictDeps = true;
 
   meta = with lib; {
     homepage = "https://github.com/jjsullivan5196/wvkbd";

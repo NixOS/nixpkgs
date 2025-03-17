@@ -1140,7 +1140,7 @@
   "libnvidia_nscq": {
     "linux-sbsa": {
       "outputs": {
-        "bin": false,
+        "bin": true,
         "dev": false,
         "doc": false,
         "lib": true,
@@ -1150,7 +1150,7 @@
     },
     "linux-x86_64": {
       "outputs": {
-        "bin": false,
+        "bin": true,
         "dev": false,
         "doc": false,
         "lib": true,
