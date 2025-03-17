@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "meross-iot";
-  version = "0.4.7.5";
+  version = "0.4.9.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "albertogeniola";
     repo = "MerossIot";
     tag = version;
-    hash = "sha256-CEBZVbUkRMWw95imL1k3q7Z3Nkyzwleh5C/s0XxfhfQ=";
+    hash = "sha256-EBsWEsP7SzhDbMayD2903T5Q2WDJKboVtyYY4xP8AOE=";
   };
 
   build-system = [ setuptools ];
@@ -45,7 +45,7 @@ buildPythonPackage rec {
     broken = lib.versionAtLeast paho-mqtt.version "2";
     description = "Python library to interact with Meross devices";
     homepage = "https://github.com/albertogeniola/MerossIot";
-    changelog = "https://github.com/albertogeniola/MerossIot/releases/tag/${version}";
+    changelog = "https://github.com/albertogeniola/MerossIot/releases/tag/${src.tag}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };
