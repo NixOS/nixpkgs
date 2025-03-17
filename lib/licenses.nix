@@ -220,6 +220,11 @@ lib.mapAttrs mkLicense ({
     fullName = "Lawrence Berkeley National Labs BSD variant license";
   };
 
+  bsdAxisNoDisclaimerUnmodified = {
+    fullName = "BSD-Axis without Warranty Disclaimer with Unmodified requirement";
+    url = "https://scancode-licensedb.aboutcode.org/bsd-no-disclaimer-unmodified.html";
+  };
+
   bsdOriginal = {
     spdxId = "BSD-4-Clause";
     fullName = ''BSD 4-clause "Original" or "Old" License'';

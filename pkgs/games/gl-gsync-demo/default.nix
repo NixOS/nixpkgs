@@ -9,7 +9,7 @@
   lib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "gl-gsync-demo";
   version = "unstable-2020-12-27";
 

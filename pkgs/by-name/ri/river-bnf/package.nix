@@ -7,7 +7,7 @@
   unstableGitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "river-bnf";
   version = "0-unstable-2023-10-10";
 

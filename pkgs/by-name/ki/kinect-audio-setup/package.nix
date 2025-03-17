@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   version = "0.5";
 
   # This is an MSI or CAB file
-  FIRMWARE = requireFile rec {
+  FIRMWARE = requireFile {
     name = "UACFirmware";
     sha256 = "08a2vpgd061cmc6h3h8i6qj3sjvjr1fwcnwccwywqypz3icn8xw1";
     message = ''

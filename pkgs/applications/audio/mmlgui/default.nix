@@ -14,7 +14,7 @@
   cppunit,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "mmlgui";
   version = "210420-preview-unstable-2024-04-15";
 

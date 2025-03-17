@@ -8,7 +8,7 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "mdbook-cmdrun";
   version = "0.6.0-unstable-2024-04-15";
 

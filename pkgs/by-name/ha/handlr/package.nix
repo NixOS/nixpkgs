@@ -8,7 +8,7 @@
   installShellFiles,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "handlr";
   version = "unstable-2021-08-29";
 

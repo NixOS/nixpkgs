@@ -7,7 +7,7 @@
   libxcrypt,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "tcb";
   version = "1.2";
 

@@ -20,7 +20,7 @@
   qt5,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "smuview";
   version = "0.0.5-unstable-2023-04-12";
 

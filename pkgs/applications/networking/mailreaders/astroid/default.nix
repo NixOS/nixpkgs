@@ -101,5 +101,7 @@ stdenv.mkDerivation rec {
     ];
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
+    # error: 'is_regular' was not declared in this scope
+    broken = true;
   };
 }

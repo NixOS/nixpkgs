@@ -8,7 +8,7 @@
   darwin,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   version = "0.3.1";
   pname = "transmission-rss";
 

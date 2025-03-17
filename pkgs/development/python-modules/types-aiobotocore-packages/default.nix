@@ -58,7 +58,7 @@ let
       };
     };
 in
-rec {
+{
   types-aiobotocore-accessanalyzer =
     buildTypesAiobotocorePackage "accessanalyzer" "2.21.1"
       "sha256-R+eS/SwpXvYD/Up9nb4Z3ExnyopPYGzZpg6z24/OXu8=";

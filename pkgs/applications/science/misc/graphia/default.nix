@@ -3,7 +3,6 @@
 , cmake
 , git
 , fetchFromGitHub
-, fetchpatch
 , wrapQtAppsHook
 , qtbase
 , qtdeclarative

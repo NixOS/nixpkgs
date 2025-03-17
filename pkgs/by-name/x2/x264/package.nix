@@ -6,7 +6,7 @@
   enableShared ? !stdenv.hostPlatform.isStatic,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "x264";
   version = "0-unstable-2025-01-03";
 

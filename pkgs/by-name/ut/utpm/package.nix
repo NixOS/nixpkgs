@@ -5,7 +5,7 @@
   openssl,
   pkg-config,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "utpm";
   version = "0-unstable-2024-12-17";
 

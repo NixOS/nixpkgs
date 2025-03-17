@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchDebianPatch,
   cmake,
   gfortran,
   blas,

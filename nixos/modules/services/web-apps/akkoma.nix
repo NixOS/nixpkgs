@@ -95,7 +95,7 @@ let
       package = mkOption {
         type = types.package;
         description = "Akkoma frontend package.";
-        example = literalExpression "pkgs.akkoma-frontends.akkoma-fe";
+        example = literalExpression "pkgs.akkoma-fe";
       };
 
       name = mkOption {
@@ -520,12 +520,12 @@ in {
         type = with types; attrsOf (submodule frontend);
         default = {
           primary = {
-            package = pkgs.akkoma-frontends.akkoma-fe;
+            package = pkgs.akkoma-fe;
             name = "akkoma-fe";
             ref = "stable";
           };
           admin = {
-            package = pkgs.akkoma-frontends.admin-fe;
+            package = pkgs.akkoma-admin-fe;
             name = "admin-fe";
             ref = "stable";
           };
@@ -533,12 +533,12 @@ in {
         defaultText = literalExpression ''
           {
             primary = {
-              package = pkgs.akkoma-frontends.akkoma-fe;
+              package = pkgs.akkoma-fe;
               name = "akkoma-fe";
               ref = "stable";
             };
             admin = {
-              package = pkgs.akkoma-frontends.admin-fe;
+              package = pkgs.akkoma-admin-fe;
               name = "admin-fe";
               ref = "stable";
             };
@@ -557,7 +557,7 @@ in {
         default = null;
         example = literalExpression ''
           {
-            "emoji/blobs.gg" = pkgs.akkoma-emoji.blobs_gg;
+            "emoji/blobs.gg" = pkgs.blobs_gg;
             "static/terms-of-service.html" = pkgs.writeText "terms-of-service.html" '''
               …
             ''';

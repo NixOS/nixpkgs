@@ -10,7 +10,7 @@
   libXi,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "x2x";
   version = "unstable-2023-04-30";
 

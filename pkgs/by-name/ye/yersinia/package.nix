@@ -14,7 +14,7 @@
   enableAdmin ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "yersinia";
   version = "unstable-2022-11-20";
 

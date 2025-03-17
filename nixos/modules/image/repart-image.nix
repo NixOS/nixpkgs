@@ -24,6 +24,7 @@
   # compression tools
 , zstd
 , xz
+, zeekstd
 
   # arguments
 , name
@@ -89,11 +90,13 @@ let
   compressionPkg = {
     "zstd" = zstd;
     "xz" = xz;
+    "zstd-seekable" = zeekstd;
   }."${compression.algorithm}";
 
   compressionCommand = {
     "zstd" = "zstd --no-progress --threads=$NIX_BUILD_CORES -${toString compression.level}";
     "xz" = "xz --keep --verbose --threads=$NIX_BUILD_CORES -${toString compression.level}";
+    "zstd-seekable" = "zeekstd --quiet --max-frame-size 2M --compression-level ${toString compression.level}";
   }."${compression.algorithm}";
 in
   stdenvNoCC.mkDerivation (finalAttrs:

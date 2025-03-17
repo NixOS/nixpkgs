@@ -8,7 +8,7 @@
   libminc,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "mni_autoreg";
   version = "unstable-2022-05-20";
 

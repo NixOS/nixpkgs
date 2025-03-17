@@ -786,7 +786,7 @@
     }
   },
   "ungoogled-chromium": {
-    "version": "134.0.6998.35",
+    "version": "134.0.6998.88",
     "deps": {
       "depot_tools": {
         "rev": "e42fac3e9c1726ab14a61a25e6291d9ccc49e688",
@@ -797,16 +797,16 @@
         "hash": "sha256-EqbwCLkseND1v3UqM+49N7GuoXJ3PlJjWOes4OijQ3U="
       },
       "ungoogled-patches": {
-        "rev": "134.0.6998.35-1",
-        "hash": "sha256-gwU3fNDrBGql5NSzkf+TBsQKxmk6zhQnFJ1Es2sHgl8="
+        "rev": "134.0.6998.88-1",
+        "hash": "sha256-Mn7Cr2jCSh1yMw6racIPAbj0gX44xhonHMQLSz4La/E="
       },
       "npmHash": "sha256-oVoTruhxTymYiGkELd2Oa1wOfjGLtChQZozP4GzOO1A="
     },
     "DEPS": {
       "src": {
         "url": "https://chromium.googlesource.com/chromium/src.git",
-        "rev": "ea6ef4c2ac15ae95d2cfd65682da62c093415099",
-        "hash": "sha256-Y/3V1cmna7nSJkS05SYsDxtPTz8bF7Q8fWYxVhVSy/g=",
+        "rev": "7e3d5c978c6d3a6eda25692cfac7f893a2b20dd0",
+        "hash": "sha256-4RRB7uYI3I7c1dSypU2gzF9TCA2MJ7yStKEvm6vfSnE=",
         "recompress": true
       },
       "src/third_party/clang-format/script": {
@@ -1026,8 +1026,8 @@
       },
       "src/third_party/devtools-frontend/src": {
         "url": "https://chromium.googlesource.com/devtools/devtools-frontend",
-        "rev": "044764a564924c9aa0897ba8c50149acc7ddf364",
-        "hash": "sha256-T8BlvYNMF77BubiR4tMvW8iAhqS0ppPAESO48/mNX3w="
+        "rev": "65b3f414b81ffe4df49202af6fc75bc26a3cb109",
+        "hash": "sha256-rdBpJWdQ5VtFnIfbr/Vq1q1euSvkbY8iIqyuTMAS2KM="
       },
       "src/third_party/dom_distiller_js/dist": {
         "url": "https://chromium.googlesource.com/chromium/dom-distiller/dist.git",
@@ -1566,8 +1566,8 @@
       },
       "src/v8": {
         "url": "https://chromium.googlesource.com/v8/v8.git",
-        "rev": "debba63b78f8791411bff379835982cb2e8cabfa",
-        "hash": "sha256-iOpnf4jq4bl0CJlHngJ1BV6b0VY1PigJIIjVXk4rqOE="
+        "rev": "a57459aad9ec3ed5f78d9ded700d52e31029efd2",
+        "hash": "sha256-IE1X6lfMyoXsN+7ebJ3RWXAgpR98AjituL3faQbNag0="
       }
     }
   }

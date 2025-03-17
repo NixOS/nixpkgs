@@ -62,6 +62,8 @@ mkKdeDerivation {
     gpsd
   ];
 
+  qtWrapperArgs = [ "--inherit-argv0" ];
+
   # Hardcoded as QStrings, which are UTF-16 so Nix can't pick these up automatically
   postFixup = ''
     mkdir -p $out/nix-support

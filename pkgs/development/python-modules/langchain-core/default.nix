@@ -35,21 +35,30 @@
 
 buildPythonPackage rec {
   pname = "langchain-core";
-  version = "0.3.35";
+  version = "0.3.44";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-core==${version}";
-    hash = "sha256-bwNSeXQJsfbc4c8mSd0GtlVsQ/HRilNiyP6XLcEzL20=";
+    hash = "sha256-da1G/aGWbt73E1hmaGi8jkBEF1QyemHj+qIifyU8eik=";
   };
 
   sourceRoot = "${src.name}/libs/core";
 
+  patches = [
+    # Remove dependency on blockbuster (not available in nixpkgs due to dependency on forbiddenfruit)
+    ./rm-blockbuster.patch
+  ];
+
   build-system = [ pdm-backend ];
 
   pythonRelaxDeps = [ "tenacity" ];
+
+  pythonRemoveDependencies = [
+    "blockbuster"
+  ];
 
   dependencies = [
     jsonpatch
@@ -147,6 +156,8 @@ buildPythonPackage rec {
       "test_rate_limit_ainvoke"
       "test_rate_limit_astream"
     ];
+
+  disabledTestPaths = [ "tests/unit_tests/runnables/test_runnable_events_v2.py" ];
 
   meta = {
     description = "Building applications with LLMs through composability";

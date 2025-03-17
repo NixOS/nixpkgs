@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitea,
   replaceVars,
-  fetchpatch,
   colord,
   setuptools,
   pikepdf,

@@ -10,7 +10,7 @@
   SDL2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "smpeg2";
   version = "unstable-2022-05-26";
 

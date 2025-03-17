@@ -48,7 +48,7 @@ let
       '';
     }));
 
-in rec {
+in {
   inherit mkTmuxPlugin;
 
   battery = mkTmuxPlugin {

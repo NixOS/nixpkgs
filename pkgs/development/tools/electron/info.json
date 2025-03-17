@@ -17,7 +17,7 @@
             "src": {
                 "fetcher": "fetchFromGitiles",
                 "hash": "sha256-hJZWDT7D2YP75CQJwYNqnMTvLyMIF3wS2yJaRuUiOhY=",
-                "postFetch": "rm -r $out/third_party/blink/web_tests; rm -r $out/third_party/hunspell/tests; rm -r $out/content/test/data; rm -rf $out/courgette/testdata; rm -r $out/extensions/test/data; rm -r $out/media/test/data; ",
+                "postFetch": "rm -r $out/third_party/blink/web_tests; rm -rf $out/third_party/hunspell/tests; rm -r $out/content/test/data; rm -rf $out/courgette/testdata; rm -r $out/extensions/test/data; rm -r $out/media/test/data; ",
                 "rev": "130.0.6723.191",
                 "url": "https://chromium.googlesource.com/chromium/src.git"
             },
@@ -47,10 +47,10 @@
             },
             "src/electron": {
                 "fetcher": "fetchFromGitHub",
-                "hash": "sha256-/tGxWvyqwb0TWli2JkFDiyrqAm6DF5JHD7NfC1XTa8I=",
+                "hash": "sha256-jumOmlCUiRRR0ubLuVRGl5E2lwbID5C0JYJ2+gJUrA8=",
                 "owner": "electron",
                 "repo": "electron",
-                "rev": "v33.4.3"
+                "rev": "v33.4.5"
             },
             "src/media/cdm/api": {
                 "fetcher": "fetchFromGitiles",
@@ -950,7 +950,7 @@
         "electron_yarn_hash": "0bzsswcg62b39xinq5vikk7qz7d15276s2vc15v1gcb5wvh05ff8",
         "modules": "130",
         "node": "20.18.3",
-        "version": "33.4.3"
+        "version": "33.4.5"
     },
     "34": {
         "chrome": "132.0.6834.210",
@@ -1000,10 +1000,10 @@
             },
             "src/electron": {
                 "fetcher": "fetchFromGitHub",
-                "hash": "sha256-HQ2RHDTG0DaZ54j6Il9Ajez8dBIg1zwG71/yOQg7o0s=",
+                "hash": "sha256-mOrKKuUkfTDjLxNvjlvHS5NP4NjdgaIdS4xgWKJBET8=",
                 "owner": "electron",
                 "repo": "electron",
-                "rev": "v34.3.2"
+                "rev": "v34.3.3"
             },
             "src/media/cdm/api": {
                 "fetcher": "fetchFromGitiles",
@@ -1915,6 +1915,6 @@
         "electron_yarn_hash": "10ny8cj2m8wn8zb5ljsfc8rpv6y4rp049zv5i5slyk3lj2zpgr6y",
         "modules": "132",
         "node": "20.18.3",
-        "version": "34.3.2"
+        "version": "34.3.3"
     }
 }

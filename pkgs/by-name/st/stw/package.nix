@@ -8,7 +8,7 @@
   libXrender,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "stw";
   version = "unstable-2022-02-04";
 

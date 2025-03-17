@@ -40,9 +40,9 @@
     ]
   },
   "contacts": {
-    "hash": "sha256-o7RoBhg0UFzZoxXj1Qovbheq1i7wBHnn4hSnEbc/D/c=",
-    "url": "https://github.com/nextcloud-releases/contacts/releases/download/v6.0.3/contacts-v6.0.3.tar.gz",
-    "version": "6.0.3",
+    "hash": "sha256-NctHwZmGw3eF0DhreHAqVd87En1PTNfJ0CyL8nZeQKU=",
+    "url": "https://github.com/nextcloud-releases/contacts/releases/download/v6.0.4/contacts-v6.0.4.tar.gz",
+    "version": "6.0.4",
     "description": "The Nextcloud contacts app is a user interface for Nextcloud's CardDAV server. Easily sync contacts from various devices with your Nextcloud and edit them online.\n\n* 🚀 **Integration with other Nextcloud apps!** Currently Mail and Calendar – more to come.\n* 🎉 **Never forget a birthday!** You can sync birthdays and other recurring events with your Nextcloud Calendar.\n* 👥 **Sharing of Adressbooks!** You want to share your contacts with your friends or coworkers? No problem!\n* 🙈 **We’re not reinventing the wheel!** Based on the great and open SabreDAV library.",
     "homepage": "https://github.com/nextcloud/contacts#readme",
     "licenses": [
@@ -50,9 +50,9 @@
     ]
   },
   "cookbook": {
-    "hash": "sha256-upbTdzu17BH6tehgCUcTxBvTVOO31Kri/33vGd4Unyw=",
-    "url": "https://github.com/christianlupus-nextcloud/cookbook-releases/releases/download/v0.11.2/cookbook-0.11.2.tar.gz",
-    "version": "0.11.2",
+    "hash": "sha256-EWLBypv588IkO1wx0vFv26NSk5GKx1pqSWTlAcW2mwE=",
+    "url": "https://github.com/christianlupus-nextcloud/cookbook-releases/releases/download/v0.11.3/cookbook-0.11.3.tar.gz",
+    "version": "0.11.3",
     "description": "A library for all your recipes. It uses JSON files following the schema.org recipe format. To add a recipe to the collection, you can paste in the URL of the recipe, and the provided web page will be parsed and downloaded to whichever folder you specify in the app settings.",
     "homepage": "https://github.com/nextcloud/cookbook/",
     "licenses": [
@@ -120,9 +120,9 @@
     ]
   },
   "forms": {
-    "hash": "sha256-TPyz/cZvFnd35Blzlewgva6WO0PmAEAtI4hNpkACQcc=",
-    "url": "https://github.com/nextcloud-releases/forms/releases/download/v4.3.9/forms-v4.3.9.tar.gz",
-    "version": "4.3.9",
+    "hash": "sha256-0CqZmvjILDNdDMoI8H9H0uphXOkLavTvXpSsoeBP6fk=",
+    "url": "https://github.com/nextcloud-releases/forms/releases/download/v4.3.10/forms-v4.3.10.tar.gz",
+    "version": "4.3.10",
     "description": "**Simple surveys and questionnaires, self-hosted!**\n\n- **📝 Simple design:** No mass of options, only the essentials. Works well on mobile of course.\n- **📊 View & export results:** Results are visualized and can also be exported as CSV in the same format used by Google Forms.\n- **🔒 Data under your control!** Unlike in Google Forms, Typeform, Doodle and others, the survey info and responses are kept private on your instance.\n- **🧑‍💻 Connect to your software:** Easily integrate Forms into your service with our full-fledged [REST-API](https://github.com/nextcloud/forms/blob/main/docs/API.md).\n- **🙋 Get involved!** We have lots of stuff planned like more question types, collaboration on forms, [and much more](https://github.com/nextcloud/forms/milestones)!",
     "homepage": "https://github.com/nextcloud/forms",
     "licenses": [
@@ -143,7 +143,7 @@
     "hash": "sha256-yfTZjAsmv2wdMNNP1Tm0fmzSIlUwRfMraNPgFEHW238=",
     "url": "https://github.com/nextcloud-releases/groupfolders/releases/download/v17.0.10/groupfolders-v17.0.10.tar.gz",
     "version": "17.0.10",
-    "description": "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder.",
+    "description": "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.",
     "homepage": "https://github.com/nextcloud/groupfolders",
     "licenses": [
       "agpl"
@@ -180,9 +180,9 @@
     ]
   },
   "integration_paperless": {
-    "hash": "sha256-UkpcmCK/LDWg0glKxlk2u4AiZIMJ6Nr/VvI3QBwpwFw=",
-    "url": "https://github.com/nextcloud-releases/integration_paperless/releases/download/v1.0.5/integration_paperless-v1.0.5.tar.gz",
-    "version": "1.0.5",
+    "hash": "sha256-Tw0VZk+ByXLmFdNBgJdFnHUiFarDP+YyulzvCmE3ivw=",
+    "url": "https://github.com/nextcloud-releases/integration_paperless/releases/download/v1.0.6/integration_paperless-v1.0.6.tar.gz",
+    "version": "1.0.6",
     "description": "Integration with the [Paperless](https://docs.paperless-ngx.com) Document Management System.\nIt adds a file action menu item that can be used to upload a file from your Nextcloud Files to Paperless.",
     "homepage": "",
     "licenses": [
@@ -190,9 +190,9 @@
     ]
   },
   "mail": {
-    "hash": "sha256-lotR7KnNtZSpoSohgFbocIIan6/NBmAEZuuT+u2Iuv0=",
-    "url": "https://github.com/nextcloud-releases/mail/releases/download/v3.7.21/mail-v3.7.21.tar.gz",
-    "version": "3.7.21",
+    "hash": "sha256-nx9trnOjtl/jd081DB8/5BjtDe6WVwcss0ynxyT/dEU=",
+    "url": "https://github.com/nextcloud-releases/mail/releases/download/v3.7.23/mail-v3.7.23.tar.gz",
+    "version": "3.7.23",
     "description": "**💌 A mail app for Nextcloud**\n\n- **🚀 Integration with other Nextcloud apps!** Currently Contacts, Calendar & Files – more to come.\n- **📥 Multiple mail accounts!** Personal and company account? No problem, and a nice unified inbox. Connect any IMAP account.\n- **🔒 Send & receive encrypted mails!** Using the great [Mailvelope](https://mailvelope.com) browser extension.\n- **🙈 We’re not reinventing the wheel!** Based on the great [Horde](https://horde.org) libraries.\n- **📬 Want to host your own mail server?** We do not have to reimplement this as you could set up [Mail-in-a-Box](https://mailinabox.email)!\n\n## Ethical AI Rating\n\n### Priority Inbox\n\nPositive:\n* The software for training and inferencing of this model is open source.\n* The model is created and trained on-premises based on the user's own data.\n* The training data is accessible to the user, making it possible to check or correct for bias or optimise the performance and CO2 usage.\n\n### Thread Summaries (opt-in)\n\n**Rating:** 🟢/🟡/🟠/🔴\n\nThe rating depends on the installed text processing backend. See [the rating overview](https://docs.nextcloud.com/server/latest/admin_manual/ai/index.html) for details.\n\nLearn more about the Nextcloud Ethical AI Rating [in our blog](https://nextcloud.com/blog/nextcloud-ethical-ai-rating/).",
     "homepage": "https://github.com/nextcloud/mail#readme",
     "licenses": [
@@ -230,9 +230,9 @@
     ]
   },
   "news": {
-    "hash": "sha256-OtW42UQtG3fCJdwPW6t6b60Y2WscZw78/2L22kMiFig=",
-    "url": "https://github.com/nextcloud/news/releases/download/25.2.1/news.tar.gz",
-    "version": "25.2.1",
+    "hash": "sha256-CAnDrbpXZVISJ4WjAAl7mhZY2t9ohBgPLdf7tGd3aIY=",
+    "url": "https://github.com/nextcloud/news/releases/download/25.3.0/news.tar.gz",
+    "version": "25.3.0",
     "description": "📰 A RSS/Atom Feed reader App for Nextcloud\n\n- 📲 Synchronize your feeds with multiple mobile or desktop [clients](https://nextcloud.github.io/news/clients/)\n- 🔄 Automatic updates of your news feeds\n- 🆓 Free and open source under AGPLv3, no ads or premium functions\n\n**System Cron is currently required for this app to work**\n\nRequirements can be found [here](https://nextcloud.github.io/news/install/#dependencies)\n\nThe Changelog is available [here](https://github.com/nextcloud/news/blob/master/CHANGELOG.md)\n\nCreate a [bug report](https://github.com/nextcloud/news/issues/new/choose)\n\nCreate a [feature request](https://github.com/nextcloud/news/discussions/new)\n\nReport a [feed issue](https://github.com/nextcloud/news/discussions/new)",
     "homepage": "https://github.com/nextcloud/news",
     "licenses": [
@@ -270,9 +270,9 @@
     ]
   },
   "polls": {
-    "hash": "sha256-sN/LzW3uw4NAy14ZtTeZZGz338LU2N+5S7FESqt9HUg=",
-    "url": "https://github.com/nextcloud-releases/polls/releases/download/v7.3.2/polls-v7.3.2.tar.gz",
-    "version": "7.3.2",
+    "hash": "sha256-fnZT4iuwlD66AVwiNPE0yurszO5/9IQsJfA1OB/dEVU=",
+    "url": "https://github.com/nextcloud-releases/polls/releases/download/v7.4.1/polls-v7.4.1.tar.gz",
+    "version": "7.4.1",
     "description": "A polls app, similar to Doodle/Dudle with the possibility to restrict access (members, certain groups/users, hidden and public).",
     "homepage": "https://github.com/nextcloud/polls",
     "licenses": [
@@ -340,9 +340,9 @@
     ]
   },
   "spreed": {
-    "hash": "sha256-JJp0dzFKJttDBuPOavraF7odo/0tVoDAeMPHVkmB78s=",
-    "url": "https://github.com/nextcloud-releases/spreed/releases/download/v19.0.13/spreed-v19.0.13.tar.gz",
-    "version": "19.0.13",
+    "hash": "sha256-Wu228AT3cRcHZs1yk14LK8s/Rhpzhzl/qnZl2ZcL6qU=",
+    "url": "https://github.com/nextcloud-releases/spreed/releases/download/v19.0.14/spreed-v19.0.14.tar.gz",
+    "version": "19.0.14",
     "description": "Chat, video & audio-conferencing using WebRTC\n\n* 💬 **Chat** Nextcloud Talk comes with a simple text chat, allowing you to share or upload files from your Nextcloud Files app or local device and mention other participants.\n* 👥 **Private, group, public and password protected calls!** Invite someone, a whole group or send a public link to invite to a call.\n* 🌐 **Federated chats** Chat with other Nextcloud users on their servers\n* 💻 **Screen sharing!** Share your screen with the participants of your call.\n* 🚀 **Integration with other Nextcloud apps** like Files, Calendar, User status, Dashboard, Flow, Maps, Smart picker, Contacts, Deck, and many more.\n* 🌉 **Sync with other chat solutions** With [Matterbridge](https://github.com/42wim/matterbridge/) being integrated in Talk, you can easily sync a lot of other chat solutions to Nextcloud Talk and vice-versa.",
     "homepage": "https://github.com/nextcloud/spreed",
     "licenses": [
@@ -400,9 +400,9 @@
     ]
   },
   "user_oidc": {
-    "hash": "sha256-2FeFmqD53eUujA80s6cec53U5XL6CXSh5h3XM0N8Afk=",
-    "url": "https://github.com/nextcloud-releases/user_oidc/releases/download/v6.3.1/user_oidc-v6.3.1.tar.gz",
-    "version": "6.3.1",
+    "hash": "sha256-jhqch6Gup7774P9seExlwhDGbDv0AK9LEzSEtmFW85A=",
+    "url": "https://github.com/nextcloud-releases/user_oidc/releases/download/v7.0.0/user_oidc-v7.0.0.tar.gz",
+    "version": "7.0.0",
     "description": "Allows flexible configuration of an OIDC server as Nextcloud login user backend.",
     "homepage": "https://github.com/nextcloud/user_oidc",
     "licenses": [

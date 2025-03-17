@@ -603,9 +603,10 @@ in
         ''
       )
       + ''
-        # clear cache after update (before migrations)
-        OLD_VERSION=$(cat ${cfg.dataDir}/version)
-        if [[ $OLD_VERSION != "${package.version}" ]]; then
+        # clear cache if package has changed (cache may contain cached paths
+        # to the old package)
+        OLD_PACKAGE=$(cat ${cfg.dataDir}/package)
+        if [[ $OLD_PACKAGE != "${package}" ]]; then
           rm -r ${cfg.dataDir}/cache/*
         fi
 
@@ -616,16 +617,21 @@ in
           echo "${lib.boolToString cfg.enableOneMinutePolling}" > ${cfg.dataDir}/one_minute_enabled
         fi
 
-        # migrate db
-        ${artisanWrapper}/bin/librenms-artisan migrate --force --no-interaction
-
-        # regenerate cache after migrations after update
+        # migrate db if package version has changed
+        # not necessary for every package change
+        OLD_VERSION=$(cat ${cfg.dataDir}/version)
         if [[ $OLD_VERSION != "${package.version}" ]]; then
+          ${artisanWrapper}/bin/librenms-artisan migrate --force --no-interaction
+          echo "${package.version}" > ${cfg.dataDir}/version
+        fi
+
+        # regenerate cache if package has changed
+        if [[ $OLD_PACKAGE != "${package}" ]]; then
           ${artisanWrapper}/bin/librenms-artisan view:clear
           ${artisanWrapper}/bin/librenms-artisan optimize:clear
           ${artisanWrapper}/bin/librenms-artisan view:cache
           ${artisanWrapper}/bin/librenms-artisan optimize
-          echo "${package.version}" > ${cfg.dataDir}/version
+          echo "${package}" > ${cfg.dataDir}/package
         fi
       '';
     };
@@ -693,6 +699,7 @@ in
       "d ${cfg.dataDir}                              0750 ${cfg.user} ${cfg.group} - -"
       "f ${cfg.dataDir}/.env                         0600 ${cfg.user} ${cfg.group} - -"
       "f ${cfg.dataDir}/version                      0600 ${cfg.user} ${cfg.group} - -"
+      "f ${cfg.dataDir}/package                      0600 ${cfg.user} ${cfg.group} - -"
       "f ${cfg.dataDir}/one_minute_enabled           0600 ${cfg.user} ${cfg.group} - -"
       "f ${cfg.dataDir}/config.json                  0600 ${cfg.user} ${cfg.group} - -"
       "d ${cfg.dataDir}/storage                      0700 ${cfg.user} ${cfg.group} - -"

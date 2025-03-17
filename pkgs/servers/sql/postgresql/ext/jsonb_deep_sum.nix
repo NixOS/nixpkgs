@@ -6,7 +6,7 @@
   buildPostgresqlExtension,
 }:
 
-buildPostgresqlExtension rec {
+buildPostgresqlExtension {
   pname = "jsonb_deep_sum";
   version = "0-unstable-2021-12-24";
 

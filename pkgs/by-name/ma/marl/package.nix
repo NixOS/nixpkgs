@@ -5,7 +5,7 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "marl";
   version = "1.0.0"; # Based on marl's CHANGES.md
 

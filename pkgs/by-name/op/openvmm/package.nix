@@ -7,7 +7,7 @@
   protobuf,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "openvmm";
   version = "0-unstable-2024-10-19";
 
@@ -33,15 +33,8 @@ rustPlatform.buildRustPackage rec {
     openssl
   ];
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "bitvec-1.1.0" = "sha256-uXOTbrGCSnl/F6IJPZuViZKXg4BEMG4+lVcLxK5KIwc=";
-      "ms-tpm-20-ref-0.1.0" = "sha256-eB3MWRlOPtxG55sLH7HIWzSjVEY05IIBZOltTpsGpnE=";
-      "mshv-bindings-0.1.1" = "sha256-CZEhFb9qDR260OFA/mlTldEMFlF8bhawVAxXFWqPIcU=";
-      "pbjson-build-0.5.1" = "sha256-itmY3c35O7j0Otb1qyr2IDUw1MBWOCB3WwyU60ajBO4=";
-    };
-  };
+  cargoHash = "sha256-6ciIbLc/L54Rhhf/IOnv63vUlqoXPi087taw6MY80HA=";
+  useFetchCargoVendor = true;
 
   meta = with lib; {
     homepage = "https://github.com/microsoft/openvmm";

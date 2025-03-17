@@ -6,7 +6,7 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
 
   pname = "mod-arpeggiator-lv2";
   version = "unstable-2021-11-09";

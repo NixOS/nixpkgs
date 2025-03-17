@@ -5,7 +5,7 @@
   gtk-engine-murrine,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "snowblind";
   version = "2020-06-07";
 

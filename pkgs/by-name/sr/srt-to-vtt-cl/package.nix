@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "srt-to-vtt-cl";
   version = "unstable-2019-01-03";
 

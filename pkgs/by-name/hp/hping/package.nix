@@ -8,7 +8,7 @@
   tcl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "hping";
   version = "2014-12-26";
 

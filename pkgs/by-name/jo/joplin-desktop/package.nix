@@ -38,7 +38,7 @@ let
     '';
     homepage = "https://joplinapp.org";
     license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ hugoreeves qjoly ];
+    maintainers = with maintainers; [ hugoreeves qjoly yajo ];
     platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ];
   };
 

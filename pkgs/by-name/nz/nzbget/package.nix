@@ -27,13 +27,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "nzbget";
-  version = "24.6";
+  version = "24.7";
 
   src = fetchFromGitHub {
     owner = "nzbgetcom";
     repo = "nzbget";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-N2cYnZUk5//hjNRen1FaIlvG+nC2tXtvffr368AIOkA=";
+    hash = "sha256-t/zVSCiSL+/8qnmLwKqmL7IL84CAtZRfZneoC0mvnJM=";
   };
 
   patches = [

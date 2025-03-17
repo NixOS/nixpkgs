@@ -12,7 +12,7 @@
   libvorbis,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "libopenglrecorder";
   version = "unstable-2020-08-13";
 

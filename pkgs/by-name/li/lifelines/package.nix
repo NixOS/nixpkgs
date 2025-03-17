@@ -11,7 +11,7 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "lifelines";
   version = "unstable-2019-05-07";
 

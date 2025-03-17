@@ -5,7 +5,7 @@
   pkg-config,
   libudev-zero,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "uni-sync";
   version = "0.2.0";
 

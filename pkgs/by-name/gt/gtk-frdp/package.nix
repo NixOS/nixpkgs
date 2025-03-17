@@ -14,7 +14,7 @@
   unstableGitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "gtk-frdp";
   version = "0-unstable-2024-12-23";
 

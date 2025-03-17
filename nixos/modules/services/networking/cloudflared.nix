@@ -10,9 +10,11 @@ let
   certificateFile = lib.mkOption {
     type = with lib.types; nullOr path;
     description = ''
-      Cert.pem file.
+      Account certificate file, necessary to create, delete and manage tunnels. It can be obtained by running `cloudflared login`.
 
-      See [Cert.pem](https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/install-and-setup/tunnel-useful-terms/#certpem).
+      Note that this is **necessary** for a fully declarative set up, as routes can not otherwise be created outside of the Cloudflare interface.
+
+      See [Cert.pem](https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/install-and-setup/tunnel-useful-terms/#certpem) for information about the file, and [Tunnel permissions](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/do-more-with-tunnels/local-management/tunnel-permissions/) for a comparison between the account certificate and the tunnel credentials file.
     '';
     default = null;
   };
@@ -301,12 +303,6 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    assertions = lib.mapAttrsToList (name: tunnel: {
-      assertion =
-        tunnel.ingress == { } || (cfg.certificateFile != null || tunnel.certificateFile != null);
-      message = "Cloudflare Tunnel ${name} has a declarative configuration, but no certificate file was defined.";
-    }) cfg.tunnels;
-
     systemd.targets = lib.mapAttrs' (
       name: tunnel:
       lib.nameValuePair "cloudflared-tunnel-${name}" {

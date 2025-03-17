@@ -7,7 +7,7 @@
   python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "x86info";
   version = "unstable-2021-08-07";
 

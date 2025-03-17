@@ -5,7 +5,7 @@
   pkg-config,
   xen,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "xen-guest-agent";
   version = "0.4.0-unstable-2024-05-31";
 
