@@ -13,6 +13,8 @@
   casadi,
   coal,
   console-bridge,
+  cppad,
+  cppadcodegen,
   eigen,
   urdfdom,
 
@@ -22,9 +24,13 @@
   # checkInputs = [
   example-robot-data,
 
+  autodiffSupport ? true,
   casadiSupport ? true,
+  codegenSupport ? true,
   collisionSupport ? true,
 }:
+
+assert codegenSupport -> autodiffSupport;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pinocchio";
@@ -45,9 +51,20 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     # silence matplotlib warning
     export MPLCONFIGDIR=$(mktemp -d)
+
+    # error: invalid use of incomplete type 'struct Eigen::internal::traits<double>'
+    # ref. https://github.com/stack-of-tasks/pinocchio/pull/2880
+    substituteInPlace unittest/cppad/basic.cpp \
+      --replace-fail \
+        "ad_Y = ad_X.array().min(Scalar(0.));" \
+        "ad_Y = ad_X.array().min(CppAD::AD<double>(0.));" \
+      --replace-fail \
+        "ad_Y = ad_X.array().max(Scalar(0.));" \
+        "ad_Y = ad_X.array().max(CppAD::AD<double>(0.));"
   '';
 
   strictDeps = true;
+  __structuredAttrs = true;
 
   nativeBuildInputs = jrl-cmakemodules.docsNativeBuildInputs;
 
@@ -62,8 +79,10 @@ stdenv.mkDerivation (finalAttrs: {
     eigen
     urdfdom
   ]
-  ++ lib.optionals collisionSupport [ coal ]
-  ++ lib.optionals casadiSupport [ casadi ];
+  ++ lib.optionals autodiffSupport [ cppad ]
+  ++ lib.optionals casadiSupport [ casadi ]
+  ++ lib.optionals codegenSupport [ cppadcodegen ]
+  ++ lib.optionals collisionSupport [ coal ];
 
   nativeCheckInputs = [
     ctestCheckHook
@@ -86,14 +105,25 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = jrl-cmakemodules.docsCmakeFlags ++ [
     (lib.cmakeBool "BUILD_PYTHON_INTERFACE" false)
+    (lib.cmakeBool "BUILD_TESTING" finalAttrs.finalPackage.doCheck)
+    (lib.cmakeBool "BUILD_WITH_AUTODIFF_SUPPORT" autodiffSupport)
     (lib.cmakeBool "BUILD_WITH_CASADI_SUPPORT" casadiSupport)
+    (lib.cmakeBool "BUILD_WITH_CODEGEN_SUPPORT" codegenSupport)
     (lib.cmakeBool "BUILD_WITH_COLLISION_SUPPORT" collisionSupport)
     (lib.cmakeBool "INSTALL_DOCUMENTATION" true)
   ];
 
   doCheck = true;
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    inherit
+      autodiffSupport
+      casadiSupport
+      codegenSupport
+      collisionSupport
+      ;
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Fast and flexible implementation of Rigid Body Dynamics algorithms and their analytical derivatives";
