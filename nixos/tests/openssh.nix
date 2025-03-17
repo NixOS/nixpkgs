@@ -274,5 +274,8 @@ in {
             "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil server-no-pam true",
             timeout=30
         )
+
+    # None of the per-connection units should have failed.
+    server_lazy.fail("systemctl is-failed 'sshd@*.service'")
   '';
 })
