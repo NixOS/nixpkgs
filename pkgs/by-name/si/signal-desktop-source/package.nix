@@ -29,6 +29,7 @@ let
   '';
 
   sqlcipher-signal-extension = callPackage ./sqlcipher-signal-extension.nix { };
+  libsignal-node = callPackage ./libsignal-node.nix { inherit nodejs; };
 
   ringrtc = stdenv.mkDerivation (finalAttrs: {
     pname = "ringrtc-bin";
@@ -71,6 +72,7 @@ let
       runHook postInstall
     '';
   });
+
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "signal-desktop-source";
@@ -122,6 +124,9 @@ stdenv.mkDerivation (finalAttrs: {
     cp ${sqlcipher-signal-extension}/share/sqlite3.gyp node_modules/@signalapp/better-sqlite3/deps/sqlite3.gyp
 
     cp -r ${ringrtc} node_modules/@signalapp/ringrtc/build
+
+    rm -fr node_modules/@signalapp/libsignal-client/prebuilds
+    cp -r ${libsignal-node}/lib node_modules/@signalapp/libsignal-client/prebuilds
   '';
 
   buildPhase = ''
@@ -183,7 +188,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   passthru = {
-    inherit sqlcipher-signal-extension;
+    inherit sqlcipher-signal-extension libsignal-node;
   };
 
   meta = {
@@ -215,7 +220,6 @@ stdenv.mkDerivation (finalAttrs: {
       fromSource
 
       # ringrtc
-      # node_modules/@signalapp/libsignal-client/prebuilds/
       binaryNativeCode
     ];
   };
