@@ -12845,6 +12845,17 @@ final: prev:
     meta.hydraPlatforms = [ ];
   };
 
+  sonarlint-nvim = buildVimPlugin {
+    pname = "sonarlint.nvim";
+    version = "2025-01-24";
+    src = fetchgit {
+      url = "https://gitlab.com/schrieveslaach/sonarlint.nvim";
+      rev = "05cd411751b66efc734e165a3266167f6bddc717";
+      sha256 = "0pcmg86j8mcav4fg283fzwiqmzpjvfdr3g6nsh2ar4y9zb05r9q9";
+    };
+    meta.homepage = "https://gitlab.com/schrieveslaach/sonarlint.nvim";
+  };
+
   sonokai = buildVimPlugin {
     pname = "sonokai";
     version = "2025-02-24";
