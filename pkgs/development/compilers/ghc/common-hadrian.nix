@@ -455,6 +455,11 @@ stdenv.mkDerivation ({
     # GHC tries the host xattr /usr/bin/xattr by default which fails since it expects python to be 2.7
     export XATTR=${lib.getBin xattr}/bin/xattr
   ''
+  # Fix aarch64-linux builds of 9.6.0 - 9.6.4
+  # https://gitlab.haskell.org/ghc/ghc/-/issues/24348
+  + lib.optionalString (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64 && lib.versionAtLeast version "9.6" && lib.versionOlder version "9.6.5") ''
+    export NIX_CFLAGS_COMPILE+=" -Wno-incompatible-pointer-types"
+  ''
   # If we are not using release tarballs, some files need to be generated using
   # the boot script.
   + lib.optionalString (rev != null) ''
