@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "minizinc";
-  version = "2.9.0";
+  version = "2.9.2";
 
   src = fetchFromGitHub {
     owner = "MiniZinc";
     repo = "libminizinc";
     rev = finalAttrs.version;
-    sha256 = "sha256-uRSAlt72+kiqJeNcJ3aI5I3Jd4EJMfAq4IlO5+TntZk=";
+    sha256 = "sha256-rR+QvRt73wvulx+T+vhSc3354Cpx1QC6+adaodEiQ7Q=";
   };
 
   nativeBuildInputs = [
