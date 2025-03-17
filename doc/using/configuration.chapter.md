@@ -95,14 +95,14 @@ There are several ways to tweak how Nix handles a package which has been marked 
     }
     ```
 
-    For a more useful example, try the following. This configuration only allows unfree packages named roon-server and visual studio code:
+    The following example only allows two specific unfree packages:
 
     ```nix
     {
-      allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
-        "roon-server"
-        "vscode"
-      ];
+      allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) (map lib.getName [
+        roon-server
+        vscode-fhs
+      ]);
     }
     ```
 
