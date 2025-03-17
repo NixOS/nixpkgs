@@ -45,7 +45,7 @@ let
   forceRust = features.rust or false;
   # Architecture support collected from HAVE_RUST Kconfig definitions and the following table:
   # https://web.git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/rust/arch-support.rst
-  kernelSupportsRust = (
+  rustByDefault = (
     lib.versionAtLeast version "6.12"
     && (
       stdenv.hostPlatform.isx86_64
@@ -55,14 +55,13 @@ let
     )
   );
 
-  # Currently only enabling Rust by default on kernel 6.12+,
-  # which actually has features that use Rust that we want.
-  defaultRust = lib.versionAtLeast version "6.12" && rustAvailable;
   withRust =
-    assert lib.assertMsg (!(forceRust && !kernelSupportsRust)) ''
-      Kernel ${version} is not declared as supporting Rust on this host platform and compiler.
-    '';
-    (forceRust || defaultRust) && kernelSupportsRust;
+    lib.warnIfNot (forceRust -> rustAvailable)
+      "force-enabling Rust for Linux without an available rustc"
+      lib.warnIfNot
+      (forceRust -> rustByDefault)
+      "force-enabling Rust for Linux on an unsupported kernel version, host platform or compiler"
+      (forceRust || (rustAvailable && rustByDefault));
 
   options = {
 
