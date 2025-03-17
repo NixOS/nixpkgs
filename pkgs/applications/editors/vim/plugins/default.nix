@@ -24,6 +24,11 @@ let
     inherit (neovimUtils) buildNeovimPlugin;
   };
 
+  extras = callPackage ./extras.nix {
+    inherit buildVimPlugin;
+    inherit (neovimUtils) buildNeovimPlugin;
+  };
+
   # TL;DR
   # * Add your plugin to ./vim-plugin-names
   # * run ./update.py
@@ -36,9 +41,11 @@ let
   };
 
   aliases = if config.allowAliases then (import ./aliases.nix lib) else final: prev: { };
-
-  extensible-self = lib.makeExtensible (
-    extends aliases (extends overrides (extends plugins initialPackages))
-  );
 in
-extensible-self
+lib.pipe initialPackages [
+  (extends plugins)
+  (extends extras)
+  (extends overrides)
+  (extends aliases)
+  lib.makeExtensible
+]
