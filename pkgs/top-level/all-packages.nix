@@ -5744,6 +5744,15 @@ with pkgs;
       };
     }) else ccWrapper;
 
+  gnuStdenv =
+    if stdenv.cc.isGNU
+    then stdenv
+    else gccStdenv.override {
+      cc = gccStdenv.cc.override {
+        bintools = buildPackages.binutils;
+      };
+    };
+
   gccStdenv =
     if stdenv.cc.isGNU
     then stdenv
