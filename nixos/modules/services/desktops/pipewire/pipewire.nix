@@ -372,10 +372,13 @@ in
     ) "${lv2Plugins}/lib/lv2";
 
     # Mask pw-pulse if it's not wanted
-    systemd.user.services.pipewire-pulse.enable = cfg.pulse.enable;
-    systemd.user.sockets.pipewire-pulse.enable = cfg.pulse.enable;
+    systemd.services.pipewire-pulse.enable = cfg.pulse.enable && cfg.systemWide;
+    systemd.sockets.pipewire-pulse.enable = cfg.pulse.enable && cfg.systemWide;
+    systemd.user.services.pipewire-pulse.enable = cfg.pulse.enable && !cfg.systemWide;
+    systemd.user.sockets.pipewire-pulse.enable = cfg.pulse.enable && !cfg.systemWide;
 
     systemd.sockets.pipewire.wantedBy = mkIf cfg.socketActivation [ "sockets.target" ];
+    systemd.sockets.pipewire-pulse.wantedBy = mkIf cfg.socketActivation [ "sockets.target" ];
     systemd.user.sockets.pipewire.wantedBy = mkIf cfg.socketActivation [ "sockets.target" ];
     systemd.user.sockets.pipewire-pulse.wantedBy = mkIf cfg.socketActivation [ "sockets.target" ];
 

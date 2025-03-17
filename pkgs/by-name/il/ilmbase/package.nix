@@ -6,7 +6,7 @@
   openexr,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "ilmbase";
   version = lib.getVersion openexr;
 

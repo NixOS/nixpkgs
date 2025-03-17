@@ -8,7 +8,7 @@
   which,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "vhd2vl";
   version = "unstable-2022-12-26";
 

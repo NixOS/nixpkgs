@@ -4,7 +4,7 @@
   lib,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation {
   pname = "mint-cursor-themes";
   version = "1.0.2";
 

@@ -7,7 +7,7 @@
   unstableGitUpdater,
 }:
 
-ocamlPackages.buildDunePackage rec {
+ocamlPackages.buildDunePackage {
   pname = "wayland-proxy-virtwl";
   version = "0-unstable-2025-01-07";
 

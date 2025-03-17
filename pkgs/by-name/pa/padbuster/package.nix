@@ -5,7 +5,7 @@
   perl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "padbuster";
   version = "0.3.3";
 

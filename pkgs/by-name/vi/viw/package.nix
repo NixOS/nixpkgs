@@ -5,7 +5,7 @@
   ncurses,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "viw";
   version = "unstable-20171029";
 

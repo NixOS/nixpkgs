@@ -10,11 +10,11 @@
 
 stdenv.mkDerivation rec {
   pname = "tboot";
-  version = "1.11.3";
+  version = "1.11.7";
 
   src = fetchurl {
     url = "mirror://sourceforge/tboot/${pname}-${version}.tar.gz";
-    hash = "sha256-TIs/xLxLBkKBN0a0CRB2KMmCq8QgICH1++i485WDU3A=";
+    hash = "sha256-D8GE70yQh40YPnGcahHncyBHHh1MD+GmECATJVOtKnI=";
   };
 
   buildInputs = [

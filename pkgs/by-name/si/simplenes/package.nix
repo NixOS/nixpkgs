@@ -6,7 +6,7 @@
   sfml,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "simplenes";
   version = "unstable-2019-03-13";
 

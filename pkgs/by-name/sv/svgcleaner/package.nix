@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "SVGCleaner";
   version = "unstable-2021-08-30";
 

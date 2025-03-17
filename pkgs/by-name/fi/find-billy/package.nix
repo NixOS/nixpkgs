@@ -7,18 +7,19 @@
   just,
   inkscape,
   imagemagick,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
   pname = "find-billy";
-  version = "1.0.12";
+  version = "1.0.13";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "annaaurora";
     repo = "Find-Billy";
     rev = "v${version}";
-    hash = "sha256-A8pfkL000pl9ymQCHphb6HFip+Wah4k9Tc/8ruuHQlw=";
+    hash = "sha256-VpQpAODasJpHLU1UQ3NoVnrO+tvwdMNpPDNkg/NDM+4=";
   };
 
   strictDeps = true;
@@ -65,6 +66,8 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "2 dimensional Pixel Art Jump & Run";

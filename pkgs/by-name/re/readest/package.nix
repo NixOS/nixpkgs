@@ -98,7 +98,7 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/readest/readest/releases/tag/v${version}";
     mainProgram = "readest";
     license = lib.licenses.agpl3Plus;
-    maintainers = with lib.maintainers; [ nayeko ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.linux;
   };
 }

@@ -23,7 +23,7 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "john";
   version = "rolling-2404";
 

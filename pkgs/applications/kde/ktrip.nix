@@ -17,7 +17,7 @@
   qtquickcontrols2,
 }:
 
-mkDerivation rec {
+mkDerivation {
   pname = "ktrip";
 
   nativeBuildInputs = [

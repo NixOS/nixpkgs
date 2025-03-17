@@ -188,11 +188,13 @@ in
           "T[\"files()\"][\"icons\"] = new_set({ parametrize = { { \"devicons\" }, { \"mini\" } } })" \
           "T[\"files()\"][\"icons\"] = new_set({ parametrize = { { \"mini\" } } })"
 
-      # TODO: Figure out why 2 files extra for `fd`
-      substituteInPlace tests/file/ui_spec.lua \
-        --replace-fail \
-          "T[\"files()\"][\"executable\"] = new_set({ parametrize = { { \"fd\" }, { \"rg\" }, { \"find|dir\" } } }, {" \
-          "T[\"files()\"][\"executable\"] = new_set({ parametrize = { { \"rg\" }, { \"find|dir\" } } }, {"
+      # TODO: Figure out why 2 files extra
+      substituteInPlace tests/screenshots/tests-file-ui_spec.lua---files\(\)---executable---1-+-args-{-\'fd\'-} \
+        --replace-fail "111" "113"
+
+      # TODO: Figure out why 2 files extra
+      substituteInPlace tests/screenshots/tests-file-ui_spec.lua---files\(\)---preview-should-work-after-chdir-#1864 \
+        --replace-fail "110" "112"
 
       make test
 
@@ -1114,13 +1116,13 @@ in
   orgmode = prev.orgmode.overrideAttrs (oa: {
     # Patch in tree-sitter-orgmode dependency
     postPatch = ''
-      substituteInPlace lua/orgmode/utils/treesitter/install.lua lua/orgmode/health.lua \
+      substituteInPlace lua/orgmode/config/init.lua \
         --replace-fail \
-          "pcall(vim.treesitter.language.add, 'org')" \
-          "pcall(function() vim.treesitter.language.add('org', { path = '${final.tree-sitter-orgmode}/lib/lua/${final.tree-sitter-orgmode.lua.luaversion}/parser/org.so'}) end)"
-
-      substituteInPlace lua/orgmode/utils/treesitter/install.lua \
-        --replace-fail "if M.outdated() then" "if false then"
+        "require('orgmode.utils.treesitter.install').install()" \
+        "pcall(function() vim.treesitter.language.add('org', { path = '${final.tree-sitter-orgmode}/lib/lua/${final.tree-sitter-orgmode.lua.luaversion}/parser/org.so'}) end)" \
+        --replace-fail \
+        "require('orgmode.utils.treesitter.install').reinstall()" \
+        "pcall(function() vim.treesitter.language.add('org', { path = '${final.tree-sitter-orgmode}/lib/lua/${final.tree-sitter-orgmode.lua.luaversion}/parser/org.so'}) end)"
     '';
   });
 

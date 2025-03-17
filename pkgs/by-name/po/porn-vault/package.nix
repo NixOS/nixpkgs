@@ -1,6 +1,5 @@
 {
   fetchFromGitLab,
-  fetchurl,
   rustPlatform,
   lib,
   pnpm_9,
@@ -9,8 +8,6 @@
   ffmpeg,
   imagemagick,
   makeWrapper,
-  autoPatchelfHook,
-  writeShellApplication,
 }:
 let
   izzy = rustPlatform.buildRustPackage rec {

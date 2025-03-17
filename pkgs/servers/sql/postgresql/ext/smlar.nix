@@ -6,7 +6,7 @@
   buildPostgresqlExtension,
 }:
 
-buildPostgresqlExtension rec {
+buildPostgresqlExtension {
   pname = "smlar-unstable";
   version = "2021-11-08";
 

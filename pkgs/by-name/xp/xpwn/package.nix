@@ -10,7 +10,7 @@
   openssl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "xpwn";
   version = "0.5.8git";
 

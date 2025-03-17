@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, bundlerEnv, ruby_3_2, makeWrapper, nixosTests }:
 
 let
-  version = "5.1.6";
+  version = "5.1.7";
   rubyEnv = bundlerEnv {
     name = "redmine-env-${version}";
 
@@ -16,7 +16,7 @@ in
 
     src = fetchurl {
       url = "https://www.redmine.org/releases/redmine-${version}.tar.gz";
-      hash = "sha256-1zWE501pKqlGRHmdmG306Eb7WaQyBcFr2FftVs8Kvtk=";
+      hash = "sha256-x1x94iWzyekg298u3dpse0VCIamYiQdxGnENg+UCcx4=";
     };
 
     nativeBuildInputs = [ makeWrapper ];
@@ -50,6 +50,6 @@ in
       platforms = platforms.linux;
       maintainers = with maintainers; [ aanderse felixsinger megheaiulian ];
       license = licenses.gpl2;
-      knownVulnerabilities = [ "CVE-2024-54133" "GHSA-r95h-9x8f-r3f7" ];
+      knownVulnerabilities = [ "CVE-2024-54133" ];
     };
   }

@@ -100,9 +100,9 @@ in {
       major = "3";
       minor = "14";
       patch = "0";
-      suffix = "a5";
+      suffix = "a6";
     };
-    hash = "sha256-dOg/Jt4eT7nu8bVkks/5JQiDS7cawT9cWAQ4zp8JNoI=";
+    hash = "sha256-jWGB5TMdmizWykBa4SMOiFiaBD9HaOu0Q9OInUXBw1w=";
     inherit passthruFun;
   };
   # Minimal versions of Python (built without optional dependencies)

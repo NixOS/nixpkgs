@@ -3,7 +3,6 @@
   stdenv,
   buildNpmPackage,
   fetchFromGitHub,
-  fetchpatch2,
   python3,
   nodejs,
   node-gyp,

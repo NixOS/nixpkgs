@@ -5,7 +5,7 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "stardust-xr-magnetar";
   version = "0-unstable-2024-12-29";
 

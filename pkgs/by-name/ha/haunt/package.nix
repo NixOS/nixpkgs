@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  fetchpatch,
   autoreconfHook,
   callPackage,
   guile,

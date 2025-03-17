@@ -444,6 +444,7 @@ with lib.maintainers;
     members = [
       globin
       krav
+      leona
       talyz
       yayayayaka
     ];
@@ -548,7 +549,10 @@ with lib.maintainers;
   };
 
   infisical = {
-    members = [ akhilmhdh ];
+    members = [
+      akhilmhdh
+      mahyarmirrashed
+    ];
     scope = "Maintain Infisical";
     shortName = "Infisical";
   };

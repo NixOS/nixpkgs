@@ -1,4 +1,4 @@
-{ lib, clangStdenv, fetchFromGitHub, fetchpatch, libxml2, openssl
+{ lib, clangStdenv, fetchFromGitHub, libxml2, openssl
 , openldap, mariadb, libmysqlclient, libpq
 , gnustep-make
 , gnustep-base

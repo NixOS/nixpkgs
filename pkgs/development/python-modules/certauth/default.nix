@@ -9,7 +9,7 @@
   pythonOlder,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "certauth";
   version = "1.3.0";
   pyproject = true;

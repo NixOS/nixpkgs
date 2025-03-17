@@ -9,7 +9,7 @@
   ebtks,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "N3";
   version = "unstable-2018-08-09";
 

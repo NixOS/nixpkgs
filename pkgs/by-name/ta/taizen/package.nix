@@ -10,7 +10,7 @@
   darwin,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "taizen";
   version = "unstable-2023-06-05";
 

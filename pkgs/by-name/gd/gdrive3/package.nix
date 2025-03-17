@@ -8,17 +8,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "gdrive";
-  version = "3.9.0";
+  version = "3.9.1";
 
   src = fetchFromGitHub {
     owner = "glotlabs";
     repo = "gdrive";
     rev = version;
-    hash = "sha256-vWd1sto89U2ZJWZZebPjrbMyBjZMs9buoPEPKocDVnY=";
+    hash = "sha256-1yJg+rEhKTGXC7mlHxnWGUuAm9/RwhD6/Xg/GBKyQMw=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-x5Q9/2Op7ACtNiYeg5CuInMTiOngVCKxFWeHtPVow6A=";
+  cargoHash = "sha256-ZIswHJBV1uwrnSm5BmQgb8tVD1XQMTQXQ5DWvBj1WDk=";
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Security

@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   wrapGAppsHook3,
   wrapQtAppsHook,

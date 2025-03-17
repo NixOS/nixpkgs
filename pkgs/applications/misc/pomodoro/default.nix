@@ -6,7 +6,7 @@
   Foundation,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "pomodoro";
   version = "unstable-2021-06-18";
 

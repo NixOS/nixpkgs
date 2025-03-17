@@ -20,7 +20,6 @@
   clucene_core_2,
   icu75,
   libexttextcat,
-  openldap,
   libsodium,
   libstemmer,
   cyrus_sasl,
@@ -30,6 +29,8 @@
   libtirpc,
   withApparmor ? false,
   libapparmor,
+  withLDAP ? true,
+  openldap,
   withUnwind ? false,
   libunwind,
   # Auth modules
@@ -65,7 +66,6 @@ stdenv.mkDerivation rec {
       clucene_core_2
       icu75
       libexttextcat
-      openldap
       libsodium
       libstemmer
       cyrus_sasl.dev
@@ -78,6 +78,7 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optional (stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isDarwin) libtirpc
     ++ lib.optional withApparmor libapparmor
+    ++ lib.optional withLDAP openldap
     ++ lib.optional withUnwind libunwind
     ++ lib.optional withMySQL libmysqlclient
     ++ lib.optional withPgSQL libpq
@@ -142,12 +143,10 @@ stdenv.mkDerivation rec {
       # We need this so utilities default to reading /etc/dovecot/dovecot.conf file.
       "--sysconfdir=/etc"
       "--with-moduledir=${placeholder "out"}/lib/dovecot/modules"
-      "--with-ldap"
       "--with-ssl=openssl"
       "--with-zlib"
       "--with-bzlib"
       "--with-lz4"
-      "--with-ldap"
       "--with-lucene"
       "--with-icu"
       "--with-textcat"
@@ -170,10 +169,11 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optional stdenv.hostPlatform.isLinux "--with-systemd"
     ++ lib.optional stdenv.hostPlatform.isDarwin "--enable-static"
+    ++ lib.optional withLDAP "--with-ldap"
+    ++ lib.optional withLua "--with-lua"
     ++ lib.optional withMySQL "--with-mysql"
     ++ lib.optional withPgSQL "--with-pgsql"
-    ++ lib.optional withSQLite "--with-sqlite"
-    ++ lib.optional withLua "--with-lua";
+    ++ lib.optional withSQLite "--with-sqlite";
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 

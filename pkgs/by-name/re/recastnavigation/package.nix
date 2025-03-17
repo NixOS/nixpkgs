@@ -9,7 +9,7 @@
   catch,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "recastai";
   # use latest revision for the CMake build process and OpenMW
   # OpenMW use e75adf86f91eb3082220085e42dda62679f9a3ea

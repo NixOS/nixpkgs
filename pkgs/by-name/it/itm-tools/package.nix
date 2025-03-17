@@ -5,7 +5,7 @@
   pkg-config,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "itm-tools";
   version = "unstable-2019-11-15";
 

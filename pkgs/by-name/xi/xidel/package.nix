@@ -38,7 +38,7 @@ let
     hash = "sha256-x0AjOTa1g7gJOR2iBO76yBt1kzcRNujHRUsq5QOlfP0=";
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "xidel";
   version = "unstable-2022-11-01";
 

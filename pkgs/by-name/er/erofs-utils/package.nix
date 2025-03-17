@@ -9,10 +9,10 @@
   lz4,
   xz,
   zlib,
+  zstd,
   libselinux,
   fuseSupport ? stdenv.hostPlatform.isLinux,
   selinuxSupport ? false,
-  lzmaSupport ? false,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -37,16 +37,16 @@ stdenv.mkDerivation (finalAttrs: {
       util-linux
       lz4
       zlib
+      xz
+      zstd
     ]
     ++ lib.optionals fuseSupport [ fuse ]
-    ++ lib.optionals selinuxSupport [ libselinux ]
-    ++ lib.optionals lzmaSupport [ xz ];
+    ++ lib.optionals selinuxSupport [ libselinux ];
 
   configureFlags =
     [ "MAX_BLOCK_SIZE=4096" ]
     ++ lib.optional fuseSupport "--enable-fuse"
-    ++ lib.optional selinuxSupport "--with-selinux"
-    ++ lib.optional lzmaSupport "--enable-lzma";
+    ++ lib.optional selinuxSupport "--with-selinux";
 
   meta = with lib; {
     homepage = "https://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs-utils.git/about/";

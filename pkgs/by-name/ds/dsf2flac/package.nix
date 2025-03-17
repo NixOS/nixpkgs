@@ -11,7 +11,7 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "dsf2flac";
   version = "unstable-2021-07-31";
 

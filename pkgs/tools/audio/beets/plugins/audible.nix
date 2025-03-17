@@ -7,14 +7,14 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "beets-audible";
-  version = "1.0.0";
+  version = "1.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Neurrone";
     repo = "beets-audible";
     rev = "v${version}";
-    hash = "sha256-m955KPtYfjmtm9kHhkZLWoMYzVq0THOwvKCJYiVna7k=";
+    hash = "sha256-Sds16h+W9t7N755ADPXXDi+SxwouBMxP9ApUqaXedqY=";
   };
 
   pythonRelaxDeps = true;

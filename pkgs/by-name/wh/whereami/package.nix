@@ -7,7 +7,7 @@
 let
   libExt = stdenv.hostPlatform.extensions.sharedLibrary;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "whereami";
   version = "unstable-2022-02-18";
 

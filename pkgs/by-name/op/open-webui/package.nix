@@ -163,6 +163,7 @@ python312.pkgs.buildPythonApplication rec {
       requests
       restrictedpython
       sentence-transformers
+      sentencepiece
       soundfile
       tiktoken
       transformers

@@ -49,7 +49,7 @@
       ],
       "builds": {
         "243.22562.218": "https://plugins.jetbrains.com/files/1347/667258/scala-intellij-bin-2024.3.35.zip",
-        "243.25659.59": "https://plugins.jetbrains.com/files/1347/681279/scala-intellij-bin-2024.3.38.zip"
+        "243.25659.59": "https://plugins.jetbrains.com/files/1347/696516/scala-intellij-bin-2024.3.42.zip"
       },
       "name": "scala"
     },
@@ -1366,19 +1366,19 @@
         "webstorm"
       ],
       "builds": {
-        "243.22562.218": "https://plugins.jetbrains.com/files/17718/688477/github-copilot-intellij-1.5.37-242.zip",
-        "243.22562.220": "https://plugins.jetbrains.com/files/17718/688477/github-copilot-intellij-1.5.37-242.zip",
-        "243.24978.546": "https://plugins.jetbrains.com/files/17718/688477/github-copilot-intellij-1.5.37-242.zip",
-        "243.24978.79": "https://plugins.jetbrains.com/files/17718/688477/github-copilot-intellij-1.5.37-242.zip",
-        "243.25659.34": "https://plugins.jetbrains.com/files/17718/688477/github-copilot-intellij-1.5.37-242.zip",
-        "243.25659.40": "https://plugins.jetbrains.com/files/17718/688477/github-copilot-intellij-1.5.37-242.zip",
-        "243.25659.41": "https://plugins.jetbrains.com/files/17718/688477/github-copilot-intellij-1.5.37-242.zip",
-        "243.25659.42": "https://plugins.jetbrains.com/files/17718/688477/github-copilot-intellij-1.5.37-242.zip",
-        "243.25659.43": "https://plugins.jetbrains.com/files/17718/688477/github-copilot-intellij-1.5.37-242.zip",
-        "243.25659.45": "https://plugins.jetbrains.com/files/17718/688477/github-copilot-intellij-1.5.37-242.zip",
-        "243.25659.52": "https://plugins.jetbrains.com/files/17718/688477/github-copilot-intellij-1.5.37-242.zip",
-        "243.25659.54": "https://plugins.jetbrains.com/files/17718/688477/github-copilot-intellij-1.5.37-242.zip",
-        "243.25659.59": "https://plugins.jetbrains.com/files/17718/688477/github-copilot-intellij-1.5.37-242.zip"
+        "243.22562.218": "https://plugins.jetbrains.com/files/17718/694875/github-copilot-intellij-1.5.38-243.zip",
+        "243.22562.220": "https://plugins.jetbrains.com/files/17718/694875/github-copilot-intellij-1.5.38-243.zip",
+        "243.24978.546": "https://plugins.jetbrains.com/files/17718/694875/github-copilot-intellij-1.5.38-243.zip",
+        "243.24978.79": "https://plugins.jetbrains.com/files/17718/694875/github-copilot-intellij-1.5.38-243.zip",
+        "243.25659.34": "https://plugins.jetbrains.com/files/17718/694875/github-copilot-intellij-1.5.38-243.zip",
+        "243.25659.40": "https://plugins.jetbrains.com/files/17718/694875/github-copilot-intellij-1.5.38-243.zip",
+        "243.25659.41": "https://plugins.jetbrains.com/files/17718/694875/github-copilot-intellij-1.5.38-243.zip",
+        "243.25659.42": "https://plugins.jetbrains.com/files/17718/694875/github-copilot-intellij-1.5.38-243.zip",
+        "243.25659.43": "https://plugins.jetbrains.com/files/17718/694875/github-copilot-intellij-1.5.38-243.zip",
+        "243.25659.45": "https://plugins.jetbrains.com/files/17718/694875/github-copilot-intellij-1.5.38-243.zip",
+        "243.25659.52": "https://plugins.jetbrains.com/files/17718/694875/github-copilot-intellij-1.5.38-243.zip",
+        "243.25659.54": "https://plugins.jetbrains.com/files/17718/694875/github-copilot-intellij-1.5.38-243.zip",
+        "243.25659.59": "https://plugins.jetbrains.com/files/17718/694875/github-copilot-intellij-1.5.38-243.zip"
       },
       "name": "github-copilot"
     },
@@ -1465,19 +1465,19 @@
         "webstorm"
       ],
       "builds": {
-        "243.22562.218": "https://plugins.jetbrains.com/files/18824/671527/CodeGlancePro-1.9.6-signed.zip",
-        "243.22562.220": "https://plugins.jetbrains.com/files/18824/671527/CodeGlancePro-1.9.6-signed.zip",
-        "243.24978.546": "https://plugins.jetbrains.com/files/18824/671527/CodeGlancePro-1.9.6-signed.zip",
-        "243.24978.79": "https://plugins.jetbrains.com/files/18824/671527/CodeGlancePro-1.9.6-signed.zip",
-        "243.25659.34": "https://plugins.jetbrains.com/files/18824/671527/CodeGlancePro-1.9.6-signed.zip",
-        "243.25659.40": "https://plugins.jetbrains.com/files/18824/671527/CodeGlancePro-1.9.6-signed.zip",
-        "243.25659.41": "https://plugins.jetbrains.com/files/18824/671527/CodeGlancePro-1.9.6-signed.zip",
-        "243.25659.42": "https://plugins.jetbrains.com/files/18824/671527/CodeGlancePro-1.9.6-signed.zip",
-        "243.25659.43": "https://plugins.jetbrains.com/files/18824/671527/CodeGlancePro-1.9.6-signed.zip",
-        "243.25659.45": "https://plugins.jetbrains.com/files/18824/671527/CodeGlancePro-1.9.6-signed.zip",
-        "243.25659.52": "https://plugins.jetbrains.com/files/18824/671527/CodeGlancePro-1.9.6-signed.zip",
-        "243.25659.54": "https://plugins.jetbrains.com/files/18824/671527/CodeGlancePro-1.9.6-signed.zip",
-        "243.25659.59": "https://plugins.jetbrains.com/files/18824/671527/CodeGlancePro-1.9.6-signed.zip"
+        "243.22562.218": "https://plugins.jetbrains.com/files/18824/694222/CodeGlancePro-1.9.7-signed.zip",
+        "243.22562.220": "https://plugins.jetbrains.com/files/18824/694222/CodeGlancePro-1.9.7-signed.zip",
+        "243.24978.546": "https://plugins.jetbrains.com/files/18824/694222/CodeGlancePro-1.9.7-signed.zip",
+        "243.24978.79": "https://plugins.jetbrains.com/files/18824/694222/CodeGlancePro-1.9.7-signed.zip",
+        "243.25659.34": "https://plugins.jetbrains.com/files/18824/694222/CodeGlancePro-1.9.7-signed.zip",
+        "243.25659.40": "https://plugins.jetbrains.com/files/18824/694222/CodeGlancePro-1.9.7-signed.zip",
+        "243.25659.41": "https://plugins.jetbrains.com/files/18824/694222/CodeGlancePro-1.9.7-signed.zip",
+        "243.25659.42": "https://plugins.jetbrains.com/files/18824/694222/CodeGlancePro-1.9.7-signed.zip",
+        "243.25659.43": "https://plugins.jetbrains.com/files/18824/694222/CodeGlancePro-1.9.7-signed.zip",
+        "243.25659.45": "https://plugins.jetbrains.com/files/18824/694222/CodeGlancePro-1.9.7-signed.zip",
+        "243.25659.52": "https://plugins.jetbrains.com/files/18824/694222/CodeGlancePro-1.9.7-signed.zip",
+        "243.25659.54": "https://plugins.jetbrains.com/files/18824/694222/CodeGlancePro-1.9.7-signed.zip",
+        "243.25659.59": "https://plugins.jetbrains.com/files/18824/694222/CodeGlancePro-1.9.7-signed.zip"
       },
       "name": "codeglance-pro"
     },
@@ -1711,9 +1711,9 @@
         "rust-rover"
       ],
       "builds": {
-        "243.25659.42": "https://plugins.jetbrains.com/files/22407/690878/intellij-rust-243.25659.54.zip",
-        "243.25659.54": "https://plugins.jetbrains.com/files/22407/690878/intellij-rust-243.25659.54.zip",
-        "243.25659.59": "https://plugins.jetbrains.com/files/22407/690878/intellij-rust-243.25659.54.zip"
+        "243.25659.42": "https://plugins.jetbrains.com/files/22407/697137/intellij-rust-243.26053.17__1_.zip",
+        "243.25659.54": "https://plugins.jetbrains.com/files/22407/697137/intellij-rust-243.26053.17__1_.zip",
+        "243.25659.59": "https://plugins.jetbrains.com/files/22407/697137/intellij-rust-243.26053.17__1_.zip"
       },
       "name": "rust"
     },
@@ -1848,6 +1848,39 @@
         "243.25659.59": "https://plugins.jetbrains.com/files/23043/635877/MermaidChart-1.1.8.zip"
       },
       "name": "mermaid-chart"
+    },
+    "23806": {
+      "compatible": [
+        "clion",
+        "datagrip",
+        "goland",
+        "idea-community",
+        "idea-ultimate",
+        "mps",
+        "phpstorm",
+        "pycharm-community",
+        "pycharm-professional",
+        "rider",
+        "ruby-mine",
+        "rust-rover",
+        "webstorm"
+      ],
+      "builds": {
+        "243.22562.218": "https://plugins.jetbrains.com/files/23806/664310/Oxocarbon-1.4.5.zip",
+        "243.22562.220": "https://plugins.jetbrains.com/files/23806/664310/Oxocarbon-1.4.5.zip",
+        "243.24978.546": "https://plugins.jetbrains.com/files/23806/664310/Oxocarbon-1.4.5.zip",
+        "243.24978.79": "https://plugins.jetbrains.com/files/23806/664310/Oxocarbon-1.4.5.zip",
+        "243.25659.34": "https://plugins.jetbrains.com/files/23806/664310/Oxocarbon-1.4.5.zip",
+        "243.25659.40": "https://plugins.jetbrains.com/files/23806/664310/Oxocarbon-1.4.5.zip",
+        "243.25659.41": "https://plugins.jetbrains.com/files/23806/664310/Oxocarbon-1.4.5.zip",
+        "243.25659.42": "https://plugins.jetbrains.com/files/23806/664310/Oxocarbon-1.4.5.zip",
+        "243.25659.43": "https://plugins.jetbrains.com/files/23806/664310/Oxocarbon-1.4.5.zip",
+        "243.25659.45": "https://plugins.jetbrains.com/files/23806/664310/Oxocarbon-1.4.5.zip",
+        "243.25659.52": "https://plugins.jetbrains.com/files/23806/664310/Oxocarbon-1.4.5.zip",
+        "243.25659.54": "https://plugins.jetbrains.com/files/23806/664310/Oxocarbon-1.4.5.zip",
+        "243.25659.59": "https://plugins.jetbrains.com/files/23806/664310/Oxocarbon-1.4.5.zip"
+      },
+      "name": "oxocarbon"
     },
     "23927": {
       "compatible": [
@@ -1988,17 +2021,17 @@
     "https://plugins.jetbrains.com/files/13017/630016/keymap-visualStudio-243.21565.122.zip": "sha256-VQqK0Cm9ddXN63KYIqimuGOh7EB9VvdlErp/VrWx8SA=",
     "https://plugins.jetbrains.com/files/13308/370912/Indent_Rainbow-2.2.0-signed.zip": "sha256-eKwDE+PMtYhrGbDDZPS5cimssH+1xV4GF6RXXg/3urU=",
     "https://plugins.jetbrains.com/files/1347/667258/scala-intellij-bin-2024.3.35.zip": "sha256-4I75KqXyFl73S63O+00usrg8QBcuBRBgfjRmCQMpNks=",
-    "https://plugins.jetbrains.com/files/1347/681279/scala-intellij-bin-2024.3.38.zip": "sha256-l1ZevtqN/70ii1jbXYYxkbH263UrL3YMVFnwFl+n5rE=",
+    "https://plugins.jetbrains.com/files/1347/696516/scala-intellij-bin-2024.3.42.zip": "sha256-IEh/wlpfCK+lpUD+xYpeCDwpEA8NVzfirpyf5MUgC7A=",
     "https://plugins.jetbrains.com/files/14004/636643/protoeditor-243.22562.13.zip": "sha256-Tgu8CfDhO6KugfuLNhmxe89dMm+Qo3fmAg/8hwjUaoc=",
     "https://plugins.jetbrains.com/files/14059/82616/darcula-pitch-black.jar": "sha256-eXInfAqY3yEZRXCAuv3KGldM1pNKEioNwPB0rIGgJFw=",
     "https://plugins.jetbrains.com/files/14708/475401/MarioProgressBar-1.9.jar": "sha256-mB09zvUg1hLXl9lgW1NEU+DyVel1utZv6s+mFykckYY=",
     "https://plugins.jetbrains.com/files/15976/593529/IDEA_Which-Key-0.10.3.jar": "sha256-2FlEaHf2rO6xgG3LnZIPt/XKgRGjpLSiEXCncfAf3bI=",
     "https://plugins.jetbrains.com/files/164/676777/IdeaVIM-2.19.0.zip": "sha256-yKpWQZGxfsKwPVTJLHpF4KGJ5ANCd73uxHlfdFE4Qf4=",
     "https://plugins.jetbrains.com/files/16604/686930/Extra_ToolWindow_Colorful_Icons_Subscription-2025.1.4.zip": "sha256-W/oeD2vRxxyrjHuw+4hGcPEER6K1kzkDGRkxvEotOaw=",
-    "https://plugins.jetbrains.com/files/17718/688477/github-copilot-intellij-1.5.37-242.zip": "sha256-7dAi3KPTze2Kht0snxzuZreRm2gYrAnGVUyOjKMdMkA=",
+    "https://plugins.jetbrains.com/files/17718/694875/github-copilot-intellij-1.5.38-243.zip": "sha256-lq5JmR8gPsrZ9rT+byit98KZSzFsl4UppwYAaE9Kjiw=",
     "https://plugins.jetbrains.com/files/18444/165585/NetBeans6.5Keymap.zip": "sha256-KrzZTKZMQqoEMw+vDUv2jjs0EX0leaPBkU8H/ecq/oI=",
     "https://plugins.jetbrains.com/files/18682/680233/Catppuccin_Theme-3.4.1.zip": "sha256-QOF3nAXOfYhNl3YUK1fc9z5H2uXTPm2X+6fVZ5QP8ZQ=",
-    "https://plugins.jetbrains.com/files/18824/671527/CodeGlancePro-1.9.6-signed.zip": "sha256-AEHZxuRMBEZlT3xTxBUbHEPjEJBOCLxdj1wEYBzlNdk=",
+    "https://plugins.jetbrains.com/files/18824/694222/CodeGlancePro-1.9.7-signed.zip": "sha256-8RjKjmadd1o/M+WTLtKPn354bbKgEht4nvWnMcRPN9w=",
     "https://plugins.jetbrains.com/files/18922/694217/GerryThemes.jar": "sha256-8Ufa8YuGOG78KRSxo/GiwPFrd/3lwQhLWwAnB6igaGE=",
     "https://plugins.jetbrains.com/files/19275/355572/better_direnv-1.2.2-signed.zip": "sha256-hoFfIid7lClHDiT+ZH3H+tFSvWYb1tSRZH1iif+kWrM=",
     "https://plugins.jetbrains.com/files/20146/633971/Mermaid-0.0.24_IJ.243.zip": "sha256-jGWRU0g120qYvvFiUFI10zvprTsemuIq3XmIjYxZGts=",
@@ -2007,12 +2040,13 @@
     "https://plugins.jetbrains.com/files/21667/693656/code-complexity-plugin-1.6.2.zip": "sha256-2qDeC2Fxp4/IfiLPL1JDquJDCzONCp4m92Ht2fnCn/M=",
     "https://plugins.jetbrains.com/files/21904/665427/intellij-developer-tools-plugin-6.3.0-signed.zip": "sha256-TEx5wg3Sf3rkhl6oj0hRrMdBJW9KMjZ/yNDgNYaeP28=",
     "https://plugins.jetbrains.com/files/21962/684422/clouds-docker-gateway-243.24978.79.zip": "sha256-jmfcGDtizib7wQW88sWuzG095nrT0KHyN98trxqISHE=",
-    "https://plugins.jetbrains.com/files/22407/690878/intellij-rust-243.25659.54.zip": "sha256-LqBhEiWCVaLRM2WsflLWX0N+i6Q8ZmHoHaJnJSEKbS0=",
+    "https://plugins.jetbrains.com/files/22407/697137/intellij-rust-243.26053.17__1_.zip": "sha256-P5PmGUNOJJ5+Z1CYQM1ItwrS/JecBPOb9qU3kZK842w=",
     "https://plugins.jetbrains.com/files/22707/689483/continue-intellij-extension-1.0.2.zip": "sha256-Kf5kHd8tGVIClWcrin9zOFbQkZyOrwHpfMvdznPkNC0=",
     "https://plugins.jetbrains.com/files/22857/640903/vcs-gitlab-243.22562.53.zip": "sha256-lDStIaRy9ZtCXZxM2RRrz/5oZeL90aRVS63wC4XkJNw=",
     "https://plugins.jetbrains.com/files/22857/654839/vcs-gitlab-243.23654.19.zip": "sha256-VKGZLlL8ALjr6JEQtjhXiIxNrnTPXIoXMToJkJux2dw=",
     "https://plugins.jetbrains.com/files/23029/684999/Catppuccin_Icons-1.10.2.zip": "sha256-qkwfEpC2f4vgVsesSiUvd6kK6XnG9DTN4gXUR+rLlK0=",
     "https://plugins.jetbrains.com/files/23043/635877/MermaidChart-1.1.8.zip": "sha256-ssaSY1I6FopLBgVKHUyjBrqzxHLSuI/swtDfQWJ7gxU=",
+    "https://plugins.jetbrains.com/files/23806/664310/Oxocarbon-1.4.5.zip": "sha256-zF89Q1LE6xwBeDKv4FSQ6H6cbABjz74Z/qGwddRWp7M=",
     "https://plugins.jetbrains.com/files/23927/686932/Extra_IDE_Tweaks-2025.1.2.zip": "sha256-S9XvXtNadkb5geuar40+y5cARMgWp+vJELj7hk3Y4EY=",
     "https://plugins.jetbrains.com/files/24559/686931/Extra_Tools_Pack-2025.1.3.zip": "sha256-r5oFljG92OTPbXRXqbXDI4KD2dyMp2onKTWQcdftU2k=",
     "https://plugins.jetbrains.com/files/25594/623962/Nix_LSP-0.1.1.zip": "sha256-Uq5RdVQTyqRMsEwDZT6Kldv2alt0EVMCABEt/xQUHow=",

@@ -19,7 +19,7 @@
   pkgsCross,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "crosvm";
   version = "0-unstable-2025-02-18";
 

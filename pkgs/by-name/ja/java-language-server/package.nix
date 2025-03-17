@@ -18,7 +18,7 @@ let
     else
       throw "unsupported platform";
 in
-maven.buildMavenPackage rec {
+maven.buildMavenPackage {
   pname = "java-language-server";
   version = "0.2.46";
 

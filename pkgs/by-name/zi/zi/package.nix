@@ -5,7 +5,7 @@
   stdenvNoCC,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation {
   pname = "zi";
   version = "unstable-2022-04-09";
   src = fetchFromGitHub {

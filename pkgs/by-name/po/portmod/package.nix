@@ -21,7 +21,7 @@ let
     hash = "sha256-d5XNfjDgtBkNkUMhShYTjKtMbwVa2tLXdvYi6sXQmIA=";
   };
 
-  portmod-rust = rustPlatform.buildRustPackage rec {
+  portmod-rust = rustPlatform.buildRustPackage {
     inherit src version;
     pname = "portmod-rust";
 
@@ -46,7 +46,7 @@ let
   ];
 
 in
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication {
   inherit src version;
 
   pname = "portmod";

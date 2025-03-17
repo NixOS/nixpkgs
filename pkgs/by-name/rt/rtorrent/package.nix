@@ -6,7 +6,6 @@
   cppunit,
   curl,
   fetchFromGitHub,
-  fetchpatch,
   installShellFiles,
   libtool,
   libtorrent,
@@ -18,7 +17,7 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "rakshasa-rtorrent";
   version = "0.15.1";
 

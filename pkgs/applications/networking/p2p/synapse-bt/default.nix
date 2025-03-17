@@ -9,7 +9,7 @@
   Security,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "synapse-bt";
   version = "unstable-2023-02-16";
 

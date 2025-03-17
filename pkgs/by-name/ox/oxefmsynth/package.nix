@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  fetchzip,
   libX11,
   vst2-sdk,
 }:

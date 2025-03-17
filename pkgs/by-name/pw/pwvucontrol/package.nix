@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   fetchFromGitLab,
+  fetchpatch,
   cargo,
   desktop-file-utils,
   meson,
@@ -31,6 +32,13 @@ let
       tag = version;
       hash = "sha256-vhpQT67+849WV1SFthQdUeFnYe/okudTQJoL3y+wXwI=";
     };
+
+    patches = [
+      (fetchpatch {
+        url = "https://gitlab.freedesktop.org/pipewire/wireplumber/-/commit/f4f495ee212c46611303dec9cd18996830d7f721.patch";
+        hash = "sha256-dxVlXFGyNvWKZBrZniFatPPnK+38pFGig7LGAsc6Ydc=";
+      })
+    ];
   });
 in
 stdenv.mkDerivation (finalAttrs: {

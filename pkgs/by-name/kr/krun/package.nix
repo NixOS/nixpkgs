@@ -12,7 +12,7 @@
   withSommelier ? false,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "krun";
   version = "0-unstable-2024-06-18";
 

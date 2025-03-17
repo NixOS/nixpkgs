@@ -7,7 +7,7 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "pngloss";
   version = "unstable-2020-11-25";
 
