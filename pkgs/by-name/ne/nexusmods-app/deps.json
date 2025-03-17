@@ -501,23 +501,23 @@
   },
   {
     "pname": "HotChocolate.Language.SyntaxTree",
-    "version": "14.1.0",
-    "hash": "sha256-4cRFDfLW+A0378BZ0wzPrc7FOiuTdCtlA4gyitSrhiI="
+    "version": "15.0.3",
+    "hash": "sha256-PXlle10Q2Yuhcip1WhY922G5ObD4yRwYyPyUqci7Z7A="
   },
   {
     "pname": "HotChocolate.Transport.Abstractions",
-    "version": "14.1.0",
-    "hash": "sha256-i8i4ovnxHcFRrnU/a3U01izWEa+OsOjxgLDRq7wo1vs="
+    "version": "15.0.3",
+    "hash": "sha256-uRSetnfWOwar73WO/wplsHexCzpbZf6xYxVBLWaIwLo="
   },
   {
     "pname": "HotChocolate.Transport.Http",
-    "version": "14.1.0",
-    "hash": "sha256-e5VoAtmieIhNvhtGMnmPXqYAZE9SrXlfyJmDKF7LBJo="
+    "version": "15.0.3",
+    "hash": "sha256-9SkFbGb/uYmIGPDT1LnF3m42c8sEeCZBv4OuClMEU6w="
   },
   {
     "pname": "HotChocolate.Utilities",
-    "version": "14.1.0",
-    "hash": "sha256-KIYlc1jDG1BT6gZGZoei6ypHXZo9I3dN4zM/NpDWJuI="
+    "version": "15.0.3",
+    "hash": "sha256-9y7iNQqv1wrkuGZ3ovXkQQ+seSB4bZwexfmlneoeEAg="
   },
   {
     "pname": "HtmlAgilityPack",
@@ -888,11 +888,6 @@
     "pname": "Microsoft.AspNet.WebApi.Client",
     "version": "6.0.0",
     "hash": "sha256-lNL5C4W7/p8homWooO/3ZKDZQ2M0FUTDixJwqWBPVbo="
-  },
-  {
-    "pname": "Microsoft.AspNetCore.WebUtilities",
-    "version": "8.0.0",
-    "hash": "sha256-e4wqTJUgPfq6CfRwuXTw32K9vB+hOpSLxSZDpzv23Yg="
   },
   {
     "pname": "Microsoft.AspNetCore.WebUtilities",
@@ -1271,11 +1266,6 @@
   },
   {
     "pname": "Microsoft.Extensions.Http",
-    "version": "8.0.0",
-    "hash": "sha256-UgljypOLld1lL7k7h1noazNzvyEHIJw+r+6uGzucFSY="
-  },
-  {
-    "pname": "Microsoft.Extensions.Http",
     "version": "9.0.0",
     "hash": "sha256-MsStH3oUfyBbcSEoxm+rfxFBKI/rtB5PZrSGvtDjVe0="
   },
@@ -1383,11 +1373,6 @@
     "pname": "Microsoft.Extensions.Logging.EventSource",
     "version": "9.0.0",
     "hash": "sha256-pplZskMsR3gGbs3I0wycGsvIMPIpfWFJpOsR9GkiYRw="
-  },
-  {
-    "pname": "Microsoft.Extensions.ObjectPool",
-    "version": "8.0.0",
-    "hash": "sha256-FxFr5GC0y6vnp5YD2A2vISXYizAz3k/QyrH7sBXP5kg="
   },
   {
     "pname": "Microsoft.Extensions.ObjectPool",
@@ -2251,28 +2236,28 @@
   },
   {
     "pname": "StrawberryShake.Core",
-    "version": "14.1.0",
-    "hash": "sha256-h1Ozv0vdR2UvHIw3JqoBNKPVuD1S31aui7IQ8i8hcnE="
+    "version": "15.0.3",
+    "hash": "sha256-bAqmB6l6r1GAAm6w0BcUdwGlktU/FAeB3vPiENmOaKg="
   },
   {
     "pname": "StrawberryShake.Resources",
-    "version": "14.1.0",
-    "hash": "sha256-6uOb5V7UeHM9OKUTJ4p8/YwvI16LcrC12tPhSAw3U0Q="
+    "version": "15.0.3",
+    "hash": "sha256-m50HKpBrcQkrJxlRAfg2RNobMbv9yw3jakDz7Hp/sn8="
   },
   {
     "pname": "StrawberryShake.Server",
-    "version": "14.1.0",
-    "hash": "sha256-6K6TnX8YL0Dbt8wTv9FmBlbSo+UfaucHi9a5CqWCjoY="
+    "version": "15.0.3",
+    "hash": "sha256-Tdl27WUE0pA+SXZetKjPPcQxM6rxzf1Cnjz6Jw/XZaM="
   },
   {
     "pname": "StrawberryShake.Transport.Http",
-    "version": "14.1.0",
-    "hash": "sha256-Pa2vACAYMgLrAxiZUR7PxBvPY9wrclQRYGZod/VMG5Q="
+    "version": "15.0.3",
+    "hash": "sha256-UmB5tTEwB0JImx/LDb+ihCao4YxsT3XvHJpuUDBMODc="
   },
   {
     "pname": "StrawberryShake.Transport.WebSockets",
-    "version": "14.1.0",
-    "hash": "sha256-Hqp6GSxMcYorg5v8ns24DNfUDwYGY3urg0FKPleD86I="
+    "version": "15.0.3",
+    "hash": "sha256-Nz70BHgzDzxIRzIjKgx6Vx1T+K/UKoPkG6wP/yNKVYs="
   },
   {
     "pname": "Svg.Custom",
@@ -2608,6 +2593,11 @@
     "pname": "System.IO.Pipelines",
     "version": "8.0.0",
     "hash": "sha256-LdpB1s4vQzsOODaxiKstLks57X9DTD5D6cPx8DE1wwE="
+  },
+  {
+    "pname": "System.IO.Pipelines",
+    "version": "9.0.0",
+    "hash": "sha256-vb0NrPjfEao3kfZ0tavp2J/29XnsQTJgXv3/qaAwwz0="
   },
   {
     "pname": "System.Linq",

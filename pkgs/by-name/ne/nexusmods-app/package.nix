@@ -59,18 +59,18 @@ buildDotnetModule (finalAttrs: {
   nugetDeps = ./deps.json;
   mapNuGetDependencies = true;
 
-  # TODO: remove .NET 8; StrawberryShake currently needs it
-  dotnet-sdk =
-    with dotnetCorePackages;
-    combinePackages [
-      sdk_9_0
-      runtime_8_0
-    ];
+  dotnet-sdk = dotnetCorePackages.sdk_9_0;
   dotnet-runtime = dotnetCorePackages.runtime_9_0;
 
   postPatch = ''
     # for some reason these tests fail (intermittently?) with a zero timestamp
     touch tests/NexusMods.UI.Tests/WorkspaceSystem/*.verified.png
+
+    # Bump StrawberryShake so we can drop .NET 8
+    # See https://github.com/Nexus-Mods/NexusMods.App/pull/2830
+    substituteInPlace Directory.Packages.props \
+      --replace-fail 'Include="StrawberryShake.Server" Version="14.1.0"' \
+                     'Include="StrawberryShake.Server" Version="15.0.3"'
   '';
 
   makeWrapperArgs = [
