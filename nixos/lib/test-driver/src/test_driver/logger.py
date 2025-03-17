@@ -45,6 +45,10 @@ class AbstractLogger(ABC):
         pass
 
     @abstractmethod
+    def log_test_error(self, *args, **kwargs) -> None:  # type:ignore
+        pass
+
+    @abstractmethod
     def log_serial(self, message: str, machine: str) -> None:
         pass
 
@@ -96,6 +100,9 @@ class JunitXMLLogger(AbstractLogger):
     def error(self, *args, **kwargs) -> None:  # type: ignore
         self.tests[self.currentSubtest].stderr += args[0] + os.linesep
         self.tests[self.currentSubtest].failure = True
+
+    def log_test_error(self, *args, **kwargs) -> None:  # type: ignore
+        self.error(*args, **kwargs)
 
     def log_serial(self, message: str, machine: str) -> None:
         if not self._print_serial_logs:
@@ -155,6 +162,10 @@ class CompositeLogger(AbstractLogger):
     def warning(self, *args, **kwargs) -> None:  # type: ignore
         for logger in self.logger_list:
             logger.warning(*args, **kwargs)
+
+    def log_test_error(self, *args, **kwargs) -> None:  # type: ignore
+        for logger in self.logger_list:
+            logger.log_test_error(*args, **kwargs)
 
     def error(self, *args, **kwargs) -> None:  # type: ignore
         for logger in self.logger_list:
@@ -222,6 +233,11 @@ class TerminalLogger(AbstractLogger):
 
         self._eprint(Style.DIM + f"{machine} # {message}" + Style.RESET_ALL)
 
+    def log_test_error(self, *args, **kwargs) -> None:  # type: ignore
+        prefix = Fore.RED + "!!! " + Style.RESET_ALL
+        # NOTE: using `warning` instead of `error` to ensure it does not exit after printing the first log
+        self.warning(f"{prefix}{args[0]}", *args[1:], **kwargs)
+
 
 class XMLLogger(AbstractLogger):
     def __init__(self, outfile: str) -> None:
@@ -259,6 +275,9 @@ class XMLLogger(AbstractLogger):
         self.log(*args, **kwargs)
 
     def error(self, *args, **kwargs) -> None:  # type: ignore
+        self.log(*args, **kwargs)
+
+    def log_test_error(self, *args, **kwargs) -> None:  # type: ignore
         self.log(*args, **kwargs)
 
     def log(self, message: str, attributes: dict[str, str] = {}) -> None:
