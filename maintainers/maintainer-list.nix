@@ -16244,6 +16244,12 @@
     githubId = 220262;
     name = "Ion Mudreac";
   };
+  mulatta = {
+    email = "lsw1167@gmail.com";
+    github = "mulatta";
+    githubId = 67085791;
+    name = "Seungwon Lee";
+  };
   multisn8 = {
     email = "all-things-nix@multisamplednight.com";
     github = "MultisampledNight";
