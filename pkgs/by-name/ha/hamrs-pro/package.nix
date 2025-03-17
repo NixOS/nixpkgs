@@ -41,7 +41,10 @@ let
     description = "Simple, portable logger tailored for activities like Parks on the Air, Field Day, and more";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ ethancedwards8 ];
+    maintainers = with lib.maintainers; [
+      ethancedwards8
+      jhollowe
+    ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
