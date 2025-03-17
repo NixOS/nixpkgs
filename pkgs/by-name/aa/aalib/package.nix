@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, ncurses, automake}:
+{lib, stdenv, fetchurl, ncurses}:
 
 stdenv.mkDerivation rec {
   pname = "aalib";
@@ -22,7 +22,6 @@ stdenv.mkDerivation rec {
 
   # The fuloong2f is not supported by aalib still
   preConfigure = ''
-    cp ${automake}/share/automake*/config.{sub,guess} .
     configureFlagsArray+=(
       "--bindir=$bin/bin"
       "--includedir=$dev/include"
