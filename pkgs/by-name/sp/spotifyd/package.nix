@@ -23,17 +23,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "spotifyd";
-  version = "0.4.0";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "Spotifyd";
     repo = "spotifyd";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YBh5lcHXqYjyo/MjNNxnycY5AXjvlu+2gAzG6gM4Gjc=";
+    hash = "sha256-IqJlqcau0AZAqQjlaEKzinqTdVUA48/m2Y3ioFP/4Zw=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-waZ9XNYZ/scyMsNT7bZYqN4Ch4GbuQtwxAYaWTjNZwg=";
+  cargoHash = "sha256-wZ/JJZDo+Iz5vg4XawcZFvjOEqpD5I0jTfg1JyH3+MA=";
 
   nativeBuildInputs = [
     cmake
