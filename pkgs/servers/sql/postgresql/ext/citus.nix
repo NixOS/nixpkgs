@@ -1,6 +1,7 @@
 {
   curl,
   fetchFromGitHub,
+  fetchpatch,
   lib,
   lz4,
   postgresql,
@@ -18,6 +19,16 @@ postgresqlBuildExtension rec {
     tag = "v${version}";
     hash = "sha256-SuJs6OCHKO7efQagsATgn/V9rgMyuXQIHGCEP9ME7tQ=";
   };
+
+  patches = [
+    # Even though this commit is on main since Sep 2023, it hasn't made its way to the release-13.0 branch, yet.
+    # https://github.com/citusdata/citus/pull/7221
+    # Fixes build for PG 16 + 17 on darwin
+    (fetchpatch {
+      url = "https://github.com/citusdata/citus/commit/0f28a69f12418d211ffba5f7ddd222fd0c47daeb.patch";
+      hash = "sha256-8JAM+PUswzbdlAZUpRApgO0eBsMbUHFdFGsdATsG88I=";
+    })
+  ];
 
   buildInputs = [
     curl
