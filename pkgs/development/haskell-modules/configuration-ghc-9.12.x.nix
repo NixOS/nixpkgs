@@ -79,6 +79,7 @@ with haskellLib;
 
   doctest = self.doctest_0_23_0;
 
+  extra = doDistribute self.extra_1_8; # compatible with base 4.21
   htree = doDistribute self.htree_0_2_0_0;
   tagged = doDistribute self.tagged_0_8_9;
   time-compat = doDistribute (doJailbreak self.time-compat_1_9_8); # too strict lower bound on QuickCheck
