@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  callPackage,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "ynetd";
@@ -21,6 +22,10 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm755 ynetd $out/bin/ynetd
     runHook postInstall
   '';
+
+  # ctf-ynetd releases are based on the last stable ynetd version
+  # these should be kept in sync when possible
+  passthru.hardened = callPackage ./hardened.nix { };
 
   meta = {
     description = "Small server for binding programs to TCP ports";
