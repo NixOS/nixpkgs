@@ -71,6 +71,14 @@ buildGo123Module {
     "-X main.version=${version}"
     "-X main.commit=${version}"
   ];
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out/bin
+    cp -r $GOPATH/bin/api $out/bin/
+
+    runHook postInstall
+  '';
 
   passthru = {
     tests = {
