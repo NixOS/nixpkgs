@@ -6,6 +6,7 @@
   writeText,
   writeClosure,
   runCommand,
+  nixosTests,
 }:
 
 rec {
@@ -29,24 +30,24 @@ rec {
       outputFormat ? "directory",
     }:
     let
-      pname =
+      outputName =
         if name != null then
           name
         else if lib.hasAttr "name" docker-tarball then
           "${lib.strings.removeSuffix ".tar.gz" docker-tarball.name}-oci"
         else
-          throw "name must be provided if the `docker-tarball` input does not have a name attribute";
+          throw "The `name` argument attribute must be provided if the `docker-tarball` input does not have a `name` attribute";
 
       skopeoOutputFormats = {
         directory = "oci";
         tarball = "oci-archive";
       };
       skopeoOutputFormat =
-        skopeoOutputFormats."${outputFormat}" or throw
-          "`outputFormat` must be one of: ${lib.concatStringsSep ", " (lib.attrNames skopeoOutputFormats)}";
+        skopeoOutputFormats."${outputFormat}"
+          or (throw "`outputFormat` must be one of: ${lib.concatStringsSep ", " (lib.attrNames skopeoOutputFormats)}");
     in
     stdenvNoCC.mkDerivation {
-      inherit pname;
+      name = outputName;
       src = docker-tarball;
       dontUnpack = true;
       nativeBuildInputs = [ skopeo ];
@@ -62,10 +63,15 @@ rec {
   # Convenience bindings for drop-in compatibility with `dockerTools`.
   mkDockerToolsDropin =
     target: args:
-    toOCIImage {
-      docker-tarball = (dockerTools."${target}" args);
-    }
-    // args.extraOCIArgs or { };
+    let
+      dockerToolsArgs = lib.removeAttrs args [ "extraOCIArgs" ];
+    in
+    toOCIImage (
+      {
+        docker-tarball = (dockerTools."${target}" dockerToolsArgs);
+      }
+      // (args.extraOCIArgs or { })
+    );
 
   buildImage = mkDockerToolsDropin "buildImage";
   buildLayeredImage = mkDockerToolsDropin "buildLayeredImage";
@@ -212,4 +218,8 @@ rec {
           xargs tar c < ${writeClosure args} | tar -xC $out/rootfs/
         ''
       );
+
+  tests = {
+    inherit (nixosTests) oci-tools;
+  };
 }
