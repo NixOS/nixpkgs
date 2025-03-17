@@ -113,7 +113,7 @@ in
       enable = lib.mkEnableOption "Image compression";
 
       algorithm = lib.mkOption {
-        type = lib.types.enum [ "zstd" "xz" ];
+        type = lib.types.enum [ "zstd" "xz" "zstd-seekable" ];
         default = "zstd";
         description = "Compression algorithm";
       };
@@ -274,6 +274,7 @@ in
           {
             "zstd" = ".zst";
             "xz" = ".xz";
+            "zstd-seekable" = ".zst";
           }."${cfg.compression.algorithm}";
 
         makeClosure = paths: pkgs.closureInfo { rootPaths = paths; };
@@ -298,6 +299,7 @@ in
           level = lib.mkOptionDefault {
             "zstd" = 3;
             "xz" = 3;
+            "zstd-seekable" = 3;
           }."${cfg.compression.algorithm}";
         };
 

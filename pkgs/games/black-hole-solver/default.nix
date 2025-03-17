@@ -12,11 +12,11 @@
 
 stdenv.mkDerivation rec {
   pname = "black-hole-solver";
-  version = "1.12.0";
+  version = "1.14.0";
 
   src = fetchurl {
     url = "https://fc-solve.shlomifish.org/downloads/fc-solve/${pname}-${version}.tar.xz";
-    sha256 = "sha256-0y8yU291cykliPQbsNha5C1WE3bCGNxKtrrf5JBKN6c=";
+    sha256 = "sha256-XEe9CT27Fg9LCQ/WcKt8ErQ3HTmxezu9jGxKEpdVV8A=";
   };
 
   nativeBuildInputs = [

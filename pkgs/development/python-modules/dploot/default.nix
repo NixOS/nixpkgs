@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "dploot";
-  version = "3.1.0";
+  version = "3.1.2";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-DlMaEkgbDHQb5BV0mI8qjTBGpmRX7bP67MZO4g+I1uI=";
+    hash = "sha256-WY6SEBmvsvLtn6+KE4upL2n39kuGO4aK3cyGFOd9xIo=";
   };
 
   pythonRelaxDeps = [
