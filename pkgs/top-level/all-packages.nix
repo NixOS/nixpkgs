@@ -2080,12 +2080,12 @@ with pkgs;
     buildGoModule = buildGoModule.override {
       go = buildPackages.go_1_22.overrideAttrs {
         pname = "cloudflare-go";
-        version = "1.22.2-devel-cf";
+        version = "1.22.5-devel-cf";
         src = fetchFromGitHub {
           owner = "cloudflare";
           repo = "go";
-          rev = "ec0a014545f180b0c74dfd687698657a9e86e310";
-          sha256 = "sha256-oQQ9Jyh8TphZSCaHqaugTL7v0aeZjyOdVACz86I2KvU=";
+          rev = "af19da5605ca11f85776ef7af3384a02a315a52b";
+          hash = "sha256-6VT9CxlHkja+mdO1DeFoOTq7gjb3T5jcf2uf9TB/CkU=";
         };
       };
     };
