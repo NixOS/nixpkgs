@@ -395,7 +395,7 @@ def main():
             limine_deploy_args = [limine_binary, 'bios-install', device]
 
         if config('partitionIndex'):
-            limine_deploy_args.append(config('partitionIndex'))
+            limine_deploy_args.append(str(config('partitionIndex')))
 
         if config('forceMbr'):
             limine_deploy_args += '--force-mbr'
