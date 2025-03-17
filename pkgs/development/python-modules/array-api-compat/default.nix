@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "array-api-compat";
-  version = "1.11";
+  version = "1.11.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "data-apis";
     repo = "array-api-compat";
     tag = version;
-    hash = "sha256-sQgNHYjLqTP7tTAuYSjsIJCtrzLIlms1ayeeTWGpaQk=";
+    hash = "sha256-TB1aBad6Pl687nGblSraHmWl/tnnkoo1g6DDZHKhOaM=";
   };
 
   build-system = [ setuptools ];
