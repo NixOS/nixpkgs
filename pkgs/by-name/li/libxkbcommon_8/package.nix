@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   meson,
   ninja,
   pkg-config,
@@ -24,11 +24,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libxkbcommon";
-  version = "1.7.0";
+  version = "1.8.1";
 
-  src = fetchurl {
-    url = with finalAttrs; "https://xkbcommon.org/download/${pname}-${version}.tar.xz";
-    hash = "sha256-ZXgvChCktFWvnGuqtwQOL1N1IMqi7CCSgFzf02hjskc=";
+  src = fetchFromGitHub {
+    owner = "xkbcommon";
+    repo = "libxkbcommon";
+    tag = "xkbcommon-${finalAttrs.version}";
+    hash = "sha256-MnegPisAtev69pNV6cR4a/oLIQhijG2e6ed6mpKr5js=";
   };
 
   patches = [
