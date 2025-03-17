@@ -1005,7 +1005,7 @@ in {
   radicle = runTest ./radicle.nix;
   ragnarwm = handleTest ./ragnarwm.nix {};
   rasdaemon = handleTest ./rasdaemon.nix {};
-  rathole = handleTest ./rathole.nix {};
+  rathole = runTest ./rathole.nix;
   readarr = handleTest ./readarr.nix {};
   realm = handleTest ./realm.nix {};
   readeck = runTest ./readeck.nix;
