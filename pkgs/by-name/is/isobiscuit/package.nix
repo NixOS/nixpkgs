@@ -8,17 +8,15 @@
 
 buildPythonPackage rec {
   pname = "isobiscuit";
-  version = "0.3.4";
+  version = "0.3.13";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1fi2kxf64igzqayldbpsk1rhs9jz14wp3kwps1swnl3n6my4i1y9";
+    sha256 = "1rhd3gxp8wzvd16hb7yv9p8m842s2vw8s253nx2iqvqrqgm6hbih";
   };
 
   propagatedBuildInputs = with python3Packages; [
     requests
-    grpcio
-    grpcio-tools
     pyyaml
     colorama
     poetry-core
