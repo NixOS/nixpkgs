@@ -16,6 +16,7 @@
   libgcrypt,
   libgpg-error,
   usrsctp,
+  qtkeychain,
 
   chatType ? "basic", # See the assertion below for available options
   qtwebkit,
@@ -23,13 +24,13 @@
 
   enablePlugins ? true,
   html-tidy,
+  http-parser,
   libotr,
-  libsignal-protocol-c,
+  libomemo-c,
 
   # Voice messages
   voiceMessagesSupport ? true,
   gst_all_1,
-
   enablePsiMedia ? false,
   pkg-config,
 }:
@@ -44,13 +45,13 @@ assert enablePsiMedia -> enablePlugins;
 
 mkDerivation rec {
   pname = "psi-plus";
-  version = "1.5.1653";
 
+  version = "1.5.2072";
   src = fetchFromGitHub {
     owner = "psi-plus";
     repo = "psi-plus-snapshots";
     rev = version;
-    sha256 = "sha256-9WT2S6ZgIsrHoEAvlWUB078gzCdrPylvSjkkogU5tsU=";
+    sha256 = "sha256-RlZwMBWjhCTEEV08UHbf8NvuqmuihXwR1aA/vMmD1BM=";
   };
 
   cmakeFlags = [
@@ -82,6 +83,7 @@ mkDerivation rec {
       libgcrypt
       libgpg-error
       usrsctp
+      qtkeychain
     ]
     ++ lib.optionals voiceMessagesSupport [
       gst_all_1.gst-plugins-base
@@ -89,8 +91,9 @@ mkDerivation rec {
     ]
     ++ lib.optionals enablePlugins [
       html-tidy
+      http-parser
       libotr
-      libsignal-protocol-c
+      libomemo-c
     ]
     ++ lib.optionals (chatType == "webkit") [
       qtwebkit
