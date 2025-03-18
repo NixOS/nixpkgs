@@ -7,13 +7,13 @@
 
 buildGoModule {
   pname = "tlsrouter";
-  version = "0-unstable-2025-02-22";
+  version = "0-unstable-2026-09-22";
 
   src = fetchFromGitHub {
     owner = "inetaf";
     repo = "tcpproxy";
-    rev = "c4b9df066048ad2ab5c32235362fa94444a24ebe";
-    hash = "sha256-N/kdZ1esDnEaboDLU/WjXftA0a2PcOFnxDfojSYXyNQ=";
+    rev = "c159a60511096e475e3489ce13ae57e752c78f99";
+    hash = "sha256-414PJnfDIHEJJH0CAiegMrM0ehsLyW3g/4afzsjdJX8=";
   };
 
   vendorHash = "sha256-AFgBQsufrJhfMnbSAOyfgSK6StMix0zKvsRJJx4jmtY=";
@@ -21,6 +21,8 @@ buildGoModule {
   subPackages = [ "cmd/tlsrouter" ];
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "TLSRouter is a TLS proxy that routes connections to backends based on the TLS SNI (Server Name Indication) of the TLS handshake.";
