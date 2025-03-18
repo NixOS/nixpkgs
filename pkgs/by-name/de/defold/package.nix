@@ -82,13 +82,13 @@ buildFHSEnv {
   executableName = "Defold";
   runScript = "Defold";
 
-  meta = with lib; {
+  meta = {
     description = "Game engine for development of desktop, mobile and web games";
     homepage = "https://github.com/defold/defold";
     mainProgram = "Defold";
-    license = with licenses; [ defold ];
+    license = with lib.licenses; [ defold ];
     platforms = [ "x86_64-linux" ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [ musjj ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    maintainers = with lib.maintainers; [ musjj ];
   };
 }
