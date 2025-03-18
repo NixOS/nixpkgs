@@ -15,10 +15,17 @@ let
     rawHomeserverUrl = cfg.homeserverUrl;
 
     pantalaimon = {
-      inherit (cfg.pantalaimon) username;
-
       use = cfg.pantalaimon.enable;
-      password = "@PANTALAIMON_PASSWORD@"; # will be replaced in "generateConfig"
+    } // lib.optionalAttrs cfg.pantalaimon.enable {
+      inherit (cfg.pantalaimon) username;
+      password = "@MJOLNIR_PASSWORD@"; # will be replaced in "generateConfig"
+    };
+
+    encryption = {
+      use = cfg.encryption.enable;
+    } // lib.optionalAttrs cfg.encryption.enable {
+      inherit (cfg.encryption) username;
+      password = "@MJOLNIR_PASSWORD@"; # will be replaced in "generateConfig"
     };
   };
 
@@ -55,8 +62,8 @@ let
       ${lib.optionalString (cfg.accessTokenFile != null) ''
         ${pkgs.replace-secret}/bin/replace-secret '@ACCESS_TOKEN@' '${cfg.accessTokenFile}' ${cfg.dataPath}/config/default.yaml
       ''}
-      ${lib.optionalString (cfg.pantalaimon.passwordFile != null) ''
-        ${pkgs.replace-secret}/bin/replace-secret '@PANTALAIMON_PASSWORD@' '${cfg.pantalaimon.passwordFile}' ${cfg.dataPath}/config/default.yaml
+      ${lib.optionalString (cfg.passwordFile != null) ''
+        ${pkgs.replace-secret}/bin/replace-secret '@MJOLNIR_PASSWORD@' '${cfg.passwordFile}' ${cfg.dataPath}/config/default.yaml
       ''}
     ''
   );
@@ -81,6 +88,17 @@ in
       default = null;
       description = ''
         File containing the matrix access token for the `mjolnir` user.
+
+        Required when neither encryption or pantalaimon is enabled.
+      '';
+    };
+    passwordFile = lib.mkOption {
+      type = with lib.types; nullOr path;
+      default = null;
+      description = ''
+        File containing the matrix password for the `mjolnir` user.
+
+        Required when encryption or pantalaimon is enabled.
       '';
     };
 
@@ -89,26 +107,20 @@ in
         `pantalaimon` options (enables E2E Encryption support).
 
         This will create a `pantalaimon` instance with the name "mjolnir".
+
+        Mutually exclusive with setting `config.services.mjolnir.encryption.enable`.
       '';
       default = { };
       type = lib.types.submodule {
         options = {
           enable = lib.mkEnableOption ''
-            ignoring the accessToken. If true, accessToken is ignored and the username/password below will be
-            used instead. The access token of the bot will be stored in the dataPath
+            Ignoring the accessToken. If true, accessToken is ignored and username/password will be
+            used instead. The access token of the bot will be stored in the dataPath.
           '';
 
           username = lib.mkOption {
             type = lib.types.str;
             description = "The username to login with.";
-          };
-
-          passwordFile = lib.mkOption {
-            type = with lib.types; nullOr path;
-            default = null;
-            description = ''
-              File containing the matrix password for the `mjolnir` user.
-            '';
           };
 
           options = lib.mkOption {
@@ -117,6 +129,28 @@ in
             description = ''
               passthrough additional options to the `pantalaimon` service.
             '';
+          };
+        };
+      };
+    };
+
+    encryption = lib.mkOption {
+      description = ''
+        `encryption` options (enables native E2E Encryption support without using pantalaimon as proxy).
+
+        Mutually exclusive with setting `config.services.mjolnir.pantalaimon.enable`.
+      '';
+      default = { };
+      type = lib.types.submodule {
+        options = {
+          enable = lib.mkEnableOption ''
+            Ignoring the accessToken. If true, accessToken is ignored and username/password will be
+            used instead. The access token of the bot will be stored in the dataPath.
+          '';
+
+          username = lib.mkOption {
+            type = lib.types.str;
+            description = "The username to login with.";
           };
         };
       };
@@ -170,25 +204,29 @@ in
     };
   };
 
+  imports = [
+    (lib.mkRenamedOptionModule [ "services" "mjolnir" "pantalaimon" "passwordFile" ] [ "services" "mjolnir" "passwordFile" ])
+  ];
+
   config = lib.mkIf config.services.mjolnir.enable {
     assertions = [
       {
-        assertion = !(cfg.pantalaimon.enable && cfg.pantalaimon.passwordFile == null);
-        message = "Specify pantalaimon.passwordFile";
+        assertion = (cfg.pantalaimon.enable || cfg.encryption.enable) -> cfg.passwordFile != null;
+        message = "Enabling pantalaimon or encryption requires setting config.services.mjolnir.passwordFile";
       }
       {
-        assertion = !(cfg.pantalaimon.enable && cfg.accessTokenFile != null);
-        message = "Do not specify accessTokenFile when using pantalaimon";
+        assertion = (cfg.pantalaimon.enable || cfg.encryption.enable) -> cfg.accessTokenFile == null;
+        message = "Do not specify accessTokenFile when enabling pantalaimon or encryption";
       }
       {
-        assertion = !(!cfg.pantalaimon.enable && cfg.accessTokenFile == null);
-        message = "Specify accessTokenFile when not using pantalaimon";
+        assertion = !(cfg.pantalaimon.enable && cfg.encryption.enable);
+        message = "Only one of encryption or pantalaimon may be enabled, not both";
+      }
+      {
+        assertion = !(cfg.pantalaimon.enable || cfg.encryption.enable) -> cfg.accessTokenFile != null;
+        message = "Specify accessTokenFile when not using pantalaimon or encryption";
       }
     ];
-
-    # This defaults to true in the application,
-    # which breaks older configs using pantalaimon or access tokens
-    services.mjolnir.settings.encryption.use = lib.mkDefault false;
 
     services.pantalaimon-headless.instances."mjolnir" = lib.mkIf cfg.pantalaimon.enable
       {
