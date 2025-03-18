@@ -16,18 +16,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "windsend-rs";
-  version = "1.4.9";
+  version = "1.4.10.1";
 
   src = fetchFromGitHub {
     owner = "doraemonkeys";
     repo = "WindSend";
     tag = "v${version}";
-    hash = "sha256-jmFhYCUE37yH+TTHq8Q0bO1Lp/p07PnSJDMAOGbhwOM=";
+    hash = "sha256-141NrtQofrtJB+tBA9fWhcHqN/a+0eG16voKlA2DIGA=";
   };
 
   useFetchCargoVendor = true;
 
-  cargoHash = "sha256-RmtKspTNTd3ZaucuzJk6yfDFRH7wZsOlEyJd2lNApBU=";
+  cargoHash = "sha256-y+67yvWBC9Qzhe4DOhm9I9NUud4xeZ+nztG4bph/otE=";
 
   sourceRoot = "${src.name}/windSend-rs";
 
