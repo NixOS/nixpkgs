@@ -21,7 +21,7 @@ buildPythonPackage rec {
     hatchling
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  dependencies = with python3Packages; [
     requests
     pyyaml
     colorama
