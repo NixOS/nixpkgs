@@ -83,7 +83,7 @@ buildFHSEnv {
   runScript = "Defold";
 
   meta = with lib; {
-    description = "Defold is a completely free to use game engine for development of desktop, mobile and web games";
+    description = "Game engine for development of desktop, mobile and web games";
     homepage = "https://github.com/defold/defold";
     mainProgram = "Defold";
     license = with licenses; [ defold ];
