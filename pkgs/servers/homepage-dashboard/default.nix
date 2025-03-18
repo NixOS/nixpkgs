@@ -1,7 +1,9 @@
 {
-  buildNpmPackage,
   fetchFromGitHub,
   nodePackages,
+  makeWrapper,
+  nodejs,
+  pnpm_10,
   python3,
   stdenv,
   cctools,
@@ -26,30 +28,37 @@ let
     cp ${dashboardIcons}/LICENSE $out/share/homepage/public/icons/
   '';
 in
-buildNpmPackage rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "homepage-dashboard";
-  version = "0.10.9";
+  version = "1.0.4";
 
   src = fetchFromGitHub {
     owner = "gethomepage";
     repo = "homepage";
-    rev = "v${version}";
-    hash = "sha256-q8+uoikHMQVuTrVSH8tPsoI5655ZStMc/7tmoAfoZIY=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-7fi7cW+DKjU9CeVEg863UGwCqTXxA1UrwlK2vrx1c5w=";
   };
 
-  npmDepsHash = "sha256-N39gwct2U4UxlIL5ceDzzU7HpA6xh2WksrZNxGz04PU=";
+  # This patch ensures that the cache implementation respects the env
+  # variable `NIXPKGS_HOMEPAGE_CACHE_DIR`, which is set by default in the
+  # wrapper below.
+  patches = [ ./prerender_cache_path.patch ];
 
-  preBuild = ''
-    mkdir -p config
-  '';
+  pnpmDeps = pnpm_10.fetchDeps {
+    inherit (finalAttrs)
+      pname
+      version
+      src
+      patches
+      ;
+    hash = "sha256-E16+JLtfoiWCXwgFGdTGuFlx/pYxhINNl6tCuF9Z6MQ=";
+  };
 
-  postBuild = ''
-    # Add a shebang to the server js file, then patch the shebang.
-    sed -i '1s|^|#!/usr/bin/env node\n|' .next/standalone/server.js
-    patchShebangs .next/standalone/server.js
-  '';
-
-  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ cctools ];
+  nativeBuildInputs = [
+    makeWrapper
+    nodejs
+    pnpm_10.configHook
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ cctools ];
 
   buildInputs = [
     nodePackages.node-gyp-build
@@ -57,32 +66,29 @@ buildNpmPackage rec {
 
   env.PYTHON = "${python3}/bin/python";
 
+  buildPhase = ''
+    runHook preBuild
+    mkdir -p config
+    pnpm build
+    runHook postBuild
+  '';
+
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/{share,bin}
-
+    mkdir -p $out/{bin,share}
     cp -r .next/standalone $out/share/homepage/
     cp -r public $out/share/homepage/public
+    chmod +x $out/share/homepage/server.js
 
     mkdir -p $out/share/homepage/.next
     cp -r .next/static $out/share/homepage/.next/static
 
-    chmod +x $out/share/homepage/server.js
-
-    # This patch must be applied here, as it's patching the `dist` directory
-    # of NextJS. Without this, homepage-dashboard errors when trying to
-    # write its prerender cache.
-    #
-    # This patch ensures that the cache implementation respects the env
-    # variable `NIXPKGS_HOMEPAGE_CACHE_DIR`, which is set by default in the
-    # wrapper below.
-    (cd "$out" && patch -p1 <${./prerender_cache_path.patch})
-
-    makeWrapper $out/share/homepage/server.js $out/bin/homepage \
+    makeWrapper "${lib.getExe nodejs}" $out/bin/homepage \
       --set-default PORT 3000 \
       --set-default HOMEPAGE_CONFIG_DIR /var/lib/homepage-dashboard \
-      --set-default NIXPKGS_HOMEPAGE_CACHE_DIR /var/cache/homepage-dashboard
+      --set-default NIXPKGS_HOMEPAGE_CACHE_DIR /var/cache/homepage-dashboard \
+      --add-flags "$out/share/homepage/server.js"
 
     ${if enableLocalIcons then installLocalIcons else ""}
 
@@ -100,7 +106,7 @@ buildNpmPackage rec {
 
   meta = {
     description = "Highly customisable dashboard with Docker and service API integrations";
-    changelog = "https://github.com/gethomepage/homepage/releases/tag/v${version}";
+    changelog = "https://github.com/gethomepage/homepage/releases/tag/v${finalAttrs.version}";
     mainProgram = "homepage";
     homepage = "https://gethomepage.dev";
     license = lib.licenses.gpl3;
@@ -108,4 +114,4 @@ buildNpmPackage rec {
     platforms = lib.platforms.all;
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})
