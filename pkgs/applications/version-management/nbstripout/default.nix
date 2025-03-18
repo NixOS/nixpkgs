@@ -8,12 +8,12 @@
 }:
 
 python3.pkgs.buildPythonApplication rec {
-  version = "0.6.1";
+  version = "0.8.1";
   pname = "nbstripout";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-kGW83RSIs4bk88CB/8HUj0UTovjYv00NmiggjF2v6dM=";
+    hash = "sha256-6qyLa05yno3+Hl3ywPi6RKvFoXplRI8EgBQfgL4jC7E=";
   };
 
   # for some reason, darwin uses /bin/sh echo native instead of echo binary, so
