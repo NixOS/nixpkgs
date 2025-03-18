@@ -161,6 +161,65 @@ qtModule (
       # Fix race condition exposed by missing dependency
       # https://bugs.gentoo.org/933368
       ./qtwebengine-fix_build_pdf_extension_util.patch
+
+      # The latest version of Clang changed what macros it predefines on Apple
+      # targets, causing errors about predefined macros in zlib.
+      (fetchpatch2 {
+        url = "https://github.com/chromium/chromium/commit/2f39ac8d0a414dd65c0e1d5aae38c8f97aa06ae9.patch";
+        hash = "sha256-3kA2os0IntxIiJwzS5nPd7QWYlOWOpoLKYsOQFYv0Sk=";
+        stripLen = 1;
+        extraPrefix = "src/3rdparty/chromium/";
+      })
+
+      # The latest version of Clang changed what macros it predefines on Apple
+      # targets, causing errors about predefined macros in libpng.
+      (fetchpatch2 {
+        url = "https://github.com/chromium/chromium/commit/66defc14abe47c0494da9faebebfa0a5b6efcf38.patch";
+        hash = "sha256-ErS5Eycls5+xQLGYKz1r/tQC6IcRJWb/WoGsUyzO9WY=";
+        stripLen = 1;
+        extraPrefix = "src/3rdparty/chromium/";
+      })
+
+      # https://trac.macports.org/ticket/71563
+      # src/3rdparty/chromium/third_party/freetype/src/src/gzip/ftzconf.h:228:12: error: unknown type name 'Byte'
+      (fetchpatch2 {
+        url = "https://github.com/macports/macports-ports/raw/f9a4136c48020b01ecc6dffa99b88333c360f056/aqua/qt5/files/patch-qtwebengine-chromium-freetype-gzip.diff";
+        hash = "sha256-NeLmMfYMo80u3h+5GTenMANWfWLPeS35cKg+h3vzW4g=";
+        extraPrefix = "";
+      })
+
+      # src/3rdparty/chromium/base/process/process_metrics_mac.cc:303:17: error: static assertion expression is not an integral constant expression
+      (fetchpatch2 {
+        url = "https://github.com/macports/macports-ports/raw/f9a4136c48020b01ecc6dffa99b88333c360f056/aqua/qt5/files/patch-qtwebengine_chromium_static_page_size.diff";
+        hash = "sha256-8TFN5XU0SUvPJCFU6wvcKP5a8HCd0ygUnLT8BF4MZ/E=";
+        extraPrefix = "";
+      })
+
+      # Add "-target-feature +aes" to the arm crc32c build flags
+      (fetchpatch2 {
+        url = "https://github.com/chromium/chromium/commit/9f43d823b6b4cdea62f0cc7563ff01f9239b8970.patch";
+        hash = "sha256-2WCx+ZOWA8ZyV2yiSQLx9uFZOoeWQHxLqwLEZsV41QU=";
+        stripLen = 1;
+        extraPrefix = "src/3rdparty/chromium/";
+      })
+
+      # Fix build with clang and libc++ 19
+      # https://github.com/freebsd/freebsd-ports/commit/0ddd6468fb3cb9ba390973520517cb1ca2cd690d
+      (fetchpatch2 {
+        url = "https://github.com/freebsd/freebsd-ports/raw/0ddd6468fb3cb9ba390973520517cb1ca2cd690d/www/qt5-webengine/files/patch-libc++19";
+        hash = "sha256-pSVPnuEpjFHW60dbId5sZ3zHP709EWG4LSWoS+TkgcQ=";
+        extraPrefix = "";
+      })
+      (fetchpatch2 {
+        url = "https://github.com/freebsd/freebsd-ports/raw/0ddd6468fb3cb9ba390973520517cb1ca2cd690d/www/qt5-webengine/files/patch-src_3rdparty_chromium_third__party_blink_renderer_platform_wtf_hash__table.h";
+        hash = "sha256-+vyWC7Indd1oBhvL5fMTlIH4mM4INgISZFAbHsq32Lg=";
+        extraPrefix = "";
+      })
+      (fetchpatch2 {
+        url = "https://github.com/freebsd/freebsd-ports/raw/0ddd6468fb3cb9ba390973520517cb1ca2cd690d/www/qt5-webengine/files/patch-src_3rdparty_chromium_third__party_perfetto_include_perfetto_tracing_internal_track__event__data__source.h";
+        hash = "sha256-DcAYOV9b30ogPCiedvQimEmiZpUJquk5j6WLjJxR54U=";
+        extraPrefix = "";
+      })
     ];
 
     postPatch =
@@ -248,6 +307,8 @@ qtModule (
             # https://trac.macports.org/ticket/70850
             "-Wno-enum-constexpr-conversion"
             "-Wno-unused-but-set-variable"
+            # Clang 19
+            "-Wno-error=missing-template-arg-list-after-template-kw"
           ]
         );
       }
