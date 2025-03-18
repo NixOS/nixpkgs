@@ -64,7 +64,6 @@ let
       mount -o remount,rw /host/etc/resolv.conf
       trap "umount /host/etc/resolv.conf" EXIT
 
-      cp /host/etc/resolv.conf /etc/resolv.conf;
       while inotifywait /etc 2>/dev/null;
       do
         cp /etc/resolv.conf /host/etc/resolv.conf;
