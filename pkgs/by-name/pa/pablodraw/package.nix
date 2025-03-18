@@ -27,12 +27,12 @@ buildDotnetModule rec {
   executables = [ "PabloDraw" ];
 
   dotnet-sdk = dotnetCorePackages.sdk_9_0;
-  dotnet-runtime = dotnetCorePackages.runtime_9_0;
 
   nugetDeps = ./deps.json;
 
   dotnetFlags = [
     "-p:EnableCompressionInSingleFile=false"
+    "-p:TargetFrameworks=net9.0"
   ];
 
   nativeBuildInputs = [
