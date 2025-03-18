@@ -100,11 +100,8 @@ buildGoModule rec {
       ) modules
     )
     + lib.optionalString (stdenv.hostPlatform.isLinux && ui) ''
-      mkdir -p $out/share/pixmaps
-      cp $src/client/ui/netbird-systemtray-connected.png $out/share/pixmaps/netbird.png
-
-      mkdir -p $out/share/applications
-      cp $src/client/ui/netbird.desktop $out/share/applications/netbird.desktop
+      install -Dm644 "$src/client/ui/assets/netbird-systemtray-connected.png" "$out/share/pixmaps/netbird.png"
+      install -Dm644 "$src/client/ui/build/netbird.desktop" "$out/share/applications/netbird.desktop"
 
       substituteInPlace $out/share/applications/netbird.desktop \
         --replace-fail "Exec=/usr/bin/netbird-ui" "Exec=$out/bin/netbird-ui"
