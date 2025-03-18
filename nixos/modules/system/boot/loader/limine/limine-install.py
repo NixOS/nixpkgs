@@ -189,7 +189,7 @@ def find_mounted_device(path: str) -> str:
     while not os.path.ismount(path):
         path = os.path.dirname(path)
 
-    devices = [x for x in psutil.disk_partitions(all=True) if x.mountpoint == path]
+    devices = [x for x in psutil.disk_partitions() if x.mountpoint == path]
 
     assert len(devices) == 1
     return devices[0].device
@@ -395,15 +395,16 @@ def main():
             limine_deploy_args = [limine_binary, 'bios-install', device]
 
         if config('partitionIndex'):
-            limine_deploy_args.append(config('partitionIndex'))
+            limine_deploy_args.append(str(config('partitionIndex')))
 
         if config('forceMbr'):
             limine_deploy_args += '--force-mbr'
-            try:
-                subprocess.run(limine_deploy_args)
-            except:
-                raise Exception(
-                    'Failed to deploy BIOS stage 1 Limine bootloader!\n' +
-                    'You might want to try enabling the `boot.loader.limine.forceMbr` option.')
+
+        try:
+            subprocess.run(limine_deploy_args)
+        except:
+            raise Exception(
+                'Failed to deploy BIOS stage 1 Limine bootloader!\n' +
+                'You might want to try enabling the `boot.loader.limine.forceMbr` option.')
 
 main()
