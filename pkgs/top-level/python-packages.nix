@@ -5033,6 +5033,8 @@ self: super: with self; {
 
   formulae = callPackage ../development/python-modules/formulae { };
 
+  fortio = callPackage ../development/python-modules/fortio { };
+  
   fortiosapi = callPackage ../development/python-modules/fortiosapi { };
 
   formencode = callPackage ../development/python-modules/formencode { };
