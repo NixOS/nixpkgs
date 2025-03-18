@@ -8,19 +8,19 @@
 
 buildGoModule rec {
   pname = "carapace-bridge";
-  version = "1.2.3";
+  version = "1.2.4";
 
   src = fetchFromGitHub {
     owner = "carapace-sh";
     repo = "carapace-bridge";
     tag = "v${version}";
-    hash = "sha256-RMItv9HAPsxnb0NGlDjqY8Of4cxf8xU1c8ZE8Ajz0ao=";
+    hash = "sha256-/HjoE6yaawo1hCemnvtfK3wj4SBSW91D4oyuZ5qxV4M=";
   };
 
   # buildGoModule try to run `go mod vendor` instead of `go work vendor` on the
   # workspace if proxyVendor is off
   proxyVendor = true;
-  vendorHash = "sha256-R2sk5yqhF+5pVWxCnEx+EKTvNPzg32/JguLMu6R3ETM=";
+  vendorHash = "sha256-zfV5IcpwtK3n76jWs4ldMlpEqbyNmmXZWDj+fh66luw=";
 
   postPatch = ''
     substituteInPlace cmd/carapace-bridge/main.go \
