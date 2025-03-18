@@ -15,6 +15,8 @@ There are quite a few settings that need to be passed to Netbird for it to funct
 # Netbird minmal Configuration
 
 ```nix
+{pkgs, ...}: {
+  services.netbird.server = {
     enable = true;
 
     # Publicly exposed domain

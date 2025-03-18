@@ -20,6 +20,11 @@ in
       example = "1.2.3.4:1764";
     };
 
+    relayAddress = mkOption {
+      type = str;
+      description = "The external address to reach the relay service.";
+    };
+
     managementAddress = mkOption {
       type = str;
       description = "Address to reach the management api.";
@@ -84,6 +89,22 @@ in
           grpc_read_timeout 1d;
           grpc_send_timeout 1d;
           grpc_socket_keepalive on;
+        '';
+        locations."/relay".extraConfig = ''
+          proxy_pass http://${cfg.relayAddress}/relay;
+
+          # WebSocket support
+          proxy_http_version 1.1;
+          proxy_set_header Upgrade $http_upgrade;
+          proxy_set_header Connection "Upgrade";
+
+          # Timeout settings
+          proxy_read_timeout 3600s;
+          proxy_send_timeout 3600s;
+          proxy_connect_timeout 60s;
+
+          # Handle upstream errors
+          proxy_next_upstream error timeout invalid_header http_500 http_502 http_503 http_504;
         '';
       };
     };
