@@ -58526,24 +58526,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  lodash = nodeEnv.buildNodePackage {
-    name = "lodash";
-    packageName = "lodash";
-    version = "4.17.21";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/lodash/-/lodash-4.17.21.tgz";
-      sha512 = "v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==";
-    };
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Lodash modular utilities.";
-      homepage = "https://lodash.com/";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   lua-fmt = nodeEnv.buildNodePackage {
     name = "lua-fmt";
     packageName = "lua-fmt";
