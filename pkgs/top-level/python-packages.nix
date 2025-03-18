@@ -7847,6 +7847,8 @@ self: super: with self; {
 
   lmnotify = callPackage ../development/python-modules/lmnotify { };
 
+  lmnr = callPackage ../development/python-modules/lmnr { };
+
   lmtpd = callPackage ../development/python-modules/lmtpd { };
 
   lnkparse3 = callPackage ../development/python-modules/lnkparse3 { };
@@ -10014,6 +10016,8 @@ self: super: with self; {
 
   opentelemetry-instrumentation-grpc = callPackage ../development/python-modules/opentelemetry-instrumentation-grpc { };
 
+  opentelemetry-instrumentation-urllib3 = callPackage ../development/python-modules/opentelemetry-instrumentation-urllib3 { };
+
   opentelemetry-instrumentation-logging = callPackage ../development/python-modules/opentelemetry-instrumentation-logging { };
 
   opentelemetry-instrumentation-psycopg2 = callPackage ../development/python-modules/opentelemetry-instrumentation-psycopg2 { };
@@ -10022,6 +10026,10 @@ self: super: with self; {
 
   opentelemetry-instrumentation-redis = callPackage ../development/python-modules/opentelemetry-instrumentation-redis { };
 
+  opentelemetry-instrumentation-sqlalchemy = callPackage ../development/python-modules/opentelemetry-instrumentation-sqlalchemy { };
+
+  opentelemetry-instrumentation-threading = callPackage ../development/python-modules/opentelemetry-instrumentation-threading { };
+
   opentelemetry-instrumentation-wsgi = callPackage ../development/python-modules/opentelemetry-instrumentation-wsgi { };
 
   opentelemetry-propagator-aws-xray = callPackage ../development/python-modules/opentelemetry-propagator-aws-xray { };
@@ -10029,6 +10037,8 @@ self: super: with self; {
   opentelemetry-proto = callPackage ../development/python-modules/opentelemetry-proto { };
 
   opentelemetry-semantic-conventions = callPackage ../development/python-modules/opentelemetry-semantic-conventions { };
+
+  opentelemetry-semantic-conventions-ai = callPackage ../development/python-modules/opentelemetry-semantic-conventions-ai { };
 
   opentelemetry-sdk = callPackage ../development/python-modules/opentelemetry-sdk { };
 
