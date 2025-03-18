@@ -22,7 +22,6 @@ let
     type = "Application";
     startupWMClass = "com.defold.editor.Start";
     categories = [
-      "Game"
       "Development"
       "IDE"
     ];
