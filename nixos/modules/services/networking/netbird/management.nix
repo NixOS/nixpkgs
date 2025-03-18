@@ -58,6 +58,11 @@ let
       Secret = "not-secure-secret";
       TimeBasedCredentials = false;
     };
+    Relay = {
+      Addresses = [ cfg.relay.settings.NB_EXPOSED_ADDRESS ];
+      CredentialsTTL = "24h";
+      Secret._secret = cfg.relay.authSecretFile;
+    };
 
     Signal = {
       Proto = "https";

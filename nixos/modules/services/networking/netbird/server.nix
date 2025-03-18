@@ -26,11 +26,12 @@ in
     ./dashboard.nix
     ./management.nix
     ./signal.nix
+    ./relay.nix
     ./proxy.nix
   ];
 
   options.services.netbird.server = {
-    enable = mkEnableOption "Netbird Server stack, comprising the dashboard, management API and signal service";
+    enable = mkEnableOption "Netbird Server stack, comprising the dashboard, management API, relay and signal service";
 
     domain = mkOption {
       type = str;
@@ -74,6 +75,11 @@ in
         });
 
       signal = {
+        enable = mkDefault cfg.enable;
+      };
+
+      relay = {
+        settings.NB_EXPOSED_ADDRESS = mkDefault "rel://${cfg.domain}:${builtins.toString cfg.relay.port}";
         enable = mkDefault cfg.enable;
       };
 
