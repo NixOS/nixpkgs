@@ -23,6 +23,7 @@ let
       || builtins.elem license.shortName [
         "CUDA EULA"
         "cuDNN EULA"
+        "cuSPARSELt EULA"
         "cuTENSOR EULA"
         "NVidia OptiX EULA"
       ]
