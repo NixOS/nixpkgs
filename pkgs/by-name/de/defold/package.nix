@@ -63,9 +63,6 @@ buildFHSEnv {
   extraInstallCommands = ''
     runHook preInstall
 
-    mkdir -p $out/opt
-    cp -r ${defold} $out/opt/Defold
-
     bsdtar -xf ${defold}/packages/defold-*.jar --strip-components 2 icons/document.iconset
 
     install -Dm444 icon_16x16.png $out/share/icons/hicolor/16x16/apps/defold.png
@@ -80,7 +77,7 @@ buildFHSEnv {
   '';
 
   executableName = "Defold";
-  runScript = "Defold";
+  runScript = "${defold}/Defold";
 
   meta = {
     description = "Game engine for development of desktop, mobile and web games";
