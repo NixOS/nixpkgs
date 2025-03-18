@@ -3,20 +3,15 @@
   lib,
   libarchive,
   makeDesktopItem,
-  stdenv,
   buildFHSEnv,
 }:
 let
   version = "1.9.8";
 
-  defold =
-    if stdenv.hostPlatform.system == "x86_64-linux" then
-      fetchzip {
-        url = "https://github.com/defold/defold/releases/download/${version}/Defold-x86_64-linux.zip";
-        hash = "sha256-Pn7jNw8oFZfgn5vHuJ3H9n+6YQ9cTev9ntDFrCiJI9s=";
-      }
-    else
-      throw "Unsupported system: ${stdenv.hostPlatform.system}";
+  defold = fetchzip {
+    url = "https://github.com/defold/defold/releases/download/${version}/Defold-x86_64-linux.zip";
+    hash = "sha256-Pn7jNw8oFZfgn5vHuJ3H9n+6YQ9cTev9ntDFrCiJI9s=";
+  };
 
   # https://github.com/defold/defold/blob/67542769598a1b794877c96f740f3f527f63f491/editor/src/clj/editor/app_view.clj#L2748
   desktopItem = makeDesktopItem {
