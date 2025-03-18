@@ -10515,6 +10515,8 @@ self: super: with self; {
 
   pfzy = callPackage ../development/python-modules/pfzy { };
 
+  pigpio = toPythonModule (pkgs.pigpio.override { python3 = python; });
+
   ping3 = callPackage ../development/python-modules/ping3 { };
 
   pins = callPackage ../development/python-modules/pins { };
