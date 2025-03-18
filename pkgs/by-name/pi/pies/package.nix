@@ -14,6 +14,10 @@ stdenv.mkDerivation rec {
     sha256 = "12r7rjjyibjdj08dvwbp0iflfpzl4s0zhn6cr6zj3hwf9gbzgl1g";
   };
 
+  postPatch = ''
+    sed -i "19i #include <stdlib.h>" lib/pp.c
+  '';
+
   buildInputs = [ libxcrypt ];
 
   configureFlags = [ "--sysconfdir=/etc" ];
