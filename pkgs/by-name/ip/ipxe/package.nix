@@ -142,7 +142,15 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Network boot firmware";
     homepage = "https://ipxe.org/";
-    license = lib.licenses.gpl2Only;
+    license = with lib.licenses; [
+      bsd2
+      bsd3
+      gpl2Only
+      gpl2UBDLPlus
+      isc
+      mit
+      mpl11
+    ];
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ sigmasquadron ];
   };
