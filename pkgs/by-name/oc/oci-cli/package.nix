@@ -103,7 +103,6 @@ py.pkgs.buildPythonApplication rec {
       upl
     ];
     maintainers = with maintainers; [
-      adamcstephens
       ilian
       FKouhai
     ];
