@@ -1,9 +1,9 @@
 {
-  lib,
-  stdenv,
   fetchFromGitHub,
+  lib,
   postgresql,
-  buildPostgresqlExtension,
+  postgresqlBuildExtension,
+  stdenv,
 }:
 
 let
@@ -29,22 +29,18 @@ let
         version = "1.3.9";
         hash = "sha256-KGcHDwk8CgNHPZARfLBfS8r7TRCP9LPjT+m4fNSnnW0=";
       };
-      "12" = {
-        version = "1.3.9";
-        hash = "sha256-64/dlm6e4flCxMQ8efsxfKSlja+Tko0zsghTgLatN+Y=";
-      };
     }
     .${lib.versions.major postgresql.version}
     or (throw "Source for pg_hint_plan is not available for ${postgresql.version}");
 in
-buildPostgresqlExtension {
+postgresqlBuildExtension {
   pname = "pg_hint_plan";
   inherit (source) version;
 
   src = fetchFromGitHub {
     owner = "ossc-db";
     repo = "pg_hint_plan";
-    rev = "REL${lib.versions.major postgresql.version}_${
+    tag = "REL${lib.versions.major postgresql.version}_${
       builtins.replaceStrings [ "." ] [ "_" ] source.version
     }";
     inherit (source) hash;
@@ -57,11 +53,11 @@ buildPostgresqlExtension {
 
   enableUpdateScript = false;
 
-  meta = with lib; {
+  meta = {
     description = "Extension to tweak PostgreSQL execution plans using so-called 'hints' in SQL comments";
     homepage = "https://github.com/ossc-db/pg_hint_plan";
-    maintainers = with maintainers; [ _1000101 ];
+    maintainers = with lib.maintainers; [ _1000101 ];
     platforms = postgresql.meta.platforms;
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
   };
 }
