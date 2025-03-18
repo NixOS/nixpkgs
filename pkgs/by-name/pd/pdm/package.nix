@@ -19,6 +19,12 @@ let
           hash = "sha256-UBdgFN+fvbjz+rp8+rog8FW2jwO/jCfUPV7UehJKiV8=";
         };
       });
+      # pdm requires hishel and subsequentially pytest-regressions -> matplotlib -> ghostscript -> jbig2dec which is AGPL only
+      matplotlib = super.matplotlib.override ({ enableGhostscript = false; });
+      # pdm requires hishel and subsequentially moto -> graphql-core -> pytest-benchmark -> pygal-cairosvg -> cairocffi -> pikepdf -> jbig2dec which is AGPL only
+      cairocffi = super.cairocffi.overridePythonAttrs (old: rec {
+        doCheck = false;
+      });
     };
   };
 in
