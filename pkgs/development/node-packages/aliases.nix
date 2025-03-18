@@ -127,6 +127,7 @@ mapAliases {
   inherit (pkgs) http-server; # added 2024-01-20
   hueadm = pkgs.hueadm; # added 2023-07-31
   inherit (pkgs) hyperpotamus; # added 2023-08-19
+  ijavascript = throw "ijavascript has been removed because it was broken"; # added 2025-03-18
   immich = pkgs.immich-cli; # added 2023-08-19
   indium = throw "indium was removed because it was broken"; # added 2023-08-19
   inliner = throw "inliner was removed because it was abandoned upstream"; # added 2024-08-23
