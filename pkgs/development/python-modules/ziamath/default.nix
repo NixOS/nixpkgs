@@ -8,6 +8,7 @@
   pytestCheckHook,
   nbval,
   latex2mathml,
+  writableTmpDirAsHomeHook,
   fetchurl,
 }:
 buildPythonPackage rec {
@@ -32,6 +33,7 @@ buildPythonPackage rec {
     pytestCheckHook
     nbval
     latex2mathml
+    writableTmpDirAsHomeHook
   ];
 
   preCheck =
