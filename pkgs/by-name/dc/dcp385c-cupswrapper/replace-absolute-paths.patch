@@ -1,0 +1,162 @@
+--- cupswrapperdcp385c.orig	2008-11-18 10:31:13.000000000 +0100
++++ cupswrapperdcp385c	2024-06-22 21:09:26.993494135 +0200
+@@ -25,11 +25,11 @@
+ device_model="Printer"
+ if [ "$1" = '-e' ]; then
+   lpadmin -x ${printer_name}
+-  rm -f /usr/share/cups/model/br${printer_model}.ppd
+-  rm -f /usr/share/ppd/br${printer_model}.ppd
+-  rm -f /usr/lib/cups/filter/brlpdwrapper${printer_model}
+-  rm -f /usr/lib64/cups/filter/brlpdwrapper${printer_model}
+-  rm -f /usr/local/Brother/${device_model}/${printer_model}/cupswrapper/brcupsconfpt1
++  rm -f @lpr@/share/cups/model/br${printer_model}.ppd
++  rm -f @lpr@/share/ppd/br${printer_model}.ppd
++  rm -f @out@/lib/cups/filter/brlpdwrapper${printer_model}
++  rm -f @out@/lib64/cups/filter/brlpdwrapper${printer_model}
++  rm -f @out@/local/Brother/${device_model}/${printer_model}/cupswrapper/brcupsconfpt1
+ if [  -e /etc/init.d/cups ]; then
+    /etc/init.d/cups restart
+ elif [  -e /etc/init.d/cupsys ]; then
+@@ -55,21 +55,21 @@
+   echo   '       -r : remove printer'
+   exit 0
+ fi
+-#mkdir -p /usr/local/Brother/${device_model}/${printer_model}/filter
+-#mkdir -p /usr/lib/cups/filter
++#mkdir -p @lpr@/local/Brother/${device_model}/${printer_model}/filter
++#mkdir -p @lpr@/lib/cups/filter
+ 
+-if [ -e "/usr/local/Brother/${device_model}/${printer_model}/lpd/filter${printer_model}" ]; then
++if [ -e "@lpr@/local/Brother/${device_model}/${printer_model}/lpd/filter${printer_model}" ]; then
+   :
+ else
+   echo "ERROR : Brother LPD filter is not installed."
+ fi
+-rm -f /usr/share/cups/model/br${printer_model}.ppd
+-if [ -d "/usr/share/cups/model" ]; then
+-  ppd_file_name=/usr/share/cups/model/br${printer_model}.ppd
++rm -f @out@/share/cups/model/br${printer_model}.ppd
++if [ -d "@out@/share/cups/model" ]; then
++  ppd_file_name=@out@/share/cups/model/br${printer_model}.ppd
+ else
+-  ppd_file_name=/usr/share/ppd/br${printer_model}.ppd
++  ppd_file_name=@out@/share/ppd/br${printer_model}.ppd
+ fi
+-#ppd_file_name=/usr/share/cups/model/br${printer_model}.ppd
++#ppd_file_name=@out@/share/cups/model/br${printer_model}.ppd
+ 
+ cat <<ENDOFPPDFILE1 >$ppd_file_name
+ *PPD-Adobe: "4.3"
+@@ -699,27 +699,27 @@
+ 
+ chmod 644 $ppd_file_name
+ 
+-if [ -d /usr/share/ppd ]
++if [ -d @out@/share/ppd ]
+ then
+-if [ -d /usr/share/cups/model ]
++if [ -d @out@/share/cups/model ]
+ then
+-	cp $ppd_file_name /usr/share/ppd/br${printer_model}.ppd
+-	chmod 644 /usr/share/ppd/br${printer_model}.ppd
++	cp $ppd_file_name @out@/share/ppd/br${printer_model}.ppd
++	chmod 644 @out@/share/ppd/br${printer_model}.ppd
+ fi
+ fi
+ 
+ #################################################
+ 
+-if [ -d /usr/lib/cups/filter ]
++if [ -d @out@/lib/cups/filter ]
+ then
+-	brotherlpdwrapper=/usr/lib/cups/filter/brlpdwrapper${printer_model}
++	brotherlpdwrapper=@out@/lib/cups/filter/brlpdwrapper${printer_model}
+ else
+-	brotherlpdwrapper=/usr/lib64/cups/filter/brlpdwrapper${printer_model}
++	brotherlpdwrapper=@out@/lib64/cups/filter/brlpdwrapper${printer_model}
+ fi
+ 
+ 
+ rm -f  $brotherlpdwrapper
+-#echo 'rm -f /usr/lib/cups/filter/brlpdwrapper${printer_model}'
++#echo 'rm -f @out@/lib/cups/filter/brlpdwrapper${printer_model}'
+ 
+ 
+ cat <<!ENDOFWFILTER! >$brotherlpdwrapper
+@@ -759,7 +759,7 @@
+ PPDC=\`echo \$PPDC | sed -e 's/PPD=//'\`
+ 
+ if [ "\$PPDC" = "" ]; then
+-    PPDC="/usr/share/cups/model/br${printer_model}.ppd"
++    PPDC="@lpr@/share/cups/model/br${printer_model}.ppd"
+ fi
+ 
+ 
+@@ -784,6 +784,10 @@
+     echo "PPD  = \$PPD"                                         >>\$LOGFILE
+ fi
+ 
++if ! [ -e /var/cache/cups/br${printer_model}rc ]; then
++  echo "creating rc file"                                         >>\$LOGFILE
++  cp @lpr@/local/Brother/${device_model}/${printer_model}/inf/br${printer_model}rc /var/cache/cups/br${printer_model}rc
++fi
+ INPUT_TEMP_PS=\`mktemp /tmp/br_input_ps.XXXXXX\`
+ 
+ nup="cat"
+@@ -809,7 +813,7 @@
+ 		nup="cat"
+ 	fi
+ 	echo   "NUP=\$nup"                                      >>\$LOGFILE
+-   if [ -e /usr/bin/psnup ]; then
++   if [ -e @lpr@/bin/psnup ]; then
+        if [ \$# -ge 7 ]; then
+ 	       cat \$6  | \$nup > \$INPUT_TEMP_PS
+        else
+@@ -829,25 +833,25 @@
+       cat    > \$INPUT_TEMP_PS
+    fi
+ fi
+-if [ -e "/usr/local/Brother/${device_model}/${printer_model}/lpd/filter${printer_model}" ]; then
++if [ -e "@lpr@/local/Brother/${device_model}/${printer_model}/lpd/filter${printer_model}" ]; then
+        :
+ else
+-    echo "ERROR: /usr/local/Brother/${device_model}/${printer_model}/lpd/filter${printer_model} does not exist"   >>\$LOGFILE
++    echo "ERROR: @lpr@/local/Brother/${device_model}/${printer_model}/lpd/filter${printer_model} does not exist"   >>\$LOGFILE
+     errorcode=30
+     exit
+ fi
+ 
+ CUPSOPTION=\`echo "\$5 Copies=\$4" | sed -e 's/BrMirror=OFF/MirrorPrint=OFF/' -e 's/BrMirror=ON/MirrorPrint=ON/' -e 's/BrChain/Chain/' -e 's/BrBrightness/Brightness/' -e 's/BrContrast/Contrast/' -e 's/BrHalfCut/HalfCut/' -e 's/BrAutoTapeCut/AutoCut/' -e 's/BrHalftonePattern/Halftone/' -e 's/Binary/Binary/' -e 's/Dither/Dither/' -e 's/ErrorDiffusion/ErrorDiffusion/' -e 's/PageSize/media/' -e 's/BrSheets/Sheets/' -e 's/multiple-document-handling/Collate/' -e 's/separate-documents-collated-copies/ON/' -e 's/separate-documents-uncollated-copies/OFF/'\`
+-if [ -e "/usr/local/Brother/${device_model}/${printer_model}/cupswrapper/brcupsconfpt1" ]; then
++if [ -e "@out@/local/Brother/${device_model}/${printer_model}/cupswrapper/brcupsconfpt1" ]; then
+   if [ \$DEBUG = 0 ]; then
+-     /usr/local/Brother/${device_model}/${printer_model}/cupswrapper/brcupsconfpt1  ${printer_name}  \$PPDC 0 "\$CUPSOPTION" "${printer_model}">> /dev/null
++     @out@/local/Brother/${device_model}/${printer_model}/cupswrapper/brcupsconfpt1  ${printer_name}  \$PPDC 0 "\$CUPSOPTION" "${printer_model}">> /dev/null
+   else
+-     /usr/local/Brother/${device_model}/${printer_model}/cupswrapper/brcupsconfpt1  ${printer_name}  \$PPDC \$LOGCLEVEL "\$CUPSOPTION" "${printer_model}">>\$LOGFILE
++     @out@/local/Brother/${device_model}/${printer_model}/cupswrapper/brcupsconfpt1  ${printer_name}  \$PPDC \$LOGCLEVEL "\$CUPSOPTION" "${printer_model}">>\$LOGFILE
+   fi
+ fi
+ 
+ if [ \$DEBUG -lt 10 ]; then
+-    cat    \$INPUT_TEMP_PS | /usr/local/Brother/${device_model}/${printer_model}/lpd/filter${printer_model} "\$\$" "CUPS" "USB"
++    cat    \$INPUT_TEMP_PS | @lpr@/local/Brother/${device_model}/${printer_model}/lpd/filter${printer_model} "\$\$" "CUPS" "USB"
+ 
+     if [ \$LOGLEVEL -gt 2 ];  then
+ 	   if [ \$LOGFILE != "/dev/null" ]; then
+@@ -864,12 +868,12 @@
+ !ENDOFWFILTER!
+ 
+ chmod 755 $brotherlpdwrapper
+-#if [ -e /usr/lib64/cups/backend ]; then
++#if [ -e @lpr@/lib64/cups/backend ]; then
+ #   cp $brotherlpdwrapper  $brotherlpdwrapper64
+ #fi
+ 
+-chmod a+w /usr/local/Brother/${device_model}/${printer_model}/inf/br${printer_model}rc
+-chmod a+w /usr/local/Brother/${device_model}/${printer_model}/inf
++chmod a+w @lpr@/local/Brother/${device_model}/${printer_model}/inf/br${printer_model}rc
++chmod a+w @lpr@/local/Brother/${device_model}/${printer_model}/inf
+ if [ -e /etc/init.d/lpd ]; then
+    /etc/init.d/lpd stop
+ fi
