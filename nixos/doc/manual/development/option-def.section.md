@@ -139,7 +139,25 @@ A free-floating definition is created with `mkDefinition { file = ...; value = .
 
 Preserving the file location creates better error messages, for example when copying definitions from one option to another.
 
-Other properties like `mkOverride` `mkMerge` `mkAfter` can be used in the `value` attribute but not the other way around.
+Other properties like `mkOverride` `mkMerge` `mkAfter` can be used in the `value` attribute but not on the entire definition.
+
+This is what would work
+
+```nix
+mkDefinition {
+   value = mkForce 42;
+   file = "somefile.nix";
+}
+```
+
+While this would NOT work.
+
+```nix
+mkForce (mkDefinition {
+   value = 42;
+   file = "somefile.nix";
+})
+```
 
 The following shows an example configuration that yields an error with the custom position information:
 
