@@ -6271,6 +6271,7 @@
     keys = [ { fingerprint = "33CD 5C0A 673C C54D 661E  5E4C 0DB5 361B EEE5 30AB"; } ];
   };
   Donvini94 = {
+    name = "Vincenzo Pace";
     github = "donvini94";
     githubId = 9118643;
   };
