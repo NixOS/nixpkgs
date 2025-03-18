@@ -2818,7 +2818,7 @@ with pkgs;
   libotf = callPackage ../tools/inputmethods/m17n-lib/otf.nix { };
 
   netbird = callPackage ../tools/networking/netbird {
-    inherit (darwin.apple_sdk_11_0.frameworks) Cocoa IOKit Kernel UserNotifications WebKit;
+    inherit (darwin.apple_sdk.frameworks) Cocoa IOKit Kernel UserNotifications WebKit;
     inherit buildGoModule;
   };
 
