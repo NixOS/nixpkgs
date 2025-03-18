@@ -60,8 +60,6 @@ buildFHSEnv {
   ];
 
   extraInstallCommands = ''
-    runHook preInstall
-
     bsdtar -xf ${src}/packages/defold-*.jar --strip-components 2 icons/document.iconset
 
     install -Dm444 icon_16x16.png $out/share/icons/hicolor/16x16/apps/defold.png
@@ -71,8 +69,6 @@ buildFHSEnv {
     install -Dm444 icon_256x256.png $out/share/icons/hicolor/256x256/apps/defold.png
     install -Dm444 icon_256x256@2x.png $out/share/icons/hicolor/512x512/apps/defold.png
     install -Dm444 -t $out/share/applications ${desktopItem}/share/applications/Defold.desktop
-
-    runHook postInstall
   '';
 
   executableName = "Defold";
