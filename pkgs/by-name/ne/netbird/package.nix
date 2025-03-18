@@ -12,11 +12,7 @@
   libX11,
   libXcursor,
   libXxf86vm,
-  Cocoa,
-  IOKit,
-  Kernel,
-  UserNotifications,
-  WebKit,
+  darwin,
   ui ? false,
   netbird-ui,
   versionCheckHook,
@@ -58,11 +54,11 @@ buildGoModule rec {
       libXxf86vm
     ]
     ++ lib.optionals (stdenv.hostPlatform.isDarwin && ui) [
-      Cocoa
-      IOKit
-      Kernel
-      UserNotifications
-      WebKit
+      darwin.apple_sdk.frameworks.Cocoa
+      darwin.apple_sdk.frameworks.IOKit
+      darwin.apple_sdk.frameworks.Kernel
+      darwin.apple_sdk.frameworks.UserNotifications
+      darwin.apple_sdk.frameworks.WebKit
     ];
 
   subPackages = lib.attrNames modules;
