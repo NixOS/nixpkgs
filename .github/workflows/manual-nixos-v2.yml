@@ -10,6 +10,9 @@ on:
       # the release notes and some css and js files from there.
       # See nixos/doc/manual/default.nix
       - "doc/**"
+      # Build when something in lib changes
+      # Since the lib functions are used to 'massage' the options before producing the manual
+      - "lib/**"
 
 permissions: {}
 
