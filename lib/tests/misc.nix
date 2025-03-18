@@ -1429,6 +1429,29 @@ runTests {
     '';
   };
 
+  testToINIOrdered = {
+    expr = generators.toINI {} {
+      bar = [
+        { name = "foo"; value = 1;}
+        { name = "qux"; value = 2;}
+      ];
+      baz = [
+        { name = "qux"; value = 2;}
+        { name = "foo"; value = 1;}
+      ];
+    };
+    expected = ''
+      [bar]
+      foo=1
+      qux=2
+
+      [baz]
+      qux=2
+      foo=1
+    '';
+  };
+
+
   testToINIWithGlobalSectionEmpty = {
     expr = generators.toINIWithGlobalSection {} {
       globalSection = {
