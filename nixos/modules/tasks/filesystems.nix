@@ -326,9 +326,7 @@ in
           zfs = lib.mkForce false;
         }
       '';
-      type = types.coercedTo (types.listOf types.str) (
-        enabled: lib.listToAttrs (map (fs: lib.nameValuePair fs true) enabled)
-      ) (types.attrsOf types.bool);
+      type = types.attrNamesToTrue;
       description = ''
         Names of supported filesystem types, or an attribute set of file system types
         and their state. The set form may be used together with `lib.mkForce` to
