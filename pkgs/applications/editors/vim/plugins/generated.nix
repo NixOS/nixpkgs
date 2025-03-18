@@ -1188,6 +1188,19 @@ final: prev:
     meta.hydraPlatforms = [ ];
   };
 
+  aw-watcher-nvim = buildVimPlugin {
+    pname = "aw-watcher.nvim";
+    version = "2025-03-06";
+    src = fetchFromGitHub {
+      owner = "lowitea";
+      repo = "aw-watcher.nvim";
+      rev = "9030f9b851578fce7cec5fa3d7b54556eb7e270f";
+      sha256 = "0nsmfb508x03n0hvlnhcjzgqwwg8rp8wa2a5r7wz4z1hrs03hscx";
+    };
+    meta.homepage = "https://github.com/lowitea/aw-watcher.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   aw-watcher-vim = buildVimPlugin {
     pname = "aw-watcher-vim";
     version = "2023-10-09";

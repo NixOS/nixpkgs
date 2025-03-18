@@ -5111,6 +5111,8 @@ self: super: with self; {
 
   funcsigs = callPackage ../development/python-modules/funcsigs { };
 
+  functions-framework = callPackage ../development/python-modules/functions-framework { };
+
   functiontrace = callPackage ../development/python-modules/functiontrace { };
 
   funcy = callPackage ../development/python-modules/funcy { };
@@ -15398,6 +15400,8 @@ self: super: with self; {
   smmap = callPackage ../development/python-modules/smmap { };
 
   smoke-zephyr = callPackage ../development/python-modules/smoke-zephyr { };
+
+  smolagents = callPackage ../development/python-modules/smolagents { };
 
   smpplib = callPackage ../development/python-modules/smpplib { };
 
