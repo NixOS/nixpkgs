@@ -3,15 +3,13 @@
   stdenv,
   fetchFromGitHub,
   rustPlatform,
+  libcosmicAppHook,
   cmake,
-  coreutils,
   just,
   libinput,
-  libxkbcommon,
   linux-pam,
-  pkg-config,
   udev,
-  wayland,
+  coreutils,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -34,15 +32,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     rustPlatform.bindgenHook
     cmake
     just
-    pkg-config
+    libcosmicAppHook
   ];
 
   buildInputs = [
     libinput
-    libxkbcommon
     linux-pam
     udev
-    wayland
   ];
 
   dontUseJustBuild = true;
