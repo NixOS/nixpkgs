@@ -21,7 +21,7 @@ target-version = "py312"
 line-length = 88
 
 lint.select = ["E", "F", "I", "U", "N"]
-lint.ignore = ["E501"]
+lint.ignore = ["E501", "N818"]
 
 # xxx: we can import https://pypi.org/project/types-colorama/ here
 [[tool.mypy.overrides]]
