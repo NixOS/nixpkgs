@@ -1,5 +1,6 @@
 {
   lib,
+  openssl,
   stdenv,
   fetchurl,
 }:
@@ -12,9 +13,17 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-hUEZZEulmaV3KfKOqE1wl7y4SRUn2/HoOjVDabk5+YA=";
   };
 
+  buildInputs = [ openssl ];
+
+  makeFlags = [
+    "ynetd"
+    "pow-solver"
+  ];
+
   installPhase = ''
     runHook preInstall
     install -Dm755 ynetd $out/bin/ynetd
+    install -Dm755 pow-solver $out/bin/pow-solver
     runHook postInstall
   '';
 
