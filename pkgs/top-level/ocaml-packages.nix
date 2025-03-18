@@ -2076,6 +2076,8 @@ let
 
     zarith = callPackage ../development/ocaml-modules/zarith { };
 
+    zbg = callPackage ../development/ocaml-modules/zbg { };
+
     zed = callPackage ../development/ocaml-modules/zed { };
 
     zelus = callPackage ../development/ocaml-modules/zelus { };
