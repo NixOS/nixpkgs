@@ -1,12 +1,12 @@
 # This module defines a NixOS installation CD that contains X11 and
 # Plasma 5.
 
-{ pkgs, ... }:
+{ lib, pkgs, ... }:
 
 {
   imports = [ ./installation-cd-graphical-base.nix ];
 
-  isoImage.edition = "plasma5";
+  isoImage.edition = lib.mkDefault "plasma5";
 
   services.xserver.desktopManager.plasma5 = {
     enable = true;
