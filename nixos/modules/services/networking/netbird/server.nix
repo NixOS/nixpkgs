@@ -7,6 +7,7 @@ let
     mkIf
     mkOption
     optionalAttrs
+    mkMerge
     ;
 
   inherit (lib.types) str;
@@ -49,30 +50,32 @@ in
         managementServer = "https://${cfg.domain}";
       };
 
-      management = {
-        domain = mkDefault cfg.domain;
-        enable = mkDefault cfg.enable;
-        enableNginx = mkDefault cfg.enableNginx;
-      }
-      // (optionalAttrs cfg.coturn.enable rec {
-        turnDomain = cfg.domain;
-        turnPort = config.services.coturn.tls-listening-port;
-        # We cannot merge a list of attrsets so we have to redefine the whole list
-        settings = {
-          TURNConfig.Turns = mkDefault [
-            {
-              Proto = "udp";
-              URI = "turn:${turnDomain}:${builtins.toString turnPort}";
-              Username = "netbird";
-              Password =
-                if (cfg.coturn.password != null) then
-                  cfg.coturn.password
-                else
-                  { _secret = cfg.coturn.passwordFile; };
-            }
-          ];
-        };
-      });
+      management = mkMerge [
+        {
+          domain = mkDefault cfg.domain;
+          enable = mkDefault cfg.enable;
+          enableNginx = mkDefault cfg.enableNginx;
+        }
+        (mkIf cfg.coturn.enable rec {
+          turnDomain = cfg.domain;
+          turnPort = config.services.coturn.tls-listening-port;
+          # We cannot merge a list of attrsets so we have to redefine the whole list
+          settings = {
+            TURNConfig.Turns = mkDefault [
+              {
+                Proto = "udp";
+                URI = "turn:${turnDomain}:${builtins.toString turnPort}";
+                Username = "netbird";
+                Password =
+                  if (cfg.coturn.password != null) then
+                    cfg.coturn.password
+                  else
+                    { _secret = cfg.coturn.passwordFile; };
+              }
+            ];
+          };
+        })
+      ];
 
       signal = {
         domain = mkDefault cfg.domain;

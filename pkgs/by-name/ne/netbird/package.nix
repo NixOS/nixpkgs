@@ -166,7 +166,8 @@ buildGoModule (finalAttrs: {
       nazarewk
       saturn745
       loc
+      patrickdag
     ];
-    mainProgram = component.binaryName;
+     mainProgram = component.binaryName;
   };
 })
