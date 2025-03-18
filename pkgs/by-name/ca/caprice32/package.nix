@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   desktop-file-utils,
+  libGLU,
   libpng,
   pkg-config,
   SDL,
@@ -30,6 +31,7 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
   buildInputs = [
+    libGLU
     libpng
     SDL
     freetype
