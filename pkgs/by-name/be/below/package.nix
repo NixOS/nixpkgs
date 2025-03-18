@@ -11,17 +11,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "below";
-  version = "0.8.1";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "facebookincubator";
     repo = "below";
     tag = "v${version}";
-    hash = "sha256-87Fdx3Jqi3dNWM5DZl+UYs031qn2DoiiWd3IysT/glQ=";
+    hash = "sha256-tPweJFqhZMOL+M08bDjW6HPmtuhr9IXJNP0c938O7Cg=";
   };
 
+  # Upstream forgot to commit an up-to-date lockfile.
+  cargoPatches = [ ./update-Cargo.lock.patch ];
+
   useFetchCargoVendor = true;
-  cargoHash = "sha256-iRDe3zg7tfEYGLCRY6bJ6OdoT8ej0MB/vteCIf5xqNA=";
+  cargoHash = "sha256-uNeWdsvJtkUz3E1NL10heDC7B55yKzDMMYzRhEE32EQ=";
 
   prePatch = ''
     sed -i "s,ExecStart=.*/bin,ExecStart=$out/bin," etc/below.service
