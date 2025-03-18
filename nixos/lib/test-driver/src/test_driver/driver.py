@@ -11,12 +11,25 @@ from pathlib import Path
 from typing import Any
 from unittest import TestCase
 
+from test_driver.errors import RequestedAssertionFailed, TestScriptError
 from test_driver.logger import AbstractLogger
 from test_driver.machine import Machine, NixStartScript, retry
 from test_driver.polling_condition import PollingCondition
 from test_driver.vlan import VLan
 
 SENTINEL = object()
+
+
+class AssertionTester(TestCase):
+    """
+    Subclass of `unittest.TestCase` which is used in the
+    `testScript` to perform assertions.
+
+    It throws a custom exception whose parent class
+    gets special treatment in the logs.
+    """
+
+    failureException = RequestedAssertionFailed
 
 
 def get_tmp_dir() -> Path:
@@ -39,14 +52,6 @@ def get_tmp_dir() -> Path:
 
 def pythonize_name(name: str) -> str:
     return re.sub(r"^[^A-z_]|[^A-z0-9_]", "_", name)
-
-
-class NixOSAssertionError(AssertionError):
-    pass
-
-
-class Tester(TestCase):
-    failureException = NixOSAssertionError
 
 
 class Driver:
@@ -126,7 +131,7 @@ class Driver:
             try:
                 yield
             except Exception as e:
-                self.logger.error(f'Test "{name}" failed with error: "{e}"')
+                self.logger.log_test_error(f'Test "{name}" failed with error: "{e}"')
                 raise e
 
     def test_symbols(self) -> dict[str, Any]:
@@ -151,7 +156,7 @@ class Driver:
             serial_stdout_on=self.serial_stdout_on,
             polling_condition=self.polling_condition,
             Machine=Machine,  # for typing
-            t=Tester(),
+            t=AssertionTester(),
         )
         machine_symbols = {pythonize_name(m.name): m for m in self.machines}
         # If there's exactly one machine, make it available under the name
@@ -177,7 +182,7 @@ class Driver:
             symbols = self.test_symbols()  # call eagerly
             try:
                 exec(self.tests, symbols, None)
-            except NixOSAssertionError:
+            except TestScriptError:
                 exc_type, exc, tb = sys.exc_info()
                 filtered = [
                     frame
@@ -186,15 +191,14 @@ class Driver:
                 ]
 
                 self.logger.log_test_error("Traceback (most recent call last):")
+
                 code = self.tests.splitlines()
                 for frame, line in zip(filtered, traceback.format_list(filtered)):
                     self.logger.log_test_error(line.rstrip())
                     if lineno := frame.lineno:
-                        self.logger.log_test_error(
-                            f"    {code[lineno - 1].strip()}",
-                        )
+                        self.logger.log_test_error(f"    {code[lineno - 1].strip()}")
 
-                self.logger.log_test_error("") # blank line for readability
+                self.logger.log_test_error("")  # blank line for readability
                 exc_prefix = exc_type.__name__ if exc_type is not None else "Error"
                 for line in f"{exc_prefix}: {exc}".splitlines():
                     self.logger.log_test_error(line)
