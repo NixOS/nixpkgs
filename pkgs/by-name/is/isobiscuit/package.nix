@@ -14,7 +14,7 @@ buildPythonPackage rec {
     sha256 = "03ivhmh9ikc51mi2547m0my2fvgicgnnc40lqjgc8g276imfhq13";
   };
 
-  format = "pyproject";
+  pyproject = true;
 
   build-system = with python3Packages; [
     poetry-core
