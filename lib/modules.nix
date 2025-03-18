@@ -558,7 +558,7 @@ let
       # context on the explicit arguments of "args" too. This update
       # operator is used to make the "args@{ ... }: with args.lib;" notation
       # works.
-    in f (args // extraArgs);
+    in f (builtins.intersectAttrs (functionArgs f) (args // extraArgs));
 
   /**
     Merge a list of modules.  This will recurse over the option
