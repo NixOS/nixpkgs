@@ -6,6 +6,7 @@
   setuptools,
   pytestCheckHook,
   nbval,
+  writableTmpDirAsHomeHook,
   fetchurl,
 }:
 buildPythonPackage rec {
@@ -26,6 +27,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    writableTmpDirAsHomeHook
     nbval
   ];
 
