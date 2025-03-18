@@ -10878,6 +10878,8 @@ self: super: with self; {
 
   pyfluidsynth = callPackage ../development/python-modules/pyfluidsynth { };
 
+  pyforked-daapd = callPackage ../development/python-modules/pyforked-daapd { };
+
   pyformlang = callPackage ../development/python-modules/pyformlang { };
 
   pyfreedompro = callPackage ../development/python-modules/pyfreedompro { };
