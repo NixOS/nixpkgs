@@ -56,6 +56,10 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://git.yoctoproject.org/meta-selinux/plain/recipes-security/selinux/libselinux/0003-libselinux-restore-drop-the-obsolete-LSF-transitiona.patch?id=62b9c816a5000dc01b28e78213bde26b58cbca9d";
       hash = "sha256-RiEUibLVzfiRU6N/J187Cs1iPAih87gCZrlyRVI2abU=";
     })
+
+    # PR: https://github.com/SELinuxProject/selinux/pull/464
+    # Fix build on 32-bit LFS platforms
+    ./fix-build-32bit-lfs.patch
   ];
 
   nativeBuildInputs =
