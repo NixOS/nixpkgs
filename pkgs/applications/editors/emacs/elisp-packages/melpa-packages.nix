@@ -1093,7 +1093,7 @@ let
         enotify = ignoreCompilationError super.enotify; # elisp error
 
         # https://github.com/leathekd/ercn/issues/6
-        ercn = addPackageRequires super.ercn [ self.dash ];
+        ercn = addPackageRequiresIfOlder super.ercn [ self.dash ] "20250317.2338";
 
         # missing optional dependencies
         eval-in-repl = addPackageRequires super.eval-in-repl (
