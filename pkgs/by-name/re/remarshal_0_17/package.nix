@@ -58,5 +58,6 @@ pythonPackages.buildPythonApplication rec {
     license = licenses.mit;
     homepage = "https://github.com/dbohdan/remarshal";
     maintainers = with maintainers; [ hexa ];
+    mainProgram = "remarshal";
   };
 }
