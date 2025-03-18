@@ -22,7 +22,7 @@ in
       services.kanidm = {
         # needed since default for nixos 24.11
         # is kanidm 1.4.6 which is insecure
-        package = pkgs.kanidm_1_5;
+        package = pkgs.kanidm_1_7;
         enableServer = true;
         serverSettings = {
           inherit tls_key tls_chain;
@@ -44,6 +44,7 @@ in
           domain = "nixos-test.internal";
           dashboard.settings.AUTH_AUTHORITY = "https://kanidm/oauth2/openid/netbird";
           management.oidcConfigEndpoint = "https://kanidm:8443/oauth2/openid/netbird/.well-known/openid-configuration";
+          relay.authSecretFile = (pkgs.writeText "secure-secret" "secret-value");
         };
       };
   };
@@ -127,6 +128,7 @@ in
     with subtest("server starting"):
       server.wait_for_unit("netbird-management.service")
       server.wait_for_unit("netbird-signal.service")
+      server.wait_for_unit("netbird-relay.service")
   ''
   # The status used to turn into `NeedsLogin`, but recently started crashing instead.
   # leaving the snippets in here, in case some update goes back to the old behavior and can be tested again

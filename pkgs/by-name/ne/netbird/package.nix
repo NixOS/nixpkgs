@@ -168,6 +168,6 @@ buildGoModule (finalAttrs: {
       loc
       patrickdag
     ];
-     mainProgram = component.binaryName;
+    mainProgram = component.binaryName;
   };
 })
