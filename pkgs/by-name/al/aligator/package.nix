@@ -80,8 +80,13 @@ stdenv.mkDerivation (finalAttrs: {
   # Fontconfig error: Cannot load default config file: No such file: (null)
   env.FONTCONFIG_FILE = "${fontconfig.out}/etc/fonts/fonts.conf";
 
-  # Fontconfig error: No writable cache directories
-  preBuild = "export XDG_CACHE_HOME=$(mktemp -d)";
+  preBuild = ''
+    # silence matplotlib warning
+    export MPLCONFIGDIR=$(mktemp -d)
+
+    # Fontconfig error: No writable cache directories
+    export XDG_CACHE_HOME=$(mktemp -d)
+  '';
 
   doCheck = true;
   pythonImportsCheck = [ "aligator" ];
