@@ -19,6 +19,7 @@
   WebKit,
   ui ? false,
   netbird-ui,
+  versionCheckHook,
 }:
 let
   modules =
@@ -106,6 +107,13 @@ buildGoModule rec {
       substituteInPlace $out/share/applications/netbird.desktop \
         --replace-fail "Exec=/usr/bin/netbird-ui" "Exec=$out/bin/netbird-ui"
     '';
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgram = "${placeholder "out"}/bin/${meta.mainProgram}";
+  versionCheckProgramArg = "version";
+  doInstallCheck = true;
 
   passthru = {
     tests.netbird = nixosTests.netbird;
