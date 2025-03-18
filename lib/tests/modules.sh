@@ -673,6 +673,14 @@ checkConfigError 'The option .conflictingPathOptionType. in .*/pathWith.nix. is 
 # types.pathWith { inStore = true; absolute = false; }
 checkConfigError 'In pathWith, inStore means the path must be absolute' config.impossiblePathOptionType ./pathWith.nix
 
+# mkDefinition
+# check that mkDefinition 'file' is printed in the error message
+checkConfigError 'Cannot merge definitions.*\n\s*- In .file.*\n\s*- In .other.*' config.conflict ./mkDefinition.nix
+checkConfigError 'A definition for option .viaOptionDefault. is not of type .boolean.*' config.viaOptionDefault ./mkDefinition.nix
+checkConfigOutput '^true$' config.viaConfig ./mkDefinition.nix
+checkConfigOutput '^true$' config.mkMerge ./mkDefinition.nix
+checkConfigOutput '^true$' config.mkForce ./mkDefinition.nix
+
 cat <<EOF
 ====== module tests ======
 $pass Pass
