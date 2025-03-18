@@ -7,8 +7,11 @@ let
 in
 {
   imports = [
-    ../../modules/virtualisation/qemu-vm.nix
     ../../modules/testing/test-instrumentation.nix # !!! should only get added for automated test runs
+    {
+      key = "is-vm";
+      boot.isVM = true;
+    }
     {
       key = "no-manual";
       documentation.nixos.enable = false;

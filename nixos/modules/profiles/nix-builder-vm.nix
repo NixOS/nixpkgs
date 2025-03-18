@@ -26,14 +26,13 @@ in
 
 {
   imports = [
-    ../virtualisation/qemu-vm.nix
-
     # Avoid a dependency on stateVersion
     {
       disabledModules = [
         ../virtualisation/nixos-containers.nix
         ../services/x11/desktop-managers/xterm.nix
       ];
+      options.boot.isVM = true;
       # swraid's default depends on stateVersion
       config.boot.swraid.enable = false;
       options.boot.isContainer = lib.mkOption {
