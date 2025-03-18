@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  clang,
 }:
 
 let
@@ -18,72 +17,94 @@ let
     else if stdenv.hostPlatform.system == "aarch64-darwin" then
       "darwin-arm64.cpp"
     else
-      abort "Unsupported platform: ${stdenv.hostPlatform.system}";
+      throw "Unsupported platform: ${stdenv.hostPlatform.system}";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "julec";
-  version = "0.1.2";
-  irCommit = "03f3ebe18a79bb8dcb5440f0e6297e1d2e032e19";
+  version = "0.1.3";
 
   src = fetchFromGitHub {
     owner = "julelang";
     repo = "jule";
-    rev = "jule${version}";
-    name = "jule-${version}";
-    sha256 = "FhM25fff0TAhnO1RX0rhqHyox7ksyqYFBKSFby/4i0E=";
+    tag = "jule${finalAttrs.version}";
+    name = "jule-${finalAttrs.version}";
+    hash = "sha256-hFWoGeTmfXIPcICWXa5W36QDOk3yB7faORxFaM9shcQ=";
   };
 
   irSrc = fetchFromGitHub {
     owner = "julelang";
     repo = "julec-ir";
-    rev = irCommit;
-    name = "jule-ir-${version}";
-    sha256 = "0omZu/2t09eOqbLAps3KdGy6InrtzeIoM3rLtkmJwqE=";
+    # revision determined by the upstream commit hash in julec-ir/README.md
+    rev = "a274782922e4275c4a036d63acffd3369dbc382f";
+    name = "jule-ir-${finalAttrs.version}";
+    hash = "sha256-TXMSXTGTzZntPUhT6QTmn3nD2k855ZoAW9aQWyhrE8s=";
   };
 
   dontConfigure = true;
-  propagatedBuildInputs = [ clang ];
 
   unpackPhase = ''
-    cp -R ${src}/* .
-    cp "${irSrc}/src/${irFile}" ./ir.cpp
-    mkdir -p bin
+    runHook preUnpack
+
+    cp -R ${finalAttrs.src}/* .
+    cp "${finalAttrs.irSrc}/src/${irFile}" ./ir.cpp
 
     chmod +w -R .
 
     find ./*/* -type f -name '*.md' -exec rm -f {} +
+
+    runHook postUnpack
   '';
 
   buildPhase = ''
-    echo "Building ${pname} v${version} for ${stdenv.hostPlatform.system}..."
-    clang++ ./ir.cpp \
+    runHook preBuild
+
+    echo "Building ${finalAttrs.meta.mainProgram} v${finalAttrs.version} for ${stdenv.hostPlatform.system}..."
+    mkdir -p bin
+    ${stdenv.cc.targetPrefix}c++ ir.cpp \
       --std=c++17 \
-      -O0 \
       -Wno-everything \
-      -o "bin/${pname}"
+      -O3 \
+      -flto \
+      -DNDEBUG \
+      -fomit-frame-pointer \
+      -o "bin/${finalAttrs.meta.mainProgram}"
+
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/lib/jule
     mkdir -p $out/bin
     cp -R api $out/lib/jule/api
     cp -R std $out/lib/jule/std
     cp -R bin $out/lib/jule/bin
-    ln -s $out/lib/jule/bin/${pname} $out/bin/${pname}
+    ln -s $out/lib/jule/bin/${finalAttrs.meta.mainProgram} $out/bin/${finalAttrs.meta.mainProgram}
+
+    runHook postInstall
   '';
 
-  meta = with lib; {
-    description = "The Jule Programming Language Compiler";
+  meta = {
+    description = "Jule Programming Language Compiler";
     longDescription = ''
       Jule is an effective programming language designed to build efficient, fast, reliable and safe software while maintaining simplicity.
       It is a statically typed, compiled language with a syntax influenced by Go, Rust, and C++.
     '';
     homepage = "https://jule.dev";
-    license = licenses.bsd3;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/julelang/manual/releases/tag/jule${finalAttrs.version}";
+    license = lib.licenses.bsd3;
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "i686-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
+    mainProgram = "julec";
+    maintainers = with lib.maintainers; [
       adamperkowski
       sebaguardian
     ];
   };
-}
+})
