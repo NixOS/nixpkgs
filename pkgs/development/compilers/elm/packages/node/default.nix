@@ -22,7 +22,7 @@ let
   );
 in
 with self; with elmLib; {
-  inherit (nodePkgs) elm-live elm-upgrade elm-xref elm-analyse elm-git-install;
+  inherit (nodePkgs) elm-live elm-upgrade elm-xref elm-analyse elm-git-install elm-open-api;
 
   elm-verify-examples =
     let

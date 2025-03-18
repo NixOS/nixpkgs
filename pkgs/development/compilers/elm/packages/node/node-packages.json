@@ -10,6 +10,7 @@
   "elm-verify-examples",
   "elm-xref",
   "create-elm-app",
+  "elm-open-api",
   "elm-optimize-level-2",
   "elm-pages",
   "elm-git-install",
