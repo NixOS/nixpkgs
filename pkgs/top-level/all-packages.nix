@@ -2819,7 +2819,7 @@ with pkgs;
 
   netbird = callPackage ../tools/networking/netbird {
     inherit (darwin.apple_sdk_11_0.frameworks) Cocoa IOKit Kernel UserNotifications WebKit;
-    buildGoModule = buildGo123Module;
+    inherit buildGoModule;
   };
 
   netbird-ui = netbird.override {
