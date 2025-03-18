@@ -38,6 +38,9 @@ buildPythonPackage rec {
   build-system = [ poetry-core ];
 
   pythonRelaxDeps = [
+    # Each component release requests the exact latest core.
+    # That prevents us from updating individul components.
+    "langchain-core"
     "numpy"
   ];
 

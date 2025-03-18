@@ -32,6 +32,12 @@ buildPythonPackage rec {
 
   build-system = [ pdm-backend ];
 
+  pythonRelaxDeps = [
+    # Each component release requests the exact latest core.
+    # That prevents us from updating individul components.
+    "langchain-core"
+  ];
+
   dependencies = [ langchain-core ];
 
   pythonImportsCheck = [ "langchain_text_splitters" ];

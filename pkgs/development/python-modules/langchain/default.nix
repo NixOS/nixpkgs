@@ -63,6 +63,9 @@ buildPythonPackage rec {
   buildInputs = [ bash ];
 
   pythonRelaxDeps = [
+    # Each component release requests the exact latest core.
+    # That prevents us from updating individul components.
+    "langchain-core"
     "numpy"
     "tenacity"
   ];
