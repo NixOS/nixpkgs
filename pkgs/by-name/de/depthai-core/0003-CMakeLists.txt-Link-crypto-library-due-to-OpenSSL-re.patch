@@ -1,0 +1,23 @@
+From 6e92a07ac40581f23a4bdf76816a5f3969ff6d7c Mon Sep 17 00:00:00 2001
+From: Petr Hodina <petr.hodina@luxonis.com>
+Date: Fri, 21 Mar 2025 07:30:17 +0100
+Subject: [PATCH 03/14] CMakeLists.txt: Link crypto library due to OpenSSL -
+ retest if it was not for a dependency
+
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 5b670b87d..8ad7e27cb 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -767,7 +767,7 @@ if(DEPTHAI_BINARIES_RESOURCE_COMPILE)
+     )
+ 
+     # Link to resource library
+-    target_link_libraries(${TARGET_CORE_NAME} PRIVATE "${DEPTHAI_RESOURCE_LIBRARY_NAME}")
++    target_link_libraries(${TARGET_CORE_NAME} PRIVATE "${DEPTHAI_RESOURCE_LIBRARY_NAME}" "-lcrypto")
+ 
+     # Set define that binaries are resource compiled
+     target_compile_definitions(${TARGET_CORE_NAME} PRIVATE DEPTHAI_RESOURCE_COMPILED_BINARIES)
+-- 
+2.48.1
+
