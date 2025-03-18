@@ -7881,6 +7881,8 @@ self: super: with self; {
 
   logi-circle = callPackage ../development/python-modules/logi-circle { };
 
+  logica = callPackage ../development/python-modules/logica { };
+
   logical-unification = callPackage ../development/python-modules/logical-unification { };
 
   logilab-common = callPackage ../development/python-modules/logilab/common.nix {

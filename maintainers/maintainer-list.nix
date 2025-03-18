@@ -20639,6 +20639,12 @@
     keys = [ { fingerprint = "7DCA 5615 8AB2 621F 2F32  9FF4 1C7C E491 479F A273"; } ];
     name = "Rahul Butani";
   };
+  rskew = {
+    name = "Rowan Skewes";
+    email = "rowan.skewes@gmail.com";
+    github = "rskew";
+    githubId = 16100155;
+  };
   rski = {
     name = "rski";
     email = "rom.skiad+nix@gmail.com";
