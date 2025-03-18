@@ -10504,8 +10504,7 @@ self: super: with self; {
   petsc4py = toPythonModule (pkgs.petsc.override {
     python3 = python;
     python3Packages = self;
-    withPetsc4py = true;
-    withFullDeps = true;
+    pythonSupport = true;
   });
 
   pex = callPackage ../development/python-modules/pex { };
@@ -15350,6 +15349,13 @@ self: super: with self; {
   sleekxmppfs = callPackage ../development/python-modules/sleekxmppfs { };
 
   sleepyq = callPackage ../development/python-modules/sleepyq { };
+
+  slepc4py = toPythonModule (pkgs.slepc.override {
+    pythonSupport = true;
+    python3 = self.python;
+    python3Packages = self;
+    petsc = petsc4py;
+  });
 
   sleqp = toPythonModule (pkgs.sleqp.override { pythonSupport = true; python3Packages = self; });
 
