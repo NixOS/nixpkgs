@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "intel";
     repo = "gmmlib";
-    rev = "intel-gmmlib-${version}";
+    tag = "intel-gmmlib-${version}";
     hash = "sha256-SR66UaoPQYGz4Nda99ASZEfTtNlLQTqtZgDM5hlV/1w=";
   };
 
