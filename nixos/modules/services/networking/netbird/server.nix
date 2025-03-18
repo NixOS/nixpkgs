@@ -16,7 +16,7 @@ in
 
 {
   meta = {
-    maintainers = with lib.maintainers; [patrickdag];
+    maintainers = with lib.maintainers; [ patrickdag ];
     doc = ./server.md;
   };
 
@@ -26,12 +26,11 @@ in
     ./dashboard.nix
     ./management.nix
     ./signal.nix
+    ./proxy.nix
   ];
 
   options.services.netbird.server = {
     enable = mkEnableOption "Netbird Server stack, comprising the dashboard, management API and signal service";
-
-    enableNginx = mkEnableOption "Nginx reverse-proxy for the netbird server services";
 
     domain = mkOption {
       type = str;
@@ -44,7 +43,6 @@ in
       dashboard = {
         domain = mkDefault cfg.domain;
         enable = mkDefault cfg.enable;
-        enableNginx = mkDefault cfg.enableNginx;
 
         managementServer = "https://${cfg.domain}";
       };
@@ -53,31 +51,30 @@ in
         {
           domain = mkDefault cfg.domain;
           enable = mkDefault cfg.enable;
-          enableNginx = mkDefault cfg.enableNginx;
         }
         // (optionalAttrs cfg.coturn.enable rec {
           turnDomain = cfg.domain;
-          turnPort = config.services.coturn.tls-listening-port;
+          turnPort = config.services.coturn.listening-port;
           # We cannot merge a list of attrsets so we have to redefine the whole list
           settings = {
+            Signal.URI = mkDefault "${cfg.domain}:${builtins.toString cfg.signal.port}";
             TURNConfig.Turns = mkDefault [
               {
                 Proto = "udp";
                 URI = "turn:${turnDomain}:${builtins.toString turnPort}";
                 Username = "netbird";
                 Password =
-                  if (cfg.coturn.password != null)
-                  then cfg.coturn.password
-                  else {_secret = cfg.coturn.passwordFile;};
+                  if (cfg.coturn.password != null) then
+                    cfg.coturn.password
+                  else
+                    { _secret = cfg.coturn.passwordFile; };
               }
             ];
           };
         });
 
       signal = {
-        domain = mkDefault cfg.domain;
         enable = mkDefault cfg.enable;
-        enableNginx = mkDefault cfg.enableNginx;
       };
 
       coturn = {
