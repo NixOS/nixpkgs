@@ -18184,6 +18184,8 @@ with pkgs;
     erlang = erlang_25;
   };
 
+  m5ops = callPackage ../by-name/ge/gem5/m5ops.nix { };
+
   rustdesk-flutter = callPackage ../by-name/ru/rustdesk-flutter/package.nix {
     flutter = flutter324;
   };
