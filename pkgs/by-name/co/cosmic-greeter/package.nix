@@ -14,23 +14,21 @@
   wayland,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-greeter";
   version = "1.0.0-alpha.2";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-greeter";
-    rev = "epoch-${version}";
+    tag = "epoch-${finalAttrs.version}";
     hash = "sha256-5BSsiGgL369/PePS0FmuE42tktK2bpgJziYuUEnZ2jY=";
   };
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-5TXFE/pIeIOvy8x8c5sR3YaI8R2RTA8fzloguIpE4TM=";
 
-  cargoBuildFlags = [
-    "--all"
-  ];
+  cargoBuildFlags = [ "--all" ];
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
@@ -38,6 +36,7 @@ rustPlatform.buildRustPackage rec {
     just
     pkg-config
   ];
+
   buildInputs = [
     libinput
     libxkbcommon
@@ -47,6 +46,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   dontUseJustBuild = true;
+  dontUseJustCheck = true;
 
   justFlags = [
     "--set"
@@ -64,12 +64,12 @@ rustPlatform.buildRustPackage rec {
     substituteInPlace src/greeter.rs --replace-fail '/usr/bin/env' '${lib.getExe' coreutils "env"}'
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/pop-os/cosmic-greeter";
     description = "Greeter for the COSMIC Desktop Environment";
     mainProgram = "cosmic-greeter";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ nyabinary ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ nyabinary ];
+    platforms = lib.platforms.linux;
   };
-}
+})
