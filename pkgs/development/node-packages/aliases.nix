@@ -117,6 +117,7 @@ mapAliases {
   inherit (pkgs) gramma; # added 2024-06-26
   grammarly-languageserver = throw "grammarly-languageserver was removed because it requires EOL Node.js 16"; # added 2024-07-15
   inherit (pkgs) graphite-cli; # added 2024-01-25
+  inherit (pkgs) graphql-language-service-cli; # added 2025-03-17
   inherit (pkgs) graphqurl; # added 2023-08-19
   gtop = pkgs.gtop; # added 2023-07-31
   hs-client = pkgs.hsd; # added 2023-08-20
