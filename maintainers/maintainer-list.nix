@@ -4129,6 +4129,12 @@
     name = "ChaosAttractor";
     keys = [ { fingerprint = "A137 4415 DB7C 6439 10EA  5BF1 0FEE 4E47 5940 E125"; } ];
   };
+  charain = {
+    email = "charain_li@outlook.com";
+    github = "chai-yuan";
+    githubId = 42235952;
+    name = "charain";
+  };
   charB66 = {
     email = "nix.disparate221@passinbox.com";
     github = "charB66";
@@ -4382,6 +4388,12 @@
     email = "ciferkey@gmail.com";
     github = "ciferkey";
     githubId = 101422;
+  };
+  ciflire = {
+    name = "Léo Vesse";
+    email = "leovesse@gmail.com";
+    github = "Ciflire";
+    githubId = 39668077;
   };
   cig0 = {
     name = "Martín Cigorraga";
@@ -11325,6 +11337,12 @@
       # Email encryption
       { fingerprint = "816D 23F5 E672 EC58 7674  4A73 197F 9A63 2D13 9E30"; }
     ];
+  };
+  j-mendez = {
+    email = "jeff@a11ywatch.com";
+    github = "j-mendez";
+    githubId = 8095978;
+    name = "j-mendez";
   };
   jmendyk = {
     email = "jakub@ndyk.me";

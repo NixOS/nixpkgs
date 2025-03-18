@@ -66,7 +66,7 @@
 args:
 
 let
-  buildPostgresqlExtension =
+  postgresqlBuildExtension =
     finalAttrs:
     {
       enableUpdateScript ? true,
@@ -146,4 +146,4 @@ let
         + prevAttrs.postInstall or "";
     };
 in
-stdenv.mkDerivation (lib.extends buildPostgresqlExtension (lib.toFunction args))
+stdenv.mkDerivation (lib.extends postgresqlBuildExtension (lib.toFunction args))
