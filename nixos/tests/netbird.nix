@@ -45,6 +45,7 @@ import ./make-test-python.nix (
             domain = "nixos-test.internal";
             dashboard.settings.AUTH_AUTHORITY = "https://kanidm/oauth2/openid/netbird";
             management.oidcConfigEndpoint = "https://kanidm:8443/oauth2/openid/netbird/.well-known/openid-configuration";
+            relay.authSecretFile = (pkgs.writeText "secure-secret" "secret-value");
           };
         };
     };
@@ -76,6 +77,7 @@ import ./make-test-python.nix (
       with subtest("server starting"):
         server.wait_for_unit("netbird-management.service")
         server.wait_for_unit("netbird-signal.service")
+        server.wait_for_unit("netbird-relay.service")
     '';
   }
 )
