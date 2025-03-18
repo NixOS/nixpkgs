@@ -177,7 +177,7 @@ stdenv.mkDerivation rec {
   nativeInstallCheckInputs = [ mpiCheckPhaseHook ];
 
   passthru = {
-    inherit mpiSupport;
+    inherit mpiSupport pythonSupport;
   };
 
   setupHook = ./setup-hook.sh;
