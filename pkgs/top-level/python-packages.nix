@@ -7818,6 +7818,8 @@ self: super: with self; {
 
   llm-cmd = callPackage ../development/python-modules/llm-cmd { };
 
+  llm-gemini = callPackage ../development/python-modules/llm-gemini { };
+
   llm-gguf = callPackage ../development/python-modules/llm-gguf { };
 
   llm-jq = callPackage ../development/python-modules/llm-jq { };
