@@ -26,11 +26,12 @@ in
     ./dashboard.nix
     ./management.nix
     ./signal.nix
+    ./relay.nix
     ./proxy.nix
   ];
 
   options.services.netbird.server = {
-    enable = mkEnableOption "Netbird Server stack, comprising the dashboard, management API and signal service";
+    enable = mkEnableOption "Netbird Server stack, comprising the dashboard, management API, relay and signal service";
 
     domain = mkOption {
       type = str;
@@ -52,8 +53,14 @@ in
           domain = mkDefault cfg.domain;
           enable = mkDefault cfg.enable;
         }
-        // (optionalAttrs cfg.signal.enable rec {
+        // (optionalAttrs cfg.signal.enable {
           settings.Signal.URI = mkDefault "${cfg.domain}:${builtins.toString cfg.signal.port}";
+        })
+        // (optionalAttrs cfg.relay.enable {
+          settings.Relay = {
+            Addresses = [ cfg.relay.settings.NB_EXPOSED_ADDRESS ];
+            Secret._secret = cfg.relay.authSecretFile;
+          };
         })
         // (optionalAttrs cfg.coturn.enable rec {
           turnDomain = cfg.domain;
@@ -76,6 +83,11 @@ in
         });
 
       signal = {
+        enable = mkDefault cfg.enable;
+      };
+
+      relay = {
+        settings.NB_EXPOSED_ADDRESS = mkDefault "rel://${cfg.domain}:${builtins.toString cfg.relay.port}";
         enable = mkDefault cfg.enable;
       };
 
