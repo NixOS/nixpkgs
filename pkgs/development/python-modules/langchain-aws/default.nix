@@ -53,6 +53,9 @@ buildPythonPackage rec {
   pythonRelaxDeps = [
     # Boto @ 1.35 has outstripped the version requirement
     "boto3"
+    # Each component release requests the exact latest core.
+    # That prevents us from updating individul components.
+    "langchain-core"
   ];
 
   nativeCheckInputs = [

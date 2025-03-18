@@ -57,7 +57,10 @@ buildPythonPackage rec {
   ];
 
   pythonRelaxDeps = [
-    "langchain" # Can fail during updates where building sees the old langchain
+    # Each component release requests the exact latest langchain and -core.
+    # That prevents us from updating individul components.
+    "langchain"
+    "langchain-core"
     "numpy"
     "pydantic-settings"
     "tenacity"
@@ -122,7 +125,7 @@ buildPythonPackage rec {
   passthru.updateScript = nix-update-script {
     extraArgs = [
       "--version-regex"
-      "^langchain-community==([0-9.]+)$"
+      "^langchain-community==(.*)"
     ];
   };
   # updates the wrong fetcher rev attribute

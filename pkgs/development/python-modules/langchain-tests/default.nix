@@ -38,6 +38,13 @@ buildPythonPackage rec {
 
   build-system = [ pdm-backend ];
 
+  pythonRelaxDeps = [
+    # Each component release requests the exact latest core.
+    # That prevents us from updating individul components.
+    "langchain-core"
+    "numpy"
+  ];
+
   dependencies = [
     httpx
     langchain-core
