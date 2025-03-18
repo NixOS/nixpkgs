@@ -14424,9 +14424,7 @@ with pkgs;
     vscode-generic = ../applications/editors/vscode/generic.nix;
   };
 
-  openvscode-server = callPackage ../servers/openvscode-server {
-    nodejs = nodejs_22;
-  };
+  openvscode-server = callPackage ../servers/openvscode-server { };
 
   code-server = callPackage ../servers/code-server {
     nodejs = nodejs_20;
