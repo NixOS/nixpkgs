@@ -8,7 +8,7 @@
 let
   version = "1.9.8";
 
-  defold = fetchzip {
+  src = fetchzip {
     url = "https://github.com/defold/defold/releases/download/${version}/Defold-x86_64-linux.zip";
     hash = "sha256-Pn7jNw8oFZfgn5vHuJ3H9n+6YQ9cTev9ntDFrCiJI9s=";
   };
@@ -63,7 +63,7 @@ buildFHSEnv {
   extraInstallCommands = ''
     runHook preInstall
 
-    bsdtar -xf ${defold}/packages/defold-*.jar --strip-components 2 icons/document.iconset
+    bsdtar -xf ${src}/packages/defold-*.jar --strip-components 2 icons/document.iconset
 
     install -Dm444 icon_16x16.png $out/share/icons/hicolor/16x16/apps/defold.png
     install -Dm444 icon_16x16@2x.png $out/share/icons/hicolor/32x32/apps/defold.png
@@ -77,7 +77,7 @@ buildFHSEnv {
   '';
 
   executableName = "Defold";
-  runScript = "${defold}/Defold";
+  runScript = "${src}/Defold";
 
   meta = {
     description = "Game engine for development of desktop, mobile and web games";
