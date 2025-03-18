@@ -68,8 +68,6 @@ buildPythonPackage rec {
       "^langchain-tests==([0-9.]+)$"
     ];
   };
-  # updates the wrong fetcher rev attribute
-  passthru.skipBulkUpdate = true;
 
   meta = {
     description = "Build context-aware reasoning applications";

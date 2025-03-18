@@ -154,8 +154,6 @@ buildPythonPackage rec {
       "^langchain==([0-9.]+)$"
     ];
   };
-  # updates the wrong fetcher rev attribute
-  passthru.skipBulkUpdate = true;
 
   meta = {
     description = "Building applications with LLMs through composability";
