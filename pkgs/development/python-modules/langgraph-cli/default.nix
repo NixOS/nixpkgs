@@ -1,27 +1,27 @@
 {
   lib,
   buildPythonPackage,
-  click,
   fetchFromGitHub,
+
+  # build-system
   poetry-core,
 
-  # for update script
-  langgraph-sdk,
+  # dependencies
+  click,
 
   # testing
   pytest-asyncio,
   pytestCheckHook,
   docker-compose,
 
-  pythonOlder,
+  # passthru
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
   pname = "langgraph-cli";
   version = "0.1.74";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
@@ -59,9 +59,11 @@ buildPythonPackage rec {
     "test_dockerfile_command_with_docker_compose"
   ];
 
-  passthru = {
-    inherit (langgraph-sdk) updateScript;
-    skipBulkUpdate = true; # Broken, see https://github.com/NixOS/nixpkgs/issues/379898
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "cli==(\\d+\\.\\d+\\.\\d+)"
+    ];
   };
 
   meta = {
