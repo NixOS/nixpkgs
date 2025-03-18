@@ -63,7 +63,6 @@ stdenv.mkDerivation (finalAttrs: {
         npm config set cafile ${cacert}/etc/ssl/certs/ca-bundle.crt
         for p in $(find -name package.json -exec dirname {} \;)
         do (
-          set -x
           cd $p
           if [ -e node_modules ]
           then
@@ -72,8 +71,8 @@ stdenv.mkDerivation (finalAttrs: {
           fi
           mkdir node_modules
           if [ -e package-lock.json ]
-          then npm ci --ignore-scripts --log-level=verbose
-          else npm i --ignore-scripts --log-level=verbose
+          then npm ci --ignore-scripts
+          else npm i --ignore-scripts
           fi
           mkdir -p $out/$p
           cp -r node_modules $out/$p/
