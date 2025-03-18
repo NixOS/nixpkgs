@@ -1635,7 +1635,7 @@ with pkgs;
   };
 
   authelia = callPackage ../servers/authelia {
-    buildGoModule = buildGo123Module;
+    buildGoModule = buildGo124Module;
     pnpm = pnpm_10;
   };
 
@@ -13107,8 +13107,6 @@ with pkgs;
   ecpdap = callPackage ../development/embedded/fpga/ecpdap {
     inherit (darwin.apple_sdk.frameworks) AppKit;
   };
-
-  electron-cash = libsForQt5.callPackage ../applications/misc/electron-cash { };
 
   electrum = libsForQt5.callPackage ../applications/misc/electrum { };
 
