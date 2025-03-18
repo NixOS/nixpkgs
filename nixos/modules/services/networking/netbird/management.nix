@@ -58,6 +58,9 @@ let
       Secret = "not-secure-secret";
       TimeBasedCredentials = false;
     };
+    Relay = {
+      CredentialsTTL = "24h";
+    };
 
     Signal = {
       Proto = "https";
