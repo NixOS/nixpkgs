@@ -54,6 +54,8 @@
   fmt,
   espeak-ng,
   piper-tts,
+
+  nixosTests,
 }:
 let
   BUILD_TYPE =
@@ -529,8 +531,12 @@ let
         ;
     };
 
-    passthru.tests = callPackages ./tests.nix { inherit self; };
-    passthru.lib = callPackages ./lib.nix { };
+    passthru = {
+      tests = {
+        inherit (nixosTests) local-ai;
+      };
+      lib = callPackages ./lib.nix { };
+    };
 
     meta = with lib; {
       description = "OpenAI alternative to run local LLMs, image and audio generation";

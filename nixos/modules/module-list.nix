@@ -827,6 +827,7 @@
   ./services/misc/lifecycled.nix
   ./services/misc/litellm.nix
   ./services/misc/llama-cpp.nix
+  ./services/misc/local-ai.nix
   ./services/misc/logkeys.nix
   ./services/misc/mame.nix
   ./services/misc/mbpfan.nix
