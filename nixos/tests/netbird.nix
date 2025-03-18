@@ -1,8 +1,13 @@
 { pkgs, lib, ... }:
+let
+  tls_chain = "${./common/acme/server}/ca.cert.pem";
+  tls_key = "${./common/acme/server}/ca.key.pem";
+in
 {
   name = "netbird";
 
   meta.maintainers = with pkgs.lib.maintainers; [
+    patrickdag
     nazarewk
   ];
 
@@ -12,6 +17,34 @@
       {
         services.netbird.enable = true;
         services.netbird.clients.custom.port = 51819;
+      };
+    kanidm = {
+      services.kanidm = {
+        # needed since default for nixos 24.11
+        # is kanidm 1.4.6 which is insecure
+        package = pkgs.kanidm_1_5;
+        enableServer = true;
+        serverSettings = {
+          inherit tls_key tls_chain;
+          domain = "localhost";
+          origin = "https://localhost";
+        };
+      };
+    };
+    server =
+      { ... }:
+      {
+        # netbirds needs an openid identity provider
+        services.netbird.server = {
+          enable = true;
+          coturn = {
+            enable = true;
+            password = "secure-password";
+          };
+          domain = "nixos-test.internal";
+          dashboard.settings.AUTH_AUTHORITY = "https://kanidm/oauth2/openid/netbird";
+          management.oidcConfigEndpoint = "https://kanidm:8443/oauth2/openid/netbird/.well-known/openid-configuration";
+        };
       };
   };
 
@@ -86,6 +119,14 @@
 
     for name in instances:
       wait_until_rcode(node, f"{name} status |& grep -C20 Disconnected", 0, retries=5)
+
+    kanidm.start()
+    kanidm.wait_for_unit("kanidm.service")
+
+    server.start()
+    with subtest("server starting"):
+      server.wait_for_unit("netbird-management.service")
+      server.wait_for_unit("netbird-signal.service")
   ''
   # The status used to turn into `NeedsLogin`, but recently started crashing instead.
   # leaving the snippets in here, in case some update goes back to the old behavior and can be tested again
