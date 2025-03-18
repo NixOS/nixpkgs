@@ -2,7 +2,7 @@ diff --git a/app/gimp-version.c b/app/gimp-version.c
 index 6e311c8252..e6fd9d1d78 100644
 --- a/app/gimp-version.c
 +++ b/app/gimp-version.c
-@@ -231,7 +231,7 @@ gimp_version (gboolean be_verbose,
+@@ -90,7 +90,7 @@ gimp_version (gboolean be_verbose,
                                        GIMP_BUILD_ID,
                                        gimp_version_get_revision (),
                                        GIMP_BUILD_PLATFORM_FAMILY,

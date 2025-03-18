@@ -1,5 +1,3 @@
-diff --git a/build/meson/run_test_env.sh b/build/meson/run_test_env.sh
-index a3fda14f00..71fbdcd00d 100644
 --- a/build/meson/run_test_env.sh
 +++ b/build/meson/run_test_env.sh
 @@ -33,7 +33,7 @@ if [ -n "${UI_TEST}" ]; then
