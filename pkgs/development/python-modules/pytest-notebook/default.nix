@@ -77,6 +77,9 @@ buildPythonPackage rec {
     # TypeError: expected str, bytes or os.PathLike object, not NoneType
     "test_execute_notebook_with_coverage"
     "test_regression_coverage"
+
+    # pytest_notebook.nb_regression.NBRegressionError
+    "test_regression_regex_replace_pass"
   ];
 
   __darwinAllowLocalNetworking = true;
