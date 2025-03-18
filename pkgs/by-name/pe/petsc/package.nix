@@ -207,6 +207,7 @@ stdenv.mkDerivation rec {
     description = "Portable Extensible Toolkit for Scientific computation";
     homepage = "https://petsc.org/release/";
     license = licenses.bsd2;
+    platforms = lib.platforms.unix;
     maintainers = with maintainers; [
       cburstedde
       qbisi
