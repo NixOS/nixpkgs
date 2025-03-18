@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   callPackage,
+  nixosTests,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "ynetd";
@@ -26,6 +27,10 @@ stdenv.mkDerivation (finalAttrs: {
   # ctf-ynetd releases are based on the last stable ynetd version
   # these should be kept in sync when possible
   passthru.hardened = callPackage ./hardened.nix { };
+
+  passthru.tests = {
+    test = nixosTests.ynetd;
+  };
 
   meta = {
     description = "Small server for binding programs to TCP ports";

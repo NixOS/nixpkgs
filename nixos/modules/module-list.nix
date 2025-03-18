@@ -917,6 +917,7 @@
   ./services/misc/weechat.nix
   ./services/misc/workout-tracker.nix
   ./services/misc/xmrig.nix
+  ./services/misc/ynetd.nix
   ./services/misc/ytdl-sub.nix
   ./services/misc/zoneminder.nix
   ./services/misc/zookeeper.nix

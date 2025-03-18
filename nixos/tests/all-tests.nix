@@ -1320,6 +1320,8 @@ in {
   yabar = runTest ./yabar.nix;
   ydotool = handleTest ./ydotool.nix {};
   yggdrasil = runTest ./yggdrasil.nix;
+  ynetd = runTest ./ynetd.nix;
+  ynetd-hardened = runTest ./ynetd-hardened.nix;
   your_spotify = runTest ./your_spotify.nix;
   zammad = runTest ./zammad.nix;
   zenohd = runTest ./zenohd.nix;
