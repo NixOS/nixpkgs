@@ -16769,6 +16769,8 @@ self: super: with self; {
     triton = self.triton-bin;
   };
 
+  torchao = callPackage ../development/python-modules/torchao { };
+
   torchbench = callPackage ../development/python-modules/torchbench { };
 
   torchsnapshot = callPackage ../development/python-modules/torchsnapshot { };
