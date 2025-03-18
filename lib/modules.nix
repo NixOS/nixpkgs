@@ -930,6 +930,7 @@ let
         files = map (def: def.file) res.defsFinal;
         definitionsWithLocations = res.defsFinal;
         inherit (res) isDefined;
+        inherit (res.checkedAndMerged) outOfBand;
         # This allows options to be correctly displayed using `${options.path.to.it}`
         __toString = _: showOption loc;
       };
@@ -961,13 +962,24 @@ let
     # Type-check the remaining definitions, and merge them. Or throw if no definitions.
     mergedValue =
       if isDefined then
-        if all (def: type.check def.value) defsFinal then type.merge loc defsFinal
+        if type.checkAndMerge or null != null
+        then checkedAndMerged.value
+        else if all (def: type.check def.value) defsFinal then type.merge loc defsFinal
         else let allInvalid = filter (def: ! type.check def.value) defsFinal;
         in throw "A definition for option `${showOption loc}' is not of type `${type.description}'. Definition values:${showDefs allInvalid}"
       else
         # (nixos-option detects this specific error message and gives it special
         # handling.  If changed here, please change it there too.)
         throw "The option `${showOption loc}' was accessed but has no value defined. Try setting the option.";
+
+    checkedAndMerged =
+      if type.checkAndMerge or null != null
+      then type.checkAndMerge loc defsFinal
+      else {
+        # errors =
+        value = mergedValue;
+        outOfBand = { };
+      };
 
     isDefined = defsFinal != [];
 

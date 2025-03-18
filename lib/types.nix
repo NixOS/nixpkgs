@@ -49,6 +49,7 @@ let
     mergeUniqueOption
     showFiles
     showOption
+    showDefs
     ;
   inherit (lib.strings)
     concatMapStringsSep
@@ -190,6 +191,11 @@ rec {
       # definition values and locations (e.g. [ { file = "/foo.nix";
       # value = 1; } { file = "/bar.nix"; value = 2 } ]).
       merge ? mergeDefaultOption
+
+    , #
+      # This field does not have a default implementation, so that users' changes
+      # to `check` and `merge` are propagated.
+      checkAndMerge ? null
     , # Whether this type has a value representing nothingness. If it does,
       # this should be a value of the form { value = <the nothing value>; }
       # If it doesn't, this should be {}
@@ -227,7 +233,7 @@ rec {
     { _type = "option-type";
       inherit
         name check merge emptyValue getSubOptions getSubModules substSubModules
-        typeMerge deprecationMessage nestedTypes descriptionClass;
+        typeMerge deprecationMessage nestedTypes descriptionClass checkAndMerge;
       functor =
         if functor ? wrappedDeprecationMessage then
           functor // {
@@ -622,16 +628,30 @@ rec {
       description = "list of ${optionDescriptionPhrase (class: class == "noun" || class == "composite") elemType}";
       descriptionClass = "composite";
       check = isList;
-      merge = loc: defs:
-        map (x: x.value) (filter (x: x ? value) (concatLists (imap1 (n: def:
-          imap1 (m: def':
-            (mergeDefinitions
-              (loc ++ ["[definition ${toString n}-entry ${toString m}]"])
-              elemType
-              [{ inherit (def) file; value = def'; }]
-            ).optionalValue
-          ) def.value
-        ) defs)));
+      merge = loc: defs: (checkAndMerge loc defs).value;
+      checkAndMerge = loc: defs:
+        let
+          evals = filter (x: x.optionalValue ? value) (
+            concatLists (
+              imap1 (
+                n: def:
+                imap1 (
+                  m: def':
+                  (mergeDefinitions (loc ++ [ "[definition ${toString n}-entry ${toString m}]" ]) elemType [
+                    {
+                      inherit (def) file;
+                      value = def';
+                    }
+                  ])
+                ) def.value
+              ) defs
+            )
+          );
+        in
+        {
+          value = map (x: x.optionalValue.value or x.mergedValue) evals;
+          outOfBand.list = map (v: v.checkedAndMerged.outOfBand ) evals;
+        };
       emptyValue = { value = []; };
       getSubOptions = prefix: elemType.getSubOptions (prefix ++ ["*"]);
       getSubModules = elemType.getSubModules;
@@ -643,12 +663,12 @@ rec {
     };
 
     nonEmptyListOf = elemType:
-      let list = addCheck (types.listOf elemType) (l: l != []);
-      in list // {
+      let list = types.listOf elemType;
+      in addCheck (list // {
         description = "non-empty ${optionDescriptionPhrase (class: class == "noun") list}";
         emptyValue = { }; # no .value attr, meaning unset
         substSubModules = m: nonEmptyListOf (elemType.substSubModules m);
-      };
+      }) (l: l != []);
 
     attrsOf = elemType: attrsWith { inherit elemType; };
 
@@ -688,36 +708,51 @@ rec {
           {
             inherit elemType lazy placeholder;
           };
+
+      # -> { ${attrName} :: { optionalValue :: {}; mergedValue = ...; } }
+      # mergeDefs = elemType: loc: defs:
+      #   zipAttrsWith
+      #     (name: defs: mergeDefinitions (loc ++ [ name ]) elemType defs)
+      #     (pushPositions defs);
     in
     {
       elemType,
       lazy ? false,
       placeholder ? "name",
     }:
-    mkOptionType {
+    mkOptionType rec {
       name = if lazy then "lazyAttrsOf" else "attrsOf";
       description = (if lazy then "lazy attribute set" else "attribute set") + " of ${optionDescriptionPhrase (class: class == "noun" || class == "composite") elemType}";
       descriptionClass = "composite";
       check = isAttrs;
-      merge = if lazy then (
-        # Lazy merge Function
+      merge = loc: defs: (checkAndMerge loc defs).value;
+      checkAndMerge = # TODO add check calls for defs
         loc: defs:
-          zipAttrsWith (name: defs:
-            let merged = mergeDefinitions (loc ++ [name]) elemType defs;
-            # mergedValue will trigger an appropriate error when accessed
-            in merged.optionalValue.value or elemType.emptyValue.value or merged.mergedValue
-          )
-          # Push down position info.
+        let
+          evals = if lazy then
+            zipAttrsWith
+          (name: defs: mergeDefinitions (loc ++ [ name ]) elemType defs)
           (pushPositions defs)
-      ) else (
-        # Non-lazy merge Function
-        loc: defs:
-          mapAttrs (n: v: v.value) (filterAttrs (n: v: v ? value) (zipAttrsWith (name: defs:
-              (mergeDefinitions (loc ++ [name]) elemType (defs)).optionalValue
-            )
-          # Push down position info.
-          (pushPositions defs)))
-      );
+          else
+            # Filtering makes the merge function more strict
+            # Meaning it is less lazy
+            filterAttrs
+              (n: v: v.optionalValue ? value)
+              (zipAttrsWith
+          (name: defs: mergeDefinitions (loc ++ [ name ]) elemType defs)
+          (pushPositions defs));
+        in
+        {
+          value =
+            mapAttrs (n: v:
+              if lazy then
+                v.optionalValue.value or elemType.emptyValue.value or v.mergedValue
+              else
+                v.optionalValue.value
+            ) evals;
+          outOfBand.attrs = mapAttrs (n: v: v.checkedAndMerged.outOfBand) evals;
+        };
+
       emptyValue = { value = {}; };
       getSubOptions = prefix: elemType.getSubOptions (prefix ++ ["<${placeholder}>"]);
       getSubModules = elemType.getSubModules;
@@ -1015,6 +1050,16 @@ rec {
             modules = [ { _module.args.name = last loc; } ] ++ allModules defs;
             prefix = loc;
           }).config;
+        checkAndMerge = loc: defs:
+          let
+            configuration = base.extendModules {
+              modules = [ { _module.args.name = last loc; } ] ++ allModules defs;
+              prefix = loc;
+            };
+          in {
+            value = configuration.config;
+            outOfBand = configuration;
+          };
         emptyValue = { value = {}; };
         getSubOptions = prefix: (base.extendModules
           { inherit prefix; }).options // optionalAttrs (freeformType != null) {
@@ -1172,7 +1217,22 @@ rec {
       };
 
     # Augment the given type with an additional type check function.
-    addCheck = elemType: check: elemType // { check = x: elemType.check x && check x; };
+    # This is a hack and type merging discards the check.
+    # Don't use it!
+    addCheck = elemType: check: elemType // {
+      check = x: elemType.check x && check x;
+      } // (lib.optionalAttrs (elemType.checkAndMerge != null )
+      { checkAndMerge = loc: defs:
+        let
+          v = (elemType.checkAndMerge loc defs);
+        in
+          if all (def: elemType.check def.value && check def.value) defs then v
+          else
+            let
+              allInvalid = filter (def: ! elemType.check def.value || ! check def.value) defs;
+            in
+              throw "A definition for option `${showOption loc}' is not of type `${elemType.description}'. Definition values:${showDefs allInvalid}";
+      });
 
   };
 
