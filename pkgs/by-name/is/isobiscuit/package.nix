@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   format = "pyproject";
 
-  nativeBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [
     poetry-core
     hatchling
   ];
