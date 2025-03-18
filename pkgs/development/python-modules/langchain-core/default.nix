@@ -101,8 +101,6 @@ buildPythonPackage rec {
         "^langchain-core==([0-9.]+)$"
       ];
     };
-    # updates the wrong fetcher rev attribute
-    skipBulkUpdate = true;
   };
 
   disabledTests =

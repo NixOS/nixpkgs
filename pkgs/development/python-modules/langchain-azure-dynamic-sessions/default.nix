@@ -78,8 +78,6 @@ buildPythonPackage rec {
       "^langchain-azure-dynamic-sessions==([0-9.]+)$"
     ];
   };
-  # updates the wrong fetcher rev attribute
-  passthru.skipBulkUpdate = true;
 
   meta = {
     description = "Integration package connecting Azure Container Apps dynamic sessions and LangChain";
