@@ -30,14 +30,14 @@ let
         signal = "netbird-signal";
       };
 in
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "netbird";
   version = "0.38.2";
 
   src = fetchFromGitHub {
     owner = "netbirdio";
     repo = "netbird";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-8uxRR8XkomUB9dMN9h1M4/K09wxy5E+XhXVbNc0g6xQ=";
   };
 
@@ -66,7 +66,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/netbirdio/netbird/version.version=${version}"
+    "-X github.com/netbirdio/netbird/version.version=${finalAttrs.version}"
     "-X main.builtBy=nix"
   ];
 
@@ -107,7 +107,7 @@ buildGoModule rec {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgram = "${placeholder "out"}/bin/${meta.mainProgram}";
+  versionCheckProgram = "${placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";
   versionCheckProgramArg = "version";
   doInstallCheck = true;
 
@@ -119,7 +119,7 @@ buildGoModule rec {
 
   meta = with lib; {
     homepage = "https://netbird.io";
-    changelog = "https://github.com/netbirdio/netbird/releases/tag/v${version}";
+    changelog = "https://github.com/netbirdio/netbird/releases/tag/v${finalAttrs.version}";
     description = "Connect your devices into a single secure private WireGuard®-based mesh network with SSO/MFA and simple access controls";
     license = licenses.bsd3;
     maintainers = with maintainers; [
@@ -128,4 +128,4 @@ buildGoModule rec {
     ];
     mainProgram = if ui then "netbird-ui" else "netbird";
   };
-}
+})
