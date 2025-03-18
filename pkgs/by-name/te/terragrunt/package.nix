@@ -1,19 +1,23 @@
 {
   lib,
-  buildGoModule,
+  # Breaks with go 1.24 (see https://github.com/gruntwork-io/terragrunt/issues/4031)
+  # > 2025/03/17 13:30:44 internal error: package "bufio" without types was imported from "github.com/gruntwork-io/terragrunt/tf/getproviders"
+  # > tf/getproviders/lock.go:1: running "mockery": exit status 1
+  # > make: *** [Makefile:54: generate-mocks] Error 1
+  buildGo123Module,
   fetchFromGitHub,
   go-mockery,
 }:
 
-buildGoModule rec {
+buildGo123Module rec {
   pname = "terragrunt";
-  version = "0.73.15";
+  version = "0.75.10";
 
   src = fetchFromGitHub {
     owner = "gruntwork-io";
     repo = pname;
     tag = "v${version}";
-    hash = "sha256-ISo6r+mMuXiGTIALXA5+xCKNOzNTNFz8cdGtbWyQRNI=";
+    hash = "sha256-lnp1prffufVOG+XV7UAo9Rh3ALE//b87ioPgimgZ5S0=";
   };
 
   nativeBuildInputs = [ go-mockery ];
@@ -22,7 +26,7 @@ buildGoModule rec {
     make generate-mocks
   '';
 
-  vendorHash = "sha256-EO3zgqVqf994xB55twRmcGBQdffrNr2BejNq2jlkMSA=";
+  vendorHash = "sha256-UhOb1Djup9Cwrv9vYeD/DZe20dwSKYRpJa4V3ZCsPwQ=";
 
   doCheck = false;
 

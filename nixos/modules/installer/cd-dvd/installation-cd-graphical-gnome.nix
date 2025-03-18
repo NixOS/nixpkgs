@@ -1,11 +1,11 @@
 # This module defines a NixOS installation CD that contains GNOME.
 
-{ ... }:
+{ lib, ... }:
 
 {
   imports = [ ./installation-cd-graphical-base.nix ];
 
-  isoImage.edition = "gnome";
+  isoImage.edition = lib.mkDefault "gnome";
 
   services.xserver.desktopManager.gnome = {
     # Add Firefox and other tools useful for installation to the launcher
