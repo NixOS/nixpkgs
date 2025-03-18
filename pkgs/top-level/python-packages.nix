@@ -15934,6 +15934,8 @@ self: super: with self; {
 
   stamina = callPackage ../development/python-modules/stamina { };
 
+  standard-mailcap = if pythonOlder "3.13" then null else callPackage ../development/python-modules/standard-mailcap { };
+
   stanio = callPackage ../development/python-modules/stanio { };
 
   stanza = callPackage ../development/python-modules/stanza { };
