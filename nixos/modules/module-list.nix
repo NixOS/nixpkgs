@@ -1063,6 +1063,7 @@
   ./services/networking/cloudflare-dyndns.nix
   ./services/networking/cloudflared.nix
   ./services/networking/cloudflare-warp.nix
+  ./services/networking/clarissa.nix
   ./services/networking/cntlm.nix
   ./services/networking/connman.nix
   ./services/networking/consul.nix
