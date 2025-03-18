@@ -1,13 +1,13 @@
 {
-  stdenv,
-  lib,
-  fetchurl,
-  meson,
-  ninja,
-  pkg-config,
+  fetchFromGitLab,
   gi-docgen,
   gobject-introspection,
   lcms2,
+  lib,
+  meson,
+  ninja,
+  pkg-config,
+  stdenv,
   vala,
 }:
 
@@ -16,15 +16,23 @@ stdenv.mkDerivation (finalAttrs: {
   version = "0.1.112";
 
   outputs = [
-    "out"
     "dev"
     "devdoc"
+    "out"
   ];
 
-  src = fetchurl {
-    url = "https://download.gimp.org/pub/babl/${lib.versions.majorMinor finalAttrs.version}/babl-${finalAttrs.version}.tar.xz";
-    hash = "sha256-+2lmgkIXh8j+zIPoqrSBId7I7jjRGbZSkc/L4xUCink=";
+  src = fetchFromGitLab {
+    domain = "gitlab.gnome.org";
+    owner = "GNOME";
+    repo = "babl";
+    tag = "BABL_${builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
+    hash = "sha256-Xlsecb8MB3FnIaXgbN1/l3FPqs8xxu6q7Qudo3fjSxI=";
   };
+
+  postUnpack = ''
+    cp source/git-version.h.in source/git-version.h
+    substituteInPlace source/git-version.h --replace-fail "@BABL_GIT_VERSION@" "${finalAttrs.src.tag}"
+  '';
 
   patches = [
     # Allow overriding path to dev output that will be hardcoded e.g. in pkg-config file.
@@ -32,11 +40,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
+    gi-docgen
+    gobject-introspection
     meson
     ninja
     pkg-config
-    gi-docgen
-    gobject-introspection
     vala
   ];
 
@@ -59,15 +67,13 @@ stdenv.mkDerivation (finalAttrs: {
     moveToOutput "share/doc" "$devdoc"
   '';
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://gitlab.gnome.org/GNOME/babl/-/blob/${finalAttrs.src.tag}/NEWS";
     description = "Image pixel format conversion library";
-    mainProgram = "babl";
     homepage = "https://gegl.org/babl/";
-    changelog = "https://gitlab.gnome.org/GNOME/babl/-/blob/BABL_${
-      replaceStrings [ "." ] [ "_" ] finalAttrs.version
-    }/NEWS";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ jtojnar ];
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl3Plus;
+    mainProgram = "babl";
+    maintainers = with lib.maintainers; [ jtojnar ];
+    platforms = lib.platforms.unix;
   };
 })
