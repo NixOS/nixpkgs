@@ -46,12 +46,14 @@ buildFHSEnv {
       libGL
       libGLU
       openal
-      xorg.libX11
-      xorg.libXext
-      xorg.libXi
-      xorg.libXrender
-      xorg.libXtst
-      xorg.libXxf86vm
+    ])
+    ++ (with pkgs.xorg; [
+      libX11
+      libXext
+      libXi
+      libXrender
+      libXtst
+      libXxf86vm
     ]);
 
   nativeBuildInputs = [
