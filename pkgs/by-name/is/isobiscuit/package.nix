@@ -28,10 +28,10 @@ buildPythonPackage rec {
     colorama
   ];
 
-  meta = with lib; {
-    description = "IsoBiscuit is a tool for virtualization, where processes are running in biscuits. ";
+  meta = {
+    description = "Tool for virtualizing isolated processes";
     homepage = "https://github.com/isobiscuit/isobiscuit";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ trollmii ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ trollmii ];
   };
 }
