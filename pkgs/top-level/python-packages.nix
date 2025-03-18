@@ -7402,6 +7402,8 @@ self: super: with self; {
 
   legacy-cgi = callPackage ../development/python-modules/legacy-cgi { };
 
+  legal-reference-extraction = callPackage ../development/python-modules/legal-reference-extraction { };
+
   leidenalg = callPackage ../development/python-modules/leidenalg {
     igraph-c = pkgs.igraph;
   };
