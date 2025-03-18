@@ -11,6 +11,7 @@
   ziamath,
   pytestCheckHook,
   nbval,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -47,6 +48,7 @@ buildPythonPackage rec {
     latex2mathml
     ziafont
     ziamath
+    writableTmpDirAsHomeHook
   ];
 
   # Strip out references to unfree fonts from the test suite
