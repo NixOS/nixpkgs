@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation rec {
   pname = "couchdb";
-  version = "3.4.2";
+  version = "3.4.3";
 
   src = fetchurl {
     url = "mirror://apache/couchdb/source/${version}/apache-${pname}-${version}.tar.gz";
-    hash = "sha256-0n/yoTNWAAKWqYq4hMrz0XWSfPIXJ5Y/+Q+rOnR1RM8=";
+    hash = "sha256-A1dRG2/tcOPmT051ql18wgAMsPJk7zAXArGBZCf3LyA=";
   };
 
   postPatch = ''
