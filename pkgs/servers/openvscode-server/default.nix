@@ -168,7 +168,7 @@ stdenv.mkDerivation (finalAttrs: {
     ## rebuild native binaries
     + ''
       echo >&2 "Rebuilding from source in ./remote"
-      npm --prefix ./remote rebuild --build-from-source
+      npm --offline --prefix ./remote rebuild --build-from-source
     ''
     ## run postinstall scripts
     + ''
