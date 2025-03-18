@@ -58,7 +58,7 @@
   tkinter,
 
   # Ghostscript
-  enableGhostscript ? true,
+  enableGhostscript ? false,
   ghostscript,
 
   # Qt
