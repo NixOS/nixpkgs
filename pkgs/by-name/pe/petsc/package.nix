@@ -11,6 +11,7 @@
   zlib, # propagated by p4est but required by petsc
   mpi, # generic mpi dependency
   mpiCheckPhaseHook,
+  bash,
 
   # Build options
   petsc-optimized ? true,
@@ -99,6 +100,9 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs ./lib/petsc/bin
+
+    substituteInPlace config/example_template.py \
+      --replace-fail "/usr/bin/env bash" "${bash}/bin/bash"
   '';
 
   configureFlags =
