@@ -1,0 +1,66 @@
+From 472d60ff5d0f7e1cbfe4ec92cf7e985eefb68a92 Mon Sep 17 00:00:00 2001
+From: Bryan Lai <bryanlais@gmail.com>
+Date: Wed, 14 Aug 2024 14:23:10 +0800
+Subject: [PATCH] deps: bump `time`, fix build for rust 1.80
+
+---
+ Cargo.lock | 22 ++++++++++++++++------
+ 1 file changed, 16 insertions(+), 6 deletions(-)
+
+diff --git a/Cargo.lock b/Cargo.lock
+index 5bd0f35..dabe0d1 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -372,6 +372,15 @@ dependencies = [
+  "syn 1.0.109",
+ ]
+ 
++[[package]]
++name = "deranged"
++version = "0.3.11"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "b42b6fa04a440b495c8b04d0e71b707c585f83cb9cb28cf8cd0d976c315e31b4"
++dependencies = [
++ "serde",
++]
++
+ [[package]]
+ name = "errno"
+ version = "0.3.1"
+@@ -1041,10 +1050,11 @@ dependencies = [
+ 
+ [[package]]
+ name = "time"
+-version = "0.3.20"
++version = "0.3.26"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "cd0cbfecb4d19b5ea75bb31ad904eb5b9fa13f21079c3b92017ebdf4999a5890"
++checksum = "a79d09ac6b08c1ab3906a2f7cc2e81a0e27c7ae89c63812df75e52bef0751e07"
+ dependencies = [
++ "deranged",
+  "itoa",
+  "libc",
+  "num_threads",
+@@ -1055,15 +1065,15 @@ dependencies = [
+ 
+ [[package]]
+ name = "time-core"
+-version = "0.1.0"
++version = "0.1.1"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "2e153e1f1acaef8acc537e68b44906d2db6436e2b35ac2c6b42640fff91f00fd"
++checksum = "7300fbefb4dadc1af235a9cef3737cea692a9d97e1b9cbcd4ebdae6f8868e6fb"
+ 
+ [[package]]
+ name = "time-macros"
+-version = "0.2.8"
++version = "0.2.12"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "fd80a657e71da814b8e5d60d3374fc6d35045062245d80224748ae522dd76f36"
++checksum = "75c65469ed6b3a4809d987a41eb1dc918e9bc1d92211cbad7ae82931846f7451"
+ dependencies = [
+  "time-core",
+ ]
+-- 
+2.45.2
+

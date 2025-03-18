@@ -1,0 +1,28 @@
+From: =?utf-8?q?Cristi=C3=A1n_Maureira-Fredes?=
+ <Cristian.Maureira-Fredes@qt.io>
+Date: Tue, 10 Oct 2023 15:52:09 +0200
+Subject: Final details to enable 3.12 wheel compatibility
+
+Change-Id: I0252c4e73e8c214ef8aa418ddf88bc452c0fdf53
+Pick-to: 6.6
+Task-number: PYSIDE-2230
+Reviewed-by: Friedemann Kleint <Friedemann.Kleint@qt.io>
+(cherry picked from commit 6c7bb7b6e1008909e49bc04d2a48024309a784cc)
+---
+ build_scripts/config.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/build_scripts/config.py b/build_scripts/config.py
+index 5fc23d4..fb27394 100644
+--- a/build_scripts/config.py
++++ b/build_scripts/config.py
+@@ -138,7 +138,7 @@ class Config(object):
+         setup_kwargs['zip_safe'] = False
+         setup_kwargs['cmdclass'] = cmd_class_dict
+         setup_kwargs['version'] = package_version
+-        setup_kwargs['python_requires'] = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*, <3.12"
++        setup_kwargs['python_requires'] = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*, <3.13"
+ 
+         if quiet:
+             # Tells distutils / setuptools to be quiet, and only print warnings or errors.
+

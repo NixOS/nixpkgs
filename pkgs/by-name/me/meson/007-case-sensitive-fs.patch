@@ -1,0 +1,87 @@
+From a6fb2c165cda4bbf315424c96165ec9cc7052363 Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Wed, 3 Apr 2024 17:35:56 -0400
+Subject: [PATCH] dependencies: find extraframeworks on case-sensitive
+ filesystems
+
+Fixes a test failure on case-sensitive filesystems when a CMake
+dependency is turned into an Apple framework.
+---
+ mesonbuild/dependencies/framework.py              | 9 +++++++--
+ test cases/osx/11 case sensitive apfs/meson.build | 5 +++++
+ test cases/osx/11 case sensitive apfs/prog.c      | 3 +++
+ test cases/osx/11 case sensitive apfs/test.json   | 5 +++++
+ 4 files changed, 20 insertions(+), 2 deletions(-)
+ create mode 100644 test cases/osx/11 case sensitive apfs/meson.build
+ create mode 100644 test cases/osx/11 case sensitive apfs/prog.c
+ create mode 100644 test cases/osx/11 case sensitive apfs/test.json
+
+diff --git a/mesonbuild/dependencies/framework.py b/mesonbuild/dependencies/framework.py
+index 3c880c7430af..1fbd628235ba 100644
+--- a/mesonbuild/dependencies/framework.py
++++ b/mesonbuild/dependencies/framework.py
+@@ -47,6 +47,7 @@ def detect(self, name: str, paths: T.List[str]) -> None:
+             framework_path = self._get_framework_path(p, name)
+             if framework_path is None:
+                 continue
++            framework_name = framework_path.stem
+             # We want to prefer the specified paths (in order) over the system
+             # paths since these are "extra" frameworks.
+             # For example, Python2's framework is in /System/Library/Frameworks and
+@@ -54,11 +55,15 @@ def detect(self, name: str, paths: T.List[str]) -> None:
+             # Python.framework. We need to know for sure that the framework was
+             # found in the path we expect.
+             allow_system = p in self.system_framework_paths
+-            args = self.clib_compiler.find_framework(name, self.env, [p], allow_system)
++            args = self.clib_compiler.find_framework(framework_name, self.env, [p], allow_system)
+             if args is None:
+                 continue
+             self.link_args = args
+             self.framework_path = framework_path.as_posix()
++            # The search is done case-insensitively, so the found name may differ
++            # from the one that was requested. Setting the name ensures the correct
++            # one is used when linking on case-sensitive filesystems.
++            self.name = framework_name
+             self.compile_args = ['-F' + self.framework_path]
+             # We need to also add -I includes to the framework because all
+             # cross-platform projects such as OpenGL, Python, Qt, GStreamer,
+@@ -74,7 +79,7 @@ def _get_framework_path(self, path: str, name: str) -> T.Optional[Path]:
+         p = Path(path)
+         lname = name.lower()
+         for d in p.glob('*.framework/'):
+-            if lname == d.name.rsplit('.', 1)[0].lower():
++            if lname == d.stem.lower():
+                 return d
+         return None
+ 
+diff --git a/test cases/osx/11 case sensitive apfs/meson.build b/test cases/osx/11 case sensitive apfs/meson.build
+new file mode 100644
+index 000000000000..dd566b185f28
+--- /dev/null
++++ b/test cases/osx/11 case sensitive apfs/meson.build	
+@@ -0,0 +1,5 @@
++project('case-sensitive APFS with extra frameworks test', 'c')
++
++dep = dependency('FoUnDaTiOn')
++
++exe = executable('prog', 'prog.c', install : true, dependencies: dep)
+diff --git a/test cases/osx/11 case sensitive apfs/prog.c b/test cases/osx/11 case sensitive apfs/prog.c
+new file mode 100644
+index 000000000000..9b6bdc2ec2f0
+--- /dev/null
++++ b/test cases/osx/11 case sensitive apfs/prog.c	
+@@ -0,0 +1,3 @@
++int main(void) {
++    return 0;
++}
+diff --git a/test cases/osx/11 case sensitive apfs/test.json b/test cases/osx/11 case sensitive apfs/test.json
+new file mode 100644
+index 000000000000..a883714eaa27
+--- /dev/null
++++ b/test cases/osx/11 case sensitive apfs/test.json	
+@@ -0,0 +1,5 @@
++{
++  "installed": [
++    {"type": "file", "file": "usr/bin/prog"}
++  ]
++}
