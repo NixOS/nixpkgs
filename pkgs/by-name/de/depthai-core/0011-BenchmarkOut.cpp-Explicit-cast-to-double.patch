@@ -1,0 +1,22 @@
+From c504a4eef94064bac9bd2d0091931d3e632f056d Mon Sep 17 00:00:00 2001
+From: Petr Hodina <petr.hodina@luxonis.com>
+Date: Fri, 21 Mar 2025 07:38:49 +0100
+Subject: [PATCH 11/14] BenchmarkOut.cpp: Explicit cast to double
+
+
+diff --git a/src/pipeline/node/BenchmarkOut.cpp b/src/pipeline/node/BenchmarkOut.cpp
+index e3816534a..cb909197c 100644
+--- a/src/pipeline/node/BenchmarkOut.cpp
++++ b/src/pipeline/node/BenchmarkOut.cpp
+@@ -27,7 +27,7 @@ void BenchmarkOut::run() {
+ 
+     bool useTiming = (properties.fps > 0);
+ 
+-    auto frameDurationDouble = std::chrono::duration<double>(1.0 / properties.fps);
++    auto frameDurationDouble = std::chrono::duration<double>((double) 1.0 / properties.fps);
+     auto frameDuration = std::chrono::duration_cast<std::chrono::steady_clock::duration>(frameDurationDouble);
+ 
+     auto nextFrameTime = steady_clock::now();
+-- 
+2.48.1
+

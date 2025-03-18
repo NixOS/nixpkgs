@@ -1,0 +1,22 @@
+From 84dc7299304a907fb99f8247f1fbe6c7b9bce820 Mon Sep 17 00:00:00 2001
+From: Petr Hodina <petr.hodina@luxonis.com>
+Date: Fri, 21 Mar 2025 07:32:07 +0100
+Subject: [PATCH 05/14] CMakeLists: Do not install 3rdparty source code
+
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index facb5ca3d..cd10c91cb 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1326,7 +1326,7 @@ if(DEPTHAI_INSTALL)
+     # Install depthai-bootloader-shared public headers
+     install(DIRECTORY "${DEPTHAI_BOOTLOADER_SHARED_PUBLIC_INCLUDE}/" DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}")
+     # Install depthai-core dependencies
+-    install(DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/3rdparty" DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake")
++    #install(DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/3rdparty" DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake")
+     # Install resources if not RC'd
+     if(NOT DEPTHAI_BINARIES_RESOURCE_COMPILE)
+         install(DIRECTORY "${DEPTHAI_RESOURCES_OUTPUT_DIR}/" DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/${PROJECT_NAME}")
+-- 
+2.48.1
+

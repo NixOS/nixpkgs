@@ -1,0 +1,22 @@
+From 621e873bee19d23a1897b330b96ceb90b8ea6b3d Mon Sep 17 00:00:00 2001
+From: Petr Hodina <petr.hodina@luxonis.com>
+Date: Fri, 21 Mar 2025 07:31:37 +0100
+Subject: [PATCH 04/14] CMakeLists: backward dependency
+
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 8ad7e27cb..facb5ca3d 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -917,7 +917,7 @@ endif()
+ # Add Backward dependency if enabled (On by default)
+ if(DEPTHAI_ENABLE_BACKWARD)
+     target_compile_definitions(${TARGET_CORE_NAME} PRIVATE DEPTHAI_ENABLE_BACKWARD)
+-    target_link_libraries(${TARGET_CORE_NAME} PRIVATE Backward::Backward)
++    target_link_libraries(${TARGET_CORE_NAME} PRIVATE Backward)
+ endif()
+ 
+ # Add patch only mode definition
+-- 
+2.48.1
+

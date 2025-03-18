@@ -1,0 +1,104 @@
+From fd9137dfd2e8aec4bcbf2c680c4c6cae46dcc738 Mon Sep 17 00:00:00 2001
+From: Petr Hodina <petr.hodina@luxonis.com>
+Date: Fri, 21 Mar 2025 07:34:34 +0100
+Subject: [PATCH 07/14] cmake: Sort out dependencies for depthai
+
+
+diff --git a/cmake/depthaiDependencies.cmake b/cmake/depthaiDependencies.cmake
+index 7cea6bb56..8f92ea4d5 100644
+--- a/cmake/depthaiDependencies.cmake
++++ b/cmake/depthaiDependencies.cmake
+@@ -44,7 +44,6 @@ if(NOT CONFIG_MODE OR (CONFIG_MODE AND NOT DEPTHAI_SHARED_LIBS))
+     find_package(PNG  REQUIRED)
+     # libarchive for firmware packages
+     find_package(LibArchive ${_QUIET}  REQUIRED)
+-    find_package(liblzma ${_QUIET} CONFIG REQUIRED)
+     # httplib for Gate communication
+     find_package(httplib ${_QUIET} CONFIG REQUIRED)
+     # ZLIB for compressing Apps
+@@ -55,21 +54,15 @@ if(NOT CONFIG_MODE OR (CONFIG_MODE AND NOT DEPTHAI_SHARED_LIBS))
+ 
+     find_package(OpenSSL REQUIRED)
+     # Log collection dependencies
+-    if(DEPTHAI_ENABLE_CURL)
+-        find_package(CURL ${_QUIET} CONFIG REQUIRED)
+-        find_package(cpr ${_QUIET} CONFIG REQUIRED)
+-    endif()
+ 
+     # Backward
+     if(DEPTHAI_ENABLE_BACKWARD)
+         # Disable automatic check for additional stack unwinding libraries
+         # Just use the default compiler one
+         set(STACK_DETAILS_AUTO_DETECT FALSE CACHE BOOL "Auto detect backward's stack details dependencies")
+-        find_package(Backward ${_QUIET} CONFIG REQUIRED)
+         unset(STACK_DETAILS_AUTO_DETECT)
+     endif()
+     find_package(yaml-cpp ${_QUIET} CONFIG REQUIRED)
+-    find_package(semver ${_QUIET} CONFIG REQUIRED)
+     if(DEPTHAI_HAS_APRIL_TAG)
+         find_package(apriltag ${_QUIET} CONFIG REQUIRED)
+     endif()
+@@ -79,12 +72,14 @@ endif()
+ # Xtensor
+ get_filename_component(PARENT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/.. ABSOLUTE)
+ if(DEPTHAI_XTENSOR_SUPPORT)
+-    add_subdirectory("${PARENT_DIRECTORY}/3rdparty/xtl" xtl)
+-    add_subdirectory("${PARENT_DIRECTORY}/3rdparty/xtensor" xtensor)
+-endif()
+-if(DEPTHAI_ENABLE_REMOTE_CONNECTION)
+-    add_subdirectory("${PARENT_DIRECTORY}/3rdparty/foxglove/ws-protocol/cpp/foxglove-websocket" foxglove-websocket)
++    # add_subdirectory("${PARENT_DIRECTORY}/3rdparty/xtl" xtl)
++    # add_subdirectory("${PARENT_DIRECTORY}/3rdparty/xtensor" xtensor)
++    find_package(xtl 0.7.7 ${_QUIET} CONFIG REQUIRED)
++    find_package(xtensor 0.25.0 ${_QUIET} CONFIG REQUIRED)
+ endif()
++# if(DEPTHAI_ENABLE_REMOTE_CONNECTION)
++#     add_subdirectory("${PARENT_DIRECTORY}/3rdparty/foxglove/ws-protocol/cpp/foxglove-websocket" foxglove-websocket)
++# endif()
+ 
+ # Add threads (c++)
+ find_package(Threads ${_QUIET} REQUIRED)
+@@ -93,10 +88,10 @@ find_package(Threads ${_QUIET} REQUIRED)
+ find_package(nlohmann_json 3.6.0 ${_QUIET} CONFIG REQUIRED)
+ 
+ # libnop for serialization
+-find_package(libnop ${_QUIET} CONFIG REQUIRED)
++#find_package(libnop ${_QUIET} CONFIG REQUIRED)
+ 
+ # MP4V2 for video encoding
+-find_package(mp4v2 ${_QUIET} CONFIG REQUIRED)
++#find_package(mp4v2 ${_QUIET} CONFIG REQUIRED)
+ 
+ if(DEPTHAI_ENABLE_PROTOBUF)
+     find_package(Protobuf ${_QUIET} REQUIRED)
+@@ -107,18 +102,18 @@ if(DEPTHAI_BUILD_TESTS)
+ endif()
+ 
+ # XLink
+-if(DEPTHAI_XLINK_LOCAL AND (NOT CONFIG_MODE))
+-    set(_BUILD_SHARED_LIBS_SAVED "${BUILD_SHARED_LIBS}")
+-    set(BUILD_SHARED_LIBS OFF)
+-    add_subdirectory("${DEPTHAI_XLINK_LOCAL}" ${CMAKE_CURRENT_BINARY_DIR}/XLink)
+-    set(BUILD_SHARED_LIBS "${_BUILD_SHARED_LIBS_SAVED}")
+-    unset(_BUILD_SHARED_LIBS_SAVED)
+-    list(APPEND targets_to_export XLink XLinkPublic)
+-else()
++#if(DEPTHAI_XLINK_LOCAL AND (NOT CONFIG_MODE))
++#    set(_BUILD_SHARED_LIBS_SAVED "${BUILD_SHARED_LIBS}")
++#    set(BUILD_SHARED_LIBS OFF)
++#    add_subdirectory("${DEPTHAI_XLINK_LOCAL}" ${CMAKE_CURRENT_BINARY_DIR}/XLink)
++#    set(BUILD_SHARED_LIBS "${_BUILD_SHARED_LIBS_SAVED}")
++#    unset(_BUILD_SHARED_LIBS_SAVED)
++#    list(APPEND targets_to_export XLink XLinkPublic)
++    #else()
+     # TODO(themarpe) - might be required
+     # elseif(NOT DEPTHAI_XLINK_LOCAL)
+     find_package(XLink ${_QUIET} CONFIG REQUIRED HINTS "${CMAKE_CURRENT_LIST_DIR}/XLink" "${CMAKE_CURRENT_LIST_DIR}/../XLink")
+-endif()
++    #endif()
+ 
+ # OpenCV 4 - (optional)
+ message("DEPTHAI_OPENCV_SUPPORT: ${DEPTHAI_OPENCV_SUPPORT}")
+-- 
+2.48.1
+

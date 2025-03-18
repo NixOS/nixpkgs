@@ -1,0 +1,69 @@
+From 18c98fd90c087d3bcb0e6da83de7b7bdeeeca35d Mon Sep 17 00:00:00 2001
+From: Petr Hodina <petr.hodina@luxonis.com>
+Date: Fri, 21 Mar 2025 07:21:34 +0100
+Subject: [PATCH 01/14] CMakeLists.txt: Fix dependencies
+
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 2f02763fb..389f5319d 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -233,6 +233,7 @@ set(PROJECT_EXPORT_GROUP "${PROJECT_NAME}Targets")
+ 
+ ## Check if cloned or sources
+ find_package(Git)
++find_package(foxglove-websocket)
+ if(GIT_FOUND)
+     execute_process(
+         COMMAND ${GIT_EXECUTABLE} rev-parse --show-toplevel
+@@ -814,13 +815,12 @@ target_link_libraries(${TARGET_CORE_NAME}
+         Threads::Threads
+         BZip2::BZip2
+         LibArchive::LibArchive
+-        liblzma::liblzma
+         ZLIB::ZLIB
+-        lz4::lz4
++        lz4
+         httplib::httplib
+-        mp4v2::mp4v2
+-        semver::semver
++        mp4v2
+         magic_enum::magic_enum
++	  
+ )
+ 
+ if(DEPTHAI_ENABLE_PROTOBUF)
+@@ -833,9 +833,9 @@ if(DEPTHAI_ENABLE_PROTOBUF)
+ endif()
+ 
+ if(DEPTHAI_ENABLE_REMOTE_CONNECTION)
+-    target_link_libraries(${TARGET_CORE_NAME} PRIVATE
+-        foxglove-websocket::foxglove-websocket
+-    )
++	target_link_libraries(${TARGET_CORE_NAME} PRIVATE
++	    foxglove_websocket
++	)
+     target_compile_definitions(${TARGET_CORE_NAME} PRIVATE DEPTHAI_ENABLE_REMOTE_CONNECTION)
+ endif()
+ 
+@@ -847,13 +847,13 @@ endif()
+ 
+ if(DEPTHAI_ENABLE_CURL)
+     target_link_libraries(${TARGET_CORE_NAME} PRIVATE
+-        CURL::libcurl
+-        cpr::cpr
++        curl
++        cpr
+     )
+     target_compile_definitions(${TARGET_CORE_NAME} PRIVATE DEPTHAI_ENABLE_CURL)
+     target_link_libraries(zoo_helper PRIVATE
+-        CURL::libcurl
+-        cpr::cpr
++        curl
++        cpr
+     )
+     target_compile_definitions(zoo_helper PRIVATE DEPTHAI_ENABLE_CURL)
+ endif()
+-- 
+2.48.1
+
