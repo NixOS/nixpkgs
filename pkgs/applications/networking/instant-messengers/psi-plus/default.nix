@@ -14,10 +14,7 @@
   hunspell,
   libsecret,
   libgcrypt,
-  libotr,
-  html-tidy,
   libgpg-error,
-  libsignal-protocol-c,
   usrsctp,
 
   chatType ? "basic", # See the assertion below for available options
@@ -25,6 +22,9 @@
   qtwebengine,
 
   enablePlugins ? true,
+  html-tidy,
+  libotr,
+  libsignal-protocol-c,
 
   # Voice messages
   voiceMessagesSupport ? true,
@@ -80,15 +80,17 @@ mkDerivation rec {
       hunspell
       libsecret
       libgcrypt
-      libotr
-      html-tidy
       libgpg-error
-      libsignal-protocol-c
       usrsctp
     ]
     ++ lib.optionals voiceMessagesSupport [
       gst_all_1.gst-plugins-base
       gst_all_1.gst-plugins-good
+    ]
+    ++ lib.optionals enablePlugins [
+      html-tidy
+      libotr
+      libsignal-protocol-c
     ]
     ++ lib.optionals (chatType == "webkit") [
       qtwebkit
