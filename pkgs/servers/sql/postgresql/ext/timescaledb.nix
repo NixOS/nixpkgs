@@ -1,32 +1,33 @@
 {
-  buildPostgresqlExtension,
   cmake,
-  enableUnfree ? true,
   fetchFromGitHub,
   lib,
   libkrb5,
   nixosTests,
   openssl,
   postgresql,
+  postgresqlBuildExtension,
   stdenv,
+
+  enableUnfree ? true,
 }:
 
-buildPostgresqlExtension rec {
+postgresqlBuildExtension rec {
   pname = "timescaledb${lib.optionalString (!enableUnfree) "-apache"}";
   version = "2.18.2";
+
+  src = fetchFromGitHub {
+    owner = "timescale";
+    repo = "timescaledb";
+    tag = version;
+    hash = "sha256-/PKk8/cS6jqL+mhSqFU6gybqDx3ld77RLF/uB+1XJCQ=";
+  };
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [
     openssl
     libkrb5
   ];
-
-  src = fetchFromGitHub {
-    owner = "timescale";
-    repo = "timescaledb";
-    rev = version;
-    hash = "sha256-/PKk8/cS6jqL+mhSqFU6gybqDx3ld77RLF/uB+1XJCQ=";
-  };
 
   cmakeFlags =
     [
@@ -53,13 +54,13 @@ buildPostgresqlExtension rec {
 
   passthru.tests = nixosTests.postgresql.timescaledb.passthru.override postgresql;
 
-  meta = with lib; {
+  meta = {
     description = "Scales PostgreSQL for time-series data via automatic partitioning across time and space";
     homepage = "https://www.timescale.com/";
     changelog = "https://github.com/timescale/timescaledb/blob/${version}/CHANGELOG.md";
-    maintainers = [ maintainers.kirillrdy ];
+    maintainers = with lib.maintainers; [ kirillrdy ];
     platforms = postgresql.meta.platforms;
-    license = with licenses; if enableUnfree then tsl else asl20;
-    broken = versionOlder postgresql.version "14";
+    license = with lib.licenses; if enableUnfree then tsl else asl20;
+    broken = lib.versionOlder postgresql.version "14";
   };
 }
