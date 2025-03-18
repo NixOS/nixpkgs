@@ -1,0 +1,81 @@
+From cfa98aeb77f3b0a5a21be67f476afde6495e8905 Mon Sep 17 00:00:00 2001
+From: Petr Hodina <petr.hodina@luxonis.com>
+Date: Wed, 28 May 2025 11:03:18 +0200
+Subject: [PATCH 2/3] cmake: Add option to enable 3rdparty dependencies
+
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 531553f27..f8208c238 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -162,9 +162,12 @@ set(THREADS_PREFER_PTHREAD_FLAG ON)
+ 
+ 
+ # TODO Remove shared naming
++if(DEPTHAI_ENABLE_3RDPARTY)
+ set(DEPTHAI_SHARED_3RDPARTY_INCLUDE
+     ${CMAKE_CURRENT_LIST_DIR}/include/3rdparty/
+ )
++endif()
++
+ # Add depthai-bootloader-shared
+ include(${CMAKE_CURRENT_LIST_DIR}/shared/depthai-bootloader-shared.cmake)
+ 
+diff --git a/cmake/depthaiDependencies.cmake b/cmake/depthaiDependencies.cmake
+index 01d39912a..c901d56fd 100644
+--- a/cmake/depthaiDependencies.cmake
++++ b/cmake/depthaiDependencies.cmake
+@@ -104,7 +104,7 @@ if(DEPTHAI_XTENSOR_SUPPORT)
+     endif()
+ endif()
+ 
+-if(DEPTHAI_ENABLE_REMOTE_CONNECTION)
++if(DEPTHAI_ENABLE_REMOTE_CONNECTION AND DEPTHAI_ENABLE_3RDPARTY)
+     get_filename_component(PARENT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/.. ABSOLUTE)
+     add_subdirectory("${PARENT_DIRECTORY}/3rdparty/foxglove/ws-protocol/cpp/foxglove-websocket" foxglove-websocket)
+ endif()
+diff --git a/cmake/depthaiOptions.cmake b/cmake/depthaiOptions.cmake
+index 297f12ecd..5a5beb7b6 100644
+--- a/cmake/depthaiOptions.cmake
++++ b/cmake/depthaiOptions.cmake
+@@ -18,6 +18,7 @@ option(DEPTHAI_ENABLE_PROTOBUF "Enable Protobuf support" ON)
+ option(DEPTHAI_ENABLE_CURL "Enable CURL support" ${DEPTHAI_DEFAULT_CURL_SUPPORT})
+ option(DEPTHAI_ENABLE_KOMPUTE "Enable Kompute support" OFF)
+ option(DEPTHAI_ENABLE_MP4V2 "Enable video recording using the MP4V2 library" ON)
++option(DEPTHAI_ENABLE_3RDPARTY "Build 3rdparty dependencies" ON)
+ 
+ # ---------- Optional Features (public) -------------
+ option(DEPTHAI_OPENCV_SUPPORT "Enable optional OpenCV support" ON)
+diff --git a/shared/depthai-shared.cmake b/shared/depthai-shared.cmake
+index 24ce9b383..650119273 100644
+--- a/shared/depthai-shared.cmake
++++ b/shared/depthai-shared.cmake
+@@ -4,7 +4,9 @@ else()
+     set(DEPTHAI_SHARED_FOLDER ${CMAKE_CURRENT_LIST_DIR}/depthai-shared)
+ endif()
+ 
+-set(DEPTHAI_SHARED_3RDPARTY_HEADERS_PATH "depthai-shared/3rdparty")
++if(DEPTHAI_ENABLE_3RDPARTY)
++    set(DEPTHAI_SHARED_3RDPARTY_HEADERS_PATH "depthai-shared/3rdparty")
++endif()
+ 
+ set(DEPTHAI_SHARED_SOURCES
+     ${DEPTHAI_SHARED_FOLDER}/src/datatype/DatatypeEnum.cpp
+@@ -17,9 +19,11 @@ set(DEPTHAI_SHARED_PUBLIC_INCLUDE
+     ${DEPTHAI_SHARED_FOLDER}/include
+ )
+ 
+-set(DEPTHAI_SHARED_3RDPARTY_INCLUDE
+-    ${DEPTHAI_SHARED_FOLDER}/3rdparty
+-)
++if(DEPTHAI_ENABLE_3RDPARTY)
++    set(DEPTHAI_SHARED_3RDPARTY_INCLUDE
++        ${DEPTHAI_SHARED_FOLDER}/3rdparty
++    )
++endif()
+ 
+ set(DEPTHAI_SHARED_INCLUDE
+     ${DEPTHAI_SHARED_FOLDER}/src
+-- 
+2.49.0
+
