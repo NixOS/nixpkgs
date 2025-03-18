@@ -165,6 +165,11 @@ stdenv.mkDerivation (finalAttrs: {
       echo 11 > $HOME/.node-gyp/${nodejs.version}/installVersion
       ln -sfv ${nodejs}/include $HOME/.node-gyp/${nodejs.version}
     ''
+    ## node-pty build fix
+    + ''
+      substituteInPlace remote/node_modules/node-pty/scripts/post-install.js \
+        --replace-fail "npx node-gyp" "$npm_config_node_gyp"
+    ''
     ## rebuild native binaries
     + ''
       echo >&2 "Rebuilding from source in ./remote"
