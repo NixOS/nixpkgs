@@ -7,6 +7,7 @@ let
     mkIf
     mkOption
     optionalAttrs
+    mkMerge
     ;
 
   inherit (lib.types) str;
@@ -49,13 +50,13 @@ in
         managementServer = "https://${cfg.domain}";
       };
 
-      management =
+      management = mkMerge [
         {
           domain = mkDefault cfg.domain;
           enable = mkDefault cfg.enable;
           enableNginx = mkDefault cfg.enableNginx;
         }
-        // (optionalAttrs cfg.coturn.enable rec {
+        (mkIf cfg.coturn.enable rec {
           turnDomain = cfg.domain;
           turnPort = config.services.coturn.tls-listening-port;
           # We cannot merge a list of attrsets so we have to redefine the whole list
@@ -73,7 +74,8 @@ in
               }
             ];
           };
-        });
+        })
+      ];
 
       signal = {
         domain = mkDefault cfg.domain;
