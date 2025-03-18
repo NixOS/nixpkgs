@@ -20,6 +20,10 @@ rustPlatform.buildRustPackage rec {
   useFetchCargoVendor = true;
   cargoHash = "sha256-L7LfnF9C6JNjY9pGJb0uuj38H9KI3vkkvtx7QCB1GO0=";
 
+  postPatch = ''
+    rm .cargo/config.toml
+  '';
+
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = [ "--version" ];
   doInstallCheck = true;
