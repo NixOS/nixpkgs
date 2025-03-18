@@ -1252,6 +1252,8 @@ let
 
     mmap =  callPackage ../development/ocaml-modules/mmap { };
 
+    monolith = callPackage ../development/ocaml-modules/monolith { };
+
     mopsa = callPackage ../development/ocaml-modules/mopsa { };
 
     morbig = callPackage ../development/ocaml-modules/morbig { };
