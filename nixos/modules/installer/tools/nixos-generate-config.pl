@@ -43,7 +43,11 @@ my $kernel = "lts";
 if (-e "/etc/nixos-generate-config.conf") {
     my $cfg = new Config::IniFiles -file => "/etc/nixos-generate-config.conf";
     $outDir = $cfg->val("Defaults", "Directory") // $outDir;
-    $rootDir = $cfg->val("Defaults", "RootDirectory") // $rootDir;
+    if (defined $cfg->val("Defaults", "RootDirectory")) {
+        $rootDir = $cfg->val("Defaults", "RootDirectory");
+        $rootDir =~ s/\/*$//; # remove trailing slashes
+        $rootDir = File::Spec->rel2abs($rootDir); # resolve absolute path
+    }
     $kernel = $cfg->val("Defaults", "Kernel") // $kernel;
 }
 
@@ -62,6 +66,8 @@ for (my $n = 0; $n < scalar @ARGV; $n++) {
         $rootDir = $ARGV[$n];
         die "$0: ‘--root’ requires an argument\n" unless defined $rootDir;
         die "$0: no need to specify `/` with `--root`, it is the default\n" if $rootDir eq "/";
+        $rootDir =~ s/\/*$//; # remove trailing slashes
+        $rootDir = File::Spec->rel2abs($rootDir); # resolve absolute path
     }
     elsif ($arg eq "--force") {
         $force = 1;
@@ -85,8 +91,6 @@ for (my $n = 0; $n < scalar @ARGV; $n++) {
     }
 }
 
-$rootDir =~ s/\/*$//; # remove trailing slashes
-$rootDir = File::Spec->rel2abs($rootDir); # resolve absolute path
 die "$0: invalid kernel: '$kernel'" unless $kernel eq "lts" || $kernel eq "latest";
 
 my @attrs = ();
