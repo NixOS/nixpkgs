@@ -2,7 +2,7 @@
 #! nix-shell -i bash -p jq nix coreutils curl
 
 # systems to generate hashes for
-systems='linux osx'
+systems='linux'
 
 if [ $# -eq 0 ]; then
     versions="$(curl http://www.bay12games.com/dwarves/ \

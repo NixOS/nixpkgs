@@ -62,7 +62,7 @@ let
   # this. Note that unfuck and twbt are not required for 50.
   latestVersion =
     if stdenv.hostPlatform.isLinux then
-      "51.05"
+      "51.08"
     else if stdenv.hostPlatform.isDarwin then
       "0.47.05"
     else

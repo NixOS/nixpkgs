@@ -116,6 +116,21 @@ let
       hash = "sha256-emTuKWisYGzfmg8hKb1wLVn/5BcKsYA5xQeLhW56YQw=";
       xmlRev = "5513dc1ffa70d567d87ce946a0c57ce4760fae7c";
     };
+    "51.06" = {
+      dfHackRelease = "51.06-r1";
+      hash = "sha256-p7viIr9qnQh5Jqgwn+IT9YxcTzODoGqbeMmUiqbpolE=";
+      xmlRev = "9d207f7b70c7ecf3835b6ca7506e598622d29d04";
+    };
+    "51.07" = {
+      dfHackRelease = "51.07-r1";
+      hash = "sha256-fu6DK47E1mIiYlWYThhXlzbi+Ci5XhLA4qfTygxkyN4=";
+      xmlRev = "a5286b3d70249abe4d45d9f707b826ec306a1c33";
+    };
+    "51.08" = {
+      dfHackRelease = "51.08-r1";
+      hash = "sha256-FOZyjtAfwNHknwCrnPXVu39hzUCHAHmMnenbTEDj+HE=";
+      xmlRev = "860017b193c5cce1ee6c16321301b0a1d4788569";
+    };
   };
 
   release =
