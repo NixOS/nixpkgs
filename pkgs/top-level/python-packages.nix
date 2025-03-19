@@ -13786,6 +13786,8 @@ self: super: with self; {
 
   pytest-ruff = callPackage ../development/python-modules/pytest-ruff { };
 
+  pytest-scim2-server = callPackage ../development/python-modules/pytest-scim2-server { };
+
   pytest-selenium = callPackage ../development/python-modules/pytest-selenium { };
 
   pytest-server-fixtures = callPackage ../development/python-modules/pytest-server-fixtures { };
