@@ -201,11 +201,14 @@ let
         kernelBaseConfig =
           if defconfig != null then defconfig else stdenv.hostPlatform.linux-kernel.baseConfig;
 
-        makeFlags =
-          lib.optionals (
-            stdenv.hostPlatform.linux-kernel ? makeFlags
-          ) stdenv.hostPlatform.linux-kernel.makeFlags
-          ++ extraMakeFlags;
+        makeFlags = import ./common-flags.nix {
+          inherit
+            lib
+            stdenv
+            buildPackages
+            extraMakeFlags
+            ;
+        };
 
         postPatch =
           kernel.postPatch
