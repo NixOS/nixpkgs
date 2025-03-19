@@ -1,0 +1,52 @@
+From c46e4db9cf92b41092a3805549aad8b2e5f28987 Mon Sep 17 00:00:00 2001
+From: Lach <iam@lach.pw>
+Date: Sun, 16 Mar 2025 19:39:54 +0100
+Subject: [PATCH] fix: relax build-system dependencies
+
+Signed-off-by: Lach <iam@lach.pw>
+---
+ pyproject.toml | 22 +++++++++++-----------
+ 1 file changed, 11 insertions(+), 11 deletions(-)
+
+diff --git a/pyproject.toml b/pyproject.toml
+index 9413600..7ba178f 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -1,10 +1,10 @@
+ [build-system]
+ requires = [
+-    "distlib~=0.3.5",
+-    "packaging>=23.2",
+-    "pyproject-metadata~=0.7.1",
+-    "tomli>=1.2.3,<3; python_version < '3.11'",
+-    "lark>=1.1.9,<2",
++    "distlib",
++    "packaging",
++    "pyproject-metadata",
++    "tomli",
++    "lark",
+ ]
+ build-backend = "py_build_cmake.build"
+ backend-path = ["src"]
+@@ -34,12 +34,12 @@ classifiers = [
+     "Operating System :: MacOS",
+ ]
+ dependencies = [
+-    "distlib~=0.3.5",
+-    "packaging>=23.2",
+-    "pyproject-metadata~=0.7.1",
+-    "tomli>=1.2.3,<3; python_version < '3.11'",
+-    "lark>=1.1.9,<2",
+-    "click~=8.1.3",
++    "distlib",
++    "packaging",
++    "pyproject-metadata",
++    "tomli",
++    "lark",
++    "click",
+ ]
+ dynamic = ["version", "description"]
+ 
+-- 
+2.48.1
+

@@ -1,0 +1,67 @@
+From d7a608f82d902acdf0756422d6171c9fb1f935b1 Mon Sep 17 00:00:00 2001
+From: Lach <iam@lach.pw>
+Date: Sun, 16 Mar 2025 19:57:27 +0100
+Subject: [PATCH] build: update py-build-cmake to 0.4.2
+
+Signed-off-by: Lach <iam@lach.pw>
+---
+ pybgcode/CMakeLists.txt | 12 ++++++------
+ pyproject.toml          |  2 +-
+ 2 files changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/pybgcode/CMakeLists.txt b/pybgcode/CMakeLists.txt
+index abfa3d9..f2fea43 100644
+--- a/pybgcode/CMakeLists.txt
++++ b/pybgcode/CMakeLists.txt
+@@ -30,10 +30,10 @@ set(PY_VERSION_SUFFIX "")
+ set(PY_FULL_VERSION ${PROJECT_VERSION}${PY_VERSION_SUFFIX})
+ 
+ # Make sure that the Python and CMake versions match
+-if (DEFINED PY_BUILD_CMAKE_PACKAGE_VERSION)
+-    if (NOT "${PY_BUILD_CMAKE_PACKAGE_VERSION}" MATCHES "^${PY_FULL_VERSION}$")
++if (DEFINED PY_BUILD_CMAKE_PROJECT_VERSION)
++    if (NOT "${PY_BUILD_CMAKE_PROJECT_VERSION}" MATCHES "^${PY_FULL_VERSION}$")
+         message(FATAL_ERROR "Version number does not match "
+-                             "(${PY_BUILD_CMAKE_PACKAGE_VERSION} - ${PY_FULL_VERSION}).")
++                             "(${PY_BUILD_CMAKE_PROJECT_VERSION} - ${PY_FULL_VERSION}).")
+     endif()
+ endif()
+ 
+@@ -58,18 +58,18 @@ if (CMAKE_SYSTEM_NAME MATCHES "Linux")
+     target_link_options(_bgcode PRIVATE "LINKER:--exclude-libs,ALL")
+ endif()
+ 
+-if (PY_BUILD_CMAKE_MODULE_NAME)
++if (PY_BUILD_CMAKE_IMPORT_NAME)
+     # Install the Python module
+     install(TARGETS _bgcode
+             EXCLUDE_FROM_ALL
+             COMPONENT python_modules
+-            DESTINATION ${PY_BUILD_CMAKE_MODULE_NAME})
++            DESTINATION ${PY_BUILD_CMAKE_IMPORT_NAME})
+     # Install the debug file for the Python module (Windows only)
+     if (WIN32)
+         install(FILES $<TARGET_PDB_FILE:_bgcode>
+                 EXCLUDE_FROM_ALL
+                 COMPONENT python_modules
+-                DESTINATION ${PY_BUILD_CMAKE_MODULE_NAME}
++                DESTINATION ${PY_BUILD_CMAKE_IMPORT_NAME}
+                 OPTIONAL)
+     endif()
+ endif ()
+diff --git a/pyproject.toml b/pyproject.toml
+index 1a93b3b..d471059 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -19,7 +19,7 @@ requires-python = ">=3.7"
+ "Bug Tracker" = "https://github.com/prusa3d/libbgcode/issues"
+ 
+ [build-system]
+-requires = ["py-build-cmake~=0.1.8", "pytest"]
++requires = ["py-build-cmake~=0.4.2", "pytest"]
+ build-backend = "py_build_cmake.build"
+ 
+ [tool.py-build-cmake.module] # Where to find the Python module to package
+-- 
+2.48.1
+
