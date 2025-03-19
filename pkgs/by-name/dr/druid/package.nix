@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
     mkdir $out
     mv * $out
-    ${optionalString mysqlSupport "ln -s ${mysql_jdbc}/share/java/mysql-connector-java.jar $out/extensions/mysql-metadata-storage"}
+    ${optionalString mysqlSupport "ln -s ${mysql_jdbc}/share/java/mysql-connector-j.jar $out/extensions/mysql-metadata-storage"}
     ${finalAttrs.loadExtensions}
     ${finalAttrs.loadJars}
     runHook postInstall
