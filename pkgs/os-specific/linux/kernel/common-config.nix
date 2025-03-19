@@ -511,7 +511,7 @@ let
         DRM_AMD_DC_DCN = lib.mkIf (with stdenv.hostPlatform; isx86 || isPower64) (
           whenBetween "5.11" "6.4" yes
         );
-        DRM_AMD_DC_FP = whenAtLeast "6.4" yes;
+        DRM_AMD_DC_FP = lib.mkIf (!stdenv.cc.isClang) (whenAtLeast "6.4" yes);
         DRM_AMD_DC_HDCP = whenBetween "5.5" "6.4" yes;
         DRM_AMD_DC_SI = whenAtLeast "5.10" yes;
 
