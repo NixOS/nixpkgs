@@ -47,6 +47,7 @@
   patches ? [ ],
   # Re-exported plugins for this version
   dovecot_pigeonhole,
+  dovecot_exporter,
 }:
 stdenv.mkDerivation {
   pname = "dovecot";
@@ -209,5 +210,6 @@ stdenv.mkDerivation {
     };
 
     pigeonhole = dovecot_pigeonhole;
+    exporter = dovecot_exporter;
   };
 }
