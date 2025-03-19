@@ -119,6 +119,9 @@ in {
       # not available in a sandboxed build.
       "-DANTLR_BUILD_CPP_TESTS=OFF"
     ];
+    extraPatches = [
+      ./include-dir-issue-379757.patch
+    ];
   }).antlr;
 
   antlr4_12 = (mkAntlr {
