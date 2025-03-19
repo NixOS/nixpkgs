@@ -168,18 +168,34 @@ let
 
     buildPhase = ''
       export buildRoot="''${buildRoot:-build}"
+      export HOSTCC=${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}cc
+      export HOSTCXX=${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}c++
+      export HOSTAR=${buildPackages.stdenv.cc.bintools}/bin/${buildPackages.stdenv.cc.targetPrefix}ar
+      export HOSTLD=${buildPackages.stdenv.cc.bintools}/bin/${buildPackages.stdenv.cc.targetPrefix}ld
+
+      # Absolute paths for tools avoid any PATH-clobbering issues.
+      export CC=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc
+      export LD=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}ld
+      export AR=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}ar
+      export NM=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}nm
+      export STRIP=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}strip
+      export OBJCOPY=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}objcopy
+      export OBJDUMP=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}objdump
+      export READELF=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}readelf
 
       # Get a basic config file for later refinement with $generateConfig.
       make $makeFlags \
           -C . O="$buildRoot" $kernelBaseConfig \
-          ARCH=$kernelArch CROSS_COMPILE=${stdenv.cc.targetPrefix} \
+          ARCH=$kernelArch \
+          HOSTCC=$HOSTCC HOSTCXX=$HOSTCXX HOSTAR=$HOSTAR HOSTLD=$HOSTLD \
+          CC=$CC OBJCOPY=$OBJCOPY OBJDUMP=$OBJDUMP READELF=$READELF \
+          LD=$LD AR=$AR NM=$NM STRIP=$STRIP \
           $makeFlags
 
       # Create the config file.
       echo "generating kernel configuration..."
       ln -s "$kernelConfigPath" "$buildRoot/kernel-config"
-      DEBUG=1 ARCH=$kernelArch CROSS_COMPILE=${stdenv.cc.targetPrefix} \
-        KERNEL_CONFIG="$buildRoot/kernel-config" AUTO_MODULES=$autoModules \
+      DEBUG=1 ARCH=$kernelArch KERNEL_CONFIG="$buildRoot/kernel-config" AUTO_MODULES=$autoModules \
         PREFER_BUILTIN=$preferBuiltin BUILD_ROOT="$buildRoot" SRC=. MAKE_FLAGS="$makeFlags" \
         perl -w $generateConfig
 
