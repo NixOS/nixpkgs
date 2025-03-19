@@ -1292,6 +1292,7 @@ in
   syncthing-many-devices = handleTest ./syncthing-many-devices.nix { };
   syncthing-no-settings = handleTest ./syncthing-no-settings.nix { };
   syncthing-relay = handleTest ./syncthing-relay.nix { };
+  sysfs = runTest ./sysfs.nix;
   sysinit-reactivation = runTest ./sysinit-reactivation.nix;
   systemd = handleTest ./systemd.nix { };
   systemd-analyze = handleTest ./systemd-analyze.nix { };
