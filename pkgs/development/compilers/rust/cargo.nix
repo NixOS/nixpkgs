@@ -1,5 +1,5 @@
 { lib, stdenv, pkgsHostHost
-, file, curl, pkg-config, python3, openssl, cmake, zlib
+, file, curl, pkg-config, python3, openssl, cmake, zlib, libsecret
 , installShellFiles, makeWrapper, rustPlatform, rustc
 , auditable ? !cargo-auditable.meta.broken
 , cargo-auditable
@@ -49,6 +49,8 @@ rustPlatform.buildRustPackage.override {
       src/tools/cargo/src/etc/cargo.bashcomp.sh
 
     installShellCompletion --zsh src/tools/cargo/src/etc/_cargo
+  '' + lib.optionalString stdenv.isLinux ''
+    patchelf --add-needed ${libsecret}/lib/libsecret-1.so.0 $out/bin/cargo
   '';
 
   checkPhase = ''
