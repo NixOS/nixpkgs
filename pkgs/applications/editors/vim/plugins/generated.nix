@@ -850,6 +850,19 @@ final: prev:
     meta.hydraPlatforms = [ ];
   };
 
+  arshlib-nvim = buildVimPlugin {
+    pname = "arshlib.nvim";
+    version = "2024-05-18";
+    src = fetchFromGitHub {
+      owner = "arsham";
+      repo = "arshlib.nvim";
+      rev = "111fd439268adda206a24b133096893869a50764";
+      sha256 = "1jmac14w37lybanr8jg4jpi3rkbsjhmz65x5fr7mgd7kagsn3r1n";
+    };
+    meta.homepage = "https://github.com/arsham/arshlib.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   astrocore = buildVimPlugin {
     pname = "astrocore";
     version = "2025-02-18";
@@ -6122,6 +6135,19 @@ final: prev:
       sha256 = "1s2hxq3jlx6mdvq5d6zdzrp6p8fc1vvkg2px95d0qw2ryqw4rixi";
     };
     meta.homepage = "https://github.com/Darazaki/indent-o-matic/";
+    meta.hydraPlatforms = [ ];
+  };
+
+  indent-tools-nvim = buildVimPlugin {
+    pname = "indent-tools.nvim";
+    version = "2023-10-28";
+    src = fetchFromGitHub {
+      owner = "arsham";
+      repo = "indent-tools.nvim";
+      rev = "31b839d65aa04b568fabe5e100a63cc44ef3f5d5";
+      sha256 = "0vw3j9plwi6ari5p5hmds257xw0szlj2ddf75mjfj6nfzd93ni0p";
+    };
+    meta.homepage = "https://github.com/arsham/indent-tools.nvim/";
     meta.hydraPlatforms = [ ];
   };
 

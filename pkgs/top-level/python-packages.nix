@@ -6318,6 +6318,8 @@ self: super: with self; {
 
   icalendar = callPackage ../development/python-modules/icalendar { };
 
+  icalendar-compatibility = callPackage ../development/python-modules/icalendar-compatibility { };
+
   icalevents = callPackage ../development/python-modules/icalevents { };
 
   icecream = callPackage ../development/python-modules/icecream { };
@@ -8303,6 +8305,8 @@ self: super: with self; {
 
   merge3 = callPackage ../development/python-modules/merge3 { };
 
+  mergecal = callPackage ../development/python-modules/mergecal { };
+
   mergedb = callPackage ../development/python-modules/mergedb { };
 
   mergedeep = callPackage ../development/python-modules/mergedeep { };
@@ -9277,6 +9281,8 @@ self: super: with self; {
   natural = callPackage ../development/python-modules/natural { };
 
   ndcurves = toPythonModule (pkgs.ndcurves.override { python3Packages = self; pythonSupport = true; });
+
+  nglview = callPackage ../development/python-modules/nglview { };
 
   nomadnet = callPackage ../development/python-modules/nomadnet { };
 

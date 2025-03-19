@@ -2,11 +2,11 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  poetry-core,
-  poetry-dynamic-versioning,
   panflute,
   pytestCheckHook,
   pandoc,
+  hatchling,
+  hatch-vcs,
 }:
 
 buildPythonPackage rec {
@@ -22,9 +22,10 @@ buildPythonPackage rec {
   };
 
   build-system = [
-    poetry-core
-    poetry-dynamic-versioning
+    hatchling
+    hatch-vcs
   ];
+
   dependencies = [ panflute ];
 
   pythonImportsCheck = [ "pandoc_latex_environment" ];
