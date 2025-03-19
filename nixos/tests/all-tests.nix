@@ -548,6 +548,7 @@ in {
   hydra = handleTest ./hydra {};
   i3wm = handleTest ./i3wm.nix {};
   icingaweb2 = handleTest ./icingaweb2.nix {};
+  icmptx = import ./icmptx.nix { inherit recurseIntoAttrs runTest; };
   ifm = handleTest ./ifm.nix {};
   iftop = handleTest ./iftop.nix {};
   immich = handleTest ./web-apps/immich.nix {};
