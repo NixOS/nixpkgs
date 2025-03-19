@@ -179,7 +179,11 @@ let
       export HOSTLD=${buildPackages.stdenv.cc.bintools}/bin/${buildPackages.stdenv.cc.targetPrefix}ld
 
       # Absolute paths for tools avoid any PATH-clobbering issues.
-      export CC=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc
+      #
+      # We use the unwrapped clang, because the clang-wrapper doesn't like -target.
+      export CC=${if stdenv.cc.isClang
+                  then "${stdenv.cc.cc}/bin/clang"
+                  else "${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc"}
       export LD=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}ld
       export AR=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}ar
       export NM=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}nm

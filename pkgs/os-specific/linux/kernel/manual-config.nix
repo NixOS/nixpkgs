@@ -439,7 +439,9 @@ let
   # Absolute paths for compilers avoid any PATH-clobbering issues.
   commonMakeFlags = [
     "O=$(buildRoot)"
-    "CC=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc"
+    "CC=${if stdenv.cc.isClang
+                  then "${stdenv.cc.cc}/bin/clang"
+                  else "${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc"}"
     "LD=${if stdenv.isx86_64 && stdenv.cc.bintools.isLLVM
           then
             # The wrapper for ld.lld breaks linking the kernel. We use the unwrapped linker as workaround. See:
