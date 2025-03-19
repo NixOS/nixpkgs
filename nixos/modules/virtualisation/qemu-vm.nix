@@ -62,8 +62,20 @@ let
     };
 
   selectPartitionTableLayout =
-    { useEFIBoot, useDefaultFilesystems }:
-    if useDefaultFilesystems then if useEFIBoot then "efi" else "legacy" else "none";
+    {
+      useEFIBoot,
+      useDefaultFilesystems,
+      useBootPartition,
+    }:
+    if useDefaultFilesystems then
+      if useEFIBoot then
+        "efi"
+      else if useBootPartition then
+        "legacy+boot"
+      else
+        "legacy"
+    else
+      "none";
 
   driveCmdline =
     idx:
@@ -337,7 +349,9 @@ let
     format = "qcow2";
     onlyNixStore = false;
     label = rootFilesystemLabel;
-    partitionTableType = selectPartitionTableLayout { inherit (cfg) useDefaultFilesystems useEFIBoot; };
+    partitionTableType = selectPartitionTableLayout {
+      inherit (cfg) useBootPartition useDefaultFilesystems useEFIBoot;
+    };
     installBootLoader = cfg.installBootLoader;
     touchEFIVars = cfg.useEFIBoot;
     diskSize = "auto";
@@ -431,8 +445,17 @@ in
 
     virtualisation.bootPartition = mkOption {
       type = types.nullOr types.path;
-      default = if cfg.useEFIBoot then "/dev/disk/by-label/${espFilesystemLabel}" else null;
-      defaultText = literalExpression ''if cfg.useEFIBoot then "/dev/disk/by-label/${espFilesystemLabel}" else null'';
+      default =
+        if cfg.useEFIBoot then
+          "/dev/disk/by-label/${espFilesystemLabel}"
+        else if cfg.useBootPartition then
+          "/dev/disk/by-label/BOOT"
+        else
+          null;
+      defaultText = literalExpression ''
+        if cfg.useEFIBoot then "/dev/disk/by-label/${espFilesystemLabel}"
+        else if cfg.useBootPartition then "/dev/disk/by-label/BOOT"
+        else null'';
       example = "/dev/disk/by-label/esp";
       description = ''
         The path (inside the VM) to the device containing the EFI System Partition (ESP).
@@ -926,6 +949,14 @@ in
 
         This is best-effort and may break with unconventional partition setups.
         Use `virtualisation.useDefaultFilesystems` for a known-working configuration.
+      '';
+    };
+
+    virtualisation.useBootPartition = mkEnableOption null // {
+      description = ''
+        If enabled for legacy MBR VMs, the VM image will have a separate boot
+        partition mounted at /boot.
+        useBootPartition is ignored if useEFIBoot == true.
       '';
     };
 
