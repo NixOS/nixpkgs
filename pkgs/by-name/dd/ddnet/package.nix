@@ -137,6 +137,6 @@ stdenv.mkDerivation rec {
       Scrumplex
       sirseruju
     ];
-    mainProgram = "DDNet";
+    mainProgram = "DDNet${lib.optionalString (!buildClient) "-Server"}";
   };
 }
