@@ -7,7 +7,7 @@
   python3,
   stdenv,
   cctools,
-  IOKit,
+  darwin,
   lib,
   nixosTests,
   enableLocalIcons ? false,
@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     nodePackages.node-gyp-build
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ IOKit ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.IOKit ];
 
   env.PYTHON = "${python3}/bin/python";
 
