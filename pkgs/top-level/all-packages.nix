@@ -9307,6 +9307,9 @@ with pkgs;
   dovecot_2_3 = callPackage ../by-name/do/dovecot/2_3.nix { };
   dovecot_2_4 = callPackage ../by-name/do/dovecot/package.nix { };
 
+  dovecot_pigeonhole_2_3 = callPackage ../by-name/do/dovecot_pigeonhole/2_3.nix { };
+  dovecot_pigeonhole_2_4 = callPackage ../by-name/do/dovecot_pigeonhole/package.nix { };
+
   etcd = etcd_3_5;
   etcd_3_5 = callPackage ../servers/etcd/3_5 { };
 
