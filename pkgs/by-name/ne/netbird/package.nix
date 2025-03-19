@@ -12,7 +12,6 @@
   libX11,
   libXcursor,
   libXxf86vm,
-  darwin,
   ui ? false,
   netbird-ui,
   versionCheckHook,
@@ -45,21 +44,13 @@ buildGoModule (finalAttrs: {
 
   nativeBuildInputs = [ installShellFiles ] ++ lib.optional ui pkg-config;
 
-  buildInputs =
-    lib.optionals (stdenv.hostPlatform.isLinux && ui) [
-      gtk3
-      libayatana-appindicator
-      libX11
-      libXcursor
-      libXxf86vm
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && ui) [
-      darwin.apple_sdk.frameworks.Cocoa
-      darwin.apple_sdk.frameworks.IOKit
-      darwin.apple_sdk.frameworks.Kernel
-      darwin.apple_sdk.frameworks.UserNotifications
-      darwin.apple_sdk.frameworks.WebKit
-    ];
+  buildInputs = lib.optionals (stdenv.hostPlatform.isLinux && ui) [
+    gtk3
+    libayatana-appindicator
+    libX11
+    libXcursor
+    libXxf86vm
+  ];
 
   subPackages = lib.attrNames modules;
 
