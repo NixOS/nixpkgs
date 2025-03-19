@@ -192,6 +192,13 @@ in
     dependencies = [ self.middleclass ];
   };
 
+  arshlib-nvim = super.arshlib-nvim.overrideAttrs {
+    dependencies = with self; [
+      nui-nvim
+      plenary-nvim
+    ];
+  };
+
   astrocore = super.astrocore.overrideAttrs {
     dependencies = [ self.lazy-nvim ];
   };
