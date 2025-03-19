@@ -866,6 +866,15 @@
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-ZZtfVgxp7YXNRXpeUisLzweQhHzgYOuQDAp1MsxAVhg="
   },
+  "nexus": {
+    "hash": "sha256-6RPga80ZoqEEFL7I2OVXcrwaxbdhSzZDEV07xL07rZs=",
+    "homepage": "https://registry.terraform.io/providers/datadrivers/nexus",
+    "owner": "datadrivers",
+    "repo": "terraform-provider-nexus",
+    "rev": "v2.5.0",
+    "spdx": "MPL-2.0",
+    "vendorHash": "sha256-wOpR+AJYW7YiARSIACta8Tr4bmGLUONRTEBLxHyHZZk="
+  },
   "nomad": {
     "hash": "sha256-k61iQ9FQG3nscBp5CE/fFCbHpeLawbUAtGPM+IZtfVc=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/nomad",
