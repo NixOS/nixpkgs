@@ -62,7 +62,7 @@ let
                 >"$RUNTIME_DIRECTORY/api_key"
         do sleep 1; done
         (printf "X-API-Key: "; cat "$RUNTIME_DIRECTORY/api_key") >"$RUNTIME_DIRECTORY/headers"
-        ${pkgs.curl}/bin/curl -sSLk -H "@$RUNTIME_DIRECTORY/headers" \
+        ${pkgs.curl}/bin/curl --fail -sSLk -H "@$RUNTIME_DIRECTORY/headers" \
             --retry 1000 --retry-delay 1 --retry-all-errors \
             "$@"
     }
@@ -121,6 +121,7 @@ let
           '[.[].${s.GET_IdAttrName}] - $new_ids | .[]'
         )"
         for id in ''${stale_${conf_type}_ids}; do
+          >&2 echo "Deleting stale device: $id"
           curl -X DELETE ${s.baseAddress}/$id
         done
       ''

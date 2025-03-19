@@ -207,13 +207,13 @@
     "vendorHash": "sha256-qFOfE4yWJfdPtGiGbk+oWzA06QvW0WCd6iUqEMTxBBk="
   },
   "buildkite": {
-    "hash": "sha256-ihP2q0sCKd4myqANLhKrBfIX+macLvJkQ+/3hMzVM3A=",
+    "hash": "sha256-Zlc82lncNf+jeYBck8QBJKuX4pmQmkkb4vYR+T8DoXU=",
     "homepage": "https://registry.terraform.io/providers/buildkite/buildkite",
     "owner": "buildkite",
     "repo": "terraform-provider-buildkite",
-    "rev": "v1.16.2",
+    "rev": "v1.16.3",
     "spdx": "MIT",
-    "vendorHash": "sha256-zl9RRAqDmNigtJIYMti2PgRSSg7KRys0H5BVAm6RW1k="
+    "vendorHash": "sha256-/d1oml8nUOBx6sOe1k43EhbAyfbObJJuoJCEaHQuIZs="
   },
   "ccloud": {
     "hash": "sha256-Dpx0eugcHCJV8GNPqjxx4P9ohgJgB10DTnHr+CeN/iQ=",
@@ -426,11 +426,11 @@
     "vendorHash": "sha256-aTQreRL0UTMYWLs25qsdwdN+PaJcOHwLRA8CjIAsYi0="
   },
   "exoscale": {
-    "hash": "sha256-r5wQQVbonGqZrzsr/gdbhrrbXC8ej/sMGvB1xk3pvUA=",
+    "hash": "sha256-fD2PQ/WNmifAlY27V0y47wDWEfhCXql0b1y8J5uSkNk=",
     "homepage": "https://registry.terraform.io/providers/exoscale/exoscale",
     "owner": "exoscale",
     "repo": "terraform-provider-exoscale",
-    "rev": "v0.62.3",
+    "rev": "v0.63.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -507,13 +507,13 @@
     "vendorHash": "sha256-VPJ0ekrGEzhIZ6ExrU5sLb2meFHT9cak53BO7z6BCC4="
   },
   "google": {
-    "hash": "sha256-qpqpb1uXREMMtd/3TyXIdn3e2TjLSTSP5if+g/e4XhU=",
+    "hash": "sha256-9xieQT5yY1h52/tksEmX9iYXtDjYxkSL/pvC2XPXN/4=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/google",
     "owner": "hashicorp",
     "repo": "terraform-provider-google",
-    "rev": "v6.24.0",
+    "rev": "v6.25.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-UzoyVVBSrpxQnTfTJvGHIGR0wSFx8cSVVuTpo9tio2A="
+    "vendorHash": "sha256-kzugr8EaPROHy/3IVOsGkitpTixuiOw8R6kYedIrIuw="
   },
   "google-beta": {
     "hash": "sha256-1lrov28rU1K4QEiTuRqzaTLMzL+sZVsOLfgj3KNNJsw=",
@@ -642,11 +642,11 @@
     "vendorHash": null
   },
   "ibm": {
-    "hash": "sha256-VMiTOItbL8GV3gUlUu68WCzWgGLTh6Lk6S/fUkuMI68=",
+    "hash": "sha256-enisQ1DOrA4HBi0Sr+6ZNIKnbUoH3LCXBN11J03hPhc=",
     "homepage": "https://registry.terraform.io/providers/IBM-Cloud/ibm",
     "owner": "IBM-Cloud",
     "repo": "terraform-provider-ibm",
-    "rev": "v1.76.0",
+    "rev": "v1.76.1",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-YUCyq1GiFnXSmx9VvhYc3MGnrMXdnOuAVx9BKp1R2N8="
   },
@@ -913,11 +913,11 @@
     "vendorHash": null
   },
   "okta": {
-    "hash": "sha256-QvJ7yQmyOxhBltfckFC5Nkv7DXdpH79JRVF4BRAx+zs=",
+    "hash": "sha256-Yfs+yd5AgHL8Wl9/Zq922WJwJUOjoTshOa9RyI/AGZc=",
     "homepage": "https://registry.terraform.io/providers/okta/okta",
     "owner": "okta",
     "repo": "terraform-provider-okta",
-    "rev": "v4.14.1",
+    "rev": "v4.15.0",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-pykDVH44iZoOihiRr9rA9rEsCc9N6TD+UMbHelab6Nw="
   },
@@ -1120,13 +1120,13 @@
     "vendorHash": "sha256-Ry791h5AuYP03nex9nM8X5Mk6PeL7hNDbFyVRvVPJNE="
   },
   "scaleway": {
-    "hash": "sha256-ZMY69sfWN0281l+QEN6jUpVevYN7Z1CRDey+AqVDq8o=",
+    "hash": "sha256-5sLi0W5SKgaY8y85aFcVE/TE87SxpkGfhwYRF9fPf94=",
     "homepage": "https://registry.terraform.io/providers/scaleway/scaleway",
     "owner": "scaleway",
     "repo": "terraform-provider-scaleway",
-    "rev": "v2.50.0",
+    "rev": "v2.51.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-TbA6GlRSdyzkc64SU9Tn6o+DAvAN9RqR5M6DH83Tjng="
+    "vendorHash": "sha256-qIBSCRvKSfSjxM+PtcS815g0WOKHZzSK9yikXbYUWaw="
   },
   "secret": {
     "hash": "sha256-MmAnA/4SAPqLY/gYcJSTnEttQTsDd2kEdkQjQj6Bb+A=",
@@ -1373,13 +1373,13 @@
     "vendorHash": null
   },
   "utils": {
-    "hash": "sha256-rCTY06SEsppImhBZmx5AX58sOsI2NPJ5oK3+o64MIy8=",
+    "hash": "sha256-BnC5ihbOnua4ddTzM8mvWbKz5L13R2NT9c68teVLWo0=",
     "homepage": "https://registry.terraform.io/providers/cloudposse/utils",
     "owner": "cloudposse",
     "repo": "terraform-provider-utils",
-    "rev": "v1.28.0",
+    "rev": "v1.29.0",
     "spdx": "Apache-2.0",
-    "vendorHash": "sha256-Dxd/2TjxPoa+JcHlmmcoPx2wegZJzhbI1abNmF4wDik="
+    "vendorHash": "sha256-rHJabyfgu3wU79h3DHHYQauFmcR/SDuikauBF+CybZA="
   },
   "vault": {
     "hash": "sha256-GlRaV9CYm8IuIzeN/KRJWLCHIhc7Fdb5DL4fTA/dzV0=",
