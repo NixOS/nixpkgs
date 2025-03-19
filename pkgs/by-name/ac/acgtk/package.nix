@@ -18,6 +18,12 @@ stdenv.mkDerivation {
     hash = "sha256-XuPcubt1lvnQio+km6MhmDu41NXNVXKKpzGd/Y1XzLo=";
   };
 
+  # Compatibility with logs 0.8.0
+  postPatch = ''
+    substituteInPlace src/utils/dune \
+      --replace-warn 'logs mtime' 'logs logs.fmt mtime'
+  '';
+
   strictDeps = true;
 
   nativeBuildInputs = with ocamlPackages; [
