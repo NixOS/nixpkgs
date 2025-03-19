@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://downloads.zohocdn.com/zmail-desktop/linux/zoho-mail-desktop-lite-installer-x64-v${version}.deb";
-    hash = "sha256-03jahxpn4lf7i8923v2wr3zahp7cw1s0l9ikivxbfxgighyabpa6";
+    hash = "sha256-Rt2lPHzxdbf6jjMmCnTg7Fyo/shc7CESisdRYm+HSg4=";
   };
 
   nativeBuildInputs = [
