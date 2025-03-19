@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     description = "Confluent CLI";
     homepage = "https://docs.confluent.io/confluent-cli/current/overview.html";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
+    license = licenses.unfreeRedistributable;
     maintainers = with maintainers; [
       rguevara84
       autophagy
