@@ -100,7 +100,8 @@ buildGoModule (finalAttrs: {
   ];
   versionCheckProgram = "${placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";
   versionCheckProgramArg = "version";
-  doInstallCheck = true;
+  # Disabled for the `netbird-ui` version because it does a network request.
+  doInstallCheck = !ui;
 
   passthru = {
     tests = {
