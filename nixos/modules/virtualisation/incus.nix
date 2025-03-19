@@ -306,6 +306,7 @@ in
     };
 
     boot.kernelModules = [
+      "br_netfilter"
       "veth"
       "xt_comment"
       "xt_CHECKSUM"
