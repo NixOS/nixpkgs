@@ -201,11 +201,14 @@ let
         kernelBaseConfig =
           if defconfig != null then defconfig else stdenv.hostPlatform.linux-kernel.baseConfig;
 
-        makeFlags =
-          lib.optionals (
-            stdenv.hostPlatform.linux-kernel ? makeFlags
-          ) stdenv.hostPlatform.linux-kernel.makeFlags
-          ++ extraMakeFlags;
+        makeFlags = import ./common-flags.nix {
+          inherit
+            lib
+            stdenv
+            buildPackages
+            extraMakeFlags
+            ;
+        };
 
         postPatch =
           kernel.postPatch
@@ -225,8 +228,7 @@ let
           # Get a basic config file for later refinement with $generateConfig.
           make $makeFlags \
               -C . O="$buildRoot" $kernelBaseConfig \
-              ARCH=$kernelArch CROSS_COMPILE=${stdenv.cc.targetPrefix} \
-              $makeFlags
+              ARCH=$kernelArch CROSS_COMPILE=${stdenv.cc.targetPrefix}
 
           # Create the config file.
           echo "generating kernel configuration..."
