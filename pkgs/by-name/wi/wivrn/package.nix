@@ -214,7 +214,7 @@ stdenv.mkDerivation (finalAttrs: {
       (lib.cmakeBool "WIVRN_CHECK_CAPSYSNICE" false)
       (lib.cmakeBool "FETCHCONTENT_FULLY_DISCONNECTED" true)
       (lib.cmakeFeature "WIVRN_OPENXR_MANIFEST_TYPE" "absolute")
-      (lib.cmakeFeature "OPENCOMPOSITE_SEARCH_PATH" "${opencomposite}")
+      (lib.cmakeFeature "OPENCOMPOSITE_SEARCH_PATH" "${opencomposite}/lib/opencomposite")
       (lib.cmakeFeature "GIT_DESC" "v${finalAttrs.version}")
       (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_MONADO" "${finalAttrs.monado}")
     ]
