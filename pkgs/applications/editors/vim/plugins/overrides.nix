@@ -192,6 +192,13 @@ in
     dependencies = [ self.middleclass ];
   };
 
+  arshlib-nvim = super.arshlib-nvim.overrideAttrs {
+    dependencies = with self; [
+      nui-nvim
+      plenary-nvim
+    ];
+  };
+
   astrocore = super.astrocore.overrideAttrs {
     dependencies = [ self.lazy-nvim ];
   };
@@ -1462,6 +1469,14 @@ in
   indent-blankline-nvim = super.indent-blankline-nvim.overrideAttrs {
     # Meta file
     nvimSkipModule = "ibl.config.types";
+  };
+
+  indent-tools-nvim = super.indent-tools-nvim.overrideAttrs {
+    dependencies = with self; [
+      arshlib-nvim
+      nvim-treesitter
+      nvim-treesitter-textobjects
+    ];
   };
 
   instant-nvim = super.instant-nvim.overrideAttrs {
