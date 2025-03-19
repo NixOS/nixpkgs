@@ -6322,6 +6322,8 @@ self: super: with self; {
 
   icalendar = callPackage ../development/python-modules/icalendar { };
 
+  icalendar-compatibility = callPackage ../development/python-modules/icalendar-compatibility { };
+
   icalevents = callPackage ../development/python-modules/icalevents { };
 
   icecream = callPackage ../development/python-modules/icecream { };
@@ -8306,6 +8308,8 @@ self: super: with self; {
   });
 
   merge3 = callPackage ../development/python-modules/merge3 { };
+
+  mergecal = callPackage ../development/python-modules/mergecal { };
 
   mergedb = callPackage ../development/python-modules/mergedb { };
 
