@@ -85,7 +85,7 @@ stdenv.mkDerivation rec {
       src/comp/wrapper.sh
 
     substituteInPlace src/comp/Makefile \
-      --replace-fail 'install-bsc install-bluetcl' 'install-bsc install-bluetcl $(UTILEXES) install-utils'
+      --replace-fail 'install-bsc install-bluetcl' 'install-bsc install-bluetcl $(UTILEXES) $(SHOWRULESEXES) install-utils install-showrules'
 
     # For darwin
     # ld: library not found for -ltcl8.5
