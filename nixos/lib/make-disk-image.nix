@@ -731,19 +731,28 @@ let
         ''}
 
         ${lib.optionalString installBootLoader ''
-            # In this throwaway resource, we only have /dev/vda, but the actual VM may refer to another disk for bootloader, e.g. /dev/vdb
-            # Use this option to create a symlink from vda to any arbitrary device you want.
-            ${lib.optionalString (config.boot.loader.grub.enable) (
-              lib.concatMapStringsSep " " (
-                device:
-                lib.optionalString (device != "/dev/vda") ''
-                  mkdir -p "$(dirname ${device})"
-                  ln -s /dev/vda ${device}
-                ''
-              ) config.boot.loader.grub.devices
-            )}
+          # In this throwaway resource, we only have /dev/vda, but the actual VM may refer to another disk for bootloader, e.g. /dev/vdb
+          # Use this option to create a symlink from vda to any arbitrary device you want.
+          ${lib.optionalString (config.boot.loader.grub.enable) (
+            lib.concatMapStringsSep " " (
+              device:
+              lib.optionalString (device != "/dev/vda") ''
+                mkdir -p "$(dirname ${device})"
+                ln -s /dev/vda ${device}
+              ''
+            ) config.boot.loader.grub.devices
+          )}
+          ${
+            let
+              limine = config.boot.loader.limine;
+            in
+            lib.optionalString (limine.enable && limine.biosSupport && limine.biosDevice != "/dev/vda") ''
+              mkdir -p "$(dirname ${limine.biosDevice})"
+              ln -s /dev/vda ${limine.biosDevice}
+            ''
+          }
 
-            # Set up core system link, bootloader (sd-boot, GRUB, uboot, etc.), etc.
+          # Set up core system link, bootloader (sd-boot, GRUB, uboot, etc.), etc.
 
           # NOTE: systemd-boot-builder.py calls nix-env --list-generations which
           # clobbers $HOME/.nix-defexpr/channels/nixos This would cause a  folder
