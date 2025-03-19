@@ -109,7 +109,12 @@ let
 
   commonStructuredConfig = import ./common-config.nix {
     inherit lib stdenv version;
-    rustAvailable = lib.meta.availableOn stdenv.hostPlatform rustc;
+    rustAvailable = lib.meta.availableOn stdenv.hostPlatform rustc
+      # Cargo is broken for cross-compilation. See here for context:
+      # pkgs/development/compilers/rust/cargo.nix
+      && !(stdenv.hostPlatform.isx86 && stdenv.buildPlatform != stdenv.hostPlatform)
+      # Bindgen and clang don't get along right now.
+      && !stdenv.cc.isClang;
 
     features = kernelFeatures; # Ensure we know of all extra patches, etc.
   };
