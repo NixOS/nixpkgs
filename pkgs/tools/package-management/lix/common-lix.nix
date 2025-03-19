@@ -1,6 +1,5 @@
 {
   lib,
-  fetchFromGitHub,
   suffix ? "",
   version,
   src,
@@ -8,6 +7,7 @@
   patches ? [ ],
   maintainers ? lib.teams.lix.members,
 }@args:
+
 {
   stdenv,
   meson,
@@ -67,6 +67,7 @@
   stateDir,
   storeDir,
 }:
+
 let
   isLegacyParser = lib.versionOlder version "2.91";
 in

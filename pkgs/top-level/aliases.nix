@@ -910,6 +910,8 @@ mapAliases {
 
   linuxstopmotion = stopmotion; # Added 2024-11-01
 
+  lixVersions = lixPackageSets.renamedDeprecatedLixVersions; # Added 2025-03-20, warning in ../tools/package-management/lix/default.nix
+
   llvmPackages_git = (callPackages ../development/compilers/llvm { }).git;
 
   lld_9 = throw "lld_9 has been removed from nixpkgs"; # Added 2024-04-08
