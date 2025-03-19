@@ -2,14 +2,15 @@
   lib,
   stdenvNoCC,
   fetchzip,
+  useVariableFont ? false,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "cascadia-code";
   version = "2407.24";
 
   src = fetchzip {
-    url = "https://github.com/microsoft/cascadia-code/releases/download/v${version}/CascadiaCode-${version}.zip";
+    url = "https://github.com/microsoft/cascadia-code/releases/download/v${finalAttrs.version}/CascadiaCode-${finalAttrs.version}.zip";
     stripRoot = false;
     hash = "sha256-bCQzGCvjSQ1TXFVC3w9VPXNtjM4h7lRvljVjX/w1TJ4=";
   };
@@ -17,8 +18,17 @@ stdenvNoCC.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    install -Dm644 otf/static/*.otf -t $out/share/fonts/opentype
-    install -Dm644 ttf/static/*.ttf -t $out/share/fonts/truetype
+    ${
+      if useVariableFont then
+        ''
+          install -Dm644 ttf/*.ttf -t $out/share/fonts/truetype
+        ''
+      else
+        ''
+          install -Dm644 otf/static/*.otf -t $out/share/fonts/opentype
+          install -Dm644 ttf/static/*.ttf -t $out/share/fonts/truetype
+        ''
+    }
 
     runHook postInstall
   '';
@@ -31,4 +41,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = with maintainers; [ ryanccn ];
     platforms = platforms.all;
   };
-}
+})
