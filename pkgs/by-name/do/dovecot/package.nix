@@ -2,6 +2,7 @@
   callPackage,
   dovecot_pigeonhole,
   dovecot_exporter,
+  dovecot_fts_xapian,
 }@args:
 callPackage ./generic.nix args {
   version = "2.4.0";
@@ -11,5 +12,5 @@ callPackage ./generic.nix args {
     ./load-extended-modules.patch
   ];
 
-  inherit dovecot_pigeonhole dovecot_exporter;
+  inherit dovecot_pigeonhole dovecot_exporter dovecot_fts_xapian;
 }

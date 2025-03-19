@@ -49,6 +49,7 @@
   # Re-exported plugins for this version
   dovecot_pigeonhole,
   dovecot_exporter,
+  dovecot_fts_xapian,
 }:
 stdenv.mkDerivation {
   pname = "dovecot";
@@ -214,5 +215,6 @@ stdenv.mkDerivation {
 
     pigeonhole = dovecot_pigeonhole;
     exporter = dovecot_exporter;
+    fts_xapian = dovecot_fts_xapian;
   };
 }
