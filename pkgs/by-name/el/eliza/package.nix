@@ -32,8 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   installPhase = ''
     runHook preInstall
-    mkdir -p $out/bin
-    install -m555 ./eliza $out/bin
+    install -Dm544 ./eliza $out/bin/eliza
     runHook postInstall
   '';
 
