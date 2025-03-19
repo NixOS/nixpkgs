@@ -13700,6 +13700,13 @@
     githubId = 10554636;
     name = "Braian A. Diez";
   };
+  linuxwhata = {
+    email = "linuxwhata@qq.com";
+    matrix = "@lwa:envs.net";
+    github = "linuxwhata";
+    githubId = 68576488;
+    name = "Zhou Ke";
+  };
   lionello = {
     email = "lio@lunesu.com";
     github = "lionello";
