@@ -308,6 +308,8 @@ in
     dependencies = [ self.plenary-nvim ];
   };
 
+  blink-pairs = callPackage ./non-generated/blink-pairs { };
+
   bluloco-nvim = super.bluloco-nvim.overrideAttrs {
     dependencies = [ self.lush-nvim ];
   };
