@@ -34,7 +34,6 @@ postgresqlBuildExtension rec {
     (lib.cmakeBool "REGRESS_CHECKS" false)
     (lib.cmakeBool "TAP_CHECKS" false)
     (lib.cmakeBool "APACHE_ONLY" (!enableUnfree))
-    (lib.cmakeBool "LINTER" (!stdenv.hostPlatform.isDarwin))
   ];
 
   # Fix the install phase which tries to install into the pgsql extension dir,
