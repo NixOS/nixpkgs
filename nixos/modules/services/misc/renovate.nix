@@ -100,6 +100,7 @@ in
       path = [
         config.systemd.package
         pkgs.git
+        pkgs.gnupg
       ] ++ cfg.runtimePackages;
 
       serviceConfig = {
