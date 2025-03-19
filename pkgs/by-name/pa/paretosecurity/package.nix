@@ -9,19 +9,19 @@
 
 buildGoModule rec {
   pname = "paretosecurity";
-  version = "0.0.86";
+  version = "0.0.87";
 
   src = fetchFromGitHub {
     owner = "ParetoSecurity";
     repo = "agent";
     rev = version;
-    hash = "sha256-ASWECYUfG+lmkvAwQf05mCUwwFlUrx3vI0pYbGHdbuI=";
+    hash = "sha256-SgMALLuGq4HGj5eo7JdvtcWOEGuUoLyC3pgamB1WBzI=";
   };
 
   # tests do network access, fix pending
   doCheck = false;
 
-  vendorHash = "sha256-eqwrCbDKmXOCo0+X8w6Me2aaCQ3WQljgOtzqI01FzbU=";
+  vendorHash = "sha256-HReQu23sHLaxc5N8h2vYv64ruJPmY4HM9whAEKV+3Eo=";
   proxyVendor = true;
 
   subPackages = [
