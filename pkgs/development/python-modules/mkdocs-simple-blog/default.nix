@@ -4,12 +4,15 @@
   fetchFromGitHub,
   pythonOlder,
   mkdocs,
-# Add any other dependencies listed in the project's requirements
+  pytestCheckHook,
+  mock,
+  pillow,
+  ase,
 }:
 buildPythonPackage rec {
   pname = "mkdocs-simple-blog";
   version = "0.1.0"; # Update this with the correct version from the project
-
+  pyproject = false;
   disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
@@ -27,7 +30,10 @@ buildPythonPackage rec {
 
   # Add any test dependencies if needed
   nativeCheckInputs = [
-    # pytest, etc.
+    ase
+    mock
+    pillow
+    pytestCheckHook
   ];
 
   # Disable tests if they're not included or need special setup
