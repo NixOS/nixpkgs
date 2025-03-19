@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  nix-update-script,
 
   # build-system
   poetry-core,
@@ -52,6 +53,9 @@ buildPythonPackage rec {
   pythonRelaxDeps = [
     # Boto @ 1.35 has outstripped the version requirement
     "boto3"
+    # Each component release requests the exact latest core.
+    # That prevents us from updating individul components.
+    "langchain-core"
   ];
 
   nativeCheckInputs = [
@@ -64,10 +68,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "langchain_aws" ];
 
-  passthru = {
-    inherit (langchain-core) updateScript;
-    # updates the wrong fetcher rev attribute
-    skipBulkUpdate = true;
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^langchain-aws==([0-9.]+)$"
+    ];
   };
 
   meta = {
