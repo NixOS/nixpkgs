@@ -1159,6 +1159,9 @@ in
       `useBootLoader` useless. You might want to disable one of those options.
     '';
 
+    # Install Limine on the bootloader device
+    boot.loader.limine.biosDevice = cfg.bootLoaderDevice;
+
     # In UEFI boot, we use a EFI-only partition table layout, thus GRUB will fail when trying to install
     # legacy and UEFI. In order to avoid this, we have to put "nodev" to force UEFI-only installs.
     # Otherwise, we set the proper bootloader device for this.
