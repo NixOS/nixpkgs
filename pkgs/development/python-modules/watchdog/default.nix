@@ -49,6 +49,8 @@ buildPythonPackage rec {
       "--deselect=tests/test_emitter.py::test_close"
       # assert cap.out.splitlines(keepends=False).count('+++++ 0') == 2 != 3
       "--deselect=tests/test_0_watchmedo.py::test_auto_restart_on_file_change_debounce"
+      # OSError: [Errno 24] Too many open files
+      "--deselect=tests/test_inotify_c.py::test_select_fd"
     ]
     ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
       # fails to stop process in teardown
@@ -61,7 +63,7 @@ buildPythonPackage rec {
       # segfaults
       "--deselect=tests/test_delayed_queue.py::test_delayed_get"
       "--deselect=tests/test_emitter.py::test_delete"
-      # AttributeError: '_thread.RLock' object has no attribute 'key'"
+      # AttributeError: '_thread.RLock' object has no attribute 'key'
       "--deselect=tests/test_skip_repeats_queue.py::test_eventlet_monkey_patching"
     ]
     ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
