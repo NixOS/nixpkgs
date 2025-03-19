@@ -59,6 +59,52 @@ let
       default = false;
     };
 
+    fetchedSourceNameDefault = mkOption {
+      type = types.uniq (
+        types.enum [
+          "source"
+          "versioned"
+          "full"
+        ]
+      );
+      default = "source";
+      description = ''
+        This controls the default derivation `name` attribute set by the
+        `fetch*` (`fetchzip`, `fetchFromGitHub`, etc) functions.
+
+        Possible values and the resulting `.name`:
+
+        - `"source"` -> `"source"`
+        - `"versioned"` -> `"''${repo}-''${rev}-source"`
+        - `"full"` -> `"''${repo}-''${rev}-''${fetcherName}-source"`
+
+        The default `"source"` is the best choice for minimal rebuilds, it
+        will ignore any non-hash changes (like branches being renamed, source
+        URLs changing, etc) at the cost of `/nix/store` being easily
+        cache-poisoned (see [NixOS/nix#969](https://github.com/NixOS/nix/issues/969)).
+
+        Setting this to `"versioned"` greatly helps with discoverability of
+        sources in `/nix/store` and makes cache-poisoning of `/nix/store` much
+        harder, at the cost of a single mass-rebuild for all `src`
+        derivations, and an occasional rebuild when a source changes some of
+        its non-hash attributes.
+
+        Setting this to `"full"` is similar to setting it to `"versioned"`,
+        but the use of `fetcherName` in the derivation name will force a
+        rebuild when `src` switches between `fetch*` functions, thus forcing
+        `nix` to check new derivation's `outputHash`, which is useful for
+        debugging.
+
+        Also, `"full"` is useful for easy collection and tracking of
+        statistics of where the packages you use are hosted.
+
+        If you are a developer, you should probably set this to at
+        least`"versioned"`.
+
+        Changing the default will cause a mass rebuild.
+      '';
+    };
+
     doCheckByDefault = mkMassRebuild {
       feature = "run `checkPhase` by default";
     };
