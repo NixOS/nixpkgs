@@ -2,6 +2,7 @@
   lib,
   fetchFromGitHub,
   php,
+  versionCheckHook,
 }:
 
 php.buildComposerProject (finalAttrs: {
@@ -15,12 +16,13 @@ php.buildComposerProject (finalAttrs: {
     hash = "sha256-EITeApaQ1nmQb53/DrSidcmWUACapjTUuUYuJQDML0Y=";
   };
 
-  vendorHash = "sha256-IWFOpsPcrPg2/QWemRJ8tP6k0sIc2OogETdiBFAQ5BI=";
+  vendorHash = "sha256-SDLpl2gBvtVjREfcy1WDFqsGRK1fKr2wKPuBkPhApNI=";
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = [ "--version" ];
   doInstallCheck = true;
-  postInstallCheck = ''
-    $out/bin/phel --version
-  '';
 
   meta = {
     changelog = "https://github.com/phel-lang/phel-lang/releases/tag/v${finalAttrs.version}";
