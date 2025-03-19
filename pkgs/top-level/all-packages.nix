@@ -372,6 +372,7 @@ with pkgs;
     bind = python3Packages.callPackage ../tools/networking/octodns/providers/bind { };
     gandi = python3Packages.callPackage ../tools/networking/octodns/providers/gandi { };
     hetzner = python3Packages.callPackage ../tools/networking/octodns/providers/hetzner { };
+    ovh = python3Packages.callPackage ../tools/networking/octodns/providers/ovh { };
     powerdns = python3Packages.callPackage ../tools/networking/octodns/providers/powerdns { };
     cloudflare = python3Packages.callPackage ../tools/networking/octodns/providers/cloudflare { };
   };
