@@ -1471,6 +1471,14 @@ in
     nvimSkipModule = "ibl.config.types";
   };
 
+  indent-tools-nvim = super.indent-tools-nvim.overrideAttrs {
+    dependencies = with self; [
+      arshlib-nvim
+      nvim-treesitter
+      nvim-treesitter-textobjects
+    ];
+  };
+
   instant-nvim = super.instant-nvim.overrideAttrs {
     nvimSkipModule = [
       # Requires global variable config

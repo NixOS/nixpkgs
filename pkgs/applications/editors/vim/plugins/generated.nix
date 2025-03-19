@@ -6138,6 +6138,19 @@ final: prev:
     meta.hydraPlatforms = [ ];
   };
 
+  indent-tools-nvim = buildVimPlugin {
+    pname = "indent-tools.nvim";
+    version = "2023-10-28";
+    src = fetchFromGitHub {
+      owner = "arsham";
+      repo = "indent-tools.nvim";
+      rev = "31b839d65aa04b568fabe5e100a63cc44ef3f5d5";
+      sha256 = "0vw3j9plwi6ari5p5hmds257xw0szlj2ddf75mjfj6nfzd93ni0p";
+    };
+    meta.homepage = "https://github.com/arsham/indent-tools.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   indentLine = buildVimPlugin {
     pname = "indentLine";
     version = "2023-07-14";
