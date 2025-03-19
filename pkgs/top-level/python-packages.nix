@@ -27,6 +27,8 @@ self: super: with self; {
 
   setuptools = callPackage ../development/python-modules/setuptools { };
 
+  # keep-sorted start block=yes newline_separated=yes
+
   a2wsgi = callPackage ../development/python-modules/a2wsgi { };
 
   aafigure = callPackage ../development/python-modules/aafigure { };
@@ -13095,11 +13097,9 @@ self: super: with self; {
 
   pyqt5-multimedia = self.pyqt5.override { withMultimedia = true; };
 
-  /*
-    `pyqt5-webkit` should not be used by python libraries in
-    pkgs/development/python-modules/*. Putting this attribute in
-    `propagatedBuildInputs` may cause collisions.
-  */
+  # `pyqt5-webkit` should not be used by python libraries in
+  # pkgs/development/python-modules/*. Putting this attribute in
+  # `propagatedBuildInputs` may cause collisions.
   pyqt5-webkit = self.pyqt5.override { withWebKit = true; };
 
   pyqt6 = callPackage ../development/python-modules/pyqt/6.x.nix { };
@@ -19507,4 +19507,6 @@ self: super: with self; {
   zxcvbn-rs-py = callPackage ../development/python-modules/zxcvbn-rs-py { };
 
   zxing-cpp = callPackage ../development/python-modules/zxing-cpp { libzxing-cpp = pkgs.zxing-cpp; };
+
+  # keep-sorted end
 }
