@@ -191,7 +191,7 @@ let
         ++ lib.optional (lib.versionAtLeast version "5.2") pahole
         ++ lib.optionals withRust [
           rust-bindgen
-          rustc
+          rustc.unwrapped
         ];
 
         RUST_LIB_SRC = lib.optionalString withRust rustPlatform.rustLibSrc;
@@ -201,11 +201,14 @@ let
         kernelBaseConfig =
           if defconfig != null then defconfig else stdenv.hostPlatform.linux-kernel.baseConfig;
 
-        makeFlags =
-          lib.optionals (
-            stdenv.hostPlatform.linux-kernel ? makeFlags
-          ) stdenv.hostPlatform.linux-kernel.makeFlags
-          ++ extraMakeFlags;
+        makeFlags = import ./common-flags.nix {
+          inherit
+            lib
+            stdenv
+            buildPackages
+            extraMakeFlags
+            ;
+        };
 
         postPatch = kernel.postPatch + ''
           # Patch kconfig to print "###" after every question so that
