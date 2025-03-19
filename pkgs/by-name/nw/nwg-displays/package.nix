@@ -61,7 +61,7 @@ python3Packages.buildPythonApplication rec {
   # Upstream has no tests
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/nwg-piotr/nwg-displays";
     description = "Output management utility for Sway and Hyprland";
     license = lib.licenses.mit;
