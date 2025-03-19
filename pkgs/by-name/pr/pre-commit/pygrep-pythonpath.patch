@@ -1,0 +1,13 @@
+diff --git a/pre_commit/languages/pygrep.py b/pre_commit/languages/pygrep.py
+index ec55560..44e08a1 100644
+--- a/pre_commit/languages/pygrep.py
++++ b/pre_commit/languages/pygrep.py
+@@ -98,7 +98,7 @@ def run_hook(
+         color: bool,
+ ) -> tuple[int, bytes]:
+     cmd = (sys.executable, '-m', __name__, *args, entry)
+-    return xargs(cmd, file_args, color=color)
++    return xargs(cmd, file_args, color=color, env={ "PYTHONPATH": ':'.join(sys.path) })
+ 
+ 
+ def main(argv: Sequence[str] | None = None) -> int:

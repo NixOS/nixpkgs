@@ -1,0 +1,38 @@
+From d9152f5e1f77a6c3bbc759eec58811410de7b85a Mon Sep 17 00:00:00 2001
+From: OPNA2608 <opna2608@protonmail.com>
+Date: Thu, 16 Jan 2025 17:12:49 +0100
+Subject: [PATCH 5/5] Make GTest available to example test
+
+---
+ CMakeLists.txt       | 2 ++
+ tests/CMakeLists.txt | 1 -
+ 2 files changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index cbfd9c0..0663b44 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -189,6 +189,8 @@ if (${BUILD_TESTING})
+     find_package(Qt5QuickTest REQUIRED)
+     find_package(Qt5Network REQUIRED)
+ 
++    find_package(GMock REQUIRED)
++
+     add_subdirectory(tests)
+ endif()
+ add_subdirectory(include)
+diff --git a/tests/CMakeLists.txt b/tests/CMakeLists.txt
+index 97cb3a1..92eae14 100644
+--- a/tests/CMakeLists.txt
++++ b/tests/CMakeLists.txt
+@@ -3,7 +3,6 @@
+ 
+ set(old_cxx_flags ${CMAKE_CXX_FLAGS})
+ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -Wno-old-style-cast -Wno-missing-field-initializers")
+-find_package(GMock)
+ set(CMAKE_CXX_FLAGS ${old_cxx_flags})
+ 
+ set(TESTDATADIR ${CMAKE_CURRENT_SOURCE_DIR}/media)
+-- 
+2.47.0
+

@@ -1,0 +1,36 @@
+diff -Nurp grav-src/system/src/Grav/Common/Cache.php grav-src-nixos/system/src/Grav/Common/Cache.php
+--- grav-src/system/src/Grav/Common/Cache.php	1970-01-01 01:00:01.000000000 +0100
++++ grav-src-nixos/system/src/Grav/Common/Cache.php	2024-11-22 15:46:47.481175690 +0100
+@@ -517,7 +517,7 @@ class Cache extends Getters
+ 
+         $output[] = '';
+ 
+-        if (($remove === 'all' || $remove === 'standard') && file_exists($user_config)) {
++        if (($remove === 'all' || $remove === 'standard') && file_exists($user_config) && is_writable($user_config)) {
+             touch($user_config);
+ 
+             $output[] = '<red>Touched: </red>' . $user_config;
+@@ -544,7 +544,7 @@ class Cache extends Getters
+     {
+         $user_config = USER_DIR . 'config/system.yaml';
+ 
+-        if (file_exists($user_config)) {
++        if (file_exists($user_config) && is_writable($user_config)) {
+             touch($user_config);
+         }
+ 
+diff -Nurp grav-src/system/src/Grav/Console/Gpm/SelfupgradeCommand.php grav-src-nixos/system/src/Grav/Console/Gpm/SelfupgradeCommand.php
+--- grav-src/system/src/Grav/Console/Gpm/SelfupgradeCommand.php	1970-01-01 01:00:01.000000000 +0100
++++ grav-src-nixos/system/src/Grav/Console/Gpm/SelfupgradeCommand.php	2024-11-22 16:05:13.752536788 +0100
+@@ -94,6 +94,11 @@ class SelfupgradeCommand extends GpmComm
+         $input = $this->getInput();
+         $io = $this->getIO();
+ 
++        # Adopted from Arch package.
++        $io->error('Grav cannot be upgraded this way as it has been installed with a distribution package.');
++        $io->writeln('Use Nix to upgrade.');
++        return 1;
++
+         if (!class_exists(ZipArchive::class)) {
+             $io->title('GPM Self Upgrade');
+             $io->error('php-zip extension needs to be enabled!');

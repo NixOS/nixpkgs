@@ -1,0 +1,45 @@
+{ config, lib, pkgs, ... }:
+let
+  cfg = config.services.tzupdate;
+in {
+  options.services.tzupdate = {
+    enable = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = ''
+        Enable the tzupdate timezone updating service. This provides
+        a one-shot service which can be activated with systemctl to
+        update the timezone.
+      '';
+    };
+  };
+
+  config = lib.mkIf cfg.enable {
+    # We need to have imperative time zone management for this to work.
+    # This will give users an error if they have set an explicit time
+    # zone, which is better than silently overriding it.
+    time.timeZone = null;
+
+    # We provide a one-shot service which can be manually run. We could
+    # provide a service that runs on startup, but it's tricky to get
+    # a service to run after you have *internet* access.
+    systemd.services.tzupdate = {
+      description = "tzupdate timezone update service";
+      wants = [ "network-online.target" ];
+      after = [ "network-online.target" ];
+      script = ''
+        timezone="$(${lib.getExe pkgs.tzupdate} --print-only)"
+        if [[ -n "$timezone" ]]; then
+          echo "Setting timezone to '$timezone'"
+          timedatectl set-timezone "$timezone"
+        fi
+      '';
+
+      serviceConfig = {
+        Type = "oneshot";
+      };
+    };
+  };
+
+  meta.maintainers = with lib.maintainers; [ doronbehar ];
+}

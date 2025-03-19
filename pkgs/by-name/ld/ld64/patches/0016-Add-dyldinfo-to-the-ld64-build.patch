@@ -1,0 +1,35 @@
+From 1bd02ac97fd47d8f7c8f1f21893d7107ae2319b5 Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Sun, 17 Nov 2024 10:02:34 -0500
+Subject: [PATCH 16/18] Add dyldinfo to the ld64 build
+
+---
+ src/other/meson.build | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
+
+diff --git a/src/other/meson.build b/src/other/meson.build
+index 067a69c..663b9ee 100644
+--- a/src/other/meson.build
++++ b/src/other/meson.build
+@@ -1,3 +1,18 @@
++dyldinfo = executable(
++    'dyldinfo',
++    dependencies : [
++        abstraction_dep,
++        llvm_dep,
++    ],
++    include_directories : [ '../ld' ],
++    install : true,
++    sources : [
++        configure_h,
++        'dyldinfo.cpp',
++    ],
++)
++install_man(meson.global_source_root() / 'doc/man/man1/dyldinfo.1')
++
+ machocheck = executable(
+     'machocheck',
+     dependencies : [
+-- 
+2.47.2
+

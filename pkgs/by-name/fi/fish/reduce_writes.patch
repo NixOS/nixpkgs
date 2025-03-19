@@ -1,0 +1,82 @@
+commit 780541aa2509e6020ffbb6359e412c66eeca03dd
+Author: Johannes Altmanninger <aclopte@gmail.com>
+Date:   Mon Mar 3 10:37:49 2025 +0100
+
+    Try to reduce write(3) calls for OSC 133 prompt markers
+    
+    Something like
+    
+            write!(f, "foo{}bar", ...)
+    
+    seems to call f.write_str() thrice.
+    
+    Splitting a single OSC 133 command into three calls to write(3) might result in
+    odd situations if one of them fails. Let's try to do it in one in most cases.
+    
+    Add a new buffered output type that can be used with write!(). This is
+    somewhat redundant given that we have scoped_buffer().  While at it, remove
+    the confused error handling.  This doesn't fail unless we are OOM (and this
+    new type makes that more obvious).
+    
+    (cherry picked from commit e5e932e97082ce9079a8d6e665839c5bfd875049)
+
+diff --git a/src/output.rs b/src/output.rs
+index 8833df4a0..eeb3be0a7 100644
+--- a/src/output.rs
++++ b/src/output.rs
+@@ -456,6 +456,35 @@ impl Outputter {
+     }
+ }
+ 
++pub struct BufferedOuputter<'a>(&'a mut Outputter);
++
++impl<'a> BufferedOuputter<'a> {
++    pub fn new(outputter: &'a mut Outputter) -> Self {
++        outputter.begin_buffering();
++        Self(outputter)
++    }
++}
++
++impl<'a> Drop for BufferedOuputter<'a> {
++    fn drop(&mut self) {
++        self.0.end_buffering();
++    }
++}
++
++impl<'a> Write for BufferedOuputter<'a> {
++    fn write(&mut self, buf: &[u8]) -> Result<usize> {
++        self.0
++            .write(buf)
++            .expect("Writing to in-memory buffer should never fail");
++        Ok(buf.len())
++    }
++
++    fn flush(&mut self) -> Result<()> {
++        self.0.flush().unwrap();
++        Ok(())
++    }
++}
++
+ /// Given a list of RgbColor, pick the "best" one, as determined by the color support. Returns
+ /// RgbColor::NONE if empty.
+ pub fn best_color(candidates: &[RgbColor], support: ColorSupport) -> RgbColor {
+diff --git a/src/reader.rs b/src/reader.rs
+index ea8e4356c..46f68d8c4 100644
+--- a/src/reader.rs
++++ b/src/reader.rs
+@@ -664,11 +664,12 @@ fn read_i(parser: &Parser) -> i32 {
+         parser.libdata_mut().exit_current_script = false;
+ 
+         // OSC 133 "Command finished"
+-        let _ = write!(
+-            Outputter::stdoutput().borrow_mut(),
++        write!(
++            BufferedOuputter::new(&mut Outputter::stdoutput().borrow_mut()),
+             "\x1b]133;D;{}\x07",
+             parser.get_last_status()
+-        );
++        )
++        .unwrap();
+         event::fire_generic(parser, L!("fish_postexec").to_owned(), vec![command]);
+         // Allow any pending history items to be returned in the history array.
+         data.history.resolve_pending();
