@@ -215,8 +215,8 @@
 
   # SAMBA
   samba = [
-    "https://www.samba.org/ftp/"
-    "http://www.samba.org/ftp/"
+    "https://download.samba.org/pub/"
+    "http://download.samba.org/pub/"
   ];
 
   # GNU Savannah
