@@ -41,6 +41,7 @@ buildNimPackage (
       homepage = "https://github.com/nim-lang/nimble";
       license = lib.licenses.bsd3;
       mainProgram = "nimble";
+      maintainers = [ lib.maintainers.daylinmorgan ];
     };
   }
 )
