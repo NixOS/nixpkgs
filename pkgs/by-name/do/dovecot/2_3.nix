@@ -1,6 +1,7 @@
 {
   callPackage,
   fetchpatch,
+  dovecot_pigeonhole_2_3,
 }@args:
 callPackage ./generic.nix args {
   version = "2.3.21.1";
@@ -14,4 +15,6 @@ callPackage ./generic.nix args {
       hash = "sha256-PbBB1jIY3jIC8Js1NY93zkV0gISGUq7Nc67Ul5tN7sw=";
     })
   ];
+
+  dovecot_pigeonhole = dovecot_pigeonhole_2_3;
 }
