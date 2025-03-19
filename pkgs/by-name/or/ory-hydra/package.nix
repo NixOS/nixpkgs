@@ -10,7 +10,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "ory";
     repo = "hydra";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-f/pBRrFMfpcYSfejIGpCD5Kywtg5oyovw5RemvRDPTs=";
   };
 
@@ -22,7 +22,7 @@ buildGoModule rec {
     "-s"
     "-w"
     "-X github.com/ory/hydra/v2/driver/config.Version=${version}"
-    "-X github.com/ory/hydra/v2/driver/config.Commit=${src.rev}"
+    "-X github.com/ory/hydra/v2/driver/config.Commit=${src.tag}"
   ];
 
   meta = {
