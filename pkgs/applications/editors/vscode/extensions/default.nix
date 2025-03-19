@@ -4178,6 +4178,8 @@ let
         };
       };
 
+      rooveterinaryinc.roo-cline = callPackage ./rooveterinaryinc.roo-cline { };
+
       RoweWilsonFrederiskHolme.wikitext = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "wikitext";
