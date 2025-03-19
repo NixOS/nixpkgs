@@ -703,10 +703,11 @@ in
             "|stage1panic"
           ];
         };
-        script = ''
-          echo c > /proc/sysrq-trigger
-        '';
-        serviceConfig.Type = "oneshot";
+        serviceConfig = {
+          Type = "oneshot";
+          ExecStart = "${pkgs.coreutils}/bin/echo c";
+          StandardOutput = "file:/proc/sysrq-trigger";
+        };
       };
     };
   };
