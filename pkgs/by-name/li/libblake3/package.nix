@@ -33,7 +33,10 @@ stdenv.mkDerivation (finalAttrs: {
       asl20
       cc0
     ];
-    maintainers = with lib.maintainers; [ fgaz ];
+    maintainers = with lib.maintainers; [
+      fgaz
+      fpletz
+    ];
     platforms = lib.platforms.all;
   };
 })
