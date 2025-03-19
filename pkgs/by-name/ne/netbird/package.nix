@@ -112,8 +112,10 @@ buildGoModule (finalAttrs: {
   doInstallCheck = true;
 
   passthru = {
-    tests.netbird = nixosTests.netbird;
-    tests.netbird-ui = netbird-ui;
+    tests = {
+      nixos = nixosTests.netbird;
+      withUI = netbird-ui;
+    };
     updateScript = nix-update-script { };
   };
 
