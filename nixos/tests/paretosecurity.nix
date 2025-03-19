@@ -9,8 +9,8 @@
       services.paretosecurity.enable = true;
     };
 
-  # very basic test for now, need to add output asserts
   testScript = ''
-    machine.wait_until_succeeds("paretosecurity check")
+    (status, out) = machine.execute("paretosecurity check")
+    assert status == 1, "paretosecurity did not return 1 on failing checks"
   '';
 }
