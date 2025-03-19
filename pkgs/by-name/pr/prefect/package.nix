@@ -7,7 +7,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "prefect";
-  version = "3.2.7";
+  version = "3.2.13";
   pyproject = true;
 
   # Trying to install from source is challenging
@@ -16,12 +16,8 @@ python3Packages.buildPythonApplication rec {
   # Source will be missing sdist, uv.lock, ui artefacts ...
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-4kwGrKvDihBi6Gcvcf6ophNI6GGd+M4qR0nnu/AUK1Q=";
+    hash = "sha256-NJL3KTvSIzUX1JMa/Lfpx2UzsAgqjU/mbndnkG2evTA=";
   };
-
-  patches = [
-    ./make_ui_files_writeable_on_startup.patch
-  ];
 
   pythonRelaxDeps = [
     "websockets"
@@ -32,61 +28,68 @@ python3Packages.buildPythonApplication rec {
     versioningit
   ];
 
-  dependencies = with python3Packages; [
-    aiosqlite
-    alembic
-    anyio
-    apprise
-    asgi-lifespan
-    asyncpg
-    cachetools
-    click
-    cloudpickle
-    coolname
-    cryptography
-    dateparser
-    docker
-    exceptiongroup
-    fastapi
-    fsspec
-    graphviz
-    griffe
-    httpcore
-    httpx
-    humanize
-    importlib-metadata
-    jinja2
-    jinja2-humanize-extension
-    jsonpatch
-    jsonschema
-    opentelemetry-api
-    orjson
-    packaging
-    pathspec
-    pendulum
-    prometheus-client
-    pydantic
-    pydantic-core
-    pydantic-extra-types
-    pydantic-settings
-    python-dateutil
-    python-slugify
-    python-socks
-    pytz
-    pyyaml
-    readchar
-    rfc3339-validator
-    rich
-    ruamel-yaml
-    sniffio
-    sqlalchemy
-    toml
-    typer
-    typing-extensions
-    ujson
-    uvicorn
-    websockets
-  ];
+  dependencies =
+    with python3Packages;
+    [
+      aiosqlite
+      alembic
+      apprise
+      asyncpg
+      click
+      cryptography
+      dateparser
+      docker
+      graphviz
+      jinja2
+      jinja2-humanize-extension
+      humanize
+      pytz
+      readchar
+      sqlalchemy
+      typer
+      # client dependencies
+      anyio
+      asgi-lifespan
+      cachetools
+      cloudpickle
+      coolname
+      exceptiongroup
+      fastapi
+      fsspec
+      # graphviz already included
+      griffe
+      httpcore
+      httpx
+      jsonpatch
+      jsonschema
+      opentelemetry-api
+      orjson
+      packaging
+      pathspec
+      pendulum
+      prometheus-client
+      pydantic
+      pydantic-core
+      pydantic-extra-types
+      pydantic-settings
+      python-dateutil
+      python-slugify
+      python-socks
+      pyyaml
+      rfc3339-validator
+      rich
+      ruamel-yaml
+      sniffio
+      toml
+      typing-extensions
+      ujson
+      uvicorn
+      websockets
+      uv
+    ]
+    ++ sqlalchemy.optional-dependencies.asyncio
+    ++ httpx.optional-dependencies.http2
+    ++ python-socks.optional-dependencies.asyncio;
 
   optional-dependencies = with python3Packages; {
     aws = [
