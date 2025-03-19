@@ -1,7 +1,5 @@
 {
   lib,
-  SDL,
-  SDL_image,
   a52dec,
   alsa-lib,
   autoreconfHook,
@@ -132,8 +130,6 @@ stdenv.mkDerivation (finalAttrs: {
   # needing them
   buildInputs =
     [
-      SDL
-      SDL_image
       a52dec
       alsa-lib
       avahi
