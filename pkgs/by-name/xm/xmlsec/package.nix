@@ -27,7 +27,7 @@ lib.fix (
         # for when the ${version} gets older than the last two
         "https://www.aleksey.com/xmlsec/download/older-releases/xmlsec1-${version}.tar.gz"
       ];
-      sha256 = "sha256-2C6TtpuKogWmFrYpF6JpMiv2Oj6q+zd1AU5hdSsgE+o=";
+      hash = "sha256-2C6TtpuKogWmFrYpF6JpMiv2Oj6q+zd1AU5hdSsgE+o=";
     };
 
     patches = [
