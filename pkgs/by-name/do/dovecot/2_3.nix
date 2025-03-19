@@ -3,6 +3,7 @@
   fetchpatch,
   dovecot_pigeonhole_2_3,
   dovecot_exporter_2_3,
+  dovecot_fts_xapian_2_3,
 }@args:
 callPackage ./generic.nix args {
   version = "2.3.21.1";
@@ -19,4 +20,5 @@ callPackage ./generic.nix args {
 
   dovecot_pigeonhole = dovecot_pigeonhole_2_3;
   dovecot_exporter = dovecot_exporter_2_3;
+  dovecot_fts_xapian = dovecot_fts_xapian_2_3;
 }
