@@ -83,11 +83,14 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Music notation and composition software used with lilypond";
     homepage = "http://denemo.org";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.olynch ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.olynch ];
+    # sffile.c:38:10: error: implicit declaration of function 'isprint' [-Wimplicit-function-declaration]
+    # sffile.c:54:10: error: type defaults to 'int' in declaration of 'initialized' [-Wimplicit-int]
+    broken = true;
   };
 }
