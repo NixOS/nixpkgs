@@ -4496,7 +4496,6 @@ broken-packages:
   - postgresql-typed-lifted # failure in job https://hydra.nixos.org/build/233215141 at 2023-09-02
   - postgres-tmp # failure in job https://hydra.nixos.org/build/233258685 at 2023-09-02
   - postgrest-ws # failure in job https://hydra.nixos.org/build/233247807 at 2023-09-02
-  - postgres-websockets # failure in job https://hydra.nixos.org/build/233199923 at 2023-09-02
   - postie # failure in job https://hydra.nixos.org/build/233259075 at 2023-09-02
   - postmark-streams # failure in job https://hydra.nixos.org/build/233233210 at 2023-09-02
   - postmaster # failure in job https://hydra.nixos.org/build/233258599 at 2023-09-02
