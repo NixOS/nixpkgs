@@ -850,6 +850,19 @@ final: prev:
     meta.hydraPlatforms = [ ];
   };
 
+  arshlib-nvim = buildVimPlugin {
+    pname = "arshlib.nvim";
+    version = "2024-05-18";
+    src = fetchFromGitHub {
+      owner = "arsham";
+      repo = "arshlib.nvim";
+      rev = "111fd439268adda206a24b133096893869a50764";
+      sha256 = "1jmac14w37lybanr8jg4jpi3rkbsjhmz65x5fr7mgd7kagsn3r1n";
+    };
+    meta.homepage = "https://github.com/arsham/arshlib.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   astrocore = buildVimPlugin {
     pname = "astrocore";
     version = "2025-02-18";
