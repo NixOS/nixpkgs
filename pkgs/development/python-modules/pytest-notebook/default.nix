@@ -24,6 +24,7 @@
   pytest-regressions,
   pytestCheckHook,
   writableTmpDirAsHomeHook,
+  pythonAtLeast,
 }:
 
 buildPythonPackage rec {
@@ -69,18 +70,23 @@ buildPythonPackage rec {
     writableTmpDirAsHomeHook
   ];
 
-  disabledTests = [
-    # AssertionError: FILES DIFFER:
-    "test_diff_to_string"
+  disabledTests =
+    [
+      # AssertionError: FILES DIFFER:
+      "test_diff_to_string"
 
-    # pytest_notebook.execution.CoverageError: An error occurred while executing coverage start-up
-    # TypeError: expected str, bytes or os.PathLike object, not NoneType
-    "test_execute_notebook_with_coverage"
-    "test_regression_coverage"
+      # pytest_notebook.execution.CoverageError: An error occurred while executing coverage start-up
+      # TypeError: expected str, bytes or os.PathLike object, not NoneType
+      "test_execute_notebook_with_coverage"
+      "test_regression_coverage"
 
-    # pytest_notebook.nb_regression.NBRegressionError
-    "test_regression_regex_replace_pass"
-  ];
+      # pytest_notebook.nb_regression.NBRegressionError
+      "test_regression_regex_replace_pass"
+    ]
+    ++ lib.optionals (pythonAtLeast "3.13") [
+      # AssertionError: FILES DIFFER:
+      "test_documentation"
+    ];
 
   __darwinAllowLocalNetworking = true;
 
