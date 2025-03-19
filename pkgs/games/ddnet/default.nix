@@ -136,6 +136,6 @@ stdenv.mkDerivation rec {
       lom
       ncfavier
     ];
-    mainProgram = "DDNet";
+    mainProgram = "DDNet${lib.optionalString (!buildClient) "-Server"}";
   };
 }
