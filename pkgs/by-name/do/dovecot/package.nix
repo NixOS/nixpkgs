@@ -1,6 +1,7 @@
 {
   callPackage,
   dovecot_pigeonhole,
+  dovecot_exporter,
 }:
 callPackage ./generic.nix { } {
   version = "2.4.0";
@@ -10,5 +11,5 @@ callPackage ./generic.nix { } {
     ./load-extended-modules.patch
   ];
 
-  inherit dovecot_pigeonhole;
+  inherit dovecot_pigeonhole dovecot_exporter;
 }
