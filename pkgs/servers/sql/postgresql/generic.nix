@@ -425,41 +425,15 @@ let
                 inherit (llvmPackages) llvm;
                 postgresql = this;
                 stdenv = stdenv';
-                postgresqlTestExtension =
-                  {
-                    finalPackage,
-                    withPackages ? [ ],
-                    ...
-                  }@extraArgs:
-                  stdenvNoCC.mkDerivation (
-                    {
-                      name = "${finalPackage.name}-test-extension";
-                      dontUnpack = true;
-                      doCheck = true;
-                      nativeCheckInputs = [
-                        postgresqlTestHook
-                        (this.withPackages (ps: [ finalPackage ] ++ (map (p: ps."${p}") withPackages)))
-                      ];
-                      failureHook = "postgresqlStop";
-                      postgresqlTestUserOptions = "LOGIN SUPERUSER";
-                      passAsFile = [ "sql" ];
-                      checkPhase = ''
-                        runHook preCheck
-                        psql -a -v ON_ERROR_STOP=1 -f "$sqlPath"
-                        runHook postCheck
-                      '';
-                      installPhase = "touch $out";
-                    }
-                    // extraArgs
-                  );
-                buildPostgresqlExtension = newSuper.callPackage ./buildPostgresqlExtension.nix { };
+                postgresqlTestExtension = newSuper.callPackage ./postgresqlTestExtension.nix { };
+                postgresqlBuildExtension = newSuper.callPackage ./postgresqlBuildExtension.nix { };
               };
               newSelf = self // scope;
               newSuper = {
                 callPackage = newScope (scope // this.pkgs);
               };
             in
-            import ./ext newSelf newSuper;
+            import ./ext.nix newSelf newSuper;
 
           withPackages = postgresqlWithPackages {
             inherit buildEnv;

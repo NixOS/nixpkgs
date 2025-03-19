@@ -1,20 +1,20 @@
 {
-  lib,
   fetchFromGitHub,
+  lib,
   postgresql,
+  postgresqlBuildExtension,
   postgresqlTestExtension,
   testers,
-  buildPostgresqlExtension,
 }:
 
-buildPostgresqlExtension (finalAttrs: {
+postgresqlBuildExtension (finalAttrs: {
   pname = "pg-semver";
   version = "0.40.0";
 
   src = fetchFromGitHub {
     owner = "theory";
     repo = "pg-semver";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-9f+QuGupjTUK3cQk7DFDrL7MOIwDE9SAUyVZ9RfrdDM=";
   };
 

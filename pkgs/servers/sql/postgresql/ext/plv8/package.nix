@@ -1,29 +1,29 @@
 {
-  stdenv,
-  lib,
   fetchFromGitHub,
+  jitSupport,
+  lib,
   nodejs_20,
   perl,
   postgresql,
-  jitSupport,
-  buildPostgresqlExtension,
+  postgresqlBuildExtension,
+  stdenv,
   # For test
-  runCommand,
   coreutils,
   gnugrep,
+  runCommand,
 }:
 
 let
   libv8 = nodejs_20.libv8;
 in
-buildPostgresqlExtension (finalAttrs: {
+postgresqlBuildExtension (finalAttrs: {
   pname = "plv8";
   version = "3.2.3";
 
   src = fetchFromGitHub {
     owner = "plv8";
     repo = "plv8";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ivQZJSNn5giWF351fqZ7mBZoJkGtby5T7beK45g3Zqs=";
   };
 
@@ -130,7 +130,7 @@ buildPostgresqlExtension (finalAttrs: {
       };
   };
 
-  meta = with lib; {
+  meta = {
     description = "V8 Engine Javascript Procedural Language add-on for PostgreSQL";
     homepage = "https://plv8.github.io/";
     changelog = "https://github.com/plv8/plv8/blob/r${finalAttrs.version}/Changes";
@@ -139,7 +139,7 @@ buildPostgresqlExtension (finalAttrs: {
       "x86_64-linux"
       "aarch64-linux"
     ];
-    license = licenses.postgresql;
+    license = lib.licenses.postgresql;
     broken = jitSupport;
   };
 })
