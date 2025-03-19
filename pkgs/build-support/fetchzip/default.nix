@@ -7,6 +7,7 @@
 
 {
   lib,
+  repoRevToNameMaybe,
   fetchurl,
   withUnzip ? true,
   unzip,
@@ -14,9 +15,9 @@
 }:
 
 {
-  name ? "source",
   url ? "",
   urls ? [ ],
+  name ? repoRevToNameMaybe (if url != "" then url else builtins.head urls) null "unpacked",
   nativeBuildInputs ? [ ],
   postFetch ? "",
   extraPostFetch ? "",
