@@ -429,6 +429,8 @@ let
         pathHasContext
         canCleanSource
         pathIsGitRepo
+        revOrTag
+        repoRevToName
         ;
       inherit (self.modules)
         evalModules
