@@ -14,7 +14,7 @@
   # tests
   psutil,
   pytestCheckHook,
-  redis-server,
+  redisTestHook,
   sentry-sdk,
 }:
 
@@ -42,17 +42,9 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     psutil
     pytestCheckHook
+    redisTestHook
     sentry-sdk
   ];
-
-  preCheck = ''
-    PATH=$out/bin:$PATH
-    ${redis-server}/bin/redis-server &
-  '';
-
-  postCheck = ''
-    kill %%
-  '';
 
   __darwinAllowLocalNetworking = true;
 
