@@ -445,13 +445,6 @@ lib.mapAttrs mkLicense ({
     fullName = "curl License";
   };
 
-  defold = {
-    fullName = "Defold License";
-    url = "https://defold.com/license";
-    free = false;
-    redistributable = true;
-  };
-
   doc = {
     spdxId = "DOC";
     fullName = "DOC License";

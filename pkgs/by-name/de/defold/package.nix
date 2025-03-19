@@ -78,7 +78,14 @@ buildFHSEnv {
     description = "Game engine for development of desktop, mobile and web games";
     homepage = "https://github.com/defold/defold";
     mainProgram = "Defold";
-    license = with lib.licenses; [ defold ];
+    license = [
+      {
+        fullName = "Defold License";
+        url = "https://defold.com/license";
+        free = false;
+        redistributable = true;
+      }
+    ];
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     maintainers = with lib.maintainers; [ musjj ];
