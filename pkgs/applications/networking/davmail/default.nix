@@ -17,17 +17,17 @@
 }:
 
 let
-  rev = 3546;
+  rev = 3627;
   jre' = if preferZulu then zulu else jre;
   gtk' = if preferGtk3 then gtk3 else gtk2;
 in
 stdenv.mkDerivation rec {
   pname = "davmail";
-  version = "6.2.2";
+  version = "6.3.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${version}/${pname}-${version}-${toString rev}.zip";
-    hash = "sha256-45paGy6SfUFXK6vY8L4tHFYiio1/5ah9vTyGImdgwHI=";
+    hash = "sha256-Yh61ZHsEMF6SchLEyBV3rRI7pJ/bvR2K4G8U6jrPa3A=";
   };
 
   postPatch = ''
