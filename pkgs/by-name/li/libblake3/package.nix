@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libblake3";
-  version = "1.6.1";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "BLAKE3-team";
     repo = "BLAKE3";
     tag = finalAttrs.version;
-    hash = "sha256-YJ3rRzpmF6oS8p377CEoRteARCD1lr/L7/fbN5poUXw=";
+    hash = "sha256-08D5hnU3I0VJ+RM/TNk2LxsEAvOLuO52+08zlKssXbc=";
   };
 
   sourceRoot = finalAttrs.src.name + "/c";
