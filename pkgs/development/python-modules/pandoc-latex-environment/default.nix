@@ -2,8 +2,8 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  poetry-core,
-  poetry-dynamic-versioning,
+  hatchling,
+  hatch-vcs,
   panflute,
   pytestCheckHook,
   pandoc,
@@ -22,8 +22,8 @@ buildPythonPackage rec {
   };
 
   build-system = [
-    poetry-core
-    poetry-dynamic-versioning
+    hatchling
+    hatch-vcs
   ];
   dependencies = [ panflute ];
 
