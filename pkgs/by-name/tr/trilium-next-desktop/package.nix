@@ -15,7 +15,7 @@
 
 let
   pname = "trilium-next-desktop";
-  version = "0.91.6";
+  version = "0.92.4";
 
   triliumSource = os: arch: sha256: {
     url = "https://github.com/TriliumNext/Notes/releases/download/v${version}/TriliumNextNotes-v${version}-${os}-${arch}.zip";
@@ -26,10 +26,10 @@ let
   darwinSource = triliumSource "macos";
 
   # exposed like this for update.sh
-  x86_64-linux.sha256 = "13r9akfakmrpvnyab182irhraf9hpqb24205r8rxjfgj8dpmfa4p";
-  aarch64-linux.sha256 = "07bh5fcdcw3al5w8nqx5kxzqa5vgni27gb6591y6j6jynz6cmyqp";
-  x86_64-darwin.sha256 = "0iaz4wim11x110phg4xgzdw3sjcbmxwbksk5gpygjbhlzhjprnnp";
-  aarch64-darwin.sha256 = "1x2s8sdz89sy69lvdg552qmr3chj20d32sskks1r8g5rs16fwqd1";
+  x86_64-linux.sha256 = "12z6r38ab8jrjgic370q5v1y17m9brj38gfqdg05drf7a25xam8r";
+  aarch64-linux.sha256 = "0zsc7c7q07zml91sqvwgz8x3vql1mlhvb7msf7vx22w94dypzivf";
+  x86_64-darwin.sha256 = "09ipqfr77xqlgbzh2dvlidm532isg8jj8iwawjldq74ncbv8m5h0";
+  aarch64-darwin.sha256 = "031nz4f3rdjg3cyvadax4shchr7liyrzsn3ab6whsp3mhnb9wr9l";
 
   sources = {
     x86_64-linux = linuxSource "x64" x86_64-linux.sha256;
@@ -53,7 +53,7 @@ let
     platforms = lib.attrNames sources;
   };
 
-  linux = stdenv.mkDerivation rec {
+  linux = stdenv.mkDerivation {
     inherit
       pname
       version
@@ -105,7 +105,7 @@ let
       asar extract $out/share/trilium/resources/app.asar $tmp
       rm $out/share/trilium/resources/app.asar
 
-      for f in "src/services/utils.ts" "dist/src/services/utils.js"; do
+      for f in "src/services/utils.js"; do
         substituteInPlace $tmp/$f \
           --replace-fail "process.resourcesPath" "'$out/share/trilium/resources'"
       done
