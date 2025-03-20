@@ -15,15 +15,15 @@ let
     ps.setuptools
   ]);
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lief";
   version = "0.16.4";
 
   src = fetchFromGitHub {
     owner = "lief-project";
     repo = "LIEF";
-    rev = version;
-    sha256 = "sha256-3rLnT/zs7YrAYNc8I2EJevl98LHGcXFf7bVlJJfxqRc=";
+    tag = finalAttrs.version;
+    hash = "sha256-3rLnT/zs7YrAYNc8I2EJevl98LHGcXFf7bVlJJfxqRc=";
   };
 
   outputs = [
@@ -69,4 +69,4 @@ stdenv.mkDerivation rec {
       genericnerdyusername
     ];
   };
-}
+})
