@@ -5,7 +5,15 @@
   autoreconfHook,
   nix-update-script,
   fetchpatch,
+  ncurses ? null,
+
+  # Enable `termcap` (`ncurses`) support.
+  enableTermcap ? false,
 }:
+
+assert lib.assertMsg (
+  enableTermcap -> ncurses != null
+) "`ncurses` must be provided when `enableTermcap` is enabled";
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "editline";
@@ -43,9 +51,18 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  configureFlags = [ (lib.enableFeature true "sigstop") ];
+  configureFlags = [
+    # Enable SIGSTOP (Ctrl-Z) behavior.
+    (lib.enableFeature true "sigstop")
+    # Enable ANSI arrow keys.
+    (lib.enableFeature true "arrow-keys")
+    # Use termcap library to query terminal size.
+    (lib.enableFeature enableTermcap "termcap")
+  ];
 
   nativeBuildInputs = [ autoreconfHook ];
+
+  propagatedBuildInputs = lib.optional enableTermcap ncurses;
 
   outputs = [
     "out"
