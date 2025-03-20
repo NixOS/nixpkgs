@@ -16,22 +16,11 @@ rustPlatform.buildRustPackage rec {
     owner = "agersant";
     repo = "polaris";
     tag = version;
-    hash = "sha256-uwYNyco4IY6lF+QSVEOVVhZCJ4nRkj8gsgRA0UydLHU=";
-
-    # The polaris version upstream in Cargo.lock is "0.0.0".
-    # We're unable to simply patch it in the patch phase due to
-    # rustPlatform.buildRustPackage fetching dependencies before applying patches.
-    # If we patch it after fetching dependencies we get an error when
-    # validating consistency between the final build and the prefetched deps.
-    postFetch = ''
-      # 'substituteInPlace' does not support multiline replacements?
-      sed -i $out/Cargo.lock -z \
-        -e 's/\[\[package\]\]\nname = "polaris"\nversion = "0.0.0"/[[package]]\nname = "polaris"\nversion = "'"${version}"'"/g'
-    '';
+    hash = "sha256-7VgDySL3LWEuf9ee+w3Wpv3WCNA7DBYFaMMmP7BE/rc=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-EUUxKLLdXgNp7GWTWAkzdNHKogu4Voo8wjeFFzM9iEg=";
+  cargoHash = "sha256-/YvLcawEBpF76evByQ0WMZ9dic5vFcsydbO/6TfN+ts=";
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.Security
