@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  poetry-core,
+  hatchling,
   alembic,
   attrs,
   build,
@@ -30,7 +30,6 @@
   python-socketio,
   pythonOlder,
   redis,
-  reflex-chakra,
   reflex-hosting-cli,
   rich,
   sqlmodel,
@@ -40,14 +39,12 @@
   typer,
   unzip,
   uvicorn,
-  watchdog,
-  watchfiles,
   wrapt,
 }:
 
 buildPythonPackage rec {
   pname = "reflex";
-  version = "0.7.2";
+  version = "0.7.3";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -56,7 +53,7 @@ buildPythonPackage rec {
     owner = "reflex-dev";
     repo = "reflex";
     tag = "v${version}";
-    hash = "sha256-XhYgZx4zc2utWIzT6lvGNyGn6MyTxhsiaFa3/h4XQjM=";
+    hash = "sha256-Jia8WrzxaPFg3wDEgxiSc1e1q1HtSPHrJTyfBkU1PUo=";
   };
 
   pythonRelaxDeps = [
@@ -69,13 +66,12 @@ buildPythonPackage rec {
     "build"
   ];
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     alembic
     build # used in custom_components/custom_components.py
     charset-normalizer
-    dill
     distro
     fastapi
     gunicorn
@@ -89,7 +85,6 @@ buildPythonPackage rec {
     python-multipart
     python-socketio
     redis
-    reflex-chakra
     reflex-hosting-cli
     rich
     sqlmodel
@@ -98,8 +93,6 @@ buildPythonPackage rec {
     twine # used in custom_components/custom_components.py
     typer
     uvicorn
-    watchdog
-    watchfiles
     wrapt
   ];
 
@@ -107,6 +100,7 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-asyncio
     pytest-mock
+    dill
     playwright
     attrs
     numpy
