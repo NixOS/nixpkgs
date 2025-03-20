@@ -5,15 +5,23 @@
   autoreconfHook,
   nix-update-script,
   fetchpatch,
+  ncurses ? null,
+
+  # Enable `termcap` (`ncurses`) support.
+  enableTermcap ? false,
 }:
 
-stdenv.mkDerivation rec {
+assert lib.assertMsg (
+  enableTermcap -> ncurses != null
+) "`ncurses` must be provided when `enableTermcap` is enabled";
+
+stdenv.mkDerivation (finalAttrs: {
   pname = "editline";
   version = "1.17.1";
   src = fetchFromGitHub {
     owner = "troglobit";
     repo = "editline";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-0FeDUVCUahbweH24nfaZwa7j7lSfZh1TnQK7KYqO+3g=";
   };
 
@@ -43,9 +51,18 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  configureFlags = [ (lib.enableFeature true "sigstop") ];
+  configureFlags = [
+    # Enable SIGSTOP (Ctrl-Z) behavior.
+    (lib.enableFeature true "sigstop")
+    # Enable ANSI arrow keys.
+    (lib.enableFeature true "arrow-keys")
+    # Use termcap library to query terminal size.
+    (lib.enableFeature enableTermcap "termcap")
+  ];
 
   nativeBuildInputs = [ autoreconfHook ];
+
+  propagatedBuildInputs = lib.optional enableTermcap ncurses;
 
   outputs = [
     "out"
@@ -63,4 +80,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ oxalica ];
     platforms = platforms.all;
   };
-}
+})
