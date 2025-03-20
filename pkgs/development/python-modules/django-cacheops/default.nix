@@ -53,7 +53,7 @@ buildPythonPackage rec {
     jinja2
     before-after
     nettools
-    pkgs.redis
+    pkgs.valkey
     redisTestHook
   ];
 
