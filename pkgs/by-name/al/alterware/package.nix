@@ -1,11 +1,12 @@
 { lib, fetchFromGitHub, rustPlatform, perl, }:
 
-with import (fetchTarball "https://github.com/NixOS/nixpkgs/tarball/nixos-24.11") {
-  overlays = [
-    (import (fetchTarball
-      "https://github.com/oxalica/rust-overlay/archive/master.tar.gz"))
-  ];
-};
+with import (fetchTarball
+  "https://github.com/NixOS/nixpkgs/archive/b75693fb46bfaf09e662d09ec076c5a162efa9f6.tar.gz") {
+    overlays = [
+      (import (fetchTarball
+        "https://github.com/oxalica/rust-overlay/archive/master.tar.gz"))
+    ];
+  };
 let
   rustPlatform = makeRustPlatform {
     cargo = rust-bin.stable.latest.minimal;
