@@ -9205,6 +9205,11 @@
     github = "gytis-ivaskevicius";
     githubId = 23264966;
   };
+  GZGavinZhao = {
+    name = "Gavin Zhao";
+    github = "GZGavinZhao";
+    githubId = 74938940;
+  };
   h3cth0r = {
     name = "Hector Miranda";
     email = "hector.miranda@tec.mx";
@@ -10542,6 +10547,12 @@
     github = "iynaix";
     githubId = 94313;
     name = "Xianyi Lin";
+  };
+  izelnakri = {
+    email = "contact@izelnakri.com";
+    github = "izelnakri";
+    githubId = 1190931;
+    name = "Izel Nakri";
   };
   izorkin = {
     email = "Izorkin@gmail.com";
@@ -14237,6 +14248,17 @@
     github = "lxea";
     githubId = 7910815;
     name = "Alex McGrath";
+  };
+  lykos153 = {
+    email = "silvio.ankermann@cloudandheat.com";
+    github = "Lykos153";
+    githubId = 6453662;
+    name = "Silvio Ankermann";
+    keys = [
+      {
+        fingerprint = "8D47 6294 7205 541C 62A4  9C88 F422 6CA3 971C 4E97";
+      }
+    ];
   };
   lyn = {
     name = "Lyn";
@@ -22027,6 +22049,11 @@
     githubId = 91412114;
     keys = [ { fingerprint = "C1DA A551 B422 7A6F 3FD9  6B3A 467B 7D12 9EA7 3AC9"; } ];
   };
+  silvanshade = {
+    github = "silvanshade";
+    githubId = 11022302;
+    name = "silvanshade";
+  };
   Silver-Golden = {
     name = "Brendan Golden";
     email = "github+nixpkgs@brendan.ie";
@@ -22550,6 +22577,13 @@
     github = "Spoonbaker";
     githubId = 47164123;
     name = "Spoonbaker";
+  };
+  sportshead = {
+    email = "me@sportshead.dev";
+    github = "sportshead";
+    githubId = 32637656;
+    name = "sportshead";
+    keys = [ { fingerprint = "A6B6 D031 782E BDF7 631A  8E7E A874 DB2C BFD3 CFD0"; } ];
   };
   sprock = {
     email = "rmason@mun.ca";

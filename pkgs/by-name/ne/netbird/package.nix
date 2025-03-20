@@ -12,13 +12,9 @@
   libX11,
   libXcursor,
   libXxf86vm,
-  Cocoa,
-  IOKit,
-  Kernel,
-  UserNotifications,
-  WebKit,
   ui ? false,
   netbird-ui,
+  versionCheckHook,
 }:
 let
   modules =
@@ -33,43 +29,35 @@ let
         signal = "netbird-signal";
       };
 in
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "netbird";
-  version = "0.37.1";
+  version = "0.38.2";
 
   src = fetchFromGitHub {
     owner = "netbirdio";
     repo = "netbird";
-    tag = "v${version}";
-    hash = "sha256-5+R0Y/xPgnVH53p1vtY65tOqePWQVOMR4oY1yOOFHK4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-8uxRR8XkomUB9dMN9h1M4/K09wxy5E+XhXVbNc0g6xQ=";
   };
 
-  vendorHash = "sha256-DGvDkkdM8WaaR5FQwZgKn2n1JEDeqUegZxeAIxniJ5A=";
+  vendorHash = "sha256-m5ou5p2/ubDDMLr0M2F+9qgkqKjhXRJ6HpizwxJhmtU=";
 
   nativeBuildInputs = [ installShellFiles ] ++ lib.optional ui pkg-config;
 
-  buildInputs =
-    lib.optionals (stdenv.hostPlatform.isLinux && ui) [
-      gtk3
-      libayatana-appindicator
-      libX11
-      libXcursor
-      libXxf86vm
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && ui) [
-      Cocoa
-      IOKit
-      Kernel
-      UserNotifications
-      WebKit
-    ];
+  buildInputs = lib.optionals (stdenv.hostPlatform.isLinux && ui) [
+    gtk3
+    libayatana-appindicator
+    libX11
+    libXcursor
+    libXxf86vm
+  ];
 
   subPackages = lib.attrNames modules;
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/netbirdio/netbird/version.version=${version}"
+    "-X github.com/netbirdio/netbird/version.version=${finalAttrs.version}"
     "-X main.builtBy=nix"
   ];
 
@@ -100,31 +88,38 @@ buildGoModule rec {
       ) modules
     )
     + lib.optionalString (stdenv.hostPlatform.isLinux && ui) ''
-      mkdir -p $out/share/pixmaps
-      cp $src/client/ui/netbird-systemtray-connected.png $out/share/pixmaps/netbird.png
-
-      mkdir -p $out/share/applications
-      cp $src/client/ui/netbird.desktop $out/share/applications/netbird.desktop
+      install -Dm644 "$src/client/ui/assets/netbird-systemtray-connected.png" "$out/share/pixmaps/netbird.png"
+      install -Dm644 "$src/client/ui/build/netbird.desktop" "$out/share/applications/netbird.desktop"
 
       substituteInPlace $out/share/applications/netbird.desktop \
         --replace-fail "Exec=/usr/bin/netbird-ui" "Exec=$out/bin/netbird-ui"
     '';
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgram = "${placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";
+  versionCheckProgramArg = "version";
+  # Disabled for the `netbird-ui` version because it does a network request.
+  doInstallCheck = !ui;
+
   passthru = {
-    tests.netbird = nixosTests.netbird;
-    tests.netbird-ui = netbird-ui;
+    tests = {
+      nixos = nixosTests.netbird;
+      withUI = netbird-ui;
+    };
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://netbird.io";
-    changelog = "https://github.com/netbirdio/netbird/releases/tag/v${version}";
+    changelog = "https://github.com/netbirdio/netbird/releases/tag/v${finalAttrs.version}";
     description = "Connect your devices into a single secure private WireGuard®-based mesh network with SSO/MFA and simple access controls";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
       vrifox
       saturn745
     ];
     mainProgram = if ui then "netbird-ui" else "netbird";
   };
-}
+})

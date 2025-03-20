@@ -2646,6 +2646,10 @@ self: super: with self; {
 
   conda-package-streaming = callPackage ../development/python-modules/conda-package-streaming { };
 
+  conduit = callPackage ../development/python-modules/conduit { };
+
+  conduit-mpi = callPackage ../development/python-modules/conduit { mpiSupport = true; };
+
   confection = callPackage ../development/python-modules/confection { };
 
   configargparse = callPackage ../development/python-modules/configargparse { };
@@ -7233,6 +7237,8 @@ self: super: with self; {
   kubernetes = callPackage ../development/python-modules/kubernetes { };
 
   kubernetes-asyncio = callPackage ../development/python-modules/kubernetes-asyncio { };
+
+  kubernetes-validate = callPackage ../by-name/ku/kubernetes-validate/unwrapped.nix { };
 
   kurbopy = callPackage ../development/python-modules/kurbopy { };
 
