@@ -704,6 +704,19 @@ checkConfigOutput '"bar"' config.sub.conditionalImportAsNixos.foo ./specialArgs-
 checkConfigError 'attribute .*bar.* not found' config.sub.conditionalImportAsNixos.bar ./specialArgs-class.nix
 checkConfigError 'attribute .*foo.* not found' config.sub.conditionalImportAsDarwin.foo ./specialArgs-class.nix
 checkConfigOutput '"foo"' config.sub.conditionalImportAsDarwin.bar ./specialArgs-class.nix
+# Check that some types expose the 'valueMeta'
+checkConfigOutput '\{\}' options.str.valueMeta ./types-valueMeta.nix
+checkConfigOutput '["foo", "bar"]' config.attrsOfResult ./types-valueMeta.nix
+checkConfigOutput '2' config.listOfResult ./types-valueMeta.nix
+
+# Check that composed types expose the 'valueMeta'
+# attrsOf submodule (also on merged options,types)
+checkConfigOutput '42' options.attrsOfModule.valueMeta.attrs.foo.options.bar.value ./composed-types-valueMeta.nix
+checkConfigOutput '42' options.mergedAttrsOfModule.valueMeta.attrs.foo.options.bar.value ./composed-types-valueMeta.nix
+
+# listOf submodule (also on merged options,types)
+checkConfigOutput '42' config.listResult ./composed-types-valueMeta.nix
+checkConfigOutput '42' config.mergedListResult ./composed-types-valueMeta.nix
 
 cat <<EOF
 ====== module tests ======
