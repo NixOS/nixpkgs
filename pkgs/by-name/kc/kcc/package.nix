@@ -22,7 +22,7 @@ python3Packages.buildPythonApplication rec {
 
   nativeBuildInputs = [ qt6.wrapQtAppsHook ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ qt6.qtwayland ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ qt6.qtwayland ] ++ [ qt6.qtbase ];
   propagatedBuildInputs = (
     with python3Packages;
     [
