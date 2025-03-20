@@ -127,10 +127,11 @@ let
       # When extended with extendModules or moduleType, a fresh instance of
       # this module is used, to avoid conflicts and allow chaining of
       # extendModules.
-      internalModule = rec {
+      # Cannot use 'config' here. This causes infinite recursion.
+      internalModule = {
         _file = "lib/modules.nix";
 
-        key = _file;
+        key = "lib/modules.nix";
 
         options = {
           _module.args = mkOption {
@@ -228,6 +229,28 @@ let
               within a configuration, but can be used in module imports.
             '';
           };
+
+          _module.freeformConfig = mkOption {
+            # Do not show this in the documentation
+            internal = true;
+            visible = false;
+            # Cant add because it has a default
+            readOnly = true;
+            # TODO: Implement the type
+            # type =
+            #   if options._module.freeformType.value != null
+            #   then options._module.freeformType.value
+            #   # The value is the empty set. But we dont have a type yet for that.
+            #   else (types.attrsOf types.bool);
+            # default = type.emptyValue.value or { };
+            description = ''
+              Read-only version of the freeform definitions. This includes all definitions that don't have matching options if the freeformType is set.
+              Otherwise this is an empty attribute set.
+            '';
+            # Discards the value but keeps the definition
+            # Which is then available via '.options._module.freeform.definitions'
+            apply = _value: freeformConfig;
+          };
         };
 
         config = {
@@ -236,6 +259,9 @@ let
             moduleType = type;
           };
           _module.specialArgs = specialArgs;
+          # This is not actually assigned
+          # 'apply' discards the value but keeps the definition
+          _module.freeformConfig = lib.mkMerge (map mkDefinition freeformDefs);
         };
       };
 
@@ -249,23 +275,20 @@ let
 
       options = merged.matchedOptions;
 
-      config =
-        let
+      freeformDefs = map (def: {
+        file = def.file;
+        value = setAttrByPath def.prefix def.value;
+      }) (merged.unmatchedDefns);
 
-          # For definitions that have an associated option
           declaredConfig = mapAttrsRecursiveCond (v: ! isOption v) (_: v: v.value) options;
-
-          # If freeformType is set, this is for definitions that don't have an associated option
           freeformConfig =
             let
-              defs = map (def: {
-                file = def.file;
-                value = setAttrByPath def.prefix def.value;
-              }) merged.unmatchedDefns;
+              defs = freeformDefs;
             in if defs == [] then {}
             else declaredConfig._module.freeformType.merge prefix defs;
 
-        in if declaredConfig._module.freeformType == null then declaredConfig
+      config =
+        if declaredConfig._module.freeformType == null then declaredConfig
           # Because all definitions that had an associated option ended in
           # declaredConfig, freeformConfig can only contain the non-option
           # paths, meaning recursiveUpdate will never override any value
@@ -940,7 +963,11 @@ let
       let
         # Process mkMerge and mkIf properties.
         defs' = concatMap (m:
-          map (value: { inherit (m) file; inherit value; }) (addErrorContext "while evaluating definitions from `${m.file}':" (dischargeProperties m.value))
+          map (value:
+            if value._type or null == "definition"
+            then value
+            else { inherit (m) file; inherit value; }
+          ) (addErrorContext "while evaluating definitions from `${m.file}':" (dischargeProperties m.value))
         ) defs;
 
         # Process mkOverride properties.
@@ -1006,6 +1033,8 @@ let
       map (mapAttrs (n: v: mkIf cfg.condition v)) (pushDownProperties cfg.content)
     else if cfg._type or "" == "override" then
       map (mapAttrs (n: v: mkOverride cfg.priority v)) (pushDownProperties cfg.content)
+    # else if cfg._type or "" == "definition" then
+    #   map (mapAttrs (n: v: mkDefinition v)) (pushDownProperties cfg.content)
     else # FIXME: handle mkOrder?
       [ cfg ];
 
@@ -1184,6 +1213,12 @@ let
     { _type = "merge";
       inherit contents;
     };
+
+  /**
+    Return a definition with file location information.
+   */
+  mkDefinition = args@{ file, value, ... }:
+    args // { _type = "definition"; };
 
   mkOverride = priority: content:
     { _type = "override";
@@ -1865,6 +1900,7 @@ private //
     mkBefore
     mkChangedOptionModule
     mkDefault
+    mkDefinition
     mkDerivedConfig
     mkFixStrictness
     mkForce
