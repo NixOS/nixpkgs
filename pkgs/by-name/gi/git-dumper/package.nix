@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "arthaud";
     repo = "git-dumper";
-    rev = version;
+    tag = version;
     hash = "sha256-XU+6Od+mC8AV+w7sd8JaMB2Lc81ekeDLDiGGNu6bU0A=";
   };
 
