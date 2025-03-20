@@ -48,6 +48,10 @@ buildPythonPackage rec {
     rm tests/conftest.py
   '';
 
+  checkPhase = ''
+    export PYTEST_ADDOPTS="--asyncio_default_fixture_loop_scope=function"
+  '';
+
   pythonImportsCheck = [ "aiohttp_swagger" ];
 
   meta = with lib; {
