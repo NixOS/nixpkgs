@@ -1264,11 +1264,11 @@
     "vendorHash": "sha256-9M1DsE/FPQK8TG7xCJWbU3HAJCK3p/7lxdzjO1oAfWs="
   },
   "sumologic": {
-    "hash": "sha256-/ysh6W9vSZ8uwfebjVTktsxLm7CDnOqXx2wh+N7RfJ0=",
+    "hash": "sha256-bjOyxgdEAfd98OvjWT8pQrrqEcmDp0qeQ7gitvTdLVA=",
     "homepage": "https://registry.terraform.io/providers/SumoLogic/sumologic",
     "owner": "SumoLogic",
     "repo": "terraform-provider-sumologic",
-    "rev": "v3.0.5",
+    "rev": "v3.0.6",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-YdWs2orKhbwAZSQYC73t4e/vvVxk8LrBPG9ZC38VcZE="
   },
