@@ -6453,6 +6453,19 @@ final: prev:
     meta.hydraPlatforms = [ ];
   };
 
+  kitty-scrollback-nvim = buildVimPlugin {
+    pname = "kitty-scrollback.nvim";
+    version = "2025-03-20";
+    src = fetchFromGitHub {
+      owner = "mikesmithgh";
+      repo = "kitty-scrollback.nvim";
+      rev = "9b70b5f73b653745ddca4a8e49b9477fc33b817f";
+      sha256 = "0570ng60dzwdbbq76vpkdrww6jnm15vbcyy79885fvb0sjwcpf1a";
+    };
+    meta.homepage = "https://github.com/mikesmithgh/kitty-scrollback.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   kmonad-vim = buildVimPlugin {
     pname = "kmonad-vim";
     version = "2022-03-20";
