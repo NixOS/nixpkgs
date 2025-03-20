@@ -578,21 +578,22 @@ in
     };
 
     networking.fqdn = mkOption {
-      readOnly = true;
       type = types.str;
       default =
         if (cfg.hostName != "" && cfg.domain != null) then
           "${cfg.hostName}.${cfg.domain}"
         else
           throw ''
-            The FQDN is required but cannot be determined. Please make sure that
-            both networking.hostName and networking.domain are set properly.
+            The FQDN is required but cannot be determined from `networking.hostName`
+            and `networking.domain`. Please ensure these options are set properly or
+            set `networking.fqdn` directly.
           '';
       defaultText = literalExpression ''"''${networking.hostName}.''${networking.domain}"'';
       description = ''
-        The fully qualified domain name (FQDN) of this host. It is the result
-        of combining `networking.hostName` and `networking.domain.` Using this
-        option will result in an evaluation error if the hostname is empty or
+        The fully qualified domain name (FQDN) of this host. By default, it is
+        the result of combining `networking.hostName` and `networking.domain.`
+
+        Using this option will result in an evaluation error if the hostname is empty or
         no domain is specified.
 
         Modules that accept a mere `networking.hostName` but prefer a fully qualified
