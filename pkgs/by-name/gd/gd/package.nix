@@ -36,8 +36,6 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  hardeningDisable = [ "format" ];
-
   configureFlags =
     [
       "--enable-gd-formats"
