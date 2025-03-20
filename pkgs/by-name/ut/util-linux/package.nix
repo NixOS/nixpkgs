@@ -105,6 +105,10 @@ stdenv.mkDerivation rec {
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # Doesn't build on Darwin, also doesn't really make sense on Darwin
       "--disable-liblastlog2"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isStatic [
+      # Mandatory shared library.
+      "--disable-pam-lastlog2"
     ];
 
   makeFlags = [
