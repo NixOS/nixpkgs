@@ -1,26 +1,30 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
   click,
+  fetchFromGitHub,
   pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "click-option-group";
   version = "0.5.6";
-  format = "setuptools";
-  disabled = pythonOlder "3.6";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "click-contrib";
-    repo = pname;
+    repo = "click-option-group";
     tag = "v${version}";
     hash = "sha256-uR5rIZPPT6pRk/jJEy2rZciOXrHWVWN6BfGroQ3znas=";
   };
 
-  propagatedBuildInputs = [ click ];
+  build-system = [ setuptools ];
+
+  dependencies = [ click ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
