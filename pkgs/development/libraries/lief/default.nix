@@ -47,6 +47,8 @@ stdenv.mkDerivation (finalAttrs: {
     scikit-build-core
   ];
 
+  cmakeFlags = [ (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic)) ];
+
   postBuild = ''
     pushd ../api/python
     ${pyEnv.interpreter} -m build --no-isolation --wheel --skip-dependency-check --config-setting=--parallel=$NIX_BUILD_CORES
