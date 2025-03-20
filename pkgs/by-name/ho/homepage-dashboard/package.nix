@@ -1,7 +1,7 @@
 {
   fetchFromGitHub,
   nodePackages,
-  makeWrapper,
+  makeBinaryWrapper,
   nodejs,
   pnpm_10,
   python3,
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "gethomepage";
     repo = "homepage";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-7fi7cW+DKjU9CeVEg863UGwCqTXxA1UrwlK2vrx1c5w=";
   };
 
@@ -55,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
-    makeWrapper
+    makeBinaryWrapper
     nodejs
     pnpm_10.configHook
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ cctools ];
