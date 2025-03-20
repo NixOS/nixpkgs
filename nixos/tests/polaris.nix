@@ -38,6 +38,22 @@ import ./make-test-python.nix (
         inherit settings;
       };
 
+      systemd.services.prepopulate-polaris-config = {
+        wantedBy = [ "polaris.service" ];
+        before = [ "polaris.service" ];
+        serviceConfig.Type = "oneshot";
+        script = ''
+          mkdir -p /var/lib/private/polaris/
+          cat <<-"EOF" > /var/lib/private/polaris/config.toml
+            album_art_pattern = "nope"
+            foobar = "hello world"
+
+            [[mount_dirs]]
+            name = "i don't exist"
+            source = "/foo"
+          EOF
+        '';
+      };
     };
 
     testScript = ''
@@ -162,6 +178,12 @@ import ./make-test-python.nix (
       print(out)
       out = machine.succeed("find /var/cache/private/polaris/")
       print(out)
+      out = machine.succeed("cat /var/lib/private/polaris/config.toml")
+      print(out)
+
+      # check that foobar survived the config merge
+      data = tomllib.loads(out)
+      assert data["foobar"] == "hello world", f"{data["foobar"]=}"
     '';
   }
 )
