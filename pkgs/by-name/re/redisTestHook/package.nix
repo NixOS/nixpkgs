@@ -2,14 +2,14 @@
   lib,
   callPackage,
   makeSetupHook,
-  redis,
+  valkey,
 }:
 
 makeSetupHook {
   name = "redis-test-hook";
   substitutions = {
-    cli = lib.getExe' redis "redis-cli";
-    server = lib.getExe' redis "redis-server";
+    cli = lib.getExe' valkey "redis-cli";
+    server = lib.getExe' valkey "redis-server";
   };
   passthru.tests = {
     simple = callPackage ./test.nix { };

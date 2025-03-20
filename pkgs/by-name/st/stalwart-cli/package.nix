@@ -22,6 +22,9 @@ rustPlatform.buildRustPackage {
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = [ "--version" ];
 
+  # Prerelease reports incorrect version
+  dontVersionCheck = true;
+
   meta = {
     inherit (stalwart-mail.meta) license homepage changelog;
     description = "Stalwart Mail Server CLI";

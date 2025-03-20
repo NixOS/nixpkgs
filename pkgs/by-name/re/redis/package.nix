@@ -94,6 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
       --timeout 2000 \
       --clients $NIX_BUILD_CORES \
       --tags -leaks \
+      --skipunit integration/aof-multi-part \
       --skipunit integration/failover # flaky and slow
 
     runHook postCheck

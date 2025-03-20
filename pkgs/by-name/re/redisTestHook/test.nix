@@ -1,5 +1,5 @@
 {
-  redis,
+  valkey,
   redisTestHook,
   stdenv,
 }:
@@ -8,7 +8,7 @@ stdenv.mkDerivation {
   name = "redis-test-hook-test";
 
   nativeCheckInputs = [
-    redis
+    valkey
     redisTestHook
   ];
 
