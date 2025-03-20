@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage rec {
     description = "Official launcher for AlterWare Call of Duty mods";
     homepage = "https://github.com/mxve/alterware-launcher";
     license = lib.licenses.gpl3Only;
-    # maintainers = with lib.maintainers; [ andrew-field ];
+    maintainers = with lib.maintainers; [ andrewfield ];
     mainProgram = "alterware";
   };
 }
