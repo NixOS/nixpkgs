@@ -18,7 +18,7 @@ let
       src = fetchFromGitHub {
         owner = "tweag";
         repo = "genealogos";
-        rev = "v${version}";
+        tag = "v${version}";
         hash = "sha256-EQrKInsrqlpjySX6duylo++2qwglB3EqGfLFJucOQM8=";
         # Genealogos' fixture tests contain valid nix store paths, and are thus incompatible with a fixed-output-derivation.
         # To avoid this, we just remove the tests
@@ -41,13 +41,18 @@ let
       # Since most tests were removed, just skip testing
       doCheck = false;
 
-      meta = with lib; {
-        description = "A Nix sbom generator";
+      meta = {
+        description = "Nix sbom generator";
         homepage = "https://github.com/tweag/genealogos";
-        license = licenses.mit;
-        maintainers = with maintainers; [ erin ];
-        changelog = "https://github.com/tweag/genealogos/blob/${src.rev}/CHANGELOG.md";
-        mainProgram = "genealogos";
+        license = lib.licenses.mit;
+        maintainers = with lib.maintainers; [ erin ];
+        changelog = "https://github.com/tweag/genealogos/blob/${src.tag}/CHANGELOG.md";
+        mainProgram =
+          {
+            api = "genealogos-api";
+            cli = "genealogos";
+          }
+          .${crate};
         platforms = lib.platforms.unix;
       };
     };
