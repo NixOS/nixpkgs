@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "databricks-cli";
-  version = "0.243.0";
+  version = "0.244.0";
 
   src = fetchFromGitHub {
     owner = "databricks";
     repo = "cli";
     rev = "v${version}";
-    hash = "sha256-U1ZQFRPL9iYtCHJXBdgCgaE1LZgKOWdYJ1gFAsgWPI8=";
+    hash = "sha256-TGbmGAS3hS9m6CNTtHQ0N3Fz6Ei+ry06enfYtWK/xOw=";
   };
 
-  vendorHash = "sha256-InVmtV3PH75exsftC3sxz9/xt9drJPlXgRYqvqnp+yM=";
+  vendorHash = "sha256-W1tAFLSy5rX07Dkj+r+T6whbuTevpxxtakG2caUdWJQ=";
 
   excludedPackages = [
     "bundle/internal"
@@ -38,8 +38,10 @@ buildGoModule rec {
       "TestExpandPipelineGlobPaths"
       "TestRelativePathTranslationDefault"
       "TestRelativePathTranslationOverride"
-      # Use venv
+      # Use uv venv which doesn't work with nix
+      # https://github.com/astral-sh/uv/issues/4450
       "TestVenvSuccess"
+      "TestPatchWheel"
     ]);
 
   nativeCheckInputs = [
