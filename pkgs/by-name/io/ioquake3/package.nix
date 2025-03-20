@@ -21,7 +21,7 @@
   bc,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ioquake3";
   version = "unstable-2025-03-08";
 
@@ -110,7 +110,7 @@ stdenv.mkDerivation {
       name = "IOQuake3";
       exec = "ioquake3";
       icon = "ioquake3";
-      comment = "A fast-paced 3D first-person shooter, a community effort to continue supporting/developing id's Quake III Arena";
+      comment = finalAttrs.meta.description;
       desktopName = "ioquake3";
       categories = [
         "Game"
@@ -131,4 +131,4 @@ stdenv.mkDerivation {
     ];
     platforms = lib.platforms.unix;
   };
-}
+})
